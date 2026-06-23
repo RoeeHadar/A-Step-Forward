@@ -20,8 +20,16 @@ export async function POST(req: Request) {
   const parsedAgent = agentNameSchema.safeParse(body.agent);
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
 
-  const stream = streamAgentResponse(userId, lastMessage, agent);
-  return new StreamingTextResponse(stream);
+  const gen = streamAgentResponse(userId, lastMessage, agent);
+  const encoder = new TextEncoder();
+  const readable = new ReadableStream({
+    async pull(controller) {
+      const { value, done } = await gen.next();
+      if (done) controller.close();
+      else controller.enqueue(encoder.encode(value));
+    },
+  });
+  return new StreamingTextResponse(readable);
 }
 
 async function* streamAgentResponse(

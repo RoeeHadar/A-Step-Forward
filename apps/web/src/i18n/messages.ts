@@ -74,5 +74,7 @@ const messages = {
 export type Messages = (typeof messages)['en'];
 
 export function getMessages(locale: Locale): Messages {
-  return messages[locale] ?? messages.en;
+  // Both locales share the same key structure; Hebrew literal values don't
+  // satisfy the English literal types, so we cast through unknown.
+  return (messages[locale] ?? messages.en) as unknown as Messages;
 }

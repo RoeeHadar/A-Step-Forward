@@ -12,7 +12,7 @@ export interface ApiAuthHeaders {
 
 export async function apiFetch<T>(
   path: string,
-  init: RequestInit & { schema: z.ZodType<T>; auth?: ApiAuthHeaders },
+  init: RequestInit & { schema: z.ZodType<T, z.ZodTypeDef, unknown>; auth?: ApiAuthHeaders },
 ): Promise<T> {
   const headers: Record<string, string> = {
     'content-type': 'application/json',
@@ -40,7 +40,7 @@ export async function apiFetch<T>(
 
 export async function apiFetchOptional<T>(
   path: string,
-  init: RequestInit & { schema: z.ZodType<T>; auth?: ApiAuthHeaders },
+  init: RequestInit & { schema: z.ZodType<T, z.ZodTypeDef, unknown>; auth?: ApiAuthHeaders },
 ): Promise<T | null> {
   try {
     return await apiFetch(path, init);

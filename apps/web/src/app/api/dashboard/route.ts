@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
-import { fetchDashboard, fetchMemories, fetchProgress } from '@/lib/data';
+import { fetchDashboard } from '@/lib/data';
 import { getAuthContext } from '@/lib/auth';
 
 export async function GET() {

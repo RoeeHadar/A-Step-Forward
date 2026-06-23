@@ -9,8 +9,7 @@ function emit(level: Level, message: string, meta?: Record<string, unknown>) {
   if (typeof window === 'undefined') {
     process.stdout.write(JSON.stringify(payload) + '\n');
   } else if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
-    console[level === 'debug' ? 'log' : level](payload);
+    console[level === 'debug' ? 'log' : level](payload); // dev-only; no-console suppressed in prod
   }
 }
 

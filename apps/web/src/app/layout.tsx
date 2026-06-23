@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import { AppProviders } from '@/providers/app-providers';
 import './globals.css';
 
@@ -7,7 +7,7 @@ const siteUrl =
 
 const title = 'A Step Forward — an AI learning center that remembers you';
 const description =
-  'A small team of AI agents — Tutor, Mentor, Coach, Reviewer — that teaches you, assesses you, remembers what you’ve learned, and adapts. Open source, MIT, multi-language.';
+  "A small team of AI agents \u2014 Tutor, Mentor, Coach, Reviewer \u2014 that teaches you, assesses you, remembers what you've learned, and adapts. Open source, MIT, multi-language.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
