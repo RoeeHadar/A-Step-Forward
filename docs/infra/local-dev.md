@@ -3,8 +3,26 @@
 ## Prerequisites
 
 - Docker Desktop (or Docker Engine + Compose v2)
-- [uv](https://docs.astral.sh/uv/) (Python 3.11+)
+- [uv](https://docs.astral.sh/uv/) (Python **3.11+**)
 - [pnpm](https://pnpm.io/) 9.x (for `apps/web`)
+
+### Windows first-time setup
+
+```powershell
+# From repo root (installs Python 3.11 / Node if missing, syncs uv, optional compose + migrate)
+.\scripts\bootstrap.ps1
+```
+
+If `uv sync` fails with `invalid peer certificate: UnknownIssuer` (common on corporate networks):
+
+```powershell
+$env:UV_SYSTEM_CERTS = "1"
+uv sync --all-groups --python 3.11 --system-certs
+```
+
+**OneDrive note:** if `uv sync` complains about `path` vs `workspace` sources, run `.\scripts\fix-workspace-sources.ps1` then sync again.
+
+After installing Docker Desktop, **start it once** from the Start menu and wait for “Docker Desktop is running” before `make up`.
 
 ## Start services
 

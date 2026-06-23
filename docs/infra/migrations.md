@@ -28,7 +28,10 @@ uv run alembic -c infra/alembic.ini revision -m "describe change"
 | Revision | Description |
 | --- | --- |
 | `0001` | Extensions: `vector`, `pgcrypto`, `pg_trgm` |
-| `0002` | Core tables: memory_*, gateway_*, audit_* |
+| `0002_memory` | Memory tables + audit_memory_events |
+| `0003_gateway` | gateway_users, gateway_sessions, audit_gateway_events |
+| `0004_curriculum` | curriculum_courses, concepts, lessons |
+| `0005_kg_chunks` | kg_chunks + HNSW index |
 
 ## Rules (see `skills/db-migrations/SKILL.md`)
 

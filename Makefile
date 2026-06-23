@@ -3,12 +3,15 @@
 # per-service helpers. Keep targets cross-platform-friendly where possible.
 
 PYTHON ?= python
+UV ?= uv
+UV_FLAGS ?= --system-certs
 
-.PHONY: help up down dev migrate migrate-revision seed evals evals-ci lint fmt test smoke
+.PHONY: help up down dev migrate migrate-revision seed evals evals-ci lint fmt test smoke sync
 
 help:
 	@echo "Targets:"
-	@echo "  up               Start Docker Compose (Postgres, Redis, Neo4j, Langfuse, MinIO, Mailhog, OTel, Prometheus, Grafana)"
+	@echo "  sync             uv sync (Python 3.11 workspace)"
+	@echo "  up               Start Docker Compose stack"
 	@echo "  down             Stop the stack"
 	@echo "  dev              Start API + web in dev mode (requires up)"
 	@echo "  migrate          Run Alembic upgrade head against compose Postgres"
@@ -19,6 +22,9 @@ help:
 	@echo "  lint fmt         ruff/eslint/prettier"
 	@echo "  test             pytest + vitest"
 	@echo "  smoke            Run Phase-0 smoke tests (memory, graphrag, orchestrator)"
+
+sync:
+	$(UV) sync --all-groups --python 3.11 $(UV_FLAGS)
 
 up:
 	docker compose -f infra/docker-compose.yml up -d
@@ -31,32 +37,32 @@ dev:
 	@echo "and 'cd apps/web && pnpm dev' in another."
 
 migrate:
-	uv run alembic -c infra/alembic.ini upgrade head
+	$(UV) run $(UV_FLAGS) alembic -c infra/alembic.ini upgrade head
 
 migrate-revision:
-	uv run alembic -c infra/alembic.ini revision --autogenerate -m "$(msg)"
+	$(UV) run $(UV_FLAGS) alembic -c infra/alembic.ini revision --autogenerate -m "$(msg)"
 
 seed:
-	uv run python scripts/seed_curriculum.py
+	$(UV) run $(UV_FLAGS) python scripts/seed_curriculum.py
 
 evals:
-	uv sync
+	$(UV) sync --all-groups --python 3.11 $(UV_FLAGS)
 	cd evals && pnpm install
-	uv run python evals/runner.py
+	$(UV) run $(UV_FLAGS) python evals/runner.py
 
 evals-ci:
-	uv run python evals/runner.py --touched
+	$(UV) run $(UV_FLAGS) python evals/runner.py --touched
 
 lint:
-	uv run ruff check .
+	$(UV) run $(UV_FLAGS) ruff check infra tests scripts
 	cd apps/web && pnpm lint
 
 fmt:
-	uv run ruff format .
+	$(UV) run $(UV_FLAGS) ruff format infra tests scripts
 	cd apps/web && pnpm exec prettier --write .
 
 test:
-	uv run pytest
+	$(UV) run $(UV_FLAGS) pytest
 	cd apps/web && pnpm test
 
 smoke:

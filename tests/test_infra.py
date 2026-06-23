@@ -14,7 +14,9 @@ def test_repo_layout() -> None:
 
 def test_alembic_model_metadata() -> None:
     from app.stores.models import Base as GatewayBase
+    from curriculum_service.stores.models import Base as CurriculumBase
     from memory_service.stores.models import Base as MemoryBase
 
     assert "episodic_memories" in MemoryBase.metadata.tables
     assert "gateway_users" in GatewayBase.metadata.tables
+    assert "curriculum_courses" in CurriculumBase.metadata.tables
