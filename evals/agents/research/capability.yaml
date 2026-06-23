@@ -1,0 +1,20 @@
+description: Research capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/research/v1.md
+providers:
+  - id: anthropic:claude-opus-4-8
+tests:
+  - description: prompt requires citations
+    vars:
+      message: Research topic.
+    assert:
+      - type: contains
+        value: Cite everything
+      - type: contains
+        value: ResearchOutput
+  - description: prompt lists kg.retrieve_chunks
+    vars:
+      message: chunks
+    assert:
+      - type: contains
+        value: kg.retrieve_chunks

@@ -273,6 +273,25 @@ def _progress_analyzer_factory() -> Agent:
     return ProgressAnalyzerAgent()
 
 
+def _research_factory() -> Agent:
+    from agents.system.research import ResearchAgent
+
+    return ResearchAgent()
+
+
+def _content_curator_factory() -> Agent:
+    from agents.system.content_curator import ContentCuratorAgent
+
+    return ContentCuratorAgent()
+
+
+def _kg_builder_factory() -> Agent:
+    from agents.system.kg_builder import KGBuilderAgent
+
+    return KGBuilderAgent()
+
+
+
 PHASE1_AGENTS: frozenset[AgentName] = frozenset(
     {AgentName.TUTOR, AgentName.QA_EXPLAINER, AgentName.COACH}
 )
@@ -286,7 +305,15 @@ PHASE2_AGENTS: frozenset[AgentName] = frozenset(
     }
 )
 
-IMPLEMENTED_AGENTS: frozenset[AgentName] = PHASE1_AGENTS | PHASE2_AGENTS
+PHASE3_AGENTS: frozenset[AgentName] = frozenset(
+    {
+        AgentName.RESEARCH,
+        AgentName.CONTENT_CURATOR,
+        AgentName.KG_BUILDER,
+    }
+)
+
+IMPLEMENTED_AGENTS: frozenset[AgentName] = PHASE1_AGENTS | PHASE2_AGENTS | PHASE3_AGENTS
 
 
 AGENT_FACTORIES: dict[AgentName, AgentFactory] = {
@@ -297,6 +324,9 @@ AGENT_FACTORIES: dict[AgentName, AgentFactory] = {
     AgentName.ASSESSMENT_GENERATOR: _assessment_generator_factory,
     AgentName.GRADER: _grader_factory,
     AgentName.PROGRESS_ANALYZER: _progress_analyzer_factory,
+    AgentName.RESEARCH: _research_factory,
+    AgentName.CONTENT_CURATOR: _content_curator_factory,
+    AgentName.KG_BUILDER: _kg_builder_factory,
 }
 
 
@@ -305,6 +335,7 @@ __all__ = [
     "AGENT_FACTORIES",
     "PHASE1_AGENTS",
     "PHASE2_AGENTS",
+    "PHASE3_AGENTS",
     "IMPLEMENTED_AGENTS",
     "AgentFactory",
 ]

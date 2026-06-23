@@ -1,0 +1,20 @@
+description: Content Curator capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/content_curator/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt requires quality ranking
+    vars:
+      message: Curate.
+    assert:
+      - type: contains
+        value: Quality over quantity
+      - type: contains
+        value: ContentCuratorOutput
+  - description: prompt lists attach_resource
+    vars:
+      message: attach
+    assert:
+      - type: contains
+        value: curriculum.attach_resource

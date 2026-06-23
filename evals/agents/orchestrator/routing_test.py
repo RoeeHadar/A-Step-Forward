@@ -1,4 +1,4 @@
-"""Routing eval matrix for the orchestrator declarative router."""
+﻿"""Routing eval matrix for the orchestrator declarative router."""
 
 from __future__ import annotations
 
@@ -25,6 +25,8 @@ ROUTING_CASES: list[tuple[str, AgentName]] = [
     ("Review my essay on climate change.", AgentName.REVIEWER),
     ("Summarize today's lesson into notes.", AgentName.NOTE_TAKER),
     ("Find research papers on neural networks.", AgentName.RESEARCH),
+    ("Find reading list materials for fractions.", AgentName.CONTENT_CURATOR),
+    ("Extract entities from this lesson upload.", AgentName.KG_BUILDER),
     ("Where am I in my learning path?", AgentName.PROGRESS_ANALYZER),
     ("Teach me a lesson on photosynthesis.", AgentName.TUTOR),
     ("Hello, I'm not sure what to do.", AgentName.TUTOR),

@@ -1,0 +1,20 @@
+description: KG Builder capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/kg_builder/v1.md
+providers:
+  - id: anthropic:claude-haiku-4-5
+tests:
+  - description: prompt requires structured extraction
+    vars:
+      message: Extract.
+    assert:
+      - type: contains
+        value: Structured extraction
+      - type: contains
+        value: KGBuilderOutput
+  - description: prompt lists write_triples
+    vars:
+      message: triples
+    assert:
+      - type: contains
+        value: kg.write_triples
