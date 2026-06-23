@@ -11,43 +11,54 @@ within a phase. Estimated total wall-clock if you have an evening: **2.5–4 h**
 
 ---
 
-## 0. One-time prereqs (10 min)
+## 0. One-time prereqs
 
-These tools are needed by anyone (human or sub-agent) to drive the rest. The
-Release Captain's sandbox doesn't have them.
+These tools are needed to drive the rest.
 
-- [ ] Install **GitHub CLI** — https://cli.github.com/ — then `gh auth login`.
-- [ ] Install **Node 20+** and **pnpm 9.12+** — `winget install OpenJS.NodeJS.LTS`
-      then `corepack enable && corepack prepare pnpm@9.12.0 --activate`.
-- [ ] Install **uv** (Python package manager) — `pipx install uv` or
-      `winget install --id astral-sh.uv`.
-- [ ] Install **Docker Desktop** (for local Postgres / migrate-check).
-- [ ] Install **flyctl** — `iwr https://fly.io/install.ps1 -useb | iex`.
-- [ ] Install **Vercel CLI** — `pnpm i -g vercel`.
-- [ ] Install **Doppler CLI** — `winget install Doppler.doppler`.
+**Installed by Release Captain:**
+- [x] GitHub CLI (`gh`) — v2.95
+- [x] Node 20+ — v24.17
+- [x] pnpm 9.12 — via npm, global bin at `%APPDATA%\Local\pnpm`
+- [x] uv — v0.11.23
+- [x] flyctl — v0.4.60 (at `%USERPROFILE%\.fly\bin`)
+- [x] Vercel CLI — v54.15.1 (via pnpm global)
+- [x] Doppler CLI — v3.76.0 (binary at `%USERPROFILE%\.doppler`)
+
+**Still needed from you (interactive auth, 10 min):**
+- [ ] `gh auth login` — the stored git OAuth token lacks `read:org`; the
+      Release Captain used `GH_TOKEN` env var for PR creation but you need a
+      full login for branch protection, reviews, etc.
+- [ ] `flyctl auth login` — browser flow.
+- [ ] `vercel login` — browser/device flow.
+- [ ] `doppler login` — browser flow.
+
+**WSL (required for Docker Desktop on Windows):**
+- [ ] WSL is not installed. Docker Desktop needs it. Run in **admin PowerShell**:
+      ```powershell
+      wsl --install
+      ```
+      Then restart the computer. After restart, Docker Desktop will work and
+      `make up` will boot the local stack (Postgres+pgvector, Redis, Neo4j, etc.).
+      Until then, Alembic migration validation runs against Neon cloud Postgres
+      (step 2 → provision Neon first, then run migrations).
 
 ---
 
-## 1. Land the integration branch (5 min, GH UI or `gh`)
+## 1. Open PRs (DONE by Release Captain)
 
-The Release Captain pushed `release/phase-1-integration` — six new commits on
-top of `main` integrating the frontend, GraphRAG, and security stacks (3
-merge commits + 3 polish commits).
+Four PRs are open and waiting for review + merge:
 
-- [ ] Open the PR:
-      ```pwsh
-      gh pr create --base main --head release/phase-1-integration `
-        --title "feat: integrate phase-1 stacks (frontend, graphrag, safety) + launch polish" `
-        --body-file .cursor/subagent-briefs/RELEASE-CAPTAIN-PR-BODY.md
-      ```
-- [ ] Run `review-bugbot` skill on the PR.
-- [ ] Run `review-security` skill (touches auth/safety evals).
-- [ ] Squash-merge when green.
+| PR | Branch | Base | Size |
+| -- | ------ | ---- | ---- |
+| [#1](https://github.com/RoeeHadar/A-Step-Forward/pull/1) | `release/phase-1-integration` | `main` | 135 files, +7k lines — frontend + GraphRAG + launch polish |
+| [#2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) | `chore/infra/workspace-stabilization` | `release/phase-1-integration` | workspace pyproject cleanup, uv.lock, alembic fixes |
+| [#3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) | `feat/agents/03-phase3-system-agents` | `release/phase-1-integration` | Research, KG Builder, Content Curator agents |
+| [#4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) | `feat/mcp/05-server-improvements` | `release/phase-1-integration` | MCP server typed errors + expanded tests |
 
-> If `gh` was used, the body should be auto-derived from the file mentioned
-> below; otherwise, copy the body from
-> [`.cursor/subagent-briefs/RELEASE-CAPTAIN-PR-BODY.md`](.cursor/subagent-briefs/RELEASE-CAPTAIN-PR-BODY.md)
-> when opening in the GitHub UI.
+- [ ] Run `review-bugbot` skill on PR #1 (the main integration PR).
+- [ ] Run `review-security` skill on PR #1 (touches auth middleware and safety evals).
+- [ ] Squash-merge #1 to main when CI is green.
+- [ ] Merge #2, #3, #4 after #1 (or open new PRs re-based on main).
 
 ---
 
@@ -199,15 +210,33 @@ Copy is already drafted under `docs/marketing/`:
 
 ## What the Release Captain shipped (so you don't redo it)
 
-- `release/phase-1-integration` branch with three clean stack merges.
+**Branches pushed to origin:**
+- `release/phase-1-integration` — frontend + graphrag + safety merged + launch polish + pyproject fixes + ruff format + mypy fix.
+- `chore/infra/workspace-stabilization` — pyproject workspace sources, uv.lock, alembic migration cleanup, Makefile, ruff scoping.
+- `feat/agents/03-phase3-system-agents` — Research, KG Builder, Content Curator agents + eval matrices.
+- `feat/mcp/05-server-improvements` — typed MCP errors, tool expansions, full test suites.
+
+**PRs open:**
+- [#1](https://github.com/RoeeHadar/A-Step-Forward/pull/1), [#2](https://github.com/RoeeHadar/A-Step-Forward/pull/2), [#3](https://github.com/RoeeHadar/A-Step-Forward/pull/3), [#4](https://github.com/RoeeHadar/A-Step-Forward/pull/4)
+
+**Governance + docs:**
 - `LICENSE` (MIT), `SECURITY.md`, `CHANGELOG.md`, `cliff.toml`.
 - `.github/workflows/changelog.yml`, `.github/workflows/repo-health.yml`.
 - `docs/adr/README.md` (ADR index).
 - `docs/marketing/copy.md`, `launch-hn.md`, `launch-ph.md`, `social-copy.md`.
 - `docs/diagrams/architecture.md`, `docs/diagrams/graphrag.md`.
 - `scripts/smoke/e2e.sh`, `scripts/smoke/e2e.ps1`.
-- README polish with hero block, badges, agent matrix.
-- `BLOCKED.md` (this file).
+- README polished with hero image, badges, agent matrix.
+
+**CLIs installed:**
+- pnpm 9.12 · flyctl 0.4.60 · Vercel CLI 54.15.1 · Doppler CLI 3.76.0
+
+**Code validated locally:**
+- `ruff check .` — all checks passed.
+- `ruff format .` — 9 scripts files reformatted.
+- `mypy` — no issues (fixed `DeclarativeBase` type annotation in `infra/alembic/env.py`)
+- `pnpm install` — succeeded (peer warnings for react 19 in Clerk/shadcn are pre-existing, not blocking).
+- Alembic migration validation skipped — Docker Desktop requires WSL (see §0).
 
 When every box above is checked, delete this file in the commit titled
 `chore: launched 🚀`.
