@@ -9,8 +9,8 @@ from __future__ import annotations
 
 from alembic import op
 
-revision = "0002"
-down_revision = "0001"
+revision = "0005_kg_chunks"
+down_revision = "0004_curriculum"
 branch_labels = None
 depends_on = None
 

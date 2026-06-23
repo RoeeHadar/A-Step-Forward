@@ -8,8 +8,8 @@ dependencies = ["mcp>=1.0", "pydantic>=2.7", "schemas", "graphrag-service"]
 dev = ["pytest>=8.0", "pytest-asyncio>=0.24"]
 
 [tool.uv.sources]
-schemas = { path = "../../packages/schemas", editable = true }
-graphrag-service = { path = "../../services/graphrag", editable = true }
+schemas = { workspace = true }
+graphrag-service = { workspace = true }
 
 [project.scripts]
 graphrag-mcp = "graphrag_mcp.server:main"
@@ -24,3 +24,4 @@ packages = ["src/graphrag_mcp"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+addopts = "--cov-fail-under=80"

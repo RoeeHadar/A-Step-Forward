@@ -31,9 +31,10 @@ def _combine_metadata(*bases: type) -> MetaData:
 
 def _load_target_metadata() -> MetaData:
     from app.stores.models import Base as GatewayBase
+    from curriculum_service.stores.models import Base as CurriculumBase
     from memory_service.stores.models import Base as MemoryBase
 
-    return _combine_metadata(MemoryBase, GatewayBase)
+    return _combine_metadata(MemoryBase, GatewayBase, CurriculumBase)
 
 
 target_metadata = _load_target_metadata()

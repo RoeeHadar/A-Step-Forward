@@ -11,7 +11,7 @@ import sqlalchemy as sa
 from alembic import op
 from pgvector.sqlalchemy import Vector
 
-revision = "0002"
+revision = "0002_memory"
 down_revision = "0001"
 branch_labels = None
 depends_on = None
