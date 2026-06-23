@@ -66,6 +66,14 @@ _INTENT_PATTERNS: list[tuple[re.Pattern[str], AgentName, str]] = [
         "research intent",
     ),
     (
+        re.compile(
+            r"\b(extract (?:entities|relations)|build (?:the )?knowledge graph|kg ingest)\b",
+            re.IGNORECASE,
+        ),
+        AgentName.KG_BUILDER,
+        "kg extraction intent",
+    ),
+    (
         re.compile(r"\b(content|resource|reading list|materials for)\b", re.IGNORECASE),
         AgentName.CONTENT_CURATOR,
         "content curation intent",

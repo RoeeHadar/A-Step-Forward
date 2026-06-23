@@ -1,8 +1,9 @@
-﻿"""Stub package for agent kg_builder. Sub-agent 03-agents fills this in.
+﻿"""KG Builder agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/kg_builder/v1.md
-"""
+from __future__ import annotations
+
+from .agent import KGBuilderAgent
+from .input import KGBuilderInput
+from .output import KGBuilderOutput
+
+__all__ = ["KGBuilderAgent", "KGBuilderInput", "KGBuilderOutput"]

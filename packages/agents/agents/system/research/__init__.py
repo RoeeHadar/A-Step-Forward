@@ -1,8 +1,9 @@
-﻿"""Stub package for agent research. Sub-agent 03-agents fills this in.
+﻿"""Research agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/research/v1.md
-"""
+from __future__ import annotations
+
+from .agent import ResearchAgent
+from .input import ResearchInput
+from .output import ResearchOutput
+
+__all__ = ["ResearchAgent", "ResearchInput", "ResearchOutput"]

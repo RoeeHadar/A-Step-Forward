@@ -169,6 +169,12 @@ AGENT_REGISTRY: dict[AgentName, AgentManifest] = {
     AgentName.CONTENT_CURATOR: _manifest(
         AgentName.CONTENT_CURATOR,
         "Sources from web/library, ranks quality, attaches to concepts.",
+        tools=[
+            ToolRef(server="memory", name="memory.search"),
+            ToolRef(server="graphrag", name="kg.related_concepts"),
+            ToolRef(server="graphrag", name="web.search"),
+            ToolRef(server="curriculum", name="curriculum.attach_resource"),
+        ],
         read={MemoryType.SEMANTIC},
         write={MemoryType.SOURCE},
     ),
@@ -176,6 +182,12 @@ AGENT_REGISTRY: dict[AgentName, AgentManifest] = {
         AgentName.RESEARCH,
         "Deep research with web search + RAG + KG; writes citations.",
         primary_model="claude-opus-4-8",
+        tools=[
+            ToolRef(server="memory", name="memory.search"),
+            ToolRef(server="graphrag", name="kg.retrieve_chunks"),
+            ToolRef(server="graphrag", name="kg.related_concepts"),
+            ToolRef(server="graphrag", name="web.search"),
+        ],
         read={MemoryType.SOURCE, MemoryType.SEMANTIC},
         write={MemoryType.SOURCE, MemoryType.REFLECTIVE},
     ),
@@ -183,6 +195,11 @@ AGENT_REGISTRY: dict[AgentName, AgentManifest] = {
         AgentName.KG_BUILDER,
         "Extracts entities/relations from content into the KG.",
         primary_model="claude-haiku-4-5",
+        tools=[
+            ToolRef(server="graphrag", name="kg.extract_entities"),
+            ToolRef(server="graphrag", name="kg.write_triples"),
+            ToolRef(server="memory", name="memory.search"),
+        ],
         read={MemoryType.SOURCE},
         write={MemoryType.SOURCE},
     ),

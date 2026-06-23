@@ -1,8 +1,9 @@
-﻿"""Stub package for agent content_curator. Sub-agent 03-agents fills this in.
+﻿"""Content Curator agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/content_curator/v1.md
-"""
+from __future__ import annotations
+
+from .agent import ContentCuratorAgent
+from .input import ContentCuratorInput
+from .output import ContentCuratorOutput, CuratedResource
+
+__all__ = ["ContentCuratorAgent", "ContentCuratorInput", "ContentCuratorOutput", "CuratedResource"]
