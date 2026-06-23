@@ -36,7 +36,11 @@ def main() -> int:
         schemas[name] = model.model_json_schema(ref_template="#/components/schemas/{model}")
 
     out = TS_DIR / "generated.json"
-    out.write_text(json.dumps({"$schema": "http://json-schema.org/draft-07/schema#", "definitions": schemas}, indent=2))
+    out.write_text(
+        json.dumps(
+            {"$schema": "http://json-schema.org/draft-07/schema#", "definitions": schemas}, indent=2
+        )
+    )
     index = TS_DIR / "index.ts"
     index.write_text(
         "/** Auto-generated JSON Schema bundle. Import types via your codegen tool of choice. */\n"

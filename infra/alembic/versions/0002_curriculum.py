@@ -22,8 +22,18 @@ def upgrade() -> None:
         sa.Column("prerequisites", postgresql.JSONB(), nullable=False, server_default="[]"),
         sa.Column("payload", postgresql.JSONB(), nullable=False),
         sa.Column("published", sa.Boolean(), nullable=False, server_default="true"),
-        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
     )
     op.create_table(
         "curriculum_concepts",

@@ -31,9 +31,7 @@ def upgrade() -> None:
         )
         """
     )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS kg_chunks_document_id_idx ON kg_chunks (document_id)"
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS kg_chunks_document_id_idx ON kg_chunks (document_id)")
     op.execute(
         """
         CREATE INDEX IF NOT EXISTS kg_chunks_embedding_hnsw_idx

@@ -78,7 +78,9 @@ def _create_memory_table(name: str) -> None:
     op.create_index(f"ix_{name}_learner_id", name, ["learner_id"], unique=False)
     op.create_index(f"ix_{name}_superseded_by", name, ["superseded_by"], unique=False)
     op.create_index(f"ix_{name}_learner_created", name, ["learner_id", "created_at"], unique=False)
-    op.create_index(f"ix_{name}_learner_not_deleted", name, ["learner_id", "deleted_at"], unique=False)
+    op.create_index(
+        f"ix_{name}_learner_not_deleted", name, ["learner_id", "deleted_at"], unique=False
+    )
     # HNSW index for cosine similarity search on embeddings.
     op.create_index(
         f"ix_{name}_embedding_hnsw",
@@ -124,7 +126,9 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_audit_memory_events_action", "audit_memory_events", ["action"], unique=False)
+    op.create_index(
+        "ix_audit_memory_events_action", "audit_memory_events", ["action"], unique=False
+    )
     op.create_index(
         "ix_audit_memory_events_learner_id", "audit_memory_events", ["learner_id"], unique=False
     )
@@ -151,7 +155,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_gateway_users_clerk_user_id", "gateway_users", ["clerk_user_id"], unique=True)
+    op.create_index(
+        "ix_gateway_users_clerk_user_id", "gateway_users", ["clerk_user_id"], unique=True
+    )
 
     op.create_table(
         "gateway_sessions",
@@ -161,7 +167,9 @@ def upgrade() -> None:
         sa.Column("ended_at", sa.DateTime(timezone=True), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_gateway_sessions_learner_id", "gateway_sessions", ["learner_id"], unique=False)
+    op.create_index(
+        "ix_gateway_sessions_learner_id", "gateway_sessions", ["learner_id"], unique=False
+    )
 
     op.create_table(
         "audit_gateway_events",
