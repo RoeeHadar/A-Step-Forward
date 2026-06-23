@@ -2,6 +2,9 @@
 import { AppProviders } from '@/providers/app-providers';
 import './globals.css';
 
+// Clerk requires runtime auth context — skip static prerendering for all pages.
+export const dynamic = 'force-dynamic';
+
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://astepforward.app';
 
