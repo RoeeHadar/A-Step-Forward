@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   reactStrictMode: true,
   transpilePackages: ['@asf/ui', '@asf/schemas'],
   experimental: {},
