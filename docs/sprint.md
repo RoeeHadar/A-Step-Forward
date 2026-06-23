@@ -2,27 +2,35 @@
 
 > Loaded into agent context by the `agentStart` hook. Keep tight.
 
-## Phase 0 (this sprint, owner: Opus)
+## Round 1 — Phase 0 (DONE, owner: Opus)
 
-- [x] Master plan + architecture + AGENTS + CONTRIBUTING.
-- [x] Cursor config: rules, mcp.json, hooks.json, sub-agent briefs.
-- [x] Project skills authored.
-- [x] Memory service foundation: schemas, stores, hygiene (PII, importance, decay, consolidation, conflict resolution, compression, compaction, verification, dreaming), retrieval (hybrid + policy), audit.
-- [x] GraphRAG foundation: ontology, ingestion pipeline skeleton, service surface.
-- [x] Agent framework: base classes, registry, Tutor stub, orchestrator with declarative router.
-- [x] MCP server stubs: memory, graphrag, curriculum, progress.
-- [x] FastAPI gateway scaffold with `/healthz`, `/v1/chat` (SSE), `/v1/memory`, `/v1/graphrag`.
-- [x] Frontend scaffold: Next.js 15, Tailwind v4, shadcn ready, package.json, layout, landing.
-- [x] docker-compose: Postgres+pgvector, Redis, Neo4j, Langfuse, MinIO, Mailhog, OTel.
-- [x] ADRs for record-keeping and memory architecture.
+Foundation laid: master plan, architecture, AGENTS, rules, hooks, skills, all
+service skeletons (memory, GraphRAG, agents, orchestrator, MCPs, API, frontend,
+infra). See git log on `main`. All Phase-0 smoke tests green.
 
-## Phase 1 (next sprint, owner: sub-agents)
+## Round 2 — Phase 1/2 (NOW, owner: stream sub-agents)
 
-- Frontend implements pages from `01-frontend.md`.
-- Backend implements full route set from `02-backend-api.md`.
-- Agents 03 fills `run()` for Tutor + Q&A + Coach, plus full eval suites.
-- Memory 04 swaps in real Postgres/pgvector implementation, full PII (Presidio), real importance LLM-judge.
-- GraphRAG 05 wires Neo4j + real extraction pipeline.
-- MCP 06 swaps stdio for the official MCP SDK transport.
-- Infra 09 wires CI/CD and migrations.
-- Security 10 implements Clerk verification, RBAC, audit tables.
+Per-stream **resume briefs** at `.cursor/subagent-briefs/NN-<stream>-resume.md`
+are the paste-and-go prompts. Locked decisions in `RESUME-README.md` are
+project policy — sub-agents do not ask the user.
+
+### Where each stream is right now
+
+| # | Stream | State | Tip branch |
+| - | ------ | ----- | ---------- |
+| 01 | Frontend | 9-branch stack covering all Phase-1 pages; nothing merged | `feat/frontend/09-educator-admin` |
+| 02 | Backend / API | Phase-1 routes on `main` (chat SSE, memory CRUD, GraphRAG search); Phase-2 to go | `main` |
+| 03 | Agents | 6 Phase-2 agents on `main`; Phase-3 (research/kg_builder/content_curator) preserved on `wip/agents-phase3-snapshot` | `main` + WIP |
+| 04 | Memory | Phase-0 hygiene + retrieval scaffolds on `main`; Phase-2 (Postgres + Voyage + Presidio + Dreamer) to go | `main` |
+| 05 | GraphRAG | 4-branch stack: ontology, ingestion, retrieval, MCP+evals; nothing merged | `feat/graphrag/04-mcp-evals` |
+| 06 | MCP servers | 4-branch stack (memory, graphrag, curriculum, progress) on `mcp-stack-base`; nothing merged | `feat/mcp/04-progress` |
+| 07 | Curriculum | Service skeleton on `main`; Phase-1 course content + seeder to go | `main` |
+| 08 | Evals & QA | 8 agent eval folders + orchestrator routing test + qa citation test on `main`; Phase-3 evals on WIP | `main` |
+| 09 | Infra / DevOps | docker-compose, alembic, 6 deploy workflow files, Makefile on `main`; workspace stabilization on WIP | `main` + WIP |
+| 10 | Security / Safety | Only `safety_moderation` eval YAMLs (80 lines); rest to do | `feat/security/10-safety-hardening` |
+| 11 | **Release Captain** | NEW this round — coordinates merges, deploys, launch | — |
+
+### Round 2 acceptance (Release Captain enforces)
+
+End-to-end deployed website + public GitHub repo + shareable demo. See
+`.cursor/subagent-briefs/11-release-captain-resume.md` Phase A → D.

@@ -8,8 +8,13 @@
 
 ## Phase
 
-**Phase 0 — Foundation laid by Opus (this session).** Implementation is delegated
-to Composer 2.5 / Cursor Auto sub-agents per `.cursor/subagent-briefs/`.
+**Phase 1/2 — Stream sub-agents in flight.** Round 1 (Phase 0) landed the
+foundation. Round 2 is now active: each stream has a *resume brief* at
+`.cursor/subagent-briefs/NN-<stream>-resume.md` — that is the paste-and-go
+prompt for the matching Composer 2.5 sub-agent. A new **Release Captain**
+stream (`11-release-captain-resume.md`) coordinates merges, deploys, and
+launch. **Read `.cursor/subagent-briefs/RESUME-README.md` first** — its
+locked decisions are project policy; sub-agents must not stop to ask the user.
 
 ## Key invariants
 
@@ -26,5 +31,6 @@ to Composer 2.5 / Cursor Auto sub-agents per `.cursor/subagent-briefs/`.
 See `docs/sprint.md`.
 
 <!-- LAST_SESSION -->
-Last session: 2026-06-23 (opus)
+Last session: 2026-06-23 PM (opus — Round 2 dispatch). 19 in-flight branches;
+WIP preserved on `wip/agents-phase3-snapshot`. Per-stream resume briefs ready.
 <!-- LAST_SESSION -->
