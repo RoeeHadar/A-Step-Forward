@@ -1,8 +1,9 @@
-﻿"""Stub package for agent grader. Sub-agent 03-agents fills this in.
+﻿"""Grader agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/grader/v1.md
-"""
+from __future__ import annotations
+
+from .agent import GraderAgent
+from .input import GraderInput
+from .output import GraderOutput
+
+__all__ = ["GraderAgent", "GraderInput", "GraderOutput"]

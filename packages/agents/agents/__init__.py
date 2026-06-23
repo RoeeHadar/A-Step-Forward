@@ -122,24 +122,47 @@ AGENT_REGISTRY: dict[AgentName, AgentManifest] = {
         AgentName.CURRICULUM_DESIGNER,
         "Builds personalized learning paths.",
         primary_model="claude-opus-4-8",
+        tools=[
+            ToolRef(server="memory", name="memory.search"),
+            ToolRef(server="curriculum", name="curriculum.get_path"),
+            ToolRef(server="curriculum", name="curriculum.update_path"),
+            ToolRef(server="graphrag", name="kg.related_concepts"),
+            ToolRef(server="progress", name="progress.get_mastery"),
+        ],
         read={MemoryType.SEMANTIC, MemoryType.PROCEDURAL, MemoryType.EPISODIC},
         write={MemoryType.SEMANTIC, MemoryType.REFLECTIVE},
     ),
     AgentName.ASSESSMENT_GENERATOR: _manifest(
         AgentName.ASSESSMENT_GENERATOR,
         "Creates quizzes, exercises, projects from objectives.",
+        tools=[
+            ToolRef(server="memory", name="memory.search"),
+            ToolRef(server="curriculum", name="curriculum.get_objectives"),
+            ToolRef(server="graphrag", name="kg.related_concepts"),
+        ],
         read={MemoryType.SEMANTIC, MemoryType.PROCEDURAL},
         write={MemoryType.EPISODIC},
     ),
     AgentName.GRADER: _manifest(
         AgentName.GRADER,
         "Auto-grades objective questions + LLM-judges subjective with rubric.",
+        tools=[
+            ToolRef(server="memory", name="memory.search"),
+            ToolRef(server="curriculum", name="curriculum.get_rubric"),
+            ToolRef(server="curriculum", name="curriculum.get_objectives"),
+        ],
         read={MemoryType.SEMANTIC, MemoryType.PROCEDURAL},
         write={MemoryType.EPISODIC, MemoryType.REFLECTIVE},
     ),
     AgentName.PROGRESS_ANALYZER: _manifest(
         AgentName.PROGRESS_ANALYZER,
         "Identifies knowledge gaps, predicts at-risk learners, recommends interventions.",
+        tools=[
+            ToolRef(server="memory", name="memory.search"),
+            ToolRef(server="memory", name="memory.timeline"),
+            ToolRef(server="progress", name="progress.get_mastery"),
+            ToolRef(server="graphrag", name="kg.related_concepts"),
+        ],
         read={MemoryType.EPISODIC, MemoryType.SEMANTIC, MemoryType.PROCEDURAL},
         write={MemoryType.SEMANTIC, MemoryType.REFLECTIVE},
     ),
@@ -209,16 +232,62 @@ def _coach_factory() -> Agent:
     return CoachAgent()
 
 
+def _curriculum_designer_factory() -> Agent:
+    from agents.system.curriculum_designer import CurriculumDesignerAgent
+
+    return CurriculumDesignerAgent()
+
+
+def _assessment_generator_factory() -> Agent:
+    from agents.system.assessment_generator import AssessmentGeneratorAgent
+
+    return AssessmentGeneratorAgent()
+
+
+def _grader_factory() -> Agent:
+    from agents.system.grader import GraderAgent
+
+    return GraderAgent()
+
+
+def _progress_analyzer_factory() -> Agent:
+    from agents.system.progress_analyzer import ProgressAnalyzerAgent
+
+    return ProgressAnalyzerAgent()
+
+
 PHASE1_AGENTS: frozenset[AgentName] = frozenset(
     {AgentName.TUTOR, AgentName.QA_EXPLAINER, AgentName.COACH}
 )
+
+PHASE2_AGENTS: frozenset[AgentName] = frozenset(
+    {
+        AgentName.CURRICULUM_DESIGNER,
+        AgentName.ASSESSMENT_GENERATOR,
+        AgentName.GRADER,
+        AgentName.PROGRESS_ANALYZER,
+    }
+)
+
+IMPLEMENTED_AGENTS: frozenset[AgentName] = PHASE1_AGENTS | PHASE2_AGENTS
 
 
 AGENT_FACTORIES: dict[AgentName, AgentFactory] = {
     AgentName.TUTOR: _tutor_factory,
     AgentName.QA_EXPLAINER: _qa_explainer_factory,
     AgentName.COACH: _coach_factory,
+    AgentName.CURRICULUM_DESIGNER: _curriculum_designer_factory,
+    AgentName.ASSESSMENT_GENERATOR: _assessment_generator_factory,
+    AgentName.GRADER: _grader_factory,
+    AgentName.PROGRESS_ANALYZER: _progress_analyzer_factory,
 }
 
 
-__all__ = ["AGENT_REGISTRY", "AGENT_FACTORIES", "PHASE1_AGENTS", "AgentFactory"]
+__all__ = [
+    "AGENT_REGISTRY",
+    "AGENT_FACTORIES",
+    "PHASE1_AGENTS",
+    "PHASE2_AGENTS",
+    "IMPLEMENTED_AGENTS",
+    "AgentFactory",
+]

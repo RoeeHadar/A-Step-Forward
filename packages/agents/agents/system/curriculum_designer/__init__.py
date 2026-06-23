@@ -1,8 +1,9 @@
-﻿"""Stub package for agent curriculum_designer. Sub-agent 03-agents fills this in.
+﻿"""Curriculum Designer agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/curriculum_designer/v1.md
-"""
+from __future__ import annotations
+
+from .agent import CurriculumDesignerAgent
+from .input import CurriculumDesignerInput
+from .output import CurriculumDesignerOutput
+
+__all__ = ["CurriculumDesignerAgent", "CurriculumDesignerInput", "CurriculumDesignerOutput"]

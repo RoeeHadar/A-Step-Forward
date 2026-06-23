@@ -1,0 +1,20 @@
+description: Curriculum Designer capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/curriculum_designer/v1.md
+providers:
+  - id: anthropic:claude-opus-4-8
+tests:
+  - description: prompt declares path-building role
+    vars:
+      message: "Plan my path."
+    assert:
+      - type: contains
+        value: "CurriculumDesignerOutput"
+      - type: contains
+        value: "personalized learning paths"
+  - description: prompt lists mastery tool
+    vars:
+      message: "Check mastery."
+    assert:
+      - type: contains
+        value: "progress.get_mastery"

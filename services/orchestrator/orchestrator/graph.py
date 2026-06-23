@@ -13,12 +13,12 @@ from uuid import uuid4
 from langgraph.graph import END, START, StateGraph
 from schemas.agents import AgentName, ChatChunk, ChatRequest, RouteDecision
 
-from agents import AGENT_FACTORIES, PHASE1_AGENTS
+from agents import AGENT_FACTORIES
 from agents.base.agent import AgentContext
 from agents.base.child_mode import resolve_child_mode
 from agents.system.orchestrator import OrchestratorAgent, OrchestratorInput, build_agent_summaries
 
-from .invoke import invoke_phase1_agent
+from .invoke import AGENT_DISPATCH, invoke_registered_agent
 
 
 class GraphState(TypedDict):
@@ -75,21 +75,21 @@ async def invoke_node(state: GraphState) -> dict[str, object]:
             ]
         }
 
-    agent = factory()
-    if selected in PHASE1_AGENTS:
-        chunks = await invoke_phase1_agent(selected, agent, request, ctx)
-        return {"chunks": chunks}
+    if selected not in AGENT_DISPATCH:
+        return {
+            "chunks": [
+                ChatChunk(
+                    kind="token",
+                    agent=selected,
+                    text=f"[stub] Agent '{selected}' invoked successfully.",
+                ),
+                ChatChunk(kind="done", agent=selected),
+            ]
+        }
 
-    return {
-        "chunks": [
-            ChatChunk(
-                kind="token",
-                agent=selected,
-                text=f"[stub] Agent '{selected}' invoked successfully.",
-            ),
-            ChatChunk(kind="done", agent=selected),
-        ]
-    }
+    agent = factory()
+    chunks = await invoke_registered_agent(selected, agent, request, ctx)
+    return {"chunks": chunks}
 
 
 def build_graph():

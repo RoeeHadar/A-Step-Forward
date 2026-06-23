@@ -1,0 +1,20 @@
+description: Progress Analyzer capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/progress_analyzer/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt requires evidence-based gaps
+    vars:
+      message: "Analyze progress."
+    assert:
+      - type: contains
+        value: "Evidence-based"
+      - type: contains
+        value: "ProgressAnalyzerOutput"
+  - description: prompt lists mastery tool
+    vars:
+      message: "mastery"
+    assert:
+      - type: contains
+        value: "progress.get_mastery"

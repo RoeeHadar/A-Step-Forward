@@ -1,0 +1,20 @@
+description: Assessment Generator capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/assessment_generator/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt aligns items to objectives
+    vars:
+      message: "Make a quiz."
+    assert:
+      - type: contains
+        value: "Align to objectives"
+      - type: contains
+        value: "AssessmentGeneratorOutput"
+  - description: prompt lists objectives tool
+    vars:
+      message: "objectives"
+    assert:
+      - type: contains
+        value: "curriculum.get_objectives"

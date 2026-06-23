@@ -1,8 +1,9 @@
-﻿"""Stub package for agent progress_analyzer. Sub-agent 03-agents fills this in.
+﻿"""Progress Analyzer agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/progress_analyzer/v1.md
-"""
+from __future__ import annotations
+
+from .agent import ProgressAnalyzerAgent
+from .input import ProgressAnalyzerInput
+from .output import ProgressAnalyzerOutput
+
+__all__ = ["ProgressAnalyzerAgent", "ProgressAnalyzerInput", "ProgressAnalyzerOutput"]

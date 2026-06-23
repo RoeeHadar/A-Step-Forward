@@ -1,0 +1,20 @@
+description: Grader capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/grader/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt requires rubric-first grading
+    vars:
+      message: "Grade this."
+    assert:
+      - type: contains
+        value: "Rubric first"
+      - type: contains
+        value: "GraderOutput"
+  - description: prompt lists rubric tool
+    vars:
+      message: "rubric"
+    assert:
+      - type: contains
+        value: "curriculum.get_rubric"

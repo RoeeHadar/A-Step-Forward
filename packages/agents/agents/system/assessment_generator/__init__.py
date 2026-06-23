@@ -1,8 +1,9 @@
-﻿"""Stub package for agent assessment_generator. Sub-agent 03-agents fills this in.
+﻿"""Assessment Generator agent."""
 
-See:
-  - PLAN.md §4 (agent roster)
-  - skills/build-an-agent/SKILL.md
-  - .cursor/subagent-briefs/03-agents.md
-  - prompts/assessment_generator/v1.md
-"""
+from __future__ import annotations
+
+from .agent import AssessmentGeneratorAgent
+from .input import AssessmentGeneratorInput
+from .output import AssessmentGeneratorOutput
+
+__all__ = ["AssessmentGeneratorAgent", "AssessmentGeneratorInput", "AssessmentGeneratorOutput"]
