@@ -5,6 +5,8 @@ from __future__ import annotations
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
+from schemas.errors import NotFoundError
 from schemas.progress import (
     KnowledgeGaps,
     LearnerRefInput,
@@ -14,6 +16,8 @@ from schemas.progress import (
     UpdateMasteryResult,
 )
 
+from progress_mcp.errors import invoke, raise_tool_error
+from progress_mcp.facade import StubProgressFacade, get_progress_facade
 from progress_mcp.server import create_server
 
 
@@ -78,3 +82,46 @@ async def test_progress_update_mastery(mcp_server, mock_facade: MagicMock) -> No
 def test_create_server_boots(mock_facade: MagicMock) -> None:
     server = create_server(facade=mock_facade)
     assert server.name == "progress"
+
+
+@pytest.mark.asyncio
+async def test_progress_snapshot_maps_app_error(mcp_server, mock_facade: MagicMock) -> None:
+    mock_facade.snapshot.side_effect = NotFoundError("learner missing")
+    with pytest.raises(ToolError, match="not_found"):
+        await mcp_server.call_tool(
+            "progress.snapshot", {"inp": LearnerRefInput(learner_id="learner-1").model_dump(mode="json")}
+        )
+
+
+@pytest.mark.asyncio
+async def test_stub_facade_defaults() -> None:
+    facade = StubProgressFacade()
+    snapshot = await facade.snapshot("learner-1")
+    assert snapshot.learner_id == "learner-1"
+    gaps = await facade.gaps("learner-1")
+    assert gaps.gaps == []
+    streak = await facade.streak("learner-1")
+    assert streak.streak_days == 0
+    result = await facade.update_mastery(
+        UpdateMasteryInput(learner_id="learner-1", concept_id="c1", score=0.5)
+    )
+    assert result.updated is True
+    assert get_progress_facade() is not None
+
+
+@pytest.mark.asyncio
+async def test_invoke_maps_service_error() -> None:
+    async def _fail() -> None:
+        raise NotFoundError("missing")
+
+    with pytest.raises(ToolError, match="not_found"):
+        await invoke(_fail())
+
+
+def test_main_invokes_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    mock_server = MagicMock()
+    monkeypatch.setattr("progress_mcp.server.create_server", lambda **_: mock_server)
+    from progress_mcp.server import main
+
+    main()
+    mock_server.run.assert_called_once()

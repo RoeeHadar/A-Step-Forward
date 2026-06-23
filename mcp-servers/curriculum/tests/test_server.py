@@ -5,6 +5,7 @@ from __future__ import annotations
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
 from schemas.curriculum import (
     CourseSummary,
     CurriculumFindForConceptInput,
@@ -15,7 +16,9 @@ from schemas.curriculum import (
     LearningPathSuggestion,
     Level,
 )
+from schemas.errors import NotFoundError
 
+from curriculum_mcp.errors import invoke, raise_tool_error
 from curriculum_mcp.server import create_server
 
 
@@ -97,3 +100,30 @@ async def test_curriculum_suggest_path(mcp_server, mock_svc: MagicMock) -> None:
 def test_create_server_boots(mock_svc: MagicMock) -> None:
     server = create_server(svc=mock_svc)
     assert server.name == "curriculum"
+
+
+@pytest.mark.asyncio
+async def test_curriculum_get_course_maps_app_error(mcp_server, mock_svc: MagicMock) -> None:
+    mock_svc.get_course.side_effect = NotFoundError("course missing")
+    with pytest.raises(ToolError, match="not_found"):
+        await mcp_server.call_tool(
+            "curriculum.get_course", {"inp": CurriculumGetCourseInput(course_id="missing").model_dump(mode="json")}
+        )
+
+
+@pytest.mark.asyncio
+async def test_invoke_maps_service_error() -> None:
+    async def _fail() -> None:
+        raise NotFoundError("missing")
+
+    with pytest.raises(ToolError, match="not_found"):
+        await invoke(_fail())
+
+
+def test_main_invokes_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    mock_server = MagicMock()
+    monkeypatch.setattr("curriculum_mcp.server.create_server", lambda **_: mock_server)
+    from curriculum_mcp.server import main
+
+    main()
+    mock_server.run.assert_called_once()
