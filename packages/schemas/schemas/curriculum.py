@@ -188,28 +188,3 @@ class LearningPathSuggestion(BaseModel):
     steps: list[PathStep] = Field(default_factory=list)
 
 
-# ---------- MCP tool inputs ----------
-
-
-class CurriculumListCoursesInput(BaseModel):
-    level: Level | None = None
-    limit: int = Field(default=50, ge=1, le=200)
-
-
-class CurriculumGetCourseInput(BaseModel):
-    course_id: IDStr
-
-
-class CurriculumGetLessonInput(BaseModel):
-    lesson_id: IDStr
-
-
-class CurriculumFindForConceptInput(BaseModel):
-    concept_id: IDStr
-    limit: int = Field(default=20, ge=1, le=100)
-
-
-class CurriculumSuggestPathInput(BaseModel):
-    learner_id: IDStr
-    goal_id: IDStr
-    max_steps: int = Field(default=12, ge=1, le=50)

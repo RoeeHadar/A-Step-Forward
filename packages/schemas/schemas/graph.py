@@ -125,38 +125,3 @@ class Extraction(BaseModel):
     notes: Literal["", "low_confidence", "pending_review"] = ""
 
 
-# ---------- MCP tool inputs ----------
-
-
-class KGConceptInput(BaseModel):
-    concept_id: IDStr
-
-
-class KGNextTopicsInput(BaseModel):
-    concept_id: IDStr
-    learner_id: IDStr
-
-
-class KGExplainPathInput(BaseModel):
-    src: IDStr
-    dst: IDStr
-
-
-class KGPersonalizedInput(BaseModel):
-    learner_id: IDStr
-    query: str = Field(min_length=1, max_length=2000)
-    k: int = Field(default=10, ge=1, le=200)
-
-
-class KGChunk(BaseModel):
-    """Text chunk stored in pgvector; linked to KG nodes via DERIVED_FROM edges."""
-
-    id: IDStr
-    document_id: IDStr
-    ordinal: int = Field(ge=0)
-    text: str
-    heading: str | None = None
-    token_count: int | None = None
-    embedding: list[float] | None = None
-    provenance: Provenance | None = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

@@ -25,30 +25,3 @@ class ProgressSummary(BaseModel):
     next_review_at: datetime | None = None
 
 
-# ---------- MCP tool inputs / outputs ----------
-
-
-class LearnerRefInput(BaseModel):
-    learner_id: IDStr
-
-
-class UpdateMasteryInput(BaseModel):
-    learner_id: IDStr
-    concept_id: IDStr
-    score: ConfidenceScore
-
-
-class KnowledgeGaps(BaseModel):
-    learner_id: IDStr
-    gaps: list[MasteryEntry] = Field(default_factory=list)
-
-
-class StreakInfo(BaseModel):
-    learner_id: IDStr
-    streak_days: int = 0
-    next_review_at: datetime | None = None
-
-
-class UpdateMasteryResult(BaseModel):
-    updated: bool = True
-    entry: MasteryEntry | None = None
