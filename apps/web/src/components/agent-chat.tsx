@@ -1,0 +1,112 @@
+'use client';
+
+import { useChat } from 'ai/react';
+import { useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Send, Loader2 } from 'lucide-react';
+import { Button } from '@asf/ui/button';
+import { Textarea } from '@asf/ui/textarea';
+import { Card } from '@asf/ui/card';
+import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas/agents';
+import { agentColors } from '@/lib/design-tokens';
+import { useChatUiStore } from '@/stores/ui-store';
+
+export function AgentChat({ agent }: { agent: string }) {
+  const parsed = agentNameSchema.safeParse(agent);
+  const agentName: AgentName = parsed.success ? parsed.data : 'tutor';
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const setLastAgent = useChatUiStore((s) => s.setLastAgent);
+
+  useEffect(() => {
+    setLastAgent(agentName);
+  }, [agentName, setLastAgent]);
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
+    api: '/api/chat',
+    body: { agent: agentName },
+  });
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  return (
+    <div className="flex h-[calc(100vh-8rem)] flex-col">
+      <header className="mb-4 flex items-center gap-3">
+        <div
+          className="h-3 w-3 rounded-full"
+          style={{ backgroundColor: agentColors[agentName] ?? 'hsl(221 83% 53%)' }}
+          aria-hidden
+        />
+        <h1 className="text-2xl font-semibold">{agentDisplayNames[agentName]}</h1>
+      </header>
+
+      <Card className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex-1 space-y-4 overflow-y-auto p-4" role="log" aria-live="polite" aria-label="Chat messages">
+          {messages.length === 0 ? (
+            <p className="text-center text-muted-foreground">
+              Ask {agentDisplayNames[agentName]} anything about your current lesson.
+            </p>
+          ) : (
+            messages.map((m) => (
+              <div
+                key={m.id}
+                className={
+                  m.role === 'user'
+                    ? 'ml-auto max-w-[85%] rounded-lg bg-primary px-4 py-2 text-primary-foreground'
+                    : 'mr-auto max-w-[85%] rounded-lg bg-muted px-4 py-2'
+                }
+              >
+                {m.role === 'assistant' ? (
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  m.content
+                )}
+              </div>
+            ))
+          )}
+          {isLoading ? (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+              <span>Thinking…</span>
+            </div>
+          ) : null}
+          <div ref={bottomRef} />
+        </div>
+
+        {error ? (
+          <p className="border-t border-border px-4 py-2 text-sm text-destructive" role="alert">
+            {error.message}
+          </p>
+        ) : null}
+
+        <form onSubmit={handleSubmit} className="flex gap-2 border-t border-border p-4">
+          <label htmlFor="chat-input" className="sr-only">
+            Message
+          </label>
+          <Textarea
+            id="chat-input"
+            value={input}
+            onChange={handleInputChange}
+            placeholder="Type your message…"
+            rows={2}
+            className="min-h-[44px] resize-none"
+            disabled={isLoading}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+              }
+            }}
+          />
+          <Button type="submit" size="icon" disabled={isLoading || !input.trim()} aria-label="Send message">
+            <Send className="h-4 w-4" />
+          </Button>
+        </form>
+      </Card>
+    </div>
+  );
+}
