@@ -1,6 +1,8 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
+import type { Route } from 'next';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -12,12 +14,12 @@ import {
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
 
-const items = [
-  { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
-  { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
-  { href: '/app/lessons/lesson-intro-fractions', icon: BookOpen, labelKey: 'lessons' as const, match: '/app/lessons' },
-  { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },
-  { href: '/app/progress', icon: TrendingUp, labelKey: 'progress' as const },
+const items: { href: Route; icon: React.ElementType; labelKey: 'dashboard' | 'chat' | 'lessons' | 'memory' | 'progress'; match?: string }[] = [
+  { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' },
+  { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat', match: '/app/chat' },
+  { href: '/app/lessons/lesson-intro-fractions', icon: BookOpen, labelKey: 'lessons', match: '/app/lessons' },
+  { href: '/app/memory', icon: Brain, labelKey: 'memory' },
+  { href: '/app/progress', icon: TrendingUp, labelKey: 'progress' },
 ];
 
 export function AppSidebar() {
