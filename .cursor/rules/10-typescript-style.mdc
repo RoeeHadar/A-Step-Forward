@@ -1,0 +1,21 @@
+---
+description: TypeScript rules for apps/web and any TS package.
+globs:
+  - "apps/web/**/*.{ts,tsx}"
+  - "packages/ui/**/*.{ts,tsx}"
+  - "packages/schemas/**/*.ts"
+---
+
+# TypeScript Style
+
+- `strict: true`, `noImplicitAny: true`, `noUncheckedIndexedAccess: true`.
+- **No `any`.** Use `unknown` + narrow, or define the type. `as` casts require a comment justifying why.
+- Validate every external boundary (HTTP, env, localStorage, postMessage) with **Zod**. Share schemas via `packages/schemas/`.
+- React components: function components only, no class components. Server components by default in Next.js App Router; mark client components with `"use client"` only when needed.
+- File layout: one component per file, kebab-case file names, PascalCase exports.
+- Prefer **server actions** + `useFormState` for mutations; `TanStack Query` for reads from the FastAPI backend (REST under `/api/...`).
+- Style with **Tailwind v4** + **shadcn/ui** primitives; never inline `style` except for dynamic CSS variables.
+- Accessibility: every interactive element has an accessible name; lint with `eslint-plugin-jsx-a11y`.
+- Test with **Vitest** (unit) + **Playwright** (E2E). Snapshot tests only for stable presentational output.
+- No `console.log` in shipped code; use the `logger` from `apps/web/src/lib/logger.ts`.
+- Use `pnpm` exclusively. Don't commit `node_modules` or alternate lockfiles.

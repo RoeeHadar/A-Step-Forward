@@ -1,0 +1,24 @@
+---
+description: Python rules for apps/api, services/*, packages/agents, mcp-servers/*.
+globs:
+  - "apps/api/**/*.py"
+  - "services/**/*.py"
+  - "packages/agents/**/*.py"
+  - "mcp-servers/**/*.py"
+  - "packages/schemas/**/*.py"
+---
+
+# Python Style
+
+- Python **3.11+**. Use `uv` for env + lockfile.
+- **Async-first.** FastAPI routes async; SQLAlchemy 2.0 async; HTTP via `httpx.AsyncClient`.
+- **Pydantic v2** for every schema (inputs, outputs, settings, agent state). Schemas live in `packages/schemas/`.
+- **Type-checked.** `mypy --strict` for `services/*`, `apps/api`, `packages/agents`. No `Any` without `# type: ignore[<rule>]` and a comment.
+- **Formatting/lint.** `ruff format` + `ruff check` (with rules enabled including `B`, `I`, `S`, `RUF`).
+- **Tests.** `pytest` + `pytest-asyncio`; aim ≥80% coverage on services and agents.
+- **DB access** only through repository classes in `services/<svc>/<svc>_service/stores/`. No raw SQL in routes.
+- **Memory access** only through `MemoryService` (or its MCP). Never query memory tables directly from agents or routes.
+- **Settings** via `pydantic-settings`; never `os.getenv` inline in feature code.
+- **Logging** via `structlog`; structured JSON logs; never log PII.
+- **LLM calls** go through `packages/agents/agents/base/llm.py` (handles retries, caching, tracing, budgets). Never instantiate provider SDKs ad-hoc in feature code.
+- **Errors.** Use typed exceptions in `packages/schemas/errors.py`; map to HTTP via FastAPI exception handlers.

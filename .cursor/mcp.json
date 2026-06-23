@@ -1,0 +1,76 @@
+{
+  "_comment": "MCP servers used by Cursor while developing this repo. Runtime (in-product) MCPs are configured by the orchestrator service. Replace ${VAR} via your local env or Cursor secret store.",
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}" }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": ["-y", "@shadcn/ui-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${env:DATABASE_URL_SYNC}"]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "memory-project": {
+      "_comment": "Project's own memory MCP, useful for dev/QA introspection. Implemented at mcp-servers/memory.",
+      "command": "python",
+      "args": ["-m", "memory_mcp.server"],
+      "cwd": "${workspaceFolder}/mcp-servers/memory",
+      "env": {
+        "DATABASE_URL": "${env:DATABASE_URL}",
+        "REDIS_URL": "${env:REDIS_URL}"
+      }
+    },
+    "graphrag-project": {
+      "command": "python",
+      "args": ["-m", "graphrag_mcp.server"],
+      "cwd": "${workspaceFolder}/mcp-servers/graphrag",
+      "env": {
+        "NEO4J_URI": "${env:NEO4J_URI}",
+        "NEO4J_USER": "${env:NEO4J_USER}",
+        "NEO4J_PASSWORD": "${env:NEO4J_PASSWORD}",
+        "DATABASE_URL": "${env:DATABASE_URL}"
+      }
+    },
+    "curriculum-project": {
+      "command": "python",
+      "args": ["-m", "curriculum_mcp.server"],
+      "cwd": "${workspaceFolder}/mcp-servers/curriculum",
+      "env": {
+        "DATABASE_URL": "${env:DATABASE_URL}"
+      }
+    },
+    "progress-project": {
+      "command": "python",
+      "args": ["-m", "progress_mcp.server"],
+      "cwd": "${workspaceFolder}/mcp-servers/progress",
+      "env": {
+        "DATABASE_URL": "${env:DATABASE_URL}",
+        "REDIS_URL": "${env:REDIS_URL}"
+      }
+    }
+  }
+}

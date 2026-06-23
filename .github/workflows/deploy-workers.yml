@@ -1,0 +1,37 @@
+name: Deploy Workers (Fly Machines)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/workers/**"
+      - "services/memory/**"
+      - "packages/agents/**"
+      - "infra/fly/asf-workers.toml"
+      - ".github/workflows/deploy-workers.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-workers-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Sync secrets from Doppler
+        uses: dopplerhq/cli-action@v3
+        with:
+          token: ${{ secrets.DOPPLER_TOKEN }}
+          project: a-step-forward
+          config: stg
+
+      - name: Deploy Celery workers + beat
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl deploy --config infra/fly/asf-workers.toml --remote-only

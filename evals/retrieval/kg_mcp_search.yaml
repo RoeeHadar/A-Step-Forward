@@ -1,0 +1,15 @@
+description: GraphRAG MCP tool eval — kg.search returns concept nodes for a query.
+providers:
+  - id: echo
+tests:
+  - description: kg.search finds fractions concept
+    vars:
+      tool: kg.search
+      input:
+        query: fractions
+        k: 5
+    assert:
+      - type: javascript
+        value: |
+          const rows = JSON.parse(output);
+          return Array.isArray(rows) && rows.some(r => (r.node?.canonical_name || '').toLowerCase().includes('fraction'));

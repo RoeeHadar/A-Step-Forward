@@ -1,0 +1,1 @@
+"""Curriculum MCP server."""

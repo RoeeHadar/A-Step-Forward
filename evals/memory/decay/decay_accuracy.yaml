@@ -1,0 +1,34 @@
+description: Decay strength computation — salience × exponential time decay (Phase-1).
+metric: decay_accuracy
+cases:
+  - type: decay_strength
+    salience: 1.0
+    tau_days: 14.0
+    elapsed_days: 0
+    expected_range: [0.99, 1.0]
+  - type: decay_strength
+    salience: 0.8
+    tau_days: 14.0
+    elapsed_days: 14
+    expected_range: [0.28, 0.32]
+  - type: decay_strength
+    salience: 0.5
+    tau_days: 7.0
+    elapsed_days: 21
+    expected_range: [0.02, 0.03]
+  - type: decay_reinforce
+    salience: 0.5
+    delta: 0.05
+    expected_salience_min: 0.55
+  - type: should_archive
+    salience: 0.05
+    tau_days: 7.0
+    elapsed_days: 60
+    threshold: 0.05
+    expected: true
+  - type: should_archive
+    salience: 0.9
+    tau_days: 14.0
+    elapsed_days: 1
+    threshold: 0.05
+    expected: false

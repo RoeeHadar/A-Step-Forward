@@ -1,0 +1,14 @@
+description: Curriculum MCP tool eval — list_courses returns published courses.
+providers:
+  - id: echo
+tests:
+  - description: curriculum.list_courses is a list (may be empty before seeding)
+    vars:
+      tool: curriculum.list_courses
+      input:
+        limit: 50
+    assert:
+      - type: javascript
+        value: |
+          const rows = JSON.parse(output);
+          return Array.isArray(rows);

@@ -1,0 +1,38 @@
+# Memory store evals — CRUD + type routing
+#
+# Run after migrations: alembic upgrade head
+# Requires local Postgres from infra/docker-compose.yml
+
+description: Memory store CRUD and per-type table routing
+
+providers:
+  - id: memory-store-pytest
+    label: memory store integration tests
+    config:
+      command: uv run pytest services/memory/tests/test_stores.py -q
+
+tests:
+  - description: All seven persisted memory types round-trip through Postgres
+    vars:
+      suite: per_type_upsert
+    assert:
+      - type: javascript
+        value: output.passed === true
+
+  - description: Soft delete hides records from get/timeline
+    vars:
+      suite: soft_delete
+    assert:
+      - type: javascript
+        value: output.passed === true
+
+  - description: Patch preserves provenance and updates content
+    vars:
+      suite: patch
+    assert:
+      - type: javascript
+        value: output.passed === true
+
+defaultTest:
+  options:
+    provider: memory-store-pytest

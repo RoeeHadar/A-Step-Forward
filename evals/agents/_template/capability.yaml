@@ -1,0 +1,17 @@
+description: Capability matrix template (promptfoo). Replace examples with real cases for the agent.
+prompts:
+  - file://../../prompts/<AGENT>/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+  - id: openai:gpt-5-mini
+tests:
+  - description: example happy case
+    vars:
+      message: "Explain this concept simply."
+    assert:
+      - type: contains-any
+        value: ["example", "let's"]
+      - type: latency
+        threshold: 8000
+      - type: cost
+        threshold: 0.02

@@ -1,0 +1,45 @@
+description: Tutor behavioral capability matrix — Socratic teaching, adaptation, JSON output (Phase-1 mock provider).
+prompts:
+  - file://../../../prompts/tutor/v1.md
+providers:
+  - id: file://../../providers/tutor_mock.js
+tests:
+  - description: asks a Socratic question before explaining fractions
+    vars:
+      message: "Can you explain what a denominator is in fractions?"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return out.reply.toLowerCase().includes('?') && (out.reply.toLowerCase().includes('denominator') || out.reply.toLowerCase().includes('think'));
+  - description: recalls curriculum when discussing photosynthesis
+    vars:
+      message: "I'm confused about photosynthesis."
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return out.reply.toLowerCase().includes('photosynthesis') && (out.reply.includes('Lesson') || out.reply.includes('?'));
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return ['continue','assess','next_lesson','rest'].includes(out.next_step);
+  - description: uses Socratic opener for generic explain request
+    vars:
+      message: "Explain quadratic equations to me."
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return out.reply.includes('?') || out.reply.toLowerCase().includes('already know');
+  - description: returns valid TutorOutput JSON shape
+    vars:
+      message: "Help me with long division."
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return typeof out.reply === 'string' && out.reply.length > 0
+            && typeof out.next_step === 'string'
+            && typeof out.rationale === 'string'
+            && Array.isArray(out.pinned_memory_writes);

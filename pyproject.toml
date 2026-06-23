@@ -1,0 +1,81 @@
+[project]
+name = "a-step-forward"
+version = "0.1.0"
+description = "A Step Forward — monorepo root (dev tooling, migrations, CI)."
+requires-python = ">=3.11"
+dependencies = [
+  "alembic>=1.13",
+  "asyncpg>=0.29",
+  "pgvector>=0.3",
+  "sqlalchemy>=2.0.30",
+  "pyyaml>=6.0",
+  "celery>=5.4",
+  "memory-service",
+  "curriculum-service",
+  "asf-api",
+]
+
+[dependency-groups]
+dev = [
+  "ruff>=0.6",
+  "pytest>=8.0",
+  "pytest-asyncio>=0.23",
+  "mypy>=1.11",
+  "types-redis",
+]
+
+[tool.uv.workspace]
+members = [
+  "apps/api",
+  "packages/agents",
+  "packages/schemas",
+  "services/memory",
+  "services/graphrag",
+  "services/orchestrator",
+  "services/curriculum",
+  "services/workers",
+  "mcp-servers/memory",
+  "mcp-servers/graphrag",
+  "mcp-servers/curriculum",
+  "mcp-servers/progress",
+]
+
+[tool.uv.sources]
+memory-service = { workspace = true }
+curriculum-service = { workspace = true }
+asf-api = { workspace = true }
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = [".venv", "node_modules", "apps/web/.next"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"infra/alembic/env.py" = ["E402"]
+"scripts/**" = ["E402"]
+"**/tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = [
+  "packages/schemas",
+  "services/memory",
+  "services/graphrag",
+  "services/orchestrator",
+  "services/curriculum",
+  "packages/agents",
+  "apps/api",
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+files = ["infra/alembic/env.py", "tests"]

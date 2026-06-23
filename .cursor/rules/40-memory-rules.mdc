@@ -1,0 +1,21 @@
+---
+description: Memory access rules. Apply to anything that reads or writes learner memory.
+globs:
+  - "services/memory/**/*.py"
+  - "packages/agents/**/*.py"
+  - "apps/api/**/*.py"
+  - "mcp-servers/memory/**/*.py"
+---
+
+# Memory Rules
+
+1. **Single front door.** All memory reads and writes go through `MemoryService` (Python) or the `memory` MCP (agents). Never query memory tables directly from routes or agents.
+2. **Typed.** All memories use the Pydantic models in `packages/schemas/memory.py`. Pick the correct `MemoryType` (working, episodic, semantic, procedural, affective, context, reflective, source).
+3. **Provenance.** Every write must include `provenance` (source kind + id + agent + model + ts). No anonymous memories.
+4. **PII first.** `MemoryService.write()` runs Presidio + custom redaction before persistence. Don't bypass.
+5. **Importance.** Importance is scored by the service, not the caller; callers may supply *hints* (`importance_hint`).
+6. **Conflict resolution.** When a write would contradict an existing semantic memory, the service marks one `superseded_by` the other. Never overwrite silently.
+7. **Decay & dreaming.** Don't replicate decay logic in features; rely on the `decay_sweep` worker and the `MemorySteward` (Dreamer) agent.
+8. **Reads are policy-filtered.** Pass the calling `agent_id` and `learner_id` so the service can apply the memory access policy.
+9. **Audit.** Every read/write is logged to `audit_memory_events`. Don't disable.
+10. **Privacy.** Learner-facing endpoints (Memory Inspector) let learners view, correct, or delete. Honor delete-on-request — set `deleted_at` and ensure embeddings and KG nodes are removed too.

@@ -1,0 +1,20 @@
+description: Coach capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/coach/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt emphasizes practice over lecture
+    vars:
+      message: "Drill me on algebra."
+    assert:
+      - type: contains
+        value: "Practice over lecture"
+      - type: contains
+        value: "CoachOutput"
+  - description: prompt references FSRS due reviews
+    vars:
+      message: "What should I review?"
+    assert:
+      - type: contains
+        value: "progress.get_due_reviews"

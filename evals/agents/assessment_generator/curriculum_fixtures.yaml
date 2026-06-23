@@ -1,0 +1,31 @@
+# Assessment Generator eval fixtures — generate items aligned to seed assessments.
+
+fixtures:
+  - id: ag-number-sense-variant
+    description: Generate a new MCQ variant for number-sense unit objectives.
+    source_assessment_id: assessment-number-sense-quiz
+    unit_id: number-sense
+    course_id: foundations-of-math
+    objective_ids:
+      - obj-ns-read-numbers
+      - obj-ns-compare
+    expect:
+      question_type: mcq
+      includes_rubric: true
+      concept_ids_subset_of: [concept-whole-number, concept-place-value, concept-comparing-numbers]
+
+  - id: ag-fractions-short-answer
+    description: Generate a short-answer item for fraction operations.
+    source_lesson_id: lesson-adding-fractions
+    objective_ids: [obj-add-like]
+    expect:
+      question_type: short
+      includes_rubric: true
+      concept_ids: [concept-fraction-operations]
+
+vars:
+  seed_course: foundations-of-math
+  seed_assessments:
+    - assessment-number-sense-quiz
+    - assessment-fractions-quiz
+    - assessment-decimals-percent-quiz

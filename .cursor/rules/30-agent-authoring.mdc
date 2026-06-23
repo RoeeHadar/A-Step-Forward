@@ -1,0 +1,34 @@
+---
+description: Rules for authoring or modifying runtime AI agents.
+globs:
+  - "packages/agents/**/*.py"
+  - "services/orchestrator/**/*.py"
+  - "prompts/**/*.md"
+  - "evals/agents/**/*"
+---
+
+# Agent Authoring
+
+Every runtime agent **must**:
+
+1. Extend `packages/agents/agents/base/agent.Agent` (or a subclass).
+2. Declare typed `Input` and `Output` Pydantic models.
+3. List its tools explicitly. Prefer MCP-backed tools over ad-hoc functions.
+4. Have a **versioned** system prompt at `prompts/<agent>/v<n>.md`. Never edit `v<n>.md` in place once shipped — bump version and update the agent's `prompt_version`.
+5. Declare its **memory access policy**: which memory types it can read/write.
+6. Pass through `SafetyModeration.pre()` and `SafetyModeration.post()`.
+7. Emit Langfuse traces with `trace_name="<agent>:<turn_id>"`.
+8. Respect its **latency** and **token** budgets defined in `packages/agents/agents/<agent>/budget.py`.
+9. Have an eval suite under `evals/agents/<agent>/` covering: capability, safety, refusal, citation, regression. **No prompt or agent PR merges without eval coverage.**
+10. Be registered in `packages/agents/agents/__init__.AGENT_REGISTRY` so the orchestrator can find it.
+
+Composition rules:
+
+- Agents do **not** call other agents directly. Always go through the Orchestrator.
+- Long-running multi-step work uses `langgraph` checkpointing so it can resume.
+- Agents may **read** the Knowledge Graph, but only `KGBuilder` and `MemorySteward` may **write** to it.
+
+Cost & model routing:
+
+- Default model: env `LLM_DEFAULT_MODEL`. Use `LLM_DEEP_MODEL` only when a router/eval shows it's needed. Use `LLM_CHEAP_MODEL` for bulk/cheap tasks (Note-Taker, Engagement, KG extraction batch).
+- Always use prompt caching for stable system prompts.

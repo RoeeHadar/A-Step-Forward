@@ -1,0 +1,110 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'promote' to deploy production"
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm promotion
+        if: inputs.confirm != 'promote'
+        run: |
+          echo "Input confirm must be 'promote'."
+          exit 1
+
+      - uses: actions/checkout@v4
+
+      - name: Require green evals on main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run list --workflow evals.yml --branch main --limit 1 --json conclusion \
+            | jq -e '.[0].conclusion == "success"'
+
+  deploy-web:
+    needs: [gate]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://app.astepforward.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - uses: dopplerhq/cli-action@v3
+        with:
+          token: ${{ secrets.DOPPLER_TOKEN }}
+          project: a-step-forward
+          config: prd
+
+      - name: Deploy web to production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: pnpm dlx vercel deploy --prod --token "$VERCEL_TOKEN" --cwd apps/web
+
+  deploy-api:
+    needs: [gate]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - uses: dopplerhq/cli-action@v3
+        with:
+          token: ${{ secrets.DOPPLER_TOKEN }}
+          project: a-step-forward
+          config: prd
+
+      - name: Deploy API to production
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl deploy --config infra/fly/asf-api.toml --remote-only
+
+      - uses: astral-sh/setup-uv@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run migrations (production)
+        run: |
+          uv sync
+          uv run alembic -c infra/alembic.ini upgrade head
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
+  deploy-workers:
+    needs: [gate]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy workers to production
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl deploy --config infra/fly/asf-workers.toml --remote-only

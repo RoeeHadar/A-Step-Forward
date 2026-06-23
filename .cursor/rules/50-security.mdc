@@ -1,0 +1,18 @@
+---
+description: Security & privacy rules. Always apply.
+alwaysApply: true
+---
+
+# Security & Privacy
+
+- **Secrets** never go into the repo. Use `.env.local`, Vercel envs, or Doppler. `*.env*` is in `.gitignore` (except `.env.example`). If you spot a secret in a diff, stop and rotate it.
+- **TLS** in transit, **AES-GCM** at rest for sensitive fields (memory contents, notes, uploads). Use the `crypto.envelope` helpers; no raw `cryptography` calls in feature code.
+- **PII** is redacted before any storage or log. Use `services/memory/memory_service/hygiene/pii.py` (Presidio + custom rules).
+- **Auth** via Clerk. Verify JWTs in `apps/api/app/core/auth.py`. Never trust client claims for `role` or `learner_id`.
+- **RBAC** roles: `learner`, `educator`, `admin`, `parent`. Enforce in route dependencies, not in handlers.
+- **Per-row policy.** Learner data filtered by `learner_id` from the auth context; never accept `learner_id` from the request body for read endpoints.
+- **Child mode.** If `learner.age < 13` or `learner.child_mode = true`, apply COPPA-aware policies: no third-party trackers, no affective-memory persistence, stricter moderation thresholds.
+- **Jailbreak defense.** Run inputs through the moderation classifier; system prompts are hardened; tool calls are allowlisted per agent.
+- **Audit log.** Memory reads/writes, RBAC denials, and admin actions are logged to `audit_*` tables. Don't disable.
+- **Dependencies.** Pin versions. New deps require a one-liner justification in the PR description.
+- **CSP** and security headers configured in `apps/web/middleware.ts`. Don't broaden CSP to fix a bug — fix the bug.

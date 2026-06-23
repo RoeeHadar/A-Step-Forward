@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "_comment": "Cursor hooks for this project. Run 'python scripts/hooks/<name>.py' from the workspace root. Keep hooks fast (<300ms typical).",
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "python scripts/hooks/before_shell.py",
+        "description": "Block dangerous commands (rm -rf /, force-push to main, drop database, raw kubectl delete, etc.).",
+        "blocking": true,
+        "timeoutMs": 2000
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "python scripts/hooks/after_file_edit.py",
+        "description": "Format & lint changed files (prettier/eslint for TS/JS, ruff for Python). Best-effort, non-blocking.",
+        "blocking": false,
+        "timeoutMs": 5000
+      }
+    ],
+    "agentStart": [
+      {
+        "command": "python scripts/hooks/agent_start.py",
+        "description": "Inject MEMORY_SNAPSHOT.md + current sprint goals + active sub-agent brief into the agent context.",
+        "blocking": false,
+        "timeoutMs": 2000
+      }
+    ],
+    "agentStop": [
+      {
+        "command": "python scripts/hooks/agent_stop.py",
+        "description": "Append session highlights to docs/sessions/<date>.md and update MEMORY_SNAPSHOT.md.",
+        "blocking": false,
+        "timeoutMs": 3000
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": "python scripts/hooks/before_read_file.py",
+        "description": "Redact secrets if .env* is being read; warn on private keys.",
+        "blocking": true,
+        "timeoutMs": 1000
+      }
+    ],
+    "agentResponse": [
+      {
+        "command": "python scripts/hooks/agent_response.py",
+        "description": "Log tokens/model/latency to local eval store (data/agent_responses.jsonl) for cost & regression tracking.",
+        "blocking": false,
+        "timeoutMs": 1000
+      }
+    ]
+  }
+}

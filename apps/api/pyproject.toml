@@ -1,0 +1,55 @@
+[project]
+name = "asf-api"
+version = "0.1.0"
+description = "FastAPI gateway for A Step Forward."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.4",
+  "httpx>=0.27",
+  "structlog>=24.1",
+  "python-jose[cryptography]>=3.3",
+  "redis>=5.0",
+  "sqlalchemy[asyncio]>=2.0",
+  "asyncpg>=0.29",
+  "prometheus-client>=0.20",
+  "sentry-sdk[fastapi]>=2.0",
+  "opentelemetry-api>=1.27",
+  "opentelemetry-sdk>=1.27",
+  "opentelemetry-instrumentation-fastapi>=0.48b0",
+  "opentelemetry-exporter-otlp-proto-http>=1.27",
+  "schemas",
+  "memory-service",
+  "curriculum-service",
+  "graphrag-service",
+  "agents",
+  "orchestrator",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.24",
+  "httpx>=0.27",
+]
+
+[tool.uv.sources]
+schemas = { path = "../../packages/schemas", editable = true }
+memory-service = { path = "../../services/memory", editable = true }
+curriculum-service = { path = "../../services/curriculum", editable = true }
+graphrag-service = { path = "../../services/graphrag", editable = true }
+agents = { path = "../../packages/agents", editable = true }
+orchestrator = { path = "../../services/orchestrator", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -1,0 +1,21 @@
+---
+description: Testing & evals rules.
+alwaysApply: true
+---
+
+# Testing & Evals
+
+- **Coverage targets**: services + agents ≥ 80%, frontend ≥ 70%.
+- **Unit tests** next to code (`tests/` per package). Pure logic only; no network.
+- **Integration tests** under top-level `tests/`. Use Docker Compose services.
+- **Agent evals** in `evals/agents/<agent>/`:
+  - `*.yaml` — `promptfoo` capability + regression matrices.
+  - `*.py` — `DeepEval` for graded outputs (faithfulness, citation accuracy, helpfulness, safety, refusal-when-appropriate).
+- **Retrieval evals** in `evals/retrieval/`: recall@k, precision@k, MRR for memory and GraphRAG.
+- **Memory evals** in `evals/memory/`: dreaming quality, consolidation correctness, decay accuracy, conflict-resolution correctness.
+- **Required gates** in CI:
+  - Lint + type-check + unit must pass.
+  - Touched-prompt evals must pass with no regressions vs. baseline.
+  - Touched-agent evals must meet thresholds defined in `evals/agents/<agent>/thresholds.yaml`.
+- **No flaky tests merged.** Quarantine with `@pytest.mark.flaky` only with a Linear/Github issue link in the marker reason.
+- **Shadow mode.** New prompts/agents may be enabled in shadow mode in production; promote only after 24h of green online evals.

@@ -1,0 +1,20 @@
+description: Tutor capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/tutor/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt declares Socratic teaching role
+    vars:
+      message: "Help me understand fractions."
+    assert:
+      - type: contains
+        value: "Socratic"
+      - type: contains
+        value: "TutorOutput"
+  - description: prompt lists memory tools
+    vars:
+      message: "Recall what I learned."
+    assert:
+      - type: contains-any
+        value: ["memory.search", "memory.write"]

@@ -1,0 +1,20 @@
+description: Orchestrator routing capability matrix (declarative router + prompt contract).
+prompts:
+  - file://../../prompts/orchestrator/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt declares routing role and output schema
+    vars:
+      message: "Route this turn."
+    assert:
+      - type: contains
+        value: "OrchestratorOutput"
+      - type: contains
+        value: "Route, don't answer"
+  - description: prompt lists core learner-facing agents
+    vars:
+      message: "Check catalog."
+    assert:
+      - type: contains-any
+        value: ["tutor", "qa_explainer", "coach"]

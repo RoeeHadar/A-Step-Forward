@@ -1,0 +1,17 @@
+description: Memory MCP tool eval — hybrid search returns relevant episodic memories.
+providers:
+  - id: echo
+tests:
+  - description: memory.search finds long-division episodic memory
+    vars:
+      tool: memory.search
+      input:
+        learner_id: learner-fixture-1
+        query: long division worked example
+        agent_id: tutor
+        k: 5
+    assert:
+      - type: javascript
+        value: |
+          const rows = JSON.parse(output);
+          return Array.isArray(rows) && rows.length >= 1 && rows[0].record.content.toLowerCase().includes('division');

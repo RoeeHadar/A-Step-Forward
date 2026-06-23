@@ -1,0 +1,28 @@
+[project]
+name = "graphrag-service"
+version = "0.1.0"
+description = "GraphRAG service over Neo4j + pgvector for A Step Forward."
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7",
+  "pydantic-settings>=2.4",
+  "neo4j>=5.22",
+  "httpx>=0.27",
+  "structlog>=24.1",
+  "sqlalchemy>=2.0.30",
+  "asyncpg>=0.29",
+  "pgvector>=0.3",
+  "rapidfuzz>=3.9",
+  "tiktoken>=0.7",
+  "schemas",
+]
+
+[tool.uv.sources]
+schemas = { path = "../../packages/schemas", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["graphrag_service"]

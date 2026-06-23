@@ -1,0 +1,32 @@
+---
+description: Project compass. Always read the master plan and architecture before changing anything non-trivial.
+alwaysApply: true
+---
+
+# Architecture Compass
+
+You are working on **A Step Forward**, an AI-native learning center.
+
+Before non-trivial work, you **must** have read:
+
+- `PLAN.md` — vision, stack, agents, memory, MCPs, hooks, skills, roadmap.
+- `ARCHITECTURE.md` — components and data flows.
+- `AGENTS.md` — runtime agent roster + Cursor sub-agent briefs.
+- The relevant sub-agent brief in `.cursor/subagent-briefs/`.
+- Any project skill the brief points to (under `skills/`).
+
+If your task is large or ambiguous and not covered by the plan, **stop and ask** rather than improvise. Architectural decisions are made by Opus and recorded as ADRs under `docs/adr/`.
+
+Monorepo map (memorize):
+
+```
+apps/web         — Next.js 15 frontend
+apps/api         — FastAPI gateway
+services/        — memory, graphrag, orchestrator, workers
+packages/        — agents, schemas, ui
+mcp-servers/     — memory, graphrag, curriculum, progress
+prompts/         — versioned agent prompts
+evals/           — promptfoo + DeepEval suites
+infra/           — docker-compose, alembic
+skills/          — project skills (sub-agent readable)
+```

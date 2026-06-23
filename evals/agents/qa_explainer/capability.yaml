@@ -1,0 +1,20 @@
+description: Q&A Explainer capability matrix (promptfoo).
+prompts:
+  - file://../../prompts/qa_explainer/v1.md
+providers:
+  - id: anthropic:claude-sonnet-4-5
+tests:
+  - description: prompt requires citations
+    vars:
+      message: "What is photosynthesis?"
+    assert:
+      - type: contains
+        value: "Cite evidence"
+      - type: contains
+        value: "QAExplainerOutput"
+  - description: prompt lists retrieval tools
+    vars:
+      message: "Find sources."
+    assert:
+      - type: contains-any
+        value: ["kg.retrieve_chunks", "memory.search"]

@@ -1,0 +1,84 @@
+name: Lint & Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: lint-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: astepforward
+          POSTGRES_USER: astepforward
+          POSTGRES_PASSWORD: astepforward
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U astepforward"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql+asyncpg://astepforward:astepforward@localhost:5432/astepforward
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python deps
+        run: uv sync --all-groups
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format (check)
+        run: uv run ruff format --check .
+
+      - name: Mypy (infra)
+        run: uv run mypy
+
+      - name: Alembic upgrade head
+        run: uv run alembic -c infra/alembic.ini upgrade head
+
+      - name: Pytest
+        run: uv run pytest
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Install frontend deps
+        run: pnpm install --frozen-lockfile || pnpm install
+
+      - name: ESLint
+        run: pnpm --filter @asf/web lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Vitest
+        run: pnpm --filter @asf/web exec vitest run --passWithNoTests

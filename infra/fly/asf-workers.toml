@@ -1,0 +1,27 @@
+app = "asf-workers"
+primary_region = "iad"
+
+[build]
+  dockerfile = "services/workers/Dockerfile"
+
+[env]
+  APP_ENV = "staging"
+  LOG_LEVEL = "INFO"
+
+# Celery workers — no public HTTP; process health via machine checks.
+[processes]
+  worker = "celery -A workers.celery_app worker --loglevel=INFO"
+  beat = "celery -A workers.celery_app beat --loglevel=INFO"
+  dreamer = "celery -A workers.celery_app worker -Q dreamer --loglevel=INFO --concurrency=2"
+
+[[vm]]
+  memory = "2gb"
+  cpu_kind = "shared"
+  cpus = 2
+  processes = ["dreamer"]
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
+  processes = ["worker", "beat"]

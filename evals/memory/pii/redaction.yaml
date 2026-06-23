@@ -1,0 +1,21 @@
+# PII redaction eval cases — no raw PII should remain after redact()
+
+cases:
+  - input: "Email me at student@example.com about homework."
+    must_not_contain: ["student@example.com"]
+    must_contain: ["[EMAIL]"]
+
+  - input: "My phone is +1 (555) 867-5309."
+    must_not_contain: ["867-5309"]
+    must_contain: ["[PHONE]"]
+
+  - input: "SSN on file: 987-65-4321"
+    must_not_contain: ["987-65-4321"]
+    must_contain: ["[SSN]"]
+
+  - input: "Card ending 4111 1111 1111 1111"
+    must_not_contain: ["4111 1111 1111 1111"]
+    must_contain: ["[CC]"]
+
+thresholds:
+  pass_rate: 1.0

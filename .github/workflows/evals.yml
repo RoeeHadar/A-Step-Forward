@@ -1,0 +1,43 @@
+name: Evals
+
+on:
+  pull_request:
+    paths:
+      - "prompts/**"
+      - "packages/agents/**"
+      - "evals/**"
+      - ".github/workflows/evals.yml"
+  push:
+    branches: [main]
+    paths:
+      - "prompts/**"
+      - "packages/agents/**"
+      - "evals/**"
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: uv sync --all-groups
+
+      - name: Run touched evals
+        run: uv run python evals/runner.py --touched
+
+      # Phase 1+: wire promptfoo + DeepEval here; upload artifacts on failure.
