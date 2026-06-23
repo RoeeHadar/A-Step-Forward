@@ -1,6 +1,8 @@
 # curriculum MCP
 
-Read-side surface over the curriculum store. Sub-agent 07-curriculum implements the real backing service; this Phase-0 stub returns empty results so agents wire up cleanly.
+Read-side surface over the Curriculum Service (`services/curriculum`). Same tool
+surface used by agents at runtime and by Cursor during development (registered
+in `.cursor/mcp.json` as `curriculum-project`).
 
 ## Tools
 
@@ -17,3 +19,9 @@ Read-side surface over the curriculum store. Sub-agent 07-curriculum implements 
 ```bash
 python -m curriculum_mcp.server
 ```
+
+Uses the official Python MCP SDK (stdio transport).
+
+## Eval
+
+See `evals/retrieval/curriculum_mcp_list.yaml`.

@@ -23,3 +23,7 @@ python -m memory_mcp.server
 ```
 
 Uses the official Python MCP SDK (stdio transport). Registered in `.cursor/mcp.json` as `memory-project`.
+
+## Eval
+
+See `evals/memory/mcp_search.yaml`.
