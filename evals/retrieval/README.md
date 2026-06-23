@@ -6,9 +6,10 @@ Offline KG retrieval benchmarks for GraphRAG.
 
 ```bash
 python evals/retrieval/kg/run_eval.py
+uv run python evals/runner.py --suite graphrag
 ```
 
-Metrics (thresholds in `evals/retrieval/kg/queries.yaml`):
+Metrics (thresholds in `evals/retrieval/kg/queries.yaml` and `thresholds.yaml`):
 
 - `recall@10` ≥ 0.8
 - `MRR` ≥ 0.7

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import sys
 from pathlib import Path
 
@@ -122,7 +123,7 @@ def main() -> int:
         and metrics["mrr"] >= thresholds["mrr"]
         and metrics["personalized_lift"] >= thresholds["personalized_lift"]
     )
-    print({"ok": ok, "metrics": metrics, "thresholds": thresholds})
+    print(json.dumps({"ok": ok, "metrics": metrics, "thresholds": thresholds}))
     return 0 if ok else 1
 
 

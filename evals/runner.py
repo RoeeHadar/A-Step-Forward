@@ -27,7 +27,7 @@ REPORT_MD = EVALS / "report.md"
 RESULTS_JSON = EVALS / "results.json"
 
 # Ensure monorepo packages are importable when running without uv editable installs.
-_PATHS = ("packages/schemas", "services/memory", "packages/agents")
+_PATHS = ("packages/schemas", "services/memory", "services/graphrag", "packages/agents")
 for rel in _PATHS:
     pkg_root = ROOT / rel
     if pkg_root.exists() and str(pkg_root) not in sys.path:
@@ -48,6 +48,9 @@ TOUCH_MAP: list[tuple[str, str]] = [
     ("evals/agents/tutor/", "tutor"),
     ("services/memory/", "memory"),
     ("evals/memory/", "memory"),
+    ("services/graphrag/", "graphrag"),
+    ("evals/retrieval/kg/", "graphrag"),
+    ("mcp-servers/graphrag/", "graphrag"),
 ]
 
 
@@ -132,6 +135,11 @@ def suites_for_touched(changed: list[str]) -> set[str]:
     for path in changed:
         if path.replace("\\", "/").startswith("evals/"):
             matched.update({"tutor", "memory"})
+            break
+    for path in changed:
+        norm = path.replace("\\", "/")
+        if norm.startswith("services/graphrag/") or norm.startswith("evals/retrieval/"):
+            matched.add("graphrag")
             break
     return matched
 
@@ -505,17 +513,59 @@ async def _run_memory_yaml(path: Path) -> SuiteResult:
             result.failed += 1
             result.errors.append(f"case {i}: {err}")
     result.ok = result.failed == 0
-        metric_key = data.get("metric")
-        if not metric_key and "pii" in str(path):
-            metric_key = "pii_redaction_accuracy"
-        if not metric_key and "archive" in str(path):
-            metric_key = "decay_accuracy"
-        if not metric_key and "merge" in str(path):
-            metric_key = "consolidation_correctness"
-        if not metric_key and "contradictions" in str(path):
-            metric_key = "conflict_resolution_correctness"
-        if metric_key and cases:
+    metric_key = data.get("metric")
+    if not metric_key and "pii" in str(path):
+        metric_key = "pii_redaction_accuracy"
+    if not metric_key and "archive" in str(path):
+        metric_key = "decay_accuracy"
+    if not metric_key and "merge" in str(path):
+        metric_key = "consolidation_correctness"
+    if not metric_key and "contradictions" in str(path):
+        metric_key = "conflict_resolution_correctness"
+    if metric_key and cases:
         result.metrics[metric_key] = result.passed / max(1, len(cases))
+    return result
+
+
+def _run_kg_retrieval_eval() -> SuiteResult:
+    """Run offline KG retrieval eval (recall@10, MRR, personalized lift)."""
+    script = EVALS / "retrieval" / "kg" / "run_eval.py"
+    config = EVALS / "retrieval" / "kg" / "queries.yaml"
+    result = SuiteResult(suite="graphrag", kind="retrieval", path=str(script.relative_to(ROOT)))
+    if not script.exists():
+        result.skipped = 1
+        result.errors.append("kg run_eval.py not found")
+        return result
+    proc = subprocess.run(
+        [sys.executable, str(script), "--config", str(config)],
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
+        env={**dict(subprocess.os.environ), "PYTHONPATH": _pythonpath_env()},
+    )
+    stdout = proc.stdout + proc.stderr
+    if proc.returncode == 0:
+        result.passed = 1
+        result.failed = 0
+    else:
+        result.passed = 0
+        result.failed = 1
+        tail = stdout.strip()[-2000:] if stdout.strip() else "(no output)"
+        result.errors.append(f"kg retrieval eval exit {proc.returncode}: {tail}")
+    result.ok = proc.returncode == 0
+    # Parse metrics from final JSON line when present.
+    for line in reversed(stdout.splitlines()):
+        line = line.strip()
+        if line.startswith("{") and "recall_at_10" in line:
+            try:
+                payload = json.loads(line)
+                metrics = payload.get("metrics", payload)
+                for key in ("recall_at_10", "mrr", "personalized_lift"):
+                    if key in metrics:
+                        result.metrics[key] = float(metrics[key])
+            except (json.JSONDecodeError, ValueError):
+                pass
+            break
     return result
 
 
@@ -608,6 +658,27 @@ def _check_regressions(
                         f"memory.{metric}: {cur:.3f} < baseline floor {floor:.3f} (baseline={base:.3f})"
                     )
 
+    kg_thresholds = EVALS / "retrieval" / "kg" / "thresholds.yaml"
+    kg_baseline = EVALS / "retrieval" / "kg" / "baseline.json"
+    if kg_thresholds.exists() and kg_baseline.exists():
+        thresholds = _load_yaml(kg_thresholds).get("metrics", {})
+        baseline = json.loads(kg_baseline.read_text(encoding="utf-8"))
+        graphrag_runs = [r for r in suite_results if r.suite == "graphrag"]
+        current: dict[str, float] = {}
+        for r in graphrag_runs:
+            current.update(r.metrics)
+        for metric, spec in thresholds.items():
+            if metric not in current or metric not in baseline:
+                continue
+            cur = current[metric]
+            base = float(baseline[metric])
+            if "min" in spec:
+                floor = float(spec["min"])
+                if cur < floor:
+                    regressions.append(
+                        f"graphrag.{metric}: {cur:.3f} < threshold min {floor:.3f} (baseline={base:.3f})"
+                    )
+
 
 def _write_report(report: RunReport) -> None:
     lines = [
@@ -652,6 +723,9 @@ async def run_all(*, suite_filter: set[str] | None, check_baseline: bool) -> Run
     for mem_yaml in discover_memory_yaml(suite_filter):
         suites.append(await _run_memory_yaml(mem_yaml))
 
+    if suite_filter is None or "graphrag" in suite_filter:
+        suites.append(_run_kg_retrieval_eval())
+
     regressions: list[str] = []
     if check_baseline:
         _check_regressions(suites, regressions)
@@ -666,7 +740,7 @@ async def run_all(*, suite_filter: set[str] | None, check_baseline: bool) -> Run
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run A Step Forward eval suites.")
     parser.add_argument("--touched", action="store_true", help="Run only suites affected by changed files.")
-    parser.add_argument("--suite", action="append", dest="suites", metavar="ID", help="Run a specific suite (tutor, memory).")
+    parser.add_argument("--suite", action="append", dest="suites", metavar="ID", help="Run a specific suite (tutor, memory, graphrag).")
     parser.add_argument("--no-baseline", action="store_true", help="Skip baseline regression checks.")
     args = parser.parse_args()
 

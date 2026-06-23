@@ -8,6 +8,7 @@ a running database.
 from __future__ import annotations
 
 from collections import defaultdict
+from typing import Any
 
 from schemas.graph import (
     KGChunk,
@@ -103,7 +104,22 @@ class DefaultGraphRAGService:
 
     async def hybrid(self, input: KGHybridInput) -> list[KGSearchResult]:
         seeds = await self.search(KGSearchInput(query=input.query, k=input.k))
-        return seeds
+        seed_ids = [s.node.id for s in seeds if not s.node.id.startswith("resource:")]
+        if not seed_ids:
+            return seeds
+        paths = await self.walk(
+            KGWalkInput(seed_node_ids=seed_ids, depth=input.depth, limit=input.k * 3)
+        )
+        seen = {s.node.id for s in seeds}
+        merged = list(seeds)
+        for path in paths:
+            for node in path.nodes:
+                if node.id in seen:
+                    continue
+                seen.add(node.id)
+                merged.append(KGSearchResult(node=node, score=0.55, snippet=node.summary))
+        merged.sort(key=lambda r: r.score, reverse=True)
+        return merged[: input.k]
 
     async def personalized(self, *, learner_id: str, query: str, k: int = 10) -> list[KGSearchResult]:
         base = await self.hybrid(KGHybridInput(query=query, k=k, depth=2, learner_id=learner_id))
