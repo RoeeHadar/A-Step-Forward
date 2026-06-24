@@ -1,18 +1,22 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   Brain,
   BookOpen,
   Github,
-  Sparkles,
+  Sparkles as SparklesIcon,
   UserPlus,
 } from 'lucide-react';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
 import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
+import { AnimatedCounter } from '@/components/animated-counter';
+import { Marquee } from '@/components/marquee';
+import { Sparkles } from '@/components/sparkles';
 
 type FeatureKey = keyof ReturnType<typeof useI18n>['messages']['landing']['features'];
 
@@ -97,10 +101,39 @@ const howItWorksSteps = [
     step: 3,
     titleKey: 'howItWorksStep3Title' as const,
     descKey: 'howItWorksStep3Desc' as const,
-    icon: Sparkles,
+    icon: SparklesIcon,
     gradient: 'from-accent-cyan to-primary',
   },
 ];
+
+function TypedMessage({ text, restartMs = 12000 }: { text: string; restartMs?: number }) {
+  const [display, setDisplay] = useState('');
+  useEffect(() => {
+    let i = 0;
+    let typeId: ReturnType<typeof setInterval>;
+    const startTyping = () => {
+      i = 0;
+      setDisplay('');
+      typeId = setInterval(() => {
+        i++;
+        setDisplay(text.slice(0, i));
+        if (i >= text.length) clearInterval(typeId);
+      }, 35);
+    };
+    startTyping();
+    const restartId = setInterval(startTyping, restartMs);
+    return () => {
+      clearInterval(typeId);
+      clearInterval(restartId);
+    };
+  }, [text, restartMs]);
+  return (
+    <>
+      {display}
+      <span className="ms-0.5 inline-block h-3 w-0.5 animate-pulse bg-current align-middle" />
+    </>
+  );
+}
 
 function TypingIndicator() {
   return (
@@ -166,14 +199,15 @@ export function LandingHero() {
         />
 
         {/* Dot grid overlay */}
+        <Sparkles count={30} className="z-[1]" />
         <div
-          className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30 dark:opacity-50"
+          className="bg-dot-grid pointer-events-none absolute inset-0 z-[2] opacity-30 dark:opacity-50"
           aria-hidden
         />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 lg:py-28">
           {/* Hero text block */}
-          <div className="max-w-4xl">
+          <div className="mx-auto max-w-4xl text-center">
             <motion.div
               className="mb-6 inline-flex items-center gap-2 rounded-full glass-surface px-4 py-1.5 text-xs font-medium text-muted-foreground"
               {...fadeUp(0)}
@@ -194,13 +228,16 @@ export function LandingHero() {
             </motion.h1>
 
             <motion.p
-              className="mt-6 max-w-2xl text-lg text-muted-foreground lg:text-xl"
+              className="mx-auto mt-6 max-w-2xl text-center text-lg text-muted-foreground lg:text-xl"
               {...fadeUp(0.16)}
             >
               {t.subtitle}
             </motion.p>
 
-            <motion.div className="mt-8 flex flex-wrap items-center gap-3" {...fadeUp(0.24)}>
+            <motion.div
+              className="mt-8 flex flex-wrap items-center justify-center gap-3"
+              {...fadeUp(0.24)}
+            >
               <Link
                 href="/sign-up"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -216,7 +253,10 @@ export function LandingHero() {
               </Link>
             </motion.div>
 
-            <motion.div className="mt-8 flex flex-wrap items-center gap-5" {...fadeUp(0.32)}>
+            <motion.div
+              className="mt-8 flex flex-wrap items-center justify-center gap-5"
+              {...fadeUp(0.32)}
+            >
               {trustChips.map(({ dotClass, key }) => (
                 <div key={key} className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span className={cn('h-2 w-2 rounded-full', dotClass)} aria-hidden />
@@ -250,7 +290,7 @@ export function LandingHero() {
                 </div>
                 <div className="flex justify-start">
                   <div className="max-w-[90%] rounded-2xl rounded-es-sm bg-surface-2 px-4 py-3 text-sm leading-relaxed text-foreground">
-                    {t.demoTutorMsg}
+                    <TypedMessage text={t.demoTutorMsg} />
                   </div>
                 </div>
                 <TypingIndicator />
@@ -263,9 +303,10 @@ export function LandingHero() {
               {...fadeUpInView(0.15)}
             >
               <div>
-                <span className="font-display text-6xl font-bold tabular-nums bg-gradient-to-br from-primary to-accent-magenta bg-clip-text text-transparent">
-                  {t.statsCoursesValue}
-                </span>
+                <AnimatedCounter
+                  end={13}
+                  className="font-display text-6xl font-bold tabular-nums bg-gradient-to-br from-primary to-accent-magenta bg-clip-text text-transparent"
+                />
                 <p className="mt-1 text-sm text-muted-foreground">{t.statsCoursesLabel}</p>
               </div>
               <div className="mt-4 flex gap-2">
@@ -287,9 +328,10 @@ export function LandingHero() {
               {...fadeUpInView(0.2)}
             >
               <div>
-                <span className="font-display text-6xl font-bold tabular-nums bg-gradient-to-br from-accent-cyan to-primary bg-clip-text text-transparent">
-                  {t.statsAgentsValue}
-                </span>
+                <AnimatedCounter
+                  end={4}
+                  className="font-display text-6xl font-bold tabular-nums bg-gradient-to-br from-accent-cyan to-primary bg-clip-text text-transparent"
+                />
                 <p className="mt-1 text-sm text-muted-foreground">{t.statsAgentsLabel}</p>
               </div>
               <div className="mt-4 flex -space-x-2 rtl:space-x-reverse">
@@ -322,26 +364,28 @@ export function LandingHero() {
 
             {/* Tile E — Subject categories */}
             <motion.div
-              className="glass-surface col-span-12 flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between lg:col-span-7 lg:row-span-1"
+              className="glass-surface col-span-12 flex flex-col gap-4 rounded-2xl p-5 lg:col-span-7 lg:row-span-1"
               {...fadeUpInView(0.3)}
             >
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+              <Marquee speed={35} className="py-1">
                 {categoryPreview.map((cat) => (
                   <span
                     key={cat.id}
-                    className="inline-flex shrink-0 items-center gap-2 rounded-full glass-surface px-4 py-2 text-sm text-foreground transition-transform hover:scale-105"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-full glass-surface px-4 py-2 text-sm text-foreground"
                   >
                     <span aria-hidden>{cat.emoji}</span>
                     {locale === 'he' ? cat.heLabel : cat.enLabel}
                   </span>
                 ))}
+              </Marquee>
+              <div className="flex justify-end">
+                <Link
+                  href="/app/lessons"
+                  className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                >
+                  {t.viewAll}
+                </Link>
               </div>
-              <Link
-                href="/app/lessons"
-                className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
-              >
-                {t.viewAll}
-              </Link>
             </motion.div>
 
             {/* Tile F — Open source trust */}

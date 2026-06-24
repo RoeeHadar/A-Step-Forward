@@ -4,12 +4,12 @@
   :root {
     --background: 250 30% 98%;
     --surface-1: 0 0% 100%;
-    --surface-2: 250 25% 96%;
-    --foreground: 240 20% 12%;
+    --surface-2: 250 25% 95%;
+    --foreground: 240 30% 8%;
     --muted: 250 25% 96%;
-    --muted-foreground: 240 8% 45%;
-    --border: 250 20% 90%;
-    --border-bright: 250 25% 80%;
+    --muted-foreground: 240 8% 40%;
+    --border: 250 20% 85%;
+    --border-bright: 250 25% 70%;
     --primary: 264 80% 58%;
     --primary-foreground: 0 0% 100%;
     --accent-cyan: 188 95% 38%;
@@ -27,14 +27,14 @@
   }
 
   .dark {
-    --background: 240 6% 5%;
-    --surface-1: 240 8% 8%;
-    --surface-2: 240 10% 11%;
-    --foreground: 220 14% 96%;
+    --background: 240 8% 4%;
+    --surface-1: 240 10% 9%;
+    --surface-2: 240 12% 13%;
+    --foreground: 0 0% 99%;
     --muted: 240 10% 11%;
-    --muted-foreground: 220 10% 55%;
-    --border: 240 8% 15%;
-    --border-bright: 240 8% 25%;
+    --muted-foreground: 220 10% 65%;
+    --border: 240 8% 18%;
+    --border-bright: 240 10% 30%;
     --primary: 264 89% 66%;
     --primary-foreground: 0 0% 100%;
     --accent-cyan: 188 95% 50%;
@@ -93,19 +93,19 @@
 /* Solid-color orbs — used for visible hero blobs. Each orb is one color so the
    blur produces a vibrant glow instead of a washed-out three-color mush. */
 .orb-violet {
-  background: radial-gradient(circle at center, hsl(264 89% 66% / 0.9), hsl(264 89% 50% / 0.35) 50%, transparent 75%);
+  background: radial-gradient(circle at center, hsl(264 89% 66% / 0.8), hsl(264 89% 50% / 0.35) 50%, transparent 75%);
   filter: blur(50px);
 }
 .orb-cyan {
-  background: radial-gradient(circle at center, hsl(188 95% 55% / 0.85), hsl(188 95% 45% / 0.3) 50%, transparent 75%);
+  background: radial-gradient(circle at center, hsl(188 95% 55% / 0.75), hsl(188 95% 45% / 0.3) 50%, transparent 75%);
   filter: blur(50px);
 }
 .orb-magenta {
-  background: radial-gradient(circle at center, hsl(322 81% 65% / 0.8), hsl(322 81% 50% / 0.3) 50%, transparent 75%);
+  background: radial-gradient(circle at center, hsl(322 81% 65% / 0.7), hsl(322 81% 50% / 0.3) 50%, transparent 75%);
   filter: blur(50px);
 }
 .orb-amber {
-  background: radial-gradient(circle at center, hsl(38 95% 60% / 0.7), hsl(38 95% 50% / 0.25) 50%, transparent 75%);
+  background: radial-gradient(circle at center, hsl(38 95% 60% / 0.6), hsl(38 95% 50% / 0.25) 50%, transparent 75%);
   filter: blur(50px);
 }
 /* Lighter in light mode for AA contrast on text */
@@ -158,6 +158,25 @@
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid hsl(var(--border));
+}
+
+.card-punch {
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--surface-1));
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.card-punch:hover {
+  border-color: hsl(var(--primary) / 0.4);
+  box-shadow:
+    0 0 0 1px hsl(var(--primary) / 0.1),
+    0 8px 32px -8px hsl(var(--primary) / 0.2);
+}
+
+.dark .card-punch:hover {
+  box-shadow:
+    0 0 0 1px hsl(var(--primary) / 0.3),
+    0 8px 32px -8px hsl(var(--primary) / 0.4);
 }
 
 @keyframes orb-float {
