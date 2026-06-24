@@ -46,7 +46,7 @@ export default async function DashboardPage() {
                 <div key={lesson.id} className="space-y-2">
                   <div className="flex min-w-0 items-center justify-between gap-2">
                     <Link
-                      href={`/app/lessons/${lesson.id}`}
+                      href={`/app/lessons/l/${lesson.id}`}
                       className="truncate font-medium hover:underline"
                     >
                       {lesson.title}

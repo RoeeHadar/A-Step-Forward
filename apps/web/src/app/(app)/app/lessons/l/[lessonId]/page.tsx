@@ -21,7 +21,7 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
 
   return (
     <div className="max-w-3xl">
-      <PageHeader title={lesson.title} backHref="/app" />
+      <PageHeader title={lesson.title} backHref="/app/lessons" />
       <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
         <Badge variant="secondary">{lesson.modality}</Badge>
         <span className="flex items-center gap-1">

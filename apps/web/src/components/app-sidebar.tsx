@@ -16,7 +16,7 @@ import { useI18n } from '@/providers/i18n-provider';
 const items = [
   { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
   { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
-  { href: '/app/lessons/lesson-intro-fractions', icon: BookOpen, labelKey: 'lessons' as const, match: '/app/lessons' },
+  { href: '/app/lessons', icon: BookOpen, labelKey: 'lessons' as const, match: '/app/lessons' },
   { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },
   { href: '/app/progress', icon: TrendingUp, labelKey: 'progress' as const },
 ];
