@@ -117,23 +117,12 @@ Remaining in this step:
 
 ---
 
-## 4. Tangled WIP branch — surgery before merging (30–60 min)
+## 4. Tangled WIP branch ✅ DONE
 
-`wip/agents-phase3-snapshot` mixes Phase-3 agents (research, kg_builder,
-content_curator, …) with workspace-stabilization (pyproject + uv.lock + ruff +
-alembic 0002_core_tables deletion + scripts/fix-workspace-sources.ps1). Per
-`09-infra-resume.md` it must be split. Recommended approach:
-
-1. `git checkout -b chore/infra/workspace-stabilization main` and cherry-pick
-   only the infra files listed in `09-infra-resume.md`. Validate
-   `alembic upgrade head` + `downgrade base` on a fresh Postgres docker.
-2. `git checkout -b feat/agents/phase3 main` and cherry-pick only the agent
-   code (`packages/agents/agents/system/research/`, `.../kg_builder/`,
-   `.../content_curator/`, and prompts under `prompts/`).
-3. Open them as two PRs in that order. Run `review-bugbot` on both.
-
-The Release Captain did **not** touch this branch — surgery here without the
-ability to run `uv sync` and `alembic` was unsafe.
+Split by the Release Captain into three clean branches and PRs:
+- [PR #2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) — `chore/infra/workspace-stabilization`
+- [PR #3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) — `feat/agents/03-phase3-system-agents`
+- [PR #4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) — `feat/mcp/05-server-improvements`
 
 ---
 
