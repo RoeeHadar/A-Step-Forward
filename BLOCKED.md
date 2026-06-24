@@ -35,12 +35,12 @@ These tools are needed to drive the rest.
 
 ---
 
-## 1. PRs ✅ #1 MERGED
+## 1. PRs ✅ ALL MERGED
 
-- [x] [#1](https://github.com/RoeeHadar/A-Step-Forward/pull/1) — squash-merged to `main` 2026-06-24.
-- [ ] [#2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) `chore/infra/workspace-stabilization` — rebase onto main, then merge.
-- [ ] [#3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) `feat/agents/03-phase3-system-agents` — rebase onto main, then merge.
-- [ ] [#4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) `feat/mcp/05-server-improvements` — rebase onto main, then merge.
+- [x] [#1](https://github.com/RoeeHadar/A-Step-Forward/pull/1) — squash-merged 2026-06-24.
+- [x] [#2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) — cherry-picked onto main (d0fed33) 2026-06-24.
+- [x] [#3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) — cherry-picked onto main (f6d02e2) 2026-06-24.
+- [x] [#4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) — cherry-picked onto main (a3e1ddd) 2026-06-24.
 
 ---
 
