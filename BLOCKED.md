@@ -83,5 +83,18 @@ Render dashboard → **asf-api** → Environment: `GROQ_API_KEY`, `CLERK_JWKS_UR
 
 ---
 
+## Memory persistence (stream I)
+
+- **DATABASE_URL** must be set (Neon Postgres connection string) for memory events to persist.
+  Set it in Render env vars and GitHub Actions secrets.
+- Episodic memory writes via `MemoryService` are **already wired** in the orchestrator
+  (`services/orchestrator/orchestrator/episodic.py`); each chat turn also writes a lightweight
+  row to `memory_events` after the SSE stream completes (`apps/api/app/routers/chat.py`).
+- Dreamer cron (`.github/workflows/cron-dreaming.yml`) runs nightly via GitHub Actions
+  (`workers.jobs.dreaming`). Wire to a Render cron endpoint when the Dreamer worker is
+  deployed there.
+
+---
+
 When browser validation and key rotation are done, delete this file in a commit titled
 `chore: launched 🚀`.

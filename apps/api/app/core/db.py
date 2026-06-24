@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -44,3 +45,14 @@ async def check_postgres() -> bool:
         return True
     except Exception:
         return False
+
+
+def database_url_configured() -> bool:
+    """True when DATABASE_URL is explicitly set (Neon / production)."""
+    return bool(os.environ.get("DATABASE_URL", "").strip())
+
+
+async def get_db() -> AsyncIterator[AsyncSession]:
+    """FastAPI dependency — yields an async SQLAlchemy session."""
+    async with session_scope() as session:
+        yield session

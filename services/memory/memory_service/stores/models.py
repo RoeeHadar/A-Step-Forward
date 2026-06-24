@@ -11,7 +11,7 @@ from typing import Any
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import DateTime, Float, Index, Integer, String, Text, func
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -157,6 +157,22 @@ class SourceMemory(Base, MemoryColumnsMixin):
             postgresql_with={"m": 16, "ef_construction": 64},
             postgresql_ops={"embedding": "vector_cosine_ops"},
         ),
+    )
+
+
+class MemoryEvent(Base):
+    """Lightweight chat-turn event log (stream I persistence)."""
+
+    __tablename__ = "memory_events"
+    __table_args__ = (Index("idx_memory_events_learner_id", "learner_id"),)
+
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True, server_default=func.gen_random_uuid())
+    learner_id: Mapped[str] = mapped_column(Text, nullable=False)
+    agent: Mapped[str] = mapped_column(Text, nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    event_type: Mapped[str] = mapped_column(Text, nullable=False, server_default="chat_turn")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
     )
 
 
