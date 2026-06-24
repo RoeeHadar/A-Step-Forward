@@ -26,8 +26,8 @@ export function AppSidebar() {
   const { messages } = useI18n();
 
   return (
-    <aside className="hidden w-56 shrink-0 border-r border-border bg-muted/30 md:block">
-      <nav className="flex flex-col gap-1 p-4" aria-label="App navigation">
+    <aside className="hidden w-56 shrink-0 border-e border-border bg-muted/30 md:block">
+      <nav className="flex flex-col gap-1 p-4" aria-label={messages.common.appNavigation}>
         {items.map((item) => {
           const matchPath = item.match ?? item.href;
           const active = pathname === item.href || pathname.startsWith(matchPath);

@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import { defaultLocale } from '@/i18n/config';
+import { LOCALE_STORAGE_KEY, LOCALE_COOKIE, isLocale, localeDir } from '@/i18n/locale-storage';
 import { getMessages, type Messages } from '@/i18n/messages';
 
 interface I18nContextValue {
@@ -14,30 +15,43 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
+function persistLocale(locale: Locale) {
+  localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  document.cookie = `${LOCALE_COOKIE}=${locale};path=/;max-age=31536000;sameSite=lax`;
+}
+
+function syncDocumentLocale(locale: Locale) {
+  document.documentElement.lang = locale;
+  document.documentElement.dir = localeDir(locale);
+}
+
+export function I18nProvider({ children, initialLocale = defaultLocale }: { children: React.ReactNode; initialLocale?: Locale }) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    const stored = localStorage.getItem('asf-locale') as Locale | null;
-    if (stored === 'en' || stored === 'he') setLocaleState(stored);
-  }, []);
+    const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (isLocale(stored)) {
+      setLocaleState(stored);
+      syncDocumentLocale(stored);
+      document.cookie = `${LOCALE_COOKIE}=${stored};path=/;max-age=31536000;sameSite=lax`;
+      return;
+    }
+    persistLocale(initialLocale);
+    syncDocumentLocale(initialLocale);
+  }, [initialLocale]);
 
   const setLocale = (next: Locale) => {
     setLocaleState(next);
-    localStorage.setItem('asf-locale', next);
-    document.documentElement.lang = next;
-    document.documentElement.dir = next === 'he' ? 'rtl' : 'ltr';
+    persistLocale(next);
+    syncDocumentLocale(next);
   };
 
   useEffect(() => {
-    document.documentElement.lang = locale;
-    document.documentElement.dir = locale === 'he' ? 'rtl' : 'ltr';
+    syncDocumentLocale(locale);
   }, [locale]);
 
   return (
-    <I18nContext.Provider
-      value={{ locale, messages: getMessages(locale), setLocale, dir: locale === 'he' ? 'rtl' : 'ltr' }}
-    >
+    <I18nContext.Provider value={{ locale, messages: getMessages(locale), setLocale, dir: localeDir(locale) }}>
       {children}
     </I18nContext.Provider>
   );
