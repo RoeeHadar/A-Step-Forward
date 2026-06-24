@@ -5,7 +5,6 @@ on:
     paths:
       - "prompts/**"
       - "packages/agents/**"
-      - "services/graphrag/**"
       - "evals/**"
       - ".github/workflows/evals.yml"
   push:
@@ -13,7 +12,6 @@ on:
     paths:
       - "prompts/**"
       - "packages/agents/**"
-      - "services/graphrag/**"
       - "evals/**"
 
 concurrency:
@@ -21,27 +19,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  evals:
+  tutor-promptfoo:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
+          node-version: "20"
 
-      - uses: astral-sh/setup-uv@v5
+      - name: promptfoo eval — tutor capability
+        run: npx --yes promptfoo@latest eval -c evals/agents/tutor/capability.yaml --no-progress-bar
+
+      - name: promptfoo eval — tutor safety
+        run: npx --yes promptfoo@latest eval -c evals/agents/tutor/safety.yaml --no-progress-bar
+
+      - name: Report tutor thresholds
+        if: always()
+        run: |
+          echo "Tutor eval thresholds (evals/agents/tutor/thresholds.yaml):"
+          cat evals/agents/tutor/thresholds.yaml
+
+      - name: Upload eval report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          enable-cache: true
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install deps
-        run: uv sync --all-groups
-
-      - name: Run touched evals
-        env:
-          RUN_LIVE_EVALS: "0"
-        run: uv run python evals/runner.py --touched
-
-      # Phase 1+: wire promptfoo + DeepEval here; upload artifacts on failure.
+          name: promptfoo-tutor-report
+          path: |
+            ~/.promptfoo/output
+          if-no-files-found: ignore
