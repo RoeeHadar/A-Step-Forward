@@ -8,15 +8,13 @@ from typing import TypeVar
 
 from pydantic import BaseModel
 
-from .llm import LLM, LLMRequest, LLMResponse
+from .llm import LLM, STUB_PREFIX, LLMRequest, LLMResponse
 
 O = TypeVar("O", bound=BaseModel)
 
-_STUB_PREFIX = "[stub LLM response"
-
 
 def is_stub_llm_response(response: LLMResponse) -> bool:
-    return response.text.startswith(_STUB_PREFIX)
+    return response.text.startswith(STUB_PREFIX)
 
 
 def extract_json_object(text: str) -> dict | None:
