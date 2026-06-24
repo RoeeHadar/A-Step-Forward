@@ -15,8 +15,8 @@ Last updated: 2026-06-24T16:02:00Z by Coordinator session 2 (c9ee2952)
 - [x] Memory writes wired — `cef3a43` episodic per chat turn
 - [ ] Memory visible on live `/memory` — pending Render chat + Clerk
 - [x] Dreamer cron runs — GitHub Actions `cron-dreaming.yml` (03:00 UTC) + `cron-decay.yml` (Sun 04:00 UTC); dry-run when secrets unset (`9f57509`)
-- [x] GraphRAG seeded — **31 chunks** in Neon `kg_chunks` from `foundations-of-math` (`743b9e5`); hybrid search returns results for "what is a fraction"
-- [>] Neo4j graph nodes — **blocked**: AuraDB auth failure during ingest; Postgres chunks live; re-run `scripts/ingest_graphrag.py` after `NEO4J_PASSWORD` verified
+- [x] GraphRAG seeded — **31 chunks** in Neon `kg_chunks` (384-dim MiniLM); hybrid search top results ~0.62 for "what is a fraction" (`743b9e5`, `39432b0`)
+- [x] Neo4j graph nodes — **61 Concept + 9 Lesson + 18 Resource** nodes in AuraDB; 138 DERIVED_FROM + 14 COVERS + 9 TEACHES edges (`39432b0`)
 - [ ] CI green — needs audit on latest pushes
 - [x] Public repo, README, LICENSE, SECURITY.md, ADR-0004/0005
 - [ ] Demo GIF — placeholder only
@@ -30,6 +30,7 @@ Legend: `[x]` done · `[>]` partial · `[ ]` not started
   - `ff33298` — `docs(blocked): tighten human-only launch checklist`
   - `9f57509` — `feat(infra): add GitHub Actions cron for Dreamer and Decay jobs`
   - `743b9e5` — `feat(graphrag): ingest foundations-of-math with MiniLM embeddings`
+  - `39432b0` — `fix(graphrag): patch httpx SSL for HuggingFace model download` (sub-agent follow-up: real MiniLM vectors + full Neo4j ingest)
 - **Coordinator fixes during GraphRAG integration**: Postgres-only service path (`api.py`, `neo4j_service.py`), asyncpg vector SQL fix, ran ingest → 31 Neon rows, hybrid smoke OK
 - **Reverted** out-of-scope `apps/web` e2e edits from GraphRAG sub-agent workspace
 - **Live smoke** (post 743b9e5):
@@ -41,10 +42,11 @@ Legend: `[x]` done · `[>]` partial · `[ ]` not started
 
 ## Next session priorities
 
-1. **Human**: Confirm Neo4j AuraDB password; re-run `scripts/ingest_graphrag.py` with `USE_NEO4J=true` for Concept/Lesson nodes
-2. **Human**: Render Blueprint deploy + Groq key + Vercel `NEXT_PUBLIC_API_BASE_URL`
-3. **CI audit** — lint-test on `743b9e5` / `9f57509`
-4. **Set GitHub Actions secrets** for cron jobs (`DATABASE_URL`, etc.) per BLOCKED.md §5
+1. **Human**: Render Blueprint deploy + Groq key + Vercel `NEXT_PUBLIC_API_BASE_URL`
+2. **Human**: Set GitHub Actions secrets for cron jobs (`DATABASE_URL`, etc.) per BLOCKED.md §5
+3. **CI audit** — lint-test on `743b9e5` / `9f57509` / `39432b0`
+4. **Stream upgrade options**: real entity extraction with Groq (replaces heuristic offline mode, 36 nodes flagged `pending_review`); Tutor/QA wiring to call `kg.hybrid` for citation grounding
+5. **Note for sub-agents**: AuraDB requires `NEO4J_USER=06b74083` + `NEO4J_DATABASE=06b74083` (instance id, not `neo4j`); document in `.env.example`
 
 ## Hands-off until manager check-in
 
