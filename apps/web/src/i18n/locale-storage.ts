@@ -1,6 +1,6 @@
 import { defaultLocale, locales, type Locale } from './config';
 
-export const LOCALE_STORAGE_KEY = 'asf-locale';
+export const LOCALE_STORAGE_KEY = 'asf-locale-v2';
 export const LOCALE_COOKIE = 'asf-locale';
 
 export function isLocale(value: string | null | undefined): value is Locale {

@@ -10,12 +10,14 @@ import { Textarea } from '@asf/ui/textarea';
 import { Card } from '@asf/ui/card';
 import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas/agents';
 import { agentColors } from '@/lib/design-tokens';
+import { useI18n } from '@/providers/i18n-provider';
 import { useChatUiStore } from '@/stores/ui-store';
 
 const CONNECTING_DELAY_MS = 3000;
 const COLD_START_RETRY_MS = 15000;
 
 export function AgentChat({ agent }: { agent: string }) {
+  const { messages: i18nMessages } = useI18n();
   const parsed = agentNameSchema.safeParse(agent);
   const agentName: AgentName = parsed.success ? parsed.data : 'tutor';
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -80,7 +82,8 @@ export function AgentChat({ agent }: { agent: string }) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const statusMessage = showConnecting && isLoading ? 'מתחבר לשרת…' : 'Thinking…';
+  const statusMessage =
+    showConnecting && isLoading ? i18nMessages.chat.connecting : i18nMessages.chat.thinking;
 
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
@@ -96,9 +99,7 @@ export function AgentChat({ agent }: { agent: string }) {
       <Card className="flex flex-1 flex-col overflow-hidden">
         <div className="flex-1 space-y-4 overflow-y-auto p-4" role="log" aria-live="polite" aria-label="Chat messages">
           {messages.length === 0 ? (
-            <p className="text-center text-muted-foreground">
-              Ask {agentDisplayNames[agentName]} anything about your current lesson.
-            </p>
+            <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
           ) : (
             messages.map((m) => (
               <div
@@ -142,7 +143,7 @@ export function AgentChat({ agent }: { agent: string }) {
             id="chat-input"
             value={input}
             onChange={handleInputChange}
-            placeholder="Type your message…"
+            placeholder={i18nMessages.chat.placeholder}
             rows={2}
             className="min-h-[44px] resize-none"
             disabled={isLoading}

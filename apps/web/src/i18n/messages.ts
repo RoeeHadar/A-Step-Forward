@@ -54,6 +54,12 @@ const messages = {
       appNavigation: 'App navigation',
       mainNavigation: 'Main',
     },
+    chat: {
+      placeholder: 'Type your message…',
+      thinking: 'Thinking…',
+      connecting: 'Connecting to AI server…',
+      empty: 'Ask your AI agent anything.',
+    },
   },
   he: {
     nav: {
@@ -106,6 +112,12 @@ const messages = {
       toggleTheme: 'החלפת ערכת נושא',
       appNavigation: 'ניווט באפליקציה',
       mainNavigation: 'ראשי',
+    },
+    chat: {
+      placeholder: 'הקלד את הודעתך…',
+      thinking: 'חושב…',
+      connecting: 'מתחבר לשרת ה-AI…',
+      empty: 'שאל את הסוכן שלך כל שאלה.',
     },
   },
 } as const;
