@@ -8,7 +8,7 @@ export default function HomePage() {
       <main>
         <LandingHero />
       </main>
-      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
+      <footer className="border-t border-border bg-[#d1fe17] py-8 text-center text-sm text-[#0f1113]">
         © {new Date().getFullYear()} A Step Forward
       </footer>
     </div>

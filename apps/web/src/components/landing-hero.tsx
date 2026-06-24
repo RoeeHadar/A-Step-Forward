@@ -14,10 +14,14 @@ const agentFeatures = [
   { emoji: '✍️', titleKey: 'reviewer' as const, descKey: 'reviewerDesc' as const },
 ];
 
+const primaryCtaClass =
+  'min-w-[10rem] bg-[#d1fe17] text-base text-[#0f1113] shadow-md hover:bg-[#d1fe17]/90 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-[#d1fe17] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f1113]';
+
 export function LandingHero() {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const t = messages.landing;
   const reduceMotion = useReducedMotion();
+  const badgeText = locale === 'he' ? 'למידה מבוסס AI' : 'AI-NATIVE LEARNING';
 
   const fadeUp = reduceMotion
     ? {}
@@ -38,15 +42,17 @@ export function LandingHero() {
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-gradient-to-b from-primary/10 via-accent/5 to-transparent"
           aria-hidden
         />
-        <p className="mb-4 text-sm font-medium tracking-wide text-accent">A Step Forward</p>
-        <h1 className="text-balance text-3xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+        <span className="mb-4 inline-flex items-center rounded-full bg-[rgba(209,254,23,0.12)] px-3 py-1 text-xs font-semibold text-[#d1fe17]">
+          {badgeText}
+        </span>
+        <h1 className="text-balance text-3xl font-bold leading-tight sm:text-5xl md:text-6xl">
           {t.hero}
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg">
           {t.subtitle}
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          <Button asChild size="lg" className="min-w-[10rem] bg-primary text-base shadow-md hover:shadow-lg">
+          <Button asChild size="lg" className={primaryCtaClass}>
             <Link href="/sign-up">
               {t.cta}
               <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />
@@ -74,7 +80,7 @@ export function LandingHero() {
                       transition: { duration: 0.4, delay: i * 0.08 },
                     })}
               >
-                <Card className="h-full border-border/80 bg-card/80 shadow-sm transition-shadow hover:shadow-md">
+                <Card className="glass-card h-full backdrop-blur-sm transition-shadow hover:shadow-md">
                   <CardHeader className="space-y-3">
                     <span className="text-3xl" role="img" aria-hidden>
                       {emoji}
@@ -95,7 +101,7 @@ export function LandingHero() {
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-balance text-2xl font-semibold">{t.closingHeading}</h2>
           <p className="mt-3 text-pretty text-muted-foreground">{t.closingSubtitle}</p>
-          <Button asChild className="mt-6 shadow-md" size="lg">
+          <Button asChild className={primaryCtaClass} size="lg">
             <Link href="/sign-up">
               {t.cta}
               <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />

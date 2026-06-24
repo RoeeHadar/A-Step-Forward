@@ -31,7 +31,7 @@ export default async function DashboardPage() {
       <PageHeader title={`Welcome back, ${auth.displayName}`} description="Continue your learning journey" />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <MotionCard>
+        <MotionCard className="glass-card border border-white/7 bg-[rgb(26,28,30)]">
           <CardHeader>
             <CardTitle>Recent lessons</CardTitle>
             <CardDescription>Pick up where you left off</CardDescription>
@@ -60,7 +60,7 @@ export default async function DashboardPage() {
           </CardContent>
         </MotionCard>
 
-        <MotionCard>
+        <MotionCard className="glass-card border border-white/7 bg-[rgb(26,28,30)]">
           <CardHeader>
             <CardTitle>Mastery summary</CardTitle>
             <CardDescription>Concept-level progress</CardDescription>
@@ -95,7 +95,7 @@ export default async function DashboardPage() {
         <h2 className="mb-4 text-xl font-semibold">Your agents</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {learnerFacingAgents.map((agent: AgentName) => (
-            <MotionCard key={agent}>
+            <MotionCard key={agent} className="glass-card border border-white/7 bg-[rgb(26,28,30)]">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div

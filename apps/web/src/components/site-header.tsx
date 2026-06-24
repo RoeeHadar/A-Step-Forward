@@ -28,6 +28,10 @@ export function SiteHeader() {
         <div className="flex items-center gap-6">
           <Link href="/" className="text-lg font-semibold tracking-tight">
             A Step Forward
+            <span className="text-[#d1fe17]" aria-hidden>
+              {' '}
+              ·
+            </span>
           </Link>
           <SignedIn>
             <nav className="hidden items-center gap-1 md:flex" aria-label={messages.common.mainNavigation}>
@@ -38,7 +42,7 @@ export function SiteHeader() {
                   className={cn(
                     'rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted',
                     pathname === link.href || pathname.startsWith(link.href + '/')
-                      ? 'bg-muted font-medium'
+                      ? 'border-b-2 border-[#d1fe17] bg-muted font-medium'
                       : 'text-muted-foreground',
                   )}
                 >

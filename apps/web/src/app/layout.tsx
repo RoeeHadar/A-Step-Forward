@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 
-import { Heebo, Inter } from 'next/font/google';
+import { Heebo, Inter, Space_Grotesk } from 'next/font/google';
 
 import { AppProviders } from '@/providers/app-providers';
 import { getServerLocale } from '@/i18n/locale-server';
@@ -10,6 +10,12 @@ import './globals.css';
 
 const heebo = Heebo({ subsets: ['hebrew', 'latin'], variable: '--font-heebo', display: 'swap' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +49,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b0b0d' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f1113' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -54,7 +60,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const dir = localeDir(locale);
 
   return (
-    <html lang={locale} dir={dir} suppressHydrationWarning className={`${heebo.variable} ${inter.variable} h-full`}>
+    <html
+      lang={locale}
+      dir={dir}
+      suppressHydrationWarning
+      className={`${heebo.variable} ${inter.variable} ${spaceGrotesk.variable} h-full`}
+    >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <AppProviders initialLocale={locale}>{children}</AppProviders>
       </body>
