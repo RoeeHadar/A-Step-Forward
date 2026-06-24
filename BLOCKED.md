@@ -55,67 +55,69 @@ Doppler (not required for launch).
 
 ## 3. Remaining launch checklist
 
-Complete in any order. Estimated wall-clock: **~30–60 min**.
+**Backend URL:** `https://asf-api-q566.onrender.com` (Render service `asf-api`, Blueprint applied).
 
-### 5a. Backend on Render (~10 min)
+Complete **§5d** below (~3 min) to go live. Everything else in this section is reference.
 
-Fly.io requires a credit card — **use Render** (`render.yaml` is in the repo).
+### 5a. Backend on Render ✅ (deployed — env vars pending)
 
-1. https://dashboard.render.com → sign in with GitHub
-2. **New → Blueprint** → repo `RoeeHadar/A-Step-Forward`
-3. Render creates `asf-api` from `render.yaml`
-4. Set env vars on the service:
+Render service exists at `https://asf-api-q566.onrender.com`. `/healthz` will not respond until
+`CLERK_JWKS_URL` + `GROQ_API_KEY` are set (see §5d). `APP_ENV=staging` triggers
+`validate_auth_config()` at startup — missing Clerk JWKS prevents the process from booting.
 
-   ```
-   DATABASE_URL   = postgresql+asyncpg://neondb_owner:npg_vmKB0jNoSLF3@ep-plain-sea-as5ml68n-pooler.c-4.eu-central-1.aws.neon.tech/neondb?ssl=require
-   REDIS_URL      = rediss://default:AaRhAAIgcDE5Y2JkMTZhYmVkZWE0MTk0ODE2YjJkZDRhMTg0OGE0MA@expert-trout-42081.upstash.io:6379
-   NEO4J_URI      = neo4j+s://06b74083.databases.neo4j.io
-   NEO4J_USER     = neo4j
-   NEO4J_DATABASE = neo4j
-   NEO4J_PASSWORD = <from AuraDB dashboard>
-   GROQ_API_KEY   = <see §5c>
-   ```
+Database / Redis / Neo4j connection strings should already be on the service from Blueprint setup.
 
-5. Confirm deploy: `GET /healthz` → `{"status":"ok"}`
-
-> **Render URL note (2026-06-24):** `https://asf-api.onrender.com/` currently
-> serves an unrelated app (`{"mensaje":"hola"}`) and `/healthz` returns 404.
-> The Blueprint either was not applied yet or the subdomain is taken. After
-> deploy, verify `/healthz`. If the name is squatted, rename the service in
-> `render.yaml` (e.g. `asf-api-roeehadar`) and use that URL everywhere below.
-
-### 5a-i. Point Vercel at Render (~30 sec)
+### 5a-i. Point Vercel at Render
 
 Until `NEXT_PUBLIC_API_BASE_URL` is set, the frontend falls back to mock data.
 
+**Option A — GitHub Actions (no local token):**
+
 ```pwsh
-$env:VERCEL_TOKEN = "<from https://vercel.com/account/tokens>"
-pwsh ./scripts/vercel-set-env.ps1 -ApiBaseUrl "https://<your-actual-render-url>"
+gh workflow run wire-vercel-env.yml
 ```
 
-Script sets Production + Preview env vars and triggers redeploy. Use
-`-SkipRedeploy` to set vars only; `-TeamSlug a-step-forward` if needed.
+Uses `VERCEL_TOKEN`, `RENDER_API_BASE_URL`, and Clerk secrets from GitHub Actions.
 
-### 5b. Clerk Dev keys (~5 min)
+**Option B — local script:**
 
-Production Clerk needs a custom domain. **Dev keys** work on `*.vercel.app`.
+```pwsh
+$env:VERCEL_TOKEN = "<from https://vercel.com/account/tokens>"
+pwsh ./scripts/wire-env-vars.ps1 `
+  -ClerkPublishableKey "<pk_test_…>" `
+  -ClerkSecretKey "<sk_test_…>"
+```
 
-1. https://dashboard.clerk.com → app `astepforward` → **API Keys**
-2. Copy `pk_test_…` and `sk_test_…`
-3. Vercel → project env vars:
-   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-   - `CLERK_SECRET_KEY`
-4. Save → redeploy. Optionally mirror to GitHub Actions secrets for CI.
+Legacy one-var helper: `pwsh ./scripts/vercel-set-env.ps1 -ApiBaseUrl "https://asf-api-q566.onrender.com"`
 
-### 5c. Groq API key (~2 min, free)
+### 5b. Clerk Dev keys ✅ (values provided — wire via §5d)
 
-See `docs/adr/0004-llm-provider-groq.md`.
+Production Clerk needs a custom domain. **Dev keys** work on `*.vercel.app`. Keys are set on
+Vercel via §5d and mirrored in GitHub Actions secrets.
 
-1. https://console.groq.com/keys → create key (`gsk_…`)
-2. Set on **Render** (`asf-api` env) and **GitHub Actions** secret `GROQ_API_KEY`
-3. Wait ~60s for Render redeploy; chat should return real Llama-3.3-70B tokens
+### 5c. Groq API key ✅ (value provided — paste on Render via §5d)
 
-Until set, Tutor returns the Socratic stub from `TutorAgent._stub_output`.
+See `docs/adr/0004-llm-provider-groq.md`. Key goes on **Render** (`asf-api` env), not Vercel.
+
+### 5d — Final wire-up (3 min)
+
+> 🔑 **ROTATE THESE KEYS AFTER LAUNCH** — see §13.
+
+**One step:** open https://dashboard.render.com → **asf-api** → **Environment** → paste all
+three lines below → **Save Changes** (Render redeploys ~60s). Then run
+`gh workflow run wire-vercel-env.yml` (or `scripts/wire-env-vars.ps1`) and push the empty
+redeploy commit if not already on `main`.
+
+```
+GROQ_API_KEY=<gsk_… from manager secure note / Groq dashboard>
+CLERK_JWKS_URL=https://joint-python-37.clerk.accounts.dev/.well-known/jwks.json
+CLERK_ISSUER=https://joint-python-37.clerk.accounts.dev
+```
+
+(Vercel vars `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
+are set via `wire-vercel-env.yml` / `wire-env-vars.ps1` — not on Render.)
+
+After Render redeploy: `GET https://asf-api-q566.onrender.com/healthz` → `{"status":"ok"}`.
 
 ### 5. Custom domain (optional, post-launch)
 
@@ -142,12 +144,23 @@ Set at https://github.com/RoeeHadar/A-Step-Forward/settings/secrets/actions:
 | `DATABASE_URL` | CI migrations, cron-dreaming, cron-decay | ✅ set (alias of STAGING_DATABASE_URL) |
 | `REDIS_URL` | cron jobs | verify in dashboard |
 | `NEO4J_URI`, `NEO4J_PASSWORD`, `NEO4J_USER` | cron jobs, GraphRAG CI | ✅ set |
-| `GROQ_API_KEY` | cron-dreaming, evals | verify in dashboard |
-| `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | deploy-web | verify in dashboard |
-| `CLERK_*` | CI auth tests | optional |
+| `GROQ_API_KEY` | cron-dreaming, evals | ✅ set |
+| `RENDER_API_BASE_URL` | wire-vercel-env, frontend | ✅ set (`https://asf-api-q566.onrender.com`) |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | wire-vercel-env | ✅ set |
+| `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | deploy-web, wire-vercel-env | ✅ set |
 
 Cron workflows run on schedule or via **Actions → Run workflow**. They execute
 real jobs when `DATABASE_URL` is set (no longer dry-run-only in CI).
+
+---
+
+## 13. Post-launch security hygiene
+
+- [ ] **Rotate all keys shared during launch** — Groq (`GROQ_API_KEY`), Clerk (`pk_test_` / `sk_test_`), and re-issue GitHub Actions secrets
+- [ ] Revoke any Vercel tokens created for one-shot wiring
+- [ ] Confirm Render env vars are not logged in deploy output
+- [ ] Enable Clerk production instance + custom domain before public marketing push
+- [ ] Run Dependabot security PR triage (58 open advisories on default branch as of 2026-06-24)
 
 ---
 

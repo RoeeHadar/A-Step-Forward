@@ -1,0 +1,57 @@
+name: Wire Vercel Env
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: wire-vercel-env
+  cancel-in-progress: false
+
+jobs:
+  wire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Vercel env vars via API
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          RENDER_API_BASE_URL: ${{ secrets.RENDER_API_BASE_URL }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+        run: |
+          set -euo pipefail
+          SCOPE="?teamId=${VERCEL_ORG_ID}"
+          AUTH="Authorization: Bearer ${VERCEL_TOKEN}"
+
+          delete_key() {
+            local key="$1"
+            local ids
+            ids=$(curl -sf -H "$AUTH" \
+              "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env${SCOPE}" \
+              | jq -r --arg k "$key" '.envs[] | select(.key==$k) | .id')
+            for id in $ids; do
+              echo "Deleting prior ${key} (${id})"
+              curl -sf -X DELETE -H "$AUTH" \
+                "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env/${id}${SCOPE}" >/dev/null
+            done
+          }
+
+          upsert_key() {
+            local key="$1"
+            local value="$2"
+            delete_key "$key"
+            curl -sf -X POST -H "$AUTH" -H "Content-Type: application/json" \
+              "https://api.vercel.com/v10/projects/${VERCEL_PROJECT_ID}/env${SCOPE}" \
+              -d "$(jq -nc \
+                --arg k "$key" --arg v "$value" \
+                '{key:$k,value:$v,target:["production","preview"],type:"plain"}')" >/dev/null
+            echo "Set ${key}"
+          }
+
+          upsert_key "NEXT_PUBLIC_API_BASE_URL" "${RENDER_API_BASE_URL}"
+          upsert_key "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" "${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}"
+          upsert_key "CLERK_SECRET_KEY" "${CLERK_SECRET_KEY}"
+          echo "Vercel env wired."

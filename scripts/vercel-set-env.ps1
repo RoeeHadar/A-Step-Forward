@@ -37,7 +37,7 @@
 param(
   [string]$Token = $env:VERCEL_TOKEN,
   [string]$ProjectName = "a-step-forward-waij",
-  [string]$ApiBaseUrl = "https://asf-api.onrender.com",
+  [string]$ApiBaseUrl = "https://asf-api-q566.onrender.com",
   [string]$TeamSlug = "",
   [switch]$SkipRedeploy
 )
