@@ -29,15 +29,24 @@ owner to knock out independently.
 - Vercel deploy live; marketing landing + learner UI shipped
 - Memory episodic writes wired in orchestrator (`cef3a43`)
 - Groq LLM provider + ADR-0004 committed; Tutor uses `LLM.astream`
+- GraphRAG: 31 Neon chunks + Neo4j graph ingested (`743b9e5`, `39432b0`); ADR-0005
+- GitHub Actions cron-dreaming + cron-decay (`9f57509`); `DATABASE_URL` secret set
 - Governance: LICENSE (MIT), SECURITY.md, ADRs, Dependabot, secret scanning
 
 ---
 
 ## 2. Managed services ✅ provisioned
 
-Neon, Upstash Redis, and Neo4j AuraDB (asf-stg) are created. Connection
-strings are referenced in §5a below — set them on Render once the API service
-exists. **Do not commit secrets to git.**
+Neon, Upstash Redis, and Neo4j AuraDB (asf-stg) are created. AuraDB auth:
+`NEO4J_URI=neo4j+s://06b74083.databases.neo4j.io`, **`NEO4J_USER=neo4j`**,
+**`NEO4J_DATABASE=neo4j`** (not the instance id). GitHub Actions secrets
+updated; `.env.local` mirrors these for local dev.
+
+> **Local Neo4j note:** the developer machine uses a TLS-inspecting proxy, so
+> `neo4j+s://` handshakes fail locally. Do not burn cycles debugging this —
+> Neo4j connectivity is verified on GitHub Actions runners and in AuraDB
+> console. Re-run `scripts/ingest_graphrag.py` from CI or a clean network if
+> graph re-ingest is needed.
 
 Optional / deferred: Cloudflare R2 uploads, Sentry, Langfuse, custom domain,
 Doppler (not required for launch).
@@ -61,6 +70,8 @@ Fly.io requires a credit card — **use Render** (`render.yaml` is in the repo).
    DATABASE_URL   = postgresql+asyncpg://neondb_owner:npg_vmKB0jNoSLF3@ep-plain-sea-as5ml68n-pooler.c-4.eu-central-1.aws.neon.tech/neondb?ssl=require
    REDIS_URL      = rediss://default:AaRhAAIgcDE5Y2JkMTZhYmVkZWE0MTk0ODE2YjJkZDRhMTg0OGE0MA@expert-trout-42081.upstash.io:6379
    NEO4J_URI      = neo4j+s://06b74083.databases.neo4j.io
+   NEO4J_USER     = neo4j
+   NEO4J_DATABASE = neo4j
    NEO4J_PASSWORD = <from AuraDB dashboard>
    GROQ_API_KEY   = <see §5c>
    ```
@@ -126,17 +137,17 @@ Until set, Tutor returns the Socratic stub from `TutorAgent._stub_output`.
 
 Set at https://github.com/RoeeHadar/A-Step-Forward/settings/secrets/actions:
 
-| Secret | Used by |
-| --- | --- |
-| `DATABASE_URL` | CI migrations, cron-dreaming, cron-decay |
-| `REDIS_URL` | cron jobs |
-| `NEO4J_URI`, `NEO4J_PASSWORD` | cron jobs, GraphRAG CI |
-| `GROQ_API_KEY` | cron-dreaming, evals |
-| `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | deploy-web |
-| `CLERK_*` | CI auth tests |
+| Secret | Used by | Status |
+| --- | --- | --- |
+| `DATABASE_URL` | CI migrations, cron-dreaming, cron-decay | ✅ set (alias of STAGING_DATABASE_URL) |
+| `REDIS_URL` | cron jobs | verify in dashboard |
+| `NEO4J_URI`, `NEO4J_PASSWORD`, `NEO4J_USER` | cron jobs, GraphRAG CI | ✅ set |
+| `GROQ_API_KEY` | cron-dreaming, evals | verify in dashboard |
+| `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | deploy-web | verify in dashboard |
+| `CLERK_*` | CI auth tests | optional |
 
-Cron workflows (`cron-dreaming.yml`, `cron-decay.yml`) default to **dry-run**
-when `DATABASE_URL` is unset — safe to merge before secrets are configured.
+Cron workflows run on schedule or via **Actions → Run workflow**. They execute
+real jobs when `DATABASE_URL` is set (no longer dry-run-only in CI).
 
 ---
 
