@@ -9,12 +9,18 @@ export function PageHeader({
   title,
   description,
   backHref,
+  gradientTitle,
 }: {
   title: string;
   description?: string;
   backHref?: string;
+  gradientTitle?: boolean;
 }) {
   const { messages } = useI18n();
+
+  const words = title.split(' ');
+  const firstWord = words[0] ?? title;
+  const rest = words.slice(1).join(' ');
 
   return (
     <div className="mb-8 flex flex-col gap-2">
@@ -26,7 +32,22 @@ export function PageHeader({
           </Link>
         </Button>
       ) : null}
-      <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight">
+        {gradientTitle && words.length > 1 ? (
+          <>
+            <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
+              {firstWord}
+            </span>
+            {rest ? ` ${rest}` : null}
+          </>
+        ) : gradientTitle ? (
+          <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
+            {title}
+          </span>
+        ) : (
+          title
+        )}
+      </h1>
       {description ? <p className="text-muted-foreground">{description}</p> : null}
     </div>
   );

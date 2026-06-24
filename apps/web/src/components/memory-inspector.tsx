@@ -5,7 +5,6 @@ import { Pencil, Trash2, Search } from 'lucide-react';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -19,8 +18,11 @@ import { Input } from '@asf/ui/input';
 import { Label } from '@asf/ui/label';
 import { Textarea } from '@asf/ui/textarea';
 import { deleteMemoryAction, updateMemoryAction } from '@/app/(app)/app/memory/actions';
+import { useI18n } from '@/providers/i18n-provider';
 
 export function MemoryInspector({ memories }: { memories: MemoryRecord[] }) {
+  const { messages } = useI18n();
+  const t = messages.memory;
   const [items, setItems] = useState(memories);
   const [query, setQuery] = useState('');
   const [pending, startTransition] = useTransition();
@@ -28,26 +30,29 @@ export function MemoryInspector({ memories }: { memories: MemoryRecord[] }) {
   const filtered = items.filter(
     (m) =>
       m.content.toLowerCase().includes(query.toLowerCase()) ||
-      m.tags.some((t) => t.toLowerCase().includes(query.toLowerCase())),
+      m.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase())),
   );
 
   return (
     <div className="space-y-6">
       <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+        <Search
+          className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden
+        />
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search memories…"
-          className="pl-9"
-          aria-label="Search memories"
+          placeholder={t.searchPlaceholder}
+          className="ps-9"
+          aria-label={t.searchAriaLabel}
         />
       </div>
 
       <div className="space-y-4">
         {filtered.map((memory) => (
-          <Card key={memory.id}>
-            <CardHeader className="flex flex-row items-start justify-between gap-4 pb-2">
+          <div key={memory.id} className="card-punch rounded-2xl p-5">
+            <div className="flex flex-row items-start justify-between gap-4 pb-2">
               <div className="space-y-1">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary">{memory.type}</Badge>
@@ -57,7 +62,9 @@ export function MemoryInspector({ memories }: { memories: MemoryRecord[] }) {
                     </Badge>
                   ))}
                 </div>
-                <CardTitle className="text-base font-normal">{memory.summary ?? 'Memory'}</CardTitle>
+                <h3 className="font-display text-base font-semibold">
+                  {memory.summary ?? t.memoryDefault}
+                </h3>
               </div>
               <div className="flex gap-1">
                 <EditDialog memory={memory} disabled={pending} startTransition={startTransition} />
@@ -68,21 +75,22 @@ export function MemoryInspector({ memories }: { memories: MemoryRecord[] }) {
                   onDeleted={() => setItems((prev) => prev.filter((m) => m.id !== memory.id))}
                 />
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm">{memory.content}</p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Salience {Math.round(memory.salience * 100)}% · Confidence{' '}
-                {Math.round(memory.confidence * 100)}%
-              </p>
-            </CardContent>
-          </Card>
+            </div>
+            <p className="text-sm">{memory.content}</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              <span className="bg-gradient-to-r from-primary to-accent-cyan bg-clip-text text-transparent">
+                {t.salience} {Math.round(memory.salience * 100)}%
+              </span>
+              {' · '}
+              <span className="bg-gradient-to-r from-primary to-accent-cyan bg-clip-text text-transparent">
+                {t.confidence} {Math.round(memory.confidence * 100)}%
+              </span>
+            </p>
+          </div>
         ))}
         {filtered.length === 0 ? (
           <p className="text-center text-muted-foreground">
-            {items.length === 0
-              ? 'No memories yet — start chatting with an agent and we\u2019ll build a picture of how you learn.'
-              : 'No memories match your search.'}
+            {items.length === 0 ? t.noMemoriesYet : t.noSearchResults}
           </p>
         ) : null}
       </div>
@@ -99,10 +107,13 @@ function EditDialog({
   disabled: boolean;
   startTransition: (fn: () => void) => void;
 }) {
+  const { messages } = useI18n();
+  const t = messages.memory;
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label={`Edit memory ${memory.id}`}>
+        <Button variant="ghost" size="icon" aria-label={`${t.editAriaLabel} ${memory.id}`}>
           <Pencil className="h-4 w-4" />
         </Button>
       </DialogTrigger>
@@ -115,23 +126,28 @@ function EditDialog({
           }}
         >
           <DialogHeader>
-            <DialogTitle>Edit memory</DialogTitle>
-            <DialogDescription>Corrections are logged for audit.</DialogDescription>
+            <DialogTitle className="font-display">{t.editTitle}</DialogTitle>
+            <DialogDescription>{t.editDescription}</DialogDescription>
           </DialogHeader>
           <input type="hidden" name="memoryId" value={memory.id} />
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor={`content-${memory.id}`}>Content</Label>
+              <Label htmlFor={`content-${memory.id}`}>{t.content}</Label>
               <Textarea id={`content-${memory.id}`} name="content" defaultValue={memory.content} rows={4} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={`reason-${memory.id}`}>Reason for edit</Label>
-              <Input id={`reason-${memory.id}`} name="reason" defaultValue="Learner correction" required />
+              <Label htmlFor={`reason-${memory.id}`}>{t.reasonForEdit}</Label>
+              <Input
+                id={`reason-${memory.id}`}
+                name="reason"
+                defaultValue={t.defaultEditReason}
+                required
+              />
             </div>
           </div>
           <DialogFooter>
             <Button type="submit" disabled={disabled}>
-              Save
+              {t.save}
             </Button>
           </DialogFooter>
         </form>
@@ -151,10 +167,13 @@ function DeleteDialog({
   startTransition: (fn: () => void) => void;
   onDeleted: () => void;
 }) {
+  const { messages } = useI18n();
+  const t = messages.memory;
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label={`Delete memory ${memory.id}`}>
+        <Button variant="ghost" size="icon" aria-label={`${t.deleteAriaLabel} ${memory.id}`}>
           <Trash2 className="h-4 w-4 text-destructive" />
         </Button>
       </DialogTrigger>
@@ -168,19 +187,22 @@ function DeleteDialog({
           }}
         >
           <DialogHeader>
-            <DialogTitle>Delete memory</DialogTitle>
-            <DialogDescription>
-              This soft-deletes the memory and records an audit event. This cannot be undone from the UI.
-            </DialogDescription>
+            <DialogTitle className="font-display">{t.deleteTitle}</DialogTitle>
+            <DialogDescription>{t.deleteDescription}</DialogDescription>
           </DialogHeader>
           <input type="hidden" name="memoryId" value={memory.id} />
           <div className="grid gap-2 py-4">
-            <Label htmlFor={`delete-reason-${memory.id}`}>Reason</Label>
-            <Input id={`delete-reason-${memory.id}`} name="reason" defaultValue="Learner requested deletion" required />
+            <Label htmlFor={`delete-reason-${memory.id}`}>{t.reason}</Label>
+            <Input
+              id={`delete-reason-${memory.id}`}
+              name="reason"
+              defaultValue={t.defaultDeleteReason}
+              required
+            />
           </div>
           <DialogFooter>
             <Button type="submit" variant="destructive" disabled={disabled}>
-              Delete
+              {t.delete}
             </Button>
           </DialogFooter>
         </form>

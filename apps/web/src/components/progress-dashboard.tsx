@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import {
   LineChart,
   Line,
@@ -12,9 +13,13 @@ import {
   Bar,
 } from 'recharts';
 import type { LearnerProgress } from '@asf/schemas/progress';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@asf/ui/card';
+import { useI18n } from '@/providers/i18n-provider';
+import { AnimatedCounter } from '@/components/animated-counter';
 
 export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
+  const { messages } = useI18n();
+  const t = messages.progress;
+
   const masteryData = progress.concepts.map((c) => ({
     name: c.concept_name,
     score: Math.round(c.current_score * 100),
@@ -29,20 +34,47 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard title="Streak" value={`${progress.streak_days} days`} />
-        <StatCard title="Total time" value={`${progress.total_minutes} min`} />
-        <StatCard title="Lessons done" value={String(progress.lessons_completed)} />
+        <StatCard
+          title={t.streak}
+          value={
+            <>
+              <AnimatedCounter end={progress.streak_days} className="font-display text-3xl font-bold" />
+              <span className="ms-1 text-lg font-normal text-muted-foreground">{t.days}</span>
+            </>
+          }
+          gradient="from-accent-amber to-accent-magenta"
+        />
+        <StatCard
+          title={t.totalTime}
+          value={
+            <>
+              <AnimatedCounter end={progress.total_minutes} className="font-display text-3xl font-bold" />
+              <span className="ms-1 text-lg font-normal text-muted-foreground">
+                {messages.dashboard.minutes}
+              </span>
+            </>
+          }
+          gradient="from-accent-cyan to-primary"
+        />
+        <StatCard
+          title={t.lessonsDone}
+          value={
+            <AnimatedCounter
+              end={progress.lessons_completed}
+              className="font-display text-3xl font-bold"
+            />
+          }
+          gradient="from-accent-magenta to-accent-cyan"
+        />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Mastery by concept</CardTitle>
-          <CardDescription>Current scores across tracked concepts</CardDescription>
-        </CardHeader>
-        <CardContent className="h-72">
+      <div className="card-punch rounded-2xl p-6">
+        <h2 className="font-display text-xl font-semibold">{t.masteryByConcept}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t.masteryByConceptDesc}</p>
+        <div className="mt-4 h-72">
           {masteryData.length === 0 ? (
             <div className="flex h-full items-center justify-center text-center text-sm text-muted-foreground">
-              Track your progress as you learn — mastery scores show up after your first session.
+              {t.noMasteryYet}
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
@@ -51,20 +83,25 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
                 <Tooltip />
-                <Bar dataKey="score" fill="hsl(221 83% 53%)" radius={[4, 4, 0, 0]} name="Mastery %" />
+                <Bar
+                  dataKey="score"
+                  fill="hsl(var(--primary))"
+                  radius={[4, 4, 0, 0]}
+                  name="Mastery %"
+                />
               </BarChart>
             </ResponsiveContainer>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {historyData.length > 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Mastery over time</CardTitle>
-            <CardDescription>{progress.concepts[0]?.concept_name} progress trend</CardDescription>
-          </CardHeader>
-          <CardContent className="h-72">
+        <div className="card-punch rounded-2xl p-6">
+          <h2 className="font-display text-xl font-semibold">{t.masteryOverTime}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {progress.concepts[0]?.concept_name} {t.progressTrend}
+          </p>
+          <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={historyData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
@@ -74,27 +111,33 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
                 <Line
                   type="monotone"
                   dataKey="score"
-                  stroke="hsl(142 71% 45%)"
+                  stroke="hsl(var(--accent-cyan))"
                   strokeWidth={2}
                   dot={{ r: 4 }}
                   name="Mastery %"
                 />
               </LineChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : null}
     </div>
   );
 }
 
-function StatCard({ title, value }: { title: string; value: string }) {
+function StatCard({
+  title,
+  value,
+  gradient,
+}: {
+  title: string;
+  value: ReactNode;
+  gradient: string;
+}) {
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardDescription>{title}</CardDescription>
-        <CardTitle className="text-3xl">{value}</CardTitle>
-      </CardHeader>
-    </Card>
+    <div className="card-punch rounded-2xl p-5">
+      <p className="text-sm text-muted-foreground">{title}</p>
+      <div className={`mt-1 bg-gradient-to-r bg-clip-text text-transparent ${gradient}`}>{value}</div>
+    </div>
   );
 }

@@ -7,14 +7,23 @@ import remarkGfm from 'remark-gfm';
 import { Send, Loader2 } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
-import { Card } from '@asf/ui/card';
+import { cn } from '@asf/ui';
 import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas/agents';
-import { agentColors } from '@/lib/design-tokens';
 import { useI18n } from '@/providers/i18n-provider';
 import { useChatUiStore } from '@/stores/ui-store';
 
 const CONNECTING_DELAY_MS = 800;
 const COLD_START_RETRY_MS = 15000;
+
+const agentGradients: Partial<Record<AgentName, string>> = {
+  tutor: 'from-primary to-accent-magenta',
+  mentor: 'from-accent-amber to-accent-magenta',
+  coach: 'from-accent-cyan to-primary',
+  reviewer: 'from-accent-magenta to-accent-cyan',
+  qa_explainer: 'from-accent-cyan to-primary',
+  note_taker: 'from-accent-magenta to-accent-cyan',
+  accessibility: 'from-primary to-accent-cyan',
+};
 
 export function AgentChat({ agent }: { agent: string }) {
   const { messages: i18nMessages } = useI18n();
@@ -89,19 +98,32 @@ export function AgentChat({ agent }: { agent: string }) {
   const statusMessage =
     showConnecting && isLoading ? i18nMessages.chat.connecting : i18nMessages.chat.thinking;
 
+  const gradient = agentGradients[agentName] ?? 'from-primary to-accent-cyan';
+
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
       <header className="mb-4 flex items-center gap-3">
         <div
-          className="h-3 w-3 rounded-full"
-          style={{ backgroundColor: agentColors[agentName] ?? 'hsl(221 83% 53%)' }}
+          className={cn('h-3 w-3 rounded-full bg-gradient-to-br', gradient)}
           aria-hidden
         />
-        <h1 className="text-2xl font-semibold">{agentDisplayNames[agentName]}</h1>
+        <h1
+          className={cn(
+            'font-display text-2xl font-semibold bg-gradient-to-r bg-clip-text text-transparent',
+            gradient,
+          )}
+        >
+          {agentDisplayNames[agentName]}
+        </h1>
       </header>
 
-      <Card className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex-1 space-y-4 overflow-y-auto p-4" role="log" aria-live="polite" aria-label="Chat messages">
+      <div className="glass-surface flex flex-1 flex-col overflow-hidden rounded-2xl">
+        <div
+          className="flex-1 space-y-4 overflow-y-auto p-4"
+          role="log"
+          aria-live="polite"
+          aria-label="Chat messages"
+        >
           {messages.length === 0 ? (
             <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
           ) : (
@@ -110,8 +132,8 @@ export function AgentChat({ agent }: { agent: string }) {
                 key={m.id}
                 className={
                   m.role === 'user'
-                    ? 'ml-auto max-w-[85%] rounded-lg bg-primary px-4 py-2 text-primary-foreground'
-                    : 'mr-auto max-w-[85%] rounded-lg bg-muted px-4 py-2'
+                    ? 'ms-auto max-w-[85%] rounded-2xl rounded-ee-sm bg-primary/90 px-4 py-2 text-primary-foreground'
+                    : 'me-auto max-w-[85%] rounded-2xl rounded-es-sm border border-border glass-surface px-4 py-2 text-foreground'
                 }
               >
                 {m.role === 'assistant' ? (
@@ -135,13 +157,13 @@ export function AgentChat({ agent }: { agent: string }) {
 
         {error ? (
           <p className="border-t border-border px-4 py-2 text-sm text-destructive" role="alert">
-            {friendlyChatError(error)}
+            {friendlyChatError(error, i18nMessages.chat)}
           </p>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="flex gap-2 border-t border-border p-4">
+        <form onSubmit={handleSubmit} className="glass-surface flex gap-2 border-t border-border p-4">
           <label htmlFor="chat-input" className="sr-only">
-            Message
+            {i18nMessages.chat.messageLabel}
           </label>
           <Textarea
             id="chat-input"
@@ -149,7 +171,7 @@ export function AgentChat({ agent }: { agent: string }) {
             onChange={handleInputChange}
             placeholder={i18nMessages.chat.placeholder}
             rows={2}
-            className="min-h-[44px] resize-none"
+            className="min-h-[44px] resize-none border-border bg-surface-1/50"
             disabled={isLoading}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
@@ -158,24 +180,32 @@ export function AgentChat({ agent }: { agent: string }) {
               }
             }}
           />
-          <Button type="submit" size="icon" disabled={isLoading || !input.trim()} aria-label="Send message">
-            <Send className="h-4 w-4" />
+          <Button
+            type="submit"
+            size="icon"
+            disabled={isLoading || !input.trim()}
+            aria-label={i18nMessages.chat.sendAriaLabel}
+          >
+            <Send className="h-4 w-4 rtl:rotate-180" />
           </Button>
         </form>
-      </Card>
+      </div>
     </div>
   );
 }
 
-function friendlyChatError(error: unknown): string {
+function friendlyChatError(
+  error: unknown,
+  chat: { signInRequired: string; networkError: string; genericError: string },
+): string {
   if (error instanceof Error && error.message) {
     if (/401|unauthor/i.test(error.message)) {
-      return 'Please sign in to continue chatting.';
+      return chat.signInRequired;
     }
     if (/network|fetch|failed/i.test(error.message)) {
-      return 'We hit a network hiccup reaching the agent. Please try again in a moment.';
+      return chat.networkError;
     }
     return error.message;
   }
-  return 'Something went wrong. Please try again.';
+  return chat.genericError;
 }

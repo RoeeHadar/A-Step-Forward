@@ -1,31 +1,53 @@
 'use client';
 
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
-import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
+import { useI18n } from '@/providers/i18n-provider';
+import { CURRICULUM_CATEGORIES, type CurriculumCategory } from '@/lib/curriculum-categories';
 
 export default function LessonsPage() {
+  const { messages, locale } = useI18n();
+  const t = messages.lessons;
+
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-2">שיעורים</h1>
-      <p className="text-muted-foreground mb-8">בחר קטגוריה להתחלה</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div>
+      <h1 className="font-display text-3xl font-bold">{t.title}</h1>
+      <p className="mt-2 text-muted-foreground">{t.pickCategory}</p>
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {CURRICULUM_CATEGORIES.map((cat) => (
-          <Link key={cat.id} href={`/app/lessons/${cat.id}`}>
-            <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
-              <CardHeader className="pb-2">
-                <div className="text-3xl mb-2">{cat.emoji}</div>
-                <CardTitle className="text-base leading-tight">{cat.heLabel}</CardTitle>
-                <p className="text-xs text-muted-foreground">{cat.enLabel}</p>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{cat.sections.length} נושאים</p>
-                <span className="text-xs text-primary font-medium mt-1 inline-block">עיין ›</span>
-              </CardContent>
-            </Card>
-          </Link>
+          <CategoryCard key={cat.id} cat={cat} locale={locale} t={t} />
         ))}
       </div>
     </div>
+  );
+}
+
+function CategoryCard({
+  cat,
+  locale,
+  t,
+}: {
+  cat: CurriculumCategory;
+  locale: string;
+  t: { sections: string; browse: string };
+}) {
+  const label = locale === 'he' ? cat.heLabel : cat.enLabel;
+  const sublabel = locale === 'he' ? cat.enLabel : cat.heLabel;
+
+  return (
+    <Link href={`/app/lessons/${cat.id}`} className="card-punch block rounded-2xl p-5 transition-transform hover:scale-[1.02]">
+      <div className="mb-3 inline-flex rounded-full bg-gradient-to-br from-primary/10 to-accent-cyan/10 p-3">
+        <span className="text-2xl" aria-hidden>
+          {cat.emoji}
+        </span>
+      </div>
+      <h2 className="font-display text-base font-semibold leading-tight">{label}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{sublabel}</p>
+      <div className="mt-3 flex items-center justify-between">
+        <span className="rounded-full glass-surface px-2 py-0.5 text-xs text-muted-foreground">
+          {cat.sections.length} {t.sections}
+        </span>
+        <span className="text-xs font-medium text-primary">{t.browse} ›</span>
+      </div>
+    </Link>
   );
 }

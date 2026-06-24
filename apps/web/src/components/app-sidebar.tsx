@@ -26,7 +26,7 @@ export function AppSidebar() {
   const { messages } = useI18n();
 
   return (
-    <aside className="hidden w-56 shrink-0 border-e border-border bg-muted/30 md:block">
+    <aside className="hidden w-56 shrink-0 border-e border-border bg-surface-1/40 backdrop-blur-md md:block">
       <nav className="flex flex-col gap-1 p-4" aria-label={messages.common.appNavigation}>
         {items.map((item) => {
           const matchPath = item.match ?? item.href;
@@ -37,11 +37,27 @@ export function AppSidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted',
-                active ? 'bg-muted font-medium text-foreground' : 'text-muted-foreground',
+                'relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                active
+                  ? 'font-semibold text-foreground'
+                  : 'text-muted-foreground hover:bg-surface-2/60 hover:text-foreground',
               )}
             >
-              <Icon className="h-4 w-4" aria-hidden />
+              {active ? (
+                <span
+                  className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-gradient-to-b from-primary via-accent-magenta to-accent-cyan"
+                  aria-hidden
+                />
+              ) : null}
+              <Icon
+                className={cn(
+                  'h-4 w-4 shrink-0',
+                  active
+                    ? 'text-primary'
+                    : 'text-muted-foreground group-hover:text-foreground',
+                )}
+                aria-hidden
+              />
               {messages.nav[item.labelKey]}
             </Link>
           );
