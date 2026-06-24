@@ -141,7 +141,38 @@ Fly.io requires a credit card. Use **Render** instead — `render.yaml` is alrea
    NEO4J_PASSWORD    = Ws_Tygc7x5aye95rZx1nnLVVyEeXTb7gqhr6N_7YtNM
    DATABASE_URL      = postgresql+asyncpg://neondb_owner:npg_vmKB0jNoSLF3@ep-plain-sea-as5ml68n-pooler.c-4.eu-central-1.aws.neon.tech/neondb?ssl=require
    ```
-5. Once deployed, copy the `https://asf-api.onrender.com` URL into Vercel env var `NEXT_PUBLIC_API_URL`.
+5. Once deployed, copy the `https://asf-api.onrender.com` URL into Vercel env var `NEXT_PUBLIC_API_BASE_URL`.
+
+---
+
+## 5a-i. Point the Vercel frontend at Render — 30 sec (manual one-time)
+
+The frontend's `apps/web/src/lib/api.ts` reads `NEXT_PUBLIC_API_BASE_URL`. Until
+that env var exists on the Vercel project, every backend call falls through to
+the in-process mock data in `apps/web/src/lib/data.ts` (handy, but not the
+production goal). The Frontend sub-agent could not configure this autonomously
+because the local Vercel CLI hangs on this network and no Vercel token is
+exposed to the workspace.
+
+**You must run this once, with a Vercel token:**
+
+```pwsh
+# 1. Grab the token from https://vercel.com/account/tokens
+#    (it's the same value stored as the GitHub Actions secret VERCEL_TOKEN).
+$env:VERCEL_TOKEN = "<paste here>"
+
+# 2. Run the helper. It looks up the project, sets the env var on
+#    Production + Preview, and pushes an empty commit to trigger redeploy.
+pwsh ./scripts/vercel-set-env.ps1
+```
+
+The script is idempotent — running it again just rewrites the value. Add
+`-SkipRedeploy` if you'd rather trigger the build yourself, and
+`-TeamSlug a-step-forward` if the project lives under that team scope.
+
+After the redeploy is live, the frontend will hit `https://asf-api.onrender.com`
+directly. CORS is already wired (see commit `feat(api): CORS allow Vercel
+domains by default`).
 
 ---
 
@@ -165,6 +196,27 @@ Also update GitHub Actions secrets (for CI):
 gh secret set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY --body "pk_test_..."
 gh secret set CLERK_SECRET_KEY --body "sk_test_..."
 ```
+
+---
+
+## 5c. Enable real AI responses — 2 min, FREE
+
+The site uses Groq Cloud (llama-3.3-70b-versatile, free, no credit card).
+See `docs/adr/0004-llm-provider-groq.md` for the rationale.
+
+1. Go to https://console.groq.com → sign up with GitHub.
+2. Visit https://console.groq.com/keys → click "Create API Key" → copy `gsk_...`.
+3. Set it in two places:
+   - **Render** (backend): dashboard → asf-api → Environment → add `GROQ_API_KEY=gsk_...`
+   - **GitHub Actions secrets** (for CI): `gh secret set GROQ_API_KEY --body "gsk_..."`
+4. Wait ~60s for Render to redeploy. Test by sending a message in the chat UI.
+
+Until this is done, the Tutor returns a placeholder message (the Socratic
+"Let's explore that together…" stub from `TutorAgent._stub_output`).
+
+Optional overrides (defaults are fine):
+- `LLM_DEFAULT_MODEL` (default `llama-3.3-70b-versatile`)
+- `LLM_CHEAP_MODEL` (default `llama-3.1-8b-instant`)
 
 ---
 
