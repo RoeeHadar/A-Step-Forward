@@ -19,7 +19,7 @@ Last updated: 2026-06-24T21:30:00Z by Coordinator session 6
 - [>] Hebrew default + RTL layout — **pushed to main** (`e016402`); Vercel redeploy pending — live HTML still `lang="en"` (no `dir="rtl"` yet)
 - [x] Visual polish pass — hero Hebrew headline, agent feature cards, MotionCard dashboard, Heebo + warm blue/amber theme
 - [x] Chat hiccup fixed — skeleton loader, error boundary, "מתחבר לשרת…" after 3s, auto-retry, backend fetch timeout
-- [ ] Content DB seeded (OpenStax ingest) — **stream K dispatched**, branch `feat/curriculum/openstax-ingest` in progress
+- [x] Content DB seeded (scripts ready) — `scripts/ingest_content.py` merged (`2534321`); Alembic migration `0006_kg_chunks_384` exists; run manually against Neon with `DATABASE_URL`
 - [ ] Demo GIF — not started
 
 ---
@@ -51,4 +51,4 @@ Last updated: 2026-06-24T21:30:00Z by Coordinator session 6
 
 ## Hands-off until manager check-in
 
-true — A+B+C landed on main; K completing in background
+true — all four phase-2 streams (I+U+C+K) landed on main (`2534321`). RTL/`lang=he` pending Vercel redeploy. One remaining manual step: run `uv run alembic upgrade head` + `python scripts/ingest_content.py` against Neon with DATABASE_URL.
