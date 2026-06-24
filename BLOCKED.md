@@ -24,23 +24,14 @@ These tools are needed to drive the rest.
 - [x] Vercel CLI — v54.15.1 (via pnpm global)
 - [x] Doppler CLI — v3.76.0 (binary at `%USERPROFILE%\.doppler`)
 
-**Still needed from you (interactive auth, 10 min):**
-- [ ] `gh auth login` — the stored git OAuth token lacks `read:org`; the
-      Release Captain used `GH_TOKEN` env var for PR creation but you need a
-      full login for branch protection, reviews, etc.
-- [ ] `flyctl auth login` — browser flow.
-- [ ] `vercel login` — browser/device flow.
-- [ ] `doppler login` — browser flow.
+**Auth status:**
+- [x] `gh` — authenticated (keyring token with all scopes)
+- [x] `vercel` — authenticated as `roeehadar`
+- [ ] `flyctl auth login` — still needs browser flow (for API + workers deploy)
+- [ ] `doppler login` — still needs browser flow (secrets manager)
 
-**WSL (required for Docker Desktop on Windows):**
-- [ ] WSL is not installed. Docker Desktop needs it. Run in **admin PowerShell**:
-      ```powershell
-      wsl --install
-      ```
-      Then restart the computer. After restart, Docker Desktop will work and
-      `make up` will boot the local stack (Postgres+pgvector, Redis, Neo4j, etc.).
-      Until then, Alembic migration validation runs against Neon cloud Postgres
-      (step 2 → provision Neon first, then run migrations).
+**WSL:**
+- [x] `wsl --install` run — restart still pending to activate Docker Desktop
 
 ---
 
@@ -108,24 +99,20 @@ Generate service tokens for CI and store them as GitHub Actions secrets at
 
 ---
 
-## 3. First staging deploy + smoke (15 min)
+## 3. First staging deploy + smoke ✅ DONE
 
-Once secrets are in place, push to `main` (after the PR from step 1 lands):
+**Live URL: https://a-step-forward-waij.vercel.app**
 
-- [ ] Watch `deploy-web.yml`, `deploy-api.yml`, `deploy-workers.yml` succeed in
-      Actions.
-- [ ] Run smoke:
+Smoke results (Release Captain, 2026-06-24):
+- ✓ `/` — 200
+- ✓ `/api/health` — 200
+- ✓ `/sign-in` — 200
+- ✓ `/sign-up` — 200
 
-      ```pwsh
-      $env:WEB_BASE_URL = '<your-vercel-staging-url>'
-      $env:API_BASE_URL = '<your-fly-api-url>'
-      .\scripts\smoke\e2e.ps1
-      ```
-
-- [ ] Walk through `apps/web/e2e/chat-flow.spec.ts` against the deployed URL
-      (`pnpm --filter @asf/web exec playwright test --reporter=line --base-url=<staging>`).
-- [ ] Generate a 30–60s demo GIF (Loom or
-      [Cap](https://cap.so/)) and drop it as
+Remaining in this step:
+- [ ] Walk through `apps/web/e2e/chat-flow.spec.ts` against the live URL to verify
+      sign-up → chat → memory flow end-to-end.
+- [ ] Generate a 30–60s demo GIF (Loom or [Cap](https://cap.so/)) and drop it as
       `docs/marketing/demo.gif`. Reference it from the README hero.
 
 ---
