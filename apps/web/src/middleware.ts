@@ -15,10 +15,10 @@ const isEducatorRoute = createRouteMatcher(['/educator(.*)']);
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
-    await auth.protect();
+    await auth().protect();
   }
 
-  const { sessionClaims } = await auth();
+  const { sessionClaims } = auth();
   const metadata = (sessionClaims?.metadata ?? {}) as {
     role?: string;
     child_mode?: boolean;
