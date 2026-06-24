@@ -8,6 +8,7 @@ from schemas.common import Citation
 from ...__init__ import AGENT_REGISTRY
 from ...base.agent import Agent, AgentContext, AgentResult
 from ...base.agent_helpers import complete_turn, parse_output
+from ...base.memory_hydrator import HydratedMemory
 from ...base.prompts import load_prompt
 from .budget import BUDGET
 from .input import QAExplainerInput
@@ -26,6 +27,12 @@ class QAExplainerAgent(Agent[QAExplainerInput, QAExplainerOutput]):
         manifest = AGENT_REGISTRY[AgentName.QA_EXPLAINER]
         super().__init__(manifest=manifest)
         self._system_prompt = load_prompt("qa_explainer", self.prompt_version)
+
+    def _build_system_prompt(self, ctx: AgentContext) -> str:
+        hydrated: HydratedMemory | None = ctx.extra.get("hydrated_memory")
+        if hydrated and hydrated.summary:
+            return f"{self._system_prompt}\n\n{hydrated.summary}"
+        return self._system_prompt
 
     def _format_user_message(self, inp: QAExplainerInput) -> str:
         parts = [f"Question: {inp.message}"]
@@ -56,7 +63,7 @@ class QAExplainerAgent(Agent[QAExplainerInput, QAExplainerOutput]):
     async def run(self, inp: QAExplainerInput, ctx: AgentContext) -> AgentResult[QAExplainerOutput]:
         response = await complete_turn(
             self.llm,
-            system=self._system_prompt,
+            system=self._build_system_prompt(ctx),
             user_message=self._format_user_message(inp),
             trace_name=f"qa_explainer:{ctx.turn_id}",
             max_output_tokens=self.budget.max_output_tokens,

@@ -10,6 +10,7 @@ from ...__init__ import AGENT_REGISTRY
 from ...base.agent import Agent, AgentContext, AgentResult
 from ...base.agent_helpers import complete_turn, parse_output
 from ...base.llm import STUB_PREFIX, LLMRequest
+from ...base.memory_hydrator import HydratedMemory
 from ...base.prompts import load_prompt
 from .budget import BUDGET
 from .input import TutorInput
@@ -29,6 +30,13 @@ class TutorAgent(Agent[TutorInput, TutorOutput]):
         super().__init__(manifest=manifest)
         self._system_prompt = load_prompt("tutor", self.prompt_version)
 
+    def _build_system_prompt(self, ctx: AgentContext) -> str:
+        """Append hydrated memory block (if any) to the base system prompt."""
+        hydrated: HydratedMemory | None = ctx.extra.get("hydrated_memory")
+        if hydrated and hydrated.summary:
+            return f"{self._system_prompt}\n\n{hydrated.summary}"
+        return self._system_prompt
+
     def _format_user_message(self, inp: TutorInput) -> str:
         parts = [f"Learner message: {inp.message}"]
         if inp.lesson_id:
@@ -37,13 +45,7 @@ class TutorAgent(Agent[TutorInput, TutorOutput]):
         return "\n".join(parts)
 
     def _format_streaming_message(self, inp: TutorInput) -> str:
-        """Conversational variant used for token streaming.
-
-        The structured JSON envelope from ``TutorOutput`` makes a poor SSE
-        stream — partial JSON looks broken to the user. For the streaming
-        path we ask for plain conversational text instead and skip the
-        ``next_step`` / ``rationale`` envelope fields.
-        """
+        """Conversational variant used for token streaming."""
         parts = [f"Learner message: {inp.message}"]
         if inp.lesson_id:
             parts.append(f"Active lesson_id: {inp.lesson_id}")
@@ -67,7 +69,7 @@ class TutorAgent(Agent[TutorInput, TutorOutput]):
     async def run(self, inp: TutorInput, ctx: AgentContext) -> AgentResult[TutorOutput]:
         response = await complete_turn(
             self.llm,
-            system=self._system_prompt,
+            system=self._build_system_prompt(ctx),
             user_message=self._format_user_message(inp),
             trace_name=f"tutor:{ctx.turn_id}",
             max_output_tokens=self.budget.max_output_tokens,
@@ -84,16 +86,11 @@ class TutorAgent(Agent[TutorInput, TutorOutput]):
     async def astream_reply(
         self, inp: TutorInput, ctx: AgentContext
     ) -> AsyncIterator[ChatChunk]:
-        """Stream the Tutor's reply as per-token SSE chunks.
-
-        Used by the orchestrator's chat endpoint so users see characters
-        appear progressively. Falls back to the offline stub when no
-        provider is configured. Safety pre/post checks bracket the stream.
-        """
-        await self.safety.pre(text=inp.message, agent=self.name, child_mode=ctx.child_mode)
+        """Stream the Tutor's reply as per-token SSE chunks."""
+        await self.pre(inp, ctx)
 
         request = LLMRequest(
-            system=self._system_prompt,
+            system=self._build_system_prompt(ctx),
             messages=[{"role": "user", "content": self._format_streaming_message(inp)}],
             max_output_tokens=self.budget.max_output_tokens,
             metadata={"trace_name": f"tutor:{ctx.turn_id}"},
@@ -104,9 +101,6 @@ class TutorAgent(Agent[TutorInput, TutorOutput]):
         async for token in self.llm.astream(request):
             if not token:
                 continue
-            # When the LLM is offline its very first chunk carries STUB_PREFIX.
-            # Swap in the Tutor's own Socratic stub so the demo reads naturally
-            # (and the existing Phase-1 smoke test keeps passing).
             if not accumulated and token.startswith(STUB_PREFIX):
                 fallback = self._stub_output(inp).reply
                 accumulated.append(fallback)

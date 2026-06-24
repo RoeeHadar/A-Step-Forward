@@ -7,6 +7,7 @@ from schemas.agents import AgentName
 from ...__init__ import AGENT_REGISTRY
 from ...base.agent import Agent, AgentContext, AgentResult
 from ...base.agent_helpers import complete_turn, parse_output
+from ...base.memory_hydrator import HydratedMemory
 from ...base.prompts import load_prompt
 from .budget import BUDGET
 from .input import CoachInput
@@ -25,6 +26,12 @@ class CoachAgent(Agent[CoachInput, CoachOutput]):
         manifest = AGENT_REGISTRY[AgentName.COACH]
         super().__init__(manifest=manifest)
         self._system_prompt = load_prompt("coach", self.prompt_version)
+
+    def _build_system_prompt(self, ctx: AgentContext) -> str:
+        hydrated: HydratedMemory | None = ctx.extra.get("hydrated_memory")
+        if hydrated and hydrated.summary:
+            return f"{self._system_prompt}\n\n{hydrated.summary}"
+        return self._system_prompt
 
     def _format_user_message(self, inp: CoachInput) -> str:
         parts = [
@@ -53,7 +60,7 @@ class CoachAgent(Agent[CoachInput, CoachOutput]):
     async def run(self, inp: CoachInput, ctx: AgentContext) -> AgentResult[CoachOutput]:
         response = await complete_turn(
             self.llm,
-            system=self._system_prompt,
+            system=self._build_system_prompt(ctx),
             user_message=self._format_user_message(inp),
             trace_name=f"coach:{ctx.turn_id}",
             max_output_tokens=self.budget.max_output_tokens,

@@ -20,6 +20,7 @@ from pydantic import BaseModel
 from schemas.agents import AgentManifest, AgentName
 
 from .llm import LLM
+from .memory_hydrator import HydratedMemory, hydrate
 from .safety import SafetyModeration
 
 I = TypeVar("I", bound=BaseModel)
@@ -35,6 +36,7 @@ class AgentContext:
     turn_id: str
     locale: str = "en"
     child_mode: bool = False
+    memory_api: Any = None  # MemoryService instance or None (graceful offline)
     pinned_memory_ids: list[str] = field(default_factory=list)
     extra: dict[str, Any] = field(default_factory=dict)
 
@@ -74,6 +76,12 @@ class Agent(Generic[I, O]):
 
     async def pre(self, inp: I, ctx: AgentContext) -> None:
         await self.safety.pre(text=str(inp), agent=self.name, child_mode=ctx.child_mode)
+        hydrated: HydratedMemory = await hydrate(
+            learner_id=ctx.learner_id,
+            query=str(inp),
+            memory_api=ctx.memory_api,
+        )
+        ctx.extra["hydrated_memory"] = hydrated
 
     async def post(self, inp: I, result: AgentResult[O], ctx: AgentContext) -> None:
         await self.safety.post(text=str(result.output), agent=self.name, child_mode=ctx.child_mode)
