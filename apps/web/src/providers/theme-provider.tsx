@@ -18,8 +18,10 @@ function getSystemTheme(): 'light' | 'dark' {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('system');
-  const [resolved, setResolved] = useState<'light' | 'dark'>('light');
+  // Default to dark — the site identity is the dark premium design.
+  // Users can override via the theme toggle; preference is persisted in localStorage.
+  const [theme, setThemeState] = useState<Theme>('dark');
+  const [resolved, setResolved] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
     const stored = localStorage.getItem('asf-theme') as Theme | null;

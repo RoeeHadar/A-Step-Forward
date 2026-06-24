@@ -64,7 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang={locale}
       dir={dir}
       suppressHydrationWarning
-      className={`${heebo.variable} ${inter.variable} ${spaceGrotesk.variable} h-full`}
+      className={`${heebo.variable} ${inter.variable} ${spaceGrotesk.variable} h-full dark`}
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <AppProviders initialLocale={locale}>{children}</AppProviders>
