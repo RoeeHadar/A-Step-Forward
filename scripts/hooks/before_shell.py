@@ -16,15 +16,30 @@ import re
 import sys
 
 DANGEROUS_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"\brm\s+-rf?\s+(/|~|\$HOME|\*)"), "Refusing recursive force-delete of root/home/wildcards."),
-    (re.compile(r"\bgit\s+push\s+.*--force(-with-lease)?\b.*\b(main|master|prod|release)\b"), "Refusing force-push to a protected branch."),
-    (re.compile(r"\bgit\s+reset\s+--hard\s+origin/(main|master|prod|release)"), "Refusing hard reset against protected branch."),
+    (
+        re.compile(r"\brm\s+-rf?\s+(/|~|\$HOME|\*)"),
+        "Refusing recursive force-delete of root/home/wildcards.",
+    ),
+    (
+        re.compile(r"\bgit\s+push\s+.*--force(-with-lease)?\b.*\b(main|master|prod|release)\b"),
+        "Refusing force-push to a protected branch.",
+    ),
+    (
+        re.compile(r"\bgit\s+reset\s+--hard\s+origin/(main|master|prod|release)"),
+        "Refusing hard reset against protected branch.",
+    ),
     (re.compile(r"\bdrop\s+database\b", re.IGNORECASE), "Refusing DROP DATABASE."),
-    (re.compile(r"\btruncate\s+table\s+\w+\s*;?\s*$", re.IGNORECASE), "Refusing TRUNCATE without explicit WHERE/confirmation."),
+    (
+        re.compile(r"\btruncate\s+table\s+\w+\s*;?\s*$", re.IGNORECASE),
+        "Refusing TRUNCATE without explicit WHERE/confirmation.",
+    ),
     (re.compile(r"\bkubectl\s+delete\b"), "Refusing raw kubectl delete; use a reviewed manifest."),
     (re.compile(r"\bdd\s+if=.*\s+of=/dev/"), "Refusing dd to /dev/*."),
     (re.compile(r":\(\)\s*\{\s*:\|:\s*&\s*\}\s*;\s*:"), "Refusing fork bomb."),
-    (re.compile(r"curl\s+.*\|\s*(sudo\s+)?(bash|sh|zsh)\b"), "Refusing curl|bash style remote execution."),
+    (
+        re.compile(r"curl\s+.*\|\s*(sudo\s+)?(bash|sh|zsh)\b"),
+        "Refusing curl|bash style remote execution.",
+    ),
     (re.compile(r"\bchmod\s+-R\s+777\b"), "Refusing world-writable chmod -R 777."),
 ]
 

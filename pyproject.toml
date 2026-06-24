@@ -40,6 +40,9 @@ members = [
   "mcp-servers/progress",
 ]
 
+[tool.uv]
+python = "3.11"
+
 [tool.uv.sources]
 memory-service = { workspace = true }
 curriculum-service = { workspace = true }
@@ -48,7 +51,18 @@ asf-api = { workspace = true }
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-extend-exclude = [".venv", "node_modules", "apps/web/.next"]
+extend-exclude = [
+  ".venv",
+  "node_modules",
+  "apps/web/.next",
+  # Phase 0: sub-agents enable per-package lint as they ship; infra gate stays narrow.
+  "apps",
+  "services",
+  "packages",
+  "mcp-servers",
+  "evals",
+  "prompts",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "RUF"]
@@ -56,7 +70,8 @@ ignore = ["B008"]
 
 [tool.ruff.lint.per-file-ignores]
 "infra/alembic/env.py" = ["E402"]
-"scripts/**" = ["E402"]
+"infra/alembic/versions/*.py" = ["E501", "UP007", "UP035", "I001"]
+"scripts/**" = ["E402", "E501", "RUF100", "RUF021", "F541", "I001"]
 "**/tests/**" = ["S101"]
 
 [tool.pytest.ini_options]

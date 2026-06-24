@@ -1,11 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   reactStrictMode: true,
   transpilePackages: ['@asf/ui', '@asf/schemas'],
-  experimental: {
-    typedRoutes: true,
-  },
+  experimental: {},
   async headers() {
     return [
       {

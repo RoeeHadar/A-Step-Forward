@@ -126,7 +126,9 @@ def main() -> int:
     new_course = sub.add_parser("new-course", help="Scaffold a new course directory")
     new_course.add_argument("course_id")
     new_course.add_argument("title")
-    new_course.add_argument("--level", default="beginner", choices=["beginner", "intermediate", "advanced"])
+    new_course.add_argument(
+        "--level", default="beginner", choices=["beginner", "intermediate", "advanced"]
+    )
     new_course.set_defaults(func=cmd_new_course)
 
     new_unit = sub.add_parser("new-unit", help="Scaffold a new unit under a course")

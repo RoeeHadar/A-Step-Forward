@@ -27,9 +27,16 @@ def upgrade() -> None:
         sa.Column("age", sa.Integer(), nullable=True),
         sa.Column("child_mode", sa.Boolean(), nullable=False, server_default=sa.text("false")),
         sa.Column("locale", sa.String(length=16), nullable=False, server_default="en"),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
     )
-    op.create_index("ix_gateway_users_clerk_user_id", "gateway_users", ["clerk_user_id"], unique=True)
+    op.create_index(
+        "ix_gateway_users_clerk_user_id", "gateway_users", ["clerk_user_id"], unique=True
+    )
 
     op.create_table(
         "gateway_sessions",
@@ -47,7 +54,12 @@ def upgrade() -> None:
         sa.Column("action", sa.String(length=64), nullable=False),
         sa.Column("route", sa.String(length=256), nullable=False),
         sa.Column("metadata_json", sa.Text(), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
     )
     op.create_index("ix_audit_gateway_events_learner_id", "audit_gateway_events", ["learner_id"])
 

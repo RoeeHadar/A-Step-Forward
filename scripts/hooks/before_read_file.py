@@ -29,7 +29,7 @@ def redact_env(text: str) -> str:
             out.append(line)
             continue
         key, val = m.group(1), m.group(2)
-        if not val or val.startswith('"' ) and val.endswith('"') and len(val) <= 2:
+        if not val or val.startswith('"') and val.endswith('"') and len(val) <= 2:
             out.append(line)
             continue
         out.append(f"{key}=***REDACTED***")
@@ -44,7 +44,10 @@ def main() -> int:
     path = (payload.get("path") or "").replace("\\", "/").lower()
     if not path:
         return 0
-    is_secret_path = any(s.replace("\\", "/").lower() in path for s in SECRET_PATHS) and ".env.example" not in path
+    is_secret_path = (
+        any(s.replace("\\", "/").lower() in path for s in SECRET_PATHS)
+        and ".env.example" not in path
+    )
     if not is_secret_path:
         return 0
     p = Path(payload["path"])

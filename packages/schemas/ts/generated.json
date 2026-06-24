@@ -1,0 +1,1265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ChatRequest": {
+      "$defs": {
+        "AgentName": {
+          "enum": [
+            "tutor",
+            "mentor",
+            "coach",
+            "qa_explainer",
+            "reviewer",
+            "note_taker",
+            "engagement",
+            "accessibility",
+            "orchestrator",
+            "curriculum_designer",
+            "assessment_generator",
+            "grader",
+            "progress_analyzer",
+            "content_curator",
+            "research",
+            "kg_builder",
+            "memory_steward",
+            "safety_moderation",
+            "eval_agent",
+            "analytics_insights"
+          ],
+          "title": "AgentName",
+          "type": "string"
+        }
+      },
+      "properties": {
+        "learner_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Learner Id",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "requested_agent": {
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/AgentName"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Id"
+        },
+        "locale": {
+          "default": "en",
+          "title": "Locale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "learner_id",
+        "message"
+      ],
+      "title": "ChatRequest",
+      "type": "object"
+    },
+    "ChatChunk": {
+      "$defs": {
+        "AgentName": {
+          "enum": [
+            "tutor",
+            "mentor",
+            "coach",
+            "qa_explainer",
+            "reviewer",
+            "note_taker",
+            "engagement",
+            "accessibility",
+            "orchestrator",
+            "curriculum_designer",
+            "assessment_generator",
+            "grader",
+            "progress_analyzer",
+            "content_curator",
+            "research",
+            "kg_builder",
+            "memory_steward",
+            "safety_moderation",
+            "eval_agent",
+            "analytics_insights"
+          ],
+          "title": "AgentName",
+          "type": "string"
+        },
+        "Citation": {
+          "description": "Citation an agent attaches to a claim or generated answer.",
+          "properties": {
+            "source_kind": {
+              "enum": [
+                "memory",
+                "kg_node",
+                "kg_chunk",
+                "lesson",
+                "resource",
+                "web"
+              ],
+              "title": "Source Kind",
+              "type": "string"
+            },
+            "source_id": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "quote": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Quote"
+            },
+            "score": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Score"
+            }
+          },
+          "required": [
+            "source_kind",
+            "source_id"
+          ],
+          "title": "Citation",
+          "type": "object"
+        }
+      },
+      "description": "A single SSE chunk going back to the client.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "token",
+            "tool_call",
+            "tool_result",
+            "citation",
+            "done",
+            "error"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "agent": {
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/AgentName"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/Citation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool"
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Payload"
+        },
+        "ts": {
+          "format": "date-time",
+          "title": "Ts",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "ChatChunk",
+      "type": "object"
+    },
+    "AgentManifest": {
+      "$defs": {
+        "AgentName": {
+          "enum": [
+            "tutor",
+            "mentor",
+            "coach",
+            "qa_explainer",
+            "reviewer",
+            "note_taker",
+            "engagement",
+            "accessibility",
+            "orchestrator",
+            "curriculum_designer",
+            "assessment_generator",
+            "grader",
+            "progress_analyzer",
+            "content_curator",
+            "research",
+            "kg_builder",
+            "memory_steward",
+            "safety_moderation",
+            "eval_agent",
+            "analytics_insights"
+          ],
+          "title": "AgentName",
+          "type": "string"
+        },
+        "Budget": {
+          "description": "Per-agent budget.",
+          "properties": {
+            "max_input_tokens": {
+              "default": 100000,
+              "title": "Max Input Tokens",
+              "type": "integer"
+            },
+            "max_output_tokens": {
+              "default": 4000,
+              "title": "Max Output Tokens",
+              "type": "integer"
+            },
+            "max_latency_ms": {
+              "default": 30000,
+              "title": "Max Latency Ms",
+              "type": "integer"
+            },
+            "max_cost_usd": {
+              "default": 0.5,
+              "title": "Max Cost Usd",
+              "type": "number"
+            }
+          },
+          "title": "Budget",
+          "type": "object"
+        },
+        "MemoryAccessPolicy": {
+          "description": "Per-agent policy declaring which memory types may be read/written.",
+          "properties": {
+            "read": {
+              "items": {
+                "$ref": "#/components/schemas/MemoryType"
+              },
+              "title": "Read",
+              "type": "array",
+              "uniqueItems": true
+            },
+            "write": {
+              "items": {
+                "$ref": "#/components/schemas/MemoryType"
+              },
+              "title": "Write",
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "title": "MemoryAccessPolicy",
+          "type": "object"
+        },
+        "MemoryType": {
+          "description": "The eight memory types. See PLAN.md \u00a75.1.",
+          "enum": [
+            "working",
+            "episodic",
+            "semantic",
+            "procedural",
+            "affective",
+            "context",
+            "reflective",
+            "source"
+          ],
+          "title": "MemoryType",
+          "type": "string"
+        },
+        "ToolRef": {
+          "description": "Reference to an MCP tool (or local function tool).",
+          "properties": {
+            "transport": {
+              "default": "mcp",
+              "enum": [
+                "mcp",
+                "local"
+              ],
+              "title": "Transport",
+              "type": "string"
+            },
+            "server": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Server"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "ToolRef",
+          "type": "object"
+        }
+      },
+      "description": "Static description of an agent \u2014 used for routing and docs.",
+      "properties": {
+        "name": {
+          "$ref": "#/components/schemas/AgentName"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "prompt_version": {
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "primary_model": {
+          "title": "Primary Model",
+          "type": "string"
+        },
+        "fallback_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fallback Model"
+        },
+        "tools": {
+          "items": {
+            "$ref": "#/components/schemas/ToolRef"
+          },
+          "title": "Tools",
+          "type": "array"
+        },
+        "memory_policy": {
+          "$ref": "#/components/schemas/MemoryAccessPolicy"
+        },
+        "budget": {
+          "$ref": "#/components/schemas/Budget"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "prompt_version",
+        "primary_model",
+        "memory_policy"
+      ],
+      "title": "AgentManifest",
+      "type": "object"
+    },
+    "LearnerProfile": {
+      "$defs": {
+        "LearnerRole": {
+          "enum": [
+            "learner",
+            "educator",
+            "admin",
+            "parent"
+          ],
+          "title": "LearnerRole",
+          "type": "string"
+        }
+      },
+      "description": "Current learner profile returned by GET /v1/learners/me.",
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "clerk_user_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clerk User Id"
+        },
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Email"
+        },
+        "age": {
+          "anyOf": [
+            {
+              "maximum": 120,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age"
+        },
+        "child_mode": {
+          "default": false,
+          "title": "Child Mode",
+          "type": "boolean"
+        },
+        "locale": {
+          "default": "en",
+          "title": "Locale",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/components/schemas/LearnerRole",
+          "default": "learner"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "display_name"
+      ],
+      "title": "LearnerProfile",
+      "type": "object"
+    },
+    "Lesson": {
+      "$defs": {
+        "BloomsLevel": {
+          "enum": [
+            "remember",
+            "understand",
+            "apply",
+            "analyze",
+            "evaluate",
+            "create"
+          ],
+          "title": "BloomsLevel",
+          "type": "string"
+        },
+        "Modality": {
+          "enum": [
+            "reading",
+            "interactive",
+            "video",
+            "project",
+            "discussion"
+          ],
+          "title": "Modality",
+          "type": "string"
+        },
+        "Objective": {
+          "properties": {
+            "id": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Id",
+              "type": "string"
+            },
+            "statement": {
+              "title": "Statement",
+              "type": "string"
+            },
+            "blooms_level": {
+              "$ref": "#/components/schemas/BloomsLevel"
+            },
+            "concepts": {
+              "items": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Concepts",
+              "type": "array"
+            }
+          },
+          "required": [
+            "id",
+            "statement",
+            "blooms_level"
+          ],
+          "title": "Objective",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "body_md": {
+          "title": "Body Md",
+          "type": "string"
+        },
+        "modality": {
+          "$ref": "#/components/schemas/Modality"
+        },
+        "objectives": {
+          "items": {
+            "$ref": "#/components/schemas/Objective"
+          },
+          "title": "Objectives",
+          "type": "array"
+        },
+        "concepts": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Concepts",
+          "type": "array"
+        },
+        "resources": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "est_minutes": {
+          "default": 15,
+          "title": "Est Minutes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "body_md",
+        "modality"
+      ],
+      "title": "Lesson",
+      "type": "object"
+    },
+    "ProgressSummary": {
+      "$defs": {
+        "MasteryEntry": {
+          "properties": {
+            "concept_id": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Concept Id",
+              "type": "string"
+            },
+            "concept_title": {
+              "title": "Concept Title",
+              "type": "string"
+            },
+            "score": {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "title": "Score",
+              "type": "number"
+            },
+            "last_reviewed_at": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Last Reviewed At"
+            }
+          },
+          "required": [
+            "concept_id",
+            "concept_title",
+            "score"
+          ],
+          "title": "MasteryEntry",
+          "type": "object"
+        }
+      },
+      "description": "Current mastery summary returned by GET /v1/progress.",
+      "properties": {
+        "learner_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Learner Id",
+          "type": "string"
+        },
+        "mastery": {
+          "items": {
+            "$ref": "#/components/schemas/MasteryEntry"
+          },
+          "title": "Mastery",
+          "type": "array"
+        },
+        "streak_days": {
+          "default": 0,
+          "title": "Streak Days",
+          "type": "integer"
+        },
+        "next_review_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Review At"
+        }
+      },
+      "required": [
+        "learner_id"
+      ],
+      "title": "ProgressSummary",
+      "type": "object"
+    },
+    "MemoryRecord": {
+      "$defs": {
+        "MemoryType": {
+          "description": "The eight memory types. See PLAN.md \u00a75.1.",
+          "enum": [
+            "working",
+            "episodic",
+            "semantic",
+            "procedural",
+            "affective",
+            "context",
+            "reflective",
+            "source"
+          ],
+          "title": "MemoryType",
+          "type": "string"
+        },
+        "Provenance": {
+          "description": "Where a piece of data came from.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "chat",
+                "lesson",
+                "assessment",
+                "upload",
+                "agent_reflection",
+                "system",
+                "import",
+                "verification"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Id"
+            },
+            "agent": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Agent"
+            },
+            "model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Model"
+            },
+            "model_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Model Version"
+            },
+            "ts": {
+              "format": "date-time",
+              "title": "Ts",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "title": "Provenance",
+          "type": "object"
+        }
+      },
+      "description": "Persisted memory row (the contract returned by reads).",
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "learner_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Learner Id",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/components/schemas/MemoryType"
+        },
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "salience": {
+          "default": 0.5,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Salience",
+          "type": "number"
+        },
+        "confidence": {
+          "default": 0.5,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "valence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": -1.0,
+          "title": "Valence",
+          "type": "number"
+        },
+        "decay_tau_days": {
+          "default": 14.0,
+          "title": "Decay Tau Days",
+          "type": "number"
+        },
+        "last_accessed_at": {
+          "format": "date-time",
+          "title": "Last Accessed At",
+          "type": "string"
+        },
+        "access_count": {
+          "default": 0,
+          "title": "Access Count",
+          "type": "integer"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "superseded_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded At"
+        },
+        "provenance": {
+          "$ref": "#/components/schemas/Provenance"
+        },
+        "kg_node_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Kg Node Ids",
+          "type": "array"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "archived_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Archived At"
+        },
+        "deleted_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deleted At"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        }
+      },
+      "required": [
+        "id",
+        "learner_id",
+        "type",
+        "content",
+        "provenance"
+      ],
+      "title": "MemoryRecord",
+      "type": "object"
+    },
+    "MemoryWriteInput": {
+      "$defs": {
+        "MemoryType": {
+          "description": "The eight memory types. See PLAN.md \u00a75.1.",
+          "enum": [
+            "working",
+            "episodic",
+            "semantic",
+            "procedural",
+            "affective",
+            "context",
+            "reflective",
+            "source"
+          ],
+          "title": "MemoryType",
+          "type": "string"
+        },
+        "Provenance": {
+          "description": "Where a piece of data came from.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "chat",
+                "lesson",
+                "assessment",
+                "upload",
+                "agent_reflection",
+                "system",
+                "import",
+                "verification"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Id"
+            },
+            "agent": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Agent"
+            },
+            "model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Model"
+            },
+            "model_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Model Version"
+            },
+            "ts": {
+              "format": "date-time",
+              "title": "Ts",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "title": "Provenance",
+          "type": "object"
+        }
+      },
+      "description": "Input passed to MemoryService.write() and the memory.write MCP tool.",
+      "properties": {
+        "learner_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Learner Id",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/components/schemas/MemoryType"
+        },
+        "content": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "valence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": -1.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valence"
+        },
+        "importance_hint": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Importance Hint"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        },
+        "provenance": {
+          "$ref": "#/components/schemas/Provenance"
+        }
+      },
+      "required": [
+        "learner_id",
+        "type",
+        "content",
+        "provenance"
+      ],
+      "title": "MemoryWriteInput",
+      "type": "object"
+    },
+    "MemorySearchInput": {
+      "$defs": {
+        "MemoryType": {
+          "description": "The eight memory types. See PLAN.md \u00a75.1.",
+          "enum": [
+            "working",
+            "episodic",
+            "semantic",
+            "procedural",
+            "affective",
+            "context",
+            "reflective",
+            "source"
+          ],
+          "title": "MemoryType",
+          "type": "string"
+        }
+      },
+      "description": "Input for hybrid memory retrieval.",
+      "properties": {
+        "learner_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Learner Id",
+          "type": "string"
+        },
+        "query": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Query",
+          "type": "string"
+        },
+        "types": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/components/schemas/MemoryType"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Types"
+        },
+        "k": {
+          "default": 10,
+          "maximum": 200,
+          "minimum": 1,
+          "title": "K",
+          "type": "integer"
+        },
+        "agent_id": {
+          "title": "Agent Id",
+          "type": "string"
+        },
+        "include_archived": {
+          "default": false,
+          "title": "Include Archived",
+          "type": "boolean"
+        },
+        "min_strength": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Strength",
+          "type": "number"
+        }
+      },
+      "required": [
+        "learner_id",
+        "query",
+        "agent_id"
+      ],
+      "title": "MemorySearchInput",
+      "type": "object"
+    }
+  }
+}

@@ -10,6 +10,7 @@ from alembic import context
 from sqlalchemy import MetaData, pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy.orm import DeclarativeBase
 
 config = context.config
 if config.config_file_name is not None:
@@ -21,7 +22,7 @@ if database_url:
     config.set_main_option("sqlalchemy.url", database_url)
 
 
-def _combine_metadata(*bases: type) -> MetaData:
+def _combine_metadata(*bases: type[DeclarativeBase]) -> MetaData:
     combined = MetaData()
     for base in bases:
         for table in base.metadata.tables.values():

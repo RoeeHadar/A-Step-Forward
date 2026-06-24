@@ -33,7 +33,12 @@ def _memory_columns() -> list[sa.Column]:
         sa.Column("learner_id", sa.String(length=128), nullable=False),
         sa.Column("content", sa.Text(), nullable=False),
         sa.Column("summary", sa.Text(), nullable=True),
-        sa.Column("tags", sa.dialects.postgresql.JSONB(), nullable=False, server_default=sa.text("'[]'::jsonb")),
+        sa.Column(
+            "tags",
+            sa.dialects.postgresql.JSONB(),
+            nullable=False,
+            server_default=sa.text("'[]'::jsonb"),
+        ),
         sa.Column("embedding", Vector(1024), nullable=True),
         sa.Column("salience", sa.Float(), nullable=False, server_default="0.5"),
         sa.Column("confidence", sa.Float(), nullable=False, server_default="0.5"),
