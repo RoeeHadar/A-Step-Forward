@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 
-from agents.agents import AGENT_REGISTRY
+from agents import AGENT_REGISTRY
 from schemas.agents import AgentManifest
 
 from ..core.auth import AuthCtx, require_learner
