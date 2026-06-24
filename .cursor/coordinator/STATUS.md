@@ -1,76 +1,56 @@
 # A Step Forward — Coordinator Status
 
-Last updated: 2026-06-24T17:05:00Z by Coordinator session 5 (c9ee2952)
+Last updated: 2026-06-24T18:04:00Z by Manager (post auth-fix)
 
-## Launch status: **LIVE (core infrastructure)** · **NEEDS_BROWSER_VALIDATION**
+## Launch status: **LIVE & WORKING** — phase-2 streams now open
 
-Frontend and backend are deployed and passing HTTP smoke. Sign-up → chat → memory
-still require a human browser pass (BLOCKED.md §2).
+User confirmed sign-up works. Auth was fully debugged by manager (middleware moved to
+`src/middleware.ts`, explicit redirect, Clerk v5.7.6 compat). Site is live and usable.
 
 ---
 
-## Acceptance checklist (per RESUME-README.md end-state)
+## Phase-2 directive (from manager, session 6)
 
-- [x] `apps/web` deployed to Vercel — https://a-step-forward-waij.vercel.app
-- [x] `/` returns 200 — verified session 5 (post `4752c7b` redeploy trigger)
+Four new streams are now the priority. Tackle in parallel where safe:
+
+| Stream | Label | Priority |
+| --- | --- | --- |
+| RTL / Hebrew default | **I18N** | P0 |
+| Visual polish | **UI** | P0 |
+| Chat hiccup fix | **CHAT** | P0 |
+| Content research ingest (math/physics/…) | **CONTENT** | P1 |
+
+Details in ROADMAP.md §Phase-2.
+
+---
+
+## Acceptance checklist
+
+- [x] `apps/web` deployed — https://a-step-forward-waij.vercel.app
+- [x] `/` returns 200
 - [x] `/sign-in` returns 200
-- [x] `/lessons/lesson-whole-numbers` returns 200
-- [x] `/api/health` returns 200 — `{"status":"ok","service":"web"}`
-- [x] `apps/api` on Render — https://asf-api-q566.onrender.com
-- [x] `/healthz` 200 — `{"status":"ok"}` (manager + coordinator verified)
-- [x] `/readyz` 200 — `postgres=true`, `redis=true`
-- [x] `/v1/chat` route live — 401 without auth (expected)
-- [x] Vercel env vars → Render — confirmed via `wire-vercel-env.yml` run 28103755335 (Set all 3 keys)
-- [ ] Learner sign-up works — **browser test pending** (Clerk keys on Vercel)
-- [ ] Learner chat returns real Groq response — **browser test pending**
-- [ ] Memory visible on live `/memory` — pending sign-in + chat
-- [x] Memory writes wired — `cef3a43` episodic per chat turn
-- [x] Dreamer + Decay cron — verified session 3; manual dispatch green
-- [x] GraphRAG seeded — 31 Neon chunks + Neo4j graph (local Neo4j untestable — TLS proxy)
-- [x] CI green — Lint & Test, Evals, Repo Health on `0e4cf94`+
-- [x] Tutor eval gates — mocked promptfoo + regression workflow
-- [x] Public repo, README, LICENSE, SECURITY.md, ADR-0004/0005
-- [ ] Demo GIF — placeholder only
-
-Legend: `[x]` done · `[ ]` not started / needs human validation
+- [x] `/api/health` returns 200
+- [x] Render backend live — https://asf-api-q566.onrender.com
+- [x] `/healthz` 200
+- [x] `/readyz` 200 — postgres=true redis=true
+- [x] `/v1/chat` 401 (auth required — expected)
+- [x] Clerk auth working — user confirmed sign-up with Google succeeds
+- [x] Middleware fixed — Clerk v5.7.6 + src/middleware.ts + explicit redirect
+- [ ] Hebrew default + RTL layout — not started
+- [ ] Visual polish pass — not started
+- [ ] Chat hiccup fixed — not started
+- [ ] Content DB seeded (math/physics/calculus/linAlg/stats) — not started
+- [ ] Demo GIF — not started
 
 ---
 
-## Final smoke (session 5)
+## Phase-1 completed (for reference)
 
-| Route | Result |
-| --- | --- |
-| `GET /` | 200 |
-| `GET /sign-in` | 200 |
-| `GET /lessons/lesson-whole-numbers` | 200 |
-| `GET /api/health` | 200 |
-| `GET /healthz` | 200 `{"status":"ok"}` |
-| `GET /readyz` | 200 `postgres=true redis=true` |
-| `POST /v1/chat` (no auth) | 401 |
-
----
-
-## Session history (condensed)
-
-| Session | Outcome |
-| --- | --- |
-| 1 | Memory episodic writes; frontend empty states |
-| 2 | GraphRAG ingest + cron jobs |
-| 3 | CI green; Tutor eval gates |
-| 4 | Launch wiring: `wire-vercel-env.yml`, BLOCKED §5d, Render env paste |
-| 5 | Backend live confirmed; Vercel redeploy triggered (`4752c7b`); BLOCKED + STATUS finalized |
-
----
-
-## Remaining human tasks (BLOCKED.md §2)
-
-1. Browser: sign-up at `/sign-up`
-2. Browser: chat message → confirm Groq response
-3. Rotate Groq + Clerk keys shared during launch setup
-4. Optional: custom domain, marketing posts, demo GIF
+Memory episodic writes, GraphRAG seeded, Dreamer/Decay cron, CI green, public repo,
+README/LICENSE/SECURITY.md/ADRs, marketing landing.
 
 ---
 
 ## Hands-off until manager check-in
 
-true — launch milestone reached; only browser validation and key rotation remain
+true — manager will check in at the next major milestone (Hebrew+UI or Content ingest complete)

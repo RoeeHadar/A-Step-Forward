@@ -1,83 +1,153 @@
-# Coordinator Roadmap
+# Coordinator Roadmap — Phase 2
 
-Priority-ordered list of streams to close out, with dependencies. The Coordinator picks the next 1–3 parallel-safe items each session.
+## P0 — User-visible improvements (run in parallel)
 
-## P0 — Critical path to a working demo
+### I. Hebrew default + full RTL layout  (stream: `01-frontend`)
 
-### A. Backend live on Render
-- **Owner stream**: `02-backend-api`
-- **State**: Dockerfile + `render.yaml` shipped. User created the Render Blueprint at ~15:22 UTC+3 with all env vars set. **Render is currently building.**
-- **Done when**: `https://asf-api.onrender.com/healthz` returns 200 + `/v1/chat` streams real Groq tokens after `GROQ_API_KEY` is set.
-- **Dispatch**: poll the URL every 60s for up to 10 min. When live, set `NEXT_PUBLIC_API_BASE_URL=https://asf-api.onrender.com` on Vercel (via API, in flight by frontend sub-agent), trigger empty-commit redeploy, smoke `/v1/lessons/lesson-whole-numbers` from the live frontend. If Render fails the build, debug the Dockerfile (most likely: `uv sync --frozen --package asf-api` step; the `uv.lock` may be stale).
-- **Coord**: this is the SINGLE highest-priority item. Without backend, only lessons render (via the snapshot fallback shipped by the curriculum sub-agent).
+**Goal**: The website defaults to Hebrew (`he`). All UI text, navigation, labels, and page
+layouts must be right-to-left. English is available via the language switcher.
 
-### B. Memory persistence end-to-end
-- **Owner stream**: `04-memory`
-- **Brief**: `.cursor/subagent-briefs/04-memory-resume.md`
-- **State**: tables exist in Neon (`semantic_memories`, `episodic_memories`, etc.). `MemoryService` exists. No writes actually happen during a chat turn.
-- **Done when**:
-  1. Sending a chat message produces a row in `episodic_memories`.
-  2. Visiting `/memory` on the live site shows ≥1 row for the signed-in learner.
-  3. The Note-Taker agent writes structured semantic memories after long sessions (or a worker batches this).
-- **Dispatch**: Composer 2.5, 1 sub-agent. Tell it to read brief 04, wire `MemoryService.write()` into the orchestrator's `runner.stream`, add an integration test, and verify against Neon.
+**Acceptance**:
+- `<html lang="he" dir="rtl">` by default.
+- `tailwind.config` + CSS: RTL-aware utilities (`ml-*`→`ms-*`, `pl-*`→`ps-*`, etc.) OR use
+  `@tailwindcss/rtl` or `logical` CSS properties. No hardcoded `left`/`right` margins.
+- The locale switcher in `SiteHeader` sets `he` (default) / `en` and persists to
+  `localStorage`.
+- `apps/web/src/i18n/messages/he.ts` (or `.json`) contains all Hebrew translations for every
+  key already in `apps/web/src/i18n/messages/en.ts`.
+- The Clerk-rendered components (`<SignIn>`, `<SignUp>`, `<UserButton>`) have `locale="he-IL"`
+  passed to `ClerkProvider`.
+- Smoke: GET `/` → HTML contains `dir="rtl"` and `lang="he"`. GET `/sign-in` → 200.
 
-### C. Groq key + final chat smoke
-- **Owner stream**: `11-release-captain` (you, via the manager)
-- **State**: Groq provider shipped (see ADR-0004). `GROQ_API_KEY` not yet set on Render.
-- **Done when**: user adds `GROQ_API_KEY=gsk_...` in the Render dashboard. Live chat returns Llama-3.3-70B text within ~3s.
-- **Coord**: this is a 2-min human action. Document very clearly in `BLOCKED.md §5c` (already done by Groq sub-agent). When the user reports the key is set, smoke `/v1/chat`.
+**Key files to touch**:
+- `apps/web/src/app/layout.tsx` — set `dir`/`lang` dynamically from user locale
+- `apps/web/src/providers/app-providers.tsx` — pass `locale` to `ClerkProvider`
+- `apps/web/src/providers/i18n-provider.tsx` + `config.ts` — default locale = `he`
+- `apps/web/src/i18n/messages/he.ts` — add all Hebrew strings
+- Tailwind: prefer CSS logical properties (`ps`, `pe`, `ms`, `me`, `bs`, `be`) everywhere
 
-## P1 — Quality bar
+**Do NOT change**: route structure, auth flow, API calls.
 
-### D. GraphRAG hybrid retrieval against seeded corpus
-- **Owner stream**: `05-graphrag`
-- **Brief**: `.cursor/subagent-briefs/05-graphrag-resume.md`
-- **State**: `kg_chunks` table exists, GraphRAG service has retrieval modes (bm25/dense/hybrid/rerank), Neo4j AuraDB credentials set. Corpus is NOT yet chunked + embedded.
-- **Done when**: ingesting the `foundations-of-math` markdown into `kg_chunks` (1024-dim embeddings via Voyage AI — but Voyage isn't free; **substitute** with HuggingFace `sentence-transformers/all-mpnet-base-v2` (768d) or any local/free embedding; document via ADR). `kg.hybrid` MCP tool returns ranked chunks for a query like "what is a fraction".
-- **Dispatch**: Composer 2.5. Coordinator drafts the prompt; emphasize **no paid embedding APIs**.
+---
 
-### E. CI green across the board
-- **Owner stream**: `09-infra` + `08-evals-qa`
-- **State**: `.github/workflows/` has lint-test, deploy-web, deploy-api, evals. Latest pushes may have broken some jobs.
-- **Done when**: latest commit on `main` shows all required checks green in `gh pr checks` (or `gh run list --limit 5`).
-- **Dispatch**: Composer 2.5 to fix any red CI runs. Re-rebase if needed.
+### U. Visual polish pass  (stream: `01-frontend`)
 
-### F. Workers + Dreamer cron
-- **Owner stream**: `04-memory` (Dreamer agent) + `09-infra` (Render Cron Job)
-- **State**: `services/workers/` exists with `dreaming.py`, `decay.py`, `kg_ingest.py`. Not deployed.
-- **Done when**: a Render Cron Job (`asf-workers`) runs `python -m workers.jobs.dreaming` nightly. (Alternative: GitHub Actions cron — free, doesn't need Render Background Workers which require paid tier.)
-- **Dispatch**: Composer 2.5. Strongly prefer **GitHub Actions cron** over Render Background Workers (free tier limitation).
+**Goal**: The website looks professional, warm, and modern. Current state has basic shadcn
+components but lacks personality.
 
-## P2 — Polish
+**Acceptance**:
+- Landing page (`/`) hero: compelling headline in Hebrew, sub-headline, CTA button ("התחל ללמוד"), 
+  feature cards (Tutor, Mentor, Coach, Reviewer) with icons and descriptions.
+- App dashboard (`/app`): cards have micro-animations (Framer Motion already installed), 
+  progress bars are visually polished.
+- Typography: set a good Google Font (Heebo for Hebrew, Inter/DM Sans for English fallback)
+  via `next/font`. Hebrew requires a font with Hebrew glyph support.
+- Color theme: a warm blue + amber accent (already in globals.css? if not, set it).
+- Mobile responsive: check at 375px, 768px, 1280px.
+- No broken layouts on RTL (coordinate with stream I).
 
-### G. Demo screenshot + README polish
-- **Owner stream**: `01-frontend` + `11-release-captain`
-- **Done when**: README hero shows a real screenshot of the live site (not just the placeholder generated earlier).
+**Key files**:
+- `apps/web/src/app/globals.css`
+- `apps/web/src/components/landing-hero.tsx`
+- `apps/web/src/app/page.tsx`
+- `apps/web/src/app/(app)/app/page.tsx`
 
-### H. Educator + Admin pages functional
-- **State**: `apps/web/src/app/(app)/educator/page.tsx` and `admin/page.tsx` exist as stubs.
-- **Done when**: empty-state UI is acceptable (these are post-launch features).
+---
 
-### I. Evals threshold gates
-- **Owner stream**: `08-evals-qa`
-- **Done when**: at least the Tutor agent has `evals/agents/tutor/capability.yaml` + `safety.yaml` + `thresholds.yaml` and they run green in CI against the new Groq LLM (use mocked responses where possible to avoid spending free-tier quota in CI).
+### C. Chat hiccup fix  (stream: `01-frontend` + `02-backend-api`)
 
-## Dependency graph
+**Goal**: Opening a chat session is smooth with no visible flash/error on first load.
 
-```
-A (backend) ──┬─→ B (memory)
-              ├─→ C (chat smoke)
-              ├─→ D (graphrag hybrid)
-              └─→ F (workers)
-                       │
-B + D ─────────────────┴─→ E (CI green) → G (polish) + I (eval gates) → DONE
-```
+**Current symptom** (reported by user): a "hiccup" when starting a chat. This is likely:
+1. The Render backend spins down (free tier cold start → first request takes 5–15s)
+2. OR the frontend `/app/chat/[agent]` page crashes on mount before the user sends a message
+3. OR a CORS error for the first request
 
-`H` is independent and low priority.
+**Acceptance**:
+- `/app/chat/[agent]` loads without error or visible crash.
+- Sending the first message shows a clear loading state (spinner or "Thinking…" indicator).
+- If the backend is cold-starting, a friendly "Connecting to your AI tutor, please wait…"
+  message is shown for up to 15s, then retries once.
+- CORS headers are correct: `Access-Control-Allow-Origin` includes the Vercel URL.
 
-## Notes for the Coordinator
+**Investigation checklist** (sub-agent must check these before coding):
+1. GET `https://a-step-forward-waij.vercel.app/app/chat/tutor` — check browser console
+2. Check `apps/web/src/app/(app)/app/chat/[agent]/page.tsx` for any uncaught async errors
+3. Check `apps/api/app/routers/chat.py` for CORS + streaming headers
 
-- The most recent commits on `main` are from concurrent sub-agents (LLM, Curriculum, Frontend). Always `git pull --rebase` before starting any local work.
-- The `pyproject.toml` workspace has a malformed `[tool.uv]` block (`python = "3.11"`) that confuses newer `uv` versions. If you need `uv` for migrations or testing, use the `.venv-infra/` venv that the manager already populated with pip-installed deps.
-- Docker Desktop is running (WSL2 installed). You can use `docker run --rm postgres:16 psql "<url>" -c "<sql>"` for any Postgres operations.
-- The frontend has a robust fallback path — when the backend is unreachable, lessons render from `apps/web/src/lib/seed-lessons.generated.json`. Don't rip out the fallback when wiring the live backend; keep both.
+---
+
+## P1 — Content database (stream: `07-curriculum` + `05-graphrag`)
+
+### K. Research ingest for STEM curriculum
+
+**Goal**: Scrape/collect high-quality public-domain or CC-licensed educational content for:
+- **Mathematics**: arithmetic, fractions, algebra, geometry, number theory
+- **Calculus**: limits, derivatives, integrals, series
+- **Linear Algebra**: vectors, matrices, eigenvalues, transformations
+- **Statistics & Probability**: distributions, hypothesis testing, Bayesian inference
+- **Physics**: mechanics, electromagnetism (basics)
+
+**Sources** (free, legal, high quality):
+- OpenStax textbooks (https://openstax.org — CC BY 4.0): `precalculus-2e`, `calculus-vol-1`,
+  `calculus-vol-2`, `linear-algebra`, `introductory-statistics`, `university-physics-vol-1`
+- Paul's Online Math Notes (https://tutorial.math.lamar.edu — free educational use):
+  Calculus I/II/III notes
+- Wikipedia math articles for concept definitions
+
+**Approach**:
+1. Write a Python script `scripts/ingest_content.py` that:
+   - Downloads OpenStax book HTML (they have a public API: `https://openstax.org/apps/archive/...`)
+   - Parses chapters into `Lesson` objects matching `packages/schemas/src/curriculum.ts`
+   - Chunks into ≤1000-token segments
+   - Inserts into `kg_chunks` table (Neon) with subject tag
+   - Also inserts into `curriculum.lessons` if a full lesson structure is available
+2. Run the script against at least 3 OpenStax books (precalculus, calculus-vol-1, statistics)
+3. Verify with `SELECT COUNT(*), subject FROM kg_chunks GROUP BY subject;` against Neon
+4. Update `apps/web/src/lib/seed-lessons.generated.json` with a sample of new lesson objects
+
+**Constraints**:
+- Do NOT use paid embedding APIs. Use `sentence-transformers/all-MiniLM-L6-v2` (384-dim,
+  free, fast) OR the existing HuggingFace inference API (no key needed for public models).
+- Embeddings go in `kg_chunks.embedding` (vector column exists).
+- Mark every chunk with `source_url`, `license = "CC BY 4.0"`, `subject` metadata.
+- The script must be idempotent (re-runnable without duplicates — upsert on `source_url+chunk_idx`).
+
+---
+
+## P2 — Deferred to phase 3
+
+- Custom domain `astepforward.app`
+- Clerk production instance (needs domain)
+- Key rotation (Groq + Clerk dev keys)
+- Marketing posts (HN, Product Hunt, LinkedIn)
+- Demo GIF recording
+
+---
+
+## Coordinator dispatch plan
+
+**Session 6** (this session): dispatch streams I + U + C in parallel (3 sub-agents).
+Wait for all to land, smoke test, then dispatch K (content ingest) separately.
+
+**Parallel-safe**: I, U, C touch different files (I18n config, landing page UI, chat page/API).
+**Not parallel with I**: K touches `seed-lessons.generated.json` — wait for I to finish first
+to avoid RTL-related string conflicts.
+
+### Sub-agent prompts summary
+
+**Agent A (I18N + RTL)**:
+Read PLAN.md + `.cursor/subagent-briefs/01-frontend.md` + this ROADMAP §I, then:
+implement Hebrew default with RTL layout per spec.
+
+**Agent B (Visual Polish)**:
+Read PLAN.md + `.cursor/subagent-briefs/01-frontend.md` + this ROADMAP §U, then:
+implement visual polish per spec.
+
+**Agent C (Chat Hiccup)**:
+Read PLAN.md + `.cursor/subagent-briefs/01-frontend.md` + `.cursor/subagent-briefs/02-backend-api.md` + this ROADMAP §C, then:
+investigate and fix the chat cold-start hiccup.
+
+**Agent K (Content Ingest)**:
+Read PLAN.md + `.cursor/subagent-briefs/07-curriculum.md` + `.cursor/subagent-briefs/05-graphrag.md` + this ROADMAP §K, then:
+implement the content scraping and ingest script.
