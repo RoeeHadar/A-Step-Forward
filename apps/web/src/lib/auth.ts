@@ -18,7 +18,7 @@ export async function getAuthContext(): Promise<AuthContext | null> {
   const user = await currentUser();
   const role = (user?.publicMetadata?.role as AppRole | undefined) ?? 'learner';
   const displayName =
-    user?.firstName ?? user?.username ?? user?.emailAddresses[0]?.emailAddress ?? 'Learner';
+    user?.firstName ?? user?.username ?? user?.emailAddresses?.[0]?.emailAddress ?? 'Learner';
 
   return {
     userId,
