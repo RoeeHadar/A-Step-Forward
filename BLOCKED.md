@@ -83,6 +83,30 @@ Render dashboard → **asf-api** → Environment: `GROQ_API_KEY`, `CLERK_JWKS_UR
 
 ---
 
+## Custom domain + Clerk production
+
+### 7. Custom domain: astepforward.app
+Manual steps required:
+a. Purchase/configure domain DNS to point to Vercel (add CNAME record in registrar)
+b. In Vercel dashboard: add custom domain under project settings
+c. Wait for SSL provisioning (~5 min)
+d. In Clerk dashboard: create a Production instance (separate from Dev)
+e. Set the Production instance's allowed origins to https://astepforward.app
+f. Copy the Production CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY
+g. Update Vercel env vars: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY to production values
+h. Update NEXT_PUBLIC_SITE_URL in Vercel to https://astepforward.app
+i. Redeploy
+
+### 8. Key rotation
+After step 7 above:
+a. Rotate GROQ_API_KEY — generate a new one at console.groq.com, update in Render + GitHub Secrets + Vercel
+b. Delete old Clerk dev keys from all env stores
+
+Before cutover, run `python scripts/verify_prod_env.py` with production env vars set locally
+(or in CI) to confirm `DATABASE_URL`, `GROQ_API_KEY`, and `CLERK_SECRET_KEY` are reachable.
+
+---
+
 ## Memory persistence (stream I)
 
 - **DATABASE_URL** must be set (Neon Postgres connection string) for memory events to persist.
