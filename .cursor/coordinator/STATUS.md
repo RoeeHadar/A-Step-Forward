@@ -1,51 +1,51 @@
 # A Step Forward — Coordinator Status
 
-Last updated: 2026-06-24T13:35:00Z by Coordinator session c9ee2952
+Last updated: 2026-06-24T16:02:00Z by Coordinator session 2 (c9ee2952)
 
 ## Acceptance checklist (per RESUME-README.md end-state)
 
 - [x] `apps/web` deployed to Vercel — https://a-step-forward-waij.vercel.app
-- [x] `/` returns 200 — verified 13:35Z (smoke after fed6cc1)
-- [ ] Learner sign-up works — placeholder Clerk keys; user task §5b BLOCKED.md
-- [ ] Learner can chat with Tutor and get a real response — needs Render API live + `GROQ_API_KEY` §5c
-- [>] `apps/api` deployed to Render — **BLOCKED**: `https://asf-api.onrender.com/` returns `{"mensaje":"hola"}` (wrong app); `/healthz` 404
-- [ ] `/healthz` 200 — pending correct Render service deploy
-- [ ] `/readyz` 200 — pending Render + DB connectivity
+- [x] `/` returns 200 — verified 16:02Z (post 743b9e5)
+- [ ] Learner sign-up works — Clerk Dev keys pending (BLOCKED.md §5b)
+- [ ] Learner can chat with Tutor and get real response — Render API + `GROQ_API_KEY` pending
+- [>] `apps/api` on Render — human deploying correct subdomain (BLOCKED.md §5a)
+- [ ] `/healthz` 200 — pending Render deploy
+- [ ] `/readyz` 200 — pending Render + DB
 - [ ] `/v1/chat` streams Tutor reply — pending Render + Groq key
-- [x] Memory writes wired — `cef3a43` persists episodic row per chat turn via `MemoryService.write()` in orchestrator `stream()`
-- [ ] Memory visible on live `/memory` — pending Render chat + Clerk sign-in
-- [ ] Dreamer cron runs — not deployed
-- [>] GraphRAG seeded with foundations-of-math — `kg_chunks` table exists; no ingestion yet
-- [ ] CI green — needs audit on latest pushes (cef3a43, fed6cc1)
-- [x] Public GitHub repo — https://github.com/RoeeHadar/A-Step-Forward
-- [x] Polished README, LICENSE, SECURITY.md, ADR-0004 (Groq)
+- [x] Memory writes wired — `cef3a43` episodic per chat turn
+- [ ] Memory visible on live `/memory` — pending Render chat + Clerk
+- [x] Dreamer cron runs — GitHub Actions `cron-dreaming.yml` (03:00 UTC) + `cron-decay.yml` (Sun 04:00 UTC); dry-run when secrets unset (`9f57509`)
+- [x] GraphRAG seeded — **31 chunks** in Neon `kg_chunks` from `foundations-of-math` (`743b9e5`); hybrid search returns results for "what is a fraction"
+- [>] Neo4j graph nodes — **blocked**: AuraDB auth failure during ingest; Postgres chunks live; re-run `scripts/ingest_graphrag.py` after `NEO4J_PASSWORD` verified
+- [ ] CI green — needs audit on latest pushes
+- [x] Public repo, README, LICENSE, SECURITY.md, ADR-0004/0005
 - [ ] Demo GIF — placeholder only
 
-Legend: `[x]` done · `[>]` in progress · `[ ]` not started
+Legend: `[x]` done · `[>]` partial · `[ ]` not started
 
-## This session
+## This session (Coordinator session 2)
 
-- **Waited on frontend sub-agent** (`6dd13fd2`) — crashed with `resource_exhausted`; integrated surviving work manually as `fed6cc1`
-- **Dispatched**: Memory persistence sub-agent (`8da852bd`) — wired episodic writes + integration test
+- **Dispatched**: [GraphRAG ingestion](cb1cf9e1-25bd-4684-96fb-863fc98f195c), [Dreamer/Decay cron](d52f4b25-8e80-4a88-a705-6332ff8e05b5)
 - **Integrated commits**:
-  - `cef3a43` — `feat(memory): wire episodic writes into orchestrator stream`
-  - `fed6cc1` — `feat(frontend): polish empty states and Vercel env helper` (+ pyproject.toml uv fix)
-- **Render polling** (3× over ~3 min): `/healthz` consistently 404; root returns unrelated JSON app
-- **Live smoke** (post-push `fed6cc1`):
+  - `ff33298` — `docs(blocked): tighten human-only launch checklist`
+  - `9f57509` — `feat(infra): add GitHub Actions cron for Dreamer and Decay jobs`
+  - `743b9e5` — `feat(graphrag): ingest foundations-of-math with MiniLM embeddings`
+- **Coordinator fixes during GraphRAG integration**: Postgres-only service path (`api.py`, `neo4j_service.py`), asyncpg vector SQL fix, ran ingest → 31 Neon rows, hybrid smoke OK
+- **Reverted** out-of-scope `apps/web` e2e edits from GraphRAG sub-agent workspace
+- **Live smoke** (post 743b9e5):
   - `/` → 200
   - `/api/health` → 200
   - `/sign-in` → 200
   - `/lessons/lesson-whole-numbers` → 200
-  - `https://asf-api.onrender.com/healthz` → 404
-- **Blocked**: Render service not our FastAPI app (see BLOCKED.md §5a note added this session)
+  - `https://asf-api.onrender.com/healthz` → 404 (Render still not our app)
 
 ## Next session priorities
 
-1. **Human**: Deploy Render Blueprint from repo (or rename service if subdomain taken); confirm `/healthz` → `{"status":"ok"}`. Set env vars + `GROQ_API_KEY`.
-2. **Human**: Run `scripts/vercel-set-env.ps1` with `VERCEL_TOKEN` to set `NEXT_PUBLIC_API_BASE_URL` to actual Render URL.
-3. **Dispatch GraphRAG ingestion** (`05-graphrag-resume.md`) — seed `foundations-of-math` into `kg_chunks` with free HuggingFace embeddings.
-4. **CI audit** — fix any red jobs on `cef3a43`/`fed6cc1`.
+1. **Human**: Confirm Neo4j AuraDB password; re-run `scripts/ingest_graphrag.py` with `USE_NEO4J=true` for Concept/Lesson nodes
+2. **Human**: Render Blueprint deploy + Groq key + Vercel `NEXT_PUBLIC_API_BASE_URL`
+3. **CI audit** — lint-test on `743b9e5` / `9f57509`
+4. **Set GitHub Actions secrets** for cron jobs (`DATABASE_URL`, etc.) per BLOCKED.md §5
 
 ## Hands-off until manager check-in
 
-true — natural checkpoint reached (memory stream done; backend blocked on human Render deploy)
+true — natural checkpoint (2 streams advanced: GraphRAG ingestion + cron jobs)
