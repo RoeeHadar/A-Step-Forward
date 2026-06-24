@@ -10,7 +10,6 @@ from ...__init__ import AGENT_REGISTRY
 from ...base.agent import Agent, AgentContext, AgentResult
 from ...base.agent_helpers import complete_turn, parse_output
 from ...base.llm import STUB_PREFIX, LLMRequest
-from ...base.memory_hydrator import HydratedMemory
 from ...base.prompts import load_prompt
 from .budget import BUDGET
 from .input import TutorInput
@@ -31,11 +30,18 @@ class TutorAgent(Agent[TutorInput, TutorOutput]):
         self._system_prompt = load_prompt("tutor", self.prompt_version)
 
     def _build_system_prompt(self, ctx: AgentContext) -> str:
-        """Append hydrated memory block (if any) to the base system prompt."""
-        hydrated: HydratedMemory | None = ctx.extra.get("hydrated_memory")
+        """Build the system prompt with hydrated memory and adaptation note."""
+        parts = [self._system_prompt]
+
+        hydrated = ctx.extra.get("hydrated_memory")
         if hydrated and hydrated.summary:
-            return f"{self._system_prompt}\n\n{hydrated.summary}"
-        return self._system_prompt
+            parts.append(hydrated.summary)
+
+        adaptation = ctx.extra.get("adaptation")
+        if adaptation:
+            parts.append(f"## Adaptation note for this turn\n{adaptation}")
+
+        return "\n\n".join(parts)
 
     def _format_user_message(self, inp: TutorInput) -> str:
         parts = [f"Learner message: {inp.message}"]

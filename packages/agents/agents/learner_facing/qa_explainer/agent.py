@@ -8,7 +8,6 @@ from schemas.common import Citation
 from ...__init__ import AGENT_REGISTRY
 from ...base.agent import Agent, AgentContext, AgentResult
 from ...base.agent_helpers import complete_turn, parse_output
-from ...base.memory_hydrator import HydratedMemory
 from ...base.prompts import load_prompt
 from .budget import BUDGET
 from .input import QAExplainerInput
@@ -29,10 +28,18 @@ class QAExplainerAgent(Agent[QAExplainerInput, QAExplainerOutput]):
         self._system_prompt = load_prompt("qa_explainer", self.prompt_version)
 
     def _build_system_prompt(self, ctx: AgentContext) -> str:
-        hydrated: HydratedMemory | None = ctx.extra.get("hydrated_memory")
+        """Build the system prompt with hydrated memory and adaptation note."""
+        parts = [self._system_prompt]
+
+        hydrated = ctx.extra.get("hydrated_memory")
         if hydrated and hydrated.summary:
-            return f"{self._system_prompt}\n\n{hydrated.summary}"
-        return self._system_prompt
+            parts.append(hydrated.summary)
+
+        adaptation = ctx.extra.get("adaptation")
+        if adaptation:
+            parts.append(f"## Adaptation note for this turn\n{adaptation}")
+
+        return "\n\n".join(parts)
 
     def _format_user_message(self, inp: QAExplainerInput) -> str:
         parts = [f"Question: {inp.message}"]

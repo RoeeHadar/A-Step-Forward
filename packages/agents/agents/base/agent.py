@@ -19,9 +19,11 @@ from pydantic import BaseModel
 
 from schemas.agents import AgentManifest, AgentName
 
+from .affect_detector import detect_affect
 from .llm import LLM
 from .memory_hydrator import HydratedMemory, hydrate
 from .safety import SafetyModeration
+from .skill_accumulator import maybe_write_skill
 
 I = TypeVar("I", bound=BaseModel)
 O = TypeVar("O", bound=BaseModel)
@@ -76,12 +78,24 @@ class Agent(Generic[I, O]):
 
     async def pre(self, inp: I, ctx: AgentContext) -> None:
         await self.safety.pre(text=str(inp), agent=self.name, child_mode=ctx.child_mode)
+
         hydrated: HydratedMemory = await hydrate(
             learner_id=ctx.learner_id,
             query=str(inp),
             memory_api=ctx.memory_api,
         )
         ctx.extra["hydrated_memory"] = hydrated
+
+        affect = detect_affect(str(inp))
+        ctx.extra["affect"] = affect
+        adaptation = await maybe_write_skill(
+            learner_id=ctx.learner_id,
+            agent_name=str(self.name),
+            affect=affect,
+            memory_api=ctx.memory_api,
+            child_mode=ctx.child_mode,
+        )
+        ctx.extra["adaptation"] = adaptation
 
     async def post(self, inp: I, result: AgentResult[O], ctx: AgentContext) -> None:
         await self.safety.post(text=str(result.output), agent=self.name, child_mode=ctx.child_mode)
