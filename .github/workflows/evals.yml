@@ -40,6 +40,8 @@ jobs:
         run: uv sync --all-groups
 
       - name: Run touched evals
+        env:
+          RUN_LIVE_EVALS: "0"
         run: uv run python evals/runner.py --touched
 
       # Phase 1+: wire promptfoo + DeepEval here; upload artifacts on failure.

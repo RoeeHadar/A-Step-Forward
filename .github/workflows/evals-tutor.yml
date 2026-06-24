@@ -1,0 +1,56 @@
+name: Evals — Tutor
+
+on:
+  pull_request:
+    paths:
+      - "packages/agents/agents/learner_facing/tutor/**"
+      - "prompts/tutor/**"
+      - "evals/agents/tutor/**"
+      - "evals/providers/tutor_mock.js"
+      - "evals/promptfoo_local.py"
+      - ".github/workflows/evals-tutor.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/agents/agents/learner_facing/tutor/**"
+      - "prompts/tutor/**"
+      - "evals/agents/tutor/**"
+      - "evals/providers/tutor_mock.js"
+      - "evals/promptfoo_local.py"
+
+concurrency:
+  group: evals-tutor-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tutor-evals:
+    runs-on: ubuntu-latest
+    env:
+      RUN_LIVE_EVALS: "0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: uv sync --all-groups
+
+      - name: Run Tutor eval suite (mock LLM)
+        run: uv run python evals/runner.py --suite tutor
+
+      - name: Upload eval report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tutor-eval-report
+          path: |
+            evals/report.md
+            evals/results.json
