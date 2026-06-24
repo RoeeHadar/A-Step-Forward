@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: asf-api
+    runtime: docker
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    branch: main
+    envVars:
+      - key: APP_ENV
+        value: staging
+      - key: DATABASE_URL
+        fromDatabase:
+          name: asf-postgres
+          property: connectionString
+      - key: REDIS_URL
+        sync: false  # set manually from Upstash
+      - key: NEO4J_URI
+        sync: false
+      - key: NEO4J_PASSWORD
+        sync: false
+      - key: CLERK_JWKS_URL
+        sync: false  # e.g. https://<clerk-domain>/.well-known/jwks.json
+      - key: CLERK_ISSUER
+        sync: false
+      - key: CORS_ORIGINS
+        value: "https://a-step-forward-waij.vercel.app"
+    healthCheckPath: /healthz
+    autoDeploy: true

@@ -44,7 +44,7 @@ These tools are needed to drive the rest.
 
 ---
 
-## 2. Provision managed services (45–60 min)
+## 2. Provision managed services ✅ MOSTLY DONE
 
 All hosting decisions are locked in `RESUME-README.md` and `09-infra-resume.md`.
 Each provider has a free tier sufficient for launch traffic.
@@ -57,8 +57,8 @@ Each provider has a free tier sufficient for launch traffic.
 | Cloudflare R2          | Free (10GB) | Bucket `asf-uploads`                                     | `R2_ACCESS_KEY_ID`, `R2_SECRET`, `R2_BUCKET`, `R2_ENDPOINT` |
 | Doppler                | Free        | Project `a-step-forward`, configs `dev`, `stg`, `prd`    | `DOPPLER_TOKEN` (per env)         |
 | Vercel                 | Hobby       | Project linked to `apps/web`; root dir = `apps/web`      | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
-| Fly.io                 | Hobby       | Apps `asf-api`, `asf-workers` (start here; MCP apps later) | `FLY_API_TOKEN`                  |
-| Clerk                  | Free        | App `astepforward`, instances `dev`, `prod`              | `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `CLERK_WEBHOOK_SECRET` |
+| Fly.io                 | **Requires credit card** | BLOCKED — use Render instead (see §5a) | `FLY_API_TOKEN` |
+| Clerk                  | Free (Dev instance) | Use Dev keys — see §5b for 3-step guide | `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` |
 | Anthropic              | Paid        | API key                                                  | `ANTHROPIC_API_KEY`              |
 | OpenAI                 | Paid        | API key                                                  | `OPENAI_API_KEY`                 |
 | Voyage AI              | Free start  | API key                                                  | `VOYAGE_API_KEY`                 |
@@ -90,6 +90,16 @@ Generate service tokens for CI and store them as GitHub Actions secrets at
 
 ---
 
+## 2a. DB migrations ✅ DONE
+
+All 16 tables applied to Neon dev (via Docker psql, 2026-06-24):
+`affective_memories`, `audit_gateway_events`, `audit_memory_events`, `context_memories`,
+`curriculum_concepts`, `curriculum_courses`, `curriculum_lessons`, `episodic_memories`,
+`gateway_sessions`, `gateway_users`, `kg_chunks`, `procedural_memories`,
+`reflective_memories`, `semantic_memories`, `source_memories`.
+
+---
+
 ## 3. First staging deploy + smoke ✅ DONE
 
 **Live URL: https://a-step-forward-waij.vercel.app**
@@ -114,6 +124,47 @@ Split by the Release Captain into three clean branches and PRs:
 - [PR #2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) — `chore/infra/workspace-stabilization`
 - [PR #3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) — `feat/agents/03-phase3-system-agents`
 - [PR #4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) — `feat/mcp/05-server-improvements`
+
+---
+
+## 5a. Backend deploy on Render (free, no credit card) — 10 min
+
+Fly.io requires a credit card. Use **Render** instead — `render.yaml` is already in the repo.
+
+1. Go to **https://dashboard.render.com** → sign in with GitHub (free).
+2. Click **New → Blueprint** → select repo `RoeeHadar/A-Step-Forward`.
+3. Render detects `render.yaml` and creates `asf-api` automatically.
+4. Set the following environment variables in the Render dashboard for `asf-api`:
+   ```
+   REDIS_URL         = rediss://default:AaRhAAIgcDE5Y2JkMTZhYmVkZWE0MTk0ODE2YjJkZDRhMTg0OGE0MA@expert-trout-42081.upstash.io:6379
+   NEO4J_URI         = neo4j+s://06b74083.databases.neo4j.io
+   NEO4J_PASSWORD    = Ws_Tygc7x5aye95rZx1nnLVVyEeXTb7gqhr6N_7YtNM
+   DATABASE_URL      = postgresql+asyncpg://neondb_owner:npg_vmKB0jNoSLF3@ep-plain-sea-as5ml68n-pooler.c-4.eu-central-1.aws.neon.tech/neondb?ssl=require
+   ```
+5. Once deployed, copy the `https://asf-api.onrender.com` URL into Vercel env var `NEXT_PUBLIC_API_URL`.
+
+---
+
+## 5b. Clerk auth — use Dev keys (free, no domain needed) — 5 min
+
+Clerk Production requires a custom domain. Use the **Dev** instance instead — it's
+free and works on any URL including `*.vercel.app`.
+
+1. Go to **https://dashboard.clerk.com** → select your app (`astepforward`).
+2. Click **API Keys** in the left sidebar.
+3. Copy **Publishable key** (`pk_test_…`) and **Secret key** (`sk_test_…`).
+4. Add them to Vercel:
+   - Go to https://vercel.com/a-step-forward/a-step-forward-waij/settings/environment-variables
+   - Set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` = `pk_test_…`
+   - Set `CLERK_SECRET_KEY` = `sk_test_…`
+   - Click **Save** → Vercel will redeploy automatically.
+5. Sign-up / sign-in will now work on the live site.
+
+Also update GitHub Actions secrets (for CI):
+```pwsh
+gh secret set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY --body "pk_test_..."
+gh secret set CLERK_SECRET_KEY --body "sk_test_..."
+```
 
 ---
 
