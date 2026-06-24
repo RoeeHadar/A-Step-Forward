@@ -12,7 +12,12 @@ import { agentDisplayNames, learnerFacingAgents, type AgentName } from '@asf/sch
 import { agentColors } from '@/lib/design-tokens';
 
 export default async function DashboardPage() {
-  const auth = await getAuthContext();
+  let auth;
+  try {
+    auth = await getAuthContext();
+  } catch {
+    redirect('/sign-in');
+  }
   if (!auth) redirect('/sign-in');
 
   const dashboard = await fetchDashboard(auth);

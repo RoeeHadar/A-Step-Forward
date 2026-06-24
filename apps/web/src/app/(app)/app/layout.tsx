@@ -4,7 +4,12 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const auth = await getAuthContext();
+  let auth;
+  try {
+    auth = await getAuthContext();
+  } catch {
+    redirect('/sign-in');
+  }
   if (!auth) redirect('/sign-in');
 
   return (
