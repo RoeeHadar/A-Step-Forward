@@ -84,22 +84,38 @@ Agent identity + memory + dreaming + skill accumulation (Session 12 brief).
   - Registers new router in `main.py`
 
 ### Integration
-- Pending sub-agent completion (running in background)
+- All 3 sub-agents completed successfully
+- Committed orchestrator wiring (`65296b5`) — `memory_api` passed through `OrchestratorRunner` → `new_context()` → `AgentContext`
+- `pnpm --filter @asf/web typecheck` — **0 errors**
+- `ruff check` on all session-12 files — **0 errors** (after `a5e1002` lint fix commit)
+- 4-route smoke (2026-06-25T00:30Z):
+  - `GET /` → 200 ✓
+  - `GET /api/health` → 200 ✓
+  - `GET /sign-in` → 200 ✓
+  - `GET /app/lessons/calculus` → 200 ✓
+
+### Session 12 commits (5 total)
+- `d1b3cdc` — `feat(agents): inject learner memory into agent system prompt at session start`
+- `397048e` — `feat(agents): affect detection, skill accumulation, and adaptive system prompt injection`
+- `d5ea1c3` — `feat(memory): wire LLM-based memory consolidation in dreaming pipeline`
+- `65296b5` — `feat(agents): wire memory_api into AgentContext via OrchestratorRunner`
+- `a5e1002` — `fix(agents): ruff lint fixes`
 
 ### Blocked
-- None (all work is code-only, no external dependencies)
+- None
 
 ---
 
 ## Next session priorities
 
-1. **Integration smoke** — after all 3 sub-agents land: `pnpm --filter @asf/web typecheck` + `uv run ruff check` + 4-route smoke
-2. **Seed more lesson content** — run `scripts/ingest_content.py` against Neon
-3. **Add GitHub secrets** (`CLERK_TEST_USER_EMAIL` + `CLERK_TEST_USER_PASSWORD`)
-4. **Custom domain cutover** — human action needed
+1. **Seed more lesson content** — run `scripts/ingest_content.py` against Neon
+2. **Add GitHub secrets** (`CLERK_TEST_USER_EMAIL` + `CLERK_TEST_USER_PASSWORD`) to activate E2E CI
+3. **Custom domain cutover** — human action: purchase `astepforward.app`, follow `BLOCKED.md §7–8`
+4. **Memory inspector UI** — learner-facing "what do you know about me?" view (Phase 2 feature)
+5. **Test dreaming endpoint** — trigger `POST /v1/admin/dream` against Render after a chat session
 
 ---
 
 ## Hands-off until manager check-in
 
-false — session 12 sub-agents dispatched, awaiting completion for integration + smoke
+true — session 12 complete; 5 commits on main; all checks green; remaining items require human action or are Phase 2 features
