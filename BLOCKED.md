@@ -35,21 +35,12 @@ These tools are needed to drive the rest.
 
 ---
 
-## 1. Open PRs (DONE by Release Captain)
+## 1. PRs ✅ #1 MERGED
 
-Four PRs are open and waiting for review + merge:
-
-| PR | Branch | Base | Size |
-| -- | ------ | ---- | ---- |
-| [#1](https://github.com/RoeeHadar/A-Step-Forward/pull/1) | `release/phase-1-integration` | `main` | 135 files, +7k lines — frontend + GraphRAG + launch polish |
-| [#2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) | `chore/infra/workspace-stabilization` | `release/phase-1-integration` | workspace pyproject cleanup, uv.lock, alembic fixes |
-| [#3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) | `feat/agents/03-phase3-system-agents` | `release/phase-1-integration` | Research, KG Builder, Content Curator agents |
-| [#4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) | `feat/mcp/05-server-improvements` | `release/phase-1-integration` | MCP server typed errors + expanded tests |
-
-- [ ] Run `review-bugbot` skill on PR #1 (the main integration PR).
-- [ ] Run `review-security` skill on PR #1 (touches auth middleware and safety evals).
-- [ ] Squash-merge #1 to main when CI is green.
-- [ ] Merge #2, #3, #4 after #1 (or open new PRs re-based on main).
+- [x] [#1](https://github.com/RoeeHadar/A-Step-Forward/pull/1) — squash-merged to `main` 2026-06-24.
+- [ ] [#2](https://github.com/RoeeHadar/A-Step-Forward/pull/2) `chore/infra/workspace-stabilization` — rebase onto main, then merge.
+- [ ] [#3](https://github.com/RoeeHadar/A-Step-Forward/pull/3) `feat/agents/03-phase3-system-agents` — rebase onto main, then merge.
+- [ ] [#4](https://github.com/RoeeHadar/A-Step-Forward/pull/4) `feat/mcp/05-server-improvements` — rebase onto main, then merge.
 
 ---
 
@@ -136,20 +127,16 @@ Split by the Release Captain into three clean branches and PRs:
 
 ---
 
-## 6. Flip repo public + enable community surfaces (10 min)
+## 6. Flip repo public ✅ DONE
 
-After Phase-C bars are met (smoke green, Sentry < 0.5%, p95 < 2.5s, evals
-green for ≥ 24h):
+Repo is now **public**: https://github.com/RoeeHadar/A-Step-Forward
 
-- [ ] `gh repo edit RoeeHadar/A-Step-Forward --visibility public --accept-visibility-change-consequences`
-- [ ] `gh repo edit --enable-discussions --enable-issues`
-- [ ] Enable Dependabot:
-      `https://github.com/RoeeHadar/A-Step-Forward/settings/security_analysis`
-      → turn on Dependabot alerts, security updates, version updates, secret
-      scanning.
+- [x] Visibility flipped to public (2026-06-24).
+- [x] Discussions + Issues enabled.
+- [x] Topics added: `ai`, `education`, `learning`, `agents`, `memory`, `graphrag`, `nextjs`, `fastapi`, `langgraph`.
+- [ ] Enable Dependabot (alerts, security updates, secret scanning):
+      https://github.com/RoeeHadar/A-Step-Forward/settings/security_analysis
 - [ ] Enable private vulnerability reporting on the same page.
-- [ ] Add the topics: `ai`, `education`, `learning`, `agents`, `memory`,
-      `graphrag`, `nextjs`, `fastapi`, `langgraph`.
 
 ---
 
