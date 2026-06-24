@@ -23,26 +23,32 @@ export function SiteHeader() {
   const toggleTheme = () => setTheme(resolved === 'dark' ? 'light' : 'dark');
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+        {/* Brand */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-lg font-semibold tracking-tight">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-lg font-semibold tracking-tight text-foreground transition-opacity hover:opacity-80"
+          >
+            <span className="text-violet-500" aria-hidden>◆</span>
             A Step Forward
-            <span className="text-[#d1fe17]" aria-hidden>
-              {' '}
-              ·
-            </span>
           </Link>
+
+          {/* Desktop nav — only shown when signed in */}
           <SignedIn>
-            <nav className="hidden items-center gap-1 md:flex" aria-label={messages.common.mainNavigation}>
+            <nav
+              className="hidden items-center gap-1 md:flex"
+              aria-label={messages.common.mainNavigation}
+            >
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted',
+                    'rounded-md px-3 py-2 text-sm transition-colors hover:text-foreground',
                     pathname === link.href || pathname.startsWith(link.href + '/')
-                      ? 'border-b-2 border-[#d1fe17] bg-muted font-medium'
+                      ? 'border-b-2 border-violet-500 font-medium text-foreground'
                       : 'text-muted-foreground',
                   )}
                 >
@@ -52,17 +58,23 @@ export function SiteHeader() {
             </nav>
           </SignedIn>
         </div>
+
+        {/* Right-side controls */}
         <div className="flex items-center gap-2">
+          {/* Locale switcher */}
           <label className="sr-only" htmlFor="locale-select">
             {messages.common.language}
           </label>
           <div className="relative flex items-center">
-            <Globe className="pointer-events-none absolute start-2 h-4 w-4 text-muted-foreground" aria-hidden />
+            <Globe
+              className="pointer-events-none absolute start-2 h-4 w-4 text-muted-foreground"
+              aria-hidden
+            />
             <select
               id="locale-select"
               value={locale}
               onChange={(e) => setLocale(e.target.value as Locale)}
-              className="h-9 rounded-md border border-border bg-background ps-8 pe-2 text-sm"
+              className="h-9 rounded-md border border-white/[0.08] bg-background/60 ps-8 pe-2 text-sm text-muted-foreground backdrop-blur-sm transition-colors hover:border-white/20 hover:text-foreground"
               aria-label={messages.common.selectLanguage}
             >
               {locales.map((l) => (
@@ -72,19 +84,33 @@ export function SiteHeader() {
               ))}
             </select>
           </div>
-          <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label={messages.common.toggleTheme}>
+
+          {/* Theme toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={messages.common.toggleTheme}
+            className="text-muted-foreground hover:text-foreground"
+          >
             {resolved === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
+
+          {/* Auth buttons */}
           <SignedOut>
             <SignInButton mode="modal">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-sm text-muted-foreground hover:text-foreground">
                 {messages.nav.signIn}
               </Button>
             </SignInButton>
-            <Button asChild size="sm">
-              <Link href="/sign-up">{messages.nav.signUp}</Link>
-            </Button>
+            <Link
+              href="/sign-up"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-violet-700 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-500/20 transition-all hover:from-violet-500 hover:to-violet-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+            >
+              {messages.nav.signUp}
+            </Link>
           </SignedOut>
+
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>

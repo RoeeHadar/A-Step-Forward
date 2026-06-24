@@ -1,16 +1,15 @@
 import { SiteHeader } from '@/components/site-header';
 import { LandingHero } from '@/components/landing-hero';
 
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
-      <main>
+      <main className="flex-1">
         <LandingHero />
       </main>
-      <footer className="border-t border-border bg-[#d1fe17] py-8 text-center text-sm text-[#0f1113]">
-        © {new Date().getFullYear()} A Step Forward
-      </footer>
     </div>
   );
 }
