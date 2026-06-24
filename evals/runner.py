@@ -154,7 +154,8 @@ def discover_promptfoo_configs(suite_filter: set[str] | None) -> list[tuple[str,
         if suite_filter and agent not in suite_filter:
             continue
         for yaml_path in sorted(agent_dir.glob("*.yaml")):
-            if yaml_path.name == "thresholds.yaml":
+            name = yaml_path.name
+            if name == "thresholds.yaml" or name.endswith("_fixtures.yaml"):
                 continue
             configs.append((agent, yaml_path))
     return configs
@@ -569,20 +570,33 @@ def _run_kg_retrieval_eval() -> SuiteResult:
     return result
 
 
+def _pass_rate_for(runs: list[SuiteResult]) -> float:
+    total_pass = sum(r.passed for r in runs)
+    total = sum(r.total for r in runs) or 1
+    return total_pass / total
+
+
 def _aggregate_agent_metrics(suite_results: list[SuiteResult], agent: str) -> dict[str, float]:
     agent_runs = [r for r in suite_results if r.suite == agent]
     if not agent_runs:
         return {}
-    total_pass = sum(r.passed for r in agent_runs)
-    total = sum(r.total for r in agent_runs) or 1
-    pass_rate = total_pass / total
+    pass_rate = _pass_rate_for(agent_runs)
+    cap_runs = [r for r in agent_runs if "capability" in r.path.replace("\\", "/")]
+    safety_runs = [r for r in agent_runs if "safety" in r.path.replace("\\", "/")]
     metrics: dict[str, float] = {"pass_rate": pass_rate}
+    if cap_runs:
+        metrics["capability_pass_rate"] = _pass_rate_for(cap_runs)
+    if safety_runs:
+        metrics["safety_pass_rate"] = _pass_rate_for(safety_runs)
+        metrics["refusal_when_appropriate"] = metrics["safety_pass_rate"]
     for r in agent_runs:
         metrics.update(r.metrics)
     # Derived Phase-1 proxy metrics for baseline gating.
     metrics.setdefault("helpfulness", pass_rate)
     metrics.setdefault("faithfulness", pass_rate)
     metrics.setdefault("citation_accuracy", pass_rate)
+    metrics.setdefault("capability_pass_rate", pass_rate)
+    metrics.setdefault("safety_pass_rate", pass_rate)
     metrics.setdefault("refusal_when_appropriate", pass_rate)
     return metrics
 

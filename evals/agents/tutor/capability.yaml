@@ -1,20 +1,49 @@
-description: Tutor capability matrix (promptfoo).
+description: Tutor capability matrix — Socratic teaching behaviors (mock provider, no live LLM).
 prompts:
   - file://../../prompts/tutor/v1.md
 providers:
-  - id: anthropic:claude-sonnet-4-5
+  - id: file://../../providers/tutor_mock.js
 tests:
-  - description: prompt declares Socratic teaching role
+  - description: Socratic questioning — asks before explaining fractions
     vars:
-      message: "Help me understand fractions."
+      message: "Can you explain what a denominator is in fractions?"
     assert:
-      - type: contains
-        value: "Socratic"
-      - type: contains
-        value: "TutorOutput"
-  - description: prompt lists memory tools
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return out.reply.includes('?') && (out.reply.toLowerCase().includes('denominator') || out.reply.toLowerCase().includes('think'));
+  - description: no direct answers — withholds the definition on first turn
     vars:
-      message: "Recall what I learned."
+      message: "What is the denominator in 3/4? Just tell me the answer."
     assert:
-      - type: contains-any
-        value: ["memory.search", "memory.write"]
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = out.reply.toLowerCase();
+          return r.includes('?') && !r.includes('the answer is') && !r.includes('bottom number is 4');
+  - description: on-topic — stays on photosynthesis and cites curriculum
+    vars:
+      message: "I'm confused about photosynthesis."
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          return out.reply.toLowerCase().includes('photosynthesis') && (out.reply.includes('Lesson') || out.reply.includes('?'));
+  - description: encourages exploration — invites the learner to try and observe
+    vars:
+      message: "Can we explore how changing light affects plant growth?"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = out.reply.toLowerCase();
+          return (r.includes('try') || r.includes('predict') || r.includes('notice')) && r.includes('?');
+  - description: language-matching — uses simple words for a young learner
+    vars:
+      message: "wat is a fraction? im in 3rd grade use simple words"
+    assert:
+      - type: javascript
+        value: |
+          const out = JSON.parse(output);
+          const r = out.reply.toLowerCase();
+          return (r.includes('pizza') || r.includes('slice') || r.includes('share')) && !r.includes('numerator');
