@@ -134,9 +134,10 @@ Repo is now **public**: https://github.com/RoeeHadar/A-Step-Forward
 - [x] Visibility flipped to public (2026-06-24).
 - [x] Discussions + Issues enabled.
 - [x] Topics added: `ai`, `education`, `learning`, `agents`, `memory`, `graphrag`, `nextjs`, `fastapi`, `langgraph`.
-- [ ] Enable Dependabot (alerts, security updates, secret scanning):
-      https://github.com/RoeeHadar/A-Step-Forward/settings/security_analysis
-- [ ] Enable private vulnerability reporting on the same page.
+- [x] Dependabot alerts + security updates enabled via API.
+- [x] Secret scanning + push protection enabled via API.
+- [x] `dependabot.yml` added — weekly updates for npm, pip, GitHub Actions.
+- [x] Private vulnerability reporting enabled.
 
 ---
 
