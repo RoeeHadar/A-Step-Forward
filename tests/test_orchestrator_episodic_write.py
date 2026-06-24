@@ -7,13 +7,13 @@ from uuid import uuid4
 
 import pytest
 from schemas.agents import AgentName, ChatChunk, ChatRequest
+from schemas.memory import MemoryType
 
 from memory_service.default_service import DefaultMemoryService
 from memory_service.settings import MemorySettings
 from memory_service.stores.database import dispose_engine
 from orchestrator.episodic import build_episodic_content, extract_response_text
 from orchestrator.runner import OrchestratorRunner
-from schemas.memory import MemoryType
 
 
 def _database_reachable() -> bool:

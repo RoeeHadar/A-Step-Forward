@@ -80,5 +80,9 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Schema TS tests
+        run: pnpm --filter @asf/schemas test:ts
+
       - name: Vitest
-        run: pnpm --filter @asf/web exec vitest run --passWithNoTests
+        working-directory: apps/web
+        run: pnpm exec vitest run --exclude 'src/lib/schemas.test.ts'
