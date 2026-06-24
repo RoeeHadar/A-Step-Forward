@@ -115,7 +115,65 @@ components but lacks personality.
 
 ---
 
-## P2 — Deferred to phase 3
+## P2 — Phase 3 (current focus)
+
+### E. Real agent routing with Groq  (stream: `03-agents`)
+
+**Goal**: End-to-end Groq-backed chat. Currently `/v1/chat` may return stub responses.
+The Orchestrator/Router agent must receive the user message, route it to the correct
+learner-facing agent (Tutor, Mentor, Coach, etc.), call Groq, and stream the reply.
+
+**Acceptance**:
+- POST `https://asf-api-q566.onrender.com/v1/chat` with `{"agent": "tutor", "message": "What is a derivative?", "learner_id": "test-123"}` → streams a real Groq response (not a stub).
+- The response correctly identifies itself as a Socratic tutor, not a generic assistant.
+- Latency first-token < 4s on Render free tier (warm).
+
+**Key files**:
+- `packages/agents/agents/learner_facing/tutor/` — Tutor agent implementation
+- `packages/agents/agents/system/orchestrator/` — router
+- `apps/api/app/routers/chat.py` — streaming endpoint
+- `packages/agents/agents/base/llm.py` — Groq client (already implemented)
+- `prompts/tutor/` — tutor prompt
+
+Read `.cursor/subagent-briefs/03-agents.md` before starting.
+
+---
+
+### F. Assessment Generator + Grader stubs  (stream: `03-agents`)
+
+**Goal**: A learner can request a quiz on a topic; the Assessment Generator creates 3–5
+questions; the Grader evaluates answers. These can be stub implementations (returning
+hardcoded structure) as long as the API contract and agent classes are wired up.
+
+**Acceptance**:
+- `GET /v1/assessment?topic=derivatives&level=beginner` returns a JSON array of 3–5 questions.
+- `POST /v1/grade` with `{question, answer}` returns `{correct: bool, feedback: string}`.
+- Both endpoints documented in `apps/api/README.md`.
+
+---
+
+### G. ADRs (Architecture Decision Records)
+
+**Goal**: Record the key architecture decisions made during Phase 0–2.
+
+**Acceptance**:
+- `docs/adr/001-hosting.md` — Vercel + Render over Fly.io (credit card constraint)
+- `docs/adr/002-llm.md` — Groq Cloud free tier over Anthropic/OpenAI
+- `docs/adr/003-auth.md` — Clerk dev keys, no prod instance until custom domain
+- `docs/adr/004-database.md` — Neon + Upstash + Neo4j AuraDB
+- Each ADR follows the Markdown ADR template: Status, Context, Decision, Consequences.
+
+---
+
+### H. Demo screenshot  (carry-over from session 7 D4)
+
+Screenshoot `https://a-step-forward-waij.vercel.app/` (landing) and `/sign-in`.
+Save to `docs/screenshots/landing.png` and `docs/screenshots/sign-in.png`.
+Update README hero image reference. Use `browser-use` subagent or `cursor-ide-browser` MCP.
+
+---
+
+## P3 — Deferred to phase 4
 
 - Custom domain `astepforward.app`
 - Clerk production instance (needs domain)
