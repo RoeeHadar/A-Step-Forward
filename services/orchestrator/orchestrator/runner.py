@@ -64,7 +64,12 @@ class OrchestratorRunner:
         child_mode: bool = False,
         age: int | None = None,
     ) -> AsyncIterator[ChatChunk]:
-        ctx = new_context(request, child_mode=child_mode, age=age)
+        ctx = new_context(
+            request,
+            child_mode=child_mode,
+            age=age,
+            memory_api=self._memory,
+        )
         decision = await self._route(request, ctx)
 
         if decision is None or not decision.selected_agents:

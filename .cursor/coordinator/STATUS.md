@@ -1,6 +1,6 @@
 # A Step Forward — Coordinator Status
 
-Last updated: 2026-06-24T21:05:00Z by Coordinator session 11
+Last updated: 2026-06-25T00:09:00Z by Coordinator session 12
 
 ## Launch status: **LIVE** — All 4 session-11 priorities delivered; Phase-4 deferred items remain
 
@@ -58,15 +58,48 @@ Last updated: 2026-06-24T21:05:00Z by Coordinator session 11
 
 ---
 
+## Session 12
+
+### Goal
+Agent identity + memory + dreaming + skill accumulation (Session 12 brief).
+
+### Dispatched
+- [Sub-agent A](19d3b03e-4979-4b05-905c-b79032a1ae90) — Memory hydration in `pre()` hook:
+  - Creates `packages/agents/agents/base/memory_hydrator.py`
+  - Adds `memory_api` field to `AgentContext`
+  - Calls `hydrate()` in `pre()` to inject learner memories into system prompt
+  - Updates Tutor, Coach, QA Explainer agents with `_build_system_prompt(ctx)`
+
+- [Sub-agent B](cfd60f64-1d1c-40c0-98a6-f14c46410ae2) — Affect detection + skill accumulation:
+  - Creates `packages/agents/agents/base/affect_detector.py` (heuristic pattern matching, Hebrew + English)
+  - Creates `packages/agents/agents/base/skill_accumulator.py` (writes `AFFECTIVE` memories on frustration/confusion/despair)
+  - Updates `pre()` to detect affect + write adaptation to memory
+  - Injects adaptation note into system prompt for current turn
+  - Creates/updates `prompts/coach/v1.md`, `prompts/mentor/v1.md`, `prompts/reviewer/v1.md`
+
+- [Sub-agent C](d2e4ad68-215c-4072-8703-c0bc475a40a0) — LLM-based dreaming pipeline:
+  - Replaces stub `dream()` with real keyword-cluster + Groq LLM consolidation
+  - Writes synthetic `SEMANTIC` memories from episodic clusters
+  - Creates `apps/api/app/routers/memory_admin.py` with `POST /v1/admin/dream`
+  - Registers new router in `main.py`
+
+### Integration
+- Pending sub-agent completion (running in background)
+
+### Blocked
+- None (all work is code-only, no external dependencies)
+
+---
+
 ## Next session priorities
 
-1. **Seed more lesson content** — run `scripts/ingest_content.py` against Neon to populate lessons beyond the current 10 seed entries; re-generate `seed-lessons.generated.json`.
-2. **Add GitHub secrets** (`CLERK_TEST_USER_EMAIL` + `CLERK_TEST_USER_PASSWORD`) to activate E2E CI.
-3. **Custom domain cutover** — human action: purchase `astepforward.app`, follow `BLOCKED.md §7–8`, then rotate keys.
-4. **Remove/migrate** `apps/web/e2e/chat-flow.spec.ts` now that `testDir` has moved.
+1. **Integration smoke** — after all 3 sub-agents land: `pnpm --filter @asf/web typecheck` + `uv run ruff check` + 4-route smoke
+2. **Seed more lesson content** — run `scripts/ingest_content.py` against Neon
+3. **Add GitHub secrets** (`CLERK_TEST_USER_EMAIL` + `CLERK_TEST_USER_PASSWORD`)
+4. **Custom domain cutover** — human action needed
 
 ---
 
 ## Hands-off until manager check-in
 
-true — all 4 session-11 priorities delivered; remaining items require human action (domain purchase, GitHub secrets) or are deferred content work.
+false — session 12 sub-agents dispatched, awaiting completion for integration + smoke

@@ -7,7 +7,7 @@ Checkpointing and parallel multi-agent composition are Phase 2 extensions.
 from __future__ import annotations
 
 import operator
-from typing import Annotated, TypedDict
+from typing import Annotated, Any, TypedDict
 from uuid import uuid4
 
 from langgraph.graph import END, START, StateGraph
@@ -102,11 +102,18 @@ def build_graph():
     return graph.compile()
 
 
-def new_context(request: ChatRequest, *, child_mode: bool = False, age: int | None = None) -> AgentContext:
+def new_context(
+    request: ChatRequest,
+    *,
+    child_mode: bool = False,
+    age: int | None = None,
+    memory_api: Any = None,
+) -> AgentContext:
     return AgentContext(
         learner_id=request.learner_id,
         session_id=request.session_id or str(uuid4()),
         turn_id=str(uuid4()),
         locale=request.locale,
         child_mode=resolve_child_mode(age=age, child_mode_flag=child_mode),
+        memory_api=memory_api,
     )
