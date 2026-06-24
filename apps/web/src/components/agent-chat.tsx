@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from 'ai/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Send, Loader2 } from 'lucide-react';
@@ -12,24 +12,75 @@ import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas
 import { agentColors } from '@/lib/design-tokens';
 import { useChatUiStore } from '@/stores/ui-store';
 
+const CONNECTING_DELAY_MS = 3000;
+const COLD_START_RETRY_MS = 15000;
+
 export function AgentChat({ agent }: { agent: string }) {
   const parsed = agentNameSchema.safeParse(agent);
   const agentName: AgentName = parsed.success ? parsed.data : 'tutor';
   const bottomRef = useRef<HTMLDivElement>(null);
   const setLastAgent = useChatUiStore((s) => s.setLastAgent);
+  const hasAutoRetriedRef = useRef(false);
+  const hasReceivedTokensRef = useRef(false);
+  const userMessageCountRef = useRef(0);
+  const [showConnecting, setShowConnecting] = useState(false);
 
   useEffect(() => {
     setLastAgent(agentName);
   }, [agentName, setLastAgent]);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, stop } = useChat({
     api: '/api/chat',
     body: { agent: agentName },
+    onError: () => {
+      if (!hasAutoRetriedRef.current && userMessageCountRef.current <= 1) {
+        hasAutoRetriedRef.current = true;
+        window.setTimeout(() => reload(), 500);
+      }
+    },
   });
+
+  useEffect(() => {
+    userMessageCountRef.current = messages.filter((m) => m.role === 'user').length;
+    const assistantContent = messages.find((m) => m.role === 'assistant')?.content;
+    if (assistantContent) {
+      hasReceivedTokensRef.current = true;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setShowConnecting(false);
+      return;
+    }
+
+    if (userMessageCountRef.current > 1) {
+      setShowConnecting(false);
+      return;
+    }
+
+    hasReceivedTokensRef.current = false;
+
+    const connectTimer = window.setTimeout(() => setShowConnecting(true), CONNECTING_DELAY_MS);
+    const retryTimer = window.setTimeout(() => {
+      if (!hasAutoRetriedRef.current && !hasReceivedTokensRef.current) {
+        hasAutoRetriedRef.current = true;
+        stop();
+        reload();
+      }
+    }, COLD_START_RETRY_MS);
+
+    return () => {
+      window.clearTimeout(connectTimer);
+      window.clearTimeout(retryTimer);
+    };
+  }, [isLoading, reload, stop]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const statusMessage = showConnecting && isLoading ? 'מתחבר לשרת…' : 'Thinking…';
 
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
@@ -69,9 +120,9 @@ export function AgentChat({ agent }: { agent: string }) {
             ))
           )}
           {isLoading ? (
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground" role="status">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-              <span>Thinking…</span>
+              <span>{statusMessage}</span>
             </div>
           ) : null}
           <div ref={bottomRef} />

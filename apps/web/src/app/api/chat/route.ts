@@ -6,6 +6,9 @@ import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
+const BACKEND_FETCH_TIMEOUT_MS = 15000;
+const BACKEND_MAX_ATTEMPTS = 2;
+
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) {
@@ -32,13 +35,12 @@ export async function POST(req: Request) {
   return new StreamingTextResponse(readable);
 }
 
-async function* streamAgentResponse(
-  userId: string,
-  message: string,
-  agent: string,
-): AsyncGenerator<string> {
+async function fetchBackendChat(userId: string, message: string, agent: string): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), BACKEND_FETCH_TIMEOUT_MS);
+
   try {
-    const res = await fetch(`${API_BASE_URL}/v1/chat`, {
+    return await fetch(`${API_BASE_URL}/v1/chat`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -51,9 +53,44 @@ async function* streamAgentResponse(
         requested_agent: agent,
         locale: 'en',
       }),
+      signal: controller.signal,
     });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 
-    if (!res.ok || !res.body) {
+async function* streamAgentResponse(
+  userId: string,
+  message: string,
+  agent: string,
+): AsyncGenerator<string> {
+  try {
+    let res: Response | null = null;
+
+    for (let attempt = 0; attempt < BACKEND_MAX_ATTEMPTS; attempt++) {
+      try {
+        const attemptRes = await fetchBackendChat(userId, message, agent);
+        if (attemptRes.ok && attemptRes.body) {
+          res = attemptRes;
+          break;
+        }
+        if (attempt < BACKEND_MAX_ATTEMPTS - 1) {
+          logger.warn('chat backend returned non-ok, retrying', {
+            status: attemptRes.status,
+            attempt,
+          });
+        }
+      } catch (err) {
+        if (attempt < BACKEND_MAX_ATTEMPTS - 1) {
+          logger.warn('chat backend fetch failed, retrying', { attempt, err: String(err) });
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    if (!res?.ok || !res.body) {
       yield getMockResponse(message, agent);
       return;
     }
