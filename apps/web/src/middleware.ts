@@ -14,11 +14,13 @@ const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 const isEducatorRoute = createRouteMatcher(['/educator(.*)']);
 
 export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth().protect();
-  }
+  const { userId, sessionClaims } = auth();
 
-  const { sessionClaims } = auth();
+  if (!isPublicRoute(request) && !userId) {
+    const signInUrl = new URL('/sign-in', request.url);
+    signInUrl.searchParams.set('redirect_url', request.url);
+    return NextResponse.redirect(signInUrl);
+  }
   const metadata = (sessionClaims?.metadata ?? {}) as {
     role?: string;
     child_mode?: boolean;
