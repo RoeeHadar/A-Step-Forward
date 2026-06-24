@@ -15,8 +15,8 @@ class GraphRAGSettings(BaseSettings):
 
     database_url: str = "postgresql+asyncpg://astepforward:astepforward@localhost:5432/astepforward"
 
-    embedding_model: str = "voyage-3-large"
-    embedding_dim: int = 1024
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    embedding_dim: int = 384
     chunk_tokens: int = 600
     chunk_overlap: int = 50
 

@@ -100,3 +100,65 @@ class GraphWriter:
                 edges_written += 1
 
         return nodes_written, edges_written, pending_review
+
+    async def write_lesson_graph(self, doc: RawDocument) -> tuple[int, int]:
+        """Create Lesson node and COVERS/TEACHES edges from lesson frontmatter."""
+        meta = doc.metadata
+        lesson_id = str(meta.get("id", doc.id))
+
+        props: dict[str, str | int | float | bool] = {}
+        if meta.get("modality"):
+            props["modality"] = str(meta["modality"])
+        if meta.get("est_minutes") is not None:
+            props["est_minutes"] = int(meta["est_minutes"])
+
+        lesson = KGNode(
+            id=lesson_id,
+            kind=NodeKind.LESSON,
+            canonical_name=doc.title,
+            summary=doc.text[:400],
+            properties=props,
+            provenance=doc.source,
+            pending_review=False,
+        )
+        await self.service.upsert_node(lesson)
+        nodes_written = 1
+        edges_written = 0
+
+        concepts_raw = meta.get("concepts") or []
+        if isinstance(concepts_raw, str):
+            concepts_raw = [concepts_raw]
+        for concept_id in concepts_raw:
+            cid = str(concept_id)
+            label = cid.removeprefix("concept-").replace("-", " ").title()
+            concept = KGNode(
+                id=cid,
+                kind=NodeKind.CONCEPT,
+                canonical_name=label,
+                provenance=doc.source,
+                pending_review=False,
+            )
+            await self.service.upsert_node(concept)
+            nodes_written += 1
+            edge = KGEdge(
+                id=f"covers:{lesson_id}:{cid}",
+                kind=EdgeKind.COVERS,
+                src=lesson_id,
+                dst=cid,
+                provenance=doc.source,
+            )
+            await self.service.upsert_edge(edge)
+            edges_written += 1
+
+        resource_id = f"resource:{doc.id}"
+        teaches = KGEdge(
+            id=f"teaches:{lesson_id}:{resource_id}",
+            kind=EdgeKind.TEACHES,
+            src=lesson_id,
+            dst=resource_id,
+            provenance=doc.source,
+        )
+        await self.service.upsert_edge(teaches)
+        edges_written += 1
+
+        return nodes_written, edges_written

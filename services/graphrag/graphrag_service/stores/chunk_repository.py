@@ -133,10 +133,10 @@ class ChunkRepository:
                 text(
                     f"""
                     SELECT id, document_id, ordinal, text, heading, token_count, provenance, created_at,
-                           1 - (embedding <=> :embedding::vector) AS score
+                           1 - (embedding <=> CAST(:embedding AS vector)) AS score
                     FROM kg_chunks
                     WHERE TRUE {doc_filter}
-                    ORDER BY embedding <=> :embedding::vector
+                    ORDER BY embedding <=> CAST(:embedding AS vector)
                     LIMIT :k
                     """
                 ),

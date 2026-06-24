@@ -32,6 +32,7 @@ uv run alembic -c infra/alembic.ini revision -m "describe change"
 | `0003_gateway` | gateway_users, gateway_sessions, audit_gateway_events |
 | `0004_curriculum` | curriculum_courses, concepts, lessons |
 | `0005_kg_chunks` | kg_chunks + HNSW index |
+| `0006_kg_chunks_384` | kg_chunks embedding dim 384 (sentence-transformers) |
 
 ## Rules (see `skills/db-migrations/SKILL.md`)
 

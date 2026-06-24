@@ -33,6 +33,24 @@ def _parse_provenance(raw: Any) -> dict[str, Any] | None:
     return None
 
 
+def _parse_datetime(raw: Any) -> datetime:
+    if raw is None:
+        return datetime.now(timezone.utc)
+    if isinstance(raw, datetime):
+        return raw
+    to_native = getattr(raw, "to_native", None)
+    if callable(to_native):
+        native = to_native()
+        if isinstance(native, datetime):
+            return native
+    iso_format = getattr(raw, "iso_format", None)
+    if callable(iso_format):
+        return datetime.fromisoformat(iso_format())
+    if isinstance(raw, str):
+        return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    return datetime.now(timezone.utc)
+
+
 def _record_to_node(record: dict[str, Any]) -> KGNode:
     props = dict(record)
     kind = NodeKind(props.pop("kind"))
@@ -44,7 +62,7 @@ def _record_to_node(record: dict[str, Any]) -> KGNode:
         properties = json.loads(properties)
     provenance_raw = props.pop("provenance", None)
     provenance = _parse_provenance(provenance_raw)
-    created_at = props.pop("created_at", None)
+    created_at = _parse_datetime(props.pop("created_at", None))
     return KGNode(
         id=props.pop("id"),
         kind=kind,
@@ -54,7 +72,7 @@ def _record_to_node(record: dict[str, Any]) -> KGNode:
         properties={str(k): v for k, v in properties.items()},
         provenance=provenance,  # type: ignore[arg-type]
         pending_review=bool(props.pop("pending_review", False)),
-        created_at=created_at or datetime.now(timezone.utc),
+        created_at=created_at,
     )
 
 
@@ -108,8 +126,11 @@ class Neo4jStore:
         applied = 0
         async with self._session() as session:
             for stmt in statements:
-                await session.run(stmt)
-                applied += 1
+                try:
+                    await session.run(stmt)
+                    applied += 1
+                except Exception as exc:
+                    log.warning("neo4j.schema_statement_skipped", stmt=stmt[:80], error=str(exc))
         return applied
 
     async def upsert_node(self, node: KGNode) -> KGNode:
@@ -204,7 +225,7 @@ class Neo4jStore:
                 result = await session.run(cypher, params)
                 rows = await result.data()
             return [_record_to_node(dict(row["node"])) for row in rows]
-        return await self.list_nodes(kinds=kinds)
+        return []
 
     async def list_nodes(
         self,

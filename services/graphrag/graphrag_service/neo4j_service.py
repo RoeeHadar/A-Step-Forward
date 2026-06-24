@@ -27,26 +27,36 @@ class Neo4jGraphRAGService:
         self._chunks = ChunkRepository(self.settings)
         self._embedder = Embedder(self.settings)
         self._connected = False
+        self._local_nodes: dict[str, KGNode] = {}
+        self._local_edges: dict[str, KGEdge] = {}
 
     async def _ensure_connected(self) -> None:
         if self._connected:
             return
-        await self._neo4j.connect()
+        if self.settings.use_neo4j:
+            await self._neo4j.connect()
         await self._chunks.connect()
         self._connected = True
 
     async def close(self) -> None:
-        await self._neo4j.close()
+        if self.settings.use_neo4j:
+            await self._neo4j.close()
         await self._chunks.close()
         self._connected = False
 
     async def upsert_node(self, node: KGNode) -> KGNode:
         await self._ensure_connected()
-        return await self._neo4j.upsert_node(node)
+        if self.settings.use_neo4j:
+            return await self._neo4j.upsert_node(node)
+        self._local_nodes[node.id] = node
+        return node
 
     async def upsert_edge(self, edge: KGEdge) -> KGEdge:
         await self._ensure_connected()
-        return await self._neo4j.upsert_edge(edge)
+        if self.settings.use_neo4j:
+            return await self._neo4j.upsert_edge(edge)
+        self._local_edges[edge.id] = edge
+        return edge
 
     async def upsert_chunk(self, chunk: KGChunk) -> KGChunk:
         await self._ensure_connected()

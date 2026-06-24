@@ -13,6 +13,7 @@ ADRs in PRs.
 | [0002](0002-memory-architecture.md) | Multi-layered, self-healing memory | Accepted |
 | [0003](0003-security-threat-model.md) | Security threat model | Accepted |
 | [0004](0004-llm-provider-groq.md) | Groq Cloud as primary LLM provider | Accepted |
+| [0005](0005-embeddings-sentence-transformers.md) | Sentence-Transformers for GraphRAG embeddings | Accepted |
 
 ## Authoring a new ADR
 

@@ -26,7 +26,7 @@ CYPHER_INDEXES: list[str] = [
     "CREATE INDEX concept_pending IF NOT EXISTS FOR (n:Concept) ON (n.pending_review)",
     "CREATE INDEX lesson_title IF NOT EXISTS FOR (n:Lesson) ON (n.title)",
     "CREATE INDEX resource_title IF NOT EXISTS FOR (n:Resource) ON (n.title)",
-    "CREATE INDEX node_canonical_name IF NOT EXISTS FOR (n) ON (n.canonical_name)",
+    "CREATE INDEX concept_canonical_name IF NOT EXISTS FOR (n:Concept) ON (n.canonical_name)",
     "CREATE INDEX masters_score IF NOT EXISTS FOR ()-[r:MASTERS]-() ON (r.score)",
     "CREATE INDEX prereq_weight IF NOT EXISTS FOR ()-[r:PREREQUISITE_OF]-() ON (r.weight)",
     "CREATE INDEX derived_from_chunk IF NOT EXISTS FOR ()-[r:DERIVED_FROM]-() ON (r.chunk_id)",

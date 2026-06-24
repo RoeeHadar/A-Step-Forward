@@ -14,7 +14,7 @@ from schemas.graph import (
 
 from ..stores.chunk_repository import ChunkRepository
 from ..stores.neo4j_store import Neo4jStore
-from .embedder import Embedder
+from ..ingest.embedder import Embedder
 
 
 async def local_search(

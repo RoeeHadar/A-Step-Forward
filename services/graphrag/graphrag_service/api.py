@@ -40,7 +40,7 @@ class GraphRAGService(Protocol):
 
 def get_graphrag_service() -> GraphRAGService:
     settings = GraphRAGSettings()
-    if settings.use_neo4j:
+    if settings.use_neo4j or settings.use_postgres_chunks:
         from .neo4j_service import Neo4jGraphRAGService
 
         return Neo4jGraphRAGService(settings)
