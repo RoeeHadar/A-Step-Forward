@@ -15,9 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-staging:
+  build-smoke:
     runs-on: ubuntu-latest
-    environment: staging
     steps:
       - uses: actions/checkout@v4
 
@@ -33,19 +32,8 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile || pnpm install
 
-      - name: Pull env from Doppler
-        uses: dopplerhq/cli-action@v3
-        with:
-          token: ${{ secrets.DOPPLER_TOKEN }}
-          project: a-step-forward
-          config: stg
-
-      - name: Deploy to Vercel (staging)
+      - name: Build smoke check
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          # Project root directory is configured as apps/web in Vercel settings.
-          pnpm dlx vercel deploy --prod --token "$VERCEL_TOKEN" \
-            --scope "$VERCEL_ORG_ID"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        run: pnpm --filter @asf/web build
