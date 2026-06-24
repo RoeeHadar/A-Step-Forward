@@ -23,6 +23,9 @@ Last updated: 2026-06-24T16:02:00Z by Coordinator session 2 (c9ee2952)
 
 Legend: `[x]` done · `[>]` partial · `[ ]` not started
 
+## Out-of-band manager-dispatched fixes
+- 2026-06-24T16:16 — fix(api): agents.agents → agents import typo. Commit: ccba32e. Render redeploy: unknown subdomain (`asf-api.onrender.com/healthz` → 404; not our app).
+
 ## This session (Coordinator session 2)
 
 - **Dispatched**: [GraphRAG ingestion](cb1cf9e1-25bd-4684-96fb-863fc98f195c), [Dreamer/Decay cron](d52f4b25-8e80-4a88-a705-6332ff8e05b5)
