@@ -12,7 +12,8 @@ concurrency:
 jobs:
   playwright:
     runs-on: ubuntu-latest
-    if: secrets.CLERK_TEST_USER_EMAIL != ''
+    # Test skips itself internally when CLERK_TEST_USER_EMAIL is not set.
+    # continue-on-error keeps the workflow green until real E2E creds are wired.
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
