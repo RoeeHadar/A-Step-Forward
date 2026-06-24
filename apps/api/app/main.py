@@ -12,7 +12,7 @@ from .core.exception_handlers import register_exception_handlers
 from .core.settings import get_settings
 from .core.telemetry import configure_logging, configure_sentry, instrument_app
 from .core.auth import validate_auth_config
-from .routers import admin, agents, chat, graphrag, health, learners, lessons, memory, progress
+from .routers import admin, agents, assessment, chat, graphrag, health, learners, lessons, memory, progress
 
 
 @asynccontextmanager
@@ -43,6 +43,7 @@ def create_app() -> FastAPI:
     instrument_app(app, settings)
 
     app.include_router(health.router)
+    app.include_router(assessment.router)
     app.include_router(chat.router)
     app.include_router(agents.router)
     app.include_router(learners.router)
