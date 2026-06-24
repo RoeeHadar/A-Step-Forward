@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import AsyncGenerator
 from uuid import uuid4
 
 import pytest
@@ -41,7 +42,7 @@ async def _postgres_available() -> bool:
 
 
 @pytest.fixture
-async def postgres_available() -> None:
+async def postgres_available() -> AsyncGenerator[None, None]:
     if not await _postgres_available():
         pytest.skip("Postgres not available for orchestrator episodic write test")
     await dispose_engine()
