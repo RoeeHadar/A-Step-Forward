@@ -71,12 +71,7 @@ export default clerkMiddleware(async (auth, request) => {
   }
 
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-nonce', nonce);
-
-  const response = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
+  const response = NextResponse.next();
 
   for (const [key, value] of Object.entries(securityHeaders(nonce, childMode))) {
     response.headers.set(key, value);
