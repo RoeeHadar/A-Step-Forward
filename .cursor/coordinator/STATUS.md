@@ -1,8 +1,8 @@
 # A Step Forward — Coordinator Status
 
-Last updated: 2026-06-24T21:45:00Z by Coordinator session-8
+Last updated: 2026-06-24T21:55:00Z by Coordinator session-9
 
-## Launch status: **LIVE** — Phase-3 streams E+F+G landed; CI green; H pending screenshot
+## Launch status: **LIVE** — Session-9 streams I+J landed; smoke 200×4; memory+GraphRAG wired
 
 ---
 
@@ -26,7 +26,39 @@ Last updated: 2026-06-24T21:45:00Z by Coordinator session-8
 - [x] Real Groq-backed Tutor agent — `astream_reply` calls Groq LLM; smoke test added (`7d32bb9`)
 - [x] Assessment Generator + Grader endpoints — `GET /v1/assessment`, `POST /v1/grade`, documented in README (`18a254e`)
 - [x] ADRs — hosting, LLM, auth, database decisions recorded in `docs/adr/` (`7d7141f`)
+- [x] Memory writes persist to Neon; Dreamer cron runs (or stub-cron documented). — `memory_events` table (migration `0007`), fire-and-forget writer after each SSE stream, dreamer cron `cron-dreaming.yml` at 03:00 UTC; `DATABASE_URL` documented in `BLOCKED.md` (`68a8f02`).
+- [x] GraphRAG seeded with `foundations-of-math`; `kg.hybrid` returns ranked results (or graceful fallback). — `GET /v1/search` wired (pgvector 384-dim + Neo4j graceful fallback); `kg_chunks` migration `0006` confirmed; seeding docs in `BLOCKED.md` (`89ab8c5`).
 - [ ] Demo screenshot / GIF — H: screenshots placeholder created (`docs/screenshots/README.md`); actual screenshots need open IDE browser tab
+
+---
+
+## Session 9 results
+
+### I — Memory event persistence ✅
+- `memory_events` table was missing; created Alembic migration `0007_memory_events` (UUID PK, learner index).
+- `services/memory/memory_service/event_writer.py` — async fire-and-forget via `asyncio.create_task`; graceful no-op when `DATABASE_URL` unset.
+- `apps/api/app/routers/chat.py` — schedules event row in `finally` block after SSE stream.
+- `apps/api/app/core/db.py` — `get_db()` FastAPI dependency added.
+- Dreamer cron `.github/workflows/cron-dreaming.yml` already existed and was valid; runs at `0 3 * * *` UTC.
+- Episodic writes already wired in orchestrator via `MemoryService`.
+- `BLOCKED.md` updated with operator steps (`DATABASE_URL`, `alembic upgrade head`).
+- Commit: `68a8f02` — `feat(memory): wire memory event persistence and verify dreamer cron`
+
+### J — GraphRAG hybrid search endpoint ✅
+- Full `GraphRAGService` was already in place; `POST /v1/graphrag/hybrid` (auth-required) already existed.
+- `kg_chunks` migration `0006_kg_chunks_384` (`vector(384)`, HNSW index) confirmed present.
+- Added `GET /v1/search?q=…&top_k=5` — no auth, always returns `{results, warning}`, never 500.
+- Added `services/graphrag/retrieval.py` — asyncpg vector search + optional Neo4j enrichment stub.
+- Registered search router in `apps/api/app/main.py`.
+- `BLOCKED.md` updated with seeding commands for Neon + Neo4j.
+- Commit: `89ab8c5` — `feat(graphrag): wire hybrid search endpoint with graceful Neo4j fallback`
+
+### Smoke test ✅ (post-session-9)
+- `/ 200` ✅
+- `/api/health 200` ✅ (Vercel Next.js route → `{"status":"ok","service":"web"}`)
+- `/sign-in 200` ✅
+- `/lessons/lesson-whole-numbers 200` ✅
+- `/healthz 200` ✅ (Render backend confirmed)
 
 ---
 
@@ -84,13 +116,21 @@ Last updated: 2026-06-24T21:45:00Z by Coordinator session-8
 
 ## Next session priorities
 
-1. H — Demo screenshot: open IDE browser to `https://a-step-forward-waij.vercel.app`, screenshot landing + `/sign-in`, commit to `docs/screenshots/`.
-2. Memory writes: verify `/memory` endpoint on Render persists to Neon; verify Dreamer cron stub is documented.
-3. GraphRAG: seed `foundations-of-math`; verify `kg.hybrid` returns ranked results or graceful fallback.
-4. Phase-4: Polish, full eval gates, Playwright E2E tests.
+1. **CI green check** — verify `alembic upgrade head` runs in CI/Render deploy so `memory_events` and `kg_chunks` tables exist in Neon before new code hits production.
+2. **Phase-4 eval gates** — run `evals/` suites (promptfoo + DeepEval); wire eval job to GitHub Actions CI.
+3. **Playwright E2E** — learner sign-up → chat → memory event persisted flow.
+4. **Demo screenshot** — open IDE browser to `https://a-step-forward-waij.vercel.app`, screenshot landing + `/sign-in`, commit to `docs/screenshots/`.
+
+---
+
+## This session
+
+- Dispatched: [Memory agent](425038cf-a58b-45c0-bbfd-555c1c0ea67e) (I), [GraphRAG agent](17d31c66-97ee-4ea5-8aaf-290b65b460b1) (J) — both composer-2.5-fast, background, parallel
+- Integrated: `68a8f02` (I), `89ab8c5` (J) — no merge conflicts; clean sequential push to main
+- Blocked: none — both streams completed; external blockers (`DATABASE_URL`, `NEO4J_URI`) documented in `BLOCKED.md`
 
 ---
 
 ## Hands-off until manager check-in
 
-true — E+F+G all delivered; all 4 smoke routes 200; CI should be green. H needs IDE browser.
+true — I+J delivered; all 4 smoke routes 200; 2 of 3 remaining acceptance items now checked. Only open item: demo screenshot (needs IDE browser tab) and Phase-4 eval/E2E gates.
