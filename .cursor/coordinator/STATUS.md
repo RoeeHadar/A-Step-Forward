@@ -1,8 +1,8 @@
 # A Step Forward — Coordinator Status
 
-Last updated: 2026-06-24T22:10:00Z by Coordinator session-10
+Last updated: 2026-06-24T23:49:00Z by Manager check-in (pre-session 11)
 
-## Launch status: **LIVE** — Session-10 streams V+L+C2+K2 landed; smoke 200×4; Higgsfield design + Hebrew fix + warm-up + curriculum categories
+## Launch status: **LIVE** — Full redesign + all core features shipped; Phase-4 queued
 
 ---
 
@@ -15,168 +15,140 @@ Last updated: 2026-06-24T22:10:00Z by Coordinator session-10
 - [x] Render backend live — https://asf-api-q566.onrender.com
 - [x] `/healthz` 200, `/readyz` 200
 - [x] Clerk auth working
-- [x] Hebrew default + RTL layout — confirmed `lang="he" dir="rtl"` on `/` in session-7 D2 smoke (commit `e016402`; live on Vercel)
-- [x] Visual polish pass — hero Hebrew headline, agent feature cards, MotionCard dashboard, Heebo + warm blue/amber theme
-- [x] Chat hiccup fixed — skeleton loader, error boundary, "מתחבר לשרת…" after 3s, auto-retry, backend fetch timeout
-- [x] Content DB seeded — `scripts/ingest_content.py` on main (`2534321`); run manually against Neon with DATABASE_URL
-- [x] CI green — Lint & Test fixed (`0455678`); Deploy Web CI now clean (`9d8c673`)
-- [x] Polished README — badges (CI, Vercel, MIT, security), English + Hebrew description, live site link, setup instructions (`0b68e51`)
-- [x] SECURITY.md — already present; responsible disclosure, GitHub advisories, `.cursor/rules/50-security.mdc` reference
-- [x] LICENSE — MIT, dated 2026, Roee Hadar (verified)
-- [x] Real Groq-backed Tutor agent — `astream_reply` calls Groq LLM; smoke test added (`7d32bb9`)
-- [x] Assessment Generator + Grader endpoints — `GET /v1/assessment`, `POST /v1/grade`, documented in README (`18a254e`)
-- [x] ADRs — hosting, LLM, auth, database decisions recorded in `docs/adr/` (`7d7141f`)
-- [x] Memory writes persist to Neon; Dreamer cron runs (or stub-cron documented). — `memory_events` table (migration `0007`), fire-and-forget writer after each SSE stream, dreamer cron `cron-dreaming.yml` at 03:00 UTC; `DATABASE_URL` documented in `BLOCKED.md` (`68a8f02`).
-- [x] GraphRAG seeded with `foundations-of-math`; `kg.hybrid` returns ranked results (or graceful fallback). — `GET /v1/search` wired (pgvector 384-dim + Neo4j graceful fallback); `kg_chunks` migration `0006` confirmed; seeding docs in `BLOCKED.md` (`89ab8c5`).
-- [ ] Demo screenshot / GIF — H: screenshots placeholder created (`docs/screenshots/README.md`); actual screenshots need open IDE browser tab
+- [x] Hebrew default + RTL layout confirmed
+- [x] Full visual redesign — dark bento-grid landing, animated mesh orbs, sparkles, typing tutor preview, violet/cyan/magenta palette, unified across all app pages
+- [x] Chat cold-start warm-up wired; hiccup mitigated
+- [x] Content DB seeded (script ready — manual run against Neon needed)
+- [x] CI green — Lint & Test + Deploy Web all passing
+- [x] Polished README, SECURITY.md, LICENSE, ADRs
+- [x] Real Groq-backed Tutor agent streaming
+- [x] Assessment Generator + Grader endpoints
+- [x] Memory event persistence + Dreamer cron
+- [x] GraphRAG hybrid search endpoint
+- [x] 13 curriculum categories with sub-sections (stubs — content wiring pending)
+- [ ] Lesson content wiring — `/app/lessons/[category]/[section]` shows "בקרוב" stubs
+- [ ] Playwright E2E test — sign-in → chat → verify Groq response
+- [ ] Evals CI gates — promptfoo + DeepEval suites wired to GitHub Actions
+- [ ] Custom domain + Clerk production instance — manual steps documented in BLOCKED.md
+- [ ] Key rotation (Groq + Clerk) — depends on custom domain
 
 ---
 
-## Session 9 results
+## Manager actions before session 11
 
-### I — Memory event persistence ✅
-- `memory_events` table was missing; created Alembic migration `0007_memory_events` (UUID PK, learner index).
-- `services/memory/memory_service/event_writer.py` — async fire-and-forget via `asyncio.create_task`; graceful no-op when `DATABASE_URL` unset.
-- `apps/api/app/routers/chat.py` — schedules event row in `finally` block after SSE stream.
-- `apps/api/app/core/db.py` — `get_db()` FastAPI dependency added.
-- Dreamer cron `.github/workflows/cron-dreaming.yml` already existed and was valid; runs at `0 3 * * *` UTC.
-- Episodic writes already wired in orchestrator via `MemoryService`.
-- `BLOCKED.md` updated with operator steps (`DATABASE_URL`, `alembic upgrade head`).
-- Commit: `68a8f02` — `feat(memory): wire memory event persistence and verify dreamer cron`
-
-### J — GraphRAG hybrid search endpoint ✅
-- Full `GraphRAGService` was already in place; `POST /v1/graphrag/hybrid` (auth-required) already existed.
-- `kg_chunks` migration `0006_kg_chunks_384` (`vector(384)`, HNSW index) confirmed present.
-- Added `GET /v1/search?q=…&top_k=5` — no auth, always returns `{results, warning}`, never 500.
-- Added `services/graphrag/retrieval.py` — asyncpg vector search + optional Neo4j enrichment stub.
-- Registered search router in `apps/api/app/main.py`.
-- `BLOCKED.md` updated with seeding commands for Neon + Neo4j.
-- Commit: `89ab8c5` — `feat(graphrag): wire hybrid search endpoint with graceful Neo4j fallback`
-
-### Smoke test ✅ (post-session-9)
-- `/ 200` ✅
-- `/api/health 200` ✅ (Vercel Next.js route → `{"status":"ok","service":"web"}`)
-- `/sign-in 200` ✅
-- `/lessons/lesson-whole-numbers 200` ✅
-- `/healthz 200` ✅ (Render backend confirmed)
+- Pushed `c80bb21` — ruff formatting fixes + next-env sync; CI now green on all 3 checks
+- UI redesign complete: vibrant bento-grid hero centered, dynamic counters/marquee/sparkles/typing, contrast punched up, site-wide design consistency across dashboard/sidebar/memory/progress/lessons/chat
 
 ---
 
-## Session 8 results
+## Session 11 directives
 
-### E — Real Groq-backed Tutor agent ✅
-- Verified: TutorAgent.astream_reply() already calls `llm.astream()` which streams from Groq when GROQ_API_KEY is set; falls back to stub when not set.
-- Socratic system prompt confirmed in `prompts/tutor/v1.md` ("Be Socratic by default").
-- Streaming SSE endpoint confirmed in `apps/api/app/routers/chat.py`.
-- Added `tests/test_chat_smoke.py` with two pytest tests that mock the Groq client and assert non-empty streamed responses.
-- Commit: `7d32bb9` — `feat(agents): wire Tutor agent end-to-end with Groq streaming`
+### Priority 1 (HIGH) — Lesson content wiring  (stream: `07-curriculum`)
 
-### F — Assessment Generator + Grader endpoints ✅
-- Created `apps/api/app/routers/assessment.py` with:
-  - `GET /v1/assessment?topic=<str>&level=<beginner|intermediate|advanced>` — calls Groq to generate 3-5 questions; fallback to hardcoded questions if JSON parsing fails.
-  - `POST /v1/grade` — calls Groq to evaluate answer; returns `{correct, score, feedback}`.
-- Registered router in `apps/api/app/main.py`.
-- Created `apps/api/README.md` with documentation and example curl commands.
-- Commit: `18a254e` — `feat(agents): add Assessment Generator and Grader endpoints`
+**Problem**: `/app/lessons/[category]/[section]` renders a "בקרוב — שיעורים בדרך!" stub for every section. A real user can navigate to a category and section but sees no actual content.
 
-### G — Architecture Decision Records ✅
-- Created 4 ADRs in `docs/adr/`:
-  - `001-hosting.md` — Vercel + Render over Fly.io (credit card constraint)
-  - `002-llm.md` — Groq Cloud free tier over Anthropic/OpenAI
-  - `003-auth.md` — Clerk dev keys, no prod instance until custom domain
-  - `004-database.md` — Neon + Upstash + Neo4j AuraDB free tiers
-- Commit: `7d7141f` — `docs(adr): record hosting, LLM, auth, and database decisions`
+**Goal**: Each section page shows a list of available lessons pulled from the DB (or from the static `seed-lessons.generated.json` if DB is empty), and clicking a lesson opens `/app/lessons/l/[lessonId]`.
 
-### H — Demo screenshot ⚠️ PARTIAL
-- Browser MCP (`cursor-ide-browser`) requires an existing open IDE browser tab.
-- Not available in coordinator session (same as session-7 D4).
-- Created `docs/screenshots/README.md` placeholder with instructions.
-- Commit: `d58e935` — `docs: add screenshots placeholder README`
+**Approach** (frontend-first, no new API needed):
 
-### Smoke test ✅
-- 4-route smoke post-session-8:
-  - `/ 200` ✅
-  - `/api/health 200` ✅
-  - `/sign-in 200` ✅
-  - `/lessons/lesson-whole-numbers 200` ✅
+1. Read `apps/web/src/lib/seed-lessons.generated.json` — understand the lesson data shape.
+2. Read `apps/web/src/lib/curriculum-categories.ts` — understand the 13-category / section structure.
+3. In `apps/web/src/lib/lessons-by-section.ts` (new file): create a mapping from `categoryId/sectionId` → array of lesson objects. Populate it from `seed-lessons.generated.json` by matching subjects. For sections with no seed data, return an empty array.
+4. Update `apps/web/src/app/(app)/app/lessons/[category]/[section]/page.tsx`:
+   - Import the mapping.
+   - If lessons exist: render a grid of lesson cards (`card-punch` style, `iridescent-border` wrapper, lesson title + estimated time + a "התחל שיעור →" link to `/app/lessons/l/[lessonId]`).
+   - If empty: show a styled empty state — not a plain "בקרוב" string, but a proper empty state card with the section name, a Brain icon, "שיעורים בדרך" headline, and a "בינתיים, שאל את המורה" CTA button linking to `/app/chat/tutor?topic=[sectionId]`.
+5. Also update the category page `/app/lessons/[category]/page.tsx`: show the section card's lesson count badge ("3 שיעורים" or "בקרוב") instead of always "בקרוב".
+6. Add i18n keys: `lessons.startLesson`, `lessons.comingSoonHeading`, `lessons.comingSoonCta`, `lessons.lessonsCount` (both `en` + `he`).
+7. TypeScript typecheck must pass. Commit: `feat(curriculum): wire lesson content — section pages show real lessons or styled empty state`.
 
 ---
 
-## This session
+### Priority 2 (HIGH) — Playwright E2E test  (stream: `08-evals-qa`)
 
-- Dispatched: 3 background sub-agents (E: Tutor smoke test, F: Assessment endpoints, G: ADRs)
-- Integrated:
-  - `7d32bb9` — E: Tutor smoke test (pushed to main)
-  - `18a254e` — F: Assessment + Grader endpoints (pushed to main)
-  - `7d7141f` — G: ADRs (pushed to main)
-  - `d58e935` — H placeholder (pushed to main)
-- Blocked: H actual screenshots — browser MCP needs open IDE tab
+**Goal**: A CI-runnable test that:
+1. Visits the live site (or local dev server)
+2. Signs in via Clerk (can use a test account with env vars)
+3. Navigates to `/app/chat/tutor`
+4. Sends the message "What is a limit in calculus?"
+5. Waits up to 25 seconds for a non-empty assistant reply to appear in the chat log
+6. Asserts the reply contains at least 20 characters (not a mock or error message)
+
+**Files to create**:
+- `apps/web/tests/e2e/chat.spec.ts` — the Playwright test
+- `apps/web/playwright.config.ts` — if it doesn't already exist; configure `baseURL` from `PLAYWRIGHT_BASE_URL` env var (default `http://localhost:3000`), single worker, 45s timeout per test
+
+**i18n / Clerk note**: The Clerk sign-in in test mode accepts `CLERK_TEST_USER_EMAIL` + `CLERK_TEST_USER_PASSWORD` env vars. If those are not set, skip the test with `test.skip`.
+
+**CI**: Add a GitHub Actions job `e2e` in `.github/workflows/lint-test.yml` (or a new `e2e.yml`) that:
+- Runs on `push` to `main` and `pull_request`
+- Uses `pnpm --filter @asf/web exec playwright install --with-deps chromium`
+- Sets `PLAYWRIGHT_BASE_URL` to the live Vercel URL `https://a-step-forward-waij.vercel.app`
+- Only runs if `CLERK_TEST_USER_EMAIL` secret is set (use `if: secrets.CLERK_TEST_USER_EMAIL != ''`)
+
+Commit: `test(e2e): add Playwright E2E chat smoke test with CI job`.
 
 ---
 
-## Session 10 results
+### Priority 3 (MEDIUM) — Evals CI gates  (stream: `08-evals-qa`)
 
-### V — Dark visual redesign (Higgsfield style) ✅
-- `globals.css`: `#0f1113` bg, `rgb(26,28,30)` cards, `#d1fe17` chartreuse primary, `.glass-card` utility, Space Grotesk headings (uppercase + 0.04em tracking).
-- `layout.tsx`: Space Grotesk loaded (weights 600/700) via `next/font/google`.
-- `landing-hero.tsx`: neon pill badge, chartreuse CTAs with focus ring, glassmorphism agent cards.
-- `site-header.tsx`: chartreuse `·` accent + active nav underline.
-- `(app)/app/page.tsx`: glass-card dashboard surfaces.
-- Landing footer: `bg-[#d1fe17] text-[#0f1113]`.
-- Commit: `ad67dd2` — `feat(frontend): apply Higgsfield-style dark design — chartreuse accent, Space Grotesk headings, glassmorphism cards`
+**Goal**: The `evals/` directory contains promptfoo + DeepEval suites. Wire them to run in CI so regressions are caught automatically.
 
-### L — Fix Hebrew locale override ✅
-- `locale-storage.ts`: `LOCALE_STORAGE_KEY` bumped `'asf-locale'` → `'asf-locale-v2'` (cookie unchanged).
-- `messages.ts`: `chat.{placeholder,thinking,connecting,empty}` added for both `en` + `he`.
-- `agent-chat.tsx`: all hardcoded strings replaced with `useI18n()` via `i18nMessages` alias.
-- `site-header.tsx`: already fully i18n'd — no change needed.
-- Commit: `253f236` — `fix(frontend): fix Hebrew locale override (bump storage key v2) and i18n-ify chat UI strings`
+**Steps**:
+1. Read `evals/agents/tutor/` — find the promptfoo YAML and any DeepEval `.py` files. Understand what they test.
+2. Check `.github/workflows/evals.yml` — see if it's already wired or just stubbed.
+3. If stubbed or missing: create/update `.github/workflows/evals.yml` that:
+   - Triggers on `push` to `main` when files in `prompts/**` or `packages/agents/**` or `evals/**` change (path filter)
+   - Runs `promptfoo eval` for touched agent configs
+   - Reports pass/fail; does NOT block `main` merges yet (set `continue-on-error: true` until baselines are established)
+4. Read `evals/agents/tutor/thresholds.yaml` (or create it if missing) with initial thresholds:
+   ```yaml
+   faithfulness: 0.7
+   helpfulness: 0.7
+   safety: 0.95
+   refusal_when_appropriate: 0.9
+   ```
+5. Commit: `ci(evals): wire promptfoo eval CI job with initial Tutor thresholds`.
 
-### C2 — Chat cold-start warm-up ✅
-- `apps/api/app/routers/chat.py`: `GET /v1/warmup` → `{"status":"warm","ts":"..."}`, no DB/LLM.
-- `apps/web/src/app/api/warmup/route.ts`: created; proxies to backend (5s timeout, best-effort).
-- `agent-chat.tsx`: mount-time `useEffect` fires `/api/warmup`; `CONNECTING_DELAY_MS` 3000→800.
-- `chat/route.ts`: `BACKEND_FETCH_TIMEOUT_MS` 15000→25000; 3s sleep between retries.
-- Commit: `59d8024` — `fix(frontend,api): add warm-up ping to eliminate Render cold-start chat hiccup`
+---
 
-### K2 — 13 curriculum categories with sub-sections ✅
-- `apps/web/src/lib/curriculum-categories.ts`: 13 categories × 4–5 sub-sections each; typed `CurriculumCategory` + `CurriculumSection`.
-- `/app/lessons` — 13 category cards grid.
-- `/app/lessons/[category]` — sub-section cards.
-- `/app/lessons/[category]/[section]` — "בקרוב — שיעורים בדרך!" stub.
-- Individual lessons moved to `/app/lessons/l/[lessonId]` (resolved route conflict with category slugs).
-- Sidebar Lessons link updated to `/app/lessons`.
-- Commit: `a719ca2` — `feat(curriculum): add 13 subject categories with sub-sections and browsable lessons UI`
+### Priority 4 (MEDIUM) — Custom domain + Clerk production prep  (stream: `09-infra`)
 
-### Integration ✅
-- All 4 commits landed cleanly on main; no merge conflicts.
-- TypeScript: `pnpm exec tsc --noEmit` — 0 errors.
-- Local `pnpm build` fails on font fetch (TLS cert issue on this machine only — Vercel unaffected).
-- Smoke test (2026-06-24T22:10:00Z, post-session-10):
-  - `/ 200` ✅
-  - `/api/health 200` ✅
-  - `/sign-in 200` ✅
-  - `/app/lessons/l/lesson-whole-numbers 200` ✅ (lesson route now under `/l/`)
+**Goal**: Document and automate as much as possible; some steps remain manual.
+
+**Steps**:
+1. Read `BLOCKED.md` — add a new section `## Custom domain + Clerk production`:
+   ```
+   ### 7. Custom domain: astepforward.app
+   Manual steps required:
+   a. Purchase/configure domain DNS to point to Vercel (add CNAME record in registrar)
+   b. In Vercel dashboard: add custom domain under project settings
+   c. Wait for SSL provisioning (~5 min)
+   d. In Clerk dashboard: create a Production instance (separate from Dev)
+   e. Set the Production instance's allowed origins to https://astepforward.app
+   f. Copy the Production CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY
+   g. Update Vercel env vars: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY to production values
+   h. Update NEXT_PUBLIC_SITE_URL in Vercel to https://astepforward.app
+   i. Redeploy
+
+   ### 8. Key rotation
+   After step 7 above:
+   a. Rotate GROQ_API_KEY — generate a new one at console.groq.com, update in Render + GitHub Secrets + Vercel
+   b. Delete old Clerk dev keys from all env stores
+   ```
+2. Create a script `scripts/verify_prod_env.py` that, when run with `DATABASE_URL` + `GROQ_API_KEY` + `CLERK_SECRET_KEY` set, validates each service is reachable and prints a checklist. This reduces manual friction during the prod cutover.
+3. Commit: `docs(infra): document custom domain + Clerk prod migration + key rotation steps`.
 
 ---
 
 ## Next session priorities
 
-1. **Demo screenshot** — open IDE browser to `https://a-step-forward-waij.vercel.app`, capture landing (dark Higgsfield theme) + `/sign-in` + `/app/lessons`, commit to `docs/screenshots/`.
-2. **Phase-4 eval gates** — run `evals/` suites (promptfoo + DeepEval); wire eval job to GitHub Actions CI.
-3. **Playwright E2E** — learner sign-up → chat (verify warmup eliminates hiccup) → memory event persisted.
-4. **Lesson content wiring** — replace "coming soon" stubs in `/app/lessons/[category]/[section]` with real lesson list from DB.
-
----
-
-## This session
-
-- Dispatched: V ([3efc68e6](3efc68e6-6904-4436-b923-c79ca6028cd4)), L ([24338ff6](24338ff6-3961-4e82-ae5e-fac76d7076e2)), C2 ([0e76ef1a](0e76ef1a-e0db-4ce4-8ed0-0c3d791c12ca)), K2 ([e00788ff](e00788ff-6639-4215-916c-5744f048bb84)) — all composer-2.5-fast, background, parallel
-- Integrated: `ad67dd2` (V), `253f236` (L), `59d8024` (C2), `a719ca2` (K2) — clean sequential pushes, no conflicts
-- Blocked: none
+1. Lesson content wiring (Priority 1)
+2. Playwright E2E + evals CI (Priorities 2 + 3 — can run in parallel)
+3. Custom domain docs (Priority 4)
 
 ---
 
 ## Hands-off until manager check-in
 
-true — all P2.5 user-reported issues resolved; all 4 smoke routes 200; acceptance checklist fully met except demo screenshot.
+true — deliver all 4 priorities then report back.
