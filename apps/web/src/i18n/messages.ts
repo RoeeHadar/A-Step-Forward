@@ -139,6 +139,10 @@ const messages = {
       backTo: 'Back to',
       comingSoonTitle: 'Coming soon',
       comingSoon: 'Coming soon — lessons are on the way!',
+      startLesson: 'Start Lesson',
+      comingSoonHeading: 'Lessons Coming Soon',
+      comingSoonCta: 'Ask your teacher in the meantime',
+      lessonsCount: '{count} lessons',
     },
     common: {
       back: 'Back',
@@ -297,6 +301,10 @@ const messages = {
       backTo: 'חזרה ל',
       comingSoonTitle: 'בקרוב',
       comingSoon: 'בקרוב — שיעורים בדרך!',
+      startLesson: 'התחל שיעור',
+      comingSoonHeading: 'שיעורים בדרך',
+      comingSoonCta: 'בינתיים, שאל את המורה',
+      lessonsCount: '{count} שיעורים',
     },
     common: {
       back: 'חזרה',

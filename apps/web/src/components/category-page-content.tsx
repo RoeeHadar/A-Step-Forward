@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useI18n } from '@/providers/i18n-provider';
 import type { CurriculumCategory } from '@/lib/curriculum-categories';
+import { getLessonCountForSection } from '@/lib/lessons-by-section';
 
 export function CategoryPageContent({ category }: { category: CurriculumCategory }) {
   const { messages, locale } = useI18n();
@@ -33,13 +34,24 @@ export function CategoryPageContent({ category }: { category: CurriculumCategory
         {category.sections.map((section) => {
           const sectionLabel = locale === 'he' ? section.heLabel : section.enLabel;
           const sectionSublabel = locale === 'he' ? section.enLabel : section.heLabel;
+          const lessonCount = getLessonCountForSection(category.id, section.id);
+          const badgeLabel =
+            lessonCount > 0
+              ? t.lessonsCount.replace('{count}', String(lessonCount))
+              : t.comingSoonTitle;
+
           return (
             <Link
               key={section.id}
               href={`/app/lessons/${category.id}/${section.id}`}
               className="card-punch block rounded-2xl p-5 transition-transform hover:scale-[1.02]"
             >
-              <h2 className="font-display text-base font-semibold">{sectionLabel}</h2>
+              <div className="flex items-start justify-between gap-2">
+                <h2 className="font-display text-base font-semibold">{sectionLabel}</h2>
+                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  {badgeLabel}
+                </span>
+              </div>
               <p className="mt-1 text-xs text-muted-foreground">{sectionSublabel}</p>
             </Link>
           );
