@@ -7,6 +7,7 @@ Local development, migrations, CI/CD, secrets, and observability for **A Step Fo
 | [local-dev.md](./local-dev.md) | Docker Compose stack, ports, first-run |
 | [migrations.md](./migrations.md) | Alembic async setup, autogenerate workflow |
 | [ci-cd.md](./ci-cd.md) | GitHub Actions workflows, staging vs production |
+| [cron-jobs.md](./cron-jobs.md) | Scheduled Dreamer + Decay jobs (GitHub Actions cron) |
 | [secrets.md](./secrets.md) | Doppler, Vercel envs, local `.env.local` |
 | [observability.md](./observability.md) | Langfuse, OTel, Prometheus, Grafana, Sentry |
 
