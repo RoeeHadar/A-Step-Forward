@@ -1,0 +1,41 @@
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    if: secrets.CLERK_TEST_USER_EMAIL != ''
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Install frontend deps
+        run: pnpm install --frozen-lockfile || pnpm install
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter @asf/web exec playwright install --with-deps chromium
+
+      - name: Run chat E2E smoke test
+        working-directory: apps/web
+        env:
+          PLAYWRIGHT_BASE_URL: https://a-step-forward-waij.vercel.app
+          CLERK_TEST_USER_EMAIL: ${{ secrets.CLERK_TEST_USER_EMAIL }}
+          CLERK_TEST_USER_PASSWORD: ${{ secrets.CLERK_TEST_USER_PASSWORD }}
+        run: pnpm exec playwright test tests/e2e/chat.spec.ts
