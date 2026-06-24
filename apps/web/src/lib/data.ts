@@ -139,7 +139,33 @@ export async function fetchLesson(auth: AuthContext, lessonId: string): Promise<
     auth: { learnerId: auth.learnerId, role: auth.role },
   });
   if (remote) return remote;
+
+  // Fall back to the committed seed snapshot so the demo content is always
+  // accurate (the previous mock hard-coded "Introduction to Fractions"
+  // regardless of which lesson the learner requested).
+  const { getSeedLesson } = await import('./seed-lessons');
+  const seeded = getSeedLesson(lessonId);
+  if (seeded) return seeded;
   return { ...MOCK_LESSON, id: lessonId };
+}
+
+/**
+ * Public-facing lesson fetch.
+ *
+ * The `/v1/lessons/{id}` route still requires an auth header in dev/test envs,
+ * so we send a `demo` learner id to satisfy the dev fallback. When the API is
+ * unreachable (returns null), we fall through to the committed seed snapshot
+ * so the demo URL always renders something for the foundations-of-math course.
+ */
+export async function fetchLessonPublic(lessonId: string): Promise<Lesson | null> {
+  const remote = await apiFetchOptional(`/v1/lessons/${lessonId}`, {
+    schema: lessonSchema,
+    auth: { learnerId: 'demo-public', role: 'learner' },
+  });
+  if (remote) return remote;
+
+  const { getSeedLesson } = await import('./seed-lessons');
+  return getSeedLesson(lessonId);
 }
 
 export async function fetchProgress(auth: AuthContext): Promise<LearnerProgress> {
