@@ -25,7 +25,7 @@ import re
 import ssl
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
@@ -338,13 +338,14 @@ def _objectives_from_statements(
                 concepts=[concept_id],
             )
         )
-    return objectives if len(objectives) >= 2 else objectives + [
+    return objectives if len(objectives) >= 2 else [
+        *objectives,
         Objective(
             id=f"obj-{_slugify(page_slug)}-fallback",
             statement=f"Apply ideas from {page_slug.replace('-', ' ')}.",
             blooms_level=BloomsLevel.APPLY,
             concepts=[concept_id],
-        )
+        ),
     ]
 
 
@@ -535,7 +536,7 @@ async def ingest_book(
             continue
 
         embeddings = await embed_texts([c.text for c in chunks])
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         for chunk, embedding in zip(chunks, embeddings, strict=True):
             provenance = {
                 "kind": "import",
