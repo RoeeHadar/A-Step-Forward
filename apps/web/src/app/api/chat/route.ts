@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
-const BACKEND_FETCH_TIMEOUT_MS = 15000;
+const BACKEND_FETCH_TIMEOUT_MS = 25000;
 const BACKEND_MAX_ATTEMPTS = 2;
 
 export async function POST(req: Request) {
@@ -80,10 +80,12 @@ async function* streamAgentResponse(
             status: attemptRes.status,
             attempt,
           });
+          await new Promise((r) => setTimeout(r, 3000));
         }
       } catch (err) {
         if (attempt < BACKEND_MAX_ATTEMPTS - 1) {
           logger.warn('chat backend fetch failed, retrying', { attempt, err: String(err) });
+          await new Promise((r) => setTimeout(r, 3000));
         } else {
           throw err;
         }

@@ -18,6 +18,13 @@ from ..core.rate_limit import per_user
 router = APIRouter(prefix="/v1", tags=["chat"])
 
 
+@router.get("/warmup")
+async def warmup() -> dict[str, str]:
+    from datetime import datetime
+
+    return {"status": "warm", "ts": datetime.now().isoformat()}
+
+
 def _get_runner():
     from orchestrator.runner import OrchestratorRunner
 

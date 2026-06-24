@@ -13,7 +13,7 @@ import { agentColors } from '@/lib/design-tokens';
 import { useI18n } from '@/providers/i18n-provider';
 import { useChatUiStore } from '@/stores/ui-store';
 
-const CONNECTING_DELAY_MS = 3000;
+const CONNECTING_DELAY_MS = 800;
 const COLD_START_RETRY_MS = 15000;
 
 export function AgentChat({ agent }: { agent: string }) {
@@ -30,6 +30,10 @@ export function AgentChat({ agent }: { agent: string }) {
   useEffect(() => {
     setLastAgent(agentName);
   }, [agentName, setLastAgent]);
+
+  useEffect(() => {
+    fetch('/api/warmup').catch(() => {});
+  }, []);
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, stop } = useChat({
     api: '/api/chat',
