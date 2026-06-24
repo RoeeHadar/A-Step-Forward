@@ -1,0 +1,50 @@
+name: dependabot-lockfile
+
+# When Dependabot opens or updates an npm PR it only touches package.json,
+# leaving pnpm-lock.yaml stale. Vercel then fails with ERR_PNPM_OUTDATED_LOCKFILE.
+# This workflow checks out the Dependabot branch, regenerates the lockfile,
+# and pushes the update so the frozen-lockfile install succeeds.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-lockfile:
+    if: github.actor == 'dependabot[bot]' && contains(github.head_ref, 'npm_and_yarn')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Regenerate lockfile
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Commit updated lockfile if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet pnpm-lock.yaml; then
+            echo "Lockfile unchanged, nothing to commit."
+          else
+            git add pnpm-lock.yaml
+            git commit -m "chore(deps): regenerate pnpm-lock.yaml for dependabot update"
+            git push
+          fi
