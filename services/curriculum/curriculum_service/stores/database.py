@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
@@ -27,6 +28,7 @@ def get_session_factory(settings: CurriculumSettings | None = None) -> async_ses
     return _session_factory
 
 
+@asynccontextmanager
 async def session_scope(settings: CurriculumSettings | None = None) -> AsyncIterator[AsyncSession]:
     factory = get_session_factory(settings)
     async with factory() as session:

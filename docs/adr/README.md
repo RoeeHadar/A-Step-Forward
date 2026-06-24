@@ -12,6 +12,7 @@ ADRs in PRs.
 | [0001](0001-record-architecture-decisions.md) | Record architecture decisions | Accepted |
 | [0002](0002-memory-architecture.md) | Multi-layered, self-healing memory | Accepted |
 | [0003](0003-security-threat-model.md) | Security threat model | Accepted |
+| [0004](0004-llm-provider-groq.md) | Groq Cloud as primary LLM provider | Accepted |
 
 ## Authoring a new ADR
 
