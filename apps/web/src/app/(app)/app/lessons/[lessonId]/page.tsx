@@ -32,9 +32,19 @@ export default async function LessonPage({ params }: { params: Promise<{ lessonI
 
       <Card className="mb-8">
         <CardContent className="prose prose-neutral dark:prose-invert max-w-none pt-6">
-          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeKatex]}>
-            {lesson.body_md}
-          </ReactMarkdown>
+          {lesson.body_md.trim().length === 0 ? (
+            <div className="not-prose space-y-2 text-muted-foreground">
+              <p className="text-base font-medium text-foreground">Lesson coming soon</p>
+              <p className="text-sm">
+                We&apos;re still putting this lesson together. In the meantime, ask the Tutor below to
+                walk you through the topic.
+              </p>
+            </div>
+          ) : (
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeKatex]}>
+              {lesson.body_md}
+            </ReactMarkdown>
+          )}
         </CardContent>
       </Card>
 

@@ -79,7 +79,7 @@ export function AgentChat({ agent }: { agent: string }) {
 
         {error ? (
           <p className="border-t border-border px-4 py-2 text-sm text-destructive" role="alert">
-            {error.message}
+            {friendlyChatError(error)}
           </p>
         ) : null}
 
@@ -109,4 +109,17 @@ export function AgentChat({ agent }: { agent: string }) {
       </Card>
     </div>
   );
+}
+
+function friendlyChatError(error: unknown): string {
+  if (error instanceof Error && error.message) {
+    if (/401|unauthor/i.test(error.message)) {
+      return 'Please sign in to continue chatting.';
+    }
+    if (/network|fetch|failed/i.test(error.message)) {
+      return 'We hit a network hiccup reaching the agent. Please try again in a moment.';
+    }
+    return error.message;
+  }
+  return 'Something went wrong. Please try again.';
 }

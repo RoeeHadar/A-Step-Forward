@@ -143,6 +143,15 @@ Fly.io requires a credit card. Use **Render** instead — `render.yaml` is alrea
    ```
 5. Once deployed, copy the `https://asf-api.onrender.com` URL into Vercel env var `NEXT_PUBLIC_API_BASE_URL`.
 
+> **Status as of 2026-06-24 (Frontend sub-agent poll):** the host
+> `https://asf-api.onrender.com/` returned `{"mensaje":"hola"}` instead of our
+> FastAPI app, and `/healthz` returned 404. That means the Render service either
+> wasn't created from `render.yaml` yet or another Render account is squatting
+> the subdomain. After deploying via Blueprint, confirm `/healthz` returns
+> `{"status":"ok"}`; if the subdomain is taken, rename the service in
+> `render.yaml` (e.g. `asf-api-roeehadar`) and update
+> `NEXT_PUBLIC_API_BASE_URL` accordingly.
+
 ---
 
 ## 5a-i. Point the Vercel frontend at Render — 30 sec (manual one-time)

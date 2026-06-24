@@ -79,7 +79,11 @@ export function MemoryInspector({ memories }: { memories: MemoryRecord[] }) {
           </Card>
         ))}
         {filtered.length === 0 ? (
-          <p className="text-center text-muted-foreground">No memories match your search.</p>
+          <p className="text-center text-muted-foreground">
+            {items.length === 0
+              ? 'No memories yet — start chatting with an agent and we\u2019ll build a picture of how you learn.'
+              : 'No memories match your search.'}
+          </p>
         ) : null}
       </div>
     </div>

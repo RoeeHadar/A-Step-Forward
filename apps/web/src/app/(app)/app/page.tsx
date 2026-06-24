@@ -28,17 +28,23 @@ export default async function DashboardPage() {
             <CardDescription>Pick up where you left off</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {dashboard.recent_lessons.map((lesson) => (
-              <div key={lesson.id} className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <Link href={`/app/lessons/${lesson.id}`} className="font-medium hover:underline">
-                    {lesson.title}
-                  </Link>
-                  <span className="text-xs text-muted-foreground">{lesson.est_minutes} min</span>
+            {dashboard.recent_lessons.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                No lessons yet — pick an agent below and ask for a topic to get started.
+              </p>
+            ) : (
+              dashboard.recent_lessons.map((lesson) => (
+                <div key={lesson.id} className="space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <Link href={`/app/lessons/${lesson.id}`} className="font-medium hover:underline">
+                      {lesson.title}
+                    </Link>
+                    <span className="text-xs text-muted-foreground">{lesson.est_minutes} min</span>
+                  </div>
+                  <Progress value={lesson.progress * 100} aria-label={`${lesson.title} progress`} />
                 </div>
-                <Progress value={lesson.progress * 100} aria-label={`${lesson.title} progress`} />
-              </div>
-            ))}
+              ))
+            )}
           </CardContent>
         </Card>
 
@@ -48,17 +54,23 @@ export default async function DashboardPage() {
             <CardDescription>Concept-level progress</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {dashboard.mastery_summary.map((item) => (
-              <div key={item.concept_id} className="flex items-center justify-between gap-4">
-                <span>{item.concept_name}</span>
-                <div className="flex items-center gap-3">
-                  <Progress value={item.score * 100} className="w-24" aria-label={`${item.concept_name} mastery`} />
-                  <Badge variant={item.score >= 0.7 ? 'success' : 'secondary'}>
-                    {Math.round(item.score * 100)}%
-                  </Badge>
+            {dashboard.mastery_summary.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Mastery scores appear once you&apos;ve worked through a few questions.
+              </p>
+            ) : (
+              dashboard.mastery_summary.map((item) => (
+                <div key={item.concept_id} className="flex items-center justify-between gap-4">
+                  <span>{item.concept_name}</span>
+                  <div className="flex items-center gap-3">
+                    <Progress value={item.score * 100} className="w-24" aria-label={`${item.concept_name} mastery`} />
+                    <Badge variant={item.score >= 0.7 ? 'success' : 'secondary'}>
+                      {Math.round(item.score * 100)}%
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </CardContent>
         </Card>
       </div>

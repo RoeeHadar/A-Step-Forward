@@ -40,15 +40,21 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
           <CardDescription>Current scores across tracked concepts</CardDescription>
         </CardHeader>
         <CardContent className="h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={masteryData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Bar dataKey="score" fill="hsl(221 83% 53%)" radius={[4, 4, 0, 0]} name="Mastery %" />
-            </BarChart>
-          </ResponsiveContainer>
+          {masteryData.length === 0 ? (
+            <div className="flex h-full items-center justify-center text-center text-sm text-muted-foreground">
+              Track your progress as you learn — mastery scores show up after your first session.
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={masteryData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Bar dataKey="score" fill="hsl(221 83% 53%)" radius={[4, 4, 0, 0]} name="Mastery %" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
 
