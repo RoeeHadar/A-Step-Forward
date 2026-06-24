@@ -24,6 +24,18 @@ def _allow_insecure_hub_downloads() -> None:
         ssl._create_default_https_context = ssl._create_unverified_context  # type: ignore[method-assign]
     except Exception:
         pass
+    try:
+        import httpx
+
+        _orig_init = httpx.Client.__init__
+
+        def _patched_init(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            kwargs["verify"] = False
+            _orig_init(self, *args, **kwargs)
+
+        httpx.Client.__init__ = _patched_init  # type: ignore[method-assign]
+    except Exception:
+        pass
 
 
 class Embedder:
