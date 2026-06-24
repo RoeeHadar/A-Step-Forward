@@ -328,7 +328,12 @@ def _objectives_from_statements(
             f"Apply concepts from {page_slug.replace('-', ' ')} to practice problems.",
         ]
     objectives: list[Objective] = []
-    blooms_cycle = [BloomsLevel.UNDERSTAND, BloomsLevel.APPLY, BloomsLevel.ANALYZE, BloomsLevel.REMEMBER]
+    blooms_cycle = [
+        BloomsLevel.UNDERSTAND,
+        BloomsLevel.APPLY,
+        BloomsLevel.ANALYZE,
+        BloomsLevel.REMEMBER,
+    ]
     for idx, statement in enumerate(statements[:4]):
         objectives.append(
             Objective(
@@ -338,15 +343,19 @@ def _objectives_from_statements(
                 concepts=[concept_id],
             )
         )
-    return objectives if len(objectives) >= 2 else [
-        *objectives,
-        Objective(
-            id=f"obj-{_slugify(page_slug)}-fallback",
-            statement=f"Apply ideas from {page_slug.replace('-', ' ')}.",
-            blooms_level=BloomsLevel.APPLY,
-            concepts=[concept_id],
-        ),
-    ]
+    return (
+        objectives
+        if len(objectives) >= 2
+        else [
+            *objectives,
+            Objective(
+                id=f"obj-{_slugify(page_slug)}-fallback",
+                statement=f"Apply ideas from {page_slug.replace('-', ' ')}.",
+                blooms_level=BloomsLevel.APPLY,
+                concepts=[concept_id],
+            ),
+        ]
+    )
 
 
 def page_to_lesson(page: ParsedPage, book_slug: str, book_cfg: dict[str, str]) -> Lesson:
@@ -418,7 +427,9 @@ def parse_page_html(*, book_slug: str, page_slug: str, html: str) -> ParsedPage 
         return None
     objectives = _extract_objectives(body)
     source_url = _page_url(book_slug, page_slug)
-    body_md = f"# {title}\n\n{body}\n\n---\n\n*Source: [{source_url}]({source_url}) · License: {LICENSE}*"
+    body_md = (
+        f"# {title}\n\n{body}\n\n---\n\n*Source: [{source_url}]({source_url}) · License: {LICENSE}*"
+    )
     return ParsedPage(
         slug=page_slug,
         title=title,
@@ -499,7 +510,9 @@ async def ingest_book(
     database_url: str | None,
     max_pages: int | None,
 ) -> dict[str, Any]:
-    book_cfg = BOOK_CONFIG.get(book_slug, {"title": book_slug, "subject": book_slug, "level": "intermediate"})
+    book_cfg = BOOK_CONFIG.get(
+        book_slug, {"title": book_slug, "subject": book_slug, "level": "intermediate"}
+    )
     meta = await resolve_book(client, book_slug)
     print(f"[openstax] {book_slug}: {meta.get('title', book_cfg.get('title', book_slug))}")
 
@@ -576,7 +589,9 @@ async def ingest_book(
     }
 
 
-def _lessons_to_seed_payload(lessons: list[Lesson], book_slug: str, book_cfg: dict[str, str]) -> list[dict]:
+def _lessons_to_seed_payload(
+    lessons: list[Lesson], book_slug: str, book_cfg: dict[str, str]
+) -> list[dict]:
     unit_id = f"openstax-{book_cfg['subject']}"
     unit_title = book_cfg["title"]
     course_id = f"openstax-{book_cfg['subject']}"
@@ -629,7 +644,9 @@ async def run_ingest(args: argparse.Namespace) -> dict[str, Any]:
     if args.export_lessons:
         export_path = Path(args.export_lessons)
         export_path.parent.mkdir(parents=True, exist_ok=True)
-        export_path.write_text(json.dumps(all_lessons, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        export_path.write_text(
+            json.dumps(all_lessons, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
         print(f"[export] wrote {len(all_lessons)} lessons to {export_path}")
 
     return totals
@@ -643,7 +660,9 @@ def main() -> int:
         default=list(DEFAULT_BOOKS),
         help=f"OpenStax book slugs (default: {' '.join(DEFAULT_BOOKS)})",
     )
-    parser.add_argument("--dry-run", action="store_true", help="Discover pages without fetch/embed/DB.")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Discover pages without fetch/embed/DB."
+    )
     parser.add_argument(
         "--parse-only",
         action="store_true",

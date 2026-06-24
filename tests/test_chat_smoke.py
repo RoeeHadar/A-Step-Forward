@@ -1,4 +1,5 @@
 """Smoke test: Tutor agent streams a non-empty response (Groq client mocked)."""
+
 from __future__ import annotations
 
 import sys
