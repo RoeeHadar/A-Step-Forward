@@ -98,3 +98,19 @@ Render dashboard → **asf-api** → Environment: `GROQ_API_KEY`, `CLERK_JWKS_UR
 
 When browser validation and key rotation are done, delete this file in a commit titled
 `chore: launched 🚀`.
+
+---
+
+## GraphRAG seeding (stream J)
+
+- **DATABASE_URL** must point to Neon Postgres for kg_chunks vector search to work.
+- **NEO4J_URI** must point to AuraDB Free for KG walk enrichment; without it, hybrid search
+  falls back to vector-only (graceful degradation is implemented).
+- Authenticated hybrid search is already wired at `POST /v1/graphrag/hybrid` (via
+  `GraphRAGService`). Public graceful GET search: `GET /v1/search?q=…&top_k=5`.
+- To seed foundations-of-math content: run `python scripts/ingest_graphrag.py` with
+  `DATABASE_URL` and `NEO4J_URI` set. For OpenStax STEM bulk ingest:
+  `python scripts/ingest_content.py` with `DATABASE_URL` set (upserts kg_chunks with
+  384-dim embeddings; apply Alembic migration `0006_kg_chunks_384` first).
+- sentence-transformers must be installed: `pip install sentence-transformers asyncpg` in
+  the services/graphrag environment.

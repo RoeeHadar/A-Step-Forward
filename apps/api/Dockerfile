@@ -22,6 +22,7 @@ RUN uv sync --frozen --no-dev --package asf-api
 # Copy source code
 COPY packages/schemas packages/schemas
 COPY packages/agents packages/agents
+COPY services/__init__.py services/__init__.py
 COPY services/memory services/memory
 COPY services/graphrag services/graphrag
 COPY services/orchestrator services/orchestrator
