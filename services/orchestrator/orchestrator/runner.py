@@ -16,9 +16,6 @@ import logging
 from collections.abc import AsyncIterator
 from typing import TYPE_CHECKING
 
-from memory_service.api import get_memory_service
-from schemas.agents import AgentName, ChatChunk, ChatRequest, RouteDecision
-
 from agents import AGENT_FACTORIES
 from agents.base.agent import AgentContext
 from agents.system.orchestrator import (
@@ -26,6 +23,8 @@ from agents.system.orchestrator import (
     OrchestratorInput,
     build_agent_summaries,
 )
+from memory_service.api import get_memory_service
+from schemas.agents import AgentName, ChatChunk, ChatRequest, RouteDecision
 
 from .episodic import persist_episodic_turn
 from .graph import build_graph, new_context

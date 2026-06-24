@@ -10,7 +10,7 @@ from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from schemas.common import Provenance
 from schemas.memory import MemoryHealthReport, MemoryRecord, MemoryType
@@ -34,7 +34,7 @@ class DreamWindow:
 async def gather_window(
     repo: MemoryRepository, *, learner_id: str, hours: int
 ) -> tuple[DreamWindow, list[MemoryRecord]]:
-    end = datetime.now(timezone.utc)
+    end = datetime.now(UTC)
     start = end - timedelta(hours=hours)
     rows = [r async for r in _iter_window(repo, learner_id=learner_id, start=start, end=end)]
     return DreamWindow(learner_id=learner_id, start=start, end=end), rows
@@ -111,10 +111,10 @@ async def _consolidate_cluster_with_llm(
             ),
             confidence=0.75,
             salience=0.6,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
             tags=["dreamer", "synthesized"],
         )
-    except Exception:  # noqa: BLE001
+    except Exception:
         logger.exception("dreamer.consolidate_cluster failed")
         return None
 
@@ -151,7 +151,7 @@ async def dream(
                 try:
                     await repo.upsert(synthetic)
                     promoted += 1
-                except Exception:  # noqa: BLE001
+                except Exception:
                     logger.exception("dreamer.upsert_synthetic failed")
 
     # Consolidation pass (merge near-duplicate semantics)
@@ -163,11 +163,11 @@ async def dream(
     # Decay / archive sweep
     for row in rows:
         if should_archive(row, threshold=archive_threshold):
-            row.archived_at = datetime.now(timezone.utc)
+            row.archived_at = datetime.now(UTC)
             try:
                 await repo.upsert(row)
                 archived += 1
-            except Exception:  # noqa: BLE001
+            except Exception:
                 logger.exception("dreamer.archive failed for %s", row.id)
 
     return MemoryHealthReport(

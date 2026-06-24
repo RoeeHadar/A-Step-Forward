@@ -66,7 +66,7 @@ async def maybe_write_skill(
                 ),
             )
             await memory_api.write(write_input, agent_id=agent_name)
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
     return adaptation

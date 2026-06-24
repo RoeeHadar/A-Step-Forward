@@ -3,10 +3,10 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 
 
-class AffectSignal(str, Enum):
+class AffectSignal(StrEnum):
     FRUSTRATED = "frustrated"
     CONFUSED = "confused"
     DESPAIR = "despair"
@@ -36,7 +36,7 @@ _PATTERNS: list[tuple[AffectSignal, list[str]]] = [
     (AffectSignal.CELEBRATING, [
         r"\bi get it\b", r"\bi understand\b", r"\bgot it\b", r"makes sense",
         r"(yes|yay|great|awesome|perfect|finally)",
-        r"הבנתי", r"מגניב", r"\bכן\b", r"מעולה",
+        r"הבנתי", r"מגניב", r"\bכן\b", r"מעולה",  # noqa: RUF001
     ]),
     (AffectSignal.ENGAGED, [
         r"(interesting|tell me more|what about|how does|why does)",

@@ -16,7 +16,6 @@ from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel
-
 from schemas.agents import AgentManifest, AgentName
 
 from .affect_detector import detect_affect
@@ -25,8 +24,8 @@ from .memory_hydrator import HydratedMemory, hydrate
 from .safety import SafetyModeration
 from .skill_accumulator import maybe_write_skill
 
-I = TypeVar("I", bound=BaseModel)
-O = TypeVar("O", bound=BaseModel)
+I = TypeVar("I", bound=BaseModel)  # noqa: E741
+O = TypeVar("O", bound=BaseModel)  # noqa: E741
 
 
 @dataclass
@@ -62,7 +61,13 @@ class Agent(Generic[I, O]):
     llm: LLM
     safety: SafetyModeration
 
-    def __init__(self, *, manifest: AgentManifest, llm: LLM | None = None, safety: SafetyModeration | None = None) -> None:
+    def __init__(
+        self,
+        *,
+        manifest: AgentManifest,
+        llm: LLM | None = None,
+        safety: SafetyModeration | None = None,
+    ) -> None:
         self.manifest = manifest
         self.name = manifest.name
         self.llm = llm or LLM(model=manifest.primary_model, fallback_model=manifest.fallback_model)

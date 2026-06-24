@@ -45,5 +45,5 @@ async def hydrate(
             summary="\n".join(lines),
             record_ids=[r.record.id for r in results],
         )
-    except Exception:  # noqa: BLE001
+    except Exception:
         return HydratedMemory(summary="", record_ids=[])
