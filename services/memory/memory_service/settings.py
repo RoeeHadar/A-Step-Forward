@@ -30,6 +30,9 @@ class MemorySettings(BaseSettings):
     presidio_enabled: bool = True
     llm_judge_enabled: bool = False
 
+    groq_api_key: str | None = None
+    llm_default_model: str = "llama-3.3-70b-versatile"
+
     compaction_verbatim_turns: int = 6
     verification_min_salience: float = 0.6
     verification_max_age_days: int = 60

@@ -55,6 +55,8 @@ class APISettings(BaseSettings):
     llm_default_model: str = "llama-3.3-70b-versatile"
     llm_cheap_model: str = "llama-3.1-8b-instant"
 
+    admin_key: str = ""  # if set, POST /v1/admin/* requires X-Admin-Key header
+
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _parse_cors_origins(cls, value: Any) -> Any:
