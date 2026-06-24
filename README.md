@@ -14,18 +14,32 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT licensed" /></a>
   <a href="SECURITY.md"><img src="https://img.shields.io/badge/security-disclosure-informational" alt="Security policy" /></a>
-  <a href="docs/marketing/copy.md"><img src="https://img.shields.io/badge/status-Phase%201%20staging-orange" alt="Status: staging" /></a>
+  <a href="https://github.com/RoeeHadar/A-Step-Forward/actions/workflows/lint-test.yml"><img src="https://github.com/RoeeHadar/A-Step-Forward/actions/workflows/lint-test.yml/badge.svg" alt="CI: lint &amp; test" /></a>
+  <a href="https://a-step-forward-waij.vercel.app"><img src="https://img.shields.io/badge/deployed-Vercel-black?logo=vercel" alt="Deployed on Vercel" /></a>
   <img src="https://img.shields.io/badge/stack-Next.js%2015%20%C2%B7%20FastAPI%20%C2%B7%20LangGraph-black" alt="Stack" />
   <img src="https://img.shields.io/badge/i18n-en%20%C2%B7%20he-purple" alt="i18n" />
 </p>
 
 <p align="center">
-  <a href="https://astepforward.app">Live (post-launch)</a> ·
+  <a href="https://a-step-forward-waij.vercel.app"><strong>Live site</strong></a> ·
   <a href="docs/diagrams/architecture.md">Architecture</a> ·
   <a href="AGENTS.md">Agents</a> ·
   <a href="docs/adr/README.md">ADRs</a> ·
   <a href="docs/marketing/copy.md">Pitch</a>
 </p>
+
+---
+
+> **A Step Forward** is an open-source, AI-native learning center where a coordinated team of
+> specialized agents — Tutor, Mentor, Coach, Reviewer, Researcher — teaches you, assesses you,
+> remembers what you've learned across sessions, and adapts. Built with Next.js 15, FastAPI,
+> LangGraph, and a multi-layered memory system backed by Postgres + pgvector + Neo4j.
+> The default language is **Hebrew (עברית)** with full RTL layout; English is available via the
+> language switcher. MIT licensed, self-hostable, and eval-gated.
+>
+> **א צעד קדימה** הוא מרכז למידה מבוסס-בינה מלאכותית בקוד פתוח. צוות של סוכנים מתמחים — מורה,
+> מנטור, מאמן, מבקר, חוקר — מלמד אתכם, מעריך אתכם, זוכר את מה שלמדתם לאורך שיחות, ומסתגל
+> אליכם. ממשק ברירת המחדל הוא עברית עם פריסה מימין לשמאל. רישיון MIT, ניתן לאחסון עצמי.
 
 ---
 
@@ -83,7 +97,8 @@ cd apps/web && pnpm install && pnpm dev
 ```
 
 Open <http://localhost:3000>, sign up via Clerk (dev keys in `.env.example`), and
-chat with the Tutor. Detailed walkthroughs:
+chat with the Tutor. The deployed version is live at
+<https://a-step-forward-waij.vercel.app>. Detailed walkthroughs:
 
 - [`docs/infra/local-dev.md`](docs/infra/local-dev.md) — full stack, ports, restore drills.
 - [`docs/infra/migrations.md`](docs/infra/migrations.md) — Alembic multi-head graph and `make migrate-check`.
