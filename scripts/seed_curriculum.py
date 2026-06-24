@@ -68,9 +68,15 @@ async def _seed(course_id: str) -> int:
             CurriculumLessonIndex,
         )
 
-        course_count = (await session.execute(select(func.count()).select_from(CurriculumCourse))).scalar_one()
-        concept_count = (await session.execute(select(func.count()).select_from(CurriculumConcept))).scalar_one()
-        lesson_count = (await session.execute(select(func.count()).select_from(CurriculumLessonIndex))).scalar_one()
+        course_count = (
+            await session.execute(select(func.count()).select_from(CurriculumCourse))
+        ).scalar_one()
+        concept_count = (
+            await session.execute(select(func.count()).select_from(CurriculumConcept))
+        ).scalar_one()
+        lesson_count = (
+            await session.execute(select(func.count()).select_from(CurriculumLessonIndex))
+        ).scalar_one()
 
     seeded_lessons = sum(len(unit.lessons) for unit in course.units)
     print(
