@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import logging
 from collections.abc import AsyncIterator
+from typing import TYPE_CHECKING
 
+from memory_service.api import get_memory_service
 from schemas.agents import AgentName, ChatChunk, ChatRequest, RouteDecision
 
 from agents import AGENT_FACTORIES
@@ -25,8 +27,12 @@ from agents.system.orchestrator import (
     build_agent_summaries,
 )
 
+from .episodic import persist_episodic_turn
 from .graph import build_graph, new_context
 from .invoke import AGENT_DISPATCH, invoke_registered_agent
+
+if TYPE_CHECKING:
+    from memory_service.api import MemoryService
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +41,9 @@ STREAMING_AGENTS: frozenset[AgentName] = frozenset({AgentName.TUTOR})
 
 
 class OrchestratorRunner:
-    def __init__(self) -> None:
+    def __init__(self, memory_service: MemoryService | None = None) -> None:
         self._graph = build_graph()
+        self._memory = memory_service or get_memory_service()
 
     async def handle(
         self,
@@ -70,14 +77,25 @@ class OrchestratorRunner:
             return
 
         selected = decision.selected_agents[0]
+        chunks: list[ChatChunk] = []
 
         if selected in STREAMING_AGENTS:
             async for chunk in self._stream_agent(selected, request, ctx):
+                chunks.append(chunk)
                 yield chunk
-            return
+        else:
+            async for chunk in self._fallback_dispatch(selected, request, ctx):
+                chunks.append(chunk)
+                yield chunk
 
-        async for chunk in self._fallback_dispatch(selected, request, ctx):
-            yield chunk
+        await persist_episodic_turn(
+            self._memory,
+            request=request,
+            ctx=ctx,
+            agent=selected,
+            chunks=chunks,
+            child_mode=ctx.child_mode,
+        )
 
     async def _route(self, request: ChatRequest, ctx: AgentContext) -> RouteDecision | None:
         try:
