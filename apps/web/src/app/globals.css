@@ -76,19 +76,43 @@
 
 .mesh-gradient {
   background-image:
-    radial-gradient(at 20% 20%, hsl(264 89% 66% / 0.18), transparent 50%),
-    radial-gradient(at 80% 25%, hsl(188 95% 50% / 0.12), transparent 50%),
-    radial-gradient(at 50% 80%, hsl(322 81% 60% / 0.1), transparent 50%);
+    radial-gradient(at 20% 20%, hsl(264 89% 66% / 0.28), transparent 50%),
+    radial-gradient(at 80% 25%, hsl(188 95% 50% / 0.22), transparent 50%),
+    radial-gradient(at 50% 80%, hsl(322 81% 60% / 0.2), transparent 50%);
   filter: blur(40px);
 }
 
 .dark .mesh-gradient {
   background-image:
-    radial-gradient(at 20% 20%, hsl(264 89% 66% / 0.35), transparent 50%),
-    radial-gradient(at 80% 25%, hsl(188 95% 50% / 0.22), transparent 50%),
-    radial-gradient(at 50% 80%, hsl(322 81% 60% / 0.18), transparent 50%);
-  filter: blur(60px);
+    radial-gradient(at 20% 20%, hsl(264 89% 66% / 0.55), transparent 60%),
+    radial-gradient(at 80% 25%, hsl(188 95% 50% / 0.42), transparent 60%),
+    radial-gradient(at 50% 80%, hsl(322 81% 60% / 0.38), transparent 60%);
+  filter: blur(40px);
 }
+
+/* Solid-color orbs — used for visible hero blobs. Each orb is one color so the
+   blur produces a vibrant glow instead of a washed-out three-color mush. */
+.orb-violet {
+  background: radial-gradient(circle at center, hsl(264 89% 66% / 0.9), hsl(264 89% 50% / 0.35) 50%, transparent 75%);
+  filter: blur(50px);
+}
+.orb-cyan {
+  background: radial-gradient(circle at center, hsl(188 95% 55% / 0.85), hsl(188 95% 45% / 0.3) 50%, transparent 75%);
+  filter: blur(50px);
+}
+.orb-magenta {
+  background: radial-gradient(circle at center, hsl(322 81% 65% / 0.8), hsl(322 81% 50% / 0.3) 50%, transparent 75%);
+  filter: blur(50px);
+}
+.orb-amber {
+  background: radial-gradient(circle at center, hsl(38 95% 60% / 0.7), hsl(38 95% 50% / 0.25) 50%, transparent 75%);
+  filter: blur(50px);
+}
+/* Lighter in light mode for AA contrast on text */
+:root:not(.dark) .orb-violet { opacity: 0.45; }
+:root:not(.dark) .orb-cyan { opacity: 0.4; }
+:root:not(.dark) .orb-magenta { opacity: 0.4; }
+:root:not(.dark) .orb-amber { opacity: 0.35; }
 
 .bg-dot-grid {
   background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);

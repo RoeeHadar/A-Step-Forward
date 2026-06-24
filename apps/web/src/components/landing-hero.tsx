@@ -141,21 +141,27 @@ export function LandingHero() {
   return (
     <>
       {/* Section 1: Hero + Bento */}
-      <section className="relative min-h-screen overflow-hidden">
-        {/* Floating orbs */}
+      <section className="relative min-h-[85vh] overflow-hidden">
+        {/* Floating colored orbs — one bright color each so the blur produces
+            a vibrant glow instead of a washed-out three-color mush. */}
         <div
-          className="orb-float pointer-events-none absolute -start-32 -top-32 h-[280px] w-[280px] rounded-full mesh-gradient opacity-80 sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px]"
+          className="orb-float orb-violet pointer-events-none absolute -start-32 -top-40 h-[420px] w-[420px] rounded-full sm:h-[560px] sm:w-[560px] lg:h-[680px] lg:w-[680px]"
           style={{ animationDelay: '0s' }}
           aria-hidden
         />
         <div
-          className="orb-float pointer-events-none absolute -end-20 top-10 h-[220px] w-[220px] rounded-full mesh-gradient opacity-70 sm:h-[320px] sm:w-[320px] lg:h-[400px] lg:w-[400px]"
+          className="orb-float orb-cyan pointer-events-none absolute -end-24 top-20 h-[340px] w-[340px] rounded-full sm:h-[460px] sm:w-[460px] lg:h-[560px] lg:w-[560px]"
           style={{ animationDelay: '-7s' }}
           aria-hidden
         />
         <div
-          className="orb-float pointer-events-none absolute bottom-0 start-1/2 h-[180px] w-[360px] -translate-x-1/2 rounded-full mesh-gradient opacity-60 sm:h-[240px] sm:w-[480px] lg:h-[300px] lg:w-[600px]"
+          className="orb-float orb-magenta pointer-events-none absolute bottom-[-120px] start-1/2 h-[300px] w-[480px] -translate-x-1/2 rounded-full sm:h-[380px] sm:w-[620px] lg:h-[460px] lg:w-[820px]"
           style={{ animationDelay: '-14s' }}
+          aria-hidden
+        />
+        <div
+          className="orb-float orb-amber pointer-events-none absolute top-1/3 end-1/4 h-[220px] w-[220px] rounded-full sm:h-[300px] sm:w-[300px]"
+          style={{ animationDelay: '-10s' }}
           aria-hidden
         />
 
