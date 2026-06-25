@@ -108,12 +108,22 @@ def _extract_year(filename: str) -> int | None:
     return None
 
 
-def _normalize_database_url(url: str) -> str:
-    if url.startswith("postgresql://"):
-        return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+def _normalize_database_url(url: str) -> tuple[str, dict]:
+    """Strip asyncpg-incompatible query params; return (clean_url, connect_args)."""
+    from urllib.parse import parse_qs, urlparse, urlunparse
+
     if url.startswith("postgres://"):
-        return url.replace("postgres://", "postgresql+asyncpg://", 1)
-    return url
+        url = "postgresql+asyncpg://" + url[len("postgres://"):]
+    elif url.startswith("postgresql://"):
+        url = "postgresql+asyncpg://" + url[len("postgresql://"):]
+    parsed = urlparse(url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+    sslmode = params.pop("sslmode", ["disable"])[0]
+    params.pop("channel_binding", None)
+    remaining = "&".join(f"{k}={v[0]}" for k, v in params.items())
+    clean = urlunparse(parsed._replace(query=remaining))
+    connect_args = {"ssl": True} if sslmode in ("require", "verify-ca", "verify-full") else {}
+    return clean, connect_args
 
 
 def _extract_pdf_text(pdf_path: Path) -> list[tuple[int, str]]:
@@ -426,7 +436,8 @@ async def run_ingest(args: argparse.Namespace) -> IngestStats:
     stats = IngestStats()
     pdfs = sorted(source_root.rglob("*.pdf"))
 
-    engine = create_async_engine(_normalize_database_url(db_url), pool_pre_ping=True)
+    clean_url, connect_args = _normalize_database_url(db_url)
+    engine = create_async_engine(clean_url, connect_args=connect_args, pool_pre_ping=True)
     sessionmaker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with sessionmaker() as session:
@@ -491,6 +502,10 @@ def _watch(source: Path, db_url: str, bucket: str | None) -> None:
 
 
 def main() -> int:
+    # asyncpg + SSL on Windows requires SelectorEventLoop (not the default ProactorEventLoop)
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     parser = argparse.ArgumentParser(description="Ingest Learning Database PDFs.")
     parser.add_argument("--source", default="Learning Database/", help="Root folder of PDFs")
     parser.add_argument("--db-url", default="", help="Postgres URL (or DATABASE_URL env)")
