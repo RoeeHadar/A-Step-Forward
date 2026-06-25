@@ -1,0 +1,46 @@
+name: Seed DB (one-shot)
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Which seed to run"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - diagnostic
+          - knowledge-graph
+
+jobs:
+  seed:
+    name: Run seed scripts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: "3.11"
+
+      - name: Install workspace deps
+        run: uv sync --all-packages --no-dev
+
+      - name: Seed diagnostic_items
+        if: ${{ inputs.target == 'all' || inputs.target == 'diagnostic' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: uv run python scripts/seed_diagnostic_items.py
+
+      - name: Seed knowledge graph (Neo4j)
+        if: ${{ inputs.target == 'all' || inputs.target == 'knowledge-graph' }}
+        env:
+          NEO4J_URI: ${{ secrets.NEO4J_URI }}
+          NEO4J_USER: ${{ secrets.NEO4J_USER }}
+          NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
+          USE_NEO4J: "true"
+        run: uv run python scripts/seed_knowledge_graph.py
