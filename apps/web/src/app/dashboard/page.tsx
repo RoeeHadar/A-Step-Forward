@@ -2,19 +2,20 @@ import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
-import { fetchCurrentPlan } from '@/lib/learning-path-api';
+import { getCurrentPlan, dbConfigured } from '@/lib/neon-db';
+import { ensureOnboarded } from '@/lib/onboarding-gate';
 import { Button } from '@asf/ui/button';
 
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const { userId, getToken } = await auth();
+  const { userId } = await auth();
   if (!userId) {
     return null;
   }
 
-  const token = await getToken();
-  const plan = token ? await fetchCurrentPlan(token) : null;
+  await ensureOnboarded(userId, '/dashboard');
+  const plan = dbConfigured ? await getCurrentPlan(userId).catch(() => null) : null;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">

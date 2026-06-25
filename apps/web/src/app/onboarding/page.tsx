@@ -25,6 +25,9 @@ interface Step1 {
   gradeLevel: string;
   pointsGroup: string;
   subjects: Subject[];
+  nextTestName: string;
+  nextTestDate: string;
+  finalGoalDate: string;
 }
 
 interface Step2 {
@@ -36,6 +39,17 @@ interface Step2 {
 }
 
 interface Step3 {
+  // mental / motivation
+  motivation: number; // 1-10
+  anxiety: number; // 1-10
+  confidence: number; // 1-10
+  preferredTime: 'morning' | 'afternoon' | 'evening' | 'night';
+  hasQuietSpace: boolean;
+  supportSystem: 'strong' | 'some' | 'none';
+  whyThisGoal: string;
+}
+
+interface Step4 {
   selfScores: Record<string, number>;
 }
 
@@ -123,6 +137,7 @@ function SliderField({
   value,
   onChange,
   displayValue,
+  hint,
 }: {
   label: string;
   min: number;
@@ -131,6 +146,7 @@ function SliderField({
   value: number;
   onChange: (v: number) => void;
   displayValue?: string;
+  hint?: string;
 }) {
   return (
     <div className="space-y-2">
@@ -151,6 +167,7 @@ function SliderField({
         <span>{min}</span>
         <span>{max}</span>
       </div>
+      {hint && <p className="text-xs text-white/40">{hint}</p>}
     </div>
   );
 }
@@ -169,6 +186,9 @@ export default function OnboardingPage() {
     gradeLevel: '11',
     pointsGroup: '5',
     subjects: ['math'],
+    nextTestName: '',
+    nextTestDate: '',
+    finalGoalDate: '',
   });
 
   const [s2, setS2] = useState<Step2>({
@@ -179,7 +199,17 @@ export default function OnboardingPage() {
     attentionSpan: 45,
   });
 
-  const [s3, setS3] = useState<Step3>({ selfScores: {} });
+  const [s3, setS3] = useState<Step3>({
+    motivation: 7,
+    anxiety: 5,
+    confidence: 5,
+    preferredTime: 'evening',
+    hasQuietSpace: true,
+    supportSystem: 'some',
+    whyThisGoal: '',
+  });
+
+  const [s4, setS4] = useState<Step4>({ selfScores: {} });
 
   function toggleSubject(sub: Subject) {
     setS1((prev) => ({
@@ -191,17 +221,23 @@ export default function OnboardingPage() {
   }
 
   function setScore(conceptId: string, val: number) {
-    setS3((prev) => ({ ...prev, selfScores: { ...prev.selfScores, [conceptId]: val } }));
+    setS4((prev) => ({ ...prev, selfScores: { ...prev.selfScores, [conceptId]: val } }));
   }
 
-  const conceptsForStep3 = s1.subjects.flatMap((sub) => CONCEPTS_BY_SUBJECT[sub] ?? []);
-  const needsPointsGroup = s1.subjects.includes('math') && s1.gradeLevel !== 'university_1' && s1.gradeLevel !== 'university_2plus';
+  const conceptsForStep4 = s1.subjects.flatMap((sub) => CONCEPTS_BY_SUBJECT[sub] ?? []);
+  const needsPointsGroup =
+    s1.subjects.includes('math') &&
+    s1.gradeLevel !== 'university_1' &&
+    s1.gradeLevel !== 'university_2plus';
 
   async function handleSubmit() {
     setSubmitting(true);
     setError('');
     try {
-      const goalText = s1.goal === 'other' ? s1.goalOther : (GOALS.find((g) => g.value === s1.goal)?.label ?? s1.goal);
+      const goalText =
+        s1.goal === 'other'
+          ? s1.goalOther
+          : (GOALS.find((g) => g.value === s1.goal)?.label ?? s1.goal);
       const res = await fetch('/api/onboarding/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -213,8 +249,28 @@ export default function OnboardingPage() {
           hours_per_week: s2.hoursPerWeek,
           preferred_style: s2.style,
           attention_span: s2.attentionSpan,
-          self_scores: s3.selfScores,
+          self_scores: s4.selfScores,
           background_notes: `Self-rating: ${s2.selfRating}/10. Teacher rating: ${s2.teacherRating}/10.`,
+          next_test_name: s1.nextTestName || null,
+          next_test_date: s1.nextTestDate || null,
+          final_goal_date: s1.finalGoalDate || null,
+          mental_state: {
+            motivation: s3.motivation,
+            anxiety: s3.anxiety,
+            confidence: s3.confidence,
+            preferred_study_time: s3.preferredTime,
+            has_quiet_space: s3.hasQuietSpace,
+            support_system: s3.supportSystem,
+            why_this_goal: s3.whyThisGoal,
+          },
+          personality_profile: {
+            // netflix-like categorical preferences
+            past_teacher_rating: s2.teacherRating,
+            self_rating: s2.selfRating,
+            learning_style: s2.style,
+            attention_span_min: s2.attentionSpan,
+            hours_per_week: s2.hoursPerWeek,
+          },
         }),
       });
       if (!res.ok) throw new Error(await res.text());
@@ -229,14 +285,16 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-neutral-950 text-white">
       <SiteHeader />
       <main className="mx-auto max-w-xl px-4 py-12">
-        <StepIndicator current={step} total={3} />
+        <StepIndicator current={step} total={4} />
 
-        {/* ── Step 0: Goals ── */}
+        {/* ── Step 0: Goals + timeline ── */}
         {step === 0 && (
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl font-bold mb-1">What are you working towards?</h1>
-              <p className="text-sm text-white/50">This helps us build your personalized plan.</p>
+              <p className="text-sm text-white/50">
+                We will use your next test date and final goal date to pace your weekly plan.
+              </p>
             </div>
 
             <div className="space-y-2">
@@ -278,7 +336,7 @@ export default function OnboardingPage() {
                         : 'border-white/10 bg-white/5 text-white/50 hover:border-white/30'
                     }`}
                   >
-                    {sub === 'math' ? '📐 Math' : '⚛️ Physics'}
+                    {sub === 'math' ? 'Math' : 'Physics'}
                   </button>
                 ))}
               </div>
@@ -286,7 +344,9 @@ export default function OnboardingPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="grade-level" className="block text-xs text-white/50 mb-1.5">Grade level</label>
+                <label htmlFor="grade-level" className="block text-xs text-white/50 mb-1.5">
+                  Grade level
+                </label>
                 <select
                   id="grade-level"
                   value={s1.gradeLevel}
@@ -294,13 +354,17 @@ export default function OnboardingPage() {
                   className="w-full px-3 py-2 rounded-lg border border-white/10 bg-neutral-900 text-sm focus:outline-none focus:border-accent-cyan"
                 >
                   {GRADE_LEVELS.map((g) => (
-                    <option key={g.value} value={g.value}>{g.label}</option>
+                    <option key={g.value} value={g.value}>
+                      {g.label}
+                    </option>
                   ))}
                 </select>
               </div>
               {needsPointsGroup && (
                 <div>
-                  <label htmlFor="points-group" className="block text-xs text-white/50 mb-1.5">Math units</label>
+                  <label htmlFor="points-group" className="block text-xs text-white/50 mb-1.5">
+                    Math units
+                  </label>
                   <select
                     id="points-group"
                     value={s1.pointsGroup}
@@ -315,22 +379,70 @@ export default function OnboardingPage() {
               )}
             </div>
 
+            <div className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-4">
+              <p className="text-sm font-medium text-white/80">Timeline</p>
+              <div>
+                <label htmlFor="next-test-name" className="block text-xs text-white/50 mb-1.5">
+                  Next big event / test
+                </label>
+                <input
+                  id="next-test-name"
+                  type="text"
+                  placeholder="e.g. school midterm, mock Bagrut, semester final"
+                  value={s1.nextTestName}
+                  onChange={(e) => setS1((p) => ({ ...p, nextTestName: e.target.value }))}
+                  className="w-full px-3 py-2 rounded-lg border border-white/10 bg-neutral-900 text-sm focus:outline-none focus:border-accent-cyan"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="next-test-date" className="block text-xs text-white/50 mb-1.5">
+                    Date of next event
+                  </label>
+                  <input
+                    id="next-test-date"
+                    type="date"
+                    value={s1.nextTestDate}
+                    onChange={(e) => setS1((p) => ({ ...p, nextTestDate: e.target.value }))}
+                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-neutral-900 text-sm focus:outline-none focus:border-accent-cyan"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="final-goal-date" className="block text-xs text-white/50 mb-1.5">
+                    Final goal date
+                  </label>
+                  <input
+                    id="final-goal-date"
+                    type="date"
+                    value={s1.finalGoalDate}
+                    onChange={(e) => setS1((p) => ({ ...p, finalGoalDate: e.target.value }))}
+                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-neutral-900 text-sm focus:outline-none focus:border-accent-cyan"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-white/40">
+                Optional — leave blank if you do not have a specific deadline yet.
+              </p>
+            </div>
+
             <button
               disabled={!s1.goal || s1.subjects.length === 0}
               onClick={() => setStep(1)}
               className="w-full py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm disabled:opacity-40 hover:bg-cyan-300 transition-colors"
             >
-              Next →
+              Next
             </button>
           </div>
         )}
 
-        {/* ── Step 1: Background ── */}
+        {/* ── Step 1: Background (technical) ── */}
         {step === 1 && (
           <div className="space-y-7">
             <div>
               <h1 className="text-2xl font-bold mb-1">Tell us about yourself</h1>
-              <p className="text-sm text-white/50">This calibrates your plan difficulty and pacing.</p>
+              <p className="text-sm text-white/50">
+                This calibrates your plan difficulty and pacing.
+              </p>
             </div>
 
             <SliderField
@@ -365,9 +477,9 @@ export default function OnboardingPage() {
               <div className="grid grid-cols-3 gap-2">
                 {(
                   [
-                    { v: 'theory_first', label: '📖 Theory first' },
-                    { v: 'practice_first', label: '✏️ Practice first' },
-                    { v: 'mixed', label: '⚖️ Mixed' },
+                    { v: 'theory_first', label: 'Theory first' },
+                    { v: 'practice_first', label: 'Practice first' },
+                    { v: 'mixed', label: 'Mixed' },
                   ] as const
                 ).map(({ v, label }) => (
                   <button
@@ -415,38 +527,181 @@ export default function OnboardingPage() {
                 onClick={() => setStep(0)}
                 className="flex-1 py-3 rounded-xl border border-white/20 text-sm text-white/70 hover:border-white/40 transition-colors"
               >
-                ← Back
+                Back
               </button>
               <button
                 onClick={() => setStep(2)}
                 className="flex-1 py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm hover:bg-cyan-300 transition-colors"
               >
-                Next →
+                Next
               </button>
             </div>
           </div>
         )}
 
-        {/* ── Step 2: Self-assessment ── */}
+        {/* ── Step 2: Mental / motivation ── */}
         {step === 2 && (
+          <div className="space-y-7">
+            <div>
+              <h1 className="text-2xl font-bold mb-1">How are you feeling about this?</h1>
+              <p className="text-sm text-white/50">
+                We tailor tone, frequency, and check-ins based on this. Be honest.
+              </p>
+            </div>
+
+            <SliderField
+              label="How motivated do you feel right now?"
+              min={1}
+              max={10}
+              value={s3.motivation}
+              onChange={(v) => setS3((p) => ({ ...p, motivation: v }))}
+              displayValue={`${s3.motivation}/10`}
+            />
+
+            <SliderField
+              label="How much test anxiety do you usually feel?"
+              min={1}
+              max={10}
+              value={s3.anxiety}
+              onChange={(v) => setS3((p) => ({ ...p, anxiety: v }))}
+              displayValue={`${s3.anxiety}/10`}
+              hint="1 = none, 10 = a lot. Affects how the AI talks to you about quizzes."
+            />
+
+            <SliderField
+              label="How confident do you feel in your ability to reach your goal?"
+              min={1}
+              max={10}
+              value={s3.confidence}
+              onChange={(v) => setS3((p) => ({ ...p, confidence: v }))}
+              displayValue={`${s3.confidence}/10`}
+            />
+
+            <div>
+              <p className="block text-sm text-white/70 mb-2">When do you study best?</p>
+              <div className="grid grid-cols-4 gap-2">
+                {(
+                  [
+                    { v: 'morning', label: 'Morning' },
+                    { v: 'afternoon', label: 'Afternoon' },
+                    { v: 'evening', label: 'Evening' },
+                    { v: 'night', label: 'Night' },
+                  ] as const
+                ).map(({ v, label }) => (
+                  <button
+                    key={v}
+                    onClick={() => setS3((p) => ({ ...p, preferredTime: v }))}
+                    className={`py-2.5 rounded-lg border text-xs font-medium transition-all ${
+                      s3.preferredTime === v
+                        ? 'border-accent-cyan bg-accent-cyan/10 text-white'
+                        : 'border-white/10 bg-white/5 text-white/50 hover:border-white/30'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="block text-sm text-white/70 mb-2">Do you have a quiet study space?</p>
+                <div className="flex gap-2">
+                  {[
+                    { v: true, label: 'Yes' },
+                    { v: false, label: 'No' },
+                  ].map(({ v, label }) => (
+                    <button
+                      key={String(v)}
+                      onClick={() => setS3((p) => ({ ...p, hasQuietSpace: v }))}
+                      className={`flex-1 py-2.5 rounded-lg border text-xs font-medium transition-all ${
+                        s3.hasQuietSpace === v
+                          ? 'border-accent-cyan bg-accent-cyan/10 text-white'
+                          : 'border-white/10 bg-white/5 text-white/50 hover:border-white/30'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="block text-sm text-white/70 mb-2">Support system</p>
+                <div className="flex gap-2">
+                  {(
+                    [
+                      { v: 'strong', label: 'Strong' },
+                      { v: 'some', label: 'Some' },
+                      { v: 'none', label: 'None' },
+                    ] as const
+                  ).map(({ v, label }) => (
+                    <button
+                      key={v}
+                      onClick={() => setS3((p) => ({ ...p, supportSystem: v }))}
+                      className={`flex-1 py-2.5 rounded-lg border text-xs font-medium transition-all ${
+                        s3.supportSystem === v
+                          ? 'border-accent-cyan bg-accent-cyan/10 text-white'
+                          : 'border-white/10 bg-white/5 text-white/50 hover:border-white/30'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="why-this-goal" className="block text-xs text-white/50 mb-1.5">
+                In your own words: why does this goal matter to you? (optional)
+              </label>
+              <textarea
+                id="why-this-goal"
+                rows={3}
+                placeholder="e.g. I want to qualify for engineering, prove to myself I can, get into a specific program..."
+                value={s3.whyThisGoal}
+                onChange={(e) => setS3((p) => ({ ...p, whyThisGoal: e.target.value }))}
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-neutral-900 text-sm focus:outline-none focus:border-accent-cyan resize-none"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setStep(1)}
+                className="flex-1 py-3 rounded-xl border border-white/20 text-sm text-white/70 hover:border-white/40 transition-colors"
+              >
+                Back
+              </button>
+              <button
+                onClick={() => setStep(3)}
+                className="flex-1 py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm hover:bg-cyan-300 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ── Step 3: Self-assessment ── */}
+        {step === 3 && (
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl font-bold mb-1">Rate your understanding</h1>
               <p className="text-sm text-white/50">
-                Be honest — this is just the starting point. The system will verify and adapt.
+                Be honest — this is just the starting point. The diagnostic will verify and adapt.
               </p>
             </div>
 
             <div className="space-y-5">
-              {conceptsForStep3.map(({ id, label }) => (
+              {conceptsForStep4.map(({ id, label }) => (
                 <SliderField
                   key={id}
                   label={label}
                   min={1}
                   max={10}
-                  value={s3.selfScores[id] ?? 5}
+                  value={s4.selfScores[id] ?? 5}
                   onChange={(v) => setScore(id, v)}
-                  displayValue={`${s3.selfScores[id] ?? 5}/10`}
+                  displayValue={`${s4.selfScores[id] ?? 5}/10`}
                 />
               ))}
             </div>
@@ -457,17 +712,17 @@ export default function OnboardingPage() {
 
             <div className="flex gap-3">
               <button
-                onClick={() => setStep(1)}
+                onClick={() => setStep(2)}
                 className="flex-1 py-3 rounded-xl border border-white/20 text-sm text-white/70 hover:border-white/40 transition-colors"
               >
-                ← Back
+                Back
               </button>
               <button
                 disabled={submitting}
                 onClick={handleSubmit}
                 className="flex-1 py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm disabled:opacity-50 hover:bg-cyan-300 transition-colors"
               >
-                {submitting ? 'Saving…' : 'Start my diagnostic →'}
+                {submitting ? 'Saving…' : 'Start my diagnostic'}
               </button>
             </div>
           </div>

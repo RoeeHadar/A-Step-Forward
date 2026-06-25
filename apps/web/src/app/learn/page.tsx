@@ -19,37 +19,32 @@ export default async function LearnPage() {
           </p>
         </header>
 
-        {subjects.length === 0 ? (
-          <div className="glass-surface rounded-2xl p-8 text-center text-muted-foreground">
-            <p className="text-foreground font-medium">No content available right now</p>
-            <p className="mt-2 text-sm">The content service is temporarily unavailable. Please try again in a moment.</p>
-          </div>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {subjects.map((s) => (
-              <Link
-                key={s.subject}
-                href={`/learn/${s.subject}`}
-                className="glass-surface group rounded-2xl p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <span className="text-3xl" aria-hidden>
-                    {subjectIcon(s.subject)}
-                  </span>
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                    {s.section_count} sections
-                  </span>
-                </div>
-                <h2 className="mt-3 font-display text-lg font-semibold text-foreground group-hover:text-primary">
-                  {subjectLabel(s.subject, 'en')}
-                </h2>
-                <p className="mt-1 text-sm text-muted-foreground" dir="rtl">
-                  {subjectLabel(s.subject, 'he')}
-                </p>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {subjects.map((s) => (
+            <Link
+              key={s.subject}
+              href={`/learn/${s.subject}`}
+              className="glass-surface group rounded-2xl p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <span className="text-3xl" aria-hidden>
+                  {subjectIcon(s.subject)}
+                </span>
+                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  {s.section_count > 0
+                    ? `${s.section_count} sections`
+                    : 'Curated resources'}
+                </span>
+              </div>
+              <h2 className="mt-3 font-display text-lg font-semibold text-foreground group-hover:text-primary">
+                {subjectLabel(s.subject, 'en')}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground" dir="rtl">
+                {subjectLabel(s.subject, 'he')}
+              </p>
+            </Link>
+          ))}
+        </div>
       </main>
     </div>
   );

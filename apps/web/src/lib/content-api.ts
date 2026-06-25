@@ -23,16 +23,26 @@ async function contentFetch<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+const STATIC_SUBJECT_FALLBACK: SubjectSummary[] = [
+  { subject: 'math', section_count: 0, sample_grade: null },
+  { subject: 'physics', section_count: 0, sample_grade: null },
+  { subject: 'calculus', section_count: 0, sample_grade: null },
+  { subject: 'linear_algebra', section_count: 0, sample_grade: null },
+];
+
 export async function fetchSubjects(): Promise<SubjectSummary[]> {
   if (neonConfigured) {
     const rows = await neonFetchSubjects();
     if (rows.length > 0) return rows;
   }
   try {
-    return await contentFetch<SubjectSummary[]>('/v1/subjects');
+    const rows = await contentFetch<SubjectSummary[]>('/v1/subjects');
+    if (rows.length > 0) return rows;
   } catch {
-    return [];
+    // fall through to static fallback
   }
+  // Always show something — the curated external resources work even without our DB content.
+  return STATIC_SUBJECT_FALLBACK;
 }
 
 export async function fetchSections(subject: string): Promise<SectionSummary[]> {

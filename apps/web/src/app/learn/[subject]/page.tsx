@@ -5,6 +5,7 @@ import { PremiumBadge } from '@/components/premium-badge';
 import { fetchBagrutExams, fetchSections, fetchSubjects } from '@/lib/content-api';
 import { subjectLabel } from '@/lib/subject-labels';
 import { SubjectSectionsClient } from '@/components/subject-sections-client';
+import { getResourcesForSubject } from '@/lib/external-resources';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,10 +13,13 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const { subject } = await params;
   const allSubjects = await fetchSubjects();
   const known = allSubjects.some((s) => s.subject === subject);
-  const sections = await fetchSections(subject);
-  const bagrut = await fetchBagrutExams(subject);
+  const [sections, bagrut, external] = await Promise.all([
+    fetchSections(subject),
+    fetchBagrutExams(subject),
+    getResourcesForSubject(subject),
+  ]);
 
-  if (!known && sections.length === 0 && bagrut.length === 0) {
+  if (!known && sections.length === 0 && bagrut.length === 0 && external.length === 0) {
     notFound();
   }
 
@@ -69,6 +73,42 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
         </div>
 
         <SubjectSectionsClient subject={subject} sections={sections} />
+
+        {external.length > 0 ? (
+          <section className="mt-10">
+            <h2 className="font-display text-xl font-semibold text-foreground">
+              More free resources
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Hand-picked open educational materials from Khan Academy, OpenStax, MIT
+              OpenCourseWare and others — matched to this subject.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {external.map((r) => (
+                <a
+                  key={r.url}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-surface group rounded-xl border-border/60 p-4 transition-all hover:border-primary/40"
+                  dir={r.language === 'he' ? 'rtl' : 'ltr'}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-medium text-foreground group-hover:text-primary">
+                      {r.title}
+                    </h3>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+                      {r.source}
+                    </span>
+                  </div>
+                  {r.description ? (
+                    <p className="mt-1.5 text-sm text-muted-foreground">{r.description}</p>
+                  ) : null}
+                </a>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </main>
     </div>
   );
