@@ -1,5 +1,8 @@
 /** Human-readable labels for Learning Database subject slugs. */
 export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: string }> = {
+  math: { en: 'Mathematics', he: 'מתמטיקה', icon: '📐' },
+  physics: { en: 'Physics', he: 'פיזיקה', icon: '⚛️' },
+  calculus: { en: 'Calculus', he: 'חדו״א', icon: '∫' },
   calculus_1: { en: 'Calculus 1', he: 'חדו״א 1', icon: '∫' },
   linear_algebra: { en: 'Linear Algebra', he: 'אלגברה לינארית', icon: '⎡' },
   statistics_probability: { en: 'Statistics & Probability', he: 'סטטיסטיקה והסתברות', icon: '📊' },
