@@ -12,6 +12,7 @@ on:
           - all
           - diagnostic
           - knowledge-graph
+          - content-json
 
 jobs:
   seed:
@@ -30,6 +31,10 @@ jobs:
       - name: Install workspace deps
         run: uv sync --all-packages --no-dev
 
+      - name: Install psycopg for import script
+        if: ${{ inputs.target == 'all' || inputs.target == 'content-json' }}
+        run: uv pip install psycopg[binary]
+
       - name: Seed diagnostic_items
         if: ${{ inputs.target == 'all' || inputs.target == 'diagnostic' }}
         env:
@@ -44,3 +49,14 @@ jobs:
           NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
           USE_NEO4J: "true"
         run: uv run python scripts/seed_knowledge_graph.py
+
+      - name: Import content JSON to Neon
+        if: ${{ inputs.target == 'all' || inputs.target == 'content-json' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -f tmp/content_export.json ]; then
+            python scripts/import_content_json.py --input tmp/content_export.json
+          else
+            echo "No tmp/content_export.json found — skipping. Run ingest_learning_db.py --export-json first."
+          fi

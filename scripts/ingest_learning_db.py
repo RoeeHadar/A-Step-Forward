@@ -127,20 +127,10 @@ def _normalize_database_url(url: str) -> tuple[str, dict]:
 
 
 def _extract_pdf_text(pdf_path: Path) -> list[tuple[int, str]]:
-    """Return (page_num, text) pairs. Tries pdfplumber then PyMuPDF."""
+    """Return (page_num, text) pairs. Tries PyMuPDF first (fast), then pdfplumber."""
     pages: list[tuple[int, str]] = []
-    try:
-        import pdfplumber  # type: ignore[import-untyped]
 
-        with pdfplumber.open(pdf_path) as pdf:
-            for idx, page in enumerate(pdf.pages, start=1):
-                text = page.extract_text(x_tolerance=2, y_tolerance=2) or ""
-                pages.append((idx, text))
-        if any(t.strip() for _, t in pages):
-            return pages
-    except Exception:
-        pass
-
+    # PyMuPDF first — much faster on image PDFs (returns empty text instantly)
     try:
         import fitz  # type: ignore[import-untyped]  # PyMuPDF
 
@@ -149,6 +139,20 @@ def _extract_pdf_text(pdf_path: Path) -> list[tuple[int, str]]:
             text = doc[idx].get_text("text") or ""
             pages.append((idx + 1, text))
         doc.close()
+        if any(t.strip() for _, t in pages):
+            return pages
+    except Exception:
+        pass
+
+    # pdfplumber fallback — better layout-aware extraction for complex PDFs
+    try:
+        import pdfplumber  # type: ignore[import-untyped]
+
+        pages = []
+        with pdfplumber.open(pdf_path) as pdf:
+            for idx, page in enumerate(pdf.pages, start=1):
+                text = page.extract_text(x_tolerance=2, y_tolerance=2) or ""
+                pages.append((idx, text))
     except Exception as exc:
         raise RuntimeError(f"PDF extract failed: {exc}") from exc
     return pages
@@ -419,17 +423,154 @@ async def ingest_file(
     stats.processed += 1
 
 
+def _log(msg: str) -> None:
+    """Print safely even on Windows terminals with non-UTF8 code pages."""
+    try:
+        print(msg)
+    except UnicodeEncodeError:
+        print(msg.encode("utf-8", errors="replace").decode("ascii", errors="replace"))
+
+
+def _extract_with_timeout(pdf_path: Path, timeout_sec: int = 30) -> list[tuple[int, str]]:
+    """Run _extract_pdf_text in a thread with a timeout. Returns [] on timeout."""
+    import concurrent.futures
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+        future = ex.submit(_extract_pdf_text, pdf_path)
+        try:
+            return future.result(timeout=timeout_sec)
+        except concurrent.futures.TimeoutError:
+            return []
+
+
+async def run_ingest_export(args: argparse.Namespace) -> IngestStats:
+    """Offline mode: extract PDFs → JSON + copy Bagrut PDFs. No DB required.
+
+    Writes incrementally so progress is preserved even if interrupted.
+    Applies a 30-second timeout per PDF to skip hang-prone scanned files.
+    """
+    source_root = Path(args.source).resolve()
+    if not source_root.is_dir():
+        _log(f"[error] source not found: {source_root}")
+        return IngestStats(failed=[{"file": str(source_root), "reason": "not a directory"}])
+
+    export_path = Path(args.export_json)
+    export_path.parent.mkdir(parents=True, exist_ok=True)
+    public_dir = ROOT / "apps" / "web" / "public" / "content" / "bagrut"
+
+    # Load existing export if present (resume from where we left off)
+    if export_path.exists():
+        try:
+            existing = json.loads(export_path.read_text(encoding="utf-8"))
+            sections: list[dict] = existing.get("sections", [])
+            bagrut_rows: list[dict] = existing.get("bagrut", [])
+            done_files: set[str] = {r["source_file"] for r in sections} | {r["source_file"] for r in bagrut_rows}
+            _log(f"[resume] found existing export with {len(sections)} sections, {len(bagrut_rows)} bagrut rows")
+        except Exception:
+            sections, bagrut_rows, done_files = [], [], set()
+    else:
+        sections, bagrut_rows, done_files = [], [], set()
+
+    stats = IngestStats()
+
+    def _flush() -> None:
+        payload = {"sections": sections, "bagrut": bagrut_rows, "stats": {
+            "processed": stats.processed, "sections": stats.sections,
+            "bagrut": stats.bagrut, "skipped": stats.skipped,
+        }}
+        export_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    for pdf_path in sorted(source_root.rglob("*.pdf")):
+        rel = pdf_path.relative_to(source_root)
+        source_file = pdf_path.name
+
+        if source_file in done_files:
+            _log(f"[skip-done] {rel}")
+            stats.processed += 1
+            continue
+
+        subject = _subject_from_path(source_root, pdf_path)
+        grade = _grade_from_path(pdf_path)
+
+        if _is_bagrut(pdf_path):
+            digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()[:16]
+            dest_name = f"{digest}_{pdf_path.name}"
+            public_dir.mkdir(parents=True, exist_ok=True)
+            dest = public_dir / dest_name
+            if not dest.exists():
+                shutil.copy2(pdf_path, dest)
+            bagrut_rows.append({
+                "subject": subject,
+                "exam_type": _exam_type_from_path(pdf_path),
+                "year": _extract_year(source_file),
+                "source_file": source_file,
+                "display_name": _display_name(source_file),
+                "file_url": f"/content/bagrut/{dest_name}",
+            })
+            done_files.add(source_file)
+            stats.bagrut += 1
+            stats.processed += 1
+            _log(f"[bagrut] {rel}")
+            _flush()
+            continue
+
+        pages = _extract_with_timeout(pdf_path, timeout_sec=30)
+
+        if pages is None or not pages:
+            stats.skipped += 1
+            stats.failed.append({"file": str(pdf_path), "reason": "no extractable text or timeout"})
+            _log(f"[skip] {rel}: no text / timeout")
+            done_files.add(source_file)
+            _flush()
+            continue
+
+        if not any(t.strip() for _, t in pages):
+            stats.skipped += 1
+            stats.failed.append({"file": str(pdf_path), "reason": "no extractable text"})
+            _log(f"[skip] {rel}: no text")
+            done_files.add(source_file)
+            _flush()
+            continue
+
+        chapters = _split_chapters(pages)
+        chunk_count = 0
+        for idx, chapter in enumerate(chapters):
+            body = chapter["body_md"]
+            if not body.strip():
+                continue
+            sections.append({
+                "subject": subject,
+                "grade": grade,
+                "source_file": source_file,
+                "chunk_index": idx,
+                "title": chapter["title"],
+                "body_md": body,
+                "page_start": chapter.get("page_start"),
+                "page_end": chapter.get("page_end"),
+            })
+            stats.sections += 1
+            chunk_count += 1
+
+        done_files.add(source_file)
+        stats.processed += 1
+        _flush()
+        _log(f"[ok] {rel} — {chunk_count} chunks")
+
+    _log(f"\n[export] wrote {len(sections)} sections + {len(bagrut_rows)} bagrut rows → {export_path}")
+    return stats
+
+
 async def run_ingest(args: argparse.Namespace) -> IngestStats:
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     source_root = Path(args.source).resolve()
     if not source_root.is_dir():
-        print(f"[error] source not found: {source_root}")
+        _log(f"[error] source not found: {source_root}")
         return IngestStats(failed=[{"file": str(source_root), "reason": "not a directory"}])
 
     db_url = args.db_url or os.environ.get("DATABASE_URL")
     if not db_url:
-        print("[error] --db-url or DATABASE_URL required")
+        _log("[error] --db-url or DATABASE_URL required")
         return IngestStats(failed=[{"file": "", "reason": "no database url"}])
 
     public_dir = ROOT / "apps" / "web" / "public" / "content" / "bagrut"
@@ -451,10 +592,10 @@ async def run_ingest(args: argparse.Namespace) -> IngestStats:
                     public_dir=public_dir,
                     stats=stats,
                 )
-                print(f"[ok] {pdf_path.relative_to(source_root)}")
+                _log(f"[ok] {pdf_path.relative_to(source_root)}")
             except Exception as exc:
                 stats.failed.append({"file": str(pdf_path), "reason": str(exc)})
-                print(f"[fail] {pdf_path}: {exc}")
+                _log(f"[fail] {pdf_path.name}: {exc}")
 
         await _update_status(session, stats.failed)
         await session.commit()
@@ -511,6 +652,12 @@ def main() -> int:
     parser.add_argument("--db-url", default="", help="Postgres URL (or DATABASE_URL env)")
     parser.add_argument("--storage-bucket", default="", help="R2/S3 bucket for Bagrut PDFs")
     parser.add_argument("--watch", action="store_true", help="Watch folder for new/changed PDFs")
+    parser.add_argument(
+        "--export-json",
+        default="",
+        metavar="PATH",
+        help="Offline mode: extract PDFs to JSON (no DB needed). Use seed-content workflow to import.",
+    )
     args = parser.parse_args()
 
     source = Path(args.source).resolve()
@@ -520,8 +667,12 @@ def main() -> int:
         _watch(source, db_url, args.storage_bucket or None)
         return 0
 
-    stats = asyncio.run(run_ingest(args))
-    print(
+    if args.export_json:
+        stats = asyncio.run(run_ingest_export(args))
+    else:
+        stats = asyncio.run(run_ingest(args))
+
+    _log(
         f"\nSummary: processed={stats.processed} sections={stats.sections} "
         f"bagrut={stats.bagrut} skipped={stats.skipped} failed={len(stats.failed)}"
     )
