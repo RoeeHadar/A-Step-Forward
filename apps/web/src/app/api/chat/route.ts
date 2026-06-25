@@ -6,9 +6,10 @@ import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
-const BACKEND_FETCH_TIMEOUT_MS = 55_000;
-const BACKEND_MAX_ATTEMPTS = 1;
-const COLD_START_GRACE_MS = 2_000;
+// Render free tier can take up to 60s to cold-start; give it room.
+const BACKEND_FETCH_TIMEOUT_MS = 90_000;
+const BACKEND_MAX_ATTEMPTS = 2;
+const COLD_START_GRACE_MS = 3_000;
 
 export async function POST(req: Request) {
   const { userId } = await auth();

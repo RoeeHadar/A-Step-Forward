@@ -1,0 +1,22 @@
+name: Keep Render warm
+
+on:
+  schedule:
+    # Every 14 minutes — Render free tier spins down after 15 min idle.
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping API health
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 30 \
+            "${{ vars.RENDER_API_URL || 'https://asf-api-q566.onrender.com' }}/health")
+          echo "Health check status: $status"
+          # Accept 200 or 503 (still waking up) — just keep the dyno alive
+          if [ "$status" = "000" ]; then
+            echo "WARNING: API unreachable (network or DNS issue)"
+          fi
