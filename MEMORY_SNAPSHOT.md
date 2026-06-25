@@ -32,9 +32,9 @@ See `docs/sprint.md`.
 
 <!-- LAST_SESSION -->
 Round 4 (2026-06-25): PR #15 merged; Render deploy failed — `bookings.py` used
-`EmailStr` without `email-validator`; CI never imported `app.main`. Fixed on
-`fix/render-api-startup`: validated `str` Field, Dockerfile `app.main:app`, CI
-import smoke + `apps/api/tests`. Adaptive learning architecture brief is
-`14-adaptive-learning-architecture.md` (additive, nothing breaks).
+`EmailStr` without `email-validator`; CI never imported `app.main`. PR #16 merged:
+validated `str` Field, Dockerfile `app.main:app`, CI **API import smoke** step.
+Lesson: Pydantic `EmailStr` needs `email-validator` in prod deps; Vercel green ≠
+Render green. Adaptive learning brief: `14-adaptive-learning-architecture.md`.
 <!-- LAST_SESSION -->
 
