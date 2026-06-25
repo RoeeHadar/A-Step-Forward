@@ -216,7 +216,8 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
     );
   }
 
-  const current = quiz.questions[currentIdx];
+  const current = quiz.questions[currentIdx] ?? quiz.questions[0];
+  if (!current) return null;
   const answered = Object.keys(answers).length;
   const isLast = currentIdx === quiz.questions.length - 1;
   const timeWarning = timeLeft < 120;
