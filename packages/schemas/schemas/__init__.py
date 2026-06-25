@@ -12,6 +12,13 @@ from .memory import (
     MemoryHealthReport,
 )
 from .learners import LearnerProfile, LearnerRole
+from .learner_model import (
+    AdaptiveLearnerProfile,
+    LearnerProfileInput,
+    StudentModel,
+    classify_mastery,
+    self_score_to_mastery,
+)
 from .progress import MasteryEntry, ProgressSummary
 from .curriculum import (
     Assessment,
@@ -63,6 +70,11 @@ __all__ = [
     "ForbiddenError",
     "LearnerProfile",
     "LearnerRole",
+    "AdaptiveLearnerProfile",
+    "LearnerProfileInput",
+    "StudentModel",
+    "classify_mastery",
+    "self_score_to_mastery",
     "MasteryEntry",
     "ProgressSummary",
     "Assessment",

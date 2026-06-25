@@ -15,6 +15,7 @@ COPY services/graphrag/pyproject.toml services/graphrag/
 COPY services/orchestrator/pyproject.toml services/orchestrator/
 COPY services/workers/pyproject.toml services/workers/
 COPY services/curriculum/pyproject.toml services/curriculum/
+COPY services/learner_model/pyproject.toml services/learner_model/
 
 # Install all workspace dependencies
 RUN uv sync --frozen --no-dev --package asf-api
@@ -28,6 +29,7 @@ COPY services/graphrag services/graphrag
 COPY services/orchestrator services/orchestrator
 COPY services/workers services/workers
 COPY services/curriculum services/curriculum
+COPY services/learner_model services/learner_model
 COPY apps/api apps/api
 
 # Re-sync to ensure editable installs are wired

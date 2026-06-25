@@ -20,6 +20,7 @@ members = [
     "curriculum-service",
     "graphrag-mcp",
     "graphrag-service",
+    "learner-model-service",
     "memory-mcp",
     "memory-service",
     "orchestrator",
@@ -342,6 +343,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "graphrag-service" },
     { name = "httpx" },
+    { name = "learner-model-service" },
     { name = "memory-service" },
     { name = "opentelemetry-api" },
     { name = "opentelemetry-exporter-otlp-proto-http" },
@@ -376,6 +378,7 @@ requires-dist = [
     { name = "graphrag-service", editable = "services/graphrag" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27" },
+    { name = "learner-model-service", editable = "services/learner_model" },
     { name = "memory-service", editable = "services/memory" },
     { name = "opentelemetry-api", specifier = ">=1.27" },
     { name = "opentelemetry-exporter-otlp-proto-http", specifier = ">=1.27" },
@@ -951,6 +954,40 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23" },
     { name = "schemas", editable = "packages/schemas" },
     { name = "sqlalchemy", specifier = ">=2.0.30" },
+    { name = "structlog", specifier = ">=24.1" },
+]
+provides-extras = ["dev"]
+
+[[package]]
+name = "learner-model-service"
+version = "0.1.0"
+source = { editable = "services/learner_model" }
+dependencies = [
+    { name = "asyncpg" },
+    { name = "graphrag-service" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "schemas" },
+    { name = "sqlalchemy" },
+    { name = "structlog" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "asyncpg", specifier = ">=0.29" },
+    { name = "graphrag-service", editable = "services/graphrag" },
+    { name = "pydantic", specifier = ">=2.7" },
+    { name = "pydantic-settings", specifier = ">=2.4" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.2" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23" },
+    { name = "schemas", editable = "packages/schemas" },
+    { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.30" },
     { name = "structlog", specifier = ">=24.1" },
 ]
 provides-extras = ["dev"]
