@@ -37,6 +37,13 @@ COPY apps/api apps/api
 # Re-sync to ensure editable installs are wired
 RUN uv sync --frozen --no-dev --package asf-api
 
+# Verify learner-model + diagnostic packages import (matches CI import smoke)
+RUN uv run --package asf-api python -c "\
+from app.main import app; \
+from learner_model_service.api import get_learner_model_service; \
+from diagnostic_service.api import get_diagnostic_service; \
+assert app.title; get_learner_model_service; get_diagnostic_service"
+
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app/apps/api"
 

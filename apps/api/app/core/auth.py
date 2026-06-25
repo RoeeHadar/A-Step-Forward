@@ -7,9 +7,9 @@ from dataclasses import dataclass
 from typing import Any
 
 import httpx
-from fastapi import Depends, Header, HTTPException
+from fastapi import Header, HTTPException
 from jose import JWTError, jwt
-
+from jose.exceptions import JWKError
 from schemas.errors import AuthError
 from schemas.learners import LearnerRole
 
@@ -37,7 +37,9 @@ def validate_auth_config() -> None:
     """Fail fast when deployed without Clerk JWKS."""
     settings = get_settings()
     if settings.app_env in _DEPLOYED_ENVS and not settings.clerk_jwks_url:
-        raise RuntimeError("CLERK_JWKS_URL is required when APP_ENV is production, staging, or preview")
+        raise RuntimeError(
+            "CLERK_JWKS_URL is required when APP_ENV is production, staging, or preview"
+        )
 
 
 async def _fetch_jwks() -> dict[str, Any]:
@@ -48,12 +50,36 @@ async def _fetch_jwks() -> dict[str, Any]:
     now = time.time()
     if _jwks_cache and (now - _jwks_fetched_at) < _JWKS_TTL_SEC:
         return _jwks_cache
-    async with httpx.AsyncClient(timeout=10.0) as client:
-        resp = await client.get(settings.clerk_jwks_url)
-        resp.raise_for_status()
-        _jwks_cache = resp.json()
-        _jwks_fetched_at = now
-        return _jwks_cache
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(settings.clerk_jwks_url)
+            resp.raise_for_status()
+            try:
+                _jwks_cache = resp.json()
+            except ValueError as exc:
+                raise AuthError("invalid Clerk JWKS response") from exc
+            _jwks_fetched_at = now
+            return _jwks_cache
+    except httpx.HTTPError as exc:
+        raise AuthError("unable to fetch Clerk JWKS; check CLERK_JWKS_URL") from exc
+
+
+async def warmup_clerk_jwks() -> None:
+    """Fail fast at startup when deployed with an unreachable JWKS URL."""
+    settings = get_settings()
+    if settings.clerk_jwks_url:
+        await _fetch_jwks()
+
+
+async def check_clerk_jwks() -> bool:
+    settings = get_settings()
+    if not settings.clerk_jwks_url:
+        return True
+    try:
+        await _fetch_jwks()
+        return True
+    except (AuthError, httpx.HTTPError):
+        return False
 
 
 def _child_fields_from_claims(claims: dict[str, Any]) -> tuple[int | None, bool]:
@@ -97,7 +123,7 @@ async def _verify_clerk_token(authorization: str | None) -> AuthCtx:
 
     try:
         claims = jwt.decode(token, jwks, **decode_kwargs)
-    except JWTError as exc:
+    except (JWTError, JWKError) as exc:
         raise AuthError("invalid token") from exc
 
     sub = claims.get("sub")
@@ -134,7 +160,9 @@ async def require_learner(
         raise AuthError("header auth is only allowed in local/test environments")
 
     if not x_learner_id:
-        raise HTTPException(status_code=401, detail="missing learner id (dev: set X-Learner-Id header)")
+        raise HTTPException(
+            status_code=401, detail="missing learner id (dev: set X-Learner-Id header)"
+        )
 
     age = int(x_age) if x_age and x_age.isdigit() else None
     child_mode = x_child_mode == "1" or (age is not None and age < 13)

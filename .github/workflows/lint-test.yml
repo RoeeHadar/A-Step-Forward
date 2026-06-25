@@ -55,7 +55,15 @@ jobs:
         run: uv run alembic -c infra/alembic.ini upgrade head
 
       - name: API import smoke (matches Render Docker startup)
-        run: uv run --package asf-api python -c "from app.main import app; assert app.title"
+        run: |
+          uv run --package asf-api python -c "
+          from app.main import app
+          from learner_model_service.api import get_learner_model_service
+          from diagnostic_service.api import get_diagnostic_service
+          assert app.title
+          get_learner_model_service
+          get_diagnostic_service
+          "
 
       - name: Pytest
         run: uv run pytest tests
