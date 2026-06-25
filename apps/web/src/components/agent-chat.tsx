@@ -15,7 +15,6 @@ import { useChatUiStore } from '@/stores/ui-store';
 
 const CONNECTING_DELAY_MS = 800;
 const WARMUP_BANNER_DELAY_MS = 3000;
-const COLD_START_RETRY_MS = 15000;
 
 const agentGradients: Partial<Record<AgentName, string>> = {
   tutor: 'from-primary to-accent-magenta',
@@ -88,20 +87,12 @@ export function AgentChat({ agent }: { agent: string }) {
         setShowWarmupBanner(true);
       }
     }, WARMUP_BANNER_DELAY_MS);
-    const retryTimer = window.setTimeout(() => {
-      if (!hasAutoRetriedRef.current && !hasReceivedTokensRef.current) {
-        hasAutoRetriedRef.current = true;
-        stop();
-        reload();
-      }
-    }, COLD_START_RETRY_MS);
 
     return () => {
       window.clearTimeout(connectTimer);
       window.clearTimeout(warmupTimer);
-      window.clearTimeout(retryTimer);
     };
-  }, [isLoading, reload, stop]);
+  }, [isLoading]);
 
   useEffect(() => {
     const assistantContent = messages.find((m) => m.role === 'assistant')?.content;

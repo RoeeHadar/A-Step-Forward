@@ -30,6 +30,7 @@ export default function BookPage() {
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [emailSent, setEmailSent] = useState(true);
 
   const slots = useMemo(() => timeSlots(), []);
   const total = HOURLY_RATE * duration;
@@ -57,6 +58,8 @@ export default function BookPage() {
         const body = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(body.error ?? 'Booking failed');
       }
+      const payload = (await res.json()) as { emailed?: boolean };
+      setEmailSent(payload.emailed !== false);
       setStatus('success');
     } catch (err) {
       setStatus('error');
@@ -89,7 +92,9 @@ export default function BookPage() {
           <div className="glass-surface rounded-2xl p-8 text-center">
             <h2 className="text-xl font-semibold text-foreground">Request received!</h2>
             <p className="mt-2 text-muted-foreground">
-              We&apos;ll confirm your lesson by email shortly.
+              {emailSent
+                ? "We'll confirm your lesson by email shortly."
+                : 'Your request was saved. We may follow up by email if notification delivery failed.'}
             </p>
             <Link href="/" className="mt-4 inline-block text-primary hover:underline">
               Back to home

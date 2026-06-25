@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, EmailStr, Field
 
 from ..core.db import get_db
+from ..core.rate_limit import per_ip
+from ..core.settings import get_settings
 from ..stores import content_store
 
 router = APIRouter(prefix="/v1/bookings", tags=["bookings"])
@@ -24,8 +26,21 @@ class BookingRequest(BaseModel):
     notes: str | None = Field(default=None, max_length=2000)
 
 
+async def require_booking_secret(
+    x_booking_secret: str | None = Header(default=None, alias="X-Booking-Secret"),
+) -> None:
+    expected = get_settings().booking_api_secret
+    if expected and x_booking_secret != expected:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+
 @router.post("")
-async def create_booking(body: BookingRequest, session=Depends(get_db)) -> dict:
+async def create_booking(
+    body: BookingRequest,
+    session=Depends(get_db),
+    _secret=Depends(require_booking_secret),
+    _rl=Depends(per_ip("bookings.create", per_min=10)),
+) -> dict:
     price_ils = int(HOURLY_RATE_ILS * body.duration_h)
     booking_id = await content_store.insert_booking(
         session,

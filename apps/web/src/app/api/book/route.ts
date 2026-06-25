@@ -15,6 +15,15 @@ const bookingSchema = z.object({
   notes: z.string().max(2000).optional(),
 });
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 async function sendBookingEmail(
   data: z.infer<typeof bookingSchema>,
   priceIls: number,
@@ -35,14 +44,14 @@ async function sendBookingEmail(
       subject: `New lesson booking — ${data.name}`,
       html: `
         <h2>New booking request</h2>
-        <p><strong>Name:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Phone:</strong> ${data.phone ?? '—'}</p>
-        <p><strong>Date:</strong> ${data.date} at ${data.time}</p>
+        <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(data.phone ?? '—')}</p>
+        <p><strong>Date:</strong> ${escapeHtml(data.date)} at ${escapeHtml(data.time)}</p>
         <p><strong>Duration:</strong> ${data.duration_h} hours</p>
-        <p><strong>Subject:</strong> ${data.subject}</p>
+        <p><strong>Subject:</strong> ${escapeHtml(data.subject)}</p>
         <p><strong>Price:</strong> ${priceIls} ₪</p>
-        <p><strong>Notes:</strong> ${data.notes ?? '—'}</p>
+        <p><strong>Notes:</strong> ${escapeHtml(data.notes ?? '—')}</p>
       `,
     }),
   });
@@ -66,10 +75,16 @@ export async function POST(req: Request) {
   let bookingId: string | null = null;
   let priceIls = Math.round(150 * data.duration_h);
 
+  const bookingHeaders: Record<string, string> = { 'content-type': 'application/json' };
+  const bookingSecret = process.env.BOOKING_API_SECRET;
+  if (bookingSecret) {
+    bookingHeaders['X-Booking-Secret'] = bookingSecret;
+  }
+
   try {
     const res = await fetch(`${API_BASE_URL}/v1/bookings`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: bookingHeaders,
       body: JSON.stringify(data),
     });
     if (res.ok) {
@@ -92,5 +107,5 @@ export async function POST(req: Request) {
   }
 
   logger.info('booking received', { bookingId, emailed, date: data.date });
-  return Response.json({ ok: true, id: bookingId, emailed });
+  return Response.json({ ok: true, id: bookingId, emailed, persisted: Boolean(bookingId) });
 }
