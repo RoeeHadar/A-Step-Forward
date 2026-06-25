@@ -23,6 +23,7 @@ from .routers import (
     graphrag,
     health,
     learners,
+    learning_path,
     lessons,
     memory,
     memory_admin,
@@ -65,6 +66,7 @@ def create_app() -> FastAPI:
     app.include_router(chat.router)
     app.include_router(agents.router)
     app.include_router(learners.router)
+    app.include_router(learning_path.router)
     app.include_router(onboarding.router)
     app.include_router(diagnostic.router)
     app.include_router(lessons.router)
