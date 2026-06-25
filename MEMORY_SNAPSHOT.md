@@ -31,6 +31,10 @@ locked decisions are project policy; sub-agents must not stop to ask the user.
 See `docs/sprint.md`.
 
 <!-- LAST_SESSION -->
-Last session: 2026-06-23 PM (opus — Round 2 dispatch). 19 in-flight branches;
-WIP preserved on `wip/agents-phase3-snapshot`. Per-stream resume briefs ready.
+Last session: 2026-06-25 (supervisor check-in — Round 3). Chat broken (mock
+fallback showing; Render cold-start suspected). Three new tasks: content pipeline
+from `Learning Database/` (76 PDFs → Postgres), private lesson booking page
+(`/book`, 150₪/hr, 1-3h, Resend), free/premium tier structure. Full directive in
+`.cursor/subagent-briefs/12-coordinator-directive.md`. `Learning Database/` is
+gitignored (PDFs only, local source of truth). No key rotation yet.
 <!-- LAST_SESSION -->

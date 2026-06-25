@@ -6,8 +6,9 @@ import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
-const BACKEND_FETCH_TIMEOUT_MS = 25000;
-const BACKEND_MAX_ATTEMPTS = 2;
+const BACKEND_FETCH_TIMEOUT_MS = 55_000;
+const BACKEND_MAX_ATTEMPTS = 1;
+const COLD_START_GRACE_MS = 2_000;
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -23,7 +24,8 @@ export async function POST(req: Request) {
   const parsedAgent = agentNameSchema.safeParse(body.agent);
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
 
-  const gen = streamAgentResponse(userId, lastMessage, agent);
+  const isFirstTurn = (body.messages?.filter((m) => m.role === 'user').length ?? 0) <= 1;
+  const gen = streamAgentResponse(userId, lastMessage, agent, isFirstTurn);
   const encoder = new TextEncoder();
   const readable = new ReadableStream({
     async pull(controller) {
@@ -64,8 +66,14 @@ async function* streamAgentResponse(
   userId: string,
   message: string,
   agent: string,
+  isFirstTurn: boolean,
 ): AsyncGenerator<string> {
   try {
+    if (isFirstTurn) {
+      fetch(`${API_BASE_URL}/v1/warmup`).catch(() => {});
+      await new Promise((r) => setTimeout(r, COLD_START_GRACE_MS));
+    }
+
     let res: Response | null = null;
 
     for (let attempt = 0; attempt < BACKEND_MAX_ATTEMPTS; attempt++) {

@@ -15,6 +15,7 @@ import { useI18n } from '@/providers/i18n-provider';
 
 const items = [
   { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
+  { href: '/learn', icon: BookOpen, labelKey: 'learn' as const, match: '/learn' },
   { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
   { href: '/app/lessons', icon: BookOpen, labelKey: 'lessons' as const, match: '/app/lessons' },
   { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },

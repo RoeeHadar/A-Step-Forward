@@ -69,6 +69,49 @@ S3_SECRET_KEY=miniominio
 S3_BUCKET=astepforward-media
 ```
 
+## Learning Database ingest
+
+Place PDFs under `Learning Database/` (gitignored). Apply migrations, then:
+
+```bash
+uv sync --group ingest
+make migrate
+make ingest DATABASE_URL=postgresql+asyncpg://astepforward:astepforward@localhost:5432/astepforward
+```
+
+Optional: watch for new files:
+
+```bash
+uv run python scripts/ingest_learning_db.py --watch --db-url "$DATABASE_URL"
+```
+
+Bagrut PDFs are copied to `apps/web/public/content/bagrut/` when R2 is not configured.
+
+### Seeding content (production)
+
+After merging the content pipeline and running migrations on Neon:
+
+1. Confirm the API is ready (empty catalog is OK):
+   ```bash
+   curl https://asf-api-q566.onrender.com/v1/subjects
+   # → []
+   ```
+2. On a machine with the `Learning Database/` folder, run:
+   ```bash
+   uv sync --group ingest
+   make ingest DATABASE_URL="<neon-connection-string>"
+   ```
+3. Verify counts (admin JWT required):
+   ```bash
+   curl -H "Authorization: Bearer <admin-jwt>" \
+     https://asf-api-q566.onrender.com/v1/admin/content/status
+   ```
+4. Browse https://a-step-forward-waij.vercel.app/learn — sections and Bagrut exams
+   should appear after ingest completes.
+
+Set `BOOKING_API_SECRET` on Render and Vercel (same value) before relying on
+`/book` DB persistence from the Next.js route.
+
 ## Tear down
 
 ```bash

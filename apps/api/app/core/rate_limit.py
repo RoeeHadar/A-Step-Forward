@@ -60,3 +60,18 @@ def per_user(
         await check_rate_limit(key, limit=per_min, window_sec=60)
 
     return _rate_limit
+
+
+def per_ip(
+    route_key: str,
+    *,
+    per_min: int = 30,
+) -> Callable[..., Coroutine[Any, Any, None]]:
+    """Rate limit by client IP (for unauthenticated public routes)."""
+
+    async def _rate_limit(request: Request) -> None:
+        host = request.client.host if request.client else "unknown"
+        key = f"rl:ip:{host}:{route_key}"
+        await check_rate_limit(key, limit=per_min, window_sec=60)
+
+    return _rate_limit

@@ -56,6 +56,7 @@ class APISettings(BaseSettings):
     llm_cheap_model: str = "llama-3.1-8b-instant"
 
     admin_key: str = ""  # if set, POST /v1/admin/* requires X-Admin-Key header
+    booking_api_secret: str = ""  # if set, POST /v1/bookings requires X-Booking-Secret
 
     @field_validator("cors_origins", mode="before")
     @classmethod
