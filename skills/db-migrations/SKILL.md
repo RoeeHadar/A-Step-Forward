@@ -31,5 +31,6 @@ uv run alembic -c infra/alembic.ini upgrade head
 
 ## Pitfalls
 - Don't `op.execute("RAW SQL")` without comments.
+- **asyncpg / Alembic async**: one SQL statement per `op.execute()` — multiple semicolon-separated commands raise `PostgresSyntaxError: cannot insert multiple commands into a prepared statement`.
 - Don't autogenerate without reviewing — Alembic misses enum changes and index renames.
 - Don't add unique constraints on existing data without a backfill.

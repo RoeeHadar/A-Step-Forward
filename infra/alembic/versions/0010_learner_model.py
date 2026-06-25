@@ -14,6 +14,8 @@ down_revision = "0009_bookings"
 branch_labels = None
 depends_on = None
 
+# asyncpg (Alembic async) rejects multiple statements per op.execute — one per call.
+
 
 def upgrade() -> None:
     op.execute(
@@ -32,8 +34,11 @@ def upgrade() -> None:
             background_notes TEXT,
             created_at       TIMESTAMPTZ DEFAULT NOW(),
             updated_at       TIMESTAMPTZ DEFAULT NOW()
-        );
-
+        )
+        """
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS concept_mastery (
             id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             learner_id    TEXT NOT NULL,
@@ -43,11 +48,14 @@ def upgrade() -> None:
             last_activity TIMESTAMPTZ DEFAULT NOW(),
             created_at    TIMESTAMPTZ DEFAULT NOW(),
             UNIQUE (learner_id, concept_id)
-        );
-
-        CREATE INDEX IF NOT EXISTS ix_concept_mastery_learner
-            ON concept_mastery (learner_id);
-
+        )
+        """
+    )
+    op.execute(
+        "CREATE INDEX IF NOT EXISTS ix_concept_mastery_learner ON concept_mastery (learner_id)"
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS mastery_snapshots (
             id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             learner_id  TEXT NOT NULL,
@@ -55,8 +63,11 @@ def upgrade() -> None:
             scores      JSONB NOT NULL,
             created_at  TIMESTAMPTZ DEFAULT NOW(),
             UNIQUE (learner_id, week_start)
-        );
-
+        )
+        """
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS diagnostic_sessions (
             id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             learner_id    TEXT NOT NULL,
@@ -66,11 +77,14 @@ def upgrade() -> None:
             results       JSONB,
             created_at    TIMESTAMPTZ DEFAULT NOW(),
             completed_at  TIMESTAMPTZ
-        );
-
-        CREATE INDEX IF NOT EXISTS ix_diagnostic_sessions_learner
-            ON diagnostic_sessions (learner_id);
-
+        )
+        """
+    )
+    op.execute(
+        "CREATE INDEX IF NOT EXISTS ix_diagnostic_sessions_learner ON diagnostic_sessions (learner_id)"
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS diagnostic_items (
             id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             topic          TEXT NOT NULL,
@@ -82,11 +96,14 @@ def upgrade() -> None:
             explanation    TEXT,
             source_concept TEXT NOT NULL,
             created_at     TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        CREATE INDEX IF NOT EXISTS ix_diagnostic_items_topic
-            ON diagnostic_items (topic, subject);
-
+        )
+        """
+    )
+    op.execute(
+        "CREATE INDEX IF NOT EXISTS ix_diagnostic_items_topic ON diagnostic_items (topic, subject)"
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS learning_plans (
             id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             learner_id    TEXT NOT NULL UNIQUE,
@@ -96,8 +113,11 @@ def upgrade() -> None:
             status        TEXT NOT NULL DEFAULT 'active',
             created_at    TIMESTAMPTZ DEFAULT NOW(),
             updated_at    TIMESTAMPTZ DEFAULT NOW()
-        );
-
+        )
+        """
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS plan_weeks (
             id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             plan_id       UUID NOT NULL REFERENCES learning_plans(id) ON DELETE CASCADE,
@@ -107,8 +127,11 @@ def upgrade() -> None:
             quiz_due_at   TIMESTAMPTZ,
             status        TEXT NOT NULL DEFAULT 'upcoming',
             UNIQUE (plan_id, week_number)
-        );
-
+        )
+        """
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS weekly_quizzes (
             id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             week_id       UUID NOT NULL REFERENCES plan_weeks(id) ON DELETE CASCADE,
@@ -120,8 +143,11 @@ def upgrade() -> None:
             score         NUMERIC(5,4),
             per_topic     JSONB,
             status        TEXT NOT NULL DEFAULT 'pending'
-        );
-
+        )
+        """
+    )
+    op.execute(
+        """
         CREATE TABLE IF NOT EXISTS quiz_responses (
             id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             quiz_id       UUID NOT NULL,
@@ -131,25 +157,21 @@ def upgrade() -> None:
             correct       BOOLEAN NOT NULL,
             time_spent_s  INT,
             created_at    TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        CREATE INDEX IF NOT EXISTS ix_quiz_responses_quiz
-            ON quiz_responses (quiz_id, quiz_type);
+        )
         """
+    )
+    op.execute(
+        "CREATE INDEX IF NOT EXISTS ix_quiz_responses_quiz ON quiz_responses (quiz_id, quiz_type)"
     )
 
 
 def downgrade() -> None:
-    op.execute(
-        """
-        DROP TABLE IF EXISTS quiz_responses;
-        DROP TABLE IF EXISTS weekly_quizzes;
-        DROP TABLE IF EXISTS plan_weeks;
-        DROP TABLE IF EXISTS learning_plans;
-        DROP TABLE IF EXISTS diagnostic_items;
-        DROP TABLE IF EXISTS diagnostic_sessions;
-        DROP TABLE IF EXISTS mastery_snapshots;
-        DROP TABLE IF EXISTS concept_mastery;
-        DROP TABLE IF EXISTS learner_profiles;
-        """
-    )
+    op.execute("DROP TABLE IF EXISTS quiz_responses")
+    op.execute("DROP TABLE IF EXISTS weekly_quizzes")
+    op.execute("DROP TABLE IF EXISTS plan_weeks")
+    op.execute("DROP TABLE IF EXISTS learning_plans")
+    op.execute("DROP TABLE IF EXISTS diagnostic_items")
+    op.execute("DROP TABLE IF EXISTS diagnostic_sessions")
+    op.execute("DROP TABLE IF EXISTS mastery_snapshots")
+    op.execute("DROP TABLE IF EXISTS concept_mastery")
+    op.execute("DROP TABLE IF EXISTS learner_profiles")
