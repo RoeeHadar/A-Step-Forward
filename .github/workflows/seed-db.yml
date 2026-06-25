@@ -45,8 +45,9 @@ jobs:
         if: ${{ inputs.target == 'all' || inputs.target == 'knowledge-graph' }}
         env:
           NEO4J_URI: ${{ secrets.NEO4J_URI }}
-          NEO4J_USER: ${{ secrets.NEO4J_USER }}
+          NEO4J_USER: neo4j
           NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
+          NEO4J_DATABASE: neo4j
           USE_NEO4J: "true"
         run: uv run python scripts/seed_knowledge_graph.py
 
