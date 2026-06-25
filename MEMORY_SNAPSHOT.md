@@ -31,6 +31,10 @@ locked decisions are project policy; sub-agents must not stop to ask the user.
 See `docs/sprint.md`.
 
 <!-- LAST_SESSION -->
-The platform is now being upgraded from a content browser + chatbot to a full adaptive learning system (KG prerequisite graph ? diagnostic CAT ? weekly plans ? end-of-week quizzes ? tutor mastery injection). See subagent-briefs/14-adaptive-learning-architecture.md. Nothing existing breaks; new services are additive.
+Round 4 (2026-06-25): PR #15 merged; Render deploy failed — `bookings.py` used
+`EmailStr` without `email-validator`; CI never imported `app.main`. Fixed on
+`fix/render-api-startup`: validated `str` Field, Dockerfile `app.main:app`, CI
+import smoke + `apps/api/tests`. Adaptive learning architecture brief is
+`14-adaptive-learning-architecture.md` (additive, nothing breaks).
 <!-- LAST_SESSION -->
 
