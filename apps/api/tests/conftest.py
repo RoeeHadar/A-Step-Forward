@@ -11,8 +11,8 @@ def _default_test_env(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRe
     if request.node.fspath.basename == "test_auth_clerk.py":
         yield  # type: ignore[misc]
         return
-    monkeypatch.delenv("CLERK_JWKS_URL", raising=False)
-    monkeypatch.delenv("CLERK_ISSUER", raising=False)
+    monkeypatch.setenv("CLERK_JWKS_URL", "")
+    monkeypatch.setenv("CLERK_ISSUER", "")
     monkeypatch.setenv("APP_ENV", "test")
     monkeypatch.setenv("RATE_LIMIT_ENABLED", "false")
     from app.core.settings import get_settings

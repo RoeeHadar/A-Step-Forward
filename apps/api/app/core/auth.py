@@ -54,7 +54,10 @@ async def _fetch_jwks() -> dict[str, Any]:
         async with httpx.AsyncClient(timeout=10.0) as client:
             resp = await client.get(settings.clerk_jwks_url)
             resp.raise_for_status()
-            _jwks_cache = resp.json()
+            try:
+                _jwks_cache = resp.json()
+            except ValueError as exc:
+                raise AuthError("invalid Clerk JWKS response") from exc
             _jwks_fetched_at = now
             return _jwks_cache
     except httpx.HTTPError as exc:
