@@ -60,10 +60,15 @@ jobs:
           from app.main import app
           from learner_model_service.api import get_learner_model_service
           from diagnostic_service.api import get_diagnostic_service
+          from learning_path_service.api import get_learning_path_service
           assert app.title
           get_learner_model_service
           get_diagnostic_service
+          get_learning_path_service
           "
+
+      - name: Learning path unit tests
+        run: uv run --package learning-path-service pytest -q
 
       - name: Pytest
         run: uv run pytest tests

@@ -17,6 +17,7 @@ COPY services/workers/pyproject.toml services/workers/
 COPY services/curriculum/pyproject.toml services/curriculum/
 COPY services/learner_model/pyproject.toml services/learner_model/
 COPY services/diagnostic/pyproject.toml services/diagnostic/
+COPY services/learning_path/pyproject.toml services/learning_path/
 
 # Install all workspace dependencies
 RUN uv sync --frozen --no-dev --package asf-api
@@ -32,6 +33,7 @@ COPY services/workers services/workers
 COPY services/curriculum services/curriculum
 COPY services/learner_model services/learner_model
 COPY services/diagnostic services/diagnostic
+COPY services/learning_path services/learning_path
 COPY apps/api apps/api
 
 # Re-sync to ensure editable installs are wired
@@ -42,7 +44,8 @@ RUN uv run --package asf-api python -c "\
 from app.main import app; \
 from learner_model_service.api import get_learner_model_service; \
 from diagnostic_service.api import get_diagnostic_service; \
-assert app.title; get_learner_model_service; get_diagnostic_service"
+from learning_path_service.api import get_learning_path_service; \
+assert app.title; get_learner_model_service; get_diagnostic_service; get_learning_path_service"
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app/apps/api"
