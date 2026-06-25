@@ -10,7 +10,7 @@ export async function POST(
   const { userId, getToken } = await auth();
   if (!userId) return new Response('Unauthorized', { status: 401 });
 
-  const { week_id } = await params;
+  await params; // week_id unused — plan_id + week_num come from the body
   const body = (await req.json()) as {
     plan_id: string;
     week_num: number;

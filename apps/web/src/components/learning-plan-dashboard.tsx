@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Badge } from '@asf/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { Button } from '@asf/ui/button';
-import type { LearningPlan, PlanConcept, PlanWeek } from '@asf/schemas/learning_path';
+import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { currentActiveWeek } from '@/lib/learning-path-types';
 
 function masteryBadgeVariant(score: number | null | undefined): 'success' | 'warning' | 'secondary' {

@@ -39,7 +39,7 @@ export default async function QuizPage({ params, searchParams }: Props) {
   const { userId, getToken } = await auth();
   if (!userId) redirect('/sign-in');
 
-  const { week_id } = await params;
+  await params; // week_id is in the URL for routing; actual quiz is fetched via plan_id + week_num
   const { plan_id, week_num } = await searchParams;
 
   if (!plan_id || !week_num) {
