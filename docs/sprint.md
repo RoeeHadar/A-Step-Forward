@@ -74,18 +74,20 @@ project policy — sub-agents do not ask the user.
 End-to-end deployed website + public GitHub repo + shareable demo. See
 `.cursor/subagent-briefs/11-release-captain-resume.md` Phase A → D.
 
-## Round 4 tasks dispatched (2026-06-25 13:41)
+## Round 4 — Done (2026-06-25)
 
-See .cursor/subagent-briefs/13-coordinator-directive.md for the full directive.
+See `.cursor/subagent-briefs/13-coordinator-directive.md`.
 
-| Priority | Task |
-| --- | --- |
-| P0 | Merge ix/coordinator-round3 ? main once Vercel preview is green |
-| P1 | Triage 3 diverged in-flight branches; delete superseded ones |
-| P2 | Verify content DB migrations on Neon; document ingest command |
-| P3 | Verify chat works with real AI response post-deploy |
-| P4 | Batch-merge safe Dependabot PRs (8 open) |
-| P5 | Add Resend API key instructions to BLOCKED.md |
-| P6 | Continue memory, GraphRAG, security, evals missions |
+| Priority | Status | Notes |
+| -------- | ------ | ----- |
+| P0 Merge Round 3 | **Done** | PR #15 squash-merged → `c509f5b`; Vercel + CI green |
+| P1 Branch triage | **Partial** | Deleted `release/phase-1-integration`. Diverged branches (`chore/infra/workspace-stabilization`, `feat/agents/03-phase3-system-agents`, `feat/mcp/05-server-improvements`) need rebase + cherry-pick PRs |
+| P2 Content infra | **Ready** | Migrations 0008/0009 on main; run `alembic upgrade head` on Neon; ingest docs in `docs/infra/local-dev.md` |
+| P3 Chat verify | **Pending human** | Render redeploying from main; browser test `/app/chat/tutor` after wake |
+| P4 Dependabot | **Pending** | 5 GH Actions bumps open (#5–#9); batch merge when convenient |
+| P5 Resend | **Done** | Instructions in `BLOCKED.md` §2 item 6 |
+| P6 Ongoing missions | **Ongoing** | Memory Postgres, GraphRAG context wiring, RBAC tests, real eval gates |
 
-**Build post-mortem logged**: ESLint unused-var + ESM transpilePackages rules now in skills/add-a-frontend-page/SKILL.md.
+**Deleted remote branches:** `release/phase-1-integration`, `fix/coordinator-round3` (via PR merge).
+
+**Build post-mortem:** ESLint unused-var + ESM `transpilePackages` rules in `skills/add-a-frontend-page/SKILL.md`.
