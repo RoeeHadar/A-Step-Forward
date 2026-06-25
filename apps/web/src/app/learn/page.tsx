@@ -21,7 +21,8 @@ export default async function LearnPage() {
 
         {subjects.length === 0 ? (
           <div className="glass-surface rounded-2xl p-8 text-center text-muted-foreground">
-            <p>Content is being prepared. Run <code className="text-foreground">make ingest</code> locally to load the Learning Database.</p>
+            <p className="text-foreground font-medium">No content available right now</p>
+            <p className="mt-2 text-sm">The content service is temporarily unavailable. Please try again in a moment.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

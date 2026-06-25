@@ -102,7 +102,10 @@ async function* streamAgentResponse(
     }
 
     if (!res?.ok || !res.body) {
-      yield getMockResponse(message, agent);
+      // Render backend unreachable — fall back to direct Groq call
+      for await (const chunk of streamFromGroq(message, agent)) {
+        yield chunk;
+      }
       return;
     }
 
@@ -135,11 +138,107 @@ async function* streamAgentResponse(
     }
 
     if (!emitted) {
-      yield getMockResponse(message, agent);
+      for await (const chunk of streamFromGroq(message, agent)) {
+        yield chunk;
+      }
     }
   } catch (err) {
     logger.error('chat stream failed', { err: String(err) });
-    yield "I'm having trouble connecting right now. Please try again shortly.";
+    try {
+      for await (const chunk of streamFromGroq(message, agent)) {
+        yield chunk;
+      }
+    } catch {
+      yield "I'm having trouble connecting right now. Please try again shortly.";
+    }
+  }
+}
+
+const AGENT_PERSONAS: Record<string, string> = {
+  tutor:
+    "You are the Tutor for A Step Forward, an AI-native learning center. Use the Socratic method — ask guiding questions, give worked examples when asked, and adapt difficulty to the learner. Reply in the learner's language (Hebrew or English). Be warm, concise, and concrete.",
+  mentor:
+    "You are the Mentor for A Step Forward. Help learners set goals, build study habits, and stay motivated. Reply in the learner's language. Be empathetic, direct, and actionable.",
+  coach:
+    "You are the Coach for A Step Forward. Run practice drills and spaced-repetition reviews. Reply in the learner's language. Be encouraging but rigorous.",
+  reviewer:
+    "You are the Reviewer for A Step Forward. Give specific, line-level feedback on code, essays, or solutions. Reply in the learner's language. Be precise and kind.",
+  qa_explainer:
+    "You are the QA Explainer for A Step Forward. Answer learner questions with a clear, cited explanation. Reply in the learner's language. Be accurate and concrete.",
+  note_taker:
+    "You are the Note Taker for A Step Forward. Summarize and organize learner notes. Reply in the learner's language. Be structured and brief.",
+};
+
+async function* streamFromGroq(message: string, agent: string): AsyncGenerator<string> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    yield getMockResponse(message, agent);
+    return;
+  }
+
+  const persona = AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor;
+
+  try {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: persona },
+          { role: 'user', content: message },
+        ],
+        max_tokens: 1024,
+        temperature: 0.4,
+        stream: true,
+      }),
+    });
+
+    if (!resp.ok || !resp.body) {
+      yield getMockResponse(message, agent);
+      return;
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let emitted = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') break;
+        try {
+          const parsed = JSON.parse(data) as {
+            choices?: Array<{ delta?: { content?: string } }>;
+          };
+          const token = parsed.choices?.[0]?.delta?.content;
+          if (token) {
+            emitted = true;
+            yield token;
+          }
+        } catch {
+          // ignore parse errors
+        }
+      }
+    }
+
+    if (!emitted) {
+      yield getMockResponse(message, agent);
+    }
+  } catch (err) {
+    logger.warn('groq fallback failed', { err: String(err) });
+    yield getMockResponse(message, agent);
   }
 }
 
