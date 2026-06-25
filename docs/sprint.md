@@ -30,6 +30,21 @@ project policy — sub-agents do not ask the user.
 | 10 | Security / Safety | Only `safety_moderation` eval YAMLs (80 lines); rest to do | `feat/security/10-safety-hardening` |
 | 11 | **Release Captain** | NEW this round — coordinates merges, deploys, launch | — |
 
+## Round 3 — Active (2026-06-25, from supervisor)
+
+### New priorities dispatched
+
+| Priority | Task | Brief |
+| -------- | ---- | ----- |
+| P0 | Fix chat — AI agent unreachable (mock fallback is showing) | `12-coordinator-directive.md §P0` |
+| P1 | Content pipeline: Learning Database (76 PDFs) → Postgres + website | `12-coordinator-directive.md §P1` |
+| P2 | Private lesson booking page (`/book`) | `12-coordinator-directive.md §P2` |
+| P3 | Free vs Premium tier structure | `12-coordinator-directive.md §P3` |
+| P4 | In-flight branch triage | `12-coordinator-directive.md §P4` |
+| P5 | Continue previous missions (memory, GraphRAG, MCP, evals, security) | `12-coordinator-directive.md §P5` |
+
+**User constraints**: No key rotation yet. Learning Database folder is `.gitignore`d (PDFs). No payment integration now (Premium tier is free structurally). Bagrut tests are drag-and-drop PDF viewer only.
+
 ### Round 2 acceptance (Release Captain enforces)
 
 End-to-end deployed website + public GitHub repo + shareable demo. See
