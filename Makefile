@@ -6,7 +6,7 @@ PYTHON ?= python
 UV ?= uv
 UV_FLAGS ?= --system-certs
 
-.PHONY: help up down dev migrate migrate-revision seed seed-kg ingest evals evals-ci lint fmt test smoke sync
+.PHONY: help up down dev migrate migrate-revision seed seed-kg seed-diagnostic ingest evals evals-ci lint fmt test smoke sync
 
 help:
 	@echo "Targets:"
@@ -18,6 +18,7 @@ help:
 	@echo "  migrate-revision Autogenerate Alembic revision (msg=...)"
 	@echo "  seed             Seed curriculum + sample learner"
 	@echo "  seed-kg          Seed Neo4j prerequisite graph from content/knowledge-graph/"
+	@echo "  seed-diagnostic  Bootstrap diagnostic_items MCQ bank from KG YAML"
 	@echo "  ingest           Ingest Learning Database PDFs into Postgres"
 	@echo "  evals            Run full eval suite (promptfoo + DeepEval + memory)"
 	@echo "  evals-ci         Run touched-only evals (CI default)"
@@ -49,6 +50,9 @@ seed:
 
 seed-kg:
 	$(UV) run $(UV_FLAGS) python scripts/seed_knowledge_graph.py
+
+seed-diagnostic:
+	$(UV) run $(UV_FLAGS) python scripts/seed_diagnostic_items.py
 
 ingest:
 	$(UV) run $(UV_FLAGS) python scripts/ingest_learning_db.py --db-url $(DATABASE_URL) \

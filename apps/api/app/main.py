@@ -19,6 +19,7 @@ from .routers import (
     bookings,
     chat,
     content,
+    diagnostic,
     graphrag,
     health,
     learners,
@@ -64,6 +65,7 @@ def create_app() -> FastAPI:
     app.include_router(agents.router)
     app.include_router(learners.router)
     app.include_router(onboarding.router)
+    app.include_router(diagnostic.router)
     app.include_router(lessons.router)
     app.include_router(content.router)
     app.include_router(bookings.router)

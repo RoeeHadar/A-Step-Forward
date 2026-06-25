@@ -16,6 +16,7 @@ COPY services/orchestrator/pyproject.toml services/orchestrator/
 COPY services/workers/pyproject.toml services/workers/
 COPY services/curriculum/pyproject.toml services/curriculum/
 COPY services/learner_model/pyproject.toml services/learner_model/
+COPY services/diagnostic/pyproject.toml services/diagnostic/
 
 # Install all workspace dependencies
 RUN uv sync --frozen --no-dev --package asf-api
@@ -30,6 +31,7 @@ COPY services/orchestrator services/orchestrator
 COPY services/workers services/workers
 COPY services/curriculum services/curriculum
 COPY services/learner_model services/learner_model
+COPY services/diagnostic services/diagnostic
 COPY apps/api apps/api
 
 # Re-sync to ensure editable installs are wired
