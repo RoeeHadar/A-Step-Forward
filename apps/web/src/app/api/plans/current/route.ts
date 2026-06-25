@@ -1,20 +1,27 @@
 import { auth } from '@clerk/nextjs/server';
-import { API_BASE_URL } from '@/lib/api';
+import { getCurrentPlan, dbConfigured } from '@/lib/neon-db';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const { userId, getToken } = await auth();
-  if (!userId) {
-    return new Response('Unauthorized', { status: 401 });
+  const { userId } = await auth();
+  if (!userId) return new Response('Unauthorized', { status: 401 });
+  if (!dbConfigured) {
+    return Response.json({ plan: null, reason: 'db_not_configured' });
   }
 
-  const token = await getToken();
-  const res = await fetch(`${API_BASE_URL}/v1/learners/me/plans/current`, {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
-  });
-
-  const data = await res.json().catch(() => ({}));
-  return Response.json(data, { status: res.status });
+  try {
+    const plan = await getCurrentPlan(userId);
+    if (!plan) {
+      return Response.json({ plan: null });
+    }
+    return Response.json({ plan });
+  } catch (err) {
+    console.error('[plans/current]', err);
+    return Response.json(
+      { plan: null, error: err instanceof Error ? err.message : String(err) },
+      { status: 200 },
+    );
+  }
 }

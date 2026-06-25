@@ -3,6 +3,13 @@ import { StreamingTextResponse } from 'ai';
 import { agentNameSchema, chatChunkSchema } from '@asf/schemas/agents';
 import { API_BASE_URL } from '@/lib/api';
 import { logger } from '@/lib/logger';
+import {
+  fetchRecentChatTurns,
+  recordChatTurn,
+  getLearnerProfile,
+  getConceptMastery,
+} from '@/lib/neon-db';
+import kg from '@/lib/kg-data.json';
 
 export const runtime = 'nodejs';
 
@@ -10,6 +17,19 @@ export const runtime = 'nodejs';
 const BACKEND_FETCH_TIMEOUT_MS = 90_000;
 const BACKEND_MAX_ATTEMPTS = 2;
 const COLD_START_GRACE_MS = 3_000;
+const MAX_MEMORY_TURNS = 10;
+
+interface KgConcept {
+  id: string;
+  name: string;
+  name_he: string | null;
+  subject: string;
+  level: string;
+  prerequisites: string[];
+}
+const kgByName: Record<string, KgConcept> = Object.fromEntries(
+  ((kg as { concepts: KgConcept[] }).concepts).map((c) => [c.id, c]),
+);
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -26,13 +46,23 @@ export async function POST(req: Request) {
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
 
   const isFirstTurn = (body.messages?.filter((m) => m.role === 'user').length ?? 0) <= 1;
+
+  // Record the user turn (fire-and-forget, doesn't block streaming).
+  void recordChatTurn(userId, agent, 'user', lastMessage);
+
   const gen = streamAgentResponse(userId, lastMessage, agent, isFirstTurn);
   const encoder = new TextEncoder();
+  let assistantBuffer = '';
   const readable = new ReadableStream({
     async pull(controller) {
       const { value, done } = await gen.next();
-      if (done) controller.close();
-      else controller.enqueue(encoder.encode(value));
+      if (done) {
+        controller.close();
+        if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
+      } else {
+        assistantBuffer += value;
+        controller.enqueue(encoder.encode(value));
+      }
     },
   });
   return new StreamingTextResponse(readable);
@@ -102,8 +132,8 @@ async function* streamAgentResponse(
     }
 
     if (!res?.ok || !res.body) {
-      // Render backend unreachable — fall back to direct Groq call
-      for await (const chunk of streamFromGroq(message, agent)) {
+      // Render backend unreachable — fall back to direct Groq call with memory + profile context.
+      for await (const chunk of streamFromGroq(userId, message, agent)) {
         yield chunk;
       }
       return;
@@ -138,14 +168,14 @@ async function* streamAgentResponse(
     }
 
     if (!emitted) {
-      for await (const chunk of streamFromGroq(message, agent)) {
+      for await (const chunk of streamFromGroq(userId, message, agent)) {
         yield chunk;
       }
     }
   } catch (err) {
     logger.error('chat stream failed', { err: String(err) });
     try {
-      for await (const chunk of streamFromGroq(message, agent)) {
+      for await (const chunk of streamFromGroq(userId, message, agent)) {
         yield chunk;
       }
     } catch {
@@ -169,16 +199,116 @@ const AGENT_PERSONAS: Record<string, string> = {
     "You are the Note Taker for A Step Forward. Summarize and organize learner notes. Reply in the learner's language. Be structured and brief.",
 };
 
-async function* streamFromGroq(message: string, agent: string): AsyncGenerator<string> {
+function findRelevantConcepts(message: string, subjects: string[]): KgConcept[] {
+  if (!message) return [];
+  const lower = message.toLowerCase();
+  const matches: KgConcept[] = [];
+  for (const concept of Object.values(kgByName)) {
+    if (subjects.length && !subjects.includes(concept.subject)) continue;
+    const id = concept.id.replace(/_/g, ' ');
+    if (
+      lower.includes(id) ||
+      lower.includes(concept.name.toLowerCase()) ||
+      (concept.name_he && lower.includes(concept.name_he.toLowerCase()))
+    ) {
+      matches.push(concept);
+    }
+  }
+  return matches.slice(0, 3);
+}
+
+async function buildContextPrompt(
+  userId: string,
+  agent: string,
+  message: string,
+): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
+  const profile = await getLearnerProfile(userId).catch(() => null);
+  const mastery = await getConceptMastery(userId).catch(() => ({}));
+  const recent = await fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []);
+
+  let context = AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor!;
+
+  if (profile) {
+    context += `\n\n## Learner profile`;
+    context += `\n- Goal: ${profile.goal}`;
+    if (profile.grade_level) context += `\n- Grade level: ${profile.grade_level}`;
+    if (profile.points_group) context += `\n- Math units: ${profile.points_group}`;
+    if (profile.subjects?.length) context += `\n- Subjects: ${profile.subjects.join(', ')}`;
+    if (profile.preferred_style) context += `\n- Preferred style: ${profile.preferred_style}`;
+    if (profile.hours_per_week) context += `\n- Available study time: ${profile.hours_per_week} hours/week`;
+    if (profile.next_test_name && profile.next_test_date) {
+      context += `\n- Next big event: ${profile.next_test_name} on ${profile.next_test_date}`;
+    }
+    if (profile.final_goal_date) {
+      context += `\n- Final goal date: ${profile.final_goal_date}`;
+    }
+    const mental = profile.mental_state as Record<string, unknown> | null;
+    if (mental && Object.keys(mental).length > 0) {
+      const anxiety = typeof mental.anxiety === 'number' ? mental.anxiety : null;
+      const motivation = typeof mental.motivation === 'number' ? mental.motivation : null;
+      if (anxiety != null) context += `\n- Test anxiety: ${anxiety}/10`;
+      if (motivation != null) context += `\n- Motivation: ${motivation}/10`;
+      if (anxiety != null && anxiety >= 7) {
+        context += `\n- IMPORTANT: This learner has high test anxiety. Be extra reassuring; avoid time pressure cues; celebrate small wins.`;
+      }
+    }
+  }
+
+  const weakConcepts = Object.entries(mastery)
+    .filter(([, score]) => score < 0.4)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 5)
+    .map(([id]) => id);
+  const strongConcepts = Object.entries(mastery)
+    .filter(([, score]) => score > 0.7)
+    .map(([id]) => id)
+    .slice(0, 5);
+  if (weakConcepts.length || strongConcepts.length) {
+    context += `\n\n## Mastery so far`;
+    if (weakConcepts.length) context += `\n- Weak areas: ${weakConcepts.join(', ')}`;
+    if (strongConcepts.length) context += `\n- Strong areas: ${strongConcepts.join(', ')}`;
+  }
+
+  const related = findRelevantConcepts(message, profile?.subjects ?? []);
+  if (related.length) {
+    context += `\n\n## Relevant curriculum context`;
+    for (const c of related) {
+      context += `\n- ${c.name} (${c.id})`;
+      if (c.prerequisites?.length) context += ` — prerequisites: ${c.prerequisites.join(', ')}`;
+    }
+  }
+
+  context += `\n\nKeep responses focused on this learner. Reference their goal and timeline when relevant.`;
+
+  return {
+    system: context,
+    memory: recent.map((t) => ({
+      role: t.role,
+      content: t.content,
+    })),
+  };
+}
+
+async function* streamFromGroq(
+  userId: string,
+  message: string,
+  agent: string,
+): AsyncGenerator<string> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     yield getMockResponse(message, agent);
     return;
   }
 
-  const persona = AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor;
+  const { system, memory } = await buildContextPrompt(userId, agent, message);
 
   try {
+    const messages: Array<{ role: string; content: string }> = [
+      { role: 'system', content: system },
+      ...memory,
+      { role: 'user', content: message },
+    ];
+
     const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -187,10 +317,7 @@ async function* streamFromGroq(message: string, agent: string): AsyncGenerator<s
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: persona },
-          { role: 'user', content: message },
-        ],
+        messages,
         max_tokens: 1024,
         temperature: 0.4,
         stream: true,
@@ -198,6 +325,7 @@ async function* streamFromGroq(message: string, agent: string): AsyncGenerator<s
     });
 
     if (!resp.ok || !resp.body) {
+      logger.warn('groq returned non-ok', { status: resp.status });
       yield getMockResponse(message, agent);
       return;
     }
