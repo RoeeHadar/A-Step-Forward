@@ -20,11 +20,11 @@ jobs:
   migrate-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: astral-sh/setup-uv@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -38,12 +38,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Sync secrets from Doppler
-        uses: dopplerhq/cli-action@v3
+        uses: dopplerhq/cli-action@v4
         with:
           token: ${{ secrets.DOPPLER_TOKEN }}
           project: a-step-forward
@@ -54,14 +54,14 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         run: |
           if [ -z "$FLY_API_TOKEN" ]; then
-            echo "::notice::Skipping Fly.io deploy — FLY_API_TOKEN not set (Render is primary)."
+            echo "::notice::Skipping Fly.io deploy â€” FLY_API_TOKEN not set (Render is primary)."
             exit 0
           fi
           flyctl deploy --config infra/fly/asf-api.toml --remote-only
 
       - uses: astral-sh/setup-uv@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -71,7 +71,7 @@ jobs:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         run: |
           if [ -z "$FLY_API_TOKEN" ] || [ -z "$DATABASE_URL" ]; then
-            echo "::notice::Skipping staging migrations — Fly/DB secrets not configured."
+            echo "::notice::Skipping staging migrations â€” Fly/DB secrets not configured."
             exit 0
           fi
           uv run alembic -c infra/alembic.ini upgrade head
