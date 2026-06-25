@@ -81,7 +81,7 @@ See `.cursor/subagent-briefs/13-coordinator-directive.md`.
 | Priority | Status | Notes |
 | -------- | ------ | ----- |
 | P0 Merge Round 3 | **Done** | PR #15 + #16 merged; Render `/healthz` + `/readyz` green |
-| P1 Branch triage | **In progress** | Diverged branches need rebase PRs; stale remotes pending cleanup |
+| P1 Branch triage | **Done** | [P1 audit](9b067447-50a5-43e9-9fed-fb992c6a878b): agents/MCP archived (already on main); infra branch surgical port only |
 | P2 Content infra | **Blocked on Neon migrate** | `/v1/subjects` 500 until 0008/0009 applied — `migrate-neon.yml` added |
 | P3 Chat verify | **API up** | healthz/readyz/warmup OK; live chat needs signed-in browser test |
 | P4 Dependabot | **In progress** | Batch GH Actions PR (#5–#9) |
@@ -98,7 +98,9 @@ Branch `feat/adaptive-learning/phase-a`:
 
 **Next after Neon confirms 0010:** dispatch Backend (02) for LearnerModelService + onboarding API (A3+A4). **Do not start Phase B** until then.
 
-**Deleted remote branches:** `release/phase-1-integration`, `fix/coordinator-round3` (via PR merge).
+**Deleted branches (2026-06-25):** `release/phase-1-integration`, `fix/coordinator-round3`, `fix/render-api-startup` (remote); `feat/curriculum/openstax-ingest`, `feat/frontend/chat-cold-start-fix` (local, 0-ahead / never on remote).
+
+**Archived (do not merge/rebase):** `feat/agents/03-phase3-system-agents`, `feat/mcp/05-server-improvements`, `wip/agents-phase3-snapshot`. **Surgical port only:** `chore/infra/workspace-stabilization` (Alembic/uv slices from `9820532`, not whole branch).
 
 **Build post-mortem:** ESLint unused-var + ESM `transpilePackages` rules in `skills/add-a-frontend-page/SKILL.md`.
 
