@@ -23,6 +23,13 @@ description: How to deploy apps/web (Vercel), apps/api + services (Fly.io), work
 - Secrets via `fly secrets set ...` (sourced from Doppler).
 - Rolling deploys; auto-rollback on health-check fail.
 
+## Backend (Render — primary for solo/staging)
+- Service: `asf-api` via `render.yaml` + `apps/api/Dockerfile`.
+- **Start command**: `uvicorn app.main:app` with `PYTHONPATH=/app/apps/api` (see Dockerfile). Do not use `apps.api.app.main` — fragile without package `__init__.py` files.
+- **Pre-push gate**: `uv run --package asf-api python -c "from app.main import app"`. CI runs this as "API import smoke". A green root `pytest` does **not** prove the API boots.
+- **Optional Pydantic types**: `EmailStr` needs `email-validator>=2.0` in `apps/api` deps (and `uv lock`), or use `Field(pattern=...)` on `str`. Missing dep crashes startup when FastAPI generates schemas.
+- Free tier cold-starts ~15s; frontend warm-up + 55s timeout handle this (see ADR-001).
+
 ## Workers (Fly Machines or Modal)
 - Celery beat + worker pools; one machine per pool.
 - Dreamer pool gets larger memory.
@@ -42,3 +49,4 @@ description: How to deploy apps/web (Vercel), apps/api + services (Fly.io), work
 - Don't pin a model in production without a fallback route in `agents/base/llm.py`.
 - Don't bypass migration gates ("just one quick fix"); follow the checklist.
 - Don't ship a prompt or agent change without an eval baseline promotion PR.
+- Don't assume green CI means Render will boot — verify the **API import smoke** step and Docker `CMD` match.

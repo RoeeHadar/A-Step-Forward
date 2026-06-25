@@ -54,8 +54,11 @@ jobs:
       - name: Alembic upgrade head
         run: uv run alembic -c infra/alembic.ini upgrade head
 
+      - name: API import smoke (matches Render Docker startup)
+        run: uv run --package asf-api python -c "from app.main import app; assert app.title"
+
       - name: Pytest
-        run: uv run pytest
+        run: uv run pytest tests apps/api/tests
 
   web:
     runs-on: ubuntu-latest
