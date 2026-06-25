@@ -55,8 +55,9 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          if [ -f tmp/content_export.json ]; then
-            python scripts/import_content_json.py --input tmp/content_export.json
+          if [ -f scripts/seed_data/content_export.json ]; then
+            pip install psycopg[binary] -q
+            python scripts/import_content_json.py --input scripts/seed_data/content_export.json
           else
-            echo "No tmp/content_export.json found — skipping. Run ingest_learning_db.py --export-json first."
+            echo "No scripts/seed_data/content_export.json found — skipping."
           fi
