@@ -1,6 +1,33 @@
-# Resume Briefs — Round 2 (2026-06-23 PM)
+# Resume Briefs — Round 6 (2026-06-26)
 
 These `NN-<stream>-resume.md` files are the **current paste-and-go prompts** for the Composer 2.5 / Cursor Auto sub-agents. They supersede the starter prompts inside the original briefs for this round only. The originals (`NN-<stream>.md`) remain the canonical contract.
+
+**Coordinator directive**: `.cursor/subagent-briefs/15-coordinator-directive.md` (Round 6, 2026-06-26).
+
+## Current state (2026-06-26)
+
+### Live
+- Frontend: https://a-step-forward-waij.vercel.app
+- Backend: https://asf-api-q566.onrender.com
+- CI: green on `main`
+
+### Databases — seeded
+| Store | Contents |
+|-------|----------|
+| Neon (PostgreSQL) | 30 tables, 460 diagnostic items, 232 content sections, 13 Bagrut exam records |
+| Neo4j Aura | 92 concepts, 137 PREREQUISITE_OF edges |
+| Vercel static | 15 Bagrut PDFs at `/content/bagrut/` |
+
+### Phases
+- ✅ **Phase A** — DB migrations + KG YAMLs (merged)
+- ✅ **Phase B** — LearnerModelService, StudentModel, `/onboarding` UI + API (merged)
+- ✅ **Phase C** — CAT diagnostic engine, `/diagnostic` UI (merged)
+- 🔄 **Phase D** — Learning path engine + dashboard (in progress; see coordinator TASK 3)
+- ⏳ **Phase E** — Weekly quizzes + plan adaptation (not started)
+
+### Active branches
+- `feat/agents/phase-d-learning-path` — Phase D learning path engine (when spawned)
+- `feat/frontend/learn-content-browser` — `/learn` content browser (coordinator TASK 2)
 
 ## Locked decisions (no need to ask the user)
 
