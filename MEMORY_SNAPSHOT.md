@@ -31,10 +31,6 @@ locked decisions are project policy; sub-agents must not stop to ask the user.
 See `docs/sprint.md`.
 
 <!-- LAST_SESSION -->
-Last session: 2026-06-25 (supervisor check-in — Round 3). Chat broken (mock
-fallback showing; Render cold-start suspected). Three new tasks: content pipeline
-from `Learning Database/` (76 PDFs → Postgres), private lesson booking page
-(`/book`, 150₪/hr, 1-3h, Resend), free/premium tier structure. Full directive in
-`.cursor/subagent-briefs/12-coordinator-directive.md`. `Learning Database/` is
-gitignored (PDFs only, local source of truth). No key rotation yet.
+The platform is now being upgraded from a content browser + chatbot to a full adaptive learning system (KG prerequisite graph ? diagnostic CAT ? weekly plans ? end-of-week quizzes ? tutor mastery injection). See subagent-briefs/14-adaptive-learning-architecture.md. Nothing existing breaks; new services are additive.
 <!-- LAST_SESSION -->
+
