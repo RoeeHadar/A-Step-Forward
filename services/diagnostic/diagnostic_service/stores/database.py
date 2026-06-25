@@ -1,4 +1,4 @@
-"""Async SQLAlchemy engine/session factory."""
+"""Async SQLAlchemy session factory."""
 
 from __future__ import annotations
 
@@ -8,13 +8,14 @@ from urllib.parse import parse_qs, urlparse, urlunparse
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from ..settings import LearnerModelSettings
+from ..settings import DiagnosticSettings
 
 _engine = None
 _session_factory: async_sessionmaker[AsyncSession] | None = None
 
 
 def _normalize_url(url: str) -> tuple[str, dict]:
+    """Convert plain postgresql:// to asyncpg-compatible URL + connect_args."""
     if url.startswith("postgres://"):
         url = "postgresql+asyncpg://" + url[len("postgres://"):]
     elif url.startswith("postgresql://"):
@@ -29,24 +30,24 @@ def _normalize_url(url: str) -> tuple[str, dict]:
     return clean, connect_args
 
 
-def get_engine(settings: LearnerModelSettings | None = None):
+def get_engine(settings: DiagnosticSettings | None = None):
     global _engine, _session_factory
     if _engine is None:
-        cfg = settings or LearnerModelSettings()
+        cfg = settings or DiagnosticSettings()
         url, connect_args = _normalize_url(cfg.database_url)
         _engine = create_async_engine(url, connect_args=connect_args, pool_pre_ping=True)
         _session_factory = async_sessionmaker(_engine, expire_on_commit=False)
     return _engine
 
 
-def get_session_factory(settings: LearnerModelSettings | None = None) -> async_sessionmaker[AsyncSession]:
+def get_session_factory(settings: DiagnosticSettings | None = None) -> async_sessionmaker[AsyncSession]:
     get_engine(settings)
     assert _session_factory is not None
     return _session_factory
 
 
 @asynccontextmanager
-async def session_scope(settings: LearnerModelSettings | None = None) -> AsyncIterator[AsyncSession]:
+async def session_scope(settings: DiagnosticSettings | None = None) -> AsyncIterator[AsyncSession]:
     factory = get_session_factory(settings)
     async with factory() as session:
         yield session
