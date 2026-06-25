@@ -46,7 +46,7 @@ export function AgentChat({ agent }: { agent: string }) {
     fetch('/api/warmup').catch(() => {});
   }, []);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, stop } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload } = useChat({
     api: '/api/chat',
     body: { agent: agentName },
     onError: () => {
