@@ -1,0 +1,35 @@
+name: Migrate Neon
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "infra/alembic/**"
+  workflow_dispatch:
+
+concurrency:
+  group: migrate-neon
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Alembic upgrade head (Neon)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::DATABASE_URL secret is not set"
+            exit 1
+          fi
+          uv sync
+          uv run alembic -c infra/alembic.ini upgrade head

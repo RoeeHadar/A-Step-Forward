@@ -27,7 +27,7 @@ description: How to deploy apps/web (Vercel), apps/api + services (Fly.io), work
 - Service: `asf-api` via `render.yaml` + `apps/api/Dockerfile`.
 - **Start command**: `uvicorn app.main:app` with `PYTHONPATH=/app/apps/api` (see Dockerfile). Do not use `apps.api.app.main` — fragile without package `__init__.py` files.
 - **Pre-push gate**: `uv run --package asf-api python -c "from app.main import app"`. CI runs this as "API import smoke". A green root `pytest` does **not** prove the API boots.
-- **Optional Pydantic types**: `EmailStr` needs `email-validator>=2.0` in `apps/api` deps (and `uv lock`), or use `Field(pattern=...)` on `str`. Missing dep crashes startup when FastAPI generates schemas.
+- **Neon migrations**: `.github/workflows/migrate-neon.yml` runs `alembic upgrade head` on push to `main` when `infra/alembic/**` changes (uses `secrets.DATABASE_URL`). Also `workflow_dispatch` for manual runs. Render does **not** auto-migrate — without this, new routes like `/v1/subjects` 500 until tables exist.
 - Free tier cold-starts ~15s; frontend warm-up + 55s timeout handle this (see ADR-001).
 
 ## Workers (Fly Machines or Modal)
