@@ -13,6 +13,7 @@ on:
           - diagnostic
           - knowledge-graph
           - content-json
+          - external-resources
 
 jobs:
   seed:
@@ -63,3 +64,17 @@ jobs:
           else
             echo "No scripts/seed_data/content_export.json found — skipping."
           fi
+
+      - name: Setup Node (for external resources seed)
+        if: ${{ inputs.target == 'all' || inputs.target == 'external-resources' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Seed external_resources
+        if: ${{ inputs.target == 'all' || inputs.target == 'external-resources' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock js-yaml @neondatabase/serverless
+          node scripts/seed-external-resources.mjs
