@@ -23,8 +23,8 @@ class FakeMemoryService:
         self.settings = MemorySettings()
         self._rows: dict[str, MemoryRecord] = {}
 
-    async def write(self, input: MemoryWriteInput, *, agent_id: str) -> MemoryRecord:
-        _ = agent_id
+    async def write(self, input: MemoryWriteInput, *, agent_id: str, child_mode: bool = False) -> MemoryRecord:
+        _ = (agent_id, child_mode)
         record = MemoryRecord(
             id=str(uuid4()),
             learner_id=input.learner_id,

@@ -43,4 +43,4 @@ Adding a route under `apps/api/app/routers/...`.
 - Never return Pydantic models from internal services without re-validating at the API boundary.
 - Don't add a new HTTP verb for what should be a query parameter (e.g., no `POST /search-and-count`).
 - **`EmailStr` requires `email-validator`** — add it to `apps/api/pyproject.toml` and run `uv lock`, or use `str` + `Field(pattern=...)` instead. FastAPI builds OpenAPI schemas at startup; missing `email-validator` crashes Render/Docker with `ImportError` even though root `pytest` never imported the app.
-- After adding a router, run **`uv run --package asf-api python -c "from app.main import app"`** locally (mirrors Render). Root `testpaths = ["tests"]` alone does not load `apps/api`.
+- After adding a router, run **`uv run --package asf-api python -c "from app.main import app"`** locally (mirrors Render). CI runs this as **API import smoke** — root `pytest tests/` alone does not load `apps/api`.
