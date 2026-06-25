@@ -9,6 +9,8 @@ from memory_service.hygiene.audit import list_memory_audit_events
 from ..core.audit import log_gateway_audit
 from ..core.auth import AuthCtx
 from ..core.rbac import require_admin
+from ..core.db import get_db
+from ..stores import content_store
 from ..stores.audit_store import get_audit_store
 
 router = APIRouter(prefix="/v1/admin", tags=["admin"])
@@ -72,3 +74,16 @@ async def admin_stats(ctx: AuthCtx = Depends(require_admin)) -> dict:
         "memory_audit_event_count": len(memory_rows),
         "rbac_denial_count": sum(1 for r in gateway_rows if r.action == "rbac.denied"),
     }
+
+
+@router.get("/content/status")
+async def content_status(
+    ctx: AuthCtx = Depends(require_admin),
+    session=Depends(get_db),
+) -> dict:
+    await log_gateway_audit(
+        action="admin.content.status",
+        route="/v1/admin/content/status",
+        learner_id=ctx.learner_id,
+    )
+    return await content_store.get_content_status(session)

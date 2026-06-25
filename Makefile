@@ -6,7 +6,7 @@ PYTHON ?= python
 UV ?= uv
 UV_FLAGS ?= --system-certs
 
-.PHONY: help up down dev migrate migrate-revision seed evals evals-ci lint fmt test smoke sync
+.PHONY: help up down dev migrate migrate-revision seed ingest evals evals-ci lint fmt test smoke sync
 
 help:
 	@echo "Targets:"
@@ -17,6 +17,7 @@ help:
 	@echo "  migrate          Run Alembic upgrade head against compose Postgres"
 	@echo "  migrate-revision Autogenerate Alembic revision (msg=...)"
 	@echo "  seed             Seed curriculum + sample learner"
+	@echo "  ingest           Ingest Learning Database PDFs into Postgres"
 	@echo "  evals            Run full eval suite (promptfoo + DeepEval + memory)"
 	@echo "  evals-ci         Run touched-only evals (CI default)"
 	@echo "  lint fmt         ruff/eslint/prettier"
@@ -44,6 +45,10 @@ migrate-revision:
 
 seed:
 	$(UV) run $(UV_FLAGS) python scripts/seed_curriculum.py
+
+ingest:
+	$(UV) run $(UV_FLAGS) python scripts/ingest_learning_db.py --db-url $(DATABASE_URL) \
+	  --source "Learning Database/" --storage-bucket $(R2_BUCKET)
 
 evals:
 	$(UV) sync --all-groups --python 3.11 $(UV_FLAGS)

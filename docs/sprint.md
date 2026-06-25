@@ -32,6 +32,30 @@ project policy — sub-agents do not ask the user.
 
 ## Round 3 — Active (2026-06-25, from supervisor)
 
+### Implementation status (session fix/coordinator-round3)
+
+| Priority | Status | Notes |
+| -------- | ------ | ----- |
+| P0 Chat cold-start | **Done** | 55s timeout, fire-and-forget warmup + 2s grace, waking banner after 3s |
+| P1 Content pipeline | **Done (code)** | Migrations 0008/0009, `scripts/ingest_learning_db.py`, `/v1/subjects/*`, `/learn/*` UI — run `make ingest` to populate |
+| P2 Booking `/book` | **Done** | Form + `POST /api/book` → Resend email or `bookings` table via API |
+| P3 Free/Premium UI | **Done** | Public `/learn`, Premium badge on chat + tutor CTA on subject pages |
+| P4 Branch triage | **Done** | See below |
+| P5 Prior missions | **Ongoing** | Memory/GraphRAG/MCP/evals unchanged this session |
+
+### Branch triage (2026-06-25)
+
+| Branch | Ahead of main | Action |
+| ------ | ------------- | ------ |
+| `feat/agents/03-phase3-system-agents` | 1 commit (Research, KG Builder, Content Curator) | **Open PR** — material value not on main |
+| `feat/mcp/05-server-improvements` | 1 commit (typed errors, tool expansions, tests) | **Open PR** — cherry-pick or merge |
+| `chore/infra/workspace-stabilization` | 1 commit (pyproject/ruff/alembic) | Review vs main; likely partial merge |
+| `release/phase-1-integration` | Stale (main 3+ commits ahead) | **Archive** — integration complete on main |
+| `feat/curriculum/openstax-ingest` | Not on remote | **Superseded** by Learning Database pipeline (P1) |
+| `feat/frontend/chat-cold-start-fix` | Not on remote | **Superseded** by P0 fix on `fix/coordinator-round3` |
+| `feat/frontend/hebrew-rtl-default` | Not on remote | RTL defaults already on main — no action |
+| `feat/frontend/visual-polish` | Not on remote | Visual polish already on main — no action |
+
 ### New priorities dispatched
 
 | Priority | Task | Brief |

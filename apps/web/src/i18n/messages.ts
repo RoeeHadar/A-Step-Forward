@@ -13,6 +13,8 @@ const messages = {
       admin: 'Admin',
       signIn: 'Sign in',
       signUp: 'Get started',
+      learn: 'Learn',
+      book: 'Book a Lesson',
     },
     landing: {
       hero: 'Learn with AI agents\nthat remember you',
@@ -176,6 +178,8 @@ const messages = {
       admin: 'ניהול',
       signIn: 'התחברות',
       signUp: 'התחל',
+      learn: 'לימוד',
+      book: 'קביעת שיעור',
     },
     landing: {
       hero: 'למד עם סוכני AI\nשזוכרים אותך',

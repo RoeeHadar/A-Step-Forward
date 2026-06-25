@@ -69,6 +69,24 @@ S3_SECRET_KEY=miniominio
 S3_BUCKET=astepforward-media
 ```
 
+## Learning Database ingest
+
+Place PDFs under `Learning Database/` (gitignored). Apply migrations, then:
+
+```bash
+uv sync --group ingest
+make migrate
+make ingest DATABASE_URL=postgresql+asyncpg://astepforward:astepforward@localhost:5432/astepforward
+```
+
+Optional: watch for new files:
+
+```bash
+uv run python scripts/ingest_learning_db.py --watch --db-url "$DATABASE_URL"
+```
+
+Bagrut PDFs are copied to `apps/web/public/content/bagrut/` when R2 is not configured.
+
 ## Tear down
 
 ```bash

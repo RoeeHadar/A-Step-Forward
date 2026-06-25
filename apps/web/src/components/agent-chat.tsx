@@ -9,10 +9,12 @@ import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
 import { cn } from '@asf/ui';
 import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas/agents';
+import { PremiumBadge } from '@/components/premium-badge';
 import { useI18n } from '@/providers/i18n-provider';
 import { useChatUiStore } from '@/stores/ui-store';
 
 const CONNECTING_DELAY_MS = 800;
+const WARMUP_BANNER_DELAY_MS = 3000;
 const COLD_START_RETRY_MS = 15000;
 
 const agentGradients: Partial<Record<AgentName, string>> = {
@@ -35,6 +37,7 @@ export function AgentChat({ agent }: { agent: string }) {
   const hasReceivedTokensRef = useRef(false);
   const userMessageCountRef = useRef(0);
   const [showConnecting, setShowConnecting] = useState(false);
+  const [showWarmupBanner, setShowWarmupBanner] = useState(false);
 
   useEffect(() => {
     setLastAgent(agentName);
@@ -66,17 +69,25 @@ export function AgentChat({ agent }: { agent: string }) {
   useEffect(() => {
     if (!isLoading) {
       setShowConnecting(false);
+      setShowWarmupBanner(false);
       return;
     }
 
     if (userMessageCountRef.current > 1) {
       setShowConnecting(false);
+      setShowWarmupBanner(false);
       return;
     }
 
     hasReceivedTokensRef.current = false;
+    setShowWarmupBanner(false);
 
     const connectTimer = window.setTimeout(() => setShowConnecting(true), CONNECTING_DELAY_MS);
+    const warmupTimer = window.setTimeout(() => {
+      if (!hasReceivedTokensRef.current) {
+        setShowWarmupBanner(true);
+      }
+    }, WARMUP_BANNER_DELAY_MS);
     const retryTimer = window.setTimeout(() => {
       if (!hasAutoRetriedRef.current && !hasReceivedTokensRef.current) {
         hasAutoRetriedRef.current = true;
@@ -87,9 +98,18 @@ export function AgentChat({ agent }: { agent: string }) {
 
     return () => {
       window.clearTimeout(connectTimer);
+      window.clearTimeout(warmupTimer);
       window.clearTimeout(retryTimer);
     };
   }, [isLoading, reload, stop]);
+
+  useEffect(() => {
+    const assistantContent = messages.find((m) => m.role === 'assistant')?.content;
+    if (assistantContent && isLoading) {
+      hasReceivedTokensRef.current = true;
+      setShowWarmupBanner(false);
+    }
+  }, [messages, isLoading]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -115,6 +135,7 @@ export function AgentChat({ agent }: { agent: string }) {
         >
           {agentDisplayNames[agentName]}
         </h1>
+        <PremiumBadge />
       </header>
 
       <div className="glass-surface flex flex-1 flex-col overflow-hidden rounded-2xl">
@@ -146,6 +167,14 @@ export function AgentChat({ agent }: { agent: string }) {
               </div>
             ))
           )}
+          {showWarmupBanner && isLoading ? (
+            <div
+              className="rounded-lg border border-accent-cyan/30 bg-accent-cyan/10 px-4 py-2 text-sm text-accent-cyan"
+              role="status"
+            >
+              🔄 Waking the AI up… (free hosting — first response takes up to 30s)
+            </div>
+          ) : null}
           {isLoading ? (
             <div className="flex items-center gap-2 text-muted-foreground" role="status">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />

@@ -246,6 +246,18 @@ export function LandingHero() {
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
               </Link>
               <Link
+                href="/book"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
+              >
+                Book a Lesson
+              </Link>
+              <Link
+                href="/learn"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
+              >
+                Browse content
+              </Link>
+              <Link
                 href="/sign-in"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
               >

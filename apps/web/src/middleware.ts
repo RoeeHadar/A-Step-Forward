@@ -8,6 +8,9 @@ const isPublicRoute = createRouteMatcher([
   '/api/health',
   '/api/debug-auth',
   '/lessons(.*)',
+  '/learn(.*)',
+  '/book',
+  '/api/book',
 ]);
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);

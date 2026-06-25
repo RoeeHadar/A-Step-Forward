@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 
-const BACKEND_FETCH_TIMEOUT_MS = 25000;
+const BACKEND_FETCH_TIMEOUT_MS = 55_000;
 const BACKEND_MAX_ATTEMPTS = 2;
 
 export async function POST(req: Request) {
@@ -14,6 +14,10 @@ export async function POST(req: Request) {
   if (!userId) {
     return new Response('Unauthorized', { status: 401 });
   }
+
+  // fire-and-forget warm-up so Render wakes before the real request
+  fetch(`${API_BASE_URL}/v1/warmup`).catch(() => {});
+  await new Promise((r) => setTimeout(r, 2000));
 
   const body = (await req.json()) as {
     messages?: { role: string; content: string }[];
