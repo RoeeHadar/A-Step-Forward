@@ -17,8 +17,13 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Resolve DATABASE_URL from env (CI, Doppler, local .env.local) with alembic.ini fallback.
+# Neon (and most providers) expose plain `postgresql://` URLs; async_engine_from_config
+# requires `postgresql+asyncpg://`. Rewrite automatically so the secret can stay unchanged.
 database_url = os.environ.get("DATABASE_URL") or config.get_main_option("sqlalchemy.url")
 if database_url:
+    if database_url.startswith("postgresql://") or database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
     config.set_main_option("sqlalchemy.url", database_url)
 
 
