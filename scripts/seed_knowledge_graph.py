@@ -86,6 +86,7 @@ async def seed(*, dry_run: bool = False) -> dict[str, int]:
         raise RuntimeError("USE_NEO4J must be true and NEO4J_URI set")
 
     store = Neo4jStore(settings)
+    await store.connect()
     await store.apply_schema(CYPHER_CONSTRAINTS + CYPHER_INDEXES + CYPHER_FULLTEXT_INDEXES)
 
     for graph in graphs:
