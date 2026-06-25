@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Header, HTTPException
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 
 from ..core.db import get_db
 from ..core.rate_limit import per_ip
@@ -17,7 +17,7 @@ HOURLY_RATE_ILS = 150
 
 class BookingRequest(BaseModel):
     name: str = Field(min_length=1, max_length=200)
-    email: EmailStr
+    email: str = Field(min_length=3, max_length=320, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
     phone: str | None = Field(default=None, max_length=40)
     date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
     time: str = Field(pattern=r"^\d{2}:\d{2}$")
@@ -45,7 +45,7 @@ async def create_booking(
     booking_id = await content_store.insert_booking(
         session,
         name=body.name,
-        email=str(body.email),
+        email=body.email,
         phone=body.phone,
         date=body.date,
         time=body.time,

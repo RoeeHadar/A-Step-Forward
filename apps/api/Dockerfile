@@ -34,8 +34,8 @@ COPY apps/api apps/api
 RUN uv sync --frozen --no-dev --package asf-api
 
 ENV PATH="/app/.venv/bin:$PATH"
-ENV PYTHONPATH="/app"
+ENV PYTHONPATH="/app/apps/api"
 
 EXPOSE 8000
 
-CMD ["uvicorn", "apps.api.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
