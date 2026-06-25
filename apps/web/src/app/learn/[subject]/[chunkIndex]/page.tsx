@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { MarkdownReader } from '@/components/markdown-reader';
 import { PremiumBadge } from '@/components/premium-badge';
-import { fetchSection, fetchSections } from '@/lib/content-api';
+import { fetchSection, fetchSectionSummaries } from '@/lib/content-api';
 import { subjectLabel } from '@/lib/subject-labels';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +20,7 @@ export default async function SectionPage({
   const section = await fetchSection(subject, chunkIndex);
   if (!section) notFound();
 
-  const allSections = await fetchSections(subject);
+  const allSections = await fetchSectionSummaries(subject);
   const prev = allSections.find((s) => s.chunk_index === chunkIndex - 1);
   const next = allSections.find((s) => s.chunk_index === chunkIndex + 1);
 
@@ -30,7 +30,7 @@ export default async function SectionPage({
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
         <nav className="mb-4 text-sm text-muted-foreground">
           <Link href="/learn" className="hover:text-foreground">
-            Learn
+            Free Content
           </Link>
           <span className="mx-2">/</span>
           <Link href={`/learn/${subject}`} className="hover:text-foreground">
@@ -49,13 +49,12 @@ export default async function SectionPage({
               Pages {section.page_start}
               {section.page_end != null && section.page_end !== section.page_start
                 ? `–${section.page_end}`
-                : ''}{' '}
-              · {section.source_file}
+                : ''}
             </p>
           ) : null}
         </header>
 
-        <article className="glass-surface rounded-2xl p-6" dir="auto">
+        <article className="glass-surface rounded-2xl p-6" dir="rtl">
           <MarkdownReader content={section.body_md} />
         </article>
 
@@ -79,7 +78,7 @@ export default async function SectionPage({
             ) : null}
           </div>
           <Link
-            href={`/app/chat/tutor?context=${encodeURIComponent(section.id)}`}
+            href={`/app/chat/tutor?context=${encodeURIComponent(`${subject}:${chunkIndex}`)}`}
             className="inline-flex items-center gap-2 rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary"
           >
             Chat with Tutor about this

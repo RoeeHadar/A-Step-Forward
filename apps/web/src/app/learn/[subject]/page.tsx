@@ -2,31 +2,39 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { PremiumBadge } from '@/components/premium-badge';
-import { fetchBagrutExams, fetchSections, fetchSubjects } from '@/lib/content-api';
+import { SubjectContentTabs } from '@/components/subject-content-tabs';
+import { fetchBagrutExams, fetchSectionGrades, fetchSectionsPage, fetchSubjects } from '@/lib/content-api';
 import { subjectLabel } from '@/lib/subject-labels';
-import { SubjectSectionsClient } from '@/components/subject-sections-client';
 
 export const dynamic = 'force-dynamic';
 
-export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {
+export default async function SubjectPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ subject: string }>;
+  searchParams: Promise<{ tab?: string }>;
+}) {
   const { subject } = await params;
+  const { tab } = await searchParams;
   const allSubjects = await fetchSubjects();
   const known = allSubjects.some((s) => s.subject === subject);
-  const sections = await fetchSections(subject);
+  const sectionsPage = await fetchSectionsPage(subject, { page: 1, page_size: 20 });
+  const grades = await fetchSectionGrades(subject);
   const bagrut = await fetchBagrutExams(subject);
 
-  if (!known && sections.length === 0 && bagrut.length === 0) {
+  if (!known && sectionsPage.total === 0 && bagrut.length === 0) {
     notFound();
   }
+
+  const defaultTab = tab === 'bagrut' ? 'bagrut' : 'textbook';
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
         <nav className="mb-4 text-sm text-muted-foreground">
-          <Link href="/learn" className="hover:text-foreground">
-            Learn
-          </Link>
+          <Link href="/learn" className="hover:text-foreground">Free Content</Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{subjectLabel(subject, 'en')}</span>
         </nav>
@@ -34,18 +42,8 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-bold">{subjectLabel(subject, 'en')}</h1>
-            <p className="mt-1 text-muted-foreground" dir="rtl">
-              {subjectLabel(subject, 'he')}
-            </p>
+            <p className="mt-1 text-muted-foreground" dir="rtl">{subjectLabel(subject, 'he')}</p>
           </div>
-          {bagrut.length > 0 ? (
-            <Link
-              href={`/learn/${subject}/bagrut`}
-              className="rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
-            >
-              Bagrut Exams ({bagrut.length})
-            </Link>
-          ) : null}
         </header>
 
         <div className="mb-8 glass-surface rounded-2xl border border-accent-amber/20 p-5">
@@ -68,7 +66,14 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
           </div>
         </div>
 
-        <SubjectSectionsClient subject={subject} sections={sections} />
+        <SubjectContentTabs
+          subject={subject}
+          initialSections={sectionsPage.items}
+          initialTotal={sectionsPage.total}
+          initialGrades={grades}
+          bagrutExams={bagrut}
+          defaultTab={defaultTab}
+        />
       </main>
     </div>
   );
