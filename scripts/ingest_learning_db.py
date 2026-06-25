@@ -150,7 +150,6 @@ def _split_chapters(pages: list[tuple[int, str]]) -> list[dict[str, Any]]:
     if not full_text.strip():
         return [{"title": "תוכן", "body_md": "", "page_start": 1, "page_end": len(pages)}]
 
-    lines = full_text.splitlines()
     chapters: list[dict[str, Any]] = []
     current_title = "מבוא"
     current_lines: list[str] = []

@@ -46,6 +46,16 @@ Complete in a browser (~10 min). No dashboard wiring left for launch.
 
 5. **Optional:** post launch using copy in `docs/marketing/` (HN, Product Hunt, LinkedIn).
 
+6. **Resend API key (booking emails)** — sign up at [resend.com](https://resend.com) (free tier),
+   create an API key, and set in **Render** and **Vercel** environment variables:
+   - `RESEND_API_KEY=<key>`
+   - `TUTOR_EMAIL=<your email>`
+   - `RESEND_FROM=A Step Forward <onboarding@resend.dev>` (free tier) or your verified domain
+
+   Without this, `/book` submissions are saved to Postgres only (no email notification).
+   Also set `BOOKING_API_SECRET` (same random string on Render + Vercel) so the API
+   rejects direct unauthenticated booking spam.
+
 ---
 
 ## 3. Post-launch polish (defer)
