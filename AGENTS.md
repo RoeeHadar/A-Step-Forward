@@ -63,3 +63,15 @@ Each runtime agent must implement the contract in `packages/agents/agents/base/a
 **Model**: every Cursor sub-agent runs **Composer 2.5** or **Cursor Auto**, never Opus (Opus is reserved for planning/replanning).
 
 **Run mode**: long, focused sub-agent sessions with `run_in_background: true` are preferred for multi-file work.
+
+---
+
+## 3. Cross-cutting skills (read before touching the relevant code)
+
+| Skill | Read before |
+| ----- | ----------- |
+| `skills/neon-direct-route/SKILL.md` | Adding/modifying any `apps/web/src/app/api/**` route that touches Neon. The free-tier critical path (onboarding, diagnostic, plans, chat memory, /learn) is Vercel + Neon direct; Render is optional. |
+| `skills/chat-memory-context/SKILL.md` | Touching `apps/web/src/app/api/chat/route.ts`, adding a new agent persona, or changing what gets persisted in `chat_turns`. |
+| `skills/onboarding-flow/SKILL.md` | Adding an onboarding question, changing plan generation inputs, or adjusting the diagnostic length. |
+| `skills/coordinator-dispatch/SKILL.md` | Whenever you are operating as the Coordinator. |
+| `skills/assign-to-coordinator/SKILL.md` | Whenever you are operating as the Manager and need to hand off a new round of work. |

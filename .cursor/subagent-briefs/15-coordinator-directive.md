@@ -1,6 +1,6 @@
-# Coordinator Directive — Round 5 (2026-06-25 19:54)
+# Coordinator Directive — Round 7 (2026-06-26)
 
-Read `14-adaptive-learning-architecture.md` first for the full architectural vision.
+Read `14-adaptive-learning-architecture.md` first for the architectural vision.
 This directive is the concrete task list for right now.
 
 ---
@@ -8,439 +8,162 @@ This directive is the concrete task list for right now.
 ## State of the world
 
 ### Live
-- Frontend: https://a-step-forward-waij.vercel.app ✅
-- Backend: https://asf-api-q566.onrender.com ✅ (PR #16 fixed startup crash)
+- Frontend: https://a-step-forward-waij.vercel.app ✅ (Vercel)
+- Backend: https://asf-api-q566.onrender.com ⚠️ (Render — **now optional**, free-tier path no longer depends on it)
+- DB: Neon Postgres (12 tables incl. new `chat_turns`, `external_resources` + extended `learner_profiles`).
+- KG: Neo4j Aura (PREREQUISITE_OF edges seeded). Now duplicated as static JSON in `apps/web/src/lib/kg-data.json` for fast Vercel access.
 
 ### main (clean, CI passing)
-- 9 migrations (0001→0009_bookings), 16 tables on Neon
-- `/learn` content browser, `/book` booking, agent chat, memory, progress stubs
-- Render startup crash fixed (#16: EmailStr + Docker CMD)
-- `migrate-neon.yml` workflow fires on push to main touching `infra/alembic/**`
+- **11 migrations** (0001 → 0011_onboarding_extras).
+- Migration 0011 just ran successfully via `Migrate Neon` workflow.
+- PR #27 just merged: **full Vercel-direct flow for onboarding, diagnostic, plans, chat memory + curated external resources on /learn**.
+- All 3 user-visible goals delivered:
+  1. ✅ Learning center functional with our data + curated external resources.
+  2. ✅ AI chat works end-to-end with per-agent memory + KG/profile context.
+  3. ✅ 4-step onboarding (technical + mental) → next-test-aware weekly plan.
 
-### Current working branch: `feat/adaptive-learning/phase-a`
-3 commits ahead of main, 0 behind. Ready to PR.
-Contains:
-- `infra/alembic/versions/0010_learner_model.py` — 8 new tables (learner_profiles,
-  concept_mastery, mastery_snapshots, diagnostic_sessions, diagnostic_items,
-  learning_plans, plan_weeks, weekly_quizzes, quiz_responses)
-- `content/knowledge-graph/math-high-school.yaml` — full prerequisite graph
-- `content/knowledge-graph/math-university.yaml`
-- `content/knowledge-graph/physics-high-school.yaml`
-- `content/knowledge-graph/physics-university.yaml`
-- `scripts/seed_knowledge_graph.py` — reads YAML → writes Neo4j PREREQUISITE_OF edges
-- `.github/workflows/migrate-neon.yml` — auto-runs `alembic upgrade head` on push to main
+### Manager-level changes this round
+- New skill `skills/neon-direct-route/SKILL.md` — pattern for Render-optional Vercel routes.
+- New skill `skills/chat-memory-context/SKILL.md` — how chat persistence + context injection works.
+- New skill `skills/onboarding-flow/SKILL.md` — end-to-end onboarding → diagnostic → plan.
+- `apps/web/src/lib/neon-db.ts` is now the **single Vercel access layer** for free-tier features.
+- `scripts/build-kg-json.mjs` regenerates the KG snapshot when YAMLs change.
 
-### In-flight branches (need action)
+### Pending manual / infra follow-up
 
-| Branch | +ahead / -behind | Action |
-|--------|-----------------|--------|
-| `feat/adaptive-learning/phase-a` | +3 / 0 | **PR → main immediately** |
-| `chore/deps-gh-actions-batch` | +1 / -1 | **PR → main immediately** (safe dep bumps) |
-| `feat/security/10-safety-hardening` | +1 / -1 | **PR → main** (safety_moderation eval matrices) |
-| `feat/frontend/hebrew-rtl-default` | +2 / -2 | Assess: does it add value vs main RTL? If yes PR, else archive |
-| `chore/infra/workspace-stabilization` | +21 / -21 | Diverged — cherry-pick infra-only commits or archive |
-| `feat/agents/03-phase3-system-agents` | +21 / -21 | Diverged — cherry-pick agent improvements or archive |
-| `feat/mcp/05-server-improvements` | +21 / -21 | Diverged — cherry-pick MCP improvements or archive |
-| `feat/frontend/visual-polish` | 0 ahead | **Delete** (no commits vs main) |
-
-### Blockers requiring human action (in BLOCKED.md)
-1. Verify chat gives real AI response (not mock fallback) — test at live URL
-2. Resend API key for booking emails → set in Render + Vercel env
-3. Key rotation (Groq + Clerk) — deferred by user, skip for now
+| Item | Action | Owner |
+|------|--------|-------|
+| Seed `external_resources` table | Run `Seed DB (one-shot)` workflow with `external-resources` (or `all`) | Coordinator (one click) |
+| Verify Vercel envs: `DATABASE_URL`, `GROQ_API_KEY`, `NEXT_PUBLIC_API_BASE_URL` | One-time check in Vercel Settings → Environment Variables | User |
+| Render env vars (`GROQ_API_KEY`, `CLERK_SECRET_KEY`, …) | Now **optional** — only needed if we ever route through Render again | User (defer) |
+| 58 Dependabot vulnerabilities (3 critical) | Batch-bump + open PR | Infra agent |
+| Branch cleanup (`feat/frontend/learn-content-browser`, `feat/security/10-safety-hardening`, `fix/infra/prod-e2e-verify`) | Delete after final sweep | Coordinator |
 
 ---
 
 ## Priorities — execute in order
 
-### P0 — Merge Phase A (FIRST — everything else depends on it)
+### P0 — Verify live site (no code change)
 
-```
-git checkout feat/adaptive-learning/phase-a
-# open PR → main
-# title: feat(adaptive-learning): Phase A — learner model DB + prerequisite KG
-# run review-bugbot
-# merge (squash or merge commit)
-```
+1. Hit https://a-step-forward-waij.vercel.app/learn — confirm subject cards appear (math, physics, calculus, linear_algebra), each with a "Curated resources" badge or section count.
+2. Click into one subject (e.g. `/learn/math`) — confirm:
+   - Sections list (if any).
+   - **"More free resources"** panel with Khan Academy, OpenStax, etc.
+3. Sign up a fresh user — confirm redirect to `/onboarding`.
+4. Walk all 4 onboarding steps — confirm redirect to `/diagnostic`, then `/dashboard` with a weekly plan.
+5. Open `/app/chat/tutor` — send a message. Confirm a real response (not the mock). Switch to `/app/chat/mentor` — confirm fresh persona but profile context still present.
 
-**After merge:** `migrate-neon.yml` fires automatically and runs `alembic upgrade head`.
-Verify by checking the workflow run in GitHub Actions.
-If `DATABASE_URL` secret is missing from GitHub, that is the only blocker — add
-`DATABASE_URL` to GitHub repo secrets (Settings → Secrets → Actions) from the
-Neon dashboard connection string. This unblocks ALL of Phase B, C, D.
-
-**Also merge immediately (safe, no deps):**
-- `chore/deps-gh-actions-batch` → PR "chore(deps): batch bump GH Actions"
-- `feat/security/10-safety-hardening` → PR "eval(security): safety_moderation matrices"
+If any step fails, escalate to manager with screenshots + browser console logs.
 
 ---
 
-### P1 — Learner Model Service (start after P0 merges)
+### P1 — Seed `external_resources` table [Infra]
 
-Create `services/learner_model/` — the single source of truth for what a learner knows.
-
-**Branch:** `feat/adaptive-learning/phase-a-services`
+Trigger `Seed DB (one-shot)` workflow with input `external-resources`.
 
 ```
-services/learner_model/
-  pyproject.toml               # package: learner-model-service
-  learner_model_service/
-    __init__.py
-    api.py                     # LearnerModelService protocol (ABC)
-    settings.py                # pydantic-settings
-    default_service.py         # in-memory stub for tests
-    postgres_service.py        # real impl using SQLAlchemy 2.0 async
-    stores/
-      models.py                # ORM models for 0010_learner_model tables
-      repository.py            # CRUD: upsert_mastery, get_student_model,
-                               #       snapshot_week, get_prerequisites
+gh workflow run "Seed DB (one-shot)" -f target=external-resources
 ```
 
-Key methods (all async):
-```python
-async def get_student_model(learner_id: str) -> StudentModel
-async def upsert_mastery(learner_id: str, concept_id: str, score: float, data_points: int = 1) -> None
-async def get_prerequisites(concept_id: str) -> list[str]   # Neo4j traversal
-async def snapshot_week(learner_id: str, week_start: date) -> None
-async def create_profile(learner_id: str, profile: LearnerProfileInput) -> LearnerProfile
-async def get_profile(learner_id: str) -> LearnerProfile | None
-```
+Confirms the 18 curated entries from `content/external-resources.yaml` land in the table. After this the static fallback in `lib/external-resources.ts` is the secondary source.
 
-Add `StudentModel` Pydantic schema to `packages/schemas/schemas/learner_model.py`:
-```python
-class StudentModel(BaseModel):
-    learner_id: str
-    profile: LearnerProfile | None
-    mastery: dict[str, float]          # concept_id → 0.0–1.0
-    weak: list[str]                    # concept_ids with score < 0.4
-    developing: list[str]             # 0.4–0.7
-    strong: list[str]                  # > 0.7
-    last_active: datetime | None
-```
-
-Wire into `apps/api/app/main.py`. Add `GET /v1/learners/me/model` route.
+**Acceptance:** Seed workflow goes green; `gh api ...` query returns ≥18 rows; the resources still render on `/learn/[subject]` (no regression).
 
 ---
 
-### P2 — Onboarding API + frontend (start after P1)
+### P2 — Phase F: Error diagnosis [Agents]
 
-**Branch:** `feat/adaptive-learning/phase-b-onboarding`
+**Goal:** When a learner submits a wrong quiz answer, classify *why* (concept gap vs. computational error vs. misread) and feed remediation into the next session.
 
-#### Backend
-`apps/api/app/routers/onboarding.py`:
-- `POST /v1/onboarding/submit` — creates `learner_profile`, seeds initial
-  `concept_mastery` from `self_scores` (1–10 → 0.1–0.9 linear map), returns `{ok: true}`
-- `GET /v1/onboarding/status` (auth) → `{complete: bool}`
+**Branch:** `feat/agents/phase-f-error-diagnosis`
 
-#### Frontend gate (middleware)
-In `apps/web/src/middleware.ts`, add: if user is signed in AND
-`GET /v1/onboarding/status` returns `{complete: false}`, redirect to `/onboarding`.
-Exempt: `/onboarding`, `/sign-in`, `/sign-out`, `/api/*`, `/book`, `/learn`.
+**Steps:**
+1. Add `error_diagnosis` JSONB column to `quiz_responses` via migration 0012.
+2. In `services/learning_path/learning_path_service/quiz_repository.py` (`submit_quiz`):
+   - For each wrong answer, call new `diagnose_error(item, chosen, learner_profile)` helper that uses Groq to classify into `{conceptual, procedural, careless, misread}`.
+   - Persist classification + remediation hint per response.
+3. In the chat tutor system prompt, surface recent diagnoses (top 3) so the AI can address them proactively.
+4. In `/dashboard`, surface a "What to revisit" card if any `conceptual` diagnoses exist in the last 7 days.
 
-#### Frontend page `apps/web/src/app/onboarding/page.tsx`
-3-step wizard (client component, state machine):
-
-**Step 1 — Goals** (שאלות פתיחה):
-- "What is your learning goal?" — dropdown: "Pass Bagrut 5pt Math" | "Pass Bagrut 4pt Math" |
-  "Pass Bagrut 3pt Math" | "Pass Bagrut Physics" | "Prepare for university" | "Calculus 1" |
-  "Linear Algebra" | "Other" + free text
-- Subjects: multi-select checkboxes (Math, Physics, Both)
-- Grade level: dropdown (7th–12th, University 1st year, University 2nd+ year)
-- Points group (if high school math): 3pt / 4pt / 5pt
-
-**Step 2 — Background** (היסטוריה לימודית):
-- "How many hours/week can you study?" — slider 1–20, default 5
-- "How did you do in your last math/physics class?" — 1–10 slider
-- "How would you rate your teacher?" — 1–10 slider (context for pacing)
-- "Preferred learning style?" — radio: Theory first / Practice first / Mixed
-- "How long can you focus in one sitting?" — radio: 20 min / 45 min / 90 min
-
-**Step 3 — Self-assessment** (הערכה עצמית):
-Show relevant concepts (from KG YAML filtered by subject/grade).
-For each concept: "Rate your understanding 1–10" — horizontal slider.
-Concepts shown: ~8–12 most important for their goal (not all 30+).
-E.g. for 5pt Math goal: Algebra, Trig, Functions, Sequences, Limits, Derivatives, Integrals.
-
-On submit → `POST /v1/onboarding/submit` → redirect to `/diagnostic`.
-
-Style: dark glassmorphism, step indicator at top, Hebrew RTL layout, each step
-fits one screen without scrolling. "Next" button bottom right.
+**Acceptance:** Submitting a quiz with mixed answers writes `error_diagnosis` JSON; tutor chat references the diagnosis when learner asks about a recent quiz mistake; eval for `assessment_generator` updated.
 
 ---
 
-### P3 — Diagnostic engine (start after P1, can parallel P2)
+### P3 — Phase G: Dynamic exercise generation [Agents]
 
-**Branch:** `feat/adaptive-learning/phase-b-diagnostic`
+**Goal:** Generate concept-specific practice problems on demand, scaled to learner difficulty.
 
-#### New service `services/diagnostic/`
-```
-services/diagnostic/
-  pyproject.toml
-  diagnostic_service/
-    __init__.py
-    engine.py      # CAT algorithm
-    scorer.py      # mastery estimation
-    api.py         # DiagnosticService protocol
-    settings.py
-    default_service.py
-    stores/
-      models.py    # ORM for diagnostic_sessions, quiz_responses
-      repository.py
-```
+**Branch:** `feat/agents/phase-g-exercise-gen`
 
-**CAT engine (simple, no IRT parameters needed yet):**
-```python
-START_DIFFICULTY = 5.0
-QUESTIONS_TARGET = 18    # stop at 18 or when confidence converges
+**Steps:**
+1. New endpoint `POST /api/exercises/generate` with body `{concept_id, difficulty?, count?}`.
+2. Pull recent mastery + profile to pick difficulty if not specified.
+3. Use Groq to generate 3–10 exercises with worked solutions per concept.
+4. Cache by `(concept_id, difficulty)` in a new `generated_exercises` table.
+5. Surface from concept cards in `/dashboard` as "Practice this".
 
-def next_difficulty(current: float, was_correct: bool) -> float:
-    return min(10.0, current + 1.0) if was_correct else max(1.0, current - 1.0)
-
-def confidence_converged(responses: list[Response]) -> bool:
-    # Converge if last 4 answers are all correct or all incorrect
-    if len(responses) < 4:
-        return False
-    last = [r.correct for r in responses[-4:]]
-    return all(last) or not any(last)
-
-def estimate_mastery(responses: list[Response]) -> float:
-    if not responses:
-        return 0.5
-    # Weighted by difficulty: harder correct answers count more
-    num = sum(r.difficulty * int(r.correct) for r in responses)
-    den = sum(r.difficulty for r in responses)
-    return round(num / den, 4) if den else 0.5
-```
-
-#### API routes `apps/api/app/routers/diagnostic.py`
-- `POST /v1/diagnostic/start` — `{topics: list[str]}` → creates session, returns first question
-- `POST /v1/diagnostic/{session_id}/answer` — `{item_id, chosen}` → scores, returns next question or `{complete: true, results: {...}}`
-- `GET /v1/diagnostic/{session_id}` — current state
-- On complete: call `LearnerModelService.upsert_mastery()` for each topic
-
-#### Question bank seeder `scripts/seed_diagnostic_items.py`
-For each concept in the KG YAML files, generate 5 MCQ questions at difficulties 2, 4, 6, 8, 10
-using `AssessmentGeneratorAgent` with structured output. Store in `diagnostic_items`.
-
-This script runs ONCE to bootstrap the bank. Add to Makefile: `make seed-diagnostic`.
-
-#### Frontend `apps/web/src/app/diagnostic/page.tsx`
-- Gate: redirect here from `/onboarding` completion
-- Progress bar "Question N of ~18"
-- One question at a time, LaTeX rendered via KaTeX
-- 4 MCQ options as large radio buttons
-- "Submit answer" → next question
-- On complete: radar chart (Recharts `RadarChart`) of mastery per topic
-  - Axes: each topic in the diagnostic
-  - Shows current estimate (0–100%)
-- CTA button: "Generate my learning plan" → `POST /v1/plan/generate` → redirect `/plan`
+**Acceptance:** Generates valid LaTeX-rendered exercises; cache hit ≥ 70% within first week; eval for exercise quality scores ≥ 0.75.
 
 ---
 
-### P4 — Planning engine (start after P3 complete)
+### P4 — Infra housekeeping [Infra]
 
-**Branch:** `feat/adaptive-learning/phase-c-planner`
-
-#### New service `services/planner/`
-```
-services/planner/
-  planner_service/
-    __init__.py
-    generator.py   # plan generation from mastery + KG
-    adapter.py     # plan adaptation after quiz
-    api.py
-    settings.py
-    stores/
-      models.py    # ORM for learning_plans, plan_weeks
-      repository.py
-```
-
-**Generator algorithm (topological sort through prerequisite graph):**
-```python
-async def generate(
-    learner_id: str,
-    mastery: dict[str, float],
-    goal_concepts: list[str],          # from goal → KG traversal
-    hours_per_week: float,
-) -> LearningPlan:
-    # 1. BFS/DFS from goal_concepts backward through PREREQUISITE_OF edges
-    # 2. Filter to concepts with mastery < 0.70 (need work)
-    # 3. Topological sort (prerequisites first)
-    # 4. Pack into weeks: ~2 new concepts + 1 review per week
-    #    assuming 45 min per concept per week
-    # 5. Assign quiz_due_at = Sunday of each week
-```
-
-#### API routes `apps/api/app/routers/planner.py`
-- `POST /v1/plan/generate` — generates or regenerates; returns full plan
-- `GET /v1/plan` — current plan (all weeks + status)
-- `GET /v1/plan/current-week` — this week's concepts, content, quiz deadline
-- `POST /v1/plan/adapt` — called after quiz; adapts remaining weeks
-
-#### Frontend `apps/web/src/app/plan/page.tsx`
-- Timeline: list of weeks (accordion or vertical scroll)
-- Current week: highlighted, shows concepts as cards with mastery badge
-- Each concept card: links to `/learn/[subject]/[section]` AND `/app/chat/tutor?context=...`
-- Quiz countdown timer (days until end of week)
-- Past weeks: score chip (e.g. "78% ✓")
-- "Study now" → opens first content section for this week
-
-Add "My Plan" link to sidebar (between Dashboard and Progress).
+1. **Dependabot batch:** Open PR titled `chore(deps): batch security updates` resolving the 58 vulnerabilities. Group by ecosystem; smoke test the build.
+2. **Branch cleanup:** Delete the 3 stale branches listed above.
+3. **Render env hygiene:** Document in `docs/infra/render-optional.md` that Render is now optional and which envs would be needed to bring it back in the critical path.
 
 ---
 
-### P5 — End-of-week quiz (start after P4)
+### P5 — OCR scanned physics PDFs [Infra]
 
-**Branch:** `feat/adaptive-learning/phase-d-quiz`
+The ~20 scanned physics PDFs in `Learning Database/Physics/Bagrut/...` still have no extracted text. Add an OCR pass:
 
-#### Backend `apps/api/app/routers/quiz.py`
-- `POST /v1/quiz/start` — generates quiz from current week's concepts (15 questions
-  from `diagnostic_items`), sets `time_limit_s = 1800` (30 min), returns items
-- `POST /v1/quiz/{quiz_id}/submit` — scores all responses, calls
-  `LearnerModelService.upsert_mastery()` + `snapshot_week()` + `planner.adapt()`
-- Server enforces time: if `NOW() > started_at + time_limit_s`, mark expired
+1. Install `pytesseract` + Hebrew language pack in a one-shot script `scripts/ocr_pdfs.py`.
+2. Resume-friendly: skip files already in `content_sections`.
+3. Run via a new `OCR PDFs` workflow with manual dispatch.
 
-#### Frontend `apps/web/src/app/quiz/page.tsx`
-- Full-screen layout, countdown timer in top bar (MM:SS, goes red < 5 min)
-- Question navigator on side (dot per question, green=answered, grey=unanswered)
-- One question visible at a time, navigate with prev/next
-- "Submit quiz" button (always enabled after Q1 is answered)
-- On submit or time-expire: results page
-  - Score per topic (bar chart)
-  - Mastery change deltas (↑ Limits +12%, ↓ Derivatives -3%)
-  - "See updated plan" CTA
-
-Add "Weekly Quiz" link to sidebar, shown only when quiz is pending.
+**Acceptance:** All Physics Bagrut PDFs have extractable text in `content_sections`; `/learn/physics/bagrut` shows them with previews.
 
 ---
 
-### P6 — Tutor v2 prompt + student model injection (after P1, parallel with P3+)
+## Rules for all agents (unchanged)
 
-**Branch:** `feat/adaptive-learning/phase-e-tutor-v2`
+- Conventional commits: `<type>(<scope>): <subject>`.
+- Branches: `feat/<stream>/<short-name>`, `fix/<stream>/<short-name>`, `eval/<stream>/<short-name>`.
+- One task = one branch = one PR. No mega-PRs.
+- Must pass: lint, typecheck, unit tests, touched-prompt evals.
+- Run `review-bugbot` skill on every PR.
+- Run `review-security` on PRs touching auth, memory, graphrag, mcp, RBAC, encryption, payments.
+- No secrets in code. `.env*` is gitignored.
+- Coverage ≥ 80% for new services; ≥ 70% for frontend components.
+- **NEW:** Free-tier critical-path routes must follow `skills/neon-direct-route/SKILL.md` — no hard Render dependency.
+- **NEW:** Anything touching chat persistence must follow `skills/chat-memory-context/SKILL.md`.
+- **NEW:** Anything touching the onboarding fields must follow `skills/onboarding-flow/SKILL.md`.
 
-1. Create `prompts/tutor/v2.md`:
-   - Same as v1 but add:
-     ```
-     ## Student mastery context (injected per session)
-     The orchestrator will inject a `## Learner mastery` section at the top of
-     each conversation with the learner's current mastery snapshot. Use it to:
-     - Identify which prerequisite is likely causing confusion
-     - Calibrate explanation depth (strong → challenge, weak → scaffold)
-     - Never explain a concept without first checking a prerequisite
+## Coordinator responsibilities
 
-     ## Socratic protocol (MANDATORY for new topics)
-     Before explaining any NEW concept:
-     1. Ask exactly ONE question: "What do you already know about [concept]?"
-        OR "Why did you choose that approach?"
-     2. Wait for the answer. Then adapt.
-     Do NOT skip this for any new topic, even if the learner asks directly.
-     If the learner says "just tell me", acknowledge warmly then ask anyway.
-
-     ## next_step expansion
-     `generate_exercise` — trigger exercise generation for the current concept
-     `assess_prerequisite` — ask a targeted diagnostic question on the prerequisite
-     `flag_for_planner` — this concept needs more time; alert the planner
-     ```
-
-2. In `services/orchestrator/orchestrator/runner.py`, before dispatching to Tutor:
-   - Call `LearnerModelService.get_student_model(learner_id)`
-   - Build mastery summary string:
-     ```
-     ## Learner mastery
-     Strong (>70%): Algebra (92%), Functions (81%)
-     Developing (40–70%): Derivatives (58%), Sequences (45%)
-     Weak (<40%): Limits (28%), Integration (15%)
-     ```
-   - Inject into `AgentContext.extra["student_model_summary"]`
-   - Update `TutorAgent._build_system_prompt()` to include it
-
-3. Update `TutorAgent.prompt_version = "v2"` only after eval gate passes.
-
-4. Eval gate: add `evals/agents/tutor/socratic_test.py` (DeepEval):
-   - Test: when given a new concept, tutor asks a question before explaining
-   - Test: when mastery shows "weak in limits", tutor offers to review prerequisites
-   - Threshold: both pass in ≥ 80% of runs
+- **P0 first** (smoke test live site) before assigning any agent work.
+- **P1 second** (seed external_resources) — single workflow run, no agent needed.
+- Then dispatch P2–P5 in parallel to Agents and Infra streams.
+- Escalate to manager if:
+  - Migration 0011 verification fails on Neon.
+  - Vercel preview for any new PR shows the `/learn` or `/onboarding` flow broken.
+  - More than 2 P2 tasks block on shared state.
 
 ---
 
-### P7 — Branch cleanup (parallel with everything)
+## Quick reference — what just changed
 
-Delete these remote branches (all either 0 commits ahead, or fully superseded):
-
-```bash
-git push origin --delete feat/frontend/visual-polish
-git push origin --delete feat/frontend/01-foundation
-git push origin --delete feat/frontend/02-landing
-git push origin --delete feat/frontend/03-auth
-git push origin --delete feat/frontend/04-dashboard
-git push origin --delete feat/frontend/05-chat
-git push origin --delete feat/frontend/06-lessons
-git push origin --delete feat/frontend/07-memory
-git push origin --delete feat/frontend/08-progress
-git push origin --delete feat/frontend/09-educator-admin
-git push origin --delete feat/graphrag/01-ontology-migration
-git push origin --delete feat/graphrag/02-ingestion-pipeline
-git push origin --delete feat/graphrag/03-retrieval-modes
-git push origin --delete feat/graphrag/04-mcp-evals
-git push origin --delete feat/mcp/01-memory
-git push origin --delete feat/mcp/02-graphrag
-git push origin --delete feat/mcp/03-curriculum
-git push origin --delete feat/mcp/04-progress
-git push origin --delete mcp-stack-base
-git push origin --delete split/baseline
-git push origin --delete split/frontend-base
-git push origin --delete wip/agents-phase3-snapshot
-```
-
-For the diverged branches (+21/-21), assess each:
-- `chore/infra/workspace-stabilization`: cherry-pick infra/pyproject edits not on main
-- `feat/agents/03-phase3-system-agents`: check if Research/KG Builder agents are better than main's stubs; cherry-pick if yes
-- `feat/mcp/05-server-improvements`: check for auth-context/telemetry improvements; cherry-pick if yes
-- If nothing new to salvage: delete
-
----
-
-## Dependency graph
-
-```
-P0 (merge Phase A) ──────────────────────────────────────────────────┐
-                                                                       │
-    ├── P1 (LearnerModelService) ──────────────────────────────────────┤
-    │         │                                                         │
-    │         ├── P2 (Onboarding API + page)                           │
-    │         │         │                                               │
-    │         ├── P3 (Diagnostic engine) ───────── P5 (Quiz)           │
-    │         │         │                                               │
-    │         └── P4 (Planner) ────────────────── P5 (Quiz)            │
-    │                                                                   │
-    └── P6 (Tutor v2 + mastery injection)                              │
-                                                                        │
-P7 (cleanup) ── parallel, no deps ─────────────────────────────────────┘
-```
-
-P1 is the critical bottleneck — dispatch it immediately after P0 merges.
-P2, P3, P6 can be dispatched in parallel once P1 is in review.
-P4 starts after P3 is green.
-P5 starts after P4 is green.
-
----
-
-## Non-negotiable rules
-
-1. **`npx next lint --dir src` must pass before every frontend push.** Zero ESLint errors.
-2. **`npx tsc --noEmit` must pass locally.** Don't rely on Vercel to catch type errors.
-3. **No new ESM packages without adding to `transpilePackages` in `next.config.mjs`.**
-4. **No Phase B/C/D API routes until `0010_learner_model` is confirmed on Neon** (check
-   `migrate-neon` GH Actions run after P0 merges).
-5. **Tutor v2 prompt ships ONLY after `evals/agents/tutor/socratic_test.py` passes.**
-6. `review-bugbot` on every PR. `review-security` on onboarding, mastery, diagnostic routes.
-7. Many small PRs. One feature per PR. No giant PRs.
-
----
-
-## What the human will do (their only actions)
-
-1. Check `DATABASE_URL` is in GitHub repo secrets (needed for `migrate-neon.yml`).
-   If missing: add it from the Neon dashboard. Without this, `0010_learner_model` won't run.
-2. After `/onboarding` is live: go through it themselves to validate the flow.
-3. After `/diagnostic` is live: complete a diagnostic to confirm mastery profile appears.
-4. Resend API key for booking emails (optional, non-blocking).
+| File | Purpose |
+|------|---------|
+| `apps/web/src/lib/neon-db.ts` | Unified Neon access layer for Vercel |
+| `apps/web/src/lib/kg-data.json` | Pre-built KG snapshot (92 concepts) |
+| `apps/web/src/lib/external-resources.ts` | Static fallback + DB read for /learn |
+| `apps/web/src/lib/onboarding-gate.ts` | Redirect logged-in users without a profile |
+| `apps/web/src/app/onboarding/page.tsx` | 4-step questionnaire (was 3) |
+| `apps/web/src/app/api/{onboarding,diagnostic,plans,chat}/...` | All Neon-direct now |
+| `infra/alembic/versions/0011_onboarding_extras.py` | New columns + 2 new tables |
+| `content/external-resources.yaml` | Curated 3rd-party resource registry |
+| `scripts/build-kg-json.mjs` | Rebuild KG JSON from YAML |
+| `scripts/seed-external-resources.mjs` | Seed external_resources table |
+| `skills/{neon-direct-route,chat-memory-context,onboarding-flow}/SKILL.md` | New patterns |
