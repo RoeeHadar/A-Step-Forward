@@ -48,6 +48,17 @@ Adding a route under `apps/web/src/app/...` or a feature component under `apps/w
 - Don't add a global state store for something a few props can do.
 - Don't import server-only modules into a client component (mark with `import 'server-only'`).
 
+## ESLint errors fail the build — check before pushing
+
+Next.js runs ESLint as part of `next build`. Any ESLint **error** (not just warning)
+causes the build to exit with code 1 on Vercel. The most common ones to watch for:
+
+- `@typescript-eslint/no-unused-vars` — remove any destructured variables that are never read
+- `jsx-a11y/*` — every interactive element needs an accessible name/label
+- `@next/next/no-html-link-for-pages` — use `<Link>` from `next/link`, not `<a>`
+
+**Always run `npx next lint --dir src` before pushing** to catch these locally.
+
 ## ESM-only packages — MUST add to `transpilePackages`
 
 Several popular packages ship as **pure ESM** and will cause a Vercel build failure
