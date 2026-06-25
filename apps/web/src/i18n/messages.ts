@@ -13,7 +13,7 @@ const messages = {
       admin: 'Admin',
       signIn: 'Sign in',
       signUp: 'Get started',
-      learn: 'Learn',
+      learn: 'Free Content',
       book: 'Book a Lesson',
     },
     landing: {
@@ -178,7 +178,7 @@ const messages = {
       admin: 'ניהול',
       signIn: 'התחברות',
       signUp: 'התחל',
-      learn: 'לימוד',
+      learn: 'תוכן חינמי',
       book: 'קביעת שיעור',
     },
     landing: {

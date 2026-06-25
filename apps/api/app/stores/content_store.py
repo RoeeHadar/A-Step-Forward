@@ -39,6 +39,52 @@ async def list_sections(
     session: AsyncSession,
     *,
     subject: str,
+    grade: str | None = None,
+    page: int = 1,
+    page_size: int = 20,
+) -> tuple[list[dict[str, Any]], int]:
+    page = max(page, 1)
+    page_size = min(max(page_size, 1), 100)
+    offset = (page - 1) * page_size
+
+    count_result = await session.execute(
+        text(
+            """
+            SELECT COUNT(*)::int AS n
+            FROM content_sections
+            WHERE subject = :subject
+              AND (:grade IS NULL OR grade = :grade)
+            """
+        ),
+        {"subject": subject, "grade": grade},
+    )
+    total = count_result.scalar_one()
+
+    result = await session.execute(
+        text(
+            """
+            SELECT subject, grade, title, body_md, page_start, page_end, chunk_index
+            FROM content_sections
+            WHERE subject = :subject
+              AND (:grade IS NULL OR grade = :grade)
+            ORDER BY chunk_index
+            LIMIT :limit OFFSET :offset
+            """
+        ),
+        {
+            "subject": subject,
+            "grade": grade,
+            "limit": page_size,
+            "offset": offset,
+        },
+    )
+    return [dict(r) for r in result.mappings().all()], total
+
+
+async def list_section_summaries(
+    session: AsyncSession,
+    *,
+    subject: str,
 ) -> list[dict[str, Any]]:
     result = await session.execute(
         text(
