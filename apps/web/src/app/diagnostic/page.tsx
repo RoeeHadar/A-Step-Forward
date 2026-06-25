@@ -99,6 +99,22 @@ export default function DiagnosticPage() {
         setComplete(true);
         setMastery(data.results?.mastery_by_topic ?? {});
         setQuestion(null);
+        setPlanLoading(true);
+        try {
+          const planRes = await fetch('/api/plans/generate', { method: 'POST' });
+          if (planRes.ok) {
+            router.push('/dashboard');
+            return;
+          }
+          const errText = await planRes.text();
+          setError(errText || 'Could not generate your learning plan. Try the button below.');
+        } catch (planErr) {
+          setError(
+            planErr instanceof Error ? planErr.message : 'Could not generate your learning plan.',
+          );
+        } finally {
+          setPlanLoading(false);
+        }
       } else {
         setQuestion(data.question);
         setQuestionNumber(data.question_number ?? questionNumber + 1);
@@ -115,16 +131,11 @@ export default function DiagnosticPage() {
     setPlanLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/plan/generate', { method: 'POST' });
-      if (res.status === 404 || res.status === 501) {
-        router.push('/plan');
-        return;
-      }
+      const res = await fetch('/api/plans/generate', { method: 'POST' });
       if (!res.ok) throw new Error(await res.text());
-      router.push('/plan');
+      router.push('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Plan generation is not available yet');
-      router.push('/plan');
+      setError(err instanceof Error ? err.message : 'Plan generation failed');
     } finally {
       setPlanLoading(false);
     }

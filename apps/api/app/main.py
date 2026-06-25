@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .core.auth import validate_auth_config, warmup_clerk_jwks
 from .core.exception_handlers import register_exception_handlers
 from .core.settings import get_settings
 from .core.telemetry import configure_logging, configure_sentry, instrument_app
-from .core.auth import validate_auth_config
 from .routers import (
     admin,
     agents,
@@ -23,6 +23,7 @@ from .routers import (
     graphrag,
     health,
     learners,
+    learning_path,
     lessons,
     memory,
     memory_admin,
@@ -36,6 +37,7 @@ from .routers import (
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings = get_settings()
     validate_auth_config()
+    await warmup_clerk_jwks()
     configure_logging(settings)
     configure_sentry(settings)
     yield
@@ -64,6 +66,7 @@ def create_app() -> FastAPI:
     app.include_router(chat.router)
     app.include_router(agents.router)
     app.include_router(learners.router)
+    app.include_router(learning_path.router)
     app.include_router(onboarding.router)
     app.include_router(diagnostic.router)
     app.include_router(lessons.router)
