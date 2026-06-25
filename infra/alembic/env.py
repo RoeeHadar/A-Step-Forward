@@ -29,9 +29,9 @@ def _parse_database_url(raw: str) -> tuple[str, dict]:
     """
     # Rewrite scheme to asyncpg
     if raw.startswith("postgres://"):
-        raw = "postgresql+asyncpg://" + raw[len("postgres://"):]
+        raw = "postgresql+asyncpg://" + raw[len("postgres://") :]
     elif raw.startswith("postgresql://"):
-        raw = "postgresql+asyncpg://" + raw[len("postgresql://"):]
+        raw = "postgresql+asyncpg://" + raw[len("postgresql://") :]
 
     parsed = urlparse(raw)
     params = parse_qs(parsed.query, keep_blank_values=True)
