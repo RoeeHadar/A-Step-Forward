@@ -73,3 +73,19 @@ project policy — sub-agents do not ask the user.
 
 End-to-end deployed website + public GitHub repo + shareable demo. See
 `.cursor/subagent-briefs/11-release-captain-resume.md` Phase A → D.
+
+## Round 4 tasks dispatched (2026-06-25 13:41)
+
+See .cursor/subagent-briefs/13-coordinator-directive.md for the full directive.
+
+| Priority | Task |
+| --- | --- |
+| P0 | Merge ix/coordinator-round3 ? main once Vercel preview is green |
+| P1 | Triage 3 diverged in-flight branches; delete superseded ones |
+| P2 | Verify content DB migrations on Neon; document ingest command |
+| P3 | Verify chat works with real AI response post-deploy |
+| P4 | Batch-merge safe Dependabot PRs (8 open) |
+| P5 | Add Resend API key instructions to BLOCKED.md |
+| P6 | Continue memory, GraphRAG, security, evals missions |
+
+**Build post-mortem logged**: ESLint unused-var + ESM transpilePackages rules now in skills/add-a-frontend-page/SKILL.md.
