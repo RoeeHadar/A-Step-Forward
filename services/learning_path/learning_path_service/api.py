@@ -4,7 +4,13 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from schemas.learning_path import LearningPlan, PlanWeek
+from schemas.learning_path import (
+    LearningPlan,
+    PlanWeek,
+    QuizAnswerItem,
+    QuizStartResponse,
+    QuizSubmitResponse,
+)
 
 from .settings import LearningPathSettings
 
@@ -15,6 +21,12 @@ class LearningPathService(Protocol):
     async def generate_plan(self, learner_id: str) -> LearningPlan: ...
     async def get_current_plan(self, learner_id: str) -> LearningPlan | None: ...
     async def get_week(self, learner_id: str, plan_id: str, week_number: int) -> PlanWeek: ...
+    async def start_quiz(
+        self, learner_id: str, plan_id: str, week_number: int
+    ) -> QuizStartResponse: ...
+    async def submit_quiz(
+        self, learner_id: str, quiz_id: str, answers: list[QuizAnswerItem]
+    ) -> QuizSubmitResponse: ...
 
 
 _service: LearningPathService | None = None

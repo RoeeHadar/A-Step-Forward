@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from learner_model_service.api import get_learner_model_service
-from schemas.learning_path import PlanConcept
+from schemas.learning_path import PlanConcept, QuizAnswerItem, QuizStartResponse, QuizSubmitResponse
 from schemas.errors import ValidationFailed
 
 from .engine import build_week_concept_groups, collect_weak_worklist, infer_subject
 from .settings import LearningPathSettings
+from .stores.database import session_scope
 from .stores.repository import LearningPathRepository
 
 
@@ -70,3 +71,41 @@ class PostgresLearningPathService:
 
     async def get_week(self, learner_id: str, plan_id: str, week_number: int):
         return await self.repo.get_week(plan_id, week_number, learner_id)
+
+    async def start_quiz(
+        self, learner_id: str, plan_id: str, week_number: int
+    ) -> QuizStartResponse:
+        from .quiz_generator import build_quiz_items
+        from .stores.quiz_repository import QuizRepository
+
+        async with session_scope(self.settings) as session:
+            week = await self.repo._get_week(session, plan_id, week_number, learner_id)
+            concept_ids = [c.concept_id for c in week.concepts]
+            subjects = list({c.subject for c in week.concepts})
+            subject = subjects[0] if subjects else "math"
+            items = await build_quiz_items(session, concept_ids, subject)
+            quiz_repo = QuizRepository(session)
+            result = await quiz_repo.start_quiz(
+                learner_id=learner_id,
+                plan_id=plan_id,
+                week_num=week_number,
+                items=items,
+            )
+            await session.commit()
+            return result
+
+    async def submit_quiz(
+        self, learner_id: str, quiz_id: str, answers: list[QuizAnswerItem]
+    ) -> QuizSubmitResponse:
+        from .stores.quiz_repository import QuizRepository
+
+        async with session_scope(self.settings) as session:
+            quiz_repo = QuizRepository(session)
+            result = await quiz_repo.submit_quiz(
+                quiz_id=quiz_id,
+                learner_id=learner_id,
+                answers=answers,
+                svc=self,
+            )
+            await session.commit()
+            return result

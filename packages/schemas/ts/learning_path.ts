@@ -43,6 +43,43 @@ export const learningPlanSchema = z.object({
   weeks: z.array(planWeekSchema).default([]),
 });
 
+export const quizOptionSchema = z.object({
+  key: z.string(),
+  text: z.string(),
+});
+
+export const quizQuestionSchema = z.object({
+  id: z.string(),
+  topic: z.string(),
+  subject: z.string(),
+  difficulty: z.number(),
+  stem: z.string(),
+  options: z.array(quizOptionSchema),
+});
+
+export const quizStartResponseSchema = z.object({
+  quiz_id: z.string(),
+  week_id: z.string(),
+  plan_id: z.string(),
+  week_number: z.number().int(),
+  time_limit_s: z.number().int(),
+  questions: z.array(quizQuestionSchema),
+  started_at: z.string(),
+});
+
+export const quizSubmitResponseSchema = z.object({
+  quiz_id: z.string(),
+  score: z.number(),
+  per_topic: z.record(z.string(), z.number()),
+  weak_concepts: z.array(z.string()),
+  plan_adapted: z.boolean(),
+  next_week_concepts: z.array(z.string()).nullable().optional(),
+});
+
 export type PlanConcept = z.infer<typeof planConceptSchema>;
 export type PlanWeek = z.infer<typeof planWeekSchema>;
 export type LearningPlan = z.infer<typeof learningPlanSchema>;
+export type QuizOption = z.infer<typeof quizOptionSchema>;
+export type QuizQuestion = z.infer<typeof quizQuestionSchema>;
+export type QuizStartResponse = z.infer<typeof quizStartResponseSchema>;
+export type QuizSubmitResponse = z.infer<typeof quizSubmitResponseSchema>;
