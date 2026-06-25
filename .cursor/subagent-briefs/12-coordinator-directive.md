@@ -394,3 +394,18 @@ Continue (or monitor) all missions from `RESUME-README.md`:
 3. `/book` booking page is live with working form (email or DB-persisted).
 4. In-flight branches triaged (merged, PRed, or deleted with a note).
 5. CI green on `main`.
+
+---
+
+## Build error log (2026-06-25 13:31)
+
+**Error**: Vercel build failed — "Command 'pnpm --filter @asf/web build' exited with 1"
+**Root cause**: eact-markdown v9, emark-math v6, ehype-katex v7, ehype-highlight v7,
+emark-gfm v4, and their unified/micromark transitive deps are **pure-ESM** packages.
+Next.js cannot equire() them without explicit 	ranspilePackages entries.
+**Fix applied**: 531a227 fix(frontend): add ESM-only remark/rehype packages to transpilePackages
+**Lesson logged**: skills/add-a-frontend-page/SKILL.md — "ESM-only packages" section added.
+
+**Rule for future sub-agents**: whenever adding a markdown/unified/remark/rehype package,
+immediately add it (and its transitive deps) to 	ranspilePackages in 
+ext.config.mjs.

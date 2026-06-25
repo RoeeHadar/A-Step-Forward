@@ -47,3 +47,20 @@ Adding a route under `apps/web/src/app/...` or a feature component under `apps/w
 - Don't fetch inside a loop in RSC; batch.
 - Don't add a global state store for something a few props can do.
 - Don't import server-only modules into a client component (mark with `import 'server-only'`).
+
+## ESM-only packages — MUST add to `transpilePackages`
+
+Several popular packages ship as **pure ESM** and will cause a Vercel build failure
+("require() of ES Module") unless explicitly listed in `apps/web/next.config.mjs`
+under `transpilePackages`. **Always add a new ESM-only package to that list.**
+
+Known ESM-only packages used in this project (already in `transpilePackages`):
+- `react-markdown` v9+
+- `remark-gfm` v4+, `remark-math` v6+
+- `rehype-katex` v7+, `rehype-highlight` v7+
+- `unified`, `bail`, `is-plain-obj`, `trough`, `vfile`, `vfile-message`
+- `unist-util-stringify-position`, `mdast-util-*`, `micromark`, `micromark-*`
+
+To check if a package is ESM-only: look for `"type": "module"` in its `package.json`
+or the absence of a `main` field paired with an `exports` map that has no `require`
+entry. When in doubt, add it to `transpilePackages`.
