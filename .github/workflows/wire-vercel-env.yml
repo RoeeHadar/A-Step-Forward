@@ -21,6 +21,8 @@ jobs:
           RENDER_API_BASE_URL: ${{ secrets.RENDER_API_BASE_URL }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           set -euo pipefail
           SCOPE="?teamId=${VERCEL_ORG_ID}"
@@ -42,16 +44,49 @@ jobs:
           upsert_key() {
             local key="$1"
             local value="$2"
+            if [ -z "$value" ]; then
+              echo "Skipping ${key} (empty secret)"
+              return
+            fi
             delete_key "$key"
+            local type="plain"
+            case "$key" in
+              CLERK_SECRET_KEY|DATABASE_URL|GROQ_API_KEY) type="encrypted" ;;
+            esac
             curl -sf -X POST -H "$AUTH" -H "Content-Type: application/json" \
               "https://api.vercel.com/v10/projects/${VERCEL_PROJECT_ID}/env${SCOPE}" \
               -d "$(jq -nc \
-                --arg k "$key" --arg v "$value" \
-                '{key:$k,value:$v,target:["production","preview"],type:"plain"}')" >/dev/null
-            echo "Set ${key}"
+                --arg k "$key" --arg v "$value" --arg t "$type" \
+                '{key:$k,value:$v,target:["production","preview"],type:$t}')" >/dev/null
+            echo "Set ${key} (type=${type})"
           }
 
           upsert_key "NEXT_PUBLIC_API_BASE_URL" "${RENDER_API_BASE_URL}"
           upsert_key "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" "${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}"
           upsert_key "CLERK_SECRET_KEY" "${CLERK_SECRET_KEY}"
+          upsert_key "DATABASE_URL" "${DATABASE_URL}"
+          upsert_key "GROQ_API_KEY" "${GROQ_API_KEY}"
           echo "Vercel env wired."
+
+      - name: Trigger Vercel production redeploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: |
+          set -euo pipefail
+          SCOPE="?teamId=${VERCEL_ORG_ID}"
+          AUTH="Authorization: Bearer ${VERCEL_TOKEN}"
+          # Find the latest production deployment and redeploy with the new envs.
+          DEPLOY=$(curl -sf -H "$AUTH" \
+            "https://api.vercel.com/v6/deployments?projectId=${VERCEL_PROJECT_ID}&target=production&limit=1&state=READY${SCOPE:+&teamId=${VERCEL_ORG_ID}}" \
+            | jq -r '.deployments[0].uid')
+          if [ -z "$DEPLOY" ] || [ "$DEPLOY" = "null" ]; then
+            echo "No production deployment found; skipping redeploy"
+            exit 0
+          fi
+          echo "Redeploying ${DEPLOY}"
+          curl -sf -X POST -H "$AUTH" -H "Content-Type: application/json" \
+            "https://api.vercel.com/v13/deployments${SCOPE}" \
+            -d "$(jq -nc --arg id "$DEPLOY" '{deploymentId:$id, name:"a-step-forward-waij", target:"production"}')" >/dev/null
+          echo "Redeploy triggered."
