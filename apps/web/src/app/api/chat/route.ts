@@ -228,10 +228,13 @@ async function buildContextPrompt(
   };
 }
 
+// Ordered from highest quality to fastest fallback. We try each in turn on
+// transient failure (429 / 5xx / network). ``llama-3.1-70b-versatile`` was
+// retired by Groq in 2025 and intentionally omitted.
 const GROQ_MODELS = [
   'llama-3.3-70b-versatile',
-  'llama-3.1-70b-versatile',
   'llama-3.1-8b-instant',
+  'gemma2-9b-it',
 ];
 
 async function* streamFromGroq(
