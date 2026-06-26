@@ -37,22 +37,51 @@ Memory is **per-agent** on purpose — switching from Tutor to Mentor gives the
 learner a fresh start with that personality.
 
 ## How profile / mastery / KG context gets injected
-`buildContextPrompt(userId, agent, message)` builds the system message:
+`buildContextPrompt(userId, agent, message)` builds the system message in this
+exact order — each layer can be absent independently:
 
-1. Base persona (`AGENT_PERSONAS[agent]`).
-2. Learner profile snapshot (goal, grade, subjects, hours/week, next test date,
-   final goal date, mental_state).
-3. Top weak + strong concepts from `concept_mastery`.
-4. KG concepts whose `id`, English name, or Hebrew name appear in the user's
-   message — limited to 3 to keep the prompt tight.
-5. If `mental_state.anxiety >= 7`, an extra instruction telling the model to
-   soften tone and avoid time pressure language.
+1. **Shared agent baseline** (`apps/web/src/lib/agent-baseline.ts` →
+   `buildAgentBaseline()`). Corpus stats, KG dimensions, agent network
+   roster, universal rules (bilingual HE-default, math LTR, no external
+   links, brand-new-learner protocol). Same for every agent.
+2. **Long-form agent persona** (`apps/web/src/lib/agent-prompts.ts` →
+   `getAgentPersona(agent)`). Per-agent tools allowlist, style, hand-off
+   rules, refusal/safety. Versioned in-file.
+3. **Brand-new-learner cue** if `getLearnerProfile()` returned null —
+   tells the agent to invite the learner to `/onboarding` and NOT to
+   improvise a curriculum.
+4. **Learner profile snapshot** (goal, grade, subjects, hours/week, next
+   test date, final goal date, mental_state).
+5. **Top weak + strong concepts** from `concept_mastery`.
+6. **Relevant curriculum context** — KG concepts whose `id`, English
+   name, or Hebrew name appear in the user's message (cap 3).
+7. **Lesson-level agent_hints** (tutor / coach / qa_explainer) — key
+   insights, pacing hints, common misconceptions (triggered by detect
+   phrases in the learner's message), diagnostic moves, skill atoms
+   unlocked.
+8. **Learning-plan snapshot** (tutor / coach / qa_explainer /
+   curriculum_designer / progress_analyzer) — `buildLearningPlan()`
+   walked from the most-relevant concept. Ordered `path[]` +
+   `blocking_atoms[]`.
+9. **Mental_state.anxiety ≥ 7** → extra instruction to soften tone.
+
+Order matters: the baseline gives universal context, the persona narrows
+to the agent's role, and the per-turn signals override / augment those
+defaults. Never skip a layer — fall back to placeholders if a helper
+throws.
 
 ## Adding a new agent
-1. Add the persona to `AGENT_PERSONAS` in `apps/web/src/app/api/chat/route.ts`.
-2. Add the agent to `agentNameSchema` in `packages/schemas/ts/agents.ts`.
-3. Add a UI tile / page under `apps/web/src/app/(app)/app/chat/[agent]/page.tsx`.
-4. Update the agent switcher pill list in the same page.
+1. Add the long-form persona to `AGENT_PROMPTS` in
+   `apps/web/src/lib/agent-prompts.ts` (include tools list, style, hand-off
+   rules, refusal/safety, output format).
+2. Also add a one-line fallback to `AGENT_PERSONAS` in
+   `apps/web/src/app/api/chat/route.ts` (used only if `agent-prompts.ts`
+   fails to load).
+3. Author / update the matching `prompts/<agent>/v1.md` for sub-agent /
+   human readers — must stay in sync with the runtime version.
+4. Add the agent to `agentNameSchema` in `packages/schemas/ts/agents.ts`.
+5. Add a UI tile / page under `apps/web/src/app/(app)/app/chat/[agent]/page.tsx`.
+6. Update the agent switcher pill list in the same page.
 
 No schema changes needed — `chat_turns.agent` is just `TEXT`.
 

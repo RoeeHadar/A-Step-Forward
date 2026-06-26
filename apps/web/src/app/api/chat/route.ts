@@ -10,6 +10,8 @@ import {
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import kg from '@/lib/kg-data.json';
+import { buildAgentBaseline } from '@/lib/agent-baseline';
+import { getAgentPersona } from '@/lib/agent-prompts';
 
 export const runtime = 'nodejs';
 
@@ -125,19 +127,25 @@ async function* streamAgentResponse(
   }
 }
 
+/**
+ * Cold-start fallback personas used only if `agent-prompts.ts` fails to
+ * load (e.g. a future schema mismatch). The real personas — long-form,
+ * versioned, with explicit tool catalogs and baseline awareness — live in
+ * `apps/web/src/lib/agent-prompts.ts` and are loaded via `getAgentPersona`.
+ */
 const AGENT_PERSONAS: Record<string, string> = {
   tutor:
-    "You are the Tutor for A Step Forward, an AI-native learning center. Use the Socratic method — ask guiding questions, give worked examples when asked, and adapt difficulty to the learner. Reply in the learner's language (Hebrew or English). Be warm, concise, and concrete.",
+    "You are the Tutor for A Step Forward, an AI-native learning center. Use the Socratic method, adapt difficulty, and reply in the learner's language (HE default). Math goes in $...$ (always LTR).",
   mentor:
-    "You are the Mentor for A Step Forward. Help learners set goals, build study habits, and stay motivated. Reply in the learner's language. Be empathetic, direct, and actionable.",
+    "You are the Mentor for A Step Forward. Help learners set goals, build study habits, and stay motivated. Reply in the learner's language (HE default); math in $...$ (LTR).",
   coach:
-    "You are the Coach for A Step Forward. Run practice drills and spaced-repetition reviews. Reply in the learner's language. Be encouraging but rigorous.",
+    "You are the Coach for A Step Forward. Run drills and spaced-repetition reviews. Reply in the learner's language (HE default); math in $...$ (LTR).",
   reviewer:
-    "You are the Reviewer for A Step Forward. Give specific, line-level feedback on code, essays, or solutions. Reply in the learner's language. Be precise and kind.",
+    "You are the Reviewer for A Step Forward. Give specific, line-level feedback on submissions. Reply in the learner's language (HE default); math in $...$ (LTR).",
   qa_explainer:
-    "You are the QA Explainer for A Step Forward. Answer learner questions with a clear, cited explanation. Reply in the learner's language. Be accurate and concrete.",
+    "You are the QA Explainer for A Step Forward. Cite from the authored corpus, never external. HE default; math in $...$ (LTR).",
   note_taker:
-    "You are the Note Taker for A Step Forward. Summarize and organize learner notes. Reply in the learner's language. Be structured and brief.",
+    "You are the Note Taker for A Step Forward. Summarize structurally. HE default; math in $...$ (LTR).",
 };
 
 function findRelevantConcepts(message: string, subjects: string[]): KgConcept[] {
@@ -170,8 +178,20 @@ async function buildContextPrompt(
     fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []),
   ]);
 
-  let context = AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor!;
+  // Every agent gets the same platform baseline first (corpus stats, KG
+  // dimensions, agent network roster, math-LTR + bilingual rules). Then
+  // its long-form persona from agent-prompts.ts. Per-turn learner data
+  // (profile, mastery, relevant context, agent_hints, learning-plan) is
+  // appended below.
+  let context = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
 
+  if (!profile) {
+    // Onboarded learners always have a profile row. A missing row means
+    // either a brand-new user or a probe before onboarding. Tell the
+    // agent explicitly so it doesn't pretend it knows their context.
+    context += `\n\n## Brand-new learner`;
+    context += `\nNo learner profile is on file yet. Open with a one-sentence orientation in Hebrew (or match the language the learner just used), and invite them to complete the 4-step onboarding at \`/onboarding\` so the rest of the agent network can plan a personalised path. Do NOT improvise a curriculum or recommend specific lessons until a profile exists.`;
+  }
   if (profile) {
     context += `\n\n## Learner profile`;
     context += `\n- Goal: ${profile.goal}`;
@@ -343,7 +363,8 @@ async function* streamFromGroq(
     context = await buildContextPrompt(userId, agent, message);
   } catch (err) {
     logger.warn('buildContextPrompt failed, using bare persona', { err: String(err) });
-    context = { system: AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor!, memory: [] };
+    const bareSystem = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
+    context = { system: bareSystem, memory: [] };
   }
 
   const messages: Array<{ role: string; content: string }> = [
