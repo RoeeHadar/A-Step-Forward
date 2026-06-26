@@ -127,27 +127,6 @@ async function* streamAgentResponse(
   }
 }
 
-/**
- * Cold-start fallback personas used only if `agent-prompts.ts` fails to
- * load (e.g. a future schema mismatch). The real personas — long-form,
- * versioned, with explicit tool catalogs and baseline awareness — live in
- * `apps/web/src/lib/agent-prompts.ts` and are loaded via `getAgentPersona`.
- */
-const AGENT_PERSONAS: Record<string, string> = {
-  tutor:
-    "You are the Tutor for A Step Forward, an AI-native learning center. Use the Socratic method, adapt difficulty, and reply in the learner's language (HE default). Math goes in $...$ (always LTR).",
-  mentor:
-    "You are the Mentor for A Step Forward. Help learners set goals, build study habits, and stay motivated. Reply in the learner's language (HE default); math in $...$ (LTR).",
-  coach:
-    "You are the Coach for A Step Forward. Run drills and spaced-repetition reviews. Reply in the learner's language (HE default); math in $...$ (LTR).",
-  reviewer:
-    "You are the Reviewer for A Step Forward. Give specific, line-level feedback on submissions. Reply in the learner's language (HE default); math in $...$ (LTR).",
-  qa_explainer:
-    "You are the QA Explainer for A Step Forward. Cite from the authored corpus, never external. HE default; math in $...$ (LTR).",
-  note_taker:
-    "You are the Note Taker for A Step Forward. Summarize structurally. HE default; math in $...$ (LTR).",
-};
-
 function findRelevantConcepts(message: string, subjects: string[]): KgConcept[] {
   if (!message) return [];
   const lower = message.toLowerCase();
