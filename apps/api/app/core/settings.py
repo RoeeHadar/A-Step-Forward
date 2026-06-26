@@ -58,6 +58,43 @@ class APISettings(BaseSettings):
     admin_key: str = ""  # if set, POST /v1/admin/* requires X-Admin-Key header
     booking_api_secret: str = ""  # if set, POST /v1/bookings requires X-Booking-Secret
 
+    @field_validator(
+        "clerk_jwks_url",
+        "clerk_issuer",
+        "clerk_audience",
+        "clerk_publishable_key",
+        "clerk_secret_key",
+        "sentry_dsn",
+        "otel_exporter_otlp_endpoint",
+        "langfuse_public_key",
+        "langfuse_secret_key",
+        "langfuse_host",
+        "groq_api_key",
+        "cors_origin_regex",
+        mode="before",
+    )
+    @classmethod
+    def _strip_optional_string(cls, value: Any) -> Any:
+        """Trim accidental whitespace from *optional* string env vars; empty → None.
+
+        Render's dashboard sometimes preserves leading tabs or trailing
+        newlines when copy-pasting URLs/secrets, which makes httpx and
+        asyncpg raise opaque errors at startup. Strip them defensively.
+        """
+        if isinstance(value, str):
+            stripped = value.strip()
+            return stripped or None
+        return value
+
+    @field_validator("database_url", "redis_url", "neo4j_uri", mode="before")
+    @classmethod
+    def _strip_required_string(cls, value: Any) -> Any:
+        """Trim whitespace from required string env vars; preserve original if empty."""
+        if isinstance(value, str):
+            stripped = value.strip()
+            return stripped if stripped else value
+        return value
+
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _parse_cors_origins(cls, value: Any) -> Any:

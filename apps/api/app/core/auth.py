@@ -65,10 +65,26 @@ async def _fetch_jwks() -> dict[str, Any]:
 
 
 async def warmup_clerk_jwks() -> None:
-    """Fail fast at startup when deployed with an unreachable JWKS URL."""
+    """Best-effort JWKS prefetch.
+
+    We intentionally do NOT crash the process if the warmup fails — a
+    misconfigured ``CLERK_JWKS_URL`` (typo, leading whitespace, network
+    blip, Clerk outage) used to take the entire API down at boot,
+    masking every other endpoint. Now we log the failure and let the
+    process come up; per-request auth still rejects requests cleanly
+    via ``_verify_clerk_token`` if the URL really is bad.
+    """
+    import logging
+
     settings = get_settings()
-    if settings.clerk_jwks_url:
+    if not settings.clerk_jwks_url:
+        return
+    try:
         await _fetch_jwks()
+    except Exception as exc:  # noqa: BLE001 — must never propagate at boot
+        logging.getLogger(__name__).warning(
+            "Clerk JWKS warmup failed (will retry on first auth): %s", exc
+        )
 
 
 async def check_clerk_jwks() -> bool:
