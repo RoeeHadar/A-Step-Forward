@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { subjectLabel } from '@/lib/subject-labels';
 import {
+  dbConfigured,
   fetchConceptExplanation,
   fetchConceptExplanationFallback,
 } from '@/lib/neon-db';
@@ -95,11 +96,14 @@ export default async function ConceptPage({
         {!en && !he && !fallback ? (
           <div className="glass-surface rounded-2xl p-8 text-center">
             <p className="text-foreground font-medium">
-              No explanation has been ingested for this concept yet.
+              {dbConfigured
+                ? 'No explanation has been ingested for this concept yet.'
+                : 'Concept explanations are unavailable: the site database is not yet connected to this deployment.'}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              An administrator can run the concept-content seed workflow to fetch it from
-              Wikipedia (CC BY-SA 4.0).
+              {dbConfigured
+                ? 'An administrator can run the concept-content seed workflow to fetch it from Wikipedia (CC BY-SA 4.0).'
+                : 'A maintainer needs to add DATABASE_URL to the Vercel environment variables. Until then the AI Tutor is the best way to learn this concept.'}
             </p>
             <Link
               href={`/app/chat/tutor?context=${encodeURIComponent(conceptName)}`}
