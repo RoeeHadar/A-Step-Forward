@@ -19,6 +19,7 @@ on:
           - content-from-export
           - lessons-from-json
           - wipe-pdf-sections
+          - diagnostic-he-backfill
 
 jobs:
   seed:
@@ -117,6 +118,14 @@ jobs:
           npm install --no-save --no-package-lock @neondatabase/serverless
           ls -lah scripts/seed_data/lessons | head -40
           node scripts/seed-lessons.mjs
+
+      - name: Backfill Hebrew columns on existing diagnostic_items
+        if: ${{ inputs.target == 'diagnostic-he-backfill' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          node scripts/backfill-diagnostic-he.mjs
 
       - name: Wipe legacy PDF content_sections (Bagrut preserved)
         if: ${{ inputs.target == 'wipe-pdf-sections' }}
