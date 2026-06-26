@@ -14,6 +14,7 @@ on:
           - knowledge-graph
           - content-json
           - external-resources
+          - concept-explanations
 
 jobs:
   seed:
@@ -78,3 +79,11 @@ jobs:
         run: |
           npm install --no-save --no-package-lock js-yaml @neondatabase/serverless
           node scripts/seed-external-resources.mjs
+
+      - name: Scrape concept explanations (Wikipedia EN + HE)
+        if: ${{ inputs.target == 'all' || inputs.target == 'concept-explanations' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock js-yaml @neondatabase/serverless
+          node scripts/scrape-concept-content.mjs
