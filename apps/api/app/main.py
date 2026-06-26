@@ -8,6 +8,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import asyncio
+
 from .core.auth import validate_auth_config, warmup_clerk_jwks
 from .core.exception_handlers import register_exception_handlers
 from .core.settings import get_settings
@@ -35,11 +37,20 @@ from .routers import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Keep startup ultra-fast so cold-start health checks always pass.
+
+    Render's free tier sometimes shows a "deploy failed (health check
+    timed out)" email when the cold-start exceeds its internal window,
+    even though the new image is healthy. We:
+      - run only quick synchronous config here, and
+      - fire the JWKS warmup as a background task so an unreachable
+        Clerk doesn't delay the first ``/healthz`` response.
+    """
     settings = get_settings()
     validate_auth_config()
-    await warmup_clerk_jwks()
     configure_logging(settings)
     configure_sentry(settings)
+    asyncio.create_task(warmup_clerk_jwks())
     yield
 
 

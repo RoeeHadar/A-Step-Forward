@@ -30,3 +30,18 @@ services:
         sync: false
     healthCheckPath: /healthz
     autoDeploy: true
+    # Only redeploy on changes that actually affect the API image.
+    # Without this filter, Vercel-only commits (apps/web changes) trigger
+    # Render rebuilds, which on free tier sometimes exceed the deploy
+    # health-check window and show as false "deploy failed" emails even
+    # though the previous image is still serving traffic.
+    buildFilter:
+      paths:
+        - apps/api/**
+        - packages/agents/**
+        - packages/schemas/**
+        - services/**
+        - infra/alembic/**
+        - pyproject.toml
+        - uv.lock
+        - render.yaml

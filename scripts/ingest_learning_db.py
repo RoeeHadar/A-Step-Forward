@@ -680,18 +680,27 @@ async def run_ingest_export(args: argparse.Namespace) -> IngestStats:
     export_path.parent.mkdir(parents=True, exist_ok=True)
     public_dir = ROOT / "apps" / "web" / "public" / "content" / "bagrut"
 
-    # Load existing export if present (resume from where we left off)
+    # Load existing export if present (resume from where we left off).
+    # IMPORTANT: dedup key is (subject, source_file), NOT just source_file —
+    # the same PDF often lives under multiple subject folders (e.g. Physics 1,
+    # Physics High School/10th grade, Physics Pre-University) and must be
+    # ingested separately into each subject's content_sections.
     if export_path.exists():
         try:
             existing = json.loads(export_path.read_text(encoding="utf-8"))
             sections: list[dict] = existing.get("sections", [])
             bagrut_rows: list[dict] = existing.get("bagrut", [])
-            done_files: set[str] = {r["source_file"] for r in sections} | {r["source_file"] for r in bagrut_rows}
-            _log(f"[resume] found existing export with {len(sections)} sections, {len(bagrut_rows)} bagrut rows")
+            done_keys: set[tuple[str, str]] = {
+                (r["subject"], r["source_file"]) for r in sections
+            } | {(r["subject"], r["source_file"]) for r in bagrut_rows}
+            _log(
+                f"[resume] found existing export with {len(sections)} sections, "
+                f"{len(bagrut_rows)} bagrut rows, {len(done_keys)} unique (subject,file) keys"
+            )
         except Exception:
-            sections, bagrut_rows, done_files = [], [], set()
+            sections, bagrut_rows, done_keys = [], [], set()
     else:
-        sections, bagrut_rows, done_files = [], [], set()
+        sections, bagrut_rows, done_keys = [], [], set()
 
     stats = IngestStats()
 
@@ -705,14 +714,14 @@ async def run_ingest_export(args: argparse.Namespace) -> IngestStats:
     for pdf_path in sorted(source_root.rglob("*.pdf")):
         rel = pdf_path.relative_to(source_root)
         source_file = pdf_path.name
+        subject = _subject_from_path(source_root, pdf_path)
+        grade = _grade_from_path(pdf_path)
+        dedup_key = (subject, source_file)
 
-        if source_file in done_files:
+        if dedup_key in done_keys:
             _log(f"[skip-done] {rel}")
             stats.processed += 1
             continue
-
-        subject = _subject_from_path(source_root, pdf_path)
-        grade = _grade_from_path(pdf_path)
 
         if _is_bagrut(pdf_path):
             digest = hashlib.sha256(pdf_path.read_bytes()).hexdigest()[:16]
@@ -729,7 +738,7 @@ async def run_ingest_export(args: argparse.Namespace) -> IngestStats:
                 "display_name": _display_name(source_file),
                 "file_url": f"/content/bagrut/{dest_name}",
             })
-            done_files.add(source_file)
+            done_keys.add(dedup_key)
             stats.bagrut += 1
             stats.processed += 1
             _log(f"[bagrut] {rel}")
@@ -738,20 +747,37 @@ async def run_ingest_export(args: argparse.Namespace) -> IngestStats:
 
         pages = _extract_with_timeout(pdf_path, timeout_sec=30)
 
-        if pages is None or not pages:
-            stats.skipped += 1
-            stats.failed.append({"file": str(pdf_path), "reason": "no extractable text or timeout"})
-            _log(f"[skip] {rel}: no text / timeout")
-            done_files.add(source_file)
+        # Fallback for scanned / font-encoded PDFs that yield no text.
+        # We can't reliably host the raw PDFs on Vercel (some exceed the
+        # 50 MB single-file limit and the total would balloon the bundle),
+        # so we emit a single placeholder section so the lesson is at
+        # least discoverable in the Learn nav. Full content will arrive
+        # once we either OCR these PDFs or move them to object storage.
+        has_text = bool(pages) and any(t.strip() for _, t in pages)
+        if not has_text:
+            display = _display_name(source_file)
+            placeholder_md = (
+                f"### {display}\n\n"
+                f"החומר עבור נושא זה מבוסס על קובץ PDF שעדיין לא ניתן לחילוץ "
+                f"טקסט אוטומטי (PDF סרוק / מקודד בפונט מוטמע).\n\n"
+                f"החומר יתווסף בקרוב לאחר שלב ה-OCR. בינתיים, ניתן לפנות למורה "
+                f"או לבחור שיעור אחר באותו נושא.\n"
+            )
+            sections.append({
+                "subject": subject,
+                "grade": grade,
+                "source_file": source_file,
+                "chunk_index": 0,
+                "title": display,
+                "body_md": placeholder_md,
+                "page_start": None,
+                "page_end": None,
+            })
+            stats.sections += 1
+            done_keys.add(dedup_key)
+            stats.processed += 1
             _flush()
-            continue
-
-        if not any(t.strip() for _, t in pages):
-            stats.skipped += 1
-            stats.failed.append({"file": str(pdf_path), "reason": "no extractable text"})
-            _log(f"[skip] {rel}: no text")
-            done_files.add(source_file)
-            _flush()
+            _log(f"[placeholder] {rel}: no extractable text — added placeholder")
             continue
 
         chapters = _split_chapters(pages)
@@ -773,7 +799,7 @@ async def run_ingest_export(args: argparse.Namespace) -> IngestStats:
             stats.sections += 1
             chunk_count += 1
 
-        done_files.add(source_file)
+        done_keys.add(dedup_key)
         stats.processed += 1
         _flush()
         _log(f"[ok] {rel} — {chunk_count} chunks")
