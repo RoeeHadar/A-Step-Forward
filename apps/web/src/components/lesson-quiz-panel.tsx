@@ -106,14 +106,12 @@ function QuestionCard({
   const [ordering, setOrdering] = useState<number[]>(() => {
     const payload = question.answer_payload;
     if (question.kind === 'ordering' && payload?.steps_en) {
-      // Present the steps in their AUTHORED (correct) order first, then shuffle
-      // deterministically so the page is stable across server/client renders.
+      // Present the steps shuffled deterministically so the page is stable
+      // across server/client renders (we identity-shuffle index list 0..n-1).
       const n = payload.steps_en.length;
-      const initial = Array.from({ length: n }, (_, i) => i);
-      // Simple deterministic shuffle: reverse + odd/even split.
       const shuffled: number[] = [];
-      for (let i = 0; i < n; i += 2) shuffled.push(initial[i]);
-      for (let i = 1; i < n; i += 2) shuffled.push(initial[i]);
+      for (let i = 0; i < n; i += 2) shuffled.push(i);
+      for (let i = 1; i < n; i += 2) shuffled.push(i);
       return shuffled.reverse();
     }
     return [];
@@ -226,7 +224,11 @@ function QuestionCard({
       const next = [...prev];
       const target = idx + delta;
       if (target < 0 || target >= next.length) return prev;
-      [next[idx], next[target]] = [next[target], next[idx]];
+      const a = next[idx];
+      const b = next[target];
+      if (a === undefined || b === undefined) return prev;
+      next[idx] = b;
+      next[target] = a;
       return next;
     });
   }
@@ -444,7 +446,8 @@ function QuestionCard({
           {(lang === 'he' ? payload.left_he ?? payload.left_en : payload.left_en).map((left, i) => {
             const rightOptions = lang === 'he' ? payload.right_he ?? payload.right_en! : payload.right_en!;
             const userChoice = matchSelections[i] ?? null;
-            const correctIdx = (payload.correct_pairs ?? [])[i];
+            const correctIdx = (payload.correct_pairs ?? [])[i] ?? -1;
+            const correctRight = correctIdx >= 0 ? rightOptions[correctIdx] ?? '' : '';
             let cls = 'border-border';
             if (state.submitted) {
               cls = userChoice === correctIdx ? 'border-emerald-500/60 bg-emerald-500/10' : 'border-destructive/60 bg-destructive/10';
@@ -474,7 +477,7 @@ function QuestionCard({
                 {state.submitted && userChoice !== correctIdx ? (
                   <span className="text-xs text-emerald-400">
                     {lang === 'he' ? 'נכון: ' : 'Correct: '}
-                    {rightOptions[correctIdx]}
+                    {correctRight}
                   </span>
                 ) : null}
               </div>
@@ -498,6 +501,7 @@ function QuestionCard({
         <div className="space-y-2">
           {ordering.map((stepIdx, displayIdx) => {
             const steps = lang === 'he' ? payload.steps_he ?? payload.steps_en! : payload.steps_en!;
+            const stepText = steps[stepIdx] ?? '';
             const correctPos = (payload.correct_order ?? []).indexOf(stepIdx);
             let cls = 'border-border';
             if (state.submitted) {
@@ -507,7 +511,7 @@ function QuestionCard({
               <div key={stepIdx} className={`flex items-center gap-2 rounded-lg border bg-surface-1/50 p-3 text-sm ${cls}`}>
                 <span className="font-mono text-xs text-muted-foreground">{displayIdx + 1}.</span>
                 <span className="flex-1">
-                  <MarkdownInline content={steps[stepIdx]} />
+                  <MarkdownInline content={stepText} />
                 </span>
                 {state.submitted ? (
                   displayIdx === correctPos ? (
