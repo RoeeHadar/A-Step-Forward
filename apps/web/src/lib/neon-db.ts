@@ -635,3 +635,83 @@ export async function fetchExternalResources(subject: string): Promise<ExternalR
     return [];
   }
 }
+
+// ── Concept explanations (in-house adapted from CC sources) ────────────────
+
+export interface ConceptExplanation {
+  concept_id: string;
+  language: string;
+  title: string;
+  body_md: string;
+  body_html: string | null;
+  summary: string | null;
+  image_url: string | null;
+  source: string;
+  source_url: string;
+  source_lang: string;
+  license: string;
+  attribution: string;
+  fetched_at: string;
+}
+
+export interface ConceptCoverage {
+  concept_id: string;
+  languages: string[];
+}
+
+export async function fetchConceptExplanation(
+  conceptId: string,
+  language: string,
+): Promise<ConceptExplanation | null> {
+  if (!sql) return null;
+  try {
+    const rows = (await sql`
+      SELECT concept_id, language, title, body_md, body_html, summary, image_url,
+             source, source_url, source_lang, license, attribution, fetched_at
+      FROM concept_explanations
+      WHERE concept_id = ${conceptId} AND language = ${language}
+      ORDER BY fetched_at DESC
+      LIMIT 1
+    `) as ConceptExplanation[];
+    return rows[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchConceptExplanationFallback(
+  conceptId: string,
+  preferredLang: string,
+): Promise<ConceptExplanation | null> {
+  if (!sql) return null;
+  try {
+    const rows = (await sql`
+      SELECT concept_id, language, title, body_md, body_html, summary, image_url,
+             source, source_url, source_lang, license, attribution, fetched_at
+      FROM concept_explanations
+      WHERE concept_id = ${conceptId}
+      ORDER BY CASE WHEN language = ${preferredLang} THEN 0 ELSE 1 END, fetched_at DESC
+      LIMIT 1
+    `) as ConceptExplanation[];
+    return rows[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchConceptsWithExplanations(
+  conceptIds: string[],
+): Promise<Map<string, string[]>> {
+  if (!sql || conceptIds.length === 0) return new Map();
+  try {
+    const rows = (await sql`
+      SELECT concept_id, ARRAY_AGG(DISTINCT language) AS langs
+      FROM concept_explanations
+      WHERE concept_id = ANY(${conceptIds})
+      GROUP BY concept_id
+    `) as Array<{ concept_id: string; langs: string[] }>;
+    return new Map(rows.map((r) => [r.concept_id, r.langs]));
+  } catch {
+    return new Map();
+  }
+}
