@@ -1,7 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { StreamingTextResponse } from 'ai';
-import { agentNameSchema, chatChunkSchema } from '@asf/schemas/agents';
-import { API_BASE_URL } from '@/lib/api';
+import { agentNameSchema } from '@asf/schemas/agents';
 import { logger } from '@/lib/logger';
 import {
   fetchRecentChatTurns,
@@ -13,10 +12,10 @@ import kg from '@/lib/kg-data.json';
 
 export const runtime = 'nodejs';
 
-// Render free tier can take up to 60s to cold-start; give it room.
-const BACKEND_FETCH_TIMEOUT_MS = 90_000;
-const BACKEND_MAX_ATTEMPTS = 2;
-const COLD_START_GRACE_MS = 3_000;
+// Vercel functions have a 60s timeout on Pro, 10s on Hobby for non-streaming.
+// We stream, so the connection stays open as long as we keep yielding chunks.
+// Keep the upstream LLM timeout well under that.
+const GROQ_TIMEOUT_MS = 25_000;
 const MAX_MEMORY_TURNS = 10;
 
 interface KgConcept {
@@ -37,150 +36,66 @@ export async function POST(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const body = (await req.json()) as {
-    messages?: { role: string; content: string }[];
-    agent?: string;
-  };
+  let body: { messages?: { role: string; content: string }[]; agent?: string };
+  try {
+    body = (await req.json()) as typeof body;
+  } catch {
+    return new Response('Bad request', { status: 400 });
+  }
+
   const lastMessage = body.messages?.filter((m) => m.role === 'user').at(-1)?.content ?? '';
   const parsedAgent = agentNameSchema.safeParse(body.agent);
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
 
-  const isFirstTurn = (body.messages?.filter((m) => m.role === 'user').length ?? 0) <= 1;
-
-  // Record the user turn (fire-and-forget, doesn't block streaming).
+  // Record user turn (fire-and-forget — does not block streaming).
   void recordChatTurn(userId, agent, 'user', lastMessage);
 
-  const gen = streamAgentResponse(userId, lastMessage, agent, isFirstTurn);
+  const gen = streamAgentResponse(userId, lastMessage, agent);
   const encoder = new TextEncoder();
   let assistantBuffer = '';
   const readable = new ReadableStream({
     async pull(controller) {
-      const { value, done } = await gen.next();
-      if (done) {
+      try {
+        const { value, done } = await gen.next();
+        if (done) {
+          controller.close();
+          if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
+        } else {
+          assistantBuffer += value;
+          controller.enqueue(encoder.encode(value));
+        }
+      } catch (err) {
+        logger.error('chat stream pull failed', { err: String(err) });
+        // Emit a friendly text and close, so the client never sees a network error.
+        const fallback = friendlyFallback(lastMessage, agent);
+        assistantBuffer += fallback;
+        controller.enqueue(encoder.encode(fallback));
         controller.close();
         if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
-      } else {
-        assistantBuffer += value;
-        controller.enqueue(encoder.encode(value));
       }
     },
   });
   return new StreamingTextResponse(readable);
 }
 
-async function fetchBackendChat(userId: string, message: string, agent: string): Promise<Response> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), BACKEND_FETCH_TIMEOUT_MS);
-
-  try {
-    return await fetch(`${API_BASE_URL}/v1/chat`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'X-Learner-Id': userId,
-        'X-Role': 'learner',
-      },
-      body: JSON.stringify({
-        learner_id: userId,
-        message,
-        requested_agent: agent,
-        locale: 'en',
-      }),
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-
 async function* streamAgentResponse(
   userId: string,
   message: string,
   agent: string,
-  isFirstTurn: boolean,
 ): AsyncGenerator<string> {
+  // Direct Groq path — no Render dependency. Designed to fit comfortably
+  // inside Vercel function timeouts.
+  let emitted = false;
   try {
-    if (isFirstTurn) {
-      fetch(`${API_BASE_URL}/v1/warmup`).catch(() => {});
-      await new Promise((r) => setTimeout(r, COLD_START_GRACE_MS));
-    }
-
-    let res: Response | null = null;
-
-    for (let attempt = 0; attempt < BACKEND_MAX_ATTEMPTS; attempt++) {
-      try {
-        const attemptRes = await fetchBackendChat(userId, message, agent);
-        if (attemptRes.ok && attemptRes.body) {
-          res = attemptRes;
-          break;
-        }
-        if (attempt < BACKEND_MAX_ATTEMPTS - 1) {
-          logger.warn('chat backend returned non-ok, retrying', {
-            status: attemptRes.status,
-            attempt,
-          });
-          await new Promise((r) => setTimeout(r, 3000));
-        }
-      } catch (err) {
-        if (attempt < BACKEND_MAX_ATTEMPTS - 1) {
-          logger.warn('chat backend fetch failed, retrying', { attempt, err: String(err) });
-          await new Promise((r) => setTimeout(r, 3000));
-        } else {
-          throw err;
-        }
-      }
-    }
-
-    if (!res?.ok || !res.body) {
-      // Render backend unreachable — fall back to direct Groq call with memory + profile context.
-      for await (const chunk of streamFromGroq(userId, message, agent)) {
-        yield chunk;
-      }
-      return;
-    }
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let emitted = false;
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const events = buffer.split('\n\n');
-      buffer = events.pop() ?? '';
-
-      for (const event of events) {
-        const dataLine = event.split('\n').find((l) => l.startsWith('data: '));
-        if (!dataLine) continue;
-        const raw = dataLine.slice(6);
-        try {
-          const chunk = chatChunkSchema.parse(JSON.parse(raw));
-          if (chunk.kind === 'token' && chunk.text) {
-            emitted = true;
-            yield chunk.text;
-          }
-        } catch {
-          // skip malformed SSE chunks
-        }
-      }
-    }
-
-    if (!emitted) {
-      for await (const chunk of streamFromGroq(userId, message, agent)) {
-        yield chunk;
-      }
+    for await (const chunk of streamFromGroq(userId, message, agent)) {
+      emitted = true;
+      yield chunk;
     }
   } catch (err) {
-    logger.error('chat stream failed', { err: String(err) });
-    try {
-      for await (const chunk of streamFromGroq(userId, message, agent)) {
-        yield chunk;
-      }
-    } catch {
-      yield "I'm having trouble connecting right now. Please try again shortly.";
-    }
+    logger.warn('groq stream raised', { err: String(err) });
+  }
+  if (!emitted) {
+    yield friendlyFallback(message, agent);
   }
 }
 
@@ -222,9 +137,12 @@ async function buildContextPrompt(
   agent: string,
   message: string,
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
-  const profile = await getLearnerProfile(userId).catch(() => null);
-  const mastery = await getConceptMastery(userId).catch(() => ({}));
-  const recent = await fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []);
+  // Each helper catches its own errors so a single DB issue cannot break chat.
+  const [profile, mastery, recent] = await Promise.all([
+    getLearnerProfile(userId).catch(() => null),
+    getConceptMastery(userId).catch(() => ({})),
+    fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []),
+  ]);
 
   let context = AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor!;
 
@@ -282,12 +200,15 @@ async function buildContextPrompt(
 
   return {
     system: context,
-    memory: recent.map((t) => ({
-      role: t.role,
-      content: t.content,
-    })),
+    memory: recent.map((t) => ({ role: t.role, content: t.content })),
   };
 }
+
+const GROQ_MODELS = [
+  'llama-3.3-70b-versatile',
+  'llama-3.1-70b-versatile',
+  'llama-3.1-8b-instant',
+];
 
 async function* streamFromGroq(
   userId: string,
@@ -296,81 +217,121 @@ async function* streamFromGroq(
 ): AsyncGenerator<string> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    yield getMockResponse(message, agent);
+    logger.warn('GROQ_API_KEY missing — skipping Groq');
     return;
   }
 
-  const { system, memory } = await buildContextPrompt(userId, agent, message);
-
+  let context: Awaited<ReturnType<typeof buildContextPrompt>>;
   try {
-    const messages: Array<{ role: string; content: string }> = [
-      { role: 'system', content: system },
-      ...memory,
-      { role: 'user', content: message },
-    ];
+    context = await buildContextPrompt(userId, agent, message);
+  } catch (err) {
+    logger.warn('buildContextPrompt failed, using bare persona', { err: String(err) });
+    context = { system: AGENT_PERSONAS[agent] ?? AGENT_PERSONAS.tutor!, memory: [] };
+  }
 
-    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages,
-        max_tokens: 1024,
-        temperature: 0.4,
-        stream: true,
-      }),
-    });
+  const messages: Array<{ role: string; content: string }> = [
+    { role: 'system', content: context.system },
+    ...context.memory,
+    { role: 'user', content: message },
+  ];
 
-    if (!resp.ok || !resp.body) {
-      logger.warn('groq returned non-ok', { status: resp.status });
-      yield getMockResponse(message, agent);
-      return;
-    }
+  // Try each model with its own short timeout; fall through on 429 / 5xx / network errors.
+  for (const model of GROQ_MODELS) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
+    try {
+      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          max_tokens: 1024,
+          temperature: 0.4,
+          stream: true,
+        }),
+        signal: controller.signal,
+      });
 
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let emitted = false;
+      if (!resp.ok || !resp.body) {
+        const status = resp.status;
+        clearTimeout(timeoutId);
+        logger.warn('groq non-ok, trying next model', { status, model });
+        if (status === 401 || status === 403) {
+          // Bad key — no point retrying with other models.
+          return;
+        }
+        continue;
+      }
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop() ?? '';
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let emitted = false;
 
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const data = line.slice(6).trim();
-        if (data === '[DONE]') break;
-        try {
-          const parsed = JSON.parse(data) as {
-            choices?: Array<{ delta?: { content?: string } }>;
-          };
-          const token = parsed.choices?.[0]?.delta?.content;
-          if (token) {
-            emitted = true;
-            yield token;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') break;
+          try {
+            const parsed = JSON.parse(data) as {
+              choices?: Array<{ delta?: { content?: string } }>;
+            };
+            const token = parsed.choices?.[0]?.delta?.content;
+            if (token) {
+              emitted = true;
+              yield token;
+            }
+          } catch {
+            // ignore parse errors
           }
-        } catch {
-          // ignore parse errors
         }
       }
+      clearTimeout(timeoutId);
+      if (emitted) return; // success
+    } catch (err) {
+      clearTimeout(timeoutId);
+      logger.warn('groq attempt threw', { model, err: String(err) });
     }
-
-    if (!emitted) {
-      yield getMockResponse(message, agent);
-    }
-  } catch (err) {
-    logger.warn('groq fallback failed', { err: String(err) });
-    yield getMockResponse(message, agent);
   }
 }
 
-function getMockResponse(message: string, agent: string): string {
-  const preview = message.slice(0, 80);
-  return `**${agent}**: That's a great question about "${preview}". Let me guide you — what do you already know about this topic? I'll help you discover the answer step by step.`;
+/**
+ * Friendly response when no LLM can be reached. We still personalize the
+ * preview of the user message so it doesn't feel robotic.
+ */
+function friendlyFallback(message: string, agent: string): string {
+  const preview = message.slice(0, 120);
+  const heads: Record<string, string> = {
+    tutor: "I'm your Tutor.",
+    mentor: "I'm your Mentor.",
+    coach: "I'm your Coach.",
+    reviewer: "I'm your Reviewer.",
+    qa_explainer: "I'm your Q&A explainer.",
+    note_taker: "I'm your Note-taker.",
+  };
+  const head = heads[agent] ?? "I'm your assistant.";
+  return [
+    `${head} Our language model is temporarily unreachable, so I cannot answer in real time right now.`,
+    '',
+    preview ? `You asked: *"${preview}"*` : '',
+    '',
+    'Two things you can do right now:',
+    '- Refresh in a moment — the model usually returns within a minute.',
+    '- Browse the **/learn** section for curated explanations on this topic.',
+    '',
+    'Your message is saved in your chat history, so I will see it next turn.',
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
