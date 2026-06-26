@@ -49,40 +49,71 @@ def _is_hebrew_line(line: str) -> bool:
     return hebrew > latin and hebrew > 0
 
 
-def _fix_visual_order_hebrew(text: str) -> str:
-    """PyMuPDF returns RTL text in *visual* order (right-to-left chars
-    appear reversed when read as LTR). This function converts back to
-    *logical* (storage) order.
+# Common short Hebrew tokens used to detect logical order. These appear
+# only when the text is in correct (logical) order — never in visual order.
+_COMMON_HE_TOKENS = (
+    " של ", " את ", " על ", " אם ", " כי ", " לא ", " זה ",
+    " גם ", " או ", " רק ", " יש ", " לפי ", " אך ", " כל ",
+    "ה", "ב", "ל", "כ",  # very common prefixes — used in the bigram check below
+)
+# More-specific multi-char Hebrew words that almost never collide with reversed text
+_HEBREW_LOGICAL_WORDS = [
+    " של ", " את ", " על ", " אם ", " כי ", " לא ", " זה ",
+    " גם ", " או ", " רק ", " יש ", " לפי ", " אך ", " כל ",
+    " ולכן ", " מאוד ", " כמו ", " הוא ", " היא ", " היה ",
+]
 
-    Strategy:
-    - Split into lines (newlines are preserved as-is).
-    - For each line that's predominantly Hebrew, reverse the whole line
-      (both word order and char order). This is exactly correct for pure-RTL
-      text. For mixed Latin/digits within Hebrew, runs of Latin/digits get
-      reversed too — we re-reverse those individual tokens to keep them
-      readable. This handles the common "(1744)" → ")4471(" → "(1744)" case.
-    - Lines that are predominantly Latin/numeric are left untouched.
+
+def _count_logical_signals(text: str) -> int:
+    """How many recognizable common Hebrew words appear in `text`?
+    Higher = more likely to already be in logical order."""
+    n = 0
+    pad = f" {text} "  # pad so boundary chars match
+    for word in _HEBREW_LOGICAL_WORDS:
+        i = 0
+        while (i := pad.find(word, i)) != -1:
+            n += 1
+            i += len(word)
+    return n
+
+
+def _fix_visual_order_hebrew(text: str) -> str:
+    """Convert Hebrew text from visual (PDF-display) order to logical
+    (storage / read) order — but ONLY if it actually appears to be in
+    visual order. Modern PyMuPDF (≥1.18) returns logical order for most
+    PDFs; older extractors and pdfplumber's text path often return visual
+    order. We auto-detect per-line by counting common Hebrew words
+    pre/post reversal; if reversal would expose more recognizable words,
+    we apply it. Otherwise the line is left untouched.
+
+    Mixed-direction quirks:
+    - Inside a Hebrew run we re-reverse Latin/digit tokens so e.g. ``(1744)``
+      survives a reversal pass.
+    - Lines whose body is predominantly Latin/numeric are never touched.
     """
     if not text:
         return text
 
     def _reverse_with_latin_correction(line: str) -> str:
-        # Reverse the entire line first.
         reversed_line = line[::-1]
-        # Now re-reverse any contiguous Latin/digit runs to restore them.
         return re.sub(
             r"[A-Za-z0-9_]+(?:[.,;:!?][A-Za-z0-9_]+)*",
             lambda m: m.group(0)[::-1],
             reversed_line,
         )
 
-    fixed: list[str] = []
+    out: list[str] = []
     for line in text.split("\n"):
-        if _is_hebrew_line(line):
-            fixed.append(_reverse_with_latin_correction(line))
+        if not _is_hebrew_line(line):
+            out.append(line)
+            continue
+        reversed_line = _reverse_with_latin_correction(line)
+        # Only flip if reversal yields strictly more recognizable Hebrew.
+        if _count_logical_signals(reversed_line) > _count_logical_signals(line):
+            out.append(reversed_line)
         else:
-            fixed.append(line)
-    return "\n".join(fixed)
+            out.append(line)
+    return "\n".join(out)
 
 
 # Common control glyphs that PDF extraction emits as artifacts

@@ -16,6 +16,7 @@ on:
           - external-resources
           - concept-explanations
           - fix-hebrew-content
+          - content-from-export
 
 jobs:
   seed:
@@ -96,3 +97,12 @@ jobs:
         run: |
           npm install --no-save --no-package-lock @neondatabase/serverless
           node scripts/fix-hebrew-content.mjs
+
+      - name: Seed content_sections + bagrut from JSON export
+        if: ${{ inputs.target == 'content-from-export' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          ls -lah scripts/seed_data/content_export.json
+          node scripts/seed-content-from-export.mjs --input=scripts/seed_data/content_export.json
