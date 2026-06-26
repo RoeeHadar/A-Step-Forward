@@ -16,11 +16,20 @@ import type {
 export type { BagrutExam, SectionDetail, SectionSummary, SubjectSummary };
 
 async function contentFetch<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 300 } });
-  if (!res.ok) {
-    throw new Error(`Content API ${res.status} on ${path}`);
+  // Hard cap so a dead Render instance can't time-out the Vercel function.
+  // Once /learn fully runs on Neon, the Render fallback is best-effort polish.
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 4000);
+  try {
+    const res = await fetch(`${API_BASE_URL}${path}`, {
+      next: { revalidate: 300 },
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error(`Content API ${res.status} on ${path}`);
+    return (await res.json()) as T;
+  } finally {
+    clearTimeout(timeout);
   }
-  return res.json() as Promise<T>;
 }
 
 const STATIC_SUBJECT_FALLBACK: SubjectSummary[] = [
@@ -39,16 +48,14 @@ export async function fetchSubjects(): Promise<SubjectSummary[]> {
     const rows = await contentFetch<SubjectSummary[]>('/v1/subjects');
     if (rows.length > 0) return rows;
   } catch {
-    // fall through to static fallback
+    // Render is best-effort: ignore failures and show the static fallback below.
   }
-  // Always show something — the curated external resources work even without our DB content.
   return STATIC_SUBJECT_FALLBACK;
 }
 
 export async function fetchSections(subject: string): Promise<SectionSummary[]> {
   if (neonConfigured) {
-    const rows = await neonFetchSections(subject);
-    if (rows.length > 0) return rows;
+    return await neonFetchSections(subject);
   }
   try {
     return await contentFetch<SectionSummary[]>(
@@ -64,8 +71,7 @@ export async function fetchSection(
   chunkIndex: number,
 ): Promise<SectionDetail | null> {
   if (neonConfigured) {
-    const row = await neonFetchSection(subject, chunkIndex);
-    if (row) return row;
+    return await neonFetchSection(subject, chunkIndex);
   }
   try {
     return await contentFetch<SectionDetail>(
@@ -78,8 +84,7 @@ export async function fetchSection(
 
 export async function fetchBagrutExams(subject: string): Promise<BagrutExam[]> {
   if (neonConfigured) {
-    const rows = await neonFetchBagrutExams(subject);
-    if (rows.length > 0) return rows;
+    return await neonFetchBagrutExams(subject);
   }
   try {
     return await contentFetch<BagrutExam[]>(
