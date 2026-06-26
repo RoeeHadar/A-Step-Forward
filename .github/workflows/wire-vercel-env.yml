@@ -28,6 +28,26 @@ jobs:
           SCOPE="?teamId=${VERCEL_ORG_ID}"
           AUTH="Authorization: Bearer ${VERCEL_TOKEN}"
 
+          # Sanity check token + project access first.
+          echo "Pinging Vercel API (project info)…"
+          HTTP=$(curl -s -o /tmp/vercel_probe.json -w "%{http_code}" -H "$AUTH" \
+            "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}${SCOPE}")
+          echo "Response code: $HTTP"
+          if [ "$HTTP" != "200" ]; then
+            echo "Project probe failed (with teamId scope). Trying without teamId..."
+            HTTP=$(curl -s -o /tmp/vercel_probe.json -w "%{http_code}" -H "$AUTH" \
+              "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}")
+            echo "Response code (no teamId): $HTTP"
+            if [ "$HTTP" = "200" ]; then
+              echo "VERCEL_ORG_ID scope was the problem — switching to personal scope."
+              SCOPE=""
+            else
+              echo "Both scopes failed. Body:"
+              cat /tmp/vercel_probe.json
+              exit 1
+            fi
+          fi
+
           delete_key() {
             local key="$1"
             local ids
