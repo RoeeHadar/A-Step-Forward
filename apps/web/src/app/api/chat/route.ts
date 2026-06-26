@@ -1,5 +1,4 @@
 import { auth } from '@clerk/nextjs/server';
-import { StreamingTextResponse } from 'ai';
 import { agentNameSchema } from '@asf/schemas/agents';
 import { logger } from '@/lib/logger';
 import {
@@ -53,29 +52,47 @@ export async function POST(req: Request) {
   const gen = streamAgentResponse(userId, lastMessage, agent);
   const encoder = new TextEncoder();
   let assistantBuffer = '';
+
+  // Vercel AI SDK "data stream" protocol: every text token is emitted on its
+  // own line, prefixed by `0:` and JSON-stringified, terminated with `\n`.
+  // The final line is `d:{...}` for the finish message. This is the format
+  // useChat expects by default.
+  const encodeToken = (text: string) => encoder.encode(`0:${JSON.stringify(text)}\n`);
+  const encodeFinish = () =>
+    encoder.encode(`d:${JSON.stringify({ finishReason: 'stop', usage: { promptTokens: 0, completionTokens: 0 } })}\n`);
+
   const readable = new ReadableStream({
     async pull(controller) {
       try {
         const { value, done } = await gen.next();
         if (done) {
+          controller.enqueue(encodeFinish());
           controller.close();
           if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
         } else {
           assistantBuffer += value;
-          controller.enqueue(encoder.encode(value));
+          controller.enqueue(encodeToken(value));
         }
       } catch (err) {
         logger.error('chat stream pull failed', { err: String(err) });
-        // Emit a friendly text and close, so the client never sees a network error.
         const fallback = friendlyFallback(lastMessage, agent);
         assistantBuffer += fallback;
-        controller.enqueue(encoder.encode(fallback));
+        controller.enqueue(encodeToken(fallback));
+        controller.enqueue(encodeFinish());
         controller.close();
         if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
       }
     },
   });
-  return new StreamingTextResponse(readable);
+
+  return new Response(readable, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'X-Vercel-AI-Data-Stream': 'v1',
+      'Cache-Control': 'no-cache, no-transform',
+    },
+  });
 }
 
 async function* streamAgentResponse(

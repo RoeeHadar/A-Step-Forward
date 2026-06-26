@@ -31,12 +31,69 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps" / "api"))
 
 CHAPTER_MARKERS = re.compile(
-    r"^(?:פרק|יחידה|פרק\s+\d+|יחידה\s+\d+|Chapter\s+\d+|Unit\s+\d+)",
+    r"^(?:פרק|יחידה|פרק\s+\d+|יחידה\s+\d+|Chapter\s+\d+|Unit\s+\d+|חלק\s+\S+)",
     re.MULTILINE | re.IGNORECASE,
 )
 MATH_INLINE = re.compile(r"(?<!\$)\$(?!\$)([^\$\n]+?)(?<!\$)\$(?!\$)")
 MATH_DISPLAY = re.compile(r"\$\$([\s\S]+?)\$\$")
 BAGRUT_YEAR = re.compile(r"(20\d{2})")
+
+# Hebrew character ranges in Unicode (Hebrew block + alphabetic presentation forms)
+HEBREW_CHAR = re.compile(r"[\u0590-\u05FF\uFB1D-\uFB4F]")
+# Run of Hebrew chars (and Hebrew punctuation like maqaf U+05BE) plus combining marks
+HEBREW_RUN = re.compile(r"[\u0590-\u05FF\uFB1D-\uFB4F\u05BE'\"·\.,;:!?\-\u2013\u2014]+")
+# Detect a line that's predominantly Hebrew (more Hebrew chars than Latin)
+def _is_hebrew_line(line: str) -> bool:
+    hebrew = len(HEBREW_CHAR.findall(line))
+    latin = sum(1 for c in line if c.isascii() and c.isalpha())
+    return hebrew > latin and hebrew > 0
+
+
+def _fix_visual_order_hebrew(text: str) -> str:
+    """PyMuPDF returns RTL text in *visual* order (right-to-left chars
+    appear reversed when read as LTR). This function converts back to
+    *logical* (storage) order.
+
+    Strategy:
+    - Split into lines (newlines are preserved as-is).
+    - For each line that's predominantly Hebrew, reverse the whole line
+      (both word order and char order). This is exactly correct for pure-RTL
+      text. For mixed Latin/digits within Hebrew, runs of Latin/digits get
+      reversed too — we re-reverse those individual tokens to keep them
+      readable. This handles the common "(1744)" → ")4471(" → "(1744)" case.
+    - Lines that are predominantly Latin/numeric are left untouched.
+    """
+    if not text:
+        return text
+
+    def _reverse_with_latin_correction(line: str) -> str:
+        # Reverse the entire line first.
+        reversed_line = line[::-1]
+        # Now re-reverse any contiguous Latin/digit runs to restore them.
+        return re.sub(
+            r"[A-Za-z0-9_]+(?:[.,;:!?][A-Za-z0-9_]+)*",
+            lambda m: m.group(0)[::-1],
+            reversed_line,
+        )
+
+    fixed: list[str] = []
+    for line in text.split("\n"):
+        if _is_hebrew_line(line):
+            fixed.append(_reverse_with_latin_correction(line))
+        else:
+            fixed.append(line)
+    return "\n".join(fixed)
+
+
+# Common control glyphs that PDF extraction emits as artifacts
+# U+2212 (minus sign), U+00A0 (nbsp), zero-width chars, BOM
+ARTIFACT_CHARS = re.compile(r"[\u200B-\u200F\u202A-\u202E\uFEFF\u00AD]")
+# Stray bullets at line starts (often from list markers / page-break dashes)
+STRAY_BULLETS = re.compile(r"^\s*[\u2212\u2013\u2014•▪◦∙·]\s*", re.MULTILINE)
+# Page-number-only lines like "12" or "- 12 -"
+PAGE_NUMBER_LINE = re.compile(r"^\s*[\u2212\u2013\u2014\-]?\s*\d{1,3}\s*[\u2212\u2013\u2014\-]?\s*$", re.MULTILINE)
+# Multiple blank lines collapsed
+MULTI_BLANK = re.compile(r"\n{3,}")
 
 
 @dataclass
@@ -126,53 +183,97 @@ def _normalize_database_url(url: str) -> tuple[str, dict]:
     return clean, connect_args
 
 
+def _clean_page_text(raw: str) -> str:
+    """Strip control-char artifacts and stray bullets/page-numbers; collapse blanks."""
+    if not raw:
+        return ""
+    text = ARTIFACT_CHARS.sub("", raw)
+    text = STRAY_BULLETS.sub("", text)
+    text = PAGE_NUMBER_LINE.sub("", text)
+    text = MULTI_BLANK.sub("\n\n", text)
+    return text.strip()
+
+
 def _extract_pdf_text(pdf_path: Path) -> list[tuple[int, str]]:
-    """Return (page_num, text) pairs. Tries PyMuPDF first (fast), then pdfplumber."""
+    """Return (page_num, text) pairs in **logical (storage) order** with cleanup.
+
+    PyMuPDF returns RTL text in visual order — we apply `_fix_visual_order_hebrew`
+    to restore logical order. Tries PyMuPDF first, falls back to pdfplumber.
+    """
     pages: list[tuple[int, str]] = []
 
-    # PyMuPDF first — much faster on image PDFs (returns empty text instantly)
     try:
         import fitz  # type: ignore[import-untyped]  # PyMuPDF
 
         doc = fitz.open(pdf_path)
         for idx in range(len(doc)):
-            text = doc[idx].get_text("text") or ""
-            pages.append((idx + 1, text))
+            raw = doc[idx].get_text("text") or ""
+            cleaned = _clean_page_text(raw)
+            fixed = _fix_visual_order_hebrew(cleaned)
+            pages.append((idx + 1, fixed))
         doc.close()
         if any(t.strip() for _, t in pages):
             return pages
     except Exception:
         pass
 
-    # pdfplumber fallback — better layout-aware extraction for complex PDFs
     try:
         import pdfplumber  # type: ignore[import-untyped]
 
         pages = []
         with pdfplumber.open(pdf_path) as pdf:
             for idx, page in enumerate(pdf.pages, start=1):
-                text = page.extract_text(x_tolerance=2, y_tolerance=2) or ""
-                pages.append((idx, text))
+                raw = page.extract_text(x_tolerance=2, y_tolerance=2) or ""
+                cleaned = _clean_page_text(raw)
+                fixed = _fix_visual_order_hebrew(cleaned)
+                pages.append((idx, fixed))
     except Exception as exc:
         raise RuntimeError(f"PDF extract failed: {exc}") from exc
     return pages
 
 
+# Heading detectors used during section splitting
+# Numbered headings: "1.", "1.1", "1.1.1", with optional dot
+NUMBERED_HEADING = re.compile(r"^\s*\d+(?:\.\d+){0,3}\.?\s+\S")
+# Hebrew chapter markers anywhere on the line (not just start) to catch "פרק 3"
+HEBREW_CHAPTER_LINE = re.compile(r"^(?:פרק|יחידה|חלק)\s+\S+", re.MULTILINE)
+# A short title-looking line: < 90 chars, no period, mostly letters
+def _looks_like_heading(line: str) -> bool:
+    line = line.strip()
+    if not line or len(line) > 90:
+        return False
+    if line.endswith(("...", ".", ":", ";")) and not CHAPTER_MARKERS.match(line):
+        return False
+    # Heading-y if matches markers or has heading-like structure
+    if CHAPTER_MARKERS.match(line) or HEBREW_CHAPTER_LINE.match(line):
+        return True
+    if NUMBERED_HEADING.match(line) and not line[-1].isdigit():
+        return True
+    return False
+
+
 def _split_chapters(pages: list[tuple[int, str]]) -> list[dict[str, Any]]:
-    """Split PDF pages into chapters using Hebrew/English heading markers."""
-    full_text = "\n\n".join(text for _, text in pages if text.strip())
-    if not full_text.strip():
-        return [{"title": "תוכן", "body_md": "", "page_start": 1, "page_end": len(pages)}]
+    """Split PDF pages into chapters using Hebrew/English heading markers.
+
+    Strategy:
+    1. Walk lines; promote any line that looks like a heading to a section boundary.
+    2. Title the section after that heading.
+    3. If no headings detected → chunk every ~5 pages and synthesise a title
+       from the first non-trivial sentence of the chunk.
+    4. Drop sections shorter than 200 chars (likely covers, TOCs, page-numbers).
+    """
+    if not pages:
+        return []
 
     chapters: list[dict[str, Any]] = []
     current_title = "מבוא"
     current_lines: list[str] = []
-    page_start = 1
+    page_start = pages[0][0]
 
     def flush(end_page: int) -> None:
         nonlocal current_lines, current_title, page_start
         body = "\n".join(current_lines).strip()
-        if body or len(chapters) == 0:
+        if body:
             chapters.append(
                 {
                     "title": current_title,
@@ -186,42 +287,132 @@ def _split_chapters(pages: list[tuple[int, str]]) -> list[dict[str, Any]]:
     for page_num, page_text in pages:
         for line in page_text.splitlines():
             stripped = line.strip()
-            if stripped and CHAPTER_MARKERS.match(stripped):
-                if current_lines:
+            if not stripped:
+                # Preserve paragraph breaks
+                if current_lines and current_lines[-1] != "":
+                    current_lines.append("")
+                continue
+            if _looks_like_heading(stripped):
+                # Flush previous section if it has substantive content
+                if current_lines and any(l.strip() for l in current_lines):
                     flush(page_num)
                 current_title = stripped
                 page_start = page_num
-            elif stripped:
+            else:
                 current_lines.append(stripped)
 
-    flush(pages[-1][0] if pages else 1)
+    flush(pages[-1][0])
 
-    if len(chapters) == 1 and len(chapters[0]["body_md"]) < 100:
-        # Fallback: one section per ~8 pages
-        chapters = []
-        chunk_size = 8
+    # Drop tiny chapters (likely covers / TOC / glyph noise)
+    chapters = [c for c in chapters if len(c["body_md"]) >= 200]
+
+    # Fallback: no real chapters found — chunk by pages with synthesised titles
+    if not chapters:
+        chunk_size = 5
         for i in range(0, len(pages), chunk_size):
             chunk = pages[i : i + chunk_size]
-            body = "\n\n".join(t for _, t in chunk if t.strip())
+            body_raw = "\n\n".join(t for _, t in chunk if t.strip())
+            if not body_raw.strip():
+                continue
             chapters.append(
                 {
-                    "title": f"חלק {len(chapters) + 1}",
-                    "body_md": _text_to_markdown(body),
+                    "title": _synthesise_title(body_raw, len(chapters) + 1),
+                    "body_md": _text_to_markdown(body_raw),
                     "page_start": chunk[0][0],
                     "page_end": chunk[-1][0],
                 }
             )
+
     return chapters
 
 
+def _synthesise_title(body: str, idx: int) -> str:
+    """Pick the first short, sentence-like line from body; fallback to numbered."""
+    for line in body.split("\n"):
+        s = line.strip()
+        if 8 <= len(s) <= 80 and not s[-1].isdigit():
+            return s
+    return f"חלק {idx}"
+
+
+# Mathematical-looking single-character / short-token patterns that should be kept inline
+MATH_SHORT_TOKEN = re.compile(r"(?<!\$)\b([a-zA-Z](?:_?\d)?(?:\^?\d)?)\b(?!\$)")
+
+
+def _detect_math_blocks(text: str) -> str:
+    """Promote equations to display math when they look like standalone formulas."""
+    # Lines that are mostly math symbols (>= 50% of non-space chars) become $$...$$
+    out_lines: list[str] = []
+    for line in text.split("\n"):
+        stripped = line.strip()
+        if not stripped:
+            out_lines.append(line)
+            continue
+        non_space = [c for c in stripped if not c.isspace()]
+        if not non_space:
+            out_lines.append(line)
+            continue
+        math_chars = sum(
+            1
+            for c in non_space
+            if c in "=+-*/^√∫∑∂∞≤≥≠±·×÷±αβγδεζηθικλμνξπρστυφχψω∀∃∈∉⊂⊃⊆⊇∪∩"
+            or c.isdigit()
+            or (c.isalpha() and c.isascii() and len(non_space) < 25)
+        )
+        if math_chars / len(non_space) > 0.55 and 3 <= len(stripped) <= 100:
+            out_lines.append(f"$${stripped}$$")
+        else:
+            out_lines.append(line)
+    return "\n".join(out_lines)
+
+
 def _text_to_markdown(text: str) -> str:
-    """Light heuristics: preserve math-like tokens as inline LaTeX."""
+    """Produce readable Markdown with paragraph breaks, bullet lists, and math."""
     if not text.strip():
         return ""
-    # Wrap common math patterns
-    text = re.sub(r"([=+\-*/^₀₁₂₃₄₅₆₇₈₉√∫∑∂∞≤≥≠±])", r" $\1$ ", text)
+
+    # Detect and wrap display math first
+    text = _detect_math_blocks(text)
+
+    # Existing math markers
     text = MATH_DISPLAY.sub(r"$$\1$$", text)
     text = MATH_INLINE.sub(r"$\1$", text)
+
+    # Convert numbered/bulleted list items into proper Markdown
+    text = re.sub(r"(?m)^\s*(\d+)[\)\.]\s+", r"\1. ", text)
+    text = re.sub(r"(?m)^\s*[•·◦∙▪]\s+", r"- ", text)
+
+    # Collapse single-line wraps inside a paragraph: a line that doesn't end
+    # with punctuation joined to the next non-empty line.
+    # This turns the "wall of text from PDF wrap" into proper paragraphs.
+    lines = text.split("\n")
+    merged: list[str] = []
+    for line in lines:
+        if (
+            merged
+            and merged[-1]
+            and not merged[-1].endswith((".", ":", "?", "!", "؟", "—", ";"))
+            and not merged[-1].startswith(("$$", "- ", "* "))
+            and not line.startswith(("$$", "#", "- ", "* "))
+            and not re.match(r"^\s*\d+\.", line)
+            and line.strip()
+        ):
+            merged[-1] = merged[-1] + " " + line.strip()
+        else:
+            merged.append(line)
+    text = "\n".join(merged)
+
+    # Promote heading-y lines to Markdown headings
+    promoted: list[str] = []
+    for line in text.split("\n"):
+        stripped = line.strip()
+        if _looks_like_heading(stripped) and len(stripped) < 80:
+            promoted.append(f"### {stripped}")
+        else:
+            promoted.append(line)
+    text = "\n".join(promoted)
+
+    # Paragraph normalisation
     paragraphs = [p.strip() for p in re.split(r"\n{2,}", text) if p.strip()]
     return "\n\n".join(paragraphs)
 

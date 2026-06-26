@@ -15,6 +15,7 @@ on:
           - content-json
           - external-resources
           - concept-explanations
+          - fix-hebrew-content
 
 jobs:
   seed:
@@ -87,3 +88,11 @@ jobs:
         run: |
           npm install --no-save --no-package-lock js-yaml @neondatabase/serverless
           node scripts/scrape-concept-content.mjs
+
+      - name: Fix Hebrew content (reverse visual-order rows in content_sections)
+        if: ${{ inputs.target == 'fix-hebrew-content' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          node scripts/fix-hebrew-content.mjs
