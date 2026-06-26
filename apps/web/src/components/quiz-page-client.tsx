@@ -361,6 +361,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     let correctCount = 0;
     for (let i = 0; i < envelope.questions.length; i += 1) {
       const q = envelope.questions[i];
+      if (!q) continue;
       const a = answers[i] ?? {};
       const graded = gradeOne(q, a);
       const isCorrect = graded === true;
@@ -596,6 +597,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   // ---------- running ------------------------------------------------------
   if (phase === 'running' && envelope) {
     const q = envelope.questions[cursor];
+    if (!q) return null;
     const a = answers[cursor] ?? {};
     const total = envelope.questions.length;
     const stem = isHe ? q.stem_he : q.stem_en;
@@ -862,7 +864,10 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
                         {t.selfCorrect}
                       </Badge>
                     ) : graded === false ? (
-                      <Badge variant="destructive" className="gap-1">
+                      <Badge
+                        variant="secondary"
+                        className="gap-1 bg-destructive/15 text-destructive"
+                      >
                         <X className="h-3 w-3" aria-hidden />
                         {t.selfWrong}
                       </Badge>

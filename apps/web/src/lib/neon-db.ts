@@ -1774,7 +1774,7 @@ export async function getDashboardSnapshot(
 ): Promise<DashboardSnapshot> {
   if (!sql) return EMPTY_DASHBOARD;
   try {
-    const [streak, masteryRows, atomCountRows] = await Promise.all([
+    const [streak, masteryRowsRaw, atomCountRowsRaw] = await Promise.all([
       getLearnerStreak(learnerId).catch(() => ({
         current_days: 0,
         longest_days: 0,
@@ -1788,14 +1788,19 @@ export async function getDashboardSnapshot(
         WHERE learner_id = ${learnerId}
         ORDER BY last_activity DESC NULLS LAST
         LIMIT 30
-      ` as Promise<Array<{ concept_id: string; score: number; last_activity: string | null }>>,
+      `,
       sql`
         SELECT COUNT(*)::int AS n
         FROM skill_practice
         WHERE learner_id = ${learnerId} AND attempts > 0
-      ` as Promise<Array<{ n: number }>>,
+      `,
     ]);
-    const allMastery = masteryRows;
+    const allMastery = masteryRowsRaw as Array<{
+      concept_id: string;
+      score: number;
+      last_activity: string | null;
+    }>;
+    const atomCountRows = atomCountRowsRaw as Array<{ n: number }>;
     const completed = allMastery.filter((r) => Number(r.score) >= 0.7).length;
     const atomsPracticed = atomCountRows[0]?.n ?? 0;
     // Conservative gamification curve: 1 by default; 1 extra level per 3
