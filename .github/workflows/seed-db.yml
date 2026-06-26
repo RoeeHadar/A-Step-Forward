@@ -20,6 +20,7 @@ on:
           - lessons-from-json
           - wipe-pdf-sections
           - diagnostic-he-backfill
+          - generate-bulk-questions
 
 jobs:
   seed:
@@ -126,6 +127,20 @@ jobs:
         run: |
           npm install --no-save --no-package-lock @neondatabase/serverless
           node scripts/backfill-diagnostic-he.mjs
+
+      - name: Bulk-author additional questions via Groq
+        if: ${{ inputs.target == 'generate-bulk-questions' }}
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "GROQ_API_KEY secret is missing — set it in repo Secrets."
+            exit 1
+          fi
+          node scripts/generate-bulk-questions.mjs --target 12 --limit 25
+          echo "--- diff stat (questions added) ---"
+          git --no-pager diff --stat scripts/seed_data/lessons || true
+          echo "Re-seed lessons-from-json after merging this run to push the new questions to Neon."
 
       - name: Wipe legacy PDF content_sections (Bagrut preserved)
         if: ${{ inputs.target == 'wipe-pdf-sections' }}

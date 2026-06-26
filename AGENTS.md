@@ -40,7 +40,7 @@ The **baseline** tells every agent: the corpus stats (117 KG concepts, 93 cross-
 | Skill-atom mastery           | per-(learner, atom)    | `skill_practice`                          | Lesson/answer route                    | Learning planner                       | `skills/cross-subject-kg/SKILL.md`     |
 | Activity streak / weekly plan | per-learner            | `learning_plans` + `plan_weeks` + derived | Plan generator                         | `/dashboard`                           | `skills/use-learning-plan/SKILL.md`    |
 
-The Clerk `userId` is the single key. There is no separate "storage bucket" for memories — every learner-bound row lives in the same Postgres database as the user identity, RLS-friendly. Lightweight dreaming/consolidation runs against `learner_agent_notes` at `POST /api/agent-memory/dream`; heavy nightly consolidation belongs to the Memory Steward.
+The Clerk `userId` is the single key. There is no separate "storage bucket" for memories — every learner-bound row lives in the same Postgres database as the user identity, RLS-friendly. Lightweight dreaming/consolidation runs against `learner_agent_notes` at `POST /api/agent-memory/dream` (no LLM, on-demand). Heavy LLM-driven consolidation runs at `POST /api/agent-memory/consolidate` (authed, per-learner — also wired to the `Rebuild from notes` button on `/settings/persona`) and `POST /api/cron/consolidate-memory` (CRON_SECRET, weekly sweep — Vercel cron + GitHub Actions backstop). Learners can inspect / edit / redact their shared persona at `/settings/persona`.
 
 ### Learner-facing
 
@@ -111,5 +111,6 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/learner-persona/SKILL.md` | Reading or writing the shared CLAUDE.md-style learner persona (`learner_profiles.learner_persona`). |
 | `skills/agent-skill-notes/SKILL.md` | Reading or writing per-(learner, agent) private notes (`learner_agent_notes`); also see the dreaming endpoint. |
 | `skills/dreaming-and-consolidation/SKILL.md` | Any consolidation work — the lightweight web endpoint or the heavy Memory Steward nightly. |
+| `skills/memory-steward-consolidate/SKILL.md` | The heavy LLM-driven `POST /api/agent-memory/consolidate` endpoint, the weekly `POST /api/cron/consolidate-memory` sweep, and the `Rebuild from notes` button on `/settings/persona`. |
 | `skills/coordinator-dispatch/SKILL.md` | Whenever you are operating as the Coordinator. |
 | `skills/assign-to-coordinator/SKILL.md` | Whenever you are operating as the Manager and need to hand off a new round of work. |

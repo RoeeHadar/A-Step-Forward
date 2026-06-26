@@ -90,7 +90,7 @@ export function buildAgentBaseline(): string {
     'Two persistence channels are available on every turn:',
     '- **Shared learner persona** — `POST /api/agent-memory/persona` (full replace) or `PATCH` (append a single bullet under a section). Use sparingly: this is the CLAUDE.md every agent reads. Only write stable, durable observations about HOW the learner thinks/talks/learns. Never write PII (no names, schools, contact details). Idempotent on duplicates.',
     '- **Your own private notes** — `POST /api/agent-memory/notes { agent: "<you>", content, importance: 1-5, kind?: observation|preference|strategy|open_question|misconception|win|plan, related_concept_id? }`. Use freely: per-(learner, you) scratchpad nobody else reads. The dreaming pass keeps it under 30 live notes per agent and merges near-duplicates.',
-    'Dreaming/consolidation: `POST /api/agent-memory/dream { agent?: "<you>" }` runs the lightweight pass (archive low-importance + supersede near-dupes). Heavy LLM-driven consolidation belongs to the Memory Steward.',
+    'Dreaming/consolidation: `POST /api/agent-memory/dream { agent?: "<you>" }` runs the lightweight pass (archive low-importance + supersede near-dupes). The heavy LLM-driven pass is `POST /api/agent-memory/consolidate` (authed, per-learner) and the cron-only `POST /api/cron/consolidate-memory` (CRON_SECRET-gated, weekly sweep). Both promote durable per-agent notes into the shared persona and archive them. See `skills/memory-steward-consolidate/SKILL.md`.',
     '',
     '### The agent network',
     'You are NOT the only AI here. Each agent has a focused role; route to them by name in your `reply` and the Orchestrator will hand off. Do not impersonate another agent.',

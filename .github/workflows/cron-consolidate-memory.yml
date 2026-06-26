@@ -1,0 +1,39 @@
+name: Cron — Memory Steward consolidation
+
+# Weekly heavy LLM-driven consolidation of per-(learner, agent) notes into
+# the shared learner persona. Mirror of the Vercel cron config in
+# apps/web/vercel.json — runs from GitHub Actions so the job still fires on
+# Vercel tiers that don't support project-managed crons.
+
+on:
+  schedule:
+    # Sunday 03:00 UTC — same as the vercel.json entry.
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max learners to consolidate per invocation"
+        required: false
+        default: "25"
+        type: string
+
+jobs:
+  call-endpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Trigger consolidation sweep
+        env:
+          BASE_URL: ${{ secrets.WEB_BASE_URL }}        # e.g. https://a-step-forward-waij.vercel.app
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          LIMIT: ${{ inputs.limit || '25' }}
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "BASE_URL or CRON_SECRET secret missing; skipping (set in repo Secrets)."
+            exit 0
+          fi
+          set -euo pipefail
+          curl -sS -X POST \
+            -H "x-cron-secret: $CRON_SECRET" \
+            -w '\nHTTP %{http_code}\n' \
+            "$BASE_URL/api/cron/consolidate-memory?limit=$LIMIT"

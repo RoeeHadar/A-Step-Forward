@@ -104,3 +104,24 @@ For ephemeral drills inside a chat session (not persisted to `lessons`):
 > "Read scripts/seed_data/lessons/<concept_id>.json. List the current kind, difficulty, and skill-atom distribution. Then propose 6 NEW questions that close the biggest gaps, in the exact JSON shape used by the existing entries, bilingual EN+HE. Do not rewrite existing questions."
 
 > "For the atom <atom_id> on lesson <concept_id>, generate one mcq + one short_answer + one derivation question. Cite the matching misconception from agent_hints.common_misconceptions where appropriate."
+
+## Bulk-generation script
+
+For a fleet-wide top-up there is a Groq-backed script that automates the
+authoring workflow above. It enforces kind + difficulty mix, restricts
+`skill_atoms` to the lesson's `agent_hints.skill_atoms_unlocked` set,
+validates each question against the same schema as the seeder, and
+writes back to the JSON files:
+
+```
+GROQ_API_KEY=… node scripts/generate-bulk-questions.mjs \
+  --target 12   # add up to this many per lesson
+  --limit 25    # process at most this many lessons
+  --only <csv>  # restrict to specific concept_ids
+  --dry-run     # do everything except writing back
+```
+
+Also exposed as the `generate-bulk-questions` target in the
+`Seed DB (one-shot)` GitHub workflow. After a run, inspect the diff,
+PR it, then re-run the `lessons-from-json` target to push the new
+questions to Neon.

@@ -15,6 +15,11 @@ Keep learner memory **healthy at scale** by simulating the cognitive processes t
 - **Web runtime**, lightweight: `POST /api/agent-memory/dream { agent? }`
   (Vercel-friendly, deterministic — no LLM call). Safe for a settings-page
   button, Vercel cron, or as a precursor to the heavy Memory Steward pass.
+- **Web runtime**, heavy: `POST /api/agent-memory/consolidate { force? }`
+  (authed) and `POST /api/cron/consolidate-memory` (CRON_SECRET-gated,
+  Vercel + GitHub Actions cron). One Groq call per learner; promotes
+  durable notes into the shared persona and archives them. See
+  `skills/memory-steward-consolidate/SKILL.md` for the contract.
 
 ## Web-runtime pass — what it does (deterministic, no LLM)
 

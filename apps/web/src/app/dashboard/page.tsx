@@ -3,16 +3,37 @@ import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
 import { LearnerStreakCard } from '@/components/learner-streak-card';
+import { ActivityHeatmap } from '@/components/activity-heatmap';
 import {
   getCurrentPlan,
   getLearnerStreak,
   getRecentActivity,
+  getDailyActivity,
+  getWeeklyRecap,
   dbConfigured,
 } from '@/lib/neon-db';
 import { ensureOnboarded } from '@/lib/onboarding-gate';
 import { Button } from '@asf/ui/button';
 
 export const dynamic = 'force-dynamic';
+
+const EMPTY_STREAK = {
+  current_days: 0,
+  longest_days: 0,
+  last_active: null,
+  active_today: false,
+  active_days_last_30: 0,
+} as const;
+
+const EMPTY_WEEKLY = {
+  week_start: '',
+  week_end: '',
+  chat_turns: 0,
+  concepts_touched: 0,
+  atoms_practiced: 0,
+  mastery_gain: 0,
+  best_day: null,
+} as const;
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -21,33 +42,24 @@ export default async function DashboardPage() {
   }
 
   await ensureOnboarded(userId, '/dashboard');
-  // All three lookups are parallel so the dashboard cold-start latency is
+  // All five lookups are parallel so the dashboard cold-start latency is
   // bounded by the slowest single query rather than the sum.
-  const [plan, streak, activity] = dbConfigured
+  const [plan, streak, activity, daily, weekly] = dbConfigured
     ? await Promise.all([
         getCurrentPlan(userId).catch(() => null),
-        getLearnerStreak(userId).catch(() => ({
-          current_days: 0,
-          longest_days: 0,
-          last_active: null,
-          active_today: false,
-          active_days_last_30: 0,
-        })),
+        getLearnerStreak(userId).catch(() => ({ ...EMPTY_STREAK })),
         getRecentActivity(userId, 8).catch(() => []),
+        getDailyActivity(userId, 30).catch(() => []),
+        getWeeklyRecap(userId).catch(() => ({ ...EMPTY_WEEKLY })),
       ])
-    : [null, {
-        current_days: 0,
-        longest_days: 0,
-        last_active: null,
-        active_today: false,
-        active_days_last_30: 0,
-      }, []];
+    : [null, { ...EMPTY_STREAK }, [], [], { ...EMPTY_WEEKLY }];
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 space-y-6">
         <LearnerStreakCard streak={streak} activity={activity} />
+        <ActivityHeatmap daily={daily} weekly={weekly} />
 
         {!plan ? (
           <div className="glass-surface rounded-2xl p-8 text-center">

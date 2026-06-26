@@ -1510,3 +1510,186 @@ export async function getRecentActivity(
     return [];
   }
 }
+
+// ── 30-day activity heatmap + this-week recap ────────────────────────────────
+
+export interface DailyActivity {
+  /** ISO date (YYYY-MM-DD) in UTC. */
+  date: string;
+  /** Total signals for that day across chat + concept + atom streams. */
+  count: number;
+}
+
+/**
+ * Returns one row per day for the last `days` calendar days (default 30),
+ * INCLUDING zero-count days so the heatmap can render a stable grid. Counts
+ * are the sum of three signals on that day:
+ *   - chat_turns from the learner (role='user')
+ *   - distinct concepts whose mastery was touched
+ *   - distinct skill atoms practiced
+ *
+ * The series is ordered oldest → newest, so the UI can lay it out left-to-right.
+ */
+export async function getDailyActivity(
+  learnerId: string,
+  days = 30,
+): Promise<DailyActivity[]> {
+  if (!sql) return [];
+  try {
+    const rows = (await sql`
+      WITH series AS (
+        SELECT generate_series(
+          (CURRENT_DATE - (${days - 1}::int))::date,
+          CURRENT_DATE::date,
+          interval '1 day'
+        )::date AS d
+      ),
+      chat_d AS (
+        SELECT date_trunc('day', created_at)::date AS d, COUNT(*)::int AS n
+        FROM chat_turns
+        WHERE learner_id = ${learnerId} AND role = 'user'
+          AND created_at >= CURRENT_DATE - (${days - 1}::int)
+        GROUP BY 1
+      ),
+      mastery_d AS (
+        SELECT date_trunc('day', last_activity)::date AS d, COUNT(DISTINCT concept_id)::int AS n
+        FROM concept_mastery
+        WHERE learner_id = ${learnerId} AND last_activity IS NOT NULL
+          AND last_activity >= CURRENT_DATE - (${days - 1}::int)
+        GROUP BY 1
+      ),
+      atom_d AS (
+        SELECT date_trunc('day', last_practiced)::date AS d, COUNT(DISTINCT skill_atom)::int AS n
+        FROM skill_practice
+        WHERE learner_id = ${learnerId} AND last_practiced IS NOT NULL
+          AND last_practiced >= CURRENT_DATE - (${days - 1}::int)
+        GROUP BY 1
+      )
+      SELECT to_char(s.d, 'YYYY-MM-DD') AS date,
+             (COALESCE(c.n, 0) + COALESCE(m.n, 0) + COALESCE(a.n, 0))::int AS count
+      FROM series s
+      LEFT JOIN chat_d c ON c.d = s.d
+      LEFT JOIN mastery_d m ON m.d = s.d
+      LEFT JOIN atom_d a ON a.d = s.d
+      ORDER BY s.d ASC
+    `) as DailyActivity[];
+    return rows;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getDailyActivity failed', err);
+    }
+    return [];
+  }
+}
+
+export interface WeeklyRecap {
+  /** Monday of the current ISO week in UTC (YYYY-MM-DD). */
+  week_start: string;
+  /** Sunday of the current ISO week in UTC (YYYY-MM-DD). */
+  week_end: string;
+  chat_turns: number;
+  concepts_touched: number;
+  atoms_practiced: number;
+  mastery_gain: number;
+  best_day: { date: string; count: number } | null;
+}
+
+/**
+ * Recap of the current ISO week (Mon→Sun, UTC) — used by the dashboard
+ * "this week" panel. All counts are confined to the current week so a
+ * fresh week starts clean.
+ */
+export async function getWeeklyRecap(learnerId: string): Promise<WeeklyRecap> {
+  const empty: WeeklyRecap = {
+    week_start: '',
+    week_end: '',
+    chat_turns: 0,
+    concepts_touched: 0,
+    atoms_practiced: 0,
+    mastery_gain: 0,
+    best_day: null,
+  };
+  if (!sql) return empty;
+  try {
+    const rows = (await sql`
+      WITH bounds AS (
+        SELECT
+          (date_trunc('week', CURRENT_DATE))::date AS week_start,
+          (date_trunc('week', CURRENT_DATE) + interval '6 days')::date AS week_end
+      ),
+      chat_count AS (
+        SELECT COUNT(*)::int AS n
+        FROM chat_turns, bounds
+        WHERE learner_id = ${learnerId}
+          AND role = 'user'
+          AND created_at >= bounds.week_start
+          AND created_at <  bounds.week_end + interval '1 day'
+      ),
+      concept_count AS (
+        SELECT COUNT(DISTINCT concept_id)::int AS n,
+               COALESCE(SUM(GREATEST(score::numeric, 0)), 0)::numeric AS mastery_sum
+        FROM concept_mastery, bounds
+        WHERE learner_id = ${learnerId}
+          AND last_activity IS NOT NULL
+          AND last_activity >= bounds.week_start
+          AND last_activity <  bounds.week_end + interval '1 day'
+      ),
+      atom_count AS (
+        SELECT COUNT(DISTINCT skill_atom)::int AS n
+        FROM skill_practice, bounds
+        WHERE learner_id = ${learnerId}
+          AND last_practiced IS NOT NULL
+          AND last_practiced >= bounds.week_start
+          AND last_practiced <  bounds.week_end + interval '1 day'
+      ),
+      per_day AS (
+        SELECT date_trunc('day', created_at)::date AS d, COUNT(*)::int AS n
+        FROM chat_turns, bounds
+        WHERE learner_id = ${learnerId}
+          AND created_at >= bounds.week_start
+          AND created_at <  bounds.week_end + interval '1 day'
+        GROUP BY 1
+      ),
+      best AS (
+        SELECT to_char(d, 'YYYY-MM-DD') AS date, n AS count
+        FROM per_day ORDER BY n DESC LIMIT 1
+      )
+      SELECT
+        to_char((SELECT week_start FROM bounds), 'YYYY-MM-DD') AS week_start,
+        to_char((SELECT week_end   FROM bounds), 'YYYY-MM-DD') AS week_end,
+        (SELECT n FROM chat_count) AS chat_turns,
+        (SELECT n FROM concept_count) AS concepts_touched,
+        (SELECT n FROM atom_count) AS atoms_practiced,
+        ROUND((SELECT mastery_sum FROM concept_count) * 100)::int AS mastery_gain,
+        (SELECT date FROM best) AS best_date,
+        (SELECT count FROM best) AS best_count
+    `) as Array<{
+      week_start: string;
+      week_end: string;
+      chat_turns: number;
+      concepts_touched: number;
+      atoms_practiced: number;
+      mastery_gain: number;
+      best_date: string | null;
+      best_count: number | null;
+    }>;
+    const r = rows[0];
+    if (!r) return empty;
+    return {
+      week_start: r.week_start,
+      week_end: r.week_end,
+      chat_turns: Number(r.chat_turns ?? 0),
+      concepts_touched: Number(r.concepts_touched ?? 0),
+      atoms_practiced: Number(r.atoms_practiced ?? 0),
+      mastery_gain: Number(r.mastery_gain ?? 0),
+      best_day: r.best_date
+        ? { date: r.best_date, count: Number(r.best_count ?? 0) }
+        : null,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getWeeklyRecap failed', err);
+    }
+    return empty;
+  }
+}
