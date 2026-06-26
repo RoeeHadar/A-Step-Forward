@@ -704,14 +704,22 @@ export async function fetchConceptsWithExplanations(
 ): Promise<Map<string, string[]>> {
   if (!sql || conceptIds.length === 0) return new Map();
   try {
+    // Neon HTTP driver has flaky semantics for `ANY(${array})` parameter binding,
+    // so we pull all rows and filter in JS. The table is small (~200 rows) and
+    // this read happens at most once per /learn/[subject] render.
     const rows = (await sql`
       SELECT concept_id, ARRAY_AGG(DISTINCT language) AS langs
       FROM concept_explanations
-      WHERE concept_id = ANY(${conceptIds})
       GROUP BY concept_id
     `) as Array<{ concept_id: string; langs: string[] }>;
-    return new Map(rows.map((r) => [r.concept_id, r.langs]));
-  } catch {
+    const wanted = new Set(conceptIds);
+    return new Map(
+      rows.filter((r) => wanted.has(r.concept_id)).map((r) => [r.concept_id, r.langs]),
+    );
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchConceptsWithExplanations failed:', err);
+    }
     return new Map();
   }
 }
