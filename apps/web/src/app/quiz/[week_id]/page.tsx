@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { WeekQuizClient } from '@/components/week-quiz-client';
+import { QuizUnavailable } from '@/components/quiz-unavailable';
 import { SiteHeader } from '@/components/site-header';
 import { API_BASE_URL } from '@/lib/api';
 import type { QuizStartResponse } from '@asf/schemas/learning_path';
@@ -63,12 +64,7 @@ export default async function QuizPage({ params, searchParams }: Props) {
             token={token}
           />
         ) : (
-          <div className="glass-surface rounded-2xl p-8 text-center">
-            <h1 className="font-display text-2xl font-bold">Quiz unavailable</h1>
-            <p className="mt-2 text-muted-foreground">
-              Unable to load the quiz. Please try again from your dashboard.
-            </p>
-          </div>
+          <QuizUnavailable />
         )}
       </main>
     </div>

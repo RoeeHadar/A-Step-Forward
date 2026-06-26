@@ -17,6 +17,10 @@ export const bagrutRefSchema = z.object({
 export const planConceptSchema = z.object({
   concept_id: z.string(),
   name: z.string(),
+  // Optional Hebrew companion to `name`. UI components prefer this when the
+  // learner's language preference is `he`. Optional + nullable so legacy
+  // payloads (or the Python backend) that don't include it still validate.
+  name_he: z.string().nullable().optional(),
   subject: z.string(),
   mastery: z.number().nullable().optional(),
   suggested_sections: z.array(contentSectionRefSchema).default([]),

@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
 import { LearnerStreakCard } from '@/components/learner-streak-card';
 import { ActivityHeatmap } from '@/components/activity-heatmap';
+import { NoPlanEmptyState } from '@/components/no-plan-empty-state';
 import {
   getCurrentPlan,
   getLearnerStreak,
@@ -13,7 +13,6 @@ import {
   dbConfigured,
 } from '@/lib/neon-db';
 import { ensureOnboarded } from '@/lib/onboarding-gate';
-import { Button } from '@asf/ui/button';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,20 +61,7 @@ export default async function DashboardPage() {
         <ActivityHeatmap daily={daily} weekly={weekly} />
 
         {!plan ? (
-          <div className="glass-surface rounded-2xl p-8 text-center">
-            <h1 className="font-display text-2xl font-bold">No learning plan yet</h1>
-            <p className="mt-2 text-muted-foreground">
-              Complete the diagnostic assessment to generate your personalized weekly plan.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button asChild>
-                <Link href="/diagnostic">Start diagnostic</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href="/app">Back to app</Link>
-              </Button>
-            </div>
-          </div>
+          <NoPlanEmptyState />
         ) : (
           <LearningPlanDashboard plan={plan} />
         )}

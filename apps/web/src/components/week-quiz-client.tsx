@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@asf/ui/button';
 import { Badge } from '@asf/ui/badge';
 import { cn } from '@asf/ui';
-import { CheckCircle2, XCircle, Clock, ChevronRight, Loader2 } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 import type { QuizQuestion, QuizStartResponse, QuizSubmitResponse } from '@asf/schemas/learning_path';
+import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
 
 interface Props {
   quiz: QuizStartResponse;
@@ -16,6 +17,47 @@ interface Props {
 }
 
 type AnswerMap = Record<string, string>; // item_id → chosen key
+
+/**
+ * Localised strings for the week-quiz flow. Hebrew is the default; the
+ * `dir="auto"` attribute on the user-content elements (question stem,
+ * options, topic chip) keeps mixed Hebrew/LaTeX strings rendering with
+ * the correct base direction even when the UI is RTL.
+ */
+const STR = {
+  he: {
+    title: (n: number) => `מבחן שבוע ${n}`,
+    answered: (a: number, total: number) => `${a} מתוך ${total} נענו`,
+    question_x_of_y: (i: number, total: number) => `שאלה ${i} מתוך ${total}`,
+    submit: 'שלח מבחן',
+    submitting: 'שולח…',
+    next: 'הבא',
+    previous: 'הקודם',
+    back_to_dashboard: 'חזרה ללוח',
+    great: 'עבודה מצוינת! המשך כך.',
+    keep_studying: 'המשך ללמוד — אפשר לעשות את המבחן שוב.',
+    per_topic_scores: 'ציונים לפי נושא',
+    plan_adapted: 'תכנית הלימוד שלך עודכנה בעקבות תוצאות המבחן.',
+    next_up: (cs: string) => ` הבא בתור: ${cs}.`,
+    review_concepts: 'מושגים לחזרה:',
+  },
+  en: {
+    title: (n: number) => `Week ${n} Quiz`,
+    answered: (a: number, total: number) => `${a} of ${total} answered`,
+    question_x_of_y: (i: number, total: number) => `Question ${i} of ${total}`,
+    submit: 'Submit quiz',
+    submitting: 'Submitting…',
+    next: 'Next',
+    previous: 'Previous',
+    back_to_dashboard: 'Back to dashboard',
+    great: 'Great work! Keep it up.',
+    keep_studying: 'Keep studying — you can retake this quiz.',
+    per_topic_scores: 'Per-topic scores',
+    plan_adapted: 'Your learning plan has been updated based on your quiz results.',
+    next_up: (cs: string) => ` Next up: ${cs}.`,
+    review_concepts: 'Concepts to review:',
+  },
+} as const;
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -29,20 +71,23 @@ function QuizQuestionCard({
   total,
   chosen,
   onChoose,
+  lang,
 }: {
   question: QuizQuestion;
   index: number;
   total: number;
   chosen: string | undefined;
   onChoose: (key: string) => void;
+  lang: Lang;
 }) {
+  const t = STR[lang];
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <span className="text-sm text-muted-foreground">
-          Question {index + 1} of {total}
+          {t.question_x_of_y(index + 1, total)}
         </span>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-xs" dir="auto">
           {question.topic.replace(/_/g, ' ')}
         </Badge>
       </div>
@@ -63,7 +108,11 @@ function QuizQuestionCard({
                 : 'border-border bg-surface-1/40 hover:border-primary/40 hover:bg-surface-2/60',
             )}
           >
-            <span className="mr-3 font-semibold">{opt.key}.</span>
+            {/* Option key (A/B/C/D) is always LTR; option text picks its own
+                direction. `me-3` keeps spacing correct in both RTL and LTR. */}
+            <span className="me-3 font-semibold" dir="ltr">
+              {opt.key}.
+            </span>
             <span dir="auto">{opt.text}</span>
           </button>
         ))}
@@ -75,15 +124,19 @@ function QuizQuestionCard({
 function ResultView({
   result,
   onGoToDashboard,
+  lang,
 }: {
   result: QuizSubmitResponse;
   onGoToDashboard: () => void;
+  lang: Lang;
 }) {
+  const t = STR[lang];
+  const isHe = lang === 'he';
   const pct = Math.round(result.score * 100);
   const passed = result.score >= 0.6;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={isHe ? 'rtl' : 'ltr'}>
       <div className="text-center">
         {passed ? (
           <CheckCircle2 className="mx-auto h-16 w-16 text-green-500" />
@@ -92,13 +145,13 @@ function ResultView({
         )}
         <h2 className="mt-4 font-display text-3xl font-bold">{pct}%</h2>
         <p className="mt-1 text-muted-foreground">
-          {passed ? 'Great work! Keep it up.' : 'Keep studying — you can retake this quiz.'}
+          {passed ? t.great : t.keep_studying}
         </p>
       </div>
 
       {Object.keys(result.per_topic).length > 0 && (
         <div className="glass-surface rounded-xl p-4">
-          <h3 className="mb-3 text-sm font-semibold">Per-topic scores</h3>
+          <h3 className="mb-3 text-sm font-semibold">{t.per_topic_scores}</h3>
           <div className="space-y-2">
             {Object.entries(result.per_topic).map(([topic, score]) => (
               <div key={topic} className="flex items-center justify-between gap-3">
@@ -110,7 +163,11 @@ function ResultView({
                     <div
                       className={cn(
                         'h-full rounded-full',
-                        score >= 0.7 ? 'bg-green-500' : score >= 0.4 ? 'bg-amber-500' : 'bg-destructive',
+                        score >= 0.7
+                          ? 'bg-green-500'
+                          : score >= 0.4
+                            ? 'bg-amber-500'
+                            : 'bg-destructive',
                       )}
                       style={{ width: `${Math.round(score * 100)}%` }}
                     />
@@ -127,19 +184,28 @@ function ResultView({
 
       {result.plan_adapted && (
         <div className="rounded-xl border border-accent-cyan/30 bg-accent-cyan/10 px-4 py-3 text-sm text-accent-cyan">
-          Your learning plan has been updated based on your quiz results.
+          {t.plan_adapted}
           {result.next_week_concepts && result.next_week_concepts.length > 0 && (
-            <span> Next up: {result.next_week_concepts.slice(0, 3).map((c) => c.replace(/_/g, ' ')).join(', ')}.</span>
+            <span>
+              {t.next_up(
+                result.next_week_concepts
+                  .slice(0, 3)
+                  .map((c) => c.replace(/_/g, ' '))
+                  .join(', '),
+              )}
+            </span>
           )}
         </div>
       )}
 
       {result.weak_concepts.length > 0 && (
         <div>
-          <p className="text-sm font-medium text-muted-foreground">Concepts to review:</p>
+          <p className="text-sm font-medium text-muted-foreground">
+            {t.review_concepts}
+          </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {result.weak_concepts.map((c) => (
-              <Badge key={c} variant="secondary">
+              <Badge key={c} variant="secondary" dir="auto">
                 {c.replace(/_/g, ' ')}
               </Badge>
             ))}
@@ -148,7 +214,7 @@ function ResultView({
       )}
 
       <Button className="w-full" onClick={onGoToDashboard}>
-        Back to dashboard
+        {t.back_to_dashboard}
       </Button>
     </div>
   );
@@ -156,6 +222,10 @@ function ResultView({
 
 export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
   const router = useRouter();
+  const [lang] = useLanguagePreference('he');
+  const t = STR[lang];
+  const isHe = lang === 'he';
+
   const [answers, setAnswers] = useState<AnswerMap>({});
   const [currentIdx, setCurrentIdx] = useState(0);
   const [timeLeft, setTimeLeft] = useState(quiz.time_limit_s);
@@ -212,7 +282,11 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
 
   if (result) {
     return (
-      <ResultView result={result} onGoToDashboard={() => router.push('/dashboard')} />
+      <ResultView
+        result={result}
+        onGoToDashboard={() => router.push('/dashboard')}
+        lang={lang}
+      />
     );
   }
 
@@ -221,14 +295,17 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
   const answered = Object.keys(answers).length;
   const isLast = currentIdx === quiz.questions.length - 1;
   const timeWarning = timeLeft < 120;
+  // Forward/back chevrons need to mirror in RTL so "next" still points
+  // in the reading direction.
+  const NextIcon = isHe ? ChevronLeft : ChevronRight;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={isHe ? 'rtl' : 'ltr'}>
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold">Week {weekNum} Quiz</h1>
+          <h1 className="font-display text-2xl font-bold">{t.title(weekNum)}</h1>
           <p className="text-sm text-muted-foreground">
-            {answered} of {quiz.questions.length} answered
+            {t.answered(answered, quiz.questions.length)}
           </p>
         </div>
         <div
@@ -238,6 +315,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
               ? 'bg-destructive/10 text-destructive'
               : 'bg-surface-1/60 text-muted-foreground',
           )}
+          dir="ltr"
         >
           <Clock className="h-4 w-4" />
           {formatTime(timeLeft)}
@@ -258,7 +336,10 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
           index={currentIdx}
           total={quiz.questions.length}
           chosen={answers[current.id]}
-          onChoose={(key) => setAnswers((prev) => ({ ...prev, [current.id]: key }))}
+          onChoose={(key) =>
+            setAnswers((prev) => ({ ...prev, [current.id]: key }))
+          }
+          lang={lang}
         />
       </div>
 
@@ -268,31 +349,31 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
           onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
           disabled={currentIdx === 0}
         >
-          Previous
+          {t.previous}
         </Button>
 
         {isLast ? (
-          <Button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="gap-2"
-          >
+          <Button onClick={handleSubmit} disabled={submitting} className="gap-2">
             {submitting ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Submitting…
+                {t.submitting}
               </>
             ) : (
-              'Submit quiz'
+              t.submit
             )}
           </Button>
         ) : (
           <Button
-            onClick={() => setCurrentIdx((i) => Math.min(quiz.questions.length - 1, i + 1))}
+            onClick={() =>
+              setCurrentIdx((i) =>
+                Math.min(quiz.questions.length - 1, i + 1),
+              )
+            }
             className="gap-2"
           >
-            Next
-            <ChevronRight className="h-4 w-4" />
+            {t.next}
+            <NextIcon className="h-4 w-4" />
           </Button>
         )}
       </div>

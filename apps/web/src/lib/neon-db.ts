@@ -387,6 +387,9 @@ export interface PlanWeek {
 export interface PlanConcept {
   concept_id: string;
   name: string;
+  /** Hebrew companion to `name` (from `kg-data.json`). UI prefers this when
+   *  the learner's language preference is `he`. */
+  name_he: string | null;
   subject: string;
   mastery: number | null;
   suggested_sections: Array<{ id: string; title: string; chunk_index: number | null; page_start: number | null }>;
@@ -486,6 +489,7 @@ export async function generateLearningPlan(learnerId: string): Promise<LearningP
       hydrated.push({
         concept_id: cid,
         name: kgInfo?.name ?? cid.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
+        name_he: kgInfo?.name_he ?? null,
         subject,
         mastery: mastery[cid] ?? null,
         suggested_sections: sections,
@@ -561,6 +565,7 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
       hydrated.push({
         concept_id: cid,
         name: kgInfo?.name ?? cid.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
+        name_he: kgInfo?.name_he ?? null,
         subject,
         mastery: mastery[cid] ?? null,
         suggested_sections: sections,
