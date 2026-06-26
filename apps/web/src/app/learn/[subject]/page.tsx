@@ -4,7 +4,6 @@ import { SiteHeader } from '@/components/site-header';
 import { PremiumBadge } from '@/components/premium-badge';
 import { fetchBagrutExams, fetchSubjects } from '@/lib/content-api';
 import { subjectLabel } from '@/lib/subject-labels';
-import { getResourcesForSubject } from '@/lib/external-resources';
 import { fetchConceptsWithExplanations, fetchLessonAvailability } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
 
@@ -36,9 +35,8 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
     subjectMatchesConcept(subject, c.subject),
   );
   const conceptIds = conceptsForSubject.map((c) => c.id);
-  const [bagrut, external, coverage, lessonIds] = await Promise.all([
+  const [bagrut, coverage, lessonIds] = await Promise.all([
     fetchBagrutExams(subject),
-    getResourcesForSubject(subject),
     fetchConceptsWithExplanations(conceptIds),
     fetchLessonAvailability(conceptIds),
   ]);
@@ -57,12 +55,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
       return a.name.localeCompare(b.name);
     });
 
-  if (
-    !known &&
-    bagrut.length === 0 &&
-    external.length === 0 &&
-    conceptsWithCoverage.length === 0
-  ) {
+  if (!known && bagrut.length === 0 && conceptsWithCoverage.length === 0) {
     notFound();
   }
 
@@ -174,41 +167,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
           </section>
         ) : null}
 
-        {external.length > 0 ? (
-          <section className="mt-10">
-            <h3 className="font-display text-lg font-semibold text-foreground">
-              Reference textbooks &amp; courses
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              For deeper study, these long-form open courses pair well with the concept
-              explanations above. External links — opens in a new tab.
-            </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {external.map((r) => (
-                <a
-                  key={r.url}
-                  href={r.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-surface group rounded-xl border-border/60 p-4 transition-all hover:border-primary/40"
-                  dir={r.language === 'he' ? 'rtl' : 'ltr'}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-medium text-foreground group-hover:text-primary">
-                      {r.title}
-                    </h3>
-                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-                      {r.source}
-                    </span>
-                  </div>
-                  {r.description ? (
-                    <p className="mt-1.5 text-sm text-muted-foreground">{r.description}</p>
-                  ) : null}
-                </a>
-              ))}
-            </div>
-          </section>
-        ) : null}
       </main>
     </div>
   );
