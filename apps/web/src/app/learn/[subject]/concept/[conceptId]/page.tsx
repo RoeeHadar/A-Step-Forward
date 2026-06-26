@@ -6,9 +6,11 @@ import {
   dbConfigured,
   fetchConceptExplanation,
   fetchConceptExplanationFallback,
+  fetchLessonByConceptId,
 } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
 import { ConceptContentClient } from '@/components/concept-content-client';
+import { LessonPageClient } from '@/components/lesson-page-client';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,22 +35,28 @@ export default async function ConceptPage({
   const { subject, conceptId } = await params;
   const concept = kgById[conceptId];
 
-  // Try both languages in parallel; if neither has content yet, render a
-  // graceful placeholder pointing to the source.
-  const [en, he] = await Promise.all([
+  // Lesson is the new authoritative source. If it exists, render it instead
+  // of the wiki-style explanation. Both queries run in parallel for the
+  // fallback case.
+  const [lessonData, en, he] = await Promise.all([
+    fetchLessonByConceptId(conceptId),
     fetchConceptExplanation(conceptId, 'en'),
     fetchConceptExplanation(conceptId, 'he'),
   ]);
 
-  const fallback = !en && !he ? await fetchConceptExplanationFallback(conceptId, 'en') : null;
+  const fallback =
+    !lessonData && !en && !he
+      ? await fetchConceptExplanationFallback(conceptId, 'en')
+      : null;
 
-  if (!concept && !en && !he && !fallback) {
+  if (!concept && !lessonData && !en && !he && !fallback) {
     notFound();
   }
 
   const display = en ?? he ?? fallback ?? null;
-  const conceptName = concept?.name ?? display?.title ?? conceptId.replace(/_/g, ' ');
-  const conceptNameHe = concept?.name_he ?? null;
+  const conceptName =
+    concept?.name ?? lessonData?.lesson.title_en ?? display?.title ?? conceptId.replace(/_/g, ' ');
+  const conceptNameHe = concept?.name_he ?? lessonData?.lesson.title_he ?? null;
 
   const prerequisites = concept?.prerequisites ?? [];
 
@@ -93,7 +101,9 @@ export default async function ConceptPage({
           ) : null}
         </header>
 
-        {!en && !he && !fallback ? (
+        {lessonData ? (
+          <LessonPageClient data={lessonData} conceptId={conceptId} />
+        ) : !en && !he && !fallback ? (
           <div className="glass-surface rounded-2xl p-8 text-center">
             <p className="text-foreground font-medium">
               {dbConfigured

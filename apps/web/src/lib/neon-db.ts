@@ -723,3 +723,194 @@ export async function fetchConceptsWithExplanations(
     return new Map();
   }
 }
+
+// ── AI-authored lessons (table: `lessons` + `lesson_questions`) ───────────────
+
+export interface LessonSection {
+  kind: 'intro' | 'theory' | 'worked_example' | 'pitfall' | 'practice_tip' | 'summary';
+  title_en: string;
+  title_he: string;
+  body_en_md: string;
+  body_he_md: string;
+}
+
+export interface LessonAgentHints {
+  key_insights?: string[];
+  common_misconceptions?: Array<{
+    wrong: string;
+    correction: string;
+    detect_phrase_en?: string;
+    detect_phrase_he?: string;
+  }>;
+  skill_atoms_unlocked?: string[];
+  prerequisites_to_check_before_teaching?: string[];
+  tutor_pacing_hint?: string;
+  coach_drill_skills?: string[];
+  diagnostic_signals?: Record<string, string>;
+  next_recommended?: string[];
+}
+
+export interface LessonRow {
+  id: string;
+  concept_id: string;
+  subject: string;
+  level: string;
+  math_track: string[];
+  title_en: string;
+  title_he: string;
+  summary_en: string;
+  summary_he: string;
+  sections: LessonSection[];
+  agent_hints: LessonAgentHints;
+  est_minutes: number;
+  author: string;
+  version: number;
+}
+
+export interface LessonQuestionRow {
+  id: string;
+  lesson_id: string;
+  ord: number;
+  kind: 'mcq' | 'open' | 'fill_blank' | 'numeric';
+  difficulty: 'easy' | 'medium' | 'hard';
+  stem_en: string;
+  stem_he: string;
+  options_en: string[] | null;
+  options_he: string[] | null;
+  correct_index: number | null;
+  correct_answer: string | null;
+  rubric_en: string | null;
+  rubric_he: string | null;
+  explanation_en: string;
+  explanation_he: string;
+  skill_atoms: string[];
+}
+
+export interface LessonWithQuestions {
+  lesson: LessonRow;
+  questions: LessonQuestionRow[];
+}
+
+export async function fetchLessonByConceptId(
+  conceptId: string,
+): Promise<LessonWithQuestions | null> {
+  if (!sql) return null;
+  try {
+    const lessonRows = (await sql`
+      SELECT id, concept_id, subject, level, math_track,
+             title_en, title_he, summary_en, summary_he,
+             sections, agent_hints, est_minutes, author, version
+      FROM lessons
+      WHERE concept_id = ${conceptId}
+      LIMIT 1
+    `) as LessonRow[];
+    const lesson = lessonRows[0];
+    if (!lesson) return null;
+    const questions = (await sql`
+      SELECT id, lesson_id, ord, kind, difficulty,
+             stem_en, stem_he, options_en, options_he,
+             correct_index, correct_answer, rubric_en, rubric_he,
+             explanation_en, explanation_he, skill_atoms
+      FROM lesson_questions
+      WHERE lesson_id = ${lesson.id}
+      ORDER BY ord ASC
+    `) as LessonQuestionRow[];
+    return { lesson, questions };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchLessonByConceptId failed:', err);
+    }
+    return null;
+  }
+}
+
+/**
+ * Lightweight fetch of agent hints for one or more concept IDs. Used by the
+ * Tutor route to inject `key_insights`, `common_misconceptions`,
+ * `tutor_pacing_hint`, and `detect_phrase_*` triggers into the system prompt
+ * without paying for the full lesson body.
+ */
+export async function fetchLessonAgentHintsByConceptIds(
+  conceptIds: string[],
+): Promise<
+  Array<{ concept_id: string; title_en: string; title_he: string; agent_hints: LessonAgentHints }>
+> {
+  if (!sql || conceptIds.length === 0) return [];
+  try {
+    const rows = (await sql`
+      SELECT concept_id, title_en, title_he, agent_hints
+      FROM lessons
+      WHERE concept_id = ANY(${conceptIds}::text[])
+    `) as Array<{
+      concept_id: string;
+      title_en: string;
+      title_he: string;
+      agent_hints: LessonAgentHints;
+    }>;
+    return rows;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchLessonAgentHintsByConceptIds failed:', err);
+    }
+    return [];
+  }
+}
+
+export async function fetchLessonAvailability(
+  conceptIds: string[],
+): Promise<Set<string>> {
+  if (!sql || conceptIds.length === 0) return new Set();
+  try {
+    const rows = (await sql`
+      SELECT concept_id FROM lessons
+    `) as Array<{ concept_id: string }>;
+    const wanted = new Set(conceptIds);
+    return new Set(rows.map((r) => r.concept_id).filter((id) => wanted.has(id)));
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchLessonAvailability failed:', err);
+    }
+    return new Set();
+  }
+}
+
+export async function recordLessonAnswer(args: {
+  learnerId: string;
+  lessonId: string;
+  questionId: string;
+  conceptId: string;
+  correct: boolean;
+  skillAtoms: string[];
+  timeSpentS?: number | null;
+}): Promise<void> {
+  const s = requireSql();
+  const { learnerId, lessonId, questionId, conceptId, correct, skillAtoms } = args;
+
+  await s`
+    INSERT INTO quiz_responses (id, quiz_id, quiz_type, item_id, chosen, correct, created_at)
+    VALUES (gen_random_uuid(), ${lessonId}::uuid, 'lesson', ${questionId}::uuid, '', ${correct}, NOW())
+  `;
+
+  const newScore = correct ? 0.75 : 0.35;
+  await s`
+    INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
+    VALUES (${learnerId}, ${conceptId}, ${newScore}, 1, NOW(), NOW())
+    ON CONFLICT (learner_id, concept_id) DO UPDATE SET
+      score = (concept_mastery.score * concept_mastery.data_points + ${newScore}) /
+              (concept_mastery.data_points + 1),
+      data_points = concept_mastery.data_points + 1,
+      last_activity = NOW()
+  `;
+
+  for (const atom of skillAtoms) {
+    if (!atom || typeof atom !== 'string') continue;
+    await s`
+      INSERT INTO skill_practice (learner_id, skill_atom, attempts, successes, last_practiced)
+      VALUES (${learnerId}, ${atom}, 1, ${correct ? 1 : 0}, NOW())
+      ON CONFLICT (learner_id, skill_atom) DO UPDATE SET
+        attempts = skill_practice.attempts + 1,
+        successes = skill_practice.successes + ${correct ? 1 : 0},
+        last_practiced = NOW()
+    `;
+  }
+}

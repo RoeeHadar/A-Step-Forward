@@ -6,6 +6,7 @@ import {
   recordChatTurn,
   getLearnerProfile,
   getConceptMastery,
+  fetchLessonAgentHintsByConceptIds,
 } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
 
@@ -217,6 +218,58 @@ async function buildContextPrompt(
     for (const c of related) {
       context += `\n- ${c.name} (${c.id})`;
       if (c.prerequisites?.length) context += ` — prerequisites: ${c.prerequisites.join(', ')}`;
+    }
+
+    // Inject agent_hints from the matching AI-authored lessons so the Tutor
+    // can ground its reply in the canonical key insights, pacing hints, and
+    // common-misconception triggers we authored per concept.
+    if (agent === 'tutor' || agent === 'coach' || agent === 'qa_explainer') {
+      const hintsRows = await fetchLessonAgentHintsByConceptIds(related.map((c) => c.id)).catch(
+        () => [] as Awaited<ReturnType<typeof fetchLessonAgentHintsByConceptIds>>,
+      );
+      if (hintsRows.length) {
+        context += `\n\n## Lesson-level guidance for the AI-authored corpus`;
+        const lowerMsg = message.toLowerCase();
+        for (const row of hintsRows) {
+          const h = row.agent_hints ?? {};
+          context += `\n\n### ${row.title_en} (${row.concept_id})`;
+          if (h.key_insights?.length) {
+            context += `\n- Key insights:`;
+            for (const k of h.key_insights.slice(0, 4)) context += `\n  - ${k}`;
+          }
+          if (h.tutor_pacing_hint) {
+            context += `\n- Pacing hint: ${h.tutor_pacing_hint}`;
+          }
+          if (h.common_misconceptions?.length) {
+            const triggered = h.common_misconceptions.filter((m) => {
+              const en = m.detect_phrase_en?.toLowerCase();
+              const he = m.detect_phrase_he;
+              return (
+                (en && lowerMsg.includes(en)) ||
+                (he && message.includes(he))
+              );
+            });
+            const toShow = triggered.length > 0 ? triggered : h.common_misconceptions.slice(0, 2);
+            context += `\n- Misconception watch:`;
+            for (const m of toShow) {
+              context += `\n  - "${m.wrong}" → ${m.correction}`;
+            }
+            if (triggered.length > 0) {
+              context += `\n- IMPORTANT: the learner's last message appears to express a known misconception above. Open your reply with a gentle, targeted correction before answering the rest.`;
+            }
+          }
+          if (h.diagnostic_signals && Object.keys(h.diagnostic_signals).length) {
+            const entries = Object.entries(h.diagnostic_signals).slice(0, 3);
+            context += `\n- Diagnostic moves:`;
+            for (const [signal, move] of entries) {
+              context += `\n  - If "${signal}": ${move}`;
+            }
+          }
+          if (h.skill_atoms_unlocked?.length) {
+            context += `\n- Skills this lesson develops: ${h.skill_atoms_unlocked.slice(0, 6).join(', ')}`;
+          }
+        }
+      }
     }
   }
 

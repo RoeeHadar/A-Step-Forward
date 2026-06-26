@@ -2,11 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { PremiumBadge } from '@/components/premium-badge';
-import { fetchBagrutExams, fetchSections, fetchSubjects } from '@/lib/content-api';
+import { fetchBagrutExams, fetchSubjects } from '@/lib/content-api';
 import { subjectLabel } from '@/lib/subject-labels';
-import { SubjectSectionsClient } from '@/components/subject-sections-client';
 import { getResourcesForSubject } from '@/lib/external-resources';
-import { fetchConceptsWithExplanations } from '@/lib/neon-db';
+import { fetchConceptsWithExplanations, fetchLessonAvailability } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
 
 export const dynamic = 'force-dynamic';
@@ -36,20 +35,30 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const conceptsForSubject = kgConcepts.filter((c) =>
     subjectMatchesConcept(subject, c.subject),
   );
-  const [sections, bagrut, external, coverage] = await Promise.all([
-    fetchSections(subject),
+  const conceptIds = conceptsForSubject.map((c) => c.id);
+  const [bagrut, external, coverage, lessonIds] = await Promise.all([
     fetchBagrutExams(subject),
     getResourcesForSubject(subject),
-    fetchConceptsWithExplanations(conceptsForSubject.map((c) => c.id)),
+    fetchConceptsWithExplanations(conceptIds),
+    fetchLessonAvailability(conceptIds),
   ]);
 
   const conceptsWithCoverage = conceptsForSubject
-    .map((c) => ({ ...c, langs: coverage.get(c.id) ?? [] }))
-    .sort((a, b) => b.langs.length - a.langs.length || a.name.localeCompare(b.name));
+    .map((c) => ({
+      ...c,
+      langs: coverage.get(c.id) ?? [],
+      hasLesson: lessonIds.has(c.id),
+    }))
+    .sort((a, b) => {
+      // Lessons first, then explanation-only, then nothing.
+      const aRank = a.hasLesson ? 2 : a.langs.length > 0 ? 1 : 0;
+      const bRank = b.hasLesson ? 2 : b.langs.length > 0 ? 1 : 0;
+      if (aRank !== bRank) return bRank - aRank;
+      return a.name.localeCompare(b.name);
+    });
 
   if (
     !known &&
-    sections.length === 0 &&
     bagrut.length === 0 &&
     external.length === 0 &&
     conceptsWithCoverage.length === 0
@@ -106,35 +115,46 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
           </div>
         </div>
 
-        <SubjectSectionsClient subject={subject} sections={sections} />
-
         {conceptsWithCoverage.length > 0 ? (
-          <section className="mt-10">
+          <section className="mt-2">
             <h2 className="font-display text-xl font-semibold text-foreground">
-              Concept explanations
+              Lessons
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              In-house, bilingual explanations of every concept in this subject — adapted from
-              open educational sources, rendered natively here with full attribution.
+              AI-authored, bilingual lessons with worked examples, common pitfalls, and a quick
+              quiz at the end. Open one to start.
             </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {conceptsWithCoverage.map((c) => {
-                const hasContent = c.langs.length > 0;
+                const hasContent = c.hasLesson || c.langs.length > 0;
+                const badgeLabel = c.hasLesson
+                  ? 'Lesson · EN · HE'
+                  : c.langs.includes('he') && c.langs.includes('en')
+                    ? 'EN · HE'
+                    : c.langs[0]?.toUpperCase();
                 return (
                   <Link
                     key={c.id}
                     href={`/learn/${subject}/concept/${c.id}`}
-                    className="glass-surface group rounded-xl border-border/60 p-4 transition-all hover:border-primary/40"
+                    className={`glass-surface group rounded-xl p-4 transition-all ${
+                      c.hasLesson
+                        ? 'border-primary/30 hover:border-primary/60'
+                        : 'border-border/60 hover:border-primary/40'
+                    }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="font-medium text-foreground group-hover:text-primary">
                         {c.name}
                       </h3>
                       {hasContent ? (
-                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium uppercase text-primary">
-                          {c.langs.includes('he') && c.langs.includes('en')
-                            ? 'EN · HE'
-                            : c.langs[0]?.toUpperCase()}
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${
+                            c.hasLesson
+                              ? 'bg-primary/15 text-primary'
+                              : 'bg-muted text-muted-foreground'
+                          }`}
+                        >
+                          {badgeLabel}
                         </span>
                       ) : (
                         <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
