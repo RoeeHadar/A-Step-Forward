@@ -30,16 +30,23 @@ const kgByName: Record<string, KgConcept> = Object.fromEntries(
 );
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
+  let userId: string | null = null;
+  try {
+    const a = await auth();
+    userId = a.userId;
+  } catch (err) {
+    logger.error('chat: auth() threw', { err: String(err) });
+    return Response.json({ error: 'auth_failed' }, { status: 401 });
+  }
   if (!userId) {
-    return new Response('Unauthorized', { status: 401 });
+    return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
   let body: { messages?: { role: string; content: string }[]; agent?: string };
   try {
     body = (await req.json()) as typeof body;
   } catch {
-    return new Response('Bad request', { status: 400 });
+    return Response.json({ error: 'bad_request' }, { status: 400 });
   }
 
   const lastMessage = body.messages?.filter((m) => m.role === 'user').at(-1)?.content ?? '';

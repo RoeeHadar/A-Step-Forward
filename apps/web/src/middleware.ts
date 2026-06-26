@@ -19,8 +19,20 @@ const isEducatorRoute = createRouteMatcher(['/educator(.*)']);
 
 export default clerkMiddleware(async (auth, request) => {
   const { userId, sessionClaims } = auth();
+  const isApiRoute = request.nextUrl.pathname.startsWith('/api/');
 
   if (!isPublicRoute(request) && !userId) {
+    // API routes MUST return a clean 401 — never an HTML redirect. Without
+    // this, fetch-based clients (useChat, react-query, etc.) follow the
+    // redirect and try to parse the sign-in HTML page as their expected
+    // content (JSON / SSE / AI data stream), surfacing as opaque
+    // "network hiccup" errors to the user.
+    if (isApiRoute) {
+      return NextResponse.json(
+        { error: 'unauthorized', message: 'Authentication required' },
+        { status: 401 },
+      );
+    }
     const signInUrl = new URL('/sign-in', request.url);
     signInUrl.searchParams.set('redirect_url', request.url);
     return NextResponse.redirect(signInUrl);
@@ -33,11 +45,15 @@ export default clerkMiddleware(async (auth, request) => {
   const role = metadata.role ?? 'learner';
 
   if (isAdminRoute(request) && role !== 'admin') {
-    return NextResponse.redirect(new URL('/app', request.url));
+    return isApiRoute
+      ? NextResponse.json({ error: 'forbidden' }, { status: 403 })
+      : NextResponse.redirect(new URL('/app', request.url));
   }
 
   if (isEducatorRoute(request) && role !== 'educator' && role !== 'admin') {
-    return NextResponse.redirect(new URL('/app', request.url));
+    return isApiRoute
+      ? NextResponse.json({ error: 'forbidden' }, { status: 403 })
+      : NextResponse.redirect(new URL('/app', request.url));
   }
 });
 
