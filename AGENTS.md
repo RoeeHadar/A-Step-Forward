@@ -105,6 +105,7 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/in-house-concept-content/SKILL.md` | Adding bilingual concept explanations to `/learn`, fixing wrong Wikipedia matches, or adding new CC content sources (OpenStax, Wikibooks, etc.). |
 | `skills/author-lesson/SKILL.md` | Authoring or modifying an AI-authored lesson under `scripts/seed_data/lessons/` (sections, all 10 question kinds, `agent_hints`, skill atoms). |
 | `skills/author-question-bank/SKILL.md` | Adding MORE questions (volume + kind diversity) to an existing authored lesson, or generating drills live. Pair with `author-lesson`. |
+| `skills/build-custom-quiz/SKILL.md` | Spinning up an ephemeral, fit-to-purpose AI quiz for one learner via `POST /api/quiz/custom`. Used by the `/app/quiz` page and any agent that wants to drop a mini-assessment into chat. NOT for authoring durable lesson question banks. |
 | `skills/expand-lesson-theory/SKILL.md` | Adding MORE sections / worked examples / pitfalls / cross-subject `why_matters` to an authored lesson without breaking the schema. |
 | `skills/use-learning-plan/SKILL.md` | Adding any "what should I study next?" / "why am I stuck?" feature, or wiring a new agent / UI to the mastery-aware path planner. |
 | `skills/cross-subject-kg/SKILL.md` | Adding cross-subject edges to `kg-cross-edges.json`, within-subject prereqs in YAML, or new canonical skill atoms. |

@@ -11,28 +11,14 @@ import { lessonSchema } from '@asf/schemas/curriculum';
 import { memoryTimelineSchema } from '@asf/schemas/memory';
 import { apiFetch, apiFetchOptional } from './api';
 
+// Brand-new learners must NOT see fake "Introduction to Fractions" tiles.
+// The real numbers come from `getDashboardSnapshot()` in `neon-db.ts`, which
+// the `/app` server page calls directly. This fallback is now empty so any
+// legacy caller of `fetchDashboard()` gets the same empty-state semantics:
+// "no lessons yet" / "no mastery yet" rather than mock content.
 const MOCK_DASHBOARD: LearnerDashboard = {
-  recent_lessons: [
-    {
-      id: 'lesson-intro-fractions',
-      title: 'Introduction to Fractions',
-      progress: 0.65,
-      est_minutes: 20,
-      last_accessed_at: new Date().toISOString(),
-    },
-    {
-      id: 'lesson-fractions-ops',
-      title: 'Adding and Subtracting Fractions',
-      progress: 0.2,
-      est_minutes: 25,
-      last_accessed_at: new Date(Date.now() - 86400000).toISOString(),
-    },
-  ],
-  mastery_summary: [
-    { concept_id: 'concept-fractions', concept_name: 'Fractions', score: 0.72 },
-    { concept_id: 'concept-decimals', concept_name: 'Decimals', score: 0.45 },
-    { concept_id: 'concept-ratios', concept_name: 'Ratios', score: 0.3 },
-  ],
+  recent_lessons: [],
+  mastery_summary: [],
 };
 
 const MOCK_LESSON: Lesson = {
@@ -66,34 +52,15 @@ If you eat 3 slices of a pizza cut into 8 equal slices, you've eaten $\\frac{3}{
   est_minutes: 20,
 };
 
+// Same reasoning as MOCK_DASHBOARD: a brand-new learner must never see
+// fake fractions on /app/progress. If `/v1/progress` returns nothing the UI
+// renders the empty state, not a fabricated history.
 const MOCK_PROGRESS: LearnerProgress = {
   learner_id: 'demo',
-  streak_days: 5,
-  total_minutes: 340,
-  lessons_completed: 12,
-  concepts: [
-    {
-      concept_id: 'concept-fractions',
-      concept_name: 'Fractions',
-      current_score: 0.72,
-      history: [
-        { date: '2026-06-01', score: 0.4 },
-        { date: '2026-06-08', score: 0.55 },
-        { date: '2026-06-15', score: 0.65 },
-        { date: '2026-06-22', score: 0.72 },
-      ],
-    },
-    {
-      concept_id: 'concept-decimals',
-      concept_name: 'Decimals',
-      current_score: 0.45,
-      history: [
-        { date: '2026-06-01', score: 0.2 },
-        { date: '2026-06-15', score: 0.35 },
-        { date: '2026-06-22', score: 0.45 },
-      ],
-    },
-  ],
+  streak_days: 0,
+  total_minutes: 0,
+  lessons_completed: 0,
+  concepts: [],
 };
 
 const MOCK_EDUCATOR: EducatorDashboard = {

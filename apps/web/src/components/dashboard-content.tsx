@@ -6,10 +6,22 @@ import { Flame, CheckCircle2, Star } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Progress } from '@asf/ui/progress';
 import { cn } from '@asf/ui';
-import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import { agentDisplayNames, type AgentName } from '@asf/schemas/agents';
 import { useI18n } from '@/providers/i18n-provider';
 import { AnimatedCounter } from '@/components/animated-counter';
+import type { DashboardSnapshot } from '@/lib/neon-db';
+
+/**
+ * /app dashboard content. Every number on this page is REAL (sourced from
+ * Neon via `getDashboardSnapshot`); there is no mock fallback. A brand-new
+ * learner sees zeros + "no lessons yet" / "no mastery yet" empty states.
+ *
+ * `streak_days` comes from chat turns + concept mastery activity + skill
+ * practice unioned via `getLearnerStreak`. `lessons_completed` is the
+ * count of distinct concepts with `concept_mastery.score >= 0.7`. `level`
+ * is a deterministic gamification curve based on completions + atoms
+ * practiced — it stays at 1 until the learner actually does work.
+ */
 
 const progressBarClass =
   'h-2.5 overflow-hidden rounded-full bg-secondary [&>div]:rounded-full [&>div]:bg-gradient-to-r [&>div]:from-primary [&>div]:to-accent-cyan';
@@ -27,22 +39,18 @@ const dashboardAgents: Array<{
 
 export function DashboardContent({
   displayName,
-  dashboard,
-  streak = 7,
-  lessonsCompleted = 12,
-  level = 3,
+  snapshot,
 }: {
   displayName: string;
-  dashboard: LearnerDashboard;
-  streak?: number;
-  lessonsCompleted?: number;
-  level?: number;
+  snapshot: DashboardSnapshot;
 }) {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const t = messages.dashboard;
+  const isHe = locale === 'he';
+  const { stats, recent_lessons, mastery_summary } = snapshot;
 
   return (
-    <div>
+    <div dir={isHe ? 'rtl' : 'ltr'}>
       <header className="mb-8">
         <h1 className="font-display text-4xl font-bold tracking-tight">
           <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
@@ -56,21 +64,34 @@ export function DashboardContent({
         <StatTile
           icon={Flame}
           label={t.streak}
-          value={<AnimatedCounter end={streak} className="font-display text-3xl font-bold" />}
+          value={
+            <AnimatedCounter
+              end={stats.streak_days}
+              className="font-display text-3xl font-bold"
+            />
+          }
           gradient="from-accent-amber to-accent-magenta"
         />
         <StatTile
           icon={CheckCircle2}
           label={t.lessonsCompleted}
           value={
-            <AnimatedCounter end={lessonsCompleted} className="font-display text-3xl font-bold" />
+            <AnimatedCounter
+              end={stats.lessons_completed}
+              className="font-display text-3xl font-bold"
+            />
           }
           gradient="from-accent-cyan to-primary"
         />
         <StatTile
           icon={Star}
           label={t.level}
-          value={<AnimatedCounter end={level} className="font-display text-3xl font-bold" />}
+          value={
+            <AnimatedCounter
+              end={stats.level}
+              className="font-display text-3xl font-bold"
+            />
+          }
           gradient="from-accent-magenta to-accent-cyan"
         />
       </div>
@@ -80,29 +101,41 @@ export function DashboardContent({
           <h2 className="font-display text-xl font-semibold">{t.recentLessons}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t.recentLessonsDesc}</p>
           <div className="mt-4 space-y-4">
-            {dashboard.recent_lessons.length === 0 ? (
+            {recent_lessons.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t.noLessonsYet}</p>
             ) : (
-              dashboard.recent_lessons.map((lesson) => (
-                <div key={lesson.id} className="space-y-2">
-                  <div className="flex min-w-0 items-center justify-between gap-2">
-                    <Link
-                      href={`/app/lessons/l/${lesson.id}`}
-                      className="truncate font-medium hover:underline"
-                    >
-                      {lesson.title}
-                    </Link>
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {lesson.est_minutes} {t.minutes}
-                    </span>
+              recent_lessons.map((lesson) => {
+                const title =
+                  isHe && lesson.title_he ? lesson.title_he : lesson.title;
+                // Deep-link to the authored lesson when available; else to
+                // the subject-level /learn page for that concept.
+                const href = lesson.id
+                  ? `/app/lessons/l/${lesson.id}`
+                  : `/learn/${lesson.subject}`;
+                return (
+                  <div key={lesson.concept_id} className="space-y-2">
+                    <div className="flex min-w-0 items-center justify-between gap-2">
+                      <Link
+                        href={href}
+                        className="truncate font-medium hover:underline"
+                        dir="auto"
+                      >
+                        {title}
+                      </Link>
+                      {lesson.est_minutes != null ? (
+                        <span className="shrink-0 text-xs text-muted-foreground">
+                          {lesson.est_minutes} {t.minutes}
+                        </span>
+                      ) : null}
+                    </div>
+                    <Progress
+                      value={lesson.progress * 100}
+                      className={progressBarClass}
+                      aria-label={`${title} progress`}
+                    />
                   </div>
-                  <Progress
-                    value={lesson.progress * 100}
-                    className={progressBarClass}
-                    aria-label={`${lesson.title} progress`}
-                  />
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -111,24 +144,29 @@ export function DashboardContent({
           <h2 className="font-display text-xl font-semibold">{t.mastery}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t.masteryDesc}</p>
           <div className="mt-4 space-y-3">
-            {dashboard.mastery_summary.length === 0 ? (
+            {mastery_summary.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t.noMasteryYet}</p>
             ) : (
-              dashboard.mastery_summary.map((item) => (
-                <div key={item.concept_id} className="space-y-1.5">
-                  <div className="flex min-w-0 items-center justify-between gap-2">
-                    <span className="truncate text-sm">{item.concept_name}</span>
-                    <Badge variant={item.score >= 0.7 ? 'success' : 'secondary'}>
-                      {Math.round(item.score * 100)}%
-                    </Badge>
+              mastery_summary.map((item) => {
+                const name = isHe && item.name_he ? item.name_he : item.name;
+                return (
+                  <div key={item.concept_id} className="space-y-1.5">
+                    <div className="flex min-w-0 items-center justify-between gap-2">
+                      <span className="truncate text-sm" dir="auto">
+                        {name}
+                      </span>
+                      <Badge variant={item.score >= 0.7 ? 'success' : 'secondary'}>
+                        {Math.round(item.score * 100)}%
+                      </Badge>
+                    </div>
+                    <Progress
+                      value={item.score * 100}
+                      className={progressBarClass}
+                      aria-label={`${name} mastery`}
+                    />
                   </div>
-                  <Progress
-                    value={item.score * 100}
-                    className={progressBarClass}
-                    aria-label={`${item.concept_name} mastery`}
-                  />
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -160,7 +198,9 @@ export function DashboardContent({
               >
                 {agentDisplayNames[agent]}
               </h3>
-              <span className="mt-3 text-sm font-medium text-primary">{t.startChat} →</span>
+              <span className="mt-3 text-sm font-medium text-primary">
+                {t.startChat} →
+              </span>
             </Link>
           ))}
         </div>

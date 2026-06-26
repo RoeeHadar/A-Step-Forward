@@ -1057,9 +1057,16 @@ export async function fetchLessonAvailability(
 }
 
 export interface LessonMeta {
+  /** Lesson UUID (table `lessons.id`). */
+  id: string;
   concept_id: string;
   subject: string;
   math_track: string[];
+  /** Display titles + estimated minutes — added so the /app dashboard can
+   *  render real recent-lesson tiles without a second query. */
+  title_en: string | null;
+  title_he: string | null;
+  est_minutes: number | null;
 }
 
 /**
@@ -1074,10 +1081,12 @@ export async function fetchLessonMetaByConceptIds(
   if (!sql || conceptIds.length === 0) return out;
   try {
     const rows = (await sql`
-      SELECT concept_id, subject, COALESCE(math_track, '{}'::text[]) AS math_track
+      SELECT id::text, concept_id, subject,
+             COALESCE(math_track, '{}'::text[]) AS math_track,
+             title_en, title_he, est_minutes
       FROM lessons
       WHERE concept_id = ANY(${conceptIds}::text[])
-    `) as Array<{ concept_id: string; subject: string; math_track: string[] }>;
+    `) as Array<LessonMeta>;
     for (const r of rows) out.set(r.concept_id, r);
     return out;
   } catch (err) {
@@ -1696,5 +1705,165 @@ export async function getWeeklyRecap(learnerId: string): Promise<WeeklyRecap> {
       console.warn('[neon-db] getWeeklyRecap failed', err);
     }
     return empty;
+  }
+}
+
+// ── /app dashboard real stats ────────────────────────────────────────────────
+
+export interface LearnerStatsTile {
+  /** Consecutive-day streak (delegates to getLearnerStreak.current_days). */
+  streak_days: number;
+  /** Number of distinct concepts with mastery score >= 0.7. */
+  lessons_completed: number;
+  /** Derived "level" — gameification number. Stays at 1 until the learner
+   *  has logged real activity, then grows with completed concepts +
+   *  practiced atoms so the number actually moves. */
+  level: number;
+}
+
+export interface DashboardRecentLesson {
+  /** lesson_id from `lessons` if we have an authored lesson for this concept,
+   *  otherwise null — in that case the UI should link to /learn/<subject>. */
+  id: string | null;
+  concept_id: string;
+  title: string;
+  title_he: string | null;
+  subject: string;
+  progress: number; // 0..1
+  est_minutes: number | null;
+  last_activity: string; // ISO
+}
+
+export interface DashboardMasteryItem {
+  concept_id: string;
+  name: string;
+  name_he: string | null;
+  score: number;
+}
+
+export interface DashboardSnapshot {
+  stats: LearnerStatsTile;
+  recent_lessons: DashboardRecentLesson[];
+  mastery_summary: DashboardMasteryItem[];
+}
+
+const EMPTY_DASHBOARD: DashboardSnapshot = {
+  stats: { streak_days: 0, lessons_completed: 0, level: 1 },
+  recent_lessons: [],
+  mastery_summary: [],
+};
+
+/**
+ * Returns the real numbers behind the /app dashboard tiles + lists for one
+ * learner. Pulls EVERYTHING from Neon — no mock fallback. Brand-new learners
+ * get an all-zero snapshot, so the UI is forced to render the "no activity
+ * yet" empty state instead of the legacy "Introduction to Fractions" mock.
+ *
+ * "Lessons completed" = count of concepts where the learner's `concept_mastery.score`
+ * is >= 0.7. "Level" = 1 + floor(completed/3 + atoms_practiced/12) — chosen so
+ * a brand-new learner is level 1, and the number actually moves as they
+ * progress (1 completion ≈ partial level; 3 completions = 1 level).
+ *
+ * `recent_lessons` is built from `concept_mastery.last_activity` joined with
+ * the in-process KG (for bilingual names) and `lessons` (for the
+ * authored-lesson id + est_minutes). Items without an authored lesson still
+ * appear, with `id = null`; the UI then links to /learn/<subject>.
+ */
+export async function getDashboardSnapshot(
+  learnerId: string,
+): Promise<DashboardSnapshot> {
+  if (!sql) return EMPTY_DASHBOARD;
+  try {
+    const [streak, masteryRows, atomCountRows] = await Promise.all([
+      getLearnerStreak(learnerId).catch(() => ({
+        current_days: 0,
+        longest_days: 0,
+        last_active: null,
+        active_today: false,
+        active_days_last_30: 0,
+      })),
+      sql`
+        SELECT concept_id, score::float AS score, last_activity
+        FROM concept_mastery
+        WHERE learner_id = ${learnerId}
+        ORDER BY last_activity DESC NULLS LAST
+        LIMIT 30
+      ` as Promise<Array<{ concept_id: string; score: number; last_activity: string | null }>>,
+      sql`
+        SELECT COUNT(*)::int AS n
+        FROM skill_practice
+        WHERE learner_id = ${learnerId} AND attempts > 0
+      ` as Promise<Array<{ n: number }>>,
+    ]);
+    const allMastery = masteryRows;
+    const completed = allMastery.filter((r) => Number(r.score) >= 0.7).length;
+    const atomsPracticed = atomCountRows[0]?.n ?? 0;
+    // Conservative gamification curve: 1 by default; 1 extra level per 3
+    // completions or per 12 practiced atoms (whichever helps first). Never
+    // goes down.
+    const level =
+      1 +
+      Math.floor(completed / 3) +
+      Math.floor(Number(atomsPracticed) / 12);
+
+    // Lesson availability for the top recent concepts so we can deep-link.
+    const conceptsForLessons = allMastery.slice(0, 6).map((r) => r.concept_id);
+    const lessonMeta = conceptsForLessons.length
+      ? await fetchLessonMetaByConceptIds(conceptsForLessons)
+      : new Map<string, LessonMeta>();
+
+    const recent_lessons: DashboardRecentLesson[] = allMastery
+      .slice(0, 6)
+      .filter((r) => r.last_activity != null)
+      .map((r) => {
+        const kgInfo = kgById[r.concept_id];
+        const meta = lessonMeta.get(r.concept_id) ?? null;
+        return {
+          id: meta?.id ?? null,
+          concept_id: r.concept_id,
+          title: meta?.title_en ?? kgInfo?.name ?? r.concept_id,
+          title_he: meta?.title_he ?? kgInfo?.name_he ?? null,
+          subject: kgInfo?.subject ?? inferSubject(r.concept_id, []),
+          progress: Number(r.score),
+          est_minutes: meta?.est_minutes ?? null,
+          last_activity: r.last_activity as string,
+        };
+      });
+
+    // Top-5 mastery items by score (desc, then by recency).
+    const mastery_summary: DashboardMasteryItem[] = [...allMastery]
+      .sort((a, b) => {
+        const d = Number(b.score) - Number(a.score);
+        if (d !== 0) return d;
+        return (
+          new Date(b.last_activity ?? 0).getTime() -
+          new Date(a.last_activity ?? 0).getTime()
+        );
+      })
+      .slice(0, 5)
+      .map((r) => {
+        const kgInfo = kgById[r.concept_id];
+        return {
+          concept_id: r.concept_id,
+          name: kgInfo?.name ?? r.concept_id,
+          name_he: kgInfo?.name_he ?? null,
+          score: Number(r.score),
+        };
+      });
+
+    return {
+      stats: {
+        streak_days: streak.current_days,
+        lessons_completed: completed,
+        level,
+      },
+      recent_lessons,
+      mastery_summary,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getDashboardSnapshot failed', err);
+    }
+    return EMPTY_DASHBOARD;
   }
 }
