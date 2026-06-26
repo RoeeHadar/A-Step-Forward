@@ -17,6 +17,8 @@ on:
           - concept-explanations
           - fix-hebrew-content
           - content-from-export
+          - lessons-from-json
+          - wipe-pdf-sections
 
 jobs:
   seed:
@@ -106,3 +108,27 @@ jobs:
           npm install --no-save --no-package-lock @neondatabase/serverless
           ls -lah scripts/seed_data/content_export.json
           node scripts/seed-content-from-export.mjs --input=scripts/seed_data/content_export.json
+
+      - name: Seed AI-authored lessons + questions
+        if: ${{ inputs.target == 'lessons-from-json' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          ls -lah scripts/seed_data/lessons | head -40
+          node scripts/seed-lessons.mjs
+
+      - name: Wipe legacy PDF content_sections (Bagrut preserved)
+        if: ${{ inputs.target == 'wipe-pdf-sections' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          node -e "
+          import('@neondatabase/serverless').then(async ({ neon }) => {
+            const sql = neon(process.env.DATABASE_URL);
+            const before = await sql\`SELECT COUNT(*)::int AS n FROM content_sections\`;
+            const r = await sql\`DELETE FROM content_sections\`;
+            console.log('deleted', before[0].n, 'PDF-extracted content_sections rows; bagrut_exams untouched');
+          });
+          "
