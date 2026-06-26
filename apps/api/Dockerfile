@@ -43,7 +43,8 @@ RUN uv sync --frozen --no-dev --package asf-api
 # ensure `email-validator` is installed even if an earlier `uv sync` layer
 # was cached from before this dep was added. Without this, pydantic's
 # `EmailStr` (used in routers/bookings.py) raises at module import time.
-RUN /app/.venv/bin/pip install --no-cache-dir 'email-validator>=2.2' \
+# The uv-managed venv has no `pip`, so use `uv pip install` with --python.
+RUN uv pip install --python /app/.venv/bin/python --no-cache 'email-validator>=2.2' \
     && /app/.venv/bin/python -c "import email_validator; print('email_validator OK', email_validator.__version__)"
 
 # Verify learner-model + diagnostic packages import (matches CI import smoke)
