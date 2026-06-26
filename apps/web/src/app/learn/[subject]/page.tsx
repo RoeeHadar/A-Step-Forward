@@ -4,7 +4,10 @@ import { SiteHeader } from '@/components/site-header';
 import { PremiumBadge } from '@/components/premium-badge';
 import { fetchBagrutExams, fetchSubjects } from '@/lib/content-api';
 import { subjectLabel } from '@/lib/subject-labels';
-import { fetchConceptsWithExplanations, fetchLessonAvailability } from '@/lib/neon-db';
+import {
+  fetchConceptsWithExplanations,
+  fetchLessonMetaByConceptIds,
+} from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
 
 export const dynamic = 'force-dynamic';
@@ -17,36 +20,134 @@ interface KgConcept {
 }
 const kgConcepts: KgConcept[] = (kg as { concepts: KgConcept[] }).concepts;
 
-function subjectMatchesConcept(uiSubject: string, kgSubject: string): boolean {
-  if (uiSubject === kgSubject) return true;
-  // /learn/math card should include concepts tagged in kg as 'math' across levels
-  if (uiSubject === 'math' && kgSubject === 'math') return true;
-  if (uiSubject === 'physics' && kgSubject === 'physics') return true;
-  if (uiSubject === 'calculus' && kgSubject === 'math') return true;
-  if (uiSubject === 'linear_algebra' && kgSubject === 'math') return true;
-  return false;
+// Concept-ID allowlists for UI subjects that map to a narrowed slice of a KG
+// subject (e.g. /learn/calculus is just the calculus chapters of KG math).
+const CALCULUS_CONCEPTS = [
+  'limits',
+  'continuity',
+  'derivatives_intro',
+  'derivatives_rules',
+  'derivatives_applications',
+  'integrals_intro',
+  'integrals_techniques',
+  'integrals_applications',
+  'definite_integrals',
+  'differential_equations_intro',
+];
+const LINEAR_ALGEBRA_CONCEPTS = [
+  'vectors_basics',
+  'vectors_2d',
+  'la_matrices',
+  'la_vector_spaces',
+  'la_eigenvalues',
+];
+const STATISTICS_CONCEPTS = [
+  'descriptive_stats',
+  'probability_basic',
+  'combinatorics',
+  'distributions',
+  'hypothesis_testing',
+];
+
+type MathTrack = '3pt' | '4pt' | '5pt';
+
+interface UiSubjectFilter {
+  kgSubject: 'math' | 'physics' | null;
+  mathTrack?: MathTrack;
+  conceptAllowlist?: string[];
+}
+
+/**
+ * Translates a URL-facing subject slug (e.g. `high_school_math_5_points`) into
+ * the slice of the AI-authored corpus that should be surfaced on that page:
+ * which KG subject to draw from, an optional Bagrut math-track filter, and an
+ * optional explicit concept allowlist for sub-domain pages.
+ */
+function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
+  // Pure KG-aligned UI subjects.
+  if (uiSubject === 'math') return { kgSubject: 'math' };
+  if (uiSubject === 'physics') return { kgSubject: 'physics' };
+
+  // Israeli high-school math tracks: same KG concepts, filtered by math_track.
+  if (uiSubject === 'high_school_math_3_points')
+    return { kgSubject: 'math', mathTrack: '3pt' };
+  if (uiSubject === 'high_school_math_4_points')
+    return { kgSubject: 'math', mathTrack: '4pt' };
+  if (uiSubject === 'high_school_math_5_points')
+    return { kgSubject: 'math', mathTrack: '5pt' };
+
+  // Middle school is treated as the 3-pt prep track until we author dedicated content.
+  if (
+    uiSubject === 'middle_school_math_7th_grade' ||
+    uiSubject === 'middle_school_math_8th_grade' ||
+    uiSubject === 'middle_school_math_9th_grade'
+  ) {
+    return { kgSubject: 'math', mathTrack: '3pt' };
+  }
+
+  // Pre-university math has no math_track filter; surface everything.
+  if (uiSubject === 'math_pre_university') return { kgSubject: 'math' };
+
+  // University-style sub-domains drawn from KG math.
+  if (uiSubject === 'calculus' || uiSubject === 'calculus_1') {
+    return { kgSubject: 'math', conceptAllowlist: CALCULUS_CONCEPTS };
+  }
+  if (uiSubject === 'linear_algebra') {
+    return { kgSubject: 'math', conceptAllowlist: LINEAR_ALGEBRA_CONCEPTS };
+  }
+  if (uiSubject === 'statistics_probability') {
+    return { kgSubject: 'math', conceptAllowlist: STATISTICS_CONCEPTS };
+  }
+
+  // Physics-flavoured subjects: all map to the KG `physics` corpus.
+  if (
+    uiSubject === 'physics_high_school' ||
+    uiSubject === 'physics_middle_school' ||
+    uiSubject === 'physics_pre_university' ||
+    uiSubject === 'physics_1' ||
+    uiSubject === 'physics_2'
+  ) {
+    return { kgSubject: 'physics' };
+  }
+
+  return { kgSubject: null };
 }
 
 export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {
   const { subject } = await params;
   const allSubjects = await fetchSubjects();
   const known = allSubjects.some((s) => s.subject === subject);
-  const conceptsForSubject = kgConcepts.filter((c) =>
-    subjectMatchesConcept(subject, c.subject),
-  );
+
+  const filter = uiSubjectFilter(subject);
+  const allowlist = filter.conceptAllowlist ? new Set(filter.conceptAllowlist) : null;
+  const conceptsForSubject = filter.kgSubject
+    ? kgConcepts.filter((c) => {
+        if (c.subject !== filter.kgSubject) return false;
+        if (allowlist && !allowlist.has(c.id)) return false;
+        return true;
+      })
+    : [];
+
   const conceptIds = conceptsForSubject.map((c) => c.id);
-  const [bagrut, coverage, lessonIds] = await Promise.all([
+  const [bagrut, coverage, lessonMeta] = await Promise.all([
     fetchBagrutExams(subject),
     fetchConceptsWithExplanations(conceptIds),
-    fetchLessonAvailability(conceptIds),
+    fetchLessonMetaByConceptIds(conceptIds),
   ]);
 
   const conceptsWithCoverage = conceptsForSubject
-    .map((c) => ({
-      ...c,
-      langs: coverage.get(c.id) ?? [],
-      hasLesson: lessonIds.has(c.id),
-    }))
+    .map((c) => {
+      const meta = lessonMeta.get(c.id);
+      const hasLesson = Boolean(meta);
+      // Math-track filter: when on a 3/4/5-pt page, only show concepts whose
+      // lesson explicitly opted into that track. Non-math subjects ignore this.
+      const inTrack =
+        filter.mathTrack && filter.kgSubject === 'math'
+          ? Boolean(meta?.math_track?.includes(filter.mathTrack))
+          : true;
+      return { ...c, langs: coverage.get(c.id) ?? [], hasLesson, inTrack };
+    })
+    .filter((c) => c.inTrack)
     .sort((a, b) => {
       // Lessons first, then explanation-only, then nothing.
       const aRank = a.hasLesson ? 2 : a.langs.length > 0 ? 1 : 0;
@@ -114,8 +215,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
               Lessons
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              AI-authored, bilingual lessons with worked examples, common pitfalls, and a quick
-              quiz at the end. Open one to start.
+              {filter.mathTrack
+                ? `AI-authored, bilingual lessons aligned to the ${filter.mathTrack.replace('pt', '-pt')} Bagrut track. Worked examples, common pitfalls, and a quick quiz at the end.`
+                : 'AI-authored, bilingual lessons with worked examples, common pitfalls, and a quick quiz at the end. Open one to start.'}
             </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {conceptsWithCoverage.map((c) => {
@@ -165,7 +267,23 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
               })}
             </div>
           </section>
-        ) : null}
+        ) : (
+          <section className="mt-2 glass-surface rounded-2xl p-8 text-center">
+            <h2 className="font-display text-xl font-semibold text-foreground">
+              No lessons in this track yet
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              We&rsquo;re still authoring AI lessons for this slice of the curriculum. In the
+              meantime, the AI Tutor can teach any topic on demand and reference your goals.
+            </p>
+            <Link
+              href={`/app/chat/tutor?context=${encodeURIComponent(subject)}`}
+              className="mt-5 inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              Open Tutor Chat
+            </Link>
+          </section>
+        )}
 
       </main>
     </div>

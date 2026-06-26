@@ -874,6 +874,38 @@ export async function fetchLessonAvailability(
   }
 }
 
+export interface LessonMeta {
+  concept_id: string;
+  subject: string;
+  math_track: string[];
+}
+
+/**
+ * Returns metadata for any lessons whose `concept_id` is in `conceptIds`.
+ * Used by the subject page to decide which concept tiles to show and
+ * which math-track (3pt/4pt/5pt) variants to surface.
+ */
+export async function fetchLessonMetaByConceptIds(
+  conceptIds: string[],
+): Promise<Map<string, LessonMeta>> {
+  const out = new Map<string, LessonMeta>();
+  if (!sql || conceptIds.length === 0) return out;
+  try {
+    const rows = (await sql`
+      SELECT concept_id, subject, COALESCE(math_track, '{}'::text[]) AS math_track
+      FROM lessons
+      WHERE concept_id = ANY(${conceptIds}::text[])
+    `) as Array<{ concept_id: string; subject: string; math_track: string[] }>;
+    for (const r of rows) out.set(r.concept_id, r);
+    return out;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchLessonMetaByConceptIds failed:', err);
+    }
+    return out;
+  }
+}
+
 export async function recordLessonAnswer(args: {
   learnerId: string;
   lessonId: string;
