@@ -1,0 +1,194 @@
+{
+  "concept_id": "hypothesis_testing",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["5pt"],
+  "title_en": "Hypothesis Testing — p-values, Significance, Errors",
+  "title_he": "בדיקת השערות — ערכי p, מובהקות, שגיאות",
+  "summary_en": "Hypothesis testing assesses whether data are consistent with a null hypothesis. We compute a p-value and reject $H_0$ if it falls below significance level $\\alpha$.",
+  "summary_he": "בדיקת השערות בודקת האם הנתונים תואמים השערת אפס. מחשבים ערך p ודוחים את $H_0$ אם הוא קטן מרמת המובהקות $\\alpha$.",
+  "est_minutes": 18,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "The null and alternative hypotheses",
+      "title_he": "השערת האפס והאלטרנטיבית",
+      "body_en_md": "**Hypothesis testing** is a procedure for deciding whether evidence supports rejecting a default claim.\n\n### Setup\n\n- **Null hypothesis $H_0$**: the default / no-effect claim. *Example:* 'a new drug has no effect'.\n- **Alternative hypothesis $H_1$**: what we'd believe if $H_0$ is rejected. *Example:* 'the drug works'.\n\n### Logic\n\n1. Assume $H_0$ is true.\n2. Compute a **test statistic** from the data.\n3. Find the **p-value**: probability of observing something AT LEAST as extreme as the data, given $H_0$.\n4. If p < $\\alpha$ (significance level, often 0.05): **reject $H_0$**.\n5. Otherwise: **fail to reject $H_0$** (NOT 'accept $H_0$').\n\n**Analogy:** like a criminal trial. $H_0$ = 'innocent'. Reject only if evidence is strong (p small).",
+      "body_he_md": "**בדיקת השערות** היא תהליך החלטה האם הנתונים תומכים בדחיית טענת ברירת מחדל.\n\n### הצבה\n\n- **השערת אפס $H_0$**: ברירת מחדל / ללא אפקט. *דוגמה:* 'תרופה לא משפיעה'.\n- **השערה אלטרנטיבית $H_1$**: מה שנאמין אם נדחה את $H_0$. *דוגמה:* 'התרופה פועלת'.\n\n### לוגיקה\n\n1. נניח ש-$H_0$ נכון.\n2. נחשב **סטטיסטי מבחן** מהנתונים.\n3. נמצא **ערך p**: ההסתברות לקבל תוצאה לפחות קיצונית כמו הנתונים, בהינתן $H_0$.\n4. אם p < $\\alpha$ (רמת מובהקות, לרוב 0.05): **דוחים $H_0$**.\n5. אחרת: **לא דוחים $H_0$** (לא 'מקבלים $H_0$').\n\n**אנלוגיה:** משפט פלילי. $H_0$ = 'חף מפשע'. דוחים רק עם ראיות חזקות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Test statistics, p-values, errors",
+      "title_he": "סטטיסטי מבחן, ערכי p, שגיאות",
+      "body_en_md": "### Z-test for a mean\n\nGiven a sample mean $\\bar{x}$ from $n$ observations, with known population $\\sigma$, test $H_0: \\mu = \\mu_0$.\n\n**Test statistic:**\n\n$$Z = \\frac{\\bar{x} - \\mu_0}{\\sigma / \\sqrt{n}}.$$\n\nUnder $H_0$, $Z \\sim N(0, 1)$.\n\n### p-value\n\n- **Two-tailed** ($H_1: \\mu \\ne \\mu_0$): $p = 2 P(Z > |z_{\\text{obs}}|)$.\n- **Right-tailed** ($H_1: \\mu > \\mu_0$): $p = P(Z > z_{\\text{obs}})$.\n- **Left-tailed** ($H_1: \\mu < \\mu_0$): $p = P(Z < z_{\\text{obs}})$.\n\nReject $H_0$ if $p < \\alpha$.\n\n### Critical values (two-tailed)\n\n| $\\alpha$ | Reject if $|Z| > $ |\n|---|---|\n| 0.10 | 1.645 |\n| 0.05 | 1.96 |\n| 0.01 | 2.576 |\n\n### Errors\n\n| | $H_0$ true | $H_0$ false |\n|---|---|---|\n| Reject $H_0$ | **Type I** ($\\alpha$) | Correct |\n| Fail to reject | Correct | **Type II** ($\\beta$) |\n\n- **Type I (α):** false positive. Probability = $\\alpha$.\n- **Type II (β):** false negative.\n- **Power = 1 - β:** probability of correctly rejecting a false $H_0$.\n\nLower $\\alpha$ → fewer Type I errors but more Type II.",
+      "body_he_md": "### Z-test לממוצע\n\nלממוצע מדגם $\\bar{x}$ עם $n$ תצפיות, $\\sigma$ ידוע, בודקים $H_0: \\mu = \\mu_0$.\n\n**סטטיסטי מבחן:**\n\n$$Z = \\frac{\\bar{x} - \\mu_0}{\\sigma / \\sqrt{n}}.$$\n\nתחת $H_0$, $Z \\sim N(0, 1)$.\n\n### ערך p\n\n- **דו-זנבי** ($H_1: \\mu \\ne \\mu_0$): $p = 2 P(Z > |z|)$.\n- **חד-זנבי ימני**: $p = P(Z > z)$.\n- **חד-זנבי שמאלי**: $p = P(Z < z)$.\n\n### ערכים קריטיים (דו-זנבי)\n\n| $\\alpha$ | דוחים אם $|Z| > $ |\n|---|---|\n| 0.10 | 1.645 |\n| 0.05 | 1.96 |\n| 0.01 | 2.576 |\n\n### שגיאות\n\n- **Type I (α):** דחייה לשווא של $H_0$ נכון.\n- **Type II (β):** אי-דחייה של $H_0$ שגוי.\n- **עוצמה = 1 - β:** הסתברות לדחות $H_0$ שגוי.\n\nהקטנת $\\alpha$ → פחות Type I, יותר Type II."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: drug effect",
+      "title_he": "דוגמה פתורה: השפעת תרופה",
+      "body_en_md": "A new sleep drug claims to extend sleep beyond the population norm of $\\mu_0 = 7$ hours. A sample of $n = 25$ patients sleeps $\\bar{x} = 7.6$ hours; population $\\sigma = 1.5$ hours. Test at $\\alpha = 0.05$ (one-tailed: drug **increases** sleep).\n\n**Hypotheses:**\n- $H_0: \\mu = 7$.\n- $H_1: \\mu > 7$.\n\n**Test statistic:**\n\n$$Z = \\frac{7.6 - 7}{1.5/\\sqrt{25}} = \\frac{0.6}{0.3} = 2.0.$$\n\n**p-value (one-tailed):** $P(Z > 2.0) \\approx 0.0228$.\n\n**Decision:** $p = 0.0228 < 0.05$ → **reject $H_0$**. There is statistically significant evidence (at the 5% level) that the drug increases sleep.\n\n**Caveat:** statistical significance ≠ practical significance. A 36-minute improvement may or may not matter clinically.",
+      "body_he_md": "תרופה חדשה לשינה טוענת שהיא מאריכה את השינה מעבר ל-$\\mu_0 = 7$ שעות. מדגם של $n = 25$ נותן $\\bar{x} = 7.6$; $\\sigma = 1.5$. בדיקה ב-$\\alpha = 0.05$ (חד-זנבי).\n\n**השערות:**\n- $H_0: \\mu = 7$.\n- $H_1: \\mu > 7$.\n\n**סטטיסטי מבחן:**\n\n$$Z = \\frac{7.6 - 7}{1.5/\\sqrt{25}} = 2.0.$$\n\n**ערך p:** $P(Z > 2.0) \\approx 0.0228$.\n\n**החלטה:** $p < 0.05$ → **דוחים $H_0$**. ראיה מובהקת לעלייה בשינה.\n\n**אזהרה:** מובהקות סטטיסטית ≠ מובהקות מעשית."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **'Failing to reject' ≠ 'proving $H_0$'.** Absence of evidence is not evidence of absence.\n2. **p-value is NOT $P(H_0 \\text{ true})$.** It's $P(\\text{data} | H_0)$. These are reversed!\n3. **Statistical vs. practical significance.** A trivial effect can be 'significant' with huge $n$.\n4. **Cherry-picking $\\alpha$ after seeing data.** Always fix $\\alpha$ in advance.\n5. **Multiple testing.** Running 20 tests at $\\alpha = 0.05$, expect ~1 false positive. Adjust (e.g., Bonferroni).\n6. **One-tailed vs. two-tailed.** Use one-tailed only if a directional alternative was specified in advance.",
+      "body_he_md": "1. **'לא דוחים' ≠ 'מוכיחים $H_0$'.** העדר ראיה אינו ראיה להעדר.\n2. **p-value ≠ $P(H_0 \\text{ נכון})$.** זה $P(\\text{נתונים} | H_0)$. שונה!\n3. **מובהקות סטטיסטית vs. מעשית.** אפקט קטן יכול להיות 'מובהק' עם $n$ ענק.\n4. **בחירת $\\alpha$ אחרי הנתונים.** קבעו מראש.\n5. **בדיקות מרובות.** 20 בדיקות ב-$\\alpha = 0.05$ → צפויות ~1 חיוביות שווא.\n6. **חד-זנבי vs. דו-זנבי.** חד-זנבי רק אם כיוון הוגדר מראש."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Set up $H_0$ vs. $H_1$ in advance.\n- Compute test statistic ($Z = (\\bar{x} - \\mu_0)/(\\sigma/\\sqrt{n})$).\n- p-value = probability of data this extreme under $H_0$.\n- Reject if $p < \\alpha$; else fail to reject.\n- Type I = false positive ($\\alpha$); Type II = false negative ($\\beta$).\n- Power = $1 - \\beta$.",
+      "body_he_md": "- קבעו $H_0$ vs. $H_1$ מראש.\n- חשבו סטטיסטי מבחן.\n- ערך p = הסתברות לנתונים קיצוניים כאלה תחת $H_0$.\n- דוחים אם $p < \\alpha$.\n- Type I = חיובי שווא ($\\alpha$); Type II = שלילי שווא ($\\beta$).\n- עוצמה = $1 - \\beta$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "If a test yields $p = 0.03$ at $\\alpha = 0.05$, the conclusion is:",
+      "stem_he": "אם בדיקה נותנת $p = 0.03$ ב-$\\alpha = 0.05$, המסקנה:",
+      "options_en": ["Reject $H_0$", "Fail to reject $H_0$", "Accept $H_0$", "Test inconclusive"],
+      "options_he": ["דוחים $H_0$", "לא דוחים $H_0$", "מקבלים $H_0$", "אינו חד-משמעי"],
+      "correct_index": 0,
+      "explanation_en": "$p = 0.03 < 0.05 = \\alpha$, so reject $H_0$.",
+      "explanation_he": "$p = 0.03 < 0.05$, דוחים $H_0$.",
+      "skill_atoms": ["reject_decision"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What is a Type I error?",
+      "stem_he": "מהי שגיאה מסוג I?",
+      "options_en": [
+        "Failing to reject a false $H_0$",
+        "Rejecting a true $H_0$",
+        "Confidence interval too wide",
+        "Sample size too small"
+      ],
+      "options_he": [
+        "אי-דחייה של $H_0$ שגוי",
+        "דחייה של $H_0$ נכון",
+        "רווח סמך רחב מדי",
+        "מדגם קטן מדי"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Type I = rejecting $H_0$ when it's actually true (false positive). Probability = $\\alpha$.",
+      "explanation_he": "Type I = דחיית $H_0$ נכון. הסתברות = $\\alpha$.",
+      "skill_atoms": ["error_types"]
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "A coin is suspected of being unfair. In 100 flips, 60 are heads. Test $H_0: p = 0.5$ vs. $H_1: p \\ne 0.5$ at $\\alpha = 0.05$.",
+      "stem_he": "חשד שמטבע לא הוגן. ב-100 הטלות יצאו 60 עצים. בדקו $H_0: p = 0.5$ מול $H_1: p \\ne 0.5$ ב-$\\alpha = 0.05$.",
+      "rubric_en": "Full credit (4/4): Under $H_0$, $\\hat{p} \\sim N(0.5, 0.5 \\cdot 0.5/100) = N(0.5, 0.0025)$, std $= 0.05$. $Z = (0.6 - 0.5)/0.05 = 2.0$. Two-tailed p = $2 P(Z > 2.0) \\approx 0.0456 < 0.05$. **Reject $H_0$**.\nPartial (3/4): $Z = 2$ correct, p-value or decision error.\nMinimal (2/4): correct $H_0$ setup.",
+      "rubric_he": "ציון מלא (4/4): תחת $H_0$, $\\hat{p} \\sim N(0.5, 0.0025)$, std $= 0.05$. $Z = 2.0$. p דו-זנבי $\\approx 0.0456 < 0.05$ → **דוחים $H_0$**.\nחלקי (3/4): $Z = 2$ נכון, p או החלטה שגויים.\nמינימלי (2/4): ניסוח נכון של $H_0$.",
+      "explanation_en": "$Z = 2.0$, p-value $\\approx 0.046 < 0.05$, so we reject — evidence the coin is unfair.",
+      "explanation_he": "$Z = 2.0$, p $\\approx 0.046 < 0.05$ → דוחים. ראיה לחוסר הוגנות.",
+      "skill_atoms": ["proportion_z_test"]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Reducing $\\alpha$ from 0.05 to 0.01 (with all else equal):",
+      "stem_he": "הקטנת $\\alpha$ מ-0.05 ל-0.01 (השאר ללא שינוי):",
+      "options_en": [
+        "Decreases both Type I and Type II error rates",
+        "Decreases Type I error, increases Type II",
+        "Increases Type I, decreases Type II",
+        "No change"
+      ],
+      "options_he": [
+        "מקטינה גם Type I וגם Type II",
+        "מקטינה Type I, מגדילה Type II",
+        "מגדילה Type I, מקטינה Type II",
+        "ללא שינוי"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Smaller $\\alpha$ ⇒ fewer false rejections (Type I down) but harder to reject any $H_0$, so more false acceptances (Type II up).",
+      "explanation_he": "$\\alpha$ קטן ⇒ פחות דחיות לשווא (Type I יורד) אבל קשה לדחות בכלל, אז יותר אי-דחיות שגויות (Type II עולה).",
+      "skill_atoms": ["alpha_beta_tradeoff"]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Which statement about p-values is TRUE?",
+      "stem_he": "איזו אמירה על ערכי p **נכונה**?",
+      "options_en": [
+        "$p$ is the probability that $H_0$ is true",
+        "$p$ is the probability of the data, or more extreme, given $H_0$",
+        "$1 - p$ is the probability $H_1$ is true",
+        "$p < 0.05$ proves the effect is large"
+      ],
+      "options_he": [
+        "$p$ היא ההסתברות ש-$H_0$ נכון",
+        "$p$ היא ההסתברות לנתונים (או קיצוניים יותר) בהינתן $H_0$",
+        "$1 - p$ היא ההסתברות ש-$H_1$ נכון",
+        "$p < 0.05$ מוכיח אפקט גדול"
+      ],
+      "correct_index": 1,
+      "explanation_en": "p-value is $P(\\text{data or more extreme} \\mid H_0)$ — NOT the probability of any hypothesis being true, and significance doesn't measure effect size.",
+      "explanation_he": "p-value היא $P(\\text{נתונים או יותר קיצוניים} \\mid H_0)$ — לא הסתברות של השערה, ולא גודל אפקט.",
+      "skill_atoms": ["p_value_interpretation"]
+    },
+    {
+      "ord": 6,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A factory specifies bolt diameter $\\mu_0 = 5\\,\\text{mm}$. A sample of $n = 36$ bolts has $\\bar{x} = 5.1$ mm; $\\sigma = 0.4$ mm. Test $H_0: \\mu = 5$ vs. $H_1: \\mu \\ne 5$ at $\\alpha = 0.01$. Decision?",
+      "stem_he": "מפעל מגדיר קוטר ברגים $\\mu_0 = 5$ מ\"מ. מדגם של $n = 36$ נותן $\\bar{x} = 5.1$ מ\"מ; $\\sigma = 0.4$. בדקו $H_0: \\mu = 5$ מול $H_1: \\mu \\ne 5$ ב-$\\alpha = 0.01$.",
+      "rubric_en": "Full credit (4/4): $Z = (5.1 - 5)/(0.4/\\sqrt{36}) = 0.1/0.0667 = 1.5$. Critical value for $\\alpha = 0.01$ two-tailed: $\\pm 2.576$. $|Z| = 1.5 < 2.576$ → **fail to reject $H_0$**.\nPartial (3/4): $Z$ correct, wrong critical value.\nMinimal (2/4): setup correct.",
+      "rubric_he": "ציון מלא (4/4): $Z = 0.1/0.0667 = 1.5$. ערך קריטי ב-$\\alpha = 0.01$ דו-זנבי: $\\pm 2.576$. $|Z| < 2.576$ → **לא דוחים**.\nחלקי (3/4): $Z$ נכון, ערך קריטי שגוי.\nמינימלי (2/4): הצבה נכונה.",
+      "explanation_en": "$Z = 1.5$, $|Z| < 2.576$ → fail to reject $H_0$. No significant deviation from 5 mm at the 1% level.",
+      "explanation_he": "$Z = 1.5$, $|Z| < 2.576$ → לא דוחים. אין סטייה מובהקת מ-5 מ\"מ.",
+      "skill_atoms": ["z_test_two_tailed"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "p-value = $P(\\text{data this extreme} \\mid H_0)$, NOT $P(H_0)$.",
+      "Reject $H_0$ if $p < \\alpha$; never 'accept' $H_0$.",
+      "Z-test for mean: $Z = (\\bar{x} - \\mu_0)/(\\sigma/\\sqrt{n})$.",
+      "Type I error rate = $\\alpha$; Type II = $\\beta$; power = $1 - \\beta$.",
+      "Lowering $\\alpha$ trades Type I for Type II."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "p-value is the probability $H_0$ is true",
+        "correction": "p-value is $P(\\text{data} \\mid H_0)$, NOT $P(H_0 \\mid \\text{data})$. Bayes' rule shows they're different.",
+        "detect_phrase_en": "p-value probability null true",
+        "detect_phrase_he": "ערך p הסתברות אפס נכון"
+      },
+      {
+        "wrong": "Failing to reject = proving $H_0$",
+        "correction": "Failing to reject means insufficient evidence; $H_0$ could still be false.",
+        "detect_phrase_en": "fail to reject proves",
+        "detect_phrase_he": "אי-דחייה מוכיחה"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "z_test_two_tailed",
+      "proportion_z_test",
+      "p_value_interpretation",
+      "error_types",
+      "alpha_beta_tradeoff"
+    ],
+    "prerequisites_to_check_before_teaching": ["distributions", "descriptive_stats"],
+    "tutor_pacing_hint": "Use the courtroom analogy aggressively: $H_0$ = innocent. Drill the p-value interpretation — most learners get it backwards. Show ONE worked Z-test fully before doing variants.",
+    "coach_drill_skills": ["z_test_two_tailed", "p_value_interpretation"],
+    "diagnostic_signals": {
+      "if_learner_says_p_is_prob_h0_true": "Stop. Re-derive: p is $P(\\text{data} \\mid H_0)$, not $P(H_0 \\mid \\text{data})$.",
+      "if_learner_accepts_h0": "Reframe: we 'fail to reject' — absence of evidence is not evidence of absence."
+    },
+    "next_recommended": []
+  }
+}

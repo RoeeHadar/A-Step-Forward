@@ -1,0 +1,178 @@
+{
+  "concept_id": "probability_basic",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["4pt", "5pt"],
+  "title_en": "Basic Probability — Sample Spaces, Events, Conditional Probability",
+  "title_he": "הסתברות בסיסית — מרחבי מדגם, מאורעות, הסתברות מותנית",
+  "summary_en": "Probability quantifies uncertainty. From a sample space and uniform model we derive event probabilities, union/intersection rules, independence, and Bayes' formula.",
+  "summary_he": "הסתברות מכמתת אי-ודאות. ממרחב מדגם ומודל אחיד גוזרים הסתברויות של מאורעות, חוקי איחוד/חיתוך, אי-תלות ונוסחת בייס.",
+  "est_minutes": 16,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Sample space and events",
+      "title_he": "מרחב מדגם ומאורעות",
+      "body_en_md": "An **experiment** has uncertain outcomes. The set of ALL possible outcomes is the **sample space** $\\Omega$.\n\n**Examples:**\n- Flip a coin: $\\Omega = \\{H, T\\}$.\n- Roll a 6-sided die: $\\Omega = \\{1, 2, 3, 4, 5, 6\\}$.\n- Two dice: $\\Omega = \\{(i, j) : i, j \\in 1..6\\}$, $|\\Omega| = 36$.\n\nAn **event** $A$ is a subset of $\\Omega$. Example: 'sum of two dice = 7' is the event $\\{(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\\}$.\n\n**Probability** $P(A)$ is a number in $[0, 1]$:\n- $P(\\emptyset) = 0$ (impossible event).\n- $P(\\Omega) = 1$ (sure event).\n- For **equally likely outcomes**: $P(A) = \\dfrac{|A|}{|\\Omega|}$.\n\nExample: $P(\\text{sum} = 7) = 6/36 = 1/6$.",
+      "body_he_md": "ל**ניסוי** תוצאות לא-ודאיות. אוסף **כל** התוצאות האפשריות הוא **מרחב המדגם** $\\Omega$.\n\n**דוגמאות:**\n- הטלת מטבע: $\\Omega = \\{H, T\\}$.\n- הטלת קובייה: $\\Omega = \\{1, \\ldots, 6\\}$.\n- שתי קוביות: $|\\Omega| = 36$.\n\n**מאורע** $A$ הוא תת-קבוצה של $\\Omega$.\n\n**הסתברות** $P(A) \\in [0, 1]$:\n- $P(\\emptyset) = 0$, $P(\\Omega) = 1$.\n- לתוצאות **שוות-הסתברות**: $P(A) = \\dfrac{|A|}{|\\Omega|}$.\n\nדוגמה: $P(\\text{סכום} = 7) = 6/36 = 1/6$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Rules of probability",
+      "title_he": "חוקי הסתברות",
+      "body_en_md": "### Complement\n\n$P(A^c) = 1 - P(A)$.\n\n### Union (inclusion-exclusion)\n\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B).$$\n\nIf $A$ and $B$ are **mutually exclusive** (disjoint, $A \\cap B = \\emptyset$): $P(A \\cup B) = P(A) + P(B)$.\n\n### Conditional probability\n\nThe probability of $A$ **given** that $B$ occurred:\n\n$$P(A | B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0.$$\n\nInterpretation: we restrict the sample space to $B$.\n\n### Independence\n\n$A$ and $B$ are **independent** if knowing one doesn't change the probability of the other:\n\n$$P(A \\cap B) = P(A) \\cdot P(B).$$\n\nEquivalently: $P(A|B) = P(A)$ (when $P(B) > 0$).\n\n**Important:** independent ≠ mutually exclusive. Disjoint non-empty events are NOT independent (knowing one excludes the other).\n\n### Bayes' formula\n\nReverses conditioning:\n\n$$P(A | B) = \\frac{P(B | A) \\cdot P(A)}{P(B)}.$$\n\nUseful when $P(B|A)$ is easy but $P(A|B)$ is what we want. (Medical tests, spam filters, etc.)\n\n### Law of total probability\n\nIf $B_1, B_2, \\ldots, B_n$ partition $\\Omega$:\n\n$$P(A) = \\sum_{i} P(A | B_i) P(B_i).$$",
+      "body_he_md": "### משלים\n\n$P(A^c) = 1 - P(A)$.\n\n### איחוד (הכלה-הוצאה)\n\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B).$$\n\nאם $A, B$ **זרים** ($A \\cap B = \\emptyset$): $P(A \\cup B) = P(A) + P(B)$.\n\n### הסתברות מותנית\n\n$$P(A | B) = \\frac{P(A \\cap B)}{P(B)}.$$\n\nפירוש: מצמצמים את מרחב המדגם ל-$B$.\n\n### אי-תלות\n\n$A, B$ **בלתי-תלויים** אם:\n\n$$P(A \\cap B) = P(A) \\cdot P(B).$$\n\nשווה ערך: $P(A|B) = P(A)$.\n\n**חשוב:** בלתי-תלויים ≠ זרים.\n\n### נוסחת בייס\n\n$$P(A | B) = \\frac{P(B | A) \\cdot P(A)}{P(B)}.$$\n\n### חוק ההסתברות הכוללת\n\nאם $B_1, \\ldots, B_n$ חלוקה של $\\Omega$:\n\n$$P(A) = \\sum_{i} P(A | B_i) P(B_i).$$"
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: medical test (Bayes)",
+      "title_he": "דוגמה פתורה: בדיקה רפואית (בייס)",
+      "body_en_md": "A disease affects 1% of the population. A test has:\n- **Sensitivity** $P(+|D) = 0.99$ (99% true positive rate).\n- **Specificity** $P(-|D^c) = 0.95$ (95% true negative rate, so 5% false positive).\n\nA randomly selected person tests positive. What's the probability they have the disease?\n\n**Bayes:**\n\n$$P(D | +) = \\frac{P(+ | D) P(D)}{P(+)}.$$\n\n**Compute $P(+)$ via total probability:**\n\n$$P(+) = P(+|D)P(D) + P(+|D^c)P(D^c) = 0.99 \\cdot 0.01 + 0.05 \\cdot 0.99 = 0.0099 + 0.0495 = 0.0594.$$\n\n**Apply Bayes:**\n\n$$P(D | +) = \\frac{0.99 \\cdot 0.01}{0.0594} \\approx 0.167 = 16.7\\%.$$\n\n**Interpretation:** Even with a positive result, the probability of having the disease is only ~17% — because the disease is rare. This counterintuitive result is the **base-rate fallacy**.",
+      "body_he_md": "מחלה משפיעה על 1% מהאוכלוסייה. לבדיקה:\n- **רגישות** $P(+|D) = 0.99$.\n- **סגוליות** $P(-|D^c) = 0.95$ (כלומר 5% חיוביות שווא).\n\nאדם נבחר אקראית ומקבל תוצאה חיובית. מה ההסתברות שיש לו את המחלה?\n\n**בייס:**\n\n$$P(D | +) = \\frac{P(+ | D) P(D)}{P(+)}.$$\n\n**חישוב $P(+)$ דרך הסתברות כוללת:**\n\n$$P(+) = 0.99 \\cdot 0.01 + 0.05 \\cdot 0.99 = 0.0594.$$\n\n**הצבה:**\n\n$$P(D | +) = \\frac{0.99 \\cdot 0.01}{0.0594} \\approx 0.167.$$\n\n**פירוש:** גם עם תוצאה חיובית, ההסתברות שיש את המחלה היא רק ~17% — כי המחלה נדירה."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing $P(A|B)$ with $P(B|A)$.** They're different! Bayes converts between them.\n2. **Independent = mutually exclusive (FALSE).** Disjoint events are MAXIMALLY dependent (knowing one rules out the other).\n3. **Adding probabilities without subtracting overlap.** $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n4. **Equal likelihood when not justified.** Don't assume uniform unless the problem says so.\n5. **Base-rate fallacy.** Always factor in $P(A)$ (prior), not just $P(B|A)$.",
+      "body_he_md": "1. **בלבול בין $P(A|B)$ ל-$P(B|A)$.** שונים! בייס ממיר.\n2. **בלתי-תלויים = זרים (שגוי).** זרים הם תלויים מקסימלית.\n3. **חיבור הסתברויות בלי החסרת חפיפה.** $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n4. **שוויון הסתברות לא מוצדק.** לא להניח אחידות בלי הצדקה.\n5. **שגיאת שיעור בסיסי.** חייבים לקחת בחשבון $P(A)$ (priori)."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- $P(A) = |A|/|\\Omega|$ for uniform sample spaces.\n- $P(A^c) = 1 - P(A)$.\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n- Conditional: $P(A|B) = P(A \\cap B)/P(B)$.\n- Independent: $P(A \\cap B) = P(A)P(B)$.\n- Bayes: $P(A|B) = P(B|A) P(A) / P(B)$.",
+      "body_he_md": "- $P(A) = |A|/|\\Omega|$ למרחב מדגם אחיד.\n- $P(A^c) = 1 - P(A)$.\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n- מותנית: $P(A|B) = P(A \\cap B)/P(B)$.\n- בלתי-תלויים: $P(A \\cap B) = P(A)P(B)$.\n- בייס: $P(A|B) = P(B|A) P(A) / P(B)$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Two fair dice are rolled. What is the probability the sum is 8? (Enter as fraction, e.g. 5/36.)",
+      "stem_he": "שתי קוביות הוגנות מוטלות. מה ההסתברות שהסכום הוא 8? (כתבו כשבר, למשל 5/36.)",
+      "correct_answer": "5/36",
+      "explanation_en": "Outcomes summing to 8: (2,6),(3,5),(4,4),(5,3),(6,2) — 5 outcomes. $P = 5/36$.",
+      "explanation_he": "תוצאות עם סכום 8: (2,6),(3,5),(4,4),(5,3),(6,2) — 5 תוצאות. $P = 5/36$.",
+      "skill_atoms": ["uniform_sample_space"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$P(A) = 0.3$, $P(B) = 0.4$, $A$ and $B$ independent. $P(A \\cap B) = ?$",
+      "stem_he": "$P(A) = 0.3$, $P(B) = 0.4$, $A, B$ בלתי-תלויים. $P(A \\cap B) = ?$",
+      "options_en": ["$0.7$", "$0.12$", "$0.10$", "$0.58$"],
+      "options_he": ["$0.7$", "$0.12$", "$0.10$", "$0.58$"],
+      "correct_index": 1,
+      "explanation_en": "Independence: $P(A \\cap B) = P(A)P(B) = 0.3 \\cdot 0.4 = 0.12$.",
+      "explanation_he": "אי-תלות: $P(A \\cap B) = 0.3 \\cdot 0.4 = 0.12$.",
+      "skill_atoms": ["independence_product"]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "If $P(A) = 0.5$, $P(B) = 0.6$, $P(A \\cup B) = 0.8$, then $P(A \\cap B)$ is:",
+      "stem_he": "אם $P(A) = 0.5$, $P(B) = 0.6$, $P(A \\cup B) = 0.8$, אז $P(A \\cap B)$:",
+      "options_en": ["$0.1$", "$0.3$", "$0.5$", "$0.9$"],
+      "options_he": ["$0.1$", "$0.3$", "$0.5$", "$0.9$"],
+      "correct_index": 1,
+      "explanation_en": "$P(A \\cap B) = P(A) + P(B) - P(A \\cup B) = 0.5 + 0.6 - 0.8 = 0.3$.",
+      "explanation_he": "$P(A \\cap B) = 0.5 + 0.6 - 0.8 = 0.3$.",
+      "skill_atoms": ["inclusion_exclusion"]
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "A box has 3 red and 5 blue balls. Two balls are drawn without replacement. Find the probability both are red.",
+      "stem_he": "בקופסה 3 כדורים אדומים ו-5 כחולים. מוציאים 2 ללא החזרה. מצאו את ההסתברות ששניהם אדומים.",
+      "rubric_en": "Full credit (3/3): $P(\\text{red}_1) = 3/8$, $P(\\text{red}_2 | \\text{red}_1) = 2/7$. $P(\\text{both red}) = 3/8 \\cdot 2/7 = 6/56 = 3/28$.\nPartial (2/3): correct chain rule, arithmetic error.\nMinimal (1/3): writes $3/8$ only.",
+      "rubric_he": "ציון מלא (3/3): $P(\\text{אדום}_1) = 3/8$, $P(\\text{אדום}_2 | \\text{אדום}_1) = 2/7$. $P = 3/28$.\nחלקי (2/3): כלל שרשרת נכון, טעות חישוב.\nמינימלי (1/3): רק $3/8$.",
+      "explanation_en": "$P = P(\\text{red}_1) \\cdot P(\\text{red}_2 | \\text{red}_1) = \\frac{3}{8} \\cdot \\frac{2}{7} = \\frac{3}{28}$.",
+      "explanation_he": "$P = \\frac{3}{8} \\cdot \\frac{2}{7} = \\frac{3}{28}$.",
+      "skill_atoms": ["conditional_probability_chain"]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "A spam filter flags 90% of spam and 5% of non-spam. 30% of email is spam. A message is flagged. Probability it's actually spam?",
+      "stem_he": "מסנן זבל מסמן 90% מההודעות הזבל ו-5% מהלגיטימיות. 30% מההודעות הן זבל. הודעה סומנה. מה ההסתברות שהיא באמת זבל?",
+      "options_en": ["$\\approx 89\\%$", "$\\approx 90\\%$", "$\\approx 50\\%$", "$\\approx 30\\%$"],
+      "options_he": ["$\\approx 89\\%$", "$\\approx 90\\%$", "$\\approx 50\\%$", "$\\approx 30\\%$"],
+      "correct_index": 0,
+      "explanation_en": "$P(\\text{flag}) = 0.9 \\cdot 0.3 + 0.05 \\cdot 0.7 = 0.27 + 0.035 = 0.305$. Bayes: $P(\\text{spam}|\\text{flag}) = 0.27 / 0.305 \\approx 0.885 \\approx 89\\%$.",
+      "explanation_he": "$P(\\text{flag}) = 0.27 + 0.035 = 0.305$. בייס: $P(\\text{זבל}|\\text{flag}) = 0.27/0.305 \\approx 89\\%$.",
+      "skill_atoms": ["bayes_application"]
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "If $A$ and $B$ are mutually exclusive with $P(A), P(B) > 0$, are they independent?",
+      "stem_he": "אם $A, B$ זרים עם $P(A), P(B) > 0$, האם הם בלתי-תלויים?",
+      "options_en": [
+        "Yes",
+        "No — $P(A \\cap B) = 0$ but $P(A)P(B) > 0$",
+        "Sometimes",
+        "Cannot tell"
+      ],
+      "options_he": [
+        "כן",
+        "לא — $P(A \\cap B) = 0$ אבל $P(A)P(B) > 0$",
+        "לפעמים",
+        "לא ניתן לקבוע"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$P(A \\cap B) = 0$ (disjoint), but for independence we'd need $P(A)P(B) = 0$ — meaning at least one has probability 0. So both positive ⇒ disjoint ⇒ NOT independent.",
+      "explanation_he": "$P(A \\cap B) = 0$ (זרים), אבל לאי-תלות נדרש $P(A)P(B) = 0$. אז אם שניהם חיוביים — זרים = לא בלתי-תלויים.",
+      "skill_atoms": ["independence_vs_disjoint"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Uniform sample space: $P(A) = |A|/|\\Omega|$.",
+      "Inclusion-exclusion: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.",
+      "Conditional: $P(A|B) = P(A \\cap B)/P(B)$.",
+      "Independence: $P(A \\cap B) = P(A)P(B)$ — VERY different from disjoint.",
+      "Bayes: flips conditioning — $P(A|B) = P(B|A)P(A)/P(B)$."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Disjoint = independent",
+        "correction": "Disjoint events with positive probability are NOT independent. Knowing one rules out the other.",
+        "detect_phrase_en": "disjoint independent",
+        "detect_phrase_he": "זרים בלתי-תלויים"
+      },
+      {
+        "wrong": "$P(A|B) = P(B|A)$",
+        "correction": "Generally false — Bayes converts between them: $P(A|B) = P(B|A) P(A)/P(B)$.",
+        "detect_phrase_en": "conditional symmetric",
+        "detect_phrase_he": "מותנית סימטרית"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "uniform_sample_space",
+      "inclusion_exclusion",
+      "independence_product",
+      "conditional_probability_chain",
+      "bayes_application",
+      "independence_vs_disjoint"
+    ],
+    "prerequisites_to_check_before_teaching": ["fractions_algebraic"],
+    "tutor_pacing_hint": "Use Venn diagrams aggressively for visualizing union/intersection. Drill Bayes with a concrete example (medical test) early; the formula alone is opaque.",
+    "coach_drill_skills": [
+      "uniform_sample_space",
+      "inclusion_exclusion",
+      "bayes_application"
+    ],
+    "diagnostic_signals": {
+      "if_learner_confuses_disjoint_independent": "Draw both on a Venn: disjoint = no overlap; independent = overlap proportional to areas.",
+      "if_learner_skips_prior_in_bayes": "Walk through the base-rate fallacy explicitly."
+    },
+    "next_recommended": ["combinatorics", "distributions"]
+  }
+}

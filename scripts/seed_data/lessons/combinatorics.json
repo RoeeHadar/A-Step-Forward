@@ -1,0 +1,162 @@
+{
+  "concept_id": "combinatorics",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["4pt", "5pt"],
+  "title_en": "Combinatorics — Counting Principles, Permutations, Combinations",
+  "title_he": "קומבינטוריקה — עקרונות ספירה, חליפות וצירופים",
+  "summary_en": "Combinatorics counts arrangements: the multiplication and addition principles, permutations (order matters), combinations (order doesn't), and binomial coefficients.",
+  "summary_he": "קומבינטוריקה סופרת סידורים: עקרונות הכפל והחיבור, חליפות (סדר חשוב), צירופים (סדר לא חשוב) ומקדמי בינום.",
+  "est_minutes": 15,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Why count?",
+      "title_he": "למה לספור?",
+      "body_en_md": "Many probability problems boil down to: 'how many ways can this happen?' Combinatorics gives systematic counting tools.\n\n**Two basic principles:**\n\n### Multiplication principle\n\nIf task A can be done in $m$ ways and task B in $n$ ways (independently), the combined task can be done in $m \\cdot n$ ways.\n\n*Example:* 3 shirts × 4 pants = 12 outfits.\n\n### Addition principle\n\nIf task A can be done in $m$ ways OR task B in $n$ ways (mutually exclusive), there are $m + n$ ways.\n\n*Example:* choose a math book (5 options) OR a physics book (3 options) = 8 ways.",
+      "body_he_md": "הרבה בעיות הסתברות מסתכמות ב'בכמה דרכים זה יכול לקרות?'.\n\n**שני עקרונות יסוד:**\n\n### עקרון הכפל\n\nאם משימה A ב-$m$ דרכים ו-B ב-$n$ דרכים (אי-תלויות), יחד ב-$m \\cdot n$ דרכים.\n\n*דוגמה:* 3 חולצות × 4 מכנסיים = 12 תלבושות.\n\n### עקרון החיבור\n\nאם משימה A ב-$m$ דרכים **או** B ב-$n$ דרכים (זרות), אז $m + n$ דרכים."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Permutations and combinations",
+      "title_he": "חליפות וצירופים",
+      "body_en_md": "### Factorial\n\n$n! = n \\cdot (n-1) \\cdot (n-2) \\cdots 2 \\cdot 1$. $0! = 1$ by convention.\n\nThis counts the number of orderings of $n$ distinct objects.\n\n### Permutations (order matters)\n\nChoose $k$ objects from $n$ distinct objects in a specific order:\n\n$$P(n, k) = \\frac{n!}{(n-k)!} = n(n-1)\\cdots(n-k+1).$$\n\n*Example:* 5 runners, gold/silver/bronze medals: $P(5, 3) = 5 \\cdot 4 \\cdot 3 = 60$ ways.\n\n### Combinations (order doesn't matter)\n\nChoose $k$ objects from $n$:\n\n$$\\binom{n}{k} = \\frac{n!}{k! \\, (n-k)!}.$$\n\nThe division by $k!$ removes the $k!$ orderings of each subset.\n\n*Example:* choose 3 players from 10 for a committee: $\\binom{10}{3} = \\frac{10!}{3! \\, 7!} = \\frac{10 \\cdot 9 \\cdot 8}{6} = 120$.\n\n### Useful identities\n\n- $\\binom{n}{0} = \\binom{n}{n} = 1$.\n- $\\binom{n}{k} = \\binom{n}{n-k}$ (symmetry).\n- $\\binom{n}{k} + \\binom{n}{k+1} = \\binom{n+1}{k+1}$ (Pascal's rule).\n- **Binomial theorem:** $(a+b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^k$.",
+      "body_he_md": "### עצרת\n\n$n! = n \\cdot (n-1) \\cdots 1$, $0! = 1$.\n\nסופרת סידורים של $n$ עצמים שונים.\n\n### חליפות (סדר חשוב)\n\n$$P(n, k) = \\frac{n!}{(n-k)!}.$$\n\n*דוגמה:* 5 רצים, מדליות זהב/כסף/ארד: $P(5, 3) = 60$.\n\n### צירופים (סדר לא חשוב)\n\n$$\\binom{n}{k} = \\frac{n!}{k! \\, (n-k)!}.$$\n\n*דוגמה:* בחירת 3 שחקנים מ-10: $\\binom{10}{3} = 120$.\n\n### זהויות שימושיות\n\n- $\\binom{n}{0} = \\binom{n}{n} = 1$.\n- $\\binom{n}{k} = \\binom{n}{n-k}$.\n- $\\binom{n}{k} + \\binom{n}{k+1} = \\binom{n+1}{k+1}$ (פסקל).\n- **בינום ניוטון:** $(a+b)^n = \\sum_{k} \\binom{n}{k} a^{n-k} b^k$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: poker hands",
+      "title_he": "דוגמה פתורה: ידיים בפוקר",
+      "body_en_md": "From a 52-card deck, how many 5-card hands contain exactly 2 aces?\n\n**Strategy: multiplication principle.**\n\n**Step 1.** Choose 2 aces from 4: $\\binom{4}{2} = 6$.\n\n**Step 2.** Choose 3 non-aces from 48: $\\binom{48}{3} = \\frac{48 \\cdot 47 \\cdot 46}{6} = 17296$.\n\n**Step 3.** Multiply: $6 \\cdot 17296 = 103776$ hands.\n\n**Sanity:** total 5-card hands = $\\binom{52}{5} = 2598960$, so $P(\\text{exactly 2 aces}) = 103776/2598960 \\approx 0.04$.",
+      "body_he_md": "מחפיסה של 52 קלפים, כמה ידיים של 5 קלפים מכילות בדיוק 2 אסים?\n\n**אסטרטגיה: עקרון הכפל.**\n\n**שלב 1.** בחירת 2 אסים מ-4: $\\binom{4}{2} = 6$.\n\n**שלב 2.** בחירת 3 קלפים שאינם אסים מתוך 48: $\\binom{48}{3} = 17296$.\n\n**שלב 3.** מכפלה: $6 \\cdot 17296 = 103776$ ידיים."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Order vs. no order confusion.** 'Pick a president and vice-president' = permutation. 'Pick a committee of 2' = combination.\n2. **Double-counting.** When using multiplication, ensure each outcome is counted exactly once.\n3. **Forgetting to subtract impossible cases.** 'At least one' problems: easier as $1 - P(\\text{none})$.\n4. **Repetition allowed vs. not.** With repetition ($n^k$) is different from without ($P(n,k)$).\n5. **$\\binom{n}{k}$ vs. $n^k$.** Number of subsets vs. number of sequences. Very different!",
+      "body_he_md": "1. **סדר vs. אי-סדר.** 'נשיא וסגן' = חליפה. 'ועדה של 2' = צירוף.\n2. **ספירה כפולה.** במכפלה — כל תוצאה חייבת להיספר בדיוק פעם אחת.\n3. **'לפחות אחד'.** קל יותר כ-$1 - P(\\text{אף אחד לא})$.\n4. **עם חזרות vs. בלי.** עם ($n^k$) שונה מבלי ($P(n,k)$).\n5. **$\\binom{n}{k}$ vs. $n^k$.** מספר תת-קבוצות vs. מספר סדרות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- **Multiplication**: $m \\cdot n$ for 'A AND B'.\n- **Addition**: $m + n$ for disjoint 'A OR B'.\n- **Permutation**: $P(n,k) = n!/(n-k)!$ — order matters.\n- **Combination**: $\\binom{n}{k} = n!/(k!(n-k)!)$ — order doesn't.\n- **Binomial:** $(a+b)^n = \\sum \\binom{n}{k} a^{n-k} b^k$.",
+      "body_he_md": "- **כפל**: $m \\cdot n$ עבור 'A וגם B'.\n- **חיבור**: $m + n$ עבור 'A או B' זרות.\n- **חליפה**: $P(n,k) = n!/(n-k)!$ — סדר חשוב.\n- **צירוף**: $\\binom{n}{k} = n!/(k!(n-k)!)$ — סדר לא חשוב.\n- **בינום:** $(a+b)^n = \\sum \\binom{n}{k} a^{n-k} b^k$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\binom{6}{2}$.",
+      "stem_he": "חשבו $\\binom{6}{2}$.",
+      "correct_answer": "15",
+      "explanation_en": "$\\binom{6}{2} = \\frac{6 \\cdot 5}{2} = 15$.",
+      "explanation_he": "$\\binom{6}{2} = \\frac{6 \\cdot 5}{2} = 15$.",
+      "skill_atoms": ["binomial_coefficient_compute"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "How many different 4-digit PINs are there (digits 0–9, repetition allowed)?",
+      "stem_he": "כמה קודי PIN בני 4 ספרות שונים יש (ספרות 0–9, חזרות מותרות)?",
+      "options_en": ["$5040$", "$10000$", "$10^4$ = 10 000", "$10!$"],
+      "options_he": ["$5040$", "$10000$", "$10^4$ = 10 000", "$10!$"],
+      "correct_index": 2,
+      "explanation_en": "4 independent digits, each 10 choices: $10^4 = 10000$.",
+      "explanation_he": "4 ספרות, כל אחת 10 אפשרויות: $10^4 = 10000$.",
+      "skill_atoms": ["multiplication_principle"]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "How many ways to arrange the letters of 'MATH'?",
+      "stem_he": "בכמה דרכים אפשר לסדר את אותיות המילה 'MATH'?",
+      "options_en": ["$4$", "$16$", "$24$", "$256$"],
+      "options_he": ["$4$", "$16$", "$24$", "$256$"],
+      "correct_index": 2,
+      "explanation_en": "$4! = 24$ orderings of 4 distinct letters.",
+      "explanation_he": "$4! = 24$ סידורים של 4 אותיות שונות.",
+      "skill_atoms": ["permutation_distinct"]
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "A team of 4 is chosen from 9 people. In how many ways? Then, in how many ways if one specific person MUST be on the team?",
+      "stem_he": "בוחרים צוות של 4 מתוך 9 אנשים. בכמה דרכים? וכמה אם אדם מסוים **חייב** להיכלל?",
+      "rubric_en": "Full credit (3/3): $\\binom{9}{4} = 126$; with one fixed: choose 3 more from 8 = $\\binom{8}{3} = 56$.\nPartial (2/3): one correct.\nMinimal (1/3): correct formula stated.",
+      "rubric_he": "ציון מלא (3/3): $\\binom{9}{4} = 126$; עם אדם קבוע: $\\binom{8}{3} = 56$.\nחלקי (2/3): אחד נכון.\nמינימלי (1/3): נוסחה נכונה.",
+      "explanation_en": "Total: $\\binom{9}{4} = 126$. With a fixed member: select the other 3 from remaining 8 = $\\binom{8}{3} = 56$.",
+      "explanation_he": "סה\"כ: $\\binom{9}{4} = 126$. עם חבר קבוע: $\\binom{8}{3} = 56$.",
+      "skill_atoms": ["combination_compute", "case_split"]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "From a class of 12 boys and 8 girls, a committee of 5 with EXACTLY 2 girls is formed. How many ways?",
+      "stem_he": "מכיתה עם 12 בנים ו-8 בנות בוחרים ועדה של 5 עם **בדיוק** 2 בנות. בכמה דרכים?",
+      "options_en": ["$\\binom{20}{5}$", "$\\binom{8}{2} \\cdot \\binom{12}{3}$", "$\\binom{8}{2} + \\binom{12}{3}$", "$\\binom{12}{2} \\cdot \\binom{8}{3}$"],
+      "options_he": ["$\\binom{20}{5}$", "$\\binom{8}{2} \\cdot \\binom{12}{3}$", "$\\binom{8}{2} + \\binom{12}{3}$", "$\\binom{12}{2} \\cdot \\binom{8}{3}$"],
+      "correct_index": 1,
+      "explanation_en": "Choose 2 girls from 8: $\\binom{8}{2}$. Choose 3 boys from 12: $\\binom{12}{3}$. Multiply: $\\binom{8}{2}\\binom{12}{3} = 28 \\cdot 220 = 6160$.",
+      "explanation_he": "בחירת 2 בנות מ-8: $\\binom{8}{2}$. בחירת 3 בנים מ-12: $\\binom{12}{3}$. מכפלה: $28 \\cdot 220 = 6160$.",
+      "skill_atoms": ["combination_constrained"]
+    },
+    {
+      "ord": 6,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the coefficient of $x^3$ in the expansion of $(2x + 1)^5$.",
+      "stem_he": "מצאו את המקדם של $x^3$ בפיתוח של $(2x + 1)^5$.",
+      "rubric_en": "Full credit (4/4): general term $\\binom{5}{k}(2x)^{5-k} \\cdot 1^k$, want $5-k = 3 \\Rightarrow k = 2$. Coefficient = $\\binom{5}{2} \\cdot 2^3 = 10 \\cdot 8 = 80$.\nPartial (3/4): correct $k$, arithmetic error.\nMinimal (2/4): binomial theorem written correctly.",
+      "rubric_he": "ציון מלא (4/4): איבר כללי $\\binom{5}{k}(2x)^{5-k}$, מבקשים $5-k=3 \\Rightarrow k=2$. מקדם = $\\binom{5}{2} \\cdot 2^3 = 80$.\nחלקי (3/4): $k$ נכון, טעות חישוב.\nמינימלי (2/4): כתיבת בינום.",
+      "explanation_en": "Coefficient of $x^3 = \\binom{5}{2} \\cdot 2^3 \\cdot 1^2 = 10 \\cdot 8 = 80$.",
+      "explanation_he": "המקדם של $x^3 = \\binom{5}{2} \\cdot 2^3 = 80$.",
+      "skill_atoms": ["binomial_theorem_apply"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Multiplication principle for 'AND'; addition for disjoint 'OR'.",
+      "Permutation: order matters; Combination: order doesn't.",
+      "$\\binom{n}{k} = n!/(k!(n-k)!)$; symmetric in $k \\leftrightarrow n-k$.",
+      "Binomial theorem: $(a+b)^n = \\sum \\binom{n}{k} a^{n-k} b^k$.",
+      "'At least one' problems: complement strategy."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Use $n^k$ for committee selection",
+        "correction": "$n^k$ counts sequences with repetition; committees (subsets) use $\\binom{n}{k}$.",
+        "detect_phrase_en": "committee n^k",
+        "detect_phrase_he": "ועדה n בחזקת"
+      },
+      {
+        "wrong": "$P(n, k) = \\binom{n}{k}$",
+        "correction": "$P(n,k) = k! \\binom{n}{k}$ — permutation is $k!$ times the combination.",
+        "detect_phrase_en": "permutation combination same",
+        "detect_phrase_he": "חליפה צירוף שווים"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "multiplication_principle",
+      "permutation_distinct",
+      "combination_compute",
+      "binomial_theorem_apply",
+      "case_split"
+    ],
+    "prerequisites_to_check_before_teaching": ["arithmetic"],
+    "tutor_pacing_hint": "Drill order vs. no-order with concrete examples (committee vs. president/vp). Use small cases first ($\\binom{4}{2} = 6$ by listing) before formulas.",
+    "coach_drill_skills": ["combination_compute", "permutation_distinct", "binomial_theorem_apply"],
+    "diagnostic_signals": {
+      "if_learner_uses_n_pow_k_for_subsets": "Distinguish: $n^k$ = sequences with repetition; $\\binom{n}{k}$ = subsets.",
+      "if_learner_skips_division_by_k_factorial": "Remind: subsets don't care about order, so divide by $k!$."
+    },
+    "next_recommended": ["probability_basic", "distributions"]
+  }
+}

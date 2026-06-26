@@ -1,0 +1,188 @@
+{
+  "concept_id": "la_vector_spaces",
+  "subject": "math",
+  "level": "university",
+  "math_track": [],
+  "title_en": "Vector Spaces — Span, Basis, Dimension",
+  "title_he": "מרחבי וקטורים — קבוצת פרישה, בסיס, מימד",
+  "summary_en": "A vector space generalizes ℝ². The triple (span, linear independence, basis) captures what 'building blocks' are needed to describe every vector.",
+  "summary_he": "מרחב וקטורי מכליל את ℝ². השלשה (פרישה, אי-תלות לינארית, בסיס) קובעת אילו 'אבני בניין' נחוצות לתיאור כל וקטור.",
+  "est_minutes": 18,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What is a vector space",
+      "title_he": "מהו מרחב וקטורי",
+      "body_en_md": "A **vector space** $V$ over $\\mathbb{R}$ is a set closed under addition and scalar multiplication, satisfying 8 axioms (associativity, identity, etc.).\n\nClassic examples: $\\mathbb{R}^n$, the set of $m \\times n$ matrices, the set of polynomials of degree $\\le n$, the set of continuous functions on $[a,b]$. Each looks different but plays by the same rules — that's the power of abstraction.\n\nThe central question: **how many linearly independent vectors do you need to describe everything in $V$?** That number is the **dimension**.",
+      "body_he_md": "**מרחב וקטורי** $V$ מעל $\\mathbb{R}$ הוא קבוצה סגורה תחת חיבור וכפל בסקלר, המקיימת 8 אקסיומות.\n\nדוגמאות: $\\mathbb{R}^n$, מטריצות $m \\times n$, פולינומים ממעלה $\\le n$, פונקציות רציפות. כולן נראות שונות אבל מצייתות לאותם כללים — זו עוצמת ההפשטה.\n\nהשאלה המרכזית: **כמה וקטורים בלתי-תלויים לינארית צריך כדי לתאר את כל $V$?** המספר הזה הוא **המימד**."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Span, independence, basis, dimension",
+      "title_he": "פרישה, אי-תלות, בסיס, מימד",
+      "body_en_md": "### Linear combination\n\nGiven $v_1, \\ldots, v_k$ in $V$, a **linear combination** is $c_1 v_1 + c_2 v_2 + \\ldots + c_k v_k$ with scalars $c_i$.\n\n### Span\n\nThe **span** of $\\{v_1, \\ldots, v_k\\}$ is the SET of all linear combinations. Notation: $\\text{span}(v_1, \\ldots, v_k)$.\n\nExample: $\\text{span}\\bigl((1,0), (0,1)\\bigr) = \\mathbb{R}^2$.\n\n### Linear independence\n\n$v_1, \\ldots, v_k$ are **linearly independent** if the only solution to $c_1 v_1 + \\ldots + c_k v_k = 0$ is $c_1 = \\ldots = c_k = 0$.\n\nEquivalently: NO vector can be written as a combination of the others.\n\nIf NOT independent ⇒ **linearly dependent**: there's a non-trivial combination summing to zero.\n\n### Basis\n\nA **basis** of $V$ is a set of vectors that is **both**:\n1. **Spans** $V$.\n2. **Linearly independent**.\n\nThe **standard basis** of $\\mathbb{R}^n$ is $e_1 = (1,0,\\ldots,0), e_2 = (0,1,0,\\ldots,0), \\ldots, e_n = (0,\\ldots,0,1)$.\n\n### Dimension\n\n**All bases of $V$ have the same number of vectors.** That number is $\\dim V$.\n\n- $\\dim \\mathbb{R}^n = n$.\n- $\\dim P_n$ (polynomials of degree $\\le n$) $= n+1$.\n- $\\dim M_{m \\times n} = mn$.\n\n### Practical test for independence (matrices)\n\nPut vectors as columns of a matrix $A$. They are linearly independent iff $\\text{rank}(A)$ equals the number of vectors. For $n$ vectors in $\\mathbb{R}^n$, independent ⇔ $\\det A \\ne 0$.\n\n### Subspace\n\nA **subspace** $W \\subseteq V$ is a subset that is itself a vector space (closed under $+$ and scalar mult, contains $\\vec{0}$).\n\nExample: a line through origin in $\\mathbb{R}^2$ is a 1-D subspace; a plane through origin in $\\mathbb{R}^3$ is a 2-D subspace.",
+      "body_he_md": "### צירוף לינארי\n\nבהינתן $v_1, \\ldots, v_k$ ב-$V$, **צירוף לינארי** הוא $c_1 v_1 + \\ldots + c_k v_k$.\n\n### פרישה\n\n**פרישה** של $\\{v_1, \\ldots, v_k\\}$ היא קבוצת כל הצירופים הלינאריים.\n\nדוגמה: $\\text{span}\\bigl((1,0), (0,1)\\bigr) = \\mathbb{R}^2$.\n\n### אי-תלות לינארית\n\nוקטורים $v_1, \\ldots, v_k$ הם **בלתי-תלויים לינארית** אם הפתרון היחיד ל-$c_1 v_1 + \\ldots + c_k v_k = 0$ הוא $c_1 = \\ldots = c_k = 0$.\n\nשווה ערך: אף וקטור אינו ניתן לכתיבה כצירוף של האחרים.\n\nאם תלויים: יש צירוף לא-טריוויאלי השווה לאפס.\n\n### בסיס\n\n**בסיס** של $V$ הוא קבוצה ש-**שתיים**:\n1. **פורשת** $V$.\n2. **בלתי-תלויה לינארית**.\n\n**הבסיס הסטנדרטי** של $\\mathbb{R}^n$: $e_1 = (1,0,\\ldots,0), \\ldots$\n\n### מימד\n\n**לכל הבסיסים של $V$ אותו מספר וקטורים.** המספר הזה הוא $\\dim V$.\n\n- $\\dim \\mathbb{R}^n = n$.\n- $\\dim P_n = n+1$.\n- $\\dim M_{m \\times n} = mn$.\n\n### מבחן מעשי לאי-תלות (מטריצות)\n\nשמים וקטורים כעמודות של מטריצה $A$. בלתי-תלויים ⇔ $\\text{rank}(A) = $ מספר הוקטורים. ל-$n$ וקטורים ב-$\\mathbb{R}^n$: ⇔ $\\det A \\ne 0$.\n\n### תת-מרחב\n\n**תת-מרחב** $W \\subseteq V$ הוא תת-קבוצה שהיא בעצמה מרחב וקטורי.\n\nדוגמה: ישר דרך הראשית ב-$\\mathbb{R}^2$ הוא תת-מרחב חד-מימדי."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: are these vectors a basis?",
+      "title_he": "דוגמה פתורה: האם הוקטורים בסיס?",
+      "body_en_md": "Check if $v_1 = (1, 2, 3)$, $v_2 = (0, 1, 4)$, $v_3 = (2, 5, 10)$ form a basis of $\\mathbb{R}^3$.\n\n**Three vectors in $\\mathbb{R}^3$:** they're a basis iff linearly independent iff $\\det \\ne 0$.\n\n$$A = \\begin{pmatrix} 1 & 0 & 2 \\\\ 2 & 1 & 5 \\\\ 3 & 4 & 10 \\end{pmatrix}.$$\n\nExpand along the first row:\n\n$$\\det A = 1 \\cdot (10 - 20) - 0 + 2 \\cdot (8 - 3) = -10 + 10 = 0.$$\n\n**$\\det = 0$** ⇒ **linearly dependent** ⇒ **NOT** a basis.\n\nLet's verify by finding the dependency: $v_3 = 2 v_1 + v_2$? $2(1,2,3) + (0,1,4) = (2, 5, 10)$ ✓ — yes!",
+      "body_he_md": "בדקו אם $v_1 = (1, 2, 3)$, $v_2 = (0, 1, 4)$, $v_3 = (2, 5, 10)$ מהווים בסיס של $\\mathbb{R}^3$.\n\n**שלושה וקטורים ב-$\\mathbb{R}^3$:** מהווים בסיס ⇔ בלתי-תלויים ⇔ $\\det \\ne 0$.\n\n$$\\det \\begin{pmatrix} 1 & 0 & 2 \\\\ 2 & 1 & 5 \\\\ 3 & 4 & 10 \\end{pmatrix} = 1 \\cdot (10 - 20) - 0 + 2 \\cdot (8 - 3) = 0.$$\n\n**$\\det = 0$** ⇒ **תלויים** ⇒ **לא** בסיס.\n\nאימות: $v_3 = 2 v_1 + v_2$ ✓."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing span with basis.** A spanning set might be too BIG (linearly dependent); a basis is minimal.\n2. **Counting wrong.** $n$ vectors in $\\mathbb{R}^n$ are a basis IFF independent. Fewer than $n$ never spans; more than $n$ always dependent.\n3. **Forgetting zero vector in subspaces.** Every subspace contains $\\vec{0}$.\n4. **Linear dependence = parallel.** True for 2 vectors, false for 3+. Three vectors in $\\mathbb{R}^3$ can be pairwise non-parallel yet dependent.\n5. **Span vs subspace confusion.** $\\text{span}(S)$ is ALWAYS a subspace, even if $S$ is just one or two vectors.",
+      "body_he_md": "1. **בלבול בין פרישה לבסיס.** קבוצה פורשת יכולה להיות גדולה מדי (תלויה); בסיס מינימלי.\n2. **ספירה שגויה.** $n$ וקטורים ב-$\\mathbb{R}^n$ הם בסיס ⇔ בלתי-תלויים. פחות מ-$n$ לעולם לא פורש; יותר מ-$n$ תמיד תלוי.\n3. **שכחת וקטור האפס בתתי-מרחבים.** כל תת-מרחב מכיל $\\vec{0}$.\n4. **אי-תלות = מקבילים.** נכון לשני וקטורים, שגוי ל-3+.\n5. **בלבול פרישה ותת-מרחב.** $\\text{span}(S)$ תמיד תת-מרחב."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Vector space: closed under $+$ and scalar mult.\n- Span = all linear combinations.\n- Independent: only trivial combination = 0.\n- Basis: spans + independent.\n- Dimension: number of vectors in any basis.\n- For $n$ vectors in $\\mathbb{R}^n$: basis ⇔ $\\det \\ne 0$.",
+      "body_he_md": "- מרחב וקטורי: סגור תחת $+$ וכפל בסקלר.\n- פרישה = כל הצירופים הלינאריים.\n- בלתי-תלוי: רק הצירוף הטריוויאלי = 0.\n- בסיס: פורש + בלתי-תלוי.\n- מימד: מספר וקטורים בכל בסיס.\n- ל-$n$ וקטורים ב-$\\mathbb{R}^n$: בסיס ⇔ $\\det \\ne 0$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "What is $\\dim \\mathbb{R}^5$?",
+      "stem_he": "מה $\\dim \\mathbb{R}^5$?",
+      "correct_answer": "5",
+      "explanation_en": "Standard basis has 5 vectors $e_1, \\ldots, e_5$.",
+      "explanation_he": "הבסיס הסטנדרטי בעל 5 וקטורים.",
+      "skill_atoms": ["dimension_rn"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Are $(1, 0)$ and $(2, 0)$ linearly independent in $\\mathbb{R}^2$?",
+      "stem_he": "האם $(1, 0)$ ו-$(2, 0)$ בלתי-תלויים לינארית ב-$\\mathbb{R}^2$?",
+      "options_en": ["Yes", "No — they are parallel (one is a multiple of the other)", "Only if scaled", "Cannot determine"],
+      "options_he": ["כן", "לא — מקבילים (אחד כפולה של השני)", "רק אם משנים גודל", "לא ניתן לקבוע"],
+      "correct_index": 1,
+      "explanation_en": "$(2, 0) = 2 \\cdot (1, 0)$ — they're proportional, hence dependent.",
+      "explanation_he": "$(2, 0) = 2 \\cdot (1, 0)$ — מקבילים, ולכן תלויים.",
+      "skill_atoms": ["linear_independence_2_vectors"]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which is the dimension of $P_3$ = polynomials of degree at most 3?",
+      "stem_he": "מהו המימד של $P_3$ = פולינומים ממעלה לכל היותר 3?",
+      "options_en": ["$3$", "$4$", "$\\infty$", "$1$"],
+      "options_he": ["$3$", "$4$", "$\\infty$", "$1$"],
+      "correct_index": 1,
+      "explanation_en": "Basis: $\\{1, x, x^2, x^3\\}$ — 4 polynomials. $\\dim P_n = n + 1$.",
+      "explanation_he": "בסיס: $\\{1, x, x^2, x^3\\}$ — 4 פולינומים. $\\dim P_n = n + 1$.",
+      "skill_atoms": ["dimension_polynomial_space"]
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Show that $v_1 = (1, 1, 0)$, $v_2 = (0, 1, 1)$, $v_3 = (1, 0, 1)$ form a basis of $\\mathbb{R}^3$.",
+      "stem_he": "הראו ש-$v_1 = (1, 1, 0)$, $v_2 = (0, 1, 1)$, $v_3 = (1, 0, 1)$ מהווים בסיס של $\\mathbb{R}^3$.",
+      "rubric_en": "Full credit (3/3): notes 3 vectors in $\\mathbb{R}^3$, computes $\\det \\begin{pmatrix} 1 & 0 & 1 \\\\ 1 & 1 & 0 \\\\ 0 & 1 & 1 \\end{pmatrix} = 1(1) - 0 + 1(1) = 2 \\ne 0$, concludes linearly independent and hence basis.\nPartial (2/3): correct det computation but missing conclusion.\nMinimal (1/3): writes the matrix only.",
+      "rubric_he": "ציון מלא (3/3): מציין 3 וקטורים ב-$\\mathbb{R}^3$, מחשב $\\det = 2 \\ne 0$, מסיק בלתי-תלויים ולכן בסיס.\nחלקי (2/3): חישוב נכון אבל ללא מסקנה.\nמינימלי (1/3): רק כותב מטריצה.",
+      "explanation_en": "Three vectors in $\\mathbb{R}^3$. Form matrix with them as columns. $\\det = 1(1 \\cdot 1 - 0) - 0 + 1(1 \\cdot 1 - 0) = 1 + 1 = 2 \\ne 0$. Therefore independent ⇒ basis.",
+      "explanation_he": "שלושה וקטורים ב-$\\mathbb{R}^3$. $\\det = 2 \\ne 0$ ⇒ בלתי-תלויים ⇒ בסיס.",
+      "skill_atoms": ["check_basis_via_determinant"]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Which set is NOT a subspace of $\\mathbb{R}^2$?",
+      "stem_he": "איזו קבוצה אינה תת-מרחב של $\\mathbb{R}^2$?",
+      "options_en": [
+        "$\\{(x, y) : y = 2x\\}$",
+        "$\\{(0, 0)\\}$",
+        "$\\{(x, y) : x + y = 1\\}$",
+        "$\\mathbb{R}^2$ itself"
+      ],
+      "options_he": [
+        "$\\{(x, y) : y = 2x\\}$",
+        "$\\{(0, 0)\\}$",
+        "$\\{(x, y) : x + y = 1\\}$",
+        "$\\mathbb{R}^2$ עצמו"
+      ],
+      "correct_index": 2,
+      "explanation_en": "$\\{x + y = 1\\}$ doesn't contain $(0, 0)$ (since $0 + 0 = 0 \\ne 1$). Subspaces MUST contain the zero vector. The line passes through $(1,0)$ and $(0,1)$ but not the origin.",
+      "explanation_he": "$\\{x + y = 1\\}$ לא מכילה $(0, 0)$. תת-מרחב חייב להכיל וקטור האפס.",
+      "skill_atoms": ["subspace_test"]
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "If $v_1, v_2, v_3 \\in \\mathbb{R}^2$, the set $\\{v_1, v_2, v_3\\}$ is:",
+      "stem_he": "אם $v_1, v_2, v_3 \\in \\mathbb{R}^2$, הקבוצה $\\{v_1, v_2, v_3\\}$:",
+      "options_en": [
+        "Always linearly independent",
+        "Always linearly dependent",
+        "Always a basis of $\\mathbb{R}^2$",
+        "Depends on the specific vectors"
+      ],
+      "options_he": [
+        "תמיד בלתי-תלויה",
+        "תמיד תלויה",
+        "תמיד בסיס של $\\mathbb{R}^2$",
+        "תלוי בוקטורים הספציפיים"
+      ],
+      "correct_index": 1,
+      "explanation_en": "More vectors than dimension ⇒ always dependent. (3 vectors in 2-D space: at least one is a combination of the others.)",
+      "explanation_he": "יותר וקטורים מהמימד ⇒ תמיד תלויים. (3 וקטורים במרחב דו-מימדי.)",
+      "skill_atoms": ["dimension_argument"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Span = set of all linear combinations.",
+      "Independent ⇔ only trivial combination is 0.",
+      "Basis = spans AND independent.",
+      "Dimension = #vectors in any basis (well-defined).",
+      "For $n$ vectors in $\\mathbb{R}^n$: basis ⇔ $\\det \\ne 0$."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Independence means pairwise non-parallel",
+        "correction": "For 2 vectors yes; for 3+ in higher dimensions, can be pairwise non-parallel yet dependent.",
+        "detect_phrase_en": "independence pairwise",
+        "detect_phrase_he": "אי-תלות זוגית"
+      },
+      {
+        "wrong": "Any spanning set is a basis",
+        "correction": "Basis must ALSO be independent. A spanning set could be redundant.",
+        "detect_phrase_en": "spanning is basis",
+        "detect_phrase_he": "פורש זה בסיס"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "dimension_rn",
+      "linear_independence_2_vectors",
+      "dimension_polynomial_space",
+      "check_basis_via_determinant",
+      "subspace_test",
+      "dimension_argument"
+    ],
+    "prerequisites_to_check_before_teaching": ["la_matrices", "la_vectors"],
+    "tutor_pacing_hint": "Use $\\mathbb{R}^2$ pictures (arrows from origin) as the recurring intuition pump. Then port the same ideas to polynomial / matrix spaces by analogy.",
+    "coach_drill_skills": [
+      "linear_independence_2_vectors",
+      "check_basis_via_determinant",
+      "subspace_test"
+    ],
+    "diagnostic_signals": {
+      "if_learner_confuses_span_basis": "Show a spanning set with too many vectors; remove the redundant one to recover a basis.",
+      "if_learner_forgets_zero_in_subspace": "First test for any subspace candidate: does it contain $(0, 0, \\ldots, 0)$?"
+    },
+    "next_recommended": ["la_eigenvalues", "la_orthogonality"]
+  }
+}

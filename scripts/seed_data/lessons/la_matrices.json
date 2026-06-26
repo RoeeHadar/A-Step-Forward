@@ -1,0 +1,198 @@
+{
+  "concept_id": "la_matrices",
+  "subject": "math",
+  "level": "university",
+  "math_track": [],
+  "title_en": "Matrices and Linear Systems",
+  "title_he": "מטריצות ומערכות לינאריות",
+  "summary_en": "A matrix is a rectangular array of numbers. Matrix multiplication composes linear transformations; Gaussian elimination solves linear systems systematically.",
+  "summary_he": "מטריצה היא מערך מלבני של מספרים. כפל מטריצות מרכיב טרנספורמציות לינאריות; חילוץ גאוס פותר מערכות לינאריות באופן שיטתי.",
+  "est_minutes": 20,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Why matrices",
+      "title_he": "למה מטריצות",
+      "body_en_md": "A **matrix** $A$ of size $m \\times n$ is a grid of numbers with $m$ rows and $n$ columns. We use matrices to:\n\n- Represent and solve **linear systems** ($Ax = b$).\n- Encode **linear transformations** (rotations, scalings, projections).\n- Store data (tables, images, graphs).\n\nIn high school, you solved $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ by substitution. With $A = \\begin{pmatrix} 2 & 3 \\\\ 1 & -1 \\end{pmatrix}$ and $b = \\begin{pmatrix} 7 \\\\ 1 \\end{pmatrix}$ this becomes $Ax = b$ — and matrix theory gives a unified method that scales to thousands of equations.",
+      "body_he_md": "**מטריצה** $A$ בגודל $m \\times n$ היא רשת של מספרים עם $m$ שורות ו-$n$ עמודות. משתמשים במטריצות:\n\n- ייצוג ופתרון **מערכות לינאריות** ($Ax = b$).\n- קידוד **טרנספורמציות לינאריות** (סיבובים, שינויי גודל, השלכות).\n- אחסון נתונים.\n\nבתיכון פתרנו $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ בהצבה. עם $A = \\begin{pmatrix} 2 & 3 \\\\ 1 & -1 \\end{pmatrix}$ ו-$b = \\begin{pmatrix} 7 \\\\ 1 \\end{pmatrix}$ זה הופך ל-$Ax = b$ — תיאוריית המטריצות נותנת שיטה אחידה שמתרחבת לאלפי משוואות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Operations + Gaussian elimination",
+      "title_he": "פעולות + חילוץ גאוס",
+      "body_en_md": "### Matrix operations\n\n**Addition / scalar mult** are entry-wise: $(A + B)_{ij} = a_{ij} + b_{ij}$.\n\n**Matrix multiplication** $AB$ requires $A$ to be $m \\times n$ and $B$ to be $n \\times p$. Result is $m \\times p$:\n\n$$(AB)_{ij} = \\sum_{k=1}^n a_{ik} b_{kj}.$$\n\n*Row $i$ of $A$ dot column $j$ of $B$.*\n\n**Important:** $AB \\ne BA$ in general (non-commutative).\n\n**Identity matrix** $I$: $1$'s on diagonal, $0$'s elsewhere. $AI = IA = A$.\n\n**Transpose** $A^T$: rows become columns. $(A^T)_{ij} = a_{ji}$.\n\n### Linear systems → augmented matrix\n\nSystem $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ becomes:\n\n$$\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right].$$\n\n### Elementary row operations (preserve solutions)\n\n1. **Swap** two rows.\n2. **Scale** a row by a nonzero constant.\n3. **Add a multiple** of one row to another.\n\n### Gaussian elimination\n\nRepeatedly apply row operations to reach **row-echelon form** (zeros below the diagonal). Then **back-substitute**.\n\n**Three possible outcomes:**\n1. **Unique solution** — full rank.\n2. **No solution** — a row reduces to $[0, 0, \\ldots, 0 \\,|\\, c]$ with $c \\ne 0$ (contradiction).\n3. **Infinitely many solutions** — a free variable appears.\n\n### Inverse matrix\n\nFor square $A$, $A^{-1}$ (if it exists) satisfies $AA^{-1} = A^{-1}A = I$. When $A^{-1}$ exists, $Ax = b$ has the unique solution $x = A^{-1}b$.\n\nFor $2 \\times 2$: $A = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} \\Rightarrow A^{-1} = \\dfrac{1}{ad - bc} \\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$ (if $ad - bc \\ne 0$).",
+      "body_he_md": "### פעולות מטריצה\n\n**חיבור / כפל בסקלר** איבר-איבר: $(A + B)_{ij} = a_{ij} + b_{ij}$.\n\n**כפל מטריצות** $AB$ דורש ש-$A$ יהיה $m \\times n$ ו-$B$ יהיה $n \\times p$. תוצאה $m \\times p$:\n\n$$(AB)_{ij} = \\sum_{k=1}^n a_{ik} b_{kj}.$$\n\n**חשוב:** $AB \\ne BA$ בכלליות.\n\n**מטריצת יחידה** $I$: $1$'ים באלכסון, $0$'ים בשאר. $AI = IA = A$.\n\n**שיחלוף** $A^T$: שורות הופכות לעמודות.\n\n### מערכות לינאריות → מטריצה מורחבת\n\nהמערכת $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ הופכת ל-\n\n$$\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right].$$\n\n### פעולות שורה אלמנטריות\n\n1. **החלפת** שני שורות.\n2. **כפל** שורה בקבוע שונה מאפס.\n3. **הוספת כפולה** של שורה לאחרת.\n\n### חילוץ גאוס\n\nמיישמים פעולות שורה עד לצורה מדורגת. ואז **הצבה לאחור**.\n\n**שלוש תוצאות אפשריות:**\n1. **פתרון יחיד** — דרגה מלאה.\n2. **אין פתרון** — שורה מצטמצמת ל-$[0, \\ldots | c]$ עם $c \\ne 0$.\n3. **אינסוף פתרונות** — משתנה חופשי.\n\n### מטריצה הופכית\n\nל-$A$ ריבועית, $A^{-1}$ (אם קיימת) מקיימת $AA^{-1} = I$. אז $x = A^{-1}b$ פותר $Ax = b$.\n\nל-$2 \\times 2$: $A^{-1} = \\dfrac{1}{ad - bc} \\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$ אם $ad - bc \\ne 0$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: solve a 2×2 system",
+      "title_he": "דוגמה פתורה: פתרון מערכת 2×2",
+      "body_en_md": "Solve $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$.\n\n**Augmented:** $\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right]$.\n\n**$R_1 \\leftrightarrow R_2$** (swap):\n\n$$\\left[\\begin{array}{cc|c} 1 & -1 & 1 \\\\ 2 & 3 & 7 \\end{array}\\right].$$\n\n**$R_2 \\to R_2 - 2 R_1$:**\n\n$$\\left[\\begin{array}{cc|c} 1 & -1 & 1 \\\\ 0 & 5 & 5 \\end{array}\\right].$$\n\n**Back-substitute:** $5y = 5 \\Rightarrow y = 1$. $x - 1 = 1 \\Rightarrow x = 2$.\n\n**Verify:** $2(2) + 3(1) = 7$ ✓, $2 - 1 = 1$ ✓.",
+      "body_he_md": "פתרו $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$.\n\n**מורחבת:** $\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right]$.\n\n**$R_1 \\leftrightarrow R_2$**, ואז **$R_2 - 2R_1$**:\n\n$$\\left[\\begin{array}{cc|c} 1 & -1 & 1 \\\\ 0 & 5 & 5 \\end{array}\\right].$$\n\n**הצבה לאחור:** $y = 1$, $x = 2$."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **$AB \\ne BA$.** Matrix multiplication is NOT commutative.\n2. **Dimension mismatch.** $AB$ requires $A$'s columns = $B$'s rows.\n3. **Row operations done on columns.** Always rows.\n4. **Trying to invert a singular matrix.** If $\\det A = 0$, no inverse exists.\n5. **Forgetting the augmented bar.** Keep track of which entries are the RHS $b$.",
+      "body_he_md": "1. **$AB \\ne BA$.** כפל מטריצות אינו קומוטטיבי.\n2. **חוסר התאמת ממדים.** $AB$ דורש שעמודות $A$ = שורות $B$.\n3. **פעולות שורה על עמודות.** תמיד שורות.\n4. **ניסיון להפוך מטריצה סינגולרית.** אם $\\det A = 0$, אין הופכית.\n5. **שכחת קו המורחבת.** לעקוב אילו ערכים הם $b$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Matrix = rectangular array; sizes matter for multiplication.\n- $AB \\ne BA$; $A I = A$; $(AB)^T = B^T A^T$.\n- Linear systems = $Ax = b$; solve via Gaussian elimination.\n- Three outcomes: unique, none, infinitely many.\n- $A^{-1}$ exists iff $\\det A \\ne 0$; then $x = A^{-1} b$.",
+      "body_he_md": "- מטריצה = מערך מלבני; ממדים חשובים לכפל.\n- $AB \\ne BA$; $A I = A$; $(AB)^T = B^T A^T$.\n- מערכות לינאריות = $Ax = b$; פותרים בחילוץ גאוס.\n- שלוש תוצאות: יחיד, אין, אינסוף.\n- $A^{-1}$ קיימת ⇔ $\\det A \\ne 0$; אז $x = A^{-1}b$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What size is $AB$ if $A$ is $3 \\times 2$ and $B$ is $2 \\times 5$?",
+      "stem_he": "מה גודל $AB$ אם $A$ הוא $3 \\times 2$ ו-$B$ הוא $2 \\times 5$?",
+      "options_en": ["$2 \\times 5$", "$3 \\times 5$", "$5 \\times 3$", "Undefined"],
+      "options_he": ["$2 \\times 5$", "$3 \\times 5$", "$5 \\times 3$", "לא מוגדר"],
+      "correct_index": 1,
+      "explanation_en": "Inner dims match ($2 = 2$), outer dims give size $3 \\times 5$.",
+      "explanation_he": "ממדים פנימיים תואמים ($2 = 2$), ממדים חיצוניים נותנים $3 \\times 5$.",
+      "skill_atoms": ["matrix_dimensions"]
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\det \\begin{pmatrix} 3 & 1 \\\\ 2 & 4 \\end{pmatrix}$.",
+      "stem_he": "חשבו $\\det \\begin{pmatrix} 3 & 1 \\\\ 2 & 4 \\end{pmatrix}$.",
+      "correct_answer": "10",
+      "explanation_en": "$\\det = ad - bc = 3 \\cdot 4 - 1 \\cdot 2 = 10$.",
+      "explanation_he": "$\\det = ad - bc = 3 \\cdot 4 - 1 \\cdot 2 = 10$.",
+      "skill_atoms": ["det_2x2"]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}\\begin{pmatrix} 5 \\\\ 6 \\end{pmatrix}$.",
+      "stem_he": "חשבו $\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}\\begin{pmatrix} 5 \\\\ 6 \\end{pmatrix}$.",
+      "options_en": [
+        "$\\begin{pmatrix} 17 \\\\ 39 \\end{pmatrix}$",
+        "$\\begin{pmatrix} 11 \\\\ 23 \\end{pmatrix}$",
+        "$\\begin{pmatrix} 5 \\\\ 12 \\end{pmatrix}$",
+        "$\\begin{pmatrix} 39 \\\\ 17 \\end{pmatrix}$"
+      ],
+      "options_he": [
+        "$\\begin{pmatrix} 17 \\\\ 39 \\end{pmatrix}$",
+        "$\\begin{pmatrix} 11 \\\\ 23 \\end{pmatrix}$",
+        "$\\begin{pmatrix} 5 \\\\ 12 \\end{pmatrix}$",
+        "$\\begin{pmatrix} 39 \\\\ 17 \\end{pmatrix}$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Row 1: $1 \\cdot 5 + 2 \\cdot 6 = 17$. Row 2: $3 \\cdot 5 + 4 \\cdot 6 = 39$.",
+      "explanation_he": "שורה 1: $1 \\cdot 5 + 2 \\cdot 6 = 17$. שורה 2: $3 \\cdot 5 + 4 \\cdot 6 = 39$.",
+      "skill_atoms": ["matrix_vector_product"]
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} x + y + z = 6 \\\\ 2x - y + z = 3 \\\\ x + 2y - z = 2 \\end{cases}$ using Gaussian elimination.",
+      "stem_he": "פתרו $\\begin{cases} x + y + z = 6 \\\\ 2x - y + z = 3 \\\\ x + 2y - z = 2 \\end{cases}$ באמצעות חילוץ גאוס.",
+      "rubric_en": "Full credit (3/3): performs row reduction, finds $z = 3, y = 2, x = 1$.\nPartial (2/3): correct reduction, arithmetic error.\nMinimal (1/3): writes augmented matrix only.",
+      "rubric_he": "ציון מלא (3/3): מבצע חילוץ, מוצא $z = 3, y = 2, x = 1$.\nחלקי (2/3): חילוץ נכון, טעות חישוב.\nמינימלי (1/3): רק כותב מטריצה מורחבת.",
+      "explanation_en": "Augmented matrix → row reduction → $x = 1, y = 2, z = 3$. Verify: $1+2+3=6$ ✓.",
+      "explanation_he": "מטריצה מורחבת → חילוץ → $x = 1, y = 2, z = 3$. אימות: $1+2+3=6$ ✓.",
+      "skill_atoms": ["gaussian_elimination_3x3"]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Find the inverse of $A = \\begin{pmatrix} 2 & 1 \\\\ 5 & 3 \\end{pmatrix}$.",
+      "stem_he": "מצאו את ההופכית של $A = \\begin{pmatrix} 2 & 1 \\\\ 5 & 3 \\end{pmatrix}$.",
+      "options_en": [
+        "$\\begin{pmatrix} 3 & -1 \\\\ -5 & 2 \\end{pmatrix}$",
+        "$\\begin{pmatrix} -3 & 1 \\\\ 5 & -2 \\end{pmatrix}$",
+        "Doesn't exist",
+        "$\\begin{pmatrix} 2 & 1 \\\\ 5 & 3 \\end{pmatrix}$"
+      ],
+      "options_he": [
+        "$\\begin{pmatrix} 3 & -1 \\\\ -5 & 2 \\end{pmatrix}$",
+        "$\\begin{pmatrix} -3 & 1 \\\\ 5 & -2 \\end{pmatrix}$",
+        "לא קיימת",
+        "$\\begin{pmatrix} 2 & 1 \\\\ 5 & 3 \\end{pmatrix}$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$\\det = 6 - 5 = 1$. $A^{-1} = \\begin{pmatrix} 3 & -1 \\\\ -5 & 2 \\end{pmatrix}$. Verify: $AA^{-1} = I$.",
+      "explanation_he": "$\\det = 1$. $A^{-1} = \\begin{pmatrix} 3 & -1 \\\\ -5 & 2 \\end{pmatrix}$.",
+      "skill_atoms": ["matrix_inverse_2x2"]
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "If a $3 \\times 3$ system has $\\det A = 0$, what can we say?",
+      "stem_he": "אם למערכת $3 \\times 3$ יש $\\det A = 0$, מה אפשר לומר?",
+      "options_en": [
+        "Exactly one solution",
+        "No solutions OR infinitely many — never exactly one",
+        "Always infinitely many",
+        "Always no solutions"
+      ],
+      "options_he": [
+        "פתרון יחיד",
+        "אין פתרונות או אינסוף — אף פעם לא יחיד",
+        "תמיד אינסוף",
+        "תמיד אין פתרונות"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$\\det = 0$ means the matrix is singular, so $A^{-1}$ doesn't exist. The system has either no solutions or infinitely many — never a unique one.",
+      "explanation_he": "$\\det = 0$ פירושו שהמטריצה סינגולרית, $A^{-1}$ לא קיימת. למערכת אין פתרונות או אינסוף — אף פעם לא יחיד.",
+      "skill_atoms": ["singular_matrix_implications"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "$AB \\ne BA$ in general.",
+      "Matrix-vector product: row of $A$ · column of $x$.",
+      "Linear systems $Ax = b$: solve by Gaussian elimination on augmented matrix.",
+      "$A^{-1}$ exists ⇔ $\\det A \\ne 0$ ⇔ unique solution to $Ax = b$.",
+      "$\\det = 0$ ⇒ either no solution or infinitely many — never one."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Matrix multiplication is commutative",
+        "correction": "$AB \\ne BA$ in general. Order matters.",
+        "detect_phrase_en": "matrix multiplication commutative",
+        "detect_phrase_he": "כפל מטריצות קומוטטיבי"
+      },
+      {
+        "wrong": "Every square matrix has an inverse",
+        "correction": "Only if $\\det A \\ne 0$. Singular matrices have no inverse.",
+        "detect_phrase_en": "every matrix has inverse",
+        "detect_phrase_he": "לכל מטריצה הופכית"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "matrix_dimensions",
+      "matrix_vector_product",
+      "det_2x2",
+      "matrix_inverse_2x2",
+      "gaussian_elimination_3x3",
+      "singular_matrix_implications"
+    ],
+    "prerequisites_to_check_before_teaching": ["la_vectors", "equations_linear"],
+    "tutor_pacing_hint": "Always draw the matrix grid. Drill matrix-vector multiplication before matrix-matrix. Gaussian elimination is best taught by example, not formula.",
+    "coach_drill_skills": [
+      "matrix_vector_product",
+      "det_2x2",
+      "gaussian_elimination_3x3"
+    ],
+    "diagnostic_signals": {
+      "if_learner_swaps_factors": "Show $AB \\ne BA$ with a concrete example.",
+      "if_learner_does_columns_instead_of_rows_in_elimination": "Remind that rows correspond to equations; column ops break that."
+    },
+    "next_recommended": ["la_determinants", "la_vector_spaces"]
+  }
+}

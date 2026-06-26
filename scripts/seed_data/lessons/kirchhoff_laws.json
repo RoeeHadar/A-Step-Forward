@@ -1,0 +1,186 @@
+{
+  "concept_id": "kirchhoff_laws",
+  "subject": "physics",
+  "level": "high_school",
+  "title_en": "Kirchhoff's Laws — Junction and Loop Rules",
+  "title_he": "חוקי קירכהוף — חוק הצומת והלולאה",
+  "summary_en": "Kirchhoff's Current Law (KCL): $\\sum I_{\\text{in}} = \\sum I_{\\text{out}}$ at every junction (charge conservation). Kirchhoff's Voltage Law (KVL): $\\sum V = 0$ around any closed loop (energy conservation). Together they solve any circuit.",
+  "summary_he": "חוק הצומת (KCL): $\\sum I_{\\text{נכנס}} = \\sum I_{\\text{יוצא}}$ בכל צומת (שימור מטען). חוק הלולאה (KVL): $\\sum V = 0$ בכל לולאה סגורה (שימור אנרגיה). יחד פותרים כל מעגל.",
+  "est_minutes": 14,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Why we need more than Ohm's law",
+      "title_he": "למה זקוקים ליותר מחוק אוהם",
+      "body_en_md": "Series-parallel rules handle simple circuits. But what about **multi-loop circuits** — circuits with multiple batteries, branches that aren't pure series or pure parallel? We need a general method.\n\nEnter **Kirchhoff's laws**: two principles based on conservation, applicable to ANY circuit.\n\n### Two laws\n\n1. **KCL (Current Law / Junction Rule):** at any junction (node), current in = current out. (Charge conservation.)\n\n2. **KVL (Voltage Law / Loop Rule):** around any closed loop, sum of voltage drops = sum of EMFs. (Energy conservation.)\n\n### Workflow\n\n1. Label unknown currents (assume directions).\n2. Apply KCL at junctions.\n3. Apply KVL around independent loops.\n4. Solve the linear system.\n\nIf an assumed current direction turns out negative — that's fine, it just means actual direction is opposite.",
+      "body_he_md": "כללי טור-מקבילי מטפלים במעגלים פשוטים. אך מה לגבי **מעגלים רב-לולאיים**? נצטרך שיטה כללית.\n\nנכנסים **חוקי קירכהוף**: שני עקרונות מבוססי שימור.\n\n### שני חוקים\n\n1. **KCL (חוק הצומת):** בכל צומת, $\\sum I_{\\text{נכנס}} = \\sum I_{\\text{יוצא}}$ (שימור מטען).\n2. **KVL (חוק הלולאה):** סביב לולאה סגורה, $\\sum$ ירידות מתח $= \\sum$ EMFs (שימור אנרגיה).\n\n### תהליך עבודה\n\n1. סמנו זרמים לא ידועים.\n2. KCL בצמתים.\n3. KVL בלולאות.\n4. פתרו מערכת ליניארית.\n\nזרם שלילי = כיוון הפוך מהמשוער. תקין."
+    },
+    {
+      "kind": "theory",
+      "title_en": "KCL, KVL, sign conventions",
+      "title_he": "KCL, KVL, מוסכמות סימן",
+      "body_en_md": "### KCL (Junction Rule)\n\n$$\\boxed{\\sum_{\\text{into node}} I = 0.}$$\n\nWith sign: incoming current = +, outgoing = − (or vice versa). At any node, algebraic sum = 0.\n\nWhy? Charge can't accumulate at a wire junction (steady state).\n\n### KVL (Loop Rule)\n\n$$\\boxed{\\sum_{\\text{around loop}} \\Delta V = 0.}$$\n\nGoing around any closed loop in one direction, sum of voltage CHANGES is 0.\n\nWhy? Potential is single-valued — return to start = same potential.\n\n### Sign conventions for KVL\n\nWalk around the loop. Assign sign to each $\\Delta V$:\n\n- **Resistor** ($R$, current $I$): if you walk WITH the current → drop ($-IR$). Against → rise ($+IR$).\n- **EMF source** ($\\varepsilon$): if you walk from − terminal to + terminal → rise ($+\\varepsilon$). + to − → drop ($-\\varepsilon$).\n\n### Steady state\n\nKirchhoff for DC: current is constant in time. For capacitors in steady state: $I = 0$ (no current through fully-charged capacitor). For inductors: $V = 0$ across (no voltage in steady state).\n\n### Example: 2-loop method\n\nFor a circuit with 2 loops:\n1. Define **mesh currents** $i_1, i_2$ (one per loop).\n2. KVL in each loop in terms of mesh currents.\n3. Solve 2 equations.\n\nThis is the **mesh method**, equivalent to KCL+KVL but more efficient.\n\n### Node-voltage method\n\nAlternative: pick a reference (ground), define potentials at other nodes, apply KCL using $V/R$ for current through each resistor. Faster for circuits with many resistors meeting at few nodes.",
+      "body_he_md": "### KCL\n\n$$\\boxed{\\sum I = 0 \\text{ בצומת.}}$$\n\nשימור מטען.\n\n### KVL\n\n$$\\boxed{\\sum \\Delta V = 0 \\text{ בלולאה.}}$$\n\nשימור אנרגיה.\n\n### מוסכמות KVL\n\n- **נגד:** עם הזרם = ירידה ($-IR$). נגד = עלייה ($+IR$).\n- **EMF:** מ− ל+ = עלייה ($+\\varepsilon$).\n\n### מצב יציב (DC)\n\nקבל = אין זרם דרכו. סליל = אין מתח עליו.\n\n### שיטת לולאות (mesh)\n\nזרם לולאה ייחודי לכל לולאה. פתרו $n$ משוואות עבור $n$ לולאות.\n\n### שיטת צמתים\n\nקרקע = נקודת ייחוס. KCL בכל צומת בעזרת $V/R$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: 2-loop circuit",
+      "title_he": "דוגמה: מעגל שתי לולאות",
+      "body_en_md": "Two batteries: $\\varepsilon_1 = 12$ V on left, $\\varepsilon_2 = 6$ V on right. Three resistors: $R_1 = 2 \\, \\Omega$ (left branch), $R_2 = 3 \\, \\Omega$ (middle branch), $R_3 = 1 \\, \\Omega$ (right branch). Find current through each resistor.\n\n**Step 1: Label currents.** $I_1$ down through $R_1$, $I_2$ up through $R_2$, $I_3$ down through $R_3$. (Junction at top.)\n\n**Step 2: KCL at top junction.** $I_1 + I_3 = I_2$ (assuming $I_1, I_3$ enter; $I_2$ leaves).\n\n**Step 3: KVL left loop** (walk clockwise: down through $\\varepsilon_1$ in direction of EMF rise, down through $R_1$ in direction of $I_1$, up through $R_2$ against $I_2$):\n\n$$\\varepsilon_1 - I_1 R_1 - I_2 R_2 = 0 \\Rightarrow 12 = 2 I_1 + 3 I_2.$$\n\n**Step 4: KVL right loop** (similarly):\n\n$$\\varepsilon_2 - I_3 R_3 - I_2 R_2 = 0 \\Rightarrow 6 = I_3 + 3 I_2.$$\n\n**Step 5: Three unknowns, three equations.** From (1): $I_1 + I_3 = I_2$, so $I_1 = I_2 - I_3$. Substitute into (2): $12 = 2(I_2 - I_3) + 3 I_2 = 5 I_2 - 2 I_3$. From (3): $I_3 = 6 - 3 I_2$. Substituting: $12 = 5 I_2 - 2(6 - 3 I_2) = 5 I_2 - 12 + 6 I_2 = 11 I_2 - 12$. So $11 I_2 = 24$, $I_2 = 24/11 \\approx 2.18$ A.\n\nThen $I_3 = 6 - 3(24/11) = 66/11 - 72/11 = -6/11 \\approx -0.545$ A (negative = actual flow is OPPOSITE).\n\n$I_1 = I_2 - I_3 = 24/11 - (-6/11) = 30/11 \\approx 2.73$ A.\n\n**Answers:** $I_1 \\approx 2.73$ A, $I_2 \\approx 2.18$ A, $I_3 \\approx -0.545$ A.",
+      "body_he_md": "שתי סוללות: $\\varepsilon_1 = 12$ V, $\\varepsilon_2 = 6$ V. נגדים: $R_1 = 2, R_2 = 3, R_3 = 1\\,\\Omega$. זרם בכל נגד?\n\n**שלב 1: סימון.** $I_1, I_2, I_3$.\n**שלב 2: KCL בצומת עליון.** $I_1 + I_3 = I_2$.\n**שלב 3: KVL לולאה שמאלית.** $12 = 2I_1 + 3I_2$.\n**שלב 4: KVL לולאה ימנית.** $6 = I_3 + 3I_2$.\n**שלב 5: פתרון.** $I_2 = 24/11 \\approx 2.18$ A; $I_3 = -6/11 \\approx -0.545$ A (כיוון הפוך); $I_1 = 30/11 \\approx 2.73$ A."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Sign confusion in KVL.** Walk consistently in one direction; tabulate $\\Delta V$ for each element with its sign.\n2. **Forgetting EMF orientation.** Direction matters: − to + is a RISE.\n3. **Wrong number of equations.** $n$ unknowns need $n$ independent equations. (Loops are independent if not encompassed by others.)\n4. **Negative current = error?** No — it means actual direction is opposite to your assumption. Result is still valid.\n5. **Mixing KCL/KVL with series-parallel.** Use one or the other; mixing causes confusion.\n6. **'Resistors split voltage equally.'** Only if equal R. Generally $V_i = I R_i$.",
+      "body_he_md": "1. **בלבול סימנים ב-KVL.** הלכו עקבית בכיוון אחד.\n2. **כיוון EMF.** − ל+ = עלייה.\n3. **מספר משוואות לא נכון.** $n$ נעלמים = $n$ משוואות.\n4. **זרם שלילי = שגיאה?** לא; כיוון הפוך.\n5. **ערבוב KCL/KVL עם טור-מקבילי.**\n6. **'נגדים מחלקים מתח שווה'.** רק אם שווי R."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- KCL: $\\sum I = 0$ at any junction (charge conservation).\n- KVL: $\\sum \\Delta V = 0$ around any loop (energy conservation).\n- Sign convention: walk direction; track each rise/drop.\n- Solve $n$ equations for $n$ unknowns.\n- Negative result = assumed direction reversed.",
+      "body_he_md": "- KCL: $\\sum I = 0$.\n- KVL: $\\sum \\Delta V = 0$.\n- מוסכמות סימן בעקביות.\n- $n$ משוואות, $n$ נעלמים.\n- זרם שלילי = כיוון הפוך."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Kirchhoff's Current Law is based on conservation of:",
+      "stem_he": "חוק הצומת של קירכהוף מבוסס על שימור:",
+      "options_en": ["Energy", "Charge", "Momentum", "Mass"],
+      "options_he": ["אנרגיה", "מטען", "תנע", "מסה"],
+      "correct_index": 1,
+      "explanation_en": "KCL: charge can't accumulate at a junction. $\\sum I = 0$.",
+      "explanation_he": "מטען לא מצטבר בצומת.",
+      "skill_atoms": ["kcl_basis"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Kirchhoff's Voltage Law: around a closed loop, sum of voltage changes equals:",
+      "stem_he": "חוק הלולאה: סכום שינויי מתח סביב לולאה סגורה =",
+      "options_en": ["EMF", "Zero", "Current", "Power"],
+      "options_he": ["EMF", "אפס", "זרם", "הספק"],
+      "correct_index": 1,
+      "explanation_en": "KVL: $\\sum \\Delta V = 0$. (Energy conservation; potential is single-valued.)",
+      "explanation_he": "KVL: $\\sum \\Delta V = 0$.",
+      "skill_atoms": ["kvl_basis"]
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "At a junction, currents 2 A and 3 A enter; current $I$ leaves. Find $I$.",
+      "stem_he": "בצומת, זרמים 2 A ו-3 A נכנסים; זרם $I$ יוצא. מצאו $I$.",
+      "rubric_en": "Full credit (1/1): $I = 2 + 3 = 5$ A (KCL).",
+      "rubric_he": "ציון מלא (1/1): $I = 5$ A.",
+      "explanation_en": "$I = 5$ A.",
+      "explanation_he": "$I = 5$ A.",
+      "skill_atoms": ["kcl_simple"]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Walking around a loop in the direction of assumed current, traversing a resistor gives:",
+      "stem_he": "הליכה סביב לולאה בכיוון הזרם, מעבר על נגד נותן:",
+      "options_en": [
+        "Voltage rise (+IR)",
+        "Voltage drop (−IR)",
+        "Zero",
+        "Depends on resistor type"
+      ],
+      "options_he": [
+        "עלייה (+IR)",
+        "ירידה (−IR)",
+        "אפס",
+        "תלוי בנגד"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Walking WITH current direction across $R$ → potential drops by $IR$.",
+      "explanation_he": "עם כיוון הזרם → ירידה $IR$.",
+      "skill_atoms": ["kvl_sign_convention"]
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Loop: 12 V battery + 4 Ω resistor + 2 Ω resistor + 6 V battery (opposing the 12 V) all in series, forming a single loop. Find the current.",
+      "stem_he": "לולאה: סוללה 12 V + נגד 4 $\\Omega$ + נגד 2 $\\Omega$ + סוללה 6 V (מתנגדת ל-12 V), הכל בטור. מצאו זרם.",
+      "rubric_en": "Full credit (3/3): KVL: $12 - 6 = I(4 + 2) \\Rightarrow 6 = 6I \\Rightarrow I = 1$ A.\nPartial (2/3): correct KVL setup.\nMinimal (1/3): mentions KVL.",
+      "rubric_he": "ציון מלא (3/3): $12 - 6 = 6I \\Rightarrow I = 1$ A.\nחלקי (2/3): הצבה נכונה.\nמינימלי (1/3): KVL מוזכר.",
+      "explanation_en": "$I = 1$ A.",
+      "explanation_he": "$I = 1$ A.",
+      "skill_atoms": ["kvl_single_loop"]
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "If after solving Kirchhoff equations you find $I = -2$ A, this means:",
+      "stem_he": "אם אחרי פתרון משוואות קירכהוף קיבלתם $I = -2$ A, זה אומר:",
+      "options_en": [
+        "Error — must be positive",
+        "Current is 2 A in OPPOSITE direction to assumed",
+        "Circuit is broken",
+        "Battery is dead"
+      ],
+      "options_he": [
+        "שגיאה — חייב חיובי",
+        "זרם 2 A בכיוון **הפוך** למשוער",
+        "מעגל שבור",
+        "סוללה מתה"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Negative just means assumed direction was opposite to reality. Magnitude is still correct.",
+      "explanation_he": "שלילי = כיוון משוער הפוך. גודל נכון.",
+      "skill_atoms": ["interpret_negative_current"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "KCL: $\\sum I = 0$ at junction (charge conservation).",
+      "KVL: $\\sum \\Delta V = 0$ around loop (energy conservation).",
+      "Walk loop in one direction; tabulate each element's $\\Delta V$ with sign.",
+      "Resistor with current: walk WITH $I$ = drop ($-IR$); against = rise.",
+      "EMF: walk from − to + = rise; reverse = drop.",
+      "Solve linear system: $n$ unknowns, $n$ independent equations.",
+      "Negative current = assumed direction reversed."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "KVL equals total EMF",
+        "correction": "KVL: $\\sum \\Delta V = 0$ (drops + rises = 0). Sum of EMFs = sum of $IR$ drops.",
+        "detect_phrase_en": "kvl equals emf",
+        "detect_phrase_he": "kvl שווה emf"
+      },
+      {
+        "wrong": "Negative current is an error",
+        "correction": "Just means you assumed wrong direction. Flip and accept the magnitude.",
+        "detect_phrase_en": "negative current error",
+        "detect_phrase_he": "זרם שלילי שגיאה"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "kcl_basis",
+      "kvl_basis",
+      "kcl_simple",
+      "kvl_sign_convention",
+      "kvl_single_loop",
+      "interpret_negative_current"
+    ],
+    "prerequisites_to_check_before_teaching": ["electric_circuits"],
+    "tutor_pacing_hint": "Stress the SYSTEMATIC procedure: label, KCL, KVL, solve. For sign convention, use 'walk' metaphor — like walking up/down a hill, summing changes.",
+    "coach_drill_skills": ["kvl_single_loop", "kvl_sign_convention"],
+    "diagnostic_signals": {
+      "if_learner_panics_on_negative_current": "Negative just means direction. Magnitude is what matters; flip the arrow.",
+      "if_learner_inconsistent_walk_direction": "Pick a direction at start; stay consistent. Each element's sign depends on walk direction."
+    },
+    "next_recommended": ["magnetic_field"]
+  }
+}

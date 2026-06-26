@@ -1,0 +1,163 @@
+{
+  "concept_id": "descriptive_stats",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["4pt", "5pt"],
+  "title_en": "Descriptive Statistics — Mean, Median, Variance",
+  "title_he": "סטטיסטיקה תיאורית — ממוצע, חציון, שונות",
+  "summary_en": "Descriptive statistics summarize a dataset with center (mean, median, mode), spread (variance, standard deviation, range, IQR), and shape.",
+  "summary_he": "סטטיסטיקה תיאורית מסכמת מערך נתונים: מדדי מרכז (ממוצע, חציון, שכיח), פיזור (שונות, סטיית תקן, טווח, טווח בין-רבעוני) וצורה.",
+  "est_minutes": 14,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What summarizes a dataset?",
+      "title_he": "מה מסכם מערך נתונים?",
+      "body_en_md": "Given numbers $x_1, x_2, \\ldots, x_n$, we want concise summaries.\n\n**Two questions:**\n1. **Where is the data centered?** (mean, median, mode)\n2. **How spread out is it?** (variance, standard deviation, range)",
+      "body_he_md": "נתונים $x_1, \\ldots, x_n$ — רוצים סיכומים תמציתיים.\n\n**שתי שאלות:**\n1. **איפה המרכז?** (ממוצע, חציון, שכיח)\n2. **כמה פיזור?** (שונות, סטיית תקן, טווח)"
+    },
+    {
+      "kind": "theory",
+      "title_en": "Measures of center and spread",
+      "title_he": "מדדי מרכז ופיזור",
+      "body_en_md": "### Mean (average)\n\n$$\\bar{x} = \\frac{1}{n} \\sum_{i=1}^{n} x_i = \\frac{x_1 + x_2 + \\cdots + x_n}{n}.$$\n\n**Sensitive to outliers.**\n\n### Median\n\nMiddle value when sorted. For $n$ odd: position $(n+1)/2$. For $n$ even: average of positions $n/2$ and $n/2 + 1$.\n\n**Robust to outliers.**\n\n### Mode\n\nMost frequent value (can be multiple).\n\n### Range\n\n$\\text{Range} = \\max - \\min$.\n\n### Variance\n\nMean of squared deviations from the mean:\n\n$$\\sigma^2 = \\frac{1}{n} \\sum_{i=1}^{n} (x_i - \\bar{x})^2.$$\n\n(Sample variance uses $n - 1$ in the denominator; below we use population formula for simplicity.)\n\n### Standard deviation\n\n$\\sigma = \\sqrt{\\sigma^2}$ — same units as the data.\n\n### Quartiles and IQR\n\n- $Q_1$ = 25th percentile, $Q_2$ = median, $Q_3$ = 75th percentile.\n- **Interquartile range:** $\\text{IQR} = Q_3 - Q_1$. Robust spread measure.\n\n### Useful shortcut for variance\n\n$$\\sigma^2 = \\overline{x^2} - \\bar{x}^2 = \\frac{1}{n}\\sum x_i^2 - \\bar{x}^2.$$",
+      "body_he_md": "### ממוצע\n\n$$\\bar{x} = \\frac{1}{n} \\sum_{i=1}^{n} x_i.$$\n\n**רגיש לחריגים.**\n\n### חציון\n\nהערך האמצעי במיון. ל-$n$ אי-זוגי: מיקום $(n+1)/2$. ל-$n$ זוגי: ממוצע שני האמצעיים.\n\n**עמיד לחריגים.**\n\n### שכיח\n\nהערך השכיח ביותר.\n\n### טווח\n\n$\\text{Range} = \\max - \\min$.\n\n### שונות\n\n$$\\sigma^2 = \\frac{1}{n} \\sum (x_i - \\bar{x})^2.$$\n\n### סטיית תקן\n\n$\\sigma = \\sqrt{\\sigma^2}$ — באותן יחידות כמו הנתונים.\n\n### רבעונים ו-IQR\n\n- $Q_1, Q_2, Q_3$ = רבעונים.\n- $\\text{IQR} = Q_3 - Q_1$ — מדד פיזור עמיד.\n\n### קיצור דרך לשונות\n\n$$\\sigma^2 = \\overline{x^2} - \\bar{x}^2.$$"
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example",
+      "title_he": "דוגמה פתורה",
+      "body_en_md": "**Dataset:** 4, 7, 8, 10, 11.\n\n**Mean:** $\\bar{x} = (4+7+8+10+11)/5 = 40/5 = 8$.\n\n**Median:** sorted = 4, 7, **8**, 10, 11. Middle = 8.\n\n**Mode:** none (all distinct).\n\n**Range:** $11 - 4 = 7$.\n\n**Variance (using shortcut):**\n- $\\overline{x^2} = (16 + 49 + 64 + 100 + 121)/5 = 350/5 = 70$.\n- $\\sigma^2 = 70 - 8^2 = 70 - 64 = 6$.\n\n**Standard deviation:** $\\sigma = \\sqrt{6} \\approx 2.45$.\n\n**Effect of an outlier:** add the value 100. New mean = $(40 + 100)/6 \\approx 23.3$ — pulled way up. New median = $8.5$ (between 8 and 9 after sorting 4,7,8,10,11,100 — actually median is between 8 and 10, = 9). Robustly, the median barely budged.",
+      "body_he_md": "**נתונים:** 4, 7, 8, 10, 11.\n\n**ממוצע:** $\\bar{x} = 40/5 = 8$.\n\n**חציון:** 4, 7, **8**, 10, 11. חציון = 8.\n\n**שכיח:** אין.\n\n**טווח:** $11 - 4 = 7$.\n\n**שונות (קיצור):**\n- $\\overline{x^2} = 350/5 = 70$.\n- $\\sigma^2 = 70 - 64 = 6$.\n\n**סטיית תקן:** $\\sigma = \\sqrt{6} \\approx 2.45$.\n\n**השפעת חריג:** הוסיפו 100. ממוצע = 23.3 (קופץ). חציון = 9 (כמעט לא זז) — עמיד."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Mean vs. median for skewed data.** For income data (right-skewed), median is more representative.\n2. **Forgetting to sort before finding median/quartiles.**\n3. **Variance is in squared units.** Always state $\\sigma$ for interpretation.\n4. **Don't compute $\\sigma^2$ as $\\overline{x^2}$ directly** — must subtract $\\bar{x}^2$.\n5. **Sample vs. population variance** — divide by $n-1$ for sample (Bessel's correction); $n$ for full population.",
+      "body_he_md": "1. **ממוצע vs. חציון לנתונים מוטים.** להכנסות, חציון מייצג יותר.\n2. **שכחה למיין לפני חציון/רבעונים.**\n3. **שונות ביחידות בריבוע.** תמיד דווחו $\\sigma$.\n4. **אל תחשבו $\\sigma^2 = \\overline{x^2}$** — צריך להחסיר $\\bar{x}^2$.\n5. **מדגם vs. אוכלוסייה** — $n-1$ למדגם; $n$ לאוכלוסייה מלאה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Mean = $\\sum x_i / n$ (sensitive to outliers).\n- Median = middle value (robust).\n- Variance = $\\overline{x^2} - \\bar{x}^2$.\n- Standard deviation = $\\sqrt{\\sigma^2}$, same units as data.\n- IQR = $Q_3 - Q_1$ — robust spread.",
+      "body_he_md": "- ממוצע = $\\sum x_i / n$ (רגיש).\n- חציון = אמצע (עמיד).\n- שונות = $\\overline{x^2} - \\bar{x}^2$.\n- סטיית תקן = $\\sqrt{\\sigma^2}$.\n- $\\text{IQR} = Q_3 - Q_1$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the mean of: 3, 5, 7, 9.",
+      "stem_he": "מצאו את הממוצע של: 3, 5, 7, 9.",
+      "correct_answer": "6",
+      "explanation_en": "$\\bar{x} = (3+5+7+9)/4 = 24/4 = 6$.",
+      "explanation_he": "$\\bar{x} = 24/4 = 6$.",
+      "skill_atoms": ["mean_compute"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Median of 2, 5, 1, 8, 4?",
+      "stem_he": "חציון של 2, 5, 1, 8, 4?",
+      "options_en": ["$2$", "$4$", "$5$", "$8$"],
+      "options_he": ["$2$", "$4$", "$5$", "$8$"],
+      "correct_index": 1,
+      "explanation_en": "Sorted: 1, 2, **4**, 5, 8. Middle = 4.",
+      "explanation_he": "ממוין: 1, 2, **4**, 5, 8. חציון = 4.",
+      "skill_atoms": ["median_compute"]
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "For the data 2, 4, 6, compute the variance and standard deviation (population formula).",
+      "stem_he": "לנתונים 2, 4, 6 חשבו את השונות וסטיית התקן (אוכלוסייה).",
+      "rubric_en": "Full credit (3/3): $\\bar{x} = 4$. Deviations: $-2, 0, 2$. Squared: $4, 0, 4$. $\\sigma^2 = 8/3 \\approx 2.67$. $\\sigma = \\sqrt{8/3} \\approx 1.63$.\nPartial (2/3): variance correct, $\\sigma$ missing or wrong.\nMinimal (1/3): mean correct.",
+      "rubric_he": "ציון מלא (3/3): $\\bar{x} = 4$. סטיות: $-2, 0, 2$. בריבוע: $4, 0, 4$. $\\sigma^2 = 8/3$. $\\sigma \\approx 1.63$.\nחלקי (2/3): שונות נכונה, $\\sigma$ חסרה/שגויה.\nמינימלי (1/3): ממוצע נכון.",
+      "explanation_en": "$\\bar{x} = 4$. $\\sigma^2 = (4+0+4)/3 = 8/3 \\approx 2.67$. $\\sigma \\approx 1.63$.",
+      "explanation_he": "$\\bar{x} = 4$. $\\sigma^2 = 8/3$. $\\sigma \\approx 1.63$.",
+      "skill_atoms": ["variance_compute"]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "If every value in a dataset is doubled, the standard deviation:",
+      "stem_he": "אם מכפילים פי 2 כל ערך בנתונים, סטיית התקן:",
+      "options_en": ["Stays the same", "Doubles", "Quadruples", "Halves"],
+      "options_he": ["נשארת זהה", "מוכפלת פי 2", "מוכפלת פי 4", "מתחלקת ב-2"],
+      "correct_index": 1,
+      "explanation_en": "Scaling by $c$ scales $\\sigma$ by $|c|$. Variance scales by $c^2$.",
+      "explanation_he": "כפל ב-$c$ מכפיל את $\\sigma$ ב-$|c|$. שונות מוכפלת ב-$c^2$.",
+      "skill_atoms": ["scaling_variance"]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which is most robust to a single huge outlier?",
+      "stem_he": "מה הכי עמיד לחריג בודד גדול?",
+      "options_en": ["Mean", "Range", "Standard deviation", "Median"],
+      "options_he": ["ממוצע", "טווח", "סטיית תקן", "חציון"],
+      "correct_index": 3,
+      "explanation_en": "Median depends only on the middle order — barely changes. Mean, range, and std are all pulled.",
+      "explanation_he": "חציון תלוי באמצע בלבד — כמעט לא משתנה. כל השאר נמשכים.",
+      "skill_atoms": ["robust_vs_sensitive"]
+    },
+    {
+      "ord": 6,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A class of 30 students has mean test score 75. A new student joins with score 105. What is the new mean?",
+      "stem_he": "בכיתה של 30 תלמידים, ממוצע המבחן 75. תלמיד חדש מצטרף עם ציון 105. מה הממוצע החדש?",
+      "rubric_en": "Full credit (3/3): Sum was $30 \\cdot 75 = 2250$. New sum $= 2355$, divided by 31 = $\\approx 75.97$.\nPartial (2/3): correct setup, arithmetic error.\nMinimal (1/3): writes $\\sum = 2250$.",
+      "rubric_he": "ציון מלא (3/3): סכום קודם $30 \\cdot 75 = 2250$. סכום חדש $2355$, חלקי 31 $\\approx 75.97$.\nחלקי (2/3): הצבה נכונה, טעות חישוב.\nמינימלי (1/3): כתב $\\sum = 2250$.",
+      "explanation_en": "New mean $= (2250 + 105)/31 = 2355/31 \\approx 75.97$.",
+      "explanation_he": "ממוצע חדש $= 2355/31 \\approx 75.97$.",
+      "skill_atoms": ["mean_update"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Mean = sum/n; median = middle of sorted data.",
+      "Mean is sensitive to outliers; median is robust.",
+      "Variance = mean of squared deviations = $\\overline{x^2} - \\bar{x}^2$.",
+      "Standard deviation = $\\sqrt{\\sigma^2}$ — in original units.",
+      "Scaling by $c$: $\\sigma \\to |c| \\sigma$, $\\sigma^2 \\to c^2 \\sigma^2$."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Mean = median always",
+        "correction": "Equal only for symmetric distributions. Skewed data: they differ.",
+        "detect_phrase_en": "mean equals median",
+        "detect_phrase_he": "ממוצע שווה חציון"
+      },
+      {
+        "wrong": "Forget to sort before finding median",
+        "correction": "Always sort first! Median is middle of SORTED data.",
+        "detect_phrase_en": "median unsorted",
+        "detect_phrase_he": "חציון לא ממוין"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "mean_compute",
+      "median_compute",
+      "variance_compute",
+      "scaling_variance",
+      "robust_vs_sensitive",
+      "mean_update"
+    ],
+    "prerequisites_to_check_before_teaching": ["arithmetic", "exponents_roots"],
+    "tutor_pacing_hint": "Use a small dataset (≤6 numbers) throughout. Show effect of outliers concretely. Emphasize units for $\\sigma$.",
+    "coach_drill_skills": ["mean_compute", "median_compute", "variance_compute"],
+    "diagnostic_signals": {
+      "if_learner_forgets_to_sort": "Stop and sort first. Median is meaningless on unsorted data.",
+      "if_learner_uses_variance_units": "Convert to std for interpretation; variance is in squared units."
+    },
+    "next_recommended": ["distributions", "hypothesis_testing"]
+  }
+}

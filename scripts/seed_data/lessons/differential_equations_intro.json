@@ -1,0 +1,172 @@
+{
+  "concept_id": "differential_equations_intro",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Differential Equations — Introduction",
+  "title_he": "משוואות דיפרנציאליות — מבוא",
+  "summary_en": "A differential equation relates a function and its derivatives. The simplest types — direct integration and separable equations — describe everything from radioactive decay to population growth.",
+  "summary_he": "משוואה דיפרנציאלית מקשרת בין פונקציה ונגזרותיה. הסוגים הפשוטים ביותר — אינטגרציה ישירה ופירוק משתנים — מתארים כל דבר מדעיכה רדיואקטיבית עד גידול אוכלוסייה.",
+  "est_minutes": 16,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What is a differential equation",
+      "title_he": "מהי משוואה דיפרנציאלית",
+      "body_en_md": "A **differential equation** (ODE) is an equation involving an unknown function and its derivatives. Examples:\n\n- $y' = 2x$ — easy: integrate.\n- $y' = 2y$ — population growth at rate proportional to current size.\n- $y'' + y = 0$ — simple harmonic motion (pendulum, mass on spring).\n\n**Solving** means finding the function $y(x)$ that satisfies the equation. Most ODEs have infinitely many solutions (a family); an **initial condition** like $y(0) = 5$ pins down one specific solution.\n\nDifferential equations are the **language of physics**: Newton's second law, $F = ma$, is a second-order ODE for position.",
+      "body_he_md": "**משוואה דיפרנציאלית** היא משוואה הכוללת פונקציה לא ידועה ונגזרותיה. דוגמאות:\n\n- $y' = 2x$ — קל: אינטגרציה.\n- $y' = 2y$ — גידול אוכלוסייה בקצב יחסי לגודל.\n- $y'' + y = 0$ — תנודה הרמונית פשוטה.\n\n**פתרון** הוא מציאת פונקציה $y(x)$ המקיימת את המשוואה. רוב המשוואות בעלות אינסוף פתרונות (משפחה); **תנאי התחלה** כמו $y(0) = 5$ קובע פתרון יחיד.\n\nמשוואות דיפרנציאליות הן **שפת הפיזיקה**: חוק ניוטון השני $F = ma$ הוא משוואה דיפרנציאלית מסדר שני למיקום."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Two solvable types",
+      "title_he": "שני סוגים פתירים",
+      "body_en_md": "### Type 1 — Direct integration: $y' = f(x)$\n\nThe RHS depends only on $x$. Integrate both sides:\n\n$$y(x) = \\int f(x) \\, dx = F(x) + C.$$\n\nApply initial condition to find $C$.\n\n**Example:** $y' = 3x^2$, $y(0) = 4$. Then $y = x^3 + C$, and $y(0) = 4 \\Rightarrow C = 4$, so $y = x^3 + 4$.\n\n### Type 2 — Separable: $y' = f(x) g(y)$\n\nThe RHS factors into a function of $x$ times a function of $y$. Rewrite as $\\dfrac{dy}{dx} = f(x) g(y)$ and SEPARATE variables:\n\n$$\\frac{dy}{g(y)} = f(x) \\, dx \\quad \\text{(when } g(y) \\ne 0\\text{)}.$$\n\nIntegrate both sides:\n\n$$\\int \\frac{dy}{g(y)} = \\int f(x) \\, dx + C.$$\n\nSolve for $y$ (if possible).\n\n### Canonical example — exponential growth/decay\n\n**Equation:** $y' = ky$ ($k$ a constant).\n\n**Separate:** $\\dfrac{dy}{y} = k \\, dx$.\n\n**Integrate:** $\\ln|y| = kx + C$.\n\n**Solve for $y$:** $|y| = e^{kx + C} = e^C \\cdot e^{kx}$. Letting $A = \\pm e^C$ (any nonzero constant):\n\n$$\\boxed{y = A e^{kx}.}$$\n\nApplications:\n- $k > 0$: exponential growth (bacteria, compound interest).\n- $k < 0$: exponential decay (radioactive material, cooling).\n- The constant $A$ equals $y(0)$ — the initial amount.\n\n### Recognizing the type\n\n| Pattern | Type | Method |\n| --- | --- | --- |\n| $y' = f(x)$ | Direct | Integrate |\n| $y' = ky$ | Exponential | $y = Ae^{kx}$ |\n| $y' = f(x)g(y)$ | Separable | Separate + integrate |\n| $y'' + y = 0$ | Second-order linear | Beyond this lesson |",
+      "body_he_md": "### סוג 1 — אינטגרציה ישירה: $y' = f(x)$\n\nהאגף הימני תלוי רק ב-$x$. אינטגרציה לשני האגפים:\n\n$$y(x) = \\int f(x) \\, dx = F(x) + C.$$\n\nמחילים תנאי התחלה למציאת $C$.\n\n**דוגמה:** $y' = 3x^2$, $y(0) = 4$. אז $y = x^3 + C$, ו-$y(0) = 4 \\Rightarrow C = 4$, אז $y = x^3 + 4$.\n\n### סוג 2 — פירוק משתנים: $y' = f(x) g(y)$\n\nהאגף הימני מתפרק לפונקציה של $x$ כפול פונקציה של $y$. כותבים $\\dfrac{dy}{dx} = f(x) g(y)$ ו**מפרידים** משתנים:\n\n$$\\frac{dy}{g(y)} = f(x) \\, dx.$$\n\nאינטגרציה לשני האגפים:\n\n$$\\int \\frac{dy}{g(y)} = \\int f(x) \\, dx + C.$$\n\nפותרים עבור $y$.\n\n### דוגמה קנונית — גידול/דעיכה מעריכית\n\n**משוואה:** $y' = ky$.\n\n**מפרידים:** $\\dfrac{dy}{y} = k \\, dx$.\n\n**אינטגרציה:** $\\ln|y| = kx + C$.\n\n**פותרים עבור $y$:** $y = A e^{kx}$ כאשר $A = \\pm e^C$.\n\nיישומים:\n- $k > 0$: גידול מעריכי (חיידקים, ריבית).\n- $k < 0$: דעיכה מעריכית (חומרים רדיואקטיביים, קירור).\n- $A$ שווה ל-$y(0)$ — הכמות ההתחלתית.\n\n### זיהוי הסוג\n\n| דפוס | סוג | שיטה |\n| --- | --- | --- |\n| $y' = f(x)$ | ישיר | אינטגרציה |\n| $y' = ky$ | מעריכי | $y = Ae^{kx}$ |\n| $y' = f(x)g(y)$ | פריד | פירוק + אינטגרציה |"
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: radioactive decay",
+      "title_he": "דוגמה פתורה: דעיכה רדיואקטיבית",
+      "body_en_md": "A radioactive sample decays with half-life $T = 1620$ years (radium-226). Starting with $50$ grams, find the mass after $1000$ years.\n\n**Set up:** mass $m(t)$ decays at rate proportional to itself: $\\dfrac{dm}{dt} = -k m$ for some $k > 0$.\n\n**Solve:** $m(t) = m(0) e^{-kt} = 50 e^{-kt}$.\n\n**Find $k$:** half-life means $m(T) = m(0)/2$. So $50 e^{-kT} = 25 \\Rightarrow e^{-kT} = 1/2 \\Rightarrow -kT = -\\ln 2 \\Rightarrow k = \\frac{\\ln 2}{T} = \\frac{\\ln 2}{1620} \\approx 4.28 \\times 10^{-4}$ per year.\n\n**Evaluate at $t = 1000$:**\n\n$$m(1000) = 50 e^{-(\\ln 2) \\cdot 1000 / 1620} = 50 \\cdot 2^{-1000/1620} \\approx 50 \\cdot 0.652 \\approx 32.6 \\text{ grams}.$$",
+      "body_he_md": "דגימה רדיואקטיבית בעלת חצי-חיים $T = 1620$ שנים. מתחילים עם $50$ גרם, מצאו את המסה אחרי $1000$ שנים.\n\n**הכנה:** $\\dfrac{dm}{dt} = -k m$.\n\n**פתרון:** $m(t) = 50 e^{-kt}$.\n\n**מציאת $k$:** $m(T) = m(0)/2 \\Rightarrow k = \\frac{\\ln 2}{T} = \\frac{\\ln 2}{1620}$.\n\n**הערכה ב-$t = 1000$:**\n\n$$m(1000) = 50 \\cdot 2^{-1000/1620} \\approx 32.6 \\text{ גרם}.$$"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting $+C$** (and then the initial condition can't fix anything).\n2. **Solving for $y$ too early.** Integrate first; then isolate $y$.\n3. **Lost solutions in separation.** When we divide by $g(y)$, any $y$ where $g(y) = 0$ is also a solution (a constant solution). Mention if relevant.\n4. **Sign error in exponential decay.** Use $y = A e^{-kt}$ with $k > 0$, OR $y = A e^{kt}$ with $k < 0$ — but don't double-count signs.\n5. **Wrong sign on $\\ln$ when removing absolute value.** $|y| = e^{...}$ leads to $y = \\pm e^{...}$; the sign is absorbed into the arbitrary constant $A$.",
+      "body_he_md": "1. **שכחת $+C$** (ואז תנאי ההתחלה לא יכול לתקן).\n2. **פתרון עבור $y$ מוקדם מדי.** אינטגרציה קודם.\n3. **פתרונות אבודים בפירוק.** כאשר מחלקים ב-$g(y)$, כל $y$ שבו $g(y) = 0$ הוא גם פתרון.\n4. **טעות סימן בדעיכה מעריכית.** $y = A e^{-kt}$ עם $k > 0$, או $y = A e^{kt}$ עם $k < 0$ — לא לכפול סימנים.\n5. **טעות סימן ב-$\\ln$ בהסרת ערך מוחלט.** $|y| = e^{...}$ נותן $y = \\pm e^{...}$; הסימן נכנס ל-$A$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- ODE: equation in $y, y', y'', \\ldots$\n- Solving = finding $y(x)$.\n- Direct integration: $y' = f(x) \\Rightarrow y = \\int f \\, dx + C$.\n- Separable: $y' = f(x)g(y) \\Rightarrow \\int \\frac{dy}{g(y)} = \\int f(x) \\, dx + C$.\n- Exponential growth/decay: $y' = ky \\Rightarrow y = A e^{kx}$.\n- Initial condition $y(x_0) = y_0$ determines $C$ (or $A$).",
+      "body_he_md": "- ODE: משוואה ב-$y, y', y'', \\ldots$\n- פתרון = מציאת $y(x)$.\n- אינטגרציה ישירה: $y' = f(x) \\Rightarrow y = \\int f \\, dx + C$.\n- פריד: $y' = f(x)g(y) \\Rightarrow \\int \\frac{dy}{g(y)} = \\int f(x) \\, dx + C$.\n- גידול/דעיכה מעריכית: $y' = ky \\Rightarrow y = A e^{kx}$.\n- תנאי התחלה $y(x_0) = y_0$ קובע $C$ (או $A$)."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Solve $y' = 6x$ with $y(0) = 1$.",
+      "stem_he": "פתרו $y' = 6x$ עם $y(0) = 1$.",
+      "options_en": ["$y = 3x^2$", "$y = 3x^2 + 1$", "$y = 6$", "$y = 6x^2 + 1$"],
+      "options_he": ["$y = 3x^2$", "$y = 3x^2 + 1$", "$y = 6$", "$y = 6x^2 + 1$"],
+      "correct_index": 1,
+      "explanation_en": "Integrate: $y = 3x^2 + C$. Apply $y(0) = 1 \\Rightarrow C = 1$. So $y = 3x^2 + 1$.",
+      "explanation_he": "אינטגרציה: $y = 3x^2 + C$. מחילים $y(0) = 1 \\Rightarrow C = 1$. אז $y = 3x^2 + 1$.",
+      "skill_atoms": ["direct_integration_ode"]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "The general solution of $y' = 3y$ is:",
+      "stem_he": "הפתרון הכללי של $y' = 3y$:",
+      "options_en": ["$y = 3x$", "$y = Ae^{3x}$", "$y = 3e^x$", "$y = e^{x/3}$"],
+      "options_he": ["$y = 3x$", "$y = Ae^{3x}$", "$y = 3e^x$", "$y = e^{x/3}$"],
+      "correct_index": 1,
+      "explanation_en": "Canonical: $y' = ky \\Rightarrow y = Ae^{kx}$, here $k = 3$.",
+      "explanation_he": "קנוני: $y' = ky \\Rightarrow y = Ae^{kx}$, כאן $k = 3$.",
+      "skill_atoms": ["exponential_growth_ode"]
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\dfrac{dy}{dx} = \\dfrac{x}{y}$ with $y(0) = 2$.",
+      "stem_he": "פתרו $\\dfrac{dy}{dx} = \\dfrac{x}{y}$ עם $y(0) = 2$.",
+      "rubric_en": "Full credit (3/3): separates $y \\, dy = x \\, dx$, integrates $y^2/2 = x^2/2 + C$, applies $y(0) = 2 \\Rightarrow C = 2$, so $y^2 = x^2 + 4$, $y = \\sqrt{x^2 + 4}$ (positive root since $y(0) > 0$).\nPartial (2/3): separation and integration correct, missing $C$ or sign choice.\nMinimal (1/3): only separates variables.",
+      "rubric_he": "ציון מלא (3/3): מפריד $y \\, dy = x \\, dx$, אינטגרציה $y^2/2 = x^2/2 + C$, מחיל $y(0) = 2 \\Rightarrow C = 2$, אז $y = \\sqrt{x^2 + 4}$.\nחלקי (2/3): פירוק ואינטגרציה נכונים, חסר $C$ או בחירת סימן.\nמינימלי (1/3): רק פירוק משתנים.",
+      "explanation_en": "$y \\, dy = x \\, dx$. Integrate: $y^2/2 = x^2/2 + C$. Apply $y(0) = 2$: $2 = 0 + C \\Rightarrow C = 2$. So $y^2 = x^2 + 4$, $y = \\sqrt{x^2 + 4}$.",
+      "explanation_he": "$y \\, dy = x \\, dx$. אינטגרציה: $y^2/2 = x^2/2 + C$. מחילים $y(0) = 2$: $C = 2$. אז $y = \\sqrt{x^2 + 4}$.",
+      "skill_atoms": ["separable_ode", "initial_condition_application"]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "A bacterial culture doubles every 3 hours. Starting with 100 cells, how many after 12 hours?",
+      "stem_he": "תרבית חיידקים מכפילה את עצמה כל 3 שעות. עם 100 תאים בהתחלה, כמה אחרי 12 שעות?",
+      "options_en": ["$1200$", "$1600$", "$800$", "$400$"],
+      "options_he": ["$1200$", "$1600$", "$800$", "$400$"],
+      "correct_index": 1,
+      "explanation_en": "$N(t) = 100 \\cdot 2^{t/3}$. At $t = 12$: $2^{12/3} = 2^4 = 16$. So $N(12) = 1600$.",
+      "explanation_he": "$N(t) = 100 \\cdot 2^{t/3}$. ב-$t = 12$: $2^4 = 16$. אז $N(12) = 1600$.",
+      "skill_atoms": ["doubling_time"]
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Newton's law of cooling: an object's temperature satisfies $\\frac{dT}{dt} = -k(T - T_a)$, where $T_a$ is ambient temperature. Solve this ODE and explain the long-term behavior.",
+      "stem_he": "חוק הקירור של ניוטון: טמפרטורת גוף מקיימת $\\frac{dT}{dt} = -k(T - T_a)$, כאשר $T_a$ טמפרטורת הסביבה. פתרו וציינו את ההתנהגות לטווח ארוך.",
+      "rubric_en": "Full credit (3/3): substitution $u = T - T_a$ gives $u' = -ku$, so $u = Ce^{-kt}$, i.e. $T = T_a + Ce^{-kt}$. As $t \\to \\infty$, $T \\to T_a$.\nPartial (2/3): correct solution form but doesn't connect to long-term limit.\nMinimal (1/3): identifies separable structure only.",
+      "rubric_he": "ציון מלא (3/3): הצבה $u = T - T_a$ נותנת $u' = -ku$, אז $T = T_a + Ce^{-kt}$. ב-$t \\to \\infty$, $T \\to T_a$.\nחלקי (2/3): צורת פתרון נכונה אבל ללא חיבור לגבול.\nמינימלי (1/3): רק מזהה מבנה פריד.",
+      "explanation_en": "Let $u = T - T_a$. Then $u' = T'$, equation becomes $u' = -ku$ ⇒ $u = Ce^{-kt}$. So $T(t) = T_a + Ce^{-kt}$. As $t \\to \\infty$, $e^{-kt} \\to 0$, so $T \\to T_a$ — the object reaches ambient temperature, as expected.",
+      "explanation_he": "נסמן $u = T - T_a$. אז $u' = T'$, המשוואה הופכת ל-$u' = -ku$ ⇒ $u = Ce^{-kt}$. אז $T(t) = T_a + Ce^{-kt}$. ב-$t \\to \\infty$, $T \\to T_a$.",
+      "skill_atoms": ["substitution_in_ode", "newton_cooling"]
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Carbon-14 has half-life $\\approx 5730$ years. A bone sample has 25% of original $^{14}$C. Approximate age:",
+      "stem_he": "פחמן-14 בעל חצי-חיים $\\approx 5730$ שנים. דגימת עצם עם 25% מ-$^{14}$C המקורי. הערכת גיל:",
+      "options_en": ["$5730$ years", "$11460$ years", "$2865$ years", "$17190$ years"],
+      "options_he": ["$5730$ שנים", "$11460$ שנים", "$2865$ שנים", "$17190$ שנים"],
+      "correct_index": 1,
+      "explanation_en": "25% = $(1/2)^2$, so 2 half-lives. $2 \\cdot 5730 = 11460$ years.",
+      "explanation_he": "25% = $(1/2)^2$, אז 2 חצאי-חיים. $2 \\cdot 5730 = 11460$ שנים.",
+      "skill_atoms": ["radiocarbon_dating", "half_life_reasoning"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "ODE = equation relating $y, y', y''$, etc.",
+      "Direct integration solves $y' = f(x)$.",
+      "Separable: $y' = f(x)g(y)$ ⇒ separate and integrate both sides.",
+      "Exponential law: $y' = ky \\Rightarrow y = Ae^{kx}$. $A = y(0)$.",
+      "Initial condition turns the family of solutions into ONE specific function."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "$y' = ky$ has solution $y = kx$",
+        "correction": "The rate is proportional to $y$, not to $x$. Solution is $Ae^{kx}$, not linear.",
+        "detect_phrase_en": "y prime equals ky linear",
+        "detect_phrase_he": "y תג שווה ky ליניארית"
+      },
+      {
+        "wrong": "Don't need $+C$ in ODEs",
+        "correction": "Always include $+C$ during integration; the initial condition fixes it.",
+        "detect_phrase_en": "ODE no plus C",
+        "detect_phrase_he": "ODE בלי פלוס C"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "direct_integration_ode",
+      "separable_ode",
+      "exponential_growth_ode",
+      "initial_condition_application",
+      "doubling_time",
+      "half_life_reasoning",
+      "newton_cooling",
+      "substitution_in_ode",
+      "radiocarbon_dating"
+    ],
+    "prerequisites_to_check_before_teaching": ["derivatives_rules", "integrals_intro"],
+    "tutor_pacing_hint": "Always connect the abstract ODE to a real-world story: population, decay, cooling. Drill the exponential-law recipe first; it covers 80% of high-school problems.",
+    "coach_drill_skills": [
+      "direct_integration_ode",
+      "separable_ode",
+      "exponential_growth_ode"
+    ],
+    "diagnostic_signals": {
+      "if_learner_treats_y'=ky_as_linear": "Walk through $\\frac{dy}{y} = k dx$ step by step to derive the exponential.",
+      "if_learner_skips_initial_condition": "Highlight that without IC the answer is a FAMILY; with IC it's a single function."
+    },
+    "next_recommended": ["uni_derivatives", "uni_integrals"]
+  }
+}

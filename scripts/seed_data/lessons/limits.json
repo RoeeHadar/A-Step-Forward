@@ -1,0 +1,190 @@
+{
+  "concept_id": "limits",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Limits — The Foundation of Calculus",
+  "title_he": "גבולות — היסוד של החשבון הדיפרנציאלי והאינטגרלי",
+  "summary_en": "A limit captures the value a function 'approaches' as $x$ approaches a target — even if the function isn't defined there. Limits are the bedrock of derivatives, integrals, and continuity.",
+  "summary_he": "גבול מתאר את הערך שאליו פונקציה 'מתקרבת' כאשר $x$ מתקרב למטרה — גם אם הפונקציה לא מוגדרת שם. גבולות הם היסוד של נגזרות, אינטגרלים ורציפות.",
+  "est_minutes": 18,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What is a limit",
+      "title_he": "מהו גבול",
+      "body_en_md": "Consider $f(x) = \\dfrac{x^2 - 1}{x - 1}$. At $x = 1$, the formula gives $\\frac{0}{0}$ — undefined. But for any $x \\ne 1$, we can simplify: $f(x) = \\dfrac{(x-1)(x+1)}{x-1} = x + 1$.\n\nSo as $x$ gets close to $1$, $f(x)$ gets close to $2$. We write\n\n$$\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1} = 2.$$\n\nThe **limit** is the value $f(x)$ approaches as $x$ approaches the target — regardless of what (if anything) happens AT the target.\n\nLimits unlock:\n- **Derivatives**: instantaneous rate of change = limit of average rates.\n- **Integrals**: area under a curve = limit of rectangle sums.\n- **Continuity**: a function is continuous if its limits match its values everywhere.",
+      "body_he_md": "נסתכל על $f(x) = \\dfrac{x^2 - 1}{x - 1}$. ב-$x = 1$ הנוסחה נותנת $\\frac{0}{0}$ — לא מוגדר. אבל לכל $x \\ne 1$, אפשר לפשט: $f(x) = \\dfrac{(x-1)(x+1)}{x-1} = x + 1$.\n\nאז כאשר $x$ מתקרב ל-$1$, $f(x)$ מתקרב ל-$2$. כותבים\n\n$$\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1} = 2.$$\n\n**גבול** הוא הערך אליו $f(x)$ מתקרב כאשר $x$ מתקרב למטרה — ללא קשר למה (אם בכלל) קורה במטרה.\n\nגבולות פותחים:\n- **נגזרות**: קצב שינוי רגעי = גבול של קצבים ממוצעים.\n- **אינטגרלים**: שטח מתחת לעקומה = גבול של סכומי מלבנים.\n- **רציפות**: פונקציה רציפה אם גבוליה תואמים את ערכיה בכל מקום."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Computing limits — the toolbox",
+      "title_he": "חישוב גבולות — הארגז כלים",
+      "body_en_md": "### 1. Substitution\n\nIf $f$ is 'nice' (polynomial, rational without zero denominator, trig, exp, log within domain), then $\\lim_{x \\to a} f(x) = f(a)$. Just plug in.\n\nExample: $\\lim_{x \\to 2}(3x^2 - 5) = 3 \\cdot 4 - 5 = 7$.\n\n### 2. Algebraic simplification (the $0/0$ case)\n\nIf substitution gives $0/0$, try:\n- **Factor and cancel**: $\\lim_{x\\to 2}\\dfrac{x^2 - 4}{x - 2} = \\lim_{x \\to 2}(x + 2) = 4$.\n- **Multiply by conjugate**: $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9} - 3}{x}$ — multiply numerator and denominator by $\\sqrt{x+9} + 3$.\n- **Common denominator**: combine fractions before simplifying.\n\n### 3. Standard limits\n\nMemorize:\n\n$$\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\qquad \\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 0, \\qquad \\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2} = \\frac{1}{2}.$$\n\n$$\\lim_{x \\to \\infty}\\left(1 + \\frac{1}{x}\\right)^x = e.$$\n\n### 4. Limits at infinity (rational functions)\n\nFor $\\lim_{x \\to \\infty}\\dfrac{P(x)}{Q(x)}$ with polynomials of degrees $p$ and $q$:\n- If $p < q$: limit is $0$.\n- If $p = q$: limit is the ratio of leading coefficients.\n- If $p > q$: limit is $\\pm\\infty$ (depending on signs).\n\nExample: $\\lim_{x \\to \\infty}\\dfrac{3x^2 + 5}{2x^2 - 7} = \\dfrac{3}{2}$.\n\n### 5. One-sided limits\n\n$\\lim_{x \\to a^+}$ approaches from the right; $\\lim_{x \\to a^-}$ from the left. The two-sided limit exists iff both one-sided limits exist AND are equal.\n\nExample: $\\lim_{x \\to 0^+} \\frac{1}{x} = +\\infty$, $\\lim_{x \\to 0^-} \\frac{1}{x} = -\\infty$. So $\\lim_{x \\to 0} \\frac{1}{x}$ does NOT exist.",
+      "body_he_md": "### 1. הצבה\n\nאם $f$ 'נחמדה' (פולינום, רציונלית עם מכנה לא אפס, טריג, אקס, לוג בתחום), אז $\\lim_{x \\to a} f(x) = f(a)$. פשוט מציבים.\n\nדוגמה: $\\lim_{x \\to 2}(3x^2 - 5) = 7$.\n\n### 2. פישוט אלגברי (המקרה $0/0$)\n\nאם הצבה נותנת $0/0$, מנסים:\n- **לפרק ולצמצם**: $\\lim_{x\\to 2}\\dfrac{x^2 - 4}{x - 2} = \\lim_{x \\to 2}(x + 2) = 4$.\n- **לכפול בצמוד**: $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9} - 3}{x}$ — מכפילים מונה ומכנה ב-$\\sqrt{x+9} + 3$.\n- **מכנה משותף**: מצרפים שברים לפני פישוט.\n\n### 3. גבולות סטנדרטיים\n\nלזכור:\n\n$$\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\qquad \\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2} = \\frac{1}{2}.$$\n\n$$\\lim_{x \\to \\infty}\\left(1 + \\frac{1}{x}\\right)^x = e.$$\n\n### 4. גבולות באינסוף (פונקציות רציונליות)\n\nעבור $\\lim_{x \\to \\infty}\\dfrac{P(x)}{Q(x)}$ עם פולינומים ממעלות $p$ ו-$q$:\n- אם $p < q$: גבול $0$.\n- אם $p = q$: גבול היחס בין המקדמים המובילים.\n- אם $p > q$: גבול $\\pm\\infty$.\n\n### 5. גבולות חד-צדדיים\n\n$\\lim_{x \\to a^+}$ מתקרב מימין; $\\lim_{x \\to a^-}$ משמאל. הגבול הדו-צדדי קיים אם ורק אם שני החד-צדדיים קיימים ושווים.\n\nדוגמה: $\\lim_{x \\to 0^+} \\frac{1}{x} = +\\infty$, $\\lim_{x \\to 0^-} \\frac{1}{x} = -\\infty$. אז $\\lim_{x \\to 0} \\frac{1}{x}$ לא קיים."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: limit with conjugate",
+      "title_he": "דוגמה פתורה: גבול עם צמוד",
+      "body_en_md": "Compute $\\lim_{x \\to 0} \\dfrac{\\sqrt{x+4} - 2}{x}$.\n\n**Step 1:** substitution gives $\\dfrac{2-2}{0} = \\dfrac{0}{0}$ — indeterminate.\n\n**Step 2:** multiply numerator and denominator by the conjugate $\\sqrt{x+4} + 2$:\n\n$$\\frac{\\sqrt{x+4} - 2}{x} \\cdot \\frac{\\sqrt{x+4} + 2}{\\sqrt{x+4} + 2} = \\frac{(x+4) - 4}{x(\\sqrt{x+4} + 2)} = \\frac{x}{x(\\sqrt{x+4} + 2)} = \\frac{1}{\\sqrt{x+4} + 2}.$$\n\n**Step 3:** now substitution works:\n\n$$\\lim_{x \\to 0} \\frac{1}{\\sqrt{x+4} + 2} = \\frac{1}{\\sqrt{4} + 2} = \\frac{1}{4}.$$",
+      "body_he_md": "חשבו $\\lim_{x \\to 0} \\dfrac{\\sqrt{x+4} - 2}{x}$.\n\n**שלב 1:** הצבה נותנת $\\dfrac{2-2}{0} = \\dfrac{0}{0}$ — לא מוגדר.\n\n**שלב 2:** מכפילים מונה ומכנה בצמוד $\\sqrt{x+4} + 2$:\n\n$$\\frac{(x+4) - 4}{x(\\sqrt{x+4} + 2)} = \\frac{1}{\\sqrt{x+4} + 2}.$$\n\n**שלב 3:** עכשיו הצבה עובדת:\n\n$$\\lim_{x \\to 0} \\frac{1}{\\sqrt{x+4} + 2} = \\frac{1}{4}.$$"
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing limit with value.** $\\lim_{x \\to 1} f(x)$ does NOT have to equal $f(1)$. The function might be undefined or have a jump there.\n2. **Substituting into $0/0$.** This is **indeterminate**, not zero. You must simplify first.\n3. **Forgetting one-sided checks.** If the two sides give different limits, the two-sided limit doesn't exist.\n4. **$\\lim_{x \\to 0} \\frac{\\sin x}{x} \\ne 0$.** It's $1$. Don't blindly substitute.\n5. **Wrong degree comparison at infinity.** For $\\lim_{x\\to\\infty} \\frac{x^2 + 1}{x + 3}$, since numerator's degree is higher, limit is $\\infty$, not $1$.",
+      "body_he_md": "1. **בלבול בין גבול וערך.** $\\lim_{x \\to 1} f(x)$ לא חייב להיות שווה ל-$f(1)$. הפונקציה יכולה להיות לא מוגדרת או לקפוץ שם.\n2. **הצבה לתוך $0/0$.** זה **לא מוגדר**, לא אפס. חייבים לפשט קודם.\n3. **שכחת בדיקות חד-צדדיות.** אם שני הצדדים נותנים גבולות שונים, הגבול הדו-צדדי לא קיים.\n4. **$\\lim_{x \\to 0} \\frac{\\sin x}{x} \\ne 0$.** זה $1$. לא להציב באופן עיוור.\n5. **השוואת מעלה שגויה באינסוף.** עבור $\\lim_{x\\to\\infty} \\frac{x^2 + 1}{x + 3}$, מעלת המונה גבוהה יותר, אז הגבול $\\infty$, לא $1$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- $\\lim_{x \\to a} f(x) = L$ means $f(x)$ approaches $L$ as $x$ approaches $a$ (but ≠ $a$).\n- Substitution works for 'nice' functions. If you get $0/0$, simplify (factor, conjugate, common denominator).\n- Memorize: $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$ and $\\lim_{x\\to\\infty}(1+1/x)^x = e$.\n- At infinity (rational): compare degrees of $P$ and $Q$.\n- One-sided limits: both must exist AND agree for the two-sided limit to exist.",
+      "body_he_md": "- $\\lim_{x \\to a} f(x) = L$ פירושו ש-$f(x)$ מתקרב ל-$L$ כש-$x$ מתקרב ל-$a$ (אבל ≠ $a$).\n- הצבה עובדת לפונקציות 'נחמדות'. אם מקבלים $0/0$, מפשטים (פירוק, צמוד, מכנה משותף).\n- לזכור: $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$ ו-$\\lim_{x\\to\\infty}(1+1/x)^x = e$.\n- באינסוף (רציונלי): משווים מעלות של $P$ ו-$Q$.\n- גבולות חד-צדדיים: שניהם חייבים להתקיים ולהסכים כדי שהגבול הדו-צדדי יתקיים."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\lim_{x \\to 3}(2x^2 - x + 1)$.",
+      "stem_he": "חשבו $\\lim_{x \\to 3}(2x^2 - x + 1)$.",
+      "options_en": ["$16$", "$15$", "$14$", "$18$"],
+      "options_he": ["$16$", "$15$", "$14$", "$18$"],
+      "correct_index": 0,
+      "explanation_en": "Polynomial: substitute directly. $2(9) - 3 + 1 = 18 - 3 + 1 = 16$.",
+      "explanation_he": "פולינום: מציבים ישירות. $2(9) - 3 + 1 = 16$.",
+      "skill_atoms": ["limit_substitution"]
+    },
+    {
+      "ord": 2,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\lim_{x \\to 0}\\dfrac{\\sin(5x)}{x}$.",
+      "stem_he": "חשבו $\\lim_{x \\to 0}\\dfrac{\\sin(5x)}{x}$.",
+      "correct_answer": "5",
+      "explanation_en": "$\\frac{\\sin(5x)}{x} = 5 \\cdot \\frac{\\sin(5x)}{5x}$. As $x \\to 0$, $5x \\to 0$ and $\\frac{\\sin(5x)}{5x} \\to 1$. So limit is $5$.",
+      "explanation_he": "$\\frac{\\sin(5x)}{x} = 5 \\cdot \\frac{\\sin(5x)}{5x}$. כאשר $x \\to 0$, $5x \\to 0$ ו-$\\frac{\\sin(5x)}{5x} \\to 1$. אז הגבול $5$.",
+      "skill_atoms": ["standard_trig_limit"]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 2}\\dfrac{x^2 - 4}{x - 2}$.",
+      "stem_he": "חשבו $\\lim_{x \\to 2}\\dfrac{x^2 - 4}{x - 2}$.",
+      "options_en": ["$0$", "$2$", "$4$", "Undefined"],
+      "options_he": ["$0$", "$2$", "$4$", "לא מוגדר"],
+      "correct_index": 2,
+      "explanation_en": "Substitution gives $0/0$. Factor: $\\frac{(x-2)(x+2)}{x-2} = x+2$. Limit: $2 + 2 = 4$.",
+      "explanation_he": "הצבה נותנת $0/0$. פירוק: $\\frac{(x-2)(x+2)}{x-2} = x+2$. גבול: $4$.",
+      "skill_atoms": ["limit_factor_cancel"]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to \\infty}\\dfrac{5x^3 + 2x - 1}{3x^3 - 7x^2}$.",
+      "stem_he": "חשבו $\\lim_{x \\to \\infty}\\dfrac{5x^3 + 2x - 1}{3x^3 - 7x^2}$.",
+      "options_en": ["$0$", "$\\frac{5}{3}$", "$\\infty$", "$\\frac{3}{5}$"],
+      "options_he": ["$0$", "$\\frac{5}{3}$", "$\\infty$", "$\\frac{3}{5}$"],
+      "correct_index": 1,
+      "explanation_en": "Same degree (3). Limit = ratio of leading coefficients = $5/3$.",
+      "explanation_he": "אותה מעלה (3). גבול = יחס מקדמים מובילים = $5/3$.",
+      "skill_atoms": ["limit_at_infinity_rational"]
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 0}\\dfrac{\\sqrt{1+x} - 1}{x}$. Show your work.",
+      "stem_he": "חשבו $\\lim_{x \\to 0}\\dfrac{\\sqrt{1+x} - 1}{x}$. הראו את העבודה.",
+      "rubric_en": "Full credit (3/3): identifies $0/0$, multiplies by conjugate $\\sqrt{1+x} + 1$, simplifies to $\\frac{1}{\\sqrt{1+x}+1}$, substitutes to get $\\frac{1}{2}$.\nPartial (2/3): correct technique but arithmetic error.\nMinimal (1/3): identifies need for conjugate only.",
+      "rubric_he": "ציון מלא (3/3): מזהה $0/0$, מכפיל בצמוד $\\sqrt{1+x} + 1$, מפשט ל-$\\frac{1}{\\sqrt{1+x}+1}$, מציב ומקבל $\\frac{1}{2}$.\nחלקי (2/3): טכניקה נכונה אבל טעות חישוב.\nמינימלי (1/3): רק מזהה צורך בצמוד.",
+      "explanation_en": "Multiply by $\\frac{\\sqrt{1+x}+1}{\\sqrt{1+x}+1}$: $\\frac{(1+x)-1}{x(\\sqrt{1+x}+1)} = \\frac{1}{\\sqrt{1+x}+1}$. Substitute $x=0$: $\\frac{1}{1+1} = \\frac{1}{2}$.",
+      "explanation_he": "מכפילים ב-$\\frac{\\sqrt{1+x}+1}{\\sqrt{1+x}+1}$: $\\frac{1}{\\sqrt{1+x}+1}$. הצבה $x=0$: $\\frac{1}{2}$.",
+      "skill_atoms": ["limit_conjugate_trick"]
+    },
+    {
+      "ord": 6,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Does $\\lim_{x \\to 0}\\dfrac{|x|}{x}$ exist?",
+      "stem_he": "האם $\\lim_{x \\to 0}\\dfrac{|x|}{x}$ קיים?",
+      "options_en": [
+        "Yes, equal to $0$",
+        "Yes, equal to $1$",
+        "Yes, equal to $-1$",
+        "No — one-sided limits differ"
+      ],
+      "options_he": [
+        "כן, שווה ל-$0$",
+        "כן, שווה ל-$1$",
+        "כן, שווה ל-$-1$",
+        "לא — הגבולות החד-צדדיים שונים"
+      ],
+      "correct_index": 3,
+      "explanation_en": "$\\lim_{x\\to 0^+}\\frac{|x|}{x} = \\frac{x}{x} = 1$. $\\lim_{x\\to 0^-}\\frac{|x|}{x} = \\frac{-x}{x} = -1$. They differ, so the two-sided limit does NOT exist.",
+      "explanation_he": "$\\lim_{x\\to 0^+}\\frac{|x|}{x} = 1$. $\\lim_{x\\to 0^-}\\frac{|x|}{x} = -1$. שונים, אז הגבול הדו-צדדי לא קיים.",
+      "skill_atoms": ["one_sided_limits"]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Limit ≠ value. A function can approach $L$ at $a$ even when undefined at $a$.",
+      "$0/0$ is indeterminate — must simplify, never plug in directly.",
+      "Standard trig limit: $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$.",
+      "At infinity: compare polynomial degrees (lower / equal / higher).",
+      "Two-sided limit = both one-sided limits exist AND match."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Limit at $a$ equals $f(a)$",
+        "correction": "Only for continuous functions. Otherwise the limit can differ or $f(a)$ may not exist.",
+        "detect_phrase_en": "limit equals value",
+        "detect_phrase_he": "גבול שווה לערך"
+      },
+      {
+        "wrong": "$0/0 = 0$ or $= 1$ or undefined",
+        "correction": "$0/0$ is INDETERMINATE — neither a number nor 'no limit'. Need algebraic manipulation.",
+        "detect_phrase_en": "zero over zero",
+        "detect_phrase_he": "אפס חלקי אפס"
+      },
+      {
+        "wrong": "$\\sin(x)/x \\to 0$ at $x = 0$",
+        "correction": "It approaches $1$, not $0$. This is one of the fundamental limits.",
+        "detect_phrase_en": "sin x over x zero",
+        "detect_phrase_he": "סינוס x חלקי x אפס"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "limit_substitution",
+      "limit_factor_cancel",
+      "limit_conjugate_trick",
+      "standard_trig_limit",
+      "limit_at_infinity_rational",
+      "one_sided_limits"
+    ],
+    "prerequisites_to_check_before_teaching": [
+      "functions_quadratic",
+      "trigonometry_identities",
+      "sequences_geometric"
+    ],
+    "tutor_pacing_hint": "Always start with the geometric intuition (graph approaching but not reaching). Drill the $0/0$ check: 'always substitute first; if undefined, simplify.' Reserve $\\epsilon$-$\\delta$ formalism for the university lesson.",
+    "coach_drill_skills": [
+      "limit_substitution",
+      "limit_factor_cancel",
+      "limit_conjugate_trick",
+      "limit_at_infinity_rational"
+    ],
+    "diagnostic_signals": {
+      "if_learner_blindly_substitutes_into_zero_over_zero": "Pause: 'is the denominator zero? Then DON'T plug in. Simplify first.'",
+      "if_learner_says_sin_x_over_x_is_zero": "Re-derive geometrically with small-angle approximation $\\sin x \\approx x$.",
+      "if_learner_can't_choose_technique": "Decision tree: polynomial→substitute; $0/0$→factor or conjugate; $\\infty/\\infty$→compare degrees."
+    },
+    "next_recommended": ["continuity", "derivatives_intro"]
+  }
+}
