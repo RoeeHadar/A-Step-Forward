@@ -1,11 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import type { LessonWithQuestions } from '@/lib/neon-db';
+import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { LessonReader } from './lesson-reader';
 import { LessonQuizPanel } from './lesson-quiz-panel';
-
-type Lang = 'en' | 'he';
 
 export function LessonPageClient({
   data,
@@ -14,7 +12,8 @@ export function LessonPageClient({
   data: LessonWithQuestions;
   conceptId: string;
 }) {
-  const [lang, setLang] = useState<Lang>('en');
+  // Default Hebrew — see hooks/use-language-preference.ts for rationale.
+  const [lang, setLang] = useLanguagePreference('he');
 
   return (
     <div className="space-y-2">

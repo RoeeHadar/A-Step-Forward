@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ExternalLink } from 'lucide-react';
+import { useLanguagePreference } from '@/hooks/use-language-preference';
 
 interface Explanation {
   language: string;
@@ -41,8 +42,19 @@ export function ConceptContentClient({
     return langs;
   }, [en, he]);
 
-  const [lang, setLang] = useState<'en' | 'he'>(availableLangs[0] ?? 'en');
-  const active = lang === 'en' ? en ?? fallback : he ?? fallback;
+  const [lang, setLang] = useLanguagePreference('he');
+  // If the learner's preference isn't an available language (e.g. they prefer
+  // HE but only EN was scraped for this concept), fall back to whatever IS
+  // available without overwriting their preference for other pages.
+  useEffect(() => {
+    if (availableLangs.length === 0) return;
+    if (!availableLangs.includes(lang)) {
+      // Note: don't persist this auto-switch — only the explicit toggle should.
+      // We rely on the prop dropdown to call setLang for actual user intent.
+    }
+  }, [lang, availableLangs]);
+  const effective = availableLangs.includes(lang) ? lang : (availableLangs[0] ?? 'en');
+  const active = effective === 'en' ? en ?? fallback : he ?? fallback;
   if (!active) return null;
 
   const dir = active.language === 'he' ? 'rtl' : 'ltr';
@@ -57,7 +69,7 @@ export function ConceptContentClient({
               type="button"
               onClick={() => setLang(l)}
               className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
-                lang === l
+                effective === l
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               }`}

@@ -767,11 +767,40 @@ export interface LessonRow {
   version: number;
 }
 
+export type LessonQuestionKind =
+  | 'mcq'
+  | 'mcq_multi'
+  | 'true_false'
+  | 'open'
+  | 'short_answer'
+  | 'fill_blank'
+  | 'numeric'
+  | 'match'
+  | 'ordering'
+  | 'derivation';
+
+export interface LessonAnswerPayload {
+  // Common to many kinds; only some fields populated per kind.
+  correct_indices?: number[];
+  correct_bool?: boolean;
+  acceptable_answers?: string[];
+  case_sensitive?: boolean;
+  left_en?: string[];
+  left_he?: string[];
+  right_en?: string[];
+  right_he?: string[];
+  correct_pairs?: number[];
+  steps_en?: string[];
+  steps_he?: string[];
+  correct_order?: number[];
+  expected_steps?: string[];
+}
+
 export interface LessonQuestionRow {
   id: string;
   lesson_id: string;
   ord: number;
-  kind: 'mcq' | 'open' | 'fill_blank' | 'numeric';
+  kind: LessonQuestionKind;
   difficulty: 'easy' | 'medium' | 'hard';
   stem_en: string;
   stem_he: string;
@@ -779,6 +808,7 @@ export interface LessonQuestionRow {
   options_he: string[] | null;
   correct_index: number | null;
   correct_answer: string | null;
+  answer_payload: LessonAnswerPayload | null;
   rubric_en: string | null;
   rubric_he: string | null;
   explanation_en: string;
@@ -809,7 +839,8 @@ export async function fetchLessonByConceptId(
     const questions = (await sql`
       SELECT id, lesson_id, ord, kind, difficulty,
              stem_en, stem_he, options_en, options_he,
-             correct_index, correct_answer, rubric_en, rubric_he,
+             correct_index, correct_answer, answer_payload,
+             rubric_en, rubric_he,
              explanation_en, explanation_he, skill_atoms
       FROM lesson_questions
       WHERE lesson_id = ${lesson.id}
@@ -853,6 +884,135 @@ export async function fetchLessonAgentHintsByConceptIds(
       console.warn('fetchLessonAgentHintsByConceptIds failed:', err);
     }
     return [];
+  }
+}
+
+/**
+ * Loads the minimal fields needed to grade a single question server-side.
+ * Used by /api/lesson/answer so the client's `correct` flag can never be
+ * trusted for objective question kinds.
+ */
+export async function fetchLessonQuestionForGrading(
+  questionId: string,
+): Promise<Pick<
+  LessonQuestionRow,
+  'id' | 'kind' | 'correct_index' | 'correct_answer' | 'answer_payload'
+> | null> {
+  if (!sql) return null;
+  try {
+    const rows = (await sql`
+      SELECT id, kind, correct_index, correct_answer, answer_payload
+      FROM lesson_questions
+      WHERE id = ${questionId}::uuid
+      LIMIT 1
+    `) as Array<Pick<
+      LessonQuestionRow,
+      'id' | 'kind' | 'correct_index' | 'correct_answer' | 'answer_payload'
+    >>;
+    return rows[0] ?? null;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchLessonQuestionForGrading failed:', err);
+    }
+    return null;
+  }
+}
+
+/**
+ * Server-side grader. Returns { correct, graded_by } where `graded_by` is
+ * 'server' for objective kinds we can verify and 'self' for open/derivation
+ * kinds that rely on the learner's self-assessment.
+ */
+export function gradeLessonAnswer(
+  q: Pick<LessonQuestionRow, 'kind' | 'correct_index' | 'correct_answer' | 'answer_payload'>,
+  userAnswer: unknown,
+  clientCorrect: boolean | undefined,
+): { correct: boolean; graded_by: 'server' | 'self'; reason?: string } {
+  const norm = (s: string, cs = false) => {
+    const t = s.trim().replace(/\s+/g, ' ');
+    return cs ? t : t.toLowerCase();
+  };
+  const numericClose = (a: string, b: string): boolean => {
+    const na = Number.parseFloat(a);
+    const nb = Number.parseFloat(b);
+    if (Number.isNaN(na) || Number.isNaN(nb)) return false;
+    const tol = Math.max(1e-3, Math.abs(nb) * 0.01);
+    return Math.abs(na - nb) <= tol;
+  };
+  const arraysEqual = (a: number[], b: number[]) =>
+    a.length === b.length && a.every((v, i) => v === b[i]);
+  const setEqual = (a: number[], b: number[]) =>
+    arraysEqual([...a].sort((x, y) => x - y), [...b].sort((x, y) => x - y));
+
+  switch (q.kind) {
+    case 'mcq': {
+      if (typeof userAnswer !== 'number' || q.correct_index == null) {
+        return { correct: false, graded_by: 'server', reason: 'invalid answer' };
+      }
+      return { correct: userAnswer === q.correct_index, graded_by: 'server' };
+    }
+    case 'mcq_multi': {
+      const expected = q.answer_payload?.correct_indices ?? [];
+      const picked = Array.isArray(userAnswer)
+        ? (userAnswer as unknown[]).filter((v): v is number => typeof v === 'number')
+        : [];
+      return { correct: setEqual(picked, expected), graded_by: 'server' };
+    }
+    case 'true_false': {
+      if (typeof userAnswer !== 'boolean' || typeof q.answer_payload?.correct_bool !== 'boolean') {
+        return { correct: false, graded_by: 'server', reason: 'invalid answer' };
+      }
+      return { correct: userAnswer === q.answer_payload.correct_bool, graded_by: 'server' };
+    }
+    case 'numeric': {
+      if (typeof userAnswer !== 'string' || !q.correct_answer) {
+        return { correct: false, graded_by: 'server', reason: 'invalid answer' };
+      }
+      return { correct: numericClose(userAnswer, q.correct_answer), graded_by: 'server' };
+    }
+    case 'fill_blank': {
+      if (typeof userAnswer !== 'string' || !q.correct_answer) {
+        return { correct: false, graded_by: 'server', reason: 'invalid answer' };
+      }
+      return { correct: norm(userAnswer) === norm(q.correct_answer), graded_by: 'server' };
+    }
+    case 'short_answer': {
+      if (typeof userAnswer !== 'string') {
+        return { correct: false, graded_by: 'server', reason: 'invalid answer' };
+      }
+      const cs = q.answer_payload?.case_sensitive ?? false;
+      const accepted = (q.answer_payload?.acceptable_answers ?? []).map((a) => norm(a, cs));
+      return { correct: accepted.includes(norm(userAnswer, cs)), graded_by: 'server' };
+    }
+    case 'match': {
+      const expected = q.answer_payload?.correct_pairs ?? [];
+      const userPairs = Array.isArray(userAnswer)
+        ? (userAnswer as unknown[]).map((v) => (typeof v === 'number' ? v : -1))
+        : [];
+      return {
+        correct: userPairs.length === expected.length && arraysEqual(userPairs, expected),
+        graded_by: 'server',
+      };
+    }
+    case 'ordering': {
+      const expected = q.answer_payload?.correct_order ?? [];
+      const userOrder = Array.isArray(userAnswer)
+        ? (userAnswer as unknown[]).filter((v): v is number => typeof v === 'number')
+        : [];
+      return {
+        correct: userOrder.length === expected.length && arraysEqual(userOrder, expected),
+        graded_by: 'server',
+      };
+    }
+    case 'open':
+    case 'derivation': {
+      // No server-side grader for free-form answers yet; fall back to the
+      // learner's self-assessment. A future Grader-agent pass could re-score
+      // these against `rubric_en` / `explanation_en` and overwrite.
+      return { correct: Boolean(clientCorrect), graded_by: 'self' };
+    }
+    default:
+      return { correct: Boolean(clientCorrect), graded_by: 'self', reason: 'unknown kind' };
   }
 }
 
