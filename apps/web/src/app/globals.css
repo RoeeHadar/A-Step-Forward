@@ -221,6 +221,30 @@
   animation-delay: 0.4s;
 }
 
+/* KaTeX math must ALWAYS render left-to-right, even when the surrounding
+   paragraph / lesson body is in Hebrew (dir="rtl"). Without these overrides
+   the rtl context flips operands and breaks readability:
+     $\frac{a}{b}$  →  a/b   (good, ltr)   vs.   b/a   (bad, rtl bleed)
+   We isolate the bidi context so neighboring HE text is unaffected. The
+   `text-align: initial` reset is required because tailwind's prose ↔ rtl
+   variants force right-alignment of inline math when the parent block is
+   right-aligned. */
+.katex,
+.katex-display,
+.katex-html,
+span.katex,
+span.katex *,
+.katex-display > .katex {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  text-align: initial;
+}
+
+/* Display-math blocks keep their own centering. */
+.katex-display {
+  text-align: center !important;
+}
+
 @theme inline {
   --font-sans: var(--font-heebo), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --color-background: hsl(var(--background));
