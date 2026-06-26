@@ -2,7 +2,13 @@ import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
-import { getCurrentPlan, dbConfigured } from '@/lib/neon-db';
+import { LearnerStreakCard } from '@/components/learner-streak-card';
+import {
+  getCurrentPlan,
+  getLearnerStreak,
+  getRecentActivity,
+  dbConfigured,
+} from '@/lib/neon-db';
 import { ensureOnboarded } from '@/lib/onboarding-gate';
 import { Button } from '@asf/ui/button';
 
@@ -15,12 +21,34 @@ export default async function DashboardPage() {
   }
 
   await ensureOnboarded(userId, '/dashboard');
-  const plan = dbConfigured ? await getCurrentPlan(userId).catch(() => null) : null;
+  // All three lookups are parallel so the dashboard cold-start latency is
+  // bounded by the slowest single query rather than the sum.
+  const [plan, streak, activity] = dbConfigured
+    ? await Promise.all([
+        getCurrentPlan(userId).catch(() => null),
+        getLearnerStreak(userId).catch(() => ({
+          current_days: 0,
+          longest_days: 0,
+          last_active: null,
+          active_today: false,
+          active_days_last_30: 0,
+        })),
+        getRecentActivity(userId, 8).catch(() => []),
+      ])
+    : [null, {
+        current_days: 0,
+        longest_days: 0,
+        last_active: null,
+        active_today: false,
+        active_days_last_30: 0,
+      }, []];
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 space-y-6">
+        <LearnerStreakCard streak={streak} activity={activity} />
+
         {!plan ? (
           <div className="glass-surface rounded-2xl p-8 text-center">
             <h1 className="font-display text-2xl font-bold">No learning plan yet</h1>

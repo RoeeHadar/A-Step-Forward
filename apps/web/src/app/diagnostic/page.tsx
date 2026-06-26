@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import katex from 'katex';
 import {
@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { SiteHeader } from '@/components/site-header';
+import { useLanguagePreference } from '@/hooks/use-language-preference';
 import 'katex/dist/katex.min.css';
 
 interface DiagnosticOption {
@@ -26,7 +27,46 @@ interface DiagnosticQuestion {
   difficulty: number;
   stem: string;
   options: DiagnosticOption[];
+  stem_he?: string | null;
+  options_he?: DiagnosticOption[] | null;
 }
+
+/**
+ * Localised UI strings for the diagnostic page. Kept inline here (rather
+ * than a global i18n bundle) because the diagnostic is the very first
+ * thing a new learner sees and we want zero coupling to a translation
+ * framework we haven't introduced yet.
+ */
+const STR = {
+  he: {
+    question_n_of: (n: number, total: number) => `שאלה ${n} מתוך ~${total}`,
+    loading: 'טוען את האבחון שלך…',
+    submit: 'שלח תשובה',
+    checking: 'בודק…',
+    your_mastery: 'פרופיל השליטה שלך',
+    based_on: (n: number) => `מבוסס על ${n} שאלות מותאמות לפי תחומי הלימוד שלך.`,
+    generate_plan: 'יצירת תוכנית הלמידה שלי ←',
+    generating: 'יוצר…',
+    no_mastery: 'אין עדיין נתוני שליטה.',
+    option_label: (k: string, text: string) => `אפשרות ${k}: ${text.replace(/\$/g, '')}`,
+    fallback_plan_error: 'לא הצלחתי לייצר תוכנית למידה. נסה שוב מהכפתור למטה.',
+    lang_toggle: 'EN',
+  },
+  en: {
+    question_n_of: (n: number, total: number) => `Question ${n} of ~${total}`,
+    loading: 'Loading your diagnostic…',
+    submit: 'Submit answer',
+    checking: 'Checking…',
+    your_mastery: 'Your mastery profile',
+    based_on: (n: number) => `Based on ${n} adaptive questions across your topics.`,
+    generate_plan: 'Generate my learning plan →',
+    generating: 'Generating…',
+    no_mastery: 'No mastery data yet.',
+    option_label: (k: string, text: string) => `Option ${k}: ${text.replace(/\$/g, '')}`,
+    fallback_plan_error: 'Could not generate your learning plan. Try the button below.',
+    lang_toggle: 'עב',
+  },
+} as const;
 
 function renderLatex(text: string): string {
   return text.replace(/\$\$([^$]+)\$\$/g, (_m, expr: string) => {
@@ -46,6 +86,9 @@ function renderLatex(text: string): string {
 
 export default function DiagnosticPage() {
   const router = useRouter();
+  const [lang, setLang] = useLanguagePreference('he');
+  const t = STR[lang];
+  const isHe = lang === 'he';
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -57,6 +100,16 @@ export default function DiagnosticPage() {
   const [complete, setComplete] = useState(false);
   const [mastery, setMastery] = useState<Record<string, number>>({});
   const [planLoading, setPlanLoading] = useState(false);
+
+  // Resolve which language to show for the current question. Falls back to
+  // English if the HE columns aren't populated yet for this item.
+  const display = useMemo<{ stem: string; options: DiagnosticOption[] } | null>(() => {
+    if (!question) return null;
+    if (isHe && question.stem_he && question.options_he && question.options_he.length > 0) {
+      return { stem: question.stem_he, options: question.options_he };
+    }
+    return { stem: question.stem, options: question.options };
+  }, [question, isHe]);
 
   const startSession = useCallback(async () => {
     setLoading(true);
@@ -107,7 +160,7 @@ export default function DiagnosticPage() {
             return;
           }
           const errText = await planRes.text();
-          setError(errText || 'Could not generate your learning plan. Try the button below.');
+          setError(errText || t.fallback_plan_error);
         } catch (planErr) {
           setError(
             planErr instanceof Error ? planErr.message : 'Could not generate your learning plan.',
@@ -149,14 +202,24 @@ export default function DiagnosticPage() {
   const progressPct = complete ? 100 : Math.min(100, Math.round((questionNumber / totalEstimate) * 100));
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
+    <div className="min-h-screen bg-neutral-950 text-white" dir={isHe ? 'rtl' : 'ltr'} lang={lang}>
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-4 py-10">
         {!complete && (
           <div className="mb-8">
             <div className="flex justify-between text-xs text-white/50 mb-2">
-              <span>Question {questionNumber} of ~{totalEstimate}</span>
-              <span>{progressPct}%</span>
+              <span>{t.question_n_of(questionNumber, totalEstimate)}</span>
+              <div className="flex items-center gap-3">
+                <span>{progressPct}%</span>
+                <button
+                  type="button"
+                  onClick={() => setLang(isHe ? 'en' : 'he')}
+                  className="rounded border border-white/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white/70 hover:text-white"
+                  aria-label="Toggle language"
+                >
+                  {t.lang_toggle}
+                </button>
+              </div>
             </div>
             <div className="h-2 rounded-full bg-white/10 overflow-hidden">
               <div
@@ -168,21 +231,21 @@ export default function DiagnosticPage() {
         )}
 
         {loading && (
-          <p className="text-center text-white/50 py-20">Loading your diagnostic…</p>
+          <p className="text-center text-white/50 py-20">{t.loading}</p>
         )}
 
         {error && (
           <p className="text-sm text-red-400 bg-red-400/10 px-4 py-3 rounded-lg mb-6">{error}</p>
         )}
 
-        {!loading && !complete && question && (
+        {!loading && !complete && question && display && (
           <div className="space-y-6">
             <div
               className="rounded-2xl border border-white/10 bg-white/5 p-6 prose prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: renderLatex(question.stem) }}
+              dangerouslySetInnerHTML={{ __html: renderLatex(display.stem) }}
             />
             <div className="space-y-3">
-              {question.options.map((opt) => (
+              {display.options.map((opt) => (
                 <label
                   key={opt.key}
                   htmlFor={`opt-${opt.key}`}
@@ -199,7 +262,7 @@ export default function DiagnosticPage() {
                     value={opt.key}
                     checked={chosen === opt.key}
                     onChange={() => setChosen(opt.key)}
-                    aria-label={`Option ${opt.key}: ${opt.text.replace(/\$/g, '')}`}
+                    aria-label={t.option_label(opt.key, opt.text)}
                     className="mt-1 h-5 w-5 accent-cyan-400"
                   />
                   <span className="text-sm leading-relaxed">
@@ -214,7 +277,7 @@ export default function DiagnosticPage() {
               onClick={() => void submitAnswer()}
               className="w-full py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm disabled:opacity-40 hover:bg-cyan-300 transition-colors"
             >
-              {submitting ? 'Checking…' : 'Submit answer'}
+              {submitting ? t.checking : t.submit}
             </button>
           </div>
         )}
@@ -222,10 +285,8 @@ export default function DiagnosticPage() {
         {complete && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-2xl font-bold mb-2">Your mastery profile</h1>
-              <p className="text-sm text-white/50">
-                Based on {questionNumber} adaptive questions across your topics.
-              </p>
+              <h1 className="text-2xl font-bold mb-2">{t.your_mastery}</h1>
+              <p className="text-sm text-white/50">{t.based_on(questionNumber)}</p>
             </div>
 
             {radarData.length > 0 ? (
@@ -246,7 +307,7 @@ export default function DiagnosticPage() {
                 </ResponsiveContainer>
               </div>
             ) : (
-              <p className="text-center text-white/50 text-sm">No mastery data yet.</p>
+              <p className="text-center text-white/50 text-sm">{t.no_mastery}</p>
             )}
 
             <button
@@ -254,7 +315,7 @@ export default function DiagnosticPage() {
               onClick={() => void generatePlan()}
               className="w-full py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm disabled:opacity-50 hover:bg-cyan-300 transition-colors"
             >
-              {planLoading ? 'Generating…' : 'Generate my learning plan →'}
+              {planLoading ? t.generating : t.generate_plan}
             </button>
           </div>
         )}

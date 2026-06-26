@@ -39,5 +39,10 @@ class DiagnosticItemRow(Base):
     stem: Mapped[str] = mapped_column(Text, nullable=False)
     options: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Bilingual companions (added in migration 0015). The EN columns above
+    # stay primary for backwards compat; if HE is NULL the UI falls back to EN.
+    stem_he: Mapped[str | None] = mapped_column(Text, nullable=True)
+    options_he: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
+    explanation_he: Mapped[str | None] = mapped_column(Text, nullable=True)
     source_concept: Mapped[str] = mapped_column(String(128), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

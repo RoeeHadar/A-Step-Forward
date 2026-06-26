@@ -156,6 +156,10 @@ export interface DiagnosticItem {
   stem: string;
   options: { choices: string[]; correct: string };
   source_concept: string;
+  /** Optional HE variants (migration 0015). Null → falls back to EN. */
+  stem_he: string | null;
+  options_he: { choices: string[]; correct: string } | null;
+  explanation_he: string | null;
 }
 
 export interface DiagnosticQuestion {
@@ -165,6 +169,11 @@ export interface DiagnosticQuestion {
   difficulty: number;
   stem: string;
   options: { key: string; text: string }[];
+  /** Bilingual companion fields. When `stem_he`/`options_he` are present
+   * the UI can render either language; the actual choice happens on the
+   * client side from the persisted `asf_lang` preference. */
+  stem_he: string | null;
+  options_he: { key: string; text: string }[] | null;
 }
 
 export async function startDiagnosticSession(
@@ -186,7 +195,9 @@ export async function fetchDiagnosticItems(
 ): Promise<DiagnosticItem[]> {
   const s = requireSql();
   const rows = (await s`
-    SELECT id::text, topic, subject, difficulty::float AS difficulty, stem, options, source_concept
+    SELECT id::text, topic, subject, difficulty::float AS difficulty,
+           stem, options, source_concept,
+           stem_he, options_he, explanation_he
     FROM diagnostic_items
     WHERE subject = ANY(${subjects})
     ORDER BY random()
@@ -197,16 +208,22 @@ export async function fetchDiagnosticItems(
 
 export function itemToQuestion(item: DiagnosticItem): DiagnosticQuestion {
   const keys = ['A', 'B', 'C', 'D'];
+  const toOptions = (opts: { choices: string[] } | null | undefined) =>
+    (opts?.choices ?? []).slice(0, 4).map((text, i) => ({
+      key: keys[i] ?? String(i),
+      text,
+    }));
   return {
     id: item.id,
     topic: item.topic,
     subject: item.subject,
     difficulty: item.difficulty,
     stem: item.stem,
-    options: (item.options.choices ?? []).slice(0, 4).map((text, i) => ({
-      key: keys[i] ?? String(i),
-      text,
-    })),
+    options: toOptions(item.options),
+    // HE variants are returned to the client as soon as they exist in the
+    // DB. UI picks which language to render based on `useLanguagePreference`.
+    stem_he: item.stem_he,
+    options_he: item.options_he ? toOptions(item.options_he) : null,
   };
 }
 
@@ -1104,5 +1121,392 @@ export async function recordLessonAnswer(args: {
         successes = skill_practice.successes + ${correct ? 1 : 0},
         last_practiced = NOW()
     `;
+  }
+}
+
+// ── Learner persona (CLAUDE.md-style, shared across every agent) ─────────────
+
+/**
+ * Per-learner, free-form persona string. Agents read it on every turn as the
+ * "what this learner is like" baseline; the Memory Steward (and any agent
+ * promoted to do so) is allowed to rewrite or append. PII is stripped before
+ * write — never store learner names, contact details, or other identifiers.
+ *
+ * Recommended structure (kept short, < 1200 chars, markdown):
+ *
+ *   ## How they talk
+ *   - Casual Hebrew; uses English math terms; types fast and short.
+ *
+ *   ## How they like explanations
+ *   - One worked example first, then the rule. Hates dense definitions.
+ *
+ *   ## Triggers / preferences
+ *   - Anxiety spikes near exam dates → soften tone.
+ *   - Prefers physics intuition over pure math abstraction.
+ *
+ *   ## Recent observations (last 7d)
+ *   - Got SSS vs. SSA confused twice (2026-06-25).
+ */
+export interface LearnerPersona {
+  learner_id: string;
+  text: string | null;
+  updated_at: string | null;
+}
+
+export async function getLearnerPersona(
+  learnerId: string,
+): Promise<LearnerPersona | null> {
+  if (!sql) return null;
+  try {
+    const rows = (await sql`
+      SELECT learner_id,
+             learner_persona AS text,
+             learner_persona_updated_at AS updated_at
+      FROM learner_profiles
+      WHERE learner_id = ${learnerId}
+      LIMIT 1
+    `) as Array<LearnerPersona>;
+    return rows[0] ?? null;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getLearnerPersona failed', err);
+    }
+    return null;
+  }
+}
+
+/**
+ * Overwrite (full replace) the learner persona. We cap at 4000 chars so a
+ * runaway agent can't blow out the prompt budget.
+ */
+export async function setLearnerPersona(
+  learnerId: string,
+  text: string,
+): Promise<void> {
+  if (!sql) return;
+  const clamped = text.slice(0, 4000);
+  await sql`
+    UPDATE learner_profiles
+    SET learner_persona = ${clamped},
+        learner_persona_updated_at = NOW(),
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
+/**
+ * Append a single bullet line to the learner persona under the given section
+ * heading (creating the section if it doesn't exist). Idempotent on exact
+ * duplicate lines. Total length stays clamped to 4000 chars.
+ */
+export async function appendLearnerPersonaLine(
+  learnerId: string,
+  section: string,
+  line: string,
+): Promise<void> {
+  if (!sql) return;
+  const existing = await getLearnerPersona(learnerId);
+  const cur = existing?.text ?? '';
+  const bullet = `- ${line.trim()}`.replace(/\s+/g, ' ');
+  if (cur.includes(bullet)) return;
+  const header = `## ${section.trim()}`;
+  let next: string;
+  if (cur.includes(header)) {
+    const lines = cur.split('\n');
+    const idx = lines.findIndex((l) => l.trim() === header);
+    let insertAt = lines.length;
+    for (let i = idx + 1; i < lines.length; i += 1) {
+      if (lines[i]?.startsWith('## ')) {
+        insertAt = i;
+        break;
+      }
+    }
+    lines.splice(insertAt, 0, bullet);
+    next = lines.join('\n');
+  } else {
+    next = cur ? `${cur.trim()}\n\n${header}\n${bullet}\n` : `${header}\n${bullet}\n`;
+  }
+  await setLearnerPersona(learnerId, next.slice(0, 4000));
+}
+
+// ── Per-(learner, agent) cumulative additive notes ──────────────────────────
+
+export interface LearnerAgentNote {
+  id: string;
+  learner_id: string;
+  agent: string;
+  kind: string;
+  content: string;
+  importance: number;
+  related_concept_id: string | null;
+  source_turn_id: string | null;
+  created_at: string;
+  last_referenced_at: string | null;
+}
+
+/**
+ * Read the top-K most-useful notes for (learner, agent). Sorted by importance
+ * desc, then created_at desc. Filters out archived + superseded rows. Each
+ * agent only sees its OWN scratchpad — never another agent's.
+ */
+export async function fetchAgentNotes(
+  learnerId: string,
+  agent: string,
+  limit = 8,
+): Promise<LearnerAgentNote[]> {
+  if (!sql) return [];
+  try {
+    const rows = (await sql`
+      SELECT id::text, learner_id, agent, kind, content, importance,
+             related_concept_id, source_turn_id::text AS source_turn_id,
+             created_at, last_referenced_at
+      FROM learner_agent_notes
+      WHERE learner_id = ${learnerId}
+        AND agent = ${agent}
+        AND archived_at IS NULL
+        AND superseded_by IS NULL
+      ORDER BY importance DESC, created_at DESC
+      LIMIT ${limit}
+    `) as LearnerAgentNote[];
+    return rows;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] fetchAgentNotes failed', err);
+    }
+    return [];
+  }
+}
+
+export interface NewAgentNote {
+  kind?: string;            // 'observation' | 'preference' | 'strategy' | 'open_question' | …
+  content: string;
+  importance?: number;      // 1..5; default 3
+  related_concept_id?: string | null;
+  source_turn_id?: string | null;
+}
+
+/**
+ * Append a new note for (learner, agent). Returns the new note id. Caller
+ * is expected to clamp `content` to a reasonable length (we hard-cap at 600).
+ */
+export async function appendAgentNote(
+  learnerId: string,
+  agent: string,
+  note: NewAgentNote,
+): Promise<string | null> {
+  if (!sql) return null;
+  const id = randomUUID();
+  const content = note.content.slice(0, 600);
+  const importance = Math.max(1, Math.min(5, note.importance ?? 3));
+  try {
+    await sql`
+      INSERT INTO learner_agent_notes
+        (id, learner_id, agent, kind, content, importance,
+         related_concept_id, source_turn_id, created_at)
+      VALUES
+        (${id}, ${learnerId}, ${agent}, ${note.kind ?? 'observation'},
+         ${content}, ${importance},
+         ${note.related_concept_id ?? null},
+         ${note.source_turn_id ?? null},
+         NOW())
+    `;
+    return id;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] appendAgentNote failed', err);
+    }
+    return null;
+  }
+}
+
+/**
+ * Mark a note as superseded by another, or archive it. Used by the dreaming /
+ * consolidation pass and by agents that explicitly want to retract a stale
+ * note.
+ */
+export async function supersedeAgentNote(
+  noteId: string,
+  by: string | null,
+): Promise<void> {
+  if (!sql) return;
+  if (by) {
+    await sql`UPDATE learner_agent_notes SET superseded_by = ${by}::uuid WHERE id = ${noteId}::uuid`;
+  } else {
+    await sql`UPDATE learner_agent_notes SET archived_at = NOW() WHERE id = ${noteId}::uuid`;
+  }
+}
+
+/**
+ * Returns counts of (learner, agent) live notes — used by the dreaming
+ * endpoint to decide whether a consolidation pass is needed.
+ */
+export async function countAgentNotes(
+  learnerId: string,
+  agent: string,
+): Promise<number> {
+  if (!sql) return 0;
+  const rows = (await sql`
+    SELECT COUNT(*)::int AS n
+    FROM learner_agent_notes
+    WHERE learner_id = ${learnerId} AND agent = ${agent}
+      AND archived_at IS NULL AND superseded_by IS NULL
+  `) as Array<{ n: number }>;
+  return rows[0]?.n ?? 0;
+}
+
+// ── Activity streak (used by /dashboard) ────────────────────────────────────
+
+export interface LearnerStreak {
+  current_days: number;
+  longest_days: number;
+  last_active: string | null;
+  active_today: boolean;
+  active_days_last_30: number;
+}
+
+/**
+ * Compute the learner's activity streak by union-ing every "something
+ * happened" signal that carries a `learner_id`:
+ *
+ *   - `chat_turns.created_at` (any message sent or received)
+ *   - `concept_mastery.last_activity` (bumped by every diagnostic /
+ *     lesson / quiz answer that touches a concept)
+ *   - `skill_practice.last_practiced` (bumped by every atom-tagged answer)
+ *
+ * A day counts as active if any of these fired during the learner's local
+ * day (we treat the DB's `CURRENT_DATE` as the local day — good enough
+ * until per-learner timezones land).
+ *
+ * NOTE on `quiz_responses`: this table has no `learner_id` column, so we
+ * can't filter it directly. Instead, every learner-affecting `quiz_responses`
+ * insert is paired with a `concept_mastery` upsert (see `recordLessonAnswer`,
+ * `recordDiagnosticAnswer`), which means `concept_mastery.last_activity`
+ * already captures the quiz signal transitively.
+ */
+export async function getLearnerStreak(learnerId: string): Promise<LearnerStreak> {
+  if (!sql) {
+    return {
+      current_days: 0,
+      longest_days: 0,
+      last_active: null,
+      active_today: false,
+      active_days_last_30: 0,
+    };
+  }
+  try {
+    const rows = (await sql`
+      WITH days AS (
+        SELECT DISTINCT date_trunc('day', created_at)::date AS d
+        FROM chat_turns WHERE learner_id = ${learnerId}
+        UNION
+        SELECT DISTINCT date_trunc('day', last_activity)::date
+        FROM concept_mastery WHERE learner_id = ${learnerId} AND last_activity IS NOT NULL
+        UNION
+        SELECT DISTINCT date_trunc('day', last_practiced)::date
+        FROM skill_practice WHERE learner_id = ${learnerId} AND last_practiced IS NOT NULL
+      ),
+      ordered AS (
+        SELECT d, ROW_NUMBER() OVER (ORDER BY d) AS rn FROM days
+      ),
+      runs AS (
+        SELECT d, d - (rn || ' days')::interval AS grp FROM ordered
+      ),
+      run_lengths AS (
+        SELECT grp, COUNT(*) AS c, MAX(d) AS last_d FROM runs GROUP BY grp
+      )
+      SELECT
+        (SELECT MAX(d)::text FROM days) AS last_active,
+        EXISTS (SELECT 1 FROM days WHERE d = CURRENT_DATE) AS active_today,
+        (SELECT COUNT(*) FROM days WHERE d >= CURRENT_DATE - 29) AS active_days_last_30,
+        COALESCE((
+          SELECT c FROM run_lengths
+          WHERE last_d >= CURRENT_DATE - 1
+          ORDER BY last_d DESC LIMIT 1
+        ), 0) AS current_days,
+        COALESCE((SELECT MAX(c) FROM run_lengths), 0) AS longest_days
+    `) as Array<{
+      last_active: string | null;
+      active_today: boolean;
+      active_days_last_30: number;
+      current_days: number;
+      longest_days: number;
+    }>;
+    const r = rows[0];
+    return {
+      current_days: Number(r?.current_days ?? 0),
+      longest_days: Number(r?.longest_days ?? 0),
+      last_active: r?.last_active ?? null,
+      active_today: Boolean(r?.active_today),
+      active_days_last_30: Number(r?.active_days_last_30 ?? 0),
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getLearnerStreak failed', err);
+    }
+    return {
+      current_days: 0,
+      longest_days: 0,
+      last_active: null,
+      active_today: false,
+      active_days_last_30: 0,
+    };
+  }
+}
+
+export interface RecentActivityItem {
+  kind: 'chat' | 'lesson' | 'quiz';
+  agent: string | null;
+  concept_id: string | null;
+  detail: string;
+  created_at: string;
+}
+
+/**
+ * Returns the learner's last N "real" actions across chat, concept-level
+ * answers (from `concept_mastery.last_activity`), and atom practice
+ * (from `skill_practice.last_practiced`).
+ *
+ * We don't query `quiz_responses` directly because it has no `learner_id`
+ * column — but every quiz/lesson answer bumps `concept_mastery`, so the
+ * activity is captured via the concept stream.
+ */
+export async function getRecentActivity(
+  learnerId: string,
+  limit = 8,
+): Promise<RecentActivityItem[]> {
+  if (!sql) return [];
+  try {
+    const rows = (await sql`
+      WITH unioned AS (
+        SELECT 'chat'::text AS kind, agent::text AS agent, NULL::text AS concept_id,
+               left(content, 80) AS detail, created_at
+        FROM chat_turns
+        WHERE learner_id = ${learnerId} AND role = 'user'
+        UNION ALL
+        SELECT 'lesson'::text AS kind, NULL::text AS agent, concept_id::text AS concept_id,
+               'practiced ' || COALESCE(concept_id, '')
+                 || ' (mastery ' || ROUND(score::numeric * 100)::text || '%)' AS detail,
+               last_activity AS created_at
+        FROM concept_mastery
+        WHERE learner_id = ${learnerId} AND last_activity IS NOT NULL
+        UNION ALL
+        SELECT 'quiz'::text AS kind, NULL::text AS agent, NULL::text AS concept_id,
+               'practiced atom ' || skill_atom
+                 || ' (' || successes::text || '/' || attempts::text || ')' AS detail,
+               last_practiced AS created_at
+        FROM skill_practice
+        WHERE learner_id = ${learnerId} AND last_practiced IS NOT NULL
+      )
+      SELECT kind, agent, concept_id, detail, created_at
+      FROM unioned
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `) as RecentActivityItem[];
+    return rows;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getRecentActivity failed', err);
+    }
+    return [];
   }
 }

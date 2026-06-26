@@ -43,6 +43,7 @@ def _load_concepts() -> list[dict]:
                 {
                     "id": concept["id"],
                     "name": concept.get("name", concept["id"]),
+                    "name_he": concept.get("name_he"),
                     "subject": subject,
                 }
             )
@@ -50,11 +51,18 @@ def _load_concepts() -> list[dict]:
 
 
 def _template_item(concept: dict, difficulty: float) -> dict:
+    """Build a bilingual MCQ template item for one (concept, difficulty)
+    pair. EN columns stay primary; HE columns are populated in parallel so
+    the diagnostic page can show whichever language the learner prefers
+    (default HE). Migration 0015 added the HE columns; rows seeded by older
+    versions of this script are backfilled by ``scripts/backfill-diagnostic-he.mjs``.
+    """
     name = concept["name"]
+    name_he = concept.get("name_he") or name
     d = int(difficulty)
     correct = "B"
-    stem = f"[Difficulty {d}/10] Which statement best describes **{name}**?"
-    options = {
+    stem_en = f"[Difficulty {d}/10] Which statement best describes **{name}**?"
+    options_en = {
         "choices": [
             f"A generic unrelated fact about {name}",
             f"A core, accurate property of {name}",
@@ -63,14 +71,27 @@ def _template_item(concept: dict, difficulty: float) -> dict:
         ],
         "correct": correct,
     }
+    stem_he = f"[רמת קושי {d}/10] איזה משפט מתאר בצורה הטובה ביותר **{name_he}**?"
+    options_he = {
+        "choices": [
+            f"עובדה כללית ולא קשורה לגבי {name_he}",
+            f"תכונה ליבה ומדויקת של {name_he}",
+            f"תפיסה שגויה נפוצה לגבי {name_he}",
+            f"טענה פשטנית מדי שמתעלמת מהדרישות הקודמות של {name_he}",
+        ],
+        "correct": correct,
+    }
     return {
         "topic": concept["id"],
         "subject": concept["subject"],
         "difficulty": difficulty,
         "bloom_level": BLOOM_BY_DIFF.get(d, "apply"),
-        "stem": stem,
-        "options": options,
+        "stem": stem_en,
+        "options": options_en,
         "explanation": f"The correct answer reflects a defining property of {name}.",
+        "stem_he": stem_he,
+        "options_he": options_he,
+        "explanation_he": f"התשובה הנכונה מבטאת תכונה מהותית של {name_he}.",
         "source_concept": concept["id"],
     }
 

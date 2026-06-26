@@ -52,23 +52,47 @@ exact order — each layer can be absent independently:
    improvise a curriculum.
 4. **Learner profile snapshot** (goal, grade, subjects, hours/week, next
    test date, final goal date, mental_state).
-5. **Top weak + strong concepts** from `concept_mastery`.
-6. **Relevant curriculum context** — KG concepts whose `id`, English
+5. **`## What I know about this learner (shared persona)`** — the
+   CLAUDE.md-style learner persona from `learner_profiles.learner_persona`.
+   Read-mostly across every agent. Updated by agents via
+   `/api/agent-memory/persona`. See `skills/learner-persona/SKILL.md`.
+6. **`## My private notes on this learner (agent: <name>)`** — the top-K
+   notes from `learner_agent_notes` for THIS (learner, agent). Never
+   crosses agents. Updated by the agent itself via
+   `/api/agent-memory/notes`. See `skills/agent-skill-notes/SKILL.md`.
+7. **Top weak + strong concepts** from `concept_mastery`.
+8. **Relevant curriculum context** — KG concepts whose `id`, English
    name, or Hebrew name appear in the user's message (cap 3).
-7. **Lesson-level agent_hints** (tutor / coach / qa_explainer) — key
+9. **Lesson-level agent_hints** (tutor / coach / qa_explainer) — key
    insights, pacing hints, common misconceptions (triggered by detect
    phrases in the learner's message), diagnostic moves, skill atoms
    unlocked.
-8. **Learning-plan snapshot** (tutor / coach / qa_explainer /
+10. **Learning-plan snapshot** (tutor / coach / qa_explainer /
    curriculum_designer / progress_analyzer) — `buildLearningPlan()`
    walked from the most-relevant concept. Ordered `path[]` +
    `blocking_atoms[]`.
-9. **Mental_state.anxiety ≥ 7** → extra instruction to soften tone.
+11. **Mental_state.anxiety ≥ 7** → extra instruction to soften tone.
 
 Order matters: the baseline gives universal context, the persona narrows
-to the agent's role, and the per-turn signals override / augment those
-defaults. Never skip a layer — fall back to placeholders if a helper
-throws.
+to the agent's role, then the durable memory layers (shared persona +
+private notes) personalise it to this learner, and finally the per-turn
+signals fire when relevant. Never skip a layer — fall back to placeholders
+if a helper throws.
+
+## Per-(learner, agent) cumulative memory at a glance
+
+| Layer                     | Scope                 | Table                       | Writer            | Reader                                      | Skill                           |
+| ------------------------- | --------------------- | --------------------------- | ----------------- | ------------------------------------------- | ------------------------------- |
+| Shared learner persona    | per-learner           | `learner_profiles.learner_persona` | Any agent (sparingly) + Memory Steward | Every agent on every turn | `skills/learner-persona/SKILL.md` |
+| Agent private notes       | per-(learner, agent)  | `learner_agent_notes`       | Owning agent      | Owning agent (top-K, importance-sorted)     | `skills/agent-skill-notes/SKILL.md` |
+| Streamed chat turns       | per-(learner, agent)  | `chat_turns`                | Chat route        | Owning agent (last N)                       | This skill                      |
+| Mastery                   | per-(learner, concept)| `concept_mastery`           | Grader + lesson/answer routes | Everyone via context              | `skills/use-learning-plan/SKILL.md` |
+| Atom mastery              | per-(learner, atom)   | `skill_practice`            | Lesson/answer route | Learning planner                          | `skills/cross-subject-kg/SKILL.md` |
+
+Memory is **per-agent** for chat turns + notes on purpose — switching
+from Tutor to Mentor gives a fresh start with that personality. The
+shared persona is the only learner-level layer that follows the user
+across agents.
 
 ## Adding a new agent
 1. Add the long-form persona to `AGENT_PROMPTS` in

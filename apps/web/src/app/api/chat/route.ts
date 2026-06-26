@@ -7,6 +7,8 @@ import {
   getLearnerProfile,
   getConceptMastery,
   fetchLessonAgentHintsByConceptIds,
+  getLearnerPersona,
+  fetchAgentNotes,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import kg from '@/lib/kg-data.json';
@@ -151,10 +153,12 @@ async function buildContextPrompt(
   message: string,
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
   // Each helper catches its own errors so a single DB issue cannot break chat.
-  const [profile, mastery, recent] = await Promise.all([
+  const [profile, mastery, recent, persona, agentNotes] = await Promise.all([
     getLearnerProfile(userId).catch(() => null),
     getConceptMastery(userId).catch(() => ({})),
     fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []),
+    getLearnerPersona(userId).catch(() => null),
+    fetchAgentNotes(userId, agent, 6).catch(() => []),
   ]);
 
   // Every agent gets the same platform baseline first (corpus stats, KG
@@ -170,6 +174,27 @@ async function buildContextPrompt(
     // agent explicitly so it doesn't pretend it knows their context.
     context += `\n\n## Brand-new learner`;
     context += `\nNo learner profile is on file yet. Open with a one-sentence orientation in Hebrew (or match the language the learner just used), and invite them to complete the 4-step onboarding at \`/onboarding\` so the rest of the agent network can plan a personalised path. Do NOT improvise a curriculum or recommend specific lessons until a profile exists.`;
+  }
+
+  // CLAUDE.md-style learner persona — shared across every agent, written by
+  // the Memory Steward (and any agent allowed to). Tells you HOW this
+  // learner thinks/talks/learns, NOT what they know (that's mastery).
+  if (persona?.text && persona.text.trim().length > 0) {
+    context += `\n\n## What I know about this learner (shared persona)`;
+    context += `\n${persona.text.trim()}`;
+    context += `\n_(Last updated: ${persona.updated_at ?? 'unknown'}. Refine this view by appending notes via the agent-memory API.)_`;
+  }
+
+  // Per-(learner, agent) cumulative scratchpad — your OWN private notes on
+  // this learner that no other agent reads. Top N by importance.
+  if (agentNotes.length > 0) {
+    context += `\n\n## My private notes on this learner (agent: ${agent})`;
+    context += `\nThese are your past observations, preferences you've recorded, and strategies that worked. Build on them; don't repeat them verbatim.`;
+    for (const n of agentNotes) {
+      const tag = n.related_concept_id ? ` [concept:${n.related_concept_id}]` : '';
+      context += `\n- (${n.kind}, importance ${n.importance})${tag} ${n.content}`;
+    }
+    context += `\n_To save a new observation about this learner, POST \`/api/agent-memory/notes\` with { agent: "${agent}", content, importance: 1-5 }._`;
   }
   if (profile) {
     context += `\n\n## Learner profile`;

@@ -12,6 +12,28 @@ Keep learner memory **healthy at scale** by simulating the cognitive processes t
 - **Cron**: nightly at 03:00 learner local time (env `MEMORY_DREAM_CRON`).
 - **On-demand**: `POST /v1/memory/dream` (educator/admin) and `memory.dream_now` MCP (internal).
 - **After session**: lightweight "micro-dream" pass after a long session (>30 min).
+- **Web runtime**, lightweight: `POST /api/agent-memory/dream { agent? }`
+  (Vercel-friendly, deterministic — no LLM call). Safe for a settings-page
+  button, Vercel cron, or as a precursor to the heavy Memory Steward pass.
+
+## Web-runtime pass — what it does (deterministic, no LLM)
+
+Implemented in `apps/web/src/app/api/agent-memory/dream/route.ts`. Operates over
+`learner_agent_notes` for one or all agents the learner has notes for:
+
+1. **Near-duplicate de-dupe.** For each pair within a sliding window of 20, compute token-set Jaccard. If `≥ DUP_JACCARD` (0.6), supersede the older note by the newer (preserves audit chain).
+2. **Cap enforcement.** If still over `MAX_LIVE_NOTES_PER_AGENT` (30) live notes per (learner, agent), archive lowest-importance + oldest first until at cap.
+3. **Report.** Returns `{ archived, superseded, agents_processed }`.
+
+What this pass does **NOT** do (delegated to the heavier Memory Steward):
+
+- LLM-driven summarisation into `learner_persona`.
+- Cross-agent conflict resolution.
+- KG projection.
+- Salience / decay recompute against `concept_mastery`.
+
+Use the lightweight pass to keep the per-(learner, agent) scratchpad
+healthy between heavy nightly runs.
 
 ## Pipeline (`services/memory/memory_service/hygiene/dreaming.py`)
 1. **Pull** last N hours of episodic memories for the learner.

@@ -21,10 +21,26 @@ Every runtime agent's system prompt is composed by `apps/web/src/app/api/chat/ro
 buildAgentBaseline()           # apps/web/src/lib/agent-baseline.ts
 + getAgentPersona(agent)       # apps/web/src/lib/agent-prompts.ts
 + [brand-new-learner cue if no profile]
-+ [profile | mastery | relevant curriculum | lesson agent_hints | learning-plan snapshot]
++ [profile]
++ [shared learner persona]                     ← CLAUDE.md-style, every agent
++ [private notes for THIS (learner, agent)]    ← per-agent scratchpad
++ [mastery | relevant curriculum | lesson agent_hints | learning-plan snapshot]
 ```
 
 The **baseline** tells every agent: the corpus stats (117 KG concepts, 93 cross-subject edges, ~74 authored lessons, ~500 skill atoms), the full agent network roster, and the universal rules (bilingual HE-default, math always LTR in `$...$` / `$$...$$`, no external links, brand-new-learner protocol). This means **a brand-new learner with zero history gets a fully-grounded agent on turn one** — the entire knowledge base is the baseline.
+
+### Per-learner memory layers (storage: Neon, keyed by Clerk `userId`)
+
+| Layer                        | Scope                  | Storage                                  | Writer                                | Reader                                | Skill                                  |
+| ---------------------------- | ---------------------- | ---------------------------------------- | ------------------------------------- | ------------------------------------- | -------------------------------------- |
+| Shared learner persona       | per-learner            | `learner_profiles.learner_persona`        | Any agent (sparingly) + Memory Steward| Every agent on every turn             | `skills/learner-persona/SKILL.md`      |
+| Per-agent private notes      | per-(learner, agent)   | `learner_agent_notes`                    | The owning agent                       | The owning agent (top-K, importance)   | `skills/agent-skill-notes/SKILL.md`    |
+| Chat turns (verbatim)        | per-(learner, agent)   | `chat_turns`                              | Chat route                             | Owning agent (last N)                  | `skills/chat-memory-context/SKILL.md`  |
+| Concept mastery              | per-(learner, concept) | `concept_mastery`                         | Grader + answer routes                 | Every agent via context                | `skills/use-learning-plan/SKILL.md`    |
+| Skill-atom mastery           | per-(learner, atom)    | `skill_practice`                          | Lesson/answer route                    | Learning planner                       | `skills/cross-subject-kg/SKILL.md`     |
+| Activity streak / weekly plan | per-learner            | `learning_plans` + `plan_weeks` + derived | Plan generator                         | `/dashboard`                           | `skills/use-learning-plan/SKILL.md`    |
+
+The Clerk `userId` is the single key. There is no separate "storage bucket" for memories — every learner-bound row lives in the same Postgres database as the user identity, RLS-friendly. Lightweight dreaming/consolidation runs against `learner_agent_notes` at `POST /api/agent-memory/dream`; heavy nightly consolidation belongs to the Memory Steward.
 
 ### Learner-facing
 
@@ -88,7 +104,12 @@ The **baseline** tells every agent: the corpus stats (117 KG concepts, 93 cross-
 | `skills/onboarding-flow/SKILL.md` | Adding an onboarding question, changing plan generation inputs, or adjusting the diagnostic length. |
 | `skills/in-house-concept-content/SKILL.md` | Adding bilingual concept explanations to `/learn`, fixing wrong Wikipedia matches, or adding new CC content sources (OpenStax, Wikibooks, etc.). |
 | `skills/author-lesson/SKILL.md` | Authoring or modifying an AI-authored lesson under `scripts/seed_data/lessons/` (sections, all 10 question kinds, `agent_hints`, skill atoms). |
+| `skills/author-question-bank/SKILL.md` | Adding MORE questions (volume + kind diversity) to an existing authored lesson, or generating drills live. Pair with `author-lesson`. |
+| `skills/expand-lesson-theory/SKILL.md` | Adding MORE sections / worked examples / pitfalls / cross-subject `why_matters` to an authored lesson without breaking the schema. |
 | `skills/use-learning-plan/SKILL.md` | Adding any "what should I study next?" / "why am I stuck?" feature, or wiring a new agent / UI to the mastery-aware path planner. |
 | `skills/cross-subject-kg/SKILL.md` | Adding cross-subject edges to `kg-cross-edges.json`, within-subject prereqs in YAML, or new canonical skill atoms. |
+| `skills/learner-persona/SKILL.md` | Reading or writing the shared CLAUDE.md-style learner persona (`learner_profiles.learner_persona`). |
+| `skills/agent-skill-notes/SKILL.md` | Reading or writing per-(learner, agent) private notes (`learner_agent_notes`); also see the dreaming endpoint. |
+| `skills/dreaming-and-consolidation/SKILL.md` | Any consolidation work — the lightweight web endpoint or the heavy Memory Steward nightly. |
 | `skills/coordinator-dispatch/SKILL.md` | Whenever you are operating as the Coordinator. |
 | `skills/assign-to-coordinator/SKILL.md` | Whenever you are operating as the Manager and need to hand off a new round of work. |
