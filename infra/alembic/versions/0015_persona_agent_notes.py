@@ -26,7 +26,7 @@ Adds:
    bilingual variants. The existing EN columns stay as-is for backwards
    compat; if the HE column is NULL, the UI falls back to EN.
 
-Revision ID: 0015_learner_persona_and_agent_notes
+Revision ID: 0015_persona_agent_notes
 Revises: 0014_kg_skill_graph
 Create Date: 2026-06-26
 """
@@ -36,7 +36,7 @@ from __future__ import annotations
 from alembic import op
 
 
-revision = "0015_learner_persona_and_agent_notes"
+revision = "0015_persona_agent_notes"
 down_revision = "0014_kg_skill_graph"
 branch_labels = None
 depends_on = None

@@ -48,7 +48,7 @@ The user asked for the website to "remember" what learners did — streaks, week
 ## Files touched
 
 ```
-infra/alembic/versions/0015_learner_persona_and_agent_notes.py          [new]
+infra/alembic/versions/0015_persona_agent_notes.py                      [new]
 services/diagnostic/diagnostic_service/stores/models.py                 [+he columns]
 scripts/seed_diagnostic_items.py                                        [+he template]
 scripts/backfill-diagnostic-he.mjs                                      [new]
