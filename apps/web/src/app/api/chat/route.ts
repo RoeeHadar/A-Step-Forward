@@ -8,6 +8,7 @@ import {
   getConceptMastery,
   fetchLessonAgentHintsByConceptIds,
 } from '@/lib/neon-db';
+import { buildLearningPlan } from '@/lib/learning-plan';
 import kg from '@/lib/kg-data.json';
 
 export const runtime = 'nodejs';
@@ -268,6 +269,42 @@ async function buildContextPrompt(
           if (h.skill_atoms_unlocked?.length) {
             context += `\n- Skills this lesson develops: ${h.skill_atoms_unlocked.slice(0, 6).join(', ')}`;
           }
+        }
+      }
+    }
+
+    // Inject a learning-plan snapshot for the most-relevant concept so the
+    // tutoring / curriculum / coach agents can answer "what should I study
+    // next?" with a concrete, mastery-aware path rather than improvising.
+    // This is the runtime surface of the cross-subject KG + skill_practice
+    // walk implemented in lib/learning-plan.ts.
+    if (
+      agent === 'tutor' ||
+      agent === 'coach' ||
+      agent === 'qa_explainer' ||
+      agent === 'curriculum_designer' ||
+      agent === 'progress_analyzer'
+    ) {
+      const goal = related[0]!.id;
+      const plan = await buildLearningPlan({
+        learnerId: userId,
+        goalConceptId: goal,
+        maxNodes: 6,
+      }).catch(() => null);
+      if (plan && plan.path.length > 0) {
+        context += `\n\n## Learning-plan snapshot (goal: ${plan.goal.name})`;
+        context += `\nOrdered next steps the planner computed from the cross-subject KG + this learner's skill_practice. Use these to ground "what should I study next?" or root-cause questions.`;
+        for (const node of plan.path.slice(0, 5)) {
+          const pct = Math.round((1 - node.urgency) * 100);
+          context += `\n- [${node.concept_id}] ${node.name}${node.name_he ? ` / ${node.name_he}` : ''} — mastery ~${pct}%${node.hasLesson ? ' (lesson available)' : ''}; ${node.why_en}`;
+          if (node.weak_atoms.length > 0) {
+            const tops = node.weak_atoms.slice(0, 3).map((a) => `${a.atom} ${Math.round(a.mastery * 100)}%`).join(', ');
+            context += ` · weak atoms: ${tops}`;
+          }
+        }
+        if (plan.blocking_atoms.length > 0) {
+          const tops = plan.blocking_atoms.slice(0, 4).map((a) => `${a.atom} (${Math.round(a.mastery * 100)}%)`).join(', ');
+          context += `\n- Most-blocking atoms across the path: ${tops}`;
         }
       }
     }
