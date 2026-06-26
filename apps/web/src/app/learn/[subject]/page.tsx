@@ -99,16 +99,27 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     return { kgSubject: 'math', conceptAllowlist: STATISTICS_CONCEPTS };
   }
 
-  // Physics-flavoured subjects: all map to the KG `physics` corpus.
+  // Physics-flavoured subjects: all map to the KG `physics` corpus. Both
+  // `physics_high_school` and the inverse word order `high_school_physics`
+  // appear in the seeded content_sections, so we accept both.
   if (
     uiSubject === 'physics_high_school' ||
     uiSubject === 'physics_middle_school' ||
     uiSubject === 'physics_pre_university' ||
     uiSubject === 'physics_1' ||
-    uiSubject === 'physics_2'
+    uiSubject === 'physics_2' ||
+    uiSubject === 'high_school_physics' ||
+    uiSubject === 'middle_school_physics' ||
+    uiSubject === 'bagrut_physics'
   ) {
     return { kgSubject: 'physics' };
   }
+
+  // Catch-all heuristic so any new physics_*/*_physics subject slug we add
+  // to content_sections in the future renders against the physics corpus
+  // without code changes; same for math.
+  if (uiSubject.includes('physics')) return { kgSubject: 'physics' };
+  if (uiSubject.includes('math')) return { kgSubject: 'math' };
 
   return { kgSubject: null };
 }
