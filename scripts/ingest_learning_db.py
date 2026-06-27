@@ -325,7 +325,7 @@ def _split_chapters(pages: list[tuple[int, str]]) -> list[dict[str, Any]]:
                 continue
             if _looks_like_heading(stripped):
                 # Flush previous section if it has substantive content
-                if current_lines and any(l.strip() for l in current_lines):
+                if current_lines and any(line.strip() for line in current_lines):
                     flush(page_num)
                 current_title = stripped
                 page_start = page_num
@@ -386,7 +386,7 @@ def _detect_math_blocks(text: str) -> str:
         math_chars = sum(
             1
             for c in non_space
-            if c in "=+-*/^√∫∑∂∞≤≥≠±·×÷±αβγδεζηθικλμνξπρστυφχψω∀∃∈∉⊂⊃⊆⊇∪∩"
+            if c in "=+-*/^√∫∑∂∞≤≥≠±·x÷±αβγδεζηθικλμνξπρστυφχψω∀∃∈∉⊂⊃⊆⊇U∩"  # noqa: RUF001
             or c.isdigit()
             or (c.isalpha() and c.isascii() and len(non_space) < 25)
         )
