@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import {
   ChevronDown,
@@ -19,6 +20,41 @@ import {
   Info,
 } from 'lucide-react';
 import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
+
+/**
+ * Renders a string that may contain inline LaTeX delimited by $...$.
+ * Text outside dollar signs is rendered as plain text.
+ * This is used for section titles and other short strings that aren't
+ * full markdown but may contain inline math.
+ */
+function MathText({ text, dir }: { text: string; dir?: 'ltr' | 'rtl' }) {
+  const parts = text.split(/(\$[^$\n]+\$)/g);
+  return (
+    <span dir={dir}>
+      {parts.map((part, i) => {
+        if (part.startsWith('$') && part.endsWith('$') && part.length > 2) {
+          const math = part.slice(1, -1);
+          try {
+            const html = katex.renderToString(math, {
+              throwOnError: false,
+              output: 'html',
+            });
+            return (
+              <span
+                key={i}
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            );
+          } catch {
+            return <span key={i}>{part}</span>;
+          }
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </span>
+  );
+}
 
 type Lang = 'en' | 'he';
 
@@ -142,8 +178,8 @@ function SectionCard({
             <span className="block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               {label}
             </span>
-            <span className="block text-base font-semibold text-foreground" dir={dir}>
-              {title}
+            <span className="block text-base font-semibold text-foreground">
+              <MathText text={title} dir={dir} />
             </span>
           </div>
         </div>
@@ -197,7 +233,9 @@ export function LessonReader({
     <div className="space-y-4">
       {/* Lesson meta card */}
       <div className="glass-surface rounded-2xl border-border/60 p-5" dir={dir}>
-        <p className="text-sm leading-relaxed text-foreground/80">{summary}</p>
+        <p className="text-sm leading-relaxed text-foreground/80">
+          <MathText text={summary} dir={dir} />
+        </p>
         <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
           <span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium uppercase text-primary">
             {lesson.est_minutes} min

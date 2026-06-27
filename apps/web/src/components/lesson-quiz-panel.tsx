@@ -27,6 +27,40 @@ const DIFFICULTY_TINT: Record<LessonQuestionRow['difficulty'], string> = {
   hard: 'bg-destructive/10 text-destructive',
 };
 
+/** Label shown to the student, calibrated relative to their level. */
+function difficultyLabel(
+  raw: LessonQuestionRow['difficulty'],
+  learnerLevel: LessonPointsLevel | null,
+  lang: Lang,
+): string {
+  const isHe = lang === 'he';
+  // For lower-level students, what they find "hard" is a different concept.
+  // We relabel so the student understands the effort relative to their course.
+  if (!learnerLevel || learnerLevel === '3pt') {
+    const labels: Record<string, { en: string; he: string }> = {
+      easy: { en: 'practice', he: 'תרגול' },
+      medium: { en: 'standard', he: 'רגיל' },
+      hard: { en: 'challenging', he: 'מאתגר' },
+    };
+    return isHe ? (labels[raw]?.he ?? raw) : (labels[raw]?.en ?? raw);
+  }
+  if (learnerLevel === '4pt') {
+    const labels: Record<string, { en: string; he: string }> = {
+      easy: { en: 'warm-up', he: 'חימום' },
+      medium: { en: 'standard', he: 'רגיל' },
+      hard: { en: 'exam-level', he: 'רמת בגרות' },
+    };
+    return isHe ? (labels[raw]?.he ?? raw) : (labels[raw]?.en ?? raw);
+  }
+  // 5pt, hs_physics, calc1, la
+  const labels: Record<string, { en: string; he: string }> = {
+    easy: { en: 'standard', he: 'רגיל' },
+    medium: { en: 'challenging', he: 'מאתגר' },
+    hard: { en: 'hard / exam+', he: 'קשה / מעל בגרות' },
+  };
+  return isHe ? (labels[raw]?.he ?? raw) : (labels[raw]?.en ?? raw);
+}
+
 const KIND_LABEL: Record<LessonQuestionKind, { en: string; he: string }> = {
   mcq: { en: 'Multiple choice', he: 'בחירה מרובה' },
   mcq_multi: { en: 'Pick all that apply', he: 'סמנו את כל הנכונות' },
@@ -92,12 +126,14 @@ function QuestionCard({
   lessonId,
   conceptId,
   onAnswered,
+  learnerLevel,
 }: {
   question: LessonQuestionRow;
   lang: Lang;
   lessonId: string;
   conceptId: string;
   onAnswered: (q: LessonQuestionRow, correct: boolean) => void;
+  learnerLevel?: LessonPointsLevel | null;
 }) {
   const [state, setState] = useState<AnswerState>({
     submitted: false,
@@ -258,7 +294,7 @@ function QuestionCard({
         <span
           className={`rounded-full px-2 py-0.5 ${DIFFICULTY_TINT[question.difficulty]}`}
         >
-          {question.difficulty}
+          {difficultyLabel(question.difficulty, learnerLevel ?? null, lang)}
         </span>
       </div>
 
@@ -749,6 +785,7 @@ export function LessonQuizPanel({
           lang={lang}
           lessonId={lesson.id}
           conceptId={conceptId}
+          learnerLevel={learnerLevel}
           onAnswered={(_, correct) =>
             setScore((s) => ({ answered: s.answered + 1, correct: s.correct + (correct ? 1 : 0) }))
           }
@@ -865,6 +902,7 @@ function SkillAtomDrillSection({
               lang={lang}
               lessonId={lessonId}
               conceptId={conceptId}
+              learnerLevel={learnerLevel}
               onAnswered={(_, correct) =>
                 setScore((s) => ({
                   answered: s.answered + 1,
