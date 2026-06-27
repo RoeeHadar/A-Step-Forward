@@ -144,44 +144,19 @@ export async function fetchProgress(auth: AuthContext): Promise<LearnerProgress>
 }
 
 export async function fetchMemories(auth: AuthContext): Promise<MemoryRecord[]> {
+  // Memory must be REAL — never fabricate entries. If the upstream timeline
+  // returns nothing (brand-new learner, Render API unavailable, schema
+  // mismatch), we hand back `[]` so `MemoryInspector` renders its already-
+  // existing `t.noMemoriesYet` empty state ("No memories yet — start
+  // chatting with an agent and we'll build a picture of how you learn.").
+  // The previous fallback shipped two hardcoded sample entries
+  // ("Prefers visual explanations…", "Completed lesson on fractions…")
+  // which made the page look populated for users who had done nothing.
   const remote = await apiFetchOptional('/v1/memory/timeline?k=100', {
     schema: memoryTimelineSchema,
     auth: { learnerId: auth.learnerId, role: auth.role },
   });
-  if (remote && remote.length > 0) return remote;
-
-  return [
-    {
-      id: 'mem-1',
-      learner_id: auth.learnerId,
-      type: 'semantic',
-      content: 'Prefers visual explanations with diagrams',
-      summary: 'Learning preference',
-      tags: ['preference', 'visual'],
-      salience: 0.8,
-      confidence: 0.9,
-      valence: 0.5,
-      decay_tau_days: 30,
-      access_count: 12,
-      provenance: { kind: 'chat', agent: 'tutor', id: 'session-1' },
-      kg_node_ids: [],
-    },
-    {
-      id: 'mem-2',
-      learner_id: auth.learnerId,
-      type: 'episodic',
-      content: 'Completed lesson on fractions — struggled with unlike denominators',
-      summary: 'Fraction lesson session',
-      tags: ['fractions', 'lesson'],
-      salience: 0.6,
-      confidence: 0.85,
-      valence: -0.2,
-      decay_tau_days: 14,
-      access_count: 3,
-      provenance: { kind: 'lesson', id: 'lesson-intro-fractions' },
-      kg_node_ids: ['concept-fractions'],
-    },
-  ];
+  return remote ?? [];
 }
 
 export async function fetchEducatorDashboard(auth: AuthContext): Promise<EducatorDashboard> {
