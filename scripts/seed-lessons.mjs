@@ -255,16 +255,16 @@ for (const { file, data } of lessons) {
           ${q.difficulty},
           ${q.stem_en},
           ${q.stem_he},
-          ${q.options_en ? JSON.stringify(q.options_en) : null},
-          ${q.options_he ? JSON.stringify(q.options_he) : null},
+          ${q.options_en ? JSON.stringify(q.options_en) : null}::jsonb,
+          ${q.options_he ? JSON.stringify(q.options_he) : null}::jsonb,
           ${q.correct_index ?? null},
           ${q.correct_answer ?? null},
-          ${payload ? JSON.stringify(payload) : null},
+          ${payload ? JSON.stringify(payload) : null}::jsonb,
           ${q.rubric_en ?? null},
           ${q.rubric_he ?? null},
           ${q.explanation_en},
           ${q.explanation_he},
-          ${JSON.stringify(q.skill_atoms ?? [])},
+          ${JSON.stringify(q.skill_atoms ?? [])}::jsonb,
           ${q.points_level_min ?? null}
         )
       `;

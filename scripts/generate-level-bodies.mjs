@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// ⚠ Corporate proxy / self-signed CA: bypass TLS verification for Groq API calls
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 /**
  * generate-level-bodies.mjs
  *
