@@ -2012,3 +2012,52 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
     return empty;
   }
 }
+
+// ── Per-concept mastery for the subject page completion badges ────────────────
+
+export interface ConceptMasteryEntry {
+  concept_id: string;
+  /** 0.0–1.0, where ≥0.7 = done, 0.4–0.69 = in progress, <0.4 = needs review */
+  score: number;
+  data_points: number;
+  last_activity: string | null;
+}
+
+/**
+ * Fetches mastery scores for a set of concept IDs for a given learner.
+ * Returns a Map<concept_id, ConceptMasteryEntry> — missing entries mean no data.
+ */
+export async function fetchConceptMasteryBulk(
+  learnerId: string,
+  conceptIds: string[],
+): Promise<Map<string, ConceptMasteryEntry>> {
+  const result = new Map<string, ConceptMasteryEntry>();
+  if (!sql || conceptIds.length === 0) return result;
+  try {
+    const rows = (await sql`
+      SELECT concept_id,
+             score::float AS score,
+             data_points::int AS data_points,
+             last_activity::text AS last_activity
+      FROM concept_mastery
+      WHERE learner_id = ${learnerId}
+        AND concept_id = ANY(${conceptIds}::text[])
+    `) as Array<{
+      concept_id: string;
+      score: number;
+      data_points: number;
+      last_activity: string | null;
+    }>;
+    for (const r of rows) {
+      result.set(r.concept_id, {
+        concept_id: r.concept_id,
+        score: r.score,
+        data_points: r.data_points,
+        last_activity: r.last_activity,
+      });
+    }
+  } catch (err) {
+    console.warn('[neon-db] fetchConceptMasteryBulk failed', err);
+  }
+  return result;
+}
