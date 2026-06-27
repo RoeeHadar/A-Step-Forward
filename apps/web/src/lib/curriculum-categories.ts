@@ -66,9 +66,8 @@ const MATH_3PT_CONCEPTS = [
   'analytic_geometry_basic',
   'geometry_basics',
   'trigonometry_ratios',
-  'statistics_descriptive',
-  'probability_basic',
   'descriptive_stats',
+  'probability_basic',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -196,7 +195,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'sh801-stats',
         heLabel: 'שאלון 801 — סטטיסטיקה והסתברות',
         enLabel: 'Questionnaire 801 — Statistics & Probability',
-        concept_ids: ['statistics_descriptive', 'probability_basic'],
+        concept_ids: ['descriptive_stats', 'probability_basic'],
       },
       {
         id: 'sh802-sequences-growth',
@@ -214,7 +213,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'sh802-normal-dist',
         heLabel: 'שאלון 802 — התפלגות נורמלית',
         enLabel: 'Questionnaire 802 — Normal Distribution',
-        concept_ids: ['descriptive_stats', 'statistics_descriptive'],
+        concept_ids: ['descriptive_stats', 'probability_basic'],
       },
       {
         id: 'sh803-word-problems',

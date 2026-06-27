@@ -6,7 +6,7 @@ PYTHON ?= python
 UV ?= uv
 UV_FLAGS ?= --system-certs
 
-.PHONY: help up down dev migrate migrate-revision seed seed-kg seed-diagnostic ingest evals evals-ci lint fmt test smoke sync seed-lessons enrich-lessons enrich-skill-atoms migrate-neon
+.PHONY: help up down dev migrate migrate-revision seed seed-kg seed-diagnostic ingest evals evals-ci lint fmt test smoke sync seed-lessons enrich-lessons enrich-skill-atoms enrich-level-bodies migrate-neon
 
 help:
 	@echo "Targets:"
@@ -96,6 +96,11 @@ enrich-lessons:
 enrich-skill-atoms:
 	# Generate per-skill-atom question banks for all lessons (needs GROQ_API_KEY)
 	node scripts/generate-skill-atom-questions.mjs
+
+enrich-level-bodies:
+	# Apply body_by_level rewrites to ALL lesson JSONs — generalizes level-calibration across all subjects.
+	# Options: --concept <id>  (single lesson), --missing-only  (only generate missing tracks), --dry-run
+	node scripts/generate-level-bodies.mjs $(ARGS)
 
 migrate-neon:
 	# Apply DB migrations directly to Neon via Node.js client (for local dev without Python)
