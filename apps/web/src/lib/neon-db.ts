@@ -1872,3 +1872,98 @@ export async function getDashboardSnapshot(
     return EMPTY_DASHBOARD;
   }
 }
+
+// ── /app/progress real stats ──────────────────────────────────────────────────
+
+export interface ProgressConceptRow {
+  concept_id: string;
+  concept_name: string;
+  current_score: number;
+  history: Array<{ date: string; score: number }>;
+}
+
+export interface ProgressSnapshot {
+  streak_days: number;
+  /** Total estimated study time in minutes (chat_turns × 4 + completed_concepts × 20). */
+  total_minutes: number;
+  /** Concepts where mastery score >= 0.7. */
+  lessons_completed: number;
+  concepts: ProgressConceptRow[];
+}
+
+/**
+ * Returns progress data for `/app/progress` sourced entirely from Neon.
+ * Eliminates the dependency on the optional Render `/v1/progress` endpoint
+ * so the Progress page always shows the same numbers as the main dashboard.
+ *
+ * `total_minutes` is estimated:
+ *   (user chat turns × 4 min) + (mastered concepts × 20 min)
+ * — rough but consistent across both pages. There is no explicit session-time
+ * column yet.
+ *
+ * Concept history rows are synthesized from `concept_mastery.last_activity`
+ * as a single data-point per concept (detailed practice history requires the
+ * `quiz_responses` join, which has no `learner_id`). More granular history
+ * can be added when that table is enriched.
+ */
+export async function getProgressFromNeon(learnerId: string): Promise<ProgressSnapshot> {
+  const empty: ProgressSnapshot = {
+    streak_days: 0,
+    total_minutes: 0,
+    lessons_completed: 0,
+    concepts: [],
+  };
+  if (!sql) return empty;
+  try {
+    const [streak, masteryRowsRaw, chatCountRowsRaw] = await Promise.all([
+      getLearnerStreak(learnerId).catch(() => ({
+        current_days: 0,
+        longest_days: 0,
+        last_active: null,
+        active_today: false,
+        active_days_last_30: 0,
+      })),
+      sql`
+        SELECT concept_id, score::float AS score, last_activity
+        FROM concept_mastery
+        WHERE learner_id = ${learnerId}
+        ORDER BY score DESC, last_activity DESC NULLS LAST
+        LIMIT 40
+      `,
+      sql`
+        SELECT COUNT(*)::int AS n
+        FROM chat_turns
+        WHERE learner_id = ${learnerId} AND role = 'user'
+      `,
+    ]);
+
+    const mastery = masteryRowsRaw as Array<{ concept_id: string; score: number; last_activity: string | null }>;
+    const chatTurns = Number((chatCountRowsRaw as Array<{ n: number }>)[0]?.n ?? 0);
+    const completed = mastery.filter((r) => Number(r.score) >= 0.7).length;
+    const totalMinutes = Math.round(chatTurns * 4 + completed * 20);
+
+    const concepts: ProgressConceptRow[] = mastery.map((r) => {
+      const kgInfo = kgById[r.concept_id];
+      return {
+        concept_id: r.concept_id,
+        concept_name: kgInfo?.name ?? r.concept_id,
+        current_score: Number(r.score),
+        history: r.last_activity
+          ? [{ date: r.last_activity.slice(0, 10), score: Number(r.score) }]
+          : [],
+      };
+    });
+
+    return {
+      streak_days: streak.current_days,
+      total_minutes: totalMinutes,
+      lessons_completed: completed,
+      concepts,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getProgressFromNeon failed', err);
+    }
+    return empty;
+  }
+}

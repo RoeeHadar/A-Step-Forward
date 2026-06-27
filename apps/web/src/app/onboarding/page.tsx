@@ -294,31 +294,123 @@ const POINTS_GROUPS: { value: string; label_en: string; label_he: string }[] = [
   { value: '5', label_en: '5 units', label_he: '5 יחידות' },
 ];
 
-const CONCEPTS_BY_SUBJECT: Record<
-  Subject,
-  { id: string; label_en: string; label_he: string }[]
-> = {
-  math: [
-    { id: 'arithmetic', label_en: 'Arithmetic & Number Sense', label_he: 'חשבון ותחושת מספר' },
-    { id: 'algebra_basics', label_en: 'Algebra Basics', label_he: 'יסודות האלגברה' },
-    { id: 'equations_linear', label_en: 'Linear Equations', label_he: 'משוואות לינאריות' },
-    { id: 'equations_quadratic', label_en: 'Quadratic Equations', label_he: 'משוואות ריבועיות' },
-    { id: 'fractions_algebraic', label_en: 'Algebraic Fractions', label_he: 'שברים אלגבריים' },
-    { id: 'trigonometry', label_en: 'Trigonometry', label_he: 'טריגונומטריה' },
-    { id: 'functions', label_en: 'Functions', label_he: 'פונקציות' },
-    { id: 'sequences', label_en: 'Sequences & Series', label_he: 'סדרות וטורים' },
-    { id: 'limits', label_en: 'Limits', label_he: 'גבולות' },
-    { id: 'derivatives', label_en: 'Derivatives', label_he: 'נגזרות' },
-    { id: 'integrals', label_en: 'Integrals', label_he: 'אינטגרלים' },
+// ── Concept registry (bilingual labels) ─────────────────────────────────────
+// Each entry maps concept KG id → display labels.
+// The list an individual student sees is filtered by their goal (see
+// CONCEPTS_BY_GOAL below) so that 3-unit students never see derivatives,
+// 4-unit students never see vectors, etc.
+
+const ALL_CONCEPTS: Record<string, { label_en: string; label_he: string }> = {
+  // ── Math – common / 3pt+ ────────────────────────────────────────────────
+  arithmetic:              { label_en: 'Arithmetic & Number Sense',       label_he: 'חשבון ותחושת מספר' },
+  algebra_basics:          { label_en: 'Algebra Basics',                  label_he: 'יסודות האלגברה' },
+  equations_linear:        { label_en: 'Linear Equations',                label_he: 'משוואות מדרגה ראשונה' },
+  equations_quadratic:     { label_en: 'Quadratic Equations',             label_he: 'משוואות ריבועיות' },
+  functions_intro:         { label_en: 'Introduction to Functions',        label_he: 'מבוא לפונקציות' },
+  functions_linear:        { label_en: 'Linear Functions',                label_he: 'פונקציה לינארית' },
+  functions_quadratic:     { label_en: 'Quadratic Functions (Parabola)',   label_he: 'פונקציה ריבועית (פרבולה)' },
+  geometry_basics:         { label_en: 'Basic Geometry',                  label_he: 'גיאומטריה בסיסית' },
+  sequences_arithmetic:    { label_en: 'Arithmetic Sequences',            label_he: 'סדרות חשבוניות' },
+  statistics_descriptive:  { label_en: 'Descriptive Statistics',          label_he: 'סטטיסטיקה תיאורית' },
+  probability_basic:       { label_en: 'Basic Probability',               label_he: 'הסתברות בסיסית' },
+  // ── Math – 4pt+ ─────────────────────────────────────────────────────────
+  fractions_algebraic:     { label_en: 'Algebraic Fractions',             label_he: 'שברים אלגבריים' },
+  exponents:               { label_en: 'Exponents & Roots',               label_he: 'חזקות ושורשים' },
+  factoring:               { label_en: 'Factoring',                       label_he: 'פירוק לגורמים' },
+  functions_exponential:   { label_en: 'Exponential Functions',           label_he: 'פונקציה אקספוננציאלית' },
+  trigonometry_ratios:     { label_en: 'Trigonometry (right triangle)',    label_he: 'טריגונומטריה (משולש ישר זווית)' },
+  triangles_congruence:    { label_en: 'Triangle Congruence & Similarity', label_he: 'חפיפה ודמיון משולשים' },
+  circles:                 { label_en: 'Circles',                         label_he: 'מעגלים' },
+  analytic_geometry:       { label_en: 'Analytic Geometry',               label_he: 'גיאומטריה אנליטית' },
+  sequences_geometric:     { label_en: 'Geometric Sequences',             label_he: 'סדרות הנדסיות' },
+  combinatorics:           { label_en: 'Combinatorics',                   label_he: 'קומבינטוריקה' },
+  // ── Math – 5pt only ─────────────────────────────────────────────────────
+  logarithms:              { label_en: 'Logarithms',                      label_he: 'לוגריתמים' },
+  trigonometry_identities: { label_en: 'Trigonometric Identities',        label_he: 'זהויות טריגונומטריות' },
+  trigonometry_equations:  { label_en: 'Trigonometric Equations',         label_he: 'משוואות טריגונומטריות' },
+  vectors_2d:              { label_en: 'Vectors in the Plane',            label_he: 'וקטורים במישור' },
+  limits:                  { label_en: 'Limits',                          label_he: 'גבולות' },
+  derivatives_intro:       { label_en: 'Derivatives — Introduction',      label_he: 'נגזרות — מבוא' },
+  derivatives_rules:       { label_en: 'Derivative Rules',                label_he: 'כללי גזירה' },
+  derivatives_applications:{ label_en: 'Applications of Derivatives',     label_he: 'יישומי נגזרות' },
+  integrals_intro:         { label_en: 'Integrals — Introduction',        label_he: 'אינטגרלים — מבוא' },
+  definite_integrals:      { label_en: 'Definite Integrals',              label_he: 'אינטגרל מסוים' },
+  integrals_applications:  { label_en: 'Applications of Integrals',       label_he: 'יישומי אינטגרלים' },
+  distributions:           { label_en: 'Probability Distributions',       label_he: 'התפלגויות הסתברות' },
+  // ── University Calculus 1 ───────────────────────────────────────────────
+  continuity:              { label_en: 'Continuity',                      label_he: 'רציפות' },
+  integrals_techniques:    { label_en: 'Integration Techniques',          label_he: 'שיטות אינטגרציה' },
+  uni_sequences_series:    { label_en: 'Sequences & Series',              label_he: 'סדרות וטורים (אוניברסיטה)' },
+  // ── University Linear Algebra ───────────────────────────────────────────
+  la_vectors:              { label_en: 'Vectors in Rⁿ',                  label_he: 'וקטורים ב-Rⁿ' },
+  la_matrices:             { label_en: 'Matrices & Linear Systems',       label_he: 'מטריצות ומערכות לינאריות' },
+  la_determinants:         { label_en: 'Determinants',                    label_he: 'דטרמיננטות' },
+  la_eigenvalues:          { label_en: 'Eigenvalues & Eigenvectors',      label_he: 'ערכים עצמיים' },
+  // ── Physics – High School ───────────────────────────────────────────────
+  kinematics_1d:           { label_en: 'Kinematics (1D)',                 label_he: 'קינמטיקה (ממד אחד)' },
+  kinematics_2d:           { label_en: 'Kinematics (2D & Projectiles)',   label_he: 'קינמטיקה (דו-ממד וזריקה)' },
+  newton_laws:             { label_en: "Newton's Laws",                   label_he: 'חוקי ניוטון' },
+  work_energy:             { label_en: 'Work & Energy',                   label_he: 'עבודה ואנרגיה' },
+  momentum:                { label_en: 'Momentum & Impulse',              label_he: 'תנע ומתקף' },
+  waves_basics:            { label_en: 'Waves & Sound',                   label_he: 'גלים וקול' },
+  optics_geometric:        { label_en: 'Geometric Optics',                label_he: 'אופטיקה גיאומטרית' },
+  electrostatics:          { label_en: 'Electrostatics',                  label_he: 'אלקטרוסטטיקה' },
+  electric_circuits:       { label_en: 'Electric Circuits',               label_he: 'מעגלי חשמל' },
+  modern_physics_intro:    { label_en: 'Modern Physics Intro',            label_he: 'מבוא לפיזיקה מודרנית' },
+};
+
+type ConceptEntry = { id: string; label_en: string; label_he: string };
+
+function conceptEntry(id: string): ConceptEntry {
+  const meta = ALL_CONCEPTS[id];
+  return { id, label_en: meta?.label_en ?? id, label_he: meta?.label_he ?? id };
+}
+
+// ── Goal → concept list mapping ──────────────────────────────────────────────
+// Carefully scoped to Israeli Bagrut curriculum per unit level.
+// 4pt INCLUDES everything in 3pt; 5pt INCLUDES everything in 4pt.
+
+const MATH_3PT_CONCEPTS = [
+  'arithmetic', 'algebra_basics', 'equations_linear', 'equations_quadratic',
+  'functions_intro', 'functions_linear', 'functions_quadratic',
+  'geometry_basics', 'sequences_arithmetic', 'statistics_descriptive', 'probability_basic',
+];
+
+const MATH_4PT_EXTRA = [
+  'fractions_algebraic', 'exponents', 'factoring', 'functions_exponential',
+  'trigonometry_ratios', 'triangles_congruence', 'circles', 'analytic_geometry',
+  'sequences_geometric', 'combinatorics',
+];
+
+const MATH_5PT_EXTRA = [
+  'logarithms', 'trigonometry_identities', 'trigonometry_equations',
+  'vectors_2d', 'limits', 'derivatives_intro', 'derivatives_rules',
+  'derivatives_applications', 'integrals_intro', 'definite_integrals',
+  'integrals_applications', 'distributions',
+];
+
+const PHYSICS_HS_CONCEPTS = [
+  'kinematics_1d', 'kinematics_2d', 'newton_laws', 'work_energy', 'momentum',
+  'waves_basics', 'optics_geometric', 'electrostatics', 'electric_circuits',
+  'modern_physics_intro',
+];
+
+const CONCEPTS_BY_GOAL: Record<Goal, string[]> = {
+  bagrut_math_3:   MATH_3PT_CONCEPTS,
+  bagrut_math_4:   [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA],
+  bagrut_math_5:   [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA],
+  bagrut_physics:  PHYSICS_HS_CONCEPTS,
+  calculus1:       [
+    'limits', 'continuity', 'derivatives_intro', 'derivatives_rules',
+    'derivatives_applications', 'integrals_intro', 'integrals_techniques',
+    'definite_integrals', 'integrals_applications', 'uni_sequences_series',
   ],
-  physics: [
-    { id: 'kinematics', label_en: 'Kinematics', label_he: 'קינמטיקה' },
-    { id: 'dynamics_newton', label_en: "Newton's Laws", label_he: 'חוקי ניוטון' },
-    { id: 'energy_work', label_en: 'Energy & Work', label_he: 'אנרגיה ועבודה' },
-    { id: 'waves', label_en: 'Waves & Oscillations', label_he: 'גלים ותנודות' },
-    { id: 'electricity_circuits', label_en: 'Electric Circuits', label_he: 'מעגלים חשמליים' },
-    { id: 'optics', label_en: 'Optics', label_he: 'אופטיקה' },
+  linear_algebra:  ['la_vectors', 'la_matrices', 'la_determinants', 'la_eigenvalues'],
+  university_prep: [
+    ...MATH_5PT_EXTRA, 'continuity', 'integrals_techniques', 'uni_sequences_series',
+    'la_vectors', 'la_matrices',
   ],
+  other: [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA, ...PHYSICS_HS_CONCEPTS],
 };
 
 // ── Step components ──────────────────────────────────────────────────────────
@@ -494,9 +586,25 @@ export default function OnboardingPage() {
     }));
   }
 
-  const conceptsForStep4 = s1.subjects.flatMap(
-    (sub) => CONCEPTS_BY_SUBJECT[sub] ?? [],
-  );
+  // Build the Step-4 concept list based on the student's goal.
+  // If the goal is already specific to a subject (e.g. bagrut_math_3), use that
+  // directly. For "other" / no goal yet, fall back to subject-based selection.
+  const conceptsForStep4: ConceptEntry[] = (() => {
+    if (s1.goal && s1.goal !== 'other') {
+      // Goal-scoped list — already curriculum-accurate
+      return (CONCEPTS_BY_GOAL[s1.goal] ?? []).map(conceptEntry);
+    }
+    // Fallback when goal is unset or 'other': show a reasonable union for
+    // selected subjects (HS level)
+    const mathIds = s1.subjects.includes('math')
+      ? [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA]
+      : [];
+    const physicsIds = s1.subjects.includes('physics')
+      ? PHYSICS_HS_CONCEPTS
+      : [];
+    return [...new Set([...mathIds, ...physicsIds])].map(conceptEntry);
+  })();
+
   const needsPointsGroup =
     s1.subjects.includes('math') &&
     s1.gradeLevel !== 'university_1' &&
@@ -1001,6 +1109,11 @@ export default function OnboardingPage() {
             <div>
               <h1 className="mb-1 text-2xl font-bold">{t.s3_title}</h1>
               <p className="text-sm text-muted-foreground">{t.s3_sub}</p>
+              {s1.goal && s1.goal !== 'other' && (
+                <p className="mt-2 inline-block rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-3 py-0.5 text-xs font-medium text-accent-cyan">
+                  {goalLabel(GOALS.find((g) => g.value === s1.goal)!)}
+                </p>
+              )}
             </div>
 
             <div className="space-y-5">

@@ -1,3 +1,20 @@
+/**
+ * Curriculum category catalogue — aligned with Israeli Bagrut curriculum levels.
+ *
+ * `points_levels` is used to:
+ *   - Filter the onboarding self-assessment concepts to the student's track.
+ *   - Tag lessons and questions with which track they belong to.
+ *   - Drive the quiz builder's concept picker.
+ *
+ * Values: '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la' | 'physics1'
+ *
+ * Removed: 'physics-2' (university EM / optics / quantum — out of scope for
+ *          our target audience: high school, pre-university, first-year uni).
+ * Removed: multivariable / Calculus 2/3 sections — same reason.
+ */
+
+export type PointsLevel = '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la' | 'physics1';
+
 export interface CurriculumSection {
   id: string;
   heLabel: string;
@@ -9,6 +26,7 @@ export interface CurriculumCategory {
   heLabel: string;
   enLabel: string;
   emoji: string;
+  points_levels: PointsLevel[];
   sections: CurriculumSection[];
 }
 
@@ -18,11 +36,15 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     heLabel: 'מתמטיקה לתיכון 3 יחידות',
     enLabel: 'High School Math (3 units)',
     emoji: '📐',
+    points_levels: ['3pt'],
     sections: [
       { id: 'arithmetic-and-algebra', heLabel: 'אריתמטיקה ואלגברה', enLabel: 'Arithmetic & Algebra' },
-      { id: 'geometry-basic', heLabel: 'גאומטריה בסיסית', enLabel: 'Basic Geometry' },
+      { id: 'linear-equations', heLabel: 'משוואות מדרגה ראשונה', enLabel: 'Linear Equations' },
+      { id: 'quadratic-functions', heLabel: 'פונקציה ריבועית', enLabel: 'Quadratic Functions' },
+      { id: 'geometry-basic', heLabel: 'גיאומטריה בסיסית', enLabel: 'Basic Geometry' },
+      { id: 'sequences-basic', heLabel: 'סדרות חשבוניות', enLabel: 'Arithmetic Sequences' },
       { id: 'statistics-basic', heLabel: 'סטטיסטיקה בסיסית', enLabel: 'Basic Statistics' },
-      { id: 'linear-equations', heLabel: 'משוואות לינאריות', enLabel: 'Linear Equations' },
+      { id: 'probability-basic', heLabel: 'הסתברות בסיסית', enLabel: 'Basic Probability' },
     ],
   },
   {
@@ -30,11 +52,16 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     heLabel: 'מתמטיקה לתיכון 4 יחידות',
     enLabel: 'High School Math (4 units)',
     emoji: '📏',
+    points_levels: ['4pt'],
     sections: [
       { id: 'algebra-and-functions', heLabel: 'אלגברה ופונקציות', enLabel: 'Algebra & Functions' },
-      { id: 'geometry', heLabel: 'גאומטריה', enLabel: 'Geometry' },
+      { id: 'quadratic-equations', heLabel: 'משוואות ריבועיות', enLabel: 'Quadratic Equations' },
+      { id: 'exponential-functions', heLabel: 'פונקציה אקספוננציאלית', enLabel: 'Exponential Functions' },
+      { id: 'geometry', heLabel: 'גיאומטריה', enLabel: 'Geometry' },
       { id: 'trigonometry-basic', heLabel: 'טריגונומטריה בסיסית', enLabel: 'Basic Trigonometry' },
-      { id: 'probability-basics', heLabel: 'יסודות ההסתברות', enLabel: 'Probability Basics' },
+      { id: 'sequences-geometric', heLabel: 'סדרות הנדסיות', enLabel: 'Geometric Sequences' },
+      { id: 'analytic-geometry-basic', heLabel: 'גיאומטריה אנליטית', enLabel: 'Analytic Geometry' },
+      { id: 'combinatorics', heLabel: 'קומבינטוריקה', enLabel: 'Combinatorics' },
     ],
   },
   {
@@ -42,12 +69,15 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     heLabel: 'מתמטיקה לתיכון 5 יחידות',
     enLabel: 'High School Math (5 units)',
     emoji: '🔢',
+    points_levels: ['5pt'],
     sections: [
-      { id: 'algebra-and-functions', heLabel: 'אלגברה ופונקציות', enLabel: 'Algebra & Functions' },
+      { id: 'logarithms', heLabel: 'לוגריתמים', enLabel: 'Logarithms' },
       { id: 'trigonometry', heLabel: 'טריגונומטריה', enLabel: 'Trigonometry' },
-      { id: 'analytic-geometry', heLabel: 'גאומטריה אנליטית', enLabel: 'Analytic Geometry' },
+      { id: 'analytic-geometry', heLabel: 'גיאומטריה אנליטית', enLabel: 'Analytic Geometry' },
+      { id: 'vectors-2d', heLabel: 'וקטורים', enLabel: 'Vectors' },
       { id: 'calculus-hs', heLabel: 'חשבון דיפרנציאלי לתיכון', enLabel: 'Calculus (HS)' },
-      { id: 'probability-hs', heLabel: 'הסתברות לתיכון', enLabel: 'Probability (HS)' },
+      { id: 'integrals-hs', heLabel: 'אינטגרלים', enLabel: 'Integrals' },
+      { id: 'probability-hs', heLabel: 'הסתברות', enLabel: 'Probability & Distributions' },
     ],
   },
   {
@@ -55,32 +85,34 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     heLabel: 'מתמטיקה לחטיבת ביניים',
     enLabel: 'Middle School Math',
     emoji: '🔣',
+    points_levels: [],
     sections: [
       { id: 'numbers-and-operations', heLabel: 'מספרים ופעולות', enLabel: 'Numbers & Operations' },
       { id: 'fractions-and-decimals', heLabel: 'שברים ועשרוניים', enLabel: 'Fractions & Decimals' },
       { id: 'ratios', heLabel: 'יחסים ופרופורציות', enLabel: 'Ratios & Proportions' },
       { id: 'intro-algebra', heLabel: 'מבוא לאלגברה', enLabel: 'Intro to Algebra' },
-      { id: 'geometry-middle', heLabel: 'גאומטריה לחטיבה', enLabel: 'Middle School Geometry' },
+      { id: 'geometry-middle', heLabel: 'גיאומטריה לחטיבה', enLabel: 'Middle School Geometry' },
     ],
   },
   {
     id: 'calculus',
-    heLabel: 'חשבון דיפרנציאלי ואינטגרלי',
-    enLabel: 'Calculus',
+    heLabel: 'חדו״א 1 (אוניברסיטה)',
+    enLabel: 'Calculus 1 (University)',
     emoji: '∫',
+    points_levels: ['calc1'],
     sections: [
       { id: 'limits', heLabel: 'גבולות', enLabel: 'Limits' },
       { id: 'derivatives', heLabel: 'נגזרות', enLabel: 'Derivatives' },
       { id: 'integrals', heLabel: 'אינטגרלים', enLabel: 'Integrals' },
-      { id: 'series-and-sequences', heLabel: 'סדרות וטורים', enLabel: 'Series & Sequences' },
-      { id: 'multivariable-intro', heLabel: 'מבוא לחשבון רב-משתנים', enLabel: 'Multivariable Intro' },
+      { id: 'series-and-sequences', heLabel: 'סדרות וטורים', enLabel: 'Sequences & Series' },
     ],
   },
   {
     id: 'pre-calculus',
-    heLabel: 'קדם-חשבון',
-    enLabel: 'Pre-Calculus',
+    heLabel: 'מבוא לחשבון — הכנה לאוניברסיטה',
+    enLabel: 'Pre-Calculus (University Prep)',
     emoji: '📈',
+    points_levels: ['5pt', 'calc1'],
     sections: [
       { id: 'functions-and-graphs', heLabel: 'פונקציות וגרפים', enLabel: 'Functions & Graphs' },
       { id: 'polynomial-functions', heLabel: 'פונקציות פולינומיות', enLabel: 'Polynomial Functions' },
@@ -90,9 +122,10 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
   },
   {
     id: 'linear-algebra',
-    heLabel: 'אלגברה לינארית',
-    enLabel: 'Linear Algebra',
+    heLabel: 'אלגברה לינארית (אוניברסיטה)',
+    enLabel: 'Linear Algebra (University)',
     emoji: '🔲',
+    points_levels: ['la'],
     sections: [
       { id: 'vectors', heLabel: 'וקטורים', enLabel: 'Vectors' },
       { id: 'matrices-and-systems', heLabel: 'מטריצות ומערכות משוואות', enLabel: 'Matrices & Systems' },
@@ -106,31 +139,32 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     heLabel: 'סטטיסטיקה והסתברות',
     enLabel: 'Statistics & Probability',
     emoji: '📊',
+    points_levels: ['5pt', 'calc1'],
     sections: [
       { id: 'descriptive-statistics', heLabel: 'סטטיסטיקה תיאורית', enLabel: 'Descriptive Statistics' },
       { id: 'probability-theory', heLabel: 'תורת ההסתברות', enLabel: 'Probability Theory' },
       { id: 'distributions', heLabel: 'התפלגויות', enLabel: 'Distributions' },
-      { id: 'hypothesis-testing', heLabel: 'בדיקת השערות', enLabel: 'Hypothesis Testing' },
-      { id: 'bayesian-inference', heLabel: 'היסק בייסיאני', enLabel: 'Bayesian Inference' },
     ],
   },
   {
     id: 'physics-hs',
-    heLabel: 'פיזיקה לתיכון',
-    enLabel: 'High School Physics',
+    heLabel: 'פיזיקה לתיכון — בגרות 5 יח׳',
+    enLabel: 'High School Physics (Bagrut 5 units)',
     emoji: '⚡',
+    points_levels: ['hs_physics'],
     sections: [
       { id: 'mechanics', heLabel: 'מכניקה', enLabel: 'Mechanics' },
       { id: 'waves-and-optics', heLabel: 'גלים ואופטיקה', enLabel: 'Waves & Optics' },
-      { id: 'electricity', heLabel: 'חשמל', enLabel: 'Electricity' },
+      { id: 'electricity', heLabel: 'חשמל ומגנטיות', enLabel: 'Electricity & Magnetism' },
       { id: 'modern-physics', heLabel: 'פיזיקה מודרנית', enLabel: 'Modern Physics' },
     ],
   },
   {
     id: 'physics-middle',
-    heLabel: 'פיזיקה לחטיבת ביניים',
-    enLabel: 'Middle School Physics',
+    heLabel: 'מדעים לחטיבת ביניים',
+    enLabel: 'Middle School Science',
     emoji: '🔭',
+    points_levels: [],
     sections: [
       { id: 'forces-and-motion', heLabel: 'כוחות ותנועה', enLabel: 'Forces & Motion' },
       { id: 'energy-and-work', heLabel: 'אנרגיה ועבודה', enLabel: 'Energy & Work' },
@@ -139,41 +173,20 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     ],
   },
   {
-    id: 'physics-pre-uni',
-    heLabel: 'קדם-פיזיקה לאוניברסיטה',
-    enLabel: 'Pre-University Physics',
-    emoji: '🎓',
-    sections: [
-      { id: 'kinematics', heLabel: 'קינמטיקה', enLabel: 'Kinematics' },
-      { id: 'newton-laws', heLabel: 'חוקי ניוטון', enLabel: "Newton's Laws" },
-      { id: 'energy-conservation', heLabel: 'שימור אנרגיה', enLabel: 'Energy Conservation' },
-      { id: 'thermodynamics-intro', heLabel: 'מבוא לתרמודינמיקה', enLabel: 'Intro to Thermodynamics' },
-    ],
-  },
-  {
     id: 'physics-1',
-    heLabel: 'פיזיקה 1',
-    enLabel: 'Physics 1',
+    heLabel: 'פיזיקה 1 — מכניקה ותרמודינמיקה',
+    enLabel: 'Physics 1 (University) — Mechanics & Thermodynamics',
     emoji: '🌀',
+    points_levels: ['physics1'],
     sections: [
-      { id: 'kinematics-advanced', heLabel: 'קינמטיקה מתקדמת', enLabel: 'Advanced Kinematics' },
-      { id: 'newton-laws-advanced', heLabel: 'חוקי ניוטון מתקדם', enLabel: "Advanced Newton's Laws" },
-      { id: 'work-energy-theorem', heLabel: 'משפט עבודה-אנרגיה', enLabel: 'Work-Energy Theorem' },
+      { id: 'kinematics-advanced', heLabel: 'קינמטיקה', enLabel: 'Kinematics' },
+      { id: 'newton-laws-advanced', heLabel: 'חוקי ניוטון', enLabel: "Newton's Laws" },
+      { id: 'work-energy-theorem', heLabel: 'עבודה ואנרגיה', enLabel: 'Work & Energy' },
+      { id: 'momentum-advanced', heLabel: 'תנע ומומנט', enLabel: 'Momentum & Angular Momentum' },
       { id: 'rotation', heLabel: 'תנועה סיבובית', enLabel: 'Rotation' },
-      { id: 'fluids', heLabel: 'נוזלים', enLabel: 'Fluids' },
-    ],
-  },
-  {
-    id: 'physics-2',
-    heLabel: 'פיזיקה 2',
-    enLabel: 'Physics 2',
-    emoji: '🔋',
-    sections: [
-      { id: 'electrostatics', heLabel: 'אלקטרוסטטיקה', enLabel: 'Electrostatics' },
-      { id: 'current-circuits', heLabel: 'זרם ומעגלים', enLabel: 'Current & Circuits' },
-      { id: 'magnetic-fields', heLabel: 'שדות מגנטיים', enLabel: 'Magnetic Fields' },
-      { id: 'electromagnetic-induction', heLabel: 'השראה אלקטרומגנטית', enLabel: 'Electromagnetic Induction' },
-      { id: 'optics-advanced', heLabel: 'אופטיקה מתקדמת', enLabel: 'Advanced Optics' },
+      { id: 'oscillations', heLabel: 'תנדות', enLabel: 'Oscillations & Waves' },
+      { id: 'fluids', heLabel: 'מכניקת זורמים', enLabel: 'Fluid Mechanics' },
+      { id: 'thermodynamics', heLabel: 'תרמודינמיקה', enLabel: 'Thermodynamics' },
     ],
   },
 ];
