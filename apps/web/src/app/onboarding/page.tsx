@@ -391,14 +391,21 @@ function conceptEntry(id: string): ConceptEntry {
 // Carefully scoped to Israeli Bagrut curriculum per unit level.
 // 4pt INCLUDES everything in 3pt; 5pt INCLUDES everything in 4pt.
 
-// Bagrut Math 3 units — questionnaires 801/802/803
+// Bagrut Math 3 units — core shared by BOTH legacy (801/802/803) and new program (172/371/372)
 const MATH_3PT_CONCEPTS = [
   'arithmetic', 'algebra_basics', 'equations_linear', 'equations_quadratic',
   'inequalities', 'exponents', 'word_problems',
   'functions_intro', 'functions_linear', 'functions_quadratic',
   'analytic_geometry_basic', 'geometry_basics',
-  'sequences_arithmetic', 'trigonometry_ratios',
+  'trigonometry_ratios',
   'statistics_descriptive', 'descriptive_stats', 'probability_basic',
+];
+
+// Legacy 3pt only (801/802/803) — removed from new program (172/371/372)
+// New program students entered HS from September 2023 onwards.
+const MATH_3PT_LEGACY_EXTRA = [
+  'sequences_arithmetic',  // Removed from new 372
+  'analytic_geometry',     // Circle geometry removed from new 372
 ];
 
 // Bagrut Math 4 units — adds to 3pt
@@ -431,9 +438,11 @@ const PHYSICS_HS_CONCEPTS = [
 ];
 
 const CONCEPTS_BY_GOAL: Record<Goal, string[]> = {
-  bagrut_math_3:   MATH_3PT_CONCEPTS,
-  bagrut_math_4:   [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA],
-  bagrut_math_5:   [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA],
+  // For 3pt we include legacy extras since we can't know which program at onboarding.
+  // The AI tutor later refines based on grade year via learner profile.
+  bagrut_math_3:   [...MATH_3PT_CONCEPTS, ...MATH_3PT_LEGACY_EXTRA],
+  bagrut_math_4:   [...MATH_3PT_CONCEPTS, ...MATH_3PT_LEGACY_EXTRA, ...MATH_4PT_EXTRA],
+  bagrut_math_5:   [...MATH_3PT_CONCEPTS, ...MATH_3PT_LEGACY_EXTRA, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA],
   bagrut_physics:  PHYSICS_HS_CONCEPTS,
   calculus1:       [
     'limits', 'continuity', 'derivatives_intro', 'derivatives_rules',
