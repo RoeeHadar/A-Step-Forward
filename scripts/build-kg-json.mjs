@@ -7,6 +7,12 @@
  *
  * Run manually when YAML files change:
  *   node scripts/build-kg-json.mjs
+ *
+ * New fields (June 2026 Bagrut-aligned rebuild):
+ *   points_levels  – string[] – which Bagrut levels include this concept
+ *   bagrut_chapter – string   – Bagrut exam chapter (mechanics, algebra, …)
+ *   skill_atoms    – string[] – granular skills inside the concept
+ *   level_scope    – object   – short description of depth at each level
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -30,6 +36,10 @@ for (const file of fs.readdirSync(KG_DIR).filter((f) => f.endsWith('.yaml'))) {
       name_he: c.name_he ?? null,
       subject,
       level,
+      points_levels: c.points_levels ?? [],
+      bagrut_chapter: c.bagrut_chapter ?? null,
+      skill_atoms: c.skill_atoms ?? [],
+      level_scope: c.level_scope ?? {},
       prerequisites: c.prerequisites ?? [],
     });
   }

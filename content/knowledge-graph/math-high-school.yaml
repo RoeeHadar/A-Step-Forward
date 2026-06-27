@@ -1,129 +1,826 @@
-# High-school Math prerequisite graph
-# Format: each concept lists what must be mastered BEFORE it
+# Math – High School (Israeli Bagrut curriculum)
+#
+# Three Bagrut levels (cumulative — each level includes all lower levels):
+#   3pt = 3 units: questionnaires 801/182, 802/381, 803/382
+#   4pt = 4 units: questionnaire 484/485
+#   5pt = 5 units: questionnaires 581/807
+#
+# Each concept carries:
+#   points_levels  – which Bagrut levels include this concept
+#   bagrut_chapter – Bagrut exam section (for agent grounding)
+#   skill_atoms    – granular skills (drives quiz question scoping)
+#   level_scope    – short note differentiating depth across levels
+
 subject: math
 level: high_school
 concepts:
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # ALGEBRA & ARITHMETIC
+  # ═══════════════════════════════════════════════════════════════════════
+
   - id: arithmetic
-    name: Arithmetic
-    name_he: חשבון
+    name: Arithmetic & Number Sense
+    name_he: חשבון ותחושת מספר
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
     prerequisites: []
+    skill_atoms:
+      - "Order of operations (PEMDAS/BODMAS)"
+      - "Working with negative numbers"
+      - "Fractions, decimals, percentages"
+      - "Ratios and proportions"
+      - "Basic percent increase/decrease"
+      - "Substituting values into formulas"
+    level_scope:
+      3pt: "Practical arithmetic; percentages, ratios, word problems about prices and rates"
+      4pt: "Extends to algebraic manipulation; scientific notation; absolute values"
+      5pt: "Fast fluency; serves as prerequisite for all advanced topics"
 
   - id: algebra_basics
     name: Algebra Basics
     name_he: יסודות האלגברה
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
     prerequisites: [arithmetic]
+    skill_atoms:
+      - "Identifying and combining like terms"
+      - "Distributive property and expanding brackets"
+      - "Short multiplication formulas (a+b)², (a-b)², (a+b)(a-b)"
+      - "Trinomial factoring (ax²+bx+c)"
+      - "Difference of squares"
+      - "Common factor extraction"
+    level_scope:
+      3pt: "Basic manipulation, factoring trinomials, short formulas"
+      4pt: "Deeper factoring including higher-degree polynomials"
+      5pt: "Algebraic fractions, complex expressions, used as tool in all topics"
 
   - id: equations_linear
-    name: Linear Equations
-    name_he: משוואות מדרגה ראשונה
+    name: Linear Equations & Systems
+    name_he: משוואות מדרגה ראשונה ומערכות
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
     prerequisites: [algebra_basics]
+    skill_atoms:
+      - "Solving single linear equation in one unknown"
+      - "Solving system of 2 linear equations (substitution)"
+      - "Solving system of 2 linear equations (elimination)"
+      - "Equations with no solution or infinitely many solutions"
+      - "Changing subject of formula"
+      - "Word problems: speed-distance-time"
+      - "Word problems: work rate problems"
+      - "Word problems: mixtures and concentrations"
+    level_scope:
+      3pt: "Word problems (buying/selling, speed, percentages), systems of equations"
+      4pt: "Parametric equations, analysis of solution existence"
+      5pt: "Used as tool; systems of non-linear equations appear in analytic geometry"
 
   - id: equations_quadratic
     name: Quadratic Equations
     name_he: משוואות ריבועיות
-    prerequisites: [equations_linear]
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
+    prerequisites: [algebra_basics, equations_linear]
+    skill_atoms:
+      - "Solving by factoring"
+      - "Solving using the quadratic formula"
+      - "Discriminant (Δ): number and type of solutions"
+      - "Completing the square"
+      - "Equations reducible to quadratic (bi-quadratic)"
+      - "Equations with radicals"
+      - "Equations with absolute value"
+      - "Systems: one linear + one quadratic"
+      - "Parametric quadratic equations (analysis of solutions)"
+    level_scope:
+      3pt: "Factoring and formula; discriminant concept; basic word problems"
+      4pt: "Parametric equations; analysis of solutions (discriminant conditions)"
+      5pt: "All techniques; appears within function analysis, analytic geometry, trig equations"
+
+  - id: inequalities
+    name: Inequalities
+    name_he: אי-שוויונים
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
+    prerequisites: [equations_linear, equations_quadratic]
+    skill_atoms:
+      - "Linear inequalities in one variable"
+      - "Quadratic inequalities (sign chart method)"
+      - "Higher-degree inequalities"
+      - "Rational inequalities (fraction form)"
+      - "Compound inequalities (AND / OR)"
+      - "Absolute value inequalities"
+      - "Finding domain of algebraic expressions"
+    level_scope:
+      3pt: "Linear inequalities; graphical interpretation"
+      4pt: "Quadratic inequalities using sign chart"
+      5pt: "All types; key skill for function domain analysis"
 
   - id: fractions_algebraic
     name: Algebraic Fractions
     name_he: שברים אלגבריים
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: algebra
     prerequisites: [algebra_basics, equations_linear]
+    skill_atoms:
+      - "Simplifying algebraic fractions (cancellation)"
+      - "Multiplying and dividing algebraic fractions"
+      - "Adding and subtracting algebraic fractions (common denominator)"
+      - "Complex fractions (fraction within a fraction)"
+      - "Equations with algebraic fractions"
+    level_scope:
+      4pt: "Core skill; simplification, four operations, equations with fractions"
+      5pt: "Used in integration by partial fractions, rational function analysis"
 
   - id: exponents
     name: Exponents & Roots
     name_he: חזקות ושורשים
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
     prerequisites: [algebra_basics]
+    skill_atoms:
+      - "Laws of exponents (product, quotient, power of power)"
+      - "Zero and negative exponents"
+      - "Fractional exponents and roots"
+      - "Scientific notation"
+      - "Simplifying radical expressions"
+      - "Rationalizing denominators"
+    level_scope:
+      3pt: "Basic laws; integer exponents; simple roots"
+      4pt: "Fractional exponents; radical equations"
+      5pt: "Used throughout — exponential functions, logarithms, calculus"
+
+  - id: factoring
+    name: Factoring Polynomials
+    name_he: פירוק לגורמים
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: algebra
+    prerequisites: [algebra_basics, equations_quadratic]
+    skill_atoms:
+      - "Greatest common factor"
+      - "Difference of squares"
+      - "Perfect square trinomials"
+      - "General trinomial (ax²+bx+c)"
+      - "Sum/difference of cubes"
+      - "Factoring by grouping"
+      - "Finding rational roots of polynomials"
+    level_scope:
+      4pt: "All standard forms; applied in inequalities and simplification"
+      5pt: "Extended to cubic polynomials; used in integration by partial fractions"
+
+  - id: word_problems
+    name: Word Problems (Applied Algebra)
+    name_he: בעיות מילוליות
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: algebra
+    prerequisites: [equations_linear, equations_quadratic, arithmetic]
+    skill_atoms:
+      - "Consecutive integer problems"
+      - "Age problems"
+      - "Speed, distance, time (uniform motion)"
+      - "Work and rate problems"
+      - "Mixture and concentration problems"
+      - "Buy/sell problems (profit, loss, percentage)"
+      - "Sequential percentage changes (growth/decay)"
+      - "Geometric area/perimeter word problems"
+    level_scope:
+      3pt: "Main Bagrut 803 topic; buying/selling/percentages; trigonometric applications"
+      4pt: "More complex multi-step problems"
+      5pt: "Optimization word problems appear in calculus section"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # FUNCTIONS
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: functions_intro
     name: Functions — Introduction
     name_he: פונקציות — מבוא
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: functions
     prerequisites: [equations_linear, exponents]
+    skill_atoms:
+      - "Definition of a function; domain and range"
+      - "Function notation f(x)"
+      - "Representing functions: table, graph, equation"
+      - "Increasing, decreasing, constant intervals"
+      - "Maximum and minimum values from graph"
+      - "Reading and interpreting graphs"
+      - "Even and odd functions"
+    level_scope:
+      3pt: "Reading graphs, identifying intervals, domain from context"
+      4pt: "Formal domain analysis, transformations intro"
+      5pt: "All properties; rigorous domain from inequalities"
 
   - id: functions_linear
     name: Linear Functions
     name_he: פונקציה לינארית
-    prerequisites: [functions_intro]
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: functions
+    prerequisites: [functions_intro, equations_linear]
+    skill_atoms:
+      - "Slope-intercept form y = mx + b"
+      - "Finding slope from two points"
+      - "Finding equation of a line given two conditions"
+      - "Parallel and perpendicular lines (slope relationship)"
+      - "x-intercept and y-intercept"
+      - "Interpreting slope as rate of change"
+      - "Graphing linear functions"
+      - "Intersection of two lines"
+    level_scope:
+      3pt: "Graphing, slope, finding equation, intersection (used in analytic geometry)"
+      4pt: "Applications to modeling; deeper parametric analysis"
+      5pt: "Tool for tangent lines and linear approximation in calculus"
 
   - id: functions_quadratic
-    name: Quadratic Functions
-    name_he: פונקציה ריבועית
+    name: Quadratic Functions (Parabola)
+    name_he: פונקציה ריבועית (פרבולה)
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: functions
     prerequisites: [functions_linear, equations_quadratic]
+    skill_atoms:
+      - "Standard form y = ax²+bx+c and vertex form y = a(x-h)²+k"
+      - "Finding vertex (coordinates of maximum/minimum)"
+      - "Axis of symmetry"
+      - "x-intercepts (roots) using discriminant"
+      - "Graphing parabolas: opening direction, vertex, intercepts"
+      - "Parabola from 3 points (equation setup)"
+      - "Intersection of parabola and line"
+      - "Intersection of two parabolas"
+      - "Reading parabola from graph"
+      - "Optimization using vertex"
+    level_scope:
+      3pt: "Graphing, vertex, roots, reading from graph; no calculus"
+      4pt: "Parametric parabolas, number of intersection points, proof"
+      5pt: "Used in calculus (tangent lines, extrema verification)"
 
   - id: functions_exponential
-    name: Exponential Functions
-    name_he: פונקציה אקספוננציאלית
+    name: Exponential Functions & Growth/Decay
+    name_he: פונקציה אקספוננציאלית וגדילה/דעיכה
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: functions
     prerequisites: [functions_intro, exponents]
+    skill_atoms:
+      - "Exponential function y = a·bˣ"
+      - "Properties: domain, range, asymptote"
+      - "Graphing exponential functions"
+      - "Growth factor and decay factor"
+      - "Compound interest"
+      - "Half-life and doubling time"
+      - "Discrete growth/decay problems"
+      - "Setting up exponential models"
+    level_scope:
+      4pt: "Growth/decay problems, compound interest, discrete models"
+      5pt: "Continuous growth (e), logarithmic connection, derivative of eˣ"
 
-  - id: trigonometry_ratios
-    name: Trigonometric Ratios
-    name_he: יחסים טריגונומטריים
-    prerequisites: [functions_intro]
+  - id: logarithms
+    name: Logarithms
+    name_he: לוגריתמים
+    points_levels: [5pt]
+    bagrut_chapter: functions
+    prerequisites: [functions_exponential]
+    skill_atoms:
+      - "Definition of logarithm; change between log and exponential form"
+      - "Laws of logarithms (product, quotient, power)"
+      - "Natural logarithm (ln) and base e"
+      - "Change of base formula"
+      - "Solving logarithmic equations"
+      - "Domain of logarithmic functions"
+      - "Graphing logarithmic functions"
+      - "Solving exponential equations using logarithms"
+      - "Growth and decay: continuous models (eˣ)"
+    level_scope:
+      5pt: "Full treatment; connects to calculus (derivative of ln x, integration)"
 
-  - id: trigonometry_identities
-    name: Trig Identities
-    name_he: זהויות טריגונומטריות
-    prerequisites: [trigonometry_ratios]
+  - id: function_transformations
+    name: Function Transformations
+    name_he: הזזות ומתיחות של פונקציות
+    points_levels: [5pt]
+    bagrut_chapter: functions
+    prerequisites: [functions_intro, functions_quadratic]
+    skill_atoms:
+      - "Vertical shift: y = f(x) + k"
+      - "Horizontal shift: y = f(x-h)"
+      - "Vertical stretch/compress: y = a·f(x)"
+      - "Horizontal stretch/compress: y = f(bx)"
+      - "Reflection over x-axis: y = -f(x)"
+      - "Reflection over y-axis: y = f(-x)"
+      - "Absolute value of function: y = |f(x)|"
+      - "Combining multiple transformations"
+    level_scope:
+      5pt: "Key tool for function analysis and graphing in exam questions"
 
-  - id: trigonometry_equations
-    name: Trig Equations
-    name_he: משוואות טריגונומטריות
-    prerequisites: [trigonometry_identities, equations_quadratic]
+  # ═══════════════════════════════════════════════════════════════════════
+  # SEQUENCES & SERIES
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: sequences_arithmetic
     name: Arithmetic Sequences
     name_he: סדרות חשבוניות
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: sequences
     prerequisites: [equations_linear]
+    skill_atoms:
+      - "Definition and common difference (d)"
+      - "General term formula: aₙ = a₁ + (n-1)d"
+      - "Sum formula: Sₙ = n(a₁+aₙ)/2"
+      - "Finding term number n from value"
+      - "Setting up system: two conditions give two equations"
+      - "Word problems with arithmetic sequences"
+      - "Even/odd number of terms"
+    level_scope:
+      3pt: "Main topic in Bagrut 801/802; full treatment"
+      4pt: "Combined problems with geometric; mixed sequence problems"
+      5pt: "Connects to series convergence in calculus"
 
   - id: sequences_geometric
-    name: Geometric Sequences
+    name: Geometric Sequences & Series
     name_he: סדרות הנדסיות
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: sequences
     prerequisites: [exponents, sequences_arithmetic]
+    skill_atoms:
+      - "Definition and common ratio (q)"
+      - "General term formula: aₙ = a₁·qⁿ⁻¹"
+      - "Sum formula: Sₙ = a₁(1-qⁿ)/(1-q)"
+      - "Infinite geometric series: S∞ = a₁/(1-q) when |q|<1"
+      - "Recursive definition"
+      - "Finding q from two conditions"
+      - "Mixed problems (arithmetic and geometric)"
+      - "Growth/decay as geometric sequence"
+    level_scope:
+      4pt: "Full coverage; infinite series; growth problems"
+      5pt: "Connects to limits and calculus concepts"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # STATISTICS & PROBABILITY
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: statistics_descriptive
     name: Descriptive Statistics
     name_he: סטטיסטיקה תיאורית
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: statistics
     prerequisites: [arithmetic]
+    skill_atoms:
+      - "Mean (average)"
+      - "Median (finding from ordered list)"
+      - "Mode (most frequent value)"
+      - "Range"
+      - "Frequency table (absolute and relative frequency)"
+      - "Bar charts, pie charts, histograms"
+      - "Reading and interpreting data displays"
+      - "Stem-and-leaf plots"
+    level_scope:
+      3pt: "Main stats topic; mean, median, mode, frequency tables, graphs"
+      4pt: "Standard deviation; normal distribution intro"
+      5pt: "Normal distribution, z-scores, cumulative probability"
 
   - id: probability_basic
     name: Basic Probability
     name_he: הסתברות בסיסית
-    prerequisites: [fractions_algebraic]
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: probability
+    prerequisites: [fractions_algebraic, arithmetic]
+    skill_atoms:
+      - "Classical probability: P(A) = favorable/total"
+      - "Complementary event: P(Aᶜ) = 1-P(A)"
+      - "Union of events (mutually exclusive)"
+      - "Intersection of events"
+      - "Tree diagrams for multi-stage experiments"
+      - "Two-way tables"
+      - "Independent events"
+      - "Conditional probability: P(A|B)"
+    level_scope:
+      3pt: "Classical probability, complement, simple tree diagrams"
+      4pt: "Conditional probability, two-way tables, dependent/independent"
+      5pt: "Full treatment including Bayes-style questions"
 
   - id: combinatorics
-    name: Combinatorics
+    name: Combinatorics (Counting Methods)
     name_he: קומבינטוריקה
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: probability
     prerequisites: [probability_basic]
+    skill_atoms:
+      - "Fundamental counting principle (multiplication rule)"
+      - "Permutations nPr (ordered arrangements)"
+      - "Combinations nCr (unordered selections)"
+      - "Permutations with repetitions"
+      - "Arrangements with identical elements"
+      - "Combining permutations and combinations"
+      - "Probability using combinatorics"
+    level_scope:
+      4pt: "Core topic; all methods"
+      5pt: "Binomial distribution (Bernoulli) using combinations"
+
+  - id: distributions
+    name: Probability Distributions
+    name_he: התפלגויות הסתברות
+    points_levels: [5pt]
+    bagrut_chapter: probability
+    prerequisites: [combinatorics, probability_basic]
+    skill_atoms:
+      - "Binomial distribution: P(X=k) = C(n,k)·pᵏ·(1-p)ⁿ⁻ᵏ"
+      - "Bernoulli trials (n independent experiments)"
+      - "Conditional binomial probability"
+      - "Normal distribution (מבוא)"
+      - "z-scores and standard normal table"
+      - "Using normal table for probability calculations"
+    level_scope:
+      5pt: "Bagrut 5pt probability chapter; binomial + normal distribution"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # GEOMETRY (EUCLIDEAN)
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: geometry_basics
+    name: Euclidean Geometry — Foundations
+    name_he: גיאומטריה אוקלידית — יסודות
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: geometry
+    prerequisites: [arithmetic, algebra_basics]
+    skill_atoms:
+      - "Basic undefined terms: point, line, plane"
+      - "Types of angles: acute, right, obtuse, straight"
+      - "Complementary, supplementary, vertically opposite angles"
+      - "Angles formed by parallel lines (corresponding, alternate interior, co-interior)"
+      - "Triangle angle sum = 180°"
+      - "Types of triangles by sides and angles"
+      - "Isosceles triangle properties"
+      - "Pythagorean theorem and its converse"
+      - "Perimeter and area: rectangle, square, triangle, trapezoid, circle"
+    level_scope:
+      3pt: "All foundational topics including area/perimeter formulas"
+      4pt: "Used as prerequisite for similarity and congruence"
+      5pt: "Prerequisite for vectors and analytic geometry"
+
+  - id: triangles_congruence
+    name: Triangle Congruence & Similarity
+    name_he: חפיפה ודמיון משולשים
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: geometry
+    prerequisites: [geometry_basics]
+    skill_atoms:
+      - "Congruence criteria: SAS, ASA, AAS, SSS, RHS"
+      - "Proving triangles congruent"
+      - "Properties of congruent triangles (corresponding parts)"
+      - "Similarity criteria: AA, SAS, SSS"
+      - "Proving triangles similar"
+      - "Ratios of corresponding sides and areas"
+      - "Midsegment theorem (כולל טרפז)"
+      - "Thales' theorem (proportional division)"
+      - "Angle bisector theorem"
+      - "Proportions in right triangles (altitude to hypotenuse)"
+    level_scope:
+      4pt: "Full congruence and similarity with proofs"
+      5pt: "Used in advanced geometry and analytic geometry proofs"
+
+  - id: quadrilaterals
+    name: Quadrilaterals
+    name_he: מרובעים
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: geometry
+    prerequisites: [geometry_basics, triangles_congruence]
+    skill_atoms:
+      - "Sum of interior angles = 360°"
+      - "Parallelogram: properties and proof conditions"
+      - "Rectangle: properties"
+      - "Rhombus: properties"
+      - "Square: properties"
+      - "Trapezoid and isosceles trapezoid: properties"
+      - "Kite (דלתון): properties"
+      - "Midsegment of trapezoid"
+      - "Area of all quadrilateral types"
+    level_scope:
+      4pt: "Properties and proofs for each type"
+      5pt: "Used in geometry proof questions and vector applications"
+
+  - id: circles
+    name: Circles
+    name_he: מעגלים
+    points_levels: [4pt, 5pt]
+    bagrut_chapter: geometry
+    prerequisites: [geometry_basics, triangles_congruence]
+    skill_atoms:
+      - "Circle terminology: radius, diameter, chord, arc, sector"
+      - "Central angle = arc measure"
+      - "Inscribed angle = half the arc"
+      - "Angle inscribed in semicircle = 90°"
+      - "Perpendicular from center bisects chord"
+      - "Tangent is perpendicular to radius"
+      - "Two tangents from external point (equal length)"
+      - "Angle between tangent and chord"
+      - "Cyclic quadrilaterals"
+      - "Arc length and sector area formulas"
+      - "Two circles: external/internal tangency"
+      - "Power of a point"
+    level_scope:
+      4pt: "All major theorems; proofs in exam context"
+      5pt: "Connects to analytic geometry (circle equation)"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # ANALYTIC GEOMETRY
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: analytic_geometry_basic
+    name: Analytic Geometry — Basics
+    name_he: גיאומטריה אנליטית — בסיסי
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: analytic_geometry
+    prerequisites: [functions_linear, geometry_basics]
+    skill_atoms:
+      - "Distance formula between two points"
+      - "Midpoint formula"
+      - "Slope of a line segment"
+      - "Equation of a line (given slope and point; given two points)"
+      - "Parallel and perpendicular lines (from slopes)"
+      - "Area of shapes on coordinate system (rectangle, triangle, trapezoid)"
+      - "Checking if point lies on a line"
+    level_scope:
+      3pt: "Core Bagrut 801 topic — distance, midpoint, line equation, area of polygon"
+      4pt: "Extended to quadrilaterals on coordinate plane"
+      5pt: "Prerequisite for conic sections"
+
+  - id: analytic_geometry
+    name: Analytic Geometry — Advanced (Conic Sections)
+    name_he: גיאומטריה אנליטית — מתקדם (חתכי חרוט)
+    points_levels: [5pt]
+    bagrut_chapter: analytic_geometry
+    prerequisites: [analytic_geometry_basic, circles, equations_quadratic]
+    skill_atoms:
+      - "Circle equation: (x-a)²+(y-b)²=r²"
+      - "Finding circle center and radius from equation"
+      - "Circle and line: intersection, tangency"
+      - "Geometric loci"
+      - "Proof questions in analytic geometry"
+      - "Ellipse: standard form x²/a²+y²/b²=1 (overview)"
+      - "Parabola as conic: y²=4px (Bagrut 807 topic)"
+    level_scope:
+      5pt: "Full treatment in exam; conic sections in Bagrut 807 (5pt advanced)"
+
+  - id: vectors_2d
+    name: Vectors in the Plane
+    name_he: וקטורים במישור
+    points_levels: [5pt]
+    bagrut_chapter: vectors
+    prerequisites: [analytic_geometry_basic, trigonometry_ratios]
+    skill_atoms:
+      - "Vector notation; magnitude and direction"
+      - "Vector addition and subtraction"
+      - "Scalar multiplication"
+      - "Position vectors (from origin)"
+      - "Collinear vectors"
+      - "Dot product"
+      - "Angle between two vectors"
+      - "Vector equation of a line"
+      - "3D vectors (for Bagrut 807)"
+      - "3D trigonometry in space"
+    level_scope:
+      5pt: "Bagrut 807 chapter; 2D and 3D; dot product; angle; trigonometry in space"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # TRIGONOMETRY
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: trigonometry_ratios
+    name: Trigonometry in Right Triangle
+    name_he: טריגונומטריה במשולש ישר זווית
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: trigonometry
+    prerequisites: [geometry_basics, functions_intro]
+    skill_atoms:
+      - "sin, cos, tan, cot definitions in right triangle"
+      - "Finding missing side using trig ratios"
+      - "Finding missing angle using inverse trig"
+      - "Special angles: 30°, 45°, 60° exact values"
+      - "Pythagorean identity: sin²θ + cos²θ = 1"
+      - "Multi-step problems: height, distance, angle of elevation/depression"
+      - "Sine rule (law of sines)"
+      - "Cosine rule (law of cosines)"
+      - "Area of triangle: ½ab·sinC"
+    level_scope:
+      3pt: "Right triangle only; sin/cos/tan; area of triangle; sine/cosine rules for 801"
+      4pt: "Sine/cosine rules; 3D applications (flagpole, angle between planes)"
+      5pt: "Full unit circle; used as prerequisite for identities and equations"
+
+  - id: trigonometry_identities
+    name: Trigonometric Identities & Unit Circle
+    name_he: זהויות טריגונומטריות ומעגל היחידה
+    points_levels: [5pt]
+    bagrut_chapter: trigonometry
+    prerequisites: [trigonometry_ratios]
+    skill_atoms:
+      - "Unit circle definition of sin, cos for all angles"
+      - "Exact values for 0°, 30°, 45°, 60°, 90°, 120°, 135°, 150°, 180°"
+      - "Even/odd identities: sin(-x)=-sin(x), cos(-x)=cos(x)"
+      - "Periodicity: sin(x+360°)=sin(x)"
+      - "Complementary angle identities"
+      - "Supplementary angle identities"
+      - "Sum and difference formulas: sin(A±B), cos(A±B)"
+      - "Double angle formulas: sin(2A), cos(2A)"
+      - "Simplifying expressions using identities"
+      - "Proving trigonometric identities"
+    level_scope:
+      5pt: "Core 5pt chapter; used in equations and calculus"
+
+  - id: trigonometry_equations
+    name: Trigonometric Equations
+    name_he: משוואות טריגונומטריות
+    points_levels: [5pt]
+    bagrut_chapter: trigonometry
+    prerequisites: [trigonometry_identities, equations_quadratic]
+    skill_atoms:
+      - "Basic equations: sinθ=k, cosθ=k, tanθ=k"
+      - "General solution (all periods)"
+      - "Solution in a given domain"
+      - "Solving using identities"
+      - "Solving by dividing by cosine"
+      - "Algebraic substitution (let t=sinx)"
+      - "Quadratic-type trig equations"
+      - "Equations with radians"
+    level_scope:
+      5pt: "Bagrut 5pt exam chapter; all solution types"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # DIFFERENTIAL CALCULUS
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: limits
     name: Limits
     name_he: גבולות
+    points_levels: [5pt]
+    bagrut_chapter: calculus
     prerequisites: [functions_quadratic, trigonometry_identities, sequences_geometric]
+    skill_atoms:
+      - "Intuitive concept of limit"
+      - "Left and right limits"
+      - "Limits at infinity (horizontal asymptotes)"
+      - "lim sin(x)/x = 1 as x→0"
+      - "Limit of rational function (factoring and canceling)"
+      - "Indeterminate forms"
+      - "Vertical asymptotes from limits"
+    level_scope:
+      5pt: "Conceptual introduction in Bagrut; rigorous ε-δ NOT required; used for asymptotes"
 
   - id: derivatives_intro
-    name: Derivatives — Introduction
-    name_he: נגזרות — מבוא
+    name: Derivatives — Introduction & Basic Rules
+    name_he: נגזרות — מבוא וכללים בסיסיים
+    points_levels: [5pt]
+    bagrut_chapter: calculus
     prerequisites: [limits, functions_quadratic]
+    skill_atoms:
+      - "Derivative as slope of tangent (limit definition)"
+      - "Power rule: (xⁿ)' = nxⁿ⁻¹"
+      - "Constant rule: (c)' = 0"
+      - "Sum/difference rule"
+      - "Derivative of constants and linear terms"
+      - "Equation of tangent line at a point"
+      - "Equation of normal line at a point"
+    level_scope:
+      5pt: "Entry to Bagrut calculus; tangent line equations"
 
   - id: derivatives_rules
-    name: Derivative Rules
-    name_he: כללי גזירה
+    name: Derivative Rules (Chain, Product, Quotient)
+    name_he: כללי גזירה (שרשרת, מכפלה, מנה)
+    points_levels: [5pt]
+    bagrut_chapter: calculus
     prerequisites: [derivatives_intro, functions_exponential, trigonometry_identities]
+    skill_atoms:
+      - "Product rule: (fg)' = f'g + fg'"
+      - "Quotient rule: (f/g)' = (f'g-fg')/g²"
+      - "Chain rule: (f(g(x)))' = f'(g(x))·g'(x)"
+      - "Derivatives of trigonometric functions: (sinx)'=cosx, (cosx)'=-sinx"
+      - "Derivative of eˣ and e^f(x)"
+      - "Derivative of ln(x) and ln(f(x))"
+      - "Derivative of aˣ and power functions"
+      - "Higher-order derivatives (second derivative)"
+    level_scope:
+      5pt: "Core 5pt calculus; all differentiation rules tested in Bagrut"
 
   - id: derivatives_applications
-    name: Applications of Derivatives
-    name_he: יישומי נגזרות
-    prerequisites: [derivatives_rules]
+    name: Function Analysis Using Derivatives
+    name_he: חקירת פונקציה (ניתוח בעזרת נגזרות)
+    points_levels: [5pt]
+    bagrut_chapter: calculus
+    prerequisites: [derivatives_rules, inequalities]
+    skill_atoms:
+      - "Increasing/decreasing intervals: f'(x) > 0 / f'(x) < 0"
+      - "Local maximum and minimum: f'(x)=0, sign change test"
+      - "Concavity: f''(x) > 0 (concave up) / f''(x) < 0 (concave down)"
+      - "Inflection points: f''(x) = 0 and sign change"
+      - "Asymptotes: vertical, horizontal, oblique"
+      - "Full function investigation (חקירה מלאה)"
+      - "Relationship between f(x) and f'(x) graphs"
+      - "Relationship between f(x) and f''(x) graphs"
+      - "Even/odd function analysis"
+      - "Function analysis with parameters"
+    level_scope:
+      5pt: "Major Bagrut topic; full function investigation is a guaranteed question"
+
+  - id: optimization_problems
+    name: Optimization Problems (Extreme Value Applications)
+    name_he: בעיות קיצון
+    points_levels: [5pt]
+    bagrut_chapter: calculus
+    prerequisites: [derivatives_applications, geometry_basics]
+    skill_atoms:
+      - "Setting up a function to optimize from geometric context"
+      - "Optimization in plane geometry (area, perimeter, volume)"
+      - "Optimization with constraint equations"
+      - "Optimization in space (3D problems)"
+      - "Function and graph optimization problems"
+      - "Optimization using integral"
+    level_scope:
+      5pt: "Frequent Bagrut exam question; needs creative setup"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # INTEGRAL CALCULUS
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: integrals_intro
-    name: Integrals — Introduction
-    name_he: אינטגרלים — מבוא
+    name: Indefinite Integrals
+    name_he: אינטגרל כללי (לא מסוים)
+    points_levels: [5pt]
+    bagrut_chapter: integrals
     prerequisites: [derivatives_rules]
+    skill_atoms:
+      - "Antiderivative concept"
+      - "Immediate integrals: power, sin, cos, eˣ, 1/x"
+      - "Linearity of integration"
+      - "Integration by substitution (simple cases)"
+      - "Finding f(x) given f'(x) and an initial condition"
+      - "+C constant of integration"
+    level_scope:
+      5pt: "First part of integration chapter; basics before definite integrals"
+
+  - id: definite_integrals
+    name: Definite Integrals & Area
+    name_he: אינטגרל מסוים וחישובי שטחים
+    points_levels: [5pt]
+    bagrut_chapter: integrals
+    prerequisites: [integrals_intro]
+    skill_atoms:
+      - "Definite integral definition and notation"
+      - "Fundamental theorem of calculus"
+      - "Properties: linearity, additive intervals, sign"
+      - "Area under curve (above x-axis)"
+      - "Area below x-axis (taking absolute value)"
+      - "Area between two functions"
+      - "Area when functions cross (split at intersection)"
+      - "Area with parameters"
+      - "Area given derivative function"
+      - "Area between trig functions and x-axis"
+    level_scope:
+      5pt: "Major Bagrut topic; area calculations guaranteed in every exam"
 
   - id: integrals_techniques
     name: Integration Techniques
     name_he: שיטות אינטגרציה
-    prerequisites: [integrals_intro, derivatives_rules]
+    points_levels: [5pt]
+    bagrut_chapter: integrals
+    prerequisites: [definite_integrals]
+    skill_atoms:
+      - "Substitution (u-substitution) for complex integrands"
+      - "Integration of f'(x)/f(x) → ln|f(x)|"
+      - "Integration of f'(x)·eˢ⁽ˣ⁾"
+      - "Rational function integration (simple denominators)"
+      - "Integration of trig functions"
+      - "Volume of revolution"
+    level_scope:
+      5pt: "Extended integration techniques; volumes appear in Bagrut 5pt"
 
   - id: integrals_applications
-    name: Applications of Integrals
-    name_he: יישומי אינטגרלים
-    prerequisites: [integrals_techniques]
+    name: Integral Applications (Volumes & Optimization)
+    name_he: יישומי אינטגרלים (נפחים ובעיות קיצון)
+    points_levels: [5pt]
+    bagrut_chapter: integrals
+    prerequisites: [integrals_techniques, optimization_problems]
+    skill_atoms:
+      - "Volume of revolution around x-axis: V = π∫f(x)²dx"
+      - "Volume of revolution around y-axis"
+      - "Optimization problems involving integrals"
+      - "Finding unknown parameters in integral equations"
+    level_scope:
+      5pt: "Less frequent but possible Bagrut topic; volumes tested occasionally"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # STATISTICS (advanced — 3pt Bagrut 802/803)
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: descriptive_stats
+    name: Statistics — Advanced (Normal Distribution)
+    name_he: סטטיסטיקה מתקדמת (התפלגות נורמלית)
+    points_levels: [3pt, 4pt, 5pt]
+    bagrut_chapter: statistics
+    prerequisites: [statistics_descriptive, probability_basic]
+    skill_atoms:
+      - "Standard deviation: definition and calculation"
+      - "Variance"
+      - "Normal distribution shape and properties (68-95-99.7 rule)"
+      - "z-scores: z = (x-μ)/σ"
+      - "Using z-table/standard normal table"
+      - "Finding probability from normal distribution"
+      - "Finding values given probability (inverse)"
+    level_scope:
+      3pt: "Required in Bagrut 802 — normal distribution, z-scores, table reading"
+      4pt: "Same depth"
+      5pt: "Connects to binomial approximation by normal"

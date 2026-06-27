@@ -39,6 +39,10 @@ interface KgConcept {
   name_he: string | null;
   subject: string;
   level: string;
+  points_levels: string[];
+  bagrut_chapter: string | null;
+  skill_atoms: string[];
+  level_scope: Record<string, string>;
   prerequisites: string[];
 }
 
@@ -169,7 +173,9 @@ interface ConceptCtx {
   name_he: string | null;
   subject: string;
   level: string;
+  bagrut_chapter: string | null;
   atoms: string[];
+  level_scope_note: string | null;
   mastery: number | null;
   insights: string[];
 }
@@ -180,26 +186,47 @@ function buildUserPrompt(
   count: number,
   profile: LearnerProfileRow | null,
 ): string {
+  const goal = profile?.goal ?? null;
+  const grade = profile?.grade_level ?? null;
+
+  // Derive the learner's points level from their goal for level_scope lookup
+  const GOAL_TO_LEVEL_KEY: Record<string, string> = {
+    bagrut_math_3: '3pt', bagrut_math_4: '4pt', bagrut_math_5: '5pt',
+    bagrut_physics: 'hs_physics', calculus1: 'calc1', linear_algebra: 'la',
+  };
+  const levelKey = goal ? (GOAL_TO_LEVEL_KEY[goal] ?? null) : null;
+
   const profileLine = profile
-    ? `Profile: goal=${profile.goal ?? 'n/a'}, grade=${profile.grade_level ?? 'n/a'}, subjects=${(profile.subjects ?? []).join(',')}.`
+    ? [
+        `Profile: goal=${goal ?? 'n/a'}, grade=${grade ?? 'n/a'}`,
+        `subjects=${(profile.subjects ?? []).join(',')}`,
+        levelKey ? `points_level=${levelKey}` : null,
+      ].filter(Boolean).join(', ') + '.'
     : 'Profile: brand-new learner (no profile).';
+
   const conceptBlocks = ctx.map((c) => {
     const masteryLabel =
       c.mastery == null
         ? 'unmeasured'
-        : c.mastery >= 0.7
-          ? 'strong'
-          : c.mastery >= 0.4
-            ? 'medium'
-            : 'weak';
-    const atoms = c.atoms.length > 0 ? c.atoms.slice(0, 12).join(', ') : '(no atoms registered)';
-    const insights = c.insights.length > 0 ? `insights: ${c.insights.slice(0, 3).join(' | ')}` : '';
+        : c.mastery >= 0.7 ? 'strong'
+        : c.mastery >= 0.4 ? 'medium'
+        : 'weak';
+    const atoms = c.atoms.length > 0
+      ? c.atoms.slice(0, 15).join(' | ')
+      : '(no atoms — generate from concept name)';
+    const insights = c.insights.length > 0
+      ? `learner_insights: ${c.insights.slice(0, 3).join(' | ')}`
+      : null;
+    const scopeNote = c.level_scope_note
+      ? `depth_for_this_level: ${c.level_scope_note}`
+      : null;
     return [
       `### concept: ${c.id}`,
       `name_en: ${c.name_en}`,
       c.name_he ? `name_he: ${c.name_he}` : null,
-      `subject: ${c.subject}, level: ${c.level}, mastery: ${masteryLabel}`,
-      `atoms: ${atoms}`,
+      `subject: ${c.subject} | chapter: ${c.bagrut_chapter ?? 'general'} | mastery: ${masteryLabel}`,
+      `skill_atoms: ${atoms}`,
+      scopeNote,
       insights,
     ].filter(Boolean).join('\n');
   }).join('\n\n');
@@ -209,11 +236,23 @@ function buildUserPrompt(
 kind_mix: ${mix}
 question_count: ${count}
 
-Allowed concepts and their skill atoms:
+IMPORTANT — depth calibration:
+- The learner's goal is ${goal ?? 'general'}.
+- Adjust EVERY question to match this level. For example:
+  * 3pt math: practical, concrete, no calculus, everyday language.
+  * 5pt math: may include derivatives, integrals, proofs, advanced manipulation.
+  * hs_physics: Bagrut-level, formula-based, multi-step.
+  * calc1: rigorous; limits, derivatives, integrals with proper notation.
+- The "depth_for_this_level" lines below specify EXACTLY what depth to expect per concept.
+
+Allowed concepts, their skill atoms, and depth notes:
 
 ${conceptBlocks}
 
-Generate exactly ${count} fit-to-purpose questions now. Spread roughly evenly across the listed concepts and follow every rule in the system message. Return JSON only.`;
+Generate exactly ${count} fit-to-purpose questions now.
+Each question must test ONE specific skill_atom from the list above (reference it in the skill_atoms field).
+Spread questions evenly across the listed concepts.
+Follow every rule in the system message. Return JSON only.`;
 }
 
 // ── Groq ----------------------------------------------------------------------
@@ -284,7 +323,6 @@ function validateQuestion(
   raw: unknown,
   allowedKinds: Set<string>,
   allowedConcepts: Set<string>,
-  allowedAtomsByConcept: Map<string, Set<string>>,
 ): CustomQuizQuestion | null {
   if (!raw || typeof raw !== 'object') return null;
   const q = raw as Record<string, unknown>;
@@ -294,9 +332,9 @@ function validateQuestion(
   if (!isStr(q.stem_en) || !isStr(q.stem_he)) return null;
   if (!isStr(q.explanation_en) || !isStr(q.explanation_he)) return null;
   const atoms = Array.isArray(q.skill_atoms) ? q.skill_atoms.filter(isStr) : [];
-  const allowedAtoms = allowedAtomsByConcept.get(q.concept_id) ?? new Set<string>();
-  const filteredAtoms =
-    allowedAtoms.size > 0 ? atoms.filter((a) => allowedAtoms.has(a)) : atoms;
+  // Keep all atoms the model returned — we now verify concept_id (which is strict)
+  // but don't restrict the exact atom text since the model may paraphrase.
+  const filteredAtoms = atoms;
   const base: CustomQuizQuestion = {
     ord: 0,
     kind: q.kind as CustomQuizQuestion['kind'],
@@ -363,18 +401,38 @@ export async function buildCustomQuiz(
   const hintsRows = await fetchLessonAgentHintsByConceptIds(picked.ids).catch(() => []);
   const hintsByConcept = new Map(hintsRows.map((r) => [r.concept_id, r.agent_hints]));
 
+  // Derive level key from the learner's goal for depth calibration
+  const GOAL_TO_LEVEL_KEY: Record<string, string> = {
+    bagrut_math_3: '3pt', bagrut_math_4: '4pt', bagrut_math_5: '5pt',
+    bagrut_physics: 'hs_physics', calculus1: 'calc1', linear_algebra: 'la',
+  };
+  const levelKey = profile?.goal ? (GOAL_TO_LEVEL_KEY[profile.goal] ?? null) : null;
+
   const ctx: ConceptCtx[] = picked.ids
     .map((id) => kgById[id])
     .filter((c): c is KgConcept => Boolean(c))
     .map((c) => {
       const hints = hintsByConcept.get(c.id) ?? null;
+      // Prefer KG skill_atoms from YAML over lesson agent hints — the YAML is now
+      // much richer after the Bagrut-aligned rebuild.
+      const kgAtoms = c.skill_atoms ?? [];
+      const lessonAtoms = hints?.skill_atoms_unlocked ?? [];
+      const mergedAtoms = kgAtoms.length > 0 ? kgAtoms : lessonAtoms;
+
+      // Get level-specific scope note so the AI calibrates explanation depth
+      const scopeNote = levelKey && c.level_scope
+        ? (c.level_scope[levelKey] ?? null)
+        : null;
+
       return {
         id: c.id,
         name_en: c.name,
         name_he: c.name_he,
         subject: c.subject,
         level: c.level,
-        atoms: hints?.skill_atoms_unlocked ?? [],
+        bagrut_chapter: c.bagrut_chapter,
+        atoms: mergedAtoms,
+        level_scope_note: scopeNote,
         mastery: mastery[c.id] ?? null,
         insights: hints?.key_insights ?? [],
       };
@@ -385,15 +443,13 @@ export async function buildCustomQuiz(
   const count = questionCountFromBudget(req.time_limit_min, req.kind_mix);
   const allowedKinds = ALLOWED_KINDS_BY_MIX[req.kind_mix];
   const conceptSet = new Set(ctx.map((c) => c.id));
-  const atomsByConcept = new Map<string, Set<string>>();
-  for (const c of ctx) atomsByConcept.set(c.id, new Set(c.atoms));
 
   const groq = await callGroq(SYSTEM_PROMPT, buildUserPrompt(ctx, req.kind_mix, count, profile));
   if (!groq) return null;
 
   const validated: CustomQuizQuestion[] = [];
   for (const raw of groq.questions) {
-    const q = validateQuestion(raw, allowedKinds, conceptSet, atomsByConcept);
+    const q = validateQuestion(raw, allowedKinds, conceptSet);
     if (q) {
       q.ord = validated.length + 1;
       validated.push(q);

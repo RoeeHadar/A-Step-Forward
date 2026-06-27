@@ -301,62 +301,83 @@ const POINTS_GROUPS: { value: string; label_en: string; label_he: string }[] = [
 // 4-unit students never see vectors, etc.
 
 const ALL_CONCEPTS: Record<string, { label_en: string; label_he: string }> = {
-  // ── Math – common / 3pt+ ────────────────────────────────────────────────
+  // ── Math – 3pt+ ─────────────────────────────────────────────────────────
   arithmetic:              { label_en: 'Arithmetic & Number Sense',       label_he: 'חשבון ותחושת מספר' },
   algebra_basics:          { label_en: 'Algebra Basics',                  label_he: 'יסודות האלגברה' },
-  equations_linear:        { label_en: 'Linear Equations',                label_he: 'משוואות מדרגה ראשונה' },
+  equations_linear:        { label_en: 'Linear Equations & Systems',      label_he: 'משוואות מדרגה ראשונה ומערכות' },
   equations_quadratic:     { label_en: 'Quadratic Equations',             label_he: 'משוואות ריבועיות' },
-  functions_intro:         { label_en: 'Introduction to Functions',        label_he: 'מבוא לפונקציות' },
+  inequalities:            { label_en: 'Inequalities',                    label_he: 'אי-שוויונים' },
+  exponents:               { label_en: 'Exponents & Roots',               label_he: 'חזקות ושורשים' },
+  word_problems:           { label_en: 'Word Problems (Applied Algebra)',  label_he: 'בעיות מילוליות' },
+  functions_intro:         { label_en: 'Introduction to Functions',       label_he: 'מבוא לפונקציות' },
   functions_linear:        { label_en: 'Linear Functions',                label_he: 'פונקציה לינארית' },
-  functions_quadratic:     { label_en: 'Quadratic Functions (Parabola)',   label_he: 'פונקציה ריבועית (פרבולה)' },
+  functions_quadratic:     { label_en: 'Quadratic Functions (Parabola)',  label_he: 'פונקציה ריבועית (פרבולה)' },
   geometry_basics:         { label_en: 'Basic Geometry',                  label_he: 'גיאומטריה בסיסית' },
   sequences_arithmetic:    { label_en: 'Arithmetic Sequences',            label_he: 'סדרות חשבוניות' },
+  analytic_geometry_basic: { label_en: 'Analytic Geometry (Basics)',      label_he: 'גיאומטריה אנליטית — בסיסי' },
+  trigonometry_ratios:     { label_en: 'Trigonometry (Right Triangle)',   label_he: 'טריגונומטריה במשולש ישר זווית' },
   statistics_descriptive:  { label_en: 'Descriptive Statistics',          label_he: 'סטטיסטיקה תיאורית' },
+  descriptive_stats:       { label_en: 'Statistics — Normal Distribution',label_he: 'סטטיסטיקה — התפלגות נורמלית' },
   probability_basic:       { label_en: 'Basic Probability',               label_he: 'הסתברות בסיסית' },
   // ── Math – 4pt+ ─────────────────────────────────────────────────────────
   fractions_algebraic:     { label_en: 'Algebraic Fractions',             label_he: 'שברים אלגבריים' },
-  exponents:               { label_en: 'Exponents & Roots',               label_he: 'חזקות ושורשים' },
-  factoring:               { label_en: 'Factoring',                       label_he: 'פירוק לגורמים' },
-  functions_exponential:   { label_en: 'Exponential Functions',           label_he: 'פונקציה אקספוננציאלית' },
-  trigonometry_ratios:     { label_en: 'Trigonometry (right triangle)',    label_he: 'טריגונומטריה (משולש ישר זווית)' },
-  triangles_congruence:    { label_en: 'Triangle Congruence & Similarity', label_he: 'חפיפה ודמיון משולשים' },
+  factoring:               { label_en: 'Factoring Polynomials',           label_he: 'פירוק לגורמים' },
+  functions_exponential:   { label_en: 'Exponential Functions & Growth',  label_he: 'פונקציה אקספוננציאלית וגדילה' },
+  quadrilaterals:          { label_en: 'Quadrilaterals',                  label_he: 'מרובעים' },
+  triangles_congruence:    { label_en: 'Triangle Congruence & Similarity',label_he: 'חפיפה ודמיון משולשים' },
   circles:                 { label_en: 'Circles',                         label_he: 'מעגלים' },
-  analytic_geometry:       { label_en: 'Analytic Geometry',               label_he: 'גיאומטריה אנליטית' },
-  sequences_geometric:     { label_en: 'Geometric Sequences',             label_he: 'סדרות הנדסיות' },
+  sequences_geometric:     { label_en: 'Geometric Sequences & Series',    label_he: 'סדרות הנדסיות' },
   combinatorics:           { label_en: 'Combinatorics',                   label_he: 'קומבינטוריקה' },
   // ── Math – 5pt only ─────────────────────────────────────────────────────
   logarithms:              { label_en: 'Logarithms',                      label_he: 'לוגריתמים' },
+  function_transformations:{ label_en: 'Function Transformations',        label_he: 'הזזות ומתיחות של פונקציות' },
   trigonometry_identities: { label_en: 'Trigonometric Identities',        label_he: 'זהויות טריגונומטריות' },
   trigonometry_equations:  { label_en: 'Trigonometric Equations',         label_he: 'משוואות טריגונומטריות' },
-  vectors_2d:              { label_en: 'Vectors in the Plane',            label_he: 'וקטורים במישור' },
+  analytic_geometry:       { label_en: 'Analytic Geometry (Conic Sections)',label_he: 'גיאומטריה אנליטית — חתכי חרוט' },
+  vectors_2d:              { label_en: 'Vectors & 3D Trigonometry',       label_he: 'וקטורים וטריגונומטריה במרחב' },
+  distributions:           { label_en: 'Probability Distributions (Binomial)',label_he: 'התפלגויות (בינומית)' },
   limits:                  { label_en: 'Limits',                          label_he: 'גבולות' },
-  derivatives_intro:       { label_en: 'Derivatives — Introduction',      label_he: 'נגזרות — מבוא' },
-  derivatives_rules:       { label_en: 'Derivative Rules',                label_he: 'כללי גזירה' },
-  derivatives_applications:{ label_en: 'Applications of Derivatives',     label_he: 'יישומי נגזרות' },
-  integrals_intro:         { label_en: 'Integrals — Introduction',        label_he: 'אינטגרלים — מבוא' },
-  definite_integrals:      { label_en: 'Definite Integrals',              label_he: 'אינטגרל מסוים' },
-  integrals_applications:  { label_en: 'Applications of Integrals',       label_he: 'יישומי אינטגרלים' },
-  distributions:           { label_en: 'Probability Distributions',       label_he: 'התפלגויות הסתברות' },
+  derivatives_intro:       { label_en: 'Derivatives & Tangent Lines',     label_he: 'נגזרות וקו משיק' },
+  derivatives_rules:       { label_en: 'Derivative Rules (Chain, Product, Quotient)',label_he: 'כללי גזירה (שרשרת, מכפלה, מנה)' },
+  derivatives_applications:{ label_en: 'Function Analysis (Derivatives)', label_he: 'חקירת פונקציה בעזרת נגזרות' },
+  optimization_problems:   { label_en: 'Optimization Problems',           label_he: 'בעיות קיצון' },
+  integrals_intro:         { label_en: 'Indefinite Integrals',            label_he: 'אינטגרל כללי' },
+  definite_integrals:      { label_en: 'Definite Integrals & Areas',      label_he: 'אינטגרל מסוים וחישובי שטחים' },
+  integrals_techniques:    { label_en: 'Integration Techniques',          label_he: 'שיטות אינטגרציה' },
+  integrals_applications:  { label_en: 'Integral Applications (Volumes)', label_he: 'יישומי אינטגרלים (נפחים)' },
   // ── University Calculus 1 ───────────────────────────────────────────────
   continuity:              { label_en: 'Continuity',                      label_he: 'רציפות' },
-  integrals_techniques:    { label_en: 'Integration Techniques',          label_he: 'שיטות אינטגרציה' },
-  uni_sequences_series:    { label_en: 'Sequences & Series',              label_he: 'סדרות וטורים (אוניברסיטה)' },
+  uni_sequences_series:    { label_en: 'Sequences & Series (University)', label_he: 'סדרות וטורים (אוניברסיטה)' },
   // ── University Linear Algebra ───────────────────────────────────────────
   la_vectors:              { label_en: 'Vectors in Rⁿ',                  label_he: 'וקטורים ב-Rⁿ' },
   la_matrices:             { label_en: 'Matrices & Linear Systems',       label_he: 'מטריצות ומערכות לינאריות' },
   la_determinants:         { label_en: 'Determinants',                    label_he: 'דטרמיננטות' },
   la_eigenvalues:          { label_en: 'Eigenvalues & Eigenvectors',      label_he: 'ערכים עצמיים' },
-  // ── Physics – High School ───────────────────────────────────────────────
+  // ── Physics – High School (Bagrut 5 units) ─────────────────────────────
+  units_measurement:       { label_en: 'Units & Measurement',             label_he: 'יחידות ומדידות' },
   kinematics_1d:           { label_en: 'Kinematics (1D)',                 label_he: 'קינמטיקה (ממד אחד)' },
-  kinematics_2d:           { label_en: 'Kinematics (2D & Projectiles)',   label_he: 'קינמטיקה (דו-ממד וזריקה)' },
-  newton_laws:             { label_en: "Newton's Laws",                   label_he: 'חוקי ניוטון' },
+  kinematics_2d:           { label_en: 'Kinematics (2D) & Projectiles',  label_he: 'קינמטיקה (דו-ממד) וזריקה' },
+  newton_laws:             { label_en: "Newton's Laws of Motion",         label_he: 'חוקי ניוטון' },
+  friction:                { label_en: 'Friction',                        label_he: 'חיכוך' },
+  circular_motion:         { label_en: 'Circular Motion',                 label_he: 'תנועה מעגלית' },
+  gravitation:             { label_en: 'Gravitation',                     label_he: 'כבידה' },
   work_energy:             { label_en: 'Work & Energy',                   label_he: 'עבודה ואנרגיה' },
+  conservation_energy:     { label_en: 'Conservation of Energy',          label_he: 'שימור אנרגיה' },
   momentum:                { label_en: 'Momentum & Impulse',              label_he: 'תנע ומתקף' },
-  waves_basics:            { label_en: 'Waves & Sound',                   label_he: 'גלים וקול' },
+  collisions:              { label_en: 'Collisions',                      label_he: 'התנגשויות' },
+  simple_harmonic_motion:  { label_en: 'Simple Harmonic Motion (SHM)',    label_he: 'תנועה הרמונית פשוטה' },
+  torque:                  { label_en: 'Torque & Static Equilibrium',     label_he: 'מומנט ושיווי משקל' },
+  waves_basics:            { label_en: 'Mechanical Waves & Sound',        label_he: 'גלים מכניים וקול' },
   optics_geometric:        { label_en: 'Geometric Optics',                label_he: 'אופטיקה גיאומטרית' },
   electrostatics:          { label_en: 'Electrostatics',                  label_he: 'אלקטרוסטטיקה' },
-  electric_circuits:       { label_en: 'Electric Circuits',               label_he: 'מעגלי חשמל' },
-  modern_physics_intro:    { label_en: 'Modern Physics Intro',            label_he: 'מבוא לפיזיקה מודרנית' },
+  electric_field:          { label_en: 'Electric Field & Potential',      label_he: 'שדה חשמלי ופוטנציאל' },
+  electric_circuits:       { label_en: 'DC Electric Circuits',            label_he: 'מעגלי חשמל ישר' },
+  kirchhoff_laws:          { label_en: "Kirchhoff's Laws",                label_he: 'חוקי קירכהוף' },
+  magnetism:               { label_en: 'Magnetism & Magnetic Forces',     label_he: 'מגנטיות וכוחות מגנטיים' },
+  electromagnetic_induction:{ label_en: 'Electromagnetic Induction',      label_he: 'השראה אלקטרומגנטית' },
+  modern_physics_intro:    { label_en: 'Photoelectric Effect & Quanta',   label_he: 'אפקט פוטואלקטרי וקוונטים' },
+  atomic_models:           { label_en: 'Atomic Models & Hydrogen Spectrum',label_he: 'מודלים אטומיים וספקטרום המימן' },
+  nuclear_physics:         { label_en: 'Nuclear Physics & Radioactivity', label_he: 'פיזיקה גרעינית ורדיואקטיביות' },
 };
 
 type ConceptEntry = { id: string; label_en: string; label_he: string };
@@ -370,29 +391,43 @@ function conceptEntry(id: string): ConceptEntry {
 // Carefully scoped to Israeli Bagrut curriculum per unit level.
 // 4pt INCLUDES everything in 3pt; 5pt INCLUDES everything in 4pt.
 
+// Bagrut Math 3 units — questionnaires 801/802/803
 const MATH_3PT_CONCEPTS = [
   'arithmetic', 'algebra_basics', 'equations_linear', 'equations_quadratic',
+  'inequalities', 'exponents', 'word_problems',
   'functions_intro', 'functions_linear', 'functions_quadratic',
-  'geometry_basics', 'sequences_arithmetic', 'statistics_descriptive', 'probability_basic',
+  'analytic_geometry_basic', 'geometry_basics',
+  'sequences_arithmetic', 'trigonometry_ratios',
+  'statistics_descriptive', 'descriptive_stats', 'probability_basic',
 ];
 
+// Bagrut Math 4 units — adds to 3pt
 const MATH_4PT_EXTRA = [
-  'fractions_algebraic', 'exponents', 'factoring', 'functions_exponential',
-  'trigonometry_ratios', 'triangles_congruence', 'circles', 'analytic_geometry',
+  'fractions_algebraic', 'factoring', 'functions_exponential',
+  'quadrilaterals', 'triangles_congruence', 'circles',
   'sequences_geometric', 'combinatorics',
 ];
 
+// Bagrut Math 5 units — adds to 4pt
 const MATH_5PT_EXTRA = [
-  'logarithms', 'trigonometry_identities', 'trigonometry_equations',
-  'vectors_2d', 'limits', 'derivatives_intro', 'derivatives_rules',
-  'derivatives_applications', 'integrals_intro', 'definite_integrals',
-  'integrals_applications', 'distributions',
+  'logarithms', 'function_transformations',
+  'trigonometry_identities', 'trigonometry_equations',
+  'analytic_geometry', 'vectors_2d', 'distributions',
+  'limits', 'derivatives_intro', 'derivatives_rules',
+  'derivatives_applications', 'optimization_problems',
+  'integrals_intro', 'definite_integrals', 'integrals_techniques', 'integrals_applications',
 ];
 
+// Bagrut Physics 5 units
 const PHYSICS_HS_CONCEPTS = [
-  'kinematics_1d', 'kinematics_2d', 'newton_laws', 'work_energy', 'momentum',
-  'waves_basics', 'optics_geometric', 'electrostatics', 'electric_circuits',
-  'modern_physics_intro',
+  'units_measurement', 'kinematics_1d', 'kinematics_2d', 'newton_laws',
+  'friction', 'circular_motion', 'gravitation',
+  'work_energy', 'conservation_energy', 'momentum', 'collisions',
+  'simple_harmonic_motion', 'torque',
+  'waves_basics', 'optics_geometric',
+  'electrostatics', 'electric_field', 'electric_circuits', 'kirchhoff_laws',
+  'magnetism', 'electromagnetic_induction',
+  'modern_physics_intro', 'atomic_models', 'nuclear_physics',
 ];
 
 const CONCEPTS_BY_GOAL: Record<Goal, string[]> = {
@@ -402,12 +437,13 @@ const CONCEPTS_BY_GOAL: Record<Goal, string[]> = {
   bagrut_physics:  PHYSICS_HS_CONCEPTS,
   calculus1:       [
     'limits', 'continuity', 'derivatives_intro', 'derivatives_rules',
-    'derivatives_applications', 'integrals_intro', 'integrals_techniques',
+    'derivatives_applications', 'optimization_problems',
+    'integrals_intro', 'integrals_techniques',
     'definite_integrals', 'integrals_applications', 'uni_sequences_series',
   ],
   linear_algebra:  ['la_vectors', 'la_matrices', 'la_determinants', 'la_eigenvalues'],
   university_prep: [
-    ...MATH_5PT_EXTRA, 'continuity', 'integrals_techniques', 'uni_sequences_series',
+    ...MATH_5PT_EXTRA, 'continuity', 'uni_sequences_series',
     'la_vectors', 'la_matrices',
   ],
   other: [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA, ...PHYSICS_HS_CONCEPTS],

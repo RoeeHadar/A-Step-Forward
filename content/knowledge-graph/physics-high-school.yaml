@@ -1,138 +1,566 @@
-# High-school Physics prerequisite graph
+# Physics – High School (Israeli Bagrut 5 units)
+#
+# Bagrut physics is split into 3 mandatory questionnaires + lab:
+#   Mechanics   – שאלון 036-361 (30% of grade)
+#   Electricity – שאלון 036-371 (30% of grade)
+#   Radiation & Matter – קרינה וחומר (20% of grade)
+#   Lab – מעבדה (20% of grade)
+#
+# Each concept carries:
+#   points_levels  – [hs_physics]
+#   bagrut_chapter – mechanics | electricity | radiation | lab
+#   skill_atoms    – granular skills tested in Bagrut
+#   prerequisites  – knowledge graph prerequisites
+
 subject: physics
 level: high_school
 concepts:
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # FOUNDATIONS
+  # ═══════════════════════════════════════════════════════════════════════
+
   - id: units_measurement
     name: Units & Measurement
     name_he: יחידות ומדידות
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: []
+    skill_atoms:
+      - "SI base units: meter, kilogram, second, ampere, kelvin"
+      - "Derived units: newton, joule, watt, pascal, coulomb"
+      - "Unit conversion"
+      - "Scientific notation and significant figures"
+      - "Dimensional analysis"
+      - "Measurement uncertainty and error analysis"
+      - "Experimental setup and lab safety"
 
   - id: vectors_basics
     name: Vectors — Basics
     name_he: וקטורים — יסודות
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [units_measurement]
+    skill_atoms:
+      - "Scalar vs. vector quantities"
+      - "Vector representation: magnitude and direction"
+      - "Vector addition: triangle method and parallelogram method"
+      - "Vector subtraction"
+      - "Resolving vectors into components (x and y)"
+      - "Magnitude of resultant vector"
+      - "Unit vectors"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # MECHANICS — KINEMATICS (Bagrut 036-361)
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: kinematics_1d
-    name: Kinematics in One Dimension
+    name: Kinematics in 1D
     name_he: קינמטיקה בממד אחד
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [units_measurement]
+    skill_atoms:
+      - "Distance vs. displacement"
+      - "Speed vs. velocity"
+      - "Uniform motion: x = x₀ + vt"
+      - "Uniformly accelerated motion: kinematic equations"
+      - "Free fall: a = g = 9.8 m/s²"
+      - "x-t, v-t, a-t graphs — reading and interpretation"
+      - "Relative velocity (1D)"
+      - "Converting between graph forms"
+      - "Average vs. instantaneous velocity"
 
   - id: kinematics_2d
-    name: Kinematics in Two Dimensions
+    name: Kinematics in 2D
     name_he: קינמטיקה בשני ממדים
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [kinematics_1d, vectors_basics]
+    skill_atoms:
+      - "2D position and velocity vectors"
+      - "Superposition of independent motions"
+      - "Relative velocity in 2D"
+
+  - id: projectile_motion
+    name: Projectile Motion
+    name_he: זריקה
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [kinematics_2d, kinematics_1d]
+    skill_atoms:
+      - "Horizontal throw (zero initial vertical velocity)"
+      - "Angled throw (general projectile)"
+      - "Decomposing initial velocity into x and y components"
+      - "Time of flight"
+      - "Range (horizontal distance)"
+      - "Maximum height"
+      - "Velocity at any time (components and magnitude)"
+      - "Launch from elevated position"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # MECHANICS — DYNAMICS (Newton's Laws)
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: newton_laws
-    name: Newton's Laws
+    name: Newton's Laws of Motion
     name_he: חוקי ניוטון
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [kinematics_1d, vectors_basics]
+    skill_atoms:
+      - "Newton's 1st law: inertia and equilibrium"
+      - "Newton's 2nd law: ΣF = ma"
+      - "Newton's 3rd law: action-reaction pairs"
+      - "Free body diagrams"
+      - "Weight vs. mass: W = mg"
+      - "Normal force"
+      - "Tension in strings and cables"
+      - "Atwood machine"
+      - "Connected bodies (system of masses)"
+      - "Inclined planes (with and without friction)"
 
   - id: friction
     name: Friction
     name_he: חיכוך
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [newton_laws]
+    skill_atoms:
+      - "Static friction: f ≤ μₛN"
+      - "Kinetic friction: f = μₖN"
+      - "Direction of friction force"
+      - "Friction on inclined planes"
+      - "Rolling vs. sliding friction"
+      - "Problems combining friction and Newton's laws"
 
   - id: circular_motion
     name: Circular Motion
-    name_he: תנועה מעגלית
+    name_he: תנועה מעגלית"
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [kinematics_2d, newton_laws]
-
-  - id: work_energy
-    name: Work & Energy
-    name_he: עבודה ואנרגיה
-    prerequisites: [newton_laws, kinematics_1d]
-
-  - id: power
-    name: Power
-    name_he: הספק
-    prerequisites: [work_energy]
-
-  - id: momentum
-    name: Momentum & Impulse
-    name_he: תנע ומתקף
-    prerequisites: [newton_laws, work_energy]
-
-  - id: collisions
-    name: Collisions
-    name_he: התנגשויות
-    prerequisites: [momentum]
-
-  - id: rotational_kinematics
-    name: Rotational Kinematics
-    name_he: קינמטיקה סיבובית
-    prerequisites: [circular_motion]
-
-  - id: rotational_dynamics
-    name: Rotational Dynamics
-    name_he: דינמיקה סיבובית
-    prerequisites: [rotational_kinematics, newton_laws, torque]
-
-  - id: torque
-    name: Torque
-    name_he: מומנט
-    prerequisites: [newton_laws, vectors_basics]
-
-  - id: static_equilibrium
-    name: Static Equilibrium
-    name_he: שיווי משקל סטטי
-    prerequisites: [torque, newton_laws]
+    skill_atoms:
+      - "Period (T) and frequency (f)"
+      - "Angular velocity: ω = 2π/T"
+      - "Centripetal acceleration: a = v²/r = ω²r"
+      - "Centripetal force: F = mv²/r"
+      - "Circular motion on flat road (friction provides centripetal force)"
+      - "Banked curves"
+      - "Vertical circular motion (loop)"
+      - "Conical pendulum"
+      - "Satellite orbits"
 
   - id: gravitation
     name: Gravitation
     name_he: כבידה
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [newton_laws, circular_motion]
+    skill_atoms:
+      - "Newton's law of gravitation: F = Gm₁m₂/r²"
+      - "Gravitational constant G"
+      - "Gravitational field strength g = GM/r²"
+      - "Escape velocity"
+      - "Satellite orbital velocity and period"
+      - "Kepler's 3rd law: T² ∝ r³"
+      - "Gravitational potential energy"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # MECHANICS — ENERGY & MOMENTUM
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: work_energy
+    name: Work & Energy
+    name_he: עבודה ואנרגיה
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [newton_laws, kinematics_1d]
+    skill_atoms:
+      - "Work: W = F·d·cosθ"
+      - "Positive, negative, and zero work"
+      - "Kinetic energy: KE = ½mv²"
+      - "Work-energy theorem: W_net = ΔKE"
+      - "Gravitational potential energy: PE = mgh"
+      - "Elastic potential energy: PE = ½kx²"
+      - "Conservation of mechanical energy"
+      - "Power: P = W/t = F·v"
+      - "Efficiency"
+
+  - id: conservation_energy
+    name: Conservation of Energy
+    name_he: שימור אנרגיה
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [work_energy, friction]
+    skill_atoms:
+      - "Energy conservation in frictionless systems"
+      - "Energy dissipation by friction: W_friction = -f·d"
+      - "Energy conservation with friction"
+      - "Roller coaster / pendulum type problems"
+      - "Spring compression and energy storage"
+      - "Energy transformation diagrams"
+
+  - id: momentum
+    name: Momentum & Impulse
+    name_he: תנע ומתקף
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [newton_laws, work_energy]
+    skill_atoms:
+      - "Linear momentum: p = mv"
+      - "Impulse: J = F·Δt = Δp"
+      - "Newton's 2nd law in terms of momentum"
+      - "Conservation of momentum (no external forces)"
+      - "Elastic collisions: both KE and p conserved"
+      - "Inelastic collisions: only p conserved"
+      - "Perfectly inelastic collisions (objects stick together)"
+      - "2D momentum conservation (vector method)"
+      - "Explosion problems (recoil)"
+      - "Center of mass"
+
+  - id: collisions
+    name: Collisions
+    name_he: התנגשויות
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [momentum]
+    skill_atoms:
+      - "Elastic collision equations: head-on"
+      - "Special case: equal masses"
+      - "Coefficient of restitution"
+      - "Ballistic pendulum"
+      - "2D collision problems"
 
   - id: simple_harmonic_motion
-    name: Simple Harmonic Motion
+    name: Simple Harmonic Motion (SHM)
     name_he: תנועה הרמונית פשוטה
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
     prerequisites: [newton_laws, work_energy]
+    skill_atoms:
+      - "Definition of SHM: F = -kx"
+      - "Spring-mass system"
+      - "Period: T = 2π√(m/k)"
+      - "Simple pendulum: T = 2π√(L/g)"
+      - "Amplitude, frequency, angular frequency"
+      - "Position, velocity, acceleration as functions of time"
+      - "Energy in SHM: KE + PE = constant"
+      - "x(t) = A·cos(ωt+φ)"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # MECHANICS — ROTATIONAL (included in Bagrut mechanics)
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: torque
+    name: Torque & Static Equilibrium
+    name_he: מומנט ושיווי משקל סטטי
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [newton_laws, vectors_basics]
+    skill_atoms:
+      - "Torque: τ = r·F·sinθ"
+      - "Conditions for static equilibrium: ΣF=0 and Στ=0"
+      - "Center of gravity"
+      - "Balancing a beam on a pivot"
+      - "Ladder against wall problems"
+      - "Uniform beam supported at two points"
+
+  - id: static_equilibrium
+    name: Extended Static Equilibrium
+    name_he: שיווי משקל מורחב
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [torque]
+    skill_atoms:
+      - "Multi-force equilibrium problems"
+      - "Pivoting objects with distributed loads"
+      - "Stability and center of mass position"
+
+  - id: rotational_kinematics
+    name: Rotational Kinematics
+    name_he: קינמטיקה סיבובית
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [circular_motion]
+    skill_atoms:
+      - "Angular displacement (θ)"
+      - "Angular velocity (ω)"
+      - "Angular acceleration (α)"
+      - "Rotational kinematic equations (analogous to linear)"
+      - "Relationship between linear and angular: v=rω, a=rα"
+
+  - id: rotational_dynamics
+    name: Rotational Dynamics & Angular Momentum
+    name_he: דינמיקה סיבובית ותנע זוויתי
+    points_levels: [hs_physics]
+    bagrut_chapter: mechanics
+    prerequisites: [rotational_kinematics, torque]
+    skill_atoms:
+      - "Moment of inertia I"
+      - "Rotational Newton's 2nd law: τ = Iα"
+      - "Rotational kinetic energy: ½Iω²"
+      - "Angular momentum: L = Iω"
+      - "Conservation of angular momentum"
+      - "Rolling without slipping"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # WAVES & OPTICS (Radiation & Matter chapter)
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: waves_basics
-    name: Waves — Basics
-    name_he: גלים — יסודות
+    name: Mechanical Waves
+    name_he: גלים מכניים
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
     prerequisites: [simple_harmonic_motion]
+    skill_atoms:
+      - "Transverse vs. longitudinal waves"
+      - "Wave speed: v = fλ"
+      - "Wavelength, frequency, period relationships"
+      - "Amplitude and wave energy"
+      - "Reflection and refraction of waves"
+      - "Superposition and interference"
+      - "Standing waves"
 
   - id: sound_waves
     name: Sound Waves
     name_he: גלי קול
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
     prerequisites: [waves_basics]
+    skill_atoms:
+      - "Nature of sound: longitudinal pressure wave"
+      - "Speed of sound in different media"
+      - "Decibels and sound intensity"
+      - "Beats"
+      - "Resonance"
+
+  - id: doppler
+    name: Doppler Effect
+    name_he: אפקט דופלר
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
+    prerequisites: [sound_waves]
+    skill_atoms:
+      - "Doppler formula for moving source/observer"
+      - "Approaching vs. receding (blue-shift/red-shift)"
+      - "Applications: radar, ultrasound, astronomy"
 
   - id: optics_geometric
     name: Geometric Optics
     name_he: אופטיקה גיאומטרית
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
     prerequisites: [waves_basics]
+    skill_atoms:
+      - "Law of reflection: θᵢ = θᵣ"
+      - "Plane mirror: image location and properties"
+      - "Concave and convex mirrors: focal length"
+      - "Mirror equation: 1/f = 1/do + 1/di"
+      - "Magnification"
+      - "Refraction: Snell's law n₁sinθ₁ = n₂sinθ₂"
+      - "Total internal reflection"
+      - "Critical angle"
+      - "Converging and diverging lenses"
+      - "Lens equation: 1/f = 1/do + 1/di"
+      - "Real vs. virtual images"
+      - "Human eye: near-sightedness, far-sightedness"
 
   - id: optics_physical
-    name: Physical Optics
-    name_he: אופטיקה פיזיקלית
+    name: Wave Optics
+    name_he: אופטיקה גלית
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
     prerequisites: [optics_geometric, waves_basics]
+    skill_atoms:
+      - "Young's double-slit experiment"
+      - "Constructive and destructive interference"
+      - "Diffraction"
+      - "Polarization"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # ELECTRICITY & MAGNETISM (Bagrut 036-371)
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: electrostatics
     name: Electrostatics
     name_he: אלקטרוסטטיקה
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
     prerequisites: [vectors_basics, units_measurement]
+    skill_atoms:
+      - "Electric charge: positive and negative"
+      - "Conservation of charge"
+      - "Coulomb's law: F = kq₁q₂/r²"
+      - "Electric field: E = F/q"
+      - "Electric field lines"
+      - "Electric field of a point charge: E = kq/r²"
+      - "Superposition of electric fields"
+
+  - id: electric_field
+    name: Electric Field & Potential
+    name_he: שדה חשמלי ופוטנציאל
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
+    prerequisites: [electrostatics]
+    skill_atoms:
+      - "Electric potential energy: U = kq₁q₂/r"
+      - "Electric potential: V = kq/r"
+      - "Relationship: E = -ΔV/Δx"
+      - "Work by electric field: W = qΔV"
+      - "Equipotential surfaces"
+      - "Motion of charged particle in electric field"
+      - "Uniform electric field between plates: E = V/d"
+
+  - id: electric_potential
+    name: Capacitors
+    name_he: קבלים
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
+    prerequisites: [electric_field]
+    skill_atoms:
+      - "Capacitance: C = Q/V"
+      - "Parallel plate capacitor: C = ε₀A/d"
+      - "Energy stored: U = ½CV²"
+      - "Capacitors in series and parallel"
 
   - id: electric_circuits
     name: Electric Circuits
-    name_he: מעגלי חשמל
-    prerequisites: [electrostatics]
+    name_he: מעגלי חשמל (DC)
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
+    prerequisites: [electric_potential]
+    skill_atoms:
+      - "Electric current: I = Q/t"
+      - "Ohm's law: V = IR"
+      - "Resistors in series: R_total = ΣRᵢ"
+      - "Resistors in parallel: 1/R_total = Σ(1/Rᵢ)"
+      - "EMF and internal resistance"
+      - "Power: P = IV = I²R = V²/R"
+      - "Energy: E = Pt"
+      - "Ammeter and voltmeter placement"
+
+  - id: kirchhoff_laws
+    name: Kirchhoff's Laws
+    name_he: חוקי קירכהוף
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
+    prerequisites: [electric_circuits]
+    skill_atoms:
+      - "KCL: sum of currents at node = 0"
+      - "KVL: sum of voltages in loop = 0"
+      - "Solving multi-loop circuits"
+      - "Bridge circuits (Wheatstone)"
 
   - id: magnetism
-    name: Magnetism
-    name_he: מגנטיות
+    name: Magnetism & Magnetic Forces
+    name_he: מגנטיות וכוחות מגנטיים
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
     prerequisites: [electric_circuits, vectors_basics]
+    skill_atoms:
+      - "Magnetic field: B (Tesla)"
+      - "Magnetic field of a long wire: B = μ₀I/(2πr)"
+      - "Force on a current-carrying wire: F = BIL·sinθ"
+      - "Force on moving charge: F = qv×B (Lorentz force)"
+      - "Right-hand rule"
+      - "Magnetic field inside solenoid: B = μ₀nI"
+      - "Circular motion of charge in magnetic field"
 
   - id: electromagnetic_induction
     name: Electromagnetic Induction
     name_he: השראה אלקטרומגנטית
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
     prerequisites: [magnetism, electric_circuits]
+    skill_atoms:
+      - "Magnetic flux: Φ = B·A·cosθ"
+      - "Faraday's law: EMF = -ΔΦ/Δt"
+      - "Lenz's law (direction of induced current)"
+      - "EMF of a moving conductor in magnetic field: EMF = BLv"
+      - "Self-inductance: EMF = -L·dI/dt"
+      - "Energy stored in inductor: U = ½LI²"
+      - "Transformer: V₁/V₂ = N₁/N₂"
+
+  - id: ac_circuits
+    name: AC Circuits
+    name_he: מעגלי זרם חילופין
+    points_levels: [hs_physics]
+    bagrut_chapter: electricity
+    prerequisites: [electromagnetic_induction, simple_harmonic_motion]
+    skill_atoms:
+      - "AC voltage and current: V = V₀·sin(ωt)"
+      - "RMS values: V_rms = V₀/√2"
+      - "Capacitive reactance: Xc = 1/(ωC)"
+      - "Inductive reactance: XL = ωL"
+      - "Impedance in RLC circuit"
+      - "Resonance in LC circuit"
+      - "Power in AC circuits"
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # RADIATION & MATTER (קרינה וחומר)
+  # ═══════════════════════════════════════════════════════════════════════
 
   - id: modern_physics_intro
-    name: Introduction to Modern Physics
-    name_he: מבוא לפיזיקה מודרנית
-    prerequisites: [work_energy, waves_basics]
+    name: Quantum Physics Basics (Photoelectric Effect)
+    name_he: מבוא לפיזיקה קוונטית (אפקט פוטואלקטרי)
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
+    prerequisites: [work_energy, optics_physical]
+    skill_atoms:
+      - "Photoelectric effect: light ejects electrons from metal"
+      - "Photon energy: E = hf = hc/λ"
+      - "Work function: minimum energy to eject electron"
+      - "Einstein's photoelectric equation: KE_max = hf - φ"
+      - "Threshold frequency"
+      - "Wave-particle duality"
+      - "Planck's constant h"
+      - "de Broglie wavelength: λ = h/p"
+
+  - id: atomic_models
+    name: Atomic Models & Hydrogen Spectrum
+    name_he: מודלים אטומיים וספקטרום המימן
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
+    prerequisites: [modern_physics_intro]
+    skill_atoms:
+      - "Thomson model (raisin pudding)"
+      - "Rutherford model (nuclear atom, scattering experiment)"
+      - "Bohr model: quantized orbits"
+      - "Energy levels: Eₙ = -13.6/n² eV"
+      - "Photon emission and absorption: ΔE = hf"
+      - "Spectral series: Lyman, Balmer, Paschen"
+      - "Limitations of Bohr model"
 
   - id: nuclear_physics
-    name: Nuclear Physics
-    name_he: פיזיקה גרעינית
-    prerequisites: [modern_physics_intro]
+    name: Nuclear Physics & Radioactivity
+    name_he: פיזיקה גרעינית ורדיואקטיביות
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
+    prerequisites: [atomic_models]
+    skill_atoms:
+      - "Nucleus: protons, neutrons; atomic number Z, mass number A"
+      - "Isotopes"
+      - "Nuclear forces"
+      - "Radioactive decay: alpha, beta, gamma"
+      - "Alpha decay equation"
+      - "Beta minus decay equation"
+      - "Gamma emission"
+      - "Half-life: N(t) = N₀·(½)^(t/T½)"
+      - "Activity: A = λN"
+      - "Mass-energy equivalence: E = mc²"
+      - "Binding energy per nucleon"
+      - "Nuclear fission and fusion"
+
+  - id: special_relativity
+    name: Special Relativity (Basic)
+    name_he: יחסות פרטית — בסיסי
+    points_levels: [hs_physics]
+    bagrut_chapter: radiation
+    prerequisites: [nuclear_physics]
+    skill_atoms:
+      - "Speed of light as universal speed limit"
+      - "Time dilation: Δt = Δt₀/√(1-v²/c²)"
+      - "Length contraction"
+      - "Mass-energy: E = mc² (primarily for nuclear problems)"
