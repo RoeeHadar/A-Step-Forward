@@ -15,10 +15,53 @@ import {
   Wrench,
   CheckCircle2,
   FileText,
+  Target,
+  Info,
 } from 'lucide-react';
-import type { LessonSection, LessonWithQuestions } from '@/lib/neon-db';
+import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 
 type Lang = 'en' | 'he';
+
+// Points levels in ascending order — used for "at least X" filtering
+const LEVEL_ORDER: LessonPointsLevel[] = ['3pt', '4pt', '5pt', 'hs_physics', 'calc1', 'la'];
+
+function levelIndex(l: LessonPointsLevel): number {
+  return LEVEL_ORDER.indexOf(l);
+}
+
+function shouldShowSection(section: LessonSection, learnerLevel: LessonPointsLevel | null): boolean {
+  if (!section.level_min) return true;
+  if (!learnerLevel) return true;
+  return levelIndex(learnerLevel) >= levelIndex(section.level_min);
+}
+
+function getBodyForLevel(
+  section: LessonSection,
+  lang: Lang,
+  learnerLevel: LessonPointsLevel | null,
+): string {
+  if (learnerLevel && section.body_by_level) {
+    // Try exact level first, then fall back to the closest lower level
+    const idx = levelIndex(learnerLevel);
+    for (let i = idx; i >= 0; i--) {
+      const lvl = LEVEL_ORDER[i];
+      if (lvl && section.body_by_level[lvl]) {
+        const variant = section.body_by_level[lvl]!;
+        return lang === 'he' ? variant.body_he_md : variant.body_en_md;
+      }
+    }
+  }
+  return lang === 'he' ? section.body_he_md : section.body_en_md;
+}
+
+const LEVEL_LABELS: Record<LessonPointsLevel, { en: string; he: string; color: string }> = {
+  '3pt': { en: '3-Unit', he: '3 יח״ל', color: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30' },
+  '4pt': { en: '4-Unit', he: '4 יח״ל', color: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30' },
+  '5pt': { en: '5-Unit', he: '5 יח״ל', color: 'bg-violet-500/15 text-violet-700 dark:text-violet-400 border-violet-500/30' },
+  'hs_physics': { en: 'HS Physics', he: 'פיזיקה תיכון', color: 'bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30' },
+  'calc1': { en: 'Calc I', he: 'חשבון דיפרנציאלי', color: 'bg-pink-500/15 text-pink-700 dark:text-pink-400 border-pink-500/30' },
+  'la': { en: 'Linear Algebra', he: 'אלגברה לינארית', color: 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-400 border-cyan-500/30' },
+};
 
 const SECTION_META: Record<
   LessonSection['kind'],
@@ -66,17 +109,19 @@ function SectionCard({
   section,
   lang,
   defaultOpen,
+  learnerLevel,
 }: {
   section: LessonSection;
   lang: Lang;
   defaultOpen: boolean;
+  learnerLevel: LessonPointsLevel | null;
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const meta = SECTION_META[section.kind];
   const Icon = meta.icon;
   const title = lang === 'he' ? section.title_he : section.title_en;
   const label = lang === 'he' ? meta.label_he : meta.label_en;
-  const body = lang === 'he' ? section.body_he_md : section.body_en_md;
+  const body = getBodyForLevel(section, lang, learnerLevel);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
 
   return (
@@ -131,20 +176,27 @@ function SectionCard({
 export function LessonReader({
   data,
   lang,
+  learnerLevel,
 }: {
   data: LessonWithQuestions;
   lang: Lang;
+  learnerLevel?: LessonPointsLevel | null;
 }) {
   const { lesson } = data;
   const summary = lang === 'he' ? lesson.summary_he : lesson.summary_en;
   const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const level = learnerLevel ?? null;
+
+  // Level focus block for this student
+  const levelFocus = level && lesson.level_focus?.[level];
+
+  // Filter sections to what's appropriate for this learner's level
+  const visibleSections = lesson.sections.filter((s) => shouldShowSection(s, level));
 
   return (
     <div className="space-y-4">
-      <div
-        className="glass-surface rounded-2xl border-border/60 p-5"
-        dir={dir}
-      >
+      {/* Lesson meta card */}
+      <div className="glass-surface rounded-2xl border-border/60 p-5" dir={dir}>
         <p className="text-sm leading-relaxed text-foreground/80">{summary}</p>
         <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
           <span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium uppercase text-primary">
@@ -160,18 +212,53 @@ export function LessonReader({
                 </span>
               ))
             : null}
+          {level && LEVEL_LABELS[level] ? (
+            <span
+              className={`rounded-full border px-2 py-0.5 font-semibold ${LEVEL_LABELS[level].color}`}
+            >
+              {lang === 'he' ? LEVEL_LABELS[level].he : LEVEL_LABELS[level].en}
+            </span>
+          ) : null}
           <span className="rounded-full bg-muted px-2 py-0.5 font-medium uppercase text-muted-foreground">
             v{lesson.version}
           </span>
         </div>
       </div>
 
-      {lesson.sections.map((section, i) => (
+      {/* Level focus callout — tells the student exactly what they need to master */}
+      {levelFocus ? (
+        <div
+          className="flex gap-3 rounded-2xl border border-primary/30 bg-primary/5 px-5 py-4"
+          dir={dir}
+        >
+          <Target className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+              {lang === 'he' ? 'מה נדרש ממך ברמה זו' : 'What you need to master at your level'}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+              {lang === 'he' ? levelFocus.he : levelFocus.en}
+            </p>
+            {levelFocus.not_required ? (
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                <Info className="mr-1 inline h-3 w-3" />
+                {lang === 'he'
+                  ? `לא נדרש ברמה זו: ${levelFocus.not_required.join(', ')}`
+                  : `Not required at your level: ${levelFocus.not_required.join(', ')}`}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+
+      {/* Sections filtered + rendered at the right depth */}
+      {visibleSections.map((section, i) => (
         <SectionCard
           key={`${section.kind}-${i}`}
           section={section}
           lang={lang}
           defaultOpen={i < 2}
+          learnerLevel={level}
         />
       ))}
     </div>

@@ -189,18 +189,38 @@ export async function startDiagnosticSession(
   return id;
 }
 
+/**
+ * Fetch diagnostic items filtered by subjects and optionally by points_level.
+ * When `pointsLevel` is provided (e.g. '3pt', '4pt', '5pt'), we prefer items
+ * whose `points_levels` column includes that level. Items without a
+ * points_levels column value are included as fallback (NULL means all levels).
+ */
 export async function fetchDiagnosticItems(
   subjects: string[],
   limit: number,
+  pointsLevel?: string | null,
 ): Promise<DiagnosticItem[]> {
   const s = requireSql();
+
+  // Map learner goal/points to the level strings stored in KG / diagnostic_items
+  const levelFilter = pointsLevel ?? null;
+
   const rows = (await s`
     SELECT id::text, topic, subject, difficulty::float AS difficulty,
            stem, options, source_concept,
            stem_he, options_he, explanation_he
     FROM diagnostic_items
     WHERE subject = ANY(${subjects})
-    ORDER BY random()
+      AND (
+        ${levelFilter}::text IS NULL
+        OR points_levels IS NULL
+        OR ${levelFilter}::text = ANY(points_levels)
+      )
+    ORDER BY
+      -- prioritise items that exactly match the learner level
+      CASE WHEN ${levelFilter}::text IS NOT NULL AND ${levelFilter}::text = ANY(COALESCE(points_levels, ARRAY[]::text[]))
+           THEN 0 ELSE 1 END,
+      random()
     LIMIT ${limit}
   `) as DiagnosticItem[];
   return rows;
@@ -748,12 +768,18 @@ export async function fetchConceptsWithExplanations(
 
 // ── AI-authored lessons (table: `lessons` + `lesson_questions`) ───────────────
 
+export type LessonPointsLevel = '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la';
+
 export interface LessonSection {
   kind: 'intro' | 'theory' | 'worked_example' | 'pitfall' | 'practice_tip' | 'summary';
   title_en: string;
   title_he: string;
   body_en_md: string;
   body_he_md: string;
+  /** Minimum Bagrut level required to show this section. Omit = show to all. */
+  level_min?: LessonPointsLevel;
+  /** Override body text for a specific level (takes precedence over body_*_md). */
+  body_by_level?: Partial<Record<LessonPointsLevel, { body_en_md: string; body_he_md: string }>>;
 }
 
 export interface LessonAgentHints {
@@ -772,6 +798,17 @@ export interface LessonAgentHints {
   next_recommended?: string[];
 }
 
+export interface LevelFocusBlock {
+  en: string;
+  he: string;
+  /** Which Bagrut questionnaires this concept appears in */
+  bagrut_questionnaires?: string[];
+  /** Specific skills expected at this level */
+  skills?: string[];
+  /** Skills NOT required at this level (present at higher levels) */
+  not_required?: string[];
+}
+
 export interface LessonRow {
   id: string;
   concept_id: string;
@@ -787,6 +824,10 @@ export interface LessonRow {
   est_minutes: number;
   author: string;
   version: number;
+  /** Per-level focus: what depth is expected at 3pt / 4pt / 5pt / hs_physics */
+  level_focus?: Partial<Record<LessonPointsLevel, LevelFocusBlock>>;
+  /** Pre-generated question bank per (skill_atom, level) pair */
+  skill_atom_bank?: Record<string, Partial<Record<LessonPointsLevel, LessonQuestionRow[]>>>;
 }
 
 export type LessonQuestionKind =
@@ -836,6 +877,8 @@ export interface LessonQuestionRow {
   explanation_en: string;
   explanation_he: string;
   skill_atoms: string[];
+  /** Minimum Bagrut level for which this question is appropriate. Null = all levels. */
+  points_level_min?: LessonPointsLevel | null;
 }
 
 export interface LessonWithQuestions {
@@ -851,7 +894,8 @@ export async function fetchLessonByConceptId(
     const lessonRows = (await sql`
       SELECT id, concept_id, subject, level, math_track,
              title_en, title_he, summary_en, summary_he,
-             sections, agent_hints, est_minutes, author, version
+             sections, agent_hints, est_minutes, author, version,
+             level_focus, skill_atom_bank
       FROM lessons
       WHERE concept_id = ${conceptId}
       LIMIT 1
@@ -863,7 +907,8 @@ export async function fetchLessonByConceptId(
              stem_en, stem_he, options_en, options_he,
              correct_index, correct_answer, answer_payload,
              rubric_en, rubric_he,
-             explanation_en, explanation_he, skill_atoms
+             explanation_en, explanation_he, skill_atoms,
+             points_level_min
       FROM lesson_questions
       WHERE lesson_id = ${lesson.id}
       ORDER BY ord ASC

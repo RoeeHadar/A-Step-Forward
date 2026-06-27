@@ -1,6 +1,6 @@
 'use client';
 
-import type { LessonWithQuestions } from '@/lib/neon-db';
+import type { LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { LessonReader } from './lesson-reader';
 import { LessonQuizPanel } from './lesson-quiz-panel';
@@ -8,9 +8,11 @@ import { LessonQuizPanel } from './lesson-quiz-panel';
 export function LessonPageClient({
   data,
   conceptId,
+  learnerLevel,
 }: {
   data: LessonWithQuestions;
   conceptId: string;
+  learnerLevel?: LessonPointsLevel | null;
 }) {
   // Default Hebrew — see hooks/use-language-preference.ts for rationale.
   const [lang, setLang] = useLanguagePreference('he');
@@ -47,8 +49,8 @@ export function LessonPageClient({
         </span>
       </div>
 
-      <LessonReader data={data} lang={lang} />
-      <LessonQuizPanel data={data} lang={lang} conceptId={conceptId} />
+      <LessonReader data={data} lang={lang} learnerLevel={learnerLevel} />
+      <LessonQuizPanel data={data} lang={lang} conceptId={conceptId} learnerLevel={learnerLevel} />
     </div>
   );
 }

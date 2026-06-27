@@ -9,9 +9,15 @@ import 'katex/dist/katex.min.css';
 import { Check, X, HelpCircle, Sparkles, ChevronUp, ChevronDown } from 'lucide-react';
 import type {
   LessonQuestionKind,
+  LessonPointsLevel,
   LessonQuestionRow,
   LessonWithQuestions,
 } from '@/lib/neon-db';
+
+const LEVEL_ORDER: LessonPointsLevel[] = ['3pt', '4pt', '5pt', 'hs_physics', 'calc1', 'la'];
+function levelIndex(l: LessonPointsLevel) {
+  return LEVEL_ORDER.indexOf(l);
+}
 
 type Lang = 'en' | 'he';
 
@@ -676,13 +682,25 @@ export function LessonQuizPanel({
   data,
   lang,
   conceptId,
+  learnerLevel,
 }: {
   data: LessonWithQuestions;
   lang: Lang;
   conceptId: string;
+  learnerLevel?: LessonPointsLevel | null;
 }) {
-  const { lesson, questions } = data;
+  const { lesson, questions: allQuestions } = data;
   const [score, setScore] = useState({ answered: 0, correct: 0 });
+
+  // Filter questions to those appropriate for the learner's level
+  const questions = useMemo(() => {
+    if (!learnerLevel) return allQuestions;
+    const li = levelIndex(learnerLevel);
+    return allQuestions.filter((q) => {
+      if (!q.points_level_min) return true;
+      return li >= levelIndex(q.points_level_min);
+    });
+  }, [allQuestions, learnerLevel]);
 
   const totalEasy = useMemo(
     () => questions.filter((q) => q.difficulty === 'easy').length,
@@ -736,6 +754,133 @@ export function LessonQuizPanel({
           }
         />
       ))}
+
+      {/* Skill-atom targeted drill section */}
+      {lesson.skill_atom_bank && learnerLevel && Object.keys(lesson.skill_atom_bank).length > 0 ? (
+        <SkillAtomDrillSection
+          bank={lesson.skill_atom_bank}
+          learnerLevel={learnerLevel}
+          lang={lang}
+          lessonId={lesson.id}
+          conceptId={conceptId}
+        />
+      ) : null}
     </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Skill-atom targeted drill section
+// ---------------------------------------------------------------------------
+function SkillAtomDrillSection({
+  bank,
+  learnerLevel,
+  lang,
+  lessonId,
+  conceptId,
+}: {
+  bank: NonNullable<import('@/lib/neon-db').LessonRow['skill_atom_bank']>;
+  learnerLevel: LessonPointsLevel;
+  lang: 'en' | 'he';
+  lessonId: string;
+  conceptId: string;
+}) {
+  const [selectedAtom, setSelectedAtom] = useState<string | null>(null);
+  const [score, setScore] = useState({ answered: 0, correct: 0 });
+
+  const atoms = Object.keys(bank);
+
+  // Get questions for the selected atom at or below the learner's level
+  const atomQuestions = useMemo<import('@/lib/neon-db').LessonQuestionRow[]>(() => {
+    if (!selectedAtom) return [];
+    const atomBank = bank[selectedAtom];
+    if (!atomBank) return [];
+    // Try exact level first, then cascade down
+    const li = levelIndex(learnerLevel);
+    for (let i = li; i >= 0; i--) {
+      const lvl = LEVEL_ORDER[i];
+      if (lvl && atomBank[lvl] && (atomBank[lvl]?.length ?? 0) > 0) {
+        return atomBank[lvl] ?? [];
+      }
+    }
+    return [];
+  }, [bank, selectedAtom, learnerLevel]);
+
+  if (atoms.length === 0) return null;
+
+  const atomLabel = (atom: string) =>
+    atom
+      .split('_')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
+  return (
+    <div className="mt-6 space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="h-5 w-5 text-accent-amber">⚡</span>
+        <h3 className="font-display text-lg font-semibold">
+          {lang === 'he' ? 'תרגול לפי מיומנות' : 'Practice by skill'}
+        </h3>
+      </div>
+      <p className="text-sm text-muted-foreground">
+        {lang === 'he'
+          ? 'בחרו מיומנות ספציפית לתרגול ממוקד'
+          : 'Choose a specific skill to practice in depth'}
+      </p>
+
+      <div className="flex flex-wrap gap-2">
+        {atoms.map((atom) => (
+          <button
+            key={atom}
+            type="button"
+            onClick={() => {
+              setSelectedAtom((a) => (a === atom ? null : atom));
+              setScore({ answered: 0, correct: 0 });
+            }}
+            className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+              selectedAtom === atom
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border bg-surface-1/50 text-muted-foreground hover:border-primary/40 hover:text-foreground'
+            }`}
+          >
+            {atomLabel(atom)}
+          </button>
+        ))}
+      </div>
+
+      {selectedAtom && atomQuestions.length > 0 ? (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">
+              {lang === 'he' ? `מיומנות: ${atomLabel(selectedAtom)}` : `Skill: ${atomLabel(selectedAtom)}`}
+            </span>
+            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+              {score.correct}/{score.answered}
+            </span>
+          </div>
+          {atomQuestions.map((q) => (
+            <QuestionCard
+              key={q.id}
+              question={q}
+              lang={lang}
+              lessonId={lessonId}
+              conceptId={conceptId}
+              onAnswered={(_, correct) =>
+                setScore((s) => ({
+                  answered: s.answered + 1,
+                  correct: s.correct + (correct ? 1 : 0),
+                }))
+              }
+            />
+          ))}
+        </div>
+      ) : selectedAtom && atomQuestions.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          {lang === 'he'
+            ? 'שאלות לתרגול ייווצרו בקרוב עבור מיומנות זו'
+            : 'Practice questions for this skill will be generated soon'}
+        </p>
+      ) : null}
+    </div>
   );
 }

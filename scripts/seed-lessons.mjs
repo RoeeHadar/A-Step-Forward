@@ -216,7 +216,8 @@ for (const { file, data } of lessons) {
       INSERT INTO lessons (
         concept_id, subject, level, math_track,
         title_en, title_he, summary_en, summary_he,
-        sections, agent_hints, est_minutes, author, version
+        sections, agent_hints, est_minutes, author, version,
+        level_focus, skill_atom_bank
       ) VALUES (
         ${data.concept_id},
         ${data.subject},
@@ -230,7 +231,9 @@ for (const { file, data } of lessons) {
         ${JSON.stringify(data.agent_hints ?? {})},
         ${data.est_minutes ?? 15},
         ${data.author ?? 'cursor-claude-2026'},
-        ${data.version ?? 1}
+        ${data.version ?? 1},
+        ${data.level_focus ? JSON.stringify(data.level_focus) : null},
+        ${data.skill_atom_bank ? JSON.stringify(data.skill_atom_bank) : null}
       )
       RETURNING id::text
     `;
@@ -243,7 +246,8 @@ for (const { file, data } of lessons) {
           stem_en, stem_he, options_en, options_he,
           correct_index, correct_answer, answer_payload,
           rubric_en, rubric_he,
-          explanation_en, explanation_he, skill_atoms
+          explanation_en, explanation_he, skill_atoms,
+          points_level_min
         ) VALUES (
           ${lessonId}::uuid,
           ${q.ord},
@@ -260,7 +264,8 @@ for (const { file, data } of lessons) {
           ${q.rubric_he ?? null},
           ${q.explanation_en},
           ${q.explanation_he},
-          ${JSON.stringify(q.skill_atoms ?? [])}
+          ${JSON.stringify(q.skill_atoms ?? [])},
+          ${q.points_level_min ?? null}
         )
       `;
       questionsInserted += 1;

@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return Response.json({ error: 'DATABASE_URL not configured' }, { status: 503 });
   }
 
-  let body: { topics?: string[]; subjects?: string[] } = {};
+  let body: { topics?: string[]; subjects?: string[]; points_level?: string } = {};
   try {
     body = await req.json();
   } catch {
@@ -27,12 +27,30 @@ export async function POST(req: Request) {
   }
 
   let subjects = body.subjects ?? [];
+  let pointsLevel: string | null = null;
+
   if (subjects.length === 0) {
     const profile = await getLearnerProfile(userId);
     subjects = profile?.subjects ?? ['math'];
+
+    // Derive points_level from goal or explicit points_group
+    const pg = profile?.points_group ?? null;
+    if (pg) {
+      // Stored as e.g. "3", "3pt", "4", "4pt", "5", "5pt"
+      const num = String(pg).replace(/pt$/i, '').trim();
+      if (['3', '4', '5'].includes(num)) pointsLevel = `${num}pt`;
+    } else if (profile?.goal) {
+      const g = profile.goal.toLowerCase();
+      if (g.includes('3')) pointsLevel = '3pt';
+      else if (g.includes('4')) pointsLevel = '4pt';
+      else if (g.includes('5')) pointsLevel = '5pt';
+    }
   }
 
-  const items = await fetchDiagnosticItems(subjects, QUESTIONS_PER_SESSION);
+  // Allow caller to override points_level explicitly
+  if (body.points_level) pointsLevel = body.points_level as string;
+
+  const items = await fetchDiagnosticItems(subjects, QUESTIONS_PER_SESSION, pointsLevel);
   if (items.length === 0) {
     return Response.json(
       { error: 'No diagnostic items available for these subjects.' },

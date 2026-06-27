@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { subjectLabel } from '@/lib/subject-labels';
 import {
@@ -7,6 +8,8 @@ import {
   fetchConceptExplanation,
   fetchConceptExplanationFallback,
   fetchLessonByConceptId,
+  getLearnerProfile,
+  type LessonPointsLevel,
 } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
 import { ConceptContentClient } from '@/components/concept-content-client';
@@ -34,6 +37,30 @@ export default async function ConceptPage({
 }) {
   const { subject, conceptId } = await params;
   const concept = kgById[conceptId];
+
+  // Resolve learner level (best-effort; fall back to null if not logged in or no profile)
+  let learnerLevel: LessonPointsLevel | null = null;
+  try {
+    const { userId } = await auth();
+    if (userId) {
+      const profile = await getLearnerProfile(userId);
+      const pg = profile?.points_group ?? null;
+      if (pg) {
+        const num = String(pg).replace(/pt$/i, '').trim();
+        if (num === '3') learnerLevel = '3pt';
+        else if (num === '4') learnerLevel = '4pt';
+        else if (num === '5') learnerLevel = '5pt';
+      } else if (profile?.goal) {
+        const g = profile.goal.toLowerCase();
+        if (g.includes('3')) learnerLevel = '3pt';
+        else if (g.includes('4')) learnerLevel = '4pt';
+        else if (g.includes('5')) learnerLevel = '5pt';
+        else if (g.includes('phys')) learnerLevel = 'hs_physics';
+      }
+    }
+  } catch {
+    // Auth not available in this context — fine, render without level filtering
+  }
 
   // Lesson is the new authoritative source. If it exists, render it instead
   // of the wiki-style explanation. Both queries run in parallel for the
@@ -102,7 +129,7 @@ export default async function ConceptPage({
         </header>
 
         {lessonData ? (
-          <LessonPageClient data={lessonData} conceptId={conceptId} />
+          <LessonPageClient data={lessonData} conceptId={conceptId} learnerLevel={learnerLevel} />
         ) : !en && !he && !fallback ? (
           <div className="glass-surface rounded-2xl p-8 text-center">
             <p className="text-foreground font-medium">
