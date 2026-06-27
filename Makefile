@@ -6,7 +6,7 @@ PYTHON ?= python
 UV ?= uv
 UV_FLAGS ?= --system-certs
 
-.PHONY: help up down dev migrate migrate-revision seed seed-kg seed-diagnostic ingest evals evals-ci lint fmt test smoke sync
+.PHONY: help up down dev migrate migrate-revision seed seed-kg seed-diagnostic ingest evals evals-ci lint fmt test smoke sync seed-lessons enrich-lessons enrich-skill-atoms migrate-neon
 
 help:
 	@echo "Targets:"
@@ -82,3 +82,21 @@ smoke:
 	$(PYTHON) services/memory/tests/test_smoke.py
 	$(PYTHON) services/graphrag/tests/test_smoke.py
 	$(PYTHON) services/orchestrator/tests/test_smoke.py
+
+## ── Adaptive lesson content ─────────────────────────────────────────────────
+
+seed-lessons:
+	# Seed all lesson JSONs (with level_focus + skill_atom_bank) to Neon DB
+	cd apps/web && DATABASE_URL=$$DATABASE_URL node ../../scripts/seed-lessons.mjs
+
+enrich-lessons:
+	# Generate level-differentiated body_by_level + level_focus for all lessons (needs GROQ_API_KEY)
+	node scripts/generate-adaptive-lessons.mjs
+
+enrich-skill-atoms:
+	# Generate per-skill-atom question banks for all lessons (needs GROQ_API_KEY)
+	node scripts/generate-skill-atom-questions.mjs
+
+migrate-neon:
+	# Apply DB migrations directly to Neon via Node.js client (for local dev without Python)
+	cd apps/web && DATABASE_URL=$$DATABASE_URL node ../../scripts/run-migration-0016.mjs
