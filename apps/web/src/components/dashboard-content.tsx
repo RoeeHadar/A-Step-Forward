@@ -2,14 +2,24 @@
 
 import type { ComponentType, ReactNode } from 'react';
 import Link from 'next/link';
-import { Flame, CheckCircle2, Star, CalendarClock } from 'lucide-react';
+import { Flame, CheckCircle2, Star, CalendarClock, BookOpen, Clock } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
+import { Button } from '@asf/ui/button';
 import { Progress } from '@asf/ui/progress';
 import { cn } from '@asf/ui';
 import { agentDisplayNames, type AgentName } from '@asf/schemas/agents';
 import { useI18n } from '@/providers/i18n-provider';
 import { AnimatedCounter } from '@/components/animated-counter';
 import type { DashboardSnapshot } from '@/lib/neon-db';
+
+export interface NextLessonInfo {
+  concept_id: string;
+  lesson_id: string;
+  title: string;
+  title_he: string;
+  est_minutes: number;
+  reason: string;
+}
 
 /**
  * /app dashboard content. Every number on this page is REAL (sourced from
@@ -42,11 +52,13 @@ export function DashboardContent({
   snapshot,
   nextTestName,
   nextTestDate,
+  nextLesson,
 }: {
   displayName: string;
   snapshot: DashboardSnapshot;
   nextTestName?: string | null;
   nextTestDate?: string | null;
+  nextLesson?: NextLessonInfo | null;
 }) {
   const { messages, locale } = useI18n();
   const t = messages.dashboard;
@@ -71,6 +83,8 @@ export function DashboardContent({
           isHe={isHe}
         />
       )}
+
+      {nextLesson && <NextLessonCard lesson={nextLesson} isHe={isHe} />}
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <StatTile
@@ -217,6 +231,81 @@ export function DashboardContent({
           ))}
         </div>
       </section>
+    </div>
+  );
+}
+
+const NEXT_LESSON_STR = {
+  he: {
+    heading: '⚡ למד עכשיו',
+    subheading: 'השיעור הבא שלך',
+    minutesLabel: (n: number) => `${n} דקות`,
+    reasons: {
+      'Weakest topic': 'הנושא החלש ביותר',
+      'Continue learning plan': 'המשך תכנית הלמידה',
+      'Recommended next': 'ההמלצה הבאה',
+    } as Record<string, string>,
+    cta: 'התחל שיעור',
+  },
+  en: {
+    heading: '⚡ Study Now',
+    subheading: 'Your next lesson',
+    minutesLabel: (n: number) => `${n} min`,
+    reasons: {
+      'Weakest topic': 'Weakest topic',
+      'Continue learning plan': 'Continue your plan',
+      'Recommended next': 'Recommended next',
+    } as Record<string, string>,
+    cta: 'Start lesson',
+  },
+} as const;
+
+function NextLessonCard({
+  lesson,
+  isHe,
+}: {
+  lesson: NextLessonInfo;
+  isHe: boolean;
+}) {
+  const t = NEXT_LESSON_STR[isHe ? 'he' : 'en'];
+  const title = isHe && lesson.title_he ? lesson.title_he : lesson.title;
+  const reasonLabel = t.reasons[lesson.reason] ?? lesson.reason;
+
+  return (
+    <div
+      className="iridescent-border mb-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
+      dir={isHe ? 'rtl' : 'ltr'}
+    >
+      <div className="flex min-w-0 flex-col gap-1">
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+          {t.heading}
+        </p>
+        <p className="text-xs text-muted-foreground">{t.subheading}</p>
+        <h3
+          className="mt-1 font-display text-lg font-bold leading-snug"
+          dir="auto"
+        >
+          {title}
+        </h3>
+        <div className="mt-1 flex flex-wrap items-center gap-3">
+          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock className="h-3.5 w-3.5" aria-hidden />
+            {t.minutesLabel(lesson.est_minutes)}
+          </span>
+          <Badge variant="secondary" className="text-xs">
+            {reasonLabel}
+          </Badge>
+        </div>
+      </div>
+      <Button
+        asChild
+        className="shrink-0 bg-gradient-to-r from-primary to-accent-magenta font-semibold text-primary-foreground hover:opacity-90"
+      >
+        <Link href={`/app/lessons/l/${lesson.lesson_id}`}>
+          <BookOpen className="mr-2 h-4 w-4" aria-hidden />
+          {t.cta}
+        </Link>
+      </Button>
     </div>
   );
 }
