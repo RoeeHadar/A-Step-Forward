@@ -13,6 +13,8 @@
 
 ## Specialist Agents
 
+**Run mode (mandatory):** Every QA-loop subagent runs in **Cursor Auto** — not Sonnet, not Opus, not Composer 2.5 unless Auto routes there. When dispatching via Task, **do not pass a `model` override** (let Cursor Auto route). When opening manual chats, set the model picker to **Auto**.
+
 | Role | Brief | Purpose |
 |------|-------|---------|
 | Student QA | `20-student-qa-simulator.md` | Simulate student experience |
@@ -29,7 +31,16 @@
 
 ### Round 1 (after initial fixes)
 - Fixed: lessons navigation, sidebar, quiz level filter, exam countdown, onboarding sliders
-- Running: All 6 students simultaneously
+- Platform avg ~6.2/10
+
+### Round 2–4
+- Fixed: Study NOW card, track-filtered lessons, la_determinants rebuild, artifact removal (21 files), section labels, analytic_geometry 5pt scope + questions, arithmetic 3pt Hebrew
+- R4 avg: 7.92/10
+
+### Round 5 (final check — 633152a9)
+- **Avg: 8.20/10** | **Satisfied (≥8.5): 2/6** — Noa 8.5, Amir 8.5
+- Verified: arithmetic 3pt Hebrew, analytic_geometry Q7–Q10 schema
+- **Continue loop** — top blockers: la_determinants Hebrew stubs (Maya), re-engagement nudge (Tamar), Bagrut exam mode (Itay/Yossi/Tamar)
 
 ## Satisfaction Targets
 - Each student: ≥ 7/10 satisfaction at Month-4 checkpoint
