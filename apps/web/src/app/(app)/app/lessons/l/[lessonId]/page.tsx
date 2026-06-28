@@ -1,74 +1,94 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
-import { Clock, MessageSquare } from 'lucide-react';
-import { Badge } from '@asf/ui/badge';
-import { Button } from '@asf/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
-import { PageHeader } from '@/components/page-header';
+import { notFound, redirect } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { getAuthContext } from '@/lib/auth';
-import { fetchLesson } from '@/lib/data';
-import 'katex/dist/katex.min.css';
+import {
+  dbConfigured,
+  fetchLessonById,
+  getLearnerProfile,
+  type LessonPointsLevel,
+} from '@/lib/neon-db';
+import { getSeedLesson } from '@/lib/seed-lessons';
+import { LessonPageClient } from '@/components/lesson-page-client';
+import { LegacySeedLessonView } from '@/components/legacy-seed-lesson-view';
 
-export default async function LessonPage({ params }: { params: Promise<{ lessonId: string }> }) {
+export const dynamic = 'force-dynamic';
+
+async function resolveLearnerLevel(learnerId: string): Promise<LessonPointsLevel | null> {
+  try {
+    const profile = await getLearnerProfile(learnerId);
+    const pg = profile?.points_group ?? null;
+    if (pg) {
+      const num = String(pg).replace(/pt$/i, '').trim();
+      if (num === '3') return '3pt';
+      if (num === '4') return '4pt';
+      if (num === '5') return '5pt';
+      if (pg === 'hs_physics') return 'hs_physics';
+      if (pg === 'calc1') return 'calc1';
+      if (pg === 'la') return 'la';
+    } else if (profile?.goal) {
+      const g = profile.goal.toLowerCase();
+      if (g.includes('3')) return '3pt';
+      if (g.includes('4')) return '4pt';
+      if (g.includes('5')) return '5pt';
+      if (g.includes('phys')) return 'hs_physics';
+    }
+  } catch {
+    // Profile unavailable — render without level filtering.
+  }
+  return null;
+}
+
+export default async function LessonPage({
+  params,
+}: {
+  params: Promise<{ lessonId: string }>;
+}) {
   const auth = await getAuthContext();
   if (!auth) redirect('/sign-in');
 
   const { lessonId } = await params;
-  const lesson = await fetchLesson(auth, lessonId);
 
-  return (
-    <div className="max-w-3xl">
-      <PageHeader title={lesson.title} backHref="/app/lessons" />
-      <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-        <Badge variant="secondary">{lesson.modality}</Badge>
-        <span className="flex items-center gap-1">
-          <Clock className="h-4 w-4" aria-hidden />
-          {lesson.est_minutes} min
-        </span>
-      </div>
+  const [lessonData, learnerLevel] = await Promise.all([
+    dbConfigured ? fetchLessonById(lessonId) : Promise.resolve(null),
+    resolveLearnerLevel(auth.learnerId),
+  ]);
 
-      <Card className="mb-8">
-        <CardContent className="prose prose-neutral dark:prose-invert max-w-none pt-6">
-          {lesson.body_md.trim().length === 0 ? (
-            <div className="not-prose space-y-2 text-muted-foreground">
-              <p className="text-base font-medium text-foreground">Lesson coming soon</p>
-              <p className="text-sm">
-                We&apos;re still putting this lesson together. In the meantime, ask the Tutor below to
-                walk you through the topic.
-              </p>
-            </div>
-          ) : (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeKatex]}>
-              {lesson.body_md}
-            </ReactMarkdown>
-          )}
-        </CardContent>
-      </Card>
-
-      {lesson.objectives.length > 0 ? (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg">Learning objectives</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-inside list-disc space-y-2">
-              {lesson.objectives.map((obj) => (
-                <li key={obj.id}>{obj.statement}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      ) : null}
-
-      <Button asChild>
-        <Link href="/app/chat/tutor">
-          <MessageSquare className="h-4 w-4" aria-hidden />
-          Discuss with Tutor
+  if (lessonData) {
+    const { lesson } = lessonData;
+    return (
+      <div className="max-w-4xl">
+        <Link
+          href="/app/lessons"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />
+          Back to lessons
         </Link>
-      </Button>
-    </div>
-  );
+        <header className="mb-6">
+          <h1 className="font-display text-3xl font-bold">{lesson.title_en}</h1>
+          {lesson.title_he ? (
+            <p className="mt-1 text-lg text-muted-foreground" dir="rtl">
+              {lesson.title_he}
+            </p>
+          ) : null}
+          <p className="mt-2 text-sm text-muted-foreground">
+            {lesson.est_minutes} min · {lesson.subject}
+          </p>
+        </header>
+        <LessonPageClient
+          data={lessonData}
+          conceptId={lesson.concept_id}
+          learnerLevel={learnerLevel}
+        />
+      </div>
+    );
+  }
+
+  const seed = getSeedLesson(lessonId);
+  if (seed) {
+    return <LegacySeedLessonView lesson={seed} />;
+  }
+
+  notFound();
 }

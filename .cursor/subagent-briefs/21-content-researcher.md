@@ -1,5 +1,9 @@
 # Content Researcher — Sub-agent Brief
 
+## Run mode
+- **Cursor model: Auto only.** Do not run as Sonnet or Opus.
+- Coordinator dispatches with `subagent_type: generalPurpose`, **no `model` parameter**.
+
 ## Purpose
 Research what Israeli students at each Bagrut level actually need to know.
 Produce a gap-analysis report comparing current platform content vs. official

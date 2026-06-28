@@ -26,6 +26,7 @@ export default async function ProgressPage() {
     concepts: snap.concepts.map((c) => ({
       concept_id: c.concept_id,
       concept_name: c.concept_name,
+      concept_name_he: c.concept_name_he,
       current_score: c.current_score,
       history: c.history,
     })),

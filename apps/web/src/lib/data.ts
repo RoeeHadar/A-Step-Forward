@@ -21,37 +21,6 @@ const MOCK_DASHBOARD: LearnerDashboard = {
   mastery_summary: [],
 };
 
-const MOCK_LESSON: Lesson = {
-  id: 'lesson-intro-fractions',
-  title: 'Introduction to Fractions',
-  body_md: `# Introduction to Fractions
-
-A **fraction** represents a part of a whole.
-
-## Key concepts
-
-- **Numerator** — how many parts you have
-- **Denominator** — how many equal parts the whole is divided into
-
-## Example
-
-If you eat 3 slices of a pizza cut into 8 equal slices, you've eaten $\\frac{3}{8}$ of the pizza.
-
-> Try explaining this to the Tutor agent — they'll guide you with questions rather than giving away the answer.`,
-  modality: 'interactive',
-  objectives: [
-    {
-      id: 'obj-1',
-      statement: 'Identify numerator and denominator in a given fraction',
-      blooms_level: 'understand',
-      concepts: ['concept-fractions'],
-    },
-  ],
-  concepts: ['concept-fractions'],
-  resources: [],
-  est_minutes: 20,
-};
-
 // Same reasoning as MOCK_DASHBOARD: a brand-new learner must never see
 // fake fractions on /app/progress. If `/v1/progress` returns nothing the UI
 // renders the empty state, not a fabricated history.
@@ -100,20 +69,15 @@ export async function fetchDashboard(auth: AuthContext): Promise<LearnerDashboar
   return remote ?? { ...MOCK_DASHBOARD };
 }
 
-export async function fetchLesson(auth: AuthContext, lessonId: string): Promise<Lesson> {
+export async function fetchLesson(auth: AuthContext, lessonId: string): Promise<Lesson | null> {
   const remote = await apiFetchOptional(`/v1/lessons/${lessonId}`, {
     schema: lessonSchema,
     auth: { learnerId: auth.learnerId, role: auth.role },
   });
   if (remote) return remote;
 
-  // Fall back to the committed seed snapshot so the demo content is always
-  // accurate (the previous mock hard-coded "Introduction to Fractions"
-  // regardless of which lesson the learner requested).
   const { getSeedLesson } = await import('./seed-lessons');
-  const seeded = getSeedLesson(lessonId);
-  if (seeded) return seeded;
-  return { ...MOCK_LESSON, id: lessonId };
+  return getSeedLesson(lessonId);
 }
 
 /**

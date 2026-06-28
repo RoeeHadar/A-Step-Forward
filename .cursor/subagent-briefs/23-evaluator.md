@@ -1,5 +1,9 @@
 # Evaluator / QA Scorer — Sub-agent Brief
 
+## Run mode
+- **Cursor model: Auto only.** Do not run as Sonnet or Opus.
+- Coordinator dispatches with `subagent_type: generalPurpose`, **no `model` parameter**.
+
 ## Purpose
 Aggregate student QA simulation reports into a prioritized, actionable task list.
 Score the platform's quality across all student segments. Track improvement across rounds.

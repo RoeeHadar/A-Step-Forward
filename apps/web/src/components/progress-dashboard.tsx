@@ -17,19 +17,37 @@ import { useI18n } from '@/providers/i18n-provider';
 import { AnimatedCounter } from '@/components/animated-counter';
 
 export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const t = messages.progress;
+  const isHe = locale === 'he';
 
-  const masteryData = progress.concepts.map((c) => ({
-    name: c.concept_name,
-    score: Math.round(c.current_score * 100),
-  }));
+  const masteryData = progress.concepts.map((c) => {
+    const row = c as typeof c & { concept_name_he?: string | null };
+    const name =
+      isHe && row.concept_name_he ? row.concept_name_he : c.concept_name;
+    return {
+      name,
+      score: Math.round(c.current_score * 100),
+    };
+  });
 
   const historyData =
     progress.concepts[0]?.history.map((h) => ({
       date: h.date.slice(5),
       score: Math.round(h.score * 100),
     })) ?? [];
+
+  const topConceptName =
+    progress.concepts[0] != null
+      ? isHe &&
+        (progress.concepts[0] as typeof progress.concepts[0] & {
+          concept_name_he?: string | null;
+        }).concept_name_he
+        ? (progress.concepts[0] as typeof progress.concepts[0] & {
+            concept_name_he?: string | null;
+          }).concept_name_he!
+        : progress.concepts[0].concept_name
+      : '';
 
   return (
     <div className="space-y-6">
@@ -99,7 +117,7 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
         <div className="card-punch rounded-2xl p-6">
           <h2 className="font-display text-xl font-semibold">{t.masteryOverTime}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {progress.concepts[0]?.concept_name} {t.progressTrend}
+            {topConceptName} {t.progressTrend}
           </p>
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">

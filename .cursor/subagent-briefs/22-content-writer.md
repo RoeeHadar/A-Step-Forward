@@ -1,5 +1,9 @@
 # Content Writer — Sub-agent Brief
 
+## Run mode
+- **Cursor model: Auto only.** Do not run as Sonnet or Opus.
+- Coordinator dispatches with `subagent_type: generalPurpose`, **no `model` parameter**.
+
 ## Purpose
 Write and improve lesson content in `scripts/seed_data/lessons/*.json` based on:
 1. Researcher gap reports

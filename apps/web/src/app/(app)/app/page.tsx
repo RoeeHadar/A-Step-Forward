@@ -6,9 +6,11 @@ import {
   getDashboardSnapshot,
   getLearnerProfile,
   getConceptMastery,
+  getGoalCompletionStatus,
   dbConfigured,
   type DashboardSnapshot,
 } from '@/lib/neon-db';
+import { GoalCompletionBanner } from '@/components/goal-completion-banner';
 import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
 import type { PointsLevel } from '@/lib/curriculum-categories';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
@@ -94,7 +96,7 @@ export default async function DashboardPage() {
   }
   if (!auth) redirect('/sign-in');
 
-  const [snapshot, profile, mastery] = await Promise.all([
+  const [snapshot, profile, mastery, goalStatus] = await Promise.all([
     dbConfigured
       ? getDashboardSnapshot(auth.learnerId).catch(emptySnapshot)
       : Promise.resolve(emptySnapshot()),
@@ -104,17 +106,23 @@ export default async function DashboardPage() {
     dbConfigured
       ? getConceptMastery(auth.learnerId).catch(() => ({}))
       : Promise.resolve({}),
+    dbConfigured
+      ? getGoalCompletionStatus(auth.learnerId).catch(() => null)
+      : Promise.resolve(null),
   ]);
 
   const nextLesson = computeNextLesson(mastery, profile?.points_group ?? null);
 
   return (
-    <DashboardContent
-      displayName={auth.displayName}
-      snapshot={snapshot}
-      nextTestName={profile?.next_test_name ?? null}
-      nextTestDate={profile?.next_test_date ?? null}
-      nextLesson={nextLesson}
-    />
+    <>
+      {goalStatus ? <GoalCompletionBanner status={goalStatus} /> : null}
+      <DashboardContent
+        displayName={auth.displayName}
+        snapshot={snapshot}
+        nextTestName={profile?.next_test_name ?? null}
+        nextTestDate={profile?.next_test_date ?? null}
+        nextLesson={nextLesson}
+      />
+    </>
   );
 }

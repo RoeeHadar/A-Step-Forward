@@ -11,7 +11,9 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
+import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
+import { resolveConceptTitles } from './concept-display-names';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -886,6 +888,58 @@ export interface LessonWithQuestions {
   questions: LessonQuestionRow[];
 }
 
+
+async function fetchQuestionsForLesson(lessonDbId: string): Promise<LessonQuestionRow[]> {
+  if (!sql) return [];
+  return (await sql`
+    SELECT id, lesson_id, ord, kind, difficulty,
+           stem_en, stem_he, options_en, options_he,
+           correct_index, correct_answer, answer_payload,
+           rubric_en, rubric_he,
+           explanation_en, explanation_he, skill_atoms,
+           points_level_min
+    FROM lesson_questions
+    WHERE lesson_id = ${lessonDbId}
+    ORDER BY ord ASC
+  `) as LessonQuestionRow[];
+}
+
+async function hydrateLessonRow(lesson: LessonRow): Promise<LessonWithQuestions> {
+  const questions = await fetchQuestionsForLesson(lesson.id);
+  return { lesson, questions };
+}
+
+/**
+ * Loads a full authored lesson (sections + questions) by URL slug.
+ *
+ * Routes under `/app/lessons/l/[lessonId]` pass the **concept_id** slug
+ * (e.g. `derivatives_intro`), not the internal UUID — we match both so
+ * deep-links stay stable across re-seeds.
+ */
+export async function fetchLessonById(lessonId: string): Promise<LessonWithQuestions | null> {
+  if (!sql) return null;
+  try {
+    const lessonRows = (await sql`
+      SELECT id, concept_id, subject, level, math_track,
+             title_en, title_he, summary_en, summary_he,
+             sections, agent_hints, est_minutes, author, version,
+             level_focus, skill_atom_bank
+      FROM lessons
+      WHERE concept_id = ${lessonId}
+         OR id::text = ${lessonId}
+      LIMIT 1
+    `) as LessonRow[];
+    const lesson = lessonRows[0];
+    if (!lesson) return null;
+    return hydrateLessonRow(lesson);
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('fetchLessonById failed:', err);
+    }
+    return null;
+  }
+}
+
 export async function fetchLessonByConceptId(
   conceptId: string,
 ): Promise<LessonWithQuestions | null> {
@@ -902,18 +956,7 @@ export async function fetchLessonByConceptId(
     `) as LessonRow[];
     const lesson = lessonRows[0];
     if (!lesson) return null;
-    const questions = (await sql`
-      SELECT id, lesson_id, ord, kind, difficulty,
-             stem_en, stem_he, options_en, options_he,
-             correct_index, correct_answer, answer_payload,
-             rubric_en, rubric_he,
-             explanation_en, explanation_he, skill_atoms,
-             points_level_min
-      FROM lesson_questions
-      WHERE lesson_id = ${lesson.id}
-      ORDER BY ord ASC
-    `) as LessonQuestionRow[];
-    return { lesson, questions };
+    return hydrateLessonRow(lesson);
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('fetchLessonByConceptId failed:', err);
@@ -1868,11 +1911,12 @@ export async function getDashboardSnapshot(
       .map((r) => {
         const kgInfo = kgById[r.concept_id];
         const meta = lessonMeta.get(r.concept_id) ?? null;
+        const titles = resolveConceptTitles(r.concept_id, meta);
         return {
           id: meta?.id ?? null,
           concept_id: r.concept_id,
-          title: meta?.title_en ?? kgInfo?.name ?? r.concept_id,
-          title_he: meta?.title_he ?? kgInfo?.name_he ?? null,
+          title: titles.title_en,
+          title_he: titles.title_he,
           subject: kgInfo?.subject ?? inferSubject(r.concept_id, []),
           progress: Number(r.score),
           est_minutes: meta?.est_minutes ?? null,
@@ -1892,11 +1936,11 @@ export async function getDashboardSnapshot(
       })
       .slice(0, 5)
       .map((r) => {
-        const kgInfo = kgById[r.concept_id];
+        const titles = resolveConceptTitles(r.concept_id);
         return {
           concept_id: r.concept_id,
-          name: kgInfo?.name ?? r.concept_id,
-          name_he: kgInfo?.name_he ?? null,
+          name: titles.title_en,
+          name_he: titles.title_he,
           score: Number(r.score),
         };
       });
@@ -1923,6 +1967,7 @@ export async function getDashboardSnapshot(
 export interface ProgressConceptRow {
   concept_id: string;
   concept_name: string;
+  concept_name_he: string | null;
   current_score: number;
   history: Array<{ date: string; score: number }>;
 }
@@ -1988,10 +2033,11 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
     const totalMinutes = Math.round(chatTurns * 4 + completed * 20);
 
     const concepts: ProgressConceptRow[] = mastery.map((r) => {
-      const kgInfo = kgById[r.concept_id];
+      const titles = resolveConceptTitles(r.concept_id);
       return {
         concept_id: r.concept_id,
-        concept_name: kgInfo?.name ?? r.concept_id,
+        concept_name: titles.title_en,
+        concept_name_he: titles.title_he,
         current_score: Number(r.score),
         history: r.last_activity
           ? [{ date: r.last_activity.slice(0, 10), score: Number(r.score) }]
@@ -2060,4 +2106,129 @@ export async function fetchConceptMasteryBulk(
     console.warn('[neon-db] fetchConceptMasteryBulk failed', err);
   }
   return result;
+}
+
+// ── Memory tab (Neon-direct timeline) ─────────────────────────────────────────
+
+/**
+ * Returns learner-visible memories for `/app/memory` from Neon agent notes +
+ * shared persona. Avoids the optional Render `/v1/memory/timeline` endpoint
+ * which is often cold or unavailable on the free tier.
+ */
+export async function getMemoryTimelineFromNeon(
+  learnerId: string,
+  limit = 100,
+): Promise<MemoryRecord[]> {
+  if (!sql) return [];
+  try {
+    const [noteRows, persona] = await Promise.all([
+      sql`
+        SELECT id::text, agent, kind, content, importance,
+               related_concept_id, created_at::text AS created_at
+        FROM learner_agent_notes
+        WHERE learner_id = ${learnerId}
+          AND archived_at IS NULL
+          AND superseded_by IS NULL
+        ORDER BY importance DESC, created_at DESC
+        LIMIT ${limit}
+      `,
+      getLearnerPersona(learnerId).catch(() => null),
+    ]);
+
+    const notes = noteRows as Array<{
+      id: string;
+      agent: string;
+      kind: string;
+      content: string;
+      importance: number;
+      related_concept_id: string | null;
+      created_at: string;
+    }>;
+
+    const records: MemoryRecord[] = notes.map((n) => ({
+      id: n.id,
+      learner_id: learnerId,
+      type: 'reflective',
+      content: n.content,
+      summary: `${n.agent} · ${n.kind}`,
+      tags: [n.agent, n.kind],
+      salience: Math.min(1, Math.max(0, n.importance / 5)),
+      confidence: 0.75,
+      valence: 0,
+      decay_tau_days: 14,
+      access_count: 0,
+      provenance: { kind: 'agent_reflection', agent: n.agent },
+      kg_node_ids: n.related_concept_id ? [n.related_concept_id] : [],
+      created_at: n.created_at,
+      updated_at: n.created_at,
+      last_accessed_at: n.created_at,
+    }));
+
+    if (persona?.text && persona.text.trim().length > 0) {
+      records.unshift({
+        id: `persona-${learnerId}`,
+        learner_id: learnerId,
+        type: 'semantic',
+        content: persona.text,
+        summary: 'Shared learner profile',
+        tags: ['persona', 'shared'],
+        salience: 1,
+        confidence: 0.9,
+        valence: 0,
+        decay_tau_days: 365,
+        access_count: 0,
+        provenance: { kind: 'system', agent: 'memory_steward' },
+        kg_node_ids: [],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        last_accessed_at: new Date().toISOString(),
+      });
+    }
+
+    return records;
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getMemoryTimelineFromNeon failed', err);
+    }
+    return [];
+  }
+}
+
+// ── Goal completion detection ─────────────────────────────────────────────────
+
+const GOAL_MASTERY_THRESHOLD = 0.7;
+
+export interface GoalCompletionStatus {
+  /** Active plan week concepts all mastered. */
+  minorComplete: boolean;
+  /** Every concept in the plan mastered. */
+  majorComplete: boolean;
+  activeWeekNumber: number | null;
+  planGoal: string | null;
+}
+
+export async function getGoalCompletionStatus(
+  learnerId: string,
+): Promise<GoalCompletionStatus | null> {
+  const plan = await getCurrentPlan(learnerId);
+  if (!plan || plan.weeks.length === 0) return null;
+
+  const mastery = await getConceptMastery(learnerId);
+  const activeWeek = plan.weeks.find((w) => w.status === 'active') ?? plan.weeks[0]!;
+  const activeConceptIds = activeWeek.concepts.map((c) => c.concept_id);
+  const allConceptIds = plan.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id));
+
+  const isMastered = (id: string) => (mastery[id] ?? 0) >= GOAL_MASTERY_THRESHOLD;
+
+  const minorComplete =
+    activeConceptIds.length > 0 && activeConceptIds.every(isMastered);
+  const majorComplete =
+    allConceptIds.length > 0 && allConceptIds.every(isMastered);
+
+  return {
+    minorComplete,
+    majorComplete,
+    activeWeekNumber: activeWeek.week_number,
+    planGoal: plan.goal,
+  };
 }

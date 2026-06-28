@@ -11,12 +11,13 @@ import { useI18n } from '@/providers/i18n-provider';
 import type { Locale } from '@/i18n/config';
 
 const publicNavLinks = [
-  { href: '/learn', labelKey: 'learn' as const },
+  { href: '/learn', signedInHref: '/app/lessons', labelKey: 'learn' as const },
   { href: '/book', labelKey: 'book' as const },
 ];
 
 const appNavLinks = [
   { href: '/app', labelKey: 'dashboard' as const },
+  { href: '/app/lessons', labelKey: 'learn' as const },
   { href: '/app/progress', labelKey: 'progress' as const },
   { href: '/app/memory', labelKey: 'memory' as const },
 ];
@@ -58,24 +59,26 @@ export function SiteHeader() {
             className="hidden items-center gap-1 md:flex"
             aria-label={messages.common.mainNavigation}
           >
-            {publicNavLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                  isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
-                )}
-              >
-                {messages.nav[link.labelKey]}
-                {isActive(link.href) && (
-                  <span
-                    className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
-                    aria-hidden
-                  />
-                )}
-              </Link>
-            ))}
+            <SignedOut>
+              {publicNavLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                    isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
+                  )}
+                >
+                  {messages.nav[link.labelKey]}
+                  {isActive(link.href) && (
+                    <span
+                      className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                      aria-hidden
+                    />
+                  )}
+                </Link>
+              ))}
+            </SignedOut>
             <SignedIn>
               {appNavLinks.map((link) => (
                 <Link

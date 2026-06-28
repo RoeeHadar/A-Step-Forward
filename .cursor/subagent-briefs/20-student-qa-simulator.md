@@ -1,5 +1,9 @@
 # Student QA Simulator — Sub-agent Brief
 
+## Run mode
+- **Cursor model: Auto only.** Do not run as Sonnet or Opus.
+- Coordinator dispatches with `subagent_type: generalPurpose`, **no `model` parameter**.
+
 ## Purpose
 Roleplay as a real Israeli student using "A Step Forward" learning platform.
 Simulate their experience across 5 time checkpoints, produce structured feedback,
