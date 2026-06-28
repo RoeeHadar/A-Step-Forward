@@ -30,7 +30,9 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LESSONS_DIR = join(__dirname, 'seed_data', 'lessons');
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const MODEL = 'llama-3.3-70b-versatile';
+// llama-3.1-8b-instant: 500k tokens/day free tier (vs 100k for 70b) — use for bulk enrichment
+// Switch back to llama-3.3-70b-versatile for quality passes on individual lessons
+const MODEL = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant';
 const args = process.argv.slice(2);
 const FORCE = args.includes('--force');
 const CONCEPT_FILTER = (() => {
@@ -183,9 +185,9 @@ async function callGroq(systemPrompt, userPrompt, retries = 4) {
           model: MODEL,
           messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
           temperature: 0.25,
-          max_tokens: 3000,
-          // No response_format — plain text so Groq doesn't fail on large JSON
-          // max_tokens kept low to fit within Groq free-tier 6k TPM window
+          max_tokens: 500,
+          // 500 max_tokens: ~700 total tokens/call → safely fits 8 calls/min in 6k TPM window
+          // One section at a time → no truncation possible
         }),
       });
       if (response.status === 429) {
@@ -211,33 +213,65 @@ async function callGroq(systemPrompt, userPrompt, retries = 4) {
   throw lastErr ?? new Error('callGroq exhausted retries');
 }
 
-// Extract the first valid JSON object from a text response (handles markdown fences etc.)
-function extractJson(text) {
-  if (!text || typeof text !== 'string') return null;
-  // Try direct parse first
-  try { return JSON.parse(text); } catch { /* fall through */ }
-  // Strip markdown code fences
-  const stripped = text.replace(/^```(?:json)?\s*/m, '').replace(/\s*```\s*$/m, '');
-  try { return JSON.parse(stripped); } catch { /* fall through */ }
-  // Find outermost { ... }
-  const start = text.indexOf('{');
-  const end = text.lastIndexOf('}');
-  if (start !== -1 && end !== -1 && end > start) {
-    try { return JSON.parse(text.slice(start, end + 1)); } catch { /* fall through */ }
+// Compact level hint for system prompt
+const LEVEL_HINT = {
+  '3pt': 'Basic 3-pt Bagrut: concrete numbers, no jargon, simple examples, no proofs.',
+  '4pt': '4-pt Bagrut: formal algebra OK, explain "why", sign charts, exam-level examples.',
+  '5pt': '5-pt Bagrut: full rigor, complete derivations, edge cases, proof techniques.',
+  'hs_physics': 'HS Physics Bagrut: define every symbol, show units, worked given→find→formula→answer.',
+};
+
+// ─── ENRICH ONE SECTION × ONE TRACK per API call ─────────────────────────
+// This is the ONLY approach that works within Groq's 6k TPM limit:
+//   ~300 tokens input + ~400 tokens output = ~700 tokens/call
+//   → safe at 10-second intervals (4200 tokens/min < 6000 TPM)
+//
+// Output format: plain text with ===EN=== / ===HE=== delimiters.
+// No JSON = no truncation errors.
+async function enrichOneSection(lesson, section, track) {
+  const subtopics = REQUIRED_SUBTOPICS[lesson.concept_id] ?? {};
+  const topics = (subtopics[track] ?? []).slice(0, 4).join(', ');
+
+  const systemPrompt = `You are an Israeli curriculum writer. ALL math in LaTeX: $inline$, $$display$$.
+Level: ${LEVEL_HINT[track] ?? track}
+Write 3-5 sentences + 1 worked numeric example. Be direct and concise.
+Output ONLY:
+===EN===
+[English content]
+===HE===
+[Hebrew translation]`;
+
+  const userPrompt = `Lesson: ${lesson.title_en} | Section: ${section.title_en} | Level: ${track}${topics ? `\nCover: ${topics}` : ''}`;
+
+  let raw;
+  try {
+    raw = await callGroq(systemPrompt, userPrompt);
+  } catch (err) {
+    throw err;
   }
-  return null;
+
+  if (!raw) return null;
+
+  const enMatch = raw.match(/===EN===\s*([\s\S]*?)(?====HE===|$)/);
+  const heMatch = raw.match(/===HE===\s*([\s\S]*?)$/);
+
+  const en = enMatch?.[1]?.trim();
+  const he = heMatch?.[1]?.trim();
+
+  if (!en) return null;
+  return { body_en_md: en, body_he_md: he ?? en };
 }
 
-// ─── ENRICH ONE LESSON — one API call PER TRACK (much more reliable) ──────
+// ─── ENRICH ONE LESSON (loops sections × tracks) ─────────────────────────
 async function enrichLesson(lesson) {
   const tracks = lesson.math_track ?? [];
   if (tracks.length === 0) return false;
 
   const subtopics = REQUIRED_SUBTOPICS[lesson.concept_id] ?? {};
   let anyModified = false;
+  let callsMade = 0;
 
   for (const track of tracks) {
-    // Find sections that need this track
     const sectionsNeedingTrack = (lesson.sections ?? []).filter((s) => {
       if (!s.body_en_md && !s.body_he_md) return false;
       if (FORCE) return true;
@@ -245,65 +279,30 @@ async function enrichLesson(lesson) {
     });
 
     if (sectionsNeedingTrack.length === 0) {
-      process.stdout.write(`  ⏭ ${track}: already complete\n`);
+      process.stdout.write(`  ⏭ ${track}: all sections present\n`);
       continue;
     }
 
-    const mandatoryTopics = (subtopics[track] ?? []).slice(0, 8); // cap to save tokens
+    let trackSaved = 0;
+    for (const section of sectionsNeedingTrack) {
+      // Inter-call delay: 10s → 6 calls/min → 700 tok/call → 4200 tok/min < 6k TPM
+      if (callsMade > 0) await new Promise((r) => setTimeout(r, 10000));
+      callsMade++;
 
-    // Compact level hint (50 tokens max) instead of the full LEVEL_RULES block
-    const levelHint = {
-      '3pt': 'Basic 3-pt Bagrut: concrete numbers, no jargon, simple examples, no proofs.',
-      '4pt': '4-pt Bagrut: formal algebra OK, explain "why", sign charts, exam-level examples.',
-      '5pt': '5-pt Bagrut: full rigor, complete derivations, edge cases, proof techniques.',
-      'hs_physics': 'HS Physics Bagrut: define every symbol, show units, worked given→find→formula→answer.',
-    };
+      try {
+        const result = await enrichOneSection(lesson, section, track);
+        if (!result) { process.stdout.write(`    ⚠ no content for "${section.title_en}"\n`); continue; }
 
-    const systemPrompt = `You are an Israeli curriculum writer. Write two lesson sections in English and Hebrew.
-Level: ${levelHint[track] ?? track}
-Rules: ALL math in LaTeX ($inline$, $$display$$). Hebrew RTL, math LTR. JSON only, no preamble.
-Schema: {"sections":[{"title_en":"...","body_en_md":"...","body_he_md":"..."}]}`;
-
-    const sectionsInput = sectionsNeedingTrack.map((s) => s.title_en).join(', ');
-
-    const userPrompt = `Lesson: ${lesson.title_en} (${lesson.concept_id}) | Level: ${track}
-${mandatoryTopics.length ? `Cover: ${mandatoryTopics.join(', ')}.` : ''}
-Write body_en_md and body_he_md for these sections: ${sectionsInput}.
-Include ≥1 worked numeric example per section. Output JSON only.`;
-
-    let raw;
-    try {
-      raw = await callGroq(systemPrompt, userPrompt);
-    } catch (err) {
-      console.error(`  ❌ Groq error [${track}] for ${lesson.concept_id}: ${err.message}`);
-      continue;
+        const idx = lesson.sections.indexOf(section);
+        lesson.sections[idx].body_by_level = lesson.sections[idx].body_by_level ?? {};
+        lesson.sections[idx].body_by_level[track] = result;
+        anyModified = true;
+        trackSaved++;
+      } catch (err) {
+        process.stdout.write(`    ❌ [${track}] "${section.title_en}": ${err.message.slice(0, 80)}\n`);
+      }
     }
-
-    const parsed = extractJson(raw);
-    if (!parsed?.sections) {
-      console.error(`  ❌ Bad JSON [${track}] for ${lesson.concept_id}. Raw: ${(raw ?? '').slice(0, 150)}`);
-      continue;
-    }
-
-    for (const sectionResult of parsed.sections) {
-      if (!sectionResult?.title_en || !sectionResult?.body_en_md) continue;
-      const idx = lesson.sections.findIndex((s) => s.title_en === sectionResult.title_en);
-      if (idx === -1) continue;
-
-      lesson.sections[idx].body_by_level = lesson.sections[idx].body_by_level ?? {};
-      if (!FORCE && lesson.sections[idx].body_by_level[track]) continue;
-
-      lesson.sections[idx].body_by_level[track] = {
-        body_en_md: sectionResult.body_en_md.trim(),
-        body_he_md: (sectionResult.body_he_md ?? sectionResult.body_en_md).trim(),
-      };
-      anyModified = true;
-    }
-
-    process.stdout.write(`  ✔ ${track} enriched (${sectionsNeedingTrack.length} sections)\n`);
-
-    // Pause between track calls: 35s keeps total tokens under 12k TPM (input ~1500 + output 3000 = 4500/call → safe at 35s)
-    await new Promise((r) => setTimeout(r, 35000));
+    if (trackSaved > 0) process.stdout.write(`  ✔ ${track}: ${trackSaved}/${sectionsNeedingTrack.length} sections saved\n`);
   }
 
   return anyModified;
@@ -344,8 +343,7 @@ async function main() {
     }
 
     processed++;
-    // Inter-lesson pause: 5s (most time is spent in the per-track delay above)
-    await new Promise((r) => setTimeout(r, 5000));
+    // No extra inter-lesson pause — the per-section 10s delay already throttles correctly
   }
 
   console.log(`\n✅ Done. Files: ${processed} | Enriched: ${enriched} | Errors: ${errors}`);
