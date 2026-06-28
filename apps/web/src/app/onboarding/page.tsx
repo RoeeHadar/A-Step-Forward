@@ -458,6 +458,39 @@ const CONCEPTS_BY_GOAL: Record<Goal, string[]> = {
   other: [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA, ...PHYSICS_HS_CONCEPTS],
 };
 
+/**
+ * Key concepts for the self-assessment slider screen.
+ * Capped to ≤10 items per goal so the screen stays approachable for a
+ * stressed 17-year-old. These are the diagnostically most valuable concepts
+ * for the AI to build the learner model from.
+ */
+const SELF_SCORE_CONCEPTS_BY_GOAL: Partial<Record<Goal, string[]>> = {
+  bagrut_math_3: [
+    'arithmetic', 'algebra_basics', 'equations_quadratic',
+    'inequalities', 'functions_quadratic', 'trigonometry_ratios',
+    'sequences_arithmetic', 'geometry_basics',
+  ],
+  bagrut_math_4: [
+    'algebra_basics', 'equations_quadratic', 'inequalities',
+    'functions_quadratic', 'factoring', 'trigonometry_ratios',
+    'sequences_geometric', 'circles',
+  ],
+  bagrut_math_5: [
+    'equations_quadratic', 'functions_quadratic', 'factoring',
+    'logarithms', 'trigonometry_identities', 'analytic_geometry',
+    'derivatives_intro', 'integrals_intro',
+  ],
+  bagrut_physics: [
+    'kinematics_1d', 'newton_laws', 'work_energy', 'momentum',
+    'electrostatics', 'electric_circuits', 'waves_basics', 'optics_geometric',
+  ],
+  calculus1: [
+    'limits', 'derivatives_intro', 'derivatives_rules',
+    'derivatives_applications', 'integrals_intro', 'definite_integrals',
+  ],
+  linear_algebra: ['la_vectors', 'la_matrices', 'la_eigenvalues'],
+};
+
 // ── Step components ──────────────────────────────────────────────────────────
 
 function StepIndicator({
@@ -631,23 +664,26 @@ export default function OnboardingPage() {
     }));
   }
 
-  // Build the Step-4 concept list based on the student's goal.
-  // If the goal is already specific to a subject (e.g. bagrut_math_3), use that
-  // directly. For "other" / no goal yet, fall back to subject-based selection.
+  // Build the self-assessment concept list.
+  // Uses curated short-lists (≤10 items) from SELF_SCORE_CONCEPTS_BY_GOAL
+  // for known goals. Falls back to the full goal list for "other".
+  // Capped to MAX_SELF_SCORE = 10 regardless to prevent overwhelm.
+  const MAX_SELF_SCORE = 10;
   const conceptsForStep4: ConceptEntry[] = (() => {
     if (s1.goal && s1.goal !== 'other') {
-      // Goal-scoped list — already curriculum-accurate
-      return (CONCEPTS_BY_GOAL[s1.goal] ?? []).map(conceptEntry);
+      const curated = SELF_SCORE_CONCEPTS_BY_GOAL[s1.goal];
+      if (curated) return curated.slice(0, MAX_SELF_SCORE).map(conceptEntry);
+      // Fallback to full list capped to MAX_SELF_SCORE
+      return (CONCEPTS_BY_GOAL[s1.goal] ?? []).slice(0, MAX_SELF_SCORE).map(conceptEntry);
     }
-    // Fallback when goal is unset or 'other': show a reasonable union for
-    // selected subjects (HS level)
+    // Fallback when goal is unset or 'other'
     const mathIds = s1.subjects.includes('math')
-      ? [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA]
+      ? [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA]
       : [];
     const physicsIds = s1.subjects.includes('physics')
-      ? PHYSICS_HS_CONCEPTS
+      ? PHYSICS_HS_CONCEPTS.slice(0, 6)
       : [];
-    return [...new Set([...mathIds, ...physicsIds])].map(conceptEntry);
+    return [...new Set([...mathIds, ...physicsIds])].slice(0, MAX_SELF_SCORE).map(conceptEntry);
   })();
 
   const needsPointsGroup =

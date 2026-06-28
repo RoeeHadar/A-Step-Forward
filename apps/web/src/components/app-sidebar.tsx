@@ -14,14 +14,9 @@ import {
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
 
-// Lessons (`/app/lessons`) is hidden from the nav until video lectures land
-// — the page itself still exists as a "coming soon" placeholder for any
-// stale deep links. The slot is filled by the new Quiz builder, which uses
-// the AI to generate fit-to-purpose practice tests based on what the
-// platform knows about the learner.
 const items = [
   { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
-  { href: '/learn', icon: BookOpen, labelKey: 'learn' as const, match: '/learn' },
+  { href: '/app/lessons', icon: BookOpen, labelKey: 'learn' as const, match: '/app/lessons' },
   { href: '/app/chat/tutor', icon: MessageSquare, labelKey: 'chat' as const, match: '/app/chat' },
   { href: '/app/quiz', icon: ClipboardCheck, labelKey: 'quiz' as const, match: '/app/quiz' },
   { href: '/app/memory', icon: Brain, labelKey: 'memory' as const },

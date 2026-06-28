@@ -3,6 +3,7 @@ import { DashboardContent } from '@/components/dashboard-content';
 import { getAuthContext } from '@/lib/auth';
 import {
   getDashboardSnapshot,
+  getLearnerProfile,
   dbConfigured,
   type DashboardSnapshot,
 } from '@/lib/neon-db';
@@ -26,17 +27,21 @@ export default async function DashboardPage() {
   }
   if (!auth) redirect('/sign-in');
 
-  // Real, per-learner snapshot from Neon — no MOCK_DASHBOARD fallback.
-  // A brand-new learner with zero activity gets the empty snapshot, which the
-  // UI renders as "no lessons yet" / "no mastery yet" / streak 0.
-  const snapshot = dbConfigured
-    ? await getDashboardSnapshot(auth.learnerId).catch(emptySnapshot)
-    : emptySnapshot();
+  const [snapshot, profile] = await Promise.all([
+    dbConfigured
+      ? getDashboardSnapshot(auth.learnerId).catch(emptySnapshot)
+      : Promise.resolve(emptySnapshot()),
+    dbConfigured
+      ? getLearnerProfile(auth.learnerId).catch(() => null)
+      : Promise.resolve(null),
+  ]);
 
   return (
     <DashboardContent
       displayName={auth.displayName}
       snapshot={snapshot}
+      nextTestName={profile?.next_test_name ?? null}
+      nextTestDate={profile?.next_test_date ?? null}
     />
   );
 }

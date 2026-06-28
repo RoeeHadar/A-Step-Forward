@@ -2,7 +2,7 @@
 
 import type { ComponentType, ReactNode } from 'react';
 import Link from 'next/link';
-import { Flame, CheckCircle2, Star } from 'lucide-react';
+import { Flame, CheckCircle2, Star, CalendarClock } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Progress } from '@asf/ui/progress';
 import { cn } from '@asf/ui';
@@ -40,9 +40,13 @@ const dashboardAgents: Array<{
 export function DashboardContent({
   displayName,
   snapshot,
+  nextTestName,
+  nextTestDate,
 }: {
   displayName: string;
   snapshot: DashboardSnapshot;
+  nextTestName?: string | null;
+  nextTestDate?: string | null;
 }) {
   const { messages, locale } = useI18n();
   const t = messages.dashboard;
@@ -59,6 +63,14 @@ export function DashboardContent({
         </h1>
         <p className="mt-2 text-muted-foreground">{t.continueJourney}</p>
       </header>
+
+      {nextTestDate && (
+        <BagrutCountdown
+          testName={nextTestName}
+          testDate={nextTestDate}
+          isHe={isHe}
+        />
+      )}
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <StatTile
@@ -205,6 +217,94 @@ export function DashboardContent({
           ))}
         </div>
       </section>
+    </div>
+  );
+}
+
+const COUNTDOWN_STR = {
+  he: {
+    daysLeft: (n: number) => `${n} ימים לבגרות`,
+    today: '!הבגרות היום',
+    past: 'הבגרות עברה — כל הכבוד',
+    motivationFar: 'יש לך זמן — עבוד חכם, לא קשה',
+    motivationMid: 'מחצית הדרך. כדאי להתעמד על הנושאים החלשים',
+    motivationClose: 'השעה מאוחרת — זה הזמן לחזור על הכל',
+    motivationFinal: '!לחץ אחרון. אתה יכול',
+    examLabel: (name: string) => `הבגרות שלך — ${name}`,
+  },
+  en: {
+    daysLeft: (n: number) => `${n} days to exam`,
+    today: 'Exam day — good luck!',
+    past: 'Exam is done — well done!',
+    motivationFar: 'You have time. Work smart, not hard.',
+    motivationMid: 'Halfway there. Focus on your weak areas.',
+    motivationClose: 'Final stretch — review everything.',
+    motivationFinal: "Last push. You've got this!",
+    examLabel: (name: string) => `Your exam — ${name}`,
+  },
+} as const;
+
+function BagrutCountdown({
+  testName,
+  testDate,
+  isHe,
+}: {
+  testName?: string | null;
+  testDate: string;
+  isHe: boolean;
+}) {
+  const t = COUNTDOWN_STR[isHe ? 'he' : 'en'];
+  const now = new Date();
+  const exam = new Date(testDate);
+  const msLeft = exam.getTime() - now.getTime();
+  const daysLeft = Math.ceil(msLeft / (1000 * 60 * 60 * 24));
+
+  let label: string;
+  let motivation: string;
+  let urgencyClass: string;
+
+  if (daysLeft < 0) {
+    label = t.past;
+    motivation = '';
+    urgencyClass = 'from-muted to-muted/50';
+  } else if (daysLeft === 0) {
+    label = t.today;
+    motivation = t.motivationFinal;
+    urgencyClass = 'from-accent-magenta to-accent-cyan';
+  } else if (daysLeft <= 14) {
+    label = t.daysLeft(daysLeft);
+    motivation = t.motivationFinal;
+    urgencyClass = 'from-destructive/80 to-accent-magenta';
+  } else if (daysLeft <= 60) {
+    label = t.daysLeft(daysLeft);
+    motivation = t.motivationClose;
+    urgencyClass = 'from-accent-amber to-accent-magenta';
+  } else if (daysLeft <= 90) {
+    label = t.daysLeft(daysLeft);
+    motivation = t.motivationMid;
+    urgencyClass = 'from-accent-cyan to-primary';
+  } else {
+    label = t.daysLeft(daysLeft);
+    motivation = t.motivationFar;
+    urgencyClass = 'from-primary to-accent-cyan';
+  }
+
+  return (
+    <div
+      className={cn(
+        'mb-6 flex items-center gap-4 rounded-2xl bg-gradient-to-r p-4 text-primary-foreground',
+        urgencyClass,
+      )}
+      dir={isHe ? 'rtl' : 'ltr'}
+    >
+      <CalendarClock className="h-8 w-8 shrink-0" aria-hidden />
+      <div>
+        <p className="font-display text-2xl font-bold">{label}</p>
+        {testName && (
+          <p className="mt-0.5 text-sm opacity-90">{t.examLabel(testName)}</p>
+        )}
+        {motivation && <p className="mt-1 text-sm opacity-80">{motivation}</p>}
+      </div>
     </div>
   );
 }
