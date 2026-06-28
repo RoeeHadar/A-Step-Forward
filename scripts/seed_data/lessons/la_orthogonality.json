@@ -1,0 +1,250 @@
+{
+  "concept_id": "la_orthogonality",
+  "subject": "math",
+  "level": "university",
+  "math_track": [
+    "la"
+  ],
+  "title_en": "Orthogonality and Orthogonal Bases",
+  "title_he": "ניצבות ובסיסים אורתוגונליים",
+  "summary_en": "Orthogonality generalizes perpendicularity to any inner product space. Orthonormal bases simplify coordinates, Gram-Schmidt constructs them, and orthogonal matrices preserve geometry.",
+  "summary_he": "ניצבות מכלילה את הניצבות הגיאומטרית לכל מרחב מכפלה פנימית. בסיסים אורתונורמליים מפשטים קוורדינטות, גרם-שמידט בונה אותם, ומטריצות אורתוגונליות שומרות גיאומטריה.",
+  "est_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Dot Product and Orthogonality",
+      "title_he": "מכפלה פנימית וניצבות",
+      "body_en_md": "## The dot product\nFor $u,v\\in\\mathbb{R}^n$:\n$$u\\cdot v=u^Tv=\\sum_{i=1}^n u_iv_i$$\n\n**Length:** $\\|u\\|=\\sqrt{u\\cdot u}$\n\n**Angle:** $u\\cdot v=\\|u\\|\\|v\\|\\cos\\theta$ (so $\\cos\\theta=(u\\cdot v)/(\\|u\\|\\|v\\|)$)\n\n### Orthogonality\n$$\\boxed{u\\perp v \\iff u\\cdot v=0}$$\n\nTwo vectors are **orthogonal** if their dot product is zero (angle = 90°).\n\n### Examples in $\\mathbb{R}^3$\n- $u=(1,0,0)$, $v=(0,1,0)$: $u\\cdot v=0$ ✓ (axis vectors orthogonal)\n- $u=(1,2,0)$, $v=(2,-1,0)$: $u\\cdot v=2-2+0=0$ ✓\n- $u=(1,1,0)$, $v=(1,2,0)$: $u\\cdot v=3\\ne 0$ — NOT orthogonal\n\n### Cauchy-Schwarz\n$$|u\\cdot v|\\le\\|u\\|\\cdot\\|v\\|$$\nEquality iff $u\\parallel v$. Guarantees $|\\cos\\theta|\\le 1$.",
+      "body_he_md": "## המכפלה הפנימית\n$u\\cdot v=\\sum_{i=1}^n u_iv_i$\n\n**אורך:** $\\|u\\|=\\sqrt{u\\cdot u}$\n\n**זווית:** $\\cos\\theta=(u\\cdot v)/(\\|u\\|\\|v\\|)$\n\n### ניצבות\n$$\\boxed{u\\perp v \\iff u\\cdot v=0}$$\n\nשני וקטורים **ניצבים** אם המכפלה הפנימית שלהם אפס (זווית 90°).\n\n### דוגמאות\n- $u=(1,0,0)$, $v=(0,1,0)$: $u\\cdot v=0$ ✓\n- $u=(1,2,0)$, $v=(2,-1,0)$: $u\\cdot v=0$ ✓\n- $u=(1,1,0)$, $v=(1,2,0)$: $u\\cdot v=3\\ne 0$ — לא ניצבים\n\n### אי-שוויון קושי-שוורץ\n$|u\\cdot v|\\le\\|u\\|\\cdot\\|v\\|$",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "$u\\perp v\\iff u\\cdot v=0$. $\\|u\\|=\\sqrt{u\\cdot u}$. Cauchy-Schwarz: $|u\\cdot v|\\le\\|u\\|\\|v\\|$.",
+          "body_he_md": "$u\\perp v\\iff u\\cdot v=0$. $\\|u\\|=\\sqrt{u\\cdot u}$. קושי-שוורץ: $|u\\cdot v|\\le\\|u\\|\\|v\\|$."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "Orthonormal Bases",
+      "title_he": "בסיסים אורתונורמליים",
+      "body_en_md": "## Definitions\n$\\{q_1,\\ldots,q_n\\}$ is:\n- **Orthogonal** if $q_i\\cdot q_j=0$ for all $i\\ne j$\n- **Orthonormal** if also $\\|q_i\\|=1$ for all $i$\n\nCompactly: $q_i\\cdot q_j=\\delta_{ij}$ (Kronecker delta).\n\n## Why orthonormal bases are powerful\nIf $\\{q_1,\\ldots,q_n\\}$ is orthonormal basis for $\\mathbb{R}^n$:\n$$x=\\sum_{i=1}^n (x\\cdot q_i)\\,q_i$$\n\nCoefficients are just dot products — no matrix inversion needed!\n\n## Standard basis example\n$e_1=(1,0,0)$, $e_2=(0,1,0)$, $e_3=(0,0,1)$. Simplest orthonormal basis; $x=(3,-1,2)=3e_1-e_2+2e_3$.\n\n## Normalizing a vector\n$\\hat v=v/\\|v\\|$ gives a unit vector.\nExample: $v=(3,4,0)$, $\\|v\\|=5$, $\\hat v=(3/5,4/5,0)$.",
+      "body_he_md": "## הגדרות\n$\\{q_1,\\ldots,q_n\\}$ היא:\n- **אורתוגונלית** אם $q_i\\cdot q_j=0$ לכל $i\\ne j$\n- **אורתונורמלית** אם בנוסף $\\|q_i\\|=1$ לכל $i$\n\nבצורה קומפקטית: $q_i\\cdot q_j=\\delta_{ij}$.\n\n## מדוע בסיסים אורתונורמליים עוצמתיים\nאם $\\{q_1,\\ldots,q_n\\}$ בסיס אורתונורמלי:\n$$x=\\sum_{i=1}^n (x\\cdot q_i)\\,q_i$$\nהמקדמים הם רק מכפלות פנימיות — אין צורך בהיפוך מטריצה!\n\n## נרמול וקטור\n$\\hat v=v/\\|v\\|$. דוגמה: $v=(3,4,0)$, $\\|v\\|=5$, $\\hat v=(3/5,4/5,0)$.",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "Orthonormal: $q_i\\cdot q_j=\\delta_{ij}$. Coordinates: $x=\\sum(x\\cdot q_i)q_i$. Unit vector: $\\hat v=v/\\|v\\|$.",
+          "body_he_md": "אורתונורמלי: $q_i\\cdot q_j=\\delta_{ij}$. קוורדינטות: $x=\\sum(x\\cdot q_i)q_i$. וקטור יחידה: $\\hat v=v/\\|v\\|$."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "Gram-Schmidt Process",
+      "title_he": "תהליך גרם-שמידט",
+      "body_en_md": "## Algorithm\nGiven linearly independent $a_1,\\ldots,a_k$, produce orthonormal $q_1,\\ldots,q_k$:\n\n1. $u_1=a_1$, $q_1=u_1/\\|u_1\\|$\n2. $u_2=a_2-(a_2\\cdot q_1)q_1$, $q_2=u_2/\\|u_2\\|$\n3. $u_3=a_3-(a_3\\cdot q_1)q_1-(a_3\\cdot q_2)q_2$, $q_3=u_3/\\|u_3\\|$\n\nAt each step: subtract projections onto all previous basis vectors.\n\n## Worked Example ($\\mathbb{R}^3$)\n$a_1=(1,1,0)$, $a_2=(1,0,1)$.\n\n**Step 1:** $u_1=(1,1,0)$, $\\|u_1\\|=\\sqrt2$, $q_1=(1/\\sqrt2,1/\\sqrt2,0)$.\n\n**Step 2:** $a_2\\cdot q_1=1/\\sqrt2+0+0=1/\\sqrt2$.\n$$u_2=(1,0,1)-\\frac{1}{\\sqrt2}(1/\\sqrt2,1/\\sqrt2,0)=(1,0,1)-(1/2,1/2,0)=(1/2,-1/2,1)$$\n$\\|u_2\\|=\\sqrt{1/4+1/4+1}=\\sqrt{3/2}=\\sqrt6/2$.\n$$q_2=(2/\\sqrt6)(1/2,-1/2,1)=(1/\\sqrt6,-1/\\sqrt6,2/\\sqrt6)$$\n\n**Verify:** $q_1\\cdot q_2=1/(\\sqrt2\\sqrt6)-1/(\\sqrt2\\sqrt6)+0=0$ ✓",
+      "body_he_md": "## האלגוריתם\nבהינתן בלתי-תלויים $a_1,\\ldots,a_k$, מייצרים אורתונורמליים $q_1,\\ldots,q_k$:\n\n1. $u_1=a_1$, $q_1=u_1/\\|u_1\\|$\n2. $u_2=a_2-(a_2\\cdot q_1)q_1$, $q_2=u_2/\\|u_2\\|$\n3. $u_3=a_3-(a_3\\cdot q_1)q_1-(a_3\\cdot q_2)q_2$, $q_3=u_3/\\|u_3\\|$\n\nבכל שלב: הפחת הטלות על כל וקטורי הבסיס הקודמיים.\n\n## דוגמה פתורה ($\\mathbb{R}^3$)\n$a_1=(1,1,0)$, $a_2=(1,0,1)$.\n\n**שלב 1:** $q_1=(1/\\sqrt2,1/\\sqrt2,0)$.\n\n**שלב 2:** $u_2=(1/2,-1/2,1)$, $\\|u_2\\|=\\sqrt6/2$.\n$$q_2=(1/\\sqrt6,-1/\\sqrt6,2/\\sqrt6)$$\n\n**אימות:** $q_1\\cdot q_2=0$ ✓",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "Step $k$: $u_k=a_k-\\sum_{j<k}(a_k\\cdot q_j)q_j$, then $q_k=u_k/\\|u_k\\|$. Removes all components in directions of previous basis vectors.",
+          "body_he_md": "שלב $k$: $u_k=a_k-\\sum_{j<k}(a_k\\cdot q_j)q_j$, ואז $q_k=u_k/\\|u_k\\|$. מסיר רכיבים בכיווני וקטורי הבסיס הקודמיים."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "Orthogonal Projection onto a Subspace",
+      "title_he": "הטלה אורתוגונלית על תת-מרחב",
+      "body_en_md": "## Projection onto a line (1D subspace)\n$$\\text{proj}_a b=\\frac{b\\cdot a}{a\\cdot a}\\,a$$\n\n## Projection onto span of orthonormal vectors\nIf $W=\\text{span}\\{q_1,\\ldots,q_k\\}$ with $q_i$ orthonormal:\n$$\\text{proj}_W b=\\sum_{i=1}^k (b\\cdot q_i)\\,q_i=QQ^Tb$$\nwhere $Q=[q_1|\\cdots|q_k]$.\n\n**Key property:** Residual $b-\\text{proj}_Wb\\perp W$.\n\n## Why it matters: Least Squares\nהprojection gives the **closest point** in $W$ to $b$. This is the foundation of least-squares regression.\n\n## Example\nProject $b=(1,2,3)$ onto $xy$-plane ($W=\\text{span}\\{e_1,e_2\\}$):\n$$\\text{proj}=(b\\cdot e_1)e_1+(b\\cdot e_2)e_2=(1,2,0)$$\nResidual: $(0,0,3)$. Check: $(0,0,3)\\cdot e_1=0$ ✓, $(0,0,3)\\cdot e_2=0$ ✓.",
+      "body_he_md": "## הטלה על קו (1D)\n$$\\text{proj}_a b=\\frac{b\\cdot a}{a\\cdot a}\\,a$$\n\n## הטלה על פריסה של וקטורים אורתונורמליים\nאם $W=\\text{span}\\{q_1,\\ldots,q_k\\}$ עם $q_i$ אורתונורמליים:\n$$\\text{proj}_W b=\\sum_{i=1}^k (b\\cdot q_i)\\,q_i=QQ^Tb$$\n\n**תכונה מרכזית:** השייר $b-\\text{proj}_Wb$ ניצב ל-$W$.\n\n## דוגמה\nהטל $b=(1,2,3)$ על מישור $xy$:\n$$\\text{proj}=(1,2,0), \\quad שייר=(0,0,3) \\perp \\text{המישור} \\checkmark$$",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "$\\text{proj}_W b=\\sum_i(b\\cdot q_i)q_i=QQ^Tb$ (orthonormal $q_i$). Residual $b-\\text{proj}_Wb\\perp W$.",
+          "body_he_md": "$\\text{proj}_W b=\\sum_i(b\\cdot q_i)q_i=QQ^Tb$ ($q_i$ אורתונורמליים). שייר $b-\\text{proj}_Wb\\perp W$."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "Orthogonal Matrices",
+      "title_he": "מטריצות אורתוגונליות",
+      "body_en_md": "## Definition\nA square matrix $Q$ is **orthogonal** if:\n$$\\boxed{Q^TQ=I \\iff Q^{-1}=Q^T}$$\n\nEquivalently: columns of $Q$ form an orthonormal set.\n\n## Key properties\n1. $\\det(Q)=\\pm 1$\n2. Preserves dot products: $(Qu)\\cdot(Qv)=u\\cdot v$\n3. Preserves lengths: $\\|Qu\\|=\\|u\\|$\n4. Preserves angles between vectors\n\nOrthogonal matrices = **isometries** (distance-preserving: rotations and reflections).\n\n## Examples\n**Rotation:** $Q=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$, $\\det Q=1$.\n\n**Reflection:** $Q=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$, $\\det Q=-1$.\n\n**Verification (rotation):** $Q^TQ=\\begin{pmatrix}\\cos^2\\theta+\\sin^2\\theta&0\\\\0&1\\end{pmatrix}=I$ ✓\n\n## Connection to Spectral Theorem\n$A=QDQ^T$ for symmetric $A$: $Q^T$ rotates to eigenvector basis, $D$ scales, $Q$ rotates back.",
+      "body_he_md": "## הגדרה\n$Q$ **אורתוגונלית** אם:\n$$\\boxed{Q^TQ=I \\iff Q^{-1}=Q^T}$$\nשקול לכך שעמודות $Q$ יוצרות קבוצה אורתונורמלית.\n\n## תכונות מרכזיות\n1. $\\det(Q)=\\pm 1$\n2. שומרת מכפלות פנימיות\n3. שומרת אורכים\n4. שומרת זוויות\nמטריצות אורתוגונליות = **איזומטריות** (סיבובים והשתקפויות).\n\n## הקשר למשפט הספקטרל\n$A=QDQ^T$ ל-$A$ סימטרית.",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "Orthogonal $Q$: $Q^TQ=I$, $Q^{-1}=Q^T$. Columns orthonormal. $\\det Q=\\pm1$. Preserves lengths and angles.",
+          "body_he_md": "אורתוגונלית $Q$: $Q^TQ=I$, $Q^{-1}=Q^T$. עמודות אורתונורמליות. $\\det Q=\\pm1$. שומרת אורכים וזוויות."
+        }
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "orth_q1",
+      "type": "mcq",
+      "difficulty": "easy",
+      "level_focus": "la",
+      "body_en": "Which pair is orthogonal?",
+      "body_he": "איזה זוג הוא אורתוגונלי?",
+      "options_en": [
+        "$u=(1,2)$, $v=(-2,1)$",
+        "$u=(1,1)$, $v=(1,2)$",
+        "$u=(2,0)$, $v=(1,1)$",
+        "$u=(1,1)$, $v=(2,2)$"
+      ],
+      "options_he": [
+        "$u=(1,2)$, $v=(-2,1)$",
+        "$u=(1,1)$, $v=(1,2)$",
+        "$u=(2,0)$, $v=(1,1)$",
+        "$u=(1,1)$, $v=(2,2)$"
+      ],
+      "answer_en": "$u=(1,2)$, $v=(-2,1)$",
+      "answer_he": "$u=(1,2)$, $v=(-2,1)$",
+      "explanation_en": "$u\\cdot v=(1)(-2)+(2)(1)=-2+2=0$ ✓. Others: $1+2=3\\ne0$; $2+0=2\\ne0$; $2+2=4\\ne0$.",
+      "explanation_he": "$u\\cdot v=(1)(-2)+(2)(1)=0$ ✓. האחרים: $3\\ne0$; $2\\ne0$; $4\\ne0$.",
+      "skill_atoms": [
+        "orthogonality dot product zero",
+        "checking perpendicularity"
+      ]
+    },
+    {
+      "id": "orth_q2",
+      "type": "mcq",
+      "difficulty": "easy",
+      "level_focus": "la",
+      "body_en": "What is the unit vector in the direction of $v=(0,3,4)$?",
+      "body_he": "מהו וקטור היחידה בכיוון $v=(0,3,4)$?",
+      "options_en": [
+        "$(0,3/5,4/5)$",
+        "$(0,3,4)/7$",
+        "$(0,1,1)$",
+        "$(0,9,16)/25$"
+      ],
+      "options_he": [
+        "$(0,3/5,4/5)$",
+        "$(0,3,4)/7$",
+        "$(0,1,1)$",
+        "$(0,9,16)/25$"
+      ],
+      "answer_en": "$(0,3/5,4/5)$",
+      "answer_he": "$(0,3/5,4/5)$",
+      "explanation_en": "$\\|v\\|=\\sqrt{9+16}=5$. Unit vector: $v/\\|v\\|=(0,3/5,4/5)$.",
+      "explanation_he": "$\\|v\\|=5$. וקטור יחידה: $(0,3/5,4/5)$.",
+      "skill_atoms": [
+        "normalizing a vector",
+        "Euclidean norm"
+      ]
+    },
+    {
+      "id": "orth_q3",
+      "type": "mcq",
+      "difficulty": "medium",
+      "level_focus": "la",
+      "body_en": "For an orthogonal matrix $Q$, which is TRUE?",
+      "body_he": "עבור מטריצה אורתוגונלית $Q$, מה נכון?",
+      "options_en": [
+        "$Q^{-1}=Q^T$",
+        "$\\det(Q)=1$ always",
+        "$Q^2=I$ always",
+        "Q must be symmetric"
+      ],
+      "options_he": [
+        "$Q^{-1}=Q^T$",
+        "$\\det(Q)=1$ תמיד",
+        "$Q^2=I$ תמיד",
+        "$Q$ חייבת להיות סימטרית"
+      ],
+      "answer_en": "$Q^{-1}=Q^T$",
+      "answer_he": "$Q^{-1}=Q^T$",
+      "explanation_en": "By definition $Q^TQ=I$, so $Q^{-1}=Q^T$. Det can be $\\pm1$ (reflections have $-1$). $Q^2=I$ only for some reflections. $Q$ need not be symmetric.",
+      "explanation_he": "לפי הגדרה $Q^TQ=I$, לכן $Q^{-1}=Q^T$. דט יכול להיות $\\pm1$. $Q^2=I$ רק לחלק השתקפויות.",
+      "skill_atoms": [
+        "orthogonal matrix Q^TQ=I",
+        "Q^{-1}=Q^T"
+      ]
+    },
+    {
+      "id": "orth_q4",
+      "type": "mcq",
+      "difficulty": "medium",
+      "level_focus": "la",
+      "body_en": "In Gram-Schmidt, the key operation at each step is:",
+      "body_he": "בתהליך גרם-שמידט, הפעולה המרכזית בכל שלב היא:",
+      "options_en": [
+        "Subtracting the projection of the new vector onto all previous basis vectors",
+        "Dividing by the determinant",
+        "Adding projections to increase length",
+        "Swapping rows to increase orthogonality"
+      ],
+      "options_he": [
+        "הפחתת הטלת הוקטור החדש על כל וקטורי הבסיס הקודמיים",
+        "חלוקה בדטרמיננטה",
+        "הוספת הטלות להגדלת אורך",
+        "החלפת שורות להגדלת ניצבות"
+      ],
+      "answer_en": "Subtracting the projection of the new vector onto all previous basis vectors",
+      "answer_he": "הפחתת הטלת הוקטור החדש על כל וקטורי הבסיס הקודמיים",
+      "explanation_en": "$u_k=a_k-\\sum_{j<k}(a_k\\cdot q_j)q_j$. Removes all components in directions of previous $q$'s, leaving a vector perpendicular to all of them.",
+      "explanation_he": "$u_k=a_k-\\sum_{j<k}(a_k\\cdot q_j)q_j$. מסיר רכיבים בכיווני ה-$q$ים הקודמיים, משאיר וקטור הניצב לכולם.",
+      "skill_atoms": [
+        "Gram-Schmidt algorithm",
+        "projection subtraction"
+      ]
+    },
+    {
+      "id": "orth_q5",
+      "type": "mcq",
+      "difficulty": "hard",
+      "level_focus": "la",
+      "body_en": "Project $b=(1,1,1)$ onto the line spanned by $q=(1,1,0)/\\sqrt{2}$. What is $\\text{proj}_q b$?",
+      "body_he": "הטל $b=(1,1,1)$ על הקו הנפרש על-ידי $q=(1,1,0)/\\sqrt{2}$. מהי $\\text{proj}_q b$?",
+      "options_en": [
+        "$(1,1,0)$",
+        "$(1/2,1/2,0)$",
+        "$(1,1,1)$",
+        "$(0,0,1)$"
+      ],
+      "options_he": [
+        "$(1,1,0)$",
+        "$(1/2,1/2,0)$",
+        "$(1,1,1)$",
+        "$(0,0,1)$"
+      ],
+      "answer_en": "$(1,1,0)$",
+      "answer_he": "$(1,1,0)$",
+      "explanation_en": "$b\\cdot q=(1+1+0)/\\sqrt2=\\sqrt2$. $\\text{proj}=(b\\cdot q)q=\\sqrt2\\cdot(1/\\sqrt2,1/\\sqrt2,0)=(1,1,0)$.",
+      "explanation_he": "$b\\cdot q=\\sqrt2$. $\\text{proj}=\\sqrt2\\cdot(1/\\sqrt2,1/\\sqrt2,0)=(1,1,0)$.",
+      "skill_atoms": [
+        "projection onto unit vector",
+        "proj=(b dot q)q"
+      ]
+    },
+    {
+      "id": "orth_q6",
+      "type": "mcq",
+      "difficulty": "hard",
+      "level_focus": "la",
+      "body_en": "If $Q$ is orthogonal, what is $\\|Qx\\|$?",
+      "body_he": "אם $Q$ אורתוגונלית, מהו $\\|Qx\\|$?",
+      "options_en": [
+        "$\\|x\\|$",
+        "$\\det(Q)\\cdot\\|x\\|$",
+        "$\\|x\\|^2$",
+        "Cannot be determined"
+      ],
+      "options_he": [
+        "$\\|x\\|$",
+        "$\\det(Q)\\cdot\\|x\\|$",
+        "$\\|x\\|^2$",
+        "לא ניתן לקבוע"
+      ],
+      "answer_en": "$\\|x\\|$",
+      "answer_he": "$\\|x\\|$",
+      "explanation_en": "$\\|Qx\\|^2=(Qx)^T(Qx)=x^TQ^TQx=x^TIx=\\|x\\|^2$. So $\\|Qx\\|=\\|x\\|$. Orthogonal matrices preserve lengths.",
+      "explanation_he": "$\\|Qx\\|^2=x^TQ^TQx=x^TIx=\\|x\\|^2$. לכן $\\|Qx\\|=\\|x\\|$. מטריצות אורתוגונליות שומרות אורכים.",
+      "skill_atoms": [
+        "orthogonal matrix preserves norm",
+        "Q^TQ=I consequence"
+      ]
+    }
+  ]
+}

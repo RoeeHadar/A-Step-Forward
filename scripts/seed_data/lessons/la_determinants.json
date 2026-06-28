@@ -1,0 +1,246 @@
+{
+  "concept_id": "la_determinants",
+  "subject": "math",
+  "level": "university",
+  "math_track": [
+    "la"
+  ],
+  "title_en": "Determinants",
+  "title_he": "דטרמיננטות",
+  "summary_en": "The determinant encodes invertibility, area/volume scaling, and enables Cramer's rule.",
+  "summary_he": "הדטרמיננטה מקודדת הפיכות, סקאלת שטח/נפח, ומאפשרת כלל קרמר.",
+  "est_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What is a Determinant? (2x2)",
+      "title_he": "מהי דטרמיננטה? (2x2)",
+      "body_en_md": "## Intuition first\n\nFor $A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$:\n$$\\boxed{\\det(A)=ad-bc}$$\nIf $\\det(A)=0$ the matrix is **singular** (not invertible). If $\\det(A)\\ne 0$ it **is** invertible.\n\n### Geometric meaning\nThe rows form two vectors in the plane. $|\\det(A)|$ = **area** of the parallelogram they span.\n\n### Examples\n$A=\\begin{pmatrix}3&1\\\\2&4\\end{pmatrix}$: $\\det=(3)(4)-(1)(2)=10\\ne 0$ → invertible.\n\n$B=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$: $\\det=(2)(2)-(4)(1)=0$ → singular.\n\n### 2x2 inverse formula\nWhen $\\det(A)\\ne 0$: $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.",
+      "body_he_md": "## אינטואיציה קודם\n\nעבור $A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$:\n$$\\boxed{\\det(A)=ad-bc}$$\nאם $\\det(A)=0$ – המטריצה **סינגולרית** (לא הפיכה). אם $\\det(A)\\ne 0$ – היא **הפיכה**.\n\n### משמעות גיאומטרית\nשורות $A$ יוצרות שני וקטורים במישור. $|\\det(A)|$ = **שטח** המקבילית שהם פורשים.\n\n### דוגמאות\n$A=\\begin{pmatrix}3&1\\\\2&4\\end{pmatrix}$: $\\det=10\\ne 0$ → הפיכה.\n\n$B=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$: $\\det=0$ → סינגולרית.\n\n### נוסחת ההופכי 2x2\n$A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "2x2: $\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}=ad-bc$. Zero det ⇔ singular ⇔ linearly dependent rows.",
+          "body_he_md": "2x2: $\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}=ad-bc$. דטרמיננטה אפס ⇔ סינגולרית ⇔ שורות תלויות."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "3x3 Determinant - Cofactor Expansion",
+      "title_he": "דטרמיננטה 3x3 - פיתוח לפי קופקטורים",
+      "body_en_md": "## Cofactor expansion along row 1\n$$\\det(A)=a_{11}M_{11}-a_{12}M_{12}+a_{13}M_{13}$$\n$M_{1j}$ = **minor**: 2x2 det after deleting row 1 and column $j$.\n\nSign pattern: $\\begin{pmatrix}+&-&+\\\\-&+&-\\\\+&-&+\\end{pmatrix}$\n\n### Worked Example\nCompute $\\det\\begin{pmatrix}1&2&0\\\\3&-1&4\\\\0&2&1\\end{pmatrix}$:\n\nStep 1: Expand row 1 (0 kills the third term):\n$$\\det=1\\cdot\\det\\begin{pmatrix}-1&4\\\\2&1\\end{pmatrix}-2\\cdot\\det\\begin{pmatrix}3&4\\\\0&1\\end{pmatrix}+0$$\nStep 2: $\\det\\begin{pmatrix}-1&4\\\\2&1\\end{pmatrix}=-1-8=-9$; $\\det\\begin{pmatrix}3&4\\\\0&1\\end{pmatrix}=3$.\n\nStep 3: $\\det=1(-9)-2(3)=\\mathbf{-15}$\n\n> **Tip:** Expand along the row/column with the most zeros.",
+      "body_he_md": "## פיתוח לפי קופקטורים על שורה 1\n$$\\det(A)=a_{11}M_{11}-a_{12}M_{12}+a_{13}M_{13}$$\n$M_{1j}$ = **מינור**: דטרמיננטה 2x2 לאחר מחיקת שורה 1 ועמודה $j$.\n\n### דוגמה פתורה\n$\\det\\begin{pmatrix}1&2&0\\\\3&-1&4\\\\0&2&1\\end{pmatrix}$:\n\nשלב 1: פיתוח שורה 1 (האפס מבטל את האיבר השלישי).\nשלב 2: $-9$ ו-$3$.\nשלב 3: $\\det=-9-6=\\mathbf{-15}$\n\n> **טיפ:** פתחו לאורך השורה/עמודה עם הכי הרבה אפסים.",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "General: $\\det(A)=\\sum_j(-1)^{i+j}a_{ij}M_{ij}$ along any row $i$ or column. Choose the row with most zeros.",
+          "body_he_md": "פיתוח כללי: $\\det(A)=\\sum_j(-1)^{i+j}a_{ij}M_{ij}$ לאורך כל שורה או עמודה. בחרו את השורה עם הכי הרבה אפסים."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "Properties of Determinants",
+      "title_he": "תכונות הדטרמיננטה",
+      "body_en_md": "| Property | Rule |\n|---|---|\n| Row scaling | Scale row by $k$ → $\\det$ multiplied by $k$ |\n| Row swap | Swap two rows → sign of $\\det$ flips |\n| Row addition | Add multiple of one row to another → $\\det$ unchanged |\n| **Product rule** | $\\det(AB)=\\det(A)\\cdot\\det(B)$ |\n| Transpose | $\\det(A^T)=\\det(A)$ |\n| Inverse | $\\det(A^{-1})=1/\\det(A)$ |\n| Triangular | $\\det$ = product of diagonal entries |\n\n**Key identity:** $\\det(AB)=\\det(A)\\det(B)$ implies $\\det(A^2)=\\det(A)^2$; orthogonal $Q$ has $\\det(Q)=\\pm 1$.",
+      "body_he_md": "| תכונה | כלל |\n|---|---|\n| הכפלת שורה | הכפל שורה ב-$k$ → $\\det$ מוכפל |\n| החלפת שורות | החלף שתי שורות → הסימן של $\\det$ מתהפך |\n| חיבור שורות | הוסף כפולה של שורה לאחרת → $\\det$ ללא שינוי |\n| **כלל מכפלה** | $\\det(AB)=\\det(A)\\cdot\\det(B)$ |\n| שחלוף | $\\det(A^T)=\\det(A)$ |\n| הופכי | $\\det(A^{-1})=1/\\det(A)$ |\n| משולשית | $\\det$ = מכפלת איברי האלכסון |\n\n**זהות מרכזית:** $\\det(AB)=\\det(A)\\det(B)$ גורר $\\det(A^2)=\\det(A)^2$; $\\det(Q)=\\pm 1$ למטריצה אורתוגונלית.",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "$\\det(AB)=\\det(A)\\det(B)$; swap→sign flip; scale row→scale det; add rows→det unchanged; triangular→product of diagonal.",
+          "body_he_md": "$\\det(AB)=\\det(A)\\det(B)$; החלפה→היפוך סימן; הכפלת שורה→סקאלת דט; חיבור שורות→דט ללא שינוי; משולשית→מכפלת אלכסון."
+        }
+      }
+    },
+    {
+      "kind": "theory",
+      "title_en": "Geometric Meaning - Area and Volume Scaling",
+      "title_he": "משמעות גיאומטרית",
+      "body_en_md": "## Determinant as a scaling factor\n- **2x2:** $|\\det(A)|$ = area of the parallelogram formed by the row vectors.\n- **3x3:** $|\\det(A)|$ = volume of the parallelepiped.\n- **Sign** encodes orientation (positive = right-handed; negative = flipped).\n\n### Effect on linear maps\n| $\\det$ | Effect |\n|---|---|\n| $=1$ | Area-preserving (e.g., rotation) |\n| $=0$ | Collapses to lower dimension |\n| $>1$ | Expands |\n| $0<|\\det|<1$ | Contracts |\n\n### Example: rotation\n$R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$, $\\det=\\cos^2\\theta+\\sin^2\\theta=1$. Preserves area. ✓",
+      "body_he_md": "## דטרמיננטה כגורם סקאלה\n- **2x2:** $|\\det(A)|$ = שטח המקבילית של וקטורי השורות.\n- **3x3:** $|\\det(A)|$ = נפח המקבילית.\n- **סימן** מקודד אוריינטציה.\n\n### דוגמה: סיבוב\n$\\det(R_\\theta)=1$ – שומר שטח. ✓",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "$|\\det(A)|$ = area (2x2) or volume (3x3) scaling factor. Sign encodes orientation.",
+          "body_he_md": "$|\\det(A)|$ = גורם הגדלת שטח (2x2) או נפח (3x3). סימן מקודד אוריינטציה."
+        }
+      }
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Cramer's Rule for 2x2 Systems",
+      "title_he": "כלל קרמר למערכות 2x2",
+      "body_en_md": "## Cramer's Rule\nFor $Ax=b$ with $\\det(A)\\ne 0$: $x_j=\\det(A_j)/\\det(A)$, where $A_j$ replaces column $j$ with $b$.\n\n### Worked Example\nSolve: $2x_1+3x_2=8$, $x_1-x_2=-1$\n\n$A=\\begin{pmatrix}2&3\\\\1&-1\\end{pmatrix}$, $b=\\begin{pmatrix}8\\\\-1\\end{pmatrix}$.\n\n$\\det(A)=(2)(-1)-(3)(1)=-5$.\n\n$A_1=\\begin{pmatrix}8&3\\\\-1&-1\\end{pmatrix}$, $\\det(A_1)=-8+3=-5$. $x_1=(-5)/(-5)=1$.\n\n$A_2=\\begin{pmatrix}2&8\\\\1&-1\\end{pmatrix}$, $\\det(A_2)=-2-8=-10$. $x_2=(-10)/(-5)=2$.\n\nCheck: $2(1)+3(2)=8$ ✓, $1-2=-1$ ✓",
+      "body_he_md": "## כלל קרמר\n$x_j=\\det(A_j)/\\det(A)$, כאשר $A_j$ מחליף עמודה $j$ ב-$b$.\n\n### דוגמה פתורה\nפתרו: $2x_1+3x_2=8$, $x_1-x_2=-1$\n\n$\\det(A)=-5$.\n\n$\\det(A_1)=-5 \\Rightarrow x_1=1$.\n\n$\\det(A_2)=-10 \\Rightarrow x_2=2$.\n\nבדיקה: $2+6=8$ ✓, $1-2=-1$ ✓",
+      "body_by_level": {
+        "la": {
+          "body_en_md": "$x_j=\\det(A_j)/\\det(A)$. Best for 2x2/3x3. Use Gaussian elimination for larger systems.",
+          "body_he_md": "$x_j=\\det(A_j)/\\det(A)$. מתאים ל-2x2/3x3. למערכות גדולות יותר – דירוג גאוסי."
+        }
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "det_q1",
+      "type": "mcq",
+      "difficulty": "easy",
+      "level_focus": "la",
+      "body_en": "What is $\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}$?",
+      "body_he": "מהו $\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}$?",
+      "options_en": [
+        "10",
+        "14",
+        "8",
+        "0"
+      ],
+      "options_he": [
+        "10",
+        "14",
+        "8",
+        "0"
+      ],
+      "answer_en": "10",
+      "answer_he": "10",
+      "explanation_en": "$\\det=(4)(3)-(2)(1)=12-2=10$. Common mistake: adding gives 14.",
+      "explanation_he": "$\\det=(4)(3)-(2)(1)=10$. טעות נפוצה: חיבור במקום חיסור נותן 14.",
+      "skill_atoms": [
+        "2x2 determinant formula ad-bc"
+      ]
+    },
+    {
+      "id": "det_q2",
+      "type": "mcq",
+      "difficulty": "easy",
+      "level_focus": "la",
+      "body_en": "If $\\det(A)=0$, which is necessarily true?",
+      "body_he": "אם $\\det(A)=0$, מה בהכרח נכון?",
+      "options_en": [
+        "A is invertible",
+        "A has linearly dependent rows",
+        "A is the zero matrix",
+        "All eigenvalues are zero"
+      ],
+      "options_he": [
+        "$A$ הפיכה",
+        "לשורות $A$ יש תלות לינארית",
+        "$A$ היא מטריצת האפס",
+        "כל הערכים העצמיים אפס"
+      ],
+      "answer_en": "A has linearly dependent rows",
+      "answer_he": "לשורות $A$ יש תלות לינארית",
+      "explanation_en": "$\\det(A)=0$ iff rows are linearly dependent, making A singular (not invertible).",
+      "explanation_he": "$\\det(A)=0$ אם ורק אם השורות תלויות לינארית, מה שהופך את $A$ לסינגולרית.",
+      "skill_atoms": [
+        "det zero iff singular",
+        "linear dependence rows"
+      ]
+    },
+    {
+      "id": "det_q3",
+      "type": "mcq",
+      "difficulty": "medium",
+      "level_focus": "la",
+      "body_en": "If $\\det(A)=6$ and $\\det(B)=-2$, what is $\\det(AB)$?",
+      "body_he": "אם $\\det(A)=6$ ו-$\\det(B)=-2$, מהו $\\det(AB)$?",
+      "options_en": [
+        "-12",
+        "4",
+        "-4",
+        "12"
+      ],
+      "options_he": [
+        "-12",
+        "4",
+        "-4",
+        "12"
+      ],
+      "answer_en": "-12",
+      "answer_he": "-12",
+      "explanation_en": "$\\det(AB)=\\det(A)\\det(B)=6\\cdot(-2)=-12$.",
+      "explanation_he": "$\\det(AB)=\\det(A)\\cdot\\det(B)=6\\cdot(-2)=-12$.",
+      "skill_atoms": [
+        "det product rule"
+      ]
+    },
+    {
+      "id": "det_q4",
+      "type": "mcq",
+      "difficulty": "medium",
+      "level_focus": "la",
+      "body_en": "Compute $\\det\\begin{pmatrix}1&0&2\\\\0&3&0\\\\1&1&4\\end{pmatrix}$.",
+      "body_he": "חשבו $\\det\\begin{pmatrix}1&0&2\\\\0&3&0\\\\1&1&4\\end{pmatrix}$.",
+      "options_en": [
+        "6",
+        "12",
+        "-6",
+        "0"
+      ],
+      "options_he": [
+        "6",
+        "12",
+        "-6",
+        "0"
+      ],
+      "answer_en": "6",
+      "answer_he": "6",
+      "explanation_en": "Expand row 1: $1\\cdot(12-0)-0+2\\cdot(0-3)=12-6=6$.",
+      "explanation_he": "פיתוח שורה 1: $1\\cdot(12-0)-0+2\\cdot(0-3)=12-6=6$.",
+      "skill_atoms": [
+        "3x3 cofactor expansion",
+        "efficient row choice"
+      ]
+    },
+    {
+      "id": "det_q5",
+      "type": "mcq",
+      "difficulty": "hard",
+      "level_focus": "la",
+      "body_en": "If $\\det(A)=4$, what is $\\det(A^{-1})$?",
+      "body_he": "אם $\\det(A)=4$, מהו $\\det(A^{-1})$?",
+      "options_en": [
+        "1/4",
+        "-4",
+        "4",
+        "-1/4"
+      ],
+      "options_he": [
+        "1/4",
+        "-4",
+        "4",
+        "-1/4"
+      ],
+      "answer_en": "1/4",
+      "answer_he": "1/4",
+      "explanation_en": "$\\det(AA^{-1})=1=\\det(A)\\det(A^{-1}) \\Rightarrow \\det(A^{-1})=1/4$.",
+      "explanation_he": "$1=\\det(A)\\det(A^{-1}) \\Rightarrow \\det(A^{-1})=1/4$.",
+      "skill_atoms": [
+        "det of inverse 1/det(A)"
+      ]
+    },
+    {
+      "id": "det_q6",
+      "type": "mcq",
+      "difficulty": "hard",
+      "level_focus": "la",
+      "body_en": "Use Cramer's Rule to find $x_1$: $3x_1+x_2=7$, $x_1+2x_2=4$.",
+      "body_he": "השתמשו בכלל קרמר למציאת $x_1$: $3x_1+x_2=7$, $x_1+2x_2=4$.",
+      "options_en": [
+        "2",
+        "3",
+        "1",
+        "5"
+      ],
+      "options_he": [
+        "2",
+        "3",
+        "1",
+        "5"
+      ],
+      "answer_en": "2",
+      "answer_he": "2",
+      "explanation_en": "$\\det(A)=5$; $A_1=\\begin{pmatrix}7&1\\\\4&2\\end{pmatrix}$, $\\det(A_1)=10$; $x_1=10/5=2$.",
+      "explanation_he": "$\\det(A)=5$; $\\det(A_1)=10$; $x_1=10/5=2$.",
+      "skill_atoms": [
+        "Cramer's rule 2x2"
+      ]
+    }
+  ]
+}
