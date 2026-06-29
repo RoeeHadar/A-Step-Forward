@@ -5,14 +5,11 @@ import { SiteHeader } from '@/components/site-header';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import {
   dbConfigured,
-  fetchConceptExplanation,
-  fetchConceptExplanationFallback,
   fetchLessonByConceptId,
   getLearnerProfile,
   type LessonPointsLevel,
 } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
-import { ConceptContentClient } from '@/components/concept-content-client';
 import { LessonPageClient } from '@/components/lesson-page-client';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
@@ -113,29 +110,20 @@ export default async function ConceptPage({
   // Lesson is the new authoritative source. If it exists, render it instead
   // of the wiki-style explanation. Both queries run in parallel for the
   // fallback case.
-  const [lessonData, en, he] = await Promise.all([
+  const [lessonData] = await Promise.all([
     fetchLessonByConceptId(conceptId),
-    fetchConceptExplanation(conceptId, 'en'),
-    fetchConceptExplanation(conceptId, 'he'),
   ]);
 
   const indexEntry = getLessonIndexEntry(conceptId);
+  const hasAuthoredLesson = Boolean(lessonData) || Boolean(indexEntry);
 
-  const fallback =
-    !lessonData && !en && !he
-      ? await fetchConceptExplanationFallback(conceptId, 'en')
-      : null;
-
-  if (!concept && !lessonData && !indexEntry && !en && !he && !fallback) {
+  if (!concept && !hasAuthoredLesson) {
     notFound();
   }
-
-  const display = en ?? he ?? fallback ?? null;
   const conceptNameEn =
     lessonData?.lesson.title_en ??
     indexEntry?.title_en ??
     concept?.name ??
-    display?.title ??
     conceptId.replace(/_/g, ' ');
   const conceptNameHe =
     lessonData?.lesson.title_he ?? indexEntry?.title_he ?? concept?.name_he ?? null;
@@ -184,7 +172,7 @@ export default async function ConceptPage({
 
         {lessonData ? (
           <LessonPageClient data={lessonData} conceptId={conceptId} learnerLevel={learnerLevel} />
-        ) : !en && !he && !fallback ? (
+        ) : hasAuthoredLesson ? (
           <div
             className="glass-surface rounded-2xl p-8 text-center"
             dir={isHe ? 'rtl' : 'ltr'}
@@ -196,37 +184,56 @@ export default async function ConceptPage({
               {dbConfigured ? t.adminSeedHint : t.dbSetupHint}
             </p>
             <Link
-              href={`/app/chat/tutor?context=${encodeURIComponent(conceptNameEn)}`}
+              href={`/app/chat/tutor?topic=${encodeURIComponent(conceptId)}`}
               className="mt-6 inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              {t.askAiTutorAbout}
+              {t.chatWithTutorAboutTopic}
             </Link>
           </div>
         ) : (
-          <ConceptContentClient
-            en={en}
-            he={he}
-            fallback={fallback}
-            conceptId={conceptId}
-            subject={subject}
-            conceptName={conceptNameEn}
-          />
+          <div
+            className="glass-surface mx-auto max-w-lg rounded-2xl border border-border/60 p-10 text-center"
+            dir={isHe ? 'rtl' : 'ltr'}
+          >
+            <h2 className="font-display text-2xl font-bold text-foreground">
+              {t.comingSoonPageTitle}
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {t.comingSoonTutorReady}
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Link
+                href={`/app/chat/tutor?topic=${encodeURIComponent(conceptId)}`}
+                className="inline-flex justify-center rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+              >
+                {t.chatWithTutorAboutTopic}
+              </Link>
+              <Link
+                href={`/learn/${subject}`}
+                className="inline-flex justify-center rounded-lg border border-border bg-surface-1/50 px-5 py-2.5 text-sm font-medium hover:border-primary/40"
+              >
+                {t.backToTopicList}
+              </Link>
+            </div>
+          </div>
         )}
 
-        <section className="mt-10 flex flex-wrap gap-3">
-          <Link
-            href={`/app/chat/tutor?context=${encodeURIComponent(conceptNameEn)}`}
-            className="rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
-          >
-            {t.askAiTutor}
-          </Link>
-          <Link
-            href={`/learn/${subject}`}
-            className="rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
-          >
-            {t.moreIn} <LocalizedSubjectLabel subject={subject} />
-          </Link>
-        </section>
+        {lessonData ? (
+          <section className="mt-10 flex flex-wrap gap-3">
+            <Link
+              href={`/app/chat/tutor?topic=${encodeURIComponent(conceptId)}`}
+              className="rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              {t.askAiTutor}
+            </Link>
+            <Link
+              href={`/learn/${subject}`}
+              className="rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
+            >
+              {t.moreIn} <LocalizedSubjectLabel subject={subject} />
+            </Link>
+          </section>
+        ) : null}
       </main>
     </div>
   );

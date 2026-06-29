@@ -415,7 +415,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
 
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {group.concepts.map((c) => {
-                    const hasContent = c.hasLesson || c.langs.length > 0;
                     const statusCfg = c.status ? STATUS_CONFIG[c.status] : null;
                     const StatusIcon = statusCfg?.icon ?? BookOpen;
                     const titles = resolveConceptTitles(c.id);
@@ -454,21 +453,15 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                               <StatusIcon className="h-3 w-3" />
                               {statusLabel}
                             </span>
-                          ) : hasContent && contentBadge ? (
-                            <span
-                              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${
-                                c.hasLesson
-                                  ? 'bg-primary/15 text-primary'
-                                  : 'bg-muted text-muted-foreground'
-                              }`}
-                            >
-                              {contentBadge}
-                            </span>
-                          ) : (
+                          ) : !c.hasLesson ? (
                             <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
                               {t.soon}
                             </span>
-                          )}
+                          ) : contentBadge ? (
+                            <span className="shrink-0 rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-medium uppercase text-primary">
+                              {contentBadge}
+                            </span>
+                          ) : null}
                         </div>
                         {/* Score bar if in-progress or needs review */}
                         {c.mastery && c.status && c.status !== 'done' ? (
