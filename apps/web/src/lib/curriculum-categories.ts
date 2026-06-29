@@ -145,7 +145,7 @@ const HS_PHYSICS_CONCEPTS = [
 const UNI_PHYSICS_1_CONCEPTS = [
   'vectors_kinematics_2d_3d', 'newton_laws_general', 'rigid_body_torque_equilibrium',
   'work_energy_power', 'momentum_impulse_collisions', 'angular_momentum_particles',
-  'center_of_mass', 'harmonic_oscillation', 'fluids_hydrostatics', 'fluids_bernoulli',
+  'center_of_mass_uni', 'harmonic_oscillation', 'fluids_hydrostatics', 'fluids_bernoulli',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -427,19 +427,43 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'kinematics_dynamics_uni',
         heLabel: 'קינמטיקה ודינמיקה',
         enLabel: 'Kinematics & Dynamics',
-        concept_ids: ['vectors_kinematics_2d_3d', 'newton_laws_general', 'rigid_body_torque_equilibrium'],
+        concept_ids: ['vectors_kinematics_2d_3d', 'newton_laws_general'],
       },
       {
         id: 'energy_momentum_uni',
         heLabel: 'אנרגיה ותנע',
         enLabel: 'Energy & Momentum',
-        concept_ids: ['work_energy_power', 'momentum_impulse_collisions', 'angular_momentum_particles', 'center_of_mass'],
+        concept_ids: ['work_energy_power', 'momentum_impulse_collisions'],
       },
       {
-        id: 'oscillations_fluids_uni',
-        heLabel: 'תנודות ופלואידים',
-        enLabel: 'Oscillations & Fluids',
-        concept_ids: ['harmonic_oscillation', 'fluids_hydrostatics', 'fluids_bernoulli'],
+        id: 'rigid_body_statics_uni',
+        heLabel: 'גוף קשיח ושיווי משקל',
+        enLabel: 'Rigid Body & Statics',
+        concept_ids: ['rigid_body_torque_equilibrium'],
+      },
+      {
+        id: 'rotation_angular_momentum_uni',
+        heLabel: 'סיבוב ותנע זוויתי',
+        enLabel: 'Rotation & Angular Momentum',
+        concept_ids: ['angular_momentum_particles'],
+      },
+      {
+        id: 'systems_of_particles_uni',
+        heLabel: 'מערכות חלקיקים',
+        enLabel: 'Systems of Particles',
+        concept_ids: ['center_of_mass_uni'],
+      },
+      {
+        id: 'oscillations_uni',
+        heLabel: 'תנודות',
+        enLabel: 'Oscillations',
+        concept_ids: ['harmonic_oscillation'],
+      },
+      {
+        id: 'fluids_uni',
+        heLabel: 'פלואידים',
+        enLabel: 'Fluids',
+        concept_ids: ['fluids_hydrostatics', 'fluids_bernoulli'],
       },
     ],
   },
