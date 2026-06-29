@@ -91,7 +91,8 @@ export async function ensureMockExamTables(): Promise<void> {
 }
 
 function stripForClient(questions: StoredMockExamQuestion[]): ClientMockExamQuestion[] {
-  return questions.map(({ correct: _c, model_answer_he: _mh, model_answer_en: _me, rubric_he: _rh, rubric_en: _re, ...rest }) => rest);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return questions.map(({ correct, model_answer_he, model_answer_en, rubric_he, rubric_en, ...rest }) => rest);
 }
 
 const SYSTEM_PROMPT = `You are a bilingual (Hebrew primary, English secondary) exam author for Israeli Bagrut (בגרות) high-school exams.
