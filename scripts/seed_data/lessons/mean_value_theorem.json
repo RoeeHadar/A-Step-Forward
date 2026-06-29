@@ -2,115 +2,223 @@
   "id": "mean_value_theorem",
   "type": "interactive",
   "subject": "calculus_1",
-  "title_en": "Mean Value Theorem",
+  "title_en": "The Mean Value Theorem",
   "title_he": "משפט הערך הממוצע",
   "duration_min": 20,
   "level_min": "calculus_1",
-  "agent_hints": "Students often confuse Rolle's Theorem conditions with MVT. Emphasize the geometric picture: some tangent is parallel to the secant. For finding c, set f'(c) equal to the secant slope — this is a standard 104031 exam question. Connect MVT to Taylor: it is the n=0 case with remainder f'(c)(x-a).",
+  "agent_hints": "Students should know that MVT requires two hypotheses: continuity on the closed interval AND differentiability on the open interval. The most common exam tasks are: (1) find the guaranteed point c, (2) use MVT to prove an inequality like |f(x)-f(y)| <= M|x-y|, (3) use a corollary to conclude monotonicity or constancy. Always connect MVT to its geometric meaning — some tangent line is parallel to the secant — before writing the formula.",
   "sections": [
     {
       "id": "rolles_theorem",
-      "title_en": "Rolle's Theorem",
+      "title_en": "Rolle’s Theorem",
       "title_he": "משפט רול",
       "level_min": "calculus_1",
-      "body_en_md": "**Rolle's Theorem:** If $f$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $f(a) = f(b)$, then there exists $c \\in (a,b)$ such that $f'(c) = 0$.\n\n**Geometric meaning:** A smooth curve joining two points at the same height must have a horizontal tangent somewhere in between.\n\n**Example:** $f(x) = x^2 - 4x + 3$ on $[1,3]$. We have $f(1) = 0 = f(3)$. Then $f'(x) = 2x - 4$, and $f'(c) = 0$ gives $c = 2 \\in (1,3)$.\n\n**Note:** All three hypotheses are needed. If $f(a) \\neq f(b)$, Rolle does not apply directly — but MVT does.",
-      "body_he_md": "**משפט רול:** אם $f$ רציפה ב-$[a,b]$, גזירה ב-$(a,b)$, ו-$f(a) = f(b)$, אז קיים $c \\in (a,b)$ כך ש-$f'(c) = 0$.\n\n**משמעות גיאומטרית:** עקומה חלקה המחברת שתי נקודות באותו גובה חייבת להיות עם משיק אופקי איפשהו ביניהן.\n\n**דוגמה:** $f(x) = x^2 - 4x + 3$ ב-$[1,3]$. יש $f(1) = 0 = f(3)$. אז $f'(x) = 2x - 4$, ו-$f'(c) = 0$ נותן $c = 2 \\in (1,3)$.\n\n**שימו לב:** כל שלוש ההנחות נדרשות. אם $f(a) \\neq f(b)$, רול לא חל ישירות — אך MVT כן."
+      "body_en_md": "**Rolle’s Theorem.** Let $f$ be continuous on $[a, b]$, differentiable on $(a, b)$, and satisfy $f(a) = f(b)$. Then there exists $c \\in (a, b)$ such that $f'(c) = 0$.\n\n**Geometric meaning:** If a smooth curve starts and ends at the same height, it must have at least one horizontal tangent in between.\n\n**Why all three conditions are needed:**\n- Without *continuity* on $[a,b]$: a jump discontinuity can prevent a horizontal tangent.\n- Without *differentiability* on $(a,b)$: a corner (like $f(x)=|x|$ on $[-1,1]$) has $f(-1)=f(1)$ but no point where $f'=0$.\n- Without $f(a)=f(b)$: $f(x)=x$ on $[0,1]$ has no horizontal tangent.\n\n**Proof sketch.** $f$ attains its maximum and minimum on $[a,b]$ (Extreme Value Theorem). If both extrema occur at the endpoints, then $f$ is constant and $f'\\equiv 0$. Otherwise, an interior extremum $c$ exists, and $f'(c) = 0$ by Fermat’s theorem.",
+      "body_he_md": "**משפט רול.** תהי $f$ רציפה ב-$[a, b]$, גזירה ב-$(a, b)$, ומקיימת $f(a) = f(b)$. אז קיים $c \\in (a, b)$ כך ש-$f'(c) = 0$.\n\n**משמעות גיאומטרי:** אם עקומה חלקה מתחילה ומסיימת באותו גובה, חייבת להיות לה לפחות שיפוע אופקי אחד בינתיים.\n\n**למה שלושת התנאים נחוצים:**\n- ללא *רציפות* ב-$[a,b]$: קפיצת אי -רציפות מונעת שיפוע אופקי.\n- ללא *גזירות* ב-$(a,b)$: פינה (כגון $f(x)=|x|$ ב-$[-1,1]$) אינה עונה לקריתריון.\n- ללא $f(a)=f(b)$: $f(x)=x$ ב-$[0,1]$ אין נקודה אופקית.\n\n**הוכחה בקצרה.** $f$ משיגה מקסימום ומינימום ב-$[a,b]$ (משפט ויירשטרס). אם שני הקצוות בקצה הקטעים, אז $f$ קבועה ו-$f'\\equiv 0$. אחרת, קיים קיצון פנימי $c$, ולפי משפט פרמה $f'(c)=0$."
     },
     {
       "id": "mvt_statement",
-      "title_en": "Mean Value Theorem",
-      "title_he": "משפט הערך הממוצע",
+      "title_en": "The Mean Value Theorem — Statement and Geometry",
+      "title_he": "משפט הערך הממוצע — אמירה וגיאומטריה",
       "level_min": "calculus_1",
-      "body_en_md": "**Mean Value Theorem (MVT):** If $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$, then there exists $c \\in (a,b)$ such that:\n$$\\boxed{f'(c) = \\frac{f(b) - f(a)}{b - a}.}$$\n\n**Geometric interpretation:** Some tangent line to the graph is **parallel** to the secant line through $(a, f(a))$ and $(b, f(b))$.\n\n**Secant slope** = average rate of change of $f$ over $[a,b]$.\n\n**$f'(c)$** = instantaneous rate of change at an interior point.\n\nMVT says these two rates coincide at some $c$.",
-      "body_he_md": "**משפט הערך הממוצע (MVT):** אם $f$ רציפה ב-$[a,b]$ וגזירה ב-$(a,b)$, אז קיים $c \\in (a,b)$ כך ש:\n$$\\boxed{f'(c) = \\frac{f(b) - f(a)}{b - a}.}$$\n\n**פרשנות גיאומטרית:** קיים משיק לגרף **מקביל** לקו המיתר דרך $(a, f(a))$ ו-$(b, f(b))$.\n\n**שיפוע המיתר** = קצב השינוי הממוצע של $f$ על $[a,b]$.\n\n**$f'(c)$** = קצב השינוי הרגעי בנקודה פנימית.\n\nMVT אומר ששני הקצבים מתאימים ב-$c$ כלשהו."
+      "body_en_md": "**Mean Value Theorem (MVT).** Let $f$ be continuous on $[a, b]$ and differentiable on $(a, b)$. Then there exists $c \\in (a, b)$ such that:\n$$\\boxed{f'(c) = \\frac{f(b) - f(a)}{b - a}.}$$\n\n**Geometric meaning:** The slope of the tangent at $c$ equals the slope of the secant line through $(a, f(a))$ and $(b, f(b))$. Equivalently: *some tangent line is parallel to the secant*.\n\n**Example.** Let $f(x) = x^2$ on $[1, 3]$. The secant slope is $\\dfrac{9 - 1}{3 - 1} = 4$. MVT guarantees $c \\in (1,3)$ with $f'(c) = 2c = 4$, so $c = 2$. Indeed $c = 2 \\in (1,3)$. \\checkmark\n\n**Cauchy’s MVT (generalized).** If also $g$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $g'(x) \\neq 0$ on $(a,b)$, then:\n$$\\frac{f(b)-f(a)}{g(b)-g(a)} = \\frac{f'(c)}{g'(c)} \\quad\\text{for some } c \\in (a,b).$$",
+      "body_he_md": "**משפט הערך הממוצע (MVT).** תהי $f$ רציפה ב-$[a, b]$ וגזירה ב-$(a, b)$. אז קיים $c \\in (a, b)$ כך ש:\n$$\\boxed{f'(c) = \\frac{f(b) - f(a)}{b - a}.}$$\n\n**משמעות גיאומטרי:** שיפוע המשיק ב-$c$ שווה לשיפוע המיתר דרך $(a, f(a))$ ו-$(b, f(b))$. במילים אחרות: *קיים משיק כלשהו מקביל למיתר*.\n\n**דוגמה.** תהי $f(x) = x^2$ ב-$[1, 3]$. שיפוע המיתר $\\dfrac{9 - 1}{3 - 1} = 4$. MVT מבטיח $c \\in (1,3)$ עם $f'(c) = 2c = 4$, לכן $c = 2$. אכן $c = 2 \\in (1,3)$. \\checkmark"
     },
     {
       "id": "mvt_proof",
-      "title_en": "Proof Sketch and Corollaries",
-      "title_he": "סקיצת הוכחה ומסקנות",
+      "title_en": "Proof of MVT via Rolle’s Theorem",
+      "title_he": "הוכחת MVT באמצעות משפט רול",
       "level_min": "calculus_1",
-      "body_en_md": "### Proof sketch (via Rolle)\n\nDefine the auxiliary function:\n$$g(x) = f(x) - f(a) - \\frac{f(b)-f(a)}{b-a}(x-a).$$\n\nCheck: $g(a) = g(b) = 0$, and $g$ satisfies Rolle's hypotheses. So $\\exists c \\in (a,b)$ with $g'(c) = 0$.\n\nBut $g'(x) = f'(x) - \\frac{f(b)-f(a)}{b-a}$, hence $f'(c) = \\frac{f(b)-f(a)}{b-a}$. $\\square$\n\n---\n\n### Important corollaries\n\n1. **If $f' = 0$ on an interval** $\\Rightarrow$ $f$ is constant.\n2. **If $f' > 0$ on an interval** $\\Rightarrow$ $f$ is strictly increasing.\n3. **Uniqueness of ODE solutions (preview):** MVT-type arguments show two solutions with the same initial condition cannot diverge.\n\n---\n\n### Connection to Taylor\n\nMVT is the **$n=0$ case** of Taylor's theorem:\n$$f(b) = f(a) + f'(c)(b-a)$$\nfor some $c$ between $a$ and $b$ — the linear approximation with exact remainder.",
-      "body_he_md": "### סקיצת הוכחה (דרך רול)\n\nמגדירים את הפונקציה העזר:\n$$g(x) = f(x) - f(a) - \\frac{f(b)-f(a)}{b-a}(x-a).$$\n\nבודקים: $g(a) = g(b) = 0$, ו-$g$ מקיימת את תנאי רול. לכן $\\exists c \\in (a,b)$ עם $g'(c) = 0$.\n\nאבל $g'(x) = f'(x) - \\frac{f(b)-f(a)}{b-a}$, ולכן $f'(c) = \\frac{f(b)-f(a)}{b-a}$. $\\square$\n\n---\n\n### מסקנות חשובות\n\n1. **אם $f' = 0$ בקטע** $\\Rightarrow$ $f$ קבועה.\n2. **אם $f' > 0$ בקטע** $\\Rightarrow$ $f$ עולה בהחלט.\n3. **יחידות פתרונות ODE (תצוגה מקדימה):** טיעוני סוג MVT מראים ששני פתרונות עם אותו תנאי התחלה לא יכולים להתפצל.\n\n---\n\n### קשר לטיילור\n\nMVT הוא **מקרה $n=0$** של משפט טיילור:\n$$f(b) = f(a) + f'(c)(b-a)$$\nעבור $c$ כלשהו בין $a$ ל-$b$ — קירוב לינארי עם שארית מדויקת."
+      "body_en_md": "**Proof.** Define the auxiliary function:\n$$g(x) = f(x) - f(a) - \\frac{f(b)-f(a)}{b-a}(x - a).$$\n\n$g$ subtracts the secant line from $f$. Check:\n- $g(a) = f(a) - f(a) - 0 = 0$.\n- $g(b) = f(b) - f(a) - (f(b)-f(a)) = 0$.\n\nSo $g(a) = g(b) = 0$, $g$ is continuous on $[a,b]$, and differentiable on $(a,b)$.\n\nBy **Rolle’s Theorem**, $\\exists\\, c \\in (a,b)$ with $g'(c) = 0$.\n\nComputing: $g'(x) = f'(x) - \\dfrac{f(b)-f(a)}{b-a}$.\n\nSo $g'(c) = 0$ gives:\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}. \\quad\\square$$",
+      "body_he_md": "**הוכחה.** נגדיר פונקציית עזר:\n$$g(x) = f(x) - f(a) - \\frac{f(b)-f(a)}{b-a}(x - a).$$\n\n$g$ מחסרת מ-$f$ את ישר המיתר. בדיקה:\n- $g(a) = 0$.\n- $g(b) = 0$.\n\nלכן $g(a) = g(b) = 0$, $g$ רציפה ב-$[a,b]$ וגזירה ב-$(a,b)$.\n\nלפי **משפט רול**, קיים $c \\in (a,b)$ עם $g'(c) = 0$.\n\nחשב: $g'(x) = f'(x) - \\dfrac{f(b)-f(a)}{b-a}$.\n\nלכן $g'(c) = 0$ נותן:\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}. \\quad\\square$$"
     },
     {
-      "id": "mvt_application",
-      "title_en": "Application — Lipschitz Bound for Sine",
-      "title_he": "יישום — חסם לipschitz לסינוס",
+      "id": "corollaries",
+      "title_en": "Corollaries of MVT",
+      "title_he": "מסקנות הנגזרות ממשפט הערך הממוצע",
       "level_min": "calculus_1",
-      "body_en_md": "**Problem:** Prove $|\\sin x - \\sin y| \\leq |x - y|$ for all $x, y \\in \\mathbb{R}$.\n\n**Proof using MVT:** Assume $x \\neq y$ (the inequality is trivial if $x = y$). By MVT applied to $f(t) = \\sin t$ on the interval between $x$ and $y$:\n$$\\sin x - \\sin y = f'(c)(x - y) = \\cos(c)(x - y)$$\nfor some $c$ strictly between $x$ and $y$.\n\nTaking absolute values:\n$$|\\sin x - \\sin y| = |\\cos(c)|\\,|x - y| \\leq 1 \\cdot |x - y| = |x - y|.$$\n\n**Exam skill:** To find $c$ explicitly for a given $f$ on $[a,b]$, solve $f'(c) = \\frac{f(b)-f(a)}{b-a}$ and verify $c \\in (a,b)$.",
-      "body_he_md": "**בעיה:** הוכיחו $|\\sin x - \\sin y| \\leq |x - y|$ לכל $x, y \\in \\mathbb{R}$.\n\n**הוכחה באמצעות MVT:** נניח $x \\neq y$ (האי-שוויון טrivi אם $x = y$). לפי MVT על $f(t) = \\sin t$ בקטע בין $x$ ל-$y$:\n$$\\sin x - \\sin y = f'(c)(x - y) = \\cos(c)(x - y)$$\nעבור $c$ כלשהו בין $x$ ל-$y$.\n\nלוקחים ערך מוחלט:\n$$|\\sin x - \\sin y| = |\\cos(c)|\\,|x - y| \\leq 1 \\cdot |x - y| = |x - y|.$$\n\n**מיומנות מבחן:** למציאת $c$ מפורש עבור $f$ נתון ב-$[a,b]$, פותרים $f'(c) = \\frac{f(b)-f(a)}{b-a}$ ובודקים $c \\in (a,b)$."
+      "body_en_md": "**Corollary 1 (Constant function).** If $f'(x) = 0$ for all $x \\in (a,b)$, then $f$ is constant on $[a,b]$.\n\n*Proof:* For any $x_1, x_2 \\in [a,b]$, MVT gives $f(x_2)-f(x_1) = f'(c)(x_2-x_1) = 0$. $\\square$\n\n**Corollary 2 (Monotonicity).** If $f'(x) > 0$ for all $x \\in (a,b)$, then $f$ is strictly increasing on $[a,b]$. (Similarly for $f' < 0$ and strictly decreasing.)\n\n**Corollary 3 (Equal derivatives).** If $f'(x) = g'(x)$ for all $x \\in (a,b)$, then $f - g$ is constant.\n\n**Application: Lipschitz bound.** If $|f'(x)| \\leq M$ on $(a,b)$, then for all $x, y \\in [a,b]$:\n$$|f(x) - f(y)| \\leq M|x - y|.$$\n\n*Proof:* MVT gives $f(x)-f(y) = f'(c)(x-y)$ for some $c$, so $|f(x)-f(y)| = |f'(c)||x-y| \\leq M|x-y|$. $\\square$\n\n**Example:** Prove $|\\sin x - \\sin y| \\leq |x - y|$ for all $x, y \\in \\mathbb{R}$.\n\nSince $|\\cos c| \\leq 1$, the Lipschitz bound gives $|\\sin x - \\sin y| = |\\cos c||x-y| \\leq |x-y|$. $\\square$",
+      "body_he_md": "**מסקנא 1 (פונקציה קבועה).** אם $f'(x) = 0$ לכל $x \\in (a,b)$, אז $f$ קבועה ב-$[a,b]$.\n\n*הוכחה:* לכל $x_1, x_2$, MVT נותן $f(x_2)-f(x_1) = f'(c)(x_2-x_1) = 0$. $\\square$\n\n**מסקנא 2 (מונוטוניות).** אם $f'(x) > 0$ לכל $x \\in (a,b)$, אז $f$ עולה בחידות ב-$[a,b]$.\n\n**מסקנא 3 (נגזרות שוות).** אם $f'(x) = g'(x)$ לכל $x$, אז $f - g$ קבועה.\n\n**יישום: חסם ליפשיץ.** אם $|f'(x)| \\leq M$ ב-$(a,b)$, אז לכל $x, y \\in [a,b]$:\n$$|f(x) - f(y)| \\leq M|x - y|.$$\n\n**דוגמה:** הוכח ש-$|\\sin x - \\sin y| \\leq |x - y|$.\n\nמכיוון ש-$|\\cos c| \\leq 1$: $|\\sin x - \\sin y| = |\\cos c||x-y| \\leq |x-y|$. $\\square$"
+    },
+    {
+      "id": "connection_to_taylor",
+      "title_en": "Connection to Taylor’s Theorem",
+      "title_he": "קשר למשפט טיילור",
+      "level_min": "calculus_1",
+      "body_en_md": "MVT is the $n=1$ case of Taylor’s theorem with the Lagrange remainder:\n$$f(b) = f(a) + f'(c)(b-a) \\quad\\Leftrightarrow\\quad f'(c) = \\frac{f(b)-f(a)}{b-a}.$$\n\nMore generally, **Taylor’s theorem** says:\n$$f(b) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(b-a)^k + \\frac{f^{(n+1)}(c)}{(n+1)!}(b-a)^{n+1}$$\nfor some $c$ between $a$ and $b$. Setting $n=0$ recovers MVT exactly.\n\n**Another connection — L’Hôpital’s rule** follows from Cauchy’s MVT: if $f(a)=g(a)=0$ and $g'\\neq 0$, then $\\dfrac{f(x)}{g(x)} = \\dfrac{f'(c)}{g'(c)} \\to \\dfrac{f'(a)}{g'(a)}$.",
+      "body_he_md": "MVT הוא המקרה $n=1$ של משפט טיילור עם שארית לגרנז':\n$$f(b) = f(a) + f'(c)(b-a).$$\n\nבכלליות, **משפט טיילור** אומר:\n$$f(b) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(b-a)^k + \\frac{f^{(n+1)}(c)}{(n+1)!}(b-a)^{n+1}.$$\nקביעת $n=0$ מחזירה בדיוק את MVT.\n\n**קשר נוסף — כלל לופיטל** נגזר מ-MVT של קושי: אם $f(a)=g(a)=0$ ו-$g'\\neq 0$, אז $\\dfrac{f(x)}{g(x)} \\to \\dfrac{f'(a)}{g'(a)}$."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Which function on $[0,2]$ satisfies all hypotheses of Rolle's Theorem?",
-      "body_he": "איזו פונקציה ב-$[0,2]$ מקיימת את כל תנאי משפט רול?",
+      "body_en": "Which condition is NOT required by Rolle’s Theorem?",
+      "body_he": "איזה תנאי אינו נדרש במשפט רול?",
       "options": [
-        { "id": "a", "text_en": "$f(x) = |x-1|$", "text_he": "$f(x) = |x-1|$", "correct": false },
-        { "id": "b", "text_en": "$f(x) = x^2 - 2x$ (so $f(0)=f(2)=0$)", "text_he": "$f(x) = x^2 - 2x$ (כך $f(0)=f(2)=0$)", "correct": true },
-        { "id": "c", "text_en": "$f(x) = \\dfrac{1}{x}$", "text_he": "$f(x) = \\dfrac{1}{x}$", "correct": false },
-        { "id": "d", "text_en": "$f(x) = x + 1$", "text_he": "$f(x) = x + 1$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$f$ is continuous on $[a,b]$",
+          "text_he": "$f$ רציפה ב-$[a,b]$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$f$ is differentiable on $(a,b)$",
+          "text_he": "$f$ גזירה ב-$(a,b)$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$f(a) = f(b)$",
+          "text_he": "$f(a) = f(b)$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$f$ is differentiable at the endpoints $a$ and $b$",
+          "text_he": "$f$ גזירה בקצוות $a$ ו-$b$",
+          "correct": true
+        }
       ],
-      "explanation_en": "$f(x)=x^2-2x$ is a polynomial (continuous and differentiable everywhere), and $f(0)=0=f(2)$. Option (a) is not differentiable at $x=1$; (c) is not continuous on $[0,2]$; (d) has $f(0) \\neq f(2)$.",
-      "explanation_he": "$f(x)=x^2-2x$ הוא פולינום (רציף וגזיר בכל מקום), ו-$f(0)=0=f(2)$. אפשרות (א) אינה גזירה ב-$x=1$; (ג) אינה רציפה ב-$[0,2]$; (ד) מקיימת $f(0) \\neq f(2)$."
+      "explanation_en": "Rolle’s theorem only requires differentiability on the open interval $(a,b)$, not at the endpoints. The function need only be continuous at $a$ and $b$.",
+      "explanation_he": "משפט רול דורש גזירות רק בקטע הפתוח $(a,b)$, לא בקצוות. בקצוות נדרשת רק רציפות."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Using MVT, which inequality can be proved directly from $|\\cos c| \\leq 1$?",
-      "body_he": "באמצעות MVT, איזה אי-שוויון ניתן להוכיח ישירות מ-$|\\cos c| \\leq 1$?",
+      "body_en": "For $f(x) = x^3$ on $[0, 3]$, the MVT guarantees a point $c$ where $f'(c)$ equals the secant slope. What is $c$?",
+      "body_he": "עבור $f(x) = x^3$ ב-$[0, 3]$, MVT מבטיח נקודה $c$ שבה $f'(c)$ שווה לשיפוע המיתר. מה הוא $c$?",
       "options": [
-        { "id": "a", "text_en": "$|\\sin x - \\sin y| \\leq |x - y|$", "text_he": "$|\\sin x - \\sin y| \\leq |x - y|$", "correct": true },
-        { "id": "b", "text_en": "$|x^2 - y^2| \\leq |x - y|$ for all $x,y$", "text_he": "$|x^2 - y^2| \\leq |x - y|$ לכל $x,y$", "correct": false },
-        { "id": "c", "text_en": "$e^x \\geq 1 + x$ with no MVT", "text_he": "$e^x \\geq 1 + x$ ללא MVT", "correct": false },
-        { "id": "d", "text_en": "$\\cos x \\leq 1$ implies $\\sin x = 0$", "text_he": "$\\cos x \\leq 1$ גורר $\\sin x = 0$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$c = 1$",
+          "text_he": "$c = 1$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$c = \\sqrt{3}$",
+          "text_he": "$c = \\sqrt{3}$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$c = 3/2$",
+          "text_he": "$c = 3/2$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$c = 2$",
+          "text_he": "$c = 2$",
+          "correct": false
+        }
       ],
-      "explanation_en": "MVT on $f(t)=\\sin t$ gives $\\sin x - \\sin y = \\cos(c)(x-y)$, so $|\\sin x - \\sin y| = |\\cos c|\\,|x-y| \\leq |x-y|$.",
-      "explanation_he": "MVT על $f(t)=\\sin t$ נותן $\\sin x - \\sin y = \\cos(c)(x-y)$, לכן $|\\sin x - \\sin y| = |\\cos c|\\,|x-y| \\leq |x-y|$."
+      "explanation_en": "The secant slope is $\\dfrac{27-0}{3-0} = 9$. Setting $f'(c) = 3c^2 = 9$ gives $c^2 = 3$, so $c = \\sqrt{3} \\approx 1.73 \\in (0,3)$. \\checkmark",
+      "explanation_he": "שיפוע המיתר $\\dfrac{27-0}{3-0} = 9$. לפי $f'(c) = 3c^2 = 9$ מתקבל $c^2 = 3$, לכן $c = \\sqrt{3} \\approx 1.73 \\in (0,3)$. \\checkmark"
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "For $f(x) = x^2$ on $[1,3]$, find $c \\in (1,3)$ guaranteed by MVT.",
-      "body_he": "עבור $f(x) = x^2$ ב-$[1,3]$, מצאו $c \\in (1,3)$ ש-MVT מבטיח.",
+      "body_en": "To prove $|\\cos x - \\cos y| \\leq |x - y|$ for all $x, y \\in \\mathbb{R}$, the key step using MVT is:",
+      "body_he": "להוכחת $|\\cos x - \\cos y| \\leq |x - y|$, הצעד המרכזי באמצעות MVT הוא:",
       "options": [
-        { "id": "a", "text_en": "$c = 1$", "text_he": "$c = 1$", "correct": false },
-        { "id": "b", "text_en": "$c = 2$", "text_he": "$c = 2$", "correct": true },
-        { "id": "c", "text_en": "$c = 3$", "text_he": "$c = 3$", "correct": false },
-        { "id": "d", "text_en": "$c = 4$", "text_he": "$c = 4$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$\\cos x$ is bounded by $[-1,1]$",
+          "text_he": "$\\cos x$ חסום ב-$[-1,1]$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "By MVT, $\\cos x - \\cos y = -\\sin(c)(x-y)$ for some $c$, and $|{-\\sin c}| \\leq 1$",
+          "text_he": "לפי MVT, $\\cos x - \\cos y = -\\sin(c)(x-y)$ עבור $c$ כלשהו, ו-$|{-\\sin c}| \\leq 1$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$\\cos x$ is continuous everywhere",
+          "text_he": "$\\cos x$ רציפה בכל מקום",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "The Taylor series of $\\cos x$ converges everywhere",
+          "text_he": "טור טיילור של $\\cos x$ מתכנס בכל מקום",
+          "correct": false
+        }
       ],
-      "explanation_en": "Secant slope = $(f(3)-f(1))/(3-1) = (9-1)/2 = 4$. MVT gives $f'(c) = 2c = 4$, so $c = 2 \\in (1,3)$.",
-      "explanation_he": "שיפוע המיתר = $(f(3)-f(1))/(3-1) = (9-1)/2 = 4$. MVT נותן $f'(c) = 2c = 4$, לכן $c = 2 \\in (1,3)$."
+      "explanation_en": "MVT applied to $\\cos$ on $[y,x]$ (or $[x,y]$) gives $\\cos x - \\cos y = (\\cos)'(c)(x-y) = -\\sin(c)(x-y)$. Since $|\\sin c| \\leq 1$, we get $|\\cos x - \\cos y| \\leq |x-y|$.",
+      "explanation_he": "MVT על $\\cos$ ב-$[y,x]$ נותן $\\cos x - \\cos y = -\\sin(c)(x-y)$. מכיוון ש-$|\\sin c| \\leq 1$: $|\\cos x - \\cos y| \\leq |x-y|$."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "If $f'(x) > 0$ for all $x$ in an interval $I$, which corollary of MVT applies?",
-      "body_he": "אם $f'(x) > 0$ לכל $x$ בקטע $I$, איזו מסקנה מ-MVT חלה?",
+      "body_en": "If $f'(x) = 0$ for all $x \\in (a, b)$, which corollary of MVT applies?",
+      "body_he": "אם $f'(x) = 0$ לכל $x \\in (a, b)$, איזה מסקנא של MVT חלה?",
       "options": [
-        { "id": "a", "text_en": "$f$ is constant on $I$", "text_he": "$f$ קבועה ב-$I$", "correct": false },
-        { "id": "b", "text_en": "$f$ is strictly increasing on $I$", "text_he": "$f$ עולה בהחלט ב-$I$", "correct": true },
-        { "id": "c", "text_en": "$f$ has a horizontal tangent in $I$", "text_he": "$f$ בעלת משיק אופקי ב-$I$", "correct": false },
-        { "id": "d", "text_en": "$f$ is decreasing on $I$", "text_he": "$f$ יורדת ב-$I$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$f$ must equal zero on $(a,b)$",
+          "text_he": "$f$ חייבת להיות אפס ב-$(a,b)$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$f$ is constant on $[a,b]$",
+          "text_he": "$f$ קבועה ב-$[a,b]$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$f$ is strictly increasing on $[a,b]$",
+          "text_he": "$f$ עולה בחידות ב-$[a,b]$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$f$ has a local maximum at every point of $(a,b)$",
+          "text_he": "$f$ יש לה מקסימום מקומי בכל נקודה ב-$(a,b)$",
+          "correct": false
+        }
       ],
-      "explanation_en": "If $a < b$ in $I$, MVT gives $f(b)-f(a) = f'(c)(b-a) > 0$, so $f(b) > f(a)$. Hence $f$ is strictly increasing.",
-      "explanation_he": "אם $a < b$ ב-$I$, MVT נותן $f(b)-f(a) = f'(c)(b-a) > 0$, לכן $f(b) > f(a)$. מכאן $f$ עולה בהחלט."
+      "explanation_en": "By the constant-function corollary: for any $x_1, x_2 \\in [a,b]$, MVT gives $f(x_2)-f(x_1)=f'(c)(x_2-x_1)=0$, so $f(x_2)=f(x_1)$. This means $f$ is constant.",
+      "explanation_he": "לפי מסקנא הפונקציה הקבועה: לכל $x_1, x_2$, MVT נותן $f(x_2)-f(x_1)=f'(c)(x_2-x_1)=0$, אז $f(x_2)=f(x_1)$. כלומר $f$ קבועה."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Geometrically, the Mean Value Theorem says that on a differentiable curve from $(a,f(a))$ to $(b,f(b))$:",
-      "body_he": "גיאומטרית, משפט הערך הממוצע אומר שעל עקומה גזירה מ-$(a,f(a))$ ל-$(b,f(b))$:",
+      "body_en": "What does the Mean Value Theorem state geometrically?",
+      "body_he": "מה אומר משפט הערך הממוצע מבחינה גיאומטרית?",
       "options": [
-        { "id": "a", "text_en": "The curve must be a straight line", "text_he": "העקומה חייבת להיות קו ישר", "correct": false },
-        { "id": "b", "text_en": "Some tangent line is parallel to the secant through the endpoints", "text_he": "קיים משיק מקביל למיתר דרך קצות הקטע", "correct": true },
-        { "id": "c", "text_en": "The function must equal zero somewhere", "text_he": "הפונקציה חייבת להתאפס איפשהו", "correct": false },
-        { "id": "d", "text_en": "The derivative is constant", "text_he": "הנגזרת קבועה", "correct": false }
+        {
+          "id": "a",
+          "text_en": "The function reaches its average value at some interior point",
+          "text_he": "הפונקציה מגיעה לערכה הממוצע בנקודה פנימית כלשהי",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "There is at least one point where the tangent line is parallel to the secant line connecting the endpoints",
+          "text_he": "קיים לפחות נקודה אחת שבה המשיק מקביל למיתר המחבר את הקצוות",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "The function is symmetric about some point $c$",
+          "text_he": "הפונקציה סימטרית סביב נקודה $c$ כלשהי",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "The area under the curve equals the area of a rectangle of width $b-a$",
+          "text_he": "השטח תחת העקומה שווה לשטח מלבן ברוחב $b-a$",
+          "correct": false
+        }
       ],
-      "explanation_en": "MVT guarantees a point $c$ where the tangent slope $f'(c)$ equals the secant slope $(f(b)-f(a))/(b-a)$ — i.e., parallel tangents and secant.",
-      "explanation_he": "MVT מבטיח נקודה $c$ שבה שיפוע המשיק $f'(c)$ שווה לשיפוע המיתר $(f(b)-f(a))/(b-a)$ — כלומר משיק ומיתר מקבילים."
+      "explanation_en": "MVT guarantees that somewhere on the curve, the tangent line has the same slope as the secant through the two endpoints $(a,f(a))$ and $(b,f(b))$, i.e., the tangent is parallel to the secant.",
+      "explanation_he": "MVT מבטיח שבנקודה כלשהי על העקומה, למשיק יש אותו שיפוע כמו למיתר המחבר את $(a,f(a))$ ו-$(b,f(b))$, כלומר המשיק מקביל למיתר."
     }
   ]
 }

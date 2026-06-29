@@ -3,114 +3,222 @@
   "type": "interactive",
   "subject": "calculus_2",
   "title_en": "Double Integrals",
-  "title_he": "אינטגרלים כפולים",
+  "title_he": "אינטגרלים כפוליים",
   "duration_min": 30,
   "level_min": "calculus_1",
-  "agent_hints": "Always sketch the region D before setting limits. The most common error is wrong inner/outer limits when switching order. For Type I regions, y limits are functions of x. Remind students that ∬_D 1 dA gives area. Fubini requires continuity (or milder conditions) on a rectangle.",
+  "agent_hints": "The most common student error is reversing the order of integration without re-drawing the region, leading to incorrect limits. Always insist on sketching the region D before setting up limits. Fubini's theorem is the key tool; stress that switching order requires rewriting ALL limits, not just swapping. For non-rectangular regions, classify as Type I or Type II, write the outer limits as constants and the inner limits as functions. Technion 104281 exams often require changing to polar coordinates — this lesson covers Cartesian only.",
   "sections": [
     {
-      "id": "definition_fubini",
-      "title_en": "Definition and Fubini's Theorem",
-      "title_he": "הגדרה ומשפט פוביני",
+      "id": "definition_riemann",
+      "title_en": "Definition — Riemann Sum and Volume",
+      "title_he": "הגדרה — סכום רימן ונפח",
       "level_min": "calculus_1",
-      "body_en_md": "The **double integral** over a region $R$:\n$$\\iint_R f(x,y)\\,dA$$\nis defined as the limit of Riemann sums over partitions of $R$.\n\n**Geometric interpretation:** When $f(x,y) \\geq 0$, the double integral equals the **volume** under the surface $z = f(x,y)$ and above $R$.\n\n---\n\n**Fubini's Theorem** (rectangle $R = [a,b] \\times [c,d]$):\n$$\\iint_R f(x,y)\\,dA = \\int_a^b \\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d \\int_a^b f(x,y)\\,dx\\,dy.$$\n\nWe may integrate in either order when $f$ is continuous on $R$.",
-      "body_he_md": "**האינטegral הכפול** על אזור $R$:\n$$\\iint_R f(x,y)\\,dA$$\nמוגדר כגבול סכומי רiemann על פריסות של $R$.\n\n**פרשנות גיאומטרית:** כאשר $f(x,y) \\geq 0$, האינטגרal הכפול שווה ל**נפח** מתחת למשטח $z = f(x,y)$ ומעל $R$.\n\n---\n\n**משפט פוביני** (מלבן $R = [a,b] \\times [c,d]$):\n$$\\iint_R f(x,y)\\,dA = \\int_a^b \\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d \\int_a^b f(x,y)\\,dx\\,dy.$$\n\nניתן לחשב בכל סדר כאשר $f$ רציפה ב-$R$."
+      "body_en_md": "Let $f(x,y) \\geq 0$ be defined on a rectangle $R = [a,b] \\times [c,d]$. Partition $R$ into small sub-rectangles $R_{ij}$ of area $\\Delta A_{ij}$. The **Riemann sum** is:\n$$\\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\nThe **double integral** is the limit of these sums as the partition gets finer:\n$$\\iint_R f(x,y)\\,dA = \\lim_{\\|P\\| \\to 0} \\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\n**Geometric meaning:** $\\iint_R f(x,y)\\,dA$ equals the **volume** of the solid region bounded above by $z = f(x,y)$ and below by the region $R$ in the $xy$-plane.\n\nFor non-positive $f$, the integral gives a signed volume (negative where $f < 0$).\n\n**Useful special cases:**\n- $\\iint_D 1\\,dA = \\text{Area}(D)$\n- $\\iint_D f(x,y)\\,dA / \\text{Area}(D) = $ average value of $f$ over $D$",
+      "body_he_md": "תהי $f(x,y) \\geq 0$ מוגדרת על מלבן $R = [a,b] \\times [c,d]$. נחלק את $R$ לתת-מלבנים $R_{ij}$ בשטח $\\Delta A_{ij}$. **סכום רימן**:\n$$\\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\n**האינטגרל הכפול** הוא הגבול של סכומות אלו כאשר החלוקה מדויקת יותר:\n$$\\iint_R f(x,y)\\,dA = \\lim_{\\|P\\| \\to 0} \\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\n**משמעות גיאומטרי:** $\\iint_R f(x,y)\\,dA$ שווה לנפח הגוף התלת-ממדי החסום מעל על ידי $z = f(x,y)$ ומתחת על ידי $R$.\n\n**מקרים מיוחדים:**\n- $\\iint_D 1\\,dA = \\text{Area}(D)$\n- $\\iint_D f\\,dA / \\text{Area}(D) = $ ערך ממוצע של $f$ על $D$"
     },
     {
-      "id": "rectangular_example",
-      "title_en": "Worked Example — Rectangle",
-      "title_he": "דוגמה מפורטת — מלבן",
+      "id": "fubini",
+      "title_en": "Fubini’s Theorem — Iterated Integrals",
+      "title_he": "משפט פוביני — אינטגרלים חוזרים",
       "level_min": "calculus_1",
-      "body_en_md": "**Compute** $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\nUsing Fubini (integrate $y$ first):\n$$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\left[\\frac{y^2}{2}\\right]_0^2 dx = \\int_0^1 x \\cdot 2\\,dx = \\left[x^2\\right]_0^1 = 1.$$\n\n**Check (integrate $x$ first):**\n$$\\int_0^2 \\int_0^1 xy\\,dx\\,dy = \\int_0^2 y \\left[\\frac{x^2}{2}\\right]_0^1 dy = \\int_0^2 \\frac{y}{2}\\,dy = \\left[\\frac{y^2}{4}\\right]_0^2 = 1. \\checkmark$$",
-      "body_he_md": "**חשבו** $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\nבאמצעות פוביני (אינטegrציה ב-$y$ קודם):\n$$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\left[\\frac{y^2}{2}\\right]_0^2 dx = \\int_0^1 x \\cdot 2\\,dx = \\left[x^2\\right]_0^1 = 1.$$\n\n**בדיקה (אינטegrציה ב-$x$ קודם):**\n$$\\int_0^2 \\int_0^1 xy\\,dx\\,dy = \\int_0^2 y \\left[\\frac{x^2}{2}\\right]_0^1 dy = \\int_0^2 \\frac{y}{2}\\,dy = \\left[\\frac{y^2}{4}\\right]_0^2 = 1. \\checkmark$$"
+      "body_en_md": "**Fubini’s Theorem.** If $f$ is continuous on $R = [a,b] \\times [c,d]$, then:\n$$\\iint_R f(x,y)\\,dA = \\int_a^b\\!\\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d\\!\\int_a^b f(x,y)\\,dx\\,dy.$$\n\nThe inner integral is evaluated first (treating the outer variable as a constant), then the outer integral.\n\n**Worked Example 1.** Compute $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\n$$\\int_0^1\\!\\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\left[\\frac{y^2}{2}\\right]_0^2 dx = \\int_0^1 x \\cdot 2\\,dx = \\left[x^2\\right]_0^1 = 1.$$\n\n**Worked Example 2.** Compute $\\displaystyle\\iint_{[0,\\pi]\\times[0,1]} y\\sin x\\,dA$.\n\n$$\\int_0^\\pi\\sin x\\left(\\int_0^1 y\\,dy\\right)dx = \\int_0^\\pi \\sin x \\cdot \\frac{1}{2}\\,dx = \\frac{1}{2}[-\\cos x]_0^\\pi = \\frac{1}{2}\\cdot 2 = 1.$$",
+      "body_he_md": "**משפט פוביני.** אם $f$ רציפה ב-$R = [a,b] \\times [c,d]$, אז:\n$$\\iint_R f(x,y)\\,dA = \\int_a^b\\!\\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d\\!\\int_a^b f(x,y)\\,dx\\,dy.$$\n\nמחשבים תחילה את האינטגרל הפנימי (תוך התייחסות למשתנה החיצוני כקבוע), אחר כך את האינטגרל החיצוני.\n\n**דוגמה 1.** חשב $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\n$$\\int_0^1\\!\\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\cdot 2\\,dx = 1.$$\n\n**דוגמה 2.** חשב $\\displaystyle\\iint_{[0,\\pi]\\times[0,1]} y\\sin x\\,dA$.\n\n$$\\int_0^\\pi \\sin x \\cdot \\frac{1}{2}\\,dx = \\frac{1}{2}\\cdot 2 = 1.$$"
     },
     {
       "id": "non_rectangular",
       "title_en": "Non-Rectangular Regions — Type I and Type II",
-      "title_he": "אזורים שאינם מלבנים — סוג I וסוג II",
+      "title_he": "אזורים לא-מלבניים — סוג I וסוג II",
       "level_min": "calculus_1",
-      "body_en_md": "**Type I** (vertical slices): $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\n\n**Type II** (horizontal slices): $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$\n$$\\iint_D f\\,dA = \\int_c^d \\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n---\n\n**Worked example 2:** $\\displaystyle\\iint_D x^2 y\\,dA$ where $D$ is the triangle with vertices $(0,0)$, $(1,0)$, $(0,1)$.\n\nThe region: $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$.\n$$\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 x^2 \\left[\\frac{y^2}{2}\\right]_0^{1-x} dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}\\,dx = \\frac{1}{60}.$$",
-      "body_he_md": "**סוג I** (פרוסות אנכיות): $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\n\n**סוג II** (פרוסות אופקיות): $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$\n$$\\iint_D f\\,dA = \\int_c^d \\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n---\n\n**דוגמה 2:** $\\displaystyle\\iint_D x^2 y\\,dA$ כאשר $D$ הוא המשולש עם קודקודים $(0,0)$, $(1,0)$, $(0,1)$.\n\nהאזור: $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$.\n$$\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 x^2 \\left[\\frac{y^2}{2}\\right]_0^{1-x} dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}\\,dx = \\frac{1}{60}.$$"
+      "body_en_md": "**Type I region:** $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$.\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\nOuter variable $x$ has constant limits; inner variable $y$ has function limits.\n\n**Type II region:** $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$.\n$$\\iint_D f\\,dA = \\int_c^d \\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n**Worked Example.** $\\iint_D x^2 y\\,dA$ where $D$ is the triangle with vertices $(0,0)$, $(1,0)$, $(0,1)$.\n\nThe triangle is $D = \\{(x,y) : 0 \\leq x \\leq 1,\\; 0 \\leq y \\leq 1-x\\}$ (Type I).\n$$\\int_0^1\\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 x^2 \\cdot \\frac{(1-x)^2}{2}\\,dx = \\frac{1}{2}\\int_0^1(x^2 - 2x^3 + x^4)\\,dx$$\n$$= \\frac{1}{2}\\left[\\frac{x^3}{3} - \\frac{x^4}{2} + \\frac{x^5}{5}\\right]_0^1 = \\frac{1}{2}\\left(\\frac{1}{3} - \\frac{1}{2} + \\frac{1}{5}\\right) = \\frac{1}{2}\\cdot\\frac{1}{30} = \\frac{1}{60}.$$",
+      "body_he_md": "**אזור סוג I:** $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$.\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\nגבולות $x$ החיצוני חסוים; גבולות $y$ הפנימי הן פונקציות.\n\n**אזור סוג II:** $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$.\n\n**דוגמה.** $\\iint_D x^2 y\\,dA$ כאשר $D$ הוא המשולש עם קודקודים $(0,0)$, $(1,0)$, $(0,1)$.\n\n$D$: $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$.\n$$\\int_0^1\\int_0^{1-x} x^2 y\\,dy\\,dx = \\frac{1}{2}\\int_0^1 x^2(1-x)^2\\,dx = \\frac{1}{60}.$$"
     },
     {
-      "id": "applications_switching",
-      "title_en": "Switching Order and Applications",
-      "title_he": "החלפת סדר אינטegrציה ויישומים",
+      "id": "switching_order",
+      "title_en": "Switching the Order of Integration",
+      "title_he": "החלפת סדר האינטגרציה",
       "level_min": "calculus_1",
-      "body_en_md": "### Switching order of integration\n\nWhen inner limits depend on the outer variable, **sketch the region first**. If one order is difficult, try the other.\n\n**Tip:** After switching, the limits must describe the **same** region $D$.\n\n---\n\n### Applications\n\n| Application | Formula |\n|---|---|\n| **Area of $D$** | $\\displaystyle\\iint_D 1\\,dA$ |\n| **Average value** | $\\bar{f} = \\dfrac{1}{\\text{Area}(D)}\\iint_D f\\,dA$ |\n| **Center of mass** | $\\bar{x} = \\dfrac{1}{M}\\iint_D x\\,\\rho\\,dA$, $\\bar{y} = \\dfrac{1}{M}\\iint_D y\\,\\rho\\,dA$ |\n\nwhere $M = \\iint_D \\rho\\,dA$ is the total mass.",
-      "body_he_md": "### החלפת סדר אינטegrציה\n\nכאשר גבולות פנימיים תלויים במשתנה החיצוני, **שרטטו את האזור קודם**. אם סדר אחד קשה, נסו את השני.\n\n**טיפ:** אחרי החלפה, הגבולות חייבים לתאר את **אותו** אזור $D$.\n\n---\n\n### יישומים\n\n| יישום | נוסחה |\n|---|---|\n| **שטח $D$** | $\\displaystyle\\iint_D 1\\,dA$ |\n| **ערך ממוצע** | $\\bar{f} = \\dfrac{1}{\\text{Area}(D)}\\iint_D f\\,dA$ |\n| **מרכז מסה** | $\\bar{x} = \\dfrac{1}{M}\\iint_D x\\,\\rho\\,dA$, $\\bar{y} = \\dfrac{1}{M}\\iint_D y\\,\\rho\\,dA$ |\n\nכאשר $M = \\iint_D \\rho\\,dA$ הוא המסה הכוללת."
+      "body_en_md": "Sometimes the inner integral is hard (or impossible) in the given order, but easy after switching. **Always sketch the region first.**\n\n**Procedure:**\n1. Sketch the region $D$ described by the given iterated integral.\n2. Re-describe $D$ with the roles of $x$ and $y$ swapped.\n3. Write the new iterated integral with the new limits.\n\n**Example.** Switch the order: $\\displaystyle\\int_0^1\\int_x^1 e^{y^2}\\,dy\\,dx$.\n\nThe region is $D = \\{0 \\leq x \\leq 1,\\; x \\leq y \\leq 1\\}$.\nSketching: $D = \\{0 \\leq y \\leq 1,\\; 0 \\leq x \\leq y\\}$.\n\n$$\\int_0^1\\int_0^y e^{y^2}\\,dx\\,dy = \\int_0^1 y\\, e^{y^2}\\,dy = \\left[\\frac{e^{y^2}}{2}\\right]_0^1 = \\frac{e-1}{2}.$$\n\n(In the original order, $\\int e^{y^2}\\,dy$ has no elementary antiderivative.)",
+      "body_he_md": "לעיתים האינטגרל הפנימי קשה (או בלתי אפשרי) בסדר הנתון, אבל קל לאחר החלפה. **תמיד שרטטו את האזור תחילה.**\n\n**סדר פעולה:**\n1. שרטטו את $D$.\n2. תארו מחדש את $D$ עם תפקידי $x$ ו-$y$ מוחלפים.\n3. כתבו את האינטגרל החוזר החדש עם גבולות חדשים.\n\n**דוגמה.** החלפ: $\\displaystyle\\int_0^1\\int_x^1 e^{y^2}\\,dy\\,dx$.\n\n$D$: $0 \\leq x \\leq 1$, $x \\leq y \\leq 1$. בסדר החדש: $0 \\leq y \\leq 1$, $0 \\leq x \\leq y$.\n\n$$\\int_0^1 y\\,e^{y^2}\\,dy = \\frac{e-1}{2}.$$"
+    },
+    {
+      "id": "applications",
+      "title_en": "Applications — Area, Average Value, Center of Mass",
+      "title_he": "יישומים — שטח, ערך ממוצע, מרכז מסה",
+      "level_min": "calculus_1",
+      "body_en_md": "**Area:** $\\text{Area}(D) = \\iint_D 1\\,dA$.\n\n**Average value:** $\\bar{f} = \\dfrac{1}{\\text{Area}(D)} \\iint_D f(x,y)\\,dA$.\n\n**Center of mass** (uniform density): $\\bar{x} = \\dfrac{\\iint_D x\\,dA}{\\text{Area}(D)}$, $\\;\\bar{y} = \\dfrac{\\iint_D y\\,dA}{\\text{Area}(D)}$.\n\n**Non-uniform density $\\rho(x,y)$:**\n$$\\text{Mass} = \\iint_D \\rho(x,y)\\,dA, \\quad \\bar{x} = \\frac{\\iint_D x\\,\\rho(x,y)\\,dA}{\\text{Mass}}.$$\n\n**Example.** Area of the unit disk $x^2 + y^2 \\leq 1$:\n$$\\int_{-1}^{1}\\int_{-\\sqrt{1-x^2}}^{\\sqrt{1-x^2}} 1\\,dy\\,dx = \\pi.$$\n(This integral is much easier in polar coordinates, but Cartesian confirms $\\pi$.)",
+      "body_he_md": "**שטח:** $\\text{Area}(D) = \\iint_D 1\\,dA$.\n\n**ערך ממוצע:** $\\bar{f} = \\dfrac{1}{\\text{Area}(D)} \\iint_D f(x,y)\\,dA$.\n\n**מרכז מסה** (צפיפות אחידה): $\\bar{x} = \\dfrac{\\iint_D x\\,dA}{\\text{Area}(D)}$, $\\;\\bar{y} = \\dfrac{\\iint_D y\\,dA}{\\text{Area}(D)}$.\n\n**צפיפות לא אחידה $\\rho(x,y)$:**\n$$\\text{Mass} = \\iint_D \\rho\\,dA, \\quad \\bar{x} = \\frac{\\iint_D x\\rho\\,dA}{\\text{Mass}}.$$\n\n**דוגמה.** שטח דיסקאות היחידה: $\\iint 1\\,dA = \\pi$."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Evaluate $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.",
-      "body_he": "חשבו $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.",
+      "body_en": "Compute $\\displaystyle\\iint_{[0,2]\\times[0,3]} (x + y)\\,dA$.",
+      "body_he": "חשב $\\displaystyle\\iint_{[0,2]\\times[0,3]} (x + y)\\,dA$.",
       "options": [
-        { "id": "a", "text_en": "$2$", "text_he": "$2$", "correct": false },
-        { "id": "b", "text_en": "$1$", "text_he": "$1$", "correct": true },
-        { "id": "c", "text_en": "$\\dfrac{1}{2}$", "text_he": "$\\dfrac{1}{2}$", "correct": false },
-        { "id": "d", "text_en": "$4$", "text_he": "$4$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$15$",
+          "text_he": "$15$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$12$",
+          "text_he": "$12$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$18$",
+          "text_he": "$18$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$10$",
+          "text_he": "$10$",
+          "correct": false
+        }
       ],
-      "explanation_en": "$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 2x\\,dx = 1$.",
-      "explanation_he": "$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 2x\\,dx = 1$."
+      "explanation_en": "$\\int_0^2\\int_0^3(x+y)\\,dy\\,dx = \\int_0^2\\left[xy + y^2/2\\right]_0^3 dx = \\int_0^2(3x + 9/2)\\,dx = [3x^2/2 + 9x/2]_0^2 = 6 + 9 = 15$.",
+      "explanation_he": "$\\int_0^2\\int_0^3(x+y)\\,dy\\,dx = \\int_0^2(3x + 9/2)\\,dx = [3x^2/2 + 9x/2]_0^2 = 6 + 9 = 15$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Over the triangle $D$ with vertices $(0,0)$, $(1,0)$, $(0,1)$, $\\displaystyle\\iint_D x^2 y\\,dA$ equals:",
-      "body_he": "על המשולש $D$ עם קודקודים $(0,0)$, $(1,0)$, $(0,1)$, $\\displaystyle\\iint_D x^2 y\\,dA$ שווה:",
+      "body_en": "Compute $\\iint_D y\\,dA$ where $D$ is the region bounded by $y=x$ and $y=x^2$ (for $0 \\leq x \\leq 1$).",
+      "body_he": "חשב $\\iint_D y\\,dA$ כאשר $D$ הוא האזור החסום בין $y=x$ ל-$y=x^2$ (עבור $0 \\leq x \\leq 1$).",
       "options": [
-        { "id": "a", "text_en": "$\\dfrac{1}{12}$", "text_he": "$\\dfrac{1}{12}$", "correct": false },
-        { "id": "b", "text_en": "$\\dfrac{1}{60}$", "text_he": "$\\dfrac{1}{60}$", "correct": true },
-        { "id": "c", "text_en": "$\\dfrac{1}{6}$", "text_he": "$\\dfrac{1}{6}$", "correct": false },
-        { "id": "d", "text_en": "$\\dfrac{1}{24}$", "text_he": "$\\dfrac{1}{24}$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$1/15$",
+          "text_he": "$1/15$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$1/8$",
+          "text_he": "$1/8$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$1/6$",
+          "text_he": "$1/6$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$1/12$",
+          "text_he": "$1/12$",
+          "correct": false
+        }
       ],
-      "explanation_en": "With limits $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$: $\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}dx = \\frac{1}{60}$.",
-      "explanation_he": "עם גבולות $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$: $\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}dx = \\frac{1}{60}$."
+      "explanation_en": "$D$: $0 \\leq x \\leq 1$, $x^2 \\leq y \\leq x$ (Type I). $\\int_0^1\\int_{x^2}^x y\\,dy\\,dx = \\int_0^1\\frac{x^2-x^4}{2}\\,dx = \\frac{1}{2}\\!\\left(\\frac{1}{3}-\\frac{1}{5}\\right) = \\frac{1}{2}\\cdot\\frac{2}{15} = \\frac{1}{15}$.",
+      "explanation_he": "$D$: $0 \\leq x \\leq 1$, $x^2 \\leq y \\leq x$. $\\int_0^1\\frac{x^2-x^4}{2}\\,dx = \\frac{1}{2}\\left(\\frac{1}{3}-\\frac{1}{5}\\right) = \\frac{1}{15}$."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Fubini's Theorem on a rectangle $[a,b]\\times[c,d]$ allows us to:",
-      "body_he": "משפט פוביני על מלבן $[a,b]\\times[c,d]$ מאפשר לנו:",
+      "body_en": "By Fubini’s theorem, $\\displaystyle\\iint_{[1,2]\\times[0,1]} \\frac{x}{y+1}\\,dA$ equals:",
+      "body_he": "לפי משפט פוביני, $\\displaystyle\\iint_{[1,2]\\times[0,1]} \\frac{x}{y+1}\\,dA$ שווה ל:",
       "options": [
-        { "id": "a", "text_en": "Replace a double integral only by $\\int_a^b f(x,c)\\,dx$", "text_he": "להחליף אינטegral כפול רק ב-$\\int_a^b f(x,c)\\,dx$", "correct": false },
-        { "id": "b", "text_en": "Compute $\\iint f\\,dA$ as an iterated integral in either order", "text_he": "לחשב $\\iint f\\,dA$ כאינטegral איטרטיבי בכל סדר", "correct": true },
-        { "id": "c", "text_en": "Always use polar coordinates", "text_he": "תמיד להשתמש בקואורדינטות קוטביות", "correct": false },
-        { "id": "d", "text_en": "Convert any region to a circle", "text_he": "להמיר כל אזור למעגל", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$\\frac{3}{2}\\ln 2$",
+          "text_he": "$\\frac{3}{2}\\ln 2$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$\\ln 2$",
+          "text_he": "$\\ln 2$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$3\\ln 2$",
+          "text_he": "$3\\ln 2$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$\\frac{1}{2}\\ln 2$",
+          "text_he": "$\\frac{1}{2}\\ln 2$",
+          "correct": false
+        }
       ],
-      "explanation_en": "Fubini's theorem states $\\iint_R f\\,dA = \\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$ for continuous $f$ on a rectangle.",
-      "explanation_he": "משפט פוביני קובע $\\iint_R f\\,dA = \\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$ עבור $f$ רציפה על מלבן."
+      "explanation_en": "The integrand separates: $\\int_1^2 x\\,dx \\cdot \\int_0^1 \\frac{1}{y+1}\\,dy = \\left[\\frac{x^2}{2}\\right]_1^2 \\cdot [\\ln(y+1)]_0^1 = \\frac{3}{2} \\cdot \\ln 2 = \\frac{3\\ln 2}{2}$.",
+      "explanation_he": "האינטגרנד מתפצל: $\\int_1^2 x\\,dx \\cdot \\int_0^1 \\frac{dy}{y+1} = \\frac{3}{2}\\ln 2$."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Region $D$: $0 \\leq y \\leq 1$, $y \\leq x \\leq 1$. Which iterated integral equals $\\iint_D f\\,dA$?",
-      "body_he": "אזור $D$: $0 \\leq y \\leq 1$, $y \\leq x \\leq 1$. איזה אינטegral איטרטיבי שווה ל-$\\iint_D f\\,dA$?",
+      "body_en": "To evaluate $\\displaystyle\\int_0^1\\int_y^1 e^{x^2}\\,dx\\,dy$, we switch the order. The new integral is:",
+      "body_he": "כדי לחשב $\\displaystyle\\int_0^1\\int_y^1 e^{x^2}\\,dx\\,dy$, מחליפים סדר. האינטגרל החדש הוא:",
       "options": [
-        { "id": "a", "text_en": "$\\displaystyle\\int_0^1 \\int_y^1 f(x,y)\\,dx\\,dy$", "text_he": "$\\displaystyle\\int_0^1 \\int_y^1 f(x,y)\\,dx\\,dy$", "correct": true },
-        { "id": "b", "text_en": "$\\displaystyle\\int_0^1 \\int_0^y f(x,y)\\,dx\\,dy$", "text_he": "$\\displaystyle\\int_0^1 \\int_0^y f(x,y)\\,dx\\,dy$", "correct": false },
-        { "id": "c", "text_en": "$\\displaystyle\\int_0^1 \\int_0^1 f(x,y)\\,dy\\,dx$", "text_he": "$\\displaystyle\\int_0^1 \\int_0^1 f(x,y)\\,dy\\,dx$", "correct": false },
-        { "id": "d", "text_en": "$\\displaystyle\\int_0^1 \\int_x^1 f(x,y)\\,dy\\,dx$", "text_he": "$\\displaystyle\\int_0^1 \\int_x^1 f(x,y)\\,dy\\,dx$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "$\\displaystyle\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx$",
+          "text_he": "$\\displaystyle\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$\\displaystyle\\int_0^1\\int_0^y e^{x^2}\\,dx\\,dy$",
+          "text_he": "$\\displaystyle\\int_0^1\\int_0^y e^{x^2}\\,dx\\,dy$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$\\displaystyle\\int_0^1\\int_x^1 e^{x^2}\\,dy\\,dx$",
+          "text_he": "$\\displaystyle\\int_0^1\\int_x^1 e^{x^2}\\,dy\\,dx$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$\\displaystyle\\int_0^1\\int_0^1 e^{x^2}\\,dy\\,dx$",
+          "text_he": "$\\displaystyle\\int_0^1\\int_0^1 e^{x^2}\\,dy\\,dx$",
+          "correct": false
+        }
       ],
-      "explanation_en": "Type II: $y$ from 0 to 1, and for each $y$, $x$ goes from $y$ to 1. Option (d) is Type I with $x$ outer — also valid: $\\int_0^1\\int_0^x f\\,dy\\,dx$ would be wrong limits. Actually (d) has x outer with y from x to 1 — that's wrong. (a) is correct Type II form.",
-      "explanation_he": "סוג II: $y$ מ-0 עד 1, ולכל $y$, $x$ מ-$y$ עד 1. אפשרות (א) היא הצורה הנכונה."
+      "explanation_en": "The region is $\\{0\\leq y\\leq 1,\\; y\\leq x\\leq 1\\}$, equivalently $\\{0\\leq x\\leq 1,\\; 0\\leq y\\leq x\\}$. So the switched integral is $\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx = \\int_0^1 xe^{x^2}\\,dx = [e^{x^2}/2]_0^1 = (e-1)/2$.",
+      "explanation_he": "האזור $\\{0\\leq y\\leq 1, y\\leq x\\leq 1\\}$, בשינוי: $\\{0\\leq x\\leq 1, 0\\leq y\\leq x\\}$. אינטגרל חדש: $\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx = \\int_0^1 xe^{x^2}\\,dx = (e-1)/2$."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Geometrically, if $f(x,y) \\geq 0$, the double integral $\\iint_D f(x,y)\\,dA$ represents:",
-      "body_he": "גיאומטרית, אם $f(x,y) \\geq 0$, האינטegral הכפול $\\iint_D f(x,y)\\,dA$ מייצג:",
+      "body_en": "Geometrically, $\\iint_D f(x,y)\\,dA$ (with $f \\geq 0$) represents:",
+      "body_he": "גיאומטרית, $\\iint_D f(x,y)\\,dA$ (עם $f \\geq 0$) מייצג:",
       "options": [
-        { "id": "a", "text_en": "The arc length of a curve", "text_he": "אורך קשת של עקומה", "correct": false },
-        { "id": "b", "text_en": "The volume under $z=f(x,y)$ over $D$", "text_he": "נפח מתחת ל-$z=f(x,y)$ מעל $D$", "correct": true },
-        { "id": "c", "text_en": "The slope of the tangent plane", "text_he": "שיפוע המישור המשיק", "correct": false },
-        { "id": "d", "text_en": "The gradient of $f$", "text_he": "הגרדיאנט של $f$", "correct": false }
+        {
+          "id": "a",
+          "text_en": "The area of the region $D$",
+          "text_he": "שטח האזור $D$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "The volume of the solid bounded above by $z=f(x,y)$ and below by the region $D$",
+          "text_he": "נפח הגוף החסום מעל על ידי $z=f(x,y)$ ומתחת על ידי האזור $D$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "The surface area of $z = f(x,y)$ over $D$",
+          "text_he": "שטח המשטח $z = f(x,y)$ מעל $D$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "The average value of $f$ over $D$",
+          "text_he": "הערך הממוצע של $f$ על $D$",
+          "correct": false
+        }
       ],
-      "explanation_en": "When $f \\geq 0$, the double integral sums infinitesimal boxes $f(x,y)\\,dA$, giving the volume between the surface $z=f(x,y)$ and the $xy$-plane over $D$.",
-      "explanation_he": "כאשר $f \\geq 0$, האינטegral הכפול מסכם תיבות אינפinitesimal $f(x,y)\\,dA$, ונותן את הנפח בין המשטח $z=f(x,y)$ למישור $xy$ מעל $D$."
+      "explanation_en": "When $f(x,y) \\geq 0$, the double integral gives the volume of the 3D solid between the surface $z=f(x,y)$ and the region $D$ in the $xy$-plane. The area is $\\iint_D 1\\,dA$ (option a with $f\\equiv 1$); the average is $\\iint_D f\\,dA / \\text{Area}(D)$.",
+      "explanation_he": "כאשר $f \\geq 0$, האינטגרל הכפול נותן את הנפח של הגוף התלת-ממדי בין המשח $z=f(x,y)$ ל-$D$."
     }
   ]
 }
