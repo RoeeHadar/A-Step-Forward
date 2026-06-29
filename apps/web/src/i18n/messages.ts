@@ -93,6 +93,16 @@ const messages = {
       streak: 'Streak',
       lessonsCompleted: 'Lessons completed',
       level: 'Level',
+      agentNames: {
+        tutor: 'Tutor',
+        mentor: 'Mentor',
+        coach: 'Coach',
+        qa_explainer: 'Q&A Explainer',
+        reviewer: 'Reviewer',
+        note_taker: 'Note-Taker',
+        engagement: 'Engagement',
+        accessibility: 'Accessibility',
+      },
     },
     memory: {
       title: 'Memory Inspector',
@@ -295,6 +305,16 @@ const messages = {
       streak: 'רצף ימים',
       lessonsCompleted: 'שיעורים הושלמו',
       level: 'רמה',
+      agentNames: {
+        tutor: 'מורה',
+        mentor: 'מנטור',
+        coach: 'מאמן',
+        qa_explainer: 'שאלות ותשובות',
+        reviewer: 'מבקר',
+        note_taker: 'רושם הערות',
+        engagement: 'מעורבות',
+        accessibility: 'נגישות',
+      },
     },
     memory: {
       title: 'בודק זיכרון',

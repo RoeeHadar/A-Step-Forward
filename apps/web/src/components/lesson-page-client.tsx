@@ -8,6 +8,11 @@ import { LessonQuizPanel } from './lesson-quiz-panel';
 
 const MATH_TRACK_LEVELS: LessonPointsLevel[] = ['3pt', '4pt', '5pt'];
 
+function levelLabel(level: LessonPointsLevel, isHe: boolean): string {
+  const n = level.replace('pt', '');
+  return isHe ? `${n} יח'` : `${n}-pt`;
+}
+
 function LessonLevelToggle({
   tracks,
   activeLevel,
@@ -18,6 +23,8 @@ function LessonLevelToggle({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { locale } = useLanguagePreference();
+  const isHe = locale === 'he';
 
   const options = MATH_TRACK_LEVELS.filter((level) => tracks.includes(level));
   if (options.length <= 1) return null;
@@ -37,13 +44,13 @@ function LessonLevelToggle({
           key={level}
           type="button"
           onClick={() => selectLevel(level)}
-          className={`rounded-full px-3 py-1.5 text-xs font-semibold uppercase transition-colors ${
+          className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
             current === level
               ? 'bg-primary text-primary-foreground'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
-          {level.replace('pt', 'PT')}
+          {levelLabel(level, isHe)}
         </button>
       ))}
     </div>

@@ -245,7 +245,7 @@ export function DashboardContent({
                   gradientClass,
                 )}
               >
-                {agentDisplayNames[agent]}
+                {(t.agentNames as Record<string, string>)?.[agent] ?? agentDisplayNames[agent]}
               </h3>
               <span className="mt-3 text-sm font-medium text-primary">
                 {t.startChat} →
