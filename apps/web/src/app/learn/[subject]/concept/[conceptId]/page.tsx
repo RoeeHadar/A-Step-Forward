@@ -56,8 +56,17 @@ export default async function ConceptPage({
   const isHe = locale === 'he';
   const concept = kgById[conceptId];
 
-  // Resolve learner level (best-effort; fall back to null if not logged in or no profile)
-  let learnerLevel: LessonPointsLevel | null = null;
+  // Infer level from subject slug so unauthenticated users get correct section gating
+  function levelFromSubjectSlug(slug: string): LessonPointsLevel | null {
+    if (slug.includes('3')) return '3pt';
+    if (slug.includes('4')) return '4pt';
+    if (slug.includes('5')) return '5pt';
+    if (slug.toLowerCase().includes('phys')) return 'hs_physics';
+    return null;
+  }
+
+  // Resolve learner level — prefer authenticated profile, fall back to URL slug
+  let learnerLevel: LessonPointsLevel | null = levelFromSubjectSlug(subject);
   try {
     const { userId } = await auth();
     if (userId) {
@@ -77,7 +86,7 @@ export default async function ConceptPage({
       }
     }
   } catch {
-    // Auth not available in this context — fine, render without level filtering
+    // Auth not available — slug-based level already set above
   }
 
   // Lesson is the new authoritative source. If it exists, render it instead
