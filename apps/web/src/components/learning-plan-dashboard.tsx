@@ -149,7 +149,6 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
                   <span
                     className="text-sm text-primary"
                     dir="auto"
-                    onClick={(e) => e.stopPropagation()}
                   >
                     {section.title}
                   </span>
