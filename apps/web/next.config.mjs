@@ -29,7 +29,10 @@ const nextConfig = {
   ],
   experimental: {},
   async redirects() {
-    return [];
+    return [
+      { source: '/learn/calculus_1', destination: '/learn/makhina', permanent: false },
+      { source: '/learn/calculus', destination: '/learn/makhina', permanent: false },
+    ];
   },
   async headers() {
     return [

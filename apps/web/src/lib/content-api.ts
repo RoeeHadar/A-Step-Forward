@@ -36,13 +36,11 @@ const STATIC_SUBJECT_FALLBACK: SubjectSummary[] = [
   { subject: 'math', section_count: 0, sample_grade: null },
   { subject: 'physics', section_count: 0, sample_grade: null },
   { subject: 'makhina', section_count: 0, sample_grade: null },
-  { subject: 'calculus', section_count: 0, sample_grade: null },
   { subject: 'linear_algebra', section_count: 0, sample_grade: null },
 ];
 
 const CURATED_SUBJECT_SLUGS = [
   'makhina',
-  'calculus',
   'linear_algebra',
 ] as const;
 

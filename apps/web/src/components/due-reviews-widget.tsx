@@ -85,7 +85,10 @@ export function DueReviewsWidget({
   return (
     <section dir={isHe ? 'rtl' : 'ltr'}>
       {sectionTitle ? (
-        <h2 className="font-display mb-3 text-xl font-semibold">{sectionTitle}</h2>
+        <h2 className="font-display mb-3 flex items-center text-xl font-semibold">
+          <span className="me-2 inline-block h-2 w-2 rounded-full bg-primary" aria-hidden />
+          {sectionTitle}
+        </h2>
       ) : null}
       <div className="card-punch flex flex-col gap-3 rounded-2xl p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">

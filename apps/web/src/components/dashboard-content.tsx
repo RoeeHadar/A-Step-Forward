@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Clock, Sparkles } from 'lucide-react';
+import { ChevronRight, Clock } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
@@ -34,13 +34,13 @@ const STR = {
     streak: (n: number) => `🔥 ${n} ימים רצף`,
     estGrade: (g: number) => `ציון משוער: ~${g}`,
     planTitle: 'התוכנית שלי לשבוע זה',
-    noPlanTitle: 'אין עדיין תכנית לשבוע',
-    noPlanBlurb: 'השלם את האבחון או התחל ללמוד כדי לקבל תכנית שבועית מותאמת.',
+    noPlanTitle: 'נראה שאין לך תוכנית עדיין — בוא נתחיל!',
+    noPlanBlurb: 'השלם את האבחון כדי לקבל תכנית שבועית מותאמת אישית.',
+    startNow: 'התחל עכשיו',
     startDiagnostic: 'התחל אבחון',
     browseLearn: 'עבור ללימוד',
     dueReviews: 'חזרה להיום',
     agents: 'הסוכנים שלך',
-    goToExams: '→ כניסה לאזור הבחינות',
     statusDone: 'הושלם',
     statusInProgress: 'בתהליך',
     statusNew: 'חדש',
@@ -54,13 +54,13 @@ const STR = {
     streak: (n: number) => `🔥 ${n}-day streak`,
     estGrade: (g: number) => `Est. grade: ~${g}`,
     planTitle: 'My Plan for This Week',
-    noPlanTitle: 'No weekly plan yet',
-    noPlanBlurb: 'Complete the diagnostic or start learning to get a personalized weekly plan.',
+    noPlanTitle: "Looks like you don't have a plan yet — let's get started!",
+    noPlanBlurb: 'Complete the diagnostic to get a personalized weekly plan.',
+    startNow: 'Start now',
     startDiagnostic: 'Start diagnostic',
     browseLearn: 'Go to Learn',
     dueReviews: 'Due for Review Today',
     agents: 'Your agents',
-    goToExams: '→ Go to Practice Tests',
     statusDone: 'Done',
     statusInProgress: 'In Progress',
     statusNew: 'New',
@@ -75,6 +75,7 @@ const AGENT_CARDS: Array<{
   name_en: string;
   desc_he: string;
   desc_en: string;
+  hoverRing: string;
 }> = [
   {
     agent: 'tutor',
@@ -83,6 +84,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Tutor',
     desc_he: 'מדריך עם שאלות — ללמידה עמוקה',
     desc_en: 'Guides with questions — deep understanding',
+    hoverRing: 'hover:ring-blue-500/40',
   },
   {
     agent: 'qa_explainer',
@@ -91,6 +93,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Q&A',
     desc_he: 'עונה ישירות מתוך החומר',
     desc_en: 'Direct answers from the curriculum',
+    hoverRing: 'hover:ring-green-500/40',
   },
   {
     agent: 'coach',
@@ -99,6 +102,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Coach',
     desc_he: 'תרגול יומי ועיוון בחולשות',
     desc_en: 'Daily drills targeting your weak spots',
+    hoverRing: 'hover:ring-orange-500/40',
   },
   {
     agent: 'mentor',
@@ -107,6 +111,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Mentor',
     desc_he: 'מוטיבציה, הרגלים ותכנון',
     desc_en: 'Motivation, habits, and planning',
+    hoverRing: 'hover:ring-purple-500/40',
   },
 ];
 
@@ -160,7 +165,8 @@ function EstimatedGradePill({ isHe }: { isHe: boolean }) {
 
   const t = STR[isHe ? 'he' : 'en'];
   return (
-    <span className="card-punch inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground">
+    <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-muted-foreground">
+      <span aria-hidden>📈</span>
       {t.estGrade(grade)}
     </span>
   );
@@ -196,8 +202,8 @@ function PlanItemRow({
     <Link
       href={href}
       className={cn(
-        'group flex items-center gap-3 rounded-xl p-4 transition-all duration-200 hover:scale-[1.01]',
-        isFirst ? 'iridescent-border ring-2 ring-primary/40' : 'card-punch',
+        'group flex items-center gap-3 rounded-xl border border-border p-4 transition-all duration-200 hover:border-primary/40 hover:shadow-md',
+        isFirst ? 'border-l-4 border-l-primary bg-card' : 'card-punch',
       )}
     >
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl" aria-hidden>
@@ -232,6 +238,15 @@ function PlanItemRow({
         />
       </div>
     </Link>
+  );
+}
+
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="font-display mb-4 flex items-center text-xl font-semibold">
+      <span className="me-2 inline-block h-2 w-2 rounded-full bg-primary" aria-hidden />
+      {children}
+    </h2>
   );
 }
 
@@ -275,46 +290,41 @@ export function DashboardContent({
   return (
     <div dir={isHe ? 'rtl' : 'ltr'} className="space-y-8">
       {/* Section 1 — Welcome hero */}
-      <header className="space-y-4">
-        <h1 className="font-display text-3xl font-bold tracking-tight">
-          <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
-            {t.welcome(name)}
-          </span>
-        </h1>
-
-        {isExamCountdown ? (
-          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-            {subtitle}
-          </span>
-        ) : (
-          <p className="text-muted-foreground">{subtitle}</p>
-        )}
-
-        <div className="flex flex-wrap items-center gap-2">
-          {streakDays > 0 ? (
-            <span className="card-punch inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium">
-              {t.streak(streakDays)}
+      <header className="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-background to-accent-magenta/5 p-6">
+        <div
+          className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden
+        />
+        <div className="relative space-y-4">
+          <h1 className="font-display text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
+              {t.welcome(name)}
             </span>
-          ) : null}
-          <EstimatedGradePill isHe={isHe} />
-        </div>
+          </h1>
 
-        <Link
-          href="/app/exams"
-          className="inline-block text-sm text-muted-foreground transition-colors hover:text-primary"
-        >
-          {t.goToExams}
-        </Link>
+          {isExamCountdown ? (
+            <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+              {subtitle}
+            </span>
+          ) : (
+            <p className="text-muted-foreground">{subtitle}</p>
+          )}
+
+          <div className="flex flex-wrap items-center gap-2">
+            {streakDays > 0 ? (
+              <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium">
+                <span aria-hidden>🔥</span>
+                {isHe ? `${streakDays} ימים רצף` : `${streakDays}-day streak`}
+              </span>
+            ) : null}
+            <EstimatedGradePill isHe={isHe} />
+          </div>
+        </div>
       </header>
 
       {/* Section 2 — Learning Plan */}
       <section>
-        <h2 className="font-display mb-4 flex items-center gap-2 text-xl font-semibold">
-          <Sparkles className="h-5 w-5 text-primary" aria-hidden />
-          <span className="bg-gradient-to-r from-primary to-accent-cyan bg-clip-text text-transparent">
-            {t.planTitle}
-          </span>
-        </h2>
+        <SectionHeading>{t.planTitle}</SectionHeading>
         {planItems.length > 0 ? (
           <div className="space-y-3">
             {planItems.map((concept, idx) => (
@@ -329,12 +339,12 @@ export function DashboardContent({
             ))}
           </div>
         ) : (
-          <div className="card-punch rounded-2xl p-6 text-center">
-            <p className="font-medium">{t.noPlanTitle}</p>
+          <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-6 text-center">
+            <p className="font-display font-medium">{t.noPlanTitle}</p>
             <p className="mt-1 text-sm text-muted-foreground">{t.noPlanBlurb}</p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <Button asChild size="sm">
-                <Link href="/diagnostic">{t.startDiagnostic}</Link>
+                <Link href="/onboarding">{t.startNow}</Link>
               </Button>
               <Button asChild variant="outline" size="sm">
                 <Link href="/learn">{t.browseLearn}</Link>
@@ -349,15 +359,16 @@ export function DashboardContent({
 
       {/* Section 4 — Compact Agents */}
       <section>
-        <h2 className="font-display mb-4 text-xl font-semibold">{t.agents}</h2>
+        <SectionHeading>{t.agents}</SectionHeading>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {AGENT_CARDS.map(({ agent, emoji, name_he, name_en, desc_he, desc_en }) => (
+          {AGENT_CARDS.map(({ agent, emoji, name_he, name_en, desc_he, desc_en, hoverRing }) => (
             <Link
               key={agent}
               href={`/app/chat/${agent}`}
               className={cn(
                 'card-punch group flex flex-col gap-2 rounded-xl p-4 transition-all duration-200',
-                'hover:scale-[1.01] hover:ring-2 hover:ring-primary/40',
+                'hover:scale-[1.01] hover:ring-2',
+                hoverRing,
               )}
             >
               <span className="text-2xl" aria-hidden>

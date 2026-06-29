@@ -11,10 +11,16 @@ const MAKHINA_CARD = {
   sample_grade: null,
 };
 
+/** Calculus is covered by the מכינה track — hide duplicate catalog cards. */
+const CALCULUS_DUPLICATE_SLUGS = new Set(['calculus', 'calculus_1']);
+
 export default async function LearnPage() {
   const subjects = await fetchSubjects();
   const hasMakhina = subjects.some((s) => s.subject === 'makhina');
-  const catalog = hasMakhina ? subjects : [...subjects, MAKHINA_CARD];
+  const withMakhina = hasMakhina ? subjects : [...subjects, MAKHINA_CARD];
+  const catalog = withMakhina.filter(
+    (s) => !(hasMakhina && CALCULUS_DUPLICATE_SLUGS.has(s.subject)),
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
