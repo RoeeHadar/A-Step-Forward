@@ -35,6 +35,7 @@ async function contentFetch<T>(path: string): Promise<T> {
 const STATIC_SUBJECT_FALLBACK: SubjectSummary[] = [
   { subject: 'math', section_count: 0, sample_grade: null },
   { subject: 'physics', section_count: 0, sample_grade: null },
+  { subject: 'biology_4pt', section_count: 0, sample_grade: null },
   { subject: 'calculus', section_count: 0, sample_grade: null },
   { subject: 'linear_algebra', section_count: 0, sample_grade: null },
 ];

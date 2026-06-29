@@ -20,6 +20,9 @@ import {
   Info,
 } from 'lucide-react';
 import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
+// MATH_GLOSSARY terms (see @/lib/math-glossary) could be wrapped with
+// GlossaryTooltip for inline hover hints; full Markdown post-processing is
+// intentionally avoided here due to complexity and rendering risk.
 
 /**
  * Renders a string that may contain inline LaTeX delimited by $...$.

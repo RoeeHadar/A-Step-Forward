@@ -22,6 +22,7 @@ export type PointsLevel =
   | '4pt'
   | '5pt'
   | 'hs_physics'
+  | 'biology_4pt'
   | 'calc1'
   | 'la'
   | 'physics1';
@@ -155,6 +156,21 @@ const PHYSICS_HS_CONCEPTS = [
   'atomic_models',
   'nuclear_physics',
   'special_relativity',
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLOGY — 4 UNITS (Bagrut)
+// ─────────────────────────────────────────────────────────────────────────────
+const BIOLOGY_4PT_CONCEPTS = [
+  'cell_structure',
+  'cell_division',
+  'photosynthesis',
+  'dna_structure',
+  'heredity_mendelian',
+  'gene_expression',
+  'natural_selection',
+  'speciation',
+  'evidence_evolution',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -424,6 +440,38 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
   },
 
   // ──────────────────────────────────────────────────────────────────────────
+  // BIOLOGY — Bagrut 4 units
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'biology-4pt',
+    heLabel: 'ביולוגיה לבגרות — 4 יחידות',
+    enLabel: 'Bagrut Biology — 4 Units',
+    emoji: '🧬',
+    points_levels: ['biology_4pt'],
+    concept_ids: BIOLOGY_4PT_CONCEPTS,
+    sections: [
+      {
+        id: 'cell-biology',
+        heLabel: 'ביולוגיה של התא',
+        enLabel: 'Cell Biology',
+        concept_ids: ['cell_structure', 'cell_division', 'photosynthesis'],
+      },
+      {
+        id: 'genetics',
+        heLabel: 'גנטיקה',
+        enLabel: 'Genetics',
+        concept_ids: ['dna_structure', 'heredity_mendelian', 'gene_expression'],
+      },
+      {
+        id: 'evolution',
+        heLabel: 'אבולוציה',
+        enLabel: 'Evolution',
+        concept_ids: ['natural_selection', 'speciation', 'evidence_evolution'],
+      },
+    ],
+  },
+
+  // ──────────────────────────────────────────────────────────────────────────
   // UNIVERSITY — Calculus 1 (חדו״א 1)
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -497,6 +545,7 @@ export const GOAL_TO_LEVEL: Record<string, PointsLevel> = {
   bagrut_math_4pt: '4pt',
   bagrut_math_5pt: '5pt',
   bagrut_physics: 'hs_physics',
+  bagrut_biology_4pt: 'biology_4pt',
   calculus1: 'calc1',
   linear_algebra: 'la',
 };

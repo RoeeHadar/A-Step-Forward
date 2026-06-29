@@ -14,6 +14,7 @@ import { LessonPageClient } from '@/components/lesson-page-client';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
+import { MathGlossaryPanel } from '@/components/math-glossary-panel';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
 
 export const dynamic = 'force-dynamic';
@@ -76,6 +77,7 @@ export default async function ConceptPage({
     if (slug.includes('4')) return '4pt';
     if (slug.includes('5')) return '5pt';
     if (slug.toLowerCase().includes('phys')) return 'hs_physics';
+    if (slug.toLowerCase().includes('bio')) return '4pt';
     return null;
   }
 
@@ -234,6 +236,8 @@ export default async function ConceptPage({
             </Link>
           </section>
         ) : null}
+
+        <MathGlossaryPanel locale={locale} />
       </main>
     </div>
   );

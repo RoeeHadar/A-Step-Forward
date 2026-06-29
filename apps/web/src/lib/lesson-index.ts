@@ -2,9 +2,12 @@ import lessonsIndex from './lessons-index.generated.json';
 
 export interface LessonIndexEntry {
   id: string;
+  subject?: string;
+  concept_id?: string;
   title_en: string;
   title_he?: string;
   est_minutes: number;
+  estimated_minutes?: number;
   math_track: string[];
 }
 

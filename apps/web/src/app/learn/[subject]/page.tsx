@@ -118,8 +118,9 @@ function isInBagrutScope(conceptId: string, mathTrack: MathTrack): boolean {
 }
 
 interface UiSubjectFilter {
-  kgSubject: 'math' | 'physics' | null;
+  kgSubject: 'math' | 'physics' | 'biology' | null;
   mathTrack?: MathTrack;
+  biologyTrack?: string;
   conceptAllowlist?: string[];
   /** Maps to a CurriculumCategory id for section grouping */
   categoryId?: string;
@@ -142,6 +143,15 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     return { kgSubject: 'math', mathTrack: '5pt', categoryId: 'math-hs-5' };
   if (uiSubject === 'hs_physics')
     return { kgSubject: 'physics', categoryId: 'physics-hs' };
+  if (
+    uiSubject === 'biology_4pt' ||
+    uiSubject === 'biology-4pt' ||
+    uiSubject === 'bio_4' ||
+    uiSubject === 'bio-4'
+  )
+    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt' };
+  if (uiSubject === 'biology_5pt' || uiSubject === 'biology-5pt')
+    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt' };
   if (uiSubject === 'high_school_math_3_points')
     return { kgSubject: 'math', mathTrack: '3pt', categoryId: 'math-hs-3' };
   if (uiSubject === 'high_school_math_4_points')
@@ -167,6 +177,7 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     uiSubject === 'middle_school_physics' || uiSubject === 'bagrut_physics'
   ) return { kgSubject: 'physics', categoryId: 'physics-hs' };
   if (uiSubject.includes('physics')) return { kgSubject: 'physics', categoryId: 'physics-hs' };
+  if (uiSubject.includes('biology')) return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt' };
   if (uiSubject.includes('math')) return { kgSubject: 'math' };
   return { kgSubject: null };
 }
@@ -265,7 +276,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
       const inTrack =
         filter.mathTrack && filter.kgSubject === 'math'
           ? Boolean(trackSource?.includes(filter.mathTrack))
-          : true;
+          : filter.biologyTrack && filter.kgSubject === 'biology'
+            ? Boolean(trackSource?.includes(filter.biologyTrack))
+            : true;
       const mastery = masteryMap.get(c.id);
       const status = masteryStatus(mastery?.score);
       return { ...c, langs: coverage.get(c.id) ?? [], hasLesson, inTrack, mastery, status };
