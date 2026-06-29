@@ -2311,6 +2311,7 @@ export interface DueReviewItem {
   atom_id: string;
   concept_id: string;
   concept_name: string;
+  concept_name_he: string | null;
   last_score: number;
   times_practiced: number;
 }
@@ -2335,12 +2336,12 @@ async function ensureSkillPracticeFsrsColumns(): Promise<void> {
   await s`ALTER TABLE skill_practice ADD COLUMN IF NOT EXISTS last_score NUMERIC(4,3)`;
 }
 
-function buildAtomConceptMap(): Map<string, { concept_id: string; concept_name: string }> {
-  const map = new Map<string, { concept_id: string; concept_name: string }>();
-  const concepts = (kg as { concepts: Array<{ id: string; name: string; skill_atoms?: string[] }> }).concepts;
+function buildAtomConceptMap(): Map<string, { concept_id: string; concept_name: string; concept_name_he: string | null }> {
+  const map = new Map<string, { concept_id: string; concept_name: string; concept_name_he: string | null }>();
+  const concepts = (kg as { concepts: Array<{ id: string; name: string; name_he?: string | null; skill_atoms?: string[] }> }).concepts;
   for (const c of concepts) {
     for (const atom of c.skill_atoms ?? []) {
-      map.set(atom, { concept_id: c.id, concept_name: c.name });
+      map.set(atom, { concept_id: c.id, concept_name: c.name, concept_name_he: c.name_he ?? null });
     }
   }
   return map;
@@ -2383,6 +2384,7 @@ export async function getDueReviews(userId: string): Promise<DueReviewItem[]> {
         atom_id: r.skill_atom,
         concept_id: meta?.concept_id ?? r.skill_atom,
         concept_name: meta?.concept_name ?? r.skill_atom.replace(/_/g, ' '),
+        concept_name_he: meta?.concept_name_he ?? null,
         last_score: Number(r.last_score ?? 0),
         times_practiced: Number(r.attempts ?? 0),
       };

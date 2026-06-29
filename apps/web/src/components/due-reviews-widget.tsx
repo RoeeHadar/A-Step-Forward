@@ -11,6 +11,7 @@ interface DueReviewItem {
   atom_id: string;
   concept_id: string;
   concept_name: string;
+  concept_name_he: string | null;
   last_score: number;
   times_practiced: number;
 }
@@ -85,7 +86,7 @@ export function DueReviewsWidget() {
           <div className="flex flex-wrap gap-1.5">
             {visibleItems.map((item) => (
               <Badge key={item.atom_id} variant="secondary" className="text-xs">
-                {item.concept_name}
+                {isHe && item.concept_name_he ? item.concept_name_he : item.concept_name}
               </Badge>
             ))}
             {overflowCount > 0 && (
