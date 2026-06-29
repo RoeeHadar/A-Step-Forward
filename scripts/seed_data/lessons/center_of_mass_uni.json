@@ -1,240 +1,224 @@
 {
   "id": "center_of_mass_uni",
   "subject": "university_physics_1",
-  "title_en": "Center of Mass & Systems of Particles (University)",
-  "title_he": "מרכז מסה ומערכות חלקיקים (אוניברסיטה)",
-  "duration_min": 24,
+  "title_en": "Center of Mass and Systems of Particles — Calculus Treatment (University)",
+  "title_he": "מרכז מסה ומערכות חלקיקים — גישה בחשבון אינטגרלי (אוניברסיטה)",
+  "duration_min": 25,
   "type": "interactive",
   "level_min": "university",
-  "agent_hints": "CM motion follows $\\vec{F}_{ext}=M\\vec{a}_{cm}$ — internal forces cancel in pairs. Continuous CM requires $\\int \\vec{r}\\,dm$. Rocket equation uses variable mass; sign convention: $dM/dt<0$ as fuel burns.",
+  "agent_hints": "The key conceptual leap is Newton's 2nd law for a system: only external forces accelerate the CM — all internal forces cancel in pairs (Newton's 3rd law). Use this to explain why a person cannot move the CM of their own body by purely internal muscle forces. The rocket equation is subtle: stress that $M$ changes with time and the standard $F = ma$ form must be replaced by the momentum form $d(Mv)/dt = F_{ext}$, leading to the Tsiolkovsky equation. For CM integrals, always set up $dm = \\rho\\,dV$ (or $\\lambda\\,dx$ for 1-D) before integrating.",
   "sections": [
     {
-      "id": "discrete_cm",
-      "title_en": "Center of Mass — Discrete System",
-      "title_he": "מרכז מסה — מערכת בדידה",
-      "body_en_md": "For particles with masses $m_i$ at positions $\\vec{r}_i$:\n$$\\boxed{\\vec{r}_{cm} = \\frac{\\sum_i m_i \\vec{r}_i}{M_{tot}}, \\quad M_{tot} = \\sum_i m_i}$$\n\nVelocity and momentum:\n$$\\vec{v}_{cm} = \\frac{\\sum m_i \\vec{v}_i}{M_{tot}} = \\frac{\\vec{p}_{tot}}{M_{tot}}$$",
-      "body_he_md": "לחלקיקים $m_i$ במיקומים $\\vec{r}_i$:\n$$\\vec{r}_{cm} = \\frac{\\sum m_i \\vec{r}_i}{M_{tot}}$$\n\n$$\\vec{v}_{cm} = \\frac{\\vec{p}_{tot}}{M_{tot}}$$",
-      "level_min": "university"
+      "id": "cm_discrete",
+      "title_en": "Center of Mass — Discrete Systems",
+      "title_he": "מרכז מסה — מערכות דיסקרטיות",
+      "level_min": "university",
+      "body_en_md": "## Definition for a Discrete System\n\nFor a system of $N$ particles with masses $m_i$ and position vectors $\\vec{r}_i$, the **center of mass** (CM) is:\n$$\\boxed{\\vec{r}_{cm} = \\frac{\\sum_{i=1}^N m_i \\vec{r}_i}{M_{\\text{total}}}}$$\nwhere $M_{\\text{total}} = \\sum_i m_i$.\n\nIn components:\n$$x_{cm} = \\frac{\\sum m_i x_i}{M}, \\qquad y_{cm} = \\frac{\\sum m_i y_i}{M}, \\qquad z_{cm} = \\frac{\\sum m_i z_i}{M}$$\n\n## Velocity and Momentum of the CM\n\n$$\\vec{v}_{cm} = \\frac{d\\vec{r}_{cm}}{dt} = \\frac{\\sum m_i \\vec{v}_i}{M} = \\frac{\\vec{p}_{\\text{total}}}{M}$$\n\nThe CM velocity is the total linear momentum divided by total mass.\n\n**Example:** Two particles: $m_1 = 2$ kg at $x_1 = 1$ m, $m_2 = 4$ kg at $x_2 = 4$ m:\n$$x_{cm} = \\frac{(2)(1) + (4)(4)}{2+4} = \\frac{18}{6} = 3 \\text{ m}$$\nNote the CM is closer to the heavier particle (as expected).",
+      "body_he_md": "## הגדרה למערכת דיסקרטית\n\nעבור מערכת של $N$ חלקיקים עם מסות $m_i$ ווקטורי מיקום $\\vec{r}_i$, **מרכז המסה** (CM) הוא:\n$$\\boxed{\\vec{r}_{cm} = \\frac{\\sum_{i=1}^N m_i \\vec{r}_i}{M_{\\text{כולל}}}}$$\nכאשר $M_{\\text{כולל}} = \\sum_i m_i$.\n\n## מהירות ותנע של ה-CM\n\n$$\\vec{v}_{cm} = \\frac{\\sum m_i \\vec{v}_i}{M} = \\frac{\\vec{p}_{\\text{כולל}}}{M}$$\n\nמהירות ה-CM היא התנע הכולל חלקי המסה הכוללת.\n\n**דוגמה:** שני חלקיקים: $m_1 = 2$ kg ב-$x_1 = 1$ m, $m_2 = 4$ kg ב-$x_2 = 4$ m:\n$$x_{cm} = \\frac{(2)(1) + (4)(4)}{6} = \\frac{18}{6} = 3 \\text{ m}$$"
     },
     {
-      "id": "continuous_cm",
-      "title_en": "Continuous Body — Integral Definition",
-      "title_he": "גוף רציף — הגדרה אינטגרלית",
-      "body_en_md": "For continuous mass distribution with density $\\rho$:\n$$\\boxed{\\vec{r}_{cm} = \\frac{1}{M}\\int \\vec{r}\\,dm = \\frac{1}{M}\\int \\vec{r}\\,\\rho\\,dV}$$\n\nChoose coordinates exploiting symmetry; $dm = \\lambda\\,dx$ (rod), $\\sigma\\,dA$ (sheet), $\\rho\\,dV$ (volume).",
-      "body_he_md": "להתפלגות רציפה עם צפיפות $\\rho$:\n$$\\vec{r}_{cm} = \\frac{1}{M}\\int \\vec{r}\\,\\rho\\,dV$$",
-      "level_min": "university"
+      "id": "cm_continuous",
+      "title_en": "Center of Mass — Continuous Bodies",
+      "title_he": "מרכז מסה — גופים רציפים",
+      "level_min": "university",
+      "body_en_md": "## Integral Formula\n\nFor a continuous body with mass element $dm$:\n$$\\boxed{\\vec{r}_{cm} = \\frac{1}{M}\\int \\vec{r}\\,dm}$$\n\nIn 1-D with linear density $\\lambda(x)$ [kg/m]: $dm = \\lambda(x)\\,dx$.\nIn 2-D with surface density $\\sigma$ [kg/m²]: $dm = \\sigma\\,dA$.\nIn 3-D with volume density $\\rho$ [kg/m³]: $dm = \\rho\\,dV$.\n\n## Derivation 1 — Uniform Rod of Length $L$\n\nPlace the rod along the x-axis from 0 to $L$. Uniform linear density $\\lambda = M/L$.\n$$x_{cm} = \\frac{1}{M}\\int_0^L x\\,\\lambda\\,dx = \\frac{\\lambda}{M}\\int_0^L x\\,dx = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\frac{(M/L)}{M}\\cdot\\frac{L^2}{2} = \\boxed{\\frac{L}{2}}$$\nThe CM is at the midpoint — as expected by symmetry.\n\n## Derivation 2 — Right Triangle\n\nFor a uniform right triangle with base $b$ along x-axis and height $h$ along y-axis. The width at height $y$ is $w(y) = b(1 - y/h)$ (linear taper).\n$$y_{cm} = \\frac{1}{M}\\int_0^h y\\,\\sigma\\,w(y)\\,dy = \\frac{\\sigma b}{M}\\int_0^h y\\left(1-\\frac{y}{h}\\right)dy$$\nEvaluating: $\\int_0^h y(1-y/h)dy = h^2/2 - h^2/3 = h^2/6$.\nWith $M = \\frac{1}{2}\\sigma b h$: $y_{cm} = \\frac{\\sigma b}{M}\\cdot\\frac{h^2}{6} = \\frac{h}{3}$.\n$$\\boxed{y_{cm} = \\frac{h}{3}}\\text{ (one-third from the base)}$$",
+      "body_he_md": "## נוסחת האינטגרל\n\nלגוף רציף עם אלמנט מסה $dm$:\n$$\\boxed{\\vec{r}_{cm} = \\frac{1}{M}\\int \\vec{r}\\,dm}$$\n\nב-1D עם צפיפות ליניארית $\\lambda(x)$: $dm = \\lambda(x)\\,dx$.\nב-2D עם צפיפות שטחית $\\sigma$: $dm = \\sigma\\,dA$.\nב-3D עם צפיפות נפחית $\\rho$: $dm = \\rho\\,dV$.\n\n## גזירה 1 — מוט אחיד באורך $L$\n\nהמוט לאורך ציר x מ-0 עד $L$. $\\lambda = M/L$.\n$$x_{cm} = \\frac{1}{M}\\int_0^L x\\lambda\\,dx = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\boxed{\\frac{L}{2}}$$\n\n## גזירה 2 — משולש ישר-זווית\n\nמשולש אחיד בעל בסיס $b$ (לאורך x) וגובה $h$ (לאורך y):\n$$y_{cm} = \\frac{h}{3} \\qquad \\text{(שליש מהבסיס)}$$"
     },
     {
-      "id": "cm_derivations",
-      "title_en": "Worked Derivations — Rod and Triangle",
-      "title_he": "גזירות — מוט ומשולש",
-      "body_en_md": "**Uniform rod** length $L$ on $x$-axis from $0$ to $L$:\n$$x_{cm} = \\frac{1}{M}\\int_0^L x\\,\\lambda\\,dx = \\frac{\\lambda}{M}\\frac{L^2}{2} = \\boxed{\\frac{L}{2}}$$\n\n**Uniform triangle** (vertex at origin, base $b$ on $x$-axis, height $h$): by symmetry $x_{cm}=b/3$ along altitude; $y_{cm}=h/3$ for standard right triangle.",
-      "body_he_md": "**מוט אחיד** $L$ על ציר $x$:\n$$x_{cm} = L/2$$\n\n**משולש אחיד:** $x_{cm}=b/3$ לאורך הגובה.",
-      "level_min": "university"
-    },
-    {
-      "id": "newton_system",
+      "id": "newtons_law_system",
       "title_en": "Newton's Second Law for a System",
-      "title_he": "חוק שני של ניוטון למערכת",
-      "body_en_md": "Only **external** forces affect CM motion:\n$$\\boxed{\\vec{F}_{ext} = M_{tot}\\,\\vec{a}_{cm}}$$\n\nInternal forces (Newton III pairs) cancel in the sum over the system.\n\nA exploding firework: internal forces change relative motion but $\\vec{a}_{cm}$ follows external gravity only (neglect air).",
-      "body_he_md": "רק **כוחות חיצוניים** משפיעים על תנועת CM:\n$$\\vec{F}_{ext} = M_{tot}\\,\\vec{a}_{cm}$$\n\nכוחות פנימיים מתבטלים בזוגות.",
-      "level_min": "university"
-    },
-    {
-      "id": "momentum_conservation",
-      "title_en": "Total Momentum and Conservation",
-      "title_he": "תנע כולל ושימור",
-      "body_en_md": "$$\\vec{p}_{tot} = M_{tot}\\,\\vec{v}_{cm}$$\n\nIf $\\vec{F}_{ext}=0$:\n$$\\boxed{\\vec{p}_{tot} = \\text{const} \\quad \\Rightarrow \\quad \\vec{v}_{cm} = \\text{const}}$$\n\nCollisions, explosions: use momentum conservation in isolated system.",
-      "body_he_md": "$$\\vec{p}_{tot} = M_{tot}\\,\\vec{v}_{cm}$$\n\nאם $\\vec{F}_{ext}=0$: $\\vec{p}_{tot}$ קבוע.",
-      "level_min": "university"
-    },
-    {
-      "id": "cm_frame",
-      "title_en": "Center-of-Mass Frame",
-      "title_he": "מערכת ייחוס של מרכז מסה",
-      "body_en_md": "In the **CM frame**, $\\vec{v}_{cm}' = 0$ and total momentum is zero.\n\nInternal kinetic energy is minimized in CM frame. Two-body collisions simplify: one particle moves, other recoils oppositely.",
-      "body_he_md": "ב**מערכת CM**, $\\vec{v}_{cm}'=0$ והתנע כולל אפס.\n\nאנרגיה קינטית פנימית מינימלית במערכת CM.",
-      "level_min": "university"
+      "title_he": "חוק ניוטון השני למערכת חלקיקים",
+      "level_min": "university",
+      "body_en_md": "## $\\vec{F}_{ext} = M\\vec{a}_{cm}$\n\nDifferentiate $M\\vec{v}_{cm} = \\vec{p}_{\\text{total}}$ with respect to time:\n$$\\frac{d\\vec{p}_{\\text{total}}}{dt} = \\sum_i \\frac{d\\vec{p}_i}{dt} = \\sum_i \\vec{F}_i^{\\text{total}}$$\n\nThe forces on particle $i$ consist of external forces $\\vec{F}_i^{\\text{ext}}$ and internal forces $\\vec{F}_{ij}$ from other particles. By Newton's 3rd law, internal forces cancel in pairs:\n$$\\sum_{i \\ne j}\\vec{F}_{ij} = 0$$\n\nTherefore:\n$$\\boxed{\\vec{F}_{\\text{ext}} = M\\vec{a}_{cm}}$$\n\n**Consequence:** Only external forces can change the motion of the CM. A system of particles with no external forces has its CM moving at constant velocity (or at rest).\n\n## Conservation of Momentum\n\nIf $\\vec{F}_{\\text{ext}} = 0$, then $\\vec{p}_{\\text{total}} = M\\vec{v}_{cm} = \\text{const}$.\n\n## CM Reference Frame\n\nIn the **center-of-mass (CM) frame**, the total momentum is zero by definition:\n$$\\sum_i m_i \\vec{v}_i' = 0$$\nwhere $\\vec{v}_i' = \\vec{v}_i - \\vec{v}_{cm}$ are velocities relative to the CM.\n\nThe total kinetic energy in the CM frame ($K_{\\text{CM frame}}$) is the minimum possible kinetic energy of the system — the remaining energy $\\frac{1}{2}Mv_{cm}^2$ is associated with CM motion.",
+      "body_he_md": "## $\\vec{F}_{ext} = M\\vec{a}_{cm}$\n\nנגזור $M\\vec{v}_{cm} = \\vec{p}_{\\text{כולל}}$ לפי זמן. כוחות פנימיים מבוטלים בזוגות (חוק שלישי של ניוטון):\n$$\\boxed{\\vec{F}_{\\text{חיצוני}} = M\\vec{a}_{cm}}$$\n\n**מסקנה:** רק כוחות חיצוניים יכולים לשנות את תנועת מרכז המסה.\n\n## שימור תנע\n\nאם $\\vec{F}_{\\text{חיצוני}} = 0$, אז $\\vec{p}_{\\text{כולל}} = M\\vec{v}_{cm} = \\text{const}$.\n\n## מערכת ייחוס CM\n\nב**מערכת ייחוס מרכז המסה**, התנע הכולל הוא אפס בהגדרה:\n$$\\sum_i m_i \\vec{v}_i' = 0$$\nהאנרגיה הקינטית במערכת CM היא המינימלית האפשרית למערכת."
     },
     {
       "id": "rocket_equation",
-      "title_en": "Variable Mass — Rocket Equation",
-      "title_he": "מסה משתנה — משוואת הרocket",
-      "body_en_md": "Rocket expels exhaust at speed $u$ relative to rocket. With $M(t)$ decreasing:\n$$M\\frac{dv}{dt} = -u\\frac{dM}{dt}$$\n\nIntegrate (constant $u$, no gravity):\n$$\\boxed{\\Delta v = u\\ln\\frac{M_0}{M_f}}$$\n\n$M_0$ = initial mass, $M_f$ = final mass after burn.",
-      "body_he_md": "Rocket משליך exhaust במהירות $u$ יחסית ל-rocket:\n$$M\\frac{dv}{dt} = -u\\frac{dM}{dt}$$\n\n$$\\Delta v = u\\ln(M_0/M_f)$$",
-      "level_min": "university"
+      "title_en": "The Rocket Equation (Tsiolkovsky)",
+      "title_he": "משוואת הרקטה (צ'יולקובסקי)",
+      "level_min": "university",
+      "body_en_md": "## Variable-Mass Systems\n\nA rocket ejects exhaust gas at velocity $\\vec{u}$ **relative to the rocket**. Let $M(t)$ be the rocket mass at time $t$, and $v(t)$ its velocity (in an inertial frame).\n\nIn time $dt$: mass $|dM|$ is ejected. The exhaust velocity in the inertial frame is $v + u$ (if $u$ is defined as backward, i.e., $u < 0$ so exhaust moves backward). Conservation of momentum (no external force):\n\n$$M\\,dv = -u\\,dM \\implies M\\frac{dv}{dt} = -u\\frac{dM}{dt}$$\n\nHere $dM/dt < 0$ (mass is decreasing), and $-u\\,dM/dt > 0$ (thrust). Integrating from $M_0$ to $M_f$:\n$$\\int_{v_0}^{v_f}dv = -u\\int_{M_0}^{M_f}\\frac{dM}{M} = u\\ln\\frac{M_0}{M_f}$$\n$$\\boxed{\\Delta v = u\\ln\\frac{M_0}{M_f}}$$\n\nThis is the **Tsiolkovsky rocket equation** (Δv budget equation in orbital mechanics).\n\n**Physical insight:** $\\ln(M_0/M_f)$ grows slowly — to double $\\Delta v$, you need to square the mass ratio. Efficient rockets maximize exhaust velocity $u$ (specific impulse).\n\n**Example:** Exhaust speed $u = 3000$ m/s, $M_0/M_f = e^2 \\approx 7.4$. Then $\\Delta v = 3000 \\times 2 = 6000$ m/s.",
+      "body_he_md": "## מערכות בעלות מסה משתנה\n\nרקטה מפליטה גז פליטה במהירות $u$ **ביחס לרקטה**. $M(t)$ = מסת הרקטה, $v(t)$ = מהירותה.\n\nשימור תנע (ללא כוח חיצוני): $M\\,dv = -u\\,dM$.\nאינטגרציה מ-$M_0$ ל-$M_f$:\n$$\\boxed{\\Delta v = u\\ln\\frac{M_0}{M_f}}$$\n\nזוהי **משוואת הרקטה של צ'יולקובסקי**.\n\n**תובנה פיזיקלית:** $\\ln(M_0/M_f)$ גדל לאט — להכפלת $\\Delta v$ יש לריבוע יחס המסות. רקטות יעילות ממקסמות את מהירות הפליטה $u$.\n\n**דוגמה:** $u = 3000$ m/s, $M_0/M_f = e^2 \\approx 7.4$ $\\Rightarrow$ $\\Delta v = 6000$ m/s."
+    },
+    {
+      "id": "cm_applications_summary",
+      "title_en": "Applications and Problem-Solving Summary",
+      "title_he": "יישומים וסיכום פתרון בעיות",
+      "level_min": "university",
+      "body_en_md": "## Key Problem Types\n\n1. **Find CM position:** Use $\\vec{r}_{cm} = (\\sum m_i\\vec{r}_i)/M$ for discrete; integral for continuous.\n2. **CM doesn't move:** If $\\vec{F}_{ext} = 0$, then $\\Delta\\vec{r}_{cm} = 0$. Example: person walks on a floating raft — the raft moves backward as the person moves forward, keeping CM fixed.\n3. **Explosion/collision:** CM velocity unchanged during collision/explosion (internal forces only).\n4. **Rocket problem:** Use Tsiolkovsky or work incrementally: $M(t) = M_0 - \\dot{m}t$, thrust $= u\\dot{m}$.\n\n## Technion-Style Example\n\n*A bullet of mass $m = 0.01$ kg is fired horizontally at $v_0 = 300$ m/s into a stationary wooden block of mass $M = 2$ kg resting on a frictionless surface. The bullet embeds in the block. Find the CM velocity before and after.*\n\n- **Before:** $v_{cm} = (m v_0)/(m+M) = (0.01 \\times 300)/(2.01) \\approx 1.49$ m/s.\n- **After:** Same — CM velocity is conserved! The block+bullet system moves at 1.49 m/s.\n- This follows from $\\vec{F}_{ext} = 0$ (no friction), so $\\vec{p}_{\\text{total}} = \\text{const}$.",
+      "body_he_md": "## סוגי בעיות מרכזיים\n\n1. **מציאת מיקום CM:** $\\vec{r}_{cm} = (\\sum m_i\\vec{r}_i)/M$ לדיסקרטי; אינטגרל לרציף.\n2. **CM אינו זז:** אם $\\vec{F}_{ext} = 0$, אז $\\Delta\\vec{r}_{cm} = 0$.\n3. **פיצוץ/התנגשות:** מהירות ה-CM אינה משתנה (רק כוחות פנימיים).\n4. **בעיית רקטה:** שימוש במשוואת צ'יולקובסקי.\n\n## דוגמה בסגנון הטכניון\n\n*כדור ($m = 0.01$ kg, $v_0 = 300$ m/s) נורה לתוך בלוק עץ ($M = 2$ kg) על משטח חלק. מצא מהירות CM לפני ואחרי.*\n\n$v_{cm} = (mv_0)/(m+M) = 3/(2.01) \\approx 1.49$ m/s — שמורה לפני ואחרי!"
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Masses $2$ kg at $(0,0)$ and $4$ kg at $(3,0)$ m. The $x$-coordinate of CM is:",
-      "body_he": "מסות $2$ kg ב-$(0,0)$ ו-$4$ kg ב-$(3,0)$ m. קואורדינטת $x$ של CM:",
+      "body_en": "Three masses are placed along the x-axis: $m_1 = 1$ kg at $x = 0$, $m_2 = 3$ kg at $x = 2$ m, $m_3 = 2$ kg at $x = 5$ m. Where is the center of mass?",
+      "body_he": "שלוש מסות מונחות לאורך ציר x: $m_1 = 1$ kg ב-$x = 0$, $m_2 = 3$ kg ב-$x = 2$ m, $m_3 = 2$ kg ב-$x = 5$ m. היכן מרכז המסה?",
       "options": [
         {
           "id": "a",
-          "text_en": "$2.0$ m",
-          "text_he": "$2.0$ m",
+          "text_en": "$x_{cm} \\approx 2.67$ m",
+          "text_he": "$x_{cm} \\approx 2.67$ m",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$1.5$ m",
-          "text_he": "$1.5$ m",
+          "text_en": "$x_{cm} = 2.33$ m",
+          "text_he": "$x_{cm} = 2.33$ m",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$3.0$ m",
-          "text_he": "$3.0$ m",
+          "text_en": "$x_{cm} = 2.00$ m",
+          "text_he": "$x_{cm} = 2.00$ m",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$1.0$ m",
-          "text_he": "$1.0$ m",
+          "text_en": "$x_{cm} = 3.50$ m",
+          "text_he": "$x_{cm} = 3.50$ m",
           "correct": false
         }
       ],
-      "explanation_en": "$x_{cm}=(2\\cdot0+4\\cdot3)/6 = 12/6 = 2$ m.",
-      "explanation_he": "$x_{cm}=(0+12)/6 = 2$ m."
+      "explanation_en": "$M = 1+3+2 = 6$ kg. $x_{cm} = [(1)(0)+(3)(2)+(2)(5)]/6 = (0+6+10)/6 = 16/6 \\approx 2.67$ m. The CM lies between $m_2$ and $m_3$ but closer to $m_2$, the heaviest particle.",
+      "explanation_he": "$M = 6$ kg. $x_{cm} = (0 + 6 + 10)/6 = 16/6 \\approx 2.67$ m. מרכז המסה קרוב יותר ל-$m_2$, המסה הכבדה ביותר."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Uniform rod length $L$, linear density $\\lambda$. Using $x_{cm}=\\frac{1}{M}\\int x\\,dm$, one finds:",
-      "body_he": "מוט אחיד $L$, צפיפות לינארית $\\lambda$. מ-$x_{cm}=\\frac{1}{M}\\int x\\,dm$:",
+      "body_en": "A uniform thin rod of length $L = 0.8$ m and mass $M$ lies along the x-axis from $x = 0$ to $x = 0.8$ m. Using $x_{cm} = \\frac{1}{M}\\int_0^L x\\lambda\\,dx$, the center of mass is at:",
+      "body_he": "מוט דק אחיד באורך $L = 0.8$ m ומסה $M$ מונח לאורך ציר x מ-$x = 0$ עד $x = 0.8$ m. לפי $x_{cm} = \\frac{1}{M}\\int_0^L x\\lambda\\,dx$, מרכז המסה נמצא ב:",
       "options": [
         {
           "id": "a",
-          "text_en": "$x_{cm} = L/2$",
-          "text_he": "$x_{cm} = L/2$",
+          "text_en": "$x_{cm} = 0.4$ m",
+          "text_he": "$x_{cm} = 0.4$ m",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$x_{cm} = L/3$",
-          "text_he": "$x_{cm} = L/3$",
+          "text_en": "$x_{cm} = 0.267$ m",
+          "text_he": "$x_{cm} = 0.267$ m",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$x_{cm} = L/4$",
-          "text_he": "$x_{cm} = L/4$",
+          "text_en": "$x_{cm} = 0.6$ m",
+          "text_he": "$x_{cm} = 0.6$ m",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$x_{cm} = 2L/3$",
-          "text_he": "$x_{cm} = 2L/3$",
+          "text_en": "$x_{cm} = 0$ m",
+          "text_he": "$x_{cm} = 0$ m",
           "correct": false
         }
       ],
-      "explanation_en": "$\\int_0^L x\\lambda\\,dx = \\lambda L^2/2$; $M=\\lambda L$ gives $L/2$.",
-      "explanation_he": "אינטגרציה נותנת $x_{cm}=L/2$."
+      "explanation_en": "$\\lambda = M/L$. $x_{cm} = \\frac{\\lambda}{M}\\int_0^L x\\,dx = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\frac{L}{2} = 0.4$ m. The CM of a uniform rod is always at its midpoint.",
+      "explanation_he": "$\\lambda = M/L$. $x_{cm} = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\frac{L}{2} = 0.4$ m. מרכז המסה של מוט אחיד נמצא תמיד באמצעו."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Two skaters push off each other on frictionless ice. While pushing, $\\vec{F}_{ext}$ on the system is approximately zero. Therefore:",
-      "body_he": "שני מחליקים דוחפים זה את זה על קרח חלק. בזמן הדחיפה, $\\vec{F}_{ext}\\approx 0$. לכן:",
+      "body_en": "Two ice skaters (masses $M_1 = 60$ kg and $M_2 = 80$ kg) stand at rest on frictionless ice and push off each other. After the push, $v_1 = 2$ m/s to the right. What is $v_2$?",
+      "body_he": "שני מחליקי קרח (מסות $M_1 = 60$ kg ו-$M_2 = 80$ kg) עומדים במנוחה על קרח חלק ודוחפים אחד את השני. לאחר הדחיפה, $v_1 = 2$ m/s ימינה. מהי $v_2$?",
       "options": [
         {
           "id": "a",
-          "text_en": "CM velocity remains constant during the push",
-          "text_he": "מהירות CM קבועה",
+          "text_en": "$v_2 = 1.5$ m/s to the left",
+          "text_he": "$v_2 = 1.5$ m/s שמאלה",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "Each skater's speed is unchanged",
-          "text_he": "מהירות כל מחליק ללא שינוי",
+          "text_en": "$v_2 = 2.0$ m/s to the left",
+          "text_he": "$v_2 = 2.0$ m/s שמאלה",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "Total kinetic energy is conserved",
-          "text_he": "אנרגיה קינטית כוללת נשמרת",
+          "text_en": "$v_2 = 1.5$ m/s to the right",
+          "text_he": "$v_2 = 1.5$ m/s ימינה",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "CM accelerates due to internal forces",
-          "text_he": "CM מאיץ מכוחות פנימיים",
+          "text_en": "$v_2 = 2.67$ m/s to the left",
+          "text_he": "$v_2 = 2.67$ m/s שמאלה",
           "correct": false
         }
       ],
-      "explanation_en": "Internal forces cannot change $\\vec{v}_{cm}$ when $\\vec{F}_{ext}=0$.",
-      "explanation_he": "כוחות פנימיים לא משנים $\\vec{v}_{cm}$ כש-$\\vec{F}_{ext}=0$."
+      "explanation_en": "Initially at rest, $\\vec{p}_{\\text{total}} = 0$. After: $M_1 v_1 + M_2 v_2 = 0 \\Rightarrow v_2 = -M_1 v_1/M_2 = -(60)(2)/80 = -1.5$ m/s. Negative = to the left.",
+      "explanation_he": "בהתחלה במנוחה, $\\vec{p}_{\\text{כולל}} = 0$. לאחר: $M_1 v_1 + M_2 v_2 = 0 \\Rightarrow v_2 = -(60)(2)/80 = -1.5$ m/s (שמאלה)."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "In the center-of-mass frame of an isolated two-particle system:",
-      "body_he": "במערכת CM של מערכת שני-חלקיקים מבודדת:",
+      "body_en": "A 70 kg astronaut and a 10 kg toolbox are initially at rest in space. The astronaut pushes the toolbox away at 5 m/s relative to the initial frame. What is the astronaut's recoil speed?",
+      "body_he": "אסטרונאוט (70 kg) וארגז כלים (10 kg) נמצאים בתחילה במנוחה בחלל. האסטרונאוט דוחף את הארגז בתנועה של 5 m/s ביחס למסגרת ההתייחסות ההתחלתית. מהי מהירות הרתע של האסטרונאוט?",
       "options": [
         {
           "id": "a",
-          "text_en": "Total momentum is zero",
-          "text_he": "התנע הכולל אפס",
+          "text_en": "$\\approx 0.71$ m/s (opposite direction)",
+          "text_he": "$\\approx 0.71$ m/s (כיוון הפוך)",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "Both particles are at rest at the origin always",
-          "text_he": "שני החלקיקים תמיד במנוחה",
+          "text_en": "$5$ m/s",
+          "text_he": "$5$ m/s",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "Internal forces vanish",
-          "text_he": "כוחות פנימיים מתאפסים",
+          "text_en": "$0.5$ m/s",
+          "text_he": "$0.5$ m/s",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "Kinetic energy is zero",
-          "text_he": "אנרגיה קינטית אפס",
+          "text_en": "$3.5$ m/s",
+          "text_he": "$3.5$ m/s",
           "correct": false
         }
       ],
-      "explanation_en": "By definition $\\vec{p}_{tot}'=M\\vec{v}_{cm}'=0$ in CM frame.",
-      "explanation_he": "בהגדרה $\\vec{p}_{tot}'=0$ במערכת CM."
+      "explanation_en": "$p_{\\text{total}} = 0$. $10(5) + 70 v_{\\text{astro}} = 0 \\Rightarrow v_{\\text{astro}} = -50/70 \\approx -0.714$ m/s. The astronaut recoils at $\\approx 0.71$ m/s in the opposite direction.",
+      "explanation_he": "$p_{\\text{כולל}} = 0$. $10(5) + 70 v_{\\text{אסטרונאוט}} = 0 \\Rightarrow v_{\\text{אסטרונאוט}} = -50/70 \\approx -0.71$ m/s (כיוון הפוך)."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Rocket: $M_0=1000$ kg, $M_f=400$ kg, exhaust speed $u=2000$ m/s (no gravity). $\\Delta v$ is approximately:",
-      "body_he": "Rocket: $M_0=1000$, $M_f=400$, $u=2000$ m/s. $\\Delta v$ בקירוב:",
+      "body_en": "A rocket has initial mass $M_0 = 10{,}000$ kg and final mass $M_f = 2{,}000$ kg after burning all fuel. The exhaust speed is $u = 2500$ m/s. What is $\\Delta v$?",
+      "body_he": "לרקטה מסה התחלתית $M_0 = 10{,}000$ kg ומסה סופית $M_f = 2{,}000$ kg לאחר שריפת כל הדלק. מהירות הפליטה $u = 2500$ m/s. מהו $\\Delta v$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$2000\\ln(2.5) \\approx 1830$ m/s",
-          "text_he": "$2000\\ln(2.5) \\approx 1830$ m/s",
+          "text_en": "$\\Delta v \\approx 4024$ m/s",
+          "text_he": "$\\Delta v \\approx 4024$ m/s",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$1200$ m/s",
-          "text_he": "$1200$ m/s",
+          "text_en": "$\\Delta v = 2500$ m/s",
+          "text_he": "$\\Delta v = 2500$ m/s",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$2000$ m/s",
-          "text_he": "$2000$ m/s",
+          "text_en": "$\\Delta v \\approx 8000$ m/s",
+          "text_he": "$\\Delta v \\approx 8000$ m/s",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$600$ m/s",
-          "text_he": "$600$ m/s",
+          "text_en": "$\\Delta v = 20{,}000$ m/s",
+          "text_he": "$\\Delta v = 20{,}000$ m/s",
           "correct": false
         }
       ],
-      "explanation_en": "$\\Delta v = u\\ln(M_0/M_f) = 2000\\ln(2.5) \\approx 1830$ m/s.",
-      "explanation_he": "$\\Delta v = 2000\\ln(2.5) \\approx 1830$ m/s."
+      "explanation_en": "$\\Delta v = u\\ln(M_0/M_f) = 2500\\ln(10000/2000) = 2500\\ln 5 = 2500 \\times 1.609 \\approx 4023$ m/s.",
+      "explanation_he": "$\\Delta v = u\\ln(M_0/M_f) = 2500\\ln(5) = 2500 \\times 1.609 \\approx 4023$ m/s."
     }
   ]
 }

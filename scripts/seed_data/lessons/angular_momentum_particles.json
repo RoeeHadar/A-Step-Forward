@@ -1,240 +1,224 @@
 {
   "id": "angular_momentum_particles",
   "subject": "university_physics_1",
-  "title_en": "Angular Momentum & Rotation (University)",
-  "title_he": "תנע זוויתי וסיבוב (אוניברסיטה)",
-  "duration_min": 26,
+  "title_en": "Angular Momentum — Particles, Rigid Bodies, and Rolling (University)",
+  "title_he": "תנע זוויתי — חלקיקים, גופים קשיחים וגלגול (אוניברסיטה)",
+  "duration_min": 27,
   "type": "interactive",
   "level_min": "university",
-  "agent_hints": "$\\vec{L}=\\vec{r}\\times\\vec{p}$; $\\vec{\\tau}=d\\vec{L}/dt$. Conservation when $\\vec{\\tau}_{ext}=0$. Rolling: $v_{cm}=R\\omega$ and $KE=\\frac{1}{2}Mv_{cm}^2+\\frac{1}{2}I\\omega^2$. Solid sphere rolling beats sliding down incline (more KE in translation for slider? Actually rolling has rotational KE so slower — compare carefully).",
+  "agent_hints": "Angular momentum conservation is the rotational analog of linear momentum conservation — stress the exact parallel. For rolling without slipping, students must understand that $v_{cm} = R\\omega$ connects translational and rotational motion and must be applied before doing energy conservation. Common error: computing only $\\frac{1}{2}Mv_{cm}^2$ and forgetting the rotational KE $\\frac{1}{2}I\\omega^2$. The ice-skater example beautifully illustrates $I_1\\omega_1 = I_2\\omega_2$: as $I$ decreases (arms in), $\\omega$ increases to conserve $L$.",
   "sections": [
     {
-      "id": "L_definition",
+      "id": "angular_momentum_particle",
       "title_en": "Angular Momentum of a Particle",
       "title_he": "תנע זוויתי של חלקיק",
-      "body_en_md": "For particle of mass $m$ at $\\vec{r}$ with momentum $\\vec{p}=m\\vec{v}$:\n$$\\boxed{\\vec{L} = \\vec{r} \\times \\vec{p} = m(\\vec{r}\\times\\vec{v})}$$\n\nMagnitude: $L = mrv\\sin\\theta$ ($\\theta$ between $\\vec{r}$ and $\\vec{v}$).\n\nUnits: kg·m²/s.",
-      "body_he_md": "לחלקיק $m$ ב-$\\vec{r}$ עם $\\vec{p}=m\\vec{v}$:\n$$\\vec{L} = \\vec{r} \\times \\vec{p} = m(\\vec{r}\\times\\vec{v})$$\n\nגודל: $L = mrv\\sin\\theta$.",
-      "level_min": "university"
+      "level_min": "university",
+      "body_en_md": "## Definition\n\nFor a particle of mass $m$ at position $\\vec{r}$ with momentum $\\vec{p} = m\\vec{v}$, the **angular momentum** about the origin is:\n$$\\boxed{\\vec{L} = \\vec{r} \\times \\vec{p} = m(\\vec{r} \\times \\vec{v})}$$\n\n**Magnitude:** $L = mrv\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{v}$.\n\n**Units:** kg·m²/s.\n\n**Direction:** right-hand rule on $\\vec{r} \\times \\vec{p}$ — perpendicular to the plane of $\\vec{r}$ and $\\vec{v}$.\n\n**Important:** $\\vec{L}$ depends on the choice of origin. Always specify the origin.\n\n## Special Cases\n\n- **Circular motion** (radius $r$, speed $v$, $\\theta = 90°$): $L = mrv = mr^2\\omega$\n- **Projectile at peak** (horizontal velocity $v_x$, height $h$ above launch): $L = mhv_x$ (about launch point)\n- **Radial motion** ($\\vec{v}\\parallel\\vec{r}$, $\\theta = 0$ or 180°): $L = 0$ — no angular momentum!\n\n**Example:** A 0.2 kg ball moves at 5 m/s in a circle of radius 0.3 m. $L = (0.2)(0.3)(5) = 0.30$ kg·m²/s.",
+      "body_he_md": "## הגדרה\n\nלחלקיק בעל מסה $m$ במיקום $\\vec{r}$ עם תנע $\\vec{p} = m\\vec{v}$, **התנע הזוויתי** סביב הראשית:\n$$\\boxed{\\vec{L} = \\vec{r} \\times \\vec{p} = m(\\vec{r} \\times \\vec{v})}$$\n\n**עוצמה:** $L = mrv\\sin\\theta$, כאשר $\\theta$ הזווית בין $\\vec{r}$ ל-$\\vec{v}$.\n\n**יחידות:** kg·m²/s.\n\n**כיוון:** כלל היד הימנית על $\\vec{r} \\times \\vec{p}$.\n\n**חשוב:** $\\vec{L}$ תלוי בבחירת הראשית.\n\n## מקרים מיוחדים\n\n- **תנועה מעגלית** (רדיוס $r$, מהירות $v$): $L = mrv = mr^2\\omega$\n- **תנועה רדיאלית** ($\\vec{v}\\parallel\\vec{r}$): $L = 0$\n\n**דוגמה:** כדור (0.2 kg) בתנועה מעגלית (r = 0.3 m, v = 5 m/s): $L = 0.30$ kg·m²/s."
     },
     {
-      "id": "tau_L_relation",
-      "title_en": "Torque and Angular Momentum",
-      "title_he": "מומנט ותנע זוויתי",
-      "body_en_md": "Rotational analog of $\\vec{F}=d\\vec{p}/dt$:\n$$\\boxed{\\vec{\\tau}_{ext} = \\frac{d\\vec{L}}{dt}}$$\n\nConstant $\\vec{L}$ when net external torque vanishes.",
-      "body_he_md": "Analog סיבובי:\n$$\\vec{\\tau}_{ext} = \\frac{d\\vec{L}}{dt}$$",
-      "level_min": "university"
+      "id": "torque_angular_momentum",
+      "title_en": "Torque and the Angular Momentum Theorem",
+      "title_he": "מומנט כוח ומשפט התנע הזוויתי",
+      "level_min": "university",
+      "body_en_md": "## The Angular Momentum Theorem\n\nDifferentiate $\\vec{L} = \\vec{r} \\times \\vec{p}$:\n$$\\frac{d\\vec{L}}{dt} = \\frac{d\\vec{r}}{dt}\\times\\vec{p} + \\vec{r}\\times\\frac{d\\vec{p}}{dt} = \\vec{v}\\times m\\vec{v} + \\vec{r}\\times\\vec{F} = 0 + \\vec{\\tau}$$\n\n(since $\\vec{v}\\times\\vec{v} = 0$)\n\n$$\\boxed{\\vec{\\tau} = \\frac{d\\vec{L}}{dt}}$$\n\nThis is the **rotational analog of Newton's 2nd law**. For a system of particles, only **external** torques change the total $\\vec{L}$.\n\n## Conservation of Angular Momentum\n\nIf $\\vec{\\tau}_{\\text{ext}} = 0$, then:\n$$\\frac{d\\vec{L}}{dt} = 0 \\implies \\vec{L} = \\text{const}$$\n\n**Application — ice skater:** A skater spinning with arms extended (large $I_1$, angular velocity $\\omega_1$) pulls arms in (smaller $I_2$):\n$$I_1\\omega_1 = I_2\\omega_2 \\implies \\omega_2 = \\frac{I_1}{I_2}\\omega_1 > \\omega_1$$\nNo external torque about the vertical axis → $L = I\\omega$ conserved → faster spin.\n\n**Application — satellite orbit:** As a satellite moves closer to Earth (smaller $r$), its orbital speed increases to conserve $L = mrv$ (Kepler's second law follows).",
+      "body_he_md": "## משפט התנע הזוויתי\n\nגזירת $\\vec{L} = \\vec{r} \\times \\vec{p}$:\n$$\\boxed{\\vec{\\tau} = \\frac{d\\vec{L}}{dt}}$$\n\nזהו **האנלוג הסיבובי לחוק ניוטון השני**. רק מומנטים **חיצוניים** משנים את $\\vec{L}$ הכולל.\n\n## שימור תנע זוויתי\n\nאם $\\vec{\\tau}_{\\text{חיצוני}} = 0$:\n$$\\vec{L} = \\text{const}$$\n\n**יישום — מחלקת קרח:** מחלק ידיים פרוסות ($I_1$ גדול, $\\omega_1$) מושך ידיים פנימה ($I_2$ קטן):\n$$I_1\\omega_1 = I_2\\omega_2 \\implies \\omega_2 = \\frac{I_1}{I_2}\\omega_1 > \\omega_1$$\n\n**יישום — לוויין במסלול:** כאשר לוויין מתקרב לכדה\"א, מהירותו גדלה לשימור $L = mrv$ (חוק שני של קפלר)."
     },
     {
-      "id": "L_conservation",
-      "title_en": "Conservation of Angular Momentum",
-      "title_he": "שימור תנע זוויתי",
-      "body_en_md": "If $\\vec{\\tau}_{ext}=0$:\n$$\\boxed{\\vec{L} = \\text{const}$$\n\nIsolated system: internal torques cancel; total $\\vec{L}$ conserved.",
-      "body_he_md": "אם $\\vec{\\tau}_{ext}=0$:\n$$\\vec{L} = \\text{const}$$",
-      "level_min": "university"
+      "id": "rigid_body_angular_momentum",
+      "title_en": "Angular Momentum of a Rigid Body",
+      "title_he": "תנע זוויתי של גוף קשיח",
+      "level_min": "university",
+      "body_en_md": "## Rigid Body Rotating About a Fixed Symmetry Axis\n\nFor a rigid body rotating with angular velocity $\\omega$ about a principal axis:\n$$\\boxed{L = I\\omega}$$\nwhere $I = \\int r^2\\,dm$ is the moment of inertia about that axis.\n\nThe angular momentum theorem then gives:\n$$\\tau_{\\text{net}} = \\frac{dL}{dt} = I\\frac{d\\omega}{dt} = I\\alpha$$\n(recovering $\\tau = I\\alpha$).\n\n## Rolling Without Slipping\n\nFor a symmetric object (sphere, disk, cylinder) of mass $M$, radius $R$, rolling without slipping on a surface:\n\n**Rolling constraint:** $v_{cm} = R\\omega$ (the contact point is momentarily at rest).\n\n**Total kinetic energy:**\n$$KE_{\\text{total}} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2$$\nThe first term is translational KE of CM; the second is rotational KE about CM.\n\nSubstituting $\\omega = v_{cm}/R$:\n$$KE_{\\text{total}} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\frac{v_{cm}^2}{R^2} = \\frac{1}{2}v_{cm}^2\\left(M + \\frac{I_{cm}}{R^2}\\right)$$\n\n**Total angular momentum** about contact point:\n$$L = I_{\\text{contact}}\\omega = (I_{cm} + MR^2)\\omega$$\n(parallel-axis theorem for $I_{\\text{contact}}$).",
+      "body_he_md": "## גוף קשיח המסתובב סביב ציר סימטריה קבוע\n\nלגוף קשיח המסתובב עם $\\omega$ סביב ציר ראשי:\n$$\\boxed{L = I\\omega}$$\nכאשר $I = \\int r^2\\,dm$. משפט התנע הזוויתי נותן:\n$$\\tau_{\\text{net}} = I\\alpha$$\n\n## גלגול ללא החלקה\n\nלעצם סימטרי (כדור, דיסק, גליל) בעל מסה $M$ ורדיוס $R$ הגולל ללא החלקה:\n\n**תנאי גלגול:** $v_{cm} = R\\omega$.\n\n**אנרגיה קינטית כוללת:**\n$$KE_{\\text{כולל}} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2 = \\frac{1}{2}v_{cm}^2\\left(M + \\frac{I_{cm}}{R^2}\\right)$$"
     },
     {
-      "id": "L_applications",
-      "title_en": "Applications — Skater, Orbit, Gyroscope",
-      "title_he": "יישומים — מחליק, כוכב לווין, גyroscope",
-      "body_en_md": "**Ice skater:** $I\\omega = \\text{const}$. Pulling arms in $\\downarrow I$ $\\Rightarrow$ $\\uparrow \\omega$.\n\n**Satellite orbit:** central force $\\Rightarrow$ zero torque about planet $\\Rightarrow$ areal velocity constant (Kepler's second law).\n\n**Gyroscope precession:** gravity torque $\\perp$ to spin $\\Rightarrow$ precession of $\\vec{L}$.",
-      "body_he_md": "**מחליק קרח:** $I\\omega$ קבוע; $I$ קטן $\\Rightarrow$ $\\omega$ גדל.\n\n**מסלול לווין:** מומנט אפס $\\Rightarrow$ שטח קבוע.\n\n**גyroscope:** פרcession של $\\vec{L}$.",
-      "level_min": "university"
+      "id": "rolling_down_incline",
+      "title_en": "Worked Example — Ball Rolling Down an Incline",
+      "title_he": "דוגמה מלאה — כדור הגולל במורד מדרון",
+      "level_min": "university",
+      "body_en_md": "## Uniform Solid Ball Rolling Down an Incline\n\n**Setup:** A uniform solid sphere of mass $M$ and radius $R$ starts from rest at the top of an incline of height $h$. It rolls without slipping. Find the speed $v_{cm}$ at the bottom.\n\n**Method: Energy Conservation**\n\nInitial energy: $E_i = Mgh$ (all potential, at rest).\nFinal energy: $E_f = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2$.\n\nFor solid sphere: $I_{cm} = \\frac{2}{5}MR^2$.\nRolling: $\\omega = v_{cm}/R$.\n\n$$E_f = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}\\cdot\\frac{2}{5}MR^2\\cdot\\frac{v_{cm}^2}{R^2} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{5}Mv_{cm}^2 = \\frac{7}{10}Mv_{cm}^2$$\n\nSetting $E_i = E_f$:\n$$Mgh = \\frac{7}{10}Mv_{cm}^2 \\implies \\boxed{v_{cm} = \\sqrt{\\frac{10gh}{7}}}$$\n\n**Compare with sliding (no friction, no rotation):** $v_{\\text{slide}} = \\sqrt{2gh}$.\n\nRatio: $v_{\\text{roll}}/v_{\\text{slide}} = \\sqrt{10/14} = \\sqrt{5/7} \\approx 0.845$.\n\nThe rolling ball is **slower** because some energy goes into rotation. Objects with larger $I/MR^2$ ratios are even slower (hollow sphere $> $ solid sphere $> $ disk $> $ ring).",
+      "body_he_md": "## כדור מלא אחיד הגולל במורד מדרון\n\n**ניסוח:** כדור מלא אחיד ($M$, $R$) מתחיל ממנוחה בגובה $h$ וגולל ללא החלקה. מצא $v_{cm}$ בתחתית.\n\n**שיטה: שימור אנרגיה**\n\n$I_{cm} = \\frac{2}{5}MR^2$, $\\omega = v_{cm}/R$.\n\n$$Mgh = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}\\cdot\\frac{2}{5}MR^2\\cdot\\frac{v_{cm}^2}{R^2} = \\frac{7}{10}Mv_{cm}^2$$\n\n$$\\boxed{v_{cm} = \\sqrt{\\frac{10gh}{7}}}$$\n\n**השוואה להחלקה (ללא חיכוך):** $v_{\\text{החלקה}} = \\sqrt{2gh}$.\n\nיחס: $v_{\\text{גלגול}}/v_{\\text{החלקה}} = \\sqrt{5/7} \\approx 0.845$.\n\nהכדור הגולל **איטי יותר** כי חלק מהאנרגיה הולך לסיבוב."
     },
     {
-      "id": "rigid_body_L",
-      "title_en": "Rigid Body — $L = I\\omega$",
-      "title_he": "גוף קשיח — $L = I\\omega$",
-      "body_en_md": "Rotation about symmetry axis through CM:\n$$\\boxed{L = I\\omega}$$\n\nCombined with $\\tau=I\\alpha$ for fixed axis dynamics.",
-      "body_he_md": "סיבוב סביב ציר סימטריה:\n$$L = I\\omega$$",
-      "level_min": "university"
-    },
-    {
-      "id": "rolling",
-      "title_en": "Rolling Without Slipping",
-      "title_he": "גלגול ללא החלקה",
-      "body_en_md": "Rolling without slipping at contact:\n$$\\boxed{v_{cm} = R\\omega}$$\n\nTotal kinetic energy:\n$$K = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}Mv_{cm}^2\\left(1 + \\frac{I}{MR^2}\\right)$$",
-      "body_he_md": "גלגול ללא החלקה:\n$$v_{cm} = R\\omega$$\n\n$$K = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I\\omega^2$$",
-      "level_min": "university"
-    },
-    {
-      "id": "rolling_incline",
-      "title_en": "Worked Example — Ball Rolling Down Incline",
-      "title_he": "דוגמה — כדור גולל במדרון",
-      "body_en_md": "**Problem:** Solid sphere ($I=\\frac{2}{5}MR^2$) rolls from rest down height $h$. Find $v$ at bottom; compare to sliding block (no rotation).\n\nEnergy: $Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}Mv^2(1 + I/(MR^2))$.\n\nSphere: $I/(MR^2)=2/5$ $\\Rightarrow$ $v = \\sqrt{\\frac{10}{7}gh}$.\n\nSlider: $v=\\sqrt{2gh}$ (faster — no rotational KE).\n\nRolling sphere is **slower** than frictionless slider.",
-      "body_he_md": "**בעיה:** כדור מלא ($I=\\frac{2}{5}MR^2$) מגולל מגובה $h$.\n\n$v = \\sqrt{10gh/7}$; מחליק: $v=\\sqrt{2gh}$ (מהיר יותר).",
-      "level_min": "university"
+      "id": "angular_momentum_summary",
+      "title_en": "Summary — Parallels with Linear Mechanics",
+      "title_he": "סיכום — מקבילות עם מכניקה לינארית",
+      "level_min": "university",
+      "body_en_md": "## Translational ↔ Rotational Analogies\n\n| Linear | Rotational |\n|---|---|\n| $m$ (mass) | $I = \\int r^2\\,dm$ (moment of inertia) |\n| $\\vec{p} = m\\vec{v}$ (momentum) | $\\vec{L} = I\\vec{\\omega}$ (angular momentum) |\n| $\\vec{F} = m\\vec{a}$ | $\\vec{\\tau} = I\\vec{\\alpha}$ |\n| $\\vec{F} = d\\vec{p}/dt$ | $\\vec{\\tau} = d\\vec{L}/dt$ |\n| $\\vec{F}_{ext} = 0 \\Rightarrow \\vec{p} = \\text{const}$ | $\\vec{\\tau}_{ext} = 0 \\Rightarrow \\vec{L} = \\text{const}$ |\n| $KE = \\frac{1}{2}mv^2$ | $KE = \\frac{1}{2}I\\omega^2$ |\n\n## Gyroscope Precession (Preview)\n\nA spinning gyroscope tilted at angle $\\theta$ from vertical: the torque $\\vec{\\tau} = \\vec{r}\\times M\\vec{g}$ is horizontal (perpendicular to $\\vec{L}$), causing $\\vec{L}$ to precess (rotate) about the vertical with precession rate:\n$$\\Omega_{\\text{prec}} = \\frac{\\tau}{L} = \\frac{MgL_{cm}}{I\\omega}$$\n\nThis is a direct consequence of $\\vec{\\tau} = d\\vec{L}/dt$.",
+      "body_he_md": "## מקבילות תרגום ↔ סיבוב\n\n| לינארי | סיבובי |\n|---|---|\n| $m$ | $I = \\int r^2\\,dm$ |\n| $\\vec{p} = m\\vec{v}$ | $\\vec{L} = I\\vec{\\omega}$ |\n| $\\vec{F} = m\\vec{a}$ | $\\vec{\\tau} = I\\vec{\\alpha}$ |\n| $\\vec{F} = d\\vec{p}/dt$ | $\\vec{\\tau} = d\\vec{L}/dt$ |\n| $\\vec{F}_{ext} = 0 \\Rightarrow \\vec{p} = \\text{const}$ | $\\vec{\\tau}_{ext} = 0 \\Rightarrow \\vec{L} = \\text{const}$ |\n| $KE = \\frac{1}{2}mv^2$ | $KE = \\frac{1}{2}I\\omega^2$ |\n\n## פרצסיה של ג'ירוסקופ (תצוגה מקדימה)\n\nג'ירוסקופ מסתובב בזווית $\\theta$ מהאנכי: המומנט $\\vec{\\tau} = \\vec{r}\\times M\\vec{g}$ גורם ל-$\\vec{L}$ לפרצס (להסתובב) סביב האנכי במהירות:\n$$\\Omega_{\\text{פרצסיה}} = \\frac{\\tau}{L} = \\frac{MgL_{cm}}{I\\omega}$$"
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Particle $m=2$ kg at $\\vec{r}=(1,0,0)$ m, $\\vec{v}=(0,3,0)$ m/s. Magnitude of $\\vec{L}$ about origin:",
-      "body_he": "חלקיק $m=2$ kg, $\\vec{r}=(1,0,0)$, $\\vec{v}=(0,3,0)$. גודל $\\vec{L}$:",
+      "body_en": "A particle of mass 2 kg moves at 4 m/s. Its position vector relative to the origin has magnitude $r = 3$ m, and the angle between $\\vec{r}$ and $\\vec{v}$ is 60°. What is the magnitude of its angular momentum about the origin?",
+      "body_he": "חלקיק בעל מסה 2 kg נע במהירות 4 m/s. וקטור המיקום שלו ביחס לראשית הוא $r = 3$ m, והזווית בין $\\vec{r}$ ל-$\\vec{v}$ היא 60°. מהו גודל התנע הזוויתי שלו סביב הראשית?",
       "options": [
         {
           "id": "a",
-          "text_en": "$6$ kg·m²/s",
-          "text_he": "$6$ kg·m²/s",
+          "text_en": "$L = 12\\sqrt{3} \\approx 20.8$ kg·m²/s",
+          "text_he": "$L = 12\\sqrt{3} \\approx 20.8$ kg·m²/s",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$3$ kg·m²/s",
-          "text_he": "$3$ kg·m²/s",
+          "text_en": "$L = 24$ kg·m²/s",
+          "text_he": "$L = 24$ kg·m²/s",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$0$",
-          "text_he": "$0$",
+          "text_en": "$L = 12$ kg·m²/s",
+          "text_he": "$L = 12$ kg·m²/s",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$2$ kg·m²/s",
-          "text_he": "$2$ kg·m²/s",
+          "text_en": "$L = 6$ kg·m²/s",
+          "text_he": "$L = 6$ kg·m²/s",
           "correct": false
         }
       ],
-      "explanation_en": "$\\vec{L}=m\\vec{r}\\times\\vec{v}$; $|L|=mrv=2\\cdot1\\cdot3=6$.",
-      "explanation_he": "$|L|=mrv=6$."
+      "explanation_en": "$L = mrv\\sin\\theta = (2)(3)(4)\\sin 60° = 24 \\times (\\sqrt{3}/2) = 12\\sqrt{3} \\approx 20.8$ kg·m²/s.",
+      "explanation_he": "$L = mrv\\sin\\theta = (2)(3)(4)\\sin 60° = 24 \\times (\\sqrt{3}/2) = 12\\sqrt{3} \\approx 20.8$ kg·m²/s."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Ice skater spins with $I_i=4.0$ kg·m², $\\omega_i=2.0$ rad/s. She pulls arms to $I_f=1.0$ kg·m². Final $\\omega_f$:",
-      "body_he": "מחליקה: $I_i=4.0$, $\\omega_i=2.0$; $I_f=1.0$. $\\omega_f$:",
+      "body_en": "An ice skater with moment of inertia $I_1 = 4.0$ kg·m² spins at $\\omega_1 = 3.0$ rad/s. She pulls her arms in, reducing $I_2 = 1.5$ kg·m². What is $\\omega_2$?",
+      "body_he": "מחלקת קרח עם מומנט אינרציה $I_1 = 4.0$ kg·m² מסתובבת ב-$\\omega_1 = 3.0$ rad/s. היא מושכת ידיה פנימה ל-$I_2 = 1.5$ kg·m². מהי $\\omega_2$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$8.0$ rad/s",
-          "text_he": "$8.0$ rad/s",
+          "text_en": "$\\omega_2 = 8.0$ rad/s",
+          "text_he": "$\\omega_2 = 8.0$ rad/s",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$0.5$ rad/s",
-          "text_he": "$0.5$ rad/s",
+          "text_en": "$\\omega_2 = 3.0$ rad/s (unchanged)",
+          "text_he": "$\\omega_2 = 3.0$ rad/s (ללא שינוי)",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$2.0$ rad/s",
-          "text_he": "$2.0$ rad/s",
+          "text_en": "$\\omega_2 = 1.125$ rad/s",
+          "text_he": "$\\omega_2 = 1.125$ rad/s",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$4.0$ rad/s",
-          "text_he": "$4.0$ rad/s",
+          "text_en": "$\\omega_2 = 4.5$ rad/s",
+          "text_he": "$\\omega_2 = 4.5$ rad/s",
           "correct": false
         }
       ],
-      "explanation_en": "$I_i\\omega_i = I_f\\omega_f$ $\\Rightarrow$ $\\omega_f = 8.0$ rad/s.",
-      "explanation_he": "$\\omega_f = I_i\\omega_i/I_f = 8.0$ rad/s."
+      "explanation_en": "No external torque about vertical axis, so $L = I\\omega = $ const. $I_1\\omega_1 = I_2\\omega_2 \\Rightarrow \\omega_2 = (4.0)(3.0)/1.5 = 8.0$ rad/s.",
+      "explanation_he": "אין מומנט חיצוני סביב הציר האנכי, לכן $L = I\\omega = $ const. $\\omega_2 = (4.0)(3.0)/1.5 = 8.0$ rad/s."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Solid sphere rolls without slipping down height $h$ from rest. Speed at bottom ($I=\\frac{2}{5}MR^2$):",
-      "body_he": "כדור מלא גולל מגובה $h$ ממנוחה. מהירות בתחתית:",
+      "body_en": "A solid cylinder ($I_{cm} = \\frac{1}{2}MR^2$) rolls without slipping down an incline from height $h$. What is $v_{cm}$ at the bottom?",
+      "body_he": "גליל מלא ($I_{cm} = \\frac{1}{2}MR^2$) גולל ללא החלקה ממדרון מגובה $h$. מהי $v_{cm}$ בתחתית?",
       "options": [
         {
           "id": "a",
-          "text_en": "$\\sqrt{10gh/7}$",
-          "text_he": "$\\sqrt{10gh/7}$",
+          "text_en": "$v_{cm} = \\sqrt{\\frac{4gh}{3}}$",
+          "text_he": "$v_{cm} = \\sqrt{\\frac{4gh}{3}}$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$\\sqrt{2gh}$",
-          "text_he": "$\\sqrt{2gh}$",
+          "text_en": "$v_{cm} = \\sqrt{2gh}$",
+          "text_he": "$v_{cm} = \\sqrt{2gh}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$\\sqrt{gh}$",
-          "text_he": "$\\sqrt{gh}$",
+          "text_en": "$v_{cm} = \\sqrt{gh}$",
+          "text_he": "$v_{cm} = \\sqrt{gh}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$\\sqrt{5gh/7}$",
-          "text_he": "$\\sqrt{5gh/7}$",
+          "text_en": "$v_{cm} = \\sqrt{\\frac{10gh}{7}}$",
+          "text_he": "$v_{cm} = \\sqrt{\\frac{10gh}{7}}$",
           "correct": false
         }
       ],
-      "explanation_en": "Energy with $I/(MR^2)=2/5$ gives $v^2=10gh/7$.",
-      "explanation_he": "שימור אנרגיה נותן $v=\\sqrt{10gh/7}$."
+      "explanation_en": "$Mgh = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}\\cdot\\frac{1}{2}MR^2\\cdot(v_{cm}/R)^2 = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{4}Mv_{cm}^2 = \\frac{3}{4}Mv_{cm}^2$. So $v_{cm} = \\sqrt{4gh/3}$.",
+      "explanation_he": "$Mgh = \\frac{3}{4}Mv_{cm}^2 \\Rightarrow v_{cm} = \\sqrt{4gh/3}$. (לגליל: $\\frac{1}{2}Mv_{cm}^2 + \\frac{1}{4}Mv_{cm}^2 = \\frac{3}{4}Mv_{cm}^2$)"
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Disk ($I=MR^2/2$) rotates about center with $\\omega$. Angular momentum magnitude:",
-      "body_he": "דיסק ($I=MR^2/2$) מסתובב עם $\\omega$. גודל $L$:",
+      "body_en": "A disk ($I = \\frac{1}{2}MR^2$, $M = 5$ kg, $R = 0.2$ m) rotates at $\\omega = 10$ rad/s. What is its angular momentum $L$?",
+      "body_he": "דיסק ($I = \\frac{1}{2}MR^2$, $M = 5$ kg, $R = 0.2$ m) מסתובב ב-$\\omega = 10$ rad/s. מהו תנעו הזוויתי $L$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$L = \\frac{1}{2}MR^2\\omega$",
-          "text_he": "$L = \\frac{1}{2}MR^2\\omega$",
+          "text_en": "$L = 1.0$ kg·m²/s",
+          "text_he": "$L = 1.0$ kg·m²/s",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$L = MR^2\\omega$",
-          "text_he": "$L = MR^2\\omega$",
+          "text_en": "$L = 2.0$ kg·m²/s",
+          "text_he": "$L = 2.0$ kg·m²/s",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$L = \\frac{1}{2}MR\\omega$",
-          "text_he": "$L = \\frac{1}{2}MR\\omega$",
+          "text_en": "$L = 0.5$ kg·m²/s",
+          "text_he": "$L = 0.5$ kg·m²/s",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$L = M R \\omega$",
-          "text_he": "$L = M R \\omega$",
+          "text_en": "$L = 10$ kg·m²/s",
+          "text_he": "$L = 10$ kg·m²/s",
           "correct": false
         }
       ],
-      "explanation_en": "$L=I\\omega=MR^2\\omega/2$ for disk about center.",
-      "explanation_he": "$L=I\\omega=MR^2\\omega/2$."
+      "explanation_en": "$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.10$ kg·m². $L = I\\omega = (0.10)(10) = 1.0$ kg·m²/s.",
+      "explanation_he": "$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.10$ kg·m². $L = I\\omega = (0.10)(10) = 1.0$ kg·m²/s."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Constant external torque $\\tau$ acts on system with $L_i=0$. After time $t$, angular momentum is:",
-      "body_he": "מומנט חיצוני קבוע $\\tau$ על מערכת עם $L_i=0$. לאחר זמן $t$, $L$:",
+      "body_en": "A torque $\\vec{\\tau}$ acts on a spinning top that has angular momentum $\\vec{L}$. Which statement correctly applies the torque-angular momentum theorem $\\vec{\\tau} = d\\vec{L}/dt$?",
+      "body_he": "מומנט $\\vec{\\tau}$ פועל על כרכרה מסתובבת בעלת תנע זוויתי $\\vec{L}$. איזו טענה מיישמת נכון את משפט המומנט-תנע הזוויתי $\\vec{\\tau} = d\\vec{L}/dt$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$L = \\tau t$",
-          "text_he": "$L = \\tau t$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$L = \\tau t^2/2$",
-          "text_he": "$L = \\tau t^2/2$",
+          "text_en": "If $\\vec{\\tau}$ is perpendicular to $\\vec{L}$, the magnitude of $\\vec{L}$ changes but its direction stays the same.",
+          "text_he": "אם $\\vec{\\tau}$ מאונך ל-$\\vec{L}$, גודל $\\vec{L}$ משתנה אך כיוונו נשאר.",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "If $\\vec{\\tau}$ is perpendicular to $\\vec{L}$, the direction of $\\vec{L}$ changes (precession) but its magnitude stays constant.",
+          "text_he": "אם $\\vec{\\tau}$ מאונך ל-$\\vec{L}$, כיוון $\\vec{L}$ משתנה (פרצסיה) אך גודלו נשאר קבוע.",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$L = 0$",
-          "text_he": "$L = 0$",
+          "text_en": "A constant torque always increases $|\\vec{L}|$ at a constant rate.",
+          "text_he": "מומנט קבוע תמיד מגדיל את $|\\vec{L}|$ בשיעור קבוע.",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$L = \\tau/ t$",
-          "text_he": "$L = \\tau/ t$",
+          "text_en": "Torque and angular momentum always point in the same direction.",
+          "text_he": "מומנט ותנע זוויתי תמיד מצביעים באותו כיוון.",
           "correct": false
         }
       ],
-      "explanation_en": "$\\tau = dL/dt$ with constant $\\tau$ gives $L=\\tau t$.",
-      "explanation_he": "$\\tau = dL/dt$ $\\Rightarrow$ $L=\\tau t$."
+      "explanation_en": "When $\\vec{\\tau} \\perp \\vec{L}$, the change $d\\vec{L} = \\vec{\\tau}\\,dt$ is perpendicular to $\\vec{L}$, so $|\\vec{L}|$ is unchanged but the direction rotates — this is gyroscopic precession. A torque parallel to $\\vec{L}$ would change the magnitude.",
+      "explanation_he": "כאשר $\\vec{\\tau} \\perp \\vec{L}$, השינוי $d\\vec{L} = \\vec{\\tau}\\,dt$ מאונך ל-$\\vec{L}$, לכן $|\\vec{L}|$ אינו משתנה אך הכיוון מסתובב — זוהי פרצסיה ג'ירוסקופית. מומנט המקביל ל-$\\vec{L}$ ישנה את הגודל."
     }
   ]
 }

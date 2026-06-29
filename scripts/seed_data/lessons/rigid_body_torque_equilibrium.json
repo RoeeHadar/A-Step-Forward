@@ -3,238 +3,222 @@
   "subject": "university_physics_1",
   "title_en": "Rigid Body Statics — Torque & Equilibrium (University)",
   "title_he": "סטטיקה של גוף קשיח — מומנט ושיווי משקל (אוניברסיטה)",
-  "duration_min": 26,
+  "duration_min": 28,
   "type": "interactive",
   "level_min": "university",
-  "agent_hints": "Torque is a vector: $\\vec{\\tau}=\\vec{r}\\times\\vec{F}$; sign comes from the right-hand rule, not from 'clockwise'. Static equilibrium requires BOTH $\\sum\\vec{F}=0$ and $\\sum\\vec{\\tau}=0$ about any point — pivot at an unknown force eliminates that force from the torque equation. Common errors: using $\\tau=rF$ without $\\sin\\theta$; forgetting the beam's own weight acts at its CM.",
+  "agent_hints": "Students often forget that $\\sum\\vec{\\tau}=0$ must hold about **every** pivot simultaneously — choosing the pivot at an unknown-force point eliminates that unknown from the torque equation. Emphasize the sign convention for torques (CCW positive) and that $\\tau = rF\\sin\\theta$ uses the perpendicular distance. For the moment-of-inertia table, link to the integral $I=\\int r^2\\,dm$ so students understand why the rod-about-end value is four times the rod-about-center value.",
   "sections": [
     {
       "id": "torque_definition",
-      "title_en": "Torque — Vector Cross Product",
-      "title_he": "מומנט — מכפלה וקטורית",
-      "body_en_md": "The **torque** about point $O$ due to force $\\vec{F}$ applied at position $\\vec{r}$ (from $O$ to the point of application) is:\n\n$$\\boxed{\\vec{\\tau} = \\vec{r} \\times \\vec{F}}$$\n\n**Magnitude:** $\\tau = rF\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{F}$.\n\n**Direction:** right-hand rule — curl fingers from $\\vec{r}$ toward $\\vec{F}$; thumb gives $\\vec{\\tau}$.\n\nOnly the **perpendicular** component of $\\vec{F}$ to $\\vec{r}$ contributes. If $\\vec{F}$ is parallel to $\\vec{r}$ (line of action passes through $O$), $\\tau = 0$.\n\n**Units:** N·m (not joules — torque is a pseudovector).",
-      "body_he_md": "**מומנט** סביב נקודה $O$ עקב כוח $\\vec{F}$ בנקודה $\\vec{r}$ (מ-$O$ לנקודת הפעלה):\n\n$$\\boxed{\\vec{\\tau} = \\vec{r} \\times \\vec{F}}$$\n\n**גודל:** $\\tau = rF\\sin\\theta$, כאשר $\\theta$ הזווית בין $\\vec{r}$ ל-$\\vec{F}$.\n\n**כיוון:** כלל היד הימנית — מ-$\\vec{r}$ ל-$\\vec{F}$; האגודל נותן $\\vec{\\tau}$.\n\nרק הרכיב **המאונך** של $\\vec{F}$ ל-$\\vec{r}$ תורם. אם קו הפעולה עובר דרך $O$, $\\tau=0$.\n\n**יחידות:** N·m.",
-      "level_min": "university"
+      "title_en": "Torque — Cross Product and Right-Hand Rule",
+      "title_he": "מומנט כוח — מכפלה וקטורית וכלל היד הימנית",
+      "level_min": "university",
+      "body_en_md": "## Torque as a Cross Product\n\nThe **torque** (moment of force) produced by force $\\vec{F}$ acting at position $\\vec{r}$ relative to a chosen pivot is:\n$$\\boxed{\\vec{\\tau} = \\vec{r} \\times \\vec{F}}$$\n\n**Magnitude:** $|\\vec{\\tau}| = rF\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{F}$.\n\nEquivalent expressions:\n- $\\tau = r_\\perp F$ where $r_\\perp = r\\sin\\theta$ is the **moment arm** (perpendicular distance from pivot to the line of action)\n- $\\tau = r F_\\perp$ where $F_\\perp$ is the component of $\\vec{F}$ perpendicular to $\\vec{r}$\n\n**Units:** N·m (not joules — torque is not energy, though the units are identical dimensionally).\n\n**Direction — right-hand rule:** Point fingers along $\\vec{r}$, curl toward $\\vec{F}$; thumb points in the direction of $\\vec{\\tau}$. For planar problems, torques are either $+\\hat{z}$ (counter-clockwise, CCW) or $-\\hat{z}$ (clockwise, CW).\n\n**Sign convention in 2-D:** CCW torques are positive, CW torques are negative.\n\n### Example\nA force $F = 20$ N acts at $r = 0.5$ m from the pivot at $\\theta = 30°$ from $\\vec{r}$:\n$$\\tau = (0.5)(20)\\sin 30° = (0.5)(20)(0.5) = 5 \\text{ N·m (CCW)}$$",
+      "body_he_md": "## מומנט כוח כמכפלה וקטורית\n\n**מומנט הכוח** הנוצר על ידי כוח $\\vec{F}$ הפועל בנקודה $\\vec{r}$ ביחס לציר סיבוב נבחר:\n$$\\boxed{\\vec{\\tau} = \\vec{r} \\times \\vec{F}}$$\n\n**עוצמה:** $|\\vec{\\tau}| = rF\\sin\\theta$, כאשר $\\theta$ הזווית בין $\\vec{r}$ ל-$\\vec{F}$.\n\nביטויים שקולים:\n- $\\tau = r_\\perp F$ כאשר $r_\\perp = r\\sin\\theta$ הוא **זרוע המומנט** (המרחק הניצב מציר הסיבוב לישר הכוח)\n- $\\tau = r F_\\perp$ כאשר $F_\\perp$ הוא הרכיב הניצב של $\\vec{F}$ ל-$\\vec{r}$\n\n**יחידות:** N·m (לא ג'אול — מומנט אינו אנרגיה, אך הממדים זהים).\n\n**כיוון — כלל היד הימנית:** הצב אצבעות לאורך $\\vec{r}$ ועקם לכיוון $\\vec{F}$; האגודל מצביע לכיוון $\\vec{\\tau}$. לבעיות מישוריות, מומנטים הם $+\\hat{z}$ (נגד כיוון השעון, CCW) או $-\\hat{z}$ (עם כיוון השעון, CW).\n\n**קונבנציית סימן בדו-ממד:** מומנטים CCW חיוביים, CW שליליים.\n\n### דוגמה\nכוח $F = 20$ N פועל ב-$r = 0.5$ m מציר הסיבוב בזווית $\\theta = 30°$:\n$$\\tau = (0.5)(20)\\sin 30° = 5 \\text{ N·m (CCW)}$$"
     },
     {
       "id": "static_equilibrium",
-      "title_en": "Static Equilibrium Conditions",
-      "title_he": "תנאי שיווי משקל סטטי",
-      "body_en_md": "A rigid body in **static equilibrium** satisfies:\n\n$$\\boxed{\\sum \\vec{F} = 0 \\qquad \\text{and} \\qquad \\sum \\vec{\\tau} = 0}$$\n\nThe torque sum must vanish **about any pivot point** you choose — if it holds about one point, it holds about all (when $\\sum\\vec{F}=0$).\n\n**Strategy:**\n1. Draw a free-body diagram.\n2. Write $\\sum F_x = 0$, $\\sum F_y = 0$ (and $F_z$ if needed).\n3. Choose a pivot; write $\\sum \\tau = 0$ (sign convention consistent).\n4. Solve the linear system.\n\nYou have at most 3 independent force equations + 3 torque equations in 3D; in 2D problems, typically 2 force + 1 torque equation suffice.",
-      "body_he_md": "גוף קשיח ב**שיווי משקל סטטי** מקיים:\n\n$$\\boxed{\\sum \\vec{F} = 0 \\qquad \\text{ו} \\qquad \\sum \\vec{\\tau} = 0}$$\n\nסכום המומנטים חייב להיעלם **סביב כל נקודת ציר** — אם זה נכון לנקודה אחת ו-$\\sum\\vec{F}=0$, זה נכון לכולן.\n\n**אסטרטגיה:**\n1. דיאגרמת כוחות חופשית.\n2. $\\sum F_x = 0$, $\\sum F_y = 0$.\n3. בחרו ציר; $\\sum \\tau = 0$.\n4. פתרו את המערכת.",
-      "level_min": "university"
+      "title_en": "Conditions for Static Equilibrium",
+      "title_he": "תנאי שיווי המשקל הסטטי",
+      "level_min": "university",
+      "body_en_md": "## Two Conditions for Static Equilibrium\n\nA rigid body is in **static equilibrium** when it is neither translating nor rotating. This requires both:\n\n$$\\boxed{\\sum \\vec{F} = 0 \\quad \\text{and} \\quad \\sum \\vec{\\tau} = 0}$$\n\nIn 2-D (x-y plane), these expand to three scalar equations:\n$$\\sum F_x = 0, \\qquad \\sum F_y = 0, \\qquad \\sum \\tau_z = 0.$$\n\n**Key insight:** $\\sum\\vec{\\tau} = 0$ holds about **any** pivot point — you are free to choose whichever pivot is most convenient. Choosing the pivot at the point where an unknown force acts **eliminates** that force from the torque equation entirely (since its moment arm is zero), greatly simplifying the algebra.\n\n**Strategy:**\n1. Draw a free-body diagram with all forces labeled.\n2. Choose a pivot to eliminate as many unknowns as possible.\n3. Write $\\sum\\tau = 0$ first (usually the most useful equation).\n4. Use $\\sum F_x = 0$ and $\\sum F_y = 0$ for remaining unknowns.\n\n**When to apply:** leaning ladders, beams supported at two points, trusses, crane arms, and any static structure.",
+      "body_he_md": "## שני תנאים לשיווי משקל סטטי\n\nגוף קשיח נמצא ב**שיווי משקל סטטי** כאשר הוא אינו מתרגם ואינו מסתובב. הדבר מחייב:\n\n$$\\boxed{\\sum \\vec{F} = 0 \\quad \\text{ו-} \\quad \\sum \\vec{\\tau} = 0}$$\n\nבדו-ממד (מישור x-y), מתקבלות שלוש משוואות סקלריות:\n$$\\sum F_x = 0, \\qquad \\sum F_y = 0, \\qquad \\sum \\tau_z = 0.$$\n\n**תובנה מרכזית:** $\\sum\\vec{\\tau} = 0$ מתקיים ביחס לכל ציר סיבוב — אנו חופשיים לבחור את הציר הנוח ביותר. בחירת ציר הסיבוב בנקודה שבה פועל כוח לא-ידוע **מבטלת** את הכוח הזה ממשוואת המומנטים (זרוע מומנטו אפס), מה שמפשט מאוד את האלגברה.\n\n**אסטרטגיה:**\n1. צייר דיאגרמת גוף חופשי עם כל הכוחות.\n2. בחר ציר סיבוב שיבטל כמה שיותר נגלות.\n3. כתוב $\\sum\\tau = 0$ ראשון.\n4. השתמש ב-$\\sum F_x = 0$ ו-$\\sum F_y = 0$ לנגלות הנותרות."
     },
     {
-      "id": "pivot_choice",
-      "title_en": "Choosing the Pivot — Eliminating Unknowns",
-      "title_he": "בחירת ציר — ביטול כוחות לא ידועים",
-      "body_en_md": "Place the pivot at the line of action of an **unknown force** to eliminate it from the torque equation (since $r_\\perp = 0$ for that force).\n\n**Best choices:**\n- Hinge when finding cable tension.\n- Contact point when finding friction at the other end.\n- Any point where two unknowns intersect.\n\nYou may write multiple torque equations about different pivots if needed, but one well-chosen pivot often suffices.\n\n**Caution:** The eliminated force still appears in $\\sum\\vec{F}=0$ — you need both force and torque balance.",
-      "body_he_md": "מקמו את הציר על **קו הפעולה** של כוח **לא ידוע** כדי לבטל אותו ממשוואת המומent (כי $r_\\perp = 0$).\n\n**בחירות טובות:**\n- ציר (hinge) בחיפוש מתיחות כבל.\n- נקודת מגע בחיפוש חיכוך בקצה השני.\n\nהכוח שבוטל עדיין מופיע ב-$\\sum\\vec{F}=0$ — נדרשות שתי המשוואות.",
-      "level_min": "university"
-    },
-    {
-      "id": "worked_beam",
-      "title_en": "Worked Example — Supported Beam",
-      "title_he": "דוגמה מלאה — קורה מונחת",
-      "body_en_md": "**Problem:** A uniform horizontal beam of mass $M$ and length $L$ is attached to a wall by a hinge at one end. A cable at the far end makes angle $\\theta$ **above** the horizontal. An additional mass $m$ hangs at the midpoint. Find cable tension $T$ and hinge reaction $\\vec{H}$.\n\n**Torque about hinge** (eliminates $\\vec{H}$):\nWeights $(M+m)g$ act at $L/2$ (clockwise); cable vertical component $T\\sin\\theta$ at $L$ (counterclockwise):\n$$T L \\sin\\theta = (M+m)g\\frac{L}{2}$$\n$$\\boxed{T = \\frac{(M+m)g}{2\\sin\\theta}}$$\n\n**Forces:**\n$H_x = T\\cos\\theta = \\dfrac{(M+m)g\\cos\\theta}{2\\sin\\theta}$\n\n$H_y + T\\sin\\theta = (M+m)g \\Rightarrow H_y = \\dfrac{(M+m)g}{2}$\n\nNote: vertical hinge reaction supports half the total weight; horizontal component balances cable tension's $x$-component.",
-      "body_he_md": "**בעיה:** קורה אופקית אחידה מסה $M$ ואורך $L$ מחוברת בציר לקיר. כבל בקצה הרחוק יוצר זווית $\\theta$ **מעל** האופק. מסה $m$ תלויה באמצע. מצאו $T$ ו-$\\vec{H}$.\n\n**מומנט סביב הציר:**\n$$T L \\sin\\theta = (M+m)g\\frac{L}{2} \\Rightarrow \\boxed{T = \\frac{(M+m)g}{2\\sin\\theta}}$$\n\n**כוחות:** $H_x = T\\cos\\theta$, $H_y = (M+m)g/2$.",
-      "level_min": "university"
+      "id": "beam_worked_example",
+      "title_en": "Worked Example — Beam with Hinge and Cable",
+      "title_he": "דוגמה מלאה — קורה עם ציר ותיל",
+      "level_min": "university",
+      "body_en_md": "## Worked Example: Uniform Beam Supported by Hinge and Cable\n\n**Setup:** A uniform beam of mass $M$ and length $L$ is attached to a wall by a frictionless hinge at its left end (A). A cable makes angle $\\theta$ with the beam at the right end (B). An additional mass $m$ hangs from the midpoint. Find the cable tension $T$ and the hinge reaction force.\n\n**Free-body diagram forces:**\n- Weight of beam: $Mg$ downward at $x = L/2$\n- Weight of hanging mass: $mg$ downward at $x = L/2$\n- Cable tension: $T$ at angle $\\theta$ above beam at $x = L$\n- Hinge: unknown $H_x$ (horizontal) and $H_y$ (vertical) at $x = 0$\n\n**Step 1 — Torques about hinge (A):** The hinge forces have zero moment arm → eliminated.\n$$\\sum \\tau_A = T\\sin\\theta \\cdot L - Mg\\cdot\\frac{L}{2} - mg\\cdot\\frac{L}{2} = 0$$\n$$\\boxed{T = \\frac{(M+m)g}{2\\sin\\theta}}$$\n\n**Step 2 — Force balance:**\n$$\\sum F_x = 0: \\quad H_x - T\\cos\\theta = 0 \\implies H_x = T\\cos\\theta$$\n$$\\sum F_y = 0: \\quad H_y + T\\sin\\theta - Mg - mg = 0 \\implies H_y = (M+m)g - T\\sin\\theta = \\frac{(M+m)g}{2}$$\n\n**Hinge magnitude:** $|\\vec{H}| = \\sqrt{H_x^2 + H_y^2}$.\n\n**Physical check:** As $\\theta \\to 90°$ (vertical cable), $T \\to (M+m)g/2$ — the cable bears half the total weight, which makes sense by symmetry.",
+      "body_he_md": "## דוגמה מלאה: קורה אחידה על ציר ותיל\n\n**ניסוח:** קורה אחידה בעלת מסה $M$ ואורך $L$ מחוברת לקיר ע\"י ציר חלק בקצה השמאלי (A). תיל בזווית $\\theta$ מהקורה מחובר לקצה הימני (B). מסה $m$ נתלית מנקודת האמצע. מצא את מתח התיל $T$ וכוח הציר.\n\n**כוחות בדיאגרמת גוף חופשי:**\n- משקל הקורה: $Mg$ כלפי מטה ב-$x = L/2$\n- משקל המסה: $mg$ כלפי מטה ב-$x = L/2$\n- מתח התיל: $T$ בזווית $\\theta$ מעל הקורה ב-$x = L$\n- ציר: $H_x$ (אופקי) ו-$H_y$ (אנכי) ב-$x = 0$\n\n**שלב 1 — מומנטים סביב הציר (A):** כוחות הציר בעלי זרוע מומנט אפס → מבוטלים.\n$$\\sum \\tau_A = T\\sin\\theta \\cdot L - Mg\\cdot\\frac{L}{2} - mg\\cdot\\frac{L}{2} = 0$$\n$$\\boxed{T = \\frac{(M+m)g}{2\\sin\\theta}}$$\n\n**שלב 2 — שיווי כוחות:**\n$$H_x = T\\cos\\theta, \\qquad H_y = \\frac{(M+m)g}{2}$$\n\n**בדיקה:** כאשר $\\theta \\to 90°$ (תיל אנכי), $T \\to (M+m)g/2$ — התיל נושא חצי מהמשקל הכולל, כפי שניתן לצפות מסימטריה."
     },
     {
       "id": "moment_of_inertia",
-      "title_en": "Moment of Inertia — Overview",
-      "title_he": "מומנט אינרציה — סקירה",
-      "body_en_md": "For continuous mass distribution about axis through $O$:\n$$\\boxed{I = \\int r^2\\,dm}$$\n\nwhere $r$ is perpendicular distance from the axis.\n\n**Common values** (memorize for exams):\n\n| Body | Axis | $I$ |\n|---|---|---|\n| Thin rod, length $L$ | Center | $ML^2/12$ |\n| Thin rod | End | $ML^2/3$ |\n| Solid disk, radius $R$ | Center | $MR^2/2$ |\n| Point mass $M$ at $R$ | Pivot | $MR^2$ |\n\n**Parallel-axis theorem:** $I = I_{cm} + Md^2$ where $d$ is shift of axis.",
-      "body_he_md": "להתפלגות מסה רציפה סביב ציר דרך $O$:\n$$\\boxed{I = \\int r^2\\,dm}$$\n\n**ערכים נפוצים:**\n\n| גוף | ציר | $I$ |\n|---|---|---|\n| מוט דק, אורך $L$ | מרכז | $ML^2/12$ |\n| מוט דק | קצה | $ML^2/3$ |\n| דиск מלא, רדיוס $R$ | מרכז | $MR^2/2$ |\n| מטען נקודתי $M$ ב-$R$ | ציר | $MR^2$ |\n\n**משפט הצירים המקבילים:** $I = I_{cm} + Md^2$.",
-      "level_min": "university"
+      "title_en": "Moment of Inertia and Rotational Dynamics",
+      "title_he": "מומנט אינרציה ודינמיקה סיבובית",
+      "level_min": "university",
+      "body_en_md": "## Moment of Inertia — Definition\n\nThe **moment of inertia** is the rotational analog of mass:\n$$I = \\int r^2\\,dm$$\nwhere $r$ is the perpendicular distance from each mass element $dm$ to the rotation axis.\n\n**Key values (memorize these):**\n\n| Object | Axis | $I$ |\n|---|---|---|\n| Point mass $m$ | Distance $R$ from axis | $mR^2$ |\n| Uniform rod, mass $M$, length $L$ | Through center, ⊥ to rod | $\\frac{1}{12}ML^2$ |\n| Uniform rod, mass $M$, length $L$ | Through one end, ⊥ to rod | $\\frac{1}{3}ML^2$ |\n| Solid disk/cylinder, mass $M$, radius $R$ | Through center, along axis | $\\frac{1}{2}MR^2$ |\n| Solid sphere, mass $M$, radius $R$ | Through center | $\\frac{2}{5}MR^2$ |\n| Spherical shell, mass $M$, radius $R$ | Through center | $\\frac{2}{3}MR^2$ |\n\n**Parallel-axis theorem:** If $I_{cm}$ is the moment about the center of mass, then for any parallel axis at distance $d$:\n$$I = I_{cm} + Md^2$$\n\n## Newton's Second Law for Rotation\n\nThe rotational analog of $\\vec{F} = m\\vec{a}$ is:\n$$\\boxed{\\tau_{\\text{net}} = I\\alpha}$$\nwhere $\\alpha = d\\omega/dt$ is the angular acceleration.\n\n**Worked Example:** A uniform rod ($M$, $L$) pivots about one end. A horizontal force $F$ is applied at the midpoint. Find $\\alpha$.\n\nTorque: $\\tau = F \\cdot (L/2)$ (moment arm = $L/2$, force is perpendicular to rod which is horizontal so $\\sin 90° = 1$).\nMoment of inertia about end: $I = \\frac{1}{3}ML^2$.\n$$\\alpha = \\frac{\\tau}{I} = \\frac{F(L/2)}{ML^2/3} = \\frac{3F}{2ML}$$",
+      "body_he_md": "## מומנט אינרציה — הגדרה\n\n**מומנט האינרציה** הוא האנלוג הסיבובי של המסה:\n$$I = \\int r^2\\,dm$$\nכאשר $r$ הוא המרחק הניצב מכל אלמנט מסה $dm$ לציר הסיבוב.\n\n**ערכים מרכזיים:**\n\n| גוף | ציר | $I$ |\n|---|---|---|\n| מסה נקודתית $m$ | מרחק $R$ מהציר | $mR^2$ |\n| מוט אחיד, $M$, $L$ | דרך מרכז, ⊥ למוט | $\\frac{1}{12}ML^2$ |\n| מוט אחיד, $M$, $L$ | דרך קצה, ⊥ למוט | $\\frac{1}{3}ML^2$ |\n| דיסק/גליל מלא, $M$, $R$ | דרך מרכז, לאורך ציר | $\\frac{1}{2}MR^2$ |\n| כדור מלא, $M$, $R$ | דרך מרכז | $\\frac{2}{5}MR^2$ |\n\n**משפט הציר המקביל:** אם $I_{cm}$ הוא מומנט סביב מרכז המסה, אזי לכל ציר מקביל במרחק $d$:\n$$I = I_{cm} + Md^2$$\n\n## חוק ניוטון השני לסיבוב\n\n$$\\boxed{\\tau_{\\text{net}} = I\\alpha}$$\n\n**דוגמה:** מוט אחיד ($M$, $L$) מסתובב סביב קצהו. כוח $F$ פועל בנקודת האמצע. מצא $\\alpha$.\n\nמומנט: $\\tau = F \\cdot (L/2)$. מומנט אינרציה: $I = \\frac{1}{3}ML^2$.\n$$\\alpha = \\frac{\\tau}{I} = \\frac{F(L/2)}{ML^2/3} = \\frac{3F}{2ML}$$"
     },
     {
-      "id": "rotational_newton",
-      "title_en": "Rotational Dynamics — $\\tau_{net} = I\\alpha$",
-      "title_he": "דינמיקה סיבובית — $\\tau_{net} = I\\alpha$",
-      "body_en_md": "The rotational analog of Newton's second law:\n$$\\boxed{\\sum \\tau_{net} = I\\alpha}$$\n\nwhere $\\alpha = d\\omega/dt$ is angular acceleration (rad/s²).\n\nApplies about a **fixed axis** through a point where external forces produce no net torque, or about the center of mass for free rotation.\n\nCombine with $\\sum\\vec{F}=M\\vec{a}_{cm}$ for rolling and coupled motion problems.",
-      "body_he_md": "האנalog הסיבובי לחוק השני של ניוטון:\n$$\\boxed{\\sum \\tau_{net} = I\\alpha}$$\n\nכאשר $\\alpha = d\\omega/dt$ (rad/s²).\n\nתקף ל**ציר קבוע** או סביב מרכז המסה לסיבוב חופשי.\n\nשלבו עם $\\sum\\vec{F}=M\\vec{a}_{cm}$ לבעיות גלגול.",
-      "level_min": "university"
-    },
-    {
-      "id": "worked_rod_alpha",
-      "title_en": "Worked Example — Rod Under Horizontal Force",
-      "title_he": "דוגמה — מוט תחת כוח אופקי",
-      "body_en_md": "**Problem:** Uniform rod mass $M$, length $L$, pivoted at one end (no gravity). Horizontal force $F$ applied **perpendicular** to the rod at its midpoint. Find $\\alpha$.\n\nTorque about pivot: $\\tau = F \\cdot (L/2)$.\n\nMoment of inertia about end: $I = ML^2/3$.\n\n$$\\alpha = \\frac{\\tau}{I} = \\frac{FL/2}{ML^2/3} = \\boxed{\\frac{3F}{2ML}}$$\n\nDirection: force pushes midpoint in $+x$; torque about pivot is out of page (if rod along $+y$), so $\\alpha$ is counterclockwise.",
-      "body_he_md": "**בעיה:** מוט אחיד $M$, $L$, נתמך בקצה. כוח אופקי $F$ **מאונך** למוט באמצע. מצאו $\\alpha$.\n\n$\\tau = FL/2$, $I = ML^2/3$:\n$$\\alpha = \\frac{3F}{2ML}$$",
-      "level_min": "university"
+      "id": "equilibrium_strategy",
+      "title_en": "Problem-Solving Strategy and Pitfalls",
+      "title_he": "אסטרטגיית פתרון ומלכודות נפוצות",
+      "level_min": "university",
+      "body_en_md": "## General Strategy for Statics Problems\n\n1. **Identify all forces** — weight (applied at CM), normal forces, friction, tension, hinge reactions.\n2. **Choose a pivot wisely** — place it where the most unknown forces act; their torques vanish.\n3. **Set up torque equation** — each force contributes $\\pm r F\\sin\\theta$; CCW positive.\n4. **Force equations** — two scalar equations give the remaining unknowns.\n5. **Check units and limits** — what happens as $\\theta \\to 0$? $\\theta \\to 90°$?\n\n## Common Errors\n\n- **Using wrong moment arm:** Always compute the perpendicular distance from the pivot to the line of action, not just $r$.\n- **Missing the weight of the beam:** A beam's own weight acts at its center of mass.\n- **Wrong sign for torque:** Decide on a consistent CCW = + convention before writing equations.\n- **Forgetting that equilibrium must hold about ALL pivots:** If you choose a second pivot and the equation is not satisfied, there is an error.\n- **Confusing $I\\alpha$ with statics:** The condition $\\tau_{\\text{net}} = I\\alpha$ applies to dynamics; for statics $\\alpha = 0$ so $\\tau_{\\text{net}} = 0$.",
+      "body_he_md": "## אסטרטגיה כללית לבעיות סטטיקה\n\n1. **זהה את כל הכוחות** — משקל (פועל ב-CM), נורמליים, חיכוך, מתח, כוחות ציר.\n2. **בחר ציר סיבוב בחוכמה** — הצב אותו שם שפועלים הכי הרבה כוחות לא-ידועים; מומנטיהם מתבטלים.\n3. **כתוב משוואת מומנטים** — כל כוח תורם $\\pm r F\\sin\\theta$; CCW חיובי.\n4. **משוואות כוחות** — שתי משוואות סקלריות נותנות את הנגלות הנותרות.\n5. **בדוק יחידות וגבולות** — מה קורה כאשר $\\theta \\to 0$? $\\theta \\to 90°$?\n\n## שגיאות נפוצות\n\n- **זרוע מומנט שגויה:** חשב תמיד את המרחק הניצב מהציר לישר הכוח.\n- **שכחת משקל הקורה:** משקל הקורה פועל במרכז המסה שלה.\n- **סימן שגוי למומנט:** קבע CCW = + לפני כתיבת המשוואות.\n- **בלבול בין דינמיקה לסטטיקה:** בסטטיקה $\\alpha = 0$ ולכן $\\tau_{\\text{net}} = 0$."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Force $\\vec{F} = F\\hat{\\mathbf{y}}$ acts at $\\vec{r} = L\\hat{\\mathbf{x}}$ from pivot $O$. What is $\\vec{\\tau}$ about $O$?",
-      "body_he": "כוח $\\vec{F} = F\\hat{\\mathbf{y}}$ פועל ב-$\\vec{r} = L\\hat{\\mathbf{x}}$ מ-$O$. מהו $\\vec{\\tau}$?",
+      "body_en": "A force of 10 N is applied at a point 0.4 m from a pivot. The angle between the position vector $\\vec{r}$ and the force $\\vec{F}$ is 150°. What is the magnitude of the torque about the pivot?",
+      "body_he": "כוח של 10 N פועל בנקודה הנמצאת 0.4 m מציר סיבוב. הזווית בין וקטור המיקום $\\vec{r}$ לכוח $\\vec{F}$ היא 150°. מהו גודל המומנט סביב הציר?",
       "options": [
         {
           "id": "a",
-          "text_en": "$FL\\,\\hat{\\mathbf{z}}$",
-          "text_he": "$FL\\,\\hat{\\mathbf{z}}$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$-FL\\,\\hat{\\mathbf{z}}$",
-          "text_he": "$-FL\\,\\hat{\\mathbf{z}}$",
+          "text_en": "4.0 N·m",
+          "text_he": "4.0 N·m",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "2.0 N·m",
+          "text_he": "2.0 N·m",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$FL\\,\\hat{\\mathbf{x}}$",
-          "text_he": "$FL\\,\\hat{\\mathbf{x}}$",
+          "text_en": "3.46 N·m",
+          "text_he": "3.46 N·m",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$\\vec{0}$",
-          "text_he": "$\\vec{0}$",
+          "text_en": "0 N·m",
+          "text_he": "0 N·m",
           "correct": false
         }
       ],
-      "explanation_en": "$\\vec{\\tau} = \\hat{\\mathbf{x}}\\times\\hat{\\mathbf{y}}\\,FL = \\hat{\\mathbf{z}}\\,FL$ (right-hand rule).",
-      "explanation_he": "$\\vec{\\tau} = \\hat{\\mathbf{x}}\\times\\hat{\\mathbf{y}}\\,FL = \\hat{\\mathbf{z}}\\,FL$ (כלל יד-ימין)."
+      "explanation_en": "$\\tau = rF\\sin\\theta = (0.4)(10)\\sin 150° = 4 \\times 0.5 = 2.0$ N·m. Note $\\sin 150° = \\sin 30° = 0.5$.",
+      "explanation_he": "$\\tau = rF\\sin\\theta = (0.4)(10)\\sin 150° = 4 \\times 0.5 = 2.0$ N·m. שימו לב: $\\sin 150° = \\sin 30° = 0.5$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "In the beam problem ($M$, $m$, cable angle $\\theta$ above horizontal), the cable tension is:",
-      "body_he": "בבעיית הקורה ($M$, $m$, זווית כבל $\\theta$ מעל האופק), מתיחות הכבל היא:",
+      "body_en": "A uniform beam of mass $M = 8$ kg and length $L = 4$ m is hinged at the wall (left end). A cable at 30° above horizontal supports the right end. No additional masses. What is the cable tension $T$?",
+      "body_he": "קורה אחידה בעלת מסה $M = 8$ kg ואורך $L = 4$ m מחוברת לקיר בציר (קצה שמאלי). תיל בזווית 30° מעל האופקי תומך בקצה הימני. אין מסות נוספות. מהו מתח התיל $T$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$T = (M+m)g/(2\\sin\\theta)$",
-          "text_he": "$T = (M+m)g/(2\\sin\\theta)$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$T = (M+m)g/(2\\cos\\theta)$",
-          "text_he": "$T = (M+m)g/(2\\cos\\theta)$",
+          "text_en": "$T = 40$ N",
+          "text_he": "$T = 40$ N",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "$T = 78.4$ N",
+          "text_he": "$T = 78.4$ N",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$T = (M+m)g/\\sin\\theta$",
-          "text_he": "$T = (M+m)g/\\sin\\theta$",
+          "text_en": "$T = 68$ N",
+          "text_he": "$T = 68$ N",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$T = mg/(2\\sin\\theta)$",
-          "text_he": "$T = mg/(2\\sin\\theta)$",
+          "text_en": "$T = 39.2$ N",
+          "text_he": "$T = 39.2$ N",
           "correct": false
         }
       ],
-      "explanation_en": "Torque about hinge: $TL\\sin\\theta = (M+m)g(L/2)$ gives $T=(M+m)g/(2\\sin\\theta)$.",
-      "explanation_he": "מומנט סביב הציר: $TL\\sin\\theta = (M+m)g(L/2)$ נותן $T=(M+m)g/(2\\sin\\theta)$."
+      "explanation_en": "Taking torques about the hinge: $T\\sin30°\\cdot L - Mg\\cdot(L/2)=0 \\Rightarrow T = Mg/(2\\sin30°) = (8)(9.8)/(2\\times0.5) = 78.4$ N.",
+      "explanation_he": "מומנטים סביב הציר: $T\\sin30°\\cdot L - Mg\\cdot(L/2)=0 \\Rightarrow T = Mg/(2\\sin30°) = (8)(9.8)/(2\\times0.5) = 78.4$ N."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "To find an unknown hinge force in a static beam problem, the best first step is:",
-      "body_he": "למציאת כוח ציר לא ידוע בבעיית קורה סטטית, הצעד הראשון הטוב ביותר:",
+      "body_en": "When solving a beam equilibrium problem, why is it advantageous to choose the pivot at the hinge point (where the hinge force acts)?",
+      "body_he": "בפתרון בעיית שיווי משקל של קורה, מדוע כדאי לבחור את ציר הסיבוב בנקודת הציר (שבה פועל כוח הציר)?",
       "options": [
         {
           "id": "a",
-          "text_en": "Take torques about the hinge to eliminate hinge forces from $\\sum\\tau=0$",
-          "text_he": "מומנטים סביב הציר כדי לבטל כוחות ציר מ-$\\sum\\tau=0$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "Take torques about the cable attachment only",
-          "text_he": "מומנטים רק סביב נקודת הכבל",
+          "text_en": "Because the hinge force is the largest force in the problem.",
+          "text_he": "כי כוח הציר הוא הכוח הגדול ביותר בבעיה.",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "Because the hinge force passes through that point, so its torque is zero and it is eliminated from the torque equation.",
+          "text_he": "כי כוח הציר עובר דרך אותה נקודה, ולכן מומנטו אפס והוא מבוטל ממשוואת המומנטים.",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "Ignore torque and use only $\\sum F_x=0$",
-          "text_he": "להתעלם ממומנט ולהשתמש רק ב-$\\sum F_x=0$",
+          "text_en": "Because the net torque is only zero when computed about the hinge.",
+          "text_he": "כי מומנט הכוח הנטו הוא אפס רק כאשר מחשבים אותו סביב הציר.",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "Apply $\\tau=I\\alpha$ with $\\alpha=0$ about any point",
-          "text_he": "להפעיל $\\tau=I\\alpha$ עם $\\alpha=0$",
+          "text_en": "Because the weight of the beam acts at the hinge.",
+          "text_he": "כי משקל הקורה פועל בנקודת הציר.",
           "correct": false
         }
       ],
-      "explanation_en": "Pivot at the hinge zeroes the lever arm of both hinge force components in the torque equation.",
-      "explanation_he": "ציר ב-hinge מאפס את זרוע המומנט של רכיבי כוח הציר."
+      "explanation_en": "For a force acting at a point, its torque about that same point is zero (moment arm = 0). Placing the pivot there removes that unknown from the torque equation. Note: $\\sum\\tau = 0$ holds about ANY pivot — it is a theorem, not specific to one point.",
+      "explanation_he": "כוח הפועל בנקודה מסוימת יוצר מומנט אפס סביב אותה נקודה (זרוע מומנט = 0). בחירת הציר שם מבטלת את הנגלה הזו ממשוואת המומנטים. הערה: $\\sum\\tau = 0$ מתקיים סביב כל ציר — זהו משפט, לא תכונה של נקודה מסוימת."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "A solid disk of mass $M$ and radius $R$ rotates about its center. Its moment of inertia is:",
-      "body_he": "דיסק מלא מסה $M$ רדיוס $R$ מסתובב סביב מרכזו. מומנט האינרציה:",
+      "body_en": "A uniform solid disk (mass $M$, radius $R$) and a uniform thin ring (mass $M$, radius $R$) are both rotating about their central axes. Which has the larger moment of inertia, and by what factor?",
+      "body_he": "דיסק מלא אחיד (מסה $M$, רדיוס $R$) וטבעת דקה אחידה (מסה $M$, רדיוס $R$) מסתובבים שניהם סביב ציריהם המרכזיים. למי מומנט אינרציה גדול יותר, ובאיזה גורם?",
       "options": [
         {
           "id": "a",
-          "text_en": "$MR^2/2$",
-          "text_he": "$MR^2/2$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$MR^2$",
-          "text_he": "$MR^2$",
+          "text_en": "The disk, by factor 2",
+          "text_he": "לדיסק, בגורם 2",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "The ring, by factor 2",
+          "text_he": "לטבעת, בגורם 2",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$2MR^2/5$",
-          "text_he": "$2MR^2/5$",
+          "text_en": "They are equal",
+          "text_he": "הם שווים",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$ML^2/12$",
-          "text_he": "$ML^2/12$",
+          "text_en": "The ring, by factor 4",
+          "text_he": "לטבעת, בגורם 4",
           "correct": false
         }
       ],
-      "explanation_en": "Solid disk about center: $I = \\int r^2\\,dm = MR^2/2$. Option (c) is a solid sphere.",
-      "explanation_he": "דיסק מלא סביב מרכז: $I = MR^2/2$. (c) הוא כדור מלא."
+      "explanation_en": "Disk: $I = \\frac{1}{2}MR^2$. Ring (all mass at radius $R$): $I = MR^2$. The ring is larger by factor 2 because all its mass is at the maximum radius, whereas the disk's mass is distributed from 0 to $R$.",
+      "explanation_he": "דיסק: $I = \\frac{1}{2}MR^2$. טבעת (כל המסה ברדיוס $R$): $I = MR^2$. לטבעת מומנט גדול פי 2 מהדיסק, כי כל מסתה נמצאת ברדיוס המקסימלי, בעוד שמסת הדיסק מפוזרת מ-0 עד $R$."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Uniform rod ($M$, $L$) pivoted at end; horizontal force $F$ at midpoint (no gravity). Angular acceleration $\\alpha$ equals:",
-      "body_he": "מוט אחיד ($M$, $L$) בציר בקצה; כוח אופקי $F$ באמצע (ללא כבידה). $\\alpha$ שווה:",
+      "body_en": "A uniform rod of mass $M = 3$ kg and length $L = 1.2$ m is free to rotate about one end. A torque $\\tau = 7.2$ N·m is applied about that end. What is the angular acceleration $\\alpha$?",
+      "body_he": "מוט אחיד בעל מסה $M = 3$ kg ואורך $L = 1.2$ m חופשי להסתובב סביב קצהו. מומנט כוח $\\tau = 7.2$ N·m מופעל סביב אותו קצה. מהו התאוצה הזוויתית $\\alpha$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$3F/(2ML)$",
-          "text_he": "$3F/(2ML)$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$F/(ML)$",
-          "text_he": "$F/(ML)$",
+          "text_en": "$\\alpha = 2.0$ rad/s²",
+          "text_he": "$\\alpha = 2.0$ rad/s²",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "$\\alpha = 5.0$ rad/s²",
+          "text_he": "$\\alpha = 5.0$ rad/s²",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$2F/(ML)$",
-          "text_he": "$2F/(ML)$",
+          "text_en": "$\\alpha = 3.0$ rad/s²",
+          "text_he": "$\\alpha = 3.0$ rad/s²",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$6F/(ML)$",
-          "text_he": "$6F/(ML)$",
+          "text_en": "$\\alpha = 6.0$ rad/s²",
+          "text_he": "$\\alpha = 6.0$ rad/s²",
           "correct": false
         }
       ],
-      "explanation_en": "$\\tau=FL/2$, $I=ML^2/3$, so $\\alpha=\\tau/I=3F/(2ML)$.",
-      "explanation_he": "$\\tau=FL/2$, $I=ML^2/3$, לכן $\\alpha=3F/(2ML)$."
+      "explanation_en": "$I_{\\text{end}} = \\frac{1}{3}ML^2 = \\frac{1}{3}(3)(1.2)^2 = \\frac{1}{3}(3)(1.44) = 1.44$ kg·m². Then $\\alpha = \\tau/I = 7.2/1.44 = 5.0$ rad/s².",
+      "explanation_he": "$I_{\\text{end}} = \\frac{1}{3}ML^2 = \\frac{1}{3}(3)(1.2)^2 = 1.44$ kg·m². אז $\\alpha = \\tau/I = 7.2/1.44 = 5.0$ rad/s²."
     }
   ]
 }
