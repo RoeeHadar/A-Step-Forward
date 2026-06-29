@@ -61,6 +61,7 @@ export default async function DashboardPage() {
         streak={streak}
         pointsGroup={profile?.points_group ?? null}
         subjects={profile?.subjects ?? null}
+        goal={profile?.goal ?? null}
       />
     </>
   );

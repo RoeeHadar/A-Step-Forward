@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 import { fetchSubjects } from '@/lib/content-api';
 import { subjectIcon, subjectLabel } from '@/lib/subject-labels';
+import { getServerLocale } from '@/i18n/locale-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,6 +74,8 @@ function SubjectCard({ s, isMakhina }: { s: SubjectCard; isMakhina: boolean }) {
 }
 
 export default async function LearnPage() {
+  const locale = await getServerLocale();
+  const isHe = locale === 'he';
   const subjects = await fetchSubjects();
 
   // Build a slug → card map from DB subjects.
@@ -117,9 +120,21 @@ export default async function LearnPage() {
         <div className="space-y-12">
           {groups.map((group) => (
             <section key={group.id}>
-              <div className="mb-4 flex items-center gap-3">
-                <h2 className="font-display text-xl font-semibold text-foreground">{group.en}</h2>
-                <span className="text-muted-foreground" dir="rtl">/ {group.he}</span>
+              <div className="mb-4">
+                <div className="flex items-center gap-3">
+                  <h2 className="font-display text-xl font-semibold text-foreground">{group.en}</h2>
+                  <span className="text-muted-foreground" dir="rtl">/ {group.he}</span>
+                </div>
+                {group.id === 'makhina' ? (
+                  <p
+                    className="mt-1 text-sm text-muted-foreground"
+                    dir={isHe ? 'rtl' : 'ltr'}
+                  >
+                    {isHe
+                      ? 'מסלול לבניית בסיס מתמטי לפני האוניברסיטה'
+                      : 'Build your math foundation before university'}
+                  </p>
+                ) : null}
               </div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {group.cards.map((s) => (

@@ -15,7 +15,7 @@ import { LessonCompleteButton } from '@/components/lesson-complete-button';
 import {
   ThreePtCompletionMessage,
   ThreePtProgressBar,
-  isThreePtLessonContext,
+  getLessonEngagementTrack,
 } from '@/components/three-pt-lesson-engagement';
 import type { Lesson } from '@asf/schemas/curriculum';
 import 'katex/dist/katex.min.css';
@@ -26,6 +26,7 @@ type LegacySeedLessonClientProps = {
   sectionCount: number;
   levelMin?: string | null;
   mathTrack?: string[];
+  subject?: string | null;
 };
 
 export function LegacySeedLessonClient({
@@ -34,16 +35,23 @@ export function LegacySeedLessonClient({
   sectionCount,
   levelMin,
   mathTrack,
+  subject,
 }: LegacySeedLessonClientProps) {
   const pathname = usePathname();
   const isHe = locale === 'he';
   const [showMotivation, setShowMotivation] = useState(false);
-  const is3pt = isThreePtLessonContext({ pathname, levelMin, mathTrack });
+  const engagementTrack = getLessonEngagementTrack({
+    pathname,
+    subject,
+    levelMin,
+    mathTrack,
+  });
+  const showEngagement = engagementTrack !== null;
 
   return (
     <div className="max-w-3xl">
       <PageHeader title={lesson.title} backHref="/app/lessons" />
-      {is3pt ? (
+      {showEngagement ? (
         <ThreePtProgressBar
           currentSection={1}
           totalSections={Math.max(sectionCount, 1)}
@@ -97,8 +105,8 @@ export function LegacySeedLessonClient({
             conceptId={lesson.id}
             locale={locale}
             variant="outline"
-            navigateOnComplete={!is3pt}
-            onComplete={is3pt ? () => setShowMotivation(true) : undefined}
+            navigateOnComplete={!showEngagement}
+            onComplete={showEngagement ? () => setShowMotivation(true) : undefined}
           />
           <Button asChild>
             <Link href="/app/chat/tutor">
@@ -107,7 +115,9 @@ export function LegacySeedLessonClient({
             </Link>
           </Button>
         </div>
-        {is3pt && showMotivation ? <ThreePtCompletionMessage lang={locale} /> : null}
+        {showEngagement && showMotivation && engagementTrack ? (
+          <ThreePtCompletionMessage lang={locale} track={engagementTrack} />
+        ) : null}
       </div>
     </div>
   );

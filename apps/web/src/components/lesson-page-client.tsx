@@ -11,7 +11,7 @@ import { LessonCompleteButton } from './lesson-complete-button';
 import {
   ThreePtCompletionMessage,
   ThreePtProgressBar,
-  isThreePtLessonContext,
+  getLessonEngagementTrack,
 } from './three-pt-lesson-engagement';
 
 const MATH_TRACK_LEVELS: LessonPointsLevel[] = ['3pt', '4pt', '5pt'];
@@ -79,18 +79,25 @@ export function LessonPageClient({
   const [currentSection, setCurrentSection] = useState(1);
   const [showMotivation, setShowMotivation] = useState(false);
 
-  const is3pt = isThreePtLessonContext({
+  const subjectFromPath =
+    pathname.match(/\/learn\/([^/]+)/)?.[1] ??
+    pathname.match(/\/app\/lessons\/([^/]+)/)?.[1] ??
+    null;
+
+  const engagementTrack = getLessonEngagementTrack({
     pathname,
+    subject: subjectFromPath,
     levelMin: data.lesson.level,
     mathTrack: data.lesson.math_track,
     learnerLevel: learnerLevel ?? null,
   });
+  const showEngagement = engagementTrack !== null;
 
   const totalSections = data.lesson.sections.length;
 
   return (
     <div className="space-y-2">
-      {is3pt ? (
+      {showEngagement ? (
         <ThreePtProgressBar
           currentSection={currentSection}
           totalSections={totalSections}
@@ -134,7 +141,7 @@ export function LessonPageClient({
         data={data}
         lang={lang}
         learnerLevel={learnerLevel}
-        onSectionFocus={is3pt ? setCurrentSection : undefined}
+        onSectionFocus={showEngagement ? setCurrentSection : undefined}
       />
       <LessonQuizPanel data={data} lang={lang} conceptId={conceptId} learnerLevel={learnerLevel} />
 
@@ -144,9 +151,9 @@ export function LessonPageClient({
             conceptId={conceptId}
             lessonId={data.lesson.id}
             locale={lang}
-            navigateOnComplete={!is3pt}
+            navigateOnComplete={!showEngagement}
             onComplete={
-              is3pt
+              showEngagement
                 ? () => {
                     setShowMotivation(true);
                   }
@@ -160,7 +167,9 @@ export function LessonPageClient({
             {lang === 'he' ? 'חזרה ללוח הבקרה' : 'Back to Dashboard'}
           </Link>
         </div>
-        {is3pt && showMotivation ? <ThreePtCompletionMessage lang={lang} /> : null}
+        {showEngagement && showMotivation && engagementTrack ? (
+          <ThreePtCompletionMessage lang={lang} track={engagementTrack} />
+        ) : null}
       </div>
     </div>
   );

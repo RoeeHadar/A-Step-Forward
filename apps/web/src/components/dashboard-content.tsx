@@ -29,6 +29,7 @@ const STR = {
   he: {
     welcome: (name: string) => `ברוך הבא חזרה, ${name}!`,
     subtitleNoDate: 'בוא נלמד משהו חדש היום',
+    makhinaCue: 'המסע שלך לאוניברסיטה',
     daysUntilExam: (n: number) => `${n} ימים עד הבגרות`,
     examToday: 'הבגרות היום!',
     streak: (n: number) => `🔥 ${n} ימים רצף`,
@@ -49,6 +50,7 @@ const STR = {
   en: {
     welcome: (name: string) => `Welcome back, ${name}!`,
     subtitleNoDate: "Let's learn something new today",
+    makhinaCue: 'Your university prep journey',
     daysUntilExam: (n: number) => `${n} days until exam`,
     examToday: 'Exam day!',
     streak: (n: number) => `🔥 ${n}-day streak`,
@@ -250,6 +252,20 @@ function SectionHeading({ children }: { children: ReactNode }) {
   );
 }
 
+function isMakhinaFocus(
+  pointsGroup?: string | null,
+  subjects?: string[] | null,
+  goal?: string | null,
+): boolean {
+  if (pointsGroup === 'makhina') return true;
+  if (goal === 'makhina' || goal === 'university_prep') return true;
+  return (
+    subjects?.some(
+      (s) => s === 'makhina' || s.includes('makhina') || s === 'university_prep',
+    ) ?? false
+  );
+}
+
 export function DashboardContent({
   displayName,
   plan,
@@ -257,6 +273,7 @@ export function DashboardContent({
   streak,
   pointsGroup,
   subjects,
+  goal,
 }: {
   displayName: string;
   plan: LearningPlan | null;
@@ -264,6 +281,7 @@ export function DashboardContent({
   streak?: LearnerStreak;
   pointsGroup?: string | null;
   subjects?: string[] | null;
+  goal?: string | null;
 }) {
   const { locale } = useI18n();
   const isHe = locale === 'he';
@@ -286,6 +304,7 @@ export function DashboardContent({
   const planItems = (week?.concepts ?? []).slice(0, MAX_PLAN_ITEMS);
 
   const streakDays = streak?.current_days ?? 0;
+  const showMakhinaCue = isMakhinaFocus(pointsGroup, subjects, goal);
 
   return (
     <div dir={isHe ? 'rtl' : 'ltr'} className="space-y-8">
@@ -301,6 +320,10 @@ export function DashboardContent({
               {t.welcome(name)}
             </span>
           </h1>
+
+          {showMakhinaCue ? (
+            <p className="text-sm font-medium text-primary/80">{t.makhinaCue}</p>
+          ) : null}
 
           {isExamCountdown ? (
             <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
