@@ -1,45 +1,10 @@
-import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
 import { getAuthContext } from '@/lib/auth';
-import {
-  dbConfigured,
-  fetchLessonById,
-  getLearnerProfile,
-  type LessonPointsLevel,
-} from '@/lib/neon-db';
+import { dbConfigured, fetchLessonById } from '@/lib/neon-db';
 import { getSeedLesson } from '@/lib/seed-lessons';
-import { LessonPageClient } from '@/components/lesson-page-client';
 import { LegacySeedLessonView } from '@/components/legacy-seed-lesson-view';
-import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 
 export const dynamic = 'force-dynamic';
-
-async function resolveLearnerLevel(learnerId: string): Promise<LessonPointsLevel | null> {
-  try {
-    const profile = await getLearnerProfile(learnerId);
-    const pg = profile?.points_group ?? null;
-    if (pg) {
-      const num = String(pg).replace(/pt$/i, '').trim();
-      if (num === '3') return '3pt';
-      if (num === '4') return '4pt';
-      if (num === '5') return '5pt';
-      if (pg === 'hs_physics') return 'hs_physics';
-      if (pg === 'calc1') return 'calc1';
-      if (pg === 'la') return 'la';
-    } else if (profile?.goal) {
-      const g = profile.goal.toLowerCase();
-      if (g.includes('3')) return '3pt';
-      if (g.includes('4')) return '4pt';
-      if (g.includes('5')) return '5pt';
-      if (g.includes('phys')) return 'hs_physics';
-    }
-  } catch {
-    // Profile unavailable — render without level filtering.
-  }
-  return null;
-}
 
 export default async function LessonPage({
   params,
@@ -51,54 +16,12 @@ export default async function LessonPage({
 
   const { lessonId } = await params;
 
-  const [lessonData, learnerLevel] = await Promise.all([
-    dbConfigured ? fetchLessonById(lessonId) : Promise.resolve(null),
-    resolveLearnerLevel(auth.learnerId),
-  ]);
+  const lessonData = dbConfigured ? await fetchLessonById(lessonId) : null;
 
   if (lessonData) {
     const { lesson } = lessonData;
-    const cookieStore = await cookies();
-    const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
-    const isHe = locale === 'he';
-    const primaryTitle = locale === 'en' ? lesson.title_en : lesson.title_he;
-    const secondaryTitle = locale === 'he' ? lesson.title_en : null;
-    const backLabel = isHe ? 'חזרה לשיעורים' : 'Back to lessons';
-
-    return (
-      <div className="max-w-4xl">
-        <Link
-          href="/app/lessons"
-          className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-        >
-          <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />
-          {backLabel}
-        </Link>
-        <header className="mb-6">
-          <h1 className="font-display text-3xl font-bold" dir={isHe ? 'rtl' : 'ltr'}>
-            {primaryTitle}
-          </h1>
-          {secondaryTitle ? (
-            <p
-              className="mt-1 text-lg text-muted-foreground"
-              dir={isHe ? 'ltr' : 'rtl'}
-            >
-              {secondaryTitle}
-            </p>
-          ) : null}
-          <p className="mt-2 text-sm text-muted-foreground">
-            {lesson.est_minutes} min · {lesson.subject}
-          </p>
-        </header>
-        <LessonPageClient
-          data={lessonData}
-          conceptId={lesson.concept_id}
-          learnerLevel={learnerLevel}
-        />
-      </div>
-    );
+    redirect(`/learn/${lesson.subject}/concept/${lesson.concept_id}`);
   }
-
   const seed = getSeedLesson(lessonId);
   if (seed) {
     return <LegacySeedLessonView lesson={seed} />;

@@ -11,13 +11,13 @@ import { useI18n } from '@/providers/i18n-provider';
 import type { Locale } from '@/i18n/config';
 
 const publicNavLinks = [
-  { href: '/learn', signedInHref: '/app/lessons', labelKey: 'learn' as const },
+  { href: '/learn', labelKey: 'learn' as const },
   { href: '/book', labelKey: 'book' as const },
 ];
 
 const appNavLinks = [
   { href: '/app', labelKey: 'dashboard' as const },
-  { href: '/app/lessons', labelKey: 'learn' as const },
+  { href: '/learn', labelKey: 'learn' as const },
   { href: '/app/progress', labelKey: 'progress' as const },
   { href: '/app/memory', labelKey: 'memory' as const },
 ];

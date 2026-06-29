@@ -15,10 +15,15 @@ import type { DashboardSnapshot } from '@/lib/neon-db';
 export interface NextLessonInfo {
   concept_id: string;
   lesson_id: string;
+  subject: string;
   title: string;
   title_he: string;
   est_minutes: number;
   reason: string;
+}
+
+function learnConceptHref(subject: string, conceptId: string): string {
+  return `/learn/${subject}/concept/${conceptId}`;
 }
 
 /**
@@ -76,12 +81,12 @@ export function DashboardContent({
     daysAway !== null && daysAway >= 3 && daysAway < 60;
 
   const reengagementHref = nextLesson
-    ? `/app/lessons/l/${nextLesson.lesson_id}`
-    : recent_lessons[0]?.id
-      ? `/app/lessons/l/${recent_lessons[0].id}`
+    ? learnConceptHref(nextLesson.subject, nextLesson.concept_id)
+    : recent_lessons[0]?.concept_id
+      ? learnConceptHref(recent_lessons[0].subject, recent_lessons[0].concept_id)
       : recent_lessons[0]
         ? `/learn/${recent_lessons[0].subject}`
-        : '/app/lessons';
+        : '/learn';
 
   return (
     <div dir={isHe ? 'rtl' : 'ltr'}>
@@ -155,11 +160,7 @@ export function DashboardContent({
               recent_lessons.map((lesson) => {
                 const title =
                   isHe && lesson.title_he ? lesson.title_he : lesson.title;
-                // Deep-link to the authored lesson when available; else to
-                // the subject-level /learn page for that concept.
-                const href = lesson.id
-                  ? `/app/lessons/l/${lesson.id}`
-                  : `/learn/${lesson.subject}`;
+                const href = learnConceptHref(lesson.subject, lesson.concept_id);
                 return (
                   <div key={lesson.concept_id} className="space-y-2">
                     <div className="flex min-w-0 items-center justify-between gap-2">
@@ -357,7 +358,7 @@ function NextLessonCard({
         asChild
         className="shrink-0 bg-gradient-to-r from-primary to-accent-magenta font-semibold text-primary-foreground hover:opacity-90"
       >
-        <Link href={`/app/lessons/l/${lesson.lesson_id}`}>
+        <Link href={learnConceptHref(lesson.subject, lesson.concept_id)}>
           <BookOpen className="mr-2 h-4 w-4" aria-hidden />
           {t.cta}
         </Link>

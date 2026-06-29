@@ -14,6 +14,8 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   'hs-math-5': { en: 'High School Math — 5pt', he: 'מתמטיקה — 5 יח״ל', icon: '5' },
   hs_math_5: { en: 'High School Math — 5pt', he: 'מתמטיקה — 5 יח״ל', icon: '5' },
   hs_physics: { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  physics_h1: { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  'physics-h1': { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
   math: { en: 'Mathematics', he: 'מתמטיקה', icon: '📐' },
   physics: { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
   calculus: { en: 'Calculus', he: 'חדו״א', icon: '∫' },

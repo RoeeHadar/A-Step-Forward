@@ -33,6 +33,21 @@ function emptySnapshot(): DashboardSnapshot {
   };
 }
 
+function learnSubjectSlug(
+  conceptId: string,
+  pointsGroup: string | null,
+  subjects?: string[] | null,
+): string {
+  const physCat = CURRICULUM_CATEGORIES.find((c) => c.id === 'physics-hs');
+  if (physCat?.concept_ids.includes(conceptId) || subjects?.includes('physics')) {
+    return pointsGroup === 'hs_physics' ? 'hs_physics' : 'physics';
+  }
+  if (pointsGroup === '3pt') return 'high_school_math_3_points';
+  if (pointsGroup === '4pt') return 'high_school_math_4_points';
+  if (pointsGroup === '5pt') return 'high_school_math_5_points';
+  return 'math';
+}
+
 function computeNextLesson(
   mastery: Record<string, number>,
   pointsGroup: string | null,
@@ -87,6 +102,7 @@ function computeNextLesson(
   return {
     concept_id: chosen.id,
     lesson_id: chosen.id,
+    subject: learnSubjectSlug(chosen.id, pointsGroup, subjects),
     title: entry.title_en,
     title_he: entry.title_he ?? entry.title_en,
     est_minutes: entry.est_minutes,

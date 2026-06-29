@@ -423,11 +423,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                       ? isHe
                         ? t.lessonBadge
                         : 'Lesson'
-                      : c.langs.includes('he') && c.langs.includes('en')
-                        ? isHe
-                          ? 'EN · HE'
-                          : null
-                        : (c.langs[0]?.toUpperCase() ?? null);
+                      : null;
                     const statusLabel = statusCfg
                       ? c.status === 'done'
                         ? t.statusDone
