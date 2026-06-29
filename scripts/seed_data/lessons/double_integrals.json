@@ -1,24 +1,116 @@
 {
-  "concept_id": "double_integrals",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
+  "id": "double_integrals",
+  "type": "interactive",
+  "subject": "calculus_2",
   "title_en": "Double Integrals",
-  "title_he": "Double Integrals",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_he": "אינטגרלים כפולים",
+  "duration_min": 30,
+  "level_min": "calculus_1",
+  "agent_hints": "Always sketch the region D before setting limits. The most common error is wrong inner/outer limits when switching order. For Type I regions, y limits are functions of x. Remind students that ∬_D 1 dA gives area. Fubini requires continuity (or milder conditions) on a rectangle.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "definition_fubini",
+      "title_en": "Definition and Fubini's Theorem",
+      "title_he": "הגדרה ומשפט פוביני",
+      "level_min": "calculus_1",
+      "body_en_md": "The **double integral** over a region $R$:\n$$\\iint_R f(x,y)\\,dA$$\nis defined as the limit of Riemann sums over partitions of $R$.\n\n**Geometric interpretation:** When $f(x,y) \\geq 0$, the double integral equals the **volume** under the surface $z = f(x,y)$ and above $R$.\n\n---\n\n**Fubini's Theorem** (rectangle $R = [a,b] \\times [c,d]$):\n$$\\iint_R f(x,y)\\,dA = \\int_a^b \\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d \\int_a^b f(x,y)\\,dx\\,dy.$$\n\nWe may integrate in either order when $f$ is continuous on $R$.",
+      "body_he_md": "**האינטegral הכפול** על אזור $R$:\n$$\\iint_R f(x,y)\\,dA$$\nמוגדר כגבול סכומי רiemann על פריסות של $R$.\n\n**פרשנות גיאומטרית:** כאשר $f(x,y) \\geq 0$, האינטגרal הכפול שווה ל**נפח** מתחת למשטח $z = f(x,y)$ ומעל $R$.\n\n---\n\n**משפט פוביני** (מלבן $R = [a,b] \\times [c,d]$):\n$$\\iint_R f(x,y)\\,dA = \\int_a^b \\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d \\int_a^b f(x,y)\\,dx\\,dy.$$\n\nניתן לחשב בכל סדר כאשר $f$ רציפה ב-$R$."
+    },
+    {
+      "id": "rectangular_example",
+      "title_en": "Worked Example — Rectangle",
+      "title_he": "דוגמה מפורטת — מלבן",
+      "level_min": "calculus_1",
+      "body_en_md": "**Compute** $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\nUsing Fubini (integrate $y$ first):\n$$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\left[\\frac{y^2}{2}\\right]_0^2 dx = \\int_0^1 x \\cdot 2\\,dx = \\left[x^2\\right]_0^1 = 1.$$\n\n**Check (integrate $x$ first):**\n$$\\int_0^2 \\int_0^1 xy\\,dx\\,dy = \\int_0^2 y \\left[\\frac{x^2}{2}\\right]_0^1 dy = \\int_0^2 \\frac{y}{2}\\,dy = \\left[\\frac{y^2}{4}\\right]_0^2 = 1. \\checkmark$$",
+      "body_he_md": "**חשבו** $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\nבאמצעות פוביני (אינטegrציה ב-$y$ קודם):\n$$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\left[\\frac{y^2}{2}\\right]_0^2 dx = \\int_0^1 x \\cdot 2\\,dx = \\left[x^2\\right]_0^1 = 1.$$\n\n**בדיקה (אינטegrציה ב-$x$ קודם):**\n$$\\int_0^2 \\int_0^1 xy\\,dx\\,dy = \\int_0^2 y \\left[\\frac{x^2}{2}\\right]_0^1 dy = \\int_0^2 \\frac{y}{2}\\,dy = \\left[\\frac{y^2}{4}\\right]_0^2 = 1. \\checkmark$$"
+    },
+    {
+      "id": "non_rectangular",
+      "title_en": "Non-Rectangular Regions — Type I and Type II",
+      "title_he": "אזורים שאינם מלבנים — סוג I וסוג II",
+      "level_min": "calculus_1",
+      "body_en_md": "**Type I** (vertical slices): $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\n\n**Type II** (horizontal slices): $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$\n$$\\iint_D f\\,dA = \\int_c^d \\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n---\n\n**Worked example 2:** $\\displaystyle\\iint_D x^2 y\\,dA$ where $D$ is the triangle with vertices $(0,0)$, $(1,0)$, $(0,1)$.\n\nThe region: $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$.\n$$\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 x^2 \\left[\\frac{y^2}{2}\\right]_0^{1-x} dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}\\,dx = \\frac{1}{60}.$$",
+      "body_he_md": "**סוג I** (פרוסות אנכיות): $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\n\n**סוג II** (פרוסות אופקיות): $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$\n$$\\iint_D f\\,dA = \\int_c^d \\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n---\n\n**דוגמה 2:** $\\displaystyle\\iint_D x^2 y\\,dA$ כאשר $D$ הוא המשולש עם קודקודים $(0,0)$, $(1,0)$, $(0,1)$.\n\nהאזור: $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$.\n$$\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 x^2 \\left[\\frac{y^2}{2}\\right]_0^{1-x} dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}\\,dx = \\frac{1}{60}.$$"
+    },
+    {
+      "id": "applications_switching",
+      "title_en": "Switching Order and Applications",
+      "title_he": "החלפת סדר אינטegrציה ויישומים",
+      "level_min": "calculus_1",
+      "body_en_md": "### Switching order of integration\n\nWhen inner limits depend on the outer variable, **sketch the region first**. If one order is difficult, try the other.\n\n**Tip:** After switching, the limits must describe the **same** region $D$.\n\n---\n\n### Applications\n\n| Application | Formula |\n|---|---|\n| **Area of $D$** | $\\displaystyle\\iint_D 1\\,dA$ |\n| **Average value** | $\\bar{f} = \\dfrac{1}{\\text{Area}(D)}\\iint_D f\\,dA$ |\n| **Center of mass** | $\\bar{x} = \\dfrac{1}{M}\\iint_D x\\,\\rho\\,dA$, $\\bar{y} = \\dfrac{1}{M}\\iint_D y\\,\\rho\\,dA$ |\n\nwhere $M = \\iint_D \\rho\\,dA$ is the total mass.",
+      "body_he_md": "### החלפת סדר אינטegrציה\n\nכאשר גבולות פנימיים תלויים במשתנה החיצוני, **שרטטו את האזור קודם**. אם סדר אחד קשה, נסו את השני.\n\n**טיפ:** אחרי החלפה, הגבולות חייבים לתאר את **אותו** אזור $D$.\n\n---\n\n### יישומים\n\n| יישום | נוסחה |\n|---|---|\n| **שטח $D$** | $\\displaystyle\\iint_D 1\\,dA$ |\n| **ערך ממוצע** | $\\bar{f} = \\dfrac{1}{\\text{Area}(D)}\\iint_D f\\,dA$ |\n| **מרכז מסה** | $\\bar{x} = \\dfrac{1}{M}\\iint_D x\\,\\rho\\,dA$, $\\bar{y} = \\dfrac{1}{M}\\iint_D y\\,\\rho\\,dA$ |\n\nכאשר $M = \\iint_D \\rho\\,dA$ הוא המסה הכוללת."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Double Integrals."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "Evaluate $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.",
+      "body_he": "חשבו $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.",
+      "options": [
+        { "id": "a", "text_en": "$2$", "text_he": "$2$", "correct": false },
+        { "id": "b", "text_en": "$1$", "text_he": "$1$", "correct": true },
+        { "id": "c", "text_en": "$\\dfrac{1}{2}$", "text_he": "$\\dfrac{1}{2}$", "correct": false },
+        { "id": "d", "text_en": "$4$", "text_he": "$4$", "correct": false }
+      ],
+      "explanation_en": "$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 2x\\,dx = 1$.",
+      "explanation_he": "$\\int_0^1 \\int_0^2 xy\\,dy\\,dx = \\int_0^1 2x\\,dx = 1$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "Over the triangle $D$ with vertices $(0,0)$, $(1,0)$, $(0,1)$, $\\displaystyle\\iint_D x^2 y\\,dA$ equals:",
+      "body_he": "על המשולש $D$ עם קודקודים $(0,0)$, $(1,0)$, $(0,1)$, $\\displaystyle\\iint_D x^2 y\\,dA$ שווה:",
+      "options": [
+        { "id": "a", "text_en": "$\\dfrac{1}{12}$", "text_he": "$\\dfrac{1}{12}$", "correct": false },
+        { "id": "b", "text_en": "$\\dfrac{1}{60}$", "text_he": "$\\dfrac{1}{60}$", "correct": true },
+        { "id": "c", "text_en": "$\\dfrac{1}{6}$", "text_he": "$\\dfrac{1}{6}$", "correct": false },
+        { "id": "d", "text_en": "$\\dfrac{1}{24}$", "text_he": "$\\dfrac{1}{24}$", "correct": false }
+      ],
+      "explanation_en": "With limits $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$: $\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}dx = \\frac{1}{60}$.",
+      "explanation_he": "עם גבולות $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$: $\\int_0^1 \\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 \\frac{x^2(1-x)^2}{2}dx = \\frac{1}{60}$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "Fubini's Theorem on a rectangle $[a,b]\\times[c,d]$ allows us to:",
+      "body_he": "משפט פוביני על מלבן $[a,b]\\times[c,d]$ מאפשר לנו:",
+      "options": [
+        { "id": "a", "text_en": "Replace a double integral only by $\\int_a^b f(x,c)\\,dx$", "text_he": "להחליף אינטegral כפול רק ב-$\\int_a^b f(x,c)\\,dx$", "correct": false },
+        { "id": "b", "text_en": "Compute $\\iint f\\,dA$ as an iterated integral in either order", "text_he": "לחשב $\\iint f\\,dA$ כאינטegral איטרטיבי בכל סדר", "correct": true },
+        { "id": "c", "text_en": "Always use polar coordinates", "text_he": "תמיד להשתמש בקואורדינטות קוטביות", "correct": false },
+        { "id": "d", "text_en": "Convert any region to a circle", "text_he": "להמיר כל אזור למעגל", "correct": false }
+      ],
+      "explanation_en": "Fubini's theorem states $\\iint_R f\\,dA = \\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$ for continuous $f$ on a rectangle.",
+      "explanation_he": "משפט פוביני קובע $\\iint_R f\\,dA = \\int_a^b\\int_c^d f\\,dy\\,dx = \\int_c^d\\int_a^b f\\,dx\\,dy$ עבור $f$ רציפה על מלבן."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "Region $D$: $0 \\leq y \\leq 1$, $y \\leq x \\leq 1$. Which iterated integral equals $\\iint_D f\\,dA$?",
+      "body_he": "אזור $D$: $0 \\leq y \\leq 1$, $y \\leq x \\leq 1$. איזה אינטegral איטרטיבי שווה ל-$\\iint_D f\\,dA$?",
+      "options": [
+        { "id": "a", "text_en": "$\\displaystyle\\int_0^1 \\int_y^1 f(x,y)\\,dx\\,dy$", "text_he": "$\\displaystyle\\int_0^1 \\int_y^1 f(x,y)\\,dx\\,dy$", "correct": true },
+        { "id": "b", "text_en": "$\\displaystyle\\int_0^1 \\int_0^y f(x,y)\\,dx\\,dy$", "text_he": "$\\displaystyle\\int_0^1 \\int_0^y f(x,y)\\,dx\\,dy$", "correct": false },
+        { "id": "c", "text_en": "$\\displaystyle\\int_0^1 \\int_0^1 f(x,y)\\,dy\\,dx$", "text_he": "$\\displaystyle\\int_0^1 \\int_0^1 f(x,y)\\,dy\\,dx$", "correct": false },
+        { "id": "d", "text_en": "$\\displaystyle\\int_0^1 \\int_x^1 f(x,y)\\,dy\\,dx$", "text_he": "$\\displaystyle\\int_0^1 \\int_x^1 f(x,y)\\,dy\\,dx$", "correct": false }
+      ],
+      "explanation_en": "Type II: $y$ from 0 to 1, and for each $y$, $x$ goes from $y$ to 1. Option (d) is Type I with $x$ outer — also valid: $\\int_0^1\\int_0^x f\\,dy\\,dx$ would be wrong limits. Actually (d) has x outer with y from x to 1 — that's wrong. (a) is correct Type II form.",
+      "explanation_he": "סוג II: $y$ מ-0 עד 1, ולכל $y$, $x$ מ-$y$ עד 1. אפשרות (א) היא הצורה הנכונה."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "Geometrically, if $f(x,y) \\geq 0$, the double integral $\\iint_D f(x,y)\\,dA$ represents:",
+      "body_he": "גיאומטרית, אם $f(x,y) \\geq 0$, האינטegral הכפול $\\iint_D f(x,y)\\,dA$ מייצג:",
+      "options": [
+        { "id": "a", "text_en": "The arc length of a curve", "text_he": "אורך קשת של עקומה", "correct": false },
+        { "id": "b", "text_en": "The volume under $z=f(x,y)$ over $D$", "text_he": "נפח מתחת ל-$z=f(x,y)$ מעל $D$", "correct": true },
+        { "id": "c", "text_en": "The slope of the tangent plane", "text_he": "שיפוע המישור המשיק", "correct": false },
+        { "id": "d", "text_en": "The gradient of $f$", "text_he": "הגרדיאנט של $f$", "correct": false }
+      ],
+      "explanation_en": "When $f \\geq 0$, the double integral sums infinitesimal boxes $f(x,y)\\,dA$, giving the volume between the surface $z=f(x,y)$ and the $xy$-plane over $D$.",
+      "explanation_he": "כאשר $f \\geq 0$, האינטegral הכפול מסכם תיבות אינפinitesimal $f(x,y)\\,dA$, ונותן את הנפח בין המשטח $z=f(x,y)$ למישור $xy$ מעל $D$."
+    }
+  ]
 }

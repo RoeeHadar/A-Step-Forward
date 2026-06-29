@@ -1,24 +1,116 @@
 {
-  "concept_id": "limits_epsilon_delta",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Limits Epsilon Delta",
-  "title_he": "Limits Epsilon Delta",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "limits_epsilon_delta",
+  "type": "interactive",
+  "subject": "calculus_1",
+  "title_en": "Limits — The ε-δ Definition",
+  "title_he": "גבולות — הגדרת ε-δ",
+  "duration_min": 30,
+  "level_min": "calculus_1",
+  "agent_hints": "Technion 104031 students must write complete ε-δ proofs, not just compute limits. Emphasize the game metaphor: ε is the challenge, δ is our response. The most common exam error is choosing δ without first bounding auxiliary factors (e.g. |x+1| in the x² proof). Always require students to state the goal |f(x)-L| < ε, manipulate to |x-a|, choose δ, then verify.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "intuitive_review",
+      "title_en": "Intuitive Limits — Review",
+      "title_he": "גבולות — סקירה אינטuitיבית",
+      "level_min": "calculus_1",
+      "body_en_md": "We write $\\lim_{x \\to a} f(x) = L$ when $f(x)$ can be made **arbitrarily close** to $L$ by taking $x$ sufficiently close to $a$ (but $x \\neq a$).\n\n**Informally:** Given any target tolerance for $f(x)$ near $L$, we can find a tolerance for $x$ near $a$ that guarantees it.\n\n**Example (intuition):** For $f(x) = 3x - 1$ and $a = 2$, we expect $L = 5$. If we want $|f(x) - 5| < 0.03$, then $|3x - 6| = 3|x-2| < 0.03$, so $|x-2| < 0.01$ works. Smaller targets for $f(x)$ require smaller tolerances for $x$.\n\nThe ε-δ definition makes this precise.",
+      "body_he_md": "כותבים $\\lim_{x \\to a} f(x) = L$ כאשר $f(x)$ ניתן להביא **קרוב כרצוננו** ל-$L$ על-ידי בחירת $x$ מספיק קרוב ל-$a$ (אך $x \\neq a$).\n\n**במילים פשוטות:** לכל רמת דיוק שבוחרים עבור $f(x)$ סביב $L$, ניתן למצוא רמת דיוק עבור $x$ סביב $a$ שמבטיחה זאת.\n\n**דוגמה (אינטuition):** עבור $f(x) = 3x - 1$ ו-$a = 2$, מצפים ל-$L = 5$. אם רוצים $|f(x) - 5| < 0.03$, אז $|3x - 6| = 3|x-2| < 0.03$, ולכן $|x-2| < 0.01$ מספיק. יעדים קטנים יותר ל-$f(x)$ דורשים סובלנות קטנה יותר ל-$x$.\n\nהגדרת ε-δ מדייקת זאת."
+    },
+    {
+      "id": "epsilon_delta_definition",
+      "title_en": "The ε-δ Formal Definition",
+      "title_he": "הגדרת ε-δ הפורמלית",
+      "level_min": "calculus_1",
+      "body_en_md": "$$\\boxed{\\lim_{x \\to a} f(x) = L \\;\\;\\Longleftrightarrow\\;\\; \\forall \\epsilon > 0,\\; \\exists \\delta > 0 \\text{ such that } 0 < |x-a| < \\delta \\Rightarrow |f(x) - L| < \\epsilon.}$$\n\n**How to read it:**\n- **$\\epsilon$ (epsilon)** — the challenge: how close must $f(x)$ be to $L$?\n- **$\\delta$ (delta)** — our response: how close must $x$ be to $a$?\n- The condition $0 < |x-a|$ means $x \\neq a$; we never evaluate $f$ exactly at $a$.\n\n**Key insight:** $\\delta$ is chosen **after** seeing $\\epsilon$, and usually **depends on** $\\epsilon$. A smaller challenge ($\\epsilon$) forces a smaller response ($\\delta$).\n\nThis is the standard definition on Technion 104031 exams: you must produce $\\delta$ as an explicit function of $\\epsilon$.",
+      "body_he_md": "$$\\boxed{\\lim_{x \\to a} f(x) = L \\;\\;\\Longleftrightarrow\\;\\; \\forall \\epsilon > 0,\\; \\exists \\delta > 0 \\text{ כך ש-} 0 < |x-a| < \\delta \\Rightarrow |f(x) - L| < \\epsilon.}$$\n\n**איך קוראים:**\n- **$\\epsilon$ (אפסילון)** — האתגר: עד כמה $f(x)$ חייב להיות קרוב ל-$L$?\n- **$\\delta$ (דלתא)** — התשובה שלנו: עד כמה $x$ חייב להיות קרוב ל-$a$?\n- התנאי $0 < |x-a|$ פירושו $x \\neq a$; לא מחשבים $f$ בנקודה $a$ עצמה.\n\n**תובנה מרכזית:** $\\delta$ נבחר **אחרי** שרואים את $\\epsilon$, ובדרך כלל **תלוי** ב-$\\epsilon$. אתגר קטן יותר ($\\epsilon$) מחייב תשובה קטנה יותר ($\\delta$).\n\nזוהי ההגדרה הסטנדרטית במבחני 104031 בטכניון: יש להציג $\\delta$ כפונקציה מפורשת של $\\epsilon$."
+    },
+    {
+      "id": "proof_template",
+      "title_en": "Proof Template and Worked Examples",
+      "title_he": "תבנית הוכחה ודוגמאות מפורטות",
+      "level_min": "calculus_1",
+      "body_en_md": "### Four-step proof template\n\n1. **State the goal:** Let $\\epsilon > 0$. We need $|f(x) - L| < \\epsilon$.\n2. **Simplify** $|f(x) - L|$ in terms of $|x - a|$.\n3. **Choose $\\delta$** (often in terms of $\\epsilon$; sometimes $\\delta = \\min(\\delta_1, \\delta_2)$).\n4. **Verify:** If $0 < |x-a| < \\delta$, then $|f(x)-L| < \\epsilon$. $\\square$\n\n---\n\n**Worked proof 1:** $\\displaystyle\\lim_{x \\to 2}(3x - 1) = 5$.\n\nGoal: $|3x - 1 - 5| = |3x - 6| = 3|x - 2| < \\epsilon$.\n\nChoose $\\delta = \\epsilon/3$. If $0 < |x-2| < \\delta$, then $3|x-2| < 3 \\cdot \\epsilon/3 = \\epsilon$. $\\square$\n\n---\n\n**Worked proof 2:** $\\displaystyle\\lim_{x \\to 1} x^2 = 1$.\n\nGoal: $|x^2 - 1| = |x-1|\\,|x+1| < \\epsilon$.\n\n**Problem:** $|x+1|$ is not constant near $a=1$. **Fix:** First restrict $\\delta \\leq 1$. Then $|x-1| < 1$ implies $0 < x < 2$, so $|x+1| < 3$.\n\nNow $|x^2-1| = |x-1|\\,|x+1| < 3|x-1|$. Choose $\\delta = \\min(1,\\, \\epsilon/3)$.\n\nIf $0 < |x-1| < \\delta$, then $|x^2-1| < 3|x-1| < 3 \\cdot \\epsilon/3 = \\epsilon$. $\\square$",
+      "body_he_md": "### תבנית הוכחה בארבעה שלבים\n\n1. **קביעת המטרה:** יהי $\\epsilon > 0$. נדרש $|f(x) - L| < \\epsilon$.\n2. **פישוט** $|f(x) - L|$ ביטוי ב-$|x - a|$.\n3. **בחירת $\\delta$** (לעיתים כפונקציה של $\\epsilon$; לפעמים $\\delta = \\min(\\delta_1, \\delta_2)$).\n4. **אימות:** אם $0 < |x-a| < \\delta$, אז $|f(x)-L| < \\epsilon$. $\\square$\n\n---\n\n**הוכחה מפורטת 1:** $\\displaystyle\\lim_{x \\to 2}(3x - 1) = 5$.\n\nמטרה: $|3x - 1 - 5| = |3x - 6| = 3|x - 2| < \\epsilon$.\n\nבוחרים $\\delta = \\epsilon/3$. אם $0 < |x-2| < \\delta$, אז $3|x-2| < 3 \\cdot \\epsilon/3 = \\epsilon$. $\\square$\n\n---\n\n**הוכחה מפורטת 2:** $\\displaystyle\\lim_{x \\to 1} x^2 = 1$.\n\nמטרה: $|x^2 - 1| = |x-1|\\,|x+1| < \\epsilon$.\n\n**בעיה:** $|x+1|$ אינו קבוע ליד $a=1$. **פתרון:** קודם מגבילים $\\delta \\leq 1$. אז $|x-1| < 1$ גורר $0 < x < 2$, ולכן $|x+1| < 3$.\n\nכעת $|x^2-1| = |x-1|\\,|x+1| < 3|x-1|$. בוחרים $\\delta = \\min(1,\\, \\epsilon/3)$.\n\nאם $0 < |x-1| < \\delta$, אז $|x^2-1| < 3|x-1| < 3 \\cdot \\epsilon/3 = \\epsilon$. $\\square$"
+    },
+    {
+      "id": "one_sided_infinite",
+      "title_en": "One-Sided and Infinite Limits",
+      "title_he": "גבולות חד-צדדיים ואינסופיים",
+      "level_min": "calculus_1",
+      "body_en_md": "### One-sided limits\n\n**Right limit:** $\\lim_{x \\to a^+} f(x) = L$ means:\n$$\\forall \\epsilon > 0,\\; \\exists \\delta > 0:\\; 0 < x - a < \\delta \\Rightarrow |f(x) - L| < \\epsilon.$$\n\n**Left limit:** replace $0 < x - a$ with $0 < a - x$.\n\n$\\lim_{x \\to a} f(x) = L$ exists **iff** both one-sided limits exist and equal $L$.\n\n---\n\n### Infinite limits\n\n$\\lim_{x \\to a} f(x) = \\infty$ means: for every $M > 0$, there exists $\\delta > 0$ such that $0 < |x-a| < \\delta \\Rightarrow f(x) > M$.\n\n---\n\n### Exam tip (104031)\n\nAlways write **\"Let $\\epsilon > 0$\"** at the start. When a factor like $|x+1|$ appears, **bound it first** with an auxiliary $\\delta$ before solving for $\\epsilon$. Partial credit is lost if $\\delta$ is stated without justification.",
+      "body_he_md": "### גבולות חד-צדדיים\n\n**גבול מימין:** $\\lim_{x \\to a^+} f(x) = L$ פירושו:\n$$\\forall \\epsilon > 0,\\; \\exists \\delta > 0:\\; 0 < x - a < \\delta \\Rightarrow |f(x) - L| < \\epsilon.$$\n\n**גבול משמאל:** מחליפים $0 < x - a$ ב-$0 < a - x$.\n\n$\\lim_{x \\to a} f(x) = L$ קיים **אם ורק אם** שני הגבולות החד-צדדיים קיימים ושווים ל-$L$.\n\n---\n\n### גבולות אינסופיים\n\n$\\lim_{x \\to a} f(x) = \\infty$ פירושו: לכל $M > 0$ קיים $\\delta > 0$ כך ש-$0 < |x-a| < \\delta \\Rightarrow f(x) > M$.\n\n---\n\n### טיפ למבחן (104031)\n\nתמיד כותבים **\"יהי $\\epsilon > 0$\"** בתחילה. כאשר מופיע גורם כמו $|x+1|$, **חוסמים אותו קודם** עם $\\delta$ עזר לפני פתרון עבור $\\epsilon$. נקודות חלקיות יאבדו אם $\\delta$ מוצג ללא נימוק."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Limits Epsilon Delta."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "For $\\lim_{x \\to 2}(3x-1)=5$, which choice of $\\delta$ (in terms of $\\epsilon$) is correct?",
+      "body_he": "עבור $\\lim_{x \\to 2}(3x-1)=5$, איזו בחירת $\\delta$ (כפונקציה של $\\epsilon$) נכונה?",
+      "options": [
+        { "id": "a", "text_en": "$\\delta = \\epsilon$", "text_he": "$\\delta = \\epsilon$", "correct": false },
+        { "id": "b", "text_en": "$\\delta = \\epsilon/3$", "text_he": "$\\delta = \\epsilon/3$", "correct": true },
+        { "id": "c", "text_en": "$\\delta = 3\\epsilon$", "text_he": "$\\delta = 3\\epsilon$", "correct": false },
+        { "id": "d", "text_en": "$\\delta = \\sqrt{\\epsilon}$", "text_he": "$\\delta = \\sqrt{\\epsilon}$", "correct": false }
+      ],
+      "explanation_en": "We need $|3x-6| = 3|x-2| < \\epsilon$, so $|x-2| < \\epsilon/3$. Thus $\\delta = \\epsilon/3$.",
+      "explanation_he": "נדרש $|3x-6| = 3|x-2| < \\epsilon$, לכן $|x-2| < \\epsilon/3$. כלומר $\\delta = \\epsilon/3$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "In the ε-δ proof of $\\lim_{x \\to 1} x^2 = 1$, a student writes $|x^2-1| = |x-1||x+1| < |x-1|$ and chooses $\\delta = \\epsilon$. Where is the error?",
+      "body_he": "בהוכחת ε-δ של $\\lim_{x \\to 1} x^2 = 1$, סtudent כותב $|x^2-1| = |x-1||x+1| < |x-1|$ ובוחר $\\delta = \\epsilon$. היכן השגיאה?",
+      "options": [
+        { "id": "a", "text_en": "Should use $|x-1| < \\epsilon$ instead of $|x^2-1|$", "text_he": "יש להשתמש ב-$|x-1| < \\epsilon$ במקום $|x^2-1|$", "correct": false },
+        { "id": "b", "text_en": "Forgot that $|x+1|$ is not bounded by 1 without restricting $\\delta$ first", "text_he": "שכח ש-$|x+1|$ אינו חסום ב-1 ללא הגבלת $\\delta$ קודם", "correct": true },
+        { "id": "c", "text_en": "$\\delta$ must always equal $\\epsilon/2$", "text_he": "$\\delta$ חייב תמיד להיות $\\epsilon/2$", "correct": false },
+        { "id": "d", "text_en": "The limit is actually 2, not 1", "text_he": "הגבול הוא למעשה 2, לא 1", "correct": false }
+      ],
+      "explanation_en": "The inequality $|x+1||x-1| < |x-1|$ is false in general (it would require $|x+1| < 1$). One must first set $\\delta \\leq 1$ to bound $|x+1| < 3$.",
+      "explanation_he": "האי-שוויון $|x+1||x-1| < |x-1|$ אינו נכון בכלל (הוא דורש $|x+1| < 1$). יש קודם להגביל $\\delta \\leq 1$ כדי לחסום $|x+1| < 3$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "For $\\lim_{x \\to 1} x^2 = 1$ and a given $\\epsilon > 0$, which $\\delta$ guarantees the proof?",
+      "body_he": "עבור $\\lim_{x \\to 1} x^2 = 1$ ו-$\\epsilon > 0$ נתון, איזה $\\delta$ מבטיח את ההוכחה?",
+      "options": [
+        { "id": "a", "text_en": "$\\delta = \\epsilon$", "text_he": "$\\delta = \\epsilon$", "correct": false },
+        { "id": "b", "text_en": "$\\delta = \\min(1, \\epsilon/3)$", "text_he": "$\\delta = \\min(1, \\epsilon/3)$", "correct": true },
+        { "id": "c", "text_en": "$\\delta = \\epsilon/3$ only (no min with 1)", "text_he": "$\\delta = \\epsilon/3$ בלבד (ללא min עם 1)", "correct": false },
+        { "id": "d", "text_en": "$\\delta = 3\\epsilon$", "text_he": "$\\delta = 3\\epsilon$", "correct": false }
+      ],
+      "explanation_en": "We need $\\delta \\leq 1$ to ensure $|x+1| < 3$, then $|x^2-1| < 3|x-1|$. Setting $|x-1| < \\epsilon/3$ gives $|x^2-1| < \\epsilon$. So $\\delta = \\min(1, \\epsilon/3)$.",
+      "explanation_he": "נדרש $\\delta \\leq 1$ כדי להבטיח $|x+1| < 3$, ואז $|x^2-1| < 3|x-1|$. הגדרת $|x-1| < \\epsilon/3$ נותנת $|x^2-1| < \\epsilon$. לכן $\\delta = \\min(1, \\epsilon/3)$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "Conceptually, why must $\\delta$ typically depend on $\\epsilon$ in the definition of a limit?",
+      "body_he": "ברמה הרעיונית, מדוע $\\delta$ בדרך כלל חייב לתלות ב-$\\epsilon$ בהגדרת הגבול?",
+      "options": [
+        { "id": "a", "text_en": "Because $f(x)$ must equal $L$ at exactly one point", "text_he": "כי $f(x)$ חייב להיות שווה ל-$L$ בנקודה אחת בדיוק", "correct": false },
+        { "id": "b", "text_en": "Because a tighter requirement on $|f(x)-L|$ forces $x$ to stay closer to $a$", "text_he": "כי דרישה קפדנית יותר על $|f(x)-L|$ מחייבת $x$ להישאר קרוב יותר ל-$a$", "correct": true },
+        { "id": "c", "text_en": "Because $\\epsilon$ and $\\delta$ must always be equal", "text_he": "כי $\\epsilon$ ו-$\\delta$ תמיד חייבים להיות שווים", "correct": false },
+        { "id": "d", "text_en": "Because $\\delta$ is chosen before $\\epsilon$ in every proof", "text_he": "כי $\\delta$ נבחר לפני $\\epsilon$ בכל הוכחה", "correct": false }
+      ],
+      "explanation_en": "Smaller $\\epsilon$ means a stricter target for $f(x)$ near $L$, which generally requires a smaller neighborhood $|x-a| < \\delta$. Hence $\\delta$ is a function of $\\epsilon$.",
+      "explanation_he": "$\\epsilon$ קטן יותר משמעו יעד קפדני יותר ל-$f(x)$ ליד $L$, מה שבדרך כלל דורש שכונה $|x-a|$ קטנה יותר. לכן $\\delta$ הוא פונקציה של $\\epsilon$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "Which statement correctly describes the ε-δ definition?",
+      "body_he": "איזה משפט מתאר נכון את הגדרת ε-δ?",
+      "options": [
+        { "id": "a", "text_en": "For some $\\epsilon > 0$, there exists $\\delta > 0$ such that $|f(x)-L| < \\epsilon$", "text_he": "קיים $\\epsilon > 0$ שעבורו קיים $\\delta > 0$ כך ש-$|f(x)-L| < \\epsilon$", "correct": false },
+        { "id": "b", "text_en": "For every $\\epsilon > 0$, there exists $\\delta > 0$ such that $0 < |x-a| < \\delta$ implies $|f(x)-L| < \\epsilon$", "text_he": "לכל $\\epsilon > 0$ קיים $\\delta > 0$ כך ש-$0 < |x-a| < \\delta$ גורר $|f(x)-L| < \\epsilon$", "correct": true },
+        { "id": "c", "text_en": "There exists $\\delta > 0$ such that for all $\\epsilon > 0$, $|f(x)-L| < \\epsilon$ whenever $|x-a| < \\delta$", "text_he": "קיים $\\delta > 0$ שעבור כל $\\epsilon > 0$, $|f(x)-L| < \\epsilon$ כאשר $|x-a| < \\delta$", "correct": false },
+        { "id": "d", "text_en": "$f(a) = L$", "text_he": "$f(a) = L$", "correct": false }
+      ],
+      "explanation_en": "The definition quantifies **for all** $\\epsilon > 0$ (not just one), requires $x \\neq a$, and says $|f(x)-L| < \\epsilon$ follows from $|x-a| < \\delta$. The function need not be defined at $a$.",
+      "explanation_he": "ההגדרה כמותית **לכל** $\\epsilon > 0$ (לא רק אחד), דורשת $x \\neq a$, ואומרת $|f(x)-L| < \\epsilon$ נובע מ-$|x-a| < \\delta$. אין חובה שהפונקציה תוגדר ב-$a$."
+    }
+  ]
 }

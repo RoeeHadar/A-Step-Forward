@@ -1,24 +1,116 @@
 {
-  "concept_id": "integration_by_parts",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Integration By Parts",
-  "title_he": "Integration By Parts",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "integration_by_parts",
+  "type": "interactive",
+  "subject": "calculus_2",
+  "title_en": "Integration — By Parts and Partial Fractions",
+  "title_he": "אינטגרציה — חלקים ושברים חלקיים",
+  "duration_min": 25,
+  "level_min": "calculus_1",
+  "agent_hints": "Technion 104032 style: students must choose u via LIATE and recognize cyclic integrals (e^x cos x). For partial fractions, always check if the fraction is proper first — if not, do polynomial division. Repeated linear factors need terms like A/(x-a) + B/(x-a)^2.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "integration_by_parts",
+      "title_en": "Integration by Parts",
+      "title_he": "אינטגרציה בחלקים",
+      "level_min": "calculus_1",
+      "body_en_md": "From the product rule $(uv)' = u'v + uv'$:\n$$\\boxed{\\int u\\,dv = uv - \\int v\\,du.}$$\n\n**LIATE mnemonic** for choosing $u$ (priority order):\n- **L**ogarithms\n- **I**nverse trig\n- **A**lgebraic (polynomials)\n- **T**rigonometric\n- **E**xponential\n\nChoose $u$ as the function that **simplifies when differentiated** and $dv$ as what you can integrate easily.\n\n---\n\n**Examples:**\n- $\\int xe^x\\,dx$: $u=x$, $dv=e^x dx$ → $xe^x - \\int e^x dx = e^x(x-1) + C$\n- $\\int \\ln x\\,dx$: $u=\\ln x$, $dv=dx$ → $x\\ln x - x + C$\n- $\\int x^2\\sin x\\,dx$: apply by parts **twice**\n- $\\int e^x\\cos x\\,dx$: **cyclic** — apply twice and solve algebraically",
+      "body_he_md": "מכלל המכפלה $(uv)' = u'v + uv'$:\n$$\\boxed{\\int u\\,dv = uv - \\int v\\,du.}$$\n\n**LIATE** לבחירת $u$ (סדר עדיפות):\n- **L**ogarithms (לוגריתמים)\n- **I**nverse trig (טריגו הפוכה)\n- **A**lgebraic (פולינומים)\n- **T**rigonometric (טריגונומטרי)\n- **E**xponential (מעריכי)\n\nבוחרים $u$ כפונקציה ש**מפשטת בגזירה** ו-$dv$ כמה שניתן לאינטegrate בקלות.\n\n---\n\n**דוגמאות:**\n- $\\int xe^x\\,dx$: $u=x$, $dv=e^x dx$ → $e^x(x-1) + C$\n- $\\int \\ln x\\,dx$: $u=\\ln x$, $dv=dx$ → $x\\ln x - x + C$\n- $\\int x^2\\sin x\\,dx$: חלקים **פעמיים**\n- $\\int e^x\\cos x\\,dx$: **מחזורי** — פעמיים ופתרון אלגברי"
+    },
+    {
+      "id": "by_parts_examples",
+      "title_en": "Worked Examples — By Parts",
+      "title_he": "דוגמאות מפורטות — חלקים",
+      "level_min": "calculus_1",
+      "body_en_md": "**Example 1:** $\\int xe^x\\,dx$. Let $u=x$, $dv=e^x dx$. Then $du=dx$, $v=e^x$.\n$$\\int xe^x\\,dx = xe^x - \\int e^x\\,dx = xe^x - e^x + C = e^x(x-1) + C.$$\n\n**Example 2:** $\\int \\ln x\\,dx$. Let $u=\\ln x$, $dv=dx$. Then $du=\\frac{1}{x}dx$, $v=x$.\n$$\\int \\ln x\\,dx = x\\ln x - \\int x \\cdot \\frac{1}{x}\\,dx = x\\ln x - x + C.$$\n\n**Example 3 (cyclic):** $\\int e^x\\cos x\\,dx$. Two applications of by parts give:\n$$I = \\frac{e^x(\\sin x + \\cos x)}{2} + C.$$\n\nSet $I = \\int e^x\\cos x\\,dx$, apply by parts twice, and solve $I = \\ldots + I/2$ for $I$.",
+      "body_he_md": "**דוגמה 1:** $\\int xe^x\\,dx$. $u=x$, $dv=e^x dx$. אז $du=dx$, $v=e^x$.\n$$\\int xe^x\\,dx = xe^x - e^x + C = e^x(x-1) + C.$$\n\n**דוגמה 2:** $\\int \\ln x\\,dx$. $u=\\ln x$, $dv=dx$.\n$$\\int \\ln x\\,dx = x\\ln x - x + C.$$\n\n**דוגמה 3 (מחזורי):** $\\int e^x\\cos x\\,dx$. שני יישומי חלקים נותנים:\n$$I = \\frac{e^x(\\sin x + \\cos x)}{2} + C.$$\n\nמגדירים $I = \\int e^x\\cos x\\,dx$, מיישמים פעמיים, ופותרים $I = \\ldots + I/2$ עבור $I$."
+    },
+    {
+      "id": "partial_fractions_setup",
+      "title_en": "Partial Fractions — Setup and Cases",
+      "title_he": "שברים חלקיים — הכנה ומקרים",
+      "level_min": "calculus_1",
+      "body_en_md": "To integrate $\\int \\frac{p(x)}{q(x)}\\,dx$:\n\n1. **Factor** the denominator $q(x)$ completely.\n2. If $\\deg p \\geq \\deg q$, perform **polynomial division** first.\n3. Decompose into simpler fractions.\n\n**Distinct linear factors:**\n$$\\frac{px+q}{(ax+b)(cx+d)} = \\frac{A}{ax+b} + \\frac{B}{cx+d}.$$\n\n**Repeated linear:** $(x-a)^2$ needs $\\dfrac{A}{x-a} + \\dfrac{B}{(x-a)^2}$.\n\n**Irreducible quadratic:** $\\dfrac{Ax+B}{x^2+px+q}$ in the numerator.",
+      "body_he_md": "לאינטegral $\\int \\frac{p(x)}{q(x)}\\,dx$:\n\n1. **מפרקים** את המכנה $q(x)$ לגורמים.\n2. אם $\\deg p \\geq \\deg q$, מבצעים **חלוקת פולינומים** קודם.\n3. מפרקים לשברים פשוטים.\n\n**גורמים לינאריים שונים:**\n$$\\frac{px+q}{(ax+b)(cx+d)} = \\frac{A}{ax+b} + \\frac{B}{cx+d}.$$\n\n**חוזרים:** $(x-a)^2$ דורש $\\dfrac{A}{x-a} + \\dfrac{B}{(x-a)^2}$.\n\n**ריבועי לא-פריק:** $\\dfrac{Ax+B}{x^2+px+q}$ במונה."
+    },
+    {
+      "id": "partial_fractions_examples",
+      "title_en": "Worked Examples — Partial Fractions",
+      "title_he": "דוגמאות מפורטות — שברים חלקיים",
+      "level_min": "calculus_1",
+      "body_en_md": "**Example 1:** $\\int \\frac{1}{x^2-1}\\,dx = \\int \\frac{1}{(x-1)(x+1)}\\,dx$.\n\n$\\frac{1}{(x-1)(x+1)} = \\frac{A}{x-1} + \\frac{B}{x+1}$. Solving: $A = 1/2$, $B = -1/2$.\n$$\\int = \\frac{1}{2}\\ln|x-1| - \\frac{1}{2}\\ln|x+1| + C.$$\n\n**Example 2:** $\\int \\frac{3x+5}{x^2-x-2}\\,dx$. Factor: $x^2-x-2 = (x-2)(x+1)$.\n\n$\\frac{3x+5}{(x-2)(x+1)} = \\frac{A}{x-2} + \\frac{B}{x+1}$ gives $A = 11/3$, $B = -2/3$.\n\n**Example 3:** $\\int \\frac{x}{(x-1)^2}\\,dx$. Repeated factor:\n$\\frac{x}{(x-1)^2} = \\frac{A}{x-1} + \\frac{B}{(x-1)^2}$. Result: $\\ln|x-1| - \\frac{1}{x-1} + C$.",
+      "body_he_md": "**דוגמה 1:** $\\int \\frac{1}{x^2-1}\\,dx$. מפרקים: $A = 1/2$, $B = -1/2$.\n$$\\int = \\frac{1}{2}\\ln|x-1| - \\frac{1}{2}\\ln|x+1| + C.$$\n\n**דוגמה 2:** $\\int \\frac{3x+5}{x^2-x-2}\\,dx$. $A = 11/3$, $B = -2/3$.\n\n**דוגמה 3:** $\\int \\frac{x}{(x-1)^2}\\,dx$. גורם חוזר:\n$\\frac{x}{(x-1)^2} = \\frac{A}{x-1} + \\frac{B}{(x-1)^2}$. תוצאה: $\\ln|x-1| - \\frac{1}{x-1} + C$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Integration By Parts."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "For $\\int xe^x\\,dx$ using integration by parts, what is the best choice for $u$?",
+      "body_he": "עבור $\\int xe^x\\,dx$ באינטegracion בחלקים, מה הבחירה הטובה ביותר ל-$u$?",
+      "options": [
+        { "id": "a", "text_en": "$u = e^x$", "text_he": "$u = e^x$", "correct": false },
+        { "id": "b", "text_en": "$u = x$", "text_he": "$u = x$", "correct": true },
+        { "id": "c", "text_en": "$u = xe^x$", "text_he": "$u = xe^x$", "correct": false },
+        { "id": "d", "text_en": "$u = 1$", "text_he": "$u = 1$", "correct": false }
+      ],
+      "explanation_en": "By LIATE, Algebraic ($x$) comes before Exponential ($e^x$). With $u=x$, we get $\\int xe^x dx = xe^x - \\int e^x dx$.",
+      "explanation_he": "לפי LIATE, Algebraic ($x$) קודם ל-Exponential ($e^x$). עם $u=x$, מקבלים $\\int xe^x dx = xe^x - \\int e^x dx$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "What is $\\int \\ln x\\,dx$?",
+      "body_he": "מהי $\\int \\ln x\\,dx$?",
+      "options": [
+        { "id": "a", "text_en": "$\\dfrac{1}{x} + C$", "text_he": "$\\dfrac{1}{x} + C$", "correct": false },
+        { "id": "b", "text_en": "$x\\ln x - x + C$", "text_he": "$x\\ln x - x + C$", "correct": true },
+        { "id": "c", "text_en": "$\\dfrac{x^2}{2}\\ln x + C$", "text_he": "$\\dfrac{x^2}{2}\\ln x + C$", "correct": false },
+        { "id": "d", "text_en": "$\\ln x + C$", "text_he": "$\\ln x + C$", "correct": false }
+      ],
+      "explanation_en": "Let $u=\\ln x$, $dv=dx$. Then $uv - \\int v\\,du = x\\ln x - \\int 1\\,dx = x\\ln x - x + C$.",
+      "explanation_he": "יהי $u=\\ln x$, $dv=dx$. אז $uv - \\int v\\,du = x\\ln x - x + C$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "When integrating $\\int e^x\\cos x\\,dx$, why is the by-parts method called \"cyclic\"?",
+      "body_he": "בחישוב $\\int e^x\\cos x\\,dx$, מדוע שיטת החלקים נקראת \"מחזורית\"?",
+      "options": [
+        { "id": "a", "text_en": "The integral equals zero", "text_he": "האינטegral שווה אפס", "correct": false },
+        { "id": "b", "text_en": "Applying by parts twice returns the original integral, requiring algebraic solution", "text_he": "יישום חלקים פעמיים מחזיר את האינטegral המקורי, ודורש פתרון אלגברי", "correct": true },
+        { "id": "c", "text_en": "You must use polar coordinates", "text_he": "חייבים קואורדינטות קוטביות", "correct": false },
+        { "id": "d", "text_en": "LIATE does not apply", "text_he": "LIATE לא חל", "correct": false }
+      ],
+      "explanation_en": "Two applications of by parts on $\\int e^x\\cos x\\,dx$ produce the same integral $I$ on both sides, so you solve $I = \\text{expression} - I$ (or similar) for $I$.",
+      "explanation_he": "שני יישומי חלקים על $\\int e^x\\cos x\\,dx$ מחזירים את $I$ בשני האגפים, ופותרים $I = \\text{ביטוי} - I$ עבור $I$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "The partial fraction decomposition of $\\dfrac{1}{(x-1)(x+1)}$ is:",
+      "body_he": "פירוק השבר $\\dfrac{1}{(x-1)(x+1)}$ הוא:",
+      "options": [
+        { "id": "a", "text_en": "$\\dfrac{1/2}{x-1} - \\dfrac{1/2}{x+1}$", "text_he": "$\\dfrac{1/2}{x-1} - \\dfrac{1/2}{x+1}$", "correct": true },
+        { "id": "b", "text_en": "$\\dfrac{1}{x-1} + \\dfrac{1}{x+1}$", "text_he": "$\\dfrac{1}{x-1} + \\dfrac{1}{x+1}$", "correct": false },
+        { "id": "c", "text_en": "$\\dfrac{1}{2(x-1)(x+1)}$", "text_he": "$\\dfrac{1}{2(x-1)(x+1)}$", "correct": false },
+        { "id": "d", "text_en": "$\\dfrac{1}{x^2-1}$", "text_he": "$\\dfrac{1}{x^2-1}$", "correct": false }
+      ],
+      "explanation_en": "Cover-up or solve: $1 = A(x+1) + B(x-1)$. At $x=1$: $A=1/2$. At $x=-1$: $B=-1/2$.",
+      "explanation_he": "פתרון: $1 = A(x+1) + B(x-1)$. ב-$x=1$: $A=1/2$. ב-$x=-1$: $B=-1/2$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "For $\\int \\frac{x}{(x-1)^2}\\,dx$, the correct partial fraction setup is:",
+      "body_he": "עבור $\\int \\frac{x}{(x-1)^2}\\,dx$, הכנת השברים החלקיים הנכונה היא:",
+      "options": [
+        { "id": "a", "text_en": "$\\dfrac{A}{x-1} + \\dfrac{B}{(x-1)^2}$", "text_he": "$\\dfrac{A}{x-1} + \\dfrac{B}{(x-1)^2}$", "correct": true },
+        { "id": "b", "text_en": "$\\dfrac{A + B}{x-1}$", "text_he": "$\\dfrac{A + B}{x-1}$", "correct": false },
+        { "id": "c", "text_en": "$\\dfrac{A}{x-1} + \\dfrac{B}{x+1}$", "text_he": "$\\dfrac{A}{x-1} + \\dfrac{B}{x+1}$", "correct": false },
+        { "id": "d", "text_en": "$\\dfrac{Ax + B}{(x-1)^2}$ only (no decomposition)", "text_he": "$\\dfrac{Ax + B}{(x-1)^2}$ בלבד (ללא פירוק)", "correct": false }
+      ],
+      "explanation_en": "A repeated linear factor $(x-1)^2$ requires both $\\frac{A}{x-1}$ and $\\frac{B}{(x-1)^2}$ terms in the decomposition.",
+      "explanation_he": "גורם לינארי חוזר $(x-1)^2$ דורש גם $\\frac{A}{x-1}$ וגם $\\frac{B}{(x-1)^2}$ בפירוק."
+    }
+  ]
 }

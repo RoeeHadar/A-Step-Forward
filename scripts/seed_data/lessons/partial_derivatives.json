@@ -1,24 +1,116 @@
 {
-  "concept_id": "partial_derivatives",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Partial Derivatives",
-  "title_he": "Partial Derivatives",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "partial_derivatives",
+  "type": "interactive",
+  "subject": "calculus_2",
+  "title_en": "Partial Derivatives and the Gradient",
+  "title_he": "נגזרות חלקיות והגרדיאנט",
+  "duration_min": 25,
+  "level_min": "calculus_1",
+  "agent_hints": "Students confuse ∂f/∂x with df/dx — emphasize that other variables are held constant. For gradient direction, the steepest ascent is parallel to ∇f, not opposite. Tangent plane: always verify with f(a,b) as the constant term. Chain rule: draw the dependency tree z=f(x(t),y(t)).",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "multivariable_functions",
+      "title_en": "Multivariable Functions and Level Curves",
+      "title_he": "פונקציות רב-משתניות ועקומות רמה",
+      "level_min": "calculus_1",
+      "body_en_md": "A **multivariable function** $f: \\mathbb{R}^2 \\to \\mathbb{R}$ assigns a real number to each point $(x,y)$ in its **domain**.\n\n**Examples:** $f(x,y) = x^2 + y^2$, $f(x,y) = e^{xy}$, $f(x,y) = \\sin(x+y)$.\n\n**Level curves** (contour lines): curves where $f(x,y) = k$ for a constant $k$.\n- For $f(x,y) = x^2 + y^2$, level curves are circles $x^2 + y^2 = k$.\n- Level curves help visualize a surface $z = f(x,y)$ from above.\n\n**Graph:** The set of points $(x, y, f(x,y))$ forms a surface in $\\mathbb{R}^3$.",
+      "body_he_md": "**פונקציה רב-משתנית** $f: \\mathbb{R}^2 \\to \\mathbb{R}$ מקצה מספר ממשי לכל נקודה $(x,y)$ ב**תחום** שלה.\n\n**דוגמאות:** $f(x,y) = x^2 + y^2$, $f(x,y) = e^{xy}$, $f(x,y) = \\sin(x+y)$.\n\n**עקומות רמה:** עקומות שבהן $f(x,y) = k$ עבור קבוע $k$.\n- עבור $f(x,y) = x^2 + y^2$, עקומות הרמה הן מעגלים $x^2 + y^2 = k$.\n- עקומות רמה עוזרות לדמיין משטח $z = f(x,y) מלמעלה.\n\n**גרף:** קבוצת הנקודות $(x, y, f(x,y))$ образует משטח ב-$\\mathbb{R}^3$."
+    },
+    {
+      "id": "partial_derivatives_def",
+      "title_en": "Partial Derivatives — Definition and Computation",
+      "title_he": "נגזרות חלקיות — הגדרה וחישוב",
+      "level_min": "calculus_1",
+      "body_en_md": "The **partial derivative with respect to $x$** treats $y$ as a constant:\n$$\\frac{\\partial f}{\\partial x} = \\lim_{h \\to 0} \\frac{f(x+h, y) - f(x, y)}{h}.$$\n\nSimilarly, $\\partial f/\\partial y$ treats $x$ as constant.\n\n**Rules:** Product, quotient, and chain rules work the same — just hold the other variable fixed.\n\n---\n\n**Example:** $f(x,y) = x^2 y + e^{xy}$.\n\n$$\\frac{\\partial f}{\\partial x} = 2xy + y\\,e^{xy}$$\n\n$$\\frac{\\partial f}{\\partial y} = x^2 + x\\,e^{xy}$$\n\n(When differentiating $e^{xy}$ w.r.t. $x$, the inner function is $xy$ and $y$ is constant, so we get $y e^{xy}$.)",
+      "body_he_md": "**נגזרת חלקית לפי $x$** מתייחסת ל-$y$ כקבוע:\n$$\\frac{\\partial f}{\\partial x} = \\lim_{h \\to 0} \\frac{f(x+h, y) - f(x, y)}{h}.$$\n\nבדומה, $\\partial f/\\partial y$ מתייחסת ל-$x$ כקבוע.\n\n**כללים:** כללי מכפלה, מנה ושרשרת עובדים אותו דבר — רק מחזיקים את המשתנה השני קבוע.\n\n---\n\n**דוגמה:** $f(x,y) = x^2 y + e^{xy}$.\n\n$$\\frac{\\partial f}{\\partial x} = 2xy + y\\,e^{xy}$$\n\n$$\\frac{\\partial f}{\\partial y} = x^2 + x\\,e^{xy}$$"
+    },
+    {
+      "id": "gradient_directional",
+      "title_en": "Gradient and Directional Derivative",
+      "title_he": "גרדיאנט ונגזרת כיוונית",
+      "level_min": "calculus_1",
+      "body_en_md": "The **gradient** of $f$ is the vector of partial derivatives:\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\, \\frac{\\partial f}{\\partial y}\\right).$$\n\n**Key properties:**\n- $\\nabla f$ points in the direction of **steepest ascent** (fastest increase of $f$).\n- $-\\nabla f$ points in the direction of steepest descent.\n- $\\nabla f$ is **perpendicular** to level curves of $f$.\n\n---\n\n**Directional derivative** in unit direction $\\hat{u} = (u_1, u_2)$:\n$$D_{\\hat{u}} f = \\nabla f \\cdot \\hat{u} = \\frac{\\partial f}{\\partial x} u_1 + \\frac{\\partial f}{\\partial y} u_2.$$\n\nThis measures the rate of change of $f$ as we move in direction $\\hat{u}$.\n\n**Maximum rate:** $|D_{\\hat{u}} f| \\leq |\\nabla f|$ with equality when $\\hat{u} \\parallel \\nabla f$.",
+      "body_he_md": "**הגרדיאנט** של $f$ הוא וקטור הנגזרות החלקיות:\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\, \\frac{\\partial f}{\\partial y}\\right).$$\n\n**תכונות מרכזיות:**\n- $\\nabla f$ מצביע בכיוון **העלייה התלולה ביותר**.\n- $-\\nabla f$ מצביע בכיוון הירידה התלולה ביותר.\n- $\\nabla f$ **ניצב** לעקומות הרמה של $f$.\n\n---\n\n**נגזרת כיוונית** בכיוון יחידה $\\hat{u} = (u_1, u_2)$:\n$$D_{\\hat{u}} f = \\nabla f \\cdot \\hat{u} = \\frac{\\partial f}{\\partial x} u_1 + \\frac{\\partial f}{\\partial y} u_2.$$\n\nזה מודד את קצב השינוי של $f$ בכיוון $\\hat{u}$.\n\n**קצב מקסימלי:** $|D_{\\hat{u}} f| \\leq |\\nabla f|$ עם שוויון כאשר $\\hat{u} \\parallel \\nabla f$."
+    },
+    {
+      "id": "tangent_plane_chain",
+      "title_en": "Tangent Plane and Chain Rule",
+      "title_he": "מישור משיק וכלל השרשרת",
+      "level_min": "calculus_1",
+      "body_en_md": "### Tangent plane\n\nThe tangent plane to $z = f(x,y)$ at $(a,b)$ is:\n$$\\boxed{z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)}$$\nwhere $f_x = \\partial f/\\partial x$ and $f_y = \\partial f/\\partial y$.\n\nThis is the best linear approximation to the surface near $(a,b)$.\n\n---\n\n### Multivariable chain rule\n\nIf $z = f(x,y)$ where $x = x(t)$ and $y = y(t)$, then:\n$$\\frac{dz}{dt} = \\frac{\\partial f}{\\partial x}\\frac{dx}{dt} + \\frac{\\partial f}{\\partial y}\\frac{dy}{dt}.$$\n\n**Example:** $z = x^2 y$, $x = t^2$, $y = t$. Then $dz/dt = (2xy)(2t) + (x^2)(1) = 4t^5 + t^4$.",
+      "body_he_md": "### מישור משיק\n\nהמישור המשיק ל-$z = f(x,y)$ ב-$(a,b)$ הוא:\n$$\\boxed{z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)}$$\nכאשר $f_x = \\partial f/\\partial x$ ו-$f_y = \\partial f/\\partial y$.\n\nזהו הקירוב הלינארי הטוב ביותר למשטח ליד $(a,b)$.\n\n---\n\n### כלל שרשרת רב-משתני\n\nאם $z = f(x,y)$ כאשר $x = x(t)$ ו-$y = y(t)$, אז:\n$$\\frac{dz}{dt} = \\frac{\\partial f}{\\partial x}\\frac{dx}{dt} + \\frac{\\partial f}{\\partial y}\\frac{dy}{dt}.$$\n\n**דוגמה:** $z = x^2 y$, $x = t^2$, $y = t$. אז $dz/dt = (2xy)(2t) + (x^2)(1) = 4t^5 + t^4$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Partial Derivatives."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "For $f(x,y) = x^2 y + e^{xy}$, what is $\\dfrac{\\partial f}{\\partial x}$?",
+      "body_he": "עבור $f(x,y) = x^2 y + e^{xy}$, מהי $\\dfrac{\\partial f}{\\partial x}$?",
+      "options": [
+        { "id": "a", "text_en": "$2x + e^{xy}$", "text_he": "$2x + e^{xy}$", "correct": false },
+        { "id": "b", "text_en": "$2xy + y\\,e^{xy}$", "text_he": "$2xy + y\\,e^{xy}$", "correct": true },
+        { "id": "c", "text_en": "$x^2 + x\\,e^{xy}$", "text_he": "$x^2 + x\\,e^{xy}$", "correct": false },
+        { "id": "d", "text_en": "$2xy + x\\,e^{xy}$", "text_he": "$2xy + x\\,e^{xy}$", "correct": false }
+      ],
+      "explanation_en": "Differentiate w.r.t. $x$ treating $y$ constant: $\\partial(x^2 y)/\\partial x = 2xy$ and $\\partial(e^{xy})/\\partial x = y e^{xy}$.",
+      "explanation_he": "גוזרים לפי $x$ עם $y$ קבוע: $\\partial(x^2 y)/\\partial x = 2xy$ ו-$\\partial(e^{xy})/\\partial x = y e^{xy}$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "At a point where $\\nabla f \\neq \\mathbf{0}$, in which direction does $f$ increase fastest?",
+      "body_he": "בנקודה שבה $\\nabla f \\neq \\mathbf{0}$, באיזה כיוון $f$ עולה הכי מהר?",
+      "options": [
+        { "id": "a", "text_en": "Opposite to $\\nabla f$", "text_he": "הפוך מ-$\\nabla f$", "correct": false },
+        { "id": "b", "text_en": "In the direction of $\\nabla f$", "text_he": "בכיוון $\\nabla f$", "correct": true },
+        { "id": "c", "text_en": "Perpendicular to $\\nabla f$", "text_he": "ניצב ל-$\\nabla f$", "correct": false },
+        { "id": "d", "text_en": "Along any level curve", "text_he": "לאורך עקומת רמה כלשהי", "correct": false }
+      ],
+      "explanation_en": "The gradient points in the direction of steepest ascent. Moving perpendicular to $\\nabla f$ gives zero directional derivative (along a level curve).",
+      "explanation_he": "הגרדיאנט מצביע בכיוון העלייה התלולה ביותר. תנועה ניצבה ל-$\\nabla f$ נותנת נגזרת כיוונית אפס (לאורך עקומת רמה)."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "For $f(x,y) = x^2 + y^2$ at $(1,1)$, what is $D_{\\hat{u}} f$ in direction $\\hat{u} = (1/\\sqrt{2},\\, 1/\\sqrt{2})$?",
+      "body_he": "עבור $f(x,y) = x^2 + y^2$ ב-$(1,1)$, מהי $D_{\\hat{u}} f$ בכיוון $\\hat{u} = (1/\\sqrt{2},\\, 1/\\sqrt{2})$?",
+      "options": [
+        { "id": "a", "text_en": "$2\\sqrt{2}$", "text_he": "$2\\sqrt{2}$", "correct": true },
+        { "id": "b", "text_en": "$4$", "text_he": "$4$", "correct": false },
+        { "id": "c", "text_en": "$0$", "text_he": "$0$", "correct": false },
+        { "id": "d", "text_en": "$\\sqrt{2}$", "text_he": "$\\sqrt{2}$", "correct": false }
+      ],
+      "explanation_en": "$\\nabla f = (2x, 2y) = (2,2)$ at $(1,1)$. $D_{\\hat{u}} f = (2,2) \\cdot (1/\\sqrt{2}, 1/\\sqrt{2}) = 4/\\sqrt{2} = 2\\sqrt{2}$.",
+      "explanation_he": "$\\nabla f = (2x, 2y) = (2,2)$ ב-$(1,1)$. $D_{\\hat{u}} f = (2,2) \\cdot (1/\\sqrt{2}, 1/\\sqrt{2}) = 4/\\sqrt{2} = 2\\sqrt{2}$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "The tangent plane to $z = x^2 + y^2$ at $(1,1,2)$ is:",
+      "body_he": "המישור המשיק ל-$z = x^2 + y^2$ ב-$(1,1,2)$ הוא:",
+      "options": [
+        { "id": "a", "text_en": "$z = 2 + 2(x-1) + 2(y-1)$", "text_he": "$z = 2 + 2(x-1) + 2(y-1)$", "correct": true },
+        { "id": "b", "text_en": "$z = x^2 + y^2$", "text_he": "$z = x^2 + y^2$", "correct": false },
+        { "id": "c", "text_en": "$z = 2(x-1) + 2(y-1)$", "text_he": "$z = 2(x-1) + 2(y-1)$", "correct": false },
+        { "id": "d", "text_en": "$z = 1 + 2x + 2y$", "text_he": "$z = 1 + 2x + 2y$", "correct": false }
+      ],
+      "explanation_en": "$f(1,1)=2$, $f_x=2x=2$, $f_y=2y=2$ at $(1,1)$. Tangent plane: $z = 2 + 2(x-1) + 2(y-1)$, which simplifies to $z = 2x + 2y - 2$.",
+      "explanation_he": "$f(1,1)=2$, $f_x=2x=2$, $f_y=2y=2$ ב-$(1,1)$. מישור משיק: $z = 2 + 2(x-1) + 2(y-1)$, שמפשט ל-$z = 2x + 2y - 2$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "If $z = f(x,y)$ with $x = 3t$ and $y = t^2$, which formula gives $dz/dt$?",
+      "body_he": "אם $z = f(x,y)$ עם $x = 3t$ ו-$y = t^2$, איזו נוסחה נותנת $dz/dt$?",
+      "options": [
+        { "id": "a", "text_en": "$\\dfrac{dz}{dt} = \\dfrac{\\partial f}{\\partial x} + \\dfrac{\\partial f}{\\partial y}$", "text_he": "$\\dfrac{dz}{dt} = \\dfrac{\\partial f}{\\partial x} + \\dfrac{\\partial f}{\\partial y}$", "correct": false },
+        { "id": "b", "text_en": "$\\dfrac{dz}{dt} = \\dfrac{\\partial f}{\\partial x}\\cdot 3 + \\dfrac{\\partial f}{\\partial y}\\cdot 2t$", "text_he": "$\\dfrac{dz}{dt} = \\dfrac{\\partial f}{\\partial x}\\cdot 3 + \\dfrac{\\partial f}{\\partial y}\\cdot 2t$", "correct": true },
+        { "id": "c", "text_en": "$\\dfrac{dz}{dt} = \\dfrac{df}{dx}\\dfrac{dx}{dt}$", "text_he": "$\\dfrac{dz}{dt} = \\dfrac{df}{dx}\\dfrac{dx}{dt}$", "correct": false },
+        { "id": "d", "text_en": "$\\dfrac{dz}{dt} = \\dfrac{\\partial f}{\\partial t}$", "text_he": "$\\dfrac{dz}{dt} = \\dfrac{\\partial f}{\\partial t}$", "correct": false }
+      ],
+      "explanation_en": "Chain rule: $dz/dt = f_x \\cdot dx/dt + f_y \\cdot dy/dt = f_x \\cdot 3 + f_y \\cdot 2t$.",
+      "explanation_he": "כלל שרשרת: $dz/dt = f_x \\cdot dx/dt + f_y \\cdot dy/dt = f_x \\cdot 3 + f_y \\cdot 2t$."
+    }
+  ]
 }
