@@ -58,6 +58,7 @@ export interface CurriculumCategory {
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_3PT_NEW_CONCEPTS = [
   'descriptive_statistics', 'basic_probability', 'normal_distribution_basics', 'scatter_plot_correlation_intro',
+  'basic_statistics_3pt',
   'pythagorean_theorem', 'circle_area_circumference', 'similar_triangles', '3d_solids_volume', 'spatial_reasoning',
   'linear_equations_one_variable', 'linear_functions', 'quadratic_model_fitting', 'exponential_growth_decay_models',
   'plane_trigonometry_right_triangle',
@@ -174,6 +175,7 @@ const MAKHINA_CONCEPTS = [
   // Foundation
   'algebra_basics', 'word_problems', 'sequences_arithmetic', 'sequences_geometric',
   'analytic_geometry', 'trigonometric_identities',
+  'fractions_and_ratios', 'linear_equations_basics', 'percentages_and_interest', 'geometry_area_perimeter',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -244,7 +246,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'statistics_probability_3pt',
         heLabel: 'סטטיסטיקה והסתברות',
         enLabel: 'Statistics & Probability',
-        concept_ids: ['descriptive_statistics', 'basic_probability', 'normal_distribution_basics', 'scatter_plot_correlation_intro'],
+        concept_ids: ['descriptive_statistics', 'basic_probability', 'normal_distribution_basics', 'scatter_plot_correlation_intro', 'basic_statistics_3pt'],
       },
       {
         id: 'geometry_3pt',
@@ -546,6 +548,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         concept_ids: [
           'algebra_basics', 'word_problems', 'sequences_arithmetic', 'sequences_geometric',
           'analytic_geometry', 'trigonometric_identities',
+          'fractions_and_ratios', 'linear_equations_basics', 'percentages_and_interest', 'geometry_area_perimeter',
         ],
       },
     ],
