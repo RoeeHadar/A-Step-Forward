@@ -178,6 +178,8 @@ const messages = {
       signInRequired: 'Please sign in to continue chatting.',
       networkError: 'We hit a network hiccup reaching the agent. Please try again in a moment.',
       genericError: 'Something went wrong. Please try again.',
+      warmup: 'Waking the AI up… (first response takes up to 30s)',
+      discussWithTutor: 'Discuss with Tutor',
     },
     learn: {
       learn: 'Learn',
@@ -390,6 +392,8 @@ const messages = {
       signInRequired: 'יש להתחבר כדי להמשיך בשיחה.',
       networkError: 'אירעה תקלה ברשת בחיבור לסוכן. נסה שוב בעוד רגע.',
       genericError: 'משהו השתבש. נסה שוב.',
+      warmup: '🔄 מעיר את ה-AI… (התגובה הראשונה עשויה לקחת עד 30 שניות)',
+      discussWithTutor: 'שוחח עם המורה',
     },
     learn: {
       learn: 'למידה',

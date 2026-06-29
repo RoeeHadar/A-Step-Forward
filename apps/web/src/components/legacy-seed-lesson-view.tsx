@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
@@ -11,7 +12,10 @@ import type { Lesson } from '@asf/schemas/curriculum';
 import 'katex/dist/katex.min.css';
 
 /** Renders legacy OpenStax seed lessons that are not yet in Neon. */
-export function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
+export async function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('asf-locale')?.value === 'en' ? 'en' : 'he';
+  const isHe = locale === 'he';
   return (
     <div className="max-w-3xl">
       <PageHeader title={lesson.title} backHref="/app/lessons" />
@@ -59,7 +63,7 @@ export function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
       <Button asChild>
         <Link href="/app/chat/tutor">
           <MessageSquare className="h-4 w-4" aria-hidden />
-          Discuss with Tutor
+          {isHe ? 'שוחח עם המורה' : 'Discuss with Tutor'}
         </Link>
       </Button>
     </div>
