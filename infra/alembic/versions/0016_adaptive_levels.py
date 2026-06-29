@@ -45,9 +45,7 @@ def upgrade() -> None:
             ADD COLUMN IF NOT EXISTS answer_payload   JSONB
         """
     )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS ix_lq_level_min ON lesson_questions (points_level_min)"
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_lq_level_min ON lesson_questions (points_level_min)")
 
     # 3. diagnostic_items: add points_levels array column
     op.execute(
@@ -88,9 +86,7 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.execute("DROP INDEX IF EXISTS ix_diag_points_levels")
-    op.execute(
-        "ALTER TABLE diagnostic_items DROP COLUMN IF EXISTS points_levels"
-    )
+    op.execute("ALTER TABLE diagnostic_items DROP COLUMN IF EXISTS points_levels")
     op.execute("DROP INDEX IF EXISTS ix_lq_level_min")
     op.execute(
         """

@@ -60,12 +60,8 @@ def upgrade() -> None:
         )
         """
     )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS ix_kg_edges_src ON kg_edges (src_concept)"
-    )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS ix_kg_edges_dst ON kg_edges (dst_concept)"
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_kg_edges_src ON kg_edges (src_concept)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_kg_edges_dst ON kg_edges (dst_concept)")
 
     op.execute(
         """
@@ -81,9 +77,7 @@ def upgrade() -> None:
         )
         """
     )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS ix_skill_atoms_subject ON skill_atoms (subject)"
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_skill_atoms_subject ON skill_atoms (subject)")
 
     op.execute(
         """

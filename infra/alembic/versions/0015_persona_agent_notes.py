@@ -44,9 +44,7 @@ depends_on = None
 
 def upgrade() -> None:
     # 1. learner_persona on learner_profiles
-    op.execute(
-        "ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS learner_persona TEXT"
-    )
+    op.execute("ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS learner_persona TEXT")
     op.execute(
         "ALTER TABLE learner_profiles "
         "ADD COLUMN IF NOT EXISTS learner_persona_updated_at TIMESTAMPTZ"
@@ -83,15 +81,9 @@ def upgrade() -> None:
     )
 
     # 3. Bilingual diagnostic items
-    op.execute(
-        "ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS stem_he TEXT"
-    )
-    op.execute(
-        "ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS options_he JSONB"
-    )
-    op.execute(
-        "ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS explanation_he TEXT"
-    )
+    op.execute("ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS stem_he TEXT")
+    op.execute("ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS options_he JSONB")
+    op.execute("ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS explanation_he TEXT")
 
 
 def downgrade() -> None:
@@ -99,7 +91,5 @@ def downgrade() -> None:
     op.execute("ALTER TABLE diagnostic_items DROP COLUMN IF EXISTS options_he")
     op.execute("ALTER TABLE diagnostic_items DROP COLUMN IF EXISTS stem_he")
     op.execute("DROP TABLE IF EXISTS learner_agent_notes")
-    op.execute(
-        "ALTER TABLE learner_profiles DROP COLUMN IF EXISTS learner_persona_updated_at"
-    )
+    op.execute("ALTER TABLE learner_profiles DROP COLUMN IF EXISTS learner_persona_updated_at")
     op.execute("ALTER TABLE learner_profiles DROP COLUMN IF EXISTS learner_persona")
