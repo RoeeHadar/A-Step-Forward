@@ -42,8 +42,7 @@ function MathText({ text, dir }: { text: string; dir?: 'ltr' | 'rtl' }) {
             return (
               <span
                 key={i}
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{ __html: html }}
+                  dangerouslySetInnerHTML={{ __html: html }}
               />
             );
           } catch {

@@ -1,4 +1,6 @@
-﻿import os, re, json
+﻿import json
+import os
+import re
 
 lesson_dir = "scripts/seed_data/lessons"
 files = [f for f in os.listdir(lesson_dir) if f.endswith(".json")]
@@ -63,6 +65,6 @@ for fname in sorted(files):
         fixed_count += 1
     except json.JSONDecodeError as e:
         err_pos = getattr(e, "pos", 0)
-        print(f"FAILED: {fname} - {e} | near: {repr(fixed_str[max(0,err_pos-20):err_pos+40])}")
+        print(f"FAILED: {fname} - {e} | near: {fixed_str[max(0,err_pos-20):err_pos+40]!r}")
 
 print(f"\nTotal files fixed: {fixed_count}")
