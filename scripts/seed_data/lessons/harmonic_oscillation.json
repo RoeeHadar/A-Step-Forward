@@ -1,24 +1,240 @@
 {
-  "concept_id": "harmonic_oscillation",
-  "subject": "physics",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Harmonic Oscillation",
-  "title_he": "Harmonic Oscillation",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "harmonic_oscillation",
+  "subject": "university_physics_1",
+  "title_en": "Harmonic Oscillations (University)",
+  "title_he": "תנודות הרמוניות (אוניברסיטה)",
+  "duration_min": 24,
+  "type": "interactive",
+  "level_min": "university",
+  "agent_hints": "SHM is defined by $a=-\\omega^2 x$, not merely 'sinusoidal looking'. Students confuse $\\omega$ (rad/s) with $f$ (Hz) and $T$. For energy, $E=\\frac{1}{2}kA^2$ is constant; at general $x$, $KE+PE=kA^2/2$. Small-angle pendulum requires $\\theta\\lesssim 15°$.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "shm_definition",
+      "title_en": "Simple Harmonic Motion — Definition and Solution",
+      "title_he": "תנועה הרמונית פשוטה — הגדרה ופתרון",
+      "body_en_md": "**Definition:** motion with acceleration proportional and opposite to displacement:\n$$\\boxed{a = -\\omega^2 x}$$\n\nGeneral solution:\n$$\\boxed{x(t) = A\\cos(\\omega t + \\phi)}$$\n\n$A$ = amplitude, $\\omega$ = angular frequency (rad/s), $\\phi$ = phase constant (fixed by initial $x_0$, $v_0$).\n\nPeriod: $T = 2\\pi/\\omega$. Frequency: $f = 1/T = \\omega/(2\\pi)$.",
+      "body_he_md": "**הגדרה:** תאוצה פרופורציונית ונגדית להעתק:\n$$\\boxed{a = -\\omega^2 x}$$\n\nפתרון כללי:\n$$\\boxed{x(t) = A\\cos(\\omega t + \\phi)}$$\n\n$A$ = מplitudה, $\\omega$ = תדירות זוויתית, $\\phi$ = קבוע פазה.\n\nזמן מחזור: $T = 2\\pi/\\omega$.",
+      "level_min": "university"
+    },
+    {
+      "id": "shm_kinematics",
+      "title_en": "Velocity and Acceleration in SHM",
+      "title_he": "מהירות ותאוצה ב-SHM",
+      "body_en_md": "Differentiate $x(t) = A\\cos(\\omega t + \\phi)$:\n\n$$v(t) = \\frac{dx}{dt} = -A\\omega\\sin(\\omega t + \\phi)$$\n\n$$a(t) = \\frac{dv}{dt} = -A\\omega^2\\cos(\\omega t + \\phi) = -\\omega^2 x(t)$$\n\n**Key relations:**\n- $|v|_{max} = A\\omega$ at $x=0$.\n- $|a|_{max} = A\\omega^2$ at $|x|=A$.\n- $v$ leads $x$ by $90°$; $a$ is antiparallel to $x$.",
+      "body_he_md": "גזירה של $x(t) = A\\cos(\\omega t + \\phi)$:\n\n$$v = -A\\omega\\sin(\\omega t + \\phi), \\quad a = -A\\omega^2\\cos(\\omega t + \\phi) = -\\omega^2 x$$\n\n$|v|_{max} = A\\omega$ ב-$x=0$; $|a|_{max} = A\\omega^2$ ב-$|x|=A$.",
+      "level_min": "university"
+    },
+    {
+      "id": "spring_mass",
+      "title_en": "Spring–Mass System",
+      "title_he": "מערכת קפיץ–מסה",
+      "body_en_md": "Hooke's law: $F = -kx$ gives $m\\ddot{x} = -kx$, so:\n$$\\boxed{\\omega = \\sqrt{\\frac{k}{m}}, \\qquad T = 2\\pi\\sqrt{\\frac{m}{k}}}$$\n\nIndependent of amplitude $A$ (ideal spring, no damping).\n\nMultiple springs / masses: reduce to equivalent $k_{eq}$, $m_{eq}$.",
+      "body_he_md": "חוק הוק: $F = -kx$ נותן $m\\ddot{x} = -kx$:\n$$\\boxed{\\omega = \\sqrt{k/m}, \\quad T = 2\\pi\\sqrt{m/k}}$$\n\nלא תלוי ב-$A$ (קפיץ אידיאלי, ללא ריסון).",
+      "level_min": "university"
+    },
+    {
+      "id": "simple_pendulum",
+      "title_en": "Simple Pendulum — Small Angles",
+      "title_he": "מטוטלת פשוטה — זוויות קטנות",
+      "body_en_md": "For string length $L$ and small angle $\\theta$ (in radians, $\\theta \\lesssim 15°$):\n$$\\sin\\theta \\approx \\theta \\quad \\Rightarrow \\quad \\ddot{\\theta} = -\\frac{g}{L}\\theta$$\n\n$$\\boxed{\\omega = \\sqrt{\\frac{g}{L}}, \\qquad T = 2\\pi\\sqrt{\\frac{L}{g}}}$$\n\nValid only for small oscillations; large angles increase period.",
+      "body_he_md": "למוט אורך $L$ וזווית קטנה $\\theta$ (רדיאנים, $\\theta \\lesssim 15°$):\n$$\\omega = \\sqrt{g/L}, \\quad T = 2\\pi\\sqrt{L/g}$$\n\nתקף רק לתנודות קטנות.",
+      "level_min": "university"
+    },
+    {
+      "id": "shm_energy",
+      "title_en": "Energy in SHM",
+      "title_he": "אנרגיה ב-SHM",
+      "body_en_md": "Total mechanical energy (no damping):\n$$\\boxed{E = \\frac{1}{2}kA^2 = \\frac{1}{2}m v_{max}^2}$$\n\nAt displacement $x$:\n$$KE = \\frac{1}{2}k(A^2 - x^2), \\qquad PE = \\frac{1}{2}kx^2$$\n\nEnergy oscillates between kinetic and potential; $E$ is constant.",
+      "body_he_md": "אנרגיה מכנית כוללת:\n$$E = \\frac{1}{2}kA^2 = \\frac{1}{2}mv_{max}^2$$\n\nבהעתק $x$: $KE = \\frac{1}{2}k(A^2-x^2)$, $PE = \\frac{1}{2}kx^2$.",
+      "level_min": "university"
+    },
+    {
+      "id": "damped_oscillations",
+      "title_en": "Damped Oscillations — Overview",
+      "title_he": "תנודות מרוסנות — סקירה",
+      "body_en_md": "Linear damping: $F_{damp} = -b\\dot{x}$ gives:\n$$m\\ddot{x} + b\\dot{x} + kx = 0$$\n\nDefine $\\gamma = b/(2m)$, $\\omega_0 = \\sqrt{k/m}$.\n\n**Underdamped** ($\\gamma < \\omega_0$):\n$$x(t) = Ae^{-\\gamma t}\\cos(\\omega' t + \\phi), \\quad \\omega' = \\sqrt{\\omega_0^2 - \\gamma^2}$$\n\n**Critical:** $\\gamma = \\omega_0$ (fastest return without oscillation).\n**Overdamped:** $\\gamma > \\omega_0$ (exponential decay, no oscillation).\n\nQuality factor: $Q \\approx \\omega_0/(2\\gamma)$ (energy decay per cycle).",
+      "body_he_md": "ריסון לינארי: $F_{damp} = -b\\dot{x}$:\n$$m\\ddot{x} + b\\dot{x} + kx = 0$$\n\n**תחת-ריסון** ($\\gamma < \\omega_0$): $x = Ae^{-\\gamma t}\\cos(\\omega' t + \\phi)$.\n**קריטי:** $\\gamma = \\omega_0$. **יתר-ריסון:** $\\gamma > \\omega_0$.",
+      "level_min": "university"
+    },
+    {
+      "id": "physical_pendulum",
+      "title_en": "Physical Pendulum",
+      "title_he": "מטוטלת פיזיקלית",
+      "body_en_md": "Rigid body pivoting about fixed point: torque about pivot $\\tau = -MgL_{cm}\\sin\\theta \\approx -MgL_{cm}\\theta$ for small $\\theta$.\n\n$$\\boxed{\\omega = \\sqrt{\\frac{MgL_{cm}}{I_{pivot}}}, \\qquad T = 2\\pi\\sqrt{\\frac{I_{pivot}}{MgL_{cm}}}}$$\n\n$L_{cm}$ = distance from pivot to center of mass; $I_{pivot}$ about pivot axis.",
+      "body_he_md": "גוף קשיח סביב נקודה קבועה:\n$$\\omega = \\sqrt{MgL_{cm}/I_{pivot}}, \\quad T = 2\\pi\\sqrt{I_{pivot}/(MgL_{cm})}$$\n\n$L_{cm}$ = מרחק מציר למרכז מסה; $I_{pivot}$ סביב הציר.",
+      "level_min": "university"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Harmonic Oscillation."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "A mass $m = 0.25\\;\\text{kg}$ on a spring with $k = 100\\;\\text{N/m}$. The angular frequency $\\omega$ is:",
+      "body_he": "מסה $m = 0.25\\;\\text{kg}$ על קפיץ $k = 100\\;\\text{N/m}$. התדירות $\\omega$:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$20\\;\\text{rad/s}$",
+          "text_he": "$20\\;\\text{rad/s}$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$10\\;\\text{rad/s}$",
+          "text_he": "$10\\;\\text{rad/s}$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$40\\;\\text{rad/s}$",
+          "text_he": "$40\\;\\text{rad/s}$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$400\\;\\text{rad/s}$",
+          "text_he": "$400\\;\\text{rad/s}$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$\\omega = \\sqrt{k/m} = \\sqrt{100/0.25} = \\sqrt{400} = 20$ rad/s.",
+      "explanation_he": "$\\omega = \\sqrt{k/m} = \\sqrt{400} = 20$ rad/s."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "SHM with $k=50\\;\\text{N/m}$, $A=0.20\\;\\text{m}$. At $x=0.12\\;\\text{m}$, kinetic energy is:",
+      "body_he": "SHM עם $k=50$, $A=0.20$. ב-$x=0.12$, האנרגיה הקינטית:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$0.64\\;\\text{J}$",
+          "text_he": "$0.64\\;\\text{J}$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$0.36\\;\\text{J}$",
+          "text_he": "$0.36\\;\\text{J}$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$1.00\\;\\text{J}$",
+          "text_he": "$1.00\\;\\text{J}$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0.72\\;\\text{J}$",
+          "text_he": "$0.72\\;\\text{J}$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$KE = \\frac{1}{2}k(A^2-x^2) = 25(0.04-0.0144) = 25(0.0256) = 0.64$ J.",
+      "explanation_he": "$KE = \\frac{1}{2}k(A^2-x^2) = 0.64$ J."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "A pendulum with $L=1.0\\;\\text{m}$ on Earth ($g=9.8$) is taken to the Moon ($g=1.6$). The period on the Moon compared to Earth is:",
+      "body_he": "מטוטלת $L=1.0$ m על כדור הארץ ($g=9.8$) מועברת לירח ($g=1.6$). זמן המחזור על הירח:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "Longer by factor $\\sqrt{9.8/1.6} \\approx 2.5$",
+          "text_he": "ארוך יותר בגורם $\\sqrt{9.8/1.6} \\approx 2.5$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "Shorter by factor $\\sqrt{9.8/1.6}$",
+          "text_he": "קצר יותר",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "Unchanged",
+          "text_he": "ללא שינוי",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "Longer by factor $9.8/1.6$",
+          "text_he": "ארוך בגורם $9.8/1.6$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$T \\propto 1/\\sqrt{g}$; lower $g$ on Moon $\\Rightarrow$ longer $T$ by $\\sqrt{g_E/g_M}$.",
+      "explanation_he": "$T \\propto 1/\\sqrt{g}$; $g$ קטן יותר על הירח $\\Rightarrow$ $T$ ארוך יותר."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "For $m\\ddot{x}+b\\dot{x}+kx=0$ with $\\omega_0=10\\;\\text{rad/s}$ and $b/(2m)=12\\;\\text{s}^{-1}$, the motion is:",
+      "body_he": "עבור $\\omega_0=10$ ו-$b/(2m)=12$, התנועה:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "Overdamped (no oscillation)",
+          "text_he": "יתר-ריסון (ללא תנודה)",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "Underdamped (decaying oscillation)",
+          "text_he": "תחת-ריסון",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "Critically damped",
+          "text_he": "ריסון קריטי",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "Undamped SHM",
+          "text_he": "SHM ללא ריסון",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$\\gamma=12 > \\omega_0=10$ $\\Rightarrow$ overdamped.",
+      "explanation_he": "$\\gamma > \\omega_0$ $\\Rightarrow$ יתר-ריסון."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "Uniform rod length $L$, mass $M$, pivoted at one end. For small oscillations, $\\omega$ equals:",
+      "body_he": "מוט אחיד $L$, $M$, ציר בקצה. לתנודות קטנות, $\\omega$:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$\\sqrt{3g/(2L)}$",
+          "text_he": "$\\sqrt{3g/(2L)}$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$\\sqrt{g/L}$",
+          "text_he": "$\\sqrt{g/L}$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$\\sqrt{g/(2L)}$",
+          "text_he": "$\\sqrt{g/(2L)}$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$\\sqrt{2g/L}$",
+          "text_he": "$\\sqrt{2g/L}$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$L_{cm}=L/2$, $I_{pivot}=ML^2/3$: $\\omega=\\sqrt{Mg(L/2)/(ML^2/3)}=\\sqrt{3g/(2L)}$.",
+      "explanation_he": "$\\omega=\\sqrt{Mg(L/2)/(ML^2/3)}=\\sqrt{3g/(2L)}$."
+    }
+  ]
 }
