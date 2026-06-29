@@ -58,7 +58,7 @@ export interface CurriculumCategory {
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_3PT_NEW_CONCEPTS = [
   'descriptive_statistics', 'basic_probability', 'normal_distribution_basics', 'scatter_plot_correlation_intro',
-  'basic_statistics_3pt',
+  'basic_statistics_3pt', 'probability_basics_3pt', 'probability_conditional_3pt',
   'pythagorean_theorem', 'circle_area_circumference', 'similar_triangles', '3d_solids_volume', 'spatial_reasoning',
   'linear_equations_one_variable', 'linear_functions', 'quadratic_model_fitting', 'exponential_growth_decay_models',
   'plane_trigonometry_right_triangle',
@@ -246,7 +246,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'statistics_probability_3pt',
         heLabel: 'סטטיסטיקה והסתברות',
         enLabel: 'Statistics & Probability',
-        concept_ids: ['descriptive_statistics', 'basic_probability', 'normal_distribution_basics', 'scatter_plot_correlation_intro', 'basic_statistics_3pt'],
+        concept_ids: ['descriptive_statistics', 'basic_probability', 'normal_distribution_basics', 'scatter_plot_correlation_intro', 'basic_statistics_3pt', 'probability_basics_3pt', 'probability_conditional_3pt'],
       },
       {
         id: 'geometry_3pt',
@@ -287,6 +287,15 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     bagrut_questionnaires: ['471', '472'],
     concept_ids: MATH_4PT_CONCEPTS,
     sections: [
+      {
+        id: 'bridging_4pt',
+        heLabel: 'גשר מ-3 ל-4 יחידות',
+        enLabel: 'Bridging from 3pt',
+        concept_ids: [
+          'algebra_basics', 'equations_linear', 'equations_quadratic', 'word_problems',
+          'factoring', 'analytic_geometry_basic', 'sequences_arithmetic', 'sequences_geometric',
+        ],
+      },
       {
         id: 'calculus_4pt',
         heLabel: 'חשבון דיפרנציאלי ואינטגרלי',

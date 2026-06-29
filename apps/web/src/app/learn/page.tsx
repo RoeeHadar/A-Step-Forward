@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Fragment } from 'react';
 import { SiteHeader } from '@/components/site-header';
 import { fetchSubjects } from '@/lib/content-api';
 import { subjectIcon, subjectLabel } from '@/lib/subject-labels';
@@ -44,6 +45,21 @@ type SubjectCard = {
   section_count: number;
   sample_grade: string | null;
 };
+
+
+function UpgradeTrackBanner({ isHe }: { isHe: boolean }) {
+  return (
+    <Link
+      href="/learn/high_school_math_4pt"
+      className="col-span-full block bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-sm text-foreground transition-colors hover:bg-blue-100 dark:hover:bg-blue-900"
+      dir={isHe ? 'rtl' : 'ltr'}
+    >
+      {isHe
+        ? 'שדרוג מ-3 ל-4 יחידות? התחל כאן ←'
+        : 'Upgrading from 3pt to 4pt? Start here ←'}
+    </Link>
+  );
+}
 
 function SubjectCard({ s, isMakhina }: { s: SubjectCard; isMakhina: boolean }) {
   return (
@@ -143,7 +159,12 @@ export default async function LearnPage() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {group.cards.map((s) => (
-                  <SubjectCard key={s.subject} s={s} isMakhina={s.subject === 'makhina'} />
+                  <Fragment key={s.subject}>
+                    {group.id === 'bagrut' && s.subject === 'high_school_math_4pt' ? (
+                      <UpgradeTrackBanner isHe={isHe} />
+                    ) : null}
+                    <SubjectCard s={s} isMakhina={s.subject === 'makhina'} />
+                  </Fragment>
                 ))}
               </div>
             </section>
