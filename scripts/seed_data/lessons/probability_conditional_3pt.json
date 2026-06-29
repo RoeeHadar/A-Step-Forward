@@ -6,219 +6,219 @@
   "title_he": "הסתברות מותנית ואי-תלות",
   "duration_min": 25,
   "level_min": "3pt",
-  "agent_hints": "Use given-that stories. Watch denominator in P(B|A), tree multiplication, total probability.",
+  "agent_hints": "Conditional probability is the concept students find most confusing in 3pt probability. Anchor everything to real stories (cloudy sky, card draws without replacement). The formula P(B|A) = P(A∩B)/P(A) is easy to misapply — always insist students identify P(A∩B) and P(A) separately before dividing. Tree diagrams are the most reliable problem-solving tool here; draw branches step by step and multiply along paths. The total probability (last worked example) is a very common Bagrut question pattern — make sure students recognise it by the 'choose a box' or 'choose a group' setup.",
   "sections": [
     {
       "id": "what_is_conditional",
-      "title_en": "What Is Conditional Probability?",
-      "title_he": "מה זה הסתברות מותנית?",
+      "title_en": "What is Conditional Probability?",
+      "title_he": "מהי הסתברות מותנית?",
       "level_min": "3pt",
-      "body_en_md": "New information changes the odds. **Conditional probability** asks: *given that A happened, how likely is B?*\n\nWe write $P(B \\mid A)$ — \"probability of $B$ **given** $A$.\"\n\n**Weather:** Overall rain might be 20%, but **given** cloudy skies it jumps to 60%.\n\n**Cards:** After a red card is drawn, the deck changed — that is conditional thinking.",
-      "body_he_md": "מידע חדש משנה סיכויים. *בהינתן ש-A קרה, מה הסיכוי ל-B?*\n\n$P(B \\mid A)$.\n\n**מזג אוויר:** מעונן → סיכוי גשם עולה.\n\n**קלפים:** אחרי שליפה — החפיסה השתנתה."
+      "body_en_md": "**Conditional probability** answers this question:\n*Given that something has already happened, how likely is something else?*\n\nWe write $P(B \\mid A)$ and read it as \"probability of $B$ **given** $A$ happened\".\n\n**Everyday examples:**\n- \"What's the chance of rain, **given** it's already cloudy?\" — knowing it's cloudy changes the probability.\n- \"What's the chance of drawing a heart, **given** the first card drawn was a heart?\" — the deck has changed.\n- \"What's the chance of a student passing, **given** they studied?\" — studying is new information.\n\n**Why does conditioning matter?**\nBefore we see any clouds: maybe $P(\\text{rain}) = 0.2$.\nAfter we see clouds: $P(\\text{rain} \\mid \\text{cloudy}) = 0.6$.\nThe extra information changes everything.\n\n> 🌤️ Conditional probability is about **updating your belief** when you get new information.",
+      "body_he_md": "**הסתברות מותנית** עונה על השאלה הזו:\n*בהינתן שמשהו כבר קרה, כמה סביר שמשהו אחר יקרה?*\n\nכותבים $P(B \\mid A)$ וקוראים \"הסתברות של $B$ **בהינתן** ש-$A$ קרה\".\n\n**דוגמאות מהחיים:**\n- \"מה הסיכוי לגשם, **בהינתן** שכבר מעונן?\" — ידיעה שמעונן משנה את ההסתברות.\n- \"מה הסיכוי לשלוף לב, **בהינתן** שהקלף הראשון שנשלף היה לב?\" — החפיסה השתנתה.\n- \"מה הסיכוי שתלמיד יעבור, **בהינתן** שהוא למד?\" — הלמידה היא מידע חדש.\n\n**למה התניה חשובה?**\nלפני שרואים עננים: אולי $P(\\text{גשם}) = 0.2$.\nאחרי שרואים עננים: $P(\\text{גשם} \\mid \\text{מעונן}) = 0.6$.\nהמידע הנוסף משנה הכל.\n\n> 🌤️ הסתברות מותנית היא **עדכון האמונה** שלך כשמקבלים מידע חדש."
     },
     {
-      "id": "formula",
+      "id": "conditional_formula",
       "title_en": "The Formula",
       "title_he": "הנוסחה",
       "level_min": "3pt",
-      "body_en_md": "$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)}$$\n\n**Bag:** 5 red, 3 blue. Draw red **without replacement**. $P(\\text{2nd red} \\mid \\text{1st red}) = \\frac{4}{7}$.\n\nFormula check: $P(A)=\\frac58$, $P(A\\cap B)=\\frac58\\cdot\\frac47$ → $P(B\\mid A)=\\frac47$.",
-      "body_he_md": "$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)}$$\n\n5 אדומות, 3 כחולות, בלי החזרה: $\\frac47$."
+      "body_en_md": "$$\\boxed{P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)}}$$\n\n**How to read it:** To find the probability of $B$ given $A$, look at the fraction of $A$-outcomes that are also in $B$.\n\n**Intuition:** We've narrowed our world down to only outcomes where $A$ happened. Among those, what fraction also have $B$?\n\n**Worked Example — Drawing Balls:**\n\nA bag has **5 red** and **3 blue** balls (8 total). You draw one ball, it's red. Without replacing it, you draw again. What is $P(\\text{second is red} \\mid \\text{first is red})$?\n\nAfter drawing one red: 4 red and 3 blue remain (7 total).\n$$P(\\text{2nd red} \\mid \\text{1st red}) = \\frac{4}{7}$$\n\n**Using the formula directly:** Let $A$ = \"first is red\", $B$ = \"second is red\".\n$$P(A) = \\frac{5}{8}, \\quad P(A \\cap B) = \\frac{5}{8} \\cdot \\frac{4}{7} = \\frac{20}{56} = \\frac{5}{14}$$\n$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{5/14}{5/8} = \\frac{5}{14} \\cdot \\frac{8}{5} = \\frac{4}{7} \\checkmark$$\n\n> 📌 Always identify what event is being conditioned on (the \"given\") before plugging into the formula.",
+      "body_he_md": "$$\\boxed{P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)}}$$\n\n**איך לקרוא את זה:** כדי למצוא את ההסתברות של $B$ בהינתן $A$, מסתכלים על שבר תוצאות $A$ שהן גם ב-$B$.\n\n**אינטואיציה:** צמצמנו את העולם שלנו רק לתוצאות שבהן $A$ קרה. מביניהן, איזה שבר מכיל גם $B$?\n\n**דוגמה פתורה — שליפת כדורים:**\n\nשק עם **5 אדומים** ו**3 כחולים** (8 בסך). שלפת כדור אחד — הוא אדום. מבלי להחזיר אותו, שולפים שוב. מהי $P(\\text{שני אדום} \\mid \\text{ראשון אדום})$?\n\nאחרי שליפת אדום אחד: נשארו 4 אדומים ו-3 כחולים (7 בסך).\n$$P(\\text{שני אדום} \\mid \\text{ראשון אדום}) = \\frac{4}{7}$$\n\n**שימוש ישיר בנוסחה:** יהי $A$ = \"ראשון אדום\", $B$ = \"שני אדום\".\n$$P(A) = \\frac{5}{8}, \\quad P(A \\cap B) = \\frac{5}{8} \\cdot \\frac{4}{7} = \\frac{20}{56} = \\frac{5}{14}$$\n$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{5/14}{5/8} = \\frac{5}{14} \\cdot \\frac{8}{5} = \\frac{4}{7} \\checkmark$$\n\n> 📌 תמיד זהה על מה מתנים (ה\"בהינתן\") לפני שמציבים בנוסחה."
     },
     {
       "id": "tree_diagrams",
       "title_en": "Tree Diagrams",
-      "title_he": "עצי הסתברות",
+      "title_he": "דיאגרמות עץ",
       "level_min": "3pt",
-      "body_en_md": "For multi-stage experiments, draw a **tree**:\n\n```\n        Start\n       /     \\\n   H(1/2)   T(1/2)\n  /\n roll die → 1..6 (each 1/6)\n```\n\n**Multiply** along a path (AND). **Add** separate paths (OR).\nExample: $P(H \\text{ then } 4) = \\frac12 \\cdot \\frac16 = \\frac{1}{12}$.",
-      "body_he_md": "**עץ הסתברות** לניסוי בשלבים.\n\nכפל לאורך מסלול (וגם), חיבור מסלולים (או)."
+      "body_en_md": "A **tree diagram** maps out multi-stage experiments visually. Each branch represents one outcome; multiply along branches, add across branches for combined events.\n\n**Rules:**\n1. Write the probability on **each branch**.\n2. To get the probability of a path, **multiply** the branch probabilities along it.\n3. To get the probability of an event that can happen via multiple paths, **add** the path probabilities.\n\n**Example — Coin then Die:**\nFlip a coin. If Heads, roll a die and record if it's even.\n\n```\nStart\n  ├── H (prob 1/2)\n  │     ├── Even  (prob 3/6 = 1/2)  → path prob = 1/2 × 1/2 = 1/4\n  │     └── Odd   (prob 3/6 = 1/2)  → path prob = 1/2 × 1/2 = 1/4\n  └── T (prob 1/2)\n        └── (no die roll)\n```\n\n$P(\\text{Heads AND even}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\n\n**Two-draw example (without replacement):** A bag has 3 red (R) and 2 blue (B). Draw twice.\n\n```\n1st draw\n  ├── R (3/5)\n  │     ├── R (2/4)  → RR: 3/5 × 2/4 = 6/20\n  │     └── B (2/4)  → RB: 3/5 × 2/4 = 6/20\n  └── B (2/5)\n        ├── R (3/4)  → BR: 2/5 × 3/4 = 6/20\n        └── B (1/4)  → BB: 2/5 × 1/4 = 2/20\n```\n\nCheck: $6 + 6 + 6 + 2 = 20$. Divide each by 20 — sums to 1. ✓\n\n$P(\\text{at least one R}) = 1 - P(\\text{BB}) = 1 - \\frac{2}{20} = \\frac{18}{20} = \\frac{9}{10}$",
+      "body_he_md": "**דיאגרמת עץ** ממפה ניסויים רב-שלביים בצורה חזותית. כל ענף מייצג תוצאה אחת; מכפילים לאורך ענפים, מחברים בין ענפים לאירועים משולבים.\n\n**כללים:**\n1. רשמו את ההסתברות על **כל ענף**.\n2. כדי לקבל את ההסתברות של מסלול, **הכפלו** את הסתברויות הענפים לאורכו.\n3. כדי לקבל את ההסתברות של אירוע שיכול לקרות דרך מסלולים שונים, **חברו** את הסתברויות המסלולים.\n\n**דוגמה — מטבע ואז קוביה:**\nמטילים מטבע. אם עץ, זורקים קוביה ורושמים אם הוא זוגי.\n\n```\nהתחלה\n  ├── עץ (הסת' 1/2)\n  │     ├── זוגי  (הסת' 3/6 = 1/2)  → הסת' מסלול = 1/2 × 1/2 = 1/4\n  │     └── אי-זוגי (הסת' 3/6 = 1/2) → הסת' מסלול = 1/2 × 1/2 = 1/4\n  └── פלי (הסת' 1/2)\n        └── (אין זריקת קוביה)\n```\n\n$P(\\text{עץ וגם זוגי}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\n\n**דוגמה עם שתי שליפות (ללא החזרה):** שק עם 3 אדומים (א) ו-2 כחולים (כ). שולפים פעמיים.\n\n```\nשליפה 1\n  ├── א (3/5)\n  │     ├── א (2/4)  → אא: 3/5 × 2/4 = 6/20\n  │     └── כ (2/4)  → אכ: 3/5 × 2/4 = 6/20\n  └── כ (2/5)\n        ├── א (3/4)  → כא: 2/5 × 3/4 = 6/20\n        └── כ (1/4)  → ככ: 2/5 × 1/4 = 2/20\n```\n\nבדיקה: $6 + 6 + 6 + 2 = 20$. מחלקים ב-20 — סכום 1. ✓\n\n$P(\\text{לפחות א אחד}) = 1 - P(\\text{ככ}) = 1 - \\frac{2}{20} = \\frac{18}{20} = \\frac{9}{10}$"
     },
     {
       "id": "independence",
       "title_en": "Independence",
       "title_he": "אי-תלות",
       "level_min": "3pt",
-      "body_en_md": "$A$ and $B$ are **independent** if $P(A \\cap B) = P(A) \\cdot P(B)$.\n\n**Independent:** two coin flips.\n**Not independent:** cards without replacement.\n\n**Test:** if independent, $P(A \\mid B) = P(A)$.",
-      "body_he_md": "**עצמאיים** אם $P(A \\cap B) = P(A)P(B)$.\n\nמטבעות: כן. קלפים בלי החזרה: לא."
+      "body_en_md": "Events $A$ and $B$ are **independent** if knowing that $A$ happened gives **no information** about whether $B$ happens.\n\n**Formal definition:**\n$$A \\text{ and } B \\text{ are independent} \\iff P(A \\cap B) = P(A) \\cdot P(B)$$\n\nEquivalently: $P(B \\mid A) = P(B)$ — conditioning on $A$ doesn't change $B$'s probability.\n\n**Independent example:** Two separate coin flips.\n- $P(\\text{H on flip 1}) = \\frac{1}{2}$\n- $P(\\text{H on flip 2}) = \\frac{1}{2}$\n- $P(\\text{both H}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\nThe first flip doesn't affect the second — they are independent.\n\n**Dependent example:** Drawing cards **without replacement**.\nAfter drawing one King, there are only 3 Kings left in 51 cards:\n$P(\\text{2nd King} \\mid \\text{1st King}) = \\frac{3}{51} \\neq \\frac{4}{52} = P(\\text{King})$\nThe draws are **not** independent.\n\n**Quick test for independence:** Compute $P(A) \\cdot P(B)$. If it equals $P(A \\cap B)$, they are independent. If not, they are dependent.\n\n> 🔗 \"Independent\" does **not** mean \"have nothing to do with each other\" in the everyday sense — it has a precise mathematical meaning.",
+      "body_he_md": "אירועים $A$ ו-$B$ הם **בלתי-תלויים** אם ידיעה ש-$A$ קרה **אינה נותנת מידע** האם $B$ יקרה.\n\n**הגדרה פורמלית:**\n$$A \\text{ ו-} B \\text{ בלתי-תלויים} \\iff P(A \\cap B) = P(A) \\cdot P(B)$$\n\nשקול: $P(B \\mid A) = P(B)$ — התניה על $A$ לא משנה את ההסתברות של $B$.\n\n**דוגמה לאי-תלות:** שתי הטלות מטבע נפרדות.\n- $P(\\text{עץ בהטלה 1}) = \\frac{1}{2}$\n- $P(\\text{עץ בהטלה 2}) = \\frac{1}{2}$\n- $P(\\text{שניהם עץ}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\nההטלה הראשונה לא משפיעה על השנייה — הן בלתי-תלויות.\n\n**דוגמה לתלות:** שליפת קלפים **ללא החזרה**.\nאחרי שליפת מלך אחד, נשארו רק 3 מלכים מתוך 51 קלפים:\n$P(\\text{מלך שני} \\mid \\text{מלך ראשון}) = \\frac{3}{51} \\neq \\frac{4}{52} = P(\\text{מלך})$\nהשליפות **אינן** בלתי-תלויות.\n\n**בדיקה מהירה לאי-תלות:** חשבו $P(A) \\cdot P(B)$. אם שווה ל-$P(A \\cap B)$, הם בלתי-תלויים. אם לא, הם תלויים.\n\n> 🔗 \"בלתי-תלוי\" **לא** אומר \"אין ביניהם קשר\" במובן היומיומי — יש לזה משמעות מתמטית מדויקת."
     },
     {
-      "id": "worked_exam_problem",
-      "title_en": "Total Probability",
-      "title_he": "הסתברות מלאה",
+      "id": "total_probability_worked",
+      "title_en": "Worked Exam Problem — Total Probability",
+      "title_he": "בעיה פתורה ממבחן — הסתברות כוללת",
       "level_min": "3pt",
-      "body_en_md": "**Box 1:** 3 white, 2 black. **Box 2:** 1 white, 4 black. Pick a box ($P=0.5$ each), draw one ball.\n\n$P(\\text{white}) = 0.5 \\times \\frac{3}{5} + 0.5 \\times \\frac{1}{5} = 0.3 + 0.1 = 0.4$\n\n**Total probability** — add all paths to \"white.\" Show each multiplication on the exam!",
-      "body_he_md": "**קופסה 1:** 3ל 2ש. **קופסה 2:** 1ל 4ש. $P=0.5$ לכל קופסה.\n\n$P(\\text{לבן}) = 0.5 \\times \\frac35 + 0.5 \\times \\frac15 = 0.4$"
+      "body_en_md": "This is a very common Bagrut question type. Learn to recognise it!\n\n**Problem:** Box 1 has **3 white** and **2 black** balls. Box 2 has **1 white** and **4 black** balls. A box is chosen at random (each with probability $\\frac{1}{2}$), then one ball is drawn. What is $P(\\text{white})$?\n\n**Solution using tree diagram:**\n\n```\nChoose box\n  ├── Box 1 (1/2)\n  │     ├── White (3/5)  → path: 1/2 × 3/5 = 3/10\n  │     └── Black (2/5)  → path: 1/2 × 2/5 = 2/10\n  └── Box 2 (1/2)\n        ├── White (1/5)  → path: 1/2 × 1/5 = 1/10\n        └── Black (4/5)  → path: 1/2 × 4/5 = 4/10\n```\n\nWhite can happen via two paths (Box 1 → White) or (Box 2 → White):\n$$P(\\text{white}) = \\frac{3}{10} + \\frac{1}{10} = \\frac{4}{10} = 0.4$$\n\n**The Total Probability Formula (general):**\n$$P(W) = P(\\text{Box 1}) \\cdot P(W \\mid \\text{Box 1}) + P(\\text{Box 2}) \\cdot P(W \\mid \\text{Box 2})$$\n$$= \\frac{1}{2} \\times \\frac{3}{5} + \\frac{1}{2} \\times \\frac{1}{5} = 0.3 + 0.1 = 0.4$$\n\n> ✅ The key recognition: when you \"choose a group first\" and then observe an event, it's always a total-probability setup. Draw the tree, multiply along paths, add across paths.",
+      "body_he_md": "זהו סוג שאלה נפוץ מאד בבגרות. למדו לזהות אותו!\n\n**בעיה:** קופסה 1 מכילה **3 לבנים** ו**2 שחורים**. קופסה 2 מכילה **1 לבן** ו**4 שחורים**. בוחרים קופסה באקראי (כל אחת עם הסתברות $\\frac{1}{2}$), ואז שולפים כדור אחד. מהי $P(\\text{לבן})$?\n\n**פתרון בעזרת דיאגרמת עץ:**\n\n```\nבחירת קופסה\n  ├── קופסה 1 (1/2)\n  │     ├── לבן (3/5)  → מסלול: 1/2 × 3/5 = 3/10\n  │     └── שחור (2/5) → מסלול: 1/2 × 2/5 = 2/10\n  └── קופסה 2 (1/2)\n        ├── לבן (1/5)  → מסלול: 1/2 × 1/5 = 1/10\n        └── שחור (4/5) → מסלול: 1/2 × 4/5 = 4/10\n```\n\nלבן יכול לקרות דרך שני מסלולים (קופסה 1 → לבן) או (קופסה 2 → לבן):\n$$P(\\text{לבן}) = \\frac{3}{10} + \\frac{1}{10} = \\frac{4}{10} = 0.4$$\n\n**נוסחת ההסתברות הכוללת (כללי):**\n$$P(L) = P(\\text{קופסה 1}) \\cdot P(L \\mid \\text{קופסה 1}) + P(\\text{קופסה 2}) \\cdot P(L \\mid \\text{קופסה 2})$$\n$$= \\frac{1}{2} \\times \\frac{3}{5} + \\frac{1}{2} \\times \\frac{1}{5} = 0.3 + 0.1 = 0.4$$\n\n> ✅ זיהוי המפתח: כשה\"בוחרים קבוצה תחילה\" ואז מתבוננים באירוע, זה תמיד מבנה של הסתברות כוללת. ציירו את העץ, הכפילו לאורך מסלולים, חברו בין מסלולים."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "40 French, 25 both. P(S|F)?",
-      "body_he": "40 צרפית, 25 גם",
+      "body_en": "A class has 20 students: 12 boys and 8 girls. 5 boys and 6 girls study music. A student is chosen at random. Given the student is a girl, what is $P(\\text{music} \\mid \\text{girl})$?",
+      "body_he": "כיתה עם 20 תלמידים: 12 בנים ו-8 בנות. 5 בנים ו-6 בנות לומדים מוזיקה. תלמיד נבחר באקראי. בהינתן שהתלמיד הוא בת, מהי $P(\\text{מוזיקה} \\mid \\text{בת})$?",
       "options": [
         {
           "id": "a",
-          "text_en": "0.25",
-          "text_he": "0.25",
+          "text_en": "$\\frac{6}{20}$",
+          "text_he": "$\\frac{6}{20}$",
           "correct": false
         },
         {
           "id": "b",
-          "text_en": "0.625",
-          "text_he": "0.625",
-          "correct": true
+          "text_en": "$\\frac{5}{12}$",
+          "text_he": "$\\frac{5}{12}$",
+          "correct": false
         },
         {
           "id": "c",
-          "text_en": "0.40",
-          "text_he": "0.40",
-          "correct": false
+          "text_en": "$\\frac{6}{8}$",
+          "text_he": "$\\frac{6}{8}$",
+          "correct": true
         },
         {
           "id": "d",
-          "text_en": "0.15",
-          "text_he": "0.15",
+          "text_en": "$\\frac{11}{20}$",
+          "text_he": "$\\frac{11}{20}$",
           "correct": false
         }
       ],
-      "explanation_en": "25/40",
-      "explanation_he": "25/40"
+      "explanation_en": "Given the student is a girl, the sample space shrinks to 8 girls. 6 of them study music. $P = \\frac{6}{8} = \\frac{3}{4}$.",
+      "explanation_he": "בהינתן שהתלמיד בת, מרחב המדגם מצטמצם ל-8 בנות. 6 מהן לומדות מוזיקה. $P = \\frac{6}{8} = \\frac{3}{4}$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "P(HH)?",
-      "body_he": "P(שני עץ)?",
+      "body_en": "A bag has 4 red and 3 blue balls. You draw two balls **without replacement**. Using a tree diagram, what is $P(\\text{both red})$?",
+      "body_he": "שק עם 4 אדומים ו-3 כחולים. שולפים שני כדורים **ללא החזרה**. בעזרת דיאגרמת עץ, מהי $P(\\text{שניהם אדומים})$?",
       "options": [
         {
           "id": "a",
-          "text_en": "1/2",
-          "text_he": "1/2",
+          "text_en": "$\\frac{16}{49}$",
+          "text_he": "$\\frac{16}{49}$",
           "correct": false
         },
         {
           "id": "b",
-          "text_en": "1/3",
-          "text_he": "1/3",
+          "text_en": "$\\frac{4}{7}$",
+          "text_he": "$\\frac{4}{7}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "1/4",
-          "text_he": "1/4",
+          "text_en": "$\\frac{2}{7}$",
+          "text_he": "$\\frac{2}{7}$",
           "correct": true
         },
         {
           "id": "d",
-          "text_en": "3/4",
-          "text_he": "3/4",
+          "text_en": "$\\frac{1}{7}$",
+          "text_he": "$\\frac{1}{7}$",
           "correct": false
         }
       ],
-      "explanation_en": "1/4",
-      "explanation_he": "1/4"
+      "explanation_en": "First red: $\\frac{4}{7}$. Second red given first red: $\\frac{3}{6} = \\frac{1}{2}$. Product: $\\frac{4}{7} \\times \\frac{1}{2} = \\frac{4}{14} = \\frac{2}{7}$.",
+      "explanation_he": "ראשון אדום: $\\frac{4}{7}$. שני אדום בהינתן ראשון אדום: $\\frac{3}{6} = \\frac{1}{2}$. מכפלה: $\\frac{4}{7} \\times \\frac{1}{2} = \\frac{4}{14} = \\frac{2}{7}$."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "P(A)=0.4,P(B)=0.5,P(A cap B)=0.2. Independent?",
-      "body_he": "עצמאי?",
+      "body_en": "$P(A) = 0.5$, $P(B) = 0.4$, and $P(A \\cap B) = 0.2$. Are $A$ and $B$ independent?",
+      "body_he": "$P(A) = 0.5$, $P(B) = 0.4$, ו-$P(A \\cap B) = 0.2$. האם $A$ ו-$B$ בלתי-תלויים?",
       "options": [
         {
           "id": "a",
-          "text_en": "Yes 0.4*0.5=0.2",
-          "text_he": "כן",
+          "text_en": "Yes, because $P(A) \\cdot P(B) = P(A \\cap B)$",
+          "text_he": "כן, כי $P(A) \\cdot P(B) = P(A \\cap B)$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "No",
-          "text_he": "לא",
+          "text_en": "No, because $P(A \\cap B) \\neq 0$",
+          "text_he": "לא, כי $P(A \\cap B) \\neq 0$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "Yes sum",
-          "text_he": "לא",
+          "text_en": "Yes, because $P(A) + P(B) = 0.9$",
+          "text_he": "כן, כי $P(A) + P(B) = 0.9$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "?",
-          "text_he": "?",
+          "text_en": "Cannot be determined",
+          "text_he": "לא ניתן לקבוע",
           "correct": false
         }
       ],
-      "explanation_en": "Yes",
-      "explanation_he": "כן"
+      "explanation_en": "$P(A) \\cdot P(B) = 0.5 \\times 0.4 = 0.2 = P(A \\cap B)$. Since the product equals the intersection, they are independent.",
+      "explanation_he": "$P(A) \\cdot P(B) = 0.5 \\times 0.4 = 0.2 = P(A \\cap B)$. מכיוון שהמכפלה שווה לחיתוך, הם בלתי-תלויים."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Total P(defect)?",
-      "body_he": "P(פגם)?",
+      "body_en": "Box A has 2 white and 3 black balls. Box B has 4 white and 1 black. A box is chosen at random (prob 0.5 each), then a ball is drawn. What is $P(\\text{white})$?",
+      "body_he": "קופסה א' מכילה 2 לבנים ו-3 שחורים. קופסה ב' מכילה 4 לבנים ו-1 שחור. קופסה נבחרת באקראי (הסת' 0.5 כל אחת), ואז שולפים כדור. מהי $P(\\text{לבן})$?",
       "options": [
         {
           "id": "a",
-          "text_en": "0.032",
-          "text_he": "0.032",
-          "correct": true
+          "text_en": "0.5",
+          "text_he": "0.5",
+          "correct": false
         },
         {
           "id": "b",
-          "text_en": "0.07",
-          "text_he": "0.07",
+          "text_en": "0.3",
+          "text_he": "0.3",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "0.035",
-          "text_he": "0.035",
-          "correct": false
+          "text_en": "0.6",
+          "text_he": "0.6",
+          "correct": true
         },
         {
           "id": "d",
-          "text_en": "0.02",
-          "text_he": "0.02",
+          "text_en": "0.4",
+          "text_he": "0.4",
           "correct": false
         }
       ],
-      "explanation_en": "0.032",
-      "explanation_he": "0.032"
+      "explanation_en": "$P(W) = 0.5 \\times \\frac{2}{5} + 0.5 \\times \\frac{4}{5} = 0.5 \\times 0.4 + 0.5 \\times 0.8 = 0.2 + 0.4 = 0.6$.",
+      "explanation_he": "$P(L) = 0.5 \\times \\frac{2}{5} + 0.5 \\times \\frac{4}{5} = 0.5 \\times 0.4 + 0.5 \\times 0.8 = 0.2 + 0.4 = 0.6$."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Both red expression?",
-      "body_he": "P(שתי אדומות)?",
+      "body_en": "A bag has 6 balls: 4 red (R) and 2 green (G). Two balls are drawn without replacement. Given the first ball is red, what is $P(\\text{second is green} \\mid \\text{first is red})$?",
+      "body_he": "שק עם 6 כדורים: 4 אדומים (א) ו-2 ירוקים (י). שולפים שני כדורים ללא החזרה. בהינתן שהכדור הראשון אדום, מהי $P(\\text{שני ירוק} \\mid \\text{ראשון אדום})$?",
       "options": [
         {
           "id": "a",
-          "text_en": "0.5*4/5*3/4+0.5*2/5*1/4",
-          "text_he": "0.5*4/5*3/4+0.5*2/5*1/4",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "6/10*5/9",
-          "text_he": "6/10*5/9",
+          "text_en": "$\\frac{2}{6}$",
+          "text_he": "$\\frac{2}{6}$",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "$\\frac{2}{5}$",
+          "text_he": "$\\frac{2}{5}$",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "0.5+0.5",
-          "text_he": "0.5+0.5",
+          "text_en": "$\\frac{1}{3}$",
+          "text_he": "$\\frac{1}{3}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "1/2",
-          "text_he": "1/2",
+          "text_en": "$\\frac{4}{5}$",
+          "text_he": "$\\frac{4}{5}$",
           "correct": false
         }
       ],
-      "explanation_en": "tree paths",
-      "explanation_he": "עץ"
+      "explanation_en": "After drawing one red ball, 5 balls remain: 3 red and 2 green. $P(\\text{green} \\mid \\text{1st red}) = \\frac{2}{5}$.",
+      "explanation_he": "אחרי שליפת כדור אדום אחד, נשארו 5 כדורים: 3 אדומים ו-2 ירוקים. $P(\\text{ירוק} \\mid \\text{ראשון אדום}) = \\frac{2}{5}$."
     }
   ]
 }
