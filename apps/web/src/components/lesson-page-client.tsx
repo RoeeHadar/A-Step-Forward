@@ -23,7 +23,7 @@ function LessonLevelToggle({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { locale } = useLanguagePreference();
+  const [locale] = useLanguagePreference();
   const isHe = locale === 'he';
 
   const options = MATH_TRACK_LEVELS.filter((level) => tracks.includes(level));
