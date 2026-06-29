@@ -23,9 +23,11 @@ export type PointsLevel =
   | '5pt'
   | 'hs_physics'
   | 'biology_4pt'
+  | 'biology_5pt'
   | 'calc1'
   | 'la'
-  | 'physics1';
+  | 'physics1'
+  | 'makhina';
 
 export interface CurriculumSection {
   id: string;
@@ -171,6 +173,37 @@ const BIOLOGY_4PT_CONCEPTS = [
   'natural_selection',
   'speciation',
   'evidence_evolution',
+];
+
+const BIOLOGY_5PT_CONCEPTS = [...BIOLOGY_4PT_CONCEPTS];
+
+const MAKHINA_PHYSICS_CONCEPTS = [
+  'units_measurement',
+  'vectors_basics',
+  'kinematics_1d',
+  'kinematics_2d',
+  'projectile_motion',
+  'newton_laws',
+  'work_energy',
+  'momentum',
+  'collisions',
+];
+
+const MAKHINA_CONCEPTS = [
+  'limits',
+  'derivatives_intro',
+  'derivatives_applications',
+  'integrals_intro',
+  'definite_integrals',
+  'integrals_applications',
+  'sequences_arithmetic',
+  'sequences_geometric',
+  'la_vectors',
+  'la_matrices',
+  'la_diagonalization',
+  'statistics_descriptive',
+  'probability_basic',
+  ...MAKHINA_PHYSICS_CONCEPTS,
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -468,6 +501,109 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Evolution',
         concept_ids: ['natural_selection', 'speciation', 'evidence_evolution'],
       },
+      {
+        id: 'ecology',
+        heLabel: 'אקולוגיה',
+        enLabel: 'Ecology',
+        concept_ids: ['photosynthesis', 'natural_selection', 'speciation', 'evidence_evolution'],
+      },
+      {
+        id: 'human-systems',
+        heLabel: 'מערכות הגוף',
+        enLabel: 'Human Body Systems',
+        concept_ids: ['cell_structure', 'cell_division', 'gene_expression', 'photosynthesis'],
+      },
+    ],
+  },
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // BIOLOGY — Bagrut 5 units (same KG scope as 4pt until 5pt-specific nodes land)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'biology-5pt',
+    heLabel: 'ביולוגיה לבגרות — 5 יחידות',
+    enLabel: 'Bagrut Biology — 5 Units',
+    emoji: '🧬',
+    points_levels: ['biology_5pt'],
+    concept_ids: BIOLOGY_5PT_CONCEPTS,
+    sections: [
+      {
+        id: 'cell-biology',
+        heLabel: 'ביולוגיה של התא',
+        enLabel: 'Cell Biology',
+        concept_ids: ['cell_structure', 'cell_division', 'photosynthesis'],
+      },
+      {
+        id: 'genetics',
+        heLabel: 'גנטיקה',
+        enLabel: 'Genetics',
+        concept_ids: ['dna_structure', 'heredity_mendelian', 'gene_expression'],
+      },
+      {
+        id: 'evolution',
+        heLabel: 'אבולוציה',
+        enLabel: 'Evolution',
+        concept_ids: ['natural_selection', 'speciation', 'evidence_evolution'],
+      },
+      {
+        id: 'ecology',
+        heLabel: 'אקולוגיה',
+        enLabel: 'Ecology',
+        concept_ids: ['photosynthesis', 'natural_selection', 'speciation', 'evidence_evolution'],
+      },
+      {
+        id: 'human-systems',
+        heLabel: 'מערכות הגוף',
+        enLabel: 'Human Body Systems',
+        concept_ids: ['cell_structure', 'cell_division', 'gene_expression', 'photosynthesis'],
+      },
+    ],
+  },
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // UNIVERSITY PREP — מכינה (calculus, LA, stats, mechanics)
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'makhina',
+    heLabel: 'מכינה אקדמית',
+    enLabel: 'University Prep (מכינה)',
+    emoji: '🎓',
+    points_levels: ['makhina'],
+    concept_ids: MAKHINA_CONCEPTS,
+    sections: [
+      {
+        id: 'calculus-intensive',
+        heLabel: 'חשבון אינפיניטסימלי',
+        enLabel: 'Calculus Intensive',
+        concept_ids: [
+          'integrals_intro',
+          'definite_integrals',
+          'integrals_applications',
+          'derivatives_intro',
+          'derivatives_applications',
+          'sequences_arithmetic',
+          'sequences_geometric',
+          'limits',
+        ],
+      },
+      {
+        id: 'linear-algebra-intro',
+        heLabel: 'אלגברה לינארית — מבוא',
+        enLabel: 'Linear Algebra Intro',
+        concept_ids: ['la_vectors', 'la_matrices', 'la_diagonalization'],
+      },
+      {
+        id: 'statistics-and-probability',
+        heLabel: 'סטטיסטיקה והסתברות',
+        enLabel: 'Statistics & Probability',
+        concept_ids: ['statistics_descriptive', 'probability_basic'],
+      },
+      {
+        id: 'physics-mechanics',
+        heLabel: 'פיזיקה — מכניקה',
+        enLabel: 'Physics — Mechanics',
+        concept_ids: MAKHINA_PHYSICS_CONCEPTS,
+      },
     ],
   },
 
@@ -546,6 +682,9 @@ export const GOAL_TO_LEVEL: Record<string, PointsLevel> = {
   bagrut_math_5pt: '5pt',
   bagrut_physics: 'hs_physics',
   bagrut_biology_4pt: 'biology_4pt',
+  bagrut_biology_5pt: 'biology_5pt',
+  makhina: 'makhina',
+  university_prep: 'makhina',
   calculus1: 'calc1',
   linear_algebra: 'la',
 };

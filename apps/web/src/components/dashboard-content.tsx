@@ -2,7 +2,7 @@
 
 import type { ComponentType, ReactNode } from 'react';
 import Link from 'next/link';
-import { Flame, CheckCircle2, Star, CalendarClock, BookOpen, Clock } from 'lucide-react';
+import { Flame, CheckCircle2, Star, CalendarClock, BookOpen, Clock, ClipboardList } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { Progress } from '@asf/ui/progress';
@@ -218,6 +218,35 @@ export function DashboardContent({
           </div>
         </div>
       </div>
+
+      <section className="mb-8">
+        <h2 className="font-display mb-4 text-xl font-semibold">
+          {isHe ? 'פעולות מהירות' : 'Quick Actions'}
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Link
+            href="/app/quiz/mock-exam"
+            className="card-punch group flex items-start gap-4 rounded-2xl p-5 transition-transform hover:scale-[1.01]"
+          >
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-amber to-accent-magenta text-primary-foreground">
+              <ClipboardList className="h-6 w-6" aria-hidden />
+            </span>
+            <div>
+              <h3 className="font-display font-semibold text-foreground group-hover:text-primary">
+                {isHe ? 'בחינת בגרות מדומה' : 'Timed Mock Exam'}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {isHe ? 'Timed Mock Exam' : 'בחינת בגרות מדומה'}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {isHe
+                  ? 'מבחן מוגבל בזמן בסגנון בגרות — 45–90 דקות'
+                  : 'Timed Bagrut-style exam — 45–90 minutes'}
+              </p>
+            </div>
+          </Link>
+        </div>
+      </section>
 
       <section>
         <h2 className="font-display mb-4 text-xl font-semibold">{t.agents}</h2>

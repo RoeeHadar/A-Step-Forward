@@ -13,7 +13,7 @@ import {
 } from '@/lib/neon-db';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
 import kg from '@/lib/kg-data.json';
-import { CURRICULUM_CATEGORIES, conceptIdsForLevel } from '@/lib/curriculum-categories';
+import { CURRICULUM_CATEGORIES, conceptIdsForLevel, getCategoryById } from '@/lib/curriculum-categories';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
@@ -117,6 +117,8 @@ function isInBagrutScope(conceptId: string, mathTrack: MathTrack): boolean {
   return true;
 }
 
+const MAKHINA_CONCEPTS = getCategoryById('makhina')?.concept_ids ?? [];
+
 interface UiSubjectFilter {
   kgSubject: 'math' | 'physics' | 'biology' | null;
   mathTrack?: MathTrack;
@@ -124,6 +126,8 @@ interface UiSubjectFilter {
   conceptAllowlist?: string[];
   /** Maps to a CurriculumCategory id for section grouping */
   categoryId?: string;
+  /** Curriculum-defined slug — valid even if absent from content_sections */
+  recognized?: boolean;
 }
 
 function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
@@ -149,9 +153,11 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     uiSubject === 'bio_4' ||
     uiSubject === 'bio-4'
   )
-    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt' };
+    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt', recognized: true };
   if (uiSubject === 'biology_5pt' || uiSubject === 'biology-5pt')
-    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt' };
+    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-5pt', recognized: true };
+  if (uiSubject === 'makhina' || uiSubject === 'university_prep')
+    return { kgSubject: null, conceptAllowlist: MAKHINA_CONCEPTS, categoryId: 'makhina', recognized: true };
   if (uiSubject === 'high_school_math_3_points')
     return { kgSubject: 'math', mathTrack: '3pt', categoryId: 'math-hs-3' };
   if (uiSubject === 'high_school_math_4_points')
@@ -177,7 +183,7 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     uiSubject === 'middle_school_physics' || uiSubject === 'bagrut_physics'
   ) return { kgSubject: 'physics', categoryId: 'physics-hs' };
   if (uiSubject.includes('physics')) return { kgSubject: 'physics', categoryId: 'physics-hs' };
-  if (uiSubject.includes('biology')) return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt' };
+  if (uiSubject.includes('biology')) return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt', recognized: true };
   if (uiSubject.includes('math')) return { kgSubject: 'math' };
   return { kgSubject: null };
 }
@@ -215,6 +221,9 @@ const STATUS_CONFIG = {
 } as const;
 
 const SUBJECT_ALIASES: Record<string, string> = {
+  biology: 'biology_4pt',
+  'biology-4pt': 'biology_4pt',
+  'biology-5pt': 'biology_5pt',
   'high-school-math-3-pts': 'high_school_math_3_points',
   'high-school-math-4-pts': 'high_school_math_4_points',
   'high-school-math-5-pts': 'high_school_math_5_points',
@@ -242,16 +251,17 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
 
   const filter = uiSubjectFilter(subject);
   const allowlist = filter.conceptAllowlist ? new Set(filter.conceptAllowlist) : null;
-  const conceptsForSubject = filter.kgSubject
-    ? kgConcepts.filter((c) => {
-        if (c.subject !== filter.kgSubject) return false;
-        if (allowlist && !allowlist.has(c.id)) return false;
-        if (filter.mathTrack && filter.kgSubject === 'math' && !isInBagrutScope(c.id, filter.mathTrack)) {
-          return false;
-        }
-        return true;
-      })
-    : [];
+  const conceptsForSubject = allowlist
+    ? kgConcepts.filter((c) => allowlist.has(c.id))
+    : filter.kgSubject
+      ? kgConcepts.filter((c) => {
+          if (c.subject !== filter.kgSubject) return false;
+          if (filter.mathTrack && filter.kgSubject === 'math' && !isInBagrutScope(c.id, filter.mathTrack)) {
+            return false;
+          }
+          return true;
+        })
+      : [];
 
   const conceptIds = conceptsForSubject.map((c) => c.id);
   const [bagrut, coverage, lessonMeta, clerkUser] = await Promise.all([
@@ -275,9 +285,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
       const trackSource = meta?.math_track ?? indexEntry?.math_track;
       const inTrack =
         filter.mathTrack && filter.kgSubject === 'math'
-          ? Boolean(trackSource?.includes(filter.mathTrack))
+          ? !trackSource || trackSource.includes(filter.mathTrack)
           : filter.biologyTrack && filter.kgSubject === 'biology'
-            ? Boolean(trackSource?.includes(filter.biologyTrack))
+            ? !trackSource || trackSource.includes(filter.biologyTrack)
             : true;
       const mastery = masteryMap.get(c.id);
       const status = masteryStatus(mastery?.score);
@@ -285,7 +295,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
     })
     .filter((c) => c.inTrack);
 
-  if (!known && bagrut.length === 0 && conceptsWithCoverage.length === 0) {
+  if (!known && !filter.recognized && bagrut.length === 0 && conceptsWithCoverage.length === 0) {
     notFound();
   }
 
