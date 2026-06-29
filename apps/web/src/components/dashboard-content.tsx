@@ -2,16 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Clock } from 'lucide-react';
+import { ChevronRight, Clock, Sparkles } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
-import { agentDisplayNames, type AgentName } from '@asf/schemas/agents';
+import type { AgentName } from '@asf/schemas/agents';
 import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { useI18n } from '@/providers/i18n-provider';
 import { DueReviewsWidget } from '@/components/due-reviews-widget';
 import { currentActiveWeek } from '@/lib/learning-path-types';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
+import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
 import type { LearnerStreak } from '@/lib/neon-db';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
 
@@ -28,7 +29,7 @@ const STR = {
   he: {
     welcome: (name: string) => `ברוך הבא חזרה, ${name}!`,
     subtitleNoDate: 'בוא נלמד משהו חדש היום',
-    daysUntilExam: (n: number) => `${n} ימים עד לבגרות`,
+    daysUntilExam: (n: number) => `${n} ימים עד הבגרות`,
     examToday: 'הבגרות היום!',
     streak: (n: number) => `🔥 ${n} ימים רצף`,
     estGrade: (g: number) => `ציון משוער: ~${g}`,
@@ -67,11 +68,46 @@ const STR = {
   },
 } as const;
 
-const COMPACT_AGENTS: Array<{ agent: AgentName; emoji: string }> = [
-  { agent: 'tutor', emoji: '📚' },
-  { agent: 'coach', emoji: '💪' },
-  { agent: 'qa_explainer', emoji: '💡' },
-  { agent: 'mentor', emoji: '🌟' },
+const AGENT_CARDS: Array<{
+  agent: AgentName;
+  emoji: string;
+  name_he: string;
+  name_en: string;
+  desc_he: string;
+  desc_en: string;
+}> = [
+  {
+    agent: 'tutor',
+    emoji: '🎓',
+    name_he: 'מורה',
+    name_en: 'Tutor',
+    desc_he: 'מדריך עם שאלות — ללמידה עמוקה',
+    desc_en: 'Guides with questions — deep understanding',
+  },
+  {
+    agent: 'qa_explainer',
+    emoji: '💡',
+    name_he: 'מסביר',
+    name_en: 'Q&A',
+    desc_he: 'עונה ישירות מתוך החומר',
+    desc_en: 'Direct answers from the curriculum',
+  },
+  {
+    agent: 'coach',
+    emoji: '🏋️',
+    name_he: 'מאמן',
+    name_en: 'Coach',
+    desc_he: 'תרגול יומי ועיוון בחולשות',
+    desc_en: 'Daily drills targeting your weak spots',
+  },
+  {
+    agent: 'mentor',
+    emoji: '🧭',
+    name_he: 'מנטור',
+    name_en: 'Mentor',
+    desc_he: 'מוטיבציה, הרגלים ותכנון',
+    desc_en: 'Motivation, habits, and planning',
+  },
 ];
 
 const MAX_PLAN_ITEMS = 5;
@@ -124,7 +160,7 @@ function EstimatedGradePill({ isHe }: { isHe: boolean }) {
 
   const t = STR[isHe ? 'he' : 'en'];
   return (
-    <span className="inline-flex items-center rounded-full border border-border bg-surface-2/60 px-3 py-1 text-sm text-muted-foreground">
+    <span className="card-punch inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground">
       {t.estGrade(grade)}
     </span>
   );
@@ -135,13 +171,16 @@ function PlanItemRow({
   isHe,
   pointsGroup,
   subjects,
+  isFirst,
 }: {
   concept: PlanConcept;
   isHe: boolean;
   pointsGroup?: string | null;
   subjects?: string[] | null;
+  isFirst?: boolean;
 }) {
-  const t = STR[isHe ? 'he' : 'en'];
+  const locale = isHe ? 'he' : 'en';
+  const t = STR[locale];
   const href = learnConceptHrefFromProfile(
     concept.concept_id,
     concept.subject,
@@ -150,26 +189,48 @@ function PlanItemRow({
   );
   const estMinutes = lessonsById.get(concept.concept_id)?.est_minutes;
   const status = masteryStatus(concept.mastery, isHe);
+  const emoji = subjectIcon(concept.subject);
+  const subjectName = getSubjectLabel(concept.subject, locale);
 
   return (
     <Link
       href={href}
-      className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-surface-1/40 px-4 py-3 transition-colors hover:border-primary/40 hover:bg-surface-2/40"
+      className={cn(
+        'group flex items-center gap-3 rounded-xl p-4 transition-all duration-200 hover:scale-[1.01]',
+        isFirst ? 'iridescent-border ring-2 ring-primary/40' : 'card-punch',
+      )}
     >
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl" aria-hidden>
+        {emoji}
+      </span>
+
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-foreground" dir="auto">
           {conceptDisplayName(concept, isHe)}
         </p>
-        {estMinutes != null ? (
-          <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
-            <Clock className="h-3 w-3" aria-hidden />
-            {t.minutes(estMinutes)}
-          </p>
-        ) : null}
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <span className="text-xs text-muted-foreground">{subjectName}</span>
+          {estMinutes != null ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+              <Clock className="h-3 w-3" aria-hidden />
+              {t.minutes(estMinutes)}
+            </span>
+          ) : null}
+        </div>
       </div>
-      <Badge variant={status.variant} className="shrink-0 text-xs">
-        {status.label}
-      </Badge>
+
+      <div className="flex shrink-0 items-center gap-2">
+        <Badge variant={status.variant} className="text-xs">
+          {status.label}
+        </Badge>
+        <ChevronRight
+          className={cn(
+            'h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5',
+            isHe && 'rotate-180 group-hover:-translate-x-0.5',
+          )}
+          aria-hidden
+        />
+      </div>
     </Link>
   );
 }
@@ -189,17 +250,21 @@ export function DashboardContent({
   pointsGroup?: string | null;
   subjects?: string[] | null;
 }) {
-  const { messages, locale } = useI18n();
+  const { locale } = useI18n();
   const isHe = locale === 'he';
   const t = STR[isHe ? 'he' : 'en'];
   const name = firstName(displayName);
 
-  const subtitle = useMemo(() => {
-    if (!nextTestDate) return t.subtitleNoDate;
+  const { subtitle, isExamCountdown } = useMemo(() => {
+    if (!nextTestDate) {
+      return { subtitle: t.subtitleNoDate, isExamCountdown: false };
+    }
     const exam = new Date(nextTestDate);
     const daysLeft = Math.ceil((exam.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-    if (daysLeft <= 0) return t.examToday;
-    return t.daysUntilExam(daysLeft);
+    if (daysLeft <= 0) {
+      return { subtitle: t.examToday, isExamCountdown: true };
+    }
+    return { subtitle: t.daysUntilExam(daysLeft), isExamCountdown: true };
   }, [nextTestDate, t]);
 
   const week = plan ? currentActiveWeek(plan) : undefined;
@@ -209,23 +274,34 @@ export function DashboardContent({
 
   return (
     <div dir={isHe ? 'rtl' : 'ltr'} className="space-y-8">
-      {/* Section 1 — Welcome */}
-      <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight text-foreground">
-          {t.welcome(name)}
+      {/* Section 1 — Welcome hero */}
+      <header className="space-y-4">
+        <h1 className="font-display text-3xl font-bold tracking-tight">
+          <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
+            {t.welcome(name)}
+          </span>
         </h1>
-        <p className="mt-1 text-muted-foreground">{subtitle}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+
+        {isExamCountdown ? (
+          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+            {subtitle}
+          </span>
+        ) : (
+          <p className="text-muted-foreground">{subtitle}</p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-2">
           {streakDays > 0 ? (
-            <span className="inline-flex items-center rounded-full border border-border bg-surface-2/60 px-3 py-1 text-sm">
+            <span className="card-punch inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium">
               {t.streak(streakDays)}
             </span>
           ) : null}
           <EstimatedGradePill isHe={isHe} />
         </div>
+
         <Link
           href="/app/exams"
-          className="mt-3 inline-block text-sm text-muted-foreground transition-colors hover:text-primary"
+          className="inline-block text-sm text-muted-foreground transition-colors hover:text-primary"
         >
           {t.goToExams}
         </Link>
@@ -233,21 +309,27 @@ export function DashboardContent({
 
       {/* Section 2 — Learning Plan */}
       <section>
-        <h2 className="font-display mb-4 text-xl font-semibold">{t.planTitle}</h2>
+        <h2 className="font-display mb-4 flex items-center gap-2 text-xl font-semibold">
+          <Sparkles className="h-5 w-5 text-primary" aria-hidden />
+          <span className="bg-gradient-to-r from-primary to-accent-cyan bg-clip-text text-transparent">
+            {t.planTitle}
+          </span>
+        </h2>
         {planItems.length > 0 ? (
-          <div className="space-y-2">
-            {planItems.map((concept) => (
+          <div className="space-y-3">
+            {planItems.map((concept, idx) => (
               <PlanItemRow
                 key={concept.concept_id}
                 concept={concept}
                 isHe={isHe}
                 pointsGroup={pointsGroup}
                 subjects={subjects}
+                isFirst={idx === 0}
               />
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-border/60 bg-surface-1/40 p-6 text-center">
+          <div className="card-punch rounded-2xl p-6 text-center">
             <p className="font-medium">{t.noPlanTitle}</p>
             <p className="mt-1 text-sm text-muted-foreground">{t.noPlanBlurb}</p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -267,21 +349,26 @@ export function DashboardContent({
 
       {/* Section 4 — Compact Agents */}
       <section>
-        <h2 className="font-display mb-3 text-xl font-semibold">{t.agents}</h2>
-        <div className="flex flex-wrap gap-2">
-          {COMPACT_AGENTS.map(({ agent, emoji }) => (
+        <h2 className="font-display mb-4 text-xl font-semibold">{t.agents}</h2>
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {AGENT_CARDS.map(({ agent, emoji, name_he, name_en, desc_he, desc_en }) => (
             <Link
               key={agent}
               href={`/app/chat/${agent}`}
               className={cn(
-                'inline-flex items-center gap-2 rounded-xl border border-border/60',
-                'bg-surface-1/40 px-4 py-2.5 text-sm font-medium transition-colors',
-                'hover:border-primary/40 hover:bg-surface-2/40',
+                'card-punch group flex flex-col gap-2 rounded-xl p-4 transition-all duration-200',
+                'hover:scale-[1.01] hover:ring-2 hover:ring-primary/40',
               )}
             >
-              <span aria-hidden>{emoji}</span>
-              {(messages.dashboard.agentNames as Record<string, string>)?.[agent] ??
-                agentDisplayNames[agent]}
+              <span className="text-2xl" aria-hidden>
+                {emoji}
+              </span>
+              <p className="font-display font-semibold text-foreground">
+                {isHe ? name_he : name_en}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {isHe ? desc_he : desc_en}
+              </p>
             </Link>
           ))}
         </div>

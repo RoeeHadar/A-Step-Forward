@@ -7,6 +7,7 @@ import { Button } from '@asf/ui/button';
 import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { currentActiveWeek } from '@/lib/learning-path-types';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
+import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
 
 /**
@@ -34,7 +35,7 @@ const STR = {
     no_weeks: 'אין עדיין שבועות בתכנית.',
     progress: 'התקדמות',
     sections_label: 'סעיפים בספר',
-    browse_subject: (s: string) => `עיין בתכני ${subjectHe(s)}`,
+    browse_subject: (s: string, lang: Lang) => `עיין בתכני ${getSubjectLabel(s, lang)}`,
     not_assessed: 'טרם הוערך',
     mastery_pct: (p: number) => `${p}% שליטה`,
   },
@@ -48,23 +49,11 @@ const STR = {
     no_weeks: 'No weeks in this plan yet.',
     progress: 'Progress',
     sections_label: 'Textbook sections',
-    browse_subject: (s: string) => `Browse ${s} content`,
+    browse_subject: (s: string, lang: Lang) => `Browse ${getSubjectLabel(s, lang)} content`,
     not_assessed: 'Not assessed',
     mastery_pct: (p: number) => `${p}% mastery`,
   },
 } as const;
-
-const SUBJECT_HE: Record<string, string> = {
-  math: 'מתמטיקה',
-  physics: 'פיזיקה',
-  chemistry: 'כימיה',
-  cs: 'מדעי המחשב',
-  english: 'אנגלית',
-};
-
-function subjectHe(s: string): string {
-  return SUBJECT_HE[s.toLowerCase()] ?? s;
-}
 
 const STATUS_HE: Record<string, string> = {
   active: 'פעיל',
@@ -104,15 +93,23 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
   const progressPct = Math.round(mastery * 100);
   const name = displayName(concept, lang);
   const lessonHref = learnConceptHrefFromProfile(concept.concept_id, concept.subject);
+  const emoji = subjectIcon(concept.subject);
+  const subjectName = getSubjectLabel(concept.subject, lang);
 
   return (
     <Link href={lessonHref} className="block transition-opacity hover:opacity-90">
     <Card className="glass-surface border-border/60" dir={isHe ? 'rtl' : 'ltr'}>
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <CardTitle className="text-base" dir="auto">
-            {name}
-          </CardTitle>
+          <div className="flex min-w-0 items-start gap-2">
+            <span className="text-lg" aria-hidden>{emoji}</span>
+            <div className="min-w-0">
+              <CardTitle className="text-base" dir="auto">
+                {name}
+              </CardTitle>
+              <p className="mt-0.5 text-xs text-muted-foreground">{subjectName}</p>
+            </div>
+          </div>
           <Badge variant={masteryBadgeVariant(concept.mastery)}>
             {masteryLabel(concept.mastery, lang)}
           </Badge>
