@@ -62,7 +62,7 @@ export async function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
 
       <Button asChild variant="outline">
         <Link href="/app?completed=1">
-          {isHe ? '✓ סיימתי את השיעור' : '✓ Mark lesson done'}
+          {isHe ? '✓ סיימתי את השיעור' : '✓ Mark lesson complete'}
         </Link>
       </Button>
       <Button asChild>

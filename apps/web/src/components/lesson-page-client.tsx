@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
@@ -105,6 +106,21 @@ export function LessonPageClient({
 
       <LessonReader data={data} lang={lang} learnerLevel={learnerLevel} />
       <LessonQuizPanel data={data} lang={lang} conceptId={conceptId} learnerLevel={learnerLevel} />
+
+      <div className="mt-8 flex flex-wrap gap-3 border-t border-border/60 pt-8">
+        <Link
+          href="/app?completed=1"
+          className="inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+        >
+          {lang === 'he' ? '✓ סיימתי את השיעור' : '✓ Mark lesson complete'}
+        </Link>
+        <Link
+          href="/app"
+          className="inline-flex rounded-lg border border-border bg-surface-1/50 px-5 py-2.5 text-sm font-medium hover:border-primary/40"
+        >
+          {lang === 'he' ? 'חזרה ללוח הבקרה' : 'Back to Dashboard'}
+        </Link>
+      </div>
     </div>
   );
 }

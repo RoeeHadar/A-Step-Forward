@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -801,6 +802,22 @@ export function LessonQuizPanel({
           lessonId={lesson.id}
           conceptId={conceptId}
         />
+      ) : null}
+
+      {score.answered > 0 ? (
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-border/60 bg-surface-1/30 p-4">
+          <p className="text-sm text-muted-foreground">
+            {lang === 'he'
+              ? `עניתם על ${score.answered} שאלות — ${score.correct} נכונות`
+              : `You answered ${score.answered} questions — ${score.correct} correct`}
+          </p>
+          <Link
+            href="/app?completed=1"
+            className="inline-flex rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
+          >
+            {lang === 'he' ? 'חזרה ללוח הבקרה' : 'Back to Dashboard'}
+          </Link>
+        </div>
       ) : null}
     </section>
   );

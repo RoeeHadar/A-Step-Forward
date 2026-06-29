@@ -2462,6 +2462,50 @@ function masteryToBagrutGrade(avg: number): number {
   return 45;
 }
 
+export interface PublicShareStats {
+  lessons_completed_count: number;
+  streak_days: number;
+  mastery_avg: number;
+  last_active_date: string | null;
+}
+
+/** Aggregate stats safe for public share links — no PII. */
+export async function getPublicShareStats(userId: string): Promise<PublicShareStats | null> {
+  if (!sql || !userId.trim()) return null;
+  try {
+    const profileRows = (await sql`
+      SELECT learner_id FROM learner_profiles WHERE learner_id = ${userId} LIMIT 1
+    `) as Array<{ learner_id: string }>;
+    if (profileRows.length === 0) return null;
+
+    const [streak, masteryRows] = await Promise.all([
+      getLearnerStreak(userId),
+      sql`
+        SELECT score::float AS score
+        FROM concept_mastery
+        WHERE learner_id = ${userId}
+      `,
+    ]);
+
+    const scores = (masteryRows as Array<{ score: number }>).map((r) => Number(r.score));
+    const lessons_completed_count = scores.filter((s) => s >= 0.7).length;
+    const mastery_avg =
+      scores.length > 0 ? scores.reduce((sum, s) => sum + s, 0) / scores.length : 0;
+
+    return {
+      lessons_completed_count,
+      streak_days: streak.current_days,
+      mastery_avg,
+      last_active_date: streak.last_active,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getPublicShareStats failed', err);
+    }
+    return null;
+  }
+}
+
 export async function getEstimatedBagrutScore(
   userId: string,
   subject?: string,

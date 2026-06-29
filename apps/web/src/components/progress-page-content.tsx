@@ -5,7 +5,15 @@ import { ProgressDashboard } from '@/components/progress-dashboard';
 import { useI18n } from '@/providers/i18n-provider';
 import type { LearnerProgress } from '@asf/schemas/progress';
 
-export function ProgressPageContent({ progress }: { progress: LearnerProgress }) {
+export function ProgressPageContent({
+  progress,
+  userId,
+  hasPhysicsEnrollment = false,
+}: {
+  progress: LearnerProgress;
+  userId?: string;
+  hasPhysicsEnrollment?: boolean;
+}) {
   const { messages } = useI18n();
 
   return (
@@ -15,7 +23,11 @@ export function ProgressPageContent({ progress }: { progress: LearnerProgress })
         description={messages.progress.description}
         gradientTitle
       />
-      <ProgressDashboard progress={progress} />
+      <ProgressDashboard
+        progress={progress}
+        userId={userId}
+        hasPhysicsEnrollment={hasPhysicsEnrollment}
+      />
     </div>
   );
 }

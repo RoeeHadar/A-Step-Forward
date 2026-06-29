@@ -12,6 +12,8 @@ const isPublicRoute = createRouteMatcher([
   '/app/lessons(.*)',
   '/book',
   '/api/book',
+  '/progress/share(.*)',
+  '/api/progress/public-share',
 ]);
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);

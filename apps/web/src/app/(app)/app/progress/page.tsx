@@ -1,7 +1,20 @@
 import { redirect } from 'next/navigation';
 import { ProgressPageContent } from '@/components/progress-page-content';
 import { getAuthContext } from '@/lib/auth';
-import { getProgressFromNeon } from '@/lib/neon-db';
+import { getProgressFromNeon, getLearnerProfile } from '@/lib/neon-db';
+
+function learnerHasPhysicsEnrollment(
+  profile: Awaited<ReturnType<typeof getLearnerProfile>>,
+): boolean {
+  if (!profile) return false;
+  const personality = profile.personality_profile as { hs_physics?: boolean } | null;
+  return (
+    profile.points_group === 'hs_physics' ||
+    profile.subjects.includes('physics') ||
+    profile.subjects.includes('bagrut_physics') ||
+    personality?.hs_physics === true
+  );
+}
 
 /**
  * Progress page — reads directly from Neon so the stats always match the
@@ -15,7 +28,10 @@ export default async function ProgressPage() {
   const auth = await getAuthContext();
   if (!auth) redirect('/sign-in');
 
-  const snap = await getProgressFromNeon(auth.learnerId);
+  const [snap, profile] = await Promise.all([
+    getProgressFromNeon(auth.learnerId),
+    getLearnerProfile(auth.learnerId).catch(() => null),
+  ]);
 
   // Map ProgressSnapshot → LearnerProgress shape the ProgressDashboard expects.
   const progress = {
@@ -32,5 +48,11 @@ export default async function ProgressPage() {
     })),
   };
 
-  return <ProgressPageContent progress={progress} />;
+  return (
+    <ProgressPageContent
+      progress={progress}
+      userId={auth.learnerId}
+      hasPhysicsEnrollment={learnerHasPhysicsEnrollment(profile)}
+    />
+  );
 }
