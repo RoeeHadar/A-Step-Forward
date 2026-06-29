@@ -61,10 +61,8 @@ export default async function LessonPage({
     const cookieStore = await cookies();
     const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
     const isHe = locale === 'he';
-    const primaryTitle =
-      isHe && lesson.title_he ? lesson.title_he : lesson.title_en;
-    const secondaryTitle =
-      isHe && lesson.title_he ? lesson.title_en : lesson.title_he;
+    const primaryTitle = locale === 'en' ? lesson.title_en : lesson.title_he;
+    const secondaryTitle = locale === 'he' ? lesson.title_en : null;
     const backLabel = isHe ? 'חזרה לשיעורים' : 'Back to lessons';
 
     return (

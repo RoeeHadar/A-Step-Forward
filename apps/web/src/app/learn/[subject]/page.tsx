@@ -299,7 +299,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const doneCount = conceptsWithCoverage.filter((c) => c.status === 'done').length;
   const totalWithLesson = conceptsWithCoverage.filter((c) => c.hasLesson).length;
   const subjectName = subjectLabel(subject, locale);
-  const subjectNameAlt = subjectLabel(subject, isHe ? 'en' : 'he');
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -314,11 +313,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-bold">{subjectName}</h1>
-            {subjectNameAlt !== subjectName ? (
-              <p className="mt-1 text-muted-foreground" dir={isHe ? 'ltr' : 'rtl'}>
-                {subjectNameAlt}
-              </p>
-            ) : null}
             {learnerId && totalWithLesson > 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
                 {t.lessonsCompleted

@@ -110,8 +110,6 @@ export default async function ConceptPage({
   const conceptNameHe =
     lessonData?.lesson.title_he ?? indexEntry?.title_he ?? concept?.name_he ?? null;
   const conceptName = isHe && conceptNameHe ? conceptNameHe : conceptNameEn;
-  const conceptNameAlt =
-    isHe && conceptNameHe ? conceptNameEn : conceptNameHe;
 
   const subjectName = subjectLabel(subject, locale);
   const prerequisites = concept?.prerequisites ?? [];
@@ -134,11 +132,6 @@ export default async function ConceptPage({
 
         <header className="mb-8">
           <h1 className="font-display text-3xl font-bold">{conceptName}</h1>
-          {isHe && conceptNameAlt ? (
-            <p className="mt-1 text-lg text-muted-foreground" dir="ltr">
-              {conceptNameAlt}
-            </p>
-          ) : null}
           {prerequisites.length > 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{t.prerequisites}:</span>{' '}

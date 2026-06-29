@@ -32,6 +32,10 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   physics_pre_university: { en: 'Physics Pre-University', he: 'פיזיקה לפני אוניברסיטה', icon: '⚡' },
   physics_1: { en: 'Physics 1', he: 'פיזיקה 1', icon: '⚛️' },
   physics_2: { en: 'Physics 2', he: 'פיזיקה 2', icon: '🔋' },
+  high_school_physics: { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  'high-school-physics': { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  biology: { en: 'Biology', he: 'ביולוגיה', icon: '🧬' },
+  chemistry: { en: 'Chemistry', he: 'כימיה', icon: '⚗️' },
 };
 
 export function subjectLabel(slug: string, locale: 'en' | 'he' = 'en'): string {
