@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 import { DashboardContent } from '@/components/dashboard-content';
 import type { NextLessonInfo } from '@/components/dashboard-content';
 import { AgentsIntroBanner } from '@/components/agents-intro-banner';
@@ -6,6 +7,8 @@ import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
 import { LearnerStreakCard } from '@/components/learner-streak-card';
 import { ActivityHeatmap } from '@/components/activity-heatmap';
 import { NoPlanEmptyState } from '@/components/no-plan-empty-state';
+import { DueReviewsWidget } from '@/components/due-reviews-widget';
+import { MicroWinToast } from '@/components/micro-win-toast';
 import { getAuthContext } from '@/lib/auth';
 import {
   getDashboardSnapshot,
@@ -194,8 +197,12 @@ export default async function DashboardPage() {
     <>
       {goalStatus ? <GoalCompletionBanner status={goalStatus} /> : null}
       <AgentsIntroBanner />
+      <Suspense fallback={null}>
+        <MicroWinToast />
+      </Suspense>
       <div className="mb-8 space-y-6">
         <LearnerStreakCard streak={streak} activity={activity} />
+        <DueReviewsWidget />
         <ActivityHeatmap daily={daily} weekly={weekly} />
         {!plan ? <NoPlanEmptyState /> : <LearningPlanDashboard plan={plan} />}
       </div>
@@ -205,6 +212,7 @@ export default async function DashboardPage() {
         nextTestName={profile?.next_test_name ?? null}
         nextTestDate={profile?.next_test_date ?? null}
         nextLesson={nextLesson}
+        streak={streak}
       />
     </>
   );

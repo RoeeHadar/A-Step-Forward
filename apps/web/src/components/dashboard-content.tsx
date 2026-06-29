@@ -10,7 +10,7 @@ import { cn } from '@asf/ui';
 import { agentDisplayNames, type AgentName } from '@asf/schemas/agents';
 import { useI18n } from '@/providers/i18n-provider';
 import { AnimatedCounter } from '@/components/animated-counter';
-import type { DashboardSnapshot } from '@/lib/neon-db';
+import type { DashboardSnapshot, LearnerStreak } from '@/lib/neon-db';
 
 export interface NextLessonInfo {
   concept_id: string;
@@ -47,6 +47,7 @@ const dashboardAgents: Array<{
   gradientClass: string;
 }> = [
   { agent: 'tutor', emoji: '📚', gradientClass: 'from-primary to-accent-magenta' },
+  { agent: 'qa_explainer', emoji: '💡', gradientClass: 'from-accent-cyan to-primary' },
   { agent: 'mentor', emoji: '🌟', gradientClass: 'from-accent-amber to-accent-magenta' },
   { agent: 'coach', emoji: '💪', gradientClass: 'from-accent-cyan to-primary' },
   { agent: 'reviewer', emoji: '✍️', gradientClass: 'from-accent-magenta to-accent-cyan' },
@@ -58,12 +59,14 @@ export function DashboardContent({
   nextTestName,
   nextTestDate,
   nextLesson,
+  streak,
 }: {
   displayName: string;
   snapshot: DashboardSnapshot;
   nextTestName?: string | null;
   nextTestDate?: string | null;
   nextLesson?: NextLessonInfo | null;
+  streak?: LearnerStreak;
 }) {
   const { messages, locale } = useI18n();
   const t = messages.dashboard;
@@ -79,6 +82,18 @@ export function DashboardContent({
       : null;
   const showReengagementBanner =
     daysAway !== null && daysAway >= 3 && daysAway < 60;
+
+  const daysSinceLastActive =
+    streak?.last_active != null
+      ? Math.floor(
+          (Date.now() - new Date(streak.last_active).getTime()) / (1000 * 60 * 60 * 24),
+        )
+      : null;
+  const showWelcomeBackCard =
+    streak != null &&
+    streak.current_days === 0 &&
+    daysSinceLastActive !== null &&
+    daysSinceLastActive > 3;
 
   const reengagementHref = nextLesson
     ? learnConceptHref(nextLesson.subject, nextLesson.concept_id)
@@ -108,6 +123,10 @@ export function DashboardContent({
       )}
 
       {nextLesson && <NextLessonCard lesson={nextLesson} isHe={isHe} />}
+
+      {showWelcomeBackCard && (
+        <WelcomeBackCard isHe={isHe} />
+      )}
 
       {showReengagementBanner && daysAway !== null && (
         <ReengagementBanner daysAway={daysAway} href={reengagementHref} isHe={isHe} />
@@ -223,7 +242,7 @@ export function DashboardContent({
 
       <section>
         <h2 className="font-display mb-4 text-xl font-semibold">{t.agents}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {dashboardAgents.map(({ agent, emoji, gradientClass }) => (
             <Link
               key={agent}
@@ -269,6 +288,7 @@ const NEXT_LESSON_STR = {
       'Recommended next': 'ההמלצה הבאה',
     } as Record<string, string>,
     cta: 'התחל שיעור',
+    quick15: '15 דקות מהירות',
   },
   en: {
     heading: '⚡ Study Now',
@@ -280,7 +300,13 @@ const NEXT_LESSON_STR = {
       'Recommended next': 'Recommended next',
     } as Record<string, string>,
     cta: 'Start lesson',
+    quick15: 'Quick 15 min',
   },
+} as const;
+
+const WELCOME_BACK_STR = {
+  he: 'ברוך הבא חזרה! 10 דקות עכשיו יחזירו אותך לרצף.',
+  en: 'Welcome back! 10 minutes now gets you back on track.',
 } as const;
 
 const REENGAGEMENT_STR = {
@@ -293,6 +319,19 @@ const REENGAGEMENT_STR = {
     cta: 'Continue learning',
   },
 } as const;
+
+function WelcomeBackCard({ isHe }: { isHe: boolean }) {
+  return (
+    <div
+      className="card-punch mb-6 rounded-2xl border border-primary/20 bg-primary/5 p-4"
+      dir={isHe ? 'rtl' : 'ltr'}
+    >
+      <p className="text-sm text-muted-foreground">
+        {WELCOME_BACK_STR[isHe ? 'he' : 'en']}
+      </p>
+    </div>
+  );
+}
 
 function ReengagementBanner({
   daysAway,
@@ -354,15 +393,20 @@ function NextLessonCard({
           </Badge>
         </div>
       </div>
-      <Button
-        asChild
-        className="shrink-0 bg-gradient-to-r from-primary to-accent-magenta font-semibold text-primary-foreground hover:opacity-90"
-      >
-        <Link href={learnConceptHref(lesson.subject, lesson.concept_id)}>
-          <BookOpen className="mr-2 h-4 w-4" aria-hidden />
-          {t.cta}
-        </Link>
-      </Button>
+      <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+        <Button
+          asChild
+          className="bg-gradient-to-r from-primary to-accent-magenta font-semibold text-primary-foreground hover:opacity-90"
+        >
+          <Link href={learnConceptHref(lesson.subject, lesson.concept_id)}>
+            <BookOpen className="mr-2 h-4 w-4" aria-hidden />
+            {t.cta}
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/app/chat/coach?mode=quick&duration=15">{t.quick15}</Link>
+        </Button>
+      </div>
     </div>
   );
 }

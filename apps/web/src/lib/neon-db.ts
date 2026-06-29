@@ -2430,10 +2430,18 @@ export interface EstimatedBagrutResult {
 }
 
 function conceptIdsForSubjectParam(subject: string): string[] {
+  const concepts = (kg as { concepts: Array<{ id: string; subject: string; points_levels?: string[] }> }).concepts;
+  if (subject === 'hs_physics') {
+    return concepts
+      .filter(
+        (c) =>
+          c.subject === 'physics' && (c.points_levels ?? []).includes('hs_physics'),
+      )
+      .map((c) => c.id);
+  }
   const match = subject.match(/^(.+?)_(\d+)$/);
   const base = match?.[1] ?? subject;
   const level = match?.[2] ? `${match[2]}pt` : null;
-  const concepts = (kg as { concepts: Array<{ id: string; subject: string; points_levels?: string[] }> }).concepts;
   return concepts
     .filter((c) => {
       if (c.subject !== base) return false;

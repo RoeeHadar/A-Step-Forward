@@ -25,17 +25,19 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
   const [gradeEstimate, setGradeEstimate] = useState<{
     estimatedGrade: number;
     masteryAvg: number;
+    subject?: string;
   } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    void fetch('/api/progress/estimated-grade?subject=math_5')
+    void fetch('/api/progress/estimated-grade')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!cancelled && data && typeof data.estimatedGrade === 'number') {
           setGradeEstimate({
             estimatedGrade: data.estimatedGrade,
             masteryAvg: Number(data.masteryAvg ?? 0),
+            subject: typeof data.subject === 'string' ? data.subject : undefined,
           });
         }
       })
@@ -44,6 +46,14 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
       cancelled = true;
     };
   }, []);
+
+  const trackLabel = (() => {
+    const subject = gradeEstimate?.subject ?? 'math_5';
+    if (subject === 'hs_physics') return isHe ? 'פיזיקה' : 'physics';
+    const units = subject.match(/math_(\d)/)?.[1];
+    if (units) return isHe ? `${units} יחידות` : `${units}pt math`;
+    return isHe ? '5 יחידות' : '5pt math';
+  })();
 
   const masteryData = progress.concepts.map((c) => {
     const row = c as typeof c & { concept_name_he?: string | null };
@@ -120,10 +130,9 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
             </p>
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
-              {t.estimatedGrade}:{' '}
-              <span className="font-medium text-foreground">
-                {t.estimatedGradeValue.replace('{grade}', String(gradeEstimate.estimatedGrade))}
-              </span>
+              {t.estimatedGradeWithTrack
+                .replace('{track}', trackLabel)
+                .replace('{grade}', String(gradeEstimate.estimatedGrade))}
             </p>
           )
         ) : null}

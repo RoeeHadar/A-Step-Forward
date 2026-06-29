@@ -147,6 +147,7 @@ const messages = {
       progressTrend: 'progress trend',
       estimatedGrade: 'Estimated grade',
       estimatedGradeValue: '~{grade}',
+      estimatedGradeWithTrack: 'Estimated grade ({track}): ~{grade}',
       practiceMoreForEstimate: 'Practice more to see your estimate',
     },
     lessons: {
@@ -318,7 +319,7 @@ const messages = {
         tutor: 'מורה',
         mentor: 'מנטור',
         coach: 'מאמן',
-        qa_explainer: 'שאלות ותשובות',
+        qa_explainer: 'מסביר שאלות',
         reviewer: 'מבקר',
         note_taker: 'רושם הערות',
         engagement: 'מעורבות',
@@ -368,6 +369,7 @@ const messages = {
       progressTrend: 'מגמת התקדמות',
       estimatedGrade: 'ציון משוער',
       estimatedGradeValue: '~{grade}',
+      estimatedGradeWithTrack: 'ציון משוער ({track}): ~{grade}',
       practiceMoreForEstimate: 'תרגל עוד כדי לראות הערכה',
     },
     lessons: {
