@@ -69,6 +69,11 @@ function SubjectCard({ s, isMakhina }: { s: SubjectCard; isMakhina: boolean }) {
       <p className="mt-1 text-sm text-muted-foreground" dir="rtl">
         {subjectLabel(s.subject, 'he')}
       </p>
+      {isMakhina ? (
+        <p className="mt-1.5 text-sm text-muted-foreground" dir="rtl">
+          מסלול לבניית בסיס מתמטי לפני האוניברסיטה
+        </p>
+      ) : null}
     </Link>
   );
 }

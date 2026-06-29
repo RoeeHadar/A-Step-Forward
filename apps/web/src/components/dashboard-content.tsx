@@ -333,6 +333,12 @@ export function DashboardContent({
             <p className="text-muted-foreground">{subtitle}</p>
           )}
 
+          {subjects?.includes('makhina') || pointsGroup === 'makhina' ? (
+            <p className="text-sm text-muted-foreground" dir={isHe ? 'rtl' : 'ltr'}>
+              {isHe ? 'המסע שלך לאוניברסיטה 🎓' : 'Your university prep journey 🎓'}
+            </p>
+          ) : null}
+
           <div className="flex flex-wrap items-center gap-2">
             {streakDays > 0 ? (
               <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium">
