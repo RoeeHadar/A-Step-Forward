@@ -73,23 +73,40 @@ function shouldShowSection(section: LessonSection, learnerLevel: LessonPointsLev
   return levelIndex(learnerLevel) >= levelIndex(section.level_min);
 }
 
+function levelVariantBody(
+  variant: NonNullable<LessonSection['body_by_level']>[LessonPointsLevel],
+  lang: Lang,
+  fallback: string,
+): string {
+  if (!variant) return fallback;
+  const text = lang === 'he' ? variant.body_he_md : variant.body_en_md;
+  if (!text?.trim()) return fallback;
+  // Guard against truncated Hebrew level variants (common seed-data issue)
+  if (lang === 'he' && variant.body_en_md?.trim()) {
+    const ratio = text.length / variant.body_en_md.length;
+    if (ratio < 0.65) return fallback;
+  }
+  return text;
+}
+
 function getBodyForLevel(
   section: LessonSection,
   lang: Lang,
   learnerLevel: LessonPointsLevel | null,
 ): string {
+  const fallback = lang === 'he' ? section.body_he_md : section.body_en_md;
   if (learnerLevel && section.body_by_level) {
     // Try exact level first, then fall back to the closest lower level
     const idx = levelIndex(learnerLevel);
     for (let i = idx; i >= 0; i--) {
       const lvl = LEVEL_ORDER[i];
-      if (lvl && section.body_by_level[lvl]) {
-        const variant = section.body_by_level[lvl]!;
-        return lang === 'he' ? variant.body_he_md : variant.body_en_md;
+      const variant = lvl ? section.body_by_level[lvl] : undefined;
+      if (variant) {
+        return levelVariantBody(variant, lang, fallback);
       }
     }
   }
-  return lang === 'he' ? section.body_he_md : section.body_en_md;
+  return fallback;
 }
 
 const LEVEL_LABELS: Record<LessonPointsLevel, { en: string; he: string; color: string }> = {
