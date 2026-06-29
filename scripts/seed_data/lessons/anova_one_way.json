@@ -6,219 +6,127 @@
   "title_he": "ניתוח שונות חד-כיווני (ANOVA)",
   "duration_min": 40,
   "level_min": "university",
-  "agent_hints": "Students confuse ANOVA with multiple t-tests. A significant F only means some group differs; use post-hoc tests for pairs.",
+  "agent_hints": "The most common misconception is treating ANOVA as multiple t-tests; students must understand that doing k(k-1)/2 pairwise t-tests inflates the Type I error rate (familywise error). The F-statistic is a *ratio* of variances — stress this interpretation: if group means genuinely differ, MS_Between is inflated relative to MS_Within; if H₀ is true, both estimate the same population variance. The assumption of homoscedasticity (equal variances) is often violated silently; Levene's test is a practical diagnostic. Post-hoc tests are only applicable after a significant F — applying Tukey HSD pre-emptively is a conceptual error students need to be warned against.",
   "sections": [
     {
-      "id": "purpose_hypotheses",
+      "id": "anova_purpose",
       "title_en": "Purpose and Hypotheses",
-      "title_he": "מטרה והשערות",
+      "title_he": "מטרה ומשפטי השערה",
       "level_min": "university",
-      "body_en_md": "**One-way ANOVA** tests whether **population means of $k \\ge 3$ groups** are equal.\n\n$$H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$$\n\n$$H_a: \\text{at least one } \\mu_i \\text{ differs}$$",
-      "body_he_md": "**ANOVA חד-כיווני** בודק שוויון ממוצעי $k \\ge 3$ קבוצות.\n\n$$H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$$"
+      "body_en_md": "## When Do We Need ANOVA?\n\nSuppose you have **$k \\geq 3$ groups** and you want to test whether their population means are all equal. Running multiple $t$-tests inflates the **Type I error** (false positive) rate. With three groups, three pairwise $t$-tests at $\\alpha = 0.05$ each give a familywise error rate of about $1 - 0.95^3 \\approx 14\\%$ — far above the intended 5%.\n\n**One-Way ANOVA** tests all groups simultaneously with a single test, controlling the error rate at $\\alpha$.\n\n---\n\n## Hypotheses\n\nLet $\\mu_1, \\mu_2, \\ldots, \\mu_k$ denote the population means of the $k$ groups.\n\n$$H_0:\\; \\mu_1 = \\mu_2 = \\cdots = \\mu_k \\quad \\text{(all group means are equal)}$$\n\n$$H_a:\\; \\text{at least one } \\mu_i \\text{ differs from the rest}$$\n\n**Important:** $H_a$ does **not** say which group(s) differ — only that at least one does. Finding *which* pairs differ requires post-hoc tests (covered later).\n\n---\n\n## Setup\n\n- $k$ groups; group $i$ has $n_i$ observations.\n- $N = n_1 + n_2 + \\cdots + n_k$ is the total sample size.\n- $\\bar{x}_i$ = sample mean of group $i$.\n- $\\bar{x}_{\\text{grand}} = \\dfrac{1}{N}\\sum_{i=1}^k \\sum_{j=1}^{n_i} x_{ij}$ = overall (grand) mean.",
+      "body_he_md": "## מתי נזדקק ל-ANOVA?\n\nנניח שיש לנו **$k \\geq 3$ קבוצות** ואנחנו רוצים לבדוק האם ממוצעי האוכלוסייה שלהן שווים. ביצוע מבחני $t$ מרובים מגדיל את **שגיאת סוג I** (חיובי כוזב). בשלוש קבוצות, שלושה מבחני $t$ זוגיים ברמת $\\alpha = 0.05$ כל אחד מניבים שגיאה משפחתית של כ-$1 - 0.95^3 \\approx 14\\%$ — הרבה מעל 5% המיועדים.\n\n**ANOVA חד-כיווני** בוחן את כל הקבוצות בו-זמנית במבחן אחד, ושולט בשיעור השגיאה ברמת $\\alpha$.\n\n---\n\n## השערות\n\nיהיו $\\mu_1, \\mu_2, \\ldots, \\mu_k$ ממוצעי האוכלוסייה של $k$ קבוצות.\n\n$$H_0:\\; \\mu_1 = \\mu_2 = \\cdots = \\mu_k$$\n\n$$H_a:\\; \\text{לפחות } \\mu_i \\text{ אחד שונה מהשאר}$$\n\n**חשוב:** $H_a$ אינה אומרת אילו קבוצות שונות — רק שלפחות אחת שונה. מציאת *אילו* זוגות שונים מצריכה מבחני לאחר (Post-hoc).\n\n---\n\n## הגדרות\n\n- $k$ קבוצות; לקבוצה $i$ יש $n_i$ תצפיות.\n- $N = n_1 + n_2 + \\cdots + n_k$ — גודל המדגם הכולל.\n- $\\bar{x}_i$ — ממוצע קבוצה $i$.\n- $\\bar{x}_{\\text{grand}}$ — הממוצע הכללי (Grand Mean)."
     },
     {
-      "id": "partitioning_variance",
-      "title_en": "Partitioning Total Variance",
-      "title_he": "פירוק שונות",
+      "id": "variance_partitioning",
+      "title_en": "Partitioning the Total Variance",
+      "title_he": "פירוק השונות הכוללת",
       "level_min": "university",
-      "body_en_md": "$$SS_{Total}=SS_B+SS_W$$\n\n$$SS_B=\\sum n_i(\\bar x_i-\\bar x)^2,\\quad SS_W=\\sum\\sum(x_{ij}-\\bar x_i)^2$$",
-      "body_he_md": "$$SS_{Total}=SS_B+SS_W$$"
+      "body_en_md": "## The Core Idea: Variance Decomposition\n\nANOVA works by partitioning the **total variation** in the data into two components:\n\n$$SS_{\\text{Total}} = SS_{\\text{Between}} + SS_{\\text{Within}}$$\n\n---\n\n### $SS_{\\text{Total}}$ — Total Sum of Squares\n\nMeasures the total spread of all observations around the grand mean:\n\n$$SS_{\\text{Total}} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_{\\text{grand}})^2$$\n\n---\n\n### $SS_{\\text{Between}}$ — Between-Groups Sum of Squares\n\nMeasures how much each **group mean** differs from the grand mean (weighted by group size):\n\n$$SS_{\\text{Between}} = \\sum_{i=1}^k n_i (\\bar{x}_i - \\bar{x}_{\\text{grand}})^2$$\n\nLarge $SS_{\\text{Between}}$ ↔ group means are far apart ↔ evidence against $H_0$.\n\n---\n\n### $SS_{\\text{Within}}$ — Within-Groups Sum of Squares\n\nMeasures variability of individual observations around **their own group mean** (also called the error / residual):\n\n$$SS_{\\text{Within}} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_i)^2$$\n\nThis reflects random variation — noise that exists even if all group means were equal.\n\n---\n\n**Intuition:** If $H_0$ is true, between-group variation is just due to sampling noise and should be similar to within-group variation. If $H_a$ is true, between-group variation should be *much larger* than within-group variation.",
+      "body_he_md": "## הרעיון המרכזי: פירוק שונות\n\nANOVA פועלת על-ידי פירוק **השונות הכוללת** לשני מרכיבים:\n\n$$SS_{\\text{Total}} = SS_{\\text{Between}} + SS_{\\text{Within}}$$\n\n---\n\n### $SS_{\\text{Total}}$ — סכום ריבועים כולל\n\nמודד את הפיזור הכולל של כל התצפיות סביב הממוצע הכללי:\n\n$$SS_{\\text{Total}} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_{\\text{grand}})^2$$\n\n---\n\n### $SS_{\\text{Between}}$ — סכום ריבועים בין-קבוצות\n\nמודד כמה **ממוצע כל קבוצה** שונה מהממוצע הכללי:\n\n$$SS_{\\text{Between}} = \\sum_{i=1}^k n_i (\\bar{x}_i - \\bar{x}_{\\text{grand}})^2$$\n\n$SS_{\\text{Between}}$ גדול ↔ ממוצעי הקבוצות רחוקים זה מזה ↔ עדות נגד $H_0$.\n\n---\n\n### $SS_{\\text{Within}}$ — סכום ריבועים בתוך-קבוצות\n\nמודד שונות של תצפיות בודדות סביב **ממוצע הקבוצה שלהן** (נקרא גם שגיאה/שאריות):\n\n$$SS_{\\text{Within}} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_i)^2$$\n\nזו שונות אקראית — רעש הקיים גם אם כל ממוצעי הקבוצות היו שווים.\n\n---\n\n**אינטואיציה:** אם $H_0$ נכון, השונות בין-קבוצות נובעת מדגימה בלבד ותהיה דומה לשונות בתוך-קבוצות. אם $H_a$ נכון, השונות בין-קבוצות תהיה **גדולה בהרבה**."
     },
     {
-      "id": "f_statistic_table",
-      "title_en": "F-Statistic and ANOVA Table",
-      "title_he": "F וטבלת ANOVA",
+      "id": "mean_squares_f",
+      "title_en": "Mean Squares and the F-Statistic",
+      "title_he": "ריבועי ממוצע וסטטיסטי F",
       "level_min": "university",
-      "body_en_md": "$$MS_B=SS_B/(k-1),\\ MS_W=SS_W/(N-k),\\ F=MS_B/MS_W$$\n\nUnder $H_0$, $F\\sim F(k-1,N-k)$.\n\n| Source | SS | df | MS | F |",
-      "body_he_md": "$$F=MS_B/MS_W$$"
+      "body_en_md": "## Mean Squares (Variance Estimates)\n\nDividing each sum of squares by its degrees of freedom gives a **mean square** — an estimate of variance.\n\n$$MS_{\\text{Between}} = \\frac{SS_{\\text{Between}}}{k - 1}$$\n\n$$MS_{\\text{Within}} = \\frac{SS_{\\text{Within}}}{N - k}$$\n\nwhere:\n- $df_{\\text{Between}} = k - 1$ (one df per group, minus one for grand mean constraint)\n- $df_{\\text{Within}} = N - k$ (one df per observation, minus one per group)\n\n---\n\n## The F-Statistic\n\n$$\\boxed{F = \\frac{MS_{\\text{Between}}}{MS_{\\text{Within}}}}$$\n\n**Under $H_0$:** Both $MS_{\\text{Between}}$ and $MS_{\\text{Within}}$ estimate the same population variance $\\sigma^2$, so $F \\approx 1$.\n\n**Under $H_a$:** $MS_{\\text{Between}}$ is inflated by real between-group differences, so $F \\gg 1$.\n\nUnder $H_0$, $F$ follows an **$F$-distribution with $(k-1,\\; N-k)$ degrees of freedom**:\n\n$$F \\sim F(k-1,\\; N-k)$$\n\nThe $F$-distribution is always non-negative and right-skewed. We **reject $H_0$** when $F > F_{\\alpha, k-1, N-k}$ (the critical value from the $F$-table) or equivalently when $p$-value $< \\alpha$.",
+      "body_he_md": "## ריבועי ממוצע (אמדני שונות)\n\nחלוקת כל סכום ריבועים בדרגות החופש שלו נותנת **ריבוע ממוצע** — אמד לשונות.\n\n$$MS_{\\text{Between}} = \\frac{SS_{\\text{Between}}}{k - 1}$$\n\n$$MS_{\\text{Within}} = \\frac{SS_{\\text{Within}}}{N - k}$$\n\nכאשר:\n- $df_{\\text{Between}} = k - 1$ (דרגת חופש אחת לכל קבוצה, פחות אחת לאילוץ הממוצע הכללי)\n- $df_{\\text{Within}} = N - k$ (דרגת חופש לכל תצפית, פחות אחת לכל קבוצה)\n\n---\n\n## סטטיסטי F\n\n$$\\boxed{F = \\frac{MS_{\\text{Between}}}{MS_{\\text{Within}}}}$$\n\n**תחת $H_0$:** שניהם $MS_{\\text{Between}}$ ו-$MS_{\\text{Within}}$ מאמדים את אותה שונות $\\sigma^2$, ולכן $F \\approx 1$.\n\n**תחת $H_a$:** $MS_{\\text{Between}}$ מנופח על-ידי הבדלים בין-קבוצתיים אמיתיים, ולכן $F \\gg 1$.\n\nתחת $H_0$, $F$ מתפלג בהתפלגות **$F$ עם $(k-1,\\; N-k)$ דרגות חופש**:\n\n$$F \\sim F(k-1,\\; N-k)$$\n\nהתפלגות $F$ אי-שלילית ומוטה ימינה. **דוחים $H_0$** כאשר $F > F_{\\alpha, k-1, N-k}$ (ערך קריטי מטבלת $F$), או שקוות לכך כאשר $p < \\alpha$."
     },
     {
-      "id": "worked_example",
-      "title_en": "Worked Example ? Teaching Methods",
-      "title_he": "דוגמה פתורה",
+      "id": "worked_example_anova",
+      "title_en": "Worked Example: Three Teaching Methods",
+      "title_he": "דוגמה פתורה: שלוש שיטות הוראה",
       "level_min": "university",
-      "body_en_md": "A,B,C with n=5: means 72,80,90; variances 8. $\\bar x=80$, $SS_B=820$, $SS_W=96$, $F=51.25>3.89$ ? reject $H_0$.",
-      "body_he_md": "$F=51.25$ ? דוחים $H_0$"
+      "body_en_md": "## Problem\n\nA researcher compares three teaching methods on an exam scored 0–100. Each method is tested on $n_i = 5$ students ($N = 15$, $k = 3$). Test at $\\alpha = 0.05$.\n\n| Student | Method A (Lecture) | Method B (Interactive) | Method C (Online) |\n|---|---|---|---|\n| 1 | 62 | 72 | 55 |\n| 2 | 75 | 88 | 68 |\n| 3 | 72 | 85 | 70 |\n| 4 | 65 | 80 | 62 |\n| 5 | 76 | 85 | 65 |\n| **Mean** | **70** | **82** | **64** |\n\n---\n\n## Step 1: Grand Mean\n\n$$\\bar{x}_{\\text{grand}} = \\frac{5(70) + 5(82) + 5(64)}{15} = \\frac{1080}{15} = 72$$\n\n---\n\n## Step 2: SS_Between\n\n$$SS_B = 5(70-72)^2 + 5(82-72)^2 + 5(64-72)^2 = 5(4) + 5(100) + 5(64) = 20 + 500 + 320 = 840$$\n\n---\n\n## Step 3: SS_Within\n\n$$SS_{W,A} = (62-70)^2+(75-70)^2+(72-70)^2+(65-70)^2+(76-70)^2 = 64+25+4+25+36 = 154$$\n$$SS_{W,B} = (72-82)^2+(88-82)^2+(85-82)^2+(80-82)^2+(85-82)^2 = 100+36+9+4+9 = 158$$\n$$SS_{W,C} = (55-64)^2+(68-64)^2+(70-64)^2+(62-64)^2+(65-64)^2 = 81+16+36+4+1 = 138$$\n$$SS_W = 154 + 158 + 138 = 450$$\n\n---\n\n## Step 4: F-Statistic\n\n$$MS_B = \\frac{840}{2} = 420, \\qquad MS_W = \\frac{450}{12} = 37.5$$\n\n$$F = \\frac{420}{37.5} = 11.20$$\n\n---\n\n## Step 5: Decision\n\nFrom $F$-tables: $F_{0.05,\\,2,\\,12} = 3.89$.\n\nSince $F = 11.20 > 3.89$, we **reject $H_0$**.\n\n**Conclusion:** There is significant evidence ($p < 0.05$) that at least one teaching method produces a different mean score. Post-hoc tests are needed to identify which pairs differ.",
+      "body_he_md": "## בעיה\n\nחוקר משווה שלוש שיטות הוראה על בחינה עם ציון 0–100. כל שיטה נבדקת על $n_i = 5$ תלמידים ($N = 15$, $k = 3$). בדוק ברמת $\\alpha = 0.05$.\n\n| תלמיד | שיטה A (הרצאה) | שיטה B (אינטראקטיבית) | שיטה C (מקוונת) |\n|---|---|---|---|\n| 1 | 62 | 72 | 55 |\n| 2 | 75 | 88 | 68 |\n| 3 | 72 | 85 | 70 |\n| 4 | 65 | 80 | 62 |\n| 5 | 76 | 85 | 65 |\n| **ממוצע** | **70** | **82** | **64** |\n\n---\n\n## שלב 1: ממוצע כללי\n\n$$\\bar{x}_{\\text{grand}} = \\frac{5(70) + 5(82) + 5(64)}{15} = \\frac{1080}{15} = 72$$\n\n---\n\n## שלב 2: $SS_{\\text{Between}}$\n\n$$SS_B = 5(70-72)^2 + 5(82-72)^2 + 5(64-72)^2 = 20 + 500 + 320 = 840$$\n\n---\n\n## שלב 3: $SS_{\\text{Within}}$\n\n$$SS_{W,A} = 64+25+4+25+36 = 154$$\n$$SS_{W,B} = 100+36+9+4+9 = 158$$\n$$SS_{W,C} = 81+16+36+4+1 = 138$$\n$$SS_W = 450$$\n\n---\n\n## שלב 4: סטטיסטי F\n\n$$MS_B = \\frac{840}{2} = 420, \\qquad MS_W = \\frac{450}{12} = 37.5$$\n\n$$F = \\frac{420}{37.5} = 11.20$$\n\n---\n\n## שלב 5: החלטה\n\nמטבלות $F$: $F_{0.05,\\,2,\\,12} = 3.89$.\n\nמאחר ש-$F = 11.20 > 3.89$, **דוחים $H_0$**.\n\n**מסקנה:** יש עדות מובהקת ($p < 0.05$) שלפחות שיטת הוראה אחת מניבה ציון ממוצע שונה. נדרשים מבחני Post-hoc לזיהוי אילו זוגות שונים."
+    },
+    {
+      "id": "anova_table_structure",
+      "title_en": "The ANOVA Table",
+      "title_he": "טבלת ANOVA",
+      "level_min": "university",
+      "body_en_md": "## Standard ANOVA Table Format\n\n| Source | SS | df | MS | F |\n|---|---|---|---|---|\n| Between Groups | $SS_B$ | $k-1$ | $MS_B = SS_B/(k-1)$ | $F = MS_B/MS_W$ |\n| Within Groups (Error) | $SS_W$ | $N-k$ | $MS_W = SS_W/(N-k)$ | |\n| **Total** | $SS_T$ | $N-1$ | | |\n\n---\n\n## Filled In for Our Example\n\n| Source | SS | df | MS | F |\n|---|---|---|---|---|\n| Between Groups | 840 | 2 | 420 | **11.20** |\n| Within Groups | 450 | 12 | 37.5 | |\n| **Total** | 1290 | 14 | | |\n\n**Note:** $SS_T = SS_B + SS_W = 840 + 450 = 1290$ and $df_T = df_B + df_W = 2 + 12 = 14 = N - 1$ ✓\n\n---\n\n**Quick checks:** Always verify that (1) the SS and df columns both add up correctly, and (2) the $F$-statistic has the right degrees of freedom in the numerator and denominator.",
+      "body_he_md": "## פורמט טבלת ANOVA הסטנדרטית\n\n| מקור | SS | df | MS | F |\n|---|---|---|---|---|\n| בין-קבוצות | $SS_B$ | $k-1$ | $MS_B = SS_B/(k-1)$ | $F = MS_B/MS_W$ |\n| בתוך-קבוצות (שגיאה) | $SS_W$ | $N-k$ | $MS_W = SS_W/(N-k)$ | |\n| **כולל** | $SS_T$ | $N-1$ | | |\n\n---\n\n## ממולאת לדוגמה שלנו\n\n| מקור | SS | df | MS | F |\n|---|---|---|---|---|\n| בין-קבוצות | 840 | 2 | 420 | **11.20** |\n| בתוך-קבוצות | 450 | 12 | 37.5 | |\n| **כולל** | 1290 | 14 | | |\n\n**הערה:** $SS_T = 840 + 450 = 1290$ ו-$df_T = 2 + 12 = 14 = N - 1$ ✓\n\n---\n\n**בדיקות מהירות:** תמיד וודאו ש-(1) עמודות SS ו-df מסתכמות נכון, ו-(2) סטטיסטי $F$ מספר הנכון של דרגות חופש במונה ובמכנה."
     },
     {
       "id": "assumptions_posthoc",
-      "title_en": "Assumptions and Post-Hoc",
-      "title_he": "הנחות ו-Post-Hoc",
+      "title_en": "Assumptions and Post-Hoc Tests",
+      "title_he": "הנחות ומבחני לאחר",
       "level_min": "university",
-      "body_en_md": "Independence, normality, homoscedasticity (Levene). Post-hoc: Tukey HSD, Bonferroni when $H_0$ rejected.",
-      "body_he_md": "Tukey, Bonferroni לזוגות."
+      "body_en_md": "## Assumptions of One-Way ANOVA\n\n1. **Independence** — observations within and between groups are independent (controlled by study design).\n2. **Normality** — each group's population is approximately normally distributed. Robust to mild violations for large $n$ (CLT).\n3. **Homoscedasticity** — all groups share the same population variance $\\sigma^2$. This is the most critical assumption.\n   - **Levene's test** checks $H_0: \\sigma_1^2 = \\sigma_2^2 = \\cdots = \\sigma_k^2$. A significant Levene's test suggests using Welch's ANOVA instead.\n\n---\n\n## Post-Hoc Tests — Finding Which Pairs Differ\n\nA significant ANOVA F-test only tells you that *at least one* mean differs. To identify which specific pairs $\\mu_i \\neq \\mu_j$ are different, run a **post-hoc test**.\n\n### Tukey's HSD (Honestly Significant Difference)\n- Controls the familywise error rate at $\\alpha$\n- Tests all $\\binom{k}{2}$ pairwise comparisons simultaneously\n- Recommended when group sizes are equal\n\n### Bonferroni Correction\n- Divides $\\alpha$ by the number of comparisons: $\\alpha^* = \\alpha / m$, where $m = \\binom{k}{2}$\n- More conservative than Tukey HSD; use when you have a small number of pre-planned comparisons\n\n**Key rule:** Post-hoc tests should only be run **after** a significant overall F-test. Running them regardless is called *data dredging* and inflates Type I error.",
+      "body_he_md": "## הנחות ANOVA חד-כיווני\n\n1. **עצמאות** — תצפיות בתוך ובין קבוצות עצמאיות (נשלט על-ידי עיצוב המחקר).\n2. **נורמליות** — האוכלוסייה של כל קבוצה מתפלגת בערך נורמלית. עמיד להפרות קלות ל-$n$ גדול (מ.ג.מ.).\n3. **הומוסקדסטיות** — כל הקבוצות חולקות את אותה שונות אוכלוסייה $\\sigma^2$. זוהי ההנחה הקריטית ביותר.\n   - **מבחן לוין** בוחן $H_0: \\sigma_1^2 = \\sigma_2^2 = \\cdots = \\sigma_k^2$. מבחן לוין מובהק מציע להשתמש ב-ANOVA של Welch.\n\n---\n\n## מבחני Post-hoc — מציאת אילו זוגות שונים\n\nמבחן F של ANOVA המובהק אומר לנו רק ש*לפחות* ממוצע אחד שונה. לזיהוי אילו זוגות $\\mu_i \\neq \\mu_j$ שונים, נריץ **מבחן Post-hoc**.\n\n### Tukey's HSD (הבדל מובהק כנה)\n- שולט בשיעור השגיאה המשפחתית ברמת $\\alpha$\n- בוחן את כל $\\binom{k}{2}$ ההשוואות הזוגיות בו-זמנית\n- מומלץ כאשר גדלי הקבוצות שווים\n\n### תיקון בונפרוני\n- מחלק את $\\alpha$ במספר ההשוואות: $\\alpha^* = \\alpha / m$, כאשר $m = \\binom{k}{2}$\n- שמרני יותר מ-Tukey HSD; השתמש כאשר יש מספר קטן של השוואות מתוכננות מראש\n\n**כלל מפתח:** מבחני Post-hoc יש להריץ **רק לאחר** מבחן F כולל מובהק."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "ANOVA compares:",
-      "body_he": "ANOVA:",
+      "body_en": "Why should one-way ANOVA be used instead of multiple pairwise $t$-tests when comparing 4 groups?",
+      "body_he": "מדוע יש להשתמש ב-ANOVA חד-כיווני במקום מבחני $t$ זוגיים מרובים בהשוואת 4 קבוצות?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "Two groups only",
-          "text_he": "2",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "Three or more group means",
-          "text_he": "3+",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "One sample to constant",
-          "text_he": "1",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Paired data",
-          "text_he": "paired",
-          "correct": false
-        }
+        { "id": "a", "text_en": "ANOVA is computationally simpler than a single $t$-test.", "text_he": "ANOVA פשוט יותר חישובית ממבחן $t$ בודד.", "correct": false },
+        { "id": "b", "text_en": "Multiple $t$-tests inflate the familywise Type I error rate above $\\alpha$.", "text_he": "מבחני $t$ מרובים מגדילים את שיעור שגיאת הסוג I המשפחתי מעל $\\alpha$.", "correct": true },
+        { "id": "c", "text_en": "ANOVA does not require the normality assumption.", "text_he": "ANOVA אינו דורש הנחת נורמליות.", "correct": false },
+        { "id": "d", "text_en": "ANOVA directly identifies which groups differ.", "text_he": "ANOVA מזהה ישירות אילו קבוצות שונות.", "correct": false }
       ],
-      "explanation_en": "k>=3 groups.",
-      "explanation_he": "k>=3."
+      "explanation_en": "With 4 groups there are $\\binom{4}{2}=6$ pairwise $t$-tests. Each at $\\alpha=0.05$ gives a familywise error of $1-(0.95)^6 \\approx 26\\%$. ANOVA controls the overall error at $\\alpha$. Note that ANOVA itself does not specify which pairs differ — that requires post-hoc tests.",
+      "explanation_he": "עם 4 קבוצות יש $\\binom{4}{2}=6$ מבחני $t$ זוגיים. כל אחד ברמת $\\alpha=0.05$ מניב שגיאה משפחתית של $1-(0.95)^6 \\approx 26\\%$. ANOVA שולט בשגיאה הכוללת ברמת $\\alpha$. שים לב ש-ANOVA עצמו אינו מציין אילו זוגות שונים — לכך נדרשים מבחני Post-hoc."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "F=MS_B/MS_W ~",
-      "body_he": "F ~",
+      "body_en": "In a one-way ANOVA with $k=4$ groups and $N=28$ total observations, what are the degrees of freedom for $MS_{\\text{Between}}$ and $MS_{\\text{Within}}$?",
+      "body_he": "ב-ANOVA חד-כיווני עם $k=4$ קבוצות ו-$N=28$ תצפיות כוללות, מהן דרגות החופש של $MS_{\\text{Between}}$ ו-$MS_{\\text{Within}}$?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "t(N-1)",
-          "text_he": "t",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "chi2(k-1)",
-          "text_he": "chi2",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "F(k-1,N-k)",
-          "text_he": "F",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "N(0,1)",
-          "text_he": "N",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$df_B = 3,\\; df_W = 24$", "text_he": "$df_B = 3,\\; df_W = 24$", "correct": true },
+        { "id": "b", "text_en": "$df_B = 4,\\; df_W = 24$", "text_he": "$df_B = 4,\\; df_W = 24$", "correct": false },
+        { "id": "c", "text_en": "$df_B = 3,\\; df_W = 27$", "text_he": "$df_B = 3,\\; df_W = 27$", "correct": false },
+        { "id": "d", "text_en": "$df_B = 4,\\; df_W = 28$", "text_he": "$df_B = 4,\\; df_W = 28$", "correct": false }
       ],
-      "explanation_en": "F(k-1,N-k).",
-      "explanation_he": "F."
+      "explanation_en": "$df_{\\text{Between}} = k-1 = 4-1 = 3$ and $df_{\\text{Within}} = N-k = 28-4 = 24$. Check: $df_B + df_W = 3 + 24 = 27 = N-1$ ✓.",
+      "explanation_he": "$df_{\\text{Between}} = k-1 = 4-1 = 3$ ו-$df_{\\text{Within}} = N-k = 28-4 = 24$. בדיקה: $3 + 24 = 27 = N-1$ ✓."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Within df =",
-      "body_he": "Within df:",
+      "body_en": "Given $SS_{\\text{Between}} = 120$ with $df_B = 3$ and $SS_{\\text{Within}} = 180$ with $df_W = 36$, what is the $F$-statistic?",
+      "body_he": "בהינתן $SS_{\\text{Between}} = 120$ עם $df_B = 3$ ו-$SS_{\\text{Within}} = 180$ עם $df_W = 36$, מהו סטטיסטי $F$?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "k-1",
-          "text_he": "k-1",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "N-k",
-          "text_he": "N-k",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "N-1",
-          "text_he": "N-1",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "k",
-          "text_he": "k",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$F = 8.00$", "text_he": "$F = 8.00$", "correct": true },
+        { "id": "b", "text_en": "$F = 0.67$", "text_he": "$F = 0.67$", "correct": false },
+        { "id": "c", "text_en": "$F = 4.00$", "text_he": "$F = 4.00$", "correct": false },
+        { "id": "d", "text_en": "$F = 2.00$", "text_he": "$F = 2.00$", "correct": false }
       ],
-      "explanation_en": "N-k.",
-      "explanation_he": "N-k."
+      "explanation_en": "$MS_B = 120/3 = 40$. $MS_W = 180/36 = 5$. $F = 40/5 = 8.00$.",
+      "explanation_he": "$MS_B = 120/3 = 40$. $MS_W = 180/36 = 5$. $F = 40/5 = 8.00$."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Teaching example F =",
-      "body_he": "F =",
+      "body_en": "A significant overall $F$-test in ANOVA tells us:",
+      "body_he": "מבחן $F$ כולל מובהק ב-ANOVA מספר לנו:",
       "options": [
-        {
-          "id": "a",
-          "text_en": "8.54",
-          "text_he": "8.54",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "51.25",
-          "text_he": "51.25",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "410",
-          "text_he": "410",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "102.5",
-          "text_he": "102.5",
-          "correct": false
-        }
+        { "id": "a", "text_en": "All group means are significantly different from each other.", "text_he": "כל ממוצעי הקבוצות שונים זה מזה באופן מובהק.", "correct": false },
+        { "id": "b", "text_en": "At least one group mean differs from at least one other.", "text_he": "לפחות ממוצע קבוצה אחד שונה מלפחות ממוצע אחר.", "correct": true },
+        { "id": "c", "text_en": "The largest group mean differs from the smallest.", "text_he": "ממוצע הקבוצה הגדול ביותר שונה מהקטן ביותר.", "correct": false },
+        { "id": "d", "text_en": "The within-group variance is negligible.", "text_he": "השונות בתוך-קבוצות זניחה.", "correct": false }
       ],
-      "explanation_en": "410/8=51.25.",
-      "explanation_he": "51.25."
+      "explanation_en": "ANOVA's $H_a$ is non-specific: it only says at least one $\\mu_i$ differs. The test does not identify *which* groups differ. For that, post-hoc tests (Tukey HSD, Bonferroni) are required after a significant result.",
+      "explanation_he": "$H_a$ של ANOVA אינה ספציפית: היא אומרת רק ש-$\\mu_i$ אחד לפחות שונה. המבחן אינו מזהה אילו קבוצות שונות. לכך נדרשים מבחני Post-hoc (Tukey HSD, Bonferroni) לאחר תוצאה מובהקת."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "After reject H0 use:",
-      "body_he": "Post-hoc:",
+      "body_en": "Levene's test in the context of one-way ANOVA is used to check:",
+      "body_he": "מבחן לוין בהקשר של ANOVA חד-כיווני משמש לבדיקת:",
       "options": [
-        {
-          "id": "a",
-          "text_en": "Re-run ANOVA",
-          "text_he": "ANOVA",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "Tukey or Bonferroni",
-          "text_he": "Tukey",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "Levene",
-          "text_he": "Levene",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "SS_T",
-          "text_he": "SS",
-          "correct": false
-        }
+        { "id": "a", "text_en": "Whether the group means are normally distributed.", "text_he": "האם ממוצעי הקבוצות מתפלגים נורמלית.", "correct": false },
+        { "id": "b", "text_en": "Whether the F-statistic exceeds the critical value.", "text_he": "האם סטטיסטי F עולה על הערך הקריטי.", "correct": false },
+        { "id": "c", "text_en": "Whether the population variances are equal across groups (homoscedasticity).", "text_he": "האם שוניות האוכלוסייה שוות בין הקבוצות (הומוסקדסטיות).", "correct": true },
+        { "id": "d", "text_en": "Whether the observations are independent.", "text_he": "האם התצפיות עצמאיות.", "correct": false }
       ],
-      "explanation_en": "Post-hoc pairs.",
-      "explanation_he": "Post-hoc."
+      "explanation_en": "Levene's test has $H_0: \\sigma_1^2 = \\sigma_2^2 = \\cdots = \\sigma_k^2$. A significant Levene's test (e.g. $p < 0.05$) indicates the homoscedasticity assumption is violated, and Welch's ANOVA (which does not assume equal variances) should be used instead.",
+      "explanation_he": "למבחן לוין $H_0: \\sigma_1^2 = \\sigma_2^2 = \\cdots = \\sigma_k^2$. מבחן לוין מובהק ($p < 0.05$) מעיד על הפרת הנחת ההומוסקדסטיות, ויש להשתמש ב-ANOVA של Welch (שאינו מניח שוויון שוניות) במקומה."
     }
   ]
 }
