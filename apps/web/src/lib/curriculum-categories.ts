@@ -81,10 +81,9 @@ const MATH_3PT_CONCEPTS = [
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_4PT_CONCEPTS = [
   ...MATH_3PT_CONCEPTS,
-  'fractions_algebraic',
-  'factoring',
-  'functions_exponential',
-  'sequences_geometric',
+  // 4pt adds: combinatorics and geometry (congruence/similarity/circles)
+  // fractions_algebraic, factoring, functions_exponential, sequences_geometric
+  // are now part of MATH_3PT_CONCEPTS (they appear on 3pt questionnaires 801–803)
   'quadrilaterals',
   'triangles_congruence',
   'circles',
@@ -200,7 +199,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'sh801-stats',
         heLabel: 'סטטיסטיקה והסתברות',
         enLabel: 'Statistics & Probability',
-        concept_ids: ['statistics_descriptive', 'probability_basic'],
+        concept_ids: ['statistics_descriptive', 'descriptive_stats', 'probability_basic'],
       },
       {
         id: 'sh802-sequences-growth',
