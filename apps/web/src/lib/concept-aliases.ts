@@ -105,6 +105,14 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   maxwell_equations: 'electromagnetic_induction',
   em_waves_propagation: 'waves_basics',
   interference_diffraction: 'optics_physical',
+  // New aliases for extended catalog concept IDs
+  hypothesis_testing_z_t: 'hypothesis_testing',
+  linear_regression_least_squares: 'descriptive_stats',
+  correlation_coefficient: 'descriptive_stats',
+  analytic_geometry_lines_circles: 'analytic_geometry',
+  logarithmic_equations: 'logarithms',
+  chi_square_goodness_of_fit: 'statistics_inference',
+  central_limit_theorem: 'statistics_inference',
 };
 
 export function resolveConceptAlias(conceptId: string): string {
