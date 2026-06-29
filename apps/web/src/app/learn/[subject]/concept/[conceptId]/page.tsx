@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
+import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import { subjectLabel } from '@/lib/subject-labels';
 import {
   dbConfigured,
@@ -39,12 +40,29 @@ const CONCEPT_ID_ALIASES: Record<string, string> = {
   basic_probability: 'probability_basic',
 };
 
+/** Level values the user can explicitly select via the ?level= toggle. */
+const LEVEL_QUERY_OVERRIDES = new Set<LessonPointsLevel>(['3pt', '4pt', '5pt']);
+
+function parseLevelQueryParam(
+  value: string | string[] | undefined,
+): LessonPointsLevel | null {
+  const raw = Array.isArray(value) ? value[0] : value;
+  if (!raw) return null;
+  const normalized = raw.trim().toLowerCase();
+  return LEVEL_QUERY_OVERRIDES.has(normalized as LessonPointsLevel)
+    ? (normalized as LessonPointsLevel)
+    : null;
+}
+
 export default async function ConceptPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ subject: string; conceptId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { subject, conceptId: rawConceptId } = await params;
+  const levelOverride = parseLevelQueryParam((await searchParams).level);
 
   if (CONCEPT_ID_ALIASES[rawConceptId]) {
     redirect(`/learn/${subject}/concept/${CONCEPT_ID_ALIASES[rawConceptId]}`);
@@ -87,6 +105,10 @@ export default async function ConceptPage({
     }
   } catch {
     // Auth not available — slug-based level already set above
+  }
+
+  if (levelOverride) {
+    learnerLevel = levelOverride;
   }
 
   // Lesson is the new authoritative source. If it exists, render it instead
@@ -133,7 +155,7 @@ export default async function ConceptPage({
           </Link>
           <span className="mx-2">/</span>
           <Link href={`/learn/${subject}`} className="hover:text-foreground">
-            {subjectName}
+            <LocalizedSubjectLabel subject={subject} />
           </Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{conceptName}</span>
@@ -204,7 +226,7 @@ export default async function ConceptPage({
             href={`/learn/${subject}`}
             className="rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
           >
-            {t.moreIn} {subjectName}
+            {t.moreIn} <LocalizedSubjectLabel subject={subject} />
           </Link>
         </section>
       </main>

@@ -44,12 +44,18 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   chemistry: { en: 'Chemistry', he: 'כימיה', icon: '⚗️' },
 };
 
+function normalizeSubjectSlug(slug: string): string {
+  return slug.trim().toLowerCase().replace(/-/g, '_');
+}
+
 export function subjectLabel(slug: string, locale: 'en' | 'he' = 'en'): string {
-  const entry = SUBJECT_LABELS[slug];
+  const normalized = normalizeSubjectSlug(slug);
+  const entry = SUBJECT_LABELS[normalized] ?? SUBJECT_LABELS[slug];
   if (!entry) return slug.replace(/_/g, ' ');
   return locale === 'he' ? entry.he : entry.en;
 }
 
 export function subjectIcon(slug: string): string {
-  return SUBJECT_LABELS[slug]?.icon ?? '📚';
+  const normalized = normalizeSubjectSlug(slug);
+  return SUBJECT_LABELS[normalized]?.icon ?? SUBJECT_LABELS[slug]?.icon ?? '📚';
 }

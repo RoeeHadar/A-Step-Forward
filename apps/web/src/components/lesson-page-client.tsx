@@ -1,9 +1,54 @@
 'use client';
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { LessonReader } from './lesson-reader';
 import { LessonQuizPanel } from './lesson-quiz-panel';
+
+const MATH_TRACK_LEVELS: LessonPointsLevel[] = ['3pt', '4pt', '5pt'];
+
+function LessonLevelToggle({
+  tracks,
+  activeLevel,
+}: {
+  tracks: string[];
+  activeLevel: LessonPointsLevel | null;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const options = MATH_TRACK_LEVELS.filter((level) => tracks.includes(level));
+  if (options.length <= 1) return null;
+
+  const current = activeLevel && options.includes(activeLevel) ? activeLevel : options[0];
+
+  function selectLevel(level: LessonPointsLevel) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('level', level);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
+  return (
+    <div className="inline-flex rounded-full border border-border bg-surface-1/50 p-1">
+      {options.map((level) => (
+        <button
+          key={level}
+          type="button"
+          onClick={() => selectLevel(level)}
+          className={`rounded-full px-3 py-1.5 text-xs font-semibold uppercase transition-colors ${
+            current === level
+              ? 'bg-primary text-primary-foreground'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          {level.replace('pt', 'PT')}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function LessonPageClient({
   data,
@@ -14,35 +59,37 @@ export function LessonPageClient({
   conceptId: string;
   learnerLevel?: LessonPointsLevel | null;
 }) {
-  // Default Hebrew — see hooks/use-language-preference.ts for rationale.
   const [lang, setLang] = useLanguagePreference('he');
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between gap-3">
-        <div className="inline-flex rounded-full border border-border bg-surface-1/50 p-1">
-          <button
-            type="button"
-            onClick={() => setLang('en')}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
-              lang === 'en'
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            English
-          </button>
-          <button
-            type="button"
-            onClick={() => setLang('he')}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
-              lang === 'he'
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            עברית
-          </button>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex rounded-full border border-border bg-surface-1/50 p-1">
+            <button
+              type="button"
+              onClick={() => setLang('en')}
+              className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
+                lang === 'en'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang('he')}
+              className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
+                lang === 'he'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              עברית
+            </button>
+          </div>
+          <LessonLevelToggle tracks={data.lesson.math_track} activeLevel={learnerLevel ?? null} />
         </div>
         <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
           AI-authored · {data.lesson.author}

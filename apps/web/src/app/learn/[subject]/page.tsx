@@ -5,7 +5,7 @@ import { CheckCircle2, Clock, RefreshCw, BookOpen } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { PremiumBadge } from '@/components/premium-badge';
 import { fetchBagrutExams, fetchSubjects } from '@/lib/content-api';
-import { subjectLabel } from '@/lib/subject-labels';
+import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import {
   fetchConceptsWithExplanations,
   fetchLessonMetaByConceptIds,
@@ -335,7 +335,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   // Stats for header
   const doneCount = conceptsWithCoverage.filter((c) => c.status === 'done').length;
   const totalWithLesson = conceptsWithCoverage.filter((c) => c.hasLesson).length;
-  const subjectName = subjectLabel(subject, locale);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -344,12 +343,16 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
         <nav className="mb-4 text-sm text-muted-foreground">
           <Link href="/learn" className="hover:text-foreground">{t.learn}</Link>
           <span className="mx-2">/</span>
-          <span className="text-foreground">{subjectName}</span>
+          <span className="text-foreground">
+            <LocalizedSubjectLabel subject={subject} />
+          </span>
         </nav>
 
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-display text-3xl font-bold">{subjectName}</h1>
+            <h1 className="font-display text-3xl font-bold">
+              <LocalizedSubjectLabel subject={subject} />
+            </h1>
             {learnerId && totalWithLesson > 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
                 {t.lessonsCompleted

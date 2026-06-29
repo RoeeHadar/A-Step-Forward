@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
-import { getAuthContext } from '@/lib/auth';
+import { auth } from '@clerk/nextjs/server';
 import { dbConfigured, fetchLessonById } from '@/lib/neon-db';
 import { getSeedLesson } from '@/lib/seed-lessons';
 import { LegacySeedLessonView } from '@/components/legacy-seed-lesson-view';
@@ -11,8 +11,8 @@ export default async function LessonPage({
 }: {
   params: Promise<{ lessonId: string }>;
 }) {
-  const auth = await getAuthContext();
-  if (!auth) redirect('/sign-in');
+  const { userId } = await auth();
+  if (!userId) redirect('/learn');
 
   const { lessonId } = await params;
 

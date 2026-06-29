@@ -12,5 +12,7 @@ export function localeDir(locale: Locale): 'ltr' | 'rtl' {
 }
 
 export function resolveLocale(value: string | null | undefined): Locale {
-  return isLocale(value) ? value : defaultLocale;
+  if (value == null) return defaultLocale;
+  const normalized = value.trim().toLowerCase();
+  return isLocale(normalized) ? normalized : defaultLocale;
 }
