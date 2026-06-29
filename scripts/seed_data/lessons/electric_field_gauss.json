@@ -1,24 +1,224 @@
 {
-  "concept_id": "electric_field_gauss",
-  "subject": "physics",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Electric Field Gauss",
-  "title_he": "Electric Field Gauss",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "electric_field_gauss",
+  "subject": "university_physics_2",
+  "title_en": "Electric Field and Gauss's Law (University)",
+  "title_he": "שדה חשמלי וחוק גאוס (אוניברסיטה)",
+  "duration_min": 24,
+  "type": "interactive",
+  "level_min": "university",
+  "agent_hints": "Students confuse flux with field strength — flux depends on orientation via $\\mathbf{E}\\cdot d\\mathbf{A}$. Emphasize that Gauss's law is always true but only useful when symmetry makes $\\oint \\mathbf{E}\\cdot d\\mathbf{A}$ trivial. For conductors in equilibrium: $\\mathbf{E}=0$ inside, charge resides on surface. Inside a uniformly charged solid sphere at $r<R$: $E(r)=kQr/R^3$, so at $r=R/2$ we get $E=kQ/(2R^2)$, not $kQ/R^2$.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "electric_flux",
+      "title_en": "Electric Flux — Surface Integral Definition",
+      "title_he": "שטף חשמלי — הגדרה אינטגרלית על פני שטח",
+      "body_en_md": "The **electric flux** through a surface $S$ measures how much of the electric field 'passes through' that surface:\n$$\\Phi_E = \\int_S \\mathbf{E} \\cdot d\\mathbf{A}$$\n\nFor a **uniform** field $\\mathbf{E}$ and flat area $\\mathbf{A}$ (with $\\theta$ the angle between $\\mathbf{E}$ and the outward normal):\n$$\\Phi_E = E A \\cos\\theta = \\mathbf{E}\\cdot\\mathbf{A}$$\n\n**Closed surface:** take $d\\mathbf{A}$ outward. Flux is positive when $\\mathbf{E}$ points outward through the surface.\n\n**Dipole in a cube:** field lines enter one face and exit another; net flux through a closed surface enclosing no net charge is zero.",
+      "body_he_md": "**שטף חשמלי** דרך פני שטח $S$ מודד כמה מהשדה החשמלי 'עובר' דרך הפני שטח:\n$$\\Phi_E = \\int_S \\mathbf{E} \\cdot d\\mathbf{A}$$\n\nעבור שדה **אחיד** $\\mathbf{E}$ ושטח שטוח $\\mathbf{A}$ (כאשר $\\theta$ הזווית בין $\\mathbf{E}$ לנורמל החיצוני):\n$$\\Phi_E = E A \\cos\\theta = \\mathbf{E}\\cdot\\mathbf{A}$$\n\n**פני שטח סגורים:** $d\\mathbf{A}$ כיוון החוצה. שטף חיובי כאשר $\\mathbf{E}$ מצביע החוצה.\n\n**דיפול בתוך קוב:** קווי השדה נכנסים ויוצאים; השטף הנקי דרך פני שטח סגורים ללא מטען נקי הוא אפס.",
+      "level_min": "university"
+    },
+    {
+      "id": "gauss_law_integral",
+      "title_en": "Gauss's Law — Integral Form",
+      "title_he": "חוק גאוס — צורה אינטגרלית",
+      "body_en_md": "Gauss's law relates the flux through any **closed** Gaussian surface to the enclosed charge:\n$$\\boxed{\\oint_S \\mathbf{E}\\cdot d\\mathbf{A} = \\frac{Q_{\\text{enc}}}{\\varepsilon_0}}$$\n\nEquivalent differential form (divergence theorem):\n$$\\nabla\\cdot\\mathbf{E} = \\frac{\\rho}{\\varepsilon_0}$$\n\nGauss's law is **exact** for any charge distribution. It becomes a **calculation tool** only when symmetry implies $\\mathbf{E}$ is constant in magnitude and normal to the Gaussian surface.\n\n**Coulomb's law recovery:** apply to a sphere of radius $r$ around point charge $Q$; by symmetry $E(r)=\\dfrac{1}{4\\pi\\varepsilon_0}\\dfrac{Q}{r^2}$.",
+      "body_he_md": "חוק גאוס קושר את השטף דרך **כל** פני שטח גאוסי סגור למטען הסגור:\n$$\\boxed{\\oint_S \\mathbf{E}\\cdot d\\mathbf{A} = \\frac{Q_{\\text{enc}}}{\\varepsilon_0}}$$\n\nצורה דיפרנציאלית (משפט הדיברגנציה):\n$$\\nabla\\cdot\\mathbf{E} = \\frac{\\rho}{\\varepsilon_0}$$\n\nחוק גאוס **מדויק** לכל התפלגות מטען. הוא **כלי חישוב** רק כאשר הסימטריה גורמת ל-$\\mathbf{E}$ להיות קבוע בגודל ונורמלי לפני השטח.\n\n**שחזור חוק קולון:** יישום על כדור ברדיוס $r$ סביב מטען נקודתי $Q$.",
+      "level_min": "university"
+    },
+    {
+      "id": "gaussian_surface_choice",
+      "title_en": "Choosing a Gaussian Surface",
+      "title_he": "בחירת פני שטח גאוסיים",
+      "body_en_md": "**Strategy:** match the symmetry of the charge distribution.\n\n| Symmetry | Gaussian surface | Field direction |\n|---|---|---|\n| Infinite plane ($\\sigma$) | Pillbox straddling plane | Normal to plane |\n| Infinite line ($\\lambda$) | Cylinder coaxial with line | Radial, $\\hat{\\mathbf{r}}$ |\n| Sphere ($Q$ or $\\rho$) | Concentric sphere | Radial |\n\nOn the chosen surface: $|\\mathbf{E}|$ is constant and $\\mathbf{E}\\parallel d\\mathbf{A}$ (or zero on end caps).\n\nThen $\\oint \\mathbf{E}\\cdot d\\mathbf{A} = E\\cdot A_{\\text{relevant}}$.",
+      "body_he_md": "**אסטרטגיה:** התאמת פני השטח לסימטריה של המטען.\n\n| סימטריה | פני שטח גאוסיים | כיוון השדה |\n|---|---|---|\n| מישור אינסופי ($\\sigma$) | גלילון חוצה את המישור | נורמלי למישור |\n| קו אינסופי ($\\lambda$) | גליל קואקסיאלי | רדיאלי, $\\hat{\\mathbf{r}}$ |\n| כדור ($Q$ או $\\rho$) | כדור קונצנטרי | רדיאלי |\n\nעל פני השטח הנבחר: $|\\mathbf{E}|$ קבוע ו-$\\mathbf{E}\\parallel d\\mathbf{A}$.\n\nאז $\\oint \\mathbf{E}\\cdot d\\mathbf{A} = E\\cdot A_{\\text{relevant}}$.",
+      "level_min": "university"
+    },
+    {
+      "id": "gauss_applications",
+      "title_en": "Applications — Plane, Line, and Sphere",
+      "title_he": "יישומים — מישור, קו וכדור",
+      "body_en_md": "**Infinite charged plane** (surface charge density $\\sigma$):\n$$E = \\frac{\\sigma}{2\\varepsilon_0} \\quad \\text{(each side)}$$\n\n**Infinite line** ($\\lambda$ C/m), cylindrical Gaussian surface radius $r$:\n$$E(r) = \\frac{\\lambda}{2\\pi\\varepsilon_0 r}$$\n\n**Solid sphere**, uniform volume charge density $\\rho$, total charge $Q=\\frac{4}{3}\\pi R^3\\rho$:\n- Outside ($r\\ge R$): $E = \\dfrac{1}{4\\pi\\varepsilon_0}\\dfrac{Q}{r^2}$\n- Inside ($r<R$): only enclosed charge $Q_{\\text{enc}}=\\rho\\cdot\\frac{4}{3}\\pi r^3$:\n$$E(r) = \\frac{\\rho r}{3\\varepsilon_0} = \\frac{kQr}{R^3}$$\nAt $r=R/2$: $\\boxed{E = \\dfrac{kQ}{2R^2}}$.",
+      "body_he_md": "**מישור טעון אינסופי** (צפיפות $\\sigma$):\n$$E = \\frac{\\sigma}{2\\varepsilon_0}$$\n\n**קו אינסופי** ($\\lambda$), גליל ברדיוס $r$:\n$$E(r) = \\frac{\\lambda}{2\\pi\\varepsilon_0 r}$$\n\n**כדור מלא**, צפיפות נפח $\\rho$, מטען כולל $Q$:\n- מחוץ ($r\\ge R$): $E = \\dfrac{1}{4\\pi\\varepsilon_0}\\dfrac{Q}{r^2}$\n- בפנים ($r<R$): מטען סגור $Q_{\\text{enc}}=\\rho\\cdot\\frac{4}{3}\\pi r^3$:\n$$E(r) = \\frac{\\rho r}{3\\varepsilon_0} = \\frac{kQr}{R^3}$$\nב-$r=R/2$: $\\boxed{E = \\dfrac{kQ}{2R^2}}$.",
+      "level_min": "university"
+    },
+    {
+      "id": "conductors_gauss",
+      "title_en": "Conductors in Electrostatic Equilibrium",
+      "title_he": "מוליכים בשיווי משקל אלקטרוסטטי",
+      "body_en_md": "In equilibrium inside a conductor:\n- $\\mathbf{E} = \\mathbf{0}$ in the bulk (free charges move until cancelled)\n- Excess charge resides on the **surface**\n- Just outside a conductor: $E_n = \\sigma/\\varepsilon_0$ (Gauss pillbox on surface)\n- Entire conductor is an **equipotential** ($V=\\text{const}$)\n\n**Cavity with no enclosed charge:** $E=0$ inside cavity (electrostatic shielding / Faraday cage).\n\nGauss's law on a surface inside the metal gives $Q_{\\text{enc}}=0$.",
+      "body_he_md": "בשיווי משקל בתוך מוליך:\n- $\\mathbf{E} = \\mathbf{0}$ בנפח (מטענים חופשיים נעים עד לביטול)\n- מטען עודף על **פני השטח** בלבד\n- מיד מחוץ למוליך: $E_n = \\sigma/\\varepsilon_0$\n- המוליך **איזופוטנציאלי** ($V=\\text{const}$)\n\n**חלל ללא מטען סגור:** $E=0$ בחלל (מיגון / כלוב פараדי).\n\nחוק גאוס על פני שטח בתוך המתכת נותן $Q_{\\text{enc}}=0$.",
+      "level_min": "university"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Electric Field Gauss."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "An infinite uniformly charged plane has symmetry about the normal. Which Gaussian surface is most efficient?",
+      "body_he": "למישור טעון אינסופית אחיד יש סימטריה לנורמל. איזה פני שטח גאוסיים הכי יעילים?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "A sphere centered on the plane",
+          "text_he": "כדור במרכז המישור",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "A pillbox (cylinder) straddling the plane, axis normal to it",
+          "text_he": "גלילון החוצה את המישור, ציר נורמלי",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "A cube with one face on the plane",
+          "text_he": "קוב עם פאה על המישור",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "Any surface works equally well",
+          "text_he": "כל פני שטח עובדים באותה מידה",
+          "correct": false
+        }
+      ],
+      "explanation_en": "A pillbox exploits planar symmetry: $\\mathbf{E}$ is normal and constant on the caps; flux through the curved wall is zero.",
+      "explanation_he": "גלילון מנצל סימטריה planar: $\\mathbf{E}$ נורמלי וקבוע על הכיסויים; השטף דרך הדופן האחידה אפס."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "A point dipole is at the center of a spherical Gaussian surface. The net electric flux $\\Phi_E$ is:",
+      "body_he": "דיפול נקודתי במרכז כדור גאוסי. השטף החשמלי הנקי $\\Phi_E$ הוא:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$+q/\\varepsilon_0$",
+          "text_he": "$+q/\\varepsilon_0$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$-q/\\varepsilon_0$",
+          "text_he": "$-q/\\varepsilon_0$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$2q/\\varepsilon_0$",
+          "text_he": "$2q/\\varepsilon_0$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0$",
+          "text_he": "$0$",
+          "correct": true
+        }
+      ],
+      "explanation_en": "A dipole has net charge zero; $Q_{\\text{enc}}=0$ so $\\Phi_E=0$ by Gauss's law.",
+      "explanation_he": "לדיפול מטען נקי אפס; $Q_{\\text{enc}}=0$ ולכן $\\Phi_E=0$ לפי חוק גאוס."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "An infinite line carries $\\lambda = 2.0\\times10^{-6}$ C/m. Find $E$ at $r=0.10$ m.",
+      "body_he": "קו אינסופי נושא $\\lambda = 2.0\\times10^{-6}$ C/m. מצא $E$ ב-$r=0.10$ m.",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$3.6\\times10^{5}$ N/C",
+          "text_he": "$3.6\\times10^{5}$ N/C",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$1.8\\times10^{5}$ N/C",
+          "text_he": "$1.8\\times10^{5}$ N/C",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$7.2\\times10^{5}$ N/C",
+          "text_he": "$7.2\\times10^{5}$ N/C",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$9.0\\times10^{4}$ N/C",
+          "text_he": "$9.0\\times10^{4}$ N/C",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$E=\\lambda/(2\\pi\\varepsilon_0 r)=2k\\lambda/r=2(9\\times10^9)(2\\times10^{-6})/0.1=3.6\\times10^5$ N/C.",
+      "explanation_he": "$E=\\lambda/(2\\pi\\varepsilon_0 r)=2k\\lambda/r=3.6\\times10^5$ N/C."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "A solid uniformly charged sphere of radius $R$ and total charge $Q$. What is $E$ at $r=R/2$?",
+      "body_he": "כדור מלא טעון אחיד ברדיוס $R$ ומטען $Q$. מהו $E$ ב-$r=R/2$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$kQ/R^2$",
+          "text_he": "$kQ/R^2$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$kQ/(2R^2)$",
+          "text_he": "$kQ/(2R^2)$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$kQ/(4R^2)$",
+          "text_he": "$kQ/(4R^2)$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0$",
+          "text_he": "$0$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Inside: $E=kQr/R^3$. At $r=R/2$: $E=kQ(R/2)/R^3=kQ/(2R^2)$.",
+      "explanation_he": "בפנים: $E=kQr/R^3$. ב-$r=R/2$: $E=kQ/(2R^2)$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "A hollow conductor in equilibrium carries net charge $Q$. Where is the charge and what is $E$ inside the metal?",
+      "body_he": "מוליך חלול בשיווי משקל נושא מטען $Q$. איפה המטען ומה $E$ בתוך המתכת?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "Charge uniform in volume; $E\\ne0$ in metal",
+          "text_he": "מטען אחיד בנפח; $E\\ne0$ במתכת",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "Charge on outer surface only; $E=0$ in metal bulk",
+          "text_he": "מטען על פני שטח חיצוניים; $E=0$ בנפח המתכת",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "Charge at center; $E=0$ everywhere",
+          "text_he": "מטען במרכז; $E=0$ בכל מקום",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "Charge on inner surface only",
+          "text_he": "מטען על פני שטח פנימיים בלבד",
+          "correct": false
+        }
+      ],
+      "explanation_en": "In equilibrium, free charge in a conductor sits on surfaces; $\\mathbf{E}=0$ in the bulk metal.",
+      "explanation_he": "בשיווי משקל מטען חופשי על פני שטח; $\\mathbf{E}=0$ בנפח המתכת."
+    }
+  ]
 }

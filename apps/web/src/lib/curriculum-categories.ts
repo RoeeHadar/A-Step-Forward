@@ -154,7 +154,7 @@ const UNI_PHYSICS_1_CONCEPTS = [
 const UNI_PHYSICS_2_CONCEPTS = [
   'electrostatics_coulomb', 'electric_field_gauss', 'electric_potential',
   'capacitors_dielectrics', 'dc_circuits_kirchhoff', 'magnetic_field_biot_savart',
-  'ampere_law', 'faraday_induction', 'maxwell_equations',
+  'ampere_law', 'faraday_induction_uni', 'maxwell_equations',
   'em_waves_propagation', 'geometric_optics', 'interference_diffraction',
 ];
 
@@ -465,7 +465,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'circuits_magnetism_uni',
         heLabel: 'מעגלים ומגנטיות',
         enLabel: 'Circuits & Magnetism',
-        concept_ids: ['dc_circuits_kirchhoff', 'magnetic_field_biot_savart', 'ampere_law', 'faraday_induction'],
+        concept_ids: ['dc_circuits_kirchhoff', 'magnetic_field_biot_savart', 'ampere_law', 'faraday_induction_uni'],
       },
       {
         id: 'em_waves_optics_uni',

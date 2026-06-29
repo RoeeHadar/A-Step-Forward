@@ -1,24 +1,224 @@
 {
-  "concept_id": "maxwell_equations",
-  "subject": "physics",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Maxwell Equations",
-  "title_he": "Maxwell Equations",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "maxwell_equations",
+  "subject": "university_physics_2",
+  "title_en": "Maxwell's Equations and EM Waves (University)",
+  "title_he": "משוואות מаксוול וגלים אלקטרומגנטיים (אוניברסיטה)",
+  "duration_min": 26,
+  "type": "interactive",
+  "level_min": "university",
+  "agent_hints": "Present all four Maxwell equations in integral form first, then connect displacement current to capacitor charging. Wave speed $c=1/\\sqrt{\\mu_0\\varepsilon_0}$ follows from coupled $\\mathbf{E},\\mathbf{B}$ wave equations in vacuum. Poynting vector $\\mathbf{S}=(\\mathbf{E}\\times\\mathbf{B})/\\mu_0$ gives energy flux; direction is propagation for plane waves.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "displacement_current",
+      "title_en": "Displacement Current and Ampère-Maxwell",
+      "title_he": "תרמיל הזזה ואמפר-מаксוול",
+      "body_en_md": "Maxwell's correction for time-varying electric fields:\n$$\\mathbf{J}_d = \\varepsilon_0\\frac{\\partial\\mathbf{E}}{\\partial t}$$\n\n**Ampère-Maxwell law:**\n$$\\oint_C\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0 I_{\\text{enc}}^{\\text{total}}=\\mu_0\\!\\left(I_{\\text{cond}}+\\varepsilon_0\\frac{d\\Phi_E}{dt}\\right)$$\n\nParallel-plate capacitor charging: between plates $I_{\\text{cond}}=0$ but $\\frac{d\\Phi_E}{dt}\\ne0$, so $B$ exists — consistent with field in wires.",
+      "body_he_md": "תיקון מаксוול לשדות חשמל משתנים:\n$$\\mathbf{J}_d = \\varepsilon_0\\frac{\\partial\\mathbf{E}}{\\partial t}$$\n\n**חוק אמפר-מаксוול:**\n$$\\oint_C\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0\\!\\left(I_{\\text{cond}}+\\varepsilon_0\\frac{d\\Phi_E}{dt}\\right)$$\n\nמעגל טעינה: בין לוחות $I_{\\text{cond}}=0$ אך $\\frac{d\\Phi_E}{dt}\\ne0$.",
+      "level_min": "university"
+    },
+    {
+      "id": "maxwell_four_integral",
+      "title_en": "The Four Maxwell Equations — Integral Form",
+      "title_he": "ארבע משוואות מаксוול — צורה אינטגרלית",
+      "body_en_md": "1. **Gauss (E):** $\\displaystyle\\oint_S\\mathbf{E}\\cdot d\\mathbf{A}=\\frac{Q_{\\text{enc}}}{\\varepsilon_0}$\n\n2. **Gauss (B):** $\\displaystyle\\oint_S\\mathbf{B}\\cdot d\\mathbf{A}=0$ (no magnetic monopoles)\n\n3. **Faraday:** $\\displaystyle\\oint_C\\mathbf{E}\\cdot d\\mathbf{l}=-\\frac{d\\Phi_B}{dt}$\n\n4. **Ampère-Maxwell:** $\\displaystyle\\oint_C\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0 I_{\\text{enc}}+\\mu_0\\varepsilon_0\\frac{d\\Phi_E}{dt}$\n\nIn vacuum with $\\rho=0,\\mathbf{J}=0$, these couple to wave equations for $\\mathbf{E}$ and $\\mathbf{B}$.",
+      "body_he_md": "1. **גאוס (E):** $\\displaystyle\\oint_S\\mathbf{E}\\cdot d\\mathbf{A}=\\frac{Q_{\\text{enc}}}{\\varepsilon_0}$\n\n2. **גאוס (B):** $\\displaystyle\\oint_S\\mathbf{B}\\cdot d\\mathbf{A}=0$\n\n3. **פאראדי:** $\\displaystyle\\oint_C\\mathbf{E}\\cdot d\\mathbf{l}=-\\frac{d\\Phi_B}{dt}$\n\n4. **אמפר-מаксוול:** $\\displaystyle\\oint_C\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0 I_{\\text{enc}}+\\mu_0\\varepsilon_0\\frac{d\\Phi_E}{dt}$\n\nבריק עם $\\rho=0,\\mathbf{J}=0$ — משוואות גל ל-$\\mathbf{E}$ ו-$\\mathbf{B}$.",
+      "level_min": "university"
+    },
+    {
+      "id": "em_waves_speed",
+      "title_en": "Electromagnetic Waves and Speed $c$",
+      "title_he": "גלים אלקטרומגנטיים ומהירות $c$",
+      "body_en_md": "Plane wave in vacuum: $\\mathbf{E}=E_0\\cos(kz-\\omega t)\\hat{\\mathbf{x}}$, $\\mathbf{B}=B_0\\cos(kz-\\omega t)\\hat{\\mathbf{y}}$ with $\\mathbf{E}\\perp\\mathbf{B}\\perp\\hat{\\mathbf{k}}$.\n\nFrom Maxwell's equations in free space:\n$$\\boxed{c=\\frac{1}{\\sqrt{\\mu_0\\varepsilon_0}}=3.00\\times10^8\\,\\text{m/s}}$$\n\nAlso $E_0/B_0=c$ and $\\omega=ck$ (dispersion relation).\n\nEnergy density: $u=\\varepsilon_0 E^2$ (also $B^2/\\mu_0$).",
+      "body_he_md": "גל מישורי בריק: $\\mathbf{E}\\perp\\mathbf{B}\\perp\\hat{\\mathbf{k}}$.\n\nממשוואות מаксוול:\n$$\\boxed{c=\\frac{1}{\\sqrt{\\mu_0\\varepsilon_0}}=3.00\\times10^8\\,\\text{m/s}}$$\n\nגם $E_0/B_0=c$ ו-$\\omega=ck$.\n\nצפיפות אנרגיה: $u=\\varepsilon_0 E^2$.",
+      "level_min": "university"
+    },
+    {
+      "id": "poynting_vector",
+      "title_en": "Poynting Vector — Energy Flux",
+      "title_he": "וקטור פוינטינג — שטף אנרגיה",
+      "body_en_md": "The **Poynting vector** gives directional energy flux (W/m$^2$):\n$$\\boxed{\\mathbf{S} = \\frac{1}{\\mu_0}\\mathbf{E}\\times\\mathbf{B}}$$\n\nTime average for harmonic waves:\n$$\\langle S\\rangle = \\frac{1}{2\\mu_0}E_0 B_0 = \\frac{1}{2}c\\varepsilon_0 E_0^2$$\n\nDirection of $\\mathbf{S}$ is **propagation direction** for plane EM waves (right-hand rule: $\\mathbf{E}\\to\\mathbf{B}\\to\\mathbf{S}$).",
+      "body_he_md": "**וקטור פוינטינג** — שטף אנרגיה (W/m$^2$):\n$$\\boxed{\\mathbf{S} = \\frac{1}{\\mu_0}\\mathbf{E}\\times\\mathbf{B}}$$\n\nממוצע זמן לגלים הרמוניים:\n$$\\langle S\\rangle = \\frac{1}{2\\mu_0}E_0 B_0$$\n\nכיוון $\\mathbf{S}$ הוא **כיוון התקדמות** הגל.",
+      "level_min": "university"
+    },
+    {
+      "id": "maxwell_unification",
+      "title_en": "Physical Meaning and Unification",
+      "title_he": "משמעות פיזיקלית ואיחוד",
+      "body_en_md": "Maxwell unified:\n- Electricity (Gauss E)\n- Magnetism (Gauss B, Ampère)\n- Induction (Faraday)\n- Optics / light as EM wave (wave speed = $c$)\n\nChanging $\\mathbf{B}$ creates curling $\\mathbf{E}$; changing $\\mathbf{E}$ creates curling $\\mathbf{B}$ — self-sustaining transverse waves.\n\nIn matter, use $\\varepsilon$, $\\mu$ and bound currents/charges.",
+      "body_he_md": "מаксוול איחד:\n- חשמל (גאוס E)\n- מגנטיות (גאוס B, אמפר)\n- השראה (פאראדי)\n- אופטיקה / אור כגל EM\n\nשינוי $\\mathbf{B}$ יוצר $\\mathbf{E}$ מסתחרר; שינוי $\\mathbf{E}$ יוצר $\\mathbf{B}$ מסתחרר — גלים רוחביים.\n\nבחומר: $\\varepsilon$, $\\mu$ ומטענים/זרמים קשורים.",
+      "level_min": "university"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Maxwell Equations."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "Capacitor charging: conduction current in wires is $I$. Between plates, which term provides $I_{\\text{enc}}$ in Ampère-Maxwell?",
+      "body_he": "מעגל טעינה: זרם מוליך $I$ בחוטים. בין לוחות, איזה איבר מספק $I_{\\text{enc}}$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$I_{\\text{cond}}$ between plates",
+          "text_he": "$I_{\\text{cond}}$ בין לוחות",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$\\varepsilon_0\\, d\\Phi_E/dt$",
+          "text_he": "$\\varepsilon_0\\, d\\Phi_E/dt$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "Both are zero always",
+          "text_he": "שניהם תמיד אפס",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$\\mu_0\\, d\\Phi_B/dt$",
+          "text_he": "$\\mu_0\\, d\\Phi_B/dt$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Displacement current $\\varepsilon_0 d\\Phi_E/dt$ equals wire current during charging.",
+      "explanation_he": "תרמיל הזזה $\\varepsilon_0 d\\Phi_E/dt$ שווה לזרם בחוט בזמן טעינה."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "Which Maxwell equation states that magnetic monopoles do not exist (in classical form)?",
+      "body_he": "איזו משוואת מаксוול אומרת שאין מונופולים מגנטיים?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$\\oint\\mathbf{E}\\cdot d\\mathbf{A}=Q_{\\text{enc}}/\\varepsilon_0$",
+          "text_he": "גאוס E",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$\\oint\\mathbf{B}\\cdot d\\mathbf{A}=0$",
+          "text_he": "$\\oint\\mathbf{B}\\cdot d\\mathbf{A}=0$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$\\oint\\mathbf{E}\\cdot d\\mathbf{l}=-d\\Phi_B/dt$",
+          "text_he": "פאראדי",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$\\nabla\\cdot\\mathbf{E}=\\rho/\\varepsilon_0$ only",
+          "text_he": "רק $\\nabla\\cdot\\mathbf{E}$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Gauss's law for magnetism: net magnetic flux through any closed surface is zero.",
+      "explanation_he": "חוק גאוס למגנטיות: שטף מגנטי נקי אפס."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "In vacuum EM wave, if $E_0=300$ V/m, what is $B_0$?",
+      "body_he": "בגל EM בריק, $E_0=300$ V/m. מה $B_0$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$1.0\\times10^{-6}$ T",
+          "text_he": "$1.0\\times10^{-6}$ T",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$9.0\\times10^{10}$ T",
+          "text_he": "$9.0\\times10^{10}$ T",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$300$ T",
+          "text_he": "$300$ T",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$3.0\\times10^{-16}$ T",
+          "text_he": "$3.0\\times10^{-16}$ T",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$B_0=E_0/c=300/(3\\times10^8)=1.0\\times10^{-6}$ T.",
+      "explanation_he": "$B_0=E_0/c=1.0\\times10^{-6}$ T."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "$\\mathbf{E}$ along $+x$, $\\mathbf{B}$ along $+y$ (in phase). Poynting vector direction?",
+      "body_he": "$\\mathbf{E}$ ב-$+x$, $\\mathbf{B}$ ב-$+y$. כיוון $\\mathbf{S}$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$+z$",
+          "text_he": "$+z$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$-z$",
+          "text_he": "$-z$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$+x$",
+          "text_he": "$+x$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$-y$",
+          "text_he": "$-y$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$\\mathbf{S}\\propto\\mathbf{E}\\times\\mathbf{B}$: $\\hat{x}\\times\\hat{y}=+\\hat{z}$.",
+      "explanation_he": "$\\hat{x}\\times\\hat{y}=+\\hat{z}$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "Compute $c=1/\\sqrt{\\mu_0\\varepsilon_0}$ using $\\mu_0=4\\pi\\times10^{-7}$, $\\varepsilon_0=8.85\\times10^{-12}$.",
+      "body_he": "חשב $c=1/\\sqrt{\\mu_0\\varepsilon_0}$.",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$3.0\\times10^8$ m/s",
+          "text_he": "$3.0\\times10^8$ m/s",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$3.0\\times10^6$ m/s",
+          "text_he": "$3.0\\times10^6$ m/s",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$1.0\\times10^8$ m/s",
+          "text_he": "$1.0\\times10^8$ m/s",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$9.0\\times10^{16}$ m/s",
+          "text_he": "$9.0\\times10^{16}$ m/s",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$\\mu_0\\varepsilon_0\\approx1/(3\\times10^8)^2$, so $c\\approx3\\times10^8$ m/s.",
+      "explanation_he": "$c\\approx3\\times10^8$ m/s."
+    }
+  ]
 }
