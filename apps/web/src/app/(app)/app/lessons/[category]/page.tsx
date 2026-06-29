@@ -1,15 +1,7 @@
-import { notFound } from 'next/navigation';
-import { CategoryPageContent } from '@/components/category-page-content';
-import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
+import { redirect } from 'next/navigation';
 
-interface Props {
-  params: Promise<{ category: string }>;
-}
-
-export default async function CategoryPage({ params }: Props) {
-  const { category: categoryId } = await params;
-  const category = CURRICULUM_CATEGORIES.find((c) => c.id === categoryId);
-  if (!category) notFound();
-
-  return <CategoryPageContent category={category} />;
+// Legacy route — unified catalog lives at /learn.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default async function CategoryPage() {
+  redirect('/learn');
 }

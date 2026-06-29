@@ -1,20 +1,7 @@
-import { notFound } from 'next/navigation';
-import { SectionPageContent } from '@/components/section-page-content';
-import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
-import { getLessonsForSection } from '@/lib/lessons-by-section';
+import { redirect } from 'next/navigation';
 
-interface Props {
-  params: Promise<{ category: string; section: string }>;
-}
-
-export default async function SectionPage({ params }: Props) {
-  const { category: categoryId, section: sectionId } = await params;
-  const category = CURRICULUM_CATEGORIES.find((c) => c.id === categoryId);
-  if (!category) notFound();
-  const section = category.sections.find((s) => s.id === sectionId);
-  if (!section) notFound();
-
-  const lessons = getLessonsForSection(categoryId, sectionId);
-
-  return <SectionPageContent category={category} section={section} lessons={lessons} />;
+// Legacy route — unified catalog lives at /learn.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default async function SectionPage() {
+  redirect('/learn');
 }

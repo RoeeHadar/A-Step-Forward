@@ -53,7 +53,6 @@ const FILTER_FROM_HS_5PT = new Set([
   // Not on Bagrut 581 / 807
   'differential_equations_intro',
   'hypothesis_testing',
-  'statistics_descriptive',
   'complex_numbers',
 ]);
 
