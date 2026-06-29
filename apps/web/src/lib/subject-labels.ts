@@ -34,6 +34,10 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   physics_2: { en: 'Physics 2', he: 'פיזיקה 2', icon: '🔋' },
   high_school_physics: { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
   'high-school-physics': { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  physics_hs: { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  'physics-hs': { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
+  hs_physics_5: { en: 'Physics — 5pt', he: 'פיזיקה — 5 יח״ל', icon: '⚡' },
+  'hs-physics-5': { en: 'Physics — 5pt', he: 'פיזיקה — 5 יח״ל', icon: '⚡' },
   biology: { en: 'Biology', he: 'ביולוגיה', icon: '🧬' },
   chemistry: { en: 'Chemistry', he: 'כימיה', icon: '⚗️' },
 };
