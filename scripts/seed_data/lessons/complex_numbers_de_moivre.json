@@ -1,24 +1,116 @@
 {
-  "concept_id": "complex_numbers_de_moivre",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Complex Numbers De Moivre",
-  "title_he": "Complex Numbers De Moivre",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "id": "complex_numbers_de_moivre",
+  "type": "interactive",
+  "subject": "high_school_math_5pt",
+  "title_en": "De Moivre's Theorem — Powers and Roots of Complex Numbers",
+  "title_he": "משפט דה-מואבר — חזקות ושורשים של מספרים מרוכבים",
+  "duration_min": 25,
+  "level_min": "5pt",
+  "agent_hints": "Students at this level have already seen the algebraic form $a + bi$. The key conceptual shift here is polar form and why multiplying complex numbers adds their arguments. De Moivre's theorem makes computing high powers trivial but requires fluency with trigonometric values. For nth roots, students must enumerate all $n$ solutions — missing roots for $k = 1, 2, \\ldots, n-1$ is the most common error.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "polar_form",
+      "title_en": "Polar Form of Complex Numbers",
+      "title_he": "צורה הפולרית של מספרים מרוכבים",
+      "level_min": "5pt",
+      "body_en_md": "Every complex number $z = a + bi$ can be written in **polar form**:\n$$z = r(\\cos\\theta + i\\sin\\theta) = re^{i\\theta}$$\nwhere:\n- $r = |z| = \\sqrt{a^2 + b^2}$ is the **modulus** (distance from origin)\n- $\\theta = \\arg(z)$ is the **argument** (angle from positive real axis)\n\n**Converting to polar form:**\n- $r = \\sqrt{a^2 + b^2}$\n- $\\theta = \\arctan\\left(\\frac{b}{a}\\right)$ (adjust quadrant based on signs of $a$, $b$)\n\n**Example:** Write $z = 1 + i$ in polar form.\n$$r = \\sqrt{1^2 + 1^2} = \\sqrt{2}, \\qquad \\theta = \\arctan\\left(\\frac{1}{1}\\right) = \\frac{\\pi}{4}$$\n$$\\boxed{z = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)}$$\n\n**Multiplication in polar form:**\n$$z_1 z_2 = r_1 r_2 \\left(\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)\\right)$$\nMultiplying **multiplies moduli** and **adds arguments**.",
+      "body_he_md": "כל מספר מרוכב $z = a + bi$ ניתן לכתיבה ב**צורה פולרית**:\n$$z = r(\\cos\\theta + i\\sin\\theta) = re^{i\\theta}$$\nכאשר:\n- $r = |z| = \\sqrt{a^2 + b^2}$ הוא **המודולוס** (מרחק מהראשית)\n- $\\theta = \\arg(z)$ הוא **הארגומנט** (הזווית מהציר הממשי החיובי)\n\n**המרה לצורה פולרית:**\n- $r = \\sqrt{a^2 + b^2}$\n- $\\theta = \\arctan\\left(\\frac{b}{a}\\right)$ (מתקנים רביע לפי סימני $a$, $b$)\n\n**דוגמה:** כתבו $z = 1 + i$ בצורה פולרית.\n$$r = \\sqrt{1^2 + 1^2} = \\sqrt{2}, \\qquad \\theta = \\arctan\\left(\\frac{1}{1}\\right) = \\frac{\\pi}{4}$$\n$$\\boxed{z = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)}$$\n\n**כפל בצורה פולרית:**\n$$z_1 z_2 = r_1 r_2 \\left(\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)\\right)$$\nכפל **מכפיל מודולוסים** ו**מחבר ארגומנטים**."
+    },
+    {
+      "id": "de_moivre",
+      "title_en": "De Moivre's Theorem",
+      "title_he": "משפט דה-מואבר",
+      "level_min": "5pt",
+      "body_en_md": "**Theorem (De Moivre):** For any integer $n$ and $z = r(\\cos\\theta + i\\sin\\theta)$:\n$$\\boxed{z^n = r^n\\left(\\cos n\\theta + i\\sin n\\theta\\right)}$$\n\n**Why it works:** Multiplying $z$ by itself $n$ times multiplies the modulus $n$ times and adds the argument $n$ times.\n\n### Worked Example: Compute $(1 + i)^8$\n\n**Step 1:** Convert to polar form: $1 + i = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)$.\n\n**Step 2:** Apply De Moivre with $n = 8$:\n$$(1+i)^8 = \\left(\\sqrt{2}\\right)^8 \\left(\\cos\\frac{8\\pi}{4} + i\\sin\\frac{8\\pi}{4}\\right) = 16\\left(\\cos 2\\pi + i\\sin 2\\pi\\right).$$\n\n**Step 3:** Evaluate: $\\cos 2\\pi = 1$, $\\sin 2\\pi = 0$.\n$$(1+i)^8 = 16 \\cdot 1 = \\boxed{16}.$$\n\n> **Check:** $(1+i)^2 = 2i$, $(2i)^2 = -4$, $(-4)^2 = 16$. ✓",
+      "body_he_md": "**משפט (דה-מואבר):** לכל מספר שלם $n$ ו-$z = r(\\cos\\theta + i\\sin\\theta)$:\n$$\\boxed{z^n = r^n\\left(\\cos n\\theta + i\\sin n\\theta\\right)}$$\n\n**מדוע זה עובד:** כפל $z$ בעצמו $n$ פעמים מכפיל את המודולוס $n$ פעמים ומחבר את הארגומנט $n$ פעמים.\n\n### דוגמה פתורה: חשבו $(1 + i)^8$\n\n**שלב 1:** המרה לצורה פולרית: $1 + i = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)$.\n\n**שלב 2:** יישום דה-מואבר עם $n = 8$:\n$$(1+i)^8 = \\left(\\sqrt{2}\\right)^8 \\left(\\cos\\frac{8\\pi}{4} + i\\sin\\frac{8\\pi}{4}\\right) = 16\\left(\\cos 2\\pi + i\\sin 2\\pi\\right).$$\n\n**שלב 3:** חישוב: $\\cos 2\\pi = 1$, $\\sin 2\\pi = 0$.\n$$(1+i)^8 = 16 \\cdot 1 = \\boxed{16}.$$\n\n> **בדיקה:** $(1+i)^2 = 2i$, $(2i)^2 = -4$, $(-4)^2 = 16$. ✓"
+    },
+    {
+      "id": "nth_roots",
+      "title_en": "Finding $n$th Roots of Complex Numbers",
+      "title_he": "מציאת שורשים מסדר $n$ של מספרים מרוכבים",
+      "level_min": "5pt",
+      "body_en_md": "The equation $w^n = z$ has exactly **$n$ solutions** in $\\mathbb{C}$. If $z = r(\\cos\\theta + i\\sin\\theta)$, the $n$ roots are:\n$$\\boxed{w_k = r^{1/n}\\left(\\cos\\frac{\\theta + 2\\pi k}{n} + i\\sin\\frac{\\theta + 2\\pi k}{n}\\right), \\quad k = 0, 1, 2, \\ldots, n-1.}$$\n\nThe roots are equally spaced on a circle of radius $r^{1/n}$, separated by angles of $\\frac{2\\pi}{n}$.\n\n### Worked Example: Cube roots of $-8$\n\n$-8 = 8(\\cos\\pi + i\\sin\\pi)$, so $r = 8$, $\\theta = \\pi$, $n = 3$.\n\nModulus of each root: $8^{1/3} = 2$.\n\n$$w_0 = 2\\left(\\cos\\frac{\\pi}{3} + i\\sin\\frac{\\pi}{3}\\right) = 2\\left(\\frac{1}{2} + i\\frac{\\sqrt{3}}{2}\\right) = 1 + i\\sqrt{3}$$\n$$w_1 = 2\\left(\\cos\\pi + i\\sin\\pi\\right) = -2$$\n$$w_2 = 2\\left(\\cos\\frac{5\\pi}{3} + i\\sin\\frac{5\\pi}{3}\\right) = 2\\left(\\frac{1}{2} - i\\frac{\\sqrt{3}}{2}\\right) = 1 - i\\sqrt{3}$$\n\nVerify: $(-2)^3 = -8$. ✓",
+      "body_he_md": "המשוואה $w^n = z$ מקיימת בדיוק **$n$ פתרונות** ב-$\\mathbb{C}$. אם $z = r(\\cos\\theta + i\\sin\\theta)$, ה-$n$ שורשים הם:\n$$\\boxed{w_k = r^{1/n}\\left(\\cos\\frac{\\theta + 2\\pi k}{n} + i\\sin\\frac{\\theta + 2\\pi k}{n}\\right), \\quad k = 0, 1, 2, \\ldots, n-1.}$$\n\nהשורשים מרוחקים באופן שווה על מעגל ברדיוס $r^{1/n}$, עם זוויות $\\frac{2\\pi}{n}$ ביניהם.\n\n### דוגמה פתורה: שורשי הריבה של $-8$\n\n$-8 = 8(\\cos\\pi + i\\sin\\pi)$, כלומר $r = 8$, $\\theta = \\pi$, $n = 3$.\n\nמודולוס כל שורש: $8^{1/3} = 2$.\n\n$$w_0 = 2\\left(\\cos\\frac{\\pi}{3} + i\\sin\\frac{\\pi}{3}\\right) = 2\\left(\\frac{1}{2} + i\\frac{\\sqrt{3}}{2}\\right) = 1 + i\\sqrt{3}$$\n$$w_1 = 2\\left(\\cos\\pi + i\\sin\\pi\\right) = -2$$\n$$w_2 = 2\\left(\\cos\\frac{5\\pi}{3} + i\\sin\\frac{5\\pi}{3}\\right) = 2\\left(\\frac{1}{2} - i\\frac{\\sqrt{3}}{2}\\right) = 1 - i\\sqrt{3}$$\n\nבדיקה: $(-2)^3 = -8$. ✓"
+    },
+    {
+      "id": "roots_of_unity",
+      "title_en": "The $n$th Roots of Unity",
+      "title_he": "שורשי היחידה מסדר $n$",
+      "level_min": "5pt",
+      "body_en_md": "The $n$th roots of unity are the solutions to $w^n = 1$. Since $1 = 1 \\cdot (\\cos 0 + i\\sin 0)$, the formula gives:\n$$w_k = \\cos\\frac{2\\pi k}{n} + i\\sin\\frac{2\\pi k}{n}, \\quad k = 0, 1, \\ldots, n-1.$$\n\n**4th roots of unity** ($n=4$): $w_k = \\cos\\frac{\\pi k}{2} + i\\sin\\frac{\\pi k}{2}$:\n- $k=0$: $1$\n- $k=1$: $i$\n- $k=2$: $-1$\n- $k=3$: $-i$\n\nThey lie at the vertices of a square on the unit circle. The sum of all $n$th roots of unity is always $0$.",
+      "body_he_md": "שורשי היחידה מסדר $n$ הם הפתרונות של $w^n = 1$. מאחר ש-$1 = 1 \\cdot (\\cos 0 + i\\sin 0)$, הנוסחה נותנת:\n$$w_k = \\cos\\frac{2\\pi k}{n} + i\\sin\\frac{2\\pi k}{n}, \\quad k = 0, 1, \\ldots, n-1.$$\n\n**שורשי היחידה מסדר 4** ($n=4$): $w_k = \\cos\\frac{\\pi k}{2} + i\\sin\\frac{\\pi k}{2}$:\n- $k=0$: $1$\n- $k=1$: $i$\n- $k=2$: $-1$\n- $k=3$: $-i$\n\nהם נמצאים בקודקודי ריבוע על מעגל היחידה. סכום כל שורשי היחידה מסדר $n$ הוא תמיד $0$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Complex Numbers De Moivre."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "What is the polar form of $z = \\sqrt{3} + i$?",
+      "body_he": "מהי הצורה הפולרית של $z = \\sqrt{3} + i$?",
+      "options": [
+        { "id": "a", "text_en": "$2\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$", "text_he": "$2\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$", "correct": true },
+        { "id": "b", "text_en": "$2\\left(\\cos\\dfrac{\\pi}{3} + i\\sin\\dfrac{\\pi}{3}\\right)$", "text_he": "$2\\left(\\cos\\dfrac{\\pi}{3} + i\\sin\\dfrac{\\pi}{3}\\right)$", "correct": false },
+        { "id": "c", "text_en": "$\\sqrt{3}\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$", "text_he": "$\\sqrt{3}\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$", "correct": false },
+        { "id": "d", "text_en": "$2\\left(\\cos\\dfrac{\\pi}{4} + i\\sin\\dfrac{\\pi}{4}\\right)$", "text_he": "$2\\left(\\cos\\dfrac{\\pi}{4} + i\\sin\\dfrac{\\pi}{4}\\right)$", "correct": false }
+      ],
+      "explanation_en": "$r = \\sqrt{(\\sqrt{3})^2 + 1^2} = \\sqrt{3+1} = 2$. The argument: $\\theta = \\arctan(1/\\sqrt{3}) = \\pi/6$ (first quadrant, both components positive). So $z = 2(\\cos(\\pi/6) + i\\sin(\\pi/6))$.",
+      "explanation_he": "$r = \\sqrt{(\\sqrt{3})^2 + 1^2} = \\sqrt{4} = 2$. הארגומנט: $\\theta = \\arctan(1/\\sqrt{3}) = \\pi/6$ (רביע ראשון, שני הרכיבים חיוביים). לכן $z = 2(\\cos(\\pi/6) + i\\sin(\\pi/6))$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "Using De Moivre's theorem, compute $(1+i)^8$.",
+      "body_he": "בעזרת משפט דה-מואבר, חשבו $(1+i)^8$.",
+      "options": [
+        { "id": "a", "text_en": "$8$", "text_he": "$8$", "correct": false },
+        { "id": "b", "text_en": "$16i$", "text_he": "$16i$", "correct": false },
+        { "id": "c", "text_en": "$16$", "text_he": "$16$", "correct": true },
+        { "id": "d", "text_en": "$-16$", "text_he": "$-16$", "correct": false }
+      ],
+      "explanation_en": "$1+i = \\sqrt{2}(\\cos(\\pi/4) + i\\sin(\\pi/4))$. By De Moivre: $(1+i)^8 = (\\sqrt{2})^8(\\cos(2\\pi) + i\\sin(2\\pi)) = 16 \\cdot 1 = 16$.",
+      "explanation_he": "$1+i = \\sqrt{2}(\\cos(\\pi/4) + i\\sin(\\pi/4))$. ממשפט דה-מואבר: $(1+i)^8 = (\\sqrt{2})^8(\\cos(2\\pi) + i\\sin(2\\pi)) = 16 \\cdot 1 = 16$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "How many distinct 6th roots of unity are there?",
+      "body_he": "כמה שורשי יחידה שונים מסדר 6 יש?",
+      "options": [
+        { "id": "a", "text_en": "$2$", "text_he": "$2$", "correct": false },
+        { "id": "b", "text_en": "$3$", "text_he": "$3$", "correct": false },
+        { "id": "c", "text_en": "$6$", "text_he": "$6$", "correct": true },
+        { "id": "d", "text_en": "$12$", "text_he": "$12$", "correct": false }
+      ],
+      "explanation_en": "The equation $w^n = 1$ always has exactly $n$ solutions in $\\mathbb{C}$. For $n = 6$, there are 6 distinct roots, equally spaced at angles $0, \\pi/3, 2\\pi/3, \\pi, 4\\pi/3, 5\\pi/3$.",
+      "explanation_he": "המשוואה $w^n = 1$ תמיד מקיימת בדיוק $n$ פתרונות ב-$\\mathbb{C}$. עבור $n = 6$, יש 6 שורשים שונים, מרוחקים באופן שווה בזוויות $0, \\pi/3, 2\\pi/3, \\pi, 4\\pi/3, 5\\pi/3$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "What is $|z^{10}|$ if $|z| = 2$?",
+      "body_he": "כמה $|z^{10}|$ אם $|z| = 2$?",
+      "options": [
+        { "id": "a", "text_en": "$20$", "text_he": "$20$", "correct": false },
+        { "id": "b", "text_en": "$2^{10} = 1024$", "text_he": "$2^{10} = 1024$", "correct": true },
+        { "id": "c", "text_en": "$10$", "text_he": "$10$", "correct": false },
+        { "id": "d", "text_en": "$\\sqrt{10} \\cdot 2$", "text_he": "$\\sqrt{10} \\cdot 2$", "correct": false }
+      ],
+      "explanation_en": "By De Moivre, $|z^n| = |z|^n$. So $|z^{10}| = 2^{10} = 1024$. The argument of $z$ does not affect the modulus of the power.",
+      "explanation_he": "ממשפט דה-מואבר, $|z^n| = |z|^n$. לכן $|z^{10}| = 2^{10} = 1024$. הארגומנט של $z$ אינו משפיע על המודולוס של החזקה."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "The three cube roots of $-8$ are $-2$, $1 + i\\sqrt{3}$, and:",
+      "body_he": "שלושת שורשי הריבייה השלישית של $-8$ הם $-2$, $1 + i\\sqrt{3}$, ו:",
+      "options": [
+        { "id": "a", "text_en": "$1 - i\\sqrt{3}$", "text_he": "$1 - i\\sqrt{3}$", "correct": true },
+        { "id": "b", "text_en": "$-1 + i\\sqrt{3}$", "text_he": "$-1 + i\\sqrt{3}$", "correct": false },
+        { "id": "c", "text_en": "$2i$", "text_he": "$2i$", "correct": false },
+        { "id": "d", "text_en": "$\\sqrt{3} - i$", "text_he": "$\\sqrt{3} - i$", "correct": false }
+      ],
+      "explanation_en": "For $-8 = 8(\\cos\\pi + i\\sin\\pi)$, the three cube roots use $k=0,1,2$: $w_0 = 1+i\\sqrt{3}$, $w_1 = -2$, $w_2 = 2(\\cos(5\\pi/3)+i\\sin(5\\pi/3)) = 2(1/2 - i\\sqrt{3}/2) = 1 - i\\sqrt{3}$. Complex roots of real polynomials always come in conjugate pairs.",
+      "explanation_he": "עבור $-8 = 8(\\cos\\pi + i\\sin\\pi)$, שלושת שורשי הריבייה השלישית מחושבים עם $k=0,1,2$: $w_0 = 1+i\\sqrt{3}$, $w_1 = -2$, $w_2 = 2(\\cos(5\\pi/3)+i\\sin(5\\pi/3)) = 1 - i\\sqrt{3}$. שורשים מרוכבים של פולינומים ממשיים תמיד מופיעים בזוגות צמודים."
+    }
+  ]
 }

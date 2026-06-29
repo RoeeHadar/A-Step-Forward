@@ -1,24 +1,116 @@
 {
-  "concept_id": "mathematical_induction",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
+  "id": "mathematical_induction",
+  "type": "interactive",
+  "subject": "high_school_math_5pt",
   "title_en": "Mathematical Induction",
-  "title_he": "Mathematical Induction",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_he": "אינדוקציה מתמטית",
+  "duration_min": 25,
+  "level_min": "5pt",
+  "agent_hints": "Mathematical induction is a proof technique with a strict two-part structure: base case and inductive step. Students at this level must write complete, formal proofs — not just verify examples. Watch for the classic errors of forgetting the base case and assuming what needs to be proved (circular reasoning) in the inductive step.",
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "id": "intro",
+      "title_en": "What is Mathematical Induction?",
+      "title_he": "מהי אינדוקציה מתמטית?",
+      "level_min": "5pt",
+      "body_en_md": "**Mathematical induction** is a proof technique for showing that a statement $P(n)$ is true for every natural number $n \\geq n_0$.\n\nThink of it like an infinite row of dominoes:\n- Knocking the first domino falls (base case).\n- Each domino knocks the next (inductive step).\n\nThe proof has **exactly two steps**:\n\n### Step 1 — Base Case\nVerify $P(n_0)$ directly. For most problems $n_0 = 1$.\n\n### Step 2 — Inductive Step\nAssume $P(k)$ is true for some arbitrary $k \\geq n_0$ (**inductive hypothesis**). Then prove $P(k+1)$ is true *using* that assumption.\n\nOnce both steps are complete, we conclude $P(n)$ is true **for all** $n \\geq n_0$.",
+      "body_he_md": "**אינדוקציה מתמטית** היא שיטת הוכחה המראה שטענה $P(n)$ נכונה לכל מספר טבעי $n \\geq n_0$.\n\nחשבו על שורה אינסופית של דומינו:\n- הפלת הראשון (שלב הבסיס).\n- כל אחד מפיל את הבא (שלב האינדוקציה).\n\nלהוכחה יש **בדיוק שני שלבים**:\n\n### שלב 1 — בסיס האינדוקציה\nאמתו ישירות ש-$P(n_0)$ נכון. ברוב הבעיות $n_0 = 1$.\n\n### שלב 2 — צעד האינדוקציה\nהניחו ש-$P(k)$ נכון עבור $k \\geq n_0$ כלשהו (**הנחת האינדוקציה**). ואז הוכיחו ש-$P(k+1)$ נכון **תוך שימוש** בהנחה זו.\n\nלאחר שני השלבים, מסיקים ש-$P(n)$ נכון **לכל** $n \\geq n_0$."
+    },
+    {
+      "id": "sum_formula",
+      "title_en": "Proof: Sum Formula $\\sum_{k=1}^n k = \\frac{n(n+1)}{2}$",
+      "title_he": "הוכחה: נוסחת הסכום $\\sum_{k=1}^n k = \\frac{n(n+1)}{2}$",
+      "level_min": "5pt",
+      "body_en_md": "**Claim:** For every $n \\geq 1$: $\\displaystyle 1 + 2 + 3 + \\cdots + n = \\frac{n(n+1)}{2}$.\n\n---\n\n**Base case ($n = 1$):**\n$$\\text{LHS} = 1, \\qquad \\text{RHS} = \\frac{1 \\cdot 2}{2} = 1. \\quad \\checkmark$$\n\n**Inductive hypothesis:** Assume the formula holds for some $k \\geq 1$:\n$$1 + 2 + \\cdots + k = \\frac{k(k+1)}{2}.$$\n\n**Inductive step:** We must show it holds for $k+1$, i.e.:\n$$1 + 2 + \\cdots + k + (k+1) = \\frac{(k+1)(k+2)}{2}.$$\n\nStarting from the left side:\n$$\\underbrace{1 + 2 + \\cdots + k}_{= \\,k(k+1)/2 \\text{ (by IH)}} + (k+1) = \\frac{k(k+1)}{2} + (k+1).$$\n\nFactor out $(k+1)$:\n$$= (k+1)\\left(\\frac{k}{2} + 1\\right) = (k+1) \\cdot \\frac{k+2}{2} = \\frac{(k+1)(k+2)}{2}. \\quad \\checkmark$$\n\n**Conclusion:** By induction, the formula holds for all $n \\geq 1$. $\\blacksquare$",
+      "body_he_md": "**טענה:** לכל $n \\geq 1$: $\\displaystyle 1 + 2 + 3 + \\cdots + n = \\frac{n(n+1)}{2}$.\n\n---\n\n**בסיס ($n = 1$):**\n$$\\text{צד שמאל} = 1, \\qquad \\text{צד ימין} = \\frac{1 \\cdot 2}{2} = 1. \\quad \\checkmark$$\n\n**הנחת האינדוקציה:** נניח שהנוסחה מתקיימת עבור $k \\geq 1$ כלשהו:\n$$1 + 2 + \\cdots + k = \\frac{k(k+1)}{2}.$$\n\n**צעד האינדוקציה:** נוכיח ש-$P(k+1)$ נכון:\n$$1 + 2 + \\cdots + k + (k+1) = \\frac{(k+1)(k+2)}{2}.$$\n\nמהצד השמאלי:\n$$\\underbrace{1 + 2 + \\cdots + k}_{= \\,k(k+1)/2 \\text{ (מהנחה)}} + (k+1) = \\frac{k(k+1)}{2} + (k+1).$$\n\nמוציאים גורם $(k+1)$:\n$$= (k+1)\\left(\\frac{k}{2} + 1\\right) = (k+1) \\cdot \\frac{k+2}{2} = \\frac{(k+1)(k+2)}{2}. \\quad \\checkmark$$\n\n**מסקנה:** מעיקרון האינדוקציה, הנוסחה מתקיימת לכל $n \\geq 1$. $\\blacksquare$"
+    },
+    {
+      "id": "inequality_proof",
+      "title_en": "Proof: $3^n > 2^n$ for all $n \\geq 1$",
+      "title_he": "הוכחה: $3^n > 2^n$ לכל $n \\geq 1$",
+      "level_min": "5pt",
+      "body_en_md": "**Claim:** $3^n > 2^n$ for every integer $n \\geq 1$.\n\n**Base case ($n = 1$):** $3^1 = 3 > 2 = 2^1$. $\\checkmark$\n\n**Inductive hypothesis:** Assume $3^k > 2^k$ for some $k \\geq 1$.\n\n**Inductive step:** Multiply both sides of the inductive hypothesis by 3:\n$$3 \\cdot 3^k > 3 \\cdot 2^k.$$\nSo $3^{k+1} > 3 \\cdot 2^k$.\n\nSince $3 > 2$, we have $3 \\cdot 2^k > 2 \\cdot 2^k = 2^{k+1}$.\n\nTherefore: $3^{k+1} > 3 \\cdot 2^k > 2^{k+1}$, which gives $3^{k+1} > 2^{k+1}$. $\\checkmark$\n\n**Conclusion:** By induction, $3^n > 2^n$ for all $n \\geq 1$. $\\blacksquare$\n\n> **Key insight for inequalities:** When multiplying both sides by a positive number $c$, you must verify that $c \\cdot (\\text{larger side}) > c \\cdot (\\text{smaller side})$ — which holds since $c > 0$. For inequality proofs, you often need an extra comparison step (here: $3 \\cdot 2^k > 2 \\cdot 2^k$).",
+      "body_he_md": "**טענה:** $3^n > 2^n$ לכל מספר שלם $n \\geq 1$.\n\n**בסיס ($n = 1$):** $3^1 = 3 > 2 = 2^1$. $\\checkmark$\n\n**הנחת האינדוקציה:** נניח $3^k > 2^k$ עבור $k \\geq 1$ כלשהו.\n\n**צעד האינדוקציה:** נכפול את שני צידי הנחת האינדוקציה ב-3:\n$$3 \\cdot 3^k > 3 \\cdot 2^k.$$\nאז $3^{k+1} > 3 \\cdot 2^k$.\n\nמאחר ש-$3 > 2$, מתקיים $3 \\cdot 2^k > 2 \\cdot 2^k = 2^{k+1}$.\n\nלכן: $3^{k+1} > 3 \\cdot 2^k > 2^{k+1}$, כלומר $3^{k+1} > 2^{k+1}$. $\\checkmark$\n\n**מסקנה:** מעיקרון האינדוקציה, $3^n > 2^n$ לכל $n \\geq 1$. $\\blacksquare$\n\n> **תובנה מרכזית לאי-שוויונות:** כשכופלים שני צידים במספר חיובי $c$, יש לוודא שאכן $c \\cdot (\\text{גדול}) > c \\cdot (\\text{קטן})$. לעיתים נדרשת השוואה נוספת (כאן: $3 \\cdot 2^k > 2 \\cdot 2^k$)."
+    },
+    {
+      "id": "pitfalls",
+      "title_en": "Common Pitfalls in Induction Proofs",
+      "title_he": "מלכודות נפוצות בהוכחות אינדוקציה",
+      "level_min": "5pt",
+      "body_en_md": "### Pitfall 1: Forgetting the base case\n\nWithout a base case, the inductive step proves nothing — there is no starting domino. Always prove $P(n_0)$ explicitly.\n\n### Pitfall 2: Circular reasoning\n\n**Flawed proof** (of $1 + 2 + \\cdots + n = \\frac{n(n+1)}{2}$):\n> \"Assume $1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$. Dividing both sides by $(k+1)$...\"\n\nThis uses $P(k+1)$ to prove $P(k+1)$ — that is circular. The inductive step must start from $P(k)$ (the hypothesis) and reach $P(k+1)$ (the conclusion).\n\n### Pitfall 3: Wrong domain in the inductive hypothesis\n\n\"Assume true for all $n \\leq k$\" is *strong induction*, a valid variant. But confusing the scope can lead to errors. Specify clearly: \"Assume $P(k)$ is true for one specific $k$.\"\n\n### Pitfall 4: Not using the inductive hypothesis\n\nIf you prove $P(k+1)$ without ever referencing $P(k)$, your proof likely has an error — or $P(n)$ is so trivially obvious it doesn't need induction at all.",
+      "body_he_md": "### מלכודת 1: שכחת בסיס האינדוקציה\n\nללא שלב הבסיס, צעד האינדוקציה לא מוכיח כלום — אין את הדומינו הראשון. תמיד הוכיחו את $P(n_0)$ מפורשות.\n\n### מלכודת 2: הנמקה מעגלית\n\n**הוכחה פגומה** (של $1 + 2 + \\cdots + n = \\frac{n(n+1)}{2}$):\n> \"נניח ש-$1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$. נחלק את שני האגפים ב-$(k+1)$...\"\n\nזה משתמש ב-$P(k+1)$ כדי להוכיח $P(k+1)$ — הנמקה מעגלית. צעד האינדוקציה חייב להתחיל מ-$P(k)$ (ההנחה) ולהגיע ל-$P(k+1)$ (המסקנה).\n\n### מלכודת 3: תחום שגוי בהנחת האינדוקציה\n\n\"נניח נכון לכל $n \\leq k$\" זוהי *אינדוקציה חזקה*, גרסה תקפה. אבל בלבול בתחום עלול לגרום לשגיאות. ציינו בבירור: \"נניח ש-$P(k)$ נכון עבור $k$ מסוים אחד.\"\n\n### מלכודת 4: אי-שימוש בהנחת האינדוקציה\n\nאם הוכחתם את $P(k+1)$ מבלי להשתמש כלל ב-$P(k)$, כנראה שיש שגיאה בהוכחה — או ש-$P(n)$ טריוויאלי כל כך שאינדוקציה אינה נדרשת כלל."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Mathematical Induction."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "In a proof by induction of the statement $P(n)$ for all $n \\geq 1$, what is the **inductive hypothesis**?",
+      "body_he": "בהוכחה באינדוקציה של הטענה $P(n)$ לכל $n \\geq 1$, מהי **הנחת האינדוקציה**?",
+      "options": [
+        { "id": "a", "text_en": "The statement $P(1)$ is true.", "text_he": "הטענה $P(1)$ נכונה.", "correct": false },
+        { "id": "b", "text_en": "Assuming $P(k)$ is true for some arbitrary $k \\geq 1$.", "text_he": "ההנחה ש-$P(k)$ נכון עבור $k \\geq 1$ כלשהו.", "correct": true },
+        { "id": "c", "text_en": "The statement $P(k+1)$ is true.", "text_he": "הטענה $P(k+1)$ נכונה.", "correct": false },
+        { "id": "d", "text_en": "The statement $P(n)$ is true for all $n$.", "text_he": "הטענה $P(n)$ נכונה לכל $n$.", "correct": false }
+      ],
+      "explanation_en": "The inductive hypothesis is the assumption that $P(k)$ holds for a specific (but arbitrary) $k$. The base case proves $P(1)$, and the goal of the inductive step is to prove $P(k+1)$ using the assumption $P(k)$.",
+      "explanation_he": "הנחת האינדוקציה היא ההנחה ש-$P(k)$ מתקיים עבור $k$ מסוים (אך שרירותי). בסיס האינדוקציה מוכיח את $P(1)$, ומטרת צעד האינדוקציה היא להוכיח את $P(k+1)$ תוך שימוש בהנחה $P(k)$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "What is the correct base case for proving $\\displaystyle\\sum_{k=1}^n k = \\frac{n(n+1)}{2}$ by induction?",
+      "body_he": "מהו בסיס האינדוקציה הנכון להוכחת $\\displaystyle\\sum_{k=1}^n k = \\frac{n(n+1)}{2}$?",
+      "options": [
+        { "id": "a", "text_en": "For $n=0$: LHS $= 0$, RHS $= 0$. ✓", "text_he": "עבור $n=0$: צ\"ש $= 0$, צ\"י $= 0$. ✓", "correct": false },
+        { "id": "b", "text_en": "For $n=1$: LHS $= 1$, RHS $= 1$. ✓", "text_he": "עבור $n=1$: צ\"ש $= 1$, צ\"י $= 1$. ✓", "correct": true },
+        { "id": "c", "text_en": "For $n=2$: LHS $= 3$, RHS $= 3$. ✓", "text_he": "עבור $n=2$: צ\"ש $= 3$, צ\"י $= 3$. ✓", "correct": false },
+        { "id": "d", "text_en": "No base case is needed if the formula works for large $n$.", "text_he": "אין צורך בבסיס אם הנוסחה עובדת עבור $n$ גדול.", "correct": false }
+      ],
+      "explanation_en": "The natural starting point is $n=1$ (smallest value in the domain). We check: LHS $= 1$, RHS $= 1(2)/2 = 1$. ✓ While $n=0$ also works, the standard and expected base case for this claim is $n=1$. Never skip the base case.",
+      "explanation_he": "נקודת הפתיחה הטבעית היא $n=1$ (הערך הקטן ביותר בתחום). בדיקה: צ\"ש $= 1$, צ\"י $= 1 \\cdot 2/2 = 1$. ✓ אמנם $n=0$ גם עובד, אך בסיס האינדוקציה הסטנדרטי לטענה זו הוא $n=1$. לעולם לא מדלגים על שלב הבסיס."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "A student writes: \"Assume $1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$, then clearly $1+2+\\cdots+k = \\frac{k(k+1)}{2}$.\" What is wrong?",
+      "body_he": "תלמיד כותב: \"נניח ש-$1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$, ואז ברור ש-$1+2+\\cdots+k = \\frac{k(k+1)}{2}$.\" מה הבעיה?",
+      "options": [
+        { "id": "a", "text_en": "The algebra in the second step is wrong.", "text_he": "האלגברה בשלב השני שגויה.", "correct": false },
+        { "id": "b", "text_en": "The student forgot to verify the base case.", "text_he": "התלמיד שכח לאמת את בסיס האינדוקציה.", "correct": false },
+        { "id": "c", "text_en": "The student assumed $P(k+1)$ in order to conclude $P(k)$ — circular reasoning.", "text_he": "התלמיד הניח את $P(k+1)$ כדי להסיק $P(k)$ — הנמקה מעגלית.", "correct": true },
+        { "id": "d", "text_en": "The inductive step must start from $P(k+2)$, not $P(k+1)$.", "text_he": "צעד האינדוקציה חייב להתחיל מ-$P(k+2)$, לא מ-$P(k+1)$.", "correct": false }
+      ],
+      "explanation_en": "This is circular reasoning: the student assumed exactly what needs to be proved ($P(k+1)$) and deduced what is supposed to be the hypothesis ($P(k)$). The inductive step must go in the other direction: assume $P(k)$, then prove $P(k+1)$.",
+      "explanation_he": "זוהי הנמקה מעגלית: התלמיד הניח בדיוק את מה שצריך להוכיח ($P(k+1)$) והסיק את מה שאמור להיות ההנחה ($P(k)$). צעד האינדוקציה חייב ללכת בכיוון הנכון: נניח $P(k)$, ואז נוכיח $P(k+1)$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "In the inductive step for proving $3^n > 2^n$, after writing $3^{k+1} = 3 \\cdot 3^k > 3 \\cdot 2^k$, what additional comparison is needed?",
+      "body_he": "בצעד האינדוקציה להוכחת $3^n > 2^n$, לאחר כתיבת $3^{k+1} = 3 \\cdot 3^k > 3 \\cdot 2^k$, איזו השוואה נוספת נדרשת?",
+      "options": [
+        { "id": "a", "text_en": "$3 \\cdot 2^k = 2^{k+1}$, so $3^{k+1} > 2^{k+1}$.", "text_he": "$3 \\cdot 2^k = 2^{k+1}$, לכן $3^{k+1} > 2^{k+1}$.", "correct": false },
+        { "id": "b", "text_en": "$3 \\cdot 2^k > 2 \\cdot 2^k = 2^{k+1}$ (since $3 > 2$), so $3^{k+1} > 2^{k+1}$.", "text_he": "$3 \\cdot 2^k > 2 \\cdot 2^k = 2^{k+1}$ (כי $3 > 2$), לכן $3^{k+1} > 2^{k+1}$.", "correct": true },
+        { "id": "c", "text_en": "No additional step is needed; $3 \\cdot 2^k > 2^{k+1}$ is obvious.", "text_he": "אין צורך בשלב נוסף; $3 \\cdot 2^k > 2^{k+1}$ ברור מאליו.", "correct": false },
+        { "id": "d", "text_en": "We must use the inductive hypothesis again to show $3 \\cdot 2^k > 2^{k+1}$.", "text_he": "יש להשתמש שוב בהנחת האינדוקציה כדי להראות $3 \\cdot 2^k > 2^{k+1}$.", "correct": false }
+      ],
+      "explanation_en": "After establishing $3^{k+1} > 3 \\cdot 2^k$, we need to show $3 \\cdot 2^k > 2^{k+1} = 2 \\cdot 2^k$. This follows from $3 > 2$, so $3 \\cdot 2^k > 2 \\cdot 2^k$. Chaining: $3^{k+1} > 3 \\cdot 2^k > 2^{k+1}$.",
+      "explanation_he": "לאחר שהוכחנו $3^{k+1} > 3 \\cdot 2^k$, עלינו להראות $3 \\cdot 2^k > 2^{k+1} = 2 \\cdot 2^k$. זה נובע מ-$3 > 2$, ולכן $3 \\cdot 2^k > 2 \\cdot 2^k$. שרשרת: $3^{k+1} > 3 \\cdot 2^k > 2^{k+1}$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "Which of the following is a valid reason to skip the base case in an induction proof?",
+      "body_he": "מה מהבאים הוא סיבה תקפה לדלג על בסיס האינדוקציה?",
+      "options": [
+        { "id": "a", "text_en": "The formula was verified numerically for several values of $n$.", "text_he": "הנוסחה אומתה מספרית עבור כמה ערכים של $n$.", "correct": false },
+        { "id": "b", "text_en": "The inductive step is very convincing.", "text_he": "צעד האינדוקציה משכנע מאוד.", "correct": false },
+        { "id": "c", "text_en": "There is no valid reason — the base case is always required.", "text_he": "אין סיבה תקפה — שלב הבסיס תמיד נדרש.", "correct": true },
+        { "id": "d", "text_en": "The statement $P(n)$ is known to be true for $n > 100$.", "text_he": "הטענה $P(n)$ ידועה כנכונה עבור $n > 100$.", "correct": false }
+      ],
+      "explanation_en": "The base case is never optional. Without it, the inductive step is vacuous — it only shows that *if* any case is true, the next one is also true. If no starting case is established, no specific $n$ is ever proved. Famous example: 'all horses are the same color' — a flawed induction that fails precisely because the base case for $n=2$ doesn't work.",
+      "explanation_he": "שלב הבסיס אינו אופציונלי לעולם. בלעדיו, צעד האינדוקציה הוא ריק — הוא מראה רק ש*אם* מקרה כלשהו נכון, גם הבא נכון. בלי נקודת פתיחה, לא מוכח אף $n$ מסוים. דוגמה מפורסמת: 'כל הסוסים אותו צבע' — אינדוקציה פגומה שנכשלת בדיוק כי בסיס האינדוקציה ל-$n=2$ אינו עובד."
+    }
+  ]
 }
