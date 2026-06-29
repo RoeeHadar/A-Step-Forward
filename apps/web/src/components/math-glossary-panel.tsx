@@ -1,13 +1,9 @@
 import { MATH_GLOSSARY_TERMS } from '@/lib/math-glossary';
 
-function panelTitle(locale: 'en' | 'he', subject?: string): string {
-  const isHe = locale === 'he';
-  const isBiology = subject?.toLowerCase().includes('biology') ?? false;
-  if (isBiology) {
-    return isHe ? '\u05de\u05d9\u05dc\u05d5\u05df \u05de\u05d5\u05e0\u05d7\u05d9\u05dd \u2014 \u05d1\u05d9\u05d5\u05dc\u05d5\u05d2\u05d9\u05d4 \u05d5\u05de\u05ea\u05de\u05d8\u05d9\u05e7\u05d4' : 'Glossary \u2014 Biology & Math';
-  }
-  return isHe ? '\u05de\u05d9\u05dc\u05d5\u05df \u05de\u05d5\u05e0\u05d7\u05d9\u05dd \u2014 \u05de\u05ea\u05de\u05d8\u05d9\u05e7\u05d4' : 'Math Glossary';
-}
+const TITLE_STR = {
+  biology: { he: 'מילון מונחים — ביולוגיה ומתמטיקה', en: 'Glossary — Biology & Math' },
+  default: { he: 'מילון מונחים — מתמטיקה', en: 'Math Glossary' },
+} as const;
 
 export function MathGlossaryPanel({
   locale,
@@ -17,7 +13,9 @@ export function MathGlossaryPanel({
   subject?: string;
 }) {
   const isHe = locale === 'he';
-  const title = panelTitle(locale, subject);
+  const isBiology = subject?.toLowerCase().includes('biology') ?? false;
+  const titles = isBiology ? TITLE_STR.biology : TITLE_STR.default;
+  const title = isHe ? titles.he : titles.en;
 
   return (
     <details className="glass-surface mt-10 rounded-2xl border border-border/60 p-5">
@@ -31,10 +29,10 @@ export function MathGlossaryPanel({
         <table className="w-full min-w-[28rem] border-collapse text-sm">
           <thead>
             <tr className="border-b border-border text-start text-xs uppercase tracking-wide text-muted-foreground">
-              <th className="px-3 py-2 font-medium">{isHe ? '\u05e2\u05d1\u05e8\u05d9\u05ea' : 'Hebrew'}</th>
-              <th className="px-3 py-2 font-medium">{isHe ? '\u05d0\u05e0\u05d2\u05dc\u05d9\u05ea' : 'English'}</th>
+              <th className="px-3 py-2 font-medium">{isHe ? 'עברית' : 'Hebrew'}</th>
+              <th className="px-3 py-2 font-medium">{isHe ? 'אנגלית' : 'English'}</th>
               <th className="px-3 py-2 font-medium" dir="rtl">
-                {isHe ? '\u05e2\u05e8\u05d1\u05d9\u05ea' : 'Arabic'}
+                {isHe ? 'ערבית' : 'Arabic'}
               </th>
             </tr>
           </thead>

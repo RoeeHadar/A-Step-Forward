@@ -8,7 +8,7 @@ export const MATH_GLOSSARY: Record<string, GlossaryEntry> = {
   'נגזרת': { he: 'נגזרת', en: 'Derivative', ar: 'المشتقة' },
   'אינטגרל': { he: 'אינטגרל', en: 'Integral', ar: 'التكامل' },
   'הסתברות': { he: 'הסתברות', en: 'Probability', ar: 'الاحتمال' },
-  'הסתברות מותנת': { he: 'הסתברות מותנת', en: 'Conditional Probability', ar: 'الاحتمال الشرطي' },
+  'הסתברות מותנית': { he: 'הסתברות מותנית', en: 'Conditional Probability', ar: 'الاحتمال الشرطي' },
   'מרחב מדגם': { he: 'מרחב מדגם', en: 'Sample Space', ar: 'فضاء العينة' },
   'אירועים בלתי תלויים': { he: 'אירועים בלתי תלויים', en: 'Independent Events', ar: 'أحداث مستقلة' },
   'תמורות': { he: 'תמורות', en: 'Permutations', ar: 'التباديل' },
