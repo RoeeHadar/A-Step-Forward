@@ -277,6 +277,11 @@ const GRADE_LEVELS: { value: string; label_en: string; label_he: string }[] = [
   { value: '11', label_en: '11th grade', label_he: 'כיתה י״א' },
   { value: '12', label_en: '12th grade', label_he: 'כיתה י״ב' },
   {
+    value: 'adult_bagrut',
+    label_en: 'External Bagrut / Adult Learner',
+    label_he: 'בגרות חיצונית / בוגרים',
+  },
+  {
     value: 'university_1',
     label_en: 'University — 1st year',
     label_he: 'אוניברסיטה — שנה א׳',
@@ -620,8 +625,8 @@ export default function OnboardingPage() {
   const [s1, setS1] = useState<Step1>({
     goal: '',
     goalOther: '',
-    gradeLevel: '11',
-    pointsGroup: '5',
+    gradeLevel: '',
+    pointsGroup: '',
     subjects: ['math'],
     nextTestName: '',
     nextTestDate: '',
@@ -691,6 +696,22 @@ export default function OnboardingPage() {
     s1.gradeLevel !== 'university_1' &&
     s1.gradeLevel !== 'university_2plus';
 
+  const isPhysicsOnly =
+    s1.subjects.includes('physics') && !s1.subjects.includes('math');
+
+  function normalizePointsGroup(raw: string): string {
+    if (raw === '3' || raw === '4' || raw === '5') return `${raw}pt`;
+    return raw;
+  }
+
+  function resolvePointsGroupForSubmit(): string | null {
+    if (isPhysicsOnly) return 'hs_physics';
+    if (needsPointsGroup && s1.pointsGroup) {
+      return normalizePointsGroup(s1.pointsGroup);
+    }
+    return null;
+  }
+
   async function handleSubmit() {
     setSubmitting(true);
     setError('');
@@ -706,7 +727,7 @@ export default function OnboardingPage() {
         body: JSON.stringify({
           goal: goalText,
           grade_level: s1.gradeLevel,
-          points_group: needsPointsGroup ? s1.pointsGroup : null,
+          points_group: resolvePointsGroupForSubmit(),
           subjects: s1.subjects,
           hours_per_week: s2.hoursPerWeek,
           preferred_style: s2.style,
@@ -820,7 +841,11 @@ export default function OnboardingPage() {
                     setS1((p) => ({ ...p, gradeLevel: e.target.value }))
                   }
                   className={inputCls}
+                  required
                 >
+                  <option value="" disabled>
+                    {lang === 'he' ? 'בחר/י כיתה…' : 'Select grade…'}
+                  </option>
                   {GRADE_LEVELS.map((g) => (
                     <option key={g.value} value={g.value}>
                       {gradeLabel(g)}
@@ -843,7 +868,11 @@ export default function OnboardingPage() {
                       setS1((p) => ({ ...p, pointsGroup: e.target.value }))
                     }
                     className={inputCls}
+                    required
                   >
+                    <option value="" disabled>
+                      {lang === 'he' ? 'בחר/י יחידות…' : 'Select units…'}
+                    </option>
                     {POINTS_GROUPS.map((p) => (
                       <option key={p.value} value={p.value}>
                         {lang === 'he' ? p.label_he : p.label_en}
@@ -920,7 +949,12 @@ export default function OnboardingPage() {
 
             <button
               type="button"
-              disabled={!s1.goal || s1.subjects.length === 0}
+              disabled={
+                !s1.goal ||
+                s1.subjects.length === 0 ||
+                !s1.gradeLevel ||
+                (needsPointsGroup && !s1.pointsGroup)
+              }
               onClick={() => setStep(1)}
               className={primaryBtnCls}
             >

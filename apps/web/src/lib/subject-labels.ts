@@ -1,5 +1,13 @@
 /** Human-readable labels for Learning Database subject slugs. */
 export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: string }> = {
+  'hs-math-3': { en: 'High School Math — 3pt', he: 'מתמטיקה — 3 יח״ל', icon: '3' },
+  'math-hs-3': { en: 'High School Math — 3pt', he: 'מתמטיקה — 3 יח״ל', icon: '3' },
+  hs_math_3: { en: 'High School Math — 3pt', he: 'מתמטיקה — 3 יח״ל', icon: '3' },
+  'hs-math-4': { en: 'High School Math — 4pt', he: 'מתמטיקה — 4 יח״ל', icon: '4' },
+  hs_math_4: { en: 'High School Math — 4pt', he: 'מתמטיקה — 4 יח״ל', icon: '4' },
+  'hs-math-5': { en: 'High School Math — 5pt', he: 'מתמטיקה — 5 יח״ל', icon: '5' },
+  hs_math_5: { en: 'High School Math — 5pt', he: 'מתמטיקה — 5 יח״ל', icon: '5' },
+  hs_physics: { en: 'Physics', he: 'פיזיקה', icon: '⚛️' },
   math: { en: 'Mathematics', he: 'מתמטיקה', icon: '📐' },
   physics: { en: 'Physics', he: 'פיזיקה', icon: '⚛️' },
   calculus: { en: 'Calculus', he: 'חדו״א', icon: '∫' },

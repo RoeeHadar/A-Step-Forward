@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { Pencil, Trash2, Search } from 'lucide-react';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import { Badge } from '@asf/ui/badge';
@@ -89,9 +90,17 @@ export function MemoryInspector({ memories }: { memories: MemoryRecord[] }) {
           </div>
         ))}
         {filtered.length === 0 ? (
-          <p className="text-center text-muted-foreground">
-            {items.length === 0 ? t.noMemoriesYet : t.noSearchResults}
-          </p>
+          items.length === 0 ? (
+            <div className="card-punch rounded-2xl p-8 text-center">
+              <p className="text-muted-foreground">{t.noMemoriesYet}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{t.noMemoriesCta}</p>
+              <Button asChild className="mt-4">
+                <Link href="/app/chat/tutor">{t.noMemoriesCtaLink}</Link>
+              </Button>
+            </div>
+          ) : (
+            <p className="text-center text-muted-foreground">{t.noSearchResults}</p>
+          )
         ) : null}
       </div>
     </div>

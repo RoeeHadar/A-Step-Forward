@@ -4,7 +4,7 @@
   Post-deploy smoke test, PowerShell mirror of scripts/smoke/e2e.sh.
 
 .EXAMPLE
-  $env:WEB_BASE_URL = 'https://a-step-forward.vercel.app'
+  $env:WEB_BASE_URL = 'https://a-step-forward-waij.vercel.app'
   $env:API_BASE_URL = 'https://asf-api.fly.dev'
   .\scripts\smoke\e2e.ps1
 #>

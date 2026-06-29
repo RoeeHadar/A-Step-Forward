@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
 import { agentNameSchema } from '@asf/schemas/agents';
 import { logger } from '@/lib/logger';
 import {
@@ -14,6 +15,7 @@ import { buildLearningPlan } from '@/lib/learning-plan';
 import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
+import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 
 export const runtime = 'nodejs';
 
@@ -153,13 +155,16 @@ async function buildContextPrompt(
   message: string,
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
   // Each helper catches its own errors so a single DB issue cannot break chat.
-  const [profile, mastery, recent, persona, agentNotes] = await Promise.all([
+  const [profile, mastery, recent, persona, agentNotes, cookieStore] = await Promise.all([
     getLearnerProfile(userId).catch(() => null),
     getConceptMastery(userId).catch(() => ({})),
     fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []),
     getLearnerPersona(userId).catch(() => null),
     fetchAgentNotes(userId, agent, 6).catch(() => []),
+    cookies(),
   ]);
+
+  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
   // Every agent gets the same platform baseline first (corpus stats, KG
   // dimensions, agent network roster, math-LTR + bilingual rules). Then
@@ -167,6 +172,8 @@ async function buildContextPrompt(
   // (profile, mastery, relevant context, agent_hints, learning-plan) is
   // appended below.
   let context = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
+  context += `\n\n## Response language`;
+  context += `\n- Language preference: ${locale === 'en' ? 'English' : 'Hebrew'} — respond in this language by default`;
 
   if (!profile) {
     // Onboarded learners always have a profile row. A missing row means

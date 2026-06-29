@@ -65,6 +65,24 @@ export function DashboardContent({
   const isHe = locale === 'he';
   const { stats, recent_lessons, mastery_summary } = snapshot;
 
+  const lastActivity = recent_lessons[0]?.last_activity;
+  const daysAway =
+    lastActivity != null
+      ? Math.floor(
+          (Date.now() - new Date(lastActivity).getTime()) / (1000 * 60 * 60 * 24),
+        )
+      : null;
+  const showReengagementBanner =
+    daysAway !== null && daysAway >= 3 && daysAway < 60;
+
+  const reengagementHref = nextLesson
+    ? `/app/lessons/l/${nextLesson.lesson_id}`
+    : recent_lessons[0]?.id
+      ? `/app/lessons/l/${recent_lessons[0].id}`
+      : recent_lessons[0]
+        ? `/learn/${recent_lessons[0].subject}`
+        : '/app/lessons';
+
   return (
     <div dir={isHe ? 'rtl' : 'ltr'}>
       <header className="mb-8">
@@ -85,6 +103,10 @@ export function DashboardContent({
       )}
 
       {nextLesson && <NextLessonCard lesson={nextLesson} isHe={isHe} />}
+
+      {showReengagementBanner && daysAway !== null && (
+        <ReengagementBanner daysAway={daysAway} href={reengagementHref} isHe={isHe} />
+      )}
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <StatTile
@@ -259,6 +281,40 @@ const NEXT_LESSON_STR = {
     cta: 'Start lesson',
   },
 } as const;
+
+const REENGAGEMENT_STR = {
+  he: {
+    message: (n: number) => `לא היית פה ${n} ימים — המשך מהמקום שעצרת`,
+    cta: 'המשך ללמוד',
+  },
+  en: {
+    message: (n: number) => `You've been away ${n} days — pick up where you left off`,
+    cta: 'Continue learning',
+  },
+} as const;
+
+function ReengagementBanner({
+  daysAway,
+  href,
+  isHe,
+}: {
+  daysAway: number;
+  href: string;
+  isHe: boolean;
+}) {
+  const t = REENGAGEMENT_STR[isHe ? 'he' : 'en'];
+  return (
+    <div
+      className="card-punch mb-6 flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between"
+      dir={isHe ? 'rtl' : 'ltr'}
+    >
+      <p className="text-sm text-muted-foreground">{t.message(daysAway)}</p>
+      <Button asChild variant="outline" size="sm" className="shrink-0">
+        <Link href={href}>{t.cta}</Link>
+      </Button>
+    </div>
+  );
+}
 
 function NextLessonCard({
   lesson,

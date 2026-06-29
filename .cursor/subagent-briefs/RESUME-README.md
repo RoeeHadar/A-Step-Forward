@@ -10,7 +10,7 @@ These defaults are now project policy. Sub-agents must **not** stop to ask the u
 - **DBs (managed)**: Postgres → Neon (with pgvector), Redis → Upstash, Neo4j → AuraDB Free, object storage → Cloudflare R2 (S3-compatible).
 - **Auth**: Clerk (already chosen).
 - **Secrets**: Doppler in CI/prod; `.env.local` in dev (see `.env.example`).
-- **Domain**: `astepforward.app` if available, else Vercel default `a-step-forward.vercel.app`; Release Captain registers.
+- **Domain**: `astepforward.app` if available, else Vercel default `a-step-forward-waij.vercel.app`; Release Captain registers.
 - **Branch strategy**: trunk-based on `main`. Each stream stacks its PRs and merges in order. No long-lived branches > 1 week.
 - **PRs**: small, atomic, conventional commit titles, required eval gates, `review-bugbot` skill on every PR; `review-security` on auth/memory/RBAC/payments.
 - **Repo visibility**: stays `private` until Phase-1 deploy is green; **Release Captain** flips to public when all of: live URL responds, README polished, LICENSE chosen (MIT), security advisories enabled.

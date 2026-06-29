@@ -42,8 +42,13 @@
 - Verified: arithmetic 3pt Hebrew, analytic_geometry Q7–Q10 schema
 - **Continue loop** — top blockers: la_determinants Hebrew stubs (Maya), re-engagement nudge (Tamar), Bagrut exam mode (Itay/Yossi/Tamar)
 
+### Round 6 (in progress — commit 11397c3)
+- Pre-flight fixes committed: lesson mock, Learn nav, quiz i18n, recent lessons labels, progress bilingual, memory tab Neon-direct, goal completion banner
+- 10 new diverse students launched (see round6-students.md)
+- Evaluator + dispatch pending
+
 ## Satisfaction Targets
-- Each student: ≥ 7/10 satisfaction at Month-4 checkpoint
-- Platform score: ≥ 7.5/10
+- **Stopping condition: platform score ≥ 8.5 AND no concrete improvements remain**
+- Each student: ≥ 8.5/10 satisfaction at Month-4 checkpoint
 - No P0 issues remaining
 - No P1 issues older than 2 rounds

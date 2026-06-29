@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { getAuthContext } from '@/lib/auth';
@@ -11,6 +12,7 @@ import {
 import { getSeedLesson } from '@/lib/seed-lessons';
 import { LessonPageClient } from '@/components/lesson-page-client';
 import { LegacySeedLessonView } from '@/components/legacy-seed-lesson-view';
+import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,6 +58,15 @@ export default async function LessonPage({
 
   if (lessonData) {
     const { lesson } = lessonData;
+    const cookieStore = await cookies();
+    const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+    const isHe = locale === 'he';
+    const primaryTitle =
+      isHe && lesson.title_he ? lesson.title_he : lesson.title_en;
+    const secondaryTitle =
+      isHe && lesson.title_he ? lesson.title_en : lesson.title_he;
+    const backLabel = isHe ? 'חזרה לשיעורים' : 'Back to lessons';
+
     return (
       <div className="max-w-4xl">
         <Link
@@ -63,13 +74,18 @@ export default async function LessonPage({
           className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />
-          Back to lessons
+          {backLabel}
         </Link>
         <header className="mb-6">
-          <h1 className="font-display text-3xl font-bold">{lesson.title_en}</h1>
-          {lesson.title_he ? (
-            <p className="mt-1 text-lg text-muted-foreground" dir="rtl">
-              {lesson.title_he}
+          <h1 className="font-display text-3xl font-bold" dir={isHe ? 'rtl' : 'ltr'}>
+            {primaryTitle}
+          </h1>
+          {secondaryTitle ? (
+            <p
+              className="mt-1 text-lg text-muted-foreground"
+              dir={isHe ? 'ltr' : 'rtl'}
+            >
+              {secondaryTitle}
             </p>
           ) : null}
           <p className="mt-2 text-sm text-muted-foreground">

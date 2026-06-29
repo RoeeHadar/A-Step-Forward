@@ -42,23 +42,36 @@ const SUBJECT_LABELS: Record<string, { en: string; he: string }> = {
  * A 4pt student sees 3pt + 4pt topics (they should master the lower level too).
  * Physics students see hs_physics topics.
  */
-function allowedLevels(pointsGroup: string | null | undefined): Set<string> {
+function allowedLevels(
+  pointsGroup: string | null | undefined,
+  subjects?: string[] | null,
+): Set<string> {
+  let levels: Set<string>;
   switch (pointsGroup) {
     case '3pt':
-      return new Set(['3pt']);
+      levels = new Set(['3pt']);
+      break;
     case '4pt':
-      return new Set(['3pt', '4pt']);
+      levels = new Set(['3pt', '4pt']);
+      break;
     case '5pt':
-      return new Set(['3pt', '4pt', '5pt']);
+      levels = new Set(['3pt', '4pt', '5pt']);
+      break;
     case 'hs_physics':
-      return new Set(['hs_physics', '3pt', '4pt']);
+      levels = new Set(['hs_physics', '3pt', '4pt']);
+      break;
     case 'calc1':
     case 'la':
     case 'physics1':
-      return new Set(['3pt', '4pt', '5pt', 'calc1', 'la', 'hs_physics']);
+      levels = new Set(['3pt', '4pt', '5pt', 'calc1', 'la', 'hs_physics']);
+      break;
     default:
-      return new Set(); // no filter — show everything
+      levels = new Set(); // no filter — show everything
   }
+  if (subjects?.includes('physics')) {
+    levels.add('hs_physics');
+  }
+  return levels;
 }
 
 export default async function QuizPage() {
@@ -70,18 +83,20 @@ export default async function QuizPage() {
   }
   if (!auth) redirect('/sign-in');
 
-  // Fetch learner's points_group to filter topics
+  // Fetch learner profile to filter topics by math units + subjects
   let pointsGroup: string | null = null;
+  let subjects: string[] | null = null;
   if (dbConfigured) {
     try {
       const profile = await getLearnerProfile(auth.learnerId);
       pointsGroup = profile?.points_group ?? null;
+      subjects = profile?.subjects ?? null;
     } catch {
       // silently fall back to showing all concepts
     }
   }
 
-  const allowed = allowedLevels(pointsGroup);
+  const allowed = allowedLevels(pointsGroup, subjects);
   const allConcepts = (kg as { concepts: KgConcept[] }).concepts;
 
   // Filter concepts if we know the learner's level; otherwise show all

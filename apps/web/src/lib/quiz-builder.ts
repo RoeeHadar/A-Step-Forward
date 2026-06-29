@@ -32,6 +32,7 @@ import {
   type LearnerProfileRow,
 } from '@/lib/neon-db';
 import kg from '@/lib/kg-data.json';
+import { effectiveGradeLevel } from '@/lib/grade-level';
 
 interface KgConcept {
   id: string;
@@ -187,7 +188,7 @@ function buildUserPrompt(
   profile: LearnerProfileRow | null,
 ): string {
   const goal = profile?.goal ?? null;
-  const grade = profile?.grade_level ?? null;
+  const grade = effectiveGradeLevel(profile?.grade_level ?? null);
 
   // Derive the learner's points level from their goal for level_scope lookup
   const GOAL_TO_LEVEL_KEY: Record<string, string> = {

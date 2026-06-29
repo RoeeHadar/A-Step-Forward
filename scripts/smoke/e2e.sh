@@ -2,7 +2,7 @@
 # Post-deploy smoke test. Runs against a deployed (staging or prod) environment.
 #
 # Usage:
-#   WEB_BASE_URL=https://a-step-forward.vercel.app \
+#   WEB_BASE_URL=https://a-step-forward-waij.vercel.app \
 #   API_BASE_URL=https://asf-api.fly.dev \
 #     scripts/smoke/e2e.sh
 #

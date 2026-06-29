@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { subjectLabel } from '@/lib/subject-labels';
@@ -14,6 +14,9 @@ import {
 import kg from '@/lib/kg-data.json';
 import { ConceptContentClient } from '@/components/concept-content-client';
 import { LessonPageClient } from '@/components/lesson-page-client';
+import { getServerLocale } from '@/i18n/locale-server';
+import { getMessages } from '@/i18n/messages';
+import { getLessonIndexEntry } from '@/lib/lesson-index';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,12 +33,26 @@ const kgById: Record<string, KgConcept> = Object.fromEntries(
   ((kg as { concepts: KgConcept[] }).concepts).map((c) => [c.id, c]),
 );
 
+/** Legacy / catalog slugs that differ from the canonical lesson concept_id. */
+const CONCEPT_ID_ALIASES: Record<string, string> = {
+  basic_probability: 'probability_basic',
+};
+
 export default async function ConceptPage({
   params,
 }: {
   params: Promise<{ subject: string; conceptId: string }>;
 }) {
-  const { subject, conceptId } = await params;
+  const { subject, conceptId: rawConceptId } = await params;
+
+  if (CONCEPT_ID_ALIASES[rawConceptId]) {
+    redirect(`/learn/${subject}/concept/${CONCEPT_ID_ALIASES[rawConceptId]}`);
+  }
+
+  const conceptId = rawConceptId;
+  const locale = await getServerLocale();
+  const t = getMessages(locale).learn;
+  const isHe = locale === 'he';
   const concept = kgById[conceptId];
 
   // Resolve learner level (best-effort; fall back to null if not logged in or no profile)
@@ -71,20 +88,31 @@ export default async function ConceptPage({
     fetchConceptExplanation(conceptId, 'he'),
   ]);
 
+  const indexEntry = getLessonIndexEntry(conceptId);
+
   const fallback =
     !lessonData && !en && !he
       ? await fetchConceptExplanationFallback(conceptId, 'en')
       : null;
 
-  if (!concept && !lessonData && !en && !he && !fallback) {
+  if (!concept && !lessonData && !indexEntry && !en && !he && !fallback) {
     notFound();
   }
 
   const display = en ?? he ?? fallback ?? null;
-  const conceptName =
-    concept?.name ?? lessonData?.lesson.title_en ?? display?.title ?? conceptId.replace(/_/g, ' ');
-  const conceptNameHe = concept?.name_he ?? lessonData?.lesson.title_he ?? null;
+  const conceptNameEn =
+    lessonData?.lesson.title_en ??
+    indexEntry?.title_en ??
+    concept?.name ??
+    display?.title ??
+    conceptId.replace(/_/g, ' ');
+  const conceptNameHe =
+    lessonData?.lesson.title_he ?? indexEntry?.title_he ?? concept?.name_he ?? null;
+  const conceptName = isHe && conceptNameHe ? conceptNameHe : conceptNameEn;
+  const conceptNameAlt =
+    isHe && conceptNameHe ? conceptNameEn : conceptNameHe;
 
+  const subjectName = subjectLabel(subject, locale);
   const prerequisites = concept?.prerequisites ?? [];
 
   return (
@@ -93,11 +121,11 @@ export default async function ConceptPage({
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
         <nav className="mb-4 text-sm text-muted-foreground">
           <Link href="/learn" className="hover:text-foreground">
-            Learn
+            {t.learn}
           </Link>
           <span className="mx-2">/</span>
           <Link href={`/learn/${subject}`} className="hover:text-foreground">
-            {subjectLabel(subject, 'en')}
+            {subjectName}
           </Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{conceptName}</span>
@@ -105,14 +133,14 @@ export default async function ConceptPage({
 
         <header className="mb-8">
           <h1 className="font-display text-3xl font-bold">{conceptName}</h1>
-          {conceptNameHe ? (
-            <p className="mt-1 text-lg text-muted-foreground" dir="rtl">
-              {conceptNameHe}
+          {conceptNameAlt ? (
+            <p className="mt-1 text-lg text-muted-foreground" dir={isHe ? 'ltr' : 'rtl'}>
+              {conceptNameAlt}
             </p>
           ) : null}
           {prerequisites.length > 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Prerequisites:</span>{' '}
+              <span className="font-medium text-foreground">{t.prerequisites}:</span>{' '}
               {prerequisites.map((p, i) => (
                 <span key={p}>
                   <Link
@@ -131,22 +159,21 @@ export default async function ConceptPage({
         {lessonData ? (
           <LessonPageClient data={lessonData} conceptId={conceptId} learnerLevel={learnerLevel} />
         ) : !en && !he && !fallback ? (
-          <div className="glass-surface rounded-2xl p-8 text-center">
+          <div
+            className="glass-surface rounded-2xl p-8 text-center"
+            dir={isHe ? 'rtl' : 'ltr'}
+          >
             <p className="text-foreground font-medium">
-              {dbConfigured
-                ? 'No explanation has been ingested for this concept yet.'
-                : 'Concept explanations are unavailable: the site database is not yet connected to this deployment.'}
+              {dbConfigured ? t.noExplanationIngested : t.dbNotConnected}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              {dbConfigured
-                ? 'An administrator can run the concept-content seed workflow to fetch it from Wikipedia (CC BY-SA 4.0).'
-                : 'A maintainer needs to add DATABASE_URL to the Vercel environment variables. Until then the AI Tutor is the best way to learn this concept.'}
+              {dbConfigured ? t.adminSeedHint : t.dbSetupHint}
             </p>
             <Link
-              href={`/app/chat/tutor?context=${encodeURIComponent(conceptName)}`}
+              href={`/app/chat/tutor?context=${encodeURIComponent(conceptNameEn)}`}
               className="mt-6 inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              Ask the AI Tutor about this
+              {t.askAiTutorAbout}
             </Link>
           </div>
         ) : (
@@ -156,22 +183,22 @@ export default async function ConceptPage({
             fallback={fallback}
             conceptId={conceptId}
             subject={subject}
-            conceptName={conceptName}
+            conceptName={conceptNameEn}
           />
         )}
 
         <section className="mt-10 flex flex-wrap gap-3">
           <Link
-            href={`/app/chat/tutor?context=${encodeURIComponent(conceptName)}`}
+            href={`/app/chat/tutor?context=${encodeURIComponent(conceptNameEn)}`}
             className="rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
           >
-            Ask the AI Tutor
+            {t.askAiTutor}
           </Link>
           <Link
             href={`/learn/${subject}`}
             className="rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
           >
-            More in {subjectLabel(subject, 'en')}
+            {t.moreIn} {subjectName}
           </Link>
         </section>
       </main>

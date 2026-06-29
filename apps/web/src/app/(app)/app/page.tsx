@@ -36,20 +36,27 @@ function emptySnapshot(): DashboardSnapshot {
 function computeNextLesson(
   mastery: Record<string, number>,
   pointsGroup: string | null,
+  subjects?: string[] | null,
 ): NextLessonInfo | null {
   const index = lessonsIndex as LessonIndexEntry[];
   const indexById = new Map(index.map((l) => [l.id, l]));
 
-  // Determine candidate concept IDs from learner's track
-  let candidateIds: string[];
+  // Determine candidate concept IDs from math units and/or enrolled subjects
+  const candidateSet = new Set<string>();
   if (pointsGroup) {
     const cat = CURRICULUM_CATEGORIES.find((c) =>
       c.points_levels.includes(pointsGroup as PointsLevel),
     );
-    candidateIds = cat?.concept_ids ?? index.map((l) => l.id);
-  } else {
-    candidateIds = index.map((l) => l.id);
+    for (const id of cat?.concept_ids ?? []) candidateSet.add(id);
   }
+  if (subjects?.includes('physics')) {
+    const physCat = CURRICULUM_CATEGORIES.find((c) =>
+      c.points_levels.includes('hs_physics'),
+    );
+    for (const id of physCat?.concept_ids ?? []) candidateSet.add(id);
+  }
+  const candidateIds =
+    candidateSet.size > 0 ? [...candidateSet] : index.map((l) => l.id);
 
   // Keep only concept IDs that have an authored lesson
   const available = candidateIds.filter((id) => indexById.has(id));
@@ -111,7 +118,11 @@ export default async function DashboardPage() {
       : Promise.resolve(null),
   ]);
 
-  const nextLesson = computeNextLesson(mastery, profile?.points_group ?? null);
+  const nextLesson = computeNextLesson(
+    mastery,
+    profile?.points_group ?? null,
+    profile?.subjects ?? null,
+  );
 
   return (
     <>

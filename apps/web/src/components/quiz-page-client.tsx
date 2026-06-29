@@ -915,7 +915,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
             {t.buildAnother}
           </Button>
           <Button variant="outline" asChild>
-            <a href="/dashboard">{t.backToDashboard}</a>
+            <a href="/app">{t.backToDashboard}</a>
           </Button>
         </div>
       </div>

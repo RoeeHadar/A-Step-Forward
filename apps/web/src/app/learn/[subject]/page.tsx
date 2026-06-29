@@ -11,8 +11,11 @@ import {
   fetchLessonMetaByConceptIds,
   fetchConceptMasteryBulk,
 } from '@/lib/neon-db';
+import { getLessonIndexEntry } from '@/lib/lesson-index';
 import kg from '@/lib/kg-data.json';
 import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
+import { getServerLocale } from '@/i18n/locale-server';
+import { getMessages } from '@/i18n/messages';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,6 +49,18 @@ interface UiSubjectFilter {
 function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
   if (uiSubject === 'math') return { kgSubject: 'math' };
   if (uiSubject === 'physics') return { kgSubject: 'physics' };
+  if (
+    uiSubject === 'hs-math-3' ||
+    uiSubject === 'math-hs-3' ||
+    uiSubject === 'hs_math_3'
+  )
+    return { kgSubject: 'math', mathTrack: '3pt', categoryId: 'math-hs-3' };
+  if (uiSubject === 'hs-math-4' || uiSubject === 'hs_math_4')
+    return { kgSubject: 'math', mathTrack: '4pt', categoryId: 'math-hs-4' };
+  if (uiSubject === 'hs-math-5' || uiSubject === 'hs_math_5')
+    return { kgSubject: 'math', mathTrack: '5pt', categoryId: 'math-hs-5' };
+  if (uiSubject === 'hs_physics')
+    return { kgSubject: 'physics', categoryId: 'physics-hs' };
   if (uiSubject === 'high_school_math_3_points')
     return { kgSubject: 'math', mathTrack: '3pt', categoryId: 'math-hs-3' };
   if (uiSubject === 'high_school_math_4_points')
@@ -109,6 +124,9 @@ const STATUS_CONFIG = {
 
 export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {
   const { subject } = await params;
+  const locale = await getServerLocale();
+  const t = getMessages(locale).learn;
+  const isHe = locale === 'he';
   const allSubjects = await fetchSubjects();
   const known = allSubjects.some((s) => s.subject === subject);
 
@@ -139,10 +157,12 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const conceptsWithCoverage = conceptsForSubject
     .map((c) => {
       const meta = lessonMeta.get(c.id);
-      const hasLesson = Boolean(meta);
+      const indexEntry = getLessonIndexEntry(c.id);
+      const hasLesson = Boolean(meta) || Boolean(indexEntry);
+      const trackSource = meta?.math_track ?? indexEntry?.math_track;
       const inTrack =
         filter.mathTrack && filter.kgSubject === 'math'
-          ? Boolean(meta?.math_track?.includes(filter.mathTrack))
+          ? Boolean(trackSource?.includes(filter.mathTrack))
           : true;
       const mastery = masteryMap.get(c.id);
       const status = masteryStatus(mastery?.score);
@@ -197,35 +217,41 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
         if (aRank !== bRank) return bRank - aRank;
         return a.name.localeCompare(b.name);
       });
-      sectionGroups.push({ id: '__all__', label_en: 'All Topics', label_he: 'כל הנושאים', concepts: sorted });
+      sectionGroups.push({ id: '__all__', label_en: t.allTopics, label_he: t.allTopics, concepts: sorted });
     } else if (ungrouped.length > 0) {
-      sectionGroups.push({ id: '__other__', label_en: 'Other Topics', label_he: 'נושאים נוספים', concepts: ungrouped });
+      sectionGroups.push({ id: '__other__', label_en: t.otherTopics, label_he: t.otherTopics, concepts: ungrouped });
     }
   }
 
   // Stats for header
   const doneCount = conceptsWithCoverage.filter((c) => c.status === 'done').length;
   const totalWithLesson = conceptsWithCoverage.filter((c) => c.hasLesson).length;
+  const subjectName = subjectLabel(subject, locale);
+  const subjectNameAlt = subjectLabel(subject, isHe ? 'en' : 'he');
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
         <nav className="mb-4 text-sm text-muted-foreground">
-          <Link href="/learn" className="hover:text-foreground">Learn</Link>
+          <Link href="/learn" className="hover:text-foreground">{t.learn}</Link>
           <span className="mx-2">/</span>
-          <span className="text-foreground">{subjectLabel(subject, 'en')}</span>
+          <span className="text-foreground">{subjectName}</span>
         </nav>
 
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-display text-3xl font-bold">{subjectLabel(subject, 'en')}</h1>
-            <p className="mt-1 text-muted-foreground" dir="rtl">
-              {subjectLabel(subject, 'he')}
-            </p>
+            <h1 className="font-display text-3xl font-bold">{subjectName}</h1>
+            {subjectNameAlt !== subjectName ? (
+              <p className="mt-1 text-muted-foreground" dir={isHe ? 'ltr' : 'rtl'}>
+                {subjectNameAlt}
+              </p>
+            ) : null}
             {learnerId && totalWithLesson > 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
-                <span className="font-semibold text-emerald-500">{doneCount}</span> of {totalWithLesson} lessons completed
+                {t.lessonsCompleted
+                  .replace('{done}', String(doneCount))
+                  .replace('{total}', String(totalWithLesson))}
               </p>
             ) : null}
           </div>
@@ -234,7 +260,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
               href={`/learn/${subject}/bagrut`}
               className="rounded-lg border border-border bg-surface-1/50 px-4 py-2 text-sm font-medium hover:border-primary/40"
             >
-              Bagrut Exams ({bagrut.length})
+              {t.bagrutExams.replace('{count}', String(bagrut.length))}
             </Link>
           ) : null}
         </header>
@@ -243,18 +269,18 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-semibold text-foreground">Chat with the Tutor about this</h2>
+                <h2 className="font-semibold text-foreground">{t.chatWithTutor}</h2>
                 <PremiumBadge />
               </div>
               <p className="mt-1 text-sm text-muted-foreground">
-                Ask questions about any section — currently free for all users.
+                {t.chatWithTutorDesc}
               </p>
             </div>
             <Link
               href={`/app/chat/tutor?context=${encodeURIComponent(subject)}`}
               className="rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              Open Tutor Chat
+              {t.openTutorChat}
             </Link>
           </div>
         </div>
@@ -271,15 +297,22 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     </div>
                     <div>
                       <h2 className="font-display text-lg font-semibold text-foreground">
-                        {group.label_en}
+                        {isHe ? group.label_he : group.label_en}
                       </h2>
-                      <p className="text-xs text-muted-foreground" dir="rtl">
-                        {group.label_he}
-                      </p>
+                      {!isHe && group.label_he !== group.label_en ? (
+                        <p className="text-xs text-muted-foreground" dir="rtl">
+                          {group.label_he}
+                        </p>
+                      ) : isHe && group.label_en !== group.label_he ? (
+                        <p className="text-xs text-muted-foreground" dir="ltr">
+                          {group.label_en}
+                        </p>
+                      ) : null}
                     </div>
                     <div className="ml-auto text-xs text-muted-foreground">
-                      {group.concepts.filter((c) => c.hasLesson).length} lessons ·{' '}
-                      {group.concepts.filter((c) => c.status === 'done').length} done
+                      {t.lessonsDone
+                        .replace('{lessons}', String(group.concepts.filter((c) => c.hasLesson).length))
+                        .replace('{done}', String(group.concepts.filter((c) => c.status === 'done').length))}
                     </div>
                   </div>
                 ) : null}
@@ -291,10 +324,17 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     const StatusIcon = statusCfg?.icon ?? BookOpen;
 
                     const badgeLabel = c.hasLesson
-                      ? 'Lesson · EN · HE'
+                      ? t.lessonBadge
                       : c.langs.includes('he') && c.langs.includes('en')
                         ? 'EN · HE'
                         : (c.langs[0]?.toUpperCase() ?? null);
+                    const statusLabel = statusCfg
+                      ? c.status === 'done'
+                        ? t.statusDone
+                        : c.status === 'in_progress'
+                          ? t.statusInProgress
+                          : t.statusReview
+                      : null;
 
                     return (
                       <Link
@@ -318,7 +358,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                               className={`flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${statusCfg.classes}`}
                             >
                               <StatusIcon className="h-3 w-3" />
-                              {statusCfg.label_en}
+                              {statusLabel}
                             </span>
                           ) : hasContent ? (
                             <span
@@ -332,7 +372,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                             </span>
                           ) : (
                             <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-                              Soon
+                              {t.soon}
                             </span>
                           )}
                         </div>
@@ -351,7 +391,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                               />
                             </div>
                             <p className="mt-0.5 text-[9px] text-muted-foreground">
-                              {Math.round(c.mastery.score * 100)}% mastery
+                              {t.masteryPct.replace('{pct}', String(Math.round(c.mastery.score * 100)))}
                             </p>
                           </div>
                         ) : null}
@@ -365,17 +405,16 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
         ) : (
           <section className="mt-2 glass-surface rounded-2xl p-8 text-center">
             <h2 className="font-display text-xl font-semibold text-foreground">
-              No lessons in this track yet
+              {t.noLessonsYet}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              We&rsquo;re still authoring AI lessons for this slice of the curriculum. The AI Tutor
-              can teach any topic on demand and reference your goals.
+              {t.noLessonsDesc}
             </p>
             <Link
               href={`/app/chat/tutor?context=${encodeURIComponent(subject)}`}
               className="mt-5 inline-flex rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              Open Tutor Chat
+              {t.openTutorChat}
             </Link>
           </section>
         )}
