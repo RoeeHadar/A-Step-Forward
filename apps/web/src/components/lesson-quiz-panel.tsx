@@ -322,8 +322,8 @@ function QuestionCard({
                 onClick={() => handleMcq(i)}
                 className={`flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${cls}`}
               >
-                <span className="font-mono text-xs text-muted-foreground">
-                  {String.fromCharCode(65 + i)}.
+                <span className="shrink-0 font-mono text-xs text-muted-foreground" dir="ltr">
+                  {`${String.fromCharCode(65 + i)}. `}
                 </span>
                 <span className="flex-1">
                   <MarkdownInline content={opt} />

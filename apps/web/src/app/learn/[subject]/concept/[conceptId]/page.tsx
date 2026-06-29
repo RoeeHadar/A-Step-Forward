@@ -17,6 +17,7 @@ import { LessonPageClient } from '@/components/lesson-page-client';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
+import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
 
 export const dynamic = 'force-dynamic';
 
@@ -133,25 +134,28 @@ export default async function ConceptPage({
 
         <header className="mb-8">
           <h1 className="font-display text-3xl font-bold">{conceptName}</h1>
-          {conceptNameAlt ? (
-            <p className="mt-1 text-lg text-muted-foreground" dir={isHe ? 'ltr' : 'rtl'}>
+          {isHe && conceptNameAlt ? (
+            <p className="mt-1 text-lg text-muted-foreground" dir="ltr">
               {conceptNameAlt}
             </p>
           ) : null}
           {prerequisites.length > 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{t.prerequisites}:</span>{' '}
-              {prerequisites.map((p, i) => (
+              {prerequisites.map((p, i) => {
+                const prereqTitle = pickConceptTitle(resolveConceptTitles(p), locale);
+                return (
                 <span key={p}>
                   <Link
                     href={`/learn/${subject}/concept/${p}`}
                     className="text-primary hover:underline"
                   >
-                    {kgById[p]?.name ?? p.replace(/_/g, ' ')}
+                    {prereqTitle}
                   </Link>
                   {i < prerequisites.length - 1 ? ', ' : ''}
                 </span>
-              ))}
+                );
+              })}
             </p>
           ) : null}
         </header>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
 import { CheckCircle2, Clock, RefreshCw, BookOpen } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
@@ -16,6 +16,7 @@ import kg from '@/lib/kg-data.json';
 import { CURRICULUM_CATEGORIES, conceptIdsForLevel } from '@/lib/curriculum-categories';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
+import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
 
 export const dynamic = 'force-dynamic';
 
@@ -171,8 +172,26 @@ const STATUS_CONFIG = {
   },
 } as const;
 
+const SUBJECT_ALIASES: Record<string, string> = {
+  'high-school-math-3-pts': 'high_school_math_3_points',
+  'high-school-math-4-pts': 'high_school_math_4_points',
+  'high-school-math-5-pts': 'high_school_math_5_points',
+  'hs-math-3': 'high_school_math_3_points',
+  'hs-math-4': 'high_school_math_4_points',
+  'hs-math-5': 'high_school_math_5_points',
+  'math-hs-3': 'high_school_math_3_points',
+  hs_math_3: 'high_school_math_3_points',
+  hs_math_4: 'high_school_math_4_points',
+  hs_math_5: 'high_school_math_5_points',
+};
+
 export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {
   const { subject } = await params;
+
+  if (SUBJECT_ALIASES[subject]) {
+    redirect(`/learn/${SUBJECT_ALIASES[subject]}`);
+  }
+
   const locale = await getServerLocale();
   const t = getMessages(locale).learn;
   const isHe = locale === 'he';
@@ -351,11 +370,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                       <h2 className="font-display text-lg font-semibold text-foreground">
                         {isHe ? group.label_he : group.label_en}
                       </h2>
-                      {!isHe && group.label_he !== group.label_en ? (
-                        <p className="text-xs text-muted-foreground" dir="rtl">
-                          {group.label_he}
-                        </p>
-                      ) : isHe && group.label_en !== group.label_he ? (
+                      {isHe && group.label_en !== group.label_he ? (
                         <p className="text-xs text-muted-foreground" dir="ltr">
                           {group.label_en}
                         </p>
@@ -374,11 +389,18 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     const hasContent = c.hasLesson || c.langs.length > 0;
                     const statusCfg = c.status ? STATUS_CONFIG[c.status] : null;
                     const StatusIcon = statusCfg?.icon ?? BookOpen;
+                    const titles = resolveConceptTitles(c.id);
+                    const cardTitle = pickConceptTitle(titles, locale);
+                    const cardTitleAlt = isHe ? titles.title_en : titles.title_he;
 
-                    const badgeLabel = c.hasLesson
-                      ? t.lessonBadge
+                    const contentBadge = c.hasLesson
+                      ? isHe
+                        ? t.lessonBadge
+                        : 'Lesson'
                       : c.langs.includes('he') && c.langs.includes('en')
-                        ? 'EN · HE'
+                        ? isHe
+                          ? 'EN · HE'
+                          : null
                         : (c.langs[0]?.toUpperCase() ?? null);
                     const statusLabel = statusCfg
                       ? c.status === 'done'
@@ -402,7 +424,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                       >
                         <div className="flex items-start justify-between gap-2">
                           <h3 className="font-medium text-foreground group-hover:text-primary">
-                            {c.name}
+                            {cardTitle}
                           </h3>
                           {/* Completion badge takes precedence over content badge */}
                           {statusCfg ? (
@@ -412,7 +434,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                               <StatusIcon className="h-3 w-3" />
                               {statusLabel}
                             </span>
-                          ) : hasContent ? (
+                          ) : hasContent && contentBadge ? (
                             <span
                               className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${
                                 c.hasLesson
@@ -420,7 +442,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                                   : 'bg-muted text-muted-foreground'
                               }`}
                             >
-                              {badgeLabel}
+                              {contentBadge}
                             </span>
                           ) : (
                             <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
@@ -428,9 +450,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                             </span>
                           )}
                         </div>
-                        {c.name_he ? (
-                          <p className="mt-1 text-sm text-muted-foreground" dir="rtl">
-                            {c.name_he}
+                        {isHe && cardTitleAlt ? (
+                          <p className="mt-1 text-sm text-muted-foreground" dir="ltr">
+                            {cardTitleAlt}
                           </p>
                         ) : null}
                         {/* Score bar if in-progress or needs review */}
