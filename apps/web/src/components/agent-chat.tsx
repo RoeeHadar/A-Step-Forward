@@ -1,6 +1,7 @@
 'use client';
 
 import { useChat } from 'ai/react';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -37,6 +38,9 @@ export function AgentChat({ agent }: { agent: string }) {
   const userMessageCountRef = useRef(0);
   const [showConnecting, setShowConnecting] = useState(false);
   const [showWarmupBanner, setShowWarmupBanner] = useState(false);
+  const searchParams = useSearchParams();
+  const quickMode = searchParams.get('mode') === 'quick';
+  const quickDuration = searchParams.get('duration') ?? '15';
 
   useEffect(() => {
     setLastAgent(agentName);
@@ -48,7 +52,7 @@ export function AgentChat({ agent }: { agent: string }) {
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload } = useChat({
     api: '/api/chat',
-    body: { agent: agentName },
+    body: { agent: agentName, quickMode, quickDuration: quickMode ? quickDuration : undefined },
     onError: () => {
       if (!hasAutoRetriedRef.current && userMessageCountRef.current <= 1) {
         hasAutoRetriedRef.current = true;

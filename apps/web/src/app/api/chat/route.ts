@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
-  let body: { messages?: { role: string; content: string }[]; agent?: string };
+  let body: { messages?: { role: string; content: string }[]; agent?: string; quickMode?: boolean; quickDuration?: string };
   try {
     body = (await req.json()) as typeof body;
   } catch {
@@ -61,11 +61,13 @@ export async function POST(req: Request) {
   const lastMessage = body.messages?.filter((m) => m.role === 'user').at(-1)?.content ?? '';
   const parsedAgent = agentNameSchema.safeParse(body.agent);
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
+  const quickMode = body.quickMode === true;
+  const quickDuration = body.quickDuration ?? '15';
 
   // Record user turn (fire-and-forget — does not block streaming).
   void recordChatTurn(userId, agent, 'user', lastMessage);
 
-  const gen = streamAgentResponse(userId, lastMessage, agent);
+  const gen = streamAgentResponse(userId, lastMessage, agent, { quickMode, quickDuration });
   const encoder = new TextEncoder();
   let assistantBuffer = '';
 
@@ -115,12 +117,13 @@ async function* streamAgentResponse(
   userId: string,
   message: string,
   agent: string,
+  opts: { quickMode?: boolean; quickDuration?: string } = {},
 ): AsyncGenerator<string> {
   // Direct Groq path — no Render dependency. Designed to fit comfortably
   // inside Vercel function timeouts.
   let emitted = false;
   try {
-    for await (const chunk of streamFromGroq(userId, message, agent)) {
+    for await (const chunk of streamFromGroq(userId, message, agent, opts)) {
       emitted = true;
       yield chunk;
     }
@@ -154,7 +157,9 @@ async function buildContextPrompt(
   userId: string,
   agent: string,
   message: string,
+  opts: { quickMode?: boolean; quickDuration?: string } = {},
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
+  const { quickMode = false, quickDuration = '15' } = opts;
   // Each helper catches its own errors so a single DB issue cannot break chat.
   const [profile, mastery, recent, persona, agentNotes, cookieStore] = await Promise.all([
     getLearnerProfile(userId).catch(() => null),
@@ -364,6 +369,10 @@ async function buildContextPrompt(
     } else {
       context += `\nNo items due for review. Focus on the learner's weakest concepts from their mastery data.`;
     }
+    if (quickMode) {
+      context += `\n\n## Quick session mode`;
+      context += `\nThis is a ${quickDuration}-minute focused session. Keep ALL responses concise (≤3 sentences + question). Open immediately with one targeted drill question on the highest-priority weak concept or due item. No preamble. After ${quickDuration} minutes of interaction, summarise what was covered and suggest the next session topic.`;
+    }
   }
 
   context += `\n\nKeep responses focused on this learner. Reference their goal and timeline when relevant.`;
@@ -387,6 +396,7 @@ async function* streamFromGroq(
   userId: string,
   message: string,
   agent: string,
+  opts: { quickMode?: boolean; quickDuration?: string } = {},
 ): AsyncGenerator<string> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
@@ -396,7 +406,7 @@ async function* streamFromGroq(
 
   let context: Awaited<ReturnType<typeof buildContextPrompt>>;
   try {
-    context = await buildContextPrompt(userId, agent, message);
+    context = await buildContextPrompt(userId, agent, message, opts);
   } catch (err) {
     logger.warn('buildContextPrompt failed, using bare persona', { err: String(err) });
     const bareSystem = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
