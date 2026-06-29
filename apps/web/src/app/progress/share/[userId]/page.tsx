@@ -19,6 +19,14 @@ function formatDate(iso: string | null, locale: 'he' | 'en'): string {
   }
 }
 
+function subjectLabel(subject: string | null, isHe: boolean): string {
+  if (!subject) return isHe ? 'מתמטיקה' : 'Math';
+  if (subject === 'hs_physics') return isHe ? 'פיזיקה' : 'Physics';
+  const m = subject.match(/math_(\d)/);
+  if (m) return isHe ? `מתמטיקה ${m[1]} יח'` : `Math (${m[1]}pt)`;
+  return isHe ? 'מתמטיקה' : 'Math';
+}
+
 export default async function PublicProgressSharePage({
   params,
 }: {
@@ -68,6 +76,35 @@ export default async function PublicProgressSharePage({
               </>
             )}
           </p>
+
+          {stats.estimated_grade != null ? (
+            <div className="border-t border-border pt-3">
+              <p className="text-sm font-semibold text-foreground">
+                {isHe ? 'ציון משוער לבגרות' : 'Estimated Bagrut grade'}
+                {stats.subject ? ` (${subjectLabel(stats.subject, isHe)})` : ''}
+              </p>
+              <p className="mt-1 text-2xl font-bold text-primary">
+                ~{stats.estimated_grade}
+              </p>
+            </div>
+          ) : null}
+
+          {stats.week_activity.length === 7 ? (
+            <div className="border-t border-border pt-3">
+              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {isHe ? 'פעילות שבועית' : 'Week activity'}
+              </p>
+              <div className="flex gap-1.5">
+                {stats.week_activity.map((active, i) => (
+                  <div
+                    key={i}
+                    className={`h-6 w-6 rounded-sm ${active ? 'bg-primary' : 'bg-muted'}`}
+                    title={active ? (isHe ? 'פעיל' : 'Active') : (isHe ? 'לא פעיל' : 'Inactive')}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-8 text-center">

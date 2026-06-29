@@ -237,7 +237,7 @@ export default async function ConceptPage({
           </section>
         ) : null}
 
-        <MathGlossaryPanel locale={locale} subject={subject} />
+        <MathGlossaryPanel locale={locale} />
       </main>
     </div>
   );

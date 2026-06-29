@@ -40,13 +40,6 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   'physics-hs': { en: 'High School Physics', he: 'פיזיקה — תיכון', icon: '⚡' },
   hs_physics_5: { en: 'Physics — 5pt', he: 'פיזיקה — 5 יח״ל', icon: '⚡' },
   'hs-physics-5': { en: 'Physics — 5pt', he: 'פיזיקה — 5 יח״ל', icon: '⚡' },
-  biology: { en: 'Biology', he: 'ביולוגיה', icon: '🧬' },
-  biology_4pt: { en: 'Biology (4pt)', he: 'ביולוגיה (4 יחידות)', icon: '🧬' },
-  'biology-4pt': { en: 'Biology (4pt)', he: 'ביולוגיה (4 יחידות)', icon: '🧬' },
-  bio_4: { en: 'Biology (4pt)', he: 'ביולוגיה (4 יחידות)', icon: '🧬' },
-  'bio-4': { en: 'Biology (4pt)', he: 'ביולוגיה (4 יחידות)', icon: '🧬' },
-  biology_5pt: { en: 'Biology (5pt)', he: 'ביולוגיה (5 יחידות)', icon: '🧬' },
-  'biology-5pt': { en: 'Biology (5pt)', he: 'ביולוגיה (5 יחידות)', icon: '🧬' },
   makhina: { en: 'University Prep (מכינה)', he: 'מכינה אקדמית', icon: '🎓' },
   chemistry: { en: 'Chemistry', he: 'כימיה', icon: '⚗️' },
 };

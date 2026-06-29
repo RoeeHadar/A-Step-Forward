@@ -31,7 +31,6 @@ const SUBJECT_LABELS: Record<string, { en: string; he: string }> = {
   math: { en: 'Math', he: 'מתמטיקה' },
   physics: { en: 'Physics', he: 'פיזיקה' },
   chemistry: { en: 'Chemistry', he: 'כימיה' },
-  biology: { en: 'Biology', he: 'ביולוגיה' },
   cs: { en: 'Computer Science', he: 'מדעי המחשב' },
   english: { en: 'English', he: 'אנגלית' },
 };

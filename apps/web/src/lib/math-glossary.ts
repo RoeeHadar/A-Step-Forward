@@ -1,4 +1,4 @@
-export type GlossaryCategory = 'math' | 'biology';
+export type GlossaryCategory = 'math';
 
 export type GlossaryEntry = { he: string; en: string; category?: GlossaryCategory };
 
@@ -27,11 +27,6 @@ export const MATH_GLOSSARY: Record<string, GlossaryEntry> = {
   'טור': { he: 'טור', en: 'Series' },
   'וקטור': { he: 'וקטור', en: 'Vector' },
   'מטריצה': { he: 'מטריצה', en: 'Matrix' },
-  'תא': { he: 'תא', en: 'Cell' },
-  'גרעין': { he: 'גרעין', en: 'Nucleus' },
-  'תורשה': { he: 'תורשה', en: 'Heredity' },
-  'ברירה טבעית': { he: 'ברירה טבעית', en: 'Natural Selection' },
-  'אלל': { he: 'אלל', en: 'Allele' },
 };
 
 /** Flat array form of MATH_GLOSSARY — used by MathGlossaryPanel for table rendering. */

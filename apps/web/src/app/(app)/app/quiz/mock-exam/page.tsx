@@ -51,14 +51,12 @@ const STR = {
     retake: 'תרגול חדש',
     openAnswer: 'כתוב את התשובה שלך…',
     kinds: { mcq: 'שאלות אמריקאיות', short_answer: 'תשובה קצרה', extended: 'שאלות פתוחות' },
-    subjects: { math: 'מתמטיקה', physics: 'פיזיקה', biology: 'ביולוגיה' },
+    subjects: { math: 'מתמטיקה', physics: 'פיזיקה' },
     levels: {
       '3pt': '3 יחידות',
       '4pt': '4 יחידות',
       '5pt': '5 יחידות',
       hs_physics: 'פיזיקה 5 יח״ל',
-      biology_4pt: 'ביולוגיה 4 יח״ל',
-      biology_5pt: 'ביולוגיה 5 יח״ל',
     },
     minutes: (n: number) => `${n} דקות`,
     points: (n: number) => `${n} נק׳`,
@@ -92,14 +90,12 @@ const STR = {
     retake: 'New practice',
     openAnswer: 'Write your answer…',
     kinds: { mcq: 'Multiple Choice', short_answer: 'Short answer', extended: 'Open Questions' },
-    subjects: { math: 'Math', physics: 'Physics', biology: 'Biology' },
+    subjects: { math: 'Math', physics: 'Physics' },
     levels: {
       '3pt': '3 units',
       '4pt': '4 units',
       '5pt': '5 units',
       hs_physics: 'HS Physics 5pt',
-      biology_4pt: 'Biology 4pt',
-      biology_5pt: 'Biology 5pt',
     },
     minutes: (n: number) => `${n} min`,
     points: (n: number) => `${n} pts`,
@@ -109,11 +105,10 @@ const STR = {
   },
 } as const;
 
-const SUBJECTS = ['math', 'physics', 'biology'] as const;
+const SUBJECTS = ['math', 'physics'] as const;
 const LEVELS_BY_SUBJECT: Record<(typeof SUBJECTS)[number], string[]> = {
   math: ['3pt', '4pt', '5pt'],
   physics: ['hs_physics'],
-  biology: ['biology_4pt', 'biology_5pt'],
 };
 const DURATIONS = [45, 60, 90] as const;
 

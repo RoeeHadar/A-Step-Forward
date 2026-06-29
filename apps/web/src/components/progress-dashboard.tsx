@@ -112,11 +112,12 @@ export function ProgressDashboard({
     };
   }, [hasPhysicsEnrollment]);
 
-  const showDualGrades =
-    hasPhysicsEnrollment &&
-    gradeEstimate != null &&
-    physicsGradeEstimate != null &&
-    gradeEstimate.subject !== 'hs_physics';
+  const readinessRows = [
+    gradeEstimate && gradeEstimate.subject !== 'hs_physics' ? gradeEstimate : null,
+    hasPhysicsEnrollment ? physicsGradeEstimate : null,
+  ].filter(Boolean) as GradeEstimate[];
+
+  const showReadinessBlock = readinessRows.length > 0;
 
   async function handleShareProgress() {
     if (!userId) return;
@@ -227,55 +228,38 @@ export function ProgressDashboard({
         <h2 className="font-display text-xl font-semibold">{t.masteryByConcept}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t.masteryByConceptDesc}</p>
 
-        {showDualGrades ? (
+        {showReadinessBlock ? (
           <div className="mt-3 space-y-1">
             <p className="text-sm font-semibold text-foreground">
               {isHe ? 'מוכנות לבגרות' : 'Bagrut Readiness'}
             </p>
-            {gradeEstimate ? (
-              <GradeEstimateRow
-                estimate={gradeEstimate}
-                isHe={isHe}
-                practiceMoreLabel={t.practiceMoreForEstimate}
-                withTrackLabel={withTrackLabel}
-              />
-            ) : null}
-            {physicsGradeEstimate ? (
-              <GradeEstimateRow
-                estimate={physicsGradeEstimate}
-                isHe={isHe}
-                practiceMoreLabel={t.practiceMoreForEstimate}
-                withTrackLabel={withTrackLabel}
-              />
-            ) : null}
-          </div>
-        ) : (
-          <>
-            {gradeEstimate != null && gradeEstimate.subject !== 'hs_physics' ? (
-              <div className="mt-2">
+            {readinessRows.map((estimate) => {
+              const isPhysics = estimate.subject === 'hs_physics';
+              if (isPhysics) {
+                return estimate.masteryAvg < 0.3 ? (
+                  <p key="physics" className="text-sm italic text-muted-foreground">
+                    {t.practiceMoreForEstimate}
+                  </p>
+                ) : (
+                  <p key="physics" className="text-sm text-muted-foreground">
+                    {isHe
+                      ? `ציון משוער (פיזיקה): ~${estimate.estimatedGrade}`
+                      : `Estimated grade (Physics): ~${estimate.estimatedGrade}`}
+                  </p>
+                );
+              }
+              return (
                 <GradeEstimateRow
-                  estimate={gradeEstimate}
+                  key={estimate.subject ?? 'math'}
+                  estimate={estimate}
                   isHe={isHe}
                   practiceMoreLabel={t.practiceMoreForEstimate}
                   withTrackLabel={withTrackLabel}
                 />
-              </div>
-            ) : null}
-            {hasPhysicsEnrollment && physicsGradeEstimate != null ? (
-              <div className="mt-2">
-                {physicsGradeEstimate.masteryAvg < 0.3 ? (
-                  <p className="text-sm italic text-muted-foreground">{t.practiceMoreForEstimate}</p>
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    {isHe
-                      ? `ציון משוער (פיזיקה): ~${physicsGradeEstimate.estimatedGrade}`
-                      : `Estimated grade (Physics): ~${physicsGradeEstimate.estimatedGrade}`}
-                  </p>
-                )}
-              </div>
-            ) : null}
-          </>
-        )}
+              );
+            })}
+          </div>
+        ) : null}
 
         <div className="mt-4 h-72">
           {masteryData.length === 0 ? (

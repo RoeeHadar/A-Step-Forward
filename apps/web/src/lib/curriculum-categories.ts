@@ -22,8 +22,6 @@ export type PointsLevel =
   | '4pt'
   | '5pt'
   | 'hs_physics'
-  | 'biology_4pt'
-  | 'biology_5pt'
   | 'calc1'
   | 'la'
   | 'physics1'
@@ -159,23 +157,6 @@ const PHYSICS_HS_CONCEPTS = [
   'nuclear_physics',
   'special_relativity',
 ];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// BIOLOGY — 4 UNITS (Bagrut)
-// ─────────────────────────────────────────────────────────────────────────────
-const BIOLOGY_4PT_CONCEPTS = [
-  'cell_structure',
-  'cell_division',
-  'photosynthesis',
-  'dna_structure',
-  'heredity_mendelian',
-  'gene_expression',
-  'natural_selection',
-  'speciation',
-  'evidence_evolution',
-];
-
-const BIOLOGY_5PT_CONCEPTS = [...BIOLOGY_4PT_CONCEPTS];
 
 const MAKHINA_PHYSICS_CONCEPTS = [
   'units_measurement',
@@ -473,94 +454,6 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
   },
 
   // ──────────────────────────────────────────────────────────────────────────
-  // BIOLOGY — Bagrut 4 units
-  // ──────────────────────────────────────────────────────────────────────────
-  {
-    id: 'biology-4pt',
-    heLabel: 'ביולוגיה לבגרות — 4 יחידות',
-    enLabel: 'Bagrut Biology — 4 Units',
-    emoji: '🧬',
-    points_levels: ['biology_4pt'],
-    concept_ids: BIOLOGY_4PT_CONCEPTS,
-    sections: [
-      {
-        id: 'cell-biology',
-        heLabel: 'ביולוגיה של התא',
-        enLabel: 'Cell Biology',
-        concept_ids: ['cell_structure', 'cell_division', 'photosynthesis'],
-      },
-      {
-        id: 'genetics',
-        heLabel: 'גנטיקה',
-        enLabel: 'Genetics',
-        concept_ids: ['dna_structure', 'heredity_mendelian', 'gene_expression'],
-      },
-      {
-        id: 'evolution',
-        heLabel: 'אבולוציה',
-        enLabel: 'Evolution',
-        concept_ids: ['natural_selection', 'speciation', 'evidence_evolution'],
-      },
-      {
-        id: 'ecology',
-        heLabel: 'אקולוגיה',
-        enLabel: 'Ecology',
-        concept_ids: ['photosynthesis', 'natural_selection', 'speciation', 'evidence_evolution'],
-      },
-      {
-        id: 'human-systems',
-        heLabel: 'מערכות הגוף',
-        enLabel: 'Human Body Systems',
-        concept_ids: ['cell_structure', 'cell_division', 'gene_expression', 'photosynthesis'],
-      },
-    ],
-  },
-
-  // ──────────────────────────────────────────────────────────────────────────
-  // BIOLOGY — Bagrut 5 units (same KG scope as 4pt until 5pt-specific nodes land)
-  // ──────────────────────────────────────────────────────────────────────────
-  {
-    id: 'biology-5pt',
-    heLabel: 'ביולוגיה לבגרות — 5 יחידות',
-    enLabel: 'Bagrut Biology — 5 Units',
-    emoji: '🧬',
-    points_levels: ['biology_5pt'],
-    concept_ids: BIOLOGY_5PT_CONCEPTS,
-    sections: [
-      {
-        id: 'cell-biology',
-        heLabel: 'ביולוגיה של התא',
-        enLabel: 'Cell Biology',
-        concept_ids: ['cell_structure', 'cell_division', 'photosynthesis'],
-      },
-      {
-        id: 'genetics',
-        heLabel: 'גנטיקה',
-        enLabel: 'Genetics',
-        concept_ids: ['dna_structure', 'heredity_mendelian', 'gene_expression'],
-      },
-      {
-        id: 'evolution',
-        heLabel: 'אבולוציה',
-        enLabel: 'Evolution',
-        concept_ids: ['natural_selection', 'speciation', 'evidence_evolution'],
-      },
-      {
-        id: 'ecology',
-        heLabel: 'אקולוגיה',
-        enLabel: 'Ecology',
-        concept_ids: ['photosynthesis', 'natural_selection', 'speciation', 'evidence_evolution'],
-      },
-      {
-        id: 'human-systems',
-        heLabel: 'מערכות הגוף',
-        enLabel: 'Human Body Systems',
-        concept_ids: ['cell_structure', 'cell_division', 'gene_expression', 'photosynthesis'],
-      },
-    ],
-  },
-
-  // ──────────────────────────────────────────────────────────────────────────
   // UNIVERSITY PREP — מכינה (calculus, LA, stats, mechanics)
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -681,8 +574,6 @@ export const GOAL_TO_LEVEL: Record<string, PointsLevel> = {
   bagrut_math_4pt: '4pt',
   bagrut_math_5pt: '5pt',
   bagrut_physics: 'hs_physics',
-  bagrut_biology_4pt: 'biology_4pt',
-  bagrut_biology_5pt: 'biology_5pt',
   makhina: 'makhina',
   university_prep: 'makhina',
   calculus1: 'calc1',

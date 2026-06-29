@@ -43,7 +43,7 @@ const VALID_DURATIONS = new Set([45, 60, 90]);
 const SUBJECT_LABELS: Record<string, { en: string; he: string }> = {
   math: { en: 'Mathematics', he: 'מתמטיקה' },
   physics: { en: 'Physics', he: 'פיזיקה' },
-  biology: { en: 'Biology', he: 'ביולוגיה' },
+  makhina: { en: 'Makhina (pre-university)', he: 'מכינה' },
 };
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -51,8 +51,30 @@ const LEVEL_LABELS: Record<string, string> = {
   '4pt': '4 units (יחידות)',
   '5pt': '5 units (יחידות)',
   hs_physics: '5-unit high-school physics',
-  biology_4pt: '4-unit biology',
-  biology_5pt: '5-unit biology',
+  calculus: 'Calculus (Makhina) — university-prep, deeper than Bagrut 5pt',
+  stats: 'Statistics & Probability (Makhina)',
+  linear_algebra: 'Linear Algebra (Makhina)',
+};
+
+const MAKHINA_TOPIC_GUIDANCE: Record<string, string> = {
+  calculus: `Focus on university-prep calculus (deeper than Bagrut 5pt):
+- Limits and continuity; include ε-δ style reasoning where appropriate
+- Derivatives: rules, chain rule, implicit differentiation, applications
+- Integrals: definite/indefinite integrals, substitution, integration by parts
+- Sequences and series basics
+Include ε-δ style questions and advanced integration techniques — not just standard Bagrut items.`,
+  stats: `Focus on Makhina statistics & probability:
+- Descriptive statistics: mean, median, variance, standard deviation
+- Probability: sample spaces, conditional probability, independence
+- Bayes' theorem applications
+- Normal distribution basics (z-scores, standardization)
+- Introductory hypothesis testing concepts`,
+  linear_algebra: `Focus on Makhina linear algebra:
+- Vectors in R²/R³: magnitude, dot product, cross product (where relevant)
+- Matrix operations: addition, multiplication, transpose, inverse (2×2, 3×3)
+- Systems of linear equations (Gaussian elimination)
+- Eigenvalues and eigenvectors (2×2, 3×3)
+- Diagonalization basics`,
 };
 
 function requireSql() {
@@ -129,15 +151,26 @@ Rules:
 - NEVER include names, emails, phones, or external links.
 - Number questions sequentially from 1.`;
 
-function buildUserPrompt(subject: string, level: string, durationMinutes: number): string {
+function buildUserPrompt(
+  subject: string,
+  level: string,
+  durationMinutes: number,
+  locale: 'he' | 'en' = 'he',
+): string {
   const subj = SUBJECT_LABELS[subject] ?? { en: subject, he: subject };
   const levelNote = LEVEL_LABELS[level] ?? level;
-  return `Subject: ${subj.he} / ${subj.en}
-Bagrut level: ${levelNote}
-Exam duration: ${durationMinutes} minutes
+  const makhinaTopics =
+    subject === 'makhina' ? MAKHINA_TOPIC_GUIDANCE[level] ?? '' : '';
+  const primaryLang = locale === 'en' ? 'English' : 'Hebrew';
 
-Generate a full Bagrut-style mock exam (20–25 questions) appropriate for this subject and level.
+  return `Subject: ${subj.he} / ${subj.en}
+Exam track: ${levelNote}
+Exam duration: ${durationMinutes} minutes
+Primary display language: ${primaryLang}
+${makhinaTopics ? `\nTopic guidance:\n${makhinaTopics}\n` : ''}
+Generate a full ${subject === 'makhina' ? 'Makhina university-prep' : 'Bagrut-style'} mock exam (20–25 questions) appropriate for this subject and level.
 Mix difficulty: some easy warm-up, mostly exam-realistic, 2–3 challenging items.
+When primary language is English, stem_en must be the main exam text and stem_he a faithful translation.
 
 Return JSON only.`;
 }
@@ -187,11 +220,19 @@ async function callGroqForMockExam(
   subject: string,
   level: string,
   durationMinutes: number,
+  locale: 'he' | 'en' = 'he',
 ): Promise<StoredMockExamQuestion[] | null> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) return null;
 
-  const userPrompt = buildUserPrompt(subject, level, durationMinutes);
+  const userPrompt = buildUserPrompt(subject, level, durationMinutes, locale);
+  const systemPrompt =
+    locale === 'en'
+      ? SYSTEM_PROMPT.replace(
+          'Hebrew stems are the primary display text; English is a faithful translation.',
+          'English stems are the primary display text; Hebrew is a faithful translation.',
+        )
+      : SYSTEM_PROMPT;
 
   for (const model of GROQ_MODELS) {
     const controller = new AbortController();
@@ -206,7 +247,7 @@ async function callGroqForMockExam(
         body: JSON.stringify({
           model,
           messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
           ],
           response_format: { type: 'json_object' },
@@ -244,6 +285,7 @@ export async function getOrCreateMockExam(
   subject: string,
   level: string,
   durationMinutes: number,
+  locale: 'he' | 'en' = 'he',
 ): Promise<MockExamStartResponse | null> {
   const s = requireSql();
   await ensureMockExamTables();
@@ -273,7 +315,7 @@ export async function getOrCreateMockExam(
     // proceed to generate
   }
 
-  const generated = await callGroqForMockExam(subject, level, duration);
+  const generated = await callGroqForMockExam(subject, level, duration, locale);
   if (!generated || generated.length === 0) return null;
 
   try {

@@ -58,7 +58,6 @@ const SUBJECT_HE: Record<string, string> = {
   math: 'מתמטיקה',
   physics: 'פיזיקה',
   chemistry: 'כימיה',
-  biology: 'ביולוגיה',
   cs: 'מדעי המחשב',
   english: 'אנגלית',
 };

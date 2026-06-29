@@ -120,9 +120,8 @@ function isInBagrutScope(conceptId: string, mathTrack: MathTrack): boolean {
 const MAKHINA_CONCEPTS = getCategoryById('makhina')?.concept_ids ?? [];
 
 interface UiSubjectFilter {
-  kgSubject: 'math' | 'physics' | 'biology' | null;
+  kgSubject: 'math' | 'physics' | null;
   mathTrack?: MathTrack;
-  biologyTrack?: string;
   conceptAllowlist?: string[];
   /** Maps to a CurriculumCategory id for section grouping */
   categoryId?: string;
@@ -147,15 +146,6 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     return { kgSubject: 'math', mathTrack: '5pt', categoryId: 'math-hs-5' };
   if (uiSubject === 'hs_physics')
     return { kgSubject: 'physics', categoryId: 'physics-hs' };
-  if (
-    uiSubject === 'biology_4pt' ||
-    uiSubject === 'biology-4pt' ||
-    uiSubject === 'bio_4' ||
-    uiSubject === 'bio-4'
-  )
-    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt', recognized: true };
-  if (uiSubject === 'biology_5pt' || uiSubject === 'biology-5pt')
-    return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-5pt', recognized: true };
   if (uiSubject === 'makhina' || uiSubject === 'university_prep')
     return { kgSubject: null, conceptAllowlist: MAKHINA_CONCEPTS, categoryId: 'makhina', recognized: true };
   if (uiSubject === 'high_school_math_3_points')
@@ -183,7 +173,6 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
     uiSubject === 'middle_school_physics' || uiSubject === 'bagrut_physics'
   ) return { kgSubject: 'physics', categoryId: 'physics-hs' };
   if (uiSubject.includes('physics')) return { kgSubject: 'physics', categoryId: 'physics-hs' };
-  if (uiSubject.includes('biology')) return { kgSubject: 'biology', biologyTrack: 'biology_4pt', categoryId: 'biology-4pt', recognized: true };
   if (uiSubject.includes('math')) return { kgSubject: 'math' };
   return { kgSubject: null };
 }
@@ -221,9 +210,6 @@ const STATUS_CONFIG = {
 } as const;
 
 const SUBJECT_ALIASES: Record<string, string> = {
-  biology: 'biology_4pt',
-  'biology-4pt': 'biology_4pt',
-  'biology-5pt': 'biology_5pt',
   'high-school-math-3-pts': 'high_school_math_3_points',
   'high-school-math-4-pts': 'high_school_math_4_points',
   'high-school-math-5-pts': 'high_school_math_5_points',
@@ -286,9 +272,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
       const inTrack =
         filter.mathTrack && filter.kgSubject === 'math'
           ? !trackSource || trackSource.includes(filter.mathTrack)
-          : filter.biologyTrack && filter.kgSubject === 'biology'
-            ? !trackSource || trackSource.includes(filter.biologyTrack)
-            : true;
+          : true;
       const mastery = masteryMap.get(c.id);
       const status = masteryStatus(mastery?.score);
       return { ...c, langs: coverage.get(c.id) ?? [], hasLesson, inTrack, mastery, status };

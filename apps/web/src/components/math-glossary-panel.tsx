@@ -1,21 +1,13 @@
 import { MATH_GLOSSARY_TERMS } from '@/lib/math-glossary';
 
 const TITLE_STR = {
-  biology: { he: 'מילון מונחים — ביולוגיה ומתמטיקה', en: 'Glossary — Biology & Math' },
-  default: { he: 'מילון מונחים — מתמטיקה', en: 'Math Glossary' },
+  he: 'מילון מונחים — מתמטיקה',
+  en: 'Math Glossary',
 } as const;
 
-export function MathGlossaryPanel({
-  locale,
-  subject,
-}: {
-  locale: 'en' | 'he';
-  subject?: string;
-}) {
+export function MathGlossaryPanel({ locale }: { locale: 'en' | 'he' }) {
   const isHe = locale === 'he';
-  const isBiology = subject?.toLowerCase().includes('biology') ?? false;
-  const titles = isBiology ? TITLE_STR.biology : TITLE_STR.default;
-  const title = isHe ? titles.he : titles.en;
+  const title = isHe ? TITLE_STR.he : TITLE_STR.en;
 
   return (
     <details className="glass-surface mt-10 rounded-2xl border border-border/60 p-5">

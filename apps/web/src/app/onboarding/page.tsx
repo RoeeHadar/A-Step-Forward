@@ -44,7 +44,7 @@ type Goal =
   | 'other';
 
 
-type Subject = 'math' | 'physics' | 'biology';
+type Subject = 'math' | 'physics';
 type Style = 'theory_first' | 'practice_first' | 'mixed';
 type TutorMode = 'direct' | 'socratic';
 
@@ -96,7 +96,6 @@ const STR = {
     s0_subjects: 'Subjects',
     s0_subj_math: 'Math',
     s0_subj_physics: 'Physics',
-    s0_subj_biology: 'Biology for Bagrut',
     s0_grade: 'Grade level',
     s0_adultGoal: 'What is your goal?',
     s0_yearsGap: 'How long since you last studied math?',
@@ -172,7 +171,6 @@ const STR = {
     s0_subjects: 'מקצועות',
     s0_subj_math: 'מתמטיקה',
     s0_subj_physics: 'פיזיקה',
-    s0_subj_biology: 'ביולוגיה לבגרות',
     s0_grade: 'כיתה / שכבה',
     s0_adultGoal: 'מה המטרה שלך?',
     s0_yearsGap: 'כמה זמן עבר מאז שלמדת מתמטיקה?',
@@ -805,7 +803,6 @@ export default function OnboardingPage() {
             learning_style: s2.style,
             attention_span_min: s2.attentionSpan,
             hours_per_week: s2.hoursPerWeek,
-            ...(s1.subjects.includes('biology') ? { hs_biology: true } : {}),
             ...(isAdultLearner
               ? { adult_learner: true, years_gap: s1.yearsGap, adult_goal: s1.adultGoal }
               : {}),
@@ -868,7 +865,7 @@ export default function OnboardingPage() {
                 {t.s0_subjects}
               </p>
               <div className="flex flex-wrap gap-3">
-                {(['math', 'physics', 'biology'] as Subject[]).map((sub) => (
+                {(['math', 'physics'] as Subject[]).map((sub) => (
                   <button
                     key={sub}
                     type="button"
@@ -880,11 +877,7 @@ export default function OnboardingPage() {
                         : 'border-border bg-card text-muted-foreground hover:border-border-bright hover:text-foreground',
                     )}
                   >
-                    {sub === 'math'
-                      ? t.s0_subj_math
-                      : sub === 'physics'
-                        ? t.s0_subj_physics
-                        : t.s0_subj_biology}
+                    {sub === 'math' ? t.s0_subj_math : t.s0_subj_physics}
                   </button>
                 ))}
               </div>

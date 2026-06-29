@@ -22,7 +22,6 @@ export function resolveLearnSubjectSlug(
     'high_school_math_5_points',
     'hs_physics',
     'physics',
-    'biology',
     'makhina',
     'math',
   ]);
@@ -33,15 +32,6 @@ export function resolveLearnSubjectSlug(
       if (pointsGroup === '5pt') return 'high_school_math_5_points';
     }
     return kgSubject;
-  }
-
-  const bioCat = CURRICULUM_CATEGORIES.find((c) => c.id === 'biology-4pt');
-  if (
-    bioCat?.concept_ids.includes(conceptId) ||
-    kgSubject === 'biology' ||
-    subjects?.includes('biology')
-  ) {
-    return 'biology';
   }
 
   const physCat = CURRICULUM_CATEGORIES.find((c) => c.id === 'physics-hs');

@@ -2,19 +2,7 @@ import { redirect } from 'next/navigation';
 import { ProgressPageContent } from '@/components/progress-page-content';
 import { getAuthContext } from '@/lib/auth';
 import { getProgressFromNeon, getLearnerProfile } from '@/lib/neon-db';
-
-function learnerHasPhysicsEnrollment(
-  profile: Awaited<ReturnType<typeof getLearnerProfile>>,
-): boolean {
-  if (!profile) return false;
-  const personality = profile.personality_profile as { hs_physics?: boolean } | null;
-  return (
-    profile.points_group === 'hs_physics' ||
-    profile.subjects.includes('physics') ||
-    profile.subjects.includes('bagrut_physics') ||
-    personality?.hs_physics === true
-  );
-}
+import { learnerHasPhysicsEnrollment } from '@/lib/learner-enrollment';
 
 /**
  * Progress page — reads directly from Neon so the stats always match the

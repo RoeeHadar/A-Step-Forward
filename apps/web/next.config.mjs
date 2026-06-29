@@ -29,11 +29,7 @@ const nextConfig = {
   ],
   experimental: {},
   async redirects() {
-    return [
-      { source: '/learn/biology', destination: '/learn/biology_4pt', permanent: false },
-      { source: '/learn/biology-4pt', destination: '/learn/biology_4pt', permanent: false },
-      { source: '/learn/biology-5pt', destination: '/learn/biology_5pt', permanent: false },
-    ];
+    return [];
   },
   async headers() {
     return [
