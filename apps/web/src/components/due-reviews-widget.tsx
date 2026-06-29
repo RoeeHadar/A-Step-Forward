@@ -18,22 +18,29 @@ interface DueReviewItem {
 
 const STR = {
   he: {
-    due: (n: number) => `יש לך ${n} נושאים לחזרה היום:`,
-    dueOne: 'יש לך נושא אחד לחזרה היום:',
+    due: (n: number) => `${n} פריטים לחזרה היום:`,
+    dueOne: 'פריט אחד לחזרה היום:',
     more: (n: number) => `+${n} נוספים`,
-    cta: 'התחל חזרה עם המאמן',
+    cta: 'Coach מהיר (15 דק׳)',
   },
   en: {
     due: (n: number) => `${n} items due for review today:`,
     dueOne: '1 item due for review today:',
     more: (n: number) => `+${n} more`,
-    cta: 'Start review with Coach',
+    cta: 'Quick Coach (15 min)',
   },
 } as const;
 
 const MAX_INLINE = 3;
 
-export function DueReviewsWidget() {
+export function DueReviewsWidget({
+  hideTitle = false,
+  sectionTitle,
+}: {
+  hideTitle?: boolean;
+  /** When set, renders an outer section heading (hidden when no due items). */
+  sectionTitle?: string;
+}) {
   const { locale } = useI18n();
   const isHe = locale === 'he';
   const t = STR[isHe ? 'he' : 'en'];
@@ -76,13 +83,14 @@ export function DueReviewsWidget() {
   const heading = count === 1 ? t.dueOne : t.due(count);
 
   return (
-    <div
-      className="card-punch flex flex-col gap-3 rounded-2xl p-5"
-      dir={isHe ? 'rtl' : 'ltr'}
-    >
+    <section dir={isHe ? 'rtl' : 'ltr'}>
+      {sectionTitle ? (
+        <h2 className="font-display mb-3 text-xl font-semibold">{sectionTitle}</h2>
+      ) : null}
+      <div className="card-punch flex flex-col gap-3 rounded-2xl p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="font-medium">{heading}</p>
+          {!hideTitle ? <p className="font-medium">{heading}</p> : null}
           <div className="flex flex-wrap gap-1.5">
             {visibleItems.map((item) => (
               <Badge key={item.atom_id} variant="secondary" className="text-xs">
@@ -97,9 +105,10 @@ export function DueReviewsWidget() {
           </div>
         </div>
         <Button asChild size="sm" className="shrink-0 self-start">
-          <Link href="/app/chat/coach">{t.cta}</Link>
+          <Link href="/app/chat/coach?mode=quick&duration=15">{t.cta}</Link>
         </Button>
       </div>
-    </div>
+      </div>
+    </section>
   );
 }

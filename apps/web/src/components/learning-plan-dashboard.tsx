@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { Button } from '@asf/ui/button';
 import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { currentActiveWeek } from '@/lib/learning-path-types';
+import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
 
 /**
@@ -103,8 +104,10 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
   const mastery = concept.mastery ?? 0;
   const progressPct = Math.round(mastery * 100);
   const name = displayName(concept, lang);
+  const lessonHref = learnConceptHrefFromProfile(concept.concept_id, concept.subject);
 
   return (
+    <Link href={lessonHref} className="block transition-opacity hover:opacity-90">
     <Card className="glass-surface border-border/60" dir={isHe ? 'rtl' : 'ltr'}>
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-start justify-between gap-2">
@@ -115,9 +118,6 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
             {masteryLabel(concept.mastery, lang)}
           </Badge>
         </div>
-        <p className="text-xs text-muted-foreground font-mono" dir="ltr">
-          {concept.concept_id}
-        </p>
       </CardHeader>
       <CardContent className="space-y-3">
         <div>
@@ -146,31 +146,21 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
             <ul className="space-y-1">
               {concept.suggested_sections.slice(0, 3).map((section) => (
                 <li key={section.id}>
-                  <Link
-                    href={
-                      section.chunk_index != null
-                        ? `/learn/${concept.subject}/${section.chunk_index}`
-                        : `/learn/${concept.subject}`
-                    }
-                    className="text-sm text-primary hover:underline"
+                  <span
+                    className="text-sm text-primary"
                     dir="auto"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {section.title}
-                  </Link>
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
-        ) : (
-          <Link
-            href={`/learn/${concept.subject}`}
-            className="text-sm text-primary hover:underline"
-          >
-            {t.browse_subject(concept.subject)}
-          </Link>
-        )}
+        ) : null}
       </CardContent>
     </Card>
+    </Link>
   );
 }
 

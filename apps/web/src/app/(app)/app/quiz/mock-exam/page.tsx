@@ -19,36 +19,38 @@ import type {
   MockExamSubmitFeedback,
   MockExamSubmitResponse,
 } from '@/lib/mock-exam-types';
+import { useLanguagePreference } from '@/hooks/use-language-preference';
+import { EXAM_FORMAT_DISCLAIMER } from '@/lib/exam-disclaimer';
 
 type Phase = 'setup' | 'exam' | 'review';
 
 const STR = {
   he: {
-    title: 'בחינת בגרות מדומה',
-    titleEn: 'Timed Mock Exam',
-    subtitle: 'בחר מקצוע, רמה ומשך — וקבל מבחן בסגנון בגרות אמיתי',
+    title: 'תרגול שאלות אמריקאיות',
+    titleEn: 'MCQ Practice Set',
+    subtitle: 'בחר מקצוע, רמה ומשך — תרגול מוגבל בזמן עם שאלות אמריקאיות ותשובות קצרות',
     subject: 'מקצוע',
     level: 'רמה',
     duration: 'משך',
-    start: 'התחל מבחן',
-    starting: 'מכין מבחן…',
-    submit: 'הגש מבחן',
+    start: 'התחל תרגול',
+    starting: 'מכין תרגול…',
+    submit: 'הגש תרגול',
     submitting: 'מגיש…',
     prev: 'הקודם',
     next: 'הבא',
     jumpTo: 'קפיצה לשאלה',
     questionOf: (i: number, n: number) => `שאלה ${i} מתוך ${n}`,
     timeLeft: 'זמן שנותר',
-    autoSubmit: 'הזמן נגמר — המבחן הוגש אוטומטית',
+    autoSubmit: 'הזמן נגמר — התרגול הוגש אוטומטית',
     estimatedScore: (s: number) => `הציון המשוער שלך: ${s}/100`,
-    mcqScore: (a: number, b: number) => `שאלות רב-ברירה: ${a}/${b}`,
+    mcqScore: (a: number, b: number) => `שאלות אמריקאיות: ${a}/${b}`,
     yourAnswer: 'התשובה שלך',
     correctAnswer: 'תשובה נכונה',
     modelAnswer: 'תשובה לדוגמה',
-    backDashboard: 'חזרה ללוח',
-    retake: 'מבחן חדש',
+    backDashboard: 'חזרה לאזור הבחינות',
+    retake: 'תרגול חדש',
     openAnswer: 'כתוב את התשובה שלך…',
-    kinds: { mcq: 'רב-ברירה', short_answer: 'תשובה קצרה', extended: 'שאלה מורחבת' },
+    kinds: { mcq: 'שאלות אמריקאיות', short_answer: 'תשובה קצרה', extended: 'שאלות פתוחות' },
     subjects: { math: 'מתמטיקה', physics: 'פיזיקה', biology: 'ביולוגיה' },
     levels: {
       '3pt': '3 יחידות',
@@ -60,35 +62,36 @@ const STR = {
     },
     minutes: (n: number) => `${n} דקות`,
     points: (n: number) => `${n} נק׳`,
-    reviewTitle: 'סקירת תשובות',
-    openNote: 'שאלות פתוחות — השווה לתשובה לדוגמה (לא נבדקו אוטומטית)',
+    reviewTitle: 'סקירת תרגול',
+    openNote: 'לא נבדק אוטומטית — השווה לדוגמה',
+    timerLabel: (t: string) => `⏱ ${t} נותרות`,
   },
   en: {
-    title: 'Timed Mock Exam',
-    titleEn: 'בחינת בגרות מדומה',
-    subtitle: 'Pick subject, level, and duration — get an authentic Bagrut-style exam',
+    title: 'MCQ Practice Set',
+    titleEn: 'תרגול שאלות אמריקאיות',
+    subtitle: 'Pick subject, level, and duration — timed practice with MCQ and short-answer questions',
     subject: 'Subject',
     level: 'Level',
     duration: 'Duration',
-    start: 'Start exam',
-    starting: 'Preparing exam…',
-    submit: 'Submit exam',
+    start: 'Start Practice',
+    starting: 'Preparing practice…',
+    submit: 'Submit Practice',
     submitting: 'Submitting…',
     prev: 'Previous',
     next: 'Next',
     jumpTo: 'Jump to question',
     questionOf: (i: number, n: number) => `Question ${i} of ${n}`,
     timeLeft: 'Time remaining',
-    autoSubmit: 'Time is up — exam submitted automatically',
+    autoSubmit: 'Time is up — practice submitted automatically',
     estimatedScore: (s: number) => `Your estimated score: ${s}/100`,
-    mcqScore: (a: number, b: number) => `Multiple choice: ${a}/${b}`,
+    mcqScore: (a: number, b: number) => `Multiple Choice: ${a}/${b}`,
     yourAnswer: 'Your answer',
     correctAnswer: 'Correct answer',
     modelAnswer: 'Model answer',
-    backDashboard: 'Back to dashboard',
-    retake: 'New exam',
+    backDashboard: 'Back to Practice Tests',
+    retake: 'New practice',
     openAnswer: 'Write your answer…',
-    kinds: { mcq: 'Multiple choice', short_answer: 'Short answer', extended: 'Extended' },
+    kinds: { mcq: 'Multiple Choice', short_answer: 'Short answer', extended: 'Open Questions' },
     subjects: { math: 'Math', physics: 'Physics', biology: 'Biology' },
     levels: {
       '3pt': '3 units',
@@ -100,8 +103,9 @@ const STR = {
     },
     minutes: (n: number) => `${n} min`,
     points: (n: number) => `${n} pts`,
-    reviewTitle: 'Answer review',
-    openNote: 'Open questions — compare with model answer (not auto-graded)',
+    reviewTitle: 'Practice Review',
+    openNote: 'Not auto-graded — compare with model answer',
+    timerLabel: (t: string) => `⏱ ${t} remaining`,
   },
 } as const;
 
@@ -120,7 +124,7 @@ function formatTime(seconds: number): string {
 }
 
 export default function MockExamPage() {
-  const [locale] = useState<'he' | 'en'>('he');
+  const [locale] = useLanguagePreference('he');
   const t = STR[locale];
   const isHe = locale === 'he';
 
@@ -196,7 +200,7 @@ export default function MockExamPage() {
       const res = await fetch('/api/quiz/mock-exam', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, level, duration_minutes: duration }),
+        body: JSON.stringify({ subject, level, duration_minutes: duration, locale }),
       });
       if (!res.ok) {
         const err = (await res.json().catch(() => ({}))) as { message?: string };
@@ -252,6 +256,10 @@ export default function MockExamPage() {
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{t.subtitle}</p>
       </header>
+
+      <p className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm leading-relaxed text-foreground">
+        {EXAM_FORMAT_DISCLAIMER[isHe ? 'he' : 'en']}
+      </p>
 
       {error ? (
         <p className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-2 text-sm text-destructive">
@@ -353,7 +361,7 @@ export default function MockExamPage() {
           >
             <div className="flex items-center gap-2 font-display text-xl font-bold">
               <Clock className="h-5 w-5" aria-hidden />
-              <span>{t.timeLeft}: {formatTime(secondsLeft)}</span>
+              <span>{t.timerLabel(formatTime(secondsLeft))}</span>
             </div>
             <span className="text-sm text-muted-foreground">
               {t.questionOf(currentIdx + 1, questions.length)}
@@ -496,7 +504,7 @@ export default function MockExamPage() {
 
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" asChild>
-              <Link href="/app">{t.backDashboard}</Link>
+              <Link href="/app/exams">{t.backDashboard}</Link>
             </Button>
             <Button onClick={resetExam}>{t.retake}</Button>
           </div>

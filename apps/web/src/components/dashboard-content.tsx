@@ -1,515 +1,291 @@
 'use client';
 
-import type { ComponentType, ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Flame, CheckCircle2, Star, CalendarClock, BookOpen, Clock, ClipboardList } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
-import { Progress } from '@asf/ui/progress';
 import { cn } from '@asf/ui';
 import { agentDisplayNames, type AgentName } from '@asf/schemas/agents';
+import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { useI18n } from '@/providers/i18n-provider';
-import { AnimatedCounter } from '@/components/animated-counter';
-import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
-import type { DashboardSnapshot, LearnerStreak } from '@/lib/neon-db';
+import { DueReviewsWidget } from '@/components/due-reviews-widget';
+import { currentActiveWeek } from '@/lib/learning-path-types';
+import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
+import type { LearnerStreak } from '@/lib/neon-db';
+import lessonsIndex from '@/lib/lessons-index.generated.json';
 
-export interface NextLessonInfo {
-  concept_id: string;
-  lesson_id: string;
-  subject: string;
-  title: string;
-  title_he: string;
+interface LessonIndexEntry {
+  id: string;
   est_minutes: number;
-  reason: string;
 }
 
-function learnConceptHref(subject: string, conceptId: string): string {
-  return `/learn/${subject}/concept/${conceptId}`;
-}
+const lessonsById = new Map(
+  (lessonsIndex as LessonIndexEntry[]).map((l) => [l.id, l]),
+);
 
-/**
- * /app dashboard content. Every number on this page is REAL (sourced from
- * Neon via `getDashboardSnapshot`); there is no mock fallback. A brand-new
- * learner sees zeros + "no lessons yet" / "no mastery yet" empty states.
- *
- * `streak_days` comes from chat turns + concept mastery activity + skill
- * practice unioned via `getLearnerStreak`. `lessons_completed` is the
- * count of distinct concepts with `concept_mastery.score >= 0.7`. `level`
- * is a deterministic gamification curve based on completions + atoms
- * practiced — it stays at 1 until the learner actually does work.
- */
+const STR = {
+  he: {
+    welcome: (name: string) => `ברוך הבא חזרה, ${name}!`,
+    subtitleNoDate: 'בוא נלמד משהו חדש היום',
+    daysUntilExam: (n: number) => `${n} ימים עד לבגרות`,
+    examToday: 'הבגרות היום!',
+    streak: (n: number) => `🔥 ${n} ימים רצף`,
+    estGrade: (g: number) => `ציון משוער: ~${g}`,
+    planTitle: 'התוכנית שלי לשבוע זה',
+    noPlanTitle: 'אין עדיין תכנית לשבוע',
+    noPlanBlurb: 'השלם את האבחון או התחל ללמוד כדי לקבל תכנית שבועית מותאמת.',
+    startDiagnostic: 'התחל אבחון',
+    browseLearn: 'עבור ללימוד',
+    dueReviews: 'חזרה להיום',
+    agents: 'הסוכנים שלך',
+    goToExams: '→ כניסה לאזור הבחינות',
+    statusDone: 'הושלם',
+    statusInProgress: 'בתהליך',
+    statusNew: 'חדש',
+    minutes: (n: number) => `${n} דק׳`,
+  },
+  en: {
+    welcome: (name: string) => `Welcome back, ${name}!`,
+    subtitleNoDate: "Let's learn something new today",
+    daysUntilExam: (n: number) => `${n} days until exam`,
+    examToday: 'Exam day!',
+    streak: (n: number) => `🔥 ${n}-day streak`,
+    estGrade: (g: number) => `Est. grade: ~${g}`,
+    planTitle: 'My Plan for This Week',
+    noPlanTitle: 'No weekly plan yet',
+    noPlanBlurb: 'Complete the diagnostic or start learning to get a personalized weekly plan.',
+    startDiagnostic: 'Start diagnostic',
+    browseLearn: 'Go to Learn',
+    dueReviews: 'Due for Review Today',
+    agents: 'Your agents',
+    goToExams: '→ Go to Practice Tests',
+    statusDone: 'Done',
+    statusInProgress: 'In Progress',
+    statusNew: 'New',
+    minutes: (n: number) => `${n} min`,
+  },
+} as const;
 
-const progressBarClass =
-  'h-2.5 overflow-hidden rounded-full bg-secondary [&>div]:rounded-full [&>div]:bg-gradient-to-r [&>div]:from-primary [&>div]:to-accent-cyan';
-
-const dashboardAgents: Array<{
-  agent: AgentName;
-  emoji: string;
-  gradientClass: string;
-}> = [
-  { agent: 'tutor', emoji: '📚', gradientClass: 'from-primary to-accent-magenta' },
-  { agent: 'qa_explainer', emoji: '💡', gradientClass: 'from-accent-cyan to-primary' },
-  { agent: 'mentor', emoji: '🌟', gradientClass: 'from-accent-amber to-accent-magenta' },
-  { agent: 'coach', emoji: '💪', gradientClass: 'from-accent-cyan to-primary' },
-  { agent: 'reviewer', emoji: '✍️', gradientClass: 'from-accent-magenta to-accent-cyan' },
+const COMPACT_AGENTS: Array<{ agent: AgentName; emoji: string }> = [
+  { agent: 'tutor', emoji: '📚' },
+  { agent: 'coach', emoji: '💪' },
+  { agent: 'qa_explainer', emoji: '💡' },
+  { agent: 'mentor', emoji: '🌟' },
 ];
+
+const MAX_PLAN_ITEMS = 5;
+
+function firstName(displayName: string): string {
+  const trimmed = displayName.trim();
+  if (!trimmed) return displayName;
+  return trimmed.split(/\s+/)[0] ?? trimmed;
+}
+
+function masteryStatus(
+  mastery: number | null | undefined,
+  isHe: boolean,
+): { label: string; variant: 'success' | 'warning' | 'secondary' } {
+  const t = STR[isHe ? 'he' : 'en'];
+  if (mastery == null || mastery === 0) {
+    return { label: t.statusNew, variant: 'secondary' };
+  }
+  if (mastery >= 0.7) {
+    return { label: t.statusDone, variant: 'success' };
+  }
+  return { label: t.statusInProgress, variant: 'warning' };
+}
+
+function conceptDisplayName(concept: PlanConcept, isHe: boolean): string {
+  if (isHe && concept.name_he?.trim()) return concept.name_he;
+  return concept.name;
+}
+
+function EstimatedGradePill({ isHe }: { isHe: boolean }) {
+  const [grade, setGrade] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetch('/api/progress/estimated-grade')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        const avg = Number(data.masteryAvg ?? 0);
+        const est = data.estimatedGrade;
+        if (typeof est === 'number' && avg >= 0.3) setGrade(est);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (grade == null) return null;
+
+  const t = STR[isHe ? 'he' : 'en'];
+  return (
+    <span className="inline-flex items-center rounded-full border border-border bg-surface-2/60 px-3 py-1 text-sm text-muted-foreground">
+      {t.estGrade(grade)}
+    </span>
+  );
+}
+
+function PlanItemRow({
+  concept,
+  isHe,
+  pointsGroup,
+  subjects,
+}: {
+  concept: PlanConcept;
+  isHe: boolean;
+  pointsGroup?: string | null;
+  subjects?: string[] | null;
+}) {
+  const t = STR[isHe ? 'he' : 'en'];
+  const href = learnConceptHrefFromProfile(
+    concept.concept_id,
+    concept.subject,
+    pointsGroup,
+    subjects,
+  );
+  const estMinutes = lessonsById.get(concept.concept_id)?.est_minutes;
+  const status = masteryStatus(concept.mastery, isHe);
+
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-surface-1/40 px-4 py-3 transition-colors hover:border-primary/40 hover:bg-surface-2/40"
+    >
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-medium text-foreground" dir="auto">
+          {conceptDisplayName(concept, isHe)}
+        </p>
+        {estMinutes != null ? (
+          <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock className="h-3 w-3" aria-hidden />
+            {t.minutes(estMinutes)}
+          </p>
+        ) : null}
+      </div>
+      <Badge variant={status.variant} className="shrink-0 text-xs">
+        {status.label}
+      </Badge>
+    </Link>
+  );
+}
 
 export function DashboardContent({
   displayName,
-  snapshot,
-  nextTestName,
+  plan,
   nextTestDate,
-  nextLesson,
   streak,
+  pointsGroup,
+  subjects,
 }: {
   displayName: string;
-  snapshot: DashboardSnapshot;
-  nextTestName?: string | null;
+  plan: LearningPlan | null;
   nextTestDate?: string | null;
-  nextLesson?: NextLessonInfo | null;
   streak?: LearnerStreak;
+  pointsGroup?: string | null;
+  subjects?: string[] | null;
 }) {
   const { messages, locale } = useI18n();
-  const t = messages.dashboard;
   const isHe = locale === 'he';
-  const { stats, recent_lessons, mastery_summary } = snapshot;
+  const t = STR[isHe ? 'he' : 'en'];
+  const name = firstName(displayName);
 
-  const daysSinceLastActive =
-    streak?.last_active != null
-      ? Math.floor(
-          (Date.now() - new Date(streak.last_active).getTime()) / (1000 * 60 * 60 * 24),
-        )
-      : null;
-  const showWelcomeBackCard =
-    streak != null &&
-    streak.current_days === 0 &&
-    daysSinceLastActive !== null &&
-    daysSinceLastActive > 3;
+  const subtitle = useMemo(() => {
+    if (!nextTestDate) return t.subtitleNoDate;
+    const exam = new Date(nextTestDate);
+    const daysLeft = Math.ceil((exam.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    if (daysLeft <= 0) return t.examToday;
+    return t.daysUntilExam(daysLeft);
+  }, [nextTestDate, t]);
+
+  const week = plan ? currentActiveWeek(plan) : undefined;
+  const planItems = (week?.concepts ?? []).slice(0, MAX_PLAN_ITEMS);
+
+  const streakDays = streak?.current_days ?? 0;
 
   return (
-    <div dir={isHe ? 'rtl' : 'ltr'}>
-      <header className="mb-8">
-        <h1 className="font-display text-4xl font-bold tracking-tight">
-          <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
-            {t.welcomeBack}, {displayName}
-          </span>
+    <div dir={isHe ? 'rtl' : 'ltr'} className="space-y-8">
+      {/* Section 1 — Welcome */}
+      <header>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-foreground">
+          {t.welcome(name)}
         </h1>
-        <p className="mt-2 text-muted-foreground">{t.continueJourney}</p>
+        <p className="mt-1 text-muted-foreground">{subtitle}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {streakDays > 0 ? (
+            <span className="inline-flex items-center rounded-full border border-border bg-surface-2/60 px-3 py-1 text-sm">
+              {t.streak(streakDays)}
+            </span>
+          ) : null}
+          <EstimatedGradePill isHe={isHe} />
+        </div>
+        <Link
+          href="/app/exams"
+          className="mt-3 inline-block text-sm text-muted-foreground transition-colors hover:text-primary"
+        >
+          {t.goToExams}
+        </Link>
       </header>
 
-      {nextTestDate && (
-        <BagrutCountdown
-          testName={nextTestName}
-          testDate={nextTestDate}
-          isHe={isHe}
-        />
-      )}
-
-      {nextLesson && <NextLessonCard lesson={nextLesson} isHe={isHe} />}
-
-      {showWelcomeBackCard && (
-        <WelcomeBackCard isHe={isHe} />
-      )}
-
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <StatTile
-          icon={Flame}
-          label={t.streak}
-          value={
-            <AnimatedCounter
-              end={stats.streak_days}
-              className="font-display text-3xl font-bold"
-            />
-          }
-          gradient="from-accent-amber to-accent-magenta"
-        />
-        <StatTile
-          icon={CheckCircle2}
-          label={t.lessonsCompleted}
-          value={
-            <AnimatedCounter
-              end={stats.lessons_completed}
-              className="font-display text-3xl font-bold"
-            />
-          }
-          gradient="from-accent-cyan to-primary"
-        />
-        <StatTile
-          icon={Star}
-          label={t.level}
-          value={
-            <AnimatedCounter
-              end={stats.level}
-              className="font-display text-3xl font-bold"
-            />
-          }
-          gradient="from-accent-magenta to-accent-cyan"
-        />
-      </div>
-
-      <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-8">
-        <div className="card-punch rounded-2xl p-6 lg:col-span-5">
-          <h2 className="font-display text-xl font-semibold">{t.recentLessons}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t.recentLessonsDesc}</p>
-          <div className="mt-4 space-y-4">
-            {recent_lessons.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t.noLessonsYet}</p>
-            ) : (
-              recent_lessons.map((lesson) => {
-                const title =
-                  isHe && lesson.title_he ? lesson.title_he : lesson.title;
-                const href = learnConceptHref(lesson.subject, lesson.concept_id);
-                return (
-                  <div key={lesson.concept_id} className="space-y-2">
-                    <div className="flex min-w-0 items-center justify-between gap-2">
-                      <Link
-                        href={href}
-                        className="truncate font-medium hover:underline"
-                        dir="auto"
-                      >
-                        {title}
-                      </Link>
-                      {lesson.est_minutes != null ? (
-                        <span className="shrink-0 text-xs text-muted-foreground">
-                          {lesson.est_minutes} {t.minutes}
-                        </span>
-                      ) : null}
-                    </div>
-                    <Progress
-                      value={lesson.progress * 100}
-                      className={progressBarClass}
-                      aria-label={`${title} progress`}
-                    />
-                  </div>
-                );
-              })
-            )}
+      {/* Section 2 — Learning Plan */}
+      <section>
+        <h2 className="font-display mb-4 text-xl font-semibold">{t.planTitle}</h2>
+        {planItems.length > 0 ? (
+          <div className="space-y-2">
+            {planItems.map((concept) => (
+              <PlanItemRow
+                key={concept.concept_id}
+                concept={concept}
+                isHe={isHe}
+                pointsGroup={pointsGroup}
+                subjects={subjects}
+              />
+            ))}
           </div>
-        </div>
-
-        <div className="card-punch rounded-2xl p-6 lg:col-span-3">
-          <h2 className="font-display text-xl font-semibold">{t.mastery}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t.masteryDesc}</p>
-          <div className="mt-4 space-y-3">
-            {mastery_summary.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t.noMasteryYet}</p>
-            ) : (
-              mastery_summary.map((item) => {
-                const name = isHe && item.name_he ? item.name_he : item.name;
-                return (
-                  <div key={item.concept_id} className="space-y-1.5">
-                    <div className="flex min-w-0 items-center justify-between gap-2">
-                      <span className="truncate text-sm" dir="auto">
-                        {name}
-                      </span>
-                      <Badge variant={item.score >= 0.7 ? 'success' : 'secondary'}>
-                        {Math.round(item.score * 100)}%
-                      </Badge>
-                    </div>
-                    <Progress
-                      value={item.score * 100}
-                      className={progressBarClass}
-                      aria-label={`${name} mastery`}
-                    />
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-      </div>
-
-      <section className="mb-8">
-        <h2 className="font-display mb-4 text-xl font-semibold">
-          {isHe ? 'פעולות מהירות' : 'Quick Actions'}
-        </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Link
-            href="/app/quiz/mock-exam"
-            className="card-punch group flex items-start gap-4 rounded-2xl p-5 transition-transform hover:scale-[1.01]"
-          >
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-amber to-accent-magenta text-primary-foreground">
-              <ClipboardList className="h-6 w-6" aria-hidden />
-            </span>
-            <div>
-              <h3 className="font-display font-semibold text-foreground group-hover:text-primary">
-                {isHe ? 'בחינת בגרות מדומה' : 'Timed Mock Exam'}
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {isHe ? 'Timed Mock Exam' : 'בחינת בגרות מדומה'}
-              </p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                {isHe
-                  ? 'מבחן מוגבל בזמן בסגנון בגרות — 45–90 דקות'
-                  : 'Timed Bagrut-style exam — 45–90 minutes'}
-              </p>
+        ) : (
+          <div className="rounded-2xl border border-border/60 bg-surface-1/40 p-6 text-center">
+            <p className="font-medium">{t.noPlanTitle}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t.noPlanBlurb}</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <Button asChild size="sm">
+                <Link href="/diagnostic">{t.startDiagnostic}</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/learn">{t.browseLearn}</Link>
+              </Button>
             </div>
-          </Link>
-        </div>
+          </div>
+        )}
       </section>
 
+      {/* Section 3 — Due Reviews (conditional) */}
+      <DueReviewsWidget sectionTitle={t.dueReviews} hideTitle />
+
+      {/* Section 4 — Compact Agents */}
       <section>
-        <h2 className="font-display mb-4 text-xl font-semibold">{t.agents}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {dashboardAgents.map(({ agent, emoji, gradientClass }) => (
+        <h2 className="font-display mb-3 text-xl font-semibold">{t.agents}</h2>
+        <div className="flex flex-wrap gap-2">
+          {COMPACT_AGENTS.map(({ agent, emoji }) => (
             <Link
               key={agent}
               href={`/app/chat/${agent}`}
-              className="iridescent-border flex flex-col p-5 transition-transform hover:scale-[1.02]"
+              className={cn(
+                'inline-flex items-center gap-2 rounded-xl border border-border/60',
+                'bg-surface-1/40 px-4 py-2.5 text-sm font-medium transition-colors',
+                'hover:border-primary/40 hover:bg-surface-2/40',
+              )}
             >
-              <span
-                className={cn(
-                  'mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br text-xl',
-                  gradientClass,
-                )}
-                aria-hidden
-              >
-                {emoji}
-              </span>
-              <h3
-                className={cn(
-                  'font-display text-lg font-bold bg-gradient-to-r bg-clip-text text-transparent',
-                  gradientClass,
-                )}
-              >
-                {(t.agentNames as Record<string, string>)?.[agent] ?? agentDisplayNames[agent]}
-              </h3>
-              <span className="mt-3 text-sm font-medium text-primary">
-                {t.startChat} →
-              </span>
+              <span aria-hidden>{emoji}</span>
+              {(messages.dashboard.agentNames as Record<string, string>)?.[agent] ??
+                agentDisplayNames[agent]}
             </Link>
           ))}
         </div>
       </section>
-    </div>
-  );
-}
-
-const NEXT_LESSON_STR = {
-  he: {
-    heading: '⚡ למד עכשיו',
-    subheading: 'השיעור הבא שלך',
-    minutesLabel: (n: number) => `${n} דקות`,
-    reasons: {
-      'Weakest topic': 'הנושא החלש ביותר',
-      'Continue learning plan': 'המשך תכנית הלמידה',
-      'Recommended next': 'ההמלצה הבאה',
-    } as Record<string, string>,
-    cta: 'התחל שיעור',
-    quick15: '15 דקות מהירות',
-  },
-  en: {
-    heading: '⚡ Study Now',
-    subheading: 'Your next lesson',
-    minutesLabel: (n: number) => `${n} min`,
-    reasons: {
-      'Weakest topic': 'Weakest topic',
-      'Continue learning plan': 'Continue your plan',
-      'Recommended next': 'Recommended next',
-    } as Record<string, string>,
-    cta: 'Start lesson',
-    quick15: 'Quick 15 min',
-  },
-} as const;
-
-const WELCOME_BACK_STR = {
-  he: 'ברוך הבא חזרה! 10 דקות עכשיו יחזירו אותך לרצף.',
-  en: 'Welcome back! 10 minutes now gets you back on track.',
-} as const;
-
-function WelcomeBackCard({ isHe }: { isHe: boolean }) {
-  return (
-    <div
-      className="card-punch mb-6 rounded-2xl border border-primary/20 bg-primary/5 p-4"
-      dir={isHe ? 'rtl' : 'ltr'}
-    >
-      <p className="text-sm text-muted-foreground">
-        {WELCOME_BACK_STR[isHe ? 'he' : 'en']}
-      </p>
-    </div>
-  );
-}
-
-function NextLessonCard({
-  lesson,
-  isHe,
-}: {
-  lesson: NextLessonInfo;
-  isHe: boolean;
-}) {
-  const t = NEXT_LESSON_STR[isHe ? 'he' : 'en'];
-  const title = isHe && lesson.title_he ? lesson.title_he : lesson.title;
-  const reasonLabel = t.reasons[lesson.reason] ?? lesson.reason;
-
-  return (
-    <div
-      className="iridescent-border mb-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
-      dir={isHe ? 'rtl' : 'ltr'}
-    >
-      <div className="flex min-w-0 flex-col gap-1">
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-          {t.heading}
-        </p>
-        <p className="text-xs text-muted-foreground">{t.subheading}</p>
-        <h3
-          className="mt-1 font-display text-lg font-bold leading-snug"
-          dir="auto"
-        >
-          {title}
-        </h3>
-        <div className="mt-1 flex flex-wrap items-center gap-3">
-          <Badge variant="outline" className="text-xs">
-            <LocalizedSubjectLabel subject={lesson.subject} />
-          </Badge>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Clock className="h-3.5 w-3.5" aria-hidden />
-            {t.minutesLabel(lesson.est_minutes)}
-          </span>
-          <Badge variant="secondary" className="text-xs">
-            {reasonLabel}
-          </Badge>
-        </div>
-      </div>
-      <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-        <Button
-          asChild
-          className="bg-gradient-to-r from-primary to-accent-magenta font-semibold text-primary-foreground hover:opacity-90"
-        >
-          <Link href={learnConceptHref(lesson.subject, lesson.concept_id)}>
-            <BookOpen className="mr-2 h-4 w-4" aria-hidden />
-            {t.cta}
-          </Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link href="/app/chat/coach?mode=quick&duration=15">{t.quick15}</Link>
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-const COUNTDOWN_STR = {
-  he: {
-    daysLeft: (n: number) => `${n} ימים לבגרות`,
-    today: '!הבגרות היום',
-    past: 'הבגרות עברה — כל הכבוד',
-    motivationFar: 'יש לך זמן — עבוד חכם, לא קשה',
-    motivationMid: 'מחצית הדרך. כדאי להתעמד על הנושאים החלשים',
-    motivationClose: 'השעה מאוחרת — זה הזמן לחזור על הכל',
-    motivationFinal: '!לחץ אחרון. אתה יכול',
-    examLabel: (name: string) => `הבגרות שלך — ${name}`,
-  },
-  en: {
-    daysLeft: (n: number) => `${n} days to exam`,
-    today: 'Exam day — good luck!',
-    past: 'Exam is done — well done!',
-    motivationFar: 'You have time. Work smart, not hard.',
-    motivationMid: 'Halfway there. Focus on your weak areas.',
-    motivationClose: 'Final stretch — review everything.',
-    motivationFinal: "Last push. You've got this!",
-    examLabel: (name: string) => `Your exam — ${name}`,
-  },
-} as const;
-
-function BagrutCountdown({
-  testName,
-  testDate,
-  isHe,
-}: {
-  testName?: string | null;
-  testDate: string;
-  isHe: boolean;
-}) {
-  const t = COUNTDOWN_STR[isHe ? 'he' : 'en'];
-  const now = new Date();
-  const exam = new Date(testDate);
-  const msLeft = exam.getTime() - now.getTime();
-  const daysLeft = Math.ceil(msLeft / (1000 * 60 * 60 * 24));
-
-  let label: string;
-  let motivation: string;
-  let urgencyClass: string;
-
-  if (daysLeft < 0) {
-    label = t.past;
-    motivation = '';
-    urgencyClass = 'from-muted to-muted/50';
-  } else if (daysLeft === 0) {
-    label = t.today;
-    motivation = t.motivationFinal;
-    urgencyClass = 'from-accent-magenta to-accent-cyan';
-  } else if (daysLeft <= 14) {
-    label = t.daysLeft(daysLeft);
-    motivation = t.motivationFinal;
-    urgencyClass = 'from-destructive/80 to-accent-magenta';
-  } else if (daysLeft <= 60) {
-    label = t.daysLeft(daysLeft);
-    motivation = t.motivationClose;
-    urgencyClass = 'from-accent-amber to-accent-magenta';
-  } else if (daysLeft <= 90) {
-    label = t.daysLeft(daysLeft);
-    motivation = t.motivationMid;
-    urgencyClass = 'from-accent-cyan to-primary';
-  } else {
-    label = t.daysLeft(daysLeft);
-    motivation = t.motivationFar;
-    urgencyClass = 'from-primary to-accent-cyan';
-  }
-
-  return (
-    <div
-      className={cn(
-        'mb-6 flex items-center gap-4 rounded-2xl bg-gradient-to-r p-4 text-primary-foreground',
-        urgencyClass,
-      )}
-      dir={isHe ? 'rtl' : 'ltr'}
-    >
-      <CalendarClock className="h-8 w-8 shrink-0" aria-hidden />
-      <div>
-        <p className="font-display text-2xl font-bold">{label}</p>
-        {testName && (
-          <p className="mt-0.5 text-sm opacity-90">{t.examLabel(testName)}</p>
-        )}
-        {motivation && <p className="mt-1 text-sm opacity-80">{motivation}</p>}
-      </div>
-    </div>
-  );
-}
-
-function StatTile({
-  icon: Icon,
-  label,
-  value,
-  gradient,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-  value: ReactNode;
-  gradient: string;
-}) {
-  return (
-    <div className="card-punch rounded-2xl p-5">
-      <div className="flex items-center gap-3">
-        <div
-          className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br text-primary-foreground',
-            gradient,
-          )}
-        >
-          <Icon className="h-5 w-5" aria-hidden />
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">{label}</p>
-          <div
-            className={cn(
-              'bg-gradient-to-r bg-clip-text text-transparent',
-              gradient,
-            )}
-          >
-            {value}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

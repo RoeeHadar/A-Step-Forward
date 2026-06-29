@@ -8,8 +8,8 @@ interface GlossaryTooltipProps {
 }
 
 /**
- * Wraps a Hebrew math/science term with a hover tooltip showing the Arabic and
- * English translations. Falls back to rendering children unchanged if the term
+ * Wraps a Hebrew math/science term with a hover tooltip showing the English
+ * translation. Falls back to rendering children unchanged if the term
  * is not in the glossary.
  *
  * Usage: <GlossaryTooltip term="ממוצע">ממוצע</GlossaryTooltip>
@@ -21,7 +21,7 @@ export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
   return (
     <span
       className="relative inline-block cursor-help underline decoration-dotted decoration-muted-foreground/50 group"
-      aria-label={`${entry.ar} · ${entry.en}`}
+      aria-label={entry.en}
     >
       {children}
       <span
@@ -33,9 +33,7 @@ export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
         ].join(' ')}
         role="tooltip"
       >
-        <span dir="rtl" className="font-medium">{entry.ar}</span>
-        <span className="mx-1.5 text-muted-foreground">·</span>
-        <span>{entry.en}</span>
+        {entry.en}
       </span>
     </span>
   );

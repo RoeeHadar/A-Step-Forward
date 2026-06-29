@@ -26,14 +26,11 @@ export function MathGlossaryPanel({
         </span>
       </summary>
       <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[28rem] border-collapse text-sm">
+        <table className="w-full min-w-[20rem] border-collapse text-sm">
           <thead>
             <tr className="border-b border-border text-start text-xs uppercase tracking-wide text-muted-foreground">
               <th className="px-3 py-2 font-medium">{isHe ? 'עברית' : 'Hebrew'}</th>
               <th className="px-3 py-2 font-medium">{isHe ? 'אנגלית' : 'English'}</th>
-              <th className="px-3 py-2 font-medium" dir="rtl">
-                {isHe ? 'ערבית' : 'Arabic'}
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -43,9 +40,6 @@ export function MathGlossaryPanel({
                   {row.he}
                 </td>
                 <td className="px-3 py-2 text-muted-foreground">{row.en}</td>
-                <td className="px-3 py-2 text-foreground" dir="rtl">
-                  {row.ar}
-                </td>
               </tr>
             ))}
           </tbody>
