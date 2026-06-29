@@ -1,224 +1,216 @@
 {
   "id": "faraday_induction_uni",
-  "subject": "university_physics_2",
-  "title_en": "Faraday's Law — Electromagnetic Induction (University)",
-  "title_he": "חוק פאראדיי — השראה אלקטרומגנטית (אוניברסיטה)",
-  "duration_min": 25,
   "type": "interactive",
+  "subject": "university_physics_2",
+  "title_en": "Faraday's Law and Electromagnetic Induction — University Level",
+  "title_he": "חוק פאראדיי והשראה אלקטרומגנטית — רמה אוניברסיטאית",
+  "duration_min": 35,
   "level_min": "university",
-  "agent_hints": "Faraday: $\\mathcal{E}=-d\\Phi_B/dt$ (sign = Lenz). Motional EMF: $\\mathcal{E}=BLv$ for rod perpendicular to $\\mathbf{B}$. Generator: $\\mathcal{E}=NBA\\omega\\sin(\\omega t)$. Transformer: $V_p/V_s=N_p/N_s$. Self-inductance $L=\\mu_0 n^2 V$ for solenoid. RL time constant $\\tau=L/R$. Contrast: Faraday gives induced E from changing flux; Biot-Savart gives B from currents.",
+  "agent_hints": "This is the university-level (calculus-based) treatment of Faraday's law. Distinguish from the high-school lesson: here we use the integral form, derive motional EMF as a line integral of (v x B), and study self-inductance via the solenoid formula L = mu_0 n^2 V. The RL circuit requires solving a first-order ODE. Key subtleties: (1) the minus sign in Faraday's law IS Lenz's law; (2) motional EMF can be derived two ways: the flux method and the force-on-charges method; (3) self-inductance means the coil opposes changes in its own current. For the RL circuit, walk through the separation-of-variables solution. Common error: students forget that tau = L/R has units of seconds only when L is in henries and R in ohms.",
   "sections": [
     {
-      "id": "faraday_law",
+      "id": "faraday_law_integral",
       "title_en": "Faraday's Law — Integral Form",
       "title_he": "חוק פאראדיי — צורה אינטגרלית",
-      "body_en_md": "Magnetic flux through surface $S$:\n$$\\Phi_B = \\int_S \\mathbf{B}\\cdot d\\mathbf{A}$$\n\n**Faraday's law** (induced EMF around closed loop bounding $S$):\n$$\\boxed{\\mathcal{E} = \\oint_C \\mathbf{E}\\cdot d\\mathbf{l} = -\\frac{d\\Phi_B}{dt}}$$\n\nFor a conducting loop with resistance $R$: induced current $I=\\mathcal{E}/R$. Flux change can arise from changing $B$, changing area, or changing orientation ($\\Phi_B=BA\\cos\\theta$).",
-      "body_he_md": "שטף מגנטי דרך $S$:\n$$\\Phi_B = \\int_S \\mathbf{B}\\cdot d\\mathbf{A}$$\n\n**חוק פאראדיי:**\n$$\\boxed{\\mathcal{E} = \\oint_C \\mathbf{E}\\cdot d\\mathbf{l} = -\\frac{d\\Phi_B}{dt}}$$\n\nבלולאה מוליכה: $I=\\mathcal{E}/R$. שינוי שטף מ-$B$, שטח או זווית.",
-      "level_min": "university"
-    },
-    {
-      "id": "lenz_law",
-      "title_en": "Lenz's Law and Sign Convention",
-      "title_he": "חוק לנץ וסימון",
-      "body_en_md": "**Lenz's law:** induced current flows in direction that **opposes** the change in flux that caused it.\n\nThe minus sign in $\\mathcal{E}=-d\\Phi_B/dt$ encodes Lenz.\n\nExample: $B$ into page increasing → induced $B$ out of page → counterclockwise current (RH rule).\n\nEnergy conservation: work against induced effects heats the circuit.",
-      "body_he_md": "**חוק לנץ:** הזרם המושרה בכיוון ש**מתנגד** לשינוי השטף.\n\nסימן מינוס ב-$\\mathcal{E}=-d\\Phi_B/dt$ מקודד את לנץ.\n\nדוגמה: $B$ לתוך הדף גדל → $B$ החוצה מושר → זרם נגד כיוון השעון.\n\nשימור אנרגיה: עבודה נגד ההשראה מתחממת במעגל.",
-      "level_min": "university"
+      "level_min": "university",
+      "body_en_md": "## Faraday's Law\n\nThe magnetic flux through a surface $S$ bounded by a closed curve $C$ is:\n\n$$\\Phi_B = \\iint_S \\vec{B}\\cdot d\\vec{A}$$\n\nFaraday's law states that the EMF around the closed path $C$ equals the *negative* rate of change of magnetic flux:\n\n$$\\mathcal{E} = \\oint_C \\vec{E}\\cdot d\\vec{l} = -\\frac{d\\Phi_B}{dt}$$\n\n**The minus sign (Lenz's law):** The induced EMF drives a current in the direction that *opposes* the change in flux. If the flux through a loop is increasing (downward, say), the induced current creates a field opposing that increase (upward).\n\n**Three ways the flux can change:**\n1. The magnitude of $\\vec{B}$ changes\n2. The area of the loop changes\n3. The angle between $\\vec{B}$ and $\\vec{A}$ changes\n\nAll three mechanisms are captured by $d\\Phi_B/dt$, and all produce an EMF according to Faraday's law.\n\n**Note:** This is the *general* form—the induced electric field $\\vec{E}$ exists even in the absence of a conductor, and it drives the circulation of $\\vec{E}$ around any closed path.",
+      "body_he_md": "## חוק פאראדיי\n\nהשטף המגנטי דרך משטח $S$ הגובל בעקומה סגורה $C$:\n\n$$\\Phi_B = \\iint_S \\vec{B}\\cdot d\\vec{A}$$\n\nחוק פאראדיי קובע שה-EMF סביב המסלול הסגור $C$ שווה לקצב השינוי ה*שלילי* של השטף המגנטי:\n\n$$\\mathcal{E} = \\oint_C \\vec{E}\\cdot d\\vec{l} = -\\frac{d\\Phi_B}{dt}$$\n\n**הסימן השלילי (חוק לנץ):** ה-EMF המושרה מניע זרם בכיוון ה*מתנגד* לשינוי בשטף. אם השטף דרך לולאה גדל (כלפי מטה, נניח), הזרם המושרה יוצר שדה המתנגד לגידול זה (כלפי מעלה).\n\n**שלוש דרכים שבהן השטף יכול להשתנות:**\n1. גודל $\\vec{B}$ משתנה\n2. שטח הלולאה משתנה\n3. הזווית בין $\\vec{B}$ ל-$\\vec{A}$ משתנה\n\nכל שלושת המנגנונים כלולים ב-$d\\Phi_B/dt$, וכולם מייצרים EMF לפי חוק פאראדיי.\n\n**הערה:** זוהי הצורה ה*כללית* — השדה החשמלי המושרה $\\vec{E}$ קיים גם בהיעדר מוליך."
     },
     {
       "id": "motional_emf",
-      "title_en": "Motional EMF — $\\mathcal{E}=BLv$",
-      "title_he": "EMF תנועתי — $\\mathcal{E}=BLv$",
-      "body_en_md": "Rod length $L$ moves with speed $v$ perpendicular to uniform $\\mathbf{B}$:\nmagnetic force on charges $q\\mathbf{v}\\times\\mathbf{B}$ separates charge, creating $\\mathcal{E}=BLv$ until equilibrium.\n\nGeneral: motional EMF around moving loop = $-\\oint(\\mathbf{v}\\times\\mathbf{B})\\cdot d\\mathbf{l}$.\n\n**Worked:** $B=0.5$ T, $L=0.20$ m, $v=4$ m/s → $\\mathcal{E}=0.5\\times0.20\\times4=0.40$ V.",
-      "body_he_md": "מוט $L$ נע במהירות $v$ ניצב ל-$\\mathbf{B}$:\n$\\mathcal{E}=BLv$ עד שיווי משקל.\n\nכללי: EMF תנועתי = $-\\oint(\\mathbf{v}\\times\\mathbf{B})\\cdot d\\mathbf{l}$.\n\n**דוגמה:** $B=0.5$ T, $L=0.20$ m, $v=4$ m/s → $\\mathcal{E}=0.40$ V.",
-      "level_min": "university"
+      "title_en": "Motional EMF and Lenz's Law Applications",
+      "title_he": "EMF של תנועה ויישומי חוק לנץ",
+      "level_min": "university",
+      "body_en_md": "## Motional EMF\n\nA straight conducting rod of length $L$ moves with velocity $\\vec{v}$ perpendicular to a uniform magnetic field $\\vec{B}$. The free charges in the rod experience force $\\vec{F} = q\\vec{v}\\times\\vec{B}$, which separates charges and creates a potential difference.\n\nThe motional EMF is:\n$$\\mathcal{E} = \\oint (\\vec{v}\\times\\vec{B})\\cdot d\\vec{l} = BLv$$\n(when $\\vec{v}$, $L$, and $\\vec{B}$ are mutually perpendicular).\n\nEquivalently, by the flux method: the rod sweeps area $A = Lvt$, so $\\Phi_B = BLvt$ and $\\mathcal{E} = -d\\Phi_B/dt = -BLv$ (the sign from Lenz's law tells us the current direction).\n\n## Applying Lenz's Law\n\n**Step-by-step procedure:**\n1. Determine the initial direction of $\\vec{B}$ through the loop\n2. Determine whether $\\Phi_B$ is increasing or decreasing\n3. The induced current creates a $\\vec{B}$ that *opposes* the change\n4. Apply the right-hand rule to find the current direction consistent with step 3\n\n**Example:** A bar magnet (north pole facing a loop) is pushed toward the loop. Flux through loop increases (upward). Induced current must create downward flux inside loop → current flows clockwise (viewed from the magnet side).",
+      "body_he_md": "## EMF של תנועה\n\nמוט מוליך ישר באורך $L$ נע במהירות $\\vec{v}$ מאונכת לשדה מגנטי אחיד $\\vec{B}$. המטענים החופשיים במוט חווים כוח $\\vec{F} = q\\vec{v}\\times\\vec{B}$, המפריד מטענים ויוצר הפרש פוטנציאל.\n\nה-EMF של התנועה הוא:\n$$\\mathcal{E} = \\oint (\\vec{v}\\times\\vec{B})\\cdot d\\vec{l} = BLv$$\n(כאשר $\\vec{v}$, $L$ ו-$\\vec{B}$ מאוניים זה לזה).\n\nבשיטת השטף: המוט מגרוף שטח $A = Lvt$, ולכן $\\Phi_B = BLvt$ ו-$\\mathcal{E} = -d\\Phi_B/dt = -BLv$ (הסימן מחוק לנץ נותן את כיוון הזרם).\n\n## יישום חוק לנץ\n\n**נוהל שלב-אחר-שלב:**\n1. קבע את כיוון $\\vec{B}$ הראשוני דרך הלולאה\n2. קבע אם $\\Phi_B$ גדל או יורד\n3. הזרם המושרה יוצר $\\vec{B}$ ה*מתנגד* לשינוי\n4. הפעל כלל יד-ימין למציאת כיוון הזרם עקבי עם שלב 3\n\n**דוגמה:** מגנט קבוע (קוטב צפון לכיוון לולאה) נדחף לכיוון הלולאה. השטף גדל (כלפי מעלה). הזרם המושרה חייב ליצור שטף כלפי מטה → זרם זורם עם כיוון השעון (מצד המגנט)."
     },
     {
-      "id": "generators_transformers",
-      "title_en": "Generators, Transformers, and Self-Inductance",
-      "title_he": "גנרטורים, שנאים והשראות עצמית",
-      "body_en_md": "**Rotating coil** ($N$ turns, area $A$, angular speed $\\omega$) in $B$:\n$$\\mathcal{E}(t)=NBA\\omega\\sin(\\omega t)$$\n\n**Ideal transformer:** $\\dfrac{V_p}{V_s}=\\dfrac{N_p}{N_s}$, $I_p/I_s=N_s/N_p$ (power conserved ideally).\n\n**Solenoid self-inductance:** $L=\\mu_0 n^2 V$ where $n$ turns/m, $V$ volume.\n\nInduced EMF across inductor: $\\mathcal{E}_L=-L\\,dI/dt$.",
-      "body_he_md": "**סליל מסתובב:** $\\mathcal{E}(t)=NBA\\omega\\sin(\\omega t)$.\n\n**שנאי אידיאלי:** $\\dfrac{V_p}{V_s}=\\dfrac{N_p}{N_s}$.\n\n**השראות עצמית של סolenoid:** $L=\\mu_0 n^2 V$.\n\nEMF על סליל: $\\mathcal{E}_L=-L\\,dI/dt$.",
-      "level_min": "university"
+      "id": "generator_transformer",
+      "title_en": "Generator and Transformer",
+      "title_he": "גנרטור וטרנספורמטור",
+      "level_min": "university",
+      "body_en_md": "## AC Generator\n\nA coil of $N$ turns, area $A$, rotates at angular frequency $\\omega$ in a uniform field $\\vec{B}$. The flux through the coil is:\n\n$$\\Phi_B = NBA\\cos(\\omega t)$$\n\nFaraday's law gives the EMF:\n\n$$\\mathcal{E} = -N\\frac{d\\Phi_B}{dt} = NBA\\omega\\sin(\\omega t) = \\mathcal{E}_0\\sin(\\omega t)$$\n\nwhere $\\mathcal{E}_0 = NBA\\omega$ is the peak EMF. This is the operating principle of AC generators.\n\n## Ideal Transformer\n\nAn ideal transformer has a primary coil ($N_1$ turns, voltage $V_1$) and a secondary coil ($N_2$ turns, voltage $V_2$) on a common iron core. By Faraday's law, the same rate of flux change threads both coils:\n\n$$\\frac{V_1}{V_2} = \\frac{N_1}{N_2}$$\n\nPower is conserved: $V_1 I_1 = V_2 I_2$, so:\n\n$$\\frac{I_1}{I_2} = \\frac{N_2}{N_1}$$\n\nA step-up transformer ($N_2 > N_1$) increases voltage and decreases current. The transformer enables long-distance AC power transmission at high voltage (low current, low $I^2R$ losses).",
+      "body_he_md": "## גנרטור AC\n\nסליל בעל $N$ כריכות, שטח $A$, מסתובב בתדירות זוויתית $\\omega$ בשדה אחיד $\\vec{B}$. השטף דרך הסליל:\n\n$$\\Phi_B = NBA\\cos(\\omega t)$$\n\nחוק פאראדיי נותן את ה-EMF:\n\n$$\\mathcal{E} = -N\\frac{d\\Phi_B}{dt} = NBA\\omega\\sin(\\omega t) = \\mathcal{E}_0\\sin(\\omega t)$$\n\nכאשר $\\mathcal{E}_0 = NBA\\omega$ הוא ה-EMF השיא. זהו עקרון הפעולה של גנרטורי AC.\n\n## טרנספורמטור אידיאלי\n\nטרנספורמטור אידיאלי בעל סליל ראשוני ($N_1$ כריכות, מתח $V_1$) וסליל משני ($N_2$ כריכות, מתח $V_2$) על ליבת ברזל משותפת. מחוק פאראדיי, אותו קצב שינוי שטף עובר דרך שני הסלילים:\n\n$$\\frac{V_1}{V_2} = \\frac{N_1}{N_2}$$\n\nשימור הספק: $V_1 I_1 = V_2 I_2$, ולכן:\n\n$$\\frac{I_1}{I_2} = \\frac{N_2}{N_1}$$\n\nטרנספורמטור מעלה ($N_2 > N_1$) מגביר מתח ומקטין זרם."
     },
     {
-      "id": "rl_circuit",
-      "title_en": "RL Circuits and Faraday vs Biot-Savart",
-      "title_he": "מעגלי RL ופאראדי מול Biot-Savart",
-      "body_en_md": "Series **RL** circuit (switch closed at $t=0$):\n$$I(t)=\\frac{\\mathcal{E}_0}{R}\\left(1-e^{-t/\\tau}\\right), \\quad \\tau=\\frac{L}{R}$$\n\nAt $t=\\tau$, $I\\approx63\\%$ of maximum.\n\n**Conceptual distinction:**\n- **Biot-Savart / Ampère:** $\\mathbf{B}$ due to **existing** currents\n- **Faraday:** induced $\\mathcal{E}$ from **changing** $\\Phi_B$ (causes new currents)",
-      "body_he_md": "מעגל **RL**:\n$$I(t)=\\frac{\\mathcal{E}_0}{R}\\left(1-e^{-t/\\tau}\\right), \\quad \\tau=\\frac{L}{R}$$\n\nב-$t=\\tau$, $I\\approx63\\%$ מהמקסימום.\n\n**הבחנה:**\n- **Biot-Savart / אמפר:** $\\mathbf{B}$ מזרמים **קיימים**\n- **פאראדי:** $\\mathcal{E}$ משינוי $\\Phi_B$",
-      "level_min": "university"
+      "id": "inductance_rl_circuit",
+      "title_en": "Self-Inductance and RL Circuits",
+      "title_he": "אינדוקטנס עצמי ומעגלי RL",
+      "level_min": "university",
+      "body_en_md": "## Self-Inductance\n\nWhen the current through a coil changes, the resulting change in flux induces an EMF in the coil itself (back-EMF):\n\n$$\\mathcal{E}_L = -L\\frac{dI}{dt}$$\n\nThe proportionality constant $L$ is the **self-inductance** (units: Henry = V·s/A = Ω·s).\n\nFor an ideal solenoid (length $\\ell$, $n$ turns/m, cross-sectional area $A_c$, volume $V = A_c\\ell$):\n\n$$L = \\frac{N\\Phi_B}{I} = \\mu_0 n^2 A_c \\ell = \\mu_0 n^2 V$$\n\n## RL Circuit\n\nA series circuit with EMF $\\mathcal{E}_0$, resistance $R$, and inductance $L$. Applying Kirchhoff's voltage law:\n\n$$\\mathcal{E}_0 - IR - L\\frac{dI}{dt} = 0 \\implies \\frac{dI}{dt} = \\frac{\\mathcal{E}_0 - IR}{L}$$\n\nSolving by separation of variables with $I(0) = 0$:\n\n$$\\boxed{I(t) = \\frac{\\mathcal{E}_0}{R}\\left(1 - e^{-t/\\tau}\\right)}, \\quad \\tau = \\frac{L}{R}$$\n\n$\\tau$ is the **time constant**: after $t = \\tau$, the current reaches $1 - 1/e \\approx 63\\%$ of its final value $\\mathcal{E}_0/R$.\n\n**Energy stored in the inductor:**\n$$U_L = \\frac{1}{2}LI^2$$\n\nThis energy is stored in the magnetic field of the coil.",
+      "body_he_md": "## אינדוקטנס עצמי\n\nכאשר הזרם דרך סליל משתנה, השינוי בשטף מושרה EMF בסליל עצמו (EMF אחורי):\n\n$$\\mathcal{E}_L = -L\\frac{dI}{dt}$$\n\nקבוע הפרופורציה $L$ הוא **האינדוקטנס העצמי** (יחידות: הנרי = V·s/A = Ω·s).\n\nעבור סולנואיד אידיאלי (אורך $\\ell$, $n$ כריכות/מ', שטח חתך $A_c$, נפח $V = A_c\\ell$):\n\n$$L = \\mu_0 n^2 A_c \\ell = \\mu_0 n^2 V$$\n\n## מעגל RL\n\nמעגל טורי עם EMF $\\mathcal{E}_0$, התנגדות $R$ ואינדוקטנס $L$. מחוק קירכהוף למתחים:\n\n$$\\mathcal{E}_0 - IR - L\\frac{dI}{dt} = 0 \\implies \\frac{dI}{dt} = \\frac{\\mathcal{E}_0 - IR}{L}$$\n\nפתרון בהפרדת משתנים עם $I(0) = 0$:\n\n$$\\boxed{I(t) = \\frac{\\mathcal{E}_0}{R}\\left(1 - e^{-t/\\tau}\\right)}, \\quad \\tau = \\frac{L}{R}$$\n\n$\\tau$ הוא **קבוע הזמן**: לאחר $t = \\tau$, הזרם מגיע ל-$1 - 1/e \\approx 63\\%$ מערכו הסופי $\\mathcal{E}_0/R$.\n\n**אנרגיה המאוחסנת במשרן:**\n$$U_L = \\frac{1}{2}LI^2$$"
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "$B$ into page increases. By Lenz, induced current in a surrounding loop is:",
-      "body_he": "$B$ לתוך הדף גדל. לפי לנץ, הזרם המושרה:",
+      "body_en": "A rectangular loop lies in the plane of the page. A uniform magnetic field $\\vec{B}$ pointing into the page is increasing in magnitude. By Lenz's law, the induced current in the loop flows:",
+      "body_he": "לולאה מלבנית שוכבת במישור הדף. שדה מגנטי אחיד $\\vec{B}$ המצביע לתוך הדף גדל בעוצמתו. לפי חוק לנץ, הזרם המושרה בלולאה זורם:",
       "options": [
         {
           "id": "a",
-          "text_en": "Clockwise (viewed from above)",
-          "text_he": "עם כיוון השעון (מלמעלה)",
+          "text_en": "Clockwise (to oppose the increasing flux into the page)",
+          "text_he": "עם כיוון השעון (כדי להתנגד לגידול השטף לתוך הדף)",
           "correct": false
         },
         {
           "id": "b",
-          "text_en": "Counterclockwise",
-          "text_he": "נגד כיוון השעון",
+          "text_en": "Counterclockwise (to create flux out of the page, opposing the increase)",
+          "text_he": "נגד כיוון השעון (כדי ליצור שטף מחוץ לדף, מתנגד לגידול)",
           "correct": true
         },
         {
           "id": "c",
-          "text_en": "Zero always",
-          "text_he": "תמיד אפס",
+          "text_en": "Along the direction of $\\vec{B}$",
+          "text_he": "בכיוון $\\vec{B}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "Depends only on resistance, not Lenz",
-          "text_he": "תלוי רק ב-$R$",
+          "text_en": "There is no induced current because $\\vec{B}$ is uniform",
+          "text_he": "אין זרם מושרה כי $\\vec{B}$ אחיד",
           "correct": false
         }
       ],
-      "explanation_en": "Induced B must oppose increasing inward flux → B out of page → CCW current.",
-      "explanation_he": "שדה מושר מתנגד לגידול $B$ פנימה → CCW."
+      "explanation_en": "The flux into the page is increasing. By Lenz's law, the induced current must create a magnetic field opposing this increase, i.e., out of the page inside the loop. By the right-hand rule, this requires a counterclockwise current (viewed from the front of the page).",
+      "explanation_he": "השטף לתוך הדף גדל. לפי חוק לנץ, הזרם המושרה חייב ליצור שדה המתנגד לגידול זה, כלומר מחוץ לדף בתוך הלולאה. לפי כלל יד-ימין, זה מצריך זרם נגד כיוון השעון (מצד הקדמי של הדף)."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Rod $L=0.50$ m moves at $v=6$ m/s in $B=0.40$ T perpendicular. Motional EMF?",
-      "body_he": "מוט $L=0.50$ m, $v=6$ m/s, $B=0.40$ T ניצב. EMF?",
+      "body_en": "A conducting rod of length $L = 0.5\\;\\text{m}$ moves with velocity $v = 4\\;\\text{m/s}$ perpendicular to a uniform magnetic field $B = 0.3\\;\\text{T}$. The rod is also perpendicular to the field. What is the magnitude of the induced EMF?",
+      "body_he": "מוט מוליך באורך $L = 0.5\\;\\text{m}$ נע במהירות $v = 4\\;\\text{m/s}$ מאונכת לשדה מגנטי אחיד $B = 0.3\\;\\text{T}$. המוט גם מאונך לשדה. מהי עוצמת ה-EMF המושרה?",
       "options": [
         {
           "id": "a",
-          "text_en": "$1.20$ V",
-          "text_he": "$1.20$ V",
+          "text_en": "$0.60\\;\\text{V}$",
+          "text_he": "$0.60\\;\\text{V}$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$0.80$ V",
-          "text_he": "$0.80$ V",
+          "text_en": "$0.30\\;\\text{V}$",
+          "text_he": "$0.30\\;\\text{V}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$2.40$ V",
-          "text_he": "$2.40$ V",
+          "text_en": "$1.20\\;\\text{V}$",
+          "text_he": "$1.20\\;\\text{V}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$0.12$ V",
-          "text_he": "$0.12$ V",
+          "text_en": "$0.075\\;\\text{V}$",
+          "text_he": "$0.075\\;\\text{V}$",
           "correct": false
         }
       ],
-      "explanation_en": "$\\mathcal{E}=BLv=0.40\\times0.50\\times6=1.20$ V.",
-      "explanation_he": "$\\mathcal{E}=BLv=1.20$ V."
+      "explanation_en": "$\\mathcal{E} = BLv = (0.3)(0.5)(4) = 0.60$ V. This follows both from the flux method and from the force-on-charges approach: $F = qvB$ on each charge, work per unit charge over length $L$ is $vBL$.",
+      "explanation_he": "$\\mathcal{E} = BLv = (0.3)(0.5)(4) = 0.60$ V. זה נובע הן משיטת השטף והן מגישת הכוח על המטענים: $F = qvB$ על כל מטען, עבודה ליחידת מטען על אורך $L$ היא $vBL$."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Transformer: $N_p=200$, $N_s=50$, $V_p=120$ V. Secondary voltage?",
-      "body_he": "שנאי: $N_p=200$, $N_s=50$, $V_p=120$ V. $V_s$?",
+      "body_en": "An ideal transformer has $N_1 = 200$ turns on the primary and $N_2 = 50$ turns on the secondary. If the primary voltage is $V_1 = 240\\;\\text{V}$ and the primary current is $I_1 = 2\\;\\text{A}$, what are the secondary voltage $V_2$ and secondary current $I_2$?",
+      "body_he": "לטרנספורמטור אידיאלי יש $N_1 = 200$ כריכות בראשוני ו-$N_2 = 50$ כריכות במשני. אם המתח הראשוני הוא $V_1 = 240\\;\\text{V}$ והזרם הראשוני $I_1 = 2\\;\\text{A}$, מהם המתח המשני $V_2$ והזרם המשני $I_2$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$30$ V",
-          "text_he": "$30$ V",
+          "text_en": "$V_2 = 60\\;\\text{V},\\; I_2 = 8\\;\\text{A}$",
+          "text_he": "$V_2 = 60\\;\\text{V},\\; I_2 = 8\\;\\text{A}$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$480$ V",
-          "text_he": "$480$ V",
+          "text_en": "$V_2 = 60\\;\\text{V},\\; I_2 = 0.5\\;\\text{A}$",
+          "text_he": "$V_2 = 60\\;\\text{V},\\; I_2 = 0.5\\;\\text{A}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$60$ V",
-          "text_he": "$60$ V",
+          "text_en": "$V_2 = 960\\;\\text{V},\\; I_2 = 0.5\\;\\text{A}$",
+          "text_he": "$V_2 = 960\\;\\text{V},\\; I_2 = 0.5\\;\\text{A}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$240$ V",
-          "text_he": "$240$ V",
+          "text_en": "$V_2 = 240\\;\\text{V},\\; I_2 = 2\\;\\text{A}$",
+          "text_he": "$V_2 = 240\\;\\text{V},\\; I_2 = 2\\;\\text{A}$",
           "correct": false
         }
       ],
-      "explanation_en": "$V_s=V_p(N_s/N_p)=120\\times(50/200)=30$ V.",
-      "explanation_he": "$V_s=30$ V."
+      "explanation_en": "$V_2 = V_1(N_2/N_1) = 240(50/200) = 60$ V. By power conservation: $I_2 = I_1(N_1/N_2) = 2(200/50) = 8$ A. Check: $P = V_1 I_1 = 480$ W $= V_2 I_2 = (60)(8) = 480$ W ✓.",
+      "explanation_he": "$V_2 = V_1(N_2/N_1) = 240(50/200) = 60$ V. משימור הספק: $I_2 = I_1(N_1/N_2) = 2(200/50) = 8$ A. בדיקה: $P = 480$ W $= (60)(8) = 480$ W ✓."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "RL circuit: $L=0.20$ H, $R=40$ $\\Omega$. Time constant $\\tau$?",
-      "body_he": "מעגל RL: $L=0.20$ H, $R=40$ $\\Omega$. $\\tau$?",
+      "body_en": "A series RL circuit has $\\mathcal{E}_0 = 12\\;\\text{V}$, $R = 6\\;\\Omega$, and $L = 0.3\\;\\text{H}$. What is the time constant $\\tau$ and the current at $t = \\tau$?",
+      "body_he": "מעגל RL טורי בעל $\\mathcal{E}_0 = 12\\;\\text{V}$, $R = 6\\;\\Omega$ ו-$L = 0.3\\;\\text{H}$. מהו קבוע הזמן $\\tau$ והזרם ב-$t = \\tau$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$5.0$ ms",
-          "text_he": "$5.0$ ms",
+          "text_en": "$\\tau = 0.05\\;\\text{s},\\; I(\\tau) \\approx 1.26\\;\\text{A}$",
+          "text_he": "$\\tau = 0.05\\;\\text{s},\\; I(\\tau) \\approx 1.26\\;\\text{A}$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$8.0$ s",
-          "text_he": "$8.0$ s",
+          "text_en": "$\\tau = 1.8\\;\\text{s},\\; I(\\tau) \\approx 1.26\\;\\text{A}$",
+          "text_he": "$\\tau = 1.8\\;\\text{s},\\; I(\\tau) \\approx 1.26\\;\\text{A}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$2.0$ ms",
-          "text_he": "$2.0$ ms",
+          "text_en": "$\\tau = 0.05\\;\\text{s},\\; I(\\tau) = 2\\;\\text{A}$",
+          "text_he": "$\\tau = 0.05\\;\\text{s},\\; I(\\tau) = 2\\;\\text{A}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$50$ ms",
-          "text_he": "$50$ ms",
+          "text_en": "$\\tau = 0.05\\;\\text{s},\\; I(\\tau) = 0\\;\\text{A}$",
+          "text_he": "$\\tau = 0.05\\;\\text{s},\\; I(\\tau) = 0\\;\\text{A}$",
           "correct": false
         }
       ],
-      "explanation_en": "$\\tau=L/R=0.20/40=0.005$ s $=5.0$ ms. Note: 0.005 s and 5.0 ms are equivalent.",
-      "explanation_he": "$\\tau=L/R=5.0$ ms."
+      "explanation_en": "$\\tau = L/R = 0.3/6 = 0.05$ s. Final current: $I_\\infty = \\mathcal{E}_0/R = 12/6 = 2$ A. At $t = \\tau$: $I(\\tau) = 2(1 - e^{-1}) = 2(1 - 0.368) = 2(0.632) \\approx 1.26$ A.",
+      "explanation_he": "$\\tau = L/R = 0.3/6 = 0.05$ s. זרם סופי: $I_\\infty = 2$ A. ב-$t = \\tau$: $I(\\tau) = 2(1 - e^{-1}) \\approx 1.26$ A."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Which law gives the magnetic field of a steady current in a wire?",
-      "body_he": "איזה חוק נותן את $\\mathbf{B}$ של זרם קבוע בחוט?",
+      "body_en": "Which statement correctly distinguishes when to use Faraday's law versus Biot-Savart?",
+      "body_he": "איזו טענה מבחינה נכון מתי להשתמש בחוק פאראדיי לעומת ביו-סבר?",
       "options": [
         {
           "id": "a",
-          "text_en": "Faraday's law $\\mathcal{E}=-d\\Phi_B/dt$",
-          "text_he": "חוק פאראדי",
+          "text_en": "Use Faraday's law to find the magnetic field produced by a steady current; use Biot-Savart to find induced EMF.",
+          "text_he": "השתמש בחוק פאראדיי למציאת השדה המגנטי מזרם קבוע; השתמש בביו-סבר למציאת EMF מושרה.",
           "correct": false
         },
         {
           "id": "b",
-          "text_en": "Biot-Savart (or Ampère's law)",
-          "text_he": "Biot-Savart (או אמפר)",
+          "text_en": "Use Biot-Savart to calculate $\\vec{B}$ from a given current distribution; use Faraday's law to find the EMF (and induced current) caused by a changing magnetic flux.",
+          "text_he": "השתמש בביו-סבר לחישוב $\\vec{B}$ מפיזור זרם נתון; השתמש בחוק פאראדיי למציאת ה-EMF (והזרם המושרה) הנגרם משטף מגנטי משתנה.",
           "correct": true
         },
         {
           "id": "c",
-          "text_en": "Gauss's law for electricity",
-          "text_he": "חוק גאוס לחשמל",
+          "text_en": "Biot-Savart and Faraday's law are interchangeable; use whichever is more convenient.",
+          "text_he": "ביו-סבר וחוק פאראדיי ניתנים להחלפה; השתמש באיזה שנוח יותר.",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "Lenz's law alone",
-          "text_he": "חוק לנץ בלבד",
+          "text_en": "Use Faraday's law only for AC circuits; use Biot-Savart for DC circuits.",
+          "text_he": "השתמש בחוק פאראדיי רק למעגלי AC; השתמש בביו-סבר למעגלי DC.",
           "correct": false
         }
       ],
-      "explanation_en": "Steady B from I is computed via Biot-Savart or Ampère; Faraday links changing flux to induced EMF.",
-      "explanation_he": "B מזרם קבוע — Biot-Savart/אמפר; פאראדי — EMF משינוי שטף."
+      "explanation_en": "Biot-Savart (and Ampère's law) are used to find the magnetic field $\\vec{B}$ produced by a given current distribution. Faraday's law is used in the opposite direction: given a (possibly time-varying) magnetic field, it tells you the EMF induced in a loop and hence the induced current. They are not interchangeable: Biot-Savart is a source law (currents → fields), while Faraday is an induction law (changing fields → EMF).",
+      "explanation_he": "ביו-סבר (וחוק אמפר) משמשים למציאת השדה המגנטי $\\vec{B}$ המיוצר על-ידי פיזור זרם נתון. חוק פאראדיי משמש בכיוון ההפוך: בהינתן שדה מגנטי (אפשרי משתנה בזמן), הוא נותן את ה-EMF המושרה בלולאה ומכאן את הזרם המושרה. הם אינם ניתנים להחלפה."
     }
   ]
 }

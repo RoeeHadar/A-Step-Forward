@@ -1,224 +1,216 @@
 {
   "id": "ampere_law",
-  "subject": "university_physics_2",
-  "title_en": "Ampère's Law and Symmetric Currents (University)",
-  "title_he": "חוק אמפר וזרמים סימטריים (אוניברסיטה)",
-  "duration_min": 23,
   "type": "interactive",
+  "subject": "university_physics_2",
+  "title_en": "Ampère's Law — Magnetic Fields from Symmetric Currents",
+  "title_he": "חוק אמפר — שדות מגנטיים מזרמים סימטריים",
+  "duration_min": 30,
   "level_min": "university",
-  "agent_hints": "Ampère's law $\\oint\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0 I_{\\text{enc}}$ is the magnetic analog of Gauss — useful with high symmetry. Right-hand rule for Amperian loop direction vs $I_{\\text{enc}}$. Solenoid: $B=\\mu_0 nI$ inside. Toroid: field confined inside core. Preview displacement current: needed for consistency in capacitors and leads to Maxwell's correction.",
+  "agent_hints": "Ampère's law is the magnetic analogue of Gauss's law. The Ampèrian loop is a closed *path* (1D), not a surface. The key symmetry conditions: (1) |B| is constant along the loop, and (2) the angle between B and dl is constant. For the solenoid, the argument that B≈0 outside is subtle: use two rectangular loops to show it, or invoke the superposition of many loops. Students often confuse the enclosed current (current threads through the surface bounded by the loop) with the current at the loop itself. For the toroid, stress that outside the toroid the enclosed current is zero (currents going up and down cancel).",
   "sections": [
     {
-      "id": "ampere_integral",
-      "title_en": "Ampère's Law — Integral Form",
-      "title_he": "חוק אמפר — צורה אינטגרלית",
-      "body_en_md": "For steady (DC) currents:\n$$\\boxed{\\oint_C \\mathbf{B}\\cdot d\\mathbf{l} = \\mu_0 I_{\\text{enc}}}$$\n\n$I_{\\text{enc}}$ is the **algebraic sum** of currents piercing the surface bounded by closed Amperian loop $C$ (right-hand rule).\n\nDifferential form (Stokes):\n$$\\nabla\\times\\mathbf{B} = \\mu_0\\mathbf{J}$$\n\nValid for **steady** currents. Time-varying $E$ requires Maxwell's displacement-current term.",
-      "body_he_md": "לזרמים קבועים (DC):\n$$\\boxed{\\oint_C \\mathbf{B}\\cdot d\\mathbf{l} = \\mu_0 I_{\\text{enc}}}$$\n\n$I_{\\text{enc}}$ הוא **סכום אלגברי** של זרמים החודרים את הפני שטח הגבולות על ידי לולאת אמפר $C$ (כלל היד הימנית).\n\nצורה דיפרנציאלית:\n$$\\nabla\\times\\mathbf{B} = \\mu_0\\mathbf{J}$$\n\nתקף לזרמים **קבועים**. שינוי $\\mathbf{E}$ דורש תרמיל הזזה של מаксוול.",
-      "level_min": "university"
+      "id": "ampere_statement",
+      "title_en": "Ampère's Law — Statement and Analogy with Gauss",
+      "title_he": "חוק אמפר — ניסוח ואנלוגיה עם גאוס",
+      "level_min": "university",
+      "body_en_md": "## Ampère's Law\n\nFor any closed path (Ampèrian loop) $C$, the line integral of $\\vec{B}$ around the loop equals $\\mu_0$ times the total current threading through any surface bounded by the loop:\n\n$$\\oint_C \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$$\n\nwhere $I_{\\text{enc}}$ is the **net current passing through** any surface bounded by $C$ (the sign determined by the right-hand rule: curl the right hand in the direction of traversal; the thumb points in the positive direction for current).\n\n**Analogy with Gauss's law:**\n\n| Gauss's Law | Ampère's Law |\n|---|---|\n| Closed **surface** integral of $\\vec{E}$ | Closed **line** integral of $\\vec{B}$ |\n| $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ | $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ |\n| Source: electric charge | Source: electric current |\n| Exploit spherical/planar/cylindrical symmetry | Exploit cylindrical/planar symmetry |\n\n**When is it useful?** Only when you can argue by symmetry that $|\\vec{B}|$ is constant along the loop and the angle between $\\vec{B}$ and $d\\vec{l}$ is fixed. Otherwise, Ampère's law is true but cannot be solved algebraically—use Biot-Savart instead.",
+      "body_he_md": "## חוק אמפר\n\nעבור כל מסלול סגור (לולאת אמפר) $C$, האינטגרל הקווי של $\\vec{B}$ סביב הלולאה שווה ל-$\\mu_0$ כפול הזרם הכולל החוצה דרך כל משטח שגובל בלולאה:\n\n$$\\oint_C \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$$\n\nכאשר $I_{\\text{enc}}$ הוא **הזרם הנטו העובר דרך** כל משטח הגובל ב-$C$ (הסימן נקבע על-ידי כלל יד-ימין: עוקפים ביד-ימין בכיוון המעבר; האגודל מצביע בכיוון החיובי לזרם).\n\n**אנלוגיה עם חוק גאוס:**\n\n| חוק גאוס | חוק אמפר |\n|---|---|\n| אינטגרל **משטחי** סגור של $\\vec{E}$ | אינטגרל **קווי** סגור של $\\vec{B}$ |\n| $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ | $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ |\n| מקור: מטען חשמלי | מקור: זרם חשמלי |\n\n**מתי שימושי?** רק כאשר ניתן לטעון מסימטריה ש-$|\\vec{B}|$ קבוע לאורך הלולאה והזווית בין $\\vec{B}$ ל-$d\\vec{l}$ קבועה. אחרת, חוק אמפר נכון אך לא ניתן לפתרון אלגברי — יש להשתמש בביו-סבר."
     },
     {
       "id": "infinite_wire_ampere",
-      "title_en": "Infinite Wire via Amperian Loop",
-      "title_he": "חוט אינסופי באמצעות לולאת אמפר",
-      "body_en_md": "Circular Amperian loop radius $r$ coaxial with wire carrying $I$.\nBy symmetry $B$ is tangential and constant on the loop:\n$$\\oint \\mathbf{B}\\cdot d\\mathbf{l} = B(2\\pi r) = \\mu_0 I$$\n$$B = \\frac{\\mu_0 I}{2\\pi r}$$\n\nSame result as Biot-Savart — consistency check.\nDirection: curl fingers with $\\oint\\mathbf{B}\\cdot d\\mathbf{l}$; thumb gives current direction (RH rule).",
-      "body_he_md": "לולאת אמפר מעגלית ברדיוס $r$ קואקסיאלית לחוט עם זרם $I$.\nלפי סימטריה $B$ משיקי וקבוע על הלולאה:\n$$B(2\\pi r) = \\mu_0 I \\quad\\Rightarrow\\quad B = \\frac{\\mu_0 I}{2\\pi r}$$\n\nאותה תוצאה כמו Biot-Savart.\nכיוון: כלל היד הימנית עם $\\oint\\mathbf{B}\\cdot d\\mathbf{l}$.",
-      "level_min": "university"
+      "title_en": "Application: Infinite Wire (Confirms Biot-Savart)",
+      "title_he": "יישום: חוט אינסופי (מאשר ביו-סבר)",
+      "level_min": "university",
+      "body_en_md": "## Infinite Straight Wire — Circular Ampèrian Loop\n\nFor an infinite straight wire carrying current $I$, choose an Ampèrian loop that is a circle of radius $r$ centered on the wire, in the plane perpendicular to the wire.\n\n**Symmetry argument:** $\\vec{B}$ has cylindrical symmetry around the wire, so $|\\vec{B}|$ is constant on the circle and $\\vec{B}$ is tangent to the circle everywhere (parallel to $d\\vec{l}$).\n\nApplying Ampère's law:\n$$\\oint \\vec{B}\\cdot d\\vec{l} = B(2\\pi r) = \\mu_0 I$$\n\n$$\\boxed{B = \\frac{\\mu_0 I}{2\\pi r}}$$\n\nThis confirms the Biot-Savart result, but with far less work. The direction is given by the right-hand rule as before.",
+      "body_he_md": "## חוט ישר אינסופי — לולאת אמפר מעגלית\n\nעבור חוט ישר אינסופי הנושא זרם $I$, נבחר לולאת אמפר מעגלית ברדיוס $r$ ממורכזת על החוט, במישור מאונך לחוט.\n\n**ארגומנט סימטריה:** ל-$\\vec{B}$ סימטריה גלילית סביב החוט, לכן $|\\vec{B}|$ קבוע על המעגל ו-$\\vec{B}$ משיקי לכל מקום (מקביל ל-$d\\vec{l}$).\n\nמחוק אמפר:\n$$B(2\\pi r) = \\mu_0 I$$\n\n$$\\boxed{B = \\frac{\\mu_0 I}{2\\pi r}}$$\n\nזה מאשר את תוצאת ביו-סבר, אך בהרבה פחות עבודה."
     },
     {
       "id": "solenoid_toroid",
       "title_en": "Solenoid and Toroid",
-      "title_he": "סolenoid ו-toroid",
-      "body_en_md": "**Long solenoid** ($n$ turns/m, current $I$):\nRectangular Amperian loop: interior segment gives\n$$B = \\mu_0 n I \\quad \\text{(uniform inside, end effects neglected)}$$\n\n**Toroid** (mean radius $R$, $N$ total turns, current $I$):\nAmperian circle inside core: $B(2\\pi r)=\\mu_0 N I$ (if all turns linked)\n$$B = \\frac{\\mu_0 N I}{2\\pi r}$$\n\nField essentially **zero outside** toroid (unlike solenoid fringing).",
-      "body_he_md": "**סolenoid ארוך** ($n$ פיתולים/מ', זרם $I$):\n$$B = \\mu_0 n I \\quad \\text{(אחיד בפנים)}$$\n\n**טורoid** (רדיוס ממוצע $R$, $N$ פיתולים, זרם $I$):\n$$B = \\frac{\\mu_0 N I}{2\\pi r}$$\n\nהשדה **אפסי בחוץ** (בניגוד לסolenoid).",
-      "level_min": "university"
+      "title_he": "סולנואיד וטורואיד",
+      "level_min": "university",
+      "body_en_md": "## Solenoid\n\nAn ideal solenoid has $n$ turns per meter, carries current $I$, and is assumed infinite in length. The field inside is uniform and parallel to the axis; outside it is approximately zero.\n\nChoose a rectangular Ampèrian loop of length $l$ with one side inside (parallel to the axis) and one side outside:\n\n$$\\oint \\vec{B}\\cdot d\\vec{l} = B_{\\text{in}}\\cdot l + 0 + 0 + 0 = \\mu_0 (nl) I$$\n\n$$\\boxed{B_{\\text{solenoid}} = \\mu_0 n I}$$\n\nOutside the solenoid: $B \\approx 0$.\n\n## Toroid\n\nA toroid has $N$ total turns wound on a donut-shaped core. For a circular Ampèrian loop of radius $r$ inside the toroid (between inner radius $a$ and outer radius $b$):\n\n$$B(2\\pi r) = \\mu_0 N I \\implies \\boxed{B_{\\text{toroid}} = \\frac{\\mu_0 N I}{2\\pi r}} \\quad (a < r < b)$$\n\nFor $r < a$ or $r > b$: $I_{\\text{enc}} = 0$ (equal and opposite currents thread through the loop), so $B = 0$.",
+      "body_he_md": "## סולנואיד\n\nסולנואיד אידיאלי בעל $n$ כריכות למטר, נושא זרם $I$, ומניחים שאינסופי באורכו. השדה בפנים אחיד ומקביל לציר; מחוץ הוא אפסי בקירוב.\n\nנבחר לולאת אמפר מלבנית באורך $l$ עם צד אחד בפנים (מקביל לציר) וצד אחד מחוץ:\n\n$$B_{\\text{in}}\\cdot l = \\mu_0 (nl) I$$\n\n$$\\boxed{B_{\\text{solenoid}} = \\mu_0 n I}$$\n\nמחוץ לסולנואיד: $B \\approx 0$.\n\n## טורואיד\n\nטורואיד בעל $N$ כריכות כולל כרוך על ליבה בצורת סופגנייה. עבור לולאת אמפר מעגלית ברדיוס $r$ בתוך הטורואיד (בין רדיוס פנימי $a$ לרדיוס חיצוני $b$):\n\n$$B(2\\pi r) = \\mu_0 N I \\implies \\boxed{B_{\\text{toroid}} = \\frac{\\mu_0 N I}{2\\pi r}} \\quad (a < r < b)$$\n\nל-$r < a$ או $r > b$: $I_{\\text{enc}} = 0$ (זרמים שווים ומנוגדים חוצים דרך הלולאה), ולכן $B = 0$."
     },
     {
-      "id": "amperian_path_choice",
-      "title_en": "Choosing an Amperian Path",
-      "title_he": "בחירת מסלול אמפרי",
-      "body_en_md": "Requirements (mirror Gauss's law strategy):\n1. $\\mathbf{B}$ tangential and constant on part of path\n2. $\\mathbf{B}\\perp d\\mathbf{l}$ or $B=0$ elsewhere\n\nThen $\\oint\\mathbf{B}\\cdot d\\mathbf{l}=B\\,\\ell_{\\text{useful}}$.\n\nWrong path choice still satisfies Ampère's law but does not simplify $B$.\nAlways verify $I_{\\text{enc}}$ sign using RH convention.",
-      "body_he_md": "דרישות (כמו בחוק גאוס):\n1. $\\mathbf{B}$ משיקי וקבוע על חלק מהמסלול\n2. $\\mathbf{B}\\perp d\\mathbf{l}$ או $B=0$ elsewhere\n\nאז $\\oint\\mathbf{B}\\cdot d\\mathbf{l}=B\\,\\ell_{\\text{useful}}$.\n\nמסלול לא מתאים עדיין מקיים את החוק אך לא מפשט $B$.\nבדקו סימן $I_{\\text{enc}}$ לפי כלל היד הימנית.",
-      "level_min": "university"
-    },
-    {
-      "id": "displacement_preview",
-      "title_en": "Limitation and Displacement Current Preview",
-      "title_he": "מגבלה ותצוגה מקדימה של תרמיל הזזה",
-      "body_en_md": "Charging capacitor: steady current in wires but **no conduction current** between plates. Ampère alone gives $\\oint\\mathbf{B}\\cdot d\\mathbf{l}=0$ through gap — contradicts experiment.\n\nMaxwell added **displacement current density**:\n$$\\mathbf{J}_d = \\varepsilon_0\\frac{\\partial\\mathbf{E}}{\\partial t}$$\n\nAmpère-Maxwell law:\n$$\\oint\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0\\!\\left(I_{\\text{cond}}+\\varepsilon_0\\frac{d\\Phi_E}{dt}\\right)$$\n\nRestores consistency and enables EM waves.",
-      "body_he_md": "מעגל טעינה: זרם בחוטים אך **אין זרם מוליך** בין לוחות. אמפר בלבד נותן אפס בשבלול — סתירה.\n\nמаксוול הוסיף **צפיפות תרמיל הזזה**:\n$$\\mathbf{J}_d = \\varepsilon_0\\frac{\\partial\\mathbf{E}}{\\partial t}$$\n\nחוק אמפר-מаксוול:\n$$\\oint\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0\\!\\left(I_{\\text{cond}}+\\varepsilon_0\\frac{d\\Phi_E}{dt}\\right)$$",
-      "level_min": "university"
+      "id": "limitations",
+      "title_en": "Limitations — Why Displacement Current is Needed",
+      "title_he": "מגבלות — מדוע דרוש זרם תזוזה",
+      "level_min": "university",
+      "body_en_md": "## Limitations of the Original Ampère's Law\n\nConsider a capacitor being charged by a current $I$. Draw an Ampèrian loop around the wire feeding one plate:\n\n- **If the bounding surface is a flat disk** crossing the wire: $I_{\\text{enc}} = I$ ✓\n- **If the bounding surface bulges out** between the capacitor plates (no wire passes through): $I_{\\text{enc}} = 0$ ✗\n\nThe two surfaces give *different* values for $I_{\\text{enc}}$, which is a contradiction—Ampère's law is **inconsistent** for time-varying electric fields.\n\n**The fix:** Maxwell added the **displacement current**\n$$I_d = \\epsilon_0 \\frac{d\\Phi_E}{dt}$$\n\nmaking the modified Ampère-Maxwell law:\n$$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0(I_{\\text{enc}} + I_d)$$\n\nBetween the capacitor plates, $I_d = \\epsilon_0 dE/dt \\cdot A = I$ (exactly equal to the conduction current!), restoring consistency.\n\nThis is explored in detail in the Maxwell's Equations lesson.",
+      "body_he_md": "## מגבלות חוק אמפר המקורי\n\nנבחן קבל מתטען על-ידי זרם $I$. נצייר לולאת אמפר סביב החוט המזין לוח אחד:\n\n- **אם משטח הגבול הוא דיסק שטוח** החוצה את החוט: $I_{\\text{enc}} = I$ ✓\n- **אם משטח הגבול בולט** בין לוחות הקבל (אין חוט שחוצה): $I_{\\text{enc}} = 0$ ✗\n\nשני המשטחים נותנים ערכים *שונים* ל-$I_{\\text{enc}}$ — סתירה. חוק אמפר **לא עקבי** עבור שדות חשמליים משתנים בזמן.\n\n**הפתרון:** מקסוול הוסיף את **זרם התזוזה**\n$$I_d = \\epsilon_0 \\frac{d\\Phi_E}{dt}$$\n\nמה שיוצר את חוק אמפר-מקסוול המתוקן:\n$$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0(I_{\\text{enc}} + I_d)$$\n\nבין לוחות הקבל, $I_d = I$ (שווה בדיוק לזרם ההולכה!), ומשחזר עקביות."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Long solenoid: $n=500$ turns/m, $I=2$ A. Approximate $B$ inside?",
-      "body_he": "סolenoid ארוך: $n=500$ פיתולים/מ', $I=2$ A. $B$ בפנים?",
+      "body_en": "An infinite solenoid has $n = 2000$ turns/m and carries current $I = 0.5\\;\\text{A}$. What is the magnetic field inside?",
+      "body_he": "סולנואיד אינסופי בעל $n = 2000$ כריכות/מ' נושא זרם $I = 0.5\\;\\text{A}$. מהו השדה המגנטי בתוכו?",
       "options": [
         {
           "id": "a",
-          "text_en": "$1.26\\times10^{-3}$ T",
-          "text_he": "$1.26\\times10^{-3}$ T",
+          "text_en": "$4\\pi\\times10^{-4}\\;\\text{T} \\approx 1.26\\;\\text{mT}$",
+          "text_he": "$4\\pi\\times10^{-4}\\;\\text{T} \\approx 1.26\\;\\text{mT}$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$6.28\\times10^{-4}$ T",
-          "text_he": "$6.28\\times10^{-4}$ T",
+          "text_en": "$2\\pi\\times10^{-4}\\;\\text{T}$",
+          "text_he": "$2\\pi\\times10^{-4}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$2.51\\times10^{-3}$ T",
-          "text_he": "$2.51\\times10^{-3}$ T",
+          "text_en": "$8\\pi\\times10^{-4}\\;\\text{T}$",
+          "text_he": "$8\\pi\\times10^{-4}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$4.0\\times10^{-3}$ T",
-          "text_he": "$4.0\\times10^{-3}$ T",
+          "text_en": "$1.0\\times10^{-3}\\;\\text{T}$",
+          "text_he": "$1.0\\times10^{-3}\\;\\text{T}$",
           "correct": false
         }
       ],
-      "explanation_en": "$B=\\mu_0 nI=(4\\pi\\times10^{-7})(500)(2)=1.256\\times10^{-3}$ T.",
-      "explanation_he": "$B=\\mu_0 nI=1.26\\times10^{-3}$ T."
+      "explanation_en": "$B = \\mu_0 n I = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\times10^{-3}$ T.",
+      "explanation_he": "$B = \\mu_0 n I = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4} \\approx 1.26\\;\\text{mT}$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Toroid: $N=1000$ turns, $I=3$ A, mean radius $r=0.15$ m. Find $B$ on mean circle.",
-      "body_he": "טורoid: $N=1000$, $I=3$ A, רדיוס ממוצע $r=0.15$ m. $B$?",
+      "body_en": "If the current through a solenoid is doubled while the number of turns per meter is halved, the magnetic field inside:",
+      "body_he": "אם הזרם דרך סולנואיד מוכפל בעוד שמספר הכריכות למטר מוחצה, השדה המגנטי בפנים:",
       "options": [
         {
           "id": "a",
-          "text_en": "$4.0\\times10^{-3}$ T",
-          "text_he": "$4.0\\times10^{-3}$ T",
-          "correct": true
+          "text_en": "Doubles",
+          "text_he": "מוכפל",
+          "correct": false
         },
         {
           "id": "b",
-          "text_en": "$2.0\\times10^{-3}$ T",
-          "text_he": "$2.0\\times10^{-3}$ T",
+          "text_en": "Is halved",
+          "text_he": "מוחצה",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$8.0\\times10^{-3}$ T",
-          "text_he": "$8.0\\times10^{-3}$ T",
-          "correct": false
+          "text_en": "Remains unchanged",
+          "text_he": "נשאר ללא שינוי",
+          "correct": true
         },
         {
           "id": "d",
-          "text_en": "$1.2\\times10^{-2}$ T",
-          "text_he": "$1.2\\times10^{-2}$ T",
+          "text_en": "Increases by a factor of 4",
+          "text_he": "גדל פי 4",
           "correct": false
         }
       ],
-      "explanation_en": "$B=\\mu_0 NI/(2\\pi r)=(4\\pi\\times10^{-7})(1000)(3)/(2\\pi\\cdot0.15)=4\\times10^{-3}$ T.",
-      "explanation_he": "$B=\\mu_0 NI/(2\\pi r)=4\\times10^{-3}$ T."
+      "explanation_en": "$B = \\mu_0 n I$. Doubling $I$ and halving $n$: $B' = \\mu_0(n/2)(2I) = \\mu_0 nI = B$. The product $nI$ is unchanged.",
+      "explanation_he": "$B = \\mu_0 n I$. הכפלת $I$ וחציית $n$: $B' = \\mu_0(n/2)(2I) = \\mu_0 nI = B$. המכפלה $nI$ אינה משתנה."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Amperian loop encloses two wires: $+5$ A upward and $+3$ A downward. $I_{\\text{enc}}$?",
-      "body_he": "לולאת אמפר סוגרת שני חוטים: $+5$ A למעלה ו-$+3$ A למטה. $I_{\\text{enc}}$?",
+      "body_en": "A toroid has $N = 500$ turns, inner radius $a = 0.05\\;\\text{m}$, outer radius $b = 0.10\\;\\text{m}$, and carries current $I = 2\\;\\text{A}$. What is $B$ at radius $r = 0.07\\;\\text{m}$ (inside the toroid)?",
+      "body_he": "טורואיד בעל $N = 500$ כריכות, רדיוס פנימי $a = 0.05\\;\\text{m}$, רדיוס חיצוני $b = 0.10\\;\\text{m}$, נושא זרם $I = 2\\;\\text{A}$. מהו $B$ ברדיוס $r = 0.07\\;\\text{m}$ (בתוך הטורואיד)?",
       "options": [
         {
           "id": "a",
-          "text_en": "$8$ A",
-          "text_he": "$8$ A",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$2$ A",
-          "text_he": "$2$ A",
+          "text_en": "$2.86\\times10^{-3}\\;\\text{T}$",
+          "text_he": "$2.86\\times10^{-3}\\;\\text{T}$",
           "correct": true
         },
         {
+          "id": "b",
+          "text_en": "$1.43\\times10^{-3}\\;\\text{T}$",
+          "text_he": "$1.43\\times10^{-3}\\;\\text{T}$",
+          "correct": false
+        },
+        {
           "id": "c",
-          "text_en": "$5$ A",
-          "text_he": "$5$ A",
+          "text_en": "$4.00\\times10^{-3}\\;\\text{T}$",
+          "text_he": "$4.00\\times10^{-3}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$0$ A",
-          "text_he": "$0$ A",
+          "text_en": "$0$ (field is zero inside a toroid)",
+          "text_he": "$0$ (השדה אפס בתוך טורואיד)",
           "correct": false
         }
       ],
-      "explanation_en": "Use consistent sign: $I_{\\text{enc}}=5-3=2$ A (algebraic sum with RH convention).",
-      "explanation_he": "סכום אלגברי: $I_{\\text{enc}}=5-3=2$ A."
+      "explanation_en": "$B = \\frac{\\mu_0 N I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(500)(2)}{2\\pi(0.07)} = \\frac{4\\pi\\times10^{-4}}{0.14\\pi} = \\frac{4\\times10^{-4}}{0.14} \\approx 2.86\\times10^{-3}$ T.",
+      "explanation_he": "$B = \\frac{\\mu_0 N I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(500)(2)}{2\\pi(0.07)} \\approx 2.86\\times10^{-3}$ T."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "When does $\\oint\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0 I_{\\text{enc}}$ (original Ampère) fail?",
-      "body_he": "מתי $\\oint\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_0 I_{\\text{enc}}$ (אמפר המקורי) נכשל?",
+      "body_en": "Which of the following is the BEST choice of Ampèrian loop for finding the field inside a solenoid?",
+      "body_he": "מהי הבחירה הטובה ביותר של לולאת אמפר למציאת השדה בתוך סולנואיד?",
       "options": [
         {
           "id": "a",
-          "text_en": "Infinite straight wire",
-          "text_he": "חוט ישר אינסופי",
+          "text_en": "A circular loop coaxial with the solenoid",
+          "text_he": "לולאה מעגלית קואקסיאלית עם הסולנואיד",
           "correct": false
         },
         {
           "id": "b",
-          "text_en": "Long solenoid with steady $I$",
-          "text_he": "סolenoid עם $I$ קבוע",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "Gap in a charging capacitor (no $I_{\\text{cond}}$ in gap)",
-          "text_he": "רווח במעגל טעינת מעגל (אין $I_{\\text{cond}}$)",
+          "text_en": "A rectangular loop with one side along the axis inside and one side outside the solenoid",
+          "text_he": "לולאה מלבנית עם צד אחד לאורך הציר בפנים וצד אחד מחוץ לסולנואיד",
           "correct": true
         },
         {
+          "id": "c",
+          "text_en": "A spherical surface enclosing the solenoid",
+          "text_he": "משטח כדורי המקיף את הסולנואיד",
+          "correct": false
+        },
+        {
           "id": "d",
-          "text_en": "Toroid with steady $I$",
-          "text_he": "טורoid עם $I$ קבוע",
+          "text_en": "Any closed loop works equally well because $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ always",
+          "text_he": "כל לולאה סגורה עובדת באותה מידה כי $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ תמיד",
           "correct": false
         }
       ],
-      "explanation_en": "Without displacement current, Ampère fails when only $\\partial\\mathbf{E}/\\partial t$ links the loop.",
-      "explanation_he": "ללא תרמיל הזזה, אמפר נכשל כש-$\\partial\\mathbf{E}/\\partial t$ מקשר את הלולאה."
+      "explanation_en": "A rectangular loop with one long side inside (where $\\vec{B}\\parallel d\\vec{l}$, constant magnitude) and one long side outside (where $B\\approx 0$) allows both conditions for Ampère's law to hold: $|\\vec{B}|$ constant on the contributing segment, and known angle. A circular coaxial loop has $\\vec{B}$ perpendicular to $d\\vec{l}$ so the integral is zero—useless.",
+      "explanation_he": "לולאה מלבנית עם צד ארוך אחד בפנים (שם $\\vec{B}\\parallel d\\vec{l}$, עוצמה קבועה) וצד ארוך אחד מחוץ (שם $B\\approx 0$) מאפשרת לשני תנאי חוק אמפר להתקיים. לולאה מעגלית קואקסיאלית — $\\vec{B}$ מאונך ל-$d\\vec{l}$, האינטגרל אפס — לא שימושית."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Which symmetry best suits Ampère's law for finding $B$ of a long straight wire?",
-      "body_he": "איזו סימטריה מתאימה לחוק אמפר לחוט ישר ארוך?",
+      "body_en": "A cylindrical conductor of radius $R$ carries a uniformly distributed current $I$. A circular Ampèrian loop of radius $r < R$ (inside the conductor) gives:",
+      "body_he": "מוליך גלילי ברדיוס $R$ נושא זרם $I$ מפוזר אחידות. לולאת אמפר מעגלית ברדיוס $r < R$ (בתוך המוליך) נותנת:",
       "options": [
         {
           "id": "a",
-          "text_en": "Spherical Amperian surface",
-          "text_he": "פני שטח כדוריים",
+          "text_en": "$B = \\frac{\\mu_0 I}{2\\pi r}$ (same as outside)",
+          "text_he": "$B = \\frac{\\mu_0 I}{2\\pi r}$ (זהה לחיצוני)",
           "correct": false
         },
         {
           "id": "b",
-          "text_en": "Circular Amperian loop coaxial with wire",
-          "text_he": "לולאה מעגלית קואקסיאלית",
+          "text_en": "$B = \\frac{\\mu_0 I r}{2\\pi R^2}$",
+          "text_he": "$B = \\frac{\\mu_0 I r}{2\\pi R^2}$",
           "correct": true
         },
         {
           "id": "c",
-          "text_en": "Square loop in plane perpendicular to wire",
-          "text_he": "לולאה מרובעת ניצבת לחוט",
+          "text_en": "$B = 0$ because the conductor shields the interior",
+          "text_he": "$B = 0$ כי המוליך מגן על הפנים",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "Ampère's law cannot be used for wires",
-          "text_he": "לא ניתן להשתמש בחוק אמפר",
+          "text_en": "$B = \\frac{\\mu_0 I}{2\\pi R}$ (constant inside)",
+          "text_he": "$B = \\frac{\\mu_0 I}{2\\pi R}$ (קבוע בפנים)",
           "correct": false
         }
       ],
-      "explanation_en": "Cylindrical symmetry: $B$ tangential on circle of radius $r$ around wire.",
-      "explanation_he": "סימטריה גלילית: $B$ משיקי על מעגל ברדיוס $r$."
+      "explanation_en": "The enclosed current is $I_{\\text{enc}} = I(r^2/R^2)$ (proportional to cross-sectional area). Ampère's law: $B(2\\pi r) = \\mu_0 I r^2/R^2$, giving $B = \\mu_0 I r/(2\\pi R^2)$. Inside the conductor, $B$ grows linearly with $r$; outside it falls as $1/r$.",
+      "explanation_he": "הזרם הכלוא הוא $I_{\\text{enc}} = I(r^2/R^2)$ (יחסי לשטח החתך). מחוק אמפר: $B(2\\pi r) = \\mu_0 I r^2/R^2$, ולכן $B = \\mu_0 I r/(2\\pi R^2)$. בתוך המוליך, $B$ גדל ליניארית עם $r$; מחוץ הוא יורד כ-$1/r$."
     }
   ]
 }

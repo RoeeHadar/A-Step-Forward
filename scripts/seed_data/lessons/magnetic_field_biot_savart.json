@@ -1,224 +1,216 @@
 {
   "id": "magnetic_field_biot_savart",
-  "subject": "university_physics_2",
-  "title_en": "Magnetic Fields — Biot-Savart Law (University)",
-  "title_he": "שדות מגנטיים — חוק Biot-Savart (אוניברסיטה)",
-  "duration_min": 25,
   "type": "interactive",
+  "subject": "university_physics_2",
+  "title_en": "Biot-Savart Law — Magnetic Fields from Currents",
+  "title_he": "חוק ביו-סבר — שדות מגנטיים מזרמים",
+  "duration_min": 30,
   "level_min": "university",
-  "agent_hints": "Use the right-hand rule consistently for $\\mathbf{v}\\times\\mathbf{B}$ and $d\\mathbf{l}\\times\\hat{\\mathbf{r}}$. Biot-Savart gives the field from a current element; superposition applies. Infinite wire: $B=\\mu_0 I/(2\\pi r)$. Circular loop center: $B=\\mu_0 I/(2R)$. Parallel wires: force per length $F/L=\\mu_0 I_1 I_2/(2\\pi d)$. Units: tesla (T), $1\\,\\text{T}=1\\,\\text{N/(A·m)}$.",
+  "agent_hints": "The Biot-Savart law is the magnetic analogue of Coulomb's law. Stress the cross product: direction of dB requires right-hand rule applied to dl×r-hat. Students must always identify: (1) the current element vector dl, (2) the displacement unit vector r-hat from dl to the field point P, (3) the distance r. Common errors: getting the direction of r-hat backwards (it goes FROM source TO field point); forgetting the sin(theta) factor; sign errors in the cross product. For the infinite wire derivation, set up the integral with the angle variable and use the standard result. For the loop, use symmetry to argue that only the z-component survives. Emphasize that Biot-Savart is always valid but Ampere's law is easier when there is enough symmetry.",
   "sections": [
     {
-      "id": "magnetic_force_charges",
-      "title_en": "Magnetic Force on Moving Charges — $\\mathbf{F}=q\\mathbf{v}\\times\\mathbf{B}$",
-      "title_he": "כוח מגנטי על מטען נע — $\\mathbf{F}=q\\mathbf{v}\\times\\mathbf{B}$",
-      "body_en_md": "A charge $q$ moving with velocity $\\mathbf{v}$ in magnetic field $\\mathbf{B}$ experiences:\n$$\\boxed{\\mathbf{F} = q\\,\\mathbf{v}\\times\\mathbf{B}}$$\n\nMagnitude: $F = |q|vB\\sin\\theta$. Direction: **right-hand rule** (for $q>0$): fingers $\\mathbf{v}\\to\\mathbf{B}$, thumb = force.\n\nMagnetic force does **no work**: $\\mathbf{F}\\perp\\mathbf{v}$ so $dW=\\mathbf{F}\\cdot d\\mathbf{r}=0$.\n\nLorentz force (full EM): $\\mathbf{F}=q(\\mathbf{E}+\\mathbf{v}\\times\\mathbf{B})$.",
-      "body_he_md": "מטען $q$ הנע במהירות $\\mathbf{v}$ בשדה $\\mathbf{B}$:\n$$\\boxed{\\mathbf{F} = q\\,\\mathbf{v}\\times\\mathbf{B}}$$\n\nגודל: $F = |q|vB\\sin\\theta$. כיוון: **כלל היד הימנית** (ל-$q>0$): אצבעות $\\mathbf{v}\\to\\mathbf{B}$, אגודל = כוח.\n\nהכוח המגנטי **לא מבצע עבודה**: $\\mathbf{F}\\perp\\mathbf{v}$.\n\nכוח לורנץ: $\\mathbf{F}=q(\\mathbf{E}+\\mathbf{v}\\times\\mathbf{B})$.",
-      "level_min": "university"
-    },
-    {
-      "id": "force_on_current",
-      "title_en": "Force on a Current Element — $d\\mathbf{F}=I\\,d\\mathbf{l}\\times\\mathbf{B}$",
-      "title_he": "כוח על אלמנט זרם — $d\\mathbf{F}=I\\,d\\mathbf{l}\\times\\mathbf{B}$",
-      "body_en_md": "Current $I$ in segment $d\\mathbf{l}$ (direction of conventional current):\n$$d\\mathbf{F} = I\\,d\\mathbf{l}\\times\\mathbf{B}$$\n\nTotal force on wire from $a$ to $b$:\n$$\\mathbf{F} = I\\int_a^b d\\mathbf{l}\\times\\mathbf{B}$$\n\nFor uniform $\\mathbf{B}$ and straight wire length $L$:\n$$F = BIL\\sin\\theta$$\n\nTorque on a current loop in $\\mathbf{B}$: $\\boldsymbol{\\tau}=\\mathbf{m}\\times\\mathbf{B}$ where $\\mathbf{m}=IA\\hat{\\mathbf{n}}$ is magnetic dipole moment.",
-      "body_he_md": "זרם $I$ באלמנט $d\\mathbf{l}$ (כיוון הזרם החיובי):\n$$d\\mathbf{F} = I\\,d\\mathbf{l}\\times\\mathbf{B}$$\n\nכוח כולל על חוט:\n$$\\mathbf{F} = I\\int_a^b d\\mathbf{l}\\times\\mathbf{B}$$\n\nעבור $\\mathbf{B}$ אחיד וחוט ישר באורך $L$:\n$$F = BIL\\sin\\theta$$\n\nמומנט על לולאת זרם: $\\boldsymbol{\\tau}=\\mathbf{m}\\times\\mathbf{B}$, $\\mathbf{m}=IA\\hat{\\mathbf{n}}$.",
-      "level_min": "university"
+      "id": "magnetic_force_basics",
+      "title_en": "Magnetic Force and Current Elements",
+      "title_he": "כוח מגנטי ואלמנטי זרם",
+      "level_min": "university",
+      "body_en_md": "## Magnetic Force on Moving Charges and Currents\n\nA charge $q$ moving with velocity $\\vec{v}$ in magnetic field $\\vec{B}$ experiences the **Lorentz force**:\n\n$$\\vec{F} = q\\vec{v}\\times\\vec{B}$$\n\nThe magnitude is $F = qvB\\sin\\theta$ where $\\theta$ is the angle between $\\vec{v}$ and $\\vec{B}$. The force is always perpendicular to both $\\vec{v}$ and $\\vec{B}$, doing no work.\n\nFor a current-carrying wire, a small segment $d\\vec{l}$ carrying current $I$ experiences:\n\n$$d\\vec{F} = I\\,d\\vec{l}\\times\\vec{B}$$\n\nFor a straight wire of length $L$ in a uniform field $\\vec{B}$ at angle $\\theta$:\n\n$$F = ILB\\sin\\theta$$\n\n**Units of $B$:** Tesla ($\\text{T} = \\text{kg}/(\\text{A}\\cdot\\text{s}^2)$). Also: $1\\;\\text{T} = 10^4\\;\\text{Gauss}$.",
+      "body_he_md": "## כוח מגנטי על מטענים נעים ועל זרמים\n\nמטען $q$ הנע במהירות $\\vec{v}$ בשדה מגנטי $\\vec{B}$ חווה את **כוח לורנץ**:\n\n$$\\vec{F} = q\\vec{v}\\times\\vec{B}$$\n\nהעוצמה $F = qvB\\sin\\theta$ כאשר $\\theta$ הוא הזווית בין $\\vec{v}$ ל-$\\vec{B}$. הכוח מאונך תמיד לשניהם, ואינו מבצע עבודה.\n\nעבור חוט נושא זרם, קטע קטן $d\\vec{l}$ הנושא זרם $I$ חווה:\n\n$$d\\vec{F} = I\\,d\\vec{l}\\times\\vec{B}$$\n\nעבור חוט ישר באורך $L$ בשדה אחיד $\\vec{B}$ בזווית $\\theta$:\n\n$$F = ILB\\sin\\theta$$\n\n**יחידות של $B$:** טסלה ($\\text{T} = \\text{kg}/(\\text{A}\\cdot\\text{s}^2)$). גם: $1\\;\\text{T} = 10^4\\;\\text{גאוס}$."
     },
     {
       "id": "biot_savart_law",
       "title_en": "The Biot-Savart Law",
-      "title_he": "חוק Biot-Savart",
-      "body_en_md": "The magnetic field from steady current element $I\\,d\\mathbf{l}$ at position $\\mathbf{r}$ from the element:\n$$\\boxed{d\\mathbf{B} = \\frac{\\mu_0}{4\\pi}\\,\\frac{I\\,d\\mathbf{l}\\times\\hat{\\mathbf{r}}}{r^2}}$$\n\nwhere $\\hat{\\mathbf{r}}$ points from $d\\mathbf{l}$ to field point, $\\mu_0=4\\pi\\times10^{-7}$ T·m/A.\n\nTotal field by **superposition**:\n$$\\mathbf{B}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi}\\int \\frac{I\\,d\\mathbf{l}'\\times(\\mathbf{r}-\\mathbf{r}')}{|\\mathbf{r}-\\mathbf{r}'|^3}$$\n\nCompare Gauss (electric) vs Biot-Savart (magnetic): no magnetic monopoles, field lines close on themselves.",
-      "body_he_md": "השדה המגנטי מאלמנט זרם $I\\,d\\mathbf{l}$ בנקודת שדה $\\mathbf{r}$:\n$$\\boxed{d\\mathbf{B} = \\frac{\\mu_0}{4\\pi}\\,\\frac{I\\,d\\mathbf{l}\\times\\hat{\\mathbf{r}}}{r^2}}$$\n\n$\\mu_0=4\\pi\\times10^{-7}$ T·m/A.\n\nשדה כולל ב**superposition**:\n$$\\mathbf{B}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi}\\int \\frac{I\\,d\\mathbf{l}'\\times(\\mathbf{r}-\\mathbf{r}')}{|\\mathbf{r}-\\mathbf{r}'|^3}$$\n\nאין מונופולים מגנטיים; קווי שדה סגורים.",
-      "level_min": "university"
+      "title_he": "חוק ביו-סבר",
+      "level_min": "university",
+      "body_en_md": "## Biot-Savart Law\n\nThe magnetic field $d\\vec{B}$ produced at a field point $P$ by a current element $I\\,d\\vec{l}$ is:\n\n$$d\\vec{B} = \\frac{\\mu_0}{4\\pi}\\frac{I\\,d\\vec{l}\\times\\hat{r}}{r^2}$$\n\nwhere:\n- $\\mu_0 = 4\\pi\\times10^{-7}\\;\\text{T}\\cdot\\text{m/A}$ is the permeability of free space\n- $\\hat{r}$ is the unit vector pointing from the current element **to** the field point $P$\n- $r$ is the distance from the current element to $P$\n- The cross product $d\\vec{l}\\times\\hat{r}$ gives the direction of $d\\vec{B}$ via the right-hand rule\n\nThe magnitude is:\n$$dB = \\frac{\\mu_0}{4\\pi}\\frac{I\\,dl\\,\\sin\\alpha}{r^2}$$\n\nwhere $\\alpha$ is the angle between $d\\vec{l}$ and $\\hat{r}$.\n\n**To find the total field:** integrate over the entire current distribution:\n$$\\vec{B} = \\frac{\\mu_0 I}{4\\pi}\\int\\frac{d\\vec{l}\\times\\hat{r}}{r^2}$$",
+      "body_he_md": "## חוק ביו-סבר\n\nהשדה המגנטי $d\\vec{B}$ המיוצר בנקודה שדה $P$ על-ידי אלמנט זרם $I\\,d\\vec{l}$ הוא:\n\n$$d\\vec{B} = \\frac{\\mu_0}{4\\pi}\\frac{I\\,d\\vec{l}\\times\\hat{r}}{r^2}$$\n\nכאשר:\n- $\\mu_0 = 4\\pi\\times10^{-7}\\;\\text{T}\\cdot\\text{m/A}$ הוא מקדם החדירות של ריק\n- $\\hat{r}$ הוא וקטור היחידה המופנה מאלמנט הזרם **אל** נקודת השדה $P$\n- $r$ הוא המרחק מאלמנט הזרם ל-$P$\n- המכפלה הוקטורית $d\\vec{l}\\times\\hat{r}$ נותנת את כיוון $d\\vec{B}$ בכלל כף-יד-ימין\n\nהעוצמה:\n$$dB = \\frac{\\mu_0}{4\\pi}\\frac{I\\,dl\\,\\sin\\alpha}{r^2}$$\n\nכאשר $\\alpha$ הוא הזווית בין $d\\vec{l}$ ל-$\\hat{r}$.\n\n**לחישוב השדה הכולל:** מאגדים על פיזור הזרם כולו:\n$$\\vec{B} = \\frac{\\mu_0 I}{4\\pi}\\int\\frac{d\\vec{l}\\times\\hat{r}}{r^2}$$"
     },
     {
-      "id": "wire_and_loop",
-      "title_en": "Infinite Wire and Circular Loop",
-      "title_he": "חוט אינסופי ולולאה עגולה",
-      "body_en_md": "**Infinite straight wire** (distance $r$ from axis):\nBy symmetry and Biot-Savart integration:\n$$B(r) = \\frac{\\mu_0 I}{2\\pi r}$$\nDirection: right-hand rule around current.\n\n**Circular loop** radius $R$, current $I$, field at center:\n$$B_{\\text{center}} = \\frac{\\mu_0 I}{2R}$$\n\nOn axis at distance $z$ from center:\n$$B(z)=\\frac{\\mu_0 I R^2}{2(R^2+z^2)^{3/2}}$$",
-      "body_he_md": "**חוט ישר אינסופי** (מרחק $r$):\n$$B(r) = \\frac{\\mu_0 I}{2\\pi r}$$\nכיוון: כלל היד הימנית סביב הזרם.\n\n**לולאה עגולה** רדיוס $R$, זרם $I$, שדה במרכז:\n$$B_{\\text{center}} = \\frac{\\mu_0 I}{2R}$$\n\nעל הציר במרחק $z$:\n$$B(z)=\\frac{\\mu_0 I R^2}{2(R^2+z^2)^{3/2}}$$",
-      "level_min": "university"
+      "id": "infinite_wire",
+      "title_en": "Derivation: Infinite Straight Wire",
+      "title_he": "גזירה: חוט ישר אינסופי",
+      "level_min": "university",
+      "body_en_md": "## Magnetic Field of an Infinite Straight Wire\n\nConsider an infinite straight wire carrying current $I$ along the $z$-axis. We find the field at distance $d$ from the wire.\n\nParametrize the wire by $z$: each element $dz$ at position $z$ contributes $d\\vec{B}$ in the $\\hat{\\phi}$ direction (azimuthal, by symmetry). Setting $r = \\sqrt{z^2+d^2}$ and $\\sin\\alpha = d/r$:\n\n$$dB = \\frac{\\mu_0 I}{4\\pi}\\frac{dz\\,\\sin\\alpha}{r^2} = \\frac{\\mu_0 I}{4\\pi}\\frac{d\\,dz}{(z^2+d^2)^{3/2}}$$\n\nIntegrating over $z\\in(-\\infty,+\\infty)$ using $\\int_{-\\infty}^{\\infty}\\frac{dz}{(z^2+d^2)^{3/2}} = \\frac{2}{d^2}$:\n\n$$\\boxed{B = \\frac{\\mu_0 I}{2\\pi d}}$$\n\n**Direction:** Right-hand rule — wrap the right hand around the wire with the thumb pointing in the direction of $I$; the fingers curl in the direction of $\\vec{B}$ (counterclockwise circles around the wire for current upward).",
+      "body_he_md": "## שדה מגנטי של חוט ישר אינסופי\n\nנבחן חוט ישר אינסופי הנושא זרם $I$ לאורך ציר $z$. נמצא את השדה במרחק $d$ מהחוט.\n\nנפרמטריז את החוט לפי $z$: כל אלמנט $dz$ במיקום $z$ תורם $d\\vec{B}$ בכיוון $\\hat{\\phi}$ (אזימוטלי, מסימטריה). עם $r = \\sqrt{z^2+d^2}$ ו-$\\sin\\alpha = d/r$:\n\n$$dB = \\frac{\\mu_0 I}{4\\pi}\\frac{d\\,dz}{(z^2+d^2)^{3/2}}$$\n\nאינטגרציה על $z\\in(-\\infty,+\\infty)$ עם $\\int_{-\\infty}^{\\infty}\\frac{dz}{(z^2+d^2)^{3/2}} = \\frac{2}{d^2}$:\n\n$$\\boxed{B = \\frac{\\mu_0 I}{2\\pi d}}$$\n\n**כיוון:** כלל יד-ימין — עוטפים את כף-יד-ימין סביב החוט כאשר האגודל מצביע בכיוון $I$; האצבעות מתעקלות בכיוון $\\vec{B}$ (עיגולים נגד כיוון השעון סביב החוט עבור זרם כלפי מעלה)."
     },
     {
-      "id": "parallel_wires_units",
-      "title_en": "Parallel Wires and Magnetic Units",
-      "title_he": "חוטים מקבילים ויחידות מגנטיות",
-      "body_en_md": "Two long parallel wires separated by distance $d$, currents $I_1, I_2$:\nField on wire 2 from wire 1: $B=\\mu_0 I_1/(2\\pi d)$.\nForce per unit length on wire 2:\n$$\\frac{F}{L} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$$\n\nSame direction currents **attract**; opposite **repel**.\n\n**Units:** $\\mathbf{B}$ in tesla (T); $1\\,\\text{T} = 1\\,\\text{N/(A·m)} = 1\\,\\text{Wb/m}^2$.\nPermeability: $\\mu_0=4\\pi\\times10^{-7}$ T·m/A.",
-      "body_he_md": "שני חוטים מקבילים במרחק $d$, זרמים $I_1, I_2$:\nשדה על חוט 2 מחוט 1: $B=\\mu_0 I_1/(2\\pi d)$.\nכוח ליחידת אורך:\n$$\\frac{F}{L} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$$\n\nזרמים באותו כיוון **מושכים**; בכיוון הפוך **דוחים**.\n\n**יחידות:** $\\mathbf{B}$ ב-tesla (T); $1\\,\\text{T} = 1\\,\\text{N/(A·m)}$.",
-      "level_min": "university"
+      "id": "circular_loop",
+      "title_en": "Circular Current Loop and Force Between Wires",
+      "title_he": "לולאת זרם מעגלית וכוח בין חוטים",
+      "level_min": "university",
+      "body_en_md": "## Magnetic Field at the Center of a Circular Loop\n\nA circular loop of radius $R$ in the $xy$-plane carries current $I$. By symmetry, the field at the center is purely in the $\\hat{z}$ direction (perpendicular components cancel).\n\nFor a current element $Rd\\phi$ at angle $\\phi$: $d\\vec{l}\\times\\hat{r}$ always points in $+\\hat{z}$ (angle between $d\\vec{l}$ and $\\hat{r}$ is $90°$, $r = R$):\n\n$$dB_z = \\frac{\\mu_0 I}{4\\pi}\\frac{R\\,d\\phi}{R^2} = \\frac{\\mu_0 I}{4\\pi R}d\\phi$$\n\nIntegrating around the full loop ($\\phi: 0\\to 2\\pi$):\n\n$$\\boxed{B = \\frac{\\mu_0 I}{2R}}$$\n\nDirection: right-hand rule — curl fingers in direction of $I$; thumb points in direction of $\\vec{B}$.\n\n## Force Between Parallel Wires\n\nTwo parallel wires separated by distance $d$, carrying currents $I_1$ and $I_2$:\n\n- Wire 1 creates field $B_1 = \\mu_0 I_1/(2\\pi d)$ at wire 2's location\n- Force per unit length on wire 2: $F/L = I_2 B_1 = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$\n\n**Same direction currents:** forces are attractive (field from wire 1 at wire 2 is perpendicular to $I_2$, pointing toward wire 1 by right-hand rule).\n\n**Opposite direction currents:** forces are repulsive.",
+      "body_he_md": "## שדה מגנטי במרכז לולאה מעגלית\n\nלולאה מעגלית ברדיוס $R$ במישור $xy$ נושאת זרם $I$. מסימטריה, השדה במרכז הוא בכיוון $\\hat{z}$ בלבד (רכיבים מאונכים מבטלים זה את זה).\n\nעבור אלמנט זרם $Rd\\phi$ בזווית $\\phi$: $d\\vec{l}\\times\\hat{r}$ מצביע תמיד ב-$+\\hat{z}$ (זווית בין $d\\vec{l}$ ל-$\\hat{r}$ היא $90°$, $r = R$):\n\n$$dB_z = \\frac{\\mu_0 I}{4\\pi}\\frac{R\\,d\\phi}{R^2} = \\frac{\\mu_0 I}{4\\pi R}d\\phi$$\n\nאינטגרציה סביב הלולאה כולה ($\\phi: 0\\to 2\\pi$):\n\n$$\\boxed{B = \\frac{\\mu_0 I}{2R}}$$\n\nכיוון: כלל יד-ימין — מעקלים אצבעות בכיוון $I$; אגודל מצביע בכיוון $\\vec{B}$.\n\n## כוח בין חוטים מקבילים\n\nשני חוטים מקבילים במרחק $d$ זה מזה, הנושאים זרמים $I_1$ ו-$I_2$:\n\n- חוט 1 יוצר שדה $B_1 = \\mu_0 I_1/(2\\pi d)$ במיקום חוט 2\n- כוח ליחידת אורך על חוט 2: $F/L = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$\n\n**זרמים באותו כיוון:** כוחות притягиvaniyה (אטרקטיביים).\n\n**זרמים בכיוונים הפוכים:** כוחות דוחים."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "$\\mathbf{v}$ points $+x$, $\\mathbf{B}$ points $+z$. For $q>0$, $\\mathbf{F}=q\\mathbf{v}\\times\\mathbf{B}$ points:",
-      "body_he": "$\\mathbf{v}$ בכיוון $+x$, $\\mathbf{B}$ ב-$+z$. ל-$q>0$, $\\mathbf{F}$ בכיוון:",
+      "body_en": "A current element $I\\,d\\vec{l}$ points in the $+\\hat{x}$ direction. A field point $P$ is located in the $+\\hat{y}$ direction from the current element. What is the direction of the magnetic field $d\\vec{B}$ at $P$?",
+      "body_he": "אלמנט זרם $I\\,d\\vec{l}$ מצביע בכיוון $+\\hat{x}$. נקודת שדה $P$ נמצאת בכיוון $+\\hat{y}$ מאלמנט הזרם. מהו כיוון השדה המגנטי $d\\vec{B}$ ב-$P$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$+y$",
-          "text_he": "$+y$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$-y$",
-          "text_he": "$-y$",
+          "text_en": "$+\\hat{z}$",
+          "text_he": "$+\\hat{z}$",
           "correct": true
         },
         {
+          "id": "b",
+          "text_en": "$-\\hat{z}$",
+          "text_he": "$-\\hat{z}$",
+          "correct": false
+        },
+        {
           "id": "c",
-          "text_en": "$+x$",
-          "text_he": "$+x$",
+          "text_en": "$+\\hat{y}$",
+          "text_he": "$+\\hat{y}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$-z$",
-          "text_he": "$-z$",
+          "text_en": "$-\\hat{x}$",
+          "text_he": "$-\\hat{x}$",
           "correct": false
         }
       ],
-      "explanation_en": "$\\hat{x}\\times\\hat{z}=-\\hat{y}$, so $\\mathbf{F}=-q|\\mathbf{v}\\times\\mathbf{B}|\\hat{y}$ for $q>0$.",
-      "explanation_he": "$\\hat{x}\\times\\hat{z}=-\\hat{y}$."
+      "explanation_en": "$d\\vec{B}\\propto d\\vec{l}\\times\\hat{r}$. Here $d\\vec{l} = dl\\,\\hat{x}$ and $\\hat{r} = \\hat{y}$ (from source to field point). So $\\hat{x}\\times\\hat{y} = +\\hat{z}$.",
+      "explanation_he": "$d\\vec{B}\\propto d\\vec{l}\\times\\hat{r}$. כאן $d\\vec{l} = dl\\,\\hat{x}$ ו-$\\hat{r} = \\hat{y}$ (מהמקור לנקודת השדה). לכן $\\hat{x}\\times\\hat{y} = +\\hat{z}$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Long wire carries $I=10$ A. Find $B$ at $r=0.05$ m.",
-      "body_he": "חוט ארוך נושא $I=10$ A. מצא $B$ ב-$r=0.05$ m.",
+      "body_en": "An infinite straight wire carries current $I = 5\\;\\text{A}$. What is the magnitude of the magnetic field at a perpendicular distance $r = 4\\;\\text{cm}$ from the wire? ($\\mu_0 = 4\\pi\\times10^{-7}\\;\\text{T}\\cdot\\text{m/A}$)",
+      "body_he": "חוט ישר אינסופי נושא זרם $I = 5\\;\\text{A}$. מהי עוצמת השדה המגנטי במרחק מאונך $r = 4\\;\\text{cm}$ מהחוט?",
       "options": [
         {
           "id": "a",
-          "text_en": "$4.0\\times10^{-5}$ T",
-          "text_he": "$4.0\\times10^{-5}$ T",
+          "text_en": "$2.5\\times10^{-5}\\;\\text{T}$",
+          "text_he": "$2.5\\times10^{-5}\\;\\text{T}$",
           "correct": true
         },
         {
           "id": "b",
-          "text_en": "$2.0\\times10^{-5}$ T",
-          "text_he": "$2.0\\times10^{-5}$ T",
+          "text_en": "$5.0\\times10^{-5}\\;\\text{T}$",
+          "text_he": "$5.0\\times10^{-5}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$8.0\\times10^{-5}$ T",
-          "text_he": "$8.0\\times10^{-5}$ T",
+          "text_en": "$1.25\\times10^{-5}\\;\\text{T}$",
+          "text_he": "$1.25\\times10^{-5}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$1.0\\times10^{-4}$ T",
-          "text_he": "$1.0\\times10^{-4}$ T",
+          "text_en": "$6.25\\times10^{-6}\\;\\text{T}$",
+          "text_he": "$6.25\\times10^{-6}\\;\\text{T}$",
           "correct": false
         }
       ],
-      "explanation_en": "$B=\\mu_0 I/(2\\pi r)=(4\\pi\\times10^{-7})(10)/(2\\pi\\cdot0.05)=4\\times10^{-5}$ T.",
-      "explanation_he": "$B=\\mu_0 I/(2\\pi r)=4\\times10^{-5}$ T."
+      "explanation_en": "$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(5)}{2\\pi(0.04)} = \\frac{20\\pi\\times10^{-7}}{0.08\\pi} = \\frac{20\\times10^{-7}}{0.08} = 2.5\\times10^{-5}$ T.",
+      "explanation_he": "$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(5)}{2\\pi(0.04)} = 2.5\\times10^{-5}$ T."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Circular loop radius $R=0.20$ m, $I=5$ A. Field at center?",
-      "body_he": "לולאה $R=0.20$ m, $I=5$ A. שדה במרכז?",
+      "body_en": "A circular loop of radius $R = 0.05\\;\\text{m}$ carries current $I = 3\\;\\text{A}$. What is the magnetic field at the center of the loop?",
+      "body_he": "לולאה מעגלית ברדיוס $R = 0.05\\;\\text{m}$ נושאת זרם $I = 3\\;\\text{A}$. מהו השדה המגנטי במרכז הלולאה?",
       "options": [
         {
           "id": "a",
-          "text_en": "$1.57\\times10^{-5}$ T",
-          "text_he": "$1.57\\times10^{-5}$ T",
-          "correct": true
+          "text_en": "$3.77\\times10^{-5}\\;\\text{T}$",
+          "text_he": "$3.77\\times10^{-5}\\;\\text{T}$",
+          "correct": false
         },
         {
           "id": "b",
-          "text_en": "$3.14\\times10^{-5}$ T",
-          "text_he": "$3.14\\times10^{-5}$ T",
+          "text_en": "$1.88\\times10^{-5}\\;\\text{T}$",
+          "text_he": "$1.88\\times10^{-5}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "c",
-          "text_en": "$7.85\\times10^{-6}$ T",
-          "text_he": "$7.85\\times10^{-6}$ T",
+          "text_en": "$3.77\\times10^{-5}\\;\\text{T}$",
+          "text_he": "$3.77\\times10^{-5}\\;\\text{T}$",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$6.28\\times10^{-5}$ T",
-          "text_he": "$6.28\\times10^{-5}$ T",
-          "correct": false
+          "text_en": "$3.77\\times10^{-5}\\;\\text{T}$ ($= \\mu_0 I/2R$)",
+          "text_he": "$3.77\\times10^{-5}\\;\\text{T}$ ($= \\mu_0 I/2R$)",
+          "correct": true
         }
       ],
-      "explanation_en": "$B=\\mu_0 I/(2R)=(4\\pi\\times10^{-7})(5)/(0.4)\\approx1.57\\times10^{-5}$ T.",
-      "explanation_he": "$B=\\mu_0 I/(2R)\\approx1.57\\times10^{-5}$ T."
+      "explanation_en": "$B = \\frac{\\mu_0 I}{2R} = \\frac{(4\\pi\\times10^{-7})(3)}{2(0.05)} = \\frac{12\\pi\\times10^{-7}}{0.1} = 120\\pi\\times10^{-7} \\approx 3.77\\times10^{-5}$ T.",
+      "explanation_he": "$B = \\frac{\\mu_0 I}{2R} = \\frac{(4\\pi\\times10^{-7})(3)}{0.1} \\approx 3.77\\times10^{-5}$ T."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Two parallel wires $d=0.10$ m apart carry $I_1=I_2=8$ A same direction. $B$ on wire 2 from wire 1?",
-      "body_he": "שני חוטים $d=0.10$ m, $I_1=I_2=8$ A באותו כיוון. $B$ על חוט 2 מחוט 1?",
+      "body_en": "Two infinite parallel wires are separated by $d = 0.10\\;\\text{m}$. Wire 1 carries $I_1 = 4\\;\\text{A}$ (upward) and wire 2 carries $I_2 = 6\\;\\text{A}$ (upward). What is the force per unit length between them, and is it attractive or repulsive?",
+      "body_he": "שני חוטים מקבילים אינסופיים מופרדים ב-$d = 0.10\\;\\text{m}$. חוט 1 נושא $I_1 = 4\\;\\text{A}$ (כלפי מעלה) וחוט 2 נושא $I_2 = 6\\;\\text{A}$ (כלפי מעלה). מהו הכוח ליחידת אורך ביניהם, ואם הוא אטרקטיבי או דוחה?",
       "options": [
         {
           "id": "a",
-          "text_en": "$1.6\\times10^{-5}$ T",
-          "text_he": "$1.6\\times10^{-5}$ T",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$3.2\\times10^{-5}$ T",
-          "text_he": "$3.2\\times10^{-5}$ T",
+          "text_en": "$4.8\\times10^{-5}\\;\\text{N/m}$, repulsive",
+          "text_he": "$4.8\\times10^{-5}\\;\\text{N/m}$, דוחה",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "$4.8\\times10^{-5}\\;\\text{N/m}$, attractive",
+          "text_he": "$4.8\\times10^{-5}\\;\\text{N/m}$, אטרקטיבי",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$8.0\\times10^{-6}$ T",
-          "text_he": "$8.0\\times10^{-6}$ T",
+          "text_en": "$9.6\\times10^{-5}\\;\\text{N/m}$, attractive",
+          "text_he": "$9.6\\times10^{-5}\\;\\text{N/m}$, אטרקטיבי",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$0$ T",
-          "text_he": "$0$ T",
+          "text_en": "$2.4\\times10^{-5}\\;\\text{N/m}$, attractive",
+          "text_he": "$2.4\\times10^{-5}\\;\\text{N/m}$, אטרקטיבי",
           "correct": false
         }
       ],
-      "explanation_en": "Superposition: only wire 1 contributes to field at wire 2: $B=\\mu_0 I_1/(2\\pi d)=1.6\\times10^{-5}$ T.",
-      "explanation_he": "$B=\\mu_0 I_1/(2\\pi d)=1.6\\times10^{-5}$ T."
+      "explanation_en": "$F/L = \\frac{\\mu_0 I_1 I_2}{2\\pi d} = \\frac{(4\\pi\\times10^{-7})(4)(6)}{2\\pi(0.10)} = \\frac{96\\pi\\times10^{-7}}{0.2\\pi} = \\frac{96\\times10^{-7}}{0.2} = 4.8\\times10^{-5}$ N/m. Currents in the same direction → attractive.",
+      "explanation_he": "$F/L = \\frac{\\mu_0 I_1 I_2}{2\\pi d} = 4.8\\times10^{-5}$ N/m. זרמים באותו כיוון → כוח אטרקטיבי."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Parallel wires $I_1=I_2=8$ A, $d=0.10$ m, same direction. Force per length on wire 2 (attractive)?",
-      "body_he": "חוטים $I_1=I_2=8$ A, $d=0.10$ m, אותו כיוון. כוח ליחידת אורך על חוט 2?",
+      "body_en": "A point $P$ is located at a distance $d$ from two long parallel wires. Wire 1 carries current $I$ to the right; wire 2 carries current $I$ to the left. Both wires are equidistant from $P$, with wire 1 above $P$ and wire 2 below $P$ (both at perpendicular distance $d$). What is the direction of the total $\\vec{B}$ at $P$?",
+      "body_he": "נקודה $P$ ממוקמת במרחק $d$ משני חוטים מקבילים ארוכים. חוט 1 נושא זרם $I$ ימינה; חוט 2 נושא זרם $I$ שמאלה. שני החוטים במרחק שווה מ-$P$, חוט 1 מעל $P$ וחוט 2 מתחת ל-$P$ (שניהם במרחק מאונך $d$). מהו כיוון $\\vec{B}$ הכולל ב-$P$?",
       "options": [
         {
           "id": "a",
-          "text_en": "$1.28\\times10^{-4}$ N/m toward wire 1",
-          "text_he": "$1.28\\times10^{-4}$ N/m לכיוון חוט 1",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$1.28\\times10^{-4}$ N/m away from wire 1",
-          "text_he": "$1.28\\times10^{-4}$ N/m הרחק מחוט 1",
+          "text_en": "The fields cancel and $\\vec{B} = 0$ at $P$.",
+          "text_he": "השדות מתבטלים ו-$\\vec{B} = 0$ ב-$P$.",
           "correct": false
         },
         {
+          "id": "b",
+          "text_en": "Both wires contribute fields in the same direction at $P$, so the total field is double that from one wire.",
+          "text_he": "שני החוטים תורמים שדות באותו כיוון ב-$P$, ולכן השדה הכולל הוא פי שניים מחוט אחד.",
+          "correct": true
+        },
+        {
           "id": "c",
-          "text_en": "$6.4\\times10^{-5}$ N/m toward wire 1",
-          "text_he": "$6.4\\times10^{-5}$ N/m לכיוון חוט 1",
+          "text_en": "The total field is directed along the line connecting the two wires.",
+          "text_he": "השדה הכולל מכוון לאורך הקו המחבר את שני החוטים.",
           "correct": false
         },
         {
           "id": "d",
-          "text_en": "$0$ N/m",
-          "text_he": "$0$ N/m",
+          "text_en": "The total field is perpendicular to the plane containing the two wires.",
+          "text_he": "השדה הכולל מאונך למישור המכיל את שני החוטים.",
           "correct": false
         }
       ],
-      "explanation_en": "$F/L=\\mu_0 I_1 I_2/(2\\pi d)=1.28\\times10^{-4}$ N/m; same-direction currents attract.",
-      "explanation_he": "$F/L=\\mu_0 I_1 I_2/(2\\pi d)=1.28\\times10^{-4}$ N/m; זרמים באותו כיוון מושכים."
+      "explanation_en": "Wire 1 (above $P$, current right): by right-hand rule, $\\vec{B}_1$ at $P$ points out of the page. Wire 2 (below $P$, current left): by right-hand rule, $\\vec{B}_2$ at $P$ also points out of the page. The fields add, giving $B_{\\text{total}} = 2\\times\\frac{\\mu_0 I}{2\\pi d}$.",
+      "explanation_he": "חוט 1 (מעל $P$, זרם ימינה): $\\vec{B}_1$ ב-$P$ יוצא מהדף. חוט 2 (מתחת ל-$P$, זרם שמאלה): $\\vec{B}_2$ ב-$P$ גם יוצא מהדף. השדות מתחברים."
     }
   ]
 }
