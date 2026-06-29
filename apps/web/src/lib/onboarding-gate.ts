@@ -9,7 +9,7 @@ import { dbConfigured, getLearnerProfile } from '@/lib/neon-db';
  * If DATABASE_URL is not configured we silently skip the gate so the
  * site never hard-fails before infra is provisioned.
  */
-export async function ensureOnboarded(userId: string, returnTo = '/dashboard'): Promise<void> {
+export async function ensureOnboarded(userId: string, returnTo = '/app'): Promise<void> {
   if (!dbConfigured) return;
   try {
     const profile = await getLearnerProfile(userId);

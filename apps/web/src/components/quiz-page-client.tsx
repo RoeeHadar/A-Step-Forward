@@ -134,6 +134,7 @@ const STR = {
     yourAnswer: 'התשובה שלך',
     correctAnswer: 'התשובה הנכונה',
     buildAnother: 'בנה מבחן נוסף',
+    newQuiz: 'מבחן חדש',
     backToDashboard: 'חזרה ללוח הבקרה',
     pickedFromTopics: 'מבוסס על הנושאים שבחרת',
     pickedFromWeak: 'מבוסס על הנושאים שאתה הכי חלש בהם',
@@ -186,6 +187,7 @@ const STR = {
     yourAnswer: 'Your answer',
     correctAnswer: 'Correct answer',
     buildAnother: 'Build another quiz',
+    newQuiz: 'New quiz',
     backToDashboard: 'Back to dashboard',
     pickedFromTopics: 'Based on the topics you chose',
     pickedFromWeak: 'Based on the topics you struggle with most',
@@ -241,6 +243,42 @@ interface AnswerState {
 
 type Phase = 'builder' | 'generating' | 'running' | 'results';
 
+const QUIZ_SESSION_KEY = 'asf-quiz-session';
+
+interface QuizSessionPersist {
+  phase: 'running' | 'results';
+  envelope: CustomQuizEnvelope;
+  answers: AnswerState[];
+  cursor: number;
+  secondsLeft: number;
+  startedAt: number | null;
+  kindMix: KindMix;
+  timeMin: number;
+  selected: string[];
+  results: {
+    correctCount: number;
+    total: number;
+    perConcept: Record<string, { correct: number; total: number }>;
+    secondsUsed: number;
+  } | null;
+}
+
+function saveQuizSession(data: QuizSessionPersist) {
+  try {
+    sessionStorage.setItem(QUIZ_SESSION_KEY, JSON.stringify(data));
+  } catch {
+    // ignore quota / private mode
+  }
+}
+
+function clearQuizSession() {
+  try {
+    sessionStorage.removeItem(QUIZ_SESSION_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 const QUICK_TIMES = [5, 10, 15, 30, 45];
 
 export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
@@ -269,10 +307,70 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   }>(null);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   // All hooks must be called unconditionally; this one is read inside the
   // builder branch but lives up here to satisfy the rules of hooks.
   const grouped = useMemoGroupedTopics(topics, isHe, search);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(QUIZ_SESSION_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw) as QuizSessionPersist;
+        if (
+          saved.envelope?.questions?.length &&
+          (saved.phase === 'running' || saved.phase === 'results')
+        ) {
+          setEnvelope(saved.envelope);
+          setAnswers(
+            saved.answers?.length === saved.envelope.questions.length
+              ? saved.answers
+              : saved.envelope.questions.map(() => ({} as AnswerState)),
+          );
+          setCursor(saved.cursor ?? 0);
+          setSecondsLeft(saved.secondsLeft ?? saved.envelope.time_limit_s);
+          setStartedAt(saved.startedAt ?? null);
+          setKindMix(saved.kindMix ?? 'mixed');
+          setTimeMin(saved.timeMin ?? 10);
+          setSelected(new Set(saved.selected ?? []));
+          setResults(saved.results ?? null);
+          setPhase(saved.phase);
+        }
+      }
+    } catch {
+      clearQuizSession();
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated || !envelope || phase === 'builder' || phase === 'generating') return;
+    saveQuizSession({
+      phase: phase === 'results' ? 'results' : 'running',
+      envelope,
+      answers,
+      cursor,
+      secondsLeft,
+      startedAt,
+      kindMix,
+      timeMin,
+      selected: Array.from(selected),
+      results,
+    });
+  }, [
+    hydrated,
+    phase,
+    envelope,
+    answers,
+    cursor,
+    secondsLeft,
+    startedAt,
+    results,
+    kindMix,
+    timeMin,
+    selected,
+  ]);
 
   useEffect(() => {
     if (phase !== 'running' || !envelope) return;
@@ -406,6 +504,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   }
 
   function resetToBuilder() {
+    clearQuizSession();
     setEnvelope(null);
     setAnswers([]);
     setResults(null);
@@ -625,16 +724,21 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
             <h1 className="truncate font-display text-2xl font-bold">{t.title}</h1>
             <p className="mt-1 text-xs text-muted-foreground">{reasonStr}</p>
           </div>
-          <div
-            className={cn(
-              'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-mono',
-              overdue
-                ? 'border-destructive bg-destructive/10 text-destructive'
-                : 'border-border bg-muted/40 text-foreground',
-            )}
-          >
-            <Clock className="h-4 w-4" aria-hidden />
-            <span>{overdue ? t.timesUp : `${t.timeLeft} ${fmtT(secondsLeft)}`}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={resetToBuilder}>
+              {t.newQuiz}
+            </Button>
+            <div
+              className={cn(
+                'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-mono',
+                overdue
+                  ? 'border-destructive bg-destructive/10 text-destructive'
+                  : 'border-border bg-muted/40 text-foreground',
+              )}
+            >
+              <Clock className="h-4 w-4" aria-hidden />
+              <span>{overdue ? t.timesUp : `${t.timeLeft} ${fmtT(secondsLeft)}`}</span>
+            </div>
           </div>
         </header>
 

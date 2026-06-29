@@ -35,7 +35,7 @@ export function QuizUnavailable() {
       <p className="mt-2 text-muted-foreground">{t.blurb}</p>
       <div className="mt-6 flex justify-center">
         <Button asChild>
-          <Link href="/dashboard">{t.cta}</Link>
+          <Link href="/app">{t.cta}</Link>
         </Button>
       </div>
     </div>

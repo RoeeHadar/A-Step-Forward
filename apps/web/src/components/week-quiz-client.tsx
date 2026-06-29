@@ -284,7 +284,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
     return (
       <ResultView
         result={result}
-        onGoToDashboard={() => router.push('/dashboard')}
+        onGoToDashboard={() => router.push('/app')}
         lang={lang}
       />
     );

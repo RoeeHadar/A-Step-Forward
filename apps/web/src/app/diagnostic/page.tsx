@@ -156,7 +156,7 @@ export default function DiagnosticPage() {
         try {
           const planRes = await fetch('/api/plans/generate', { method: 'POST' });
           if (planRes.ok) {
-            router.push('/dashboard');
+            router.push('/app');
             return;
           }
           const errText = await planRes.text();
@@ -186,7 +186,7 @@ export default function DiagnosticPage() {
     try {
       const res = await fetch('/api/plans/generate', { method: 'POST' });
       if (!res.ok) throw new Error(await res.text());
-      router.push('/dashboard');
+      router.push('/app');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Plan generation failed');
     } finally {

@@ -1,12 +1,22 @@
 import { redirect } from 'next/navigation';
 import { DashboardContent } from '@/components/dashboard-content';
 import type { NextLessonInfo } from '@/components/dashboard-content';
+import { AgentsIntroBanner } from '@/components/agents-intro-banner';
+import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
+import { LearnerStreakCard } from '@/components/learner-streak-card';
+import { ActivityHeatmap } from '@/components/activity-heatmap';
+import { NoPlanEmptyState } from '@/components/no-plan-empty-state';
 import { getAuthContext } from '@/lib/auth';
 import {
   getDashboardSnapshot,
   getLearnerProfile,
   getConceptMastery,
   getGoalCompletionStatus,
+  getCurrentPlan,
+  getLearnerStreak,
+  getRecentActivity,
+  getDailyActivity,
+  getWeeklyRecap,
   dbConfigured,
   type DashboardSnapshot,
 } from '@/lib/neon-db';
@@ -24,6 +34,24 @@ interface LessonIndexEntry {
   est_minutes: number;
   math_track: string[];
 }
+
+const EMPTY_STREAK = {
+  current_days: 0,
+  longest_days: 0,
+  last_active: null,
+  active_today: false,
+  active_days_last_30: 0,
+} as const;
+
+const EMPTY_WEEKLY = {
+  week_start: '',
+  week_end: '',
+  chat_turns: 0,
+  concepts_touched: 0,
+  atoms_practiced: 0,
+  mastery_gain: 0,
+  best_day: null,
+} as const;
 
 function emptySnapshot(): DashboardSnapshot {
   return {
@@ -56,7 +84,6 @@ function computeNextLesson(
   const index = lessonsIndex as LessonIndexEntry[];
   const indexById = new Map(index.map((l) => [l.id, l]));
 
-  // Determine candidate concept IDs from math units and/or enrolled subjects
   const candidateSet = new Set<string>();
   if (pointsGroup) {
     const cat = CURRICULUM_CATEGORIES.find((c) =>
@@ -73,7 +100,6 @@ function computeNextLesson(
   const candidateIds =
     candidateSet.size > 0 ? [...candidateSet] : index.map((l) => l.id);
 
-  // Keep only concept IDs that have an authored lesson
   const available = candidateIds.filter((id) => indexById.has(id));
   if (available.length === 0) return null;
 
@@ -86,7 +112,6 @@ function computeNextLesson(
   let chosen: { id: string; reason: string } | null = null;
 
   if (withMastery.length > 0) {
-    // Weakest concept = lowest mastery score
     const weakest = withMastery.reduce((a, b) => (a.score <= b.score ? a : b));
     chosen = {
       id: weakest.id,
@@ -119,7 +144,17 @@ export default async function DashboardPage() {
   }
   if (!auth) redirect('/sign-in');
 
-  const [snapshot, profile, mastery, goalStatus] = await Promise.all([
+  const [
+    snapshot,
+    profile,
+    mastery,
+    goalStatus,
+    plan,
+    streak,
+    activity,
+    daily,
+    weekly,
+  ] = await Promise.all([
     dbConfigured
       ? getDashboardSnapshot(auth.learnerId).catch(emptySnapshot)
       : Promise.resolve(emptySnapshot()),
@@ -132,6 +167,21 @@ export default async function DashboardPage() {
     dbConfigured
       ? getGoalCompletionStatus(auth.learnerId).catch(() => null)
       : Promise.resolve(null),
+    dbConfigured
+      ? getCurrentPlan(auth.learnerId).catch(() => null)
+      : Promise.resolve(null),
+    dbConfigured
+      ? getLearnerStreak(auth.learnerId).catch(() => ({ ...EMPTY_STREAK }))
+      : Promise.resolve({ ...EMPTY_STREAK }),
+    dbConfigured
+      ? getRecentActivity(auth.learnerId, 8).catch(() => [])
+      : Promise.resolve([]),
+    dbConfigured
+      ? getDailyActivity(auth.learnerId, 30).catch(() => [])
+      : Promise.resolve([]),
+    dbConfigured
+      ? getWeeklyRecap(auth.learnerId).catch(() => ({ ...EMPTY_WEEKLY }))
+      : Promise.resolve({ ...EMPTY_WEEKLY }),
   ]);
 
   const nextLesson = computeNextLesson(
@@ -143,6 +193,12 @@ export default async function DashboardPage() {
   return (
     <>
       {goalStatus ? <GoalCompletionBanner status={goalStatus} /> : null}
+      <AgentsIntroBanner />
+      <div className="mb-8 space-y-6">
+        <LearnerStreakCard streak={streak} activity={activity} />
+        <ActivityHeatmap daily={daily} weekly={weekly} />
+        {!plan ? <NoPlanEmptyState /> : <LearningPlanDashboard plan={plan} />}
+      </div>
       <DashboardContent
         displayName={auth.displayName}
         snapshot={snapshot}

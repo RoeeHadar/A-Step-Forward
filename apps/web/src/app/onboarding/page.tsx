@@ -37,7 +37,7 @@ type Goal =
   | 'bagrut_math_5'
   | 'bagrut_math_4'
   | 'bagrut_math_3'
-  | 'bagrut_physics'
+    | 'bagrut_physics'
   | 'calculus1'
   | 'linear_algebra'
   | 'university_prep'
@@ -45,12 +45,15 @@ type Goal =
 
 type Subject = 'math' | 'physics';
 type Style = 'theory_first' | 'practice_first' | 'mixed';
+type TutorMode = 'direct' | 'socratic';
 
 interface Step1 {
   goal: Goal | '';
   goalOther: string;
   gradeLevel: string;
   pointsGroup: string;
+  adultGoal: string;
+  yearsGap: string;
   subjects: Subject[];
   nextTestName: string;
   nextTestDate: string;
@@ -93,6 +96,11 @@ const STR = {
     s0_subj_math: 'Math',
     s0_subj_physics: 'Physics',
     s0_grade: 'Grade level',
+    s0_adultGoal: 'What is your goal?',
+    s0_yearsGap: 'How long since you last studied math?',
+    s0_yearsGap_lt1: 'Less than a year',
+    s0_yearsGap_1_3: '1–3 years',
+    s0_yearsGap_gt3: 'More than 3 years',
     s0_units: 'Math units',
     s0_timeline: 'Timeline',
     s0_nextTestName: 'Next big event / test',
@@ -141,6 +149,11 @@ const STR = {
     s3_title: 'Rate your understanding',
     s3_sub:
       'Be honest — this is just the starting point. The diagnostic will verify and adapt.',
+    s4_title: 'How do you prefer to learn with the Tutor?',
+    s4_sub:
+      'Pick the style that feels most comfortable. You can change this later in settings.',
+    s4_direct: 'Explain it to me directly',
+    s4_socratic: 'Guide me with questions (Socratic)',
     next: 'Next',
     back: 'Back',
     saving: 'Saving…',
@@ -158,6 +171,11 @@ const STR = {
     s0_subj_math: 'מתמטיקה',
     s0_subj_physics: 'פיזיקה',
     s0_grade: 'כיתה / שכבה',
+    s0_adultGoal: 'מה המטרה שלך?',
+    s0_yearsGap: 'כמה זמן עבר מאז שלמדת מתמטיקה?',
+    s0_yearsGap_lt1: 'פחות משנה',
+    s0_yearsGap_1_3: '1–3 שנים',
+    s0_yearsGap_gt3: 'יותר מ-3 שנים',
     s0_units: 'יחידות במתמטיקה',
     s0_timeline: 'לוח זמנים',
     s0_nextTestName: 'אירוע או מבחן קרוב',
@@ -207,6 +225,10 @@ const STR = {
     s3_title: 'דרג/י את ההבנה שלך',
     s3_sub:
       'בכנות — זו רק נקודת ההתחלה. האבחון יאמת ויתאים את עצמו.',
+    s4_title: 'כיצד אתה מעדיף ללמוד עם המורה?',
+    s4_sub: 'בחר/י את הסגנון שהכי נוח לך. אפשר לשנות את זה בהמשך בהגדרות.',
+    s4_direct: 'הסבר לי ישירות',
+    s4_socratic: 'הנחה אותי עם שאלות (סוקרטי)',
     next: 'הבא',
     back: 'חזרה',
     saving: 'שומר…',
@@ -270,6 +292,11 @@ const GOALS: { value: Goal; label_en: string; label_he: string }[] = [
 ];
 
 const GRADE_LEVELS: { value: string; label_en: string; label_he: string }[] = [
+  {
+    value: 'adult_learner',
+    label_en: 'College student or adult learner',
+    label_he: 'סטודנט/י או בוגר/ת תיכון',
+  },
   { value: '7', label_en: '7th grade', label_he: 'כיתה ז׳' },
   { value: '8', label_en: '8th grade', label_he: 'כיתה ח׳' },
   { value: '9', label_en: '9th grade', label_he: 'כיתה ט׳' },
@@ -291,6 +318,18 @@ const GRADE_LEVELS: { value: string; label_en: string; label_he: string }[] = [
     label_en: 'University — 2nd year+',
     label_he: 'אוניברסיטה — שנה ב׳+',
   },
+];
+
+const ADULT_GOALS: { value: string; label_en: string; label_he: string }[] = [
+  { value: 'bagrut_math', label_en: 'Bagrut in Mathematics', label_he: 'בגרות במתמטיקה' },
+  { value: 'university_course', label_en: 'University course', label_he: 'קורס אוניברסיטאי' },
+  { value: 'general_improvement', label_en: 'General improvement', label_he: 'שיפור כללי' },
+];
+
+const YEARS_GAP_OPTIONS: { value: string; label_en: string; label_he: string }[] = [
+  { value: 'less_than_1_year', label_en: 'Less than a year', label_he: 'פחות משנה' },
+  { value: '1_3_years', label_en: '1–3 years', label_he: '1–3 שנים' },
+  { value: 'more_than_3_years', label_en: 'More than 3 years', label_he: 'יותר מ-3 שנים' },
 ];
 
 const POINTS_GROUPS: { value: string; label_en: string; label_he: string }[] = [
@@ -627,6 +666,8 @@ export default function OnboardingPage() {
     goalOther: '',
     gradeLevel: '',
     pointsGroup: '',
+    adultGoal: '',
+    yearsGap: '',
     subjects: ['math'],
     nextTestName: '',
     nextTestDate: '',
@@ -652,6 +693,7 @@ export default function OnboardingPage() {
   });
 
   const [s4, setS4] = useState<Step4>({ selfScores: {} });
+  const [tutorMode, setTutorMode] = useState<TutorMode>('direct');
 
   function toggleSubject(sub: Subject) {
     setS1((prev) => ({
@@ -691,8 +733,11 @@ export default function OnboardingPage() {
     return [...new Set([...mathIds, ...physicsIds])].slice(0, MAX_SELF_SCORE).map(conceptEntry);
   })();
 
+  const isAdultLearner = s1.gradeLevel === 'adult_learner';
+
   const needsPointsGroup =
     s1.subjects.includes('math') &&
+    !isAdultLearner &&
     s1.gradeLevel !== 'university_1' &&
     s1.gradeLevel !== 'university_2plus';
 
@@ -717,8 +762,9 @@ export default function OnboardingPage() {
     setError('');
     try {
       // Backend stays canonical English so cross-learner aggregations work.
-      const goalText =
-        s1.goal === 'other'
+      const goalText = isAdultLearner
+        ? (ADULT_GOALS.find((g) => g.value === s1.adultGoal)?.label_en ?? s1.adultGoal)
+        : s1.goal === 'other'
           ? s1.goalOther
           : (GOALS.find((g) => g.value === s1.goal)?.label_en ?? s1.goal);
       const res = await fetch('/api/onboarding/submit', {
@@ -733,10 +779,14 @@ export default function OnboardingPage() {
           preferred_style: s2.style,
           attention_span: s2.attentionSpan,
           self_scores: s4.selfScores,
-          background_notes: `Self-rating: ${s2.selfRating}/10. Teacher rating: ${s2.teacherRating}/10.`,
+          background_notes: isAdultLearner
+            ? `Self-rating: ${s2.selfRating}/10. Years since last math study: ${s1.yearsGap}.`
+            : `Self-rating: ${s2.selfRating}/10. Teacher rating: ${s2.teacherRating}/10.`,
           next_test_name: s1.nextTestName || null,
           next_test_date: s1.nextTestDate || null,
           final_goal_date: s1.finalGoalDate || null,
+          adult_learner: isAdultLearner,
+          years_gap: isAdultLearner ? s1.yearsGap : null,
           mental_state: {
             motivation: s3.motivation,
             anxiety: s3.anxiety,
@@ -747,12 +797,16 @@ export default function OnboardingPage() {
             why_this_goal: s3.whyThisGoal,
           },
           personality_profile: {
-            past_teacher_rating: s2.teacherRating,
+            ...(isAdultLearner ? {} : { past_teacher_rating: s2.teacherRating }),
             self_rating: s2.selfRating,
             learning_style: s2.style,
             attention_span_min: s2.attentionSpan,
             hours_per_week: s2.hoursPerWeek,
+            ...(isAdultLearner
+              ? { adult_learner: true, years_gap: s1.yearsGap, adult_goal: s1.adultGoal }
+              : {}),
           },
+          tutor_mode: tutorMode,
         }),
       });
       if (!res.ok) throw new Error(await res.text());
@@ -767,7 +821,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <main className="mx-auto max-w-xl px-4 py-12" dir={dir}>
-        <StepIndicator current={step} total={4} lang={lang} t={t} dir={dir} />
+        <StepIndicator current={step} total={5} lang={lang} t={t} dir={dir} />
 
         {/* ── Step 0: Goals + timeline ── */}
         {step === 0 && (
@@ -777,31 +831,33 @@ export default function OnboardingPage() {
               <p className="text-sm text-muted-foreground">{t.s0_sub}</p>
             </div>
 
-            <div className="space-y-2">
-              <p className="mb-1 block text-sm text-muted-foreground">{t.s0_goal}</p>
-              {GOALS.map((g) => (
-                <button
-                  key={g.value}
-                  type="button"
-                  onClick={() => setS1((p) => ({ ...p, goal: g.value }))}
-                  className={optionBtnCls(s1.goal === g.value)}
-                >
-                  {goalLabel(g)}
-                </button>
-              ))}
-              {s1.goal === 'other' && (
-                <input
-                  type="text"
-                  placeholder={t.s0_goalOtherPh}
-                  value={s1.goalOther}
-                  onChange={(e) =>
-                    setS1((p) => ({ ...p, goalOther: e.target.value }))
-                  }
-                  className={inputCls}
-                  dir="auto"
-                />
-              )}
-            </div>
+            {!isAdultLearner ? (
+              <div className="space-y-2">
+                <p className="mb-1 block text-sm text-muted-foreground">{t.s0_goal}</p>
+                {GOALS.map((g) => (
+                  <button
+                    key={g.value}
+                    type="button"
+                    onClick={() => setS1((p) => ({ ...p, goal: g.value }))}
+                    className={optionBtnCls(s1.goal === g.value)}
+                  >
+                    {goalLabel(g)}
+                  </button>
+                ))}
+                {s1.goal === 'other' && (
+                  <input
+                    type="text"
+                    placeholder={t.s0_goalOtherPh}
+                    value={s1.goalOther}
+                    onChange={(e) =>
+                      setS1((p) => ({ ...p, goalOther: e.target.value }))
+                    }
+                    className={inputCls}
+                    dir="auto"
+                  />
+                )}
+              </div>
+            ) : null}
 
             <div className="space-y-2">
               <p className="mb-1 block text-sm text-muted-foreground">
@@ -883,6 +939,37 @@ export default function OnboardingPage() {
               )}
             </div>
 
+            {isAdultLearner ? (
+              <>
+                <div className="space-y-2">
+                  <p className="mb-1 block text-sm text-muted-foreground">{t.s0_adultGoal}</p>
+                  {ADULT_GOALS.map((g) => (
+                    <button
+                      key={g.value}
+                      type="button"
+                      onClick={() => setS1((p) => ({ ...p, adultGoal: g.value }))}
+                      className={optionBtnCls(s1.adultGoal === g.value)}
+                    >
+                      {lang === 'he' ? g.label_he : g.label_en}
+                    </button>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  <p className="mb-1 block text-sm text-muted-foreground">{t.s0_yearsGap}</p>
+                  {YEARS_GAP_OPTIONS.map((g) => (
+                    <button
+                      key={g.value}
+                      type="button"
+                      onClick={() => setS1((p) => ({ ...p, yearsGap: g.value }))}
+                      className={optionBtnCls(s1.yearsGap === g.value)}
+                    >
+                      {lang === 'he' ? g.label_he : g.label_en}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : null}
+
             <div className="space-y-3 rounded-xl border border-border bg-card p-4">
               <p className="text-sm font-medium text-foreground">
                 {t.s0_timeline}
@@ -950,10 +1037,11 @@ export default function OnboardingPage() {
             <button
               type="button"
               disabled={
-                !s1.goal ||
                 s1.subjects.length === 0 ||
                 !s1.gradeLevel ||
-                (needsPointsGroup && !s1.pointsGroup)
+                (isAdultLearner
+                  ? !s1.adultGoal || !s1.yearsGap
+                  : !s1.goal || (needsPointsGroup && !s1.pointsGroup))
               }
               onClick={() => setStep(1)}
               className={primaryBtnCls}
@@ -989,14 +1077,16 @@ export default function OnboardingPage() {
               displayValue={`${s2.selfRating}/10`}
             />
 
-            <SliderField
-              label={t.s1_teacherRating}
-              min={1}
-              max={10}
-              value={s2.teacherRating}
-              onChange={(v) => setS2((p) => ({ ...p, teacherRating: v }))}
-              displayValue={`${s2.teacherRating}/10`}
-            />
+            {!isAdultLearner ? (
+              <SliderField
+                label={t.s1_teacherRating}
+                min={1}
+                max={10}
+                value={s2.teacherRating}
+                onChange={(v) => setS2((p) => ({ ...p, teacherRating: v }))}
+                displayValue={`${s2.teacherRating}/10`}
+              />
+            ) : null}
 
             <div>
               <p className="mb-2 block text-sm text-muted-foreground">{t.s1_style}</p>
@@ -1218,8 +1308,49 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── Step 3: Self-assessment ── */}
+        {/* ── Step 3: Tutor mode ── */}
         {step === 3 && (
+          <div className="space-y-7">
+            <div>
+              <h1 className="mb-1 text-2xl font-bold">{t.s4_title}</h1>
+              <p className="text-sm text-muted-foreground">{t.s4_sub}</p>
+            </div>
+
+            <div className="space-y-2">
+              {(
+                [
+                  { v: 'direct' as const, label: t.s4_direct },
+                  { v: 'socratic' as const, label: t.s4_socratic },
+                ] as const
+              ).map(({ v, label }) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setTutorMode(v)}
+                  className={optionBtnCls(tutorMode === v)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-3">
+              <button type="button" onClick={() => setStep(2)} className={secondaryBtnCls}>
+                {t.back}
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(4)}
+                className="flex-1 rounded-xl bg-accent-cyan py-3 text-sm font-semibold text-neutral-950 transition-colors hover:bg-cyan-300"
+              >
+                {t.next}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ── Step 4: Self-assessment ── */}
+        {step === 4 && (
           <div className="space-y-6">
             <div>
               <h1 className="mb-1 text-2xl font-bold">{t.s3_title}</h1>
@@ -1255,7 +1386,7 @@ export default function OnboardingPage() {
             )}
 
             <div className="flex gap-3">
-              <button type="button" onClick={() => setStep(2)} className={secondaryBtnCls}>
+              <button type="button" onClick={() => setStep(3)} className={secondaryBtnCls}>
                 {t.back}
               </button>
               <button
