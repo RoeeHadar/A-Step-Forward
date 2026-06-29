@@ -163,7 +163,7 @@ export function AgentChat({ agent }: { agent: string }) {
               className="rounded-lg border border-accent-cyan/30 bg-accent-cyan/10 px-4 py-2 text-sm text-accent-cyan"
               role="status"
             >
-              🔄 {i18nMessages.chat?.warmup ?? 'Waking the AI up… (first response takes up to 30s)'}
+              {i18nMessages.chat?.warmup ?? '🔄 Waking the AI up… (first response takes up to 30s)'}
             </div>
           ) : null}
           {isLoading ? (
