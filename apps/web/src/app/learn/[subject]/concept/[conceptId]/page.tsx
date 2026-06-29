@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
@@ -33,8 +33,10 @@ const kgById: Record<string, KgConcept> = Object.fromEntries(
 );
 
 /** Legacy / catalog slugs that differ from the canonical lesson concept_id. */
-const CONCEPT_ID_ALIASES: Record<string, string> = {
-  basic_probability: 'probability_basic',
+import { CONCEPT_ID_ALIASES, resolveConceptAlias } from '@/lib/concept-aliases';
+
+const LEGACY_CONCEPT_REDIRECTS: Record<string, string> = {
+  ...CONCEPT_ID_ALIASES,
 };
 
 /** Level values the user can explicitly select via the ?level= toggle. */
@@ -61,11 +63,12 @@ export default async function ConceptPage({
   const { subject, conceptId: rawConceptId } = await params;
   const levelOverride = parseLevelQueryParam((await searchParams).level);
 
-  if (CONCEPT_ID_ALIASES[rawConceptId]) {
-    redirect(`/learn/${subject}/concept/${CONCEPT_ID_ALIASES[rawConceptId]}`);
+  if (LEGACY_CONCEPT_REDIRECTS[rawConceptId] && LEGACY_CONCEPT_REDIRECTS[rawConceptId] !== rawConceptId) {
+    // Keep syllabus URL; load content via alias below — no redirect.
   }
 
   const conceptId = rawConceptId;
+  const canonicalLessonId = resolveConceptAlias(conceptId);
   const locale = await getServerLocale();
   const t = getMessages(locale).learn;
   const isHe = locale === 'he';
@@ -113,10 +116,16 @@ export default async function ConceptPage({
   // of the wiki-style explanation. Both queries run in parallel for the
   // fallback case.
   const [lessonData] = await Promise.all([
-    fetchLessonByConceptId(conceptId),
+    fetchLessonByConceptId(canonicalLessonId).then(async (data) => {
+      if (data) return data;
+      if (canonicalLessonId !== conceptId) {
+        return fetchLessonByConceptId(conceptId);
+      }
+      return null;
+    }),
   ]);
 
-  const indexEntry = getLessonIndexEntry(conceptId);
+  const indexEntry = getLessonIndexEntry(conceptId) ?? getLessonIndexEntry(canonicalLessonId);
   const hasAuthoredLesson = Boolean(lessonData) || Boolean(indexEntry);
 
   if (!concept && !hasAuthoredLesson) {

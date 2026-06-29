@@ -33,15 +33,31 @@ async function contentFetch<T>(path: string): Promise<T> {
 }
 
 const STATIC_SUBJECT_FALLBACK: SubjectSummary[] = [
-  { subject: 'math', section_count: 0, sample_grade: null },
-  { subject: 'physics', section_count: 0, sample_grade: null },
-  { subject: 'makhina', section_count: 0, sample_grade: null },
+  { subject: 'high_school_math_3pt', section_count: 0, sample_grade: null },
+  { subject: 'high_school_math_4pt', section_count: 0, sample_grade: null },
+  { subject: 'high_school_math_5pt', section_count: 0, sample_grade: null },
+  { subject: 'hs_physics', section_count: 0, sample_grade: null },
+  { subject: 'university_physics_1', section_count: 0, sample_grade: null },
+  { subject: 'university_physics_2', section_count: 0, sample_grade: null },
+  { subject: 'calculus_1', section_count: 0, sample_grade: null },
+  { subject: 'calculus_2', section_count: 0, sample_grade: null },
   { subject: 'linear_algebra', section_count: 0, sample_grade: null },
+  { subject: 'statistics_probability', section_count: 0, sample_grade: null },
+  { subject: 'makhina', section_count: 0, sample_grade: null },
 ];
 
 const CURATED_SUBJECT_SLUGS = [
-  'makhina',
+  'high_school_math_3pt',
+  'high_school_math_4pt',
+  'high_school_math_5pt',
+  'hs_physics',
+  'university_physics_1',
+  'university_physics_2',
+  'calculus_1',
+  'calculus_2',
   'linear_algebra',
+  'statistics_probability',
+  'makhina',
 ] as const;
 
 function mergeCuratedSubjects(rows: SubjectSummary[]): SubjectSummary[] {
