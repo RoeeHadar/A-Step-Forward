@@ -1,116 +1,116 @@
 {
   "id": "taylor_formula",
-  "subject": "calculus_1",
-  "title_en": "Taylor Series & Remainder",
-  "title_he": "טור טיילור ושארית",
-  "duration_min": 25,
   "type": "interactive",
+  "subject": "calculus_1",
+  "title_en": "Taylor and Maclaurin Series",
+  "title_he": "טורי טיילור ומקלורן",
+  "duration_min": 25,
   "level_min": "calculus_1",
-  "agent_hints": "Technion 104031 expects students to compute Taylor polynomials, use standard Maclaurin expansions, and bound error via Lagrange remainder. Stress that the remainder involves an unknown $c$ between $a$ and $x$ — the bound comes from maximizing $|f^{(n+1)}|$ on that interval.",
+  "agent_hints": "Students at this level (Technion 104031) need to both compute Taylor polynomials mechanically and understand the Lagrange remainder for error estimation. The most important skill is recognizing which standard Maclaurin series to use and how to manipulate it (substitution, differentiation, integration) to get new series. Always insist that students specify the degree of their polynomial — 'the Taylor series' without a degree is ambiguous.",
   "sections": [
     {
-      "id": "taylor_polynomial",
-      "title_en": "Taylor polynomial and Maclaurin series",
-      "title_he": "פולינום טיילור וטור מaclaurin",
+      "id": "taylor_definition",
+      "title_en": "Taylor Polynomial — Definition",
+      "title_he": "פולינום טיילור — הגדרה",
       "level_min": "calculus_1",
-      "body_en_md": "The **Taylor polynomial** of degree $n$ for $f$ around $a$:\n\n$$T_n(x) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(x-a)^k$$\n\nWhen $a = 0$, it is a **Maclaurin** polynomial.\n\n**Key Maclaurin expansions:**\n$$e^x = \\sum_{k=0}^{\\infty} \\frac{x^k}{k!} = 1 + x + \\frac{x^2}{2!} + \\cdots$$\n$$\\sin x = \\sum_{k=0}^{\\infty} \\frac{(-1)^k x^{2k+1}}{(2k+1)!} = x - \\frac{x^3}{3!} + \\cdots$$\n$$\\cos x = \\sum_{k=0}^{\\infty} \\frac{(-1)^k x^{2k}}{(2k)!} = 1 - \\frac{x^2}{2!} + \\cdots$$\n$$\\frac{1}{1-x} = \\sum_{k=0}^{\\infty} x^k = 1 + x + x^2 + \\cdots \\quad (|x| < 1)$$\n\n**Example:** $T_2(x)$ for $e^x$ at $a=0$: $T_2(x) = 1 + x + \\frac{x^2}{2}$.",
-      "body_he_md": "**פולינום טיילור** ממעלה $n$ עבור $f$ סביב $a$:\n\n$$T_n(x) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(x-a)^k$$\n\nכאשר $a = 0$, זהו פולינום **Maclaurin**.\n\n**טורי Maclaurin מרכזיים:**\n$$e^x = \\sum_{k=0}^{\\infty} \\frac{x^k}{k!} = 1 + x + \\frac{x^2}{2!} + \\cdots$$\n$$\\sin x = \\sum_{k=0}^{\\infty} \\frac{(-1)^k x^{2k+1}}{(2k+1)!} = x - \\frac{x^3}{3!} + \\cdots$$\n$$\\cos x = \\sum_{k=0}^{\\infty} \\frac{(-1)^k x^{2k}}{(2k)!} = 1 - \\frac{x^2}{2!} + \\cdots$$\n$$\\frac{1}{1-x} = \\sum_{k=0}^{\\infty} x^k = 1 + x + x^2 + \\cdots \\quad (|x| < 1)$$\n\n**דוגמה:** $T_2(x)$ עבור $e^x$ ב-$a=0$: $T_2(x) = 1 + x + \\frac{x^2}{2}$."
+      "body_en_md": "The **Taylor polynomial of degree $n$** of $f$ around $a$ is:\n$$\\boxed{T_n(x) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(x-a)^k = f(a) + f'(a)(x-a) + \\frac{f''(a)}{2!}(x-a)^2 + \\cdots + \\frac{f^{(n)}(a)}{n!}(x-a)^n.}$$\n\nWhen $a = 0$, this is the **Maclaurin polynomial**.\n\n**Key idea:** $T_n(x)$ is the unique polynomial of degree $\\leq n$ that agrees with $f$ in value and in all derivatives up to order $n$ at the point $a$.\n\n**Example:** Find $T_3(x)$ for $f(x) = e^x$ at $a = 0$.\n- $f(x) = e^x$, $f'(x) = e^x$, $f''(x) = e^x$, $f'''(x) = e^x$\n- At $x = 0$: all derivatives equal $1$.\n$$T_3(x) = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} = 1 + x + \\frac{x^2}{2} + \\frac{x^3}{6}.$$",
+      "body_he_md": "**פולינום טיילור מדרגה $n$** של $f$ סביב $a$:\n$$\\boxed{T_n(x) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(x-a)^k = f(a) + f'(a)(x-a) + \\frac{f''(a)}{2!}(x-a)^2 + \\cdots + \\frac{f^{(n)}(a)}{n!}(x-a)^n.}$$\n\nכאשר $a = 0$, זהו **פולינום מקלורן**.\n\n**רעיון מרכזי:** $T_n(x)$ הוא הפולינום היחיד מדרגה $\\leq n$ שמסכים עם $f$ בערך ובכל הנגזרות עד סדר $n$ בנקודה $a$.\n\n**דוגמה:** מצאו $T_3(x)$ של $f(x) = e^x$ ב-$a = 0$.\n- $f(x) = e^x$, $f'(x) = e^x$, $f''(x) = e^x$, $f'''(x) = e^x$\n- ב-$x = 0$: כל הנגזרות שוות $1$.\n$$T_3(x) = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} = 1 + x + \\frac{x^2}{2} + \\frac{x^3}{6}.$$"
+    },
+    {
+      "id": "standard_series",
+      "title_en": "Standard Maclaurin Series",
+      "title_he": "טורי מקלורן סטנדרטיים",
+      "level_min": "calculus_1",
+      "body_en_md": "These series must be memorized:\n\n| Function | Maclaurin series | Radius of convergence |\n|---|---|---|\n| $e^x$ | $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{x^n}{n!} = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots$ | $R = \\infty$ |\n| $\\sin x$ | $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n+1}}{(2n+1)!} = x - \\frac{x^3}{6} + \\frac{x^5}{120} - \\cdots$ | $R = \\infty$ |\n| $\\cos x$ | $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n}}{(2n)!} = 1 - \\frac{x^2}{2} + \\frac{x^4}{24} - \\cdots$ | $R = \\infty$ |\n| $\\dfrac{1}{1-x}$ | $\\displaystyle\\sum_{n=0}^{\\infty} x^n = 1 + x + x^2 + \\cdots$ | $R = 1$ |\n| $\\ln(1+x)$ | $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}x^n}{n} = x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\cdots$ | $R = 1$ |\n\n**Tip:** To get the series for $\\sin x$ from $e^x$, formally put $ix$ in place of $x$ and separate real/imaginary parts (Euler's formula).",
+      "body_he_md": "טורים אלה חייבים לזכור:\n\n| פונקציה | טור מקלורן | רדיוס התכנסות |\n|---|---|---|\n| $e^x$ | $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{x^n}{n!} = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots$ | $R = \\infty$ |\n| $\\sin x$ | $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n+1}}{(2n+1)!} = x - \\frac{x^3}{6} + \\frac{x^5}{120} - \\cdots$ | $R = \\infty$ |\n| $\\cos x$ | $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n}}{(2n)!} = 1 - \\frac{x^2}{2} + \\frac{x^4}{24} - \\cdots$ | $R = \\infty$ |\n| $\\dfrac{1}{1-x}$ | $\\displaystyle\\sum_{n=0}^{\\infty} x^n = 1 + x + x^2 + \\cdots$ | $R = 1$ |\n| $\\ln(1+x)$ | $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}x^n}{n} = x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\cdots$ | $R = 1$ |\n\n**טיפ:** לקבלת טור $\\sin x$ מ-$e^x$, מציבים $ix$ בכל מקום ומפרידים חלקים ממשיים/מדומים (נוסחת אוילר)."
     },
     {
       "id": "lagrange_remainder",
-      "title_en": "Lagrange remainder",
-      "title_he": "שארית לagrange",
+      "title_en": "Lagrange Remainder and Error Bounds",
+      "title_he": "שארית לגרנז' וחסמי שגיאה",
       "level_min": "calculus_1",
-      "body_en_md": "The **error** (remainder) when approximating $f(x)$ by $T_n(x)$:\n\n$$R_n(x) = f(x) - T_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$$\n\nfor some $c$ strictly between $a$ and $x$.\n\n**Error bound:** If $|f^{(n+1)}(t)| \\leq M$ for all $t$ between $a$ and $x$, then:\n$$|R_n(x)| \\leq \\frac{M}{(n+1)!}|x-a|^{n+1}$$\n\n**Example:** Approximate $\\sin(0.1)$ using $T_1(x) = x$ at $a=0$.\n$|R_1(0.1)| \\leq \\frac{|\\cos c|}{2!}(0.1)^2 \\leq \\frac{1}{2}(0.01) = 0.005$.\nSo $\\sin(0.1) \\approx 0.1$ with error $< 0.005$.",
-      "body_he_md": "**שגיאת** (שארית) קירוב $f(x)$ על-ידי $T_n(x)$:\n\n$$R_n(x) = f(x) - T_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$$\n\nעבור $c$ כלשהו **בין** $a$ ל-$x$.\n\n**ח bound לשגיאה:** אם $|f^{(n+1)}(t)| \\leq M$ לכל $t$ בין $a$ ל-$x$, אז:\n$$|R_n(x)| \\leq \\frac{M}{(n+1)!}|x-a|^{n+1}$$\n\n**דוגמה:** קירוב $\\sin(0.1)$ באמצעות $T_1(x) = x$ ב-$a=0$.\n$|R_1(0.1)| \\leq \\frac{|\\cos c|}{2!}(0.1)^2 \\leq \\frac{1}{2}(0.01) = 0.005$.\nאז $\\sin(0.1) \\approx 0.1$ עם שגיאה $< 0.005$."
+      "body_en_md": "The **remainder** (error) when approximating $f(x)$ by $T_n(x)$ is:\n$$R_n(x) = f(x) - T_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$$\nfor some $c$ between $a$ and $x$ (**Lagrange's theorem**).\n\n**Error bound:** If $|f^{(n+1)}(t)| \\leq M$ for all $t$ between $a$ and $x$, then:\n$$|R_n(x)| \\leq \\frac{M}{(n+1)!}|x-a|^{n+1}.$$\n\n**Worked example:** Estimate $\\sin(0.1)$ using $T_3(x) = x - \\frac{x^3}{6}$ and bound the error.\n\n$T_3(0.1) = 0.1 - \\frac{0.001}{6} \\approx 0.09983$.\n\nThe next term in the series is $\\frac{x^5}{120}$, so $R_4(x) = \\frac{\\cos c}{5!}x^5$ for some $c$ between $0$ and $0.1$.\n$$|R_4(0.1)| \\leq \\frac{1}{120}(0.1)^5 = \\frac{10^{-5}}{120} \\approx 8.3 \\times 10^{-8}.$$\nThe approximation is accurate to 7 decimal places.",
+      "body_he_md": "ה**שארית** (שגיאה) כאשר מקרבים $f(x)$ על-ידי $T_n(x)$ היא:\n$$R_n(x) = f(x) - T_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$$\nעבור $c$ כלשהו בין $a$ ל-$x$ (**משפט לגרנז'**).\n\n**חסם שגיאה:** אם $|f^{(n+1)}(t)| \\leq M$ לכל $t$ בין $a$ ל-$x$, אז:\n$$|R_n(x)| \\leq \\frac{M}{(n+1)!}|x-a|^{n+1}.$$\n\n**דוגמה:** העריכו $\\sin(0.1)$ באמצעות $T_3(x) = x - \\frac{x^3}{6}$ וחסמו את השגיאה.\n\n$T_3(0.1) = 0.1 - \\frac{0.001}{6} \\approx 0.09983$.\n\nהאיבר הבא בטור הוא $\\frac{x^5}{120}$, אז $R_4(x) = \\frac{\\cos c}{5!}x^5$ עבור $c$ בין $0$ ל-$0.1$.\n$$|R_4(0.1)| \\leq \\frac{1}{120}(0.1)^5 = \\frac{10^{-5}}{120} \\approx 8.3 \\times 10^{-8}.$$\nהקירוב מדויק עד 7 מקומות אחרי הנקודה."
     },
     {
-      "id": "computing_taylor",
-      "title_en": "Computing Taylor polynomials",
-      "title_he": "חישוב פולינומי טיילור",
+      "id": "applications",
+      "title_en": "Applications: Limits and Approximations",
+      "title_he": "יישומים: גבולות וקירובים",
       "level_min": "calculus_1",
-      "body_en_md": "**Worked example:** Find $T_3(x)$ for $f(x) = \\ln(1+x)$ at $a=0$.\n\n$f(0) = 0$, $f'(x) = \\frac{1}{1+x}$, $f'(0) = 1$\n\n$f''(x) = -\\frac{1}{(1+x)^2}$, $f''(0) = -1$\n\n$f'''(x) = \\frac{2}{(1+x)^3}$, $f'''(0) = 2$\n\n$$T_3(x) = x - \\frac{x^2}{2} + \\frac{x^3}{3}$$\n\nThis matches the series $\\ln(1+x) = x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\cdots$ for $|x| < 1$.\n\n**Technion tip:** For error bounds on $\\sin$ or $\\cos$, use $|f^{(n+1)}| \\leq 1$. For $e^x$, use $|f^{(n+1)}| = e^{|c|} \\leq e^{\\max(|a|,|x|)}$.",
-      "body_he_md": "**דוגמה:** מצאו $T_3(x)$ עבור $f(x) = \\ln(1+x)$ ב-$a=0$.\n\n$f(0) = 0$, $f'(x) = \\frac{1}{1+x}$, $f'(0) = 1$\n\n$f''(x) = -\\frac{1}{(1+x)^2}$, $f''(0) = -1$\n\n$f'''(x) = \\frac{2}{(1+x)^3}$, $f'''(0) = 2$\n\n$$T_3(x) = x - \\frac{x^2}{2} + \\frac{x^3}{3}$$\n\nזה תואם את הטור $\\ln(1+x) = x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\cdots$ ל-$|x| < 1$.\n\n**טיפ טכניון:** לח bounds על $\\sin$ או $\\cos$, השתמשו ב-$|f^{(n+1)}| \\leq 1$. ל-$e^x$, $|f^{(n+1)}| = e^{|c|} \\leq e^{\\max(|a|,|x|)}$."
-    },
-    {
-      "id": "summary",
-      "title_en": "Summary",
-      "title_he": "סיכום",
-      "level_min": "calculus_1",
-      "body_en_md": "- $T_n(x) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(x-a)^k$.\n- $R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$ — Lagrange form.\n- Bound: maximize $|f^{(n+1)}|$ on $[a,x]$.\n- Memorize: $e^x$, $\\sin x$, $\\cos x$, $\\frac{1}{1-x}$ expansions.",
-      "body_he_md": "- $T_n(x) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(x-a)^k$.\n- $R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$ — צורת Lagrange.\n- ח bound: מקסימום $|f^{(n+1)}|$ על $[a,x]$.\n- לשינון: $e^x$, $\\sin x$, $\\cos x$, $\\frac{1}{1-x}$."
+      "body_en_md": "### Computing limits using Taylor series\n\nTaylor series are powerful for $\\frac{0}{0}$ or $\\frac{\\infty}{\\infty}$ limits:\n\n$$\\lim_{x \\to 0} \\frac{\\sin x - x}{x^3} = \\lim_{x \\to 0} \\frac{\\left(x - \\frac{x^3}{6} + O(x^5)\\right) - x}{x^3} = \\lim_{x \\to 0} \\frac{-\\frac{x^3}{6} + O(x^5)}{x^3} = -\\frac{1}{6}.$$\n\n### Manipulating series\n\n- **Substitute:** $e^{x^2}$ from $e^u = \\sum u^n/n!$ with $u = x^2$: $e^{x^2} = \\sum \\frac{x^{2n}}{n!}$.\n- **Differentiate:** $(\\sin x)' = \\cos x$; differentiating the $\\sin x$ series term-by-term gives the $\\cos x$ series.\n- **Integrate:** $\\int \\frac{1}{1+t} dt = \\ln(1+x)$ from the geometric series $\\frac{1}{1+t} = \\sum (-t)^n$.",
+      "body_he_md": "### חישוב גבולות באמצעות טורי טיילור\n\nטורי טיילור חזקים לגבולות מהצורה $\\frac{0}{0}$ או $\\frac{\\infty}{\\infty}$:\n\n$$\\lim_{x \\to 0} \\frac{\\sin x - x}{x^3} = \\lim_{x \\to 0} \\frac{\\left(x - \\frac{x^3}{6} + O(x^5)\\right) - x}{x^3} = \\lim_{x \\to 0} \\frac{-\\frac{x^3}{6} + O(x^5)}{x^3} = -\\frac{1}{6}.$$\n\n### מניפולציות על טורים\n\n- **הצבה:** $e^{x^2}$ מ-$e^u = \\sum u^n/n!$ עם $u = x^2$: $e^{x^2} = \\sum \\frac{x^{2n}}{n!}$.\n- **גזירה:** $(\\sin x)' = \\cos x$; גזירת טור $\\sin x$ איבר-איבר נותנת את טור $\\cos x$.\n- **אינטגרציה:** $\\int \\frac{1}{1+t} dt = \\ln(1+x)$ מטור הנדסי $\\frac{1}{1+t} = \\sum (-t)^n$."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "What is $T_2(x)$ (Taylor polynomial of degree 2) for $e^x$ at $a = 0$?",
-      "body_he": "מהו $T_2(x)$ (פולינום טיילור ממעלה 2) עבור $e^x$ ב-$a = 0$?",
+      "body_en": "What is the Maclaurin polynomial $T_2(x)$ for $f(x) = \\cos x$?",
+      "body_he": "מהו פולינום מקלורן $T_2(x)$ של $f(x) = \\cos x$?",
       "options": [
-        { "id": "a", "text_en": "$1 + x + \\frac{x^2}{2}$", "text_he": "$1 + x + \\frac{x^2}{2}$", "correct": true },
-        { "id": "b", "text_en": "$1 + x + x^2$", "text_he": "$1 + x + x^2$", "correct": false },
-        { "id": "c", "text_en": "$x + \\frac{x^2}{2}$", "text_he": "$x + \\frac{x^2}{2}$", "correct": false },
-        { "id": "d", "text_en": "$1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!}$", "text_he": "$1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!}$", "correct": false }
+        { "id": "a", "text_en": "$1 - x^2$", "text_he": "$1 - x^2$", "correct": false },
+        { "id": "b", "text_en": "$1 - \\dfrac{x^2}{2}$", "text_he": "$1 - \\dfrac{x^2}{2}$", "correct": true },
+        { "id": "c", "text_en": "$1 - x + \\dfrac{x^2}{2}$", "text_he": "$1 - x + \\dfrac{x^2}{2}$", "correct": false },
+        { "id": "d", "text_en": "$-\\dfrac{x^2}{2}$", "text_he": "$-\\dfrac{x^2}{2}$", "correct": false }
       ],
-      "explanation_en": "$e^0=1$, $(e^x)'(0)=1$, $(e^x)''(0)=1$. So $T_2 = 1 + x + x^2/2$.",
-      "explanation_he": "$e^0=1$, $(e^x)'(0)=1$, $(e^x)''(0)=1$. אז $T_2 = 1 + x + x^2/2$."
+      "explanation_en": "$f(0)=1$, $f'(0) = -\\sin(0) = 0$, $f''(0) = -\\cos(0) = -1$. So $T_2(x) = 1 + 0 \\cdot x + \\frac{-1}{2}x^2 = 1 - \\frac{x^2}{2}$.",
+      "explanation_he": "$f(0)=1$, $f'(0) = -\\sin(0) = 0$, $f''(0) = -\\cos(0) = -1$. לכן $T_2(x) = 1 + 0 \\cdot x + \\frac{-1}{2}x^2 = 1 - \\frac{x^2}{2}$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "The Lagrange remainder $R_n(x)$ involves $f^{(n+1)}(c)$ where $c$ satisfies:",
-      "body_he": "שארית Lagrange $R_n(x)$ כוללת $f^{(n+1)}(c)$ כאשר $c$ מקיים:",
+      "body_en": "Which series represents $\\sin x$ as a Maclaurin series?",
+      "body_he": "איזה טור מייצג את $\\sin x$ כטור מקלורן?",
       "options": [
-        { "id": "a", "text_en": "$c = a$ always", "text_he": "$c = a$ תמיד", "correct": false },
-        { "id": "b", "text_en": "$c$ is strictly between $a$ and $x$", "text_he": "$c$ בין $a$ ל-$x$ (לא כולל קצוות)", "correct": true },
-        { "id": "c", "text_en": "$c = x$ always", "text_he": "$c = x$ תמיד", "correct": false },
-        { "id": "d", "text_en": "$c$ can be any real number", "text_he": "$c$ יכול להיות כל מספר ממשי", "correct": false }
+        { "id": "a", "text_en": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{2n}}{(2n)!}$", "text_he": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^{2n}}{(2n)!}$", "correct": false },
+        { "id": "b", "text_en": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{(-1)^n x^{2n+1}}{(2n+1)!}$", "text_he": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{(-1)^n x^{2n+1}}{(2n+1)!}$", "correct": true },
+        { "id": "c", "text_en": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{(-1)^n x^{2n}}{(2n)!}$", "text_he": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{(-1)^n x^{2n}}{(2n)!}$", "correct": false },
+        { "id": "d", "text_en": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^n}{n!}$", "text_he": "$\\displaystyle\\sum_{n=0}^{\\infty} \\frac{x^n}{n!}$", "correct": false }
       ],
-      "explanation_en": "Lagrange's theorem guarantees existence of $c$ between $a$ and $x$ (open interval when $a \\ne x$).",
-      "explanation_he": "משפט Lagrange מבטיח קיום $c$ בין $a$ ל-$x$ (קטע פתוח כאשר $a \\ne x$)."
+      "explanation_en": "$\\sin x$ has only odd powers with alternating signs: $x - x^3/6 + x^5/120 - \\cdots = \\sum \\frac{(-1)^n x^{2n+1}}{(2n+1)!}$. Option (a) is $\\cosh x$, (c) is $\\cos x$, (d) is $e^x$.",
+      "explanation_he": "ל-$\\sin x$ יש רק חזקות אי-זוגיות עם סימנים מתחלפים: $x - x^3/6 + x^5/120 - \\cdots = \\sum \\frac{(-1)^n x^{2n+1}}{(2n+1)!}$. אפשרות (א) היא $\\cosh x$, (ג) היא $\\cos x$, (ד) היא $e^x$."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Using $T_1(x) = x$ to approximate $\\sin(0.1)$, an upper bound on $|R_1(0.1)|$ is:",
-      "body_he": "בשימוש ב-$T_1(x) = x$ לקירוב $\\sin(0.1)$, ח bound על $|R_1(0.1)|$ הוא:",
+      "body_en": "The Lagrange remainder for $T_n(x)$ at $a=0$ is $R_n(x) = \\dfrac{f^{(n+1)}(c)}{(n+1)!}x^{n+1}$ for some $c \\in (0,x)$. For $f(x)=e^x$, $n=3$, $x=1$, what is the tightest upper bound on $|R_3(1)|$?",
+      "body_he": "שארית לגרנז' עבור $T_n(x)$ ב-$a=0$ היא $R_n(x) = \\dfrac{f^{(n+1)}(c)}{(n+1)!}x^{n+1}$ עבור $c \\in (0,x)$. עבור $f(x)=e^x$, $n=3$, $x=1$, מהו החסם העליון הקפדני ביותר על $|R_3(1)|$?",
       "options": [
-        { "id": "a", "text_en": "$0.005$", "text_he": "$0.005$", "correct": true },
-        { "id": "b", "text_en": "$0.1$", "text_he": "$0.1$", "correct": false },
-        { "id": "c", "text_en": "$0.001$", "text_he": "$0.001$", "correct": false },
-        { "id": "d", "text_en": "$0.05$", "text_he": "$0.05$", "correct": false }
+        { "id": "a", "text_en": "$\\dfrac{e}{24}$", "text_he": "$\\dfrac{e}{24}$", "correct": true },
+        { "id": "b", "text_en": "$\\dfrac{1}{24}$", "text_he": "$\\dfrac{1}{24}$", "correct": false },
+        { "id": "c", "text_en": "$\\dfrac{e}{6}$", "text_he": "$\\dfrac{e}{6}$", "correct": false },
+        { "id": "d", "text_en": "$\\dfrac{1}{4!}$", "text_he": "$\\dfrac{1}{4!}$", "correct": false }
       ],
-      "explanation_en": "$|R_1| \\leq \\frac{|\\cos c|}{2!}(0.1)^2 \\leq \\frac{1}{2}(0.01) = 0.005$ since $|\\cos c| \\leq 1$.",
-      "explanation_he": "$|R_1| \\leq \\frac{|\\cos c|}{2!}(0.1)^2 \\leq \\frac{1}{2}(0.01) = 0.005$ כי $|\\cos c| \\leq 1$."
+      "explanation_en": "$f^{(4)}(x) = e^x$ and on $[0,1]$ the maximum is $e^1 = e$. So $|R_3(1)| \\leq \\frac{e}{4!} = \\frac{e}{24}$. Using $1$ as the bound (option b) underestimates since $c$ could be close to $1$.",
+      "explanation_he": "$f^{(4)}(x) = e^x$ ועל $[0,1]$ המקסימום הוא $e^1 = e$. לכן $|R_3(1)| \\leq \\frac{e}{4!} = \\frac{e}{24}$. שימוש ב-$1$ כחסם (אפשרות ב) מוריד את ההערכה כי $c$ יכול להיות קרוב ל-$1$."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Which is the Maclaurin expansion of $\\cos x$ up to $x^4$?",
-      "body_he": "מהו טור Maclaurin של $\\cos x$ עד $x^4$?",
+      "body_en": "Using the Maclaurin series for $e^x$, what is the series for $e^{-x^2}$ up to and including degree 4?",
+      "body_he": "בשימוש בטור מקלורן של $e^x$, מהו הטור של $e^{-x^2}$ עד ממיד 4 (כולל)?",
       "options": [
-        { "id": "a", "text_en": "$1 - \\frac{x^2}{2} + \\frac{x^4}{24}$", "text_he": "$1 - \\frac{x^2}{2} + \\frac{x^4}{24}$", "correct": true },
-        { "id": "b", "text_en": "$1 + \\frac{x^2}{2} + \\frac{x^4}{24}$", "text_he": "$1 + \\frac{x^2}{2} + \\frac{x^4}{24}$", "correct": false },
-        { "id": "c", "text_en": "$x - \\frac{x^3}{6}$", "text_he": "$x - \\frac{x^3}{6}$", "correct": false },
-        { "id": "d", "text_en": "$1 - x^2 + x^4$", "text_he": "$1 - x^2 + x^4$", "correct": false }
+        { "id": "a", "text_en": "$1 - x^2 + x^4$", "text_he": "$1 - x^2 + x^4$", "correct": false },
+        { "id": "b", "text_en": "$1 - x^2 + \\dfrac{x^4}{2}$", "text_he": "$1 - x^2 + \\dfrac{x^4}{2}$", "correct": true },
+        { "id": "c", "text_en": "$1 + x^2 + \\dfrac{x^4}{2}$", "text_he": "$1 + x^2 + \\dfrac{x^4}{2}$", "correct": false },
+        { "id": "d", "text_en": "$1 - x + \\dfrac{x^2}{2} - \\dfrac{x^3}{6} + \\dfrac{x^4}{24}$", "text_he": "$1 - x + \\dfrac{x^2}{2} - \\dfrac{x^3}{6} + \\dfrac{x^4}{24}$", "correct": false }
       ],
-      "explanation_en": "$\\cos x = 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots = 1 - \\frac{x^2}{2} + \\frac{x^4}{24} - \\cdots$",
-      "explanation_he": "$\\cos x = 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots = 1 - \\frac{x^2}{2} + \\frac{x^4}{24} - \\cdots$"
+      "explanation_en": "Substitute $u = -x^2$ into $e^u = 1 + u + u^2/2! + \\cdots$: $e^{-x^2} = 1 + (-x^2) + \\frac{(-x^2)^2}{2!} + \\cdots = 1 - x^2 + \\frac{x^4}{2} - \\cdots$. Up to degree 4: $1 - x^2 + x^4/2$.",
+      "explanation_he": "מציבים $u = -x^2$ ב-$e^u = 1 + u + u^2/2! + \\cdots$: $e^{-x^2} = 1 + (-x^2) + \\frac{(-x^2)^2}{2!} + \\cdots = 1 - x^2 + \\frac{x^4}{2} - \\cdots$. עד ממד 4: $1 - x^2 + x^4/2$."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "$T_3(x)$ for $f(x) = \\frac{1}{1-x}$ at $a=0$ equals:",
-      "body_he": "$T_3(x)$ עבור $f(x) = \\frac{1}{1-x}$ ב-$a=0$ שווה:",
+      "body_en": "Using Taylor series, $\\displaystyle\\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2}$ equals:",
+      "body_he": "בשימוש בטור טיילור, $\\displaystyle\\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2}$ שווה:",
       "options": [
-        { "id": "a", "text_en": "$1 + x + x^2 + x^3$", "text_he": "$1 + x + x^2 + x^3$", "correct": true },
-        { "id": "b", "text_en": "$1 - x + x^2 - x^3$", "text_he": "$1 - x + x^2 - x^3$", "correct": false },
-        { "id": "c", "text_en": "$1 + x$", "text_he": "$1 + x$", "correct": false },
-        { "id": "d", "text_en": "$\\frac{1}{1-x}$ exactly", "text_he": "$\\frac{1}{1-x}$ בדיוק", "correct": false }
+        { "id": "a", "text_en": "$0$", "text_he": "$0$", "correct": false },
+        { "id": "b", "text_en": "$\\dfrac{1}{2}$", "text_he": "$\\dfrac{1}{2}$", "correct": true },
+        { "id": "c", "text_en": "$1$", "text_he": "$1$", "correct": false },
+        { "id": "d", "text_en": "Does not exist", "text_he": "אינו קיים", "correct": false }
       ],
-      "explanation_en": "Geometric series: $\\frac{1}{1-x} = 1 + x + x^2 + x^3 + \\cdots$; $T_3$ truncates at degree 3.",
-      "explanation_he": "טור הנדסי: $\\frac{1}{1-x} = 1 + x + x^2 + x^3 + \\cdots$; $T_3$ נחתך במעלה 3."
+      "explanation_en": "$\\cos x = 1 - \\frac{x^2}{2} + O(x^4)$, so $1 - \\cos x = \\frac{x^2}{2} + O(x^4)$. Then $\\frac{1-\\cos x}{x^2} = \\frac{x^2/2 + O(x^4)}{x^2} = \\frac{1}{2} + O(x^2) \\to \\frac{1}{2}$.",
+      "explanation_he": "$\\cos x = 1 - \\frac{x^2}{2} + O(x^4)$, לכן $1 - \\cos x = \\frac{x^2}{2} + O(x^4)$. אז $\\frac{1-\\cos x}{x^2} = \\frac{x^2/2 + O(x^4)}{x^2} = \\frac{1}{2} + O(x^2) \\to \\frac{1}{2}$."
     }
   ]
 }

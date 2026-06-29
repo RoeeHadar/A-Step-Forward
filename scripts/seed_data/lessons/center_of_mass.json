@@ -1,116 +1,108 @@
 {
   "id": "center_of_mass",
+  "type": "interactive",
   "subject": "hs_physics",
   "title_en": "Center of Mass",
-  "title_he": "מרכז המסה",
+  "title_he": "מרכז מסה",
   "duration_min": 20,
-  "type": "interactive",
   "level_min": "5pt",
-  "agent_hints": "Center of mass is a weighted average of position. In collisions, velocity of CM is conserved in isolated systems even when individual velocities change. Use component formulas separately in 2D. Bagrut physics expects numeric substitution into standard formulas.",
+  "agent_hints": "The center of mass is the 'effective location' of the total mass for Newton's second law applied to the system. Students should compute it as a weighted average position. The key non-trivial insight is that the CM velocity is conserved in isolated systems, making it the preferred reference frame for analyzing collisions. Common error: treating CM as the geometric center when masses are unequal.",
   "sections": [
     {
       "id": "definition",
-      "title_en": "Definition and two-body formula",
-      "title_he": "הגדרה ונוסחה לשני גופים",
+      "title_en": "Definition — Weighted Average Position",
+      "title_he": "הגדרה — מיקום ממוצע משוקלל",
       "level_min": "5pt",
-      "body_en_md": "The **center of mass (CM)** is the weighted average position of a mass distribution:\n\n$$x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}$$\n\nFor **two bodies** on the $x$-axis:\n\n$$x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}$$\n\n**Example:** $m_1 = 2$ kg at $x_1 = 0$ m, $m_2 = 4$ kg at $x_2 = 3$ m:\n$$x_{cm} = \\frac{2(0) + 4(3)}{2 + 4} = \\frac{12}{6} = 2 \\text{ m}$$\n\nThe CM is closer to the heavier mass.",
-      "body_he_md": "**מרכז המסה (CM)** הוא ממוצע משוקלל של מיקום התפלגות מסה:\n\n$$x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}$$\n\nעבור **שני גופים** על ציר $x$:\n\n$$x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}$$\n\n**דוגמה:** $m_1 = 2$ kg ב-$x_1 = 0$ m, $m_2 = 4$ kg ב-$x_2 = 3$ m:\n$$x_{cm} = \\frac{2(0) + 4(3)}{2 + 4} = \\frac{12}{6} = 2 \\text{ m}$$\n\nמרכז המסה קרוב יותר למסה הכבדה."
+      "body_en_md": "The **center of mass** (CM) of a system of particles is the mass-weighted average of their positions.\n\n**Two particles on a line:**\n$$\\boxed{x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}}$$\n\n**Physical meaning:** If the external force $\\vec{F}_{ext}$ acts on the whole system, then $M\\vec{a}_{cm} = \\vec{F}_{ext}$, where $M = \\sum m_i$ is the total mass. The CM obeys Newton's 2nd law as if all the mass were concentrated there.\n\n**Worked example:** Two masses $m_1 = 3$ kg at $x_1 = 1$ m and $m_2 = 1$ kg at $x_2 = 5$ m.\n$$x_{cm} = \\frac{3 \\cdot 1 + 1 \\cdot 5}{3 + 1} = \\frac{3 + 5}{4} = \\frac{8}{4} = 2 \\text{ m.}$$\nThe CM is at $x = 2$ m — much closer to the heavier mass, as expected.",
+      "body_he_md": "**מרכז המסה** (מ\"מ) של מערכת חלקיקים הוא המיקום הממוצע המשוקלל במסה שלהם.\n\n**שני חלקיקים על קו:**\n$$\\boxed{x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}}$$\n\n**משמעות פיזיקלית:** אם כוח חיצוני $\\vec{F}_{ext}$ פועל על כל המערכת, אז $M\\vec{a}_{cm} = \\vec{F}_{ext}$, כאשר $M = \\sum m_i$ היא המסה הכוללת. מ\"מ מציית לחוק ניוטון השני כאילו כל המסה ריכוזה שם.\n\n**דוגמה:** שתי מסות $m_1 = 3$ ק\"ג ב-$x_1 = 1$ מ' ו-$m_2 = 1$ ק\"ג ב-$x_2 = 5$ מ'.\n$$x_{cm} = \\frac{3 \\cdot 1 + 1 \\cdot 5}{3 + 1} = \\frac{3 + 5}{4} = \\frac{8}{4} = 2 \\text{ מ'.}$$\nמ\"מ ב-$x = 2$ מ' — קרוב הרבה יותר למסה הכבדה, כמצופה."
     },
     {
-      "id": "multi_body_2d",
-      "title_en": "Multi-body systems in 2D",
-      "title_he": "מערכות רב-גופיות ב-2D",
+      "id": "multibody_2d",
+      "title_en": "Multi-body CM in 2D",
+      "title_he": "מרכז מסה של מערכת רב-גופית בדו-ממד",
       "level_min": "5pt",
-      "body_en_md": "In 2D, compute CM coordinates **independently**:\n\n$$x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}, \\qquad y_{cm} = \\frac{\\sum m_i y_i}{\\sum m_i}$$\n\n**Example:** Three point masses:\n- $m_1 = 1$ kg at $(0, 0)$\n- $m_2 = 2$ kg at $(4, 0)$\n- $m_3 = 3$ kg at $(2, 3)$\n\nTotal mass $M = 6$ kg.\n$$x_{cm} = \\frac{0 + 8 + 6}{6} = \\frac{14}{6} \\approx 2.33 \\text{ m}$$\n$$y_{cm} = \\frac{0 + 0 + 9}{6} = 1.5 \\text{ m}$$",
-      "body_he_md": "ב-2D, מחשבים רכיבי CM **בנפרד**:\n\n$$x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}, \\qquad y_{cm} = \\frac{\\sum m_i y_i}{\\sum m_i}$$\n\n**דוגמה:** שלושה מסות נקודתיות:\n- $m_1 = 1$ kg ב-$(0, 0)$\n- $m_2 = 2$ kg ב-$(4, 0)$\n- $m_3 = 3$ kg ב-$(2, 3)$\n\nמסה כוללת $M = 6$ kg.\n$$x_{cm} = \\frac{0 + 8 + 6}{6} = \\frac{14}{6} \\approx 2.33 \\text{ m}$$\n$$y_{cm} = \\frac{0 + 0 + 9}{6} = 1.5 \\text{ m}$$"
+      "body_en_md": "For $N$ particles in 2D:\n$$\\boxed{x_{cm} = \\frac{\\sum_{i=1}^{N} m_i x_i}{\\sum_{i=1}^{N} m_i}, \\qquad y_{cm} = \\frac{\\sum_{i=1}^{N} m_i y_i}{\\sum_{i=1}^{N} m_i}.}$$\n\nThe CM is a vector: $\\vec{r}_{cm} = (x_{cm}, y_{cm})$.\n\n**Worked example:** Three particles:\n- $m_1 = 2$ kg at $(0, 0)$\n- $m_2 = 3$ kg at $(4, 0)$\n- $m_3 = 1$ kg at $(1, 3)$\n\n$$M = 2 + 3 + 1 = 6 \\text{ kg}$$\n$$x_{cm} = \\frac{2(0) + 3(4) + 1(1)}{6} = \\frac{0 + 12 + 1}{6} = \\frac{13}{6} \\approx 2.17 \\text{ m}$$\n$$y_{cm} = \\frac{2(0) + 3(0) + 1(3)}{6} = \\frac{3}{6} = 0.5 \\text{ m}$$",
+      "body_he_md": "ל-$N$ חלקיקים בדו-ממד:\n$$\\boxed{x_{cm} = \\frac{\\sum_{i=1}^{N} m_i x_i}{\\sum_{i=1}^{N} m_i}, \\qquad y_{cm} = \\frac{\\sum_{i=1}^{N} m_i y_i}{\\sum_{i=1}^{N} m_i}.}$$\n\nמ\"מ הוא וקטור: $\\vec{r}_{cm} = (x_{cm}, y_{cm})$.\n\n**דוגמה:** שלושה חלקיקים:\n- $m_1 = 2$ ק\"ג ב-$(0, 0)$\n- $m_2 = 3$ ק\"ג ב-$(4, 0)$\n- $m_3 = 1$ ק\"ג ב-$(1, 3)$\n\n$$M = 2 + 3 + 1 = 6 \\text{ ק\"ג}$$\n$$x_{cm} = \\frac{2(0) + 3(4) + 1(1)}{6} = \\frac{13}{6} \\approx 2.17 \\text{ מ'}$$\n$$y_{cm} = \\frac{2(0) + 3(0) + 1(3)}{6} = \\frac{3}{6} = 0.5 \\text{ מ'}$$"
     },
     {
-      "id": "cm_velocity",
-      "title_en": "CM velocity and collisions",
-      "title_he": "מהירות מרכז המסה והתנגשויות",
+      "id": "cm_collisions",
+      "title_en": "CM Velocity and Conservation in Collisions",
+      "title_he": "מהירות מרכז המסה ושימור בהתנגשויות",
       "level_min": "5pt",
-      "body_en_md": "The **velocity of the center of mass** for two bodies:\n\n$$v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2}$$\n\nIn an **isolated system** (no external forces), $v_{cm}$ is **conserved** before, during, and after a collision — even if individual velocities change dramatically.\n\n**Example:** $m_1 = m_2 = 2$ kg. Before collision: $v_1 = 4$ m/s, $v_2 = -2$ m/s.\n$$v_{cm} = \\frac{2(4) + 2(-2)}{4} = \\frac{4}{4} = 1 \\text{ m/s}$$\n\nAfter any collision in this isolated pair, the CM still moves at 1 m/s.",
-      "body_he_md": "**מהירות מרכז המסה** לשני גופים:\n\n$$v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2}$$\n\nב**מערכת מבודדת** (ללא כוחות חיצוניים), $v_{cm}$ **נשמר** לפני, במהלך ואחרי התנגשות — גם אם מהירויות בודדות משתנות ב drastically.\n\n**דוגמה:** $m_1 = m_2 = 2$ kg. לפני התנגשות: $v_1 = 4$ m/s, $v_2 = -2$ m/s.\n$$v_{cm} = \\frac{2(4) + 2(-2)}{4} = \\frac{4}{4} = 1 \\text{ m/s}$$\n\nאחרי כל התנגשות בזוג מבודד זה, מרכז המסה עדיין נע ב-1 m/s."
-    },
-    {
-      "id": "summary",
-      "title_en": "Summary",
-      "title_he": "סיכום",
-      "level_min": "5pt",
-      "body_en_md": "- **Position:** $x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}$ (same for $y$, $z$).\n- **Two bodies:** weighted average of positions.\n- **Velocity:** $v_{cm} = \\frac{\\sum m_i v_i}{\\sum m_i}$.\n- **Isolated system:** $v_{cm}$ conserved in collisions.\n- CM tends toward heavier masses.",
-      "body_he_md": "- **מיקום:** $x_{cm} = \\frac{\\sum m_i x_i}{\\sum m_i}$ (אותו דבר ל-$y$, $z$).\n- **שני גופים:** ממוצע משוקלל של מיקומים.\n- **מהירות:** $v_{cm} = \\frac{\\sum m_i v_i}{\\sum m_i}$.\n- **מערכת מבודדת:** $v_{cm}$ נשמר בהתנגשויות.\n- CM נוטה לכיוון מסות כבדות יותר."
+      "body_en_md": "The **velocity of the CM** of a two-body system:\n$$\\vec{v}_{cm} = \\frac{m_1 \\vec{v}_1 + m_2 \\vec{v}_2}{m_1 + m_2} = \\frac{\\vec{p}_{total}}{M}$$\n\n**Key theorem:** In an **isolated system** (no external forces), $\\vec{v}_{cm}$ is constant. The total momentum $\\vec{p} = M\\vec{v}_{cm}$ is conserved.\n\n**Before and after any collision** (elastic or inelastic), the CM moves at the same constant velocity.\n\n**Worked example:** Two carts. $m_1 = 4$ kg moving at $v_1 = 3$ m/s, $m_2 = 2$ kg moving at $v_2 = -1$ m/s (opposite direction). Find $v_{cm}$.\n$$v_{cm} = \\frac{4(3) + 2(-1)}{4 + 2} = \\frac{12 - 2}{6} = \\frac{10}{6} \\approx 1.67 \\text{ m/s.}$$\nAfter any collision between them, $v_{cm}$ remains $1.67$ m/s.",
+      "body_he_md": "**מהירות מ\"מ** של מערכת דו-גופית:\n$$\\vec{v}_{cm} = \\frac{m_1 \\vec{v}_1 + m_2 \\vec{v}_2}{m_1 + m_2} = \\frac{\\vec{p}_{total}}{M}$$\n\n**משפט מרכזי:** במערכת **מבודדת** (ללא כוחות חיצוניים), $\\vec{v}_{cm}$ קבוע. התנע הכולל $\\vec{p} = M\\vec{v}_{cm}$ משתמר.\n\n**לפני וגם אחרי כל התנגשות** (אלסטית או פלסטית), מ\"מ נע באותה מהירות קבועה.\n\n**דוגמה:** שתי עגלות. $m_1 = 4$ ק\"ג במהירות $v_1 = 3$ מ'/ש', $m_2 = 2$ ק\"ג במהירות $v_2 = -1$ מ'/ש' (כיוון הפוך). מצאו $v_{cm}$.\n$$v_{cm} = \\frac{4(3) + 2(-1)}{4 + 2} = \\frac{12 - 2}{6} = \\frac{10}{6} \\approx 1.67 \\text{ מ'/ש'.}$$\nאחרי כל התנגשות ביניהן, $v_{cm}$ יישאר $1.67$ מ'/ש'."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "Two masses $m_1 = 3$ kg at $x = 0$ and $m_2 = 1$ kg at $x = 4$ m. Where is $x_{cm}$?",
-      "body_he": "שתי מסות $m_1 = 3$ kg ב-$x = 0$ ו-$m_2 = 1$ kg ב-$x = 4$ m. איפה $x_{cm}$?",
+      "body_en": "Masses $m_1 = 5$ kg at $x_1 = 2$ m and $m_2 = 3$ kg at $x_2 = 6$ m. Where is the CM?",
+      "body_he": "מסות $m_1 = 5$ ק\"ג ב-$x_1 = 2$ מ' ו-$m_2 = 3$ ק\"ג ב-$x_2 = 6$ מ'. היכן מ\"מ?",
       "options": [
-        { "id": "a", "text_en": "$1$ m", "text_he": "$1$ m", "correct": true },
-        { "id": "b", "text_en": "$2$ m", "text_he": "$2$ m", "correct": false },
-        { "id": "c", "text_en": "$3$ m", "text_he": "$3$ m", "correct": false },
-        { "id": "d", "text_en": "$4$ m", "text_he": "$4$ m", "correct": false }
+        { "id": "a", "text_en": "$x_{cm} = 4$ m (midpoint)", "text_he": "$x_{cm} = 4$ מ' (נקודת האמצע)", "correct": false },
+        { "id": "b", "text_en": "$x_{cm} = 3.5$ m", "text_he": "$x_{cm} = 3.5$ מ'", "correct": true },
+        { "id": "c", "text_en": "$x_{cm} = 2.5$ m", "text_he": "$x_{cm} = 2.5$ מ'", "correct": false },
+        { "id": "d", "text_en": "$x_{cm} = 5$ m", "text_he": "$x_{cm} = 5$ מ'", "correct": false }
       ],
-      "explanation_en": "$x_{cm} = \\frac{3(0) + 1(4)}{4} = 1$ m — closer to the heavier mass.",
-      "explanation_he": "$x_{cm} = \\frac{3(0) + 1(4)}{4} = 1$ m — קרוב יותר למסה הכבדה."
+      "explanation_en": "$x_{cm} = \\frac{5(2) + 3(6)}{5+3} = \\frac{10+18}{8} = \\frac{28}{8} = 3.5$ m. The CM is closer to $m_1$ (heavier) than the midpoint.",
+      "explanation_he": "$x_{cm} = \\frac{5(2) + 3(6)}{5+3} = \\frac{10+18}{8} = \\frac{28}{8} = 3.5$ מ'. מ\"מ קרוב יותר ל-$m_1$ (כבדה יותר) מנקודת האמצע."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "For $v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2}$, which statement is true in an isolated collision?",
-      "body_he": "עבור $v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2}$, איזה утверה נכונה בהתנגשות מבודדת?",
+      "body_en": "Two bodies: $m_1 = 2$ kg with $v_1 = 6$ m/s and $m_2 = 4$ kg with $v_2 = 0$ (at rest). The CM velocity is:",
+      "body_he": "שני גופים: $m_1 = 2$ ק\"ג עם $v_1 = 6$ מ'/ש' ו-$m_2 = 4$ ק\"ג עם $v_2 = 0$ (במנוחה). מהירות מ\"מ:",
       "options": [
-        { "id": "a", "text_en": "$v_1$ and $v_2$ are always unchanged", "text_he": "$v_1$ ו-$v_2$ תמיד לא משתנים", "correct": false },
-        { "id": "b", "text_en": "$v_{cm}$ before equals $v_{cm}$ after", "text_he": "$v_{cm}$ לפני שווה ל-$v_{cm}$ אחרי", "correct": true },
-        { "id": "c", "text_en": "Total kinetic energy is always conserved", "text_he": "אנרגיה קינטית כוללת תמיד נשמרת", "correct": false },
-        { "id": "d", "text_en": "$v_{cm}$ always equals zero", "text_he": "$v_{cm}$ תמיד שווה לאפס", "correct": false }
+        { "id": "a", "text_en": "$3$ m/s", "text_he": "$3$ מ'/ש'", "correct": false },
+        { "id": "b", "text_en": "$2$ m/s", "text_he": "$2$ מ'/ש'", "correct": true },
+        { "id": "c", "text_en": "$6$ m/s", "text_he": "$6$ מ'/ש'", "correct": false },
+        { "id": "d", "text_en": "$4$ m/s", "text_he": "$4$ מ'/ש'", "correct": false }
       ],
-      "explanation_en": "CM momentum is conserved in isolated systems; individual velocities may change (elastic or inelastic).",
-      "explanation_he": "תנע CM נשמר במערכות מבודדות; מהירויות בודדות עשויות להשתנות (אלסטית או פלסטית)."
+      "explanation_en": "$v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2} = \\frac{2(6) + 4(0)}{6} = \\frac{12}{6} = 2$ m/s.",
+      "explanation_he": "$v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2} = \\frac{2(6) + 4(0)}{6} = \\frac{12}{6} = 2$ מ'/ש'."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "Three equal masses placed at $(0,0)$, $(6,0)$, and $(3,3)$. What is $y_{cm}$?",
-      "body_he": "שלוש מסות שוות ב-$(0,0)$, $(6,0)$, ו-$(3,3)$. מה $y_{cm}$?",
+      "body_en": "After a perfectly inelastic collision between the bodies in question 2, the final velocity of the combined mass is:",
+      "body_he": "לאחר התנגשות פלסטית מושלמת בין הגופים בשאלה 2, המהירות הסופית של המסה המאוחדת היא:",
       "options": [
-        { "id": "a", "text_en": "$0$ m", "text_he": "$0$ m", "correct": false },
-        { "id": "b", "text_en": "$1$ m", "text_he": "$1$ m", "correct": true },
-        { "id": "c", "text_en": "$3$ m", "text_he": "$3$ m", "correct": false },
-        { "id": "d", "text_en": "$2$ m", "text_he": "$2$ m", "correct": false }
+        { "id": "a", "text_en": "$3$ m/s", "text_he": "$3$ מ'/ש'", "correct": false },
+        { "id": "b", "text_en": "$2$ m/s", "text_he": "$2$ מ'/ש'", "correct": true },
+        { "id": "c", "text_en": "$1$ m/s", "text_he": "$1$ מ'/ש'", "correct": false },
+        { "id": "d", "text_en": "$0$ m/s", "text_he": "$0$ מ'/ש'", "correct": false }
       ],
-      "explanation_en": "$y_{cm} = \\frac{0 + 0 + 3}{3} = 1$ m (with $m$ equal for each).",
-      "explanation_he": "$y_{cm} = \\frac{0 + 0 + 3}{3} = 1$ m (עם $m$ שווה לכל אחת)."
+      "explanation_en": "In a perfectly inelastic collision, the two bodies stick together. By conservation of momentum, the final velocity equals the CM velocity: $v_f = v_{cm} = 2$ m/s. This always equals the CM velocity of the original system.",
+      "explanation_he": "בהתנגשות פלסטית מושלמת, שני הגופים נדבקים. לפי שימור תנע, המהירות הסופית שווה למהירות מ\"מ: $v_f = v_{cm} = 2$ מ'/ש'. זה תמיד שווה למהירות מ\"מ של המערכת המקורית."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "$m_1 = 4$ kg, $v_1 = 3$ m/s; $m_2 = 2$ kg, $v_2 = 0$. What is $v_{cm}$?",
-      "body_he": "$m_1 = 4$ kg, $v_1 = 3$ m/s; $m_2 = 2$ kg, $v_2 = 0$. מה $v_{cm}$?",
+      "body_en": "A 10 kg and a 40 kg person stand 5 m apart on a frictionless surface. Where is the CM measured from the 10 kg person?",
+      "body_he": "אדם במסה 10 ק\"ג ואדם במסה 40 ק\"ג עומדים במרחק 5 מ' זה מזה על משטח חלק. היכן מ\"מ נמדד מהאדם ה-10 ק\"ג?",
       "options": [
-        { "id": "a", "text_en": "$2$ m/s", "text_he": "$2$ m/s", "correct": true },
-        { "id": "b", "text_en": "$3$ m/s", "text_he": "$3$ m/s", "correct": false },
-        { "id": "c", "text_en": "$1.5$ m/s", "text_he": "$1.5$ m/s", "correct": false },
-        { "id": "d", "text_en": "$6$ m/s", "text_he": "$6$ m/s", "correct": false }
+        { "id": "a", "text_en": "$2.5$ m", "text_he": "$2.5$ מ'", "correct": false },
+        { "id": "b", "text_en": "$4$ m", "text_he": "$4$ מ'", "correct": true },
+        { "id": "c", "text_en": "$1$ m", "text_he": "$1$ מ'", "correct": false },
+        { "id": "d", "text_en": "$3$ m", "text_he": "$3$ מ'", "correct": false }
       ],
-      "explanation_en": "$v_{cm} = \\frac{4(3) + 2(0)}{6} = \\frac{12}{6} = 2$ m/s.",
-      "explanation_he": "$v_{cm} = \\frac{4(3) + 2(0)}{6} = \\frac{12}{6} = 2$ m/s."
+      "explanation_en": "Place 10 kg at $x=0$, 40 kg at $x=5$ m. $x_{cm} = \\frac{10(0)+40(5)}{50} = \\frac{200}{50} = 4$ m. CM is 4 m from the lighter person (near the heavier one).",
+      "explanation_he": "מציבים 10 ק\"ג ב-$x=0$, 40 ק\"ג ב-$x=5$ מ'. $x_{cm} = \\frac{10(0)+40(5)}{50} = \\frac{200}{50} = 4$ מ'. מ\"מ 4 מ' מהאדם הקל (קרוב לכבד)."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "If a heavier object is placed farther from the origin than a lighter one, the CM will be:",
-      "body_he": "אם גוף כבד יותר ממוקם רחוק יותר מהראשית מגוף קל, מרכז המסה יהיה:",
+      "body_en": "In an isolated system, two blocks collide elastically. Before the collision, $v_{cm} = 3$ m/s. After the collision, $v_{cm}$ equals:",
+      "body_he": "במערכת מבודדת, שני בלוקים מתנגשים אלסטית. לפני ההתנגשות, $v_{cm} = 3$ מ'/ש'. אחרי ההתנגשות, $v_{cm}$ שווה:",
       "options": [
-        { "id": "a", "text_en": "At the midpoint between them regardless of mass", "text_he": "באמצע ביניהם ללא קשר למסה", "correct": false },
-        { "id": "b", "text_en": "Closer to the heavier mass but shifted toward the lighter one's side", "text_he": "קרוב למסה הכבדה אך מוסט לכיוון המסה הקלה", "correct": false },
-        { "id": "c", "text_en": "Between them, weighted toward the heavier mass", "text_he": "ביניהם, משוקלל לכיוון המסה הכבדה", "correct": true },
-        { "id": "d", "text_en": "Always at the origin", "text_he": "תמיד בראשית", "correct": false }
+        { "id": "a", "text_en": "$0$ m/s (all kinetic energy is conserved)", "text_he": "$0$ מ'/ש' (כל האנרגיה הקינטית משתמרת)", "correct": false },
+        { "id": "b", "text_en": "$6$ m/s (doubles in elastic collision)", "text_he": "$6$ מ'/ש' (מכפיל בשניים בהתנגשות אלסטית)", "correct": false },
+        { "id": "c", "text_en": "$3$ m/s (unchanged)", "text_he": "$3$ מ'/ש' (לא משתנה)", "correct": true },
+        { "id": "d", "text_en": "depends on the masses", "text_he": "תלוי במסות", "correct": false }
       ],
-      "explanation_en": "CM is a mass-weighted average — always between the masses, pulled toward the larger $m_i$.",
-      "explanation_he": "CM הוא ממוצע משוקלל מסה — תמיד בין המסות, נמשך לכיוון $m_i$ הגדולה יותר."
+      "explanation_en": "In an isolated system, total momentum is conserved in all collisions (elastic or not). Since $v_{cm} = p_{total}/M$ and both $p_{total}$ and $M$ are constant, $v_{cm}$ is always conserved.",
+      "explanation_he": "במערכת מבודדת, התנע הכולל משתמר בכל ההתנגשויות (אלסטיות ולא). מאחר ש-$v_{cm} = p_{total}/M$ וגם $p_{total}$ וגם $M$ קבועים, $v_{cm}$ תמיד משתמר."
     }
   ]
 }

@@ -1,116 +1,116 @@
 {
   "id": "confidence_intervals",
-  "subject": "statistics_probability",
-  "title_en": "Confidence Intervals for the Mean",
-  "title_he": "רווחי סמך לממוצע",
-  "duration_min": 20,
   "type": "interactive",
+  "subject": "statistics_probability",
+  "title_en": "Confidence Intervals — Estimation with Uncertainty",
+  "title_he": "רווחי סמך — אמידה עם אי-ודאות",
+  "duration_min": 20,
   "level_min": "university",
-  "agent_hints": "Distinguish point vs interval estimates clearly. Emphasize correct interpretation: the 95% refers to the method, not that 95% probability the parameter is in one computed interval. Compare z vs t intervals and how sample size and alpha affect width.",
+  "agent_hints": "The most common conceptual error is interpreting a 95% CI as 'the probability that $\\mu$ is in this interval is 95%' — $\\mu$ is a fixed (unknown) constant, not a random variable. The correct interpretation is frequentist: 95% of intervals constructed this way will contain $\\mu$. Students must also know when to use $z$ (known $\\sigma$) vs $t$ (unknown $\\sigma$, small $n$), and understand that wider CI ↔ higher confidence (not higher accuracy).",
   "sections": [
     {
-      "id": "intro",
-      "title_en": "Point vs interval estimation",
-      "title_he": "אמידה נקודתית מול אמידה ברווח",
+      "id": "point_vs_interval",
+      "title_en": "Point Estimate vs Interval Estimate",
+      "title_he": "אמד נקודתי לעומת אמד קטעי",
       "level_min": "university",
-      "body_en_md": "A **point estimate** is a single number summarizing a population parameter (e.g. $\\bar{x}$ estimates $\\mu$).\n\nAn **interval estimate** (confidence interval, CI) gives a range likely to contain the true parameter.\n\n**Interpretation (correct):** \"If we repeated sampling many times and built a CI each time, about 95% of those intervals would contain the true mean $\\mu$.\"\n\n**NOT correct:** \"There is a 95% probability that $\\mu$ lies in this specific interval\" — $\\mu$ is fixed; the interval is random.\n\n**CI width** depends on:\n- $n$ (larger $n$ → narrower)\n- $\\alpha$ (smaller $\\alpha$ → wider, e.g. 99% wider than 95%)\n- $\\sigma$ or $s$ (more variability → wider)",
-      "body_he_md": "**אמידה נקודתית** היא מספר בודד המסכם פרמטר אוכלוסייה (למשל $\\bar{x}$ מעריך $\\mu$).\n\n**אמידה ברווח** (רווח סמך, CI) נותנת טווח שסביר שמכיל את הפרמטר האמיתי.\n\n**פרשנות (נכונה):** \"אם נחזור על דגימה פעמים רבות ונבנה CI בכל פעם, כ-95% מהרווחים יכילו את הממוצע האמיתי $\\mu$.\"\n\n**לא נכון:** \"יש 95% הסתברות ש-$\\mu$ בין גבולות הרווח הספציפי\" — $\\mu$ קבוע; הרווח אקראי.\n\n**רוחב CI** תלוי ב:\n- $n$ (גדול יותר → צר יותר)\n- $\\alpha$ (קטן יותר → רחב יותר, למשל 99% רחב מ-95%)\n- $\\sigma$ או $s$ (פיזור גדול יותר → רחב יותר)"
+      "body_en_md": "A **point estimate** is a single value $\\hat{\\theta}$ used to estimate a parameter $\\theta$. For the population mean $\\mu$, we use the sample mean $\\bar{X}$.\n\nProblem: a point estimate gives no information about its own precision. How close is $\\bar{X}$ to $\\mu$?\n\nAn **interval estimate** (confidence interval) says: the unknown parameter lies in the interval $[L, U]$ with specified confidence.\n\n**Key setup:**\n- Population: any distribution with mean $\\mu$ and standard deviation $\\sigma$\n- Sample: $X_1, \\ldots, X_n$ i.i.d.\n- Sample mean: $\\bar{X} = \\frac{1}{n}\\sum_{i=1}^n X_i$\n- By the CLT: $\\bar{X} \\sim N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right)$ (approximately, for large $n$)\n- Standardized: $Z = \\frac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\sim N(0,1)$",
+      "body_he_md": "**אמד נקודתי** הוא ערך יחיד $\\hat{\\theta}$ המשמש לאמידת הפרמטר $\\theta$. לממוצע האוכלוסייה $\\mu$, משתמשים בממוצע המדגם $\\bar{X}$.\n\nבעיה: אמד נקודתי אינו מספק מידע על הדיוק שלו עצמו. כמה קרוב $\\bar{X}$ ל-$\\mu$?\n\n**אמד קטעי** (רווח סמך) אומר: הפרמטר הלא-ידוע נמצא בקטע $[L, U]$ עם מידת ביטחון נקובה.\n\n**ההגדרה:**\n- אוכלוסייה: התפלגות כלשהי עם ממוצע $\\mu$ וסטיית תקן $\\sigma$\n- מדגם: $X_1, \\ldots, X_n$ בלתי-תלויים\n- ממוצע מדגם: $\\bar{X} = \\frac{1}{n}\\sum_{i=1}^n X_i$\n- לפי מ.ג.מ.: $\\bar{X} \\sim N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right)$ (בקירוב, ל-$n$ גדול)\n- משתנה מנורמל: $Z = \\frac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\sim N(0,1)$"
     },
     {
-      "id": "z_interval",
-      "title_en": "CI when $\\sigma$ is known (z-interval)",
-      "title_he": "רווח סמך כש-$\\sigma$ ידוע (רווח z)",
+      "id": "ci_known_sigma",
+      "title_en": "CI for the Mean — Known $\\sigma$",
+      "title_he": "רווח סמך לממוצע — $\\sigma$ ידוע",
       "level_min": "university",
-      "body_en_md": "When $\\sigma$ is known and the sample is large (or normally distributed):\n\n$$\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$$\n\n$z_{\\alpha/2}$ is the critical value from the standard normal:\n- 95% CI: $z_{0.025} = 1.96$\n- 90% CI: $z_{0.05} = 1.645$\n- 99% CI: $z_{0.005} = 2.576$\n\n**Example:** $\\bar{x} = 50$, $\\sigma = 10$, $n = 100$, 95% CI:\n$$50 \\pm 1.96 \\cdot \\frac{10}{\\sqrt{100}} = 50 \\pm 1.96 = [48.04,\\ 51.96]$$",
-      "body_he_md": "כאשר $\\sigma$ ידוע והדגימה גדולה (או מתפלגת נורמלית):\n\n$$\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$$\n\n$z_{\\alpha/2}$ הוא ערך קריטי מהנורמל הסטандard:\n- רווח 95%: $z_{0.025} = 1.96$\n- רווח 90%: $z_{0.05} = 1.645$\n- רווח 99%: $z_{0.005} = 2.576$\n\n**דוגמה:** $\\bar{x} = 50$, $\\sigma = 10$, $n = 100$, רווח 95%:\n$$50 \\pm 1.96 \\cdot \\frac{10}{\\sqrt{100}} = 50 \\pm 1.96 = [48.04,\\ 51.96]$$"
+      "body_en_md": "When $\\sigma$ is known, a $(1-\\alpha)$ confidence interval for $\\mu$ is:\n$$\\boxed{\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}}$$\n\nwhere $z_{\\alpha/2}$ is the **critical value** such that $P(Z > z_{\\alpha/2}) = \\alpha/2$ for $Z \\sim N(0,1)$.\n\n**Common critical values:**\n| Confidence level | $\\alpha$ | $z_{\\alpha/2}$ |\n|---|---|---|\n| 90% | 0.10 | 1.645 |\n| 95% | 0.05 | 1.960 |\n| 99% | 0.01 | 2.576 |\n\n**Worked example:** $n = 36$, $\\bar{x} = 50$, $\\sigma = 12$. Construct a 95% CI.\n$$50 \\pm 1.96 \\cdot \\frac{12}{\\sqrt{36}} = 50 \\pm 1.96 \\cdot 2 = 50 \\pm 3.92 = (46.08,\\; 53.92).$$\n\n**Margin of error:** $E = z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$. To halve the margin, quadruple the sample size.",
+      "body_he_md": "כאשר $\\sigma$ ידוע, רווח סמך $(1-\\alpha)$ לממוצע $\\mu$:\n$$\\boxed{\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}}$$\n\nכאשר $z_{\\alpha/2}$ הוא **הערך הקריטי** כך ש-$P(Z > z_{\\alpha/2}) = \\alpha/2$ עבור $Z \\sim N(0,1)$.\n\n**ערכים קריטיים נפוצים:**\n| רמת ביטחון | $\\alpha$ | $z_{\\alpha/2}$ |\n|---|---|---|\n| 90% | 0.10 | 1.645 |\n| 95% | 0.05 | 1.960 |\n| 99% | 0.01 | 2.576 |\n\n**דוגמה:** $n = 36$, $\\bar{x} = 50$, $\\sigma = 12$. בנו רווח סמך 95%.\n$$50 \\pm 1.96 \\cdot \\frac{12}{\\sqrt{36}} = 50 \\pm 1.96 \\cdot 2 = 50 \\pm 3.92 = (46.08,\\; 53.92).$$\n\n**שגיאת דגימה:** $E = z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$. כדי לחצות את $E$, יש להכפיל את גודל המדגם פי 4."
     },
     {
-      "id": "t_interval",
-      "title_en": "CI when $\\sigma$ is unknown (t-interval)",
-      "title_he": "רווח סמך כש-$\\sigma$ לא ידוע (רווח t)",
+      "id": "ci_unknown_sigma",
+      "title_en": "CI for the Mean — Unknown $\\sigma$ (Student's $t$)",
+      "title_he": "רווח סמך לממוצע — $\\sigma$ לא ידוע (התפלגות $t$)",
       "level_min": "university",
-      "body_en_md": "When $\\sigma$ is unknown, estimate with sample standard deviation $s$ and use the **t-distribution**:\n\n$$\\bar{x} \\pm t_{\\alpha/2,\\, n-1} \\cdot \\frac{s}{\\sqrt{n}}$$\n\nDegrees of freedom: $\\nu = n - 1$.\n\n**Example:** $\\bar{x} = 48$, $s = 8$, $n = 16$, 95% CI:\n$$t_{0.025,\\,15} \\approx 2.131$$\n$$48 \\pm 2.131 \\cdot \\frac{8}{\\sqrt{16}} = 48 \\pm 4.262 = [43.74,\\ 52.26]$$\n\nAs $n \\to \\infty$, $t \\to z$. Use t whenever $s$ replaces $\\sigma$.",
-      "body_he_md": "כאשר $\\sigma$ לא ידוע, מעריכים עם סטיית תקן מדגמית $s$ ומשתמשים ב**התפלגות t**:\n\n$$\\bar{x} \\pm t_{\\alpha/2,\\, n-1} \\cdot \\frac{s}{\\sqrt{n}}$$\n\nמעלות חופש: $\\nu = n - 1$.\n\n**דוגמה:** $\\bar{x} = 48$, $s = 8$, $n = 16$, רווח 95%:\n$$t_{0.025,\\,15} \\approx 2.131$$\n$$48 \\pm 2.131 \\cdot \\frac{8}{\\sqrt{16}} = 48 \\pm 4.262 = [43.74,\\ 52.26]$$\n\nכאשר $n \\to \\infty$, $t \\to z$. משתמשים ב-t whenever $s$ מחליף $\\sigma$."
+      "body_en_md": "When $\\sigma$ is **unknown**, replace it with the sample standard deviation $s$ and use the **$t$-distribution**:\n$$\\boxed{\\bar{x} \\pm t_{\\alpha/2,\\, n-1} \\cdot \\frac{s}{\\sqrt{n}}}$$\n\nwhere $t_{\\alpha/2, n-1}$ is the critical value of the $t$-distribution with $n-1$ **degrees of freedom**.\n\n**Key facts:**\n- The $t$-distribution is bell-shaped but heavier-tailed than $N(0,1)$\n- As $n \\to \\infty$, the $t$-distribution approaches $N(0,1)$\n- For $n > 30$ (rule of thumb), $z_{\\alpha/2} \\approx t_{\\alpha/2, n-1}$\n\n**Worked example:** $n = 10$, $\\bar{x} = 75$, $s = 8$, 95% CI.\n$$t_{0.025, 9} = 2.262 \\quad \\text{(from $t$-table)}.$$\n$$75 \\pm 2.262 \\cdot \\frac{8}{\\sqrt{10}} = 75 \\pm 5.72 = (69.28,\\; 80.72).$$",
+      "body_he_md": "כאשר $\\sigma$ **לא ידוע**, מחליפים אותו בסטיית התקן של המדגם $s$ ומשתמשים ב**התפלגות $t$**:\n$$\\boxed{\\bar{x} \\pm t_{\\alpha/2,\\, n-1} \\cdot \\frac{s}{\\sqrt{n}}}$$\n\nכאשר $t_{\\alpha/2, n-1}$ הוא הערך הקריטי של התפלגות $t$ עם $n-1$ **דרגות חופש**.\n\n**עובדות מרכזיות:**\n- התפלגות $t$ בעלת צורת פעמון אך עם זנבות כבדים יותר מ-$N(0,1)$\n- כאשר $n \\to \\infty$, התפלגות $t$ מתקרבת ל-$N(0,1)$\n- ל-$n > 30$ (כלל אצבע), $z_{\\alpha/2} \\approx t_{\\alpha/2, n-1}$\n\n**דוגמה:** $n = 10$, $\\bar{x} = 75$, $s = 8$, רווח סמך 95%.\n$$t_{0.025, 9} = 2.262 \\quad \\text{(מטבלת $t$)}.$$\n$$75 \\pm 2.262 \\cdot \\frac{8}{\\sqrt{10}} = 75 \\pm 5.72 = (69.28,\\; 80.72).$$"
     },
     {
-      "id": "summary",
-      "title_en": "Summary",
-      "title_he": "סיכום",
+      "id": "interpretation",
+      "title_en": "Correct Interpretation and Width Factors",
+      "title_he": "פרשנות נכונה וגורמים המשפיעים על הרוחב",
       "level_min": "university",
-      "body_en_md": "| Situation | Formula | Critical value |\n|-----------|---------|----------------|\n| $\\sigma$ known | $\\bar{x} \\pm z_{\\alpha/2} \\frac{\\sigma}{\\sqrt{n}}$ | $z$ from $N(0,1)$ |\n| $\\sigma$ unknown | $\\bar{x} \\pm t_{\\alpha/2,n-1} \\frac{s}{\\sqrt{n}}$ | $t$ with $n-1$ df |\n\n- Width $\\propto 1/\\sqrt{n}$.\n- Higher confidence → wider interval.\n- Interpret CI as a property of the **procedure**, not a single interval.",
-      "body_he_md": "| מצב | נוסחה | ערך קריטי |\n|-----|-------|----------|\n| $\\sigma$ ידוע | $\\bar{x} \\pm z_{\\alpha/2} \\frac{\\sigma}{\\sqrt{n}}$ | $z$ מ-$N(0,1)$ |\n| $\\sigma$ לא ידוע | $\\bar{x} \\pm t_{\\alpha/2,n-1} \\frac{s}{\\sqrt{n}}$ | $t$ עם $n-1$ df |\n\n- רוחב $\\propto 1/\\sqrt{n}$.\n- רמת ביטחון גבוהה יותר → רווח רחב יותר.\n- פרשו CI כתכונה של **השיטה**, לא רווח בודד."
+      "body_en_md": "### Correct interpretation\n\n**A 95% CI does NOT mean:** \"There is a 95% probability that $\\mu$ is in this interval.\"\n\n**It means:** If we repeated the sampling process many times and constructed a 95% CI each time, 95% of those intervals would contain $\\mu$. The parameter $\\mu$ is fixed; the interval is random.\n\n### Width of a CI\n\n$$\\text{Width} = 2z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$$\n\n| To **narrow** the CI | To **widen** the CI |\n|---|---|\n| Increase $n$ | Decrease $n$ |\n| Decrease confidence level | Increase confidence level |\n| Decrease $\\sigma$ (better instrument) | — |",
+      "body_he_md": "### פרשנות נכונה\n\n**רווח סמך 95% אינו אומר:** \"ההסתברות שהפרמטר $\\mu$ נמצא בקטע זה היא 95%.\"\n\n**הוא אומר:** אם נחזור על תהליך הדגימה פעמים רבות ונבנה בכל פעם רווח סמך 95%, אז 95% מאותם קטעים יכילו את $\\mu$. הפרמטר $\\mu$ קבוע; הקטע הוא משתנה מקרי.\n\n### רוחב רווח הסמך\n\n$$\\text{רוחב} = 2z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$$\n\n| לצמצם את הרווח | להרחיב את הרווח |\n|---|---|\n| הגדלת $n$ | הקטנת $n$ |\n| הקטנת רמת הביטחון | הגדלת רמת הביטחון |\n| הקטנת $\\sigma$ (מכשיר מדויק יותר) | — |"
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "A 95% confidence interval for $\\mu$ means:",
-      "body_he": "רווח סמך 95% עבור $\\mu$ פירושו:",
+      "body_en": "A 95% CI for $\\mu$ is $(42, 58)$. Which interpretation is correct?",
+      "body_he": "רווח סמך 95% לממוצע $\\mu$ הוא $(42, 58)$. איזו פרשנות נכונה?",
       "options": [
-        { "id": "a", "text_en": "95% of sample means fall in the interval", "text_he": "95% מממוצעי הדגימה נופלים ברווח", "correct": false },
-        { "id": "b", "text_en": "About 95% of similarly constructed intervals contain $\\mu$", "text_he": "כ-95% מרווחים שנבנו באופן דומה מכילים את $\\mu$", "correct": true },
-        { "id": "c", "text_en": "$\\mu$ has a 95% probability of being in this interval", "text_he": "ל-$\\mu$ יש 95% הסתברות להיות ברווח זה", "correct": false },
-        { "id": "d", "text_en": "We are 95% sure $\\bar{x} = \\mu$", "text_he": "אנחנו בטוחים ב-95% ש-$\\bar{x} = \\mu$", "correct": false }
+        { "id": "a", "text_en": "There is a 95% probability that $\\mu$ lies between 42 and 58.", "text_he": "ההסתברות ש-$\\mu$ נמצא בין 42 ל-58 היא 95%.", "correct": false },
+        { "id": "b", "text_en": "95% of the data values lie between 42 and 58.", "text_he": "95% מערכי הנתונים נמצאים בין 42 ל-58.", "correct": false },
+        { "id": "c", "text_en": "If we repeated sampling many times, 95% of such intervals would contain $\\mu$.", "text_he": "אם נחזור על הדגימה פעמים רבות, 95% מהקטעים כאלה יכילו את $\\mu$.", "correct": true },
+        { "id": "d", "text_en": "The sample mean $\\bar{x}$ lies between 42 and 58 with probability 95%.", "text_he": "ממוצע המדגם $\\bar{x}$ נמצא בין 42 ל-58 בהסתברות 95%.", "correct": false }
       ],
-      "explanation_en": "Confidence level describes the long-run success rate of the interval-building method, not a probability about one fixed interval.",
-      "explanation_he": "רמת הביטחון מתארת את שיעור ההצלחה לטווח ארוך של שיטת בניית הרווח, לא הסתברות על רווח בודד קבוע."
+      "explanation_en": "The parameter $\\mu$ is fixed (not random), so it cannot have a probability of being in an interval. The correct interpretation is frequentist: 95% of all confidence intervals constructed by this procedure will contain $\\mu$.",
+      "explanation_he": "הפרמטר $\\mu$ קבוע (אינו מקרי), לכן אין לו הסתברות להיות בתוך קטע. הפרשנות הנכונה היא תדרתנית: 95% מרווחי הסמך שיבנו בשיטה זו יכילו את $\\mu$."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "With $\\bar{x} = 100$, $\\sigma = 20$, $n = 64$, the 95% CI is:",
-      "body_he": "עם $\\bar{x} = 100$, $\\sigma = 20$, $n = 64$, רווח הסמך 95% הוא:",
+      "body_en": "A 95% CI is constructed with $n = 100$. If $n$ is increased to $400$, the width of the CI:",
+      "body_he": "רווח סמך 95% בנוי עם $n = 100$. אם $n$ גדל ל-$400$, רוחב הרווח:",
       "options": [
-        { "id": "a", "text_en": "$100 \\pm 4.9$", "text_he": "$100 \\pm 4.9$", "correct": true },
-        { "id": "b", "text_en": "$100 \\pm 19.6$", "text_he": "$100 \\pm 19.6$", "correct": false },
-        { "id": "c", "text_en": "$100 \\pm 2.5$", "text_he": "$100 \\pm 2.5$", "correct": false },
-        { "id": "d", "text_en": "$100 \\pm 39.2$", "text_he": "$100 \\pm 39.2$", "correct": false }
+        { "id": "a", "text_en": "stays the same", "text_he": "נשאר זהה", "correct": false },
+        { "id": "b", "text_en": "doubles", "text_he": "מכפיל בשניים", "correct": false },
+        { "id": "c", "text_en": "is halved", "text_he": "מחצית", "correct": true },
+        { "id": "d", "text_en": "is divided by 4", "text_he": "מחולק בארבע", "correct": false }
       ],
-      "explanation_en": "$100 \\pm 1.96 \\cdot \\frac{20}{\\sqrt{64}} = 100 \\pm 1.96 \\cdot 2.5 = 100 \\pm 4.9$.",
-      "explanation_he": "$100 \\pm 1.96 \\cdot \\frac{20}{\\sqrt{64}} = 100 \\pm 1.96 \\cdot 2.5 = 100 \\pm 4.9$."
+      "explanation_en": "Width $\\propto 1/\\sqrt{n}$. Increasing $n$ by a factor of 4 multiplies width by $1/\\sqrt{4} = 1/2$. So the width is halved.",
+      "explanation_he": "רוחב $\\propto 1/\\sqrt{n}$. הגדלת $n$ פי 4 מכפילה את הרוחב ב-$1/\\sqrt{4} = 1/2$. לכן הרוחב מתחצה."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "When $\\sigma$ is unknown and $n = 25$, which critical value should be used for a 95% CI?",
-      "body_he": "כאשר $\\sigma$ לא ידוע ו-$n = 25$, איזה ערך קריטי יש להשתמש לרווח 95%?",
+      "body_en": "When should a $t$-distribution be used instead of the standard normal for a CI on $\\mu$?",
+      "body_he": "מתי יש להשתמש בהתפלגות $t$ במקום הנורמל הסטנדרטי לרווח סמך לממוצע?",
       "options": [
-        { "id": "a", "text_en": "$z_{0.025} = 1.96$", "text_he": "$z_{0.025} = 1.96$", "correct": false },
-        { "id": "b", "text_en": "$t_{0.025,\\,24}$", "text_he": "$t_{0.025,\\,24}$", "correct": true },
-        { "id": "c", "text_en": "$t_{0.05,\\,25}$", "text_he": "$t_{0.05,\\,25}$", "correct": false },
-        { "id": "d", "text_en": "$z_{0.05} = 1.645$", "text_he": "$z_{0.05} = 1.645$", "correct": false }
+        { "id": "a", "text_en": "When $n > 30$", "text_he": "כאשר $n > 30$", "correct": false },
+        { "id": "b", "text_en": "When $\\sigma$ is unknown and $n$ is small (or the population is approximately normal)", "text_he": "כאשר $\\sigma$ לא ידוע ו-$n$ קטן (או האוכלוסייה בערך נורמלית)", "correct": true },
+        { "id": "c", "text_en": "When the sample is biased", "text_he": "כאשר המדגם מוטה", "correct": false },
+        { "id": "d", "text_en": "Only when $n < 5$", "text_he": "רק כאשר $n < 5$", "correct": false }
       ],
-      "explanation_en": "Use t with $n-1 = 24$ degrees of freedom when $\\sigma$ is unknown, even for moderate $n$.",
-      "explanation_he": "משתמשים ב-t עם $n-1 = 24$ מעלות חופש כאשר $\\sigma$ לא ידוע, גם ל-$n$ בינוני."
+      "explanation_en": "The $t$-distribution is used when $\\sigma$ is unknown and we estimate it by $s$. For large $n$ (rule of thumb: $n > 30$), the $t$-distribution is approximately normal, but the $t$ procedure is always valid for normal populations regardless of $n$.",
+      "explanation_he": "התפלגות $t$ משמשת כאשר $\\sigma$ לא ידוע ומאמדים אותו על-ידי $s$. ל-$n$ גדול (כלל אצבע: $n > 30$), התפלגות $t$ מתקרבת לנורמלית, אך נוהל $t$ תמיד תקף לאוכלוסיות נורמליות ללא תלות ב-$n$."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Holding $\\bar{x}$, $s$, and $\\alpha$ fixed, what happens to CI width when $n$ quadruples?",
-      "body_he": "בהחזקת $\\bar{x}$, $s$, ו-$\\alpha$ קבועים, מה קורה לרוחב CI כאשר $n$ מוכפל פי 4?",
+      "body_en": "A sample of $n=25$ gives $\\bar{x} = 80$, $s = 10$. The 95% CI for $\\mu$ (with $t_{0.025, 24} = 2.064$) is:",
+      "body_he": "מדגם עם $n=25$ נותן $\\bar{x} = 80$, $s = 10$. רווח הסמך 95% לממוצע $\\mu$ (עם $t_{0.025, 24} = 2.064$) הוא:",
       "options": [
-        { "id": "a", "text_en": "Width is halved", "text_he": "הרוחב מתחצה", "correct": true },
-        { "id": "b", "text_en": "Width is quartered", "text_he": "הרוחב מתרבע", "correct": false },
-        { "id": "c", "text_en": "Width doubles", "text_he": "הרוחב מוכפל", "correct": false },
-        { "id": "d", "text_en": "Width stays the same", "text_he": "הרוחב נשאר זהה", "correct": false }
+        { "id": "a", "text_en": "$(76.1,\\; 83.9)$", "text_he": "$(76.1,\\; 83.9)$", "correct": false },
+        { "id": "b", "text_en": "$(75.87,\\; 84.13)$", "text_he": "$(75.87,\\; 84.13)$", "correct": true },
+        { "id": "c", "text_en": "$(78,\\; 82)$", "text_he": "$(78,\\; 82)$", "correct": false },
+        { "id": "d", "text_en": "$(76.9,\\; 83.1)$", "text_he": "$(76.9,\\; 83.1)$", "correct": false }
       ],
-      "explanation_en": "Margin of error $\\propto 1/\\sqrt{n}$. If $n \\to 4n$, then $1/\\sqrt{n} \\to 1/(2\\sqrt{n})$ — width halves.",
-      "explanation_he": "גבול שגיאה $\\propto 1/\\sqrt{n}$. אם $n \\to 4n$, אז $1/\\sqrt{n} \\to 1/(2\\sqrt{n})$ — הרוחב מתחצה."
+      "explanation_en": "$E = t_{0.025,24} \\cdot s/\\sqrt{n} = 2.064 \\times 10/5 = 2.064 \\times 2 = 4.128$. CI: $(80 - 4.128, 80 + 4.128) = (75.872, 84.128) \\approx (75.87, 84.13)$.",
+      "explanation_he": "$E = t_{0.025,24} \\cdot s/\\sqrt{n} = 2.064 \\times 10/5 = 2.064 \\times 2 = 4.128$. רווח: $(80 - 4.128, 80 + 4.128) \\approx (75.87, 84.13)$."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Compared to a 95% CI, a 99% CI for the same data will be:",
-      "body_he": "בהשוואה לרווח 95%, רווח 99% לאותם נתונים יהיה:",
+      "body_en": "Increasing the confidence level from 95% to 99% (all else equal) causes the CI to:",
+      "body_he": "העלאת רמת הביטחון מ-95% ל-99% (כל השאר שווה) גורמת לרווח הסמך:",
       "options": [
-        { "id": "a", "text_en": "Narrower", "text_he": "צר יותר", "correct": false },
-        { "id": "b", "text_en": "Wider", "text_he": "רחב יותר", "correct": true },
-        { "id": "c", "text_en": "Same width", "text_he": "באותו רוחב", "correct": false },
-        { "id": "d", "text_en": "Centered at a different $\\bar{x}$", "text_he": "ממורכז ב-$\\bar{x}$ שונה", "correct": false }
+        { "id": "a", "text_en": "become narrower", "text_he": "להיות צר יותר", "correct": false },
+        { "id": "b", "text_en": "become wider", "text_he": "להיות רחב יותר", "correct": true },
+        { "id": "c", "text_en": "stay the same width", "text_he": "להישאר ברוחב זהה", "correct": false },
+        { "id": "d", "text_en": "have higher precision", "text_he": "לקבל דיוק גבוה יותר", "correct": false }
       ],
-      "explanation_en": "Higher confidence requires a larger critical value ($z_{0.005} > z_{0.025}$), widening the interval.",
-      "explanation_he": "רמת ביטחון גבוהה יותר דורשת ערך קריטי גדול יותר ($z_{0.005} > z_{0.025}$), ומרחיבה את הרווח."
+      "explanation_en": "Higher confidence means the critical value $z_{\\alpha/2}$ increases (from 1.96 to 2.576), which increases the margin of error and thus widens the interval. More confidence costs precision.",
+      "explanation_he": "ביטחון גבוה יותר פירושו שהערך הקריטי $z_{\\alpha/2}$ גדל (מ-1.96 ל-2.576), מה שמגדיל את שגיאת הדגימה ומרחיב את הקטע. יותר ביטחון עולה בדיוק."
     }
   ]
 }

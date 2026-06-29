@@ -1,216 +1,108 @@
 {
   "id": "vectors_plane",
+  "type": "interactive",
   "subject": "high_school_math_4pt",
   "title_en": "Vectors in the Plane",
   "title_he": "וקטורים במישור",
   "duration_min": 20,
-  "type": "interactive",
   "level_min": "4pt",
-  "agent_hints": "Keep this computational for Bagrut 472: represent vectors as ordered pairs, compute magnitude and dot product, find angles and perpendicularity. Emphasize that dot product zero means perpendicular. No abstract vector-space theory.",
+  "agent_hints": "At the 4pt level, vectors are treated computationally — no abstract theory. Students must perform addition, scalar multiplication, find magnitudes, and compute dot products. The main conceptual connection is between the dot product formula $\\vec{a}\\cdot\\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta$ and perpendicularity (dot product = 0). Keep examples grounded in geometric interpretations (displacement, force direction).",
   "sections": [
     {
-      "id": "basics",
-      "title_en": "Vectors as directed segments",
-      "title_he": "וקטורים כקטעים מכוונים",
+      "id": "intro",
+      "title_en": "What Is a Vector?",
+      "title_he": "מהו וקטור?",
       "level_min": "4pt",
-      "body_en_md": "A **vector** in the plane is a directed segment with **magnitude** (length) and **direction**.\n\nWe represent a vector by an ordered pair:\n$$\\vec{v} = (a, b)$$\nwhere $a$ is the horizontal component and $b$ the vertical component.\n\n**Magnitude (length):**\n$$|\\vec{v}| = \\sqrt{a^2 + b^2}$$\n\n**Example:** For $\\vec{v} = (3, -4)$:\n$$|\\vec{v}| = \\sqrt{3^2 + (-4)^2} = \\sqrt{9 + 16} = 5$$\n\nTwo vectors are **equal** if they have the same components — position does not matter.",
-      "body_he_md": "**וקטור** במישור הוא קטע מכוון עם **אורך** (גודל) ו**כיוון**.\n\nמייצגים וקטור כזוג סדור:\n$$\\vec{v} = (a, b)$$\nכאשר $a$ הוא הרכיב האופקי ו-$b$ הרכיב האנכי.\n\n**אורך (גודל):**\n$$|\\vec{v}| = \\sqrt{a^2 + b^2}$$\n\n**דוגמה:** עבור $\\vec{v} = (3, -4)$:\n$$|\\vec{v}| = \\sqrt{3^2 + (-4)^2} = \\sqrt{9 + 16} = 5$$\n\nשני וקטורים **שווים** אם הרכיבים שלהם זהים — מיקום ההתחלה לא משנה."
+      "body_en_md": "A **vector** is a quantity with both **magnitude** (length) and **direction**. It is represented as a directed segment or as an ordered pair $(a, b)$ in the coordinate plane.\n\n**Representation:**\n- As a pair: $\\vec{v} = (3, 4)$ — component form\n- As a directed segment: from point $A$ to point $B$, written $\\overrightarrow{AB}$\n\n**Key vocabulary:**\n- **Magnitude** (length): $|\\vec{v}| = \\sqrt{a^2 + b^2}$\n- **Unit vector:** a vector with magnitude 1\n- **Zero vector:** $\\vec{0} = (0, 0)$, magnitude 0\n- **Equal vectors:** same direction AND same magnitude\n- **Opposite vectors:** $-\\vec{v} = (-a, -b)$\n\n**Example:** $\\vec{v} = (3, 4)$. Magnitude: $|\\vec{v}| = \\sqrt{9+16} = \\sqrt{25} = 5$.",
+      "body_he_md": "**וקטור** הוא גודל בעל **עוצמה** (אורך) וגם **כיוון**. הוא מיוצג כקטע מכוון או כזוג מסודר $(a, b)$ במישור הקואורדינטות.\n\n**ייצוג:**\n- כזוג: $\\vec{v} = (3, 4)$ — צורת רכיבים\n- כקטע מכוון: מנקודה $A$ לנקודה $B$, מסומן $\\overrightarrow{AB}$\n\n**מילות מפתח:**\n- **עוצמה** (אורך): $|\\vec{v}| = \\sqrt{a^2 + b^2}$\n- **וקטור יחידה:** וקטור בעל עוצמה 1\n- **וקטור האפס:** $\\vec{0} = (0, 0)$, עוצמה 0\n- **וקטורים שווים:** אותו כיוון ואותה עוצמה\n- **וקטורים הפוכים:** $-\\vec{v} = (-a, -b)$\n\n**דוגמה:** $\\vec{v} = (3, 4)$. עוצמה: $|\\vec{v}| = \\sqrt{9+16} = \\sqrt{25} = 5$."
     },
     {
       "id": "operations",
-      "title_en": "Vector operations",
+      "title_en": "Vector Operations",
       "title_he": "פעולות על וקטורים",
       "level_min": "4pt",
-      "body_en_md": "**Addition:** add component-wise.\n$$\\vec{u} + \\vec{v} = (a_1 + a_2,\\; b_1 + b_2)$$\n\n**Subtraction:**\n$$\\vec{u} - \\vec{v} = (a_1 - a_2,\\; b_1 - b_2)$$\n\n**Scalar multiplication** by number $k$:\n$$k\\vec{v} = (ka,\\; kb)$$\n\n**Examples:**\n- $(2, 1) + (-1, 3) = (1, 4)$\n- $3(1, -2) = (3, -6)$\n- $(5, 0) - (2, 3) = (3, -3)$\n\nGeometrically, $\\vec{u} + \\vec{v}$ follows the **parallelogram rule** (or tip-to-tail).",
-      "body_he_md": "**חיבור:** מחברים רכיב-רכיב.\n$$\\vec{u} + \\vec{v} = (a_1 + a_2,\\; b_1 + b_2)$$\n\n**חיסור:**\n$$\\vec{u} - \\vec{v} = (a_1 - a_2,\\; b_1 - b_2)$$\n\n**כפל בסקלר** במספר $k$:\n$$k\\vec{v} = (ka,\\; kb)$$\n\n**דוגמאות:**\n- $(2, 1) + (-1, 3) = (1, 4)$\n- $3(1, -2) = (3, -6)$\n- $(5, 0) - (2, 3) = (3, -3)$\n\nבגיאומטריה, $\\vec{u} + \\vec{v}$ נבנה לפי **כלל המקבילית** (או ראש-לזנב)."
+      "body_en_md": "**Addition** (tip-to-tail rule or component-wise):\n$$(a_1, b_1) + (a_2, b_2) = (a_1 + a_2, \\; b_1 + b_2).$$\n\n**Subtraction:**\n$$(a_1, b_1) - (a_2, b_2) = (a_1 - a_2, \\; b_1 - b_2).$$\n\n**Scalar multiplication** by $c \\in \\mathbb{R}$:\n$$c(a, b) = (ca, cb).$$\nScaling: multiplies magnitude by $|c|$; reverses direction if $c < 0$.\n\n**Worked examples:** Let $\\vec{u} = (1, 3)$, $\\vec{v} = (4, -2)$.\n- $\\vec{u} + \\vec{v} = (5, 1)$\n- $\\vec{u} - \\vec{v} = (-3, 5)$\n- $3\\vec{u} = (3, 9)$\n- $-\\vec{v} = (-4, 2)$\n- $|\\vec{u} + \\vec{v}| = |(5,1)| = \\sqrt{26}$",
+      "body_he_md": "**חיבור** (כלל קצה-זנב או לפי רכיבים):\n$$(a_1, b_1) + (a_2, b_2) = (a_1 + a_2, \\; b_1 + b_2).$$\n\n**חיסור:**\n$$(a_1, b_1) - (a_2, b_2) = (a_1 - a_2, \\; b_1 - b_2).$$\n\n**כפל בסקלר** $c \\in \\mathbb{R}$:\n$$c(a, b) = (ca, cb).$$\nהגדלה: מכפיל עוצמה ב-$|c|$; הופך כיוון אם $c < 0$.\n\n**דוגמאות:** נניח $\\vec{u} = (1, 3)$, $\\vec{v} = (4, -2)$.\n- $\\vec{u} + \\vec{v} = (5, 1)$\n- $\\vec{u} - \\vec{v} = (-3, 5)$\n- $3\\vec{u} = (3, 9)$\n- $-\\vec{v} = (-4, 2)$\n- $|\\vec{u} + \\vec{v}| = |(5,1)| = \\sqrt{26}$"
     },
     {
       "id": "dot_product",
-      "title_en": "Dot product and angle",
-      "title_he": "מכפלה סקלרית וזווית",
+      "title_en": "Dot Product and Angle Between Vectors",
+      "title_he": "מכפלה סקלרית וזווית בין וקטורים",
       "level_min": "4pt",
-      "body_en_md": "For $\\vec{a} = (a_1, a_2)$ and $\\vec{b} = (b_1, b_2)$ in $\\mathbb{R}^2$:\n\n**Algebraic dot product:**\n$$\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2$$\n\n**Geometric form:**\n$$\\vec{a} \\cdot \\vec{b} = |\\vec{a}|\\,|\\vec{b}|\\cos\\theta$$\nwhere $\\theta$ is the angle between them ($0° \\leq \\theta \\leq 180°$).\n\n**Angle formula:**\n$$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}|\\,|\\vec{b}|}$$\n\n**Perpendicular vectors:** $\\vec{a} \\perp \\vec{b}$ iff $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**Example:** $(3, 4) \\cdot (4, -3) = 12 - 12 = 0$, so the vectors are perpendicular.",
-      "body_he_md": "עבור $\\vec{a} = (a_1, a_2)$ ו-$\\vec{b} = (b_1, b_2)$ ב-$\\mathbb{R}^2$:\n\n**מכפלה סקלרית אלגברית:**\n$$\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2$$\n\n**צורה גיאומטרית:**\n$$\\vec{a} \\cdot \\vec{b} = |\\vec{a}|\\,|\\vec{b}|\\cos\\theta$$\nכאשר $\\theta$ היא הזווית ביניהם ($0° \\leq \\theta \\leq 180°$).\n\n**נוסחת זווית:**\n$$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}|\\,|\\vec{b}|}$$\n\n**וקטורים ניצבים:** $\\vec{a} \\perp \\vec{b}$ אם ורק אם $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**דוגמה:** $(3, 4) \\cdot (4, -3) = 12 - 12 = 0$, ולכן הוקטורים ניצבים."
-    },
-    {
-      "id": "worked_examples",
-      "title_en": "Bagrut-style worked examples",
-      "title_he": "דוגמאות מעשיות בסגנון בגרות",
-      "level_min": "4pt",
-      "body_en_md": "**Problem 1:** Find $k$ such that $(2, k) \\perp (3, -6)$.\n\nSet dot product to zero:\n$$2 \\cdot 3 + k \\cdot (-6) = 0 \\Rightarrow 6 - 6k = 0 \\Rightarrow k = 1$$\n\n**Problem 2:** Find the angle between $(1, 0)$ and $(0, 1)$.\n\nDot product $= 0$, magnitudes both $= 1$:\n$$\\cos\\theta = 0 \\Rightarrow \\theta = 90°$$\n\n**Problem 3:** Find the angle between $(1, 1)$ and $(1, 0)$.\n\n$\\vec{a} \\cdot \\vec{b} = 1$, $|\\vec{a}| = \\sqrt{2}$, $|\\vec{b}| = 1$:\n$$\\cos\\theta = \\frac{1}{\\sqrt{2}} \\Rightarrow \\theta = 45°$$\n\n**Problem 4:** Unit vector in direction of $(3, 4)$:\n$$\\hat{u} = \\frac{(3, 4)}{5} = \\left(\\frac{3}{5}, \\frac{4}{5}\\right)$$",
-      "body_he_md": "**בעיה 1:** מצאו $k$ כך ש-$(2, k) \\perp (3, -6)$.\n\nנשווה מכפלה סקלרית לאפס:\n$$2 \\cdot 3 + k \\cdot (-6) = 0 \\Rightarrow 6 - 6k = 0 \\Rightarrow k = 1$$\n\n**בעיה 2:** מצאו את הזווית בין $(1, 0)$ ל-$(0, 1)$.\n\nמכפלה סקלרית $= 0$, אורכים $= 1$:\n$$\\cos\\theta = 0 \\Rightarrow \\theta = 90°$$\n\n**בעיה 3:** מצאו את הזווית בין $(1, 1)$ ל-$(1, 0)$.\n\n$\\vec{a} \\cdot \\vec{b} = 1$, $|\\vec{a}| = \\sqrt{2}$, $|\\vec{b}| = 1$:\n$$\\cos\\theta = \\frac{1}{\\sqrt{2}} \\Rightarrow \\theta = 45°$$\n\n**בעיה 4:** וקטור יחידה בכיוון $(3, 4)$:\n$$\\hat{u} = \\frac{(3, 4)}{5} = \\left(\\frac{3}{5}, \\frac{4}{5}\\right)$$"
+      "body_en_md": "The **dot product** of $\\vec{a} = (a_1, a_2)$ and $\\vec{b} = (b_1, b_2)$:\n$$\\boxed{\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2.}$$\n\nNote: the result is a **scalar**, not a vector.\n\n**Geometric meaning:**\n$$\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta,$$\nwhere $\\theta$ is the angle between the vectors.\n\n**Finding the angle:**\n$$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}.$$\n\n**Perpendicular vectors:** $\\vec{a} \\perp \\vec{b}$ if and only if $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**Worked example:** Find the angle between $\\vec{a} = (3, 0)$ and $\\vec{b} = (1, 1)$.\n$$\\vec{a}\\cdot\\vec{b} = 3, \\quad |\\vec{a}| = 3, \\quad |\\vec{b}| = \\sqrt{2}.$$\n$$\\cos\\theta = \\frac{3}{3\\sqrt{2}} = \\frac{1}{\\sqrt{2}} \\Rightarrow \\theta = 45°.$$",
+      "body_he_md": "**המכפלה הסקלרית** של $\\vec{a} = (a_1, a_2)$ ו-$\\vec{b} = (b_1, b_2)$:\n$$\\boxed{\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2.}$$\n\nשימו לב: התוצאה היא **סקלר**, לא וקטור.\n\n**משמעות גיאומטרית:**\n$$\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta,$$\nכאשר $\\theta$ הוא הזווית בין הוקטורים.\n\n**מציאת הזווית:**\n$$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}.$$\n\n**וקטורים ניצבים:** $\\vec{a} \\perp \\vec{b}$ אם ורק אם $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**דוגמה:** מצאו את הזווית בין $\\vec{a} = (3, 0)$ ו-$\\vec{b} = (1, 1)$.\n$$\\vec{a}\\cdot\\vec{b} = 3, \\quad |\\vec{a}| = 3, \\quad |\\vec{b}| = \\sqrt{2}.$$\n$$\\cos\\theta = \\frac{3}{3\\sqrt{2}} = \\frac{1}{\\sqrt{2}} \\Rightarrow \\theta = 45°.$$"
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "mcq",
-      "body_en": "What is the magnitude of $\\vec{v} = (3, -4)$?",
-      "body_he": "מהו האורך של $\\vec{v} = (3, -4)$?",
+      "body_en": "What is the magnitude of the vector $\\vec{v} = (5, -12)$?",
+      "body_he": "מהי עוצמת הוקטור $\\vec{v} = (5, -12)$?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "$5$",
-          "text_he": "$5$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$7$",
-          "text_he": "$7$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$1$",
-          "text_he": "$1$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$25$",
-          "text_he": "$25$",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$7$", "text_he": "$7$", "correct": false },
+        { "id": "b", "text_en": "$13$", "text_he": "$13$", "correct": true },
+        { "id": "c", "text_en": "$17$", "text_he": "$17$", "correct": false },
+        { "id": "d", "text_en": "$\\sqrt{7}$", "text_he": "$\\sqrt{7}$", "correct": false }
       ],
-      "explanation_en": "$|\\vec{v}| = \\sqrt{3^2 + (-4)^2} = \\sqrt{25} = 5$.",
-      "explanation_he": "$|\\vec{v}| = \\sqrt{3^2 + (-4)^2} = \\sqrt{25} = 5$."
+      "explanation_en": "$|\\vec{v}| = \\sqrt{5^2 + (-12)^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13$. This is a 5-12-13 Pythagorean triple.",
+      "explanation_he": "$|\\vec{v}| = \\sqrt{5^2 + (-12)^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13$. זהו שלשה פיתגורית 5-12-13."
     },
     {
       "id": "q2",
       "type": "mcq",
-      "body_en": "Compute $(2, 1) + (-1, 3)$.",
-      "body_he": "חשבו $(2, 1) + (-1, 3)$.",
+      "body_en": "Given $\\vec{u} = (2, 5)$ and $\\vec{v} = (-1, 3)$, what is $\\vec{u} - 2\\vec{v}$?",
+      "body_he": "בהינתן $\\vec{u} = (2, 5)$ ו-$\\vec{v} = (-1, 3)$, מהו $\\vec{u} - 2\\vec{v}$?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "$(1, 4)$",
-          "text_he": "$(1, 4)$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$(3, 4)$",
-          "text_he": "$(3, 4)$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$(1, -2)$",
-          "text_he": "$(1, -2)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$(-2, 3)$",
-          "text_he": "$(-2, 3)$",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$(0, 11)$", "text_he": "$(0, 11)$", "correct": false },
+        { "id": "b", "text_en": "$(4, -1)$", "text_he": "$(4, -1)$", "correct": true },
+        { "id": "c", "text_en": "$(0, -1)$", "text_he": "$(0, -1)$", "correct": false },
+        { "id": "d", "text_en": "$(-2, -1)$", "text_he": "$(-2, -1)$", "correct": false }
       ],
-      "explanation_en": "Add components: $(2-1,\\; 1+3) = (1, 4)$.",
-      "explanation_he": "מחברים רכיבים: $(2-1,\\; 1+3) = (1, 4)$."
+      "explanation_en": "$2\\vec{v} = (-2, 6)$. Then $\\vec{u} - 2\\vec{v} = (2-(-2), 5-6) = (4, -1)$.",
+      "explanation_he": "$2\\vec{v} = (-2, 6)$. אז $\\vec{u} - 2\\vec{v} = (2-(-2), 5-6) = (4, -1)$."
     },
     {
       "id": "q3",
       "type": "mcq",
-      "body_en": "What is $(3, 4) \\cdot (4, -3)$?",
-      "body_he": "כמה $(3, 4) \\cdot (4, -3)$?",
+      "body_en": "Compute the dot product $\\vec{a} \\cdot \\vec{b}$ for $\\vec{a} = (3, -2)$ and $\\vec{b} = (1, 4)$.",
+      "body_he": "חשבו את המכפלה הסקלרית $\\vec{a} \\cdot \\vec{b}$ עבור $\\vec{a} = (3, -2)$ ו-$\\vec{b} = (1, 4)$.",
       "options": [
-        {
-          "id": "a",
-          "text_en": "$0$",
-          "text_he": "$0$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$12$",
-          "text_he": "$12$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$24$",
-          "text_he": "$24$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$-7$",
-          "text_he": "$-7$",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$11$", "text_he": "$11$", "correct": false },
+        { "id": "b", "text_en": "$-5$", "text_he": "$-5$", "correct": true },
+        { "id": "c", "text_en": "$5$", "text_he": "$5$", "correct": false },
+        { "id": "d", "text_en": "$0$", "text_he": "$0$", "correct": false }
       ],
-      "explanation_en": "$(3, 4) \\cdot (4, -3) = 12 - 12 = 0$. The vectors are perpendicular.",
-      "explanation_he": "$(3, 4) \\cdot (4, -3) = 12 - 12 = 0$. הוקטורים ניצבים."
+      "explanation_en": "$\\vec{a}\\cdot\\vec{b} = (3)(1) + (-2)(4) = 3 - 8 = -5$.",
+      "explanation_he": "$\\vec{a}\\cdot\\vec{b} = (3)(1) + (-2)(4) = 3 - 8 = -5$."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "For which $k$ are $(2, k)$ and $(3, -6)$ perpendicular?",
-      "body_he": "עבור איזה $k$ הוקטורים $(2, k)$ ו-$(3, -6)$ ניצבים?",
+      "body_en": "Which value of $k$ makes $\\vec{u} = (2, k)$ perpendicular to $\\vec{v} = (3, -1)$?",
+      "body_he": "לאיזה ערך של $k$, הוקטור $\\vec{u} = (2, k)$ ניצב ל-$\\vec{v} = (3, -1)$?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "$k = 1$",
-          "text_he": "$k = 1$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$k = -1$",
-          "text_he": "$k = -1$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$k = 2$",
-          "text_he": "$k = 2$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$k = 0$",
-          "text_he": "$k = 0$",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$k = 6$", "text_he": "$k = 6$", "correct": true },
+        { "id": "b", "text_en": "$k = -6$", "text_he": "$k = -6$", "correct": false },
+        { "id": "c", "text_en": "$k = 2$", "text_he": "$k = 2$", "correct": false },
+        { "id": "d", "text_en": "$k = 3$", "text_he": "$k = 3$", "correct": false }
       ],
-      "explanation_en": "$2 \\cdot 3 + k(-6) = 0 \\Rightarrow 6 - 6k = 0 \\Rightarrow k = 1$.",
-      "explanation_he": "$2 \\cdot 3 + k(-6) = 0 \\Rightarrow 6 - 6k = 0 \\Rightarrow k = 1$."
+      "explanation_en": "Perpendicular iff $\\vec{u}\\cdot\\vec{v} = 0$: $2(3) + k(-1) = 6 - k = 0 \\Rightarrow k = 6$.",
+      "explanation_he": "ניצבים אמ\"מ $\\vec{u}\\cdot\\vec{v} = 0$: $2(3) + k(-1) = 6 - k = 0 \\Rightarrow k = 6$."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "What is the angle between $(1, 0)$ and $(0, 1)$?",
-      "body_he": "מהי הזווית בין $(1, 0)$ ל-$(0, 1)$?",
+      "body_en": "The angle $\\theta$ between $\\vec{a} = (0, 1)$ and $\\vec{b} = (1, 1)$ satisfies $\\cos\\theta =$",
+      "body_he": "הזווית $\\theta$ בין $\\vec{a} = (0, 1)$ ו-$\\vec{b} = (1, 1)$ מקיימת $\\cos\\theta =$",
       "options": [
-        {
-          "id": "a",
-          "text_en": "$0°$",
-          "text_he": "$0°$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$45°$",
-          "text_he": "$45°$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$90°$",
-          "text_he": "$90°$",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "$180°$",
-          "text_he": "$180°$",
-          "correct": false
-        }
+        { "id": "a", "text_en": "$\\dfrac{1}{\\sqrt{2}}$", "text_he": "$\\dfrac{1}{\\sqrt{2}}$", "correct": true },
+        { "id": "b", "text_en": "$\\dfrac{1}{2}$", "text_he": "$\\dfrac{1}{2}$", "correct": false },
+        { "id": "c", "text_en": "$0$", "text_he": "$0$", "correct": false },
+        { "id": "d", "text_en": "$1$", "text_he": "$1$", "correct": false }
       ],
-      "explanation_en": "Dot product is $0$ and both have unit length, so $\\cos\\theta = 0$ and $\\theta = 90°$.",
-      "explanation_he": "המכפלה הסקלרית היא $0$ ושניהם באורך $1$, לכן $\\cos\\theta = 0$ ו-$\\theta = 90°$."
+      "explanation_en": "$\\vec{a}\\cdot\\vec{b} = 0(1)+1(1) = 1$. $|\\vec{a}| = 1$, $|\\vec{b}| = \\sqrt{2}$. $\\cos\\theta = \\frac{1}{1\\cdot\\sqrt{2}} = \\frac{1}{\\sqrt{2}}$, so $\\theta = 45°$.",
+      "explanation_he": "$\\vec{a}\\cdot\\vec{b} = 0(1)+1(1) = 1$. $|\\vec{a}| = 1$, $|\\vec{b}| = \\sqrt{2}$. $\\cos\\theta = \\frac{1}{1\\cdot\\sqrt{2}} = \\frac{1}{\\sqrt{2}}$, כלומר $\\theta = 45°$."
     }
   ]
 }
