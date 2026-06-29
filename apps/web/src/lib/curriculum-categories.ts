@@ -79,13 +79,14 @@ const MATH_3PT_CONCEPTS = [...new Set([...MATH_3PT_NEW_CONCEPTS, ...MATH_3PT_KG_
 // MATH — 4 UNITS  (Bagrut 471 / 472)
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_4PT_NEW_CONCEPTS = [
-  'derivatives_intro', 'derivatives_polynomial_rational', 'function_analysis_extrema',
-  'optimization_word_problems', 'integrals_intro', 'integrals_polynomial_rational',
-  'areas_between_curves', 'volumes_of_revolution_basic', 'derivatives_exponential_logarithm',
-  'analytic_geometry', 'trigonometry_plane_sine_cosine_law',
+  'derivatives_intro', 'derivatives_polynomial_rational', 'derivatives_rules', 'derivatives_applications',
+  'derivatives_chain_rule', 'function_analysis_extrema', 'optimization_word_problems',
+  'integrals_intro', 'integrals_polynomial_rational', 'areas_between_curves', 'volumes_of_revolution_basic',
+  'derivatives_exponential_logarithm', 'logarithmic_equations',
+  'analytic_geometry', 'analytic_geometry_lines_circles', 'trigonometry_plane_sine_cosine_law',
   'descriptive_statistics', 'normal_distribution_z_scores', 'linear_regression_correlation', 'hypothesis_testing_intro',
   'sequences_arithmetic', 'sequences_geometric',
-  'vectors_plane',
+  'vectors_plane', 'vectors_2d',
 ];
 const MATH_4PT_KG_LEGACY = [
   ...MATH_3PT_KG_LEGACY,
@@ -161,13 +162,18 @@ const UNI_PHYSICS_2_CONCEPTS = [
 // מכינה — university prep bridge (Bagrut 5pt math + physics, reinforced)
 // ─────────────────────────────────────────────────────────────────────────────
 const MAKHINA_CONCEPTS = [
-  'limits_intro', 'derivatives_intro', 'derivatives_chain_rule', 'derivatives_trigonometric',
-  'integrals_intro', 'integrals_substitution_basic', 'volumes_of_revolution',
-  'la_vectors', 'la_matrices', 'la_diagonalization',
-  'statistics_descriptive', 'probability_basic', 'statistics_inference',
-  // Physics component
-  'units_measurement', 'vectors_basics', 'kinematics_1d', 'kinematics_2d',
-  'projectile_motion', 'newton_laws', 'work_energy', 'momentum', 'collisions',
+  // Calculus
+  'limits_intro', 'limits_epsilon_delta', 'derivatives_intro', 'derivatives_chain_rule',
+  'derivatives_trigonometric', 'integrals_intro', 'integrals_substitution_basic',
+  'volumes_of_revolution', 'derivatives_exponential_logarithm',
+  // Linear algebra
+  'la_vectors', 'la_matrices', 'la_diagonalization', 'la_orthogonality',
+  'la_determinants', 'la_vector_spaces', 'eigenvalues_eigenvectors',
+  // Statistics
+  'statistics_descriptive', 'probability_basic', 'statistics_inference', 'normal_distribution_z_scores',
+  // Foundation
+  'algebra_basics', 'word_problems', 'sequences_arithmetic', 'sequences_geometric',
+  'analytic_geometry', 'trigonometric_identities',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -202,6 +208,7 @@ const LINEAR_ALGEBRA_CONCEPTS = [
   'linear_systems_gaussian_elimination', 'la_matrices', 'matrix_operations_inverse', 'determinants_cramer',
   'la_vectors', 'vector_spaces_basis_dimension', 'linear_transformations_kernel_image',
   'la_diagonalization', 'inner_product_gram_schmidt', 'orthogonal_matrices',
+  'eigenvalues_eigenvectors',
   // Legacy KG concept IDs
   'la_determinants', 'la_eigenvalues', 'la_vector_spaces', 'la_orthogonality',
 ];
@@ -211,10 +218,12 @@ const LINEAR_ALGEBRA_CONCEPTS = [
 // ─────────────────────────────────────────────────────────────────────────────
 const STATS_PROB_CONCEPTS = [
   'probability_basic', 'probability_conditional_bayes', 'discrete_distributions_binomial_poisson',
-  'normal_distribution_z_scores', 'statistics_inference',
-  'hypothesis_testing_intro', 'linear_regression_correlation', 'confidence_intervals',
+  'normal_distribution_z_scores', 'statistics_inference', 'central_limit_theorem',
+  'hypothesis_testing_intro', 'hypothesis_testing', 'hypothesis_testing_z_t',
+  'linear_regression_correlation', 'linear_regression_least_squares', 'correlation_coefficient',
+  'confidence_intervals', 'chi_square_goodness_of_fit',
   // Legacy
-  'statistics_descriptive', 'descriptive_stats', 'combinatorics', 'distributions', 'hypothesis_testing',
+  'statistics_descriptive', 'descriptive_stats', 'combinatorics', 'distributions',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -281,16 +290,18 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'חשבון דיפרנציאלי ואינטגרלי',
         enLabel: 'Calculus',
         concept_ids: [
-          'derivatives_intro', 'derivatives_polynomial_rational', 'function_analysis_extrema',
+          'derivatives_intro', 'derivatives_polynomial_rational', 'derivatives_rules',
+          'derivatives_applications', 'derivatives_chain_rule', 'function_analysis_extrema',
           'optimization_word_problems', 'integrals_intro', 'integrals_polynomial_rational',
           'areas_between_curves', 'volumes_of_revolution_basic', 'derivatives_exponential_logarithm',
+          'logarithmic_equations',
         ],
       },
       {
         id: 'analytic_geometry_4pt',
         heLabel: 'גאומטריה אנליטית',
         enLabel: 'Analytic Geometry',
-        concept_ids: ['analytic_geometry', 'trigonometry_plane_sine_cosine_law'],
+        concept_ids: ['analytic_geometry', 'analytic_geometry_lines_circles', 'trigonometry_plane_sine_cosine_law'],
       },
       {
         id: 'statistics_4pt',
@@ -308,7 +319,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'vectors_4pt',
         heLabel: 'וקטורים',
         enLabel: 'Vectors',
-        concept_ids: ['vectors_plane'],
+        concept_ids: ['vectors_plane', 'vectors_2d'],
       },
     ],
   },
@@ -481,21 +492,37 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'חשבון אינפינטסימלי',
         enLabel: 'Calculus Intensive',
         concept_ids: [
-          'limits_intro', 'derivatives_intro', 'derivatives_chain_rule', 'derivatives_trigonometric',
-          'integrals_intro', 'integrals_substitution_basic', 'volumes_of_revolution',
+          'limits_intro', 'limits_epsilon_delta', 'derivatives_intro', 'derivatives_chain_rule',
+          'derivatives_trigonometric', 'integrals_intro', 'integrals_substitution_basic',
+          'volumes_of_revolution', 'derivatives_exponential_logarithm',
         ],
       },
       {
         id: 'linear_algebra_intro',
         heLabel: 'אלגברה לינארית',
         enLabel: 'Linear Algebra',
-        concept_ids: ['la_vectors', 'la_matrices', 'la_diagonalization'],
+        concept_ids: [
+          'la_vectors', 'la_matrices', 'la_diagonalization', 'la_orthogonality',
+          'la_determinants', 'la_vector_spaces', 'eigenvalues_eigenvectors',
+        ],
       },
       {
         id: 'statistics_probability',
         heLabel: 'סטטיסטיקה והסתברות',
         enLabel: 'Statistics & Probability',
-        concept_ids: ['statistics_descriptive', 'probability_basic', 'statistics_inference'],
+        concept_ids: [
+          'statistics_descriptive', 'probability_basic', 'statistics_inference',
+          'normal_distribution_z_scores',
+        ],
+      },
+      {
+        id: 'foundation',
+        heLabel: 'יסודות',
+        enLabel: 'Foundation',
+        concept_ids: [
+          'algebra_basics', 'word_problems', 'sequences_arithmetic', 'sequences_geometric',
+          'analytic_geometry', 'trigonometric_identities',
+        ],
       },
     ],
   },
@@ -588,19 +615,28 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'systems_matrices',
         heLabel: 'מערכות ומטריצות',
         enLabel: 'Systems & Matrices',
-        concept_ids: ['linear_systems_gaussian_elimination', 'la_matrices', 'matrix_operations_inverse', 'determinants_cramer'],
+        concept_ids: [
+          'linear_systems_gaussian_elimination', 'la_matrices', 'matrix_operations_inverse',
+          'determinants_cramer', 'la_determinants',
+        ],
       },
       {
         id: 'vector_spaces',
         heLabel: 'מרחבים וקטוריים',
         enLabel: 'Vector Spaces',
-        concept_ids: ['la_vectors', 'vector_spaces_basis_dimension', 'linear_transformations_kernel_image'],
+        concept_ids: [
+          'la_vectors', 'vector_spaces_basis_dimension', 'linear_transformations_kernel_image',
+          'la_vector_spaces',
+        ],
       },
       {
         id: 'eigenvalues_inner_product',
         heLabel: 'ערכים עצמיים ומכפלה פנימית',
         enLabel: 'Eigenvalues & Inner Products',
-        concept_ids: ['la_diagonalization', 'inner_product_gram_schmidt', 'orthogonal_matrices'],
+        concept_ids: [
+          'la_diagonalization', 'eigenvalues_eigenvectors', 'la_eigenvalues',
+          'inner_product_gram_schmidt', 'orthogonal_matrices', 'la_orthogonality',
+        ],
       },
     ],
   },
@@ -626,13 +662,17 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'continuous_distributions',
         heLabel: 'התפלגויות רציפות',
         enLabel: 'Continuous Distributions',
-        concept_ids: ['normal_distribution_z_scores', 'statistics_inference'],
+        concept_ids: ['normal_distribution_z_scores', 'statistics_inference', 'central_limit_theorem'],
       },
       {
         id: 'statistical_inference',
         heLabel: 'הסקה סטטיסטית',
         enLabel: 'Statistical Inference',
-        concept_ids: ['hypothesis_testing_intro', 'linear_regression_correlation', 'confidence_intervals'],
+        concept_ids: [
+          'hypothesis_testing_intro', 'hypothesis_testing', 'hypothesis_testing_z_t',
+          'confidence_intervals', 'chi_square_goodness_of_fit',
+          'linear_regression_correlation', 'linear_regression_least_squares', 'correlation_coefficient',
+        ],
       },
     ],
   },

@@ -81,6 +81,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   linear_transformations_kernel_image: 'la_vector_spaces',
   inner_product_gram_schmidt: 'la_orthogonality',
   orthogonal_matrices: 'la_orthogonality',
+  eigenvalues_eigenvectors: 'la_eigenvalues',
   discrete_distributions_binomial_poisson: 'distributions',
   confidence_intervals: 'statistics_inference',
   probability_conditional_bayes: 'probability_basic',

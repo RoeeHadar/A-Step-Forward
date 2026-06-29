@@ -30,8 +30,11 @@ const nextConfig = {
   experimental: {},
   async redirects() {
     return [
-      { source: '/learn/calculus_1', destination: '/learn/makhina', permanent: false },
-      { source: '/learn/calculus', destination: '/learn/makhina', permanent: false },
+      { source: '/learn/calculus', destination: '/learn/calculus_1', permanent: false },
+      { source: '/learn/high_school_math_3_points', destination: '/learn/high_school_math_3pt', permanent: false },
+      { source: '/learn/high_school_math_4_points', destination: '/learn/high_school_math_4pt', permanent: false },
+      { source: '/learn/high_school_math_5_points', destination: '/learn/high_school_math_5pt', permanent: false },
+      { source: '/learn/university_prep', destination: '/learn/makhina', permanent: false },
     ];
   },
   async headers() {
