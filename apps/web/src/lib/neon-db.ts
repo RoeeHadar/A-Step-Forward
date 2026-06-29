@@ -47,6 +47,9 @@ export interface OnboardingPayload {
   final_goal_date?: string | null;
   mental_state?: Record<string, unknown> | null;
   personality_profile?: Record<string, unknown> | null;
+  tutor_mode?: 'direct' | 'socratic' | null;
+  adult_learner?: boolean;
+  years_gap?: string | null;
 }
 
 export interface LearnerProfileRow {
@@ -76,6 +79,10 @@ export async function upsertLearnerProfile(
   p: OnboardingPayload,
 ): Promise<void> {
   const s = requireSql();
+  const personalityProfile = {
+    ...(p.personality_profile ?? {}),
+    ...(p.tutor_mode ? { tutor_mode: p.tutor_mode } : {}),
+  };
   await s`
     INSERT INTO learner_profiles (
       learner_id, goal, grade_level, points_group, subjects, hours_per_week,
@@ -90,7 +97,7 @@ export async function upsertLearnerProfile(
       ${JSON.stringify(p.self_scores ?? {})}::jsonb, ${p.background_notes ?? null},
       ${p.next_test_name ?? null}, ${p.next_test_date ?? null}, ${p.final_goal_date ?? null},
       ${JSON.stringify(p.mental_state ?? {})}::jsonb,
-      ${JSON.stringify(p.personality_profile ?? {})}::jsonb,
+      ${JSON.stringify(personalityProfile)}::jsonb,
       NOW(), NOW()
     )
     ON CONFLICT (learner_id) DO UPDATE SET
@@ -2231,4 +2238,248 @@ export async function getGoalCompletionStatus(
     activeWeekNumber: activeWeek.week_number,
     planGoal: plan.goal,
   };
+}
+
+// ── Weekly quiz cache (Neon-direct, ISO week) ───────────────────────────────
+
+export interface StoredWeeklyQuizQuestion {
+  id: string;
+  topic: string;
+  subject: string;
+  difficulty: number;
+  stem: string;
+  stem_he?: string;
+  options: { key: string; text: string }[];
+  correct: string;
+}
+
+/** User-specified cache table — independent of Render plan-week quizzes. */
+export async function ensureWeeklyQuizCacheTable(): Promise<void> {
+  const s = requireSql();
+  await s`
+    CREATE TABLE IF NOT EXISTS weekly_quizzes (
+      id SERIAL PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      week_start DATE NOT NULL,
+      questions JSONB NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE (user_id, week_start)
+    )
+  `;
+}
+
+export async function getCachedWeeklyQuiz(
+  userId: string,
+  weekStart: string,
+): Promise<StoredWeeklyQuizQuestion[] | null> {
+  const s = requireSql();
+  await ensureWeeklyQuizCacheTable();
+  try {
+    const rows = (await s`
+      SELECT questions
+      FROM weekly_quizzes
+      WHERE user_id = ${userId} AND week_start = ${weekStart}::date
+      LIMIT 1
+    `) as Array<{ questions: StoredWeeklyQuizQuestion[] }>;
+    const q = rows[0]?.questions;
+    return Array.isArray(q) && q.length > 0 ? q : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveWeeklyQuiz(
+  userId: string,
+  weekStart: string,
+  questions: StoredWeeklyQuizQuestion[],
+): Promise<void> {
+  const s = requireSql();
+  await ensureWeeklyQuizCacheTable();
+  await s`
+    INSERT INTO weekly_quizzes (user_id, week_start, questions)
+    VALUES (${userId}, ${weekStart}::date, ${JSON.stringify(questions)}::jsonb)
+    ON CONFLICT (user_id, week_start) DO UPDATE SET
+      questions = EXCLUDED.questions,
+      created_at = NOW()
+  `;
+}
+
+// ── FSRS spaced-repetition queue (Coach) ────────────────────────────────────
+
+export interface DueReviewItem {
+  atom_id: string;
+  concept_id: string;
+  concept_name: string;
+  last_score: number;
+  times_practiced: number;
+}
+
+async function ensureSkillPracticeFsrsColumns(): Promise<void> {
+  const s = requireSql();
+  await s`
+    CREATE TABLE IF NOT EXISTS skill_practice (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      learner_id TEXT NOT NULL,
+      skill_atom TEXT NOT NULL,
+      attempts INT NOT NULL DEFAULT 0,
+      successes INT NOT NULL DEFAULT 0,
+      last_practiced TIMESTAMPTZ,
+      next_review_date TIMESTAMPTZ,
+      last_score NUMERIC(4,3),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE (learner_id, skill_atom)
+    )
+  `;
+  await s`ALTER TABLE skill_practice ADD COLUMN IF NOT EXISTS next_review_date TIMESTAMPTZ`;
+  await s`ALTER TABLE skill_practice ADD COLUMN IF NOT EXISTS last_score NUMERIC(4,3)`;
+}
+
+function buildAtomConceptMap(): Map<string, { concept_id: string; concept_name: string }> {
+  const map = new Map<string, { concept_id: string; concept_name: string }>();
+  const concepts = (kg as { concepts: Array<{ id: string; name: string; skill_atoms?: string[] }> }).concepts;
+  for (const c of concepts) {
+    for (const atom of c.skill_atoms ?? []) {
+      map.set(atom, { concept_id: c.id, concept_name: c.name });
+    }
+  }
+  return map;
+}
+
+const atomConceptMap = buildAtomConceptMap();
+
+export async function getDueReviews(userId: string): Promise<DueReviewItem[]> {
+  if (!sql) return [];
+  await ensureSkillPracticeFsrsColumns();
+  try {
+    const rows = (await sql`
+      SELECT skill_atom,
+             attempts,
+             COALESCE(
+               last_score::float,
+               CASE WHEN attempts > 0 THEN successes::float / attempts ELSE 0 END
+             ) AS last_score
+      FROM skill_practice
+      WHERE learner_id = ${userId}
+        AND (
+          (next_review_date IS NOT NULL AND next_review_date <= NOW())
+          OR (
+            next_review_date IS NULL
+            AND last_practiced IS NOT NULL
+            AND last_practiced < NOW() - INTERVAL '1 day'
+          )
+        )
+      ORDER BY last_score ASC NULLS FIRST, last_practiced ASC NULLS FIRST
+      LIMIT 10
+    `) as Array<{
+      skill_atom: string;
+      attempts: number;
+      last_score: number;
+    }>;
+
+    return rows.map((r) => {
+      const meta = atomConceptMap.get(r.skill_atom);
+      return {
+        atom_id: r.skill_atom,
+        concept_id: meta?.concept_id ?? r.skill_atom,
+        concept_name: meta?.concept_name ?? r.skill_atom.replace(/_/g, ' '),
+        last_score: Number(r.last_score ?? 0),
+        times_practiced: Number(r.attempts ?? 0),
+      };
+    });
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getDueReviews failed', err);
+    }
+    return [];
+  }
+}
+
+export async function markAtomPracticed(
+  userId: string,
+  atomId: string,
+  score: number,
+): Promise<void> {
+  const s = requireSql();
+  await ensureSkillPracticeFsrsColumns();
+  const clamped = Math.max(0, Math.min(1, score));
+  const days = clamped >= 0.8 ? 7 : clamped >= 0.6 ? 3 : 1;
+  const successInc = clamped >= 0.6 ? 1 : 0;
+
+  await s`
+    INSERT INTO skill_practice (
+      learner_id, skill_atom, attempts, successes, last_practiced, last_score, next_review_date
+    )
+    VALUES (
+      ${userId}, ${atomId}, 1, ${successInc}, NOW(), ${clamped}, NOW() + (${days} || ' days')::interval
+    )
+    ON CONFLICT (learner_id, skill_atom) DO UPDATE SET
+      attempts = skill_practice.attempts + 1,
+      successes = skill_practice.successes + ${successInc},
+      last_practiced = NOW(),
+      last_score = ${clamped},
+      next_review_date = NOW() + (${days} || ' days')::interval
+  `;
+}
+
+// ── Estimated Bagrut grade ───────────────────────────────────────────────────
+
+export interface EstimatedBagrutResult {
+  estimatedGrade: number;
+  masteryAvg: number;
+}
+
+function conceptIdsForSubjectParam(subject: string): string[] {
+  const match = subject.match(/^(.+?)_(\d+)$/);
+  const base = match?.[1] ?? subject;
+  const level = match?.[2] ? `${match[2]}pt` : null;
+  const concepts = (kg as { concepts: Array<{ id: string; subject: string; points_levels?: string[] }> }).concepts;
+  return concepts
+    .filter((c) => {
+      if (c.subject !== base) return false;
+      if (!level) return true;
+      return (c.points_levels ?? []).includes(level);
+    })
+    .map((c) => c.id);
+}
+
+function masteryToBagrutGrade(avg: number): number {
+  if (avg >= 0.9) return 95;
+  if (avg >= 0.8) return 85;
+  if (avg >= 0.7) return 75;
+  if (avg >= 0.6) return 65;
+  if (avg >= 0.5) return 55;
+  return 45;
+}
+
+export async function getEstimatedBagrutScore(
+  userId: string,
+  subject: string,
+): Promise<EstimatedBagrutResult> {
+  const empty = { estimatedGrade: 45, masteryAvg: 0 };
+  if (!sql) return empty;
+
+  const conceptIds = conceptIdsForSubjectParam(subject);
+  if (conceptIds.length === 0) return empty;
+
+  try {
+    const rows = (await sql`
+      SELECT score::float AS score
+      FROM concept_mastery
+      WHERE learner_id = ${userId}
+        AND concept_id = ANY(${conceptIds}::text[])
+    `) as Array<{ score: number }>;
+
+    if (rows.length === 0) return empty;
+
+    const masteryAvg = rows.reduce((sum, r) => sum + Number(r.score), 0) / rows.length;
+    return {
+      estimatedGrade: masteryToBagrutGrade(masteryAvg),
+      masteryAvg,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getEstimatedBagrutScore failed', err);
+    }
+    return empty;
+  }
 }

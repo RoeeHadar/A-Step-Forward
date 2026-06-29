@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import {
   LineChart,
@@ -20,6 +21,29 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
   const { messages, locale } = useI18n();
   const t = messages.progress;
   const isHe = locale === 'he';
+
+  const [gradeEstimate, setGradeEstimate] = useState<{
+    estimatedGrade: number;
+    masteryAvg: number;
+  } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetch('/api/progress/estimated-grade?subject=math_5')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data && typeof data.estimatedGrade === 'number') {
+          setGradeEstimate({
+            estimatedGrade: data.estimatedGrade,
+            masteryAvg: Number(data.masteryAvg ?? 0),
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const masteryData = progress.concepts.map((c) => {
     const row = c as typeof c & { concept_name_he?: string | null };
@@ -89,6 +113,20 @@ export function ProgressDashboard({ progress }: { progress: LearnerProgress }) {
       <div className="card-punch rounded-2xl p-6">
         <h2 className="font-display text-xl font-semibold">{t.masteryByConcept}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t.masteryByConceptDesc}</p>
+        {gradeEstimate != null ? (
+          gradeEstimate.masteryAvg < 0.3 ? (
+            <p className="mt-2 text-sm italic text-muted-foreground">
+              {t.practiceMoreForEstimate}
+            </p>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t.estimatedGrade}:{' '}
+              <span className="font-medium text-foreground">
+                {t.estimatedGradeValue.replace('{grade}', String(gradeEstimate.estimatedGrade))}
+              </span>
+            </p>
+          )
+        ) : null}
         <div className="mt-4 h-72">
           {masteryData.length === 0 ? (
             <div className="flex h-full items-center justify-center text-center text-sm text-muted-foreground">

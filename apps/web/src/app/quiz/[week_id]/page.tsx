@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { WeekQuizClient } from '@/components/week-quiz-client';
 import { QuizUnavailable } from '@/components/quiz-unavailable';
 import { SiteHeader } from '@/components/site-header';
-import { API_BASE_URL } from '@/lib/api';
+import { headers } from 'next/headers';
 import type { QuizStartResponse } from '@asf/schemas/learning_path';
 
 export const dynamic = 'force-dynamic';
@@ -13,19 +13,19 @@ interface Props {
   searchParams: Promise<{ plan_id?: string; week_num?: string }>;
 }
 
-async function fetchQuiz(
-  token: string,
+async function fetchWeeklyQuiz(
   planId: string,
   weekNum: number,
 ): Promise<QuizStartResponse | null> {
   try {
+    const h = await headers();
+    const host = h.get('host') ?? 'localhost:3000';
+    const proto = h.get('x-forwarded-proto') ?? 'http';
+    const cookie = h.get('cookie') ?? '';
     const res = await fetch(
-      `${API_BASE_URL}/v1/learners/me/plans/${planId}/weeks/${weekNum}/quiz`,
+      `${proto}://${host}/api/quiz/weekly?plan_id=${encodeURIComponent(planId)}&week_num=${weekNum}`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { cookie },
         cache: 'no-store',
       },
     );
@@ -44,13 +44,13 @@ export default async function QuizPage({ params, searchParams }: Props) {
   const { plan_id, week_num } = await searchParams;
 
   if (!plan_id || !week_num) {
-    redirect('/dashboard');
+    redirect('/app');
   }
 
   const token = await getToken();
   if (!token) redirect('/sign-in');
 
-  const quiz = await fetchQuiz(token, plan_id, Number(week_num));
+  const quiz = await fetchWeeklyQuiz(plan_id, Number(week_num));
 
   return (
     <div className="flex min-h-screen flex-col bg-background">

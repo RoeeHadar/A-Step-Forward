@@ -10,6 +10,7 @@ import {
   fetchLessonAgentHintsByConceptIds,
   getLearnerPersona,
   fetchAgentNotes,
+  getDueReviews,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import kg from '@/lib/kg-data.json';
@@ -172,6 +173,17 @@ async function buildContextPrompt(
   // (profile, mastery, relevant context, agent_hints, learning-plan) is
   // appended below.
   let context = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
+
+  if (agent === 'tutor') {
+    const tutorMode =
+      (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
+    const learnerPref =
+      tutorMode === 'direct'
+        ? 'LEARNER PREFERENCE: This learner prefers direct explanations. Explain concepts clearly and fully before asking follow-up questions. Do not withhold the answer — explain first, then check understanding.'
+        : 'LEARNER PREFERENCE: This learner prefers Socratic guidance. Guide with questions; do not give away the answer directly.';
+    context = `${learnerPref}\n\n${context}`;
+  }
+
   context += `\n\n## Response language`;
   context += `\n- Language preference: ${locale === 'en' ? 'English' : 'Hebrew'} — respond in this language by default`;
 
@@ -338,6 +350,19 @@ async function buildContextPrompt(
           context += `\n- Most-blocking atoms across the path: ${tops}`;
         }
       }
+    }
+  }
+
+  if (agent === 'coach') {
+    const due = await getDueReviews(userId).catch(() => [] as Awaited<ReturnType<typeof getDueReviews>>);
+    context += `\n\n## Spaced-repetition queue (FSRS)`;
+    if (due.length > 0) {
+      const list = due
+        .map((d) => `${d.concept_name} (atom: ${d.atom_id}, last score ${Math.round(d.last_score * 100)}%)`)
+        .join('; ');
+      context += `\nDUE FOR REVIEW TODAY: ${list}. Start by drilling these before introducing new material. For each, generate a fresh question and evaluate the answer.`;
+    } else {
+      context += `\nNo items due for review. Focus on the learner's weakest concepts from their mastery data.`;
     }
   }
 
