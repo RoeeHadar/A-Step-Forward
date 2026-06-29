@@ -413,9 +413,9 @@
         "Write the likelihood $P(E|H)$ (probability of the evidence GIVEN the hypothesis)."
       ],
       "steps_he": [
-        "רשמו את הפריור $P(H)$ (האמונה לפני קבלת העדות).",
-        "חשבו את השוליות $P(E) = P(E|H)P(H) + P(E|\\neg H)P(\\neg H)$.",
-        "הציבו בבייס: $P(H|E) = \\frac{P(E|H) P(H)}{P(E)}$ כדי לקבל את הפוסטריור.",
+        "רשמו את ההסתברות המוקדמת $P(H)$ (האמונה לפני קבלת העדות).",
+        "חשבו את ההסתברות הכוללת $P(E) = P(E|H)P(H) + P(E|\\neg H)P(\\neg H)$.",
+        "הציבו בבייס: $P(H|E) = \\frac{P(E|H) P(H)}{P(E)}$ כדי לקבל את ההסתברות המאוחרת.",
         "רשמו את הסבירות $P(E|H)$ (הסתברות העדות בהינתן ההיפותזה)."
       ],
       "correct_order": [
@@ -425,7 +425,7 @@
         2
       ],
       "explanation_en": "Prior → likelihood → marginal (normalizer) → posterior. This sequence forces you to think about each ingredient explicitly, which avoids the base-rate fallacy.",
-      "explanation_he": "פריור → סבירות → שוליות (מנרמל) → פוסטריור. הסדר הזה מאלץ אתכם לחשוב על כל רכיב במפורש ומונע את כשל שיעור הבסיס.",
+      "explanation_he": "הסתברות מוקדמת → סבירות → הסתברות כוללת (מנרמלת) → הסתברות מאוחרת. הסדר הזה מאלץ אתכם לחשוב על כל רכיב במפורש ומונע את כשל שיעור הבסיס.",
       "skill_atoms": [
         "bayes_application"
       ],
@@ -438,7 +438,7 @@
       "stem_en": "A medical test for a rare disease has 95% sensitivity ($P(\\text{positive}|\\text{disease}) = 0.95$) and 90% specificity ($P(\\text{negative}|\\text{no disease}) = 0.90$). The disease's prevalence is $1\\%$. A patient tests positive. Derive $P(\\text{disease}|\\text{positive})$ step by step using Bayes' rule.",
       "stem_he": "בדיקה רפואית למחלה נדירה בעלת רגישות $95\\%$ ($P(\\text{חיובי}|\\text{מחלה}) = 0.95$) וסגוליות $90\\%$ ($P(\\text{שלילי}|\\text{לא מחלה}) = 0.90$). שכיחות המחלה $1\\%$. חולה נבדק חיובי. גזרו את $P(\\text{מחלה}|\\text{חיובי})$ צעד-אחר-צעד בעזרת כלל בייס.",
       "rubric_en": "Full credit (4/4): identifies prior $P(D) = 0.01$, likelihood $P(+|D) = 0.95$, false-positive rate $P(+|\\neg D) = 0.10$ (NOT 0.90 — specificity is $P(-|\\neg D)$). Computes marginal $P(+) = 0.95 \\cdot 0.01 + 0.10 \\cdot 0.99 = 0.0095 + 0.099 = 0.1085$. Applies Bayes: $P(D|+) = 0.0095 / 0.1085 \\approx 0.0876 \\approx 8.8\\%$. Comments that despite 95% sensitivity, posterior is only ~9% — the BASE-RATE FALLACY. Deduct 1 each for: confusing specificity / false-positive rate, arithmetic, skipping the marginal, missing the interpretive comment.",
-      "rubric_he": "ציון מלא (4/4): מזהה פריור $P(D) = 0.01$, סבירות $P(+|D) = 0.95$, שיעור חיובי-שגוי $P(+|\\neg D) = 0.10$ (**לא** 0.90 — סגוליות היא $P(-|\\neg D)$). מחשב שוליות $P(+) = 0.95 \\cdot 0.01 + 0.10 \\cdot 0.99 = 0.1085$. בייס: $P(D|+) = 0.0095 / 0.1085 \\approx 8.8\\%$. מעיר שלמרות 95% רגישות, הפוסטריור רק 9% — **כשל שיעור הבסיס**. הורידו 1 על: בלבול סגוליות/חיובי-שגוי, חשבון, דילוג על שוליות, חוסר פרשנות.",
+      "rubric_he": "ציון מלא (4/4): מזהה הסתברות מוקדמת $P(D) = 0.01$, סבירות $P(+|D) = 0.95$, שיעור חיובי-שגוי $P(+|\\neg D) = 0.10$ (**לא** 0.90 — סגוליות היא $P(-|\\neg D)$). מחשב הסתברות כוללת $P(+) = 0.95 \\cdot 0.01 + 0.10 \\cdot 0.99 = 0.1085$. בייס: $P(D|+) = 0.0095 / 0.1085 \\approx 8.8\\%$. מעיר שלמרות 95% רגישות, ההסתברות המאוחרת רק 9% — **כשל שיעור הבסיס**. הורידו 1 על: בלבול סגוליות/חיובי-שגוי, חשבון, דילוג על הסתברות כוללת, חוסר פרשנות.",
       "expected_steps": [
         "identify P(D), P(+|D), P(+|not D)",
         "compute marginal P(+)",
@@ -446,7 +446,7 @@
         "interpret base-rate fallacy"
       ],
       "explanation_en": "Prior $P(D)=0.01$; likelihood $P(+|D)=0.95$; false-positive rate $P(+|\\neg D)=1 - 0.90 = 0.10$. Marginal $P(+) = 0.95(0.01) + 0.10(0.99) = 0.1085$. Bayes: $P(D|+) = 0.95(0.01)/0.1085 \\approx 0.088 = 8.8\\%$. Even a 'very accurate' test gives a low posterior when the prior is low — that's the base-rate fallacy.",
-      "explanation_he": "פריור $P(D)=0.01$; סבירות $P(+|D)=0.95$; חיובי-שגוי $P(+|\\neg D)=0.10$. שוליות $P(+) = 0.1085$. בייס: $P(D|+) \\approx 8.8\\%$. גם בדיקה 'מאוד מדויקת' נותנת פוסטריור נמוך כשהפריור נמוך — כשל שיעור הבסיס.",
+      "explanation_he": "הסתברות מוקדמת $P(D)=0.01$; סבירות $P(+|D)=0.95$; חיובי-שגוי $P(+|\\neg D)=0.10$. הסתברות כוללת $P(+) = 0.1085$. בייס: $P(D|+) \\approx 8.8\\%$. גם בדיקה 'מאוד מדויקת' נותנת הסתברות מאוחרת נמוכה כשההסתברות המוקדמת נמוכה — כשל שיעור הבסיס.",
       "skill_atoms": [
         "bayes_application",
         "base_rate_fallacy",
