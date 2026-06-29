@@ -60,6 +60,11 @@ export async function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
         </Card>
       ) : null}
 
+      <Button asChild variant="outline">
+        <Link href="/app?completed=1">
+          {isHe ? '✓ סיימתי את השיעור' : '✓ Mark lesson done'}
+        </Link>
+      </Button>
       <Button asChild>
         <Link href="/app/chat/tutor">
           <MessageSquare className="h-4 w-4" aria-hidden />

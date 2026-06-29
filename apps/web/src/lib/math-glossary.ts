@@ -1,26 +1,27 @@
 export type GlossaryEntry = { he: string; en: string; ar: string };
 
 export const MATH_GLOSSARY: Record<string, GlossaryEntry> = {
-  '\u05de\u05de\u05d5\u05e6\u05e2': { he: '\u05de\u05de\u05d5\u05e6\u05e2', en: 'Mean / Average', ar: '\u0627\u0644\u0645\u062a\u0648\u0633\u0637' },
-  '\u05d7\u05e6\u05d9\u05d5\u05df': { he: '\u05d7\u05e6\u05d9\u05d5\u05df', en: 'Median', ar: '\u0627\u0644\u0648\u0633\u064a\u0637' },
-  '\u05e1\u05d8\u05d9\u05ea \u05ea\u05e7\u05df': { he: '\u05e1\u05d8\u05d9\u05ea \u05ea\u05e7\u05df', en: 'Standard Deviation', ar: '\u0627\u0644\u0627\u0646\u062d\u0631\u0627\u0641 \u0627\u0644\u0645\u0639\u064a\u0627\u0631\u064a' },
-  '\u05e9\u05d5\u05e0\u05d5\u05ea': { he: '\u05e9\u05d5\u05e0\u05d5\u05ea', en: 'Variance', ar: '\u0627\u0644\u062a\u0628\u0627\u064a\u0646' },
-  '\u05e0\u05d2\u05d6\u05e8\u05ea': { he: '\u05e0\u05d2\u05d6\u05e8\u05ea', en: 'Derivative', ar: '\u0627\u0644\u0645\u0634\u062a\u0642\u0629' },
-  '\u05d0\u05d9\u05e0\u05d8\u05d2\u05e8\u05dc': { he: '\u05d0\u05d9\u05e0\u05d8\u05d2\u05e8\u05dc', en: 'Integral', ar: '\u0627\u0644\u062a\u0643\u0627\u0645\u0644' },
-  '\u05d4\u05e1\u05ea\u05d1\u05e8\u05d5\u05ea': { he: '\u05d4\u05e1\u05ea\u05d1\u05e8\u05d5\u05ea', en: 'Probability', ar: '\u0627\u0644\u0627\u062d\u062a\u0645\u0627\u0644' },
-  '\u05de\u05e9\u05d5\u05d5\u05d0\u05d4': { he: '\u05de\u05e9\u05d5\u05d5\u05d0\u05d4', en: 'Equation', ar: '\u0627\u0644\u0645\u0639\u0627\u062f\u0644\u0629' },
-  '\u05e4\u05d5\u05e0\u05e7\u05e6\u05d9\u05d4': { he: '\u05e4\u05d5\u05e0\u05e7\u05e6\u05d9\u05d4', en: 'Function', ar: '\u0627\u0644\u062f\u0627\u0644\u0629' },
-  '\u05d2\u05d1\u05d5\u05dc': { he: '\u05d2\u05d1\u05d5\u05dc', en: 'Limit', ar: '\u0627\u0644\u0646\u0647\u0627\u064a\u0629' },
-  '\u05de\u05e9\u05ea\u05e0\u05d4': { he: '\u05de\u05e9\u05ea\u05e0\u05d4', en: 'Variable', ar: '\u0627\u0644\u0645\u062a\u063a\u064a\u0631' },
-  '\u05de\u05e7\u05d3\u05dd': { he: '\u05de\u05e7\u05d3\u05dd', en: 'Coefficient', ar: '\u0627\u0644\u0645\u0639\u0627\u0645\u0644' },
-  '\u05e9\u05d9\u05e4\u05d5\u05e2': { he: '\u05e9\u05d9\u05e4\u05d5\u05e2', en: 'Slope', ar: '\u0627\u0644\u0645\u064a\u0644' },
-  '\u05e1\u05d3\u05e8\u05d4': { he: '\u05e1\u05d3\u05e8\u05d4', en: 'Sequence', ar: '\u0627\u0644\u0645\u062a\u062a\u0627\u0644\u064a\u0629' },
-  '\u05d8\u05d5\u05e8': { he: '\u05d8\u05d5\u05e8', en: 'Series', ar: '\u0627\u0644\u0645\u062a\u0633\u0644\u0633\u0644\u0629' },
-  '\u05d5\u05e7\u05d8\u05d5\u05e8': { he: '\u05d5\u05e7\u05d8\u05d5\u05e8', en: 'Vector', ar: '\u0627\u0644\u0645\u062a\u062c\u0647' },
-  '\u05de\u05d8\u05e8\u05d9\u05e6\u05d4': { he: '\u05de\u05d8\u05e8\u05d9\u05e6\u05d4', en: 'Matrix', ar: '\u0627\u0644\u0645\u0635\u0641\u0648\u0641\u0629' },
-  '\u05ea\u05d0': { he: '\u05ea\u05d0', en: 'Cell', ar: '\u0627\u0644\u062e\u0644\u064a\u0629' },
-  '\u05d2\u05e8\u05e2\u05d9\u05df': { he: '\u05d2\u05e8\u05e2\u05d9\u05df', en: 'Nucleus', ar: '\u0627\u0644\u0646\u0648\u0627\u0629' },
-  '\u05d1\u05e8\u05d9\u05e8\u05d4 \u05d8\u05d1\u05e2\u05d9\u05ea': { he: '\u05d1\u05e8\u05d9\u05e8\u05d4 \u05d8\u05d1\u05e2\u05d9\u05ea', en: 'Natural Selection', ar: '\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0621 \u0627\u0644\u0637\u0628\u064a\u0639\u064a' },
+  'ממוצע': { he: 'ממוצע', en: 'Mean / Average', ar: 'المتوسط' },
+  'חציון': { he: 'חציון', en: 'Median', ar: 'الوسيط' },
+  'סטיית תקן': { he: 'סטיית תקן', en: 'Standard Deviation', ar: 'الانحراف المعياري' },
+  'שונות': { he: 'שונות', en: 'Variance', ar: 'التباين' },
+  'נגזרת': { he: 'נגזרת', en: 'Derivative', ar: 'المشتقة' },
+  'אינטגרל': { he: 'אינטגרל', en: 'Integral', ar: 'التكامل' },
+  'הסתברות': { he: 'הסתברות', en: 'Probability', ar: 'الاحتمال' },
+  'משוואה': { he: 'משוואה', en: 'Equation', ar: 'المعادلة' },
+  'פונקציה': { he: 'פונקציה', en: 'Function', ar: 'الدالة' },
+  'גבול': { he: 'גבול', en: 'Limit', ar: 'النهاية' },
+  'משתנה': { he: 'משתנה', en: 'Variable', ar: 'المتغير' },
+  'מקדם': { he: 'מקדם', en: 'Coefficient', ar: 'المعامل' },
+  'שיפוע': { he: 'שיפוע', en: 'Slope', ar: 'الميل' },
+  'סדרה': { he: 'סדרה', en: 'Sequence', ar: 'المتتالية' },
+  'טור': { he: 'טור', en: 'Series', ar: 'المتسلسلة' },
+  'וקטור': { he: 'וקטור', en: 'Vector', ar: 'المتجه' },
+  'מטריצה': { he: 'מטריצה', en: 'Matrix', ar: 'المصفوفة' },
+  'תא': { he: 'תא', en: 'Cell', ar: 'الخلية' },
+  'גרעין': { he: 'גרעין', en: 'Nucleus', ar: 'النواة' },
+  'ברירה טבעית': { he: 'ברירה טבעית', en: 'Natural Selection', ar: 'الانتقاء الطبيعي' },
 };
 
-export const MATH_GLOSSARY_TERMS = Object.values(MATH_GLOSSARY);
+/** Flat array form of MATH_GLOSSARY — used by MathGlossaryPanel for table rendering. */
+export const MATH_GLOSSARY_TERMS: GlossaryEntry[] = Object.values(MATH_GLOSSARY);
