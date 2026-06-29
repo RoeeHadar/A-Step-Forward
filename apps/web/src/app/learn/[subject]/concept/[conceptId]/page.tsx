@@ -3,7 +3,6 @@ import { notFound, redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
-import { subjectLabel } from '@/lib/subject-labels';
 import {
   dbConfigured,
   fetchConceptExplanation,
@@ -142,7 +141,6 @@ export default async function ConceptPage({
     lessonData?.lesson.title_he ?? indexEntry?.title_he ?? concept?.name_he ?? null;
   const conceptName = isHe && conceptNameHe ? conceptNameHe : conceptNameEn;
 
-  const subjectName = subjectLabel(subject, locale);
   const prerequisites = concept?.prerequisites ?? [];
 
   return (
