@@ -37,11 +37,14 @@ type Goal =
   | 'bagrut_math_5'
   | 'bagrut_math_4'
   | 'bagrut_math_3'
-    | 'bagrut_physics'
+  | 'bagrut_physics'
   | 'calculus1'
   | 'linear_algebra'
   | 'university_prep'
   | 'other';
+
+type AdultGoal = 'bagrut_math' | 'university' | 'general' | '';
+type YearsGap = 'less_than_1' | '1_to_3' | 'more_than_3' | '';
 
 type Subject = 'math' | 'physics';
 type Style = 'theory_first' | 'practice_first' | 'mixed';

@@ -2240,6 +2240,7 @@ export async function getGoalCompletionStatus(
   };
 }
 
+
 // ── Weekly quiz cache (Neon-direct, ISO week) ───────────────────────────────
 
 export interface StoredWeeklyQuizQuestion {
@@ -2453,12 +2454,13 @@ function masteryToBagrutGrade(avg: number): number {
 
 export async function getEstimatedBagrutScore(
   userId: string,
-  subject: string,
+  subject?: string,
 ): Promise<EstimatedBagrutResult> {
   const empty = { estimatedGrade: 45, masteryAvg: 0 };
   if (!sql) return empty;
 
-  const conceptIds = conceptIdsForSubjectParam(subject);
+  const allConcepts = (kg as { concepts: Array<{ id: string }> }).concepts.map((c) => c.id);
+  const conceptIds = subject ? conceptIdsForSubjectParam(subject) : allConcepts;
   if (conceptIds.length === 0) return empty;
 
   try {
