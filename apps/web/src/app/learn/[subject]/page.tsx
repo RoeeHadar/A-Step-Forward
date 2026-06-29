@@ -13,7 +13,7 @@ import {
 } from '@/lib/neon-db';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
 import kg from '@/lib/kg-data.json';
-import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
+import { CURRICULUM_CATEGORIES, conceptIdsForLevel } from '@/lib/curriculum-categories';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 
@@ -38,6 +38,53 @@ const STATISTICS_CONCEPTS = ['descriptive_stats', 'probability_basic', 'combinat
 
 type MathTrack = '3pt' | '4pt' | '5pt';
 
+/** Extra blocklist for HS 5pt — university / advanced LA concepts not on Bagrut 581 */
+const FILTER_FROM_HS_5PT = new Set([
+  'uni_vector_fields',
+  'uni_manifolds',
+  'la_diagonalization',
+  'la_eigenvalues',
+  'la_vector_spaces',
+  'la_orthogonality',
+  'la_determinants',
+  'matrix_spaces',
+  'orthogonality',
+  'continuity',
+  'differential_equations_intro',
+  'hypothesis_testing',
+  'complex_numbers',
+]);
+
+/** Extra blocklist for HS 4pt — 5pt calculus / university content */
+const FILTER_FROM_HS_4PT = new Set([
+  ...FILTER_FROM_HS_5PT,
+  'limits',
+  'derivatives_intro',
+  'derivatives_rules',
+  'derivatives_applications',
+  'optimization_problems',
+  'integrals_intro',
+  'definite_integrals',
+  'integrals_techniques',
+  'integrals_applications',
+  'function_transformations',
+  'trigonometry_identities',
+  'trigonometry_equations',
+  'analytic_geometry',
+  'vectors_2d',
+  'logarithms',
+  'distributions',
+]);
+
+function isInBagrutScope(conceptId: string, mathTrack: MathTrack): boolean {
+  if (conceptId.startsWith('uni_')) return false;
+  const allowlist = new Set(conceptIdsForLevel(mathTrack));
+  if (!allowlist.has(conceptId)) return false;
+  if (mathTrack === '5pt' && FILTER_FROM_HS_5PT.has(conceptId)) return false;
+  if (mathTrack === '4pt' && FILTER_FROM_HS_4PT.has(conceptId)) return false;
+  return true;
+}
+
 interface UiSubjectFilter {
   kgSubject: 'math' | 'physics' | null;
   mathTrack?: MathTrack;
@@ -52,12 +99,14 @@ function uiSubjectFilter(uiSubject: string): UiSubjectFilter {
   if (
     uiSubject === 'hs-math-3' ||
     uiSubject === 'math-hs-3' ||
-    uiSubject === 'hs_math_3'
+    uiSubject === 'hs_math_3' ||
+    uiSubject === 'math_3' ||
+    uiSubject === 'math-3'
   )
     return { kgSubject: 'math', mathTrack: '3pt', categoryId: 'math-hs-3' };
-  if (uiSubject === 'hs-math-4' || uiSubject === 'hs_math_4')
+  if (uiSubject === 'hs-math-4' || uiSubject === 'hs_math_4' || uiSubject === 'math_4' || uiSubject === 'math-4')
     return { kgSubject: 'math', mathTrack: '4pt', categoryId: 'math-hs-4' };
-  if (uiSubject === 'hs-math-5' || uiSubject === 'hs_math_5')
+  if (uiSubject === 'hs-math-5' || uiSubject === 'hs_math_5' || uiSubject === 'math_5' || uiSubject === 'math-5')
     return { kgSubject: 'math', mathTrack: '5pt', categoryId: 'math-hs-5' };
   if (uiSubject === 'hs_physics')
     return { kgSubject: 'physics', categoryId: 'physics-hs' };
@@ -136,6 +185,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
     ? kgConcepts.filter((c) => {
         if (c.subject !== filter.kgSubject) return false;
         if (allowlist && !allowlist.has(c.id)) return false;
+        if (filter.mathTrack && filter.kgSubject === 'math' && !isInBagrutScope(c.id, filter.mathTrack)) {
+          return false;
+        }
         return true;
       })
     : [];
