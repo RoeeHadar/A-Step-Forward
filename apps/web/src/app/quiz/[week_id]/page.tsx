@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { WeekQuizClient } from '@/components/week-quiz-client';
 import { QuizUnavailable } from '@/components/quiz-unavailable';
 import { SiteHeader } from '@/components/site-header';
-import { headers } from 'next/headers';
+import { generateWeeklyQuizForUser } from '@/lib/weekly-quiz';
 import type { QuizStartResponse } from '@asf/schemas/learning_path';
 
 export const dynamic = 'force-dynamic';
@@ -13,44 +13,30 @@ interface Props {
   searchParams: Promise<{ plan_id?: string; week_num?: string }>;
 }
 
-async function fetchWeeklyQuiz(
-  planId: string,
-  weekNum: number,
-): Promise<QuizStartResponse | null> {
-  try {
-    const h = await headers();
-    const host = h.get('host') ?? 'localhost:3000';
-    const proto = h.get('x-forwarded-proto') ?? 'http';
-    const cookie = h.get('cookie') ?? '';
-    const res = await fetch(
-      `${proto}://${host}/api/quiz/weekly?plan_id=${encodeURIComponent(planId)}&week_num=${weekNum}`,
-      {
-        headers: { cookie },
-        cache: 'no-store',
-      },
-    );
-    if (!res.ok) return null;
-    return res.json() as Promise<QuizStartResponse>;
-  } catch {
-    return null;
-  }
-}
-
 export default async function QuizPage({ params, searchParams }: Props) {
   const { userId, getToken } = await auth();
   if (!userId) redirect('/sign-in');
 
-  await params; // week_id is in the URL for routing; actual quiz is fetched via plan_id + week_num
+  await params; // week_id is in the URL for routing only
   const { plan_id, week_num } = await searchParams;
 
   if (!plan_id || !week_num) {
-    redirect('/app');
+    redirect('/dashboard');
   }
 
-  const token = await getToken();
-  if (!token) redirect('/sign-in');
+  const weekNum = Number(week_num);
 
-  const quiz = await fetchWeeklyQuiz(plan_id, Number(week_num));
+  // Primary path: generate/cache entirely within Neon + Vercel (no Render dependency).
+  let quiz: QuizStartResponse | null = null;
+  try {
+    quiz = await generateWeeklyQuizForUser(userId, plan_id, weekNum);
+  } catch {
+    quiz = null;
+  }
+
+  // Obtain a token for the submit route (still proxied to Render for scoring,
+  // but the start/generate step no longer depends on Render).
+  const token = (await getToken()) ?? '';
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -60,7 +46,7 @@ export default async function QuizPage({ params, searchParams }: Props) {
           <WeekQuizClient
             quiz={quiz}
             planId={plan_id}
-            weekNum={Number(week_num)}
+            weekNum={weekNum}
             token={token}
           />
         ) : (

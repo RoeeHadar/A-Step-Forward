@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@asf/ui/button';
@@ -8,31 +8,31 @@ const STORAGE_KEY = 'asf-agents-intro-seen';
 
 const AGENTS = [
   {
-    emoji: '🎓',
-    name_he: 'מורה',
+    emoji: '\uD83C\uDF93',
+    name_he: '\u05DE\u05D5\u05E8\u05D4',
     name_en: 'Tutor',
-    desc_he: 'מדריך עם שאלות — ללמידה עמוקה',
-    desc_en: 'Guides with questions — deep understanding',
+    desc_he: '\u05DE\u05D3\u05E8\u05D9\u05DA \u05E2\u05DD \u05E9\u05D0\u05DC\u05D5\u05EA \u2014 \u05DC\u05DC\u05DE\u05D9\u05D3\u05D4 \u05E2\u05DE\u05D5\u05E7\u05D4',
+    desc_en: 'Guides with questions \u2014 deep understanding',
   },
   {
-    emoji: '💡',
-    name_he: 'מסביר שאלות ותשובות',
+    emoji: '\uD83D\uDCA1',
+    name_he: '\u05DE\u05E1\u05D1\u05D9\u05E8 \u05E9\u05D0\u05DC\u05D5\u05EA \u05D5\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA',
     name_en: 'Q&A Explainer',
-    desc_he: 'עונה ישירות מתוך החומר',
+    desc_he: '\u05E2\u05D5\u05E0\u05D4 \u05D9\u05E9\u05D9\u05E8\u05D5\u05EA \u05DE\u05EA\u05D5\u05DA \u05D4\u05D7\u05D5\u05DE\u05E8',
     desc_en: 'Direct answers from the curriculum',
   },
   {
-    emoji: '🏋️',
-    name_he: 'מאמן',
+    emoji: '\uD83C\uDFCB\uFE0F',
+    name_he: '\u05DE\u05D0\u05DE\u05DF',
     name_en: 'Coach',
-    desc_he: 'תרגול יומי ועיון בחולשות',
+    desc_he: '\u05EA\u05E8\u05D2\u05D5\u05DC \u05D9\u05D5\u05DE\u05D9 \u05D5\u05E2\u05D9\u05D5\u05DF \u05D1\u05D7\u05D5\u05DC\u05E9\u05D5\u05EA',
     desc_en: 'Daily drills targeting your weak spots',
   },
   {
-    emoji: '🧭',
-    name_he: 'מנטור',
+    emoji: '\uD83E\uDDED',
+    name_he: '\u05DE\u05E0\u05D8\u05D5\u05E8',
     name_en: 'Mentor',
-    desc_he: 'מוטיבציה, הרגלים ותכנון',
+    desc_he: '\u05DE\u05D5\u05D8\u05D9\u05D1\u05E6\u05D9\u05D4, \u05D4\u05E8\u05D2\u05DC\u05D9\u05DD \u05D5\u05EA\u05DB\u05E0\u05D5\u05DF',
     desc_en: 'Motivation, habits, and planning',
   },
 ] as const;
@@ -63,8 +63,8 @@ export function AgentsIntroBanner() {
   if (!visible) return null;
 
   const dir = isHe ? 'rtl' : 'ltr';
-  const title = isHe ? 'הכירו את הצוות שלכם' : 'Meet Your Learning Team';
-  const gotIt = isHe ? 'הבנתי' : 'Got it';
+  const title = isHe ? '\u05D4\u05DB\u05D9\u05E8\u05D5 \u05D0\u05EA \u05D4\u05E6\u05D5\u05D5\u05EA \u05E9\u05DC\u05DB\u05DD' : 'Meet Your Learning Team';
+  const gotIt = isHe ? '\u05D4\u05D1\u05E0\u05EA\u05D9' : 'Got it';
 
   return (
     <div
@@ -84,8 +84,8 @@ export function AgentsIntroBanner() {
         </h2>
         <p className="mb-5 text-sm text-muted-foreground">
           {isHe
-            ? 'כל סוכן מיועד לצורך שונה — בחר את הנכון לך.'
-            : 'Each agent serves a different purpose — pick the right one for your goal.'}
+            ? '\u05DB\u05DC \u05E1\u05D5\u05DB\u05DF \u05DE\u05D9\u05D5\u05E2\u05D3 \u05DC\u05E6\u05D5\u05E8\u05DA \u05E9\u05D5\u05E0\u05D4 \u2014 \u05D1\u05D7\u05E8 \u05D0\u05EA \u05D4\u05E0\u05DB\u05D5\u05DF \u05DC\u05DA.'
+            : 'Each agent serves a different purpose \u2014 pick the right one for your goal.'}
         </p>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
