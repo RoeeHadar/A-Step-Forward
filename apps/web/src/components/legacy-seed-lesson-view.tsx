@@ -8,6 +8,7 @@ import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { PageHeader } from '@/components/page-header';
+import { LessonCompleteButton } from '@/components/lesson-complete-button';
 import type { Lesson } from '@asf/schemas/curriculum';
 import 'katex/dist/katex.min.css';
 
@@ -60,11 +61,7 @@ export async function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
         </Card>
       ) : null}
 
-      <Button asChild variant="outline">
-        <Link href="/app?completed=1">
-          {isHe ? '✓ סיימתי את השיעור' : '✓ Mark lesson complete'}
-        </Link>
-      </Button>
+      <LessonCompleteButton conceptId={lesson.id} locale={locale} variant="outline" />
       <Button asChild>
         <Link href="/app/chat/tutor">
           <MessageSquare className="h-4 w-4" aria-hidden />

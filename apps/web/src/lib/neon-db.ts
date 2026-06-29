@@ -155,6 +155,55 @@ export async function getConceptMastery(
   return result;
 }
 
+const LESSON_READ_BASELINE = 0.6;
+
+async function ensureConceptMasteryTable(): Promise<void> {
+  const s = requireSql();
+  await s`
+    CREATE TABLE IF NOT EXISTS concept_mastery (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      learner_id TEXT NOT NULL,
+      concept_id TEXT NOT NULL,
+      score NUMERIC(4,3) NOT NULL DEFAULT 0,
+      data_points INT NOT NULL DEFAULT 0,
+      last_activity TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE (learner_id, concept_id)
+    )
+  `;
+}
+
+async function ensureLearnerProfileCompletionColumn(): Promise<void> {
+  const s = requireSql();
+  await s`ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS lessons_completed_count INT NOT NULL DEFAULT 0`;
+}
+
+/** Baseline mastery when a learner marks a lesson as read/complete (before quiz). */
+export async function markLessonComplete(learnerId: string, conceptId: string): Promise<number> {
+  const s = requireSql();
+  await ensureConceptMasteryTable();
+  await ensureLearnerProfileCompletionColumn();
+
+  await s`
+    INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
+    VALUES (${learnerId}, ${conceptId}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
+    ON CONFLICT (learner_id, concept_id) DO UPDATE SET
+      score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
+      last_activity = NOW(),
+      updated_at = NOW()
+  `;
+
+  await s`
+    UPDATE learner_profiles
+    SET lessons_completed_count = COALESCE(lessons_completed_count, 0) + 1,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+
+  return LESSON_READ_BASELINE;
+}
+
 // ── Diagnostic ───────────────────────────────────────────────────────────────
 
 export interface DiagnosticItem {
@@ -2467,24 +2516,36 @@ export interface PublicShareStats {
   streak_days: number;
   mastery_avg: number;
   last_active_date: string | null;
+  estimated_grade: number | null;
+  subject: string | null;
+  subjects_studied: string[];
+  week_activity: boolean[];
+}
+
+export interface MockExamHistoryItem {
+  score_pct: number;
+  date: string;
+  subject: string;
 }
 
 /** Aggregate stats safe for public share links — no PII. */
 export async function getPublicShareStats(userId: string): Promise<PublicShareStats | null> {
   if (!sql || !userId.trim()) return null;
   try {
-    const profileRows = (await sql`
-      SELECT learner_id FROM learner_profiles WHERE learner_id = ${userId} LIMIT 1
-    `) as Array<{ learner_id: string }>;
-    if (profileRows.length === 0) return null;
+    const { deriveSubjectFromProfile, deriveSubjectsStudied } = await import('@/lib/learner-enrollment');
 
-    const [streak, masteryRows] = await Promise.all([
+    const profile = await getLearnerProfile(userId);
+    if (!profile) return null;
+
+    const [streak, masteryRows, daily, gradeResult] = await Promise.all([
       getLearnerStreak(userId),
       sql`
         SELECT score::float AS score
         FROM concept_mastery
         WHERE learner_id = ${userId}
       `,
+      getDailyActivity(userId, 7),
+      getEstimatedBagrutScore(userId, deriveSubjectFromProfile(profile)),
     ]);
 
     const scores = (masteryRows as Array<{ score: number }>).map((r) => Number(r.score));
@@ -2492,11 +2553,19 @@ export async function getPublicShareStats(userId: string): Promise<PublicShareSt
     const mastery_avg =
       scores.length > 0 ? scores.reduce((sum, s) => sum + s, 0) / scores.length : 0;
 
+    const subject = deriveSubjectFromProfile(profile);
+    const estimated_grade =
+      gradeResult.masteryAvg >= 0.3 ? gradeResult.estimatedGrade : null;
+
     return {
       lessons_completed_count,
       streak_days: streak.current_days,
       mastery_avg,
       last_active_date: streak.last_active,
+      estimated_grade,
+      subject,
+      subjects_studied: deriveSubjectsStudied(profile),
+      week_activity: daily.map((d) => d.count > 0),
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
@@ -2504,6 +2573,53 @@ export async function getPublicShareStats(userId: string): Promise<PublicShareSt
     }
     return null;
   }
+}
+
+export async function getMockExamHistory(
+  userId: string,
+  limit = 5,
+): Promise<MockExamHistoryItem[]> {
+  if (!sql) return [];
+  try {
+    const rows = (await sql`
+      SELECT r.score_mcq, r.max_mcq, r.created_at, e.subject
+      FROM mock_exam_results r
+      JOIN mock_exams e ON e.id = r.exam_id
+      WHERE r.user_id = ${userId}
+      ORDER BY r.created_at DESC
+      LIMIT ${limit}
+    `) as Array<{
+      score_mcq: number;
+      max_mcq: number;
+      created_at: string;
+      subject: string;
+    }>;
+
+    return rows.map((r) => ({
+      score_pct: r.max_mcq > 0 ? Math.round((Number(r.score_mcq) / Number(r.max_mcq)) * 100) : 0,
+      date: r.created_at,
+      subject: r.subject,
+    }));
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getMockExamHistory failed', err);
+    }
+    return [];
+  }
+}
+
+function mockExamFilterForSubject(subject?: string): { subject: string; level: string } | null {
+  if (!subject) return null;
+  if (subject === 'hs_physics') return { subject: 'physics', level: 'hs_physics' };
+  const m = subject.match(/^(.+?)_(\d+)$/);
+  if (m) return { subject: m[1]!, level: `${m[2]}pt` };
+  if (subject.startsWith('makhina_')) {
+    const track = subject.slice('makhina_'.length);
+    if (track === 'calculus' || track === 'stats' || track === 'linear_algebra') {
+      return { subject: 'makhina', level: track };
+    }
+  }
+  return { subject, level: '' };
 }
 
 export async function getEstimatedBagrutScore(
@@ -2528,8 +2644,39 @@ export async function getEstimatedBagrutScore(
     if (rows.length === 0) return empty;
 
     const masteryAvg = rows.reduce((sum, r) => sum + Number(r.score), 0) / rows.length;
+    const masteryEstimate = masteryToBagrutGrade(masteryAvg);
+
+    const mockFilter = mockExamFilterForSubject(subject);
+    if (!mockFilter) {
+      return { estimatedGrade: masteryEstimate, masteryAvg };
+    }
+
+    await ensureMockExamTablesForGrade();
+    const mockRows = (await sql`
+      SELECT r.score_mcq::int AS score_mcq, r.max_mcq::int AS max_mcq
+      FROM mock_exam_results r
+      JOIN mock_exams e ON e.id = r.exam_id
+      WHERE r.user_id = ${userId}
+        AND e.subject = ${mockFilter.subject}
+        AND (${mockFilter.level} = '' OR e.level = ${mockFilter.level})
+      ORDER BY r.created_at DESC
+      LIMIT 3
+    `) as Array<{ score_mcq: number; max_mcq: number }>;
+
+    if (mockRows.length === 0) {
+      return { estimatedGrade: masteryEstimate, masteryAvg };
+    }
+
+    const avgMockPct =
+      mockRows.reduce((sum, r) => {
+        const max = Math.max(1, Number(r.max_mcq));
+        return sum + Number(r.score_mcq) / max;
+      }, 0) / mockRows.length;
+    const mockGrade = avgMockPct * 100;
+    const blended = Math.max(0, Math.min(100, 0.6 * masteryEstimate + 0.4 * mockGrade));
+
     return {
-      estimatedGrade: masteryToBagrutGrade(masteryAvg),
+      estimatedGrade: Math.round(blended),
       masteryAvg,
     };
   } catch (err) {
@@ -2538,4 +2685,32 @@ export async function getEstimatedBagrutScore(
     }
     return empty;
   }
+}
+
+async function ensureMockExamTablesForGrade(): Promise<void> {
+  const s = requireSql();
+  await s`
+    CREATE TABLE IF NOT EXISTS mock_exams (
+      id SERIAL PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      level TEXT NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      questions JSONB NOT NULL,
+      duration_minutes INT NOT NULL DEFAULT 90
+    )
+  `;
+  await s`
+    CREATE TABLE IF NOT EXISTS mock_exam_results (
+      id SERIAL PRIMARY KEY,
+      exam_id INT NOT NULL,
+      user_id TEXT NOT NULL,
+      answers JSONB NOT NULL,
+      score_mcq INT NOT NULL DEFAULT 0,
+      max_mcq INT NOT NULL DEFAULT 0,
+      time_taken_seconds INT NOT NULL DEFAULT 0,
+      feedback JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
 }

@@ -11,6 +11,7 @@ import {
   getLearnerPersona,
   fetchAgentNotes,
   getDueReviews,
+  markAtomPracticed,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import kg from '@/lib/kg-data.json';
@@ -66,6 +67,20 @@ export async function POST(req: Request) {
 
   // Record user turn (fire-and-forget — does not block streaming).
   void recordChatTurn(userId, agent, 'user', lastMessage);
+
+  // Coach drill: mark top due FSRS atoms as practiced on substantive replies.
+  if (agent === 'coach' && lastMessage.trim().length > 10) {
+    void (async () => {
+      try {
+        const due = await getDueReviews(userId);
+        for (const item of due.slice(0, 2)) {
+          await markAtomPracticed(userId, item.atom_id, 0.7);
+        }
+      } catch (err) {
+        logger.warn('coach markAtomPracticed failed', { err: String(err) });
+      }
+    })();
+  }
 
   const gen = streamAgentResponse(userId, lastMessage, agent, { quickMode, quickDuration });
   const encoder = new TextEncoder();
