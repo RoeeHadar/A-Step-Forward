@@ -165,11 +165,15 @@ function SectionCard({
   lang,
   defaultOpen,
   learnerLevel,
+  sectionIndex,
+  onFocus,
 }: {
   section: LessonSection;
   lang: Lang;
   defaultOpen: boolean;
   learnerLevel: LessonPointsLevel | null;
+  sectionIndex: number;
+  onFocus?: (sectionNumber: number) => void;
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const meta = SECTION_META[section.kind];
@@ -185,7 +189,13 @@ function SectionCard({
     >
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setOpen((v) => {
+            const next = !v;
+            if (next) onFocus?.(sectionIndex + 1);
+            return next;
+          });
+        }}
         className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
         aria-expanded={open}
       >
@@ -232,10 +242,12 @@ export function LessonReader({
   data,
   lang,
   learnerLevel,
+  onSectionFocus,
 }: {
   data: LessonWithQuestions;
   lang: Lang;
   learnerLevel?: LessonPointsLevel | null;
+  onSectionFocus?: (sectionNumber: number) => void;
 }) {
   const { lesson } = data;
   const summary = lang === 'he' ? lesson.summary_he : lesson.summary_en;
@@ -316,6 +328,8 @@ export function LessonReader({
           lang={lang}
           defaultOpen={i < 2}
           learnerLevel={level}
+          sectionIndex={i}
+          onFocus={onSectionFocus}
         />
       ))}
     </div>

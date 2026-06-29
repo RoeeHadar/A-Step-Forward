@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
@@ -7,6 +8,11 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { LessonReader } from './lesson-reader';
 import { LessonQuizPanel } from './lesson-quiz-panel';
 import { LessonCompleteButton } from './lesson-complete-button';
+import {
+  ThreePtCompletionMessage,
+  ThreePtProgressBar,
+  isThreePtLessonContext,
+} from './three-pt-lesson-engagement';
 
 const MATH_TRACK_LEVELS: LessonPointsLevel[] = ['3pt', '4pt', '5pt'];
 
@@ -68,10 +74,29 @@ export function LessonPageClient({
   conceptId: string;
   learnerLevel?: LessonPointsLevel | null;
 }) {
+  const pathname = usePathname();
   const [lang, setLang] = useLanguagePreference('he');
+  const [currentSection, setCurrentSection] = useState(1);
+  const [showMotivation, setShowMotivation] = useState(false);
+
+  const is3pt = isThreePtLessonContext({
+    pathname,
+    levelMin: data.lesson.level,
+    mathTrack: data.lesson.math_track,
+    learnerLevel: learnerLevel ?? null,
+  });
+
+  const totalSections = data.lesson.sections.length;
 
   return (
     <div className="space-y-2">
+      {is3pt ? (
+        <ThreePtProgressBar
+          currentSection={currentSection}
+          totalSections={totalSections}
+          lang={lang}
+        />
+      ) : null}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <div className="inline-flex rounded-full border border-border bg-surface-1/50 p-1">
@@ -105,21 +130,37 @@ export function LessonPageClient({
         </span>
       </div>
 
-      <LessonReader data={data} lang={lang} learnerLevel={learnerLevel} />
+      <LessonReader
+        data={data}
+        lang={lang}
+        learnerLevel={learnerLevel}
+        onSectionFocus={is3pt ? setCurrentSection : undefined}
+      />
       <LessonQuizPanel data={data} lang={lang} conceptId={conceptId} learnerLevel={learnerLevel} />
 
-      <div className="mt-8 flex flex-wrap gap-3 border-t border-border/60 pt-8">
-        <LessonCompleteButton
-          conceptId={conceptId}
-          lessonId={data.lesson.id}
-          locale={lang}
-        />
-        <Link
-          href="/app"
-          className="inline-flex rounded-lg border border-border bg-surface-1/50 px-5 py-2.5 text-sm font-medium hover:border-primary/40"
-        >
-          {lang === 'he' ? 'חזרה ללוח הבקרה' : 'Back to Dashboard'}
-        </Link>
+      <div className="mt-8 flex flex-col gap-3 border-t border-border/60 pt-8">
+        <div className="flex flex-wrap gap-3">
+          <LessonCompleteButton
+            conceptId={conceptId}
+            lessonId={data.lesson.id}
+            locale={lang}
+            navigateOnComplete={!is3pt}
+            onComplete={
+              is3pt
+                ? () => {
+                    setShowMotivation(true);
+                  }
+                : undefined
+            }
+          />
+          <Link
+            href="/app"
+            className="inline-flex rounded-lg border border-border bg-surface-1/50 px-5 py-2.5 text-sm font-medium hover:border-primary/40"
+          >
+            {lang === 'he' ? 'חזרה ללוח הבקרה' : 'Back to Dashboard'}
+          </Link>
+        </div>
+        {is3pt && showMotivation ? <ThreePtCompletionMessage lang={lang} /> : null}
       </div>
     </div>
   );

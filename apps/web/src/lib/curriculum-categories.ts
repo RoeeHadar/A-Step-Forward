@@ -221,7 +221,7 @@ const STATS_PROB_CONCEPTS = [
   'normal_distribution_z_scores', 'statistics_inference', 'central_limit_theorem',
   'hypothesis_testing_intro', 'hypothesis_testing', 'hypothesis_testing_z_t',
   'linear_regression_correlation', 'linear_regression_least_squares', 'correlation_coefficient',
-  'confidence_intervals', 'chi_square_goodness_of_fit',
+  'confidence_intervals', 'chi_square_goodness_of_fit', 'anova_one_way', 'chi_square_tests',
   // Legacy
   'statistics_descriptive', 'descriptive_stats', 'combinatorics', 'distributions',
 ];
@@ -694,7 +694,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Statistical Inference',
         concept_ids: [
           'hypothesis_testing_intro', 'hypothesis_testing', 'hypothesis_testing_z_t',
-          'confidence_intervals', 'chi_square_goodness_of_fit',
+          'confidence_intervals', 'chi_square_goodness_of_fit', 'anova_one_way', 'chi_square_tests',
           'linear_regression_correlation', 'linear_regression_least_squares', 'correlation_coefficient',
         ],
       },

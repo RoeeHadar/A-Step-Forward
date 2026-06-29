@@ -12,6 +12,9 @@ interface LessonCompleteButtonProps {
   locale?: 'he' | 'en';
   className?: string;
   variant?: 'default' | 'outline' | 'gradient';
+  /** When false, stay on the page after a successful save (e.g. show 3pt motivation). */
+  navigateOnComplete?: boolean;
+  onComplete?: () => void;
 }
 
 export function LessonCompleteButton({
@@ -20,6 +23,8 @@ export function LessonCompleteButton({
   locale = 'he',
   className,
   variant = 'gradient',
+  navigateOnComplete = true,
+  onComplete,
 }: LessonCompleteButtonProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -40,7 +45,10 @@ export function LessonCompleteButton({
     } catch {
       // Best-effort — still navigate so the learner is not blocked.
     } finally {
-      router.push('/app?completed=1');
+      onComplete?.();
+      if (navigateOnComplete) {
+        router.push('/app?completed=1');
+      }
     }
   }
 

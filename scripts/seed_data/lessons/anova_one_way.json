@@ -1,0 +1,224 @@
+{
+  "id": "anova_one_way",
+  "type": "interactive",
+  "subject": "statistics_probability",
+  "title_en": "One-Way ANOVA",
+  "title_he": "ניתוח שונות חד-כיווני (ANOVA)",
+  "duration_min": 40,
+  "level_min": "university",
+  "agent_hints": "Students confuse ANOVA with multiple t-tests. A significant F only means some group differs; use post-hoc tests for pairs.",
+  "sections": [
+    {
+      "id": "purpose_hypotheses",
+      "title_en": "Purpose and Hypotheses",
+      "title_he": "מטרה והשערות",
+      "level_min": "university",
+      "body_en_md": "**One-way ANOVA** tests whether **population means of $k \\ge 3$ groups** are equal.\n\n$$H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$$\n\n$$H_a: \\text{at least one } \\mu_i \\text{ differs}$$",
+      "body_he_md": "**ANOVA חד-כיווני** בודק שוויון ממוצעי $k \\ge 3$ קבוצות.\n\n$$H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$$"
+    },
+    {
+      "id": "partitioning_variance",
+      "title_en": "Partitioning Total Variance",
+      "title_he": "פירוק שונות",
+      "level_min": "university",
+      "body_en_md": "$$SS_{Total}=SS_B+SS_W$$\n\n$$SS_B=\\sum n_i(\\bar x_i-\\bar x)^2,\\quad SS_W=\\sum\\sum(x_{ij}-\\bar x_i)^2$$",
+      "body_he_md": "$$SS_{Total}=SS_B+SS_W$$"
+    },
+    {
+      "id": "f_statistic_table",
+      "title_en": "F-Statistic and ANOVA Table",
+      "title_he": "F וטבלת ANOVA",
+      "level_min": "university",
+      "body_en_md": "$$MS_B=SS_B/(k-1),\\ MS_W=SS_W/(N-k),\\ F=MS_B/MS_W$$\n\nUnder $H_0$, $F\\sim F(k-1,N-k)$.\n\n| Source | SS | df | MS | F |",
+      "body_he_md": "$$F=MS_B/MS_W$$"
+    },
+    {
+      "id": "worked_example",
+      "title_en": "Worked Example ? Teaching Methods",
+      "title_he": "דוגמה פתורה",
+      "level_min": "university",
+      "body_en_md": "A,B,C with n=5: means 72,80,90; variances 8. $\\bar x=80$, $SS_B=820$, $SS_W=96$, $F=51.25>3.89$ ? reject $H_0$.",
+      "body_he_md": "$F=51.25$ ? דוחים $H_0$"
+    },
+    {
+      "id": "assumptions_posthoc",
+      "title_en": "Assumptions and Post-Hoc",
+      "title_he": "הנחות ו-Post-Hoc",
+      "level_min": "university",
+      "body_en_md": "Independence, normality, homoscedasticity (Levene). Post-hoc: Tukey HSD, Bonferroni when $H_0$ rejected.",
+      "body_he_md": "Tukey, Bonferroni לזוגות."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "ANOVA compares:",
+      "body_he": "ANOVA:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "Two groups only",
+          "text_he": "2",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "Three or more group means",
+          "text_he": "3+",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "One sample to constant",
+          "text_he": "1",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "Paired data",
+          "text_he": "paired",
+          "correct": false
+        }
+      ],
+      "explanation_en": "k>=3 groups.",
+      "explanation_he": "k>=3."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "F=MS_B/MS_W ~",
+      "body_he": "F ~",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "t(N-1)",
+          "text_he": "t",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "chi2(k-1)",
+          "text_he": "chi2",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "F(k-1,N-k)",
+          "text_he": "F",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text_en": "N(0,1)",
+          "text_he": "N",
+          "correct": false
+        }
+      ],
+      "explanation_en": "F(k-1,N-k).",
+      "explanation_he": "F."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "Within df =",
+      "body_he": "Within df:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "k-1",
+          "text_he": "k-1",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "N-k",
+          "text_he": "N-k",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "N-1",
+          "text_he": "N-1",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "k",
+          "text_he": "k",
+          "correct": false
+        }
+      ],
+      "explanation_en": "N-k.",
+      "explanation_he": "N-k."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "Teaching example F =",
+      "body_he": "F =",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "8.54",
+          "text_he": "8.54",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "51.25",
+          "text_he": "51.25",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "410",
+          "text_he": "410",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "102.5",
+          "text_he": "102.5",
+          "correct": false
+        }
+      ],
+      "explanation_en": "410/8=51.25.",
+      "explanation_he": "51.25."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "After reject H0 use:",
+      "body_he": "Post-hoc:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "Re-run ANOVA",
+          "text_he": "ANOVA",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "Tukey or Bonferroni",
+          "text_he": "Tukey",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "Levene",
+          "text_he": "Levene",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "SS_T",
+          "text_he": "SS",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Post-hoc pairs.",
+      "explanation_he": "Post-hoc."
+    }
+  ]
+}
