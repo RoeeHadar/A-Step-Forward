@@ -421,11 +421,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     const titles = resolveConceptTitles(c.id);
                     const cardTitle = pickConceptTitle(titles, locale);
 
-                    const contentBadge = c.hasLesson
-                      ? isHe
-                        ? t.lessonBadge
-                        : 'Lesson'
-                      : null;
+                    const contentBadge = c.hasLesson ? t.lessonBadge : null;
                     const statusLabel = statusCfg
                       ? c.status === 'done'
                         ? t.statusDone

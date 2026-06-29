@@ -292,7 +292,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'probability-4pt',
         heLabel: 'קומבינטוריקה והסתברות',
         enLabel: 'Combinatorics & Probability',
-        concept_ids: ['combinatorics', 'probability_basic', 'descriptive_stats'],
+        concept_ids: ['combinatorics', 'probability_basic', 'descriptive_stats', 'statistics_descriptive'],
       },
     ],
   },
@@ -325,7 +325,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'probability-5pt',
         heLabel: 'סטטיסטיקה, הסתברות קלאסית ובינומית',
         enLabel: 'Statistics, Classical & Binomial Probability',
-        concept_ids: ['descriptive_stats', 'probability_basic', 'combinatorics', 'distributions'],
+        concept_ids: ['statistics_descriptive', 'descriptive_stats', 'probability_basic', 'combinatorics', 'distributions'],
       },
       {
         id: 'geometry-5pt',
