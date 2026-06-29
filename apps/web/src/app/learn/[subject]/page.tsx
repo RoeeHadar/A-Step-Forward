@@ -293,13 +293,19 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
     concepts: typeof conceptsWithCoverage;
   }> = [];
 
+  const shownInSection = new Set<string>();
+
   if (category) {
     for (const section of category.sections) {
       const sectionConcepts = (section.concept_ids ?? [])
         .map((id) => conceptById.get(id))
-        .filter(Boolean) as typeof conceptsWithCoverage;
+        .filter(Boolean)
+        .filter((c) => !shownInSection.has(c!.id)) as typeof conceptsWithCoverage;
       if (sectionConcepts.length === 0) continue;
-      for (const c of sectionConcepts) coveredBySection.add(c.id);
+      for (const c of sectionConcepts) {
+        coveredBySection.add(c.id);
+        shownInSection.add(c.id);
+      }
       sectionGroups.push({
         id: section.id,
         label_en: section.enLabel,
@@ -396,11 +402,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                       <h2 className="font-display text-lg font-semibold text-foreground">
                         {isHe ? group.label_he : group.label_en}
                       </h2>
-                      {isHe && group.label_en !== group.label_he ? (
-                        <p className="text-xs text-muted-foreground" dir="ltr">
-                          {group.label_en}
-                        </p>
-                      ) : null}
                     </div>
                     <div className="ml-auto text-xs text-muted-foreground">
                       {t.lessonsDone
@@ -417,7 +418,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     const StatusIcon = statusCfg?.icon ?? BookOpen;
                     const titles = resolveConceptTitles(c.id);
                     const cardTitle = pickConceptTitle(titles, locale);
-                    const cardTitleAlt = isHe ? titles.title_en : titles.title_he;
 
                     const contentBadge = c.hasLesson
                       ? isHe
@@ -476,11 +476,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                             </span>
                           )}
                         </div>
-                        {isHe && cardTitleAlt ? (
-                          <p className="mt-1 text-sm text-muted-foreground" dir="ltr">
-                            {cardTitleAlt}
-                          </p>
-                        ) : null}
                         {/* Score bar if in-progress or needs review */}
                         {c.mastery && c.status && c.status !== 'done' ? (
                           <div className="mt-2">
