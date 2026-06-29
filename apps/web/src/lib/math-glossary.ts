@@ -8,6 +8,13 @@ export const MATH_GLOSSARY: Record<string, GlossaryEntry> = {
   'נגזרת': { he: 'נגזרת', en: 'Derivative', ar: 'المشتقة' },
   'אינטגרל': { he: 'אינטגרל', en: 'Integral', ar: 'التكامل' },
   'הסתברות': { he: 'הסתברות', en: 'Probability', ar: 'الاحتمال' },
+  'הסתברות מותנת': { he: 'הסתברות מותנת', en: 'Conditional Probability', ar: 'الاحتمال الشرطي' },
+  'מרחב מדגם': { he: 'מרחב מדגם', en: 'Sample Space', ar: 'فضاء العينة' },
+  'אירועים בלתי תלויים': { he: 'אירועים בלתי תלויים', en: 'Independent Events', ar: 'أحداث مستقلة' },
+  'תמורות': { he: 'תמורות', en: 'Permutations', ar: 'التباديل' },
+  'צירופים': { he: 'צירופים', en: 'Combinations', ar: 'التوافيق' },
+  'אינטגרציה בחלקים': { he: 'אינטגרציה בחלקים', en: 'Integration by Parts', ar: 'التكامل بالأجزاء' },
+  'נגזרת שרשרת': { he: 'נגזרת שרשרת', en: 'Chain Rule', ar: 'قاعدة السلسلة' },
   'משוואה': { he: 'משוואה', en: 'Equation', ar: 'المعادلة' },
   'פונקציה': { he: 'פונקציה', en: 'Function', ar: 'الدالة' },
   'גבול': { he: 'גבול', en: 'Limit', ar: 'النهاية' },
@@ -20,7 +27,9 @@ export const MATH_GLOSSARY: Record<string, GlossaryEntry> = {
   'מטריצה': { he: 'מטריצה', en: 'Matrix', ar: 'المصفوفة' },
   'תא': { he: 'תא', en: 'Cell', ar: 'الخلية' },
   'גרעין': { he: 'גרעין', en: 'Nucleus', ar: 'النواة' },
+  'תורשה': { he: 'תורשה', en: 'Heredity', ar: 'الوراثة' },
   'ברירה טבעית': { he: 'ברירה טבעית', en: 'Natural Selection', ar: 'الانتقاء الطبيعي' },
+  'אלל': { he: 'אלל', en: 'Allele', ar: 'الأليل' },
 };
 
 /** Flat array form of MATH_GLOSSARY — used by MathGlossaryPanel for table rendering. */

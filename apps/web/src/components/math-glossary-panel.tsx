@@ -1,8 +1,23 @@
 import { MATH_GLOSSARY_TERMS } from '@/lib/math-glossary';
 
-export function MathGlossaryPanel({ locale }: { locale: 'en' | 'he' }) {
+function panelTitle(locale: 'en' | 'he', subject?: string): string {
   const isHe = locale === 'he';
-  const title = isHe ? '\u05de\u05d9\u05dc\u05d5\u05df \u05de\u05d5\u05e0\u05d7\u05d9\u05dd' : 'Math Glossary';
+  const isBiology = subject?.toLowerCase().includes('biology') ?? false;
+  if (isBiology) {
+    return isHe ? '\u05de\u05d9\u05dc\u05d5\u05df \u05de\u05d5\u05e0\u05d7\u05d9\u05dd \u2014 \u05d1\u05d9\u05d5\u05dc\u05d5\u05d2\u05d9\u05d4 \u05d5\u05de\u05ea\u05de\u05d8\u05d9\u05e7\u05d4' : 'Glossary \u2014 Biology & Math';
+  }
+  return isHe ? '\u05de\u05d9\u05dc\u05d5\u05df \u05de\u05d5\u05e0\u05d7\u05d9\u05dd \u2014 \u05de\u05ea\u05de\u05d8\u05d9\u05e7\u05d4' : 'Math Glossary';
+}
+
+export function MathGlossaryPanel({
+  locale,
+  subject,
+}: {
+  locale: 'en' | 'he';
+  subject?: string;
+}) {
+  const isHe = locale === 'he';
+  const title = panelTitle(locale, subject);
 
   return (
     <details className="glass-surface mt-10 rounded-2xl border border-border/60 p-5">

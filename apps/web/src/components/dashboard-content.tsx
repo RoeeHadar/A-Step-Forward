@@ -10,6 +10,7 @@ import { cn } from '@asf/ui';
 import { agentDisplayNames, type AgentName } from '@asf/schemas/agents';
 import { useI18n } from '@/providers/i18n-provider';
 import { AnimatedCounter } from '@/components/animated-counter';
+import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import type { DashboardSnapshot, LearnerStreak } from '@/lib/neon-db';
 
 export interface NextLessonInfo {
@@ -73,16 +74,6 @@ export function DashboardContent({
   const isHe = locale === 'he';
   const { stats, recent_lessons, mastery_summary } = snapshot;
 
-  const lastActivity = recent_lessons[0]?.last_activity;
-  const daysAway =
-    lastActivity != null
-      ? Math.floor(
-          (Date.now() - new Date(lastActivity).getTime()) / (1000 * 60 * 60 * 24),
-        )
-      : null;
-  const showReengagementBanner =
-    daysAway !== null && daysAway >= 3 && daysAway < 60;
-
   const daysSinceLastActive =
     streak?.last_active != null
       ? Math.floor(
@@ -94,14 +85,6 @@ export function DashboardContent({
     streak.current_days === 0 &&
     daysSinceLastActive !== null &&
     daysSinceLastActive > 3;
-
-  const reengagementHref = nextLesson
-    ? learnConceptHref(nextLesson.subject, nextLesson.concept_id)
-    : recent_lessons[0]?.concept_id
-      ? learnConceptHref(recent_lessons[0].subject, recent_lessons[0].concept_id)
-      : recent_lessons[0]
-        ? `/learn/${recent_lessons[0].subject}`
-        : '/learn';
 
   return (
     <div dir={isHe ? 'rtl' : 'ltr'}>
@@ -126,10 +109,6 @@ export function DashboardContent({
 
       {showWelcomeBackCard && (
         <WelcomeBackCard isHe={isHe} />
-      )}
-
-      {showReengagementBanner && daysAway !== null && (
-        <ReengagementBanner daysAway={daysAway} href={reengagementHref} isHe={isHe} />
       )}
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
@@ -309,17 +288,6 @@ const WELCOME_BACK_STR = {
   en: 'Welcome back! 10 minutes now gets you back on track.',
 } as const;
 
-const REENGAGEMENT_STR = {
-  he: {
-    message: (n: number) => `לא היית פה ${n} ימים — המשך מהמקום שעצרת`,
-    cta: 'המשך ללמוד',
-  },
-  en: {
-    message: (n: number) => `You've been away ${n} days — pick up where you left off`,
-    cta: 'Continue learning',
-  },
-} as const;
-
 function WelcomeBackCard({ isHe }: { isHe: boolean }) {
   return (
     <div
@@ -329,29 +297,6 @@ function WelcomeBackCard({ isHe }: { isHe: boolean }) {
       <p className="text-sm text-muted-foreground">
         {WELCOME_BACK_STR[isHe ? 'he' : 'en']}
       </p>
-    </div>
-  );
-}
-
-function ReengagementBanner({
-  daysAway,
-  href,
-  isHe,
-}: {
-  daysAway: number;
-  href: string;
-  isHe: boolean;
-}) {
-  const t = REENGAGEMENT_STR[isHe ? 'he' : 'en'];
-  return (
-    <div
-      className="card-punch mb-6 flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between"
-      dir={isHe ? 'rtl' : 'ltr'}
-    >
-      <p className="text-sm text-muted-foreground">{t.message(daysAway)}</p>
-      <Button asChild variant="outline" size="sm" className="shrink-0">
-        <Link href={href}>{t.cta}</Link>
-      </Button>
     </div>
   );
 }
@@ -384,6 +329,9 @@ function NextLessonCard({
           {title}
         </h3>
         <div className="mt-1 flex flex-wrap items-center gap-3">
+          <Badge variant="outline" className="text-xs">
+            <LocalizedSubjectLabel subject={lesson.subject} />
+          </Badge>
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <Clock className="h-3.5 w-3.5" aria-hidden />
             {t.minutesLabel(lesson.est_minutes)}

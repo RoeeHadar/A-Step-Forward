@@ -24,7 +24,7 @@ import {
   type DashboardSnapshot,
 } from '@/lib/neon-db';
 import { GoalCompletionBanner } from '@/components/goal-completion-banner';
-import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
+import { CURRICULUM_CATEGORIES, conceptIdsForLevel } from '@/lib/curriculum-categories';
 import type { PointsLevel } from '@/lib/curriculum-categories';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
 
@@ -69,6 +69,10 @@ function learnSubjectSlug(
   pointsGroup: string | null,
   subjects?: string[] | null,
 ): string {
+  const bioCat = CURRICULUM_CATEGORIES.find((c) => c.id === 'biology-4pt');
+  if (bioCat?.concept_ids.includes(conceptId) || subjects?.includes('biology')) {
+    return 'biology';
+  }
   const physCat = CURRICULUM_CATEGORIES.find((c) => c.id === 'physics-hs');
   if (physCat?.concept_ids.includes(conceptId) || subjects?.includes('physics')) {
     return pointsGroup === 'hs_physics' ? 'hs_physics' : 'physics';
@@ -79,13 +83,42 @@ function learnSubjectSlug(
   return 'math';
 }
 
+const BIOLOGY_CONCEPT_PREFIXES = ['cell_', 'heredity_', 'natural_'] as const;
+
+function hasStudiedBiology(mastery: Record<string, number>): boolean {
+  const biologyIds = new Set(conceptIdsForLevel('biology_4pt'));
+  return Object.keys(mastery).some(
+    (id) =>
+      biologyIds.has(id) ||
+      BIOLOGY_CONCEPT_PREFIXES.some((prefix) => id.startsWith(prefix)),
+  );
+}
+
 function computeNextLesson(
   mastery: Record<string, number>,
   pointsGroup: string | null,
   subjects?: string[] | null,
+  personalityProfile?: Record<string, unknown> | null,
 ): NextLessonInfo | null {
   const index = lessonsIndex as LessonIndexEntry[];
   const indexById = new Map(index.map((l) => [l.id, l]));
+
+  const hsBiology = personalityProfile?.hs_biology === true;
+
+  if (hsBiology && !hasStudiedBiology(mastery)) {
+    const cellEntry = indexById.get('cell_structure');
+    if (cellEntry) {
+      return {
+        concept_id: 'cell_structure',
+        lesson_id: 'cell_structure',
+        subject: 'biology',
+        title: cellEntry.title_en,
+        title_he: cellEntry.title_he ?? cellEntry.title_en,
+        est_minutes: cellEntry.est_minutes,
+        reason: 'Recommended next',
+      };
+    }
+  }
 
   const candidateSet = new Set<string>();
   if (pointsGroup) {
@@ -99,6 +132,9 @@ function computeNextLesson(
       c.points_levels.includes('hs_physics'),
     );
     for (const id of physCat?.concept_ids ?? []) candidateSet.add(id);
+  }
+  if (hsBiology || subjects?.includes('biology')) {
+    for (const id of conceptIdsForLevel('biology_4pt')) candidateSet.add(id);
   }
   const candidateIds =
     candidateSet.size > 0 ? [...candidateSet] : index.map((l) => l.id);
@@ -191,6 +227,7 @@ export default async function DashboardPage() {
     mastery,
     profile?.points_group ?? null,
     profile?.subjects ?? null,
+    profile?.personality_profile ?? null,
   );
 
   return (
