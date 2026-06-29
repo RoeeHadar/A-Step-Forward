@@ -39,20 +39,21 @@ const STATISTICS_CONCEPTS = ['descriptive_stats', 'probability_basic', 'combinat
 
 type MathTrack = '3pt' | '4pt' | '5pt';
 
-/** Extra blocklist for HS 5pt — university / advanced LA concepts not on Bagrut 581 */
+/**
+ * Extra blocklist for HS 5pt — university / advanced LA concepts not on Bagrut 581.
+ * Note: all `uni_*` prefixed concepts are also blocked by `isInBagrutScope` directly.
+ * Concepts not in MATH_5PT_CONCEPTS are already blocked via the conceptIdsForLevel allowlist.
+ */
 const FILTER_FROM_HS_5PT = new Set([
-  'uni_vector_fields',
-  'uni_manifolds',
-  'la_diagonalization',
-  'la_eigenvalues',
-  'la_vector_spaces',
-  'la_orthogonality',
-  'la_determinants',
-  'matrix_spaces',
-  'orthogonality',
-  'continuity',
+  // University linear algebra (not on any Bagrut questionnaire)
+  'uni_vector_fields', 'uni_manifolds',
+  'la_diagonalization', 'la_eigenvalues', 'la_vector_spaces', 'la_orthogonality',
+  'la_determinants', 'la_matrices', 'la_vectors',
+  'matrix_spaces', 'orthogonality',
+  // Not on Bagrut 581 / 807
   'differential_equations_intro',
   'hypothesis_testing',
+  'statistics_descriptive',
   'complex_numbers',
 ]);
 

@@ -1,4 +1,5 @@
-﻿import os, re, json
+﻿import json
+import os
 
 lesson_dir = "scripts/seed_data/lessons"
 artifact_files = [

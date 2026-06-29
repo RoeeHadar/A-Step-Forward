@@ -181,9 +181,9 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
       },
       {
         id: 'sh801-sequences',
-        heLabel: 'סדרות חשבוניות',
-        enLabel: 'Arithmetic Sequences',
-        concept_ids: ['sequences_arithmetic'],
+        heLabel: 'סדרות חשבוניות והנדסיות',
+        enLabel: 'Arithmetic & Geometric Sequences',
+        concept_ids: ['sequences_arithmetic', 'sequences_geometric'],
       },
       {
         id: 'sh801-trigonometry',
@@ -309,13 +309,19 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'algebra-5pt',
         heLabel: 'אלגברה — סדרות, משוואות, אי-שוויונים',
         enLabel: 'Algebra — Sequences, Equations, Inequalities',
-        concept_ids: ['algebra_basics', 'fractions_algebraic', 'factoring', 'equations_quadratic', 'inequalities', 'sequences_arithmetic', 'sequences_geometric', 'word_problems'],
+        concept_ids: ['arithmetic', 'algebra_basics', 'equations_linear', 'equations_quadratic', 'inequalities', 'exponents', 'fractions_algebraic', 'factoring', 'word_problems', 'sequences_arithmetic', 'sequences_geometric'],
+      },
+      {
+        id: 'functions-5pt',
+        heLabel: 'פונקציות — סוגים ומאפיינים',
+        enLabel: 'Functions — Types & Properties',
+        concept_ids: ['functions_intro', 'functions_linear', 'functions_quadratic'],
       },
       {
         id: 'probability-5pt',
-        heLabel: 'הסתברות קלאסית ובינומית',
-        enLabel: 'Classical & Binomial Probability',
-        concept_ids: ['probability_basic', 'combinatorics', 'distributions'],
+        heLabel: 'סטטיסטיקה, הסתברות קלאסית ובינומית',
+        enLabel: 'Statistics, Classical & Binomial Probability',
+        concept_ids: ['descriptive_stats', 'probability_basic', 'combinatorics', 'distributions'],
       },
       {
         id: 'geometry-5pt',
@@ -333,7 +339,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'calculus-5pt',
         heLabel: 'חשבון דיפרנציאלי — נגזרות וחקירת פונקציה',
         enLabel: 'Differential Calculus — Derivatives & Function Analysis',
-        concept_ids: ['limits', 'derivatives_intro', 'derivatives_rules', 'derivatives_applications', 'optimization_problems', 'function_transformations'],
+        concept_ids: ['limits', 'continuity', 'derivatives_intro', 'derivatives_rules', 'derivatives_applications', 'optimization_problems', 'function_transformations'],
       },
       {
         id: 'integrals-5pt',

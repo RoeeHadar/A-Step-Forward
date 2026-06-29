@@ -1,6 +1,5 @@
 ﻿import json
 import os
-import re
 
 lesson_dir = "scripts/seed_data/lessons"
 files = sorted([f for f in os.listdir(lesson_dir) if f.endswith(".json")])
