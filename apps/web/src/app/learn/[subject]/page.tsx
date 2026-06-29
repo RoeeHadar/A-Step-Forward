@@ -57,6 +57,36 @@ const FILTER_FROM_HS_5PT = new Set([
   'complex_numbers',
 ]);
 
+/** Extra blocklist for HS 3pt — no calculus, advanced probability, or university content */
+const FILTER_FROM_HS_3PT = new Set([
+  'limits',
+  'continuity',
+  'derivatives_intro',
+  'derivatives_rules',
+  'derivatives_applications',
+  'optimization_problems',
+  'integrals_intro',
+  'definite_integrals',
+  'integrals_techniques',
+  'integrals_applications',
+  'differential_equations_intro',
+  'logarithms',
+  'function_transformations',
+  'trigonometry_identities',
+  'trigonometry_equations',
+  'analytic_geometry',
+  'vectors_2d',
+  'distributions',
+  'combinatorics',
+  'la_diagonalization',
+  'la_eigenvalues',
+  'la_vector_spaces',
+  'la_orthogonality',
+  'la_determinants',
+  'la_matrices',
+  'la_vectors',
+]);
+
 /** Extra blocklist for HS 4pt — 5pt calculus / university content */
 const FILTER_FROM_HS_4PT = new Set([
   ...FILTER_FROM_HS_5PT,
@@ -82,6 +112,7 @@ function isInBagrutScope(conceptId: string, mathTrack: MathTrack): boolean {
   if (conceptId.startsWith('uni_')) return false;
   const allowlist = new Set(conceptIdsForLevel(mathTrack));
   if (!allowlist.has(conceptId)) return false;
+  if (mathTrack === '3pt' && FILTER_FROM_HS_3PT.has(conceptId)) return false;
   if (mathTrack === '5pt' && FILTER_FROM_HS_5PT.has(conceptId)) return false;
   if (mathTrack === '4pt' && FILTER_FROM_HS_4PT.has(conceptId)) return false;
   return true;
