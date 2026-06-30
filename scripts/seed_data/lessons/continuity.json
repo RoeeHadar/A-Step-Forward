@@ -5,341 +5,194 @@
   "math_track": [
     "5pt"
   ],
-  "title_en": "Continuity",
-  "title_he": "רציפות",
-  "summary_en": "A function is continuous at $a$ when its limit at $a$ equals its value at $a$. Continuity guarantees no jumps, no holes, and unlocks the Intermediate Value Theorem.",
-  "summary_he": "פונקציה רציפה ב-$a$ כאשר הגבול שלה ב-$a$ שווה לערך שלה ב-$a$. רציפות מבטיחה שאין קפיצות, אין חורים, ופותחת את משפט ערך הביניים.",
-  "est_minutes": 12,
+  "title_en": "Continuity, IVT & EVT",
+  "title_he": "רציפות, משפט ערך הביניים ומשפט ערך הקיצון",
+  "summary_en": "A function is continuous when you can draw it without lifting the pen. Formally this means three conditions: defined, limit exists, limit equals value. The Intermediate Value Theorem (IVT) guarantees roots; the Extreme Value Theorem (EVT) guarantees maximum and minimum on a closed interval. Built in the Goren/Geva style with worked exam problems.",
+  "summary_he": "פונקציה רציפה כשאפשר לצייר אותה ללא הרמת העט. פורמלית: שלושה תנאים. IVT מבטיח שורשים; EVT מבטיח מקסימום ומינימום על קטע סגור. בנוי בסגנון גורן/גבע עם בעיות בחינה פתורות.",
+  "est_minutes": 55,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What continuity means",
-      "title_he": "מה זה רציפות",
-      "body_en_md": "Intuitively, a function is **continuous** if you can draw its graph without lifting your pen. Formally:\n\nA function $f$ is continuous at a point $a$ if all three conditions hold:\n\n1. $f(a)$ is **defined** (the function has a value at $a$).\n2. $\\lim_{x \\to a} f(x)$ **exists** (the limit is a finite number).\n3. $\\lim_{x \\to a} f(x) = f(a)$ (the limit equals the value).\n\nIf any of these fails, $f$ is **discontinuous** at $a$.",
-      "body_he_md": "אינטואיטיבית, פונקציה **רציפה** אם אפשר לצייר את הגרף שלה בלי להרים את העט. פורמלית:\n\nפונקציה $f$ רציפה בנקודה $a$ אם שלושת התנאים מתקיימים:\n\n1. $f(a)$ **מוגדר**.\n2. $\\lim_{x \\to a} f(x)$ **קיים** (גבול סופי).\n3. $\\lim_{x \\to a} f(x) = f(a)$.\n\nאם אחד מהם נכשל, $f$ **לא רציפה** ב-$a$.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "Continuity is a fundamental concept in calculus that deals with the behavior of functions at a given point. A function $f(x)$ is said to be continuous at a point $x=a$ if the following conditions are met:\n- The function is defined at $x=a$, i.e., $f(a)$ is defined.\n- The limit of the function as $x$ approaches $a$ exists, i.e., $\\lim_{x\\to a}f(x)$ exists.\n- The limit of the function as $x$ approaches $a$ is equal to the value of the function at $x=a$, i.e., $\\lim_{x\\to a}f(x)=f(a)$.\n\nThere are three types of discontinuities:\n- Jump discontinuity: The function has a finite limit at $x=a$, but the value of the function at $x=a$ is different from the limit.\n- Infinite discontinuity: The function has an infinite limit at $x=a$.\n- Removable discontinuity: The function has a finite limit at $x=a$, but the value of the function at $x=a$ is not defined.\n\nThe Intermediate Value Theorem states that if a function $f(x)$ is continuous on a closed interval $[a,b]$, and $k$ is any value between $f(a)$ and $f(b)$, then there exists a point $c$ in $(a,b)$ such that $f(c)=k$.\n\nA composition of functions $f(g(x))$ is continuous if and only if the inner function $g(x)$ is continuous at the point where the outer function $f(x)$ is continuous.\n\nWorked example: Let $f(x)=\\frac{1}{x}$ and $g(x)=x^2-4$. Find the value of $f(g(x))$ at $x=2$.\n\n$$f(g(2))=\\frac{1}{g(2)}=\\frac{1}{2^2-4}=\\frac{1}{0}$$\n\nThis is an example of an infinite discontinuity.",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "What Does Continuity Mean?",
+      "title_he": "מה פירוש רציפות?",
+      "body_en_md": "## The Pen Test\n\n**Intuitive definition:** A function is continuous on an interval if you can draw its entire graph **without lifting your pen from the paper**.\n\nExamples:\n- $f(x) = x^2$ — continuous everywhere. ✓\n- $f(x) = \\frac{1}{x}$ — has a break at $x=0$. ✗\n- $f(x) = \\frac{x^2-1}{x-1}$ — has a hole at $x=1$. ✗ (but fixable!)\n\n## Why Continuity Matters for Bagrut\n\nContinuity is the hypothesis of the most powerful theorems in the Bagrut:\n\n| Theorem | What it gives you | Requires |\n|---------|-------------------|---------|\n| **IVT** | A root exists in $(a,b)$ | $f$ continuous on $[a,b]$ |\n| **EVT** | A maximum and minimum exist | $f$ continuous on $[a,b]$ |\n| **MVT** | A point where $f'(c)=$ average slope | $f$ continuous on $[a,b]$, differentiable on $(a,b)$ |\n\n**In the Bagrut 5-point exam:** Continuity questions typically ask you to:\n1. Classify a discontinuity (removable, jump, infinite).\n2. Find a constant $k$ that makes $f$ continuous.\n3. Apply IVT to prove a root exists.\n4. Apply EVT to prove a maximum or minimum is attained.",
+      "body_he_md": "## מבחן העט\n\n**הגדרה אינטואיטיבית:** פונקציה רציפה על קטע אם אפשר לצייר את כל הגרף שלה **מבלי להרים את העט מהנייר**.\n\nדוגמאות:\n- $f(x) = x^2$ — רציפה בכל מקום. ✓\n- $f(x) = \\frac{1}{x}$ — יש הפסקה ב-$x=0$. ✗\n- $f(x) = \\frac{x^2-1}{x-1}$ — יש חור ב-$x=1$. ✗ (אבל ניתן לתיקון!)\n\n## למה רציפות חשובה לבגרות\n\nרציפות היא ההנחה של המשפטים החזקים ביותר בבגרות:\n\n| משפט | מה הוא נותן | דורש |\n|------|-------------|------|\n| **IVT** | שורש קיים ב-$(a,b)$ | $f$ רציפה על $[a,b]$ |\n| **EVT** | מקסימום ומינימום קיימים | $f$ רציפה על $[a,b]$ |\n| **MVT** | נקודה שבה $f'(c)=$ שיפוע ממוצע | $f$ רציפה על $[a,b]$, גזירה על $(a,b)$ |"
+    },
+    {
+      "kind": "definition",
+      "title_en": "Definition — Continuity at a Point",
+      "title_he": "הגדרה — רציפות בנקודה",
+      "body_en_md": "## The Three-Condition Definition\n\nA function $f$ is **continuous at the point $a$** if ALL THREE of the following conditions hold:\n\n1. **Defined:** $f(a)$ exists.\n2. **Limit exists:** $\\lim_{x\\to a}f(x)$ exists (finite, two-sided).\n3. **Agreement:** $\\lim_{x\\to a}f(x)=f(a)$.\n\nIf **any** condition fails, $f$ is **discontinuous** at $a$.\n\n## Three Types of Discontinuity\n\n### 1. Removable Discontinuity (חור — \"Hole\")\n\nThe limit **exists** but either $f(a)$ is undefined OR $f(a)\\ne\\lim_{x\\to a}f(x)$.\n\n**Example:** $f(x)=\\dfrac{x^2-1}{x-1}$ at $x=1$.\n- $f(1)$ undefined.\n- $\\lim_{x\\to 1}f(x)=\\lim_{x\\to 1}(x+1)=2$.\n- Fix: define $f(1)=2$. Now continuous. ✓\n\n**Graphically:** a single missing point (hole) on the graph.\n\n### 2. Jump Discontinuity (קפיצה)\n\nBoth one-sided limits exist but they are **unequal**:\n$$\\lim_{x\\to a^-}f(x)\\ne\\lim_{x\\to a^+}f(x).$$\n\n**Example:** $f(x)=\\dfrac{|x|}{x}$ at $x=0$: left limit $=-1$, right limit $=+1$.\n\n**Cannot be fixed by redefining the value at a single point.**\n\n### 3. Infinite Discontinuity (אסימפטוטה)\n\nAt least one one-sided limit is $\\pm\\infty$.\n\n**Example:** $f(x)=\\dfrac{1}{x}$ at $x=0$: $\\lim_{x\\to 0^+}f(x)=+\\infty$.\n\n## Continuity on an Interval\n\n- **Open interval $(a,b)$:** $f$ continuous at every interior point.\n- **Closed interval $[a,b]$:** additionally right-continuous at $a$ and left-continuous at $b$.",
+      "body_he_md": "## הגדרת שלושת התנאים\n\nפונקציה $f$ **רציפה בנקודה $a$** אם שלושת התנאים הבאים מתקיימים:\n\n1. **מוגדרת:** $f(a)$ קיים.\n2. **גבול קיים:** $\\lim_{x\\to a}f(x)$ קיים (סופי, דו-צדדי).\n3. **הסכמה:** $\\lim_{x\\to a}f(x)=f(a)$.\n\nאם **אחד** מהתנאים לא מתקיים, $f$ **אינה רציפה** ב-$a$.\n\n## שלושה סוגי אי-רציפות\n\n### 1. אי-רציפות סליקה (חור)\n\nהגבול **קיים** אבל $f(a)$ לא מוגדר או $f(a)\\ne\\lim_{x\\to a}f(x)$.\n\n**דוגמה:** $f(x)=\\dfrac{x^2-1}{x-1}$ ב-$x=1$: גבול $=2$, $f(1)$ לא מוגדר. תיקון: $f(1)=2$. ✓\n\n**גרפית:** נקודה חסרה בודדת בגרף.\n\n### 2. אי-רציפות קפיצה\n\nשני הגבולות החד-צדדיים קיימים אך **אינם שווים**:\n$$\\lim_{x\\to a^-}f(x)\\ne\\lim_{x\\to a^+}f(x).$$\n\n**דוגמה:** $f(x)=\\dfrac{|x|}{x}$ ב-$x=0$: שמאלי $=-1$, ימני $=+1$.\n\n### 3. אי-רציפות אינסופית (אסימפטוטה)\n\n**דוגמה:** $f(x)=\\dfrac{1}{x}$ ב-$x=0$: $\\lim_{x\\to 0^+}f(x)=+\\infty$."
     },
     {
       "kind": "theory",
-      "title_en": "Types of discontinuity + IVT",
-      "title_he": "סוגי אי-רציפות + משפט ערך הביניים",
-      "body_en_md": "### Three types of discontinuity\n\n1. **Removable** (hole): the limit exists but $f(a)$ doesn't equal it (or $f(a)$ undefined). Fix by redefining $f(a)$.\n   - Example: $f(x) = \\frac{x^2-1}{x-1}$ at $x=1$. Limit is $2$ but $f(1)$ undefined.\n2. **Jump**: one-sided limits exist but differ.\n   - Example: $f(x) = \\frac{|x|}{x}$ at $x=0$.\n3. **Infinite (asymptote)**: at least one one-sided limit is $\\pm\\infty$.\n   - Example: $f(x) = \\frac{1}{x}$ at $x=0$.\n\n### Continuity on an interval\n\nA function is continuous on $[a, b]$ if it's continuous at every point of the interval (with one-sided continuity at the endpoints).\n\n### What's continuous everywhere?\n\n- Polynomials.\n- Trig functions $\\sin, \\cos$ (everywhere); $\\tan$ except at odd multiples of $\\pi/2$.\n- Exponentials $a^x$ ($a > 0$); logarithms $\\log x$ for $x > 0$.\n- Sums, differences, products, compositions of continuous functions.\n- Quotients $\\frac{f}{g}$ at points where $g \\ne 0$.\n\n### Intermediate Value Theorem (IVT)\n\nIf $f$ is continuous on $[a, b]$ and $N$ is any value between $f(a)$ and $f(b)$, then there exists at least one $c \\in (a, b)$ with $f(c) = N$.\n\n**Practical use:** to prove an equation $f(x) = 0$ has a solution in $(a, b)$, show:\n1. $f$ is continuous on $[a, b]$.\n2. $f(a)$ and $f(b)$ have **opposite signs**.\n\nThen by IVT there's a root in $(a, b)$.",
-      "body_he_md": "### שלושה סוגי אי-רציפות\n\n1. **סליקה** (חור): הגבול קיים אבל $f(a)$ לא שווה לו (או לא מוגדר). תיקון: הגדרה מחדש של $f(a)$.\n2. **קפיצה**: הגבולות החד-צדדיים קיימים אבל שונים.\n3. **אינסופית (אסימפטוטה)**: לפחות אחד מהגבולות החד-צדדיים הוא $\\pm\\infty$.\n\n### רציפות על קטע\n\nפונקציה רציפה על $[a, b]$ אם רציפה בכל נקודה של הקטע.\n\n### מי רציף בכל מקום?\n\n- פולינומים.\n- $\\sin, \\cos$ בכל מקום; $\\tan$ למעט כפולות אי-זוגיות של $\\pi/2$.\n- $a^x$ ($a > 0$); $\\log x$ עבור $x > 0$.\n- סכומים, מכפלות, הרכבות של פונקציות רציפות.\n- מנות $\\frac{f}{g}$ בנקודות שבהן $g \\ne 0$.\n\n### משפט ערך הביניים\n\nאם $f$ רציפה על $[a, b]$ ו-$N$ ערך בין $f(a)$ ל-$f(b)$, אז קיים $c \\in (a, b)$ עם $f(c) = N$.\n\n**שימוש מעשי:** להוכיח שלמשוואה $f(x) = 0$ יש פתרון ב-$(a, b)$: \n1. $f$ רציפה על $[a, b]$.\n2. $f(a)$ ו-$f(b)$ עם **סימנים הפוכים**.\n\nאז מ-IVT יש שורש ב-$(a, b)$.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The Intermediate Value Theorem (IVT) states that if a function $f$ is continuous on the closed interval $[a, b]$, and $k$ is any value between $f(a)$ and $f(b)$, then there exists a value $c$ in $[a, b]$ such that $f(c) = k$. This implies that if a function is continuous on a closed interval, it takes on all values between its maximum and minimum values on that interval.\n\nThere are three types of discontinuities: removable discontinuities, jump discontinuities, and infinite discontinuities. A removable discontinuity occurs when a function is undefined at a point, but the limit exists at that point. A jump discontinuity occurs when the left and right limits of a function at a point do not exist or are not equal. An infinite discontinuity occurs when the limit of a function at a point is infinity or negative infinity.\n\nThe composition of two continuous functions is also continuous.\n\nWorked example: If $f(x) = \\frac{1}{x}$ and $g(x) = \\frac{1}{x-1}$, then the composition $f(g(x))$ is continuous for all $x$ except $x=1$.\n\n$$f(g(x)) = \\frac{1}{\\frac{1}{x-1}} = \\frac{x-1}{1} = x-1$$\n\n$$\\lim_{x\\to 1^-} f(g(x)) = \\lim_{x\\to 1^-} (x-1) = 0$$\n\n$$\\lim_{x\\to 1^+} f(g(x)) = \\lim_{x\\to 1^+} (x-1) = 0$$\n\nSince the left and right limits are equal, the limit of $f(g(x))$ as $x$ approaches 1 exists, but the function is undefined at $x=1$.",
-          "body_he_md": "המשפט הביניומי (IVT) קובע שאם פונקציה $f$ היא רציפה על האינטרבל $[a, b]$, ו-$k$ הוא ערך כלשה"
-        }
-      }
+      "title_en": "Theory — Which Functions are Continuous?",
+      "title_he": "תיאוריה — אילו פונקציות רציפות?",
+      "body_en_md": "## Functions Continuous Everywhere on Their Domain\n\n| Function family | Where continuous |\n|----------------|------------------|\n| **Polynomials** | All of $\\mathbb{R}$ |\n| **Rational functions** | Everywhere except zeros of denominator |\n| **$\\sin x$, $\\cos x$** | All of $\\mathbb{R}$ |\n| **$\\tan x$** | $\\mathbb{R}\\setminus\\{\\pi/2+k\\pi\\}$ |\n| **$e^x$, $a^x$ ($a>0$)** | All of $\\mathbb{R}$ |\n| **$\\ln x$** | $(0,\\infty)$ |\n| **$\\sqrt{x}$** | $[0,\\infty)$ |\n\n## Algebra of Continuous Functions\n\nIf $f$ and $g$ are both continuous at $a$, then so are: $f\\pm g$, $cf$, $f\\cdot g$, $f/g$ (provided $g(a)\\ne 0$), and $f\\circ g$.\n\n## Finding the Constant That Makes $f$ Continuous\n\nFor piecewise functions, set the left-hand limit equal to the right-hand limit at the join point.\n\n**Example:**\n$$f(x)=\\begin{cases}x^2+k & x\\le 2\\\\ 3x-1 & x>2\\end{cases}$$\nContinuity at $x=2$: $4+k = 3(2)-1 = 5$, so $k=1$.",
+      "body_he_md": "## פונקציות רציפות בכל מקום בתחומן\n\n| משפחת פונקציות | רציפה היכן |\n|---------------|------------|\n| **פולינומים** | כל $\\mathbb{R}$ |\n| **רציונליות** | בכל מקום חוץ מאפסי המכנה |\n| **$\\sin x$, $\\cos x$** | כל $\\mathbb{R}$ |\n| **$\\tan x$** | $\\mathbb{R}\\setminus\\{\\pi/2+k\\pi\\}$ |\n| **$e^x$** | כל $\\mathbb{R}$ |\n| **$\\ln x$** | $(0,\\infty)$ |\n| **$\\sqrt{x}$** | $[0,\\infty)$ |\n\n## אלגברה של פונקציות רציפות\n\nאם $f$ ו-$g$ רציפות ב-$a$: גם $f\\pm g$, $cf$, $f\\cdot g$, $f/g$ ($g(a)\\ne 0$), ו-$f\\circ g$.\n\n## מציאת קבוע לרציפות\n\n**דוגמה:** $f(x)=\\begin{cases}x^2+k & x\\le 2\\\\ 3x-1 & x>2\\end{cases}$.\nרציפות ב-$x=2$: $4+k=5$, לכן $k=1$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: prove an equation has a root",
-      "title_he": "דוגמה פתורה: הוכחה שיש למשוואה פתרון",
-      "body_en_md": "Show that $f(x) = x^3 + x - 1$ has a root in $(0, 1)$.\n\n**Continuity:** $f$ is a polynomial, so it's continuous everywhere — in particular on $[0, 1]$.\n\n**Sign check:**\n- $f(0) = 0 + 0 - 1 = -1 < 0$.\n- $f(1) = 1 + 1 - 1 = 1 > 0$.\n\n**Apply IVT:** $f$ is continuous on $[0, 1]$ and takes opposite signs at the endpoints. So by IVT, there's some $c \\in (0, 1)$ with $f(c) = 0$. ✓",
-      "body_he_md": "הראו שלפונקציה $f(x) = x^3 + x - 1$ יש שורש ב-$(0, 1)$.\n\n**רציפות:** $f$ פולינום, אז רציפה בכל מקום — בפרט על $[0, 1]$.\n\n**בדיקת סימנים:**\n- $f(0) = -1 < 0$.\n- $f(1) = 1 > 0$.\n\n**מחילים IVT:** $f$ רציפה על $[0, 1]$ ובעלת סימנים הפוכים בקצוות. אז מ-IVT, קיים $c \\in (0, 1)$ עם $f(c) = 0$. ✓",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The Intermediate Value Theorem states that if a function $f(x)$ is continuous on the closed interval $[a, b]$, and if $k$ is any number between $f(a)$ and $f(b)$, then there exists at least one number $c$ in $[a, b]$ such that $f(c) = k$. We can use this theorem to prove that an equation has a root.\n\nTo prove that an equation $f(x) = 0$ has a root, we need to show that there exists a number $c$ such that $f(c) = 0$. We can do this by showing that the function $f(x)$ is continuous on the closed interval $[a, b]$ and that $f(a)$ and $f(b)$ have opposite signs.\n\nFor example, consider the function $f(x) = x^2 - 2$ and the interval $[0, 2]$. We can show that $f(x)$ is continuous on $[0, 2]$ and that $f(0) = -2$ and $f(2) = 2$. Since $f(0)$ and $f(2)$ have opposite signs, we can apply the Intermediate Value Theorem to conclude that there exists at least one number $c$ in $[0, 2]$ such that $f(c) = 0$.\n\n$$\\text{Worked Example:}$$\n\nSuppose we want to prove that the equation $x^2 - 2 = 0$ has a root. We can let $f(x) = x^2 - 2$ and consider the interval $[0, 2]$. Since $f(x)$ is a polynomial function, it is continuous on $[0, 2]$. We can evaluate $f(0)$ and $f(2)$ as follows:\n\n$$f(0) = 0^2 - 2 = -2$$\n$$f(2) = 2^2 - 2 = 2$$\n\nSince $f(0)$ and $f(2)$ have opposite signs, we can apply the Intermediate Value Theorem to conclude that there exists at least one number $c$ in $[0, 2]$ such that $f(c) = 0$. Therefore, the equation $x^2 - 2 = 0$ has a root",
-          "body_he_md": ""
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Classifying and Fixing a Removable Discontinuity",
+      "title_he": "דוגמה פתורה 1 — סיווג ותיקון אי-רציפות סליקה",
+      "body_en_md": "**Show that $f(x) = \\dfrac{x^2-4}{x-2}$ has a removable discontinuity at $x=2$, and define an extension that makes $f$ continuous.**\n\n---\n\n**Step 1 — Check condition (1): Is $f(2)$ defined?**\n$$f(2) = \\frac{4-4}{2-2} = \\frac{0}{0}.\\quad\\text{Undefined. Condition (1) fails.}$$\n\n**Step 2 — Compute the limit.**\nFactor: $x^2-4=(x-2)(x+2)$.\n$$\\lim_{x\\to 2}\\frac{x^2-4}{x-2}=\\lim_{x\\to 2}(x+2)=4.$$\nThe limit exists and equals $4$. ✓\n\n**Step 3 — Classify.**\nLimit exists (condition 2 ✓) but $f(2)$ undefined (condition 1 ✗). **Removable discontinuity** (hole at $(2, 4)$).\n\n**Step 4 — Extend to make continuous.**\n$$\\tilde{f}(x)=\\begin{cases}\\dfrac{x^2-4}{x-2} & x\\ne 2\\\\ 4 & x=2\\end{cases}$$\nNow $\\tilde{f}(2)=4=\\lim_{x\\to 2}\\tilde{f}(x)$. All three conditions hold. ✓",
+      "body_he_md": "**הראו ש-$f(x) = \\dfrac{x^2-4}{x-2}$ בעלת אי-רציפות סליקה ב-$x=2$, והגדירו הרחבה שהופכת את $f$ לרציפה.**\n\n---\n\n**שלב 1 — האם $f(2)$ מוגדר?**\n$$f(2) = \\frac{0}{0}.\\quad\\text{לא מוגדר. תנאי (1) נכשל.}$$\n\n**שלב 2 — חישוב הגבול.**\n$x^2-4=(x-2)(x+2)$, לכן:\n$$\\lim_{x\\to 2}\\frac{x^2-4}{x-2}=\\lim_{x\\to 2}(x+2)=4.\\quad✓$$\n\n**שלב 3 — סיווג.**\nגבול קיים אך $f(2)$ לא מוגדר. **אי-רציפות סליקה** (חור ב-$(2,4)$).\n\n**שלב 4 — הרחבה לרציפות.**\n$$\\tilde{f}(x)=\\begin{cases}\\dfrac{x^2-4}{x-2} & x\\ne 2\\\\ 4 & x=2\\end{cases}$$\nכעת $\\tilde{f}(2)=4=\\lim$. שלושת התנאים. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice ✋",
+      "title_he": "עצור ותרגל ✋",
+      "body_en_md": "Is $g(x) = \\tan x$ continuous everywhere? If not, describe all its discontinuities and classify their type.",
+      "body_he_md": "האם $g(x) = \\tan x$ רציפה בכל מקום? אם לא, תארו את כל אי-הרציפויות שלה וסווגו את סוגן.",
+      "checkpoint_solution_en": "$\\tan x = \\sin x / \\cos x$. The denominator $\\cos x = 0$ at $x = \\frac{\\pi}{2}+k\\pi$ for any integer $k$.\n\nAt each such point:\n- $\\lim_{x\\to (\\pi/2)^-}\\tan x = +\\infty$ and $\\lim_{x\\to (\\pi/2)^+}\\tan x = -\\infty$.\n\nSo $\\tan x$ has **infinite discontinuities** at $x=\\frac{\\pi}{2}+k\\pi$, $k\\in\\mathbb{Z}$. Continuous on each open interval between these points. $\\checkmark$",
+      "checkpoint_solution_he": "$\\tan x = \\sin x / \\cos x$. המכנה $\\cos x = 0$ ב-$x = \\frac{\\pi}{2}+k\\pi$.\n\nבכל נקודה כזו: $\\lim^- = +\\infty$, $\\lim^+ = -\\infty$.\n\nל-$\\tan x$ **אי-רציפויות אינסופיות** ב-$x=\\frac{\\pi}{2}+k\\pi$. $\\checkmark$"
+    },
+    {
+      "kind": "theory",
+      "title_en": "Theory — IVT and EVT: Statements and Applications",
+      "title_he": "תיאוריה — IVT ו-EVT: אמירות ושימושים",
+      "body_en_md": "## Intermediate Value Theorem (IVT)\n\n**Statement:** Let $f$ be continuous on $[a, b]$, and let $N$ be any value strictly between $f(a)$ and $f(b)$. Then $\\exists\\,c\\in(a,b)$ such that $f(c)=N$.\n\n$$\\boxed{f \\text{ continuous on } [a,b],\\; f(a)\\cdot f(b)<0 \\;\\Rightarrow\\; \\exists\\,c\\in(a,b):\\;f(c)=0.}$$\n\n**How to use IVT to prove a root exists:**\n1. Rewrite the equation as $f(x)=0$ with $f$ continuous.\n2. Find $a, b$ with $f(a)\\cdot f(b)<0$ (opposite signs).\n3. Conclude by IVT that $\\exists\\,c\\in(a,b):\\;f(c)=0$.\n\n> **IVT gives existence, not uniqueness.**\n\n---\n\n## Extreme Value Theorem (EVT)\n\n**Statement:** If $f$ is continuous on $[a,b]$, then $f$ attains its maximum and minimum on $[a,b]$:\n$$\\exists\\, c_1, c_2\\in[a,b]:\\;f(c_1)=\\max_{[a,b]}f,\\quad f(c_2)=\\min_{[a,b]}f.$$\n\n**Critical conditions (all three required):**\n- $[a,b]$ must be **closed** (not open).\n- $[a,b]$ must be **bounded** (not $[0,\\infty)$).\n- $f$ must be **continuous** on $[a,b]$.\n\n**Practical use:** Given $f$ continuous on $[a,b]$ and $f$ never zero $\\Rightarrow$ by EVT, $f$ attains a minimum $m>0$, so $f(x)\\ge m>0$ for all $x\\in[a,b]$.",
+      "body_he_md": "## משפט ערך הביניים (IVT)\n\n**אמירה:** תהי $f$ רציפה על $[a, b]$, ו-$N$ ערך בין $f(a)$ ל-$f(b)$. אז $\\exists\\,c\\in(a,b):\\;f(c)=N$.\n\n$$\\boxed{f \\text{ רציפה על } [a,b],\\; f(a)\\cdot f(b)<0 \\;\\Rightarrow\\; \\exists\\,c\\in(a,b):\\;f(c)=0.}$$\n\n**שלבים:**\n1. שכתוב המשוואה כ-$f(x)=0$ עם $f$ רציפה.\n2. מצא $a,b$ עם $f(a)\\cdot f(b)<0$.\n3. מ-IVT: קיים $c\\in(a,b):\\;f(c)=0$.\n\n> **IVT נותן קיום, לא יחידות.**\n\n---\n\n## משפט ערך הקיצון (EVT)\n\n**אמירה:** אם $f$ רציפה על $[a,b]$, $f$ מגיעה למקסימום ומינימום שלה:\n$$\\exists\\, c_1, c_2\\in[a,b]:\\;f(c_1)=\\max f,\\quad f(c_2)=\\min f.$$\n\n**תנאים קריטיים:**\n- $[a,b]$ **סגור** (לא פתוח).\n- $[a,b]$ **חסום** (לא $[0,\\infty)$).\n- $f$ **רציפה** על $[a,b]$.\n\n**שימוש מעשי:** $f$ רציפה ושונה מאפס $\\Rightarrow$ מ-EVT: $\\min f = m > 0$, כך $f(x)\\ge m>0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Classic IVT Root-Existence Proof",
+      "title_he": "דוגמה פתורה 2 — הוכחת קיום שורש קלאסית באמצעות IVT",
+      "body_en_md": "**Show that the equation $x^5 - x^2 + 1 = 0$ has at least one real root.**\n\n---\n\n**Step 1 — Define the function and verify continuity.**\n\nLet $f(x) = x^5 - x^2 + 1$.\n$f$ is a polynomial, continuous on all of $\\mathbb{R}$. ✓\n\n**Step 2 — Find an interval with opposite signs.**\n\n$f(-2) = (-2)^5 - (-2)^2 + 1 = -32 - 4 + 1 = -35 < 0.$\n\n$f(0) = 0 - 0 + 1 = 1 > 0.$\n\nSo $f(-2) < 0 < f(0)$. ✓\n\n**Step 3 — Apply IVT.**\n\nSince $f$ is continuous on $[-2, 0]$ and $f(-2) < 0 < f(0)$, by the **Intermediate Value Theorem** there exists $c\\in(-2, 0)$ such that $f(c) = 0$. This $c$ is a real root. $\\square$\n\n> **Note:** We proved existence only. IVT does not find the root or say it's unique.",
+      "body_he_md": "**הראו שלמשוואה $x^5 - x^2 + 1 = 0$ יש לפחות שורש ממשי אחד.**\n\n---\n\n**שלב 1 — הגדרה ורציפות.**\n\n$f(x) = x^5 - x^2 + 1$ — פולינום, רציפה על כל $\\mathbb{R}$. ✓\n\n**שלב 2 — מציאת קטע עם סימנים הפוכים.**\n\n$f(-2) = -32 - 4 + 1 = -35 < 0.$\n\n$f(0) = 1 > 0.$\n\nאז $f(-2) < 0 < f(0)$. ✓\n\n**שלב 3 — יישום IVT.**\n\n$f$ רציפה על $[-2, 0]$ ו-$f(-2) < 0 < f(0)$. ממשפט **ערך הביניים** קיים $c\\in(-2, 0)$ כך ש-$f(c) = 0$. $\\square$\n\n> **הערה:** הוכחנו רק קיום. IVT לא מוצא את השורש ולא אומר שהוא יחיד."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice ✋",
+      "title_he": "עצור ותרגל ✋",
+      "body_en_md": "Use IVT to show that $\\cos x = x$ has at least one solution in $\\left(0,\\dfrac{\\pi}{2}\\right)$.",
+      "body_he_md": "השתמשו ב-IVT להראות ש-$\\cos x = x$ בעלת לפחות פתרון אחד ב-$\\left(0,\\dfrac{\\pi}{2}\\right)$.",
+      "checkpoint_solution_en": "Define $h(x) = \\cos x - x$, continuous on $\\left[0,\\dfrac{\\pi}{2}\\right]$.\n\n$h(0) = 1 - 0 = 1 > 0.$\n$h\\!\\left(\\tfrac{\\pi}{2}\\right) = 0 - \\tfrac{\\pi}{2} < 0.$\n\nBy IVT, $\\exists\\,c\\in\\left(0,\\tfrac{\\pi}{2}\\right):\\;h(c)=0$, i.e., $\\cos c = c$. $\\checkmark$",
+      "checkpoint_solution_he": "$h(x) = \\cos x - x$ רציפה. $h(0)=1>0$, $h(\\pi/2)=-\\pi/2<0$.\n\nמ-IVT: קיים $c\\in(0,\\pi/2):\\;h(c)=0$, כלומר $\\cos c = c$. $\\checkmark$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — EVT Application (Real 20406 Exam Pattern)",
+      "title_he": "דוגמה פתורה 3 — יישום EVT (תבנית בחינה אמיתית 20406)",
+      "body_en_md": "**Let $f$ be a continuous function on $[0,1]$ such that $f(0.5)>0$, and suppose $f(x)\\ne 0$ for all $x\\in[0,1]$. Prove there exists $h>0$ such that $f(x)>h$ for all $x\\in[0,1]$.**\n\n*This problem type appears directly in the 20406 (5-point) Bagrut final exam.*\n\n---\n\n**Step 1 — Identify the strategy.**\n\nWe want a universal lower bound $h>0$ on $[0,1]$. The tool is the **Extreme Value Theorem (EVT)**.\n\n**Step 2 — Apply EVT.**\n\n$f$ is continuous on the closed interval $[0,1]$. By EVT, $f$ **attains its minimum**:\n$$\\exists\\,c\\in[0,1]:\\quad f(c) = \\min_{[0,1]}f =: m.$$\n\n**Step 3 — Show $m > 0$.**\n\nBy hypothesis, $f(x)\\ne 0$ for all $x$, so $f(c)\\ne 0$, meaning $m\\ne 0$.\n\nCould $m<0$? If $m<0$: $f(c)<0$ but $f(0.5)>0$. By IVT applied to $f$ on any interval containing $c$ and $0.5$, there exists a point where $f=0$ — contradicting the hypothesis. Contradiction!\n\nTherefore $m>0$.\n\n**Step 4 — Conclude.**\n\nSet $h=m>0$. For all $x\\in[0,1]$: $f(x)\\ge m = h > 0$. $\\square$\n\n> **Lesson:** EVT + IVT together give a contradiction argument for proving strict positivity.",
+      "body_he_md": "**תהי $f$ רציפה על $[0,1]$ כך ש-$f(0.5)>0$ ו-$f(x)\\ne 0$ לכל $x$. הוכיחו שקיים $h>0$ כך ש-$f(x)>h$ לכל $x\\in[0,1]$.**\n\n*סוג בעיה זה מופיע ישירות בבגרות 20406.*\n\n---\n\n**שלב 1 — אסטרטגיה:** חסם תחתון $h>0$. כלי: **EVT**.\n\n**שלב 2 — EVT.**\n$f$ רציפה על $[0,1]$. מ-EVT, $f$ מגיעה למינימום:\n$$\\exists\\,c\\in[0,1]:\\quad f(c) = \\min f =: m.$$\n\n**שלב 3 — הראה $m > 0$.**\n\n$f(c)\\ne 0$ (הנחה) $\\Rightarrow m\\ne 0$.\n\nאם $m<0$: $f(c)<0$ אך $f(0.5)>0$. מ-IVT יש נקודה שבה $f=0$ — סתירה!\n\nלכן $m>0$.\n\n**שלב 4 — מסקנה.**\n\n$h=m>0$: $f(x)\\ge m=h>0$ לכל $x$. $\\square$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — How to Use IVT to Prove a Root",
+      "title_he": "מדריך שיטות — איך להשתמש ב-IVT להוכחת קיום שורש",
+      "body_en_md": "## Step-by-Step Guide: Proving a Root with IVT\n\n**Step 1:** Rewrite the equation as $f(x)=0$. If given $g(x)=h(x)$, define $f(x)=g(x)-h(x)$.\n\n**Step 2:** Verify $f$ is continuous on some closed interval $[a,b]$.\n\n**Step 3:** Find $a, b$ with $f(a)\\cdot f(b)<0$ (opposite signs). Try $x=0,\\pm 1, \\pm 2, \\pi$, etc.\n\n**Step 4:** Apply IVT:\n*\"Since $f$ is continuous on $[a,b]$ and $f(a)$ and $f(b)$ have opposite signs, by IVT there exists $c\\in(a,b)$ such that $f(c)=0$.\"*\n\n## IVT vs EVT: Which to Use?\n\n| Goal | Theorem |\n|------|---------|\n| Prove a root / specific value is attained | **IVT** |\n| Prove a maximum or minimum is attained | **EVT** |\n| Prove $f(x)>k$ for all $x\\in[a,b]$ | **EVT** (find min, show min $>k$) |\n| Prove two functions meet on an interval | **IVT** (apply to $f-g$) |",
+      "body_he_md": "## מדריך שלב-אחר-שלב: הוכחת שורש עם IVT\n\n**שלב 1:** שכתוב המשוואה כ-$f(x)=0$. אם ניתן $g(x)=h(x)$: $f(x)=g(x)-h(x)$.\n\n**שלב 2:** ודא ש-$f$ רציפה על $[a,b]$.\n\n**שלב 3:** מצא $a, b$ עם $f(a)\\cdot f(b)<0$.\n\n**שלב 4:** \"מ-IVT קיים $c\\in(a,b):\\;f(c)=0$.\"\n\n## IVT לעומת EVT: מה להשתמש?\n\n| מטרה | משפט |\n|------|------|\n| שורש / ערך מסוים מתקבל | **IVT** |\n| מקסימום/מינימום מתקבל | **EVT** |\n| $f(x)>k$ לכל $x$ | **EVT** (מצא מינימום $>k$) |\n| שתי פונקציות נפגשות | **IVT** ($f-g$) |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Exercise Set",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through all exercises. Solutions are hidden — try first!",
+      "body_he_md": "עבדו על כל התרגילים. הפתרונות מוסתרים — נסו קודם!",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Determine whether $f(x) = x^3 - 2x + 1$ is continuous at $x = 1$. Justify using the three conditions.",
+          "body_he": "קבע האם $f(x) = x^3 - 2x + 1$ רציפה ב-$x = 1$. נמק בשלושת התנאים.",
+          "solution_en": "(1) $f(1)=1-2+1=0$ defined. (2) Limit $=0$ (polynomial). (3) Limit $=f(1)$. All hold: continuous.",
+          "solution_he": "(1) $f(1)=0$ מוגדר. (2) גבול $=0$. (3) גבול $=f(1)$. כל התנאים: רציפה."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Classify the discontinuity of $g(x)=\\dfrac{\\sin x}{x}$ at $x=0$.",
+          "body_he": "סווג את אי-הרציפות של $g(x)=\\dfrac{\\sin x}{x}$ ב-$x=0$.",
+          "solution_en": "$g(0)$ is undefined, but $\\lim_{x\\to 0}\\frac{\\sin x}{x}=1$ exists. **Removable discontinuity.** Extend by $g(0)=1$.",
+          "solution_he": "$g(0)$ לא מוגדר, אך גבול $=1$. **אי-רציפות סליקה.** $g(0)=1$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $k$ making $f(x)=\\begin{cases}2x+k & x\\le 1\\\\ x^2+3 & x>1\\end{cases}$ continuous at $x=1$.",
+          "body_he": "מצא $k$ שהופך $f(x)=\\begin{cases}2x+k & x\\le 1\\\\ x^2+3 & x>1\\end{cases}$ לרציפה ב-$x=1$.",
+          "solution_en": "Left limit: $2+k$. Right limit: $4$. Set equal: $k=2$.",
+          "solution_he": "גבול שמאלי $2+k$, ימני $4$. $k=2$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Use IVT to show $p(x)=x^3+x-1$ has a root in $(0,1)$.",
+          "body_he": "השתמש ב-IVT להראות ש-$p(x)=x^3+x-1$ בעל שורש ב-$(0,1)$.",
+          "solution_en": "$p$ polynomial, continuous. $p(0)=-1<0$, $p(1)=1>0$. By IVT, $\\exists c\\in(0,1):\\;p(c)=0$.",
+          "solution_he": "$p$ פולינום, רציפה. $p(0)=-1<0$, $p(1)=1>0$. מ-IVT: שורש ב-$(0,1)$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Show that $f(x)=e^x-2x-1$ has at least two real roots.",
+          "body_he": "הראה ש-$f(x)=e^x-2x-1$ בעלת לפחות שני שורשים ממשיים.",
+          "solution_en": "$f(0)=1-0-1=0$: root at $x=0$. $f(1)=e-3<0$, $f(2)=e^2-5>0$. By IVT, root in $(1,2)$. At least two roots.",
+          "solution_he": "$f(0)=0$: שורש ב-$x=0$. $f(1)<0$, $f(2)>0$. מ-IVT: שורש ב-$(1,2)$. לפחות שניים."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Let $f(x)=\\begin{cases}x^2-1 & x<1\\\\ k(x-1)+2 & x\\ge 1\\end{cases}$. For what value of $k$ is $f$ continuous at $x=1$? What if no such $k$ exists?",
+          "body_he": "תהי $f(x)=\\begin{cases}x^2-1 & x<1\\\\ k(x-1)+2 & x\\ge 1\\end{cases}$. לאיזה $k$ רציפה ב-$x=1$?",
+          "solution_en": "Left limit: $\\lim_{x\\to 1^-}(x^2-1)=0$. Value: $f(1)=2$. For continuity: $0=2$ — impossible. No value of $k$ works: **jump discontinuity** of size 2.",
+          "solution_he": "גבול שמאלי $0$, ערך $f(1)=2$. $0=2$ — בלתי אפשרי. אין $k$: **אי-רציפות קפיצה** בגודל 2."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Use EVT to explain why $f(x)=x^2$ attains a minimum on $[-3,5]$. State the minimum and where it occurs.",
+          "body_he": "השתמש ב-EVT להסביר למה $f(x)=x^2$ מגיעה למינימום על $[-3,5]$.",
+          "solution_en": "$f(x)=x^2$ is a polynomial, continuous on $[-3,5]$. By EVT, $f$ attains its minimum. Min $= f(0)=0$ at $x=0$.",
+          "solution_he": "$f$ פולינום, רציפה על $[-3,5]$. מ-EVT: מינימום $=f(0)=0$ ב-$x=0$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Prove that $x^{2n+1}+x-1=0$ has a real root for every $n\\ge 1$.",
+          "body_he": "הוכח ש-$x^{2n+1}+x-1=0$ בעלת שורש ממשי לכל $n\\ge 1$.",
+          "solution_en": "$f(x)=x^{2n+1}+x-1$ is a polynomial. $f(0)=-1<0$. $f(1)=1>0$. By IVT, $\\exists c\\in(0,1):\\;f(c)=0$. ∎",
+          "solution_he": "$f(x)=x^{2n+1}+x-1$ פולינום. $f(0)=-1<0$, $f(1)=1>0$. מ-IVT: שורש ב-$(0,1)$. ∎"
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Let $f:[0,1]\\to[0,1]$ be continuous. Prove $f$ has a fixed point: $\\exists c\\in[0,1]:\\;f(c)=c$.",
+          "body_he": "תהי $f:[0,1]\\to[0,1]$ רציפה. הוכח ש-$f$ בעלת נקודת שבת: $\\exists c:\\;f(c)=c$.",
+          "solution_en": "Define $h(x)=f(x)-x$. Continuous. $h(0)=f(0)\\ge 0$ (since $f(0)\\in[0,1]$). $h(1)=f(1)-1\\le 0$. If $h(0)=0$: $c=0$. If $h(1)=0$: $c=1$. Else $h(0)>0>h(1)$: by IVT, $\\exists c:\\;h(c)=0$. ∎",
+          "solution_he": "$h(x)=f(x)-x$ רציפה. $h(0)\\ge 0$, $h(1)\\le 0$. מ-IVT: קיים $c:\\;h(c)=0$. ∎"
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Let $f$ be continuous on $[a,b]$ with $f(a)=f(b)$. Show $\\exists c\\in\\left(a,\\frac{a+b}{2}\\right)$ with $f(c)=f\\!\\left(c+\\frac{b-a}{2}\\right)$.",
+          "body_he": "תהי $f$ רציפה על $[a,b]$ עם $f(a)=f(b)$. הראה שקיים $c$ עם $f(c)=f(c+(b-a)/2)$.",
+          "solution_en": "Let $L=(b-a)/2$. Define $g(x)=f(x)-f(x+L)$ on $[a,a+L]$. $g(a)=f(a)-f(a+L)$. $g(a+L)=f(a+L)-f(b)=-g(a)$. If $g(a)=0$: done. Else opposite signs: by IVT $\\exists c:\\;g(c)=0$. ∎",
+          "solution_he": "$g(x)=f(x)-f(x+L)$. $g(a)=-g(a+L)$. מ-IVT: קיים $c:\\;g(c)=0$. ∎"
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
-      "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **All three conditions matter.** A limit existing isn't enough — $f(a)$ must equal it.\n2. **'No jumps' isn't a definition.** It's the intuition; the definition uses limits.\n3. **IVT gives existence, not uniqueness.** There could be multiple roots in the interval.\n4. **IVT requires continuity on the CLOSED interval.** If $f$ is discontinuous somewhere in $[a, b]$, IVT doesn't apply.\n5. **Removable vs other discontinuities.** A function with a hole can be 'fixed' to be continuous; a jump cannot.",
-      "body_he_md": "1. **כל שלושת התנאים חשובים.** קיום גבול לא מספיק — $f(a)$ חייב להיות שווה לו.\n2. **'אין קפיצות' לא הגדרה.** זו האינטואיציה; ההגדרה משתמשת בגבולות.\n3. **IVT נותן קיום, לא יחידות.** ייתכנו מספר שורשים בקטע.\n4. **IVT דורש רציפות בקטע סגור.** אם $f$ לא רציפה איפשהו ב-$[a, b]$, IVT לא חל.\n5. **סליקה מול אחרים.** פונקציה עם חור אפשר 'לתקן' לרציפה; קפיצה לא.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The concept of continuity is crucial in calculus, but it can be easily misinterpreted. A function $f(x)$ is continuous at a point $x=a$ if the following conditions are met: $$\\lim_{x\\to a} f(x) = f(a)$$ and $f(a)$ is defined. However, there are several types of discontinuities, including removable discontinuities, jump discontinuities, and infinite discontinuities. The Intermediate Value Theorem states that if a function $f(x)$ is continuous on a closed interval $[a,b]$ and $k$ is any value between $f(a)$ and $f(b)$, then there exists a point $c$ in $[a,b]$ such that $f(c) = k$.\n\nWhen dealing with compositions of functions, we must be aware of the potential for discontinuities. For example, if we have a function $f(x) = \\frac{1}{x}$ and $g(x) = \\sin x$, then the composition $f(g(x))$ is not continuous at $x = \\pi$ because $g(\\pi) = 0$ and $f(0)$ is undefined.\n\nWorked example: Find the values of $x$ for which the function $f(x) = \\frac{x^2 - 4}{x - 2}$ is continuous.\n\nSolution: The function $f(x)$ is not continuous at $x = 2$ because the denominator is equal to zero, resulting in an undefined value. However, we can simplify the function to $f(x) = x + 2$ for $x \\neq 2$, which is continuous everywhere except at $x = 2$.",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Top Mistakes in Continuity Problems",
+      "title_he": "הטעויות הנפוצות בבעיות רציפות",
+      "body_en_md": "## Four Dangerous Errors\n\n### Mistake 1: Forgetting All Three Conditions\n❌ \"The limit is $2$, so $f$ is continuous.\"\n✅ You also need $f(a)$ defined AND equal to the limit.\n\n### Mistake 2: IVT Gives Uniqueness\n❌ \"By IVT there is exactly one root.\"\n✅ IVT guarantees **at least one**. Uniqueness needs monotonicity.\n\n### Mistake 3: EVT on an Open or Unbounded Interval\n❌ \"$f(x)=x$ on $(0,1)$: by EVT it attains its max.\"\n✅ EVT requires **closed and bounded**. On $(0,1)$, $f=x$ approaches but never reaches $1$.\n\n### Mistake 4: Assuming the Root Location\n❌ $f(0)<0<f(2)$, so \"root at $x=1$.\"\n✅ IVT says root **somewhere in $(0,2)$** — not necessarily at $x=1$.",
+      "body_he_md": "## ארבע טעויות מסוכנות\n\n### טעות 1: שכחת שלושת התנאים\n❌ \"הגבול $2$ → רציפה.\"\n✅ צריך גם $f(a)$ מוגדר ושווה לגבול.\n\n### טעות 2: IVT נותן יחידות\n❌ \"מ-IVT: בדיוק שורש אחד.\"\n✅ IVT: **לפחות אחד**. יחידות דורשת מונוטוניות.\n\n### טעות 3: EVT על קטע פתוח\n❌ \"$f(x)=x$ על $(0,1)$: מ-EVT מגיעה למקסימום.\"\n✅ EVT דורש **סגור וחסום**. על $(0,1)$: אין מקסימום.\n\n### טעות 4: הנחת מיקום השורש\n❌ $f(0)<0<f(2)$ → \"שורש ב-$x=1$.\"\n✅ IVT: שורש **אי-שם** ב-$(0,2)$."
     },
     {
-      "kind": "summary",
-      "title_en": "Take-away",
-      "title_he": "סיכום",
-      "body_en_md": "- Continuous at $a$ ⇔ $f(a)$ defined, limit exists, limit = $f(a)$.\n- Polynomials, trig (in domain), exp, log — continuous on their domain.\n- Sum/product/composition of continuous = continuous.\n- IVT: continuous + opposite signs at endpoints ⇒ root exists.",
-      "body_he_md": "- רציפה ב-$a$ ⇔ $f(a)$ מוגדר, גבול קיים, גבול = $f(a)$.\n- פולינומים, טריג (בתחום), אקס, לוג — רציפות בתחומן.\n- סכום/מכפלה/הרכבה של רציפות = רציפה.\n- IVT: רציפה + סימנים הפוכים בקצוות ⇒ קיום שורש.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The concept of continuity is crucial in calculus. A function $f(x)$ is continuous at a point $x=a$ if the following three conditions are met: \n1. $f(a)$ is defined, \n2. $\\lim_{x\\to a} f(x)$ exists, and \n3. $\\lim_{x\\to a} f(x) = f(a)$. \nThere are three types of discontinuities: removable, jump, and infinite. The Intermediate Value Theorem states that if a function is continuous on a closed interval $[a,b]$ and $k$ is any value between $f(a)$ and $f(b)$, then there exists a value $c$ in $[a,b]$ such that $f(c) = k$. Additionally, the composition of continuous functions is continuous.\n\n### Worked Example\n\nSuppose we have the function $f(x) = \\frac{x^2 - 4}{x - 2}$ and we want to determine if it is continuous at $x=2$. We can rewrite $f(x)$ as $f(x) = \\frac{(x-2)(x+2)}{x-2}$, which simplifies to $f(x) = x+2$ for $x \\neq 2$. Since $\\lim_{x\\to 2} f(x) = \\lim_{x\\to 2} (x+2) = 4$ and $f(2) = 4$, we conclude that $f(x)$ is continuous at $x=2$.\n\n$$\\lim_{x\\to 2} f(x) = \\lim_{x\\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x\\to 2} \\frac{(x-2)(x+2)}{x-2} = \\lim_{x\\to 2} (x+2) = 4.$$\n\n",
-          "body_he_md": ""
-        }
-      }
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Cheat Sheet",
+      "title_he": "לפני הבחינה — דף נוסחאות",
+      "body_en_md": "## Three Conditions for Continuity at $a$\n\n| # | Condition | What to check |\n|---|-----------|---------------|\n| 1 | $f(a)$ defined | Plug in; no division by zero, no $\\ln$ of negative |\n| 2 | $\\lim_{x\\to a}f(x)$ exists | Left limit = right limit, both finite |\n| 3 | $\\lim_{x\\to a}f(x)=f(a)$ | Limit matches value |\n\n## Discontinuity Classification\n\n| Type | Test | Fixable? |\n|------|------|----------|\n| Removable | Limit exists $\\ne f(a)$ | Yes — redefine $f(a)$ |\n| Jump | $\\lim^- \\ne \\lim^+$ | No |\n| Infinite | $|\\text{limit}|=\\infty$ | No |\n\n## IVT and EVT in One Line Each\n\n$$\\text{IVT: } f\\text{ cts on }[a,b],\\;f(a)f(b)<0 \\Rightarrow \\exists c:\\;f(c)=0.$$\n$$\\text{EVT: } f\\text{ cts on }[a,b] \\Rightarrow f\\text{ attains max and min on }[a,b].$$\n\n## Exam Strategy\n\n1. **Finding $k$:** set left limit $=$ right limit at the join. Solve.\n2. **Classifying:** check all three conditions; find which fails.\n3. **IVT proof:** identify continuous $f$, find $a,b$ with opposite signs, invoke IVT.\n4. **EVT proof:** apply EVT to get $\\min f = m$, show $m>0$ using IVT for contradiction.\n5. **Trap:** IVT/EVT need the full closed interval — not just a point.",
+      "body_he_md": "## שלושה תנאים לרציפות ב-$a$\n\n| # | תנאי | בדיקה |\n|---|------|-------|\n| 1 | $f(a)$ מוגדר | הצב; אין חלוקה באפס |\n| 2 | גבול קיים | שמאלי = ימני, סופיים |\n| 3 | גבול $=f(a)$ | הגבול שווה לערך |\n\n## סיווג אי-רציפויות\n\n| סוג | בדיקה | ניתן לתיקון? |\n|-----|------|-------------|\n| סליקה | גבול קיים $\\ne f(a)$ | כן |\n| קפיצה | $\\lim^- \\ne \\lim^+$ | לא |\n| אינסופית | גבול = $\\pm\\infty$ | לא |\n\n## IVT ו-EVT בשורה כל אחד\n\n$$\\text{IVT: } f\\text{ רציפה, }f(a)f(b)<0 \\Rightarrow \\exists c:\\;f(c)=0.$$\n$$\\text{EVT: } f\\text{ רציפה על }[a,b] \\Rightarrow f\\text{ מגיעה למקסימום ומינימום}.$$\n\n## אסטרטגיית בחינה\n\n1. **מציאת $k$:** שווה גבולות משני הצדדים.\n2. **סיווג:** בדוק שלושת התנאים; מצא מה נכשל.\n3. **הוכחת שורש ב-IVT:** $f$ רציפה + סימנים הפוכים → מ-IVT.\n4. **הוכחת EVT:** $\\min f = m > 0$ (שלילת $m\\le 0$ ע\"י IVT).\n5. **מלכודת:** IVT/EVT דורשים קטע סגור שלם."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Which function is NOT continuous at $x = 0$?",
-      "stem_he": "איזו פונקציה לא רציפה ב-$x = 0$?",
-      "options_en": [
-        "$f(x) = x^2 + 3$",
-        "$f(x) = \\cos x$",
-        "$f(x) = \\frac{1}{x}$",
-        "$f(x) = 2x$"
-      ],
-      "options_he": [
-        "$f(x) = x^2 + 3$",
-        "$f(x) = \\cos x$",
-        "$f(x) = \\frac{1}{x}$",
-        "$f(x) = 2x$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$1/x$ is undefined at $x = 0$. The other three are polynomials/trig — continuous everywhere.",
-      "explanation_he": "$1/x$ לא מוגדר ב-$x = 0$. שלושת האחרות פולינומים/טריג — רציפות בכל מקום.",
-      "skill_atoms": [
-        "continuity_check"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 2,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Which type of discontinuity occurs in $f(x) = \\frac{x^2 - 4}{x - 2}$ at $x = 2$?",
-      "stem_he": "איזה סוג אי-רציפות יש ל-$f(x) = \\frac{x^2 - 4}{x - 2}$ ב-$x = 2$?",
-      "options_en": [
-        "Jump",
-        "Removable (hole)",
-        "Infinite",
-        "None — continuous"
-      ],
-      "options_he": [
-        "קפיצה",
-        "סליקה (חור)",
-        "אינסופית",
-        "אין — רציפה"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Limit at $x=2$ equals $4$ (factor & cancel), but $f(2)$ is $0/0$ — undefined. Removable: define $f(2) = 4$ to fix.",
-      "explanation_he": "הגבול ב-$x=2$ הוא $4$ (פירוק וצמצום), אבל $f(2)$ זה $0/0$ — לא מוגדר. סליקה: מגדירים $f(2) = 4$ לתיקון.",
-      "skill_atoms": [
-        "discontinuity_types"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "For what value of $c$ is $f(x) = \\begin{cases} x^2 & x \\le 1 \\\\ cx + 1 & x > 1 \\end{cases}$ continuous at $x = 1$?",
-      "stem_he": "עבור איזה ערך של $c$ הפונקציה $f(x) = \\begin{cases} x^2 & x \\le 1 \\\\ cx + 1 & x > 1 \\end{cases}$ רציפה ב-$x = 1$?",
-      "options_en": [
-        "$c = 0$",
-        "$c = 1$",
-        "$c = -1$",
-        "$c = 2$"
-      ],
-      "options_he": [
-        "$c = 0$",
-        "$c = 1$",
-        "$c = -1$",
-        "$c = 2$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Left limit = $1^2 = 1$. Right limit = $c \\cdot 1 + 1 = c + 1$. For continuity, $c + 1 = 1$, so $c = 0$.",
-      "explanation_he": "גבול שמאל = $1$. גבול ימין = $c + 1$. לרציפות, $c + 1 = 1$, אז $c = 0$.",
-      "skill_atoms": [
-        "piecewise_continuity",
-        "match_one_sided_limits"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Use IVT to prove $\\cos x = x$ has a solution in $(0, 1)$.",
-      "stem_he": "השתמשו ב-IVT להוכיח שלמשוואה $\\cos x = x$ יש פתרון ב-$(0, 1)$.",
-      "rubric_en": "Full credit (3/3): defines $g(x) = \\cos x - x$, notes $g$ continuous (cos and identity continuous), computes $g(0) = 1 > 0$, $g(1) = \\cos 1 - 1 \\approx -0.46 < 0$, concludes by IVT a root exists in $(0, 1)$.\nPartial (2/3): correct setup but one numerical error.\nMinimal (1/3): mentions IVT but no sign check.",
-      "rubric_he": "ציון מלא (3/3): מגדיר $g(x) = \\cos x - x$, מציין רציפות, מחשב $g(0) = 1 > 0$, $g(1) = \\cos 1 - 1 < 0$, מסיק שיש שורש ב-$(0, 1)$.\nחלקי (2/3): הגדרה נכונה אבל טעות מספרית.\nמינימלי (1/3): מזכיר IVT בלי בדיקת סימנים.",
-      "explanation_en": "Let $g(x) = \\cos x - x$. $g$ is continuous (cos is continuous, $x$ is continuous, difference is continuous). $g(0) = 1 - 0 = 1 > 0$. $g(1) = \\cos 1 - 1 \\approx 0.54 - 1 = -0.46 < 0$. By IVT, $g(c) = 0$ for some $c \\in (0, 1)$, meaning $\\cos c = c$.",
-      "explanation_he": "נסמן $g(x) = \\cos x - x$. $g$ רציפה. $g(0) = 1 > 0$. $g(1) \\approx -0.46 < 0$. מ-IVT, $g(c) = 0$ עבור $c \\in (0, 1)$.",
-      "skill_atoms": [
-        "ivt_application"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "If $f$ is continuous on $[0, 4]$ with $f(0) = -3$ and $f(4) = 5$, which is necessarily true?",
-      "stem_he": "אם $f$ רציפה על $[0, 4]$ עם $f(0) = -3$ ו-$f(4) = 5$, מה הכרחית?",
-      "options_en": [
-        "$f$ has exactly one root in $(0, 4)$",
-        "$f(2) = 1$",
-        "$f$ takes every value between $-3$ and $5$ somewhere in $[0, 4]$",
-        "$f$ is increasing"
-      ],
-      "options_he": [
-        "ל-$f$ בדיוק שורש אחד ב-$(0, 4)$",
-        "$f(2) = 1$",
-        "$f$ מקבלת כל ערך בין $-3$ ל-$5$ אי-שם ב-$[0, 4]$",
-        "$f$ עולה"
-      ],
-      "correct_index": 2,
-      "explanation_en": "IVT guarantees every value between $f(0) = -3$ and $f(4) = 5$ is attained. A is wrong (could be many roots). B is unrelated. D is not implied.",
-      "explanation_he": "IVT מבטיח שכל ערך בין $-3$ ל-$5$ מתקבל. א' שגוי (אולי הרבה שורשים). ב' לא קשור. ד' לא נובע.",
-      "skill_atoms": [
-        "ivt_interpretation"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 6,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "Which statement is FALSE?",
-      "stem_he": "איזו טענה שגויה?",
-      "options_en": [
-        "Polynomials are continuous on all of $\\mathbb{R}$.",
-        "A continuous function on $[a, b]$ attains its maximum.",
-        "If $\\lim_{x \\to a} f(x)$ exists then $f$ is continuous at $a$.",
-        "$\\sin x$ is continuous everywhere."
-      ],
-      "options_he": [
-        "פולינומים רציפים על כל $\\mathbb{R}$.",
-        "פונקציה רציפה על $[a, b]$ מקבלת מקסימום.",
-        "אם $\\lim_{x \\to a} f(x)$ קיים אז $f$ רציפה ב-$a$.",
-        "$\\sin x$ רציפה בכל מקום."
-      ],
-      "correct_index": 2,
-      "explanation_en": "C is false. The limit existing isn't enough — we also need $f(a)$ to be defined and equal to it. Removable holes are the counterexample.",
-      "explanation_he": "ג' שגוי. קיום גבול לא מספיק — צריך גם ש-$f(a)$ מוגדר ושווה לגבול. חורים סליקים הם הדוגמה הנגדית.",
-      "skill_atoms": [
-        "continuity_definition"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 7,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $f: [0,1] \\to [0,1]$ be continuous. Prove that $f$ has a fixed point, i.e., there exists $c \\in [0,1]$ such that $f(c) = c$.",
-      "stem_he": "תהי $f: [0,1] \\to [0,1]$ פונקציה רציפה. הוכיחו שיש ל-$f$ נקודה קבועה, כלומר קיים $c \\in [0,1]$ כך ש-$f(c) = c$.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Define $g(x) = f(x) - x$. Compute $g(0)$ and $g(1)$ and determine their signs.",
-          "body_he": "הגדירו $g(x) = f(x) - x$. חשבו $g(0)$ ו-$g(1)$ וקבעו את סימניהם.",
-          "points": 8
-        },
-        {
-          "label": "ב",
-          "body_en": "Apply the IVT to $g$ to conclude the proof.",
-          "body_he": "יישמו את ה-IVT על $g$ להשלמת ההוכחה.",
-          "points": 10
-        },
-        {
-          "label": "ג",
-          "body_en": "Is the fixed point necessarily unique? Give an example showing it may not be.",
-          "body_he": "האם נקודת הקבע בהכרח יחידה? הביאו דוגמה שמראה שלא.",
-          "points": 7
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: g(0) = f(0) - 0 = f(0) ≥ 0 (since f: [0,1] → [0,1] means f(0) ∈ [0,1]). g(1) = f(1) - 1 ≤ 0 (since f(1) ≤ 1). ∎\n\nPart ב: g is continuous (difference of continuous functions). g(0) ≥ 0 and g(1) ≤ 0. Case 1: if g(0) = 0, take c = 0. Case 2: if g(1) = 0, take c = 1. Case 3: g(0) > 0 and g(1) < 0. By IVT applied to g on [0,1], there exists c ∈ (0,1) with g(c) = 0, i.e., f(c) = c. ∎\n\nPart ג: Not unique. Example: f(x) = x (identity map). Every point is a fixed point. ∎",
-      "sample_solution_he": "חלק א: $g(0) = f(0) - 0 = f(0) \\geq 0$ (כי $f(0)\\in[0,1]$). $g(1) = f(1) - 1 \\leq 0$ (כי $f(1)\\leq 1$). ∎\n\nחלק ב: $g$ רציפה (הפרש פונקציות רציפות). $g(0)\\geq 0$ ו-$g(1)\\leq 0$. אם $g(0)=0$ נבחר $c=0$; אם $g(1)=0$ נבחר $c=1$; אחרת $g(0)>0>g(1)$, ומ-IVT קיים $c\\in(0,1)$ עם $g(c)=0$, כלומר $f(c)=c$. ∎\n\nחלק ג: לא. דוגמה: $f(x) = x$ — כל נקודה היא נקודת קבע. ∎",
-      "rubric_en": "Part א: 4pts for g(0)≥0, 4pts for g(1)≤0. Part ב: 5pts for continuity of g, 5pts for IVT application with correct case analysis. Part ג: 3pts correct answer, 4pts valid example.",
-      "rubric_he": "חלק א: 4 נקודות על $g(0)\\geq 0$, 4 על $g(1)\\leq 0$. חלק ב: 5 על רציפות $g$, 5 על IVT עם ניתוח מקרים. חלק ג: 3 על תשובה, 4 על דוגמה.",
-      "skill_atoms": ["ivt_application", "continuity_definition", "fixed_point_theorem"],
-      "explanation_en": "The fixed-point theorem via IVT is a classic proof question on Israeli university exams — memorize the g(x) = f(x) - x reduction.",
-      "explanation_he": "משפט נקודת הקבע דרך IVT הוא שאלת הוכחה קלאסית במבחנים ישראליים — לזכור את הצמצום $g(x) = f(x) - x$."
-    },
-    {
-      "ord": 8,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $f$ be continuous on $[a, b]$. Prove: $f$ attains every value between $f(a)$ and $f(b)$ at least once (IVT). Then use this to show $\\sqrt{2}$ is irrational — no wait, use it to prove that the equation $x^5 + 3x - 7 = 0$ has at least one real solution.",
-      "stem_he": "תהי $f$ רציפה על $[a, b]$. הוכיחו שהמשוואה $x^5 + 3x - 7 = 0$ יש לה לפחות פתרון ממשי אחד.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Find two values $a < b$ such that $f(a)$ and $f(b)$ have opposite signs, where $f(x) = x^5 + 3x - 7$.",
-          "body_he": "מצאו שני ערכים $a < b$ כך ש-$f(a)$ ו-$f(b)$ בעלי סימנים הפוכים עבור $f(x) = x^5 + 3x - 7$.",
-          "points": 8
-        },
-        {
-          "label": "ב",
-          "body_en": "Apply IVT to conclude the existence of a root.",
-          "body_he": "יישמו IVT להסקת קיום שורש.",
-          "points": 10
-        },
-        {
-          "label": "ג",
-          "body_en": "Is the root unique? Justify using monotonicity.",
-          "body_he": "האם השורש יחיד? נמקו באמצעות מונוטוניות.",
-          "points": 7
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: f(1) = 1 + 3 - 7 = -3 < 0. f(2) = 32 + 6 - 7 = 31 > 0. ∎\n\nPart ב: f is continuous everywhere (polynomial). f(1) < 0 < f(2). By IVT, there exists c ∈ (1, 2) with f(c) = 0. ∎\n\nPart ג: f'(x) = 5x⁴ + 3 > 0 for all x. So f is strictly increasing → at most one root. Together with Part ב: exactly one real root. ∎",
-      "sample_solution_he": "חלק א: $f(1) = 1 + 3 - 7 = -3 < 0$. $f(2) = 32 + 6 - 7 = 31 > 0$. ∎\n\nחלק ב: $f$ פולינום → רציפה. $f(1) < 0 < f(2)$. מ-IVT קיים $c \\in (1,2)$ עם $f(c) = 0$. ∎\n\nחלק ג: $f'(x) = 5x^4 + 3 > 0$ תמיד. $f$ מונוטונית עולה → לכל היותר שורש אחד. ביחד עם חלק ב: בדיוק שורש ממשי אחד. ∎",
-      "rubric_en": "Part א: 4pts for choosing correct a, 4pts for computing signs. Part ב: 5pts for stating continuity, 5pts for IVT conclusion. Part ג: 3pts for f' > 0 argument, 4pts for uniqueness conclusion.",
-      "rubric_he": "חלק א: 4 על בחירת $a$, 4 על חישוב הסימנים. חלק ב: 5 על רציפות, 5 על IVT. חלק ג: 3 על $f'>0$, 4 על יחידות.",
-      "skill_atoms": ["ivt_application", "continuity_definition", "monotonicity_derivative"],
-      "explanation_en": "IVT + monotonicity for existence and uniqueness of roots is one of the most common proof patterns in Calc 1 exams.",
-      "explanation_he": "IVT + מונוטוניות לקיום ויחידות של שורשים הוא אחד מתבניות ההוכחה השכיחות ביותר בחדו\"א 1."
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Continuous at $a$ ⇔ all three: $f(a)$ defined, limit exists, limit = $f(a)$.",
-      "Three discontinuity types: removable (hole), jump, infinite.",
-      "Polynomials/trig/exp/log are continuous on their domain.",
-      "IVT: continuous + opposite signs at endpoints ⇒ root exists in the interval.",
-      "IVT proves existence, not uniqueness or location."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "If a limit exists, the function is continuous",
-        "correction": "Need $f(a)$ to ALSO be defined and equal to the limit. A removable hole has a limit but is discontinuous.",
-        "detect_phrase_en": "limit exists continuous",
-        "detect_phrase_he": "גבול קיים רציפה"
-      },
-      {
-        "wrong": "IVT works on open intervals",
-        "correction": "IVT requires continuity on the CLOSED interval $[a, b]$.",
-        "detect_phrase_en": "IVT open interval",
-        "detect_phrase_he": "IVT קטע פתוח"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "continuity_check",
-      "discontinuity_types",
-      "piecewise_continuity",
-      "ivt_application",
-      "match_one_sided_limits"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "limits"
-    ],
-    "tutor_pacing_hint": "Three-condition checklist: write 'value defined? limit exists? limit = value?' for every problem. The classic IVT exam pattern is to set up $g(x) = f(x) - k$ and show $g$ changes sign.",
-    "coach_drill_skills": [
-      "continuity_check",
-      "piecewise_continuity",
-      "ivt_application"
-    ],
-    "diagnostic_signals": {
-      "if_learner_forgets_value_check": "Always run the 3-step list out loud. If any fails, the function is not continuous.",
-      "if_learner_assumes_uniqueness": "IVT says 'AT LEAST one' root. Show a curve crossing axis multiple times."
-    },
-    "next_recommended": [
-      "derivatives_intro",
-      "derivatives_rules"
-    ]
-  }
+  ]
 }
