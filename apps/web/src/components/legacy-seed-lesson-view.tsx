@@ -8,7 +8,8 @@ import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { PageHeader } from '@/components/page-header';
-import type { Lesson } from '@asf/schemas/curriculum';
+import type { InteractiveSeedLesson } from '@/components/interactive-seed-lesson-view';
+import { InteractiveSeedLessonView } from '@/components/interactive-seed-lesson-view';
 import 'katex/dist/katex.min.css';
 import {
   LegacySeedProgressBar,
@@ -16,9 +17,25 @@ import {
 } from '@/components/legacy-seed-lesson-engagement';
 
 /** Renders legacy OpenStax seed lessons that are not yet in Neon. */
-export async function LegacySeedLessonView({ lesson }: { lesson: Lesson }) {
+export async function LegacySeedLessonView({
+  lesson,
+  interactiveLesson,
+  locale: localeProp,
+}: {
+  lesson?: import('@asf/schemas/curriculum').Lesson;
+  interactiveLesson?: InteractiveSeedLesson;
+  locale?: 'he' | 'en';
+}) {
   const cookieStore = await cookies();
-  const locale = cookieStore.get('asf-locale')?.value === 'en' ? 'en' : 'he';
+  const locale = localeProp ?? (cookieStore.get('asf-locale')?.value === 'en' ? 'en' : 'he');
+
+  if (interactiveLesson) {
+    return <InteractiveSeedLessonView lesson={interactiveLesson} locale={locale} />;
+  }
+
+  if (!lesson) {
+    return null;
+  }
   const isHe = locale === 'he';
 
   // Use learning-objectives count as the "section" metric for the progress bar.

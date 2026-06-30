@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { Check, X, HelpCircle, Sparkles, ChevronUp, ChevronDown } from 'lucide-react';
+import { Check, X, HelpCircle, Sparkles, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
 import type {
   LessonQuestionKind,
   LessonPointsLevel,
@@ -289,9 +289,16 @@ function QuestionCard({
         <span className="rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
           #{question.ord}
         </span>
-        <span className="rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
-          {kindLabel}
-        </span>
+        {question.kind === 'open' || question.kind === 'derivation' ? (
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-800 dark:text-amber-300">
+            <Pencil className="h-3 w-3" aria-hidden />
+            {kindLabel}
+          </span>
+        ) : (
+          <span className="rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
+            {kindLabel}
+          </span>
+        )}
         <span
           className={`rounded-full px-2 py-0.5 ${DIFFICULTY_TINT[question.difficulty]}`}
         >
@@ -602,44 +609,81 @@ function QuestionCard({
         </div>
       ) : null}
 
-      {/* open / derivation — long text + rubric self-assessment */}
+      {/* open / derivation — written answer, self-assessed via rubric */}
       {(question.kind === 'open' || question.kind === 'derivation') && !state.submitted ? (
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-xl border-2 border-amber-500/25 bg-amber-500/5 p-4">
           <textarea
             value={openText}
             onChange={(e) => setOpenText(e.target.value)}
-            rows={4}
+            rows={6}
             placeholder={
               lang === 'he'
                 ? question.kind === 'derivation'
                   ? 'כתבו את הגזירה צעד-אחר-צעד…'
-                  : 'כתבו את הפתרון שלכם כאן…'
+                  : 'כתבו את הפתרון המלא שלכם כאן — הציגו כל שלב…'
                 : question.kind === 'derivation'
                   ? 'Write the derivation step by step…'
-                  : 'Write your reasoning here…'
+                  : 'Write your full solution here — show all steps…'
             }
-            className="w-full rounded-lg border border-border bg-surface-1/50 px-3 py-2 text-sm focus:border-primary focus:outline-none"
+            className="w-full rounded-lg border border-amber-500/20 bg-background/80 px-3 py-2.5 text-sm leading-relaxed focus:border-amber-500/50 focus:outline-none"
             dir={dir}
           />
           <button
             type="button"
-            onClick={() => setRevealed(true)}
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface-1/50 px-3 py-2 text-xs font-medium hover:border-primary/40"
+            onClick={() => setRevealed((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-2 text-xs font-semibold hover:border-amber-500/40"
           >
-            <Sparkles className="h-3.5 w-3.5" />
-            {lang === 'he' ? 'הראו פתרון מודל ומחווני ניקוד' : 'Reveal model answer + rubric'}
+            {revealed ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+            {revealed
+              ? lang === 'he'
+                ? 'הסתירו פתרון'
+                : 'Hide Solution'
+              : lang === 'he'
+                ? 'חשפו פתרון'
+                : 'Reveal Solution'}
           </button>
-          {revealed && rubric ? (
-            <div className="rounded-lg border border-border/60 bg-surface-1/40 p-3 text-xs">
-              <p className="mb-2 font-semibold uppercase tracking-wide text-muted-foreground">
-                {lang === 'he' ? 'מחוון' : 'Rubric'}
-              </p>
-              <MarkdownInline content={rubric} />
-              <p className="mt-3 mb-1 font-semibold uppercase tracking-wide text-muted-foreground">
-                {lang === 'he' ? 'הסבר' : 'Explanation'}
-              </p>
-              <MarkdownInline content={explanation} />
-              <div className="mt-3 flex flex-wrap items-center gap-2">
+          {revealed ? (
+            <div className="space-y-4 rounded-lg border border-border/60 bg-background/50 p-4 text-sm">
+              {(() => {
+                const steps =
+                  lang === 'he'
+                    ? payload?.steps_he ?? payload?.steps_en
+                    : payload?.steps_en;
+                if (steps && steps.length > 0) {
+                  return (
+                    <div>
+                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        {lang === 'he' ? 'שלבים צפויים' : 'Expected Steps'}
+                      </p>
+                      <ol className="list-decimal space-y-1 ps-5">
+                        {steps.map((step, i) => (
+                          <li key={i}>
+                            <MarkdownInline content={step} />
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+              {explanation ? (
+                <div>
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    {lang === 'he' ? 'פתרון לדוגמה' : 'Sample Solution'}
+                  </p>
+                  <MarkdownInline content={explanation} />
+                </div>
+              ) : null}
+              {rubric ? (
+                <div className="border-t border-border/40 pt-3">
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    {lang === 'he' ? 'מחוון ניקוד' : 'Grading Rubric'}
+                  </p>
+                  <MarkdownInline content={rubric} />
+                </div>
+              ) : null}
+              <div className="flex flex-wrap items-center gap-2 border-t border-border/40 pt-3">
                 <span className="text-[11px] text-muted-foreground">
                   {lang === 'he' ? 'איך הייתם מדרגים את עצמכם?' : 'How would you grade yourself?'}
                 </span>
