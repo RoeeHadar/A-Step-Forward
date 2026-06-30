@@ -1,198 +1,322 @@
 {
-  "id": "complex_numbers_de_moivre",
-  "type": "interactive",
-  "subject": "high_school_math_5pt",
-  "title_en": "De Moivre's Theorem — Powers and Roots of Complex Numbers",
-  "title_he": "משפט דה-מואבר — חזקות ושורשים של מספרים מרוכבים",
-  "duration_min": 25,
-  "level_min": "5pt",
-  "agent_hints": "Students at this level have already seen the algebraic form $a + bi$. The key conceptual shift here is polar form and why multiplying complex numbers adds their arguments. De Moivre's theorem makes computing high powers trivial but requires fluency with trigonometric values. For nth roots, students must enumerate all $n$ solutions — missing roots for $k = 1, 2, \\ldots, n-1$ is the most common error.",
+  "concept_id": "complex_numbers_de_moivre",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "De Moivre's Theorem — Proving Trigonometric Identities",
+  "title_he": "משפט דה-מואבר — הוכחת זהויות טריגונומטריות",
+  "summary_en": "De Moivre's theorem $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$ is a powerful engine for proving trigonometric identities. By equating real and imaginary parts, we derive multi-angle formulas. Euler's formula $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ provides the deepest connection.",
+  "summary_he": "משפט דה-מואבר $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$ הוא מנוע עצמתי להוכחת זהויות טריגונומטריות. על ידי השוואת חלקים ממשיים ומדומים, נגזרים נוסחאות לזוויות מרובות. נוסחת אויילר $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ מספקת את הקשר העמוק ביותר.",
+  "est_minutes": 45,
   "sections": [
     {
-      "id": "polar_form",
-      "title_en": "Polar Form of Complex Numbers",
-      "title_he": "צורה הפולרית של מספרים מרוכבים",
-      "level_min": "5pt",
-      "body_en_md": "Every complex number $z = a + bi$ can be written in **polar form**:\n$$z = r(\\cos\\theta + i\\sin\\theta) = re^{i\\theta}$$\nwhere:\n- $r = |z| = \\sqrt{a^2 + b^2}$ is the **modulus** (distance from origin)\n- $\\theta = \\arg(z)$ is the **argument** (angle from positive real axis)\n\n**Converting to polar form:**\n- $r = \\sqrt{a^2 + b^2}$\n- $\\theta = \\arctan\\left(\\frac{b}{a}\\right)$ (adjust quadrant based on signs of $a$, $b$)\n\n**Example:** Write $z = 1 + i$ in polar form.\n$$r = \\sqrt{1^2 + 1^2} = \\sqrt{2}, \\qquad \\theta = \\arctan\\left(\\frac{1}{1}\\right) = \\frac{\\pi}{4}$$\n$$\\boxed{z = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)}$$\n\n**Multiplication in polar form:**\n$$z_1 z_2 = r_1 r_2 \\left(\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)\\right)$$\nMultiplying **multiplies moduli** and **adds arguments**.",
-      "body_he_md": "כל מספר מרוכב $z = a + bi$ ניתן לכתיבה ב**צורה פולרית**:\n$$z = r(\\cos\\theta + i\\sin\\theta) = re^{i\\theta}$$\nכאשר:\n- $r = |z| = \\sqrt{a^2 + b^2}$ הוא **המודולוס** (מרחק מהראשית)\n- $\\theta = \\arg(z)$ הוא **הארגומנט** (הזווית מהציר הממשי החיובי)\n\n**המרה לצורה פולרית:**\n- $r = \\sqrt{a^2 + b^2}$\n- $\\theta = \\arctan\\left(\\frac{b}{a}\\right)$ (מתקנים רביע לפי סימני $a$, $b$)\n\n**דוגמה:** כתבו $z = 1 + i$ בצורה פולרית.\n$$r = \\sqrt{1^2 + 1^2} = \\sqrt{2}, \\qquad \\theta = \\arctan\\left(\\frac{1}{1}\\right) = \\frac{\\pi}{4}$$\n$$\\boxed{z = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)}$$\n\n**כפל בצורה פולרית:**\n$$z_1 z_2 = r_1 r_2 \\left(\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)\\right)$$\nכפל **מכפיל מודולוסים** ו**מחבר ארגומנטים**."
+      "kind": "intro",
+      "title_en": "Why De Moivre Proves Trig Identities",
+      "title_he": "מדוע דה-מואבר מוכיח זהויות טריגונומטריות",
+      "body_en_md": "Proving $\\cos(3\\theta) = 4\\cos^3\\theta - 3\\cos\\theta$ by pure trigonometry requires clever manipulation. De Moivre makes it mechanical: expand $(\\cos\\theta+i\\sin\\theta)^3$ using the binomial theorem, then equate real and imaginary parts. The 5pt Bagrut tests this technique in questions worth **10–15 points**, and it appears in the most challenging proof questions. Euler's formula $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ is referenced at this level (no proof required, but you must apply it).",
+      "body_he_md": "הוכחת $\\cos(3\\theta) = 4\\cos^3\\theta - 3\\cos\\theta$ בטריגונומטריה טהורה דורשת מניפולציה מתוחכמת. דה-מואבר הופך את זה למכאני: מפתחים $(\\cos\\theta+i\\sin\\theta)^3$ בפסקל, ואז משווים חלקים ממשיים ומדומים. בגרות 5 יח׳ בוחנת טכניקה זו בשאלות בשווי **10–15 נקודות**, והיא מופיעה בשאלות ההוכחה הקשות ביותר. נוסחת אויילר $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ מוזכרת ברמה זו (אין צורך בהוכחה, אך חייבים ליישם)."
     },
     {
-      "id": "de_moivre",
-      "title_en": "De Moivre's Theorem",
-      "title_he": "משפט דה-מואבר",
-      "level_min": "5pt",
-      "body_en_md": "**Theorem (De Moivre):** For any integer $n$ and $z = r(\\cos\\theta + i\\sin\\theta)$:\n$$\\boxed{z^n = r^n\\left(\\cos n\\theta + i\\sin n\\theta\\right)}$$\n\n**Why it works:** Multiplying $z$ by itself $n$ times multiplies the modulus $n$ times and adds the argument $n$ times.\n\n### Worked Example: Compute $(1 + i)^8$\n\n**Step 1:** Convert to polar form: $1 + i = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)$.\n\n**Step 2:** Apply De Moivre with $n = 8$:\n$$(1+i)^8 = \\left(\\sqrt{2}\\right)^8 \\left(\\cos\\frac{8\\pi}{4} + i\\sin\\frac{8\\pi}{4}\\right) = 16\\left(\\cos 2\\pi + i\\sin 2\\pi\\right).$$\n\n**Step 3:** Evaluate: $\\cos 2\\pi = 1$, $\\sin 2\\pi = 0$.\n$$(1+i)^8 = 16 \\cdot 1 = \\boxed{16}.$$\n\n> **Check:** $(1+i)^2 = 2i$, $(2i)^2 = -4$, $(-4)^2 = 16$. ✓",
-      "body_he_md": "**משפט (דה-מואבר):** לכל מספר שלם $n$ ו-$z = r(\\cos\\theta + i\\sin\\theta)$:\n$$\\boxed{z^n = r^n\\left(\\cos n\\theta + i\\sin n\\theta\\right)}$$\n\n**מדוע זה עובד:** כפל $z$ בעצמו $n$ פעמים מכפיל את המודולוס $n$ פעמים ומחבר את הארגומנט $n$ פעמים.\n\n### דוגמה פתורה: חשבו $(1 + i)^8$\n\n**שלב 1:** המרה לצורה פולרית: $1 + i = \\sqrt{2}\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right)$.\n\n**שלב 2:** יישום דה-מואבר עם $n = 8$:\n$$(1+i)^8 = \\left(\\sqrt{2}\\right)^8 \\left(\\cos\\frac{8\\pi}{4} + i\\sin\\frac{8\\pi}{4}\\right) = 16\\left(\\cos 2\\pi + i\\sin 2\\pi\\right).$$\n\n**שלב 3:** חישוב: $\\cos 2\\pi = 1$, $\\sin 2\\pi = 0$.\n$$(1+i)^8 = 16 \\cdot 1 = \\boxed{16}.$$\n\n> **בדיקה:** $(1+i)^2 = 2i$, $(2i)^2 = -4$, $(-4)^2 = 16$. ✓"
+      "kind": "definition",
+      "title_en": "Definitions",
+      "title_he": "הגדרות",
+      "body_en_md": "**De Moivre's theorem (unit circle form):** For all $n \\in \\mathbb{Z}$:\n$$(\\cos\\theta + i\\sin\\theta)^n = \\cos(n\\theta) + i\\sin(n\\theta).$$\n\n**Euler's formula:** $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$.\n\nConsequences of Euler:\n- $e^{-i\\theta} = \\cos\\theta - i\\sin\\theta$\n- $\\cos\\theta = \\dfrac{e^{i\\theta}+e^{-i\\theta}}{2}$\n- $\\sin\\theta = \\dfrac{e^{i\\theta}-e^{-i\\theta}}{2i}$\n\n**Binomial theorem** (needed for multi-angle formulas):\n$$(a+b)^n = \\sum_{k=0}^{n}\\binom{n}{k}a^{n-k}b^k.$$\n\n**Notation:** Write $c = \\cos\\theta$, $s = \\sin\\theta$ to save space.",
+      "body_he_md": "**משפט דה-מואבר (צורת מעגל היחידה):** לכל $n \\in \\mathbb{Z}$:\n$$(\\cos\\theta + i\\sin\\theta)^n = \\cos(n\\theta) + i\\sin(n\\theta).$$\n\n**נוסחת אויילר:** $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$.\n\nתוצאות מאויילר:\n- $\\cos\\theta = \\dfrac{e^{i\\theta}+e^{-i\\theta}}{2}$\n- $\\sin\\theta = \\dfrac{e^{i\\theta}-e^{-i\\theta}}{2i}$\n\n**משפט הבינום** (נדרש לנוסחאות זוויות מרובות):\n$$(a+b)^n = \\sum_{k=0}^{n}\\binom{n}{k}a^{n-k}b^k.$$\n\n**סימון:** נכתוב $c = \\cos\\theta$, $s = \\sin\\theta$ לקיצור."
     },
     {
-      "id": "nth_roots",
-      "title_en": "Finding $n$th Roots of Complex Numbers",
-      "title_he": "מציאת שורשים מסדר $n$ של מספרים מרוכבים",
-      "level_min": "5pt",
-      "body_en_md": "The equation $w^n = z$ has exactly **$n$ solutions** in $\\mathbb{C}$. If $z = r(\\cos\\theta + i\\sin\\theta)$, the $n$ roots are:\n$$\\boxed{w_k = r^{1/n}\\left(\\cos\\frac{\\theta + 2\\pi k}{n} + i\\sin\\frac{\\theta + 2\\pi k}{n}\\right), \\quad k = 0, 1, 2, \\ldots, n-1.}$$\n\nThe roots are equally spaced on a circle of radius $r^{1/n}$, separated by angles of $\\frac{2\\pi}{n}$.\n\n### Worked Example: Cube roots of $-8$\n\n$-8 = 8(\\cos\\pi + i\\sin\\pi)$, so $r = 8$, $\\theta = \\pi$, $n = 3$.\n\nModulus of each root: $8^{1/3} = 2$.\n\n$$w_0 = 2\\left(\\cos\\frac{\\pi}{3} + i\\sin\\frac{\\pi}{3}\\right) = 2\\left(\\frac{1}{2} + i\\frac{\\sqrt{3}}{2}\\right) = 1 + i\\sqrt{3}$$\n$$w_1 = 2\\left(\\cos\\pi + i\\sin\\pi\\right) = -2$$\n$$w_2 = 2\\left(\\cos\\frac{5\\pi}{3} + i\\sin\\frac{5\\pi}{3}\\right) = 2\\left(\\frac{1}{2} - i\\frac{\\sqrt{3}}{2}\\right) = 1 - i\\sqrt{3}$$\n\nVerify: $(-2)^3 = -8$. ✓",
-      "body_he_md": "המשוואה $w^n = z$ מקיימת בדיוק **$n$ פתרונות** ב-$\\mathbb{C}$. אם $z = r(\\cos\\theta + i\\sin\\theta)$, ה-$n$ שורשים הם:\n$$\\boxed{w_k = r^{1/n}\\left(\\cos\\frac{\\theta + 2\\pi k}{n} + i\\sin\\frac{\\theta + 2\\pi k}{n}\\right), \\quad k = 0, 1, 2, \\ldots, n-1.}$$\n\nהשורשים מרוחקים באופן שווה על מעגל ברדיוס $r^{1/n}$, עם זוויות $\\frac{2\\pi}{n}$ ביניהם.\n\n### דוגמה פתורה: שורשי הריבה של $-8$\n\n$-8 = 8(\\cos\\pi + i\\sin\\pi)$, כלומר $r = 8$, $\\theta = \\pi$, $n = 3$.\n\nמודולוס כל שורש: $8^{1/3} = 2$.\n\n$$w_0 = 2\\left(\\cos\\frac{\\pi}{3} + i\\sin\\frac{\\pi}{3}\\right) = 2\\left(\\frac{1}{2} + i\\frac{\\sqrt{3}}{2}\\right) = 1 + i\\sqrt{3}$$\n$$w_1 = 2\\left(\\cos\\pi + i\\sin\\pi\\right) = -2$$\n$$w_2 = 2\\left(\\cos\\frac{5\\pi}{3} + i\\sin\\frac{5\\pi}{3}\\right) = 2\\left(\\frac{1}{2} - i\\frac{\\sqrt{3}}{2}\\right) = 1 - i\\sqrt{3}$$\n\nבדיקה: $(-2)^3 = -8$. ✓"
+      "kind": "theory",
+      "title_en": "The De Moivre Strategy for Proving Trig Identities",
+      "title_he": "אסטרטגיית דה-מואבר להוכחת זהויות טריגונומטריות",
+      "body_en_md": "**Recipe for proving multi-angle formulas:**\n1. Start with $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$.\n2. Expand the left side using the binomial theorem.\n3. Collect real terms (even powers of $i$) and imaginary terms (odd powers of $i$).\n4. Equate: $\\cos(n\\theta) = \\text{real part}$, $\\sin(n\\theta) = \\text{imaginary part}$.\n\n**Key: powers of $i$ in binomial expansion:**\n- $i^0 = 1$, $i^1 = i$, $i^2 = -1$, $i^3 = -i$, $i^4 = 1$, ...\n- Even powers of $i\\sin\\theta$ contribute to **real part**\n- Odd powers of $i\\sin\\theta$ contribute to **imaginary part**\n\n**Double-angle via $n=2$:**\n$(c+is)^2 = c^2 - s^2 + 2csi$, so\n$$\\cos(2\\theta) = \\cos^2\\theta - \\sin^2\\theta, \\quad \\sin(2\\theta) = 2\\sin\\theta\\cos\\theta.$$",
+      "body_he_md": "**מתכון להוכחת נוסחאות זוויות מרובות:**\n1. מתחילים עם $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$.\n2. מפתחים צד שמאל בפסקל.\n3. מאספים גורמים ממשיים (חזקות זוגיות של $i$) ומדומים (חזקות אי-זוגיות).\n4. משווים: $\\cos(n\\theta) = $ חלק ממשי, $\\sin(n\\theta) = $ חלק מדומה.\n\n**מפתח: חזקות $i$ בפיתוח בינומי:**\n- חזקות זוגיות של $i\\sin\\theta$ תורמות ל**חלק הממשי**\n- חזקות אי-זוגיות תורמות ל**חלק המדומה**\n\n**כפל-זווית דרך $n=2$:**\n$(c+is)^2 = c^2-s^2+2csi$, לכן\n$$\\cos(2\\theta) = \\cos^2\\theta - \\sin^2\\theta, \\quad \\sin(2\\theta) = 2\\sin\\theta\\cos\\theta.$$"
     },
     {
-      "id": "roots_of_unity",
-      "title_en": "The $n$th Roots of Unity",
-      "title_he": "שורשי היחידה מסדר $n$",
-      "level_min": "5pt",
-      "body_en_md": "The $n$th roots of unity are the solutions to $w^n = 1$. Since $1 = 1 \\cdot (\\cos 0 + i\\sin 0)$, the formula gives:\n$$w_k = \\cos\\frac{2\\pi k}{n} + i\\sin\\frac{2\\pi k}{n}, \\quad k = 0, 1, \\ldots, n-1.$$\n\n**4th roots of unity** ($n=4$): $w_k = \\cos\\frac{\\pi k}{2} + i\\sin\\frac{\\pi k}{2}$:\n- $k=0$: $1$\n- $k=1$: $i$\n- $k=2$: $-1$\n- $k=3$: $-i$\n\nThey lie at the vertices of a square on the unit circle. The sum of all $n$th roots of unity is always $0$.",
-      "body_he_md": "שורשי היחידה מסדר $n$ הם הפתרונות של $w^n = 1$. מאחר ש-$1 = 1 \\cdot (\\cos 0 + i\\sin 0)$, הנוסחה נותנת:\n$$w_k = \\cos\\frac{2\\pi k}{n} + i\\sin\\frac{2\\pi k}{n}, \\quad k = 0, 1, \\ldots, n-1.$$\n\n**שורשי היחידה מסדר 4** ($n=4$): $w_k = \\cos\\frac{\\pi k}{2} + i\\sin\\frac{\\pi k}{2}$:\n- $k=0$: $1$\n- $k=1$: $i$\n- $k=2$: $-1$\n- $k=3$: $-i$\n\nהם נמצאים בקודקודי ריבוע על מעגל היחידה. סכום כל שורשי היחידה מסדר $n$ הוא תמיד $0$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Prove $\\cos(2\\theta) = \\cos^2\\theta - \\sin^2\\theta$",
+      "title_he": "דוגמה פתורה 1 — הוכחה ש-$\\cos(2\\theta) = \\cos^2\\theta - \\sin^2\\theta$",
+      "body_en_md": "**Prove the double angle formula for cosine using De Moivre.**\n\n**Step 1 — Apply De Moivre with $n=2$:**\n$$\\cos(2\\theta) + i\\sin(2\\theta) = (\\cos\\theta + i\\sin\\theta)^2.$$\n\n**Step 2 — Expand the right side:**\n$$(\\cos\\theta + i\\sin\\theta)^2 = \\cos^2\\theta + 2i\\cos\\theta\\sin\\theta + i^2\\sin^2\\theta$$\n$$= \\cos^2\\theta - \\sin^2\\theta + 2i\\cos\\theta\\sin\\theta.$$\n\n**Step 3 — Equate real and imaginary parts:**\n- Real: $\\cos(2\\theta) = \\cos^2\\theta - \\sin^2\\theta$. $\\blacksquare$\n- Imaginary (bonus): $\\sin(2\\theta) = 2\\cos\\theta\\sin\\theta$. $\\blacksquare$",
+      "body_he_md": "**הוכיחו נוסחת כפל הזווית לקוסינוס באמצעות דה-מואבר.**\n\n**שלב 1 — דה-מואבר עם $n=2$:**\n$$\\cos(2\\theta) + i\\sin(2\\theta) = (\\cos\\theta + i\\sin\\theta)^2.$$\n\n**שלב 2 — פיתוח צד ימין:**\n$$= \\cos^2\\theta - \\sin^2\\theta + 2i\\cos\\theta\\sin\\theta.$$\n\n**שלב 3 — השוואת חלקים:**\n- ממשי: $\\cos(2\\theta) = \\cos^2\\theta - \\sin^2\\theta$. $\\blacksquare$\n- מדומה (בונוס): $\\sin(2\\theta) = 2\\cos\\theta\\sin\\theta$. $\\blacksquare$"
     },
     {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "5pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nFind all $x\\in[0,2\\pi]$ where $2\\sin^2 x - \\sin x - 1 = 0$.\n\n**Complete Solution:**\n\nLet $u=\\sin x$: $2u^2-u-1=0$ → $(2u+1)(u-1)=0$ → $u=1$ or $u=-\\frac{1}{2}$.\n$\\sin x=1$ → $x=\\frac{\\pi}{2}$. $\\sin x=-\\frac{1}{2}$ → $x=\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.\n\n---\n\n**Practice Problem 2:**\n\nFind $\\frac{dy}{dx}$ if $x^2+y^2=25$ at $(3,4)$.\n\n**Complete Solution:**\n\n$2x+2y\\frac{dy}{dx}=0$ → $\\frac{dy}{dx}=-\\frac{x}{y}=-\\frac{3}{4}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nכל $x\\in[0,2\\pi]$: $2\\sin^2 x-\\sin x-1=0$.\n\n**פתרון:** $x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$x^2+y^2=25$ ב-$(3,4)$: $\\frac{dy}{dx}=-\\frac{3}{4}$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use De Moivre ($n=2$) to express $\\sin(2\\theta)$ in terms of $\\sin\\theta$ and $\\cos\\theta$.",
+      "body_he_md": "השתמשו בדה-מואבר ($n=2$) לביטוי $\\sin(2\\theta)$ ב-$\\sin\\theta$ ו-$\\cos\\theta$.",
+      "checkpoint_solution_en": "From the expansion $(\\cos\\theta+i\\sin\\theta)^2 = \\cos^2\\theta-\\sin^2\\theta + 2i\\cos\\theta\\sin\\theta$, the imaginary part gives $\\sin(2\\theta) = 2\\sin\\theta\\cos\\theta$.",
+      "checkpoint_solution_he": "מהפיתוח, החלק המדומה נותן $\\sin(2\\theta) = 2\\sin\\theta\\cos\\theta$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Express $\\cos(3\\theta)$ in Terms of $\\cos\\theta$",
+      "title_he": "דוגמה פתורה 2 — ביטוי $\\cos(3\\theta)$ ב-$\\cos\\theta$",
+      "body_en_md": "**Prove that $\\cos(3\\theta) = 4\\cos^3\\theta - 3\\cos\\theta$.**\n\n**Step 1 — De Moivre $n=3$:**\n$$\\cos(3\\theta) + i\\sin(3\\theta) = (\\cos\\theta+i\\sin\\theta)^3.$$\n\n**Step 2 — Binomial expansion** (write $c=\\cos\\theta$, $s=\\sin\\theta$):\n$$(c+is)^3 = c^3 + 3c^2(is) + 3c(is)^2 + (is)^3$$\n$$= c^3 + 3ic^2 s + 3c(i^2)s^2 + i^3 s^3$$\n$$= c^3 - 3cs^2 + i(3c^2 s - s^3).$$\n\n**Step 3 — Extract real part:**\n$$\\cos(3\\theta) = \\cos^3\\theta - 3\\cos\\theta\\sin^2\\theta.$$\n\n**Step 4 — Replace $\\sin^2\\theta = 1-\\cos^2\\theta$:**\n$$= \\cos^3\\theta - 3\\cos\\theta(1-\\cos^2\\theta) = 4\\cos^3\\theta - 3\\cos\\theta. \\quad \\blacksquare$$\n\n**Bonus — imaginary part:**\n$$\\sin(3\\theta) = 3\\cos^2\\theta\\sin\\theta - \\sin^3\\theta = 3\\sin\\theta - 4\\sin^3\\theta.$$",
+      "body_he_md": "**הוכיחו ש-$\\cos(3\\theta) = 4\\cos^3\\theta - 3\\cos\\theta$.**\n\n**שלב 1 — דה-מואבר $n=3$:**\n$$\\cos(3\\theta) + i\\sin(3\\theta) = (c+is)^3.$$\n\n**שלב 2 — פיתוח בינומי:**\n$$(c+is)^3 = c^3 - 3cs^2 + i(3c^2 s - s^3).$$\n\n**שלב 3 — חלק ממשי:**\n$$\\cos(3\\theta) = c^3 - 3cs^2.$$\n\n**שלב 4 — מחליפים $s^2 = 1-c^2$:**\n$$= c^3 - 3c(1-c^2) = 4c^3 - 3c. \\quad \\blacksquare$$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Using the $n=3$ expansion, express $\\sin(3\\theta)$ in terms of $\\sin\\theta$ only.",
+      "body_he_md": "באמצעות פיתוח $n=3$, בטאו $\\sin(3\\theta)$ ב-$\\sin\\theta$ בלבד.",
+      "checkpoint_solution_en": "Imaginary part: $\\sin(3\\theta) = 3\\cos^2\\theta\\sin\\theta - \\sin^3\\theta$. Replace $\\cos^2\\theta = 1-\\sin^2\\theta$: $\\sin(3\\theta) = 3\\sin\\theta(1-\\sin^2\\theta)-\\sin^3\\theta = 3\\sin\\theta - 4\\sin^3\\theta$.",
+      "checkpoint_solution_he": "חלק מדומה: $\\sin(3\\theta) = 3c^2 s - s^3 = 3s(1-s^2)-s^3 = 3s - 4s^3$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Prove $\\tan x + \\cot x = \\dfrac{2}{\\sin(2x)}$ Using Identities",
+      "title_he": "דוגמה פתורה 3 — הוכחת $\\tan x + \\cot x = \\dfrac{2}{\\sin(2x)}$",
+      "body_en_md": "**Prove that $\\tan x + \\cot x = \\dfrac{2}{\\sin(2x)}$** (valid where $\\sin x, \\cos x \\neq 0$).\n\n**Strategy:** Use the double-angle formula $\\sin(2x) = 2\\sin x\\cos x$ (proved by De Moivre).\n\n**Proof:**\n$$\\tan x + \\cot x = \\frac{\\sin x}{\\cos x} + \\frac{\\cos x}{\\sin x} = \\frac{\\sin^2 x + \\cos^2 x}{\\sin x \\cos x}.$$\n\nSince $\\sin^2 x + \\cos^2 x = 1$ (Pythagorean identity):\n$$= \\frac{1}{\\sin x\\cos x} = \\frac{2}{2\\sin x\\cos x} = \\frac{2}{\\sin(2x)}. \\quad \\blacksquare$$\n\n**Key connections:** De Moivre proved $\\sin(2x)=2\\sin x\\cos x$; Pythagoras gives the numerator = 1.",
+      "body_he_md": "**הוכיחו ש-$\\tan x + \\cot x = \\dfrac{2}{\\sin(2x)}$** (בתחום שבו $\\sin x, \\cos x \\neq 0$).\n\n**אסטרטגיה:** שימוש בנוסחת הכפל $\\sin(2x) = 2\\sin x\\cos x$.\n\n**הוכחה:**\n$$\\tan x + \\cot x = \\frac{\\sin x}{\\cos x} + \\frac{\\cos x}{\\sin x} = \\frac{\\sin^2 x + \\cos^2 x}{\\sin x \\cos x} = \\frac{1}{\\sin x\\cos x} = \\frac{2}{2\\sin x\\cos x} = \\frac{2}{\\sin(2x)}. \\quad \\blacksquare$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Decision Table — Trig Identities via De Moivre",
+      "title_he": "טבלת החלטה — זהויות טריגונומטריות דרך דה-מואבר",
+      "body_en_md": "| Goal | Approach |\n|---|---|\n| Prove $\\cos(n\\theta)$ in powers of $\\cos\\theta$ | De Moivre $n$, take real part, replace $\\sin^2$ with $1-\\cos^2$ |\n| Prove $\\sin(n\\theta)$ in powers of $\\sin\\theta$ | De Moivre $n$, take imag part, replace $\\cos^2$ with $1-\\sin^2$ |\n| Express $\\cos^n\\theta$ as sum of cosines | Use $\\cos\\theta = \\frac{z+z^{-1}}{2}$, $z=e^{i\\theta}$; expand and collect |\n| Express $\\sin^n\\theta$ as sum of sines | Use $\\sin\\theta = \\frac{z-z^{-1}}{2i}$; expand |\n| Prove a rational-form identity | Factor out with $\\sin x$ or $\\cos x$; use Pythagoras + double-angle |\n\n**Key formulas derived from De Moivre:**\n- $\\cos(2\\theta) = 2\\cos^2\\theta-1 = 1-2\\sin^2\\theta$\n- $\\sin(2\\theta) = 2\\sin\\theta\\cos\\theta$\n- $\\cos(3\\theta) = 4\\cos^3\\theta-3\\cos\\theta$\n- $\\sin(3\\theta) = 3\\sin\\theta-4\\sin^3\\theta$",
+      "body_he_md": "| מטרה | גישה |\n|---|---|\n| הוכחת $\\cos(n\\theta)$ בחזקות $\\cos\\theta$ | דה-מואבר $n$, חלק ממשי, החלפת $\\sin^2 = 1-\\cos^2$ |\n| הוכחת $\\sin(n\\theta)$ בחזקות $\\sin\\theta$ | דה-מואבר $n$, חלק מדומה, החלפת $\\cos^2 = 1-\\sin^2$ |\n| ביטוי $\\cos^n\\theta$ כסכום קוסינוסים | $\\cos\\theta = \\frac{z+z^{-1}}{2}$; פיתוח ואיסוף |\n| ביטוי $\\sin^n\\theta$ כסכום סינוסים | $\\sin\\theta = \\frac{z-z^{-1}}{2i}$; פיתוח |\n\n**נוסחאות מפתח:**\n- $\\cos(2\\theta) = 2\\cos^2\\theta-1$\n- $\\sin(2\\theta) = 2\\sin\\theta\\cos\\theta$\n- $\\cos(3\\theta) = 4\\cos^3\\theta-3\\cos\\theta$\n- $\\sin(3\\theta) = 3\\sin\\theta-4\\sin^3\\theta$"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Use De Moivre ($n=2$) to prove $\\cos(2\\theta) = 1 - 2\\sin^2\\theta$.",
+          "body_he": "השתמשו בדה-מואבר ($n=2$) להוכחת $\\cos(2\\theta) = 1 - 2\\sin^2\\theta$.",
+          "solution_en": "From $\\cos(2\\theta)=\\cos^2\\theta-\\sin^2\\theta$, replace $\\cos^2\\theta=1-\\sin^2\\theta$: $\\cos(2\\theta)=1-2\\sin^2\\theta$.",
+          "solution_he": "מ-$\\cos(2\\theta)=\\cos^2\\theta-\\sin^2\\theta$, מחליפים $\\cos^2\\theta=1-\\sin^2\\theta$: $\\cos(2\\theta)=1-2\\sin^2\\theta$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Prove $\\sin(2\\theta) = 2\\sin\\theta\\cos\\theta$ using De Moivre.",
+          "body_he": "הוכיחו $\\sin(2\\theta) = 2\\sin\\theta\\cos\\theta$ בדה-מואבר.",
+          "solution_en": "$(\\cos\\theta+i\\sin\\theta)^2 = \\cos^2\\theta-\\sin^2\\theta+2i\\sin\\theta\\cos\\theta$. Imaginary part: $\\sin(2\\theta)=2\\sin\\theta\\cos\\theta$.",
+          "solution_he": "חלק מדומה של $(c+is)^2$: $\\sin(2\\theta) = 2sc$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Verify that $e^{i\\pi} + 1 = 0$ (Euler's identity).",
+          "body_he": "אמתו ש-$e^{i\\pi} + 1 = 0$ (זהות אויילר).",
+          "solution_en": "$e^{i\\pi} = \\cos\\pi + i\\sin\\pi = -1 + 0 = -1$. So $e^{i\\pi}+1=0$.",
+          "solution_he": "$e^{i\\pi} = \\cos\\pi + i\\sin\\pi = -1$. לכן $e^{i\\pi}+1=0$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Use $\\cos\\theta = \\frac{e^{i\\theta}+e^{-i\\theta}}{2}$ to write $\\cos^2\\theta$ as a sum of cosines.",
+          "body_he": "השתמשו ב-$\\cos\\theta = \\frac{e^{i\\theta}+e^{-i\\theta}}{2}$ לכתיבת $\\cos^2\\theta$ כסכום קוסינוסים.",
+          "solution_en": "$\\cos^2\\theta = \\frac{(e^{i\\theta}+e^{-i\\theta})^2}{4} = \\frac{e^{2i\\theta}+2+e^{-2i\\theta}}{4} = \\frac{\\cos(2\\theta)+1}{2} = \\frac{1+\\cos(2\\theta)}{2}$.",
+          "solution_he": "$\\cos^2\\theta = \\frac{e^{2i\\theta}+2+e^{-2i\\theta}}{4} = \\frac{1+\\cos(2\\theta)}{2}$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Prove $\\sin(3\\theta) = 3\\sin\\theta - 4\\sin^3\\theta$.",
+          "body_he": "הוכיחו $\\sin(3\\theta) = 3\\sin\\theta - 4\\sin^3\\theta$.",
+          "solution_en": "Imaginary part of $(c+is)^3$: $\\sin(3\\theta)=3c^2 s-s^3=3s(1-s^2)-s^3=3s-3s^3-s^3=3s-4s^3$.",
+          "solution_he": "חלק מדומה של $(c+is)^3$: $3c^2 s - s^3 = 3s - 3s^3 - s^3 = 3s - 4s^3$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Express $\\sin^3\\theta$ as a linear combination of $\\sin\\theta$ and $\\sin(3\\theta)$.",
+          "body_he": "בטאו $\\sin^3\\theta$ כצירוף לינארי של $\\sin\\theta$ ו-$\\sin(3\\theta)$.",
+          "solution_en": "From $\\sin(3\\theta)=3\\sin\\theta-4\\sin^3\\theta$: $\\sin^3\\theta = \\frac{3\\sin\\theta-\\sin(3\\theta)}{4}$.",
+          "solution_he": "מ-$\\sin(3\\theta)=3\\sin\\theta-4\\sin^3\\theta$: $\\sin^3\\theta = \\frac{3\\sin\\theta-\\sin(3\\theta)}{4}$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Prove $\\tan(2\\theta) = \\dfrac{2\\tan\\theta}{1-\\tan^2\\theta}$.",
+          "body_he": "הוכיחו $\\tan(2\\theta) = \\dfrac{2\\tan\\theta}{1-\\tan^2\\theta}$.",
+          "solution_en": "$\\tan(2\\theta)=\\frac{\\sin(2\\theta)}{\\cos(2\\theta)}=\\frac{2sc}{c^2-s^2}$. Divide numerator and denominator by $c^2$: $\\frac{2t}{1-t^2}$ where $t=\\tan\\theta$.",
+          "solution_he": "$\\frac{2sc}{c^2-s^2}$. מחלקים ב-$c^2$: $\\frac{2t}{1-t^2}$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Prove $\\cos(4\\theta) = 8\\cos^4\\theta - 8\\cos^2\\theta + 1$ using De Moivre $n=4$.",
+          "body_he": "הוכיחו $\\cos(4\\theta) = 8\\cos^4\\theta - 8\\cos^2\\theta + 1$ בדה-מואבר $n=4$.",
+          "solution_en": "$(c+is)^4 = c^4+4c^3(is)+6c^2(is)^2+4c(is)^3+(is)^4 = c^4-6c^2s^2+s^4 + i(...)$. Real: $c^4-6c^2s^2+s^4$. Replace $s^2=1-c^2$: $(c^4-6c^2(1-c^2)+(1-c^2)^2) = c^4-6c^2+6c^4+1-2c^2+c^4 = 8c^4-8c^2+1$.",
+          "solution_he": "חלק ממשי של $(c+is)^4$: $c^4-6c^2s^2+s^4$. מחליפים $s^2=1-c^2$: $8c^4-8c^2+1$."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Prove $\\cos^3\\theta = \\dfrac{3\\cos\\theta + \\cos(3\\theta)}{4}$.",
+          "body_he": "הוכיחו $\\cos^3\\theta = \\dfrac{3\\cos\\theta + \\cos(3\\theta)}{4}$.",
+          "solution_en": "From $\\cos(3\\theta)=4\\cos^3\\theta-3\\cos\\theta$: $4\\cos^3\\theta=\\cos(3\\theta)+3\\cos\\theta$, so $\\cos^3\\theta=\\frac{\\cos(3\\theta)+3\\cos\\theta}{4}$.",
+          "solution_he": "מ-$4\\cos^3\\theta=\\cos(3\\theta)+3\\cos\\theta$: $\\cos^3\\theta=\\frac{\\cos(3\\theta)+3\\cos\\theta}{4}$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove $\\sin^5\\theta = \\frac{1}{16}(10\\sin\\theta - 5\\sin(3\\theta) + \\sin(5\\theta))$.",
+          "body_he": "הוכיחו $\\sin^5\\theta = \\frac{1}{16}(10\\sin\\theta - 5\\sin(3\\theta) + \\sin(5\\theta))$.",
+          "solution_en": "Let $z=e^{i\\theta}$. Then $2i\\sin\\theta = z-z^{-1}$, so $(2i\\sin\\theta)^5 = (z-z^{-1})^5$. Expand by binomial: $z^5-5z^3+10z-10z^{-1}+5z^{-3}-z^{-5}$. Group: $(z^5-z^{-5})-5(z^3-z^{-3})+10(z-z^{-1}) = 2i\\sin(5\\theta)-10i\\sin(3\\theta)+20i\\sin\\theta$. Divide by $32i$: $\\sin^5\\theta=\\frac{10\\sin\\theta-5\\sin(3\\theta)+\\sin(5\\theta)}{16}$.",
+          "solution_he": "$(2i\\sin\\theta)^5=(z-z^{-1})^5$. פיתוח בינומי ואיסוף: $32i\\sin^5\\theta = 2i\\sin(5\\theta)-10i\\sin(3\\theta)+20i\\sin\\theta$. לכן $\\sin^5\\theta=\\frac{10\\sin\\theta-5\\sin(3\\theta)+\\sin(5\\theta)}{16}$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Use De Moivre to prove $\\sum_{k=1}^{n}\\sin(k\\theta) = \\dfrac{\\sin(\\frac{n+1}{2}\\theta)\\sin(\\frac{n}{2}\\theta)}{\\sin(\\frac{\\theta}{2})}$.",
+          "body_he": "השתמשו בדה-מואבר להוכחת $\\sum_{k=1}^{n}\\sin(k\\theta) = \\frac{\\sin(\\frac{n+1}{2}\\theta)\\sin(\\frac{n}{2}\\theta)}{\\sin(\\frac{\\theta}{2})}$.",
+          "solution_en": "Let $z=e^{i\\theta}$. $\\sum_{k=1}^n \\text{Im}(z^k)=\\text{Im}(z\\cdot\\frac{z^n-1}{z-1})$. Factor: $z-1=2i\\sin(\\theta/2)e^{i\\theta/2}$, $z^n-1=2i\\sin(n\\theta/2)e^{in\\theta/2}$. After simplification: $\\text{Im}=\\frac{\\sin(n\\theta/2)\\sin((n+1)\\theta/2)}{\\sin(\\theta/2)}$.",
+          "solution_he": "$\\sum\\sin(k\\theta) = \\text{Im}\\sum z^k = \\text{Im}\\frac{z(z^n-1)}{z-1}$. לאחר פישוט: $\\frac{\\sin(n\\theta/2)\\sin((n+1)\\theta/2)}{\\sin(\\theta/2)}$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\cos(5\\theta) = 16\\cos^5\\theta - 20\\cos^3\\theta + 5\\cos\\theta$.",
+          "body_he": "הוכיחו $\\cos(5\\theta) = 16\\cos^5\\theta - 20\\cos^3\\theta + 5\\cos\\theta$.",
+          "solution_en": "$(c+is)^5$: real part is $c^5-10c^3s^2+5cs^4$. Replace $s^2=1-c^2$: $c^5-10c^3(1-c^2)+5c(1-c^2)^2=c^5-10c^3+10c^5+5c-10c^3+5c^5=16c^5-20c^3+5c$.",
+          "solution_he": "חלק ממשי של $(c+is)^5$: $c^5-10c^3s^2+5cs^4$. מחליפים $s^2=1-c^2$: $16c^5-20c^3+5c$."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Using Euler's formula, prove $\\cos^2\\theta + \\sin^2\\theta = 1$.",
+          "body_he": "באמצעות נוסחת אויילר, הוכיחו $\\cos^2\\theta + \\sin^2\\theta = 1$.",
+          "solution_en": "$e^{i\\theta}\\cdot e^{-i\\theta} = e^0 = 1$. But $(\\cos\\theta+i\\sin\\theta)(\\cos\\theta-i\\sin\\theta)=\\cos^2\\theta+\\sin^2\\theta$. So $\\cos^2\\theta+\\sin^2\\theta=1$.",
+          "solution_he": "$e^{i\\theta}\\cdot e^{-i\\theta}=1$. אך $(\\cos\\theta+i\\sin\\theta)(\\cos\\theta-i\\sin\\theta)=\\cos^2\\theta+\\sin^2\\theta$. לכן $\\cos^2\\theta+\\sin^2\\theta=1$."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes",
+      "title_he": "הטעויות הנפוצות ביותר",
+      "body_en_md": "1. **Confusing which part is $\\cos(n\\theta)$ and which is $\\sin(n\\theta)$:** Real part = $\\cos$; imaginary part = $\\sin$.\n2. **Forgetting to replace $\\sin^2\\theta = 1-\\cos^2\\theta$** after extracting the real part — the identity needs to be in one variable only.\n3. **Sign errors in binomial expansion with $i^2=-1$:** Write each term explicitly before simplifying.\n4. **Applying De Moivre to $n$ rational but not integer** — for $n=1/2$, you need the root formula, not De Moivre directly.\n5. **Writing $e^{i\\theta} = \\cos\\theta - i\\sin\\theta$** — that's $e^{-i\\theta}$. Euler's formula has $+i\\sin\\theta$.",
+      "body_he_md": "1. **בלבול בין חלקים:** חלק ממשי = $\\cos$; חלק מדומה = $\\sin$.\n2. **שכחת החלפת $\\sin^2\\theta=1-\\cos^2\\theta$** לאחר חילוץ החלק הממשי.\n3. **טעויות סימן בפיתוח בינומי עם $i^2=-1$:** לכתוב כל גורם במפורש לפני פישוט.\n4. **שימוש בדה-מואבר עם $n$ רציונלי לא שלם** — עבור $n=1/2$ צריך נוסחת שורשים.\n5. **כתיבת $e^{i\\theta} = \\cos\\theta - i\\sin\\theta$** — זהו $e^{-i\\theta}$. נוסחת אויילר כוללת $+i\\sin\\theta$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — 5pt Focus",
+      "title_he": "לפני הבחינה — מיקוד 5 יח׳",
+      "body_en_md": "**Key formulas to memorize:**\n- De Moivre: $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$\n- Euler: $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$\n- $\\cos\\theta = \\frac{e^{i\\theta}+e^{-i\\theta}}{2}$, $\\sin\\theta = \\frac{e^{i\\theta}-e^{-i\\theta}}{2i}$\n- $\\cos(2\\theta)=\\cos^2\\theta-\\sin^2\\theta=2\\cos^2\\theta-1=1-2\\sin^2\\theta$\n- $\\sin(2\\theta)=2\\sin\\theta\\cos\\theta$\n- $\\cos(3\\theta)=4\\cos^3\\theta-3\\cos\\theta$, $\\sin(3\\theta)=3\\sin\\theta-4\\sin^3\\theta$\n\n**Exam question types for this topic:**\n1. Prove a multi-angle formula by De Moivre (real/imag part extraction) — 8–10 pts.\n2. Express $\\sin^n\\theta$ or $\\cos^n\\theta$ as sum of multi-angle terms — 6 pts.\n3. Prove a rational-form identity using known double-angle formulas — 5 pts.",
+      "body_he_md": "**נוסחאות לזכור:**\n- דה-מואבר: $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$\n- אויילר: $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$\n- $\\cos(2\\theta)=2\\cos^2\\theta-1$, $\\sin(2\\theta)=2\\sin\\theta\\cos\\theta$\n- $\\cos(3\\theta)=4\\cos^3\\theta-3\\cos\\theta$, $\\sin(3\\theta)=3\\sin\\theta-4\\sin^3\\theta$\n\n**סוגי שאלות בחינה:**\n1. הוכחת נוסחת זווית מרובה — 8–10 נק׳.\n2. ביטוי $\\sin^n\\theta$ כסכום — 6 נק׳.\n3. הוכחת זהות ב-$\\tan$/$\\cot$ — 5 נק׳."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **De Moivre:** $(\\cos\\theta+i\\sin\\theta)^n = \\cos(n\\theta)+i\\sin(n\\theta)$. Expand, equate parts.\n- **Multi-angle cosine:** Real part of binomial expansion; then use $\\sin^2=1-\\cos^2$.\n- **Multi-angle sine:** Imaginary part; then use $\\cos^2=1-\\sin^2$.\n- **Power-reduction:** From $\\cos(3\\theta)=4c^3-3c$ we get $c^3=\\frac{3c+\\cos(3\\theta)}{4}$.\n- **Euler's bridge:** $\\cos\\theta = \\frac{e^{i\\theta}+e^{-i\\theta}}{2}$, $\\sin\\theta = \\frac{e^{i\\theta}-e^{-i\\theta}}{2i}$.",
+      "body_he_md": "- **דה-מואבר:** פיתוח + השוואת חלקים.\n- **קוסינוס זווית מרובה:** חלק ממשי + החלפת $\\sin^2$.\n- **סינוס זווית מרובה:** חלק מדומה + החלפת $\\cos^2$.\n- **צמצום חזקה:** מ-$\\cos(3\\theta)=4c^3-3c$ מקבלים $c^3=\\frac{3c+\\cos(3\\theta)}{4}$.\n- **גשר אויילר:** $\\cos\\theta = \\frac{e^{i\\theta}+e^{-i\\theta}}{2}$."
     }
   ],
   "questions": [
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "What is the polar form of $z = \\sqrt{3} + i$?",
-      "body_he": "מהי הצורה הפולרית של $z = \\sqrt{3} + i$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$2\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$",
-          "text_he": "$2\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$2\\left(\\cos\\dfrac{\\pi}{3} + i\\sin\\dfrac{\\pi}{3}\\right)$",
-          "text_he": "$2\\left(\\cos\\dfrac{\\pi}{3} + i\\sin\\dfrac{\\pi}{3}\\right)$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$\\sqrt{3}\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$",
-          "text_he": "$\\sqrt{3}\\left(\\cos\\dfrac{\\pi}{6} + i\\sin\\dfrac{\\pi}{6}\\right)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$2\\left(\\cos\\dfrac{\\pi}{4} + i\\sin\\dfrac{\\pi}{4}\\right)$",
-          "text_he": "$2\\left(\\cos\\dfrac{\\pi}{4} + i\\sin\\dfrac{\\pi}{4}\\right)$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$r = \\sqrt{(\\sqrt{3})^2 + 1^2} = \\sqrt{3+1} = 2$. The argument: $\\theta = \\arctan(1/\\sqrt{3}) = \\pi/6$ (first quadrant, both components positive). So $z = 2(\\cos(\\pi/6) + i\\sin(\\pi/6))$.",
-      "explanation_he": "$r = \\sqrt{(\\sqrt{3})^2 + 1^2} = \\sqrt{4} = 2$. הארגומנט: $\\theta = \\arctan(1/\\sqrt{3}) = \\pi/6$ (רביע ראשון, שני הרכיבים חיוביים). לכן $z = 2(\\cos(\\pi/6) + i\\sin(\\pi/6))$."
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which part of $(\\cos\\theta+i\\sin\\theta)^n$ equals $\\cos(n\\theta)$?",
+      "stem_he": "איזה חלק של $(\\cos\\theta+i\\sin\\theta)^n$ שווה ל-$\\cos(n\\theta)$?",
+      "options_en": ["Real part", "Imaginary part", "Modulus", "Argument"],
+      "options_he": ["החלק הממשי", "החלק המדומה", "המודולוס", "הארגומנט"],
+      "correct_index": 0,
+      "explanation_en": "By De Moivre: real part = $\\cos(n\\theta)$, imaginary part = $\\sin(n\\theta)$.",
+      "explanation_he": "לפי דה-מואבר: החלק הממשי = $\\cos(n\\theta)$.",
+      "skill_atoms": ["de_moivre_trig_identities"],
+      "points_level_min": "5pt"
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "Using De Moivre's theorem, compute $(1+i)^8$.",
-      "body_he": "בעזרת משפט דה-מואבר, חשבו $(1+i)^8$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$8$",
-          "text_he": "$8$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$16i$",
-          "text_he": "$16i$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$16$",
-          "text_he": "$16$",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "$-16$",
-          "text_he": "$-16$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$1+i = \\sqrt{2}(\\cos(\\pi/4) + i\\sin(\\pi/4))$. By De Moivre: $(1+i)^8 = (\\sqrt{2})^8(\\cos(2\\pi) + i\\sin(2\\pi)) = 16 \\cdot 1 = 16$.",
-      "explanation_he": "$1+i = \\sqrt{2}(\\cos(\\pi/4) + i\\sin(\\pi/4))$. ממשפט דה-מואבר: $(1+i)^8 = (\\sqrt{2})^8(\\cos(2\\pi) + i\\sin(2\\pi)) = 16 \\cdot 1 = 16$."
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What is $\\cos(2\\theta)$ according to De Moivre?",
+      "stem_he": "מהו $\\cos(2\\theta)$ לפי דה-מואבר?",
+      "options_en": ["$2\\cos^2\\theta - 1$", "$2\\cos\\theta\\sin\\theta$", "$\\cos^2\\theta + \\sin^2\\theta$", "$1 + 2\\sin^2\\theta$"],
+      "options_he": ["$2\\cos^2\\theta - 1$", "$2\\cos\\theta\\sin\\theta$", "$\\cos^2\\theta + \\sin^2\\theta$", "$1 + 2\\sin^2\\theta$"],
+      "correct_index": 0,
+      "explanation_en": "$\\cos(2\\theta)=\\cos^2\\theta-\\sin^2\\theta=\\cos^2\\theta-(1-\\cos^2\\theta)=2\\cos^2\\theta-1$.",
+      "explanation_he": "$\\cos(2\\theta)=\\cos^2\\theta-\\sin^2\\theta=2\\cos^2\\theta-1$.",
+      "skill_atoms": ["double_angle_formula"],
+      "points_level_min": "5pt"
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "How many distinct 6th roots of unity are there?",
-      "body_he": "כמה שורשי יחידה שונים מסדר 6 יש?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$2$",
-          "text_he": "$2$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$3$",
-          "text_he": "$3$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$6$",
-          "text_he": "$6$",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "$12$",
-          "text_he": "$12$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "The equation $w^n = 1$ always has exactly $n$ solutions in $\\mathbb{C}$. For $n = 6$, there are 6 distinct roots, equally spaced at angles $0, \\pi/3, 2\\pi/3, \\pi, 4\\pi/3, 5\\pi/3$.",
-      "explanation_he": "המשוואה $w^n = 1$ תמיד מקיימת בדיוק $n$ פתרונות ב-$\\mathbb{C}$. עבור $n = 6$, יש 6 שורשים שונים, מרוחקים באופן שווה בזוויות $0, \\pi/3, 2\\pi/3, \\pi, 4\\pi/3, 5\\pi/3$."
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Using De Moivre with $n=3$, prove $\\cos(3\\theta) = 4\\cos^3\\theta - 3\\cos\\theta$.",
+      "stem_he": "השתמשו בדה-מואבר עם $n=3$ להוכחת $\\cos(3\\theta) = 4\\cos^3\\theta - 3\\cos\\theta$.",
+      "rubric_en": "Full (4/4): expands $(c+is)^3$ correctly, takes real part $c^3-3cs^2$, replaces $s^2=1-c^2$, reaches $4c^3-3c$. Partial (2/4): correct expansion but error in replacement step.",
+      "rubric_he": "מלא (4/4): פיתוח נכון, חלק ממשי, החלפת $s^2$, תוצאה $4c^3-3c$.",
+      "explanation_en": "$(c+is)^3=c^3-3cs^2+i(3c^2 s-s^3)$. Real: $c^3-3c(1-c^2)=4c^3-3c$.",
+      "explanation_he": "חלק ממשי: $c^3-3c(1-c^2)=4c^3-3c$.",
+      "skill_atoms": ["de_moivre_trig_identities", "multi_angle_formula"],
+      "points_level_min": "5pt"
     },
     {
-      "id": "q4",
-      "type": "open",
-      "body_en": "Prove by mathematical induction:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "body_he": "הוכיחו באינדוקציה:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "points": 10,
-      "expected_steps_en": [
-        "Verify base case n=1",
-        "State induction hypothesis",
-        "Add (n+1)² and algebra to get (n+1)(n+2)(2n+3)/6"
-      ],
-      "expected_steps_he": [
-        "בסיס n=1",
-        "הנחת אינדוקציה",
-        "צעד אלגברי ל-n+1"
-      ],
-      "sample_solution_en": "Standard induction: base OK; inductive step factors to required form.",
-      "sample_solution_he": "אינדוקציה סטנדרטית — בסיס וצעד.",
-      "rubric_en": "2pts base; 3pts hypothesis; 5pts inductive algebra.",
-      "rubric_he": "2 נק' בסיס; 3 נק' הנחה; 5 נק' צעד."
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: Euler's formula states $e^{i\\theta} = \\cos\\theta - i\\sin\\theta$.",
+      "stem_he": "נכון או לא: נוסחת אויילר קובעת $e^{i\\theta} = \\cos\\theta - i\\sin\\theta$.",
+      "correct_answer": false,
+      "explanation_en": "Euler's formula is $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$. The formula with $-i\\sin\\theta$ is $e^{-i\\theta}$.",
+      "explanation_he": "נוסחת אויילר היא $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$. עם $-i\\sin\\theta$ זה $e^{-i\\theta}$.",
+      "skill_atoms": ["eulers_formula"],
+      "points_level_min": "5pt"
     },
     {
-      "id": "q5",
-      "type": "open",
-      "body_en": "Find all $x\\in[0,2\\pi]$ satisfying $2\\sin^2 x - \\sin x - 1 = 0$. Show all work.",
-      "body_he": "מצאו כל $x\\in[0,2\\pi]$: $2\\sin^2 x - \\sin x - 1 = 0$. הראו שלבים.",
-      "points": 10,
-      "expected_steps_en": [
-        "Substitute u=sin x, solve quadratic",
-        "sin x=1 → π/2",
-        "sin x=-1/2 → 7π/6, 11π/6"
-      ],
-      "expected_steps_he": [
-        "u=sin x, משוואה ריבועית",
-        "sin x=1 → π/2",
-        "sin x=-1/2 → 7π/6, 11π/6"
-      ],
-      "sample_solution_en": "x = π/2, 7π/6, 11π/6.",
-      "sample_solution_he": "x = π/2, 7π/6, 11π/6.",
-      "rubric_en": "3pts substitution; 4pts solving trig; 3pts all solutions in interval.",
-      "rubric_he": "3 נק' הצבה; 4 נק' טrig; 3 נק' כל הפתרונות."
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove $\\tan x + \\cot x = \\dfrac{2}{\\sin(2x)}$ using the double-angle formula.",
+      "stem_he": "הוכיחו $\\tan x + \\cot x = \\dfrac{2}{\\sin(2x)}$ בנוסחת הכפל.",
+      "rubric_en": "Full (3/3): combines $\\tan+\\cot = (\\sin^2+\\cos^2)/(\\sin\\cos)=1/(\\sin x\\cos x)$, applies $\\sin(2x)=2\\sin x\\cos x$. Partial (2/3): correct first step but incomplete. Minimal (1/3): writes definition of tan/cot only.",
+      "rubric_he": "מלא (3/3): $\\frac{\\sin^2+\\cos^2}{\\sin\\cos}=\\frac{1}{\\sin x\\cos x}=\\frac{2}{\\sin(2x)}$.",
+      "explanation_en": "$\\tan x+\\cot x=\\frac{\\sin^2 x+\\cos^2 x}{\\sin x\\cos x}=\\frac{1}{\\sin x\\cos x}=\\frac{2}{2\\sin x\\cos x}=\\frac{2}{\\sin(2x)}$.",
+      "explanation_he": "$\\frac{1}{\\sin x\\cos x}=\\frac{2}{\\sin(2x)}$.",
+      "skill_atoms": ["trig_identity_proof", "double_angle_formula"],
+      "points_level_min": "5pt"
     }
-  ]
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "De Moivre turns multi-angle trig formulas into algebra: expand the binomial, equate parts.",
+      "Real part → $\\cos(n\\theta)$ formula; imaginary part → $\\sin(n\\theta)$ formula.",
+      "After extracting real part, always use $\\sin^2\\theta = 1-\\cos^2\\theta$ to express in $\\cos$ only.",
+      "Euler's formula $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ is the algebraic foundation (not just a curiosity).",
+      "Power-reduction: the De Moivre multi-angle formulas can be inverted to reduce $\\sin^n$, $\\cos^n$."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Imaginary part gives the cosine formula",
+        "correction": "Real part = cos, imaginary part = sin. Always.",
+        "detect_phrase_en": "imaginary cosine",
+        "detect_phrase_he": "מדומה קוסינוס"
+      },
+      {
+        "wrong": "Forgetting to replace $\\sin^2=1-\\cos^2$",
+        "correction": "The identity needs to be in one variable. Always substitute after extracting the part.",
+        "detect_phrase_en": "sin squared cos squared",
+        "detect_phrase_he": "סינוס בריבוע קוסינוס בריבוע"
+      }
+    ],
+    "tutor_pacing_hint": "Start with $n=2$ (easiest) to show the method, then do $n=3$ together. Then give $n=4$ as an exercise — students should see the pattern.",
+    "skill_atoms_unlocked": [
+      "de_moivre_trig_identities",
+      "double_angle_formula",
+      "multi_angle_formula",
+      "eulers_formula",
+      "trig_identity_proof",
+      "power_reduction_trig"
+    ],
+    "prerequisites_to_check_before_teaching": ["complex_numbers", "complex_numbers_5pt", "trigonometry_ratios"],
+    "next_recommended": ["trigonometric_identities", "sequences_5pt"]
+  }
 }

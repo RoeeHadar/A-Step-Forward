@@ -1,24 +1,320 @@
 {
   "concept_id": "complex_numbers_5pt",
-  "subject": "high_school_math_5pt",
-  "level": "5pt",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Complex Numbers & De Moivre (5 Units)",
-  "title_he": "מספרים מרוכבים ודה-מואבר (5 יחידות)",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Complex Numbers — Polar Form and De Moivre's Theorem",
+  "title_he": "מספרים מרוכבים — צורה פולארית ומשפט דה-מואבר",
+  "summary_en": "Every complex number $z = r(\\cos\\theta + i\\sin\\theta)$ can be written in polar form. De Moivre's theorem states $(r\\text{cis}\\theta)^n = r^n\\text{cis}(n\\theta)$, making powers and roots of complex numbers systematic. The $n$th roots of unity divide the unit circle equally.",
+  "summary_he": "כל מספר מרוכב $z = r(\\cos\\theta + i\\sin\\theta)$ ניתן לכתיבה בצורה פולארית. משפט דה-מואבר קובע $(r\\text{cis}\\theta)^n = r^n\\text{cis}(n\\theta)$, מה שמייעל חישוב חזקות ושורשים. שורשי היחידה ממעלה $n$ מחלקים את מעגל היחידה באופן שווה.",
+  "est_minutes": 45,
   "sections": [
     {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nFind all $x\\in[0,2\\pi]$ where $2\\sin^2 x - \\sin x - 1 = 0$.\n\n**Complete Solution:**\n\nLet $u=\\sin x$: $2u^2-u-1=0$ → $(2u+1)(u-1)=0$ → $u=1$ or $u=-\\frac{1}{2}$.\n$\\sin x=1$ → $x=\\frac{\\pi}{2}$. $\\sin x=-\\frac{1}{2}$ → $x=\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.\n\n---\n\n**Practice Problem 2:**\n\nFind $\\frac{dy}{dx}$ if $x^2+y^2=25$ at $(3,4)$.\n\n**Complete Solution:**\n\n$2x+2y\\frac{dy}{dx}=0$ → $\\frac{dy}{dx}=-\\frac{x}{y}=-\\frac{3}{4}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nכל $x\\in[0,2\\pi]$: $2\\sin^2 x-\\sin x-1=0$.\n\n**פתרון:** $x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$x^2+y^2=25$ ב-$(3,4)$: $\\frac{dy}{dx}=-\\frac{3}{4}$."
+      "kind": "intro",
+      "title_en": "Why Polar Form Matters in the 5pt Bagrut",
+      "title_he": "מדוע הצורה הפולארית חשובה בבגרות 5 יח׳",
+      "body_en_md": "In standard form $a+bi$, computing $(1+i)^{10}$ requires 10 multiplications. In polar form, it takes one step: $r^{10}$ and $10\\theta$. The 5pt Bagrut tests polar form, De Moivre's theorem, and $n$th roots in a dedicated section worth **15–20 points**. Mastering polar form also lays the foundation for Euler's formula $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$ and Fourier analysis.",
+      "body_he_md": "בצורה הסטנדרטית $a+bi$, חישוב $(1+i)^{10}$ דורש 10 כפלים. בצורה פולארית, זה לוקח שלב אחד: $r^{10}$ ו-$10\\theta$. בגרות 5 יח׳ בוחנת צורה פולארית, משפט דה-מואבר ושורשים ממעלה $n$ בסעיף ייעודי בשווי **15–20 נקודות**. שליטה בצורה פולארית גם מניחה יסוד לנוסחת אויילר $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$ ולניתוח פורייה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Definitions",
+      "title_he": "הגדרות",
+      "body_en_md": "**Polar form:** $z = r(\\cos\\theta + i\\sin\\theta) = r\\,\\text{cis}\\,\\theta$, where:\n- $r = |z| = \\sqrt{a^2+b^2}$ (modulus / absolute value)\n- $\\theta = \\arg(z)$ (argument — angle from positive real axis, $\\theta \\in (-\\pi,\\pi]$)\n\n**Converting $a+bi \\to$ polar:** $r = \\sqrt{a^2+b^2}$, $\\theta = \\arctan(b/a)$ adjusted to the correct quadrant.\n\n**Converting polar $\\to a+bi$:** $a = r\\cos\\theta$, $b = r\\sin\\theta$.\n\n**Euler's formula (reference):** $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$, so $z = re^{i\\theta}$.\n\n**$n$th roots of unity:** The $n$ solutions of $z^n = 1$ are $\\zeta_k = e^{2\\pi ik/n} = \\cos\\frac{2\\pi k}{n} + i\\sin\\frac{2\\pi k}{n}$ for $k = 0,1,\\ldots,n-1$.",
+      "body_he_md": "**צורה פולארית:** $z = r(\\cos\\theta + i\\sin\\theta) = r\\,\\text{cis}\\,\\theta$, כאשר:\n- $r = |z| = \\sqrt{a^2+b^2}$ (מודולוס)\n- $\\theta = \\arg(z)$ (ארגומנט — זווית מהציר הממשי החיובי, $\\theta \\in (-\\pi,\\pi]$)\n\n**המרה $a+bi \\to$ פולארי:** $r = \\sqrt{a^2+b^2}$, $\\theta = \\arctan(b/a)$ מותאם לרביע הנכון.\n\n**המרה פולארי $\\to a+bi$:** $a = r\\cos\\theta$, $b = r\\sin\\theta$.\n\n**נוסחת אויילר (לעיון):** $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$, ולכן $z = re^{i\\theta}$.\n\n**שורשי יחידה ממעלה $n$:** $n$ הפתרונות של $z^n = 1$ הם $\\zeta_k = \\cos\\frac{2\\pi k}{n} + i\\sin\\frac{2\\pi k}{n}$ עבור $k = 0,1,\\ldots,n-1$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "De Moivre's Theorem and Root Formula",
+      "title_he": "משפט דה-מואבר ונוסחת השורשים",
+      "body_en_md": "**De Moivre's Theorem:** For any integer $n$:\n$$(r\\,\\text{cis}\\,\\theta)^n = r^n\\,\\text{cis}(n\\theta).$$\n\n**Why it works:** $\\text{cis}\\,\\alpha \\cdot \\text{cis}\\,\\beta = \\text{cis}(\\alpha+\\beta)$ (add angles, multiply moduli). Apply inductively.\n\n**Multiplying in polar:** $(r_1\\,\\text{cis}\\,\\theta_1)(r_2\\,\\text{cis}\\,\\theta_2) = r_1 r_2\\,\\text{cis}(\\theta_1+\\theta_2)$.\n\n**$n$th roots of $w = \\rho\\,\\text{cis}\\,\\phi$:** There are exactly $n$ roots:\n$$z_k = \\rho^{1/n}\\,\\text{cis}\\!\\left(\\frac{\\phi + 2\\pi k}{n}\\right), \\quad k = 0,1,\\ldots,n-1.$$\n\nGeometrically: the $n$ roots are equally spaced on a circle of radius $\\rho^{1/n}$, separated by angles $2\\pi/n$.\n\n**Key angle table (memorize):**\n\n| $\\theta$ | $0$ | $\\pi/6$ | $\\pi/4$ | $\\pi/3$ | $\\pi/2$ | $\\pi$ |\n|---|---|---|---|---|---|---|\n| $\\cos\\theta$ | $1$ | $\\frac{\\sqrt{3}}{2}$ | $\\frac{\\sqrt{2}}{2}$ | $\\frac{1}{2}$ | $0$ | $-1$ |\n| $\\sin\\theta$ | $0$ | $\\frac{1}{2}$ | $\\frac{\\sqrt{2}}{2}$ | $\\frac{\\sqrt{3}}{2}$ | $1$ | $0$ |",
+      "body_he_md": "**משפט דה-מואבר:** לכל מספר שלם $n$:\n$$(r\\,\\text{cis}\\,\\theta)^n = r^n\\,\\text{cis}(n\\theta).$$\n\n**מדוע עובד:** $\\text{cis}\\,\\alpha \\cdot \\text{cis}\\,\\beta = \\text{cis}(\\alpha+\\beta)$ (מחברים זוויות, מכפילים מודולוסים). מיישמים באינדוקציה.\n\n**כפל בצורה פולארית:** $(r_1\\,\\text{cis}\\,\\theta_1)(r_2\\,\\text{cis}\\,\\theta_2) = r_1 r_2\\,\\text{cis}(\\theta_1+\\theta_2)$.\n\n**שורשי $n$-ים של $w = \\rho\\,\\text{cis}\\,\\phi$:** יש בדיוק $n$ שורשים:\n$$z_k = \\rho^{1/n}\\,\\text{cis}\\!\\left(\\frac{\\phi + 2\\pi k}{n}\\right), \\quad k = 0,1,\\ldots,n-1.$$\n\nגיאומטרית: $n$ השורשים פרוסים שווה על מעגל ברדיוס $\\rho^{1/n}$, מרוחקים בזוויות $2\\pi/n$.\n\n**טבלת זוויות מפתח (לזכור):**\n\n| $\\theta$ | $0$ | $\\pi/6$ | $\\pi/4$ | $\\pi/3$ | $\\pi/2$ | $\\pi$ |\n|---|---|---|---|---|---|---|\n| $\\cos\\theta$ | $1$ | $\\frac{\\sqrt{3}}{2}$ | $\\frac{\\sqrt{2}}{2}$ | $\\frac{1}{2}$ | $0$ | $-1$ |\n| $\\sin\\theta$ | $0$ | $\\frac{1}{2}$ | $\\frac{\\sqrt{2}}{2}$ | $\\frac{\\sqrt{3}}{2}$ | $1$ | $0$ |"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Convert $1+i$ to Polar Form",
+      "title_he": "דוגמה פתורה 1 — המרת $1+i$ לצורה פולארית",
+      "body_en_md": "**Convert $z = 1 + i$ to polar form.**\n\n**Step 1 — Modulus:**\n$$r = |1+i| = \\sqrt{1^2+1^2} = \\sqrt{2}.$$\n\n**Step 2 — Argument:** The point $(1,1)$ is in the first quadrant.\n$$\\theta = \\arctan\\!\\left(\\frac{1}{1}\\right) = \\arctan(1) = \\frac{\\pi}{4}.$$\n\n**Step 3 — Write polar form:**\n$$z = \\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4} = \\sqrt{2}\\!\\left(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}\\right).$$\n\n**Verify:** $\\sqrt{2}\\cos\\frac{\\pi}{4} = \\sqrt{2} \\cdot \\frac{\\sqrt{2}}{2} = 1$ ✓. $\\sqrt{2}\\sin\\frac{\\pi}{4} = 1$ ✓.",
+      "body_he_md": "**המירו $z = 1 + i$ לצורה פולארית.**\n\n**שלב 1 — מודולוס:**\n$$r = |1+i| = \\sqrt{1+1} = \\sqrt{2}.$$\n\n**שלב 2 — ארגומנט:** הנקודה $(1,1)$ ברביע הראשון.\n$$\\theta = \\arctan(1/1) = \\frac{\\pi}{4}.$$\n\n**שלב 3 — כותבים צורה פולארית:**\n$$z = \\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4}.$$\n\n**אימות:** $\\sqrt{2}\\cos\\frac{\\pi}{4} = 1$ ✓. $\\sqrt{2}\\sin\\frac{\\pi}{4} = 1$ ✓."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Convert $z = -1 + \\sqrt{3}i$ to polar form.",
+      "body_he_md": "המירו $z = -1 + \\sqrt{3}i$ לצורה פולארית.",
+      "checkpoint_solution_en": "$r = \\sqrt{1+3} = 2$. The point $(-1,\\sqrt{3})$ is in Q2: $\\theta = \\pi - \\arctan(\\sqrt{3}/1) = \\pi - \\pi/3 = 2\\pi/3$. So $z = 2\\,\\text{cis}\\,\\frac{2\\pi}{3}$.",
+      "checkpoint_solution_he": "$r = 2$. הנקודה ברביע II: $\\theta = \\pi - \\pi/3 = 2\\pi/3$. לכן $z = 2\\,\\text{cis}\\,\\frac{2\\pi}{3}$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Compute $(1+i)^{10}$ Using De Moivre",
+      "title_he": "דוגמה פתורה 2 — חישוב $(1+i)^{10}$ באמצעות דה-מואבר",
+      "body_en_md": "**Compute $(1+i)^{10}$.**\n\n**Step 1 — Convert to polar:** From Example 1, $1+i = \\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4}$.\n\n**Step 2 — Apply De Moivre:**\n$$(1+i)^{10} = \\left(\\sqrt{2}\\right)^{10}\\text{cis}\\left(10 \\cdot \\frac{\\pi}{4}\\right) = 2^5 \\cdot \\text{cis}\\frac{10\\pi}{4} = 32\\,\\text{cis}\\frac{5\\pi}{2}.$$\n\n**Step 3 — Simplify argument:** $\\frac{5\\pi}{2} = 2\\pi + \\frac{\\pi}{2}$, so $\\text{cis}\\frac{5\\pi}{2} = \\text{cis}\\frac{\\pi}{2} = i$.\n\n**Answer:** $(1+i)^{10} = 32i$.\n\n**Check:** $(1+i)^2 = 2i$, so $(1+i)^{10} = (2i)^5 = 2^5 \\cdot i^5 = 32i$ ✓.",
+      "body_he_md": "**חשבו $(1+i)^{10}$.**\n\n**שלב 1 — המרה לפולארי:** מדוגמה 1, $1+i = \\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4}$.\n\n**שלב 2 — דה-מואבר:**\n$$(1+i)^{10} = (\\sqrt{2})^{10}\\,\\text{cis}\\!\\left(\\frac{10\\pi}{4}\\right) = 32\\,\\text{cis}\\frac{5\\pi}{2}.$$\n\n**שלב 3 — פישוט ארגומנט:** $\\frac{5\\pi}{2} = 2\\pi + \\frac{\\pi}{2}$, לכן $\\text{cis}\\frac{5\\pi}{2} = i$.\n\n**תשובה:** $(1+i)^{10} = 32i$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $(\\sqrt{3}+i)^6$.",
+      "body_he_md": "חשבו $(\\sqrt{3}+i)^6$.",
+      "checkpoint_solution_en": "$\\sqrt{3}+i = 2\\,\\text{cis}\\,\\frac{\\pi}{6}$. $(\\sqrt{3}+i)^6 = 2^6\\,\\text{cis}(\\pi) = 64(-1) = -64$.",
+      "checkpoint_solution_he": "$\\sqrt{3}+i = 2\\,\\text{cis}\\,\\frac{\\pi}{6}$. $(\\sqrt{3}+i)^6 = 2^6\\,\\text{cis}(\\pi) = -64$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Find All 4th Roots of $-16$ and Plot Them",
+      "title_he": "דוגמה פתורה 3 — מציאת כל שורשי הרביעי של $-16$ ושרטוטם",
+      "body_en_md": "**Find all $z \\in \\mathbb{C}$ with $z^4 = -16$.**\n\n**Step 1 — Convert $-16$ to polar:**\n$$-16 = 16\\,\\text{cis}\\,\\pi.$$\n\n**Step 2 — Root formula** ($n=4$, $\\rho=16$, $\\phi=\\pi$):\n$$z_k = 16^{1/4}\\,\\text{cis}\\!\\left(\\frac{\\pi + 2\\pi k}{4}\\right) = 2\\,\\text{cis}\\!\\left(\\frac{\\pi(2k+1)}{4}\\right), \\quad k=0,1,2,3.$$\n\n**Step 3 — List the four roots:**\n- $k=0$: $z_0 = 2\\,\\text{cis}\\frac{\\pi}{4} = 2 \\cdot \\frac{\\sqrt{2}}{2}(1+i) = \\sqrt{2}(1+i)$\n- $k=1$: $z_1 = 2\\,\\text{cis}\\frac{3\\pi}{4} = \\sqrt{2}(-1+i)$\n- $k=2$: $z_2 = 2\\,\\text{cis}\\frac{5\\pi}{4} = \\sqrt{2}(-1-i)$\n- $k=3$: $z_3 = 2\\,\\text{cis}\\frac{7\\pi}{4} = \\sqrt{2}(1-i)$\n\n**Geometric picture:** All 4 roots lie on the circle of radius 2, separated by $\\pi/2$ (90°). They form a square inscribed in the circle.\n\n**Verify $z_0$:** $[\\sqrt{2}(1+i)]^4 = (\\sqrt{2})^4 \\cdot (1+i)^4 = 4 \\cdot [(1+i)^2]^2 = 4 \\cdot (2i)^2 = 4(-4) = -16$ ✓.",
+      "body_he_md": "**מצאו את כל $z \\in \\mathbb{C}$ כך ש-$z^4 = -16$.**\n\n**שלב 1 — המרת $-16$ לפולארי:**\n$$-16 = 16\\,\\text{cis}\\,\\pi.$$\n\n**שלב 2 — נוסחת שורשים** ($n=4$, $\\rho=16$, $\\phi=\\pi$):\n$$z_k = 2\\,\\text{cis}\\!\\left(\\frac{\\pi(2k+1)}{4}\\right), \\quad k=0,1,2,3.$$\n\n**שלב 3 — רשימת ארבעת השורשים:**\n- $k=0$: $z_0 = \\sqrt{2}(1+i)$\n- $k=1$: $z_1 = \\sqrt{2}(-1+i)$\n- $k=2$: $z_2 = \\sqrt{2}(-1-i)$\n- $k=3$: $z_3 = \\sqrt{2}(1-i)$\n\n**תמונה גיאומטרית:** כל 4 השורשים שוכנים על מעגל ברדיוס 2, מרוחקים ב-90°. הם יוצרים ריבוע חסום במעגל.\n\n**אימות $z_0$:** $[\\sqrt{2}(1+i)]^4 = 4(2i)^2 = -16$ ✓."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Decision Table — Polar Form Techniques",
+      "title_he": "טבלת החלטה — טכניקות צורה פולארית",
+      "body_en_md": "| Task | Method |\n|---|---|\n| Convert $a+bi$ to polar | $r=\\sqrt{a^2+b^2}$, $\\theta$ from quadrant table |\n| Compute $z^n$ for large $n$ | Convert to polar, apply De Moivre: $r^n\\,\\text{cis}(n\\theta)$ |\n| Find all $n$th roots of $w$ | Write $w=\\rho\\,\\text{cis}\\,\\phi$; $z_k = \\rho^{1/n}\\,\\text{cis}\\frac{\\phi+2\\pi k}{n}$ |\n| Multiply two complex numbers | Add arguments, multiply moduli |\n| Divide two complex numbers | Subtract arguments, divide moduli |\n| Find $n$th roots of unity | $\\zeta_k = \\text{cis}\\frac{2\\pi k}{n}$, $k=0,\\ldots,n-1$ |\n\n**Argument adjustment:** If $\\theta$ from $\\arctan$ is in the wrong quadrant, add $\\pi$ (Q2/Q3) or $-\\pi$ (Q3/Q4 adjustment). Always check the signs of $a$ and $b$.",
+      "body_he_md": "| משימה | שיטה |\n|---|---|\n| המרת $a+bi$ לפולארי | $r=\\sqrt{a^2+b^2}$, $\\theta$ מטבלת הרביעים |\n| חישוב $z^n$ עבור $n$ גדול | המרה לפולארי, דה-מואבר: $r^n\\,\\text{cis}(n\\theta)$ |\n| מציאת כל שורשי $n$ של $w$ | $w=\\rho\\,\\text{cis}\\,\\phi$; $z_k = \\rho^{1/n}\\,\\text{cis}\\frac{\\phi+2\\pi k}{n}$ |\n| כפל מרוכבים | חיבור ארגומנטים, כפל מודולוסים |\n| חילוק מרוכבים | חיסור ארגומנטים, חילוק מודולוסים |\n| שורשי יחידה ממעלה $n$ | $\\zeta_k = \\text{cis}\\frac{2\\pi k}{n}$, $k=0,\\ldots,n-1$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Convert $z = -\\sqrt{3} + i$ to polar form.",
+          "body_he": "המירו $z = -\\sqrt{3} + i$ לצורה פולארית.",
+          "solution_en": "$r = \\sqrt{3+1}=2$. Q2: $\\theta = \\pi - \\pi/6 = 5\\pi/6$. $z = 2\\,\\text{cis}\\frac{5\\pi}{6}$.",
+          "solution_he": "$r=2$, רביע II: $\\theta=5\\pi/6$. $z = 2\\,\\text{cis}\\frac{5\\pi}{6}$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Express $z = 3\\,\\text{cis}\\,\\frac{\\pi}{3}$ in $a+bi$ form.",
+          "body_he": "בטאו $z = 3\\,\\text{cis}\\,\\frac{\\pi}{3}$ בצורה $a+bi$.",
+          "solution_en": "$3(\\cos\\frac{\\pi}{3}+i\\sin\\frac{\\pi}{3}) = 3(\\frac{1}{2}+i\\frac{\\sqrt{3}}{2}) = \\frac{3}{2}+\\frac{3\\sqrt{3}}{2}i$.",
+          "solution_he": "$\\frac{3}{2}+\\frac{3\\sqrt{3}}{2}i$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $|z| = |2\\,\\text{cis}\\,\\frac{7\\pi}{5}|$ and $\\arg(z)$.",
+          "body_he": "חשבו $|2\\,\\text{cis}\\,\\frac{7\\pi}{5}|$ ו-$\\arg(z)$.",
+          "solution_en": "$|z| = 2$, $\\arg(z) = 7\\pi/5 - 2\\pi = -3\\pi/5$ (adjusted to $(-\\pi,\\pi]$).",
+          "solution_he": "$|z|=2$, $\\arg(z) = 7\\pi/5 - 2\\pi = -3\\pi/5$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $(\\text{cis}\\,\\frac{\\pi}{6})^{12}$.",
+          "body_he": "חשבו $(\\text{cis}\\,\\frac{\\pi}{6})^{12}$.",
+          "solution_en": "$\\text{cis}(12 \\cdot \\pi/6) = \\text{cis}(2\\pi) = 1$.",
+          "solution_he": "$\\text{cis}(2\\pi) = 1$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $(1+i)^8$.",
+          "body_he": "חשבו $(1+i)^8$.",
+          "solution_en": "$1+i = \\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4}$. $(1+i)^8 = (\\sqrt{2})^8\\,\\text{cis}(2\\pi) = 16$.",
+          "solution_he": "$1+i = \\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4}$. $(1+i)^8 = 16\\,\\text{cis}(2\\pi) = 16$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find all cube roots of $8$ (i.e., solve $z^3 = 8$).",
+          "body_he": "מצאו את כל שורשי ה-3 של $8$ (כלומר, פתרו $z^3 = 8$).",
+          "solution_en": "$8 = 8\\,\\text{cis}\\,0$. $z_k = 2\\,\\text{cis}\\frac{2\\pi k}{3}$: $z_0=2$, $z_1=2\\,\\text{cis}\\frac{2\\pi}{3}=-1+\\sqrt{3}i$, $z_2=2\\,\\text{cis}\\frac{4\\pi}{3}=-1-\\sqrt{3}i$.",
+          "solution_he": "$z_k = 2\\,\\text{cis}\\frac{2\\pi k}{3}$: $z_0=2$, $z_1=-1+\\sqrt{3}i$, $z_2=-1-\\sqrt{3}i$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\dfrac{4\\,\\text{cis}\\,\\frac{2\\pi}{3}}{2\\,\\text{cis}\\,\\frac{\\pi}{6}}$.",
+          "body_he": "חשבו $\\dfrac{4\\,\\text{cis}\\,\\frac{2\\pi}{3}}{2\\,\\text{cis}\\,\\frac{\\pi}{6}}$.",
+          "solution_en": "$\\frac{4}{2}\\,\\text{cis}\\!(\\frac{2\\pi}{3}-\\frac{\\pi}{6}) = 2\\,\\text{cis}\\,\\frac{\\pi}{2} = 2i$.",
+          "solution_he": "$2\\,\\text{cis}\\,\\frac{\\pi}{2} = 2i$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find all 4th roots of $1$ (roots of unity).",
+          "body_he": "מצאו את כל שורשי הרביעי של $1$.",
+          "solution_en": "$\\zeta_k = \\text{cis}\\frac{\\pi k}{2}$: $1, i, -1, -i$.",
+          "solution_he": "$\\zeta_k = \\text{cis}\\frac{\\pi k}{2}$: $1, i, -1, -i$."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Compute $(\\sqrt{3}-i)^5$ using De Moivre.",
+          "body_he": "חשבו $(\\sqrt{3}-i)^5$ באמצעות דה-מואבר.",
+          "solution_en": "$\\sqrt{3}-i = 2\\,\\text{cis}(-\\pi/6)$. $(\\sqrt{3}-i)^5 = 32\\,\\text{cis}(-5\\pi/6) = 32(-\\frac{\\sqrt{3}}{2}-\\frac{i}{2}) = -16\\sqrt{3}-16i$.",
+          "solution_he": "$\\sqrt{3}-i = 2\\,\\text{cis}(-\\pi/6)$. $(\\sqrt{3}-i)^5 = 32\\,\\text{cis}(-5\\pi/6) = -16\\sqrt{3}-16i$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find all solutions of $z^3 = -8i$.",
+          "body_he": "מצאו את כל פתרונות $z^3 = -8i$.",
+          "solution_en": "$-8i = 8\\,\\text{cis}(-\\pi/2)$. $z_k = 2\\,\\text{cis}\\frac{-\\pi/2+2\\pi k}{3}$: $z_0=2\\,\\text{cis}(-\\pi/6)=\\sqrt{3}-i$, $z_1=2\\,\\text{cis}(\\pi/2)=2i$, $z_2=2\\,\\text{cis}(7\\pi/6)=-\\sqrt{3}-i$.",
+          "solution_he": "$z_0=\\sqrt{3}-i$, $z_1=2i$, $z_2=-\\sqrt{3}-i$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that the sum of all $n$th roots of unity equals zero: $\\sum_{k=0}^{n-1} \\zeta_k = 0$ for $n \\geq 2$.",
+          "body_he": "הוכיחו שסכום כל שורשי היחידה ממעלה $n$ שווה לאפס: $\\sum_{k=0}^{n-1} \\zeta_k = 0$ עבור $n \\geq 2$.",
+          "solution_en": "The roots are a geometric series: $\\sum_{k=0}^{n-1}\\zeta^k = \\frac{\\zeta^n-1}{\\zeta-1} = \\frac{1-1}{\\zeta-1} = 0$ for $\\zeta = e^{2\\pi i/n} \\neq 1$.",
+          "solution_he": "הסכום הוא סדרה הנדסית: $\\sum_{k=0}^{n-1}\\zeta^k = \\frac{\\zeta^n-1}{\\zeta-1} = \\frac{0}{\\zeta-1} = 0$ עבור $\\zeta\\neq 1$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Find all $z$ satisfying $z^4 + 16 = 0$ and describe their geometric arrangement.",
+          "body_he": "מצאו את כל $z$ המקיימים $z^4 + 16 = 0$ ותארו את מיקומם הגיאומטרי.",
+          "solution_en": "$z^4 = -16 = 16\\,\\text{cis}\\,\\pi$. $z_k = 2\\,\\text{cis}\\frac{(2k+1)\\pi}{4}$: $z_0=\\sqrt{2}(1+i)$, $z_1=\\sqrt{2}(-1+i)$, $z_2=\\sqrt{2}(-1-i)$, $z_3=\\sqrt{2}(1-i)$. They form a square of side $2\\sqrt{2}$ inscribed in the circle $|z|=2$.",
+          "solution_he": "$z_k = \\sqrt{2}(\\pm 1\\pm i)$. ארבעת השורשים יוצרים ריבוע חסום במעגל $|z|=2$."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Compute $\\left(\\dfrac{1+i}{1-i}\\right)^{2026}$.",
+          "body_he": "חשבו $\\left(\\dfrac{1+i}{1-i}\\right)^{2026}$.",
+          "solution_en": "$\\frac{1+i}{1-i} = \\frac{(1+i)^2}{2} = \\frac{2i}{2} = i$. So $\\left(\\frac{1+i}{1-i}\\right)^{2026} = i^{2026} = i^2 = -1$.",
+          "solution_he": "$\\frac{1+i}{1-i} = i$. אז $i^{2026} = i^2 = -1$."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes",
+      "title_he": "הטעויות הנפוצות ביותר",
+      "body_en_md": "1. **Wrong quadrant for argument:** $\\arctan(b/a)$ gives the angle in Q1 or Q4 only. Always check the signs of $a$ and $b$ to adjust.\n2. **Forgetting $k$ goes 0 to $n-1$:** $n$th roots need exactly $n$ values; missing any loses points.\n3. **Not simplifying argument modulo $2\\pi$:** $\\text{cis}(5\\pi/2) \\neq \\text{cis}(5\\pi/2)$ in raw form — always reduce to $[0,2\\pi)$ or $(-\\pi,\\pi]$.\n4. **$r^n$ vs $(r^{1/n})^n$:** When finding roots, $\\rho^{1/n}$ is the real positive $n$th root of the modulus.\n5. **Applying De Moivre to $n \\notin \\mathbb{Z}$:** De Moivre holds for all integers (including negative) but NOT for non-integer rational powers without the full root formula.",
+      "body_he_md": "1. **רביע שגוי לארגומנט:** $\\arctan(b/a)$ נותן זווית ברביע I או IV בלבד. תמיד לבדוק סימני $a$ ו-$b$.\n2. **שכחת ש-$k$ הולך מ-0 עד $n-1$:** שורשי $n$ דורשים בדיוק $n$ ערכים.\n3. **אי-פישוט ארגומנט modulo $2\\pi$:** תמיד לצמצם ל-$(-\\pi,\\pi]$.\n4. **$r^n$ לעומת $\\rho^{1/n}$:** בשורשים, $\\rho^{1/n}$ הוא השורש הממשי החיובי של המודולוס.\n5. **דה-מואבר עם $n$ לא שלם:** המשפט תקף לכל שלם, אבל לא ל-$n$ לא שלם ללא נוסחת השורשים המלאה."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — 5pt Focus",
+      "title_he": "לפני הבחינה — מיקוד 5 יח׳",
+      "body_en_md": "**Key formulas:**\n- Polar: $z = r\\,\\text{cis}\\,\\theta$, $r=|z|$, $\\theta=\\arg(z)$\n- De Moivre: $(r\\,\\text{cis}\\,\\theta)^n = r^n\\,\\text{cis}(n\\theta)$ for $n \\in \\mathbb{Z}$\n- $n$th root: $z_k = \\rho^{1/n}\\,\\text{cis}\\frac{\\phi+2\\pi k}{n}$, $k=0,\\ldots,n-1$\n- Roots of unity: $\\text{cis}\\frac{2\\pi k}{n}$, sum = 0 for $n\\geq 2$\n\n**Exam question types:**\n1. Convert to polar and back — 4 pts.\n2. Compute $z^n$ for large $n$ using De Moivre — 5 pts.\n3. Find all $n$th roots of a complex number and describe geometrically — 8–10 pts.\n4. Prove identity using De Moivre — 5 pts.\n\n**Most-missed:** forgetting the $k$ values for $n$th roots, and wrong quadrant for $\\arg$.",
+      "body_he_md": "**נוסחאות מפתח:**\n- פולארי: $z = r\\,\\text{cis}\\,\\theta$\n- דה-מואבר: $(r\\,\\text{cis}\\,\\theta)^n = r^n\\,\\text{cis}(n\\theta)$\n- שורש $n$-י: $z_k = \\rho^{1/n}\\,\\text{cis}\\frac{\\phi+2\\pi k}{n}$, $k=0,\\ldots,n-1$\n- שורשי יחידה: סכום = 0 ל-$n\\geq 2$\n\n**סוגי שאלות בחינה:**\n1. המרה לפולארי ובחזרה — 4 נק׳.\n2. חישוב $z^n$ גדול — 5 נק׳.\n3. מציאת כל שורשי $n$ וגיאומטריה — 8–10 נק׳.\n4. הוכחת זהות בדה-מואבר — 5 נק׳.\n\n**שגיאות נפוצות:** שכחת ערכי $k$ לשורשים, ורביע שגוי ל-$\\arg$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Polar form:** $z = r\\,\\text{cis}\\,\\theta$ where $r=|z|$, $\\theta=\\arg(z)$.\n- **De Moivre:** $(r\\,\\text{cis}\\,\\theta)^n = r^n\\,\\text{cis}(n\\theta)$ — multiply moduli, add arguments.\n- **$n$th roots:** $z_k = \\rho^{1/n}\\,\\text{cis}\\frac{\\phi+2\\pi k}{n}$, $k=0,\\ldots,n-1$ — equally spaced on a circle.\n- **Roots of unity:** $\\zeta_k = \\text{cis}\\frac{2\\pi k}{n}$; their sum is 0.\n- **Strategy:** For any power/root of a complex number, first convert to polar.",
+      "body_he_md": "- **צורה פולארית:** $z = r\\,\\text{cis}\\,\\theta$, $r=|z|$, $\\theta=\\arg(z)$.\n- **דה-מואבר:** $(r\\,\\text{cis}\\,\\theta)^n = r^n\\,\\text{cis}(n\\theta)$.\n- **שורשי $n$:** $z_k = \\rho^{1/n}\\,\\text{cis}\\frac{\\phi+2\\pi k}{n}$, $k=0,\\ldots,n-1$ — פרוסים שווה על מעגל.\n- **שורשי יחידה:** $\\zeta_k = \\text{cis}\\frac{2\\pi k}{n}$; סכומם = 0.\n- **אסטרטגיה:** לכל חזקה/שורש של מרוכב, תחילה להמיר לפולארי."
     }
   ],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What is the modulus and argument of $z = -2$?",
+      "stem_he": "מהו המודולוס והארגומנט של $z = -2$?",
+      "options_en": ["$r=2,\\;\\theta=0$", "$r=2,\\;\\theta=\\pi$", "$r=-2,\\;\\theta=\\pi$", "$r=2,\\;\\theta=-\\pi/2$"],
+      "options_he": ["$r=2,\\;\\theta=0$", "$r=2,\\;\\theta=\\pi$", "$r=-2,\\;\\theta=\\pi$", "$r=2,\\;\\theta=-\\pi/2$"],
+      "correct_index": 1,
+      "explanation_en": "$|-2|=2$ and $-2$ lies on the negative real axis, so $\\theta=\\pi$.",
+      "explanation_he": "$|-2|=2$ ו-$-2$ על הציר הממשי השלילי, אז $\\theta=\\pi$.",
+      "skill_atoms": ["polar_form_conversion"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Compute $(\\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4})^4$.",
+      "stem_he": "חשבו $(\\sqrt{2}\\,\\text{cis}\\,\\frac{\\pi}{4})^4$.",
+      "options_en": ["$4\\,\\text{cis}\\,\\pi = -4$", "$2\\sqrt{2}\\,\\text{cis}\\,\\pi$", "$4$", "$-2+2i$"],
+      "options_he": ["$-4$", "$2\\sqrt{2}\\,\\text{cis}\\,\\pi$", "$4$", "$-2+2i$"],
+      "correct_index": 0,
+      "explanation_en": "$(\\sqrt{2})^4=4$, $4\\cdot\\frac{\\pi}{4}=\\pi$. So $4\\,\\text{cis}\\,\\pi = -4$.",
+      "explanation_he": "$(\\sqrt{2})^4=4$, זווית $4\\cdot\\pi/4=\\pi$. אז $-4$.",
+      "skill_atoms": ["de_moivre_theorem"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 3,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many distinct 6th roots does any nonzero complex number have?",
+      "stem_he": "כמה שורשים שישיים שונים יש לכל מספר מרוכב שאינו אפס?",
+      "correct_answer": "6",
+      "explanation_en": "The $n$th root formula always gives exactly $n$ distinct roots for $n \\geq 1$.",
+      "explanation_he": "נוסחת השורש נותנת תמיד בדיוק $n$ שורשים שונים.",
+      "skill_atoms": ["nth_roots_complex"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find all 4th roots of $-16$ in $a+bi$ form.",
+      "stem_he": "מצאו את כל שורשי הרביעי של $-16$ בצורה $a+bi$.",
+      "rubric_en": "Full (4/4): $-16=16\\,\\text{cis}\\,\\pi$; applies root formula; all 4 roots $\\pm\\sqrt{2}(1\\pm i)$. Partial (2/4): correct formula but missing some roots.",
+      "rubric_he": "מלא (4/4): $-16=16\\,\\text{cis}\\,\\pi$; נוסחת שורשים; $\\pm\\sqrt{2}(1\\pm i)$. חלקי (2/4): נוסחה נכונה אך חסרים שורשים.",
+      "explanation_en": "$z_k = 2\\,\\text{cis}\\frac{(2k+1)\\pi}{4}$: $\\sqrt{2}(1+i), \\sqrt{2}(-1+i), \\sqrt{2}(-1-i), \\sqrt{2}(1-i)$.",
+      "explanation_he": "$z_k = 2\\,\\text{cis}\\frac{(2k+1)\\pi}{4}$: $\\sqrt{2}(\\pm1\\pm i)$.",
+      "skill_atoms": ["nth_roots_complex", "de_moivre_theorem"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: $(\\text{cis}\\,\\theta)^n = \\text{cis}(n\\theta)$ for all integers $n$.",
+      "stem_he": "נכון או לא נכון: $(\\text{cis}\\,\\theta)^n = \\text{cis}(n\\theta)$ לכל שלם $n$.",
+      "correct_answer": true,
+      "explanation_en": "This is De Moivre's theorem for $r=1$. It holds for all $n \\in \\mathbb{Z}$.",
+      "explanation_he": "זהו משפט דה-מואבר עבור $r=1$. תקף לכל $n \\in \\mathbb{Z}$.",
+      "skill_atoms": ["de_moivre_theorem"],
+      "points_level_min": "5pt"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Polar form converts multiplication/powers into addition of angles and multiplication of moduli.",
+      "De Moivre: to raise $z$ to the $n$th power, raise $r$ to $n$ and multiply $\\theta$ by $n$.",
+      "$n$th roots are equally spaced on a circle — the geometry makes the algebra clear.",
+      "Sum of $n$th roots of unity is 0 (geometric series argument).",
+      "Always convert to polar before computing large powers or roots."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Taking only the principal root when asked for ALL $n$th roots",
+        "correction": "There are exactly $n$ roots; $k$ runs from 0 to $n-1$.",
+        "detect_phrase_en": "the root",
+        "detect_phrase_he": "השורש"
+      },
+      {
+        "wrong": "Argument of $-a$ (negative real) is 0",
+        "correction": "Negative real numbers have argument $\\pi$, not 0.",
+        "detect_phrase_en": "argument of negative",
+        "detect_phrase_he": "ארגומנט של שלילי"
+      }
+    ],
+    "tutor_pacing_hint": "Open with polar multiplication: $(r_1\\,\\text{cis}\\,\\theta_1)(r_2\\,\\text{cis}\\,\\theta_2)$ makes the De Moivre pattern obvious. Then build to $n$th roots: 'the roots divide the circle equally'.",
+    "skill_atoms_unlocked": [
+      "polar_form_conversion",
+      "de_moivre_theorem",
+      "nth_roots_complex",
+      "roots_of_unity",
+      "complex_argument"
+    ],
+    "prerequisites_to_check_before_teaching": ["complex_numbers", "trigonometry_ratios"],
+    "next_recommended": ["complex_numbers_de_moivre"]
+  }
 }

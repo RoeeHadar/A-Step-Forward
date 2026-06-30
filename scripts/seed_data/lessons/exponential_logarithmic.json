@@ -1,24 +1,324 @@
 {
   "concept_id": "exponential_logarithmic",
-  "subject": "makhina",
-  "level": "makhina",
-  "math_track": [
-    "makhina"
-  ],
-  "title_en": "Exponential & Logarithmic Functions (מכינה)",
-  "title_he": "פונקציות מעריכיות ולוגריתמיות (מכינה)",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Exponential and Logarithmic Functions — Properties, Equations, Applications",
+  "title_he": "פונקציות אקספוננציאליות ולוגריתמיות — תכונות, משוואות, יישומים",
+  "summary_en": "The exponential function $a^x$ and logarithm $\\log_a x$ are inverses. Their properties — change of base, product/quotient/power laws — are the tools for solving equations. Exponential growth/decay $N(t)=N_0 e^{kt}$ models real-world phenomena. At 5pt level, the key limit $\\lim_{x\\to\\infty}x^n/e^x=0$ shows exponential dominates any polynomial.",
+  "summary_he": "הפונקציה האקספוננציאלית $a^x$ והלוגריתם $\\log_a x$ הן הפוכות זו לזו. תכונותיהן — שינוי בסיס, חוקי מכפלה/מנה/חזקה — הם הכלים לפתרון משוואות. גדילה/דעיכה אקספוננציאלית $N(t)=N_0 e^{kt}$ מדגמת תופעות מהעולם האמיתי. ברמת 5 יח׳, הגבול $\\lim_{x\\to\\infty}x^n/e^x=0$ מראה שהאקספוננציאל שולט על כל פולינום.",
+  "est_minutes": 40,
   "sections": [
     {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve or disprove: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ for $a,b\\geq0$.\n\n**Complete Solution:**\n\nSquare both sides (non-negative): $a+b\\leq a+b+2\\sqrt{ab}$ → $0\\leq2\\sqrt{ab}$ ✓ **True**.\n\nCounterexample for negative? Not in domain. Inequality holds for $a,b\\geq0$.\n\n---\n\n**Practice Problem 2:**\n\nFind $\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ from first principles (factor, no L'Hôpital).\n\n**Complete Solution:**\n\n$\\frac{x^2-4}{x-2}=\\frac{(x-2)(x+2)}{x-2}=x+2$ for $x\\neq2$. Limit $=4$.\n\n---\n\n**Practice Problem 3 (physics):**\n\nProjectile at $30°$, speed $v_0$. Express max height and range in terms of $v_0$ and $g$.\n\n**Complete Solution:**\n\n$H=\\frac{v_0^2\\sin^2\\theta}{2g}=\\frac{v_0^2}{8g}$. $R=\\frac{v_0^2\\sin2\\theta}{g}=\\frac{v_0^2\\sqrt3}{2g}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nהוכיחו או הפריכו: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ ל-$a,b\\geq0$.\n\n**פתרון:** נכון — $0\\leq2\\sqrt{ab}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ מעקרונות ראשונים.\n\n**פתרון:** $x+2\\to4$.\n\n---\n\n**שאלת תרגול 3:**\n\nזריקה ב-$30°$, מהירות $v_0$: גובה מקסימלי וטווח.\n\n**פתרון:** $H=\\frac{v_0^2}{8g}$, $R=\\frac{v_0^2\\sqrt3}{2g}$."
+      "kind": "intro",
+      "title_en": "Why Exponential and Log Functions Matter at 5pt",
+      "title_he": "מדוע פונקציות אקספוננציאליות ולוגריתמיות חשובות ב-5 יח׳",
+      "body_en_md": "Exponential functions model growth and decay: compound interest, radioactive decay, population growth, cooling. The natural base $e=\\lim(1+1/n)^n\\approx2.718$ arises naturally in calculus. At the 5pt level, questions test: solving exponential and logarithmic equations (12–16 pts), function investigation of $e^x$, $\\ln x$, and their composites, and proving that $\\lim_{x\\to\\infty}x^n/e^x=0$ (exponential grows faster than any polynomial).",
+      "body_he_md": "פונקציות אקספוננציאליות מדגמות גדילה ודעיכה: ריבית דריבית, דעיכה רדיואקטיבית, גדילת אוכלוסייה, קירור. הבסיס הטבעי $e=\\lim(1+1/n)^n\\approx2.718$ עולה באופן טבעי בחשבון. ברמת 5 יח׳: פתרון משוואות אקספוננציאליות ולוגריתמיות (12–16 נק׳), חקירת $e^x$, $\\ln x$ ורכיבותיהן, והוכחת $\\lim_{x\\to\\infty}x^n/e^x=0$."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Properties of Exponentials and Logarithms",
+      "title_he": "תכונות האקספוננציאל והלוגריתם",
+      "body_en_md": "**Exponential $a^x$ ($a>0$, $a\\neq1$):**\n- $a^0=1$, $a^1=a$\n- $a^{x+y}=a^x\\cdot a^y$, $a^{x-y}=a^x/a^y$, $(a^x)^y=a^{xy}$\n- Strictly increasing if $a>1$; decreasing if $0<a<1$\n- Domain $\\mathbb{R}$, range $(0,\\infty)$, passes through $(0,1)$\n\n**Natural exponential:** $e^x$ (base $e\\approx2.718$); $(e^x)'=e^x$.\n\n**Logarithm $\\log_a x$ ($a>0$, $a\\neq1$):** Inverse of $a^x$.\n- $\\log_a(xy)=\\log_a x+\\log_a y$\n- $\\log_a(x/y)=\\log_a x-\\log_a y$\n- $\\log_a(x^r)=r\\log_a x$\n- **Change of base:** $\\log_a x = \\dfrac{\\ln x}{\\ln a} = \\dfrac{\\log x}{\\log a}$\n- Domain $(0,\\infty)$, range $\\mathbb{R}$, passes through $(1,0)$\n\n**Natural log:** $\\ln x = \\log_e x$; $(\\ln x)'=1/x$; $\\ln(e^x)=x$, $e^{\\ln x}=x$.\n\n**Growth/decay model:** $N(t)=N_0 e^{kt}$. $k>0$: growth; $k<0$: decay. Half-life: $t_{1/2}=\\ln 2/|k|$.",
+      "body_he_md": "**אקספוננציאל $a^x$ ($a>0$, $a\\neq1$):**\n- $a^{x+y}=a^x a^y$, $(a^x)^y=a^{xy}$, עולה ל-$a>1$\n- תחום $\\mathbb{R}$, טווח $(0,\\infty)$\n\n**הבסיס הטבעי:** $(e^x)'=e^x$.\n\n**לוגריתם $\\log_a x$:** הפוכה של $a^x$.\n- $\\log_a(xy)=\\log_a x+\\log_a y$\n- $\\log_a(x^r)=r\\log_a x$\n- **שינוי בסיס:** $\\log_a x=\\ln x/\\ln a$\n- תחום $(0,\\infty)$, עובר דרך $(1,0)$\n\n**לוגריתם טבעי:** $(\\ln x)'=1/x$; $\\ln(e^x)=x$.\n\n**מודל גדילה/דעיכה:** $N(t)=N_0 e^{kt}$. $t_{1/2}=\\ln 2/|k|$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Solving Exponential and Logarithmic Equations",
+      "title_he": "פתרון משוואות אקספוננציאליות ולוגריתמיות",
+      "body_en_md": "**Solving $a^{f(x)}=a^{g(x)}$:** Since $a^x$ is injective (one-to-one), $f(x)=g(x)$.\n\n**Solving $a^x=b$:** Take $\\log_a$ of both sides: $x=\\log_a b = \\ln b/\\ln a$.\n\n**Solving $\\log_a f(x) = c$:** $f(x)=a^c$. Check $f(x)>0$!\n\n**Solving logarithmic equations:** Use log laws to combine, then exponentiate. Always check the domain.\n\n**Substitution for quadratic-type:**\nE.g., $e^{2x}-3e^x+2=0$: let $u=e^x$, get $u^2-3u+2=0$, solve for $u$, then $x=\\ln u$.\n\n**The key limit:** $\\lim_{x\\to\\infty}\\frac{x^n}{e^x}=0$ for any fixed $n\\geq 1$.\nProof by L'Hôpital applied $n$ times: numerator becomes $n!$, denominator stays $e^x\\to\\infty$.",
+      "body_he_md": "**$a^{f(x)}=a^{g(x)}$:** כי $a^x$ חד-חד, $f(x)=g(x)$.\n\n**$a^x=b$:** $x=\\log_a b=\\ln b/\\ln a$.\n\n**$\\log_a f(x)=c$:** $f(x)=a^c$. לבדוק $f(x)>0$!\n\n**הצבה לסוג ריבועי:**\nלמשל $e^{2x}-3e^x+2=0$: $u=e^x$, $u^2-3u+2=0$.\n\n**הגבול המפתח:** $\\lim_{x\\to\\infty}\\frac{x^n}{e^x}=0$.\nהוכחה בלופיטל: גוזרים $n$ פעמים, מקבלים $n!/e^x\\to0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Solve $2^{x+1} = 32$",
+      "title_he": "דוגמה פתורה 1 — פתרון $2^{x+1} = 32$",
+      "body_en_md": "**Solve $2^{x+1} = 32$.**\n\n**Step 1 — Express both sides as powers of 2:**\n$$32 = 2^5.$$\n\n**Step 2 — Equate exponents** (since $2^a=2^b \\Leftrightarrow a=b$):\n$$x + 1 = 5 \\Rightarrow x = 4.$$\n\n**Check:** $2^{4+1}=2^5=32$ ✓.",
+      "body_he_md": "**פתרו $2^{x+1}=32$.**\n\n**שלב 1:** $32=2^5$.\n\n**שלב 2:** $x+1=5 \\Rightarrow x=4$.\n\n**בדיקה:** $2^5=32$ ✓."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve $3^{2x-1} = 27$.",
+      "body_he_md": "פתרו $3^{2x-1}=27$.",
+      "checkpoint_solution_en": "$27=3^3$. So $2x-1=3$, $x=2$.",
+      "checkpoint_solution_he": "$3^3=27$. $2x-1=3$, $x=2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Solve $\\log_2(x) + \\log_2(x-2) = 3$",
+      "title_he": "דוגמה פתורה 2 — פתרון $\\log_2(x)+\\log_2(x-2)=3$",
+      "body_en_md": "**Solve $\\log_2(x)+\\log_2(x-2)=3$.**\n\n**Step 1 — Domain check:** Need $x>0$ AND $x-2>0$, so $x>2$.\n\n**Step 2 — Combine using log law:**\n$$\\log_2[x(x-2)]=3.$$\n\n**Step 3 — Exponentiate:**\n$$x(x-2)=2^3=8 \\Rightarrow x^2-2x-8=0.$$\n\n**Step 4 — Solve quadratic:**\n$$(x-4)(x+2)=0 \\Rightarrow x=4 \\text{ or } x=-2.$$\n\n**Step 5 — Check domain:** $x>2$, so $x=-2$ is rejected. **$x=4$.**\n\n**Verify:** $\\log_2(4)+\\log_2(2)=2+1=3$ ✓.",
+      "body_he_md": "**פתרו $\\log_2(x)+\\log_2(x-2)=3$.**\n\n**שלב 1 — תחום:** $x>2$.\n\n**שלב 2 — איחוד:** $\\log_2[x(x-2)]=3$.\n\n**שלב 3 — חזקה:** $x(x-2)=8$, $x^2-2x-8=0$.\n\n**שלב 4:** $(x-4)(x+2)=0$, $x=4$ או $x=-2$.\n\n**שלב 5 — תחום:** $x=-2$ נדחה. **$x=4$.**"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve $\\ln(x+1) + \\ln(x-1) = \\ln 3$.",
+      "body_he_md": "פתרו $\\ln(x+1)+\\ln(x-1)=\\ln 3$.",
+      "checkpoint_solution_en": "Domain: $x>1$. $\\ln[(x+1)(x-1)]=\\ln 3$, $(x+1)(x-1)=3$, $x^2-1=3$, $x^2=4$, $x=2$ (reject $x=-2$ since $x>1$).",
+      "checkpoint_solution_he": "תחום $x>1$. $(x+1)(x-1)=3$, $x^2=4$, $x=2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Show $\\lim_{x\\to\\infty}\\dfrac{x^n}{e^x}=0$ for All $n$",
+      "title_he": "דוגמה פתורה 3 — הוכחת $\\lim_{x\\to\\infty}\\dfrac{x^n}{e^x}=0$ לכל $n$",
+      "body_en_md": "**Prove that $\\lim_{x\\to\\infty}\\dfrac{x^n}{e^x}=0$ for any fixed integer $n\\geq 1$.**\n\n**Step 1 — Identify the form:** As $x\\to\\infty$: $x^n\\to\\infty$ and $e^x\\to\\infty$, so we have $\\infty/\\infty$ form.\n\n**Step 2 — Apply L'Hôpital's rule repeatedly:**\nEach application reduces the power of $x$ by 1 in the numerator:\n$$\\lim_{x\\to\\infty}\\frac{x^n}{e^x} \\stackrel{\\text{L'H}}{=} \\lim_{x\\to\\infty}\\frac{nx^{n-1}}{e^x} \\stackrel{\\text{L'H}}{=} \\lim_{x\\to\\infty}\\frac{n(n-1)x^{n-2}}{e^x} \\stackrel{\\text{L'H}}{=} \\cdots$$\n\n**Step 3 — After $n$ applications:**\n$$= \\lim_{x\\to\\infty}\\frac{n!}{e^x} = \\frac{n!}{\\infty} = 0. \\quad\\blacksquare$$\n\n**Conclusion:** Exponential growth eventually outpaces any polynomial, regardless of the degree. This justifies the heuristic '$e^x$ grows faster than any power of $x$'.",
+      "body_he_md": "**הוכיחו $\\lim_{x\\to\\infty}\\dfrac{x^n}{e^x}=0$ לכל שלם $n\\geq1$.**\n\n**שלב 1 — צורת $\\infty/\\infty$:** $x^n\\to\\infty$ ו-$e^x\\to\\infty$.\n\n**שלב 2 — לופיטל $n$ פעמים:**\nכל יישום מפחית חזקת $x$ ב-1:\n$$\\frac{x^n}{e^x} \\to \\frac{nx^{n-1}}{e^x} \\to \\cdots$$\n\n**שלב 3 — לאחר $n$ יישומים:**\n$$= \\lim_{x\\to\\infty}\\frac{n!}{e^x} = 0. \\quad\\blacksquare$$\n\n**מסקנה:** האקספוננציאל גובר על כל פולינום."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Decision Table — Solving Exponential/Log Equations",
+      "title_he": "טבלת החלטה — פתרון משוואות",
+      "body_en_md": "| Equation type | Method |\n|---|---|\n| $a^{f(x)}=a^{g(x)}$ | Set $f(x)=g(x)$ (injectivity) |\n| $a^x=b$ | $x=\\log_a b=\\ln b/\\ln a$ |\n| $\\log_a f(x)=c$ | $f(x)=a^c$; check domain |\n| Sum of logs $=\\log$ | Combine with product law, then equate |\n| $e^{2x}-ke^x+c=0$ | Let $u=e^x$; solve quadratic; $x=\\ln u$ |\n| $\\log^2 x - k\\log x + c=0$ | Let $t=\\log x$; solve quadratic |\n| Inequality $a^x>b$ | Same steps, but flip inequality if $0<a<1$ |\n\n**Critical domain rule:** $\\log_a x$ requires $x>0$. Always check all solutions satisfy the domain condition.",
+      "body_he_md": "| סוג משוואה | שיטה |\n|---|---|\n| $a^{f(x)}=a^{g(x)}$ | $f(x)=g(x)$ (חד-חד) |\n| $a^x=b$ | $x=\\log_a b$ |\n| $\\log_a f(x)=c$ | $f(x)=a^c$; תחום! |\n| סכום לוגים = לוג | מכפלה, ואז שוויון |\n| $e^{2x}-ke^x+c=0$ | $u=e^x$; ריבועית |\n| ריבועית ב-$\\log$ | $t=\\log x$ |\n\n**כלל תחום קריטי:** $\\log_a x$ דורש $x>0$. תמיד לאמת פתרונות."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Solve $2^{3x} = 64$.",
+          "body_he": "פתרו $2^{3x}=64$.",
+          "solution_en": "$64=2^6$. $3x=6$, $x=2$.",
+          "solution_he": "$2^6=64$. $3x=6$, $x=2$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\log_3 27$.",
+          "body_he": "חשבו $\\log_3 27$.",
+          "solution_en": "$3^3=27$, so $\\log_3 27=3$.",
+          "solution_he": "$3^3=27$ → $\\log_3 27=3$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Simplify $e^{\\ln 5}$.",
+          "body_he": "פשטו $e^{\\ln 5}$.",
+          "solution_en": "$e^{\\ln 5}=5$ (inverse functions).",
+          "solution_he": "$e^{\\ln 5}=5$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Solve $\\log_2 x = -3$.",
+          "body_he": "פתרו $\\log_2 x=-3$.",
+          "solution_en": "$x=2^{-3}=1/8$.",
+          "solution_he": "$x=2^{-3}=1/8$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Solve $\\log_3(x+4) + \\log_3(x) = 2$.",
+          "body_he": "פתרו $\\log_3(x+4)+\\log_3(x)=2$.",
+          "solution_en": "Domain: $x>0$. $\\log_3[x(x+4)]=2$, $x^2+4x=9$, $x^2+4x-9=0$. $x=\\frac{-4+\\sqrt{52}}{2}=\\frac{-4+2\\sqrt{13}}{2}=-2+\\sqrt{13}$ (positive, accept).",
+          "solution_he": "$x(x+4)=9$, $x^2+4x-9=0$. $x=-2+\\sqrt{13}$ (חיובי)."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Solve $e^{2x} - 5e^x + 6 = 0$.",
+          "body_he": "פתרו $e^{2x}-5e^x+6=0$.",
+          "solution_en": "$u=e^x$: $u^2-5u+6=0$, $(u-2)(u-3)=0$. $e^x=2$: $x=\\ln 2$. $e^x=3$: $x=\\ln 3$.",
+          "solution_he": "$u=e^x$: $(u-2)(u-3)=0$. $x=\\ln 2$ או $x=\\ln 3$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A bacteria population doubles every 3 hours. Starting at $N_0$, write $N(t)$ and find when $N=8N_0$.",
+          "body_he": "אוכלוסיית חיידקים מכפילה עצמה כל 3 שעות. מתחילים ב-$N_0$, כתבו $N(t)$ ומצאו מתי $N=8N_0$.",
+          "solution_en": "$N(t)=N_0\\cdot 2^{t/3}$. $2^{t/3}=8=2^3$, $t/3=3$, $t=9$ hours.",
+          "solution_he": "$N(t)=N_0\\cdot 2^{t/3}$. $2^{t/3}=8$ → $t=9$ שעות."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Solve $4^x - 2^{x+1} - 8 = 0$.",
+          "body_he": "פתרו $4^x-2^{x+1}-8=0$.",
+          "solution_en": "$4^x=(2^x)^2$. Let $u=2^x$: $u^2-2u-8=0$, $(u-4)(u+2)=0$. $u=4$ (accept since $2^x>0$): $2^x=4$, $x=2$. $u=-2$ rejected.",
+          "solution_he": "$u=2^x$: $(u-4)(u+2)=0$. $u=4$: $x=2$."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find the half-life of a substance decaying as $N(t)=N_0 e^{-0.2t}$.",
+          "body_he": "מצאו את זמן מחצית החיים של חומר המתפרק לפי $N(t)=N_0 e^{-0.2t}$.",
+          "solution_en": "$N_0/2=N_0 e^{-0.2t_{1/2}}$, $e^{-0.2t_{1/2}}=1/2$, $-0.2t_{1/2}=\\ln(1/2)=-\\ln2$. $t_{1/2}=\\ln2/0.2=5\\ln2\\approx3.47$.",
+          "solution_he": "$e^{-0.2t}=1/2$ → $t=\\ln2/0.2=5\\ln2\\approx3.47$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Show that $\\lim_{x\\to\\infty}\\dfrac{x^3}{e^x}=0$ using L'Hôpital's rule.",
+          "body_he": "הראו ש-$\\lim_{x\\to\\infty}\\dfrac{x^3}{e^x}=0$ בכלל לופיטל.",
+          "solution_en": "$\\frac{x^3}{e^x}\\stackrel{H}{=}\\frac{3x^2}{e^x}\\stackrel{H}{=}\\frac{6x}{e^x}\\stackrel{H}{=}\\frac{6}{e^x}\\to0$.",
+          "solution_he": "שלושה יישומי לופיטל: $\\frac{6}{e^x}\\to0$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that $f(x)=x\\ln x$ is concave up for all $x>0$.",
+          "body_he": "הוכיחו ש-$f(x)=x\\ln x$ קמורה לכל $x>0$.",
+          "solution_en": "$f'=\\ln x+1$. $f''=1/x>0$ for $x>0$. Since $f''>0$, $f$ is concave up.",
+          "solution_he": "$f''=1/x>0$ ל-$x>0$. קמורה."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Solve $\\ln^2 x - 3\\ln x + 2 = 0$ (where $\\ln^2 x = (\\ln x)^2$).",
+          "body_he": "פתרו $\\ln^2 x-3\\ln x+2=0$.",
+          "solution_en": "Let $t=\\ln x$: $t^2-3t+2=0$, $(t-1)(t-2)=0$. $\\ln x=1$: $x=e$. $\\ln x=2$: $x=e^2$.",
+          "solution_he": "$t=\\ln x$: $(t-1)(t-2)=0$. $x=e$ או $x=e^2$."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Show that the equation $e^x = mx$ has exactly two solutions for $m > e$.",
+          "body_he": "הראו שהמשוואה $e^x=mx$ בעלת בדיוק שני פתרונות ל-$m>e$.",
+          "solution_en": "Rewrite as $f(x)=e^x/x=m$ for $x\\neq0$. $f'(x)=(e^x(x-1))/x^2=0$ at $x=1$. $f(1)=e$. For $x>0$: $f$ has a minimum at $x=1$ with value $e$. For $m>e$, the horizontal line $y=m$ intersects $f$ twice (once for $x<0$ and once for $x>1$). Total: exactly two solutions.",
+          "solution_he": "נגדיר $g(x)=e^x/x=m$ ל-$x>0$. מינימום ב-$x=1$: $g(1)=e$. ל-$m>e$, שתי חצות (אחת ל-$x<0$, אחת ל-$x>1$)."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes",
+      "title_he": "הטעויות הנפוצות ביותר",
+      "body_en_md": "1. **Forgetting to check the domain** of logarithmic solutions — always require the argument $>0$.\n2. **Log of a negative number** — $\\ln(-2)$ is undefined; never apply $\\ln$ to a negative or zero.\n3. **$\\ln(a+b)\\neq\\ln a+\\ln b$** — the sum law applies to $\\ln(ab)$, not $\\ln(a+b)$.\n4. **$\\log_a x^r = r\\log_a x$** applies to powers, NOT to $\\log_a(rx)$.\n5. **In the quadratic substitution**, rejecting negative $u=e^x<0$ is correct (since $e^x>0$ always), but negative $u=\\log x$ is allowed if $\\log x<0$ (i.e., $x\\in(0,1)$).",
+      "body_he_md": "1. **שכחת בדיקת תחום** — תמיד לוודא ארגומנט $>0$.\n2. **לוגריתם של מספר שלילי** — $\\ln(-2)$ לא מוגדר.\n3. **$\\ln(a+b)\\neq\\ln a+\\ln b$** — חוק הסכום חל על $\\ln(ab)$.\n4. **$\\log x^r=r\\log x$** — לחזקות, לא ל-$\\log(rx)$.\n5. **בהצבה ריבועית:** $u=e^x<0$ נדחה (כי $e^x>0$), אבל $u=\\log x<0$ מותר."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — 5pt Focus",
+      "title_he": "לפני הבחינה — מיקוד 5 יח׳",
+      "body_en_md": "**Key formulas:**\n- Log laws: product, quotient, power, change of base\n- $(e^x)'=e^x$, $(\\ln x)'=1/x$\n- $\\lim_{x\\to\\infty}x^n/e^x=0$ (L'Hôpital $n$ times)\n- Growth/decay: $N(t)=N_0 e^{kt}$; half-life $t_{1/2}=\\ln2/|k|$\n\n**Exam question types:**\n1. Solve exponential equation — 4 pts.\n2. Solve logarithmic equation (with domain check) — 6 pts.\n3. Combined type (quadratic in $e^x$ or $\\log x$) — 8 pts.\n4. Application problem (growth/decay/half-life) — 8 pts.\n5. Limit involving $e^x$ (L'Hôpital) — 6 pts.",
+      "body_he_md": "**נוסחאות מפתח:**\n- חוקי לוגריתם: מכפלה, מנה, חזקה, שינוי בסיס\n- $(e^x)'=e^x$, $(\\ln x)'=1/x$\n- $\\lim x^n/e^x=0$\n- $N(t)=N_0e^{kt}$; $t_{1/2}=\\ln2/|k|$\n\n**סוגי שאלות:**\n1. פתרון משוואה אקספוננציאלית — 4 נק׳.\n2. פתרון משוואה לוגריתמית + תחום — 6 נק׳.\n3. ריבועי ב-$e^x$/$\\log x$ — 8 נק׳.\n4. יישום גדילה/דעיכה — 8 נק׳.\n5. גבול עם $e^x$ (לופיטל) — 6 נק׳."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Exponential $a^x$:** Domain $\\mathbb{R}$, range $(0,\\infty)$, passes $(0,1)$; injective.\n- **Logarithm $\\log_a x$:** Inverse of $a^x$; laws: product, quotient, power, change-of-base.\n- **Natural $e^x$ and $\\ln x$:** $(e^x)'=e^x$, $(\\ln x)'=1/x$; $e^{\\ln x}=x$, $\\ln e^x=x$.\n- **Solving equations:** Use injectivity, log laws, and substitution; always check domain.\n- **Key limit:** $\\lim_{x\\to\\infty}x^n/e^x=0$ (apply L'Hôpital $n$ times).\n- **Growth/decay:** $N(t)=N_0e^{kt}$; half-life $=\\ln2/|k|$.",
+      "body_he_md": "- **$a^x$:** תחום $\\mathbb{R}$, חד-חד, עובר $(0,1)$.\n- **$\\log_a x$:** הפוכה; חוקי מכפלה, מנה, חזקה, שינוי בסיס.\n- **$e^x$ ו-$\\ln x$:** נגזרות $e^x$ ו-$1/x$.\n- **פתרון:** חד-חד, חוקי לוגריתם, הצבה; תחום!\n- **גבול:** $x^n/e^x\\to0$.\n- **גדילה/דעיכה:** $N_0e^{kt}$, $t_{1/2}=\\ln2/|k|$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Solve $2^{x+1} = 32$.",
+      "stem_he": "פתרו $2^{x+1}=32$.",
+      "options_en": ["$x=3$", "$x=4$", "$x=5$", "$x=2$"],
+      "options_he": ["$x=3$", "$x=4$", "$x=5$", "$x=2$"],
+      "correct_index": 1,
+      "explanation_en": "$32=2^5$, so $x+1=5$, $x=4$.",
+      "explanation_he": "$2^5=32$, $x+1=5$, $x=4$.",
+      "skill_atoms": ["solve_exponential_equation"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which law says $\\log_a(xy) = \\log_a x + \\log_a y$?",
+      "stem_he": "איזה חוק אומר $\\log_a(xy)=\\log_a x+\\log_a y$?",
+      "options_en": ["Power law", "Quotient law", "Product law", "Change of base"],
+      "options_he": ["חוק החזקה", "חוק המנה", "חוק המכפלה", "שינוי בסיס"],
+      "correct_index": 2,
+      "explanation_en": "The product rule for logarithms: $\\log(xy)=\\log x+\\log y$.",
+      "explanation_he": "חוק המכפלה.",
+      "skill_atoms": ["log_product_rule"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\log_2(x) + \\log_2(x-2) = 3$.",
+      "stem_he": "פתרו $\\log_2(x)+\\log_2(x-2)=3$.",
+      "rubric_en": "Full (3/3): domain $x>2$, combines logs, solves quadratic $x^2-2x-8=0$, rejects $x=-2$, gives $x=4$.",
+      "rubric_he": "מלא (3/3): תחום, איחוד, ריבועית, $x=4$.",
+      "explanation_en": "$\\log_2[x(x-2)]=3$, $x^2-2x-8=0$, $x=4$.",
+      "explanation_he": "$x=4$.",
+      "skill_atoms": ["solve_log_equation", "log_product_rule"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: $\\ln(a+b) = \\ln a + \\ln b$.",
+      "stem_he": "נכון או לא: $\\ln(a+b)=\\ln a+\\ln b$.",
+      "correct_answer": false,
+      "explanation_en": "The correct rule is $\\ln(a\\cdot b)=\\ln a+\\ln b$. The sum rule applies to products, not sums.",
+      "explanation_he": "הנכון: $\\ln(ab)=\\ln a+\\ln b$. לסכומים — אין חוק כזה.",
+      "skill_atoms": ["log_product_rule"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove $\\lim_{x\\to\\infty}\\dfrac{x^3}{e^x} = 0$ using L'Hôpital's rule.",
+      "stem_he": "הוכיחו $\\lim_{x\\to\\infty}\\dfrac{x^3}{e^x}=0$ בכלל לופיטל.",
+      "rubric_en": "Full (3/3): identifies $\\infty/\\infty$ form, applies L'Hôpital 3 times, reaches $6/e^x\\to0$.",
+      "rubric_he": "מלא (3/3): $\\infty/\\infty$, 3 יישומי לופיטל, $6/e^x\\to0$.",
+      "explanation_en": "$\\frac{x^3}{e^x}\\to\\frac{3x^2}{e^x}\\to\\frac{6x}{e^x}\\to\\frac{6}{e^x}\\to0$.",
+      "explanation_he": "שלושה לופיטל: $6/e^x\\to0$.",
+      "skill_atoms": ["lhopital_rule", "exp_dominates_polynomial"],
+      "points_level_min": "5pt"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Log and exponential are inverses: $\\ln(e^x)=x$ and $e^{\\ln x}=x$ — use this to solve equations.",
+      "Always check domain for log equations: $\\log f(x)$ requires $f(x)>0$.",
+      "Quadratic substitution: $e^{2x}-ke^x+c=0$ → let $u=e^x$, solve quadratic.",
+      "$\\lim x^n/e^x=0$: apply L'Hôpital $n$ times; proves exponential dominates any polynomial.",
+      "Half-life: $t_{1/2}=\\ln2/|k|$ where $k$ is the decay constant."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "$\\ln(a+b)=\\ln a+\\ln b$",
+        "correction": "Product rule: $\\ln(a\\cdot b)=\\ln a+\\ln b$. There is no simplification for $\\ln(a+b)$.",
+        "detect_phrase_en": "ln sum",
+        "detect_phrase_he": "ln סכום"
+      },
+      {
+        "wrong": "Forgetting to reject negative log arguments",
+        "correction": "After solving, always check that all log arguments are positive.",
+        "detect_phrase_en": "domain check log",
+        "detect_phrase_he": "בדיקת תחום לוג"
+      }
+    ],
+    "tutor_pacing_hint": "Start with the inverse relationship $e^{\\ln x}=x$. Solve simple exponential equations (base matching). Then log equations (domain check is crucial). Quadratic substitution is the hardest — practice pattern recognition.",
+    "skill_atoms_unlocked": [
+      "solve_exponential_equation",
+      "solve_log_equation",
+      "log_product_rule",
+      "log_quotient_rule",
+      "log_power_rule",
+      "change_of_base",
+      "exp_dominates_polynomial",
+      "exponential_growth_decay"
+    ],
+    "prerequisites_to_check_before_teaching": ["functions_exponential", "logarithms"],
+    "next_recommended": ["function_analysis_5pt", "limits_5pt"]
+  }
 }

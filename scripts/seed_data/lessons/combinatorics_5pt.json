@@ -1,57 +1,220 @@
 {
   "concept_id": "combinatorics_5pt",
-  "subject": "high_school_math_5pt",
-  "level": "5pt",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Combinatorics — Permutations, Combinations & Binomial Theorem",
-  "title_he": "קומבינטוריקה — תמורות, צירופים ומשפט הבינום",
-  "summary_en": "Counting principle, permutations, combinations, binomial theorem, and probability — essential 5pt Bagrut combinatorics.",
-  "summary_he": "עקרון הספירה, תמורות, צירופים, משפט הבינום והסתברות — קומבינטוריקה חיונית ב-5 יח'.",
-  "est_minutes": 30,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Advanced Combinatorics — Inclusion-Exclusion, Advanced Counting, Binomial Identity",
+  "title_he": "קומבינטוריקה מתקדמת — כלל ההכלה-אי-הכלה, ספירה מתקדמת, זהות הבינום",
+  "summary_en": "Advanced combinatorics at the 5pt level focuses on: the inclusion-exclusion principle for counting unions of sets, advanced permutation/combination problems with constraints, and proving combinatorial identities such as $\\binom{n}{0}+\\binom{n}{1}+\\cdots+\\binom{n}{n}=2^n$.",
+  "summary_he": "קומבינטוריקה מתקדמת ב-5 יח׳: עיקרון ההכלה-אי-הכלה לספירת איחודים, בעיות תמורות/צירופים עם מגבלות, והוכחת זהויות כמו $\\binom{n}{0}+\\cdots+\\binom{n}{n}=2^n$.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Fundamental counting principle",
-      "title_he": "עקרון הספירה הבסיסי",
-      "body_en_md": "If task 1 has $m$ outcomes and task 2 has $n$ outcomes, total **ordered** outcomes = $mn$.\n\n**License plate:** 3 letters × 3 digits = $26^3 \\times 10^3$ (with repetition).\n\n**Key distinctions:** ordered vs unordered; with vs without repetition.",
-      "body_he_md": "משימה 1 עם $m$ תוצאות ומשימה 2 עם $n$ → סה\"כ $mn$.\n\n**לוחית רישוי:** $26^3 \\times 10^3$.\n\n**הבחנה:** סדר vs ללא סדר; עם vs בלי חזרות."
+      "title_en": "Why Advanced Combinatorics Appears at 5pt",
+      "title_he": "מדוע קומבינטוריקה מתקדמת מופיעה ב-5 יח׳",
+      "body_en_md": "Combinatorics questions appear in every 5pt Bagrut exam, typically worth 20–28 points. At this level, the questions test: **inclusion-exclusion** for problems involving 'at least one' or 'none', **permutations with identical elements and circular arrangements**, **non-adjacent placement**, and **combinatorial identities**. Questions often require justifying the formula or proving an identity, not just computing a number.",
+      "body_he_md": "שאלות קומבינטוריקה מופיעות בכל בגרות 5 יח׳, בדרך כלל בשווי 20–28 נקודות. ברמה זו נבדק: **הכלה-אי-הכלה** לבעיות 'לפחות אחד' או 'אף אחד', **תמורות עם איברים זהים וסידורים מעגליים**, **מיקום של לא-שכנים**, **זהויות קומבינטוריות**. שאלות דורשות לעיתים הצדקת הנוסחה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Core Counting Principles",
+      "title_he": "עקרונות ספירה בסיסיים",
+      "body_en_md": "**Permutations (ordered):**\n- $n$ distinct objects in a row: $n!$\n- Choose $r$ from $n$: $P(n,r)=\\dfrac{n!}{(n-r)!}$\n- With identical elements (multiset): $\\dfrac{n!}{n_1!\\,n_2!\\cdots n_k!}$\n- Circular: $(n-1)!$ (fix one element)\n\n**Combinations (unordered):**\n$$\\binom{n}{r}=\\dfrac{n!}{r!(n-r)!}$$\n\n**Inclusion-Exclusion Principle:**\n$$|A\\cup B|=|A|+|B|-|A\\cap B|$$\n$$|A\\cup B\\cup C|=|A|+|B|+|C|-|A\\cap B|-|A\\cap C|-|B\\cap C|+|A\\cap B\\cap C|$$\nGenerally: $|\\bigcup_{i=1}^n A_i|=\\sum|A_i|-\\sum|A_i\\cap A_j|+\\cdots$\n\n**Binomial theorem:** $(1+x)^n=\\sum_{k=0}^n\\binom{n}{k}x^k$\n\nSetting $x=1$: $2^n=\\sum_{k=0}^n\\binom{n}{k}=\\binom{n}{0}+\\binom{n}{1}+\\cdots+\\binom{n}{n}$.",
+      "body_he_md": "**תמורות (סדורים):**\n- $n$ אובייקטים שונים: $n!$\n- בחר $r$ מ-$n$: $P(n,r)=n!/(n-r)!$\n- עם איברים זהים: $n!/(n_1!\\cdots n_k!)$\n- מעגלי: $(n-1)!$\n\n**צירופים (לא סדורים):** $\\binom{n}{r}=n!/[r!(n-r)!]$\n\n**הכלה-אי-הכלה:**\n$$|A\\cup B|=|A|+|B|-|A\\cap B|$$\n\n**בינום ניוטון:** $(1+x)^n=\\sum\\binom{n}{k}x^k$.\nל-$x=1$: $\\sum\\binom{n}{k}=2^n$."
     },
     {
       "kind": "theory",
-      "title_en": "Permutations",
-      "title_he": "תמורות",
-      "body_en_md": "**Ordered arrangements:** $P(n,k) = \\frac{n!}{(n-k)!}$.\n\nAll $n$ objects: $n!$.\n\n**Identical objects:** $\\frac{n!}{n_1! n_2! \\cdots n_k!}$.\n\n**MATHEMATICS:** $\\frac{11!}{2!2!2!1!1!1!1!1!1!} = 4989600$ arrangements.",
-      "body_he_md": "**סידורים עם סדר:** $P(n,k) = \\frac{n!}{(n-k)!}$.\n\n**עצמים זהים:** $\\frac{n!}{n_1! n_2! \\cdots}$.\n\n**MATHEMATICS:** $\\frac{11!}{2!2!2!}$."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Combinations",
-      "title_he": "צירופים",
-      "body_en_md": "**Unordered selections:** $\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$.\n\nSymmetry: $\\binom{n}{k} = \\binom{n}{n-k}$.\n\n$\\binom{n}{0} = \\binom{n}{n} = 1$.\n\n**Bagrut:** Choose committee of 4 from 10 with **at least 2 women** (6W, 4M): count cases $2W2M + 3W1M + 4W0M$.",
-      "body_he_md": "**בחירות ללא סדר:** $\\binom{n}{k}$.\n\n**בגרות:** וועדה של 4 מ-10 עם **לפחות 2 בנות**."
+      "title_en": "The Inclusion-Exclusion Principle — How to Use It",
+      "title_he": "עיקרון ההכלה-אי-הכלה — כיצד להשתמש בו",
+      "body_en_md": "**Strategy for 'at least one' problems:**\nCount the complement — instead of 'at least one with property $P$', compute: (total) $-$ (none with $P$).\n\n**Example:** Count 4-letter words over $\\{a,b,c\\}$ with at least one $a$:\n- Total: $3^4=81$\n- None with $a$ (only $b$, $c$): $2^4=16$\n- Answer: $81-16=65$.\n\n**Non-adjacent placement strategy:**\nTo place $k$ objects among $n$ total so that no two of the $k$ are adjacent:\n1. First arrange the remaining $n-k$ objects: $(n-k)!$ ways.\n2. This creates $n-k+1$ gaps.\n3. Choose $k$ of the gaps: $\\binom{n-k+1}{k}$.\n4. Arrange the $k$ restricted objects: $k!$.\n\n**Circular arrangement with restrictions:**\nFix one unrestricted element. Count remaining arrangements with the constraint.",
+      "body_he_md": "**אסטרטגיה ל'לפחות אחד':**\nספרו את המשלים — (סה״כ) $-$ (ללא תכונה $P$).\n\n**ללא-שכנים:**\n1. סדרו $n-k$ האחרים.\n2. יוצרים $n-k+1$ פערים.\n3. בחרו $k$ פערים: $\\binom{n-k+1}{k}$.\n4. סדרו את $k$ המוגבלים.\n\n**מעגלי עם מגבלות:**\nקבעו אחד ללא מגבלה; ספרו שאר."
     },
     {
       "kind": "worked_example",
-      "title_en": "Binomial theorem",
-      "title_he": "משפט הבינום",
-      "body_en_md": "$$(a+b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^k.$$\n\nCoefficient of $x^3$ in $(2x-1)^5$: term $k=3$: $\\binom{5}{3}(2x)^3(-1)^2 = 10 \\cdot 8 x^3 = 80x^3$ → coefficient **80**.\n\n$\\sum_{k=0}^{n}\\binom{n}{k} = 2^n$ (set $a=b=1$).",
-      "body_he_md": "$$(a+b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^k.$$\n\nמקדם $x^3$ ב-$(2x-1)^5$: **80**.\n\n$\\sum \\binom{n}{k} = 2^n$."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — How Many 4-Digit Numbers Have No Repeated Digits?",
+      "title_he": "דוגמה פתורה 1 — כמה מספרים בני 4 ספרות ללא ספרה חוזרת?",
+      "body_en_md": "**How many 4-digit numbers (1000–9999) have no repeated digits?**\n\n**Step 1 — Choose and place the thousands digit:**\nMust be 1–9 (no leading zero): **9 choices**.\n\n**Step 2 — Choose the hundreds digit:**\nAny digit except the one already used: **9 choices** (0 is now available).\n\n**Step 3 — Choose the tens digit:**\n8 remaining digits: **8 choices**.\n\n**Step 4 — Choose the units digit:**\n7 remaining digits: **7 choices**.\n\n**Total:**\n$$9 \\times 9 \\times 8 \\times 7 = 4536.$$",
+      "body_he_md": "**כמה מספרים בני 4 ספרות ללא ספרה חוזרת?**\n\n**שלב 1:** ספרת אלפים — 9 אפשרויות (1–9).\n\n**שלב 2:** ספרת מאות — 9 אפשרויות (כולל 0, מינוס שנבחרה).\n\n**שלב 3:** ספרת עשרות — 8.\n\n**שלב 4:** ספרת אחדות — 7.\n\n$$9\\times9\\times8\\times7=4536.$$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "How many 3-digit numbers (100–999) are even and have no repeated digits?",
+      "body_he_md": "כמה מספרים בני 3 ספרות זוגיים ללא ספרה חוזרת?",
+      "checkpoint_solution_en": "Units digit is 0,2,4,6,8. **Case 1:** Units=0: hundreds (9 choices)×tens (8)=72. **Case 2:** Units≠0 (2,4,6,8 — 4 choices): hundreds (8, no 0 and not units digit)×tens (8)=256. Total: 72+256=328.",
+      "checkpoint_solution_he": "ספרת אחדות: 0,2,4,6,8. מקרה 1: אחדות=0: 9×8=72. מקרה 2: אחדות∈{2,4,6,8}: 8×8=64 לכל בחירה, 4×64=256. סה״כ: 328."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — 8 People at a Round Table, 2 Not Adjacent",
+      "title_he": "דוגמה פתורה 2 — 8 אנשים בשולחן עגול, 2 לא ישכנו",
+      "body_en_md": "**In how many ways can 8 people sit at a round table so that persons A and B are NOT adjacent?**\n\n**Step 1 — Total arrangements without restriction:**\nCircular permutation of 8: $(8-1)!=7!=5040$.\n\n**Step 2 — Arrangements where A and B ARE adjacent:**\nTreat A and B as a single unit (block). Now we have 7 'units' at a round table:\n$(7-1)! = 6! = 720$.\nWithin the block, A and B can swap: $\\times 2$.\nSo: $720\\times2=1440$.\n\n**Step 3 — Subtract:**\n$$5040 - 1440 = 3600.$$",
+      "body_he_md": "**8 אנשים בשולחן עגול כך ש-A ו-B לא ישכנו — כמה סידורים?**\n\n**שלב 1 — סה״כ:** $(8-1)!=7!=5040$.\n\n**שלב 2 — A ו-B שכנים:** A+B כבלוק אחד → 7 יחידות מעגלי: $6!=720$. $A$, $B$ ביניהם: $\\times2$. סה״כ שכנים: 1440.\n\n**שלב 3:** $5040-1440=3600$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "In how many ways can 6 people sit in a row so that persons C and D are NOT adjacent?",
+      "body_he_md": "בכמה דרכים ישבו 6 אנשים בשורה כך ש-C ו-D לא ישכנו?",
+      "checkpoint_solution_en": "Total: $6!=720$. C and D adjacent (block): $5!\\times2=240$. Answer: $720-240=480$.",
+      "checkpoint_solution_he": "סה״כ $6!=720$. שכנים: $5!\\times2=240$. תשובה: 480."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Prove $\\sum_{k=0}^{n}\\binom{n}{k}=2^n$ Combinatorially",
+      "title_he": "דוגמה פתורה 3 — הוכחה קומבינטורית ש-$\\sum_{k=0}^n\\binom{n}{k}=2^n$",
+      "body_en_md": "**Prove combinatorially that $\\displaystyle\\binom{n}{0}+\\binom{n}{1}+\\cdots+\\binom{n}{n}=2^n$.**\n\n**Left-hand side interpretation:**\n$\\binom{n}{k}$ counts the number of $k$-element subsets of a set $S$ with $n$ elements.\nTherefore $\\sum_{k=0}^n\\binom{n}{k}$ counts **the total number of all subsets** of $S$ (of all sizes, including the empty set and $S$ itself).\n\n**Right-hand side interpretation:**\nFor each of the $n$ elements, independently decide: include it ($1$) or exclude it ($0$). This gives $2$ choices per element, and $n$ elements in total:\n$$\\underbrace{2\\times2\\times\\cdots\\times2}_{n\\text{ times}}=2^n \\text{ distinct subsets.}$$\n\n**Conclusion:**\nBoth sides count the same thing — all subsets of an $n$-element set — so they are equal. $\\blacksquare$\n\n**Algebraic proof (bonus):** Set $x=1$ in the Binomial Theorem $(1+x)^n=\\sum_{k=0}^n\\binom{n}{k}x^k$:",
+      "body_he_md": "**הוכיחו קומבינטורית ש-$\\sum_{k=0}^n\\binom{n}{k}=2^n$.**\n\n**צד שמאל:**\n$\\binom{n}{k}$ סופר תת-קבוצות בגודל $k$ של קבוצה $S$ בת $n$ איברים.\nלכן $\\sum_{k=0}^n\\binom{n}{k}$ = כל תת-הקבוצות של $S$.\n\n**צד ימין:**\nלכל אחד מ-$n$ האיברים: להכניס (1) או לא (0). $n$ הכרעות בלתי-תלויות:\n$$2\\times2\\times\\cdots\\times2=2^n.$$\n\n**מסקנה:** שני הצדדים סופרים את אותו דבר. $\\blacksquare$\n\n**הוכחה אלגברית:** $x=1$ בבינום ניוטון."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Decision Table — Which Counting Method?",
+      "title_he": "טבלת החלטה — איזו שיטה?",
+      "body_en_md": "| Problem type | Method |\n|---|---|\n| All arrangements of $n$ distinct objects | $n!$ (linear) or $(n-1)!$ (circular) |\n| Choose $r$ from $n$ ordered | $P(n,r)=n!/(n-r)!$ |\n| Choose $r$ from $n$ unordered | $\\binom{n}{r}$ |\n| 'At least one' or 'at most' | Complement: (total) $-$ (none) |\n| Two specific objects NOT adjacent | (total) $-$ (they ARE adjacent) |\n| Two specific objects MUST be adjacent | Treat as block, multiply by $2$ |\n| Non-adjacent placement of $k$ in $n$ | $\\binom{n-k+1}{k}\\cdot k!$ for linear |\n| Letters with repetition | Multinomial $n!/n_1!\\cdots n_k!$ |\n| Prove identity $\\sum\\binom{n}{k}=2^n$ | Combinatorial argument or Binomial Theorem at $x=1$ |",
+      "body_he_md": "| סוג בעיה | שיטה |\n|---|---|\n| $n$ אובייקטים שונים | $n!$ / $(n-1)!$ מעגלי |\n| $r$ מ-$n$ סדורים | $P(n,r)$ |\n| $r$ מ-$n$ לא סדורים | $\\binom{n}{r}$ |\n| 'לפחות אחד' | משלים |\n| שניים לא שכנים | (סה״כ) $-$ (שכנים) |\n| שניים שכנים | בלוק $\\times2$ |\n| $k$ ללא-שכן ב-$n$ | $\\binom{n-k+1}{k}k!$ |\n| עם חזרות | מולטינומיאל |\n| הוכחת זהות | ספירה כפולה / בינום |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "How many ways can 5 people sit in a row?",
+          "body_he": "בכמה דרכים ישבו 5 אנשים בשורה?",
+          "solution_en": "$5! = 120$.",
+          "solution_he": "$5!=120$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "From a group of 10 students, how many ways can a committee of 3 be chosen?",
+          "body_he": "מקבוצה של 10 תלמידים, בכמה דרכים ניתן לבחור ועדה של 3?",
+          "solution_en": "$\\binom{10}{3}=120$.",
+          "solution_he": "$\\binom{10}{3}=120$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "How many arrangements of the letters AABBB exist?",
+          "body_he": "כמה סידורים של האותיות AABBB קיימים?",
+          "solution_en": "$5!/(2!\\cdot3!)=10$.",
+          "solution_he": "$5!/(2!\\cdot3!)=10$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\binom{7}{2}+\\binom{7}{3}$ and verify it equals $\\binom{8}{3}$.",
+          "body_he": "חשבו $\\binom{7}{2}+\\binom{7}{3}$ ואמתו ששווה ל-$\\binom{8}{3}$.",
+          "solution_en": "$21+35=56=\\binom{8}{3}$. This is Pascal's identity.",
+          "solution_he": "$21+35=56=\\binom{8}{3}$. זהו כלל פסקל."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "How many 4-digit numbers (1000–9999) are divisible by 5 and have no repeated digits?",
+          "body_he": "כמה מספרים בני 4 ספרות מתחלקים ב-5 וללא ספרה חוזרת?",
+          "solution_en": "Divisible by 5: units digit is 0 or 5. **Case 1 (units=0):** Thousands (9) × Hundreds (8) × Tens (7) = 504. **Case 2 (units=5):** Thousands (8, not 0 or 5) × Hundreds (8) × Tens (7) = 448. Total: $504+448=952$.",
+          "solution_he": "מקרה 1 (אחדות=0): $9\\times8\\times7=504$. מקרה 2 (אחדות=5): $8\\times8\\times7=448$. סה״כ: 952."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Of 100 students, 60 study math, 50 study physics, and 30 study both. How many study at least one?",
+          "body_he": "מתוך 100 תלמידים, 60 לומדים מתמטיקה, 50 פיזיקה, 30 שניהם. כמה לומדים לפחות אחד?",
+          "solution_en": "Inclusion-exclusion: $60+50-30=80$.",
+          "solution_he": "הכלה-אי-הכלה: $60+50-30=80$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "In how many ways can 6 people sit around a circular table?",
+          "body_he": "בכמה דרכים ישבו 6 אנשים בשולחן עגול?",
+          "solution_en": "$(6-1)!=5!=120$.",
+          "solution_he": "$5!=120$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "How many 5-letter arrangements of A, B, C, D, E have A and E in the first and last positions (either order)?",
+          "body_he": "כמה סידורים של A,B,C,D,E יש כשA ו-E בעמדה הראשונה והאחרונה (בכל סדר)?",
+          "solution_en": "A and E in positions 1,5: 2 orders. Remaining 3 letters fill middle 3 positions: $3!=6$. Total: $2\\times6=12$.",
+          "solution_he": "A ו-E בעמדות 1,5: 2 סדרים. שאר 3 אותיות: $3!=6$. סה״כ: 12."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "In a class of 20, in how many ways can a team of 4 be chosen such that the class president is included?",
+          "body_he": "בכיתה של 20, בכמה דרכים תיבחר קבוצה של 4 הכוללת את הנשיא?",
+          "solution_en": "President is fixed; choose 3 from remaining 19: $\\binom{19}{3}=969$.",
+          "solution_he": "הנשיא קבוע; בחר 3 מ-19: $\\binom{19}{3}=969$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove $\\binom{n}{k}=\\binom{n}{n-k}$ combinatorially.",
+          "body_he": "הוכיחו קומבינטורית ש-$\\binom{n}{k}=\\binom{n}{n-k}$.",
+          "solution_en": "Choosing $k$ elements to include is equivalent to choosing $n-k$ elements to exclude. Every $k$-element subset corresponds bijectively to its $(n-k)$-element complement.",
+          "solution_he": "בחירת $k$ איברים = בחירת $n-k$ להשאיר בחוץ. חד-חד-על."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\sum_{k=0}^n (-1)^k\\binom{n}{k} = 0$ for $n\\geq1$.",
+          "body_he": "הוכיחו ש-$\\sum_{k=0}^n(-1)^k\\binom{n}{k}=0$ ל-$n\\geq1$.",
+          "solution_en": "In the binomial theorem $(1+x)^n=\\sum\\binom{n}{k}x^k$, set $x=-1$: $(1-1)^n=0^n=0=\\sum(-1)^k\\binom{n}{k}$ for $n\\geq1$.",
+          "solution_he": "בינום ניוטון עם $x=-1$: $(1-1)^n=0=\\sum(-1)^k\\binom{n}{k}$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "From 5 men and 4 women, how many committees of 4 contain at least 2 women?",
+          "body_he": "מ-5 גברים ו-4 נשים, כמה ועדות בנות 4 מכילות לפחות 2 נשים?",
+          "solution_en": "**Exactly 2 women:** $\\binom{4}{2}\\binom{5}{2}=6\\times10=60$. **Exactly 3 women:** $\\binom{4}{3}\\binom{5}{1}=4\\times5=20$. **Exactly 4 women:** $\\binom{4}{4}\\binom{5}{0}=1$. Total: $60+20+1=81$.",
+          "solution_he": "2 נשים: 60. 3 נשים: 20. 4 נשים: 1. סה״כ: 81."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "In a group of 100 integers from 1 to 100, how many are divisible by 2 or by 3?",
+          "body_he": "מ-1 עד 100, כמה מספרים מתחלקים ב-2 או ב-3?",
+          "solution_en": "$|A|=\\lfloor100/2\\rfloor=50$, $|B|=\\lfloor100/3\\rfloor=33$, $|A\\cap B|=\\lfloor100/6\\rfloor=16$. By inclusion-exclusion: $50+33-16=67$.",
+          "solution_he": "$|A|=50$, $|B|=33$, $|A\\cap B|=16$. $50+33-16=67$."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes",
+      "title_he": "הטעויות הנפוצות ביותר",
+      "body_en_md": "1. **Forgetting the leading-zero restriction** for $k$-digit numbers: thousands digit cannot be 0.\n2. **Confusing 'adjacent' with 'block':** When treating two people as a block, multiply by $2$ (for their internal arrangements).\n3. **Circular vs linear:** In circular arrangements, it's $(n-1)!$, not $n!$.\n4. **Inclusion-exclusion direction:** $|A\\cup B|=|A|+|B|-|A\\cap B|$ (subtract the intersection, don't add it).\n5. **'At least one' trap:** Don't enumerate all cases; use complement method (total minus 'none').",
+      "body_he_md": "1. **שכחת אפס מוביל** — ספרת אלפים ≠ 0.\n2. **בלוק של שניים** — הכפלה ב-2 לסידור פנימי.\n3. **מעגלי vs ליניארי** — $(n-1)!$ לעגול.\n4. **כיוון הכלה-אי-הכלה** — מחסרים חיתוך.\n5. **'לפחות אחד'** — משלים, לא ספירת מקרים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — 5pt Focus",
+      "title_he": "לפני הבחינה — מיקוד 5 יח׳",
+      "body_en_md": "**Key formulas:**\n- $P(n,r)=n!/(n-r)!$; $\\binom{n}{r}=n!/[r!(n-r)!]$\n- Circular: $(n-1)!$; with identical: $n!/n_1!\\cdots n_k!$\n- Inclusion-exclusion: $|A\\cup B|=|A|+|B|-|A\\cap B|$\n- Pascal: $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$\n- Binomial at $x=1$: $\\sum\\binom{n}{k}=2^n$\n\n**Exam patterns:**\n1. Counting with digit restrictions (6–8 pts).\n2. Circular arrangement with restriction (8 pts).\n3. Inclusion-exclusion with 2–3 sets (8 pts).\n4. Committee/team with required members (6 pts).\n5. Prove combinatorial identity (4–6 pts — write full justification).",
+      "body_he_md": "**נוסחאות:**\n- $\\binom{n}{r}=n!/[r!(n-r)!]$\n- מעגלי $(n-1)!$\n- הכלה-אי-הכלה\n- פסקל\n- בינום ל-$x=1$: $2^n$\n\n**סוגי שאלות:**\n1. ספירת מספרים עם מגבלות — 6–8 נק׳.\n2. מעגלי עם מגבלה — 8 נק׳.\n3. הכלה-אי-הכלה — 8 נק׳.\n4. ועדה עם איברים נדרשים — 6 נק׳.\n5. הוכחת זהות — 4–6 נק׳ (נדרשת הצדקה מלאה)."
     },
     {
       "kind": "summary",
-      "title_en": "Probability with combinatorics",
-      "title_he": "הסתברות עם קומבינטוריקה",
-      "body_en_md": "$P = \\frac{\\text{favorable}}{\\text{total}}$ using combinations.\n\n**Cards:** 3 hearts from 52: $\\frac{\\binom{13}{3}}{\\binom{52}{3}}$.\n\n**Committee:** 12 boys + 8 girls, choose 4. P(exactly 2 girls) = $\\frac{\\binom{8}{2}\\binom{12}{2}}{\\binom{20}{4}}$.",
-      "body_he_md": "**קלפים:** $\\frac{\\binom{13}{3}}{\\binom{52}{3}}$.\n\n**ועדה:** P(בדיוק 2 בנות) = $\\frac{\\binom{8}{2}\\binom{12}{2}}{\\binom{20}{4}}$."
-    },
-    {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve by induction: $\\sum_{k=1}^n k^2 = \\frac{n(n+1)(2n+1)}{6}$.\n\n**Complete Solution:**\n\nBase $n=1$: LHS $=1$, RHS $=1$ ✓.\nAssume true for $n$. For $n+1$:\n$\\sum_{k=1}^{n+1} k^2 = \\frac{n(n+1)(2n+1)}{6} + (n+1)^2 = \\frac{(n+1)(2n^2+7n+6)}{6} = \\frac{(n+1)(n+2)(2n+3)}{6}$ ✓\n\n---\n\n**Practice Problem 2:**\n\nGiven $a_{n+1}=\\sqrt{a_n+2}$, $a_1=2$. Prove bounded and monotone, find the limit.\n\n**Complete Solution:**\n\n$0<a_n<2$ by induction. $a_{n+1}>a_n$ since $\\sqrt{a_n+2}>\\sqrt{a_n}$ when $a_n>0$.\nLimit $L$ satisfies $L=\\sqrt{L+2}$ → $L=2$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nהוכיחו באינדוקציה: $\\sum k^2 = \\frac{n(n+1)(2n+1)}{6}$.\n\n**פתרון:** בסיס + צעד אינדוקציה (ראו למעלה).\n\n---\n\n**שאלת תרגול 2:**\n\n$a_{n+1}=\\sqrt{a_n+2}$, $a_1=2$. הוכיחו חסומה ומונוטונית, מצאו גבול.\n\n**פתרון:** $0<a_n<2$, עולה, $L=2$."
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Permutations:** $n!$ linear, $(n-1)!$ circular; multinomial for repeated elements.\n- **Combinations:** $\\binom{n}{r}$; symmetric: $\\binom{n}{r}=\\binom{n}{n-r}$; Pascal's identity.\n- **Inclusion-exclusion:** $|A\\cup B|=|A|+|B|-|A\\cap B|$; extend to 3 sets.\n- **Non-adjacent:** use complement (total $-$ adjacent).\n- **Binomial identity:** $\\sum_{k=0}^n\\binom{n}{k}=2^n$ — proved combinatorially (all subsets) or via Binomial Theorem at $x=1$.",
+      "body_he_md": "- **תמורות:** $n!$ ליניארי, $(n-1)!$ מעגלי; מולטינומיאל.\n- **צירופים:** $\\binom{n}{r}$; סימטרי; פסקל.\n- **הכלה-אי-הכלה:** $|A\\cup B|=|A|+|B|-|A\\cap B|$.\n- **ללא שכן:** משלים.\n- **זהות:** $\\sum\\binom{n}{k}=2^n$ — ספירת תת-קבוצות / בינום."
     }
   ],
   "questions": [
@@ -59,98 +222,102 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "A meal: 3 appetizers × 4 mains × 2 desserts. How many combos?",
-      "stem_he": "ארוחה: 3 מנות × 4 עיקריות × 2 קינוחים. כמה אפשרויות?",
-      "options_en": [
-        "$9$",
-        "$12$",
-        "$24$",
-        "$36$"
-      ],
-      "options_he": [
-        "$9$",
-        "$12$",
-        "$24$",
-        "$36$"
-      ],
+      "stem_en": "How many 4-digit numbers have no repeated digits?",
+      "stem_he": "כמה מספרים בני 4 ספרות ללא ספרה חוזרת?",
+      "options_en": ["3024", "5040", "4536", "3628"],
+      "options_he": ["3024", "5040", "4536", "3628"],
       "correct_index": 2,
-      "explanation_en": "$3 \\times 4 \\times 2 = 24$.",
-      "explanation_he": "$3 \\times 4 \\times 2 = 24$."
+      "explanation_en": "$9\\times9\\times8\\times7=4536$ (thousands digit: 1–9; others: any unused).",
+      "explanation_he": "$9\\times9\\times8\\times7=4536$.",
+      "skill_atoms": ["permutations_without_repetition"],
+      "points_level_min": "5pt"
     },
     {
       "ord": 2,
-      "kind": "mcq",
+      "kind": "open",
       "difficulty": "medium",
-      "stem_en": "Arrange 5 books on a shelf. How many orderings?",
-      "stem_he": "5 ספרים על מדף. כמה סידורים?",
-      "options_en": [
-        "$5$",
-        "$25$",
-        "$120$",
-        "$720$"
-      ],
-      "options_he": [
-        "$5$",
-        "$25$",
-        "$120$",
-        "$720$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$5! = 120$.",
-      "explanation_he": "$5! = 120$."
+      "stem_en": "8 people at a round table — in how many ways can they sit so that persons A and B are NOT adjacent?",
+      "stem_he": "8 אנשים בשולחן עגול — כמה סידורים כך ש-A ו-B לא ישכנו?",
+      "rubric_en": "Full (3/3): total $(7!)=5040$, adjacent $6!\\times2=1440$, answer $3600$.",
+      "rubric_he": "מלא: $7!-6!\\times2=3600$.",
+      "explanation_en": "$7!-6!\\times2=5040-1440=3600$.",
+      "explanation_he": "$3600$.",
+      "skill_atoms": ["circular_permutation", "non_adjacent_placement"],
+      "points_level_min": "5pt"
     },
     {
       "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Choose 3 from 10 (unordered). How many ways?",
-      "stem_he": "בחרו 3 מ-10 (ללא סדר). כמה דרכים?",
-      "options_en": [
-        "$30$",
-        "$720$",
-        "$120$",
-        "$1000$"
-      ],
-      "options_he": [
-        "$30$",
-        "$720$",
-        "$120$",
-        "$1000$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$\\binom{10}{3} = 120$.",
-      "explanation_he": "$\\binom{10}{3} = 120$."
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove combinatorially that $\\sum_{k=0}^{n}\\binom{n}{k}=2^n$.",
+      "stem_he": "הוכיחו קומבינטורית ש-$\\sum_{k=0}^n\\binom{n}{k}=2^n$.",
+      "rubric_en": "Full (4/4): LHS = all subsets of $n$-element set; RHS = $2^n$ binary choices per element; bijectivity argument.",
+      "rubric_he": "מלא: LHS = כל תת-קבוצות; RHS = $2^n$ בחירות בינאריות.",
+      "explanation_en": "Count all subsets: each element independently in or out ($2^n$ choices). Sum over sizes gives LHS.",
+      "explanation_he": "כל איבר: בפנים/בחוץ. $2^n$ תת-קבוצות.",
+      "skill_atoms": ["binomial_theorem", "combinatorial_proof"],
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove by mathematical induction:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "stem_he": "הוכיחו באינדוקציה:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "rubric_en": "2pts base; 3pts hypothesis; 5pts inductive algebra.",
-      "rubric_he": "2 נק' בסיס; 3 נק' הנחה; 5 נק' צעד.",
-      "explanation_en": "Standard induction: base OK; inductive step factors to required form.",
-      "explanation_he": "אינדוקציה סטנדרטית — בסיס וצעד.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_5pt"
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "6 people sit around a circular table. How many arrangements are there?",
+      "stem_he": "6 אנשים בשולחן עגול. כמה סידורים?",
+      "options_en": ["720", "120", "360", "240"],
+      "options_he": ["720", "120", "360", "240"],
+      "correct_index": 1,
+      "explanation_en": "$(6-1)!=5!=120$.",
+      "explanation_he": "$5!=120$.",
+      "skill_atoms": ["circular_permutation"],
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Find all $x\\in[0,2\\pi]$ satisfying $2\\sin^2 x - \\sin x - 1 = 0$. Show all work.",
-      "stem_he": "מצאו כל $x\\in[0,2\\pi]$: $2\\sin^2 x - \\sin x - 1 = 0$. הראו שלבים.",
-      "rubric_en": "3pts substitution; 4pts solving trig; 3pts all solutions in interval.",
-      "rubric_he": "3 נק' הצבה; 4 נק' טrig; 3 נק' כל הפתרונות.",
-      "explanation_en": "x = π/2, 7π/6, 11π/6.",
-      "explanation_he": "x = π/2, 7π/6, 11π/6.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_5pt"
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: The number of ways to choose 3 people from 10 is the same as choosing 7 from 10.",
+      "stem_he": "נכון או לא: מספר הדרכים לבחור 3 מ-10 שווה לבחירת 7 מ-10.",
+      "correct_answer": true,
+      "explanation_en": "$\\binom{10}{3}=\\binom{10}{7}=120$ by symmetry $\\binom{n}{r}=\\binom{n}{n-r}$.",
+      "explanation_he": "$\\binom{10}{3}=\\binom{10}{7}=120$.",
+      "skill_atoms": ["combinations_symmetry"],
+      "points_level_min": "5pt"
     }
   ],
-  "agent_hints": "Permutation = order matters; combination = order doesn't. Binomial coefficient for (a+b)^n terms. Probability with combinations: count favorable/total equally likely outcomes. 'At least' problems → complement or casework."
+  "agent_hints": {
+    "key_insights": [
+      "Use complement for 'at least one': (total) - (none with property).",
+      "Adjacent pairs: treat as a single block, then multiply by 2 for internal order.",
+      "Circular permutations: $(n-1)!$, not $n!$ — fix one person.",
+      "Prove $\\sum\\binom{n}{k}=2^n$: combinatorial argument (count all subsets) or set $x=1$ in Binomial Theorem.",
+      "Inclusion-exclusion with 3 sets: add singles, subtract pairs, add triple."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Leading zero in $k$-digit numbers",
+        "correction": "Thousands digit cannot be 0; first digit has only 9 choices (1–9).",
+        "detect_phrase_en": "4-digit",
+        "detect_phrase_he": "4 ספרות"
+      },
+      {
+        "wrong": "Forgetting to multiply by 2 for internal block order",
+        "correction": "When treating A,B as one unit, they can be AB or BA — multiply by 2.",
+        "detect_phrase_en": "adjacent block",
+        "detect_phrase_he": "בלוק שכנים"
+      }
+    ],
+    "tutor_pacing_hint": "Begin with basic permutations and combinations. Introduce circular permutations with a clear example. Then teach non-adjacent by complement. Inclusion-exclusion is its own session. Combinatorial identity proofs are the climax — emphasize the 'double-counting' philosophy.",
+    "skill_atoms_unlocked": [
+      "permutations_without_repetition",
+      "circular_permutation",
+      "non_adjacent_placement",
+      "inclusion_exclusion",
+      "binomial_theorem",
+      "combinatorial_proof",
+      "combinations_symmetry"
+    ],
+    "prerequisites_to_check_before_teaching": ["basic_combinatorics", "factorials"],
+    "next_recommended": ["probability_5pt"]
+  }
 }

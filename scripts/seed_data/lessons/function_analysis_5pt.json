@@ -1,24 +1,322 @@
 {
   "concept_id": "function_analysis_5pt",
-  "subject": "high_school_math_5pt",
-  "level": "5pt",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Function Analysis (5 Units)",
-  "title_he": "חקירת פונקציות (5 יחידות)",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Complete Function Investigation (חקירת פונקציה)",
+  "title_he": "חקירת פונקציה מלאה",
+  "summary_en": "A complete function investigation (חקירת פונקציה) systematically determines domain, roots, sign, asymptotes, monotonicity (via $f'$), extrema, convexity (via $f''$), inflection points, and sketches the graph. Every 5pt Bagrut exam includes at least one full investigation worth 25–30 pts.",
+  "summary_he": "חקירת פונקציה מלאה קובעת באופן שיטתי: תחום הגדרה, שורשים, סימן, אסימפטוטות, מונוטוניות (דרך $f'$), קיצונות, קמירות (דרך $f''$), נקודות פיתול, ושרטוט גרף. כל בחינת בגרות 5 יח׳ כוללת לפחות חקירה מלאה אחת בשווי 25–30 נקודות.",
+  "est_minutes": 50,
   "sections": [
     {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve by induction: $\\sum_{k=1}^n k^2 = \\frac{n(n+1)(2n+1)}{6}$.\n\n**Complete Solution:**\n\nBase and inductive step as in standard 5pt induction template (see above).\n\n---\n\n**Practice Problem 2:**\n\nFind all $x\\in[0,2\\pi]$ where $2\\sin^2 x - \\sin x - 1 = 0$.\n\n**Complete Solution:**\n\n$x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:** הוכחה באינדוקציה ל-$\\sum k^2$.\n\n**שאלת תרגול 2:** $2\\sin^2 x-\\sin x-1=0$ → $x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$."
+      "kind": "intro",
+      "title_en": "Why Function Investigation is the Heart of 5pt Calculus",
+      "title_he": "מדוע חקירת פונקציה היא לב חשבון 5 יח׳",
+      "body_en_md": "Calculus gives us two derivative tools: $f'$ measures rate of change (tells us where the function rises or falls), and $f''$ measures the rate of that rate (tells us the shape — concave up or down). Together they give a complete picture of any smooth function. In the Bagrut 5pt exam, **every paper has at least one full investigation worth 25–30 points** — mastering the 8-step checklist is non-negotiable.",
+      "body_he_md": "חשבון מספק שני כלי נגזרת: $f'$ מודד שיעור שינוי (מגלה היכן הפונקציה עולה/יורדת), ו-$f''$ מודד שיעור של שיעור (מגלה צורה — קעור/קמור). יחד הם נותנים תמונה מלאה של כל פונקציה חלקה. בבחינת בגרות 5 יח׳, **כל מבחן כולל לפחות חקירה מלאה אחת בשווי 25–30 נקודות** — שליטה ב-8 הצעדים היא הכרחית."
+    },
+    {
+      "kind": "definition",
+      "title_en": "The 8-Step Investigation Checklist",
+      "title_he": "8 הצעדים של חקירת פונקציה",
+      "body_en_md": "**Step 1 — Domain:** Find all $x$ where $f(x)$ is defined (no division by 0, no $\\sqrt{\\text{negative}}$, etc.).\n\n**Step 2 — Roots ($x$-intercepts):** Solve $f(x) = 0$.\n\n**Step 3 — Sign:** Determine where $f(x)>0$ and $f(x)<0$ using a sign table.\n\n**Step 4 — Asymptotes:**\n- Vertical: $x=a$ if $\\lim_{x\\to a}|f(x)|=\\infty$.\n- Horizontal: $\\lim_{x\\to\\pm\\infty}f(x)=L$ → $y=L$.\n- Oblique: $\\lim_{x\\to\\pm\\infty}[f(x)-(mx+b)]=0$; find $m=\\lim f(x)/x$, then $b$.\n\n**Step 5 — Monotonicity via $f'$:** Compute $f'(x)$; find where $f'=0$ or undefined; make sign table for $f'$; where $f'>0$: increasing; where $f'<0$: decreasing.\n\n**Step 6 — Local extrema:** At $x_0$ where $f'$ changes sign: local max if $f'$ changes $+\\to-$; local min if $-\\to+$. Also check $f''(x_0)$: if $f''(x_0)<0$ → local max; $>0$ → local min.\n\n**Step 7 — Convexity via $f''$:** Compute $f''(x)$; where $f''>0$: concave up (convex); where $f''<0$: concave down.\n\n**Step 8 — Inflection points:** Where $f''$ changes sign (and $f$ is defined there).",
+      "body_he_md": "**צעד 1 — תחום הגדרה:** כל $x$ שבו $f(x)$ מוגדרת (אין חלוקה ב-0, אין $\\sqrt{\\text{שלילי}}$, וכדו׳).\n\n**צעד 2 — שורשים:** פתרון $f(x) = 0$.\n\n**צעד 3 — סימן:** קביעת היכן $f(x)>0$ ו-$f(x)<0$ בטבלת סימנים.\n\n**צעד 4 — אסימפטוטות:**\n- אנכית: $x=a$ אם $\\lim_{x\\to a}|f(x)|=\\infty$.\n- אופקית: $\\lim_{x\\to\\pm\\infty}f(x)=L$ → $y=L$.\n- אלכסונית: $m=\\lim f(x)/x$, $b=\\lim[f(x)-mx]$.\n\n**צעד 5 — מונוטוניות דרך $f'$:** מחשבים $f'(x)$; מוצאים $f'=0$ / לא מוגדרת; טבלת סימנים ל-$f'$; $f'>0$: עולה; $f'<0$: יורדת.\n\n**צעד 6 — קיצונות מקומיות:** ב-$x_0$ שבו $f'$ מחליפה סימן: מקסימום מקומי אם $+\\to-$; מינימום אם $-\\to+$.\n\n**צעד 7 — קמירות דרך $f''$:** $f''>0$: קמורה; $f''<0$: קעורה.\n\n**צעד 8 — נקודות פיתול:** היכן $f''$ מחליפה סימן."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Key Derivative Formulas for Investigation",
+      "title_he": "נוסחאות נגזרת מפתח לחקירה",
+      "body_en_md": "**Critical rules:**\n- $(x^n)' = nx^{n-1}$\n- $(e^x)' = e^x$, $(e^{f(x)})' = f'(x)e^{f(x)}$\n- $(\\ln x)' = 1/x$, $(\\ln f(x))' = f'(x)/f(x)$\n- $(\\sin x)' = \\cos x$, $(\\cos x)' = -\\sin x$\n- Product: $(fg)' = f'g + fg'$\n- Quotient: $(f/g)' = (f'g-fg')/g^2$\n- Chain: $(f(g(x)))' = f'(g(x))\\cdot g'(x)$\n\n**For asymptotes of $f(x) = P(x)/Q(x)$:**\n- If deg $P$ = deg $Q$: horizontal at $y = $ leading coeff ratio.\n- If deg $P$ = deg $Q$ + 1: oblique asymptote.\n- Vertical: roots of $Q(x)$ not cancelled by $P(x)$.\n\n**Second derivative test:**\n- $f'(x_0)=0$ and $f''(x_0)>0$: local minimum at $x_0$.\n- $f'(x_0)=0$ and $f''(x_0)<0$: local maximum at $x_0$.\n- $f'(x_0)=0$ and $f''(x_0)=0$: inconclusive — use first derivative test.",
+      "body_he_md": "**כללים קריטיים:**\n- $(x^n)' = nx^{n-1}$\n- $(e^x)' = e^x$, $(e^{f(x)})' = f'(x)e^{f(x)}$\n- $(\\ln x)' = 1/x$\n- כלל המכפלה, כלל המנה, כלל השרשרת\n\n**אסימפטוטות של $f=P/Q$:**\n- $\\deg P = \\deg Q$: אופקית בשיעור המקדמים.\n- $\\deg P = \\deg Q + 1$: אלכסונית.\n- אנכית: שורשי $Q$ שלא מתבטלים.\n\n**מבחן הנגזרת השנייה:**\n- $f'(x_0)=0$, $f''(x_0)>0$: מינימום מקומי.\n- $f'(x_0)=0$, $f''(x_0)<0$: מקסימום מקומי.\n- $f'(x_0)=0$, $f''(x_0)=0$: לא מכריע — משתמשים במבחן הנגזרת הראשונה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Investigate $f(x) = x^3 - 3x$",
+      "title_he": "דוגמה פתורה 1 — חקירת $f(x) = x^3 - 3x$",
+      "body_en_md": "**Investigate $f(x) = x^3 - 3x$.**\n\n**1. Domain:** $\\mathbb{R}$ (polynomial).\n\n**2. Roots:** $x^3-3x = x(x^2-3) = 0 \\Rightarrow x=0,\\pm\\sqrt{3}$.\n\n**3. Sign:** Test intervals: negative on $(-\\infty,-\\sqrt{3})$, positive on $(-\\sqrt{3},0)$, negative on $(0,\\sqrt{3})$, positive on $(\\sqrt{3},\\infty)$.\n\n**4. Asymptotes:** None (polynomial).\n\n**5. Monotonicity:** $f'(x) = 3x^2-3 = 3(x^2-1) = 3(x-1)(x+1)$.\n$f'=0$ at $x=\\pm 1$. Sign of $f'$: $+$ on $(-\\infty,-1)$, $-$ on $(-1,1)$, $+$ on $(1,\\infty)$.\n\n**6. Extrema:** $x=-1$: $f'$ changes $+\\to-$ → local max. $f(-1) = -1+3 = 2$. $x=1$: local min, $f(1)=-2$.\n\n**7. Convexity:** $f''(x) = 6x$. $f''>0$ for $x>0$ (concave up); $f''<0$ for $x<0$ (concave down).\n\n**8. Inflection:** $f''=0$ at $x=0$; $f''$ changes sign → inflection at $(0,0)$.",
+      "body_he_md": "**חקרו $f(x) = x^3 - 3x$.**\n\n**1. תחום:** $\\mathbb{R}$.\n\n**2. שורשים:** $x(x^2-3)=0 \\Rightarrow x=0,\\pm\\sqrt{3}$.\n\n**3. סימן:** טבלת סימנים: $-,+,-,+$ בין השורשים.\n\n**4. אסימפטוטות:** אין.\n\n**5. מונוטוניות:** $f'(x)=3(x-1)(x+1)$. עולה ב-$(-\\infty,-1)$, יורדת ב-$(-1,1)$, עולה ב-$(1,\\infty)$.\n\n**6. קיצונות:** מקסימום $(-1,2)$, מינימום $(1,-2)$.\n\n**7. קמירות:** $f''=6x$. קמורה ל-$x>0$, קעורה ל-$x<0$.\n\n**8. פיתול:** $(0,0)$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For $f(x) = x^3 - 6x^2 + 9x$: find $f'(x)$, determine critical points, and classify them.",
+      "body_he_md": "עבור $f(x) = x^3 - 6x^2 + 9x$: מצאו $f'(x)$, קבעו נקודות קריטיות וסווגו אותן.",
+      "checkpoint_solution_en": "$f'(x)=3x^2-12x+9=3(x-1)(x-3)$. Critical: $x=1$ (local max, $f(1)=4$), $x=3$ (local min, $f(3)=0$).",
+      "checkpoint_solution_he": "$f'=3(x-1)(x-3)$. קריטיות: $x=1$ (מקסימום, $f=4$), $x=3$ (מינימום, $f=0$)."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Investigate $f(x) = xe^{-x}$",
+      "title_he": "דוגמה פתורה 2 — חקירת $f(x) = xe^{-x}$",
+      "body_en_md": "**Investigate $f(x) = xe^{-x}$.**\n\n**1. Domain:** $\\mathbb{R}$.\n\n**2. Roots:** $xe^{-x}=0 \\Rightarrow x=0$ (since $e^{-x}>0$ always).\n\n**3. Sign:** $f(x)>0$ for $x>0$; $f(x)<0$ for $x<0$.\n\n**4. Asymptotes:** As $x\\to\\infty$: $xe^{-x}\\to 0$ (exponential dominates). As $x\\to-\\infty$: $xe^{-x}\\to-\\infty$ (both $x\\to-\\infty$ and $e^{-x}\\to\\infty$). Horizontal: $y=0$ as $x\\to+\\infty$.\n\n**5. Monotonicity:** $f'(x) = e^{-x} + x(-e^{-x}) = e^{-x}(1-x)$.\nSince $e^{-x}>0$ always: $f'>0$ iff $1-x>0$ iff $x<1$. So increasing on $(-\\infty,1)$, decreasing on $(1,\\infty)$.\n\n**6. Extrema:** $f'(1)=0$, $f'$ changes $+\\to-$ → **local maximum at $(1, e^{-1}) = (1, 1/e)$**.\n\n**7. Convexity:** $f''(x) = -e^{-x}(1-x)+e^{-x}(-1) = e^{-x}(x-2)$.\n$f''>0$ iff $x>2$ (concave up); $f''<0$ iff $x<2$ (concave down).\n\n**8. Inflection:** $f''=0$ at $x=2$, $f''$ changes sign → inflection at $(2, 2e^{-2}) = (2, 2/e^2)$.",
+      "body_he_md": "**חקרו $f(x) = xe^{-x}$.**\n\n**1. תחום:** $\\mathbb{R}$.\n\n**2. שורשים:** $x=0$.\n\n**3. סימן:** $f>0$ ל-$x>0$; $f<0$ ל-$x<0$.\n\n**4. אסימפטוטות:** $y=0$ כ-$x\\to+\\infty$. אין אסימפטוטה כ-$x\\to-\\infty$.\n\n**5. מונוטוניות:** $f'(x)=e^{-x}(1-x)>0$ ל-$x<1$. עולה ב-$(-\\infty,1)$, יורדת ב-$(1,\\infty)$.\n\n**6. קיצון:** מקסימום מקומי ב-$(1, 1/e)$.\n\n**7. קמירות:** $f''=e^{-x}(x-2)$. קמורה ל-$x>2$, קעורה ל-$x<2$.\n\n**8. פיתול:** $(2, 2/e^2)$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For $f(x)=xe^{-x}$, verify using the second derivative test that $x=1$ is a local maximum.",
+      "body_he_md": "עבור $f(x)=xe^{-x}$, אמתו בעזרת מבחן הנגזרת השנייה ש-$x=1$ הוא מקסימום מקומי.",
+      "checkpoint_solution_en": "$f''(x) = e^{-x}(x-2)$. At $x=1$: $f''(1) = e^{-1}(1-2) = -e^{-1} < 0$. So $x=1$ is a local maximum. ✓",
+      "checkpoint_solution_he": "$f''(1) = e^{-1}(1-2) = -1/e < 0$. לכן $x=1$ הוא מקסימום מקומי. ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Investigate $f(x) = \\dfrac{x^2}{x^2-1}$",
+      "title_he": "דוגמה פתורה 3 — חקירת $f(x) = \\dfrac{x^2}{x^2-1}$",
+      "body_en_md": "**Investigate $f(x) = \\dfrac{x^2}{x^2-1}$.**\n\n**1. Domain:** $x^2-1 \\neq 0 \\Rightarrow x \\neq \\pm 1$. Domain: $\\mathbb{R}\\setminus\\{-1,1\\}$.\n\n**2. Roots:** $x^2=0 \\Rightarrow x=0$ (and denominator $\\neq 0$ there).\n\n**3. Sign:** Note $f(x) = \\frac{x^2}{(x-1)(x+1)}$. Numerator $x^2 \\geq 0$. Sign table for denominator $(x-1)(x+1)$: positive for $|x|>1$, negative for $|x|<1$ (excluding $x=\\pm 1$). So $f(x)\\geq 0$ for $|x|>1$, $f(x)\\leq 0$ for $|x|<1$ (with $f(0)=0$).\n\n**4. Asymptotes:**\n- Vertical: $x=1$ and $x=-1$ (denominator = 0, numerator $\\neq 0$). Both are vertical asymptotes.\n- Horizontal: $\\lim_{x\\to\\pm\\infty}\\frac{x^2}{x^2-1} = 1$. So $y=1$ is a horizontal asymptote.\n\n**5. Monotonicity:** $f'(x) = \\frac{2x(x^2-1)-x^2(2x)}{(x^2-1)^2} = \\frac{2x^3-2x-2x^3}{(x^2-1)^2} = \\frac{-2x}{(x^2-1)^2}$.\n$f'=0$ at $x=0$. Sign of $f'$: positive for $x<0$ (denominator always positive, numerator $-2x>0$); negative for $x>0$. So increasing on $(-\\infty,-1)\\cup(-1,0)$, decreasing on $(0,1)\\cup(1,\\infty)$.\n\n**6. Extrema:** $f'(0)=0$, changes $+\\to-$: **local maximum at $(0,0)$**.\n\n**7. Convexity:** $f''(x) = \\frac{-2(x^2-1)^2 - (-2x)\\cdot 2(x^2-1)\\cdot 2x}{(x^2-1)^4} = \\frac{-2(x^2-1)+8x^2}{(x^2-1)^3} = \\frac{6x^2+2}{(x^2-1)^3}$.\nNumerator $6x^2+2>0$ always. Sign of $f''$ depends on $(x^2-1)^3$: positive for $|x|>1$, negative for $|x|<1$. So concave up for $|x|>1$, concave down for $|x|<1$.\n\n**8. Inflection:** No inflection points (no sign change in $f''$ without passing through $x=\\pm 1$, where $f$ is undefined).",
+      "body_he_md": "**חקרו $f(x) = \\dfrac{x^2}{x^2-1}$.**\n\n**1. תחום:** $x \\neq \\pm 1$.\n\n**2. שורשים:** $x=0$.\n\n**3. סימן:** $f(x)\\geq 0$ ל-$|x|>1$; $f(x)\\leq 0$ ל-$|x|<1$.\n\n**4. אסימפטוטות:** אנכיות $x=\\pm 1$; אופקית $y=1$.\n\n**5. מונוטוניות:** $f'(x)=\\frac{-2x}{(x^2-1)^2}$. עולה ל-$x<0$ (בתחום), יורדת ל-$x>0$.\n\n**6. קיצון:** מקסימום מקומי ב-$(0,0)$.\n\n**7. קמירות:** $f''=\\frac{6x^2+2}{(x^2-1)^3}$. קמורה ל-$|x|>1$, קעורה ל-$|x|<1$.\n\n**8. פיתול:** אין (אין שינוי סימן ב-$f''$ בתחום)."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "The 8-Step Checklist (Quick Reference)",
+      "title_he": "רשימת הבדיקה ב-8 צעדים (עזר מהיר)",
+      "body_en_md": "| Step | What to find | How |\n|---|---|---|\n| 1 Domain | Where defined | Set denominators $\\neq 0$; even roots require non-negative argument |\n| 2 Roots | $f(x)=0$ | Factor or quadratic formula |\n| 3 Sign | $f>0$ or $f<0$ | Sign table with roots & domain gaps |\n| 4 Asymptotes | Vertical, horizontal, oblique | Limits at domain gaps and $\\pm\\infty$ |\n| 5 Monotonicity | Increasing/decreasing | Compute $f'$, find zeros, sign table |\n| 6 Extrema | Local max/min | Where $f'=0$ or undef and $f'$ changes sign |\n| 7 Convexity | Concave up/down | Compute $f''$, sign table |\n| 8 Inflection | Shape changes | $f''=0$ AND changes sign |\n\n**Exam tip:** Always write a sign table for $f'$ AND $f''$ — the examiner expects to see them.",
+      "body_he_md": "| צעד | מה למצוא | איך |\n|---|---|---|\n| 1 תחום | היכן מוגדרת | מכנים $\\neq 0$; שורשים ≥ 0 |\n| 2 שורשים | $f(x)=0$ | פירוק / נוסחת שורשים |\n| 3 סימן | $f>0$ או $<0$ | טבלת סימנים |\n| 4 אסימפטוטות | אנכית, אופקית, אלכסונית | גבולות בנקודות ב-$\\pm\\infty$ |\n| 5 מונוטוניות | עולה/יורדת | $f'$, אפסים, טבלת סימנים |\n| 6 קיצונות | מקסימום/מינימום | שינוי סימן $f'$ |\n| 7 קמירות | קמור/קעור | $f''$, טבלת סימנים |\n| 8 פיתול | שינוי צורה | $f''=0$ ומחליפה סימן |\n\n**טיפ לבחינה:** תמיד לכתוב טבלת סימנים ל-$f'$ וגם ל-$f''$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find the domain of $f(x) = \\dfrac{1}{x^2-4}$.",
+          "body_he": "מצאו את תחום הגדרה של $f(x) = \\dfrac{1}{x^2-4}$.",
+          "solution_en": "$x^2-4\\neq 0 \\Rightarrow x\\neq \\pm 2$. Domain: $\\mathbb{R}\\setminus\\{-2,2\\}$.",
+          "solution_he": "$x\\neq \\pm 2$. תחום: $\\mathbb{R}\\setminus\\{-2,2\\}$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "For $f(x)=x^3-3x$, find all local extrema and classify them.",
+          "body_he": "עבור $f(x)=x^3-3x$, מצאו את כל הקיצונות המקומיות וסווגו אותן.",
+          "solution_en": "$f'=3x^2-3=3(x-1)(x+1)$. $f'=0$ at $x=\\pm 1$. $f''(x)=6x$. $f''(-1)=-6<0$: local max at $(-1,2)$. $f''(1)=6>0$: local min at $(1,-2)$.",
+          "solution_he": "$f'=3(x-1)(x+1)$. מקסימום $(-1,2)$; מינימום $(1,-2)$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find the horizontal asymptote of $f(x) = \\dfrac{3x+1}{x-2}$.",
+          "body_he": "מצאו את האסימפטוטה האופקית של $f(x) = \\dfrac{3x+1}{x-2}$.",
+          "solution_en": "$\\lim_{x\\to\\infty}\\frac{3x+1}{x-2}=\\frac{3+1/x}{1-2/x}\\to 3$. Horizontal asymptote: $y=3$.",
+          "solution_he": "$\\lim_{x\\to\\pm\\infty}\\frac{3x+1}{x-2}=3$. $y=3$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Is $f(x)=e^x$ convex or concave? Justify.",
+          "body_he": "האם $f(x)=e^x$ קמורה או קעורה? נמקו.",
+          "solution_en": "$f''(x)=e^x>0$ for all $x$. So $f$ is concave up (convex) everywhere.",
+          "solution_he": "$f''=e^x>0$ לכל $x$. קמורה (concave up) בכל מקום."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Fully investigate $f(x) = x^4 - 4x^3$: domain, roots, monotonicity, extrema, convexity, inflection.",
+          "body_he": "חקרו לחלוטין $f(x) = x^4 - 4x^3$: תחום, שורשים, מונוטוניות, קיצונות, קמירות, פיתול.",
+          "solution_en": "Domain: $\\mathbb{R}$. Roots: $x^3(x-4)=0$, $x=0,4$. $f'=4x^3-12x^2=4x^2(x-3)$: dec on $(-\\infty,3)$, inc on $(3,\\infty)$. Min at $x=3$: $f(3)=-27$. $f''=12x^2-24x=12x(x-2)$: concave up $x<0$ or $x>2$, down $0<x<2$. Inflections at $x=0,2$.",
+          "solution_he": "שורשים: $x=0,4$. $f'=4x^2(x-3)$: מינימום $x=3$, $f=-27$. $f''=12x(x-2)$: פיתולים $x=0,2$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the inflection points of $f(x)=x^3-3x^2+4$.",
+          "body_he": "מצאו נקודות פיתול של $f(x)=x^3-3x^2+4$.",
+          "solution_en": "$f'=3x^2-6x$, $f''=6x-6=6(x-1)$. $f''=0$ at $x=1$; $f''$ changes from negative to positive. Inflection at $(1,f(1))=(1,2)$.",
+          "solution_he": "$f''=6(x-1)=0$ ב-$x=1$; מחליפה סימן → פיתול ב-$(1,2)$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Investigate monotonicity of $f(x) = x\\ln x$ for $x>0$.",
+          "body_he": "חקרו מונוטוניות של $f(x) = x\\ln x$ ל-$x>0$.",
+          "solution_en": "$f'(x)=\\ln x + x\\cdot(1/x)=\\ln x + 1$. $f'=0$ when $\\ln x=-1$, i.e., $x=e^{-1}=1/e$. $f'<0$ for $x<1/e$: decreasing. $f'>0$ for $x>1/e$: increasing. Local min at $x=1/e$: $f(1/e)=-1/e$.",
+          "solution_he": "$f'=\\ln x+1=0$ ב-$x=1/e$. יורדת ל-$x<1/e$, עולה ל-$x>1/e$. מינימום $-1/e$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "For $f(x)=\\dfrac{x}{x^2+1}$, find all asymptotes and verify no vertical ones.",
+          "body_he": "עבור $f(x)=\\dfrac{x}{x^2+1}$, מצאו אסימפטוטות ואמתו שאין אנכיות.",
+          "solution_en": "Denominator $x^2+1>0$ always, so no vertical asymptotes. $\\lim_{x\\to\\pm\\infty}\\frac{x}{x^2+1}=0$. Horizontal: $y=0$.",
+          "solution_he": "מכנה $x^2+1>0$ תמיד → אין אנכיות. $y=0$ אופקית."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Investigate $f(x) = e^{-x^2}$ (the Gaussian bell curve): domain, symmetry, monotonicity, extrema.",
+          "body_he": "חקרו $f(x) = e^{-x^2}$: תחום, סימטריה, מונוטוניות, קיצונות.",
+          "solution_en": "Domain: $\\mathbb{R}$. Even function ($f(-x)=f(x)$). $f'=-2xe^{-x^2}$. $f'=0$ at $x=0$. Inc on $(-\\infty,0)$, dec on $(0,\\infty)$. Global max at $x=0$: $f(0)=1$.",
+          "solution_he": "תחום $\\mathbb{R}$. פונקציה זוגית. $f'=-2xe^{-x^2}=0$ ב-$x=0$. מקסימום גלובלי $(0,1)$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Fully investigate $f(x) = \\dfrac{x^2}{x^2-1}$: domain, asymptotes, sign, monotonicity, extrema, convexity.",
+          "body_he": "חקרו לחלוטין $f(x) = \\dfrac{x^2}{x^2-1}$: תחום, אסימפטוטות, סימן, מונוטוניות, קיצונות, קמירות.",
+          "solution_en": "Domain: $x\\neq\\pm1$. Roots: $x=0$. Asymptotes: vertical $x=\\pm1$, horizontal $y=1$. $f'=-2x/(x^2-1)^2$. Inc for $x<0$ (in domain), dec for $x>0$. Local max at $(0,0)$. $f''=(6x^2+2)/(x^2-1)^3$: concave up $|x|>1$, down $|x|<1$. No inflection.",
+          "solution_he": "תחום $x\\neq\\pm1$. אסימפטוטות $x=\\pm1$, $y=1$. $f'=-2x/(x^2-1)^2$. מקסימום $(0,0)$. קמורה $|x|>1$, קעורה $|x|<1$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the oblique asymptote of $f(x) = \\dfrac{x^2+1}{x-1}$.",
+          "body_he": "מצאו את האסימפטוטה האלכסונית של $f(x) = \\dfrac{x^2+1}{x-1}$.",
+          "solution_en": "Divide: $\\frac{x^2+1}{x-1}=x+1+\\frac{2}{x-1}$. As $x\\to\\infty$, the remainder $\\to 0$. Oblique asymptote: $y=x+1$.",
+          "solution_he": "חלוקה: $\\frac{x^2+1}{x-1}=x+1+\\frac{2}{x-1}$. אסימפטוטה אלכסונית: $y=x+1$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that $f(x) = x - \\ln x$ has a global minimum on $(0,\\infty)$ and find it.",
+          "body_he": "הוכיחו ש-$f(x) = x - \\ln x$ בעלת מינימום גלובלי ב-$(0,\\infty)$ ומצאו אותו.",
+          "solution_en": "$f'(x)=1-1/x=(x-1)/x$. $f'=0$ at $x=1$. $f'<0$ for $x<1$, $f'>0$ for $x>1$: local (and global) min at $x=1$. $f(1)=1-\\ln1=1$. Since $f(x)\\to\\infty$ as $x\\to 0^+$ and $x\\to\\infty$, the minimum at $f(1)=1$ is global.",
+          "solution_he": "$f'=(x-1)/x=0$ ב-$x=1$. יורדת ל-$x<1$, עולה ל-$x>1$. $f(1)=1$ מינימום גלובלי."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Investigate $f(x) = \\dfrac{\\ln x}{x}$ for $x>0$: find domain, monotonicity, extrema, and $\\lim_{x\\to\\infty}f(x)$.",
+          "body_he": "חקרו $f(x) = \\dfrac{\\ln x}{x}$ ל-$x>0$: מצאו תחום, מונוטוניות, קיצון, ו-$\\lim_{x\\to\\infty}f(x)$.",
+          "solution_en": "Domain: $x>0$. $f'=\\frac{(1/x)\\cdot x - \\ln x}{x^2}=\\frac{1-\\ln x}{x^2}$. $f'=0$ at $x=e$. Inc on $(0,e)$, dec on $(e,\\infty)$. Max at $(e, 1/e)$. $\\lim_{x\\to\\infty}\\frac{\\ln x}{x}=0$ (L'Hôpital: $\\frac{1/x}{1}\\to 0$).",
+          "solution_he": "$f'=(1-\\ln x)/x^2=0$ ב-$x=e$. מקסימום $(e,1/e)$. $\\lim_{x\\to\\infty}=0$."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes",
+      "title_he": "הטעויות הנפוצות ביותר",
+      "body_en_md": "1. **Classifying $f'(x_0)=0$ as extremum without checking sign change.** A critical point is NOT automatically an extremum — check the sign of $f'$ on both sides.\n2. **Missing inflection points where $f''=0$ but doesn't change sign** (e.g., $f(x)=x^4$ at $x=0$: $f''(0)=0$ but no inflection).\n3. **Forgetting vertical asymptotes in the domain** when computing derivatives — $f'$ doesn't exist at vertical asymptotes.\n4. **Horizontal asymptote at $y=L$ doesn't mean $f$ never crosses it** — it can cross at finite $x$.\n5. **Sign of $f''$:** $(x^2-1)^3$ is NOT $(x^2-1)^2$ times sign of $(x^2-1)$. Compute carefully.\n6. **Oblique asymptote:** Must perform polynomial long division — don't guess.",
+      "body_he_md": "1. **סיווג $f'(x_0)=0$ כקיצון ללא בדיקת שינוי סימן.** נקודה קריטית אינה בהכרח קיצון.\n2. **פיתולים היכן $f''=0$ אך לא מחליפה סימן** (כמו $f=x^4$ ב-$x=0$).\n3. **שכחת אסימפטוטות אנכיות בתחום** בחישוב נגזרות.\n4. **אסימפטוטה אופקית $y=L$ לא אומרת ש-$f$ לא חוצה אותה.**\n5. **סימן $f''$:** לחשב בזהירות.\n6. **אסימפטוטה אלכסונית:** חייבים חלוקת פולינומים — לא לנחש."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — 5pt Focus",
+      "title_he": "לפני הבחינה — מיקוד 5 יח׳",
+      "body_en_md": "**Every 5pt Bagrut paper has at least one full function investigation worth 25–30 pts.**\n\n**Points allocation (typical):**\n- Domain + roots + sign: 4 pts\n- Asymptotes: 4 pts\n- Monotonicity ($f'$ sign table): 6 pts\n- Extrema with values: 4 pts\n- Convexity ($f''$ sign table): 4 pts\n- Inflection points: 3 pts\n- Graph sketch: 5 pts\n\n**Most-tested function types:**\n- Rational $P(x)/Q(x)$ (with vertical + horizontal asymptotes)\n- Exponential $e^{g(x)}$ or $xe^{-x}$\n- Logarithmic $\\ln(g(x))$\n- Polynomial degree 4 (with inflection)\n\n**Graph sketch tip:** Label ALL key points ($x$-intercepts, local extrema, inflection points), draw asymptotes as dashed lines, and show behavior at $\\pm\\infty$.",
+      "body_he_md": "**כל בחינת בגרות 5 יח׳ כוללת חקירה מלאה בשווי 25–30 נקודות.**\n\n**הקצאת נקודות (טיפוסית):**\n- תחום + שורשים + סימן: 4 נק׳\n- אסימפטוטות: 4 נק׳\n- מונוטוניות (טבלת $f'$): 6 נק׳\n- קיצונות עם ערכים: 4 נק׳\n- קמירות (טבלת $f''$): 4 נק׳\n- נקודות פיתול: 3 נק׳\n- שרטוט גרף: 5 נק׳\n\n**סוגי פונקציות נפוצים:**\n- רציונלית $P/Q$ (עם אסימפטוטות)\n- אקספוננציאלית $e^{g(x)}$\n- לוגריתמית $\\ln(g(x))$\n- פולינום ממעלה 4"
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "**8-step checklist:** Domain → Roots → Sign → Asymptotes → Monotonicity ($f'$) → Extrema → Convexity ($f''$) → Inflection.\n- **$f'>0$:** increasing; **$f'<0$:** decreasing; **$f'$ changes sign:** extremum.\n- **$f''>0$:** concave up; **$f''<0$:** concave down; **$f''$ changes sign:** inflection.\n- **Always** make sign tables for $f'$ and $f''$.\n- Rational function: check for vertical (denom = 0), horizontal, and oblique asymptotes.",
+      "body_he_md": "**8 צעדים:** תחום → שורשים → סימן → אסימפטוטות → מונוטוניות ($f'$) → קיצונות → קמירות ($f''$) → פיתול.\n- $f'>0$: עולה; $f'<0$: יורדת; שינוי סימן: קיצון.\n- $f''>0$: קמורה; $f''<0$: קעורה; שינוי סימן: פיתול.\n- תמיד טבלת סימנים ל-$f'$ ו-$f''$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "If $f'(x_0) = 0$ and $f''(x_0) > 0$, then at $x_0$ the function has a:",
+      "stem_he": "אם $f'(x_0) = 0$ ו-$f''(x_0) > 0$, אז ב-$x_0$ לפונקציה יש:",
+      "options_en": ["Local maximum", "Local minimum", "Inflection point", "Vertical asymptote"],
+      "options_he": ["מקסימום מקומי", "מינימום מקומי", "נקודת פיתול", "אסימפטוטה אנכית"],
+      "correct_index": 1,
+      "explanation_en": "Second derivative test: $f'(x_0)=0$ and $f''(x_0)>0$ → local minimum.",
+      "explanation_he": "מבחן הנגזרת השנייה: $f'=0$ ו-$f''>0$ → מינימום מקומי.",
+      "skill_atoms": ["second_derivative_test"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "For $f(x) = xe^{-x}$, where does the function increase?",
+      "stem_he": "עבור $f(x) = xe^{-x}$, היכן הפונקציה עולה?",
+      "options_en": ["$x > 1$", "$x < 1$", "$x < 0$", "$x > 0$"],
+      "options_he": ["$x > 1$", "$x < 1$", "$x < 0$", "$x > 0$"],
+      "correct_index": 1,
+      "explanation_en": "$f'=e^{-x}(1-x)>0$ iff $x<1$.",
+      "explanation_he": "$f'=e^{-x}(1-x)>0$ כאשר $x<1$.",
+      "skill_atoms": ["monotonicity_derivative"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Perform a complete investigation of $f(x) = x^3 - 3x$ (all 8 steps).",
+      "stem_he": "בצעו חקירה מלאה של $f(x) = x^3 - 3x$ (8 הצעדים).",
+      "rubric_en": "Full (8/8): all 8 steps correct with sign tables. Partial: 1 pt per correct step.",
+      "rubric_he": "מלא (8/8): כל 8 הצעדים עם טבלות סימנים. חלקי: נק׳ לכל צעד נכון.",
+      "explanation_en": "Domain $\\mathbb{R}$; roots $0,\\pm\\sqrt{3}$; no asymptotes; $f'=3(x^2-1)$, dec on $(-1,1)$, inc outside; max $(-1,2)$, min $(1,-2)$; $f''=6x$, inflection $(0,0)$.",
+      "explanation_he": "תחום $\\mathbb{R}$; שורשים $0,\\pm\\sqrt{3}$; אין אסימפטוטות; מקסימום $(-1,2)$; מינימום $(1,-2)$; פיתול $(0,0)$.",
+      "skill_atoms": ["function_investigation", "monotonicity_derivative", "second_derivative_test"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 4,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: If $f''(x_0) = 0$, then $x_0$ is an inflection point.",
+      "stem_he": "נכון או לא: אם $f''(x_0) = 0$, אז $x_0$ הוא נקודת פיתול.",
+      "correct_answer": false,
+      "explanation_en": "Not necessarily. For $f(x)=x^4$, $f''(0)=0$ but $f''$ doesn't change sign, so $x=0$ is NOT an inflection point (it's a local min). We need $f''$ to change sign.",
+      "explanation_he": "לא בהכרח. עבור $f=x^4$: $f''(0)=0$ אך $f''$ לא מחליפה סימן — $x=0$ הוא מינימום, לא פיתול.",
+      "skill_atoms": ["inflection_points"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Investigate $f(x) = \\dfrac{x^2}{x^2-1}$: find domain, asymptotes, and all extrema.",
+      "stem_he": "חקרו $f(x) = \\dfrac{x^2}{x^2-1}$: מצאו תחום, אסימפטוטות, וכל הקיצונות.",
+      "rubric_en": "Full (5/5): domain $x\\neq\\pm1$; vertical asym $x=\\pm1$; horizontal $y=1$; $f'=-2x/(x^2-1)^2$; local max $(0,0)$. Partial (3/5): correct derivative and asymptotes.",
+      "rubric_he": "מלא (5/5): תחום, $x=\\pm1$, $y=1$, $f'$, מקסימום $(0,0)$.",
+      "explanation_en": "Domain $x\\neq\\pm1$. Asymptotes: $x=\\pm1$, $y=1$. $f'=-2x/(x^2-1)^2$, changes $+\\to-$ at $x=0$: local max $f(0)=0$.",
+      "explanation_he": "תחום $x\\neq\\pm1$. אסימפטוטות $x=\\pm1$, $y=1$. $f'=-2x/(x^2-1)^2$. מקסימום $(0,0)$.",
+      "skill_atoms": ["function_investigation", "asymptotes", "monotonicity_derivative"],
+      "points_level_min": "5pt"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "The 8-step investigation is a recipe: domain, roots, sign, asymptotes, f', extrema, f'', inflection.",
+      "$f'>0$ increases, $f'<0$ decreases, sign change → extremum. Write a sign table every time.",
+      "$f''>0$ concave up, $f''<0$ concave down, sign change → inflection point.",
+      "Second derivative test shortcut: $f'(x_0)=0$, $f''(x_0)>0$ → min; $<0$ → max; $=0$ → inconclusive.",
+      "Every 5pt exam has a full investigation — master all 8 steps and write sign tables explicitly."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "$f''(x_0)=0$ means inflection point",
+        "correction": "Need $f''$ to CHANGE SIGN at $x_0$, not just vanish.",
+        "detect_phrase_en": "second derivative zero inflection",
+        "detect_phrase_he": "נגזרת שנייה אפס פיתול"
+      },
+      {
+        "wrong": "Critical point = extremum",
+        "correction": "A critical point ($f'=0$) is an extremum only if $f'$ changes sign there.",
+        "detect_phrase_en": "critical point maximum",
+        "detect_phrase_he": "נקודה קריטית מקסימום"
+      }
+    ],
+    "tutor_pacing_hint": "Walk through the 8-step checklist on $x^3-3x$ together (polynomial is cleanest). Then do $xe^{-x}$ to show product rule + asymptote. Save rational functions ($x^2/(x^2-1)$) for last — they have the most steps.",
+    "skill_atoms_unlocked": [
+      "function_investigation",
+      "monotonicity_derivative",
+      "second_derivative_test",
+      "inflection_points",
+      "asymptotes",
+      "convexity_concavity"
+    ],
+    "prerequisites_to_check_before_teaching": ["derivatives_rules", "derivatives_applications", "limits_4pt"],
+    "next_recommended": ["optimization_problems", "integrals_applications"]
+  }
 }

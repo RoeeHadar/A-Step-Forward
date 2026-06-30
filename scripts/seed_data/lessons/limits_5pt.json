@@ -1,24 +1,323 @@
 {
   "concept_id": "limits_5pt",
-  "subject": "high_school_math_5pt",
-  "level": "5pt",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Limits — Rigorous (5 Units)",
-  "title_he": "גבולות — גישה מחמירה (5 יחידות)",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Limits — Epsilon-Delta, Squeeze Theorem, Continuity",
+  "title_he": "גבולות — אפסילון-דלתא, משפט הסנדביץ׳, רציפות",
+  "summary_en": "The $\\varepsilon$-$\\delta$ definition makes limits rigorous: $\\lim_{x\\to a}f(x)=L$ means for every $\\varepsilon>0$ there exists $\\delta>0$ such that $0<|x-a|<\\delta$ implies $|f(x)-L|<\\varepsilon$. The Squeeze theorem and continuity theorems complete the toolkit for 5pt proofs.",
+  "summary_he": "הגדרת $\\varepsilon$-$\\delta$ מחמירה את הגבולות: $\\lim_{x\\to a}f(x)=L$ פירושו שלכל $\\varepsilon>0$ קיים $\\delta>0$ כך ש-$0<|x-a|<\\delta$ גורר $|f(x)-L|<\\varepsilon$. משפט הסנדביץ׳ ומשפטי הרציפות משלימים את ערכת הכלים להוכחות 5 יח׳.",
+  "est_minutes": 45,
   "sections": [
     {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve by induction: $\\sum_{k=1}^n k^2 = \\frac{n(n+1)(2n+1)}{6}$.\n\n**Complete Solution:**\n\nBase and inductive step as in standard 5pt induction template (see above).\n\n---\n\n**Practice Problem 2:**\n\nFind all $x\\in[0,2\\pi]$ where $2\\sin^2 x - \\sin x - 1 = 0$.\n\n**Complete Solution:**\n\n$x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:** הוכחה באינדוקציה ל-$\\sum k^2$.\n\n**שאלת תרגול 2:** $2\\sin^2 x-\\sin x-1=0$ → $x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$."
+      "kind": "intro",
+      "title_en": "Why the Formal Definition Matters at 5pt Level",
+      "title_he": "מדוע ההגדרה הפורמלית חשובה ברמת 5 יח׳",
+      "body_en_md": "In 4-point calculus we compute limits by substitution, L'Hôpital, or factoring. At the 5pt level, the question is: what does it *mean* for a limit to exist? The $\\varepsilon$-$\\delta$ definition is the answer — it makes analysis rigorous. The Bagrut 5pt tests $\\varepsilon$-$\\delta$ proofs (typically 10 pts), squeeze theorem arguments, and the Intermediate Value Theorem. These are the hardest questions on the exam.",
+      "body_he_md": "בחשבון 4 יח׳ מחשבים גבולות בהצבה, לופיטל, או פירוק. ברמת 5 יח׳, השאלה היא: מה *פירוש* קיום גבול? הגדרת $\\varepsilon$-$\\delta$ היא התשובה — היא מחמירה את האנליזה. בגרות 5 יח׳ בוחנת הוכחות $\\varepsilon$-$\\delta$ (בדרך כלל 10 נק׳), ארגומנטי משפט הסנדביץ׳, ומשפט הערך הביניים. אלה הן השאלות הקשות ביותר בבחינה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Formal Definitions",
+      "title_he": "הגדרות פורמליות",
+      "body_en_md": "**$\\varepsilon$-$\\delta$ limit:** $\\lim_{x\\to a}f(x)=L$ means:\n$$\\forall\\varepsilon>0,\\;\\exists\\delta>0:\\;0<|x-a|<\\delta\\Rightarrow|f(x)-L|<\\varepsilon.$$\n\n**One-sided limits:** $\\lim_{x\\to a^+}f(x)=L$ (right limit: $x>a$); $\\lim_{x\\to a^-}f(x)=L$ (left limit: $x<a$).\n\n**Limit at infinity:** $\\lim_{x\\to\\infty}f(x)=L$ means: $\\forall\\varepsilon>0,\\;\\exists M:\\;x>M\\Rightarrow|f(x)-L|<\\varepsilon$.\n\n**Continuity at $a$:** $f$ is continuous at $a$ if $\\lim_{x\\to a}f(x)=f(a)$ (limit exists, $f(a)$ is defined, they're equal).\n\n**Continuity theorems:**\n- **IVT (Intermediate Value Theorem):** If $f$ is continuous on $[a,b]$ and $f(a)<c<f(b)$, then $\\exists x_0\\in(a,b)$ with $f(x_0)=c$.\n- **Extreme Value Theorem:** A continuous function on $[a,b]$ attains its max and min.\n- **Sum/product/quotient** of continuous functions is continuous (quotient: denominator $\\neq 0$).",
+      "body_he_md": "**גבול $\\varepsilon$-$\\delta$:** $\\lim_{x\\to a}f(x)=L$ פירושו:\n$$\\forall\\varepsilon>0,\\;\\exists\\delta>0:\\;0<|x-a|<\\delta\\Rightarrow|f(x)-L|<\\varepsilon.$$\n\n**גבולות חד-צדדיים:** $\\lim_{x\\to a^+}$, $\\lim_{x\\to a^-}$.\n\n**גבול באינסוף:** $\\lim_{x\\to\\infty}f(x)=L$: $\\forall\\varepsilon>0,\\;\\exists M:\\;x>M\\Rightarrow|f(x)-L|<\\varepsilon$.\n\n**רציפות ב-$a$:** $\\lim_{x\\to a}f(x)=f(a)$.\n\n**משפטי רציפות:**\n- **IVT (ערך ביניים):** אם $f$ רציפה ב-$[a,b]$ ו-$f(a)<c<f(b)$, אז $\\exists x_0\\in(a,b)$ עם $f(x_0)=c$.\n- **משפט הערך הקיצוני:** פונקציה רציפה ב-$[a,b]$ מגיעה למקס ולמין.\n- **סכום/מכפלה/מנה** של פונקציות רציפות רציפות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "The $\\varepsilon$-$\\delta$ Proof Strategy and Squeeze Theorem",
+      "title_he": "אסטרטגיית הוכחת $\\varepsilon$-$\\delta$ ומשפט הסנדביץ׳",
+      "body_en_md": "**$\\varepsilon$-$\\delta$ proof template:**\n1. **Scratch work** (not shown in proof): Find $\\delta$ in terms of $\\varepsilon$ by working backwards from $|f(x)-L|<\\varepsilon$.\n2. **Formal proof:** Given $\\varepsilon>0$, choose $\\delta=$ (your formula from step 1). Then for all $x$ with $0<|x-a|<\\delta$, show $|f(x)-L|<\\varepsilon$.\n\n**Key algebraic step:** Often need $|f(x)-L|=|\\text{expression}|\\cdot|x-a|$; bound the expression part independently, then use $|x-a|<\\delta$.\n\n**Squeeze Theorem:** If $g(x)\\leq f(x)\\leq h(x)$ near $x=a$ and $\\lim_{x\\to a}g(x)=\\lim_{x\\to a}h(x)=L$, then $\\lim_{x\\to a}f(x)=L$.\n\n**Usage:** When $f(x)$ is hard to bound directly, find $g$ and $h$ with the same limit. Classic: $|\\sin(1/x)|\\leq 1$, so $-|x|\\leq x\\sin(1/x)\\leq|x|$.\n\n**Applying IVT:** To show $f$ has a root in $(a,b)$: show $f$ is continuous and $f(a)\\cdot f(b)<0$ (different signs).",
+      "body_he_md": "**תבנית הוכחת $\\varepsilon$-$\\delta$:**\n1. **עבודת גיבוי** (לא מוצגת): מוצאים $\\delta$ בפונקציה של $\\varepsilon$ בעבודה לאחור מ-$|f(x)-L|<\\varepsilon$.\n2. **הוכחה פורמלית:** נתון $\\varepsilon>0$, בוחרים $\\delta=$... ואז מראים שלכל $0<|x-a|<\\delta$: $|f(x)-L|<\\varepsilon$.\n\n**צעד אלגברי מפתח:** לרוב $|f(x)-L|=|\\text{ביטוי}|\\cdot|x-a|$; חוסמים את הביטוי ואז משתמשים ב-$|x-a|<\\delta$.\n\n**משפט הסנדביץ׳:** אם $g(x)\\leq f(x)\\leq h(x)$ וגם $\\lim g=\\lim h=L$, אז $\\lim f=L$.\n\n**שימוש IVT:** להוכחת שורש ב-$(a,b)$: מראים רציפות וסימנים שונים ב-$f(a),f(b)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Squeeze Theorem: $\\lim_{x\\to 0}x\\sin(1/x)$",
+      "title_he": "דוגמה פתורה 1 — משפט הסנדביץ׳: $\\lim_{x\\to 0}x\\sin(1/x)$",
+      "body_en_md": "**Find $\\lim_{x\\to 0}x\\sin(1/x)$ using the Squeeze Theorem.**\n\n**Setup:** $\\sin(1/x)$ oscillates wildly near $0$, so substitution fails. We use bounds.\n\n**Step 1 — Bound $\\sin(1/x)$:** For all $x\\neq 0$: $-1\\leq\\sin(1/x)\\leq 1$.\n\n**Step 2 — Multiply by $|x|$:**\n$$-|x|\\leq x\\sin(1/x)\\leq|x|.$$\n(When $x>0$, multiply by $x$; when $x<0$, both inequalities flip and the result is the same: $-|x|\\leq x\\sin(1/x)\\leq|x|$.)\n\n**Step 3 — Apply Squeeze:** $\\lim_{x\\to 0}(-|x|)=0$ and $\\lim_{x\\to 0}|x|=0$.\n\nBy the Squeeze Theorem:\n$$\\lim_{x\\to 0}x\\sin(1/x)=0. \\quad \\blacksquare$$",
+      "body_he_md": "**מצאו $\\lim_{x\\to 0}x\\sin(1/x)$ בעזרת משפט הסנדביץ׳.**\n\n**הגדרה:** $\\sin(1/x)$ מתנדנד בחוזקה ליד $0$, לכן לא ניתן להציב.\n\n**שלב 1 — חסם $\\sin(1/x)$:** $-1\\leq\\sin(1/x)\\leq 1$ לכל $x\\neq 0$.\n\n**שלב 2 — הכפלה ב-$|x|$:**\n$$-|x|\\leq x\\sin(1/x)\\leq|x|.$$\n\n**שלב 3 — סנדביץ׳:** $\\lim_{x\\to 0}(\\pm|x|)=0$.\n\nלפי משפט הסנדביץ׳: $\\lim_{x\\to 0}x\\sin(1/x)=0$. $\\blacksquare$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the Squeeze Theorem to show $\\lim_{x\\to 0}x^2\\cos(1/x)=0$.",
+      "body_he_md": "השתמשו במשפט הסנדביץ׳ להוכחת $\\lim_{x\\to 0}x^2\\cos(1/x)=0$.",
+      "checkpoint_solution_en": "$-1\\leq\\cos(1/x)\\leq1$. Multiply by $x^2\\geq0$: $-x^2\\leq x^2\\cos(1/x)\\leq x^2$. Both bounds $\\to 0$. By Squeeze, limit $=0$.",
+      "checkpoint_solution_he": "$-x^2\\leq x^2\\cos(1/x)\\leq x^2$. שניהם $\\to 0$. לפי סנדביץ׳: גבול $=0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Prove $\\lim_{x\\to 2}(3x-1)=5$ Using $\\varepsilon$-$\\delta$",
+      "title_he": "דוגמה פתורה 2 — הוכחת $\\lim_{x\\to 2}(3x-1)=5$ בעזרת $\\varepsilon$-$\\delta$",
+      "body_en_md": "**Prove that $\\lim_{x\\to 2}(3x-1)=5$.**\n\n**Scratch work:** We need $|(3x-1)-5|=|3x-6|=3|x-2|<\\varepsilon$. So $|x-2|<\\varepsilon/3$. Choose $\\delta=\\varepsilon/3$.\n\n**Formal proof:**\n\nGiven $\\varepsilon>0$, let $\\delta=\\varepsilon/3$. Suppose $0<|x-2|<\\delta$. Then:\n$$|(3x-1)-5|=|3x-6|=3|x-2|<3\\delta=3\\cdot\\frac{\\varepsilon}{3}=\\varepsilon.$$\n\nTherefore $\\lim_{x\\to 2}(3x-1)=5$. $\\blacksquare$\n\n**Key principle:** For linear functions $f(x)=mx+b$, $\\delta=\\varepsilon/|m|$ always works.",
+      "body_he_md": "**הוכיחו ש-$\\lim_{x\\to 2}(3x-1)=5$.**\n\n**עבודת גיבוי:** $|(3x-1)-5|=3|x-2|<\\varepsilon$ → בוחרים $\\delta=\\varepsilon/3$.\n\n**הוכחה פורמלית:**\n\nנתון $\\varepsilon>0$, נבחר $\\delta=\\varepsilon/3$. נניח $0<|x-2|<\\delta$. אז:\n$$|(3x-1)-5|=3|x-2|<3\\delta=\\varepsilon.$$\n\nלכן $\\lim_{x\\to 2}(3x-1)=5$. $\\blacksquare$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Prove using $\\varepsilon$-$\\delta$ that $\\lim_{x\\to 3}(2x+1)=7$.",
+      "body_he_md": "הוכיחו בעזרת $\\varepsilon$-$\\delta$ ש-$\\lim_{x\\to 3}(2x+1)=7$.",
+      "checkpoint_solution_en": "Scratch: $|(2x+1)-7|=2|x-3|<\\varepsilon$ → $\\delta=\\varepsilon/2$. Formal: given $\\varepsilon>0$, set $\\delta=\\varepsilon/2$; then $0<|x-3|<\\delta$ gives $|(2x+1)-7|=2|x-3|<2\\delta=\\varepsilon$.",
+      "checkpoint_solution_he": "$\\delta=\\varepsilon/2$. $|(2x+1)-7|=2|x-3|<2\\delta=\\varepsilon$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Prove $\\lim_{x\\to\\infty}(1+1/x)^x = e$ via Monotone Convergence",
+      "title_he": "דוגמה פתורה 3 — הוכחת $\\lim_{x\\to\\infty}(1+1/x)^x = e$ דרך התכנסות מונוטונית",
+      "body_en_md": "**Show that $a_n=(1+1/n)^n$ is bounded above and increasing, so $\\lim_{n\\to\\infty}(1+1/n)^n$ exists. We define this limit to be $e$.**\n\n**Step 1 — Bounded above by 3 (binomial theorem):**\n$$\\left(1+\\frac{1}{n}\\right)^n = \\sum_{k=0}^n\\binom{n}{k}\\frac{1}{n^k} = \\sum_{k=0}^n\\frac{n(n-1)\\cdots(n-k+1)}{k!\\,n^k}\\leq\\sum_{k=0}^n\\frac{1}{k!}.$$\n\nSince $k!\\geq 2^{k-1}$ for $k\\geq 1$:\n$$\\sum_{k=0}^n\\frac{1}{k!}\\leq 1+1+\\frac{1}{2}+\\frac{1}{4}+\\cdots\\leq 1+\\frac{1}{1-1/2}=3.$$\n\n**Step 2 — Increasing (AM-GM):**\nApply AM-GM to $n$ copies of $(1+1/n)$ and one copy of $1$:\n$$\\frac{n(1+1/n)+1}{n+1}\\geq\\left[(1+1/n)^n\\cdot 1\\right]^{1/(n+1)}.$$\nSo $(n+2)/(n+1)\\geq a_n^{1/(n+1)}$, giving $a_{n+1}\\geq a_n$.\n\n**Step 3 — MCT:** Monotone increasing and bounded above → converges. Its limit is $e\\approx2.718$.\n\n**Continuity extension:** $\\lim_{x\\to\\infty}(1+1/x)^x=e$ for real $x$ follows from the sequence result and monotonicity arguments.",
+      "body_he_md": "**הראו ש-$a_n=(1+1/n)^n$ חסומה מלמעלה ועולה, ולכן $\\lim_{n\\to\\infty}(1+1/n)^n$ קיים. מגדירים גבול זה כ-$e$.**\n\n**שלב 1 — חסם עליון 3 (בינום):**\n$a_n = \\sum_{k=0}^n\\frac{n(n-1)\\cdots(n-k+1)}{k!n^k}\\leq\\sum_{k=0}^n\\frac{1}{k!}\\leq 3$.\n\n**שלב 2 — עולה (AM-GM):**\nAM-GM על $n$ מופעי $(1+1/n)$ ו-1: $(n+2)/(n+1)\\geq a_n^{1/(n+1)}$, לכן $a_{n+1}\\geq a_n$.\n\n**שלב 3 — MCT:** עולה + חסומה → מתכנסת. גבולה הוא $e\\approx2.718$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Decision Table — Which Limit Technique?",
+      "title_he": "טבלת החלטה — איזה טכניקה לגבולות?",
+      "body_en_md": "| Situation | Technique |\n|---|---|\n| Prove $\\lim_{x\\to a}f(x)=L$ rigorously | $\\varepsilon$-$\\delta$ |\n| $f(x)$ is between two simple functions | Squeeze Theorem |\n| $f$ oscillates (like $\\sin(1/x)$) | Squeeze with $\\pm|x|$ or $\\pm x^2$ |\n| Show a root exists in $(a,b)$ | IVT: check $f$ continuous, $f(a)\\cdot f(b)<0$ |\n| Limit of sequence | MCT (monotone + bounded) |\n| $\\lim(1+1/n)^n$ | Equals $e$ by definition |\n| $\\lim_{x\\to 0}\\sin(x)/x$ | Equals $1$ (standard limit) |\n\n**$\\varepsilon$-$\\delta$ recipe:**\n1. Compute $|f(x)-L|$ and factor out $|x-a|$.\n2. For the remaining factor, bound it by a constant $M$ near $a$.\n3. Choose $\\delta=\\min(1, \\varepsilon/M)$ (the min ensures $x$ stays near $a$).",
+      "body_he_md": "| מצב | טכניקה |\n|---|---|\n| הוכחת $\\lim_{x\\to a}f(x)=L$ בקפדנות | $\\varepsilon$-$\\delta$ |\n| $f(x)$ בין שתי פונקציות פשוטות | סנדביץ׳ |\n| $f$ מתנדנד | סנדביץ׳ עם $\\pm|x|$ |\n| קיום שורש ב-$(a,b)$ | IVT: רציפות + סימנים שונים |\n| גבול סדרה | MCT |\n| $\\lim(1+1/n)^n$ | $= e$ בהגדרה |\n\n**מתכון $\\varepsilon$-$\\delta$:**\n1. חשבו $|f(x)-L|$ ופרקו $|x-a|$.\n2. חסמו את הגורם הנותר ב-$M$ ליד $a$.\n3. בחרו $\\delta=\\min(1,\\varepsilon/M)$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Use the Squeeze Theorem to find $\\lim_{n\\to\\infty}\\dfrac{\\cos n}{n}$.",
+          "body_he": "השתמשו במשפט הסנדביץ׳ למציאת $\\lim_{n\\to\\infty}\\dfrac{\\cos n}{n}$.",
+          "solution_en": "$-1/n\\leq\\cos n/n\\leq 1/n$. Both $\\to 0$. By Squeeze: limit $=0$.",
+          "solution_he": "$-1/n\\leq\\cos n/n\\leq1/n\\to0$. גבול $=0$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Prove that $f(x)=x^2$ is continuous at $x=2$.",
+          "body_he": "הוכיחו ש-$f(x)=x^2$ רציפה ב-$x=2$.",
+          "solution_en": "$\\lim_{x\\to2}x^2=4=f(2)$ by the limit law for products (since $\\lim_{x\\to2}x=2$).",
+          "solution_he": "$\\lim_{x\\to2}x^2=4=f(2)$. רציפה."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "What is $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$?",
+          "body_he": "מהו $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$?",
+          "solution_en": "$1$. This is a standard limit proved by the Squeeze theorem using the geometric inequality $\\sin x \\leq x \\leq \\tan x$ for $0 < x < \\pi/2$.",
+          "solution_he": "$1$. גבול סטנדרטי: $\\sin x \\leq x \\leq \\tan x$ → סנדביץ׳."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Use IVT to show $x^3-x-1=0$ has a root in $(1,2)$.",
+          "body_he": "השתמשו ב-IVT להוכחת קיום שורש ל-$x^3-x-1=0$ ב-$(1,2)$.",
+          "solution_en": "$f(x)=x^3-x-1$ is continuous (polynomial). $f(1)=1-1-1=-1<0$. $f(2)=8-2-1=5>0$. By IVT, $\\exists x_0\\in(1,2)$ with $f(x_0)=0$.",
+          "solution_he": "$f(1)=-1<0$, $f(2)=5>0$. IVT → $\\exists x_0\\in(1,2)$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Prove $\\lim_{x\\to 3}(2x-5)=1$ using $\\varepsilon$-$\\delta$.",
+          "body_he": "הוכיחו $\\lim_{x\\to 3}(2x-5)=1$ בעזרת $\\varepsilon$-$\\delta$.",
+          "solution_en": "Scratch: $|(2x-5)-1|=2|x-3|<\\varepsilon$ → $\\delta=\\varepsilon/2$. Formal: given $\\varepsilon$, set $\\delta=\\varepsilon/2$; $0<|x-3|<\\delta$ → $|(2x-5)-1|=2|x-3|<\\varepsilon$.",
+          "solution_he": "$\\delta=\\varepsilon/2$. $|(2x-5)-1|=2|x-3|<2\\delta=\\varepsilon$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Use the Squeeze Theorem to prove $\\lim_{x\\to 0}x^2\\sin(1/x^2)=0$.",
+          "body_he": "השתמשו בסנדביץ׳ להוכחת $\\lim_{x\\to 0}x^2\\sin(1/x^2)=0$.",
+          "solution_en": "$-x^2\\leq x^2\\sin(1/x^2)\\leq x^2$. Both $\\to 0$. By Squeeze: limit $=0$.",
+          "solution_he": "$-x^2\\leq x^2\\sin(1/x^2)\\leq x^2\\to 0$. גבול $=0$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Prove $\\lim_{x\\to 1}x^2=1$ using $\\varepsilon$-$\\delta$.",
+          "body_he": "הוכיחו $\\lim_{x\\to 1}x^2=1$ בעזרת $\\varepsilon$-$\\delta$.",
+          "solution_en": "$|x^2-1|=|x+1||x-1|$. For $|x-1|<1$: $|x|<2$, so $|x+1|\\leq|x|+1<3$. Thus $|x^2-1|<3|x-1|<\\varepsilon$ if $|x-1|<\\varepsilon/3$. Choose $\\delta=\\min(1,\\varepsilon/3)$.",
+          "solution_he": "$|x^2-1|=|x+1||x-1|\\leq 3|x-1|<\\varepsilon$. בוחרים $\\delta=\\min(1,\\varepsilon/3)$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Show that $f(x)=|x|$ is continuous at $0$ using $\\varepsilon$-$\\delta$.",
+          "body_he": "הראו ש-$f(x)=|x|$ רציפה ב-$0$ בעזרת $\\varepsilon$-$\\delta$.",
+          "solution_en": "We need $|f(x)-f(0)|=||x|-0|=|x|<\\varepsilon$ when $|x-0|=|x|<\\delta$. Choose $\\delta=\\varepsilon$: $|x|<\\delta=\\varepsilon$ gives $||x||<\\varepsilon$.",
+          "solution_he": "$|f(x)-0|=|x|<\\varepsilon$. בוחרים $\\delta=\\varepsilon$."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Use IVT to show $e^x + x = 0$ has exactly one solution.",
+          "body_he": "השתמשו ב-IVT להוכחת קיום פתרון יחיד ל-$e^x+x=0$.",
+          "solution_en": "$g(x)=e^x+x$. $g(-1)=e^{-1}-1\\approx-0.63<0$; $g(0)=1>0$. By IVT, $\\exists x_0\\in(-1,0)$ with $g(x_0)=0$. Uniqueness: $g'(x)=e^x+1>0$ always, so $g$ is strictly increasing → at most one root.",
+          "solution_he": "$g(-1)<0$, $g(0)>0$ → IVT: $\\exists$ שורש. $g'=e^x+1>0$ → חד-חד, לכן שורש יחיד."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\lim_{x\\to\\infty}\\dfrac{1}{x}=0$ using the $\\varepsilon$-$M$ definition.",
+          "body_he": "הוכיחו ש-$\\lim_{x\\to\\infty}\\dfrac{1}{x}=0$ בעזרת הגדרת $\\varepsilon$-$M$.",
+          "solution_en": "Given $\\varepsilon>0$, choose $M=1/\\varepsilon$. For $x>M$: $|1/x-0|=1/x<1/M=\\varepsilon$.",
+          "solution_he": "בוחרים $M=1/\\varepsilon$. $x>M$ → $1/x<\\varepsilon$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that if $\\lim_{x\\to a}f(x)=L$ and $\\lim_{x\\to a}g(x)=M$, then $\\lim_{x\\to a}[f(x)+g(x)]=L+M$.",
+          "body_he": "הוכיחו: אם $\\lim_{x\\to a}f=L$ ו-$\\lim_{x\\to a}g=M$, אז $\\lim_{x\\to a}[f+g]=L+M$.",
+          "solution_en": "Given $\\varepsilon>0$, find $\\delta_1,\\delta_2$ s.t. $|f-L|<\\varepsilon/2$ for $|x-a|<\\delta_1$ and $|g-M|<\\varepsilon/2$ for $|x-a|<\\delta_2$. Take $\\delta=\\min(\\delta_1,\\delta_2)$. Then $|(f+g)-(L+M)|\\leq|f-L|+|g-M|<\\varepsilon$.",
+          "solution_he": "לכל $\\varepsilon>0$: $|(f+g)-(L+M)|\\leq|f-L|+|g-M|<\\varepsilon/2+\\varepsilon/2=\\varepsilon$ עבור $|x-a|<\\delta=\\min(\\delta_1,\\delta_2)$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}=1$ using the inequality $\\cos x\\leq\\dfrac{\\sin x}{x}\\leq 1$ for $0<x<\\pi/2$.",
+          "body_he": "הוכיחו ש-$\\lim_{x\\to0}\\dfrac{\\sin x}{x}=1$ בעזרת האי-שוויון $\\cos x\\leq\\dfrac{\\sin x}{x}\\leq 1$.",
+          "solution_en": "For $0<x<\\pi/2$, we have (area argument): $\\frac{1}{2}\\sin x\\cos x\\leq\\frac{x}{2}\\leq\\frac{\\tan x}{2}$. Dividing by $\\frac{\\sin x}{2}$: $\\cos x\\leq\\frac{x}{\\sin x}\\leq\\frac{1}{\\cos x}$. Invert: $\\cos x\\leq\\frac{\\sin x}{x}\\leq\\frac{1}{\\cos x}$. As $x\\to0$: $\\cos x\\to1$ and $1/\\cos x\\to1$. By Squeeze, $\\lim_{x\\to0}\\frac{\\sin x}{x}=1$.",
+          "solution_he": "מארגומנט שטח: $\\cos x\\leq\\frac{\\sin x}{x}\\leq\\frac{1}{\\cos x}$. כ-$x\\to0^+$: שני הצדדים $\\to1$. סנדביץ׳: גבול $=1$."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Use the IVT to show that every polynomial of odd degree has at least one real root.",
+          "body_he": "השתמשו ב-IVT להוכחת שכל פולינום ממעלה אי-זוגית יש לו לפחות שורש ממשי אחד.",
+          "solution_en": "Let $p(x)=a_n x^n+\\cdots+a_0$ with $n$ odd and $a_n>0$ (WLOG). As $x\\to+\\infty$: $p(x)\\to+\\infty$. As $x\\to-\\infty$: $p(x)\\to-\\infty$ (since $n$ is odd). So $\\exists M>0$ with $p(M)>0$ and $p(-M)<0$. By IVT (polynomial is continuous): $\\exists x_0\\in(-M,M)$ with $p(x_0)=0$.",
+          "solution_he": "$p(x)\\to+\\infty$ ל-$x\\to+\\infty$, $p(x)\\to-\\infty$ ל-$x\\to-\\infty$ (מעלה אי-זוגית). $\\exists M$: $p(M)>0$, $p(-M)<0$. IVT → $\\exists$ שורש."
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes",
+      "title_he": "הטעויות הנפוצות ביותר",
+      "body_en_md": "1. **Not choosing $\\delta$ in terms of $\\varepsilon$** — $\\delta$ must depend on $\\varepsilon$; a fixed $\\delta$ proves nothing.\n2. **Circular reasoning in $\\varepsilon$-$\\delta$:** Don't use the limit you're trying to prove in the proof.\n3. **Squeeze applied without both bounds having the same limit:** Both bounding functions MUST converge to the same $L$.\n4. **IVT conclusion:** IVT guarantees existence of a root, NOT uniqueness. For uniqueness, show $f$ is strictly monotone.\n5. **Forgetting $0<|x-a|<\\delta$:** The condition is strict: $x\\neq a$. This is important for functions undefined at $a$.",
+      "body_he_md": "1. **$\\delta$ לא תלוי ב-$\\varepsilon$** — $\\delta$ חייב להיות פונקציה של $\\varepsilon$; $\\delta$ קבוע לא מוכיח דבר.\n2. **מעגליות ב-$\\varepsilon$-$\\delta$:** לא להשתמש בגבול שמנסים להוכיח בהוכחה עצמה.\n3. **סנדביץ׳ עם חסמים שונים:** שתי הפונקציות החוסמות חייבות להתכנס לאותו $L$.\n4. **מסקנת IVT:** IVT מבטיח קיום שורש, לא יחידות. לייחודיות: מונוטוניות קפדנית.\n5. **$0<|x-a|<\\delta$ הוא קשיח:** $x\\neq a$. חשוב לפונקציות לא מוגדרות ב-$a$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — 5pt Focus",
+      "title_he": "לפני הבחינה — מיקוד 5 יח׳",
+      "body_en_md": "**Key theorems to cite:**\n- Squeeze Theorem, IVT, Extreme Value Theorem, MCT\n- $\\lim_{x\\to0}\\sin(x)/x=1$, $\\lim_{n\\to\\infty}(1+1/n)^n=e$\n\n**$\\varepsilon$-$\\delta$ proof structure:**\n1. State 'Given $\\varepsilon>0$'\n2. Choose $\\delta=\\ldots$ (function of $\\varepsilon$)\n3. Assume $0<|x-a|<\\delta$\n4. Show $|f(x)-L|<\\varepsilon$ (algebraically)\n5. Conclude\n\n**Exam patterns:**\n1. $\\varepsilon$-$\\delta$ proof for linear function $ax+b$ — 6 pts.\n2. $\\varepsilon$-$\\delta$ for $x^2$ at a point (requires bounding $|x+a|$) — 8 pts.\n3. Squeeze Theorem application (oscillating function) — 5 pts.\n4. IVT application (existence of root/solution) — 5 pts.",
+      "body_he_md": "**משפטים לציטוט:** סנדביץ׳, IVT, MCT, $\\lim\\sin x/x=1$, $\\lim(1+1/n)^n=e$.\n\n**מבנה הוכחת $\\varepsilon$-$\\delta$:**\n1. 'נתון $\\varepsilon>0$'\n2. בוחרים $\\delta=\\ldots$\n3. מניחים $0<|x-a|<\\delta$\n4. מראים $|f(x)-L|<\\varepsilon$\n5. מסכמים\n\n**תבניות בחינה:**\n1. $\\varepsilon$-$\\delta$ לפונקציה לינארית — 6 נק׳.\n2. $\\varepsilon$-$\\delta$ ל-$x^2$ בנקודה — 8 נק׳.\n3. סנדביץ׳ לפונקציה מתנדנדת — 5 נק׳.\n4. IVT לקיום שורש — 5 נק׳."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **$\\varepsilon$-$\\delta$:** $\\lim_{x\\to a}f(x)=L$ iff $\\forall\\varepsilon>0,\\exists\\delta>0:|x-a|<\\delta\\Rightarrow|f(x)-L|<\\varepsilon$.\n- **Squeeze:** $g\\leq f\\leq h$, $\\lim g=\\lim h=L$ → $\\lim f=L$.\n- **IVT:** Continuous on $[a,b]$, $f(a)$ and $f(b)$ have opposite signs → root exists.\n- **Continuity:** $\\lim_{x\\to a}f(x)=f(a)$; preserved under $+,-,\\cdot,\\div$, composition.\n- **Key limits:** $\\lim_{x\\to0}\\sin x/x=1$; $\\lim_{n\\to\\infty}(1+1/n)^n=e$.",
+      "body_he_md": "- **$\\varepsilon$-$\\delta$:** הגדרה פורמלית של גבול.\n- **סנדביץ׳:** $g\\leq f\\leq h$, שניהם $\\to L$ → $f\\to L$.\n- **IVT:** רציפות + סימנים שונים → שורש.\n- **רציפות:** $\\lim_{x\\to a}f(x)=f(a)$.\n- **גבולות מפתח:** $\\lim\\sin x/x=1$, $e=\\lim(1+1/n)^n$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What does $\\lim_{x\\to a}f(x)=L$ mean in plain language?",
+      "stem_he": "מה פירוש $\\lim_{x\\to a}f(x)=L$ בשפה פשוטה?",
+      "options_en": ["$f(a)=L$", "As $x$ gets close to $a$, $f(x)$ gets arbitrarily close to $L$", "$f$ is continuous at $a$", "$L$ is the maximum of $f$"],
+      "options_he": ["$f(a)=L$", "כ-$x$ מתקרב ל-$a$, $f(x)$ מתקרב ל-$L$", "$f$ רציפה ב-$a$", "$L$ הוא המקסימום של $f$"],
+      "correct_index": 1,
+      "explanation_en": "The limit says $f(x)$ gets close to $L$ as $x$ approaches $a$, regardless of $f(a)$.",
+      "explanation_he": "הגבול אומר ש-$f(x)$ מתקרב ל-$L$ כ-$x$ מתקרב ל-$a$, ללא קשר ל-$f(a)$.",
+      "skill_atoms": ["limit_definition"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What is $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$?",
+      "stem_he": "מהו $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$?",
+      "options_en": ["$0$", "$\\pi$", "$1$", "undefined"],
+      "options_he": ["$0$", "$\\pi$", "$1$", "לא מוגדר"],
+      "correct_index": 2,
+      "explanation_en": "Standard limit: $\\lim_{x\\to0}\\sin(x)/x=1$ (proved by Squeeze Theorem).",
+      "explanation_he": "גבול סטנדרטי: $\\lim_{x\\to0}\\sin x/x=1$.",
+      "skill_atoms": ["standard_limits"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Prove $\\lim_{x\\to2}(3x-1)=5$ using the $\\varepsilon$-$\\delta$ definition.",
+      "stem_he": "הוכיחו $\\lim_{x\\to2}(3x-1)=5$ בעזרת $\\varepsilon$-$\\delta$.",
+      "rubric_en": "Full (3/3): states $\\varepsilon>0$, chooses $\\delta=\\varepsilon/3$, shows $|(3x-1)-5|=3|x-2|<\\varepsilon$. Partial (2/3): correct $\\delta$ but incomplete algebra.",
+      "rubric_he": "מלא (3/3): $\\varepsilon>0$, $\\delta=\\varepsilon/3$, $3|x-2|<\\varepsilon$.",
+      "explanation_en": "Choose $\\delta=\\varepsilon/3$: $|(3x-1)-5|=3|x-2|<3\\cdot\\varepsilon/3=\\varepsilon$.",
+      "explanation_he": "$\\delta=\\varepsilon/3$. $3|x-2|<\\varepsilon$.",
+      "skill_atoms": ["epsilon_delta_proof"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Use the Squeeze Theorem to find $\\lim_{x\\to 0}x\\sin(1/x)$.",
+      "stem_he": "השתמשו בסנדביץ׳ למציאת $\\lim_{x\\to0}x\\sin(1/x)$.",
+      "rubric_en": "Full (3/3): $-|x|\\leq x\\sin(1/x)\\leq|x|$, both $\\to0$, Squeeze gives $0$.",
+      "rubric_he": "מלא (3/3): $-|x|\\leq x\\sin(1/x)\\leq|x|\\to0$.",
+      "explanation_en": "$-|x|\\leq x\\sin(1/x)\\leq|x|\\to0$. Limit $=0$.",
+      "explanation_he": "גבול $=0$ לפי סנדביץ׳.",
+      "skill_atoms": ["squeeze_theorem"],
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove that $x^5 - 3x + 1 = 0$ has a root in the interval $(1,2)$.",
+      "stem_he": "הוכיחו ש-$x^5-3x+1=0$ בעל שורש בקטע $(1,2)$.",
+      "rubric_en": "Full (3/3): states IVT, computes $f(1)=-1<0$ and $f(2)=27>0$, concludes. Partial (2/3): correct computation but doesn't cite IVT or continuity.",
+      "rubric_he": "מלא (3/3): IVT, $f(1)<0$, $f(2)>0$, מסקנה.",
+      "explanation_en": "$f(x)=x^5-3x+1$ is continuous. $f(1)=1-3+1=-1<0$. $f(2)=32-6+1=27>0$. By IVT, $\\exists x_0\\in(1,2)$ with $f(x_0)=0$.",
+      "explanation_he": "$f(1)=-1<0$, $f(2)=27>0$. IVT → שורש ב-$(1,2)$.",
+      "skill_atoms": ["intermediate_value_theorem", "continuity"],
+      "points_level_min": "5pt"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "$\\varepsilon$-$\\delta$ recipe: scratch work finds $\\delta$; formal proof states $\\delta$ upfront and verifies.",
+      "Squeeze Theorem: bound the oscillating part by $\\pm1$ and multiply by the vanishing factor.",
+      "IVT: needs continuous function and opposite signs at endpoints.",
+      "$\\lim_{x\\to0}\\sin x/x=1$ and $\\lim(1+1/n)^n=e$ are the two most important standard limits.",
+      "Linear functions: $\\delta=\\varepsilon/|m|$ always works."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "$\\delta$ can be a fixed number independent of $\\varepsilon$",
+        "correction": "$\\delta$ must depend on $\\varepsilon$. For each smaller $\\varepsilon$, we need a smaller (or equal) $\\delta$.",
+        "detect_phrase_en": "let delta equal 1",
+        "detect_phrase_he": "נבחר דלתא שווה 1"
+      },
+      {
+        "wrong": "IVT proves uniqueness of root",
+        "correction": "IVT only proves existence. For uniqueness, use strict monotonicity.",
+        "detect_phrase_en": "unique root IVT",
+        "detect_phrase_he": "שורש יחיד IVT"
+      }
+    ],
+    "tutor_pacing_hint": "Start with the intuition: '$\\varepsilon$ is the error tolerance, $\\delta$ is the control'. Prove the linear case first ($\\delta=\\varepsilon/|m|$). Then squeeze theorem (more geometric). IVT last — it's conceptually clearest but needs a proof of the real numbers.",
+    "skill_atoms_unlocked": [
+      "epsilon_delta_proof",
+      "squeeze_theorem",
+      "intermediate_value_theorem",
+      "limit_definition",
+      "continuity",
+      "standard_limits"
+    ],
+    "prerequisites_to_check_before_teaching": ["limits_4pt", "sequences_5pt"],
+    "next_recommended": ["sequences_5pt", "function_analysis_5pt"]
+  }
 }
