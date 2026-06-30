@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Clock } from 'lucide-react';
+import { ChevronRight, Clock, Sparkles } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
@@ -13,6 +13,7 @@ import { DueReviewsWidget } from '@/components/due-reviews-widget';
 import { currentActiveWeek } from '@/lib/learning-path-types';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
+import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 import type { LearnerStreak } from '@/lib/neon-db';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
 
@@ -45,6 +46,8 @@ const STR = {
     statusDone: 'הושלם',
     statusInProgress: 'בתהליך',
     statusNew: 'חדש',
+    actionStart: 'התחל',
+    actionContinue: 'המשך',
     minutes: (n: number) => `${n} דק׳`,
   },
   en: {
@@ -66,6 +69,8 @@ const STR = {
     statusDone: 'Done',
     statusInProgress: 'In Progress',
     statusNew: 'New',
+    actionStart: 'Start',
+    actionContinue: 'Continue',
     minutes: (n: number) => `${n} min`,
   },
 } as const;
@@ -127,24 +132,45 @@ function firstName(displayName: string): string {
 
 function masteryStatus(
   mastery: number | null | undefined,
-  isHe: boolean,
+  locale: 'he' | 'en',
 ): { label: string; variant: 'success' | 'warning' | 'secondary' } {
-  const t = STR[isHe ? 'he' : 'en'];
+  const t = STR[locale];
   if (mastery == null || mastery === 0) {
-    return { label: t.statusNew, variant: 'secondary' };
+    return { label: t.actionStart, variant: 'secondary' };
   }
   if (mastery >= 0.7) {
     return { label: t.statusDone, variant: 'success' };
   }
-  return { label: t.statusInProgress, variant: 'warning' };
+  return { label: t.actionContinue, variant: 'warning' };
 }
 
-function conceptDisplayName(concept: PlanConcept, isHe: boolean): string {
-  if (isHe && concept.name_he?.trim()) return concept.name_he;
-  return concept.name;
+function conceptDisplayName(concept: PlanConcept, locale: 'he' | 'en'): string {
+  const titles = resolveConceptTitles(concept.concept_id, {
+    title_en: concept.name,
+    title_he: concept.name_he ?? null,
+  });
+  return pickConceptTitle(titles, locale);
 }
 
-function EstimatedGradePill({ isHe }: { isHe: boolean }) {
+function resolvePlanSubject(
+  conceptSubject: string,
+  subjects?: string[] | null,
+  pointsGroup?: string | null,
+): string {
+  if (conceptSubject !== 'math' && conceptSubject !== 'physics') {
+    return conceptSubject;
+  }
+  const enrolled = subjects ?? [];
+  if (enrolled.length === 1) return enrolled[0]!;
+  const specific = enrolled.find(
+    (s) => s.includes('math') || s.includes('physics') || s === 'makhina' || s === 'university_prep',
+  );
+  if (specific) return specific;
+  if (pointsGroup === 'makhina') return 'makhina';
+  return conceptSubject;
+}
+
+function EstimatedGradePill({ isHe, onGradient = false }: { isHe: boolean; onGradient?: boolean }) {
   const [grade, setGrade] = useState<number | null>(null);
 
   useEffect(() => {
@@ -167,7 +193,14 @@ function EstimatedGradePill({ isHe }: { isHe: boolean }) {
 
   const t = STR[isHe ? 'he' : 'en'];
   return (
-    <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-muted-foreground">
+    <span
+      className={cn(
+        'flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium',
+        onGradient
+          ? 'bg-white/15 text-white backdrop-blur-sm'
+          : 'border border-border bg-card text-muted-foreground',
+      )}
+    >
       <span aria-hidden>📈</span>
       {t.estGrade(grade)}
     </span>
@@ -196,16 +229,17 @@ function PlanItemRow({
     subjects,
   );
   const estMinutes = lessonsById.get(concept.concept_id)?.est_minutes;
-  const status = masteryStatus(concept.mastery, isHe);
+  const status = masteryStatus(concept.mastery, locale);
   const emoji = subjectIcon(concept.subject);
-  const subjectName = getSubjectLabel(concept.subject, locale);
+  const subjectSlug = resolvePlanSubject(concept.subject, subjects, pointsGroup);
+  const subjectName = getSubjectLabel(subjectSlug, locale);
 
   return (
     <Link
       href={href}
       className={cn(
-        'group flex items-center gap-3 rounded-xl border border-border p-4 transition-all duration-200 hover:border-primary/40 hover:shadow-md',
-        isFirst ? 'border-l-4 border-l-primary bg-card' : 'card-punch',
+        'group flex items-center gap-3 rounded-xl p-4 transition-all duration-200 hover:scale-[1.01]',
+        isFirst ? 'iridescent-border ring-2 ring-primary/40' : 'card-punch shadow-sm',
       )}
     >
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl" aria-hidden>
@@ -214,7 +248,7 @@ function PlanItemRow({
 
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-foreground" dir="auto">
-          {conceptDisplayName(concept, isHe)}
+          {conceptDisplayName(concept, locale)}
         </p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
           <span className="text-xs text-muted-foreground">{subjectName}</span>
@@ -243,11 +277,27 @@ function PlanItemRow({
   );
 }
 
-function SectionHeading({ children }: { children: ReactNode }) {
+function SectionHeading({
+  children,
+  accent = 'primary',
+}: {
+  children: ReactNode;
+  accent?: 'primary' | 'cyan';
+}) {
   return (
-    <h2 className="font-display mb-4 flex items-center text-xl font-semibold">
-      <span className="me-2 inline-block h-2 w-2 rounded-full bg-primary" aria-hidden />
-      {children}
+    <h2 className="font-display mb-4 flex items-center gap-2 text-xl font-semibold">
+      <Sparkles
+        className={cn('h-5 w-5', accent === 'cyan' ? 'text-accent-cyan' : 'text-primary')}
+        aria-hidden
+      />
+      <span
+        className={cn(
+          'bg-gradient-to-r bg-clip-text text-transparent',
+          accent === 'cyan' ? 'from-primary to-accent-cyan' : 'from-primary to-accent-magenta',
+        )}
+      >
+        {children}
+      </span>
     </h2>
   );
 }
@@ -309,51 +359,53 @@ export function DashboardContent({
   return (
     <div dir={isHe ? 'rtl' : 'ltr'} className="space-y-8">
       {/* Section 1 — Welcome hero */}
-      <header className="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-background to-accent-magenta/5 p-6">
+      <header className="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-accent-magenta p-6 shadow-md md:p-8">
         <div
-          className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-primary/10 blur-3xl"
+          className="absolute -top-12 end-0 h-40 w-40 rounded-full bg-white/10 blur-3xl"
           aria-hidden
         />
-        <div className="relative space-y-4">
-          <h1 className="font-display text-3xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
-              {t.welcome(name)}
-            </span>
+        <div
+          className="absolute -bottom-8 start-0 h-32 w-32 rounded-full bg-accent-cyan/20 blur-2xl"
+          aria-hidden
+        />
+        <div className="relative space-y-4 text-primary-foreground">
+          <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            {t.welcome(name)}
           </h1>
 
           {showMakhinaCue ? (
-            <p className="text-sm font-medium text-primary/80">{t.makhinaCue}</p>
+            <p className="text-sm font-medium text-white/90">{t.makhinaCue}</p>
           ) : null}
 
           {isExamCountdown ? (
-            <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+            <span className="inline-flex rounded-full bg-white/20 px-4 py-1.5 text-sm font-semibold backdrop-blur-sm">
               {subtitle}
             </span>
           ) : (
-            <p className="text-muted-foreground">{subtitle}</p>
+            <p className="text-white/80">{subtitle}</p>
           )}
 
           {subjects?.includes('makhina') || pointsGroup === 'makhina' ? (
-            <p className="text-sm text-muted-foreground" dir={isHe ? 'rtl' : 'ltr'}>
+            <p className="text-sm text-white/75" dir={isHe ? 'rtl' : 'ltr'}>
               {isHe ? 'המסע שלך לאוניברסיטה 🎓' : 'Your university prep journey 🎓'}
             </p>
           ) : null}
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             {streakDays > 0 ? (
-              <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur-sm">
                 <span aria-hidden>🔥</span>
                 {isHe ? `${streakDays} ימים רצף` : `${streakDays}-day streak`}
               </span>
             ) : null}
-            <EstimatedGradePill isHe={isHe} />
+            <EstimatedGradePill isHe={isHe} onGradient />
           </div>
         </div>
       </header>
 
       {/* Section 2 — Learning Plan */}
-      <section>
-        <SectionHeading>{t.planTitle}</SectionHeading>
+      <section className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
+        <SectionHeading accent="cyan">{t.planTitle}</SectionHeading>
         {planItems.length > 0 ? (
           <div className="space-y-3">
             {planItems.map((concept, idx) => (
@@ -368,7 +420,7 @@ export function DashboardContent({
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-6 text-center">
+          <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-6 text-center">
             <p className="font-display font-medium">{t.noPlanTitle}</p>
             <p className="mt-1 text-sm text-muted-foreground">{t.noPlanBlurb}</p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -387,7 +439,7 @@ export function DashboardContent({
       <DueReviewsWidget sectionTitle={t.dueReviews} hideTitle />
 
       {/* Section 4 — Compact Agents */}
-      <section>
+      <section className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
         <SectionHeading>{t.agents}</SectionHeading>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {AGENT_CARDS.map(({ agent, emoji, name_he, name_en, desc_he, desc_en, hoverRing }) => (
@@ -395,7 +447,7 @@ export function DashboardContent({
               key={agent}
               href={`/app/chat/${agent}`}
               className={cn(
-                'card-punch group flex flex-col gap-2 rounded-xl p-4 transition-all duration-200',
+                'card-punch group flex flex-col gap-2 rounded-xl p-4 shadow-sm transition-all duration-200',
                 'hover:scale-[1.01] hover:ring-2',
                 hoverRing,
               )}

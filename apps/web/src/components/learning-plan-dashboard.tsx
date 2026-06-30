@@ -8,6 +8,7 @@ import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { currentActiveWeek } from '@/lib/learning-path-types';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
+import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
 
 /**
@@ -80,10 +81,11 @@ function masteryLabel(score: number | null | undefined, lang: Lang): string {
 }
 
 function displayName(concept: PlanConcept, lang: Lang): string {
-  if (lang === 'he' && concept.name_he && concept.name_he.trim().length > 0) {
-    return concept.name_he;
-  }
-  return concept.name;
+  const titles = resolveConceptTitles(concept.concept_id, {
+    title_en: concept.name,
+    title_he: concept.name_he ?? null,
+  });
+  return pickConceptTitle(titles, lang);
 }
 
 function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
