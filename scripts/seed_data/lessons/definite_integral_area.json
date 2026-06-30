@@ -1,16 +1,205 @@
 {
   "concept_id": "definite_integral_area",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Definite Integrals & Area Calculation",
-  "title_he": "אינטגרל מסוים וחישוב שטחים",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Definite Integrals, FTC & Area",
+  "title_he": "אינטגרל מסוים, FTC ושטחים",
+  "summary_en": "Riemann sums, Fundamental Theorem of Calculus, integral properties, area between curves, and engineering applications — connecting accumulation to area under graphs.",
+  "summary_he": "סכומי רימן, המשפט היסודי, תכונות האינטגרל, שטח בין עקומות ויישומים הנדסיים — חיבור הצטברות לשטח תחת גרף.",
+  "est_minutes": 30,
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "Riemann sums and definition",
+      "title_he": "סכומי רימן והגדרה",
+      "body_en_md": "Partition $[a,b]$ into subintervals, choose sample points $\\xi_i$, form\n$$S_n=\\sum_{i=1}^n f(\\xi_i)\\,\\Delta x_i.$$\n\nIf $f$ integrable, $\\displaystyle\\int_a^b f(x)\\,dx = \\lim_{\\|P\\|\\to 0} S_n$.\n\n**Interpretation:** signed area under $y=f(x)$ — regions below $x$-axis contribute negative area.\n\n**Special cases:** left/right/midpoint sums; for monotonic $f$, upper and lower sums bracket the integral.",
+      "body_he_md": "חלוקת $[a,b]$, נקודות $\\xi_i$:\n$$S_n=\\sum f(\\xi_i)\\,\\Delta x_i.$$\n\n$\\displaystyle\\int_a^b f = \\lim S_n$.\n\n**פרשנות:** שטח עם סימן — מתחת לציר $x$ שלילי.\n\n**מקרים:** סכומים שמאל/ימין/אמצע."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Fundamental Theorem of Calculus",
+      "title_he": "המשפט היסודי של החשבון (FTC)",
+      "body_en_md": "**Part 1:** If $f$ continuous on $[a,b]$, $F(x)=\\displaystyle\\int_a^x f(t)\\,dt$ is differentiable and $F'(x)=f(x)$.\n\n**Part 2:** If $F'=f$ on $[a,b]$, then\n$$\\boxed{\\int_a^b f(x)\\,dx = F(b)-F(a)}.$$\n\n**Example.** $\\displaystyle\\int_0^1 2x\\,dx = [x^2]_0^1 = 1$.\n\n**Example.** $\\displaystyle\\int_1^e \\frac{1}{x}\\,dx = [\\ln x]_1^e = 1$.\n\nFTC links **accumulation** (integral) to **net change** (antiderivative difference).",
+      "body_he_md": "**חלק 1:** $F(x)=\\int_a^x f$ $\\Rightarrow$ $F'=f$.\n\n**חלק 2:**\n$$\\int_a^b f = F(b)-F(a).$$\n\n**דוגמה.** $\\int_0^1 2x\\,dx = 1$.\n\nFTC מחבר הצטברות לשינוי נטו."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Properties and area between curves",
+      "title_he": "תכונות ושטח בין עקומות",
+      "body_en_md": "**Linearity:** $\\int (af+bg)=a\\int f + b\\int g$.\n**Additivity:** $\\int_a^b f + \\int_b^c f = \\int_a^c f$.\n**Order:** $f\\le g \\Rightarrow \\int f \\le \\int g$.\n\n**Area between** $f,g$ on $[a,b]$ where $f\\ge g$:\n$$A=\\int_a^b [f(x)-g(x)]\\,dx.$$\n\nIf curves cross, split at intersection points and use $|f-g|$ on each subinterval.\n\n**Example.** Area between $y=x$ and $y=x^2$ on $[0,1]$: $\\int_0^1 (x-x^2)\\,dx = \\dfrac{1}{2}-\\dfrac{1}{3}=\\dfrac{1}{6}$.",
+      "body_he_md": "**לינאריות, חיבוריות, סדר.**\n\n**שטח בין** $f,g$: $\\int [f-g]$ כש-$f\\ge g$.\n\n**דוגמה.** $y=x$ ו-$y=x^2$ על $[0,1]$: שטח $\\dfrac{1}{6}$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Engineering: total work from variable force",
+      "title_he": "הנדסה: עבודה מכוח משתנה",
+      "body_en_md": "Work $W=\\displaystyle\\int_a^b F(x)\\,dx$ when force depends on position (spring $F=kx$, etc.).\n\n**Example.** $F(x)=3x^2$ N from $x=0$ to $x=2$ m:\n$$W=\\int_0^2 3x^2\\,dx = [x^3]_0^2 = 8\\text{ J}.$$\n\nSimilarly: charge from current $Q=\\int I\\,dt$; mass from density — all **accumulation integrals**.",
+      "body_he_md": "עבודה $W=\\int F\\,dx$.\n\n**דוגמה.** $F=3x^2$, $0\\to 2$: $W=8$ J.\n\nגם: $Q=\\int I\\,dt$ — הצטברות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Problem-type map",
+      "title_he": "מפת סוגי בעיות",
+      "body_en_md": "| Question | Method |\n|---|---|\n| Evaluate $\\int_a^b f$ | Find antiderivative, apply FTC |\n| Area under one curve | $\\int |f|$ if needed for sign |\n| Area between curves | Split at intersections, $\\int|f-g|$ |\n| Net vs total quantity | Net = signed integral; total = $\\int|f|$ |\n\nUnits: integral of rate gives total change in accumulated quantity.",
+      "body_he_md": "| שאלה | שיטה |\n|---|---|\n| חישוב $\\int_a^b f$ | קדומה + FTC |\n| שטח תחת עקומה | $\\int |f|$ |\n| בין עקומות | פיצול בחיתוכים |\n| נטו מול כולל | signed vs $\\int|f|$ |"
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\displaystyle\\int_0^2 3x^2\\,dx=?$",
+      "stem_he": "$\\displaystyle\\int_0^2 3x^2\\,dx=?$",
+      "options_en": [
+        "$4$",
+        "$8$",
+        "$12$",
+        "$6$"
+      ],
+      "options_he": [
+        "$4$",
+        "$8$",
+        "$12$",
+        "$6$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$[x^3]_0^2=8$.",
+      "explanation_he": "$[x^3]_0^2=8$.",
+      "skill_atoms": [
+        "ftc_evaluate"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "FTC Part 2 requires:",
+      "stem_he": "FTC חלק 2 דורש:",
+      "options_en": [
+        "$f$ continuous and $F'=f$",
+        "$f$ only bounded",
+        "$F$ any function",
+        "$f$ differentiable"
+      ],
+      "options_he": [
+        "$f$ רציפה ו-$F'=f$",
+        "$f$ חסומה בלבד",
+        "$F$ כלשהי",
+        "$f$ גזירה"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Need antiderivative whose derivative is $f$.",
+      "explanation_he": "קדומה עם נגזרת $f$.",
+      "skill_atoms": [
+        "ftc_conditions"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Area between $y=x^2$ and $y=x$ on $[0,1]$?",
+      "stem_he": "שטח בין $y=x^2$ ו-$y=x$ על $[0,1]$?",
+      "options_en": [
+        "$1/2$",
+        "$1/3$",
+        "$1/6$",
+        "$1/12$"
+      ],
+      "options_he": [
+        "$1/2$",
+        "$1/3$",
+        "$1/6$",
+        "$1/12$"
+      ],
+      "correct_index": 2,
+      "explanation_en": "$\\int_0^1(x-x^2)dx=1/2-1/3=1/6$.",
+      "explanation_he": "$\\int_0^1(x-x^2)dx=1/6$.",
+      "skill_atoms": [
+        "area_between_curves"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "If $f(x)<0$ on $[a,b]$, then $\\int_a^b f(x)\\,dx$ is:",
+      "stem_he": "אם $f(x)<0$ על $[a,b]$, האינטגרל:",
+      "options_en": [
+        "Positive area",
+        "Negative (signed area below axis)",
+        "Zero",
+        "Undefined"
+      ],
+      "options_he": [
+        "שטח חיובי",
+        "שלילי (מתחת לציר)",
+        "אפס",
+        "לא מוגדר"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Integral is signed; negative where graph below $x$-axis.",
+      "explanation_he": "אינטגרל signed — שלילי מתחת לציר.",
+      "skill_atoms": [
+        "signed_area"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\dfrac{d}{dx}\\displaystyle\\int_2^x t^3\\,dt=?$",
+      "stem_he": "$\\dfrac{d}{dx}\\displaystyle\\int_2^x t^3\\,dt=?$",
+      "options_en": [
+        "$x^3$",
+        "$x^3-8$",
+        "$3x^2$",
+        "$\\int_2^x t^3\\,dt$"
+      ],
+      "options_he": [
+        "$x^3$",
+        "$x^3-8$",
+        "$3x^2$",
+        "$\\int_2^x t^3\\,dt$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "FTC Part 1: derivative of integral with variable upper limit is integrand at $x$.",
+      "explanation_he": "FTC חלק 1: $f(x)=x^3$.",
+      "skill_atoms": [
+        "ftc_part1"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "FTC Part 2: antiderivative evaluated at endpoints.",
+      "Area between curves needs top minus bottom; split at crossings.",
+      "Integral of rate equals net accumulated change."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Integral always equals geometric area",
+        "correction": "Integral is signed; use absolute value for total area.",
+        "detect_phrase_en": "integral is area always positive",
+        "detect_phrase_he": "אינטגרל תמיד שטח חיובי"
+      }
+    ],
+    "tutor_pacing_hint": "Draw shaded regions before setting up area integrals.",
+    "skill_atoms_unlocked": [
+      "ftc_evaluate",
+      "ftc_conditions",
+      "area_between_curves",
+      "signed_area",
+      "ftc_part1"
+    ]
+  }
 }

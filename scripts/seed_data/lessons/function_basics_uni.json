@@ -1,16 +1,204 @@
 {
   "concept_id": "function_basics_uni",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Functions — Domain, Range, Injectivity & Surjectivity",
-  "title_he": "פונקציות — תחום, טווח, חד-חד-ערכיות ועל",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Functions — Domain, Range & Elementary Families",
+  "title_he": "פונקציות — תחום, טווח ומשפחות אלמנטריות",
+  "summary_en": "Domain, range, injectivity, surjectivity, and the standard families (polynomial, rational, exponential, logarithmic, trigonometric) used throughout engineering Calc 1.",
+  "summary_he": "תחום, טווח, חד-חד-ערכיות, עליות ומשפחות הפונקציות הסטנדרטיות (פולינום, רציונלית, מעריכית, לוגריתמית, טריגונומטרית) בחשבון 1 להנדסה.",
+  "est_minutes": 25,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "What is a function?",
+      "title_he": "מהי פונקציה?",
+      "body_en_md": "A **function** $f$ from set $A$ to set $B$, written $f:A\\to B$, assigns **exactly one** output $f(x)\\in B$ to each input $x\\in A$.\n\n- **Domain** $D_f=A$: allowed inputs.\n- **Codomain** $B$: target set (may contain values never hit).\n- **Range** $R_f=\\{f(x):x\\in D_f\\}\\subseteq B$: values actually attained.\n\n**Vertical line test** (graphs in $\\mathbb{R}^2$): a curve is a function of $x$ iff no vertical line meets it more than once.\n\n**Example:** $f(x)=\\sqrt{x-1}$ requires $x-1\\ge 0$, so $D_f=[1,\\infty)$ and $R_f=[0,\\infty)$.",
+      "body_he_md": "פונקציה $f$ מקבוצה $A$ ל-$B$, $f:A\\to B$, מקצה **בדיוק ערך אחד** $f(x)\\in B$ לכל קלט $x\\in A$.\n\n- **תחום** $D_f=A$: קלטים מותרים.\n- **קד-טווח** $B$: קבוצת יעד.\n- **טווח** $R_f=\\{f(x):x\\in D_f\\}$: ערכים שמתקבלים בפועל.\n\n**מבחן הקו האנכי:** גרף הוא פונקציה של $x$ אם ורק אם אין קו אנכי שחותך אותו יותר מפעם אחת.\n\n**דוגמה:** $f(x)=\\sqrt{x-1}$ דורש $x\\ge 1$, לכן $D_f=[1,\\infty)$, $R_f=[0,\\infty)$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Injectivity, surjectivity, bijectivity",
+      "title_he": "חד-חד-ערכיות, עליות ובייקטיביות",
+      "body_en_md": "**Injective (one-to-one):** $f(x_1)=f(x_2)\\Rightarrow x_1=x_2$. Equivalently, distinct inputs give distinct outputs.\n\n**Surjective (onto $B$):** for every $y\\in B$ there exists $x\\in A$ with $f(x)=y$. Then $R_f=B$.\n\n**Bijective:** both injective and surjective — admits an inverse $f^{-1}:B\\to A$.\n\n**Horizontal line test:** $f$ is injective on an interval iff every horizontal line meets the graph at most once.\n\n**Examples:**\n- $f(x)=x^3$ is bijective $\\mathbb{R}\\to\\mathbb{R}$.\n- $f(x)=x^2$ is not injective on $\\mathbb{R}$; restricted to $[0,\\infty)$ it is injective onto $[0,\\infty)$.\n- $f(x)=e^x$ is injective, range $(0,\\infty)$, not surjective onto $\\mathbb{R}$.",
+      "body_he_md": "**חד-חד-ערכית:** $f(x_1)=f(x_2)\\Rightarrow x_1=x_2$.\n\n**על ($B$):** לכל $y\\in B$ קיים $x\\in A$ עם $f(x)=y$.\n\n**בייקטיבית:** חד-חד-ערכית ועל — קיימת פונקציה הפוכה $f^{-1}$.\n\n**מבחן הקו האופקי:** $f$ חד-חד-ערכית בקטע אם כל קו אופקי חותך את הגרף לכל היותר פעם אחת.\n\n**דוגמאות:**\n- $f(x)=x^3$ בייקטיבית $\\mathbb{R}\\to\\mathbb{R}$.\n- $f(x)=x^2$ אינה חד-חד-ערכית על $\\mathbb{R}$.\n- $f(x)=e^x$ חד-חד-ערכית, טווח $(0,\\infty)$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Finding domain and range",
+      "title_he": "מציאת תחום וטווח",
+      "body_en_md": "**Example 1.** $f(x)=\\dfrac{x+1}{x-2}$\n- Domain: denominator $\\ne 0$ $\\Rightarrow$ $D_f=\\mathbb{R}\\setminus\\{2\\}$.\n- Range: solve $y=\\dfrac{x+1}{x-2}$ for $x$: $y(x-2)=x+1 \\Rightarrow x(y-1)=2y+1 \\Rightarrow x=\\dfrac{2y+1}{y-1}$. Need $y\\ne 1$, so $R_f=\\mathbb{R}\\setminus\\{1\\}$.\n\n**Example 2.** $g(x)=\\ln(3-x)$\n- Need $3-x>0 \\Rightarrow D_g=(-\\infty,3)$.\n- Since $\\ln u$ covers $(-\\infty,\\infty)$ as $u\\in(0,\\infty)$, $R_g=\\mathbb{R}$.\n\n**Example 3.** $h(x)=\\sqrt{4-x^2}$\n- Need $4-x^2\\ge 0 \\Rightarrow x\\in[-2,2]$.\n- Maximum $\\sqrt{4}=2$, minimum $0$ $\\Rightarrow$ $R_h=[0,2]$.",
+      "body_he_md": "**דוגמה 1.** $f(x)=\\dfrac{x+1}{x-2}$\n- תחום: $x\\ne 2$ $\\Rightarrow$ $D_f=\\mathbb{R}\\setminus\\{2\\}$.\n- טווח: $y\\ne 1$ $\\Rightarrow$ $R_f=\\mathbb{R}\\setminus\\{1\\}$.\n\n**דוגמה 2.** $g(x)=\\ln(3-x)$\n- $3-x>0 \\Rightarrow D_g=(-\\infty,3)$, $R_g=\\mathbb{R}$.\n\n**דוגמה 3.** $h(x)=\\sqrt{4-x^2}$\n- $x\\in[-2,2]$, $R_h=[0,2]$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Elementary function families",
+      "title_he": "משפחות פונקציות אלמנטריות",
+      "body_en_md": "| Family | Typical form | Domain notes |\n|---|---|---|\n| Polynomial | $a_n x^n+\\cdots+a_0$ | $\\mathbb{R}$ |\n| Rational | $P(x)/Q(x)$ | exclude zeros of $Q$ |\n| Exponential | $a^x$, $e^x$ | $\\mathbb{R}$; range $(0,\\infty)$ if $a>0,a\\ne 1$ |\n| Logarithm | $\\log_a x$, $\\ln x$ | $(0,\\infty)$ |\n| Trigonometric | $\\sin x,\\cos x,\\tan x$ | $\\tan x$: exclude odd multiples of $\\pi/2$ |\n\n**Composition:** $(f\\circ g)(x)=f(g(x))$. Domain requires $x\\in D_g$ and $g(x)\\in D_f$.\n\n**Even / odd:** $f(-x)=f(x)$ (symmetric about $y$-axis); $f(-x)=-f(x)$ (origin symmetry). Useful in integration and Fourier courses later.",
+      "body_he_md": "| משפחה | צורה | הערות תחום |\n|---|---|---|\n| פולינום | $a_n x^n+\\cdots$ | $\\mathbb{R}$ |\n| רציונלית | $P/Q$ | לא ב-0 של $Q$ |\n| מעריכית | $e^x$ | $\\mathbb{R}$, טווח $(0,\\infty)$ |\n| לוגריתמית | $\\ln x$ | $(0,\\infty)$ |\n| טריגונומטרית | $\\sin,\\cos,\\tan$ | $\\tan$: לא ב-$\\pi/2$ אי-זוגי |\n\n**הרכבה:** $(f\\circ g)(x)=f(g(x))$.\n\n**זוגיות:** $f(-x)=f(x)$ זוגית; $f(-x)=-f(x)$ אי-זוגית."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Checklist for exam problems",
+      "title_he": "צ'ק-ליסט לבחינה",
+      "body_en_md": "1. Write $D_f$ first — denominators, even roots, logs.\n2. Sketch or recall graph shape for standard families.\n3. For injectivity on an interval, use monotonicity or horizontal line test.\n4. Inverse functions swap domain and range: $D_{f^{-1}}=R_f$, $R_{f^{-1}}=D_f$.\n\nThese skills appear in limits (domain near singularities), derivatives (chain rule on compositions), and integrals (substitution domains).",
+      "body_he_md": "1. כתבו $D_f$ תחילה — מכנים, שורשים, לוג.\n2. זכרו צורת גרף של משפחות סטנדרטיות.\n3. לחד-חד-ערכיות — מונוטוניות או מבחן קו אופקי.\n4. הפונקציה ההפוכה מחליפה תחום וטווח.\n\nמיומנויות אלו מופיעות בגבולות, נגזרות ואינטגרציה."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "What is the domain of $f(x)=\\dfrac{1}{x-3}$?",
+      "stem_he": "מה תחום $f(x)=\\dfrac{1}{x-3}$?",
+      "options_en": [
+        "$\\mathbb{R}$",
+        "$\\mathbb{R}\\setminus\\{3\\}$",
+        "$(3,\\infty)$",
+        "$[3,\\infty)$"
+      ],
+      "options_he": [
+        "$\\mathbb{R}$",
+        "$\\mathbb{R}\\setminus\\{3\\}$",
+        "$(3,\\infty)$",
+        "$[3,\\infty)$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Denominator zero at $x=3$.",
+      "explanation_he": "מכנה מתאפס ב-$x=3$.",
+      "skill_atoms": [
+        "find_function_domain"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which function is injective on $\\mathbb{R}$?",
+      "stem_he": "איזו פונקציה חד-חד-ערכית על $\\mathbb{R}$?",
+      "options_en": [
+        "$f(x)=x^2$",
+        "$f(x)=|x|$",
+        "$f(x)=x^3$",
+        "$f(x)=\\cos x$"
+      ],
+      "options_he": [
+        "$f(x)=x^2$",
+        "$f(x)=|x|$",
+        "$f(x)=x^3$",
+        "$f(x)=\\cos x$"
+      ],
+      "correct_index": 2,
+      "explanation_en": "$x^3$ is strictly increasing on $\\mathbb{R}$.",
+      "explanation_he": "$x^3$ עולה מונוטונית על $\\mathbb{R}$.",
+      "skill_atoms": [
+        "test_injectivity"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "If $f(x)=e^x$, what is $R_f$?",
+      "stem_he": "אם $f(x)=e^x$, מה $R_f$?",
+      "options_en": [
+        "$\\mathbb{R}$",
+        "$(0,\\infty)$",
+        "$[0,\\infty)$",
+        "$(-\\infty,0)$"
+      ],
+      "options_he": [
+        "$\\mathbb{R}$",
+        "$(0,\\infty)$",
+        "$[0,\\infty)$",
+        "$(-\\infty,0)$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$e^x>0$ for all $x$; every positive value is hit.",
+      "explanation_he": "$e^x>0$ תמיד; כל ערך חיובי מתקבל.",
+      "skill_atoms": [
+        "find_function_range"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Domain of $g(x)=\\ln(x-2)$?",
+      "stem_he": "תחום $g(x)=\\ln(x-2)$?",
+      "options_en": [
+        "$\\mathbb{R}$",
+        "$(2,\\infty)$",
+        "$[2,\\infty)$",
+        "$(-\\infty,2)$"
+      ],
+      "options_he": [
+        "$\\mathbb{R}$",
+        "$(2,\\infty)$",
+        "$[2,\\infty)$",
+        "$(-\\infty,2)$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Need $x-2>0$.",
+      "explanation_he": "צריך $x-2>0$.",
+      "skill_atoms": [
+        "find_function_domain"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "$f(x)=\\sqrt{x-1}$ is bijective from $[1,\\infty)$ to which set?",
+      "stem_he": "$f(x)=\\sqrt{x-1}$ בייקטיבית מ-$[1,\\infty)$ ל:",
+      "options_en": [
+        "$\\mathbb{R}$",
+        "$[0,\\infty)$",
+        "$(0,\\infty)$",
+        "$[1,\\infty)$"
+      ],
+      "options_he": [
+        "$\\mathbb{R}$",
+        "$[0,\\infty)$",
+        "$(0,\\infty)$",
+        "$[1,\\infty)$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Square root is increasing on $[1,\\infty)$; range $[0,\\infty)$.",
+      "explanation_he": "שורש עולה על $[1,\\infty)$; טווח $[0,\\infty)$.",
+      "skill_atoms": [
+        "test_bijectivity"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Domain restrictions come from denominators, logs, and even roots.",
+      "Injectivity on an interval often follows from strict monotonicity.",
+      "Inverse functions swap domain and range."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Domain of $1/(x-2)$ is all reals except where numerator is zero",
+        "correction": "Exclude zeros of the denominator, not numerator.",
+        "detect_phrase_en": "numerator zero",
+        "detect_phrase_he": "מונה מתאפס"
+      }
+    ],
+    "tutor_pacing_hint": "Start with domain of rational and log functions before injectivity proofs.",
+    "skill_atoms_unlocked": [
+      "find_function_domain",
+      "find_function_range",
+      "test_injectivity",
+      "test_bijectivity"
+    ]
+  }
 }

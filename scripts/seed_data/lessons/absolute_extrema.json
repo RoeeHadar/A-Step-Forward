@@ -1,16 +1,204 @@
 {
   "concept_id": "absolute_extrema",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Absolute Extrema on a Closed Interval",
-  "title_he": "קיצון מוחלט בקטע סגור",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
+  "title_en": "Absolute Extrema on Closed Intervals",
+  "title_he": "ערכי קיצון מוחלטים על קטע סגור",
+  "summary_en": "The Extreme Value Theorem, closed-interval method (candidates test), and applications — including $f(x)=x^3-3x+2$ on $[-2,3]$ and beam deflection.",
+  "summary_he": "משפט הערך הקיצוני, שיטת המועמדים על קטע סגור, ויישומים — $f(x)=x^3-3x+2$ על $[-2,3]$ וכפיפת קורה.",
   "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "EVT and the candidates test",
+      "title_he": "EVT ושיטת המועמדים",
+      "body_en_md": "On **closed** $[a,b]$, continuous $f$ attains **absolute** max and min (EVT).\n\n**Closed Interval Method:**\n1. Find critical points of $f$ in $(a,b)$.\n2. Evaluate $f$ at each critical point and at **endpoints** $a,b$.\n3. Largest value = abs max; smallest = abs min.\n\n**Why endpoints matter:** $f(x)=x$ on $[0,1]$ has max at $x=1$ (endpoint), no interior critical point.",
+      "body_he_md": "על $[a,b]$ **סגור**, $f$ רציפה $\\Rightarrow$ מקסימום ומינימום מוחלטים (EVT).\n\n**שיטת המועמדים:**\n1. נקודות קריטיות ב-$(a,b)$.\n2. חשבו $f$ בקריטיות **ובקצוות**.\n3. הגדול = מקס; הקטן = מינ.\n\n**קצוות חשובים:** $f(x)=x$ על $[0,1]$ — מקס בקצה."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "$f(x)=x^3-3x+2$ on $[-2,3]$",
+      "title_he": "$f(x)=x^3-3x+2$ על $[-2,3]$",
+      "body_en_md": "$f'(x)=3x^2-3=3(x^2-1)=0 \\Rightarrow x=\\pm 1$ (both in interval).\n\n| $x$ | $f(x)$ |\n|---|---|\n| $-2$ | $0$ |\n| $-1$ | $4$ |\n| $1$ | $0$ |\n| $3$ | $20$ |\n\n**Absolute max** $=20$ at $x=3$; **absolute min** $=0$ at $x=-2$ and $x=1$.\n\nLocal max at $x=-1$ ($f=4$) is not the global max.",
+      "body_he_md": "$f'=3(x^2-1)=0 \\Rightarrow x=\\pm 1$.\n\n$f(-2)=0$, $f(-1)=4$, $f(1)=0$, $f(3)=20$.\n\n**מקס מוחלט** $20$ ב-$x=3$; **מין מוחלט** $0$ ב-$-2$ ו-$1$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Beam deflection application",
+      "title_he": "יישום — כפיפת קורה",
+      "body_en_md": "Simply supported beam, uniform load: deflection profile may be modeled by $y(x)=-kx^2(x-L)^2$ on $[0,L]$ (symmetric, zero at supports).\n\nBy EVT, maximum deflection (most negative $y$ or $|y|$) occurs at an interior critical point or endpoint. Symmetry gives critical at $x=L/2$.\n\n**Engineering takeaway:** closed-interval optimization locates worst-case deflection without scanning infinitely many points.",
+      "body_he_md": "קורה על שני supports: פרופיל כפיפה $y(x)=-kx^2(x-L)^2$ על $[0,L]$.\n\nלפי EVT, כפיפה מקסימלית בנקודה קריטית או בקצה. סימטריה $\\Rightarrow$ $x=L/2$.\n\n**מסקנה:** אופטימיזציה על קטע סגור מוצאת כפיפה מקסימלית."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Open intervals and unconstrained domains",
+      "title_he": "קטעים פתוחים ותחומים לא חסומים",
+      "body_en_md": "**EVT fails on open intervals** — e.g. $f(x)=x$ on $(0,1)$ has no maximum.\n\nOn infinite domains, extrema may not exist; use limits at infinity plus interior critical points.\n\n**Don't confuse** local vs absolute extrema — a local min can be larger than another local max on a wide interval.",
+      "body_he_md": "**EVT נכשל בקטע פתוח** — $f(x)=x$ על $(0,1)$ ללא מקסימום.\n\nעל $\\mathbb{R}$ — בדקו גבולות באינסוף.\n\n**אל תבלבלו** מקומי ומוחלט."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Three-step recipe",
+      "title_he": "מתכון בשלושה שלבים",
+      "body_en_md": "1. Confirm **closed** interval and continuity.\n2. Solve $f'=0$ and note $f'$ undefined inside.\n3. Compare all candidate values.\n\nThis is the same logic used in design codes for peak stress, maximum heat flux, and worst-case error.",
+      "body_he_md": "1. קטע **סגור** + רציפות.\n2. $f'=0$ ובדיקת לא מוגדר.\n3. השוו מועמדים.\n\nאותה לוגיקה לעומס שיא, זרימת חום מקסימלית."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "EVT requires interval:",
+      "stem_he": "EVT דורש קטע:",
+      "options_en": [
+        "Open $(a,b)$",
+        "Closed $[a,b]$",
+        "Infinite $(-\\infty,\\infty)$",
+        "Any set"
+      ],
+      "options_he": [
+        "פתוח",
+        "סגור $[a,b]$",
+        "אינסופי",
+        "כל קבוצה"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Closed and bounded interval required.",
+      "explanation_he": "סגור וחסום.",
+      "skill_atoms": [
+        "apply_evt_closed_interval"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$f(x)=x^2$ on $[-1,2]$. Absolute maximum?",
+      "stem_he": "$f(x)=x^2$ על $[-1,2]$. מקסימום מוחלט?",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$4$",
+        "$2$"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$4$",
+        "$2$"
+      ],
+      "correct_index": 2,
+      "explanation_en": "$f(-1)=1$, $f(0)=0$, $f(2)=4$; max at endpoint $x=2$.",
+      "explanation_he": "מקס $4$ ב-$x=2$.",
+      "skill_atoms": [
+        "candidates_test"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "For $x^3-3x+2$ on $[-2,3]$, abs min value?",
+      "stem_he": "$x^3-3x+2$ על $[-2,3]$, מין מוחלט?",
+      "options_en": [
+        "$0$",
+        "$4$",
+        "$20$",
+        "$-4$"
+      ],
+      "options_he": [
+        "$0$",
+        "$4$",
+        "$20$",
+        "$-4$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Minimum value 0 at $x=-2$ and $x=1$.",
+      "explanation_he": "מינימום 0.",
+      "skill_atoms": [
+        "candidates_test"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Why is $f(x)=1/x$ on $(0,1)$ not covered by EVT?",
+      "stem_he": "למה $f(x)=1/x$ על $(0,1)$ לא ב-EVT?",
+      "options_en": [
+        "Not continuous",
+        "Interval not closed",
+        "No derivative",
+        "Always increasing"
+      ],
+      "options_he": [
+        "לא רציפה",
+        "קטע לא סגור",
+        "אין נגזרת",
+        "תמיד עולה"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Open interval — supremum may not be attained.",
+      "explanation_he": "קטע פתוח — עלול שלא להתקבל.",
+      "skill_atoms": [
+        "evt_limitations"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Critical points for candidates test include:",
+      "stem_he": "נקודות קריטיות כוללות:",
+      "options_en": [
+        "Only $f'=0$",
+        "$f'=0$ or $f'$ undefined in $(a,b)$",
+        "Only endpoints",
+        "Only inflection points"
+      ],
+      "options_he": [
+        "רק $f'=0$",
+        "$f'=0$ או $f'$ לא מוגדר",
+        "רק קצוות",
+        "רק פיתול"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Both stationary and singular interior points.",
+      "explanation_he": "עמדות ונקודות singular.",
+      "skill_atoms": [
+        "identify_critical_points"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always evaluate endpoints on closed intervals.",
+      "EVT guarantees existence, candidates test finds values.",
+      "Local extrema are not necessarily global."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Critical point always gives absolute extremum",
+        "correction": "Compare all candidates including endpoints.",
+        "detect_phrase_en": "critical is the max",
+        "detect_phrase_he": "קריטית היא המקסימום"
+      }
+    ],
+    "tutor_pacing_hint": "Tabulate f at all candidates — students skip endpoints most often.",
+    "skill_atoms_unlocked": [
+      "apply_evt_closed_interval",
+      "candidates_test",
+      "evt_limitations",
+      "identify_critical_points"
+    ]
+  }
 }

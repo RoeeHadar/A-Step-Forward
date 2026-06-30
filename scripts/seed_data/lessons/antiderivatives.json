@@ -1,16 +1,205 @@
 {
   "concept_id": "antiderivatives",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Antiderivatives & Indefinite Integrals",
-  "title_he": "פונקציה קדומה ואינטגרל לא מסוים",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Antiderivatives & Integration Techniques",
+  "title_he": "פונקציה קדומה וטכניקות אינטגרציה",
+  "summary_en": "Antiderivatives, basic integral table, u-substitution, integration by parts, and initial-value problems — the inverse of differentiation for engineering models.",
+  "summary_he": "פונקציה קדומה, טבלת אינטגרלים, החלפת $u$, אינטגרציה בחלקים ובעיות ערך התחלתי — היפוך הנגזרות למודלים הנדסיים.",
+  "est_minutes": 35,
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "Antiderivatives and the constant $C$",
+      "title_he": "פונקציה קדומה והקבוע $C$",
+      "body_en_md": "$F$ is an **antiderivative** of $f$ on interval $I$ if $F'(x)=f(x)$ for all $x\\in I$.\n\n**General antiderivative:** if $F$ is one antiderivative, then all others are $F(x)+C$.\n\n**Notation:** $\\displaystyle\\int f(x)\\,dx = F(x)+C$.\n\n**Basic table:**\n$$\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C\\ (n\\ne -1),\\quad \\int e^x\\,dx=e^x+C,\\quad \\int \\frac{1}{x}\\,dx=\\ln|x|+C$$\n$$\\int \\sin x\\,dx=-\\cos x+C,\\quad \\int \\cos x\\,dx=\\sin x+C$$",
+      "body_he_md": "$F$ **קדומה** של $f$ אם $F'=f$.\n\n**כל הקדומות:** $F(x)+C$.\n\n**סימון:** $\\displaystyle\\int f\\,dx = F(x)+C$.\n\n**טבלה:**\n$$\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C,\\quad \\int e^x\\,dx=e^x+C,\\quad \\int \\frac{1}{x}\\,dx=\\ln|x|+C$$"
+    },
+    {
+      "kind": "theory",
+      "title_en": "u-substitution",
+      "title_he": "החלפת $u$",
+      "body_en_md": "If $u=g(x)$, then $\\displaystyle\\int f(g(x))g'(x)\\,dx = \\int f(u)\\,du$.\n\n**Example.** $\\int 2x\\cos(x^2)\\,dx$. Let $u=x^2$, $du=2x\\,dx$:\n$$\\int \\cos u\\,du = \\sin u + C = \\sin(x^2)+C.$$\n\n**Example.** $\\int \\dfrac{x}{x^2+1}\\,dx$. Let $u=x^2+1$:\n$$\\frac{1}{2}\\int \\frac{1}{u}\\,du = \\frac{1}{2}\\ln|u|+C = \\frac{1}{2}\\ln(x^2+1)+C.$$\n\n**Tip:** look for inner function whose derivative (up to constant) appears as factor.",
+      "body_he_md": "אם $u=g(x)$: $\\displaystyle\\int f(g(x))g'(x)\\,dx = \\int f(u)\\,du$.\n\n**דוגמה.** $\\int 2x\\cos(x^2)\\,dx = \\sin(x^2)+C$.\n\n**דוגמה.** $\\int \\dfrac{x}{x^2+1}\\,dx = \\frac{1}{2}\\ln(x^2+1)+C$.\n\n**טיפ:** חפשו פונקציה פנימית שנגזרתה מופיעה כגורם."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Integration by parts",
+      "title_he": "אינטגרציה בחלקים",
+      "body_en_md": "$$\\int u\\,dv = uv - \\int v\\,du$$\n\nChoose $u$ via **LIATE** priority: Log, Inverse trig, Algebraic, Trig, Exponential — $u$ is earlier in list.\n\n**Example.** $\\int x e^x\\,dx$. Take $u=x$, $dv=e^x dx$:\n$$=xe^x-\\int e^x\\,dx = xe^x-e^x+C = e^x(x-1)+C.$$\n\n**Example.** $\\int \\ln x\\,dx$. Take $u=\\ln x$, $dv=dx$:\n$$=x\\ln x - \\int x\\cdot\\frac{1}{x}\\,dx = x\\ln x - x + C.$$\n\n**Tabular method** helps repeated IBP (e.g. $x^2 e^x$).",
+      "body_he_md": "$$\\int u\\,dv = uv - \\int v\\,du$$\n\n**LIATE:** Log, Inverse, Algebraic, Trig, Exp.\n\n**דוגמה.** $\\int x e^x\\,dx = e^x(x-1)+C$.\n\n**דוגמה.** $\\int \\ln x\\,dx = x\\ln x - x + C$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Initial value problems",
+      "title_he": "בעיות ערך התחלתי",
+      "body_en_md": "Given $f'(x)$ and one point on $f$, find $f$.\n\n**Example.** $f'(x)=3x^2-2$, $f(1)=4$.\n$$f(x)=x^3-2x+C,\\quad f(1)=1-2+C=4 \\Rightarrow C=5.$$\nSo $f(x)=x^3-2x+5$.\n\n**Engineering:** velocity $v(t)$ from acceleration $a(t)$ with $v(0)=v_0$; position from velocity — two integration steps + constants from ICs.",
+      "body_he_md": "נתון $f'$ ונקודה — מצאו $f$.\n\n**דוגמה.** $f'=3x^2-2$, $f(1)=4$ $\\Rightarrow$ $f(x)=x^3-2x+5$.\n\n**הנדסה:** $v$ מ-$a$; $s$ מ-$v$ — שני שלבי אינטגרציה + תנאי התחלה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Technique selection guide",
+      "title_he": "מדריך בחירת טכניקה",
+      "body_en_md": "| Integrand pattern | Try |\n|---|---|\n| Composite with inner derivative factor | $u$-sub |\n| Product of unlike types ($x e^x$, $\\ln x$) | Parts |\n| Rational simple | Partial fractions (later) or algebra |\n| Trig product | Identities or parts |\n\nAlways **check by differentiating** your answer — catches missing $+C$ and sign errors.",
+      "body_he_md": "| דפוס | טכניקה |\n|---|---|\n| הרכבה + נגזרת פנימית | $u$-sub |\n| מכפלה | חלקים |\n| רציונלית | שברים חלקיים |\n\n**אמתו בגזירה** — תופסים $+C$ חסר."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\int 3x^2\\,dx=?$",
+      "stem_he": "$\\int 3x^2\\,dx=?$",
+      "options_en": [
+        "$x^3$",
+        "$x^3+C$",
+        "$6x+C$",
+        "$x^2+C$"
+      ],
+      "options_he": [
+        "$x^3$",
+        "$x^3+C$",
+        "$6x+C$",
+        "$x^2+C$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Antiderivative of $3x^2$ is $x^3$; never forget $+C$.",
+      "explanation_he": "קדומה $x^3+C$.",
+      "skill_atoms": [
+        "basic_antiderivative"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\int 2x\\cos(x^2)\\,dx=?$",
+      "stem_he": "$\\int 2x\\cos(x^2)\\,dx=?$",
+      "options_en": [
+        "$\\sin(x^2)+C$",
+        "$-\\cos(x^2)+C$",
+        "$2\\sin(x^2)+C$",
+        "$\\cos(x^2)+C$"
+      ],
+      "options_he": [
+        "$\\sin(x^2)+C$",
+        "$-\\cos(x^2)+C$",
+        "$2\\sin(x^2)+C$",
+        "$\\cos(x^2)+C$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$u=x^2$ gives $\\int\\cos u\\,du=\\sin u$.",
+      "explanation_he": "$u=x^2$ $\\Rightarrow$ $\\sin(x^2)+C$.",
+      "skill_atoms": [
+        "u_substitution"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\int x e^x\\,dx=?$",
+      "stem_he": "$\\int x e^x\\,dx=?$",
+      "options_en": [
+        "$xe^x+C$",
+        "$e^x(x-1)+C$",
+        "$\\frac{x^2 e^x}{2}+C$",
+        "$e^x+C$"
+      ],
+      "options_he": [
+        "$xe^x+C$",
+        "$e^x(x-1)+C$",
+        "$\\frac{x^2 e^x}{2}+C$",
+        "$e^x+C$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "IBP: $u=x$, $dv=e^x dx$.",
+      "explanation_he": "חלקים: $u=x$.",
+      "skill_atoms": [
+        "integration_by_parts"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "$f'(x)=2x$, $f(0)=3$. Then $f(x)=?$",
+      "stem_he": "$f'(x)=2x$, $f(0)=3$. אז $f(x)=?$",
+      "options_en": [
+        "$x^2+3$",
+        "$x^2$",
+        "$2x+3$",
+        "$x^2+3x$"
+      ],
+      "options_he": [
+        "$x^2+3$",
+        "$x^2$",
+        "$2x+3$",
+        "$x^2+3x$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$f=x^2+C$, $f(0)=3 \\Rightarrow C=3$.",
+      "explanation_he": "$f=x^2+3$.",
+      "skill_atoms": [
+        "initial_value_antiderivative"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\int \\dfrac{1}{x}\\,dx=?$",
+      "stem_he": "$\\int \\dfrac{1}{x}\\,dx=?$",
+      "options_en": [
+        "$\\ln x + C$",
+        "$\\ln|x| + C$",
+        "$\\dfrac{1}{x^2}+C$",
+        "$x\\ln x + C$"
+      ],
+      "options_he": [
+        "$\\ln x + C$",
+        "$\\ln|x| + C$",
+        "$\\dfrac{1}{x^2}+C$",
+        "$x\\ln x + C$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Domain requires $|x|$ for negative $x$.",
+      "explanation_he": "צריך $|x|$ ל-$x<0$.",
+      "skill_atoms": [
+        "log_antiderivative"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Every antiderivative includes +C unless initial data fixes it.",
+      "u-sub needs inner function derivative as factor.",
+      "LIATE guides integration by parts choice."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Integral of 1/x is ln(x) without absolute value",
+        "correction": "Use ln|x| for all x≠0.",
+        "detect_phrase_en": "ln x only",
+        "detect_phrase_he": "ln x בלי ערך מוחלט"
+      }
+    ],
+    "tutor_pacing_hint": "Verify every antiderivative by differentiation on the board.",
+    "skill_atoms_unlocked": [
+      "basic_antiderivative",
+      "u_substitution",
+      "integration_by_parts",
+      "initial_value_antiderivative",
+      "log_antiderivative"
+    ]
+  }
 }

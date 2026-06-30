@@ -1,16 +1,205 @@
 {
   "concept_id": "limits_at_infinity",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Limits at Infinity & Horizontal Asymptotes",
-  "title_he": "גבולות באינסוף ואסימפטוטות אופקיות",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Limits at Infinity & Asymptotes",
+  "title_he": "גבולות באינסוף ואסימטוטות",
+  "summary_en": "Limits as $x\\to\\pm\\infty$, comparing growth rates, rational limits, and vertical/oblique asymptotes — essential for graph sketching and engineering approximations.",
+  "summary_he": "גבולות כאשר $x\\to\\pm\\infty$, השוואת קצבי גדילה, גבולות של פונקציות רציונליות ואסימטוטות אנכיים/אלכסוניים — חיוני לשרטוט גרפים וקירובים בהנדסה.",
+  "est_minutes": 30,
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "Limits at infinity",
+      "title_he": "גבולות באינסוף",
+      "body_en_md": "We write $\\lim_{x\\to\\infty} f(x)=L$ if outputs approach $L$ as $x$ grows without bound. Similarly $\\lim_{x\\to-\\infty} f(x)=L$.\n\n**Formal definition:** $\\lim_{x\\to\\infty}f(x)=L$ means $\\forall\\,\\epsilon>0\\,\\exists\\,N>0: x>N\\Rightarrow|f(x)-L|<\\epsilon$.\n\n**Basic limits:**\n$$\\lim_{x\\to\\infty}\\frac{1}{x}=0,\\quad \\lim_{x\\to\\infty}e^{-x}=0,\\quad \\lim_{x\\to\\infty}\\arctan x=\\frac{\\pi}{2}.$$\n\n**Infinite limits:** $\\lim_{x\\to a^+}f(x)=+\\infty$ means $f(x)$ exceeds any bound as $x\\to a$ from the right.",
+      "body_he_md": "כותבים $\\lim_{x\\to\\infty} f(x)=L$ אם הפלט מתקרב ל-$L$ כש-$x$ גדל ללא גבול.\n\n**הגדרה:** $\\forall\\,\\epsilon>0\\,\\exists\\,N: x>N\\Rightarrow|f(x)-L|<\\epsilon$.\n\n**גבולות בסיסיים:**\n$$\\lim_{x\\to\\infty}\\frac{1}{x}=0,\\quad \\lim_{x\\to\\infty}e^{-x}=0,\\quad \\lim_{x\\to\\infty}\\arctan x=\\frac{\\pi}{2}.$$\n\n**גבולות אינסופיים:** $\\lim_{x\\to a^+}f(x)=+\\infty$ — הפונקציה חורגת מכל חסם."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Growth rate hierarchy",
+      "title_he": "היררכיית קצבי גדילה",
+      "body_en_md": "For $x\\to\\infty$ (slowest to fastest among standard Calc 1 families):\n$$\\ln x \\ll x^\\alpha \\ll a^x \\ll x^x \\text{ (beyond course)}$$\nfor any fixed $\\alpha>0$, $a>1$.\n\n**Consequences:**\n- $\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=0$\n- $\\lim_{x\\to\\infty}\\dfrac{x^{100}}{e^x}=0$\n- Exponentials dominate polynomials.\n\n**Technion exam tip:** when comparing $\\dfrac{P(x)}{Q(x)}$ at infinity, divide numerator and denominator by the **highest power** of $x$.",
+      "body_he_md": "ל-$x\\to\\infty$ (מאיט ל מהיר):\n$$\\ln x \\ll x^\\alpha \\ll a^x.$$\n\n**מסקנות:**\n- $\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=0$\n- $\\lim_{x\\to\\infty}\\dfrac{x^{100}}{e^x}=0$\n- מעריכיות שולטות על פולינומים.\n\n**טיפ לבחינה:** בחלוקת $P/Q$ באינסוף — חלקו במעלה $x$ הגבוהה ביותר."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Rational limits at infinity",
+      "title_he": "גבולות רציונליים באינסוף",
+      "body_en_md": "**Rule:** for $f(x)=\\dfrac{a_n x^n+\\cdots}{b_m x^m+\\cdots}$ with $a_n,b_m\\ne 0$:\n- If $n<m$: limit $=0$\n- If $n=m$: limit $=\\dfrac{a_n}{b_m}$\n- If $n>m$: limit $=\\pm\\infty$ (sign from leading coefficients)\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{3x^2-2x+1}{5x^2+x}=\\dfrac{3}{5}$.\n\nDivide by $x^2$:\n$$\\frac{3-2/x+1/x^2}{5+1/x}\\to\\frac{3}{5}.$$\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{2x+1}{x^3-4}=0$ (degree numerator $<$ denominator).",
+      "body_he_md": "**כלל:** ל-$f(x)=\\dfrac{a_n x^n+\\cdots}{b_m x^m+\\cdots}$:\n- $n<m$: גבול $=0$\n- $n=m$: גבול $=\\dfrac{a_n}{b_m}$\n- $n>m$: $\\pm\\infty$\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{3x^2-2x+1}{5x^2+x}=\\dfrac{3}{5}$.\n\nחלוקה ב-$x^2$ נותנת $\\dfrac{3}{5}$.\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{2x+1}{x^3-4}=0$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Vertical and oblique asymptotes",
+      "title_he": "אסימטוטות אנכיים ואלכסוניים",
+      "body_en_md": "**Vertical asymptote** $x=a$: $\\lim_{x\\to a^\\pm}f(x)=\\pm\\infty$. Common at zeros of denominators.\n\n**Horizontal asymptote** $y=L$: $\\lim_{x\\to\\pm\\infty}f(x)=L$.\n\n**Oblique (slant) asymptote** $y=mx+b$: occurs when degree of numerator exceeds denominator by exactly 1. Find via long division:\n$$\\frac{x^2+1}{x-1}=x+1+\\frac{2}{x-1}\\Rightarrow y=x+1.$$\n\n**Engineering use:** asymptotes describe long-term or singular behavior — beam loads near supports, circuit response at extremes.",
+      "body_he_md": "**אנכי** $x=a$: $\\lim_{x\\to a^\\pm}f(x)=\\pm\\infty$.\n\n**אופקי** $y=L$: $\\lim_{x\\to\\pm\\infty}f(x)=L$.\n\n**אלכסוני** $y=mx+b$: כשמעלת המונה גדולה ב-1. חלוקה ארוכה:\n$$\\frac{x^2+1}{x-1}=x+1+\\frac{2}{x-1}\\Rightarrow y=x+1.$$\n\n**שימוש הנדסי:** התנהגות בקיצוניות — עומסים, תגובת מערכות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Quick reference",
+      "title_he": "סיכום מהיר",
+      "body_en_md": "| Task | Method |\n|---|---|\n| Rational at $\\infty$ | Divide by highest power of $x$ |\n| $e^x$ vs polynomial | Exponential wins |\n| Vertical asymptote | Check denominator zeros |\n| Oblique asymptote | Long division if deg num = deg den + 1 |\n\nAlways check **both** $+\\infty$ and $-\\infty$ when relevant (e.g. $\\arctan x$).",
+      "body_he_md": "| משימה | שיטה |\n|---|---|\n| רציונלית ב-$\\infty$ | חלוקה במעלה $x$ |\n| $e^x$ מול פולינום | מעריכית מנצחת |\n| אנכי | אפסי מכנה |\n| אלכסוני | חלוקה ארוכה |\n\nבדקו **גם** $+\\infty$ וגם $-\\infty$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\lim_{x\\to\\infty}\\dfrac{5x^3+1}{2x^3-x}=?$",
+      "stem_he": "$\\lim_{x\\to\\infty}\\dfrac{5x^3+1}{2x^3-x}=?$",
+      "options_en": [
+        "$0$",
+        "$\\dfrac{5}{2}$",
+        "$\\infty$",
+        "$-\\infty$"
+      ],
+      "options_he": [
+        "$0$",
+        "$\\dfrac{5}{2}$",
+        "$\\infty$",
+        "$-\\infty$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Equal degrees: ratio of leading coefficients $5/2$.",
+      "explanation_he": "מעלות שוות: יחס מקדמים מובילים $5/2$.",
+      "skill_atoms": [
+        "rational_limit_infinity"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=?$",
+      "stem_he": "$\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=?$",
+      "options_en": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "Does not exist"
+      ],
+      "options_he": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "לא קיים"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Log grows slower than any positive power of $x$.",
+      "explanation_he": "לוג גדל לאט מכל חזקה חיובית של $x$.",
+      "skill_atoms": [
+        "compare_growth_rates"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Vertical asymptote of $f(x)=\\dfrac{1}{x^2-4}$?",
+      "stem_he": "אסימטוטה אנכי של $f(x)=\\dfrac{1}{x^2-4}$?",
+      "options_en": [
+        "$x=0$",
+        "$x=\\pm 2$",
+        "$x=4$",
+        "None"
+      ],
+      "options_he": [
+        "$x=0$",
+        "$x=\\pm 2$",
+        "$x=4$",
+        "אין"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Denominator zero at $x=\\pm 2$.",
+      "explanation_he": "מכנה מתאפס ב-$x=\\pm 2$.",
+      "skill_atoms": [
+        "find_vertical_asymptote"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Oblique asymptote of $\\dfrac{x^2+3x}{x+1}$?",
+      "stem_he": "אסימטוטה אלכסוני של $\\dfrac{x^2+3x}{x+1}$?",
+      "options_en": [
+        "$y=x+2$",
+        "$y=x+3$",
+        "$y=x$",
+        "$y=2x+1$"
+      ],
+      "options_he": [
+        "$y=x+2$",
+        "$y=x+3$",
+        "$y=x$",
+        "$y=2x+1$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Division: $x+2+\\dfrac{-2}{x+1}$.",
+      "explanation_he": "חלוקה: $x+2+\\dfrac{-2}{x+1}$.",
+      "skill_atoms": [
+        "find_oblique_asymptote"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\lim_{x\\to-\\infty}e^x=?$",
+      "stem_he": "$\\lim_{x\\to-\\infty}e^x=?$",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$-\\infty$",
+        "$\\infty$"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$-\\infty$",
+        "$\\infty$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$e^x\\to 0$ as $x\\to-\\infty$.",
+      "explanation_he": "$e^x\\to 0$ כאשר $x\\to-\\infty$.",
+      "skill_atoms": [
+        "exponential_limit_infinity"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Divide by highest power of $x$ for rational limits at infinity.",
+      "Exponentials dominate polynomials and logs.",
+      "Oblique asymptotes come from long division when degree gap is 1."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "$\\lim_{x\\to\\infty}(x^2-x)=\\infty$ always positive",
+        "correction": "For $x\\to-\\infty$, $x^2-x\\to\\infty$ still, but check sign of rational leading ratio.",
+        "detect_phrase_en": "always positive infinity",
+        "detect_phrase_he": "תמיד פלוס אינסוף"
+      }
+    ],
+    "tutor_pacing_hint": "Practice dividing by $x^n$ before introducing oblique asymptotes.",
+    "skill_atoms_unlocked": [
+      "rational_limit_infinity",
+      "compare_growth_rates",
+      "find_vertical_asymptote",
+      "find_oblique_asymptote",
+      "exponential_limit_infinity"
+    ]
+  }
 }

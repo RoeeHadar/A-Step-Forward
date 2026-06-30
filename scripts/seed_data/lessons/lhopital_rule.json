@@ -1,24 +1,205 @@
 {
   "concept_id": "lhopital_rule",
-  "subject": "math",
+  "subject": "calculus_1",
   "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Lhopital Rule",
-  "title_he": "כלל לופיטל",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "L'Hopital's Rule & Indeterminate Forms",
+  "title_he": "כלל לופיטל וצורות לא קבועות",
+  "summary_en": "Indeterminate forms $0/0$, $\\infty/\\infty$, and transformations for $0\\cdot\\infty$, $\\infty-\\infty$, and exponential indeterminates — the workhorse for tough limits in Calc 1.",
+  "summary_he": "צורות לא קבועות $0/0$, $\\infty/\\infty$, והמרות ל-$0\\cdot\\infty$, $\\infty-\\infty$ ומעריכיות — כלי מרכזי לגבולות קשים בחשבון 1.",
+  "est_minutes": 30,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "title_en": "When direct substitution fails",
+      "title_he": "כשהצבה ישירה נכשלת",
+      "body_en_md": "Substituting $x\\to a$ may yield **indeterminate forms** — expressions that do not determine the limit:\n$$\\frac{0}{0},\\quad \\frac{\\infty}{\\infty},\\quad 0\\cdot\\infty,\\quad \\infty-\\infty,\\quad 0^0,\\quad 1^\\infty,\\quad \\infty^0.$$\n\n**L'Hopital's rule** handles $0/0$ and $\\infty/\\infty$ under hypotheses: $f,g$ differentiable near $a$, $g'(x)\\ne 0$, and the limit of $\\dfrac{f'(x)}{g'(x)}$ exists (or is $\\pm\\infty$).\n\nThen:\n$$\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}.$$\n\nApplies also as $x\\to\\pm\\infty$.",
+      "body_he_md": "הצבה ישירה עלולה לתת **צורות לא קבועות**:\n$$\\frac{0}{0},\\quad \\frac{\\infty}{\\infty},\\quad 0\\cdot\\infty,\\quad \\infty-\\infty.$$\n\n**כלל לופיטל** ל-$0/0$ ו-$\\infty/\\infty$: אם $\\lim \\dfrac{f'(x)}{g'(x)}$ קיים,\n$$\\lim\\frac{f(x)}{g(x)}=\\lim\\frac{f'(x)}{g'(x)}.$$\n\nתקף גם ב-$x\\to\\pm\\infty$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Applying L'Hopital correctly",
+      "title_he": "יישום נכון של לופיטל",
+      "body_en_md": "**Check form first:** verify $0/0$ or $\\infty/\\infty$ before differentiating.\n\n**Differentiate numerator and denominator separately** — never use quotient rule on $\\dfrac{f}{g}$ for L'Hopital.\n\n**Repeat** if result is still indeterminate (may apply multiple times).\n\n**Example.** $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$: form $0/0$.\n$$\\lim\\frac{\\cos x}{1}=1.$$\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{x}{e^x}$: form $\\infty/\\infty$.\n$$\\lim\\frac{1}{e^x}=0.$$\n\n**When it fails:** $\\lim_{x\\to\\infty}\\dfrac{x+\\sin x}{x}$ — L'Hopital gives non-existent $\\lim(1+\\cos x)$; use algebra instead: $1+\\dfrac{\\sin x}{x}\\to 1$.",
+      "body_he_md": "**בדקו צורה:** $0/0$ או $\\infty/\\infty$.\n\n**גזרו מונה ומכנה בנפרד** — לא כלל מנה!\n\n**חזרו** אם עדיין לא קבוע.\n\n**דוגמה.** $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}=\\lim\\dfrac{\\cos x}{1}=1$.\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{x}{e^x}=0$.\n\n**כישלון:** $\\dfrac{x+\\sin x}{x}$ — השתמשו באלגברה."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Transforming other indeterminate forms",
+      "title_he": "המרת צורות לא קבועות אחרות",
+      "body_en_md": "**$0\\cdot\\infty$:** rewrite as $\\dfrac{0}{1/\\infty}$ or $\\dfrac{\\infty}{1/0}$.\n\n$\\lim_{x\\to 0^+} x\\ln x$: write $\\dfrac{\\ln x}{1/x}$ ($-\\infty/\\infty$), L'Hopital $\\Rightarrow \\dfrac{1/x}{-1/x^2}=-x\\to 0$.\n\n**$\\infty-\\infty$:** combine algebraically or use common denominator.\n\n$\\lim_{x\\to 0}\\left(\\dfrac{1}{x}-\\dfrac{1}{\\sin x}\\right)$: common denominator $\\dfrac{\\sin x-x}{x\\sin x}$ — then $0/0$, L'Hopital (twice may be needed).\n\n**Exponential forms** $0^0,1^\\infty,\\infty^0$: take $\\ln$ first, then exponentiate result.",
+      "body_he_md": "**$0\\cdot\\infty$:** כתבו כ-$\\dfrac{\\ln x}{1/x}$.\n\n$\\lim x\\ln x=0$.\n\n**$\\infty-\\infty$:** מכנה משותף.\n\n**מעריכיות:** $\\ln$ ואז חזרה ב-$e^{(\\cdot)}$."
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Using quotient rule** instead of separate derivatives.\n2. **Applying when limit of $f'/g'$ does not exist** — rule does not apply.\n3. **Differentiating before confirming indeterminate form** — e.g. $\\dfrac{x}{x^2+1}\\to 0$ at $\\infty$ without L'Hopital.\n4. **Forgetting to exponentiate** after $\\ln$ for $1^\\infty$ forms.\n\n**Exam tip (Technion 104031):** show the indeterminate form explicitly before invoking L'Hopital.",
+      "body_he_md": "1. **כלל מנה** במקום גזירה נפרדת.\n2. **יישום כש-$\\lim f'/g'$ לא קיים**.\n3. **גזירה לפני בדיקת צורה**.\n4. **שכחת $e^{(\\cdot)}$** אחרי $\\ln$.\n\n**טיפ:** הציגו את הצורה הלא קבועה במפורש."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Decision flowchart",
+      "title_he": "תרשים זרימה",
+      "body_en_md": "1. Try direct substitution.\n2. If $0/0$ or $\\infty/\\infty$ — L'Hopital (check derivative ratio limit exists).\n3. If $0\\cdot\\infty$, $\\infty-\\infty$ — algebra first.\n4. If $1^\\infty$ etc. — use $\\ln$.\n5. If L'Hopital fails — factor, conjugates, known limits ($\\sin x/x$).",
+      "body_he_md": "1. הצבה ישירה.\n2. $0/0$ או $\\infty/\\infty$ — לופיטל.\n3. $0\\cdot\\infty$, $\\infty-\\infty$ — אלגברה.\n4. $1^\\infty$ — $\\ln$.\n5. כישלון — פירוק, גבולות ידועים."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Lhopital Rule."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\lim_{x\\to 0}\\dfrac{e^x-1}{x}=?$",
+      "stem_he": "$\\lim_{x\\to 0}\\dfrac{e^x-1}{x}=?$",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$e$",
+        "$\\infty$"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$e$",
+        "$\\infty$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Form $0/0$; L'Hopital: $e^x/1\\to 1$.",
+      "explanation_he": "צורה $0/0$; לופיטל: $e^x\\to 1$.",
+      "skill_atoms": [
+        "lhopital_basic"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=?$",
+      "stem_he": "$\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=?$",
+      "options_en": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "$-\\infty$"
+      ],
+      "options_he": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "$-\\infty$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$\\infty/\\infty$; derivative ratio $1/x\\to 0$.",
+      "explanation_he": "$\\infty/\\infty$; $(1/x)/1\\to 0$.",
+      "skill_atoms": [
+        "lhopital_infinity"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\lim_{x\\to 0^+}x\\ln x=?$",
+      "stem_he": "$\\lim_{x\\to 0^+}x\\ln x=?$",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$-\\infty$",
+        "DNE"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$-\\infty$",
+        "לא קיים"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Rewrite $\\ln x/(1/x)$, L'Hopital gives $-x\\to 0$.",
+      "explanation_he": "כתיבה כ-$\\ln x/(1/x)$, לופיטל $\\Rightarrow -x\\to 0$.",
+      "skill_atoms": [
+        "indeterminate_zero_times_inf"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Which is WRONG when using L'Hopital?",
+      "stem_he": "מה שגוי בשימוש בלופיטל?",
+      "options_en": [
+        "Verify $0/0$ first",
+        "Differentiate numerator and denominator",
+        "Apply quotient rule to $f/g$",
+        "May repeat if still indeterminate"
+      ],
+      "options_he": [
+        "בדוק $0/0$",
+        "גזור מונה ומכנה",
+        "השתמש בכלל מנה",
+        "חזור אם צריך"
+      ],
+      "correct_index": 2,
+      "explanation_en": "Never use quotient rule — differentiate top and bottom separately.",
+      "explanation_he": "אל תשתמשו בכלל מנה.",
+      "skill_atoms": [
+        "lhopital_pitfalls"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "$\\lim_{x\\to\\infty}\\left(1+\\dfrac{1}{x}\\right)^x=?$",
+      "stem_he": "$\\lim_{x\\to\\infty}\\left(1+\\dfrac{1}{x}\\right)^x=?$",
+      "options_en": [
+        "$1$",
+        "$e$",
+        "$\\infty$",
+        "$0$"
+      ],
+      "options_he": [
+        "$1$",
+        "$e$",
+        "$\\infty$",
+        "$0$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Classic $1^\\infty$ form; limit is $e$.",
+      "explanation_he": "צורה $1^\\infty$; הגבול $e$.",
+      "skill_atoms": [
+        "indeterminate_exponential"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "L'Hopital applies only to 0/0 and infinity/infinity with valid derivative ratio limit.",
+      "Transform 0·infinity and infinity-infinity algebraically first.",
+      "For 1^infinity, use ln then exponentiate."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "L'Hopital always works for any limit",
+        "correction": "Requires indeterminate form and limit of f'/g' must exist.",
+        "detect_phrase_en": "always use L'Hopital",
+        "detect_phrase_he": "תמיד לופיטל"
+      }
+    ],
+    "tutor_pacing_hint": "Drill 0/0 cases before exponential indeterminates.",
+    "skill_atoms_unlocked": [
+      "lhopital_basic",
+      "lhopital_infinity",
+      "indeterminate_zero_times_inf",
+      "lhopital_pitfalls",
+      "indeterminate_exponential"
+    ]
+  }
 }

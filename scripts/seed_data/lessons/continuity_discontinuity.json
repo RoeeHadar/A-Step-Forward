@@ -1,16 +1,205 @@
 {
   "concept_id": "continuity_discontinuity",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Continuity & Types of Discontinuity",
-  "title_he": "רציפות וסוגי אי-רציפות",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Continuity & Discontinuity",
+  "title_he": "רציפות ואי-רציפות",
+  "summary_en": "Continuity at a point and on intervals, classification of discontinuities, and the Intermediate Value and Extreme Value theorems — pillars of existence proofs in engineering.",
+  "summary_he": "רציפות בנקודה ועל קטעים, סיווג סוגי אי-רציפות, ומשפטי הערך הממוצע והקיצון — עמודי תווך להוכחות קיום בהנדסה.",
+  "est_minutes": 25,
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "Definition of continuity",
+      "title_he": "הגדרת רציפות",
+      "body_en_md": "$f$ is **continuous at $a$** if:\n1. $a\\in D_f$\n2. $\\lim_{x\\to a}f(x)$ exists\n3. $\\lim_{x\\to a}f(x)=f(a)$\n\nEquivalently: $\\forall\\,\\epsilon>0\\,\\exists\\,\\delta>0: |x-a|<\\delta\\Rightarrow|f(x)-f(a)|<\\epsilon$.\n\n**Continuous on $[a,b]$:** continuous at every interior point, continuous from right at $a$, from left at $b$.\n\n**Elementary functions** (polynomials, rational on domain, $e^x$, $\\ln x$, trig on domain) are continuous wherever defined.",
+      "body_he_md": "$f$ **רציפה ב-$a$** אם:\n1. $a\\in D_f$\n2. $\\lim_{x\\to a}f(x)$ קיים\n3. $\\lim_{x\\to a}f(x)=f(a)$\n\n**רציפה על $[a,b]$:** רציפה בפנים, מימין ב-$a$, משמאל ב-$b$.\n\n**פונקציות אלמנטריות** רציפות בכל מקום שהן מוגדרות."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Types of discontinuity",
+      "title_he": "סוגי אי-רציפות",
+      "body_en_md": "**Removable:** limit exists but $\\ne f(a)$ or $f(a)$ undefined. Fix by redefining $f(a)=\\lim_{x\\to a}f(x)$. Example: $\\dfrac{\\sin x}{x}$ at $0$.\n\n**Jump:** one-sided limits exist but differ. Example: $\\text{sgn}(x)$ at $0$.\n\n**Infinite:** at least one one-sided limit is $\\pm\\infty$. Example: $1/x$ at $0$.\n\n**Essential (oscillatory):** limit does not exist (neither finite nor infinite). Example: $\\sin(1/x)$ at $0$.",
+      "body_he_md": "**ניתנת לתיקון:** הגבול קיים אך $\\ne f(a)$. דוגמה: $\\dfrac{\\sin x}{x}$ ב-0.\n\n**קפיצה:** גבולות חד-צדדיים קיימים ושונים. דוגמה: $\\text{sgn}(x)$.\n\n**אינסופית:** גבול חד-צדדי $\\pm\\infty$. דוגמה: $1/x$ ב-0.\n\n**עיקרית:** הגבול לא קיים. דוגמה: $\\sin(1/x)$ ב-0."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Testing continuity",
+      "title_he": "בדיקת רציפות",
+      "body_en_md": "**Example.** $f(x)=\\begin{cases}x^2 & x\\ne 1\\\\ 3 & x=1\\end{cases}$\n\n$\\lim_{x\\to 1}x^2=1\\ne f(1)=3$ — **removable** discontinuity.\n\n**Example.** $g(x)=\\dfrac{x^2-1}{x-1}$ for $x\\ne 1$. Factor: $g(x)=x+1$. Extend continuously: $\\tilde g(1)=2$.\n\n**Piecewise at join:** for $h(x)=\\begin{cases}ax+1 & x<2\\\\ x^2 & x\\ge 2\\end{cases}$, continuity at $2$ requires $2a+1=4 \\Rightarrow a=3/2$.",
+      "body_he_md": "**דוגמה.** $f(1)=3$ אך $\\lim_{x\\to 1}x^2=1$ — **ניתנת לתיקון**.\n\n**דוגמה.** $g(x)=\\dfrac{x^2-1}{x-1}=x+1$ ל-$x\\ne 1$; הרחבה רציפה: $\\tilde g(1)=2$.\n\n**קטעית:** רציפות ב-$2$ דורשת $2a+1=4 \\Rightarrow a=3/2$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "IVT and EVT",
+      "title_he": "משפט ערך ביניים (IVT) ומשפט ערך קיצון (EVT)",
+      "body_en_md": "**Intermediate Value Theorem:** If $f$ is continuous on $[a,b]$ and $N$ is strictly between $f(a)$ and $f(b)$, then $\\exists\\,c\\in(a,b)$ with $f(c)=N$.\n\n**Corollary — root existence:** if $f(a)$ and $f(b)$ have opposite signs, $\\exists\\,c\\in(a,b): f(c)=0$.\n\n**Extreme Value Theorem:** If $f$ is continuous on **closed bounded** $[a,b]$, then $f$ attains absolute maximum and minimum on $[a,b]$.\n\n**Note:** EVT needs closed interval; IVT needs continuity but interval can be open if endpoints handled.",
+      "body_he_md": "**IVT:** $f$ רציפה על $[a,b]$, $N$ בין $f(a)$ ל-$f(b)$ $\\Rightarrow$ $\\exists\\,c: f(c)=N$.\n\n**מסקנה — שורש:** סימנים מנוגדים בקצוות $\\Rightarrow$ שורש ב-$(a,b)$.\n\n**EVT:** $f$ רציפה על $[a,b]$ **סגור וחסום** $\\Rightarrow$ מקסימום ומינימום מוחלטים מתקבלים.\n\n**הערה:** EVT דורש קטע סגור."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Exam strategy",
+      "title_he": "אסטרטגיה לבחינה",
+      "body_en_md": "1. Check domain first — continuity only where defined.\n2. For piecewise functions, equate left/right limits at junctions.\n3. IVT for existence (roots, intermediate values) — no need to find $c$ explicitly.\n4. EVT guarantees extrema on closed intervals — sets up optimization on $[a,b]$.\n\nThese theorems justify bisection methods, safety margins, and guaranteed peak loads in engineering models.",
+      "body_he_md": "1. בדקו תחום תחילה.\n2. בפונקציות קטעיות — השוו גבולות בנקודת החיבור.\n3. IVT לקיום — לא חייבים למצוא $c$.\n4. EVT מבטיח קיצונים בקטע סגור.\n\nמשפטים אלו מצדיקים bisection, מרווחי בטיחות ועומסי שיא."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which condition is NOT required for continuity at $a$?",
+      "stem_he": "איזה תנאי לא נדרש לרציפות ב-$a$?",
+      "options_en": [
+        "$f(a)$ is defined",
+        "$\\lim_{x\\to a}f(x)$ exists",
+        "$f'(a)$ exists",
+        "$\\lim_{x\\to a}f(x)=f(a)$"
+      ],
+      "options_he": [
+        "$f(a)$ מוגדר",
+        "$\\lim_{x\\to a}f(x)$ קיים",
+        "$f'(a)$ קיים",
+        "$\\lim_{x\\to a}f(x)=f(a)$"
+      ],
+      "correct_index": 2,
+      "explanation_en": "Differentiability implies continuity, but continuity does not require derivative.",
+      "explanation_he": "גזירות $\\Rightarrow$ רציפות, לא להפך.",
+      "skill_atoms": [
+        "continuity_definition"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$f(x)=\\dfrac{|x|}{x}$ for $x\\ne 0$. What discontinuity at $0$?",
+      "stem_he": "$f(x)=\\dfrac{|x|}{x}$ ל-$x\\ne 0$. איזה סוג אי-רציפות ב-0?",
+      "options_en": [
+        "Removable",
+        "Jump",
+        "Infinite",
+        "Essential"
+      ],
+      "options_he": [
+        "ניתנת לתיקון",
+        "קפיצה",
+        "אינסופית",
+        "עיקרית"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Right limit 1, left limit $-1$.",
+      "explanation_he": "גבול ימני 1, שמאלי $-1$.",
+      "skill_atoms": [
+        "classify_discontinuity"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "IVT applies when $f$ is continuous on $[0,4]$, $f(0)=-1$, $f(4)=3$. Which is guaranteed?",
+      "stem_he": "IVT: $f$ רציפה על $[0,4]$, $f(0)=-1$, $f(4)=3$. מה מובטח?",
+      "options_en": [
+        "$f(x)=0$ for some $x\\in(0,4)$",
+        "$f$ has a maximum at $x=4$",
+        "$f'(c)=0$ for some $c$",
+        "$f$ is increasing"
+      ],
+      "options_he": [
+        "$f(c)=0$ ל-$c\\in(0,4)$",
+        "מקסימום ב-4",
+        "$f'(c)=0$",
+        "$f$ עולה"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Sign change guarantees a root by IVT.",
+      "explanation_he": "שינוי סימן $\\Rightarrow$ שורש.",
+      "skill_atoms": [
+        "apply_ivt"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "EVT guarantees extrema on:",
+      "stem_he": "EVT מבטיח קיצונים על:",
+      "options_en": [
+        "$(a,b)$ open",
+        "$[a,b]$ closed",
+        "$\\mathbb{R}$",
+        "Any interval"
+      ],
+      "options_he": [
+        "$(a,b)$ פתוח",
+        "$[a,b]$ סגור",
+        "$\\mathbb{R}$",
+        "כל קטע"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Must be continuous on closed bounded interval.",
+      "explanation_he": "רציפות על קטע סגור וחסום.",
+      "skill_atoms": [
+        "apply_evt"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=\\begin{cases}x^2 & x<1\\\\ 2x-1 & x\\ge 1\\end{cases}$, is $f$ continuous at $1$?",
+      "stem_he": "$f(x)=\\begin{cases}x^2 & x<1\\\\ 2x-1 & x\\ge 1\\end{cases}$ — רציפה ב-1?",
+      "options_en": [
+        "No — jump",
+        "No — removable",
+        "Yes",
+        "No — infinite"
+      ],
+      "options_he": [
+        "לא — קפיצה",
+        "לא — ניתנת לתיקון",
+        "כן",
+        "לא — אינסופית"
+      ],
+      "correct_index": 2,
+      "explanation_en": "Left limit $1$, right value $2(1)-1=1$, $f(1)=1$.",
+      "explanation_he": "גבול שמאל 1, ערך ימין 1.",
+      "skill_atoms": [
+        "test_piecewise_continuity"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Continuity requires limit equals function value.",
+      "IVT proves existence; EVT proves extrema on closed intervals.",
+      "Removable discontinuities can be fixed by redefining one point."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "IVT finds the exact value of c",
+        "correction": "IVT only guarantees existence of c, not its value.",
+        "detect_phrase_en": "find c exactly",
+        "detect_phrase_he": "מצא c בדיוק"
+      }
+    ],
+    "tutor_pacing_hint": "Classify discontinuity types with graphs before IVT/EVT proofs.",
+    "skill_atoms_unlocked": [
+      "continuity_definition",
+      "classify_discontinuity",
+      "apply_ivt",
+      "apply_evt",
+      "test_piecewise_continuity"
+    ]
+  }
 }

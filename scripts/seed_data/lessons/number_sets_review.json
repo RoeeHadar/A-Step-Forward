@@ -1,16 +1,205 @@
 {
   "concept_id": "number_sets_review",
   "subject": "calculus_1",
-  "level": "calculus_1",
+  "level": "university",
   "math_track": [
     "calc1"
   ],
-  "title_en": "Number Sets Review — ℕ, ℤ, ℚ, ℝ",
-  "title_he": "חזרה על קבוצות מספרים — ℕ, ℤ, ℚ, ℝ",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
+  "title_en": "Number Sets & Real Line",
+  "title_he": "קבוצות מספרים וציר המספרים הממשי",
+  "summary_en": "The real number line, absolute value, intervals, and completeness — foundations for limits, continuity, and integration in Calc 1.",
+  "summary_he": "ציר המספרים הממשי, ערך מוחלט, קטעים ושלמות — יסודות לגבולות, רציפות ואינטגרציה בחשבון 1.",
   "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "The real number system",
+      "title_he": "מערכת המספרים הממשיים",
+      "body_en_md": "The standard inclusion chain is:\n$$\\mathbb{N} \\subset \\mathbb{Z} \\subset \\mathbb{Q} \\subset \\mathbb{R}.$$\n\n- **$\\mathbb{N}$** — natural numbers $\\{1,2,3,\\ldots\\}$ (counting).\n- **$\\mathbb{Z}$** — integers $\\{\\ldots,-2,-1,0,1,2,\\ldots\\}$.\n- **$\\mathbb{Q}$** — rationals $\\dfrac{p}{q}$ with $p,q\\in\\mathbb{Z}$, $q\\ne 0$.\n- **$\\mathbb{R}$** — reals; includes irrationals such as $\\sqrt{2}$, $\\pi$, $e$.\n\n**Density of rationals:** between any two distinct reals there is a rational. Yet $\\mathbb{Q}$ is *not* all of $\\mathbb{R}$ — the real line is a **continuum**.\n\n**Examples:** $\\dfrac{7}{3}\\in\\mathbb{Q}$; $\\sqrt{2}\\notin\\mathbb{Q}$; $0.333\\ldots = \\dfrac{1}{3}\\in\\mathbb{Q}$.",
+      "body_he_md": "שרשרת ההכללה הסטандартית:\n$$\\mathbb{N} \\subset \\mathbb{Z} \\subset \\mathbb{Q} \\subset \\mathbb{R}.$$\n\n- **$\\mathbb{N}$** — מספרים טבעיים.\n- **$\\mathbb{Z}$** — שלמים.\n- **$\\mathbb{Q}$** — רציונליים $\\dfrac{p}{q}$, $q\\ne 0$.\n- **$\\mathbb{R}$** — ממשיים; כולל אי-רציונליים כמו $\\sqrt{2}$, $\\pi$, $e$.\n\n**צפיפות הרציונליים:** בין כל שני ממשיים שונים יש רציונלי. עם זאת $\\mathbb{Q}$ אינו כל $\\mathbb{R}$ — קו המספרים הוא **רצף**.\n\n**דוגמאות:** $\\dfrac{7}{3}\\in\\mathbb{Q}$; $\\sqrt{2}\\notin\\mathbb{Q}$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Absolute value",
+      "title_he": "ערך מוחלט",
+      "body_en_md": "For $x\\in\\mathbb{R}$:\n$$|x| = \\max(x,-x) = \\begin{cases} x & x\\ge 0 \\\\ -x & x<0 \\end{cases}$$\n\n**Geometric meaning:** $|x-a|$ is the distance from $x$ to $a$ on the number line.\n\n**Neighborhood language:** $|x-a|<\\delta$ means $x\\in(a-\\delta,a+\\delta)$ — an open interval of radius $\\delta$ around $a$.\n\n**Triangle inequality:** for all $a,b\\in\\mathbb{R}$,\n$$|a+b|\\le |a|+|b|.$$\n\n**Worked examples:**\n- $| -5 | = 5$\n- Solve $|2x-3|<5$: $-5<2x-3<5 \\Rightarrow -2<2x<8 \\Rightarrow -1<x<4$\n- $|x-2|\\le 3 \\Rightarrow x\\in[-1,5]$",
+      "body_he_md": "ל-$x\\in\\mathbb{R}$:\n$$|x| = \\max(x,-x).$$\n\n**משמעות גאומטרית:** $|x-a|$ הוא המרחק מ-$x$ ל-$a$ על ציר המספרים.\n\n**שפת סביבות:** $|x-a|<\\delta$ פירושו $x\\in(a-\\delta,a+\\delta)$.\n\n**אי-שוויון המשולש:** $|a+b|\\le |a|+|b|$.\n\n**דוגמאות:**\n- $| -5 | = 5$\n- $|2x-3|<5 \\Rightarrow -1<x<4$\n- $|x-2|\\le 3 \\Rightarrow x\\in[-1,5]$"
+    },
+    {
+      "kind": "theory",
+      "title_en": "Intervals and neighborhoods",
+      "title_he": "קטעים וסביבות",
+      "body_en_md": "**Open interval:** $(a,b)=\\{x: a<x<b\\}$.\n**Closed interval:** $[a,b]=\\{x: a\\le x\\le b\\}$.\n**Half-open:** $[a,b)$ or $(a,b]$.\n\n**Deleted neighborhood** of $a$ (used in limits):\n$$0<|x-a|<\\delta \\quad\\Longleftrightarrow\\quad x\\in(a-\\delta,a+\\delta)\\setminus\\{a\\}.$$\n\n**Supremum / infimum (intuitive):** for a set $S\\subset\\mathbb{R}$ bounded above, $\\sup S$ is the *least* upper bound. For $S=(0,1)$, $\\sup S=1$ but the maximum is not attained. Similarly $\\inf S$ is the greatest lower bound.",
+      "body_he_md": "**קטע פתוח:** $(a,b)$. **סגור:** $[a,b]$. **חצי-פתוח:** $[a,b)$ או $(a,b]$.\n\n**סביבה מנוקבת** (בגבולות):\n$$0<|x-a|<\\delta \\quad\\Longleftrightarrow\\quad x\\in(a-\\delta,a+\\delta)\\setminus\\{a\\}.$$\n\n**סופרימום / אינפימום (אינטואיטיבי):** $\\sup S$ הוא חסם עליון מינימלי. ל-$S=(0,1)$, $\\sup S=1$ אך המקסימום לא מתקבל."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Bounds and completeness",
+      "title_he": "חסמים ושלמות",
+      "body_en_md": "A set $S\\subset\\mathbb{R}$ is **bounded above** if $\\exists M$ with $x\\le M$ for all $x\\in S$. **Bounded below** is analogous.\n\n**Archimedean property** (stated without proof): for every real $x>0$ there exists $n\\in\\mathbb{N}$ with $n>x$. Equivalently, $\\dfrac{1}{n}\\to 0$.\n\n**Completeness of $\\mathbb{R}$:** every bounded *increasing* sequence of reals converges to a real limit. This fails in $\\mathbb{Q}$ — e.g. a sequence of rationals approaching $\\sqrt{2}$ has no rational limit.\n\nThis property guarantees that limits you compute in Calc 1 actually land in $\\mathbb{R}$.",
+      "body_he_md": "קבוצה $S$ **חסומה מלמעלה** אם $\\exists M$ כך ש-$x\\le M$ לכל $x\\in S$.\n\n**תכונת ארכימדס** (ללא הוכחה): לכל $x>0$ קיים $n\\in\\mathbb{N}$ עם $n>x$.\n\n**שלמות $\\mathbb{R}$:** כל סדרה עולה וחסומה של ממשיים מתכנסת. ב-$\\mathbb{Q}$ זה נכשל — סדרה שמתקרבת ל-$\\sqrt{2}$ אין לה גבול רציונלי.\n\nתכונה זו מבטיחה שגבולות בחשבון 1 נחתים ב-$\\mathbb{R}$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Why this matters for Calc 1",
+      "title_he": "למה זה חשוב לחשבון 1",
+      "body_en_md": "- **Limits** use $|x-a|<\\delta$ — absolute value and deleted neighborhoods.\n- **Continuity** is defined on intervals; endpoints need one-sided limits.\n- **Integration** on $[a,b]$ uses a closed, bounded domain — EVT and Riemann sums rely on completeness.\n- **Inequalities** like $|f(x)-L|<\\epsilon$ appear in every limit proof and error bound.\n\nMaster this language early — it is the vocabulary of every exam question at Technion, TAU, BGU, and HUJI.",
+      "body_he_md": "- **גבולות** משתמשים ב-$|x-a|<\\delta$ — ערך מוחלט וסביבות מנוקבות.\n- **רציפות** מוגדרת על קטעים; בקצוות צריך גבולות חד-צדדיים.\n- **אינטגרציה** על $[a,b]$ דורשת תחום סגור וחסום.\n- **אי-שוויונות** כמו $|f(x)-L|<\\epsilon$ מופיעים בכל הוכחת גבול.\n\nשלוטו בשפה הזו מוקדם — זה אוצר המילים של כל מבחן בטכניון, ת״א, בGU והUJI."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which set does $\\sqrt{2}$ belong to?",
+      "stem_he": "לאיזו קבוצה שייך $\\sqrt{2}$?",
+      "options_en": [
+        "$\\mathbb{N}$",
+        "$\\mathbb{Z}$",
+        "$\\mathbb{Q}$",
+        "$\\mathbb{R}\\setminus\\mathbb{Q}$"
+      ],
+      "options_he": [
+        "$\\mathbb{N}$",
+        "$\\mathbb{Z}$",
+        "$\\mathbb{Q}$",
+        "$\\mathbb{R}\\setminus\\mathbb{Q}$"
+      ],
+      "correct_index": 3,
+      "explanation_en": "$\\sqrt{2}$ is irrational — real but not rational.",
+      "explanation_he": "$\\sqrt{2}$ אי-רציונלי — ממשי אך לא רציונלי.",
+      "skill_atoms": [
+        "identify_number_set"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Solve $|2x-3|<5$. The solution set is:",
+      "stem_he": "פתרו $|2x-3|<5$. קבוצת הפתרונות:",
+      "options_en": [
+        "$(-1,4)$",
+        "$(-4,1)$",
+        "$[-1,4]$",
+        "$(-\\infty,-1)\\cup(4,\\infty)$"
+      ],
+      "options_he": [
+        "$(-1,4)$",
+        "$(-4,1)$",
+        "$[-1,4]$",
+        "$(-\\infty,-1)\\cup(4,\\infty)$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$-5<2x-3<5 \\Rightarrow -1<x<4$.",
+      "explanation_he": "$-5<2x-3<5 \\Rightarrow -1<x<4$.",
+      "skill_atoms": [
+        "solve_absolute_value"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "What is $\\sup(0,1)$?",
+      "stem_he": "מהו $\\sup(0,1)$?",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "Does not exist",
+        "$\\infty$"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "לא קיים",
+        "$\\infty$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Every number $<1$ is in $(0,1)$; $1$ is the least upper bound.",
+      "explanation_he": "כל מספר $<1$ ב-$(0,1)$; $1$ הוא חסם עליון מינימלי.",
+      "skill_atoms": [
+        "find_supremum"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which notation describes $x$ with $0<|x-2|<\\delta$?",
+      "stem_he": "איזה סימון מתאר $x$ עם $0<|x-2|<\\delta$?",
+      "options_en": [
+        "Closed interval $[2-\\delta,2+\\delta]$",
+        "Deleted neighborhood of $2$",
+        "$x=2$",
+        "Half-open interval"
+      ],
+      "options_he": [
+        "קטע סגור",
+        "סביבה מנוקבת של $2$",
+        "$x=2$",
+        "קטע חצי-פתוח"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Strict inequality excludes $x=2$ — a punctured neighborhood.",
+      "explanation_he": "אי-שוויון חזק שולל $x=2$ — סביבה מנוקבת.",
+      "skill_atoms": [
+        "identify_interval"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "If $|a|=3$ and $|b|=4$, what is the largest possible value of $|a+b|$?",
+      "stem_he": "אם $|a|=3$ ו-$|b|=4$, מה הערך המקסימלי האפשרי של $|a+b|$?",
+      "options_en": [
+        "$1$",
+        "$7$",
+        "$5$",
+        "$12$"
+      ],
+      "options_he": [
+        "$1$",
+        "$7$",
+        "$5$",
+        "$12$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Maximum when $a,b$ have the same sign: $|3+4|=7$. Triangle inequality gives $|a+b|\\le7$.",
+      "explanation_he": "מקסימום כשסימנים זהים: $|3+4|=7$.",
+      "skill_atoms": [
+        "triangle_inequality"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "$\\mathbb{Q}$ is dense in $\\mathbb{R}$ but incomplete.",
+      "$|x-a|<\\delta$ is the language of limits.",
+      "$\\sup$ may not be attained; $\\max$ must be an element of the set."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Every bounded set has a maximum",
+        "correction": "It has a supremum; e.g. $(0,1)$ has no max.",
+        "detect_phrase_en": "maximum of open interval",
+        "detect_phrase_he": "מקסימום של קטע פתוח"
+      }
+    ],
+    "tutor_pacing_hint": "Draw the number line before introducing $\\delta$-neighborhoods.",
+    "skill_atoms_unlocked": [
+      "identify_number_set",
+      "solve_absolute_value",
+      "find_supremum",
+      "identify_interval",
+      "triangle_inequality"
+    ]
+  }
 }
