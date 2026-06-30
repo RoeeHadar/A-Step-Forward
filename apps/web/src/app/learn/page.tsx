@@ -64,12 +64,12 @@ function cardDescription(subject: string, isHe: boolean): string | null {
   }
   if (subject === 'high_school_math_4pt') {
     return isHe
-      ? 'שני שאלונים: 471 (65%) + 472 (35%)'
-      : 'Two exam papers: 471 (65%) + 472 (35%)';
+      ? 'שני שאלונים: 471 (65%) + 472 (35%) — כולל בדיקת השערות'
+      : 'Two exam papers: 471 (65%) + 472 (35%) — includes hypothesis testing';
   }
   if (subject === 'high_school_math_5pt') {
     return isHe
-      ? 'כולל אינduction, מספרים מרוכבים ושני שאלונים'
+      ? 'כולל אינדוקציה, מספרים מרוכבים ושני שאלונים'
       : 'Includes induction, complex numbers, and two exam papers';
   }
   if (subject === 'makhina') {

@@ -803,7 +803,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
       },
       {
         id: 'paper1_algebra_5pt',
-        heLabel: 'שאלון 1 — אלגברה, סדרות ואינduction',
+        heLabel: 'שאלון 1 — אלגברה, סדרות ואינדוקציה',
         enLabel: 'Paper 1 — Algebra, Sequences & Induction',
         exam_paper: 'paper_1',
         concept_ids: [
