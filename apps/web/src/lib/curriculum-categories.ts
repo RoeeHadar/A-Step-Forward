@@ -1136,6 +1136,7 @@ export const SUBJECT_TO_CATEGORY: Record<string, string> = {
   university_physics_1: 'university_physics_1',
   university_physics_2: 'university_physics_2',
   makhina: 'makhina',
+  makhina_physics: 'university_physics_1',
   calculus_1: 'calculus_1',
   calculus_2: 'calculus_2',
   linear_algebra: 'linear_algebra',
@@ -1166,6 +1167,6 @@ export const SUBJECT_TO_CATEGORY: Record<string, string> = {
   calculus: 'calculus_1',
   'linear-algebra': 'linear_algebra',
   university_prep: 'makhina',
-  physics_pre_university: 'makhina',
+  physics_pre_university: 'university_physics_1',
   math_pre_university: 'makhina',
 };

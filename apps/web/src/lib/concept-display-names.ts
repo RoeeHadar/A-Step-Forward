@@ -27,14 +27,22 @@ const lessonsById = new Map(lessons.map((l) => [l.id, l]));
 const CHAPTER_ALIASES: Record<string, { en: string; he: string }> = {
   derivatives: { en: 'Derivatives', he: 'נגזרות' },
   integrals: { en: 'Integrals', he: 'אינטגרלים' },
-  sequences: { en: 'Sequences & Series', he: 'סדרות וטורים' },
+  sequences: { en: 'Sequences', he: 'סדרות' },
   trigonometry: { en: 'Trigonometry', he: 'טריגונומטריה' },
   limits: { en: 'Limits', he: 'גבולות' },
   functions: { en: 'Functions', he: 'פונקציות' },
   probability: { en: 'Probability', he: 'הסתברות' },
   statistics: { en: 'Statistics', he: 'סטטיסטיקה' },
   vectors: { en: 'Vectors', he: 'וקטורים' },
+  polynomials: { en: 'Polynomials', he: 'פולינומים' },
+  geometry: { en: 'Geometry', he: 'גאומטריה' },
+  combinatorics: { en: 'Combinatorics', he: 'קומבינטוריקה' },
+  complex_numbers: { en: 'Complex Numbers', he: 'מספרים מרוכבים' },
+  linear_algebra: { en: 'Linear Algebra', he: 'אלגברה לינארית' },
   kinematics: { en: 'Kinematics', he: 'קינמטיקה' },
+  dynamics: { en: 'Dynamics', he: 'דינמיקה' },
+  mechanics: { en: 'Mechanics', he: 'מכניקה' },
+  electromagnetism: { en: 'Electromagnetism', he: 'אלקטרומגנטיות' },
   electricity: { en: 'Electricity', he: 'חשמל' },
   optics: { en: 'Optics', he: 'אופטיקה' },
   gravitation: { en: 'Gravitation', he: 'כבידה' },
@@ -63,17 +71,7 @@ export interface ConceptTitles {
   title_he: string | null;
 }
 
-export function resolveConceptTitles(
-  conceptId: string,
-  lessonMeta?: { title_en: string | null; title_he: string | null } | null,
-): ConceptTitles {
-  if (lessonMeta?.title_en) {
-    return {
-      title_en: lessonMeta.title_en,
-      title_he: lessonMeta.title_he ?? null,
-    };
-  }
-
+function resolveCanonicalTitles(conceptId: string): ConceptTitles {
   const lesson = lessonsById.get(conceptId) ?? findPrefixMatch(conceptId, lessons);
   if (lesson) {
     return {
@@ -99,6 +97,24 @@ export function resolveConceptTitles(
   }
 
   return { title_en: humanizeId(conceptId), title_he: null };
+}
+
+export function resolveConceptTitles(
+  conceptId: string,
+  lessonMeta?: { title_en: string | null; title_he: string | null } | null,
+): ConceptTitles {
+  const canonical = resolveCanonicalTitles(conceptId);
+
+  if (lessonMeta?.title_en) {
+    return {
+      title_en: lessonMeta.title_en,
+      // Plan rows often store English-only slugs (e.g. "sequences"); merge Hebrew
+      // from KG / lesson index / chapter aliases when the stored name_he is missing.
+      title_he: lessonMeta.title_he ?? canonical.title_he,
+    };
+  }
+
+  return canonical;
 }
 
 export function pickConceptTitle(titles: ConceptTitles, locale: 'en' | 'he'): string {

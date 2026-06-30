@@ -1,9 +1,9 @@
 /** Human-readable labels for Learning Database subject slugs. */
 export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: string }> = {
   // ── Bagrut math ──
-  high_school_math_3pt: { en: 'Math — 3 Points', he: 'מתמטיקה 3 יחידות', icon: '📐' },
-  high_school_math_4pt: { en: 'Math — 4 Points', he: 'מתמטיקה 4 יחידות', icon: '📏' },
-  high_school_math_5pt: { en: 'Math — 5 Points', he: 'מתמטיקה 5 יחידות', icon: '🔢' },
+  high_school_math_3pt: { en: 'Math — 3 Points', he: 'מתמטיקה 3 יח"ל', icon: '📐' },
+  high_school_math_4pt: { en: 'Math — 4 Points', he: 'מתמטיקה 4 יח"ל', icon: '📏' },
+  high_school_math_5pt: { en: 'Math — 5 Points', he: 'מתמטיקה 5 יח"ל', icon: '🔢' },
   'hs-math-3': { en: 'Math — 3 Points', he: 'מתמטיקה 3 יחידות', icon: '📐' },
   'math-hs-3': { en: 'Math — 3 Points', he: 'מתמטיקה 3 יחידות', icon: '📐' },
   hs_math_3: { en: 'Math — 3 Points', he: 'מתמטיקה 3 יחידות', icon: '📐' },
@@ -21,8 +21,8 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   high_school_math_4_points: { en: 'Math — 4 Points', he: 'מתמטיקה 4 יחידות', icon: '📏' },
   high_school_math_5_points: { en: 'Math — 5 Points', he: 'מתמטיקה 5 יחידות', icon: '🔢' },
   // ── Bagrut physics ──
-  hs_physics: { en: 'Bagrut Physics — 5 Units', he: 'פיזיקה לבגרות — 5 יחידות', icon: '⚡' },
-  high_school_physics: { en: 'Bagrut Physics — 5 Units', he: 'פיזיקה לבגרות — 5 יחידות', icon: '⚡' },
+  hs_physics: { en: 'Bagrut Physics — 5 Units', he: 'פיזיקה (בגרות)', icon: '⚡' },
+  high_school_physics: { en: 'Bagrut Physics — 5 Units', he: 'פיזיקה (בגרות)', icon: '⚡' },
   physics_h1: { en: 'Physics', he: 'פיזיקה', icon: '⚡' },
   'physics-h1': { en: 'Physics', he: 'פיזיקה', icon: '⚡' },
   physics_hs: { en: 'Physics', he: 'פיזיקה', icon: '⚡' },
@@ -32,18 +32,19 @@ export const SUBJECT_LABELS: Record<string, { en: string; he: string; icon: stri
   'hs-physics-5': { en: 'Physics — 5pt', he: 'פיזיקה — 5 יח״ל', icon: '⚡' },
   physics_high_school: { en: 'Physics', he: 'פיזיקה', icon: '⚡' },
   // ── University physics ──
-  university_physics_1: { en: 'Physics 1 — Mechanics', he: 'פיזיקה 1 — מכניקה', icon: '⚙️' },
-  university_physics_2: { en: 'Physics 2 — E&M', he: 'פיזיקה 2 — חשמל ומגנטיות', icon: '⚡' },
+  university_physics_1: { en: 'Physics 1 — Mechanics', he: 'פיזיקה 1 (אוניברסיטה)', icon: '⚙️' },
+  university_physics_2: { en: 'Physics 2 — E&M', he: 'פיזיקה 2 (אוניברסיטה)', icon: '⚡' },
   physics_1: { en: 'Physics 1', he: 'פיזיקה 1', icon: '⚙️' },
   physics_2: { en: 'Physics 2', he: 'פיזיקה 2', icon: '⚡' },
   // ── University math ──
-  calculus_1: { en: 'Calculus 1', he: 'חדו"א 1', icon: '∂' },
-  calculus_2: { en: 'Calculus 2', he: 'חדו"א 2', icon: '∫' },
-  calculus: { en: 'Calculus 1', he: 'חדו"א 1', icon: '∂' },
+  calculus_1: { en: 'Calculus 1', he: 'חשבון דיפרנציאלי 1', icon: '∂' },
+  calculus_2: { en: 'Calculus 2', he: 'חשבון דיפרנציאלי 2', icon: '∫' },
+  calculus: { en: 'Calculus 1', he: 'חשבון דיפרנציאלי 1', icon: '∂' },
   linear_algebra: { en: 'Linear Algebra', he: 'אלגברה לינארית', icon: '📐' },
   statistics_probability: { en: 'Statistics & Probability', he: 'סטטיסטיקה והסתברות', icon: '📊' },
   // ── מכינה ──
-  makhina: { en: 'University Prep (מכינה)', he: 'מכינה אקדמית', icon: '🎓' },
+  makhina: { en: 'Math Preparation', he: 'מכינה מתמטיקה', icon: '🎓' },
+  makhina_physics: { en: 'Physics Preparation', he: 'מכינה פיזיקה', icon: '⚡' },
   university_prep: { en: 'University Prep (מכינה)', he: 'מכינה אקדמית', icon: '🎓' },
   // ── Legacy / misc ──
   math: { en: 'Mathematics', he: 'מתמטיקה', icon: '🔢' },

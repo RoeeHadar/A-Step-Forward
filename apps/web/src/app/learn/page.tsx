@@ -7,8 +7,14 @@ import { getServerLocale } from '@/i18n/locale-server';
 
 export const dynamic = 'force-dynamic';
 
-const MAKHINA_CARD = {
+const MAKHINA_MATH_CARD = {
   subject: 'makhina',
+  section_count: 0,
+  sample_grade: null,
+};
+
+const MAKHINA_PHYSICS_CARD = {
+  subject: 'makhina_physics',
   section_count: 0,
   sample_grade: null,
 };
@@ -36,7 +42,6 @@ type SubjectCard = {
   sample_grade: string | null;
 };
 
-
 function UpgradeTrackBanner({ isHe }: { isHe: boolean }) {
   return (
     <Link
@@ -51,7 +56,42 @@ function UpgradeTrackBanner({ isHe }: { isHe: boolean }) {
   );
 }
 
-function SubjectCard({ s, isMakhina }: { s: SubjectCard; isMakhina: boolean }) {
+function cardDescription(subject: string, isHe: boolean): string | null {
+  if (subject === 'makhina') {
+    return isHe
+      ? 'מסלול לבניית בסיס מתמטי לפני האוניברסיטה'
+      : 'Build your math foundation before university';
+  }
+  if (subject === 'makhina_physics') {
+    return isHe
+      ? 'יסודות הפיזיקה לפני האוניברסיטה'
+      : 'Physics foundations before university';
+  }
+  return null;
+}
+
+function SubjectCard({
+  s,
+  isHe,
+}: {
+  s: SubjectCard;
+  isHe: boolean;
+}) {
+  const locale = isHe ? 'he' : 'en';
+  const isMakhinaTrack = s.subject === 'makhina' || s.subject === 'makhina_physics';
+  const description = cardDescription(s.subject, isHe);
+  const badgeLabel = isMakhinaTrack
+    ? isHe
+      ? 'מסלול גשר'
+      : 'Bridge track'
+    : s.section_count > 0
+      ? isHe
+        ? `${s.section_count} פרקים`
+        : `${s.section_count} sections`
+      : isHe
+        ? 'חומרים נבחרים'
+        : 'Curated resources';
+
   return (
     <Link
       href={`/learn/${s.subject}`}
@@ -62,22 +102,20 @@ function SubjectCard({ s, isMakhina }: { s: SubjectCard; isMakhina: boolean }) {
           {subjectIcon(s.subject)}
         </span>
         <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-          {isMakhina
-            ? 'Bridge track'
-            : s.section_count > 0
-              ? `${s.section_count} sections`
-              : 'Curated resources'}
+          {badgeLabel}
         </span>
       </div>
-      <h2 className="mt-3 font-display text-lg font-semibold text-foreground group-hover:text-primary">
-        {subjectLabel(s.subject, 'en')}
+      <h2 className="mt-3 font-display text-lg font-semibold text-foreground group-hover:text-primary" dir={isHe ? 'rtl' : 'ltr'}>
+        {subjectLabel(s.subject, locale)}
       </h2>
-      <p className="mt-1 text-sm text-muted-foreground" dir="rtl">
-        {subjectLabel(s.subject, 'he')}
-      </p>
-      {isMakhina ? (
-        <p className="mt-1.5 text-sm text-muted-foreground" dir="rtl">
-          מסלול לבניית בסיס מתמטי לפני האוניברסיטה
+      {!isHe ? (
+        <p className="mt-1 text-sm text-muted-foreground" dir="rtl">
+          {subjectLabel(s.subject, 'he')}
+        </p>
+      ) : null}
+      {description ? (
+        <p className="mt-1.5 text-sm text-muted-foreground" dir={isHe ? 'rtl' : 'ltr'}>
+          {description}
         </p>
       ) : null}
     </Link>
@@ -92,8 +130,9 @@ export default async function LearnPage() {
   // Build a slug → card map from DB subjects.
   const bySlug = new Map(subjects.map((s) => [s.subject, s]));
 
-  // Ensure makhina is always present.
-  if (!bySlug.has('makhina')) bySlug.set('makhina', MAKHINA_CARD);
+  // Ensure makhina tracks are always present.
+  if (!bySlug.has('makhina')) bySlug.set('makhina', MAKHINA_MATH_CARD);
+  if (!bySlug.has('makhina_physics')) bySlug.set('makhina_physics', MAKHINA_PHYSICS_CARD);
 
   // Helper: get card for a slug (returns placeholder if not in DB yet).
   function card(slug: string): SubjectCard {
@@ -102,12 +141,17 @@ export default async function LearnPage() {
 
   const bagrutCards = BAGRUT_SLUGS.map(card);
   const universityCards = UNIVERSITY_SLUGS.map(card);
-  const makhinaCard = card('makhina');
+  const makhinaCards = [card('makhina'), card('makhina_physics')];
 
   const groups = [
     { id: 'bagrut', he: 'בגרות', en: 'Bagrut', cards: bagrutCards },
     { id: 'university', he: 'אוניברסיטה', en: 'University', cards: universityCards },
-    { id: 'makhina', he: 'מכינה', en: 'University Preparation', cards: [makhinaCard] },
+    {
+      id: 'makhina',
+      he: 'מכינה',
+      en: 'University Preparation',
+      cards: makhinaCards,
+    },
   ];
 
   return (
@@ -115,9 +159,13 @@ export default async function LearnPage() {
       <SiteHeader />
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10">
         <header className="mb-10">
-          <h1 className="font-display text-3xl font-bold text-foreground">Learn</h1>
-          <p className="mt-2 text-muted-foreground">
-            Free textbooks, practice materials, and Bagrut exams — browse without signing in.
+          <h1 className="font-display text-3xl font-bold text-foreground">
+            {isHe ? 'לימוד' : 'Learn'}
+          </h1>
+          <p className="mt-2 text-muted-foreground" dir={isHe ? 'rtl' : 'ltr'}>
+            {isHe
+              ? 'ספרי לימוד, חומרי תרגול ומבחני בגרות — ללא צורך בהרשמה.'
+              : 'Free textbooks, practice materials, and Bagrut exams — browse without signing in.'}
           </p>
         </header>
 
@@ -125,9 +173,13 @@ export default async function LearnPage() {
           {groups.map((group) => (
             <section key={group.id}>
               <div className="mb-4">
-                <div className="flex items-center gap-3">
-                  <h2 className="font-display text-xl font-semibold text-foreground">{group.en}</h2>
-                  <span className="text-muted-foreground" dir="rtl">/ {group.he}</span>
+                <div className="flex items-center gap-3" dir={isHe ? 'rtl' : 'ltr'}>
+                  <h2 className="font-display text-xl font-semibold text-foreground">
+                    {isHe ? group.he : group.en}
+                  </h2>
+                  <span className="text-muted-foreground" dir={isHe ? 'ltr' : 'rtl'}>
+                    / {isHe ? group.en : group.he}
+                  </span>
                 </div>
                 {group.id === 'makhina' ? (
                   <p
@@ -135,8 +187,8 @@ export default async function LearnPage() {
                     dir={isHe ? 'rtl' : 'ltr'}
                   >
                     {isHe
-                      ? 'מסלול לבניית בסיס מתמטי לפני האוניברסיטה'
-                      : 'Build your math foundation before university'}
+                      ? 'הכנה לאוניברסיטה — מתמטיקה ופיזיקה'
+                      : 'University preparation — math and physics'}
                   </p>
                 ) : null}
               </div>
@@ -146,7 +198,7 @@ export default async function LearnPage() {
                     {group.id === 'bagrut' && s.subject === 'high_school_math_4pt' ? (
                       <UpgradeTrackBanner isHe={isHe} />
                     ) : null}
-                    <SubjectCard s={s} isMakhina={s.subject === 'makhina'} />
+                    <SubjectCard s={s} isHe={isHe} />
                   </Fragment>
                 ))}
               </div>

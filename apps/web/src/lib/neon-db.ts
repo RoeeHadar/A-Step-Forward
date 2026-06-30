@@ -564,10 +564,11 @@ export async function generateLearningPlan(learnerId: string): Promise<LearningP
         SELECT display_name, file_url, year, exam_type
         FROM bagrut_exams WHERE subject = ${subject} ORDER BY year DESC NULLS LAST LIMIT 2
       `) as Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
+      const titles = resolveConceptTitles(cid);
       hydrated.push({
         concept_id: cid,
-        name: kgInfo?.name ?? cid.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
-        name_he: kgInfo?.name_he ?? null,
+        name: titles.title_en,
+        name_he: titles.title_he,
         subject,
         mastery: mastery[cid] ?? null,
         suggested_sections: sections,
@@ -640,10 +641,11 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
         SELECT display_name, file_url, year, exam_type
         FROM bagrut_exams WHERE subject = ${subject} ORDER BY year DESC NULLS LAST LIMIT 2
       `) as Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
+      const titles = resolveConceptTitles(cid);
       hydrated.push({
         concept_id: cid,
-        name: kgInfo?.name ?? cid.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
-        name_he: kgInfo?.name_he ?? null,
+        name: titles.title_en,
+        name_he: titles.title_he,
         subject,
         mastery: mastery[cid] ?? null,
         suggested_sections: sections,
