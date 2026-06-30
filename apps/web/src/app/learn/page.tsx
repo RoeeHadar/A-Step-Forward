@@ -57,6 +57,21 @@ function UpgradeTrackBanner({ isHe }: { isHe: boolean }) {
 }
 
 function cardDescription(subject: string, isHe: boolean): string | null {
+  if (subject === 'high_school_math_3pt') {
+    return isHe
+      ? 'מסלול 372 החדש — כולל תכנון לינארי, ללא חדו״א'
+      : 'New 372 track — includes linear programming, no calculus';
+  }
+  if (subject === 'high_school_math_4pt') {
+    return isHe
+      ? 'שני שאלונים: 471 (65%) + 472 (35%)'
+      : 'Two exam papers: 471 (65%) + 472 (35%)';
+  }
+  if (subject === 'high_school_math_5pt') {
+    return isHe
+      ? 'כולל אינduction, מספרים מרוכבים ושני שאלונים'
+      : 'Includes induction, complex numbers, and two exam papers';
+  }
   if (subject === 'makhina') {
     return isHe
       ? 'מסלול לבניית בסיס מתמטי לפני האוניברסיטה'
@@ -181,7 +196,16 @@ export default async function LearnPage() {
                     / {isHe ? group.en : group.he}
                   </span>
                 </div>
-                {group.id === 'makhina' ? (
+                {group.id === 'bagrut' ? (
+                  <p
+                    className="mt-1 text-sm text-muted-foreground"
+                    dir={isHe ? 'rtl' : 'ltr'}
+                  >
+                    {isHe
+                      ? 'לא בטוח/ה באיזה מסלול את/ה? שאל/י את המורה — מסלול חדש (372/472/572) מ-2023, מסלול ישן (382/482/582) לבגרויות חוזרות'
+                      : 'Not sure which track? Ask your teacher — new track (372/472/572) from 2023; old track (382/482/582) for external candidates'}
+                  </p>
+                ) : group.id === 'makhina' ? (
                   <p
                     className="mt-1 text-sm text-muted-foreground"
                     dir={isHe ? 'rtl' : 'ltr'}

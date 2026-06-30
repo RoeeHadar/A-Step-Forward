@@ -42,6 +42,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   harmonic_oscillation: 'simple_harmonic_motion',
   angular_momentum_particles: 'angular_momentum',
   rigid_body_torque_equilibrium: 'torque',
+  rigid_body_dynamics: 'uni_rigid_body',
   center_of_mass: 'newton_laws',
   fluids_hydrostatics: 'static_equilibrium',
   fluids_bernoulli: 'waves_basics',
@@ -61,6 +62,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   integration_by_parts: 'integrals_techniques',
   integration_partial_fractions: 'integrals_techniques',
   riemann_integral_ftc: 'definite_integrals',
+  riemann_sums: 'riemann_integral_ftc',
   improper_integrals: 'definite_integrals',
   sequences_limits: 'sequences_arithmetic',
   lhopital_rule: 'derivatives_applications',
@@ -105,7 +107,6 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   maxwell_equations: 'electromagnetic_induction',
   em_waves_propagation: 'waves_basics',
   interference_diffraction: 'optics_physical',
-  // New aliases for extended catalog concept IDs
   hypothesis_testing_z_t: 'hypothesis_testing',
   linear_regression_least_squares: 'descriptive_stats',
   correlation_coefficient: 'descriptive_stats',

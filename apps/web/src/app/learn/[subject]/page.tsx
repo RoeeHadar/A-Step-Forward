@@ -89,6 +89,39 @@ const STATUS_CONFIG = {
   },
 } as const;
 
+/** Themed section headers for physics subjects grouped by questionnaire */
+const PHYSICS_SECTION_THEMES: Record<string, { emoji: string; label_en: string; label_he: string }> = {
+  mechanics_hs: { emoji: '⚙️', label_en: 'Mechanics', label_he: 'מכניקה' },
+  electricity_hs: { emoji: '⚡', label_en: 'Electricity & Magnetism', label_he: 'חשמל ומגנטיות' },
+  radiation_matter_hs: { emoji: '☢️', label_en: 'Radiation & Modern Physics', label_he: 'קרינה ופיזיקה מודרנית' },
+  research_lab_hs: { emoji: '🔬', label_en: 'Research & Lab', label_he: 'מחקר ומעבדה' },
+  // University Physics 1 — mechanics-focused sections
+  kinematics_dynamics_uni: { emoji: '⚙️', label_en: 'Kinematics & Dynamics', label_he: 'קינמטיקה ודינמיקה' },
+  energy_momentum_uni: { emoji: '💫', label_en: 'Energy & Momentum', label_he: 'אנרגיה ותנע' },
+  rigid_body_statics_uni: { emoji: '🔧', label_en: 'Rigid Body & Statics', label_he: 'גוף קשיח ושיווי משקל' },
+  rotation_angular_momentum_uni: { emoji: '🔄', label_en: 'Rotation & Angular Momentum', label_he: 'סיבוב ותנע זוויתי' },
+  systems_of_particles_uni: { emoji: '🎯', label_en: 'Systems of Particles', label_he: 'מערכות חלקיקים' },
+  oscillations_uni: { emoji: '〰️', label_en: 'Oscillations', label_he: 'תנודות' },
+  fluids_uni: { emoji: '💧', label_en: 'Fluids', label_he: 'פלואידים' },
+};
+
+function isPhysicsSubject(categoryId: string): boolean {
+  return categoryId === 'hs_physics'
+    || categoryId === 'university_physics_1'
+    || categoryId === 'high_school_physics';
+}
+
+function physicsSectionHeader(
+  sectionId: string,
+  fallbackEn: string,
+  fallbackHe: string,
+  isHe: boolean,
+): string {
+  const theme = PHYSICS_SECTION_THEMES[sectionId];
+  if (!theme) return isHe ? fallbackHe : fallbackEn;
+  return `${theme.emoji} ${isHe ? theme.label_he : theme.label_en}`;
+}
+
 const SUBJECT_ALIASES: Record<string, string> = {
   'high-school-math-3-pts': 'high_school_math_3pt',
   'high-school-math-4-pts': 'high_school_math_4pt',
@@ -301,7 +334,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     </div>
                     <div>
                       <h2 className="font-display text-lg font-semibold text-foreground">
-                        {isHe ? group.label_he : group.label_en}
+                        {isPhysicsSubject(filter.categoryId)
+                          ? physicsSectionHeader(group.id, group.label_en, group.label_he, isHe)
+                          : isHe ? group.label_he : group.label_en}
                       </h2>
                     </div>
                     <div className="ml-auto text-xs text-muted-foreground">

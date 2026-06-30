@@ -38,6 +38,20 @@ export interface CurriculumSection {
   enLabel: string;
   /** KG concept IDs that belong to this section */
   concept_ids?: string[];
+  /** Topics removed from the new track or only for legacy cohorts (e.g. 382 calculus) */
+  old_track_only?: boolean;
+  /** Which Bagrut exam paper this section maps to (multi-paper math subjects) */
+  exam_paper?: 'paper_1' | 'paper_2';
+  /** Official questionnaire code for physics sections */
+  questionnaire_code?: string;
+  /** Grade weight for physics questionnaires (e.g. "30%") */
+  questionnaire_weight?: string;
+}
+
+/** Old vs new Bagrut track metadata (math subjects) */
+export interface CurriculumTrackInfo {
+  old: { questionnaires: string[]; label_he: string; label_en: string };
+  new: { questionnaires: string[]; label_he: string; label_en: string };
 }
 
 export interface CurriculumCategory {
@@ -48,14 +62,18 @@ export interface CurriculumCategory {
   points_levels: PointsLevel[];
   /** Official Bagrut questionnaire numbers (empty for non-Bagrut tracks) */
   bagrut_questionnaires?: string[];
+  /** Old vs new curriculum track codes (Bagrut math only) */
+  curriculum_tracks?: CurriculumTrackInfo;
   sections: CurriculumSection[];
   /** Ordered list of all KG concept IDs in scope for this category */
   concept_ids: string[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MATH — 3 UNITS  (Bagrut 172 / 371 / 372)
-// NO calculus, NO vectors, NO complex numbers
+// MATH — 3 UNITS
+// Old track: 182 / 381 / 382 (382 included calculus)
+// New track (mandatory from Sept 2023): 172 / 371 / 372
+//   372 REMOVES calculus, ADDS linear programming + quadratic modeling + spatial reasoning
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_3PT_NEW_CONCEPTS = [
   'data_representation',
@@ -77,6 +95,19 @@ const MATH_3PT_NEW_CONCEPTS = [
   'function_transformations',
   'trigonometry_ratios',
   'percentages_and_interest',
+  // New 372 track topics
+  'linear_programming_two_variables',
+  'quadratic_model_fitting',
+  'spatial_reasoning',
+  '3d_solids_volume',
+];
+
+// Old 382 track only — calculus removed from new 372 curriculum
+const MATH_3PT_OLD_TRACK_ONLY = [
+  'limits_4pt',
+  'derivatives_intro',
+  'derivatives_rules',
+  'integrals_intro',
 ];
 
 // Keep old KG concept IDs so that conceptIdsForLevel('3pt') still covers the knowledge graph.
@@ -103,10 +134,13 @@ const MATH_3PT_KG_LEGACY = [
   'descriptive_stats',
   'probability_basic',
 ];
-const MATH_3PT_CONCEPTS = [...new Set([...MATH_3PT_NEW_CONCEPTS, ...MATH_3PT_KG_LEGACY])];
+const MATH_3PT_CONCEPTS = [...new Set([...MATH_3PT_NEW_CONCEPTS, ...MATH_3PT_KG_LEGACY, ...MATH_3PT_OLD_TRACK_ONLY])];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MATH — 4 UNITS  (Bagrut 471 / 472)
+// MATH — 4 UNITS
+// Old track: 481 (65%) / 482 (35%)
+// New track: 471 (65%) / 472 (35%)
+// Paper 2 (482/472): trig/exp/log calculus, sequences in 3D, growth/decay
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_4PT_NEW_CONCEPTS = [
   'limits_4pt',
@@ -134,10 +168,14 @@ const MATH_4PT_NEW_CONCEPTS = [
   'normal_distribution_z_scores',
   'linear_regression_correlation',
   'hypothesis_testing_intro',
+  'hypothesis_testing',
   'sequences_arithmetic',
   'sequences_geometric',
   'vectors_plane',
   'vectors_2d',
+  // Paper 2 topics (472/482)
+  'derivatives_trigonometric',
+  'exponential_growth_decay_models',
 ];
 const MATH_4PT_KG_LEGACY = [
   'quadrilaterals',
@@ -150,7 +188,10 @@ const MATH_4PT_KG_LEGACY = [
 const MATH_4PT_CONCEPTS = [...new Set([...MATH_4PT_NEW_CONCEPTS, ...MATH_4PT_KG_LEGACY])];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MATH — 5 UNITS  (Bagrut 571 / 572)
+// MATH — 5 UNITS
+// Old track: 581 (60%) / 582 (40%)
+// New track: 571 (60%) / 572 (40%)
+// Paper 2 (582/572): complex numbers, vectors, analytic geometry
 // HAS: induction, complex numbers, full trig calculus, Bernoulli, conics, 3D vectors
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_5PT_NEW_CONCEPTS = [
@@ -210,6 +251,7 @@ const MATH_5PT_CONCEPTS = [...new Set([...MATH_5PT_NEW_CONCEPTS, ...MATH_5PT_KG_
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PHYSICS — Bagrut 5 units
+// Four questionnaires: Mechanics 30%, Electricity 25%, Radiation & Matter 30%, Lab 15%
 // ─────────────────────────────────────────────────────────────────────────────
 const HS_PHYSICS_CONCEPTS = [
   'kinematics_1d',
@@ -267,9 +309,12 @@ const UNI_PHYSICS_1_CONCEPTS = [
   'vectors_2d',
   'newton_laws',
   'rigid_body_torque_equilibrium',
+  'rigid_body_dynamics',
+  'uni_rigid_body',
   'work_energy',
   'momentum',
   'angular_momentum_particles',
+  'angular_momentum',
   'center_of_mass_uni',
   'harmonic_oscillation',
   'fluids_hydrostatics',
@@ -377,6 +422,7 @@ const CALCULUS_1_CONCEPTS = [
   'continuity_discontinuity',
   'limits_epsilon_delta',
   'sequences_limits',
+  'series_convergence_tests',
   'derivatives_intro',
   'derivatives_rules',
   'derivatives_chain_rule',
@@ -389,6 +435,8 @@ const CALCULUS_1_CONCEPTS = [
   'absolute_extrema',
   'antiderivatives',
   'definite_integral_area',
+  'riemann_sums',
+  'riemann_integral_ftc',
   'taylor_formula',
   'limits',
 ];
@@ -467,6 +515,18 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     emoji: '🔢',
     points_levels: ['3pt'],
     bagrut_questionnaires: ['172', '371', '372'],
+    curriculum_tracks: {
+      old: {
+        questionnaires: ['182', '381', '382'],
+        label_he: 'מסלול ישן (382 כולל חדו״א)',
+        label_en: 'Old track (382 includes calculus)',
+      },
+      new: {
+        questionnaires: ['172', '371', '372'],
+        label_he: 'מסלול חדש (372 — ללא חדו״א, עם תכנון לינארי)',
+        label_en: 'New track (372 — no calculus, includes linear programming)',
+      },
+    },
     concept_ids: MATH_3PT_CONCEPTS,
     sections: [
       {
@@ -496,6 +556,8 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'circles',
           'triangles_congruence',
           'analytic_geometry_basic',
+          'spatial_reasoning',
+          '3d_solids_volume',
         ],
       },
       {
@@ -522,6 +584,15 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         ],
       },
       {
+        id: 'modeling_3pt',
+        heLabel: 'מודלים ותכנון לינארי (372)',
+        enLabel: 'Modeling & Linear Programming (372)',
+        concept_ids: [
+          'linear_programming_two_variables',
+          'quadratic_model_fitting',
+        ],
+      },
+      {
         id: 'trigonometry_3pt',
         heLabel: 'טריגונומטריה בסיסית',
         enLabel: 'Basic Trigonometry',
@@ -532,6 +603,18 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'מתמטיקה יישומית',
         enLabel: 'Applied Math',
         concept_ids: [ 'percentages_and_interest' ],
+      },
+      {
+        id: 'calculus_old_track_3pt',
+        heLabel: 'חדו״א — מסלול ישן בלבד (382)',
+        enLabel: 'Calculus — Old Track Only (382)',
+        old_track_only: true,
+        concept_ids: [
+          'limits_4pt',
+          'derivatives_intro',
+          'derivatives_rules',
+          'integrals_intro',
+        ],
       },
     ],
   },
@@ -546,27 +629,25 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     emoji: '📏',
     points_levels: ['4pt'],
     bagrut_questionnaires: ['471', '472'],
+    curriculum_tracks: {
+      old: {
+        questionnaires: ['481', '482'],
+        label_he: 'מסלול ישן (481 + 482)',
+        label_en: 'Old track (481 + 482)',
+      },
+      new: {
+        questionnaires: ['471', '472'],
+        label_he: 'מסלול חדש (471 + 472)',
+        label_en: 'New track (471 + 472)',
+      },
+    },
     concept_ids: MATH_4PT_CONCEPTS,
     sections: [
       {
-        id: 'bridging_4pt',
-        heLabel: 'גשר מ-3 ל-4 יחידות',
-        enLabel: 'Bridging from 3pt',
-        concept_ids: [
-          'algebra_basics',
-          'equations_linear',
-          'equations_quadratic',
-          'word_problems',
-          'factoring',
-          'analytic_geometry_basic',
-          'sequences_arithmetic',
-          'sequences_geometric',
-        ],
-      },
-      {
-        id: 'calculus_4pt',
-        heLabel: 'חשבון דיפרנציאלי ואינטגרלי',
-        enLabel: 'Calculus',
+        id: 'paper1_calculus_4pt',
+        heLabel: 'שאלון 1 — חשבון דיפרנציאלי ואינטגרלי (65%)',
+        enLabel: 'Paper 1 — Calculus (65%)',
+        exam_paper: 'paper_1',
         concept_ids: [
           'limits_4pt',
           'derivatives_intro',
@@ -582,15 +663,14 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'integrals_4pt',
           'areas_between_curves',
           'volumes_of_revolution_basic',
-          'derivatives_exponential_logarithm',
-          'logarithmic_equations',
           'logarithms',
         ],
       },
       {
-        id: 'analytic_geometry_4pt',
-        heLabel: 'גאומטריה אנליטית',
-        enLabel: 'Analytic Geometry',
+        id: 'paper1_geometry_4pt',
+        heLabel: 'שאלון 1 — גאומטריה אנליטית',
+        enLabel: 'Paper 1 — Analytic Geometry',
+        exam_paper: 'paper_1',
         concept_ids: [
           'analytic_geometry',
           'analytic_geometry_4pt',
@@ -603,30 +683,64 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         ],
       },
       {
-        id: 'statistics_4pt',
-        heLabel: 'סטטיסטיקה והסתברות',
-        enLabel: 'Statistics & Probability',
+        id: 'paper1_statistics_4pt',
+        heLabel: 'שאלון 1 — סטטיסטיקה והסתברות',
+        enLabel: 'Paper 1 — Statistics & Probability',
+        exam_paper: 'paper_1',
         concept_ids: [
           'descriptive_statistics',
           'normal_distribution_z_scores',
           'linear_regression_correlation',
-          'hypothesis_testing_intro',
           'combinatorics',
         ],
       },
       {
-        id: 'sequences_4pt',
-        heLabel: 'סדרות',
-        enLabel: 'Sequences',
-        concept_ids: [ 'sequences_arithmetic',
-          'sequences_geometric' ],
+        id: 'paper1_bridging_4pt',
+        heLabel: 'גשר מ-3 ל-4 יחידות',
+        enLabel: 'Bridging from 3pt',
+        exam_paper: 'paper_1',
+        concept_ids: [
+          'algebra_basics',
+          'equations_linear',
+          'equations_quadratic',
+          'word_problems',
+          'factoring',
+          'analytic_geometry_basic',
+        ],
       },
       {
-        id: 'vectors_4pt',
-        heLabel: 'וקטורים',
-        enLabel: 'Vectors',
-        concept_ids: [ 'vectors_plane',
-          'vectors_2d' ],
+        id: 'paper2_trig_exp_log_4pt',
+        heLabel: 'שאלון 2 — טריגונומטריה, מעריכיות ולוגריתמים (35%)',
+        enLabel: 'Paper 2 — Trig, Exp & Log Calculus (35%)',
+        exam_paper: 'paper_2',
+        concept_ids: [
+          'derivatives_exponential_logarithm',
+          'logarithmic_equations',
+          'derivatives_trigonometric',
+          'exponential_growth_decay_models',
+        ],
+      },
+      {
+        id: 'paper2_sequences_vectors_4pt',
+        heLabel: 'שאלון 2 — סדרות ווקטורים',
+        enLabel: 'Paper 2 — Sequences & Vectors',
+        exam_paper: 'paper_2',
+        concept_ids: [
+          'sequences_arithmetic',
+          'sequences_geometric',
+          'vectors_plane',
+          'vectors_2d',
+        ],
+      },
+      {
+        id: 'paper2_hypothesis_4pt',
+        heLabel: 'שאלון 2 — בדיקת השערות (472)',
+        enLabel: 'Paper 2 — Hypothesis Testing (472)',
+        exam_paper: 'paper_2',
+        concept_ids: [
+          'hypothesis_testing_intro',
+          'hypothesis_testing',
+        ],
       },
     ],
   },
@@ -641,12 +755,25 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     emoji: '🔢',
     points_levels: ['5pt'],
     bagrut_questionnaires: ['571', '572'],
+    curriculum_tracks: {
+      old: {
+        questionnaires: ['581', '582'],
+        label_he: 'מסלול ישן (581 + 582)',
+        label_en: 'Old track (581 + 582)',
+      },
+      new: {
+        questionnaires: ['571', '572'],
+        label_he: 'מסלול חדש (571 + 572)',
+        label_en: 'New track (571 + 572)',
+      },
+    },
     concept_ids: MATH_5PT_CONCEPTS,
     sections: [
       {
-        id: 'calculus_5pt',
-        heLabel: 'חשבון דיפרנציאלי ואינטגרלי',
-        enLabel: 'Calculus',
+        id: 'paper1_calculus_5pt',
+        heLabel: 'שאלון 1 — חשבון דיפרנציאלי ואינטגרלי (60%)',
+        enLabel: 'Paper 1 — Calculus (60%)',
+        exam_paper: 'paper_1',
         concept_ids: [
           'limits_5pt',
           'limits',
@@ -675,9 +802,10 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         ],
       },
       {
-        id: 'algebra_sequences_5pt',
-        heLabel: 'אלגברה וסדרות',
-        enLabel: 'Algebra & Sequences',
+        id: 'paper1_algebra_5pt',
+        heLabel: 'שאלון 1 — אלגברה, סדרות ואינduction',
+        enLabel: 'Paper 1 — Algebra, Sequences & Induction',
+        exam_paper: 'paper_1',
         concept_ids: [
           'sequences_arithmetic',
           'sequences_geometric',
@@ -691,39 +819,49 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         ],
       },
       {
-        id: 'trigonometry_5pt',
-        heLabel: 'טריגונומטריה',
-        enLabel: 'Trigonometry',
+        id: 'paper1_trigonometry_5pt',
+        heLabel: 'שאלון 1 — טריגונומטריה',
+        enLabel: 'Paper 1 — Trigonometry',
+        exam_paper: 'paper_1',
         concept_ids: [
           'trigonometry_identities',
           'trigonometry_equations',
         ],
       },
       {
-        id: 'geometry_5pt',
-        heLabel: 'גאומטריה אנליטית',
-        enLabel: 'Analytic Geometry',
-        concept_ids: [ 'analytic_geometry',
-          'analytic_geometry_5pt',
-          'analytic_geometry_conics',
-          'circles' ],
+        id: 'paper1_probability_5pt',
+        heLabel: 'שאלון 1 — הסתברות',
+        enLabel: 'Paper 1 — Probability',
+        exam_paper: 'paper_1',
+        concept_ids: [
+          'probability_conditional_bayes',
+          'distributions',
+        ],
       },
       {
-        id: 'vectors_complex_5pt',
-        heLabel: 'וקטורים ומספרים מרוכבים',
-        enLabel: 'Vectors & Complex Numbers',
-        concept_ids: [ 'vectors_dot_product_3d',
+        id: 'paper2_geometry_5pt',
+        heLabel: 'שאלון 2 — גאומטריה אנליטית (40%)',
+        enLabel: 'Paper 2 — Analytic Geometry (40%)',
+        exam_paper: 'paper_2',
+        concept_ids: [
+          'analytic_geometry',
+          'analytic_geometry_5pt',
+          'analytic_geometry_conics',
+          'circles',
+        ],
+      },
+      {
+        id: 'paper2_vectors_complex_5pt',
+        heLabel: 'שאלון 2 — וקטורים ומספרים מרוכבים',
+        enLabel: 'Paper 2 — Vectors & Complex Numbers',
+        exam_paper: 'paper_2',
+        concept_ids: [
+          'vectors_dot_product_3d',
           'complex_numbers_de_moivre',
           'complex_numbers_5pt',
           'vectors_2d',
-          'complex_numbers' ],
-      },
-      {
-        id: 'probability_5pt',
-        heLabel: 'הסתברות',
-        enLabel: 'Probability & Combinatorics',
-        concept_ids: [ 'probability_conditional_bayes',
-          'distributions' ],
+          'complex_numbers',
+        ],
       },
     ],
   },
@@ -737,29 +875,31 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     enLabel: 'Bagrut Physics — 5 Units',
     emoji: '⚡',
     points_levels: ['hs_physics'],
-    bagrut_questionnaires: ['036-361 (מכניקה)', '036-371 (חשמל)', 'קרינה וחומר', 'מעבדה'],
+    bagrut_questionnaires: ['036-361', '036-371', '036-282', '036-382'],
     concept_ids: HS_PHYSICS_CONCEPTS,
     sections: [
       {
         id: 'mechanics_hs',
-        heLabel: 'מכניקה',
-        enLabel: 'Mechanics',
+        heLabel: 'מכניקה (036-361)',
+        enLabel: 'Mechanics (036-361)',
+        questionnaire_code: '036-361',
+        questionnaire_weight: '30%',
         concept_ids: [
-          'kinematics_1d',
-          'projectile_motion',
-          'newton_laws',
-          'work_energy_conservation',
-          'momentum',
-          'circular_motion_gravitation',
           'units_measurement',
           'vectors_basics',
+          'kinematics_1d',
           'kinematics_2d',
+          'projectile_motion',
+          'newton_laws',
           'friction',
-          'circular_motion',
-          'gravitation',
+          'work_energy_conservation',
           'work_energy',
           'conservation_energy',
+          'momentum',
           'collisions',
+          'circular_motion_gravitation',
+          'circular_motion',
+          'gravitation',
           'simple_harmonic_motion',
           'torque',
           'static_equilibrium',
@@ -770,48 +910,53 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
       },
       {
         id: 'electricity_hs',
-        heLabel: 'חשמל ומגנטיות',
-        enLabel: 'Electricity & Magnetism',
+        heLabel: 'חשמל ומגנטיות (036-371)',
+        enLabel: 'Electricity & Magnetism (036-371)',
+        questionnaire_code: '036-371',
+        questionnaire_weight: '25%',
         concept_ids: [
           'coulomb_law',
+          'electrostatics',
           'electric_field_potential',
+          'electric_field',
+          'electric_circuits',
           'kirchhoff_laws',
           'capacitors_parallel_plate',
           'magnetic_force',
-          'faraday_induction',
-          'electrostatics',
-          'electric_field',
-          'electric_circuits',
           'magnetism',
+          'faraday_induction',
           'electromagnetic_induction',
           'ac_circuits',
         ],
       },
       {
-        id: 'waves_optics_hs',
-        heLabel: 'גלים ואופטיקה',
-        enLabel: 'Waves & Optics',
+        id: 'radiation_matter_hs',
+        heLabel: 'קרינה וחומר (036-282)',
+        enLabel: 'Radiation & Matter (036-282)',
+        questionnaire_code: '036-282',
+        questionnaire_weight: '30%',
         concept_ids: [
-          'geometric_optics_refraction',
-          'em_waves',
           'waves_basics',
           'sound_waves',
           'doppler',
+          'geometric_optics_refraction',
           'optics_geometric',
           'optics_physical',
-        ],
-      },
-      {
-        id: 'modern_physics_hs',
-        heLabel: 'פיזיקה מודרנית',
-        enLabel: 'Modern Physics',
-        concept_ids: [
+          'em_waves',
           'photoelectric_effect',
           'modern_physics_intro',
           'atomic_models',
           'nuclear_physics',
           'special_relativity',
         ],
+      },
+      {
+        id: 'research_lab_hs',
+        heLabel: 'מחקר ומעבדה (036-382)',
+        enLabel: 'Research & Lab (036-382)',
+        questionnaire_code: '036-382',
+        questionnaire_weight: '15%',
+        concept_ids: [],
       },
     ],
   },
@@ -846,13 +991,20 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'rigid_body_statics_uni',
         heLabel: 'גוף קשיח ושיווי משקל',
         enLabel: 'Rigid Body & Statics',
-        concept_ids: [ 'rigid_body_torque_equilibrium' ],
+        concept_ids: [
+          'rigid_body_torque_equilibrium',
+          'rigid_body_dynamics',
+          'uni_rigid_body',
+        ],
       },
       {
         id: 'rotation_angular_momentum_uni',
         heLabel: 'סיבוב ותנע זוויתי',
         enLabel: 'Rotation & Angular Momentum',
-        concept_ids: [ 'angular_momentum_particles' ],
+        concept_ids: [
+          'angular_momentum_particles',
+          'angular_momentum',
+        ],
       },
       {
         id: 'systems_of_particles_uni',
@@ -1088,9 +1240,13 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
       },
       {
         id: 'series_taylor',
-        heLabel: 'סדרות וטיילור',
-        enLabel: 'Series & Taylor',
-        concept_ids: [ 'sequences_limits', 'taylor_formula' ],
+        heLabel: 'סדרות, נוסחאות חזרה וטיילור',
+        enLabel: 'Sequences, Recurrence & Taylor',
+        concept_ids: [
+          'sequences_limits',
+          'series_convergence_tests',
+          'taylor_formula',
+        ],
       },
       {
         id: 'derivatives_calc1',
@@ -1123,6 +1279,8 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         concept_ids: [
           'antiderivatives',
           'definite_integral_area',
+          'riemann_sums',
+          'riemann_integral_ftc',
         ],
       },
     ],
