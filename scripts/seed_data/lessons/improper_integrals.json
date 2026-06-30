@@ -1,158 +1,172 @@
 {
+  "id": "improper_integrals",
   "concept_id": "improper_integrals",
-  "subject": "math",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
   "title_en": "Improper Integrals",
-  "title_he": "אינטגרלים לא אמתיים",
-  "summary_en": "Integrals over unbounded intervals or with unbounded integrand — convergence tests and evaluation.",
-  "summary_he": "אינטגרלים על קטעים לא חסומים או עם מIntegrand לא חסום — מבחני התכנסות וחישוב.",
-  "est_minutes": 28,
+  "title_he": "אינטגרלים לא אמיתיים",
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1"],
+  "duration_min": 50,
+  "est_minutes": 50,
+  "summary_en": "An improper integral arises when the interval is infinite or the integrand is unbounded. Convergence is determined via limits; the comparison test lets us handle integrals that cannot be computed in closed form.",
+  "summary_he": "אינטגרל לא אמיתי מתעורר כאשר הקטע אינסופי או האינטגרנד אינו חסום. התכנסות נקבעת דרך גבולות; מבחן ההשוואה מאפשר טיפול באינטגרלים שאי אפשר לחשב בצורה סגורה.",
   "sections": [
     {
+      "id": "s1",
+      "kind": "intro",
+      "title_en": "What Is an Improper Integral?",
+      "title_he": "מה הוא אינטגרל לא אמיתי?",
+      "body_en_md": "An **improper integral** arises in two situations:\n\n1. **Infinite limits of integration** (Type I):\n$$\\int_1^{\\infty} f(x)\\,dx = \\lim_{b\\to\\infty} \\int_1^b f(x)\\,dx$$\n\n2. **Unbounded integrand** (Type II): for example $\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx$ where $f(x)\\to\\infty$ as $x\\to 0^+$:\n$$\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx = \\lim_{\\varepsilon\\to 0^+} \\int_{\\varepsilon}^1 \\frac{1}{\\sqrt{x}}\\,dx$$\n\nThe integral **converges** if the limit is a finite number; it **diverges** otherwise.\n\n**Both endpoints:** If both limits are improper, split at an interior point $c$:\n$$\\int_{-\\infty}^{\\infty} f(x)\\,dx = \\int_{-\\infty}^c f(x)\\,dx + \\int_c^{\\infty} f(x)\\,dx$$\nand both halves must converge independently.",
+      "body_he_md": "**אינטגרל לא אמיתי** מופיע בשני מצבים:\n\n1. **גבולות אינסופיים** (סוג I):\n$$\\int_1^{\\infty} f(x)\\,dx = \\lim_{b\\to\\infty} \\int_1^b f(x)\\,dx$$\n\n2. **אינטגרנד בלתי חסום** (סוג II): למשל $\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx$ שבו $f(x)\\to\\infty$ כש-$x\\to 0^+$:\n$$\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx = \\lim_{\\varepsilon\\to 0^+} \\int_{\\varepsilon}^1 \\frac{1}{\\sqrt{x}}\\,dx$$\n\nהאינטגרל **מתכנס** אם הגבול הוא מספר סופי; **מתבדר** אחרת.\n\n**שני הגבולות:** אם שני הגבולות לא אמיתיים, מפצלים בנקודה פנימית $c$ ושני החצאים חייבים להתכנס בנפרד.",
+      "level_min": "calc1"
+    },
+    {
+      "id": "s2",
       "kind": "theory",
-      "title_en": "Definition and p-integrals",
-      "title_he": "הגדרה ואינטגרלי-p",
-      "body_en_md": "$\\int_a^\\infty f(x)\\,dx := \\lim_{b\\to\\infty}\\int_a^b f(x)\\,dx$.\n\n**p-test:** $\\int_1^\\infty \\frac{1}{x^p}\\,dx$ converges iff $p>1$.\n\n**Worked Example 1.** $\\int_1^\\infty \\frac{1}{x^2}\\,dx = \\lim_{b\\to\\infty}[-\\frac{1}{x}]_1^b = 1$.\n\n**Worked Example 2.** $\\int_1^\\infty \\frac{\\ln x}{x^2}\\,dx = 1$ (by parts).",
-      "body_he_md": "הגדרה כגבול. **p-test:** $p>1$ ⇒ מתכנס.\n\n**דוגמה:** $\\int_1^\\infty \\frac{\\ln x}{x^2}\\,dx = 1$."
+      "title_en": "The p-Integral (Key Example)",
+      "title_he": "האינטגרל מסוג p",
+      "body_en_md": "$$\\int_1^{\\infty} \\frac{1}{x^p}\\,dx = \\begin{cases} \\dfrac{1}{p-1} & p > 1 \\quad\\text{(converges)}\\\\ +\\infty & p \\leq 1 \\quad\\text{(diverges)} \\end{cases}$$\n\n**Proof for $p \\neq 1$:**\n$$\\int_1^b x^{-p}\\,dx = \\left[\\frac{x^{1-p}}{1-p}\\right]_1^b = \\frac{b^{1-p}-1}{1-p}$$\n- If $p>1$: $1-p < 0$, so $b^{1-p} = b^{-(p-1)} \\to 0$. Limit $= \\frac{0-1}{1-p} = \\frac{1}{p-1}$. ✓\n- If $p<1$: $1-p > 0$, so $b^{1-p} \\to \\infty$. Diverges. ✓\n- If $p=1$: $\\int_1^b x^{-1}\\,dx = \\ln b \\to \\infty$. Diverges. ✓\n\n**Similarly for Type II:** $\\int_0^1 x^{-p}\\,dx$ converges iff $p < 1$.\n\nMemorize: $\\int_1^\\infty 1/x^p$ converges for **large $p$** ($p>1$); $\\int_0^1 1/x^p$ converges for **small $p$** ($p<1$).",
+      "body_he_md": "$$\\int_1^{\\infty} \\frac{1}{x^p}\\,dx = \\begin{cases} \\dfrac{1}{p-1} & p > 1 \\quad\\text{(מתכנס)}\\\\ +\\infty & p \\leq 1 \\quad\\text{(מתבדר)} \\end{cases}$$\n\n**הוכחה עבור $p \\neq 1$:**\n$$\\int_1^b x^{-p}\\,dx = \\frac{b^{1-p}-1}{1-p}$$\n- $p>1$: $b^{1-p}\\to 0$, גבול $= \\frac{1}{p-1}$. ✓\n- $p<1$: $b^{1-p}\\to\\infty$, מתבדר. ✓\n- $p=1$: $\\ln b \\to \\infty$, מתבדר. ✓\n\n**לסוג II:** $\\int_0^1 x^{-p}\\,dx$ מתכנס אם ורק אם $p < 1$.\n\nלזכור: $\\int_1^\\infty 1/x^p$ — מתכנס לגדול ($p>1$); $\\int_0^1 1/x^p$ — מתכנס לקטן ($p<1$).",
+      "level_min": "calc1"
     },
     {
+      "id": "s3",
+      "kind": "theory",
+      "title_en": "Comparison Test for Improper Integrals",
+      "title_he": "מבחן ההשוואה לאינטגרלים לא אמיתיים",
+      "body_en_md": "**Theorem (Comparison Test):** Suppose $0 \\leq f(x) \\leq g(x)$ for all $x \\geq a$. Then:\n- If $\\int_a^{\\infty} g(x)\\,dx$ **converges**, so does $\\int_a^{\\infty} f(x)\\,dx$.\n- If $\\int_a^{\\infty} f(x)\\,dx$ **diverges**, so does $\\int_a^{\\infty} g(x)\\,dx$.\n\n**Limit Comparison Test:** If $f, g \\geq 0$ and $\\lim_{x\\to\\infty} \\frac{f(x)}{g(x)} = L \\in (0, \\infty)$, then $\\int_a^\\infty f$ and $\\int_a^\\infty g$ either both converge or both diverge.\n\n**Example:** Show $\\int_1^{\\infty} \\frac{1}{x^3+\\sqrt{x}}\\,dx$ converges.\n\nFor $x \\geq 1$: $x^3 + \\sqrt{x} > x^3$, so $\\frac{1}{x^3+\\sqrt{x}} < \\frac{1}{x^3}$.\nSince $\\int_1^{\\infty} x^{-3}\\,dx = \\frac{1}{2}$ converges ($p=3>1$), by comparison our integral converges too. ∎",
+      "body_he_md": "**משפט (מבחן השוואה):** אם $0 \\leq f(x) \\leq g(x)$ לכל $x \\geq a$:\n- אם $\\int_a^{\\infty} g(x)\\,dx$ **מתכנס**, גם $\\int_a^{\\infty} f(x)\\,dx$ מתכנס.\n- אם $\\int_a^{\\infty} f(x)\\,dx$ **מתבדר**, גם $\\int_a^{\\infty} g(x)\\,dx$ מתבדר.\n\n**מבחן השוואת גבולות:** אם $f,g\\geq 0$ ו-$\\lim_{x\\to\\infty} f(x)/g(x) = L \\in (0,\\infty)$, אז שני האינטגרלים מתנהגים אותו דבר.\n\n**דוגמה:** הוכח שהאינטגרל $\\int_1^{\\infty} \\frac{1}{x^3+\\sqrt{x}}\\,dx$ מתכנס.\n\nלכל $x\\geq 1$: $\\frac{1}{x^3+\\sqrt{x}} < \\frac{1}{x^3}$. מכיוון שה-$\\int_1^{\\infty} x^{-3}\\,dx = \\frac{1}{2}$ מתכנס, מבחן ההשוואה נותן התכנסות. ∎",
+      "level_min": "calc1"
+    },
+    {
+      "id": "s4",
       "kind": "worked_example",
-      "title_en": "Trig integrals",
-      "title_he": "אינטגרלים טrigונומטריים",
-      "body_en_md": "$\\tan^2 x = \\sec^2 x - 1$, so $\\int \\tan^2 x\\, dx = \\tan x - x + C$.\n\n**Harder:** $\\int_1^3 \\frac{\\ln x}{x}\\,dx = [\\frac{(\\ln x)^2}{2}]_1^3 = \\frac{(\\ln 3)^2}{2}$ (proper integral).",
-      "body_he_md": "$\\int \\tan^2 x\\, dx = \\tan x - x + C$.\n\n$\\int_1^3 \\frac{\\ln x}{x}\\,dx = \\frac{(\\ln 3)^2}{2}$."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Compute $\\int \\tan^2(x)\\,dx$.\n\n**Sample Solution:**\nUse $\\tan^2 x = \\sec^2 x - 1$:\n$$\\int \\tan^2 x\\, dx = \\int (\\sec^2 x - 1)\\, dx = \\tan x - x + C.$$\nVerify: $\\frac{d}{dx}(\\tan x - x) = \\sec^2 x - 1 = \\tan^2 x$. ✓\n\n**Problem 2:** Determine if $\\int_1^\\infty \\dfrac{\\ln x}{x^2}\\,dx$ converges; if so, compute it.\n\n**Sample Solution:**\n**Convergence:** For $x\\geq 1$, $0 < \\ln x < x$, so $0 < \\dfrac{\\ln x}{x^2} < \\dfrac{1}{x}$. Since $\\int_1^\\infty \\frac{1}{x}\\,dx$ diverges this comparison is inconclusive; use integration by parts:\n$$\\int \\frac{\\ln x}{x^2}\\,dx = -\\frac{\\ln x}{x} - \\frac{1}{x} + C.$$\nSo $\\int_1^b \\frac{\\ln x}{x^2}\\,dx = \\left[-\\frac{\\ln x}{x} - \\frac{1}{x}\\right]_1^b = -\\frac{\\ln b}{b} - \\frac{1}{b} + 1$.\nAs $b\\to\\infty$: $\\frac{\\ln b}{b}\\to 0$, $\\frac{1}{b}\\to 0$. **Converges to 1.**\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** חשבו $\\int \\tan^2(x)\\,dx$.\n\n**פתרון לדוגמה:**\n$\\tan^2 x = \\sec^2 x - 1$ ⇒ $\\int \\tan^2 x\\, dx = \\tan x - x + C$.\n\n**בעיה 2:** קבעו אם $\\int_1^\\infty \\dfrac{\\ln x}{x^2}\\,dx$ מתכנס; אם כן, חשבו.\n\n**פתרון לדוגמה:**\nאינטגרציה בחלקים: $\\left[-\\frac{\\ln x}{x} - \\frac{1}{x}\\right]_1^b \\to 1$. **מתכנס ל-1.**\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "title_en": "Worked Example: Integration by Parts + Improper",
+      "title_he": "דוגמה פתורה: אינטגרציה בחלקים + אינטגרל לא אמיתי",
+      "body_en_md": "**Compute** $\\displaystyle I = \\int_1^{\\infty} \\frac{\\ln x}{x^2}\\,dx$.\n\n**Step 1: Convergence check.** Since $\\ln x \\leq C\\sqrt{x}$ for large $x$ (apply L'Hôpital to $\\ln x/\\sqrt{x}$), we have $\\frac{\\ln x}{x^2} \\leq \\frac{C}{x^{3/2}}$, which converges. So $I$ converges.\n\n**Step 2: IBP.** Let $u = \\ln x$, $dv = x^{-2}dx$. Then $du = dx/x$, $v = -x^{-1}$.\n$$\\int_1^b \\frac{\\ln x}{x^2}\\,dx = \\left[-\\frac{\\ln x}{x}\\right]_1^b + \\int_1^b \\frac{1}{x^2}\\,dx = -\\frac{\\ln b}{b} + 0 + \\left[-\\frac{1}{x}\\right]_1^b = -\\frac{\\ln b}{b} - \\frac{1}{b} + 1$$\n\n**Step 3: Take the limit.** As $b\\to\\infty$: $\\frac{\\ln b}{b}\\to 0$ (L'Hôpital) and $\\frac{1}{b}\\to 0$. Therefore:\n$$I = \\lim_{b\\to\\infty}\\left(-\\frac{\\ln b}{b} - \\frac{1}{b} + 1\\right) = 1$$",
+      "body_he_md": "**חשבו** $\\displaystyle I = \\int_1^{\\infty} \\frac{\\ln x}{x^2}\\,dx$.\n\n**שלב 1: בדיקת התכנסות.** $\\ln x \\leq C\\sqrt{x}$ ← $\\frac{\\ln x}{x^2} \\leq \\frac{C}{x^{3/2}}$, מתכנס.\n\n**שלב 2: IBP.** $u = \\ln x$, $dv = x^{-2}dx$, $du = dx/x$, $v = -1/x$.\n$$\\int_1^b \\frac{\\ln x}{x^2}\\,dx = \\left[-\\frac{\\ln x}{x}\\right]_1^b + \\int_1^b \\frac{1}{x^2}\\,dx = -\\frac{\\ln b}{b} - \\frac{1}{b} + 1$$\n\n**שלב 3: גבול.** $b\\to\\infty$: $\\frac{\\ln b}{b}\\to 0$, לכן $I = 1$.",
+      "level_min": "calc1"
     }
   ],
   "questions": [
     {
       "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$\\int_1^\\infty \\frac{1}{x}\\,dx$:",
-      "stem_he": "$\\int_1^\\infty \\frac{1}{x}\\,dx$:",
-      "options_en": [
-        "Converges to 1",
-        "Diverges",
-        "Converges to 0",
-        "Converges to $e$"
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "Determine whether the following improper integral converges, and if so, find its value:\n$$\\displaystyle\\int_0^{\\infty} e^{-2x}\\,dx$$",
+      "stem_he": "קבע האם האינטגרל הלא אמיתי הבא מתכנס, ואם כן — מצא את ערכו:\n$$\\displaystyle\\int_0^{\\infty} e^{-2x}\\,dx$$",
+      "parts": [
+        {
+          "label": "א",
+          "body_en": "Write the integral as a limit and compute it.",
+          "body_he": "כתוב את האינטגרל כגבול וחשב אותו.",
+          "points": 15
+        },
+        {
+          "label": "ב",
+          "body_en": "Does $\\int_0^{\\infty} xe^{-2x}\\,dx$ converge? If yes, compute it using integration by parts.",
+          "body_he": "האם $\\int_0^{\\infty} xe^{-2x}\\,dx$ מתכנס? אם כן, חשב באמצעות אינטגרציה בחלקים.",
+          "points": 10
+        }
       ],
-      "options_he": [
-        "מתכנס ל-1",
-        "מתבדר",
-        "מתכנס ל-0",
-        "מתכנס ל-$e$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "p-integral with p=1 diverges.",
-      "explanation_he": "p=1 ⇒ מתבדר.",
-      "skill_atoms": [
-        "p_integral_test"
-      ],
-      "points_level_min": "calc1"
+      "total_points": 25,
+      "sample_solution_en": "Part א: $\\int_0^{\\infty} e^{-2x}\\,dx = \\lim_{b\\to\\infty} \\int_0^b e^{-2x}\\,dx = \\lim_{b\\to\\infty} \\left[-\\frac{1}{2}e^{-2x}\\right]_0^b = \\lim_{b\\to\\infty} \\left(-\\frac{1}{2}e^{-2b} + \\frac{1}{2}\\right) = 0 + \\frac{1}{2} = \\frac{1}{2}$. Converges to $\\frac{1}{2}$. ∎\n\nPart ב: IBP: $u=x$, $dv=e^{-2x}dx$, so $du=dx$, $v=-\\frac{1}{2}e^{-2x}$.\n$\\int_0^b xe^{-2x}\\,dx = \\left[-\\frac{x}{2}e^{-2x}\\right]_0^b + \\frac{1}{2}\\int_0^b e^{-2x}\\,dx = -\\frac{b}{2}e^{-2b} + \\frac{1}{2}\\cdot\\frac{1-e^{-2b}}{2}$.\nAs $b\\to\\infty$: $be^{-2b}\\to 0$ (exponential dominates), so limit $= 0 + \\frac{1}{4} = \\frac{1}{4}$. ∎",
+      "sample_solution_he": "חלק א: $\\int_0^{\\infty} e^{-2x}\\,dx = \\lim_{b\\to\\infty}\\left[-\\frac{1}{2}e^{-2x}\\right]_0^b = \\frac{1}{2}$. מתכנס ל-$\\frac{1}{2}$. ∎\n\nחלק ב: אינטגרציה בחלקים: $u=x$, $dv=e^{-2x}dx$. התוצאה: $\\frac{1}{4}$. מתכנס. ∎",
+      "rubric_en": "Part א: 8pts for correct limit setup, 7pts for evaluation. Part ב: 5pts for IBP setup, 5pts for correct limit evaluation.",
+      "rubric_he": "חלק א: 8 נקודות על הגדרת הגבול, 7 על חישוב. חלק ב: 5 על IBP, 5 על גבול.",
+      "skill_atoms": ["improper_integral_type1", "integration_by_parts_application"],
+      "explanation_en": "Both integrals converge because the exponential decay dominates polynomial growth.",
+      "explanation_he": "שני האינטגרלים מתכנסים כי הדעיכה האקספוננציאלית שולטת על הגידול הפולינומי."
     },
     {
       "ord": 2,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\int_1^\\infty \\frac{1}{x^3}\\,dx$ equals:",
-      "stem_he": "$\\int_1^\\infty \\frac{1}{x^3}\\,dx$ שווה:",
-      "options_en": [
-        "$1/2$",
-        "$1/3$",
-        "Diverges",
-        "$\\infty$"
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove that $I = \\displaystyle\\int_1^{\\infty} \\frac{\\ln x}{x^2}\\,dx$ converges and find its exact value.",
+      "stem_he": "הוכח ש-$I = \\displaystyle\\int_1^{\\infty} \\frac{\\ln x}{x^2}\\,dx$ מתכנס ומצא את ערכו המדויק.",
+      "parts": [
+        {
+          "label": "א",
+          "body_en": "Show that for $x \\geq 1$: $\\dfrac{\\ln x}{x^2} \\leq \\dfrac{C}{x^{3/2}}$ for some constant $C > 0$. Deduce convergence.",
+          "body_he": "הראה שלכל $x \\geq 1$: $\\dfrac{\\ln x}{x^2} \\leq \\dfrac{C}{x^{3/2}}$ עבור קבוע $C > 0$ כלשהו. הסק התכנסות.",
+          "points": 10
+        },
+        {
+          "label": "ב",
+          "body_en": "Compute $I$ exactly using integration by parts with $u = \\ln x$, $dv = x^{-2}\\,dx$.",
+          "body_he": "חשב את $I$ בדיוק באמצעות אינטגרציה בחלקים עם $u = \\ln x$, $dv = x^{-2}\\,dx$.",
+          "points": 15
+        }
       ],
-      "options_he": [
-        "$1/2$",
-        "$1/3$",
-        "מתבדר",
-        "$\\infty$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$[-\\frac{1}{2x^2}]_1^\\infty = 0 - (-1/2) = 1/2$.",
-      "explanation_he": "ערך $1/2$.",
-      "skill_atoms": [
-        "p_integral_test"
-      ],
-      "points_level_min": "calc1"
+      "total_points": 25,
+      "sample_solution_en": "Part א: We need $\\ln x \\leq C\\sqrt{x}$, i.e., $\\ln x/\\sqrt{x} \\leq C$. Since $\\lim_{x\\to\\infty} (\\ln x)/\\sqrt{x} = 0$ (L'Hôpital: $(1/x)/(1/(2\\sqrt{x})) = 2/\\sqrt{x} \\to 0$), this ratio is bounded for $x\\geq 1$, say by $C=2$. Therefore $\\frac{\\ln x}{x^2} \\leq \\frac{2}{x^{3/2}}$, and $\\int_1^\\infty x^{-3/2}\\,dx = 2$ converges. By comparison, $I$ converges. ∎\n\nPart ב: IBP: $u=\\ln x$, $dv=x^{-2}dx$, so $du=dx/x$, $v=-x^{-1}$.\n$\\int_1^b \\frac{\\ln x}{x^2}\\,dx = \\left[-\\frac{\\ln x}{x}\\right]_1^b + \\int_1^b \\frac{1}{x^2}\\,dx = -\\frac{\\ln b}{b} + 0 + \\left[-\\frac{1}{x}\\right]_1^b = -\\frac{\\ln b}{b} - \\frac{1}{b} + 1$.\nAs $b\\to\\infty$: $\\frac{\\ln b}{b}\\to 0$ and $\\frac{1}{b}\\to 0$. Therefore $I = 1$. ∎",
+      "sample_solution_he": "חלק א: $\\ln x/\\sqrt{x} \\to 0$ (לופיטל), לכן חסום ע\"י $C=2$ לכל $x\\geq 1$. אז $\\frac{\\ln x}{x^2} \\leq \\frac{2}{x^{3/2}}$. $\\int_1^\\infty x^{-3/2}\\,dx = 2$ מתכנס. מבחן ההשוואה נותן התכנסות. ∎\n\nחלק ב: אינטגרציה בחלקים: $u=\\ln x$, $v=-1/x$. מתקבל: $I = \\lim_{b\\to\\infty}\\left(-\\frac{\\ln b}{b} - \\frac{1}{b} + 1\\right) = 1$. ∎",
+      "rubric_en": "Part א: 5pts for identifying the comparison bound, 5pts for computing the comparison integral. Part ב: 5pts for IBP setup, 5pts for correct evaluation, 5pts for taking the limit correctly.",
+      "rubric_he": "חלק א: 5 נקודות על זיהוי החסם, 5 על חישוב. חלק ב: 5 על IBP, 5 על חישוב, 5 על גבול.",
+      "skill_atoms": ["improper_integral_comparison", "integration_by_parts_application", "lhopital_rule"],
+      "explanation_en": "IBP + improper integral is one of the most frequent combinations on 20406 final exams.",
+      "explanation_he": "IBP + אינטגרל לא אמיתי הוא אחד הצירופים השכיחים ביותר במבחן הסופי 20406."
     },
     {
       "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\int \\tan^2 x\\, dx$ equals:",
-      "stem_he": "$\\int \\tan^2 x\\, dx$ שווה:",
-      "options_en": [
-        "$\\tan x - x + C$",
-        "$\\sec^2 x + C$",
-        "$-\\cot x + C$",
-        "$\\ln|\\sec x| + C$"
-      ],
-      "options_he": [
-        "$\\tan x - x + C$",
-        "$\\sec^2 x + C$",
-        "$-\\cot x + C$",
-        "$\\ln|\\sec x| + C$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$\\tan^2 = \\sec^2 - 1$.",
-      "explanation_he": "$\\tan^2 = \\sec^2 - 1$.",
-      "skill_atoms": [
-        "integrate_tan_squared"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
       "kind": "open",
       "difficulty": "hard",
-      "stem_en": "Compute $\\int \\tan^2(x)\\,dx$ and verify by differentiation.",
-      "stem_he": "חשבו $\\int \\tan^2(x)\\,dx$ ואמתו בגזירה.",
-      "rubric_en": "Full credit (10/10): uses $\\tan^2=\\sec^2-1$, answer $\\tan x - x + C$, verifies derivative.\nPartial (6/10): correct antiderivative, no verification.\nMinimal (3/10): writes identity only.",
-      "rubric_he": "ציון מלא (10/10): $\\tan x - x + C$ + אימות.\nחלקי (6/10): קדומה נכונה.\nמינימלי (3/10): רק זהות.",
-      "explanation_en": "$\\tan x - x + C$.",
-      "explanation_he": "$\\tan x - x + C$.",
-      "skill_atoms": [
-        "integrate_tan_squared"
+      "stem_en": "For each of the following, determine whether the integral converges or diverges. If it converges, find the value. Justify your answer in each case.\n\n(i) $\\displaystyle\\int_1^{\\infty} \\frac{1}{x^2 + x}\\,dx$ \n\n(ii) $\\displaystyle\\int_0^{1} \\frac{1}{\\sqrt{x}(1+x)}\\,dx$",
+      "stem_he": "לכל אחד מהאינטגרלים הבאים, קבעו האם מתכנס או מתבדר. אם מתכנס — מצאו את הערך. נמקו כל מקרה.\n\n(i) $\\displaystyle\\int_1^{\\infty} \\frac{1}{x^2 + x}\\,dx$ \n\n(ii) $\\displaystyle\\int_0^{1} \\frac{1}{\\sqrt{x}(1+x)}\\,dx$",
+      "parts": [
+        {
+          "label": "א",
+          "body_en": "Evaluate integral (i) using partial fractions.",
+          "body_he": "חשבו אינטגרל (i) בעזרת שברים חלקיים.",
+          "points": 12
+        },
+        {
+          "label": "ב",
+          "body_en": "Determine convergence of integral (ii) and compute its value using the substitution $u = \\sqrt{x}$.",
+          "body_he": "קבעו התכנסות של אינטגרל (ii) וחשבו בעזרת ההצבה $u = \\sqrt{x}$.",
+          "points": 13
+        }
       ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Determine convergence of $\\int_1^\\infty \\dfrac{\\ln x}{x^2}\\,dx$ and compute if convergent.",
-      "stem_he": "קבעו התכנסות של $\\int_1^\\infty \\dfrac{\\ln x}{x^2}\\,dx$ וחשבו אם מתכנס.",
-      "rubric_en": "Full credit (10/10): integration by parts, limit as $b\\to\\infty$, value 1.\nPartial (6/10): correct antiderivative, limit error.\nMinimal (3/10): sets up as limit only.",
-      "rubric_he": "ציון מלא (10/10): אינטגרציה בחלקים, גבול, ערך 1.\nחלקי (6/10): קדומה נכון.\nמינימלי (3/10): רק הגדרה כגבול.",
-      "explanation_en": "Converges to 1.",
-      "explanation_he": "מתכנס ל-1.",
-      "skill_atoms": [
-        "improper_integral_limit"
-      ],
-      "points_level_min": "calc1"
+      "total_points": 25,
+      "sample_solution_en": "Part א: 1/(x²+x) = 1/(x(x+1)) = 1/x - 1/(x+1) (partial fractions). ∫₁^b (1/x - 1/(x+1)) dx = [ln x - ln(x+1)]₁^b = [ln(x/(x+1))]₁^b = ln(b/(b+1)) - ln(1/2). As b→∞: b/(b+1)→1, so ln(b/(b+1))→0. Limit = 0 - (-ln 2) = ln 2. Converges to ln 2. ∎\n\nPart ב: Near x=0: 1/(√x(1+x)) ≈ 1/√x = x^{-1/2}, which has p = 1/2 < 1, so this Type II integral converges. Substitution: u=√x, du=1/(2√x)dx, so dx=2u du. When x=0: u=0. When x=1: u=1. Integral = ∫₀¹ (1/(u(1+u²)))·2u du = 2∫₀¹ 1/(1+u²) du = 2[arctan u]₀¹ = 2(π/4 - 0) = π/2. ∎",
+      "sample_solution_he": "חלק א: $1/(x^2+x) = 1/x - 1/(x+1)$. $\\int_1^\\infty (1/x - 1/(x+1))\\,dx = \\lim_{b\\to\\infty}[\\ln(x/(x+1))]_1^b = 0 - \\ln(1/2) = \\ln 2$. מתכנס ל-$\\ln 2$. ∎\n\nחלק ב: ליד $x=0$: $1/(\\sqrt{x}(1+x))\\approx x^{-1/2}$, $p=1/2<1$, מתכנס. הצבה $u=\\sqrt{x}$: $dx=2u\\,du$. האינטגרל הופך ל-$2\\int_0^1 \\frac{1}{1+u^2}\\,du = 2\\arctan(1) = \\pi/2$. ∎",
+      "rubric_en": "Part א: 5pts for partial fractions, 7pts for correct evaluation and limit. Part ב: 4pts for convergence check, 5pts for substitution, 4pts for evaluation.",
+      "rubric_he": "חלק א: 5 על שברים חלקיים, 7 על חישוב וגבול. חלק ב: 4 על בדיקת התכנסות, 5 על הצבה, 4 על חישוב.",
+      "skill_atoms": ["improper_integral_type1", "improper_integral_type2", "partial_fractions_distinct_roots", "u_substitution_definite"],
+      "explanation_en": "These two integrals test Type I (infinite limit) and Type II (unbounded integrand) — the two main categories of improper integrals.",
+      "explanation_he": "שני אינטגרלים אלה בודקים סוג I (גבול אינסופי) וסוג II (אינטגרנד בלתי חסום) — שתי הקטגוריות העיקריות."
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "Define as limit of proper integrals.",
-      "Compare to p-integral ∫₁^∞ 1/x^p: converges iff p>1.",
-      "ln x / x^p at ∞: converges iff p>1."
+      "Always write the improper integral as a limit before computing — never skip this step on an exam.",
+      "p-integral: ∫₁^∞ 1/x^p converges iff p > 1; ∫₀¹ 1/x^p converges iff p < 1.",
+      "Comparison test: bound by a p-integral whose convergence you know.",
+      "IBP + improper: compute IBP first on [1,b], then take b→∞.",
+      "If both endpoints are improper, split at an interior point — both halves must converge."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "∫₋∞^∞ f dx = lim_{b→∞} ∫₋ᵦ^b f dx (Cauchy principal value, not the actual integral)",
+        "correction": "Split at 0: both ∫₋∞^0 and ∫₀^∞ must converge independently.",
+        "detect_phrase_en": "integral from negative infinity symmetric",
+        "detect_phrase_he": "אינטגרל מינוס אינסוף סימטרי"
+      }
     ],
     "skill_atoms_unlocked": [
-      "improper_integral_limit",
-      "p_integral_test",
-      "integrate_tan_squared"
+      "improper_integral_type1",
+      "improper_integral_type2",
+      "improper_integral_comparison",
+      "p_integral_test"
+    ],
+    "prerequisites_to_check_before_teaching": [
+      "integration_by_parts",
+      "integration_partial_fractions",
+      "lhopital_rule"
+    ],
+    "next_recommended": [
+      "series_convergence_tests",
+      "series_absolute_convergence"
     ]
   }
 }

@@ -1,0 +1,190 @@
+{
+  "id": "series_convergence_advanced",
+  "concept_id": "series_absolute_convergence",
+  "title_en": "Advanced Series Convergence",
+  "title_he": "התכנסות טורים — רמה מתקדמת",
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1"],
+  "duration_min": 55,
+  "est_minutes": 55,
+  "summary_en": "Absolute convergence, conditional convergence, the alternating series test (Leibniz), and proof-level applications of the ratio test. Covers all series topics tested on the 20406 final exam.",
+  "summary_he": "התכנסות מוחלטת, התכנסות מותנית, מבחן הטורים המתחלפים (לייבניץ), ויישומים ברמת הוכחה של מבחן המנה. מכסה את כל נושאי הטורים הנבחנים במבחן 20406.",
+  "sections": [
+    {
+      "id": "s1",
+      "kind": "theory",
+      "title_en": "Absolute vs Conditional Convergence",
+      "title_he": "התכנסות מוחלטת לעומת מותנית",
+      "body_en_md": "**Definition:** A series $\\sum_{n=1}^\\infty a_n$ **converges absolutely** if $\\sum_{n=1}^\\infty |a_n|$ converges.\n\nIt **converges conditionally** if $\\sum a_n$ converges but $\\sum |a_n|$ diverges.\n\n**Theorem:** Absolute convergence implies convergence.\n\n**Proof:** Write $a_n = a_n^+ - a_n^-$ where $a_n^+ = \\max(a_n,0) \\geq 0$ and $a_n^- = \\max(-a_n,0) \\geq 0$. Note $a_n^+ \\leq |a_n|$ and $a_n^- \\leq |a_n|$. If $\\sum |a_n|$ converges, by comparison both $\\sum a_n^+$ and $\\sum a_n^-$ converge, so $\\sum a_n = \\sum a_n^+ - \\sum a_n^-$ converges. ∎\n\n**Key example:** The alternating harmonic series $\\sum_{n=1}^\\infty \\frac{(-1)^{n+1}}{n} = 1 - \\frac{1}{2} + \\frac{1}{3} - \\cdots = \\ln 2$ converges **conditionally** (it converges, but $\\sum 1/n$ diverges).",
+      "body_he_md": "**הגדרה:** טור $\\sum_{n=1}^\\infty a_n$ **מתכנס מוחלטת** אם $\\sum_{n=1}^\\infty |a_n|$ מתכנס.\n\nהוא **מתכנס מותנית** אם $\\sum a_n$ מתכנס אבל $\\sum |a_n|$ מתבדר.\n\n**משפט:** התכנסות מוחלטת מרמזת על התכנסות.\n\n**הוכחה:** נכתוב $a_n = a_n^+ - a_n^-$ כאשר $a_n^+ = \\max(a_n,0)$ ו-$a_n^- = \\max(-a_n,0)$. מ-$a_n^+, a_n^- \\leq |a_n|$ ומבחן ההשוואה, שני הסכומים מתכנסים, ולכן גם $\\sum a_n$. ∎\n\n**דוגמה:** הטור ההרמוני המתחלף $\\sum_{n=1}^\\infty \\frac{(-1)^{n+1}}{n} = \\ln 2$ מתכנס **מותנית** (מתכנס, אבל $\\sum 1/n$ מתבדר).",
+      "level_min": "calc1"
+    },
+    {
+      "id": "s2",
+      "kind": "theory",
+      "title_en": "The Alternating Series Test (Leibniz)",
+      "title_he": "מבחן הטורים המתחלפים (לייבניץ)",
+      "body_en_md": "**Theorem (Leibniz / Alternating Series Test):** If $\\{b_n\\}$ satisfies:\n1. $b_n > 0$ for all $n$,\n2. $b_n$ is **decreasing**: $b_{n+1} \\leq b_n$,\n3. $b_n \\to 0$,\n\nthen the alternating series $\\sum_{n=1}^\\infty (-1)^{n+1} b_n$ **converges**.\n\nMoreover, the error from truncating at $N$ terms satisfies:\n$$\\left|S - S_N\\right| \\leq b_{N+1}$$\n\n**Example:** $\\sum_{n=1}^\\infty \\frac{(-1)^{n+1}}{n^2}$ converges by Leibniz ($b_n = 1/n^2$ is positive, decreasing, → 0). Since $\\sum 1/n^2$ converges (p-series, $p=2>1$), it actually converges **absolutely**.\n\n**Counterexample showing all three conditions are needed:** $\\sum (-1)^n$ diverges (condition 3 fails: $b_n = 1 \\not\\to 0$).",
+      "body_he_md": "**משפט (לייבניץ):** אם $\\{b_n\\}$ מקיים:\n1. $b_n > 0$ לכל $n$,\n2. $b_n$ **יורד**: $b_{n+1} \\leq b_n$,\n3. $b_n \\to 0$,\n\nאז הטור המתחלף $\\sum_{n=1}^\\infty (-1)^{n+1} b_n$ **מתכנס**.\n\nיתרה מכך: שגיאת הקיטום לאחר $N$ אברים מקיימת $|S - S_N| \\leq b_{N+1}$.\n\n**דוגמה:** $\\sum_{n=1}^\\infty \\frac{(-1)^{n+1}}{n^2}$ מתכנס לפי לייבניץ, ובפועל מתכנס **מוחלטת** כי $\\sum 1/n^2$ מתכנס.\n\n**דוגמה נגדית:** $\\sum (-1)^n$ מתבדר (תנאי 3 נכשל: $b_n=1\\not\\to 0$).",
+      "level_min": "calc1"
+    },
+    {
+      "id": "s3",
+      "kind": "theory",
+      "title_en": "Ratio Test (Proof-Level)",
+      "title_he": "מבחן המנה (רמת הוכחה)",
+      "body_en_md": "**Theorem (Ratio Test):** Let $\\sum a_n$ be a series with $a_n > 0$. Let $L = \\lim_{n\\to\\infty} \\frac{a_{n+1}}{a_n}$.\n- If $L < 1$: series **converges absolutely**.\n- If $L > 1$ (or $L = \\infty$): series **diverges**.\n- If $L = 1$: test is **inconclusive**.\n\n**Proof of convergence case ($L < 1$):** Choose $r$ with $L < r < 1$. There exists $N$ such that $a_{n+1}/a_n < r$ for all $n > N$. Then $a_{n} < a_N r^{n-N}$ for $n > N$, and $\\sum a_N r^{n-N}$ is a convergent geometric series. By comparison, $\\sum a_n$ converges. ∎\n\n**Example:** $\\sum \\frac{n!}{n^n}$. Check: $\\frac{a_{n+1}}{a_n} = \\frac{(n+1)!}{(n+1)^{n+1}} \\cdot \\frac{n^n}{n!} = \\frac{n^n}{(n+1)^n} = \\left(\\frac{n}{n+1}\\right)^n = \\left(1+\\frac{1}{n}\\right)^{-n} \\to e^{-1} < 1$. Converges. ∎",
+      "body_he_md": "**משפט (מבחן המנה):** תהי $\\sum a_n$ עם $a_n > 0$, ו-$L = \\lim_{n\\to\\infty} \\frac{a_{n+1}}{a_n}$.\n- $L < 1$: הטור **מתכנס מוחלטת**.\n- $L > 1$: הטור **מתבדר**.\n- $L = 1$: המבחן **לא חד-משמעי**.\n\n**הוכחה ($L<1$):** נבחר $r$ עם $L < r < 1$. קיים $N$ כך שלכל $n>N$: $a_{n+1}/a_n < r$. אז $a_n < a_N r^{n-N}$, שהוא טור הנדסי מתכנס. מבחן ההשוואה נותן התכנסות. ∎\n\n**דוגמה:** $\\sum \\frac{n!}{n^n}$: $a_{n+1}/a_n \\to e^{-1} < 1$. מתכנס. ∎",
+      "level_min": "calc1"
+    },
+    {
+      "id": "s4",
+      "kind": "worked_example",
+      "title_en": "Worked Example: Classifying a Series",
+      "title_he": "דוגמה פתורה: סיווג טור",
+      "body_en_md": "**Classify** $\\displaystyle\\sum_{n=1}^\\infty \\frac{(-1)^n}{\\sqrt{n}}$: absolutely convergent, conditionally convergent, or divergent?\n\n**Step 1: Absolute convergence?** $\\sum |a_n| = \\sum 1/\\sqrt{n} = \\sum n^{-1/2}$. This is a p-series with $p = 1/2 < 1$. **Diverges.** So not absolutely convergent.\n\n**Step 2: Conditional convergence?** Apply Leibniz: $b_n = 1/\\sqrt{n}$.\n- $b_n > 0$. ✓\n- $b_n$ decreasing: $1/\\sqrt{n+1} < 1/\\sqrt{n}$. ✓\n- $b_n \\to 0$. ✓\n\nBy Leibniz, the series **converges**.\n\n**Conclusion:** $\\sum_{n=1}^\\infty (-1)^n/\\sqrt{n}$ converges **conditionally**.",
+      "body_he_md": "**סיווג** $\\displaystyle\\sum_{n=1}^\\infty \\frac{(-1)^n}{\\sqrt{n}}$: התכנסות מוחלטת, מותנית, או התבדרות?\n\n**שלב 1: התכנסות מוחלטת?** $\\sum 1/\\sqrt{n}$ — טור p עם $p=1/2<1$. **מתבדר.** לא מוחלט.\n\n**שלב 2: התכנסות מותנית?** לייבניץ: $b_n = 1/\\sqrt{n}$, חיובי, יורד, שואף ל-$0$. ✓\n\n**מסקנה:** הטור מתכנס **מותנית**.",
+      "level_min": "calc1"
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "For each series below, determine whether it converges absolutely, converges conditionally, or diverges. Justify each answer completely.\n\n(i) $\\displaystyle\\sum_{n=1}^\\infty \\frac{(-1)^n}{n^2+1}$\n\n(ii) $\\displaystyle\\sum_{n=1}^\\infty \\frac{(-1)^n \\ln n}{n}$",
+      "stem_he": "לכל טור, קבעו האם מתכנס מוחלטת, מתכנס מותנית, או מתבדר. נמקו כל תשובה עד תום.\n\n(i) $\\displaystyle\\sum_{n=1}^\\infty \\frac{(-1)^n}{n^2+1}$\n\n(ii) $\\displaystyle\\sum_{n=1}^\\infty \\frac{(-1)^n \\ln n}{n}$",
+      "parts": [
+        {
+          "label": "א",
+          "body_en": "Classify series (i).",
+          "body_he": "סיווג טור (i).",
+          "points": 10
+        },
+        {
+          "label": "ב",
+          "body_en": "Classify series (ii). For decreasingness, you may differentiate $f(x) = \\ln x / x$.",
+          "body_he": "סיווג טור (ii). לירידה ניתן לגזור $f(x) = \\ln x/x$.",
+          "points": 15
+        }
+      ],
+      "total_points": 25,
+      "sample_solution_en": "Part א: |aₙ| = 1/(n²+1) ≤ 1/n². Since ∑1/n² converges (p-series, p=2), ∑|aₙ| converges by comparison. Therefore the series converges **absolutely**. ∎\n\nPart ב: Step 1 — absolute: ∑|aₙ| = ∑(ln n)/n. Compare with 1/√n: (ln n)/n > 1/n for large n? Actually (ln n)/n vs 1/√n: ratio = (ln n)/n · √n = (ln n)/√n → 0, so (ln n)/n < 1/√n eventually, not helpful directly. Better: (ln n)/n ≥ 1/n for n ≥ 3 (since ln n ≥ 1), and ∑1/n diverges → ∑(ln n)/n diverges. NOT absolutely convergent.\n\nStep 2 — Leibniz: bₙ = (ln n)/n. f(x) = (ln x)/x, f'(x) = (1-ln x)/x² < 0 for x > e. So bₙ is decreasing for n ≥ 3. Also bₙ → 0 (bₙ = (ln n)/n → 0). By Leibniz the series **converges**. Conclusion: converges **conditionally**. ∎",
+      "sample_solution_he": "חלק א: $|a_n| = 1/(n^2+1) \\leq 1/n^2$, וטור $\\sum 1/n^2$ מתכנס. לכן הטור מתכנס **מוחלטת**. ∎\n\nחלק ב: שלב 1 — מוחלטת: $\\sum (\\ln n)/n$. לכל $n\\geq 3$: $\\ln n \\geq 1$, לכן $(\\ln n)/n \\geq 1/n$. מכיוון ש-$\\sum 1/n$ מתבדר, גם $\\sum (\\ln n)/n$ מתבדר. לא מוחלטת.\nשלב 2 — לייבניץ: $f(x)=(\\ln x)/x$, $f'(x)=(1-\\ln x)/x^2 < 0$ ל-$x>e$. לכן $b_n$ יורד ל-$n\\geq 3$, ו-$b_n\\to 0$. מתכנס **מותנית**. ∎",
+      "rubric_en": "Part א: 4pts absolute convergence test, 3pts comparison, 3pts conclusion. Part ב: 5pts divergence of |aₙ|, 5pts monotonicity check, 3pts Leibniz, 2pts conclusion.",
+      "rubric_he": "חלק א: 4 על מבחן מוחלטת, 3 על השוואה, 3 על מסקנה. חלק ב: 5 על התבדרות $|a_n|$, 5 על מונוטוניות, 3 על לייבניץ, 2 על מסקנה.",
+      "skill_atoms": ["series_absolute_convergence", "alternating_series_leibniz", "comparison_test_series"],
+      "explanation_en": "The key workflow: always check absolute convergence first (compare with p-series), then if not absolute, try Leibniz.",
+      "explanation_he": "תהליך המפתח: תמיד בדוק מוחלטת תחילה (השוואה עם p-טור), ואם לא — נסה לייבניץ."
+    },
+    {
+      "ord": 2,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Consider the series $\\displaystyle\\sum_{n=1}^\\infty \\frac{n!}{3^n}$.",
+      "stem_he": "נסתכל על הטור $\\displaystyle\\sum_{n=1}^\\infty \\frac{n!}{3^n}$.",
+      "parts": [
+        {
+          "label": "א",
+          "body_en": "Apply the ratio test. Compute $\\lim_{n\\to\\infty} \\frac{a_{n+1}}{a_n}$ and state the conclusion.",
+          "body_he": "יישמו את מבחן המנה. חשבו $\\lim_{n\\to\\infty} \\frac{a_{n+1}}{a_n}$ ונסחו את המסקנה.",
+          "points": 12
+        },
+        {
+          "label": "ב",
+          "body_en": "Now consider $\\displaystyle\\sum_{n=1}^\\infty \\frac{3^n}{n!}$. Apply the ratio test and determine convergence.",
+          "body_he": "כעת נסתכל על $\\displaystyle\\sum_{n=1}^\\infty \\frac{3^n}{n!}$. יישמו מבחן המנה וקבעו התכנסות.",
+          "points": 8
+        },
+        {
+          "label": "ג",
+          "body_en": "The value of the second series is related to $e^3$. Without computing the exact value, explain why $\\sum_{n=0}^\\infty \\frac{3^n}{n!} = e^3$.",
+          "body_he": "ערך הטור השני קשור ל-$e^3$. ללא חישוב הערך המדויק, הסבירו מדוע $\\sum_{n=0}^\\infty \\frac{3^n}{n!} = e^3$.",
+          "points": 5
+        }
+      ],
+      "total_points": 25,
+      "sample_solution_en": "Part א: aₙ = n!/3ⁿ. aₙ₊₁/aₙ = (n+1)!/3ⁿ⁺¹ · 3ⁿ/n! = (n+1)/3. As n→∞: (n+1)/3 → ∞ > 1. By ratio test, the series **diverges**. ∎\n\nPart ב: aₙ = 3ⁿ/n!. aₙ₊₁/aₙ = 3ⁿ⁺¹/(n+1)! · n!/3ⁿ = 3/(n+1) → 0 < 1. By ratio test, the series **converges absolutely**. ∎\n\nPart ג: The Taylor series of eˣ is ∑_{n=0}^∞ xⁿ/n!, valid for all x (convergence for all x can be proved by ratio test: ratio = |x|/(n+1) → 0). Setting x = 3 gives e³ = ∑_{n=0}^∞ 3ⁿ/n!. ∎",
+      "sample_solution_he": "חלק א: $a_{n+1}/a_n = (n+1)/3 \\to \\infty > 1$. מבחן המנה: הטור **מתבדר**. ∎\n\nחלק ב: $a_{n+1}/a_n = 3/(n+1) \\to 0 < 1$. מבחן המנה: הטור **מתכנס מוחלטת**. ∎\n\nחלק ג: $e^x = \\sum_{n=0}^\\infty x^n/n!$ (טיילור ל-$e^x$ סביב $0$), מתכנס לכל $x$. הצבת $x=3$ נותנת $e^3 = \\sum_{n=0}^\\infty 3^n/n!$. ∎",
+      "rubric_en": "Part א: 6pts for computing ratio, 6pts for limit and conclusion. Part ב: 4pts for ratio, 4pts for conclusion. Part ג: 5pts for Taylor series justification.",
+      "rubric_he": "חלק א: 6 על המנה, 6 על גבול ומסקנה. חלק ב: 4 על מנה, 4 על מסקנה. חלק ג: 5 על הנמקת טיילור.",
+      "skill_atoms": ["ratio_test_series", "taylor_series_exp", "series_factorial"],
+      "explanation_en": "n!/3ⁿ vs 3ⁿ/n! is the classic contrast showing the power of the ratio test.",
+      "explanation_he": "ההניגוד בין $n!/3^n$ ל-$3^n/n!$ הוא הדגמה קלאסית לכוח מבחן המנה."
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Let $\\displaystyle S = \\sum_{n=1}^\\infty \\frac{(-1)^{n+1}}{n} = 1 - \\frac{1}{2} + \\frac{1}{3} - \\frac{1}{4} + \\cdots$",
+      "stem_he": "יהי $\\displaystyle S = \\sum_{n=1}^\\infty \\frac{(-1)^{n+1}}{n} = 1 - \\frac{1}{2} + \\frac{1}{3} - \\frac{1}{4} + \\cdots$",
+      "parts": [
+        {
+          "label": "א",
+          "body_en": "Prove $S$ converges using the Leibniz test. State all three conditions explicitly.",
+          "body_he": "הוכיחו ש-$S$ מתכנס בעזרת מבחן לייבניץ. ציינו את שלושת התנאים במפורש.",
+          "points": 10
+        },
+        {
+          "label": "ב",
+          "body_en": "Prove $S$ does NOT converge absolutely.",
+          "body_he": "הוכיחו ש-$S$ אינו מתכנס מוחלטת.",
+          "points": 5
+        },
+        {
+          "label": "ג",
+          "body_en": "The partial sums satisfy $S_{2N} < S < S_{2N+1}$ for all $N \\geq 1$. Using this, find $N$ such that $|S - S_N| < 0.01$.",
+          "body_he": "הסכומים החלקיים מקיימים $S_{2N} < S < S_{2N+1}$ לכל $N \\geq 1$. בעזרת זאת, מצאו $N$ כך ש-$|S - S_N| < 0.01$.",
+          "points": 10
+        }
+      ],
+      "total_points": 25,
+      "sample_solution_en": "Part א: Let bₙ = 1/n. (1) bₙ = 1/n > 0. ✓ (2) bₙ decreasing: 1/(n+1) < 1/n. ✓ (3) bₙ → 0: 1/n → 0. ✓ By Leibniz, S converges. ∎\n\nPart ב: ∑|aₙ| = ∑1/n, the harmonic series, which diverges (e.g., by the integral test: ∫₁^∞ 1/x dx = ∞). So S does NOT converge absolutely. ∎\n\nPart ג: By Leibniz error bound: |S - Sₙ| ≤ bₙ₊₁ = 1/(N+1). We need 1/(N+1) < 0.01, i.e., N+1 > 100, i.e., N ≥ 100. So |S - S₁₀₀| ≤ 1/101 < 0.01. ∎",
+      "sample_solution_he": "חלק א: $b_n = 1/n$: חיובי ✓, יורד ✓, שואף ל-$0$ ✓. לפי לייבניץ: $S$ מתכנס. ∎\n\nחלק ב: $\\sum |a_n| = \\sum 1/n$ — הטור ההרמוני, מתבדר. $S$ אינו מתכנס מוחלטת. ∎\n\nחלק ג: חסם שגיאת לייבניץ: $|S-S_N| \\leq b_{N+1} = 1/(N+1)$. צריך $1/(N+1)<0.01$, כלומר $N\\geq 100$. ∎",
+      "rubric_en": "Part א: 3pts per Leibniz condition (×3) + 1pt conclusion. Part ב: 5pts for identifying and showing harmonic divergence. Part ג: 4pts for applying error bound, 6pts for correct N.",
+      "rubric_he": "חלק א: 3 נקודות לכל תנאי (×3) + 1 מסקנה. חלק ב: 5 על זיהוי הטור ההרמוני. חלק ג: 4 על חסם שגיאה, 6 על $N$ נכון.",
+      "skill_atoms": ["alternating_series_leibniz", "series_absolute_convergence", "leibniz_error_bound"],
+      "explanation_en": "The alternating harmonic series is the canonical example of conditional convergence — every Calc 1 exam tests it.",
+      "explanation_he": "הטור ההרמוני המתחלף הוא הדוגמה הקנונית להתכנסות מותנית — כל מבחן חדו\"א 1 בודק אותו."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Always determine absolute convergence first (ratio test, comparison with p-series).",
+      "Leibniz test: three conditions must all be verified explicitly — examiners deduct for skipping any.",
+      "Conditionally convergent series can be rearranged to give any sum (Riemann rearrangement) — absolute convergence avoids this.",
+      "Ratio test fails (L=1) for p-series and similar polynomial-rate series; use comparison or integral test instead.",
+      "Error bound for alternating series: |S - Sₙ| ≤ bₙ₊₁."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "If the ratio test gives L=1, the series diverges",
+        "correction": "L=1 is inconclusive — p-series ∑1/n² converges but also has ratio → 1.",
+        "detect_phrase_en": "ratio test L equals 1 diverge",
+        "detect_phrase_he": "מבחן מנה L שווה 1 מתבדר"
+      },
+      {
+        "wrong": "Conditional convergence means almost convergent",
+        "correction": "Conditional convergence is real convergence; 'conditional' only means absolute test fails.",
+        "detect_phrase_en": "conditional convergence not really converge",
+        "detect_phrase_he": "התכנסות מותנית לא מתכנסת"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "series_absolute_convergence",
+      "alternating_series_leibniz",
+      "ratio_test_series",
+      "comparison_test_series",
+      "leibniz_error_bound"
+    ],
+    "prerequisites_to_check_before_teaching": [
+      "series_convergence_tests",
+      "sequences_limits"
+    ],
+    "next_recommended": [
+      "taylor_formula",
+      "improper_integrals"
+    ]
+  }
+}
