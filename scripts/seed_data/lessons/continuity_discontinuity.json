@@ -1,168 +1,233 @@
 {
   "concept_id": "continuity_discontinuity",
-  "subject": "calculus_1",
+  "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Continuity & Discontinuity",
-  "title_he": "רציפות ואי-רציפות",
-  "summary_en": "Continuity at a point and on intervals, classification of discontinuities, and the Intermediate Value and Extreme Value theorems — pillars of existence proofs in engineering.",
-  "summary_he": "רציפות בנקודה ועל קטעים, סיווג סוגי אי-רציפות, ומשפטי הערך הממוצע והקיצון — עמודי תווך להוכחות קיום בהנדסה.",
-  "est_minutes": 25,
+  "math_track": ["calculus1", "analysis"],
+  "title_en": "Types of Discontinuities",
+  "title_he": "סוגי אי-רציפויות",
+  "summary_en": "Removable, jump, and infinite discontinuities; the Dirichlet function; classifying and fixing discontinuities.",
+  "summary_he": "אי-רציפויות סילוקיות, קפיצות ואינסוטיות; פונקציית דיריכלה; סיווג ותיקון אי-רציפויות.",
+  "est_minutes": 45,
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Definition of continuity",
-      "title_he": "הגדרת רציפות",
-      "body_en_md": "$f$ is **continuous at $a$** if:\n1. $a\\in D_f$\n2. $\\lim_{x\\to a}f(x)$ exists\n3. $\\lim_{x\\to a}f(x)=f(a)$\n\nEquivalently: $\\forall\\,\\epsilon>0\\,\\exists\\,\\delta>0: |x-a|<\\delta\\Rightarrow|f(x)-f(a)|<\\epsilon$.\n\n**Continuous on $[a,b]$:** continuous at every interior point, continuous from right at $a$, from left at $b$.\n\n**Elementary functions** (polynomials, rational on domain, $e^x$, $\\ln x$, trig on domain) are continuous wherever defined.\n\n**Worked Example (MVT inequality).** If $f(0)=0$, $f(1)=1$, $f'(x)\\geq 1$, then MVT on $[0,x]$ gives $f(x)=f'(c)x\\geq x$.\n\n**Worked Example 2 (IVT).** $g(x)=e^x+x-3$ changes sign on $[0,1]$ ⇒ root in $(0,1)$.",
-      "body_he_md": "$f$ **רציפה ב-$a$** אם:\n1. $a\\in D_f$\n2. $\\lim_{x\\to a}f(x)$ קיים\n3. $\\lim_{x\\to a}f(x)=f(a)$\n\n**רציפה על $[a,b]$:** רציפה בפנים, מימין ב-$a$, משמאל ב-$b$.\n\n**פונקציות אלמנטריות** רציפות בכל מקום שהן מוגדרות.\n\n**דוגמה (MVT).** $f'(x)\\geq 1$ על $[0,1]$ ⇒ $f(x)\\geq x$.\n\n**דוגמה 2 (IVT).** $e^x+x-3$ משנה סימן ב-$[0,1]$."
+      "kind": "intro",
+      "title_en": "Why Classify Discontinuities?",
+      "title_he": "מדוע לסווג אי-רציפויות?",
+      "body_en_md": "A function can fail to be continuous in very different ways. A \"removable\" discontinuity is just a hole — fix one point and the function becomes continuous. A \"jump\" discontinuity means the function leaps — no single definition patches it. An \"infinite\" discontinuity signals a vertical asymptote. Understanding the type determines:\n- Whether Riemann integrability holds.\n- Whether the discontinuity can be removed.\n- How the function behaves near that point in applications (signal processing, physics).",
+      "body_he_md": "פונקציה יכולה להיכשל ברציפות בדרכים שונות מאוד. אי-רציפות \"סילוקית\" היא רק חור — הגדרת נקודה אחת מתקנת. \"קפיצה\" פירושה שהפונקציה קופצת — אין הגדרה אחת שמסדרת. אי-רציפות \"אינסוטית\" מסמנת אסימפטוטה אנכית. הבנת הסוג קובעת:\n- האם הפונקציה אינטגרבילית ריאמן.\n- האם ניתן לסלק את האי-רציפות.\n- כיצד הפונקציה מתנהגת ליד הנקודה ביישומים."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Types of Discontinuities",
+      "title_he": "סוגי אי-רציפויות",
+      "body_en_md": "Let $f$ be defined near $x_0$ (possibly not at $x_0$). We say $x_0$ is a discontinuity of $f$ if $f$ is not continuous at $x_0$.\n\n**Removable discontinuity:** $\\lim_{x\\to x_0} f(x) = L$ exists (finite), but either $f(x_0)$ is undefined or $f(x_0)\\neq L$. Fix: redefine $f(x_0)=L$.\n\n**Jump discontinuity:** $\\lim_{x\\to x_0^-} f(x) = L_-$ and $\\lim_{x\\to x_0^+} f(x) = L_+$ both exist (finite) but $L_- \\neq L_+$. The jump is $|L_+-L_-|$.\n\n**Infinite discontinuity:** At least one of the one-sided limits is $\\pm\\infty$. Example: $f(x)=1/x$ at $x_0=0$.\n\n**Essential (oscillation) discontinuity:** The limit does not exist and is not $\\pm\\infty$ (e.g., $\\sin(1/x)$ at $x_0=0$).",
+      "body_he_md": "תהי $f$ מוגדרת ליד $x_0$. $x_0$ היא נקודת אי-רציפות אם $f$ אינה רציפה בה.\n\n**סילוקית:** $\\lim_{x\\to x_0}f(x)=L$ קיים וסופי, אך $f(x_0)$ לא מוגדרת או שונה מ-$L$. תיקון: הגדר $f(x_0)=L$.\n\n**קפיצה:** $\\lim_{x\\to x_0^-}f(x)=L_-$ ו-$\\lim_{x\\to x_0^+}f(x)=L_+$ קיימים וסופיים, אך $L_-\\neq L_+$. גודל הקפיצה: $|L_+-L_-|$.\n\n**אינסוטית:** לפחות גבול חד-צדדי אחד הוא $\\pm\\infty$. דוגמה: $1/x$ ב-$x_0=0$.\n\n**מהותית (אוסצילציה):** הגבול לא קיים ואינו $\\pm\\infty$ (כגון $\\sin(1/x)$ ב-$x_0=0$)."
     },
     {
       "kind": "theory",
-      "title_en": "Types of discontinuity",
-      "title_he": "סוגי אי-רציפות",
-      "body_en_md": "**Removable:** limit exists but $\\ne f(a)$ or $f(a)$ undefined. Fix by redefining $f(a)=\\lim_{x\\to a}f(x)$. Example: $\\dfrac{\\sin x}{x}$ at $0$.\n\n**Jump:** one-sided limits exist but differ. Example: $\\text{sgn}(x)$ at $0$.\n\n**Infinite:** at least one one-sided limit is $\\pm\\infty$. Example: $1/x$ at $0$.\n\n**Essential (oscillatory):** limit does not exist (neither finite nor infinite). Example: $\\sin(1/x)$ at $0$.",
-      "body_he_md": "**ניתנת לתיקון:** הגבול קיים אך $\\ne f(a)$. דוגמה: $\\dfrac{\\sin x}{x}$ ב-0.\n\n**קפיצה:** גבולות חד-צדדיים קיימים ושונים. דוגמה: $\\text{sgn}(x)$.\n\n**אינסופית:** גבול חד-צדדי $\\pm\\infty$. דוגמה: $1/x$ ב-0.\n\n**עיקרית:** הגבול לא קיים. דוגמה: $\\sin(1/x)$ ב-0."
+      "title_en": "The Dirichlet Function and Essential Discontinuities",
+      "title_he": "פונקציית דיריכלה ואי-רציפויות מהותיות",
+      "body_en_md": "**Dirichlet function:**\n$$D(x) = \\begin{cases} 1 & x\\in\\mathbb{Q} \\\\ 0 & x\\notin\\mathbb{Q} \\end{cases}$$\nThis function is **discontinuous everywhere**. For any $x_0$ and any $\\delta>0$, the interval $(x_0-\\delta,x_0+\\delta)$ contains both rationals and irrationals, so the limit does not exist at any point.\n\n**Modified Dirichlet (Thomae/Popcorn function):**\n$$T(x)=\\begin{cases}1/q & x=p/q \\text{ in lowest terms}\\\\0 & x\\notin\\mathbb{Q}\\end{cases}$$\nContinuous at every irrational, discontinuous at every rational — a remarkable example.\n\n**Classification summary:**\n- Jump: step functions, $\\lfloor x\\rfloor$ at integers.\n- Removable: $\\sin(x)/x$ at 0, $(x^2-1)/(x-1)$ at 1.\n- Infinite: $\\tan x$ at $\\pi/2$, $1/x$ at 0.",
+      "body_he_md": "**פונקציית דיריכלה:**\n$$D(x)=\\begin{cases}1 & x\\in\\mathbb{Q}\\\\0 & x\\notin\\mathbb{Q}\\end{cases}$$\nאי-רציפה בכל מקום — בכל קטע קטן יש גם רציונלים וגם אי-רציונלים.\n\n**פונקציית תומה (פופקורן):** רציפה בכל אי-רציונלי, אי-רציפה בכל רציונלי.\n\n**סיכום סיווג:**\n- קפיצה: פונקציות מדרגה, $\\lfloor x\\rfloor$ בשלמים.\n- סילוקית: $\\sin x/x$ ב-0, $(x^2-1)/(x-1)$ ב-1.\n- אינסוטית: $\\tan x$ ב-$\\pi/2$, $1/x$ ב-0."
     },
     {
       "kind": "worked_example",
-      "title_en": "Testing continuity",
-      "title_he": "בדיקת רציפות",
-      "body_en_md": "**Example.** $f(x)=\\begin{cases}x^2 & x\\ne 1\\\\ 3 & x=1\\end{cases}$\n\n$\\lim_{x\\to 1}x^2=1\\ne f(1)=3$ — **removable** discontinuity.\n\n**Example.** $g(x)=\\dfrac{x^2-1}{x-1}$ for $x\\ne 1$. Factor: $g(x)=x+1$. Extend continuously: $\\tilde g(1)=2$.\n\n**Piecewise at join:** for $h(x)=\\begin{cases}ax+1 & x<2\\\\ x^2 & x\\ge 2\\end{cases}$, continuity at $2$ requires $2a+1=4 \\Rightarrow a=3/2$.",
-      "body_he_md": "**דוגמה.** $f(1)=3$ אך $\\lim_{x\\to 1}x^2=1$ — **ניתנת לתיקון**.\n\n**דוגמה.** $g(x)=\\dfrac{x^2-1}{x-1}=x+1$ ל-$x\\ne 1$; הרחבה רציפה: $\\tilde g(1)=2$.\n\n**קטעית:** רציפות ב-$2$ דורשת $2a+1=4 \\Rightarrow a=3/2$."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Classifying a Removable Discontinuity",
+      "title_he": "דוגמה פתורה 1 — סיווג אי-רציפות סילוקית",
+      "body_en_md": "**Function:** $f(x)=\\dfrac{x^2-4}{x-2}$.\n\n**Step 1 — Find the domain:** $f$ is undefined at $x=2$.\n\n**Step 2 — Compute the limit:**\n$$\\lim_{x\\to 2}\\frac{x^2-4}{x-2} = \\lim_{x\\to 2}\\frac{(x-2)(x+2)}{x-2} = \\lim_{x\\to 2}(x+2) = 4.$$\n\n**Step 3 — Classify:** The limit exists and equals 4, but $f(2)$ is undefined. This is a **removable discontinuity** at $x=2$.\n\n**Step 4 — Fix:** Define $f(2)=4$. The extended function $g(x)=x+2$ is continuous everywhere.",
+      "body_he_md": "**פונקציה:** $f(x)=\\dfrac{x^2-4}{x-2}$.\n\n**שלב 1:** $f$ אינה מוגדרת ב-$x=2$.\n\n**שלב 2:**\n$$\\lim_{x\\to 2}\\frac{x^2-4}{x-2}=\\lim_{x\\to 2}(x+2)=4.$$\n\n**שלב 3:** הגבול קיים ושווה 4, אך $f(2)$ לא מוגדרת — **אי-רציפות סילוקית** ב-$x=2$.\n\n**שלב 4:** הגדר $f(2)=4$. $g(x)=x+2$ רציפה בכל מקום."
     },
     {
-      "kind": "theory",
-      "title_en": "IVT and EVT",
-      "title_he": "משפט ערך ביניים (IVT) ומשפט ערך קיצון (EVT)",
-      "body_en_md": "**Intermediate Value Theorem:** If $f$ is continuous on $[a,b]$ and $N$ is strictly between $f(a)$ and $f(b)$, then $\\exists\\,c\\in(a,b)$ with $f(c)=N$.\n\n**Corollary — root existence:** if $f(a)$ and $f(b)$ have opposite signs, $\\exists\\,c\\in(a,b): f(c)=0$.\n\n**Extreme Value Theorem:** If $f$ is continuous on **closed bounded** $[a,b]$, then $f$ attains absolute maximum and minimum on $[a,b]$.\n\n**Note:** EVT needs closed interval; IVT needs continuity but interval can be open if endpoints handled.",
-      "body_he_md": "**IVT:** $f$ רציפה על $[a,b]$, $N$ בין $f(a)$ ל-$f(b)$ $\\Rightarrow$ $\\exists\\,c: f(c)=N$.\n\n**מסקנה — שורש:** סימנים מנוגדים בקצוות $\\Rightarrow$ שורש ב-$(a,b)$.\n\n**EVT:** $f$ רציפה על $[a,b]$ **סגור וחסום** $\\Rightarrow$ מקסימום ומינימום מוחלטים מתקבלים.\n\n**הערה:** EVT דורש קטע סגור."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Classify the discontinuity of $f(x)=\\dfrac{\\sin(x)}{x}$ at $x=0$ and fix it.",
+      "body_he_md": "סווג את אי-הרציפות של $f(x)=\\dfrac{\\sin x}{x}$ ב-$x=0$ ותקן אותה.",
+      "checkpoint_solution_en": "$\\lim_{x\\to 0}\\sin(x)/x=1$, but $f(0)$ undefined. Removable discontinuity. Fix: define $f(0)=1$.",
+      "checkpoint_solution_he": "$\\lim_{x\\to 0}\\sin x/x=1$, אך $f(0)$ לא מוגדרת. אי-רציפות סילוקית. תיקון: $f(0)=1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Classifying a Jump Discontinuity",
+      "title_he": "דוגמה פתורה 2 — סיווג אי-רציפות קפיצה",
+      "body_en_md": "**Function:** $f(x)=\\begin{cases}x+1 & x<2\\\\ 3x-3 & x\\geq 2\\end{cases}$.\n\n**Step 1 — Left limit:**\n$$\\lim_{x\\to 2^-}(x+1) = 3.$$\n\n**Step 2 — Right limit:**\n$$\\lim_{x\\to 2^+}(3x-3) = 3(2)-3 = 3.$$\n\n**Step 3 — Check the function value:** $f(2)=3(2)-3=3$.\n\n**Step 4 — Both one-sided limits equal $f(2)=3$.** The function is actually **continuous** at $x=2$! ✓\n\n**Now modify:** Consider $g(x)=\\begin{cases}x+1 & x<2\\\\ 3x-1 & x\\geq 2\\end{cases}$.\n\n$\\lim_{x\\to 2^-}=3$, $\\lim_{x\\to 2^+}=5$. Both exist but $3\\neq 5$ — **jump discontinuity**, jump size $=|5-3|=2$.",
+      "body_he_md": "**פונקציה:** $f(x)=\\begin{cases}x+1 & x<2\\\\3x-3 & x\\geq2\\end{cases}$.\n\n**שלב 1:** $\\lim_{x\\to 2^-}(x+1)=3$.\n\n**שלב 2:** $\\lim_{x\\to 2^+}(3x-3)=3$.\n\n**שלב 3:** $f(2)=3$. **הפונקציה רציפה** ב-$x=2$! ✓\n\n**גרסה עם קפיצה:** $g(x)=\\begin{cases}x+1 & x<2\\\\3x-1 & x\\geq2\\end{cases}$.\n\n$\\lim_{x\\to 2^-}=3$, $\\lim_{x\\to 2^+}=5$ — **אי-רציפות קפיצה**, גודל קפיצה $=2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Classify the discontinuity of $f(x)=\\text{sgn}(x)$ at $x=0$, where $\\text{sgn}(x)=1$ for $x>0$, $-1$ for $x<0$, $0$ for $x=0$.",
+      "body_he_md": "סווג את אי-הרציפות של $f(x)=\\text{sgn}(x)$ ב-$x=0$, כאשר $\\text{sgn}(x)=1$ עבור $x>0$, $-1$ עבור $x<0$, $0$ עבור $x=0$.",
+      "checkpoint_solution_en": "$\\lim_{x\\to 0^-}\\text{sgn}(x)=-1$, $\\lim_{x\\to 0^+}\\text{sgn}(x)=1$. Both exist but $-1\\neq 1$: **jump discontinuity**, jump $=2$.",
+      "checkpoint_solution_he": "$\\lim_{x\\to 0^-}=-1$, $\\lim_{x\\to 0^+}=1$. שניהם קיימים אך שונים: **אי-רציפות קפיצה**, קפיצה $=2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — The Dirichlet Function and Essential Discontinuity",
+      "title_he": "דוגמה פתורה 3 — פונקציית דיריכלה ואי-רציפות מהותית",
+      "body_en_md": "**Claim:** The Dirichlet function $D(x)=\\begin{cases}1 & x\\in\\mathbb{Q}\\\\0 & x\\notin\\mathbb{Q}\\end{cases}$ is discontinuous at every real number.\n\n**Step 1 — Fix any $x_0\\in\\mathbb{R}$.** We show $\\lim_{x\\to x_0}D(x)$ does not exist.\n\n**Step 2 — Density argument.** By the density of $\\mathbb{Q}$ and $\\mathbb{R}\\setminus\\mathbb{Q}$ in $\\mathbb{R}$, any interval $(x_0-\\delta, x_0+\\delta)$ contains:\n- A rational $r_n\\to x_0$ with $D(r_n)=1$.\n- An irrational $s_n\\to x_0$ with $D(s_n)=0$.\n\n**Step 3 — No limit.** If a limit $L$ existed, then both sequences would give $L$, but $D(r_n)=1\\to 1$ and $D(s_n)=0\\to 0$. Since $1\\neq 0$, the limit does not exist. $\\blacksquare$\n\n**Classification:** Every point is an **essential discontinuity** of the Dirichlet function.",
+      "body_he_md": "**טענה:** $D(x)=\\begin{cases}1 & x\\in\\mathbb{Q}\\\\0 & x\\notin\\mathbb{Q}\\end{cases}$ אי-רציפה בכל נקודה.\n\n**שלב 1:** קבע $x_0\\in\\mathbb{R}$ כלשהו. נראה שהגבול לא קיים.\n\n**שלב 2 — צפיפות.** בכל קטע $(x_0-\\delta,x_0+\\delta)$ יש:\n- $r_n\\to x_0$ רציונלים ($D(r_n)=1$).\n- $s_n\\to x_0$ אי-רציונלים ($D(s_n)=0$).\n\n**שלב 3:** אם קיים גבול $L$, אז $L=1$ וגם $L=0$ — סתירה. $\\blacksquare$\n\n**סיווג:** כל נקודה היא **אי-רציפות מהותית** של $D$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — How to Classify a Discontinuity",
+      "title_he": "מדריך שיטה — כיצד לסווג אי-רציפות",
+      "body_en_md": "1. Compute $L_- = \\lim_{x\\to x_0^-}f(x)$ and $L_+ = \\lim_{x\\to x_0^+}f(x)$.\n\n| $L_-$ | $L_+$ | $f(x_0)$ | Type |\n|---|---|---|---|\n| Finite | Finite | $=L_-=L_+$ | Continuous |\n| Finite | Finite | $\\neq L_-=L_+$ or undefined | **Removable** |\n| Finite | Finite | $L_-\\neq L_+$ | **Jump** |\n| At least one $=\\pm\\infty$ | | — | **Infinite** |\n| Does not exist (oscillation) | | — | **Essential** |\n\n2. To **fix** a removable discontinuity: define $f(x_0)=L$.\n3. Jump and infinite discontinuities **cannot** be fixed by redefining one point.",
+      "body_he_md": "1. חשב $L_-=\\lim_{x\\to x_0^-}f(x)$ ו-$L_+=\\lim_{x\\to x_0^+}f(x)$.\n\n| $L_-$ | $L_+$ | $f(x_0)$ | סוג |\n|---|---|---|---|\n| סופי | סופי | $=L_-=L_+$ | רציפה |\n| סופי | סופי | $\\neq L$ או לא מוגדרת | **סילוקית** |\n| סופי | סופי | $L_-\\neq L_+$ | **קפיצה** |\n| לפחות אחד $\\pm\\infty$ | | — | **אינסוטית** |\n| לא קיים (אוסצילציה) | | — | **מהותית** |\n\n2. לתיקון סילוקית: הגדר $f(x_0)=L$.\n3. קפיצה ואינסוטית **לא ניתנות לתיקון** על ידי הגדרת נקודה אחת."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Classify the discontinuity of $f(x)=\\dfrac{x^2-1}{x-1}$ at $x=1$ and fix it if possible.",
+          "body_he": "סווג את אי-הרציפות של $f(x)=\\dfrac{x^2-1}{x-1}$ ב-$x=1$ ותקן אם אפשר.",
+          "solution_en": "$\\lim_{x\\to 1}(x^2-1)/(x-1)=\\lim(x+1)=2$. $f(1)$ undefined. Removable. Fix: $f(1)=2$.",
+          "solution_he": "$\\lim_{x\\to 1}=2$, $f(1)$ לא מוגדרת. סילוקית. תיקון: $f(1)=2$.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Is $f(x)=\\lfloor x\\rfloor$ (floor function) continuous at $x=3$? If not, classify.",
+          "body_he": "האם $f(x)=\\lfloor x\\rfloor$ (פונקציית רצפה) רציפה ב-$x=3$? אם לא, סווג.",
+          "solution_en": "$\\lim_{x\\to 3^-}\\lfloor x\\rfloor=2$, $\\lim_{x\\to 3^+}\\lfloor x\\rfloor=3$, $f(3)=3$. Jump discontinuity, jump $=1$.",
+          "solution_he": "$\\lim_{x\\to 3^-}=2$, $\\lim_{x\\to 3^+}=3$. אי-רציפות קפיצה, קפיצה $=1$.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "What type of discontinuity does $f(x)=\\tan x$ have at $x=\\pi/2$?",
+          "body_he": "איזה סוג אי-רציפות יש ל-$f(x)=\\tan x$ ב-$x=\\pi/2$?",
+          "solution_en": "$\\lim_{x\\to (\\pi/2)^-}\\tan x=+\\infty$, $\\lim_{x\\to (\\pi/2)^+}\\tan x=-\\infty$. Infinite discontinuity.",
+          "solution_he": "$\\lim_{x\\to (\\pi/2)^-}=+\\infty$, $\\lim_{x\\to (\\pi/2)^+}=-\\infty$. אי-רציפות אינסוטית.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Define $f(x)=x\\sin(1/x)$ for $x\\neq 0$. Can we define $f(0)$ to make $f$ continuous at 0?",
+          "body_he": "הגדר $f(x)=x\\sin(1/x)$ עבור $x\\neq 0$. האם ניתן להגדיר $f(0)$ כדי ש-$f$ תהיה רציפה ב-0?",
+          "solution_en": "$|x\\sin(1/x)|\\leq|x|\\to 0$, so $\\lim_{x\\to 0}f(x)=0$. Removable: define $f(0)=0$.",
+          "solution_he": "$|x\\sin(1/x)|\\leq|x|\\to 0$. גבול $=0$. סילוקית: הגדר $f(0)=0$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "For $f(x)=\\begin{cases}(x^2-9)/(x-3) & x\\neq 3 \\\\ 7 & x=3\\end{cases}$, is $f$ continuous at $x=3$? Fix if not.",
+          "body_he": "עבור $f(x)=\\begin{cases}(x^2-9)/(x-3) & x\\neq3\\\\7 & x=3\\end{cases}$, האם $f$ רציפה ב-$x=3$? תקן אם לא.",
+          "solution_en": "$\\lim_{x\\to 3}(x^2-9)/(x-3)=\\lim(x+3)=6$. But $f(3)=7\\neq 6$. Removable discontinuity. Fix: redefine $f(3)=6$.",
+          "solution_he": "$\\lim_{x\\to 3}=6\\neq f(3)=7$. אי-רציפות סילוקית. תיקון: $f(3)=6$.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Classify the discontinuity of $f(x)=e^{1/x}$ at $x=0$.",
+          "body_he": "סווג את אי-הרציפות של $f(x)=e^{1/x}$ ב-$x=0$.",
+          "solution_en": "$\\lim_{x\\to 0^+}e^{1/x}=e^{+\\infty}=+\\infty$. $\\lim_{x\\to 0^-}e^{1/x}=e^{-\\infty}=0$. Left limit $=0$ (finite), right limit $=+\\infty$ (infinite). Infinite discontinuity.",
+          "solution_he": "$\\lim_{x\\to 0^+}e^{1/x}=+\\infty$, $\\lim_{x\\to 0^-}e^{1/x}=0$. גבול ימני אינסוטי — אי-רציפות אינסוטית.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Show that $f(x)=|x|/x$ for $x\\neq 0$ has a jump discontinuity at 0, and determine the jump.",
+          "body_he": "הראה ש-$f(x)=|x|/x$ עבור $x\\neq 0$ מציגה אי-רציפות קפיצה ב-0, וחשב את גודל הקפיצה.",
+          "solution_en": "$\\lim_{x\\to 0^-}|x|/x=\\lim(-x/x)=-1$. $\\lim_{x\\to 0^+}|x|/x=1$. Both finite, but $-1\\neq 1$: jump discontinuity, jump $=2$.",
+          "solution_he": "$\\lim_{x\\to 0^-}=-1$, $\\lim_{x\\to 0^+}=1$. שניהם סופיים וסתרניים: קפיצה $=2$.",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find all values of $a$ making $f(x)=\\begin{cases}ax+1 & x<1\\\\ x^2+2 & x\\geq 1\\end{cases}$ continuous at $x=1$.",
+          "body_he": "מצא את כל ערכי $a$ הגורמים ל-$f(x)=\\begin{cases}ax+1 & x<1\\\\x^2+2 & x\\geq1\\end{cases}$ להיות רציפה ב-$x=1$.",
+          "solution_en": "Need $\\lim_{x\\to 1^-}=\\lim_{x\\to 1^+}=f(1)$. $L_-=a+1$, $L_+=f(1)=1+2=3$. So $a+1=3\\Rightarrow a=2$.",
+          "solution_he": "דרוש $a+1=3\\Rightarrow a=2$.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Classify all discontinuities of $f(x)=\\dfrac{1}{x(x-2)}$.",
+          "body_he": "סווג את כל אי-הרציפויות של $f(x)=\\dfrac{1}{x(x-2)}$.",
+          "solution_en": "Discontinuities at $x=0$ and $x=2$. At $x=0$: $\\lim_{x\\to 0^-}=-\\infty$, $\\lim_{x\\to 0^+}=+\\infty$. Infinite. At $x=2$: $\\lim_{x\\to 2^-}=-\\infty$, $\\lim_{x\\to 2^+}=+\\infty$. Infinite.",
+          "solution_he": "אי-רציפויות ב-$x=0$ ו-$x=2$. בשתיהן: אינסוטיות (גבולות חד-צדדיים $\\pm\\infty$).",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that the Dirichlet function $D(x)$ is discontinuous at every rational number.",
+          "body_he": "הוכח שפונקציית דיריכלה $D(x)$ אי-רציפה בכל מספר רציונלי.",
+          "solution_en": "Fix $x_0\\in\\mathbb{Q}$. For any $\\delta>0$, by density of irrationals, there exists $s\\in(x_0-\\delta,x_0+\\delta)$ with $s\\notin\\mathbb{Q}$. So $D(s)=0$ but $D(x_0)=1$. Thus $|D(s)-D(x_0)|=1$ with $|s-x_0|<\\delta$. For $\\varepsilon=1/2$, no $\\delta$ works. $\\blacksquare$",
+          "solution_he": "קבע $x_0\\in\\mathbb{Q}$. לכל $\\delta>0$, קיים $s\\notin\\mathbb{Q}$ ב-$(x_0-\\delta,x_0+\\delta)$ עם $D(s)=0\\neq 1=D(x_0)$. עבור $\\varepsilon=1/2$ — שום $\\delta$ לא עובד. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that a function with only removable discontinuities on $[a,b]$ is Riemann integrable.",
+          "body_he": "הוכח שפונקציה עם אי-רציפויות סילוקיות בלבד על $[a,b]$ אינטגרבילית ריאמן.",
+          "solution_en": "A function with only removable discontinuities can be redefined at finitely many (or countably many) points to become continuous on $[a,b]$. Redefining at finitely many points does not change the Riemann integral (the set of discontinuities has measure zero). A bounded function with a set of discontinuities of measure zero is Riemann integrable (Lebesgue's criterion). $\\blacksquare$",
+          "solution_he": "פונקציה עם אי-רציפויות סילוקיות בלבד מוגדרת מחדש על קבוצה בעלת מידה אפס — הפונקציה המתוקנת רציפה (כמעט בכל מקום). לפי קריטריון לבסג — אינטגרבילית ריאמן. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "The Thomae (popcorn) function is $T(x)=1/q$ if $x=p/q$ in lowest terms, $T(x)=0$ if $x$ is irrational. Prove $T$ is continuous at every irrational.",
+          "body_he": "פונקציית תומא: $T(x)=1/q$ אם $x=p/q$ בשברים פשוטים, $T(x)=0$ אם $x$ אי-רציונלי. הוכח ש-$T$ רציפה בכל אי-רציונלי.",
+          "solution_en": "Fix irrational $x_0$, $\\varepsilon>0$. Choose $N$ with $1/N<\\varepsilon$. The rationals $p/q$ with $q\\leq N$ in $[x_0-1,x_0+1]$ are finite. So $\\exists\\delta>0$ such that no such rational lies in $(x_0-\\delta,x_0+\\delta)\\setminus\\{x_0\\}$. For $|x-x_0|<\\delta$: if $x$ irrational, $|T(x)-T(x_0)|=0<\\varepsilon$; if $x=p/q$ rational, then $q>N$, so $|T(x)|=1/q<1/N<\\varepsilon$. $\\blacksquare$",
+          "solution_he": "קבע $x_0$ אי-רציונלי, $\\varepsilon>0$. בחר $N$ עם $1/N<\\varepsilon$. רציונלים $p/q$ עם $q\\leq N$ בסביבה קומפקטית — סופיים. לכן $\\exists\\delta>0$ ללא רציונלים כאלה ב-$(x_0-\\delta,x_0+\\delta)$. לכל $|x-x_0|<\\delta$: $T(x)<1/N<\\varepsilon$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Show that a monotone function on $[a,b]$ can only have jump discontinuities, and that the set of discontinuities is at most countable.",
+          "body_he": "הראה שפונקציה מונוטונית על $[a,b]$ יכולה להיות בעלת אי-רציפויות קפיצה בלבד, וקבוצת אי-הרציפויות לכל היותר בת-מנייה.",
+          "solution_en": "For monotone increasing $f$: at each $x_0\\in(a,b)$, $L_-=\\sup_{x<x_0}f(x)$ and $L_+=\\inf_{x>x_0}f(x)$ exist (bounded monotone sequences). If $L_-\\neq L_+$, there is a jump of size $L_+-L_->0$. Each jump contains a distinct rational in the interval $(L_-,L_+)$ (by density). Since $\\mathbb{Q}$ is countable and these intervals are disjoint (monotone: jumps don't overlap), there are at most countably many discontinuities. $\\blacksquare$",
+          "solution_he": "לפונקציה עולה: ב-$x_0$ קיימים $L_-=\\sup_{x<x_0}f(x)$ ו-$L_+=\\inf_{x>x_0}f(x)$. קפיצה $L_+-L_->0$ מכילה רציונלי מובחן (צפיפות). קפיצות שונות — קטעים זרים — ולכן קבוצת אי-הרציפויות בת-מנייה. $\\blacksquare$",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing removable with jump.** Removable: limit exists, $f(x_0)$ wrong. Jump: both one-sided limits exist but differ.\n\n2. **Assuming limits equal the function value.** Always check $f(x_0)$ separately from $\\lim f$.\n\n3. **Forgetting one-sided limits for piecewise functions.** At a breakpoint, compute both $L_-$ and $L_+$ from the appropriate formula.\n\n4. **Claiming all discontinuities can be fixed.** Only removable discontinuities can be patched by redefining one point.\n\n5. **Misclassifying $e^{1/x}$ at 0.** The left limit $=0$ (finite) but the right limit $=+\\infty$: this is an infinite (not jump) discontinuity because one side is infinite.",
+      "body_he_md": "1. **בלבול סילוקית עם קפיצה.** סילוקית: גבול קיים, $f(x_0)$ שגוי. קפיצה: שני גבולות חד-צדדיים קיימים אך שונים.\n\n2. **הנחה שהגבול שווה לערך הפונקציה.** תמיד בדוק $f(x_0)$ בנפרד.\n\n3. **שכחת גבולות חד-צדדיים לפונקציות חלקיות.** חשב $L_-$ ו-$L_+$ מהנוסחה המתאימה.\n\n4. **טענה שכל האי-רציפויות ניתנות לתיקון.** רק סילוקיות.\n\n5. **סיווג שגוי של $e^{1/x}$ ב-0.** גבול שמאלי $=0$ (סופי) אך ימני $=+\\infty$ — אינסוטית."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Classification flowchart:**\n1. Compute $L_-$ and $L_+$.\n2. If both finite and equal: check $f(x_0)$.\n   - If $f(x_0)=L$: continuous.\n   - If $f(x_0)\\neq L$ or undefined: **removable**.\n3. If both finite but $L_-\\neq L_+$: **jump**.\n4. If at least one is $\\pm\\infty$: **infinite**.\n5. If limit doesn't exist (oscillation): **essential**.\n\n**Fix:** Only removable can be fixed ($f(x_0)=L$).",
+      "body_he_md": "**תרשים סיווג:**\n1. חשב $L_-$ ו-$L_+$.\n2. שניהם סופיים ושווים: בדוק $f(x_0)$.\n   - $f(x_0)=L$: רציפה.\n   - $f(x_0)\\neq L$ או לא מוגדרת: **סילוקית**.\n3. שניהם סופיים אך שונים: **קפיצה**.\n4. לפחות אחד $\\pm\\infty$: **אינסוטית**.\n5. לא קיים: **מהותית**.\n\n**תיקון:** רק סילוקית ($f(x_0)=L$)."
     },
     {
       "kind": "summary",
-      "title_en": "Exam strategy",
-      "title_he": "אסטרטגיה לבחינה",
-      "body_en_md": "1. Check domain first — continuity only where defined.\n2. For piecewise functions, equate left/right limits at junctions.\n3. IVT for existence (roots, intermediate values) — no need to find $c$ explicitly.\n4. EVT guarantees extrema on closed intervals — sets up optimization on $[a,b]$.\n\nThese theorems justify bisection methods, safety margins, and guaranteed peak loads in engineering models.",
-      "body_he_md": "1. בדקו תחום תחילה.\n2. בפונקציות קטעיות — השוו גבולות בנקודת החיבור.\n3. IVT לקיום — לא חייבים למצוא $c$.\n4. EVT מבטיח קיצונים בקטע סגור.\n\nמשפטים אלו מצדיקים bisection, מרווחי בטיחות ועומסי שיא."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Given $f$ differentiable on $\\mathbb{R}$ with $f(0)=0$, $f(1)=1$, and $f'(x)\\geq 1$ for all $x$. Prove that $f(x)\\geq x$ for all $x\\in[0,1]$.\n\n**Sample Solution:**\nFix $x\\in[0,1]$. By the **Mean Value Theorem** on $[0,x]$, there exists $c\\in(0,x)$ with\n$$f(x)-f(0)=f'(c)\\,x.$$\nSince $f(0)=0$ and $f'(c)\\geq 1$:\n$$f(x)=f'(c)\\,x \\geq 1\\cdot x = x.$$\nThis holds for every $x\\in[0,1]$, so $f(x)\\geq x$ on $[0,1]$. $\\square$\n\n**Problem 2:** Use the IVT to show $e^x = 3 - x$ has a solution in $(0,1)$.\n\n**Sample Solution:**\nLet $g(x)=e^x - (3-x)=e^x + x - 3$. Then $g$ is continuous on $[0,1]$.\n$g(0)=e^0+0-3=-2<0$ and $g(1)=e+1-3=e-2>0$ (since $e>2.7$).\nBy IVT, $\\exists\\,c\\in(0,1)$ with $g(c)=0$, i.e. $e^c=3-c$. $\\square$\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** נתונה $f$ גזירה על $\\mathbb{R}$ עם $f(0)=0$, $f(1)=1$, ו-$f'(x)\\geq 1$. הוכיחו $f(x)\\geq x$ לכל $x\\in[0,1]$.\n\n**פתרון לדוגמה:**\nלפי **MVT** על $[0,x]$: $f(x)=f'(c)x$ עם $f'(c)\\geq 1$, לכן $f(x)\\geq x$. $\\square$\n\n**בעיה 2:** השתמשו ב-IVT להראות של-$e^x=3-x$ יש פתרון ב-$(0,1)$.\n\n**פתרון לדוגמה:**\n$g(x)=e^x+x-3$ רציפה. $g(0)=-2<0$, $g(1)=e-2>0$. לפי IVT קיים שורש ב-$(0,1)$. $\\square$\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Removable:** limit exists, $f(x_0)$ missing or wrong; fix by redefining.\n- **Jump:** both one-sided limits finite but unequal; jump $=|L_+-L_-|$.\n- **Infinite:** at least one one-sided limit is $\\pm\\infty$.\n- **Essential:** limit does not exist (oscillation, e.g., $\\sin(1/x)$ at 0).\n- **Dirichlet function:** discontinuous everywhere — the extreme case.\n- Monotone functions have only jump discontinuities; at most countably many.",
+      "body_he_md": "- **סילוקית:** גבול קיים, $f(x_0)$ שגוי; תיקון על ידי הגדרה מחדש.\n- **קפיצה:** שני גבולות חד-צדדיים סופיים אך שונים.\n- **אינסוטית:** גבול חד-צדדי לפחות הוא $\\pm\\infty$.\n- **מהותית:** גבול לא קיים (אוסצילציה).\n- **דיריכלה:** אי-רציפה בכל מקום.\n- פונקציות מונוטוניות: קפיצות בלבד, לכל היותר בנות-מנייה."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Which condition is NOT required for continuity at $a$?",
-      "stem_he": "איזה תנאי לא נדרש לרציפות ב-$a$?",
-      "options_en": [
-        "$f(a)$ is defined",
-        "$\\lim_{x\\to a}f(x)$ exists",
-        "$f'(a)$ exists",
-        "$\\lim_{x\\to a}f(x)=f(a)$"
-      ],
-      "options_he": [
-        "$f(a)$ מוגדר",
-        "$\\lim_{x\\to a}f(x)$ קיים",
-        "$f'(a)$ קיים",
-        "$\\lim_{x\\to a}f(x)=f(a)$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "Differentiability implies continuity, but continuity does not require derivative.",
-      "explanation_he": "גזירות $\\Rightarrow$ רציפות, לא להפך.",
-      "skill_atoms": [
-        "continuity_definition"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove: If $f$ is differentiable on $\\mathbb{R}$, $f(0)=0$, $f(1)=1$, and $f'(x)\\geq 1$ for all $x$, then $f(x)\\geq x$ for all $x\\in[0,1]$.",
-      "stem_he": "הוכיחו: אם $f$ גזירה, $f(0)=0$, $f(1)=1$, $f'(x)\\geq 1$, אז $f(x)\\geq x$ ב-$[0,1]$.",
-      "rubric_en": "Full credit (10/10): applies MVT on $[0,x]$, uses $f(0)=0$ and $f'(c)\\geq 1$, concludes $f(x)\\geq x$.\nPartial (6/10): cites MVT but incomplete chain.\nMinimal (3/10): states MVT without application.",
-      "rubric_he": "ציון מלא (10/10): MVT על $[0,x]$, $f(0)=0$, $f'(c)\\geq 1$, מסקנה $f(x)\\geq x$.\nחלקי (6/10): מצטט MVT ללא יישום מלא.\nמינימלי (3/10): רק מציין MVT.",
-      "explanation_en": "MVT on $[0,x]$: $f(x)=f'(c)x\\geq x$.",
-      "explanation_he": "MVT: $f(x)=f'(c)x\\geq x$.",
-      "skill_atoms": [
-        "classify_discontinuity"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove using IVT that the equation $e^x = 3 - x$ has at least one solution in $(0,1)$.",
-      "stem_he": "הוכיחו ב-IVT של-$e^x=3-x$ יש פתרון ב-$(0,1)$.",
-      "rubric_en": "Full credit (10/10): defines $g(x)=e^x+x-3$, checks signs at 0 and 1, applies IVT.\nPartial (6/10): correct $g$ but sign error.\nMinimal (3/10): mentions IVT only.",
-      "rubric_he": "ציון מלא (10/10): $g(x)=e^x+x-3$, בדיקת סימנים, IVT.\nחלקי (6/10): $g$ נכון, טעות בסימן.\nמינימלי (3/10): רק מזכיר IVT.",
-      "explanation_en": "$g(0)<0$, $g(1)>0$ ⇒ root in $(0,1)$ by IVT.",
-      "explanation_he": "$g(0)<0$, $g(1)>0$ ⇒ שורש ב-$(0,1)$.",
-      "skill_atoms": [
-        "apply_ivt"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove: If $f$ is differentiable on $\\mathbb{R}$, $f(0)=0$, $f(1)=1$, and $f'(x)\\geq 1$ for all $x$, then $f(x)\\geq x$ for all $x\\in[0,1]$.",
-      "stem_he": "הוכיחו: אם $f$ גזירה, $f(0)=0$, $f(1)=1$, $f'(x)\\geq 1$, אז $f(x)\\geq x$ ב-$[0,1]$.",
-      "rubric_en": "Full credit (10/10): applies MVT on $[0,x]$, uses $f(0)=0$ and $f'(c)\\geq 1$, concludes $f(x)\\geq x$.\nPartial (6/10): cites MVT but incomplete chain.\nMinimal (3/10): states MVT without application.",
-      "rubric_he": "ציון מלא (10/10): MVT על $[0,x]$, $f(0)=0$, $f'(c)\\geq 1$, מסקנה $f(x)\\geq x$.\nחלקי (6/10): מצטט MVT ללא יישום מלא.\nמינימלי (3/10): רק מציין MVT.",
-      "explanation_en": "MVT on $[0,x]$: $f(x)=f'(c)x\\geq x$.",
-      "explanation_he": "MVT: $f(x)=f'(c)x\\geq x$.",
-      "skill_atoms": [
-        "apply_evt"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove using IVT that the equation $e^x = 3 - x$ has at least one solution in $(0,1)$.",
-      "stem_he": "הוכיחו ב-IVT של-$e^x=3-x$ יש פתרון ב-$(0,1)$.",
-      "rubric_en": "Full credit (10/10): defines $g(x)=e^x+x-3$, checks signs at 0 and 1, applies IVT.\nPartial (6/10): correct $g$ but sign error.\nMinimal (3/10): mentions IVT only.",
-      "rubric_he": "ציון מלא (10/10): $g(x)=e^x+x-3$, בדיקת סימנים, IVT.\nחלקי (6/10): $g$ נכון, טעות בסימן.\nמינימלי (3/10): רק מזכיר IVT.",
-      "explanation_en": "$g(0)<0$, $g(1)>0$ ⇒ root in $(0,1)$ by IVT.",
-      "explanation_he": "$g(0)<0$, $g(1)>0$ ⇒ שורש ב-$(0,1)$.",
-      "skill_atoms": [
-        "test_piecewise_continuity"
-      ],
-      "points_level_min": "calc1"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Continuity requires limit equals function value.",
-      "IVT proves existence; EVT proves extrema on closed intervals.",
-      "Removable discontinuities can be fixed by redefining one point."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "IVT finds the exact value of c",
-        "correction": "IVT only guarantees existence of c, not its value.",
-        "detect_phrase_en": "find c exactly",
-        "detect_phrase_he": "מצא c בדיוק"
-      }
-    ],
-    "tutor_pacing_hint": "Classify discontinuity types with graphs before IVT/EVT proofs.",
-    "skill_atoms_unlocked": [
-      "continuity_definition",
-      "classify_discontinuity",
-      "apply_ivt",
-      "apply_evt",
-      "test_piecewise_continuity"
-    ]
-  }
+  ]
 }

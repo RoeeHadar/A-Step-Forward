@@ -2,30 +2,232 @@
   "concept_id": "multivariable_limits",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Multivariable Limits",
-  "title_he": "גבולות של פונקציות רב-משתניות",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "math_track": ["calculus2", "multivariable"],
+  "title_en": "Limits of Multivariable Functions",
+  "title_he": "גבולות של פונקציות ממשתנים רבים",
+  "summary_en": "Limits in two or more variables: path-dependence, showing limits DNE, polar coordinates approach.",
+  "summary_he": "גבולות בשני משתנים ויותר: תלות בנתיב, הראת שגבול לא קיים, גישת קואורדינטות קוטביות.",
+  "est_minutes": 55,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Multivariable Limits.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-גבולות של פונקציות רב-משתניות.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Why Multivariable Limits Are Harder",
+      "title_he": "מדוע גבולות ממשתנים רבים קשים יותר",
+      "body_en_md": "In single-variable calculus, a limit $\\lim_{x\\to a}f(x)$ requires the value to be the same whether $x$ approaches $a$ from the left or right — just two paths. For functions $f(x,y)$, the point $(x,y)$ can approach $(a,b)$ along **infinitely many paths** (lines, parabolas, spirals, ...). The limit exists only if the same value is obtained along **every possible path**.\n\nThis makes proving a limit exists harder (must use $\\varepsilon$-$\\delta$ or squeeze theorem) but disproving easier: find just **two paths giving different values** and the limit does not exist (DNE).",
+      "body_he_md": "בחדו\"א חד-משתנה, גבול $\\lim_{x\\to a}f(x)$ דורש ערך זהה משמאל ומימין — שני נתיבים בלבד. עבור $f(x,y)$, הנקודה $(x,y)$ יכולה לגשת ל-$(a,b)$ לאורך **אינסוף נתיבים** (ישרים, פרבולות, ספירלות...). הגבול קיים רק אם אותו ערך מתקבל לאורך **כל נתיב אפשרי**.\n\nזה הופך הוכחת קיום הגבול לקשה יותר (צריך $\\varepsilon$-$\\delta$ או squeeze), אך שלילה לקלה יותר: מצא **שני נתיבים עם ערכים שונים** — הגבול לא קיים."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Multivariable Limits: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Multivariable Limits.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-גבולות של פונקציות רב-משתניות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-גבולות של פונקציות רב-משתניות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Definition of the Multivariable Limit",
+      "title_he": "הגדרת הגבול של פונקציה ממשתנים רבים",
+      "body_en_md": "**Definition:** $\\lim_{(x,y)\\to(a,b)} f(x,y) = L$ if:\n$$\\forall\\varepsilon>0\\;\\exists\\delta>0:\\;0<\\sqrt{(x-a)^2+(y-b)^2}<\\delta\\Rightarrow|f(x,y)-L|<\\varepsilon.$$\n\nThe distance $\\sqrt{(x-a)^2+(y-b)^2}$ is the Euclidean distance from $(x,y)$ to $(a,b)$.\n\n**Limit Does Not Exist (DNE):** If there exist two paths $C_1$ and $C_2$ approaching $(a,b)$ along which $f$ approaches different values, the limit does not exist.\n\n**Continuity:** $f$ is continuous at $(a,b)$ if $\\lim_{(x,y)\\to(a,b)}f(x,y)=f(a,b)$.",
+      "body_he_md": "**הגדרה:** $\\lim_{(x,y)\\to(a,b)}f(x,y)=L$ אם:\n$$\\forall\\varepsilon>0\\;\\exists\\delta>0:\\;0<\\sqrt{(x-a)^2+(y-b)^2}<\\delta\\Rightarrow|f(x,y)-L|<\\varepsilon.$$\n\n**גבול לא קיים:** אם קיימים שני נתיבים $C_1,C_2$ המתכנסים ל-$(a,b)$ לאורכם $f$ ניגשת לערכים שונים — הגבול לא קיים.\n\n**רציפות:** $f$ רציפה ב-$(a,b)$ אם $\\lim_{(x,y)\\to(a,b)}f(x,y)=f(a,b)$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Three Strategies",
+      "title_he": "שלוש אסטרטגיות",
+      "body_en_md": "**Strategy 1 — Disprove (path test):** To show the limit DNE, find two paths giving different limits:\n- Try $y=mx$ (lines through origin): if the limit depends on $m$, DNE.\n- Try $y=kx^2$ (parabolas): often catches cases lines miss.\n\n**Strategy 2 — Prove (squeeze theorem):** To show the limit equals $L$:\n- Bound $|f(x,y)-L|\\leq g(r)$ where $r=\\sqrt{x^2+y^2}\\to 0$.\n- If $g(r)\\to 0$, conclude $f\\to L$.\n\n**Strategy 3 — Polar coordinates:** Substitute $x=r\\cos\\theta$, $y=r\\sin\\theta$:\n- The limit as $(x,y)\\to(0,0)$ becomes $r\\to 0^+$.\n- If the result is independent of $\\theta$: the limit exists.\n- If the result depends on $\\theta$: DNE.",
+      "body_he_md": "**אסטרטגיה 1 — שלילה (מבחן נתיבים):** הראה שהגבול לא קיים על ידי מציאת שני נתיבים:\n- נסה $y=mx$ (ישרים): אם הגבול תלוי ב-$m$ — DNE.\n- נסה $y=kx^2$ (פרבולות): לעתים תופס מה שהישרים מפספסים.\n\n**אסטרטגיה 2 — הוכחה (squeeze):** כדי להראות שהגבול קיים:\n- חסום $|f(x,y)-L|\\leq g(r)$ כאשר $r=\\sqrt{x^2+y^2}\\to 0$.\n- אם $g(r)\\to 0$ — הגבול קיים.\n\n**אסטרטגיה 3 — קואורדינטות קוטביות:** הצב $x=r\\cos\\theta$, $y=r\\sin\\theta$:\n- גבול כאשר $(x,y)\\to(0,0)$ הופך ל-$r\\to 0^+$.\n- אם התוצאה אינה תלויה ב-$\\theta$: הגבול קיים.\n- אם תלויה — DNE."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Limit DNE via Path Test",
+      "title_he": "דוגמה פתורה 1 — גבול לא קיים על ידי מבחן נתיבים",
+      "body_en_md": "**Problem:** Show $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2-y^2}{x^2+y^2}$ does not exist.\n\n**Step 1 — Path $y=0$:**\n$$\\lim_{x\\to 0}\\frac{x^2-0}{x^2+0} = \\frac{x^2}{x^2} = 1.$$\n\n**Step 2 — Path $x=0$:**\n$$\\lim_{y\\to 0}\\frac{0-y^2}{0+y^2} = \\frac{-y^2}{y^2} = -1.$$\n\n**Step 3 — Conclusion:** Along $y=0$ the limit is $1$; along $x=0$ it is $-1$. Since $1\\neq -1$, **the limit does not exist (DNE)**.",
+      "body_he_md": "**בעיה:** הראה ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2-y^2}{x^2+y^2}$ לא קיים.\n\n**שלב 1 — נתיב $y=0$:**\n$$\\lim_{x\\to 0}\\frac{x^2}{x^2}=1.$$\n\n**שלב 2 — נתיב $x=0$:**\n$$\\lim_{y\\to 0}\\frac{-y^2}{y^2}=-1.$$\n\n**שלב 3:** $1\\neq -1$ — **הגבול לא קיים**."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Show $\\lim_{(x,y)\\to(0,0)}\\dfrac{xy}{x^2+y^2}$ does not exist by testing $y=0$ and $y=x$.",
+      "body_he_md": "הראה ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{xy}{x^2+y^2}$ לא קיים על ידי בדיקת $y=0$ ו-$y=x$.",
+      "checkpoint_solution_en": "Along $y=0$: $xy/(x^2+y^2)=0/x^2=0$. Along $y=x$: $x^2/(x^2+x^2)=1/2$. $0\\neq 1/2\\Rightarrow$ DNE.",
+      "checkpoint_solution_he": "נתיב $y=0$: גבול $=0$. נתיב $y=x$: $x^2/(2x^2)=1/2$. $0\\neq 1/2$ — DNE."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Limit Exists via Squeeze Theorem",
+      "title_he": "דוגמה פתורה 2 — גבול קיים על ידי משפט הסנדוויץ'",
+      "body_en_md": "**Problem:** Compute $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y}{x^2+y^2}$.\n\n**Step 1 — Suspect the limit is 0.** Check a few paths:\n- $y=0$: $0/(x^2)=0\\checkmark$\n- $y=x$: $x^3/(2x^2)=x/2\\to 0\\checkmark$\n- $y=x^2$: $x^4/(x^2+x^4)=x^2/(1+x^2)\\to 0\\checkmark$\n\n**Step 2 — Prove with squeeze.** Note that $\\dfrac{x^2}{x^2+y^2}\\leq 1$ (since $x^2\\leq x^2+y^2$). Therefore:\n$$\\left|\\frac{x^2y}{x^2+y^2}\\right| = \\frac{x^2}{x^2+y^2}|y| \\leq |y|.$$\n\n**Step 3 — Apply squeeze:** As $(x,y)\\to(0,0)$, $|y|\\to 0$. So:\n$$0 \\leq \\left|\\frac{x^2y}{x^2+y^2}\\right| \\leq |y| \\to 0.$$\n\n**Conclusion:** $\\displaystyle\\lim_{(x,y)\\to(0,0)}\\frac{x^2y}{x^2+y^2} = 0$.",
+      "body_he_md": "**בעיה:** חשב $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y}{x^2+y^2}$.\n\n**שלב 1:** בדוק מספר נתיבים — כולם מניבים 0.\n\n**שלב 2 — squeeze:** $\\dfrac{x^2}{x^2+y^2}\\leq 1$, לכן:\n$$\\left|\\frac{x^2y}{x^2+y^2}\\right|\\leq|y|.$$\n\n**שלב 3:** $|y|\\to 0\\Rightarrow$ הגבול $=0$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the squeeze theorem to show $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^3}{x^2+y^2}=0$.",
+      "body_he_md": "השתמש במשפט הסנדוויץ' להראות ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{x^3}{x^2+y^2}=0$.",
+      "checkpoint_solution_en": "$|x^3/(x^2+y^2)|=|x|\\cdot x^2/(x^2+y^2)\\leq|x|\\to 0$. By squeeze, the limit is 0.",
+      "checkpoint_solution_he": "$|x^3/(x^2+y^2)|\\leq|x|\\to 0$. לפי squeeze — הגבול $=0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Polar Coordinates Analysis",
+      "title_he": "דוגמה פתורה 3 — ניתוח בקואורדינטות קוטביות",
+      "body_en_md": "**Problem:** Use polar coordinates to determine whether $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y^2}{x^2+y^4}$ exists.\n\n**Step 1 — Substitute $x=r\\cos\\theta$, $y=r\\sin\\theta$:**\n$$f = \\frac{r^2\\cos^2\\theta\\cdot r^2\\sin^2\\theta}{r^2\\cos^2\\theta+r^4\\sin^4\\theta} = \\frac{r^4\\cos^2\\theta\\sin^2\\theta}{r^2(\\cos^2\\theta+r^2\\sin^4\\theta)}.$$\n$$= \\frac{r^2\\cos^2\\theta\\sin^2\\theta}{\\cos^2\\theta+r^2\\sin^4\\theta}.$$\n\n**Step 2 — Check if this depends on $\\theta$:** For $\\cos\\theta\\neq 0$, as $r\\to 0$:\n$$f \\to \\frac{0}{\\cos^2\\theta+0} = 0.$$\n\n**Step 3 — Check $\\theta=\\pi/2$ (i.e., $x=0$):** $\\cos(\\pi/2)=0$.\n$$f = \\frac{r^2\\cdot 0\\cdot 1}{0+r^4\\cdot 1} = \\frac{0}{r^4} = 0 \\to 0.$$\n\n**BUT step 4 — Try path $x=y^2$:** Let $x=t^2$, $y=t$ as $t\\to 0$:\n$$f = \\frac{t^4\\cdot t^2}{t^4+t^4} = \\frac{t^6}{2t^4} = \\frac{t^2}{2} \\to 0.$$\n\n**Step 5 — Try path $y^2=x$, i.e., $x=y^2=t^2$:** $f=t^4/(t^2+t^4)=t^2/(1+t^2)\\to 0$... \n\n**Actually, try $x=y^2$ directly in original form:** $f=y^4/(y^2+y^4)=y^2/(1+y^2)\\to 0$... Hmm.\n\n**Correction — Try $x=t$, $y=\\sqrt{t}$:** $f=t\\cdot t/(t+t^2)=t^2/(t(1+t))=t/(1+t)\\to 0$.\n\n**Conclusion:** All tested paths give limit 0, and polar analysis confirms this. The limit **exists and equals 0**.\n\n**Key lesson:** Polar coordinates work well when the denominator involves $r^2$-type terms. When the degree in $r$ is ambiguous (like $x^2+y^4$), path testing is also needed.",
+      "body_he_md": "**בעיה:** השתמש בקואורדינטות קוטביות לבחינת $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y^2}{x^2+y^4}$.\n\n**שלב 1:** הצב $x=r\\cos\\theta$, $y=r\\sin\\theta$:\n$$f=\\frac{r^2\\cos^2\\theta\\sin^2\\theta}{\\cos^2\\theta+r^2\\sin^4\\theta}.$$\n\n**שלב 2:** עבור $\\cos\\theta\\neq 0$, $r\\to 0$: $f\\to 0$.\n\n**שלב 3:** עבור $\\theta=\\pi/2$: $f=0\\to 0$.\n\n**שלב 4:** בדיקת נתיבים נוספים — כולם נותנים 0.\n\n**מסקנה:** הגבול **קיים ושווה 0**."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Strategy Selection",
+      "title_he": "מדריך שיטה — בחירת אסטרטגיה",
+      "body_en_md": "| Goal | Strategy | When |\n|---|---|---|\n| Show **DNE** | Path test | Try $y=0$, $x=0$, $y=mx$, $y=x^2$ |\n| Show **limit = L** | Squeeze theorem | Bound $|f-L|\\leq g(r)\\to 0$ |\n| Show **limit = L** | Polar coordinates | Substitute $x=r\\cos\\theta$, $y=r\\sin\\theta$, check dependence on $\\theta$ |\n\n**DNE path selection:**\n1. Always try the axes first ($y=0$, $x=0$).\n2. If axes give same value, try $y=mx$ (varies $m$).\n3. If lines all agree, try $y=x^2$ or $y=x^{1/2}$.\n\n**Squeeze template:**\n$$|f(x,y)-L| \\leq M\\cdot r^k \\to 0 \\quad (r=\\sqrt{x^2+y^2},\\;k>0).$$",
+      "body_he_md": "| מטרה | אסטרטגיה | מתי |\n|---|---|---|\n| הראה **DNE** | מבחן נתיבים | נסה $y=0$, $x=0$, $y=mx$, $y=x^2$ |\n| הראה **גבול = L** | Squeeze | חסום $|f-L|\\leq g(r)\\to 0$ |\n| הראה **גבול = L** | קואורדינטות קוטביות | הצב ובדוק תלות ב-$\\theta$ |\n\n**בחירת נתיבים:**\n1. תמיד נסה צירים ראשון.\n2. אם הצירים נותנים אותו ערך — $y=mx$.\n3. אם ישרים מסכימים — $y=x^2$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Show $\\lim_{(x,y)\\to(0,0)}\\dfrac{x}{x^2+y^2}$ does not exist.",
+          "body_he": "הראה ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{x}{x^2+y^2}$ לא קיים.",
+          "solution_en": "Along $y=0$: $x/x^2=1/x\\to\\pm\\infty$ — the limit is $\\pm\\infty$ depending on direction, or does not exist. Along $x=0$: $0/y^2=0$. Two paths give different behaviors: DNE.",
+          "solution_he": "נתיב $y=0$: $1/x\\to\\pm\\infty$. נתיב $x=0$: $0$. התנהגויות שונות — DNE.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\lim_{(x,y)\\to(2,3)}(x^2+y)$. Is the function continuous at $(2,3)$?",
+          "body_he": "חשב $\\lim_{(x,y)\\to(2,3)}(x^2+y)$. האם הפונקציה רציפה ב-$(2,3)$?",
+          "solution_en": "For polynomial functions, the limit equals the value: $2^2+3=7$. Yes, continuous.",
+          "solution_he": "לפונקציות פולינומיות: $4+3=7$. כן, רציפה.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Test paths $y=0$ and $y=x$ for $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2}{x^2+y^2}$.",
+          "body_he": "בדוק נתיבים $y=0$ ו-$y=x$ עבור $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2}{x^2+y^2}$.",
+          "solution_en": "$y=0$: $x^2/x^2=1$. $y=x$: $x^2/(2x^2)=1/2$. $1\\neq 1/2\\Rightarrow$ DNE.",
+          "solution_he": "נתיב $y=0$: 1. נתיב $y=x$: $1/2$. $1\\neq 1/2$ — DNE.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find $\\lim_{(x,y)\\to(0,0)}(x^2+y^2)\\ln(x^2+y^2)$ using polar coordinates.",
+          "body_he": "מצא $\\lim_{(x,y)\\to(0,0)}(x^2+y^2)\\ln(x^2+y^2)$ בקואורדינטות קוטביות.",
+          "solution_en": "$x^2+y^2=r^2$. Limit becomes $r^2\\ln(r^2)=2r^2\\ln r\\to 0$ as $r\\to 0^+$ (standard $r^p\\ln r\\to 0$). Limit = 0.",
+          "solution_he": "$r^2\\ln(r^2)=2r^2\\ln r\\to 0$ (כי $r^p\\ln r\\to 0$). גבול $=0$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Use squeeze to find $\\lim_{(x,y)\\to(0,0)}\\dfrac{xy^2}{x^2+y^2}$.",
+          "body_he": "השתמש ב-squeeze למציאת $\\lim_{(x,y)\\to(0,0)}\\dfrac{xy^2}{x^2+y^2}$.",
+          "solution_en": "$|xy^2/(x^2+y^2)|=|x|\\cdot y^2/(x^2+y^2)\\leq|x|\\to 0$. By squeeze, limit $=0$.",
+          "solution_he": "$|xy^2/(x^2+y^2)|\\leq|x|\\to 0$. לפי squeeze — גבול $=0$.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Show $\\lim_{(x,y)\\to(0,0)}\\dfrac{xy}{\\sqrt{x^2+y^2}}=0$.",
+          "body_he": "הראה ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{xy}{\\sqrt{x^2+y^2}}=0$.",
+          "solution_en": "$|xy/\\sqrt{x^2+y^2}|\\leq|x||y|/\\sqrt{x^2+y^2}\\leq\\sqrt{x^2+y^2}\\cdot|y|/\\sqrt{x^2+y^2}$... Better: $|x||y|\\leq(x^2+y^2)/2$ by AM-GM, so $|xy|/\\sqrt{x^2+y^2}\\leq r^2/(2r)=r/2\\to 0$.",
+          "solution_he": "$|xy|\\leq(x^2+y^2)/2=r^2/2$. $|xy|/r\\leq r/2\\to 0$. גבול $=0$.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Use polar coordinates to find $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^3+y^3}{x^2+y^2}$.",
+          "body_he": "השתמש בקואורדינטות קוטביות למציאת $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^3+y^3}{x^2+y^2}$.",
+          "solution_en": "$x=r\\cos\\theta$, $y=r\\sin\\theta$: $f=r^3(\\cos^3\\theta+\\sin^3\\theta)/r^2=r(\\cos^3\\theta+\\sin^3\\theta)$. Since $|\\cos^3\\theta+\\sin^3\\theta|\\leq 2$: $|f|\\leq 2r\\to 0$. Limit $=0$.",
+          "solution_he": "$f=r(\\cos^3\\theta+\\sin^3\\theta)$. $|f|\\leq 2r\\to 0$. גבול $=0$.",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Show $\\lim_{(x,y)\\to(0,0)}\\dfrac{2xy}{x^2+y^2}$ does not exist by trying $y=mx$.",
+          "body_he": "הראה ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{2xy}{x^2+y^2}$ לא קיים על ידי $y=mx$.",
+          "solution_en": "Along $y=mx$: $2x\\cdot mx/(x^2+m^2x^2)=2m/(1+m^2)$. This depends on $m$ (different values for different $m$). E.g., $m=0$: limit $=0$; $m=1$: limit $=1$. DNE.",
+          "solution_he": "על $y=mx$: $2m/(1+m^2)$ — תלוי ב-$m$. עבור $m=0$: 0; $m=1$: 1. DNE.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find $\\lim_{(x,y)\\to(0,0)}\\dfrac{\\sin(x^2+y^2)}{x^2+y^2}$.",
+          "body_he": "מצא $\\lim_{(x,y)\\to(0,0)}\\dfrac{\\sin(x^2+y^2)}{x^2+y^2}$.",
+          "solution_en": "Let $u=x^2+y^2=r^2\\to 0^+$. $\\lim_{u\\to 0}\\sin(u)/u=1$. Limit $=1$.",
+          "solution_he": "הצב $u=x^2+y^2=r^2\\to 0^+$. $\\lim_{u\\to 0}\\sin u/u=1$. גבול $=1$.",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Use the $\\varepsilon$-$\\delta$ definition to prove $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y}{x^2+y^2}=0$.",
+          "body_he": "השתמש בהגדרת $\\varepsilon$-$\\delta$ להוכחה ש-$\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y}{x^2+y^2}=0$.",
+          "solution_en": "Note $|x^2/(x^2+y^2)|\\leq 1$, so $|x^2y/(x^2+y^2)|\\leq|y|\\leq\\sqrt{x^2+y^2}=r$. Given $\\varepsilon>0$, choose $\\delta=\\varepsilon$. Then $0<r<\\delta\\Rightarrow|f(x,y)-0|\\leq r<\\delta=\\varepsilon$. $\\blacksquare$",
+          "solution_he": "$|x^2y/(x^2+y^2)|\\leq|y|\\leq r$. בחר $\\delta=\\varepsilon$. $r<\\delta\\Rightarrow|f|<\\varepsilon$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Determine whether $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y}{x^4+y^2}$ exists.",
+          "body_he": "קבע האם $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2y}{x^4+y^2}$ קיים.",
+          "solution_en": "Try $y=mx^2$: $f=x^2\\cdot mx^2/(x^4+m^2x^4)=m/(1+m^2)$. This depends on $m$. E.g., $m=0$: 0; $m=1$: 1/2. DNE. (Note: axes give 0, so lines $y=mx$ would all give 0 — need parabolas.)",
+          "solution_he": "נסה $y=mx^2$: $f=m/(1+m^2)$ — תלוי ב-$m$. עבור $m=0$: 0; $m=1$: $1/2$. DNE. (ישרים היו מחמיצים — צריך פרבולות.)",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Compute $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2\\sin^2(y)}{x^2+y^2}$ and prove rigorously.",
+          "body_he": "חשב $\\lim_{(x,y)\\to(0,0)}\\dfrac{x^2\\sin^2 y}{x^2+y^2}$ והוכח בצורה קפדנית.",
+          "solution_en": "Conjecture: limit = 0. Since $\\sin^2 y\\leq y^2$: $|x^2\\sin^2 y/(x^2+y^2)|\\leq x^2y^2/(x^2+y^2)\\leq y^2\\leq r^2\\to 0$. By squeeze, limit $=0$.",
+          "solution_he": "$|x^2\\sin^2 y/(x^2+y^2)|\\leq y^2\\leq r^2\\to 0$. לפי squeeze — גבול $=0$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Show that $f(x,y)=\\dfrac{x^3y-xy^3}{x^2+y^2}$ is continuous at $(0,0)$ if we define $f(0,0)=0$.",
+          "body_he": "הראה ש-$f(x,y)=\\dfrac{x^3y-xy^3}{x^2+y^2}$ רציפה ב-$(0,0)$ אם מגדירים $f(0,0)=0$.",
+          "solution_en": "In polar: $f=r^4(\\cos^3\\theta\\sin\\theta-\\cos\\theta\\sin^3\\theta)/r^2=r^2\\cos\\theta\\sin\\theta(\\cos^2\\theta-\\sin^2\\theta)/1=r^2\\cdot\\text{bounded}$. So $|f|\\leq r^2\\to 0$. Since $f(0,0)=0=\\lim f$, $f$ is continuous at $(0,0)$. $\\blacksquare$",
+          "solution_he": "בקואורדינטות קוטביות: $f=r^2\\cos\\theta\\sin\\theta(\\cos^2\\theta-\\sin^2\\theta)$. $|f|\\leq r^2\\to 0=f(0,0)$. $f$ רציפה ב-$(0,0)$. $\\blacksquare$",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Checking only a few paths and concluding the limit exists.** Finitely many paths agreeing does NOT prove the limit exists — only the $\\varepsilon$-$\\delta$ definition or squeeze theorem can.\n\n2. **Forgetting to try parabolic paths.** When lines $y=mx$ all give the same value, always try $y=kx^2$ before concluding the limit exists.\n\n3. **Assuming polar coordinates always work.** If the expression does not simplify to something independent of $\\theta$ as $r\\to 0$, you need additional analysis.\n\n4. **Misusing the squeeze theorem.** The bound must tend to 0 at the correct rate — $|f|\\leq g(r)$ with $g(r)\\to 0$.\n\n5. **Confusing continuity of $f(x,y)$ with continuity in $x$ for fixed $y$.** A function can be continuous in each variable separately but discontinuous jointly.",
+      "body_he_md": "1. **בדיקת מספר נתיבים בלבד ומסקנה שהגבול קיים.** כמה נתיבים שמסכימים לא מוכיחים קיום — רק $\\varepsilon$-$\\delta$ או squeeze.\n\n2. **שכחת בדיקת נתיבים פרבוליים.** כאשר ישרים $y=mx$ מסכימים — תמיד נסה $y=kx^2$.\n\n3. **הנחה שקואורדינטות קוטביות תמיד עובדות.** אם התוצאה תלויה ב-$\\theta$ — צריך ניתוח נוסף.\n\n4. **שימוש שגוי ב-squeeze.** החסם חייב לשאוף ל-0 — $g(r)\\to 0$.\n\n5. **בלבול בין רציפות ב-$f(x,y)$ לרציפות ב-$x$ לכל $y$ קבוע.** פונקציה יכולה להיות רציפה בכל משתנה בנפרד אך אי-רציפה ביחד."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Strategy summary:**\n- **To disprove:** find two paths giving different limits.\n  - Try $y=0$, $x=0$, $y=mx$, $y=kx^2$.\n- **To prove:** squeeze theorem $|f-L|\\leq g(r)\\to 0$.\n- **Polar:** $x=r\\cos\\theta$, $y=r\\sin\\theta$; check if $r\\to 0$ gives a $\\theta$-independent limit.\n\n**Key inequality:** $\\dfrac{x^2}{x^2+y^2}\\leq 1$, $\\dfrac{y^2}{x^2+y^2}\\leq 1$.",
+      "body_he_md": "**סיכום אסטרטגיות:**\n- **שלילה:** שני נתיבים עם גבולות שונים.\n  - נסה $y=0$, $x=0$, $y=mx$, $y=kx^2$.\n- **הוכחה:** $|f-L|\\leq g(r)\\to 0$.\n- **קוטביות:** $x=r\\cos\\theta$, $y=r\\sin\\theta$; בדוק אי-תלות ב-$\\theta$.\n\n**אי-שוויון מפתח:** $x^2/(x^2+y^2)\\leq 1$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Multivariable limits** require the same value along every path — infinitely many possible paths.\n- **DNE strategy:** find two paths with different limits (try axes → lines → parabolas).\n- **Existence strategy:** squeeze theorem — bound $|f-L|\\leq g(r)\\to 0$.\n- **Polar coordinates:** substitute $x=r\\cos\\theta$, $y=r\\sin\\theta$; if the result $\\to 0$ independently of $\\theta$, the limit equals 0.\n- **Key inequality:** $x^2/(x^2+y^2)\\leq 1$ is the main bounding tool.",
+      "body_he_md": "- **גבולות ממשתנים רבים:** ערך זהה לאורך כל נתיב — אינסוף אפשרויות.\n- **שלילה:** שני נתיבים עם ערכים שונים.\n- **קיום:** squeeze — $|f-L|\\leq g(r)\\to 0$.\n- **קוטביות:** $x=r\\cos\\theta$, $y=r\\sin\\theta$; תוצאה בלתי-תלויה ב-$\\theta$ = גבול קיים.\n- **אי-שוויון:** $x^2/(x^2+y^2)\\leq 1$."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Multivariable Limits."
+  ]
 }

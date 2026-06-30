@@ -1,224 +1,233 @@
 {
-  "id": "double_integrals",
-  "type": "interactive",
-  "subject": "calculus_2",
+  "concept_id": "double_integrals",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["calculus2", "multivariable"],
   "title_en": "Double Integrals",
-  "title_he": "אינטגרלים כפוליים",
-  "duration_min": 30,
-  "level_min": "calculus_1",
-  "agent_hints": "The most common student error is reversing the order of integration without re-drawing the region, leading to incorrect limits. Always insist on sketching the region D before setting up limits. Fubini's theorem is the key tool; stress that switching order requires rewriting ALL limits, not just swapping. For non-rectangular regions, classify as Type I or Type II, write the outer limits as constants and the inner limits as functions. Technion 104281 exams often require changing to polar coordinates — this lesson covers Cartesian only.",
+  "title_he": "אינטגרלים כפולים",
+  "summary_en": "Double integrals over rectangles and general regions: iterated integrals, Fubini's theorem, changing order of integration, polar coordinates.",
+  "summary_he": "אינטגרלים כפולים על מלבנים ואזורים כלליים: אינטגרלים מאוחדים, משפט פוביני, החלפת סדר אינטגרציה, קואורדינטות קוטביות.",
+  "est_minutes": 60,
   "sections": [
     {
-      "id": "definition_riemann",
-      "title_en": "Definition — Riemann Sum and Volume",
-      "title_he": "הגדרה — סכום רימן ונפח",
-      "level_min": "calculus_1",
-      "body_en_md": "Let $f(x,y) \\geq 0$ be defined on a rectangle $R = [a,b] \\times [c,d]$. Partition $R$ into small sub-rectangles $R_{ij}$ of area $\\Delta A_{ij}$. The **Riemann sum** is:\n$$\\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\nThe **double integral** is the limit of these sums as the partition gets finer:\n$$\\iint_R f(x,y)\\,dA = \\lim_{\\|P\\| \\to 0} \\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\n**Geometric meaning:** $\\iint_R f(x,y)\\,dA$ equals the **volume** of the solid region bounded above by $z = f(x,y)$ and below by the region $R$ in the $xy$-plane.\n\nFor non-positive $f$, the integral gives a signed volume (negative where $f < 0$).\n\n**Useful special cases:**\n- $\\iint_D 1\\,dA = \\text{Area}(D)$\n- $\\iint_D f(x,y)\\,dA / \\text{Area}(D) = $ average value of $f$ over $D$",
-      "body_he_md": "תהי $f(x,y) \\geq 0$ מוגדרת על מלבן $R = [a,b] \\times [c,d]$. נחלק את $R$ לתת-מלבנים $R_{ij}$ בשטח $\\Delta A_{ij}$. **סכום רימן**:\n$$\\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\n**האינטגרל הכפול** הוא הגבול של סכומות אלו כאשר החלוקה מדויקת יותר:\n$$\\iint_R f(x,y)\\,dA = \\lim_{\\|P\\| \\to 0} \\sum_{i,j} f(x_{ij}^*, y_{ij}^*) \\Delta A_{ij}.$$\n\n**משמעות גיאומטרי:** $\\iint_R f(x,y)\\,dA$ שווה לנפח הגוף התלת-ממדי החסום מעל על ידי $z = f(x,y)$ ומתחת על ידי $R$.\n\n**מקרים מיוחדים:**\n- $\\iint_D 1\\,dA = \\text{Area}(D)$\n- $\\iint_D f\\,dA / \\text{Area}(D) = $ ערך ממוצע של $f$ על $D$"
+      "kind": "intro",
+      "title_en": "From Single to Double Integrals",
+      "title_he": "מאינטגרל יחיד לאינטגרל כפול",
+      "body_en_md": "A single integral $\\int_a^b f(x)\\,dx$ computes area under a curve. A **double integral** $\\iint_D f(x,y)\\,dA$ computes the volume under the surface $z=f(x,y)$ over a region $D$ in the $xy$-plane. It extends the Riemann sum idea: partition $D$ into small rectangles, sum $f(x_i,y_j)\\Delta A$ over all pieces, and take the limit.\n\nApplications: volumes, areas of curved surfaces, mass (if $f$ is density), probability, physics (moment of inertia, electric charge).",
+      "body_he_md": "אינטגרל יחיד $\\int_a^b f(x)\\,dx$ מחשב שטח תחת עקומה. **אינטגרל כפול** $\\iint_D f(x,y)\\,dA$ מחשב את הנפח תחת המשטח $z=f(x,y)$ מעל אזור $D$. הוא מרחיב את רעיון סכומי רימן למישור.\n\nיישומים: נפחים, שטחי משטחים מעוגלים, מסה (כאשר $f$ = צפיפות), הסתברות, פיזיקה."
     },
     {
-      "id": "fubini",
-      "title_en": "Fubini’s Theorem — Iterated Integrals",
-      "title_he": "משפט פוביני — אינטגרלים חוזרים",
-      "level_min": "calculus_1",
-      "body_en_md": "**Fubini’s Theorem.** If $f$ is continuous on $R = [a,b] \\times [c,d]$, then:\n$$\\iint_R f(x,y)\\,dA = \\int_a^b\\!\\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d\\!\\int_a^b f(x,y)\\,dx\\,dy.$$\n\nThe inner integral is evaluated first (treating the outer variable as a constant), then the outer integral.\n\n**Worked Example 1.** Compute $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\n$$\\int_0^1\\!\\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\left[\\frac{y^2}{2}\\right]_0^2 dx = \\int_0^1 x \\cdot 2\\,dx = \\left[x^2\\right]_0^1 = 1.$$\n\n**Worked Example 2.** Compute $\\displaystyle\\iint_{[0,\\pi]\\times[0,1]} y\\sin x\\,dA$.\n\n$$\\int_0^\\pi\\sin x\\left(\\int_0^1 y\\,dy\\right)dx = \\int_0^\\pi \\sin x \\cdot \\frac{1}{2}\\,dx = \\frac{1}{2}[-\\cos x]_0^\\pi = \\frac{1}{2}\\cdot 2 = 1.$$",
-      "body_he_md": "**משפט פוביני.** אם $f$ רציפה ב-$R = [a,b] \\times [c,d]$, אז:\n$$\\iint_R f(x,y)\\,dA = \\int_a^b\\!\\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d\\!\\int_a^b f(x,y)\\,dx\\,dy.$$\n\nמחשבים תחילה את האינטגרל הפנימי (תוך התייחסות למשתנה החיצוני כקבוע), אחר כך את האינטגרל החיצוני.\n\n**דוגמה 1.** חשב $\\displaystyle\\iint_{[0,1]\\times[0,2]} xy\\,dA$.\n\n$$\\int_0^1\\!\\int_0^2 xy\\,dy\\,dx = \\int_0^1 x \\cdot 2\\,dx = 1.$$\n\n**דוגמה 2.** חשב $\\displaystyle\\iint_{[0,\\pi]\\times[0,1]} y\\sin x\\,dA$.\n\n$$\\int_0^\\pi \\sin x \\cdot \\frac{1}{2}\\,dx = \\frac{1}{2}\\cdot 2 = 1.$$"
+      "kind": "definition",
+      "title_en": "Iterated Integrals and Fubini's Theorem",
+      "title_he": "אינטגרלים מאוחדים ומשפט פוביני",
+      "body_en_md": "**Double integral over a rectangle** $R=[a,b]\\times[c,d]$:\n$$\\iint_R f(x,y)\\,dA = \\int_a^b\\int_c^d f(x,y)\\,dy\\,dx = \\int_c^d\\int_a^b f(x,y)\\,dx\\,dy.$$\n\n**Fubini's theorem:** If $f$ is continuous on $R$, the double integral equals either iterated integral (order doesn't matter).\n\n**Type I region** (left-right): $D=\\{(x,y):a\\leq x\\leq b,\\; g_1(x)\\leq y\\leq g_2(x)\\}$:\n$$\\iint_D f\\,dA = \\int_a^b\\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\n\n**Type II region** (top-bottom): $D=\\{(x,y):c\\leq y\\leq d,\\; h_1(y)\\leq x\\leq h_2(y)\\}$:\n$$\\iint_D f\\,dA = \\int_c^d\\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n**Polar coordinates:** $x=r\\cos\\theta$, $y=r\\sin\\theta$, $dA=r\\,dr\\,d\\theta$:\n$$\\iint_D f(x,y)\\,dA = \\iint_{D'} f(r\\cos\\theta,r\\sin\\theta)\\,r\\,dr\\,d\\theta.$$",
+      "body_he_md": "**אינטגרל כפול על מלבן** $R=[a,b]\\times[c,d]$:\n$$\\iint_R f\\,dA=\\int_a^b\\int_c^d f(x,y)\\,dy\\,dx=\\int_c^d\\int_a^b f(x,y)\\,dx\\,dy.$$\n\n**משפט פוביני:** אם $f$ רציפה על $R$, האינטגרל הכפול שווה לכל אחד מהאינטגרלים המאוחדים.\n\n**אזור סוג I:** $D=\\{a\\leq x\\leq b,\\;g_1(x)\\leq y\\leq g_2(x)\\}$:\n$$\\iint_D f\\,dA=\\int_a^b\\int_{g_1(x)}^{g_2(x)}f\\,dy\\,dx.$$\n\n**קואורדינטות קוטביות:** $dA=r\\,dr\\,d\\theta$."
     },
     {
-      "id": "non_rectangular",
-      "title_en": "Non-Rectangular Regions — Type I and Type II",
-      "title_he": "אזורים לא-מלבניים — סוג I וסוג II",
-      "level_min": "calculus_1",
-      "body_en_md": "**Type I region:** $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$.\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\nOuter variable $x$ has constant limits; inner variable $y$ has function limits.\n\n**Type II region:** $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$.\n$$\\iint_D f\\,dA = \\int_c^d \\int_{h_1(y)}^{h_2(y)} f(x,y)\\,dx\\,dy.$$\n\n**Worked Example.** $\\iint_D x^2 y\\,dA$ where $D$ is the triangle with vertices $(0,0)$, $(1,0)$, $(0,1)$.\n\nThe triangle is $D = \\{(x,y) : 0 \\leq x \\leq 1,\\; 0 \\leq y \\leq 1-x\\}$ (Type I).\n$$\\int_0^1\\int_0^{1-x} x^2 y\\,dy\\,dx = \\int_0^1 x^2 \\cdot \\frac{(1-x)^2}{2}\\,dx = \\frac{1}{2}\\int_0^1(x^2 - 2x^3 + x^4)\\,dx$$\n$$= \\frac{1}{2}\\left[\\frac{x^3}{3} - \\frac{x^4}{2} + \\frac{x^5}{5}\\right]_0^1 = \\frac{1}{2}\\left(\\frac{1}{3} - \\frac{1}{2} + \\frac{1}{5}\\right) = \\frac{1}{2}\\cdot\\frac{1}{30} = \\frac{1}{60}.$$",
-      "body_he_md": "**אזור סוג I:** $D = \\{(x,y) : a \\leq x \\leq b,\\; g_1(x) \\leq y \\leq g_2(x)\\}$.\n$$\\iint_D f\\,dA = \\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y)\\,dy\\,dx.$$\nגבולות $x$ החיצוני חסוים; גבולות $y$ הפנימי הן פונקציות.\n\n**אזור סוג II:** $D = \\{(x,y) : c \\leq y \\leq d,\\; h_1(y) \\leq x \\leq h_2(y)\\}$.\n\n**דוגמה.** $\\iint_D x^2 y\\,dA$ כאשר $D$ הוא המשולש עם קודקודים $(0,0)$, $(1,0)$, $(0,1)$.\n\n$D$: $0 \\leq x \\leq 1$, $0 \\leq y \\leq 1-x$.\n$$\\int_0^1\\int_0^{1-x} x^2 y\\,dy\\,dx = \\frac{1}{2}\\int_0^1 x^2(1-x)^2\\,dx = \\frac{1}{60}.$$"
+      "kind": "theory",
+      "title_en": "When to Use Which Method",
+      "title_he": "מתי להשתמש באיזו שיטה",
+      "body_en_md": "**Iterated integral (standard):** Start with the inner integral (treat the outer variable as constant), then the outer.\n\n**Changing the order of integration:** Sometimes one order is easy, the other is hard or impossible. Sketch the region, re-express the bounds in the other order.\n\n**Polar coordinates** — use when:\n- The region is a disk, annulus, or sector.\n- The integrand contains $x^2+y^2$.\n- Substituting $r,\\theta$ simplifies the integrand significantly.\n\n**Geometric shortcut:** If $f(x,y)=1$, then $\\iint_D 1\\,dA = \\text{Area}(D)$.\n\n**Signed area:** If $f$ takes negative values, the integral can be negative (gives net signed volume).",
+      "body_he_md": "**אינטגרל מאוחד:** מתחיל מהאינטגרל הפנימי (הגורם החיצוני = קבוע), ואז החיצוני.\n\n**החלפת סדר:** לפעמים סדר אחד קל, השני קשה. צייר את האזור ובטא גבולות מחדש.\n\n**קואורדינטות קוטביות** — שימוש כאשר:\n- האזור הוא דיסק, טבעת, או מגזר.\n- האינטגרנד מכיל $x^2+y^2$.\n- ההצבה מפשטת את האינטגרנד.\n\n**קיצור גיאומטרי:** $\\iint_D 1\\,dA=\\text{שטח}(D)$."
     },
     {
-      "id": "switching_order",
-      "title_en": "Switching the Order of Integration",
-      "title_he": "החלפת סדר האינטגרציה",
-      "level_min": "calculus_1",
-      "body_en_md": "Sometimes the inner integral is hard (or impossible) in the given order, but easy after switching. **Always sketch the region first.**\n\n**Procedure:**\n1. Sketch the region $D$ described by the given iterated integral.\n2. Re-describe $D$ with the roles of $x$ and $y$ swapped.\n3. Write the new iterated integral with the new limits.\n\n**Example.** Switch the order: $\\displaystyle\\int_0^1\\int_x^1 e^{y^2}\\,dy\\,dx$.\n\nThe region is $D = \\{0 \\leq x \\leq 1,\\; x \\leq y \\leq 1\\}$.\nSketching: $D = \\{0 \\leq y \\leq 1,\\; 0 \\leq x \\leq y\\}$.\n\n$$\\int_0^1\\int_0^y e^{y^2}\\,dx\\,dy = \\int_0^1 y\\, e^{y^2}\\,dy = \\left[\\frac{e^{y^2}}{2}\\right]_0^1 = \\frac{e-1}{2}.$$\n\n(In the original order, $\\int e^{y^2}\\,dy$ has no elementary antiderivative.)",
-      "body_he_md": "לעיתים האינטגרל הפנימי קשה (או בלתי אפשרי) בסדר הנתון, אבל קל לאחר החלפה. **תמיד שרטטו את האזור תחילה.**\n\n**סדר פעולה:**\n1. שרטטו את $D$.\n2. תארו מחדש את $D$ עם תפקידי $x$ ו-$y$ מוחלפים.\n3. כתבו את האינטגרל החוזר החדש עם גבולות חדשים.\n\n**דוגמה.** החלפ: $\\displaystyle\\int_0^1\\int_x^1 e^{y^2}\\,dy\\,dx$.\n\n$D$: $0 \\leq x \\leq 1$, $x \\leq y \\leq 1$. בסדר החדש: $0 \\leq y \\leq 1$, $0 \\leq x \\leq y$.\n\n$$\\int_0^1 y\\,e^{y^2}\\,dy = \\frac{e-1}{2}.$$"
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Double Integral over a Rectangle",
+      "title_he": "דוגמה פתורה 1 — אינטגרל כפול על מלבן",
+      "body_en_md": "**Compute** $\\iint_R (2x+3y)\\,dA$ over $R=[0,2]\\times[0,1]$.\n\n**Step 1 — Write as iterated integral:**\n$$\\int_0^2\\int_0^1 (2x+3y)\\,dy\\,dx.$$\n\n**Step 2 — Inner integral (integrate w.r.t. $y$, treat $x$ as constant):**\n$$\\int_0^1(2x+3y)\\,dy = \\left[2xy+\\frac{3y^2}{2}\\right]_0^1 = 2x+\\frac{3}{2}.$$\n\n**Step 3 — Outer integral:**\n$$\\int_0^2\\left(2x+\\frac{3}{2}\\right)dx = \\left[x^2+\\frac{3x}{2}\\right]_0^2 = 4+3 = 7.$$",
+      "body_he_md": "**חשב** $\\iint_R(2x+3y)\\,dA$ על $R=[0,2]\\times[0,1]$.\n\n**שלב 1:** $\\int_0^2\\int_0^1(2x+3y)\\,dy\\,dx$.\n\n**שלב 2 — אינטגרל פנימי:**\n$\\int_0^1(2x+3y)\\,dy=2x+3/2$.\n\n**שלב 3 — אינטגרל חיצוני:**\n$\\int_0^2(2x+3/2)\\,dx=4+3=7$."
     },
     {
-      "id": "applications",
-      "title_en": "Applications — Area, Average Value, Center of Mass",
-      "title_he": "יישומים — שטח, ערך ממוצע, מרכז מסה",
-      "level_min": "calculus_1",
-      "body_en_md": "**Area:** $\\text{Area}(D) = \\iint_D 1\\,dA$.\n\n**Average value:** $\\bar{f} = \\dfrac{1}{\\text{Area}(D)} \\iint_D f(x,y)\\,dA$.\n\n**Center of mass** (uniform density): $\\bar{x} = \\dfrac{\\iint_D x\\,dA}{\\text{Area}(D)}$, $\\;\\bar{y} = \\dfrac{\\iint_D y\\,dA}{\\text{Area}(D)}$.\n\n**Non-uniform density $\\rho(x,y)$:**\n$$\\text{Mass} = \\iint_D \\rho(x,y)\\,dA, \\quad \\bar{x} = \\frac{\\iint_D x\\,\\rho(x,y)\\,dA}{\\text{Mass}}.$$\n\n**Example.** Area of the unit disk $x^2 + y^2 \\leq 1$:\n$$\\int_{-1}^{1}\\int_{-\\sqrt{1-x^2}}^{\\sqrt{1-x^2}} 1\\,dy\\,dx = \\pi.$$\n(This integral is much easier in polar coordinates, but Cartesian confirms $\\pi$.)",
-      "body_he_md": "**שטח:** $\\text{Area}(D) = \\iint_D 1\\,dA$.\n\n**ערך ממוצע:** $\\bar{f} = \\dfrac{1}{\\text{Area}(D)} \\iint_D f(x,y)\\,dA$.\n\n**מרכז מסה** (צפיפות אחידה): $\\bar{x} = \\dfrac{\\iint_D x\\,dA}{\\text{Area}(D)}$, $\\;\\bar{y} = \\dfrac{\\iint_D y\\,dA}{\\text{Area}(D)}$.\n\n**צפיפות לא אחידה $\\rho(x,y)$:**\n$$\\text{Mass} = \\iint_D \\rho\\,dA, \\quad \\bar{x} = \\frac{\\iint_D x\\rho\\,dA}{\\text{Mass}}.$$\n\n**דוגמה.** שטח דיסקאות היחידה: $\\iint 1\\,dA = \\pi$."
-    }
-  ],
-  "questions": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\iint_R xy^2\\,dA$ over $R=[1,2]\\times[0,3]$.",
+      "body_he_md": "חשב $\\iint_R xy^2\\,dA$ על $R=[1,2]\\times[0,3]$.",
+      "checkpoint_solution_en": "Inner: $\\int_0^3 xy^2\\,dy=x[y^3/3]_0^3=9x$. Outer: $\\int_1^2 9x\\,dx=9[x^2/2]_1^2=9(2-1/2)=27/2$.",
+      "checkpoint_solution_he": "פנימי: $9x$. חיצוני: $9[x^2/2]_1^2=27/2$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "Compute $\\displaystyle\\iint_{[0,2]\\times[0,3]} (x + y)\\,dA$.",
-      "body_he": "חשב $\\displaystyle\\iint_{[0,2]\\times[0,3]} (x + y)\\,dA$.",
-      "options": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Changing the Order of Integration",
+      "title_he": "דוגמה פתורה 2 — החלפת סדר אינטגרציה",
+      "body_en_md": "**Problem:** Change the order of integration and evaluate:\n$$\\int_0^1\\int_{x}^{1} e^{y^2}\\,dy\\,dx.$$\n\n**Step 1 — Identify the region:** $D=\\{0\\leq x\\leq 1,\\;x\\leq y\\leq 1\\}$.\nSketch: The region is the triangle with vertices $(0,0),(0,1),(1,1)$.\n\n**Step 2 — Express in the other order:** For fixed $y\\in[0,1]$, $x$ ranges from $0$ to $y$:\n$$\\int_0^1\\int_0^{y} e^{y^2}\\,dx\\,dy.$$\n\n**Step 3 — Inner integral (integrate w.r.t. $x$):**\n$$\\int_0^y e^{y^2}\\,dx = ye^{y^2}.$$\n\n**Step 4 — Outer integral:**\n$$\\int_0^1 ye^{y^2}\\,dy = \\left[\\frac{e^{y^2}}{2}\\right]_0^1 = \\frac{e-1}{2}.$$",
+      "body_he_md": "**בעיה:** החלף סדר אינטגרציה וחשב:\n$$\\int_0^1\\int_x^1 e^{y^2}\\,dy\\,dx.$$\n\n**שלב 1 — האזור:** $D=\\{0\\leq x\\leq 1,\\;x\\leq y\\leq 1\\}$ — משולש.\n\n**שלב 2 — סדר הפוך:** $y\\in[0,1]$, $x\\in[0,y]$:\n$$\\int_0^1\\int_0^y e^{y^2}\\,dx\\,dy.$$\n\n**שלב 3 — פנימי:** $\\int_0^y e^{y^2}\\,dx=ye^{y^2}$.\n\n**שלב 4 — חיצוני:** $\\int_0^1 ye^{y^2}\\,dy=(e-1)/2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Change the order of $\\int_0^1\\int_y^1 x^2\\,dx\\,dy$ and evaluate.",
+      "body_he_md": "החלף סדר של $\\int_0^1\\int_y^1 x^2\\,dx\\,dy$ וחשב.",
+      "checkpoint_solution_en": "Region: $0\\leq y\\leq 1$, $y\\leq x\\leq 1$ = same as $0\\leq x\\leq 1$, $0\\leq y\\leq x$. $\\int_0^1\\int_0^x x^2\\,dy\\,dx=\\int_0^1 x^3\\,dx=1/4$.",
+      "checkpoint_solution_he": "אזור: $0\\leq x\\leq 1$, $0\\leq y\\leq x$. $\\int_0^1\\int_0^x x^2\\,dy\\,dx=1/4$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Double Integral in Polar Coordinates",
+      "title_he": "דוגמה פתורה 3 — אינטגרל כפול בקואורדינטות קוטביות",
+      "body_en_md": "**Problem:** Compute $\\iint_D e^{x^2+y^2}\\,dA$ where $D$ is the disk $x^2+y^2\\leq 4$.\n\n**Step 1 — Why polar?** The integrand $e^{x^2+y^2}=e^{r^2}$ and the disk $x^2+y^2\\leq4\\Leftrightarrow r\\leq2$ are both natural in polar.\n\n**Step 2 — Set up polar integral:** $D': 0\\leq r\\leq 2$, $0\\leq\\theta\\leq 2\\pi$.\n$$\\iint_D e^{x^2+y^2}\\,dA = \\int_0^{2\\pi}\\int_0^2 e^{r^2}\\cdot r\\,dr\\,d\\theta.$$\n\n**Step 3 — Inner integral ($r$-integral):**\n$$\\int_0^2 re^{r^2}\\,dr = \\left[\\frac{e^{r^2}}{2}\\right]_0^2 = \\frac{e^4-1}{2}.$$\n\n**Step 4 — Outer integral ($\\theta$-integral):**\n$$\\int_0^{2\\pi}\\frac{e^4-1}{2}\\,d\\theta = \\frac{e^4-1}{2}\\cdot 2\\pi = \\pi(e^4-1).$$",
+      "body_he_md": "**בעיה:** חשב $\\iint_D e^{x^2+y^2}\\,dA$ כאשר $D$ הוא הדיסק $x^2+y^2\\leq4$.\n\n**שלב 1 — מדוע קוטביות?** $e^{x^2+y^2}=e^{r^2}$; הדיסק = $r\\leq 2$.\n\n**שלב 2 — הצבה:** $\\int_0^{2\\pi}\\int_0^2 e^{r^2}\\cdot r\\,dr\\,d\\theta$.\n\n**שלב 3 — פנימי:** $\\int_0^2 re^{r^2}\\,dr=(e^4-1)/2$.\n\n**שלב 4 — חיצוני:** $(e^4-1)/2\\cdot 2\\pi=\\pi(e^4-1)$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Double Integral Strategy",
+      "title_he": "מדריך שיטה — אסטרטגיית אינטגרל כפול",
+      "body_en_md": "1. **Sketch the region $D$.**\n2. **Determine the type:** rectangle, Type I, Type II, polar disk/sector.\n3. **Set up limits:**\n   - Type I: outer = $x$-limits, inner = $y(x)$-limits.\n   - Type II: outer = $y$-limits, inner = $x(y)$-limits.\n   - Polar: outer = $\\theta$-limits, inner = $r$-limits.\n4. **Evaluate inner integral** (treat outer variable as constant).\n5. **Evaluate outer integral.**\n\n**When to change order:**\n- If the inner integral is hard (e.g., $\\int e^{y^2}\\,dy$), sketch and switch.\n\n**When to use polar:**\n- Integrand has $x^2+y^2$.\n- Region is circular.\n- Always include the Jacobian $r$: $dA=r\\,dr\\,d\\theta$.\n\n| Region | Polar description |\n|---|---|\n| Full disk radius $R$ | $0\\leq r\\leq R$, $0\\leq\\theta\\leq 2\\pi$ |\n| Upper semicircle | $0\\leq r\\leq R$, $0\\leq\\theta\\leq\\pi$ |\n| Annulus $a\\leq r\\leq b$ | $a\\leq r\\leq b$, $0\\leq\\theta\\leq 2\\pi$ |",
+      "body_he_md": "1. **צייר את האזור $D$.**\n2. **קבע סוג:** מלבן, סוג I, סוג II, קוטביות.\n3. **הצב גבולות.**\n4. **חשב אינטגרל פנימי** (גורם חיצוני = קבוע).\n5. **חשב אינטגרל חיצוני.**\n\n**מתי להחליף סדר:**\n- אם האינטגרל הפנימי קשה — צייר והחלף.\n\n**מתי קוטביות:**\n- אינטגרנד מכיל $x^2+y^2$.\n- אזור מעגלי.\n- תמיד כלול יעקוביאן $r$.\n\n| אזור | תיאור קוטבי |\n|---|---|\n| דיסק רדיוס $R$ | $0\\leq r\\leq R$, $0\\leq\\theta\\leq 2\\pi$ |\n| חצי עיגול | $0\\leq r\\leq R$, $0\\leq\\theta\\leq\\pi$ |\n| טבעת | $a\\leq r\\leq b$, $0\\leq\\theta\\leq 2\\pi$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$15$",
-          "text_he": "$15$",
-          "correct": true
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\int_0^1\\int_0^2 (x+y)\\,dy\\,dx$.",
+          "body_he": "חשב $\\int_0^1\\int_0^2(x+y)\\,dy\\,dx$.",
+          "solution_en": "Inner: $[xy+y^2/2]_0^2=2x+2$. Outer: $[x^2+2x]_0^1=1+2=3$.",
+          "solution_he": "פנימי: $2x+2$. חיצוני: $3$.",
+          "points": 4
         },
         {
-          "id": "b",
-          "text_en": "$12$",
-          "text_he": "$12$",
-          "correct": false
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\iint_R x^2y\\,dA$ over $R=[0,1]\\times[0,2]$.",
+          "body_he": "חשב $\\iint_R x^2y\\,dA$ על $R=[0,1]\\times[0,2]$.",
+          "solution_en": "$\\int_0^1\\int_0^2 x^2y\\,dy\\,dx=\\int_0^1 x^2[y^2/2]_0^2\\,dx=\\int_0^1 2x^2\\,dx=2/3$.",
+          "solution_he": "$\\int_0^1 2x^2\\,dx=2/3$.",
+          "points": 4
         },
         {
-          "id": "c",
-          "text_en": "$18$",
-          "text_he": "$18$",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Use the geometric interpretation to find $\\iint_D 3\\,dA$ where $D$ is the unit disk $x^2+y^2\\leq 1$.",
+          "body_he": "השתמש בפרשנות גיאומטרית למציאת $\\iint_D 3\\,dA$ כאשר $D$ הוא דיסק היחידה.",
+          "solution_en": "$\\iint_D 3\\,dA=3\\cdot\\text{Area}(D)=3\\pi$.",
+          "solution_he": "$3\\cdot\\pi(1)^2=3\\pi$.",
+          "points": 4
         },
         {
-          "id": "d",
-          "text_en": "$10$",
-          "text_he": "$10$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $\\int_0^{\\pi}\\int_0^1 r\\sin\\theta\\,dr\\,d\\theta$.",
+          "body_he": "חשב $\\int_0^{\\pi}\\int_0^1 r\\sin\\theta\\,dr\\,d\\theta$.",
+          "solution_en": "Inner: $\\int_0^1 r\\sin\\theta\\,dr=\\sin\\theta/2$. Outer: $\\int_0^{\\pi}\\sin\\theta/2\\,d\\theta=[-\\cos\\theta/2]_0^{\\pi}=1$.",
+          "solution_he": "פנימי: $\\sin\\theta/2$. חיצוני: $1$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\iint_D x\\,dA$ where $D$ is the triangle with vertices $(0,0)$, $(1,0)$, $(1,1)$.",
+          "body_he": "חשב $\\iint_D x\\,dA$ כאשר $D$ הוא המשולש עם קודקודים $(0,0)$, $(1,0)$, $(1,1)$.",
+          "solution_en": "Region: $0\\leq x\\leq 1$, $0\\leq y\\leq x$. $\\int_0^1\\int_0^x x\\,dy\\,dx=\\int_0^1 x^2\\,dx=1/3$.",
+          "solution_he": "$\\int_0^1\\int_0^x x\\,dy\\,dx=\\int_0^1 x^2\\,dx=1/3$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Use polar coordinates to compute $\\iint_D \\sqrt{x^2+y^2}\\,dA$ where $D$ is the disk $x^2+y^2\\leq 9$.",
+          "body_he": "השתמש בקואורדינטות קוטביות לחישוב $\\iint_D\\sqrt{x^2+y^2}\\,dA$ כאשר $D$: $x^2+y^2\\leq9$.",
+          "solution_en": "$\\int_0^{2\\pi}\\int_0^3 r\\cdot r\\,dr\\,d\\theta=\\int_0^{2\\pi}[r^3/3]_0^3\\,d\\theta=9\\int_0^{2\\pi}d\\theta=18\\pi$.",
+          "solution_he": "$\\int_0^{2\\pi}\\int_0^3 r^2\\,dr\\,d\\theta=9\\cdot 2\\pi=18\\pi$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Change the order and evaluate: $\\int_0^4\\int_{\\sqrt{x}}^2 \\frac{1}{y^3+1}\\,dy\\,dx$.",
+          "body_he": "החלף סדר וחשב: $\\int_0^4\\int_{\\sqrt{x}}^2\\frac{1}{y^3+1}\\,dy\\,dx$.",
+          "solution_en": "Region: $0\\leq x\\leq 4$, $\\sqrt{x}\\leq y\\leq 2$ = $0\\leq y\\leq 2$, $0\\leq x\\leq y^2$. $\\int_0^2\\int_0^{y^2}\\frac{1}{y^3+1}\\,dx\\,dy=\\int_0^2\\frac{y^2}{y^3+1}\\,dy=[\\ln(y^3+1)/3]_0^2=\\ln 9/3=2\\ln 3/3$.",
+          "solution_he": "אזור: $0\\leq y\\leq 2$, $0\\leq x\\leq y^2$. $\\int_0^2 y^2/(y^3+1)\\,dy=(\\ln 9)/3=2\\ln3/3$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the volume below $z=4-x^2-y^2$ above the disk $x^2+y^2\\leq 4$.",
+          "body_he": "מצא את הנפח מתחת ל-$z=4-x^2-y^2$ מעל הדיסק $x^2+y^2\\leq4$.",
+          "solution_en": "$\\int_0^{2\\pi}\\int_0^2(4-r^2)r\\,dr\\,d\\theta=\\int_0^{2\\pi}[2r^2-r^4/4]_0^2\\,d\\theta=\\int_0^{2\\pi}(8-4)\\,d\\theta=4\\cdot 2\\pi=8\\pi$.",
+          "solution_he": "$\\int_0^{2\\pi}\\int_0^2(4-r^2)r\\,dr\\,d\\theta=8\\pi$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Compute $\\iint_D y\\,dA$ where $D$ is bounded by $y=x^2$ and $y=2x$.",
+          "body_he": "חשב $\\iint_D y\\,dA$ כאשר $D$ מוגבל על ידי $y=x^2$ ו-$y=2x$.",
+          "solution_en": "Intersection: $x^2=2x\\Rightarrow x=0,2$. Region: $0\\leq x\\leq 2$, $x^2\\leq y\\leq 2x$. $\\int_0^2\\int_{x^2}^{2x}y\\,dy\\,dx=\\int_0^2[y^2/2]_{x^2}^{2x}dx=\\int_0^2(2x^2-x^4/2)\\,dx=[2x^3/3-x^5/10]_0^2=16/3-32/10=16/3-16/5=32/15$.",
+          "solution_he": "חיתוך: $x=0,2$. $\\int_0^2(2x^2-x^4/2)\\,dx=32/15$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Compute $\\iint_D e^{-(x^2+y^2)}\\,dA$ over the entire plane $\\mathbb{R}^2$ using polar coordinates.",
+          "body_he": "חשב $\\iint_{\\mathbb{R}^2} e^{-(x^2+y^2)}\\,dA$ בקואורדינטות קוטביות.",
+          "solution_en": "$\\int_0^{2\\pi}\\int_0^{\\infty}e^{-r^2}r\\,dr\\,d\\theta=\\int_0^{2\\pi}[-e^{-r^2}/2]_0^{\\infty}\\,d\\theta=\\int_0^{2\\pi}1/2\\,d\\theta=\\pi$. (This implies $\\int_{-\\infty}^{\\infty}e^{-x^2}\\,dx=\\sqrt{\\pi}$.)",
+          "solution_he": "$\\int_0^{2\\pi}\\int_0^{\\infty}e^{-r^2}r\\,dr\\,d\\theta=2\\pi\\cdot 1/2=\\pi$. (מכאן: $\\int_{-\\infty}^{\\infty}e^{-x^2}\\,dx=\\sqrt{\\pi}$.)",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Compute $\\iint_D \\frac{1}{(x^2+y^2)^{3/2}}\\,dA$ over the annulus $1\\leq x^2+y^2\\leq 4$.",
+          "body_he": "חשב $\\iint_D\\frac{1}{(x^2+y^2)^{3/2}}\\,dA$ על הטבעת $1\\leq x^2+y^2\\leq4$.",
+          "solution_en": "$\\int_0^{2\\pi}\\int_1^2 r^{-3}\\cdot r\\,dr\\,d\\theta=\\int_0^{2\\pi}\\int_1^2 r^{-2}\\,dr\\,d\\theta=\\int_0^{2\\pi}[-1/r]_1^2\\,d\\theta=\\int_0^{2\\pi}1/2\\,d\\theta=\\pi$.",
+          "solution_he": "$\\int_0^{2\\pi}\\int_1^2 r^{-2}\\,dr\\,d\\theta=\\pi$.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove Fubini's theorem for the case $f(x,y)=g(x)h(y)$ (separable functions) on $[a,b]\\times[c,d]$.",
+          "body_he": "הוכח את משפט פוביני עבור $f(x,y)=g(x)h(y)$ (פונקציות ספריות) על $[a,b]\\times[c,d]$.",
+          "solution_en": "$\\iint_R g(x)h(y)\\,dA=\\int_a^b\\int_c^d g(x)h(y)\\,dy\\,dx=\\int_a^b g(x)\\left(\\int_c^d h(y)\\,dy\\right)dx=\\left(\\int_a^b g(x)\\,dx\\right)\\left(\\int_c^d h(y)\\,dy\\right)$. The factorization is valid because $g(x)$ is constant w.r.t. the inner $dy$-integral. $\\blacksquare$",
+          "solution_he": "$\\iint g(x)h(y)\\,dA=\\int_a^b g(x)\\left(\\int_c^d h(y)\\,dy\\right)dx=\\left(\\int_a^b g(x)\\,dx\\right)\\left(\\int_c^d h(y)\\,dy\\right)$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Find the volume of the solid bounded by $z=1-x^2-y^2$ above the $xy$-plane.",
+          "body_he": "מצא את נפח הגוף המוגבל על ידי $z=1-x^2-y^2$ מעל מישור $xy$.",
+          "solution_en": "Region: $z\\geq 0\\Rightarrow x^2+y^2\\leq 1$ (unit disk). $V=\\int_0^{2\\pi}\\int_0^1(1-r^2)r\\,dr\\,d\\theta=\\int_0^{2\\pi}[r^2/2-r^4/4]_0^1\\,d\\theta=\\int_0^{2\\pi}1/4\\,d\\theta=\\pi/2$.",
+          "solution_he": "$V=\\int_0^{2\\pi}\\int_0^1(1-r^2)r\\,dr\\,d\\theta=\\pi/2$.",
+          "points": 10
         }
-      ],
-      "explanation_en": "$\\int_0^2\\int_0^3(x+y)\\,dy\\,dx = \\int_0^2\\left[xy + y^2/2\\right]_0^3 dx = \\int_0^2(3x + 9/2)\\,dx = [3x^2/2 + 9x/2]_0^2 = 6 + 9 = 15$.",
-      "explanation_he": "$\\int_0^2\\int_0^3(x+y)\\,dy\\,dx = \\int_0^2(3x + 9/2)\\,dx = [3x^2/2 + 9x/2]_0^2 = 6 + 9 = 15$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "Compute $\\iint_D y\\,dA$ where $D$ is the region bounded by $y=x$ and $y=x^2$ (for $0 \\leq x \\leq 1$).",
-      "body_he": "חשב $\\iint_D y\\,dA$ כאשר $D$ הוא האזור החסום בין $y=x$ ל-$y=x^2$ (עבור $0 \\leq x \\leq 1$).",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$1/15$",
-          "text_he": "$1/15$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$1/8$",
-          "text_he": "$1/8$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$1/6$",
-          "text_he": "$1/6$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$1/12$",
-          "text_he": "$1/12$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$D$: $0 \\leq x \\leq 1$, $x^2 \\leq y \\leq x$ (Type I). $\\int_0^1\\int_{x^2}^x y\\,dy\\,dx = \\int_0^1\\frac{x^2-x^4}{2}\\,dx = \\frac{1}{2}\\!\\left(\\frac{1}{3}-\\frac{1}{5}\\right) = \\frac{1}{2}\\cdot\\frac{2}{15} = \\frac{1}{15}$.",
-      "explanation_he": "$D$: $0 \\leq x \\leq 1$, $x^2 \\leq y \\leq x$. $\\int_0^1\\frac{x^2-x^4}{2}\\,dx = \\frac{1}{2}\\left(\\frac{1}{3}-\\frac{1}{5}\\right) = \\frac{1}{15}$."
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Wrong order of limits.** The inner integral limits can depend on the outer variable (Type I/II), but the outer limits must be constants.\n\n2. **Forgetting the Jacobian $r$ in polar.** $dA=r\\,dr\\,d\\theta$, NOT $dr\\,d\\theta$.\n\n3. **Incorrect region sketch.** Always sketch the region before setting up limits — the bounds must match the geometry.\n\n4. **Changing order without re-sketching.** Changing the order requires re-expressing all bounds from the sketch.\n\n5. **Confusing $x$-simple and $y$-simple regions.** For Type I, outer limits are in $x$; inner in $y$. For Type II, reversed.",
+      "body_he_md": "1. **גבולות שגויים.** גבולות האינטגרל הפנימי יכולים לתלות בגורם החיצוני, אך גבולות החיצוני חייבים להיות קבועים.\n\n2. **שכחת יעקוביאן $r$ בקוטביות.** $dA=r\\,dr\\,d\\theta$, לא $dr\\,d\\theta$.\n\n3. **ציור שגוי של האזור.** תמיד צייר לפני הצבת גבולות.\n\n4. **החלפת סדר ללא ציור מחדש.** החלפה מחייבת ביטוי מחדש של כל הגבולות.\n\n5. **בלבול בין סוג I וסוג II.** I: גבולות חיצוניים ב-$x$; II: חיצוניים ב-$y$."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "By Fubini’s theorem, $\\displaystyle\\iint_{[1,2]\\times[0,1]} \\frac{x}{y+1}\\,dA$ equals:",
-      "body_he": "לפי משפט פוביני, $\\displaystyle\\iint_{[1,2]\\times[0,1]} \\frac{x}{y+1}\\,dA$ שווה ל:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\frac{3}{2}\\ln 2$",
-          "text_he": "$\\frac{3}{2}\\ln 2$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$\\ln 2$",
-          "text_he": "$\\ln 2$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$3\\ln 2$",
-          "text_he": "$3\\ln 2$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\frac{1}{2}\\ln 2$",
-          "text_he": "$\\frac{1}{2}\\ln 2$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "The integrand separates: $\\int_1^2 x\\,dx \\cdot \\int_0^1 \\frac{1}{y+1}\\,dy = \\left[\\frac{x^2}{2}\\right]_1^2 \\cdot [\\ln(y+1)]_0^1 = \\frac{3}{2} \\cdot \\ln 2 = \\frac{3\\ln 2}{2}$.",
-      "explanation_he": "האינטגרנד מתפצל: $\\int_1^2 x\\,dx \\cdot \\int_0^1 \\frac{dy}{y+1} = \\frac{3}{2}\\ln 2$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Process for every double integral:**\n1. Sketch the region.\n2. Determine Type (I, II, polar).\n3. Write limits correctly.\n4. Evaluate inner, then outer.\n\n**Polar formula:** $\\iint_D f\\,dA=\\int\\int f(r\\cos\\theta,r\\sin\\theta)\\cdot r\\,dr\\,d\\theta$.\n\n**Useful:** $\\iint_D 1\\,dA=\\text{Area}(D)$.\n\n**Exam patterns:** Evaluate double integral; change order; use polar for circles.",
+      "body_he_md": "**תהליך לכל אינטגרל כפול:**\n1. ציייר אזור.\n2. קבע סוג (I, II, קוטבי).\n3. גבולות נכונים.\n4. פנימי אז חיצוני.\n\n**נוסחת קוטביות:** $dA=r\\,dr\\,d\\theta$.\n\n**שימושי:** $\\iint_D 1\\,dA=\\text{שטח}(D)$."
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "To evaluate $\\displaystyle\\int_0^1\\int_y^1 e^{x^2}\\,dx\\,dy$, we switch the order. The new integral is:",
-      "body_he": "כדי לחשב $\\displaystyle\\int_0^1\\int_y^1 e^{x^2}\\,dx\\,dy$, מחליפים סדר. האינטגרל החדש הוא:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\displaystyle\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx$",
-          "text_he": "$\\displaystyle\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$\\displaystyle\\int_0^1\\int_0^y e^{x^2}\\,dx\\,dy$",
-          "text_he": "$\\displaystyle\\int_0^1\\int_0^y e^{x^2}\\,dx\\,dy$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$\\displaystyle\\int_0^1\\int_x^1 e^{x^2}\\,dy\\,dx$",
-          "text_he": "$\\displaystyle\\int_0^1\\int_x^1 e^{x^2}\\,dy\\,dx$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\displaystyle\\int_0^1\\int_0^1 e^{x^2}\\,dy\\,dx$",
-          "text_he": "$\\displaystyle\\int_0^1\\int_0^1 e^{x^2}\\,dy\\,dx$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "The region is $\\{0\\leq y\\leq 1,\\; y\\leq x\\leq 1\\}$, equivalently $\\{0\\leq x\\leq 1,\\; 0\\leq y\\leq x\\}$. So the switched integral is $\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx = \\int_0^1 xe^{x^2}\\,dx = [e^{x^2}/2]_0^1 = (e-1)/2$.",
-      "explanation_he": "האזור $\\{0\\leq y\\leq 1, y\\leq x\\leq 1\\}$, בשינוי: $\\{0\\leq x\\leq 1, 0\\leq y\\leq x\\}$. אינטגרל חדש: $\\int_0^1\\int_0^x e^{x^2}\\,dy\\,dx = \\int_0^1 xe^{x^2}\\,dx = (e-1)/2$."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "Geometrically, $\\iint_D f(x,y)\\,dA$ (with $f \\geq 0$) represents:",
-      "body_he": "גיאומטרית, $\\iint_D f(x,y)\\,dA$ (עם $f \\geq 0$) מייצג:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "The area of the region $D$",
-          "text_he": "שטח האזור $D$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "The volume of the solid bounded above by $z=f(x,y)$ and below by the region $D$",
-          "text_he": "נפח הגוף החסום מעל על ידי $z=f(x,y)$ ומתחת על ידי האזור $D$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "The surface area of $z = f(x,y)$ over $D$",
-          "text_he": "שטח המשטח $z = f(x,y)$ מעל $D$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "The average value of $f$ over $D$",
-          "text_he": "הערך הממוצע של $f$ על $D$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "When $f(x,y) \\geq 0$, the double integral gives the volume of the 3D solid between the surface $z=f(x,y)$ and the region $D$ in the $xy$-plane. The area is $\\iint_D 1\\,dA$ (option a with $f\\equiv 1$); the average is $\\iint_D f\\,dA / \\text{Area}(D)$.",
-      "explanation_he": "כאשר $f \\geq 0$, האינטגרל הכפול נותן את הנפח של הגוף התלת-ממדי בין המשח $z=f(x,y)$ ל-$D$."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Double integral** $\\iint_D f\\,dA$: volume under $z=f(x,y)$ above region $D$.\n- **Fubini:** evaluate as iterated integral (two orders usually possible).\n- **Type I:** $\\int_a^b\\int_{g_1(x)}^{g_2(x)}f\\,dy\\,dx$; **Type II:** $\\int_c^d\\int_{h_1(y)}^{h_2(y)}f\\,dx\\,dy$.\n- **Changing order:** sketch the region, re-express limits.\n- **Polar:** use when integrand has $x^2+y^2$ or region is circular; $dA=r\\,dr\\,d\\theta$.",
+      "body_he_md": "- **אינטגרל כפול** $\\iint_D f\\,dA$: נפח תחת $z=f(x,y)$.\n- **פוביני:** חשב כאינטגרל מאוחד.\n- **סוג I:** $\\int_a^b\\int_{g_1(x)}^{g_2(x)}f\\,dy\\,dx$; **סוג II:** מהופך.\n- **החלפת סדר:** צייר, בטא גבולות מחדש.\n- **קוטביות:** אינטגרנד עם $x^2+y^2$ או אזור מעגלי; $dA=r\\,dr\\,d\\theta$."
     }
   ]
 }

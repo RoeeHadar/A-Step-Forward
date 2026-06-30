@@ -2,30 +2,232 @@
   "concept_id": "optimization_related_rates",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Optimization Related Rates",
-  "title_he": "קצבים קשורים",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "math_track": ["calculus1"],
+  "title_en": "Related Rates",
+  "title_he": "קצבי שינוי מקושרים",
+  "summary_en": "Using the chain rule to relate rates of change of different quantities in geometric and physical problems.",
+  "summary_he": "שימוש בכלל השרשרת לקישור קצבי שינוי של גדלים שונים בבעיות גיאומטריות ופיזיקליות.",
+  "est_minutes": 55,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Optimization Related Rates.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-קצבים קשורים.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "The Idea of Related Rates",
+      "title_he": "הרעיון של קצבי שינוי מקושרים",
+      "body_en_md": "When two or more quantities are related by an equation, their rates of change with respect to time are also related. **Related rates** problems use implicit differentiation with respect to time $t$ to find an unknown rate from a known one.\n\nExamples:\n- A ladder slides down a wall: how fast does the top fall when the bottom slides out?\n- A balloon is inflated: how fast does the radius grow when air is pumped in at a known rate?\n- Water drains from a cone: what is the rate of change of height?\n\nThe key is to identify all changing quantities, write an equation connecting them (geometry, physics), differentiate both sides w.r.t. $t$, and solve for the unknown rate.",
+      "body_he_md": "כאשר שני גדלים או יותר קשורים על ידי משוואה, גם קצבי השינוי שלהם לפי זמן קשורים. בעיות **קצבי שינוי מקושרים** משתמשות בגזירה סמויה לפי זמן $t$ כדי למצוא קצב לא ידוע מתוך ידוע.\n\nדוגמאות:\n- סולם מחליק על קיר: כמה מהר יורד הקצה העליון?\n- בלון מתנפח: מה קצב גידול הרדיוס?\n- מים מתנקזים מחרוט: מה קצב ירידת הגובה?\n\nמפתח: זהה את כל הגדלים המשתנים, כתוב משוואה המקשרת ביניהם, גזור לפי $t$, ופתור."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Optimization Related Rates: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Optimization Related Rates.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-קצבים קשורים: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-קצבים קשורים.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Setting Up Related Rates",
+      "title_he": "הצבת בעיית קצבי שינוי מקושרים",
+      "body_en_md": "**General procedure:**\n1. Draw a diagram and label all quantities (variables and constants).\n2. Identify which quantities change with time and write them as functions of $t$.\n3. Write an **algebraic equation** relating the variables (from geometry, physics, etc.).\n4. Differentiate both sides with respect to $t$ (chain rule / implicit differentiation).\n5. Substitute the **known** values (rates and quantities) at the specific instant.\n6. Solve for the **unknown rate**.\n\n**Chain rule in action:**\n$$\\frac{d}{dt}[f(x)] = f'(x)\\cdot\\frac{dx}{dt}, \\qquad \\frac{d}{dt}[x^2] = 2x\\frac{dx}{dt}.$$\n\n**Important:** Do NOT substitute constant values for variables BEFORE differentiating — only substitute after.",
+      "body_he_md": "**נוהל כללי:**\n1. צייר דיאגרמה וסמן את כל הגדלים.\n2. זהה אילו גדלים משתנים עם הזמן.\n3. כתוב **משוואה אלגברית** המקשרת בין הגדלים.\n4. גזור שני הצדדים לפי $t$ (כלל שרשרת).\n5. הצב את **הערכים הידועים** ברגע הספציפי.\n6. פתור את **הקצב הלא ידוע**.\n\n**כלל שרשרת:**\n$$\\frac{d}{dt}[f(x)]=f'(x)\\cdot\\frac{dx}{dt}.$$\n\n**חשוב:** אל תציב ערכים קבועים לפני הגזירה — רק אחריה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Common Geometric Formulas for Related Rates",
+      "title_he": "נוסחאות גיאומטריות שכיחות לקצבי שינוי",
+      "body_en_md": "**Pythagorean theorem** (ladder, diagonal):\n$$a^2+b^2=c^2 \\implies 2a\\frac{da}{dt}+2b\\frac{db}{dt}=2c\\frac{dc}{dt}.$$\n\n**Circle:** $A=\\pi r^2\\implies \\dfrac{dA}{dt}=2\\pi r\\dfrac{dr}{dt}$.\n\n**Sphere:** $V=\\dfrac{4}{3}\\pi r^3\\implies \\dfrac{dV}{dt}=4\\pi r^2\\dfrac{dr}{dt}$.\n\n**Cone:** $V=\\dfrac{1}{3}\\pi r^2 h$. If $r/h$ is constant (similar triangles), substitute $r=kh$ first, then differentiate.\n\n**Similar triangles** often reduce two changing variables to one.\n\n**Key tip:** Write the general formula, differentiate, THEN substitute.",
+      "body_he_md": "**פיתגורס** (סולם, אלכסון):\n$$a^2+b^2=c^2\\implies 2a\\frac{da}{dt}+2b\\frac{db}{dt}=2c\\frac{dc}{dt}.$$\n\n**מעגל:** $A=\\pi r^2\\implies dA/dt=2\\pi r\\cdot dr/dt$.\n\n**כדור:** $V=\\frac{4}{3}\\pi r^3\\implies dV/dt=4\\pi r^2\\cdot dr/dt$.\n\n**חרוט:** $V=\\frac{1}{3}\\pi r^2 h$. אם $r/h$ קבוע, הצב $r=kh$ לפני הגזירה.\n\n**משולשים דומים** מצמצמים שתי משתנים לאחד.\n\n**טיפ:** כתוב נוסחה כללית, גזור, ואז הצב."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Ladder Problem",
+      "title_he": "דוגמה פתורה 1 — בעיית הסולם",
+      "body_en_md": "**Problem:** A 10 m ladder leans against a wall. The foot slides away at 2 m/s. How fast is the top sliding down when the foot is 6 m from the wall?\n\n**Step 1 — Variables:** Let $x$ = distance of foot from wall, $y$ = height of top. Given: $dx/dt=2$ m/s, find $dy/dt$ when $x=6$.\n\n**Step 2 — Equation:**\n$$x^2+y^2=100 \\qquad (\\text{ladder length}=10).$$\n\n**Step 3 — Differentiate w.r.t. $t$:**\n$$2x\\frac{dx}{dt}+2y\\frac{dy}{dt}=0.$$\n\n**Step 4 — Find $y$ when $x=6$:**\n$$y=\\sqrt{100-36}=\\sqrt{64}=8.$$\n\n**Step 5 — Substitute and solve:**\n$$2(6)(2)+2(8)\\frac{dy}{dt}=0 \\implies 24+16\\frac{dy}{dt}=0 \\implies \\frac{dy}{dt}=-\\frac{3}{2}\\text{ m/s}.$$\n\n**Conclusion:** The top slides down at 1.5 m/s (negative = downward).",
+      "body_he_md": "**בעיה:** סולם 10 מ' נשען על קיר. הקצה התחתון מחליק ב-2 מ'/שנ'. כמה מהר יורד הקצה העליון כאשר הקצה התחתון נמצא 6 מ' מהקיר?\n\n**שלב 1:** $x$ = מרחק מהקיר, $y$ = גובה. $dx/dt=2$, מצא $dy/dt$ כאשר $x=6$.\n\n**שלב 2:** $x^2+y^2=100$.\n\n**שלב 3:** $2x\\cdot dx/dt+2y\\cdot dy/dt=0$.\n\n**שלב 4:** $y=\\sqrt{64}=8$.\n\n**שלב 5:** $2(6)(2)+2(8)\\cdot dy/dt=0\\implies dy/dt=-3/2$ מ'/שנ'.\n\n**מסקנה:** הקצה העליון יורד ב-1.5 מ'/שנ'."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A 13 m ladder has its foot sliding away at 1 m/s. How fast is the top descending when the foot is 5 m from the wall?",
+      "body_he_md": "לסולם באורך 13 מ', הקצה התחתון מחליק ב-1 מ'/שנ'. כמה מהר יורד הקצה העליון כאשר הקצה התחתון נמצא 5 מ' מהקיר?",
+      "checkpoint_solution_en": "$x^2+y^2=169$. $y=\\sqrt{169-25}=12$. $2(5)(1)+2(12)dy/dt=0\\Rightarrow dy/dt=-5/12$ m/s.",
+      "checkpoint_solution_he": "$y=12$. $10+24\\cdot dy/dt=0\\Rightarrow dy/dt=-5/12$ מ'/שנ'."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Expanding Circle",
+      "title_he": "דוגמה פתורה 2 — מעגל מתרחב",
+      "body_en_md": "**Problem:** A circular oil spill grows at a rate of $\\dfrac{dA}{dt}=50\\text{ m}^2/\\text{min}$. How fast is the radius growing when the radius is 10 m?\n\n**Step 1 — Variables:** $r$ = radius, $A$ = area. Given: $dA/dt=50$, find $dr/dt$ when $r=10$.\n\n**Step 2 — Equation:**\n$$A = \\pi r^2.$$\n\n**Step 3 — Differentiate w.r.t. $t$:**\n$$\\frac{dA}{dt} = 2\\pi r\\frac{dr}{dt}.$$\n\n**Step 4 — Substitute:**\n$$50 = 2\\pi(10)\\frac{dr}{dt} = 20\\pi\\frac{dr}{dt}.$$\n\n**Step 5 — Solve:**\n$$\\frac{dr}{dt} = \\frac{50}{20\\pi} = \\frac{5}{2\\pi} \\approx 0.796\\text{ m/min}.$$",
+      "body_he_md": "**בעיה:** כתם שמן עגול מתרחב בקצב $dA/dt=50\\text{ מ}^2/\\text{דק}$. כמה מהר גדל הרדיוס כאשר $r=10$ מ'?\n\n**שלב 1:** $A=\\pi r^2$.\n\n**שלב 2:** $dA/dt=2\\pi r\\cdot dr/dt$.\n\n**שלב 3:** $50=2\\pi(10)\\cdot dr/dt=20\\pi\\cdot dr/dt$.\n\n**שלב 4:** $dr/dt=50/(20\\pi)=5/(2\\pi)\\approx 0.796$ מ'/דק'."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A spherical balloon is inflated at $dV/dt=100\\text{ cm}^3/\\text{s}$. Find $dr/dt$ when $r=5$ cm.",
+      "body_he_md": "בלון כדורי מתנפח בקצב $dV/dt=100\\text{ סמ}^3/\\text{שנ}$. מצא $dr/dt$ כאשר $r=5$ סמ.",
+      "checkpoint_solution_en": "$V=4\\pi r^3/3$. $dV/dt=4\\pi r^2\\cdot dr/dt$. $100=4\\pi(25)\\cdot dr/dt$. $dr/dt=100/(100\\pi)=1/\\pi\\approx0.318$ cm/s.",
+      "checkpoint_solution_he": "$100=100\\pi\\cdot dr/dt\\Rightarrow dr/dt=1/\\pi\\approx0.318$ סמ/שנ."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Conical Tank Draining",
+      "title_he": "דוגמה פתורה 3 — ניקוז מיכל חרוטי",
+      "body_en_md": "**Problem:** Water drains from a conical tank (vertex down) of height 12 m and radius 4 m at a rate of $dV/dt=-2\\text{ m}^3/\\text{min}$. Find $dh/dt$ when $h=6$ m.\n\n**Step 1 — Similar triangles:** At height $h$, the radius of the water surface is $r$. Since the full cone has $r/h=4/12=1/3$:\n$$r = \\frac{h}{3}.$$\n\n**Step 2 — Volume formula:** Substitute $r=h/3$:\n$$V = \\frac{1}{3}\\pi r^2 h = \\frac{1}{3}\\pi\\left(\\frac{h}{3}\\right)^2 h = \\frac{\\pi h^3}{27}.$$\n\n**Step 3 — Differentiate w.r.t. $t$:**\n$$\\frac{dV}{dt} = \\frac{\\pi\\cdot 3h^2}{27}\\frac{dh}{dt} = \\frac{\\pi h^2}{9}\\frac{dh}{dt}.$$\n\n**Step 4 — Substitute $dV/dt=-2$ and $h=6$:**\n$$-2 = \\frac{\\pi(36)}{9}\\frac{dh}{dt} = 4\\pi\\frac{dh}{dt}.$$\n\n**Step 5 — Solve:**\n$$\\frac{dh}{dt} = \\frac{-2}{4\\pi} = -\\frac{1}{2\\pi} \\approx -0.159\\text{ m/min}.$$\n\n**Conclusion:** The water level drops at $1/(2\\pi)$ m/min when $h=6$ m.",
+      "body_he_md": "**בעיה:** מים מתנקזים מחרוט (קודקוד למטה) בגובה 12 מ' ורדיוס 4 מ', בקצב $dV/dt=-2\\text{ מ}^3/\\text{דק}$. מצא $dh/dt$ כאשר $h=6$ מ'.\n\n**שלב 1 — משולשים דומים:** $r/h=4/12=1/3$, לכן $r=h/3$.\n\n**שלב 2:** $V=\\frac{1}{3}\\pi r^2h=\\frac{\\pi h^3}{27}$.\n\n**שלב 3:** $dV/dt=\\frac{\\pi h^2}{9}\\cdot dh/dt$.\n\n**שלב 4:** $-2=\\frac{\\pi(36)}{9}\\cdot dh/dt=4\\pi\\cdot dh/dt$.\n\n**שלב 5:** $dh/dt=-1/(2\\pi)\\approx-0.159$ מ'/דק'."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Related Rates Checklist",
+      "title_he": "מדריך שיטה — רשימת פעולות לקצבי שינוי מקושרים",
+      "body_en_md": "1. **Read** carefully — identify all quantities and which ones change.\n2. **Draw** a diagram at a general instant (not a specific one).\n3. **Label** variables (use algebra, not specific numbers yet).\n4. **Write** the geometric/physical equation relating the variables.\n5. **Simplify** if two variables are constrained (e.g., similar triangles) — reduce to one variable.\n6. **Differentiate** both sides w.r.t. $t$.\n7. **Substitute** the known values (position and rates) at the given instant.\n8. **Solve** for the unknown rate.\n\n| Geometry | Formula | Derivative |\n|---|---|---|\n| Circle area | $A=\\pi r^2$ | $dA/dt=2\\pi r\\cdot dr/dt$ |\n| Sphere volume | $V=4\\pi r^3/3$ | $dV/dt=4\\pi r^2\\cdot dr/dt$ |\n| Cone volume | $V=\\pi r^2h/3$ | Use similar triangles to eliminate $r$ |\n| Pythagoras | $a^2+b^2=c^2$ | $2a\\dot{a}+2b\\dot{b}=2c\\dot{c}$ |",
+      "body_he_md": "1. **קרא** בעיון — זהה גדלים ומה משתנה.\n2. **צייר** דיאגרמה ברגע כללי.\n3. **סמן** משתנים (לא מספרים עדיין).\n4. **כתוב** משוואה גיאומטרית/פיזיקלית.\n5. **פשט** אם קיים אילוץ (משולשים דומים).\n6. **גזור** לפי $t$.\n7. **הצב** ערכים ידועים.\n8. **פתור** את הקצב הלא ידוע.\n\n| גיאומטריה | נוסחה | נגזרת |\n|---|---|---|\n| שטח מעגל | $A=\\pi r^2$ | $dA/dt=2\\pi r\\cdot dr/dt$ |\n| נפח כדור | $V=4\\pi r^3/3$ | $dV/dt=4\\pi r^2\\cdot dr/dt$ |\n| נפח חרוט | $V=\\pi r^2h/3$ | השתמש במשולשים דומים |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "The radius of a circle increases at 3 cm/s. How fast is the area increasing when $r=5$ cm?",
+          "body_he": "רדיוס מעגל גדל ב-3 סמ/שנ. כמה מהר גדל השטח כאשר $r=5$ סמ?",
+          "solution_en": "$dA/dt=2\\pi r\\cdot dr/dt=2\\pi(5)(3)=30\\pi\\approx94.25\\text{ cm}^2/\\text{s}$.",
+          "solution_he": "$dA/dt=2\\pi(5)(3)=30\\pi\\approx94.25\\text{ סמ}^2/\\text{שנ}$.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A sphere's volume decreases at $dV/dt=-8\\text{ cm}^3/\\text{s}$. Find $dr/dt$ when $r=2$ cm.",
+          "body_he": "נפח כדור קטן בקצב $dV/dt=-8\\text{ סמ}^3/\\text{שנ}$. מצא $dr/dt$ כאשר $r=2$ סמ.",
+          "solution_en": "$dV/dt=4\\pi r^2\\cdot dr/dt$. $-8=4\\pi(4)\\cdot dr/dt$. $dr/dt=-8/(16\\pi)=-1/(2\\pi)$ cm/s.",
+          "solution_he": "$-8=16\\pi\\cdot dr/dt$. $dr/dt=-1/(2\\pi)$ סמ/שנ.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Two cars leave an intersection at right angles. One goes north at 60 km/h, the other east at 80 km/h. How fast is the distance between them increasing after 1 hour?",
+          "body_he": "שתי מכוניות יוצאות מצומת בזוויות ישרות. אחת נוסעת צפונה ב-60 קמ\"ש, השנייה מזרחה ב-80 קמ\"ש. כמה מהר גדל המרחק ביניהן לאחר שעה?",
+          "solution_en": "After 1h: $a=60$, $b=80$, $c=\\sqrt{3600+6400}=100$. $2a(da/dt)+2b(db/dt)=2c(dc/dt)$. $2(60)(60)+2(80)(80)=2(100)(dc/dt)$. $7200+12800=200(dc/dt)$. $dc/dt=100$ km/h.",
+          "solution_he": "לאחר שעה: $c=100$. $2(60)(60)+2(80)(80)=200\\cdot dc/dt$. $dc/dt=100$ קמ\"ש.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A 5 m ladder leans against a wall. The foot slides at 1 m/s. Find $dy/dt$ when the foot is 3 m from the wall.",
+          "body_he": "סולם 5 מ' נשען על קיר. הקצה התחתון מחליק ב-1 מ'/שנ'. מצא $dy/dt$ כאשר הקצה תחתון נמצא 3 מ' מהקיר.",
+          "solution_en": "$x=3$, $y=4$. $2(3)(1)+2(4)dy/dt=0$. $dy/dt=-6/8=-3/4$ m/s.",
+          "solution_he": "$y=4$. $6+8\\cdot dy/dt=0$. $dy/dt=-3/4$ מ'/שנ'.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Water is poured into a cylindrical tank (radius 3 m) at $2\\text{ m}^3/\\text{min}$. How fast does the height rise?",
+          "body_he": "מים מוזרמים למיכל גלילי (רדיוס 3 מ') בקצב $2\\text{ מ}^3/\\text{דק}$. כמה מהר עולה הגובה?",
+          "solution_en": "$V=\\pi r^2 h=9\\pi h$. $dV/dt=9\\pi\\cdot dh/dt$. $2=9\\pi\\cdot dh/dt$. $dh/dt=2/(9\\pi)\\approx0.071$ m/min.",
+          "solution_he": "$V=9\\pi h$. $2=9\\pi\\cdot dh/dt$. $dh/dt=2/(9\\pi)\\approx0.071$ מ'/דק'.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A conical pile of sand has $r=2h$ always. Sand is added at $5\\text{ m}^3/\\text{min}$. Find $dh/dt$ when $h=3$ m.",
+          "body_he": "גל חול חרוטי מקיים $r=2h$ תמיד. חול נוסף בקצב $5\\text{ מ}^3/\\text{דק}$. מצא $dh/dt$ כאשר $h=3$ מ'.",
+          "solution_en": "$V=\\pi r^2h/3=\\pi(2h)^2h/3=4\\pi h^3/3$. $dV/dt=4\\pi h^2\\cdot dh/dt$. $5=4\\pi(9)\\cdot dh/dt=36\\pi\\cdot dh/dt$. $dh/dt=5/(36\\pi)\\approx0.044$ m/min.",
+          "solution_he": "$V=4\\pi h^3/3$. $5=36\\pi\\cdot dh/dt$. $dh/dt=5/(36\\pi)\\approx0.044$ מ'/דק'.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A kite is 100 m high and moves horizontally at 5 m/s. The string is being paid out. Find the rate at which the string lengthens when 150 m of string is out.",
+          "body_he": "עפיפון בגובה 100 מ' נע אופקית ב-5 מ'/שנ'. המחרוזת מתארכת. מצא קצב התארכות המחרוזת כאשר יש 150 מ' מחרוזת.",
+          "solution_en": "Let $x$ = horizontal distance, $L$ = string length. $L^2=x^2+100^2$. When $L=150$: $x=\\sqrt{150^2-100^2}=\\sqrt{12500}=50\\sqrt{5}$. $2L\\cdot dL/dt=2x\\cdot dx/dt$. $dL/dt=x\\cdot dx/dt/L=(50\\sqrt{5})(5)/150=250\\sqrt{5}/150=5\\sqrt{5}/3\\approx3.73$ m/s.",
+          "solution_he": "$L^2=x^2+10000$. $x=50\\sqrt{5}$. $dL/dt=x\\cdot dx/dt/L=5\\sqrt{5}/3\\approx3.73$ מ'/שנ'.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "The length of a rectangle increases at 4 cm/s, width decreases at 2 cm/s. When $l=10$, $w=6$, find the rate of change of area.",
+          "body_he": "אורך מלבן גדל ב-4 סמ/שנ, רוחב פוחת ב-2 סמ/שנ. כאשר $l=10$, $w=6$, מצא קצב שינוי השטח.",
+          "solution_en": "$A=lw$. $dA/dt=l\\cdot dw/dt+w\\cdot dl/dt=(10)(-2)+(6)(4)=-20+24=4\\text{ cm}^2/\\text{s}$.",
+          "solution_he": "$dA/dt=l\\cdot dw/dt+w\\cdot dl/dt=-20+24=4\\text{ סמ}^2/\\text{שנ}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A street light is 6 m high. A 1.8 m tall person walks away from it at 1.5 m/s. Find the rate at which the person's shadow lengthens.",
+          "body_he": "פנס רחוב גבוה 6 מ'. אדם גבוה 1.8 מ' מתרחק ממנו ב-1.5 מ'/שנ'. מצא את קצב התארכות הצל.",
+          "solution_en": "By similar triangles: $6/(x+s)=1.8/s\\Rightarrow 6s=1.8x+1.8s\\Rightarrow 4.2s=1.8x\\Rightarrow s=3x/7$. $ds/dt=3/7\\cdot dx/dt=3/7\\times1.5=9/14\\approx0.643$ m/s.",
+          "solution_he": "משולשים דומים: $s=3x/7$. $ds/dt=3/7\\times1.5=9/14\\approx0.643$ מ'/שנ'.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A conical tank (vertex down) has height 8 m and radius 2 m. Water drains at $3\\text{ m}^3/\\text{min}$. Find $dh/dt$ when $h=4$ m.",
+          "body_he": "מיכל חרוטי (קודקוד למטה) בגובה 8 מ' ורדיוס 2 מ'. מים מתנקזים ב-$3\\text{ מ}^3/\\text{דק}$. מצא $dh/dt$ כאשר $h=4$ מ'.",
+          "solution_en": "$r/h=2/8=1/4\\Rightarrow r=h/4$. $V=\\pi r^2h/3=\\pi h^3/48$. $dV/dt=\\pi h^2/16\\cdot dh/dt$. $-3=\\pi(16)/16\\cdot dh/dt=\\pi\\cdot dh/dt$. $dh/dt=-3/\\pi\\approx-0.955$ m/min.",
+          "solution_he": "$r=h/4$, $V=\\pi h^3/48$. $-3=\\pi\\cdot dh/dt$. $dh/dt=-3/\\pi\\approx-0.955$ מ'/דק'.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A particle moves along $y=x^2$. The $x$-coordinate increases at 3 units/s. Find $dy/dt$ when $x=2$.",
+          "body_he": "חלקיק נע לאורך $y=x^2$. קואורדינטת $x$ גדלה ב-3 יחידות/שנ'. מצא $dy/dt$ כאשר $x=2$.",
+          "solution_en": "$dy/dt=2x\\cdot dx/dt=2(2)(3)=12$ units/s.",
+          "solution_he": "$dy/dt=2(2)(3)=12$ יחידות/שנ'.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Water is pumped into a hemispherical bowl of radius 10 cm at $2\\text{ cm}^3/\\text{s}$. The volume of water at height $h$ is $V=\\pi h^2(30-h)/3$. Find $dh/dt$ when $h=5$ cm.",
+          "body_he": "מים מוזרמים לקערת חצי כדור ברדיוס 10 סמ בקצב $2\\text{ סמ}^3/\\text{שנ}$. נפח המים בגובה $h$ הוא $V=\\pi h^2(30-h)/3$. מצא $dh/dt$ כאשר $h=5$.",
+          "solution_en": "$V=\\pi(30h^2-h^3)/3$. $dV/dt=\\pi(60h-3h^2)/3\\cdot dh/dt=\\pi h(20-h)\\cdot dh/dt$. At $h=5$: $2=\\pi(5)(15)\\cdot dh/dt=75\\pi\\cdot dh/dt$. $dh/dt=2/(75\\pi)\\approx0.00849$ cm/s.",
+          "solution_he": "$dV/dt=\\pi h(20-h)\\cdot dh/dt$. ב-$h=5$: $2=75\\pi\\cdot dh/dt$. $dh/dt=2/(75\\pi)\\approx0.00849$ סמ/שנ'.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Two ships start from the same point. Ship A travels east at 20 km/h, Ship B travels north at 15 km/h. Find the rate at which the angle $\\theta$ (between the line AB and the east direction) changes after 2 hours.",
+          "body_he": "שתי ספינות יוצאות מאותה נקודה. ספינה A נוסעת מזרחה ב-20 קמ\"ש, ספינה B צפונה ב-15 קמ\"ש. מצא את קצב שינוי הזווית $\\theta$ (בין AB למזרח) לאחר 2 שעות.",
+          "solution_en": "After 2h: $x=40$, $y=30$. $\\tan\\theta=y/x=30/40=3/4$. Differentiate: $\\sec^2\\theta\\cdot d\\theta/dt=(x\\cdot dy/dt-y\\cdot dx/dt)/x^2=(40\\times15-30\\times20)/1600=(600-600)/1600=0$. So $d\\theta/dt=0$ at $t=2$ h.",
+          "solution_he": "לאחר 2 שעות: $x=40$, $y=30$. $\\tan\\theta=3/4$. $\\sec^2\\theta\\cdot d\\theta/dt=(40\\times15-30\\times20)/1600=0/1600=0$. $d\\theta/dt=0$.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Substituting specific values BEFORE differentiating.** You must differentiate first, then substitute. Substituting first kills the variable and gives zero derivatives.\n\n2. **Forgetting chain rule.** $d/dt[r^2]=2r\\cdot dr/dt$, not just $2r$.\n\n3. **Wrong sign.** If a quantity decreases, $dV/dt$ is negative. Check physical sense of the sign.\n\n4. **Not using similar triangles to eliminate a variable.** In cone problems, always reduce to one variable before differentiating.\n\n5. **Units.** Be consistent: if rate is per second, all lengths should be in the same unit.",
+      "body_he_md": "1. **הצבת ערכים ספציפיים לפני הגזירה.** חובה לגזור קודם, ואז להציב. הצבה מוקדמת מאפסת את הנגזרת.\n\n2. **שכחת כלל שרשרת.** $d/dt[r^2]=2r\\cdot dr/dt$, לא $2r$.\n\n3. **סימן שגוי.** אם גדל פוחת, $dV/dt<0$. בדוק את המשמעות הפיזיקלית.\n\n4. **אי-שימוש במשולשים דומים.** בבעיות חרוט — צמצם תמיד לשתי משתנה אחת לפני הגזירה.\n\n5. **יחידות.** שמור על עקביות יחידות."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Golden rule:** Never substitute specific values before differentiating.\n\n**Process:**\n1. Draw diagram.\n2. Label variables, write equation.\n3. Reduce variables (similar triangles if needed).\n4. Differentiate w.r.t. $t$.\n5. Substitute, solve.\n\n**Formulas:**\n- $dA/dt=2\\pi r\\cdot dr/dt$ (circle area)\n- $dV/dt=4\\pi r^2\\cdot dr/dt$ (sphere volume)\n- Cone: substitute $r=kh$ first, then differentiate.\n- Pythagoras: $2a\\dot{a}+2b\\dot{b}=0$ (if $c$ fixed).",
+      "body_he_md": "**כלל זהב:** לעולם אל תציב ערכים ספציפיים לפני הגזירה.\n\n**תהליך:**\n1. ציור.\n2. משתנים ומשוואה.\n3. צמצום משתנים.\n4. גזירה לפי $t$.\n5. הצבה ופתרון.\n\n**נוסחאות:**\n- $dA/dt=2\\pi r\\cdot dr/dt$ (מעגל)\n- $dV/dt=4\\pi r^2\\cdot dr/dt$ (כדור)\n- חרוט: הצב $r=kh$ קודם."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Related rates** = implicit differentiation w.r.t. $t$: find one rate from another.\n- Always differentiate BEFORE substituting specific values.\n- Use geometry (Pythagoras, similar triangles) to relate quantities.\n- For cones: reduce to one variable using $r/h=\\text{const}$ before differentiating.\n- Check signs: positive rate = quantity increasing; negative = decreasing.",
+      "body_he_md": "- **קצבי שינוי מקושרים** = גזירה סמויה לפי $t$: מציאת קצב אחד מתוך אחר.\n- תמיד גזור לפני הצבת ערכים ספציפיים.\n- השתמש בגיאומטריה (פיתגורס, משולשים דומים) לקישור.\n- לחרוטים: צמצם למשתנה אחד לפני הגזירה.\n- בדוק סימנים: חיובי = גדל; שלילי = קטן."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Optimization Related Rates."
+  ]
 }

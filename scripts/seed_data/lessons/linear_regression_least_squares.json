@@ -1,224 +1,233 @@
 {
-  "id": "linear_regression_least_squares",
-  "type": "interactive",
-  "subject": "statistics_probability",
-  "title_en": "Linear Regression — Least Squares Method",
+  "concept_id": "linear_regression_least_squares",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["statistics"],
+  "title_en": "Linear Regression — Least Squares",
   "title_he": "רגרסיה לינארית — שיטת הריבועים הפחותים",
-  "duration_min": 25,
-  "level_min": "university",
-  "agent_hints": "Students confuse correlation (r) with causation, and often misinterpret R^2 (e.g. thinking R^2=0.81 means 81 data points fit perfectly). Stress: (1) r measures linear association strength, not causation; (2) R^2 is the proportion of variance in y explained by the linear model; (3) the OLS line always passes through (x-bar, y-bar); (4) extrapolation is unreliable because the linear pattern may not hold outside the observed range. At university level, students should be able to derive the OLS formulas by minimizing SS_res with calculus.",
+  "summary_en": "Least squares regression: deriving the slope estimator, intercept, residuals, R-squared, and inference on regression coefficients.",
+  "summary_he": "רגרסיה בריבועים פחותים: גזירת אומד השיפוע, נקודת החיתוך, שאריות, R-squared, והסקה על מקדמי הרגרסיה.",
+  "est_minutes": 55,
   "sections": [
     {
-      "id": "problem_setup",
-      "title_en": "Problem Setup — Fitting a Line to Data",
-      "title_he": "הגדרת הבעיה — התאמת ישר לנתונים",
-      "level_min": "university",
-      "body_en_md": "Given $n$ data points $(x_1, y_1), (x_2, y_2), \\ldots, (x_n, y_n)$, we want to find the line $\\hat{y} = a + bx$ that best fits the data.\n\n**Why not just connect all points?** With real data, no single line passes through all points (measurement error, natural variability). We need a principled criterion for \"best fit.\"\n\n**Least Squares Criterion.** For a line $\\hat{y} = a + bx$, define the **residual** for observation $i$ as:\n$$e_i = y_i - \\hat{y}_i = y_i - (a + bx_i).$$\n\nThe **residual sum of squares** is:\n$$SS_{\\text{res}} = \\sum_{i=1}^n e_i^2 = \\sum_{i=1}^n (y_i - a - bx_i)^2.$$\n\nOLS (**ordinary least squares**) chooses $a$ and $b$ to **minimize** $SS_{\\text{res}}$. This minimization is done by calculus: set $\\partial SS_{\\text{res}}/\\partial a = 0$ and $\\partial SS_{\\text{res}}/\\partial b = 0$, then solve the **normal equations**.",
-      "body_he_md": "נתונים $n$ נקודות $(x_1, y_1), \\ldots, (x_n, y_n)$. רוצים למצוא ישר $\\hat{y} = a + bx$ המתאים ביותר לנתונים.\n\n**למה לא רק לחבר את כל הנקודות?** בנתונים אמיתיים, אין ישר אחד שעובר דרך כל הנקודות. צריך קריטריון מעוגן ל“התאמה הטובה ביותר”.\n\n**קריטריון הריבועים הפחותים.** עבור ישר $\\hat{y} = a + bx$, ה**שארית** עבור תצפית $i$:\n$$e_i = y_i - \\hat{y}_i = y_i - (a + bx_i).$$\n\n**סכום ריבועי השאריות:**\n$$SS_{\\text{res}} = \\sum_{i=1}^n (y_i - a - bx_i)^2.$$\n\nOLS בוחר $a$ ו-$b$ המ**מזערים** את $SS_{\\text{res}}$ באמצעות חשבון דיפרנציאלי."
+      "kind": "intro",
+      "title_en": "The Principle of Least Squares",
+      "title_he": "עיקרון הריבועים הפחותים",
+      "body_en_md": "Given data $(x_1,y_1),\\ldots,(x_n,y_n)$, we want a line $\\hat{y}=\\hat{\\beta}_0+\\hat{\\beta}_1 x$ that fits the data as closely as possible. \"Closest\" is defined by minimising the **sum of squared residuals**:\n$$\\text{SSR} = \\sum_{i=1}^n (y_i - \\hat{y}_i)^2 = \\sum_{i=1}^n (y_i - \\hat{\\beta}_0 - \\hat{\\beta}_1 x_i)^2.$$\nThe line that achieves this minimum is the **Ordinary Least Squares (OLS)** regression line, and the resulting estimators have the best possible properties (BLUE: Best Linear Unbiased Estimators) when classical assumptions hold.",
+      "body_he_md": "בהינתן נתונים $(x_1,y_1),\\ldots,(x_n,y_n)$, אנו רוצים קו $\\hat{y}=\\hat{\\beta}_0+\\hat{\\beta}_1 x$ שמתאים לנתונים הכי טוב שניתן. \"הכי טוב\" מוגדר על ידי מינימיזציה של **סכום ריבועי השאריות**:\n$$\\text{SSR}=\\sum_{i=1}^n(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i)^2.$$\nהקו שמשיג מינימום זה הוא קו **רגרסיה OLS**, ולאומדים המתקבלים יש תכונות אופטימליות (BLUE) כאשר ההנחות הקלאסיות מתקיימות."
     },
     {
-      "id": "ols_formulas",
-      "title_en": "OLS Formulas",
-      "title_he": "נוסחאות OLS",
-      "level_min": "university",
-      "body_en_md": "Minimizing $SS_{\\text{res}}$ by setting partial derivatives to zero yields the **OLS formulas**:\n\n$$\\boxed{b = \\frac{S_{xy}}{S_{xx}} = \\frac{\\sum_{i=1}^n (x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_{i=1}^n (x_i - \\bar{x})^2}, \\qquad a = \\bar{y} - b\\bar{x},}$$\n\nwhere $\\bar{x} = \\frac{1}{n}\\sum x_i$ and $\\bar{y} = \\frac{1}{n}\\sum y_i$ are the sample means.\n\n**Equivalent forms for computation:**\n$$S_{xx} = \\sum x_i^2 - n\\bar{x}^2, \\quad S_{xy} = \\sum x_i y_i - n\\bar{x}\\bar{y}, \\quad S_{yy} = \\sum y_i^2 - n\\bar{y}^2.$$\n\n**Key property:** The OLS regression line always passes through the point $(\\bar{x}, \\bar{y})$ (the center of mass of the data).\n\n**Interpretation of $b$:** A one-unit increase in $x$ is associated with a $b$-unit change in the predicted $y$. This is an association, not necessarily causation.",
-      "body_he_md": "הקטנת $SS_{\\text{res}}$ על ידי אפסוס נגזרות חלקיות נותנת את **נוסחאות OLS**:\n\n$$\\boxed{b = \\frac{S_{xy}}{S_{xx}}, \\qquad a = \\bar{y} - b\\bar{x}.}$$\n\n**צורות שיקוליות לחישוב:**\n$$S_{xx} = \\sum x_i^2 - n\\bar{x}^2, \\quad S_{xy} = \\sum x_i y_i - n\\bar{x}\\bar{y}.$$\n\n**תכונה מרכזית:** ישר הרגרסיה עובר תמיד דרך $(\\bar{x}, \\bar{y})$.\n\n**פירוש $b$:** עלייה ביחידה אחת ב-$x$ קשורה לשינוי של $b$ יחידות ב-$\\hat{y}$ החזוי (קשר, לא בהכרח סיבתיות)."
+      "kind": "definition",
+      "title_en": "OLS Estimators and Key Quantities",
+      "title_he": "אומדני OLS וגדלים מרכזיים",
+      "body_en_md": "**OLS slope and intercept:**\n$$\\hat{\\beta}_1 = \\frac{\\sum_{i=1}^n (x_i-\\bar{x})(y_i-\\bar{y})}{\\sum_{i=1}^n (x_i-\\bar{x})^2} = \\frac{S_{xy}}{S_{xx}}, \\qquad \\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}.$$\n\n**Predicted value:** $\\hat{y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 x_i$.\n\n**Residual:** $e_i = y_i - \\hat{y}_i$. Properties: $\\sum e_i = 0$ and $\\sum x_i e_i = 0$.\n\n**Total, Explained, Residual sum of squares:**\n$$\\text{SST} = \\sum(y_i-\\bar{y})^2, \\quad \\text{SSE} = \\sum\\hat{y}_i^2 \\text{ terms}, \\quad \\text{SSR} = \\sum e_i^2.$$\n$$\\text{SST} = \\text{SSE} + \\text{SSR}.$$\n\n**Coefficient of determination:**\n$$R^2 = 1 - \\frac{\\text{SSR}}{\\text{SST}} = \\frac{\\text{SSE}}{\\text{SST}} = r^2.$$\n$R^2$ is the proportion of total variance in $y$ explained by the regression.\n\n**Residual standard error:** $s = \\sqrt{\\text{SSR}/(n-2)}$ (estimates $\\sigma$).",
+      "body_he_md": "**אומדני OLS:**\n$$\\hat{\\beta}_1=\\frac{S_{xy}}{S_{xx}}, \\qquad \\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}.$$\n\n**ערך חזוי:** $\\hat{y}_i=\\hat{\\beta}_0+\\hat{\\beta}_1 x_i$.\n\n**שארית:** $e_i=y_i-\\hat{y}_i$. תכונות: $\\sum e_i=0$ ו-$\\sum x_i e_i=0$.\n\n**פירוק שונות:**\n$$\\text{SST}=\\text{SSE}+\\text{SSR}.$$\n\n**$R^2$:** $R^2=1-\\text{SSR}/\\text{SST}$ — שיעור שונות ב-$y$ מוסבר על ידי הרגרסיה.\n\n**שגיאה סטנדרטית:** $s=\\sqrt{\\text{SSR}/(n-2)}$."
     },
     {
-      "id": "correlation_r2",
-      "title_en": "Correlation Coefficient and $R^2$",
-      "title_he": "מקדם המתאם ו-$R^2$",
-      "level_min": "university",
-      "body_en_md": "**Pearson correlation coefficient:**\n$$r = \\frac{S_{xy}}{\\sqrt{S_{xx}\\, S_{yy}}}, \\quad -1 \\leq r \\leq 1.$$\n\n- $r = 1$: perfect positive linear relationship.\n- $r = -1$: perfect negative linear relationship.\n- $r = 0$: no linear association (but could have nonlinear).\n- $|r|$ close to 1: strong linear association; close to 0: weak.\n\n**Coefficient of determination:**\n$$R^2 = r^2, \\quad 0 \\leq R^2 \\leq 1.$$\n\n$R^2$ is the **proportion of total variance in $y$ explained by the linear regression on $x$**.\n\nEquivalently: $R^2 = 1 - SS_{\\text{res}} / SS_{\\text{tot}}$ where $SS_{\\text{tot}} = S_{yy}$.\n\n**Example interpretation:** $R^2 = 0.81$ means the linear model explains 81% of the variability in $y$; the remaining 19% is unexplained by $x$ alone.",
-      "body_he_md": "**מקדם המתאם של פירסון:**\n$$r = \\frac{S_{xy}}{\\sqrt{S_{xx}\\, S_{yy}}}, \\quad -1 \\leq r \\leq 1.$$\n\n- $r = 1$: קשר לינארי חיובי מושלם.\n- $r = -1$: קשר לינארי שלילי מושלם.\n- $r = 0$: אין קשר לינארי (אך יתכן קשר לא-לינארי).\n\n**מקדם הקביעות:**\n$$R^2 = r^2 = 1 - SS_{\\text{res}} / SS_{\\text{tot}}.$$\n\n$R^2$ הוא **חלק השנות הכללית ב-$y$ המוסברת על ידי הדגם הלינארי**.\n\n**דוגמה:** $R^2 = 0.81$ פירושו שהדגם מסביר 81% מהשפרות ב-$y$; 19% נותרים בלתי מוסברים על ידי $x$ לבדו."
+      "kind": "theory",
+      "title_en": "OLS Assumptions and BLUE Property",
+      "title_he": "הנחות OLS ותכונת BLUE",
+      "body_en_md": "**Classical OLS assumptions (Gauss-Markov):**\n1. Linearity: $y_i = \\beta_0+\\beta_1 x_i + \\varepsilon_i$.\n2. Fixed $x_i$ (or $x_i$ independent of $\\varepsilon_i$).\n3. $E[\\varepsilon_i] = 0$ for all $i$.\n4. $\\text{Var}(\\varepsilon_i) = \\sigma^2$ (homoscedasticity).\n5. $\\text{Cov}(\\varepsilon_i, \\varepsilon_j) = 0$ for $i\\neq j$ (no autocorrelation).\n\n**Gauss-Markov theorem:** Under these assumptions, the OLS estimators are BLUE — Best (minimum variance) Linear Unbiased Estimators.\n\n**For inference** (add normality $\\varepsilon_i\\sim N(0,\\sigma^2)$):\n$$\\frac{\\hat{\\beta}_1-\\beta_1}{s/\\sqrt{S_{xx}}} \\sim t(n-2).$$",
+      "body_he_md": "**הנחות OLS קלאסיות (גאוס-מרקוב):**\n1. לינאריות: $y_i=\\beta_0+\\beta_1 x_i+\\varepsilon_i$.\n2. $x_i$ קבוע או בלתי-תלוי ב-$\\varepsilon_i$.\n3. $E[\\varepsilon_i]=0$.\n4. $\\text{Var}(\\varepsilon_i)=\\sigma^2$ (הומוסקדסטיות).\n5. $\\text{Cov}(\\varepsilon_i,\\varepsilon_j)=0$ (ללא אוטוקורלציה).\n\n**משפט גאוס-מרקוב:** תחת הנחות אלה, OLS הוא BLUE.\n\n**להסקה** (עם נורמליות):\n$$\\frac{\\hat{\\beta}_1-\\beta_1}{s/\\sqrt{S_{xx}}}\\sim t(n-2).$$"
     },
     {
-      "id": "worked_example",
-      "title_en": "Worked Example",
-      "title_he": "דוגמה מלאה",
-      "level_min": "university",
-      "body_en_md": "**Example.** Five students’ study hours ($x$) and exam scores ($y$):\n\n| $x$ | 1 | 2 | 3 | 4 | 5 |\n|-----|---|---|---|---|---|\n| $y$ | 50 | 55 | 65 | 70 | 80 |\n\n**Step 1.** $\\bar{x} = 3$, $\\bar{y} = 64$.\n\n**Step 2.** $S_{xx} = (1-3)^2+(2-3)^2+(3-3)^2+(4-3)^2+(5-3)^2 = 4+1+0+1+4 = 10$.\n\n$S_{xy} = (1-3)(50-64)+(2-3)(55-64)+(3-3)(65-64)+(4-3)(70-64)+(5-3)(80-64)$\n$= (-2)(-14)+(-1)(-9)+(0)(1)+(1)(6)+(2)(16) = 28+9+0+6+32 = 75$.\n\n**Step 3.** $b = S_{xy}/S_{xx} = 75/10 = 7.5$. $a = \\bar{y} - b\\bar{x} = 64 - 7.5 \\cdot 3 = 41.5$.\n\n**Regression line:** $\\hat{y} = 41.5 + 7.5x$.\n\n**Step 4.** $S_{yy} = (-14)^2+(-9)^2+1^2+6^2+16^2 = 196+81+1+36+256 = 570$.\n$r = S_{xy}/\\sqrt{S_{xx}S_{yy}} = 75/\\sqrt{10 \\cdot 570} = 75/\\sqrt{5700} \\approx 75/75.5 \\approx 0.993$.\n$R^2 \\approx 0.986$: the model explains 98.6% of variance in scores.",
-      "body_he_md": "**דוגמה.** חמישה סטודנטים, שעות לימוד ($x$) וציון ($y$):\n\n| $x$ | 1 | 2 | 3 | 4 | 5 |\n|-----|---|---|---|---|---|\n| $y$ | 50 | 55 | 65 | 70 | 80 |\n\n$\\bar{x} = 3$, $\\bar{y} = 64$. $S_{xx} = 10$, $S_{xy} = 75$.\n\n$b = 75/10 = 7.5$, $a = 64 - 22.5 = 41.5$.\n\n**ישר הרגרסיה:** $\\hat{y} = 41.5 + 7.5x$.\n\n$r \\approx 0.993$, $R^2 \\approx 0.986$: הדגם מסביר 98.6% מהשפרות בציונים."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Computing OLS Slope and Intercept",
+      "title_he": "דוגמה פתורה 1 — חישוב שיפוע ונקודת חיתוך OLS",
+      "body_en_md": "**Data:** $(x,y)$: $(1,2),(2,3),(3,5),(4,4),(5,6)$.\n\n**Step 1 — Means:** $\\bar{x}=3$, $\\bar{y}=4$.\n\n**Step 2 — $S_{xy}$ and $S_{xx}$:**\n\n| $i$ | $x_i-\\bar{x}$ | $y_i-\\bar{y}$ | product | $(x-\\bar{x})^2$ |\n|---|---|---|---|---|\n| 1 | -2 | -2 | 4 | 4 |\n| 2 | -1 | -1 | 1 | 1 |\n| 3 | 0 | 1 | 0 | 0 |\n| 4 | 1 | 0 | 0 | 1 |\n| 5 | 2 | 2 | 4 | 4 |\n| **Sum** | | | **9** | **10** |\n\n$$\\hat{\\beta}_1 = \\frac{9}{10} = 0.9, \\qquad \\hat{\\beta}_0 = 4 - 0.9 \\times 3 = 4 - 2.7 = 1.3.$$\n\n**Regression line:** $\\hat{y} = 1.3 + 0.9x$.\n\n**Interpretation:** For each 1-unit increase in $x$, predicted $y$ increases by 0.9.",
+      "body_he_md": "**נתונים:** $(x,y)$: $(1,2),(2,3),(3,5),(4,4),(5,6)$.\n\n**שלב 1:** $\\bar{x}=3$, $\\bar{y}=4$.\n\n**שלב 2:** $S_{xy}=9$, $S_{xx}=10$.\n\n$$\\hat{\\beta}_1=\\frac{9}{10}=0.9, \\qquad \\hat{\\beta}_0=4-0.9\\times3=1.3.$$\n\n**קו רגרסיה:** $\\hat{y}=1.3+0.9x$.\n\n**פרשנות:** לכל עלייה של 1 ב-$x$, $y$ החזוי עולה ב-0.9."
     },
     {
-      "id": "prediction_residuals",
-      "title_en": "Prediction, Residuals, and Diagnostics",
-      "title_he": "נבואה, שאריות ודיאגנוסטיקה",
-      "level_min": "university",
-      "body_en_md": "**Prediction.** For a new $x_0$, predict $\\hat{y}_0 = a + bx_0$.\n\n**Interpolation vs. extrapolation:** Interpolation (predicting within the range of observed $x$ values) is generally reliable. **Extrapolation** (predicting outside this range) is risky — the linear pattern may not extend.\n\n**Residuals.** $e_i = y_i - \\hat{y}_i$. Key properties of OLS residuals:\n- $\\sum e_i = 0$ (residuals sum to zero)\n- $\\sum x_i e_i = 0$ (residuals are uncorrelated with $x$)\n\n**Residual plot.** Plot $e_i$ vs. $\\hat{y}_i$ (or vs. $x_i$). A good model shows:\n- Residuals scattered randomly around 0 (no pattern).\n- Roughly constant spread (homoscedasticity).\n\nPatterns in residuals (curved trend, funnel shape, outliers) suggest the linear model is inadequate.",
-      "body_he_md": "**נבואה.** עבור $x_0$ חדש: $\\hat{y}_0 = a + bx_0$.\n\n**אינטרפולציה מול אקסטרפולציה:** אינטרפולציה (תחזית בתחום $x$ הנצפה) בדרך כלל אמינה. **אקסטרפולציה** (מחוץ לתחום) מסוכנת — הדפוס הלינארי עשוי לא להתקיים.\n\n**שאריות.** $e_i = y_i - \\hat{y}_i$. \n\n**גרף שאריות.** משרטטים $e_i$ מול $\\hat{y}_i$. דגם טוב מראה: פיזור אקראי סביב 0 (ללא דפוס). דפוסים בשאריות מרמזים שהדגם הלינארי אינו מתאים."
-    }
-  ],
-  "questions": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For data with $\\bar{x}=5$, $\\bar{y}=20$, $S_{xy}=30$, $S_{xx}=15$, find $\\hat{\\beta}_1$ and $\\hat{\\beta}_0$.",
+      "body_he_md": "עבור נתונים עם $\\bar{x}=5$, $\\bar{y}=20$, $S_{xy}=30$, $S_{xx}=15$, מצא $\\hat{\\beta}_1$ ו-$\\hat{\\beta}_0$.",
+      "checkpoint_solution_en": "$\\hat{\\beta}_1=30/15=2$. $\\hat{\\beta}_0=20-2(5)=10$. Line: $\\hat{y}=10+2x$.",
+      "checkpoint_solution_he": "$\\hat{\\beta}_1=2$, $\\hat{\\beta}_0=10$. קו: $\\hat{y}=10+2x$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "Which formula correctly gives the OLS slope $b$?",
-      "body_he": "איזו נוסחא נותנת נכון את שיפוע OLS $b$?",
-      "options": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Computing $R^2$ and Residuals",
+      "title_he": "דוגמה פתורה 2 — חישוב $R^2$ ושאריות",
+      "body_en_md": "Using the data from Example 1 ($\\hat{y}=1.3+0.9x$), compute residuals, SSR, SST, and $R^2$.\n\n**Residuals:**\n\n| $i$ | $x_i$ | $y_i$ | $\\hat{y}_i=1.3+0.9x_i$ | $e_i=y_i-\\hat{y}_i$ | $e_i^2$ | $(y_i-\\bar{y})^2$ |\n|---|---|---|---|---|---|---|\n| 1 | 1 | 2 | 2.2 | -0.2 | 0.04 | 4 |\n| 2 | 2 | 3 | 3.1 | -0.1 | 0.01 | 1 |\n| 3 | 3 | 5 | 4.0 | 1.0 | 1.00 | 1 |\n| 4 | 4 | 4 | 4.9 | -0.9 | 0.81 | 0 |\n| 5 | 5 | 6 | 5.8 | 0.2 | 0.04 | 4 |\n| **Sum** | | | | **0** | **1.90** | **10** |\n\n$$\\text{SSR} = 1.90, \\quad \\text{SST} = 10, \\quad R^2 = 1 - \\frac{1.90}{10} = 0.81.$$\n\n**Interpretation:** 81% of the variance in $y$ is explained by the linear relationship with $x$.",
+      "body_he_md": "משתמשים בנתוני דוגמה 1 ($\\hat{y}=1.3+0.9x$). חשב שאריות, SSR, SST ו-$R^2$.\n\n**שאריות:** (ראה טבלה)\n\n$$\\text{SSR}=1.90, \\quad \\text{SST}=10, \\quad R^2=1-1.90/10=0.81.$$\n\n**פרשנות:** 81% מהשונות ב-$y$ מוסברת על ידי הקשר הלינארי עם $x$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A regression has SST = 200 and SSR = 50. Find $R^2$ and interpret it.",
+      "body_he_md": "לרגרסיה SST = 200 ו-SSR = 50. מצא $R^2$ ופרש אותו.",
+      "checkpoint_solution_en": "$R^2 = 1-50/200 = 0.75$. 75% of the variance in $y$ is explained by the regression model.",
+      "checkpoint_solution_he": "$R^2=0.75$. 75% מהשונות ב-$y$ מוסברת על ידי מודל הרגרסיה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Deriving the OLS Formulas",
+      "title_he": "דוגמה פתורה 3 — גזירת נוסחאות OLS",
+      "body_en_md": "**Derive the formulas for $\\hat{\\beta}_0$ and $\\hat{\\beta}_1$ that minimise SSR.**\n\n**Step 1 — Define the objective:**\n$$Q = \\sum_{i=1}^n (y_i - \\beta_0 - \\beta_1 x_i)^2.$$\n\n**Step 2 — First-order conditions** (set partial derivatives to zero):\n$$\\frac{\\partial Q}{\\partial \\beta_0} = -2\\sum(y_i-\\beta_0-\\beta_1 x_i) = 0 \\Rightarrow \\sum y_i = n\\beta_0 + \\beta_1\\sum x_i. \\quad (1)$$\n$$\\frac{\\partial Q}{\\partial \\beta_1} = -2\\sum x_i(y_i-\\beta_0-\\beta_1 x_i) = 0 \\Rightarrow \\sum x_iy_i = \\beta_0\\sum x_i + \\beta_1\\sum x_i^2. \\quad (2)$$\n\n**Step 3 — Solve:** Divide equation (1) by $n$: $\\bar{y} = \\beta_0 + \\beta_1\\bar{x} \\Rightarrow \\hat{\\beta}_0 = \\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n\nSubstitute into (2) and simplify:\n$$\\sum x_i y_i - n\\bar{x}\\bar{y} = \\hat{\\beta}_1(\\sum x_i^2 - n\\bar{x}^2)$$\n$$\\Rightarrow \\hat{\\beta}_1 = \\frac{\\sum x_iy_i - n\\bar{x}\\bar{y}}{\\sum x_i^2 - n\\bar{x}^2} = \\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$",
+      "body_he_md": "**גזור את הנוסחאות ל-$\\hat{\\beta}_0$ ו-$\\hat{\\beta}_1$ שממזערות SSR.**\n\n**שלב 1:** $Q=\\sum(y_i-\\beta_0-\\beta_1 x_i)^2$.\n\n**שלב 2 — תנאי ראשון:**\n$$\\partial Q/\\partial\\beta_0=0 \\Rightarrow \\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}.$$\n$$\\partial Q/\\partial\\beta_1=0 \\Rightarrow \\hat{\\beta}_1=\\frac{\\sum x_iy_i-n\\bar{x}\\bar{y}}{\\sum x_i^2-n\\bar{x}^2}=\\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — OLS Regression Procedure",
+      "title_he": "מדריך שיטה — נוהל רגרסיה OLS",
+      "body_en_md": "1. Compute $\\bar{x}$, $\\bar{y}$.\n2. Compute $S_{xx}=\\sum(x_i-\\bar{x})^2$, $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$.\n3. $\\hat{\\beta}_1=S_{xy}/S_{xx}$; $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n4. Compute residuals $e_i=y_i-\\hat{y}_i$; verify $\\sum e_i=0$.\n5. $\\text{SSR}=\\sum e_i^2$; $\\text{SST}=S_{yy}=\\sum(y_i-\\bar{y})^2$.\n6. $R^2=1-\\text{SSR}/\\text{SST}$.\n7. $s=\\sqrt{\\text{SSR}/(n-2)}$ (residual standard error).\n\n| Quantity | Formula |\n|---|---|\n| Slope | $S_{xy}/S_{xx}$ |\n| Intercept | $\\bar{y}-\\hat{\\beta}_1\\bar{x}$ |\n| $R^2$ | $1-\\text{SSR}/\\text{SST}$ |\n| $r$ | $\\pm\\sqrt{R^2}$ (sign = sign of $\\hat{\\beta}_1$) |",
+      "body_he_md": "1. חשב $\\bar{x}$, $\\bar{y}$.\n2. $S_{xx}$, $S_{xy}$.\n3. $\\hat{\\beta}_1=S_{xy}/S_{xx}$; $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n4. שאריות $e_i$; אמת $\\sum e_i=0$.\n5. SSR, SST.\n6. $R^2=1-\\text{SSR}/\\text{SST}$.\n\n| גדל | נוסחה |\n|---|---|\n| שיפוע | $S_{xy}/S_{xx}$ |\n| נקודת חיתוך | $\\bar{y}-\\hat{\\beta}_1\\bar{x}$ |\n| $R^2$ | $1-\\text{SSR}/\\text{SST}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$b = \\dfrac{\\sum(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum(y_i - \\bar{y})^2}$",
-          "text_he": "$b = \\dfrac{\\sum(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum(y_i - \\bar{y})^2}$",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Data: $\\bar{x}=4$, $\\bar{y}=10$, $S_{xy}=20$, $S_{xx}=5$. Find the regression line.",
+          "body_he": "נתונים: $\\bar{x}=4$, $\\bar{y}=10$, $S_{xy}=20$, $S_{xx}=5$. מצא קו הרגרסיה.",
+          "solution_en": "$\\hat{\\beta}_1=4$. $\\hat{\\beta}_0=10-16=-6$. Line: $\\hat{y}=-6+4x$.",
+          "solution_he": "$\\hat{\\beta}_1=4$, $\\hat{\\beta}_0=-6$. קו: $\\hat{y}=-6+4x$.",
+          "points": 4
         },
         {
-          "id": "b",
-          "text_en": "$b = \\dfrac{\\sum(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum(x_i - \\bar{x})^2}$",
-          "text_he": "$b = \\dfrac{\\sum(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum(x_i - \\bar{x})^2}$",
-          "correct": true
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "The regression line always passes through which point?",
+          "body_he": "קו הרגרסיה תמיד עובר דרך איזו נקודה?",
+          "solution_en": "The centroid $(\\bar{x},\\bar{y})$. This follows from $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.",
+          "solution_he": "הנקודה $( \\bar{x},\\bar{y})$. נובע מ-$\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.",
+          "points": 4
         },
         {
-          "id": "c",
-          "text_en": "$b = \\dfrac{\\bar{y}}{\\bar{x}}$",
-          "text_he": "$b = \\dfrac{\\bar{y}}{\\bar{x}}$",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "SST = 100, SSR = 20. Find $R^2$.",
+          "body_he": "SST = 100, SSR = 20. מצא $R^2$.",
+          "solution_en": "$R^2=1-20/100=0.80$.",
+          "solution_he": "$R^2=0.80$.",
+          "points": 4
         },
         {
-          "id": "d",
-          "text_en": "$b = \\dfrac{\\sum x_i y_i}{\\sum x_i^2}$",
-          "text_he": "$b = \\dfrac{\\sum x_i y_i}{\\sum x_i^2}$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Verify that for residuals: $\\sum e_i = 0$ when $\\hat{\\beta}_0$ is the OLS intercept.",
+          "body_he": "אמת שלשאריות: $\\sum e_i=0$ כאשר $\\hat{\\beta}_0$ הוא נקודת החיתוך של OLS.",
+          "solution_en": "$\\sum e_i = \\sum(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i = n\\bar{y}-n(\\bar{y}-\\hat{\\beta}_1\\bar{x})-\\hat{\\beta}_1 n\\bar{x}=0$. $\\blacksquare$",
+          "solution_he": "$\\sum e_i=\\sum y_i-n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i=n\\bar{y}-n\\bar{y}=0$. $\\blacksquare$",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Data: $(2,5),(4,9),(6,11),(8,13),(10,17)$. Compute $\\hat{\\beta}_1$ and $\\hat{\\beta}_0$.",
+          "body_he": "נתונים: $(2,5),(4,9),(6,11),(8,13),(10,17)$. חשב $\\hat{\\beta}_1$ ו-$\\hat{\\beta}_0$.",
+          "solution_en": "$\\bar{x}=6$, $\\bar{y}=11$. $S_{xy}=(2-6)(5-11)+...=(-4)(-6)+(-2)(-2)+(0)(0)+(2)(2)+(4)(6)=24+4+0+4+24=56$. $S_{xx}=16+4+0+4+16=40$. $\\hat{\\beta}_1=56/40=1.4$. $\\hat{\\beta}_0=11-1.4(6)=11-8.4=2.6$. Line: $\\hat{y}=2.6+1.4x$.",
+          "solution_he": "$S_{xy}=56$, $S_{xx}=40$. $\\hat{\\beta}_1=1.4$, $\\hat{\\beta}_0=2.6$. קו: $\\hat{y}=2.6+1.4x$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Using the line from e5, compute $R^2$. First find SST.",
+          "body_he": "בעזרת הקו מ-e5, חשב $R^2$. מצא קודם SST.",
+          "solution_en": "$S_{yy}=(-6)^2+(-2)^2+0^2+2^2+6^2=36+4+0+4+36=80=\\text{SST}$. SSR $=\\sum e_i^2$: $e_1=5-5.4=-0.4$; $e_2=9-8.2=0.8$; $e_3=11-11=0$; $e_4=13-13.8=-0.8$; $e_5=17-16.6=0.4$. SSR $=0.16+0.64+0+0.64+0.16=1.6$. $R^2=1-1.6/80=0.98$.",
+          "solution_he": "SST $=80$. SSR $=1.6$. $R^2=0.98$. פרשנות: 98% מהשונות מוסברת.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Prove that $R^2 = r^2$ (the square of the Pearson correlation).",
+          "body_he": "הוכח ש-$R^2=r^2$ (ריבוע מקדם המתאם של פירסון).",
+          "solution_en": "$\\hat{\\beta}_1=S_{xy}/S_{xx}$. $\\text{SSE (explained)} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2=\\text{SSE}/\\text{SST}=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$",
+          "solution_he": "$\\text{SSE}=\\hat{\\beta}_1^2 S_{xx}=S_{xy}^2/S_{xx}$. $R^2=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A regression has $n=20$, SSR = 40. Find the residual standard error $s$.",
+          "body_he": "לרגרסיה עם $n=20$, SSR = 40. מצא שגיאה סטנדרטית $s$.",
+          "solution_en": "$s=\\sqrt{40/(20-2)}=\\sqrt{40/18}=\\sqrt{2.22}\\approx1.49$.",
+          "solution_he": "$s=\\sqrt{40/18}\\approx1.49$.",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Explain why the least-squares line minimises sum of SQUARED residuals rather than sum of absolute residuals.",
+          "body_he": "הסבר מדוע קו הריבועים הפחותים ממזער סכום ריבועי השאריות ולא סכום ערכים מוחלטים.",
+          "solution_en": "1. Squaring makes large deviations count more (penalises outliers). 2. The squared criterion leads to a closed-form analytical solution via calculus (differentiation). 3. It gives the BLUE estimators (Gauss-Markov). Minimising absolute values gives the LAD (Least Absolute Deviations) regression, which is more robust to outliers but harder to compute.",
+          "solution_he": "1. ריבועים מעניקים משקל גדול יותר לסטיות גדולות. 2. הקריטריון הריבועי מוביל לפתרון אנליטי (גזירה). 3. נותן אומדני BLUE (גאוס-מרקוב). מינימיזציה של ערכים מוחלטים נותנת LAD — עמיד יותר לערכים קיצוניים אך קשה יותר לחישוב.",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\hat{\\beta}_1$ is unbiased for $\\beta_1$ under the classical OLS assumptions.",
+          "body_he": "הוכח ש-$\\hat{\\beta}_1$ חסר הטיה ל-$\\beta_1$ תחת הנחות OLS הקלאסיות.",
+          "solution_en": "$\\hat{\\beta}_1=S_{xy}/S_{xx}=\\sum(x_i-\\bar{x})y_i/S_{xx}$. Since $y_i=\\beta_0+\\beta_1 x_i+\\varepsilon_i$: $\\hat{\\beta}_1=\\beta_1\\sum(x_i-\\bar{x})x_i/S_{xx}+\\sum(x_i-\\bar{x})\\varepsilon_i/S_{xx}$. The first term equals $\\beta_1$ (since $\\sum(x_i-\\bar{x})x_i=S_{xx}$). Taking expectation: $E[\\hat{\\beta}_1]=\\beta_1+0=\\beta_1$ (since $E[\\varepsilon_i]=0$). $\\blacksquare$",
+          "solution_he": "$\\hat{\\beta}_1=\\sum(x_i-\\bar{x})y_i/S_{xx}$. הצב $y_i=\\beta_0+\\beta_1x_i+\\varepsilon_i$: $E[\\hat{\\beta}_1]=\\beta_1+\\sum(x_i-\\bar{x})E[\\varepsilon_i]/S_{xx}=\\beta_1+0=\\beta_1$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Given the regression $\\hat{y}=2+3x$ and $n=10$, SSR = 18, SST = 90. Conduct a $t$-test of $H_0:\\beta_1=0$ at $\\alpha=0.05$. ($S_{xx}=6$; $t_{0.025,8}=2.306$).",
+          "body_he": "בהינתן $\\hat{y}=2+3x$, $n=10$, SSR = 18, SST = 90. ערוך מבחן $t$ על $H_0:\\beta_1=0$ ב-$\\alpha=0.05$. ($S_{xx}=6$; $t_{0.025,8}=2.306$).",
+          "solution_en": "$s=\\sqrt{18/8}=\\sqrt{2.25}=1.5$. $\\text{SE}(\\hat{\\beta}_1)=s/\\sqrt{S_{xx}}=1.5/\\sqrt{6}\\approx0.612$. $t=3/0.612\\approx4.9$. Since $|t|=4.9>2.306$: **reject $H_0$**. The slope is significantly different from zero.",
+          "solution_he": "$s=1.5$. $\\text{SE}(\\hat{\\beta}_1)=1.5/\\sqrt{6}\\approx0.612$. $t=3/0.612\\approx4.9>2.306$: **דוחים $H_0$**. השיפוע שונה מובהקית מאפס.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that $\\text{Var}(\\hat{\\beta}_1) = \\sigma^2/S_{xx}$ under the classical OLS assumptions.",
+          "body_he": "הראה ש-$\\text{Var}(\\hat{\\beta}_1)=\\sigma^2/S_{xx}$ תחת הנחות OLS הקלאסיות.",
+          "solution_en": "$\\hat{\\beta}_1=\\sum c_i y_i$ where $c_i=(x_i-\\bar{x})/S_{xx}$. Since $y_i$ are independent with $\\text{Var}(y_i)=\\sigma^2$: $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2\\sum c_i^2=\\sigma^2\\sum(x_i-\\bar{x})^2/S_{xx}^2=\\sigma^2S_{xx}/S_{xx}^2=\\sigma^2/S_{xx}$. $\\blacksquare$",
+          "solution_he": "$\\hat{\\beta}_1=\\sum c_i y_i$ עם $c_i=(x_i-\\bar{x})/S_{xx}$. $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2\\sum c_i^2=\\sigma^2/S_{xx}$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A regression has $R^2=0.95$. A student says 'the model fits perfectly.' What cautions should be raised?",
+          "body_he": "לרגרסיה $R^2=0.95$. תלמיד אומר 'המודל מתאים בצורה מושלמת'. אילו אזהרות יש להעלות?",
+          "solution_en": "High $R^2$ does not guarantee: (1) a correctly specified model (non-linearity may exist); (2) absence of outliers that inflate $R^2$; (3) good predictions on new data (overfitting); (4) causal interpretation; (5) the other OLS assumptions are met. Always check residual plots.",
+          "solution_he": "$R^2$ גבוה אינו מבטיח: (1) מפרט מודל נכון; (2) היעדר ערכים קיצוניים; (3) ניבוי טוב על נתונים חדשים (over-fitting); (4) פרשנות סיבתית; (5) קיום הנחות OLS. תמיד בדוק גרפי שאריות.",
+          "points": 10
         }
-      ],
-      "explanation_en": "The OLS slope is $b = S_{xy}/S_{xx} = \\sum(x_i-\\bar{x})(y_i-\\bar{y}) / \\sum(x_i-\\bar{x})^2$. Option (a) divides by $S_{yy}$ instead of $S_{xx}$; option (d) is only valid when the regression passes through the origin.",
-      "explanation_he": "שיפוע OLS הוא $b = S_{xy}/S_{xx}$. אפשרות (א) מחלקת ב-$S_{yy}$ במקום $S_{xx}$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "A regression of exam score on hours studied gives $R^2 = 0.81$. Which interpretation is correct?",
-      "body_he": "רגרסיה של ציון בחינה על שעות לימוד נותנת $R^2 = 0.81$. איזה פרשנות נכונה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "81% of students scored exactly on the regression line",
-          "text_he": "81% מהסטודנטים קיבלו בדיוק את הציון הנחזה",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "81% of the variance in exam scores is explained by the linear regression on study hours",
-          "text_he": "81% מהשפרות בציונים מוסברת על ידי הרגרסיה הלינארית על שעות הלימוד",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "The correlation coefficient is $r = 0.81$",
-          "text_he": "מקדם המתאם הוא $r = 0.81$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Hours studied causes 81% improvement in exam scores",
-          "text_he": "שעות הלימוד גורמות שיפור של 81% בציונים",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$R^2 = 0.81$ means the linear model accounts for 81% of the total variability (variance) in $y$. Option (c) is wrong because $r = \\sqrt{0.81} = 0.9$, not 0.81. Option (d) is wrong because correlation does not imply causation.",
-      "explanation_he": "$R^2 = 0.81$ אומר שהדגם הלינארי מסביר 81% מהשפרות הכללית ב-$y$. אפשרות (ג) שגוייה כי $r = 0.9$, לא 0.81."
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Reversing $x$ and $y$.** The OLS line for predicting $y$ from $x$ is different from predicting $x$ from $y$ — they are not the same line!\n\n2. **Using $R^2$ as the only criterion.** A high $R^2$ can result from outliers, overfitting, or non-linearity. Always plot residuals.\n\n3. **Not checking residual plots.** If residuals show a pattern (vs. $x$ or $\\hat{y}$), the linear model is misspecified.\n\n4. **Extrapolation.** Predicting far outside the range of observed $x$ is unreliable — the linear relationship may not hold.\n\n5. **Concluding causality.** OLS measures association, not causation. A statistically significant slope does not mean $x$ *causes* $y$.",
+      "body_he_md": "1. **היפוך $x$ ו-$y$.** קו OLS לחיזוי $y$ מ-$x$ שונה מחיזוי $x$ מ-$y$ — לא אותו קו!\n\n2. **שימוש ב-$R^2$ כקריטריון יחיד.** $R^2$ גבוה יכול לנבוע מערכים קיצוניים, over-fitting, או לא-לינאריות.\n\n3. **אי-בדיקת גרפי שאריות.** אם שאריות מראות דפוס — מפרט המודל שגוי.\n\n4. **אקסטרפולציה.** חיזוי מחוץ לתחום הנתונים — לא אמין.\n\n5. **הסקת סיבתיות.** OLS מודד קשר, לא סיבתיות."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Given $\\hat{y} = 5 + 3x$, what is the predicted $y$ when $x = 4$?",
-      "body_he": "נתון $\\hat{y} = 5 + 3x$, מה הוא $y$ החזוי כאשר $x = 4$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$12$",
-          "text_he": "$12$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$17$",
-          "text_he": "$17$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$20$",
-          "text_he": "$20$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$27$",
-          "text_he": "$27$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\hat{y} = 5 + 3(4) = 5 + 12 = 17$.",
-      "explanation_he": "$\\hat{y} = 5 + 3(4) = 17$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- $\\hat{\\beta}_1=S_{xy}/S_{xx}$\n- $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$\n- $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$; $S_{xx}=\\sum(x_i-\\bar{x})^2$\n- $R^2=1-\\text{SSR}/\\text{SST}=r^2$\n- $s=\\sqrt{\\text{SSR}/(n-2)}$\n- $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2/S_{xx}$; $t$-stat $=\\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1)\\sim t(n-2)$\n\n**Exam patterns:** Compute OLS line; find $R^2$; test $H_0:\\beta_1=0$; derive OLS formulas.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $\\hat{\\beta}_1=S_{xy}/S_{xx}$\n- $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$\n- $R^2=1-\\text{SSR}/\\text{SST}$\n- $s=\\sqrt{\\text{SSR}/(n-2)}$\n- $t=\\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1)\\sim t(n-2)$"
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "A correlation of $r = -0.9$ between two variables $x$ and $y$ means:",
-      "body_he": "מתאם $r = -0.9$ בין שני משתנים $x$ ו-$y$ משמעו:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$x$ causes $y$ to decrease",
-          "text_he": "$x$ גורם ל-$y$ לרדת",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "There is a strong negative linear association between $x$ and $y$",
-          "text_he": "קשר לינארי שלילי חזק בין $x$ ל-$y$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "As $x$ increases by 1, $y$ decreases by 0.9",
-          "text_he": "כאשר $x$ עולה ב-1, $y$ יורד ב-0.9",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$R^2 = -0.81$ and the fit is poor",
-          "text_he": "$R^2 = -0.81$ וההתאמה גרועה",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$r = -0.9$ means a strong negative linear association: as $x$ tends to increase, $y$ tends to decrease. Option (c) confuses $r$ with the slope $b$ (they are proportional but not equal). Option (d) is wrong because $R^2 = r^2 = 0.81 > 0$.",
-      "explanation_he": "$r = -0.9$ משמעו קשר לינארי שלילי חזק. אפשרות (ג) מבלבלת $r$ עם $b$. אפשרות (ד) שגויית כי $R^2 = 0.81 > 0$."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "The data covers ages 20–50. Using the fitted line to predict for age 80 is problematic because:",
-      "body_he": "הנתונים מכסים גיל 20–50. שימוש בישר המותאם לחיזוי עבור גיל 80 בעייתי כיוון ש:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "The OLS formulas are only valid for small datasets",
-          "text_he": "נוסחאות OLS תקפות רק לעבור מדגמים קטנים",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "The linear relationship found in the range 20–50 may not hold at age 80 (extrapolation risk)",
-          "text_he": "הקשר הלינארי שנמצא בתחום 20–50 עשוי לא להתקיים בגיל 80 (סכנת אקסטרפולציה)",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "Age 80 is not in the dataset, so there is no residual",
-          "text_he": "גיל 80 אינו במדגם, לכן אין שארית",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "The correlation coefficient is undefined outside the data range",
-          "text_he": "מקדם המתאם אינו מוגדר מחוץ לתחום",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Extrapolation means predicting outside the range of observed data. The linear relationship seen in [20, 50] may break down, accelerate, or reverse at age 80. OLS gives no warning about this — it blindly extrapolates the line.",
-      "explanation_he": "אקסטרפולציה היא נבואה מחוץ לתחום הנצפה. הקשר הלינארי ב-[20, 50] עשוי להישבר או להיפך בגיל 80."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **OLS** minimises $\\sum(y_i-\\hat{y}_i)^2$; formulas: $\\hat{\\beta}_1=S_{xy}/S_{xx}$, $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n- **Residuals:** $e_i=y_i-\\hat{y}_i$; $\\sum e_i=0$ always.\n- **$R^2=1-\\text{SSR}/\\text{SST}$:** proportion of variance explained; equals $r^2$.\n- **Gauss-Markov:** OLS is BLUE under classical assumptions.\n- **Inference:** $t$-statistic for $\\hat{\\beta}_1$ follows $t(n-2)$ under normality.",
+      "body_he_md": "- **OLS** ממזער $\\sum e_i^2$; $\\hat{\\beta}_1=S_{xy}/S_{xx}$, $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n- **שאריות:** $e_i=y_i-\\hat{y}_i$; $\\sum e_i=0$ תמיד.\n- **$R^2=1-\\text{SSR}/\\text{SST}$:** שיעור שונות מוסבר; שווה ל-$r^2$.\n- **גאוס-מרקוב:** OLS הוא BLUE תחת הנחות קלאסיות.\n- **הסקה:** $t$-סטטיסטיקה ל-$\\hat{\\beta}_1$ מקיימת $t(n-2)$."
     }
   ]
 }

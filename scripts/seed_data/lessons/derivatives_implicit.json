@@ -2,30 +2,232 @@
   "concept_id": "derivatives_implicit",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Derivatives Implicit",
-  "title_he": "נגזרות משתמות",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "math_track": ["calculus1"],
+  "title_en": "Implicit Differentiation",
+  "title_he": "גזירה סמויה",
+  "summary_en": "Differentiating implicitly defined curves to find dy/dx, tangent lines, and second derivatives.",
+  "summary_he": "גזירת עקומות מוגדרות סמוית לצורך מציאת dy/dx, ישרי משיק, ונגזרות שניות.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Derivatives Implicit.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-נגזרות משתמות.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "When You Can't Solve for $y$",
+      "title_he": "כאשר לא ניתן לבטא את $y$ מפורשות",
+      "body_en_md": "Some curves — like $x^2+y^2=25$ (a circle) or $x^3+y^3=6xy$ (folium of Descartes) — cannot be written as $y=f(x)$ globally, yet we can still find tangent lines and rates of change at specific points. **Implicit differentiation** is the technique: differentiate both sides with respect to $x$, treating $y$ as a function of $x$, then solve for $dy/dx$.\n\nApplications: tangent lines to implicit curves, related rates, finding where a curve has a horizontal/vertical tangent.",
+      "body_he_md": "עקומות כגון $x^2+y^2=25$ (מעגל) או $x^3+y^3=6xy$ (עלה דקרט) אינן ניתנות לביטוי כ-$y=f(x)$ בכל התחום. בכל זאת ניתן למצוא ישרי משיק ושיעורי שינוי בנקודות ספציפיות. **גזירה סמויה**: גזור שני הצדדים לפי $x$, תוך יחס ל-$y$ כאל פונקציה של $x$, ואז בטא את $dy/dx$.\n\nיישומים: ישרי משיק לעקומות סמויות, קצבי שינוי מקושרים, נקודות עם משיק אופקי/אנכי."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Derivatives Implicit: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Derivatives Implicit.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-נגזרות משתמות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-נגזרות משתמות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Implicit Differentiation — The Technique",
+      "title_he": "גזירה סמויה — הטכניקה",
+      "body_en_md": "**Setup:** Given $F(x,y)=0$ (or $F(x,y)=c$), we want $\\dfrac{dy}{dx}$.\n\n**Rule:** Differentiate both sides with respect to $x$. For every term involving $y$, apply the chain rule: differentiate with respect to $y$, then multiply by $\\dfrac{dy}{dx}$.\n\n**Example pattern:**\n$$\\frac{d}{dx}[y^2] = 2y\\frac{dy}{dx}, \\qquad \\frac{d}{dx}[\\sin y] = \\cos y\\cdot\\frac{dy}{dx}, \\qquad \\frac{d}{dx}[xy] = y + x\\frac{dy}{dx}.$$\n\n**Formula (implicit function theorem):**\n$$\\frac{dy}{dx} = -\\frac{F_x}{F_y} \\qquad \\text{(when }F_y\\neq 0\\text{)}.$$\n\n**Second derivative** $\\dfrac{d^2y}{dx^2}$: differentiate $\\dfrac{dy}{dx}$ implicitly again, substituting $\\dfrac{dy}{dx}$ in the result.",
+      "body_he_md": "**הגדרה:** בהינתן $F(x,y)=0$, רוצים $\\dfrac{dy}{dx}$.\n\n**כלל:** גזור שני הצדדים לפי $x$. לכל גורם הכולל $y$, השתמש בכלל השרשרת: גזור לפי $y$ ואז כפל ב-$\\dfrac{dy}{dx}$.\n\n**דוגמאות:**\n$$\\frac{d}{dx}[y^2]=2y\\frac{dy}{dx}, \\quad \\frac{d}{dx}[\\sin y]=\\cos y\\cdot\\frac{dy}{dx}, \\quad \\frac{d}{dx}[xy]=y+x\\frac{dy}{dx}.$$\n\n**נוסחה (משפט הפונקציה הסמויה):**\n$$\\frac{dy}{dx}=-\\frac{F_x}{F_y}.$$\n\n**נגזרת שנייה:** גזור שוב את $\\dfrac{dy}{dx}$ סמוית."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Why the Chain Rule is Central",
+      "title_he": "מדוע כלל השרשרת מרכזי",
+      "body_en_md": "When we write $y$ in an equation like $x^2+y^2=r^2$, we are implicitly assuming $y=y(x)$ — a function of $x$ (at least locally near a point). The chain rule says:\n$$\\frac{d}{dx}[g(y)] = g'(y)\\cdot\\frac{dy}{dx}.$$\n\n**Key sub-rules to memorise:**\n- $\\frac{d}{dx}[y^n] = ny^{n-1}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[e^y] = e^y\\frac{dy}{dx}$\n- $\\frac{d}{dx}[\\ln y] = \\frac{1}{y}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[xy] = y+x\\frac{dy}{dx}$ (product rule)\n\n**Tangent line** at $(x_0,y_0)$: slope $m=\\left.\\dfrac{dy}{dx}\\right|_{(x_0,y_0)}$; line: $y-y_0=m(x-x_0)$.",
+      "body_he_md": "כאשר כותבים $y$ במשוואה כגון $x^2+y^2=r^2$, מניחים סמוית ש-$y=y(x)$. כלל השרשרת:\n$$\\frac{d}{dx}[g(y)]=g'(y)\\cdot\\frac{dy}{dx}.$$\n\n**כללי משנה לשינון:**\n- $\\frac{d}{dx}[y^n]=ny^{n-1}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[e^y]=e^y\\frac{dy}{dx}$\n- $\\frac{d}{dx}[\\ln y]=\\frac{1}{y}\\frac{dy}{dx}$\n- $\\frac{d}{dx}[xy]=y+x\\frac{dy}{dx}$ (כלל מכפלה)\n\n**ישר משיק** ב-$(x_0,y_0)$: שיפוע $m=dy/dx|_{(x_0,y_0)}$; ישר: $y-y_0=m(x-x_0)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Tangent to a Circle",
+      "title_he": "דוגמה פתורה 1 — משיק למעגל",
+      "body_en_md": "**Given:** $x^2+y^2=25$. Find $\\dfrac{dy}{dx}$ and the tangent line at $(3,4)$.\n\n**Step 1 — Differentiate both sides implicitly:**\n$$\\frac{d}{dx}[x^2]+\\frac{d}{dx}[y^2] = \\frac{d}{dx}[25]$$\n$$2x + 2y\\frac{dy}{dx} = 0.$$\n\n**Step 2 — Solve for $dy/dx$:**\n$$2y\\frac{dy}{dx} = -2x \\implies \\frac{dy}{dx} = -\\frac{x}{y}.$$\n\n**Step 3 — Evaluate at $(3,4)$:**\n$$\\left.\\frac{dy}{dx}\\right|_{(3,4)} = -\\frac{3}{4}.$$\n\n**Step 4 — Write the tangent line:**\n$$y - 4 = -\\frac{3}{4}(x-3) \\implies y = -\\frac{3}{4}x + \\frac{25}{4}.$$",
+      "body_he_md": "**נתון:** $x^2+y^2=25$. מצא $\\dfrac{dy}{dx}$ וישר משיק ב-$(3,4)$.\n\n**שלב 1:** גזור שני הצדדים:\n$$2x+2y\\frac{dy}{dx}=0.$$\n\n**שלב 2:** $\\dfrac{dy}{dx}=-\\dfrac{x}{y}$.\n\n**שלב 3:** ב-$(3,4)$: $\\dfrac{dy}{dx}=-\\dfrac{3}{4}$.\n\n**שלב 4:** ישר משיק: $y-4=-\\dfrac{3}{4}(x-3)$, כלומר $y=-\\dfrac{3}{4}x+\\dfrac{25}{4}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For $x^2+y^2=100$, find $dy/dx$ and the tangent line at the point $(6,8)$.",
+      "body_he_md": "עבור $x^2+y^2=100$, מצא $dy/dx$ וישר משיק ב-$(6,8)$.",
+      "checkpoint_solution_en": "$dy/dx=-x/y$. At $(6,8)$: slope $=-6/8=-3/4$. Tangent: $y-8=-3/4(x-6)$.",
+      "checkpoint_solution_he": "$dy/dx=-x/y$. ב-$(6,8)$: שיפוע $=-3/4$. ישר: $y-8=-3/4(x-6)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Implicit Differentiation with Product Rule",
+      "title_he": "דוגמה פתורה 2 — גזירה סמויה עם כלל מכפלה",
+      "body_en_md": "**Given:** $x^3+y^3=6xy$. Find $\\dfrac{dy}{dx}$.\n\n**Step 1 — Differentiate both sides:**\n$$\\frac{d}{dx}[x^3]+\\frac{d}{dx}[y^3] = \\frac{d}{dx}[6xy]$$\n$$3x^2 + 3y^2\\frac{dy}{dx} = 6\\left(y + x\\frac{dy}{dx}\\right).$$\n\n**Step 2 — Expand the right side:**\n$$3x^2 + 3y^2\\frac{dy}{dx} = 6y + 6x\\frac{dy}{dx}.$$\n\n**Step 3 — Collect $dy/dx$ terms:**\n$$3y^2\\frac{dy}{dx} - 6x\\frac{dy}{dx} = 6y - 3x^2$$\n$$\\frac{dy}{dx}(3y^2 - 6x) = 6y - 3x^2.$$\n\n**Step 4 — Solve:**\n$$\\frac{dy}{dx} = \\frac{6y-3x^2}{3y^2-6x} = \\frac{2y-x^2}{y^2-2x}.$$",
+      "body_he_md": "**נתון:** $x^3+y^3=6xy$. מצא $\\dfrac{dy}{dx}$.\n\n**שלב 1:** $3x^2+3y^2\\dfrac{dy}{dx}=6\\left(y+x\\dfrac{dy}{dx}\\right)$.\n\n**שלב 2:** פתח:\n$3x^2+3y^2\\dfrac{dy}{dx}=6y+6x\\dfrac{dy}{dx}$.\n\n**שלב 3:** אסוף:\n$(3y^2-6x)\\dfrac{dy}{dx}=6y-3x^2$.\n\n**שלב 4:** $\\dfrac{dy}{dx}=\\dfrac{2y-x^2}{y^2-2x}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $dy/dx$ for $x^2y+y^3=5$.",
+      "body_he_md": "מצא $dy/dx$ עבור $x^2y+y^3=5$.",
+      "checkpoint_solution_en": "Differentiate: $(2xy+x^2\\cdot dy/dx)+3y^2\\cdot dy/dx=0$. Collect: $dy/dx(x^2+3y^2)=-2xy$. So $dy/dx=-2xy/(x^2+3y^2)$.",
+      "checkpoint_solution_he": "גזירה: $(2xy+x^2\\cdot dy/dx)+3y^2\\cdot dy/dx=0$. $dy/dx=-2xy/(x^2+3y^2)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Second Derivative Implicitly",
+      "title_he": "דוגמה פתורה 3 — נגזרת שנייה סמוית",
+      "body_en_md": "**Given:** $x^2+y^2=r^2$. Find $\\dfrac{d^2y}{dx^2}$.\n\n**Step 1 — First derivative (already found):**\n$$\\frac{dy}{dx} = -\\frac{x}{y}.$$\n\n**Step 2 — Differentiate again (quotient rule):**\n$$\\frac{d^2y}{dx^2} = -\\frac{\\frac{d}{dx}[x]\\cdot y - x\\cdot\\frac{d}{dx}[y]}{y^2} = -\\frac{y - x\\frac{dy}{dx}}{y^2}.$$\n\n**Step 3 — Substitute $dy/dx = -x/y$:**\n$$\\frac{d^2y}{dx^2} = -\\frac{y - x\\cdot(-x/y)}{y^2} = -\\frac{y + x^2/y}{y^2} = -\\frac{y^2+x^2}{y^3}.$$\n\n**Step 4 — Simplify using $x^2+y^2=r^2$:**\n$$\\frac{d^2y}{dx^2} = -\\frac{r^2}{y^3}.$$\n\n**Interpretation:** Since $r^2>0$ and $y>0$ on the upper semicircle, $d^2y/dx^2<0$ — the circle is concave down (as expected).",
+      "body_he_md": "**נתון:** $x^2+y^2=r^2$. מצא $\\dfrac{d^2y}{dx^2}$.\n\n**שלב 1:** $\\dfrac{dy}{dx}=-\\dfrac{x}{y}$.\n\n**שלב 2:** גזור שוב (כלל מנה):\n$$\\frac{d^2y}{dx^2}=-\\frac{y-x\\cdot dy/dx}{y^2}.$$\n\n**שלב 3:** הצב $dy/dx=-x/y$:\n$$\\frac{d^2y}{dx^2}=-\\frac{y+x^2/y}{y^2}=-\\frac{y^2+x^2}{y^3}.$$\n\n**שלב 4:** השתמש ב-$x^2+y^2=r^2$:\n$$\\frac{d^2y}{dx^2}=-\\frac{r^2}{y^3}.$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Implicit Differentiation Checklist",
+      "title_he": "מדריך שיטה — רשימת פעולות לגזירה סמויה",
+      "body_en_md": "1. **Differentiate** both sides w.r.t. $x$.\n2. **Apply chain rule** to every $y$-term: $d/dx[g(y)]=g'(y)\\cdot y'$.\n3. **Apply product rule** where $x$ and $y$ are multiplied.\n4. **Collect all $y'$ terms** on one side.\n5. **Factor out $y'$** and divide.\n6. For tangent line: **evaluate $y'$ at the given point**.\n7. For $y''$: **differentiate $y'$ implicitly** and substitute $y'$ into the result.\n\n| Operation | Formula |\n|---|---|\n| $d/dx[y^n]$ | $ny^{n-1}y'$ |\n| $d/dx[e^y]$ | $e^y y'$ |\n| $d/dx[\\ln y]$ | $y'/y$ |\n| $d/dx[xy]$ | $y+xy'$ |\n| $d/dx[x^m y^n]$ | $mx^{m-1}y^n+nx^m y^{n-1}y'$ |",
+      "body_he_md": "1. גזור שני הצדדים לפי $x$.\n2. כלל שרשרת לכל גורם $y$: $g'(y)\\cdot y'$.\n3. כלל מכפלה היכן ש-$x$ ו-$y$ מוכפלים.\n4. אסוף את כל גורמי $y'$ לצד אחד.\n5. הוצא $y'$ כגורם וחלק.\n6. למשיק: הצב בנקודה הנתונה.\n7. ל-$y''$: גזור שוב את $y'$ סמוית והצב.\n\n| פעולה | נוסחה |\n|---|---|\n| $d/dx[y^n]$ | $ny^{n-1}y'$ |\n| $d/dx[e^y]$ | $e^y y'$ |\n| $d/dx[\\ln y]$ | $y'/y$ |\n| $d/dx[xy]$ | $y+xy'$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $x^2+3y=7$.",
+          "body_he": "מצא $dy/dx$ עבור $x^2+3y=7$.",
+          "solution_en": "$2x+3y'=0 \\Rightarrow y'=-2x/3$.",
+          "solution_he": "$2x+3y'=0 \\Rightarrow y'=-2x/3$.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $y^3=x$.",
+          "body_he": "מצא $dy/dx$ עבור $y^3=x$.",
+          "solution_en": "$3y^2 y'=1 \\Rightarrow y'=1/(3y^2)$.",
+          "solution_he": "$3y^2 y'=1 \\Rightarrow y'=1/(3y^2)$.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find the slope of $x^2+y^2=13$ at $(-2,3)$.",
+          "body_he": "מצא את שיפוע $x^2+y^2=13$ ב-$(-2,3)$.",
+          "solution_en": "$y'=-x/y$. At $(-2,3)$: $y'=2/3$.",
+          "solution_he": "$y'=-x/y$. ב-$(-2,3)$: $y'=2/3$.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $\\sin y = x$.",
+          "body_he": "מצא $dy/dx$ עבור $\\sin y=x$.",
+          "solution_en": "$\\cos y\\cdot y'=1 \\Rightarrow y'=1/\\cos y=\\sec y$.",
+          "solution_he": "$\\cos y\\cdot y'=1 \\Rightarrow y'=\\sec y$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ and the tangent line to $x^2-xy+y^2=7$ at $(1,3)$.",
+          "body_he": "מצא $dy/dx$ וישר משיק ל-$x^2-xy+y^2=7$ ב-$(1,3)$.",
+          "solution_en": "$2x-(y+xy')+2yy'=0$. At $(1,3)$: $2-(3+y')+6y'=0 \\Rightarrow 5y'=1 \\Rightarrow y'=1/5$. Line: $y-3=1/5(x-1)$.",
+          "solution_he": "$2x-(y+xy')+2yy'=0$. ב-$(1,3)$: $5y'=1$, $y'=1/5$. ישר: $y-3=1/5(x-1)$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ for $e^{xy}=x+y$.",
+          "body_he": "מצא $dy/dx$ עבור $e^{xy}=x+y$.",
+          "solution_en": "$e^{xy}(y+xy')=1+y'$. So $ye^{xy}+xe^{xy}y'=1+y'$. $y'(xe^{xy}-1)=1-ye^{xy}$. $y'=(1-ye^{xy})/(xe^{xy}-1)$.",
+          "solution_he": "$e^{xy}(y+xy')=1+y'$. $y'(xe^{xy}-1)=1-ye^{xy}$. $y'=(1-ye^{xy})/(xe^{xy}-1)$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Use implicit differentiation to find $dy/dx$ for $y=x^x$ (logarithmic differentiation).",
+          "body_he": "השתמש בגזירה סמויה למציאת $dy/dx$ עבור $y=x^x$ (גזירה לוגריתמית).",
+          "solution_en": "Take $\\ln y=x\\ln x$. Differentiate: $y'/y=\\ln x+1$. So $y'=y(\\ln x+1)=x^x(\\ln x+1)$.",
+          "solution_he": "$\\ln y=x\\ln x$. $y'/y=\\ln x+1$. $y'=x^x(\\ln x+1)$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the points on $x^2+y^2=1$ where the tangent is horizontal.",
+          "body_he": "מצא את הנקודות על $x^2+y^2=1$ בהן המשיק אופקי.",
+          "solution_en": "$y'=-x/y=0 \\Rightarrow x=0$. Substituting: $y=\\pm 1$. Points: $(0,1)$ and $(0,-1)$.",
+          "solution_he": "$y'=-x/y=0\\Rightarrow x=0$. הצב: $y=\\pm1$. נקודות: $(0,1)$ ו-$(0,-1)$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ for $\\ln(xy)=x+y$.",
+          "body_he": "מצא $dy/dx$ עבור $\\ln(xy)=x+y$.",
+          "solution_en": "$\\frac{1}{xy}(y+xy')=1+y'$. So $\\frac{y}{xy}+\\frac{xy'}{xy}=1+y'$. $\\frac{1}{x}+\\frac{y'}{y}=1+y'$. $y'(1/y-1)=1-1/x$. $y'=\\frac{1-1/x}{1/y-1}=\\frac{y(x-1)}{x(1-y)}$.",
+          "solution_he": "$1/x+y'/y=1+y'$. $y'(1/y-1)=1-1/x$. $y'=y(x-1)/(x(1-y))$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find $d^2y/dx^2$ for $x^2+y^2=r^2$ using the result $dy/dx=-x/y$.",
+          "body_he": "מצא $d^2y/dx^2$ עבור $x^2+y^2=r^2$ תוך שימוש ב-$dy/dx=-x/y$.",
+          "solution_en": "$y''=-\\frac{y-x(-x/y)}{y^2}=-\\frac{y+x^2/y}{y^2}=-\\frac{y^2+x^2}{y^3}=-\\frac{r^2}{y^3}$.",
+          "solution_he": "$y''=-\\frac{y+x^2/y}{y^2}=-\\frac{r^2}{y^3}$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the equation of the tangent line to $x^3+y^3=2$ at $(1,1)$, then show the normal line at that point is $y=x$.",
+          "body_he": "מצא ישר משיק ל-$x^3+y^3=2$ ב-$(1,1)$, ואז הראה שהנורמל הוא $y=x$.",
+          "solution_en": "$3x^2+3y^2y'=0 \\Rightarrow y'=-x^2/y^2$. At $(1,1)$: $y'=-1$. Tangent: $y-1=-(x-1)\\Rightarrow y=-x+2$. Normal slope $=1$ (negative reciprocal of $-1$). Normal: $y-1=1(x-1)\\Rightarrow y=x$. $\\checkmark$",
+          "solution_he": "$y'=-x^2/y^2$. ב-$(1,1)$: $y'=-1$. משיק: $y=-x+2$. נורמל: שיפוע $=1$, $y=x$. $\\checkmark$",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Find $d^2y/dx^2$ for $xy=1$ (you should get $d^2y/dx^2=2/x^3$).",
+          "body_he": "מצא $d^2y/dx^2$ עבור $xy=1$ (אמור לקבל $d^2y/dx^2=2/x^3$).",
+          "solution_en": "$y+xy'=0\\Rightarrow y'=-y/x$. Differentiate again: $y''+y'\\cdot0... $. Use $y=1/x\\Rightarrow y'=-1/x^2$. $y''=\\frac{d}{dx}[-1/x^2]=2/x^3$. $\\checkmark$",
+          "solution_he": "$y=-1/x$, $y'=-1/x^2$, $y''=2/x^3$. $\\checkmark$",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Use the implicit function theorem: if $F(x,y)=0$ and $F_y\\neq 0$, show $dy/dx=-F_x/F_y$. Apply to $F(x,y)=x^2+y^2-r^2=0$.",
+          "body_he": "הוכח באמצעות משפט הפונקציה הסמויה: אם $F(x,y)=0$ ו-$F_y\\neq 0$, אז $dy/dx=-F_x/F_y$. יישם ל-$x^2+y^2-r^2=0$.",
+          "solution_en": "By total differentiation: $dF=F_x dx+F_y dy=0\\Rightarrow F_y\\,dy=-F_x\\,dx\\Rightarrow dy/dx=-F_x/F_y$. For $F=x^2+y^2-r^2$: $F_x=2x$, $F_y=2y$, so $dy/dx=-2x/2y=-x/y$. $\\checkmark$",
+          "solution_he": "מהדיפרנציאל הכולל: $F_x\\,dx+F_y\\,dy=0\\Rightarrow dy/dx=-F_x/F_y$. עבור $F=x^2+y^2-r^2$: $dy/dx=-x/y$. $\\checkmark$",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting the chain rule for $y$-terms.** Write $d/dx[y^2]=2y\\cdot y'$, NOT just $2y$.\n\n2. **Dropping the $y'$ after differentiating.** After $d/dx[\\sin y]=\\cos y$, you must include $\\cdot y'$.\n\n3. **Product rule errors for mixed terms.** $d/dx[xy]=y+xy'$ — both $y$ and $xy'$ appear.\n\n4. **Not checking the point is on the curve.** Before computing the tangent at $(x_0,y_0)$, verify $F(x_0,y_0)=0$.\n\n5. **Forgetting to substitute $y'$ when computing $y''$.** For the second derivative, you must substitute the expression for $y'$, not leave it symbolic.",
+      "body_he_md": "1. **שכחת כלל שרשרת לגורמי $y$.** $d/dx[y^2]=2y\\cdot y'$, לא $2y$.\n\n2. **השמטת $y'$ אחרי גזירה.** $d/dx[\\sin y]=\\cos y\\cdot y'$ — חובה לכלול את $y'$.\n\n3. **שגיאות בכלל מכפלה לגורמים מעורבים.** $d/dx[xy]=y+xy'$.\n\n4. **אי-בדיקה שהנקודה נמצאת על העקומה.** לפני חישוב המשיק, אמת $F(x_0,y_0)=0$.\n\n5. **שכחת להציב $y'$ בחישוב $y''$.** בנגזרת השנייה חובה להציב את הביטוי ל-$y'$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Process:**\n1. Differentiate both sides w.r.t. $x$.\n2. Chain rule on all $y$-terms.\n3. Collect $y'$, factor, divide.\n4. Evaluate at the given point.\n\n**Key formulas:**\n- $d/dx[y^n]=ny^{n-1}y'$\n- $d/dx[xy]=y+xy'$\n- $dy/dx=-F_x/F_y$\n- Tangent at $(x_0,y_0)$: $y-y_0=m(x-x_0)$ where $m=dy/dx|_{(x_0,y_0)}$.\n\n**Exam patterns:** Find $dy/dx$; find tangent line; find $d^2y/dx^2$.",
+      "body_he_md": "**תהליך:**\n1. גזור לפי $x$.\n2. כלל שרשרת לגורמי $y$.\n3. אסוף $y'$, הוצא כגורם, חלק.\n4. הצב בנקודה.\n\n**נוסחאות מרכזיות:**\n- $d/dx[y^n]=ny^{n-1}y'$\n- $d/dx[xy]=y+xy'$\n- $dy/dx=-F_x/F_y$\n- משיק: $y-y_0=m(x-x_0)$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Implicit differentiation:** differentiate both sides, apply chain rule to $y$-terms ($d/dx[g(y)]=g'(y)y'$), collect $y'$, solve.\n- **Tangent line** at $(x_0,y_0)$: compute $y'|_{(x_0,y_0)}$ and use point-slope form.\n- **Second derivative:** differentiate $y'$ implicitly, then substitute the expression for $y'$.\n- **Implicit function theorem:** $dy/dx=-F_x/F_y$ when $F(x,y)=0$ and $F_y\\neq 0$.\n- Works for any implicitly defined curve: circles, folium, level curves.",
+      "body_he_md": "- **גזירה סמויה:** גזור שני הצדדים, כלל שרשרת לגורמי $y$, אסוף $y'$, פתור.\n- **משיק** ב-$(x_0,y_0)$: חשב $y'|_{(x_0,y_0)}$ ושתמש בצורת נקודה-שיפוע.\n- **נגזרת שנייה:** גזור שוב את $y'$ סמוית, הצב את הביטוי ל-$y'$.\n- **משפט הפונקציה הסמויה:** $dy/dx=-F_x/F_y$.\n- עובד לכל עקומה מוגדרת סמוית."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Derivatives Implicit."
+  ]
 }

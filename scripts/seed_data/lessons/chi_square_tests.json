@@ -1,132 +1,233 @@
 {
-  "id": "chi_square_tests",
-  "type": "interactive",
-  "subject": "statistics_probability",
+  "concept_id": "chi_square_tests",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["statistics"],
   "title_en": "Chi-Square Tests",
   "title_he": "מבחני כי-בריבוע",
-  "duration_min": 35,
-  "level_min": "university",
-  "agent_hints": "Students confuse the two chi-square tests: goodness-of-fit (one categorical variable, observed vs. theoretical) vs. independence (two categorical variables in a contingency table). Stress that the chi-square statistic is always $\\sum(O-E)^2/E$ — the same formula — but the degrees of freedom differ. The most common algebraic error is computing df = rc instead of (r-1)(c-1). The condition 'expected cell ≥ 5' applies to *expected* counts, not observed. When cells have small expected counts (<5), Fisher's exact test is the correct alternative. Students also need to know chi-square is always right-tailed — a large chi-square (large discrepancy between observed and expected) goes in the rejection region.",
+  "summary_en": "Chi-square test for independence (contingency tables) and goodness-of-fit test. Computing the test statistic, degrees of freedom, and interpreting results.",
+  "summary_he": "מבחן כי-בריבוע לאי-תלות (טבלאות אקראיות) ומבחן טיב-ההתאמה. חישוב סטטיסטיקת המבחן, דרגות החופש ופרשנות התוצאות.",
+  "est_minutes": 45,
   "sections": [
     {
-      "id": "chi_square_distribution",
-      "title_en": "The Chi-Square Statistic and Distribution",
-      "title_he": "סטטיסטי כי-בריבוע וההתפלגות שלו",
-      "level_min": "university",
-      "body_en_md": "## The Chi-Square Statistic\n\nFor any test comparing **observed counts** $O_i$ to **expected counts** $E_i$, the chi-square statistic is:\n\n$$\\boxed{\\chi^2 = \\sum_{i} \\frac{(O_i - E_i)^2}{E_i}}$$\n\nEach term $(O_i - E_i)^2 / E_i$ measures the standardized squared discrepancy for category $i$. Large values indicate large departures from what is expected under $H_0$.\n\n---\n\n## The Chi-Square Distribution\n\nUnder $H_0$, the statistic follows a **chi-square distribution** with $\\nu$ degrees of freedom (abbreviated $\\chi^2(\\nu)$):\n\n- **Always non-negative** (squares of real numbers)\n- **Right-skewed** — the tail to the right is longer\n- As $\\nu$ increases, it becomes more symmetric and approaches a normal distribution\n- The mean is $\\nu$ and the variance is $2\\nu$\n\nThe test is always **right-tailed**: we reject $H_0$ when $\\chi^2 > \\chi^2_{\\alpha, \\nu}$.\n\n---\n\n## Two Chi-Square Tests\n\n| Test | Question | Degrees of Freedom |\n|---|---|---|\n| Goodness-of-fit | Does the sample match a specific distribution? | $k - 1$ (where $k$ = number of categories) |\n| Test of independence | Are two categorical variables independent? | $(r-1)(c-1)$ (where $r$ = rows, $c$ = columns) |",
-      "body_he_md": "## סטטיסטי כי-בריבוע\n\nלכל מבחן המשווה **ספירות נצפות** $O_i$ ל**ספירות צפויות** $E_i$, סטטיסטי כי-בריבוע הוא:\n\n$$\\boxed{\\chi^2 = \\sum_{i} \\frac{(O_i - E_i)^2}{E_i}}$$\n\nכל איבר $(O_i - E_i)^2 / E_i$ מודד את הסטייה הריבועית הסטנדרטית עבור קטגוריה $i$. ערכים גדולים מעידים על סטייה גדולה מהצפוי תחת $H_0$.\n\n---\n\n## התפלגות כי-בריבוע\n\nתחת $H_0$, הסטטיסטי מתפלג בהתפלגות **כי-בריבוע** עם $\\nu$ דרגות חופש ($\\chi^2(\\nu)$):\n\n- **תמיד אי-שלילי** (ריבועים של מספרים אמיתיים)\n- **מוטה ימינה** — זנב ימני ארוך יותר\n- ככל ש-$\\nu$ גדל, ההתפלגות הופכת לסימטרית יותר ומתקרבת לנורמלית\n- ממוצע $\\nu$ ושונות $2\\nu$\n\nהמבחן תמיד **חד-זנבי ימני**: דוחים $H_0$ כאשר $\\chi^2 > \\chi^2_{\\alpha, \\nu}$.\n\n---\n\n## שני מבחני כי-בריבוע\n\n| מבחן | שאלה | דרגות חופש |\n|---|---|---|\n| התאמה לפילוג | האם המדגם מתאים לפילוג ספציפי? | $k - 1$ ($k$ = מספר קטגוריות) |\n| עצמאות | האם שני משתנים קטגוריים עצמאיים? | $(r-1)(c-1)$ ($r$ = שורות, $c$ = עמודות) |"
+      "kind": "intro",
+      "title_en": "Categorical Data and the Chi-Square Test",
+      "title_he": "נתונים קטגוריים ומבחן כי-בריבוע",
+      "body_en_md": "Are gender and political preference related? Does the observed distribution of blood types match the expected population frequencies? These questions involve **categorical data** — data with no natural numerical ordering.\n\nThe **chi-square ($\\chi^2$) test** is the standard tool for:\n1. **Test for independence:** Testing whether two categorical variables are associated.\n2. **Goodness-of-fit test:** Testing whether observed counts match a hypothesised distribution.\n\nThe key idea: compare what we **observed** to what we would **expect** if $H_0$ were true.",
+      "body_he_md": "האם מגדר ומועדפות פוליטית קשורים? האם פילוג סוגי הדם התצפיתי תואם את הצפוי? שאלות אלה עוסקות ב**נתונים קטגוריים** — נתונים ללא סדר מספרי טבעי.\n\n**מבחן כי-בריבוע ($\\chi^2$)** הוא הכלי הסטנדרטי ל:\n1. **מבחן אי-תלות:** בדיקה אם שני משתנים קטגוריים קשורים.\n2. **מבחן טיב-התאמה:** בדיקה אם ספירות תצפיתיות תואמות פילוג היפותטי.\n\nהרעיון המרכזי: השווה מה **נצפה** לבין מה **היינו מצפים** אם $H_0$ נכון."
     },
     {
-      "id": "goodness_of_fit",
-      "title_en": "Goodness-of-Fit Test",
-      "title_he": "מבחן התאמה לפילוג",
-      "level_min": "university",
-      "body_en_md": "## Setting Up the Goodness-of-Fit Test\n\nThe **goodness-of-fit test** asks: does the observed frequency distribution match a **claimed (hypothesized) distribution**?\n\n**Hypotheses:**\n$$H_0:\\; \\text{The data follow the specified distribution}$$\n$$H_a:\\; \\text{The data do NOT follow the specified distribution}$$\n\n**Procedure:**\n1. State the hypothesized probabilities $p_1, p_2, \\ldots, p_k$ for each category (must sum to 1).\n2. Compute **expected counts**: $E_i = n \\cdot p_i$, where $n$ is the total sample size.\n3. Compute the chi-square statistic: $\\chi^2 = \\sum_{i=1}^{k} \\frac{(O_i - E_i)^2}{E_i}$\n4. Degrees of freedom: $df = k - 1$\n5. Reject $H_0$ if $\\chi^2 > \\chi^2_{\\alpha, k-1}$\n\n**Condition:** Each expected count must be $E_i \\geq 5$ (not the observed count). If this fails, combine adjacent categories or use an exact test.",
-      "body_he_md": "## הגדרת מבחן התאמה לפילוג\n\n**מבחן התאמה לפילוג** שואל: האם פילוג התדירויות הנצפה מתאים ל**פילוג הנטען (ההשערה)**?\n\n**השערות:**\n$$H_0:\\; \\text{הנתונים עוקבים אחר הפילוג המוגדר}$$\n$$H_a:\\; \\text{הנתונים אינם עוקבים אחר הפילוג המוגדר}$$\n\n**נוהל:**\n1. קבע הסתברויות מוטענות $p_1, p_2, \\ldots, p_k$ לכל קטגוריה (חייבות להסתכם ל-1).\n2. חשב **ספירות צפויות**: $E_i = n \\cdot p_i$ ($n$ = גודל המדגם).\n3. חשב סטטיסטי: $\\chi^2 = \\sum_{i=1}^{k} \\frac{(O_i - E_i)^2}{E_i}$\n4. דרגות חופש: $df = k - 1$\n5. דחה $H_0$ אם $\\chi^2 > \\chi^2_{\\alpha, k-1}$\n\n**תנאי:** כל ספירה צפויה חייבת להיות $E_i \\geq 5$ (לא הנצפית). אם לא, שלב קטגוריות סמוכות או השתמש במבחן מדויק."
+      "kind": "definition",
+      "title_en": "Chi-Square Formulas",
+      "title_he": "נוסחאות כי-בריבוע",
+      "body_en_md": "**Chi-square statistic (both tests):**\n$$\\chi^2 = \\sum \\frac{(O - E)^2}{E}$$\nwhere $O$ = observed count, $E$ = expected count.\n\n**Test for independence (contingency table with $r$ rows, $c$ columns):**\n- $H_0$: the two variables are independent.\n- Expected count in cell $(i,j)$: $E_{ij} = \\dfrac{(\\text{row}_i \\text{ total}) \\times (\\text{col}_j \\text{ total})}{\\text{grand total}}$.\n- Degrees of freedom: $df = (r-1)(c-1)$.\n\n**Goodness-of-fit test ($k$ categories):**\n- $H_0$: data follow a specific distribution.\n- Expected count in category $i$: $E_i = n \\cdot p_i$ where $p_i$ is the hypothesised probability.\n- Degrees of freedom: $df = k - 1$.\n\n**Decision rule:** Reject $H_0$ if $\\chi^2 > \\chi^2_{\\alpha, df}$.\n\n**Rule of thumb:** All expected counts should be $\\geq 5$.",
+      "body_he_md": "**סטטיסטיקת כי-בריבוע (שני מבחנים):**\n$$\\chi^2 = \\sum \\frac{(O - E)^2}{E}$$\nכאשר $O$ = ספירה תצפיתית, $E$ = ספירה צפויה.\n\n**מבחן אי-תלות (טבלה עם $r$ שורות, $c$ עמודות):**\n- $H_0$: שני המשתנים בלתי-תלויים.\n- ספירה צפויה בתא $(i,j)$: $E_{ij} = \\dfrac{(\\text{סה\"כ שורה}_i) \\times (\\text{סה\"כ עמודה}_j)}{\\text{סה\"כ כולל}}$.\n- דרגות חופש: $df = (r-1)(c-1)$.\n\n**מבחן טיב-התאמה ($k$ קטגוריות):**\n- $H_0$: הנתונים עוקבים אחרי פילוג מסוים.\n- ספירה צפויה בקטגוריה $i$: $E_i = n \\cdot p_i$.\n- דרגות חופש: $df = k-1$.\n\n**כלל החלטה:** דחה $H_0$ אם $\\chi^2 > \\chi^2_{\\alpha, df}$.\n\n**כלל אצבע:** כל הספירות הצפויות חייבות להיות $\\geq 5$."
     },
     {
-      "id": "gof_worked_example",
-      "title_en": "Worked Example: Is the Die Fair?",
-      "title_he": "דוגמה פתורה: האם הקוביה הוגנת?",
-      "level_min": "university",
-      "body_en_md": "## Problem\n\nA die is rolled 60 times. The observed frequencies are:\n\n| Face | 1 | 2 | 3 | 4 | 5 | 6 | Total |\n|---|---|---|---|---|---|---|---|\n| Observed $O_i$ | 8 | 12 | 9 | 14 | 7 | 10 | 60 |\n\nTest at $\\alpha = 0.05$ whether the die is fair.\n\n---\n\n## Solution\n\n**$H_0$:** Die is fair, i.e. each face has probability $1/6$.\n\n**Expected counts:** $E_i = 60 \\times (1/6) = 10$ for each face.\n\n**Chi-square statistic:**\n\n$$\\chi^2 = \\frac{(8-10)^2}{10} + \\frac{(12-10)^2}{10} + \\frac{(9-10)^2}{10} + \\frac{(14-10)^2}{10} + \\frac{(7-10)^2}{10} + \\frac{(10-10)^2}{10}$$\n\n$$= \\frac{4}{10} + \\frac{4}{10} + \\frac{1}{10} + \\frac{16}{10} + \\frac{9}{10} + \\frac{0}{10} = 0.4 + 0.4 + 0.1 + 1.6 + 0.9 + 0 = 3.40$$\n\n**Degrees of freedom:** $df = k - 1 = 6 - 1 = 5$\n\n**Critical value:** $\\chi^2_{0.05,\\,5} = 11.07$\n\n**Decision:** $\\chi^2 = 3.40 < 11.07$. **Fail to reject $H_0$**.\n\n**Conclusion:** There is insufficient evidence to conclude the die is unfair. The observed frequencies are consistent with a fair die at the 5% significance level.",
-      "body_he_md": "## בעיה\n\nקוביה מוטלת 60 פעמים. התדירויות הנצפות:\n\n| פנים | 1 | 2 | 3 | 4 | 5 | 6 | סה\"כ |\n|---|---|---|---|---|---|---|---|\n| נצפה $O_i$ | 8 | 12 | 9 | 14 | 7 | 10 | 60 |\n\nבדוק ברמת $\\alpha = 0.05$ האם הקוביה הוגנת.\n\n---\n\n## פתרון\n\n**$H_0$:** הקוביה הוגנת, כלומר לכל פנים הסתברות $1/6$.\n\n**ספירות צפויות:** $E_i = 60 \\times (1/6) = 10$ לכל פנים.\n\n**סטטיסטי כי-בריבוע:**\n\n$$\\chi^2 = \\frac{(8-10)^2}{10} + \\frac{(12-10)^2}{10} + \\frac{(9-10)^2}{10} + \\frac{(14-10)^2}{10} + \\frac{(7-10)^2}{10} + \\frac{(10-10)^2}{10}$$\n\n$$= 0.4 + 0.4 + 0.1 + 1.6 + 0.9 + 0.0 = 3.40$$\n\n**דרגות חופש:** $df = k - 1 = 6 - 1 = 5$\n\n**ערך קריטי:** $\\chi^2_{0.05,\\,5} = 11.07$\n\n**החלטה:** $\\chi^2 = 3.40 < 11.07$. **לא דוחים $H_0$**.\n\n**מסקנה:** אין עדות מספקת לקביעה שהקוביה אינה הוגנת. התדירויות הנצפות עקביות עם קוביה הוגנת ברמת מובהקות 5%."
+      "kind": "theory",
+      "title_en": "Why Does $\\chi^2$ Work?",
+      "title_he": "מדוע $\\chi^2$ עובד?",
+      "body_en_md": "Under $H_0$, each $(O-E)^2/E$ is approximately a chi-square(1) variable, and their sum follows $\\chi^2(df)$.\n\n**Large $\\chi^2$ means:** observed and expected counts are far apart — evidence against $H_0$.\n\n**Small $\\chi^2$ means:** observed matches expected well — no evidence against $H_0$.\n\n**Independence intuition:** If two variables are independent, the joint probability is the product of marginals: $P(A \\cap B) = P(A) \\cdot P(B)$. The expected cell counts use exactly this product structure.",
+      "body_he_md": "תחת $H_0$, כל $(O-E)^2/E$ מקורב ל-$\\chi^2(1)$ ולכן הסכום עוקב אחרי $\\chi^2(df)$.\n\n**$\\chi^2$ גדול:** ספירות תצפיתיות וצפויות רחוקות — עדות נגד $H_0$.\n\n**$\\chi^2$ קטן:** התצפיות תואמות הצפוי — אין עדות נגד $H_0$.\n\n**אינטואיציה של אי-תלות:** אם שני משתנים בלתי-תלויים, ההסתברות המשותפת היא מכפלת השוליות: $P(A\\cap B)=P(A)\\cdot P(B)$. ספירות הצפוי משתמשות בדיוק במבנה מכפלה זה."
     },
     {
-      "id": "independence_test",
-      "title_en": "Test of Independence — Contingency Tables",
-      "title_he": "מבחן עצמאות — טבלאות אגירה",
-      "level_min": "university",
-      "body_en_md": "## Setting Up the Test of Independence\n\nThe **chi-square test of independence** asks: are two categorical variables **statistically independent** in the population?\n\n**Hypotheses:**\n$$H_0:\\; \\text{Variable A and Variable B are independent}$$\n$$H_a:\\; \\text{Variable A and Variable B are NOT independent (they are associated)}$$\n\n---\n\n## The Contingency Table\n\nArrange data in an $r \\times c$ contingency table (rows = categories of variable A, columns = categories of variable B).\n\n**Expected cell counts** under $H_0$ (independence means joint probability = product of marginals):\n\n$$\\boxed{E_{ij} = \\frac{(\\text{Row}_i \\text{ total}) \\times (\\text{Column}_j \\text{ total})}{N}}$$\n\n**Test statistic:**\n$$\\chi^2 = \\sum_{i,j} \\frac{(O_{ij} - E_{ij})^2}{E_{ij}}$$\n\n**Degrees of freedom:**\n$$df = (r-1)(c-1)$$\n\nFor a $2 \\times 2$ table: $df = 1$. For a $3 \\times 2$ table: $df = 2$.\n\n**Reject $H_0$** if $\\chi^2 > \\chi^2_{\\alpha,\\,(r-1)(c-1)}$.",
-      "body_he_md": "## הגדרת מבחן העצמאות\n\n**מבחן כי-בריבוע לעצמאות** שואל: האם שני משתנים קטגוריים **סטטיסטית עצמאיים** באוכלוסייה?\n\n**השערות:**\n$$H_0:\\; \\text{משתנה A ומשתנה B עצמאיים}$$\n$$H_a:\\; \\text{משתנה A ומשתנה B אינם עצמאיים (קשורים)}$$\n\n---\n\n## טבלת האגירה\n\nסדר נתונים בטבלת אגירה $r \\times c$ (שורות = קטגוריות משתנה A, עמודות = קטגוריות משתנה B).\n\n**ספירות צפויות** תחת $H_0$:\n\n$$\\boxed{E_{ij} = \\frac{(\\text{סה\"כ שורה}_i) \\times (\\text{סה\"כ עמודה}_j)}{N}}$$\n\n**סטטיסטי המבחן:**\n$$\\chi^2 = \\sum_{i,j} \\frac{(O_{ij} - E_{ij})^2}{E_{ij}}$$\n\n**דרגות חופש:**\n$$df = (r-1)(c-1)$$\n\nעבור טבלה $2 \\times 2$: $df = 1$. עבור טבלה $3 \\times 2$: $df = 2$.\n\n**דחה $H_0$** אם $\\chi^2 > \\chi^2_{\\alpha,\\,(r-1)(c-1)}$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — 2×2 Contingency Table",
+      "title_he": "דוגמה פתורה 1 — טבלת אקראיות 2×2",
+      "body_en_md": "**Is smoking associated with lung disease?** 200 people surveyed:\n\n| | Has Disease | No Disease | Total |\n|---|---|---|---|\n| Smoker | 50 | 50 | 100 |\n| Non-smoker | 20 | 80 | 100 |\n| **Total** | 70 | 130 | 200 |\n\n**Step 1 — Expected counts:** $E_{ij} = (\\text{row total} \\times \\text{col total})/200$.\n$$E_{11} = 100 \\times 70/200 = 35, \\quad E_{12} = 100 \\times 130/200 = 65.$$\n$$E_{21} = 100 \\times 70/200 = 35, \\quad E_{22} = 100 \\times 130/200 = 65.$$\n\n**Step 2 — Chi-square statistic:**\n$$\\chi^2 = \\frac{(50-35)^2}{35} + \\frac{(50-65)^2}{65} + \\frac{(20-35)^2}{35} + \\frac{(80-65)^2}{65}$$\n$$= \\frac{225}{35} + \\frac{225}{65} + \\frac{225}{35} + \\frac{225}{65} = 6.43 + 3.46 + 6.43 + 3.46 = 19.78.$$\n\n**Step 3 — Decision:** $df = (2-1)(2-1) = 1$. $\\chi^2_{0.05,1} = 3.84$. Since $19.78 > 3.84$: **reject $H_0$**. Smoking and lung disease are significantly associated.",
+      "body_he_md": "**האם עישון קשור למחלת ריאות?** 200 נסקרו:\n\n| | מחלה | ללא מחלה | סה\"כ |\n|---|---|---|---|\n| מעשן | 50 | 50 | 100 |\n| לא מעשן | 20 | 80 | 100 |\n| **סה\"כ** | 70 | 130 | 200 |\n\n**שלב 1 — ספירות צפויות:**\n$$E_{11}=35, \\quad E_{12}=65, \\quad E_{21}=35, \\quad E_{22}=65.$$\n\n**שלב 2 — $\\chi^2$:**\n$$\\chi^2 = \\frac{225}{35}+\\frac{225}{65}+\\frac{225}{35}+\\frac{225}{65} = 19.78.$$\n\n**שלב 3 — החלטה:** $df=1$, $\\chi^2_{0.05,1}=3.84$. מאחר ש-$19.78>3.84$: **דוחים $H_0$**. יש קשר מובהק בין עישון ומחלת ריאות."
     },
     {
-      "id": "independence_worked_example",
-      "title_en": "Worked Example: Smoking and Disease",
-      "title_he": "דוגמה פתורה: עישון ומחלה",
-      "level_min": "university",
-      "body_en_md": "## Problem\n\nA study of $N = 200$ people records smoking status and disease status:\n\n| | Disease | No Disease | Row Total |\n|---|---|---|---|\n| Smoker | 40 | 60 | **100** |\n| Non-Smoker | 20 | 80 | **100** |\n| **Column Total** | **60** | **140** | **200** |\n\nTest at $\\alpha = 0.05$ whether smoking and disease are independent.\n\n---\n\n## Step 1: Expected Counts\n\n$$E_{\\text{Smoker,Disease}} = \\frac{100 \\times 60}{200} = 30 \\qquad E_{\\text{Smoker,No Disease}} = \\frac{100 \\times 140}{200} = 70$$\n$$E_{\\text{Non-Smoker,Disease}} = \\frac{100 \\times 60}{200} = 30 \\qquad E_{\\text{Non-Smoker,No Disease}} = \\frac{100 \\times 140}{200} = 70$$\n\nAll $E_{ij} \\geq 5$ ✓\n\n---\n\n## Step 2: Chi-Square Statistic\n\n$$\\chi^2 = \\frac{(40-30)^2}{30} + \\frac{(60-70)^2}{70} + \\frac{(20-30)^2}{30} + \\frac{(80-70)^2}{70}$$\n\n$$= \\frac{100}{30} + \\frac{100}{70} + \\frac{100}{30} + \\frac{100}{70} = 3.333 + 1.429 + 3.333 + 1.429 = 9.524$$\n\n---\n\n## Step 3: Decision\n\n$df = (2-1)(2-1) = 1$.\n\nCritical value: $\\chi^2_{0.05,\\,1} = 3.841$.\n\nSince $\\chi^2 = 9.524 > 3.841$, **reject $H_0$**.\n\n**Conclusion:** There is significant evidence ($p < 0.05$) that smoking status and disease status are **not independent** — they are associated in this population.",
-      "body_he_md": "## בעיה\n\nמחקר של $N = 200$ אנשים רושם סטטוס עישון וסטטוס מחלה:\n\n| | מחלה | ללא מחלה | סה\"כ שורה |\n|---|---|---|---|\n| מעשן | 40 | 60 | **100** |\n| לא מעשן | 20 | 80 | **100** |\n| **סה\"כ עמודה** | **60** | **140** | **200** |\n\nבדוק ברמת $\\alpha = 0.05$ האם עישון ומחלה עצמאיים.\n\n---\n\n## שלב 1: ספירות צפויות\n\n$$E_{\\text{מעשן,מחלה}} = \\frac{100 \\times 60}{200} = 30 \\qquad E_{\\text{מעשן,ללא מחלה}} = \\frac{100 \\times 140}{200} = 70$$\n$$E_{\\text{לא מעשן,מחלה}} = \\frac{100 \\times 60}{200} = 30 \\qquad E_{\\text{לא מעשן,ללא מחלה}} = \\frac{100 \\times 140}{200} = 70$$\n\nכל $E_{ij} \\geq 5$ ✓\n\n---\n\n## שלב 2: סטטיסטי כי-בריבוע\n\n$$\\chi^2 = \\frac{(40-30)^2}{30} + \\frac{(60-70)^2}{70} + \\frac{(20-30)^2}{30} + \\frac{(80-70)^2}{70}$$\n\n$$= 3.333 + 1.429 + 3.333 + 1.429 = 9.524$$\n\n---\n\n## שלב 3: החלטה\n\n$df = (2-1)(2-1) = 1$.\n\nערך קריטי: $\\chi^2_{0.05,\\,1} = 3.841$.\n\nמאחר ש-$\\chi^2 = 9.524 > 3.841$, **דוחים $H_0$**.\n\n**מסקנה:** יש עדות מובהקת ($p < 0.05$) שסטטוס עישון וסטטוס מחלה **אינם עצמאיים** — הם קשורים באוכלוסייה זו."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A 2×2 table has: $O_{11}=20$, $O_{12}=30$, $O_{21}=10$, $O_{22}=40$. Grand total = 100. Compute $E_{11}$.",
+      "body_he_md": "טבלה 2×2: $O_{11}=20$, $O_{12}=30$, $O_{21}=10$, $O_{22}=40$. סה\"כ = 100. חשב $E_{11}$.",
+      "checkpoint_solution_en": "Row 1 total = 50, Col 1 total = 30. $E_{11} = 50 \\times 30 / 100 = 15$.",
+      "checkpoint_solution_he": "סה\"כ שורה 1 = 50, עמודה 1 = 30. $E_{11} = 50 \\times 30 / 100 = 15$."
     },
     {
-      "id": "conditions_comparison",
-      "title_en": "Conditions, Limitations, and Comparison with t-tests",
-      "title_he": "תנאים, מגבלות, והשוואה למבחני t",
-      "level_min": "university",
-      "body_en_md": "## Conditions for Chi-Square Tests\n\n1. **Random sampling** — data must come from a random sample or randomized experiment.\n2. **Independence of observations** — each individual appears in exactly one cell.\n3. **Expected cell count ≥ 5** — applies to all cells. This ensures the $\\chi^2$ approximation is valid.\n   - If violated: combine categories, or use **Fisher's Exact Test** (exact for any sample size; preferred for $2\\times2$ tables with small $n$).\n\n---\n\n## Fisher's Exact Test\n\nWhen expected cell counts are small (<5), the chi-square approximation is poor. **Fisher's Exact Test** computes the exact probability of observing the data (or more extreme data) under $H_0$ of independence, without any distributional approximation. It is the standard choice for $2\\times2$ tables with small samples.\n\n---\n\n## Chi-Square vs. t-Tests: When to Use Each\n\n| Situation | Appropriate Test |\n|---|---|\n| Compare one mean to a value | One-sample $t$-test |\n| Compare two group means | Two-sample $t$-test |\n| Compare proportions / categorical distributions | **Chi-square** |\n| Test independence of two categorical variables | **Chi-square test of independence** |\n| One categorical variable, small expected counts | **Fisher's Exact Test** |\n\n**Key distinction:** Use chi-square when your outcome variable is **categorical** (counts, frequencies). Use $t$-tests when your outcome is **numerical** (means, averages).",
-      "body_he_md": "## תנאי מבחני כי-בריבוע\n\n1. **דגימה אקראית** — הנתונים חייבים לבוא ממדגם אקראי או ניסוי אקראי.\n2. **עצמאות תצפיות** — כל פרט מופיע בדיוק בתא אחד.\n3. **ספירה צפויה ≥ 5** — חל על כל התאים. מבטיח שהקירוב $\\chi^2$ תקין.\n   - אם מופר: שלב קטגוריות, או השתמש ב**מבחן פישר המדויק** (מדויק לכל גודל מדגם; מועדף לטבלאות $2\\times2$ עם $n$ קטן).\n\n---\n\n## מבחן פישר המדויק\n\nכאשר ספירות צפויות קטנות (<5), הקירוב של כי-בריבוע חלש. **מבחן פישר המדויק** מחשב את ההסתברות המדויקת של צפייה בנתונים (או קיצוניים יותר) תחת $H_0$ של עצמאות, ללא קירוב התפלגותי. זהו הבחירה הסטנדרטית לטבלאות $2\\times2$ עם מדגמים קטנים.\n\n---\n\n## כי-בריבוע לעומת מבחני t: מתי להשתמש\n\n| מצב | מבחן מתאים |\n|---|---|\n| השוואת ממוצע אחד לערך | מבחן $t$ חד-מדגמי |\n| השוואת ממוצעי שתי קבוצות | מבחן $t$ דו-מדגמי |\n| השוואת פרופורציות / פילוגים קטגוריים | **כי-בריבוע** |\n| בדיקת עצמאות שני משתנים קטגוריים | **מבחן עצמאות כי-בריבוע** |\n| משתנה קטגורי אחד, ספירות צפויות קטנות | **מבחן פישר המדויק** |\n\n**הבחנה מרכזית:** השתמש בכי-בריבוע כאשר משתנה התוצאה **קטגורי** (ספירות, תדירויות). השתמש במבחני $t$ כאשר התוצאה **מספרית** (ממוצעים)."
-    }
-  ],
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A chi-square goodness-of-fit test is applied to a variable with 5 categories. What are the degrees of freedom?",
-      "body_he": "מבחן התאמה לפילוג כי-בריבוע מוחל על משתנה עם 5 קטגוריות. מהן דרגות החופש?",
-      "options": [
-        { "id": "a", "text_en": "$df = 5$", "text_he": "$df = 5$", "correct": false },
-        { "id": "b", "text_en": "$df = 4$", "text_he": "$df = 4$", "correct": true },
-        { "id": "c", "text_en": "$df = 6$", "text_he": "$df = 6$", "correct": false },
-        { "id": "d", "text_en": "$df = 3$", "text_he": "$df = 3$", "correct": false }
-      ],
-      "explanation_en": "For a goodness-of-fit test with $k$ categories, $df = k - 1 = 5 - 1 = 4$. One degree of freedom is lost because the expected counts must sum to the observed total $n$.",
-      "explanation_he": "עבור מבחן התאמה לפילוג עם $k$ קטגוריות, $df = k - 1 = 5 - 1 = 4$. דרגת חופש אחת אובדת מכיוון שהספירות הצפויות חייבות להסתכם לסה\"כ הנצפה $n$."
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — 3×2 Contingency Table",
+      "title_he": "דוגמה פתורה 2 — טבלת אקראיות 3×2",
+      "body_en_md": "**Is education level associated with exercise frequency?** 150 surveyed:\n\n| | Exercises regularly | Does not | Total |\n|---|---|---|---|\n| High school | 20 | 40 | 60 |\n| Bachelor | 30 | 30 | 60 |\n| Graduate | 25 | 5 | 30 |\n| **Total** | 75 | 75 | 150 |\n\n**Step 1 — Expected counts** ($E_{ij} = \\text{row}_i \\times \\text{col}_j / 150$):\n\n| | Exercises | Does not |\n|---|---|---|\n| High school | $60\\times75/150=30$ | 30 |\n| Bachelor | $60\\times75/150=30$ | 30 |\n| Graduate | $30\\times75/150=15$ | 15 |\n\n**Step 2 — Chi-square:**\n$$\\chi^2 = \\frac{(20-30)^2}{30}+\\frac{(40-30)^2}{30}+\\frac{(30-30)^2}{30}+\\frac{(30-30)^2}{30}+\\frac{(25-15)^2}{15}+\\frac{(5-15)^2}{15}$$\n$$= 3.33+3.33+0+0+6.67+6.67 = 20.$$\n\n**Step 3 — Decision:** $df=(3-1)(2-1)=2$. $\\chi^2_{0.05,2}=5.99$. Since $20>5.99$: **reject $H_0$**. Education and exercise are associated.",
+      "body_he_md": "**האם רמת השכלה קשורה לתדירות פעילות גופנית?** 150 נסקרו (ראה טבלה).\n\n**שלב 1 — ספירות צפויות:**\n| | מתאמן | לא מתאמן |\n|---|---|---|\n| תיכון | 30 | 30 |\n| תואר ראשון | 30 | 30 |\n| תואר שני | 15 | 15 |\n\n**שלב 2 — $\\chi^2 = 20$.**\n\n**שלב 3 — החלטה:** $df=2$, $\\chi^2_{0.05,2}=5.99$. $20>5.99$: **דוחים $H_0$**. השכלה ופעילות גופנית קשורים."
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "A chi-square test of independence uses a $3 \\times 4$ contingency table. What are the degrees of freedom?",
-      "body_he": "מבחן עצמאות כי-בריבוע משתמש בטבלת אגירה $3 \\times 4$. מהן דרגות החופש?",
-      "options": [
-        { "id": "a", "text_en": "$df = 12$", "text_he": "$df = 12$", "correct": false },
-        { "id": "b", "text_en": "$df = 6$", "text_he": "$df = 6$", "correct": true },
-        { "id": "c", "text_en": "$df = 7$", "text_he": "$df = 7$", "correct": false },
-        { "id": "d", "text_en": "$df = 11$", "text_he": "$df = 11$", "correct": false }
-      ],
-      "explanation_en": "$df = (r-1)(c-1) = (3-1)(4-1) = 2 \\times 3 = 6$. A common mistake is using $r \\times c = 12$ (forgetting to subtract 1 from each).",
-      "explanation_he": "$df = (r-1)(c-1) = (3-1)(4-1) = 2 \\times 3 = 6$. טעות נפוצה היא שימוש ב-$r \\times c = 12$ (שכחת חיסור 1 מכל אחד)."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A 3×3 contingency table has $df = ?$ and a 4×2 table has $df = ?$",
+      "body_he_md": "לטבלה 3×3 יש $df = ?$ ולטבלה 4×2 יש $df = ?$",
+      "checkpoint_solution_en": "3×3: $df=(3-1)(3-1)=4$. 4×2: $df=(4-1)(2-1)=3$.",
+      "checkpoint_solution_he": "3×3: $df=4$. 4×2: $df=3$."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "In a contingency table with row total 80, column total 50, and grand total $N = 200$, what is the expected cell count?",
-      "body_he": "בטבלת אגירה עם סה\"כ שורה 80, סה\"כ עמודה 50 וסה\"כ כולל $N = 200$, מהי הספירה הצפויה בתא?",
-      "options": [
-        { "id": "a", "text_en": "$E = 20$", "text_he": "$E = 20$", "correct": true },
-        { "id": "b", "text_en": "$E = 25$", "text_he": "$E = 25$", "correct": false },
-        { "id": "c", "text_en": "$E = 40$", "text_he": "$E = 40$", "correct": false },
-        { "id": "d", "text_en": "$E = 16$", "text_he": "$E = 16$", "correct": false }
-      ],
-      "explanation_en": "$E = \\frac{\\text{Row total} \\times \\text{Column total}}{N} = \\frac{80 \\times 50}{200} = \\frac{4000}{200} = 20$.",
-      "explanation_he": "$E = \\frac{\\text{סה\"כ שורה} \\times \\text{סה\"כ עמודה}}{N} = \\frac{80 \\times 50}{200} = \\frac{4000}{200} = 20$."
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Goodness-of-Fit Test",
+      "title_he": "דוגמה פתורה 3 — מבחן טיב-התאמה",
+      "body_en_md": "**A die is rolled 120 times.** Observed counts: 1→18, 2→22, 3→25, 4→19, 5→20, 6→16. Test whether the die is fair at $\\alpha=0.05$.\n\n**$H_0$:** The die is fair (each face has probability $1/6$).\n\n**Step 1 — Expected counts:** $E_i = 120 \\times (1/6) = 20$ for each face.\n\n**Step 2 — Chi-square statistic:**\n$$\\chi^2 = \\frac{(18-20)^2}{20}+\\frac{(22-20)^2}{20}+\\frac{(25-20)^2}{20}+\\frac{(19-20)^2}{20}+\\frac{(20-20)^2}{20}+\\frac{(16-20)^2}{20}$$\n$$= \\frac{4}{20}+\\frac{4}{20}+\\frac{25}{20}+\\frac{1}{20}+0+\\frac{16}{20} = 0.2+0.2+1.25+0.05+0+0.8 = 2.5.$$\n\n**Step 3 — Decision:** $df = 6-1 = 5$. $\\chi^2_{0.05,5} = 11.07$. Since $2.5 < 11.07$: **fail to reject $H_0$**.\n\n**Conclusion:** There is no significant evidence that the die is unfair. The observed counts are consistent with a fair die.",
+      "body_he_md": "**קובייה נזרקת 120 פעמים.** ספירות תצפיתיות: 1→18, 2→22, 3→25, 4→19, 5→20, 6→16. בדוק אם הקובייה הוגנת ב-$\\alpha=0.05$.\n\n**$H_0$:** הקובייה הוגנת (כל פאה בהסתברות $1/6$).\n\n**שלב 1 — ספירות צפויות:** $E_i = 20$ לכל פאה.\n\n**שלב 2 — $\\chi^2$:**\n$$\\chi^2 = \\frac{4+4+25+1+0+16}{20} = \\frac{50}{20} = 2.5.$$\n\n**שלב 3 — החלטה:** $df=5$, $\\chi^2_{0.05,5}=11.07$. $2.5<11.07$: **לא דוחים $H_0$**.\n\n**מסקנה:** אין עדות מובהקת שהקובייה לא הוגנת."
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "A goodness-of-fit test yields $\\chi^2 = 7.8$ with $df = 4$. The critical value at $\\alpha = 0.05$ is $\\chi^2_{0.05,4} = 9.49$. What is the correct conclusion?",
-      "body_he": "מבחן התאמה לפילוג נותן $\\chi^2 = 7.8$ עם $df = 4$. הערך הקריטי ברמת $\\alpha = 0.05$ הוא $\\chi^2_{0.05,4} = 9.49$. מהי המסקנה הנכונה?",
-      "options": [
-        { "id": "a", "text_en": "Reject $H_0$; the data do not fit the distribution.", "text_he": "דחה $H_0$; הנתונים אינם מתאימים לפילוג.", "correct": false },
-        { "id": "b", "text_en": "Fail to reject $H_0$; the data are consistent with the distribution.", "text_he": "לא דחה $H_0$; הנתונים עקביים עם הפילוג.", "correct": true },
-        { "id": "c", "text_en": "Reject $H_0$; the data perfectly match the distribution.", "text_he": "דחה $H_0$; הנתונים מתאימים לפילוג באופן מושלם.", "correct": false },
-        { "id": "d", "text_en": "Fail to reject $H_0$; the distribution is certainly correct.", "text_he": "לא דחה $H_0$; הפילוג בוודאי נכון.", "correct": false }
-      ],
-      "explanation_en": "Since $\\chi^2 = 7.8 < 9.49 = \\chi^2_{\\text{crit}}$, the statistic does not fall in the rejection region. We fail to reject $H_0$ — the sample data are consistent with the hypothesized distribution. Note: 'fail to reject' is not the same as 'prove the distribution is correct'.",
-      "explanation_he": "מאחר ש-$\\chi^2 = 7.8 < 9.49 = \\chi^2_{\\text{crit}}$, הסטטיסטי אינו נופל באזור הדחייה. לא דוחים $H_0$ — נתוני המדגם עקביים עם הפילוג המוטען. הערה: 'לא לדחות' אינו שווה ל'להוכיח שהפילוג נכון'."
+      "kind": "method_guide",
+      "title_en": "Method Guide — Chi-Square Tests",
+      "title_he": "מדריך שיטה — מבחני כי-בריבוע",
+      "body_en_md": "**Independence test (contingency table):**\n1. State $H_0$: variables are independent.\n2. Compute expected counts: $E_{ij} = (R_i \\times C_j)/N$.\n3. Verify all $E_{ij} \\geq 5$.\n4. Compute $\\chi^2 = \\sum (O-E)^2/E$.\n5. $df = (r-1)(c-1)$.\n6. Compare to $\\chi^2_{\\alpha, df}$.\n\n**Goodness-of-fit test:**\n1. State $H_0$: data follow distribution with probabilities $p_1, \\ldots, p_k$.\n2. $E_i = n \\cdot p_i$.\n3. Verify all $E_i \\geq 5$.\n4. $\\chi^2 = \\sum (O-E)^2/E$.\n5. $df = k-1$.\n6. Compare to $\\chi^2_{\\alpha, df}$.\n\n| Large $\\chi^2$ | Reject $H_0$ | Association exists / Fit is poor |\n|---|---|---|\n| Small $\\chi^2$ | Fail to reject | No evidence of association / Good fit |",
+      "body_he_md": "**מבחן אי-תלות:**\n1. $H_0$: המשתנים בלתי-תלויים.\n2. $E_{ij} = (R_i \\times C_j)/N$.\n3. אמת ש-$E_{ij} \\geq 5$ לכולם.\n4. $\\chi^2 = \\sum (O-E)^2/E$.\n5. $df=(r-1)(c-1)$.\n6. השווה ל-$\\chi^2_{\\alpha,df}$.\n\n**מבחן טיב-התאמה:**\n1. $H_0$: הנתונים עוקבים אחרי פילוג עם הסתברויות $p_1,\\ldots,p_k$.\n2. $E_i = n \\cdot p_i$.\n3. $\\chi^2 = \\sum (O-E)^2/E$.\n4. $df=k-1$."
     },
     {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "When should Fisher's Exact Test be used instead of the chi-square test of independence?",
-      "body_he": "מתי יש להשתמש במבחן פישר המדויק במקום מבחן עצמאות כי-בריבוע?",
-      "options": [
-        { "id": "a", "text_en": "When the sample size is very large ($n > 1000$).", "text_he": "כאשר גודל המדגם גדול מאוד ($n > 1000$).", "correct": false },
-        { "id": "b", "text_en": "When one or more expected cell counts are less than 5.", "text_he": "כאשר ספירה צפויה אחת או יותר קטנה מ-5.", "correct": true },
-        { "id": "c", "text_en": "When the contingency table has more than two rows.", "text_he": "כאשר לטבלת האגירה יש יותר משתי שורות.", "correct": false },
-        { "id": "d", "text_en": "When the observed and expected counts are identical.", "text_he": "כאשר הספירות הנצפות והצפויות זהות.", "correct": false }
-      ],
-      "explanation_en": "The chi-square approximation requires all expected cell counts $E_{ij} \\geq 5$. When this condition is violated (e.g. small samples or rare categories), Fisher's Exact Test provides exact $p$-values without approximation and is the appropriate alternative, especially for $2\\times2$ tables.",
-      "explanation_he": "קירוב כי-בריבוע מצריך שכל ספירות צפויות $E_{ij} \\geq 5$. כאשר תנאי זה מופר (למשל מדגמים קטנים או קטגוריות נדירות), מבחן פישר המדויק מספק ערכי $p$ מדויקים ללא קירוב והוא האלטרנטיבה המתאימה, במיוחד לטבלאות $2\\times2$."
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A 2×2 table has row totals 40 and 60, column totals 50 and 50, grand total 100. Find $E_{11}$.",
+          "body_he": "טבלה 2×2 עם סה\"כ שורות 40 ו-60, עמודות 50 ו-50, כולל 100. מצא $E_{11}$.",
+          "solution_en": "$E_{11} = 40 \\times 50 / 100 = 20$.",
+          "solution_he": "$E_{11} = 20$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "For a goodness-of-fit test with $k=4$ categories, what is $df$?",
+          "body_he": "במבחן טיב-התאמה עם $k=4$ קטגוריות, מהו $df$?",
+          "solution_en": "$df = 4-1 = 3$.",
+          "solution_he": "$df = 3$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "A coin is flipped 100 times: 55 heads, 45 tails. $H_0$: fair coin. Compute $\\chi^2$.",
+          "body_he": "מטבע נזרק 100 פעמים: 55 עץ, 45 פלי. $H_0$: מטבע הוגן. חשב $\\chi^2$.",
+          "solution_en": "$E = 50$ each. $\\chi^2 = (55-50)^2/50 + (45-50)^2/50 = 0.5+0.5 = 1$.",
+          "solution_he": "$E=50$ לכל אחד. $\\chi^2 = 0.5+0.5 = 1$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "For a 4×3 contingency table, what are the degrees of freedom?",
+          "body_he": "לטבלת אקראיות 4×3, כמה דרגות חופש?",
+          "solution_en": "$df = (4-1)(3-1) = 6$.",
+          "solution_he": "$df = 6$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A 2×2 contingency table (gender vs. preference): $O_{11}=30$, $O_{12}=20$, $O_{21}=10$, $O_{22}=40$. Grand total = 100. Compute $\\chi^2$ and test at $\\alpha=0.05$.",
+          "body_he": "טבלה 2×2 (מגדר מול העדפה): $O_{11}=30$, $O_{12}=20$, $O_{21}=10$, $O_{22}=40$. כולל = 100. חשב $\\chi^2$ ובדוק ב-$\\alpha=0.05$.",
+          "solution_en": "Row totals: 50, 50. Col totals: 40, 60. $E_{11}=20$, $E_{12}=30$, $E_{21}=20$, $E_{22}=30$. $\\chi^2 = 100/20+100/30+100/20+100/30 = 5+3.33+5+3.33=16.67$. $df=1$, $\\chi^2_{0.05,1}=3.84$. Reject $H_0$.",
+          "solution_he": "$E_{11}=20$, $E_{12}=30$, $E_{21}=20$, $E_{22}=30$. $\\chi^2=16.67$. $df=1$, קריטי=3.84. **דוחים $H_0$**.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A bag claims 25% red, 25% blue, 25% green, 25% yellow candies. In 80 candies: 24 red, 18 blue, 20 green, 18 yellow. Test goodness of fit at $\\alpha=0.05$ ($\\chi^2_{0.05,3}=7.81$).",
+          "body_he": "שקית ממתקים טוענת 25% מכל צבע. ב-80 ממתקים: 24 אדום, 18 כחול, 20 ירוק, 18 צהוב. בדוק טיב-התאמה ב-$\\alpha=0.05$.",
+          "solution_en": "$E_i = 20$ each. $\\chi^2 = (4^2+2^2+0^2+2^2)/20 = (16+4+0+4)/20 = 24/20 = 1.2$. $df=3$. $1.2 < 7.81$: fail to reject $H_0$. Good fit.",
+          "solution_he": "$E_i=20$ לכל צבע. $\\chi^2=24/20=1.2<7.81$. **לא דוחים $H_0$**. התאמה טובה.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "When is the chi-square test NOT valid? State the rule of thumb.",
+          "body_he": "מתי מבחן כי-בריבוע **לא** תקף? ציין את כלל האצבע.",
+          "solution_en": "The chi-square test is unreliable when expected counts are less than 5. Rule of thumb: **all $E_{ij} \\geq 5$**. If violated, combine categories or use Fisher's exact test.",
+          "solution_he": "המבחן לא אמין כאשר ספירות צפויות קטנות מ-5. כלל: **כל $E_{ij} \\geq 5$**. אם מופר — אחד קטגוריות או השתמש במבחן הדיוק של פישר.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "In a 3×2 table, $\\chi^2 = 8.5$. The critical value $\\chi^2_{0.05,2} = 5.99$. What is the conclusion?",
+          "body_he": "בטבלה 3×2, $\\chi^2=8.5$. ערך קריטי $\\chi^2_{0.05,2}=5.99$. מה המסקנה?",
+          "solution_en": "$8.5 > 5.99$: **reject $H_0$**. The two categorical variables are significantly associated at the 5% level.",
+          "solution_he": "$8.5>5.99$: **דוחים $H_0$**. שני המשתנים הקטגוריים קשורים מובהקית ברמה 5%.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Explain the difference between the chi-square test for independence and the goodness-of-fit test.",
+          "body_he": "הסבר את ההבדל בין מבחן אי-תלות ומבחן טיב-התאמה.",
+          "solution_en": "**Independence:** two categorical variables in a contingency table; tests association. **Goodness-of-fit:** one categorical variable; tests whether observed frequencies match a hypothesised distribution. Both use the same $\\chi^2 = \\sum(O-E)^2/E$ statistic but different $df$.",
+          "solution_he": "**אי-תלות:** שני משתנים קטגוריים בטבלה; בודק קשר. **טיב-התאמה:** משתנה קטגורי אחד; בודק התאמה לפילוג היפותטי. שניהם משתמשים באותה $\\chi^2$ אבל $df$ שונה.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that for a 2×2 table with observed counts $a,b,c,d$ and row/column totals $R_1,R_2,C_1,C_2$, $N$, the chi-square statistic equals $N(ad-bc)^2/(R_1 R_2 C_1 C_2)$.",
+          "body_he": "הוכח שעבור טבלה 2×2 עם ספירות $a,b,c,d$ וסה\"כ שורות/עמודות, $\\chi^2 = N(ad-bc)^2/(R_1 R_2 C_1 C_2)$.",
+          "solution_en": "$E_{11}=R_1C_1/N$. $(O-E)_{11} = a - R_1C_1/N = (aN - R_1C_1)/N = (a(C_1+C_2)-(a+b)C_1)/N = (aC_2-bC_1)/N = (ad-bc)/N$ (since $C_2=c+d$, $C_1=a+c$, so $ad-bc = a(c+d)-b(a+c)$... after algebra). Squaring and summing all four cells with their $E$ values yields the compact form. $\\blacksquare$",
+          "solution_he": "$E_{11}=R_1C_1/N$. $(O_{11}-E_{11}) = (ad-bc)/N$ לאחר אלגברה. ריבוע וסיכום כל תאי הטבלה מניב את הצורה הקומפקטית. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A geneticist observes 315 round-yellow, 101 round-green, 108 wrinkled-yellow, 32 wrinkled-green peas (Mendel data). Under 9:3:3:1 ratio, test goodness of fit at $\\alpha=0.05$ ($\\chi^2_{0.05,3}=7.81$).",
+          "body_he": "גנטיקאי צופה 315 עגול-צהוב, 101 עגול-ירוק, 108 מקומט-צהוב, 32 מקומט-ירוק. תחת יחס 9:3:3:1, בדוק טיב-התאמה.",
+          "solution_en": "Total $n=556$. Expected: $556\\times(9/16)=312.75$; $556\\times(3/16)=104.25$; $104.25$; $556\\times(1/16)=34.75$. $\\chi^2 = (315-312.75)^2/312.75+(101-104.25)^2/104.25+(108-104.25)^2/104.25+(32-34.75)^2/34.75 \\approx 0.016+0.101+0.135+0.218=0.47$. $0.47<7.81$: fail to reject. Data consistent with 9:3:3:1.",
+          "solution_he": "$n=556$. $\\chi^2\\approx0.47<7.81$: לא דוחים. הנתונים תואמים יחס 9:3:3:1 (נתוני מנדל).",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Under $H_0$ for the independence test, show that the expected count formula $E_{ij} = R_i C_j / N$ follows directly from the definition of statistical independence.",
+          "body_he": "תחת $H_0$ במבחן אי-תלות, הראה שנוסחת הספירה הצפויה $E_{ij}=R_i C_j/N$ נובעת ישירות מהגדרת אי-תלות סטטיסטית.",
+          "solution_en": "If rows and columns are independent, $P(\\text{row }i, \\text{col }j) = P(\\text{row }i) \\cdot P(\\text{col }j) = (R_i/N) \\cdot (C_j/N)$. Expected count $= N \\cdot P(\\text{row }i, \\text{col }j) = N \\cdot (R_i/N)(C_j/N) = R_i C_j / N$. $\\blacksquare$",
+          "solution_he": "אי-תלות: $P(i,j)=P(i)\\cdot P(j)=(R_i/N)(C_j/N)$. ספירה צפויה $= N \\cdot (R_i/N)(C_j/N) = R_iC_j/N$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A 3×3 table has $\\chi^2 = 15.2$. Using $\\chi^2_{0.05,4}=9.49$ and $\\chi^2_{0.01,4}=13.28$, what is the approximate p-value? State the conclusion.",
+          "body_he": "לטבלה 3×3, $\\chi^2=15.2$. עם $\\chi^2_{0.05,4}=9.49$ ו-$\\chi^2_{0.01,4}=13.28$, מהו ה-p-value המשוער? ציין מסקנה.",
+          "solution_en": "$15.2 > 13.28 = \\chi^2_{0.01,4}$, so $p < 0.01$. The result is significant at the 1% level. There is very strong evidence of association between the two variables.",
+          "solution_he": "$15.2 > 13.28$, לכן $p<0.01$. המסקנה מובהקת ברמה 1%. עדות חזקה מאוד לקשר בין המשתנים.",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Using observed counts as expected.** Expected counts $E_{ij}$ are computed from marginal totals, NOT simply the average observed counts.\n\n2. **Small expected counts.** If any $E_{ij} < 5$, the chi-square approximation is unreliable. Combine categories or use Fisher's exact test.\n\n3. **Wrong degrees of freedom.** Independence: $df = (r-1)(c-1)$. Goodness-of-fit: $df = k-1$. Do not confuse the two.\n\n4. **Chi-square does not measure association strength.** A large $\\chi^2$ means significant association but doesn't tell you the strength (use Cramér's $V$ for that).\n\n5. **Directional conclusions.** Chi-square only detects whether an association exists. It does NOT say which groups differ or the direction of the effect.",
+      "body_he_md": "1. **שימוש בספירות תצפיתיות כצפויות.** ספירות $E_{ij}$ מחושבות מסה\"כ שוליים, לא פשוט ממוצע ספירות תצפיתיות.\n\n2. **ספירות צפויות קטנות.** אם $E_{ij}<5$ — הקירוב לא אמין. אחד קטגוריות או השתמש במבחן פישר.\n\n3. **דרגות חופש שגויות.** אי-תלות: $(r-1)(c-1)$. טיב-התאמה: $k-1$. אל תבלבל.\n\n4. **$\\chi^2$ לא מודד עוצמת קשר.** $\\chi^2$ גדול = קשר מובהק, לא חזק. לעוצמה השתמש ב-$V$ של קרמר.\n\n5. **מסקנות כיווניות.** $\\chi^2$ רק מגלה אם קשר קיים. הוא לא אומר אילו קבוצות שונות או כיוון האפקט."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- $\\chi^2 = \\sum (O-E)^2/E$\n- Independence: $E_{ij} = R_i C_j / N$; $df = (r-1)(c-1)$\n- Goodness-of-fit: $E_i = n p_i$; $df = k-1$\n- Reject $H_0$ if $\\chi^2 > \\chi^2_{\\alpha, df}$\n- Condition: all $E_{ij} \\geq 5$\n\n**Exam patterns:**\n- Compute $\\chi^2$ from a given table.\n- Find expected counts.\n- State $df$ and compare to critical value.\n- Interpret the conclusion in context.\n\n**Tip:** Check that observed + expected totals match. This catches arithmetic errors early.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $\\chi^2 = \\sum (O-E)^2/E$\n- אי-תלות: $E_{ij}=R_iC_j/N$; $df=(r-1)(c-1)$\n- טיב-התאמה: $E_i=np_i$; $df=k-1$\n- דחה $H_0$ אם $\\chi^2>\\chi^2_{\\alpha,df}$\n- תנאי: $E_{ij}\\geq5$ לכולם\n\n**דגשי מבחן:**\n- חשב $\\chi^2$ מטבלה נתונה.\n- מצא ספירות צפויות.\n- ציין $df$ והשווה לקריטי.\n- פרש מסקנה בהקשר.\n\n**טיפ:** בדוק שסה\"כ תצפיות = סה\"כ צפויות. זה מגלה שגיאות חישוב מוקדם."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Chi-square statistic:** $\\chi^2 = \\sum (O-E)^2/E$; large values evidence against $H_0$.\n- **Independence test:** $E_{ij} = R_i C_j/N$; $df=(r-1)(c-1)$; tests whether two categorical variables are associated.\n- **Goodness-of-fit:** $E_i = np_i$; $df=k-1$; tests whether data follow a specified distribution.\n- **Validity condition:** all expected counts $\\geq 5$.\n- **Decision:** reject $H_0$ if $\\chi^2 > \\chi^2_{\\alpha, df}$.",
+      "body_he_md": "- **$\\chi^2 = \\sum (O-E)^2/E$:** ערכים גדולים = עדות נגד $H_0$.\n- **אי-תלות:** $E_{ij}=R_iC_j/N$; $df=(r-1)(c-1)$; בודק קשר בין שני משתנים קטגוריים.\n- **טיב-התאמה:** $E_i=np_i$; $df=k-1$; בודק התאמה לפילוג.\n- **תנאי תקפות:** ספירות צפויות $\\geq5$ לכולן.\n- **החלטה:** דחה $H_0$ אם $\\chi^2>\\chi^2_{\\alpha,df}$."
     }
   ]
 }

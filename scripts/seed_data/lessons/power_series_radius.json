@@ -2,30 +2,232 @@
   "concept_id": "power_series_radius",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Power Series Radius",
+  "math_track": ["calculus1", "analysis"],
+  "title_en": "Power Series and Radius of Convergence",
   "title_he": "טורי חזקות ורדיוס התכנסות",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "summary_en": "Power series, radius and interval of convergence via ratio test, term-by-term differentiation and integration.",
+  "summary_he": "טורי חזקות, רדיוס ותחום התכנסות על ידי מבחן המנה, גזירה ואינטגרציה איבר-איבר.",
+  "est_minutes": 55,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Power Series Radius.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-טורי חזקות ורדיוס התכנסות.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Why Power Series?",
+      "title_he": "מדוע טורי חזקות?",
+      "body_en_md": "A **power series** $\\sum_{n=0}^{\\infty} a_n(x-c)^n$ is an \"infinite polynomial\" centred at $c$. Power series are fundamental in analysis because:\n- They represent functions like $e^x$, $\\sin x$, $\\ln(1+x)$ exactly on an interval.\n- They allow term-by-term differentiation and integration (no messy rules needed).\n- They are the basis of Taylor/Maclaurin series used throughout physics, engineering, and numerical computation.\n- Many ODEs and PDEs are solved using power series.",
+      "body_he_md": "**טור חזקות** $\\sum_{n=0}^{\\infty}a_n(x-c)^n$ הוא \"פולינום אינסופי\" ממורכז ב-$c$. טורי חזקות מהותיים בגלל:\n- הם מייצגים פונקציות כגון $e^x$, $\\sin x$, $\\ln(1+x)$ בדיוק על קטע.\n- ניתן לגזור ולאינטגר אותם איבר-איבר.\n- הם הבסיס לטורי טיילור-מקלורן שמשמשים בכל הפיזיקה, ההנדסה, והחישוב המספרי.\n- משוואות דיפרנציאליות רבות נפתרות בעזרת טורי חזקות."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Power Series Radius: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Power Series Radius.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-טורי חזקות ורדיוס התכנסות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-טורי חזקות ורדיוס התכנסות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Power Series, Radius of Convergence, Interval",
+      "title_he": "טור חזקות, רדיוס התכנסות, תחום",
+      "body_en_md": "**Power series** centered at $c$:\n$$\\sum_{n=0}^{\\infty} a_n(x-c)^n = a_0+a_1(x-c)+a_2(x-c)^2+\\cdots$$\n\n**Radius of convergence $R$:** The series converges absolutely for $|x-c|<R$ and diverges for $|x-c|>R$.\n\n**Finding $R$ via ratio test:**\n$$R = \\lim_{n\\to\\infty}\\left|\\frac{a_n}{a_{n+1}}\\right| \\quad\\text{(if the limit exists)}.$$\nEquivalently, $1/R = \\lim_{n\\to\\infty}|a_{n+1}/a_n|$ (the ratio test applied to the general term).\n\n**Finding $R$ via root test:**\n$$1/R = \\limsup_{n\\to\\infty}|a_n|^{1/n}.$$\n\n**Interval of convergence:** $(c-R,c+R)$ plus endpoint checks. At $x=c\\pm R$: test separately (series may converge or diverge).\n\n**Special cases:** $R=0$ (converges only at $c$); $R=\\infty$ (converges for all $x$).\n\n**Term-by-term differentiation/integration:**\n$$\\frac{d}{dx}\\sum a_n(x-c)^n = \\sum na_n(x-c)^{n-1}, \\quad \\int\\sum a_n(x-c)^n\\,dx = \\sum\\frac{a_n(x-c)^{n+1}}{n+1}+C,$$\nboth valid on $(c-R,c+R)$.",
+      "body_he_md": "**טור חזקות** ממורכז ב-$c$:\n$$\\sum_{n=0}^{\\infty}a_n(x-c)^n=a_0+a_1(x-c)+\\cdots$$\n\n**רדיוס התכנסות $R$:** מתכנס בהחלט ל-$|x-c|<R$; מתבדר ל-$|x-c|>R$.\n\n**מבחן המנה:** $R=\\lim|a_n/a_{n+1}|$.\n\n**מבחן השורש:** $1/R=\\limsup|a_n|^{1/n}$.\n\n**תחום התכנסות:** $(c-R,c+R)$ + בדיקת קצוות בנפרד.\n\n**מקרים מיוחדים:** $R=0$ (התכנסות ב-$c$ בלבד); $R=\\infty$ (התכנסות לכל $x$).\n\n**גזירה/אינטגרציה איבר-איבר:** חוקיות על $(c-R,c+R)$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Key Power Series to Memorise",
+      "title_he": "טורי חזקות מרכזיים לשינון",
+      "body_en_md": "**Geometric series:**\n$$\\frac{1}{1-x} = \\sum_{n=0}^{\\infty}x^n, \\quad |x|<1 \\quad (R=1).$$\n\n**Exponential:**\n$$e^x = \\sum_{n=0}^{\\infty}\\frac{x^n}{n!}, \\quad R=\\infty.$$\n\n**Sine:**\n$$\\sin x = \\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n+1}}{(2n+1)!}, \\quad R=\\infty.$$\n\n**Cosine:**\n$$\\cos x = \\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n}}{(2n)!}, \\quad R=\\infty.$$\n\n**Logarithm:**\n$$\\ln(1+x) = \\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}x^n}{n} = x-\\frac{x^2}{2}+\\frac{x^3}{3}-\\cdots, \\quad -1<x\\leq 1.$$\n\n**Arctangent:**\n$$\\arctan x = \\sum_{n=0}^{\\infty}\\frac{(-1)^n x^{2n+1}}{2n+1} = x-\\frac{x^3}{3}+\\cdots, \\quad |x|\\leq 1.$$",
+      "body_he_md": "**סדרה גיאומטרית:** $\\dfrac{1}{1-x}=\\sum x^n$, $|x|<1$.\n\n**אקספוננט:** $e^x=\\sum x^n/n!$, $R=\\infty$.\n\n**סינוס:** $\\sin x=\\sum(-1)^n x^{2n+1}/(2n+1)!$, $R=\\infty$.\n\n**קוסינוס:** $\\cos x=\\sum(-1)^n x^{2n}/(2n)!$, $R=\\infty$.\n\n**לוגריתם:** $\\ln(1+x)=\\sum(-1)^{n-1}x^n/n$, $-1<x\\leq1$.\n\n**ארקטנגנס:** $\\arctan x=\\sum(-1)^n x^{2n+1}/(2n+1)$, $|x|\\leq1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Finding the Radius of Convergence",
+      "title_he": "דוגמה פתורה 1 — מציאת רדיוס ההתכנסות",
+      "body_en_md": "**Series:** $\\displaystyle\\sum_{n=0}^{\\infty}\\frac{x^n}{n!}$.\n\n**Step 1 — Identify $a_n$:** $a_n=1/n!$.\n\n**Step 2 — Apply ratio test:**\n$$\\frac{|a_{n+1}|}{|a_n|}\\cdot|x| = \\frac{1/(n+1)!}{1/n!}|x| = \\frac{|x|}{n+1} \\to 0\\text{ as }n\\to\\infty.$$\n\n**Step 3 — Convergence condition:** Ratio $\\to 0 < 1$ for any fixed $x$. By ratio test: **converges for all $x$**.\n\n**Conclusion:** $R=\\infty$. This is the series for $e^x$.",
+      "body_he_md": "**טור:** $\\sum x^n/n!$.\n\n**שלב 1:** $a_n=1/n!$.\n\n**שלב 2 — מנה:** $|a_{n+1}|/|a_n|\\cdot|x|=|x|/(n+1)\\to 0$.\n\n**שלב 3:** מתכנס לכל $x$.\n\n**מסקנה:** $R=\\infty$. זהו הטור של $e^x$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the radius of convergence of $\\sum_{n=1}^{\\infty}n x^n$.",
+      "body_he": "מצא רדיוס התכנסות של $\\sum_{n=1}^{\\infty}nx^n$.",
+      "checkpoint_solution_en": "$a_n=n$. Ratio: $|a_{n+1}/a_n|\\cdot|x|=(n+1)/n\\cdot|x|\\to|x|$. Converges when $|x|<1$. $R=1$.",
+      "checkpoint_solution_he": "$|a_{n+1}/a_n|\\cdot|x|\\to|x|$. מתכנס כאשר $|x|<1$. $R=1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Full Interval of Convergence",
+      "title_he": "דוגמה פתורה 2 — תחום התכנסות מלא",
+      "body_en_md": "**Series:** $\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^n(x-2)^n}{n}$.\n\n**Step 1 — Identify:** $a_n=(-1)^n/n$, centred at $c=2$.\n\n**Step 2 — Ratio test for $R$:**\n$$\\left|\\frac{a_{n+1}}{a_n}\\right| = \\frac{n}{n+1} \\to 1.$$\nSo $R = \\lim|a_n/a_{n+1}| = \\lim n/(n+1)... $ Better: $1/R=\\lim|a_{n+1}/a_n|=1$, so $R=1$.\n\n**Step 3 — Open interval:** $(2-1,2+1)=(1,3)$.\n\n**Step 4 — Check endpoints:**\n- At $x=1$: $(x-2)^n=(-1)^n$. Series $=\\sum(-1)^n(-1)^n/n=\\sum1/n$. **Diverges** (harmonic series).\n- At $x=3$: $(x-2)^n=1^n=1$. Series $=\\sum(-1)^n/n$. **Converges** (alternating series test).\n\n**Conclusion:** Interval of convergence is $[1,3)$... wait, $x=3$ gives $\\sum(-1)^n/n$ which converges, and $x=1$ diverges. So interval is $(1,3]$.",
+      "body_he_md": "**טור:** $\\sum(-1)^n(x-2)^n/n$, ממורכז ב-$c=2$.\n\n**שלב 1:** $R=1$; קטע פתוח: $(1,3)$.\n\n**שלב 2 — קצוות:**\n- $x=1$: $\\sum 1/n$ — **מתבדר**.\n- $x=3$: $\\sum(-1)^n/n$ — **מתכנס** (מבחן לייבניץ).\n\n**מסקנה:** תחום התכנסות: $(1,3]$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the interval of convergence of $\\sum_{n=0}^{\\infty}\\dfrac{x^n}{n+1}$.",
+      "body_he_md": "מצא את תחום ההתכנסות של $\\sum_{n=0}^{\\infty}\\dfrac{x^n}{n+1}$.",
+      "checkpoint_solution_en": "$a_n=1/(n+1)$. $R=\\lim(n+1)/(n+2)=1$. Interval $(−1,1)$. At $x=1$: $\\sum 1/(n+1)$ diverges. At $x=-1$: $\\sum(-1)^n/(n+1)$ converges. Interval: $[-1,1)$.",
+      "checkpoint_solution_he": "$R=1$. ב-$x=1$: מתבדר. ב-$x=-1$: מתכנס. תחום: $[-1,1)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Term-by-Term Integration to Find a New Series",
+      "title_he": "דוגמה פתורה 3 — אינטגרציה איבר-איבר למציאת טור חדש",
+      "body_en_md": "**Problem:** Starting from $\\dfrac{1}{1+x}=\\sum_{n=0}^{\\infty}(-1)^n x^n$ (for $|x|<1$), find the power series for $\\ln(1+x)$.\n\n**Step 1 — Integrate both sides from 0 to $x$:**\n$$\\int_0^x\\frac{1}{1+t}\\,dt = \\int_0^x\\sum_{n=0}^{\\infty}(-1)^n t^n\\,dt.$$\n\n**Step 2 — Left side:**\n$$[\\ln(1+t)]_0^x = \\ln(1+x)-\\ln(1)=\\ln(1+x).$$\n\n**Step 3 — Right side (integrate term by term):**\n$$\\sum_{n=0}^{\\infty}(-1)^n\\int_0^x t^n\\,dt = \\sum_{n=0}^{\\infty}(-1)^n\\frac{x^{n+1}}{n+1} = \\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}x^n}{n}.$$\n\n**Step 4 — Result:**\n$$\\ln(1+x) = x-\\frac{x^2}{2}+\\frac{x^3}{3}-\\frac{x^4}{4}+\\cdots = \\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}x^n}{n}.$$\n\n**Step 5 — Radius:** Same $R=1$. Checking endpoints: converges at $x=1$ (conditional), diverges at $x=-1$. Interval: $(-1,1]$.",
+      "body_he_md": "**בעיה:** מתוך $1/(1+x)=\\sum(-1)^n x^n$, מצא טור ל-$\\ln(1+x)$.\n\n**שלב 1:** אינטגר שני הצדדים מ-0 עד $x$.\n\n**שלב 2 — צד שמאל:** $\\ln(1+x)$.\n\n**שלב 3 — צד ימין (איבר-איבר):**\n$$\\sum(-1)^n\\frac{x^{n+1}}{n+1}=\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}x^n}{n}.$$\n\n**שלב 4:**\n$$\\ln(1+x)=\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}x^n}{n}, \\quad R=1, \\text{ תחום: }(-1,1].$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Power Series Workflow",
+      "title_he": "מדריך שיטה — נוהל טורי חזקות",
+      "body_en_md": "**Finding the radius $R$:**\n1. Write the general term $a_n(x-c)^n$.\n2. Apply ratio test: $L=\\lim|a_{n+1}/a_n|\\cdot|x-c|$. Converges if $L<1$.\n3. $R=\\lim|a_n/a_{n+1}|$ (or $1/R=\\limsup|a_n|^{1/n}$).\n\n**Checking endpoints:** substitute $x=c\\pm R$ in the series; test convergence separately.\n\n**Term-by-term differentiation:** $d/dx\\sum a_n(x-c)^n=\\sum na_n(x-c)^{n-1}$; same $R$.\n**Term-by-term integration:** $\\int\\sum a_n(x-c)^n\\,dx=C+\\sum a_n(x-c)^{n+1}/(n+1)$; same $R$.\n\n| Series | Formula | $R$ |\n|---|---|---|\n| $\\sum x^n$ | $1/(1-x)$ | 1 |\n| $\\sum x^n/n!$ | $e^x$ | $\\infty$ |\n| $\\sum(-1)^n x^{2n+1}/(2n+1)!$ | $\\sin x$ | $\\infty$ |\n| $\\sum(-1)^{n-1}x^n/n$ | $\\ln(1+x)$ | 1 |",
+      "body_he_md": "**מציאת $R$:**\n1. כתוב גורם כללי $a_n(x-c)^n$.\n2. מבחן מנה: $L=\\lim|a_{n+1}/a_n|\\cdot|x-c|$. מתכנס אם $L<1$.\n3. $R=\\lim|a_n/a_{n+1}|$.\n\n**קצוות:** הצב $x=c\\pm R$ ובדוק בנפרד.\n\n**גזירה איבר-איבר:** אותו $R$.\n**אינטגרציה איבר-איבר:** אותו $R$.\n\n| טור | פונקציה | $R$ |\n|---|---|---|\n| $\\sum x^n$ | $1/(1-x)$ | 1 |\n| $\\sum x^n/n!$ | $e^x$ | $\\infty$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find the radius of convergence of $\\sum_{n=0}^{\\infty}2^n x^n$.",
+          "body_he": "מצא רדיוס התכנסות של $\\sum_{n=0}^{\\infty}2^n x^n$.",
+          "solution_en": "$a_n=2^n$. $|a_{n+1}/a_n|=2$. $R=1/2$.",
+          "solution_he": "$|a_{n+1}/a_n|=2$. $R=1/2$.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find the radius of convergence of $\\sum_{n=0}^{\\infty}n!\\, x^n$.",
+          "body_he": "מצא רדיוס התכנסות של $\\sum_{n=0}^{\\infty}n!\\,x^n$.",
+          "solution_en": "$|a_{n+1}/a_n|=(n+1)|x|\\to\\infty$ for $x\\neq 0$. $R=0$ (converges only at $x=0$).",
+          "solution_he": "$|a_{n+1}/a_n|=(n+1)|x|\\to\\infty$. $R=0$.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Write the first 4 non-zero terms of $e^x$ and find $e^{-1}$ approximately using 3 terms.",
+          "body_he": "כתוב 4 האיברים הראשונים של $e^x$ ומצא $e^{-1}$ בקירוב עם 3 איברים.",
+          "solution_en": "$e^x=1+x+x^2/2+x^3/6+\\cdots$. $e^{-1}\\approx 1-1+1/2=0.5$ (exact: $0.368$).",
+          "solution_he": "$e^{-1}\\approx1-1+1/2=0.5$ (מדויק: $0.368$).",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find the interval of convergence of $\\sum_{n=0}^{\\infty}\\dfrac{(x-1)^n}{3^n}$.",
+          "body_he": "מצא תחום התכנסות של $\\sum_{n=0}^{\\infty}\\dfrac{(x-1)^n}{3^n}$.",
+          "solution_en": "$a_n=1/3^n$. $R=\\lim|a_n/a_{n+1}|=3$. Centred at 1. Open interval: $(-2,4)$. At $x=-2$: $\\sum(-1)^n$ diverges. At $x=4$: $\\sum 1$ diverges. Interval: $(-2,4)$.",
+          "solution_he": "$R=3$, ממורכז ב-1. קטע פתוח: $(-2,4)$. בשני הקצוות: מתבדר. תחום: $(-2,4)$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find the power series for $f(x)=\\dfrac{1}{1+x^2}$ and its radius of convergence.",
+          "body_he": "מצא טור חזקות ל-$f(x)=\\dfrac{1}{1+x^2}$ ורדיוס התכנסותו.",
+          "solution_en": "Use $1/(1-t)=\\sum t^n$ with $t=-x^2$: $1/(1+x^2)=\\sum(-1)^n x^{2n}=1-x^2+x^4-\\cdots$. $R=1$ (need $|x^2|<1\\Leftrightarrow|x|<1$).",
+          "solution_he": "הצב $t=-x^2$: $1/(1+x^2)=\\sum(-1)^n x^{2n}$. $R=1$.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the power series for $\\arctan x$ by integrating $1/(1+x^2)$.",
+          "body_he": "מצא טור חזקות ל-$\\arctan x$ על ידי אינטגרציה של $1/(1+x^2)$.",
+          "solution_en": "$\\int_0^x 1/(1+t^2)\\,dt=\\int_0^x\\sum(-1)^n t^{2n}\\,dt=\\sum(-1)^n x^{2n+1}/(2n+1)=x-x^3/3+x^5/5-\\cdots$. This is $\\arctan x$, valid for $|x|\\leq 1$ (check endpoints: converges at $\\pm1$ by AST).",
+          "solution_he": "$\\int_0^x\\sum(-1)^n t^{2n}\\,dt=\\sum(-1)^n x^{2n+1}/(2n+1)=\\arctan x$. תחום: $[-1,1]$.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find the power series for $xe^x$ and state its radius of convergence.",
+          "body_he": "מצא טור חזקות ל-$xe^x$ ומצא את רדיוס ההתכנסות שלו.",
+          "solution_en": "$xe^x=x\\sum_{n=0}^{\\infty}x^n/n!=\\sum_{n=0}^{\\infty}x^{n+1}/n!=\\sum_{n=1}^{\\infty}x^n/(n-1)!$. $R=\\infty$.",
+          "solution_he": "$xe^x=\\sum x^{n+1}/n!=\\sum_{n=1}^{\\infty}x^n/(n-1)!$. $R=\\infty$.",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the radius of convergence of $\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n x^{2n}}{n\\cdot 4^n}$.",
+          "body_he": "מצא רדיוס התכנסות של $\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n x^{2n}}{n\\cdot 4^n}$.",
+          "solution_en": "Write $b_n=(-1)^n/(n4^n)$ so $b_n(x^2)^n$. Ratio of $|b_{n+1}|/|b_n|=n/((n+1)4)\\cdot|x^2|\\to|x^2|/4$. Converges when $|x^2|/4<1\\Leftrightarrow|x|<2$. $R=2$.",
+          "solution_he": "הנה $|b_{n+1}/b_n|\\cdot|x^2|\\to|x^2|/4$. $|x|<2\\Rightarrow R=2$.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Differentiate the series $\\sum_{n=0}^{\\infty}x^n=1/(1-x)$ term by term to get a series for $1/(1-x)^2$.",
+          "body_he": "גזור את הטור $\\sum x^n=1/(1-x)$ איבר-איבר כדי לקבל טור ל-$1/(1-x)^2$.",
+          "solution_en": "$d/dx[1/(1-x)]=1/(1-x)^2$. $d/dx[\\sum x^n]=\\sum nx^{n-1}=\\sum_{n=1}^{\\infty}nx^{n-1}$. So $1/(1-x)^2=\\sum_{n=1}^{\\infty}nx^{n-1}=\\sum_{n=0}^{\\infty}(n+1)x^n$, valid for $|x|<1$.",
+          "solution_he": "$d/dx[\\sum x^n]=\\sum nx^{n-1}=1/(1-x)^2$. לכן $1/(1-x)^2=\\sum_{n=0}^{\\infty}(n+1)x^n$, $|x|<1$.",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find the full interval of convergence of $\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n x^n}{\\sqrt{n}}$.",
+          "body_he": "מצא תחום התכנסות מלא של $\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n x^n}{\\sqrt{n}}$.",
+          "solution_en": "$a_n=(-1)^n/\\sqrt{n}$. $R=\\lim|a_n/a_{n+1}|=\\lim\\sqrt{n+1}/\\sqrt{n}=1$. Open interval: $(-1,1)$. At $x=1$: $\\sum(-1)^n/\\sqrt{n}$ converges (AST). At $x=-1$: $\\sum(-1)^n(-1)^n/\\sqrt{n}=\\sum 1/\\sqrt{n}$ diverges ($p$-series, $p=1/2\\leq 1$). Interval: $(-1,1]$.",
+          "solution_he": "$R=1$. ב-$x=1$: מתכנס (AST). ב-$x=-1$: $\\sum 1/\\sqrt{n}$ מתבדר. תחום: $(-1,1]$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that term-by-term differentiation of $\\sin x=\\sum(-1)^n x^{2n+1}/(2n+1)!$ gives $\\cos x$.",
+          "body_he": "הראה שגזירה איבר-איבר של $\\sin x=\\sum(-1)^n x^{2n+1}/(2n+1)!$ נותנת $\\cos x$.",
+          "solution_en": "$d/dx[\\sum(-1)^n x^{2n+1}/(2n+1)!]=\\sum(-1)^n(2n+1)x^{2n}/(2n+1)!=\\sum(-1)^n x^{2n}/(2n)!=\\cos x$. $\\blacksquare$",
+          "solution_he": "$d/dx[\\sum(-1)^n x^{2n+1}/(2n+1)!]=\\sum(-1)^n x^{2n}/(2n)!=\\cos x$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Compute $\\int_0^{0.5}\\dfrac{\\sin x}{x}\\,dx$ as a power series, keeping terms up to $x^6$.",
+          "body_he": "חשב $\\int_0^{0.5}\\dfrac{\\sin x}{x}\\,dx$ כטור חזקות, עד לאיבר $x^6$.",
+          "solution_en": "$\\sin x/x=\\sum_{n=0}^{\\infty}(-1)^n x^{2n}/(2n+1)!=1-x^2/6+x^4/120-x^6/5040+\\cdots$. Integrate: $x-x^3/18+x^5/600-x^7/35280+\\cdots|_0^{0.5}=0.5-1/144+1/19200-\\approx0.5-0.00694+0.0000521\\approx0.4931$.",
+          "solution_he": "$\\sin x/x=1-x^2/6+x^4/120+\\cdots$. $\\int_0^{0.5}=0.5-1/144+\\cdots\\approx0.4931$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Prove that if $\\sum a_n x^n$ has radius of convergence $R$, then $\\sum na_n x^{n-1}$ also has radius of convergence $R$.",
+          "body_he": "הוכח שאם ל-$\\sum a_n x^n$ יש רדיוס התכנסות $R$, אז ל-$\\sum na_n x^{n-1}$ יש גם רדיוס $R$.",
+          "solution_en": "Let $b_n=na_n$. Then $|b_{n+1}/b_n|=(n+1)|a_{n+1}|/(n|a_n|)=[(n+1)/n]\\cdot|a_{n+1}/a_n|\\to 1\\cdot(1/R)=1/R$. So the radius for the differentiated series is also $R$. $\\blacksquare$ (Alternatively: by Cauchy-Hadamard, $\\limsup|na_n|^{1/n}=\\limsup n^{1/n}\\cdot|a_n|^{1/n}=1\\cdot 1/R=1/R$.)",
+          "solution_he": "$|b_{n+1}/b_n|=(n+1)/n\\cdot|a_{n+1}/a_n|\\to 1/R$. לכן רדיוס הטור המגוזר הוא $R$. $\\blacksquare$",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting to check endpoints.** The ratio test gives an open interval $(c-R,c+R)$. Always check $x=c\\pm R$ separately.\n\n2. **Confusing $R$ with the interval.** $R$ is a number; the interval of convergence includes endpoint analysis.\n\n3. **Forgetting the Jacobian in term-by-term operations.** When integrating/differentiating, the radius stays $R$ but endpoints may change.\n\n4. **Wrong formula for ratio test.** Use $|a_{n+1}/a_n||x-c|<1$ for convergence; so $R=\\lim|a_n/a_{n+1}|$, NOT $\\lim|a_{n+1}/a_n|$.\n\n5. **Replacing $x$ with $x^2$ or $x^3$ carelessly.** If the series uses $x^2$, the radius in terms of $x^2$ is $R'$, but in terms of $x$ it's $\\sqrt{R'}$.",
+      "body_he_md": "1. **שכחת בדיקת קצוות.** מבחן המנה נותן קטע פתוח — בדוק $x=c\\pm R$ בנפרד.\n\n2. **בלבול בין $R$ לתחום.** $R$ הוא מספר; תחום ההתכנסות כולל ניתוח קצוות.\n\n3. **שינוי קצוות לאחר גזירה/אינטגרציה.** $R$ לא משתנה, אך קצוות עלולים להשתנות.\n\n4. **נוסחה שגויה לרדיוס.** $R=\\lim|a_n/a_{n+1}|$ (לא $\\lim|a_{n+1}/a_n|$).\n\n5. **הצבת $x^2$ במקום $x$ בלי תשומת לב.** אם $\\sum a_n x^{2n}$, בדוק רדיוס בפנים ל-$x^2$ ואז חלץ עבור $x$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- Ratio test: $R=\\lim_{n\\to\\infty}|a_n/a_{n+1}|$.\n- Root test: $1/R=\\limsup|a_n|^{1/n}$.\n- Always check endpoints separately.\n- $\\frac{1}{1-x}=\\sum x^n$ ($|x|<1$); $e^x=\\sum x^n/n!$ ($R=\\infty$).\n- Term-by-term $d/dx$ and $\\int$: same $R$.\n\n**Exam patterns:** Find $R$ and interval; derive a series by substitution/integration/differentiation; compute approximate value.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $R=\\lim|a_n/a_{n+1}|$ (מנה); $1/R=\\limsup|a_n|^{1/n}$ (שורש).\n- בדוק קצוות בנפרד.\n- $1/(1-x)=\\sum x^n$ ($|x|<1$); $e^x=\\sum x^n/n!$.\n- גזירה/אינטגרציה: אותו $R$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Power series** $\\sum a_n(x-c)^n$ converges for $|x-c|<R$ and diverges for $|x-c|>R$.\n- **Radius** $R=\\lim|a_n/a_{n+1}|$ (ratio test).\n- **Interval of convergence:** open interval $(c-R,c+R)$ plus endpoint analysis.\n- **Term-by-term differentiation and integration** preserve $R$.\n- Key series: $1/(1-x)$, $e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$, $\\arctan x$.",
+      "body_he_md": "- **טור חזקות** $\\sum a_n(x-c)^n$ מתכנס ל-$|x-c|<R$ ומתבדר ל-$|x-c|>R$.\n- **רדיוס** $R=\\lim|a_n/a_{n+1}|$.\n- **תחום:** $(c-R,c+R)$ + בדיקת קצוות.\n- **גזירה/אינטגרציה:** שומרים $R$.\n- טורים מרכזיים: $1/(1-x)$, $e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$, $\\arctan x$."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Power Series Radius."
+  ]
 }

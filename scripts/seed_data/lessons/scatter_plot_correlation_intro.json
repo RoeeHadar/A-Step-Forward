@@ -2,30 +2,232 @@
   "concept_id": "scatter_plot_correlation_intro",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Scatter Plot Correlation Intro",
-  "title_he": "גרף פיזור ומתאם",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "math_track": ["statistics"],
+  "title_en": "Scatter Plots and Correlation",
+  "title_he": "גרפי פיזור ומתאם",
+  "summary_en": "Scatter plots, Pearson correlation coefficient r, interpreting correlation strength and direction, and the distinction between correlation and causation.",
+  "summary_he": "גרפי פיזור, מקדם המתאם של פירסון r, פרשנות עוצמה וכיוון המתאם, והבחנה בין מתאם לסיבתיות.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Scatter Plot Correlation Intro.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-גרף פיזור ומתאם.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Visualising Relationships Between Variables",
+      "title_he": "הדמיית קשרים בין משתנים",
+      "body_en_md": "How related are height and weight? Study time and exam score? Two variables may move together (**correlated**) or be unrelated. Before fitting any model, we visualise the relationship with a **scatter plot** and measure its strength with the **correlation coefficient**.\n\nThe correlation coefficient $r$ answers: how strongly and in which direction are two variables linearly related? This single number between $-1$ and $+1$ summarises the pattern in the data.",
+      "body_he_md": "עד כמה קשורים גובה ומשקל? שעות לימוד וציון? שני משתנים עשויים לנוע יחד (**מתואמים**) או להיות לא קשורים. לפני התאמת מודל, אנו מדמים את הקשר ב**גרף פיזור** ומודדים את עוצמתו במ**קדם המתאם**.\n\nמקדם המתאם $r$ עונה: עד כמה חזק ובאיזה כיוון שני משתנים קשורים לינארית? מספר בודד בין $-1$ ל-$+1$ מסכם את הדפוס בנתונים."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Scatter Plot Correlation Intro: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Scatter Plot Correlation Intro.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-גרף פיזור ומתאם: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-גרף פיזור ומתאם.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Scatter Plot and Pearson Correlation Coefficient",
+      "title_he": "גרף פיזור ומקדם המתאם של פירסון",
+      "body_en_md": "**Scatter plot:** A graph in which each data point $(x_i, y_i)$ is plotted as a dot. The pattern of dots reveals the direction and strength of the relationship.\n\n**Pearson correlation coefficient:**\n$$r = \\frac{\\sum_{i=1}^n (x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum(x_i-\\bar{x})^2 \\cdot \\sum(y_i-\\bar{y})^2}}$$\n\nEquivalently: $r = \\dfrac{S_{xy}}{\\sqrt{S_{xx} \\cdot S_{yy}}}$ where $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$.\n\n**Properties of $r$:**\n- $-1 \\leq r \\leq 1$.\n- $r = +1$: perfect positive linear relationship.\n- $r = -1$: perfect negative linear relationship.\n- $r = 0$: no linear relationship (may still have non-linear relationship).\n- $r$ is unit-free (dimensionless).\n\n**Interpretation:**\n\n| $|r|$ | Strength |\n|---|---|\n| 0 – 0.3 | Weak |\n| 0.3 – 0.7 | Moderate |\n| 0.7 – 1 | Strong |",
+      "body_he_md": "**גרף פיזור:** גרף שבו כל נקודת נתונים $(x_i,y_i)$ מיוצגת כנקודה. דפוס הנקודות מגלה כיוון ועוצמת הקשר.\n\n**מקדם המתאם של פירסון:**\n$$r=\\frac{\\sum(x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum(x_i-\\bar{x})^2\\cdot\\sum(y_i-\\bar{y})^2}}$$\n\n**תכונות $r$:**\n- $-1\\leq r\\leq1$.\n- $r=+1$: קשר לינארי חיובי מושלם.\n- $r=-1$: קשר לינארי שלילי מושלם.\n- $r=0$: אין קשר לינארי.\n\n| $|r|$ | עוצמה |\n|---|---|\n| 0–0.3 | חלש |\n| 0.3–0.7 | בינוני |\n| 0.7–1 | חזק |"
+    },
+    {
+      "kind": "theory",
+      "title_en": "Correlation vs. Causation",
+      "title_he": "מתאם לעומת סיבתיות",
+      "body_en_md": "**Correlation does not imply causation!** Two variables may be correlated because:\n1. $X$ causes $Y$ (direct causation).\n2. $Y$ causes $X$ (reverse causation).\n3. A third variable $Z$ (lurking/confounding variable) causes both.\n4. Pure coincidence (spurious correlation).\n\n**Example:** Ice cream sales and drowning rates are positively correlated — not because ice cream causes drowning, but because **hot weather** (lurking variable) drives both.\n\n**$r$ only measures linear association.** A dataset where all points lie on a circle has $r=0$ — yet there is a perfect (non-linear) relationship!\n\n**$r$ is sensitive to outliers.** A single extreme point can dramatically change $r$.",
+      "body_he_md": "**מתאם אינו מעיד על סיבתיות!** שני משתנים עשויים להיות מתואמים כי:\n1. $X$ גורם ל-$Y$ (סיבתיות ישירה).\n2. $Y$ גורם ל-$X$ (סיבתיות הפוכה).\n3. משתנה שלישי $Z$ (משתנה מסתיר) גורם לשניהם.\n4. צירוף מקרים.\n\n**דוגמה:** מכירות גלידה ושיעורי טביעה מתואמים חיובית — לא כי גלידה גורמת לטביעה, אלא כי **מזג אוויר חם** (משתנה מסתיר) גורם לשניהם.\n\n**$r$ מודד רק קשר לינארי.** נקודות על מעגל: $r=0$ אך יש קשר מושלם (לא-לינארי)!\n\n**$r$ רגיש לערכים קיצוניים.** נקודה קיצונית אחת יכולה לשנות $r$ דרמטית."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Computing Pearson r",
+      "title_he": "דוגמה פתורה 1 — חישוב r של פירסון",
+      "body_en_md": "**Data (study hours $x$, exam score $y$):** $(1,50)$, $(2,55)$, $(3,65)$, $(4,70)$, $(5,80)$.\n\n**Step 1 — Means:** $\\bar{x} = 3$, $\\bar{y} = 64$.\n\n**Step 2 — Deviations and products:**\n\n| $x_i$ | $y_i$ | $x_i-\\bar{x}$ | $y_i-\\bar{y}$ | $(x-\\bar{x})(y-\\bar{y})$ | $(x-\\bar{x})^2$ | $(y-\\bar{y})^2$ |\n|---|---|---|---|---|---|---|\n| 1 | 50 | -2 | -14 | 28 | 4 | 196 |\n| 2 | 55 | -1 | -9 | 9 | 1 | 81 |\n| 3 | 65 | 0 | 1 | 0 | 0 | 1 |\n| 4 | 70 | 1 | 6 | 6 | 1 | 36 |\n| 5 | 80 | 2 | 16 | 32 | 4 | 256 |\n| **Sum** | | | | **75** | **10** | **570** |\n\n**Step 3:**\n$$r = \\frac{75}{\\sqrt{10 \\times 570}} = \\frac{75}{\\sqrt{5700}} \\approx \\frac{75}{75.5} \\approx 0.993.$$\n\n**Interpretation:** $r \\approx 0.993$ — very strong positive linear correlation between study hours and exam scores.",
+      "body_he_md": "**נתונים (שעות לימוד $x$, ציון $y$):** $(1,50),(2,55),(3,65),(4,70),(5,80)$.\n\n**שלב 1:** $\\bar{x}=3$, $\\bar{y}=64$.\n\n**שלב 2 — טבלת סטיות:**\n\n| $x_i$ | $y_i$ | $x-\\bar{x}$ | $y-\\bar{y}$ | מכפלה | $(x-\\bar{x})^2$ | $(y-\\bar{y})^2$ |\n|---|---|---|---|---|---|---|\n| סכום | | | | **75** | **10** | **570** |\n\n**שלב 3:**\n$$r=\\frac{75}{\\sqrt{10\\times570}}=\\frac{75}{\\sqrt{5700}}\\approx0.993.$$\n\n**פרשנות:** $r\\approx0.993$ — מתאם לינארי חיובי חזק מאוד."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Two variables have $r = -0.85$. Interpret this value: what is the direction and strength of the relationship?",
+      "body_he_md": "שני משתנים עם $r=-0.85$. פרש ערך זה: מהם הכיוון והעוצמה של הקשר?",
+      "checkpoint_solution_en": "**Direction:** Negative (as $x$ increases, $y$ decreases). **Strength:** Strong ($|r|=0.85>0.7$). As $x$ grows, $y$ tends to decrease significantly.",
+      "checkpoint_solution_he": "**כיוון:** שלילי (ככל ש-$x$ גדל, $y$ קטן). **עוצמה:** חזקה ($|r|=0.85>0.7$). ככל ש-$x$ גדל, $y$ נוטה לקטון משמעותית."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Identifying Correlation from Scatter Plots",
+      "title_he": "דוגמה פתורה 2 — זיהוי מתאם מגרפי פיזור",
+      "body_en_md": "Match each description with the approximate $r$ value:\n\n| Description | Pattern |\n|---|---|\n| A. All points on a line with positive slope | $r=+1$ |\n| B. Points scattered with slight upward trend | $r \\approx +0.3$ |\n| C. Points scattered with no pattern | $r \\approx 0$ |\n| D. Points with a clear downward trend | $r \\approx -0.8$ |\n| E. All points on a downward line | $r = -1$ |\n\n**Key insights:**\n- A perfect line: $|r|=1$.\n- Upward cloud: $r>0$; tighter cloud: higher $r$.\n- Random cloud: $r\\approx0$.\n- Curved patterns can have $r=0$ even with strong non-linear relationships.",
+      "body_he_md": "התאם כל תיאור לערך $r$ המשוער:\n\n| תיאור | $r$ |\n|---|---|\n| A. כל הנקודות על קו עם שיפוע חיובי | $r=+1$ |\n| B. נקודות מפוזרות עם מגמה חיובית קלה | $r\\approx+0.3$ |\n| C. נקודות ללא דפוס | $r\\approx0$ |\n| D. מגמה שלילית ברורה | $r\\approx-0.8$ |\n| E. כל הנקודות על קו יורד | $r=-1$ |\n\n**תובנות:** קו מושלם: $|r|=1$. ענן עולה: $r>0$; ענן הדוק: $r$ גבוה. ענן אקראי: $r\\approx0$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A study finds $r = 0.92$ between shoe size and reading ability in children. A journalist claims \"large feet cause better reading\". What is wrong with this claim?",
+      "body_he_md": "מחקר מוצא $r=0.92$ בין מספר נעל לכישורי קריאה בילדים. עיתונאי טוען \"רגל גדולה גורמת לקריאה טובה יותר\". מה לא בסדר בטענה זו?",
+      "checkpoint_solution_en": "This is a **spurious correlation** driven by **age** (lurking variable): older children have both bigger feet and better reading ability. Correlation does not imply causation.",
+      "checkpoint_solution_he": "זהו **מתאם מדומה** הנגרם על ידי **גיל** (משתנה מסתיר): ילדים מבוגרים יותר הן ברגל גדולה והן בקריאה טובה. מתאם אינו מוכיח סיבתיות."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — $r^2$ and the Effect of Outliers",
+      "title_he": "דוגמה פתורה 3 — $r^2$ והשפעת ערכים קיצוניים",
+      "body_en_md": "**Dataset A** (no outlier): 5 points with $r = 0.95$, $r^2=0.90$.\n\n**Interpretation of $r^2$:** 90% of the variability in $y$ is explained by the linear relationship with $x$. Only 10% is unexplained.\n\n**Dataset B** (add one outlier at $(10,1)$, far from the trend): The new $r$ drops to $0.45$.\n\n**Why?** The outlier is far from the predicted line for its $x$-value, creating a large deviation that disrupts the linear pattern. One extreme point can make a strong relationship appear weak.\n\n**Lesson:** Always look at the scatter plot, not just $r$. Check for outliers before interpreting correlation.\n\n**Coefficient of determination $r^2$:** The proportion of variance in $y$ explained by the linear model with $x$. Always between 0 and 1.",
+      "body_he_md": "**קבוצת נתונים A** (ללא ערך קיצוני): 5 נקודות עם $r=0.95$, $r^2=0.90$.\n\n**פרשנות $r^2$:** 90% מהשונות ב-$y$ מוסברת על ידי הקשר הלינארי עם $x$.\n\n**קבוצת נתונים B** (עם ערך קיצוני ב-$(10,1)$): $r$ יורד ל-$0.45$.\n\n**מדוע?** הערך הקיצוני רחוק מהקו החזוי — סטייה גדולה שמשבשת את הדפוס הלינארי.\n\n**מסקנה:** תמיד בדוק גרף פיזור, לא רק $r$. ערכים קיצוניים משנים $r$ דרמטית.\n\n**$r^2$ — מקדם הדטרמינציה:** שיעור השונות ב-$y$ המוסבר על ידי המודל הלינארי עם $x$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Computing and Interpreting r",
+      "title_he": "מדריך שיטה — חישוב ופרשנות r",
+      "body_en_md": "**Step-by-step for computing $r$:**\n1. Compute $\\bar{x}$ and $\\bar{y}$.\n2. Compute $S_{xx}=\\sum(x_i-\\bar{x})^2$, $S_{yy}=\\sum(y_i-\\bar{y})^2$, $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$.\n3. $r = S_{xy}/\\sqrt{S_{xx}\\cdot S_{yy}}$.\n\n**Interpretation checklist:**\n1. Direction: sign of $r$ ($+$ or $-$).\n2. Strength: $|r|$ (weak/moderate/strong).\n3. Is the relationship linear? (Scatter plot check.)\n4. Any outliers? (Can distort $r$.)\n5. Correlation $\\neq$ causation.",
+      "body_he_md": "**שלב אחר שלב לחישוב $r$:**\n1. חשב $\\bar{x}$ ו-$\\bar{y}$.\n2. חשב $S_{xx}$, $S_{yy}$, $S_{xy}$.\n3. $r=S_{xy}/\\sqrt{S_{xx}\\cdot S_{yy}}$.\n\n**רשימת בדיקה לפרשנות:**\n1. כיוון: סימן $r$.\n2. עוצמה: $|r|$.\n3. האם הקשר לינארי? (גרף פיזור.)\n4. ערכים קיצוניים?\n5. מתאם $\\neq$ סיבתיות."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "What does $r = 0$ mean? Does it mean there is no relationship between $x$ and $y$?",
+          "body_he": "מה $r=0$ אומר? האם זה אומר שאין קשר בין $x$ ל-$y$?",
+          "solution_en": "$r=0$ means no **linear** relationship. There may still be a non-linear relationship (e.g., $y=x^2$ gives $r=0$ over a symmetric range).",
+          "solution_he": "$r=0$ פירושו אין קשר **לינארי**. עדיין עשוי להיות קשר לא-לינארי (למשל $y=x^2$).",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Match: $r=-0.9$ describes what type of scatter plot?",
+          "body_he": "התאם: $r=-0.9$ מתאר איזה סוג גרף פיזור?",
+          "solution_en": "Strong negative linear relationship — points closely clustered around a downward-sloping line.",
+          "solution_he": "קשר לינארי שלילי חזק — נקודות צמודות סביב קו יורד.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "If $r = 0.5$, what is $r^2$? Interpret it.",
+          "body_he": "אם $r=0.5$, מהו $r^2$? פרש אותו.",
+          "solution_en": "$r^2 = 0.25$. 25% of the variability in $y$ is explained by the linear relationship with $x$.",
+          "solution_he": "$r^2=0.25$. 25% מהשונות ב-$y$ מוסברת על ידי הקשר הלינארי עם $x$.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Is $r = 1.3$ possible? Explain.",
+          "body_he": "האם $r=1.3$ אפשרי? הסבר.",
+          "solution_en": "No. $r$ is always between $-1$ and $+1$. A value of 1.3 indicates a computation error.",
+          "solution_he": "לא. $r$ תמיד בין $-1$ ל-$+1$. ערך 1.3 מעיד על שגיאת חישוב.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $r$ for: $(1,2),(2,4),(3,5),(4,4),(5,5)$. $\\bar{x}=3$, $\\bar{y}=4$.",
+          "body_he": "חשב $r$ עבור: $(1,2),(2,4),(3,5),(4,4),(5,5)$. $\\bar{x}=3$, $\\bar{y}=4$.",
+          "solution_en": "$S_{xy}=(−2)(−2)+(−1)(0)+(0)(1)+(1)(0)+(2)(1)=4+0+0+0+2=6$. $S_{xx}=4+1+0+1+4=10$. $S_{yy}=4+0+1+0+1=6$. $r=6/\\sqrt{60}=6/7.746\\approx0.775$. Strong positive.",
+          "solution_he": "$S_{xy}=6$, $S_{xx}=10$, $S_{yy}=6$. $r=6/\\sqrt{60}\\approx0.775$. חיובי חזק.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A study finds $r=0.82$ between number of doctors per capita and life expectancy. A student claims more doctors cause longer life. What alternative explanations exist?",
+          "body_he": "מחקר מוצא $r=0.82$ בין מספר רופאים לנפש ותוחלת חיים. תלמיד טוען שיותר רופאים גורמים לחיים ארוכים יותר. אילו הסברים חלופיים קיימים?",
+          "solution_en": "Wealthy countries can afford both more doctors AND better nutrition, housing, and healthcare — making national wealth a lurking variable. Also, healthy populations may attract more doctors.",
+          "solution_he": "מדינות עשירות יכולות להרשות לעצמן הן רופאים רבים והן תזונה, דיור ושירותי בריאות טובים — עושר לאומי הוא משתנה מסתיר. גם אוכלוסיות בריאות עשויות למשוך רופאים.",
+          "points": 6
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Two datasets both have $r=0.7$. Dataset 1 has 5 points; Dataset 2 has 500 points. Which correlation is more trustworthy? Why?",
+          "body_he": "שני קבצי נתונים עם $r=0.7$. קובץ 1: 5 נקודות; קובץ 2: 500 נקודות. איזה מתאם אמין יותר? מדוע?",
+          "solution_en": "Dataset 2 (500 points) — larger samples give more stable and reliable estimates of $r$. With only 5 points, $r=0.7$ could easily occur by chance.",
+          "solution_he": "קובץ 2 (500 נקודות) — מדגמים גדולים נותנים אמידות יציבות ואמינות יותר של $r$. עם 5 נקודות, $r=0.7$ עשוי לקרות במקרה.",
+          "points": 6
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "The correlation between $x$ and $y$ is $r = 0.6$. If we measure $x$ in centimetres instead of metres, does $r$ change? Why?",
+          "body_he": "מתאם בין $x$ ל-$y$ הוא $r=0.6$. אם מודדים $x$ בסנטימטרים במקום מטרים, האם $r$ משתנה? מדוע?",
+          "solution_en": "No. $r$ is **dimensionless** (unit-free). Multiplying $x$ by a constant scales numerator and denominator equally, leaving $r$ unchanged.",
+          "solution_he": "לא. $r$ **חסר יחידות**. הכפלת $x$ בקבוע מכפיל מונה ומכנה באותה מידה, ו-$r$ נשאר ללא שינוי.",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Describe three different scatter plot shapes that all give $r \\approx 0$.",
+          "body_he": "תאר שלוש צורות שונות של גרף פיזור שכולן נותנות $r\\approx0$.",
+          "solution_en": "1. Random cloud (no pattern). 2. Points on a circle (symmetric non-linear). 3. Points on a parabola $y=x^2$ over $[-a,a]$ (symmetric quadratic). All have zero linear correlation but may have strong non-linear patterns.",
+          "solution_he": "1. ענן אקראי. 2. נקודות על מעגל (לא-לינארי סימטרי). 3. נקודות על פרבולה $y=x^2$ מעל $[-a,a]$. לכולם $r=0$ אך קשר לא-לינארי חזק.",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $-1 \\leq r \\leq 1$ using the Cauchy-Schwarz inequality.",
+          "body_he": "הוכח ש-$-1\\leq r\\leq1$ בעזרת אי-שוויון קושי-שוורץ.",
+          "solution_en": "Let $u_i=x_i-\\bar{x}$, $v_i=y_i-\\bar{y}$. Cauchy-Schwarz: $\\left(\\sum u_iv_i\\right)^2 \\leq \\sum u_i^2\\cdot\\sum v_i^2$. So $S_{xy}^2\\leq S_{xx}S_{yy}$, hence $r^2=S_{xy}^2/(S_{xx}S_{yy})\\leq1$, giving $-1\\leq r\\leq1$. $\\blacksquare$",
+          "solution_he": "$u_i=x_i-\\bar{x}$, $v_i=y_i-\\bar{y}$. קושי-שוורץ: $S_{xy}^2\\leq S_{xx}S_{yy}$. לכן $r^2\\leq1$, כלומר $-1\\leq r\\leq1$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "The correlation between $x$ and $y$ is $r$. What is the correlation between $(x+3)$ and $(2y-1)$? Justify.",
+          "body_he": "מתאם בין $x$ ל-$y$ הוא $r$. מהו המתאם בין $(x+3)$ ל-$(2y-1)$? נמק.",
+          "solution_en": "Adding constants and multiplying by positive constants don't change $r$ (it's unit-free and shift-invariant). Correlation between $(x+3)$ and $(2y-1)$ is still **$r$**. (If the multiplier were negative, the sign would flip.)",
+          "solution_he": "הוספת קבועים והכפלה בקבועים חיוביים לא משנה את $r$ (חסר יחידות ואי-תלוי הזזה). המתאם בין $(x+3)$ ל-$(2y-1)$ עדיין **$r$**.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Give an example where adding one outlier changes $r$ from near 0 to near 1. Explain the mechanism.",
+          "body_he": "תן דוגמה שבה הוספת ערך קיצוני אחד משנה $r$ מכמעט 0 לכמעט 1. הסבר את המנגנון.",
+          "solution_en": "Take 5 points in a random cloud: $r\\approx0$. Add $(100,100)$ far from the origin. This extreme point creates a strong lever: the sum $\\sum(x_i-\\bar{x})(y_i-\\bar{y})$ is dominated by the outlier's large positive product, pulling $r$ toward +1. The outlier has high **leverage** because it is far from the centroid.",
+          "solution_he": "5 נקודות בענן אקראי: $r\\approx0$. הוסף $(100,100)$ רחוק מהמרכז. הנקודה הקיצונית יוצרת מנוף חזק: $\\sum(x_i-\\bar{x})(y_i-\\bar{y})$ מוביל על ידי המכפלה החיובית הגדולה שלה, ומושך $r$ ל-$+1$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "The correlation between $x$ and $y$ is 0.8. Can we determine the slope of the regression line? What additional information is needed?",
+          "body_he": "מתאם בין $x$ ל-$y$ הוא 0.8. האם ניתן לקבוע את שיפוע קו הרגרסיה? איזה מידע נוסף דרוש?",
+          "solution_en": "No. The slope $b = r \\cdot (s_y/s_x)$ requires the standard deviations $s_x$ and $s_y$ in addition to $r$. Knowing $r=0.8$ alone tells us the direction and relative strength but not the slope magnitude.",
+          "solution_he": "לא. השיפוע $b=r\\cdot(s_y/s_x)$ דורש גם את $s_x$ ו-$s_y$ בנוסף ל-$r$. ידיעת $r=0.8$ לבדה אומרת כיוון ועוצמה יחסית אבל לא את עוצמת השיפוע.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Concluding causation from correlation.** A high $r$ only shows linear association, not cause and effect.\n\n2. **Ignoring non-linearity.** $r=0$ does not mean \"no relationship\" — it means no *linear* relationship. Always plot the data.\n\n3. **Not checking for outliers.** A single outlier can dramatically distort $r$ in small samples.\n\n4. **Confusing $r$ with $r^2$.** $r=0.7$ means $r^2=0.49$ — only 49% of variance explained. Students sometimes over-interpret moderate $r$ values.\n\n5. **Assuming the same $r$ means the same scatter pattern.** Anscombe's quartet shows four very different scatter plots with nearly identical $r$ values.",
+      "body_he_md": "1. **הסקת סיבתיות ממתאם.** $r$ גבוה מראה רק קשר לינארי, לא סיבה ותוצאה.\n\n2. **התעלמות מלא-לינאריות.** $r=0$ לא אומר \"אין קשר\" — פירושו אין קשר *לינארי*. תמיד גרף פיזור.\n\n3. **אי-בדיקת ערכים קיצוניים.** ערך קיצוני אחד יכול לעוות $r$ במדגמים קטנים.\n\n4. **בלבול $r$ עם $r^2$.** $r=0.7$ אומר $r^2=0.49$ — רק 49% שונות מוסברת.\n\n5. **הנחה שאותו $r$ = אותו דפוס.** רביעיית אנסקומב מראה 4 גרפים שונים מאוד עם $r$ כמעט זהים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- $r = S_{xy}/\\sqrt{S_{xx}\\cdot S_{yy}}$\n- $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$\n- $-1\\leq r\\leq1$\n- $r^2$ = proportion of variance explained\n\n**Interpretation table:**\n- $|r|>0.7$: strong; $0.3$–$0.7$: moderate; $<0.3$: weak\n\n**Exam patterns:**\n- Compute $r$ from a small dataset.\n- Interpret $r$ (direction, strength).\n- Identify lurking variables.\n- Explain why correlation ≠ causation.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $r=S_{xy}/\\sqrt{S_{xx}\\cdot S_{yy}}$\n- $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$\n- $-1\\leq r\\leq1$\n- $r^2$ = שיעור שונות מוסברת\n\n**טבלת פרשנות:** $|r|>0.7$: חזק; $0.3$–$0.7$: בינוני; $<0.3$: חלש\n\n**דגשי מבחן:** חשב $r$; פרש; זהה משתנים מסתירים; הסבר מדוע מתאם $\\neq$ סיבתיות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Scatter plot:** visualises the relationship between two quantitative variables.\n- **Pearson $r$:** measures strength and direction of linear association; $-1 \\leq r \\leq 1$.\n- **$r > 0$:** positive; **$r < 0$:** negative; **$|r|$ close to 1:** strong.\n- **$r^2$:** proportion of variance in $y$ explained by $x$.\n- **Correlation ≠ Causation:** always consider lurking variables.",
+      "body_he_md": "- **גרף פיזור:** מדמה קשר בין שני משתנים כמותיים.\n- **$r$ של פירסון:** מודד עוצמה וכיוון קשר לינארי; $-1\\leq r\\leq1$.\n- **$r>0$:** חיובי; **$r<0$:** שלילי; **$|r|$ קרוב ל-1:** חזק.\n- **$r^2$:** שיעור שונות ב-$y$ מוסברת על ידי $x$.\n- **מתאם $\\neq$ סיבתיות:** תמיד שקול משתנים מסתירים."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Scatter Plot Correlation Intro."
+  ]
 }

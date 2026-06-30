@@ -1,224 +1,233 @@
 {
-  "id": "partial_derivatives",
-  "type": "interactive",
-  "subject": "calculus_2",
-  "title_en": "Partial Derivatives & the Gradient",
-  "title_he": "נגזרות חלקיות והגרדיאנט",
-  "duration_min": 25,
-  "level_min": "calculus_1",
-  "agent_hints": "Students first meeting multivariable calculus often treat partial derivatives as just single-variable derivatives with the other variable temporarily frozen, which is correct for computation but misses the subtlety that continuity of partials implies differentiability (not just existence). Stress: (1) the geometric meaning of each partial as slope in a coordinate direction, (2) the gradient as the direction of steepest ascent and its role in the tangent-plane formula, (3) the chain rule careful bookkeeping with a dependency diagram. Technion 104281 exams expect students to compute tangent planes and directional derivatives fluently.",
+  "concept_id": "partial_derivatives",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["calculus2", "multivariable"],
+  "title_en": "Partial Derivatives",
+  "title_he": "נגזרות חלקיות",
+  "summary_en": "Partial derivatives: definition, computation, geometric meaning, mixed partials, Clairaut's theorem, and the gradient vector.",
+  "summary_he": "נגזרות חלקיות: הגדרה, חישוב, משמעות גיאומטרית, נגזרות מעורבות, משפט קלרו, ווקטור הגרדיאנט.",
+  "est_minutes": 55,
   "sections": [
     {
-      "id": "multivariable_functions",
-      "title_en": "Multivariable Functions and Visualization",
-      "title_he": "פונקציות רבות-משתנים וויזואליזציה",
-      "level_min": "calculus_1",
-      "body_en_md": "A **function of two variables** $f: \\mathbb{R}^2 \\to \\mathbb{R}$ assigns a real number $f(x,y)$ to each point $(x,y)$ in its domain.\n\n**Examples:**\n- $f(x,y) = x^2 + y^2$ (paraboloid; level curves are circles)\n- $f(x,y) = x^2 - y^2$ (saddle; level curves are hyperbolas)\n- $f(x,y) = e^{-(x^2+y^2)}$ (Gaussian bump)\n\n**Level curves** (contour lines): the set $\\{(x,y) : f(x,y) = c\\}$ for fixed $c$. Closely spaced level curves indicate steep terrain; widely spaced ones indicate gentle slopes.\n\n**Graph:** the surface $z = f(x,y)$ in $\\mathbb{R}^3$. The partial derivatives measure how this surface slopes in the $x$- and $y$-directions.",
-      "body_he_md": "**פונקציה משני משתנים** $f: \\mathbb{R}^2 \\to \\mathbb{R}$ מציבה מספר ממשי $f(x,y)$ לכל נקודה $(x,y)$ בתחומה.\n\n**דוגמאות:**\n- $f(x,y) = x^2 + y^2$ (פרבולואיד; עקומות שיווי-גובה הן מעגלים)\n- $f(x,y) = x^2 - y^2$ (אוכף; עקומות שיווי-גובה הן היפרבולות)\n- $f(x,y) = e^{-(x^2+y^2)}$ (פקעת גאוסית)\n\n**עקומות שיווי-גובה:** הקבוצה $\\{(x,y) : f(x,y) = c\\}$ עבור $c$ קבוע. עקומות צפופות מצביעות על שיפוע תלול; עקומות מרווחות על שיפוע עדין.\n\n**גרף:** המשטח $z = f(x,y)$ ב-$\\mathbb{R}^3$. הנגזרות החלקיות מודדות כיצד משטח זה משופע בכיווני $x$ ו-$y$."
+      "kind": "intro",
+      "title_en": "Rates of Change in Multiple Directions",
+      "title_he": "קצבי שינוי בכיוונים שונים",
+      "body_en_md": "For $f(x,y)$, the rate of change depends on the direction. The **partial derivative** $\\partial f/\\partial x$ measures how fast $f$ changes as $x$ varies while $y$ is held fixed — the slope of the curve $z=f(x,y_0)$. Similarly for $\\partial f/\\partial y$.\n\nPartial derivatives appear throughout applied mathematics:\n- **Physics:** $\\partial T/\\partial x$ is heat flow in the $x$-direction.\n- **Economics:** $\\partial U/\\partial x_i$ is marginal utility of good $i$.\n- **Machine learning:** gradient descent uses all partial derivatives simultaneously.",
+      "body_he_md": "עבור $f(x,y)$, קצב השינוי תלוי בכיוון. **הנגזרת החלקית** $\\partial f/\\partial x$ מודדת כמה מהר $f$ משתנה כאשר $x$ משתנה ו-$y$ קבוע — שיפוע העקומה $z=f(x,y_0)$. בדומה ל-$\\partial f/\\partial y$.\n\nנגזרות חלקיות מופיעות בכל הנדסה ומדעים:\n- **פיזיקה:** $\\partial T/\\partial x$ — זרימת חום.\n- **כלכלה:** $\\partial U/\\partial x_i$ — תועלת שולית.\n- **למידת מכונה:** ירידת גרדיאנט משתמשת בכל הנגזרות החלקיות."
     },
     {
-      "id": "partial_derivative_definition",
-      "title_en": "Partial Derivatives — Definition and Computation",
-      "title_he": "נגזרות חלקיות — הגדרה וחישוב",
-      "level_min": "calculus_1",
-      "body_en_md": "**Definition.** The partial derivative of $f$ with respect to $x$ at $(x_0, y_0)$ is:\n$$\\frac{\\partial f}{\\partial x}(x_0, y_0) = \\lim_{h \\to 0} \\frac{f(x_0+h,\\, y_0) - f(x_0,\\, y_0)}{h}.$$\nIt measures the rate of change of $f$ in the $x$-direction with $y$ held fixed.\n\n**Computation rule:** Differentiate with respect to $x$, treating $y$ as a constant (and vice versa for $\\partial f/\\partial y$).\n\n**Worked Example.** Let $f(x,y) = x^2 y + e^{xy}$.\n\n$$\\frac{\\partial f}{\\partial x} = 2xy + y e^{xy}, \\qquad \\frac{\\partial f}{\\partial y} = x^2 + x e^{xy}.$$\n\n**Second-order partials:** $f_{xx} = \\partial^2 f/\\partial x^2$, $f_{xy} = \\partial^2 f / \\partial x\\, \\partial y$, etc.\n\n**Clairaut’s theorem:** If $f_{xy}$ and $f_{yx}$ are both continuous, then $f_{xy} = f_{yx}$ (mixed partials commute).",
-      "body_he_md": "**הגדרה.** הנגזרת החלקית של $f$ לפי $x$ בנקודה $(x_0, y_0)$:\n$$\\frac{\\partial f}{\\partial x}(x_0, y_0) = \\lim_{h \\to 0} \\frac{f(x_0+h,\\, y_0) - f(x_0,\\, y_0)}{h}.$$\nהיא מודדת את קצב השינוי של $f$ בכיוון $x$ כאשר $y$ קבוע.\n\n**כלל חישוב:** גוזרים לפי $x$ תוך התייחסות ל-$y$ כקבוע (ולהפך עבור $\\partial f/\\partial y$).\n\n**דוגמה.** יהי $f(x,y) = x^2 y + e^{xy}$.\n\n$$\\frac{\\partial f}{\\partial x} = 2xy + y e^{xy}, \\qquad \\frac{\\partial f}{\\partial y} = x^2 + x e^{xy}.$$\n\n**נגזרות מסדר שני:** $f_{xx}$, $f_{xy}$, וכו'.\n\n**משפט קלארו:** אם $f_{xy}$ ו-$f_{yx}$ שתיהן רציפות, אז $f_{xy} = f_{yx}$ (נגזרות חלקיות מעורבות מתחלפות)."
+      "kind": "definition",
+      "title_en": "Partial Derivatives — Formal Definitions",
+      "title_he": "נגזרות חלקיות — הגדרות פורמליות",
+      "body_en_md": "**Partial derivative w.r.t. $x$:**\n$$f_x(x,y) = \\frac{\\partial f}{\\partial x} = \\lim_{h\\to 0}\\frac{f(x+h,y)-f(x,y)}{h}.$$\n\n**Partial derivative w.r.t. $y$:**\n$$f_y(x,y) = \\frac{\\partial f}{\\partial y} = \\lim_{h\\to 0}\\frac{f(x,y+h)-f(x,y)}{h}.$$\n\n**Computation rule:** Treat all other variables as constants and differentiate as usual.\n\n**Higher-order partial derivatives:**\n$$f_{xx}=\\frac{\\partial^2 f}{\\partial x^2}, \\quad f_{yy}=\\frac{\\partial^2 f}{\\partial y^2}, \\quad f_{xy}=\\frac{\\partial^2 f}{\\partial y\\partial x}=\\frac{\\partial}{\\partial y}\\left(\\frac{\\partial f}{\\partial x}\\right).$$\n\n**Clairaut's theorem:** If $f_{xy}$ and $f_{yx}$ are both continuous on an open set, then $f_{xy}=f_{yx}$.\n\n**Gradient vector:**\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\frac{\\partial f}{\\partial y}\\right) = (f_x,f_y).$$",
+      "body_he_md": "**נגזרת חלקית לפי $x$:**\n$$f_x=\\lim_{h\\to 0}\\frac{f(x+h,y)-f(x,y)}{h}.$$\n\n**נגזרת חלקית לפי $y$:**\n$$f_y=\\lim_{h\\to 0}\\frac{f(x,y+h)-f(x,y)}{h}.$$\n\n**כלל חישוב:** יחס לכל שאר המשתנים כאל קבועים וגזור כרגיל.\n\n**נגזרות מסדר גבוה:** $f_{xx}$, $f_{yy}$, $f_{xy}$, $f_{yx}$.\n\n**משפט קלרו:** אם $f_{xy}$ ו-$f_{yx}$ רציפות על קבוצה פתוחה, אז $f_{xy}=f_{yx}$.\n\n**וקטור גרדיאנט:** $\\nabla f=(f_x,f_y)$."
     },
     {
-      "id": "gradient_directional",
-      "title_en": "Gradient and Directional Derivative",
-      "title_he": "גרדיאנט ונגזרת כיוון",
-      "level_min": "calculus_1",
-      "body_en_md": "**Gradient.** The gradient of $f$ at $(x,y)$ is the vector:\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\; \\frac{\\partial f}{\\partial y}\\right).$$\n\n**Key property:** $\\nabla f$ points in the direction of steepest ascent of $f$; $-\\nabla f$ points toward steepest descent. The magnitude $|\\nabla f|$ is the rate of steepest ascent.\n\n**Directional derivative.** The rate of change of $f$ in the direction of a unit vector $\\hat{u} = (u_1, u_2)$ is:\n$$D_{\\hat{u}} f = \\nabla f \\cdot \\hat{u} = \\frac{\\partial f}{\\partial x} u_1 + \\frac{\\partial f}{\\partial y} u_2.$$\n\n**Maximum directional derivative:** $D_{\\hat{u}}f$ is maximized when $\\hat{u} = \\nabla f / |\\nabla f|$ (the gradient direction), with maximum value $|\\nabla f|$.\n\n**Example.** $f(x,y) = x^2 + 3y^2$ at $(1,1)$: $\\nabla f = (2x, 6y)|_{(1,1)} = (2, 6)$. The direction of steepest ascent is $(1/\\sqrt{10}, 3/\\sqrt{10})$, with rate $\\sqrt{40} = 2\\sqrt{10}$.",
-      "body_he_md": "**גרדיאנט.** גרדיאנט של $f$ בנקודה $(x,y)$ הוא הוקטור:\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\; \\frac{\\partial f}{\\partial y}\\right).$$\n\n**תכונה מרכזית:** $\\nabla f$ מצביע בכיוון העלייה התלולה ביותר של $f$; $-\\nabla f$ בכיוון הירידה התלולה ביותר. הגודל $|\\nabla f|$ הוא קצב העלייה התלולה ביותר.\n\n**נגזרת כיוון.** קצב השינוי של $f$ בכיוון וקטור יחידה $\\hat{u} = (u_1, u_2)$:\n$$D_{\\hat{u}} f = \\nabla f \\cdot \\hat{u} = \\frac{\\partial f}{\\partial x} u_1 + \\frac{\\partial f}{\\partial y} u_2.$$\n\n**נגזרת כיוון מקסימלית:** $D_{\\hat{u}}f$ ממוקסמת כאשר $\\hat{u} = \\nabla f / |\\nabla f|$, עם ערך מקסימלי $|\\nabla f|$.\n\n**דוגמה.** $f(x,y) = x^2 + 3y^2$ ב-$(1,1)$: $\\nabla f = (2, 6)$. כיוון העלייה התלולה ביותר הוא $(1/\\sqrt{10}, 3/\\sqrt{10})$, בקצב $2\\sqrt{10}$."
+      "kind": "theory",
+      "title_en": "Geometric Meaning and Notation",
+      "title_he": "משמעות גיאומטרית וסימונים",
+      "body_en_md": "**Geometric meaning:**\n- $f_x(a,b)$ = slope of the curve obtained by slicing the surface $z=f(x,y)$ with the plane $y=b$, at $x=a$.\n- $f_y(a,b)$ = slope of the curve obtained by slicing with $x=a$, at $y=b$.\n\n**Notation alternatives:** $f_x=\\partial f/\\partial x=D_x f=D_1 f$.\n\n**Clairaut's theorem in practice:** For all \"nice\" (twice continuously differentiable) functions: $\\partial^2 f/(\\partial x\\partial y)=\\partial^2 f/(\\partial y\\partial x)$. The order of differentiation doesn't matter.\n\n**n-variable generalization:** For $f(x_1,\\ldots,x_n)$:\n$$\\frac{\\partial f}{\\partial x_i}:\\text{differentiate w.r.t. }x_i,\\text{ hold all others constant.}$$\n\n**Gradient direction:** $\\nabla f$ points in the direction of steepest ascent of $f$.",
+      "body_he_md": "**משמעות גיאומטרית:**\n- $f_x(a,b)$ = שיפוע העקומה הנוצרת על ידי חיתוך המשטח $z=f(x,y)$ עם המישור $y=b$, ב-$x=a$.\n- $f_y(a,b)$ = שיפוע העקומה מחיתוך עם $x=a$, ב-$y=b$.\n\n**סימונים חלופיים:** $f_x=\\partial f/\\partial x=D_x f$.\n\n**משפט קלרו בפועל:** לפונקציות \"ניחות\": $f_{xy}=f_{yx}$. סדר הגזירה לא משנה.\n\n**הגרדיאנט:** $\\nabla f$ מצביע בכיוון העלייה התלולה ביותר."
     },
     {
-      "id": "tangent_plane",
-      "title_en": "Tangent Plane",
-      "title_he": "מישור משיק",
-      "level_min": "calculus_1",
-      "body_en_md": "If $f$ is differentiable at $(a, b)$, the **tangent plane** to $z = f(x,y)$ at $(a, b, f(a,b))$ is:\n$$\\boxed{z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b).}$$\n\nThis is the best linear approximation to $f$ near $(a,b)$.\n\n**Linear approximation formula:**\n$$f(x,y) \\approx f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b) \\quad \\text{for } (x,y) \\approx (a,b).$$\n\n**Example.** $f(x,y) = \\ln(x + 2y)$ at $(1, 0)$.\n\n$f(1,0) = \\ln 1 = 0$.\n$f_x = \\dfrac{1}{x+2y}\\big|_{(1,0)} = 1$, $\\;f_y = \\dfrac{2}{x+2y}\\big|_{(1,0)} = 2$.\n\nTangent plane: $z = (x-1) + 2y$, i.e., $z = x + 2y - 1$.",
-      "body_he_md": "אם $f$ גזירה ב-$(a, b)$, **המישור המשיק** ל-$z = f(x,y)$ ב-$(a, b, f(a,b))$ הוא:\n$$\\boxed{z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b).}$$\n\nזה הקירוב הלינארי הטוב ביותר ל-$f$ ליד $(a,b)$.\n\n**נוסחת קירוב לינארי:**\n$$f(x,y) \\approx f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b).$$\n\n**דוגמה.** $f(x,y) = \\ln(x + 2y)$ ב-$(1, 0)$.\n\n$f(1,0) = 0$. $f_x|_{(1,0)} = 1$, $f_y|_{(1,0)} = 2$.\n\nמישור משיק: $z = (x-1) + 2y$, כלומר $z = x + 2y - 1$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Computing Partial Derivatives",
+      "title_he": "דוגמה פתורה 1 — חישוב נגזרות חלקיות",
+      "body_en_md": "**Function:** $f(x,y)=x^3+2x^2y-y^3+5$.\n\n**Step 1 — Find $f_x$:** Treat $y$ as constant:\n$$f_x = 3x^2+4xy-0+0 = 3x^2+4xy.$$\n\n**Step 2 — Find $f_y$:** Treat $x$ as constant:\n$$f_y = 0+2x^2(1)-3y^2+0 = 2x^2-3y^2.$$\n\n**Step 3 — Evaluate at $(1,2)$:**\n$$f_x(1,2)=3(1)+4(1)(2)=3+8=11.$$\n$$f_y(1,2)=2(1)-3(4)=2-12=-10.$$\n\n**Interpretation:** At $(1,2)$, the surface rises at rate 11 in the $x$-direction and falls at rate 10 in the $y$-direction.",
+      "body_he_md": "**פונקציה:** $f(x,y)=x^3+2x^2y-y^3+5$.\n\n**שלב 1 — $f_x$:** $y$ קבוע:\n$$f_x=3x^2+4xy.$$\n\n**שלב 2 — $f_y$:** $x$ קבוע:\n$$f_y=2x^2-3y^2.$$\n\n**שלב 3 — ב-$(1,2)$:**\n$$f_x(1,2)=11, \\quad f_y(1,2)=-10.$$\n\n**פרשנות:** ב-$(1,2)$, המשטח עולה בקצב 11 בכיוון $x$ ויורד ב-10 בכיוון $y$."
     },
     {
-      "id": "chain_rule_multivariable",
-      "title_en": "Chain Rule for Multivariable Functions",
-      "title_he": "כלל השרשרת לפונקציות רבות-משתנים",
-      "level_min": "calculus_1",
-      "body_en_md": "**Chain Rule (one parameter).** If $z = f(x(t), y(t))$, then:\n$$\\frac{dz}{dt} = \\frac{\\partial f}{\\partial x}\\frac{dx}{dt} + \\frac{\\partial f}{\\partial y}\\frac{dy}{dt}.$$\n\n**Chain Rule (two parameters).** If $z = f(x(s,t), y(s,t))$, then:\n$$\\frac{\\partial z}{\\partial s} = \\frac{\\partial f}{\\partial x}\\frac{\\partial x}{\\partial s} + \\frac{\\partial f}{\\partial y}\\frac{\\partial y}{\\partial s}, \\qquad \\frac{\\partial z}{\\partial t} = \\frac{\\partial f}{\\partial x}\\frac{\\partial x}{\\partial t} + \\frac{\\partial f}{\\partial y}\\frac{\\partial y}{\\partial t}.$$\n\n**Tip:** Draw a dependency diagram (tree) with $z$ at the top, $x,y$ in the middle, and $s,t$ at the bottom. Each path from $z$ to a parameter gives one product term.\n\n**Example.** $f(x,y) = x^2 + y^2$, $x = t\\cos t$, $y = t\\sin t$.\n$$\\frac{dz}{dt} = 2x(\\cos t - t\\sin t) + 2y(\\sin t + t\\cos t) = 2t(\\cos^2 t + \\sin^2 t) + 2t^2(0) = 2t.$$\n(Can verify directly: $z = t^2$, so $dz/dt = 2t$.)",
-      "body_he_md": "**כלל השרשרת (פרמטר אחד).** אם $z = f(x(t), y(t))$, אז:\n$$\\frac{dz}{dt} = \\frac{\\partial f}{\\partial x}\\frac{dx}{dt} + \\frac{\\partial f}{\\partial y}\\frac{dy}{dt}.$$\n\n**כלל השרשרת (שני פרמטרים).** אם $z = f(x(s,t), y(s,t))$, אז:\n$$\\frac{\\partial z}{\\partial s} = \\frac{\\partial f}{\\partial x}\\frac{\\partial x}{\\partial s} + \\frac{\\partial f}{\\partial y}\\frac{\\partial y}{\\partial s}, \\qquad \\frac{\\partial z}{\\partial t} = \\frac{\\partial f}{\\partial x}\\frac{\\partial x}{\\partial t} + \\frac{\\partial f}{\\partial y}\\frac{\\partial y}{\\partial t}.$$\n\n**טיפ:** שרטטו דיאגרמת תלות (עץ) עם $z$ בראש, $x,y$ באמצע, ו-$s,t$ בתחתית. כל נתיב מ-$z$ לפרמטר נותן אבר מכפלה אחד.\n\n**דוגמה.** $f(x,y) = x^2 + y^2$, $x = t\\cos t$, $y = t\\sin t$. $z = t^2$, $dz/dt = 2t$."
-    }
-  ],
-  "questions": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $f_x$ and $f_y$ for $f(x,y)=x^2\\sin(y)+e^{xy}$.",
+      "body_he_md": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=x^2\\sin y+e^{xy}$.",
+      "checkpoint_solution_en": "$f_x=2x\\sin y+ye^{xy}$. $f_y=x^2\\cos y+xe^{xy}$.",
+      "checkpoint_solution_he": "$f_x=2x\\sin y+ye^{xy}$. $f_y=x^2\\cos y+xe^{xy}$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "For $f(x,y) = x^3 y^2 + \\sin(xy)$, what is $\\dfrac{\\partial f}{\\partial x}$?",
-      "body_he": "עבור $f(x,y) = x^3 y^2 + \\sin(xy)$, מה היא $\\dfrac{\\partial f}{\\partial x}$?",
-      "options": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Second-Order Partials and Clairaut's Theorem",
+      "title_he": "דוגמה פתורה 2 — נגזרות חלקיות מסדר שני ומשפט קלרו",
+      "body_en_md": "**Function:** $f(x,y)=x^2y^3+\\ln(xy)$.\n\n**Step 1 — First partials:**\n$$f_x = 2xy^3+\\frac{1}{x}, \\qquad f_y = 3x^2y^2+\\frac{1}{y}.$$\n\n**Step 2 — Second partials:**\n$$f_{xx} = \\frac{\\partial}{\\partial x}\\left[2xy^3+\\frac{1}{x}\\right] = 2y^3-\\frac{1}{x^2}.$$\n$$f_{yy} = \\frac{\\partial}{\\partial y}\\left[3x^2y^2+\\frac{1}{y}\\right] = 6x^2y-\\frac{1}{y^2}.$$\n\n**Step 3 — Mixed partial $f_{xy}$:**\n$$f_{xy} = \\frac{\\partial f_x}{\\partial y} = \\frac{\\partial}{\\partial y}\\left[2xy^3+\\frac{1}{x}\\right] = 6xy^2.$$\n\n**Step 4 — Mixed partial $f_{yx}$:**\n$$f_{yx} = \\frac{\\partial f_y}{\\partial x} = \\frac{\\partial}{\\partial x}\\left[3x^2y^2+\\frac{1}{y}\\right] = 6xy^2.$$\n\n**Clairaut confirmed:** $f_{xy}=f_{yx}=6xy^2$. ✓",
+      "body_he_md": "**פונקציה:** $f(x,y)=x^2y^3+\\ln(xy)$.\n\n**שלב 1:** $f_x=2xy^3+1/x$, $f_y=3x^2y^2+1/y$.\n\n**שלב 2:** $f_{xx}=2y^3-1/x^2$, $f_{yy}=6x^2y-1/y^2$.\n\n**שלב 3:** $f_{xy}=6xy^2$.\n\n**שלב 4:** $f_{yx}=6xy^2$.\n\n**קלרו מאושר:** $f_{xy}=f_{yx}=6xy^2$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For $f(x,y)=\\sin(xy)$, verify that $f_{xy}=f_{yx}$.",
+      "body_he_md": "עבור $f(x,y)=\\sin(xy)$, אמת ש-$f_{xy}=f_{yx}$.",
+      "checkpoint_solution_en": "$f_x=y\\cos(xy)$. $f_{xy}=\\cos(xy)-xy\\sin(xy)$. $f_y=x\\cos(xy)$. $f_{yx}=\\cos(xy)-xy\\sin(xy)$. Equal. ✓",
+      "checkpoint_solution_he": "$f_x=y\\cos(xy)$. $f_{xy}=\\cos(xy)-xy\\sin(xy)$. $f_y=x\\cos(xy)$. $f_{yx}=\\cos(xy)-xy\\sin(xy)$. שווים. ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Gradient and Level Curves",
+      "title_he": "דוגמה פתורה 3 — גרדיאנט ועקומות גובה",
+      "body_en_md": "**Problem:** For $f(x,y)=4x^2+y^2$, find the gradient at $(1,2)$ and show it is perpendicular to the level curve $f=8$ at that point.\n\n**Step 1 — Compute partials:**\n$$f_x = 8x, \\qquad f_y = 2y.$$\n\n**Step 2 — Gradient at $(1,2)$:**\n$$\\nabla f(1,2) = (8(1),2(2)) = (8,4).$$\n\n**Step 3 — Level curve $f=8$:** The curve $4x^2+y^2=8$ is an ellipse. At $(1,2)$: $4+4=8$. ✓\n\n**Step 4 — Tangent to level curve:** Implicit differentiation of $4x^2+y^2=8$:\n$$8x+2yy'=0 \\implies y' = -\\frac{8x}{2y} = -\\frac{4x}{y}.$$\nAt $(1,2)$: $y'=-4/2=-2$. Tangent direction vector: $(1,-2)$.\n\n**Step 5 — Check perpendicularity:**\n$$\\nabla f(1,2)\\cdot(1,-2) = (8)(1)+(4)(-2) = 8-8 = 0. \\quad\\checkmark$$\n\n**Conclusion:** The gradient is always perpendicular to the level curves.",
+      "body_he_md": "**בעיה:** עבור $f(x,y)=4x^2+y^2$, מצא גרדיאנט ב-$(1,2)$ והראה שהוא ניצב לעקומת הגובה $f=8$ בנקודה זו.\n\n**שלב 1:** $f_x=8x$, $f_y=2y$.\n\n**שלב 2:** $\\nabla f(1,2)=(8,4)$.\n\n**שלב 3:** $(1,2)$ על $4x^2+y^2=8$. ✓\n\n**שלב 4:** כיוון המשיק לעקומת הגובה: $y'=-2$. וקטור כיוון: $(1,-2)$.\n\n**שלב 5:** $(8,4)\\cdot(1,-2)=8-8=0$. $\\checkmark$\n\n**מסקנה:** הגרדיאנט תמיד ניצב לעקומות הגובה."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Partial Derivatives Checklist",
+      "title_he": "מדריך שיטה — רשימת פעולות לנגזרות חלקיות",
+      "body_en_md": "**To find $\\partial f/\\partial x_i$:**\n1. Treat ALL variables EXCEPT $x_i$ as constants.\n2. Differentiate using standard single-variable rules.\n3. Result: a function of all variables.\n\n**Common patterns:**\n| Term | $\\partial/\\partial x$ | $\\partial/\\partial y$ |\n|---|---|---|\n| $x^m y^n$ | $mx^{m-1}y^n$ | $nx^m y^{n-1}$ |\n| $e^{ax+by}$ | $ae^{ax+by}$ | $be^{ax+by}$ |\n| $\\sin(xy)$ | $y\\cos(xy)$ | $x\\cos(xy)$ |\n| $\\ln(f(x,y))$ | $f_x/f$ | $f_y/f$ |\n\n**Clairaut's:** $f_{xy}=f_{yx}$ for smooth functions (save computation!).\n\n**Gradient:** $\\nabla f=(f_x,f_y,\\ldots)$ — points in direction of steepest ascent.",
+      "body_he_md": "**למציאת $\\partial f/\\partial x_i$:**\n1. יחס לכל המשתנים פרט ל-$x_i$ כאל קבועים.\n2. גזור לפי כללי משתנה אחד רגיל.\n\n**תבניות שכיחות:**\n| גורם | $\\partial/\\partial x$ | $\\partial/\\partial y$ |\n|---|---|---|\n| $x^m y^n$ | $mx^{m-1}y^n$ | $nx^m y^{n-1}$ |\n| $e^{ax+by}$ | $ae^{ax+by}$ | $be^{ax+by}$ |\n| $\\sin(xy)$ | $y\\cos(xy)$ | $x\\cos(xy)$ |\n\n**קלרו:** $f_{xy}=f_{yx}$ — חוסך חישוב!\n\n**גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה מרבית."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$3x^2 y^2 + y\\cos(xy)$",
-          "text_he": "$3x^2 y^2 + y\\cos(xy)$",
-          "correct": true
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $f_x$ and $f_y$ for $f(x,y)=3x^2+4xy-y^3$.",
+          "body_he": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=3x^2+4xy-y^3$.",
+          "solution_en": "$f_x=6x+4y$. $f_y=4x-3y^2$.",
+          "solution_he": "$f_x=6x+4y$. $f_y=4x-3y^2$.",
+          "points": 4
         },
         {
-          "id": "b",
-          "text_en": "$3x^2 y^2 + \\cos(xy)$",
-          "text_he": "$3x^2 y^2 + \\cos(xy)$",
-          "correct": false
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $\\partial f/\\partial x$ for $f(x,y,z)=x^2yz^3$.",
+          "body_he": "מצא $\\partial f/\\partial x$ עבור $f(x,y,z)=x^2yz^3$.",
+          "solution_en": "$\\partial f/\\partial x=2xyz^3$.",
+          "solution_he": "$\\partial f/\\partial x=2xyz^3$.",
+          "points": 4
         },
         {
-          "id": "c",
-          "text_en": "$x^3 \\cdot 2y + \\cos(xy)$",
-          "text_he": "$x^3 \\cdot 2y + \\cos(xy)$",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $f_x(2,1)$ for $f(x,y)=x^2y-3y^2$.",
+          "body_he": "מצא $f_x(2,1)$ עבור $f(x,y)=x^2y-3y^2$.",
+          "solution_en": "$f_x=2xy$. $f_x(2,1)=4$.",
+          "solution_he": "$f_x=2xy$. $f_x(2,1)=4$.",
+          "points": 4
         },
         {
-          "id": "d",
-          "text_en": "$3x^2 + y\\cos(xy)$",
-          "text_he": "$3x^2 + y\\cos(xy)$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find the gradient $\\nabla f$ at $(0,0)$ for $f(x,y)=e^x\\sin y$.",
+          "body_he": "מצא $\\nabla f$ ב-$(0,0)$ עבור $f(x,y)=e^x\\sin y$.",
+          "solution_en": "$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. At $(0,0)$: $\\nabla f=(0,1)$.",
+          "solution_he": "$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. ב-$(0,0)$: $\\nabla f=(0,1)$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find all second-order partial derivatives of $f(x,y)=x^3y^2$.",
+          "body_he": "מצא את כל הנגזרות החלקיות מסדר שני של $f(x,y)=x^3y^2$.",
+          "solution_en": "$f_x=3x^2y^2$, $f_y=2x^3y$. $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, $f_{yx}=6x^2y$. $f_{xy}=f_{yx}$. ✓",
+          "solution_he": "$f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$. ✓",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "For $f(x,y)=\\dfrac{x}{x^2+y^2}$, find $f_x$ and $f_y$.",
+          "body_he": "עבור $f(x,y)=\\dfrac{x}{x^2+y^2}$, מצא $f_x$ ו-$f_y$.",
+          "solution_en": "$f_x=[(x^2+y^2)-x\\cdot 2x]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. $f_y=[-x\\cdot 2y]/(x^2+y^2)^2=-2xy/(x^2+y^2)^2$.",
+          "solution_he": "$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Verify that $f(x,y)=e^x\\cos y$ satisfies the Laplace equation $f_{xx}+f_{yy}=0$.",
+          "body_he": "אמת ש-$f(x,y)=e^x\\cos y$ מקיימת את משוואת לפלס $f_{xx}+f_{yy}=0$.",
+          "solution_en": "$f_x=e^x\\cos y$, $f_{xx}=e^x\\cos y$. $f_y=-e^x\\sin y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=e^x\\cos y-e^x\\cos y=0$. ✓",
+          "solution_he": "$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=0$. ✓",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the gradient $\\nabla f$ of $f(x,y)=x^2+3xy+y^2$ at $(1,-1)$ and find its magnitude.",
+          "body_he": "מצא $\\nabla f$ של $f(x,y)=x^2+3xy+y^2$ ב-$(1,-1)$ ומצא את גודלו.",
+          "solution_en": "$f_x=2x+3y$, $f_y=3x+2y$. At $(1,-1)$: $f_x=-1$, $f_y=1$. $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.",
+          "solution_he": "ב-$(1,-1)$: $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find $f_{xy}$ for $f(x,y)=x^2e^{2y}$ without computing $f_{yx}$ directly.",
+          "body_he": "מצא $f_{xy}$ עבור $f(x,y)=x^2e^{2y}$ מבלי לחשב $f_{yx}$ ישירות.",
+          "solution_en": "$f_x=2xe^{2y}$. $f_{xy}=2x\\cdot 2e^{2y}=4xe^{2y}$. (By Clairaut, $f_{yx}=4xe^{2y}$ too.)",
+          "solution_he": "$f_x=2xe^{2y}$. $f_{xy}=4xe^{2y}$. (לפי קלרו: $f_{yx}=4xe^{2y}$ גם.)",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $f(x,y)=xy(x^2-y^2)/(x^2+y^2)$ for $(x,y)\\neq(0,0)$, $f(0,0)=0$ has $f_{xy}(0,0)\\neq f_{yx}(0,0)$, showing Clairaut requires continuity.",
+          "body_he": "הוכח שעבור $f=xy(x^2-y^2)/(x^2+y^2)$, $(x,y)\\neq(0,0)$, $f(0,0)=0$: $f_{xy}(0,0)\\neq f_{yx}(0,0)$, המראה שקלרו מצריך רציפות.",
+          "solution_en": "$f_x(0,0)=\\lim_{h\\to 0}f(h,0)/h=0$. $f_x(x,y)=y(x^4+4x^2y^2-y^4)/(x^2+y^2)^2$ for $(x,y)\\neq(0,0)$. $f_{xy}(0,0)=\\lim_{k\\to 0}f_x(0,k)/k=\\lim_{k\\to 0}k(-k^4/k^4)/k=-1$. By symmetry $f_{yx}(0,0)=1$. So $f_{xy}\\neq f_{yx}$ at $(0,0)$. The mixed partials are not continuous at $(0,0)$, so Clairaut doesn't apply.",
+          "solution_he": "$f_{xy}(0,0)=-1$, $f_{yx}(0,0)=1$. שונים! הנגזרות המעורבות אינן רציפות ב-$(0,0)$ — קלרו אינו חל.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find all partial derivatives of $f(x,y,z)=\\ln(x^2+y^2+z^2)$ and verify $f_{xy}=f_{yx}$.",
+          "body_he": "מצא את כל הנגזרות החלקיות של $f(x,y,z)=\\ln(x^2+y^2+z^2)$ ואמת $f_{xy}=f_{yx}$.",
+          "solution_en": "Let $r^2=x^2+y^2+z^2$. $f_x=2x/r^2$, $f_y=2y/r^2$, $f_z=2z/r^2$. $f_{xy}=\\partial(2x/r^2)/\\partial y=2x(-2y/r^4)=-4xy/r^4$. $f_{yx}=-4xy/r^4=f_{xy}$. ✓",
+          "solution_he": "$f_x=2x/r^2$, $f_y=2y/r^2$, $f_z=2z/r^2$. $f_{xy}=f_{yx}=-4xy/r^4$. ✓",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that $f(x,y)=e^{xy}(x^2-y^2)$ satisfies a second-order PDE. Find an expression for $f_{xx}-f_{yy}$.",
+          "body_he": "הראה ש-$f(x,y)=e^{xy}(x^2-y^2)$ מקיימת משוואת PDE מסדר שני. מצא ביטוי ל-$f_{xx}-f_{yy}$.",
+          "solution_en": "$f_x=e^{xy}(2x)+ye^{xy}(x^2-y^2)=e^{xy}(2x+y(x^2-y^2))$. $f_{xx}=ye^{xy}(2x+y(x^2-y^2))+e^{xy}(2+y(2x))=e^{xy}(y^2(x^2-y^2)+2+4xy+2xy)$... The exact computation is lengthy; the point is to practice applying the product/chain rules systematically.",
+          "solution_he": "$f_x=e^{xy}[2x+y(x^2-y^2)]$. $f_{xx}$ ו-$f_{yy}$ מחייבים גזירה נוספת עם כלל מכפלה. הנקודה: תרגול שיטתי של גזירה חלקית.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "The heat equation is $\\partial u/\\partial t=k\\partial^2 u/\\partial x^2$. Verify that $u(x,t)=e^{-kn^2t}\\sin(nx)$ is a solution.",
+          "body_he": "משוואת החום היא $\\partial u/\\partial t=k\\partial^2 u/\\partial x^2$. אמת ש-$u(x,t)=e^{-kn^2t}\\sin(nx)$ היא פתרון.",
+          "solution_en": "$\\partial u/\\partial t=-kn^2e^{-kn^2t}\\sin(nx)$. $\\partial u/\\partial x=ne^{-kn^2t}\\cos(nx)$. $\\partial^2u/\\partial x^2=-n^2e^{-kn^2t}\\sin(nx)$. $k\\cdot(-n^2e^{-kn^2t}\\sin(nx))=-kn^2e^{-kn^2t}\\sin(nx)=\\partial u/\\partial t$. ✓",
+          "solution_he": "$\\partial u/\\partial t=-kn^2e^{-kn^2t}\\sin(nx)$. $k\\partial^2u/\\partial x^2=-kn^2e^{-kn^2t}\\sin(nx)$. שווים. ✓",
+          "points": 10
         }
-      ],
-      "explanation_en": "Differentiate with $y$ fixed: $\\partial(x^3 y^2)/\\partial x = 3x^2 y^2$ and $\\partial(\\sin(xy))/\\partial x = \\cos(xy)\\cdot y$. So $\\partial f/\\partial x = 3x^2 y^2 + y\\cos(xy)$.",
-      "explanation_he": "גוזרים כש-$y$ קבוע: $\\partial(x^3 y^2)/\\partial x = 3x^2 y^2$ ו-$\\partial(\\sin(xy))/\\partial x = \\cos(xy)\\cdot y$. לכן $\\partial f/\\partial x = 3x^2 y^2 + y\\cos(xy)$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "The gradient $\\nabla f$ at a point $(a,b)$ points in the direction of:",
-      "body_he": "הגרדיאנט $\\nabla f$ בנקודה $(a,b)$ מצביע בכיוון:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "Steepest descent of $f$",
-          "text_he": "ירידה תלולה ביותר של $f$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "Steepest ascent of $f$",
-          "text_he": "עלייה תלולה ביותר של $f$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "The level curve of $f$ through $(a,b)$",
-          "text_he": "עקומת שיווי-גובה של $f$ דרך $(a,b)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "The direction of the $x$-axis",
-          "text_he": "כיוון ציר $x$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "The gradient $\\nabla f$ always points in the direction of steepest ascent of $f$. Its magnitude $|\\nabla f|$ equals the maximum rate of increase. The negative gradient $-\\nabla f$ points toward steepest descent.",
-      "explanation_he": "הגרדיאנט $\\nabla f$ תמיד מצביע בכיוון העלייה התלולה ביותר של $f$. גודלו $|\\nabla f|$ שווה לקצב הגידול המקסימלי."
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Not treating the other variable as constant.** $\\partial(x^2y^3)/\\partial x = 2xy^3$ (treat $y^3$ as a constant factor).\n\n2. **Applying $f_{xy}=f_{yx}$ without checking conditions.** Clairaut requires the mixed partials to be continuous. For most exam functions this holds, but counterexamples exist.\n\n3. **Forgetting chain rule for nested terms.** $\\partial/\\partial x[\\ln(x^2+y^2)] = 2x/(x^2+y^2)$, not $1/(x^2+y^2)$.\n\n4. **Confusing $\\partial^2f/\\partial x\\partial y$ notation.** This means differentiate w.r.t. $y$ first, then $x$: $f_{yx}$. (Some books reverse this convention — always check.)\n\n5. **Gradient direction.** $\\nabla f$ points toward increasing $f$. If you want the direction of steepest descent, use $-\\nabla f$.",
+      "body_he_md": "1. **אי-יחס למשתנה השני כקבוע.** $\\partial(x^2y^3)/\\partial x=2xy^3$ (יחס ל-$y^3$ כגורם קבוע).\n\n2. **שימוש ב-$f_{xy}=f_{yx}$ ללא בדיקת תנאים.** קלרו מצריך רציפות. לרוב פונקציות הבחינה זה מתקיים, אך קיימות דוגמאות נגד.\n\n3. **שכחת כלל שרשרת.** $\\partial\\ln(x^2+y^2)/\\partial x=2x/(x^2+y^2)$.\n\n4. **בלבול בסימון $\\partial^2f/\\partial x\\partial y$.** בדרך כלל: גזור לפי $y$ קודם, אז $x$ ($=f_{yx}$). בדוק מוסכמות ספר.\n\n5. **כיוון הגרדיאנט.** $\\nabla f$ מצביע לכיוון עלייה. לירידה תלולה: $-\\nabla f$."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "For $f(x,y) = x^2 + y^2$ at $(1, 2)$, compute the directional derivative in the direction $\\hat{u} = (3/5, 4/5)$.",
-      "body_he": "עבור $f(x,y) = x^2 + y^2$ ב-$(1, 2)$, חשב את נגזרת הכיוון בכיוון $\\hat{u} = (3/5, 4/5)$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$22/5$",
-          "text_he": "$22/5$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$26/5$",
-          "text_he": "$26/5$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$2$",
-          "text_he": "$2$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\sqrt{20}$",
-          "text_he": "$\\sqrt{20}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\nabla f = (2x, 2y)|_{(1,2)} = (2, 4)$. Then $D_{\\hat{u}}f = (2,4)\\cdot(3/5, 4/5) = 6/5 + 16/5 = 22/5$.",
-      "explanation_he": "$\\nabla f|_{(1,2)} = (2, 4)$. אז $D_{\\hat{u}}f = (2,4)\\cdot(3/5, 4/5) = 6/5 + 16/5 = 22/5$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Computing partials:**\n- $f_x$: hold $y$ constant, differentiate in $x$.\n- $f_y$: hold $x$ constant, differentiate in $y$.\n\n**Key formulas:**\n- $\\nabla f = (f_x,f_y)$\n- $f_{xy}=f_{yx}$ (Clairaut, when continuous)\n- Laplace: $\\nabla^2 f=f_{xx}+f_{yy}=0$\n- Gradient $\\perp$ level curves\n\n**Exam patterns:** Compute $f_x$, $f_y$ at a point; find $f_{xx}$, $f_{xy}$; verify a PDE; find gradient.",
+      "body_he_md": "**חישוב נגזרות:**\n- $f_x$: $y$ קבוע, גזור לפי $x$.\n- $f_y$: $x$ קבוע, גזור לפי $y$.\n\n**נוסחאות מרכזיות:**\n- $\\nabla f=(f_x,f_y)$\n- $f_{xy}=f_{yx}$ (קלרו)\n- לפלס: $f_{xx}+f_{yy}=0$\n- גרדיאנט $\\perp$ עקומות גובה"
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "The equation of the tangent plane to $z = f(x,y)$ at the point $(a, b)$ is:",
-      "body_he": "משוואת המישור המשיק ל-$z = f(x,y)$ בנקודה $(a,b)$ היא:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$z = f_x(a,b)(x-a) + f_y(a,b)(y-b)$",
-          "text_he": "$z = f_x(a,b)(x-a) + f_y(a,b)(y-b)$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)$",
-          "text_he": "$z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$z = f(a,b) + \\nabla f(a,b) \\cdot (x+y)$",
-          "text_he": "$z = f(a,b) + \\nabla f(a,b) \\cdot (x+y)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$z - f(a,b) = f_{xx}(a,b)(x-a)^2 + f_{yy}(a,b)(y-b)^2$",
-          "text_he": "$z - f(a,b) = f_{xx}(a,b)(x-a)^2 + f_{yy}(a,b)(y-b)^2$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "The tangent plane passes through $(a, b, f(a,b))$ and has slopes $f_x(a,b)$ and $f_y(a,b)$ in the $x$- and $y$-directions. Option (a) is missing the $f(a,b)$ constant; options (c) and (d) are not the tangent plane formula.",
-      "explanation_he": "המישור המשיק עובר דרך $(a, b, f(a,b))$ ויש לו שיפועים $f_x(a,b)$ ו-$f_y(a,b)$. אפשרות (א) חסר את הקבוע $f(a,b)$."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "If $z = f(x,y)$ where $x = e^t$ and $y = \\ln t$, then $\\dfrac{dz}{dt}$ equals:",
-      "body_he": "אם $z = f(x,y)$ כאשר $x = e^t$ ו-$y = \\ln t$, אז $\\dfrac{dz}{dt}$ שווה ל:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$f_x e^t + f_y \\ln t$",
-          "text_he": "$f_x e^t + f_y \\ln t$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$f_x e^t + f_y / t$",
-          "text_he": "$f_x e^t + f_y / t$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$f_x + f_y / t$",
-          "text_he": "$f_x + f_y / t$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$f_x e^t + f_y t$",
-          "text_he": "$f_x e^t + f_y t$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "By the chain rule: $\\dfrac{dz}{dt} = f_x \\dfrac{dx}{dt} + f_y \\dfrac{dy}{dt} = f_x \\cdot e^t + f_y \\cdot \\dfrac{1}{t}$.",
-      "explanation_he": "לפי כלל השרשרת: $\\dfrac{dz}{dt} = f_x \\dfrac{dx}{dt} + f_y \\dfrac{dy}{dt} = f_x \\cdot e^t + f_y \\cdot \\dfrac{1}{t}$."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Partial derivative $f_x$:** differentiate w.r.t. $x$, treat $y$ as constant; measures the rate of change in the $x$-direction.\n- **Mixed partials:** $f_{xy}=f_{yx}$ when both are continuous (Clairaut's theorem).\n- **Gradient:** $\\nabla f=(f_x,f_y)$ — points in the direction of steepest ascent; perpendicular to level curves.\n- **Geometric meaning:** $f_x(a,b)$ = slope of the surface in the $x$-direction at $(a,b)$.\n- **Applications:** PDEs (heat, wave, Laplace), optimization, machine learning.",
+      "body_he_md": "- **$f_x$:** גזירה לפי $x$, $y$ קבוע; מודד קצב שינוי בכיוון $x$.\n- **נגזרות מעורבות:** $f_{xy}=f_{yx}$ כאשר שתיהן רציפות (קלרו).\n- **גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה תלולה; ניצב לעקומות גובה.\n- **משמעות גיאומטרית:** $f_x(a,b)$ = שיפוע המשטח בכיוון $x$ ב-$(a,b)$.\n- **יישומים:** PDE, אופטימיזציה, למידת מכונה."
     }
   ]
 }

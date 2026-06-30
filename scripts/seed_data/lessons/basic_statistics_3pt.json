@@ -1,206 +1,233 @@
 {
-  "id": "basic_statistics_3pt",
-  "type": "interactive",
-  "subject": "high_school_math_3pt",
-  "title_en": "Statistics Basics — Mean, Median, Mode",
-  "title_he": "סטטיסטיקה בסיסית — ממוצע, חציון, שכיח",
-  "duration_min": 25,
-  "level_min": "3pt",
-  "agent_hints": "Students at the 3pt level often think statistics is just 'adding and dividing'. Emphasise the *why*: each measure captures something different about the data. The outlier example (Elon Musk in a room) is very effective for building intuition about when median beats mean. Watch for the even-count median trap: students often just pick one of the two middle values instead of averaging them.",
+  "concept_id": "basic_statistics_3pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["3pt"],
+  "title_en": "Basic Statistics — Mean, Median, Mode, Range",
+  "title_he": "סטטיסטיקה בסיסית — ממוצע, חציון, שכיח וטווח",
+  "summary_en": "Measures of centre (mean, median, mode) and spread (range) applied to real data sets at the 3-point level.",
+  "summary_he": "מדדי מרכז (ממוצע, חציון, שכיח) ומדד פיזור (טווח) עם דוגמאות מהחיים ברמת 3 יחידות.",
+  "est_minutes": 35,
   "sections": [
     {
-      "id": "why_statistics",
-      "title_en": "Why Statistics?",
-      "title_he": "למה סטטיסטיקה?",
-      "level_min": "3pt",
-      "body_en_md": "Every day we are surrounded by data — test scores, sports results, prices, temperatures. Statistics gives us tools to make sense of all these numbers and draw meaningful conclusions.\n\nImagine your class got the following grades on a recent test:\n$$60, \\; 70, \\; 75, \\; 80, \\; 80, \\; 85, \\; 90, \\; 95$$\n\nSomeone asks: *\"How did the class do?\"* You could list all 8 numbers, but that is not very helpful. You want one **representative number** — a single value that captures the \"typical\" result.\n\nThere are three common ways to do this:\n- **Mean (ממוצע):** the arithmetic average\n- **Median (חציון):** the middle value when sorted\n- **Mode (שכיח):** the value that appears most often\n\nEach one tells a slightly different story, and knowing *when* to use each one is what separates a data reader from a data thinker.",
-      "body_he_md": "בכל יום אנחנו מוקפים בנתונים — ציוני מבחנים, תוצאות ספורט, מחירים, טמפרטורות. הסטטיסטיקה נותנת לנו כלים להפוך את כל המספרים האלה למשמעותיים ולהסיק מסקנות.\n\nדמיינ/י שהכיתה שלך קיבלה את הציונים הבאים במבחן:\n$$60, \\; 70, \\; 75, \\; 80, \\; 80, \\; 85, \\; 90, \\; 95$$\n\nמישהו שואל: *\"איך הלך לכיתה?\"* אפשר לרשום את כל 8 המספרים, אבל זה לא ממש עוזר. רוצים **מספר מייצג אחד** — ערך בודד שלוכד את התוצאה ה\"טיפוסית\".\n\nיש שלוש דרכים נפוצות לעשות זאת:\n- **ממוצע:** הממוצע החשבוני\n- **חציון:** הערך האמצעי לאחר מיון\n- **שכיח:** הערך שמופיע הכי הרבה\n\nכל אחד מספר סיפור מעט שונה, ולדעת *מתי* להשתמש בכל אחד — זה ההבדל בין מי שקורא נתונים לבין מי שחושב עליהם."
+      "kind": "intro",
+      "title_en": "Why Summarise Data?",
+      "title_he": "למה מסכמים נתונים?",
+      "body_en_md": "Imagine a teacher who wants to understand how her 30 students performed on a test. Looking at 30 numbers is overwhelming. Instead, she asks: **What is the typical score? What is the spread?**\n\nStatistics gives us tools to compress a data set into a few meaningful numbers:\n- The **mean** (average) — the balance point of the data.\n- The **median** — the middle value when data are ordered.\n- The **mode** — the most frequent value.\n- The **range** — how spread out the data are.\n\nThese four numbers appear on the Israeli Bagrut in data analysis, reading tables, and interpreting graphs.",
+      "body_he_md": "דמיינו מורה שרוצה להבין כיצד 30 תלמידיה ביצעו במבחן. להסתכל על 30 מספרים זה מבלבל. במקום זאת היא שואלת: **מה הציון הטיפוסי? מה הפיזור?**\n\nסטטיסטיקה נותנת לנו כלים לצמצם קבוצת נתונים לכמה מספרים משמעותיים:\n- **ממוצע** — נקודת האיזון של הנתונים.\n- **חציון** — הערך האמצעי כשהנתונים מסודרים.\n- **שכיח** — הערך שמופיע הכי הרבה.\n- **טווח** — עד כמה הנתונים פרוסים.\n\nארבעת המספרים הללו מופיעים בבגרות בניתוח נתונים, קריאת טבלאות ופירוש גרפים."
     },
     {
-      "id": "mean",
-      "title_en": "Mean (ממוצע) — The Average",
-      "title_he": "ממוצע — האינטואיציה מאחורי הממוצע",
-      "level_min": "3pt",
-      "body_en_md": "The **mean** is what most people mean when they say \"average\". You compute it by:\n$$\\bar{x} = \\frac{\\text{sum of all values}}{\\text{number of values}}$$\n\n**Example:** Data set $\\{70, 80, 90, 100\\}$\n$$\\bar{x} = \\frac{70 + 80 + 90 + 100}{4} = \\frac{340}{4} = 85$$\n\n**Worked example — 5 test grades:**\nGrades: $55, 70, 75, 80, 95$\n$$\\bar{x} = \\frac{55 + 70 + 75 + 80 + 95}{5} = \\frac{375}{5} = 75$$\n\n**Intuition:** the mean is the value everyone would get if you \"levelled\" all the scores equally — redistribute all points until everyone has the same.\n\n**Limitation:** the mean is heavily affected by extreme values (outliers). One very high or very low score can pull the mean far from most of the data.",
-      "body_he_md": "**הממוצע** הוא מה שרוב האנשים מתכוונים כשהם אומרים \"ממוצע\". מחשבים אותו לפי:\n$$\\bar{x} = \\frac{\\text{סכום כל הערכים}}{\\text{מספר הערכים}}$$\n\n**דוגמה:** $\\{70, 80, 90, 100\\}$\n$$\\bar{x} = \\frac{70 + 80 + 90 + 100}{4} = \\frac{340}{4} = 85$$\n\n**דוגמה פתורה — 5 ציוני מבחן:**\nציונים: $55, 70, 75, 80, 95$\n$$\\bar{x} = \\frac{55 + 70 + 75 + 80 + 95}{5} = \\frac{375}{5} = 75$$\n\n**אינטואיציה:** הממוצע הוא הערך שכולם היו מקבלים אם \"היינו מיישרים\" את כל הציונים שווה — מחלקים את כל הנקודות עד שלכולם יש אותו הדבר.\n\n**מגבלה:** הממוצע מושפע מאד מערכים קיצוניים (חריגים). ציון גבוה מאד או נמוך מאד אחד יכול למשוך את הממוצע רחוק ממרבית הנתונים."
+      "kind": "definition",
+      "title_en": "Definitions",
+      "title_he": "הגדרות",
+      "body_en_md": "Let the data set be $x_1, x_2, \\ldots, x_n$ with $n$ values.\n\n**Mean (Average):** $\\bar{x} = \\dfrac{x_1 + x_2 + \\cdots + x_n}{n} = \\dfrac{\\sum x_i}{n}$\n\n**Median:** Arrange values in ascending order. If $n$ is odd, the median is the middle value. If $n$ is even, the median is the average of the two middle values.\n\n**Mode:** The value that appears most frequently. A data set can have no mode, one mode, or multiple modes.\n\n**Range:** $\\text{Range} = \\text{Maximum} - \\text{Minimum}$",
+      "body_he_md": "יהיו הנתונים $x_1, x_2, \\ldots, x_n$ עם $n$ ערכים.\n\n**ממוצע:** $\\bar{x} = \\dfrac{x_1 + x_2 + \\cdots + x_n}{n} = \\dfrac{\\sum x_i}{n}$\n\n**חציון:** סדר את הערכים בסדר עולה. אם $n$ אי-זוגי — הערך האמצעי. אם $n$ זוגי — ממוצע שני הערכים האמצעיים.\n\n**שכיח:** הערך שמופיע הכי הרבה. ייתכן שאין שכיח, שכיח אחד, או כמה שכיחים.\n\n**טווח:** $\\text{טווח} = \\text{מקסימום} - \\text{מינימום}$"
     },
     {
-      "id": "median",
-      "title_en": "Median (חציון) — The Middle Value",
-      "title_he": "חציון — הערך האמצעי",
-      "level_min": "3pt",
-      "body_en_md": "The **median** is the middle value in a sorted list. Half the values are above it, half are below.\n\n**Step 1:** Sort the data from smallest to largest.\n**Step 2:** If there is an **odd** number of values, the median is the middle one. If there is an **even** number, the median is the average of the two middle values.\n\n**Odd count example:** $\\{3, 7, 9, 12, 15\\}$ → median = **9** (3rd out of 5)\n\n**Even count example:** $\\{3, 7, 9, 12\\}$ → two middle values are 7 and 9 → median = $\\frac{7+9}{2} = 8$\n\n**Why median is better than mean for outliers:**\nImagine 10 people in a room, each earning around ₪5,000/month. The average salary is ₪5,000. Now Elon Musk walks in earning ₪500,000,000/month. The *mean* jumps to ~₪45,000,000 — completely misleading! The *median* barely changes, because it only cares about the middle position, not the size of the extremes.\n\nThat is why median is the standard measure for income statistics — a few ultra-wealthy people should not distort the picture of what is \"typical\".",
-      "body_he_md": "**החציון** הוא הערך האמצעי ברשימה ממוינת. מחצית הערכים מעליו, מחצית מתחתיו.\n\n**שלב 1:** מסדרים את הנתונים מהקטן לגדול.\n**שלב 2:** אם יש מספר **אי-זוגי** של ערכים, החציון הוא האמצעי. אם יש מספר **זוגי**, החציון הוא ממוצע שני הערכים האמצעיים.\n\n**דוגמה עם מספר אי-זוגי:** $\\{3, 7, 9, 12, 15\\}$ → חציון = **9** (ה-3 מתוך 5)\n\n**דוגמה עם מספר זוגי:** $\\{3, 7, 9, 12\\}$ → שני הערכים האמצעיים הם 7 ו-9 → חציון = $\\frac{7+9}{2} = 8$\n\n**למה חציון עדיף על ממוצע בנוכחות חריגים:**\nדמיינ/י 10 אנשים בחדר שמרוויחים כ-₪5,000 לחודש. הממוצע הוא ₪5,000. עכשיו אילון מאסק נכנס לחדר ומרוויח ₪500,000,000 לחודש. ה*ממוצע* קופץ ל-~₪45,000,000 — מטעה לחלוטין! ה*חציון* כמעט לא משתנה, כי הוא מתעניין רק במיקום האמצעי, לא בגודל הקצוות.\n\nלכן החציון הוא מדד ההכנסה הסטנדרטי בסטטיסטיקה — מיעוט של אנשים עשירים מאד לא אמור לעוות את התמונה של מה שהוא \"טיפוסי\"."
+      "kind": "theory",
+      "title_en": "When to Use Each Measure",
+      "title_he": "מתי להשתמש בכל מדד?",
+      "body_en_md": "**Mean** is sensitive to extreme values (outliers). One very high or low score pulls the mean away from the centre.\n\n**Median** is resistant to outliers. Use it when the data is skewed (e.g., salaries, house prices).\n\n**Mode** is used for categorical data (e.g., most popular colour, most common grade). It is the only measure that can apply to non-numerical data.\n\n**Range** is a simple but rough measure of spread. It depends only on the two extreme values and ignores all others.\n\n**Key exam fact:** If a data set is sorted, finding the median is fast. If unsorted, sort first!",
+      "body_he_md": "**ממוצע** רגיש לערכים קיצוניים. ערך אחד גבוה מאוד או נמוך מאוד מושך את הממוצע.\n\n**חציון** עמיד בפני ערכים קיצוניים. השתמש בו כאשר הנתונים מוטים (למשל משכורות, מחירי דירות).\n\n**שכיח** משמש לנתונים קטגוריים (למשל הצבע הנפוץ ביותר, הציון הנפוץ ביותר). הוא המדד היחיד שיכול להתאים לנתונים לא-מספריים.\n\n**טווח** מדד פיזור פשוט אבל גס. הוא תלוי רק בשני הערכים הקיצוניים ומתעלם מהשאר.\n\n**עובדת מבחן מרכזית:** אם הנתונים מסודרים, מציאת החציון מהירה. אם לא — מיין קודם!"
     },
     {
-      "id": "mode",
-      "title_en": "Mode (שכיח) — The Most Frequent Value",
-      "title_he": "שכיח — הערך הנפוץ ביותר",
-      "level_min": "3pt",
-      "body_en_md": "The **mode** is the value that appears **most often** in the data set.\n\n**Example:** $\\{3, 5, 5, 7, 8, 5, 9\\}$ → mode = **5** (appears 3 times)\n\n**Two modes (bimodal):** $\\{2, 3, 3, 5, 7, 7, 9\\}$ → modes = **3 and 7** (each appears twice)\n\n**No mode:** $\\{1, 2, 3, 4, 5\\}$ → every value appears once, so there is no mode.\n\n**When is mode useful?** Mode shines for **categorical data** — data where values are labels rather than numbers.\n\n**Real-life example — shoe sizes in a store:**\nA shoe store sells the following sizes in one week: 39, 40, 40, 41, 41, 41, 42, 42, 43.\nMode = **41**. The store manager should order more size 41 shoes! Mean and median are less useful here — average shoe size 41.2 does not correspond to any real shoe size you can order.",
-      "body_he_md": "**השכיח** הוא הערך שמופיע **הכי הרבה פעמים** בקבוצת הנתונים.\n\n**דוגמה:** $\\{3, 5, 5, 7, 8, 5, 9\\}$ → שכיח = **5** (מופיע 3 פעמים)\n\n**שני שכיחים (דו-שכיחי):** $\\{2, 3, 3, 5, 7, 7, 9\\}$ → שכיחים = **3 ו-7** (כל אחד מופיע פעמיים)\n\n**אין שכיח:** $\\{1, 2, 3, 4, 5\\}$ → כל ערך מופיע פעם אחת, אז אין שכיח.\n\n**מתי השכיח שימושי?** השכיח מצליח עם **נתונים קטגוריים** — נתונים שבהם הערכים הם תוויות ולא מספרים.\n\n**דוגמה מהחיים — מידות נעליים בחנות:**\nחנות נעליים מוכרת במהלך שבוע אחד את המידות: 39, 40, 40, 41, 41, 41, 42, 42, 43.\nשכיח = **41**. מנהל החנות צריך להזמין יותר נעליים במידה 41! ממוצע וחציון פחות שימושיים כאן — ממוצע מידת נעליים 41.2 לא מתאים לאף מידה אמיתית שאפשר להזמין."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Calculating All Four Measures",
+      "title_he": "דוגמה פתורה 1 — חישוב כל ארבעת המדדים",
+      "body_en_md": "**The test scores of 7 students:** 72, 85, 90, 68, 85, 92, 78.\n\nFind the mean, median, mode, and range.\n\n**Step 1 — Sort the data:** 68, 72, 78, 85, 85, 90, 92.\n\n**Step 2 — Mean:**\n$$\\bar{x} = \\frac{68+72+78+85+85+90+92}{7} = \\frac{570}{7} \\approx 81.4$$\n\n**Step 3 — Median:** $n=7$ (odd). The 4th value in sorted order is **85**.\n\n**Step 4 — Mode:** 85 appears twice; all others once. **Mode = 85**.\n\n**Step 5 — Range:** $92 - 68 = 24$.\n\n**Summary:** Mean $\\approx 81.4$, Median $= 85$, Mode $= 85$, Range $= 24$.",
+      "body_he_md": "**ציוני מבחן של 7 תלמידים:** 72, 85, 90, 68, 85, 92, 78.\n\nמצא את הממוצע, החציון, השכיח והטווח.\n\n**שלב 1 — מיון:** 68, 72, 78, 85, 85, 90, 92.\n\n**שלב 2 — ממוצע:**\n$$\\bar{x} = \\frac{68+72+78+85+85+90+92}{7} = \\frac{570}{7} \\approx 81.4$$\n\n**שלב 3 — חציון:** $n=7$ (אי-זוגי). הערך ה-4 הוא **85**.\n\n**שלב 4 — שכיח:** 85 מופיע פעמיים. **שכיח = 85**.\n\n**שלב 5 — טווח:** $92 - 68 = 24$.\n\n**סיכום:** ממוצע $\\approx 81.4$, חציון $= 85$, שכיח $= 85$, טווח $= 24$."
     },
     {
-      "id": "range_when_to_use",
-      "title_en": "Range & When to Use Which Measure",
-      "title_he": "טווח ומתי להשתמש בכל מדד",
-      "level_min": "3pt",
-      "body_en_md": "**Range** is the simplest measure of spread:\n$$\\text{Range} = \\text{max} - \\text{min}$$\n\nFor test scores $\\{55, 60, 70, 85, 90\\}$: range $= 90 - 55 = 35$. This tells us the scores were spread across 35 points.\n\n**When to use which measure:**\n\n| Measure | Use when... |\n|---|---|\n| **Mean** | data is symmetric, no extreme outliers (e.g. heights, exam scores in a balanced class) |\n| **Median** | data has outliers or is skewed (e.g. incomes, house prices) |\n| **Mode** | data is categorical, or you care about the most common value (e.g. shoe sizes, survey answers) |\n\n**Interpretation question:** Test scores in one class: $\\{50, 55, 60, 65, 90\\}$.\n- Mean = $\\frac{320}{5} = 64$\n- Median = **60** (middle value)\n- Mode = none\n- Range = $90 - 50 = 40$\n\nWhich measure best represents the class? **Median = 60** is better here, because the single high score (90) pulls the mean up to 64, making the class look stronger than most students actually performed.",
-      "body_he_md": "**טווח** הוא המדד הפשוט ביותר לפיזור:\n$$\\text{טווח} = \\text{מקסימום} - \\text{מינימום}$$\n\nלציוני מבחן $\\{55, 60, 70, 85, 90\\}$: טווח $= 90 - 55 = 35$. זה אומר לנו שהציונים היו פרוסים על פני 35 נקודות.\n\n**מתי להשתמש בכל מדד:**\n\n| מדד | מתי להשתמש |\n|---|---|\n| **ממוצע** | הנתונים סימטריים, אין חריגים קיצוניים (למשל גבהים, ציוני מבחן בכיתה מאוזנת) |\n| **חציון** | יש חריגים בנתונים או שהם מוטים (למשל הכנסות, מחירי בתים) |\n| **שכיח** | הנתונים קטגוריים, או כשמעניין הערך הנפוץ ביותר (למשל מידות נעליים, תשובות לסקר) |\n\n**שאלת פרשנות:** ציוני מבחן בכיתה: $\\{50, 55, 60, 65, 90\\}$.\n- ממוצע = $\\frac{320}{5} = 64$\n- חציון = **60** (הערך האמצעי)\n- שכיח = אין\n- טווח = $90 - 50 = 40$\n\nאיזה מדד מייצג את הכיתה בצורה הטובה ביותר? **חציון = 60** עדיף כאן, כי הציון הגבוה הבודד (90) מושך את הממוצע ל-64, גורם לכיתה להיראות חזקה יותר ממה שרוב התלמידים באמת ביצעו."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the mean, median, mode, and range of: **3, 7, 7, 9, 12, 15**.",
+      "body_he_md": "מצא את הממוצע, החציון, השכיח והטווח עבור: **3, 7, 7, 9, 12, 15**.",
+      "checkpoint_solution_en": "**Mean:** $(3+7+7+9+12+15)/6 = 53/6 \\approx 8.83$. **Median:** $n=6$ even; middle two are 7 and 9; Median $= (7+9)/2 = 8$. **Mode:** 7 (appears twice). **Range:** $15-3=12$.",
+      "checkpoint_solution_he": "**ממוצע:** $53/6 \\approx 8.83$. **חציון:** $n=6$ זוגי; ממוצע שתי הקטנות האמצעיות = $(7+9)/2=8$. **שכיח:** 7. **טווח:** 12."
     },
     {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "3pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\n(a) A bag has 5 red and 3 blue balls. Two balls are drawn **without replacement**. Find the probability both are the same color.\n\n(b) Given that the first ball drawn was red, find the probability the second is also red.\n\n**Complete Solution:**\n\n(a) Same color = both red OR both blue.\n$P(RR) = \\frac{5}{8}\\cdot\\frac{4}{7} = \\frac{20}{56}$, $P(BB) = \\frac{3}{8}\\cdot\\frac{2}{7} = \\frac{6}{56}$.\n$P(\\text{same}) = \\frac{26}{56} = \\frac{13}{28}$.\n\n(b) After one red remains 4 red of 7: $P(R_2|R_1) = \\frac{4}{7}$.\n\n---\n\n**Practice Problem 2:**\n\n(a) A fair coin is flipped three times. Find $P(\\text{at least two heads})$.\n\n(b) Use the complement rule to verify your answer.\n\n**Complete Solution:**\n\n(a) Favorable: HHH, HHT, HTH, THH → $P = \\frac{4}{8} = \\frac{1}{2}$.\n\n(b) Complement = 0 or 1 head: TTT, HTT, THT, TTH → $\\frac{4}{8} = \\frac{1}{2}$ ✓",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\n(א) בשק 5 כדורים אדומים ו-3 כחולים. שולפים **ללא החזרה** 2 כדורים. מצאו את ההסתברות ששניהם באותו צבע.\n\n(ב) ידוע שהראשון אדום — מה ההסתברות שגם השני אדום?\n\n**פתרון מלא:**\n\n(א) $P(RR)=\\frac{5}{8}\\cdot\\frac{4}{7}=\\frac{20}{56}$, $P(BB)=\\frac{3}{8}\\cdot\\frac{2}{7}=\\frac{6}{56}$ → $P=\\frac{13}{28}$.\n\n(ב) $P(R_2|R_1)=\\frac{4}{7}$.\n\n---\n\n**שאלת תרגול 2:**\n\n(א) מטבע הוגן נזרק 3 פעמים. מצאו $P(\\text{לפחות 2 עצים})$.\n\n(ב) אמתו עם כלל המשלים.\n\n**פתרון מלא:**\n\n(א) 4 מתוך 8 → $\\frac{1}{2}$. (ב) משלים = 0 או 1 עץ → $\\frac{1}{2}$ ✓"
-    }
-  ],
-  "questions": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Effect of an Outlier",
+      "title_he": "דוגמה פתורה 2 — השפעת ערך קיצוני",
+      "body_en_md": "**Ages at a birthday party:** 8, 9, 9, 10, 10, 10, 11, 45.\n\nThe 45-year-old is a parent. Calculate the mean and median. Which better represents the typical child's age?\n\n**Step 1 — Sort:** Already sorted: 8, 9, 9, 10, 10, 10, 11, 45.\n\n**Step 2 — Mean:**\n$$\\bar{x} = \\frac{8+9+9+10+10+10+11+45}{8} = \\frac{112}{8} = 14$$\n\nThe mean is 14 — but **no one is 14**! The outlier pulled it up.\n\n**Step 3 — Median:** $n=8$ (even). 4th value = 10, 5th value = 10.\n$$\\text{Median} = \\frac{10+10}{2} = 10$$\n\n**Step 4 — Conclusion:** The median (10) better represents the typical child. The mean (14) is distorted by the parent's age. **Use median when outliers exist.**",
+      "body_he_md": "**גילאים במסיבת יום הולדת:** 8, 9, 9, 10, 10, 10, 11, 45.\n\nאדם בן 45 הוא הורה. חשב את הממוצע והחציון. מה מייצג טוב יותר גיל ילד טיפוסי?\n\n**שלב 1 — מיון:** כבר ממוין: 8, 9, 9, 10, 10, 10, 11, 45.\n\n**שלב 2 — ממוצע:**\n$$\\bar{x} = \\frac{8+9+9+10+10+10+11+45}{8} = \\frac{112}{8} = 14$$\n\nהממוצע הוא 14 — אבל **אף אחד לא בן 14**! הערך הקיצוני משך אותו.\n\n**שלב 3 — חציון:** $n=8$ (זוגי). ה-4 = 10, ה-5 = 10. חציון $= 10$.\n\n**שלב 4 — מסקנה:** החציון (10) מייצג טוב יותר. הממוצע (14) מעוות על ידי גיל ההורה. **השתמש בחציון כשיש ערכים קיצוניים.**"
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "Find the mean of: $\\{4, 8, 6, 10, 12\\}$.",
-      "body_he": "מצא/י את הממוצע של: $\\{4, 8, 6, 10, 12\\}$.",
-      "options": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A class of 6 students scored: 55, 60, 65, 70, 70, 100. Find the mean and median. Which is more representative and why?",
+      "body_he_md": "כיתה של 6 תלמידים ציונים: 55, 60, 65, 70, 70, 100. מצא את הממוצע והחציון. איזה מהם מייצג יותר ומדוע?",
+      "checkpoint_solution_en": "Mean $= (55+60+65+70+70+100)/6 = 420/6 = 70$. Median: sorted, middle two are 65 and 70; Median $= 67.5$. The score 100 is an outlier pulling the mean up — **median (67.5) is more representative**.",
+      "checkpoint_solution_he": "ממוצע $= 420/6 = 70$. חציון: $(65+70)/2 = 67.5$. הציון 100 מושך את הממוצע — **החציון (67.5) מייצג יותר**."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Finding a Missing Value from the Mean",
+      "title_he": "דוגמה פתורה 3 — מציאת ערך חסר מהממוצע",
+      "body_en_md": "**In a data set of 8 values**, the mean is 20 and seven of the values are: 15, 18, 22, 24, 19, 17, 21. Find the 8th value.\n\n**Step 1 — Use the mean formula:**\n$$\\bar{x} = \\frac{\\text{Sum of all values}}{n} \\Rightarrow 20 = \\frac{\\text{Sum}}{8} \\Rightarrow \\text{Sum} = 160.$$\n\n**Step 2 — Sum the known values:**\n$$15+18+22+24+19+17+21 = 136.$$\n\n**Step 3 — Find the missing value:**\n$$x_8 = 160 - 136 = 24.$$\n\n**Check:** $(136+24)/8 = 160/8 = 20$ ✓\n\n**Conclusion:** The 8th value is **24**.",
+      "body_he_md": "**בקבוצת נתונים של 8 ערכים**, הממוצע הוא 20 ושבעה מהערכים הם: 15, 18, 22, 24, 19, 17, 21. מצא את הערך ה-8.\n\n**שלב 1 — השתמש בנוסחת הממוצע:**\n$$20 = \\frac{\\text{סכום}}{8} \\Rightarrow \\text{סכום} = 160.$$\n\n**שלב 2 — סכם ערכים ידועים:**\n$$15+18+22+24+19+17+21 = 136.$$\n\n**שלב 3 — מצא הערך החסר:**\n$$x_8 = 160 - 136 = 24.$$\n\n**בדיקה:** $160/8 = 20$ ✓\n\n**מסקנה:** הערך ה-8 הוא **24**."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Step-by-Step Checklist",
+      "title_he": "מדריך שיטה — רשימת בדיקה",
+      "body_en_md": "| Step | Action |\n|---|---|\n| 1 | Count $n$ values |\n| 2 | Sort in ascending order |\n| 3 | Mean: add all, divide by $n$ |\n| 4 | Median: middle value (odd $n$) or avg. of 2 middle (even $n$) |\n| 5 | Mode: value appearing most often |\n| 6 | Range: max $-$ min |\n\n**Finding median position:** For $n$ values, the median is at position $\\dfrac{n+1}{2}$ (odd) or average of positions $\\dfrac{n}{2}$ and $\\dfrac{n}{2}+1$ (even).\n\n**When asked to find a missing value:** Use Total $=$ Mean $\\times n$, then subtract the known values.",
+      "body_he_md": "| שלב | פעולה |\n|---|---|\n| 1 | ספור $n$ ערכים |\n| 2 | מיין בסדר עולה |\n| 3 | ממוצע: סכום חלקי $n$ |\n| 4 | חציון: ערך אמצעי ($n$ אי-זוגי) או ממוצע שניים ($n$ זוגי) |\n| 5 | שכיח: ערך שמופיע הכי הרבה |\n| 6 | טווח: מקסימום $-$ מינימום |\n\n**מיקום החציון:** עמדה $\\dfrac{n+1}{2}$ ($n$ אי-זוגי) או ממוצע עמדות $\\dfrac{n}{2}$ ו-$\\dfrac{n}{2}+1$ ($n$ זוגי).\n\n**כשמחפשים ערך חסר:** סכום $=$ ממוצע $\\times n$, ואז חסר הערכים הידועים."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "7",
-          "text_he": "7",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find the mean of: 4, 8, 6, 5, 3, 7, 9.",
+          "body_he": "מצא את הממוצע של: 4, 8, 6, 5, 3, 7, 9.",
+          "solution_en": "Sum $= 42$, $n=7$. Mean $= 42/7 = 6$.",
+          "solution_he": "סכום $= 42$, $n=7$. ממוצע $= 6$.",
+          "points": 4
         },
         {
-          "id": "b",
-          "text_en": "8",
-          "text_he": "8",
-          "correct": true
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find the median of: 13, 5, 22, 8, 17, 3, 11.",
+          "body_he": "מצא את החציון של: 13, 5, 22, 8, 17, 3, 11.",
+          "solution_en": "Sorted: 3, 5, 8, 11, 13, 17, 22. $n=7$. Median = 4th value = **11**.",
+          "solution_he": "מסודר: 3, 5, 8, 11, 13, 17, 22. חציון = ערך ה-4 = **11**.",
+          "points": 4
         },
         {
-          "id": "c",
-          "text_en": "10",
-          "text_he": "10",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find the mode of: 2, 4, 4, 6, 7, 4, 9, 2.",
+          "body_he": "מצא את השכיח של: 2, 4, 4, 6, 7, 4, 9, 2.",
+          "solution_en": "4 appears 3 times. **Mode = 4.**",
+          "solution_he": "4 מופיע 3 פעמים. **שכיח = 4.**",
+          "points": 4
         },
         {
-          "id": "d",
-          "text_en": "6",
-          "text_he": "6",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find the range of: 15, 3, 28, 7, 42, 11.",
+          "body_he": "מצא את הטווח של: 15, 3, 28, 7, 42, 11.",
+          "solution_en": "Max $= 42$, Min $= 3$. Range $= 42-3 = 39$.",
+          "solution_he": "מקס $= 42$, מין $= 3$. טווח $= 39$.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Scores: 70, 80, 90, 75, 85. A new student joins and scores 95. How does the mean change?",
+          "body_he": "ציונים: 70, 80, 90, 75, 85. תלמיד חדש מצטרף עם ציון 95. כיצד משתנה הממוצע?",
+          "solution_en": "Old mean $= 400/5 = 80$. New mean $= 495/6 = 82.5$. Mean increases by 2.5.",
+          "solution_he": "ממוצע ישן $= 80$. ממוצע חדש $= 495/6 = 82.5$. עלה ב-2.5.",
+          "points": 6
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "The mean of 6 numbers is 15. Five of the numbers are 12, 18, 14, 17, 13. Find the sixth number.",
+          "body_he": "הממוצע של 6 מספרים הוא 15. חמישה מהם הם 12, 18, 14, 17, 13. מצא את השישי.",
+          "solution_en": "Total $= 15 \\times 6 = 90$. Sum of known $= 74$. Sixth $= 90-74 = 16$.",
+          "solution_he": "סכום $= 15 \\times 6 = 90$. סכום ידועים $= 74$. שישי $= 16$.",
+          "points": 6
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find the median of: 5, 12, 3, 18, 7, 14.",
+          "body_he": "מצא את החציון של: 5, 12, 3, 18, 7, 14.",
+          "solution_en": "Sorted: 3, 5, 7, 12, 14, 18. $n=6$ (even). Median $= (7+12)/2 = 9.5$.",
+          "solution_he": "מסודר: 3, 5, 7, 12, 14, 18. חציון $= (7+12)/2 = 9.5$.",
+          "points": 6
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Which measure of centre is most appropriate for house prices in a city? Explain.",
+          "body_he": "איזה מדד מרכז מתאים ביותר למחירי דירות בעיר? הסבר.",
+          "solution_en": "The **median**, because house prices are right-skewed (a few very expensive properties would inflate the mean, making it unrepresentative of the typical buyer).",
+          "solution_he": "**חציון**, כי מחירי דירות מוטים ימינה (מספר דירות יקרות מאוד מנפחות את הממוצע, שאינו מייצג קונה טיפוסי).",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Data: 10, 10, 10, 20, 30. Find mean, median, mode. Which two measures are equal?",
+          "body_he": "נתונים: 10, 10, 10, 20, 30. מצא ממוצע, חציון, שכיח. אילו שניים שווים?",
+          "solution_en": "Mean $= 80/5 = 16$. Median $= 10$ (3rd value). Mode $= 10$. **Median = Mode = 10.**",
+          "solution_he": "ממוצע $= 16$. חציון $= 10$. שכיח $= 10$. **חציון = שכיח = 10.**",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A data set has 5 values. The mean is 12, the median is 11, and the mode is 9. Two values are 9 and 9. Find all five values given that the largest is 20.",
+          "body_he": "קבוצת נתונים של 5 ערכים. ממוצע 12, חציון 11, שכיח 9. שני ערכים הם 9 ו-9. מצא את כל חמשת הערכים כשהגדול ביותר הוא 20.",
+          "solution_en": "Mode = 9 (appears at least twice). Total $= 12 \\times 5 = 60$. With 9, 9, and 20: remaining two sum $= 60-9-9-20 = 22$. Median (3rd value when sorted) $= 11$. Sorted so far: 9, 9, ?, ?, 20. Third value $= 11$. Remaining fourth value $= 22-11 = 11$. Values: **9, 9, 11, 11, 20**. Check: mean $= 60/5 = 12$ ✓.",
+          "solution_he": "שכיח = 9 (לפחות פעמיים). סכום $= 60$. עם 9, 9, 20: שני הנותרים מסתכמים ל-22. חציון (ערך 3) = 11. סדר: 9, 9, 11, ?, 20. ערך 4: $22-11=11$. ערכים: **9, 9, 11, 11, 20**.",
+          "points": 8
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "The mean of 8 values is 25. When one value is removed, the mean drops to 23. What was the removed value?",
+          "body_he": "ממוצע של 8 ערכים הוא 25. כששולפים ערך אחד, הממוצע יורד ל-23. מהו הערך שהוסר?",
+          "solution_en": "Original sum $= 25 \\times 8 = 200$. New sum (7 values) $= 23 \\times 7 = 161$. Removed value $= 200-161 = 39$.",
+          "solution_he": "סכום מקורי $= 200$. סכום חדש (7 ערכים) $= 161$. הערך שהוסר $= 200-161 = 39$.",
+          "points": 8
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Explain: can the mean and median be equal? Can they differ greatly? Give an example of each.",
+          "body_he": "הסבר: האם ממוצע וחציון יכולים להיות שווים? האם הם יכולים להיות שונים מאוד? תן דוגמה לכל מקרה.",
+          "solution_en": "**Equal:** Symmetric data, e.g. 2, 4, 6: mean = median = 4. **Different:** Skewed data, e.g. 1, 2, 3, 4, 100: mean = 22, median = 3. The outlier 100 pulls the mean far from the median.",
+          "solution_he": "**שווים:** נתונים סימטריים, למשל 2, 4, 6: ממוצע = חציון = 4. **שונים:** נתונים מוטים, למשל 1, 2, 3, 4, 100: ממוצע = 22, חציון = 3.",
+          "points": 8
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "If every value in a data set is multiplied by 3, what happens to (a) the mean, (b) the median, (c) the range?",
+          "body_he": "אם כל ערך בקבוצה מוכפל ב-3, מה קורה ל-(א) הממוצע, (ב) החציון, (ג) הטווח?",
+          "solution_en": "(a) Mean is multiplied by 3. (b) Median is multiplied by 3. (c) Range is multiplied by 3. All three scale with the data. **General rule:** multiplication by $k$ multiplies mean, median, and range by $k$.",
+          "solution_he": "(א) ממוצע מוכפל ב-3. (ב) חציון מוכפל ב-3. (ג) טווח מוכפל ב-3. **כלל כללי:** הכפלה ב-$k$ מכפילה ממוצע, חציון וטווח ב-$k$.",
+          "points": 8
         }
-      ],
-      "explanation_en": "Sum = $4+8+6+10+12 = 40$. Mean = $40 \\div 5 = 8$.",
-      "explanation_he": "סכום = $4+8+6+10+12 = 40$. ממוצע = $40 \\div 5 = 8$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "Find the median of: $\\{3, 9, 1, 7, 5\\}$.",
-      "body_he": "מצא/י את החציון של: $\\{3, 9, 1, 7, 5\\}$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "7",
-          "text_he": "7",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "3",
-          "text_he": "3",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "9",
-          "text_he": "9",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "5",
-          "text_he": "5",
-          "correct": true
-        }
-      ],
-      "explanation_en": "Sort: $1, 3, 5, 7, 9$. The middle (3rd) value is **5**.",
-      "explanation_he": "מיון: $1, 3, 5, 7, 9$. הערך האמצעי (ה-3) הוא **5**."
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting to sort before finding the median.** The median is always the middle value of the SORTED data, not just the middle position in the original list.\n\n2. **Even vs. odd $n$ for the median.** If $n$ is even, average the two middle values. Students often just take one of them.\n\n3. **Confusing mean with median when an outlier is present.** An outlier strongly affects the mean but not the median.\n\n4. **Assuming there is always exactly one mode.** A data set can have no mode (all values appear once), one mode, or be bimodal/multimodal.\n\n5. **Using the range as a complete measure of spread.** Range depends only on the two extreme values — one weird outlier changes it completely.",
+      "body_he_md": "1. **שכחת מיון לפני מציאת חציון.** החציון הוא תמיד הערך האמצעי של הנתונים **הממוינים**, לא רק המיקום האמצעי ברשימה המקורית.\n\n2. **$n$ זוגי לעומת אי-זוגי לחציון.** אם $n$ זוגי, מממצעים שני הערכים האמצעיים. תלמידים לוקחים אחד בלבד.\n\n3. **בלבול ממוצע עם חציון בנוכחות ערך קיצוני.** ערך קיצוני משפיע חזק על הממוצע אך לא על החציון.\n\n4. **הנחה שיש תמיד שכיח אחד.** קבוצה יכולה ללא שכיח, שכיח אחד, או כמה שכיחים.\n\n5. **שימוש בטווח כמדד מלא לפיזור.** הטווח תלוי רק בשני הקיצונות — ערך קיצוני אחד משנה אותו לחלוטין."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Find the median of: $\\{2, 5, 8, 11\\}$.",
-      "body_he": "מצא/י את החציון של: $\\{2, 5, 8, 11\\}$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "5",
-          "text_he": "5",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "8",
-          "text_he": "8",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "6.5",
-          "text_he": "6.5",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "6",
-          "text_he": "6",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Even count (4 values), already sorted. Two middle values: 5 and 8. Median = $\\frac{5+8}{2} = 6.5$.",
-      "explanation_he": "מספר זוגי (4 ערכים), כבר ממוין. שני הערכים האמצעיים: 5 ו-8. חציון = $\\frac{5+8}{2} = 6.5$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- Mean: $\\bar{x} = \\dfrac{\\sum x_i}{n}$\n- Median: sort, then take middle (or average two middles for even $n$)\n- Mode: most frequent value\n- Range: max $-$ min\n- Missing value: Total $=$ Mean $\\times n$\n\n**Bagrut exam patterns:**\n- Read a table or frequency chart and compute all four measures.\n- Find a missing value given the mean.\n- Identify which measure is affected by an outlier.\n- Compare two data sets using their measures.\n\n**Tip:** Always sort the data immediately — it helps find median, mode, and range at once.",
+      "body_he_md": "**גיליון נוסחאות:**\n- ממוצע: $\\bar{x} = \\dfrac{\\sum x_i}{n}$\n- חציון: מיין, אחר כך אמצע (או ממוצע שניים ל-$n$ זוגי)\n- שכיח: הערך שמופיע הכי הרבה\n- טווח: מקסימום $-$ מינימום\n- ערך חסר: סכום $=$ ממוצע $\\times n$\n\n**דגשי בגרות:**\n- קרא טבלה או תרשים תדרים וחשב כל ארבעת המדדים.\n- מצא ערך חסר נתון הממוצע.\n- זהה איזה מדד מושפע מערך קיצוני.\n- השווה שתי קבוצות נתונים על פי המדדים שלהן.\n\n**טיפ:** מיין נתונים מיד — זה מסייע למצוא חציון, שכיח וטווח בבת אחת."
     },
     {
-      "id": "q4",
-      "type": "open",
-      "body_en": "A bag contains 5 red and 3 blue balls. Two balls are drawn without replacement.\n\n(a) Find the probability both are the same color.\n(b) Given the first ball was red, find P(second is red).",
-      "body_he": "שק עם 5 כדורים אדומים ו-3 כחולים. שולפים 2 ללא החזרה.\n\n(א) הסתברות ששניהם באותו צבע.\n(ב) ידוע שהראשון אדום — P(שני אדום).",
-      "points": 10,
-      "expected_steps_en": [
-        "Compute P(both red) = (5/8)(4/7) and P(both blue) = (3/8)(2/7)",
-        "Add for same color: 13/28",
-        "Conditional: P(R2|R1) = 4/7"
-      ],
-      "expected_steps_he": [
-        "חשב P(RR) ו-P(BB)",
-        "סכום: 13/28",
-        "מותנית: 4/7"
-      ],
-      "sample_solution_en": "(a) P(same) = 20/56 + 6/56 = 13/28. (b) P(R2|R1) = 4/7.",
-      "sample_solution_he": "(א) 13/28. (ב) 4/7.",
-      "rubric_en": "4pts correct same-color probability with work; 3pts conditional probability; 3pts clear notation.",
-      "rubric_he": "4 נק' הסתברות אותו צבע; 3 נק' מותנית; 3 נק' סימון ברור."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "For $f(x)=x^2-6x+8$:\n\n(a) Find the vertex by completing the square.\n(b) Find x-intercepts.\n(c) Sketch the parabola showing vertex and intercepts.",
-      "body_he": "עבור $f(x)=x^2-6x+8$:\n\n(א) קודקוד בשלמות ריבוע.\n(ב) חיתוכי x.\n(ג) סקיצה.",
-      "points": 10,
-      "expected_steps_en": [
-        "Complete square: (x-3)²-1, vertex (3,-1)",
-        "Set f(x)=0 → x=2,4",
-        "Sketch upward parabola with labeled points"
-      ],
-      "expected_steps_he": [
-        "שלמות ריבוע: (x-3)²-1",
-        "אפסים: x=2,4",
-        "סקיצה עם קודקוד וחיתוכים"
-      ],
-      "sample_solution_en": "Vertex (3,-1), zeros x=2,4, opens up.",
-      "sample_solution_he": "קודקוד (3,-1), אפסים 2,4, פותח למעלה.",
-      "rubric_en": "3pts vertex; 3pts intercepts; 4pts sketch with labels.",
-      "rubric_he": "3 נק' קודקוד; 3 נק' חיתוכים; 4 נק' סקיצה."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Mean** = sum ÷ count; sensitive to outliers.\n- **Median** = middle of sorted data; robust to outliers; use for skewed data.\n- **Mode** = most frequent value; works for categorical data.\n- **Range** = max − min; simple spread measure; sensitive to outliers.\n- To find a **missing value**: Total = Mean × $n$, then subtract known values.",
+      "body_he_md": "- **ממוצע** = סכום ÷ מספר; רגיש לערכים קיצוניים.\n- **חציון** = אמצע נתונים ממוינים; עמיד בפני ערכים קיצוניים; מתאים לנתונים מוטים.\n- **שכיח** = הערך הנפוץ ביותר; מתאים לנתונים קטגוריים.\n- **טווח** = מקסימום − מינימום; מדד פיזור פשוט; רגיש לערכים קיצוניים.\n- למציאת **ערך חסר**: סכום = ממוצע × $n$, ואז חסר ערכים ידועים."
     }
   ]
 }

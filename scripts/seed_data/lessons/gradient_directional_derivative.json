@@ -2,30 +2,232 @@
   "concept_id": "gradient_directional_derivative",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Gradient Directional Derivative",
+  "math_track": ["calculus2", "multivariable"],
+  "title_en": "Gradient and Directional Derivative",
   "title_he": "גרדיאנט ונגזרת כיוונית",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "summary_en": "Gradient vector, directional derivative formula, steepest ascent/descent, and level curve geometry.",
+  "summary_he": "וקטור גרדיאנט, נוסחת הנגזרת הכיוונית, כיוון עלייה/ירידה מרבית, וגיאומטריית עקומות גובה.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Gradient Directional Derivative.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-גרדיאנט ונגזרת כיוונית.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Rate of Change in a Specific Direction",
+      "title_he": "קצב שינוי בכיוון ספציפי",
+      "body_en_md": "Partial derivatives tell us the rate of change along the coordinate axes. But what if we want to know how fast $f(x,y)$ changes as we move in an arbitrary direction — say, NE at $45°$? The **directional derivative** $D_{\\mathbf{u}}f$ answers this. The **gradient** $\\nabla f$ collects all this directional information into a single vector: it points in the direction of steepest ascent, and its magnitude gives the maximum rate of increase.\n\nApplications: gradient descent in machine learning, heat conduction direction, fluid flow, contour maps.",
+      "body_he_md": "נגזרות חלקיות מספרות לנו את קצב השינוי לאורך צירי הקואורדינטות. אך מה אם רוצים לדעת כמה מהר $f(x,y)$ משתנה בכיוון שרירותי? **הנגזרת הכיוונית** $D_{\\mathbf{u}}f$ עונה על זה. **הגרדיאנט** $\\nabla f$ אוסף את כל המידע הכיווני לוקטור אחד: הוא מצביע בכיוון העלייה התלולה ביותר, וגודלו נותן את שיעור העלייה המרבי.\n\nיישומים: ירידת גרדיאנט בלמידת מכונה, כיוון הולכת חום, זרימת נוזל, מפות קווי מתאר."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Gradient Directional Derivative: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Gradient Directional Derivative.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-גרדיאנט ונגזרת כיוונית: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-גרדיאנט ונגזרת כיוונית.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Directional Derivative and Gradient",
+      "title_he": "נגזרת כיוונית וגרדיאנט",
+      "body_en_md": "**Directional derivative** of $f$ at $(a,b)$ in direction $\\mathbf{u}=(u_1,u_2)$ (unit vector):\n$$D_{\\mathbf{u}}f(a,b) = \\lim_{h\\to 0}\\frac{f(a+hu_1,b+hu_2)-f(a,b)}{h}.$$\n\n**Formula (when $f$ is differentiable):**\n$$D_{\\mathbf{u}}f = \\nabla f\\cdot\\mathbf{u} = f_x u_1+f_y u_2.$$\n\n**Gradient:**\n$$\\nabla f(x,y) = (f_x,f_y) = f_x\\mathbf{i}+f_y\\mathbf{j}.$$\n\n**Key properties:**\n- $D_{\\mathbf{u}}f = |\\nabla f|\\cos\\theta$ where $\\theta$ = angle between $\\nabla f$ and $\\mathbf{u}$.\n- **Maximum** of $D_{\\mathbf{u}}f$: occurs when $\\mathbf{u}=\\nabla f/|\\nabla f|$; max value $=|\\nabla f|$.\n- **Minimum** (most negative): $\\mathbf{u}=-\\nabla f/|\\nabla f|$; min value $=-|\\nabla f|$.\n- $D_{\\mathbf{u}}f=0$ when $\\mathbf{u}\\perp\\nabla f$ (direction of level curve).\n- $\\nabla f\\perp$ level curves of $f$.",
+      "body_he_md": "**נגזרת כיוונית** של $f$ ב-$(a,b)$ בכיוון $\\mathbf{u}=(u_1,u_2)$ (וקטור יחידה):\n$$D_{\\mathbf{u}}f(a,b)=\\lim_{h\\to 0}\\frac{f(a+hu_1,b+hu_2)-f(a,b)}{h}.$$\n\n**נוסחה (כאשר $f$ גזירה):**\n$$D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}=f_x u_1+f_y u_2.$$\n\n**גרדיאנט:**\n$$\\nabla f=(f_x,f_y).$$\n\n**תכונות מרכזיות:**\n- $D_{\\mathbf{u}}f=|\\nabla f|\\cos\\theta$ ($\\theta$= זווית בין $\\nabla f$ ל-$\\mathbf{u}$).\n- **מקסימום:** $\\mathbf{u}=\\nabla f/|\\nabla f|$; ערך מקסימלי $=|\\nabla f|$.\n- **מינימום:** $\\mathbf{u}=-\\nabla f/|\\nabla f|$; ערך מינימלי $=-|\\nabla f|$.\n- $D_{\\mathbf{u}}f=0$ כאשר $\\mathbf{u}\\perp\\nabla f$ (כיוון עקומת גובה).\n- $\\nabla f\\perp$ עקומות גובה."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Why the Gradient Points Uphill",
+      "title_he": "מדוע הגרדיאנט מצביע \"במעלה\"",
+      "body_en_md": "**Derivation of the formula:** If $\\mathbf{r}(t)=(a+tu_1,b+tu_2)$ is the path in direction $\\mathbf{u}$, then by the chain rule:\n$$\\frac{d}{dt}f(\\mathbf{r}(t))\\Big|_{t=0} = f_x u_1+f_y u_2 = \\nabla f\\cdot\\mathbf{u}.$$\n\n**Maximum direction:** By Cauchy-Schwarz, $\\nabla f\\cdot\\mathbf{u}\\leq|\\nabla f||\\mathbf{u}|=|\\nabla f|$, with equality when $\\mathbf{u}$ is parallel to $\\nabla f$. So the gradient direction is the steepest ascent.\n\n**Level curve perpendicularity:** On a level curve $f(x(t),y(t))=c$:\n$$f_x x'(t)+f_y y'(t)=0 \\implies \\nabla f\\cdot\\mathbf{r}'(t)=0.$$\nSo $\\nabla f$ is perpendicular to the tangent of the level curve.\n\n**3D generalization:** For $f(x,y,z)$: $\\nabla f=(f_x,f_y,f_z)$; $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$; $\\nabla f\\perp$ level surfaces.",
+      "body_he_md": "**גזירת הנוסחה:** אם $\\mathbf{r}(t)=(a+tu_1,b+tu_2)$, אז לפי כלל השרשרת:\n$$\\left.\\frac{d}{dt}f(\\mathbf{r}(t))\\right|_{t=0}=f_x u_1+f_y u_2=\\nabla f\\cdot\\mathbf{u}.$$\n\n**כיוון מקסימום:** לפי קושי-שוורץ: $\\nabla f\\cdot\\mathbf{u}\\leq|\\nabla f|$, שוויון כאשר $\\mathbf{u}\\|\\nabla f$.\n\n**ניצבות לעקומות גובה:** על $f(x(t),y(t))=c$: $\\nabla f\\cdot\\mathbf{r}'(t)=0$ — $\\nabla f$ ניצב לעקומת הגובה.\n\n**הכללה ל-3D:** $\\nabla f=(f_x,f_y,f_z)$; $\\nabla f\\perp$ משטחי גובה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Computing a Directional Derivative",
+      "title_he": "דוגמה פתורה 1 — חישוב נגזרת כיוונית",
+      "body_en_md": "**Function:** $f(x,y)=x^2+3xy$. Find the directional derivative at $(1,2)$ in the direction of $\\mathbf{v}=(3,4)$.\n\n**Step 1 — Unit vector:** $|\\mathbf{v}|=\\sqrt{9+16}=5$. $\\mathbf{u}=(3/5,4/5)$.\n\n**Step 2 — Gradient:**\n$$\\nabla f = (f_x,f_y) = (2x+3y, 3x).$$\n\n**Step 3 — Evaluate at $(1,2)$:**\n$$\\nabla f(1,2) = (2+6, 3) = (8,3).$$\n\n**Step 4 — Dot product:**\n$$D_{\\mathbf{u}}f(1,2) = \\nabla f\\cdot\\mathbf{u} = (8)\\frac{3}{5}+(3)\\frac{4}{5} = \\frac{24+12}{5} = \\frac{36}{5} = 7.2.$$",
+      "body_he_md": "**פונקציה:** $f(x,y)=x^2+3xy$. מצא נגזרת כיוונית ב-$(1,2)$ בכיוון $\\mathbf{v}=(3,4)$.\n\n**שלב 1 — וקטור יחידה:** $\\mathbf{u}=(3/5,4/5)$.\n\n**שלב 2 — גרדיאנט:** $\\nabla f=(2x+3y,3x)$.\n\n**שלב 3 — ב-$(1,2)$:** $\\nabla f=(8,3)$.\n\n**שלב 4:** $D_{\\mathbf{u}}f=8\\cdot3/5+3\\cdot4/5=36/5=7.2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For $f(x,y)=e^x\\cos y$, find $D_{\\mathbf{u}}f$ at $(0,0)$ in the direction of $\\mathbf{u}=(1/\\sqrt{2},1/\\sqrt{2})$.",
+      "body_he_md": "עבור $f(x,y)=e^x\\cos y$, מצא $D_{\\mathbf{u}}f$ ב-$(0,0)$ בכיוון $\\mathbf{u}=(1/\\sqrt{2},1/\\sqrt{2})$.",
+      "checkpoint_solution_en": "$f_x=e^x\\cos y$, $f_y=-e^x\\sin y$. At $(0,0)$: $\\nabla f=(1,0)$. $D_{\\mathbf{u}}f=(1)(1/\\sqrt{2})+(0)(1/\\sqrt{2})=1/\\sqrt{2}\\approx0.707$.",
+      "checkpoint_solution_he": "$\\nabla f(0,0)=(1,0)$. $D_{\\mathbf{u}}f=1/\\sqrt{2}\\approx0.707$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Direction of Maximum Increase and Level Curves",
+      "title_he": "דוגמה פתורה 2 — כיוון עלייה מרבית ועקומות גובה",
+      "body_en_md": "**Function:** $f(x,y)=x^2y-y^3$ at point $(2,1)$.\n\n**Step 1 — Gradient:**\n$$f_x=2xy, \\quad f_y=x^2-3y^2.$$\n$$\\nabla f(2,1) = (2\\cdot2\\cdot1, 4-3) = (4,1).$$\n\n**Step 2 — Maximum rate of increase:**\nThe maximum of $D_{\\mathbf{u}}f = |\\nabla f| = \\sqrt{16+1} = \\sqrt{17}\\approx4.12$.\nAchieved in direction $\\mathbf{u}=(4,1)/\\sqrt{17}$.\n\n**Step 3 — Direction of steepest descent:**\n$-\\nabla f = (-4,-1)$. Unit vector: $(-4,-1)/\\sqrt{17}$.\n\n**Step 4 — Level curve through $(2,1)$:**\n$f(2,1)=4(1)-1=3$, so the level curve is $x^2y-y^3=3$.\nThe gradient $(4,1)$ is perpendicular to this curve at $(2,1)$.",
+      "body_he_md": "**פונקציה:** $f(x,y)=x^2y-y^3$ ב-$(2,1)$.\n\n**שלב 1:** $f_x=2xy$, $f_y=x^2-3y^2$. $\\nabla f(2,1)=(4,1)$.\n\n**שלב 2 — עלייה מרבית:** $|\\nabla f|=\\sqrt{17}\\approx4.12$ בכיוון $(4,1)/\\sqrt{17}$.\n\n**שלב 3 — ירידה תלולה:** כיוון $(-4,-1)/\\sqrt{17}$.\n\n**שלב 4 — עקומת גובה:** $f(2,1)=3$. $x^2y-y^3=3$. הגרדיאנט $(4,1)$ ניצב לעקומה ב-$(2,1)$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For $f(x,y)=x^2+4y^2$, find the direction of maximum increase at $(1,1)$ and the maximum rate.",
+      "body_he_md": "עבור $f(x,y)=x^2+4y^2$, מצא את כיוון העלייה המרבית ב-$(1,1)$ ואת הקצב המרבי.",
+      "checkpoint_solution_en": "$\\nabla f=(2x,8y)$. At $(1,1)$: $\\nabla f=(2,8)$. Direction: $(2,8)/\\sqrt{68}=(1,4)/\\sqrt{17}$. Max rate: $\\sqrt{68}=2\\sqrt{17}\\approx8.25$.",
+      "checkpoint_solution_he": "$\\nabla f(1,1)=(2,8)$. כיוון: $(1,4)/\\sqrt{17}$. קצב מרבי: $2\\sqrt{17}\\approx8.25$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Gradient in 3D and Normal to a Surface",
+      "title_he": "דוגמה פתורה 3 — גרדיאנט ב-3D ונורמל למשטח",
+      "body_en_md": "**Problem:** For $F(x,y,z)=x^2+y^2+z^2-4$, find $\\nabla F$ at $(1,1,\\sqrt{2})$ and use it to find the tangent plane to the sphere $F=0$.\n\n**Step 1 — Check the point is on the surface:**\n$$1+1+2 = 4. \\quad F(1,1,\\sqrt{2})=4-4=0. \\quad\\checkmark$$\n\n**Step 2 — Gradient:**\n$$\\nabla F = (2x,2y,2z).$$\n$$\\nabla F(1,1,\\sqrt{2}) = (2,2,2\\sqrt{2}).$$\n\n**Step 3 — Tangent plane:** The gradient is the normal to the level surface $F=0$. Tangent plane at $(x_0,y_0,z_0)$:\n$$F_x(x-x_0)+F_y(y-y_0)+F_z(z-z_0) = 0$$\n$$2(x-1)+2(y-1)+2\\sqrt{2}(z-\\sqrt{2}) = 0$$\n$$2x+2y+2\\sqrt{2}z = 2+2+4 = 8$$\n$$x+y+\\sqrt{2}z = 4.$$\n\n**Step 4 — Directional derivative in direction $(1,0,0)$:**\n$$D_{\\mathbf{e}_1}F = \\nabla F\\cdot(1,0,0) = 2.$$",
+      "body_he_md": "**בעיה:** עבור $F(x,y,z)=x^2+y^2+z^2-4$, מצא $\\nabla F$ ב-$(1,1,\\sqrt{2})$ וחשב את מישור המשיק לכדור $F=0$.\n\n**שלב 1:** $1+1+2=4=F+4$. ✓\n\n**שלב 2:** $\\nabla F=(2x,2y,2z)=(2,2,2\\sqrt{2})$ ב-$(1,1,\\sqrt{2})$.\n\n**שלב 3 — מישור משיק:** $\\nabla F$ הוא הנורמל למשטח. $2(x-1)+2(y-1)+2\\sqrt{2}(z-\\sqrt{2})=0$, כלומר $x+y+\\sqrt{2}z=4$.\n\n**שלב 4:** $D_{\\mathbf{e}_1}F=2$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Directional Derivative and Gradient",
+      "title_he": "מדריך שיטה — נגזרת כיוונית וגרדיאנט",
+      "body_en_md": "**Algorithm for $D_{\\mathbf{u}}f$ at $(a,b)$ in direction $\\mathbf{v}$:**\n1. Normalize: $\\mathbf{u}=\\mathbf{v}/|\\mathbf{v}|$.\n2. Compute $\\nabla f=(f_x,f_y)$.\n3. Evaluate $\\nabla f$ at $(a,b)$.\n4. $D_{\\mathbf{u}}f = \\nabla f(a,b)\\cdot\\mathbf{u}$.\n\n| Question | Answer |\n|---|---|\n| Max rate of increase | $|\\nabla f|$, direction $\\nabla f/|\\nabla f|$ |\n| Min rate (steepest descent) | $-|\\nabla f|$, direction $-\\nabla f/|\\nabla f|$ |\n| Rate in direction $\\mathbf{u}$ | $\\nabla f\\cdot\\mathbf{u}$ |\n| Level curve direction at $(a,b)$ | Perpendicular to $\\nabla f$ |\n| Normal to surface $F=c$ | $\\nabla F$ |\n| Tangent plane to $F=c$ | $\\nabla F(\\mathbf{x}_0)\\cdot(\\mathbf{x}-\\mathbf{x}_0)=0$ |",
+      "body_he_md": "**אלגוריתם ל-$D_{\\mathbf{u}}f$:**\n1. נרמל: $\\mathbf{u}=\\mathbf{v}/|\\mathbf{v}|$.\n2. $\\nabla f=(f_x,f_y)$.\n3. הצב ב-$(a,b)$.\n4. $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$.\n\n| שאלה | תשובה |\n|---|---|\n| קצב עלייה מרבי | $|\\nabla f|$, כיוון $\\nabla f/|\\nabla f|$ |\n| קצב ירידה מרבי | $-|\\nabla f|$, כיוון $-\\nabla f/|\\nabla f|$ |\n| קצב בכיוון $\\mathbf{u}$ | $\\nabla f\\cdot\\mathbf{u}$ |\n| נורמל למשטח $F=c$ | $\\nabla F$ |\n| מישור משיק ל-$F=c$ | $\\nabla F\\cdot(\\mathbf{x}-\\mathbf{x}_0)=0$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $\\nabla f$ for $f(x,y)=3x^2-2y^2$.",
+          "body_he": "מצא $\\nabla f$ עבור $f(x,y)=3x^2-2y^2$.",
+          "solution_en": "$\\nabla f=(6x,-4y)$.",
+          "solution_he": "$\\nabla f=(6x,-4y)$.",
+          "points": 4
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $D_{\\mathbf{u}}f$ at $(1,0)$ for $f(x,y)=\\sin(\\pi x)+y^2$ in direction $\\mathbf{u}=(0,1)$.",
+          "body_he": "מצא $D_{\\mathbf{u}}f$ ב-$(1,0)$ עבור $f(x,y)=\\sin(\\pi x)+y^2$ בכיוון $\\mathbf{u}=(0,1)$.",
+          "solution_en": "$\\nabla f=(\\pi\\cos(\\pi x),2y)$. At $(1,0)$: $\\nabla f=(-\\pi,0)$. $D_{\\mathbf{u}}f=(-\\pi,0)\\cdot(0,1)=0$.",
+          "solution_he": "$\\nabla f(1,0)=(-\\pi,0)$. $D_{\\mathbf{u}}f=0$.",
+          "points": 4
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "At $(3,4)$, find the maximum rate of increase of $f(x,y)=\\sqrt{x^2+y^2}$.",
+          "body_he": "ב-$(3,4)$, מצא את שיעור העלייה המרבי של $f(x,y)=\\sqrt{x^2+y^2}$.",
+          "solution_en": "$f_x=x/\\sqrt{x^2+y^2}$, $f_y=y/\\sqrt{x^2+y^2}$. At $(3,4)$: $\\nabla f=(3/5,4/5)$. Max rate $=|\\nabla f|=1$.",
+          "solution_he": "$\\nabla f(3,4)=(3/5,4/5)$. שיעור מרבי $=1$.",
+          "points": 4
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "In which direction is $D_{\\mathbf{u}}f=0$ at a given point?",
+          "body_he": "באיזה כיוון $D_{\\mathbf{u}}f=0$ בנקודה נתונה?",
+          "solution_en": "$D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}=0$ when $\\mathbf{u}\\perp\\nabla f$, i.e., along the level curve of $f$ at that point.",
+          "solution_he": "$\\mathbf{u}\\perp\\nabla f$, כלומר לאורך עקומת הגובה.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "For $f(x,y)=xe^{y}+\\cos(xy)$, find $D_{\\mathbf{u}}f$ at $(1,0)$ in direction $\\mathbf{v}=(1,-1)$.",
+          "body_he": "עבור $f(x,y)=xe^y+\\cos(xy)$, מצא $D_{\\mathbf{u}}f$ ב-$(1,0)$ בכיוון $\\mathbf{v}=(1,-1)$.",
+          "solution_en": "$f_x=e^y-y\\sin(xy)$, $f_y=xe^y-x\\sin(xy)$. At $(1,0)$: $\\nabla f=(1,1)$. $\\mathbf{u}=(1,-1)/\\sqrt{2}$. $D_{\\mathbf{u}}f=(1,1)\\cdot(1,-1)/\\sqrt{2}=0$.",
+          "solution_he": "$\\nabla f(1,0)=(1,1)$. $\\mathbf{u}=(1,-1)/\\sqrt{2}$. $D_{\\mathbf{u}}f=0$.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "For $f(x,y)=x^2y+2xy^2$ at $(1,2)$, find the direction of steepest descent and the rate.",
+          "body_he": "עבור $f(x,y)=x^2y+2xy^2$ ב-$(1,2)$, מצא כיוון הירידה התלולה ביותר ואת קצבה.",
+          "solution_en": "$f_x=2xy+2y^2$, $f_y=x^2+4xy$. At $(1,2)$: $\\nabla f=(4+8,1+8)=(12,9)$. Steepest descent direction: $(-12,-9)/15=(-4,-3)/5$. Rate: $-|\\nabla f|=-15$.",
+          "solution_he": "$\\nabla f(1,2)=(12,9)$. כיוון ירידה: $(-4,-3)/5$. קצב: $-15$.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Show that at any point on the level curve $f(x,y)=c$, the gradient $\\nabla f$ is perpendicular to the tangent of the curve.",
+          "body_he": "הראה שבכל נקודה על עקומת הגובה $f(x,y)=c$, הגרדיאנט $\\nabla f$ ניצב למשיק של העקומה.",
+          "solution_en": "Let $(x(t),y(t))$ be a parametrization of the level curve. Then $f(x(t),y(t))=c$. Differentiating: $f_x x'(t)+f_y y'(t)=0$, i.e., $\\nabla f\\cdot\\mathbf{r}'(t)=0$. So $\\nabla f\\perp\\mathbf{r}'(t)$. $\\blacksquare$",
+          "solution_he": "תהי $(x(t),y(t))$ פרמטריזציה. $f(x(t),y(t))=c\\Rightarrow f_x x'+f_y y'=0\\Rightarrow\\nabla f\\cdot\\mathbf{r}'=0$. $\\blacksquare$",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "The temperature in a room is $T(x,y)=100-2x^2-3y^2$. Find the direction in which temperature increases fastest at $(1,1)$, and the rate.",
+          "body_he": "הטמפרטורה בחדר היא $T(x,y)=100-2x^2-3y^2$. מצא את הכיוון בו הטמפרטורה עולה הכי מהר ב-$(1,1)$, ואת הקצב.",
+          "solution_en": "$\\nabla T=(-4x,-6y)$. At $(1,1)$: $\\nabla T=(-4,-6)$. Max increase in direction $(-4,-6)/\\sqrt{52}=(-2,-3)/\\sqrt{13}$. Rate: $\\sqrt{52}=2\\sqrt{13}\\approx7.21$.",
+          "solution_he": "$\\nabla T(1,1)=(-4,-6)$. כיוון: $(-2,-3)/\\sqrt{13}$. קצב: $2\\sqrt{13}\\approx7.21$.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "For $f(x,y,z)=xyz$, find $D_{\\mathbf{u}}f$ at $(1,2,3)$ in direction $\\mathbf{u}=(1,1,1)/\\sqrt{3}$.",
+          "body_he": "עבור $f(x,y,z)=xyz$, מצא $D_{\\mathbf{u}}f$ ב-$(1,2,3)$ בכיוון $\\mathbf{u}=(1,1,1)/\\sqrt{3}$.",
+          "solution_en": "$\\nabla f=(yz,xz,xy)$. At $(1,2,3)$: $\\nabla f=(6,3,2)$. $D_{\\mathbf{u}}f=(6+3+2)/\\sqrt{3}=11/\\sqrt{3}\\approx6.35$.",
+          "solution_he": "$\\nabla f(1,2,3)=(6,3,2)$. $D_{\\mathbf{u}}f=11/\\sqrt{3}\\approx6.35$.",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find the tangent plane to the surface $z=x^2-y^2$ at $(2,1,3)$.",
+          "body_he": "מצא את מישור המשיק למשטח $z=x^2-y^2$ ב-$(2,1,3)$.",
+          "solution_en": "Write $F(x,y,z)=x^2-y^2-z=0$. $\\nabla F=(2x,-2y,-1)$. At $(2,1,3)$: $\\nabla F=(4,-2,-1)$. Tangent plane: $4(x-2)-2(y-1)-(z-3)=0\\Rightarrow 4x-2y-z=3$.",
+          "solution_he": "$F=x^2-y^2-z$. $\\nabla F(2,1,3)=(4,-2,-1)$. מישור: $4(x-2)-2(y-1)-(z-3)=0$, כלומר $4x-2y-z=3$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that if $\\nabla f(a,b)=\\mathbf{0}$, then $D_{\\mathbf{u}}f(a,b)=0$ for ALL unit vectors $\\mathbf{u}$.",
+          "body_he": "הוכח שאם $\\nabla f(a,b)=\\mathbf{0}$, אז $D_{\\mathbf{u}}f(a,b)=0$ לכל וקטור יחידה $\\mathbf{u}$.",
+          "solution_en": "$D_{\\mathbf{u}}f(a,b)=\\nabla f(a,b)\\cdot\\mathbf{u}=\\mathbf{0}\\cdot\\mathbf{u}=0$ for any $\\mathbf{u}$. $\\blacksquare$ This is why $\\nabla f=\\mathbf{0}$ characterises critical points — the rate of change is zero in all directions.",
+          "solution_he": "$D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}=\\mathbf{0}\\cdot\\mathbf{u}=0$. $\\blacksquare$ זו הסיבה ש-$\\nabla f=\\mathbf{0}$ מאפיין נקודות קריטיות.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove: the maximum value of $D_{\\mathbf{u}}f(a,b)$ over all unit vectors $\\mathbf{u}$ is $|\\nabla f(a,b)|$.",
+          "body_he": "הוכח: הערך המרבי של $D_{\\mathbf{u}}f(a,b)$ על כל וקטורי היחידה $\\mathbf{u}$ הוא $|\\nabla f(a,b)|$.",
+          "solution_en": "$D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}=|\\nabla f||\\mathbf{u}|\\cos\\theta=|\\nabla f|\\cos\\theta$ (since $|\\mathbf{u}|=1$). Maximum when $\\cos\\theta=1$, i.e., $\\theta=0$, meaning $\\mathbf{u}=\\nabla f/|\\nabla f|$. Maximum value $=|\\nabla f|$. $\\blacksquare$",
+          "solution_he": "$D_{\\mathbf{u}}f=|\\nabla f|\\cos\\theta\\leq|\\nabla f|$, שוויון כאשר $\\theta=0$ ($\\mathbf{u}\\|\\nabla f$). ערך מרבי $=|\\nabla f|$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "For $f(x,y)=x^3-3xy^2$, find all points where $|\\nabla f|=0$.",
+          "body_he": "עבור $f(x,y)=x^3-3xy^2$, מצא את כל הנקודות בהן $|\\nabla f|=0$.",
+          "solution_en": "$f_x=3x^2-3y^2=3(x^2-y^2)$, $f_y=-6xy$. Set $\\nabla f=(0,0)$: $x^2=y^2$ and $xy=0$. From $xy=0$: $x=0$ or $y=0$. If $x=0$: $y^2=0\\Rightarrow y=0$. If $y=0$: $x^2=0\\Rightarrow x=0$. Only critical point: $(0,0)$.",
+          "solution_he": "$f_x=3(x^2-y^2)=0$, $f_y=-6xy=0$. $x=y=0$ — רק הנקודה $(0,0)$.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting to normalize the direction vector.** $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$ requires $\\mathbf{u}$ to be a **unit** vector. Always divide $\\mathbf{v}$ by $|\\mathbf{v}|$ first.\n\n2. **Confusing direction of max increase with max value of $f$.** The gradient direction maximises the **rate of change**, not the value of $f$ itself.\n\n3. **Assuming gradient is along the level curve.** The gradient is **perpendicular** to the level curve, not parallel.\n\n4. **Wrong sign for steepest descent.** Use $-\\nabla f$ (not $\\nabla f$) for steepest descent.\n\n5. **Forgetting that $D_{\\mathbf{u}}f$ can be negative.** A negative value means $f$ decreases in that direction.",
+      "body_he_md": "1. **שכחת לנרמל את וקטור הכיוון.** $\\mathbf{u}$ חייב להיות וקטור **יחידה**. חלק תמיד ב-$|\\mathbf{v}|$.\n\n2. **בלבול בין כיוון עלייה מרבי לערך מרבי של $f$.** הגרדיאנט ממקסם את **קצב השינוי**, לא את ערך $f$ עצמו.\n\n3. **הנחה שהגרדיאנט לאורך עקומת הגובה.** הגרדיאנט **ניצב** לעקומה, לא מקביל.\n\n4. **סימן שגוי לירידה תלולה.** השתמש ב-$-\\nabla f$ לירידה, לא $\\nabla f$.\n\n5. **שכחה ש-$D_{\\mathbf{u}}f$ יכול להיות שלילי.** ערך שלילי = $f$ יורדת בכיוון זה."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$ ($\\mathbf{u}$ must be unit)\n- $\\nabla f=(f_x,f_y)$ (or $(f_x,f_y,f_z)$ in 3D)\n- Max rate of increase: $|\\nabla f|$, in direction $\\nabla f/|\\nabla f|$\n- Min rate: $-|\\nabla f|$, in direction $-\\nabla f/|\\nabla f|$\n- $\\nabla f\\perp$ level curves\n- Tangent plane to $F(x,y,z)=c$: $\\nabla F\\cdot(\\mathbf{x}-\\mathbf{x}_0)=0$\n\n**Exam patterns:** Compute $D_{\\mathbf{u}}f$; find max/min rate; find tangent plane; prove perpendicularity.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$ ($\\mathbf{u}$ חייב להיות יחידה)\n- $\\nabla f=(f_x,f_y)$\n- קצב עלייה מרבי: $|\\nabla f|$\n- $\\nabla f\\perp$ עקומות גובה\n- מישור משיק: $\\nabla F\\cdot(\\mathbf{x}-\\mathbf{x}_0)=0$"
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Directional derivative:** $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$ — rate of change in direction $\\mathbf{u}$ (unit vector).\n- **Gradient $\\nabla f$:** points in direction of steepest ascent; magnitude = max rate of increase.\n- **Steepest descent:** $-\\nabla f/|\\nabla f|$, rate $=-|\\nabla f|$.\n- **Zero directional derivative:** when $\\mathbf{u}\\perp\\nabla f$ (along the level curve).\n- **Gradient $\\perp$ level curves:** fundamental geometric property.\n- **3D:** $\\nabla F$ is the normal to the level surface $F=c$; tangent plane: $\\nabla F\\cdot(\\mathbf{x}-\\mathbf{x}_0)=0$.",
+      "body_he_md": "- **נגזרת כיוונית:** $D_{\\mathbf{u}}f=\\nabla f\\cdot\\mathbf{u}$ — קצב שינוי בכיוון $\\mathbf{u}$.\n- **גרדיאנט:** כיוון עלייה תלולה; גודל = קצב עלייה מרבי.\n- **ירידה תלולה:** $-\\nabla f/|\\nabla f|$.\n- **$D_{\\mathbf{u}}f=0$:** כאשר $\\mathbf{u}\\perp\\nabla f$ (לאורך עקומת גובה).\n- **גרדיאנט $\\perp$ עקומות גובה.**\n- **3D:** $\\nabla F$ — נורמל למשטח הגובה; מישור משיק: $\\nabla F\\cdot(\\mathbf{x}-\\mathbf{x}_0)=0$."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Gradient Directional Derivative."
+  ]
 }

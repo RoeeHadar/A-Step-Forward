@@ -1,224 +1,233 @@
 {
-  "id": "sampling_estimation",
-  "type": "interactive",
-  "subject": "statistics_probability",
-  "title_en": "Sampling, Point Estimation & Confidence Intervals",
-  "title_he": "דגימה, אמידת נקודה ורווח בר-סמך",
-  "duration_min": 35,
-  "level_min": "university",
-  "agent_hints": "The CLT applies to the sample mean, not individual observations — and requires independent samples with finite variance. Students confuse standard deviation with standard error: SE = sigma/sqrt(n). For CI interpretation, mu is fixed — the interval is random. Sample-size formulas for proportions need a conservative p-hat = 0.5 when unknown. Connect to the confidence_intervals lesson for z vs t procedures.",
+  "concept_id": "sampling_estimation",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["statistics"],
+  "title_en": "Sampling and Estimation",
+  "title_he": "דגימה והערכה",
+  "summary_en": "Point estimation, properties of estimators (unbiasedness, consistency, efficiency), and maximum likelihood estimation (MLE) for binomial and Poisson models.",
+  "summary_he": "אומדן נקודתי, תכונות אומדים (חסרי הטיה, עקביות, יעילות) ואומדן בשיטת הנראות המרבית (MLE) עבור מודלים בינומי ופואסון.",
+  "est_minutes": 50,
   "sections": [
     {
-      "id": "population_sample",
-      "title_en": "Population vs Sample",
-      "title_he": "אוכלוסייה לעומת מדגם",
-      "level_min": "university",
-      "body_en_md": "A **population** is the entire group of interest (all students, all manufactured parts). A **sample** is a subset drawn from the population.\n\n**Parameters** (unknown, fixed): $\\mu$ (mean), $\\sigma$ (std dev), $p$ (proportion).\n**Statistics** (computed from data, random): $\\bar{X}$, $s$, $\\hat{p}$.\n\n**Sampling distribution:** the probability distribution of a statistic over repeated samples.\n\n**Example:** population exam scores with $\\mu=72$, $\\sigma=15$. One sample of $n=25$ gives $\\bar{x}=68.4$ — this is one realization of $\\bar{X}$.\n\n**Bias:** a statistic is **unbiased** if $E[\\hat{\\theta}] = \\theta$. The sample mean is unbiased for $\\mu$; $s^2$ (with $n-1$) is unbiased for $\\sigma^2$.",
-      "body_he_md": "**אוכלוסייה** — כל הקבוצה; **מדגם** — תת-קבוצה.\n\n**פרמטרים:** $\\mu$, $\\sigma$, $p$. **סטטיסטיקות:** $\\bar{X}$, $s$, $\\hat{p}$.\n\n**התפלגות דגימה:** התפלגות הסטטיסטיקה על דגימות חוזרות.\n\n**דוגמה:** $\\mu=72$, $\\sigma=15$; מדגם $n=25$ נותן $\\bar{x}=68.4$.\n\n$\\bar{X}$ הוא אמוד לא-מוטה ל-$\\mu$."
+      "kind": "intro",
+      "title_en": "From Data to Parameters",
+      "title_he": "מנתונים לפרמטרים",
+      "body_en_md": "We rarely know the true parameters of a population (mean $\\mu$, variance $\\sigma^2$, proportion $p$, rate $\\lambda$). Instead, we take a **sample** and use it to **estimate** the unknown parameters.\n\nThis lesson addresses: How do we choose a good estimator? What makes one estimator better than another? And how does the **maximum likelihood** principle provide a systematic way to derive estimators?\n\nEstimation is the foundation of all statistical inference.",
+      "body_he_md": "לעיתים נדירות אנחנו יודעים את הפרמטרים האמיתיים של אוכלוסייה (ממוצע $\\mu$, שונות $\\sigma^2$, שיעור $p$, קצב $\\lambda$). במקום זאת, אנו לוקחים **מדגם** ומשתמשים בו ל**הערכת** הפרמטרים הלא-ידועים.\n\nשיעור זה עוסק ב: כיצד בוחרים אומד טוב? מה הופך אומד אחד לטוב יותר מאחר? וכיצד עיקרון **הנראות המרבית** מספק דרך שיטתית לגזור אומדים?"
     },
     {
-      "id": "clt",
-      "title_en": "Central Limit Theorem",
-      "title_he": "משפט הגבול המרכזי",
-      "level_min": "university",
-      "body_en_md": "Let $X_1, \\ldots, X_n$ be i.i.d. with mean $\\mu$ and variance $\\sigma^2$ (finite). Then for large $n$:\n$$\\boxed{\\bar{X} \\approx N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right)}$$\n\nEquivalently:\n$$\\frac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\approx N(0,1)$$\n\n**Key points:**\n- Applies to **sample means**, not single observations\n- Population can be any shape (roughly $n \\geq 30$ is a common rule)\n- Spread of $\\bar{X}$ shrinks as $1/\\sqrt{n}$\n\n**Example:** skewed service times with $\\mu=8$ min, $\\sigma=4$, $n=36$.\n$\\bar{X}$ is approximately $N(8, 16/36) = N(8, 0.444)$ — std error $= 4/6 \\approx 0.67$ min.",
-      "body_he_md": "ל-$X_1,\\ldots,X_n$ בלתי-תלויים עם $\\mu$ ו-$\\sigma^2$ סופית, ל-$n$ גדול:\n$$\\bar{X} \\approx N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right)$$\n\n**חשוב:** חל על **ממוצעי מדגם**, לא על תצפית בודדת.\n\n**דוגמה:** $n=36$, $\\sigma=4$ $\\Rightarrow$ SE $= 4/6 \\approx 0.67$."
+      "kind": "definition",
+      "title_en": "Estimators and Their Properties",
+      "title_he": "אומדים ותכונותיהם",
+      "body_en_md": "**Estimator:** A function of the sample data $T = g(X_1, \\ldots, X_n)$ used to estimate an unknown parameter $\\theta$.\n\n**Unbiasedness:** $T$ is **unbiased** if $E[T] = \\theta$. The sample mean $\\bar{X}$ is an unbiased estimator of $\\mu$.\n\n**Bias:** $\\text{Bias}(T) = E[T] - \\theta$. Unbiased $\\Rightarrow$ Bias $= 0$.\n\n**Consistency:** $T_n$ is **consistent** if $T_n \\to \\theta$ in probability as $n \\to \\infty$.\n\n**Efficiency:** Among all unbiased estimators, the one with the **smallest variance** is most efficient. The Cramér-Rao lower bound gives the minimum possible variance.\n\n**Mean Squared Error (MSE):** $\\text{MSE}(T) = \\text{Var}(T) + [\\text{Bias}(T)]^2$.\n\n**Maximum Likelihood Estimator (MLE):** The value $\\hat{\\theta}$ that maximises the likelihood function $L(\\theta) = \\prod_{i=1}^n f(x_i; \\theta)$. Equivalently, maximise $\\ell(\\theta) = \\ln L(\\theta)$ (log-likelihood).",
+      "body_he_md": "**אומד:** פונקציה של נתוני המדגם $T=g(X_1,\\ldots,X_n)$ לאמידת פרמטר לא-ידוע $\\theta$.\n\n**חסרי הטיה:** $T$ **חסר הטיה** אם $E[T]=\\theta$. $\\bar{X}$ הוא אומד חסר הטיה של $\\mu$.\n\n**הטיה:** $\\text{Bias}(T)=E[T]-\\theta$.\n\n**עקביות:** $T_n$ **עקבי** אם $T_n\\to\\theta$ בהסתברות כאשר $n\\to\\infty$.\n\n**יעילות:** בין כל האומדים חסרי ההטיה, זה עם **השונות הקטנה ביותר** הוא היעיל ביותר.\n\n**MSE:** $\\text{MSE}(T)=\\text{Var}(T)+[\\text{Bias}(T)]^2$.\n\n**MLE:** הערך $\\hat{\\theta}$ שממקסם את $L(\\theta)=\\prod f(x_i;\\theta)$ (או את $\\ell(\\theta)=\\ln L(\\theta)$)."
     },
     {
-      "id": "point_estimation",
-      "title_en": "Point Estimation",
-      "title_he": "אמידת נקודה",
-      "level_min": "university",
-      "body_en_md": "A **point estimate** $\\hat{\\theta}$ is a single number summarizing a parameter.\n\n| Parameter | Estimator |\n|---|---|\n| $\\mu$ | $\\bar{X} = \\frac{1}{n}\\sum X_i$ |\n| $\\sigma^2$ | $s^2 = \\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$ |\n| $p$ | $\\hat{p} = \\frac{\\text{# successes}}{n}$ |\n\n**Desirable properties:**\n- **Unbiased:** $E[\\hat{\\theta}] = \\theta$\n- **Consistent:** $\\hat{\\theta} \\to \\theta$ as $n \\to \\infty$\n- **Efficient:** smallest variance among unbiased estimators\n\n**Worked example:** 400 voters sampled; 228 support a candidate.\n$\\hat{p} = 228/400 = 0.57$ estimates the population proportion $p$.",
-      "body_he_md": "**אמד נקודתי** $\\hat{\\theta}$ — מספר יחיד.\n\n$\\mu$ $\\to$ $\\bar{X}$; $p$ $\\to$ $\\hat{p}$.\n\n**תכונות:** לא-מוטה, עקבי, יעיל.\n\n**דוגמה:** 228 מתוך 400 $\\Rightarrow$ $\\hat{p}=0.57$."
+      "kind": "theory",
+      "title_en": "Properties of MLE and Common Estimators",
+      "title_he": "תכונות MLE ואומדים נפוצים",
+      "body_en_md": "**MLE properties (large samples):** Consistent; asymptotically unbiased; asymptotically efficient (achieves Cramér-Rao bound); invariant under reparameterisation.\n\n**How to find MLE:**\n1. Write the likelihood $L(\\theta) = \\prod_i f(x_i; \\theta)$.\n2. Take the log: $\\ell(\\theta) = \\sum_i \\ln f(x_i; \\theta)$.\n3. Differentiate and set to zero: $\\ell'(\\theta) = 0$.\n4. Verify it is a maximum (second derivative $< 0$).\n\n**Standard estimators:**\n- Sample mean $\\bar{X} = \\frac{1}{n}\\sum X_i$: unbiased for $\\mu$.\n- Sample variance $S^2 = \\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$: unbiased for $\\sigma^2$ (note divisor $n-1$, not $n$).\n- Sample proportion $\\hat{p} = X/n$: unbiased for $p$.",
+      "body_he_md": "**תכונות MLE (מדגמים גדולים):** עקבי; אסימפטוטית חסר הטיה; אסימפטוטית יעיל; אינווריאנטי תחת שינוי פרמטריזציה.\n\n**כיצד למצוא MLE:**\n1. כתוב $L(\\theta)=\\prod_i f(x_i;\\theta)$.\n2. קח לוג: $\\ell(\\theta)=\\sum_i\\ln f(x_i;\\theta)$.\n3. גזור והשווה לאפס: $\\ell'(\\theta)=0$.\n4. אמת שזהו מקסימום.\n\n**אומדים סטנדרטיים:**\n- $\\bar{X}=\\frac{1}{n}\\sum X_i$: חסר הטיה ל-$\\mu$.\n- $S^2=\\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$: חסר הטיה ל-$\\sigma^2$ (מחלקים ב-$n-1$!).\n- $\\hat{p}=X/n$: חסר הטיה ל-$p$."
     },
     {
-      "id": "ci_mean",
-      "title_en": "Confidence Interval for the Mean",
-      "title_he": "רווח סמך לממוצע",
-      "level_min": "university",
-      "body_en_md": "When $\\sigma$ is known (or $n$ large with $s$):\n$$\\boxed{\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}}$$\n\nWhen $\\sigma$ unknown (normal population):\n$$\\boxed{\\bar{x} \\pm t_{\\alpha/2,\\,n-1} \\cdot \\frac{s}{\\sqrt{n}}}$$\n\n**Standard error of the mean:** $\\text{SE} = s/\\sqrt{n}$.\n\n**Worked example:** $n=16$, $\\bar{x}=50$, $s=8$, 95% CI, $t_{0.025,15}=2.131$.\n$$50 \\pm 2.131 \\cdot \\frac{8}{\\sqrt{16}} = 50 \\pm 4.26 = (45.74,\\; 54.26).$$",
-      "body_he_md": "$\\sigma$ ידוע: $\\bar{x} \\pm z_{\\alpha/2} \\cdot \\sigma/\\sqrt{n}$.\n\n$\\sigma$ לא ידוע: $\\bar{x} \\pm t_{\\alpha/2,n-1} \\cdot s/\\sqrt{n}$.\n\n**שגיאת תקן:** $s/\\sqrt{n}$.\n\n**דוגמה:** $n=16$, $\\bar{x}=50$, $s=8$ $\\Rightarrow$ $(45.74, 54.26)$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Sample Mean as an Estimator",
+      "title_he": "דוגמה פתורה 1 — ממוצע המדגם כאומד",
+      "body_en_md": "**Problem:** A random sample of $n=5$ exam scores is: 72, 85, 90, 68, 80. Use the sample mean to estimate the population mean $\\mu$.\n\n**Step 1 — Compute the sample mean:**\n$$\\bar{x} = \\frac{72+85+90+68+80}{5} = \\frac{395}{5} = 79.$$\n\n**Step 2 — Show unbiasedness:** $E[\\bar{X}] = \\mu$ (by linearity of expectation and independence).\n\n**Step 3 — Standard error of $\\bar{X}$:**\n$$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}} = \\frac{\\sigma}{\\sqrt{5}}.$$\nAs $n$ increases, SE decreases — the estimator becomes more precise.\n\n**Conclusion:** $\\hat{\\mu} = 79$ is an unbiased, consistent estimate of the population mean.",
+      "body_he_md": "**בעיה:** מדגם אקראי של $n=5$ ציוני מבחן: 72, 85, 90, 68, 80. השתמש בממוצע המדגם לאמידת $\\mu$.\n\n**שלב 1 — חשב ממוצע:**\n$$\\bar{x}=\\frac{72+85+90+68+80}{5}=\\frac{395}{5}=79.$$\n\n**שלב 2 — חסרי הטיה:** $E[\\bar{X}]=\\mu$.\n\n**שלב 3 — שגיאה סטנדרטית:** $\\text{SE}(\\bar{X})=\\sigma/\\sqrt{n}$. ככל ש-$n$ גדל, SE קטן.\n\n**מסקנה:** $\\hat{\\mu}=79$ הוא אומד חסר הטיה ועקבי של $\\mu$."
     },
     {
-      "id": "ci_proportion",
-      "title_en": "Confidence Interval for a Proportion & Sample Size",
-      "title_he": "רווח סמך לפרופורציה וגודל מדגם",
-      "level_min": "university",
-      "body_en_md": "For large $n$, an approximate $(1-\\alpha)$ CI for $p$ is:\n$$\\boxed{\\hat{p} \\pm z_{\\alpha/2} \\sqrt{\\frac{\\hat{p}(1-\\hat{p})}{n}}}$$\n\n**Sample size** for estimating $p$ within margin $E$ at confidence $1-\\alpha$:\n$$\\boxed{n \\geq \\left(\\frac{z_{\\alpha/2}}{E}\\right)^2 \\hat{p}(1-\\hat{p})}$$\n\nIf $\\hat{p}$ unknown, use conservative $\\hat{p}=0.5$ (maximizes $p(1-p)$).\n\n**Worked example:** $\\hat{p}=0.57$, $n=400$, 95% CI ($z=1.96$):\n$$0.57 \\pm 1.96\\sqrt{\\frac{0.57 \\cdot 0.43}{400}} = 0.57 \\pm 0.0485 = (0.521,\\; 0.619).$$\n\nFor $E=0.03$ at 95% with unknown $p$: $n \\geq (1.96/0.03)^2 \\cdot 0.25 \\approx 1068$.",
-      "body_he_md": "רווח סמך ל-$p$: $\\hat{p} \\pm z_{\\alpha/2}\\sqrt{\\hat{p}(1-\\hat{p})/n}$.\n\nגודל מדגם: $n \\geq (z_{\\alpha/2}/E)^2 \\hat{p}(1-\\hat{p})$; אם $p$ לא ידוע — $\\hat{p}=0.5$.\n\n**דוגמה:** $\\hat{p}=0.57$, $n=400$ $\\Rightarrow$ $(0.521, 0.619)$."
-    }
-  ],
-  "questions": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A sample of 4 values gives: 10, 14, 12, 16. Compute $\\bar{x}$ and $s^2$ (sample variance with divisor $n-1$).",
+      "body_he_md": "מדגם של 4 ערכים: 10, 14, 12, 16. חשב $\\bar{x}$ ו-$s^2$ (שונות דגם עם מחלק $n-1$).",
+      "checkpoint_solution_en": "$\\bar{x} = 52/4 = 13$. $s^2 = [(10-13)^2+(14-13)^2+(12-13)^2+(16-13)^2]/(4-1) = (9+1+1+9)/3 = 20/3 \\approx 6.67$.",
+      "checkpoint_solution_he": "$\\bar{x}=13$. $s^2=(9+1+1+9)/3=20/3\\approx6.67$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "The Central Limit Theorem states that for large $n$, the sample mean $\\bar{X}$ is approximately:",
-      "body_he": "משפט הגבול המרכזי קובע של-$n$ גדול, ממוצע המדגם $\\bar{X}$ הוא בקירוב:",
-      "options": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — MLE for Binomial Parameter p",
+      "title_he": "דוגמה פתורה 2 — MLE לפרמטר p בינומי",
+      "body_en_md": "**Problem:** In $n$ independent trials, we observe $k$ successes. Find the MLE of $p$.\n\n**Step 1 — Likelihood function:**\n$$L(p) = \\binom{n}{k}p^k(1-p)^{n-k}.$$\n\n**Step 2 — Log-likelihood** (drop the constant $\\binom{n}{k}$):\n$$\\ell(p) = k\\ln p + (n-k)\\ln(1-p).$$\n\n**Step 3 — Differentiate and set to zero:**\n$$\\frac{d\\ell}{dp} = \\frac{k}{p} - \\frac{n-k}{1-p} = 0.$$\n\n**Step 4 — Solve:**\n$$k(1-p) = (n-k)p \\Rightarrow k - kp = np - kp \\Rightarrow k = np \\Rightarrow \\hat{p} = \\frac{k}{n}.$$\n\n**Interpretation:** The MLE of $p$ is the **sample proportion** — the most natural estimate. It is also unbiased ($E[\\hat{p}] = p$).",
+      "body_he_md": "**בעיה:** ב-$n$ ניסויים בלתי-תלויים נצפו $k$ הצלחות. מצא את MLE של $p$.\n\n**שלב 1 — פונקציית נראות:**\n$$L(p)=\\binom{n}{k}p^k(1-p)^{n-k}.$$\n\n**שלב 2 — לוג-נראות:**\n$$\\ell(p)=k\\ln p+(n-k)\\ln(1-p).$$\n\n**שלב 3 — גזור והשווה לאפס:**\n$$\\frac{d\\ell}{dp}=\\frac{k}{p}-\\frac{n-k}{1-p}=0.$$\n\n**שלב 4 — פתור:**\n$$\\hat{p}=\\frac{k}{n}.$$\n\n**פרשנות:** MLE של $p$ הוא **שיעור המדגם** — ההערכה הטבעית ביותר. הוא גם חסר הטיה."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A sample of 10 trials has 7 successes. What is the MLE of $p$?",
+      "body_he_md": "מדגם של 10 ניסויים עם 7 הצלחות. מהו MLE של $p$?",
+      "checkpoint_solution_en": "$\\hat{p} = 7/10 = 0.7$.",
+      "checkpoint_solution_he": "$\\hat{p}=7/10=0.7$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — MLE for Poisson Rate λ",
+      "title_he": "דוגמה פתורה 3 — MLE לקצב λ בפואסון",
+      "body_en_md": "**Problem:** We observe $n$ independent Poisson observations $x_1, \\ldots, x_n$. Find the MLE of $\\lambda$.\n\n**Step 1 — Likelihood:**\n$$L(\\lambda) = \\prod_{i=1}^n \\frac{e^{-\\lambda}\\lambda^{x_i}}{x_i!} = e^{-n\\lambda} \\lambda^{\\sum x_i} \\cdot \\prod_{i=1}^n \\frac{1}{x_i!}.$$\n\n**Step 2 — Log-likelihood** (drop the $\\sum \\ln(x_i!)$ constant):\n$$\\ell(\\lambda) = -n\\lambda + \\left(\\sum_{i=1}^n x_i\\right)\\ln\\lambda.$$\n\n**Step 3 — Differentiate:**\n$$\\frac{d\\ell}{d\\lambda} = -n + \\frac{\\sum x_i}{\\lambda} = 0.$$\n\n**Step 4 — Solve:**\n$$\\hat{\\lambda} = \\frac{\\sum_{i=1}^n x_i}{n} = \\bar{x}.$$\n\n**Interpretation:** The MLE of $\\lambda$ is the **sample mean** — which equals the Poisson mean by construction. It is unbiased, consistent, and efficient.\n\n**Example:** If 5 observations are 2, 3, 1, 4, 0, then $\\hat{\\lambda} = (2+3+1+4+0)/5 = 2$.",
+      "body_he_md": "**בעיה:** $n$ תצפיות פואסון בלתי-תלויות $x_1,\\ldots,x_n$. מצא MLE של $\\lambda$.\n\n**שלב 1 — נראות:**\n$$L(\\lambda)=e^{-n\\lambda}\\lambda^{\\sum x_i}\\cdot\\prod\\frac{1}{x_i!}.$$\n\n**שלב 2 — לוג-נראות:**\n$$\\ell(\\lambda)=-n\\lambda+\\left(\\sum x_i\\right)\\ln\\lambda.$$\n\n**שלב 3 — גזור:**\n$$\\frac{d\\ell}{d\\lambda}=-n+\\frac{\\sum x_i}{\\lambda}=0.$$\n\n**שלב 4 — פתור:**\n$$\\hat{\\lambda}=\\bar{x}.$$\n\n**פרשנות:** MLE של $\\lambda$ הוא **ממוצע המדגם** — חסר הטיה, עקבי ויעיל.\n\n**דוגמה:** 5 תצפיות: 2,3,1,4,0. $\\hat{\\lambda}=10/5=2$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Finding MLE",
+      "title_he": "מדריך שיטה — מציאת MLE",
+      "body_en_md": "**MLE Recipe:**\n1. Write the PMF/PDF: $f(x_i; \\theta)$.\n2. Form likelihood: $L(\\theta) = \\prod_{i=1}^n f(x_i; \\theta)$.\n3. Log-likelihood: $\\ell(\\theta) = \\sum \\ln f(x_i; \\theta)$.\n4. Differentiate: $\\ell'(\\theta) = 0$.\n5. Solve for $\\hat{\\theta}$.\n6. Verify maximum: $\\ell''(\\hat{\\theta}) < 0$.\n\n| Parameter | Distribution | MLE |\n|---|---|---|\n| $\\mu$ | Normal | $\\bar{X}$ |\n| $\\sigma^2$ | Normal | $\\frac{1}{n}\\sum(X_i-\\bar{X})^2$ (biased!) |\n| $p$ | Binomial | $k/n$ |\n| $\\lambda$ | Poisson | $\\bar{X}$ |",
+      "body_he_md": "**מתכון MLE:**\n1. כתוב PMF/PDF: $f(x_i;\\theta)$.\n2. נראות: $L(\\theta)=\\prod f(x_i;\\theta)$.\n3. לוג-נראות: $\\ell(\\theta)=\\sum\\ln f(x_i;\\theta)$.\n4. גזור: $\\ell'(\\theta)=0$.\n5. פתור $\\hat{\\theta}$.\n6. אמת מקסימום: $\\ell''(\\hat{\\theta})<0$.\n\n| פרמטר | פילוג | MLE |\n|---|---|---|\n| $\\mu$ | נורמלי | $\\bar{X}$ |\n| $\\sigma^2$ | נורמלי | $\\frac{1}{n}\\sum(X_i-\\bar{X})^2$ (מוטה!) |\n| $p$ | בינומי | $k/n$ |\n| $\\lambda$ | פואסון | $\\bar{X}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "Normal with mean $\\mu$ and variance $\\sigma^2$",
-          "text_he": "נורמלי עם ממוצע $\\mu$ ושונות $\\sigma^2$",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A sample gives $\\bar{x} = 42$. Identify the parameter being estimated and state whether this estimator is unbiased.",
+          "body_he": "מדגם נותן $\\bar{x}=42$. זהה את הפרמטר המוערך וציין אם האומד חסר הטיה.",
+          "solution_en": "Estimating population mean $\\mu$. $E[\\bar{X}]=\\mu$, so **unbiased**.",
+          "solution_he": "אמידת ממוצע האוכלוסייה $\\mu$. $E[\\bar{X}]=\\mu$ — **חסר הטיה**.",
+          "points": 4
         },
         {
-          "id": "b",
-          "text_en": "Normal with mean $\\mu$ and variance $\\sigma^2/n$",
-          "text_he": "נורמלי עם ממוצע $\\mu$ ושונות $\\sigma^2/n$",
-          "correct": true
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Why do we divide by $n-1$ (not $n$) in the sample variance $S^2$?",
+          "body_he": "מדוע מחלקים ב-$n-1$ (לא ב-$n$) בשונות המדגם $S^2$?",
+          "solution_en": "Dividing by $n-1$ makes $S^2$ an unbiased estimator of $\\sigma^2$: $E[S^2]=\\sigma^2$. Using $n$ gives $E[\\hat{\\sigma}^2]=(n-1)\\sigma^2/n < \\sigma^2$ (biased).",
+          "solution_he": "חלוקה ב-$n-1$ הופכת את $S^2$ לאומד חסר הטיה של $\\sigma^2$. חלוקה ב-$n$ נותנת אומד מוטה.",
+          "points": 4
         },
         {
-          "id": "c",
-          "text_en": "Same distribution as the population",
-          "text_he": "באותה התפלגות כמו האוכלוסייה",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "6 Poisson observations: 3, 1, 4, 2, 5, 3. Find the MLE of $\\lambda$.",
+          "body_he": "6 תצפיות פואסון: 3, 1, 4, 2, 5, 3. מצא MLE של $\\lambda$.",
+          "solution_en": "$\\hat{\\lambda} = \\bar{x} = (3+1+4+2+5+3)/6 = 18/6 = 3$.",
+          "solution_he": "$\\hat{\\lambda}=18/6=3$.",
+          "points": 4
         },
         {
-          "id": "d",
-          "text_en": "Always exactly normal for any $n$",
-          "text_he": "תמיד נורמלי בדיוק לכל $n$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "State the bias of the sample proportion $\\hat{p} = X/n$.",
+          "body_he": "ציין את ההטיה של שיעור המדגם $\\hat{p}=X/n$.",
+          "solution_en": "$E[\\hat{p}]=E[X/n]=np/n=p$. **Bias $= 0$** (unbiased).",
+          "solution_he": "$E[\\hat{p}]=p$. **הטיה $=0$** (חסר הטיה).",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "15 Bernoulli trials produce 9 successes. Find the MLE of $p$ and compute its standard error.",
+          "body_he": "15 ניסויי ברנולי נותנים 9 הצלחות. מצא MLE של $p$ וחשב שגיאה סטנדרטית.",
+          "solution_en": "$\\hat{p}=9/15=0.6$. $\\text{SE}(\\hat{p})=\\sqrt{\\hat{p}(1-\\hat{p})/n}=\\sqrt{0.24/15}=\\sqrt{0.016}\\approx0.126$.",
+          "solution_he": "$\\hat{p}=0.6$. $\\text{SE}=\\sqrt{0.6\\times0.4/15}\\approx0.126$.",
+          "points": 6
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Estimator $T$ has $E[T]=\\theta+2$ and $\\text{Var}(T)=3$. Compute the MSE.",
+          "body_he": "אומד $T$ מקיים $E[T]=\\theta+2$ ו-$\\text{Var}(T)=3$. חשב MSE.",
+          "solution_en": "$\\text{Bias}=2$. $\\text{MSE}=3+4=7$.",
+          "solution_he": "$\\text{הטיה}=2$. $\\text{MSE}=3+4=7$.",
+          "points": 6
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Explain why the MLE $\\hat{\\sigma}^2 = \\frac{1}{n}\\sum(X_i-\\bar{X})^2$ is biased for $\\sigma^2$.",
+          "body_he": "הסבר מדוע $\\hat{\\sigma}^2=\\frac{1}{n}\\sum(X_i-\\bar{X})^2$ הוא אומד מוטה של $\\sigma^2$.",
+          "solution_en": "$E[\\hat{\\sigma}^2]=\\frac{n-1}{n}\\sigma^2 < \\sigma^2$. The MLE underestimates $\\sigma^2$ because it uses $\\bar{X}$ (estimated mean) instead of true $\\mu$, losing one degree of freedom.",
+          "solution_he": "$E[\\hat{\\sigma}^2]=\\frac{n-1}{n}\\sigma^2<\\sigma^2$. ה-MLE מזלזל ב-$\\sigma^2$ כי הוא משתמש ב-$\\bar{X}$ במקום $\\mu$ האמיתי, ומאבד דרגת חופש.",
+          "points": 6
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Compare two estimators for $\\mu$: $T_1=\\bar{X}$ and $T_2=\\bar{X}+5$. Which is better and why?",
+          "body_he": "השווה שני אומדים ל-$\\mu$: $T_1=\\bar{X}$ ו-$T_2=\\bar{X}+5$. מי טוב יותר ומדוע?",
+          "solution_en": "$T_1$ is unbiased ($E[T_1]=\\mu$). $T_2$ has bias $5$ ($E[T_2]=\\mu+5$). $\\text{MSE}(T_1)=\\sigma^2/n$; $\\text{MSE}(T_2)=\\sigma^2/n+25$. **$T_1$ is better** (lower MSE, unbiased).",
+          "solution_he": "$T_1$ חסר הטיה. $T_2$ בעל הטיה 5. $\\text{MSE}(T_1)=\\sigma^2/n$; $\\text{MSE}(T_2)=\\sigma^2/n+25$. **$T_1$ טוב יותר**.",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Data from exponential distribution with rate $\\lambda$: $f(x;\\lambda)=\\lambda e^{-\\lambda x}$. Find the MLE of $\\lambda$ from observations $x_1,\\ldots,x_n$.",
+          "body_he": "נתונים מפילוג מעריכי עם קצב $\\lambda$: $f(x;\\lambda)=\\lambda e^{-\\lambda x}$. מצא MLE של $\\lambda$ מ-$x_1,\\ldots,x_n$.",
+          "solution_en": "$L(\\lambda)=\\lambda^n e^{-\\lambda\\sum x_i}$. $\\ell=n\\ln\\lambda-\\lambda\\sum x_i$. $d\\ell/d\\lambda=n/\\lambda-\\sum x_i=0$. $\\hat{\\lambda}=n/\\sum x_i=1/\\bar{x}$.",
+          "solution_he": "$\\ell=n\\ln\\lambda-\\lambda\\sum x_i$. $n/\\hat{\\lambda}=\\sum x_i$. $\\hat{\\lambda}=1/\\bar{x}$.",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\bar{X}$ is consistent for $\\mu$ using Chebyshev's inequality.",
+          "body_he": "הוכח ש-$\\bar{X}$ עקבי ל-$\\mu$ בעזרת אי-שוויון צ'בישב.",
+          "solution_en": "$P(|\\bar{X}-\\mu|>\\varepsilon) \\leq \\text{Var}(\\bar{X})/\\varepsilon^2 = \\sigma^2/(n\\varepsilon^2) \\to 0$ as $n\\to\\infty$. So $\\bar{X}\\to\\mu$ in probability. $\\blacksquare$",
+          "solution_he": "$P(|\\bar{X}-\\mu|>\\varepsilon)\\leq\\sigma^2/(n\\varepsilon^2)\\to0$. לכן $\\bar{X}\\to\\mu$ בהסתברות. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the MLE for the uniform distribution $U(0,\\theta)$ with density $f(x;\\theta)=1/\\theta$ for $0\\leq x\\leq\\theta$.",
+          "body_he": "מצא MLE עבור פילוג אחיד $U(0,\\theta)$ עם צפיפות $f(x;\\theta)=1/\\theta$ עבור $0\\leq x\\leq\\theta$.",
+          "solution_en": "$L(\\theta)=\\prod_{i=1}^n (1/\\theta)=\\theta^{-n}$ (requires $\\theta\\geq x_{(n)}=\\max x_i$). To maximise $L$: minimise $\\theta$. The smallest valid $\\theta$ is $\\theta=x_{(n)}$. So $\\hat{\\theta}=\\max(X_1,\\ldots,X_n)$.",
+          "solution_he": "$L(\\theta)=\\theta^{-n}$ (צריך $\\theta\\geq\\max x_i$). $L$ יורד ב-$\\theta$, לכן ממקסמים ב-$\\theta$ המינימלי המותר: $\\hat{\\theta}=\\max(X_1,\\ldots,X_n)$.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that for Bernoulli trials, $\\hat{p}=X/n$ is unbiased and find $\\text{Var}(\\hat{p})$.",
+          "body_he": "הראה שעבור ניסויי ברנולי, $\\hat{p}=X/n$ חסר הטיה ומצא $\\text{Var}(\\hat{p})$.",
+          "solution_en": "$E[X]=np$ (Binomial). $E[\\hat{p}]=E[X/n]=np/n=p$. Unbiased. $\\text{Var}(\\hat{p})=\\text{Var}(X/n)=\\text{Var}(X)/n^2=np(1-p)/n^2=p(1-p)/n$. $\\blacksquare$",
+          "solution_he": "$E[\\hat{p}]=np/n=p$. חסר הטיה. $\\text{Var}(\\hat{p})=np(1-p)/n^2=p(1-p)/n$. $\\blacksquare$",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "An estimator $T$ of $\\theta$ has $\\text{MSE}(T) = \\text{Var}(T) + \\text{Bias}^2(T)$. Can a biased estimator ever be preferred over an unbiased one? Explain.",
+          "body_he": "אומד $T$ של $\\theta$ מקיים $\\text{MSE}(T)=\\text{Var}(T)+\\text{Bias}^2(T)$. האם אומד מוטה יכול להיות עדיף על אי-מוטה? הסבר.",
+          "solution_en": "Yes. A biased estimator with much smaller variance can have lower MSE. Example: The James-Stein estimator is biased but has lower MSE than the sample mean in $\\mathbb{R}^3$. The bias-variance tradeoff is fundamental in statistics and machine learning.",
+          "solution_he": "כן. אומד מוטה עם שונות קטנה בהרבה יכול לקבל MSE נמוך יותר. דוגמה: אומד ג'יימס-שטיין מוטה אבל MSE נמוך יותר. ה-bias-variance tradeoff בסיסי בסטטיסטיקה ולמידת מכונה.",
+          "points": 10
         }
-      ],
-      "explanation_en": "CLT: $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$. Individual $X_i$ keep population variance $\\sigma^2$.",
-      "explanation_he": "מ.ג.מ.: $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "A sample of $n=49$ has $s=14$. The standard error of the mean is:",
-      "body_he": "מדגם $n=49$ עם $s=14$. שגיאת התקן של הממוצע:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$14$",
-          "text_he": "$14$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$7$",
-          "text_he": "$7$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$2$",
-          "text_he": "$2$",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "$98$",
-          "text_he": "$98$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\text{SE} = s/\\sqrt{n} = 14/\\sqrt{49} = 14/7 = 2$.",
-      "explanation_he": "$\\text{SE} = 14/\\sqrt{49} = 2$."
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Using $n$ instead of $n-1$ in sample variance.** The MLE $\\hat{\\sigma}^2 = \\frac{1}{n}\\sum(X_i-\\bar{X})^2$ is biased. The unbiased estimator uses $n-1$.\n\n2. **Confusing consistency with unbiasedness.** An estimator can be consistent but biased (e.g., MLE of $\\sigma^2$), or unbiased but inconsistent.\n\n3. **Forgetting to verify the MLE is a maximum.** Check $\\ell''(\\hat{\\theta}) < 0$, especially when the score equation has multiple solutions.\n\n4. **Applying MLE when sample is tiny.** MLE properties are asymptotic. With very small $n$, Bayesian methods may be more appropriate.\n\n5. **Mixing up SE of $\\hat{p}$ formulas.** $\\text{SE}(\\hat{p})=\\sqrt{p(1-p)/n}$ (true $p$ known) vs. $\\sqrt{\\hat{p}(1-\\hat{p})/n}$ (estimated).",
+      "body_he_md": "1. **שימוש ב-$n$ במקום $n-1$ בשונות המדגם.** MLE $\\hat{\\sigma}^2=\\frac{1}{n}\\sum(X_i-\\bar{X})^2$ מוטה. האומד חסר ההטיה משתמש ב-$n-1$.\n\n2. **בלבול עקביות עם חסרי הטיה.** אומד יכול להיות עקבי אבל מוטה (למשל MLE של $\\sigma^2$).\n\n3. **שכחת אימות מקסימום.** בדוק $\\ell''(\\hat{\\theta})<0$.\n\n4. **הפעלת MLE עם מדגם קטן מאוד.** תכונות MLE הן אסימפטוטיות.\n\n5. **ערבוב נוסחאות SE של $\\hat{p}$.** $\\sqrt{p(1-p)/n}$ (p ידוע) לעומת $\\sqrt{\\hat{p}(1-\\hat{p})/n}$ (p מוערך)."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Given $n=25$, $\\bar{x}=100$, $\\sigma=20$, construct a 95% CI for $\\mu$ ($z_{0.025}=1.96$):",
-      "body_he": "נתון $n=25$, $\\bar{x}=100$, $\\sigma=20$. רווח סמך 95% ל-$\\mu$ ($z=1.96$):",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$(92.16,\\; 107.84)$",
-          "text_he": "$(92.16,\\; 107.84)$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$(80,\\; 120)$",
-          "text_he": "$(80,\\; 120)$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$(96,\\; 104)$",
-          "text_he": "$(96,\\; 104)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$(84.08,\\; 115.92)$",
-          "text_he": "$(84.08,\\; 115.92)$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$E = 1.96 \\cdot 20/\\sqrt{25} = 1.96 \\cdot 4 = 7.84$. CI: $(100 \\pm 7.84)$.",
-      "explanation_he": "$E = 1.96 \\cdot 4 = 7.84$. רווח: $(92.16, 107.84)$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula card:**\n- $\\bar{X}=\\frac{1}{n}\\sum X_i$; unbiased for $\\mu$\n- $S^2=\\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$; unbiased for $\\sigma^2$\n- $\\hat{p}=k/n$; unbiased for $p$; $\\text{Var}(\\hat{p})=p(1-p)/n$\n- MLE recipe: $L\\to\\ell\\to d\\ell/d\\theta=0$\n- $\\text{MSE}=\\text{Var}+\\text{Bias}^2$\n\n**Exam patterns:**\n- Derive the MLE for a given distribution.\n- Verify unbiasedness of an estimator.\n- Compute MSE and compare two estimators.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $\\bar{X}=\\frac{1}{n}\\sum X_i$; חסר הטיה ל-$\\mu$\n- $S^2=\\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$; חסר הטיה ל-$\\sigma^2$\n- $\\hat{p}=k/n$; $\\text{Var}(\\hat{p})=p(1-p)/n$\n- מתכון MLE: $L\\to\\ell\\to d\\ell/d\\theta=0$\n- $\\text{MSE}=\\text{Var}+\\text{Bias}^2$"
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "A 95% confidence interval for $\\mu$ is $(45, 55)$. Which statement is correct?",
-      "body_he": "רווח סמך 95% ל-$\\mu$ הוא $(45, 55)$. איזו טענה נכונה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "There is a 95% probability that $\\mu$ is between 45 and 55.",
-          "text_he": "יש 95% הסתברות ש-$\\mu$ בין 45 ל-55.",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "95% of sample means fall between 45 and 55.",
-          "text_he": "95% ממוצעי המדגם בין 45 ל-55.",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "If we repeated sampling, 95% of such intervals would contain $\\mu$.",
-          "text_he": "אם נחזור על הדגימה, 95% מהקטעים יכילו את $\\mu$.",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "$\\mu$ is definitely between 45 and 55.",
-          "text_he": "$\\mu$ בהחלט בין 45 ל-55.",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Frequentist interpretation: the procedure captures $\\mu$ in 95% of repeated samples; $\\mu$ is fixed.",
-      "explanation_he": "פרשנות תדרתנית: 95% מהקטעים יכילו את $\\mu$; $\\mu$ קבוע."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "For a 95% CI on a proportion with margin of error $E=0.04$ and unknown $p$, the minimum $n$ (using $p=0.5$) is approximately:",
-      "body_he": "לרווח סמך 95% לפרופורציה עם $E=0.04$ ו-$p$ לא ידוע ($p=0.5$), $n$ המינימלי בקירוב:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$601$",
-          "text_he": "$601$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$400$",
-          "text_he": "$400$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$100$",
-          "text_he": "$100$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$2401$",
-          "text_he": "$2401$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$n \\geq (1.96/0.04)^2 \\cdot 0.25 = 49^2 \\cdot 0.25 = 600.25$, so $n \\geq 601$.",
-      "explanation_he": "$n \\geq (1.96/0.04)^2 \\cdot 0.25 \\approx 601$."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Estimator $T$** estimates unknown $\\theta$ from sample data.\n- **Unbiased:** $E[T]=\\theta$; **Consistent:** $T_n\\to\\theta$ as $n\\to\\infty$.\n- **MSE = Var + Bias²**: lower MSE is better.\n- **MLE:** maximise $L(\\theta)=\\prod f(x_i;\\theta)$ or equivalently the log-likelihood.\n- MLEs for standard distributions: $\\hat{\\mu}=\\bar{X}$, $\\hat{p}=k/n$, $\\hat{\\lambda}=\\bar{X}$.",
+      "body_he_md": "- **אומד $T$** מעריך $\\theta$ לא-ידוע מנתוני מדגם.\n- **חסר הטיה:** $E[T]=\\theta$; **עקבי:** $T_n\\to\\theta$ כ-$n\\to\\infty$.\n- **MSE = Var + הטיה²**: MSE נמוך יותר עדיף.\n- **MLE:** ממקסם $L(\\theta)=\\prod f(x_i;\\theta)$ או לוג-נראות.\n- MLE לפילוגים סטנדרטיים: $\\hat{\\mu}=\\bar{X}$, $\\hat{p}=k/n$, $\\hat{\\lambda}=\\bar{X}$."
     }
   ]
 }
