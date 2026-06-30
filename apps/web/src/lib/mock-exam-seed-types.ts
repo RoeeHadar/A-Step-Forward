@@ -33,6 +33,9 @@ export interface SeedMockExam {
   duration_min: number;
   instructions_en: string;
   instructions_he: string;
+  /** e.g. "accumulation" — best N answers count toward max_score */
+  scoring?: string;
+  max_score?: number;
   sections: MockExamSection[];
 }
 

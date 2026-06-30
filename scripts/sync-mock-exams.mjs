@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,7 +9,7 @@ const destDir = path.join(root, 'apps/web/src/lib/mock-exams');
 
 if (!existsSync(destDir)) mkdirSync(destDir, { recursive: true });
 
-const files = ['index.json', 'math_4pt_mock_1.json', 'math_5pt_mock_1.json', 'calculus_1_mock_1.json', 'linear_algebra_mock_1.json', 'hs_physics_mock_1.json'];
+const files = readdirSync(srcDir).filter((f) => f.endsWith('.json'));
 
 for (const file of files) {
   const src = path.join(srcDir, file);
