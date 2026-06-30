@@ -18,7 +18,14 @@ import {
   FileText,
   Target,
   Info,
+  BookMarked,
+  PenLine,
+  Map,
+  GraduationCap,
+  Dumbbell,
+  Trophy,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 // MATH_GLOSSARY terms (see @/lib/math-glossary) could be wrapped with
 // GlossaryTooltip for inline hover hints; full Markdown post-processing is
@@ -45,7 +52,7 @@ function MathText({ text, dir }: { text: string; dir?: 'ltr' | 'rtl' }) {
             return (
               <span
                 key={i}
-                  dangerouslySetInnerHTML={{ __html: html }}
+                dangerouslySetInnerHTML={{ __html: html }}
               />
             );
           } catch {
@@ -158,7 +165,236 @@ const SECTION_META: Record<
     icon: CheckCircle2,
     tint: 'border-emerald-500/40 bg-emerald-500/5',
   },
+  definition: {
+    label_en: 'Definition',
+    label_he: 'הגדרה',
+    icon: BookMarked,
+    tint: 'border-blue-500/50 bg-blue-500/5',
+  },
+  checkpoint: {
+    label_en: 'Stop & Practice',
+    label_he: 'עצור ותרגל',
+    icon: PenLine,
+    tint: 'border-amber-500/50 bg-amber-500/5',
+  },
+  method_guide: {
+    label_en: 'Method Guide',
+    label_he: 'מדריך שיטות',
+    icon: Map,
+    tint: 'border-cyan-500/50 bg-cyan-500/5',
+  },
+  before_exam: {
+    label_en: 'Before the Exam',
+    label_he: 'לפני הבחינה',
+    icon: GraduationCap,
+    tint: 'border-violet-500/50 bg-violet-500/5',
+  },
+  exercise_set: {
+    label_en: 'Practice Exercises',
+    label_he: 'תרגילים',
+    icon: Dumbbell,
+    tint: 'border-green-500/50 bg-green-500/5',
+  },
+  exam_problems: {
+    label_en: 'Exam-Level Problems',
+    label_he: 'בעיות ברמת בחינה',
+    icon: Trophy,
+    tint: 'border-rose-500/50 bg-rose-500/5',
+  },
 };
+
+// ── Difficulty badge helper ──────────────────────────────────────────────────
+
+function DifficultyBadge({ difficulty, lang }: { difficulty: 'easy' | 'medium' | 'hard'; lang: Lang }) {
+  return (
+    <span
+      className={cn(
+        'rounded-full border px-2 py-0.5 text-[10px] font-bold',
+        difficulty === 'easy' && 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+        difficulty === 'medium' && 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400',
+        difficulty === 'hard' && 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400',
+      )}
+    >
+      {difficulty === 'easy' ? '⭐' : difficulty === 'medium' ? '⭐⭐' : '⭐⭐⭐'}
+      {' '}
+      {lang === 'he'
+        ? difficulty === 'easy' ? 'קל' : difficulty === 'medium' ? 'בינוני' : 'קשה'
+        : difficulty === 'easy' ? 'Easy' : difficulty === 'medium' ? 'Medium' : 'Hard'}
+    </span>
+  );
+}
+
+// ── CheckpointCard ───────────────────────────────────────────────────────────
+
+function CheckpointCard({
+  section,
+  lang,
+  dir,
+}: {
+  section: LessonSection;
+  lang: Lang;
+  dir: 'rtl' | 'ltr';
+}) {
+  const [showSolution, setShowSolution] = useState(false);
+  const body = lang === 'he' ? section.body_he_md : section.body_en_md;
+  const solution = lang === 'he' ? section.checkpoint_solution_he : section.checkpoint_solution_en;
+
+  return (
+    <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-500/5 overflow-hidden">
+      <div className="flex items-center gap-3 px-5 py-3 bg-amber-500/10">
+        <PenLine className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+        <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+          {lang === 'he' ? '✋ עצור ותרגל' : '✋ Stop & Practice'}
+        </span>
+      </div>
+      <div className="px-5 py-4" dir={dir}>
+        <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
+          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+            {body}
+          </ReactMarkdown>
+        </div>
+        {solution ? (
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() => setShowSolution((v) => !v)}
+              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-3 py-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+            >
+              {showSolution
+                ? lang === 'he' ? '▲ הסתר פתרון' : '▲ Hide solution'
+                : lang === 'he' ? '▼ הצג פתרון' : '▼ Show solution'}
+            </button>
+            {showSolution ? (
+              <div className="mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  {lang === 'he' ? 'פתרון' : 'Solution'}
+                </p>
+                <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
+                  <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+                    {solution}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+// ── ExerciseItem ─────────────────────────────────────────────────────────────
+
+function ExerciseItem({
+  exercise,
+  lang,
+  dir,
+}: {
+  exercise: NonNullable<LessonSection['exercises']>[number];
+  lang: Lang;
+  dir: 'rtl' | 'ltr';
+}) {
+  const [showSolution, setShowSolution] = useState(false);
+  const body = lang === 'he' ? exercise.body_he : exercise.body_en;
+  const solution = lang === 'he' ? exercise.solution_he : exercise.solution_en;
+
+  return (
+    <div className="rounded-xl border border-border bg-background/60 p-4">
+      <div className="mb-2 flex items-center gap-2">
+        <DifficultyBadge difficulty={exercise.difficulty} lang={lang} />
+        {exercise.points ? (
+          <span className="text-[10px] text-muted-foreground">{exercise.points} pts</span>
+        ) : null}
+      </div>
+      <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40" dir={dir}>
+        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+          {body}
+        </ReactMarkdown>
+      </div>
+      {solution ? (
+        <>
+          <button
+            type="button"
+            onClick={() => setShowSolution((v) => !v)}
+            className="mt-2 text-[11px] text-primary underline-offset-2 hover:underline"
+          >
+            {showSolution
+              ? lang === 'he' ? 'הסתר פתרון' : 'Hide solution'
+              : lang === 'he' ? 'הצג פתרון' : 'Show solution'}
+          </button>
+          {showSolution ? (
+            <div className="mt-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
+              <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40" dir={dir}>
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+                  {solution}
+                </ReactMarkdown>
+              </div>
+            </div>
+          ) : null}
+        </>
+      ) : null}
+    </div>
+  );
+}
+
+// ── ExerciseSetCard ──────────────────────────────────────────────────────────
+
+function ExerciseSetCard({
+  section,
+  lang,
+  dir,
+}: {
+  section: LessonSection;
+  lang: Lang;
+  dir: 'rtl' | 'ltr';
+}) {
+  return (
+    <div className="rounded-2xl border-2 border-green-500/40 bg-green-500/5 overflow-hidden">
+      <div className="px-5 py-3 bg-green-500/10 flex items-center gap-2">
+        <Dumbbell className="h-4 w-4 text-green-600 dark:text-green-400" />
+        <span className="text-xs font-bold uppercase tracking-wider text-green-600 dark:text-green-400">
+          {lang === 'he' ? 'תרגילים' : 'Practice Exercises'}
+        </span>
+      </div>
+      <div className="p-4 space-y-3">
+        {section.exercises?.map((ex, i) => (
+          <ExerciseItem key={ex.id || String(i)} exercise={ex} lang={lang} dir={dir} />
+        ))}
+        {!section.exercises ? (
+          <div className="prose prose-sm dark:prose-invert max-w-none px-1 prose-headings:font-display prose-pre:bg-muted/40" dir={dir}>
+            <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+              {lang === 'he' ? section.body_he_md : section.body_en_md}
+            </ReactMarkdown>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+// ── defaultOpen logic ────────────────────────────────────────────────────────
+
+function getDefaultOpen(section: LessonSection, i: number): boolean {
+  switch (section.kind) {
+    case 'intro':
+    case 'definition':
+    case 'method_guide':
+    case 'before_exam':
+    case 'summary':
+      return true;
+    case 'worked_example':
+      return section.difficulty !== 'hard';
+    case 'theory':
+      return i <= 2;
+    case 'pitfall':
+    case 'exercise_set':
+      return false;
+    default:
+      return i < 2;
+  }
+}
+
+// ── SectionCard ──────────────────────────────────────────────────────────────
 
 function SectionCard({
   section,
@@ -183,6 +419,70 @@ function SectionCard({
   const body = getBodyForLevel(section, lang, learnerLevel);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
 
+  // Sections with dedicated card renderers bypass the accordion entirely
+  if (section.kind === 'checkpoint') {
+    return <CheckpointCard section={section} lang={lang} dir={dir} />;
+  }
+  if (section.kind === 'exercise_set') {
+    return <ExerciseSetCard section={section} lang={lang} dir={dir} />;
+  }
+
+  // method_guide and before_exam: always open, no collapse button
+  const alwaysOpen = section.kind === 'method_guide' || section.kind === 'before_exam';
+
+  const headerContent = (
+    <div className="flex items-center gap-3">
+      <span className="grid h-9 w-9 place-items-center rounded-full bg-background/60">
+        <Icon className="h-4 w-4 text-foreground" />
+      </span>
+      <div>
+        <span className="block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {section.kind === 'worked_example' && section.example_number
+            ? `${label} ${section.example_number}`
+            : label}
+        </span>
+        <span className="block text-base font-semibold text-foreground">
+          <MathText text={title} dir={dir} />
+        </span>
+      </div>
+      {section.kind === 'worked_example' && section.difficulty ? (
+        <DifficultyBadge difficulty={section.difficulty} lang={lang} />
+      ) : null}
+    </div>
+  );
+
+  const bodyContent = (
+    <div
+      className={cn(
+        'border-t border-border/40 px-5 py-4',
+        section.kind === 'worked_example'
+          ? 'bg-gradient-to-br from-background/60 to-accent-magenta/5'
+          : 'bg-background/40',
+      )}
+      dir={dir}
+    >
+      <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {body}
+        </ReactMarkdown>
+      </div>
+    </div>
+  );
+
+  if (alwaysOpen) {
+    return (
+      <div className={`glass-surface overflow-hidden rounded-2xl border-2 ${meta.tint} transition-all`}>
+        <div className="flex items-center gap-3 px-5 py-4">
+          {headerContent}
+        </div>
+        {bodyContent}
+      </div>
+    );
+  }
+
   return (
     <div
       className={`glass-surface overflow-hidden rounded-2xl border-2 ${meta.tint} transition-all`}
@@ -199,44 +499,20 @@ function SectionCard({
         className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
         aria-expanded={open}
       >
-        <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-background/60">
-            <Icon className="h-4 w-4 text-foreground" />
-          </span>
-          <div>
-            <span className="block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              {label}
-            </span>
-            <span className="block text-base font-semibold text-foreground">
-              <MathText text={title} dir={dir} />
-            </span>
-          </div>
-        </div>
+        {headerContent}
         {open ? (
-          <ChevronUp className="h-5 w-5 text-muted-foreground" />
+          <ChevronUp className="h-5 w-5 shrink-0 text-muted-foreground" />
         ) : (
-          <ChevronDown className="h-5 w-5 text-muted-foreground" />
+          <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground" />
         )}
       </button>
 
-      {open ? (
-        <div
-          className="border-t border-border/40 bg-background/40 px-5 py-4"
-          dir={dir}
-        >
-          <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm, remarkMath]}
-              rehypePlugins={[rehypeKatex]}
-            >
-              {body}
-            </ReactMarkdown>
-          </div>
-        </div>
-      ) : null}
+      {open ? bodyContent : null}
     </div>
   );
 }
+
+// ── LessonReader ─────────────────────────────────────────────────────────────
 
 export function LessonReader({
   data,
@@ -320,13 +596,35 @@ export function LessonReader({
         </div>
       ) : null}
 
+      {/* Compact table of contents for longer lessons */}
+      {visibleSections.length > 3 ? (
+        <div className="rounded-xl border border-border bg-muted/30 p-3" dir={dir}>
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            {lang === 'he' ? 'תוכן הלימוד' : 'In this lesson'}
+          </p>
+          <ol className="space-y-1">
+            {visibleSections.map((s, i) => {
+              const tocMeta = SECTION_META[s.kind];
+              const TocIcon = tocMeta?.icon ?? BookOpen;
+              const tocTitle = lang === 'he' ? s.title_he : s.title_en;
+              return (
+                <li key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <TocIcon className="h-3 w-3 shrink-0" />
+                  <span className="truncate">{tocTitle}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ) : null}
+
       {/* Sections filtered + rendered at the right depth */}
       {visibleSections.map((section, i) => (
         <SectionCard
           key={`${section.kind}-${i}`}
           section={section}
           lang={lang}
-          defaultOpen={i < 2}
+          defaultOpen={getDefaultOpen(section, i)}
           learnerLevel={level}
           sectionIndex={i}
           onFocus={onSectionFocus}

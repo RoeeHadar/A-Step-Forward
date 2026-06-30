@@ -831,7 +831,19 @@ export async function fetchConceptsWithExplanations(
 export type LessonPointsLevel = '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la';
 
 export interface LessonSection {
-  kind: 'intro' | 'theory' | 'worked_example' | 'pitfall' | 'practice_tip' | 'summary';
+  kind:
+    | 'intro'
+    | 'theory'
+    | 'worked_example'
+    | 'pitfall'
+    | 'practice_tip'
+    | 'summary'
+    | 'checkpoint'
+    | 'method_guide'
+    | 'before_exam'
+    | 'exercise_set'
+    | 'definition'
+    | 'exam_problems';
   title_en: string;
   title_he: string;
   body_en_md: string;
@@ -840,6 +852,23 @@ export interface LessonSection {
   level_min?: LessonPointsLevel;
   /** Override body text for a specific level (takes precedence over body_*_md). */
   body_by_level?: Partial<Record<LessonPointsLevel, { body_en_md: string; body_he_md: string }>>;
+  /** For worked_example: difficulty level */
+  difficulty?: 'easy' | 'medium' | 'hard';
+  /** For worked_example: the sequential number (e.g., 1, 2, 3) */
+  example_number?: number;
+  /** For checkpoint: inline solution that's collapsed by default */
+  checkpoint_solution_en?: string;
+  checkpoint_solution_he?: string;
+  /** For exercise_set: exercises organized by tier */
+  exercises?: Array<{
+    id: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+    body_en: string;
+    body_he: string;
+    solution_en?: string;
+    solution_he?: string;
+    points?: number;
+  }>;
 }
 
 export interface LessonAgentHints {
