@@ -1,24 +1,203 @@
 {
   "concept_id": "linear_transformations_kernel_image",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
   "math_track": [
-    "calc1"
+    "la"
   ],
-  "title_en": "Linear Transformations Kernel Image",
-  "title_he": "העתקות לינאריות — גרעין ותמונה",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "Linear Transformations, Kernel & Image",
+  "title_he": "העתקות לינאריות, גרעין ותמונה",
+  "summary_en": "Define linear maps, matrix representation, kernel (null space), image (column space), Rank–Nullity, and invertibility for $T: \\mathbb{R}^n \\to \\mathbb{R}^n$.",
+  "summary_he": "הגדרת העתקות לינאריות, ייצוג מטריצי, גרעין, תמונה, משפט דרגה-גרעין והפיכות.",
+  "est_minutes": 35,
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "kind": "theory",
+      "title_en": "Definition of linear transformation",
+      "title_he": "הגדרת העתקה לינארית",
+      "body_en_md": "$T: V \\to W$ is **linear** if for all $\\vec{u},\\vec{v} \\in V$ and scalars $a,b$:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\nEquivalently: $T(\\vec{u}+\\vec{v}) = T(\\vec{u})+T(\\vec{v})$ and $T(c\\vec{v}) = cT(\\vec{v})$.\n\n**Immediate consequence:** $T(\\vec{0}) = \\vec{0}$.\n\n**Examples:** $T(x,y) = (2x+y, x-3y)$; differentiation on $P_n$; projection onto a line; rotation by $\\theta$ in $\\mathbb{R}^2$.",
+      "body_he_md": "$T: V \\to W$ **לינארית** אם:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\n**מסקנה:** $T(\\vec{0}) = \\vec{0}$.\n\n**דוגמאות:** $T(x,y) = (2x+y, x-3y)$; גזירה; הטלה; סיבוב בזווית $\\theta$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Matrix representation",
+      "title_he": "ייצוג מטריצי",
+      "body_en_md": "Every linear $T: \\mathbb{R}^n \\to \\mathbb{R}^m$ equals $T(\\vec{x}) = A\\vec{x}$ where\n$$A = [T(\\vec{e}_1)\\,|\\,T(\\vec{e}_2)\\,|\\,\\cdots\\,|\\,T(\\vec{e}_n)].$$\n\n**Example:** $T(x,y) = (2x+y, x-3y)$ gives $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & -3 \\end{pmatrix}$.\n\n**Composition:** $(T_2 \\circ T_1)(\\vec{x}) = T_2(T_1(\\vec{x}))$ corresponds to $A_2 A_1$ (order matters).\n\n**Rotation:** $R_\\theta = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}$.",
+      "body_he_md": "כל $T: \\mathbb{R}^n \\to \\mathbb{R}^m$ שווה ל-$A\\vec{x}$ עם\n$$A = [T(\\vec{e}_1)\\,|\\,\\cdots\\,|\\,T(\\vec{e}_n)].$$\n\n**דוגמה:** $T(x,y) = (2x+y, x-3y)$ ⇒ $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & -3 \\end{pmatrix}$.\n\n**הרכבה:** $A_2 A_1$. **סיבוב:** $R_\\theta$ עם $\\cos,\\sin$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Kernel (null space)",
+      "title_he": "גרעין (מרחב האפסים)",
+      "body_en_md": "$\\ker(T) = \\{\\vec{v} \\in V : T(\\vec{v}) = \\vec{0}\\}$ — always a subspace of the **domain**.\n\nFind by solving $A\\vec{x} = \\vec{0}$. **Nullity** = $\\dim(\\ker T)$.\n\n$T$ is **injective** (one-to-one) iff $\\ker(T) = \\{\\vec{0}\\}$.\n\n**Worked example:** $T(x,y,z) = (x+y, y+z, x+z)$.\n$$A = \\begin{pmatrix} 1 & 1 & 0 \\\\ 0 & 1 & 1 \\\\ 1 & 0 & 1 \\end{pmatrix} \\Rightarrow \\ker = \\text{span}\\{(1,-1,1)\\},\\; \\text{nullity} = 1.$$",
+      "body_he_md": "$\\ker(T) = \\{\\vec{v}: T(\\vec{v}) = \\vec{0}\\}$ — תת-מרחב של **תחום**.\n\n**Nullity** = $\\dim(\\ker T)$. **חד-חד-ערכית** iff $\\ker = \\{\\vec{0}\\}$.\n\n**דוגמה:** $T(x,y,z) = (x+y, y+z, x+z)$ ⇒ $\\ker = \\text{span}\\{(1,-1,1)\\}$, nullity = 1."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Image (range) and Rank–Nullity",
+      "title_he": "תמונה (Range) ודרגה-גרעין",
+      "body_en_md": "$\\text{Im}(T) = \\{T(\\vec{v}) : \\vec{v} \\in V\\}$ — subspace of the **codomain**.\n\nFor $T(\\vec{x})=A\\vec{x}$: $\\text{Im}(T) = \\text{col}(A)$ (column space). **Rank** = $\\dim(\\text{Im}(T))$.\n\n$T$ is **surjective** onto $\\mathbb{R}^m$ iff $\\text{rank}(A) = m$.\n\n**Rank–Nullity theorem:**\n$$\\text{nullity}(T) + \\text{rank}(T) = \\dim(V).$$\n\nFor a $3\\times 3$ matrix: rank 2 ⇒ nullity 1.",
+      "body_he_md": "$\\text{Im}(T)$ — תת-מרחב של **טווח**. עבור $A\\vec{x}$: $\\text{Im}(T) = \\text{col}(A)$.\n\n**דרגה** = $\\dim(\\text{Im}(T))$. **על** iff rank = $m$.\n\n**דרגה-גרעין:** nullity + rank = $\\dim(V)$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Isomorphisms and invertibility",
+      "title_he": "איזומורפיזמים והפיכות",
+      "body_en_md": "$T$ is **invertible** iff bijective (injective + surjective). For $T: \\mathbb{R}^n \\to \\mathbb{R}^n$, the following are equivalent:\n- $\\ker(T) = \\{\\vec{0}\\}$\n- $\\text{rank}(T) = n$\n- $A$ is invertible / $\\det(A) \\neq 0$\n\n**Exam problem:** Is $T(x,y) = (x+y, x-y)$ invertible?\n$A = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$, $\\det A = -2 \\neq 0$ ⇒ yes.\n$$A^{-1} = \\frac{1}{-2}\\begin{pmatrix} -1 & -1 \\\\ -1 & 1 \\end{pmatrix} = \\begin{pmatrix} 1/2 & 1/2 \\\\ 1/2 & -1/2 \\end{pmatrix}.$$\nSo $T^{-1}(u,v) = (\\frac{u+v}{2}, \\frac{u-v}{2})$.",
+      "body_he_md": "$T$ **הפיכה** iff חד-חד-ערכית ועל. ל-$T: \\mathbb{R}^n \\to \\mathbb{R}^n$ שקולים: $\\ker=\\{0\\}$, rank=$n$, $\\det A \\neq 0$.\n\n**מבחן:** $T(x,y)=(x+y,x-y)$, $\\det=-2\\neq 0$ ⇒ כן.\n$T^{-1}(u,v) = (\\frac{u+v}{2}, \\frac{u-v}{2})$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Linear Transformations Kernel Image."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which map is **not** linear?",
+      "stem_he": "איזו העתקה **אינה** לינארית?",
+      "options_en": [
+        "$T(x,y)=(2x,y)$",
+        "$T(x,y)=(x+1,y)$",
+        "$T(x)=3x$",
+        "$T(x,y)=(x-y,0)$"
+      ],
+      "options_he": [
+        "$T(x,y)=(2x,y)$",
+        "$T(x,y)=(x+1,y)$",
+        "$T(x)=3x$",
+        "$T(x,y)=(x-y,0)$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$T(0,0)=(1,0)\\neq(0,0)$ — constant term breaks linearity.",
+      "explanation_he": "$T(0,0)=(1,0)\\neq(0,0)$ — איבר קבוע שובר לינאריות.",
+      "skill_atoms": [
+        "verify_linearity"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Matrix of $T(x,y,z)=(x+2z, y-z)$ is:",
+      "stem_he": "מטריצה של $T(x,y,z)=(x+2z, y-z)$:",
+      "options_en": [
+        "$\\begin{pmatrix}1&0&2\\\\0&1&-1\\end{pmatrix}$",
+        "$\\begin{pmatrix}1&2&0\\\\0&-1&1\\end{pmatrix}$",
+        "$\\begin{pmatrix}1&0&2\\\\0&1&1\\end{pmatrix}$",
+        "$\\begin{pmatrix}2&0&1\\\\-1&1&0\\end{pmatrix}$"
+      ],
+      "options_he": [
+        "$\\begin{pmatrix}1&0&2\\\\0&1&-1\\end{pmatrix}$",
+        "$\\begin{pmatrix}1&2&0\\\\0&-1&1\\end{pmatrix}$",
+        "$\\begin{pmatrix}1&0&2\\\\0&1&1\\end{pmatrix}$",
+        "$\\begin{pmatrix}2&0&1\\\\-1&1&0\\end{pmatrix}$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Columns are $T(1,0,0)=(1,0)$, $T(0,1,0)=(0,1)$, $T(0,0,1)=(2,-1)$.",
+      "explanation_he": "עמודות: $T(e_1), T(e_2), T(e_3)$.",
+      "skill_atoms": [
+        "matrix_of_transformation"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\ker(T)$ for $T(x,y)=(2x,2y)$ in $\\mathbb{R}^2$ is:",
+      "stem_he": "$\\ker(T)$ עבור $T(x,y)=(2x,2y)$ ב-$\\mathbb{R}^2$:",
+      "options_en": [
+        "$\\{(0,0)\\}$ only",
+        "All of $\\mathbb{R}^2$",
+        "The $x$-axis",
+        "The line $y=x$"
+      ],
+      "options_he": [
+        "$\\{(0,0)\\}$ בלבד",
+        "כל $\\mathbb{R}^2$",
+        "ציר $x$",
+        "הישר $y=x$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Only (0,0) maps to 0; scaling by 2 is invertible on each coordinate.",
+      "explanation_he": "רק $(0,0)$ מתאפס — כפל ב-2 הפיך.",
+      "skill_atoms": [
+        "compute_kernel"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$A$ is $3\\times 5$ with rank 2. $\\dim(\\text{Im}(T))$ and nullity are:",
+      "stem_he": "$A$ בגודל $3\\times 5$ עם rank 2. $\\dim(\\text{Im}(T))$ ו-nullity:",
+      "options_en": [
+        "$2$ and $3$",
+        "$3$ and $2$",
+        "$5$ and $0$",
+        "$2$ and $2$"
+      ],
+      "options_he": [
+        "$2$ ו-$3$",
+        "$3$ ו-$2$",
+        "$5$ ו-$0$",
+        "$2$ ו-$2$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "rank = dim(Im) = 2; nullity = 5 - 2 = 3.",
+      "explanation_he": "rank = dim(Im) = 2; nullity = 5 - 2 = 3.",
+      "skill_atoms": [
+        "image_rank"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "$T: \\mathbb{R}^2 \\to \\mathbb{R}^2$, $T(x,y)=(x+y,x+y)$. Which is true?",
+      "stem_he": "$T: \\mathbb{R}^2 \\to \\mathbb{R}^2$, $T(x,y)=(x+y,x+y)$. מה נכון?",
+      "options_en": [
+        "Invertible",
+        "Rank 1, not invertible",
+        "Surjective",
+        "Kernel is empty"
+      ],
+      "options_he": [
+        "הפיכה",
+        "Rank 1, לא הפיכה",
+        "על",
+        "גרעין ריק"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Image is line $u=v$ — rank 1 < 2; kernel is $\\{(t,-t)\\}$.",
+      "explanation_he": "תמונה = ישר $u=v$ — rank 1; $\\ker = \\{(t,-t)\\}$.",
+      "skill_atoms": [
+        "rank_nullity_transform"
+      ]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Linear: T(0)=0; matrix columns = T(e_i).",
+      "ker(T) in domain; Im(T) in codomain = col(A).",
+      "Rank–Nullity: nullity + rank = dim(domain)."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Linear maps can have T(0) ≠ 0",
+        "correction": "T(0) must be 0 for any linear map.",
+        "detect_phrase_en": "T(0) not zero",
+        "detect_phrase_he": "T(0) לא אפס"
+      }
+    ],
+    "tutor_pacing_hint": "Build matrix from images of basis vectors before computing kernel.",
+    "diagnostic_signals": {
+      "confuses kernel and image spaces": "Kernel lives in domain; image in codomain."
+    },
+    "skill_atoms_unlocked": [
+      "verify_linearity",
+      "matrix_of_transformation",
+      "compute_kernel",
+      "image_rank",
+      "rank_nullity_transform"
+    ]
+  }
 }

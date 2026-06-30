@@ -5,12 +5,199 @@
   "math_track": [
     "la"
   ],
-  "title_en": "Matrices as Linear Transformations",
-  "title_he": "מטריצות כהצגה של העתקות לינאריות",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Matrices as Linear Transformations & Change of Basis",
+  "title_he": "מטריצות כהעתקות לינאריות ומעבר בסיסים",
+  "summary_en": "$A\\vec{x}$ as column combinations, matrix of $T$ in non-standard bases, similarity $P^{-1}AP$, diagonalization, and principal axes in engineering.",
+  "summary_he": "$A\\vec{x}$ כקומבינציה של עמודות, מטריצת $T$ בבסיסים, דמיון $P^{-1}AP$, אלכסון וצירים ראשיים בהנדסה.",
+  "est_minutes": 30,
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "Matrix–vector product as transformation",
+      "title_he": "מכפלת מטריצה-וקטור כהעתקה",
+      "body_en_md": "$A\\vec{x} = x_1\\vec{a}_1 + x_2\\vec{a}_2 + \\cdots$ — linear combination of **columns** of $A$.\n\n**Column space** $\\text{col}(A)$ = image of $L(\\vec{x})=A\\vec{x}$.\n\n**Geometric $2\\times 2$ examples:**\n- $\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}$ — uniform scaling by 2.\n- $\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ — rotation $90°$.\n- $\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ — shear (fixes $x$-axis, slides $y$).\n- $\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$ — projection onto $x$-axis.",
+      "body_he_md": "$A\\vec{x}$ = קומבינציה לינארית של **עמודות** $A$. $\\text{col}(A)$ = תמונה.\n\n**דוגמאות גיאומטריות 2×2:** scaling, סיבוב 90°, share, הטלה על ציר $x$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Matrix of T in a non-standard basis",
+      "title_he": "מטריצת T בבסיס לא-סטנדרטי",
+      "body_en_md": "If $B = \\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ is a basis of $V$ and $C$ of $W$, the matrix $[T]_{B,C}$ has columns $[T(\\vec{b}_j)]_C$.\n\nIn standard coordinates, if $A$ represents $T$ and $P_B$ has basis vectors as columns:\n$$[T]_B = P^{-1} A P_B$$\n(change-of-basis between standard and $B$).\n\n**Idea:** express what $T$ does to each basis vector of $B$, then write results in coordinates of $C$.",
+      "body_he_md": "$[T]_{B,C}$: עמודה $j$ = $[T(\\vec{b}_j)]_C$.\n\nבקואורדינטות סטנדרטיות: $[T]_B = P^{-1} A P_B$.\n\n**רעיון:** מה $T$ עושה לכל וקטור בסיס $B$, וכתיבת התוצאה בקואורדינטות $C$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Change of basis and similar matrices",
+      "title_he": "מעבר בסיסים ומטריצות דומות",
+      "body_en_md": "$P_B = [\\vec{b}_1\\,|\\,\\cdots\\,|\\,\\vec{b}_n]$ — change-of-basis matrix (columns = basis vectors in standard coords).\n\n$$[\\vec{v}]_B = P_B^{-1}\\vec{v}.$$\n\nIf $[T]_B = P^{-1} A P$, then $A$ and $[T]_B$ are **similar**. **Similar matrices share eigenvalues** (same characteristic polynomial).\n\nDiagonalization $A = PDP^{-1}$: $D$ = eigenvalues on diagonal, columns of $P$ = eigenvectors — this is $[T]_B$ in the eigenbasis.",
+      "body_he_md": "$P_B$ — מטריצת מעבר בסיס. $[\\vec{v}]_B = P_B^{-1}\\vec{v}$.\n\n$A$ ו-$P^{-1}AP$ **דומות** — **אותם ערכים עצמיים**.\n\n$A = PDP^{-1}$: $D$ ערכים עצמיים, $P$ וקטורים עצמיים — $[T]$ בבסיס העצמי."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Diagonalization revisited",
+      "title_he": "אלכסון — חזרה",
+      "body_en_md": "$A = PDP^{-1}$ where $D = \\text{diag}(\\lambda_1,\\ldots,\\lambda_n)$, $P$ invertible with eigenvector columns.\n\n**When does an eigenbasis exist?**\n- $n$ distinct eigenvalues ⇒ $n$ independent eigenvectors.\n- Or: enough independent eigenvectors even with repeated $\\lambda$.\n\n**Powers:** $A^k = PD^k P^{-1}$ — easy when $D^k$ is diagonal.\n\n**Application:** decouple coupled systems (physics, differential equations).",
+      "body_he_md": "$A = PDP^{-1}$. **מתי קיים בסיס עצמי?** $n$ ערכים שונים, או מספיק וקטורים עצמיים בלתי-תלויים.\n\n**חזקות:** $A^k = PD^k P^{-1}$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Engineering: principal axes",
+      "title_he": "יישום הנדסי: צירים ראשיים",
+      "body_en_md": "Symmetric **stress tensor** $\\Sigma$ (materials engineering): eigenvalues = **principal stresses**, eigenvectors = **principal directions**.\n\nRotate coordinates to the eigenbasis → $\\Sigma$ becomes diagonal (no shear stress in those directions). Brief link to **Mohr's circle** for 2D stress states.\n\nSimilarly, the **moment of inertia tensor** diagonalizes in principal axes — simplifying rotational dynamics (links to `concept:angular_momentum`).\n\n**Statistics connection:** least-squares normal equations use $(A^T A)$ — symmetric, often analyzed via eigenvalues for conditioning.",
+      "body_he_md": "טנזור **מתח סימטרי** $\\Sigma$: ערכים עצמיים = **מתחים ראשיים**, וקטורים עצמיים = **כיוונים ראשיים**.\n\nסיבוב לבסיס העצמי → $\\Sigma$ אלכסונית (ללא גזירה). קשר ל**מעגל מור** (2D).\n\n**טנזור מומנט אינרציה** — אלכסון בצירים ראשיים. קשר לרגרסיה: $(A^T A)$ סימטרית."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Columns of $A$ are $(1,0), (1,1)$. $A\\begin{pmatrix}2\\\\-1\\end{pmatrix}$ equals:",
+      "stem_he": "עמודות $A$: $(1,0), (1,1)$. $A\\begin{pmatrix}2\\\\-1\\end{pmatrix}$ שווה ל:",
+      "options_en": [
+        "$(1,-1)$",
+        "$(1,1)$",
+        "$(2,0)$",
+        "$(0,1)$"
+      ],
+      "options_he": [
+        "$(1,-1)$",
+        "$(1,1)$",
+        "$(2,0)$",
+        "$(0,1)$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$2(1,0) + (-1)(1,1) = (2-1, 0-1) = (1,-1)$.",
+      "explanation_he": "$2(1,0) + (-1)(1,1) = (1,-1)$.",
+      "skill_atoms": [
+        "matrix_vector_transformation"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "If $P = \\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ and $A = \\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$, then $P^{-1}AP$ represents:",
+      "stem_he": "אם $P = \\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ ו-$A$ אלכסונית, $P^{-1}AP$ מייצג:",
+      "options_en": [
+        "The same transformation in a sheared basis",
+        "A rotation of A",
+        "Always diagonal",
+        "Always identity"
+      ],
+      "options_he": [
+        "אותה העתקה בבסיס מגודר",
+        "סיבוב של A",
+        "תמיד אלכסונית",
+        "תמיד היחידה"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Similarity change = same linear map, different coordinates (here, a sheared basis).",
+      "explanation_he": "שינוי דמיון = אותה העתקה, קואורדינטות שונות.",
+      "skill_atoms": [
+        "change_of_basis_matrix"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "If $A$ and $B$ are similar, which must be equal?",
+      "stem_he": "אם $A$ ו-$B$ דומות, מה חייב להיות שווה?",
+      "options_en": [
+        "All entries",
+        "Determinant and eigenvalues",
+        "Number of zero rows",
+        "First column"
+      ],
+      "options_he": [
+        "כל האיברים",
+        "דטרמיננטה וערכים עצמיים",
+        "מספר שורות אפס",
+        "עמודה ראשונה"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Similar matrices share characteristic polynomial, hence eigenvalues and determinant.",
+      "explanation_he": "מטריצות דומות חולקות פולינום אופייני — אותם ע\"ע ודטרמיננטה.",
+      "skill_atoms": [
+        "similar_eigenvalues"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$A = \\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}$ has eigenvalues 5 and 2. Which diagonalizes $A$?",
+      "stem_he": "ל-$A$ ע\"ע 5 ו-2. מה מאלכסן?",
+      "options_en": [
+        "$P=I$ always",
+        "$P$ with independent eigenvector columns",
+        "Any invertible $P$",
+        "Only orthogonal $P$"
+      ],
+      "options_he": [
+        "$P=I$ תמיד",
+        "$P$ עם עמודות וקטור עצמי בלתי-תלוי",
+        "כל $P$ הפיכה",
+        "רק $P$ אורתוגונלית"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$A = PDP^{-1}$ requires $P$ whose columns are eigenvectors forming a basis.",
+      "explanation_he": "$P$ עם וקטורים עצמיים בלתי-תלויים כעמודות.",
+      "skill_atoms": [
+        "diagonalization"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Principal stresses are:",
+      "stem_he": "מתחים ראשיים הם:",
+      "options_en": [
+        "Off-diagonal entries of $\\Sigma$",
+        "Eigenvalues of the symmetric stress tensor",
+        "Components in standard axes only",
+        "Always zero"
+      ],
+      "options_he": [
+        "איברים לא-אלכסוניים",
+        "ערכים עצמיים של טנזור המתח",
+        "רק ברכיבי ציר",
+        "תמיד אפס"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Eigenvalues of symmetric $\\Sigma$ give extremal normal stresses in principal directions.",
+      "explanation_he": "ערכים עצמיים של $\\Sigma$ הסימטרי = מתחים נורמליים קיצוניים.",
+      "skill_atoms": [
+        "principal_axes_application"
+      ]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "A x = linear combo of columns; col(A) = image.",
+      "Similar matrices: P^{-1}AP; same eigenvalues.",
+      "Diagonalization: eigenbasis makes T diagonal."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Change of basis changes the transformation",
+        "correction": "Same T; only coordinate representation changes.",
+        "detect_phrase_en": "changes the map",
+        "detect_phrase_he": "משנה את ההעתקה"
+      }
+    ],
+    "tutor_pacing_hint": "Show one 2×2 geometric example (rotation/shear) before abstract P^{-1}AP.",
+    "diagnostic_signals": {
+      "confuses A with P^{-1}AP": "Similarity is same operator, different basis."
+    },
+    "skill_atoms_unlocked": [
+      "matrix_vector_transformation",
+      "change_of_basis_matrix",
+      "similar_eigenvalues",
+      "diagonalization",
+      "principal_axes_application"
+    ]
+  }
 }

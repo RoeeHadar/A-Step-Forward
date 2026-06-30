@@ -1,24 +1,203 @@
 {
   "concept_id": "vector_spaces_basis_dimension",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
   "math_track": [
-    "calc1"
+    "la"
   ],
-  "title_en": "Vector Spaces Basis Dimension",
-  "title_he": "מרחבי וקטורים — בסיס וממד",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "Vector Spaces, Basis & Dimension",
+  "title_he": "מרחבים וקטוריים, בסיס וממד",
+  "summary_en": "Vector space axioms, subspaces, linear independence, span, basis, dimension, Rank–Nullity, and coordinates in a non-standard basis.",
+  "summary_he": "אקסיומות מרחב וקטורי, תת-מרחבים, בלתי-תלות לינארית, קבוצת פרישה, בסיס, ממד, משפט דרגה-גרעין וקואורדינטות בבסיס.",
+  "est_minutes": 35,
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "kind": "theory",
+      "title_en": "Vector space axioms",
+      "title_he": "אקסיומות מרחב וקטורי",
+      "body_en_md": "A **vector space** $V$ over $\\mathbb{R}$ satisfies 10 axioms (closure under $+$ and scalar multiply; associativity, commutativity; zero vector; additive inverses; distributivity).\n\n**Examples:** $\\mathbb{R}^n$; polynomials $P_n$ of degree $\\leq n$; matrices $M_{m\\times n}$; continuous functions $C[a,b]$.\n\n**Zero vector** $\\vec{0}$ is unique. **Counterexample:** the half-plane $\\{(x,y): x \\geq 0\\}$ is **not** a vector space — no additive inverses for most vectors.",
+      "body_he_md": "**מרחב וקטורי** $V$ מעל $\\mathbb{R}$ מקיים 10 אקסיומות (סגירות, אסוצiativיות, $\\vec{0}$, הופכים, דistributivיות).\n\n**דוגמאות:** $\\mathbb{R}^n$; פולינומים $P_n$; מטריצות $M_{m\\times n}$; פונקציות רציפות $C[a,b]$.\n\n**וקטור האפס** $\\vec{0}$ יחיד. **דוגמת נגד:** חצי-מישור $\\{(x,y): x \\geq 0\\}$ **אינו** מרחב וקטורי — אין הופכים."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Subspaces",
+      "title_he": "תת-מרחבים",
+      "body_en_md": "$W \\subseteq V$ is a **subspace** iff:\n1. $\\vec{0} \\in W$\n2. Closed under addition: $\\vec{u},\\vec{v} \\in W \\Rightarrow \\vec{u}+\\vec{v} \\in W$\n3. Closed under scalar multiplication: $c\\vec{v} \\in W$ for all scalars $c$\n\n**Examples (subspaces):** $\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$; $\\ker(A) = \\{\\vec{x}: A\\vec{x}=\\vec{0}\\}$; solution space of $A\\vec{x}=\\vec{0}$.\n\n**NOT a subspace:** $\\{(x,y): x+y=1\\}$ — does not contain $\\vec{0}$.\n\n**Subspace test:** verify all three conditions (or the one-step: $c\\vec{u}+d\\vec{v} \\in W$).",
+      "body_he_md": "$W \\subseteq V$ הוא **תת-מרחב** iff:\n1. $\\vec{0} \\in W$\n2. סגור לחיבור\n3. סגור לכפל בסקalar\n\n**דוגמאות:** $\\text{span}$; $\\ker(A)$; מרחב פתרונות של $A\\vec{x}=\\vec{0}$.\n\n**לא תת-מרחב:** $\\{(x,y): x+y=1\\}$ — אין $\\vec{0}$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Linear independence",
+      "title_he": "בלתי-תלות לינארית",
+      "body_en_md": "Vectors $\\vec{v}_1,\\ldots,\\vec{v}_k$ are **linearly independent** if\n$$c_1\\vec{v}_1 + \\cdots + c_k\\vec{v}_k = \\vec{0} \\Rightarrow c_i = 0 \\text{ for all } i.$$\n\n**Span:** $\\text{span}(\\vec{v}_1,\\ldots,\\vec{v}_k) = \\{c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k\\}$ — always a subspace.\n\n**Test via Gaussian elimination:** form matrix with vectors as columns; independent iff no free columns.\n\n**Worked example:** Are $(1,2,3), (0,1,2), (1,1,1)$ independent?\n$$\\left[\\begin{array}{ccc} 1 & 0 & 1 \\\\ 2 & 1 & 1 \\\\ 3 & 2 & 1 \\end{array}\\right] \\to \\text{REF: 3 pivots} \\Rightarrow \\text{independent}.$$",
+      "body_he_md": "$\\vec{v}_1,\\ldots,\\vec{v}_k$ **בלתי-תלויים לינארית** אם\n$$c_1\\vec{v}_1 + \\cdots + c_k\\vec{v}_k = \\vec{0} \\Rightarrow c_i = 0.$$\n\n**קבוצת פרישה (span):** כל הקומבינציות הלינאריות — תמיד תת-מרחב.\n\n**בדיקה:** מטריצה עם הוקטורים כעמודות; בלתי-תלויים iff 3 pivots.\n\n**דוגמה:** $(1,2,3), (0,1,2), (1,1,1)$ — 3 pivots ⇒ **בלתי-תלויים**."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Basis and dimension",
+      "title_he": "בסיס וממד",
+      "body_en_md": "A **basis** of $V$ is a linearly independent spanning set. **Dimension** $\\dim(V)$ = number of vectors in any basis.\n\n**Standard basis** of $\\mathbb{R}^n$: $\\vec{e}_1,\\ldots,\\vec{e}_n$.\n\n**Exchange lemma (stated):** in a finite-dimensional space, every linearly independent set can be extended to a basis; every basis has the same size.\n\n**Rank–Nullity:** for $A$ with $n$ columns,\n$$\\dim(\\ker A) + \\dim(\\text{col}(A)) = n.$$\n\nExample: $3\\times 3$ matrix with rank 2 has nullity 1.",
+      "body_he_md": "**בסיס** = קבוצה בלתי-תלויה וסוגרת. **ממד** = גודל כל בסיס.\n\n**בסיס סטנדרטי** ב-$\\mathbb{R}^n$: $\\vec{e}_1,\\ldots,\\vec{e}_n$.\n\n**למת החלפה (נוסח):** כל קבוצה בלתי-תלויה ניתנת להרחבה לבסיס; כל הבסיסים באותו גודל.\n\n**דרגה-גרעין:** $\\dim(\\ker A) + \\dim(\\text{col}(A)) = n$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Coordinates in a basis",
+      "title_he": "קואורדינטות בבסיס",
+      "body_en_md": "Every $\\vec{v}$ in a basis $B = \\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ has **unique** representation $\\vec{v} = c_1\\vec{b}_1 + \\cdots + c_n\\vec{b}_n$. The **coordinate vector** is $[\\vec{v}]_B = (c_1,\\ldots,c_n)^T$.\n\n**Technion-style problem:** Find coordinates of $(3,5,1)$ in $B = \\{(1,1,0), (0,1,1), (1,0,1)\\}$.\n\nSolve $c_1(1,1,0) + c_2(0,1,1) + c_3(1,0,1) = (3,5,1)$:\n$$\\begin{cases} c_1 + c_3 = 3 \\\\ c_1 + c_2 = 5 \\\\ c_2 + c_3 = 1 \\end{cases} \\Rightarrow c_1 = 2,\\; c_2 = 3,\\; c_3 = 1.$$\nSo $[(3,5,1)]_B = (2,3,1)^T$.",
+      "body_he_md": "ייצוג **יחיד:** $\\vec{v} = c_1\\vec{b}_1 + \\cdots + c_n\\vec{b}_n$; $[\\vec{v}]_B = (c_1,\\ldots,c_n)^T$.\n\n**בעיה:** קואורדינטות של $(3,5,1)$ ב-$B = \\{(1,1,0), (0,1,1), (1,0,1)\\}$.\n\n$$c_1 + c_3 = 3,\\; c_1 + c_2 = 5,\\; c_2 + c_3 = 1 \\Rightarrow (2,3,1)^T.$$"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Vector Spaces Basis Dimension."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which set is a subspace of $\\mathbb{R}^2$?",
+      "stem_he": "איזו קבוצה היא תת-מרחב של $\\mathbb{R}^2$?",
+      "options_en": [
+        "$\\{(x,y): x+y=1\\}$",
+        "$\\{(x,y): x=0\\}$ (the $y$-axis)",
+        "$\\{(x,y): x \\geq 0\\}$",
+        "$\\{(x,y): xy=0\\}$"
+      ],
+      "options_he": [
+        "$\\{(x,y): x+y=1\\}$",
+        "$\\{(x,y): x=0\\}$ (ציר $y$)",
+        "$\\{(x,y): x \\geq 0\\}$",
+        "$\\{(x,y): xy=0\\}$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "The y-axis contains 0, is closed under addition and scaling. The others fail (no 0, or not closed).",
+      "explanation_he": "ציר $y$ מכיל 0 וסגור לחיבור וכפל. השאר נכשלים.",
+      "skill_atoms": [
+        "verify_subspace"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Are $(1,0,1), (2,0,2), (0,1,0)$ linearly independent in $\\mathbb{R}^3$?",
+      "stem_he": "האם $(1,0,1), (2,0,2), (0,1,0)$ בלתי-תלויים ב-$\\mathbb{R}^3$?",
+      "options_en": [
+        "Yes",
+        "No — the first two are dependent",
+        "No — all three are dependent",
+        "Cannot determine"
+      ],
+      "options_he": [
+        "כן",
+        "לא — הראשונים תלויים",
+        "לא — כולם תלויים",
+        "לא ניתן לקבוע"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$(2,0,2) = 2(1,0,1)$, so only 2 independent vectors at most.",
+      "explanation_he": "$(2,0,2) = 2(1,0,1)$ — לכל היותר 2 בלתי-תלויים.",
+      "skill_atoms": [
+        "test_linear_independence"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\text{span}\\{(1,0,0), (0,1,0)\\}$ in $\\mathbb{R}^3$ has dimension:",
+      "stem_he": "$\\text{span}\\{(1,0,0), (0,1,0)\\}$ ב-$\\mathbb{R}^3$ במימד:",
+      "options_en": [
+        "$1$",
+        "$2$",
+        "$3$",
+        "$0$"
+      ],
+      "options_he": [
+        "$1$",
+        "$2$",
+        "$3$",
+        "$0$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Two independent vectors span the $xy$-plane — a 2-dimensional subspace.",
+      "explanation_he": "שני וקטורים בלתי-תלויים ⇒ מישור — מימד 2.",
+      "skill_atoms": [
+        "dimension_of_span"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$A$ is $4 \\times 6$ with rank 3. What is $\\dim(\\ker A)$?",
+      "stem_he": "$A$ בגודל $4 \\times 6$ עם rank 3. מה $\\dim(\\ker A)$?",
+      "options_en": [
+        "$1$",
+        "$2$",
+        "$3$",
+        "$6$"
+      ],
+      "options_he": [
+        "$1$",
+        "$2$",
+        "$3$",
+        "$6$"
+      ],
+      "correct_index": 2,
+      "explanation_en": "Rank–Nullity: nullity = $n - \\text{rank} = 6 - 3 = 3$.",
+      "explanation_he": "דרגה-גרעין: $6 - 3 = 3$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Coordinates of $(3,5,1)$ in basis $\\{(1,1,0), (0,1,1), (1,0,1)\\}$ are:",
+      "stem_he": "קואורדינטות של $(3,5,1)$ בבסיס $\\{(1,1,0), (0,1,1), (1,0,1)\\}$:",
+      "options_en": [
+        "$(3,5,1)$",
+        "$(2,3,1)$",
+        "$(1,2,3)$",
+        "$(2,1,3)$"
+      ],
+      "options_he": [
+        "$(3,5,1)$",
+        "$(2,3,1)$",
+        "$(1,2,3)$",
+        "$(2,1,3)$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Solve $c_1(1,1,0)+c_2(0,1,1)+c_3(1,0,1)=(3,5,1)$ to get $(2,3,1)$.",
+      "explanation_he": "פתרון המערכת נותן $(2,3,1)$.",
+      "skill_atoms": [
+        "coordinates_in_basis"
+      ]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Subspace: contains 0, closed under + and scalar multiply.",
+      "Basis = independent + spanning; dim = |basis|.",
+      "Rank–Nullity: dim(ker A) + rank(A) = n (columns of A)."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Any subset of R^n is a subspace",
+        "correction": "Must contain 0 and be closed under linear combinations.",
+        "detect_phrase_en": "any subset",
+        "detect_phrase_he": "כל תת-קבוצה"
+      }
+    ],
+    "tutor_pacing_hint": "Test subspaces with the one-step combination rule before abstract axioms.",
+    "diagnostic_signals": {
+      "confuses span with basis": "Spanning is not enough — need independence too."
+    },
+    "skill_atoms_unlocked": [
+      "verify_subspace",
+      "test_linear_independence",
+      "dimension_of_span",
+      "rank_nullity",
+      "coordinates_in_basis"
+    ]
+  }
 }

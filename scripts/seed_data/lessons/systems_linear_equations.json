@@ -5,12 +5,205 @@
   "math_track": [
     "la"
   ],
-  "title_en": "Systems of Linear Equations — Gaussian Elimination",
-  "title_he": "מערכות משוואות לינאריות — elimination של גאוס",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Systems of Linear Equations & Gaussian Elimination",
+  "title_he": "מערכות משוואות לינאריות ואלימינציה גאוסית",
+  "summary_en": "Solve $m \\times n$ linear systems via augmented matrices, elementary row operations, REF/RREF, and the Rouché–Capelli rank criteria — the Technion/TAU entry point to linear algebra.",
+  "summary_he": "פתרון מערכות $m \\times n$ באמצעות מטריצה מורחבת, פעולות שורה, REF/RREF וקריטריוני דרגה (רושה-קפלי) — נקודת הכניסה לאלגברה לינארית בטכניון/TAU.",
+  "est_minutes": 40,
+  "sections": [
+    {
+      "kind": "theory",
+      "title_en": "Systems and augmented matrices",
+      "title_he": "מערכות ומטריצות מורחבות",
+      "body_en_md": "A **system of linear equations** in $n$ unknowns $x_1,\\ldots,x_n$ has the form:\n$$a_{11}x_1 + \\cdots + a_{1n}x_n = b_1, \\quad \\ldots, \\quad a_{m1}x_1 + \\cdots + a_{mn}x_n = b_m.$$\n\nIn **matrix notation**: $A\\vec{x} = \\vec{b}$, where $A$ is $m \\times n$, $\\vec{x} \\in \\mathbb{R}^n$, $\\vec{b} \\in \\mathbb{R}^m$.\n\nThe **augmented matrix** $[A|\\vec{b}]$ stores coefficients and constants side by side — row operations on it solve the system without rewriting variables each time.\n\n**Three solution types:**\n1. **Unique** — exactly one $\\vec{x}$.\n2. **Infinitely many** — an affine subspace of dimension $\\geq 1$.\n3. **None** — inconsistent (contradiction).\n\n**Geometry (2D/3D):** each equation is a line/plane/hyperplane. A unique solution = transversal intersection; none = parallel objects; infinitely many = overlap along a subspace (e.g. two coincident planes in $\\mathbb{R}^3$).",
+      "body_he_md": "**מערכת משוואות לינאריות** ב-$n$ נעלמים $x_1,\\ldots,x_n$:\n$$a_{11}x_1 + \\cdots + a_{1n}x_n = b_1, \\quad \\ldots, \\quad a_{m1}x_1 + \\cdots + a_{mn}x_n = b_m.$$\n\n**סימון מטריצי:** $A\\vec{x} = \\vec{b}$, כאשר $A$ בגודל $m \\times n$.\n\n**המטריצה המורחבת** $[A|\\vec{b}]$ מאחסנת מקדמים ואגפים יחד — פעולות שורה עליה פותרות את המערכת.\n\n**שלושה סוגי פתרונות:**\n1. **יחיד** — $\\vec{x}$ אחד בדיוק.\n2. **אינסוף רבים** — תת-מרחב אפיני.\n3. **אין** — מערכת סותרת.\n\n**גיאומטריה:** כל משוואה = ישר/מישור. חיתוך יחיד / אין חיתוך / חפיפה לאורך תת-מרחב."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Elementary row operations",
+      "title_he": "פעולות שורה אלמנטריות",
+      "body_en_md": "Three **elementary row operations (EROs)** — each preserves the solution set:\n\n1. **Swap:** $R_i \\leftrightarrow R_j$.\n2. **Scale:** $R_i \\leftarrow cR_i$ with $c \\neq 0$.\n3. **Add multiple:** $R_i \\leftarrow R_i + cR_j$.\n\n**Goal:** reach **Row Echelon Form (REF)** — pivots move right as you go down; zeros below each pivot. **Reduced REF (RREF)** additionally has zeros above pivots and pivot entries equal to 1.\n\nEvery ERO is reversible, so solutions of $[A|\\vec{b}]$ and its REF/RREF are identical.\n\n**Exam tip:** scaling a row by $-1$ or swapping rows does not change consistency — but forgetting to apply the same operation to $\\vec{b}$ in the augmented matrix *does* change the system.",
+      "body_he_md": "שלוש **פעולות שורה אלמנטריות** — כל אחת שומרת על קבוצת הפתרונות:\n\n1. **החלפה:** $R_i \\leftrightarrow R_j$.\n2. **כפל:** $R_i \\leftarrow cR_i$ ($c \\neq 0$).\n3. **חיבור כפולה:** $R_i \\leftarrow R_i + cR_j$.\n\n**מטרה:** **צורת מדרגות (REF)** — אפסים מתחת לכל pivot; pivots זזים ימינה. **RREF** — גם אפסים מעל pivots וערכי pivot = 1.\n\n**טיפ למבחן:** החלפת שורות לא משנה עקביות — אבל שכחה לעדכן את $\\vec{b}$ במטריצה המורחבת כן."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Gaussian elimination — 3×3 example",
+      "title_he": "אלימינציה גאוסית — דוגמה 3×3",
+      "body_en_md": "Solve:\n$$\\begin{cases} x + 2y + z = 9 \\\\ 2x + 5y + 3z = 23 \\\\ x + 4y + 2z = 14 \\end{cases}$$\n\nAugmented matrix and forward elimination:\n$$\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 2 & 5 & 3 & 23 \\\\ 1 & 4 & 2 & 14 \\end{array}\\right]\n\\xrightarrow{R_2-2R_1,\\; R_3-R_1}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 2 & 1 & 5 \\end{array}\\right]\n\\xrightarrow{R_3-2R_2}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 0 & -1 & -5 \\end{array}\\right]$$\n\n**Back-substitution:** $-z = -5 \\Rightarrow z = 5$; $y + z = 5 \\Rightarrow y = 0$; $x + 2y + z = 9 \\Rightarrow x = 4$.\n\n**Unique solution:** $(x,y,z) = (4, 0, 5)$.\n\nWhen fewer pivots than unknowns, **free variables** appear — assign parameters (e.g. $x_3 = t$) and express basic variables in terms of $t$.",
+      "body_he_md": "פתרו:\n$$\\begin{cases} x + 2y + z = 9 \\\\ 2x + 5y + 3z = 23 \\\\ x + 4y + 2z = 14 \\end{cases}$$\n\n$$\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 2 & 5 & 3 & 23 \\\\ 1 & 4 & 2 & 14 \\end{array}\\right]\n\\xrightarrow{R_2-2R_1,\\; R_3-R_1}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 2 & 1 & 5 \\end{array}\\right]\n\\xrightarrow{R_3-2R_2}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 0 & -1 & -5 \\end{array}\\right]$$\n\n**הצבה לאחור:** $z = 5$, $y = 0$, $x = 4$. **פתרון יחיד:** $(4,0,5)$.\n\nכשיש פחות pivots מנעלמים — **משתנים חופשיים** (למשל $x_3 = t$)."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Solution structure and rank",
+      "title_he": "מבנה הפתרון ודרגה",
+      "body_en_md": "**Rank** = number of pivot columns in REF of $A$ = $\\text{rank}(A)$.\n\nIf $\\text{rank}(A) = r$ and there are $n$ unknowns, the solution set (when consistent) is an **affine subspace** of dimension $n - r$.\n\nFor **homogeneous** $A\\vec{x} = \\vec{0}$: always has the trivial $\\vec{0}$; nontrivial solutions iff $r < n$.\n\n**General solution:** $\\vec{x} = \\vec{x}_p + \\vec{x}_h$, where $\\vec{x}_p$ is any particular solution and $\\vec{x}_h \\in \\ker(A)$.\n\n**Technion-style example with parameter $k$:**\n$$\\begin{cases} x + y = 2 \\\\ 2x + 2y = k \\end{cases}$$\nRow 2 gives $k = 4$ for consistency. If $k = 4$: infinitely many $(x,y) = (2-t, t)$; if $k \\neq 4$: no solution.",
+      "body_he_md": "**דרגה** = מספר עמודות pivot ב-REF של $A$.\n\nאם $\\text{rank}(A) = r$ ו-$n$ נעלמים, קבוצת הפתרונות (אם עקבית) היא **תת-מרחב אפיני** במימד $n-r$.\n\nל**הומогנית** $A\\vec{x} = \\vec{0}$: תמיד $\\vec{0}$; פתרונות לא-טריוויאליים iff $r < n$.\n\n**פתרון כללי:** $\\vec{x} = \\vec{x}_p + \\vec{x}_h$.\n\n**דוגמה עם פרמטר $k$:**\n$$\\begin{cases} x + y = 2 \\\\ 2x + 2y = k \\end{cases}$$\nעקביות דורשת $k = 4$. אם $k = 4$: $(2-t, t)$; אם $k \\neq 4$: אין פתרון."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Unique / infinite / no solution — Rouché–Capelli",
+      "title_he": "פתרון יחיד / אינסוף / אין — רושה-קפלי",
+      "body_en_md": "**Inconsistent (no solution):** a row $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ with $c \\neq 0$ — a pivot in the augmented column with no variable.\n\n**Rouché–Capelli theorem (stated):** $A\\vec{x} = \\vec{b}$ is consistent iff $\\text{rank}(A) = \\text{rank}([A|\\vec{b}])$.\n\n| Condition | Outcome |\n|---|---|\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) = n$ | **Unique** solution |\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) < n$ | **Infinitely many** |\n| $\\text{rank}(A) < \\text{rank}([A|\\vec{b}])$ | **No** solution |\n\n**Exam type:** *For which $k$ does the system have a solution?* — eliminate and read the condition on the last row without fully solving.\n\n**Connection:** $\\dim(\\ker A) = n - \\text{rank}(A)$ (preview of Rank–Nullity).",
+      "body_he_md": "**אין פתרון:** שורה $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ עם $c \\neq 0$.\n\n**משפט רושה-קפלי:** $A\\vec{x} = \\vec{b}$ עקבית iff $\\text{rank}(A) = \\text{rank}([A|\\vec{b}])$.\n\n| תנאי | תוצאה |\n|---|---|\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) = n$ | **פתרון יחיד** |\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) < n$ | **אינסוף רבים** |\n| $\\text{rank}(A) < \\text{rank}([A|\\vec{b}])$ | **אין** פתרון |\n\n**סוג מבחן:** *לערך איזה $k$ יש פתרון?* — אלימינציה וקריאת התנאי בשורה האחרונה."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which row operation is **not** elementary?",
+      "stem_he": "איזו פעולת שורה **אינה** אלמנטרית?",
+      "options_en": [
+        "$R_1 \\leftrightarrow R_2$",
+        "$R_1 \\leftarrow 3R_1$",
+        "$R_2 \\leftarrow R_2 + 2R_1$",
+        "$R_1 \\leftarrow R_1 + R_2$ then $R_2 \\leftarrow R_1 - R_2$"
+      ],
+      "options_he": [
+        "$R_1 \\leftrightarrow R_2$",
+        "$R_1 \\leftarrow 3R_1$",
+        "$R_2 \\leftarrow R_2 + 2R_1$",
+        "$R_1 \\leftarrow R_1 + R_2$ ואז $R_2 \\leftarrow R_1 - R_2$"
+      ],
+      "correct_index": 3,
+      "explanation_en": "The fourth option combines two dependent row replacements that are not a single ERO; the standard three EROs are swap, scale ($c\\neq 0$), and add-multiple.",
+      "explanation_he": "האפשרות הרביעית אינה אחת משלוש הפעולות הסטנדרטיות (החלפה, כפל ב-$c\\neq 0$, חיבור כפולה).",
+      "skill_atoms": [
+        "perform_row_operations"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "After forward elimination, $[A|\\vec{b}]$ has pivots in columns 1 and 3 only (3 unknowns). What is $\\text{rank}(A)$?",
+      "stem_he": "לאחר אלימינציה, pivots בעמודות 1 ו-3 בלבד (3 נעלמים). מה $\\text{rank}(A)$?",
+      "options_en": [
+        "$1$",
+        "$2$",
+        "$3$",
+        "Cannot determine"
+      ],
+      "options_he": [
+        "$1$",
+        "$2$",
+        "$3$",
+        "לא ניתן לקבוע"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Rank equals the number of pivot columns = 2.",
+      "explanation_he": "הדרגה = מספר עמודות pivot = 2.",
+      "skill_atoms": [
+        "find_ref_rank"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "A row $[0\\;0\\;0\\;|\\;5]$ appears in RREF of $[A|\\vec{b}]$. The system is:",
+      "stem_he": "מופיעה שורה $[0\\;0\\;0\\;|\\;5]$ ב-RREF של $[A|\\vec{b}]$. המערכת:",
+      "options_en": [
+        "Consistent with unique solution",
+        "Consistent with infinitely many solutions",
+        "Inconsistent",
+        "Homogeneous only"
+      ],
+      "options_he": [
+        "עקבית עם פתרון יחיד",
+        "עקבית עם אינסוף פתרונות",
+        "סותרת",
+        "הומогנית בלבד"
+      ],
+      "correct_index": 2,
+      "explanation_en": "A pivot in the augmented column with zeros elsewhere means $0 = 5$ — contradiction.",
+      "explanation_he": "pivot בעמודה המורחבת עם אפסים = $0 = 5$ — סתירה.",
+      "skill_atoms": [
+        "determine_solution_type"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "RREF gives $x_1 + 2x_3 = 4$ and $x_2 - x_3 = 1$ (3 unknowns). General solution?",
+      "stem_he": "RREF נותן $x_1 + 2x_3 = 4$ ו-$x_2 - x_3 = 1$ (3 נעלמים). פתרון כללי?",
+      "options_en": [
+        "$(4,1,0)$ only",
+        "$(4-2t,\\,1+t,\\,t)$",
+        "$(4+2t,\\,1-t,\\,t)$",
+        "No solution"
+      ],
+      "options_he": [
+        "$(4,1,0)$ בלבד",
+        "$(4-2t,\\,1+t,\\,t)$",
+        "$(4+2t,\\,1-t,\\,t)$",
+        "אין פתרון"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Free variable $x_3 = t$; then $x_1 = 4 - 2t$, $x_2 = 1 + t$.",
+      "explanation_he": "$x_3 = t$ חופשי; $x_1 = 4 - 2t$, $x_2 = 1 + t$.",
+      "skill_atoms": [
+        "general_solution_free_variable"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "For which $k$ does $\\begin{cases} x + 2y = 1 \\\\ 2x + 4y = k \\end{cases}$ have a solution?",
+      "stem_he": "לערך איזה $k$ יש פתרון ל-$\\begin{cases} x + 2y = 1 \\\\ 2x + 4y = k \\end{cases}$?",
+      "options_en": [
+        "All $k$",
+        "$k = 1$ only",
+        "$k = 2$ only",
+        "No $k$"
+      ],
+      "options_he": [
+        "כל $k$",
+        "$k = 1$ בלבד",
+        "$k = 2$ בלבד",
+        "אף $k$"
+      ],
+      "correct_index": 2,
+      "explanation_en": "Row 2 is $2\\times$ row 1; consistency requires $k = 2 \\cdot 1 = 2$.",
+      "explanation_he": "שורה 2 = פי 2 משורה 1; עקביות דורשת $k = 2$.",
+      "skill_atoms": [
+        "parametric_consistency"
+      ]
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "$A\\vec{x}=\\vec{b}$; augmented matrix $[A|\\vec{b}]$; EROs preserve solutions.",
+      "Rank = pivot count; Rouché–Capelli: consistent iff rank(A) = rank([A|b]).",
+      "General solution = particular + homogeneous; free variables when rank < n."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "More equations than unknowns always means no solution",
+        "correction": "Redundant equations can still be consistent; check ranks, not just m vs n.",
+        "detect_phrase_en": "more equations",
+        "detect_phrase_he": "יותר משוואות"
+      },
+      {
+        "wrong": "Zero row means no solution",
+        "correction": "[0...0|0] is fine; only [0...0|c] with c≠0 is inconsistent.",
+        "detect_phrase_en": "zero row no solution",
+        "detect_phrase_he": "שורת אפסים אין פתרון"
+      }
+    ],
+    "tutor_pacing_hint": "Work one 3×3 elimination completely before stating rank theorems.",
+    "diagnostic_signals": {
+      "confuses REF and RREF": "Show pivot positions are the same; RREF is for reading solutions directly."
+    },
+    "skill_atoms_unlocked": [
+      "perform_row_operations",
+      "find_ref_rank",
+      "determine_solution_type",
+      "general_solution_free_variable",
+      "parametric_consistency"
+    ]
+  }
 }
