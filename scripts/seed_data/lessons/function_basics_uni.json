@@ -2,166 +2,41 @@
   "concept_id": "function_basics_uni",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Functions — Domain, Range & Elementary Families",
-  "title_he": "פונקציות — תחום, טווח ומשפחות אלמנטריות",
-  "summary_en": "Domain, range, injectivity, surjectivity, and the standard families (polynomial, rational, exponential, logarithmic, trigonometric) used throughout engineering Calc 1.",
-  "summary_he": "תחום, טווח, חד-חד-ערכיות, עליות ומשפחות הפונקציות הסטנדרטיות (פולינום, רציונלית, מעריכית, לוגריתמית, טריגונומטרית) בחשבון 1 להנדסה.",
-  "est_minutes": 25,
+  "math_track": ["calc1"],
+  "title_en": "Function Basics (University)",
+  "title_he": "יסודות פונקציות (אוניברסיטה)",
+  "summary_en": "Injectivity, surjectivity, bijections, inverse functions, and |N|=|Z| bijection.",
+  "summary_he": "חח\"ע, על, ביjectivיות, פונקציה הופכית ו-|N|=|Z|.",
+  "est_minutes": 35,
   "sections": [
-    {
-      "kind": "intro",
-      "title_en": "What is a function?",
-      "title_he": "מהי פונקציה?",
-      "body_en_md": "A **function** $f$ from set $A$ to set $B$, written $f:A\\to B$, assigns **exactly one** output $f(x)\\in B$ to each input $x\\in A$.\n\n- **Domain** $D_f=A$: allowed inputs.\n- **Codomain** $B$: target set (may contain values never hit).\n- **Range** $R_f=\\{f(x):x\\in D_f\\}\\subseteq B$: values actually attained.\n\n**Vertical line test** (graphs in $\\mathbb{R}^2$): a curve is a function of $x$ iff no vertical line meets it more than once.\n\n**Example:** $f(x)=\\sqrt{x-1}$ requires $x-1\\ge 0$, so $D_f=[1,\\infty)$ and $R_f=[0,\\infty)$.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "פונקציה $f$ מקבוצה $A$ ל-$B$, $f:A\\to B$, מקצה **בדיוק ערך אחד** $f(x)\\in B$ לכל קלט $x\\in A$.\n\n- **תחום** $D_f=A$: קלטים מותרים.\n- **קד-טווח** $B$: קבוצת יעד.\n- **טווח** $R_f=\\{f(x):x\\in D_f\\}$: ערכים שמתקבלים בפועל.\n\n**מבחן הקו האנכי:** גרף הוא פונקציה של $x$ אם ורק אם אין קו אנכי שחותך אותו יותר מפעם אחת.\n\n**דוגמה:** $f(x)=\\sqrt{x-1}$ דורש $x\\ge 1$, לכן $D_f=[1,\\infty)$, $R_f=[0,\\infty)$.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Injectivity, surjectivity, bijectivity",
-      "title_he": "חד-חד-ערכיות, עליות ובייקטיביות",
-      "body_en_md": "**Injective (one-to-one):** $f(x_1)=f(x_2)\\Rightarrow x_1=x_2$. Equivalently, distinct inputs give distinct outputs.\n\n**Surjective (onto $B$):** for every $y\\in B$ there exists $x\\in A$ with $f(x)=y$. Then $R_f=B$.\n\n**Bijective:** both injective and surjective — admits an inverse $f^{-1}:B\\to A$.\n\n**Horizontal line test:** $f$ is injective on an interval iff every horizontal line meets the graph at most once.\n\n**Examples:**\n- $f(x)=x^3$ is bijective $\\mathbb{R}\\to\\mathbb{R}$.\n- $f(x)=x^2$ is not injective on $\\mathbb{R}$; restricted to $[0,\\infty)$ it is injective onto $[0,\\infty)$.\n- $f(x)=e^x$ is injective, range $(0,\\infty)$, not surjective onto $\\mathbb{R}$.",
-      "body_he_md": "**חד-חד-ערכית:** $f(x_1)=f(x_2)\\Rightarrow x_1=x_2$.\n\n**על ($B$):** לכל $y\\in B$ קיים $x\\in A$ עם $f(x)=y$.\n\n**בייקטיבית:** חד-חד-ערכית ועל — קיימת פונקציה הפוכה $f^{-1}$.\n\n**מבחן הקו האופקי:** $f$ חד-חד-ערכית בקטע אם כל קו אופקי חותך את הגרף לכל היותר פעם אחת.\n\n**דוגמאות:**\n- $f(x)=x^3$ בייקטיבית $\\mathbb{R}\\to\\mathbb{R}$.\n- $f(x)=x^2$ אינה חד-חד-ערכית על $\\mathbb{R}$.\n- $f(x)=e^x$ חד-חד-ערכית, טווח $(0,\\infty)$."
-    },
-    {
-      "kind": "worked_example",
-      "title_en": "Finding domain and range",
-      "title_he": "מציאת תחום וטווח",
-      "body_en_md": "**Example 1.** $f(x)=\\dfrac{x+1}{x-2}$\n- Domain: denominator $\\ne 0$ $\\Rightarrow$ $D_f=\\mathbb{R}\\setminus\\{2\\}$.\n- Range: solve $y=\\dfrac{x+1}{x-2}$ for $x$: $y(x-2)=x+1 \\Rightarrow x(y-1)=2y+1 \\Rightarrow x=\\dfrac{2y+1}{y-1}$. Need $y\\ne 1$, so $R_f=\\mathbb{R}\\setminus\\{1\\}$.\n\n**Example 2.** $g(x)=\\ln(3-x)$\n- Need $3-x>0 \\Rightarrow D_g=(-\\infty,3)$.\n- Since $\\ln u$ covers $(-\\infty,\\infty)$ as $u\\in(0,\\infty)$, $R_g=\\mathbb{R}$.\n\n**Example 3.** $h(x)=\\sqrt{4-x^2}$\n- Need $4-x^2\\ge 0 \\Rightarrow x\\in[-2,2]$.\n- Maximum $\\sqrt{4}=2$, minimum $0$ $\\Rightarrow$ $R_h=[0,2]$.",
-      "body_he_md": "**דוגמה 1.** $f(x)=\\dfrac{x+1}{x-2}$\n- תחום: $x\\ne 2$ $\\Rightarrow$ $D_f=\\mathbb{R}\\setminus\\{2\\}$.\n- טווח: $y\\ne 1$ $\\Rightarrow$ $R_f=\\mathbb{R}\\setminus\\{1\\}$.\n\n**דוגמה 2.** $g(x)=\\ln(3-x)$\n- $3-x>0 \\Rightarrow D_g=(-\\infty,3)$, $R_g=\\mathbb{R}$.\n\n**דוגמה 3.** $h(x)=\\sqrt{4-x^2}$\n- $x\\in[-2,2]$, $R_h=[0,2]$."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Elementary function families",
-      "title_he": "משפחות פונקציות אלמנטריות",
-      "body_en_md": "| Family | Typical form | Domain notes |\n|---|---|---|\n| Polynomial | $a_n x^n+\\cdots+a_0$ | $\\mathbb{R}$ |\n| Rational | $P(x)/Q(x)$ | exclude zeros of $Q$ |\n| Exponential | $a^x$, $e^x$ | $\\mathbb{R}$; range $(0,\\infty)$ if $a>0,a\\ne 1$ |\n| Logarithm | $\\log_a x$, $\\ln x$ | $(0,\\infty)$ |\n| Trigonometric | $\\sin x,\\cos x,\\tan x$ | $\\tan x$: exclude odd multiples of $\\pi/2$ |\n\n**Composition:** $(f\\circ g)(x)=f(g(x))$. Domain requires $x\\in D_g$ and $g(x)\\in D_f$.\n\n**Even / odd:** $f(-x)=f(x)$ (symmetric about $y$-axis); $f(-x)=-f(x)$ (origin symmetry). Useful in integration and Fourier courses later.",
-      "body_he_md": "| משפחה | צורה | הערות תחום |\n|---|---|---|\n| פולינום | $a_n x^n+\\cdots$ | $\\mathbb{R}$ |\n| רציונלית | $P/Q$ | לא ב-0 של $Q$ |\n| מעריכית | $e^x$ | $\\mathbb{R}$, טווח $(0,\\infty)$ |\n| לוגריתמית | $\\ln x$ | $(0,\\infty)$ |\n| טריגונומטרית | $\\sin,\\cos,\\tan$ | $\\tan$: לא ב-$\\pi/2$ אי-זוגי |\n\n**הרכבה:** $(f\\circ g)(x)=f(g(x))$.\n\n**זוגיות:** $f(-x)=f(x)$ זוגית; $f(-x)=-f(x)$ אי-זוגית."
-    },
-    {
-      "kind": "summary",
-      "title_en": "Checklist for exam problems",
-      "title_he": "צ'ק-ליסט לבחינה",
-      "body_en_md": "1. Write $D_f$ first — denominators, even roots, logs.\n2. Sketch or recall graph shape for standard families.\n3. For injectivity on an interval, use monotonicity or horizontal line test.\n4. Inverse functions swap domain and range: $D_{f^{-1}}=R_f$, $R_{f^{-1}}=D_f$.\n\nThese skills appear in limits (domain near singularities), derivatives (chain rule on compositions), and integrals (substitution domains).",
-      "body_he_md": "1. כתבו $D_f$ תחילה — מכנים, שורשים, לוג.\n2. זכרו צורת גרף של משפחות סטנדרטיות.\n3. לחד-חד-ערכיות — מונוטוניות או מבחן קו אופקי.\n4. הפונקציה ההפוכה מחליפה תחום וטווח.\n\nמיומנויות אלו מופיעות בגבולות, נגזרות ואינטגרציה."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Functions — Domain, Range & Elementary Families: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Functions — Domain, Range & Elementary Families.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-פונקציות — תחום, טווח ומשפחות אלמנטריות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-פונקציות — תחום, טווח ומשפחות אלמנטריות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
+    {"kind":"intro","title_en":"Functions as Maps","title_he":"פונקציות כמיפויים","body_en_md":"A **function** $f:A\\to B$ assigns exactly one output in $B$ to each input in $A$.\n\nUniversity calculus requires precise language: **injective** (one-to-one), **surjective** (onto), **bijective** (both — invertible).","body_he_md":"**פונקציה** $f:A\\to B$ — לכל קלט ב-$A$ בדיוק פלט אחד ב-$B$.\n\n**חח\"ע**, **על**, **ביjectivית** — שפה מדויקת."},
+    {"kind":"definition","title_en":"Map Types","title_he":"סוגי מיפויים","body_en_md":"**Injective (1-1):** $f(a)=f(b)\\Rightarrow a=b$.\n\n**Surjective (onto):** $\\forall y\\in B\\,\\exists x\\in A: f(x)=y$.\n\n**Bijective:** Injective and surjective — has inverse $f^{-1}:B\\to A$.\n\n**Domain matters:** $f(x)=x^2$ is not injective on $\\mathbb{R}$ but is on $[0,\\infty)$.","body_he_md":"**חח\"ע:** $f(a)=f(b)\\Rightarrow a=b$.\n\n**על:** כל $y\\in B$ יש מקור.\n\n**ביjectivית:** חח\"ע + על → $f^{-1}$ קיימת.\n\n**תחום חשוב:** $x^2$ לא חח\"ע על $\\mathbb{R}$."},
+    {"kind":"theory","title_en":"Tests and Cardinality","title_he":"בדיקות ועוצמות","body_en_md":"**Horizontal line test:** Injective iff no horizontal line hits graph more than once.\n\n**Inverse:** Only exists for bijections.\n\n**Cardinality:** $|A|=|B|$ if bijection exists. $|N|=|Z|$ via alternating map; $|Q|=|N|$ (countable).","body_he_md":"**מבחן קו אופקי:** חח\"ע ⟺ לכל הורizontali לכל היותר חיתוך אחד.\n\n**הופכית:** רק לביjectivית.\n\n**עוצמה:** $|N|=|Z|$; $|Q|$ בת מנייה."},
+    {"kind":"worked_example","difficulty":"easy","example_number":1,"title_en":"Worked Example 1 — Is x² Injective on R?","title_he":"דוגמה 1 — האם x² חח\"ע על R?","body_en_md":"**Given:** $f(x)=x^2$, domain $\\mathbb{R}$.\n\n**Step 1:** Test: $f(2)=4$ and $f(-2)=4$.\n\n**Step 2:** Two different inputs, same output → **not injective**.\n\n**Step 3:** On $[0,\\infty)$: if $a^2=b^2$ and $a,b\\ge0$, then $a=b$ → injective there.\n\n**Step 4:** On $[0,\\infty)$ onto $[0,\\infty)$: bijective with inverse $\\sqrt{y}$.\n\n**Answer:** Not injective on $\\mathbb{R}$; bijective on $[0,\\infty)\\to[0,\\infty)$.","body_he_md":"**נתון:** $f(x)=x^2$ על $\\mathbb{R}$.\n\n**שלב 1:** $f(2)=f(-2)=4$.\n\n**שלב 2:** לא חח\"ע על $\\mathbb{R}$.\n\n**שלב 3:** חח\"ע על $[0,\\infty)$.\n\n**שלב 4:** ביjectivית $[0,\\infty)\\to[0,\\infty)$."},
+    {"kind":"checkpoint","title_en":"Stop & Practice","title_he":"עצור ותרגל","body_en_md":"Is $f(x)=|x|$ injective on $\\mathbb{R}$?","body_he_md":"האם $f(x)=|x|$ חח\"ע על $\\mathbb{R}$?","checkpoint_solution_en":"No: $f(1)=f(-1)=1$.","checkpoint_solution_he":"לא: $f(1)=f(-1)$."},
+    {"kind":"worked_example","difficulty":"medium","example_number":2,"title_en":"Worked Example 2 — f(x)=2x+1 is Bijective","title_he":"דוגמה 2 — f(x)=2x+1 ביjectivית","body_en_md":"**Given:** $f:\\mathbb{R}\\to\\mathbb{R}$, $f(x)=2x+1$.\n\n**Step 1 (injective):** $2a+1=2b+1$ → $a=b$ ✓.\n\n**Step 2 (surjective):** For any $y\\in\\mathbb{R}$, solve $y=2x+1$ → $x=(y-1)/2\\in\\mathbb{R}$ ✓.\n\n**Step 3:** Bijective.\n\n**Step 4:** Inverse $f^{-1}(y)=(y-1)/2$.\n\n**Answer:** Bijective; $f^{-1}(x)=(x-1)/2$.","body_he_md":"**נתון:** $f(x)=2x+1$, $\\mathbb{R}\\to\\mathbb{R}$.\n\n**שלב 1:** חח\"ע ✓.\n\n**שלב 2:** על ✓.\n\n**שלב 3:** ביjectivית.\n\n**שלב 4:** $f^{-1}(x)=(x-1)/2$."},
+    {"kind":"checkpoint","title_en":"Stop & Practice","title_he":"עצור ותרגל","body_en_md":"Inverse of $f(x)=2x+1$?","body_he_md":"הופכית של $f(x)=2x+1$?","checkpoint_solution_en":"$f^{-1}(x)=(x-1)/2$.","checkpoint_solution_he":"$(x-1)/2$."},
+    {"kind":"worked_example","difficulty":"hard","example_number":3,"title_en":"Worked Example 3 — Bijection |N|=|Z|","title_he":"דוגמה 3 — ביjectיה |N|=|Z|","body_en_md":"**Goal:** Show $|\\mathbb{N}|=|\\mathbb{Z}|$ via explicit bijection.\n\n**Step 1:** Define $g:\\mathbb{N}\\to\\mathbb{Z}$: $g(1)=0$, $g(2)=1$, $g(3)=-1$, $g(4)=2$, $g(5)=-2$, ...\n\n**Step 2:** Formula: $g(n)=(-1)^n\\lceil n/2\\rceil$ (adjust indexing if $\\mathbb{N}$ starts at 1).\n\n**Step 3:** Every integer appears exactly once — surjective.\n\n**Step 4:** Different $n$ give different values — injective.\n\n**Answer:** Bijection proves $|\\mathbb{N}|=|\\mathbb{Z}|$ (same cardinality).","body_he_md":"**מטרה:** $|\\mathbb{N}|=|\\mathbb{Z}|$.\n\n**שלב 1:** $g(1)=0$, $g(2)=1$, $g(3)=-1$, ...\n\n**שלב 2:** $g(n)=(-1)^n\\lceil n/2\\rceil$.\n\n**שלב 3–4:** על + חח\"ע.\n\n**תשובה:** $|\\mathbb{N}|=|\\mathbb{Z}|$."},
+    {"kind":"method_guide","title_en":"Method Guide","title_he":"מדריך שיטה","body_en_md":"| Property | Test |\n|---|---|\n| Injective | $f(a)=f(b)\\Rightarrow a=b$ or horizontal line test |\n| Surjective | Solve $y=f(x)$ for any $y$ in codomain |\n| Bijective | Both; find $f^{-1}$ |\n| Restrict domain | Make non-injective functions bijective |","body_he_md":"| תכונה | בדיקה |\n|---|---|\n| חח\"ע | $f(a)=f(b)\\Rightarrow a=b$ |\n| על | פתור $y=f(x)$ |\n| ביjectivית | שניהם |\n| הגבלת תחום | לביjectivית |"},
+    {"kind":"exercise_set","title_en":"Practice Exercises","title_he":"תרגילים","body_en_md":"","body_he_md":"","exercises":[
+      {"id":"fbe1","difficulty":"easy","body_en":"$f(x)=x^3$ injective on $\\mathbb{R}$?","body_he":"$f(x)=x^3$ חח\"ע על $\\mathbb{R}$?","solution_en":"Yes — strictly increasing.","solution_he":"כן — עולה."},
+      {"id":"fbe2","difficulty":"easy","body_en":"$f(x)=5$ onto $\\mathbb{R}$?","body_he":"$f(x)=5$ על $\\mathbb{R}$?","solution_en":"No — only hits 5.","solution_he":"לא — רק 5."},
+      {"id":"fbe3","difficulty":"easy","body_en":"$f(1)=a$, $f(2)=a$. Injective?","body_he":"$f(1)=f(2)=a$. חח\"ע?","solution_en":"No.","solution_he":"לא."},
+      {"id":"fbe4","difficulty":"easy","body_en":"Identity map bijective?","body_he":"מיפוי זהות — ביjectivית?","solution_en":"Yes.","solution_he":"כן."},
+      {"id":"fbm1","difficulty":"medium","body_en":"Prove $f(x)=3x-2$ injective.","body_he":"הוכח $f(x)=3x-2$ חח\"ע.","solution_en":"$3a-2=3b-2$ → $a=b$.","solution_he":"$a=b$."},
+      {"id":"fbm2","difficulty":"medium","body_en":"$f(x)=x^2$ onto $\\mathbb{R}$?","body_he":"$f(x)=x^2$ על $\\mathbb{R}$?","solution_en":"No — negative values not reached.","solution_he":"לא — שליליים לא בטווח."},
+      {"id":"fbm3","difficulty":"medium","body_en":"Composition of bijections?","body_he":"הרכבה של ביjectivיות?","solution_en":"Bijective.","solution_he":"ביjectivית."},
+      {"id":"fbm4","difficulty":"medium","body_en":"$f(x)=1/x$ on $\\mathbb{R}\\setminus\\{0\\}$.","body_he":"$f(x)=1/x$ על $\\mathbb{R}\\setminus\\{0\\}$.","solution_en":"Bijective to itself.","solution_he":"ביjectivית לעצמה."},
+      {"id":"fbm5","difficulty":"medium","body_en":"Even function injective on symmetric domain?","body_he":"פונקציה זוגית חח\"ע על תחום סימטרי?","solution_en":"No (unless domain is single point).","solution_he":"לא."},
+      {"id":"fbh1","difficulty":"hard","body_en":"Bijection $(0,1)\\to\\mathbb{R}$ (outline).","body_he":"ביjectיה $(0,1)\\to\\mathbb{R}$ (מתאר).","solution_en":"Use tan after shifting to $(-\\pi/2,\\pi/2)$.","solution_he":"tan עם הזזה."},
+      {"id":"fbh2","difficulty":"hard","body_en":"No surjection $S\\to\\mathcal{P}(S)$ (outline).","body_he":"אין על $S\\to\\mathcal{P}(S)$ (מתאר).","solution_en":"Cantor diagonal.","solution_he":"Cantor."},
+      {"id":"fbh3","difficulty":"hard","body_en":"Restrict $x^2$ to be bijective.","body_he":"הגבל $x^2$ לביjectivית.","solution_en":"$[0,\\infty)\\to[0,\\infty)$.","solution_he":"$[0,\\infty)\\to[0,\\infty)$."},
+      {"id":"fbh4","difficulty":"hard","body_en":"If $f$ monotone continuous on interval, injective?","body_he":"$f$ monotonית רציפה — חח\"ע?","solution_en":"Strictly monotone → injective.","solution_he":"מונotonית קשה → חח\"ע."}
+    ]},
+    {"kind":"pitfall","title_en":"Common Pitfalls","title_he":"מלכודות נפוצות","body_en_md":"1. **Ignoring domain** when testing injectivity.\n2. **Confusing codomain and range** for surjectivity.\n3. **Assuming all linear functions bijective** — check codomain.\n4. **Even functions** rarely injective on symmetric domains.","body_he_md":"1. **התעלמות מתחום**.\n2. **בלבול codomain/range**.\n3. **לינארית ≠ תמיד ביjectivית**.\n4. **פונקציה זוגית**."},
+    {"kind":"before_exam","title_en":"Before the Exam","title_he":"לפני הבחינה","body_en_md":"- Injective: 1-1; Surjective: onto; Bijective: both.\n- Domain restriction can fix injectivity.\n- $|N|=|Z|$ via explicit bijection.\n- Inverse exists iff bijective.","body_he_md":"- חח\"ע, על, ביjectivית.\n- הגבלת תחום.\n- $|N|=|Z|$.\n- $f^{-1}$ ⟺ ביjectivית."},
+    {"kind":"summary","title_en":"Take-away","title_he":"סיכום","body_en_md":"- Functions need domain and codomain specified.\n- Bijective ⟺ invertible.\n- Cardinality via bijections.\n- Graph tests help visualize injectivity.","body_he_md":"- תחום ו-codomain.\n- ביjectivית ⟺ הופכית.\n- עוצמה.\n- גרף + מבחן קו."}
   ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "What is the domain of $f(x)=\\dfrac{1}{x-3}$?",
-      "stem_he": "מה תחום $f(x)=\\dfrac{1}{x-3}$?",
-      "options_en": [
-        "$\\mathbb{R}$",
-        "$\\mathbb{R}\\setminus\\{3\\}$",
-        "$(3,\\infty)$",
-        "$[3,\\infty)$"
-      ],
-      "options_he": [
-        "$\\mathbb{R}$",
-        "$\\mathbb{R}\\setminus\\{3\\}$",
-        "$(3,\\infty)$",
-        "$[3,\\infty)$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Denominator zero at $x=3$.",
-      "explanation_he": "מכנה מתאפס ב-$x=3$.",
-      "skill_atoms": [
-        "find_function_domain"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Functions — Domain, Range & Elementary Families'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'פונקציות — תחום, טווח ומשפחות אלמנטריות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "test_injectivity"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Functions — Domain, Range & Elementary Families' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'פונקציות — תחום, טווח ומשפחות אלמנטריות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "find_function_range"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Functions — Domain, Range & Elementary Families'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'פונקציות — תחום, טווח ומשפחות אלמנטריות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "find_function_domain"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Functions — Domain, Range & Elementary Families' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'פונקציות — תחום, טווח ומשפחות אלמנטריות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "test_bijectivity"
-      ],
-      "points_level_min": "calc1"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Domain restrictions come from denominators, logs, and even roots.",
-      "Injectivity on an interval often follows from strict monotonicity.",
-      "Inverse functions swap domain and range."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Domain of $1/(x-2)$ is all reals except where numerator is zero",
-        "correction": "Exclude zeros of the denominator, not numerator.",
-        "detect_phrase_en": "numerator zero",
-        "detect_phrase_he": "מונה מתאפס"
-      }
-    ],
-    "tutor_pacing_hint": "Start with domain of rational and log functions before injectivity proofs.",
-    "skill_atoms_unlocked": [
-      "find_function_domain",
-      "find_function_range",
-      "test_injectivity",
-      "test_bijectivity"
-    ]
-  }
+  "questions":[{"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"Bijective means:","stem_he":"ביjectivית פירושה:","options_en":["one-one only","onto only","both injective and surjective","neither"],"options_he":["חח\"ע בלבד","על בלבד","חח\"ע ועל","לא זה ולא זה"],"correct_index":2,"explanation_en":"Bijective = injective + surjective.","explanation_he":"חח\"ע + על.","skill_atoms":["bijection"]}],
+  "agent_hints":{"key_insights":["Domain matters for injectivity","Bijective ⟺ inverse exists","|N|=|Z| via alternating map"],"tutor_pacing_hint":"Graph examples on board.","next_recommended":["limits_continuity"]}
 }

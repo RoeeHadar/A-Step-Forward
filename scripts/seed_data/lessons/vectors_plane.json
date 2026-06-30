@@ -1,190 +1,42 @@
 {
-  "id": "vectors_plane",
-  "type": "interactive",
-  "subject": "high_school_math_4pt",
+  "concept_id": "vectors_plane",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["4pt"],
   "title_en": "Vectors in the Plane",
   "title_he": "וקטורים במישור",
-  "duration_min": 20,
-  "level_min": "4pt",
-  "agent_hints": "At the 4pt level, vectors are treated computationally — no abstract theory. Students must perform addition, scalar multiplication, find magnitudes, and compute dot products. The main conceptual connection is between the dot product formula $\\vec{a}\\cdot\\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta$ and perpendicularity (dot product = 0). Keep examples grounded in geometric interpretations (displacement, force direction).",
+  "summary_en": "2D vector addition, magnitude, dot product, angles, midpoints, and parallelogram proofs.",
+  "summary_he": "חיבור וקטורים, גודל, מכפלה סקalarית, זוויות, אמצעים והוכחות.",
+  "est_minutes": 35,
   "sections": [
-    {
-      "id": "intro",
-      "title_en": "What Is a Vector?",
-      "title_he": "מהו וקטור?",
-      "level_min": "4pt",
-      "body_en_md": "A **vector** is a quantity with both **magnitude** (length) and **direction**. It is represented as a directed segment or as an ordered pair $(a, b)$ in the coordinate plane.\n\n**Representation:**\n- As a pair: $\\vec{v} = (3, 4)$ — component form\n- As a directed segment: from point $A$ to point $B$, written $\\overrightarrow{AB}$\n\n**Key vocabulary:**\n- **Magnitude** (length): $|\\vec{v}| = \\sqrt{a^2 + b^2}$\n- **Unit vector:** a vector with magnitude 1\n- **Zero vector:** $\\vec{0} = (0, 0)$, magnitude 0\n- **Equal vectors:** same direction AND same magnitude\n- **Opposite vectors:** $-\\vec{v} = (-a, -b)$\n\n**Example:** $\\vec{v} = (3, 4)$. Magnitude: $|\\vec{v}| = \\sqrt{9+16} = \\sqrt{25} = 5$.",
-      "body_he_md": "**וקטור** הוא גודל בעל **עוצמה** (אורך) וגם **כיוון**. הוא מיוצג כקטע מכוון או כזוג מסודר $(a, b)$ במישור הקואורדינטות.\n\n**ייצוג:**\n- כזוג: $\\vec{v} = (3, 4)$ — צורת רכיבים\n- כקטע מכוון: מנקודה $A$ לנקודה $B$, מסומן $\\overrightarrow{AB}$\n\n**מילות מפתח:**\n- **עוצמה** (אורך): $|\\vec{v}| = \\sqrt{a^2 + b^2}$\n- **וקטור יחידה:** וקטור בעל עוצמה 1\n- **וקטור האפס:** $\\vec{0} = (0, 0)$, עוצמה 0\n- **וקטורים שווים:** אותו כיוון ואותה עוצמה\n- **וקטורים הפוכים:** $-\\vec{v} = (-a, -b)$\n\n**דוגמה:** $\\vec{v} = (3, 4)$. עוצמה: $|\\vec{v}| = \\sqrt{9+16} = \\sqrt{25} = 5$."
-    },
-    {
-      "id": "operations",
-      "title_en": "Vector Operations",
-      "title_he": "פעולות על וקטורים",
-      "level_min": "4pt",
-      "body_en_md": "**Addition** (tip-to-tail rule or component-wise):\n$$(a_1, b_1) + (a_2, b_2) = (a_1 + a_2, \\; b_1 + b_2).$$\n\n**Subtraction:**\n$$(a_1, b_1) - (a_2, b_2) = (a_1 - a_2, \\; b_1 - b_2).$$\n\n**Scalar multiplication** by $c \\in \\mathbb{R}$:\n$$c(a, b) = (ca, cb).$$\nScaling: multiplies magnitude by $|c|$; reverses direction if $c < 0$.\n\n**Worked examples:** Let $\\vec{u} = (1, 3)$, $\\vec{v} = (4, -2)$.\n- $\\vec{u} + \\vec{v} = (5, 1)$\n- $\\vec{u} - \\vec{v} = (-3, 5)$\n- $3\\vec{u} = (3, 9)$\n- $-\\vec{v} = (-4, 2)$\n- $|\\vec{u} + \\vec{v}| = |(5,1)| = \\sqrt{26}$",
-      "body_he_md": "**חיבור** (כלל קצה-זנב או לפי רכיבים):\n$$(a_1, b_1) + (a_2, b_2) = (a_1 + a_2, \\; b_1 + b_2).$$\n\n**חיסור:**\n$$(a_1, b_1) - (a_2, b_2) = (a_1 - a_2, \\; b_1 - b_2).$$\n\n**כפל בסקלר** $c \\in \\mathbb{R}$:\n$$c(a, b) = (ca, cb).$$\nהגדלה: מכפיל עוצמה ב-$|c|$; הופך כיוון אם $c < 0$.\n\n**דוגמאות:** נניח $\\vec{u} = (1, 3)$, $\\vec{v} = (4, -2)$.\n- $\\vec{u} + \\vec{v} = (5, 1)$\n- $\\vec{u} - \\vec{v} = (-3, 5)$\n- $3\\vec{u} = (3, 9)$\n- $-\\vec{v} = (-4, 2)$\n- $|\\vec{u} + \\vec{v}| = |(5,1)| = \\sqrt{26}$"
-    },
-    {
-      "id": "dot_product",
-      "title_en": "Dot Product and Angle Between Vectors",
-      "title_he": "מכפלה סקלרית וזווית בין וקטורים",
-      "level_min": "4pt",
-      "body_en_md": "The **dot product** of $\\vec{a} = (a_1, a_2)$ and $\\vec{b} = (b_1, b_2)$:\n$$\\boxed{\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2.}$$\n\nNote: the result is a **scalar**, not a vector.\n\n**Geometric meaning:**\n$$\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta,$$\nwhere $\\theta$ is the angle between the vectors.\n\n**Finding the angle:**\n$$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}.$$\n\n**Perpendicular vectors:** $\\vec{a} \\perp \\vec{b}$ if and only if $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**Worked example:** Find the angle between $\\vec{a} = (3, 0)$ and $\\vec{b} = (1, 1)$.\n$$\\vec{a}\\cdot\\vec{b} = 3, \\quad |\\vec{a}| = 3, \\quad |\\vec{b}| = \\sqrt{2}.$$\n$$\\cos\\theta = \\frac{3}{3\\sqrt{2}} = \\frac{1}{\\sqrt{2}} \\Rightarrow \\theta = 45°.$$",
-      "body_he_md": "**המכפלה הסקלרית** של $\\vec{a} = (a_1, a_2)$ ו-$\\vec{b} = (b_1, b_2)$:\n$$\\boxed{\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2.}$$\n\nשימו לב: התוצאה היא **סקלר**, לא וקטור.\n\n**משמעות גיאומטרית:**\n$$\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta,$$\nכאשר $\\theta$ הוא הזווית בין הוקטורים.\n\n**מציאת הזווית:**\n$$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}.$$\n\n**וקטורים ניצבים:** $\\vec{a} \\perp \\vec{b}$ אם ורק אם $\\vec{a} \\cdot \\vec{b} = 0$.\n\n**דוגמה:** מצאו את הזווית בין $\\vec{a} = (3, 0)$ ו-$\\vec{b} = (1, 1)$.\n$$\\vec{a}\\cdot\\vec{b} = 3, \\quad |\\vec{a}| = 3, \\quad |\\vec{b}| = \\sqrt{2}.$$\n$$\\cos\\theta = \\frac{3}{3\\sqrt{2}} = \\frac{1}{\\sqrt{2}} \\Rightarrow \\theta = 45°.$$"
-    },
-    {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "4pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nTriangle $ABC$ has $A(1,0)$, $B(7,4)$. Point $C$ is on the $x$-axis. $CE$ is a median with $BC/EB=2$. Find $C$, then the area of $\\triangle ABC$.\n\n**Complete Solution:**\n\nMidpoint of $AB$: $M(4,2)$. Median from $C$ meets $AB$ at $E$ with $BE:EA=1:2$ → $E(3,\\frac{4}{3})$.\nLine $CE$ through $E$ with $C$ on $x$-axis: solve to get $C(5,0)$.\nArea $= \\frac{1}{2}|(7-1)(0-4)-(5-1)(4-0)| = 12$.\n\n---\n\n**Practice Problem 2:**\n\nFind the distance from $P(2,-1)$ to the line $3x+4y-5=0$.\n\n**Complete Solution:**\n\n$d = \\frac{|3(2)+4(-1)-5|}{\\sqrt{9+16} = \\frac{1}{5}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\n$ABC$: $A(1,0)$, $B(7,4)$, $C$ על ציר $x$. $CE$ חוצה — מצאו $C$ ושטח המשולש.\n\n**פתרון:** $C(5,0)$, שטח $=12$.\n\n---\n\n**שאלת תרגול 2:**\n\nמרחק מ-$P(2,-1)$ לישר $3x+4y-5=0$.\n\n**פתרון:** $d=\\frac{1}{5}$."
-    }
+    {"kind":"intro","title_en":"Vectors in 2D","title_he":"וקטורים במישור","body_en_md":"A **vector** in the plane is an ordered pair $\\vec{v}=(a,b)$ representing magnitude and direction.\n\n4-unit Bagrut uses component-wise addition, dot product for angles, and geometric proofs with midpoints.","body_he_md":"**וקטור** במישור הוא זוג סדור $\\vec{v}=(a,b)$.\n\nב-4 יחידות: חיבור רכיבי, מכפלה סקalarית לזוויות, הוכחות גיאומטריות."},
+    {"kind":"definition","title_en":"Operations","title_he":"פעולות","body_en_md":"**Addition:** $(a,b)+(c,d)=(a+c,b+d)$\n\n**Scalar multiply:** $k(a,b)=(ka,kb)$\n\n**Magnitude:** $|\\vec{v}|=\\sqrt{a^2+b^2}$\n\n**Dot product:** $\\vec{a}\\cdot\\vec{b}=a_1b_1+a_2b_2=|\\vec{a}||\\vec{b}|\\cos\\theta$\n\n**Midpoint of $A$ to $B$:** $\\frac{1}{2}(\\vec{OA}+\\vec{OB})$","body_he_md":"**חיבור:** $(a,b)+(c,d)=(a+c,b+d)$\n\n**גודל:** $|\\vec{v}|=\\sqrt{a^2+b^2}$\n\n**מכפלה סקalarית:** $\\vec{a}\\cdot\\vec{b}=a_1b_1+a_2b_2$\n\n**אמצע:** $\\frac{1}{2}(\\vec{OA}+\\vec{OB})$"},
+    {"kind":"theory","title_en":"Angles and Midpoints","title_he":"זוויות ואמצעים","body_en_md":"$$\\cos\\theta=\\frac{\\vec{a}\\cdot\\vec{b}}{|\\vec{a}||\\vec{b}|}$$\n\n**Perpendicular** ⟺ dot product = 0.\n\n**Varignon's theorem:** Midpoints of any quadrilateral's sides form a parallelogram.","body_he_md":"$$\\cos\\theta=\\frac{\\vec{a}\\cdot\\vec{b}}{|\\vec{a}||\\vec{b}|}$$\n\n**ניצבות** ⟺ מכפלה = 0.\n\n**משפט ואריניון:** אמצעי צלעות = מקבילית."},
+    {"kind":"worked_example","difficulty":"easy","example_number":1,"title_en":"Worked Example 1 — Sum and Magnitude","title_he":"דוגמה 1 — סכום וגודל","body_en_md":"**Given:** $\\vec{u}=(1,3)$, $\\vec{v}=(-2,4)$.\n\n**Step 1:** $\\vec{u}+\\vec{v}=(1-2,\\,3+4)=(-1,7)$.\n\n**Step 2:** $|\\vec{u}+\\vec{v}|=\\sqrt{1+49}=\\sqrt{50}=5\\sqrt{2}$.\n\n**Step 3:** Compare: $|\\vec{u}|=\\sqrt{10}$, $|\\vec{v}|=\\sqrt{20}$ — triangle inequality holds.\n\n**Answer:** $\\vec{u}+\\vec{v}=(-1,7)$, magnitude $5\\sqrt{2}$.","body_he_md":"**נתון:** $\\vec{u}=(1,3)$, $\\vec{v}=(-2,4)$.\n\n**שלב 1:** $\\vec{u}+\\vec{v}=(-1,7)$.\n\n**שלב 2:** $|\\vec{u}+\\vec{v}|=5\\sqrt{2}$.\n\n**תשובה:** $(-1,7)$, גודל $5\\sqrt{2}$."},
+    {"kind":"checkpoint","title_en":"Stop & Practice","title_he":"עצור ותרגל","body_en_md":"$\\vec{a}=(3,4)$. Find $|\\vec{a}|$.","body_he_md":"$\\vec{a}=(3,4)$. מצא $|\\vec{a}|$.","checkpoint_solution_en":"$|\\vec{a}|=\\sqrt{9+16}=5$.","checkpoint_solution_he":"$|\\vec{a}|=5$."},
+    {"kind":"worked_example","difficulty":"medium","example_number":2,"title_en":"Worked Example 2 — Angle Between (3,4) and (1,0)","title_he":"דוגמה 2 — זווית בין (3,4) ו-(1,0)","body_en_md":"**Given:** $\\vec{a}=(3,4)$, $\\vec{b}=(1,0)$.\n\n**Step 1:** $\\vec{a}\\cdot\\vec{b}=3(1)+4(0)=3$.\n\n**Step 2:** $|\\vec{a}|=5$, $|\\vec{b}|=1$.\n\n**Step 3:** $\\cos\\theta=\\frac{3}{5}=0.6$.\n\n**Step 4:** $\\theta=\\arccos(0.6)\\approx53.1°$.\n\n**Answer:** $\\theta\\approx53°$.","body_he_md":"**נתון:** $\\vec{a}=(3,4)$, $\\vec{b}=(1,0)$.\n\n**שלב 1:** $\\vec{a}\\cdot\\vec{b}=3$.\n\n**שלב 2:** $|\\vec{a}|=5$, $|\\vec{b}|=1$.\n\n**שלב 3:** $\\cos\\theta=3/5$.\n\n**שלב 4:** $\\theta\\approx53°$."},
+    {"kind":"checkpoint","title_en":"Stop & Practice","title_he":"עצור ותרגל","body_en_md":"Are $(2,1)$ and $(-1,2)$ perpendicular?","body_he_md":"האם $(2,1)$ ו-$(-1,2)$ ניצבים?","checkpoint_solution_en":"Dot $=2(-1)+1(2)=0$. Yes, perpendicular.","checkpoint_solution_he":"מכפלה = 0. כן, ניצבים."},
+    {"kind":"worked_example","difficulty":"hard","example_number":3,"title_en":"Worked Example 3 — Midpoints Form a Parallelogram","title_he":"דוגמה 3 — אמצעים יוצרים מקבילית","body_en_md":"**Given:** Quadrilateral $ABCD$. Let $M,N,P,Q$ be midpoints of $AB,BC,CD,DA$.\n\n**Step 1:** $\\vec{MN}=\\frac{1}{2}\\vec{AC}$ (midpoint theorem on $\\triangle ABC$).\n\n**Step 2:** Similarly $\\vec{QP}=\\frac{1}{2}\\vec{AC}$.\n\n**Step 3:** So $\\vec{MN}=\\vec{QP}$ — parallel and equal.\n\n**Step 4:** $MNPQ$ is a parallelogram (one pair of opposite sides equal and parallel).\n\n**Answer:** Varignon's theorem proved.","body_he_md":"**נתון:** מרובע $ABCD$, $M,N,P,Q$ אמצעי צלעות.\n\n**שלב 1:** $\\vec{MN}=\\frac{1}{2}\\vec{AC}$.\n\n**שלב 2:** $\\vec{QP}=\\frac{1}{2}\\vec{AC}$.\n\n**שלב 3:** $\\vec{MN}=\\vec{QP}$.\n\n**שלב 4:** $MNPQ$ מקבילית (ואריניון)."},
+    {"kind":"method_guide","title_en":"Method Guide","title_he":"מדריך שיטה","body_en_md":"| Task | Method |\n|---|---|\n| Add vectors | Component-wise |\n| Magnitude | $\\sqrt{a^2+b^2}$ |\n| Angle | Dot product formula |\n| Perpendicular | Dot = 0 |\n| Midpoint | Average coordinates |","body_he_md":"| משימה | שיטה |\n|---|---|\n| חיבור | רכיבים |\n| גודל | $\\sqrt{a^2+b^2}$ |\n| זווית | dot |\n| ניצבות | dot=0 |\n| אמצע | ממוצע |"},
+    {"kind":"exercise_set","title_en":"Practice Exercises","title_he":"תרגילים","body_en_md":"","body_he_md":"","exercises":[
+      {"id":"vpe1","difficulty":"easy","body_en":"$(1,2)+(3,1)$?","body_he":"$(1,2)+(3,1)$?","solution_en":"$(4,3)$","solution_he":"$(4,3)$"},
+      {"id":"vpe2","difficulty":"easy","body_en":"$|(5,12)|$?","body_he":"$|(5,12)|$?","solution_en":"$13$","solution_he":"$13$"},
+      {"id":"vpe3","difficulty":"easy","body_en":"$2(2,-1)$?","body_he":"$2(2,-1)$?","solution_en":"$(4,-2)$","solution_he":"$(4,-2)$"},
+      {"id":"vpe4","difficulty":"easy","body_en":"Unit vector of $(3,4)$.","body_he":"וקטור יחידה של $(3,4)$.","solution_en":"$(3/5,4/5)$","solution_he":"$(3/5,4/5)$"},
+      {"id":"vpm1","difficulty":"medium","body_en":"Angle between $(1,1)$ and $(1,0)$.","body_he":"זווית בין $(1,1)$ ו-$(1,0)$.","solution_en":"$45°$","solution_he":"$45°$"},
+      {"id":"vpm2","difficulty":"medium","body_en":"Dot product $(2,3)\\cdot(4,-1)$.","body_he":"$(2,3)\\cdot(4,-1)$.","solution_en":"$5$","solution_he":"$5$"},
+      {"id":"vpm3","difficulty":"medium","body_en":"Find $c$ so $(1,c)$ ⊥ $(2,1)$.","body_he":"מצא $c$ כך $(1,c)$ ⟂ $(2,1)$.","solution_en":"$c=-2$","solution_he":"$c=-2$"},
+      {"id":"vpm4","difficulty":"medium","body_en":"Midpoint of $(0,0)$ and $(4,6)$.","body_he":"אמצע $(0,0)$ ו-$(4,6)$.","solution_en":"$(2,3)$","solution_he":"$(2,3)$"},
+      {"id":"vpm5","difficulty":"medium","body_en":"$|(1,3)+(3,1)|$?","body_he":"$|(1,3)+(3,1)|$?","solution_en":"$4\\sqrt{2}$","solution_he":"$4\\sqrt{2}$"},
+      {"id":"vph1","difficulty":"hard","body_en":"Prove $|u+v|\\le|u|+|v|$ (triangle inequality).","body_he":"הוכח $|u+v|\\le|u|+|v|$.","solution_en":"From Cauchy-Schwarz on dot product.","solution_he":"מ-Cauchy-Schwarz."},
+      {"id":"vph2","difficulty":"hard","body_en":"Parallelogram law: $|u+v|^2+|u-v|^2=2(|u|^2+|v|^2)$.","body_he":"חוק מקבילית: $|u+v|^2+|u-v|^2=2(|u|^2+|v|^2)$.","solution_en":"Expand dot products.","solution_he":"פתח dot."},
+      {"id":"vph3","difficulty":"hard","body_en":"State and use Varignon's theorem.","body_he":"משפט ואריניון — הצהרה ושימוש.","solution_en":"Midpoints of quadrilateral sides form parallelogram.","solution_he":"אמצעי צלעות → מקבילית."},
+      {"id":"vph4","difficulty":"hard","body_en":"Find angle between $(-2,1)$ and $(3,2)$.","body_he":"זווית בין $(-2,1)$ ו-$(3,2)$.","solution_en":"$\\cos\\theta=-4/(\\sqrt{5}\\sqrt{13})$","solution_he":"$\\cos\\theta=-4/\\sqrt{65}$"}
+    ]},
+    {"kind":"pitfall","title_en":"Common Pitfalls","title_he":"מלכודות נפוצות","body_en_md":"1. **Adding magnitudes** instead of components.\n2. **Forgetting $\\sqrt{}$** in magnitude.\n3. **Wrong dot product** — multiply corresponding components and sum.\n4. **Angle in wrong quadrant** — check signs of components.","body_he_md":"1. **חיבור גדלים** במקום רכיבים.\n2. **שכחת $\\sqrt{}$**.\n3. **dot שגוי**.\n4. **רביע שגוי**."},
+    {"kind":"before_exam","title_en":"Before the Exam","title_he":"לפני הבחינה","body_en_md":"- Add/subtract component-wise.\n- $|\\vec{v}|=\\sqrt{a^2+b^2}$.\n- $\\cos\\theta=\\frac{\\vec{a}\\cdot\\vec{b}}{|\\vec{a}||\\vec{b}|}$.\n- Midpoint = average.","body_he_md":"- רכיבים.\n- גודל.\n- dot לזווית.\n- אמצע = ממוצע."},
+    {"kind":"summary","title_en":"Take-away","title_he":"סיכום","body_en_md":"- Vectors add by components.\n- Dot product gives angle and tests perpendicularity.\n- Midpoints enable elegant proofs.","body_he_md":"- חיבור רכיבי.\n- dot → זווית וניצבות.\n- אמצעים להוכחות."}
   ],
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "What is the magnitude of the vector $\\vec{v} = (5, -12)$?",
-      "body_he": "מהי עוצמת הוקטור $\\vec{v} = (5, -12)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$7$",
-          "text_he": "$7$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$13$",
-          "text_he": "$13$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$17$",
-          "text_he": "$17$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\sqrt{7}$",
-          "text_he": "$\\sqrt{7}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$|\\vec{v}| = \\sqrt{5^2 + (-12)^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13$. This is a 5-12-13 Pythagorean triple.",
-      "explanation_he": "$|\\vec{v}| = \\sqrt{5^2 + (-12)^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13$. זהו שלשה פיתגורית 5-12-13."
-    },
-    {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "Given $\\vec{u} = (2, 5)$ and $\\vec{v} = (-1, 3)$, what is $\\vec{u} - 2\\vec{v}$?",
-      "body_he": "בהינתן $\\vec{u} = (2, 5)$ ו-$\\vec{v} = (-1, 3)$, מהו $\\vec{u} - 2\\vec{v}$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$(0, 11)$",
-          "text_he": "$(0, 11)$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$(4, -1)$",
-          "text_he": "$(4, -1)$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$(0, -1)$",
-          "text_he": "$(0, -1)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$(-2, -1)$",
-          "text_he": "$(-2, -1)$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$2\\vec{v} = (-2, 6)$. Then $\\vec{u} - 2\\vec{v} = (2-(-2), 5-6) = (4, -1)$.",
-      "explanation_he": "$2\\vec{v} = (-2, 6)$. אז $\\vec{u} - 2\\vec{v} = (2-(-2), 5-6) = (4, -1)$."
-    },
-    {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Compute the dot product $\\vec{a} \\cdot \\vec{b}$ for $\\vec{a} = (3, -2)$ and $\\vec{b} = (1, 4)$.",
-      "body_he": "חשבו את המכפלה הסקלרית $\\vec{a} \\cdot \\vec{b}$ עבור $\\vec{a} = (3, -2)$ ו-$\\vec{b} = (1, 4)$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$11$",
-          "text_he": "$11$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$-5$",
-          "text_he": "$-5$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$5$",
-          "text_he": "$5$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0$",
-          "text_he": "$0$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\vec{a}\\cdot\\vec{b} = (3)(1) + (-2)(4) = 3 - 8 = -5$.",
-      "explanation_he": "$\\vec{a}\\cdot\\vec{b} = (3)(1) + (-2)(4) = 3 - 8 = -5$."
-    },
-    {
-      "id": "q4",
-      "type": "open",
-      "body_en": "Investigate $f(x)=x^3-6x^2+9x$:\n\n(a) Domain and zeros.\n(b) Monotonicity and local extrema.\n(c) Area between $f$ and the x-axis on $[0,3]$.",
-      "body_he": "חקור $f(x)=x^3-6x^2+9x$:\n\n(א) תחום ואפסים.\n(ב) מונוטוניות וקיצון.\n(ג) שטח ב-$[0,3]$.",
-      "points": 10,
-      "expected_steps_en": [
-        "Factor: x(x-3)², zeros 0 and 3",
-        "f'=3(x-1)(x-3), max at (1,4), min at (3,0)",
-        "∫₀³ f(x)dx = 27/4"
-      ],
-      "expected_steps_he": [
-        "אפסים 0,3",
-        "קיצון: מקס (1,4), מין (3,0)",
-        "שטח 27/4"
-      ],
-      "sample_solution_en": "Zeros 0,3; max (1,4); area 27/4.",
-      "sample_solution_he": "אפסים 0,3; מקס (1,4); שטח 27/4.",
-      "rubric_en": "3pts domain/zeros; 4pts derivative analysis; 3pts integral.",
-      "rubric_he": "3 נק' תחום/אפסים; 4 נק' נגזרת; 3 נק' אינטגרל."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "Bag: 2 apples and $n$ peaches. P(two apples without replacement) = 1/36.\n\n(a) Find $n$.\n(b) Find P(both same type | two drawn).",
-      "body_he": "2 תפוחים ו-$n$ אפרסקים. P(2 תפוחים)=1/36.\n\n(א) מצא $n$.\n(ב) P(אותו סוג | 2 נשלפו).",
-      "points": 10,
-      "expected_steps_en": [
-        "Set (2/(n+2))(1/(n+1)) = 1/36",
-        "Solve (n+2)(n+1)=72 → n=7",
-        "P(same)=1/36 + P(two peaches)"
-      ],
-      "expected_steps_he": [
-        "הצבה: (n+2)(n+1)=72",
-        "n=7",
-        "P(אותו סוג)=43/144"
-      ],
-      "sample_solution_en": "n=7. P(same type)=43/144.",
-      "sample_solution_he": "n=7. P=43/144.",
-      "rubric_en": "5pts find n with algebra; 5pts conditional/total probability.",
-      "rubric_he": "5 נק' מציאת n; 5 נק' הסתברות."
-    }
-  ]
+  "questions":[{"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"$|(3,4)|=$","stem_he":"$|(3,4)|=$","options_en":["$5$","$7$","$25$","$12$"],"options_he":["$5$","$7$","$25$","$12$"],"correct_index":0,"explanation_en":"3-4-5 triangle.","explanation_he":"משולש 3-4-5.","skill_atoms":["vector_magnitude"]}],
+  "agent_hints":{"key_insights":["Component-wise addition","Dot for angle","Varignon for proofs"],"tutor_pacing_hint":"Draw arrows on grid.","next_recommended":["vectors_dot_product_3d"]}
 }
