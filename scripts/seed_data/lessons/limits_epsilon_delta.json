@@ -1,136 +1,233 @@
 {
-  "id": "limits_epsilon_delta",
-  "type": "interactive",
-  "subject": "calculus_1",
-  "title_en": "Limits — The ε-δ Definition",
-  "title_he": "גבולות — הגדרת אפסילון-דלתא",
-  "duration_min": 30,
-  "level_min": "calculus_1",
-  "agent_hints": "Students at Technion 104031 must write complete ε-δ proofs — not just understand intuitively. The core skill: given ε > 0, construct δ(ε) explicitly, then verify |x-a|<δ ⇒ |f(x)-L|<ε forwards. Common errors: assuming δ=ε always works; omitting the bounding step (restrict δ ≤ 1 to bound a product factor); writing steps in the wrong order. Always have students state the goal |f(x)-L|<ε before working backwards to find δ.",
+  "concept_id": "limits_epsilon_delta",
+  "subject": "math",
+  "level": "university",
+  "math_track": ["5pt", "university"],
+  "title_en": "The ε-δ Definition of a Limit and Continuity",
+  "title_he": "ההגדרה ε-δ של גבול ורציפות",
+  "summary_en": "The ε-δ definition makes the intuitive notion of a limit rigorous. For every ε>0 there exists δ>0 such that 0<|x-c|<δ implies |f(x)-L|<ε. Continuity means f(c) = lim_{x→c} f(x). The sum rule for limits follows by choosing δ = min(δ₁,δ₂).",
+  "summary_he": "ההגדרה ε-δ מהפכת את הרעיון האינטואיטיבי של גבול לקפדני. לכל ε>0 קיים δ>0 כך ש-0<|x-c|<δ גורר |f(x)-L|<ε. רציפות פירושה f(c) = lim_{x→c} f(x). כלל הסכום לגבולות נובע מבחירת δ = min(δ₁,δ₂).",
+  "est_minutes": 70,
   "sections": [
     {
-      "id": "intuitive_review",
-      "title_en": "Intuitive Limits Review",
-      "title_he": "חזרה אינטואיטיבית על גבולות",
-      "level_min": "calculus_1",
-      "body_en_md": "We write $\\lim_{x \\to a} f(x) = L$ to mean: as $x$ approaches $a$ (with $x \\neq a$), the output $f(x)$ gets arbitrarily close to $L$.\n\nThis is intuitive — it says nothing about *how close* $x$ must be to $a$ to guarantee a given closeness of $f(x)$ to $L$. The ε-δ definition quantifies exactly this.\n\n**Examples:**\n- $\\lim_{x \\to 2}(3x-1) = 5$: as $x \\to 2$, $3x-1 \\to 5$. ✓ (can be proved rigorously)\n- $\\lim_{x \\to 0}\\dfrac{\\sin x}{x} = 1$: not obvious algebraically — requires careful work.\n- $\\lim_{x \\to 0}\\sin(1/x)$: **does not exist** — the function oscillates between −1 and 1 infinitely often near 0.\n\nThe formal definition will let us prove the first, establish the second, and disprove the third with mathematical certainty.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "כותבים $\\lim_{x \\to a} f(x) = L$ כדי לומר: כאשר $x$ מתקרב ל-$a$ (עם $x \\neq a$), הפלט $f(x)$ מתקרב ל-$L$ בצורה שרירותית.\n\nזו אמירה אינטואיטיבית — היא אינה מפרטת *כמה* קרוב $x$ חייב להיות ל-$a$ כדי להבטיח קרבות נתונה של $f(x)$ ל-$L$. הגדרת ε-δ מכמתת בדיוק את זה.\n\n**דוגמאות:**\n- $\\lim_{x \\to 2}(3x-1) = 5$: כאשר $x \\to 2$, $3x-1 \\to 5$. ✓\n- $\\lim_{x \\to 0}\\dfrac{\\sin x}{x} = 1$: לא מובן מאליו אלגבראית — דורש עבודה קפדנית.\n- $\\lim_{x \\to 0}\\sin(1/x)$: **אינו קיים** — הפונקציה מתנדנדת בין −1 ל-1 אינסוף פעמים ליד 0.\n\nההגדרה הפורמלית תאפשר לנו להוכיח את הראשון, לבסס את השני, ולסתור את השלישי בודאות מתמטית.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "kind": "intro",
+      "title_en": "Why ε-δ?",
+      "title_he": "למה ε-δ?",
+      "body_en_md": "The phrase \"$f(x)$ approaches $L$ as $x \\to c$\" is intuitive but imprecise. What does \"approaches\" mean exactly? How close is \"close enough\"? The ε-δ definition — introduced by Weierstrass in the 19th century — gives mathematics the precision to prove rigorously that limits behave correctly.\n\n**Why it matters for university calculus:**\n- All theorems of calculus (derivatives, integrals, continuity) are ultimately built on the ε-δ definition.\n- University exams often require writing explicit ε-δ proofs.\n- The technique teaches you to think quantitatively about approximation and error.\n\n**Topics in this lesson:**\n- The ε-δ definition of $\\lim_{x\\to c}f(x) = L$.\n- The four-step proof template.\n- The squeeze theorem.\n- Continuity in terms of ε-δ.\n- Proof of the sum rule: $\\lim(f+g) = \\lim f + \\lim g$.",
+      "body_he_md": "הביטוי \"$f(x)$ מתקרבת ל-$L$ כאשר $x \\to c$\" הוא אינטואיטיבי אך לא מדויק. מה בדיוק פירוש \"מתקרבת\"? כמה קרוב הוא \"קרוב מספיק\"? ההגדרה ε-δ — שהוצגה על ידי ויירשטראס במאה ה-19 — מעניקה למתמטיקה את הדיוק להוכיח בקפדנות שגבולות מתנהגים כראוי.\n\n**מדוע זה חשוב לחשבון אוניברסיטאי:**\n- כל משפטי החשבון (נגזרות, אינטגרלים, רציפות) בנויים בסופו של דבר על ההגדרה ε-δ.\n- בחינות אוניברסיטה דורשות לעיתים קרובות כתיבת הוכחות ε-δ מפורשות.\n- הטכניקה מלמדת לחשוב כמותית על קירוב ושגיאות.\n\n**נושאים בשיעור זה:**\n- ההגדרה ε-δ של $\\lim_{x\\to c}f(x) = L$.\n- תבנית הוכחת 4 שלבים.\n- משפט הסנדוויץ'.\n- רציפות במונחי ε-δ.\n- הוכחת כלל הסכום: $\\lim(f+g) = \\lim f + \\lim g$."
     },
     {
-      "id": "epsilon_delta_definition",
-      "title_en": "The Formal ε-δ Definition",
-      "title_he": "ההגדרה הפורמלית ε-δ",
-      "level_min": "calculus_1",
-      "body_en_md": "**Definition.** $\\lim_{x \\to a} f(x) = L$ means:\n$$\\forall\\,\\epsilon > 0,\\quad\\exists\\,\\delta > 0 \\quad\\text{such that}\\quad 0 < |x - a| < \\delta \\;\\Rightarrow\\; |f(x) - L| < \\epsilon.$$\n\n**Reading it aloud:** “For every challenge $\\epsilon > 0$ (no matter how small), we can produce a response $\\delta > 0$ such that whenever $x$ is within $\\delta$ of $a$ (but $x \\neq a$), $f(x)$ is within $\\epsilon$ of $L$.”\n\n**Key points:**\n1. $\\delta$ may depend on $\\epsilon$, on $a$, on $f$, and on $L$ — and usually must.\n2. The condition $0 < |x-a|$ (strict inequality on the left) excludes $x = a$ itself.\n3. The definition must hold for **all** $\\epsilon > 0$, however small.\n\n**Negation** (to disprove a limit): $\\lim_{x \\to a}f(x) \\neq L$ iff $\\exists\\,\\epsilon_0 > 0$ such that for every $\\delta > 0$, there exists $x$ with $0 < |x-a| < \\delta$ yet $|f(x) - L| \\geq \\epsilon_0$.",
-      "body_he_md": "**הגדרה.** $\\lim_{x \\to a} f(x) = L$ פירושו:\n$$\\forall\\,\\epsilon > 0,\\quad\\exists\\,\\delta > 0 \\quad\\text{כך ש-}\\quad 0 < |x - a| < \\delta \\;\\Rightarrow\\; |f(x) - L| < \\epsilon.$$\n\n**קריאה בקול:** “לכל אתגר $\\epsilon > 0$ (לא משנה כמה קטן), ניתן למצוא תגובה $\\delta > 0$ כך שבכל פעם ש-$x$ נמצא בתוך $\\delta$ מ-$a$ (אך $x \\neq a$), $f(x)$ נמצא בתוך $\\epsilon$ מ-$L$.”\n\n**נקודות מרכזיות:**\n1. $\\delta$ עשוי לתלות ב-$\\epsilon$, ב-$a$, ב-$f$ וב-$L$ — ובדרך כלל חייב.\n2. התנאי $0 < |x-a|$ (אי-שוויון חזק) שולל $x = a$ עצמה.\n3. ההגדרה חייבת להתקיים לכל $\\epsilon > 0$, יהיה קטן כאשר יהיה.\n\n**שלילה** (לסתור גבול): $\\lim_{x \\to a}f(x) \\neq L$ אמ\"ם $\\exists\\,\\epsilon_0 > 0$ כך שלכל $\\delta > 0$, קיים $x$ עם $0 < |x-a| < \\delta$ אך $|f(x) - L| \\geq \\epsilon_0$."
+      "kind": "definition",
+      "title_en": "The ε-δ Definition",
+      "title_he": "ההגדרה ε-δ",
+      "body_en_md": "**Definition (Weierstrass):**\n$$\\lim_{x\\to c}f(x) = L$$\nmeans: for every $\\varepsilon > 0$ there exists $\\delta > 0$ such that\n$$0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon$$\n\n**Interpretation:**\n- $\\varepsilon$ (epsilon) measures how close $f(x)$ must be to $L$ (the \"output tolerance\").\n- $\\delta$ (delta) is the \"input radius\" we find to achieve that output tolerance.\n- $0 < |x-c|$ means $x \\neq c$ — the limit is about approaching $c$, not being at $c$.\n- The definition says: however tight the output tolerance $\\varepsilon$, we can always find a small enough input window $\\delta$.\n\n**Continuity:**\n$f$ is continuous at $c$ if:\n1. $f(c)$ is defined.\n2. $\\lim_{x\\to c}f(x)$ exists.\n3. $\\lim_{x\\to c}f(x) = f(c)$.\n\nEquivalently: for every $\\varepsilon > 0$ there exists $\\delta > 0$ such that\n$$|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon$$\n(Note: the condition $x \\neq c$ is dropped for continuity.)",
+      "body_he_md": "**הגדרה (ויירשטראס):**\n$$\\lim_{x\\to c}f(x) = L$$\nפירושה: לכל $\\varepsilon > 0$ קיים $\\delta > 0$ כך ש-\n$$0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon$$\n\n**פרשנות:**\n- $\\varepsilon$ (אפסילון) מודד כמה קרוב $f(x)$ חייב להיות ל-$L$ (ה\"סבילות של הפלט\").\n- $\\delta$ (דלתא) הוא \"רדיוס הקלט\" שמוצאים להשגת סבילות הפלט.\n- $0 < |x-c|$ פירושו $x \\neq c$ — הגבול עוסק בהתקרבות ל-$c$, לא בהיות ב-$c$.\n- ההגדרה אומרת: כמה שסבילות הפלט $\\varepsilon$ קטנה, תמיד ניתן למצוא חלון קלט קטן מספיק $\\delta$.\n\n**רציפות:**\n$f$ רציפה ב-$c$ אם:\n1. $f(c)$ מוגדרת.\n2. $\\lim_{x\\to c}f(x)$ קיים.\n3. $\\lim_{x\\to c}f(x) = f(c)$.\n\nשקולה: לכל $\\varepsilon > 0$ קיים $\\delta > 0$ כך ש-\n$$|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon$$\n(הערה: התנאי $x \\neq c$ מושמט לרציפות.)"
     },
     {
-      "id": "proof_template_linear",
-      "title_en": "Proof Template — Linear Functions",
-      "title_he": "תבנית הוכחה — פונקציות לינאריות",
-      "level_min": "calculus_1",
-      "body_en_md": "## The Four-Step Template\n\n1. **State the goal:** write $|f(x) - L| < \\epsilon$.\n2. **Simplify:** express $|f(x) - L|$ algebraically in terms of $|x - a|$.\n3. **Choose $\\delta$:** set $\\delta$ as an explicit function of $\\epsilon$.\n4. **Verify:** assume $0 < |x - a| < \\delta$ and derive $|f(x) - L| < \\epsilon$.\n\n---\n\n**Worked Example 1.** Prove $\\lim_{x \\to 2}(3x - 1) = 5$.\n\n*Scratch work (step 2):*\n$$|(3x-1) - 5| = |3x - 6| = 3|x - 2|.$$\nWe need $3|x-2| < \\epsilon$, i.e., $|x-2| < \\epsilon/3$. Choose $\\delta = \\epsilon/3$.\n\n*Formal proof:*\n> **Given** $\\epsilon > 0$. **Let** $\\delta = \\dfrac{\\epsilon}{3}$. **Suppose** $0 < |x-2| < \\delta$. **Then:**\n> $$|(3x-1) - 5| = 3|x - 2| < 3\\delta = 3 \\cdot \\frac{\\epsilon}{3} = \\epsilon. \\quad\\square$$\n\n**General rule for $f(x) = mx + b$:** $|f(x) - L| = |m|\\,|x-a|$, so $\\delta = \\epsilon/|m|$ (provided $m \\neq 0$).",
-      "body_he_md": "## תבנית ארבעת השלבים\n\n1. **הצהר על המטרה:** כתוב $|f(x) - L| < \\epsilon$.\n2. **פשט:** הבע את $|f(x) - L|$ אלגבראית במונחי $|x - a|$.\n3. **בחר $\\delta$:** הגדר $\\delta$ כפונקציה מפורשת של $\\epsilon$.\n4. **אמת:** הנח $0 < |x - a| < \\delta$ והסק $|f(x) - L| < \\epsilon$.\n\n---\n\n**דוגמה מלאה 1.** הוכח ש-$\\lim_{x \\to 2}(3x - 1) = 5$.\n\n*עבודת שרבוט (שלב 2):*\n$$|(3x-1) - 5| = |3x - 6| = 3|x - 2|.$$\nצריכים $3|x-2| < \\epsilon$, כלומר $|x-2| < \\epsilon/3$. בוחרים $\\delta = \\epsilon/3$.\n\n*הוכחה פורמלית:*\n> **נתון** $\\epsilon > 0$. **נגדיר** $\\delta = \\dfrac{\\epsilon}{3}$. **נניח** $0 < |x-2| < \\delta$. **אז:**\n> $$|(3x-1) - 5| = 3|x - 2| < 3\\delta = 3 \\cdot \\frac{\\epsilon}{3} = \\epsilon. \\quad\\square$$\n\n**כלל כללי ל-$f(x) = mx + b$:** $|f(x) - L| = |m|\\,|x-a|$, לכן $\\delta = \\epsilon/|m|$ (בתנאי $m \\neq 0$)."
+      "kind": "theory",
+      "title_en": "The Four-Step ε-δ Proof Template",
+      "title_he": "תבנית הוכחת ε-δ ב-4 שלבים",
+      "body_en_md": "**Step 1 — Scratch work (find $\\delta$):**\nWork backwards. Assume $|x-c|<\\delta$ and try to bound $|f(x)-L|$ in terms of $\\delta$. The goal is to find $\\delta = \\delta(\\varepsilon)$ (a function of $\\varepsilon$) such that $|f(x)-L| < \\varepsilon$.\n\n**Step 2 — State $\\delta$:**\nChoose $\\delta$ based on the scratch work. Write: \"Let $\\delta = \\ldots$\".\n\n**Step 3 — Prove the implication:**\nAssume $0 < |x-c| < \\delta$. Start from $|f(x)-L|$ and bound it to get $< \\varepsilon$.\n\n**Step 4 — Conclude:**\n\"Therefore $\\lim_{x\\to c}f(x) = L$ by definition.\"\n\n**Key inequalities used in ε-δ proofs:**\n- **Triangle inequality:** $|a+b| \\leq |a|+|b|$.\n- **Product bound:** $|ab| = |a||b|$.\n- **Restriction trick:** if we additionally require $|x-c|<1$ (say), then $|x|$ is bounded and we can bound variable coefficients.\n\n**Squeeze Theorem:** If $g(x) \\leq f(x) \\leq h(x)$ near $c$, and $\\lim_{x\\to c}g(x) = \\lim_{x\\to c}h(x) = L$, then $\\lim_{x\\to c}f(x) = L$.",
+      "body_he_md": "**שלב 1 — עבודת טיוטה (מציאת $\\delta$):**\nעבוד לאחור. הניח $|x-c|<\\delta$ ונסה לחסום $|f(x)-L|$ במונחי $\\delta$. המטרה היא למצוא $\\delta = \\delta(\\varepsilon)$ (פונקציה של $\\varepsilon$) כך ש-$|f(x)-L| < \\varepsilon$.\n\n**שלב 2 — ציין את $\\delta$:**\nבחר $\\delta$ על בסיס עבודת הטיוטה. כתוב: \"יהי $\\delta = \\ldots$\".\n\n**שלב 3 — הוכח את הגרירה:**\nהניח $0 < |x-c| < \\delta$. התחל מ-$|f(x)-L|$ וחסום כדי לקבל $< \\varepsilon$.\n\n**שלב 4 — סיים:**\n\"לכן $\\lim_{x\\to c}f(x) = L$ לפי ההגדרה.\"\n\n**אי-שוויונות מרכזיים בהוכחות ε-δ:**\n- **אי-שוויון משולש:** $|a+b| \\leq |a|+|b|$.\n- **חסם מכפלה:** $|ab| = |a||b|$.\n- **טריק הגבלה:** אם נדרוש בנוסף $|x-c|<1$ (לדוגמה), אז $|x|$ חסומה ונוכל לחסום מקדמים משתנים.\n\n**משפט הסנדוויץ':** אם $g(x) \\leq f(x) \\leq h(x)$ בסביבת $c$, ו-$\\lim_{x\\to c}g(x) = \\lim_{x\\to c}h(x) = L$, אז $\\lim_{x\\to c}f(x) = L$."
     },
     {
-      "id": "quadratic_proof_bounding",
-      "title_en": "Proofs with Quadratics — The Bounding Trick",
-      "title_he": "הוכחות עם ריבועיות — טריק החסימה",
-      "level_min": "calculus_1",
-      "body_en_md": "**Worked Example 2.** Prove $\\lim_{x \\to 1} x^2 = 1$.\n\n*Scratch work:*\n$$|x^2 - 1| = |x-1|\\,|x+1|.$$\nThe factor $|x-1|$ is controlled by $\\delta$, but $|x+1|$ also depends on $x$ and must be bounded separately.\n\n**Bounding trick:** Impose $\\delta \\leq 1$ upfront. If $|x-1| < 1$, then $0 < x < 2$, so $1 < x+1 < 3$, giving $|x+1| < 3$.\n\nTherefore: $|x^2 - 1| < 3|x-1| < 3\\delta$.\n\nWe need $3\\delta \\leq \\epsilon$, i.e., $\\delta \\leq \\epsilon/3$. Combined with $\\delta \\leq 1$:\n$$\\boxed{\\delta = \\min\\!\\left(1,\\ \\frac{\\epsilon}{3}\\right).}$$\n\n*Formal proof:*\n> **Given** $\\epsilon > 0$. **Let** $\\delta = \\min(1, \\epsilon/3)$. **Suppose** $0 < |x-1| < \\delta$.\n> Since $\\delta \\leq 1$: $|x-1| < 1 \\Rightarrow |x+1| < 3$.\n> Therefore: $|x^2 - 1| = |x-1|\\,|x+1| < 3|x-1| < 3\\delta \\leq \\epsilon$. $\\square$\n\n**General principle:** For a product $|g(x)| \\cdot |x-a|$, restrict $\\delta \\leq 1$ to bound $|g(x)| \\leq M$, then choose $\\delta = \\min(1, \\epsilon/M)$.",
-      "body_he_md": "**דוגמה מלאה 2.** הוכח ש-$\\lim_{x \\to 1} x^2 = 1$.\n\n*עבודת שרבוט:*\n$$|x^2 - 1| = |x-1|\\,|x+1|.$$\nהגורם $|x-1|$ נשלט על ידי $\\delta$, אך $|x+1|$ תלוי גם ב-$x$ וביש לחסום בנפרד.\n\n**טריק החסימה:** מוסיפים את הגבלה $\\delta \\leq 1$ מלכתחילה. אם $|x-1| < 1$, אז $0 < x < 2$, לכן $1 < x+1 < 3$, ומכאן $|x+1| < 3$.\n\nלכן: $|x^2 - 1| < 3|x-1| < 3\\delta$.\n\nצריכים $3\\delta \\leq \\epsilon$, כלומר $\\delta \\leq \\epsilon/3$. בשילוב עם $\\delta \\leq 1$:\n$$\\boxed{\\delta = \\min\\!\\left(1,\\ \\frac{\\epsilon}{3}\\right).}$$\n\n*הוכחה פורמלית:*\n> **נתון** $\\epsilon > 0$. **נגדיר** $\\delta = \\min(1, \\epsilon/3)$. **נניח** $0 < |x-1| < \\delta$.\n> מכיוון ש-$\\delta \\leq 1$: $|x-1| < 1 \\Rightarrow |x+1| < 3$.\n> לכן: $|x^2 - 1| = |x-1|\\,|x+1| < 3|x-1| < 3\\delta \\leq \\epsilon$. $\\square$\n\n**עקרון כללי:** עבור מכפלה $|g(x)| \\cdot |x-a|$, מגבילים $\\delta \\leq 1$ לחסימת $|g(x)| \\leq M$, ואז בוחרים $\\delta = \\min(1, \\epsilon/M)$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Prove $\\lim_{x\\to 2}(3x-1) = 5$",
+      "title_he": "דוגמה פתורה 1 — הוכח $\\lim_{x\\to 2}(3x-1) = 5$",
+      "body_en_md": "**Claim:** $\\lim_{x\\to 2}(3x-1) = 5$.\n\n**Step 1 — Scratch work:**\n$$|f(x)-L| = |(3x-1)-5| = |3x-6| = 3|x-2|$$\nWe need $3|x-2| < \\varepsilon$, i.e., $|x-2| < \\dfrac{\\varepsilon}{3}$.\nSo choose $\\delta = \\dfrac{\\varepsilon}{3}$.\n\n**Step 2 — State $\\delta$:**\nLet $\\delta = \\dfrac{\\varepsilon}{3}$.\n\n**Step 3 — Prove the implication:**\nAssume $0 < |x-2| < \\delta = \\dfrac{\\varepsilon}{3}$. Then:\n$$|(3x-1)-5| = |3x-6| = 3|x-2| < 3\\cdot\\frac{\\varepsilon}{3} = \\varepsilon$$\n\n**Step 4 — Conclusion:**\nFor every $\\varepsilon > 0$, choosing $\\delta = \\varepsilon/3$ ensures $|x-2| < \\delta \\implies |(3x-1)-5| < \\varepsilon$.\n$$\\therefore \\lim_{x\\to 2}(3x-1) = 5 \\quad \\checkmark$$",
+      "body_he_md": "**טענה:** $\\lim_{x\\to 2}(3x-1) = 5$.\n\n**שלב 1 — עבודת טיוטה:**\n$$|f(x)-L| = |(3x-1)-5| = |3x-6| = 3|x-2|$$\nאנחנו צריכים $3|x-2| < \\varepsilon$, כלומר $|x-2| < \\dfrac{\\varepsilon}{3}$.\nלכן נבחר $\\delta = \\dfrac{\\varepsilon}{3}$.\n\n**שלב 2 — ציון $\\delta$:**\nיהי $\\delta = \\dfrac{\\varepsilon}{3}$.\n\n**שלב 3 — הוכחת הגרירה:**\nהניח $0 < |x-2| < \\delta = \\dfrac{\\varepsilon}{3}$. אז:\n$$|(3x-1)-5| = |3x-6| = 3|x-2| < 3\\cdot\\frac{\\varepsilon}{3} = \\varepsilon$$\n\n**שלב 4 — מסקנה:**\nלכל $\\varepsilon > 0$, בחירת $\\delta = \\varepsilon/3$ מבטיחה ש-$|x-2| < \\delta \\implies |(3x-1)-5| < \\varepsilon$.\n$$\\therefore \\lim_{x\\to 2}(3x-1) = 5 \\quad \\checkmark$$"
     },
     {
-      "id": "onesided_infinite",
-      "title_en": "One-Sided and Infinite Limits",
-      "title_he": "גבולות חד-צדדיים וגבולות אינסופיים",
-      "level_min": "calculus_1",
-      "body_en_md": "### One-Sided Limits\n\n**Right-hand limit** $\\lim_{x \\to a^+} f(x) = L$:\n$$\\forall\\,\\epsilon>0,\\;\\exists\\,\\delta>0:\\quad 0 < x - a < \\delta \\;\\Rightarrow\\; |f(x)-L|<\\epsilon.$$\n**Left-hand limit:** replace $0 < x-a$ with $0 < a-x$.\n\nThe two-sided limit exists iff both one-sided limits exist and are equal.\n\n### Limits at Infinity and Infinite Limits\n\n**$f(x) \\to L$ as $x \\to \\infty$:** $\\;\\forall\\,\\epsilon>0,\\;\\exists\\,N>0: x>N\\Rightarrow|f(x)-L|<\\epsilon$.\n\n**$f(x) \\to \\infty$ as $x \\to a$:** $\\;\\forall\\,M>0,\\;\\exists\\,\\delta>0: 0<|x-a|<\\delta\\Rightarrow f(x)>M$.\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{1}{x}=0$. Given $\\epsilon>0$, let $N=\\dfrac{1}{\\epsilon}$. Then $x>N \\Rightarrow \\dfrac{1}{x}<\\dfrac{1}{N}=\\epsilon$. $\\checkmark$",
-      "body_he_md": "### גבולות חד-צדדיים\n\n**גבול מהצד הימני** $\\lim_{x \\to a^+} f(x) = L$:\n$$\\forall\\,\\epsilon>0,\\;\\exists\\,\\delta>0:\\quad 0 < x - a < \\delta \\;\\Rightarrow\\; |f(x)-L|<\\epsilon.$$\n**גבול מהצד השמאלי:** מחליפים $0 < x-a$ ב-$0 < a-x$.\n\nהגבול הדו-צדדי קיים אמ\"ם שני הגבולות החד-צדדיים קיימים ושווים.\n\n### גבולות באינסוף וגבולות אינסופיים\n\n**$f(x) \\to L$ כאשר $x \\to \\infty$:** $\\;\\forall\\,\\epsilon>0,\\;\\exists\\,N>0: x>N\\Rightarrow|f(x)-L|<\\epsilon$.\n\n**$f(x) \\to \\infty$ כאשר $x \\to a$:** $\\;\\forall\\,M>0,\\;\\exists\\,\\delta>0: 0<|x-a|<\\delta\\Rightarrow f(x)>M$.\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{1}{x}=0$. נתון $\\epsilon>0$, נגדיר $N=\\dfrac{1}{\\epsilon}$. אז $x>N \\Rightarrow \\dfrac{1}{x}<\\dfrac{1}{N}=\\epsilon$. $\\checkmark$"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Write an ε-δ proof that $\\lim_{x\\to 3}(2x+1) = 7$.",
+      "body_he_md": "כתוב הוכחת ε-δ ש-$\\lim_{x\\to 3}(2x+1) = 7$.",
+      "checkpoint_solution_en": "Scratch: $|(2x+1)-7| = |2x-6| = 2|x-3|$. Need $2|x-3|<\\varepsilon$, so $|x-3|<\\varepsilon/2$. Let $\\delta=\\varepsilon/2$. Proof: if $0<|x-3|<\\delta$, then $|(2x+1)-7| = 2|x-3| < 2\\cdot(\\varepsilon/2) = \\varepsilon$.",
+      "checkpoint_solution_he": "טיוטה: $|(2x+1)-7| = |2x-6| = 2|x-3|$. צריך $2|x-3|<\\varepsilon$, לכן $|x-3|<\\varepsilon/2$. יהי $\\delta=\\varepsilon/2$. הוכחה: אם $0<|x-3|<\\delta$, אז $|(2x+1)-7| = 2|x-3| < 2\\cdot(\\varepsilon/2) = \\varepsilon$."
     },
     {
-      "id": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "calculus_1",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Limits — The ε-δ Definition: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Limits — The ε-δ Definition.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-גבולות — הגדרת אפסילון-דלתא: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-גבולות — הגדרת אפסילון-דלתא.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Squeeze Theorem: $\\lim_{x\\to 0}x\\sin(1/x) = 0$",
+      "title_he": "דוגמה פתורה 2 — משפט הסנדוויץ': $\\lim_{x\\to 0}x\\sin(1/x) = 0$",
+      "body_en_md": "**Claim:** $\\lim_{x\\to 0}x\\sin\\left(\\dfrac{1}{x}\\right) = 0$.\n\n**Note:** We cannot substitute $x=0$ ($1/x$ is undefined), and $\\lim_{x\\to 0}\\sin(1/x)$ does not exist (it oscillates). But we can use the squeeze theorem.\n\n**Step 1 — Bound $|\\sin(1/x)|$:**\nFor all $x \\neq 0$:\n$$\\left|\\sin\\left(\\frac{1}{x}\\right)\\right| \\leq 1$$\n\n**Step 2 — Multiply by $|x|$:**\n$$\\left|x\\sin\\left(\\frac{1}{x}\\right)\\right| = |x|\\left|\\sin\\left(\\frac{1}{x}\\right)\\right| \\leq |x|$$\n\n**Step 3 — Apply squeeze:**\n$$-|x| \\leq x\\sin\\left(\\frac{1}{x}\\right) \\leq |x|$$\nSince $\\lim_{x\\to 0}|x| = 0$ and $\\lim_{x\\to 0}(-|x|) = 0$, by the Squeeze Theorem:\n$$\\lim_{x\\to 0}x\\sin\\left(\\frac{1}{x}\\right) = 0 \\quad \\checkmark$$\n\n**ε-δ version:** Given $\\varepsilon > 0$, let $\\delta = \\varepsilon$. Then $0 < |x-0| < \\delta$ implies $\\left|x\\sin(1/x)-0\\right| \\leq |x| < \\delta = \\varepsilon$.",
+      "body_he_md": "**טענה:** $\\lim_{x\\to 0}x\\sin\\left(\\dfrac{1}{x}\\right) = 0$.\n\n**הערה:** לא ניתן להציב $x=0$ ($1/x$ לא מוגדרת), ו-$\\lim_{x\\to 0}\\sin(1/x)$ לא קיים (הוא מתנדנד). אבל ניתן להשתמש במשפט הסנדוויץ'.\n\n**שלב 1 — חסום $|\\sin(1/x)|$:**\nלכל $x \\neq 0$:\n$$\\left|\\sin\\left(\\frac{1}{x}\\right)\\right| \\leq 1$$\n\n**שלב 2 — הכפל ב-$|x|$:**\n$$\\left|x\\sin\\left(\\frac{1}{x}\\right)\\right| = |x|\\left|\\sin\\left(\\frac{1}{x}\\right)\\right| \\leq |x|$$\n\n**שלב 3 — יישום הסנדוויץ':**\n$$-|x| \\leq x\\sin\\left(\\frac{1}{x}\\right) \\leq |x|$$\nמאחר ש-$\\lim_{x\\to 0}|x| = 0$ ו-$\\lim_{x\\to 0}(-|x|) = 0$, לפי משפט הסנדוויץ':\n$$\\lim_{x\\to 0}x\\sin\\left(\\frac{1}{x}\\right) = 0 \\quad \\checkmark$$\n\n**גרסת ε-δ:** בהינתן $\\varepsilon > 0$, יהי $\\delta = \\varepsilon$. אז $0 < |x-0| < \\delta$ גורר $\\left|x\\sin(1/x)-0\\right| \\leq |x| < \\delta = \\varepsilon$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "To prove $\\lim_{x \\to 3}(2x - 1) = 5$ using the ε-δ definition, which $\\delta$ should be chosen?",
-      "body_he": "להוכחת $\\lim_{x \\to 3}(2x - 1) = 5$ בשיטת ε-δ, איזה $\\delta$ צריך לבחור?",
-      "options": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the squeeze theorem to find $\\lim_{x\\to\\infty}\\dfrac{\\sin x}{x}$.",
+      "body_he_md": "השתמש במשפט הסנדוויץ' למציאת $\\lim_{x\\to\\infty}\\dfrac{\\sin x}{x}$.",
+      "checkpoint_solution_en": "$-1\\leq\\sin x\\leq 1$ for all $x\\neq 0$, so $-1/|x|\\leq(\\sin x)/x\\leq 1/|x|$. As $x\\to\\infty$, $1/|x|\\to 0$. By squeeze: $\\lim_{x\\to\\infty}(\\sin x)/x = 0$.",
+      "checkpoint_solution_he": "$-1\\leq\\sin x\\leq 1$ לכל $x\\neq 0$, לכן $-1/|x|\\leq(\\sin x)/x\\leq 1/|x|$. כאשר $x\\to\\infty$, $1/|x|\\to 0$. לפי סנדוויץ': $\\lim_{x\\to\\infty}(\\sin x)/x = 0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Limit Sum Rule via ε-δ",
+      "title_he": "דוגמה פתורה 3 — כלל הסכום לגבולות בעזרת ε-δ",
+      "body_en_md": "**Theorem:** If $\\lim_{x\\to c}f(x) = L$ and $\\lim_{x\\to c}g(x) = M$, then $\\lim_{x\\to c}(f(x)+g(x)) = L+M$.\n\n**Proof:**\n\n**Step 1 — Setup.** Let $\\varepsilon > 0$ be given. We need to find $\\delta > 0$ such that:\n$$0 < |x-c| < \\delta \\implies |(f(x)+g(x)) - (L+M)| < \\varepsilon$$\n\n**Step 2 — Use the individual limits.**\nSince $\\lim_{x\\to c}f(x) = L$: for $\\varepsilon/2 > 0$, there exists $\\delta_1 > 0$ such that\n$$0 < |x-c| < \\delta_1 \\implies |f(x)-L| < \\frac{\\varepsilon}{2}$$\nSince $\\lim_{x\\to c}g(x) = M$: for $\\varepsilon/2 > 0$, there exists $\\delta_2 > 0$ such that\n$$0 < |x-c| < \\delta_2 \\implies |g(x)-M| < \\frac{\\varepsilon}{2}$$\n\n**Step 3 — Choose $\\delta$.** Let $\\delta = \\min(\\delta_1, \\delta_2)$.\n\n**Step 4 — Prove the implication.** Assume $0 < |x-c| < \\delta$. Then $|x-c| < \\delta_1$ and $|x-c| < \\delta_2$, so both bounds apply. By the triangle inequality:\n$$|(f(x)+g(x))-(L+M)| = |(f(x)-L)+(g(x)-M)|$$\n$$\\leq |f(x)-L| + |g(x)-M| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$\n\n**Conclusion:**\n$$\\lim_{x\\to c}(f(x)+g(x)) = L+M \\quad \\square$$",
+      "body_he_md": "**משפט:** אם $\\lim_{x\\to c}f(x) = L$ ו-$\\lim_{x\\to c}g(x) = M$, אז $\\lim_{x\\to c}(f(x)+g(x)) = L+M$.\n\n**הוכחה:**\n\n**שלב 1 — הכנה.** יהי $\\varepsilon > 0$ נתון. אנחנו צריכים למצוא $\\delta > 0$ כך ש-:\n$$0 < |x-c| < \\delta \\implies |(f(x)+g(x)) - (L+M)| < \\varepsilon$$\n\n**שלב 2 — שימוש בגבולות הבודדים.**\nמאחר ש-$\\lim_{x\\to c}f(x) = L$: עבור $\\varepsilon/2 > 0$, קיים $\\delta_1 > 0$ כך ש-\n$$0 < |x-c| < \\delta_1 \\implies |f(x)-L| < \\frac{\\varepsilon}{2}$$\nמאחר ש-$\\lim_{x\\to c}g(x) = M$: עבור $\\varepsilon/2 > 0$, קיים $\\delta_2 > 0$ כך ש-\n$$0 < |x-c| < \\delta_2 \\implies |g(x)-M| < \\frac{\\varepsilon}{2}$$\n\n**שלב 3 — בחירת $\\delta$.** יהי $\\delta = \\min(\\delta_1, \\delta_2)$.\n\n**שלב 4 — הוכחת הגרירה.** הניח $0 < |x-c| < \\delta$. אז $|x-c| < \\delta_1$ ו-$|x-c| < \\delta_2$, לכן שני החסמים חלים. לפי אי-שוויון המשולש:\n$$|(f(x)+g(x))-(L+M)| = |(f(x)-L)+(g(x)-M)|$$\n$$\\leq |f(x)-L| + |g(x)-M| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$\n\n**מסקנה:**\n$$\\lim_{x\\to c}(f(x)+g(x)) = L+M \\quad \\square$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — The 4-Step ε-δ Template",
+      "title_he": "מדריך שיטות — תבנית ε-δ ב-4 שלבים",
+      "body_en_md": "**Template for $\\lim_{x\\to c}f(x) = L$:**\n\n**Step 1 — Scratch work (not part of the proof, done on the side):**\nBound $|f(x)-L|$ in terms of $|x-c|$.\n- For linear: $|ax+b - L| = |a||x-c|$ → choose $\\delta = \\varepsilon/|a|$.\n- For quadratic near $c$: restrict $|x-c|<1$ to bound $|x+c|$ ≤ $M$, then $|x^2-c^2| = |x-c||x+c| \\leq M|x-c|$ → choose $\\delta = \\min(1, \\varepsilon/M)$.\n\n**Step 2 — State the proof:**\n\"Let $\\varepsilon > 0$ be given. Choose $\\delta = \\ldots$\"\n\n**Step 3 — Assume and bound:**\n\"Suppose $0 < |x-c| < \\delta$. Then:\n$|f(x)-L| = \\ldots \\leq \\ldots < \\varepsilon$.\"\n\n**Step 4 — Conclude:**\n\"Therefore $\\lim_{x\\to c}f(x) = L$ by definition.\"\n\n**Common tricks:**\n- Split $\\varepsilon$ into $\\varepsilon/2$ when combining two bounds (sum rule).\n- Use $\\min(\\delta_1, \\delta_2)$ to satisfy two conditions simultaneously.\n- Restrict to $|x-c|<1$ to bound variable parts of the expression.",
+      "body_he_md": "**תבנית עבור $\\lim_{x\\to c}f(x) = L$:**\n\n**שלב 1 — עבודת טיוטה (לא חלק מהוכחה, נעשה בצד):**\nחסום $|f(x)-L|$ במונחי $|x-c|$.\n- עבור לינארי: $|ax+b - L| = |a||x-c|$ → בחר $\\delta = \\varepsilon/|a|$.\n- עבור ריבועי בסביבת $c$: הגבל $|x-c|<1$ לחסום $|x+c|$ ≤ $M$, אז $|x^2-c^2| = |x-c||x+c| \\leq M|x-c|$ → בחר $\\delta = \\min(1, \\varepsilon/M)$.\n\n**שלב 2 — ציין את ההוכחה:**\n\"יהי $\\varepsilon > 0$ נתון. בחר $\\delta = \\ldots$\"\n\n**שלב 3 — הנח וחסום:**\n\"הניח $0 < |x-c| < \\delta$. אז:\n$|f(x)-L| = \\ldots \\leq \\ldots < \\varepsilon$.\"\n\n**שלב 4 — סיים:**\n\"לכן $\\lim_{x\\to c}f(x) = L$ לפי ההגדרה.\"\n\n**טריקים נפוצים:**\n- פצל $\\varepsilon$ ל-$\\varepsilon/2$ בעת שילוב שני חסמים (כלל הסכום).\n- השתמש ב-$\\min(\\delta_1, \\delta_2)$ לקיום שני תנאים בו-זמנית.\n- הגבל ל-$|x-c|<1$ לחסום חלקים משתנים של הביטוי."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$\\delta = \\epsilon$",
-          "text_he": "$\\delta = \\epsilon$",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Prove $\\lim_{x\\to 5}(2x-3) = 7$ using the ε-δ definition.",
+          "body_he": "הוכח $\\lim_{x\\to 5}(2x-3) = 7$ תוך שימוש בהגדרת ε-δ.",
+          "solution_en": "$|(2x-3)-7| = |2x-10| = 2|x-5|$. Let $\\delta = \\varepsilon/2$. If $0<|x-5|<\\delta$: $|(2x-3)-7| = 2|x-5| < 2\\delta = \\varepsilon$.",
+          "solution_he": "$|(2x-3)-7| = |2x-10| = 2|x-5|$. יהי $\\delta = \\varepsilon/2$. אם $0<|x-5|<\\delta$: $|(2x-3)-7| = 2|x-5| < 2\\delta = \\varepsilon$.",
+          "points": 5
         },
         {
-          "id": "b",
-          "text_en": "$\\delta = \\epsilon / 2$",
-          "text_he": "$\\delta = \\epsilon / 2$",
-          "correct": true
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Prove $\\lim_{x\\to 4}7 = 7$ (constant function).",
+          "body_he": "הוכח $\\lim_{x\\to 4}7 = 7$ (פונקציה קבועה).",
+          "solution_en": "Let $\\delta = 1$ (any positive value works). If $0<|x-4|<\\delta$: $|7-7| = 0 < \\varepsilon$ for any $\\varepsilon>0$.",
+          "solution_he": "יהי $\\delta = 1$ (כל ערך חיובי עובד). אם $0<|x-4|<\\delta$: $|7-7| = 0 < \\varepsilon$ לכל $\\varepsilon>0$.",
+          "points": 5
         },
         {
-          "id": "c",
-          "text_en": "$\\delta = 2\\epsilon$",
-          "text_he": "$\\delta = 2\\epsilon$",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Prove $\\lim_{x\\to 0}|x| = 0$.",
+          "body_he": "הוכח $\\lim_{x\\to 0}|x| = 0$.",
+          "solution_en": "Let $\\delta = \\varepsilon$. If $0<|x-0|<\\delta$: $||x|-0| = |x| = |x-0| < \\delta = \\varepsilon$.",
+          "solution_he": "יהי $\\delta = \\varepsilon$. אם $0<|x-0|<\\delta$: $||x|-0| = |x| = |x-0| < \\delta = \\varepsilon$.",
+          "points": 5
         },
         {
-          "id": "d",
-          "text_en": "$\\delta = \\epsilon / 3$",
-          "text_he": "$\\delta = \\epsilon / 3$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Prove $\\lim_{x\\to 1}(5-2x) = 3$.",
+          "body_he": "הוכח $\\lim_{x\\to 1}(5-2x) = 3$.",
+          "solution_en": "$|(5-2x)-3| = |-2x+2| = 2|x-1|$. Let $\\delta = \\varepsilon/2$. If $0<|x-1|<\\delta$: $|(5-2x)-3| = 2|x-1| < 2\\delta = \\varepsilon$.",
+          "solution_he": "$|(5-2x)-3| = |-2x+2| = 2|x-1|$. יהי $\\delta = \\varepsilon/2$. אם $0<|x-1|<\\delta$: $|(5-2x)-3| = 2|x-1| < 2\\delta = \\varepsilon$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Prove $\\lim_{x\\to 3}x^2 = 9$ using the ε-δ definition.",
+          "body_he": "הוכח $\\lim_{x\\to 3}x^2 = 9$ תוך שימוש בהגדרת ε-δ.",
+          "solution_en": "$|x^2-9| = |x-3||x+3|$. Restrict $|x-3|<1$ so $x\\in(2,4)$, giving $|x+3|<7$. Thus $|x^2-9|<7|x-3|$. Choose $\\delta=\\min(1,\\varepsilon/7)$. If $|x-3|<\\delta$: $|x^2-9|<7|x-3|<7\\cdot(\\varepsilon/7)=\\varepsilon$.",
+          "solution_he": "$|x^2-9| = |x-3||x+3|$. הגבל $|x-3|<1$ כך ש-$x\\in(2,4)$, נותן $|x+3|<7$. לכן $|x^2-9|<7|x-3|$. בחר $\\delta=\\min(1,\\varepsilon/7)$. אם $|x-3|<\\delta$: $|x^2-9|<7|x-3|<7\\cdot(\\varepsilon/7)=\\varepsilon$.",
+          "points": 5
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Prove that $f(x) = x^2$ is continuous at $x = 2$ using the ε-δ definition.",
+          "body_he": "הוכח ש-$f(x) = x^2$ רציפה ב-$x = 2$ תוך שימוש בהגדרת ε-δ.",
+          "solution_en": "Need: for every $\\varepsilon>0$, $\\exists\\delta>0$ s.t. $|x-2|<\\delta\\implies|x^2-4|<\\varepsilon$. $|x^2-4|=|x-2||x+2|$. Restrict $|x-2|<1$: $|x+2|<5$. So $|x^2-4|<5|x-2|$. Choose $\\delta=\\min(1,\\varepsilon/5)$.",
+          "solution_he": "צריך: לכל $\\varepsilon>0$, $\\exists\\delta>0$ כך ש-$|x-2|<\\delta\\implies|x^2-4|<\\varepsilon$. $|x^2-4|=|x-2||x+2|$. הגבל $|x-2|<1$: $|x+2|<5$. לכן $|x^2-4|<5|x-2|$. בחר $\\delta=\\min(1,\\varepsilon/5)$.",
+          "points": 5
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Use the squeeze theorem to prove $\\lim_{x\\to 0}x^2\\sin(1/x^2) = 0$.",
+          "body_he": "השתמש במשפט הסנדוויץ' להוכחה ש-$\\lim_{x\\to 0}x^2\\sin(1/x^2) = 0$.",
+          "solution_en": "$|x^2\\sin(1/x^2)|\\leq x^2$ for all $x\\neq0$. So $-x^2\\leq x^2\\sin(1/x^2)\\leq x^2$. Since $\\lim_{x\\to0}x^2=0$, by squeeze: limit is $0$.",
+          "solution_he": "$|x^2\\sin(1/x^2)|\\leq x^2$ לכל $x\\neq0$. לכן $-x^2\\leq x^2\\sin(1/x^2)\\leq x^2$. מאחר ש-$\\lim_{x\\to0}x^2=0$, לפי סנדוויץ': הגבול הוא $0$.",
+          "points": 5
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Prove that $f(x) = \\sin x$ is continuous everywhere by showing $|\\sin x - \\sin c| \\leq |x-c|$.",
+          "body_he": "הוכח ש-$f(x) = \\sin x$ רציפה בכל מקום על ידי הוכחה ש-$|\\sin x - \\sin c| \\leq |x-c|$.",
+          "solution_en": "By the mean value theorem: $|\\sin x - \\sin c| = |\\cos\\xi||x-c| \\leq |x-c|$ for some $\\xi$ between $x$ and $c$ (since $|\\cos\\xi|\\leq1$). Given $\\varepsilon>0$, choose $\\delta=\\varepsilon$: if $|x-c|<\\delta$, then $|\\sin x-\\sin c|\\leq|x-c|<\\varepsilon$.",
+          "solution_he": "לפי משפט ערך הממוצע: $|\\sin x - \\sin c| = |\\cos\\xi||x-c| \\leq |x-c|$ לאיזשהו $\\xi$ בין $x$ ל-$c$ (כי $|\\cos\\xi|\\leq1$). בהינתן $\\varepsilon>0$, בחר $\\delta=\\varepsilon$: אם $|x-c|<\\delta$, אז $|\\sin x-\\sin c|\\leq|x-c|<\\varepsilon$.",
+          "points": 5
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Show that $f(x) = 1/x$ is NOT uniformly continuous on $(0,1)$ using the ε-δ idea (hint: for any $\\delta$, find $x_1, x_2 \\in (0,1)$ with $|x_1-x_2|<\\delta$ but $|f(x_1)-f(x_2)|\\geq1$).",
+          "body_he": "הראה ש-$f(x) = 1/x$ אינה רציפה אחידה על $(0,1)$ תוך שימוש ברעיון ε-δ (רמז: לכל $\\delta$, מצאו $x_1, x_2 \\in (0,1)$ עם $|x_1-x_2|<\\delta$ אבל $|f(x_1)-f(x_2)|\\geq1$).",
+          "solution_en": "Choose $\\varepsilon=1$. For any $\\delta>0$, let $x_1 = \\delta/2$ and $x_2 = \\delta/4$ (both in $(0,1)$ for small $\\delta$). $|x_1-x_2|=\\delta/4<\\delta$. But $|f(x_1)-f(x_2)|=|2/\\delta-4/\\delta|=2/\\delta$, which can be $\\geq1$ for $\\delta\\leq2$. So no single $\\delta$ works for all $x$.",
+          "solution_he": "בחר $\\varepsilon=1$. לכל $\\delta>0$, יהי $x_1 = \\delta/2$ ו-$x_2 = \\delta/4$ (שניהם ב-$(0,1)$ עבור $\\delta$ קטן). $|x_1-x_2|=\\delta/4<\\delta$. אבל $|f(x_1)-f(x_2)|=|2/\\delta-4/\\delta|=2/\\delta$, שיכול להיות $\\geq1$ עבור $\\delta\\leq2$. לכן אין $\\delta$ בודדת שעובדת לכל $x$.",
+          "points": 5
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove the product rule for limits: if $\\lim_{x\\to c}f(x) = L$ and $\\lim_{x\\to c}g(x) = M$, then $\\lim_{x\\to c}f(x)g(x) = LM$.",
+          "body_he": "הוכח את כלל המכפלה לגבולות: אם $\\lim_{x\\to c}f(x) = L$ ו-$\\lim_{x\\to c}g(x) = M$, אז $\\lim_{x\\to c}f(x)g(x) = LM$.",
+          "solution_en": "$|fg-LM|=|fg-Lg+Lg-LM|\\leq|g||f-L|+|L||g-M|$. Near $c$, $|g|\\leq|M|+1$ (say). Given $\\varepsilon>0$, choose $\\delta_1$ s.t. $|f-L|<\\varepsilon/(2(|M|+1))$, $\\delta_2$ s.t. $|g-M|<1$, $\\delta_3$ s.t. $|g-M|<\\varepsilon/(2(|L|+1))$. Set $\\delta=\\min(\\delta_1,\\delta_2,\\delta_3)$: $|fg-LM|<\\varepsilon/2+\\varepsilon/2=\\varepsilon$.",
+          "solution_he": "$|fg-LM|=|fg-Lg+Lg-LM|\\leq|g||f-L|+|L||g-M|$. בסביבת $c$, $|g|\\leq|M|+1$ (לדוגמה). בהינתן $\\varepsilon>0$, בחר $\\delta_1$ כך ש-$|f-L|<\\varepsilon/(2(|M|+1))$, $\\delta_2$ כך ש-$|g-M|<1$, $\\delta_3$ כך ש-$|g-M|<\\varepsilon/(2(|L|+1))$. יהי $\\delta=\\min(\\delta_1,\\delta_2,\\delta_3)$: $|fg-LM|<\\varepsilon/2+\\varepsilon/2=\\varepsilon$.",
+          "points": 5
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that if $\\lim_{x\\to c}f(x) = L > 0$, then there exists $\\delta > 0$ such that $f(x) > 0$ for all $x$ with $0 < |x-c| < \\delta$.",
+          "body_he": "הוכח שאם $\\lim_{x\\to c}f(x) = L > 0$, אז קיים $\\delta > 0$ כך ש-$f(x) > 0$ לכל $x$ עם $0 < |x-c| < \\delta$.",
+          "solution_en": "Apply the definition with $\\varepsilon = L/2 > 0$: there exists $\\delta>0$ s.t. $0<|x-c|<\\delta\\implies|f(x)-L|<L/2$. So $f(x) > L - L/2 = L/2 > 0$.",
+          "solution_he": "יישם את ההגדרה עם $\\varepsilon = L/2 > 0$: קיים $\\delta>0$ כך ש-$0<|x-c|<\\delta\\implies|f(x)-L|<L/2$. לכן $f(x) > L - L/2 = L/2 > 0$.",
+          "points": 5
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that if $f$ is continuous at $c$ and $f(c) > 0$, then $f(x) > 0$ in some neighbourhood of $c$.",
+          "body_he": "הוכח שאם $f$ רציפה ב-$c$ ו-$f(c) > 0$, אז $f(x) > 0$ בסביבה כלשהי של $c$.",
+          "solution_en": "Since $f$ is continuous at $c$ with $f(c)>0$: apply the previous result with $L=f(c)>0$. There exists $\\delta>0$ s.t. $|x-c|<\\delta\\implies|f(x)-f(c)|<f(c)/2$, so $f(x)>f(c)/2>0$.",
+          "solution_he": "מאחר ש-$f$ רציפה ב-$c$ עם $f(c)>0$: יישם את התוצאה הקודמת עם $L=f(c)>0$. קיים $\\delta>0$ כך ש-$|x-c|<\\delta\\implies|f(x)-f(c)|<f(c)/2$, לכן $f(x)>f(c)/2>0$.",
+          "points": 5
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Prove $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$ using the squeeze theorem and the geometric inequality $\\cos x \\leq \\frac{\\sin x}{x} \\leq 1$ for $0 < x < \\pi/2$.",
+          "body_he": "הוכח $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$ תוך שימוש במשפט הסנדוויץ' ואי-השוויון הגאומטרי $\\cos x \\leq \\frac{\\sin x}{x} \\leq 1$ עבור $0 < x < \\pi/2$.",
+          "solution_en": "For $0<x<\\pi/2$: $\\cos x \\leq \\sin x/x \\leq 1$ (geometric proof via unit circle areas). Since $\\lim_{x\\to0^+}\\cos x = 1$ and $\\lim_{x\\to0^+}1 = 1$, by squeeze: $\\lim_{x\\to0^+}(\\sin x)/x = 1$. By symmetry (function is even), $\\lim_{x\\to0^-}(\\sin x)/x = 1$. Therefore $\\lim_{x\\to0}(\\sin x)/x = 1$.",
+          "solution_he": "עבור $0<x<\\pi/2$: $\\cos x \\leq \\sin x/x \\leq 1$ (הוכחה גאומטרית דרך שטחי המעגל היחידה). מאחר ש-$\\lim_{x\\to0^+}\\cos x = 1$ ו-$\\lim_{x\\to0^+}1 = 1$, לפי סנדוויץ': $\\lim_{x\\to0^+}(\\sin x)/x = 1$. לפי סימטריה (פונקציה זוגית), $\\lim_{x\\to0^-}(\\sin x)/x = 1$. לכן $\\lim_{x\\to0}(\\sin x)/x = 1$.",
+          "points": 5
         }
-      ],
-      "explanation_en": "$|(2x-1)-5| = |2x-6| = 2|x-3|$. We need $2|x-3| < \\epsilon$, i.e., $|x-3| < \\epsilon/2$. So $\\delta = \\epsilon/2$.",
-      "explanation_he": "$|(2x-1)-5| = |2x-6| = 2|x-3|$. צריכים $2|x-3| < \\epsilon$, כלומר $|x-3| < \\epsilon/2$. לכן $\\delta = \\epsilon/2$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "open",
-      "body_en": "Exam problem: solve a multi-step problem using 'Limits — The ε-δ Definition'. Show all work.",
-      "body_he": "בעיית בחינה מ-'גבולות — הגדרת אפסילון-דלתא'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): complete justified solution.\nPartial (6/10): partial progress.\nMinimal (3/10): setup only.",
-      "rubric_he": "ציון מלא (10/10): פתרון מלא.\nחלקי (6/10): התקדמות.\nמינימלי (3/10): הגדרה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה."
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Confusing the order of quantifiers:** The definition says \"for every $\\varepsilon$, there exists $\\delta$\". $\\delta$ depends on $\\varepsilon$. You cannot choose $\\varepsilon$ after $\\delta$.\n\n2. **Ignoring $x \\neq c$ in the definition:** The condition is $0 < |x-c| < \\delta$ (strict inequality $0 <$), not $|x-c| < \\delta$. The limit is about approaching $c$, not being at $c$.\n\n3. **Choosing $\\delta$ that depends on $x$:** $\\delta$ must be a fixed number (depending only on $\\varepsilon$ and $c$), not on the variable $x$.\n\n4. **Forgetting to restrict in the quadratic case:** When bounding $|x^2-c^2|$, you need an extra restriction like $|x-c|<1$ to control the variable coefficient $|x+c|$. Then use $\\delta = \\min(1, \\varepsilon/M)$.\n\n5. **Stopping at scratch work:** The scratch work finds $\\delta$, but the proof must start fresh: assume $0 < |x-c| < \\delta$ and derive $|f(x)-L| < \\varepsilon$.",
+      "body_he_md": "1. **בלבול בסדר הכמתים:** ההגדרה אומרת \"לכל $\\varepsilon$, קיים $\\delta$\". $\\delta$ תלויה ב-$\\varepsilon$. אי-אפשר לבחור $\\varepsilon$ לאחר $\\delta$.\n\n2. **התעלמות מ-$x \\neq c$ בהגדרה:** התנאי הוא $0 < |x-c| < \\delta$ (אי-שוויון חד $0 <$), לא $|x-c| < \\delta$. הגבול עוסק בהתקרבות ל-$c$, לא בהיות ב-$c$.\n\n3. **בחירת $\\delta$ התלויה ב-$x$:** $\\delta$ חייבת להיות מספר קבוע (תלוי רק ב-$\\varepsilon$ וב-$c$), לא במשתנה $x$.\n\n4. **שכחת הגבלה במקרה הריבועי:** בחסימת $|x^2-c^2|$, נדרשת הגבלה נוספת כמו $|x-c|<1$ לשליטה במקדם המשתנה $|x+c|$. לאחר מכן השתמש ב-$\\delta = \\min(1, \\varepsilon/M)$.\n\n5. **עצירה בעבודת הטיוטה:** עבודת הטיוטה מוצאת $\\delta$, אבל ההוכחה חייבת להתחיל מחדש: הניח $0 < |x-c| < \\delta$ והסק $|f(x)-L| < \\varepsilon$."
     },
     {
-      "id": "q3",
-      "type": "open",
-      "body_en": "Prove a key result from 'Limits — The ε-δ Definition' with full rigor.",
-      "body_he": "הוכיחו תוצאה מ-'גבולות — הגדרת אפסילון-דלתא' בקפדנות.",
-      "rubric_en": "Full credit (10/10): complete proof.\nPartial (6/10): incomplete.\nMinimal (3/10): outline.",
-      "rubric_he": "ציון מלא (10/10): הוכחה מלאה.\nחלקי (6/10): חלקית.\nמינימלי (3/10): שלד.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**The ε-δ definition:**\n$$\\lim_{x\\to c}f(x) = L \\iff \\forall\\varepsilon>0,\\ \\exists\\delta>0:\\ 0<|x-c|<\\delta\\implies|f(x)-L|<\\varepsilon$$\n\n**The 4-step template:**\n1. Scratch: bound $|f(x)-L|$ in terms of $|x-c|$.\n2. State $\\delta$ (using scratch work).\n3. Assume $0<|x-c|<\\delta$ and bound $|f(x)-L|<\\varepsilon$.\n4. Conclude.\n\n**Key tricks:**\n- For linear $f$: $\\delta = \\varepsilon/|a|$.\n- For quadratic: restrict $|x-c|<1$, then $\\delta = \\min(1, \\varepsilon/M)$.\n- For sum rule: use $\\varepsilon/2$ and $\\delta = \\min(\\delta_1, \\delta_2)$.\n- Squeeze: $|f(x)| \\leq g(x)$ and $g(x) \\to 0$ implies $f(x) \\to 0$.\n\n**Typical exam patterns:**\n- Prove a limit for a linear or quadratic function.\n- Prove $\\lim x\\sin(1/x) = 0$ using squeeze.\n- Prove the sum rule (choosing $\\delta = \\min$).",
+      "body_he_md": "**הגדרת ε-δ:**\n$$\\lim_{x\\to c}f(x) = L \\iff \\forall\\varepsilon>0,\\ \\exists\\delta>0:\\ 0<|x-c|<\\delta\\implies|f(x)-L|<\\varepsilon$$\n\n**תבנית 4 השלבים:**\n1. טיוטה: חסום $|f(x)-L|$ במונחי $|x-c|$.\n2. ציין $\\delta$ (בהתבסס על עבודת הטיוטה).\n3. הניח $0<|x-c|<\\delta$ וחסום $|f(x)-L|<\\varepsilon$.\n4. סיים.\n\n**טריקים מרכזיים:**\n- עבור לינארי $f$: $\\delta = \\varepsilon/|a|$.\n- עבור ריבועי: הגבל $|x-c|<1$, לאחר מכן $\\delta = \\min(1, \\varepsilon/M)$.\n- עבור כלל הסכום: השתמש ב-$\\varepsilon/2$ ו-$\\delta = \\min(\\delta_1, \\delta_2)$.\n- סנדוויץ': $|f(x)| \\leq g(x)$ ו-$g(x) \\to 0$ גורר $f(x) \\to 0$.\n\n**תבניות אופייניות בבחינה:**\n- הוכחת גבול לפונקציה לינארית או ריבועית.\n- הוכחת $\\lim x\\sin(1/x) = 0$ תוך שימוש בסנדוויץ'.\n- הוכחת כלל הסכום (בחירת $\\delta = \\min$)."
     },
     {
-      "id": "q4",
-      "type": "open",
-      "body_en": "Exam problem: solve a multi-step problem using 'Limits — The ε-δ Definition'. Show all work.",
-      "body_he": "בעיית בחינה מ-'גבולות — הגדרת אפסילון-דלתא'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): complete justified solution.\nPartial (6/10): partial progress.\nMinimal (3/10): setup only.",
-      "rubric_he": "ציון מלא (10/10): פתרון מלא.\nחלקי (6/10): התקדמות.\nמינימלי (3/10): הגדרה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "Prove a key result from 'Limits — The ε-δ Definition' with full rigor.",
-      "body_he": "הוכיחו תוצאה מ-'גבולות — הגדרת אפסילון-דלתא' בקפדנות.",
-      "rubric_en": "Full credit (10/10): complete proof.\nPartial (6/10): incomplete.\nMinimal (3/10): outline.",
-      "rubric_he": "ציון מלא (10/10): הוכחה מלאה.\nחלקי (6/10): חלקית.\nמינימלי (3/10): שלד.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה."
+      "kind": "summary",
+      "title_en": "Lesson Summary",
+      "title_he": "סיכום השיעור",
+      "body_en_md": "- **ε-δ definition:** $\\lim_{x\\to c}f(x)=L$ means: for every $\\varepsilon>0$, there exists $\\delta>0$ such that $0<|x-c|<\\delta \\implies |f(x)-L|<\\varepsilon$.\n- **Proof template:** scratch work to find $\\delta$; then formal proof assuming $0<|x-c|<\\delta$ and deriving $|f-L|<\\varepsilon$.\n- **Squeeze theorem:** sandwich $f$ between two functions with the same limit.\n- **Sum rule proof:** use $\\varepsilon/2$ for each function and take $\\delta = \\min(\\delta_1, \\delta_2)$.\n- **Continuity:** $f$ is continuous at $c$ iff the same definition holds with $|x-c|<\\delta$ (no strict $0<$) and $L = f(c)$.",
+      "body_he_md": "- **הגדרת ε-δ:** $\\lim_{x\\to c}f(x)=L$ פירושה: לכל $\\varepsilon>0$, קיים $\\delta>0$ כך ש-$0<|x-c|<\\delta \\implies |f(x)-L|<\\varepsilon$.\n- **תבנית הוכחה:** עבודת טיוטה למציאת $\\delta$; לאחר מכן הוכחה רשמית בהנחת $0<|x-c|<\\delta$ והסקת $|f-L|<\\varepsilon$.\n- **משפט הסנדוויץ':** כלוא $f$ בין שתי פונקציות עם אותו גבול.\n- **הוכחת כלל הסכום:** השתמש ב-$\\varepsilon/2$ לכל פונקציה וקח $\\delta = \\min(\\delta_1, \\delta_2)$.\n- **רציפות:** $f$ רציפה ב-$c$ אם ורק אם אותה הגדרה חלה עם $|x-c|<\\delta$ (ללא $0<$ חד) ו-$L = f(c)$."
     }
   ]
 }

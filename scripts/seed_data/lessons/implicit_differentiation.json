@@ -1,156 +1,233 @@
 {
   "concept_id": "implicit_differentiation",
-  "subject": "high_school_math_5pt",
-  "level": "5pt",
-  "math_track": [
-    "5pt"
-  ],
+  "subject": "math",
+  "level": "university",
+  "math_track": ["5pt", "university"],
   "title_en": "Implicit Differentiation",
   "title_he": "גזירה סתומה",
-  "summary_en": "Differentiate curves defined implicitly, find tangent lines, and solve related-rates problems — core 5pt Bagrut calculus.",
-  "summary_he": "גזירה של עקומות מוגדרות באופן סתום, משיקים ובעיות קצבי שינוי קשורים — ליבת חשבון 5 יח'.",
-  "est_minutes": 25,
+  "summary_en": "Implicit differentiation finds dy/dx by differentiating both sides of an equation with respect to x, treating y as a function of x and applying the chain rule to every y-term. Used for circles, ellipses, and any curve not given as y = f(x).",
+  "summary_he": "גזירה סתומה מוצאת dy/dx על ידי גזירת שני אגפי משוואה לפי x, תוך התייחסות ל-y כפונקציה של x ויישום כלל השרשרת לכל איבר עם y. מיושמת על מעגלים, אליפסות וכל עקומה שאינה נתונה כ-y = f(x).",
+  "est_minutes": 60,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Explicit vs implicit functions",
-      "title_he": "פונקציה מפורשת מול סתומה",
-      "body_en_md": "**Explicit:** $y = f(x)$ — $y$ is isolated (e.g. $y = x^2 + 1$).\n\n**Implicit:** $F(x, y) = 0$ — relationship not solved for $y$ (e.g. $x^2 + y^2 = r^2$).\n\nCircles, ellipses, and many curves are easier **implicitly**. The idea: differentiate **both sides** with respect to $x$, treating $y$ as a function of $x$.",
-      "body_he_md": "**מפורשת:** $y = f(x)$.\n\n**סתומה:** $F(x, y) = 0$ — הקשר לא פתור ל-$y$ (למשל $x^2 + y^2 = r^2$).\n\nמעגלים, אליפסות ועקומות רבות קלים יותר **בצורה סתומה**. הרעיון: גזרו **שני אגפים** ב-$x$, מתייחסים ל-$y$ כפונקציה של $x$."
+      "title_en": "When y Cannot Be Isolated",
+      "title_he": "כאשר לא ניתן לבודד y",
+      "body_en_md": "The equation $x^2 + y^2 = 25$ defines a circle. You cannot write it as a single explicit function $y = f(x)$ without splitting into two branches ($y = \\pm\\sqrt{25-x^2}$). Differentiating each branch separately is messy. Implicit differentiation differentiates the equation directly and solves for $dy/dx$ in one step.\n\n**Where implicit differentiation appears:**\n- University Calculus 1: tangent lines to implicit curves.\n- Curves defined by polynomial equations in $x$ and $y$ (conic sections, folium of Descartes, lemniscate).\n- Related rates problems (how fast is one quantity changing as another changes).\n- Deriving inverse function derivatives (e.g., $\\arcsin$, $\\arctan$).\n\nThe central principle: **when you differentiate $y^n$ with respect to $x$, use the chain rule:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}$$",
+      "body_he_md": "המשוואה $x^2 + y^2 = 25$ מגדירה מעגל. אי-אפשר לכתוב אותה כפונקציה מפורשת בודדת $y = f(x)$ מבלי לפצל לשני ענפים ($y = \\pm\\sqrt{25-x^2}$). גזירת כל ענף בנפרד מסובכת. גזירה סתומה גוזרת את המשוואה ישירות ופותרת עבור $dy/dx$ בצעד אחד.\n\n**היכן מופיעה גזירה סתומה:**\n- חשבון דיפרנציאלי ואינטגרלי 1 באוניברסיטה: משיקים לעקומות סתומות.\n- עקומות המוגדרות על ידי משוואות פולינומיאליות ב-$x$ וב-$y$ (חתכי חרוט, פוליום של דקארט, למניסקטה).\n- בעיות קצבים קשורים (כמה מהר משתנה כמות אחת כאשר משתנה אחרת).\n- גזירת נגזרות פונקציות הפוכות (כמו $\\arcsin$, $\\arctan$).\n\nהעיקרון המרכזי: **כאשר גוזרים $y^n$ לפי $x$, משתמשים בכלל השרשרת:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}$$"
+    },
+    {
+      "kind": "definition",
+      "title_en": "Implicit Differentiation — The Method",
+      "title_he": "גזירה סתומה — השיטה",
+      "body_en_md": "**Definition:** An equation $F(x, y) = 0$ defines $y$ **implicitly** as a function of $x$ (at least locally near a point where the curve is smooth).\n\n**Method:**\n1. Differentiate both sides with respect to $x$.\n2. For every term involving $y$, apply the chain rule: treat $y$ as $y(x)$ and multiply by $\\dfrac{dy}{dx}$.\n3. Collect all terms containing $\\dfrac{dy}{dx}$ on one side.\n4. Factor out $\\dfrac{dy}{dx}$ and solve.\n\n**Key chain rule instances:**\n$$\\frac{d}{dx}(y^2) = 2y\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(\\sin y) = \\cos y \\cdot \\frac{dy}{dx}$$\n$$\\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx} \\quad (\\text{product rule + chain rule})$$",
+      "body_he_md": "**הגדרה:** משוואה $F(x, y) = 0$ מגדירה את $y$ **סתומה** כפונקציה של $x$ (לפחות מקומית ליד נקודה שבה העקומה חלקה).\n\n**שיטה:**\n1. גזור את שני האגפים לפי $x$.\n2. לכל איבר המכיל $y$, יישם כלל שרשרת: התייחס ל-$y$ כ-$y(x)$ והכפל ב-$\\dfrac{dy}{dx}$.\n3. אסוף את כל האיברים המכילים $\\dfrac{dy}{dx}$ לצד אחד.\n4. הוצא גורם $\\dfrac{dy}{dx}$ ופתור.\n\n**יישומי כלל שרשרת מרכזיים:**\n$$\\frac{d}{dx}(y^2) = 2y\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(\\sin y) = \\cos y \\cdot \\frac{dy}{dx}$$\n$$\\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx} \\quad (\\text{כלל מכפלה + כלל שרשרת})$$"
     },
     {
       "kind": "theory",
-      "title_en": "The chain rule for $\\frac{d}{dx}[g(y)]$",
-      "title_he": "כלל השרשרת ל-$\\frac{d}{dx}[g(y)]$",
-      "body_en_md": "Since $y = y(x)$, by the chain rule:\n\n$$\\frac{d}{dx}[y^2] = 2y \\cdot \\frac{dy}{dx}, \\quad \\frac{d}{dx}[\\sin y] = \\cos y \\cdot \\frac{dy}{dx}.$$\n\n**General pattern:** $\\frac{d}{dx}[f(y)] = f'(y) \\cdot y'$.\n\nWrite $y' = \\frac{dy}{dx}$ for brevity. This is the **key step** in every implicit differentiation problem.",
-      "body_he_md": "מכיוון ש-$y = y(x)$, לפי כלל השרשרת:\n\n$$\\frac{d}{dx}[y^2] = 2y \\cdot y', \\quad \\frac{d}{dx}[\\sin y] = \\cos y \\cdot y'.$$\n\n**כלל כללי:** $\\frac{d}{dx}[f(y)] = f'(y) \\cdot y'$.\n\nזה **השלב המפתח** בכל בעיית גזירה סתומה."
+      "title_en": "Why Does This Work? — The Chain Rule Perspective",
+      "title_he": "מדוע זה עובד? — פרספקטיבת כלל השרשרת",
+      "body_en_md": "If $y = y(x)$ is a differentiable function of $x$, then any function of $y$ is also a function of $x$ through the chain rule:\n$$\\frac{d}{dx}[f(y)] = f'(y) \\cdot \\frac{dy}{dx}$$\n\n**Example — Differentiating $y^3$:**\n$$\\frac{d}{dx}(y^3) = 3y^2 \\cdot \\frac{dy}{dx}$$\nThis is because $y^3 = (y(x))^3$, so the outer function is $t^3$ with $t = y$:\n$$\\frac{d}{dx}(y(x)^3) = 3y(x)^2 \\cdot y'(x) = 3y^2\\frac{dy}{dx}$$\n\n**Tangent line from $dy/dx$:**\nOnce you have $\\dfrac{dy}{dx}$, evaluate it at the point $(x_0, y_0)$ to get the slope $m$. Tangent line:\n$$y - y_0 = m(x - x_0)$$\n\n**Important:** $\\dfrac{dy}{dx}$ from implicit differentiation usually contains both $x$ and $y$. You must substitute a specific point to get a numerical slope.",
+      "body_he_md": "אם $y = y(x)$ היא פונקציה גזירה של $x$, אז כל פונקציה של $y$ היא גם פונקציה של $x$ דרך כלל השרשרת:\n$$\\frac{d}{dx}[f(y)] = f'(y) \\cdot \\frac{dy}{dx}$$\n\n**דוגמה — גזירת $y^3$:**\n$$\\frac{d}{dx}(y^3) = 3y^2 \\cdot \\frac{dy}{dx}$$\nזה מכיוון ש-$y^3 = (y(x))^3$, לכן הפונקציה החיצונית היא $t^3$ עם $t = y$:\n$$\\frac{d}{dx}(y(x)^3) = 3y(x)^2 \\cdot y'(x) = 3y^2\\frac{dy}{dx}$$\n\n**קו משיק מ-$dy/dx$:**\nברגע שיש לך $\\dfrac{dy}{dx}$, הצב אותו בנקודה $(x_0, y_0)$ לקבלת השיפוע $m$. קו משיק:\n$$y - y_0 = m(x - x_0)$$\n\n**חשוב:** $\\dfrac{dy}{dx}$ מגזירה סתומה בדרך כלל מכיל גם $x$ וגם $y$. חייב להציב נקודה ספציפית לקבלת שיפוע מספרי."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: circle",
-      "title_he": "דוגמה פתורה: מעגל",
-      "body_en_md": "$x^2 + y^2 = 25$. Differentiate:\n\n$$2x + 2y \\cdot y' = 0 \\Rightarrow y' = -\\frac{x}{y}.$$\n\n**Tangent at $(3, 4)$:** slope $= -\\frac{3}{4}$.\n\n$$y - 4 = -\\frac{3}{4}(x - 3).$$\n\n**Geometric check:** radius from origin to $(3,4)$ has slope $\\frac{4}{3}$; tangent slope $-\\frac{3}{4}$ — **perpendicular** ✓.",
-      "body_he_md": "$x^2 + y^2 = 25$. גזירה:\n\n$$2x + 2y \\cdot y' = 0 \\Rightarrow y' = -\\frac{x}{y}.$$\n\n**משיק ב-$(3, 4)$:** שיפוע $= -\\frac{3}{4}$.\n\n$$y - 4 = -\\frac{3}{4}(x - 3).$$\n\n**בדיקה גאומטרית:** רדיוס ⟂ משיק ✓."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Circle $x^2 + y^2 = 25$",
+      "title_he": "דוגמה פתורה 1 — מעגל $x^2 + y^2 = 25$",
+      "body_en_md": "**Given:** $x^2 + y^2 = 25$. Find $\\dfrac{dy}{dx}$.\n\n**Step 1 — Differentiate both sides with respect to $x$:**\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(y^2) = \\frac{d}{dx}(25)$$\n$$2x + 2y\\frac{dy}{dx} = 0$$\n\n**Step 2 — Solve for $\\dfrac{dy}{dx}$:**\n$$2y\\frac{dy}{dx} = -2x$$\n$$\\frac{dy}{dx} = -\\frac{x}{y}$$\n\n**Answer:** $\\dfrac{dy}{dx} = -\\dfrac{x}{y}$.\n\n**Geometric check:** At $(3, 4)$ on the circle: slope $= -3/4$. The radius to $(3,4)$ has slope $4/3$. Product $= (-3/4)(4/3) = -1$ ✓ (tangent ⊥ radius).",
+      "body_he_md": "**נתון:** $x^2 + y^2 = 25$. מצאו $\\dfrac{dy}{dx}$.\n\n**שלב 1 — גזירת שני האגפים לפי $x$:**\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(y^2) = \\frac{d}{dx}(25)$$\n$$2x + 2y\\frac{dy}{dx} = 0$$\n\n**שלב 2 — פתרון עבור $\\dfrac{dy}{dx}$:**\n$$2y\\frac{dy}{dx} = -2x$$\n$$\\frac{dy}{dx} = -\\frac{x}{y}$$\n\n**תשובה:** $\\dfrac{dy}{dx} = -\\dfrac{x}{y}$.\n\n**בדיקה גאומטרית:** ב-$(3, 4)$ על המעגל: שיפוע $= -3/4$. הרדיוס ל-$(3,4)$ בעל שיפוע $4/3$. מכפלה $= (-3/4)(4/3) = -1$ ✓ (משיק ⊥ רדיוס)."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $dy/dx$ for $x^3 + y^3 = 6xy$ (folium of Descartes).",
+      "body_he_md": "מצאו $dy/dx$ עבור $x^3 + y^3 = 6xy$ (פוליום של דקארט).",
+      "checkpoint_solution_en": "Differentiate: $3x^2 + 3y^2(dy/dx) = 6y + 6x(dy/dx)$. Collect: $3y^2(dy/dx) - 6x(dy/dx) = 6y - 3x^2$. Factor: $(dy/dx)(3y^2-6x) = 6y-3x^2$. So $dy/dx = (6y-3x^2)/(3y^2-6x) = (2y-x^2)/(y^2-2x)$.",
+      "checkpoint_solution_he": "גזירה: $3x^2 + 3y^2(dy/dx) = 6y + 6x(dy/dx)$. איסוף: $3y^2(dy/dx) - 6x(dy/dx) = 6y - 3x^2$. פירוק: $(dy/dx)(3y^2-6x) = 6y-3x^2$. לכן $dy/dx = (6y-3x^2)/(3y^2-6x) = (2y-x^2)/(y^2-2x)$."
     },
     {
       "kind": "worked_example",
-      "title_en": "More worked examples",
-      "title_he": "דוגמאות נוספות",
-      "body_en_md": "**Folium of Descartes:** $x^3 + y^3 = 6xy$.\n\n$$3x^2 + 3y^2 y' = 6y + 6xy' \\Rightarrow y' = \\frac{2y - x^2}{y^2 - 2x}.$$\n\n**Ellipse** $\\frac{x^2}{9} + \\frac{y^2}{4} = 1$ at $\\left(\\frac{3}{\\sqrt{2}}, \\sqrt{2}\\right)$:\n\nImplicit diff: $\\frac{2x}{9} + \\frac{2y}{4}y' = 0$ → $y' = -\\frac{4x}{9y}$.\n\nAt the point: $y' = -\\frac{4 \\cdot 3/\\sqrt{2}}{9\\sqrt{2}} = -\\frac{2}{3}$.",
-      "body_he_md": "**עליון של דקארט:** $x^3 + y^3 = 6xy$ → $y' = \\frac{2y - x^2}{y^2 - 2x}$.\n\n**אליפסה** $\\frac{x^2}{9} + \\frac{y^2}{4} = 1$ ב-$\\left(\\frac{3}{\\sqrt{2}}, \\sqrt{2}\\right)$:\n\n$y' = -\\frac{4x}{9y} = -\\frac{2}{3}$."
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Tangent Line to $x^2 + xy + y^2 = 7$ at $(1, 2)$",
+      "title_he": "דוגמה פתורה 2 — קו משיק ל-$x^2 + xy + y^2 = 7$ ב-$(1, 2)$",
+      "body_en_md": "**Given:** $x^2 + xy + y^2 = 7$. Find the equation of the tangent line at $(1, 2)$.\n\n**Step 1 — Verify the point lies on the curve:**\n$$1 + 2 + 4 = 7 \\checkmark$$\n\n**Step 2 — Differentiate both sides implicitly:**\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(xy) + \\frac{d}{dx}(y^2) = 0$$\n$$2x + \\left(y + x\\frac{dy}{dx}\\right) + 2y\\frac{dy}{dx} = 0$$\n\n**Step 3 — Collect $dy/dx$ terms:**\n$$2x + y + (x + 2y)\\frac{dy}{dx} = 0$$\n$$(x+2y)\\frac{dy}{dx} = -2x-y$$\n$$\\frac{dy}{dx} = \\frac{-2x-y}{x+2y}$$\n\n**Step 4 — Evaluate at $(1, 2)$:**\n$$\\frac{dy}{dx}\\bigg|_{(1,2)} = \\frac{-2(1)-2}{1+2(2)} = \\frac{-4}{5}$$\n\n**Step 5 — Write the tangent line:**\n$$y - 2 = -\\frac{4}{5}(x-1)$$\n$$y = -\\frac{4}{5}x + \\frac{4}{5} + 2 = -\\frac{4}{5}x + \\frac{14}{5}$$\n\n**Answer:** $y = -\\dfrac{4}{5}x + \\dfrac{14}{5}$.",
+      "body_he_md": "**נתון:** $x^2 + xy + y^2 = 7$. מצאו את משוואת קו המשיק ב-$(1, 2)$.\n\n**שלב 1 — אימות שהנקודה שוכנת על העקומה:**\n$$1 + 2 + 4 = 7 \\checkmark$$\n\n**שלב 2 — גזירת שני האגפים סתומה:**\n$$\\frac{d}{dx}(x^2) + \\frac{d}{dx}(xy) + \\frac{d}{dx}(y^2) = 0$$\n$$2x + \\left(y + x\\frac{dy}{dx}\\right) + 2y\\frac{dy}{dx} = 0$$\n\n**שלב 3 — איסוף איברי $dy/dx$:**\n$$2x + y + (x + 2y)\\frac{dy}{dx} = 0$$\n$$(x+2y)\\frac{dy}{dx} = -2x-y$$\n$$\\frac{dy}{dx} = \\frac{-2x-y}{x+2y}$$\n\n**שלב 4 — הצבה ב-$(1, 2)$:**\n$$\\frac{dy}{dx}\\bigg|_{(1,2)} = \\frac{-2(1)-2}{1+2(2)} = \\frac{-4}{5}$$\n\n**שלב 5 — כתיבת קו המשיק:**\n$$y - 2 = -\\frac{4}{5}(x-1)$$\n$$y = -\\frac{4}{5}x + \\frac{4}{5} + 2 = -\\frac{4}{5}x + \\frac{14}{5}$$\n\n**תשובה:** $y = -\\dfrac{4}{5}x + \\dfrac{14}{5}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the slope of the tangent to $y^2 = x^3 + 1$ at $(2, 3)$.",
+      "body_he_md": "מצאו את שיפוע המשיק ל-$y^2 = x^3 + 1$ ב-$(2, 3)$.",
+      "checkpoint_solution_en": "Verify: $9 = 8+1$ ✓. Differentiate: $2y(dy/dx) = 3x^2$. At $(2,3)$: $6(dy/dx) = 12$. $dy/dx = 2$.",
+      "checkpoint_solution_he": "אימות: $9 = 8+1$ ✓. גזירה: $2y(dy/dx) = 3x^2$. ב-$(2,3)$: $6(dy/dx) = 12$. $dy/dx = 2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Differentiating $\\sin(xy) = x + y^2$",
+      "title_he": "דוגמה פתורה 3 — גזירה של $\\sin(xy) = x + y^2$",
+      "body_en_md": "**Given:** $\\sin(xy) = x + y^2$. Find $\\dfrac{dy}{dx}$. Then determine if this equation defines a curve passing through $(0, 0)$ and find $dy/dx$ there if it does.\n\n**Step 1 — Differentiate both sides:**\nLeft side: use the chain rule on $\\sin(xy)$, and the product rule on $xy$:\n$$\\frac{d}{dx}[\\sin(xy)] = \\cos(xy) \\cdot \\frac{d}{dx}(xy) = \\cos(xy)\\left(y + x\\frac{dy}{dx}\\right)$$\n\nRight side:\n$$\\frac{d}{dx}(x+y^2) = 1 + 2y\\frac{dy}{dx}$$\n\n**Step 2 — Set equal and collect $dy/dx$:**\n$$\\cos(xy)\\left(y + x\\frac{dy}{dx}\\right) = 1 + 2y\\frac{dy}{dx}$$\n$$y\\cos(xy) + x\\cos(xy)\\frac{dy}{dx} = 1 + 2y\\frac{dy}{dx}$$\n$$\\frac{dy}{dx}\\left(x\\cos(xy) - 2y\\right) = 1 - y\\cos(xy)$$\n$$\\frac{dy}{dx} = \\frac{1-y\\cos(xy)}{x\\cos(xy)-2y}$$\n\n**Step 3 — Check if $(0,0)$ is on the curve:**\n$$\\sin(0 \\cdot 0) = 0 + 0^2 \\quad \\Rightarrow \\quad 0 = 0 \\checkmark$$\n\n**Step 4 — Evaluate $dy/dx$ at $(0,0)$:**\n$$\\frac{dy}{dx}\\bigg|_{(0,0)} = \\frac{1-0\\cdot\\cos(0)}{0\\cdot\\cos(0)-0} = \\frac{1}{0}$$\nThe denominator is $0$, so the derivative is **undefined** at $(0,0)$ — the tangent is vertical there.\n\n**Answer:** $\\dfrac{dy}{dx} = \\dfrac{1-y\\cos(xy)}{x\\cos(xy)-2y}$; undefined (vertical tangent) at $(0,0)$.",
+      "body_he_md": "**נתון:** $\\sin(xy) = x + y^2$. מצאו $\\dfrac{dy}{dx}$. לאחר מכן קבעו אם משוואה זו מגדירה עקומה העוברת דרך $(0, 0)$ ומצאו $dy/dx$ שם אם כן.\n\n**שלב 1 — גזירת שני האגפים:**\nאגף שמאל: שימוש בכלל שרשרת על $\\sin(xy)$, וכלל מכפלה על $xy$:\n$$\\frac{d}{dx}[\\sin(xy)] = \\cos(xy) \\cdot \\frac{d}{dx}(xy) = \\cos(xy)\\left(y + x\\frac{dy}{dx}\\right)$$\n\nאגף ימין:\n$$\\frac{d}{dx}(x+y^2) = 1 + 2y\\frac{dy}{dx}$$\n\n**שלב 2 — שוויון ואיסוף $dy/dx$:**\n$$\\cos(xy)\\left(y + x\\frac{dy}{dx}\\right) = 1 + 2y\\frac{dy}{dx}$$\n$$y\\cos(xy) + x\\cos(xy)\\frac{dy}{dx} = 1 + 2y\\frac{dy}{dx}$$\n$$\\frac{dy}{dx}\\left(x\\cos(xy) - 2y\\right) = 1 - y\\cos(xy)$$\n$$\\frac{dy}{dx} = \\frac{1-y\\cos(xy)}{x\\cos(xy)-2y}$$\n\n**שלב 3 — בדיקה אם $(0,0)$ על העקומה:**\n$$\\sin(0 \\cdot 0) = 0 + 0^2 \\quad \\Rightarrow \\quad 0 = 0 \\checkmark$$\n\n**שלב 4 — הצבת $dy/dx$ ב-$(0,0)$:**\n$$\\frac{dy}{dx}\\bigg|_{(0,0)} = \\frac{1-0\\cdot\\cos(0)}{0\\cdot\\cos(0)-0} = \\frac{1}{0}$$\nהמכנה הוא $0$, לכן הנגזרת **אינה מוגדרת** ב-$(0,0)$ — המשיק שם הוא אנכי.\n\n**תשובה:** $\\dfrac{dy}{dx} = \\dfrac{1-y\\cos(xy)}{x\\cos(xy)-2y}$; אינה מוגדרת (משיק אנכי) ב-$(0,0)$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Implicit Differentiation Steps",
+      "title_he": "מדריך שיטות — שלבי הגזירה הסתומה",
+      "body_en_md": "**Standard procedure:**\n\n1. **Verify the point** (if finding a tangent) — substitute into the equation.\n2. **Differentiate both sides** term by term with respect to $x$.\n3. **Chain rule for $y$-terms:** every $y$-term picks up a factor $dy/dx$.\n4. **Product rule** when $x$ and $y$ are multiplied: $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$.\n5. **Isolate $dy/dx$:** collect on one side, factor, divide.\n6. **Substitute the point** to get the numerical slope.\n7. **Write the tangent line:** $y - y_0 = m(x-x_0)$.\n\n**Special cases:**\n| Term | Derivative |\n|------|------------|\n| $y^n$ | $ny^{n-1}\\frac{dy}{dx}$ |\n| $e^y$ | $e^y\\frac{dy}{dx}$ |\n| $\\ln y$ | $\\frac{1}{y}\\frac{dy}{dx}$ |\n| $\\sin y$ | $\\cos y\\frac{dy}{dx}$ |\n| $x^m y^n$ | $mx^{m-1}y^n + x^m \\cdot ny^{n-1}\\frac{dy}{dx}$ |",
+      "body_he_md": "**הליך סטנדרטי:**\n\n1. **אמת את הנקודה** (אם מוצאים משיק) — הצב במשוואה.\n2. **גזור את שני האגפים** איבר-איבר לפי $x$.\n3. **כלל שרשרת לאיברי $y$:** כל איבר $y$ מקבל גורם $dy/dx$.\n4. **כלל מכפלה** כאשר $x$ ו-$y$ מוכפלים: $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$.\n5. **בודד $dy/dx$:** אסוף לצד אחד, הוצא גורם, חלק.\n6. **הצב את הנקודה** לקבלת השיפוע המספרי.\n7. **כתוב את קו המשיק:** $y - y_0 = m(x-x_0)$.\n\n**מקרים מיוחדים:**\n| איבר | נגזרת |\n|------|-------|\n| $y^n$ | $ny^{n-1}\\frac{dy}{dx}$ |\n| $e^y$ | $e^y\\frac{dy}{dx}$ |\n| $\\ln y$ | $\\frac{1}{y}\\frac{dy}{dx}$ |\n| $\\sin y$ | $\\cos y\\frac{dy}{dx}$ |\n| $x^m y^n$ | $mx^{m-1}y^n + x^m \\cdot ny^{n-1}\\frac{dy}{dx}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $x^2 + y^2 = 49$.",
+          "body_he": "מצאו $dy/dx$ עבור $x^2 + y^2 = 49$.",
+          "solution_en": "$2x + 2y(dy/dx) = 0$. $dy/dx = -x/y$.",
+          "solution_he": "$2x + 2y(dy/dx) = 0$. $dy/dx = -x/y$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $xy = 10$.",
+          "body_he": "מצאו $dy/dx$ עבור $xy = 10$.",
+          "solution_en": "$y + x(dy/dx) = 0$. $dy/dx = -y/x$.",
+          "solution_he": "$y + x(dy/dx) = 0$. $dy/dx = -y/x$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $dy/dx$ for $x^3 + y^3 = 8$.",
+          "body_he": "מצאו $dy/dx$ עבור $x^3 + y^3 = 8$.",
+          "solution_en": "$3x^2 + 3y^2(dy/dx) = 0$. $dy/dx = -x^2/y^2$.",
+          "solution_he": "$3x^2 + 3y^2(dy/dx) = 0$. $dy/dx = -x^2/y^2$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find the slope of $x^2 + y^2 = 25$ at $(3, -4)$.",
+          "body_he": "מצאו את שיפוע $x^2 + y^2 = 25$ ב-$(3, -4)$.",
+          "solution_en": "$dy/dx = -x/y$. At $(3,-4)$: $dy/dx = -3/(-4) = 3/4$.",
+          "solution_he": "$dy/dx = -x/y$. ב-$(3,-4)$: $dy/dx = -3/(-4) = 3/4$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ for $e^y + x^2 y = 5$.",
+          "body_he": "מצאו $dy/dx$ עבור $e^y + x^2 y = 5$.",
+          "solution_en": "$e^y(dy/dx) + 2xy + x^2(dy/dx) = 0$. $(e^y+x^2)(dy/dx) = -2xy$. $dy/dx = -2xy/(e^y+x^2)$.",
+          "solution_he": "$e^y(dy/dx) + 2xy + x^2(dy/dx) = 0$. $(e^y+x^2)(dy/dx) = -2xy$. $dy/dx = -2xy/(e^y+x^2)$.",
+          "points": 5
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the tangent line to $x^2 - xy + y^2 = 3$ at $(1, -1)$.",
+          "body_he": "מצאו את קו המשיק ל-$x^2 - xy + y^2 = 3$ ב-$(1, -1)$.",
+          "solution_en": "Verify: $1+1+1=3$ ✓. Differentiate: $2x - y - x(dy/dx) + 2y(dy/dx) = 0$. At $(1,-1)$: $2+1-dy/dx-2(dy/dx)=0$. $3 = 3(dy/dx)$. $dy/dx=1$. Tangent: $y+1=1(x-1)$, i.e., $y=x-2$.",
+          "solution_he": "אימות: $1+1+1=3$ ✓. גזירה: $2x - y - x(dy/dx) + 2y(dy/dx) = 0$. ב-$(1,-1)$: $2+1-dy/dx-2(dy/dx)=0$. $3 = 3(dy/dx)$. $dy/dx=1$. משיק: $y+1=1(x-1)$, כלומר $y=x-2$.",
+          "points": 5
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Derive $\\frac{d}{dx}(\\arctan x) = \\frac{1}{1+x^2}$ using implicit differentiation.",
+          "body_he": "הוכח $\\frac{d}{dx}(\\arctan x) = \\frac{1}{1+x^2}$ תוך שימוש בגזירה סתומה.",
+          "solution_en": "Let $y = \\arctan x$, so $\\tan y = x$. Differentiate: $\\sec^2 y \\cdot (dy/dx) = 1$. So $dy/dx = \\cos^2 y$. Since $\\tan y = x$: $\\sec^2 y = 1+\\tan^2 y = 1+x^2$, so $\\cos^2 y = 1/(1+x^2)$. Thus $dy/dx = 1/(1+x^2)$.",
+          "solution_he": "תהי $y = \\arctan x$, לכן $\\tan y = x$. גזירה: $\\sec^2 y \\cdot (dy/dx) = 1$. לכן $dy/dx = \\cos^2 y$. מאחר ש-$\\tan y = x$: $\\sec^2 y = 1+\\tan^2 y = 1+x^2$, לכן $\\cos^2 y = 1/(1+x^2)$. לפיכך $dy/dx = 1/(1+x^2)$.",
+          "points": 5
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the points on $x^2 + y^2 = 25$ where the tangent line is horizontal.",
+          "body_he": "מצאו את הנקודות על $x^2 + y^2 = 25$ שבהן קו המשיק הוא אופקי.",
+          "solution_en": "$dy/dx = -x/y = 0 \\Rightarrow x = 0$. Substituting: $y = \\pm 5$. Points: $(0,5)$ and $(0,-5)$.",
+          "solution_he": "$dy/dx = -x/y = 0 \\Rightarrow x = 0$. הצבה: $y = \\pm 5$. נקודות: $(0,5)$ ו-$(0,-5)$.",
+          "points": 5
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Find $dy/dx$ for $\\cos(x+y) = y\\sin x$.",
+          "body_he": "מצאו $dy/dx$ עבור $\\cos(x+y) = y\\sin x$.",
+          "solution_en": "$-\\sin(x+y)(1+dy/dx) = (dy/dx)\\sin x + y\\cos x$. $-\\sin(x+y) - y\\cos x = (dy/dx)(\\sin x + \\sin(x+y))$. $dy/dx = \\frac{-\\sin(x+y)-y\\cos x}{\\sin x+\\sin(x+y)}$.",
+          "solution_he": "$-\\sin(x+y)(1+dy/dx) = (dy/dx)\\sin x + y\\cos x$. $-\\sin(x+y) - y\\cos x = (dy/dx)(\\sin x + \\sin(x+y))$. $dy/dx = \\frac{-\\sin(x+y)-y\\cos x}{\\sin x+\\sin(x+y)}$.",
+          "points": 5
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "For $x^2/9 + y^2/4 = 1$ (ellipse), find $dy/dx$ and the tangent at $(3\\cos t, 2\\sin t)$ for general parameter $t$.",
+          "body_he": "עבור $x^2/9 + y^2/4 = 1$ (אליפסה), מצאו $dy/dx$ ואת המשיק ב-$(3\\cos t, 2\\sin t)$ לפרמטר כללי $t$.",
+          "solution_en": "Differentiate: $2x/9 + 2y(dy/dx)/4 = 0$. $dy/dx = -4x/(9\\cdot 2y) = -2x/(9y)$. At $(3\\cos t, 2\\sin t)$: $dy/dx = -2(3\\cos t)/(9(2\\sin t)) = -\\cos t/(3\\sin t)$.",
+          "solution_he": "גזירה: $2x/9 + 2y(dy/dx)/4 = 0$. $dy/dx = -4x/(9\\cdot 2y) = -2x/(9y)$. ב-$(3\\cos t, 2\\sin t)$: $dy/dx = -2(3\\cos t)/(9(2\\sin t)) = -\\cos t/(3\\sin t)$.",
+          "points": 5
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the second derivative $d^2y/dx^2$ for $x^2 + y^2 = r^2$.",
+          "body_he": "מצאו את הנגזרת השנייה $d^2y/dx^2$ עבור $x^2 + y^2 = r^2$.",
+          "solution_en": "$dy/dx = -x/y$. Differentiate again: $d^2y/dx^2 = -(y-x(dy/dx))/y^2 = -(y-x(-x/y))/y^2 = -(y+x^2/y)/y^2 = -(y^2+x^2)/y^3 = -r^2/y^3$.",
+          "solution_he": "$dy/dx = -x/y$. גזירה שנייה: $d^2y/dx^2 = -(y-x(dy/dx))/y^2 = -(y-x(-x/y))/y^2 = -(y+x^2/y)/y^2 = -(y^2+x^2)/y^3 = -r^2/y^3$.",
+          "points": 5
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Derive $\\frac{d}{dx}(\\arcsin x) = \\frac{1}{\\sqrt{1-x^2}}$ using implicit differentiation.",
+          "body_he": "הוכח $\\frac{d}{dx}(\\arcsin x) = \\frac{1}{\\sqrt{1-x^2}}$ תוך שימוש בגזירה סתומה.",
+          "solution_en": "Let $y = \\arcsin x$, so $\\sin y = x$. Differentiate: $\\cos y (dy/dx) = 1$. $dy/dx = 1/\\cos y$. Since $\\sin y = x$: $\\cos y = \\sqrt{1-\\sin^2 y} = \\sqrt{1-x^2}$ (taking positive root since $y \\in (-\\pi/2,\\pi/2)$). Thus $dy/dx = 1/\\sqrt{1-x^2}$.",
+          "solution_he": "תהי $y = \\arcsin x$, לכן $\\sin y = x$. גזירה: $\\cos y (dy/dx) = 1$. $dy/dx = 1/\\cos y$. מאחר ש-$\\sin y = x$: $\\cos y = \\sqrt{1-\\sin^2 y} = \\sqrt{1-x^2}$ (שורש חיובי כי $y \\in (-\\pi/2,\\pi/2)$). לפיכך $dy/dx = 1/\\sqrt{1-x^2}$.",
+          "points": 5
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Use implicit differentiation to show that the product of the slopes of a circle and its radius at any point is $-1$ (perpendicularity of tangent and radius).",
+          "body_he": "השתמש בגזירה סתומה להראות שמכפלת שיפועי המעגל והרדיוס שלו בכל נקודה היא $-1$ (ניצביות משיק ורדיוס).",
+          "solution_en": "Circle $x^2+y^2=r^2$. Tangent slope at $(x_0,y_0)$: $dy/dx = -x_0/y_0$. Radius slope (from origin to $(x_0,y_0)$): $y_0/x_0$. Product: $(-x_0/y_0)(y_0/x_0) = -1$. ✓ So tangent ⊥ radius.",
+          "solution_he": "מעגל $x^2+y^2=r^2$. שיפוע משיק ב-$(x_0,y_0)$: $dy/dx = -x_0/y_0$. שיפוע רדיוס (מהראשית ל-$(x_0,y_0)$): $y_0/x_0$. מכפלה: $(-x_0/y_0)(y_0/x_0) = -1$. ✓ לכן משיק ⊥ רדיוס.",
+          "points": 5
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting $dy/dx$ when differentiating $y$-terms:** Every time you differentiate a term containing $y$ with respect to $x$, you must multiply by $dy/dx$ (chain rule). Example: $(y^2)' = 2y\\,dy/dx$, NOT just $2y$.\n\n2. **Product rule on $xy$ terms:** $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$. Students often write just $y$ or just $x\\frac{dy}{dx}$.\n\n3. **Forgetting to verify the point lies on the curve** before computing a tangent line.\n\n4. **$dy/dx$ contains both $x$ and $y$:** Do not try to simplify $dy/dx$ by expressing $y$ in terms of $x$ — the point of implicit differentiation is to avoid this.\n\n5. **Division by zero:** If the denominator of $dy/dx$ is zero at a point, the tangent is vertical (or the curve has a cusp). State this explicitly.",
+      "body_he_md": "1. **שכחת $dy/dx$ בגזירת איברי $y$:** בכל פעם שגוזרים איבר המכיל $y$ לפי $x$, חייב להכפיל ב-$dy/dx$ (כלל שרשרת). דוגמה: $(y^2)' = 2y\\,dy/dx$, לא רק $2y$.\n\n2. **כלל מכפלה על איברי $xy$:** $\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$. תלמידים לעתים כותבים רק $y$ או רק $x\\frac{dy}{dx}$.\n\n3. **שכחת אימות שהנקודה שוכנת על העקומה** לפני חישוב קו משיק.\n\n4. **$dy/dx$ מכיל גם $x$ וגם $y$:** אל תנסה לפשט $dy/dx$ על ידי הבעת $y$ כפונקציה של $x$ — מטרת הגזירה הסתומה היא להימנע מכך.\n\n5. **חלוקה באפס:** אם המכנה של $dy/dx$ הוא אפס בנקודה, המשיק הוא אנכי (או שיש לעקומה קוספ). ציין זאת במפורש."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**The method in 5 steps:**\n1. Differentiate both sides w.r.t. $x$.\n2. Chain rule on every $y$-term (multiply by $dy/dx$).\n3. Product rule on $xy$-terms.\n4. Collect $dy/dx$ on one side, factor, divide.\n5. Substitute the point for a numerical slope.\n\n**Key formulas:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}, \\quad \\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}, \\quad \\frac{d}{dx}(\\ln y) = \\frac{1}{y}\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$$\n\n**Typical exam patterns:**\n- Find $dy/dx$ for a given implicit equation.\n- Find the tangent line at a given point.\n- Derive an inverse trig derivative.\n- Find horizontal/vertical tangents.",
+      "body_he_md": "**השיטה ב-5 שלבים:**\n1. גזור את שני האגפים לפי $x$.\n2. כלל שרשרת על כל איבר $y$ (הכפל ב-$dy/dx$).\n3. כלל מכפלה על איברי $xy$.\n4. אסוף $dy/dx$ לצד אחד, הוצא גורם, חלק.\n5. הצב את הנקודה לקבלת שיפוע מספרי.\n\n**נוסחאות מרכזיות:**\n$$\\frac{d}{dx}(y^n) = ny^{n-1}\\frac{dy}{dx}, \\quad \\frac{d}{dx}(e^y) = e^y\\frac{dy}{dx}, \\quad \\frac{d}{dx}(\\ln y) = \\frac{1}{y}\\frac{dy}{dx}$$\n$$\\frac{d}{dx}(xy) = y + x\\frac{dy}{dx}$$\n\n**תבניות אופייניות בבחינה:**\n- מציאת $dy/dx$ עבור משוואה סתומה נתונה.\n- מציאת קו המשיק בנקודה נתונה.\n- גזירת נגזרת טריגונומטרית הפוכה.\n- מציאת משיקים אופקיים/אנכיים."
     },
     {
       "kind": "summary",
-      "title_en": "Related rates",
-      "title_he": "קצבי שינוי קשורים",
-      "body_en_md": "When variables depend on time $t$, differentiate with respect to $t$:\n\n**Ladder problem:** 10 m ladder, foot slides away at 2 m/s. How fast does the top slide down when foot is 6 m from wall?\n\n$x^2 + y^2 = 100$. Differentiate w.r.t. $t$:\n\n$$2x\\dot{x} + 2y\\dot{y} = 0 \\Rightarrow \\dot{y} = -\\frac{x}{y}\\dot{x}.$$\n\nAt $x = 6$: $y = 8$, $\\dot{x} = 2$ → $\\dot{y} = -\\frac{6}{8}(2) = -1.5$ m/s (top slides **down** at 1.5 m/s).",
-      "body_he_md": "כשמשתנים תלויים בזמן $t$, גזרו ב-$t$:\n\n**בעיית הסולם:** סולם 10 מ', בסיס זז 2 מ'/ש'. כמה מהר הראש יורד כשהבסיס 6 מ' מהקיר?\n\n$x^2 + y^2 = 100$ → $2x\\dot{x} + 2y\\dot{y} = 0$.\n\nב-$x = 6$, $y = 8$, $\\dot{x} = 2$ → $\\dot{y} = -1.5$ מ'/ש'."
-    },
-    {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nFind all $x\\in[0,2\\pi]$ where $2\\sin^2 x - \\sin x - 1 = 0$.\n\n**Complete Solution:**\n\nLet $u=\\sin x$: $2u^2-u-1=0$ → $(2u+1)(u-1)=0$ → $u=1$ or $u=-\\frac{1}{2}$.\n$\\sin x=1$ → $x=\\frac{\\pi}{2}$. $\\sin x=-\\frac{1}{2}$ → $x=\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.\n\n---\n\n**Practice Problem 2:**\n\nFind $\\frac{dy}{dx}$ if $x^2+y^2=25$ at $(3,4)$.\n\n**Complete Solution:**\n\n$2x+2y\\frac{dy}{dx}=0$ → $\\frac{dy}{dx}=-\\frac{x}{y}=-\\frac{3}{4}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nכל $x\\in[0,2\\pi]$: $2\\sin^2 x-\\sin x-1=0$.\n\n**פתרון:** $x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$x^2+y^2=25$ ב-$(3,4)$: $\\frac{dy}{dx}=-\\frac{3}{4}$."
+      "title_en": "Lesson Summary",
+      "title_he": "סיכום השיעור",
+      "body_en_md": "- **Implicit differentiation:** differentiate both sides w.r.t. $x$, applying the chain rule to every $y$-term.\n- **Key rule:** $(y^n)' = ny^{n-1}\\frac{dy}{dx}$; $(xy)' = y + x\\frac{dy}{dx}$.\n- **Finding tangents:** evaluate $dy/dx$ at the given point; if denominator $= 0$, tangent is vertical.\n- **Inverse functions:** implicit differentiation elegantly derives $(\\arcsin x)' = 1/\\sqrt{1-x^2}$ and $(\\arctan x)' = 1/(1+x^2)$.\n- **The result $dy/dx$ contains both $x$ and $y$** — this is normal and expected.",
+      "body_he_md": "- **גזירה סתומה:** גזור את שני האגפים לפי $x$, תוך יישום כלל השרשרת על כל איבר $y$.\n- **כלל מרכזי:** $(y^n)' = ny^{n-1}\\frac{dy}{dx}$; $(xy)' = y + x\\frac{dy}{dx}$.\n- **מציאת משיקים:** הצב $dy/dx$ בנקודה הנתונה; אם המכנה $= 0$, המשיק אנכי.\n- **פונקציות הפוכות:** גזירה סתומה גוזרת בצורה אלגנטית $(\\arcsin x)' = 1/\\sqrt{1-x^2}$ ו-$(\\arctan x)' = 1/(1+x^2)$.\n- **התוצאה $dy/dx$ מכילה גם $x$ וגם $y$** — זה נורמלי ומצופה."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "If $x^2 + y^2 = 16$, what is $\\frac{dy}{dx}$?",
-      "stem_he": "אם $x^2 + y^2 = 16$, מה $\\frac{dy}{dx}$?",
-      "options_en": [
-        "$-\\frac{x}{y}$",
-        "$\\frac{x}{y}$",
-        "$-\\frac{y}{x}$",
-        "$2x + 2y$"
-      ],
-      "options_he": [
-        "$-\\frac{x}{y}$",
-        "$\\frac{x}{y}$",
-        "$-\\frac{y}{x}$",
-        "$2x + 2y$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$2x + 2yy' = 0$ → $y' = -x/y$.",
-      "explanation_he": "$2x + 2yy' = 0$ → $y' = -x/y$."
-    },
-    {
-      "ord": 2,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Slope of tangent to $x^2 + y^2 = 25$ at $(3, 4)$:",
-      "stem_he": "שיפוע משיק ל-$x^2 + y^2 = 25$ ב-$(3, 4)$:",
-      "options_en": [
-        "$\\frac{3}{4}$",
-        "$-\\frac{3}{4}$",
-        "$-\\frac{4}{3}$",
-        "$\\frac{4}{3}$"
-      ],
-      "options_he": [
-        "$\\frac{3}{4}$",
-        "$-\\frac{3}{4}$",
-        "$-\\frac{4}{3}$",
-        "$\\frac{4}{3}$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$y' = -x/y = -3/4$.",
-      "explanation_he": "$y' = -3/4$."
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "For $x^3 + y^3 = 3xy$, find $y'$:",
-      "stem_he": "ל-$x^3 + y^3 = 3xy$, מצאו $y'$:",
-      "options_en": [
-        "$\\frac{y - x^2}{y^2 - x}$",
-        "$\\frac{y - x^2}{y^2 - 2x}$",
-        "$\\frac{x^2 - y}{y^2 - x}$",
-        "$\\frac{2y - x^2}{y^2 - 2x}$"
-      ],
-      "options_he": [
-        "$\\frac{y - x^2}{y^2 - x}$",
-        "$\\frac{y - x^2}{y^2 - 2x}$",
-        "$\\frac{x^2 - y}{y^2 - x}$",
-        "$\\frac{2y - x^2}{y^2 - 2x}$"
-      ],
-      "correct_index": 3,
-      "explanation_en": "Collect $y'$ terms: $y'(3y^2 - 6x) = 6y - 3x^2$.",
-      "explanation_he": "איסוף $y'$: $y'(3y^2 - 6x) = 6y - 3x^2$."
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove by mathematical induction:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "stem_he": "הוכיחו באינדוקציה:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "rubric_en": "2pts base; 3pts hypothesis; 5pts inductive algebra.",
-      "rubric_he": "2 נק' בסיס; 3 נק' הנחה; 5 נק' צעד.",
-      "explanation_en": "Standard induction: base OK; inductive step factors to required form.",
-      "explanation_he": "אינדוקציה סטנדרטית — בסיס וצעד.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Find all $x\\in[0,2\\pi]$ satisfying $2\\sin^2 x - \\sin x - 1 = 0$. Show all work.",
-      "stem_he": "מצאו כל $x\\in[0,2\\pi]$: $2\\sin^2 x - \\sin x - 1 = 0$. הראו שלבים.",
-      "rubric_en": "3pts substitution; 4pts solving trig; 3pts all solutions in interval.",
-      "rubric_he": "3 נק' הצבה; 4 נק' טrig; 3 נק' כל הפתרונות.",
-      "explanation_en": "x = π/2, 7π/6, 11π/6.",
-      "explanation_he": "x = π/2, 7π/6, 11π/6.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_5pt"
-    }
-  ],
-  "agent_hints": "Students forget the y' factor when differentiating g(y). Always collect y' terms on one side. For tangents, verify perpendicularity to radius on circles. Related rates: draw diagram, label rates, differentiate w.r.t. t, then substitute. Prerequisite: lesson:derivatives_intro chain rule."
+  ]
 }
