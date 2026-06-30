@@ -29,7 +29,8 @@ export type PointsLevel =
   | 'university_physics_1'
   | 'university_physics_2'
   | 'stats_prob'
-  | 'makhina';
+  | 'makhina'
+  | 'makhina_physics';
 
 export interface CurriculumSection {
   id: string;
@@ -57,6 +58,7 @@ export interface CurriculumCategory {
 // NO calculus, NO vectors, NO complex numbers
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_3PT_NEW_CONCEPTS = [
+  'data_representation',
   'descriptive_statistics',
   'basic_probability',
   'normal_distribution_basics',
@@ -64,6 +66,7 @@ const MATH_3PT_NEW_CONCEPTS = [
   'basic_statistics_3pt',
   'probability_basics_3pt',
   'probability_conditional_3pt',
+  'linear_regression_3pt',
   'geometry_basics',
   'circles',
   'triangles_congruence',
@@ -71,6 +74,7 @@ const MATH_3PT_NEW_CONCEPTS = [
   'functions_linear',
   'functions_quadratic',
   'functions_exponential',
+  'function_transformations',
   'trigonometry_ratios',
   'percentages_and_interest',
 ];
@@ -105,22 +109,27 @@ const MATH_3PT_CONCEPTS = [...new Set([...MATH_3PT_NEW_CONCEPTS, ...MATH_3PT_KG_
 // MATH — 4 UNITS  (Bagrut 471 / 472)
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_4PT_NEW_CONCEPTS = [
+  'limits_4pt',
   'derivatives_intro',
   'derivatives_polynomial_rational',
   'derivatives_rules',
   'derivatives_applications',
   'derivatives_chain_rule',
   'function_analysis_extrema',
+  'function_analysis_4pt',
   'optimization_word_problems',
   'integrals_intro',
   'integrals_polynomial_rational',
+  'integrals_4pt',
   'areas_between_curves',
   'volumes_of_revolution_basic',
   'derivatives_exponential_logarithm',
   'logarithmic_equations',
   'analytic_geometry',
+  'analytic_geometry_4pt',
   'analytic_geometry_lines_circles',
   'trigonometry_plane_sine_cosine_law',
+  '3d_solids_volume',
   'descriptive_statistics',
   'normal_distribution_z_scores',
   'linear_regression_correlation',
@@ -145,25 +154,36 @@ const MATH_4PT_CONCEPTS = [...new Set([...MATH_4PT_NEW_CONCEPTS, ...MATH_4PT_KG_
 // HAS: induction, complex numbers, full trig calculus, Bernoulli, conics, 3D vectors
 // ─────────────────────────────────────────────────────────────────────────────
 const MATH_5PT_NEW_CONCEPTS = [
+  'limits_5pt',
   'derivatives_intro',
   'derivatives_chain_rule',
   'derivatives_trigonometric',
+  'derivatives_trig_exp',
+  'implicit_differentiation',
+  'optimization_related_rates',
   'function_analysis_asymptotes',
+  'function_analysis_5pt',
   'integrals_trigonometric',
+  'integrals_trig_exp',
   'integrals_substitution_basic',
+  'integration_substitution',
   'volumes_of_revolution',
   'derivatives_exponential_logarithm',
   'sequences_arithmetic',
   'sequences_geometric',
+  'sequences_5pt',
   'mathematical_induction',
+  'combinatorics_5pt',
   'distributions',
   'trigonometry_identities',
   'trigonometry_equations',
   'analytic_geometry',
+  'analytic_geometry_5pt',
   'analytic_geometry_conics',
   'circles',
   'vectors_dot_product_3d',
   'complex_numbers_de_moivre',
+  'complex_numbers_5pt',
   'probability_conditional_bayes',
 ];
 const MATH_5PT_KG_LEGACY = [
@@ -275,6 +295,13 @@ const UNI_PHYSICS_2_CONCEPTS = [
 // מכינה — university prep bridge (Bagrut 5pt math + physics, reinforced)
 // ─────────────────────────────────────────────────────────────────────────────
 const MAKHINA_CONCEPTS = [
+  'algebra_review',
+  'number_sets_review',
+  'quadratic_equations_makhina',
+  'functions_makhina',
+  'trigonometry_makhina',
+  'exponential_logarithmic',
+  'calculus_intro_makhina',
   'limits_intro',
   'limits_epsilon_delta',
   'derivatives_intro',
@@ -299,31 +326,70 @@ const MAKHINA_CONCEPTS = [
   'word_problems',
   'sequences_arithmetic',
   'sequences_geometric',
+  'mathematical_induction',
+  'combinatorics',
   'analytic_geometry',
   'trigonometry_identities',
   'fractions_and_ratios',
   'linear_equations_basics',
   'percentages_and_interest',
   'geometry_area_perimeter',
+  'function_transformations',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CALCULUS 1 — University (real numbers → derivatives + function analysis, NO integrals)
-// Technion: sequences, ε-δ, derivatives, MVT, Taylor, L'Hôpital, function analysis
+// מכינה פיזיקה — engineering physics prep (CHE appendix + dedicated syllabus)
+// ─────────────────────────────────────────────────────────────────────────────
+const MAKHINA_PHYSICS_CONCEPTS = [
+  'units_measurement',
+  'vectors_basics',
+  'mechanics_makhina',
+  'kinematics_1d',
+  'projectile_motion',
+  'newton_laws',
+  'friction',
+  'energy_work_makhina',
+  'work_energy',
+  'conservation_energy',
+  'momentum',
+  'circular_motion',
+  'gravitation',
+  'waves_sound_makhina',
+  'waves_basics',
+  'sound_waves',
+  'thermodynamics_makhina',
+  'electricity_makhina',
+  'electrostatics',
+  'electric_field',
+  'electric_circuits',
+  'kirchhoff_laws',
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CALCULUS 1 — University (Ariel syllabus: numbers → integrals + areas)
 // ─────────────────────────────────────────────────────────────────────────────
 const CALCULUS_1_CONCEPTS = [
+  'number_sets_review',
+  'function_basics_uni',
   'limits_intro',
+  'limits_at_infinity',
   'continuity',
+  'continuity_discontinuity',
   'limits_epsilon_delta',
+  'sequences_limits',
   'derivatives_intro',
+  'derivatives_rules',
   'derivatives_chain_rule',
   'derivatives_applications',
+  'lhopital_rule',
   'mean_value_theorem',
-  'sequences_limits',
-  'taylor_formula',
   'function_analysis_asymptotes',
+  'function_investigation_uni',
   'optimization_problems',
-  'derivatives_rules',
+  'absolute_extrema',
+  'antiderivatives',
+  'definite_integral_area',
+  'taylor_formula',
   'limits',
 ];
 
@@ -347,39 +413,46 @@ const CALCULUS_2_CONCEPTS = [
 // LINEAR ALGEBRA — University
 // ─────────────────────────────────────────────────────────────────────────────
 const LINEAR_ALGEBRA_CONCEPTS = [
+  'systems_linear_equations',
   'la_matrices',
   'la_determinants',
   'la_vectors',
   'la_vector_spaces',
-  'la_diagonalization',
-  'la_orthogonality',
+  'vector_spaces_basis_dimension',
+  'linear_transformations_kernel_image',
+  'matrix_representation',
   'eigenvalues_eigenvectors',
   'la_eigenvalues',
+  'la_diagonalization',
+  'la_orthogonality',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATISTICS & PROBABILITY — University
 // ─────────────────────────────────────────────────────────────────────────────
 const STATS_PROB_CONCEPTS = [
+  'sample_space',
   'probability_basic',
   'probability_conditional_bayes',
+  'combinatorics',
+  'random_variables',
   'distributions',
   'normal_distribution_z_scores',
+  'statistics_descriptive',
+  'descriptive_stats',
   'statistics_inference',
+  'sampling_estimation',
   'central_limit_theorem',
+  'confidence_intervals',
   'hypothesis_testing_intro',
   'hypothesis_testing',
   'hypothesis_testing_z_t',
   'linear_regression_correlation',
   'linear_regression_least_squares',
   'correlation_coefficient',
-  'confidence_intervals',
   'chi_square_goodness_of_fit',
   'anova_one_way',
   'chi_square_tests',
-  'statistics_descriptive',
-  'descriptive_stats',
-  'combinatorics',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -408,6 +481,8 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'basic_statistics_3pt',
           'probability_basics_3pt',
           'probability_conditional_3pt',
+          'data_representation',
+          'linear_regression_3pt',
           'descriptive_stats',
           'probability_basic',
         ],
@@ -432,6 +507,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'functions_linear',
           'functions_quadratic',
           'functions_exponential',
+          'function_transformations',
           'algebra_basics',
           'arithmetic',
           'equations_quadratic',
@@ -492,15 +568,18 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'חשבון דיפרנציאלי ואינטגרלי',
         enLabel: 'Calculus',
         concept_ids: [
+          'limits_4pt',
           'derivatives_intro',
           'derivatives_polynomial_rational',
           'derivatives_rules',
           'derivatives_applications',
           'derivatives_chain_rule',
           'function_analysis_extrema',
+          'function_analysis_4pt',
           'optimization_word_problems',
           'integrals_intro',
           'integrals_polynomial_rational',
+          'integrals_4pt',
           'areas_between_curves',
           'volumes_of_revolution_basic',
           'derivatives_exponential_logarithm',
@@ -514,11 +593,13 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Analytic Geometry',
         concept_ids: [
           'analytic_geometry',
+          'analytic_geometry_4pt',
           'analytic_geometry_lines_circles',
           'trigonometry_plane_sine_cosine_law',
           'circles',
           'quadrilaterals',
           'triangles_congruence',
+          '3d_solids_volume',
         ],
       },
       {
@@ -567,16 +648,23 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'חשבון דיפרנציאלי ואינטגרלי',
         enLabel: 'Calculus',
         concept_ids: [
+          'limits_5pt',
+          'limits',
+          'continuity',
           'derivatives_intro',
           'derivatives_chain_rule',
           'derivatives_trigonometric',
+          'derivatives_trig_exp',
+          'implicit_differentiation',
+          'optimization_related_rates',
           'function_analysis_asymptotes',
+          'function_analysis_5pt',
           'integrals_trigonometric',
+          'integrals_trig_exp',
           'integrals_substitution_basic',
+          'integration_substitution',
           'volumes_of_revolution',
           'derivatives_exponential_logarithm',
-          'limits',
-          'continuity',
           'derivatives_rules',
           'derivatives_applications',
           'integrals_intro',
@@ -594,9 +682,12 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
           'sequences_arithmetic',
           'sequences_geometric',
           'mathematical_induction',
+          'combinatorics_5pt',
+          'combinatorics',
           'distributions',
           'function_transformations',
           'logarithms',
+          'sequences_5pt',
         ],
       },
       {
@@ -613,6 +704,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'גאומטריה אנליטית',
         enLabel: 'Analytic Geometry',
         concept_ids: [ 'analytic_geometry',
+          'analytic_geometry_5pt',
           'analytic_geometry_conics',
           'circles' ],
       },
@@ -622,6 +714,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Vectors & Complex Numbers',
         concept_ids: [ 'vectors_dot_product_3d',
           'complex_numbers_de_moivre',
+          'complex_numbers_5pt',
           'vectors_2d',
           'complex_numbers' ],
       },
@@ -837,6 +930,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'חשבון אינפינטסימלי',
         enLabel: 'Calculus Intensive',
         concept_ids: [
+          'calculus_intro_makhina',
           'limits_intro',
           'limits_epsilon_delta',
           'derivatives_intro',
@@ -878,16 +972,82 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'יסודות',
         enLabel: 'Foundation',
         concept_ids: [
+          'algebra_review',
+          'number_sets_review',
+          'quadratic_equations_makhina',
+          'functions_makhina',
+          'trigonometry_makhina',
+          'exponential_logarithmic',
           'algebra_basics',
           'word_problems',
           'sequences_arithmetic',
           'sequences_geometric',
+          'mathematical_induction',
+          'combinatorics',
           'analytic_geometry',
           'trigonometry_identities',
           'fractions_and_ratios',
           'linear_equations_basics',
           'percentages_and_interest',
           'geometry_area_perimeter',
+          'function_transformations',
+        ],
+      },
+    ],
+  },
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // מכינה פיזיקה — engineering physics prep
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    id: 'makhina_physics',
+    heLabel: 'מכינה — פיזיקה להנדסה',
+    enLabel: 'Engineering Physics Prep (מכינה)',
+    emoji: '⚡',
+    points_levels: ['makhina_physics'],
+    concept_ids: MAKHINA_PHYSICS_CONCEPTS,
+    sections: [
+      {
+        id: 'mechanics_makhina',
+        heLabel: 'מכניקה',
+        enLabel: 'Mechanics',
+        concept_ids: [
+          'units_measurement',
+          'vectors_basics',
+          'mechanics_makhina',
+          'kinematics_1d',
+          'projectile_motion',
+          'newton_laws',
+          'friction',
+          'energy_work_makhina',
+          'work_energy',
+          'conservation_energy',
+          'momentum',
+          'circular_motion',
+          'gravitation',
+        ],
+      },
+      {
+        id: 'waves_thermo_makhina',
+        heLabel: 'גלים וחום',
+        enLabel: 'Waves & Thermodynamics',
+        concept_ids: [
+          'waves_sound_makhina',
+          'waves_basics',
+          'sound_waves',
+          'thermodynamics_makhina',
+        ],
+      },
+      {
+        id: 'electricity_makhina',
+        heLabel: 'חשמל',
+        enLabel: 'Electricity',
+        concept_ids: [
+          'electricity_makhina',
+          'electrostatics',
+          'electric_field',
+          'electric_circuits',
+          'kirchhoff_laws',
         ],
       },
     ],
@@ -905,13 +1065,32 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
     concept_ids: CALCULUS_1_CONCEPTS,
     sections: [
       {
+        id: 'number_sets_functions',
+        heLabel: 'קבוצות מספרים ופונקציות',
+        enLabel: 'Number Sets & Functions',
+        concept_ids: [
+          'number_sets_review',
+          'function_basics_uni',
+        ],
+      },
+      {
         id: 'limits_continuity',
         heLabel: 'גבולות ורציפות',
         enLabel: 'Limits & Continuity',
-        concept_ids: [ 'limits_intro',
+        concept_ids: [
+          'limits_intro',
+          'limits_at_infinity',
           'continuity',
+          'continuity_discontinuity',
           'limits_epsilon_delta',
-          'limits' ],
+          'limits',
+        ],
+      },
+      {
+        id: 'series_taylor',
+        heLabel: 'סדרות וטיילור',
+        enLabel: 'Series & Taylor',
+        concept_ids: [ 'sequences_limits', 'taylor_formula' ],
       },
       {
         id: 'derivatives_calc1',
@@ -919,18 +1098,12 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Derivatives',
         concept_ids: [
           'derivatives_intro',
+          'derivatives_rules',
           'derivatives_chain_rule',
           'derivatives_applications',
+          'lhopital_rule',
           'mean_value_theorem',
-          'derivatives_rules',
         ],
-      },
-      {
-        id: 'series_taylor',
-        heLabel: 'טורים וטיילור',
-        enLabel: 'Series & Taylor',
-        concept_ids: [ 'sequences_limits',
-          'taylor_formula' ],
       },
       {
         id: 'function_analysis_calc1',
@@ -938,8 +1111,18 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         enLabel: 'Function Analysis',
         concept_ids: [
           'function_analysis_asymptotes',
+          'function_investigation_uni',
           'optimization_problems',
-          'derivatives_rules',
+          'absolute_extrema',
+        ],
+      },
+      {
+        id: 'integrals_calc1',
+        heLabel: 'אינטגרלים',
+        enLabel: 'Integrals',
+        concept_ids: [
+          'antiderivatives',
+          'definite_integral_area',
         ],
       },
     ],
@@ -1002,6 +1185,7 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'מערכות ומטריצות',
         enLabel: 'Systems & Matrices',
         concept_ids: [
+          'systems_linear_equations',
           'la_matrices',
           'la_determinants',
         ],
@@ -1013,6 +1197,16 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         concept_ids: [
           'la_vectors',
           'la_vector_spaces',
+          'vector_spaces_basis_dimension',
+        ],
+      },
+      {
+        id: 'linear_transformations',
+        heLabel: 'העתקות לינאריות',
+        enLabel: 'Linear Transformations',
+        concept_ids: [
+          'linear_transformations_kernel_image',
+          'matrix_representation',
           'la_matrices',
         ],
       },
@@ -1046,9 +1240,11 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         heLabel: 'יסודות ההסתברות',
         enLabel: 'Probability Foundations',
         concept_ids: [
+          'sample_space',
           'probability_basic',
           'probability_conditional_bayes',
           'distributions',
+          'random_variables',
           'combinatorics',
           'statistics_descriptive',
           'descriptive_stats',
@@ -1058,9 +1254,12 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
         id: 'continuous_distributions',
         heLabel: 'התפלגויות רציפות',
         enLabel: 'Continuous Distributions',
-        concept_ids: [ 'normal_distribution_z_scores',
+        concept_ids: [
+          'normal_distribution_z_scores',
           'statistics_inference',
-          'central_limit_theorem' ],
+          'sampling_estimation',
+          'central_limit_theorem',
+        ],
       },
       {
         id: 'statistical_inference',
@@ -1106,6 +1305,7 @@ export const GOAL_TO_LEVEL: Record<string, PointsLevel> = {
   bagrut_math_5pt: '5pt',
   bagrut_physics: 'hs_physics',
   makhina: 'makhina',
+  makhina_physics: 'makhina_physics',
   university_prep: 'makhina',
   calculus1: 'calc1',
   calculus_1: 'calc1',
@@ -1136,7 +1336,7 @@ export const SUBJECT_TO_CATEGORY: Record<string, string> = {
   university_physics_1: 'university_physics_1',
   university_physics_2: 'university_physics_2',
   makhina: 'makhina',
-  makhina_physics: 'university_physics_1',
+  makhina_physics: 'makhina_physics',
   calculus_1: 'calculus_1',
   calculus_2: 'calculus_2',
   linear_algebra: 'linear_algebra',
