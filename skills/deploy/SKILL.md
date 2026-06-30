@@ -45,8 +45,46 @@ description: How to deploy apps/web (Vercel), apps/api + services (Fly.io), work
 3. Sentry error rate < threshold.
 4. `gh workflow run deploy-prod.yml` with reviewer approval.
 
+## MANDATORY: Post-push Vercel check (every agent, every push to main)
+
+After **every** `git push` to `main`, you MUST:
+
+1. **Wait for CI** — poll until the `Deploy Web (Vercel)` workflow completes:
+   ```powershell
+   gh run list --limit 3 --json status,conclusion,name | ConvertFrom-Json | Where-Object { $_.name -match "Deploy|Lint" }
+   ```
+   Wait up to 5 minutes, re-polling every 30 seconds.
+
+2. **Check the result** — if `conclusion` is `failure`:
+   - Fetch the error: `gh run view <run_id> --log-failed`
+   - Fix the root cause immediately (ESLint, TypeScript, ruff)
+   - Push the fix and repeat from step 1
+
+3. **Smoke test the live URL** — once CI is green, hit the canonical URL:
+   ```powershell
+   $urls = @("/", "/sign-in", "/app", "/learn")
+   foreach ($path in $urls) {
+     $r = Invoke-WebRequest -Uri "https://a-step-forward-waij.vercel.app$path" -UseBasicParsing -MaximumRedirection 5 -ErrorAction SilentlyContinue
+     Write-Host "$($r.StatusCode) $path"
+   }
+   ```
+   Any non-2xx/3xx → roll back: `git revert HEAD --no-edit; git push`
+
+4. **Never leave a broken build.** A failing CI on `main` blocks all other agents. Fix it before ending your task.
+
+## Most common CI failures (quick fixes)
+
+| Error | Fix |
+|-------|-----|
+| `'X' is defined but never used` (ESLint) | Remove unused import in the flagged file |
+| `Found N errors` (Ruff) | Check if new `.py` file is in an excluded path; if not, fix lint or add path to `extend-exclude` in `pyproject.toml` |
+| `Type error: Property 'X' does not exist` | Run `npx tsc --noEmit` locally, fix type errors |
+| `Cannot find module` | Check import paths and `tsconfig.json` paths |
+| Build size / memory limit | Check for accidentally imported large assets |
+
 ## Pitfalls
 - Don't pin a model in production without a fallback route in `agents/base/llm.py`.
 - Don't bypass migration gates ("just one quick fix"); follow the checklist.
 - Don't ship a prompt or agent change without an eval baseline promotion PR.
 - Don't assume green CI means Render will boot — verify the **API import smoke** step and Docker `CMD` match.
+- **Don't end your task without a green CI.** Check `gh run list` before finishing.

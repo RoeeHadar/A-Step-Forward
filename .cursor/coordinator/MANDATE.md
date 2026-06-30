@@ -33,7 +33,7 @@ These come from `.cursor/subagent-briefs/RESUME-README.md` and are project polic
 - DO NOT touch `.env.local` / any secrets file.
 - DO NOT commit secrets even by accident — repo has secret scanning + push protection enabled, but be defensive.
 - Conventional commit messages per `.cursor/rules/70-commit-style.mdc`.
-- After every push to `main`, run a 4-route smoke (`/`, `/api/health`, `/sign-in`, `/lessons/lesson-whole-numbers`) against `https://a-step-forward-waij.vercel.app` and record the result in `STATUS.md`. If any non-2xx, roll back the last commit immediately and document.
+- **MANDATORY after every push to `main`**: Read and follow `skills/deploy/SKILL.md` → "MANDATORY: Post-push Vercel check" section. Poll `gh run list` until `Deploy Web (Vercel)` and `Lint & Test` are both `success`. If either fails, fix immediately before doing anything else. Run the smoke test against `https://a-step-forward-waij.vercel.app`. Record result in `STATUS.md`. Broken CI = P0 blocker, stop all other work.
 - When a sub-agent's work conflicts with another's, the most recently-pushed work wins; the loser must rebase. You arbitrate.
 - Time budget per session: **45 minutes** of wall-clock. If approaching that limit, finish the current task, update `STATUS.md`, and return.
 
