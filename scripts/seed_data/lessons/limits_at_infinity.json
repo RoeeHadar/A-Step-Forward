@@ -1,168 +1,189 @@
 {
   "concept_id": "limits_at_infinity",
-  "subject": "calculus_1",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Limits at Infinity & Asymptotes",
-  "title_he": "גבולות באינסוף ואסימטוטות",
-  "summary_en": "Limits as $x\\to\\pm\\infty$, comparing growth rates, rational limits, and vertical/oblique asymptotes — essential for graph sketching and engineering approximations.",
-  "summary_he": "גבולות כאשר $x\\to\\pm\\infty$, השוואת קצבי גדילה, גבולות של פונקציות רציונליות ואסימטוטות אנכיים/אלכסוניים — חיוני לשרטוט גרפים וקירובים בהנדסה.",
-  "est_minutes": 30,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["5pt"],
+  "title_en": "Limits at Infinity & Indeterminate Forms",
+  "title_he": "גבולות באינסוף וצורות בלתי-קצובות",
+  "summary_en": "A focused sub-lesson on limits as $x\\to\\infty$ or $x\\to -\\infty$: rational function degree comparison, horizontal and vertical asymptotes, the five indeterminate forms ($\\infty/\\infty$, $\\infty-\\infty$, $0\\cdot\\infty$, $1^\\infty$, $0^0$, $\\infty^0$), and the fundamental limit $(1+1/x)^x\\to e$. Built in the Goren/Geva style with checkpoints and exam prep.",
+  "summary_he": "שיעור-משנה ממוקד על גבולות כש-$x\\to\\infty$ או $x\\to -\\infty$: השוואת מעלות פונקציות רציונליות, אסימפטוטות אופקיות ואנכיות, חמש הצורות הבלתי-קצובות, והגבול היסודי $(1+1/x)^x\\to e$. בנוי בסגנון גורן/גבע עם עצרות ותרגול ומדריך לפני הבחינה.",
+  "est_minutes": 45,
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Limits at infinity",
-      "title_he": "גבולות באינסוף",
-      "body_en_md": "We write $\\lim_{x\\to\\infty} f(x)=L$ if outputs approach $L$ as $x$ grows without bound. Similarly $\\lim_{x\\to-\\infty} f(x)=L$.\n\n**Formal definition:** $\\lim_{x\\to\\infty}f(x)=L$ means $\\forall\\,\\epsilon>0\\,\\exists\\,N>0: x>N\\Rightarrow|f(x)-L|<\\epsilon$.\n\n**Basic limits:**\n$$\\lim_{x\\to\\infty}\\frac{1}{x}=0,\\quad \\lim_{x\\to\\infty}e^{-x}=0,\\quad \\lim_{x\\to\\infty}\\arctan x=\\frac{\\pi}{2}.$$\n\n**Infinite limits:** $\\lim_{x\\to a^+}f(x)=+\\infty$ means $f(x)$ exceeds any bound as $x\\to a$ from the right.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "כותבים $\\lim_{x\\to\\infty} f(x)=L$ אם הפלט מתקרב ל-$L$ כש-$x$ גדל ללא גבול.\n\n**הגדרה:** $\\forall\\,\\epsilon>0\\,\\exists\\,N: x>N\\Rightarrow|f(x)-L|<\\epsilon$.\n\n**גבולות בסיסיים:**\n$$\\lim_{x\\to\\infty}\\frac{1}{x}=0,\\quad \\lim_{x\\to\\infty}e^{-x}=0,\\quad \\lim_{x\\to\\infty}\\arctan x=\\frac{\\pi}{2}.$$\n\n**גבולות אינסופיים:** $\\lim_{x\\to a^+}f(x)=+\\infty$ — הפונקציה חורגת מכל חסם.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "kind": "intro",
+      "title_en": "Limits at Infinity — Why They Matter",
+      "title_he": "גבולות באינסוף — למה הם חשובים",
+      "body_en_md": "## Long-Run Behavior of Functions\n\nWhen a function is evaluated for very large (or very negative) values of $x$, we ask: **does it settle to a finite value? Blow up? Oscillate?**\n\nThis question is answered by the **limit at infinity**:\n$$\\\\lim_{x\\\\to+\\\\infty}f(x) \\\\quad\\\\text{and}\\\\quad \\\\lim_{x\\\\to-\\\\infty}f(x).$$\n\n## Connection to Asymptotes\n\n| Asymptote type | Definition | Example |\n|---------------|------------|---------|\n| **Horizontal** $y=L$ | $\\\\lim_{x\\\\to\\\\pm\\\\infty}f(x)=L$ | $f(x)=\\\\frac{1}{x}\\\\to 0$ |\n| **Vertical** $x=a$ | $\\\\lim_{x\\\\to a^\\\\pm}f(x)=\\\\pm\\\\infty$ | $f(x)=\\\\frac{1}{x-2}$ at $x=2$ |\n| **Oblique** $y=mx+b$ | $\\\\lim_{x\\\\to\\\\infty}[f(x)-(mx+b)]=0$ | $f(x)=\\\\frac{x^2+1}{x}=x+\\\\frac{1}{x}$ |\n\n## Where This Appears\n\n- **Bagrut 5-point:** asymptote finding, rational function behavior, $e$-limit problems.\n- **University calculus:** indeterminate forms, L'Hôpital, Taylor series asymptotics.\n- **Physics/Economics:** terminal velocity (limit as $t\\\\to\\\\infty$), market equilibrium.",
+      "body_he_md": "## התנהגות הפונקציה לטווח ארוך\n\nכאשר פונקציה מוערכת עבור ערכי $x$ גדולים מאוד (או שליליים מאוד), אנו שואלים: **האם היא מתייצבת לערך סופי? מתפוצצת? מתנדנדת?**\n\nשאלה זו נענית על-ידי **הגבול באינסוף**:\n$$\\\\lim_{x\\\\to+\\\\infty}f(x) \\\\quad\\\\text{ו-}\\\\quad \\\\lim_{x\\\\to-\\\\infty}f(x).$$\n\n## הקשר לאסימפטוטות\n\n| סוג אסימפטוטה | הגדרה | דוגמה |\n|--------------|-------|-------|\n| **אופקית** $y=L$ | $\\\\lim_{x\\\\to\\\\pm\\\\infty}f(x)=L$ | $f(x)=\\\\frac{1}{x}\\\\to 0$ |\n| **אנכית** $x=a$ | $\\\\lim_{x\\\\to a^\\\\pm}f(x)=\\\\pm\\\\infty$ | $f(x)=\\\\frac{1}{x-2}$ ב-$x=2$ |\n| **אלכסונית** $y=mx+b$ | $\\\\lim_{x\\\\to\\\\infty}[f(x)-(mx+b)]=0$ | $f(x)=\\\\frac{x^2+1}{x}=x+\\\\frac{1}{x}$ |\n\n## היכן זה מופיע\n\n- **בגרות 5 יחידות:** מציאת אסימפטוטות, התנהגות פונקציות רציונליות, בעיות גבול $e$.\n- **חדו\"א באוניברסיטה:** צורות בלתי-קצובות, לופיטל, אסימפטוטיקה של טיילור.\n- **פיזיקה/כלכלה:** מהירות סופנית ($t\\\\to\\\\infty$), שיווי משקל בשוק."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Definition — Limit at Infinity vs Limit Equal to Infinity",
+      "title_he": "הגדרה — גבול באינסוף לעומת גבול שווה לאינסוף",
+      "body_en_md": "## Limit at Infinity (Horizontal Asymptote)\n\n$\\\\lim_{x\\\\to+\\\\infty}f(x)=L$ means: for every $\\\\varepsilon>0$, there exists $M>0$ such that\n$$x>M \\\\Rightarrow |f(x)-L|<\\\\varepsilon.$$\nThe function **approaches** the finite value $L$ as $x$ grows without bound.\n\n**Example:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{1}{x}=0$ — the graph approaches the $x$-axis.\n\n---\n\n## Limit Equal to Infinity (Vertical Asymptote / Unbounded Growth)\n\n$\\\\lim_{x\\\\to a}f(x)=+\\\\infty$ means: for every $M>0$, there exists $\\\\delta>0$ such that\n$$0<|x-a|<\\\\delta \\\\Rightarrow f(x)>M.$$\n\n**Example:** $\\\\lim_{x\\\\to 0^+}\\\\dfrac{1}{x}=+\\\\infty$ — the graph shoots up to infinity.\n\n---\n\n## Key Distinction\n\n| Expression | Meaning | Finite limit? |\n|------------|---------|---------------|\n| $\\\\lim_{x\\\\to\\\\infty}f(x)=L$ | $x$ grows, $f$ settles to $L$ | Yes, $L$ is finite |\n| $\\\\lim_{x\\\\to a}f(x)=\\\\infty$ | $x$ approaches $a$, $f$ blows up | No, $\\\\infty$ is not a real number |\n| $\\\\lim_{x\\\\to\\\\infty}f(x)=\\\\infty$ | Both $x$ and $f$ go to infinity | No |\n\n> In the last two rows, we say the limit **does not exist** as a finite number, but we use $\\\\infty$ as a descriptive shorthand.",
+      "body_he_md": "## גבול באינסוף (אסימפטוטה אופקית)\n\n$\\\\lim_{x\\\\to+\\\\infty}f(x)=L$ פירושו: לכל $\\\\varepsilon>0$ קיים $M>0$ כך ש:\n$$x>M \\\\Rightarrow |f(x)-L|<\\\\varepsilon.$$\nהפונקציה **מתקרבת** לערך הסופי $L$ כאשר $x$ גדל ללא גבול.\n\n**דוגמה:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{1}{x}=0$ — הגרף מתקרב לציר ה-$x$.\n\n---\n\n## גבול שווה לאינסוף (אסימפטוטה אנכית / גדילה לא-חסומה)\n\n$\\\\lim_{x\\\\to a}f(x)=+\\\\infty$ פירושו: לכל $M>0$ קיים $\\\\delta>0$ כך ש:\n$$0<|x-a|<\\\\delta \\\\Rightarrow f(x)>M.$$\n\n**דוגמה:** $\\\\lim_{x\\\\to 0^+}\\\\dfrac{1}{x}=+\\\\infty$ — הגרף מזנק לאינסוף.\n\n---\n\n## הבחנה מרכזית\n\n| ביטוי | פירוש | גבול סופי? |\n|-------|-------|------------|\n| $\\\\lim_{x\\\\to\\\\infty}f(x)=L$ | $x$ גדל, $f$ מתייצבת ל-$L$ | כן, $L$ סופי |\n| $\\\\lim_{x\\\\to a}f(x)=\\\\infty$ | $x$ מתקרב ל-$a$, $f$ מתפוצצת | לא, $\\\\infty$ אינו מספר ממשי |\n| $\\\\lim_{x\\\\to\\\\infty}f(x)=\\\\infty$ | גם $x$ וגם $f$ הולכים לאינסוף | לא |\n\n> בשורות האחרונות אומרים שהגבול **לא קיים** כמספר סופי, אך משתמשים ב-$\\\\infty$ כקיצור תיאורי."
     },
     {
       "kind": "theory",
-      "title_en": "Growth rate hierarchy",
-      "title_he": "היררכיית קצבי גדילה",
-      "body_en_md": "For $x\\to\\infty$ (slowest to fastest among standard Calc 1 families):\n$$\\ln x \\ll x^\\alpha \\ll a^x \\ll x^x \\text{ (beyond course)}$$\nfor any fixed $\\alpha>0$, $a>1$.\n\n**Consequences:**\n- $\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=0$\n- $\\lim_{x\\to\\infty}\\dfrac{x^{100}}{e^x}=0$\n- Exponentials dominate polynomials.\n\n**Technion exam tip:** when comparing $\\dfrac{P(x)}{Q(x)}$ at infinity, divide numerator and denominator by the **highest power** of $x$.",
-      "body_he_md": "ל-$x\\to\\infty$ (מאיט ל מהיר):\n$$\\ln x \\ll x^\\alpha \\ll a^x.$$\n\n**מסקנות:**\n- $\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}=0$\n- $\\lim_{x\\to\\infty}\\dfrac{x^{100}}{e^x}=0$\n- מעריכיות שולטות על פולינומים.\n\n**טיפ לבחינה:** בחלוקת $P/Q$ באינסוף — חלקו במעלה $x$ הגבוהה ביותר."
+      "title_en": "Theory — Rational Functions at Infinity: The Three Cases",
+      "title_he": "תיאוריה — פונקציות רציונליות באינסוף: שלושת המקרים",
+      "body_en_md": "## The Degree-Comparison Rule\n\nFor $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{P(x)}{Q(x)}$ where $P$ has degree $p$ and $Q$ has degree $q$:\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\frac{a_p x^p + \\\\cdots + a_0}{b_q x^q + \\\\cdots + b_0} = \\\\begin{cases}\n0 & p < q \\\\quad (\\\\text{numerator degree is lower})\\\\\\\\\n\\\\dfrac{a_p}{b_q} & p = q \\\\quad (\\\\text{ratio of leading coefficients})\\\\\\\\\n\\\\pm\\\\infty & p > q \\\\quad (\\\\text{numerator degree is higher})\n\\\\end{cases}$$\n\n**The trick:** divide numerator and denominator by the **highest power of $x$ in the denominator** ($x^q$). Then every remaining term $\\\\to 0$ as $x\\\\to\\\\infty$.\n\n## The Three Cases Explained\n\n### Case 1: $p < q$ (numerator loses)\n\nDivide by $x^q$: numerator $\\\\to 0$, denominator $\\\\to b_q\\\\ne 0$. Limit $= 0$.\n\n**Example:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{5x+3}{2x^3-1}$: divide by $x^3$: $\\\\dfrac{5/x^2+3/x^3}{2-1/x^3}\\\\to\\\\dfrac{0}{2}=0$.\n\nHorizontal asymptote: $y=0$.\n\n### Case 2: $p = q$ (tie — ratio of leading coefficients)\n\nDivide by $x^p=x^q$: leading terms survive, all others $\\\\to 0$.\n\n**Example:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{3x^2+7x}{2x^2-1}$: divide by $x^2$: $\\\\dfrac{3+7/x}{2-1/x^2}\\\\to\\\\dfrac{3}{2}$.\n\nHorizontal asymptote: $y=3/2$.\n\n### Case 3: $p > q$ (numerator wins — no horizontal asymptote)\n\nThe limit is $\\\\pm\\\\infty$. Sign depends on signs of $a_p$ and $b_q$ for $x\\\\to+\\\\infty$.\n\n**Example:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^3+1}{x+2}$: degree $3 > 1$, so limit $=+\\\\infty$. Oblique asymptote: $y=x^2-2x+\\\\ldots$ (do polynomial division).\n\n## Indeterminate Forms at Infinity\n\nBeyond rational functions, infinity creates these indeterminate forms:\n\n| Form | Example | Resolution |\n|------|---------|------------|\n| $\\\\infty/\\\\infty$ | $\\\\frac{x^2}{e^x}$ | L'Hôpital or growth order |\n| $\\\\infty - \\\\infty$ | $\\\\sqrt{x^2+x}-x$ | Multiply by conjugate |\n| $0\\\\cdot\\\\infty$ | $x\\\\cdot\\\\sin(1/x)$ | Rewrite as $0/0$ or $\\\\infty/\\\\infty$ |\n| $1^\\\\infty$ | $(1+1/x)^x$ | Use $e^{\\\\ln}$ trick |\n| $0^0$ | $x^x$ as $x\\\\to 0^+$ | Use $e^{\\\\ln}$ trick |\n| $\\\\infty^0$ | $x^{1/x}$ as $x\\\\to\\\\infty$ | Use $e^{\\\\ln}$ trick |",
+      "body_he_md": "## כלל השוואת המעלות\n\nעבור $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{P(x)}{Q(x)}$ כאשר ל-$P$ יש מעלה $p$ ול-$Q$ מעלה $q$:\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\frac{a_p x^p + \\\\cdots + a_0}{b_q x^q + \\\\cdots + b_0} = \\\\begin{cases}\n0 & p < q \\\\quad (\\\\text{מעלת המונה קטנה יותר})\\\\\\\\\n\\\\dfrac{a_p}{b_q} & p = q \\\\quad (\\\\text{יחס מקדמים מובילים})\\\\\\\\\n\\\\pm\\\\infty & p > q \\\\quad (\\\\text{מעלת המונה גדולה יותר})\n\\\\end{cases}$$\n\n**הטריק:** מחלקים מונה ומכנה ב**חזקת ה-$x$ הגבוהה ביותר במכנה** ($x^q$). אז כל שאר האיברים $\\\\to 0$ כש-$x\\\\to\\\\infty$.\n\n## שלושת המקרים מוסברים\n\n### מקרה 1: $p < q$ (המונה מפסיד)\n\nמחלקים ב-$x^q$: מונה $\\\\to 0$, מכנה $\\\\to b_q\\\\ne 0$. גבול $= 0$.\n\n**דוגמה:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{5x+3}{2x^3-1}$: מחלקים ב-$x^3$: $\\\\dfrac{5/x^2+3/x^3}{2-1/x^3}\\\\to 0$.\n\nאסימפטוטה אופקית: $y=0$.\n\n### מקרה 2: $p = q$ (תיקו — יחס מקדמים מובילים)\n\nמחלקים ב-$x^p=x^q$: האיברים המובילים שורדים, כל השאר $\\\\to 0$.\n\n**דוגמה:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{3x^2+7x}{2x^2-1}$: מחלקים ב-$x^2$: $\\\\to\\\\dfrac{3}{2}$.\n\nאסימפטוטה אופקית: $y=3/2$.\n\n### מקרה 3: $p > q$ (המונה מנצח — אין אסימפטוטה אופקית)\n\nהגבול הוא $\\\\pm\\\\infty$. הסימן תלוי בסימני $a_p$ ו-$b_q$ עבור $x\\\\to+\\\\infty$.\n\n**דוגמה:** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^3+1}{x+2}$: מעלה $3 > 1$, לכן גבול $=+\\\\infty$. אסימפטוטה אלכסונית (חלוקת פולינומים).\n\n## צורות בלתי-קצובות באינסוף\n\nמעבר לפונקציות רציונליות, האינסוף יוצר צורות בלתי-קצובות אלו:\n\n| צורה | דוגמה | פתרון |\n|------|--------|-------|\n| $\\\\infty/\\\\infty$ | $\\\\frac{x^2}{e^x}$ | לופיטל או סדר גדילה |\n| $\\\\infty - \\\\infty$ | $\\\\sqrt{x^2+x}-x$ | כפל בצמוד |\n| $0\\\\cdot\\\\infty$ | $x\\\\cdot\\\\sin(1/x)$ | שכתוב כ-$0/0$ או $\\\\infty/\\\\infty$ |\n| $1^\\\\infty$ | $(1+1/x)^x$ | טריק $e^{\\\\ln}$ |\n| $0^0$ | $x^x$ כש-$x\\\\to 0^+$ | טריק $e^{\\\\ln}$ |\n| $\\\\infty^0$ | $x^{1/x}$ כש-$x\\\\to\\\\infty$ | טריק $e^{\\\\ln}$ |"
     },
     {
       "kind": "worked_example",
-      "title_en": "Rational limits at infinity",
-      "title_he": "גבולות רציונליים באינסוף",
-      "body_en_md": "**Rule:** for $f(x)=\\dfrac{a_n x^n+\\cdots}{b_m x^m+\\cdots}$ with $a_n,b_m\\ne 0$:\n- If $n<m$: limit $=0$\n- If $n=m$: limit $=\\dfrac{a_n}{b_m}$\n- If $n>m$: limit $=\\pm\\infty$ (sign from leading coefficients)\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{3x^2-2x+1}{5x^2+x}=\\dfrac{3}{5}$.\n\nDivide by $x^2$:\n$$\\frac{3-2/x+1/x^2}{5+1/x}\\to\\frac{3}{5}.$$\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{2x+1}{x^3-4}=0$ (degree numerator $<$ denominator).",
-      "body_he_md": "**כלל:** ל-$f(x)=\\dfrac{a_n x^n+\\cdots}{b_m x^m+\\cdots}$:\n- $n<m$: גבול $=0$\n- $n=m$: גבול $=\\dfrac{a_n}{b_m}$\n- $n>m$: $\\pm\\infty$\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{3x^2-2x+1}{5x^2+x}=\\dfrac{3}{5}$.\n\nחלוקה ב-$x^2$ נותנת $\\dfrac{3}{5}$.\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{2x+1}{x^3-4}=0$."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Vertical and oblique asymptotes",
-      "title_he": "אסימטוטות אנכיים ואלכסוניים",
-      "body_en_md": "**Vertical asymptote** $x=a$: $\\lim_{x\\to a^\\pm}f(x)=\\pm\\infty$. Common at zeros of denominators.\n\n**Horizontal asymptote** $y=L$: $\\lim_{x\\to\\pm\\infty}f(x)=L$.\n\n**Oblique (slant) asymptote** $y=mx+b$: occurs when degree of numerator exceeds denominator by exactly 1. Find via long division:\n$$\\frac{x^2+1}{x-1}=x+1+\\frac{2}{x-1}\\Rightarrow y=x+1.$$\n\n**Engineering use:** asymptotes describe long-term or singular behavior — beam loads near supports, circuit response at extremes.",
-      "body_he_md": "**אנכי** $x=a$: $\\lim_{x\\to a^\\pm}f(x)=\\pm\\infty$.\n\n**אופקי** $y=L$: $\\lim_{x\\to\\pm\\infty}f(x)=L$.\n\n**אלכסוני** $y=mx+b$: כשמעלת המונה גדולה ב-1. חלוקה ארוכה:\n$$\\frac{x^2+1}{x-1}=x+1+\\frac{2}{x-1}\\Rightarrow y=x+1.$$\n\n**שימוש הנדסי:** התנהגות בקיצוניות — עומסים, תגובת מערכות."
-    },
-    {
-      "kind": "summary",
-      "title_en": "Quick reference",
-      "title_he": "סיכום מהיר",
-      "body_en_md": "| Task | Method |\n|---|---|\n| Rational at $\\infty$ | Divide by highest power of $x$ |\n| $e^x$ vs polynomial | Exponential wins |\n| Vertical asymptote | Check denominator zeros |\n| Oblique asymptote | Long division if deg num = deg den + 1 |\n\nAlways check **both** $+\\infty$ and $-\\infty$ when relevant (e.g. $\\arctan x$).",
-      "body_he_md": "| משימה | שיטה |\n|---|---|\n| רציונלית ב-$\\infty$ | חלוקה במעלה $x$ |\n| $e^x$ מול פולינום | מעריכית מנצחת |\n| אנכי | אפסי מכנה |\n| אלכסוני | חלוקה ארוכה |\n\nבדקו **גם** $+\\infty$ וגם $-\\infty$."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Limits at Infinity & Asymptotes: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Limits at Infinity & Asymptotes.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-גבולות באינסוף ואסימטוטות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-גבולות באינסוף ואסימטוטות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$\\lim_{x\\to\\infty}\\dfrac{5x^3+1}{2x^3-x}=?$",
-      "stem_he": "$\\lim_{x\\to\\infty}\\dfrac{5x^3+1}{2x^3-x}=?$",
-      "options_en": [
-        "$0$",
-        "$\\dfrac{5}{2}$",
-        "$\\infty$",
-        "$-\\infty$"
-      ],
-      "options_he": [
-        "$0$",
-        "$\\dfrac{5}{2}$",
-        "$\\infty$",
-        "$-\\infty$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Equal degrees: ratio of leading coefficients $5/2$.",
-      "explanation_he": "מעלות שוות: יחס מקדמים מובילים $5/2$.",
-      "skill_atoms": [
-        "rational_limit_infinity"
-      ],
-      "points_level_min": "calc1"
+      "example_number": 1,
+      "title_en": "Worked Example 1 — All Three Rational Function Cases",
+      "title_he": "דוגמה פתורה 1 — שלושת מקרי הפונקציה הרציונלית",
+      "body_en_md": "Evaluate the following limits as $x\\\\to+\\\\infty$.\n\n---\n\n### Part A: $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{4x+1}{3x^2-2}$ (case $p < q$: $1 < 2$)\n\nDivide numerator and denominator by $x^2$ (highest power in denominator):\n$$\\\\frac{4x+1}{3x^2-2}\\\\cdot\\\\frac{1/x^2}{1/x^2} = \\\\frac{4/x+1/x^2}{3-2/x^2}\\\\xrightarrow{x\\\\to\\\\infty}\\\\frac{0+0}{3-0} = \\\\boxed{0}.$$\n\nHorizontal asymptote: $y=0$.\n\n---\n\n### Part B: $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{5x^2-3}{2x^2+7x}$ (case $p = q$: $2 = 2$)\n\nDivide by $x^2$:\n$$\\\\frac{5-3/x^2}{2+7/x}\\\\xrightarrow{x\\\\to\\\\infty}\\\\frac{5-0}{2+0} = \\\\boxed{\\\\frac{5}{2}}.$$\n\nHorizontal asymptote: $y=5/2$.\n\n---\n\n### Part C: $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^3+2x}{x+1}$ (case $p > q$: $3 > 1$)\n\nDivide by $x$ (degree of denominator):\n$$\\\\frac{x^2+2}{1+1/x}\\\\xrightarrow{x\\\\to\\\\infty}\\\\frac{\\\\infty}{1} = \\\\boxed{+\\\\infty}.$$\n\nNo horizontal asymptote. The function grows without bound.",
+      "body_he_md": "חשבו את הגבולות הבאים כש-$x\\\\to+\\\\infty$.\n\n---\n\n### חלק א': $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{4x+1}{3x^2-2}$ (מקרה $p < q$: $1 < 2$)\n\nמחלקים מונה ומכנה ב-$x^2$ (החזקה הגבוהה ביותר במכנה):\n$$\\\\frac{4/x+1/x^2}{3-2/x^2}\\\\xrightarrow{x\\\\to\\\\infty}\\\\frac{0}{3} = \\\\boxed{0}.$$\n\nאסימפטוטה אופקית: $y=0$.\n\n---\n\n### חלק ב': $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{5x^2-3}{2x^2+7x}$ (מקרה $p = q$: $2 = 2$)\n\nמחלקים ב-$x^2$:\n$$\\\\frac{5-3/x^2}{2+7/x}\\\\xrightarrow{x\\\\to\\\\infty}\\\\frac{5}{2} = \\\\boxed{\\\\frac{5}{2}}.$$\n\nאסימפטוטה אופקית: $y=5/2$.\n\n---\n\n### חלק ג': $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^3+2x}{x+1}$ (מקרה $p > q$: $3 > 1$)\n\nמחלקים ב-$x$:\n$$\\\\frac{x^2+2}{1+1/x}\\\\xrightarrow{x\\\\to\\\\infty}\\\\frac{\\\\infty}{1} = \\\\boxed{+\\\\infty}.$$\n\nאין אסימפטוטה אופקית. הפונקציה גדלה ללא גבול."
     },
     {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Limits at Infinity & Asymptotes'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'גבולות באינסוף ואסימטוטות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "compare_growth_rates"
-      ],
-      "points_level_min": "calc1"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice ✋",
+      "title_he": "עצור ותרגל ✋",
+      "body_en_md": "Determine whether each limit is $0$, a finite non-zero number, $+\\\\infty$, or $-\\\\infty$. State the rule you use.\n\n**(a)** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{7x^4-1}{3x^4+x}$\n\n**(b)** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^2+5x}{x^4+1}$\n\n**(c)** $\\\\lim_{x\\\\to-\\\\infty}\\\\dfrac{2x^3}{x^2+1}$",
+      "body_he_md": "קבע האם כל גבול הוא $0$, מספר סופי שאינו אפס, $+\\\\infty$, או $-\\\\infty$. ציין את הכלל שאתה משתמש בו.\n\n**(א)** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{7x^4-1}{3x^4+x}$\n\n**(ב)** $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^2+5x}{x^4+1}$\n\n**(ג)** $\\\\lim_{x\\\\to-\\\\infty}\\\\dfrac{2x^3}{x^2+1}$",
+      "checkpoint_solution_en": "**(a)** Degrees equal ($p=q=4$): limit $= 7/3$. Horizontal asymptote $y=7/3$. $\\\\checkmark$\n\n**(b)** Numerator degree $2 <$ denominator degree $4$: limit $= 0$. $\\\\checkmark$\n\n**(c)** Numerator degree $3 >$ denominator degree $2$. Leading terms: $2x^3/x^2=2x$. As $x\\\\to-\\\\infty$: $2x\\\\to-\\\\infty$. Limit $= -\\\\infty$. $\\\\checkmark$",
+      "checkpoint_solution_he": "**(א)** מעלות שוות ($p=q=4$): גבול $= 7/3$. אסימפטוטה $y=7/3$. $\\\\checkmark$\n\n**(ב)** מעלת מונה $2 <$ מעלת מכנה $4$: גבול $= 0$. $\\\\checkmark$\n\n**(ג)** מעלת מונה $3 >$ מעלת מכנה $2$. איברים מובילים: $2x$. כש-$x\\\\to-\\\\infty$: גבול $= -\\\\infty$. $\\\\checkmark$"
     },
     {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Limits at Infinity & Asymptotes' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'גבולות באינסוף ואסימטוטות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "find_vertical_asymptote"
-      ],
-      "points_level_min": "calc1"
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — The $\\infty - \\infty$ Form and the $e$ Limit",
+      "title_he": "דוגמה פתורה 2 — הצורה $\\infty - \\infty$ וגבול ה-$e$",
+      "body_en_md": "### Part A: The $\\\\infty-\\\\infty$ Form\n\n**Compute** $\\\\lim_{x\\\\to+\\\\infty}\\\\left(\\\\sqrt{x^2+x}-x\\\\right)$.\n\n**Step 1:** Direct substitution: $\\\\infty-\\\\infty$. Indeterminate. Multiply by conjugate.\n\n**Step 2:** Multiply by $\\\\dfrac{\\\\sqrt{x^2+x}+x}{\\\\sqrt{x^2+x}+x}$:\n\n$$\\\\frac{(\\\\sqrt{x^2+x})^2-x^2}{\\\\sqrt{x^2+x}+x} = \\\\frac{x^2+x-x^2}{\\\\sqrt{x^2+x}+x} = \\\\frac{x}{\\\\sqrt{x^2+x}+x}.$$\n\n**Step 3:** Divide numerator and denominator by $x$ (positive for $x>0$):\n\n$$\\\\frac{1}{\\\\sqrt{1+1/x}+1}.$$\n\n**Step 4:** As $x\\\\to+\\\\infty$: $1/x\\\\to 0$, so\n\n$$\\\\frac{1}{\\\\sqrt{1+0}+1} = \\\\frac{1}{1+1} = \\\\boxed{\\\\frac{1}{2}}.$$\n\n---\n\n### Part B: The Fundamental $e$ Limit\n\n**Prove** $\\\\displaystyle\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\frac{1}{x}\\\\right)^x = e$.\n\nThis is the **definition** of $e$ via limits. Here's how to evaluate equivalent forms:\n\n**Rescaled version:** $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^x$.\n\nLet $u=x/k$, so $x=ku$ and $x\\\\to\\\\infty\\\\Leftrightarrow u\\\\to\\\\infty$:\n$$\\\\left(1+\\\\frac{1}{u}\\\\right)^{ku} = \\\\left[\\\\left(1+\\\\frac{1}{u}\\\\right)^u\\\\right]^k \\\\to e^k.$$\n\n**Example:** $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{3}{x}\\\\right)^x = e^3$.\n\n**Example:** $\\\\lim_{x\\\\to\\\\infty}\\\\left(1-\\\\dfrac{1}{x}\\\\right)^x$: set $k=-1$: $e^{-1}=1/e$.",
+      "body_he_md": "### חלק א': הצורה $\\\\infty-\\\\infty$\n\n**חשבו** $\\\\lim_{x\\\\to+\\\\infty}\\\\left(\\\\sqrt{x^2+x}-x\\\\right)$.\n\n**שלב 1:** הצבה: $\\\\infty-\\\\infty$. בלתי-קצוב. נכפיל בצמוד.\n\n**שלב 2:** נכפיל ב-$\\\\dfrac{\\\\sqrt{x^2+x}+x}{\\\\sqrt{x^2+x}+x}$:\n\n$$\\\\frac{x^2+x-x^2}{\\\\sqrt{x^2+x}+x} = \\\\frac{x}{\\\\sqrt{x^2+x}+x}.$$\n\n**שלב 3:** מחלקים ב-$x$ (חיובי עבור $x>0$):\n\n$$\\\\frac{1}{\\\\sqrt{1+1/x}+1}.$$\n\n**שלב 4:** כש-$x\\\\to+\\\\infty$: $1/x\\\\to 0$, לכן\n\n$$\\\\frac{1}{\\\\sqrt{1}+1} = \\\\frac{1}{2} = \\\\boxed{\\\\frac{1}{2}}.$$\n\n---\n\n### חלק ב': גבול ה-$e$ היסודי\n\n**הוכח** $\\\\displaystyle\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\frac{1}{x}\\\\right)^x = e$.\n\nזוהי **ההגדרה** של $e$ דרך גבולות. כיצד לחשב צורות שקולות:\n\n**גרסה עם קנה-מידה:** $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^x$.\n\nנגדיר $u=x/k$:\n$$\\\\left(1+\\\\frac{1}{u}\\\\right)^{ku} = \\\\left[\\\\left(1+\\\\frac{1}{u}\\\\right)^u\\\\right]^k \\\\to e^k.$$\n\n**דוגמה:** $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{3}{x}\\\\right)^x = e^3$.\n\n**דוגמה:** $\\\\lim_{x\\\\to\\\\infty}\\\\left(1-\\\\dfrac{1}{x}\\\\right)^x = e^{-1}=1/e$."
     },
     {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Limits at Infinity & Asymptotes'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'גבולות באינסוף ואסימטוטות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "find_oblique_asymptote"
-      ],
-      "points_level_min": "calc1"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice ✋",
+      "title_he": "עצור ותרגל ✋",
+      "body_en_md": "Evaluate: $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{2}{x}\\\\right)^{3x}$.",
+      "body_he_md": "חשבו: $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{2}{x}\\\\right)^{3x}$.",
+      "checkpoint_solution_en": "Write the exponent as $3x = \\\\dfrac{3}{2}\\\\cdot 2x$. Let $u=x/2$ (so $x=2u$, $x\\\\to\\\\infty\\\\Leftrightarrow u\\\\to\\\\infty$):\n\n$$\\\\left(1+\\\\frac{1}{u}\\\\right)^{6u} = \\\\left[\\\\left(1+\\\\frac{1}{u}\\\\right)^u\\\\right]^6 \\\\to e^6.$$\n\n**Answer:** $e^6$. $\\\\checkmark$\n\n*Alternative:* use the rule $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^{mx}=e^{km}$ with $k=2$, $m=3$: $e^{2\\\\cdot 3}=e^6$.",
+      "checkpoint_solution_he": "נכתוב את המעריך: $u=x/2$:\n\n$$\\\\left(1+\\\\frac{1}{u}\\\\right)^{6u} = \\\\left[\\\\left(1+\\\\frac{1}{u}\\\\right)^u\\\\right]^6 \\\\to e^6.$$\n\n**תשובה:** $e^6$. $\\\\checkmark$\n\n*חלופה:* כלל $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^{mx}=e^{km}$ עם $k=2$, $m=3$: $e^6$."
     },
     {
-      "ord": 5,
-      "kind": "open",
+      "kind": "worked_example",
       "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Limits at Infinity & Asymptotes' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'גבולות באינסוף ואסימטוטות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "exponential_limit_infinity"
-      ],
-      "points_level_min": "calc1"
+      "example_number": 3,
+      "title_en": "Worked Example 3 — The $1^\\infty$ Indeterminate Form",
+      "title_he": "דוגמה פתורה 3 — הצורה הבלתי-קצובה $1^\\infty$",
+      "body_en_md": "**Compute** $\\\\displaystyle\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\frac{x+3}{x+1}\\\\right)^x$.\n\n---\n\n**Step 1 — Identify the form.**\n\nAs $x\\\\to\\\\infty$: $\\\\dfrac{x+3}{x+1}\\\\to 1$, and the exponent $x\\\\to\\\\infty$. This is a $1^\\\\infty$ form.\n\n**Step 2 — Take the natural logarithm.**\n\nLet $y=\\\\left(\\\\dfrac{x+3}{x+1}\\\\right)^x$. Then:\n$$\\\\ln y = x\\\\ln\\\\left(\\\\frac{x+3}{x+1}\\\\right).$$\n\n**Step 3 — Rewrite as $0/0$ or $\\\\infty/\\\\infty$.**\n\n$$\\\\ln y = x\\\\ln\\\\left(1+\\\\frac{2}{x+1}\\\\right) = \\\\frac{\\\\ln\\\\left(1+\\\\frac{2}{x+1}\\\\right)}{1/x}.$$\n\nAs $x\\\\to\\\\infty$: numerator $\\\\to\\\\ln 1=0$, denominator $\\\\to 0$. Form $0/0$.\n\n**Step 4 — Apply L'Hôpital (or standard limit).**\n\nLet $t=2/(x+1)\\\\to 0$ as $x\\\\to\\\\infty$. Note $1/x\\\\approx t/2$ for large $x$. Then:\n$$\\\\ln y \\\\approx \\\\frac{\\\\ln(1+t)}{t/2} = 2\\\\cdot\\\\frac{\\\\ln(1+t)}{t}\\\\to 2\\\\cdot 1 = 2.$$\n\n*(Using the standard limit $\\\\lim_{t\\\\to 0}\\\\frac{\\\\ln(1+t)}{t}=1$.)*\n\n**Step 5 — Exponentiate.**\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\ln y = 2 \\\\quad\\\\Rightarrow\\\\quad \\\\lim_{x\\\\to\\\\infty}y = e^2.$$\n\n$$\\\\boxed{\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\frac{x+3}{x+1}\\\\right)^x = e^2.}$$\n\n**Sanity check:** $\\\\frac{x+3}{x+1}=1+\\\\frac{2}{x+1}\\\\approx\\\\left(1+\\\\frac{2}{x}\\\\right)^x\\\\to e^2$. ✓",
+      "body_he_md": "**חשבו** $\\\\displaystyle\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\frac{x+3}{x+1}\\\\right)^x$.\n\n---\n\n**שלב 1 — זיהוי הצורה.**\n\nכש-$x\\\\to\\\\infty$: $\\\\dfrac{x+3}{x+1}\\\\to 1$, והמעריך $x\\\\to\\\\infty$. זוהי צורה $1^\\\\infty$.\n\n**שלב 2 — לקיחת לוגריתם טבעי.**\n\nנגדיר $y=\\\\left(\\\\dfrac{x+3}{x+1}\\\\right)^x$. אז:\n$$\\\\ln y = x\\\\ln\\\\left(\\\\frac{x+3}{x+1}\\\\right).$$\n\n**שלב 3 — שכתוב כ-$0/0$ או $\\\\infty/\\\\infty$.**\n\n$$\\\\ln y = \\\\frac{\\\\ln\\\\left(1+\\\\frac{2}{x+1}\\\\right)}{1/x}.$$\n\nכש-$x\\\\to\\\\infty$: מונה $\\\\to 0$, מכנה $\\\\to 0$. צורה $0/0$.\n\n**שלב 4 — גבול סטנדרטי.**\n\nנגדיר $t=2/(x+1)\\\\to 0$. אז:\n$$\\\\ln y \\\\approx 2\\\\cdot\\\\frac{\\\\ln(1+t)}{t}\\\\to 2\\\\cdot 1 = 2.$$\n\n*(שימוש בגבול הסטנדרטי $\\\\lim_{t\\\\to 0}\\\\frac{\\\\ln(1+t)}{t}=1$.)*\n\n**שלב 5 — חזקת $e$.**\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\ln y = 2 \\\\quad\\\\Rightarrow\\\\quad \\\\lim_{x\\\\to\\\\infty}y = e^2.$$\n\n$$\\\\boxed{\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\frac{x+3}{x+1}\\\\right)^x = e^2.}$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Handling Indeterminate Forms at Infinity",
+      "title_he": "מדריך שיטות — טיפול בצורות בלתי-קצובות באינסוף",
+      "body_en_md": "## The $e^{\\\\ln}$ Trick for Power Forms\n\nFor limits of the form $[f(x)]^{g(x)}$ where you get $1^\\\\infty$, $0^0$, or $\\\\infty^0$:\n\n1. **Take the log:** Let $y=[f(x)]^{g(x)}$. Then $\\\\ln y = g(x)\\\\cdot\\\\ln f(x)$.\n2. **Evaluate $\\\\lim\\\\ln y$:** This is now a $0\\\\cdot\\\\infty$ form → rewrite as fraction → L'Hôpital or standard limit.\n3. **Exponentiate:** $\\\\lim y = e^{\\\\lim \\\\ln y}$.\n\n## Quick Reference: Indeterminate Forms\n\n| Form | What to do |\n|------|------------|\n| $\\\\dfrac{0}{0}$ | Factor, conjugate, or L'Hôpital |\n| $\\\\dfrac{\\\\infty}{\\\\infty}$ | Divide by leading term, or L'Hôpital |\n| $\\\\infty - \\\\infty$ | Multiply by conjugate OR find common denominator |\n| $0 \\\\cdot \\\\infty$ | Write as $\\\\dfrac{0}{1/\\\\infty}$ (= $\\\\dfrac{0}{0}$) or $\\\\dfrac{\\\\infty}{1/0}$ (= $\\\\dfrac{\\\\infty}{\\\\infty}$) |\n| $1^\\\\infty$, $0^0$, $\\\\infty^0$ | Use $e^{\\\\ln}$ trick, then evaluate $\\\\lim \\\\ln y$ |\n\n## Growth Order at Infinity (Useful for University)\n\nFrom slowest to fastest growth:\n$$\\\\ln x \\\\ll x^\\\\alpha \\\\ll e^x \\\\ll e^{cx}\\\\;(c>1) \\\\ll x^x \\\\quad\\\\text{as }x\\\\to\\\\infty.$$\n\n**Consequence:** $\\\\dfrac{x^n}{e^x}\\\\to 0$ and $\\\\dfrac{e^x}{x^n}\\\\to\\\\infty$ for any fixed $n$.",
+      "body_he_md": "## טריק ה-$e^{\\\\ln}$ לצורות חזקה\n\nלגבולות של הצורה $[f(x)]^{g(x)}$ שנותנים $1^\\\\infty$, $0^0$, או $\\\\infty^0$:\n\n1. **לקחת לוגריתם:** נגדיר $y=[f(x)]^{g(x)}$. אז $\\\\ln y = g(x)\\\\cdot\\\\ln f(x)$.\n2. **לחשב $\\\\lim\\\\ln y$:** כעת זוהי צורה $0\\\\cdot\\\\infty$ → שכתוב כשבר → לופיטל או גבול סטנדרטי.\n3. **להעלות ב-$e$:** $\\\\lim y = e^{\\\\lim \\\\ln y}$.\n\n## עזר מהיר: צורות בלתי-קצובות\n\n| צורה | מה לעשות |\n|------|----------|\n| $\\\\dfrac{0}{0}$ | פירוק, צמוד, או לופיטל |\n| $\\\\dfrac{\\\\infty}{\\\\infty}$ | חלוקה באיבר המוביל, או לופיטל |\n| $\\\\infty - \\\\infty$ | כפל בצמוד או מציאת מכנה משותף |\n| $0 \\\\cdot \\\\infty$ | כתוב כ-$\\\\dfrac{0}{1/\\\\infty}$ (= $\\\\dfrac{0}{0}$) |\n| $1^\\\\infty$, $0^0$, $\\\\infty^0$ | טריק $e^{\\\\ln}$, אז חשב $\\\\lim \\\\ln y$ |\n\n## סדר גדילה באינסוף (שימושי לאוניברסיטה)\n\nמהאיטי לבמהיר ביותר:\n$$\\\\ln x \\\\ll x^\\\\alpha \\\\ll e^x \\\\ll e^{cx}\\\\;(c>1) \\\\ll x^x \\\\quad\\\\text{כש-}x\\\\to\\\\infty.$$\n\n**מסקנה:** $\\\\dfrac{x^n}{e^x}\\\\to 0$ ו-$\\\\dfrac{e^x}{x^n}\\\\to\\\\infty$ לכל $n$ קבוע."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Exercise Set",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through all exercises. Solutions are hidden — try first!",
+      "body_he_md": "עבדו על כל התרגילים. הפתרונות מוסתרים — נסו קודם!",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{6x^3-1}{2x^3+5x}$ and identify any horizontal asymptote.",
+          "body_he": "מצא $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{6x^3-1}{2x^3+5x}$ וזהה אסימפטוטה אופקית.",
+          "solution_en": "Degrees equal ($p=q=3$). Ratio of leading coefficients: $6/2=3$. Horizontal asymptote: $y=3$.",
+          "solution_he": "מעלות שוות. יחס מקדמים מובילים: $6/2=3$. אסימפטוטה: $y=3$."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find all horizontal asymptotes of $f(x)=\\\\dfrac{3x}{\\\\sqrt{x^2+1}}$.",
+          "body_he": "מצא את כל האסימפטוטות האופקיות של $f(x)=\\\\dfrac{3x}{\\\\sqrt{x^2+1}}$.",
+          "solution_en": "For $x\\\\to+\\\\infty$: $\\\\sqrt{x^2+1}\\\\approx x$, so $f(x)\\\\to 3$. For $x\\\\to-\\\\infty$: $\\\\sqrt{x^2+1}\\\\approx|x|=-x$ (since $x<0$), so $f(x)\\\\to -3$. Two horizontal asymptotes: $y=3$ and $y=-3$.",
+          "solution_he": "כש-$x\\\\to+\\\\infty$: $f(x)\\\\to 3$. כש-$x\\\\to-\\\\infty$: $\\\\sqrt{x^2+1}\\\\approx -x$, לכן $f(x)\\\\to -3$. שתי אסימפטוטות: $y=3$ ו-$y=-3$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{5}{x}\\\\right)^x$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{5}{x}\\\\right)^x$.",
+          "solution_en": "Using $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^x=e^k$ with $k=5$: answer is $e^5$.",
+          "solution_he": "שימוש ב-$\\\\lim\\\\left(1+\\\\dfrac{k}{x}\\\\right)^x=e^k$ עם $k=5$: תשובה $e^5$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{\\\\sin x}{x}$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{\\\\sin x}{x}$.",
+          "solution_en": "Since $|\\\\sin x|\\\\le 1$ for all $x$: $\\\\left|\\\\dfrac{\\\\sin x}{x}\\\\right|\\\\le\\\\dfrac{1}{x}\\\\to 0$. By squeeze theorem: limit $= 0$.",
+          "solution_he": "מכיוון ש-$|\\\\sin x|\\\\le 1$: $\\\\left|\\\\dfrac{\\\\sin x}{x}\\\\right|\\\\le\\\\dfrac{1}{x}\\\\to 0$. ממשפט הסנדוויץ': גבול $= 0$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\sqrt{x^2+3x}-x\\\\right)$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\sqrt{x^2+3x}-x\\\\right)$.",
+          "solution_en": "Multiply by conjugate: $\\\\dfrac{x^2+3x-x^2}{\\\\sqrt{x^2+3x}+x}=\\\\dfrac{3x}{\\\\sqrt{x^2+3x}+x}$. Divide by $x$: $\\\\dfrac{3}{\\\\sqrt{1+3/x}+1}\\\\to\\\\dfrac{3}{2}$.",
+          "solution_he": "צמוד: $\\\\dfrac{3x}{\\\\sqrt{x^2+3x}+x}$. חלוקה ב-$x$: $\\\\dfrac{3}{\\\\sqrt{1+3/x}+1}\\\\to\\\\dfrac{3}{2}$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Use L'Hôpital's rule to compute $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^2}{e^x}$.",
+          "body_he": "השתמש בלופיטל לחישוב $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{x^2}{e^x}$.",
+          "solution_en": "Form $\\\\infty/\\\\infty$. L'Hôpital: $\\\\dfrac{2x}{e^x}\\\\to\\\\dfrac{2}{e^x}\\\\to 0$. (Apply twice.) Answer: $0$.",
+          "solution_he": "צורה $\\\\infty/\\\\infty$. לופיטל פעמיים: $\\\\dfrac{2x}{e^x}\\\\to\\\\dfrac{2}{e^x}\\\\to 0$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\\\lim_{x\\\\to\\\\infty}x\\\\sin\\\\dfrac{1}{x}$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to\\\\infty}x\\\\sin\\\\dfrac{1}{x}$.",
+          "solution_en": "Let $t=1/x\\\\to 0^+$. Then $x\\\\sin(1/x)=\\\\dfrac{\\\\sin t}{t}\\\\to 1$.",
+          "solution_he": "נגדיר $t=1/x\\\\to 0^+$. אז $x\\\\sin(1/x)=\\\\dfrac{\\\\sin t}{t}\\\\to 1$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find $\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\dfrac{x+1}{x-1}\\\\right)^x$.",
+          "body_he": "מצא $\\\\lim_{x\\\\to\\\\infty}\\\\left(\\\\dfrac{x+1}{x-1}\\\\right)^x$.",
+          "solution_en": "Write $\\\\dfrac{x+1}{x-1}=1+\\\\dfrac{2}{x-1}$. Let $u=x-1$: $\\\\left(1+\\\\dfrac{2}{u}\\\\right)^{u+1}=\\\\left(1+\\\\dfrac{2}{u}\\\\right)^u\\\\cdot\\\\left(1+\\\\dfrac{2}{u}\\\\right)\\\\to e^2\\\\cdot 1=e^2$.",
+          "solution_he": "$\\\\dfrac{x+1}{x-1}=1+\\\\dfrac{2}{x-1}$. נגדיר $u=x-1$: $\\\\left(1+\\\\dfrac{2}{u}\\\\right)^{u+1}\\\\to e^2\\\\cdot 1=e^2$."
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Compute $\\\\lim_{x\\\\to\\\\infty}x^{1/x}$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to\\\\infty}x^{1/x}$.",
+          "solution_en": "Let $y=x^{1/x}$. Then $\\\\ln y=\\\\dfrac{\\\\ln x}{x}\\\\xrightarrow{\\\\infty/\\\\infty}$ L'Hôpital: $\\\\dfrac{1/x}{1}=\\\\dfrac{1}{x}\\\\to 0$. So $\\\\lim y=e^0=1$.",
+          "solution_he": "נגדיר $y=x^{1/x}$. $\\\\ln y=\\\\dfrac{\\\\ln x}{x}\\\\xrightarrow{\\\\infty/\\\\infty}$ לופיטל: $\\\\dfrac{1}{x}\\\\to 0$. לכן $\\\\lim y=e^0=1$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{\\\\ln x}{x^\\\\alpha}=0$ for any $\\\\alpha>0$. This shows that $\\\\ln x$ grows slower than any positive power of $x$.",
+          "body_he": "הוכח ש-$\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{\\\\ln x}{x^\\\\alpha}=0$ לכל $\\\\alpha>0$. זה מראה ש-$\\\\ln x$ גדל לאט יותר מכל חזקה חיובית של $x$.",
+          "solution_en": "Form $\\\\infty/\\\\infty$. L'Hôpital: $\\\\dfrac{1/x}{\\\\alpha x^{\\\\alpha-1}}=\\\\dfrac{1}{\\\\alpha x^\\\\alpha}\\\\to 0$ as $x\\\\to\\\\infty$ (since $\\\\alpha>0$). ∎",
+          "solution_he": "צורה $\\\\infty/\\\\infty$. לופיטל: $\\\\dfrac{1/x}{\\\\alpha x^{\\\\alpha-1}}=\\\\dfrac{1}{\\\\alpha x^\\\\alpha}\\\\to 0$ ($\\\\alpha>0$). ∎"
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes at Infinity",
+      "title_he": "טעויות נפוצות באינסוף",
+      "body_en_md": "## Three Mistakes to Avoid\n\n### Mistake 1: $\\\\infty - \\\\infty = 0$\n\n❌ **Wrong:** $\\\\lim_{x\\\\to\\\\infty}(x^2-x)=\\\\infty-\\\\infty=0$.\n\n✅ **Right:** $x^2-x=x(x-1)\\\\to+\\\\infty$. The form $\\\\infty-\\\\infty$ is indeterminate — you must algebraically resolve it.\n\n### Mistake 2: Applying the Degree Rule to Non-Polynomial Functions\n\n❌ **Wrong:** \"$\\\\dfrac{e^x}{x^2}$: degrees: $e^x$ has degree $1$, $x^2$ has degree $2$. Limit $= 0$.\"\n\n✅ **Right:** $e^x$ is NOT a polynomial. Exponentials grow faster than any polynomial. $\\\\dfrac{e^x}{x^2}\\\\to+\\\\infty$.\n\n### Mistake 3: Forgetting Both Signs for $x\\\\to-\\\\infty$\n\n❌ **Wrong:** $\\\\lim_{x\\\\to-\\\\infty}\\\\dfrac{3x}{\\\\sqrt{x^2+1}}=3$ (same as $x\\\\to+\\\\infty$).\n\n✅ **Right:** For $x<0$, $\\\\sqrt{x^2}=|x|=-x$. So $\\\\dfrac{3x}{\\\\sqrt{x^2+1}}\\\\approx\\\\dfrac{3x}{-x}=-3$ as $x\\\\to-\\\\infty$.",
+      "body_he_md": "## שלוש טעויות להימנע מהן\n\n### טעות 1: $\\\\infty - \\\\infty = 0$\n\n❌ **שגוי:** $\\\\lim_{x\\\\to\\\\infty}(x^2-x)=\\\\infty-\\\\infty=0$.\n\n✅ **נכון:** $x^2-x=x(x-1)\\\\to+\\\\infty$. הצורה $\\\\infty-\\\\infty$ בלתי-קצובה — יש לפתור אלגברית.\n\n### טעות 2: יישום כלל המעלות לפונקציות שאינן פולינומים\n\n❌ **שגוי:** \"$\\\\dfrac{e^x}{x^2}$: מעלת $e^x$ היא $1$, מעלת $x^2$ היא $2$. גבול $= 0$.\"\n\n✅ **נכון:** $e^x$ אינו פולינום. אקספוננציאלים גדלים מהר יותר מכל פולינום. $\\\\dfrac{e^x}{x^2}\\\\to+\\\\infty$.\n\n### טעות 3: שכחת שני הסימנים עבור $x\\\\to-\\\\infty$\n\n❌ **שגוי:** $\\\\lim_{x\\\\to-\\\\infty}\\\\dfrac{3x}{\\\\sqrt{x^2+1}}=3$ (כמו $x\\\\to+\\\\infty$).\n\n✅ **נכון:** עבור $x<0$, $\\\\sqrt{x^2}=|x|=-x$. לכן $\\\\dfrac{3x}{\\\\sqrt{x^2+1}}\\\\approx\\\\dfrac{3x}{-x}=-3$ כש-$x\\\\to-\\\\infty$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Cheat Sheet for Limits at Infinity",
+      "title_he": "לפני הבחינה — דף נוסחאות לגבולות באינסוף",
+      "body_en_md": "## Degree Comparison (Rational Functions)\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\frac{a_p x^p+\\\\cdots}{b_q x^q+\\\\cdots}=\\\\begin{cases}0&p<q\\\\\\\\ a_p/b_q & p=q\\\\\\\\ \\\\pm\\\\infty & p>q\\\\end{cases}$$\n\n**Method:** Divide by $x^q$ (highest denominator power). All lower terms vanish.\n\n## The $e$ Limit and Variations\n\n| Limit | Value |\n|-------|-------|\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{1}{x}\\\\right)^x$ | $e$ |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^x$ | $e^k$ |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^{mx}$ | $e^{km}$ |\n| $\\\\lim_{x\\\\to 0}(1+x)^{1/x}$ | $e$ |\n\n## Indeterminate Form Checklist\n\n| Form | Action |\n|------|--------|\n| $\\\\infty/\\\\infty$ | Divide by leading term, or L'Hôpital |\n| $\\\\infty-\\\\infty$ | Conjugate or common denominator |\n| $0\\\\cdot\\\\infty$ | Rewrite as fraction ($0/0$ or $\\\\infty/\\\\infty$) |\n| $1^\\\\infty$, $0^0$, $\\\\infty^0$ | Take $\\\\ln$, get $0\\\\cdot\\\\infty$, resolve, exponentiate |\n\n## Asymptote Rules\n\n- **Horizontal:** $y=L$ iff $\\\\lim_{x\\\\to\\\\pm\\\\infty}f(x)=L$.\n- **Vertical:** $x=a$ iff $\\\\lim_{x\\\\to a^\\\\pm}|f(x)|=\\\\infty$.\n- A function can have **at most 2 horizontal asymptotes** (one for $+\\\\infty$, one for $-\\\\infty$).\n- If $\\\\deg(P)=\\\\deg(Q)+1$: there is an **oblique** (slant) asymptote — find it by polynomial division.\n\n## What Bagrut/University Examiners Look For\n\n1. Always **show the indeterminate form** before applying a technique.\n2. For $\\\\infty/\\\\infty$: **show the division step** by $x^q$.\n3. For $1^\\\\infty$: **show the $\\\\ln$ step** and final exponentiation.\n4. Check $x\\\\to-\\\\infty$ separately — signs can differ!\n5. For $\\\\infty-\\\\infty$ with radicals: **show the conjugate multiplication**.",
+      "body_he_md": "## השוואת מעלות (פונקציות רציונליות)\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\frac{a_p x^p+\\\\cdots}{b_q x^q+\\\\cdots}=\\\\begin{cases}0&p<q\\\\\\\\ a_p/b_q & p=q\\\\\\\\ \\\\pm\\\\infty & p>q\\\\end{cases}$$\n\n**שיטה:** מחלקים ב-$x^q$ (החזקה הגבוהה ביותר במכנה). כל האיברים הנמוכים יותר נעלמים.\n\n## גבול ה-$e$ ווריאציות\n\n| גבול | ערך |\n|------|-----|\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{1}{x}\\\\right)^x$ | $e$ |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^x$ | $e^k$ |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{k}{x}\\\\right)^{mx}$ | $e^{km}$ |\n| $\\\\lim_{x\\\\to 0}(1+x)^{1/x}$ | $e$ |\n\n## רשימת בדיקה לצורות בלתי-קצובות\n\n| צורה | פעולה |\n|------|-------|\n| $\\\\infty/\\\\infty$ | חלוקה באיבר מוביל, או לופיטל |\n| $\\\\infty-\\\\infty$ | צמוד או מכנה משותף |\n| $0\\\\cdot\\\\infty$ | שכתוב כשבר ($0/0$ או $\\\\infty/\\\\infty$) |\n| $1^\\\\infty$, $0^0$, $\\\\infty^0$ | קח $\\\\ln$, קבל $0\\\\cdot\\\\infty$, פתור, העלה ב-$e$ |\n\n## כללי אסימפטוטות\n\n- **אופקית:** $y=L$ אם ורק אם $\\\\lim_{x\\\\to\\\\pm\\\\infty}f(x)=L$.\n- **אנכית:** $x=a$ אם ורק אם $\\\\lim_{x\\\\to a^\\\\pm}|f(x)|=\\\\infty$.\n- לפונקציה יכולות להיות **לכל היותר 2 אסימפטוטות אופקיות**.\n- אם $\\\\deg(P)=\\\\deg(Q)+1$: יש **אסימפטוטה אלכסונית** — מצא אותה בחלוקת פולינומים.\n\n## מה בוחני הבגרות/אוניברסיטה מחפשים\n\n1. תמיד **הצג את הצורה הבלתי-קצובה** לפני שימוש בטכניקה.\n2. עבור $\\\\infty/\\\\infty$: **הצג את שלב החלוקה** ב-$x^q$.\n3. עבור $1^\\\\infty$: **הצג את שלב ה-$\\\\ln$** ואת ההעלאה הסופית ב-$e$.\n4. בדוק $x\\\\to-\\\\infty$ בנפרד — הסימנים יכולים להיות שונים!\n5. עבור $\\\\infty-\\\\infty$ עם שורשים: **הצג את כפל הצמוד**."
     }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Divide by highest power of $x$ for rational limits at infinity.",
-      "Exponentials dominate polynomials and logs.",
-      "Oblique asymptotes come from long division when degree gap is 1."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "$\\lim_{x\\to\\infty}(x^2-x)=\\infty$ always positive",
-        "correction": "For $x\\to-\\infty$, $x^2-x\\to\\infty$ still, but check sign of rational leading ratio.",
-        "detect_phrase_en": "always positive infinity",
-        "detect_phrase_he": "תמיד פלוס אינסוף"
-      }
-    ],
-    "tutor_pacing_hint": "Practice dividing by $x^n$ before introducing oblique asymptotes.",
-    "skill_atoms_unlocked": [
-      "rational_limit_infinity",
-      "compare_growth_rates",
-      "find_vertical_asymptote",
-      "find_oblique_asymptote",
-      "exponential_limit_infinity"
-    ]
-  }
+  ]
 }

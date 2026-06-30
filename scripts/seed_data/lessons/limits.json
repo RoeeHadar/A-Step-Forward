@@ -2,362 +2,204 @@
   "concept_id": "limits",
   "subject": "math",
   "level": "high_school",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Limits — The Foundation of Calculus",
-  "title_he": "גבולות — היסוד של החשבון הדיפרנציאלי והאינטגרלי",
-  "summary_en": "A limit captures the value a function 'approaches' as $x$ approaches a target — even if the function isn't defined there. Limits are the bedrock of derivatives, integrals, and continuity.",
-  "summary_he": "גבול מתאר את הערך שאליו פונקציה 'מתקרבת' כאשר $x$ מתקרב למטרה — גם אם הפונקציה לא מוגדרת שם. גבולות הם היסוד של נגזרות, אינטגרלים ורציפות.",
-  "est_minutes": 18,
+  "math_track": ["5pt"],
+  "title_en": "Limits — Algebraic Techniques",
+  "title_he": "גבולות — טכניקות אלגבריות",
+  "summary_en": "Master the five core techniques for evaluating limits: direct substitution, factoring and canceling (the 0/0 case), the conjugate method, standard limit identities, and L'Hôpital's rule. Built in the Goren/Geva style with full worked examples, checkpoints, and an exam-prep summary.",
+  "summary_he": "שליטה בחמש הטכניקות המרכזיות לחישוב גבולות: הצבה ישירה, פירוק וצמצום (מקרה 0/0), שיטת הצמוד, גבולות סטנדרטיים, וכלל לופיטל. בנוי בסגנון גורן/גבע עם דוגמאות פתורות מלאות, עצרות ותרגול, ומדריך לפני הבחינה.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is a limit",
-      "title_he": "מהו גבול",
-      "body_en_md": "Consider $f(x) = \\dfrac{x^2 - 1}{x - 1}$. At $x = 1$, the formula gives $\\frac{0}{0}$ — undefined. But for any $x \\ne 1$, we can simplify: $f(x) = \\dfrac{(x-1)(x+1)}{x-1} = x + 1$.\n\nSo as $x$ gets close to $1$, $f(x)$ gets close to $2$. We write\n\n$$\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1} = 2.$$\n\nThe **limit** is the value $f(x)$ approaches as $x$ approaches the target — regardless of what (if anything) happens AT the target.\n\nLimits unlock:\n- **Derivatives**: instantaneous rate of change = limit of average rates.\n- **Integrals**: area under a curve = limit of rectangle sums.\n- **Continuity**: a function is continuous if its limits match its values everywhere.",
-      "body_he_md": "נסתכל על $f(x) = \\dfrac{x^2 - 1}{x - 1}$. ב-$x = 1$ הנוסחה נותנת $\\frac{0}{0}$ — לא מוגדר. אבל לכל $x \\ne 1$, אפשר לפשט: $f(x) = \\dfrac{(x-1)(x+1)}{x-1} = x + 1$.\n\nאז כאשר $x$ מתקרב ל-$1$, $f(x)$ מתקרב ל-$2$. כותבים\n\n$$\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1} = 2.$$\n\n**גבול** הוא הערך אליו $f(x)$ מתקרב כאשר $x$ מתקרב למטרה — ללא קשר למה (אם בכלל) קורה במטרה.\n\nגבולות פותחים:\n- **נגזרות**: קצב שינוי רגעי = גבול של קצבים ממוצעים.\n- **אינטגרלים**: שטח מתחת לעקומה = גבול של סכומי מלבנים.\n- **רציפות**: פונקציה רציפה אם גבוליה תואמים את ערכיה בכל מקום.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The concept of a limit is a fundamental idea in calculus, which describes the behavior of a function as the input values approach a specific point. A limit is denoted as $$\\lim_{x \\to a} f(x) = L$$, where $f(x)$ is the function, $a$ is the point of approach, and $L$ is the limit value. The limit laws state that the limit of a sum is the sum of the limits, the limit of a product is the product of the limits, and the limit of a constant is the constant itself. Additionally, limits at infinity can be used to describe the behavior of a function as the input values approach positive or negative infinity.\n\nWorked example: Find the limit of $$\\frac{x^2 - 4}{x - 2}$$ as $x$ approaches 2.\n\n$$\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x \\to 2} \\frac{(x - 2)(x + 2)}{x - 2} = \\lim_{x \\to 2} (x + 2) = 4$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Why Limits Matter",
+      "title_he": "למה גבולות חשובים",
+      "body_en_md": "## Why Study Limits?\n\nLimits are the engine behind all of calculus. Every major result in Bagrut math and first-year university calculus rests on the limit concept:\n\n| Concept | How limits appear |\n|---------|-------------------|\n| **Derivative** | $f'(a) = \\\\lim_{h\\\\to 0}\\\\dfrac{f(a+h)-f(a)}{h}$ |\n| **Definite integral** | $\\\\int_a^b f\\\\,dx = \\\\lim_{n\\\\to\\\\infty}\\\\sum_{k=1}^n f(x_k)\\\\Delta x$ |\n| **Continuity** | $f$ continuous at $a$ iff $\\\\lim_{x\\\\to a}f(x)=f(a)$ |\n| **Asymptotes** | Horizontal asymptote when $\\\\lim_{x\\\\to\\\\infty}f(x)=L$ |\n\n**In Bagrut exams (מבחן הבגרות):** Limits appear in every 5-point paper, typically 10–20 points. The most tested skill is resolving the **indeterminate form** $0/0$.\n\n**In university calculus (חדו\"א):** Limits form the entire first chapter and are tested on every exam.\n\nBy the end of this lesson you will be able to evaluate any limit that appears in a standard Israeli high-school or first-year university exam.",
+      "body_he_md": "## למה ללמוד גבולות?\n\nגבולות הם המנוע של כל החשבון הדיפרנציאלי והאינטגרלי. כל תוצאה מרכזית במתמטיקה לבגרות ובחדו\"א שנה א' מבוססת על מושג הגבול:\n\n| מושג | כיצד גבולות מופיעים |\n|------|---------------------|\n| **נגזרת** | $f'(a) = \\\\lim_{h\\\\to 0}\\\\dfrac{f(a+h)-f(a)}{h}$ |\n| **אינטגרל מסוים** | $\\\\int_a^b f\\\\,dx = \\\\lim_{n\\\\to\\\\infty}\\\\sum_{k=1}^n f(x_k)\\\\Delta x$ |\n| **רציפות** | $f$ רציפה ב-$a$ אם ורק אם $\\\\lim_{x\\\\to a}f(x)=f(a)$ |\n| **אסימפטוטות** | אסימפטוטה אופקית כשֿ $\\\\lim_{x\\\\to\\\\infty}f(x)=L$ |\n\n**בבחינות הבגרות:** גבולות מופיעים בכל עיתון 5 יחידות, בדרך כלל 10–20 נקודות. המיומנות הנבחנת ביותר היא פתרון **הצורה הבלתי-קצובה** $0/0$.\n\n**בחדו\"א באוניברסיטה:** גבולות מהווים את הפרק הראשון כולו ונבחנים בכל מבחן.\n\nבסוף השיעור הזה תוכל לחשב כל גבול שמופיע בבחינת בגרות ישראלית או בחדו\"א שנה א' סטנדרטית."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Definition — What is a Limit?",
+      "title_he": "הגדרה — מהו גבול?",
+      "body_en_md": "## Informal Definition\n\nWe say $\\\\lim_{x \\\\to a} f(x) = L$ if $f(x)$ can be made **arbitrarily close** to $L$ by taking $x$ **sufficiently close** (but not equal) to $a$.\n\n## Formal (ε–δ) Definition\n\n$$\\\\lim_{x \\\\to a} f(x) = L \\\\quad \\\\Longleftrightarrow \\\\quad \\\\forall\\\\,\\\\varepsilon > 0,\\\\; \\\\exists\\\\,\\\\delta > 0 : 0 < |x - a| < \\\\delta \\\\Rightarrow |f(x) - L| < \\\\varepsilon.$$\n\n> **Key insight:** The value $f(a)$ (if it even exists) is **irrelevant** to the limit.\n\n## One-Sided Limits\n\n- **Right-hand limit:** $\\\\lim_{x \\\\to a^+} f(x) = L$ — $x$ approaches $a$ from values **greater than** $a$.\n- **Left-hand limit:** $\\\\lim_{x \\\\to a^-} f(x) = L$ — $x$ approaches $a$ from values **less than** $a$.\n\n## Two-Sided Limit\n\n$$\\\\lim_{x \\\\to a} f(x) = L \\\\quad \\\\Longleftrightarrow \\\\quad \\\\lim_{x \\\\to a^+} f(x) = L \\\\;\\\\text{AND}\\\\; \\\\lim_{x \\\\to a^-} f(x) = L.$$\n\n## Limit Does Not Exist (DNE)\n\nA limit **does not exist** (DNE) if:\n- The one-sided limits differ: e.g., $\\\\lim_{x\\\\to 0^+}\\\\frac{1}{x}=+\\\\infty$ but $\\\\lim_{x\\\\to 0^-}\\\\frac{1}{x}=-\\\\infty$.\n- The function oscillates without settling: $\\\\lim_{x\\\\to 0}\\\\sin\\\\frac{1}{x}$ DNE.\n- One or both one-sided limits are $\\\\pm\\\\infty$ (infinite limits — the limit is $\\\\infty$, which we say \"does not exist\" as a finite number).",
+      "body_he_md": "## הגדרה לא-פורמלית\n\nאומרים $\\\\lim_{x \\\\to a} f(x) = L$ אם $f(x)$ יכולה להיות **קרובה כרצוננו** ל-$L$ כאשר $x$ **קרוב מספיק** (אך לא שווה) ל-$a$.\n\n## הגדרה פורמלית (ε–δ)\n\n$$\\\\lim_{x \\\\to a} f(x) = L \\\\quad \\\\Longleftrightarrow \\\\quad \\\\forall\\\\,\\\\varepsilon > 0,\\\\; \\\\exists\\\\,\\\\delta > 0 : 0 < |x - a| < \\\\delta \\\\Rightarrow |f(x) - L| < \\\\varepsilon.$$\n\n> **תובנת מפתח:** הערך $f(a)$ (אם קיים בכלל) **לא רלוונטי** לגבול.\n\n## גבולות חד-צדדיים\n\n- **גבול ימני:** $\\\\lim_{x \\\\to a^+} f(x) = L$ — $x$ מתקרב ל-$a$ מערכים **גדולים ממנו**.\n- **גבול שמאלי:** $\\\\lim_{x \\\\to a^-} f(x) = L$ — $x$ מתקרב ל-$a$ מערכים **קטנים ממנו**.\n\n## גבול דו-צדדי\n\n$$\\\\lim_{x \\\\to a} f(x) = L \\\\quad \\\\Longleftrightarrow \\\\quad \\\\lim_{x \\\\to a^+} f(x) = L \\\\;\\\\text{וגם}\\\\; \\\\lim_{x \\\\to a^-} f(x) = L.$$\n\n## גבול לא קיים (DNE)\n\nגבול **לא קיים** (DNE) אם:\n- הגבולות החד-צדדיים שונים: למשל $\\\\lim_{x\\\\to 0^+}\\\\frac{1}{x}=+\\\\infty$ אך $\\\\lim_{x\\\\to 0^-}\\\\frac{1}{x}=-\\\\infty$.\n- הפונקציה מתנדנדת ללא התכנסות: $\\\\lim_{x\\\\to 0}\\\\sin\\\\frac{1}{x}$ DNE.\n- אחד מהגבולות החד-צדדיים הוא $\\\\pm\\\\infty$."
     },
     {
       "kind": "theory",
-      "title_en": "Computing limits — the toolbox",
-      "title_he": "חישוב גבולות — הארגז כלים",
-      "body_en_md": "### 1. Substitution\n\nIf $f$ is 'nice' (polynomial, rational without zero denominator, trig, exp, log within domain), then $\\lim_{x \\to a} f(x) = f(a)$. Just plug in.\n\nExample: $\\lim_{x \\to 2}(3x^2 - 5) = 3 \\cdot 4 - 5 = 7$.\n\n### 2. Algebraic simplification (the $0/0$ case)\n\nIf substitution gives $0/0$, try:\n- **Factor and cancel**: $\\lim_{x\\to 2}\\dfrac{x^2 - 4}{x - 2} = \\lim_{x \\to 2}(x + 2) = 4$.\n- **Multiply by conjugate**: $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9} - 3}{x}$ — multiply numerator and denominator by $\\sqrt{x+9} + 3$.\n- **Common denominator**: combine fractions before simplifying.\n\n### 3. Standard limits\n\nMemorize:\n\n$$\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\qquad \\lim_{x \\to 0} \\frac{1 - \\cos x}{x} = 0, \\qquad \\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2} = \\frac{1}{2}.$$\n\n$$\\lim_{x \\to \\infty}\\left(1 + \\frac{1}{x}\\right)^x = e.$$\n\n### 4. Limits at infinity (rational functions)\n\nFor $\\lim_{x \\to \\infty}\\dfrac{P(x)}{Q(x)}$ with polynomials of degrees $p$ and $q$:\n- If $p < q$: limit is $0$.\n- If $p = q$: limit is the ratio of leading coefficients.\n- If $p > q$: limit is $\\pm\\infty$ (depending on signs).\n\nExample: $\\lim_{x \\to \\infty}\\dfrac{3x^2 + 5}{2x^2 - 7} = \\dfrac{3}{2}$.\n\n### 5. One-sided limits\n\n$\\lim_{x \\to a^+}$ approaches from the right; $\\lim_{x \\to a^-}$ from the left. The two-sided limit exists iff both one-sided limits exist AND are equal.\n\nExample: $\\lim_{x \\to 0^+} \\frac{1}{x} = +\\infty$, $\\lim_{x \\to 0^-} \\frac{1}{x} = -\\infty$. So $\\lim_{x \\to 0} \\frac{1}{x}$ does NOT exist.\n\n**Worked Example (exam level).** $\\lim_{x\\to 0}\\dfrac{\\sin x - x}{x^3}$:\nTaylor gives $-\\tfrac{1}{6}$; L'Hôpital three times confirms.\n\n**Worked Example 2.** $\\lim_{n\\to\\infty} n(\\sqrt{1+1/n}-1)$: conjugate yields $1/(\\sqrt{1+1/n}+1) \\to 1/2$.",
-      "body_he_md": "### 1. הצבה\n\nאם $f$ 'נחמדה' (פולינום, רציונלית עם מכנה לא אפס, טריג, אקס, לוג בתחום), אז $\\lim_{x \\to a} f(x) = f(a)$. פשוט מציבים.\n\nדוגמה: $\\lim_{x \\to 2}(3x^2 - 5) = 7$.\n\n### 2. פישוט אלגברי (המקרה $0/0$)\n\nאם הצבה נותנת $0/0$, מנסים:\n- **לפרק ולצמצם**: $\\lim_{x\\to 2}\\dfrac{x^2 - 4}{x - 2} = \\lim_{x \\to 2}(x + 2) = 4$.\n- **לכפול בצמוד**: $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9} - 3}{x}$ — מכפילים מונה ומכנה ב-$\\sqrt{x+9} + 3$.\n- **מכנה משותף**: מצרפים שברים לפני פישוט.\n\n### 3. גבולות סטנדרטיים\n\nלזכור:\n\n$$\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1, \\qquad \\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2} = \\frac{1}{2}.$$\n\n$$\\lim_{x \\to \\infty}\\left(1 + \\frac{1}{x}\\right)^x = e.$$\n\n### 4. גבולות באינסוף (פונקציות רציונליות)\n\nעבור $\\lim_{x \\to \\infty}\\dfrac{P(x)}{Q(x)}$ עם פולינומים ממעלות $p$ ו-$q$:\n- אם $p < q$: גבול $0$.\n- אם $p = q$: גבול היחס בין המקדמים המובילים.\n- אם $p > q$: גבול $\\pm\\infty$.\n\n### 5. גבולות חד-צדדיים\n\n$\\lim_{x \\to a^+}$ מתקרב מימין; $\\lim_{x \\to a^-}$ משמאל. הגבול הדו-צדדי קיים אם ורק אם שני החד-צדדיים קיימים ושווים.\n\nדוגמה: $\\lim_{x \\to 0^+} \\frac{1}{x} = +\\infty$, $\\lim_{x \\to 0^-} \\frac{1}{x} = -\\infty$. אז $\\lim_{x \\to 0} \\frac{1}{x}$ לא קיים.\n\n**דוגמה (רמת בחינה).** $\\lim_{x\\to 0}\\dfrac{\\sin x - x}{x^3} = -\\tfrac{1}{6}$.\n\n**דוגמה 2.** $\\lim_{n\\to\\infty} n(\\sqrt{1+1/n}-1) = \\tfrac{1}{2}$.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "Limits are a fundamental concept in calculus, and understanding how to compute them is crucial for solving problems in the field. The limit of a function $f(x)$ as $x$ approaches $a$ is denoted as $\\lim_{x \\to a} f(x)$ and is defined as the value that the function approaches as $x$ gets arbitrarily close to $a$. We can use various limit laws to simplify the computation of limits, such as the sum law, product law, and chain rule. Additionally, we can use L'Hôpital's rule to evaluate indeterminate forms, such as $\\frac{0}{0}$ and $\\frac{\\infty}{\\infty}$.\n\nTo evaluate the limit of a function as $x$ approaches infinity, we can use the following definition: $\\lim_{x \\to \\infty} f(x) = L$ if and only if for every $\\epsilon > 0$, there exists a $M > 0$ such that $|f(x) - L| < \\epsilon$ whenever $x > M$.\n\nWorked example: Evaluate the limit $\\lim_{x \\to 0} \\frac{\\sin x}{x}$.\n\n$$\\lim_{x \\to 0} \\frac{\\sin x}{x} = \\lim_{x \\to 0} \\frac{\\sin x}{x} \\cdot \\frac{1}{\\cos x} = \\lim_{x \\to 0} \\frac{\\tan x}{\\cos x} = \\lim_{x \\to 0} \\frac{\\sin x}{\\cos^2 x} = \\frac{\\sin 0}{\\cos^2 0} = \\frac{0}{1} = 0$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Theory — The Five Techniques",
+      "title_he": "תיאוריה — חמש הטכניקות",
+      "body_en_md": "## The Five Limit-Evaluation Techniques\n\n### Technique 1: Direct Substitution\n\nIf $f$ is continuous at $a$ (polynomials, $\\\\sin$, $\\\\cos$, $e^x$, $\\\\ln x$ within domain), then:\n$$\\\\lim_{x \\\\to a} f(x) = f(a).$$\nAlways **try substitution first**. If you don't get $0/0$, $\\\\infty/\\\\infty$, or another indeterminate form, you're done.\n\n### Technique 2: Factor and Cancel (for $0/0$)\n\nIf substitution gives $\\\\frac{0}{0}$, factor the numerator and/or denominator and cancel the common factor:\n$$\\\\lim_{x\\\\to 2}\\\\frac{x^2-4}{x-2} = \\\\lim_{x\\\\to 2}\\\\frac{(x-2)(x+2)}{x-2} = \\\\lim_{x\\\\to 2}(x+2) = 4.$$\n\n**When to use:** numerator/denominator are polynomials and substitution gives $0/0$.\n\n### Technique 3: Conjugate (for surds giving $0/0$)\n\nMultiply by the conjugate to rationalize:\n$$\\\\frac{\\\\sqrt{A}-\\\\sqrt{B}}{\\\\text{something}} \\\\cdot \\\\frac{\\\\sqrt{A}+\\\\sqrt{B}}{\\\\sqrt{A}+\\\\sqrt{B}} = \\\\frac{A-B}{\\\\text{something}\\\\cdot(\\\\sqrt{A}+\\\\sqrt{B})}.$$\n\n**When to use:** there's a square root in the numerator (or denominator) and substitution gives $0/0$.\n\n### Technique 4: Standard Limit Identities\n\nMemorize these — they appear constantly:\n\n| Identity | Value |\n|----------|-------|\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sin x}{x}$ | $1$ |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{1-\\\\cos x}{x^2}$ | $\\\\dfrac{1}{2}$ |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{e^x-1}{x}$ | $1$ |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\ln(1+x)}{x}$ | $1$ |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\frac{1}{x}\\\\right)^x$ | $e$ |\n\n**Rescaling trick:** $\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin(5x)}{x} = 5\\\\cdot\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin(5x)}{5x} = 5\\\\cdot 1 = 5$.\n\n### Technique 5: L'Hôpital's Rule\n\nIf $\\\\lim_{x\\\\to a}\\\\frac{f(x)}{g(x)}$ gives $\\\\frac{0}{0}$ or $\\\\frac{\\\\infty}{\\\\infty}$, and if $f,g$ are differentiable near $a$:\n\n$$\\\\lim_{x\\\\to a}\\\\frac{f(x)}{g(x)} = \\\\lim_{x\\\\to a}\\\\frac{f'(x)}{g'(x)},$$\n\nprovided the right-hand limit exists.\n\n> **Warning:** L'Hôpital differentiates $f$ and $g$ **separately** — it does NOT use the quotient rule!\n> Apply repeatedly until the indeterminate form is resolved.\n\n**When to use:** last resort when factoring and conjugate don't simplify the expression cleanly.",
+      "body_he_md": "## חמש טכניקות חישוב גבולות\n\n### טכניקה 1: הצבה ישירה\n\nאם $f$ רציפה ב-$a$ (פולינומים, $\\\\sin$, $\\\\cos$, $e^x$, $\\\\ln x$ בתחום), אז:\n$$\\\\lim_{x \\\\to a} f(x) = f(a).$$\nתמיד **נסה הצבה ראשון**. אם לא מקבלים $0/0$, $\\\\infty/\\\\infty$, או צורה בלתי-קצובה אחרת — סיימנו.\n\n### טכניקה 2: פירוק וצמצום (עבור $0/0$)\n\nאם הצבה נותנת $\\\\frac{0}{0}$, מפרקים מונה ו/או מכנה ומצמצמים את הגורם המשותף:\n$$\\\\lim_{x\\\\to 2}\\\\frac{x^2-4}{x-2} = \\\\lim_{x\\\\to 2}\\\\frac{(x-2)(x+2)}{x-2} = \\\\lim_{x\\\\to 2}(x+2) = 4.$$\n\n**מתי להשתמש:** מונה/מכנה פולינומים והצבה נותנת $0/0$.\n\n### טכניקה 3: צמוד (עבור שורשים שנותנים $0/0$)\n\nמכפילים בצמוד לרציונליזציה:\n$$\\\\frac{\\\\sqrt{A}-\\\\sqrt{B}}{\\\\text{משהו}} \\\\cdot \\\\frac{\\\\sqrt{A}+\\\\sqrt{B}}{\\\\sqrt{A}+\\\\sqrt{B}} = \\\\frac{A-B}{\\\\text{משהו}\\\\cdot(\\\\sqrt{A}+\\\\sqrt{B})}.$$\n\n**מתי להשתמש:** יש שורש ריבועי במונה (או מכנה) והצבה נותנת $0/0$.\n\n### טכניקה 4: גבולות סטנדרטיים\n\nלזכור — הם מופיעים כל הזמן:\n\n| זהות | ערך |\n|------|-----|\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sin x}{x}$ | $1$ |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{1-\\\\cos x}{x^2}$ | $\\\\dfrac{1}{2}$ |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{e^x-1}{x}$ | $1$ |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\ln(1+x)}{x}$ | $1$ |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\frac{1}{x}\\\\right)^x$ | $e$ |\n\n**טריק קנה-מידה:** $\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin(5x)}{x} = 5\\\\cdot\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin(5x)}{5x} = 5\\\\cdot 1 = 5$.\n\n### טכניקה 5: כלל לופיטל\n\nאם $\\\\lim_{x\\\\to a}\\\\frac{f(x)}{g(x)}$ נותן $\\\\frac{0}{0}$ או $\\\\frac{\\\\infty}{\\\\infty}$, ו-$f,g$ גזירות ליד $a$:\n\n$$\\\\lim_{x\\\\to a}\\\\frac{f(x)}{g(x)} = \\\\lim_{x\\\\to a}\\\\frac{f'(x)}{g'(x)},$$\n\nבתנאי שהגבול הימני קיים.\n\n> **אזהרה:** לופיטל גוזר את $f$ ואת $g$ **בנפרד** — זה **לא** כלל המנה!\n> מחילים שוב ושוב עד שהצורה הבלתי-קצובה נפתרת.\n\n**מתי להשתמש:** מוצא אחרון כאשר פירוק וצמוד לא מפשטים את הביטוי."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: limit with conjugate",
-      "title_he": "דוגמה פתורה: גבול עם צמוד",
-      "body_en_md": "Compute $\\lim_{x \\to 0} \\dfrac{\\sqrt{x+4} - 2}{x}$.\n\n**Step 1:** substitution gives $\\dfrac{2-2}{0} = \\dfrac{0}{0}$ — indeterminate.\n\n**Step 2:** multiply numerator and denominator by the conjugate $\\sqrt{x+4} + 2$:\n\n$$\\frac{\\sqrt{x+4} - 2}{x} \\cdot \\frac{\\sqrt{x+4} + 2}{\\sqrt{x+4} + 2} = \\frac{(x+4) - 4}{x(\\sqrt{x+4} + 2)} = \\frac{x}{x(\\sqrt{x+4} + 2)} = \\frac{1}{\\sqrt{x+4} + 2}.$$\n\n**Step 3:** now substitution works:\n\n$$\\lim_{x \\to 0} \\frac{1}{\\sqrt{x+4} + 2} = \\frac{1}{\\sqrt{4} + 2} = \\frac{1}{4}.$$",
-      "body_he_md": "חשבו $\\lim_{x \\to 0} \\dfrac{\\sqrt{x+4} - 2}{x}$.\n\n**שלב 1:** הצבה נותנת $\\dfrac{2-2}{0} = \\dfrac{0}{0}$ — לא מוגדר.\n\n**שלב 2:** מכפילים מונה ומכנה בצמוד $\\sqrt{x+4} + 2$:\n\n$$\\frac{(x+4) - 4}{x(\\sqrt{x+4} + 2)} = \\frac{1}{\\sqrt{x+4} + 2}.$$\n\n**שלב 3:** עכשיו הצבה עובדת:\n\n$$\\lim_{x \\to 0} \\frac{1}{\\sqrt{x+4} + 2} = \\frac{1}{4}.$$",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The concept of limits is a fundamental building block of calculus, allowing us to study the behavior of functions as the input values approach a certain point. To evaluate limits, we can use various techniques, including direct substitution, limit laws, and L'Hôpital's rule. In this example, we will use the conjugate method to evaluate a limit of the form $\\frac{0}{0}$.\n\nConsider the function $f(x) = \\frac{x^2 - 4}{x - 2}$, and we want to find the limit as $x$ approaches 2. We can rewrite the function as $f(x) = \\frac{(x - 2)(x + 2)}{x - 2}$, and then cancel out the common factor of $(x - 2)$ to get $f(x) = x + 2$. Now we can directly substitute $x = 2$ to find the limit.\n\n$$\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x \\to 2} (x + 2) = 2 + 2 = 4$$\n\nWorked example: Find the limit of $f(x) = \\frac{x^2 - 4}{x - 2}$ as $x$ approaches 2.\n\n### Solution\n$$\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x \\to 2} \\frac{(x - 2)(x + 2)}{x - 2} = \\lim_{x \\to 2} (x + 2) = 4$$",
-          "body_he_md": "הרעיון של הגבולות הוא יסוד הבנייה של הקאלקולוס, המאפשר לנו ללמוד את התנהגות הפונקציות כאשר הערכי הקלט מתקרבים לנקודה מסוימת. לשם הערכת הגבול"
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Direct Substitution and Factoring",
+      "title_he": "דוגמה פתורה 1 — הצבה ישירה ופירוק",
+      "body_en_md": "**Compute** $\\\\displaystyle\\\\lim_{x\\\\to 2}\\\\frac{x^2-4}{x-2}$.\n\n---\n\n**Step 1 — Try direct substitution.**\n$$\\\\frac{2^2-4}{2-2} = \\\\frac{0}{0}.$$\nIndeterminate form. We need algebra.\n\n**Step 2 — Factor the numerator.**\n$$x^2 - 4 = (x-2)(x+2).$$\n\n**Step 3 — Cancel the common factor $(x-2)$.**\n$$\\\\frac{x^2-4}{x-2} = \\\\frac{(x-2)(x+2)}{x-2} = x+2 \\\\quad (x\\\\ne 2).$$\n\n**Step 4 — Substitute.**\n$$\\\\lim_{x\\\\to 2}(x+2) = 2+2 = \\\\boxed{4}.$$\n\n> **Remark:** We cancelled the factor $(x-2)$ only because in the limit we consider $x\\\\ne 2$. This cancellation is valid.",
+      "body_he_md": "**חשבו** $\\\\displaystyle\\\\lim_{x\\\\to 2}\\\\frac{x^2-4}{x-2}$.\n\n---\n\n**שלב 1 — הצבה ישירה.**\n$$\\\\frac{2^2-4}{2-2} = \\\\frac{0}{0}.$$\nצורה בלתי-קצובה. נצטרך אלגברה.\n\n**שלב 2 — פירוק המונה.**\n$$x^2 - 4 = (x-2)(x+2).$$\n\n**שלב 3 — צמצום הגורם המשותף $(x-2)$.**\n$$\\\\frac{x^2-4}{x-2} = \\\\frac{(x-2)(x+2)}{x-2} = x+2 \\\\quad (x\\\\ne 2).$$\n\n**שלב 4 — הצבה.**\n$$\\\\lim_{x\\\\to 2}(x+2) = 2+2 = \\\\boxed{4}.$$\n\n> **הערה:** צמצמנו את הגורם $(x-2)$ כיוון שבגבול $x\\\\ne 2$. הצמצום תקין."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice ✋",
+      "title_he": "עצור ותרגל ✋",
+      "body_en_md": "Compute $\\\\displaystyle\\\\lim_{x\\\\to 3}\\\\frac{x^2-9}{x-3}$ before reading the solution.",
+      "body_he_md": "חשבו $\\\\displaystyle\\\\lim_{x\\\\to 3}\\\\frac{x^2-9}{x-3}$ לפני שתמשיכו לפתרון.",
+      "checkpoint_solution_en": "**Factor:** $x^2-9=(x-3)(x+3)$.\n\n$$\\\\lim_{x\\\\to 3}\\\\frac{(x-3)(x+3)}{x-3} = \\\\lim_{x\\\\to 3}(x+3) = 3+3 = \\\\mathbf{6}.\\\\checkmark$$",
+      "checkpoint_solution_he": "**פירוק:** $x^2-9=(x-3)(x+3)$.\n\n$$\\\\lim_{x\\\\to 3}\\\\frac{(x-3)(x+3)}{x-3} = \\\\lim_{x\\\\to 3}(x+3) = 3+3 = \\\\mathbf{6}.\\\\checkmark$$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — The Conjugate Technique",
+      "title_he": "דוגמה פתורה 2 — שיטת הצמוד",
+      "body_en_md": "**Compute** $\\\\displaystyle\\\\lim_{x\\\\to 0}\\\\frac{\\\\sqrt{x+4}-2}{x}$.\n\n---\n\n**Step 1 — Direct substitution.**\n$$\\\\frac{\\\\sqrt{0+4}-2}{0} = \\\\frac{2-2}{0} = \\\\frac{0}{0}.$$\nIndeterminate. We have a square root, so use the conjugate.\n\n**Step 2 — Multiply by the conjugate over itself.**\n$$\\\\frac{\\\\sqrt{x+4}-2}{x}\\\\cdot\\\\frac{\\\\sqrt{x+4}+2}{\\\\sqrt{x+4}+2}.$$\n\n**Step 3 — Simplify the numerator** (difference of squares).\n$$(\\\\sqrt{x+4}-2)(\\\\sqrt{x+4}+2) = (x+4)-4 = x.$$\n\nSo the expression becomes:\n$$\\\\frac{x}{x(\\\\sqrt{x+4}+2)} = \\\\frac{1}{\\\\sqrt{x+4}+2} \\\\quad (x\\\\ne 0).$$\n\n**Step 4 — Cancel $x$ and substitute.**\n$$\\\\lim_{x\\\\to 0}\\\\frac{1}{\\\\sqrt{x+4}+2} = \\\\frac{1}{\\\\sqrt{4}+2} = \\\\frac{1}{4} = \\\\boxed{\\\\tfrac{1}{4}}.$$\n\n**Step 5 — Sanity check:** the function $\\\\frac{\\\\sqrt{x+4}-2}{x}$ near $x=0.01$ equals $\\\\approx 0.2498$. Yes, $\\\\tfrac{1}{4}=0.25$. ✓",
+      "body_he_md": "**חשבו** $\\\\displaystyle\\\\lim_{x\\\\to 0}\\\\frac{\\\\sqrt{x+4}-2}{x}$.\n\n---\n\n**שלב 1 — הצבה ישירה.**\n$$\\\\frac{\\\\sqrt{0+4}-2}{0} = \\\\frac{2-2}{0} = \\\\frac{0}{0}.$$\nצורה בלתי-קצובה. יש שורש ריבועי, לכן נשתמש בצמוד.\n\n**שלב 2 — כפל בצמוד על עצמו.**\n$$\\\\frac{\\\\sqrt{x+4}-2}{x}\\\\cdot\\\\frac{\\\\sqrt{x+4}+2}{\\\\sqrt{x+4}+2}.$$\n\n**שלב 3 — פישוט המונה** (הפרש ריבועים).\n$$(\\\\sqrt{x+4}-2)(\\\\sqrt{x+4}+2) = (x+4)-4 = x.$$\n\nהביטוי הופך:\n$$\\\\frac{x}{x(\\\\sqrt{x+4}+2)} = \\\\frac{1}{\\\\sqrt{x+4}+2} \\\\quad (x\\\\ne 0).$$\n\n**שלב 4 — צמצום $x$ והצבה.**\n$$\\\\lim_{x\\\\to 0}\\\\frac{1}{\\\\sqrt{x+4}+2} = \\\\frac{1}{\\\\sqrt{4}+2} = \\\\frac{1}{4} = \\\\boxed{\\\\tfrac{1}{4}}.$$\n\n**שלב 5 — בדיקת הגיון:** הפונקציה $\\\\frac{\\\\sqrt{x+4}-2}{x}$ ליד $x=0.01$ שווה $\\\\approx 0.2498$. אכן $\\\\tfrac{1}{4}=0.25$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice ✋",
+      "title_he": "עצור ותרגל ✋",
+      "body_en_md": "Compute $\\\\displaystyle\\\\lim_{x\\\\to 0}\\\\frac{\\\\sqrt{x+1}-1}{x}$ using the conjugate method.",
+      "body_he_md": "חשבו $\\\\displaystyle\\\\lim_{x\\\\to 0}\\\\frac{\\\\sqrt{x+1}-1}{x}$ בשיטת הצמוד.",
+      "checkpoint_solution_en": "Multiply by $\\\\dfrac{\\\\sqrt{x+1}+1}{\\\\sqrt{x+1}+1}$:\n\n$$\\\\frac{(x+1)-1}{x(\\\\sqrt{x+1}+1)} = \\\\frac{x}{x(\\\\sqrt{x+1}+1)} = \\\\frac{1}{\\\\sqrt{x+1}+1}.$$\n\nAs $x\\\\to 0$: $\\\\dfrac{1}{\\\\sqrt{1}+1} = \\\\dfrac{1}{2}$. $\\\\checkmark$",
+      "checkpoint_solution_he": "מכפילים ב-$\\\\dfrac{\\\\sqrt{x+1}+1}{\\\\sqrt{x+1}+1}$:\n\n$$\\\\frac{(x+1)-1}{x(\\\\sqrt{x+1}+1)} = \\\\frac{x}{x(\\\\sqrt{x+1}+1)} = \\\\frac{1}{\\\\sqrt{x+1}+1}.$$\n\nכש-$x\\\\to 0$: $\\\\dfrac{1}{\\\\sqrt{1}+1} = \\\\dfrac{1}{2}$. $\\\\checkmark$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — L'Hôpital + Composition (Two Methods)",
+      "title_he": "דוגמה פתורה 3 — לופיטל + הרכבה (שתי שיטות)",
+      "body_en_md": "**Compute** $\\\\displaystyle\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin(3x)-3\\\\sin x}{x^3}$.\n\n---\n\n### Method A: L'Hôpital's Rule (Applied Three Times)\n\n**Step 1 — Check:** substitution gives $\\\\frac{0-0}{0}=\\\\frac{0}{0}$. ✓\n\n**Apply L'Hôpital once** (differentiate top and bottom separately):\n$$\\\\frac{3\\\\cos(3x)-3\\\\cos x}{3x^2}.$$\nSubstitute $x=0$: $\\\\frac{3-3}{0}=\\\\frac{0}{0}$. Still indeterminate.\n\n**Apply L'Hôpital a second time:**\n$$\\\\frac{-9\\\\sin(3x)+3\\\\sin x}{6x}.$$\nSubstitute $x=0$: $\\\\frac{0}{0}$. Still indeterminate.\n\n**Apply L'Hôpital a third time:**\n$$\\\\frac{-27\\\\cos(3x)+3\\\\cos x}{6}.$$\nNow substitute $x=0$:\n$$\\\\frac{-27\\\\cdot 1+3\\\\cdot 1}{6} = \\\\frac{-24}{6} = \\\\boxed{-4}.$$\n\n---\n\n### Method B: Taylor Expansion (Faster for Competitions/University)\n\nRecall $\\\\sin u = u - \\\\frac{u^3}{6} + O(u^5)$.\n\n$$\\\\sin(3x) = 3x - \\\\frac{(3x)^3}{6} + O(x^5) = 3x - \\\\frac{27x^3}{6} + O(x^5).$$\n$$3\\\\sin x = 3\\\\left(x - \\\\frac{x^3}{6}\\\\right) + O(x^5) = 3x - \\\\frac{3x^3}{6} + O(x^5).$$\n\n$$\\\\sin(3x) - 3\\\\sin x = \\\\left(3x - \\\\frac{27x^3}{6}\\\\right) - \\\\left(3x - \\\\frac{3x^3}{6}\\\\right) + O(x^5) = -\\\\frac{24x^3}{6} + O(x^5) = -4x^3 + O(x^5).$$\n\n$$\\\\lim_{x\\\\to 0}\\\\frac{-4x^3+O(x^5)}{x^3} = \\\\lim_{x\\\\to 0}\\\\left(-4+O(x^2)\\\\right) = \\\\boxed{-4}.$$\n\n**Both methods agree: the answer is $-4$.**",
+      "body_he_md": "**חשבו** $\\\\displaystyle\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin(3x)-3\\\\sin x}{x^3}$.\n\n---\n\n### שיטה א': כלל לופיטל (שלוש פעמים)\n\n**שלב 1 — בדיקה:** הצבה נותנת $\\\\frac{0-0}{0}=\\\\frac{0}{0}$. ✓\n\n**מחילים לופיטל פעם ראשונה** (גוזרים מונה ומכנה בנפרד):\n$$\\\\frac{3\\\\cos(3x)-3\\\\cos x}{3x^2}.$$\nמציבים $x=0$: $\\\\frac{3-3}{0}=\\\\frac{0}{0}$. עדיין בלתי-קצוב.\n\n**מחילים לופיטל פעם שנייה:**\n$$\\\\frac{-9\\\\sin(3x)+3\\\\sin x}{6x}.$$\nמציבים $x=0$: $\\\\frac{0}{0}$. עדיין בלתי-קצוב.\n\n**מחילים לופיטל פעם שלישית:**\n$$\\\\frac{-27\\\\cos(3x)+3\\\\cos x}{6}.$$\nמציבים $x=0$:\n$$\\\\frac{-27\\\\cdot 1+3\\\\cdot 1}{6} = \\\\frac{-24}{6} = \\\\boxed{-4}.$$\n\n---\n\n### שיטה ב': פיתוח טיילור (מהיר יותר לאוניברסיטה)\n\nנזכיר $\\\\sin u = u - \\\\frac{u^3}{6} + O(u^5)$.\n\n$$\\\\sin(3x) = 3x - \\\\frac{27x^3}{6} + O(x^5).$$\n$$3\\\\sin x = 3x - \\\\frac{3x^3}{6} + O(x^5).$$\n\n$$\\\\sin(3x) - 3\\\\sin x = -\\\\frac{24x^3}{6} + O(x^5) = -4x^3 + O(x^5).$$\n\n$$\\\\lim_{x\\\\to 0}\\\\frac{-4x^3+O(x^5)}{x^3} = \\\\lim_{x\\\\to 0}\\\\left(-4+O(x^2)\\\\right) = \\\\boxed{-4}.$$\n\n**שתי השיטות מסכימות: התשובה היא $-4$.**"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — How to Choose the Right Technique",
+      "title_he": "מדריך שיטות — איך לבחור את הטכניקה הנכונה",
+      "body_en_md": "## Decision Flowchart for Evaluating a Limit\n\n```\nGiven: lim_{x→a} f(x)/g(x)\n         |\n         v\n  Try direct substitution\n         |\n    _____|_____\n   |           |\n  ✓ Works    0/0 (or other indeterminate)\n   |           |\n  Done        v\n         Is there a square root?\n              |\n         _____|_____\n        |           |\n       Yes          No\n        |           |\n    Conjugate    Factor numerator/denominator\n        |           |\n    Simplify    Cancel common factor\n        |           |\n    Substitute  Substitute\n                    |\n             Still 0/0?\n                    |\n              L'Hôpital\n                    |\n           Differentiate top & bottom\n                    |\n              Substitute\n```\n\n## Quick Reference Table\n\n| Situation | Best Technique |\n|-----------|----------------|\n| No $0/0$: polynomial, trig, exp at regular point | Direct substitution |\n| $0/0$: both numerator/denominator are polynomials | Factor and cancel |\n| $0/0$: square root in numerator | Conjugate (rationalize) |\n| $\\\\sin(kx)/x$ or $\\\\sin(kx)/\\\\sin(mx)$ near $0$ | Standard limit $\\\\sin u/u \\\\to 1$, rescale |\n| $0/0$ or $\\\\infty/\\\\infty$: nothing else works | L'Hôpital (differentiate top/bottom) |\n| $p$-degree poly / $q$-degree poly as $x\\\\to\\\\infty$ | Compare degrees (see limits at infinity lesson) |\n\n## Golden Rules\n\n1. **Always try substitution first** — even for hard problems.\n2. **Factor before L'Hôpital** — L'Hôpital on a polynomial is slower than factoring.\n3. **L'Hôpital requires** $0/0$ or $\\\\infty/\\\\infty$ — verify the form first!\n4. **After each L'Hôpital step**, check if the new expression is still indeterminate.\n5. **Conjugate only for surds** — don't multiply by a conjugate when factoring suffices.",
+      "body_he_md": "## תרשים זרימה לחישוב גבול\n\n```\nנתון: lim_{x→a} f(x)/g(x)\n         |\n         v\n  נסה הצבה ישירה\n         |\n    _____|_____\n   |           |\n  ✓ עובד    0/0 (או בלתי-קצוב אחר)\n   |           |\n  סיום        v\n         יש שורש ריבועי?\n              |\n         _____|_____\n        |           |\n       כן          לא\n        |           |\n    צמוד       פירוק מונה/מכנה\n        |           |\n    פישוט      צמצום גורם משותף\n        |           |\n    הצבה       הצבה\n                    |\n             עדיין 0/0?\n                    |\n              לופיטל\n                    |\n           גזירת מונה ומכנה\n                    |\n              הצבה\n```\n\n## טבלת עזר מהירה\n\n| מצב | הטכניקה הטובה ביותר |\n|-----|---------------------|\n| אין $0/0$: פולינום, טריג, אקס בנקודה רגילה | הצבה ישירה |\n| $0/0$: מונה ומכנה פולינומים | פירוק וצמצום |\n| $0/0$: שורש ריבועי במונה | צמוד (רציונליזציה) |\n| $\\\\sin(kx)/x$ או $\\\\sin(kx)/\\\\sin(mx)$ ליד $0$ | גבול סטנדרטי $\\\\sin u/u \\\\to 1$, שינוי קנה-מידה |\n| $0/0$ או $\\\\infty/\\\\infty$: כלום אחר לא עובד | לופיטל (גזירת מונה ומכנה) |\n| פולינום מדרגה $p$ / פולינום מדרגה $q$ כש-$x\\\\to\\\\infty$ | השוואת מעלות |\n\n## כללי זהב\n\n1. **תמיד נסה הצבה ראשון** — גם בבעיות קשות.\n2. **פרק לפני לופיטל** — לופיטל על פולינום איטי יותר מפירוק.\n3. **לופיטל דורש** $0/0$ או $\\\\infty/\\\\infty$ — ודא את הצורה קודם!\n4. **אחרי כל שלב לופיטל**, בדוק אם הביטוי החדש עדיין בלתי-קצוב.\n5. **צמוד רק לשורשים** — אל תכפיל בצמוד כשפירוק מספיק."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Exercise Set",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through all exercises. Solutions are hidden — try first!",
+      "body_he_md": "עבדו על כל התרגילים. הפתרונות מוסתרים — נסו קודם!",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\\\lim_{x\\\\to 4}\\\\dfrac{x^2 - 16}{x-4}$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to 4}\\\\dfrac{x^2-16}{x-4}$.",
+          "solution_en": "$\\\\lim_{x\\\\to 4}\\\\dfrac{(x-4)(x+4)}{x-4} = \\\\lim_{x\\\\to 4}(x+4) = 8$. ∎",
+          "solution_he": "$\\\\lim_{x\\\\to 4}\\\\dfrac{(x-4)(x+4)}{x-4} = 8$. ∎"
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sin(5x)}{x}$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sin(5x)}{x}$.",
+          "solution_en": "Write as $5\\\\cdot\\\\dfrac{\\\\sin(5x)}{5x}\\\\to 5\\\\cdot 1 = 5$.",
+          "solution_he": "כותבים $5\\\\cdot\\\\dfrac{\\\\sin(5x)}{5x}\\\\to 5\\\\cdot 1 = 5$."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $\\\\lim_{x\\\\to \\\\infty}\\\\dfrac{3x^2-1}{2x^2+5}$.",
+          "body_he": "מצאו $\\\\lim_{x\\\\to\\\\infty}\\\\dfrac{3x^2-1}{2x^2+5}$.",
+          "solution_en": "Degrees equal; ratio of leading coefficients: $\\\\dfrac{3}{2}$.",
+          "solution_he": "מעלות שוות; יחס מקדמים מובילים: $\\\\dfrac{3}{2}$."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $\\\\lim_{x\\\\to 0^+}\\\\ln x$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to 0^+}\\\\ln x$.",
+          "solution_en": "$-\\\\infty$. As $x\\\\to 0^+$, $\\\\ln x \\\\to -\\\\infty$.",
+          "solution_he": "$-\\\\infty$. כש-$x\\\\to 0^+$, $\\\\ln x \\\\to -\\\\infty$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sqrt{x+9}-3}{x}$ using the conjugate method.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sqrt{x+9}-3}{x}$ בשיטת הצמוד.",
+          "solution_en": "Multiply by $\\\\dfrac{\\\\sqrt{x+9}+3}{\\\\sqrt{x+9}+3}$: $\\\\dfrac{x}{x(\\\\sqrt{x+9}+3)}=\\\\dfrac{1}{\\\\sqrt{x+9}+3}\\\\to\\\\dfrac{1}{6}$.",
+          "solution_he": "מכפילים בצמוד: $\\\\dfrac{1}{\\\\sqrt{x+9}+3}\\\\to\\\\dfrac{1}{6}$."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Compute $\\\\lim_{x\\\\to 0}\\\\dfrac{e^x - 1}{x}$ (do not use L'Hôpital).",
+          "body_he": "חשבו $\\\\lim_{x\\\\to 0}\\\\dfrac{e^x-1}{x}$ (ללא לופיטל).",
+          "solution_en": "This is the standard limit (definition of $(e^x)'$ at $x=0$), or Taylor: $e^x = 1+x+O(x^2)$, so $\\\\dfrac{e^x-1}{x}\\\\to 1$.",
+          "solution_he": "גבול סטנדרטי (הגדרת הנגזרת של $e^x$ ב-$x=0$), או טיילור: $(e^x-1)/x\\\\to 1$."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find $\\\\lim_{x\\\\to 1}\\\\dfrac{x^3-1}{x^2-1}$.",
+          "body_he": "מצאו $\\\\lim_{x\\\\to 1}\\\\dfrac{x^3-1}{x^2-1}$.",
+          "solution_en": "Factor: $\\\\dfrac{(x-1)(x^2+x+1)}{(x-1)(x+1)}=\\\\dfrac{x^2+x+1}{x+1}\\\\to\\\\dfrac{3}{2}$.",
+          "solution_he": "פירוק: $\\\\dfrac{(x-1)(x^2+x+1)}{(x-1)(x+1)}=\\\\dfrac{x^2+x+1}{x+1}\\\\to\\\\dfrac{3}{2}$."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Use L'Hôpital to compute $\\\\lim_{x\\\\to 0}\\\\dfrac{x - \\\\sin x}{x^3}$.",
+          "body_he": "השתמש בלופיטל לחישוב $\\\\lim_{x\\\\to 0}\\\\dfrac{x-\\\\sin x}{x^3}$.",
+          "solution_en": "Apply L'Hôpital three times: $\\\\dfrac{1-\\\\cos x}{3x^2}\\\\to\\\\dfrac{\\\\sin x}{6x}\\\\to\\\\dfrac{\\\\cos x}{6}\\\\to\\\\dfrac{1}{6}$.",
+          "solution_he": "לופיטל שלוש פעמים: תוצאה $\\\\dfrac{1}{6}$."
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Compute $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\tan x - \\\\sin x}{x^3}$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\tan x - \\\\sin x}{x^3}$.",
+          "solution_en": "$\\\\tan x - \\\\sin x = \\\\sin x(\\\\sec x-1) = \\\\sin x\\\\cdot\\\\dfrac{1-\\\\cos x}{\\\\cos x}$. Near $x=0$: $\\\\sin x\\\\approx x$, $1-\\\\cos x\\\\approx\\\\dfrac{x^2}{2}$, $\\\\cos x\\\\approx 1$. So $\\\\approx x\\\\cdot\\\\dfrac{x^2/2}{1}=\\\\dfrac{x^3}{2}$. Limit: $\\\\dfrac{1}{2}$.",
+          "solution_he": "פישוט: $\\\\sin x(1-\\\\cos x)/\\\\cos x \\\\approx x\\\\cdot x^2/2 = x^3/2$. גבול: $\\\\dfrac{1}{2}$."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Let $f$ be continuous at 0 with $\\\\lim_{x\\\\to 0}\\\\dfrac{f(x)}{x} = 7$. Find $\\\\lim_{x\\\\to 0}\\\\dfrac{f(\\\\sin x)}{x}$.",
+          "body_he": "תהי $f$ רציפה ב-0 עם $\\\\lim_{x\\\\to 0}\\\\dfrac{f(x)}{x}=7$. מצאו $\\\\lim_{x\\\\to 0}\\\\dfrac{f(\\\\sin x)}{x}$.",
+          "solution_en": "Write $\\\\dfrac{f(\\\\sin x)}{x} = \\\\dfrac{f(\\\\sin x)}{\\\\sin x}\\\\cdot\\\\dfrac{\\\\sin x}{x}$. As $x\\\\to 0$: $\\\\sin x\\\\to 0$, so $\\\\dfrac{f(\\\\sin x)}{\\\\sin x}\\\\to 7$. And $\\\\dfrac{\\\\sin x}{x}\\\\to 1$. Product: $7$.",
+          "solution_he": "$\\\\dfrac{f(\\\\sin x)}{x} = \\\\dfrac{f(\\\\sin x)}{\\\\sin x}\\\\cdot\\\\dfrac{\\\\sin x}{x}\\\\to 7\\\\cdot 1=7$."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Compute $\\\\lim_{x\\\\to\\\\infty}x\\\\left(\\\\sqrt{1+1/x^2}-1\\\\right)$.",
+          "body_he": "חשבו $\\\\lim_{x\\\\to\\\\infty}x\\\\left(\\\\sqrt{1+1/x^2}-1\\\\right)$.",
+          "solution_en": "Conjugate: $x\\\\cdot\\\\dfrac{1/x^2}{\\\\sqrt{1+1/x^2}+1}=\\\\dfrac{1/x}{\\\\sqrt{1+1/x^2}+1}\\\\to\\\\dfrac{0}{2}=0$.",
+          "solution_he": "צמוד: $\\\\dfrac{1/x}{\\\\sqrt{1+1/x^2}+1}\\\\to 0$."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\\\lim_{x\\\\to 0^+}x\\\\ln x = 0$. (Hint: write as $\\\\ln x / (1/x)$ and use L'Hôpital.)",
+          "body_he": "הוכח ש-$\\\\lim_{x\\\\to 0^+}x\\\\ln x = 0$. (רמז: כתוב כ-$\\\\ln x / (1/x)$ והשתמש בלופיטל.)",
+          "solution_en": "$\\\\dfrac{\\\\ln x}{1/x}\\\\xrightarrow{-\\\\infty/\\\\infty}$ L'Hôpital: $\\\\dfrac{1/x}{-1/x^2}=-x\\\\to 0$. ∎",
+          "solution_he": "$\\\\dfrac{\\\\ln x}{1/x}\\\\xrightarrow{-\\\\infty/\\\\infty}$ לופיטל: $\\\\dfrac{1/x}{-1/x^2}=-x\\\\to 0$. ∎"
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
-      "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Confusing limit with value.** $\\lim_{x \\to 1} f(x)$ does NOT have to equal $f(1)$. The function might be undefined or have a jump there.\n2. **Substituting into $0/0$.** This is **indeterminate**, not zero. You must simplify first.\n3. **Forgetting one-sided checks.** If the two sides give different limits, the two-sided limit doesn't exist.\n4. **$\\lim_{x \\to 0} \\frac{\\sin x}{x} \\ne 0$.** It's $1$. Don't blindly substitute.\n5. **Wrong degree comparison at infinity.** For $\\lim_{x\\to\\infty} \\frac{x^2 + 1}{x + 3}$, since numerator's degree is higher, limit is $\\infty$, not $1$.",
-      "body_he_md": "1. **בלבול בין גבול וערך.** $\\lim_{x \\to 1} f(x)$ לא חייב להיות שווה ל-$f(1)$. הפונקציה יכולה להיות לא מוגדרת או לקפוץ שם.\n2. **הצבה לתוך $0/0$.** זה **לא מוגדר**, לא אפס. חייבים לפשט קודם.\n3. **שכחת בדיקות חד-צדדיות.** אם שני הצדדים נותנים גבולות שונים, הגבול הדו-צדדי לא קיים.\n4. **$\\lim_{x \\to 0} \\frac{\\sin x}{x} \\ne 0$.** זה $1$. לא להציב באופן עיוור.\n5. **השוואת מעלה שגויה באינסוף.** עבור $\\lim_{x\\to\\infty} \\frac{x^2 + 1}{x + 3}$, מעלת המונה גבוהה יותר, אז הגבול $\\infty$, לא $1$.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "In this section, we will discuss common pitfalls when dealing with limits. A limit is defined as: $$\\lim_{x\\to a} f(x) = L \\iff \\forall \\epsilon > 0, \\exists \\delta > 0 \\text{ such that } 0 < |x-a| < \\delta \\implies |f(x) - L| < \\epsilon.$$\nThe limit laws state that: $$\\lim_{x\\to a} [f(x) + g(x)] = \\lim_{x\\to a} f(x) + \\lim_{x\\to a} g(x),$$ $$\\lim_{x\\to a} [f(x) \\cdot g(x)] = \\lim_{x\\to a} f(x) \\cdot \\lim_{x\\to a} g(x),$$ and $$\\lim_{x\\to a} \\frac{f(x)}{g(x)} = \\frac{\\lim_{x\\to a} f(x)}{\\lim_{x\\to a} g(x)}$$ when $\\lim_{x\\to a} g(x) \\neq 0$.\nLimits at infinity are defined as: $$\\lim_{x\\to \\infty} f(x) = L \\iff \\forall \\epsilon > 0, \\exists M > 0 \\text{ such that } x > M \\implies |f(x) - L| < \\epsilon.$$\nIndeterminate forms such as $\\frac{0}{0}$ and $\\frac{\\infty}{\\infty}$ can be evaluated using L'Hopital's rule, which states that: $$\\lim_{x\\to a} \\frac{f(x)}{g(x)} = \\lim_{x\\to a} \\frac{f'(x)}{g'(x)}$$ when $\\lim_{x\\to a} f(x) = \\lim_{x\\to a} g(x) = 0$ or $\\lim_{x\\to a} f(x) = \\lim_{x\\to a} g(x) = \\infty$.\n\nWorked example: Evaluate $\\lim_{x\\to 0} \\frac{\\sin x}{x}$.\nUsing L'Hopital's rule, we have: $$\\lim_{x\\to 0} \\frac{\\sin x}{x} = \\lim_{x\\",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Top 5 Mistakes — Don't Fall for These!",
+      "title_he": "5 הטעויות הנפוצות ביותר — אל תיפול בהן!",
+      "body_en_md": "## The Five Most Common Errors in Limit Problems\n\n### Mistake 1: Confusing the Limit with the Value\n\n❌ **Wrong:** \"$\\\\lim_{x\\\\to 2}\\\\frac{x^2-4}{x-2} = \\\\frac{4-4}{2-2} = $ undefined.\"\n\n✅ **Right:** The function is undefined at $x=2$, but the **limit** as $x\\\\to 2$ is $4$. These are different questions!\n\n### Mistake 2: Concluding $\\\\frac{0}{0} = 0$\n\n❌ **Wrong:** \"$\\\\frac{0}{0} = 0$, so the limit is $0$.\"\n\n✅ **Right:** $\\\\frac{0}{0}$ is **indeterminate** — it means you need more work, not that the answer is $0$. The true answer could be any number.\n\n### Mistake 3: Skipping the One-Sided Check\n\nFor limits involving $|x|$, $\\\\sqrt{x}$, $\\\\ln x$, $\\\\frac{1}{x}$, or piecewise functions: **always check both sides**.\n\n❌ **Wrong:** Compute only $\\\\lim_{x\\\\to 0^+}$ and declare the two-sided limit exists.\n\n✅ **Right:** Check $\\\\lim_{x\\\\to 0^+}$ AND $\\\\lim_{x\\\\to 0^-}$. If they differ: limit DNE.\n\n### Mistake 4: Misapplying $\\\\sin x / x \\\\to 1$\n\n❌ **Wrong:** \"$\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin x}{x} = 0$ because $\\\\sin(0)=0$.\"\n\n✅ **Right:** $\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin x}{x} = 1$, not $0$. This is a fundamental identity; the $x$ in the denominator cancels the leading behavior of $\\\\sin x$.\n\n### Mistake 5: Wrong Degree Comparison at Infinity\n\n❌ **Wrong:** $\\\\lim_{x\\\\to\\\\infty}\\\\frac{x^2+3x}{x^3-1} = \\\\frac{1+3}{1-1}$\n\n✅ **Right:** Divide by $x^3$: $\\\\frac{1/x + 3/x^2}{1-1/x^3}\\\\to\\\\frac{0}{1}=0$. Lower-degree numerator always wins: limit $=0$.",
+      "body_he_md": "## חמש הטעויות הנפוצות ביותר בבעיות גבולות\n\n### טעות 1: בלבול בין גבול לערך\n\n❌ **שגוי:** \"$\\\\lim_{x\\\\to 2}\\\\frac{x^2-4}{x-2} = \\\\frac{4-4}{2-2} = $ לא מוגדר.\"\n\n✅ **נכון:** הפונקציה לא מוגדרת ב-$x=2$, אבל **הגבול** כש-$x\\\\to 2$ הוא $4$. אלו שאלות שונות!\n\n### טעות 2: מסיקים $\\\\frac{0}{0} = 0$\n\n❌ **שגוי:** \"$\\\\frac{0}{0} = 0$, לכן הגבול הוא $0$.\"\n\n✅ **נכון:** $\\\\frac{0}{0}$ היא **בלתי-קצובה** — המשמעות היא שצריך עבודה נוספת, לא שהתשובה היא $0$. התשובה האמיתית יכולה להיות כל מספר.\n\n### טעות 3: דילוג על בדיקה חד-צדדית\n\nלגבולות עם $|x|$, $\\\\sqrt{x}$, $\\\\ln x$, $\\\\frac{1}{x}$, או פונקציות מקוטעות: **תמיד לבדוק שני צדדים**.\n\n❌ **שגוי:** מחשב רק $\\\\lim_{x\\\\to 0^+}$ ומכריז שהגבול הדו-צדדי קיים.\n\n✅ **נכון:** לבדוק $\\\\lim_{x\\\\to 0^+}$ וגם $\\\\lim_{x\\\\to 0^-}$. אם שונים: הגבול DNE.\n\n### טעות 4: שימוש שגוי ב-$\\\\sin x / x \\\\to 1$\n\n❌ **שגוי:** \"$\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin x}{x} = 0$ כי $\\\\sin(0)=0$.\"\n\n✅ **נכון:** $\\\\lim_{x\\\\to 0}\\\\frac{\\\\sin x}{x} = 1$, לא $0$. זהות יסודית; ה-$x$ במכנה מצמצם את ההתנהגות הלינארית של $\\\\sin x$.\n\n### טעות 5: השוואת מעלות שגויה באינסוף\n\n❌ **שגוי:** $\\\\lim_{x\\\\to\\\\infty}\\\\frac{x^2+3x}{x^3-1} = \\\\frac{1+3}{1-1}$\n\n✅ **נכון:** מחלקים ב-$x^3$: $\\\\frac{1/x + 3/x^2}{1-1/x^3}\\\\to\\\\frac{0}{1}=0$. מונה ממעלה נמוכה תמיד מנצח: גבול $=0$."
     },
     {
-      "kind": "summary",
-      "title_en": "Take-away",
-      "title_he": "סיכום",
-      "body_en_md": "- $\\lim_{x \\to a} f(x) = L$ means $f(x)$ approaches $L$ as $x$ approaches $a$ (but ≠ $a$).\n- Substitution works for 'nice' functions. If you get $0/0$, simplify (factor, conjugate, common denominator).\n- Memorize: $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$ and $\\lim_{x\\to\\infty}(1+1/x)^x = e$.\n- At infinity (rational): compare degrees of $P$ and $Q$.\n- One-sided limits: both must exist AND agree for the two-sided limit to exist.",
-      "body_he_md": "- $\\lim_{x \\to a} f(x) = L$ פירושו ש-$f(x)$ מתקרב ל-$L$ כש-$x$ מתקרב ל-$a$ (אבל ≠ $a$).\n- הצבה עובדת לפונקציות 'נחמדות'. אם מקבלים $0/0$, מפשטים (פירוק, צמוד, מכנה משותף).\n- לזכור: $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$ ו-$\\lim_{x\\to\\infty}(1+1/x)^x = e$.\n- באינסוף (רציונלי): משווים מעלות של $P$ ו-$Q$.\n- גבולות חד-צדדיים: שניהם חייבים להתקיים ולהסכים כדי שהגבול הדו-צדדי יתקיים.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "The concept of a limit is a fundamental idea in calculus, allowing us to study the behavior of functions as the input values approach a certain point. The limit of a function $f(x)$ as $x$ approaches $a$ is denoted by $\\lim_{x\\to a} f(x)$ and is defined as the value that the function approaches as $x$ gets arbitrarily close to $a$. We can use the limit laws to simplify the calculation of limits, such as the sum, difference, product, and quotient laws: $$\\lim_{x\\to a} [f(x) \\pm g(x)] = \\lim_{x\\to a} f(x) \\pm \\lim_{x\\to a} g(x)$$ $$\\lim_{x\\to a} [f(x) \\cdot g(x)] = \\lim_{x\\to a} f(x) \\cdot \\lim_{x\\to a} g(x)$$ $$\\lim_{x\\to a} \\frac{f(x)}{g(x)} = \\frac{\\lim_{x\\to a} f(x)}{\\lim_{x\\to a} g(x)}$$ Additionally, we can use limits at infinity to study the behavior of functions as the input values approach positive or negative infinity. We also need to be aware of indeterminate forms, such as $\\frac{0}{0}$ and $\\frac{\\infty}{\\infty}$, which require the use of L'Hôpital's rule to evaluate.\n\n### Worked Example:\nFind the limit of the function $f(x) = \\frac{x^2 - 4}{x - 2}$ as $x$ approaches 2.\n\n$$\\lim_{x\\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x\\to 2} \\frac{(x-2)(x+2)}{x-2}$$\n$$= \\lim_{x\\to 2} (x+2)$$\n$$= 2 + 2$$\n$$= 4$$\n\n",
-          "body_he_md": ""
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Compute $\\lim_{x\\to 0}\\dfrac{\\sin(x)-x}{x^3}$.\n\n**Sample Solution:**\n**Method 1 (Taylor):** $\\sin x = x - \\dfrac{x^3}{6} + O(x^5)$, so\n$$\\frac{\\sin x - x}{x^3} = \\frac{-\\frac{x^3}{6} + O(x^5)}{x^3} = -\\frac{1}{6} + O(x^2) \\xrightarrow[x\\to 0]{} -\\frac{1}{6}.$$\n\n**Method 2 (L'Hôpital, three times):** Form $0/0$. Differentiate:\n$$\\lim_{x\\to 0}\\frac{\\cos x - 1}{3x^2} \\xrightarrow{0/0} \\lim_{x\\to 0}\\frac{-\\sin x}{6x} \\xrightarrow{0/0} \\lim_{x\\to 0}\\frac{-\\cos x}{6} = -\\frac{1}{6}.$$\n\n**Problem 2:** Compute $\\lim_{n\\to\\infty} n\\bigl(\\sqrt{1+\\frac{1}{n}} - 1\\bigr)$.\n\n**Sample Solution:**\nMultiply by the conjugate:\n$$n\\bigl(\\sqrt{1+\\tfrac{1}{n}} - 1\\bigr) = n \\cdot \\frac{\\bigl(1+\\frac{1}{n}\\bigr)-1}{\\sqrt{1+\\frac{1}{n}}+1} = \\frac{1}{\\sqrt{1+\\frac{1}{n}}+1}.$$\nAs $n\\to\\infty$, the denominator $\\to 2$, so the limit is $\\boxed{\\dfrac{1}{2}}$.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** חשבו $\\lim_{x\\to 0}\\dfrac{\\sin(x)-x}{x^3}$.\n\n**פתרון לדוגמה:**\n**טיילור:** $\\sin x = x - \\dfrac{x^3}{6} + O(x^5)$, לכן הגבול $-\\dfrac{1}{6}$.\n\n**לופיטל (3 פעמים):** $\\dfrac{\\cos x - 1}{3x^2} \\to \\dfrac{-\\sin x}{6x} \\to \\dfrac{-\\cos x}{6} = -\\dfrac{1}{6}$.\n\n**בעיה 2:** חשבו $\\lim_{n\\to\\infty} n\\bigl(\\sqrt{1+\\frac{1}{n}} - 1\\bigr)$.\n\n**פתרון לדוגמה:**\nכפל בצמוד: $n \\cdot \\dfrac{1/n}{\\sqrt{1+1/n}+1} = \\dfrac{1}{\\sqrt{1+1/n}+1} \\to \\dfrac{1}{2}$.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Cheat Sheet",
+      "title_he": "לפני הבחינה — דף נוסחאות",
+      "body_en_md": "## Standard Limits to Memorize\n\n| Limit | Value | Condition |\n|-------|-------|-----------|\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sin x}{x}$ | $1$ | — |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{1-\\\\cos x}{x^2}$ | $\\\\dfrac{1}{2}$ | — |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{e^x-1}{x}$ | $1$ | — |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\ln(1+x)}{x}$ | $1$ | — |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{1}{x}\\\\right)^x$ | $e$ | — |\n| $\\\\lim_{x\\\\to 0}(1+x)^{1/x}$ | $e$ | — |\n| $\\\\lim_{x\\\\to 0^+}x\\\\ln x$ | $0$ | — |\n\n## L'Hôpital's Rule\n\n**Applies when:** $\\\\dfrac{f(x)}{g(x)}$ gives $\\\\dfrac{0}{0}$ or $\\\\dfrac{\\\\infty}{\\\\infty}$.\n\n$$\\\\lim_{x\\\\to a}\\\\frac{f(x)}{g(x)} \\\\overset{\\\\text{L'H}}{=} \\\\lim_{x\\\\to a}\\\\frac{f'(x)}{g'(x)}.$$\n\n**Common derivatives needed:**\n- $(\\\\sin x)' = \\\\cos x$, $(\\\\cos x)' = -\\\\sin x$, $(\\\\tan x)' = \\\\sec^2 x$\n- $(e^x)' = e^x$, $(\\\\ln x)' = 1/x$\n- $(x^n)' = nx^{n-1}$\n\n## Degree Comparison (Rational Functions at $\\\\infty$)\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\frac{a_n x^n + \\\\cdots}{b_m x^m + \\\\cdots} = \\\\begin{cases} 0 & n < m \\\\\\\\ \\\\dfrac{a_n}{b_m} & n = m \\\\\\\\ \\\\pm\\\\infty & n > m\\\\end{cases}$$\n\n## What Bagrut Examiners Look For\n\n1. **Show the indeterminate form** explicitly (write $0/0$) before applying a technique.\n2. **Show every cancellation** — don't jump steps.\n3. **State L'Hôpital** when you use it: write \"L'H\" or \"by L'Hôpital\" above the equality sign.\n4. **Check one-sided limits** for any limit at a point where the function changes behavior.\n5. **Box your final answer.** Examiners reward clear presentation.\n6. **Degree comparison** is one of the fastest points to earn — know it cold.",
+      "body_he_md": "## גבולות סטנדרטיים לשינון\n\n| גבול | ערך | תנאי |\n|------|-----|------|\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\sin x}{x}$ | $1$ | — |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{1-\\\\cos x}{x^2}$ | $\\\\dfrac{1}{2}$ | — |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{e^x-1}{x}$ | $1$ | — |\n| $\\\\lim_{x\\\\to 0}\\\\dfrac{\\\\ln(1+x)}{x}$ | $1$ | — |\n| $\\\\lim_{x\\\\to\\\\infty}\\\\left(1+\\\\dfrac{1}{x}\\\\right)^x$ | $e$ | — |\n| $\\\\lim_{x\\\\to 0}(1+x)^{1/x}$ | $e$ | — |\n| $\\\\lim_{x\\\\to 0^+}x\\\\ln x$ | $0$ | — |\n\n## כלל לופיטל\n\n**חל כאשר:** $\\\\dfrac{f(x)}{g(x)}$ נותן $\\\\dfrac{0}{0}$ או $\\\\dfrac{\\\\infty}{\\\\infty}$.\n\n$$\\\\lim_{x\\\\to a}\\\\frac{f(x)}{g(x)} \\\\overset{\\\\text{ל'ה}}{=} \\\\lim_{x\\\\to a}\\\\frac{f'(x)}{g'(x)}.$$\n\n**נגזרות נפוצות הנדרשות:**\n- $(\\\\sin x)' = \\\\cos x$, $(\\\\cos x)' = -\\\\sin x$, $(\\\\tan x)' = \\\\sec^2 x$\n- $(e^x)' = e^x$, $(\\\\ln x)' = 1/x$\n- $(x^n)' = nx^{n-1}$\n\n## השוואת מעלות (פונקציות רציונליות ב-$\\\\infty$)\n\n$$\\\\lim_{x\\\\to\\\\infty}\\\\frac{a_n x^n + \\\\cdots}{b_m x^m + \\\\cdots} = \\\\begin{cases} 0 & n < m \\\\\\\\ \\\\dfrac{a_n}{b_m} & n = m \\\\\\\\ \\\\pm\\\\infty & n > m\\\\end{cases}$$\n\n## מה בוחני הבגרות מחפשים\n\n1. **הצג את הצורה הבלתי-קצובה** במפורש (כתוב $0/0$) לפני שימוש בטכניקה.\n2. **הצג כל צמצום** — אל תדלג על שלבים.\n3. **הצהר על לופיטל** כשאתה משתמש בו: כתוב \"ל'ה\" או \"לפי לופיטל\" מעל סימן שוויון.\n4. **בדוק גבולות חד-צדדיים** לכל גבול בנקודה שבה הפונקציה משנה התנהגות.\n5. **הקף את התשובה הסופית.** בוחנים מתגמלים על הצגה ברורה.\n6. **השוואת מעלות** היא אחת מנקודות הציון המהירות ביותר — לדעת אותה בעל-פה."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\lim_{x \\to 3}(2x^2 - x + 1)$.",
-      "stem_he": "חשבו $\\lim_{x \\to 3}(2x^2 - x + 1)$.",
-      "options_en": [
-        "$16$",
-        "$15$",
-        "$14$",
-        "$18$"
-      ],
-      "options_he": [
-        "$16$",
-        "$15$",
-        "$14$",
-        "$18$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Polynomial: substitute directly. $2(9) - 3 + 1 = 18 - 3 + 1 = 16$.",
-      "explanation_he": "פולינום: מציבים ישירות. $2(9) - 3 + 1 = 16$.",
-      "skill_atoms": [
-        "limit_substitution"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 2,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\lim_{x \\to 0}\\dfrac{\\sin(5x)}{x}$.",
-      "stem_he": "חשבו $\\lim_{x \\to 0}\\dfrac{\\sin(5x)}{x}$.",
-      "correct_answer": "5",
-      "explanation_en": "$\\frac{\\sin(5x)}{x} = 5 \\cdot \\frac{\\sin(5x)}{5x}$. As $x \\to 0$, $5x \\to 0$ and $\\frac{\\sin(5x)}{5x} \\to 1$. So limit is $5$.",
-      "explanation_he": "$\\frac{\\sin(5x)}{x} = 5 \\cdot \\frac{\\sin(5x)}{5x}$. כאשר $x \\to 0$, $5x \\to 0$ ו-$\\frac{\\sin(5x)}{5x} \\to 1$. אז הגבול $5$.",
-      "skill_atoms": [
-        "standard_trig_limit"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\lim_{x \\to 2}\\dfrac{x^2 - 4}{x - 2}$.",
-      "stem_he": "חשבו $\\lim_{x \\to 2}\\dfrac{x^2 - 4}{x - 2}$.",
-      "options_en": [
-        "$0$",
-        "$2$",
-        "$4$",
-        "Undefined"
-      ],
-      "options_he": [
-        "$0$",
-        "$2$",
-        "$4$",
-        "לא מוגדר"
-      ],
-      "correct_index": 2,
-      "explanation_en": "Substitution gives $0/0$. Factor: $\\frac{(x-2)(x+2)}{x-2} = x+2$. Limit: $2 + 2 = 4$.",
-      "explanation_he": "הצבה נותנת $0/0$. פירוק: $\\frac{(x-2)(x+2)}{x-2} = x+2$. גבול: $4$.",
-      "skill_atoms": [
-        "limit_factor_cancel"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute $\\lim_{x\\to 0}\\dfrac{\\sin(x)-x}{x^3}$ using Taylor expansion or L'Hôpital's rule. Show all steps.",
-      "stem_he": "חשבו $\\lim_{x\\to 0}\\dfrac{\\sin(x)-x}{x^3}$ באמצעות טיילור או לופיטל. הראו את כל השלבים.",
-      "rubric_en": "Full credit (10/10): identifies $0/0$, applies Taylor OR three L'Hôpital steps, answer $-1/6$ with justification.\nPartial (6/10): correct method, arithmetic slip.\nMinimal (3/10): identifies indeterminate form only.",
-      "rubric_he": "ציון מלא (10/10): מזהה $0/0$, מיישם טיילור או לופיטל 3 פעמים, תשובה $-1/6$.\nחלקי (6/10): שיטה נכונה, טעות חישוב.\nמינימלי (3/10): רק מזהה צורה לא קבועה.",
-      "explanation_en": "Answer: $-\\dfrac{1}{6}$.",
-      "explanation_he": "תשובה: $-\\dfrac{1}{6}$.",
-      "skill_atoms": [
-        "limit_at_infinity_rational"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute $\\lim_{x \\to 0}\\dfrac{\\sqrt{1+x} - 1}{x}$. Show your work.",
-      "stem_he": "חשבו $\\lim_{x \\to 0}\\dfrac{\\sqrt{1+x} - 1}{x}$. הראו את העבודה.",
-      "rubric_en": "Full credit (3/3): identifies $0/0$, multiplies by conjugate $\\sqrt{1+x} + 1$, simplifies to $\\frac{1}{\\sqrt{1+x}+1}$, substitutes to get $\\frac{1}{2}$.\nPartial (2/3): correct technique but arithmetic error.\nMinimal (1/3): identifies need for conjugate only.",
-      "rubric_he": "ציון מלא (3/3): מזהה $0/0$, מכפיל בצמוד $\\sqrt{1+x} + 1$, מפשט ל-$\\frac{1}{\\sqrt{1+x}+1}$, מציב ומקבל $\\frac{1}{2}$.\nחלקי (2/3): טכניקה נכונה אבל טעות חישוב.\nמינימלי (1/3): רק מזהה צורך בצמוד.",
-      "explanation_en": "Multiply by $\\frac{\\sqrt{1+x}+1}{\\sqrt{1+x}+1}$: $\\frac{(1+x)-1}{x(\\sqrt{1+x}+1)} = \\frac{1}{\\sqrt{1+x}+1}$. Substitute $x=0$: $\\frac{1}{1+1} = \\frac{1}{2}$.",
-      "explanation_he": "מכפילים ב-$\\frac{\\sqrt{1+x}+1}{\\sqrt{1+x}+1}$: $\\frac{1}{\\sqrt{1+x}+1}$. הצבה $x=0$: $\\frac{1}{2}$.",
-      "skill_atoms": [
-        "limit_conjugate_trick"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute $\\lim_{n\\to\\infty} n\\bigl(\\sqrt{1+\\frac{1}{n}} - 1\\bigr)$. Justify each algebraic step.",
-      "stem_he": "חשבו $\\lim_{n\\to\\infty} n\\bigl(\\sqrt{1+\\frac{1}{n}} - 1\\bigr)$. הנמקו כל שלב.",
-      "rubric_en": "Full credit (10/10): conjugate multiplication, simplifies to $1/(\\sqrt{1+1/n}+1)$, limit $1/2$.\nPartial (6/10): correct setup, error in limit evaluation.\nMinimal (3/10): recognizes need for conjugate.",
-      "rubric_he": "ציון מלא (10/10): כפל בצמוד, מפשט ל-$1/(\\sqrt{1+1/n}+1)$, גבול $1/2$.\nחלקי (6/10): הגדרה נכונה, שגיאה בגבול.\nמינימלי (3/10): מזהה צורך בצמוד.",
-      "explanation_en": "Answer: $\\dfrac{1}{2}$.",
-      "explanation_he": "תשובה: $\\dfrac{1}{2}$.",
-      "skill_atoms": [
-        "one_sided_limits"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 7,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $f$ be a continuous function satisfying $\\lim_{x \\to 0} \\frac{f(x)}{x} = 5$.",
-      "stem_he": "תהי $f$ פונקציה רציפה המקיימת $\\lim_{x \\to 0} \\frac{f(x)}{x} = 5$.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Prove that $f(0) = 0$.",
-          "body_he": "הוכיחו ש-$f(0) = 0$.",
-          "points": 8
-        },
-        {
-          "label": "ב",
-          "body_en": "Compute $\\lim_{x \\to 0} \\frac{f(\\sin x)}{x}$. Justify every step.",
-          "body_he": "חשבו את $\\lim_{x \\to 0} \\frac{f(\\sin x)}{x}$. נמקו כל שלב.",
-          "points": 9
-        },
-        {
-          "label": "ג",
-          "body_en": "If additionally $\\lim_{x \\to 0} \\frac{f(x)}{x^2}$ exists and equals $L$, what can you conclude about $L$? Prove your answer.",
-          "body_he": "אם בנוסף $\\lim_{x \\to 0} \\frac{f(x)}{x^2}$ קיים ושווה $L$, מה אפשר להסיק על $L$? הוכיחו.",
-          "points": 8
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: Since lim_{x→0} f(x)/x = 5 (finite) and x→0, we have f(x) = x · [f(x)/x] → 0 · 5 = 0. Since f is continuous at 0: f(0) = lim_{x→0} f(x) = 0. ∎\n\nPart ב: Write f(sin x)/x = [f(sin x)/sin x] · [sin x/x]. As x→0, sin x→0, so f(sin x)/sin x → 5 (by the given condition with u = sin x → 0). Also sin x/x → 1. Therefore the limit = 5 · 1 = 5. ∎\n\nPart ג: If lim f(x)/x² = L (finite), then f(x)/x = (f(x)/x²) · x → L · 0 = 0. But we know f(x)/x → 5 ≠ 0. Contradiction. Therefore no finite L exists — lim f(x)/x² cannot be finite given lim f(x)/x = 5. ∎",
-      "sample_solution_he": "חלק א: מכיוון ש-$\\lim_{x\\to 0} f(x)/x = 5$ (סופי) ו-$x\\to 0$, מתקיים $f(x) = x \\cdot [f(x)/x] \\to 0 \\cdot 5 = 0$. מרציפות $f$ ב-$0$: $f(0) = \\lim_{x\\to 0} f(x) = 0$. ∎\n\nחלק ב: כותבים: $f(\\sin x)/x = [f(\\sin x)/\\sin x] \\cdot [\\sin x / x]$. כש-$x\\to 0$, $\\sin x \\to 0$, לכן $f(\\sin x)/\\sin x \\to 5$ (מהנתון עם $u = \\sin x$). וגם $\\sin x/x \\to 1$. לכן הגבול הוא $5 \\cdot 1 = 5$. ∎\n\nחלק ג: אם $\\lim_{x\\to 0} f(x)/x^2 = L$ (סופי), אז $f(x)/x = (f(x)/x^2)\\cdot x \\to L\\cdot 0 = 0$. אבל $f(x)/x \\to 5 \\neq 0$. סתירה! לכן אין $L$ סופי כזה. ∎",
-      "rubric_en": "Part א: 3pts for correct manipulation of the limit, 5pts for using continuity correctly. Part ב: 4pts for writing f(sin x)/x as a product, 5pts for applying the composition limit. Part ג: 4pts for the correct reasoning chain, 4pts for identifying the contradiction.",
-      "rubric_he": "חלק א: 3 נקודות על מניפולציית הגבול, 5 על שימוש נכון ברציפות. חלק ב: 4 על פירוק המכפלה, 5 על יישום הגבול. חלק ג: 4 על שרשרת ההסקה, 4 על זיהוי הסתירה.",
-      "skill_atoms": ["limit_composition", "limit_sequential", "continuity_definition"],
-      "explanation_en": "This question tests algebraic limit manipulation, the composition rule, and proof by contradiction — core skills for the 20406 exam.",
-      "explanation_he": "שאלה זו בודקת מניפולציות אלגבריות של גבולות, כלל ההרכבה והוכחה בסתירה — מיומנויות מרכזיות במבחן 20406."
-    },
-    {
-      "ord": 8,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Using the squeeze theorem (המשפט הסנדוויץ'), prove: $\\lim_{x \\to 0} x^2 \\sin\\left(\\frac{1}{x}\\right) = 0$.",
-      "stem_he": "השתמשו במשפט הסנדוויץ' להוכחה: $\\lim_{x \\to 0} x^2 \\sin\\left(\\frac{1}{x}\\right) = 0$.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "State the squeeze theorem precisely.",
-          "body_he": "נסחו את משפט הסנדוויץ' במדויק.",
-          "points": 5
-        },
-        {
-          "label": "ב",
-          "body_en": "Apply it to prove the limit equals 0.",
-          "body_he": "יישמו אותו להוכחת הגבול.",
-          "points": 10
-        },
-        {
-          "label": "ג",
-          "body_en": "Does $\\lim_{x \\to 0} x \\sin(1/x)$ exist? Justify your answer.",
-          "body_he": "האם $\\lim_{x \\to 0} x \\sin(1/x)$ קיים? נמקו.",
-          "points": 10
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: If g(x) ≤ f(x) ≤ h(x) near a, and lim g(x) = lim h(x) = L, then lim f(x) = L. ∎\n\nPart ב: For all x ≠ 0: |sin(1/x)| ≤ 1, so |x² sin(1/x)| ≤ x². Thus -x² ≤ x² sin(1/x) ≤ x². Both bounds → 0 as x → 0. By squeeze theorem, lim x² sin(1/x) = 0. ∎\n\nPart ג: Yes, lim_{x→0} x sin(1/x) = 0 by the same argument: |x sin(1/x)| ≤ |x| → 0. ∎",
-      "sample_solution_he": "חלק א: אם $g(x) \\leq f(x) \\leq h(x)$ ב-סביבת $a$, ו-$\\lim g(x) = \\lim h(x) = L$, אז $\\lim f(x) = L$. ∎\n\nחלק ב: לכל $x\\neq 0$: $|\\sin(1/x)|\\leq 1$, אז $|x^2\\sin(1/x)|\\leq x^2$. לכן $-x^2 \\leq x^2\\sin(1/x) \\leq x^2$. שני החסמים שואפים ל-$0$. ממשפט הסנדוויץ': הגבול הוא $0$. ∎\n\nחלק ג: כן. $|x\\sin(1/x)|\\leq |x|\\to 0$, לכן גם הגבול הזה הוא $0$. ∎",
-      "rubric_en": "Part א: 5pts for complete and precise statement. Part ב: 5pts for the bounding inequality, 5pts for concluding via squeeze. Part ג: 5pts correct conclusion with justification, 5pts for applying the same argument.",
-      "rubric_he": "חלק א: 5 נקודות על ניסוח מדויק. חלק ב: 5 על אי-השוויון החוסם, 5 על הסקה ממשפט הסנדוויץ'. חלק ג: 5 על מסקנה נכונה, 5 על יישום הטיעון.",
-      "skill_atoms": ["squeeze_theorem", "limit_bounded_oscillation"],
-      "explanation_en": "The squeeze theorem with |sin(1/x)| ≤ 1 is a classic exam technique when direct substitution and L'Hôpital fail.",
-      "explanation_he": "משפט הסנדוויץ' עם $|\\sin(1/x)|\\leq 1$ הוא טכניקה קלאסית למבחן כאשר הצבה ישירה ולופיטל לא עובדים."
-    },
-    {
-      "ord": 9,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute the following limit, justifying every step:\n$$\\lim_{x \\to 0^+} x^x$$",
-      "stem_he": "חשבו את הגבול הבא, תוך הנמקת כל שלב:\n$$\\lim_{x \\to 0^+} x^x$$",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Write $x^x = e^{x \\ln x}$ and reduce the problem to computing $\\lim_{x\\to 0^+} x \\ln x$.",
-          "body_he": "כתבו $x^x = e^{x \\ln x}$ ועצמו את הבעיה לחישוב $\\lim_{x\\to 0^+} x \\ln x$.",
-          "points": 5
-        },
-        {
-          "label": "ב",
-          "body_en": "Compute $\\lim_{x\\to 0^+} x \\ln x$ using L'Hôpital's rule.",
-          "body_he": "חשבו $\\lim_{x\\to 0^+} x \\ln x$ באמצעות כלל לופיטל.",
-          "points": 10
-        },
-        {
-          "label": "ג",
-          "body_en": "Conclude the value of $\\lim_{x \\to 0^+} x^x$.",
-          "body_he": "הסיקו את ערך $\\lim_{x \\to 0^+} x^x$.",
-          "points": 10
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: x^x = e^{x ln x}. By continuity of e^t: lim x^x = e^{lim x ln x}. ∎\n\nPart ב: x ln x = ln x / (1/x), which is −∞/∞ as x→0+. L'Hôpital: (1/x) / (−1/x²) = (1/x)·(−x²) = −x → 0. So lim x ln x = 0. ∎\n\nPart ג: lim x^x = e^0 = 1. ∎",
-      "sample_solution_he": "חלק א: $x^x = e^{x\\ln x}$. מרציפות $e^t$: $\\lim x^x = e^{\\lim x\\ln x}$. ∎\n\nחלק ב: $x\\ln x = \\frac{\\ln x}{1/x}$, שהיא $\\frac{-\\infty}{\\infty}$ כש-$x\\to 0^+$. לופיטל: $\\frac{1/x}{-1/x^2} = -x \\to 0$. לכן $\\lim x\\ln x = 0$. ∎\n\nחלק ג: $\\lim x^x = e^0 = 1$. ∎",
-      "rubric_en": "Part א: 5pts for the exponential rewrite. Part ב: 5pts for identifying the 0·∞ form, 5pts for the correct L'Hôpital application. Part ג: 5pts for final answer with justification, 5pts for using continuity of exp correctly.",
-      "rubric_he": "חלק א: 5 נקודות על כתיבה מחדש. חלק ב: 5 על זיהוי הצורה $0 \\cdot \\infty$, 5 על לופיטל. חלק ג: 5 על תשובה סופית, 5 על שימוש נכון ברציפות.",
-      "skill_atoms": ["lhopital_rule", "limit_exponential_form", "limit_composition"],
-      "explanation_en": "The $0^0$ indeterminate form via $e^{x \\ln x}$ is a standard 20406 final exam question.",
-      "explanation_he": "הצורה הלא קבועה $0^0$ דרך $e^{x\\ln x}$ היא שאלה סטנדרטית במבחן 20406."
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Limit ≠ value. A function can approach $L$ at $a$ even when undefined at $a$.",
-      "$0/0$ is indeterminate — must simplify, never plug in directly.",
-      "Standard trig limit: $\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1$.",
-      "At infinity: compare polynomial degrees (lower / equal / higher).",
-      "Two-sided limit = both one-sided limits exist AND match."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Limit at $a$ equals $f(a)$",
-        "correction": "Only for continuous functions. Otherwise the limit can differ or $f(a)$ may not exist.",
-        "detect_phrase_en": "limit equals value",
-        "detect_phrase_he": "גבול שווה לערך"
-      },
-      {
-        "wrong": "$0/0 = 0$ or $= 1$ or undefined",
-        "correction": "$0/0$ is INDETERMINATE — neither a number nor 'no limit'. Need algebraic manipulation.",
-        "detect_phrase_en": "zero over zero",
-        "detect_phrase_he": "אפס חלקי אפס"
-      },
-      {
-        "wrong": "$\\sin(x)/x \\to 0$ at $x = 0$",
-        "correction": "It approaches $1$, not $0$. This is one of the fundamental limits.",
-        "detect_phrase_en": "sin x over x zero",
-        "detect_phrase_he": "סינוס x חלקי x אפס"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "limit_substitution",
-      "limit_factor_cancel",
-      "limit_conjugate_trick",
-      "standard_trig_limit",
-      "limit_at_infinity_rational",
-      "one_sided_limits"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "functions_quadratic",
-      "trigonometry_identities",
-      "sequences_geometric"
-    ],
-    "tutor_pacing_hint": "Always start with the geometric intuition (graph approaching but not reaching). Drill the $0/0$ check: 'always substitute first; if undefined, simplify.' Reserve $\\epsilon$-$\\delta$ formalism for the university lesson.",
-    "coach_drill_skills": [
-      "limit_substitution",
-      "limit_factor_cancel",
-      "limit_conjugate_trick",
-      "limit_at_infinity_rational"
-    ],
-    "diagnostic_signals": {
-      "if_learner_blindly_substitutes_into_zero_over_zero": "Pause: 'is the denominator zero? Then DON'T plug in. Simplify first.'",
-      "if_learner_says_sin_x_over_x_is_zero": "Re-derive geometrically with small-angle approximation $\\sin x \\approx x$.",
-      "if_learner_can't_choose_technique": "Decision tree: polynomial→substitute; $0/0$→factor or conjugate; $\\infty/\\infty$→compare degrees."
-    },
-    "next_recommended": [
-      "continuity",
-      "derivatives_intro"
-    ]
-  }
+  ]
 }
