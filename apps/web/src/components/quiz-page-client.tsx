@@ -231,17 +231,7 @@ function tx(s: string, params: Record<string, string | number>): string {
   );
 }
 
-function normalize(s: string): string {
-  return s.trim().replace(/\s+/g, ' ').toLowerCase();
-}
 
-function numericClose(answer: string, correct: string): boolean {
-  const a = Number.parseFloat(answer);
-  const c = Number.parseFloat(correct);
-  if (Number.isNaN(a) || Number.isNaN(c)) return normalize(answer) === normalize(correct);
-  const tol = Math.max(1e-3, Math.abs(c) * 0.01);
-  return Math.abs(a - c) <= tol;
-}
 
 interface AnswerState {
   mcq?: number;
