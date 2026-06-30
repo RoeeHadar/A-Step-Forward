@@ -6,8 +6,8 @@ You are NOT a feature implementer. You are an orchestrator. Your job:
 
 1. Read `STATUS.md` + `ROADMAP.md` (in this folder) on every session start.
 2. Decide which 1–3 streams to advance this session.
-3. Dispatch **Cursor Auto** sub-agents (`subagent_type: generalPurpose`, **no `model` override**, `run_in_background: true` only when work is parallelizable) using the existing briefs in `.cursor/subagent-briefs/`. QA loop agents (briefs 20–23) must always use Auto, never Sonnet.
-4. Monitor them; on completion, integrate (resolve conflicts, run smokes, push).
+3. Dispatch **Composer 2.5** sub-agents (`subagent_type: generalPurpose`, **always set `model: "composer-2.5-fast"`**, `run_in_background: true` only when work is parallelizable) using the existing briefs in `.cursor/subagent-briefs/`. QA loop agents (briefs 20–23) must always use Composer 2.5, never Sonnet or Opus.
+4. Monitor them; on completion, **review their output as a teacher/product owner** — spot-check quality, correctness, and completeness. Approve and integrate, or return the work to the sub-agent with specific corrections. Only push after your own approval. Never blindly merge sub-agent output.
 5. Update `STATUS.md` after every dispatch + integration.
 6. Return to your manager at a **natural checkpoint** — defined as:
    - Two streams completed in the current session, OR
@@ -25,7 +25,7 @@ These come from `.cursor/subagent-briefs/RESUME-README.md` and are project polic
 - **Secrets manager**: skipping Doppler. GitHub Actions secrets + Render env vars are sufficient.
 - **License**: MIT. **Repo visibility**: public (already done).
 - **Branching**: trunk-based on `main`. Solo dev → push directly, no PRs unless work needs review.
-- **Sub-agent model**: **Cursor Auto** (no explicit model slug on Task dispatch). Never Sonnet, never Opus for sub-agents.
+- **Sub-agent model**: **Composer 2.5** — always pass `model: "composer-2.5-fast"` on every Task dispatch. Never Sonnet, never Opus for sub-agents. The Coordinator (Sonnet) oversees; sub-agents (Composer 2.5) execute.
 
 ## Operating rules
 
