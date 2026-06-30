@@ -1,216 +1,225 @@
 {
-  "id": "mean_value_theorem",
-  "type": "interactive",
+  "concept_id": "mean_value_theorem",
   "subject": "calculus_1",
-  "title_en": "The Mean Value Theorem",
-  "title_he": "משפט הערך הממוצע",
-  "duration_min": 20,
-  "level_min": "calculus_1",
-  "agent_hints": "Students should know that MVT requires two hypotheses: continuity on the closed interval AND differentiability on the open interval. The most common exam tasks are: (1) find the guaranteed point c, (2) use MVT to prove an inequality like |f(x)-f(y)| <= M|x-y|, (3) use a corollary to conclude monotonicity or constancy. Always connect MVT to its geometric meaning — some tangent line is parallel to the secant — before writing the formula.",
+  "level": "university",
+  "math_track": ["calc1"],
+  "title_en": "Mean Value Theorem & Rolle's Theorem",
+  "title_he": "משפט הערך הממוצע ומשפט רול",
+  "summary_en": "Rolle's theorem and the Mean Value Theorem (MVT) guarantee the existence of a point where the instantaneous rate of change equals the average rate of change. They are fundamental theoretical tools for proofs and estimates in analysis.",
+  "summary_he": "משפט רול ומשפט הערך הממוצע (MVT) מבטיחים קיום נקודה שבה קצב השינוי הרגעי שווה לקצב השינוי הממוצע. הם כלים תיאורטיים בסיסיים להוכחות ואומדנים באנליזה.",
+  "est_minutes": 55,
+  "agent_hints": "MVT proofs on exams typically ask: (1) verify the hypotheses, (2) find c explicitly, or (3) apply MVT to prove an inequality. Guide the learner through all three patterns.",
   "sections": [
     {
-      "id": "rolles_theorem",
-      "title_en": "Rolle’s Theorem",
-      "title_he": "משפט רול",
-      "level_min": "calculus_1",
-      "body_en_md": "**Rolle’s Theorem.** Let $f$ be continuous on $[a, b]$, differentiable on $(a, b)$, and satisfy $f(a) = f(b)$. Then there exists $c \\in (a, b)$ such that $f'(c) = 0$.\n\n**Geometric meaning:** If a smooth curve starts and ends at the same height, it must have at least one horizontal tangent in between.\n\n**Why all three conditions are needed:**\n- Without *continuity* on $[a,b]$: a jump discontinuity can prevent a horizontal tangent.\n- Without *differentiability* on $(a,b)$: a corner (like $f(x)=|x|$ on $[-1,1]$) has $f(-1)=f(1)$ but no point where $f'=0$.\n- Without $f(a)=f(b)$: $f(x)=x$ on $[0,1]$ has no horizontal tangent.\n\n**Proof sketch.** $f$ attains its maximum and minimum on $[a,b]$ (Extreme Value Theorem). If both extrema occur at the endpoints, then $f$ is constant and $f'\\equiv 0$. Otherwise, an interior extremum $c$ exists, and $f'(c) = 0$ by Fermat’s theorem.\n\n**Exam Example.** $f'(x)\\geq 1$ on $[0,1]$ ⇒ $f(x)\\geq x$ via MVT on $[0,x]$.",
-      "body_he_md": "**משפט רול.** תהי $f$ רציפה ב-$[a, b]$, גזירה ב-$(a, b)$, ומקיימת $f(a) = f(b)$. אז קיים $c \\in (a, b)$ כך ש-$f'(c) = 0$.\n\n**משמעות גיאומטרי:** אם עקומה חלקה מתחילה ומסיימת באותו גובה, חייבת להיות לה לפחות שיפוע אופקי אחד בינתיים.\n\n**למה שלושת התנאים נחוצים:**\n- ללא *רציפות* ב-$[a,b]$: קפיצת אי -רציפות מונעת שיפוע אופקי.\n- ללא *גזירות* ב-$(a,b)$: פינה (כגון $f(x)=|x|$ ב-$[-1,1]$) אינה עונה לקריתריון.\n- ללא $f(a)=f(b)$: $f(x)=x$ ב-$[0,1]$ אין נקודה אופקית.\n\n**הוכחה בקצרה.** $f$ משיגה מקסימום ומינימום ב-$[a,b]$ (משפט ויירשטרס). אם שני הקצוות בקצה הקטעים, אז $f$ קבועה ו-$f'\\equiv 0$. אחרת, קיים קיצון פנימי $c$, ולפי משפט פרמה $f'(c)=0$.\n\n**דוגמת בחינה.** $f'\\geq 1$ ⇒ $f(x)\\geq x$."
+      "kind": "intro",
+      "title_en": "Why MVT Matters",
+      "title_he": "למה MVT חשוב",
+      "body_en_md": "The Mean Value Theorem is the **bridge between local derivatives and global behavior.** Its geometric statement is simple: on a smooth curve, there must be at least one point where the tangent is parallel to the secant connecting the endpoints.\n\n**Applications:**\n- **Inequalities:** proving $|\\sin a - \\sin b| \\leq |a-b|$.\n- **Monotonicity:** if $f'>0$ everywhere then $f$ is increasing.\n- **Uniqueness:** if $f'=0$ everywhere on an interval, then $f$ is constant.\n- **Error estimates** in numerical methods.\n- **University exams:** MVT questions appear in every calculus course.",
+      "body_he_md": "משפט הערך הממוצע הוא **הגשר בין נגזרות מקומיות להתנהגות גלובלית.** ניסוחו הגיאומטרי פשוט: על עקומה חלקה, קיימת לפחות נקודה אחת שבה המשיק מקביל לסקנטה המחברת את הקצוות.\n\n**יישומים:**\n- **אי-שוויונות:** הוכחת $|\\sin a - \\sin b|\\leq|a-b|$.\n- **מונוטוניות:** אם $f'>0$ בכל מקום, $f$ עולה.\n- **יחידות:** אם $f'=0$ בכל קטע, $f$ קבועה.\n- **אומדני שגיאה** בשיטות נומריות.\n- **בחינות אוניברסיטה:** שאלות MVT מופיעות בכל קורס חשבון."
     },
     {
-      "id": "mvt_statement",
-      "title_en": "The Mean Value Theorem — Statement and Geometry",
-      "title_he": "משפט הערך הממוצע — אמירה וגיאומטריה",
-      "level_min": "calculus_1",
-      "body_en_md": "**Mean Value Theorem (MVT).** Let $f$ be continuous on $[a, b]$ and differentiable on $(a, b)$. Then there exists $c \\in (a, b)$ such that:\n$$\\boxed{f'(c) = \\frac{f(b) - f(a)}{b - a}.}$$\n\n**Geometric meaning:** The slope of the tangent at $c$ equals the slope of the secant line through $(a, f(a))$ and $(b, f(b))$. Equivalently: *some tangent line is parallel to the secant*.\n\n**Example.** Let $f(x) = x^2$ on $[1, 3]$. The secant slope is $\\dfrac{9 - 1}{3 - 1} = 4$. MVT guarantees $c \\in (1,3)$ with $f'(c) = 2c = 4$, so $c = 2$. Indeed $c = 2 \\in (1,3)$. \\checkmark\n\n**Cauchy’s MVT (generalized).** If also $g$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $g'(x) \\neq 0$ on $(a,b)$, then:\n$$\\frac{f(b)-f(a)}{g(b)-g(a)} = \\frac{f'(c)}{g'(c)} \\quad\\text{for some } c \\in (a,b).$$",
-      "body_he_md": "**משפט הערך הממוצע (MVT).** תהי $f$ רציפה ב-$[a, b]$ וגזירה ב-$(a, b)$. אז קיים $c \\in (a, b)$ כך ש:\n$$\\boxed{f'(c) = \\frac{f(b) - f(a)}{b - a}.}$$\n\n**משמעות גיאומטרי:** שיפוע המשיק ב-$c$ שווה לשיפוע המיתר דרך $(a, f(a))$ ו-$(b, f(b))$. במילים אחרות: *קיים משיק כלשהו מקביל למיתר*.\n\n**דוגמה.** תהי $f(x) = x^2$ ב-$[1, 3]$. שיפוע המיתר $\\dfrac{9 - 1}{3 - 1} = 4$. MVT מבטיח $c \\in (1,3)$ עם $f'(c) = 2c = 4$, לכן $c = 2$. אכן $c = 2 \\in (1,3)$. \\checkmark"
+      "kind": "definition",
+      "title_en": "Rolle's Theorem and the MVT",
+      "title_he": "משפט רול ו-MVT",
+      "body_en_md": "**Rolle's Theorem:**\nLet $f$ be continuous on $[a,b]$, differentiable on $(a,b)$, and $f(a)=f(b)$. Then there exists $c\\in(a,b)$ such that $f'(c)=0$.\n\n*Geometric meaning:* if the curve returns to the same height, it must have a horizontal tangent somewhere in between.\n\n---\n\n**Mean Value Theorem (MVT):**\nLet $f$ be continuous on $[a,b]$ and differentiable on $(a,b)$. Then there exists $c\\in(a,b)$ such that\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}.$$\n\n*Geometric meaning:* there is a point $c$ where the tangent slope equals the secant slope (average rate of change).\n\n**MVT is a generalization of Rolle:** Rolle is the special case where $f(a)=f(b)$, giving $f'(c)=0$.",
+      "body_he_md": "**משפט רול:**\nתהי $f$ רציפה על $[a,b]$, גזירה על $(a,b)$, ו-$f(a)=f(b)$. אז קיים $c\\in(a,b)$ כך ש-$f'(c)=0$.\n\n*משמעות גיאומטרית:* אם העקומה חוזרת לאותו גובה, חייב להיות לה משיק אופקי בתווך.\n\n---\n\n**משפט הערך הממוצע (MVT):**\nתהי $f$ רציפה על $[a,b]$ וגזירה על $(a,b)$. אז קיים $c\\in(a,b)$ כך ש-\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}.$$\n\n*משמעות גיאומטרית:* קיימת נקודה $c$ שבה שיפוע המשיק שווה לשיפוע הסקנטה.\n\n**MVT הוא הכללה של רול:** רול הוא מקרה פרטי עם $f(a)=f(b)$."
     },
     {
-      "id": "mvt_proof",
-      "title_en": "Proof of MVT via Rolle’s Theorem",
-      "title_he": "הוכחת MVT באמצעות משפט רול",
-      "level_min": "calculus_1",
-      "body_en_md": "**Proof.** Define the auxiliary function:\n$$g(x) = f(x) - f(a) - \\frac{f(b)-f(a)}{b-a}(x - a).$$\n\n$g$ subtracts the secant line from $f$. Check:\n- $g(a) = f(a) - f(a) - 0 = 0$.\n- $g(b) = f(b) - f(a) - (f(b)-f(a)) = 0$.\n\nSo $g(a) = g(b) = 0$, $g$ is continuous on $[a,b]$, and differentiable on $(a,b)$.\n\nBy **Rolle’s Theorem**, $\\exists\\, c \\in (a,b)$ with $g'(c) = 0$.\n\nComputing: $g'(x) = f'(x) - \\dfrac{f(b)-f(a)}{b-a}$.\n\nSo $g'(c) = 0$ gives:\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}. \\quad\\square$$",
-      "body_he_md": "**הוכחה.** נגדיר פונקציית עזר:\n$$g(x) = f(x) - f(a) - \\frac{f(b)-f(a)}{b-a}(x - a).$$\n\n$g$ מחסרת מ-$f$ את ישר המיתר. בדיקה:\n- $g(a) = 0$.\n- $g(b) = 0$.\n\nלכן $g(a) = g(b) = 0$, $g$ רציפה ב-$[a,b]$ וגזירה ב-$(a,b)$.\n\nלפי **משפט רול**, קיים $c \\in (a,b)$ עם $g'(c) = 0$.\n\nחשב: $g'(x) = f'(x) - \\dfrac{f(b)-f(a)}{b-a}$.\n\nלכן $g'(c) = 0$ נותן:\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}. \\quad\\square$$"
+      "kind": "theory",
+      "title_en": "How to Apply the MVT",
+      "title_he": "כיצד להפעיל את MVT",
+      "body_en_md": "**Step-by-step MVT application:**\n1. **Verify hypotheses:** Check that $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$.\n2. **Compute the average rate of change:** $\\dfrac{f(b)-f(a)}{b-a}$.\n3. **Set $f'(c)$ equal to this value** and solve for $c$.\n4. **Check** that the solution $c$ lies in $(a,b)$.\n\n**Important consequences:**\n- If $f'(x)>0$ on $(a,b)$ $\\Rightarrow$ $f$ is strictly increasing on $[a,b]$.\n- If $f'(x)<0$ on $(a,b)$ $\\Rightarrow$ $f$ is strictly decreasing.\n- If $f'(x)=0$ on $(a,b)$ $\\Rightarrow$ $f$ is constant.\n- If $|f'(x)|\\leq M$ on $(a,b)$ $\\Rightarrow$ $|f(b)-f(a)|\\leq M|b-a|$ (Lipschitz bound).",
+      "body_he_md": "**יישום MVT צעד-אחר-צעד:**\n1. **אמתו תנאים:** $f$ רציפה על $[a,b]$ וגזירה על $(a,b)$.\n2. **חשבו קצב שינוי ממוצע:** $\\dfrac{f(b)-f(a)}{b-a}$.\n3. **השוו $f'(c)$ לערך זה** ופתרו ל-$c$.\n4. **בדקו** שהפתרון $c$ נמצא ב-$(a,b)$.\n\n**תוצאות חשובות:**\n- $f'(x)>0$ על $(a,b)$ $\\Rightarrow$ $f$ עולה קפדנית.\n- $f'(x)<0$ $\\Rightarrow$ $f$ יורדת.\n- $f'(x)=0$ $\\Rightarrow$ $f$ קבועה.\n- $|f'(x)|\\leq M$ $\\Rightarrow$ $|f(b)-f(a)|\\leq M|b-a|$."
     },
     {
-      "id": "corollaries",
-      "title_en": "Corollaries of MVT",
-      "title_he": "מסקנות הנגזרות ממשפט הערך הממוצע",
-      "level_min": "calculus_1",
-      "body_en_md": "**Corollary 1 (Constant function).** If $f'(x) = 0$ for all $x \\in (a,b)$, then $f$ is constant on $[a,b]$.\n\n*Proof:* For any $x_1, x_2 \\in [a,b]$, MVT gives $f(x_2)-f(x_1) = f'(c)(x_2-x_1) = 0$. $\\square$\n\n**Corollary 2 (Monotonicity).** If $f'(x) > 0$ for all $x \\in (a,b)$, then $f$ is strictly increasing on $[a,b]$. (Similarly for $f' < 0$ and strictly decreasing.)\n\n**Corollary 3 (Equal derivatives).** If $f'(x) = g'(x)$ for all $x \\in (a,b)$, then $f - g$ is constant.\n\n**Application: Lipschitz bound.** If $|f'(x)| \\leq M$ on $(a,b)$, then for all $x, y \\in [a,b]$:\n$$|f(x) - f(y)| \\leq M|x - y|.$$\n\n*Proof:* MVT gives $f(x)-f(y) = f'(c)(x-y)$ for some $c$, so $|f(x)-f(y)| = |f'(c)||x-y| \\leq M|x-y|$. $\\square$\n\n**Example:** Prove $|\\sin x - \\sin y| \\leq |x - y|$ for all $x, y \\in \\mathbb{R}$.\n\nSince $|\\cos c| \\leq 1$, the Lipschitz bound gives $|\\sin x - \\sin y| = |\\cos c||x-y| \\leq |x-y|$. $\\square$",
-      "body_he_md": "**מסקנא 1 (פונקציה קבועה).** אם $f'(x) = 0$ לכל $x \\in (a,b)$, אז $f$ קבועה ב-$[a,b]$.\n\n*הוכחה:* לכל $x_1, x_2$, MVT נותן $f(x_2)-f(x_1) = f'(c)(x_2-x_1) = 0$. $\\square$\n\n**מסקנא 2 (מונוטוניות).** אם $f'(x) > 0$ לכל $x \\in (a,b)$, אז $f$ עולה בחידות ב-$[a,b]$.\n\n**מסקנא 3 (נגזרות שוות).** אם $f'(x) = g'(x)$ לכל $x$, אז $f - g$ קבועה.\n\n**יישום: חסם ליפשיץ.** אם $|f'(x)| \\leq M$ ב-$(a,b)$, אז לכל $x, y \\in [a,b]$:\n$$|f(x) - f(y)| \\leq M|x - y|.$$\n\n**דוגמה:** הוכח ש-$|\\sin x - \\sin y| \\leq |x - y|$.\n\nמכיוון ש-$|\\cos c| \\leq 1$: $|\\sin x - \\sin y| = |\\cos c||x-y| \\leq |x-y|$. $\\square$"
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Verify MVT for $f(x)=x^2$ on $[0,2]$",
+      "title_he": "דוגמה פתורה 1 — אימות MVT עבור $f(x)=x^2$ על $[0,2]$",
+      "body_en_md": "**Given:** $f(x) = x^2$, interval $[0,2]$.\n\n**Step 1 — Verify hypotheses:**\n$f(x)=x^2$ is a polynomial, so it is continuous on $[0,2]$ and differentiable on $(0,2)$. ✓\n\n**Step 2 — Compute average rate of change:**\n$$\\frac{f(2)-f(0)}{2-0} = \\frac{4-0}{2} = 2$$\n\n**Step 3 — Find $c$ with $f'(c)=2$:**\n$$f'(x) = 2x \\implies 2c = 2 \\implies c = 1$$\n\n**Step 4 — Check $c\\in(0,2)$:**\n$c=1\\in(0,2)$ ✓\n\n**Answer:** By the MVT, $c=1$ is the guaranteed point. Geometrically: the tangent to $y=x^2$ at $x=1$ has slope $2$, which equals the slope of the secant from $(0,0)$ to $(2,4)$.",
+      "body_he_md": "**נתון:** $f(x)=x^2$, קטע $[0,2]$.\n\n**שלב 1 — תנאים:**\n$f$ פולינום — רציפה על $[0,2]$, גזירה על $(0,2)$ ✓\n\n**שלב 2 — קצב שינוי ממוצע:**\n$$\\frac{f(2)-f(0)}{2-0} = \\frac{4-0}{2} = 2$$\n\n**שלב 3 — מצאו $c$ עם $f'(c)=2$:**\n$$2c = 2 \\implies c = 1$$\n\n**שלב 4 — בדיקה:** $c=1\\in(0,2)$ ✓\n\n**תשובה:** $c=1$. המשיק ב-$x=1$ הוא בשיפוע $2$ — שווה לשיפוע הסקנטה מ-$(0,0)$ ל-$(2,4)$."
     },
     {
-      "id": "connection_to_taylor",
-      "title_en": "Connection to Taylor’s Theorem",
-      "title_he": "קשר למשפט טיילור",
-      "level_min": "calculus_1",
-      "body_en_md": "MVT is the $n=1$ case of Taylor’s theorem with the Lagrange remainder:\n$$f(b) = f(a) + f'(c)(b-a) \\quad\\Leftrightarrow\\quad f'(c) = \\frac{f(b)-f(a)}{b-a}.$$\n\nMore generally, **Taylor’s theorem** says:\n$$f(b) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(b-a)^k + \\frac{f^{(n+1)}(c)}{(n+1)!}(b-a)^{n+1}$$\nfor some $c$ between $a$ and $b$. Setting $n=0$ recovers MVT exactly.\n\n**Another connection — L’Hôpital’s rule** follows from Cauchy’s MVT: if $f(a)=g(a)=0$ and $g'\\neq 0$, then $\\dfrac{f(x)}{g(x)} = \\dfrac{f'(c)}{g'(c)} \\to \\dfrac{f'(a)}{g'(a)}$.",
-      "body_he_md": "MVT הוא המקרה $n=1$ של משפט טיילור עם שארית לגרנז':\n$$f(b) = f(a) + f'(c)(b-a).$$\n\nבכלליות, **משפט טיילור** אומר:\n$$f(b) = \\sum_{k=0}^{n} \\frac{f^{(k)}(a)}{k!}(b-a)^k + \\frac{f^{(n+1)}(c)}{(n+1)!}(b-a)^{n+1}.$$\nקביעת $n=0$ מחזירה בדיוק את MVT.\n\n**קשר נוסף — כלל לופיטל** נגזר מ-MVT של קושי: אם $f(a)=g(a)=0$ ו-$g'\\neq 0$, אז $\\dfrac{f(x)}{g(x)} \\to \\dfrac{f'(a)}{g'(a)}$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Apply the MVT to $f(x) = \\sqrt{x}$ on $[1,4]$. Find all values of $c$.",
+      "body_he_md": "הפעילו את MVT על $f(x)=\\sqrt{x}$ בקטע $[1,4]$. מצאו את כל ערכי $c$.",
+      "checkpoint_solution_en": "Hypotheses: $f$ continuous on $[1,4]$, differentiable on $(1,4)$ ✓.\n\nAverage rate: $\\frac{\\sqrt{4}-\\sqrt{1}}{4-1}=\\frac{2-1}{3}=\\frac{1}{3}$.\n\n$f'(x)=\\frac{1}{2\\sqrt{x}}$. Set $\\frac{1}{2\\sqrt{c}}=\\frac{1}{3}\\Rightarrow 2\\sqrt{c}=3\\Rightarrow \\sqrt{c}=3/2\\Rightarrow c=9/4$.\n\nCheck: $9/4=2.25\\in(1,4)$ ✓.",
+      "checkpoint_solution_he": "קצב ממוצע: $1/3$. $\\frac{1}{2\\sqrt{c}}=\\frac{1}{3}\\Rightarrow c=9/4\\in(1,4)$ ✓."
     },
     {
-      "id": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "calculus_1",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Given $f$ differentiable on $\\mathbb{R}$ with $f(0)=0$, $f(1)=1$, $f'(x)\\geq 1$. Prove $f(x)\\geq x$ for $x\\in[0,1]$.\n\n**Sample Solution:**\nMVT on $[0,x]$: $f(x)-f(0)=f'(c)x$ for some $c\\in(0,x)$. With $f(0)=0$ and $f'(c)\\geq 1$: $f(x)\\geq x$. $\\square$\n\n**Problem 2:** Find all $c\\in(1,3)$ guaranteed by MVT for $f(x)=x^3$ on $[1,3]$.\n\n**Sample Solution:**\nSecant slope: $(27-1)/(3-1)=13$. Need $f'(c)=3c^2=13$, so $c=\\sqrt{13/3}\\approx 2.08\\in(1,3)$. $\\checkmark$\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** $f(0)=0$, $f(1)=1$, $f'\\geq 1$. הוכיחו $f(x)\\geq x$ ב-$[0,1]$.\n\n**פתרון לדוגמה:**\nMVT: $f(x)=f'(c)x\\geq x$. $\\square$\n\n**בעיה 2:** מצאו $c$ מ-MVT ל-$f(x)=x^3$ ב-$[1,3]$.\n\n**פתרון לדוגמה:**\n$3c^2=13$, $c=\\sqrt{13/3}$.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "Which condition is NOT required by Rolle’s Theorem?",
-      "body_he": "איזה תנאי אינו נדרש במשפט רול?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$f$ is continuous on $[a,b]$",
-          "text_he": "$f$ רציפה ב-$[a,b]$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$f$ is differentiable on $(a,b)$",
-          "text_he": "$f$ גזירה ב-$(a,b)$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$f(a) = f(b)$",
-          "text_he": "$f(a) = f(b)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$f$ is differentiable at the endpoints $a$ and $b$",
-          "text_he": "$f$ גזירה בקצוות $a$ ו-$b$",
-          "correct": true
-        }
-      ],
-      "explanation_en": "Rolle’s theorem only requires differentiability on the open interval $(a,b)$, not at the endpoints. The function need only be continuous at $a$ and $b$.",
-      "explanation_he": "משפט רול דורש גזירות רק בקטע הפתוח $(a,b)$, לא בקצוות. בקצוות נדרשת רק רציפות."
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Find $c$ in MVT for $f(x)=x^3-x$ on $[0,2]$",
+      "title_he": "דוגמה פתורה 2 — מצאו $c$ ב-MVT עבור $f(x)=x^3-x$ על $[0,2]$",
+      "body_en_md": "**Given:** $f(x) = x^3 - x$, interval $[0,2]$.\n\n**Step 1 — Hypotheses:** polynomial — continuous on $[0,2]$, differentiable on $(0,2)$. ✓\n\n**Step 2 — Average rate of change:**\n$$f(0) = 0,\\quad f(2) = 8-2 = 6$$\n$$\\text{Average} = \\frac{6-0}{2-0} = 3$$\n\n**Step 3 — Solve $f'(c)=3$:**\n$$f'(x) = 3x^2 - 1$$\n$$3c^2 - 1 = 3 \\implies 3c^2 = 4 \\implies c^2 = \\frac{4}{3} \\implies c = \\pm\\frac{2}{\\sqrt{3}}$$\n\n**Step 4 — Select $c\\in(0,2)$:**\n$$c = \\frac{2}{\\sqrt{3}} = \\frac{2\\sqrt{3}}{3} \\approx 1.155 \\in (0,2) \\checkmark$$\n\n(The negative root $-2/\\sqrt{3}$ is not in $(0,2)$.)\n\n**Answer:** $c = \\dfrac{2\\sqrt{3}}{3}$ ✓",
+      "body_he_md": "**נתון:** $f(x)=x^3-x$, $[0,2]$.\n\n**שלב 1:** פולינום ✓\n\n**שלב 2:** $f(0)=0$, $f(2)=6$. קצב ממוצע: $6/2=3$.\n\n**שלב 3:** $f'(c)=3x^2-1=3\\Rightarrow c^2=4/3\\Rightarrow c=\\pm 2/\\sqrt{3}$.\n\n**שלב 4:** $c=2/\\sqrt{3}=2\\sqrt{3}/3\\approx 1.155\\in(0,2)$ ✓\n\n**תשובה:** $c=\\dfrac{2\\sqrt{3}}{3}$"
     },
     {
-      "id": "q2",
-      "type": "open",
-      "body_en": "Prove using MVT: If $f$ is differentiable, $f(0)=0$, $f(1)=1$, and $f'(x)\\geq 1$ on $[0,1]$, then $f(x)\\geq x$ for all $x\\in[0,1]$.",
-      "body_he": "הוכיחו ב-MVT: $f(0)=0$, $f(1)=1$, $f'\\geq 1$ ⇒ $f(x)\\geq x$ ב-$[0,1]$.",
-      "rubric_en": "Full credit (10/10): MVT on $[0,x]$, uses $f(0)=0$ and $f'(c)\\geq 1$.\nPartial (6/10): cites MVT incompletely.\nMinimal (3/10): restates claim.",
-      "rubric_he": "ציון מלא (10/10): MVT על $[0,x]$.\nחלקי (6/10): MVT חלקי.\nמינימלי (3/10): חזרה על הטענה.",
-      "explanation_en": "MVT: $f(x)=f'(c)x\\geq x$.",
-      "explanation_he": "MVT: $f(x)\\geq x$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Verify that Rolle's theorem applies to $f(x) = x^3 - 3x^2 + 2x$ on $[0,2]$, and find all values of $c$.",
+      "body_he_md": "אמתו שמשפט רול חל על $f(x)=x^3-3x^2+2x$ על $[0,2]$, ומצאו את כל ערכי $c$.",
+      "checkpoint_solution_en": "$f(0)=0$, $f(2)=8-12+4=0$ ✓ (equal). Polynomial: continuous and differentiable ✓.\n$f'(x)=3x^2-6x+2=0\\Rightarrow x=\\frac{6\\pm\\sqrt{36-24}}{6}=\\frac{6\\pm\\sqrt{12}}{6}=1\\pm\\frac{1}{\\sqrt{3}}$.\nBoth roots are approximately $0.423$ and $1.577$, both in $(0,2)$ ✓.",
+      "checkpoint_solution_he": "$f(0)=f(2)=0$ ✓. $f'(c)=0\\Rightarrow c=1\\pm\\frac{1}{\\sqrt{3}}\\approx 0.423, 1.577$, שניהם ב-$(0,2)$ ✓."
     },
     {
-      "id": "q3",
-      "type": "open",
-      "body_en": "State Rolle's theorem and explain why differentiability on the open interval is essential (give a counterexample if endpoint differentiability fails).",
-      "body_he": "נסחו משפט רול והסבירו מדוע גזירות בקטע הפתוח חיונית.",
-      "rubric_en": "Full credit (10/10): correct statement + counterexample (e.g. $|x|$ on $[-1,1]$ with $f(-1)=f(1)$).\nPartial (6/10): statement only.\nMinimal (3/10): vague description.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + דוגמה נגדית.\nחלקי (6/10): ניסוח.\nמינימלי (3/10): תיאור כללי.",
-      "explanation_en": "Rolle needs diff on $(a,b)$; $|x|$ corner at 0.",
-      "explanation_he": "רול דורש גזירות ב-$(a,b)$; $|x|$."
-    },
-    {
-      "id": "q4",
-      "type": "open",
-      "body_en": "Prove using MVT: If $f$ is differentiable, $f(0)=0$, $f(1)=1$, and $f'(x)\\geq 1$ on $[0,1]$, then $f(x)\\geq x$ for all $x\\in[0,1]$.",
-      "body_he": "הוכיחו ב-MVT: $f(0)=0$, $f(1)=1$, $f'\\geq 1$ ⇒ $f(x)\\geq x$ ב-$[0,1]$.",
-      "rubric_en": "Full credit (10/10): MVT on $[0,x]$, uses $f(0)=0$ and $f'(c)\\geq 1$.\nPartial (6/10): cites MVT incompletely.\nMinimal (3/10): restates claim.",
-      "rubric_he": "ציון מלא (10/10): MVT על $[0,x]$.\nחלקי (6/10): MVT חלקי.\nמינימלי (3/10): חזרה על הטענה.",
-      "explanation_en": "MVT: $f(x)=f'(c)x\\geq x$.",
-      "explanation_he": "MVT: $f(x)\\geq x$."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "State Rolle's theorem and explain why differentiability on the open interval is essential (give a counterexample if endpoint differentiability fails).",
-      "body_he": "נסחו משפט רול והסבירו מדוע גזירות בקטע הפתוח חיונית.",
-      "rubric_en": "Full credit (10/10): correct statement + counterexample (e.g. $|x|$ on $[-1,1]$ with $f(-1)=f(1)$).\nPartial (6/10): statement only.\nMinimal (3/10): vague description.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + דוגמה נגדית.\nחלקי (6/10): ניסוח.\nמינימלי (3/10): תיאור כללי.",
-      "explanation_en": "Rolle needs diff on $(a,b)$; $|x|$ corner at 0.",
-      "explanation_he": "רול דורש גזירות ב-$(a,b)$; $|x|$."
-    },
-    {
-      "id": "q6",
-      "type": "open",
-      "ord": 6,
-      "kind": "open",
+      "kind": "worked_example",
       "difficulty": "hard",
-      "stem_en": "Prove the inequality: $\\sin x \\leq x$ for all $x \\geq 0$.",
-      "stem_he": "הוכיחו את האי-שוויון: $\\sin x \\leq x$ לכל $x \\geq 0$.",
-      "parts": [
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proving $|\\sin a - \\sin b| \\leq |a-b|$ with MVT",
+      "title_he": "דוגמה פתורה 3 — הוכחת $|\\sin a-\\sin b|\\leq|a-b|$ עם MVT",
+      "body_en_md": "**Claim:** For all $a, b\\in\\mathbb{R}$, $|\\sin a - \\sin b|\\leq |a-b|$.\n\n**Proof using MVT:**\n\n**Step 1 — Trivial case:** If $a=b$, both sides are $0$. ✓\n\n**Step 2 — Case $a\\ne b$. Set up MVT:** Let $f(x)=\\sin x$. This is continuous on $[\\min(a,b),\\max(a,b)]$ and differentiable everywhere. The hypotheses of MVT are satisfied.\n\n**Step 3 — Apply MVT:** There exists $c$ between $a$ and $b$ such that\n$$\\frac{\\sin a - \\sin b}{a - b} = f'(c) = \\cos c.$$\n\n**Step 4 — Estimate using $|\\cos c|\\leq 1$:**\n$$\\left|\\frac{\\sin a - \\sin b}{a-b}\\right| = |\\cos c| \\leq 1$$\n\n**Step 5 — Multiply both sides by $|a-b|>0$:**\n$$|\\sin a - \\sin b| \\leq |a-b|. \\qquad \\blacksquare$$\n\n*This is the **Lipschitz condition** for $\\sin x$ with constant $1$. The same method works for any $f$ with $|f'|\\leq M$ — giving $|f(a)-f(b)|\\leq M|a-b|$.*",
+      "body_he_md": "**טענה:** לכל $a,b\\in\\mathbb{R}$, $|\\sin a-\\sin b|\\leq|a-b|$.\n\n**הוכחה ב-MVT:**\n\n**שלב 1 — מקרה טריוויאלי:** $a=b$ — שני הצדדים $0$. ✓\n\n**שלב 2 — $a\\ne b$. הגדרת $f$:** $f(x)=\\sin x$ — רציפה וגזירה בכל מקום. תנאי MVT מתקיימים.\n\n**שלב 3 — MVT:** קיים $c$ בין $a$ ל-$b$ כך ש-\n$$\\frac{\\sin a-\\sin b}{a-b} = \\cos c.$$\n\n**שלב 4 — אומדן עם $|\\cos c|\\leq 1$:**\n$$\\left|\\frac{\\sin a-\\sin b}{a-b}\\right| = |\\cos c| \\leq 1$$\n\n**שלב 5 — הכפלה ב-$|a-b|>0$:**\n$$|\\sin a-\\sin b|\\leq|a-b|. \\quad \\blacksquare$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — MVT vs. Rolle",
+      "title_he": "מדריך שיטות — MVT מול רול",
+      "body_en_md": "| Theorem | When does it apply? | What does it give? | Typical exam use |\n|---------|--------------------|--------------------|------------------|\n| **Rolle** | $f$ cts on $[a,b]$, diff on $(a,b)$, **$f(a)=f(b)$** | $\\exists c: f'(c)=0$ | Show a function has a zero of $f'$; prove existence of root |\n| **MVT** | $f$ cts on $[a,b]$, diff on $(a,b)$ | $\\exists c: f'(c)=\\frac{f(b)-f(a)}{b-a}$ | Find a specific $c$; prove inequalities; establish monotonicity |\n\n**Decision:**\n1. Check $f(a)=f(b)$? → Rolle gives $f'(c)=0$.\n2. $f(a)\\ne f(b)$? → MVT gives $f'(c)=$ average slope.\n3. Need an inequality $|f(a)-f(b)|\\leq M|a-b|$? → MVT + bound on $|f'|$.",
+      "body_he_md": "| משפט | מתי חל? | מה נותן? | שימוש בבחינה |\n|------|---------|---------|-------------|\n| **רול** | $f$ רציפה ב-$[a,b]$, גזירה ב-$(a,b)$, **$f(a)=f(b)$** | $\\exists c: f'(c)=0$ | הוכחת אפס ל-$f'$; קיום שורש |\n| **MVT** | $f$ רציפה ב-$[a,b]$, גזירה ב-$(a,b)$ | $\\exists c: f'(c)=\\frac{f(b)-f(a)}{b-a}$ | מציאת $c$; אי-שוויונות; מונוטוניות |\n\n**החלטה:**\n1. $f(a)=f(b)$? ← רול נותן $f'(c)=0$.\n2. $f(a)\\ne f(b)$? ← MVT נותן שיפוע ממוצע.\n3. צריך $|f(a)-f(b)|\\leq M|a-b|$? ← MVT + חסם על $|f'|$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "label": "א",
-          "body_en": "Define $f(x) = x - \\sin x$. Show $f(0) = 0$.",
-          "body_he": "הגדירו $f(x) = x - \\sin x$. הראו ש-$f(0) = 0$.",
-          "points": 4
-        },
-        {
-          "label": "ב",
-          "body_en": "Compute $f'(x)$ and show $f'(x) \\geq 0$ for all $x \\geq 0$.",
-          "body_he": "חשבו $f'(x)$ והראו ש-$f'(x) \\geq 0$ לכל $x \\geq 0$.",
-          "points": 8
-        },
-        {
-          "label": "ג",
-          "body_en": "Use MVT (or monotonicity) to conclude $f(x) \\geq 0$, i.e., $\\sin x \\leq x$.",
-          "body_he": "השתמשו ב-MVT (או מונוטוניות) להסקת $f(x) \\geq 0$, כלומר $\\sin x \\leq x$.",
-          "points": 8
-        },
-        {
-          "label": "ד",
-          "body_en": "Now prove the sharper inequality: $\\sin x \\geq x - \\frac{x^3}{6}$ for $x \\geq 0$ using the same method.",
-          "body_he": "הוכיחו את האי-שוויון החד יותר: $\\sin x \\geq x - \\frac{x^3}{6}$ לכל $x \\geq 0$ בשיטה דומה.",
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Verify all MVT hypotheses and find $c$ for $f(x)=x^2+2x$ on $[0,3]$.",
+          "body_he": "אמתו את תנאי MVT ומצאו $c$ עבור $f(x)=x^2+2x$ על $[0,3]$.",
+          "solution_en": "Polynomial ✓. $f(0)=0$, $f(3)=15$. Average: $5$. $f'(c)=2c+2=5\\Rightarrow c=3/2\\in(0,3)$ ✓.",
+          "solution_he": "$c=3/2\\in(0,3)$ ✓.",
           "points": 5
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: f(0) = 0 - sin 0 = 0. ∎\n\nPart ב: f'(x) = 1 - cos x ≥ 0 for all x, since cos x ≤ 1. ∎\n\nPart ג: f is continuous on [0, x] and differentiable on (0, x). f(0) = 0 and f' ≥ 0. By MVT: f(x) - f(0) = f'(c)(x - 0) = (1 - cos c)·x ≥ 0. So f(x) ≥ 0, i.e., x - sin x ≥ 0, i.e., sin x ≤ x. ∎\n\nPart ד: Let g(x) = sin x - x + x³/6. Then g(0) = 0. g'(x) = cos x - 1 + x²/2. g'(0) = 0. g''(x) = -sin x + x ≥ 0 (from Part ג). So g' is increasing from g'(0) = 0, meaning g' ≥ 0 for x ≥ 0. So g is increasing from g(0) = 0, meaning g ≥ 0 for x ≥ 0. ∎",
-      "sample_solution_he": "חלק א: $f(0) = 0 - \\sin 0 = 0$. ∎\n\nחלק ב: $f'(x) = 1 - \\cos x \\geq 0$ לכל $x$, כי $\\cos x \\leq 1$. ∎\n\nחלק ג: $f$ רציפה ב-$[0,x]$ וגזירה ב-$(0,x)$. $f(0)=0$ ו-$f'\\geq 0$. ממשפט MVT: $f(x)-f(0) = f'(c)\\cdot x \\geq 0$. לכן $f(x)\\geq 0$, כלומר $\\sin x \\leq x$. ∎\n\nחלק ד: $g(x) = \\sin x - x + x^3/6$. $g(0)=0$, $g'(x)=\\cos x -1+x^2/2$, $g'(0)=0$, $g''(x) = -\\sin x + x \\geq 0$ (מחלק ג). לכן $g'$ עולה מ-$0$, $g'\\geq 0$, ולכן $g$ עולה מ-$0$, $g\\geq 0$. ∎",
-      "rubric_en": "Part א: 4pts. Part ב: 4pts for derivative, 4pts for inequality. Part ג: 4pts MVT application, 4pts conclusion. Part ד: 5pts for the chain of derivatives argument.",
-      "rubric_he": "חלק א: 4 נקודות. חלק ב: 4 על נגזרת, 4 על אי-שוויון. חלק ג: 4 MVT, 4 מסקנה. חלק ד: 5 על שרשרת הנגזרות.",
-      "body_en": "Prove $\\sin x \\leq x$ for $x \\geq 0$ via MVT.",
-      "body_he": "הוכיחו $\\sin x \\leq x$ ל-$x \\geq 0$ באמצעות MVT.",
-      "skill_atoms": ["mvt_application", "inequality_proof_derivative", "monotonicity_derivative"]
-    },
-    {
-      "id": "q7",
-      "type": "open",
-      "ord": 7,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $f$ be differentiable on $\\mathbb{R}$ with $f(0) = 0$ and $|f'(x)| \\leq M$ for all $x$. Prove: $|f(x)| \\leq M|x|$ for all $x$.",
-      "stem_he": "תהי $f$ גזירה על $\\mathbb{R}$ עם $f(0) = 0$ ו-$|f'(x)| \\leq M$ לכל $x$. הוכיחו: $|f(x)| \\leq M|x|$ לכל $x$.",
-      "parts": [
+        },
         {
-          "label": "א",
-          "body_en": "Apply MVT to $f$ on the interval between $0$ and $x$.",
-          "body_he": "החילו את MVT על $f$ בקטע שבין $0$ ל-$x$.",
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Apply Rolle's theorem to $f(x)=x^2-4$ on $[-2,2]$. Find $c$.",
+          "body_he": "הפעילו את משפט רול על $f(x)=x^2-4$ בקטע $[-2,2]$. מצאו $c$.",
+          "solution_en": "$f(-2)=f(2)=0$ ✓. $f'(c)=2c=0\\Rightarrow c=0\\in(-2,2)$ ✓.",
+          "solution_he": "$f(-2)=f(2)=0$ ✓. $c=0$ ✓.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find all $c$ values for MVT applied to $f(x)=x^3$ on $[-1,2]$.",
+          "body_he": "מצאו את כל ערכי $c$ עבור MVT על $f(x)=x^3$ ב-$[-1,2]$.",
+          "solution_en": "$f(-1)=-1$, $f(2)=8$. Average: $9/3=3$. $3c^2=3\\Rightarrow c=\\pm 1$. Only $c=1\\in(-1,2)$ ✓.",
+          "solution_he": "קצב ממוצע: $3$. $c=\\pm 1$; רק $c=1\\in(-1,2)$ ✓.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Does Rolle's theorem apply to $f(x)=|x|$ on $[-1,1]$? Explain.",
+          "body_he": "האם משפט רול חל על $f(x)=|x|$ בקטע $[-1,1]$? הסבירו.",
+          "solution_en": "$f(-1)=f(1)=1$ ✓, $f$ continuous ✓, but $f$ is NOT differentiable at $x=0$. The hypothesis fails. Rolle does not apply (and indeed $f'\\ne 0$ anywhere on $(-1,0)\\cup(0,1)$).",
+          "solution_he": "$f$ לא גזירה ב-$x=0$ — תנאי הגזירות נכשל. רול לא חל.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Apply MVT to $f(x)=\\ln x$ on $[1,e]$. Find all $c\\in(1,e)$.",
+          "body_he": "הפעילו MVT על $f(x)=\\ln x$ על $[1,e]$. מצאו $c\\in(1,e)$.",
+          "solution_en": "$f(1)=0$, $f(e)=1$. Average: $\\frac{1}{e-1}$. $f'(c)=1/c=\\frac{1}{e-1}\\Rightarrow c=e-1\\approx 1.718\\in(1,e)$ ✓.",
+          "solution_he": "$c=e-1\\approx 1.718\\in(1,e)$ ✓.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Use the MVT to prove that $e^x \\geq 1+x$ for all $x\\geq 0$.",
+          "body_he": "השתמשו ב-MVT להוכיח ש-$e^x\\geq 1+x$ לכל $x\\geq 0$.",
+          "solution_en": "For $x=0$: equality. For $x>0$: apply MVT to $f(t)=e^t$ on $[0,x]$. $\\exists c\\in(0,x)$: $e^x-1=e^c\\cdot x$. Since $c>0$, $e^c>1$, so $e^x-1=xe^c>x$, giving $e^x>1+x$.",
+          "solution_he": "ל-$x>0$: MVT על $[0,x]$: $e^x-1=xe^c$ עם $c\\in(0,x)$. $e^c>1$ ← $e^x-1>x$ ← $e^x>1+x$. ■",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "How many real roots can $f(x) = x^5 + 3x + 1$ have? Use Rolle's theorem.",
+          "body_he": "כמה שורשים ממשיים יכולה ל-$f(x)=x^5+3x+1$ להיות? השתמשו במשפט רול.",
+          "solution_en": "$f'(x)=5x^4+3>0$ always. So $f$ is strictly increasing, hence at most one root. Since $f(-1)=-3<0$ and $f(0)=1>0$, by IVT exactly one root exists in $(-1,0)$.",
+          "solution_he": "$f'(x)=5x^4+3>0$ — $f$ עולה קפדנית, לכן לכל היותר שורש אחד. IVT נותן בדיוק אחד.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Use MVT to prove that $|\\cos a - \\cos b|\\leq|a-b|$ for all $a,b\\in\\mathbb{R}$.",
+          "body_he": "השתמשו ב-MVT להוכיח ש-$|\\cos a-\\cos b|\\leq|a-b|$ לכל $a,b$.",
+          "solution_en": "Apply MVT to $f(x)=\\cos x$ on the interval between $a$ and $b$. $\\exists c$: $\\frac{\\cos a-\\cos b}{a-b}=-\\sin c$. Since $|-\\sin c|\\leq 1$: $|\\cos a-\\cos b|\\leq|a-b|$. ■",
+          "solution_he": "MVT על $f(x)=\\cos x$: $|\\cos a-\\cos b|=|\\sin c||a-b|\\leq|a-b|$. ■",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Show that $x-1\\leq\\ln x\\leq x-1$ for $x>0$... Wait — use MVT to show $\\ln x \\leq x-1$ for all $x>0$.",
+          "body_he": "השתמשו ב-MVT להראות ש-$\\ln x\\leq x-1$ לכל $x>0$.",
+          "solution_en": "For $x=1$: equality. For $x>1$: MVT on $g(t)=\\ln t$ on $[1,x]$: $\\ln x = \\frac{1}{c}(x-1)$ for some $c\\in(1,x)$. Since $c>1$, $1/c<1$, so $\\ln x<x-1$. For $0<x<1$ reverse the interval similarly.",
+          "solution_he": "MVT על $[1,x]$: $\\ln x=\\frac{x-1}{c}$ עם $c>1$ (אם $x>1$), לכן $\\ln x<x-1$. ■",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove: if $f'(x)=g'(x)$ for all $x\\in(a,b)$, then $f(x)=g(x)+C$ for some constant $C$.",
+          "body_he": "הוכיחו: אם $f'(x)=g'(x)$ לכל $x\\in(a,b)$, אז $f(x)=g(x)+C$ עבור קבוע $C$.",
+          "solution_en": "Let $h=f-g$. Then $h'=(f-g)'=f'-g'=0$ on $(a,b)$. By MVT applied to $h$ on any $[x_1,x_2]\\subset(a,b)$: $h(x_2)-h(x_1)=h'(c)(x_2-x_1)=0$. So $h$ is constant: $h(x)=C$. ■",
+          "solution_he": "$h=f-g$. $h'=0$ ב-$(a,b)$. MVT: $h(x_2)-h(x_1)=0$ לכל $x_1,x_2$. לכן $h=C$. ■",
           "points": 12
         },
         {
-          "label": "ב",
-          "body_en": "Use the hypothesis $|f'(x)| \\leq M$ to complete the proof.",
-          "body_he": "השתמשו בהנחה $|f'(x)| \\leq M$ להשלמת ההוכחה.",
-          "points": 8
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Use MVT to show that for $x>0$: $\\frac{x}{1+x}<\\ln(1+x)<x$.",
+          "body_he": "השתמשו ב-MVT להראות ש-$\\frac{x}{1+x}<\\ln(1+x)<x$ לכל $x>0$.",
+          "solution_en": "Apply MVT to $f(t)=\\ln t$ on $[1,1+x]$: $\\ln(1+x)=\\frac{1}{c}\\cdot x$ for $c\\in(1,1+x)$. Since $1<c<1+x$: $\\frac{1}{1+x}<\\frac{1}{c}<1$. Multiply by $x>0$: $\\frac{x}{1+x}<\\ln(1+x)<x$. ■",
+          "solution_he": "MVT על $[1,1+x]$: $\\ln(1+x)=x/c$, $1<c<1+x\\Rightarrow x/(1+x)<\\ln(1+x)<x$. ■",
+          "points": 12
         },
         {
-          "label": "ג",
-          "body_en": "Give a specific example where equality holds for some $x \\neq 0$.",
-          "body_he": "הביאו דוגמה ספציפית שבה מתקיימת שוויות עבור $x \\neq 0$ כלשהו.",
-          "points": 5
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Use Rolle's theorem to prove that between any two roots of $f'(x)$, there can be at most one root of $f(x)$ (assuming $f$ is continuous and differentiable).",
+          "body_he": "השתמשו במשפט רול להוכיח שבין כל שני שורשים של $f'(x)$, יכול להיות לכל היותר שורש אחד של $f(x)$.",
+          "solution_en": "Contrapositive: Suppose $f(a)=f(b)=0$ with $a<b$. By Rolle's theorem, $\\exists c\\in(a,b)$ with $f'(c)=0$. So between any two roots of $f$, there is a root of $f'$. Equivalently: between two consecutive roots of $f'$, $f$ can have at most one root. ■",
+          "solution_he": "הפוך: אם $f(a)=f(b)=0$, רול נותן $f'(c)=0$ בין $a$ ל-$b$. בין שני שורשי $f'$ עוקבים — לכל היותר שורש אחד ל-$f$. ■",
+          "points": 12
         }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: Fix x ≠ 0. f is continuous on the closed interval between 0 and x, differentiable on the open interval. By MVT: f(x) - f(0) = f'(c) · (x - 0) for some c between 0 and x. Since f(0) = 0: f(x) = f'(c) · x. ∎\n\nPart ב: |f(x)| = |f'(c)| · |x| ≤ M · |x|. ∎\n\nPart ג: f(x) = Mx (linear). Then f'(x) = M, so |f'| = M, and |f(x)| = M|x| — equality holds for all x. ∎",
-      "sample_solution_he": "חלק א: נקבע $x\\neq 0$. $f$ רציפה בקטע סגור ב-$[0,x]$ (או $[x,0]$) וגזירה בפנים. ממשפט MVT: $f(x)-f(0) = f'(c)\\cdot(x-0)$ עבור $c$ כלשהו ביניהם. מכיוון ש-$f(0)=0$: $f(x) = f'(c)\\cdot x$. ∎\n\nחלק ב: $|f(x)| = |f'(c)|\\cdot|x| \\leq M\\cdot|x|$. ∎\n\nחלק ג: $f(x)=Mx$. אז $f'(x)=M$, $|f'|=M$, ו-$|f(x)|=M|x|$ — שוויות לכל $x$. ∎",
-      "rubric_en": "Part א: 6pts for MVT application, 6pts for using f(0)=0. Part ב: 4pts for absolute values, 4pts for conclusion. Part ג: 5pts for valid example.",
-      "rubric_he": "חלק א: 6 נקודות על MVT, 6 על שימוש ב-$f(0)=0$. חלק ב: 4 על ערכים מוחלטים, 4 על מסקנה. חלק ג: 5 על דוגמה.",
-      "body_en": "Prove $|f(x)| \\leq M|x|$ given $f(0)=0$, $|f'|\\leq M$.",
-      "body_he": "הוכיחו $|f(x)|\\leq M|x|$ בהינתן $f(0)=0$, $|f'|\\leq M$.",
-      "skill_atoms": ["mvt_application", "inequality_proof_derivative", "lipschitz_bound"]
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting to verify continuity and differentiability.** MVT requires BOTH. $f(x)=1/x$ is differentiable on $(0,2)$ but not continuous at $0$ — you can't apply MVT on $[-1,2]$.\n\n2. **Applying Rolle without checking $f(a)=f(b)$.** If the endpoints are not equal, Rolle does not apply — use MVT instead.\n\n3. **Assuming $c$ is unique.** MVT only guarantees existence, not uniqueness. Multiple values of $c$ may satisfy the equation.\n\n4. **Not checking $c\\in(a,b)$.** Always verify the open interval condition after solving.\n\n5. **Confusing MVT with the Fundamental Theorem of Calculus.** MVT is about derivatives, not integrals.",
+      "body_he_md": "1. **שכחת אימות רציפות וגזירות.** MVT מחייב את שניהם.\n\n2. **יישום רול ללא בדיקת $f(a)=f(b)$.** אם הקצוות שונים — השתמשו ב-MVT.\n\n3. **הנחה שה-$c$ יחיד.** MVT מבטיח קיום, לא יחידות.\n\n4. **אי-בדיקה ש-$c\\in(a,b)$.** תמיד אמתו זאת.\n\n5. **בלבול בין MVT לFTC.** MVT עוסק בנגזרות, לא באינטגרלים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**MVT formula card:**\n$$f'(c) = \\frac{f(b)-f(a)}{b-a}, \\quad c\\in(a,b)$$\n\n**Required hypotheses (state in every proof):**\n1. $f$ continuous on $[a,b]$\n2. $f$ differentiable on $(a,b)$\n\n**Rolle's special case:** add $f(a)=f(b)$ → conclusion $f'(c)=0$.\n\n**Typical exam patterns:**\n- Find explicit $c$ (easy): compute average slope, set $f'(c)=$ average, solve.\n- Prove inequality: apply MVT, bound $|f'|$.\n- Prove existence of root: combine IVT + Rolle.\n- Prove uniqueness of root: assume two roots, apply Rolle to get a zero of $f'$, contradict $f'>0$.\n\n**Lipschitz bound:** If $|f'(x)|\\leq M$ on $(a,b)$, then $|f(x)-f(y)|\\leq M|x-y|$ for all $x,y\\in[a,b]$.",
+      "body_he_md": "**נוסחת MVT:**\n$$f'(c) = \\frac{f(b)-f(a)}{b-a},\\quad c\\in(a,b)$$\n\n**תנאים נדרשים (כתבו בכל הוכחה):**\n1. $f$ רציפה על $[a,b]$\n2. $f$ גזירה על $(a,b)$\n\n**מקרה רול:** הוסיפו $f(a)=f(b)$ ← $f'(c)=0$.\n\n**דפוסי בחינה:**\n- מציאת $c$ מפורש: חשבו שיפוע ממוצע, הציבו ב-$f'(c)$, פתרו.\n- הוכחת אי-שוויון: MVT + חסם על $|f'|$.\n- הוכחת קיום שורש: IVT + רול.\n- הוכחת יחידות שורש: הניחו שני שורשים, רול נותן $f'(c)=0$, סתירה עם $f'>0$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Rolle:** continuous on $[a,b]$, differentiable on $(a,b)$, $f(a)=f(b)$ $\\Rightarrow$ $\\exists c$ with $f'(c)=0$.\n- **MVT:** same hypotheses without equal endpoints $\\Rightarrow$ $\\exists c$ with $f'(c)=$ average slope.\n- MVT is the key tool for proving monotonicity, inequalities, and uniqueness of roots.\n- The **Lipschitz bound** $|f(a)-f(b)|\\leq M|a-b|$ follows directly from MVT when $|f'|\\leq M$.\n- Always state and verify the hypotheses — examiners award partial credit for this step.",
+      "body_he_md": "- **רול:** רציפות, גזירות, $f(a)=f(b)$ ← $\\exists c: f'(c)=0$.\n- **MVT:** אותם תנאים ← $\\exists c: f'(c)=$ שיפוע ממוצע.\n- MVT הוא הכלי המרכזי להוכחת מונוטוניות, אי-שוויונות, ויחידות שורשים.\n- **חסם ליפשיץ:** $|f(a)-f(b)|\\leq M|a-b|$ כאשר $|f'|\\leq M$.\n- תמיד כתבו ואמתו את התנאים — הבוחנים נותנים נקודות על צעד זה."
     }
   ]
 }

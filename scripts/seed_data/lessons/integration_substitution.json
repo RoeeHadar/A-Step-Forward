@@ -1,214 +1,225 @@
 {
   "concept_id": "integration_substitution",
-  "subject": "high_school_math_5pt",
-  "level": "5pt",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Integration by Substitution (u-substitution)",
-  "title_he": "אינטגרציה בהצבה",
-  "summary_en": "Reverse chain rule: recognize f(g(x))g'(x), change variables, and apply to definite integrals and area problems.",
-  "summary_he": "הפיכת כלל השרשרת: זיהוי $f(g(x))g'(x)$, החלפת משתנה, ויישום לאינטגרל מסוים ושטחים.",
-  "est_minutes": 25,
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1"],
+  "title_en": "Integration by Substitution ($u$-Substitution)",
+  "title_he": "אינטגרציה בהחלפת משתנה (החלפת $u$)",
+  "summary_en": "$u$-substitution is the chain rule in reverse: by substituting $u=g(x)$, we convert a complicated integral into a simpler one in $u$. It is the most important single integration technique.",
+  "summary_he": "החלפת $u$ היא כלל השרשרת הפוך: על-ידי הצבת $u=g(x)$ אנו הופכים אינטגרל מסובך לאינטגרל פשוט ב-$u$. זוהי טכניקת האינטגרציה החשובה ביותר.",
+  "est_minutes": 55,
+  "agent_hints": "When a learner is stuck on u-substitution, ask: 'What is the inner function? What is its derivative — does it appear in the integrand?' If yes, let u equal the inner function. Require the learner to always change dx to du explicitly.",
   "sections": [
     {
       "kind": "intro",
-      "title_en": "The substitution idea",
-      "title_he": "רעיון ההצבה",
-      "body_en_md": "Substitution reverses the chain rule. If the integrand has the form $f(g(x)) \\cdot g'(x)$, let $u = g(x)$, $du = g'(x)\\,dx$:\n\n$$\\int f(g(x)) g'(x)\\,dx = \\int f(u)\\,du.$$\n\n**When it works:** you see an \"inner function\" and (up to a constant) its derivative as a factor.",
-      "body_he_md": "הצבה הופכת את כלל השרשרת. אם יש $f(g(x)) \\cdot g'(x)$, נקבע $u = g(x)$:\n\n$$\\int f(g(x)) g'(x)\\,dx = \\int f(u)\\,du.$$\n\n**מתי זה עובד:** רואים \"פונקציה פנימית\" ואת הנגזרת שלה כגורם."
+      "title_en": "Why Substitution?",
+      "title_he": "למה החלפה?",
+      "body_en_md": "Not every integral can be computed directly from the basic table. Consider:\n$$\\int 2x(x^2+1)^3\\,dx$$\nThere is no table entry for $(x^2+1)^3$. But notice: $\\frac{d}{dx}[x^2+1]=2x$, which appears as a factor! The integrand is of the form $g'(x)\\cdot f(g(x))$ — precisely the pattern produced by the **chain rule** when differentiating $F(g(x))$.\n\n**$u$-substitution** exploits this: set $u=g(x)$, so $du=g'(x)\\,dx$, converting the integral into $\\int f(u)\\,du$.\n\n**Rule of thumb:** If you see an inner function whose derivative also appears (possibly up to a constant), try substitution.",
+      "body_he_md": "לא כל אינטגרל ניתן לחישוב ישיר מהטבלה הבסיסית. שקלו:\n$$\\int 2x(x^2+1)^3\\,dx$$\nאין ערך בטבלה ל-$(x^2+1)^3$. אבל: $\\frac{d}{dx}[x^2+1]=2x$ מופיע כגורם! האינטגרנד הוא מהצורה $g'(x)\\cdot f(g(x))$ — בדיוק התבנית של **כלל השרשרת** בגזירת $F(g(x))$.\n\n**החלפת $u$** מנצלת זאת: $u=g(x)$, $du=g'(x)\\,dx$, הופכים אינטגרל ל-$\\int f(u)\\,du$.\n\n**כלל אצבע:** אם רואים פונקציה פנימית שנגזרתה מופיעה (אולי עד קבוע) — נסו החלפה."
     },
     {
-      "kind": "worked_example",
-      "title_en": "Indefinite integral substitution",
-      "title_he": "אינטגרל לא מסוים בהצבה",
-      "body_en_md": "$\\int 2x(x^2+1)^3\\,dx$: $u = x^2+1$, $du = 2x\\,dx$ → $\\int u^3\\,du = \\frac{u^4}{4}+C = \\frac{(x^2+1)^4}{4}+C$.\n\n$\\int \\frac{x}{x^2+3}\\,dx$: $u = x^2+3$ → $\\frac{1}{2}\\ln|x^2+3|+C$.",
-      "body_he_md": "$\\int 2x(x^2+1)^3\\,dx = \\frac{(x^2+1)^4}{4}+C$.\n\n$\\int \\frac{x}{x^2+3}\\,dx = \\frac{1}{2}\\ln(x^2+3)+C$."
-    },
-    {
-      "kind": "worked_example",
-      "title_en": "Substitution with trig/exp",
-      "title_he": "הצבה עם trig/exp",
-      "body_en_md": "$\\int e^{3x}\\,dx = \\frac{1}{3}e^{3x}+C$.\n\n$\\int \\cos(2x+1)\\,dx = \\frac{1}{2}\\sin(2x+1)+C$.\n\n$\\int \\sin x \\cos x\\,dx$: $u = \\sin x$ → $\\frac{\\sin^2 x}{2}+C$.\n\n$\\int \\frac{\\ln x}{x}\\,dx$: $u = \\ln x$ → $\\frac{(\\ln x)^2}{2}+C$.\n\n$\\int x e^{x^2}\\,dx = \\frac{1}{2}e^{x^2}+C$.",
-      "body_he_md": "דוגמאות trig/exp/log — כולן עם $u = $\"פנימי\"."
+      "kind": "definition",
+      "title_en": "The Substitution Rule",
+      "title_he": "כלל ההחלפה",
+      "body_en_md": "**Theorem (Substitution Rule for Indefinite Integrals):**\nIf $u=g(x)$ is differentiable and $f$ is continuous, then\n$$\\int f(g(x))\\,g'(x)\\,dx = \\int f(u)\\,du.$$\n\n**For definite integrals** — two options:\n\n*Option A (change the limits):*\n$$\\int_a^b f(g(x))g'(x)\\,dx = \\int_{g(a)}^{g(b)} f(u)\\,du$$\n\n*Option B (back-substitute):* Compute the indefinite integral, express in $x$, then apply the Fundamental Theorem.\n\n**Key mantra:**\n1. Choose $u = g(x)$ (the inner function).\n2. Compute $du = g'(x)\\,dx$.\n3. Rewrite the entire integral in terms of $u$.\n4. Integrate in $u$.\n5. Back-substitute $u=g(x)$.",
+      "body_he_md": "**משפט (כלל ההחלפה לאינטגרלים לא-מסוימים):**\nאם $u=g(x)$ גזירה ו-$f$ רציפה, אז\n$$\\int f(g(x))\\,g'(x)\\,dx = \\int f(u)\\,du.$$\n\n**לאינטגרלים מסוימים** — שתי אפשרויות:\n\n*אפשרות א' (שינוי גבולות):*\n$$\\int_a^b f(g(x))g'(x)\\,dx = \\int_{g(a)}^{g(b)} f(u)\\,du$$\n\n*אפשרות ב' (חזרה למשתנה $x$):* חשבו אינטגרל לא-מסוים, הציבו חזרה.\n\n**מנטרה:**\n1. בחרו $u=g(x)$.\n2. $du=g'(x)\\,dx$.\n3. כתבו הכל ב-$u$.\n4. אינטגרציה ב-$u$.\n5. הציבו חזרה $u=g(x)$."
     },
     {
       "kind": "theory",
-      "title_en": "Definite integral substitution",
-      "title_he": "אינטגרל מסוים בהצבה",
-      "body_en_md": "**Method 1:** Change limits when substituting.\n\n$\\int_0^1 2x\\sqrt{x^2+1}\\,dx$: $u = x^2+1$, limits $u: 1 \\to 2$ → $\\int_1^2 \\sqrt{u}\\,du = \\frac{2}{3}(2^{3/2}-1)$.\n\n**Method 2:** Find indefinite antiderivative, then evaluate at original limits.\n\nBoth are valid — pick whichever is cleaner.",
-      "body_he_md": "**שיטה 1:** החלפת גבולות.\n\n**שיטה 2:** פונקציה קדומה + הצבה בגבולות המקוריים.\n\nשתיהן תקפות."
+      "title_en": "Choosing $u$ — Strategy and Patterns",
+      "title_he": "בחירת $u$ — אסטרטגיה ותבניות",
+      "body_en_md": "**Pattern recognition:**\n\n| Integrand form | Substitution | Result |\n|---------------|--------------|--------|\n| $f(ax+b)$ | $u=ax+b$ | $\\frac{1}{a}\\int f(u)\\,du$ |\n| $f(g(x))\\cdot g'(x)$ | $u=g(x)$ | $\\int f(u)\\,du$ |\n| $\\dfrac{g'(x)}{g(x)}$ | $u=g(x)$ | $\\ln|u|+C$ |\n| $[g(x)]^n\\cdot g'(x)$ | $u=g(x)$ | $\\dfrac{u^{n+1}}{n+1}+C$ |\n| $f(\\sqrt{x})$ | $u=\\sqrt{x}$ (then $dx=2u\\,du$) | Simplifies |\n\n**When substitution WON'T work easily:**\n- No clear inner function (try IBP or partial fractions).\n- The remaining factor after substitution still involves $x$.\n\n**Adjusting for a missing constant:** $\\int 5x(x^2+1)^3\\,dx$ — let $u=x^2+1$, $du=2x\\,dx$, so $x\\,dx=du/2$:\n$$\\int 5x(x^2+1)^3\\,dx = \\frac{5}{2}\\int u^3\\,du.$$",
+      "body_he_md": "**זיהוי תבניות:**\n\n| צורת האינטגרנד | החלפה | תוצאה |\n|----------------|-------|-------|\n| $f(ax+b)$ | $u=ax+b$ | $\\frac{1}{a}\\int f(u)\\,du$ |\n| $f(g(x))\\cdot g'(x)$ | $u=g(x)$ | $\\int f(u)\\,du$ |\n| $\\frac{g'(x)}{g(x)}$ | $u=g(x)$ | $\\ln|u|+C$ |\n| $[g(x)]^n\\cdot g'(x)$ | $u=g(x)$ | $\\frac{u^{n+1}}{n+1}+C$ |\n| $f(\\sqrt{x})$ | $u=\\sqrt{x}$ | מפשט |\n\n**כאשר החלפה לא עובדת בקלות:**\n- אין פונקציה פנימית ברורה — נסו IBP או שברים חלקיים.\n- הגורם שנותר עדיין תלוי ב-$x$."
     },
     {
-      "kind": "summary",
-      "title_en": "Area calculations with substitution",
-      "title_he": "חישובי שטח עם הצבה",
-      "body_en_md": "$\\int_0^1 x\\sqrt{1-x^2}\\,dx$: $u = 1-x^2$, $du = -2x\\,dx$ → equals $\\frac{1}{3}$ (semicircle quarter area check: $\\pi/4$ for unit disk quarter... verify numerically).\n\n**Between curves:** area between $y = e^{-x}$ and $y = e^{-2x}$ on $[0,1]$:\n\n$$\\int_0^1 (e^{-x} - e^{-2x})\\,dx = [-e^{-x} + \\frac{1}{2}e^{-2x}]_0^1 = (1 - \\frac{1}{2}) - (-1 + \\frac{1}{2}) = 1 - e^{-1} + \\frac{1}{2}e^{-2}.$$\n\n(Or substitute $u = e^{-x}$ for the second term.)",
-      "body_he_md": "שטח בין $e^{-x}$ ו-$e^{-2x}$ ב-$[0,1]$ — דורש הצבה או אינטגרציה ישירה של ההפרש."
-    },
-    {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve by induction: $\\sum_{k=1}^n k^2 = \\frac{n(n+1)(2n+1)}{6}$.\n\n**Complete Solution:**\n\nBase and inductive step as in standard 5pt induction template (see above).\n\n---\n\n**Practice Problem 2:**\n\nFind all $x\\in[0,2\\pi]$ where $2\\sin^2 x - \\sin x - 1 = 0$.\n\n**Complete Solution:**\n\n$x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:** הוכחה באינדוקציה ל-$\\sum k^2$.\n\n**שאלת תרגול 2:** $2\\sin^2 x-\\sin x-1=0$ → $x=\\frac{\\pi}{2},\\frac{7\\pi}{6},\\frac{11\\pi}{6}$."
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
+      "kind": "worked_example",
       "difficulty": "easy",
-      "stem_en": "Best substitution for $\\int x(x^2+5)^4\\,dx$:",
-      "stem_he": "ההצבה הטובה ל-$\\int x(x^2+5)^4\\,dx$:",
-      "options_en": [
-        "$u = x$",
-        "$u = x^2+5$",
-        "$u = x^4$",
-        "$u = 5x$"
-      ],
-      "options_he": [
-        "$u = x$",
-        "$u = x^2+5$",
-        "$u = x^4$",
-        "$u = 5x$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Inner function $x^2+5$, derivative $2x$ present (adjust constant).",
-      "explanation_he": "פנימי $x^2+5$."
+      "example_number": 1,
+      "title_en": "Worked Example 1 — $\\int 2x(x^2+1)^3\\,dx$",
+      "title_he": "דוגמה פתורה 1 — $\\int 2x(x^2+1)^3\\,dx$",
+      "body_en_md": "**Given:** $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.\n\n**Step 1 — Identify $u$:** The inner function is $x^2+1$ and its derivative $2x$ appears as a factor.\n$$u = x^2+1, \\qquad du = 2x\\,dx$$\n\n**Step 2 — Rewrite the integral in $u$:**\n$$\\int (x^2+1)^3 \\cdot 2x\\,dx = \\int u^3\\,du$$\n\n**Step 3 — Integrate:**\n$$\\int u^3\\,du = \\frac{u^4}{4} + C$$\n\n**Step 4 — Back-substitute $u = x^2+1$:**\n$$= \\frac{(x^2+1)^4}{4} + C$$\n\n**Answer:** $\\boxed{\\dfrac{(x^2+1)^4}{4} + C}$ ✓\n\n*Verify by differentiating: $\\frac{d}{dx}\\left[\\frac{(x^2+1)^4}{4}\\right] = (x^2+1)^3 \\cdot 2x$ ✓*",
+      "body_he_md": "**נתון:** $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.\n\n**שלב 1 — בחרו $u$:** $u=x^2+1$, $du=2x\\,dx$.\n\n**שלב 2 — כתבו ב-$u$:**\n$$\\int u^3\\,du$$\n\n**שלב 3 — אינטגרציה:**\n$$\\frac{u^4}{4}+C$$\n\n**שלב 4 — הציבו חזרה:**\n$$\\frac{(x^2+1)^4}{4}+C$$\n\n**תשובה:** $\\boxed{\\dfrac{(x^2+1)^4}{4}+C}$ ✓"
     },
     {
-      "ord": 2,
-      "kind": "mcq",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\int 3x^2\\cos(x^3)\\,dx$.",
+      "body_he_md": "חשבו $\\displaystyle\\int 3x^2\\cos(x^3)\\,dx$.",
+      "checkpoint_solution_en": "Let $u=x^3$, $du=3x^2\\,dx$:\n$$\\int \\cos(u)\\,du = \\sin u + C = \\sin(x^3)+C.$$",
+      "checkpoint_solution_he": "$u=x^3$, $du=3x^2\\,dx$:\n$\\int\\cos u\\,du=\\sin(x^3)+C$."
+    },
+    {
+      "kind": "worked_example",
       "difficulty": "medium",
-      "stem_en": "$\\int 2x(x^2+1)^3\\,dx = ?$",
-      "stem_he": "$\\int 2x(x^2+1)^3\\,dx = ?$",
-      "options_en": [
-        "$\\frac{(x^2+1)^4}{4}+C$",
-        "$\\frac{(x^2+1)^3}{3}+C$",
-        "$(x^2+1)^4+C$",
-        "$4(x^2+1)^3+C$"
-      ],
-      "options_he": [
-        "$\\frac{(x^2+1)^4}{4}+C$",
-        "$\\frac{(x^2+1)^3}{3}+C$",
-        "$(x^2+1)^4+C$",
-        "$4(x^2+1)^3+C$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$u = x^2+1$ → $\\frac{u^4}{4}$.",
-      "explanation_he": "$u = x^2+1$ → $\\frac{u^4}{4}$."
+      "example_number": 2,
+      "title_en": "Worked Example 2 — $\\int\\dfrac{x}{\\sqrt{x^2+4}}\\,dx$",
+      "title_he": "דוגמה פתורה 2 — $\\int\\dfrac{x}{\\sqrt{x^2+4}}\\,dx$",
+      "body_en_md": "**Given:** $\\displaystyle\\int\\frac{x}{\\sqrt{x^2+4}}\\,dx$.\n\n**Step 1 — Identify $u$:** Inner function is $x^2+4$; its derivative $2x$ appears (up to constant).\n$$u = x^2+4, \\qquad du = 2x\\,dx \\implies x\\,dx = \\frac{du}{2}$$\n\n**Step 2 — Rewrite:**\n$$\\int\\frac{x\\,dx}{\\sqrt{x^2+4}} = \\int\\frac{1}{\\sqrt{u}}\\cdot\\frac{du}{2} = \\frac{1}{2}\\int u^{-1/2}\\,du$$\n\n**Step 3 — Integrate using power rule:**\n$$\\frac{1}{2}\\cdot\\frac{u^{1/2}}{1/2} + C = u^{1/2}+C = \\sqrt{u}+C$$\n\n**Step 4 — Back-substitute:**\n$$= \\sqrt{x^2+4}+C$$\n\n**Answer:** $\\boxed{\\sqrt{x^2+4}+C}$ ✓\n\n*Check: $\\frac{d}{dx}\\sqrt{x^2+4} = \\frac{1}{2\\sqrt{x^2+4}}\\cdot 2x = \\frac{x}{\\sqrt{x^2+4}}$ ✓*",
+      "body_he_md": "**נתון:** $\\displaystyle\\int\\frac{x}{\\sqrt{x^2+4}}\\,dx$.\n\n**שלב 1:** $u=x^2+4$, $x\\,dx=du/2$.\n\n**שלב 2:**\n$$\\frac{1}{2}\\int u^{-1/2}\\,du$$\n\n**שלב 3:**\n$$\\frac{1}{2}\\cdot 2\\sqrt{u}+C=\\sqrt{u}+C$$\n\n**שלב 4:**\n$$\\sqrt{x^2+4}+C$$\n\n**תשובה:** $\\boxed{\\sqrt{x^2+4}+C}$ ✓"
     },
     {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\int \\cos(3x)\\,dx = ?$",
-      "stem_he": "$\\int \\cos(3x)\\,dx = ?$",
-      "options_en": [
-        "$\\sin(3x)+C$",
-        "$\\frac{1}{3}\\sin(3x)+C$",
-        "$3\\sin(3x)+C$",
-        "$-\\frac{1}{3}\\sin(3x)+C$"
-      ],
-      "options_he": [
-        "$\\sin(3x)+C$",
-        "$\\frac{1}{3}\\sin(3x)+C$",
-        "$3\\sin(3x)+C$",
-        "$-\\frac{1}{3}\\sin(3x)+C$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$u = 3x$, $du = 3\\,dx$ → $\\frac{1}{3}\\sin u$.",
-      "explanation_he": "$u = 3x$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\int\\frac{2x}{x^2+1}\\,dx$.",
+      "body_he_md": "חשבו $\\displaystyle\\int\\frac{2x}{x^2+1}\\,dx$.",
+      "checkpoint_solution_en": "Let $u=x^2+1$, $du=2x\\,dx$:\n$$\\int\\frac{du}{u}=\\ln|u|+C=\\ln(x^2+1)+C.$$",
+      "checkpoint_solution_he": "$u=x^2+1$, $du=2x\\,dx$:\n$\\ln(x^2+1)+C$."
     },
     {
-      "ord": 4,
-      "kind": "open",
+      "kind": "worked_example",
       "difficulty": "hard",
-      "stem_en": "Prove by mathematical induction:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "stem_he": "הוכיחו באינדוקציה:\n$$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$$",
-      "rubric_en": "2pts base; 3pts hypothesis; 5pts inductive algebra.",
-      "rubric_he": "2 נק' בסיס; 3 נק' הנחה; 5 נק' צעד.",
-      "explanation_en": "Standard induction: base OK; inductive step factors to required form.",
-      "explanation_he": "אינדוקציה סטנדרטית — בסיס וצעד.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_5pt"
+      "example_number": 3,
+      "title_en": "Worked Example 3 — $\\int\\dfrac{\\ln x}{x}\\,dx$ and a Definite Integral",
+      "title_he": "דוגמה פתורה 3 — $\\int\\dfrac{\\ln x}{x}\\,dx$ ואינטגרל מסוים",
+      "body_en_md": "**Part A — Indefinite integral:** $\\displaystyle\\int\\frac{\\ln x}{x}\\,dx$.\n\n**Step 1 — Choose $u$:** $u=\\ln x$, $du=\\dfrac{1}{x}dx \\implies \\dfrac{dx}{x}=du$.\n\n**Step 2 — Rewrite:**\n$$\\int\\frac{\\ln x}{x}\\,dx = \\int u\\,du$$\n\n**Step 3 — Integrate:**\n$$= \\frac{u^2}{2}+C = \\frac{(\\ln x)^2}{2}+C$$\n\n**Answer Part A:** $\\boxed{\\dfrac{(\\ln x)^2}{2}+C}$ ✓\n\n---\n\n**Part B — Definite integral:** $\\displaystyle\\int_1^e \\frac{\\ln x}{x}\\,dx$.\n\n**Method: change limits.**\nWhen $x=1$: $u=\\ln 1=0$.\nWhen $x=e$: $u=\\ln e=1$.\n\n$$\\int_1^e\\frac{\\ln x}{x}\\,dx = \\int_0^1 u\\,du = \\left[\\frac{u^2}{2}\\right]_0^1 = \\frac{1}{2}-0 = \\frac{1}{2}$$\n\n**Answer Part B:** $\\boxed{\\dfrac{1}{2}}$ ✓",
+      "body_he_md": "**חלק א' — אינטגרל לא-מסוים:** $\\displaystyle\\int\\frac{\\ln x}{x}\\,dx$.\n\n**שלב 1:** $u=\\ln x$, $du=dx/x$.\n\n**שלב 2:**\n$$\\int u\\,du = \\frac{u^2}{2}+C = \\frac{(\\ln x)^2}{2}+C$$\n\n**תשובה חלק א':** $\\boxed{\\dfrac{(\\ln x)^2}{2}+C}$ ✓\n\n---\n\n**חלק ב' — אינטגרל מסוים:** $\\displaystyle\\int_1^e\\frac{\\ln x}{x}\\,dx$.\n\nשינוי גבולות: $x=1\\Rightarrow u=0$; $x=e\\Rightarrow u=1$.\n\n$$\\int_0^1 u\\,du = \\frac{1}{2}$$\n\n**תשובה חלק ב':** $\\boxed{\\dfrac{1}{2}}$ ✓"
     },
     {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Find all $x\\in[0,2\\pi]$ satisfying $2\\sin^2 x - \\sin x - 1 = 0$. Show all work.",
-      "stem_he": "מצאו כל $x\\in[0,2\\pi]$: $2\\sin^2 x - \\sin x - 1 = 0$. הראו שלבים.",
-      "rubric_en": "3pts substitution; 4pts solving trig; 3pts all solutions in interval.",
-      "rubric_he": "3 נק' הצבה; 4 נק' טrig; 3 נק' כל הפתרונות.",
-      "explanation_en": "x = π/2, 7π/6, 11π/6.",
-      "explanation_he": "x = π/2, 7π/6, 11π/6.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_5pt"
+      "kind": "method_guide",
+      "title_en": "Method Guide — How to Choose $u$",
+      "title_he": "מדריך שיטות — כיצד לבחור $u$",
+      "body_en_md": "**Step 1 — Look for a composite function.** Is there an inner function $g(x)$ nested inside another function?\n\n**Step 2 — Check if $g'(x)$ appears as a factor.** If yes: set $u=g(x)$.\n\n**Step 3 — If $g'(x)$ appears up to a constant:** adjust by multiplying and dividing by that constant.\n\n**Step 4 — If substitution leaves an $x$ in the integrand that cannot be expressed in $u$:** try a different $u$, or use IBP.\n\n**Common $u$ choices:**\n| Integrand contains... | Try $u=$ |\n|----------------------|----------|\n| $(ax+b)^n$ | $ax+b$ |\n| $e^{g(x)}$ | $g(x)$ |\n| $\\sin(g(x))$ or $\\cos(g(x))$ | $g(x)$ |\n| $\\ln(g(x))/g(x)$ | $\\ln(g(x))$ |\n| $\\sqrt{g(x)}$ with $g'$ present | $g(x)$ |\n| $g'(x)/g(x)$ | $g(x)$ |",
+      "body_he_md": "**שלב 1 — חפשו פונקציה מורכבת.** האם יש פונקציה פנימית $g(x)$?\n\n**שלב 2 — בדקו אם $g'(x)$ מופיע כגורם.** אם כן: $u=g(x)$.\n\n**שלב 3 — אם $g'(x)$ מופיע עד קבוע:** הכפילו וחלקו בקבוע.\n\n**שלב 4 — אם נותר $x$ שלא ניתן לביטוי ב-$u$:** נסו $u$ אחר, או IBP.\n\n**בחירות $u$ נפוצות:**\n| האינטגרנד מכיל... | נסו $u=$ |\n|-------------------|----------|\n| $(ax+b)^n$ | $ax+b$ |\n| $e^{g(x)}$ | $g(x)$ |\n| $\\sin(g(x))$ | $g(x)$ |\n| $\\ln(g(x))/g(x)$ | $\\ln(g(x))$ |\n| $\\sqrt{g(x)}$ עם $g'$ | $g(x)$ |\n| $g'(x)/g(x)$ | $g(x)$ |"
     },
     {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute the following integral using the appropriate technique:\n$$\\int_0^1 \\frac{x}{\\sqrt{1 - x^2}}\\,dx$$",
-      "stem_he": "חשבו את האינטגרל הבא בשיטה המתאימה:\n$$\\int_0^1 \\frac{x}{\\sqrt{1 - x^2}}\\,dx$$",
-      "parts": [
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "label": "א",
-          "body_en": "Identify the appropriate substitution and state the new limits of integration.",
-          "body_he": "זהו את ההצבה המתאימה וציינו את גבולות האינטגרציה החדשים.",
-          "points": 10
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int (2x+3)^5\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int(2x+3)^5\\,dx$.",
+          "solution_en": "$u=2x+3$, $du=2\\,dx$. $\\frac{1}{2}\\int u^5\\,du=\\frac{u^6}{12}+C=\\frac{(2x+3)^6}{12}+C$.",
+          "solution_he": "$u=2x+3$: $\\frac{(2x+3)^6}{12}+C$.",
+          "points": 5
         },
         {
-          "label": "ב",
-          "body_en": "Complete the computation and give the exact value.",
-          "body_he": "השלימו את החישוב ותנו את הערך המדויק.",
-          "points": 15
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: Let u = 1 - x², du = -2x dx, so x dx = -du/2. When x = 0: u = 1. When x = 1: u = 0. ∎\n\nPart ב: Integral becomes: ∫₁⁰ (1/√u)·(-du/2) = (1/2)∫₀¹ u^{-1/2} du = (1/2)[2√u]₀¹ = (1/2)·2 = 1. ∎",
-      "sample_solution_he": "חלק א: $u = 1-x^2$, $du = -2x\\,dx$, כלומר $x\\,dx = -du/2$. כש-$x=0$: $u=1$. כש-$x=1$: $u=0$. ∎\n\nחלק ב: האינטגרל הופך ל-$\\int_1^0 \\frac{1}{\\sqrt{u}}\\cdot\\frac{-du}{2} = \\frac{1}{2}\\int_0^1 u^{-1/2}\\,du = \\frac{1}{2}[2\\sqrt{u}]_0^1 = 1$. ∎",
-      "rubric_en": "Part א: 5pts for correct substitution, 5pts for correctly transforming the limits. Part ב: 8pts for correct integral in u, 7pts for evaluation.",
-      "rubric_he": "חלק א: 5 נקודות על הצבה נכונה, 5 על שינוי גבולות. חלק ב: 8 על אינטגרל ב-$u$, 7 על חישוב.",
-      "skill_atoms": ["u_substitution_definite", "change_of_limits", "power_rule_integral"],
-      "explanation_en": "This definite integral with substitution tests the ability to correctly transform limits — a frequent trap on exams.",
-      "explanation_he": "אינטגרל מסוים עם הצבה בודק יכולת לשנות גבולות — מלכודת שכיחה במבחנים."
-    },
-    {
-      "ord": 7,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute: $\\displaystyle\\int \\frac{2x+1}{\\sqrt{x^2+x+1}}\\,dx$",
-      "stem_he": "חשבו: $\\displaystyle\\int \\frac{2x+1}{\\sqrt{x^2+x+1}}\\,dx$",
-      "parts": [
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int e^{3x}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int e^{3x}\\,dx$.",
+          "solution_en": "$u=3x$, $du=3\\,dx$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{3x}}{3}+C$.",
+          "solution_he": "$\\frac{e^{3x}}{3}+C$.",
+          "points": 5
+        },
         {
-          "label": "א",
-          "body_en": "Notice that the numerator is (up to a constant) the derivative of the expression under the square root. Use substitution $u = x^2 + x + 1$.",
-          "body_he": "שימו לב שהמונה הוא (עד כדי קבוע) הנגזרת של הביטוי תחת השורש. השתמשו בהצבה $u = x^2 + x + 1$.",
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int\\sin(4x)\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\sin(4x)\\,dx$.",
+          "solution_en": "$u=4x$: $-\\frac{\\cos(4x)}{4}+C$.",
+          "solution_he": "$-\\frac{\\cos(4x)}{4}+C$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
+          "solution_en": "$u=3x+1$: $\\frac{1}{3}\\ln|3x+1|+C$.",
+          "solution_he": "$\\frac{\\ln|3x+1|}{3}+C$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
+          "solution_en": "$u=x^3$, $du=3x^2\\,dx$, $x^2\\,dx=du/3$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{x^3}}{3}+C$.",
+          "solution_he": "$u=x^3$: $\\frac{e^{x^3}}{3}+C$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
+          "solution_en": "$u=\\sin x$, $du=\\cos x\\,dx$. $\\int u^{-3}\\,du=-\\frac{u^{-2}}{2}+C=-\\frac{1}{2\\sin^2 x}+C$.",
+          "solution_he": "$u=\\sin x$: $-\\frac{1}{2\\sin^2 x}+C$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
+          "solution_en": "$u=x^2+1$. Limits: $u(0)=1$, $u(1)=2$. $\\int_1^2\\sqrt{u}\\,du=\\left[\\frac{2u^{3/2}}{3}\\right]_1^2=\\frac{2(2\\sqrt{2}-1)}{3}$.",
+          "solution_he": "$u=x^2+1$. גבולות $1\\to 2$. $\\frac{2(2\\sqrt{2}-1)}{3}$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\tan x\\,dx$ by writing $\\tan x = \\sin x/\\cos x$.",
+          "body_he": "חשבו $\\displaystyle\\int\\tan x\\,dx$ תוך כתיבה $\\tan x=\\sin x/\\cos x$.",
+          "solution_en": "$\\int\\frac{\\sin x}{\\cos x}\\,dx$. Let $u=\\cos x$, $du=-\\sin x\\,dx$. $-\\int\\frac{1}{u}\\,du=-\\ln|\\cos x|+C=\\ln|\\sec x|+C$.",
+          "solution_he": "$u=\\cos x$: $-\\ln|\\cos x|+C$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\frac{x}{(x^2+1)^2}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{x}{(x^2+1)^2}\\,dx$.",
+          "solution_en": "$u=x^2+1$, $x\\,dx=du/2$. $\\frac{1}{2}\\int u^{-2}\\,du=-\\frac{1}{2(x^2+1)}+C$.",
+          "solution_he": "$-\\frac{1}{2(x^2+1)}+C$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\int_0^{\\pi/2}\\sin x\\cos x\\,dx$ using substitution (two ways: $u=\\sin x$ and $u=\\cos x$). Reconcile the answers.",
+          "body_he": "חשבו $\\displaystyle\\int_0^{\\pi/2}\\sin x\\cos x\\,dx$ בשתי החלפות: $u=\\sin x$ ו-$u=\\cos x$. הסבירו את ההבדל.",
+          "solution_en": "Way 1: $u=\\sin x$. $\\int_0^1 u\\,du=1/2$. Way 2: $u=\\cos x$, $du=-\\sin x\\,dx$. $-\\int_1^0 u\\,du=1/2$. Both give $1/2$. The indefinite forms differ by a constant: $\\sin^2x/2+C_1$ vs. $-\\cos^2x/2+C_2$; since $\\sin^2x+\\cos^2x=1$, $C_1=C_2+1/2$.",
+          "solution_he": "שתי הדרכים נותנות $1/2$. הצורות הלא-מסוימות שונות בקבוע: $\\sin^2x/2$ ו-$-\\cos^2x/2$ שקולות כי $\\sin^2+\\cos^2=1$.",
           "points": 12
         },
         {
-          "label": "ב",
-          "body_en": "Complete the integral and verify by differentiating your answer.",
-          "body_he": "השלימו את האינטגרל ובדקו על ידי גזירת תשובתכם.",
-          "points": 13
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\int\\frac{e^x}{e^x+1}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{e^x}{e^x+1}\\,dx$.",
+          "solution_en": "$u=e^x+1$, $du=e^x\\,dx$. $\\int\\frac{du}{u}=\\ln|e^x+1|+C=\\ln(e^x+1)+C$.",
+          "solution_he": "$u=e^x+1$: $\\ln(e^x+1)+C$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\int\\frac{\\arctan x}{1+x^2}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{\\arctan x}{1+x^2}\\,dx$.",
+          "solution_en": "$u=\\arctan x$, $du=\\frac{1}{1+x^2}\\,dx$. $\\int u\\,du=\\frac{u^2}{2}+C=\\frac{(\\arctan x)^2}{2}+C$.",
+          "solution_he": "$u=\\arctan x$: $\\frac{(\\arctan x)^2}{2}+C$.",
+          "points": 12
         }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: u = x² + x + 1, du = (2x + 1) dx. The integral becomes ∫ u^{-1/2} du. ∎\n\nPart ב: ∫ u^{-1/2} du = 2√u + C = 2√(x² + x + 1) + C.\n\nVerification: d/dx [2√(x² + x + 1)] = 2 · (2x+1)/(2√(x²+x+1)) = (2x+1)/√(x²+x+1). ✓ ∎",
-      "sample_solution_he": "חלק א: $u = x^2+x+1$, $du = (2x+1)\\,dx$. האינטגרל הופך ל-$\\int u^{-1/2}\\,du$. ∎\n\nחלק ב: $\\int u^{-1/2}\\,du = 2\\sqrt{u}+C = 2\\sqrt{x^2+x+1}+C$.\n\nבדיקה: $\\frac{d}{dx}[2\\sqrt{x^2+x+1}] = \\frac{2x+1}{\\sqrt{x^2+x+1}}$. ✓ ∎",
-      "rubric_en": "Part א: 6pts for identifying the substitution, 6pts for the correct transformation. Part ב: 8pts for correct integral, 5pts for verification.",
-      "rubric_he": "חלק א: 6 נקודות על זיהוי ההצבה, 6 על שינוי. חלק ב: 8 על אינטגרל נכון, 5 על בדיקה.",
-      "skill_atoms": ["u_substitution_indefinite", "derivative_check", "composite_function_integral"],
-      "explanation_en": "Recognizing 'numerator = derivative of inner expression' is the key pattern for this class of substitution integrals.",
-      "explanation_he": "זיהוי 'מונה = נגזרת של ביטוי פנימי' הוא תבנית המפתח לסוג זה של אינטגרלים בהצבה."
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Not converting $dx$ to $du$.** You MUST write $du = g'(x)\\,dx$ and replace $dx$ — don't leave a mixed $x$-$u$ integral.\n\n2. **Forgetting to back-substitute.** For indefinite integrals, the final answer must be in terms of $x$, not $u$.\n\n3. **Forgetting to change the limits.** For definite integrals with limit change, compute $u(a)$ and $u(b)$ and use them — do not substitute back and use the old limits.\n\n4. **Wrong sign when $du$ has a minus.** If $u=\\cos x$ then $du=-\\sin x\\,dx$. The minus must be tracked carefully.\n\n5. **Trying substitution when no inner function exists.** $\\int x^2 e^x\\,dx$ has no hidden inner function — use IBP.",
+      "body_he_md": "1. **אי-המרת $dx$ ל-$du$.** חובה לכתוב $du=g'(x)\\,dx$ ולהחליף את $dx$ — אסור להשאיר אינטגרל מעורב ב-$x$ ו-$u$.\n\n2. **שכחת ההצבה חזרה.** לאינטגרל לא-מסוים — התשובה חייבת להיות ב-$x$.\n\n3. **שכחת שינוי הגבולות.** לאינטגרל מסוים עם שינוי גבולות — חשבו $u(a)$ ו-$u(b)$.\n\n4. **סימן שגוי כאשר $du$ שלילי.** $u=\\cos x$ ← $du=-\\sin x\\,dx$ — עקבו אחרי המינוס.\n\n5. **ניסיון החלפה ללא פונקציה פנימית.** $\\int x^2 e^x\\,dx$ — אין מה להחליף, השתמשו ב-IBP."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Substitution checklist:**\n1. Spot the inner function $g(x)$.\n2. Verify $g'(x)$ (or a multiple of it) appears.\n3. Write $u=g(x)$, compute $du$.\n4. Rewrite integral entirely in $u$.\n5. Integrate in $u$.\n6. Back-substitute (indefinite) or change limits (definite).\n\n**Quick recognition table:**\n$$\\int [g(x)]^n g'(x)\\,dx = \\frac{[g(x)]^{n+1}}{n+1}+C$$\n$$\\int \\frac{g'(x)}{g(x)}\\,dx = \\ln|g(x)|+C$$\n$$\\int e^{g(x)}g'(x)\\,dx = e^{g(x)}+C$$\n\n**Exam tip:** If you get a messy integral after substitution, try a different $u$. If substitution fails entirely, try IBP next.",
+      "body_he_md": "**רשימת תיוג להחלפה:**\n1. אתרו פונקציה פנימית $g(x)$.\n2. אמתו ש-$g'(x)$ מופיע.\n3. $u=g(x)$, $du=g'(x)\\,dx$.\n4. כתבו הכל ב-$u$.\n5. אינטגרציה ב-$u$.\n6. הציבו חזרה (לא-מסוים) / שנו גבולות (מסוים).\n\n**טבלה מהירה:**\n$$\\int[g(x)]^n g'(x)\\,dx = \\frac{[g(x)]^{n+1}}{n+1}+C$$\n$$\\int\\frac{g'(x)}{g(x)}\\,dx = \\ln|g(x)|+C$$\n$$\\int e^{g(x)}g'(x)\\,dx = e^{g(x)}+C$$"
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- $u$-substitution is the chain rule in reverse: set $u=g(x)$, $du=g'(x)\\,dx$, convert, integrate, back-substitute.\n- The key signal: the integrand is a product of an inner function and (a multiple of) its derivative.\n- For definite integrals: either change the limits to $u$-values, or back-substitute and use the original limits.\n- Always verify by differentiating the answer.\n- When substitution fails, the next technique to try is integration by parts.",
+      "body_he_md": "- החלפת $u$ היא כלל שרשרת הפוך: $u=g(x)$, $du=g'(x)\\,dx$, המרה, אינטגרציה, הצבה חזרה.\n- האות המרכזית: האינטגרנד הוא מכפלה של פונקציה פנימית ונגזרתה.\n- לאינטגרל מסוים: שנו גבולות ל-$u$ או הציבו חזרה.\n- תמיד אמתו על-ידי גזירת התשובה.\n- כאשר ההחלפה נכשלת — נסו אינטגרציה בחלקים."
     }
-  ],
-  "agent_hints": "Look for inner function + its derivative. Missing constant? Divide/multiply to match du. For definite integrals, changing limits avoids back-substitution errors."
+  ]
 }

@@ -2,167 +2,224 @@
   "concept_id": "definite_integral_area",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Definite Integrals, FTC & Area",
-  "title_he": "אינטגרל מסוים, FTC ושטחים",
-  "summary_en": "Riemann sums, Fundamental Theorem of Calculus, integral properties, area between curves, and engineering applications — connecting accumulation to area under graphs.",
-  "summary_he": "סכומי רימן, המשפט היסודי, תכונות האינטגרל, שטח בין עקומות ויישומים הנדסיים — חיבור הצטברות לשטח תחת גרף.",
-  "est_minutes": 30,
+  "math_track": ["calc1"],
+  "title_en": "Definite Integral, Area, and the Fundamental Theorem",
+  "title_he": "אינטגרל מסוים, שטח ומשפט היסוד",
+  "summary_en": "The definite integral $\\int_a^b f(x)\\,dx$ is the signed area under $f$. The Fundamental Theorem of Calculus (FTC) connects it to antiderivatives: $\\int_a^b f(x)\\,dx = F(b)-F(a)$. Area between curves requires subtracting the lower function.",
+  "summary_he": "האינטגרל המסוים $\\int_a^b f(x)\\,dx$ הוא השטח הסימני מתחת ל-$f$. משפט היסוד של החשבון (FTC) מקשר אותו לקדומות: $\\int_a^b f(x)\\,dx=F(b)-F(a)$. שטח בין עקומות מחייב חיסור הפונקציה התחתונה.",
+  "est_minutes": 60,
+  "agent_hints": "When computing area between curves, always remind the learner to find intersection points first, determine which function is on top in each subinterval, and integrate |f-g|. Signed vs unsigned area is a common source of errors.",
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Riemann sums and definition",
-      "title_he": "סכומי רימן והגדרה",
-      "body_en_md": "Partition $[a,b]$ into subintervals, choose sample points $\\xi_i$, form\n$$S_n=\\sum_{i=1}^n f(\\xi_i)\\,\\Delta x_i.$$\n\nIf $f$ integrable, $\\displaystyle\\int_a^b f(x)\\,dx = \\lim_{\\|P\\|\\to 0} S_n$.\n\n**Interpretation:** signed area under $y=f(x)$ — regions below $x$-axis contribute negative area.\n\n**Special cases:** left/right/midpoint sums; for monotonic $f$, upper and lower sums bracket the integral.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "חלוקת $[a,b]$, נקודות $\\xi_i$:\n$$S_n=\\sum f(\\xi_i)\\,\\Delta x_i.$$\n\n$\\displaystyle\\int_a^b f = \\lim S_n$.\n\n**פרשנות:** שטח עם סימן — מתחת לציר $x$ שלילי.\n\n**מקרים:** סכומים שמאל/ימין/אמצע.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "kind": "intro",
+      "title_en": "From Slices to Area: The Big Idea",
+      "title_he": "ממלבנים לשטח: הרעיון הגדול",
+      "body_en_md": "Imagine approximating the area under a curve $y=f(x)$ on $[a,b]$ using $n$ thin rectangles of width $\\Delta x = (b-a)/n$. As $n\\to\\infty$ the sum of rectangle areas converges to a limit — the **definite integral** $\\int_a^b f(x)\\,dx$.\n\nThis is the **Riemann integral**, defined as:\n$$\\int_a^b f(x)\\,dx = \\lim_{n\\to\\infty}\\sum_{i=1}^n f(x_i^*)\\Delta x$$\n\n**Key insight:** This geometric definition would be nearly impossible to compute for every function. The **Fundamental Theorem of Calculus** provides the shortcut: use antiderivatives instead of limits of sums.",
+      "body_he_md": "דמיינו קירוב השטח מתחת לעקומה $y=f(x)$ על $[a,b]$ באמצעות $n$ מלבנים צרים ברוחב $\\Delta x=(b-a)/n$. כאשר $n\\to\\infty$ סכום שטחי המלבנים מתכנס לגבול — **האינטגרל המסוים** $\\int_a^b f(x)\\,dx$.\n\nזהו **אינטגרל רימן**:\n$$\\int_a^b f(x)\\,dx=\\lim_{n\\to\\infty}\\sum_{i=1}^n f(x_i^*)\\Delta x$$\n\n**תובנה מרכזית:** הגדרה גיאומטרית זו קשה לחישוב עבור כל פונקציה. **משפט היסוד של החשבון** מספק קיצור: השתמשו בקדומות."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Fundamental Theorem of Calculus (FTC)",
+      "title_he": "משפט היסוד של החשבון (FTC)",
+      "body_en_md": "**FTC Part 1 (Derivative of an integral):**\nIf $f$ is continuous on $[a,b]$, then the function\n$$G(x) = \\int_a^x f(t)\\,dt$$\nis differentiable on $(a,b)$ and $G'(x) = f(x)$.\n\n*In words: differentiation undoes integration.*\n\n**FTC Part 2 (Evaluation):**\nIf $F$ is any antiderivative of $f$ (i.e., $F'=f$) on $[a,b]$, then\n$$\\int_a^b f(x)\\,dx = F(b) - F(a) = \\Big[F(x)\\Big]_a^b.$$\n\n**Signed area:** $\\int_a^b f(x)\\,dx$ is **negative** when $f<0$ on $(a,b)$.\n\n**Unsigned area (geometric area):** $\\displaystyle\\int_a^b |f(x)|\\,dx$ — always non-negative.\n\n**Area between two curves** ($f\\geq g$ on $[a,b]$):\n$$A = \\int_a^b [f(x)-g(x)]\\,dx$$",
+      "body_he_md": "**FTC חלק 1 (נגזרת של אינטגרל):**\nאם $f$ רציפה על $[a,b]$, אז\n$$G(x)=\\int_a^x f(t)\\,dt$$\nגזירה על $(a,b)$ ו-$G'(x)=f(x)$.\n\n**FTC חלק 2 (חישוב):**\nאם $F'=f$ על $[a,b]$:\n$$\\int_a^b f(x)\\,dx = F(b)-F(a)=\\Big[F(x)\\Big]_a^b.$$\n\n**שטח סימני:** שלילי כאשר $f<0$.\n\n**שטח גיאומטרי:** $\\int_a^b|f(x)|\\,dx$ — תמיד אי-שלילי.\n\n**שטח בין עקומות** ($f\\geq g$ על $[a,b]$):\n$$A=\\int_a^b[f(x)-g(x)]\\,dx$$"
     },
     {
       "kind": "theory",
-      "title_en": "Fundamental Theorem of Calculus",
-      "title_he": "המשפט היסודי של החשבון (FTC)",
-      "body_en_md": "**Part 1:** If $f$ continuous on $[a,b]$, $F(x)=\\displaystyle\\int_a^x f(t)\\,dt$ is differentiable and $F'(x)=f(x)$.\n\n**Part 2:** If $F'=f$ on $[a,b]$, then\n$$\\boxed{\\int_a^b f(x)\\,dx = F(b)-F(a)}.$$\n\n**Example.** $\\displaystyle\\int_0^1 2x\\,dx = [x^2]_0^1 = 1$.\n\n**Example.** $\\displaystyle\\int_1^e \\frac{1}{x}\\,dx = [\\ln x]_1^e = 1$.\n\nFTC links **accumulation** (integral) to **net change** (antiderivative difference).",
-      "body_he_md": "**חלק 1:** $F(x)=\\int_a^x f$ $\\Rightarrow$ $F'=f$.\n\n**חלק 2:**\n$$\\int_a^b f = F(b)-F(a).$$\n\n**דוגמה.** $\\int_0^1 2x\\,dx = 1$.\n\nFTC מחבר הצטברות לשינוי נטו."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Properties and area between curves",
-      "title_he": "תכונות ושטח בין עקומות",
-      "body_en_md": "**Linearity:** $\\int (af+bg)=a\\int f + b\\int g$.\n**Additivity:** $\\int_a^b f + \\int_b^c f = \\int_a^c f$.\n**Order:** $f\\le g \\Rightarrow \\int f \\le \\int g$.\n\n**Area between** $f,g$ on $[a,b]$ where $f\\ge g$:\n$$A=\\int_a^b [f(x)-g(x)]\\,dx.$$\n\nIf curves cross, split at intersection points and use $|f-g|$ on each subinterval.\n\n**Example.** Area between $y=x$ and $y=x^2$ on $[0,1]$: $\\int_0^1 (x-x^2)\\,dx = \\dfrac{1}{2}-\\dfrac{1}{3}=\\dfrac{1}{6}$.",
-      "body_he_md": "**לינאריות, חיבוריות, סדר.**\n\n**שטח בין** $f,g$: $\\int [f-g]$ כש-$f\\ge g$.\n\n**דוגמה.** $y=x$ ו-$y=x^2$ על $[0,1]$: שטח $\\dfrac{1}{6}$."
+      "title_en": "Properties of the Definite Integral",
+      "title_he": "תכונות האינטגרל המסוים",
+      "body_en_md": "**Linearity:**\n$$\\int_a^b[cf(x)+g(x)]\\,dx = c\\int_a^b f(x)\\,dx + \\int_a^b g(x)\\,dx$$\n\n**Interval splitting:**\n$$\\int_a^b f(x)\\,dx = \\int_a^c f(x)\\,dx + \\int_c^b f(x)\\,dx$$\n\n**Reversing limits:** $\\int_b^a f\\,dx = -\\int_a^b f\\,dx$\n\n**Comparison:** If $f\\leq g$ on $[a,b]$, then $\\int_a^b f\\,dx\\leq\\int_a^b g\\,dx$.\n\n**FTC Part 1 with chain rule (Leibniz rule):**\n$$\\frac{d}{dx}\\int_{g(x)}^{h(x)} f(t)\\,dt = f(h(x))h'(x) - f(g(x))g'(x)$$\n\n**Area between curves — when which is on top changes:** Split the interval at the intersection point and integrate each piece with the correct sign.",
+      "body_he_md": "**ליניאריות:**\n$$\\int_a^b[cf+g]\\,dx=c\\int_a^b f\\,dx+\\int_a^b g\\,dx$$\n\n**פיצול קטע:**\n$$\\int_a^b f\\,dx=\\int_a^c f\\,dx+\\int_c^b f\\,dx$$\n\n**היפוך גבולות:** $\\int_b^a f\\,dx=-\\int_a^b f\\,dx$\n\n**השוואה:** $f\\leq g$ על $[a,b]\\Rightarrow\\int_a^b f\\,dx\\leq\\int_a^b g\\,dx$.\n\n**FTC 1 עם שרשרת (כלל לייבניץ):**\n$$\\frac{d}{dx}\\int_{g(x)}^{h(x)} f(t)\\,dt=f(h(x))h'(x)-f(g(x))g'(x)$$\n\n**שטח בין עקומות — כשה\"עליון\" מתחלף:** פצלו בנקודת החיתוך."
     },
     {
       "kind": "worked_example",
-      "title_en": "Engineering: total work from variable force",
-      "title_he": "הנדסה: עבודה מכוח משתנה",
-      "body_en_md": "Work $W=\\displaystyle\\int_a^b F(x)\\,dx$ when force depends on position (spring $F=kx$, etc.).\n\n**Example.** $F(x)=3x^2$ N from $x=0$ to $x=2$ m:\n$$W=\\int_0^2 3x^2\\,dx = [x^3]_0^2 = 8\\text{ J}.$$\n\nSimilarly: charge from current $Q=\\int I\\,dt$; mass from density — all **accumulation integrals**.",
-      "body_he_md": "עבודה $W=\\int F\\,dx$.\n\n**דוגמה.** $F=3x^2$, $0\\to 2$: $W=8$ J.\n\nגם: $Q=\\int I\\,dt$ — הצטברות."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — $\\int_0^2 x^2\\,dx$",
+      "title_he": "דוגמה פתורה 1 — $\\int_0^2 x^2\\,dx$",
+      "body_en_md": "**Given:** $\\displaystyle\\int_0^2 x^2\\,dx$.\n\n**Step 1 — Find an antiderivative of $x^2$:**\n$$F(x) = \\frac{x^3}{3}$$\n\n**Step 2 — Apply FTC Part 2:**\n$$\\int_0^2 x^2\\,dx = F(2) - F(0) = \\frac{2^3}{3} - \\frac{0^3}{3} = \\frac{8}{3} - 0 = \\frac{8}{3}$$\n\n**Answer:** $\\boxed{\\dfrac{8}{3}}$ ✓\n\n*Geometric interpretation: the area under the parabola $y=x^2$ from $x=0$ to $x=2$ is exactly $8/3$ square units.*",
+      "body_he_md": "**נתון:** $\\displaystyle\\int_0^2 x^2\\,dx$.\n\n**שלב 1 — קדומה:**\n$$F(x)=\\frac{x^3}{3}$$\n\n**שלב 2 — FTC:**\n$$F(2)-F(0)=\\frac{8}{3}-0=\\frac{8}{3}$$\n\n**תשובה:** $\\boxed{\\dfrac{8}{3}}$ ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\int_0^{\\pi/2}\\cos x\\,dx$.",
+      "body_he_md": "חשבו $\\displaystyle\\int_0^{\\pi/2}\\cos x\\,dx$.",
+      "checkpoint_solution_en": "$F(x)=\\sin x$. $[\\sin x]_0^{\\pi/2}=\\sin(\\pi/2)-\\sin(0)=1-0=1$.",
+      "checkpoint_solution_he": "$[\\sin x]_0^{\\pi/2}=1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Area Between $y=x^2$ and $y=x$",
+      "title_he": "דוגמה פתורה 2 — שטח בין $y=x^2$ ו-$y=x$",
+      "body_en_md": "**Given:** Find the area enclosed between $y=x^2$ and $y=x$.\n\n**Step 1 — Find intersection points:**\n$$x^2 = x \\implies x^2-x=0 \\implies x(x-1)=0 \\implies x=0 \\text{ or } x=1$$\n\n**Step 2 — Determine which is on top on $(0,1)$:**\nAt $x=1/2$: $y=x$ gives $1/2$; $y=x^2$ gives $1/4$. So $x\\geq x^2$ on $[0,1]$. ✓\n\n**Step 3 — Area = $\\int_0^1[x-x^2]\\,dx$:**\n$$= \\left[\\frac{x^2}{2}-\\frac{x^3}{3}\\right]_0^1 = \\left(\\frac{1}{2}-\\frac{1}{3}\\right)-0 = \\frac{1}{6}$$\n\n**Answer:** $\\boxed{A = \\dfrac{1}{6}}$ sq. units ✓",
+      "body_he_md": "**נתון:** מצאו את השטח הסגור בין $y=x^2$ ו-$y=x$.\n\n**שלב 1 — נקודות חיתוך:** $x^2=x\\Rightarrow x=0$ או $x=1$.\n\n**שלב 2 — מי למעלה על $(0,1)$?** ב-$x=1/2$: $x=1/2>1/4=x^2$. ✓\n\n**שלב 3:**\n$$\\int_0^1(x-x^2)\\,dx=\\left[\\frac{x^2}{2}-\\frac{x^3}{3}\\right]_0^1=\\frac{1}{2}-\\frac{1}{3}=\\frac{1}{6}$$\n\n**תשובה:** $\\boxed{\\dfrac{1}{6}}$ ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the area between $y=x$ and $y=x^3$ for $x\\in[-1,1]$. (Hint: determine on which sub-intervals each is on top.)",
+      "body_he_md": "מצאו את השטח בין $y=x$ ו-$y=x^3$ עבור $x\\in[-1,1]$. (רמז: קבעו על אילו תת-קטעים כל אחת למעלה.)",
+      "checkpoint_solution_en": "Intersections: $x=x^3\\Rightarrow x=0,\\pm 1$. On $(-1,0)$: $x^3>x$ (check at $x=-1/2$). On $(0,1)$: $x>x^3$.\n$A=\\int_{-1}^0(x^3-x)dx+\\int_0^1(x-x^3)dx$. By symmetry (both are $1/4$): $A=1/2$.",
+      "checkpoint_solution_he": "חיתוכים: $x=0,\\pm 1$. לפי סימטריה: $A=2\\int_0^1(x-x^3)dx=2\\cdot[x^2/2-x^4/4]_0^1=2\\cdot 1/4=1/2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Unsigned Area $\\int_0^1|x^2-x|\\,dx$",
+      "title_he": "דוגמה פתורה 3 — שטח גיאומטרי $\\int_0^1|x^2-x|\\,dx$",
+      "body_en_md": "**Given:** $\\displaystyle\\int_0^1|x^2-x|\\,dx$.\n\n**Step 1 — Find zeros of $x^2-x$:**\n$$x^2-x = x(x-1) = 0 \\implies x=0 \\text{ or } x=1$$\n\n**Step 2 — Determine sign on $(0,1)$:**\nAt $x=1/2$: $x^2-x = 1/4-1/2 = -1/4 < 0$. So $x^2-x < 0$ on $(0,1)$, meaning $|x^2-x| = x-x^2$ there.\n\n**Step 3 — Remove the absolute value:**\n$$\\int_0^1|x^2-x|\\,dx = \\int_0^1(x-x^2)\\,dx$$\n\n*(Both endpoints are zeros, no sign change inside $(0,1)$.)*\n\n**Step 4 — Evaluate:**\n$$\\int_0^1(x-x^2)\\,dx = \\left[\\frac{x^2}{2}-\\frac{x^3}{3}\\right]_0^1 = \\frac{1}{2}-\\frac{1}{3} = \\frac{1}{6}$$\n\n**Answer:** $\\boxed{\\dfrac{1}{6}}$ ✓\n\n*Extended case: to compute $\\int_0^2|x^2-x|\\,dx$, note that $x^2-x>0$ on $(1,2)$. Split:*\n$$\\int_0^1(x-x^2)\\,dx + \\int_1^2(x^2-x)\\,dx = \\frac{1}{6}+\\left[\\frac{x^3}{3}-\\frac{x^2}{2}\\right]_1^2=\\frac{1}{6}+\\frac{5}{6}=1$$",
+      "body_he_md": "**נתון:** $\\displaystyle\\int_0^1|x^2-x|\\,dx$.\n\n**שלב 1 — אפסי $x^2-x$:**\n$$x(x-1)=0\\Rightarrow x=0,1$$\n\n**שלב 2 — סימן על $(0,1)$:** ב-$x=1/2$: $-1/4<0$. לכן $|x^2-x|=x-x^2$ שם.\n\n**שלב 3 — הסירו ערך מוחלט:**\n$$\\int_0^1(x-x^2)\\,dx$$\n\n**שלב 4:**\n$$\\left[\\frac{x^2}{2}-\\frac{x^3}{3}\\right]_0^1=\\frac{1}{2}-\\frac{1}{3}=\\frac{1}{6}$$\n\n**תשובה:** $\\boxed{\\dfrac{1}{6}}$ ✓"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Area Problems",
+      "title_he": "מדריך שיטות — בעיות שטח",
+      "body_en_md": "**Computing $\\int_a^b f(x)\\,dx$ (signed area):**\n1. Find antiderivative $F$.\n2. Evaluate $F(b)-F(a)$.\n\n**Unsigned area $\\int_a^b|f(x)|\\,dx$:**\n1. Find all zeros of $f$ in $[a,b]$.\n2. On each subinterval, determine the sign of $f$.\n3. Replace $|f|$ with $+f$ where $f>0$ and $-f$ where $f<0$.\n4. Integrate each piece and sum.\n\n**Area between curves $y=f(x)$ and $y=g(x)$:**\n1. Find all intersections: solve $f(x)=g(x)$.\n2. On each subinterval, determine which is on top.\n3. $A=\\int_a^b|f(x)-g(x)|\\,dx$ — split as above.\n\n**FTC Part 1 (differentiation of integrals):**\n$$\\frac{d}{dx}\\int_a^{g(x)} f(t)\\,dt = f(g(x))\\cdot g'(x)$$",
+      "body_he_md": "**חישוב $\\int_a^b f(x)\\,dx$ (שטח סימני):**\n1. מצאו קדומה $F$.\n2. חשבו $F(b)-F(a)$.\n\n**שטח גיאומטרי $\\int_a^b|f(x)|\\,dx$:**\n1. מצאו אפסי $f$ ב-$[a,b]$.\n2. קבעו סימן $f$ בכל תת-קטע.\n3. החליפו $|f|$ בהתאם.\n4. אינטגרציה על כל חלק וסיכום.\n\n**שטח בין עקומות:**\n1. מצאו חיתוכים: $f(x)=g(x)$.\n2. קבעו מי למעלה בכל תת-קטע.\n3. $A=\\int_a^b|f-g|\\,dx$.\n\n**FTC 1:**\n$$\\frac{d}{dx}\\int_a^{g(x)} f(t)\\,dt=f(g(x))\\cdot g'(x)$$"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int_1^3(x^2-1)\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int_1^3(x^2-1)\\,dx$.",
+          "solution_en": "$[x^3/3-x]_1^3=(9-3)-(1/3-1)=6+2/3=20/3$.",
+          "solution_he": "$20/3$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int_0^\\pi\\sin x\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int_0^\\pi\\sin x\\,dx$.",
+          "solution_en": "$[-\\cos x]_0^\\pi=(-\\cos\\pi)-(-\\cos 0)=1+1=2$.",
+          "solution_he": "$[-\\cos x]_0^\\pi=2$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int_1^e\\frac{1}{x}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int_1^e\\frac{1}{x}\\,dx$.",
+          "solution_en": "$[\\ln x]_1^e=\\ln e-\\ln 1=1-0=1$.",
+          "solution_he": "$1$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find $G'(x)$ where $G(x)=\\displaystyle\\int_0^x\\sin(t^2)\\,dt$.",
+          "body_he": "מצאו $G'(x)$ כאשר $G(x)=\\displaystyle\\int_0^x\\sin(t^2)\\,dt$.",
+          "solution_en": "By FTC Part 1: $G'(x)=\\sin(x^2)$.",
+          "solution_he": "$G'(x)=\\sin(x^2)$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find the area between $y=x^2$ and $y=4$ (the horizontal line).",
+          "body_he": "מצאו את השטח בין $y=x^2$ ו-$y=4$.",
+          "solution_en": "Intersections: $x^2=4\\Rightarrow x=\\pm 2$. On $[-2,2]$: $4\\geq x^2$. $A=\\int_{-2}^2(4-x^2)dx=[4x-x^3/3]_{-2}^2=(8-8/3)-(-8+8/3)=16-16/3=32/3$.",
+          "solution_he": "$A=\\int_{-2}^2(4-x^2)dx=32/3$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int_0^2|x-1|\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int_0^2|x-1|\\,dx$.",
+          "solution_en": "Split at $x=1$: $\\int_0^1(1-x)dx+\\int_1^2(x-1)dx=[x-x^2/2]_0^1+[x^2/2-x]_1^2=(1/2)+(1/2)=1$.",
+          "solution_he": "$\\int_0^1(1-x)dx+\\int_1^2(x-1)dx=1/2+1/2=1$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find $\\dfrac{d}{dx}\\displaystyle\\int_1^{x^2}\\cos(t)\\,dt$.",
+          "body_he": "מצאו $\\dfrac{d}{dx}\\displaystyle\\int_1^{x^2}\\cos(t)\\,dt$.",
+          "solution_en": "FTC + chain rule: $\\cos(x^2)\\cdot 2x=2x\\cos(x^2)$.",
+          "solution_he": "$2x\\cos(x^2)$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the area enclosed between $y=\\sin x$ and $y=\\cos x$ on $[0,\\pi/2]$.",
+          "body_he": "מצאו את השטח הסגור בין $y=\\sin x$ ו-$y=\\cos x$ על $[0,\\pi/2]$.",
+          "solution_en": "Intersection: $\\sin x=\\cos x\\Rightarrow x=\\pi/4$. On $[0,\\pi/4]$: $\\cos\\geq\\sin$. On $[\\pi/4,\\pi/2]$: $\\sin\\geq\\cos$. $A=\\int_0^{\\pi/4}(\\cos x-\\sin x)dx+\\int_{\\pi/4}^{\\pi/2}(\\sin x-\\cos x)dx=[\\sin x+\\cos x]_0^{\\pi/4}+[-\\cos x-\\sin x]_{\\pi/4}^{\\pi/2}=(\\sqrt{2}-1)+(\\sqrt{2}-1)=2(\\sqrt{2}-1)$.",
+          "solution_he": "$A=2(\\sqrt{2}-1)$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int_0^2\\sqrt{4-x^2}\\,dx$ using geometric reasoning.",
+          "body_he": "חשבו $\\displaystyle\\int_0^2\\sqrt{4-x^2}\\,dx$ בהסתמך על הסתכלות גיאומטרית.",
+          "solution_en": "$y=\\sqrt{4-x^2}$ is the upper semicircle of radius 2. $\\int_0^2\\sqrt{4-x^2}\\,dx$ is a quarter-circle of area $\\frac{1}{4}\\pi(2)^2=\\pi$.",
+          "solution_he": "$y=\\sqrt{4-x^2}$ הוא חצי-עיגול ברדיוס 2. האינטגרל הוא רבע-עיגול: $\\pi$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find the total area enclosed between $y=x^3-x$ and the $x$-axis.",
+          "body_he": "מצאו את השטח הכולל הסגור בין $y=x^3-x$ לציר ה-$x$.",
+          "solution_en": "$x^3-x=x(x^2-1)=x(x-1)(x+1)$. Zeros at $-1,0,1$. On $(-1,0)$: $f>0$; on $(0,1)$: $f<0$. By symmetry of the odd function: $A=2\\int_0^1|x^3-x|dx=2\\int_0^1(x-x^3)dx=2[x^2/2-x^4/4]_0^1=2\\cdot(1/4)=1/2$.",
+          "solution_he": "אפסים: $-1,0,1$. לפי סימטריה (פונקציה אי-זוגית): $A=2\\int_0^1(x-x^3)dx=1/2$.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find $\\dfrac{d}{dx}\\displaystyle\\int_{\\sin x}^{\\cos x} t^2\\,dt$.",
+          "body_he": "מצאו $\\dfrac{d}{dx}\\displaystyle\\int_{\\sin x}^{\\cos x} t^2\\,dt$.",
+          "solution_en": "By Leibniz rule: $\\cos^2(x)\\cdot(-\\sin x)-\\sin^2(x)\\cdot\\cos x=-\\cos x(\\cos^2 x+\\sin^2 x)$... Actually: upper limit $\\cos x$: $\\cos^2(\\cos x)\\cdot(-\\sin x)$? No — the integrand is $t^2$ so $f(t)=t^2$. Leibniz: $f(\\cos x)\\cdot(\\cos x)'- f(\\sin x)\\cdot(\\sin x)'=\\cos^2 x\\cdot(-\\sin x)-\\sin^2 x\\cdot\\cos x=-\\sin x\\cos x(\\cos x+\\sin x)$. Simplified: $-\\frac{\\sin(2x)}{2}(\\cos x+\\sin x)$.",
+          "solution_he": "לייבניץ: $\\cos^2 x\\cdot(-\\sin x)-\\sin^2 x\\cdot\\cos x=-\\sin x\\cos x(\\cos x+\\sin x)$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Find the area of the region bounded by $y=x^2$, $y=2-x^2$, and enclosed between their two intersection points.",
+          "body_he": "מצאו את השטח הסגור בין $y=x^2$ ו-$y=2-x^2$.",
+          "solution_en": "Intersections: $x^2=2-x^2\\Rightarrow 2x^2=2\\Rightarrow x=\\pm 1$. On $[-1,1]$: $2-x^2\\geq x^2$. $A=\\int_{-1}^1(2-x^2-x^2)dx=\\int_{-1}^1(2-2x^2)dx=[2x-2x^3/3]_{-1}^1=(2-2/3)-(-2+2/3)=8/3$.",
+          "solution_he": "חיתוכים: $x=\\pm 1$. $A=\\int_{-1}^1(2-2x^2)dx=8/3$.",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Signed vs. unsigned area.** $\\int_0^{2\\pi}\\sin x\\,dx = 0$, but the area is NOT zero — it is $2\\cdot 2 = 4$. Always check the sign of the integrand.\n\n2. **Forgetting to find intersection points.** For area between curves, you cannot set up the integral without first knowing where they cross.\n\n3. **Wrong order of subtraction.** Area = $\\int$(top - bottom). If you reverse, you get a negative area.\n\n4. **Not splitting at sign changes.** $\\int_0^2|x^2-x|\\,dx$ requires splitting at $x=1$.\n\n5. **FTC Part 1 without chain rule.** $\\frac{d}{dx}\\int_0^{x^2}f(t)\\,dt = f(x^2)\\cdot 2x$, NOT just $f(x^2)$.",
+      "body_he_md": "1. **שטח סימני מול גיאומטרי.** $\\int_0^{2\\pi}\\sin x\\,dx=0$, אבל השטח הגיאומטרי הוא 4.\n\n2. **שכחת מציאת נקודות חיתוך.** לא ניתן להגדיר את האינטגרל ללא זה.\n\n3. **סדר חיסור שגוי.** שטח = $\\int$(עליון-תחתון). היפוך נותן שלילי.\n\n4. **אי-פיצול בנקודות שינוי סימן.** $\\int_0^2|x^2-x|\\,dx$ דורש פיצול ב-$x=1$.\n\n5. **FTC 1 ללא כלל שרשרת.** $\\frac{d}{dx}\\int_0^{x^2}f(t)dt=f(x^2)\\cdot 2x$, לא רק $f(x^2)$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**FTC Part 2 (evaluation):**\n$$\\int_a^b f(x)\\,dx = F(b)-F(a) = \\Big[F(x)\\Big]_a^b$$\n\n**FTC Part 1 (differentiation):**\n$$\\frac{d}{dx}\\int_a^{g(x)}f(t)\\,dt = f(g(x))\\cdot g'(x)$$\n\n**Area algorithms:**\n- Unsigned: find zeros, split, remove $|\\cdot|$ with correct sign.\n- Between curves: find intersections, integrate (top − bottom).\n\n**Exam tip:** For area problems, always sketch the region — a 30-second drawing prevents major errors.\n\n**Common definite integrals:**\n$$\\int_0^1 x^n\\,dx=\\frac{1}{n+1}, \\quad \\int_0^\\pi\\sin x\\,dx=2, \\quad \\int_0^{\\pi/2}\\cos x\\,dx=1$$",
+      "body_he_md": "**FTC 2 (חישוב):**\n$$\\int_a^b f(x)\\,dx=F(b)-F(a)$$\n\n**FTC 1 (גזירה):**\n$$\\frac{d}{dx}\\int_a^{g(x)}f(t)\\,dt=f(g(x))\\cdot g'(x)$$\n\n**אלגוריתמי שטח:**\n- גיאומטרי: מצאו אפסים, פצלו, הסירו $|\\cdot|$.\n- בין עקומות: מצאו חיתוכים, $\\int$(עליון-תחתון).\n\n**טיפ לבחינה:** סרטטו תמיד את האזור — 30 שניות ומונעים טעויות גדולות."
     },
     {
       "kind": "summary",
-      "title_en": "Problem-type map",
-      "title_he": "מפת סוגי בעיות",
-      "body_en_md": "| Question | Method |\n|---|---|\n| Evaluate $\\int_a^b f$ | Find antiderivative, apply FTC |\n| Area under one curve | $\\int |f|$ if needed for sign |\n| Area between curves | Split at intersections, $\\int|f-g|$ |\n| Net vs total quantity | Net = signed integral; total = $\\int|f|$ |\n\nUnits: integral of rate gives total change in accumulated quantity.",
-      "body_he_md": "| שאלה | שיטה |\n|---|---|\n| חישוב $\\int_a^b f$ | קדומה + FTC |\n| שטח תחת עקומה | $\\int |f|$ |\n| בין עקומות | פיצול בחיתוכים |\n| נטו מול כולל | signed vs $\\int|f|$ |"
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Definite Integrals, FTC & Area: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Definite Integrals, FTC & Area.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-אינטגרל מסוים, FTC ושטחים: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-אינטגרל מסוים, FTC ושטחים.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- The definite integral $\\int_a^b f(x)\\,dx$ is the signed area; use $\\int|f|\\,dx$ for unsigned area.\n- **FTC Part 2:** $\\int_a^b f\\,dx = F(b)-F(a)$ — antiderivatives compute areas.\n- **FTC Part 1:** $\\frac{d}{dx}\\int_a^{g(x)}f(t)\\,dt=f(g(x))g'(x)$ — differentiation undoes integration.\n- **Area between curves:** integrate (top - bottom) after finding intersections.\n- Always check the sign of the integrand in each subinterval before integrating.",
+      "body_he_md": "- $\\int_a^b f\\,dx$ הוא שטח סימני; $\\int|f|\\,dx$ לשטח גיאומטרי.\n- **FTC 2:** $F(b)-F(a)$ — קדומות מחשבות שטחים.\n- **FTC 1:** $\\frac{d}{dx}\\int_a^{g(x)}f(t)dt=f(g(x))g'(x)$.\n- **שטח בין עקומות:** $\\int$(עליון-תחתון) אחרי מציאת חיתוכים.\n- בדקו תמיד סימן האינטגרנד בכל תת-קטע."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$\\displaystyle\\int_0^2 3x^2\\,dx=?$",
-      "stem_he": "$\\displaystyle\\int_0^2 3x^2\\,dx=?$",
-      "options_en": [
-        "$4$",
-        "$8$",
-        "$12$",
-        "$6$"
-      ],
-      "options_he": [
-        "$4$",
-        "$8$",
-        "$12$",
-        "$6$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$[x^3]_0^2=8$.",
-      "explanation_he": "$[x^3]_0^2=8$.",
-      "skill_atoms": [
-        "ftc_evaluate"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Definite Integrals, FTC & Area'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'אינטגרל מסוים, FTC ושטחים'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "ftc_conditions"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Definite Integrals, FTC & Area' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'אינטגרל מסוים, FTC ושטחים' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "area_between_curves"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Definite Integrals, FTC & Area'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'אינטגרל מסוים, FTC ושטחים'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "signed_area"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Definite Integrals, FTC & Area' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'אינטגרל מסוים, FTC ושטחים' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "ftc_part1"
-      ],
-      "points_level_min": "calc1"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "FTC Part 2: antiderivative evaluated at endpoints.",
-      "Area between curves needs top minus bottom; split at crossings.",
-      "Integral of rate equals net accumulated change."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Integral always equals geometric area",
-        "correction": "Integral is signed; use absolute value for total area.",
-        "detect_phrase_en": "integral is area always positive",
-        "detect_phrase_he": "אינטגרל תמיד שטח חיובי"
-      }
-    ],
-    "tutor_pacing_hint": "Draw shaded regions before setting up area integrals.",
-    "skill_atoms_unlocked": [
-      "ftc_evaluate",
-      "ftc_conditions",
-      "area_between_curves",
-      "signed_area",
-      "ftc_part1"
-    ]
-  }
+  ]
 }

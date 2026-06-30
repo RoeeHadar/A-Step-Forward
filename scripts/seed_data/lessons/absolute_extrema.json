@@ -2,166 +2,224 @@
   "concept_id": "absolute_extrema",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
+  "math_track": ["calc1"],
   "title_en": "Absolute Extrema on Closed Intervals",
-  "title_he": "ערכי קיצון מוחלטים על קטע סגור",
-  "summary_en": "The Extreme Value Theorem, closed-interval method (candidates test), and applications — including $f(x)=x^3-3x+2$ on $[-2,3]$ and beam deflection.",
-  "summary_he": "משפט הערך הקיצוני, שיטת המועמדים על קטע סגור, ויישומים — $f(x)=x^3-3x+2$ על $[-2,3]$ וכפיפת קורה.",
-  "est_minutes": 20,
+  "title_he": "קיצונים מוחלטים על קטעים סגורים",
+  "summary_en": "The Extreme Value Theorem guarantees that a continuous function on $[a,b]$ attains both an absolute maximum and an absolute minimum. The candidates are: (1) critical points inside $(a,b)$ where $f'=0$ or $f'$ does not exist, and (2) the endpoints $a$ and $b$.",
+  "summary_he": "משפט הערכים הקיצוניים (EVT) מבטיח שפונקציה רציפה על $[a,b]$ מגיעה גם למקסימום מוחלט וגם למינימום מוחלט. המועמדים הם: (1) נקודות קריטיות ב-$(a,b)$ שבהן $f'=0$ או $f'$ אינה קיימת, ו-(2) הקצוות $a$ ו-$b$.",
+  "est_minutes": 50,
+  "agent_hints": "Students often forget endpoints or forget to check f'=DNE critical points. Emphasize: absolute extrema require checking ALL candidates. For f(x)=x^{1/3} on [-1,1], the critical point is at x=0 where f' doesn't exist, not where f'=0.",
   "sections": [
     {
+      "kind": "intro",
+      "title_en": "Absolute vs. Local Extrema",
+      "title_he": "קיצון מוחלט מול קיצון מקומי",
+      "body_en_md": "A **local** maximum at $c$ means $f(c)\\geq f(x)$ for nearby $x$. An **absolute** (global) maximum at $c$ means $f(c)\\geq f(x)$ for **all** $x$ in the domain.\n\n**Key distinction:** A local max may not be the largest value overall. The absolute max is the tallest point on the entire graph.\n\n**Why it matters:** In optimization, we want the **absolute** optimum — the actual best value, not just a local winner. The Extreme Value Theorem and the closed-interval method together guarantee we find it.",
+      "body_he_md": "**מקסימום מקומי** ב-$c$ פירושו $f(c)\\geq f(x)$ בסביבה של $c$. **מקסימום מוחלט** פירושו $f(c)\\geq f(x)$ עבור **כל** $x$ בתחום.\n\n**הבדל מרכזי:** מקסימום מקומי אינו בהכרח הגדול ביותר. המקסימום המוחלט הוא הנקודה הגבוהה ביותר בגרף כולו.\n\n**למה זה חשוב:** באופטימיזציה אנחנו רוצים את האופטימום **המוחלט** — הערך הטוב ביותר, לא רק מנצח מקומי."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Extreme Value Theorem and the Closed-Interval Method",
+      "title_he": "משפט הערכים הקיצוניים ושיטת הקטע הסגור",
+      "body_en_md": "**Extreme Value Theorem (EVT):**\nIf $f$ is **continuous** on a **closed** interval $[a,b]$, then $f$ attains both an absolute maximum value and an absolute minimum value on $[a,b]$.\n\n*Note: Both conditions are necessary. Removing either one can cause EVT to fail.*\n- $f(x)=1/x$ on $(0,1]$ — no minimum (open left endpoint).\n- $f(x)=x$ on $(0,1)$ — neither max nor min (open interval).\n\n**The Closed-Interval Method:**\nTo find the absolute max/min of a continuous $f$ on $[a,b]$:\n1. Find all critical numbers in $(a,b)$: solve $f'(x)=0$; also find where $f'(x)$ does not exist.\n2. Evaluate $f$ at each critical number and at the endpoints $a$ and $b$.\n3. The **largest** value is the absolute maximum; the **smallest** is the absolute minimum.\n\n**What are critical numbers?** $x=c$ is a critical number if $f'(c)=0$ OR $f'(c)$ does not exist (and $c$ is in the domain of $f$).",
+      "body_he_md": "**משפט הערכים הקיצוניים (EVT):**\nאם $f$ **רציפה** על קטע **סגור** $[a,b]$, אז $f$ מגיעה הן למקסימום מוחלט והן למינימום מוחלט על $[a,b]$.\n\n*שימו לב: שני התנאים דרושים.*\n\n**שיטת הקטע הסגור:**\nלמציאת מקסימום/מינימום מוחלט של $f$ רציפה על $[a,b]$:\n1. מצאו כל המספרים הקריטיים ב-$(a,b)$: $f'(x)=0$; וגם שם $f'$ לא קיימת.\n2. חשבו $f$ בכל מספר קריטי ובקצוות $a,b$.\n3. **הגדול ביותר** = מקסימום מוחלט; **הקטן ביותר** = מינימום מוחלט.\n\n**מה הם מספרים קריטיים?** $c$ קריטי אם $f'(c)=0$ או $f'(c)$ לא קיימת."
+    },
+    {
       "kind": "theory",
-      "title_en": "EVT and the candidates test",
-      "title_he": "EVT ושיטת המועמדים",
-      "body_en_md": "On **closed** $[a,b]$, continuous $f$ attains **absolute** max and min (EVT).\n\n**Closed Interval Method:**\n1. Find critical points of $f$ in $(a,b)$.\n2. Evaluate $f$ at each critical point and at **endpoints** $a,b$.\n3. Largest value = abs max; smallest = abs min.\n\n**Why endpoints matter:** $f(x)=x$ on $[0,1]$ has max at $x=1$ (endpoint), no interior critical point.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "על $[a,b]$ **סגור**, $f$ רציפה $\\Rightarrow$ מקסימום ומינימום מוחלטים (EVT).\n\n**שיטת המועמדים:**\n1. נקודות קריטיות ב-$(a,b)$.\n2. חשבו $f$ בקריטיות **ובקצוות**.\n3. הגדול = מקס; הקטן = מינ.\n\n**קצוות חשובים:** $f(x)=x$ על $[0,1]$ — מקס בקצה.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "title_en": "Critical Points Where $f'$ Does Not Exist",
+      "title_he": "נקודות קריטיות שבהן $f'$ אינה קיימת",
+      "body_en_md": "Don't forget: critical points include points where $f'$ doesn't exist! This includes:\n- **Corners:** $f(x)=|x|$ has a corner at $x=0$; $f'(0)$ DNE.\n- **Cusps:** $f(x)=x^{2/3}$ has a cusp at $x=0$; $f'(0)=\\lim\\frac{x^{2/3}}{x}=\\lim x^{-1/3}$ DNE.\n- **Vertical tangents:** $f(x)=x^{1/3}$ has $f'(x)=\\frac{1}{3}x^{-2/3}\\to\\infty$ at $x=0$.\n\n**Example:** $f(x)=x^{1/3}$ on $[-1,1]$:\n- $f'(x)=\\frac{1}{3x^{2/3}}$ — never zero, but DNE at $x=0$.\n- So $x=0$ is the only critical number.\n- Evaluate: $f(-1)=-1$, $f(0)=0$, $f(1)=1$.\n- Absolute max: $f(1)=1$. Absolute min: $f(-1)=-1$.\n\n*Despite $f'(0)$ not existing, EVT still guarantees a max and min on $[-1,1]$ because $f$ is continuous.*",
+      "body_he_md": "אל תשכחו: נקודות קריטיות כוללות מקומות שבהם $f'$ אינה קיימת:\n- **פינות:** $f(x)=|x|$ — $f'(0)$ לא קיימת.\n- **קאספים:** $f(x)=x^{2/3}$ — $f'(0)$ לא קיימת.\n- **משיקים אנכיים:** $f(x)=x^{1/3}$ — $f'(x)=\\frac{1}{3}x^{-2/3}\\to\\infty$ ב-$x=0$.\n\n**דוגמה:** $f(x)=x^{1/3}$ על $[-1,1]$:\n- $f'$ לא קיימת ב-$x=0$ (לא שווה לאפס שם).\n- $f(0)=0$, $f(-1)=-1$, $f(1)=1$.\n- מקסימום: $1$; מינימום: $-1$.\n\n*למרות ש-$f'(0)$ לא קיימת, EVT עדיין מבטיח קיצונים כי $f$ רציפה.*"
     },
     {
       "kind": "worked_example",
-      "title_en": "$f(x)=x^3-3x+2$ on $[-2,3]$",
-      "title_he": "$f(x)=x^3-3x+2$ על $[-2,3]$",
-      "body_en_md": "$f'(x)=3x^2-3=3(x^2-1)=0 \\Rightarrow x=\\pm 1$ (both in interval).\n\n| $x$ | $f(x)$ |\n|---|---|\n| $-2$ | $0$ |\n| $-1$ | $4$ |\n| $1$ | $0$ |\n| $3$ | $20$ |\n\n**Absolute max** $=20$ at $x=3$; **absolute min** $=0$ at $x=-2$ and $x=1$.\n\nLocal max at $x=-1$ ($f=4$) is not the global max.",
-      "body_he_md": "$f'=3(x^2-1)=0 \\Rightarrow x=\\pm 1$.\n\n$f(-2)=0$, $f(-1)=4$, $f(1)=0$, $f(3)=20$.\n\n**מקס מוחלט** $20$ ב-$x=3$; **מין מוחלט** $0$ ב-$-2$ ו-$1$."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — $f(x)=x^3-3x$ on $[-2,2]$",
+      "title_he": "דוגמה פתורה 1 — $f(x)=x^3-3x$ על $[-2,2]$",
+      "body_en_md": "**Given:** Find the absolute extrema of $f(x)=x^3-3x$ on $[-2,2]$.\n\n**Step 1 — Verify EVT conditions:** $f$ is a polynomial — continuous on $[-2,2]$. ✓ EVT guarantees extrema exist.\n\n**Step 2 — Find critical numbers in $(-2,2)$:**\n$$f'(x) = 3x^2-3 = 3(x-1)(x+1) = 0 \\implies x=-1 \\text{ or } x=1$$\nBoth are in $(-2,2)$. ✓ ($f'$ exists everywhere — no DNE critical numbers.)\n\n**Step 3 — Evaluate $f$ at all candidates:**\n| $x$ | $f(x)=x^3-3x$ |\n|-----|---------------|\n| $-2$ (endpoint) | $(-8)-(-6)=-2$ |\n| $-1$ (critical) | $(-1)-(-3)=2$ |\n| $1$ (critical) | $1-3=-2$ |\n| $2$ (endpoint) | $8-6=2$ |\n\n**Step 4 — Identify extrema:**\n- **Absolute maximum:** $f=2$, achieved at $x=-1$ and $x=2$.\n- **Absolute minimum:** $f=-2$, achieved at $x=-2$ and $x=1$.\n\n**Answer:** Max $= 2$; Min $= -2$. ✓",
+      "body_he_md": "**נתון:** מצאו קיצונים מוחלטים של $f(x)=x^3-3x$ על $[-2,2]$.\n\n**שלב 1 — EVT:** $f$ פולינום — רציפה ✓.\n\n**שלב 2 — נקודות קריטיות:**\n$$f'(x)=3x^2-3=0\\Rightarrow x=\\pm 1\\in(-2,2)$$\n\n**שלב 3 — ערכים:**\n| $x$ | $f(x)$ |\n|-----|--------|\n| $-2$ | $-2$ |\n| $-1$ | $2$ |\n| $1$ | $-2$ |\n| $2$ | $2$ |\n\n**תשובה:** מקסימום $2$ (ב-$x=-1,2$); מינימום $-2$ (ב-$x=-2,1$). ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the absolute maximum and minimum of $f(x)=x^4-8x^2+3$ on $[-3,3]$.",
+      "body_he_md": "מצאו מקסימום ומינימום מוחלטים של $f(x)=x^4-8x^2+3$ על $[-3,3]$.",
+      "checkpoint_solution_en": "$f'(x)=4x^3-16x=4x(x^2-4)=0\\Rightarrow x=0,\\pm 2$. All in $(-3,3)$.\n$f(-3)=81-72+3=12$, $f(-2)=16-32+3=-13$, $f(0)=3$, $f(2)=-13$, $f(3)=12$.\nMax: $12$ (at $x=\\pm 3$). Min: $-13$ (at $x=\\pm 2$).",
+      "checkpoint_solution_he": "קריטיות: $x=0,\\pm 2$. $f(-2)=f(2)=-13$ (מינימום). $f(\\pm 3)=12$ (מקסימום)."
     },
     {
       "kind": "worked_example",
-      "title_en": "Beam deflection application",
-      "title_he": "יישום — כפיפת קורה",
-      "body_en_md": "Simply supported beam, uniform load: deflection profile may be modeled by $y(x)=-kx^2(x-L)^2$ on $[0,L]$ (symmetric, zero at supports).\n\nBy EVT, maximum deflection (most negative $y$ or $|y|$) occurs at an interior critical point or endpoint. Symmetry gives critical at $x=L/2$.\n\n**Engineering takeaway:** closed-interval optimization locates worst-case deflection without scanning infinitely many points.",
-      "body_he_md": "קורה על שני supports: פרופיל כפיפה $y(x)=-kx^2(x-L)^2$ על $[0,L]$.\n\nלפי EVT, כפיפה מקסימלית בנקודה קריטית או בקצה. סימטריה $\\Rightarrow$ $x=L/2$.\n\n**מסקנה:** אופטימיזציה על קטע סגור מוצאת כפיפה מקסימלית."
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — $f(x)=x+1/x$ on $[1/2, 3]$",
+      "title_he": "דוגמה פתורה 2 — $f(x)=x+1/x$ על $[1/2,3]$",
+      "body_en_md": "**Given:** Find the absolute extrema of $f(x)=x+\\dfrac{1}{x}$ on $\\left[\\dfrac{1}{2},3\\right]$.\n\n**Step 1 — Check continuity:** $f$ is continuous on $[1/2,3]$ since $x\\ne 0$ on this interval. ✓\n\n**Step 2 — Find critical numbers in $(1/2,3)$:**\n$$f'(x) = 1-\\frac{1}{x^2} = \\frac{x^2-1}{x^2} = 0 \\implies x^2=1 \\implies x=1 \\text{ or } x=-1$$\nOnly $x=1$ lies in $(1/2,3)$. ($f'$ exists for all $x>0$, so no DNE critical numbers.)\n\n**Step 3 — Evaluate at all candidates:**\n| $x$ | $f(x)=x+1/x$ |\n|-----|-------------|\n| $1/2$ (endpoint) | $1/2+2=5/2$ |\n| $1$ (critical) | $1+1=2$ |\n| $3$ (endpoint) | $3+1/3=10/3$ |\n\n**Step 4 — Identify extrema:**\n- **Absolute maximum:** $f=10/3\\approx 3.33$ at $x=3$.\n- **Absolute minimum:** $f=2$ at $x=1$.\n\n**Answer:** Max $= 10/3$; Min $= 2$. ✓\n\n*The minimum is at the critical point $x=1$ (confirmed by $f''(1)=2/x^3|_{x=1}=2>0$).*",
+      "body_he_md": "**נתון:** קיצונים מוחלטים של $f(x)=x+1/x$ על $[1/2,3]$.\n\n**שלב 1 — רציפות:** $x\\ne 0$ על $[1/2,3]$ ✓.\n\n**שלב 2 — קריטיות:**\n$$f'(x)=1-1/x^2=0\\Rightarrow x=1\\in(1/2,3)$$\n\n**שלב 3 — ערכים:**\n| $x$ | $f(x)$ |\n|-----|--------|\n| $1/2$ | $5/2$ |\n| $1$ | $2$ |\n| $3$ | $10/3$ |\n\n**תשובה:** מקסימום $10/3$ ב-$x=3$; מינימום $2$ ב-$x=1$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the absolute extrema of $f(x)=x^{2/3}$ on $[-1,8]$.",
+      "body_he_md": "מצאו קיצונים מוחלטים של $f(x)=x^{2/3}$ על $[-1,8]$.",
+      "checkpoint_solution_en": "$f'(x)=\\frac{2}{3}x^{-1/3}$ — DNE at $x=0$; never zero. Critical number: $x=0$.\n$f(-1)=1$, $f(0)=0$, $f(8)=4$.\nMax: $4$ at $x=8$. Min: $0$ at $x=0$.",
+      "checkpoint_solution_he": "$f'$ לא קיימת ב-$x=0$ (נקודה קריטית). $f(0)=0$, $f(-1)=1$, $f(8)=4$. מקסימום $4$; מינימום $0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — $f(x)=x^{1/3}$ on $[-1,1]$ Achieves Its Maximum",
+      "title_he": "דוגמה פתורה 3 — $f(x)=x^{1/3}$ על $[-1,1]$ מגיעה למקסימום",
+      "body_en_md": "**Claim:** Prove that $f(x)=x^{1/3}$ on $[-1,1]$ attains its absolute maximum, and find the maximum value, despite the fact that $f'$ does not exist at $x=0$.\n\n**Step 1 — Verify EVT conditions:**\n- $f(x)=x^{1/3}$ is continuous on all of $\\mathbb{R}$, including $[-1,1]$. ✓\n- $[-1,1]$ is a closed bounded interval. ✓\n- **Conclusion by EVT:** $f$ attains both absolute max and min on $[-1,1]$. ∎ (existence guaranteed)\n\n**Step 2 — Find critical numbers in $(-1,1)$:**\n$$f'(x) = \\frac{1}{3}x^{-2/3} = \\frac{1}{3x^{2/3}}$$\n- $f'(x)\\ne 0$ for any $x$ (the numerator $1\\ne 0$).\n- $f'(0)$ does not exist (denominator is $0$ when $x=0$, and $x=0$ is in the domain).\n- **Critical number:** $x=0$.\n\n**Step 3 — Evaluate $f$ at all candidates:**\n| $x$ | $f(x)=x^{1/3}$ |\n|-----|----------------|\n| $-1$ (endpoint) | $(-1)^{1/3}=-1$ |\n| $0$ (critical, $f'$ DNE) | $0$ |\n| $1$ (endpoint) | $1$ |\n\n**Step 4 — Identify extrema:**\n- **Absolute maximum:** $f(1)=1$ at $x=1$. ✓\n- **Absolute minimum:** $f(-1)=-1$ at $x=-1$.\n\n**Answer:** The absolute maximum is $1$, attained at $x=1$. The absolute minimum is $-1$, attained at $x=-1$.\n\n*Key point: the critical number $x=0$ (where $f'$ DNE) gave $f(0)=0$, which is neither the max nor the min — this illustrates that critical numbers are just candidates.*",
+      "body_he_md": "**טענה:** הוכיחו ש-$f(x)=x^{1/3}$ על $[-1,1]$ מגיעה למקסימום מוחלט, ומצאו אותו, למרות ש-$f'(0)$ אינה קיימת.\n\n**שלב 1 — אמתו תנאי EVT:**\n- $f(x)=x^{1/3}$ רציפה על $\\mathbb{R}$, בפרט על $[-1,1]$ ✓.\n- קטע סגור וחסום ✓.\n- **EVT:** $f$ מגיעה למקסימום ומינימום מוחלטים. ■\n\n**שלב 2 — נקודות קריטיות:**\n$$f'(x)=\\frac{1}{3x^{2/3}}$$\n- $f'\\ne 0$ לשום $x$ (מונה $=1$).\n- $f'(0)$ לא קיימת; $x=0$ בתחום ← נקודה קריטית.\n\n**שלב 3 — ערכים:**\n| $x$ | $f(x)$ |\n|-----|--------|\n| $-1$ | $-1$ |\n| $0$ | $0$ |\n| $1$ | $1$ |\n\n**תשובה:** מקסימום מוחלט $1$ ב-$x=1$. מינימום $-1$ ב-$x=-1$. ✓"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Complete Algorithm",
+      "title_he": "מדריך שיטות — אלגוריתם שלם",
+      "body_en_md": "**Algorithm for absolute extrema on $[a,b]$:**\n\n```\n1. Verify f is continuous on [a,b] (invoke EVT)\n2. Compute f'(x)\n3. Find critical numbers in (a,b):\n   a. Solve f'(x) = 0\n   b. Find x where f'(x) DNE but f(x) is defined\n4. Build table: evaluate f at each critical number and at a, b\n5. Scan table: largest value = absolute max, smallest = absolute min\n6. State: \"f achieves its absolute maximum of [value] at x = [location]\"\n```\n\n**Common candidate sources:**\n| Source | Example |\n|--------|----------|\n| $f'(c)=0$ | $f'(x)=2x=0\\Rightarrow x=0$ |\n| $f'(c)$ DNE | $f(x)=|x|$ at $x=0$; $f(x)=x^{1/3}$ at $x=0$ |\n| Left endpoint $a$ | Always check |\n| Right endpoint $b$ | Always check |",
+      "body_he_md": "**אלגוריתם לקיצונים מוחלטים על $[a,b]$:**\n\n```\n1. אמתו ש-f רציפה על [a,b] (הפעילו EVT)\n2. חשבו f'(x)\n3. מצאו מספרים קריטיים ב-(a,b):\n   א. f'(x)=0\n   ב. f'(x) לא קיימת אבל f(x) מוגדרת\n4. בנו טבלה: חשבו f בכל קריטית ובקצוות a, b\n5. סרקו: גדול ביותר = מקסימום, קטן ביותר = מינימום\n6. נסחו: \"f מגיעה למקסימום מוחלט [ערך] ב-x=[מקום]\"\n```\n\n**מקורות נפוצים לקריטיות:**\n| מקור | דוגמה |\n|------|-------|\n| $f'(c)=0$ | $f'(x)=2x=0\\Rightarrow x=0$ |\n| $f'(c)$ לא קיימת | $|x|$ ב-$0$; $x^{1/3}$ ב-$0$ |\n| קצה שמאל $a$ | תמיד בדקו |\n| קצה ימין $b$ | תמיד בדקו |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find absolute extrema of $f(x)=x^2-2x+1$ on $[0,3]$.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=x^2-2x+1$ על $[0,3]$.",
+          "solution_en": "$f'=2x-2=0\\Rightarrow x=1$. $f(0)=1$, $f(1)=0$, $f(3)=4$. Max: $4$ at $x=3$. Min: $0$ at $x=1$.",
+          "solution_he": "מקסימום $4$ ב-$x=3$; מינימום $0$ ב-$x=1$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find absolute extrema of $f(x)=\\sin x$ on $[0,2\\pi]$.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=\\sin x$ על $[0,2\\pi]$.",
+          "solution_en": "$f'=\\cos x=0\\Rightarrow x=\\pi/2, 3\\pi/2$. $f(0)=0$, $f(\\pi/2)=1$, $f(3\\pi/2)=-1$, $f(2\\pi)=0$. Max: $1$; Min: $-1$.",
+          "solution_he": "מקסימום $1$ ב-$x=\\pi/2$; מינימום $-1$ ב-$x=3\\pi/2$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find absolute extrema of $f(x)=e^x$ on $[-1,2]$.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=e^x$ על $[-1,2]$.",
+          "solution_en": "$f'=e^x>0$ always — no critical points. Max: $f(2)=e^2$. Min: $f(-1)=e^{-1}$.",
+          "solution_he": "אין נקודות קריטיות. מקסימום $e^2$; מינימום $e^{-1}$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Does EVT guarantee that $f(x)=1/x$ has an absolute max on $[1,3]$? Find it.",
+          "body_he": "האם EVT מבטיח מקסימום מוחלט ל-$f(x)=1/x$ על $[1,3]$? מצאו אותו.",
+          "solution_en": "$f$ is continuous on $[1,3]$ (no discontinuity for $x>0$). EVT applies. $f'=-1/x^2<0$ — no critical points. Max at left endpoint: $f(1)=1$. Min: $f(3)=1/3$.",
+          "solution_he": "EVT חל ✓. $f'<0$ — מקסימום בקצה: $f(1)=1$. מינימום: $f(3)=1/3$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find the absolute extrema of $f(x)=|x^2-4|$ on $[-3,3]$.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=|x^2-4|$ על $[-3,3]$.",
+          "solution_en": "$x^2-4=0$ at $x=\\pm 2$ (corners of $|\\cdot|$, so $f'$ DNE there). For $|x|>2$: $f=x^2-4$, $f'=2x$; critical at $x=0$ (not in this region). For $|x|<2$: $f=4-x^2$, $f'=-2x=0$ at $x=0$. Candidates: $x=-3,-2,0,2,3$. $f(-3)=5,f(-2)=0,f(0)=4,f(2)=0,f(3)=5$. Max: $5$. Min: $0$.",
+          "solution_he": "קריטיות: $x=0$ ($f'=0$), $x=\\pm 2$ ($f'$ לא קיימת). מקסימום $5$ ב-$x=\\pm 3$; מינימום $0$ ב-$x=\\pm 2$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find absolute extrema of $f(x)=x^{2/3}(2-x)$ on $[-1,2]$.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=x^{2/3}(2-x)$ על $[-1,2]$.",
+          "solution_en": "$f'=\\frac{2}{3}x^{-1/3}(2-x)+x^{2/3}(-1)=x^{-1/3}[\\frac{2(2-x)}{3}-x]=x^{-1/3}\\frac{4-2x-3x}{3}=\\frac{4-5x}{3x^{1/3}}$. $f'=0$ at $x=4/5$; $f'$ DNE at $x=0$. Candidates: $-1,0,4/5,2$. $f(-1)=(-1)^{2/3}(3)=3$, $f(0)=0$, $f(4/5)=(4/5)^{2/3}(6/5)$, $f(2)=0$. Max: $3$ at $x=-1$.",
+          "solution_he": "נקודות קריטיות: $x=4/5$ ($f'=0$), $x=0$ ($f'$ DNE). $f(-1)=3$ (מקסימום). $f(0)=f(2)=0$ (מינימום).",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Show that $g(x)=x^{1/3}$ attains its maximum on $[-8,8]$ even though $g'(0)$ does not exist.",
+          "body_he": "הראו ש-$g(x)=x^{1/3}$ מגיעה למקסימום על $[-8,8]$ למרות ש-$g'(0)$ לא קיימת.",
+          "solution_en": "$g$ is continuous on $[-8,8]$ ✓. EVT guarantees max and min exist. $g'=\\frac{1}{3}x^{-2/3}\\ne 0$ for $x\\ne 0$; DNE at $x=0$. Candidates: $x=-8,0,8$. $g(-8)=-2$, $g(0)=0$, $g(8)=2$. Absolute max: $g(8)=2$. ∎",
+          "solution_he": "$g$ רציפה ✓. EVT מבטיח. $g'$ לא קיימת ב-$x=0$. $g(0)=0$, $g(8)=2$, $g(-8)=-2$. מקסימום $2$. ■",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find absolute extrema of $f(x)=\\cos x + x$ on $[0,2\\pi]$.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=\\cos x+x$ על $[0,2\\pi]$.",
+          "solution_en": "$f'=-\\sin x+1=0\\Rightarrow \\sin x=1\\Rightarrow x=\\pi/2$. $f(0)=1$, $f(\\pi/2)=0+\\pi/2=\\pi/2\\approx 1.57$, $f(2\\pi)=1+2\\pi\\approx 7.28$. Max: $1+2\\pi$. Min: $f(0)=1$.",
+          "solution_he": "מקסימום $1+2\\pi$ ב-$x=2\\pi$; מינימום $1$ ב-$x=0$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "For $f(x)=x\\ln x$ on $[1/e,e]$, find absolute extrema.",
+          "body_he": "עבור $f(x)=x\\ln x$ על $[1/e,e]$, מצאו קיצונים מוחלטים.",
+          "solution_en": "$f'=\\ln x+1=0\\Rightarrow x=e^{-1}=1/e$ (boundary point). No interior critical point. So only evaluate endpoints. $f(1/e)=(1/e)(-1)=-1/e$, $f(e)=e$. Max: $e$. Min: $-1/e$.",
+          "solution_he": "$f'=0\\Rightarrow x=1/e$ (קצה). $f(1/e)=-1/e$ (מינימום). $f(e)=e$ (מקסימום).",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $f(x)=x^{1/3}$ on $[-1,1]$ attains both its absolute maximum and minimum, explicitly identifying all candidates and applying EVT.",
+          "body_he": "הוכיחו ש-$f(x)=x^{1/3}$ על $[-1,1]$ מגיעה גם למקסימום וגם למינימום מוחלטים, תוך זיהוי כל המועמדים ויישום EVT.",
+          "solution_en": "Step 1: $f$ is continuous on $\\mathbb{R}\\supset[-1,1]$ (cube roots are defined for all reals, including negative). Closed bounded interval. EVT applies: absolute max and min exist. Step 2: $f'(x)=\\frac{1}{3}x^{-2/3}$ is never zero (numerator=1). $f'(0)$ DNE since $x^{-2/3}\\to\\infty$. So $x=0$ is the only interior critical number. Step 3: Table: $f(-1)=-1$, $f(0)=0$, $f(1)=1$. Absolute max: $f(1)=1$; absolute min: $f(-1)=-1$. ∎",
+          "solution_he": "EVT חל (רציפות + קטע סגור) ✓. $x=0$: נקודה קריטית ($f'$ DNE). $f(-1)=-1$, $f(0)=0$, $f(1)=1$. מקסימום $1$; מינימום $-1$. ■",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find the absolute extrema of $f(x)=x^4-4x^3$ on $[-1,4]$ and classify all critical points.",
+          "body_he": "מצאו קיצונים מוחלטים של $f(x)=x^4-4x^3$ על $[-1,4]$ וסווגו את כל הנקודות הקריטיות.",
+          "solution_en": "$f'=4x^3-12x^2=4x^2(x-3)=0\\Rightarrow x=0$ or $x=3$. $f''(x)=12x^2-24x$. $f''(0)=0$ (inconclusive for second deriv test). $f''(3)=36>0$: local min at $x=3$. First deriv: $f'$ doesn't change sign at $x=0$ (inflection). Candidates: $f(-1)=1+4=5$, $f(0)=0$, $f(3)=81-108=-27$, $f(4)=256-256=0$. Max: $5$ at $x=-1$. Min: $-27$ at $x=3$.",
+          "solution_he": "נקודות קריטיות: $x=0$ (נקודת פיתול), $x=3$ (מינימום מקומי). מקסימום $5$ ב-$x=-1$; מינימום $-27$ ב-$x=3$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Give an example of a function that is NOT continuous on $[0,1]$ and fails to attain its supremum. Explain why EVT does not apply.",
+          "body_he": "תנו דוגמה לפונקציה שאינה רציפה על $[0,1]$ ואינה מגיעה לסופרמום שלה. הסבירו מדוע EVT לא חל.",
+          "solution_en": "$f(x)=x$ for $x\\in[0,1)$ and $f(1)=0$. Then $\\sup f=1$ but $f$ never equals $1$ (since $f(1)=0\\ne 1$). EVT does not apply because $f$ is discontinuous at $x=1$: $\\lim_{x\\to 1^-}f(x)=1\\ne 0=f(1)$.",
+          "solution_he": "$f(x)=x$ עבור $x\\in[0,1)$, $f(1)=0$. $\\sup f=1$ אך לא מושג. EVT לא חל: $f$ אינה רציפה ב-$x=1$.",
+          "points": 12
+        }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Open intervals and unconstrained domains",
-      "title_he": "קטעים פתוחים ותחומים לא חסומים",
-      "body_en_md": "**EVT fails on open intervals** — e.g. $f(x)=x$ on $(0,1)$ has no maximum.\n\nOn infinite domains, extrema may not exist; use limits at infinity plus interior critical points.\n\n**Don't confuse** local vs absolute extrema — a local min can be larger than another local max on a wide interval.",
-      "body_he_md": "**EVT נכשל בקטע פתוח** — $f(x)=x$ על $(0,1)$ ללא מקסימום.\n\nעל $\\mathbb{R}$ — בדקו גבולות באינסוף.\n\n**אל תבלבלו** מקומי ומוחלט."
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Missing the endpoints.** The absolute max or min may occur at $a$ or $b$, not at a critical point. Always include endpoints in the candidate table.\n\n2. **Missing critical points where $f'$ DNE.** For $f(x)=|x|$, $f(x)=x^{2/3}$, $f(x)=x^{1/3}$: critical numbers include $x=0$ even though $f'(0)$ does not exist.\n\n3. **Confusing local and absolute extrema.** A local max is NOT necessarily the absolute max. Compare ALL candidates.\n\n4. **Assuming EVT applies to open intervals.** EVT requires a **closed** bounded interval. On $(0,1)$, a continuous function may not attain its supremum.\n\n5. **Not checking continuity before invoking EVT.** $f(x)=1/x$ on $[-1,1]$ is not continuous (discontinuous at $x=0$) — EVT does not apply.",
+      "body_he_md": "1. **שכחת קצוות.** הקיצון המוחלט עשוי להיות בקצה, לא בנקודה קריטית.\n\n2. **שכחת נקודות קריטיות שבהן $f'$ לא קיימת.** $|x|$, $x^{2/3}$, $x^{1/3}$: $x=0$ קריטית.\n\n3. **בלבול בין מקומי למוחלט.** מקסימום מקומי אינו בהכרח המקסימום המוחלט.\n\n4. **הנחת EVT על קטעים פתוחים.** EVT דורש קטע **סגור** חסום.\n\n5. **אי-בדיקת רציפות לפני EVT.** $1/x$ על $[-1,1]$ — לא רציפה ב-$0$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**EVT statement:** $f$ continuous on $[a,b]$ $\\Rightarrow$ absolute max and min exist.\n\n**Closed-interval method:**\n1. Find critical numbers: $f'(x)=0$ and $f'(x)$ DNE in $(a,b)$.\n2. Evaluate $f$ at critical numbers and at $a, b$.\n3. Largest value = absolute max; smallest = absolute min.\n\n**Critical number sources:**\n- $f'=0$: algebraic, solve.\n- $f'$ DNE: at corners, cusps, vertical tangents — common when $f$ involves $|x|$, $x^{p/q}$ with $q$ even, or piecewise definitions.\n\n**Exam tip:** State EVT explicitly when proving existence. Examiners award partial credit for invoking it correctly.",
+      "body_he_md": "**EVT:** $f$ רציפה על $[a,b]$ ← מקסימום ומינימום מוחלטים קיימים.\n\n**שיטת הקטע הסגור:**\n1. מספרים קריטיים: $f'=0$ ו-$f'$ לא קיימת ב-$(a,b)$.\n2. חשבו $f$ בקריטיות ובקצוות $a,b$.\n3. גדול ביותר = מקסימום; קטן ביותר = מינימום.\n\n**מקורות נקודות קריטיות:**\n- $f'=0$: אלגברי.\n- $f'$ לא קיימת: פינות, קאספים, משיקים אנכיים.\n\n**טיפ לבחינה:** ציינו EVT במפורש — הבוחנים נותנים נקודות על הפעלה נכונה שלו."
     },
     {
       "kind": "summary",
-      "title_en": "Three-step recipe",
-      "title_he": "מתכון בשלושה שלבים",
-      "body_en_md": "1. Confirm **closed** interval and continuity.\n2. Solve $f'=0$ and note $f'$ undefined inside.\n3. Compare all candidate values.\n\nThis is the same logic used in design codes for peak stress, maximum heat flux, and worst-case error.",
-      "body_he_md": "1. קטע **סגור** + רציפות.\n2. $f'=0$ ובדיקת לא מוגדר.\n3. השוו מועמדים.\n\nאותה לוגיקה לעומס שיא, זרימת חום מקסימלית."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Absolute Extrema on Closed Intervals: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Absolute Extrema on Closed Intervals.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-ערכי קיצון מוחלטים על קטע סגור: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-ערכי קיצון מוחלטים על קטע סגור.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **EVT:** continuous $f$ on $[a,b]$ always attains its absolute max and min.\n- **Candidates:** (1) $f'(c)=0$, (2) $f'(c)$ DNE, (3) endpoints $a$ and $b$.\n- Evaluate $f$ at all candidates; the extreme values are the largest and smallest.\n- Critical points where $f'$ DNE (corners, cusps, vertical tangents) are easily forgotten but must be included.\n- Local extrema are not automatically global — always compare all candidates.",
+      "body_he_md": "- **EVT:** $f$ רציפה על $[a,b]$ ← קיצונים מוחלטים קיימים.\n- **מועמדים:** (1) $f'(c)=0$, (2) $f'(c)$ לא קיימת, (3) קצוות $a,b$.\n- חשבו $f$ בכל המועמדים; קיצונים = גדול ביותר וקטן ביותר.\n- נקודות קריטיות עם $f'$ לא קיימת (פינות, קאספים) נשכחות בקלות.\n- מקומי ≠ מוחלט — תמיד השוו את כל המועמדים."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "EVT requires interval:",
-      "stem_he": "EVT דורש קטע:",
-      "options_en": [
-        "Open $(a,b)$",
-        "Closed $[a,b]$",
-        "Infinite $(-\\infty,\\infty)$",
-        "Any set"
-      ],
-      "options_he": [
-        "פתוח",
-        "סגור $[a,b]$",
-        "אינסופי",
-        "כל קבוצה"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Closed and bounded interval required.",
-      "explanation_he": "סגור וחסום.",
-      "skill_atoms": [
-        "apply_evt_closed_interval"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Absolute Extrema on Closed Intervals'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'ערכי קיצון מוחלטים על קטע סגור'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "candidates_test"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Absolute Extrema on Closed Intervals' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'ערכי קיצון מוחלטים על קטע סגור' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "candidates_test"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Absolute Extrema on Closed Intervals'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'ערכי קיצון מוחלטים על קטע סגור'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "evt_limitations"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Absolute Extrema on Closed Intervals' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'ערכי קיצון מוחלטים על קטע סגור' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "identify_critical_points"
-      ],
-      "points_level_min": "calc1"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Always evaluate endpoints on closed intervals.",
-      "EVT guarantees existence, candidates test finds values.",
-      "Local extrema are not necessarily global."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Critical point always gives absolute extremum",
-        "correction": "Compare all candidates including endpoints.",
-        "detect_phrase_en": "critical is the max",
-        "detect_phrase_he": "קריטית היא המקסימום"
-      }
-    ],
-    "tutor_pacing_hint": "Tabulate f at all candidates — students skip endpoints most often.",
-    "skill_atoms_unlocked": [
-      "apply_evt_closed_interval",
-      "candidates_test",
-      "evt_limitations",
-      "identify_critical_points"
-    ]
-  }
+  ]
 }

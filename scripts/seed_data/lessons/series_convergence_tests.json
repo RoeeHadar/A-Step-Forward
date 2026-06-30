@@ -1,159 +1,225 @@
 {
   "concept_id": "series_convergence_tests",
-  "subject": "math",
+  "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Sequences & Series — Convergence",
-  "title_he": "סדרות וטורים — התכנסות",
-  "summary_en": "Monotone bounded sequences, recurrence relations, ratio and comparison tests — exam staples in Calculus 1.",
-  "summary_he": "סדרות monoton חסומות, נוסחאות נסיגה, מבחן המנה וההשוואה — נושאי בחינה בחדו״א 1.",
-  "est_minutes": 30,
+  "math_track": ["calc1"],
+  "title_en": "Series Convergence Tests",
+  "title_he": "מבחני התכנסות לטורים",
+  "summary_en": "A series $\\sum a_n$ converges if its partial sums approach a finite limit. The main convergence tests — divergence, integral, comparison, limit comparison, ratio, root, and alternating series — each apply to different types of series. The method guide gives the decision tree for choosing the right test.",
+  "summary_he": "טור $\\sum a_n$ מתכנס אם הסכומים החלקיים שלו מתכנסים לגבול סופי. מבחני ההתכנסות המרכזיים — פיזור, אינטגרל, השוואה, השוואת גבולות, מנה, שורש וסדרה חילופית — מתאימים לסוגי טורים שונים. מדריך השיטות נותן עץ החלטות לבחירת המבחן הנכון.",
+  "est_minutes": 70,
+  "agent_hints": "When a learner asks which convergence test to use, first ask: Are the terms always positive? If yes, consider ratio/root for factorial/exponential, comparison for rational functions. For alternating series, use AST. Never apply L'Hôpital inside a convergence test without first confirming the correct form.",
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Monotone sequences",
-      "title_he": "סדרות monoton",
-      "body_en_md": "If $(a_n)$ is **monotone** (non-decreasing or non-increasing) and **bounded**, then it **converges**.\n\n**Worked Example 1.** $a_n = 1 - \\frac{1}{n}$: increasing, bounded above by 1, so $\\lim a_n = 1$.\n\n**Worked Example 2.** $a_{n+1} = \\frac{a_n + 2}{a_n + 1}$ with $a_1=1$: prove decreasing and bounded below, then $L = \\sqrt{2}$.",
-      "body_he_md": "סדרה **monoton** ו**חסומה** ⇒ **מתכנסת**.\n\n**דוגמה 1.** $a_n = 1 - 1/n \\to 1$.\n\n**דוגמה 2.** $a_{n+1} = \\frac{a_n+2}{a_n+1}$, $a_1=1$: יורדת, חסומה, גבול $\\sqrt{2}$."
+      "kind": "intro",
+      "title_en": "Why Convergence Tests?",
+      "title_he": "למה מבחני התכנסות?",
+      "body_en_md": "An **infinite series** $\\displaystyle\\sum_{n=1}^\\infty a_n$ is the limit of partial sums $S_N=\\sum_{n=1}^N a_n$. It **converges** if $\\lim_{N\\to\\infty}S_N$ is finite; otherwise it **diverges**.\n\nDetermining convergence directly (by computing partial sums) is usually impossible. Convergence tests give us indirect criteria:\n\n**The big picture:**\n- Series with **factorials or exponentials** in $a_n$: ratio or root test.\n- Series that **look like** $1/n^p$ or $1/n$: comparison or $p$-series.\n- Series with **alternating signs**: alternating series test.\n- **First check:** divergence test (if $a_n\\not\\to 0$, automatically diverges).\n\n**These tests appear on every university calculus final.**",
+      "body_he_md": "**טור אינסופי** $\\displaystyle\\sum_{n=1}^\\infty a_n$ הוא גבול הסכומים החלקיים $S_N=\\sum_{n=1}^N a_n$. **מתכנס** אם $\\lim_{N\\to\\infty}S_N$ סופי; אחרת **מתבדר**.\n\nקביעת התכנסות ישירה (חישוב סכומים חלקיים) בדרך כלל אינה אפשרית. מבחני ההתכנסות נותנים קריטריונים עקיפים:\n\n**תמונה גדולה:**\n- טורים עם **עצרות או מעריכיות** ב-$a_n$: מבחן מנה או שורש.\n- טורים **דומים** ל-$1/n^p$: השוואה או טור $p$.\n- טורים **בסימנים חילופיים**: מבחן סדרה חילופית.\n- **בדיקה ראשונה:** מבחן פיזור ($a_n\\not\\to 0$ — מתבדר)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "The Seven Convergence Tests",
+      "title_he": "שבעת מבחני ההתכנסות",
+      "body_en_md": "**1. Divergence Test (n-th term test):**\nIf $\\lim_{n\\to\\infty}a_n\\ne 0$ (or does not exist), then $\\sum a_n$ **diverges**. *(If $a_n\\to 0$, the test is inconclusive.)*\n\n**2. $p$-Series Test:**\n$\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^p}$ converges iff $p>1$.\n\n**3. Integral Test:**\nIf $f$ is continuous, positive, and decreasing on $[1,\\infty)$ with $f(n)=a_n$, then $\\sum a_n$ and $\\int_1^\\infty f(x)\\,dx$ either both converge or both diverge.\n\n**4. Direct Comparison Test:**\n- If $0\\leq a_n\\leq b_n$ and $\\sum b_n$ converges, then $\\sum a_n$ converges.\n- If $0\\leq b_n\\leq a_n$ and $\\sum b_n$ diverges, then $\\sum a_n$ diverges.\n\n**5. Limit Comparison Test:**\nIf $a_n,b_n>0$ and $\\lim_{n\\to\\infty}\\dfrac{a_n}{b_n}=L$ with $0<L<\\infty$, then $\\sum a_n$ and $\\sum b_n$ both converge or both diverge.\n\n**6. Ratio Test:**\nLet $r=\\lim_{n\\to\\infty}\\left|\\dfrac{a_{n+1}}{a_n}\\right|$.\n- $r<1$: converges absolutely.\n- $r>1$: diverges.\n- $r=1$: inconclusive.\n\n**7. Root Test:**\nLet $r=\\lim_{n\\to\\infty}\\sqrt[n]{|a_n|}$. Same conclusions as ratio test.\n\n**Alternating Series Test (AST):**\nIf $\\sum(-1)^n b_n$ with $b_n>0$, $b_n$ decreasing, and $b_n\\to 0$, then the series **converges**.",
+      "body_he_md": "**1. מבחן פיזור:**\nאם $\\lim_{n\\to\\infty}a_n\\ne 0$ — $\\sum a_n$ **מתבדר**. *(אם $a_n\\to 0$ — מבחן לא חרוץ.)*\n\n**2. מבחן $p$-טור:**\n$\\sum\\frac{1}{n^p}$ מתכנס אם"ם $p>1$.\n\n**3. מבחן אינטגרל:**\nאם $f$ רציפה, חיובית, יורדת על $[1,\\infty)$ עם $f(n)=a_n$: $\\sum a_n$ ו-$\\int_1^\\infty f\\,dx$ הן שניהם מתכנסות או שניהם מתבדרות.\n\n**4. מבחן השוואה ישירה:**\n- $0\\leq a_n\\leq b_n$, $\\sum b_n$ מתכנסת $\\Rightarrow$ $\\sum a_n$ מתכנסת.\n- $0\\leq b_n\\leq a_n$, $\\sum b_n$ מתבדרת $\\Rightarrow$ $\\sum a_n$ מתבדרת.\n\n**5. מבחן השוואת גבולות:**\n$a_n,b_n>0$, $\\lim\\frac{a_n}{b_n}=L\\in(0,\\infty)$: שניהם מתכנסות או שניהם מתבדרות.\n\n**6. מבחן המנה:**\n$r=\\lim|a_{n+1}/a_n|$. $r<1$: מתכנס; $r>1$: מתבדר; $r=1$: לא חרוץ.\n\n**7. מבחן השורש:**\n$r=\\lim\\sqrt[n]{|a_n|}$. אותן מסקנות.\n\n**מבחן סדרה חילופית (AST):**\n$\\sum(-1)^n b_n$, $b_n>0$, $b_n$ יורדת, $b_n\\to 0$: **מתכנסת**."
     },
     {
       "kind": "theory",
-      "title_en": "Convergence tests for series",
-      "title_he": "מבחני התכנסות לטורים",
-      "body_en_md": "**Ratio test:** If $\\lim |a_{n+1}/a_n| = L < 1$, then $\\sum a_n$ converges absolutely.\n\n**Comparison:** If $0 \\leq a_n \\leq b_n$ and $\\sum b_n$ converges, then $\\sum a_n$ converges.\n\n**Worked Example 1.** $\\sum \\frac{1}{n^2}$ converges (p-series, $p=2$).\n\n**Worked Example 2.** $\\sum \\frac{n!}{n^n}$: ratio $\\to e^{-1} < 1$ ⇒ converges.",
-      "body_he_md": "**מבחן המנה:** $L<1$ ⇒ מתכנס.\n\n**השוואה:** $0\\leq a_n\\leq b_n$, $\\sum b_n$ מתכנס ⇒ $\\sum a_n$ מתכנס.\n\n**דוגמה:** $\\sum n!/n^n$ מתכנס (מנה $\\to e^{-1}$)."
+      "title_en": "Absolute vs. Conditional Convergence",
+      "title_he": "התכנסות מוחלטת מול תנאית",
+      "body_en_md": "**Absolute convergence:** $\\sum a_n$ converges absolutely if $\\sum|a_n|$ converges.\n\n**Conditional convergence:** $\\sum a_n$ converges but $\\sum|a_n|$ diverges.\n\n**Theorem:** Absolute convergence implies convergence.\n\n**Classic example:** $\\sum\\dfrac{(-1)^n}{\\sqrt{n}}$:\n- The series $\\sum\\dfrac{1}{\\sqrt{n}}=\\sum n^{-1/2}$ diverges ($p=1/2<1$).\n- But by AST: $b_n=1/\\sqrt{n}$ is decreasing and $\\to 0$. So the alternating series **converges**.\n- **Conclusion:** $\\sum\\dfrac{(-1)^n}{\\sqrt{n}}$ converges **conditionally** but not absolutely.\n\n**Ratio/root test give absolute convergence** when they give $r<1$.",
+      "body_he_md": "**התכנסות מוחלטת:** $\\sum a_n$ מתכנסת מוחלטת אם $\\sum|a_n|$ מתכנסת.\n\n**התכנסות תנאית:** $\\sum a_n$ מתכנסת אך $\\sum|a_n|$ מתבדרת.\n\n**משפט:** מוחלטת גוררת התכנסות.\n\n**דוגמה קלאסית:** $\\sum\\frac{(-1)^n}{\\sqrt{n}}$:\n- $\\sum\\frac{1}{\\sqrt{n}}$ מתבדרת ($p=1/2<1$).\n- לפי AST: $b_n=1/\\sqrt{n}$ יורדת ו-$\\to 0$ → מתכנסת.\n- **מסקנה:** מתכנסת **תנאית** בלבד."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Let $a_1=1$ and $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. Prove the sequence converges and find its limit.\n\n**Sample Solution:**\n**Step 1 — positive and bounded below:** $a_1=1>0$. If $a_n>0$ then $a_{n+1}>0$. All terms positive.\n\n**Step 2 — monotone decreasing:** Compute $a_{n+1}-a_n = \\dfrac{a_n+2}{a_n+1}-a_n = \\dfrac{2-a_n^2}{a_n+1}$.\nFor $a_n\\geq 1$: numerator $2-a_n^2\\leq 1-1=0$, so $a_{n+1}\\leq a_n$. Since $a_1=1$ and the map preserves $a_n\\geq\\sqrt{2}$ eventually... Actually check: $a_2=3/2$, $a_3=7/5=1.4$, decreasing toward limit.\n\n**Step 3 — bounded below:** $a_{n+1} = 1 + \\dfrac{1}{a_n+1} > 1$, so $a_n > 1$ for $n\\geq 2$. Bounded below by 1.\n\nMonotone decreasing + bounded below ⇒ **converges** to $L$.\n\n**Step 4 — limit:** $L = \\dfrac{L+2}{L+1} \\Rightarrow L(L+1)=L+2 \\Rightarrow L^2=2 \\Rightarrow L=\\sqrt{2}$ (positive). $\\boxed{\\lim a_n = \\sqrt{2}}$.\n\n**Problem 2:** Determine convergence of $\\sum_{n=1}^\\infty \\dfrac{n!}{n^n}$.\n\n**Sample Solution:**\n**Ratio test:** $\\dfrac{a_{n+1}}{a_n} = \\dfrac{(n+1)!/(n+1)^{n+1}}{n!/n^n} = \\dfrac{n^n}{(n+1)^n} = \\left(\\dfrac{n}{n+1}\\right)^n \\to e^{-1} < 1$.\nTherefore the series **converges**.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** תנו $a_1=1$, $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. הוכיחו התכנסות ומצאו גבול.\n\n**פתרון לדוגמה:**\n**monotone יורד + חסום מלרע** ⇒ מתכנס. **גבול:** $L=\\dfrac{L+2}{L+1} \\Rightarrow L=\\sqrt{2}$. $\\square$\n\n**בעיה 2:** קבעו התכנסות של $\\sum \\dfrac{n!}{n^n}$.\n\n**פתרון לדוגמה:**\n**מבחן המנה:** $\\left(\\dfrac{n}{n+1}\\right)^n \\to e^{-1}<1$ ⇒ **מתכנס**.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
+      "kind": "worked_example",
       "difficulty": "easy",
-      "stem_en": "A monotone increasing sequence bounded above:",
-      "stem_he": "סדרה monoton עולה וחסומה מלעלה:",
-      "options_en": [
-        "Diverges to $\\infty$",
-        "Converges",
-        "Is constant",
-        "Oscillates"
-      ],
-      "options_he": [
-        "מתבדרת ל-$\\infty$",
-        "מתכנסת",
-        "קבועה",
-        "מתנדנדת"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Monotone + bounded ⇒ converges (completeness).",
-      "explanation_he": "monoton + חסומה ⇒ מתכנסת.",
-      "skill_atoms": [
-        "sequence_monotone_proof"
-      ],
-      "points_level_min": "calc1"
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Does $\\sum\\frac{1}{n^2}$ Converge? (Integral Test)",
+      "title_he": "דוגמה פתורה 1 — האם $\\sum\\frac{1}{n^2}$ מתכנסת? (מבחן אינטגרל)",
+      "body_en_md": "**Given:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^2}$.\n\n**Step 1 — Check with divergence test:**\n$a_n=1/n^2\\to 0$ as $n\\to\\infty$. Test is **inconclusive**.\n\n**Step 2 — Apply Integral Test:**\nLet $f(x)=1/x^2$. Check hypotheses:\n- Continuous on $[1,\\infty)$. ✓\n- Positive: $1/x^2>0$. ✓\n- Decreasing: $f'(x)=-2/x^3<0$ for $x\\geq 1$. ✓\n\n**Step 3 — Compute the improper integral:**\n$$\\int_1^\\infty\\frac{1}{x^2}\\,dx = \\left[-\\frac{1}{x}\\right]_1^\\infty = 0-(-1) = 1 < \\infty$$\n\n**Step 4 — Conclusion:**\nThe integral converges, therefore $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^2}$ **converges**.\n\n*(Known fact: $\\sum 1/n^2 = \\pi^2/6\\approx 1.645$ — the Basel Problem.)* ✓\n\nAlternatively: by the **$p$-series test** with $p=2>1$, the series converges immediately.",
+      "body_he_md": "**נתון:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^2}$.\n\n**שלב 1 — פיזור:** $1/n^2\\to 0$ — לא חרוץ.\n\n**שלב 2 — מבחן אינטגרל:** $f(x)=1/x^2$ — רציפה, חיובית, יורדת ✓.\n\n**שלב 3:**\n$$\\int_1^\\infty\\frac{1}{x^2}\\,dx=1<\\infty$$\n\n**מסקנה:** $\\sum 1/n^2$ **מתכנסת**. ✓\n\n(לחלופין: $p=2>1$ — $p$-טור מתכנס.)"
     },
     {
-      "ord": 2,
-      "kind": "mcq",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Does $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{\\sqrt{n}}$ converge or diverge? Use two methods.",
+      "body_he_md": "האם $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{\\sqrt{n}}$ מתכנסת או מתבדרת? השתמשו בשתי שיטות.",
+      "checkpoint_solution_en": "Method 1 ($p$-series): $p=1/2<1$ → diverges.\nMethod 2 (Integral): $\\int_1^\\infty x^{-1/2}dx=[2\\sqrt{x}]_1^\\infty=\\infty$ → diverges.",
+      "checkpoint_solution_he": "שיטה 1: $p=1/2<1$ ← מתבדרת. שיטה 2: $\\int_1^\\infty x^{-1/2}dx=\\infty$ ← מתבדרת."
+    },
+    {
+      "kind": "worked_example",
       "difficulty": "medium",
-      "stem_en": "If $\\lim |a_{n+1}/a_n| = 1/2$, the series $\\sum a_n$:",
-      "stem_he": "אם $\\lim |a_{n+1}/a_n| = 1/2$, הטור $\\sum a_n$:",
-      "options_en": [
-        "Converges",
-        "Diverges",
-        "Inconclusive always",
-        "Converges to 0"
-      ],
-      "options_he": [
-        "מתכנס",
-        "מתבדר",
-        "תמיד לא חד-משמעי",
-        "מתכנס ל-0"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Ratio $< 1$ ⇒ absolute convergence.",
-      "explanation_he": "מנה $< 1$ ⇒ התכנסות מוחלטת.",
-      "skill_atoms": [
-        "ratio_test"
-      ],
-      "points_level_min": "calc1"
+      "example_number": 2,
+      "title_en": "Worked Example 2 — $\\sum\\frac{n!}{n^n}$ (Ratio Test)",
+      "title_he": "דוגמה פתורה 2 — $\\sum\\frac{n!}{n^n}$ (מבחן מנה)",
+      "body_en_md": "**Given:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{n!}{n^n}$.\n\n**Step 1 — Identify:** Terms involve $n!$ — ratio test is indicated.\n\n**Step 2 — Compute $|a_{n+1}/a_n|$:**\n$$\\frac{a_{n+1}}{a_n} = \\frac{(n+1)!}{(n+1)^{n+1}}\\cdot\\frac{n^n}{n!} = \\frac{(n+1)\\cdot n!}{(n+1)^{n+1}}\\cdot\\frac{n^n}{n!} = \\frac{n^n}{(n+1)^n}$$\n\n**Step 3 — Take the limit:**\n$$r = \\lim_{n\\to\\infty}\\frac{n^n}{(n+1)^n} = \\lim_{n\\to\\infty}\\left(\\frac{n}{n+1}\\right)^n = \\lim_{n\\to\\infty}\\frac{1}{\\left(1+\\frac{1}{n}\\right)^n} = \\frac{1}{e}$$\n\n*(using the standard limit $\\left(1+\\frac{1}{n}\\right)^n\\to e$)*\n\n**Step 4 — Conclusion:**\n$$r = \\frac{1}{e} < 1 \\implies \\text{the series \\textbf{converges} (absolutely).}$$\n\n**Answer:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{n!}{n^n}$ **converges**. ✓",
+      "body_he_md": "**נתון:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{n!}{n^n}$.\n\n**שלב 1 — $n!$ → מבחן מנה.**\n\n**שלב 2:**\n$$\\frac{a_{n+1}}{a_n}=\\frac{(n+1)!}{(n+1)^{n+1}}\\cdot\\frac{n^n}{n!}=\\frac{n^n}{(n+1)^n}$$\n\n**שלב 3:**\n$$r=\\lim_{n\\to\\infty}\\left(\\frac{n}{n+1}\\right)^n=\\frac{1}{\\lim(1+1/n)^n}=\\frac{1}{e}<1$$\n\n**מסקנה:** $\\sum n!/n^n$ **מתכנסת** ✓."
     },
     {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "For $a_{n+1}=\\sqrt{2+a_n}$ with $a_1=1$, a candidate limit $L$ satisfies:",
-      "stem_he": "ל-$a_{n+1}=\\sqrt{2+a_n}$, מועמד לגבול $L$ מקיים:",
-      "options_en": [
-        "$L=2$",
-        "$L=\\sqrt{2+L}$",
-        "$L=1$",
-        "$L=0$"
-      ],
-      "options_he": [
-        "$L=2$",
-        "$L=\\sqrt{2+L}$",
-        "$L=1$",
-        "$L=0$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Pass limit through recurrence: $L = \\sqrt{2+L}$.",
-      "explanation_he": "מעבירים גבול: $L = \\sqrt{2+L}$.",
-      "skill_atoms": [
-        "sequence_limit_recurrence"
-      ],
-      "points_level_min": "calc1"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the ratio test on $\\displaystyle\\sum_{n=1}^\\infty\\frac{2^n}{n!}$.",
+      "body_he_md": "הפעילו מבחן מנה על $\\displaystyle\\sum_{n=1}^\\infty\\frac{2^n}{n!}$.",
+      "checkpoint_solution_en": "$\\left|\\frac{a_{n+1}}{a_n}\\right|=\\frac{2^{n+1}}{(n+1)!}\\cdot\\frac{n!}{2^n}=\\frac{2}{n+1}\\to 0<1$. Converges.",
+      "checkpoint_solution_he": "$\\frac{2}{n+1}\\to 0<1$. מתכנסת."
     },
     {
-      "ord": 4,
-      "kind": "open",
+      "kind": "worked_example",
       "difficulty": "hard",
-      "stem_en": "Let $a_1=1$, $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. Prove $(a_n)$ converges and find $\\lim a_n$.",
-      "stem_he": "תנו $a_1=1$, $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. הוכיחו התכנסות ומצאו $\\lim a_n$.",
-      "rubric_en": "Full credit (10/10): proves monotone + bounded, passes limit to get $L=\\sqrt{2}$.\nPartial (6/10): finds $L$ without monotonicity proof.\nMinimal (3/10): only sets $L=(L+2)/(L+1)$.",
-      "rubric_he": "ציון מלא (10/10): monoton + חסום, $L=\\sqrt{2}$.\nחלקי (6/10): גבול ללא הוכחת monoton.\nמינימלי (3/10): רק משוואת גבול.",
-      "explanation_en": "Limit = $\\sqrt{2}$.",
-      "explanation_he": "גבול = $\\sqrt{2}$.",
-      "skill_atoms": [
-        "sequence_limit_recurrence"
-      ],
-      "points_level_min": "calc1"
+      "example_number": 3,
+      "title_en": "Worked Example 3 — $\\sum\\frac{(-1)^n}{\\sqrt{n}}$ (Conditional Convergence)",
+      "title_he": "דוגמה פתורה 3 — $\\sum\\frac{(-1)^n}{\\sqrt{n}}$ (התכנסות תנאית)",
+      "body_en_md": "**Given:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{\\sqrt{n}}$.\n\n**Question:** Does the series converge? If so, is it absolute or conditional?\n\n**Part A — Absolute convergence?** Check $\\sum|a_n|=\\sum\\dfrac{1}{\\sqrt{n}}=\\sum n^{-1/2}$. By the $p$-series test with $p=1/2<1$: **this diverges**. So the series does NOT converge absolutely.\n\n**Part B — Conditional convergence via AST:** The series has the form $\\sum(-1)^n b_n$ where $b_n=\\dfrac{1}{\\sqrt{n}}$.\n\nCheck the three AST conditions:\n1. $b_n = 1/\\sqrt{n} > 0$ for all $n\\geq 1$. ✓\n2. $b_n$ is decreasing: $\\dfrac{1}{\\sqrt{n+1}}<\\dfrac{1}{\\sqrt{n}}$ since $n+1>n$. ✓\n3. $\\lim_{n\\to\\infty}b_n = \\lim_{n\\to\\infty}\\dfrac{1}{\\sqrt{n}}=0$. ✓\n\n**All three AST conditions met. Therefore the series converges.**\n\n**Conclusion:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{\\sqrt{n}}$ **converges conditionally** (but not absolutely). ✓",
+      "body_he_md": "**נתון:** $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{\\sqrt{n}}$.\n\n**חלק א' — התכנסות מוחלטת?** $\\sum 1/\\sqrt{n}$: $p=1/2<1$ — **מתבדרת**. לא התכנסות מוחלטת.\n\n**חלק ב' — AST:** $b_n=1/\\sqrt{n}>0$, יורדת, $\\to 0$. שלושת תנאי AST מתקיימים ✓.\n\n**מסקנה:** $\\sum\\frac{(-1)^n}{\\sqrt{n}}$ **מתכנסת תנאית**. ✓"
     },
     {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove $\\sum_{n=1}^\\infty \\dfrac{n!}{n^n}$ converges using the ratio test.",
-      "stem_he": "הוכיחו ב-מבחן המנה ש-$\\sum \\dfrac{n!}{n^n}$ מתכנס.",
-      "rubric_en": "Full credit (10/10): sets up ratio, simplifies to $(n/(n+1))^n$, limit $e^{-1}<1$.\nPartial (6/10): correct ratio, wrong limit.\nMinimal (3/10): cites ratio test only.",
-      "rubric_he": "ציון מלא (10/10): מנה $(n/(n+1))^n \to e^{-1}<1$.\nחלקי (6/10): מנה נכון, גבול שגוי.\nמינימלי (3/10): רק מציין מבחן מנה.",
-      "explanation_en": "Ratio $\\\\to e^{-1}<1$ ⇒ converges.",
-      "explanation_he": "מנה $\\\\to e^{-1}<1$ ⇒ מתכנס.",
-      "skill_atoms": [
-        "ratio_test"
-      ],
-      "points_level_min": "calc1"
+      "kind": "method_guide",
+      "title_en": "Method Guide — Which Test to Try First (Decision Tree)",
+      "title_he": "מדריך שיטות — איזה מבחן לנסות קודם (עץ החלטות)",
+      "body_en_md": "**Step 1 — Always start:** Check $\\lim a_n$. If $a_n\\not\\to 0$: **diverges** (divergence test). Done.\n\n**Step 2 — Look at the form of $a_n$:**\n\n| $a_n$ has this feature | Try this test |\n|----------------------|---------------|\n| Alternating sign ($(-1)^n$) | Alternating Series Test |\n| $n!$ or $n^n$ or $a^n$ | Ratio test |\n| $n$-th power throughout (like $(f(n))^n$) | Root test |\n| Rational function in $n$ (poly/poly) | Limit comparison with $1/n^p$ |\n| Clear $1/n^p$ pattern | $p$-series directly |\n| Can integrate $f(x)$ with $f(n)=a_n$ | Integral test |\n| Bounded by known convergent/divergent | Direct comparison |\n\n**Step 3 — After identifying convergence, ask:** Absolutely or conditionally? Check $\\sum|a_n|$ separately.",
+      "body_he_md": "**שלב 1 — תמיד:** בדקו $\\lim a_n$. אם $a_n\\not\\to 0$: **מתבדרת**.\n\n**שלב 2 — הסתכלו על צורת $a_n$:**\n\n| תכונת $a_n$ | נסו |\n|------------|-----|\n| סימנים חילופיים ($(-1)^n$) | AST |\n| $n!$ או $n^n$ או $a^n$ | מנה |\n| חזקה של $n$ בכל מקום | שורש |\n| פונקציה רציונלית ב-$n$ | השוואת גבולות עם $1/n^p$ |\n| דפוס $1/n^p$ ברור | $p$-טור ישיר |\n| ניתן לאינטגרציה | מבחן אינטגרל |\n| חסום מלמעלה/מטה | השוואה ישירה |\n\n**שלב 3 — אחרי קביעת התכנסות:** מוחלטת או תנאית? בדקו $\\sum|a_n|$ בנפרד."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Does $\\displaystyle\\sum_{n=1}^\\infty\\frac{n}{n+1}$ converge or diverge?",
+          "body_he": "האם $\\displaystyle\\sum_{n=1}^\\infty\\frac{n}{n+1}$ מתכנסת או מתבדרת?",
+          "solution_en": "Divergence test: $\\lim_{n\\to\\infty}\\frac{n}{n+1}=1\\ne 0$. The series **diverges**.",
+          "solution_he": "מבחן פיזור: $\\lim\\frac{n}{n+1}=1\\ne 0$ → **מתבדרת**.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Does $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^3}$ converge? Use $p$-series.",
+          "body_he": "האם $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^3}$ מתכנסת? השתמשו ב-$p$-טור.",
+          "solution_en": "$p=3>1$ → **converges**.",
+          "solution_he": "$p=3>1$ → **מתכנסת**.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Does $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n}$ converge or diverge? (Harmonic series.)",
+          "body_he": "האם $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n}$ מתכנסת? (הטור ההרמוני.)",
+          "solution_en": "$p=1$ → **diverges** (harmonic series).",
+          "solution_he": "$p=1$ → **מתבדרת** (טור הרמוני).",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Does $\\displaystyle\\sum_{n=0}^\\infty\\frac{3^n}{5^n}$ converge? (Geometric series.)",
+          "body_he": "האם $\\displaystyle\\sum_{n=0}^\\infty\\frac{3^n}{5^n}$ מתכנסת? (טור גיאומטרי.)",
+          "solution_en": "Geometric with ratio $r=3/5<1$ → **converges**. Sum $=\\frac{1}{1-3/5}=5/2$.",
+          "solution_he": "גיאומטרי עם $r=3/5<1$ → **מתכנסת**. סכום $=5/2$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Test convergence of $\\displaystyle\\sum_{n=1}^\\infty\\frac{n+1}{n^2+3}$ using limit comparison.",
+          "body_he": "בדקו התכנסות $\\displaystyle\\sum_{n=1}^\\infty\\frac{n+1}{n^2+3}$ בהשוואת גבולות.",
+          "solution_en": "Compare with $b_n=1/n$. $\\lim\\frac{a_n}{b_n}=\\lim\\frac{n(n+1)}{n^2+3}=1\\in(0,\\infty)$. Since $\\sum 1/n$ diverges, $\\sum\\frac{n+1}{n^2+3}$ **diverges**.",
+          "solution_he": "השוו עם $1/n$. $L=1>0$. $\\sum 1/n$ מתבדר → **מתבדר**.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Test $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^2+n}$ using comparison.",
+          "body_he": "בדקו $\\displaystyle\\sum_{n=1}^\\infty\\frac{1}{n^2+n}$ בהשוואה.",
+          "solution_en": "$\\frac{1}{n^2+n}<\\frac{1}{n^2}$. Since $\\sum 1/n^2$ converges ($p=2$), by comparison $\\sum\\frac{1}{n^2+n}$ **converges**.",
+          "solution_he": "$\\frac{1}{n^2+n}<\\frac{1}{n^2}$. $\\sum 1/n^2$ מתכנסת → **מתכנסת**.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Apply the ratio test to $\\displaystyle\\sum_{n=1}^\\infty\\frac{n!}{2^n}$.",
+          "body_he": "הפעילו מבחן מנה על $\\displaystyle\\sum_{n=1}^\\infty\\frac{n!}{2^n}$.",
+          "solution_en": "$\\left|\\frac{a_{n+1}}{a_n}\\right|=\\frac{(n+1)!}{2^{n+1}}\\cdot\\frac{2^n}{n!}=\\frac{n+1}{2}\\to\\infty>1$ → **diverges**.",
+          "solution_he": "$\\frac{n+1}{2}\\to\\infty>1$ → **מתבדרת**.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Test convergence of $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^{n+1}}{n}$ (alternating harmonic series).",
+          "body_he": "בדקו התכנסות $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^{n+1}}{n}$ (טור הרמוני חילופי).",
+          "solution_en": "AST: $b_n=1/n>0$, decreasing, $\\to 0$ ✓. **Converges**. Note: $\\sum 1/n$ diverges, so convergence is conditional only. (Known: sum $=\\ln 2$.)",
+          "solution_he": "AST: $b_n=1/n$ יורדת, $\\to 0$ ✓. **מתכנסת** (תנאית). סכום $=\\ln 2$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Use the integral test to decide convergence of $\\displaystyle\\sum_{n=2}^\\infty\\frac{1}{n\\ln n}$.",
+          "body_he": "השתמשו במבחן אינטגרל לקביעת התכנסות $\\displaystyle\\sum_{n=2}^\\infty\\frac{1}{n\\ln n}$.",
+          "solution_en": "$\\int_2^\\infty\\frac{dx}{x\\ln x}=[\\ln(\\ln x)]_2^\\infty=\\infty$ → diverges. So the series **diverges**.",
+          "solution_he": "$\\int_2^\\infty\\frac{dx}{x\\ln x}=\\infty$ → **מתבדרת**.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Determine whether $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{n^2}$ converges absolutely, conditionally, or diverges.",
+          "body_he": "קבעו האם $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{n^2}$ מתכנסת מוחלטת, תנאית, או מתבדרת.",
+          "solution_en": "$\\sum|a_n|=\\sum 1/n^2$ converges ($p=2>1$). Therefore the series converges **absolutely**.",
+          "solution_he": "$\\sum 1/n^2$ מתכנסת ($p=2$) → **מוחלטת**.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Test convergence of $\\displaystyle\\sum_{n=1}^\\infty\\left(\\frac{n}{2n+1}\\right)^n$ using the root test.",
+          "body_he": "בדקו $\\displaystyle\\sum_{n=1}^\\infty\\left(\\frac{n}{2n+1}\\right)^n$ במבחן שורש.",
+          "solution_en": "$\\sqrt[n]{|a_n|}=\\frac{n}{2n+1}\\to\\frac{1}{2}<1$ → **converges** (absolutely).",
+          "solution_he": "$\\sqrt[n]{|a_n|}=\\frac{n}{2n+1}\\to\\frac{1}{2}<1$ → **מתכנסת**.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{\\ln(n+1)}$ converges conditionally but not absolutely.",
+          "body_he": "הראו ש-$\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{\\ln(n+1)}$ מתכנסת תנאית אך לא מוחלטת.",
+          "solution_en": "**Not absolutely:** $\\sum\\frac{1}{\\ln(n+1)}\\geq\\sum\\frac{1}{n+1}$ (since $\\ln(n+1)<n+1$), and $\\sum\\frac{1}{n+1}$ diverges (harmonic). By comparison, $\\sum\\frac{1}{\\ln(n+1)}$ diverges.\n\n**Conditionally convergent:** AST with $b_n=\\frac{1}{\\ln(n+1)}$. $b_n>0$ ✓. $b_n$ decreasing (denominator increasing) ✓. $b_n\\to 0$ ✓. By AST, the alternating series converges. ■",
+          "solution_he": "**לא מוחלטת:** $\\frac{1}{\\ln(n+1)}>\\frac{1}{n+1}$ (כי $\\ln(n+1)<n+1$) → $\\sum\\frac{1}{\\ln(n+1)}$ מתבדרת. **תנאית:** AST עם $b_n=\\frac{1}{\\ln(n+1)}$ יורדת, $\\to 0$ ✓. ■",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Applying the divergence test to conclude convergence.** If $a_n\\to 0$, the test is INCONCLUSIVE — it does NOT prove convergence. ($\\sum 1/n$ has $a_n\\to 0$ but diverges!)\n\n2. **Wrong direction in comparison.** To show convergence, you need $a_n\\leq b_n$ where $\\sum b_n$ converges. Showing $a_n\\geq b_n$ (with convergent $b_n$) says nothing.\n\n3. **Using ratio test when $r=1$.** The ratio test is inconclusive when $r=1$ — use another test.\n\n4. **Forgetting to verify ALL three AST conditions.** All of $b_n>0$, $b_n$ decreasing, and $b_n\\to 0$ must hold.\n\n5. **Confusing conditional and absolute convergence.** A series can converge without converging absolutely. Always check $\\sum|a_n|$ to determine which type.",
+      "body_he_md": "1. **מבחן פיזור להוכחת התכנסות.** $a_n\\to 0$ — לא חרוץ להתכנסות. ($\\sum 1/n$ עם $a_n\\to 0$ — מתבדרת!)\n\n2. **כיוון שגוי בהשוואה.** להתכנסות: $a_n\\leq b_n$ עם $\\sum b_n$ מתכנסת. $a_n\\geq b_n$ לא מסיק דבר.\n\n3. **מבחן מנה עם $r=1$.** לא חרוץ — השתמשו במבחן אחר.\n\n4. **אי-אמות כל שלושת תנאי AST.** חובה: $b_n>0$, יורדת, $\\to 0$.\n\n5. **בלבול מוחלטת ותנאית.** תמיד בדקו $\\sum|a_n|$ לקביעת הסוג."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Quick reference:**\n| Test | Converges if | Diverges if | Inconclusive if |\n|------|-------------|------------|----------------|\n| Divergence | — | $a_n\\not\\to 0$ | $a_n\\to 0$ |\n| $p$-series | $p>1$ | $p\\leq 1$ | — |\n| Ratio | $r<1$ | $r>1$ | $r=1$ |\n| Root | $r<1$ | $r>1$ | $r=1$ |\n| AST | All 3 conditions met | — | Conditions fail |\n\n**Absolute vs. conditional:** After determining convergence via AST, check $\\sum|a_n|$:\n- If $\\sum|a_n|$ converges → **absolute**.\n- If $\\sum|a_n|$ diverges → **conditional**.\n\n**Exam strategy:** State the test name, verify its hypotheses, compute the key quantity ($r$, $L$, integral value), state the conclusion. Examiners award marks for each step.",
+      "body_he_md": "**עזר מהיר:**\n| מבחן | מתכנסת | מתבדרת | לא חרוץ |\n|------|--------|--------|--------|\n| פיזור | — | $a_n\\not\\to 0$ | $a_n\\to 0$ |\n| $p$-טור | $p>1$ | $p\\leq 1$ | — |\n| מנה | $r<1$ | $r>1$ | $r=1$ |\n| שורש | $r<1$ | $r>1$ | $r=1$ |\n| AST | 3 תנאים ✓ | — | תנאי נכשל |\n\n**מוחלטת מול תנאית:** אחרי קביעת התכנסות (AST), בדקו $\\sum|a_n|$.\n\n**אסטרטגיית בחינה:** ציינו שם המבחן, אמתו תנאים, חשבו גודל מרכזי ($r$, $L$, אינטגרל), הסיקו מסקנה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Always start** with the divergence test: if $a_n\\not\\to 0$, the series diverges immediately.\n- **$p$-series:** $\\sum 1/n^p$ converges iff $p>1$.\n- **Ratio test:** best for $n!$, $a^n$, or other exponential growth — gives $r$, compare to 1.\n- **Alternating series test (AST):** alternating sign, $b_n$ decreasing and $\\to 0$ → converges.\n- **Absolute vs. conditional:** check $\\sum|a_n|$ to determine which type of convergence.\n- State the test name and verify hypotheses — partial credit on exams.",
+      "body_he_md": "- **תמיד התחילו** במבחן פיזור.\n- **$p$-טור:** $\\sum 1/n^p$ מתכנסת אם"ם $p>1$.\n- **מבחן מנה:** מצוין ל-$n!$, $a^n$ — חשבו $r$, השוו ל-1.\n- **AST:** סימנים חילופיים, $b_n$ יורדת ו-$\\to 0$ → מתכנסת.\n- **מוחלטת מול תנאית:** בדקו $\\sum|a_n|$.\n- ציינו שם המבחן ואמתו תנאים — נקודות חלקיות בבחינה."
     }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Monotone + bounded ⇒ converges (completeness of ℝ).",
-      "Fixed point of recurrence: solve L = g(L) for limit.",
-      "Ratio test: |a_{n+1}/a_n| < 1 ⇒ converges absolutely."
-    ],
-    "tutor_pacing_hint": "Prove monotonicity before invoking boundedness. Always state the limit candidate from L = f(L).",
-    "skill_atoms_unlocked": [
-      "sequence_monotone_proof",
-      "sequence_limit_recurrence",
-      "ratio_test"
-    ]
-  }
+  ]
 }

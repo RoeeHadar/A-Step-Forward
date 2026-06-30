@@ -2,167 +2,224 @@
   "concept_id": "lhopital_rule",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "L'Hopital's Rule & Indeterminate Forms",
-  "title_he": "כלל לופיטל וצורות לא קבועות",
-  "summary_en": "Indeterminate forms $0/0$, $\\infty/\\infty$, and transformations for $0\\cdot\\infty$, $\\infty-\\infty$, and exponential indeterminates — the workhorse for tough limits in Calc 1.",
-  "summary_he": "צורות לא קבועות $0/0$, $\\infty/\\infty$, והמרות ל-$0\\cdot\\infty$, $\\infty-\\infty$ ומעריכיות — כלי מרכזי לגבולות קשים בחשבון 1.",
-  "est_minutes": 30,
+  "math_track": ["calc1"],
+  "title_en": "L'Hôpital's Rule",
+  "title_he": "כלל לופיטל",
+  "summary_en": "L'Hôpital's rule resolves indeterminate limits of the form $0/0$ and $\\infty/\\infty$ by differentiating numerator and denominator separately. Other indeterminate forms ($0\\cdot\\infty$, $1^\\infty$, $\\infty-\\infty$) are reduced to these two by algebraic manipulation.",
+  "summary_he": "כלל לופיטל פותר גבולות בלתי-קבועים מהצורה $0/0$ ו-$\\infty/\\infty$ על ידי גזירה נפרדת של המונה והמכנה. צורות בלתי-קבועות אחרות ($0\\cdot\\infty$, $1^\\infty$, $\\infty-\\infty$) מומרות לאחת משתי הצורות הנ\"ל.",
+  "est_minutes": 55,
+  "agent_hints": "Before applying L'Hôpital, always verify that the limit IS in indeterminate form 0/0 or ∞/∞. A common error is applying the rule when it doesn't apply. For other forms, guide the learner through the algebraic conversion.",
   "sections": [
     {
       "kind": "intro",
-      "title_en": "When direct substitution fails",
-      "title_he": "כשהצבה ישירה נכשלת",
-      "body_en_md": "Substituting $x\\to a$ may yield **indeterminate forms** — expressions that do not determine the limit:\n$$\\frac{0}{0},\\quad \\frac{\\infty}{\\infty},\\quad 0\\cdot\\infty,\\quad \\infty-\\infty,\\quad 0^0,\\quad 1^\\infty,\\quad \\infty^0.$$\n\n**L'Hopital's rule** handles $0/0$ and $\\infty/\\infty$ under hypotheses: $f,g$ differentiable near $a$, $g'(x)\\ne 0$, and the limit of $\\dfrac{f'(x)}{g'(x)}$ exists (or is $\\pm\\infty$).\n\nThen:\n$$\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}.$$\n\nApplies also as $x\\to\\pm\\infty$.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "הצבה ישירה עלולה לתת **צורות לא קבועות**:\n$$\\frac{0}{0},\\quad \\frac{\\infty}{\\infty},\\quad 0\\cdot\\infty,\\quad \\infty-\\infty.$$\n\n**כלל לופיטל** ל-$0/0$ ו-$\\infty/\\infty$: אם $\\lim \\dfrac{f'(x)}{g'(x)}$ קיים,\n$$\\lim\\frac{f(x)}{g(x)}=\\lim\\frac{f'(x)}{g'(x)}.$$\n\nתקף גם ב-$x\\to\\pm\\infty$.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "title_en": "Why We Need L'Hôpital's Rule",
+      "title_he": "למה אנחנו צריכים את כלל לופיטל",
+      "body_en_md": "Standard limit laws fail when both numerator and denominator approach 0 (or both approach $\\infty$). For example:\n$$\\lim_{x\\to 0}\\frac{\\sin x}{x} = ?$$\nPlugging in $x=0$ gives $0/0$ — **undefined**. This is an **indeterminate form**.\n\nL'Hôpital (1696, from Bernoulli) provides an elegant shortcut: under appropriate conditions, differentiate top and bottom separately.\n\n**Where it appears:**\n- Limits at points with $0/0$ form (e.g., $\\frac{e^x-1}{x}$ as $x\\to 0$).\n- Limits at infinity with $\\infty/\\infty$ (e.g., $\\frac{x^k}{e^x}$ as $x\\to\\infty$).\n- Disguised forms: $0\\cdot\\infty$, $1^\\infty$, $\\infty-\\infty$ — appear on every university calculus exam.",
+      "body_he_md": "חוקי הגבולות הרגילים נכשלים כאשר גם המונה וגם המכנה שואפים ל-0 (או שניהם ל-$\\infty$). למשל:\n$$\\lim_{x\\to 0}\\frac{\\sin x}{x} = ?$$\nהצבת $x=0$ נותנת $0/0$ — **לא מוגדר**. זו **צורה בלתי-קבועה**.\n\nלופיטל (1696, מברנולי) מספק קיצור אלגנטי: בתנאים מתאימים, גזרו מונה ומכנה בנפרד.\n\n**היכן מופיע:**\n- גבולות בנקודות בצורת $0/0$.\n- גבולות באינסוף בצורת $\\infty/\\infty$.\n- צורות מוסוות: $0\\cdot\\infty$, $1^\\infty$, $\\infty-\\infty$ — מופיעות בכל בחינת חשבון."
+    },
+    {
+      "kind": "definition",
+      "title_en": "L'Hôpital's Rule — Formal Statement",
+      "title_he": "כלל לופיטל — ניסוח פורמלי",
+      "body_en_md": "**Theorem (L'Hôpital's Rule):**\n\nSuppose $\\lim_{x\\to a}f(x) = 0$ and $\\lim_{x\\to a}g(x) = 0$ (or both limits are $\\pm\\infty$). If $g'(x) \\ne 0$ near $a$ (except possibly at $a$), and if\n$$\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}$$\nexists (or is $\\pm\\infty$), then\n$$\\lim_{x\\to a}\\frac{f(x)}{g(x)} = \\lim_{x\\to a}\\frac{f'(x)}{g'(x)}.$$\n\nThe rule also applies to one-sided limits and limits as $x\\to\\pm\\infty$.\n\n**Critical precondition:** You must verify $0/0$ or $\\infty/\\infty$ BEFORE differentiating. If the form is NOT indeterminate, L'Hôpital does NOT apply and gives wrong answers.\n\n**The rule may be applied repeatedly** if the new ratio is again indeterminate.",
+      "body_he_md": "**משפט (כלל לופיטל):**\n\nנניח $\\lim_{x\\to a}f(x)=0$ ו-$\\lim_{x\\to a}g(x)=0$ (או שניהם $\\pm\\infty$). אם $g'(x)\\ne 0$ בסביבת $a$, וגבול\n$$\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}$$\nקיים (או $\\pm\\infty$), אז\n$$\\lim_{x\\to a}\\frac{f(x)}{g(x)} = \\lim_{x\\to a}\\frac{f'(x)}{g'(x)}.$$\n\nהכלל חל גם על גבולות חד-צדדיים ועל $x\\to\\pm\\infty$.\n\n**תנאי קדם קריטי:** חייבים לאמת $0/0$ או $\\infty/\\infty$ לפני הגזירה. אם הצורה אינה בלתי-קבועה — הכלל לא חל.\n\n**ניתן להפעיל את הכלל שוב** אם המנה החדשה עדיין בלתי-קבועה."
     },
     {
       "kind": "theory",
-      "title_en": "Applying L'Hopital correctly",
-      "title_he": "יישום נכון של לופיטל",
-      "body_en_md": "**Check form first:** verify $0/0$ or $\\infty/\\infty$ before differentiating.\n\n**Differentiate numerator and denominator separately** — never use quotient rule on $\\dfrac{f}{g}$ for L'Hopital.\n\n**Repeat** if result is still indeterminate (may apply multiple times).\n\n**Example.** $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$: form $0/0$.\n$$\\lim\\frac{\\cos x}{1}=1.$$\n\n**Example.** $\\lim_{x\\to\\infty}\\dfrac{x}{e^x}$: form $\\infty/\\infty$.\n$$\\lim\\frac{1}{e^x}=0.$$\n\n**When it fails:** $\\lim_{x\\to\\infty}\\dfrac{x+\\sin x}{x}$ — L'Hopital gives non-existent $\\lim(1+\\cos x)$; use algebra instead: $1+\\dfrac{\\sin x}{x}\\to 1$.",
-      "body_he_md": "**בדקו צורה:** $0/0$ או $\\infty/\\infty$.\n\n**גזרו מונה ומכנה בנפרד** — לא כלל מנה!\n\n**חזרו** אם עדיין לא קבוע.\n\n**דוגמה.** $\\lim_{x\\to 0}\\dfrac{\\sin x}{x}=\\lim\\dfrac{\\cos x}{1}=1$.\n\n**דוגמה.** $\\lim_{x\\to\\infty}\\dfrac{x}{e^x}=0$.\n\n**כישלון:** $\\dfrac{x+\\sin x}{x}$ — השתמשו באלגברה."
+      "title_en": "All Indeterminate Forms and How to Handle Them",
+      "title_he": "כל הצורות הבלתי-קבועות וכיצד לטפל בהן",
+      "body_en_md": "**The 7 indeterminate forms:**\n\n| Form | Reduction strategy |\n|------|--------------------|\n| $0/0$ | Apply L'Hôpital directly |\n| $\\infty/\\infty$ | Apply L'Hôpital directly |\n| $0\\cdot\\infty$ | Rewrite as $\\frac{0}{1/\\infty}$ or $\\frac{\\infty}{1/0}$ |\n| $\\infty - \\infty$ | Combine fractions; find common denominator |\n| $1^\\infty$ | Take log: $e^{\\lim \\ln f}$, get $0\\cdot\\infty$ form |\n| $0^0$ | Take log: $e^{\\lim \\ln f}$, get $0\\cdot\\infty$ form |\n| $\\infty^0$ | Take log: $e^{\\lim \\ln f}$, get $0\\cdot\\infty$ form |\n\n**The exponential trick for $1^\\infty$, $0^0$, $\\infty^0$:**\nIf $L = \\lim f(x)^{g(x)}$, then $\\ln L = \\lim g(x)\\ln f(x)$ — now a $0\\cdot(\\pm\\infty)$ form.",
+      "body_he_md": "**7 הצורות הבלתי-קבועות:**\n\n| צורה | אסטרטגיית המרה |\n|------|----------------|\n| $0/0$ | לופיטל ישיר |\n| $\\infty/\\infty$ | לופיטל ישיר |\n| $0\\cdot\\infty$ | כתבו כ-$\\frac{0}{1/\\infty}$ או $\\frac{\\infty}{1/0}$ |\n| $\\infty-\\infty$ | איחוד שברים; מכנה משותף |\n| $1^\\infty$ | לוגריתם: $e^{\\lim\\ln f}$, מקבלים $0\\cdot\\infty$ |\n| $0^0$ | לוגריתם: $e^{\\lim\\ln f}$ |\n| $\\infty^0$ | לוגריתם: $e^{\\lim\\ln f}$ |\n\n**טריק האקספוננט ל-$1^\\infty$, $0^0$, $\\infty^0$:**\nאם $L=\\lim f(x)^{g(x)}$, אז $\\ln L=\\lim g(x)\\ln f(x)$ — עכשיו צורת $0\\cdot(\\pm\\infty)$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Transforming other indeterminate forms",
-      "title_he": "המרת צורות לא קבועות אחרות",
-      "body_en_md": "**$0\\cdot\\infty$:** rewrite as $\\dfrac{0}{1/\\infty}$ or $\\dfrac{\\infty}{1/0}$.\n\n$\\lim_{x\\to 0^+} x\\ln x$: write $\\dfrac{\\ln x}{1/x}$ ($-\\infty/\\infty$), L'Hopital $\\Rightarrow \\dfrac{1/x}{-1/x^2}=-x\\to 0$.\n\n**$\\infty-\\infty$:** combine algebraically or use common denominator.\n\n$\\lim_{x\\to 0}\\left(\\dfrac{1}{x}-\\dfrac{1}{\\sin x}\\right)$: common denominator $\\dfrac{\\sin x-x}{x\\sin x}$ — then $0/0$, L'Hopital (twice may be needed).\n\n**Exponential forms** $0^0,1^\\infty,\\infty^0$: take $\\ln$ first, then exponentiate result.",
-      "body_he_md": "**$0\\cdot\\infty$:** כתבו כ-$\\dfrac{\\ln x}{1/x}$.\n\n$\\lim x\\ln x=0$.\n\n**$\\infty-\\infty$:** מכנה משותף.\n\n**מעריכיות:** $\\ln$ ואז חזרה ב-$e^{(\\cdot)}$."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — $\\lim_{x\\to 0}\\frac{\\sin x}{x}$ via L'Hôpital",
+      "title_he": "דוגמה פתורה 1 — $\\lim_{x\\to 0}\\frac{\\sin x}{x}$ בכלל לופיטל",
+      "body_en_md": "**Given:** $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x}{x}$.\n\n**Step 1 — Verify indeterminate form:**\n$$\\text{Numerator: }\\sin(0)=0. \\quad \\text{Denominator: }0. \\quad \\Rightarrow \\text{Form: } \\frac{0}{0}. \\checkmark$$\n\n**Step 2 — L'Hôpital: differentiate numerator and denominator separately:**\n$$\\frac{d}{dx}[\\sin x] = \\cos x, \\qquad \\frac{d}{dx}[x] = 1$$\n\n**Step 3 — New limit:**\n$$\\lim_{x\\to 0}\\frac{\\cos x}{1} = \\cos(0) = 1$$\n\n**Answer:** $\\boxed{\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1}$ ✓\n\n*This is the most famous limit in calculus — it is the reason $(\\sin x)' = \\cos x$.*",
+      "body_he_md": "**נתון:** $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x}{x}$.\n\n**שלב 1 — אמתו צורה בלתי-קבועה:**\n$$\\sin(0)=0,\\quad 0 \\Rightarrow \\frac{0}{0} \\checkmark$$\n\n**שלב 2 — לופיטל: גזרו מונה ומכנה בנפרד:**\n$$\\frac{d}{dx}[\\sin x]=\\cos x,\\quad \\frac{d}{dx}[x]=1$$\n\n**שלב 3 — גבול חדש:**\n$$\\lim_{x\\to 0}\\frac{\\cos x}{1} = 1$$\n\n**תשובה:** $\\boxed{1}$ ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{e^x - 1}{x}$ using L'Hôpital's rule.",
+      "body_he_md": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1}{x}$ בכלל לופיטל.",
+      "checkpoint_solution_en": "Form at $x=0$: $\\frac{0}{0}$. ✓ Apply L'Hôpital:\n$$\\lim_{x\\to 0}\\frac{(e^x-1)'}{(x)'} = \\lim_{x\\to 0}\\frac{e^x}{1} = e^0 = 1.$$",
+      "checkpoint_solution_he": "צורה: $\\frac{0}{0}$ ✓. לופיטל:\n$$\\lim_{x\\to 0}\\frac{e^x}{1} = 1.$$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — $\\lim_{x\\to\\infty}\\frac{x^2}{e^x}$ (Apply Twice)",
+      "title_he": "דוגמה פתורה 2 — $\\lim_{x\\to\\infty}\\frac{x^2}{e^x}$ (פעמיים)",
+      "body_en_md": "**Given:** $\\displaystyle\\lim_{x\\to\\infty}\\frac{x^2}{e^x}$.\n\n**Step 1 — Verify indeterminate form as $x\\to\\infty$:**\n$$\\text{Numerator: }x^2\\to\\infty.\\quad\\text{Denominator: }e^x\\to\\infty. \\quad \\Rightarrow \\frac{\\infty}{\\infty}.\\checkmark$$\n\n**Step 2 — First application of L'Hôpital:**\n$$\\lim_{x\\to\\infty}\\frac{x^2}{e^x} = \\lim_{x\\to\\infty}\\frac{2x}{e^x}$$\n\n**Step 3 — Check form again:** As $x\\to\\infty$: $2x\\to\\infty$, $e^x\\to\\infty$ $\\Rightarrow$ still $\\infty/\\infty$. Apply again:\n$$\\lim_{x\\to\\infty}\\frac{2x}{e^x} = \\lim_{x\\to\\infty}\\frac{2}{e^x} = 0$$\n\n**Answer:** $\\boxed{\\displaystyle\\lim_{x\\to\\infty}\\frac{x^2}{e^x} = 0}$ ✓\n\n*General rule: $\\lim_{x\\to\\infty}\\frac{x^n}{e^x}=0$ for any fixed $n$ — exponentials dominate any polynomial.*",
+      "body_he_md": "**נתון:** $\\displaystyle\\lim_{x\\to\\infty}\\frac{x^2}{e^x}$.\n\n**שלב 1 — צורה:** $\\infty/\\infty$ ✓\n\n**שלב 2 — לופיטל ראשון:**\n$$\\lim_{x\\to\\infty}\\frac{x^2}{e^x} = \\lim_{x\\to\\infty}\\frac{2x}{e^x}$$\n\n**שלב 3 — עדיין $\\infty/\\infty$, לופיטל שני:**\n$$\\lim_{x\\to\\infty}\\frac{2}{e^x} = 0$$\n\n**תשובה:** $\\boxed{0}$ ✓\n\n*כלל כללי: $e^x$ גובר על כל פולינום.*"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\lim_{x\\to\\infty}\\frac{\\ln x}{x}$.",
+      "body_he_md": "חשבו $\\displaystyle\\lim_{x\\to\\infty}\\frac{\\ln x}{x}$.",
+      "checkpoint_solution_en": "Form: $\\infty/\\infty$. ✓ L'Hôpital: $\\lim_{x\\to\\infty}\\frac{1/x}{1}=\\lim_{x\\to\\infty}\\frac{1}{x}=0$.",
+      "checkpoint_solution_he": "צורה: $\\infty/\\infty$ ✓. לופיטל: $\\lim_{x\\to\\infty}\\frac{1/x}{1}=0$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — $\\lim_{x\\to 0^+}x^x$ (Form $0^0$)",
+      "title_he": "דוגמה פתורה 3 — $\\lim_{x\\to 0^+}x^x$ (צורת $0^0$)",
+      "body_en_md": "**Given:** $\\displaystyle\\lim_{x\\to 0^+}x^x$.\n\n**Step 1 — Identify form:** As $x\\to 0^+$: $x\\to 0$ and $x^x = e^{x\\ln x}$. The exponent $x\\ln x\\to 0\\cdot(-\\infty)$ — indeterminate form $0\\cdot\\infty$.\n\n**Step 2 — Let $L = \\lim_{x\\to 0^+}x^x$. Take logarithm:**\n$$\\ln L = \\lim_{x\\to 0^+}x\\ln x = \\lim_{x\\to 0^+}\\frac{\\ln x}{1/x}$$\n\n**Step 3 — Verify new form:** As $x\\to 0^+$: $\\ln x\\to -\\infty$, $1/x\\to +\\infty$ $\\Rightarrow$ $\\frac{-\\infty}{+\\infty}$ — apply L'Hôpital:\n$$\\ln L = \\lim_{x\\to 0^+}\\frac{(\\ln x)'}{(1/x)'} = \\lim_{x\\to 0^+}\\frac{1/x}{-1/x^2} = \\lim_{x\\to 0^+}(-x) = 0$$\n\n**Step 4 — Exponentiate:**\n$$\\ln L = 0 \\implies L = e^0 = 1$$\n\n**Answer:** $\\boxed{\\displaystyle\\lim_{x\\to 0^+}x^x = 1}$ ✓\n\n*The $1^\\infty$ technique is identical: take log, get $0\\cdot\\infty$, rewrite as a ratio, apply L'Hôpital, exponentiate.*",
+      "body_he_md": "**נתון:** $\\displaystyle\\lim_{x\\to 0^+}x^x$.\n\n**שלב 1 — זהו צורה:** $x^x = e^{x\\ln x}$. החזקה $x\\ln x\\to 0\\cdot(-\\infty)$ — בלתי-קבועה.\n\n**שלב 2 — $L=\\lim x^x$, קחו לוגריתם:**\n$$\\ln L = \\lim_{x\\to 0^+}x\\ln x = \\lim_{x\\to 0^+}\\frac{\\ln x}{1/x}$$\n\n**שלב 3 — צורה: $\\frac{-\\infty}{+\\infty}$ ✓ לופיטל:**\n$$\\ln L = \\lim_{x\\to 0^+}\\frac{1/x}{-1/x^2} = \\lim_{x\\to 0^+}(-x) = 0$$\n\n**שלב 4 — חזרה מהלוגריתם:**\n$$L = e^0 = 1$$\n\n**תשובה:** $\\boxed{1}$ ✓"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Conversion Table for All Indeterminate Forms",
+      "title_he": "מדריך שיטות — טבלת המרה לכל הצורות הבלתי-קבועות",
+      "body_en_md": "| Indeterminate form | How to convert to $0/0$ or $\\infty/\\infty$ |\n|--------------------|-----------------------------------------|\n| $0/0$ | Apply L'Hôpital directly |\n| $\\infty/\\infty$ | Apply L'Hôpital directly |\n| $f\\cdot g$ with $0\\cdot\\infty$ | Write as $\\frac{f}{1/g}$ (form $0/0$) or $\\frac{g}{1/f}$ (form $\\infty/\\infty$) — choose whichever simplifies more |\n| $f - g$ with $\\infty-\\infty$ | Combine into one fraction over a common denominator, then $0/0$ |\n| $f^g$ with $1^\\infty$, $0^0$, or $\\infty^0$ | Let $L=\\lim f^g$; compute $\\ln L=\\lim g\\ln f$ (gives $0\\cdot\\pm\\infty$); then convert and apply L'Hôpital; finally $L=e^{\\ln L}$ |\n\n**Warning:** NOT all $0\\cdot\\infty$ forms need L'Hôpital. Sometimes direct algebra or known limits are simpler.",
+      "body_he_md": "| צורה בלתי-קבועה | כיצד להמיר ל-$0/0$ או $\\infty/\\infty$ |\n|-----------------|---------------------------------------|\n| $0/0$ | לופיטל ישיר |\n| $\\infty/\\infty$ | לופיטל ישיר |\n| $f\\cdot g$ עם $0\\cdot\\infty$ | כתבו כ-$\\frac{f}{1/g}$ ($0/0$) או $\\frac{g}{1/f}$ ($\\infty/\\infty$) |\n| $f-g$ עם $\\infty-\\infty$ | איחוד לשבר אחד ← $0/0$ |\n| $f^g$ עם $1^\\infty$, $0^0$, $\\infty^0$ | $\\ln L=\\lim g\\ln f$ ← $0\\cdot\\pm\\infty$ ← לופיטל ← $L=e^{\\ln L}$ |\n\n**אזהרה:** לא כל $0\\cdot\\infty$ דורש לופיטל — לפעמים אלגברה ישירה פשוטה יותר."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\tan x}{x}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{\\tan x}{x}$.",
+          "solution_en": "Form $0/0$. L'Hôpital: $\\lim_{x\\to 0}\\frac{\\sec^2 x}{1}=1$.",
+          "solution_he": "צורה $0/0$. לופיטל: $\\sec^2(0)=1$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{1-\\cos x}{x^2}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{1-\\cos x}{x^2}$.",
+          "solution_en": "Form $0/0$. First application: $\\lim\\frac{\\sin x}{2x}$ — still $0/0$. Second: $\\lim\\frac{\\cos x}{2}=1/2$.",
+          "solution_he": "צורה $0/0$. לופיטל: $\\frac{\\sin x}{2x}$ ← עוד $0/0$ ← $\\frac{\\cos x}{2}=1/2$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\ln(1+x)}{x}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{\\ln(1+x)}{x}$.",
+          "solution_en": "Form $0/0$. L'Hôpital: $\\lim_{x\\to 0}\\frac{1/(1+x)}{1}=1$.",
+          "solution_he": "צורה $0/0$. לופיטל: $\\frac{1/(1+x)}{1}=1$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 2}\\frac{x^2-4}{x-2}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 2}\\frac{x^2-4}{x-2}$.",
+          "solution_en": "Form $0/0$. L'Hôpital: $\\lim_{x\\to 2}\\frac{2x}{1}=4$. (Alternatively factor: $\\frac{(x-2)(x+2)}{x-2}\\to 4$.)",
+          "solution_he": "צורה $0/0$. לופיטל: $2\\cdot 2=4$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to\\infty}\\frac{\\ln x}{\\sqrt{x}}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to\\infty}\\frac{\\ln x}{\\sqrt{x}}$.",
+          "solution_en": "Form $\\infty/\\infty$. L'Hôpital: $\\lim_{x\\to\\infty}\\frac{1/x}{1/(2\\sqrt{x})}=\\lim_{x\\to\\infty}\\frac{2\\sqrt{x}}{x}=\\lim_{x\\to\\infty}\\frac{2}{\\sqrt{x}}=0$.",
+          "solution_he": "צורה $\\infty/\\infty$. לופיטל: $\\frac{2}{\\sqrt{x}}\\to 0$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0^+}x\\ln x$ (form $0\\cdot\\infty$).",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0^+}x\\ln x$ (צורת $0\\cdot\\infty$).",
+          "solution_en": "Rewrite: $\\frac{\\ln x}{1/x}$ (form $-\\infty/+\\infty$). L'Hôpital: $\\frac{1/x}{-1/x^2}=-x\\to 0$.",
+          "solution_he": "כתבו: $\\frac{\\ln x}{1/x}$. לופיטל: $-x\\to 0$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to\\infty}\\frac{x^3}{e^{2x}}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to\\infty}\\frac{x^3}{e^{2x}}$.",
+          "solution_en": "Apply L'Hôpital three times: $\\frac{x^3}{e^{2x}}\\to\\frac{3x^2}{2e^{2x}}\\to\\frac{6x}{4e^{2x}}\\to\\frac{6}{8e^{2x}}\\to 0$.",
+          "solution_he": "שלוש פעמי לופיטל: $\\to\\frac{6}{8e^{2x}}\\to 0$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\left(\\frac{1}{\\sin x}-\\frac{1}{x}\\right)$ (form $\\infty-\\infty$).",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\left(\\frac{1}{\\sin x}-\\frac{1}{x}\\right)$ (צורת $\\infty-\\infty$).",
+          "solution_en": "Combine: $\\frac{x-\\sin x}{x\\sin x}$ (form $0/0$). L'Hôpital: $\\frac{1-\\cos x}{\\sin x+x\\cos x}\\to\\frac{0}{0+0}$. Apply again: $\\frac{\\sin x}{2\\cos x-x\\sin x}\\to\\frac{0}{2}=0$.",
+          "solution_he": "איחוד: $\\frac{x-\\sin x}{x\\sin x}$. שני יישומי לופיטל: $\\to 0$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0^+}(\\sin x)^x$ (form $0^0$).",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0^+}(\\sin x)^x$ (צורת $0^0$).",
+          "solution_en": "Let $L=\\lim(\\sin x)^x$. $\\ln L=\\lim_{x\\to 0^+}x\\ln(\\sin x)$. Write as $\\frac{\\ln(\\sin x)}{1/x}$. L'Hôpital: $\\frac{\\cos x/\\sin x}{-1/x^2}=\\frac{-x^2\\cos x}{\\sin x}\\to 0$. So $L=e^0=1$.",
+          "solution_he": "$\\ln L=\\lim x\\ln(\\sin x)\\to 0$. $L=e^0=1$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$.",
+          "solution_en": "Form $0/0$. Apply L'Hôpital three times:\n$\\frac{e^x-1-x}{3x^2}\\to\\frac{e^x-1}{6x}\\to\\frac{e^x}{6}=\\frac{1}{6}$.",
+          "solution_he": "שלוש פעמי לופיטל: $\\to\\frac{e^x}{6}=\\frac{1}{6}$.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to 1}\\left(\\frac{1}{\\ln x}-\\frac{1}{x-1}\\right)$.",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to 1}\\left(\\frac{1}{\\ln x}-\\frac{1}{x-1}\\right)$.",
+          "solution_en": "Combine: $\\frac{(x-1)-\\ln x}{(x-1)\\ln x}$. At $x=1$: $0/0$. L'Hôpital (numerator): $1-1/x$; (denominator): $\\ln x+(x-1)/x$. Ratio at $x=1$: $0/0$ again. Apply once more. After second application: $\\frac{1/x^2}{2/x}=\\frac{1}{2x}\\to 1/2$.",
+          "solution_he": "איחוד: $\\frac{(x-1)-\\ln x}{(x-1)\\ln x}$. שני יישומי לופיטל $\\to 1/2$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\lim_{x\\to\\infty}\\left(1+\\frac{1}{x}\\right)^x$ (form $1^\\infty$).",
+          "body_he": "חשבו $\\displaystyle\\lim_{x\\to\\infty}\\left(1+\\frac{1}{x}\\right)^x$ (צורת $1^\\infty$).",
+          "solution_en": "Let $L=\\lim(1+1/x)^x$. $\\ln L=\\lim_{x\\to\\infty}x\\ln(1+1/x)=\\lim_{t\\to 0^+}\\frac{\\ln(1+t)}{t}$ (sub $t=1/x$). L'Hôpital or known limit: $\\to 1$. So $L=e^1=e$.",
+          "solution_he": "$\\ln L=\\lim_{t\\to 0^+}\\frac{\\ln(1+t)}{t}\\to 1$. $L=e$.",
+          "points": 12
+        }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common mistakes",
+      "title_en": "Common Mistakes",
       "title_he": "טעויות נפוצות",
-      "body_en_md": "1. **Using quotient rule** instead of separate derivatives.\n2. **Applying when limit of $f'/g'$ does not exist** — rule does not apply.\n3. **Differentiating before confirming indeterminate form** — e.g. $\\dfrac{x}{x^2+1}\\to 0$ at $\\infty$ without L'Hopital.\n4. **Forgetting to exponentiate** after $\\ln$ for $1^\\infty$ forms.\n\n**Exam tip (Technion 104031):** show the indeterminate form explicitly before invoking L'Hopital.",
-      "body_he_md": "1. **כלל מנה** במקום גזירה נפרדת.\n2. **יישום כש-$\\lim f'/g'$ לא קיים**.\n3. **גזירה לפני בדיקת צורה**.\n4. **שכחת $e^{(\\cdot)}$** אחרי $\\ln$.\n\n**טיפ:** הציגו את הצורה הלא קבועה במפורש."
+      "body_en_md": "1. **Applying L'Hôpital without verifying indeterminate form.** If $\\lim_{x\\to 1}\\frac{x^2-1}{x+3}$ is evaluated — numerator $\\to 0$, denominator $\\to 4$ — the form is $0/4=0$, NOT $0/0$. L'Hôpital does not apply and gives the wrong answer.\n\n2. **Differentiating as a product instead of separately.** You differentiate $\\frac{f}{g}$ by differentiating $f$ and $g$ **independently**, not by applying the quotient rule.\n\n3. **Forgetting to exponentiate after taking logs.** For $f^g$ forms: once you compute $\\ln L$, you must return $L = e^{\\ln L}$.\n\n4. **Not re-checking the form after first application.** Sometimes the first derivative gives a non-indeterminate form and you must stop.\n\n5. **Wrong conversion of $0\\cdot\\infty$.** Putting $f$ in the numerator (form $0/0$) vs. the denominator (form $\\infty/\\infty$) can make a huge difference in complexity — try both if one gets messy.",
+      "body_he_md": "1. **יישום לופיטל ללא אימות צורה בלתי-קבועה.** אם המכנה שואף ל-4, הצורה היא $0/4=0$, לא $0/0$ — לופיטל לא חל.\n\n2. **גזירה כמכפלה במקום בנפרד.** גוזרים $f$ ו-$g$ בנפרד — לא מפעילים כלל מנה.\n\n3. **שכחת האקספוננציה אחרי הלוגריתם.** עבור $f^g$: לאחר חישוב $\\ln L$, חייבים לחזור $L=e^{\\ln L}$.\n\n4. **לא בדיקת הצורה אחרי יישום ראשון.** לפעמים היישום הראשון נותן צורה קבועה — יש לעצור.\n\n5. **המרה שגויה של $0\\cdot\\infty$.** שימו $f$ במונה ($0/0$) או במכנה ($\\infty/\\infty$) — נסו את מה שפשוט יותר."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Checklist before every L'Hôpital computation:**\n1. Substitute — is the form $0/0$ or $\\infty/\\infty$? If not, stop.\n2. Differentiate numerator and denominator separately.\n3. Substitute again. Repeat if still indeterminate.\n4. If the form is $0\\cdot\\infty$, $\\infty-\\infty$, or an exponential, convert first.\n\n**Key known limits (don't need L'Hôpital):**\n$$\\lim_{x\\to 0}\\frac{\\sin x}{x}=1,\\quad \\lim_{x\\to 0}\\frac{e^x-1}{x}=1,\\quad \\lim_{x\\to 0}\\frac{\\ln(1+x)}{x}=1,\\quad \\lim_{x\\to\\infty}\\left(1+\\frac{1}{x}\\right)^x=e$$\n\n**Examiner patterns:** L'Hôpital almost always requires 2–3 applications, or a logarithm trick. Partial credit is given for correctly identifying the form.",
+      "body_he_md": "**רשימת תיוג לפני כל חישוב לופיטל:**\n1. הציבו — האם הצורה $0/0$ או $\\infty/\\infty$? אם לא, עצרו.\n2. גזרו מונה ומכנה בנפרד.\n3. הציבו שוב. חזרו אם עדיין בלתי-קבועה.\n4. אם הצורה $0\\cdot\\infty$, $\\infty-\\infty$, או מעריכית — המירו קודם.\n\n**גבולות ידועים (לא צריך לופיטל):**\n$$\\lim_{x\\to 0}\\frac{\\sin x}{x}=1,\\quad \\lim_{x\\to 0}\\frac{e^x-1}{x}=1,\\quad \\lim_{x\\to\\infty}(1+1/x)^x=e$$\n\n**דפוסי בוחן:** לופיטל דורש לרוב 2–3 יישומים או טריק לוגריתם."
     },
     {
       "kind": "summary",
-      "title_en": "Decision flowchart",
-      "title_he": "תרשים זרימה",
-      "body_en_md": "1. Try direct substitution.\n2. If $0/0$ or $\\infty/\\infty$ — L'Hopital (check derivative ratio limit exists).\n3. If $0\\cdot\\infty$, $\\infty-\\infty$ — algebra first.\n4. If $1^\\infty$ etc. — use $\\ln$.\n5. If L'Hopital fails — factor, conjugates, known limits ($\\sin x/x$).",
-      "body_he_md": "1. הצבה ישירה.\n2. $0/0$ או $\\infty/\\infty$ — לופיטל.\n3. $0\\cdot\\infty$, $\\infty-\\infty$ — אלגברה.\n4. $1^\\infty$ — $\\ln$.\n5. כישלון — פירוק, גבולות ידועים."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for L'Hopital's Rule & Indeterminate Forms: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from L'Hopital's Rule & Indeterminate Forms.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-כלל לופיטל וצורות לא קבועות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-כלל לופיטל וצורות לא קבועות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- L'Hôpital's rule applies ONLY when the form is $0/0$ or $\\infty/\\infty$.\n- Differentiate numerator and denominator **separately** (not with quotient rule).\n- Apply repeatedly if the new form is still indeterminate.\n- Other forms ($0\\cdot\\infty$, $\\infty-\\infty$, $f^g$ types) must be converted first.\n- Exponential forms: take $\\ln$, compute the limit of the exponent, then exponentiate.\n- Know the four standard limits (sin, exp, log, $(1+1/x)^x$) by heart.",
+      "body_he_md": "- לופיטל חל רק כשהצורה $0/0$ או $\\infty/\\infty$.\n- גזרו מונה ומכנה **בנפרד** (לא כלל מנה).\n- חזרו ביישום אם הצורה עדיין בלתי-קבועה.\n- צורות אחרות: המירו קודם.\n- צורות מעריכיות: לוגריתם ← לופיטל ← אקספוננציה.\n- דעו בעל-פה את ארבעת הגבולות הידועים."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$\\lim_{x\\to 0}\\dfrac{e^x-1}{x}=?$",
-      "stem_he": "$\\lim_{x\\to 0}\\dfrac{e^x-1}{x}=?$",
-      "options_en": [
-        "$0$",
-        "$1$",
-        "$e$",
-        "$\\infty$"
-      ],
-      "options_he": [
-        "$0$",
-        "$1$",
-        "$e$",
-        "$\\infty$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Form $0/0$; L'Hopital: $e^x/1\\to 1$.",
-      "explanation_he": "צורה $0/0$; לופיטל: $e^x\\to 1$.",
-      "skill_atoms": [
-        "lhopital_basic"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'L'Hopital's Rule & Indeterminate Forms'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'כלל לופיטל וצורות לא קבועות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "lhopital_infinity"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'L'Hopital's Rule & Indeterminate Forms' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'כלל לופיטל וצורות לא קבועות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "indeterminate_zero_times_inf"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'L'Hopital's Rule & Indeterminate Forms'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'כלל לופיטל וצורות לא קבועות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "lhopital_pitfalls"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'L'Hopital's Rule & Indeterminate Forms' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'כלל לופיטל וצורות לא קבועות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "indeterminate_exponential"
-      ],
-      "points_level_min": "calc1"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "L'Hopital applies only to 0/0 and infinity/infinity with valid derivative ratio limit.",
-      "Transform 0·infinity and infinity-infinity algebraically first.",
-      "For 1^infinity, use ln then exponentiate."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "L'Hopital always works for any limit",
-        "correction": "Requires indeterminate form and limit of f'/g' must exist.",
-        "detect_phrase_en": "always use L'Hopital",
-        "detect_phrase_he": "תמיד לופיטל"
-      }
-    ],
-    "tutor_pacing_hint": "Drill 0/0 cases before exponential indeterminates.",
-    "skill_atoms_unlocked": [
-      "lhopital_basic",
-      "lhopital_infinity",
-      "indeterminate_zero_times_inf",
-      "lhopital_pitfalls",
-      "indeterminate_exponential"
-    ]
-  }
+  ]
 }

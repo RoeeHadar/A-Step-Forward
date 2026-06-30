@@ -1,506 +1,225 @@
 {
   "concept_id": "derivatives_intro",
-  "subject": "math",
-  "level": "high_school",
-  "math_track": [
-    "4pt",
-    "5pt"
-  ],
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1"],
   "title_en": "Derivatives — Introduction",
   "title_he": "נגזרות — מבוא",
-  "summary_en": "The derivative $f'(x)$ is the instantaneous rate of change of $f$ at $x$, formally defined as a limit. Geometrically: the slope of the tangent line. Calculus begins here.",
-  "summary_he": "הנגזרת $f'(x)$ היא קצב השינוי הרגעי של $f$ ב-$x$, מוגדרת פורמלית כגבול. גיאומטרית: שיפוע המשיק. כאן מתחיל החשבון הדיפרנציאלי.",
-  "est_minutes": 18,
-  "level_focus": {
-    "4pt": {
-      "en": "You must understand derivatives conceptually (rate of change, tangent slope) and apply the basic rules: power rule, constant multiple, sum/difference. You must find where f'(x) = 0 to locate critical points and determine max/min. Limit definition is conceptually required but not tested computationally.",
-      "he": "עליכם להבין נגזרות מבחינה מושגית (קצב שינוי, שיפוע משיק) וליישם את הכללים הבסיסיים: כלל החזקה, מכפלת קבוע, סכום/הפרש. עליכם למצוא היכן f'(x) = 0 לאיתור נקודות קריטיות ומקסימום/מינימום. הגדרת הגבול נדרשת מושגית אך לא מחושבת.",
-      "bagrut_questionnaires": [
-        "804"
-      ],
-      "skills": [
-        "power_rule",
-        "sum_rule",
-        "constant_multiple_rule",
-        "critical_points_from_derivative",
-        "max_min_from_sign_change"
-      ],
-      "not_required": [
-        "chain_rule",
-        "product_rule",
-        "quotient_rule",
-        "implicit_differentiation",
-        "L_hopital",
-        "limit_definition_computational"
-      ]
-    },
-    "5pt": {
-      "en": "All 4pt content, PLUS: chain rule, product rule, quotient rule; implicit differentiation; second derivative test; curve sketching (f' for monotonicity, f'' for concavity); optimization problems; tangent line equations; L'Hôpital's rule for limits.",
-      "he": "כל תוכן 4 יח׳, בנוסף: כלל השרשרת, כלל המכפלה, כלל המנה; גזירה מרומזת; מבחן הנגזרת השנייה; סקיצה (f' לחד-מונוטוניות, f'' לקעירות); בעיות אופטימיזציה; משוואות משיק; כלל לופיטל לגבולות.",
-      "bagrut_questionnaires": [
-        "581",
-        "807"
-      ],
-      "skills": [
-        "chain_rule",
-        "product_rule",
-        "quotient_rule",
-        "second_derivative_test",
-        "curve_sketching",
-        "optimization",
-        "tangent_line_equation",
-        "L_hopital"
-      ]
-    }
-  },
+  "summary_en": "The derivative $f'(x)$ is the instantaneous rate of change of $f$ at $x$, formally defined as a limit. Geometrically it is the slope of the tangent line. Mastering the limit definition is the foundation of all of differential calculus.",
+  "summary_he": "הנגזרת $f'(x)$ היא קצב השינוי הרגעי של $f$ ב-$x$, מוגדרת פורמלית כגבול. גיאומטרית: שיפוע המשיק. שליטה בהגדרת הגבול היא הבסיס לכל החשבון הדיפרנציאלי.",
+  "est_minutes": 55,
+  "agent_hints": "When a learner asks about derivatives, start with geometric intuition (slope of tangent), then state the limit definition. Require the learner to compute at least one derivative from definition before applying rules.",
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Why we need derivatives",
-      "title_he": "למה צריך נגזרות",
-      "body_en_md": "Velocity is the rate at which position changes. Acceleration is the rate at which velocity changes. But what is the **instantaneous** velocity — at a single moment, not over an interval?\n\nFor an interval $[t_1, t_2]$, average velocity = $\\dfrac{x(t_2) - x(t_1)}{t_2 - t_1}$. As $t_2 \\to t_1$, this ratio approaches the instantaneous velocity at $t_1$. That ratio's limit is the **derivative** of position with respect to time.\n\nThis idea generalizes: for ANY function $f$, the **derivative** measures how fast $f$ is changing.\n\nNotation:\n- Lagrange: $f'(x)$, $f''(x)$, $f^{(n)}(x)$.\n- Leibniz: $\\dfrac{df}{dx}$, $\\dfrac{d^2 f}{dx^2}$.\n- For position with time: $\\dot{x}(t)$ (Newton's dot notation).",
-      "body_he_md": "מהירות היא קצב שינוי המיקום. תאוצה היא קצב שינוי המהירות. אבל מהי מהירות **רגעית** — ברגע יחיד, לא על פני קטע?\n\nלקטע $[t_1, t_2]$, מהירות ממוצעת = $\\dfrac{x(t_2) - x(t_1)}{t_2 - t_1}$. כאשר $t_2 \\to t_1$, היחס מתקרב למהירות הרגעית ב-$t_1$. הגבול הזה הוא **הנגזרת** של המיקום ביחס לזמן.\n\nהרעיון כללי: לכל פונקציה $f$, **הנגזרת** מודדת כמה מהר $f$ משתנה.\n\nסימונים:\n- לגרנז': $f'(x)$, $f''(x)$.\n- לייבניץ: $\\dfrac{df}{dx}$.\n- ניוטון: $\\dot{x}(t)$ (לזמן).",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this lesson, we will introduce the concept of derivatives, which is a fundamental tool in calculus. Derivatives measure the rate of change of a function with respect to its input. This is crucial in various fields such as physics, engineering, and economics, where understanding how quantities change is essential. We will explore the concept of limits and how they lead to the definition of derivatives.\n\n$$\\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$$\n\nThis limit represents the instantaneous rate of change of the function $f(x)$ at a point $x$.",
-          "body_he_md": "בשיעור זה נכיר את **הנגזרת** — כלי מרכזי בחשבון דיפרנציאלי. הנגזרת מודדת את **קצב השינוי** של פונקציה בנקודה נתונה: כמה מהר $f(x)$ משתנה כש-$x$ משתנה מעט.\n\nגיאומטרית, הנגזרת ב-$x$ היא **שיפוע המשיק** לגרף בנקודה זו. פיזיקלית, אם $s(t)$ הוא מיקום, אז $s'(t)$ הוא **מהירות**.\n\nבבגרות 4 נקודות (שאלון 804) נדרש להבין את הרעיון וליישם **כלל החזקה**, **כלל הסכום** ו**מכפלה בקבוע** — ולמצוא נקודות שבהן $f'(x) = 0$.\n\nההגדרה הפורמלית (מושגית):\n\n$$\\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$$\n\nהגבול הזה הוא קצב השינוי **הרגעי** של $f$ ב-$x$."
-        },
-        "5pt": {
-          "body_en_md": "The concept of a derivative is crucial in calculus and has numerous applications in various fields, including physics, engineering, and economics. The derivative of a function at a point represents the rate of change of the function with respect to the input variable. This can be interpreted as the slope of the tangent line to the graph of the function at that point. A function is said to be differentiable at a point if its derivative exists at that point.\n\nThe limit definition of a derivative is given by:\n$$\n\\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h} = f'(x)\n$$\nwhere $f'(x)$ is the derivative of the function $f(x)$ at the point $x$.\n\nThe tangent line interpretation of the derivative is that the derivative at a point represents the slope of the tangent line to the graph of the function at that point.\n\nA function is said to be differentiable at a point if its derivative exists at that point.\n\nWorked example: Find the derivative of the function $f(x) = x^2$ at the point $x = 2$.\n$$\n\\begin{aligned}\nf'(2) &= \\lim_{h \\to 0} \\frac{(2 + h)^2 - 2^2}{h} \\\\\n&= \\lim_{h \\to 0} \\frac{4 + 4h + h^2 - 4}{h} \\\\\n&= \\lim_{h \\to 0} \\frac{4h + h^2}{h} \\\\\n&= \\lim_{h \\to 0} (4 + h) \\\\\n&= 4\n\\end{aligned}\n$$",
-          "body_he_md": "ה**נגזרת** היא מושג מרכזי בחשבון דיפרנציאלי. היא מודדת את **קצב השינוי הרגעי** של פונקציה בנקודה נתונה, ו**גיאומטרית** — את **שיפוע המשיק** לגרף.\n\nפונקציה **גזירה** בנקודה אם הנגזרת שלה קיימת שם.\n\n**הגדרת הגבול:**\n\n$$\\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h} = f'(x)$$\n\n**דוגמה פתורה:** מצאו את הנגזרת של $f(x) = x^2$ ב-$x = 2$.\n\n$$\\begin{aligned}\nf'(2) &= \\lim_{h \\to 0} \\frac{(2 + h)^2 - 2^2}{h} \\\\\n&= \\lim_{h \\to 0} \\frac{4 + 4h + h^2 - 4}{h} \\\\\n&= \\lim_{h \\to 0} \\frac{4h + h^2}{h} \\\\\n&= \\lim_{h \\to 0} (4 + h) \\\\\n&= 4\n\\end{aligned}$$"
-        }
-      }
+      "title_en": "Why Derivatives?",
+      "title_he": "למה נגזרות?",
+      "body_en_md": "Every time you ask *how fast is something changing right now?* you are asking for a derivative.\n\n- **Physics:** velocity $v(t) = x'(t)$; acceleration $a(t) = v'(t)$.\n- **Economics:** marginal cost is the derivative of the cost function.\n- **Engineering:** rates of heat flow, electrical current, signal processing.\n- **Exams (Bagrut / university):** derivatives appear in every function-investigation question — monotonicity, extrema, concavity, and tangent lines all rely on $f'$.\n\nThe derivative is the single most important concept in calculus. Everything else — integrals, differential equations, optimization — builds on it.",
+      "body_he_md": "בכל פעם שאתם שואלים *כמה מהר משתנה משהו עכשיו?* אתם שואלים על נגזרת.\n\n- **פיזיקה:** מהירות $v(t)=x'(t)$; תאוצה $a(t)=v'(t)$.\n- **כלכלה:** עלות שולית היא נגזרת פונקציית העלות.\n- **הנדסה:** קצבי זרימת חום, זרם חשמלי, עיבוד אותות.\n- **בחינות (בגרות / אוניברסיטה):** נגזרות מופיעות בכל שאלת חקירת פונקציה — מונוטוניות, קיצון, קעירות וקו משיק נשענים על $f'$.\n\nהנגזרת היא המושג החשוב ביותר בחשבון הדיפרנציאלי."
+    },
+    {
+      "kind": "definition",
+      "title_en": "The Limit Definition of the Derivative",
+      "title_he": "הגדרת הגבול של הנגזרת",
+      "body_en_md": "Let $f$ be defined on an open interval containing $a$. The **derivative of $f$ at $a$** is\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h)-f(a)}{h}$$\nprovided this limit exists. If it does, $f$ is called **differentiable** at $a$.\n\n**Equivalent form (using $x \\to a$):**\n$$f'(a) = \\lim_{x \\to a} \\frac{f(x)-f(a)}{x-a}$$\n\n**Geometric meaning:** The difference quotient $\\dfrac{f(a+h)-f(a)}{h}$ is the slope of the **secant line** through $(a,f(a))$ and $(a+h,f(a+h))$. As $h\\to 0$, the secant approaches the **tangent line** at $a$, whose slope is $f'(a)$.\n\n**Notation:** $f'(x)$, $\\dfrac{dy}{dx}$, $\\dot{f}$ (physics), $D_x f$, $\\dfrac{df}{dx}$. All mean the same thing.",
+      "body_he_md": "תהי $f$ מוגדרת בסביבה פתוחה של $a$. **הנגזרת של $f$ ב-$a$** היא\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h)-f(a)}{h}$$\nbבתנאי שהגבול קיים. אם קיים, $f$ נקראת **גזירה** ב-$a$.\n\n**צורה שקולה:**\n$$f'(a) = \\lim_{x \\to a} \\frac{f(x)-f(a)}{x-a}$$\n\n**משמעות גיאומטרית:** מנת ההפרש $\\dfrac{f(a+h)-f(a)}{h}$ היא שיפוע **קו הסקנטה** דרך $(a,f(a))$ ו-$(a+h,f(a+h))$. כאשר $h\\to 0$, הסקנטה מתקרבת ל**קו המשיק** ב-$a$, שיפועו $f'(a)$.\n\n**סימונים:** $f'(x)$, $\\dfrac{dy}{dx}$, $\\dot{f}$ (פיזיקה), $D_x f$. כולם אותו דבר."
     },
     {
       "kind": "theory",
-      "title_en": "Definition + geometric meaning",
-      "title_he": "הגדרה + משמעות גיאומטרית",
-      "body_en_md": "### Formal definition\n\n$$\\boxed{f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}.}$$\n\nThe quantity $\\dfrac{f(x+h) - f(x)}{h}$ is the **average rate of change** over an interval of length $h$ starting at $x$ — the slope of the secant line.\n\nAs $h \\to 0$, the secant line approaches the **tangent line** at $(x, f(x))$. So:\n\n$$f'(x) = \\text{slope of the tangent line at } (x, f(x)).$$\n\n### Computing derivatives from the definition\n\nFor $f(x) = x^2$:\n$$f'(x) = \\lim_{h\\to 0}\\frac{(x+h)^2 - x^2}{h} = \\lim_{h \\to 0}\\frac{2xh + h^2}{h} = \\lim_{h \\to 0}(2x + h) = 2x.$$\n\nSo the derivative of $x^2$ is $2x$. At $x = 3$: slope is $6$.\n\n### Common derivatives (preview — full list in 'Derivative Rules')\n\n$$\\frac{d}{dx}(c) = 0, \\quad \\frac{d}{dx}(x^n) = nx^{n-1}, \\quad \\frac{d}{dx}(\\sin x) = \\cos x, \\quad \\frac{d}{dx}(e^x) = e^x.$$\n\n### When does the derivative not exist?\n\n1. **Discontinuity**: not continuous ⇒ not differentiable.\n2. **Corner / cusp**: $|x|$ at $x=0$ — left and right slopes differ.\n3. **Vertical tangent**: $f'(x) = \\pm\\infty$.\n\n*Differentiable ⇒ continuous, but not the reverse.*\n\n### Equation of a tangent line\n\nAt the point $(a, f(a))$, the tangent has slope $f'(a)$:\n\n$$y - f(a) = f'(a)(x - a).$$",
-      "body_he_md": "### הגדרה פורמלית\n\n$$\\boxed{f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}.}$$\n\nהביטוי $\\dfrac{f(x+h) - f(x)}{h}$ הוא **קצב השינוי הממוצע** על קטע באורך $h$ — שיפוע המיתר.\n\nכאשר $h \\to 0$, המיתר מתקרב ל**משיק** ב-$(x, f(x))$. אז:\n\n$$f'(x) = \\text{שיפוע המשיק ב-}(x, f(x)).$$\n\n### חישוב נגזרת מההגדרה\n\nעבור $f(x) = x^2$:\n$$f'(x) = \\lim_{h\\to 0}\\frac{2xh + h^2}{h} = \\lim_{h \\to 0}(2x + h) = 2x.$$\n\n### נגזרות נפוצות (תצוגה מקדימה)\n\n$$\\frac{d}{dx}(c) = 0, \\quad \\frac{d}{dx}(x^n) = nx^{n-1}, \\quad \\frac{d}{dx}(\\sin x) = \\cos x, \\quad \\frac{d}{dx}(e^x) = e^x.$$\n\n### מתי הנגזרת לא קיימת?\n\n1. **אי-רציפות**: לא רציפה ⇒ לא גזירה.\n2. **פינה / קוץ**: $|x|$ ב-$x=0$.\n3. **משיק אנכי**: $f'(x) = \\pm\\infty$.\n\n*גזירה ⇒ רציפה, אבל לא הפוך.*\n\n### משוואת משיק\n\nבנקודה $(a, f(a))$, המשיק בשיפוע $f'(a)$:\n\n$$y - f(a) = f'(a)(x - a).$$",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "The derivative of a function $f(x)$, denoted as $f'(x)$, represents the rate of change of the function with respect to $x$. Geometrically, it can be interpreted as the slope of the tangent line to the graph of $f(x)$ at a given point. This concept is crucial in understanding how functions behave and can be used to model real-world phenomena. The derivative is a fundamental tool in calculus, with numerous applications in physics, engineering, and economics.\n\nTo understand the concept of a derivative, consider the following example:\n\nWorked Example: Find the derivative of $f(x) = x^2$.\n\n$$f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h} = \\lim_{h \\to 0} \\frac{(x + h)^2 - x^2}{h} = \\lim_{h \\to 0} \\frac{x^2 + 2xh + h^2 - x^2}{h} = \\lim_{h \\to 0} \\frac{2xh + h^2}{h} = \\lim_{h \\to 0} (2x + h) = 2x$$",
-          "body_he_md": "הנגזרת $f'(x)$ של פונקציה $f(x)$ מודדת את **קצב השינוי** של $f$ ביחס ל-$x$. **גיאומטרית:** $f'(a)$ הוא **שיפוע המשיק** לגרף בנקודה $(a, f(a))$.\n\n### כללים לבגרות 4 נקודות\n\n- **קבוע:** $(c)' = 0$\n- **חזקה:** $(x^n)' = nx^{n-1}$\n- **סכום/הפרש:** $(f \\pm g)' = f' \\pm g'$\n- **מכפלה בקבוע:** $(cf)' = c \\cdot f'$\n\n### נקודות קריטיות\n\nנקודות שבהן $f'(x) = 0$ (או שבהן $f'$ לא קיימת) הן **מועמדות** למקסימום או מינימום. בודקים **שינוי סימן** של $f'$ סביב הנקודה: $+ \\to -$ ⇒ מקסימום מקומי; $- \\to +$ ⇒ מינימום מקומי.\n\n**דוגמה:** $f(x) = x^2$. לפי כלל החזקה: $f'(x) = 2x$. כאשר $x = 0$ מתקבל $f'(0) = 0$ — נקודה קריטית. ל-$x < 0$ הנגזרת שלילית (יורד), ל-$x > 0$ חיובית (עולה) ⇒ **מינימום** ב-$x = 0$."
-        },
-        "5pt": {
-          "body_en_md": "The derivative of a function $f(x)$ is defined as the limit of the difference quotient:\n$$\\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}.$$\nThis limit represents the instantaneous rate of change of the function at a point $x$, and it can be interpreted as the slope of the tangent line to the graph of $f(x)$ at $x$.\nA function $f(x)$ is said to be differentiable at a point $x$ if the limit exists, and the derivative of $f(x)$ at $x$ is denoted by $f'(x)$.\nThe derivative at a point $x$ represents the rate of change of the function at that point.\n\nWorked example: Find the derivative of $f(x) = x^2$ at $x = 2$.\n$$\\lim_{h \\to 0} \\frac{(2+h)^2 - 2^2}{h} = \\lim_{h \\to 0} \\frac{4+4h+h^2-4}{h} = \\lim_{h \\to 0} \\frac{4h+h^2}{h} = \\lim_{h \\to 0} (4+h) = 4.$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Key Properties and Intuition",
+      "title_he": "תכונות מרכזיות ואינטואיציה",
+      "body_en_md": "**Differentiability implies continuity:** If $f$ is differentiable at $a$, it is continuous there. The converse is false — $|x|$ is continuous at 0 but not differentiable.\n\n**The tangent line equation:** Once you know $f'(a)$, the tangent line at $(a, f(a))$ is\n$$y = f(a) + f'(a)(x-a).$$\n\n**Sign of $f'$:**\n- $f'(x) > 0$ on an interval $\\Rightarrow$ $f$ is **increasing**.\n- $f'(x) < 0$ on an interval $\\Rightarrow$ $f$ is **decreasing**.\n- $f'(a) = 0$ $\\Rightarrow$ $a$ is a **critical point** (possible extremum).\n\n**When is a function NOT differentiable?** At corners (like $|x|$ at 0), cusps, vertical tangents, or discontinuities.",
+      "body_he_md": "**גזירות גוררת רציפות:** אם $f$ גזירה ב-$a$, היא רציפה שם. ההפך אינו נכון — $|x|$ רציפה ב-0 אך לא גזירה.\n\n**משוואת המשיק:** כאשר $f'(a)$ ידועה, קו המשיק ב-$(a, f(a))$ הוא\n$$y = f(a) + f'(a)(x-a).$$\n\n**סימן $f'$:**\n- $f'(x) > 0$ בקטע $\\Rightarrow$ $f$ **עולה**.\n- $f'(x) < 0$ בקטע $\\Rightarrow$ $f$ **יורדת**.\n- $f'(a) = 0$ $\\Rightarrow$ $a$ **נקודה קריטית** (אפשר קיצון).\n\n**מתי פונקציה אינה גזירה?** בפינות (כמו $|x|$ ב-0), קאספים, משיקים אנכיים, ואי-רציפויות."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: derivative from definition",
-      "title_he": "דוגמה פתורה: נגזרת מההגדרה",
-      "body_en_md": "Find $f'(x)$ for $f(x) = 3x^2 - x + 5$ using the definition.\n\n$$f(x + h) = 3(x+h)^2 - (x+h) + 5 = 3(x^2 + 2xh + h^2) - x - h + 5.$$\n\n$$f(x+h) - f(x) = 3 \\cdot 2xh + 3h^2 - h = 6xh + 3h^2 - h.$$\n\n$$\\frac{f(x+h) - f(x)}{h} = 6x + 3h - 1.$$\n\n$$f'(x) = \\lim_{h \\to 0}(6x + 3h - 1) = 6x - 1.$$\n\n**Verify** with the power rule: $\\frac{d}{dx}(3x^2 - x + 5) = 6x - 1$ ✓",
-      "body_he_md": "מצאו $f'(x)$ עבור $f(x) = 3x^2 - x + 5$ באמצעות ההגדרה.\n\n$$f(x + h) - f(x) = 6xh + 3h^2 - h.$$\n\n$$\\frac{f(x+h) - f(x)}{h} = 6x + 3h - 1.$$\n\n$$f'(x) = \\lim_{h \\to 0}(6x + 3h - 1) = 6x - 1.$$\n\n**אימות** עם חוק החזקה: $\\frac{d}{dx}(3x^2 - x + 5) = 6x - 1$ ✓",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "The derivative of a function $f(x)$ is defined as the limit of the difference quotient: $$\\frac{f(x + h) - f(x)}{h}$$ as $h$ approaches zero. This definition is used to find the rate of change of the function with respect to $x$. The derivative is denoted as $f'(x)$.\n\nTo find the derivative of a function using this definition, we need to plug in the function into the formula and simplify. Let's consider the function $f(x) = x^2$.\n\nWorked example: Find the derivative of $f(x) = x^2$ using the definition.\n\n$$\\frac{f(x + h) - f(x)}{h} = \\frac{(x + h)^2 - x^2}{h}$$\n$$= \\frac{x^2 + 2xh + h^2 - x^2}{h}$$\n$$= \\frac{2xh + h^2}{h}$$\n$$= 2x + h$$\n\nNow, we take the limit as $h$ approaches zero:\n$$\\lim_{h \\to 0} (2x + h) = 2x$$\n\nTherefore, the derivative of $f(x) = x^2$ is $f'(x) = 2x$.",
-          "body_he_md": "**בעיה:** מצאו $f'(x)$ עבור $f(x) = 3x^2 - x + 5$ **באמצעות כלל החזקה** (לא חובה מההגדרה בבגרות 4 נק').\n\n**שלב 1 — גזירה איבר-איבר:**\n\n$$f'(x) = 3 \\cdot 2x - 1 + 0 = 6x - 1$$\n\n**שלב 2 — נקודות קריטיות:**\n\n$$f'(x) = 0 \\Rightarrow 6x - 1 = 0 \\Rightarrow x = \\frac{1}{6}$$\n\n**שלב 3 — סיווג:**\n\nל-$x < \\frac{1}{6}$: $f'(x) < 0$ (הפונקציה יורדת).\n\nל-$x > \\frac{1}{6}$: $f'(x) > 0$ (הפונקציה עולה).\n\nשינוי סימן מ-$-$ ל-$+$ ⇒ **מינימום מקומי** ב-$x = \\frac{1}{6}$.\n\n**ערך המינימום:**\n\n$$f\\left(\\frac{1}{6}\\right) = 3 \\cdot \\frac{1}{36} - \\frac{1}{6} + 5 = \\frac{1}{12} - \\frac{1}{6} + 5 = 4\\frac{11}{12}$$"
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Derivative of $x^2$ from Definition",
+      "title_he": "דוגמה פתורה 1 — נגזרת $x^2$ מהגדרה",
+      "body_en_md": "**Given:** $f(x) = x^2$. Find $f'(x)$ using the limit definition.\n\n**Step 1 — Write the difference quotient:**\n$$\\frac{f(x+h)-f(x)}{h} = \\frac{(x+h)^2 - x^2}{h}$$\n\n**Step 2 — Expand the numerator:**\n$$(x+h)^2 - x^2 = x^2 + 2xh + h^2 - x^2 = 2xh + h^2$$\n\n**Step 3 — Simplify (factor and cancel $h$):**\n$$\\frac{2xh + h^2}{h} = \\frac{h(2x+h)}{h} = 2x + h \\quad (h \\ne 0)$$\n\n**Step 4 — Take the limit as $h \\to 0$:**\n$$f'(x) = \\lim_{h \\to 0}(2x + h) = 2x$$\n\n**Answer:** $\\boxed{f'(x) = 2x}$ ✓\n\n*Check at $x=3$: $f'(3) = 6$, which means the tangent to $y=x^2$ at $(3,9)$ has slope 6.*",
+      "body_he_md": "**נתון:** $f(x) = x^2$. מצאו את $f'(x)$ מהגדרת הגבול.\n\n**שלב 1 — כתבו את מנת ההפרש:**\n$$\\frac{f(x+h)-f(x)}{h} = \\frac{(x+h)^2 - x^2}{h}$$\n\n**שלב 2 — פתחו את המונה:**\n$$(x+h)^2 - x^2 = x^2 + 2xh + h^2 - x^2 = 2xh + h^2$$\n\n**שלב 3 — פשטו (פצלו וצמצמו $h$):**\n$$\\frac{2xh + h^2}{h} = \\frac{h(2x+h)}{h} = 2x + h \\quad (h \\ne 0)$$\n\n**שלב 4 — חשבו את הגבול כאשר $h \\to 0$:**\n$$f'(x) = \\lim_{h \\to 0}(2x + h) = 2x$$\n\n**תשובה:** $\\boxed{f'(x) = 2x}$ ✓\n\n*בדיקה ב-$x=3$: $f'(3)=6$, כלומר המשיק ל-$y=x^2$ ב-$(3,9)$ הוא בשיפוע 6.*"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the limit definition to find $f'(x)$ for $f(x) = x^3$.\n\n*(Hint: expand $(x+h)^3$ using the binomial formula.)*",
+      "body_he_md": "השתמשו בהגדרת הגבול למצוא $f'(x)$ עבור $f(x) = x^3$.\n\n*(רמז: פתחו $(x+h)^3$ עם נוסחת הבינום.)*",
+      "checkpoint_solution_en": "**Step 1:** $(x+h)^3 = x^3 + 3x^2h + 3xh^2 + h^3$\n\n**Step 2:** Numerator: $(x+h)^3 - x^3 = 3x^2h + 3xh^2 + h^3$\n\n**Step 3:** Divide by $h$: $3x^2 + 3xh + h^2$\n\n**Step 4:** $\\lim_{h\\to 0}(3x^2+3xh+h^2) = 3x^2$\n\n**Answer:** $f'(x) = 3x^2$ ✓",
+      "checkpoint_solution_he": "**שלב 1:** $(x+h)^3 = x^3 + 3x^2h + 3xh^2 + h^3$\n\n**שלב 2:** מונה: $(x+h)^3 - x^3 = 3x^2h + 3xh^2 + h^3$\n\n**שלב 3:** חלקו ב-$h$: $3x^2 + 3xh + h^2$\n\n**שלב 4:** $\\lim_{h\\to 0}(3x^2+3xh+h^2) = 3x^2$\n\n**תשובה:** $f'(x) = 3x^2$ ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Derivative of $\\sqrt{x}$ from Definition",
+      "title_he": "דוגמה פתורה 2 — נגזרת $\\sqrt{x}$ מהגדרה",
+      "body_en_md": "**Given:** $f(x) = \\sqrt{x}$, $x > 0$. Find $f'(x)$ from the definition.\n\n**Step 1 — Difference quotient:**\n$$\\frac{\\sqrt{x+h}-\\sqrt{x}}{h}$$\n\n**Step 2 — Rationalize (multiply by conjugate):**\n$$\\frac{\\sqrt{x+h}-\\sqrt{x}}{h} \\cdot \\frac{\\sqrt{x+h}+\\sqrt{x}}{\\sqrt{x+h}+\\sqrt{x}} = \\frac{(x+h)-x}{h(\\sqrt{x+h}+\\sqrt{x})} = \\frac{h}{h(\\sqrt{x+h}+\\sqrt{x})}$$\n\n**Step 3 — Cancel $h$ ($h\\ne 0$):**\n$$= \\frac{1}{\\sqrt{x+h}+\\sqrt{x}}$$\n\n**Step 4 — Limit:**\n$$f'(x) = \\lim_{h\\to 0}\\frac{1}{\\sqrt{x+h}+\\sqrt{x}} = \\frac{1}{\\sqrt{x}+\\sqrt{x}} = \\frac{1}{2\\sqrt{x}}$$\n\n**Answer:** $\\boxed{f'(x) = \\dfrac{1}{2\\sqrt{x}}}$ ✓\n\n*Key technique: rationalizing the conjugate turns the indeterminate $0/0$ into a computable limit.*",
+      "body_he_md": "**נתון:** $f(x) = \\sqrt{x}$, $x > 0$. מצאו $f'(x)$ מהגדרה.\n\n**שלב 1 — מנת ההפרש:**\n$$\\frac{\\sqrt{x+h}-\\sqrt{x}}{h}$$\n\n**שלב 2 — רציונליזציה (הכפלה בצמוד):**\n$$\\frac{\\sqrt{x+h}-\\sqrt{x}}{h} \\cdot \\frac{\\sqrt{x+h}+\\sqrt{x}}{\\sqrt{x+h}+\\sqrt{x}} = \\frac{(x+h)-x}{h(\\sqrt{x+h}+\\sqrt{x})} = \\frac{h}{h(\\sqrt{x+h}+\\sqrt{x})}$$\n\n**שלב 3 — צמצמו $h$ ($h\\ne 0$):**\n$$= \\frac{1}{\\sqrt{x+h}+\\sqrt{x}}$$\n\n**שלב 4 — גבול:**\n$$f'(x) = \\lim_{h\\to 0}\\frac{1}{\\sqrt{x+h}+\\sqrt{x}} = \\frac{1}{2\\sqrt{x}}$$\n\n**תשובה:** $\\boxed{f'(x) = \\dfrac{1}{2\\sqrt{x}}}$ ✓\n\n*טכניקה מרכזית: רציונליזציה הופכת את $0/0$ הבלתי-קבוע לגבול ניתן לחישוב.*"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Use the limit definition to differentiate $f(x) = \\dfrac{1}{x}$ at $x \\ne 0$.",
+      "body_he_md": "השתמשו בהגדרת הגבול לגזור $f(x) = \\dfrac{1}{x}$ עבור $x \\ne 0$.",
+      "checkpoint_solution_en": "**Step 1:** $\\dfrac{f(x+h)-f(x)}{h} = \\dfrac{\\frac{1}{x+h}-\\frac{1}{x}}{h} = \\dfrac{\\frac{x-(x+h)}{x(x+h)}}{h} = \\dfrac{-h}{hx(x+h)} = \\dfrac{-1}{x(x+h)}$\n\n**Step 2:** $f'(x) = \\lim_{h\\to 0}\\dfrac{-1}{x(x+h)} = \\dfrac{-1}{x^2}$\n\n**Answer:** $f'(x) = -\\dfrac{1}{x^2}$ ✓",
+      "checkpoint_solution_he": "**שלב 1:** $\\dfrac{f(x+h)-f(x)}{h} = \\dfrac{\\frac{1}{x+h}-\\frac{1}{x}}{h} = \\dfrac{-h}{hx(x+h)} = \\dfrac{-1}{x(x+h)}$\n\n**שלב 2:** $f'(x) = \\lim_{h\\to 0}\\dfrac{-1}{x(x+h)} = \\dfrac{-1}{x^2}$\n\n**תשובה:** $f'(x) = -\\dfrac{1}{x^2}$ ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Derivative of $\\sin x$ from Definition",
+      "title_he": "דוגמה פתורה 3 — נגזרת $\\sin x$ מהגדרה",
+      "body_en_md": "**Given:** $f(x) = \\sin x$. Prove $f'(x) = \\cos x$ using the limit definition and the fundamental trigonometric limits.\n\n**Preliminary limits (required knowledge):**\n$$\\lim_{h\\to 0}\\frac{\\sin h}{h} = 1, \\qquad \\lim_{h\\to 0}\\frac{\\cos h - 1}{h} = 0$$\n\n**Step 1 — Difference quotient:**\n$$\\frac{\\sin(x+h)-\\sin x}{h}$$\n\n**Step 2 — Apply sum-of-angles formula: $\\sin(x+h) = \\sin x\\cos h + \\cos x\\sin h$:**\n$$= \\frac{\\sin x\\cos h + \\cos x\\sin h - \\sin x}{h}$$\n\n**Step 3 — Group terms:**\n$$= \\frac{\\sin x(\\cos h - 1)}{h} + \\frac{\\cos x\\sin h}{h} = \\sin x\\cdot\\frac{\\cos h-1}{h} + \\cos x\\cdot\\frac{\\sin h}{h}$$\n\n**Step 4 — Take the limit:**\n$$f'(x) = \\sin x \\cdot 0 + \\cos x \\cdot 1 = \\cos x$$\n\n**Answer:** $\\boxed{(\\sin x)' = \\cos x}$ ✓\n\n*This calculation shows that differentiating trigonometric functions from definition requires the special limits — they cannot be obtained by algebraic manipulation alone.*",
+      "body_he_md": "**נתון:** $f(x) = \\sin x$. הוכיחו $f'(x) = \\cos x$ מהגדרת הגבול ומגבולות טריגונומטריים.\n\n**גבולות קדומים (ידע נדרש):**\n$$\\lim_{h\\to 0}\\frac{\\sin h}{h} = 1, \\qquad \\lim_{h\\to 0}\\frac{\\cos h - 1}{h} = 0$$\n\n**שלב 1 — מנת ההפרש:**\n$$\\frac{\\sin(x+h)-\\sin x}{h}$$\n\n**שלב 2 — נוסחת סכום: $\\sin(x+h) = \\sin x\\cos h + \\cos x\\sin h$:**\n$$= \\frac{\\sin x\\cos h + \\cos x\\sin h - \\sin x}{h}$$\n\n**שלב 3 — קיבוץ:**\n$$= \\sin x\\cdot\\frac{\\cos h-1}{h} + \\cos x\\cdot\\frac{\\sin h}{h}$$\n\n**שלב 4 — חישוב הגבול:**\n$$f'(x) = \\sin x \\cdot 0 + \\cos x \\cdot 1 = \\cos x$$\n\n**תשובה:** $\\boxed{(\\sin x)' = \\cos x}$ ✓\n\n*חישוב זה מראה שגזירת פונקציות טריגונומטריות מהגדרה מחייבת גבולות מיוחדים.*"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Definition vs. Rules",
+      "title_he": "מדריך שיטות — הגדרה מול כללים",
+      "body_en_md": "| Situation | Use | Reason |\n|-----------|-----|--------|\n| Asked explicitly to use the definition | Limit definition | Exam instruction |\n| Proving a derivative formula | Limit definition | Rigorous justification required |\n| Function is polynomial, exponential, trig | Differentiation rules | Much faster |\n| Function has absolute value / piecewise at a point | Limit definition (one-sided) | Rules may not apply |\n| Function involves composition | Chain rule (not definition) | Avoid messy limits |\n\n**When in doubt in an exam:** if the question says \"from first principles\" or \"using the definition\", you MUST use the limit. Otherwise, use the rules.\n\n**Tangent line equation summary:**\n$$y - f(a) = f'(a)(x-a)$$",
+      "body_he_md": "| מצב | שיטה | סיבה |\n|-----|------|------|\n| נדרש במפורש להשתמש בהגדרה | גבול הגדרה | הוראת הבחינה |\n| הוכחת נוסחת נגזרת | גבול הגדרה | דרוש הוכחה פורמלית |\n| פונקציה פולינומית / מעריכית / טריגונומטרית | כללי גזירה | הרבה יותר מהיר |\n| פונקציה עם ערך מוחלט / חלקים בנקודה | גבול הגדרה (חד-צדדי) | הכללים עשויים לא לחול |\n| פונקציה מורכבת | כלל השרשרת | הימנעות מגבולות מסובכים |\n\n**בספק בבחינה:** אם השאלה אומרת \"מהגדרה\" — חייבים גבול. אחרת — כללים.\n\n**משוואת המשיק:**\n$$y - f(a) = f'(a)(x-a)$$"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Use the limit definition to find $f'(x)$ for $f(x) = 5x + 3$.",
+          "body_he": "השתמשו בהגדרת הגבול למצוא $f'(x)$ עבור $f(x) = 5x + 3$.",
+          "solution_en": "Difference quotient: $\\frac{5(x+h)+3-(5x+3)}{h} = \\frac{5h}{h} = 5$. Limit: $f'(x) = 5$.",
+          "solution_he": "מנת הפרש: $\\frac{5(x+h)+3-(5x+3)}{h} = 5$. גבול: $f'(x) = 5$.",
+          "points": 5
         },
-        "5pt": {
-          "body_en_md": "The derivative of a function $f(x)$ at a point $x=a$ is defined as the limit of the average rate of change of the function as the change in $x$ approaches zero:\n$$\\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}.$$\nThis definition can be interpreted as the slope of the tangent line to the graph of $f(x)$ at the point $(a, f(a))$.\nA function $f(x)$ is said to be differentiable at a point $x=a$ if the limit exists, and the derivative at that point is denoted by $f'(a)$.\n\nWorked example: Find the derivative of $f(x) = x^2$ at $x=2$ using the definition.\n\nLet $f(x) = x^2$ and $a=2$. We have:\n$$f(2+h) = (2+h)^2 = 4 + 4h + h^2.$$\nNow, we can compute the limit:\n$$\\lim_{h \\to 0} \\frac{f(2+h) - f(2)}{h} = \\lim_{h \\to 0} \\frac{(4 + 4h + h^2) - 4}{h} = \\lim_{h \\to 0} \\frac{4h + h^2}{h} = \\lim_{h \\to 0} (4 + h) = 4.$$\nTherefore, the derivative of $f(x) = x^2$ at $x=2$ is $f'(2) = 4$.",
-          "body_he_md": ""
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $f'(x)$ from definition for $f(x) = x^2 - 3x$.",
+          "body_he": "מצאו $f'(x)$ מהגדרה עבור $f(x) = x^2 - 3x$.",
+          "solution_en": "Numerator: $(x+h)^2-3(x+h)-(x^2-3x)=2xh+h^2-3h$. Divide by $h$: $2x+h-3$. Limit: $f'(x)=2x-3$.",
+          "solution_he": "מונה: $2xh+h^2-3h$. חלוקה ב-$h$: $2x+h-3$. גבול: $f'(x)=2x-3$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find the equation of the tangent line to $y = x^2$ at $x = 1$.",
+          "body_he": "מצאו את משוואת המשיק ל-$y = x^2$ ב-$x = 1$.",
+          "solution_en": "$f'(x)=2x$, so $f'(1)=2$. Point: $(1,1)$. Tangent: $y - 1 = 2(x-1)$, i.e., $y = 2x-1$.",
+          "solution_he": "$f'(1)=2$. נקודה: $(1,1)$. משיק: $y=2x-1$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "At which points is $f(x) = |x|$ not differentiable? Explain using the limit definition.",
+          "body_he": "באילו נקודות $f(x) = |x|$ אינה גזירה? הסבירו באמצעות הגדרת הגבול.",
+          "solution_en": "At $x=0$: left-hand limit is $-1$, right-hand limit is $+1$. They differ, so the limit does not exist and $f$ is not differentiable at $0$. Everywhere else $f'(x)=\\pm 1$.",
+          "solution_he": "ב-$x=0$: גבול שמאלי $-1$, ימני $+1$ — שונים. הגבול אינו קיים, ולכן $f$ אינה גזירה ב-0.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Prove from the definition that $(c \\cdot f)'(x) = c \\cdot f'(x)$ for any constant $c$.",
+          "body_he": "הוכיחו מהגדרה ש-$(c \\cdot f)'(x) = c \\cdot f'(x)$ לכל קבוע $c$.",
+          "solution_en": "Difference quotient of $g=cf$: $\\frac{c f(x+h)-cf(x)}{h}=c\\cdot\\frac{f(x+h)-f(x)}{h}$. Limit: $c\\cdot f'(x)$. ∎",
+          "solution_he": "מנת הפרש של $g=cf$: $c\\cdot\\frac{f(x+h)-f(x)}{h}$. גבול: $c\\cdot f'(x)$. ■",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find $f'(2)$ from the definition for $f(x) = x^3 - 2x$.",
+          "body_he": "מצאו $f'(2)$ מהגדרה עבור $f(x) = x^3 - 2x$.",
+          "solution_en": "Using $f'(a)=\\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}$: $f(2)=4$. $\\frac{x^3-2x-4}{x-2} = \\frac{(x-2)(x^2+2x+2)}{x-2}=x^2+2x+2\\to 10$. So $f'(2)=10$.",
+          "solution_he": "$f(2)=4$. $\\frac{x^3-2x-4}{x-2}=x^2+2x+2 \\to 10$. לכן $f'(2)=10$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Use the definition to find the derivative of $f(x) = \\dfrac{1}{x+1}$.",
+          "body_he": "השתמשו בהגדרה לגזור $f(x) = \\dfrac{1}{x+1}$.",
+          "solution_en": "Difference quotient: $\\frac{\\frac{1}{x+h+1}-\\frac{1}{x+1}}{h}=\\frac{-h}{h(x+h+1)(x+1)}=\\frac{-1}{(x+h+1)(x+1)}$. Limit: $-\\frac{1}{(x+1)^2}$.",
+          "solution_he": "מנת הפרש: $\\frac{-1}{(x+h+1)(x+1)}$. גבול: $-\\frac{1}{(x+1)^2}$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "For $f(x) = \\sqrt{2x+1}$, find $f'(x)$ from the limit definition.",
+          "body_he": "עבור $f(x) = \\sqrt{2x+1}$, מצאו $f'(x)$ מהגדרת הגבול.",
+          "solution_en": "Rationalize: $\\frac{\\sqrt{2(x+h)+1}-\\sqrt{2x+1}}{h}\\cdot\\frac{\\sqrt{2(x+h)+1}+\\sqrt{2x+1}}{\\cdot}=\\frac{2h}{h(\\sqrt{2x+2h+1}+\\sqrt{2x+1})}$. Limit: $\\frac{2}{2\\sqrt{2x+1}}=\\frac{1}{\\sqrt{2x+1}}$.",
+          "solution_he": "רציונליזציה: $\\frac{2}{2\\sqrt{2x+1}}=\\frac{1}{\\sqrt{2x+1}}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Let $f(x) = x^2\\sin\\left(\\dfrac{1}{x}\\right)$ for $x\\ne 0$ and $f(0)=0$. Show that $f'(0)$ exists and find its value.",
+          "body_he": "תהי $f(x) = x^2\\sin\\left(\\dfrac{1}{x}\\right)$ עבור $x\\ne 0$ ו-$f(0)=0$. הוכיחו ש-$f'(0)$ קיים ומצאו את ערכו.",
+          "solution_en": "$f'(0)=\\lim_{h\\to 0}\\frac{h^2\\sin(1/h)-0}{h}=\\lim_{h\\to 0}h\\sin(1/h)$. Since $|h\\sin(1/h)|\\leq |h|\\to 0$, by squeeze theorem $f'(0)=0$.",
+          "solution_he": "$f'(0)=\\lim_{h\\to 0}h\\sin(1/h)$. כיוון ש-$|h\\sin(1/h)|\\leq |h|\\to 0$, ממשפט הסנדוויץ' $f'(0)=0$.",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Use the definition to show that $\\cos x$ is differentiable everywhere and $(\\cos x)' = -\\sin x$.",
+          "body_he": "השתמשו בהגדרה להראות ש-$\\cos x$ גזירה בכל מקום ו-$(\\cos x)' = -\\sin x$.",
+          "solution_en": "Difference quotient: $\\frac{\\cos(x+h)-\\cos x}{h}=\\frac{\\cos x\\cos h - \\sin x\\sin h -\\cos x}{h}=\\cos x\\cdot\\frac{\\cos h-1}{h}-\\sin x\\cdot\\frac{\\sin h}{h}$. Taking $h\\to 0$: $\\cos x\\cdot 0 - \\sin x\\cdot 1=-\\sin x$. ∎",
+          "solution_he": "מנת הפרש: $\\cos x\\cdot\\frac{\\cos h-1}{h}-\\sin x\\cdot\\frac{\\sin h}{h}$. גבול: $-\\sin x$. ■",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Let $f(x) = x^{4/3}$. Find $f'(0)$ directly from the definition.",
+          "body_he": "תהי $f(x) = x^{4/3}$. מצאו $f'(0)$ ישירות מהגדרה.",
+          "solution_en": "$f'(0)=\\lim_{h\\to 0}\\frac{h^{4/3}-0}{h}=\\lim_{h\\to 0}h^{1/3}=0$. So $f'(0)=0$.",
+          "solution_he": "$f'(0)=\\lim_{h\\to 0}\\frac{h^{4/3}}{h}=\\lim_{h\\to 0}h^{1/3}=0$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that $f(x) = x^{2/3}$ is continuous but NOT differentiable at $x = 0$.",
+          "body_he": "הראו ש-$f(x) = x^{2/3}$ רציפה אך לא גזירה ב-$x = 0$.",
+          "solution_en": "Continuity: $\\lim_{x\\to 0}x^{2/3}=0=f(0)$ ✓. Differentiability: $\\frac{f(h)-f(0)}{h}=\\frac{h^{2/3}}{h}=h^{-1/3}\\to\\infty$ as $h\\to 0$. The limit is infinite, so $f'(0)$ does not exist (vertical tangent).",
+          "solution_he": "רציפות: $\\lim_{x\\to 0}x^{2/3}=0$ ✓. גזירות: $\\frac{h^{2/3}}{h}=h^{-1/3}\\to\\infty$ — גבול אינסופי, לכן $f'(0)$ אינה קיימת (משיק אנכי).",
+          "points": 12
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
-      "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Forgetting the limit.** $\\frac{f(x+h) - f(x)}{h}$ alone is the AVERAGE rate, not the derivative.\n2. **Cancelling $h$ before simplifying.** Don't divide by $h$ until you've expanded and the $h$'s cancel naturally.\n3. **Confusing $f'(a)$ with $f(a)$.** Different objects: value of derivative at $a$ vs value of function at $a$.\n4. **'Differentiable implies continuous'**, not the reverse. $|x|$ is continuous at $0$ but not differentiable there.\n5. **Tangent line ≠ secant line.** Tangent touches at one point with matching slope; secant cuts through two points.",
-      "body_he_md": "1. **שכחת הגבול.** $\\frac{f(x+h) - f(x)}{h}$ לבד זה קצב שינוי **ממוצע**, לא נגזרת.\n2. **צמצום $h$ לפני פישוט.** לא מחלקים ב-$h$ עד שהפיתוח גורם ל-$h$-ים להצטמצם באופן טבעי.\n3. **בלבול בין $f'(a)$ ל-$f(a)$.** אובייקטים שונים.\n4. **'גזירה גוררת רציפות'**, לא הפוך. $|x|$ רציפה ב-$0$ אבל לא גזירה שם.\n5. **משיק ≠ מיתר.** משיק נוגע בנקודה אחת בשיפוע מתאים; מיתר חותך שתי נקודות.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "When dealing with derivatives, it's essential to be aware of common pitfalls that can lead to incorrect answers. One common mistake is confusing the derivative of a function with the function itself. For example, if we have the function $f(x) = x^2$, its derivative is $f'(x) = 2x$, not $f(x) = 2x$. This distinction is crucial when working with derivatives.\n\nAnother common pitfall is forgetting to check the sign of $f'$ on both sides of a critical point — $f'(x_0) = 0$ alone does not guarantee a maximum or minimum.\n\nTo avoid these pitfalls, carefully apply the power rule, sum rule, and constant multiple rule.\n\nWorked example: Classify the critical point of $f(x) = x^3 - 3x$ at $x = 1$.\n\n$$f'(x) = 3x^2 - 3 = 3(x-1)(x+1)$$\n\nAt $x = 1$: $f'$ changes from negative to positive ⇒ local minimum.",
-          "body_he_md": "1. **בלבול בין $f(x)$ ל-$f'(x)$.** ל-$f(x) = x^2 + 3$ ב-$x = 2$: $f(2) = 7$ (ערך), $f'(2) = 4$ (שיפוע). אלה שני מספרים שונים!\n\n2. **שכחת מקדם.** $(5x^3)' = 15x^2$, לא $5x^2$.\n\n3. **$f'(x_0) = 0$ לא מספיק לקיצון.** חייבים לבדוק **שינוי סימן** של $f'$ (או לחשב $f(x_0)$ ולהשוות לשכנים). לדוגמה: $f(x) = x^3$ — ב-$x = 0$ מתקבל $f' = 0$, אבל **אין** מקס/מין (פיתול).\n\n4. **שכחת הגבול בהגדרה.** $\\frac{f(x+h)-f(x)}{h}$ לבד הוא קצב שינוי **ממוצע** — הנגזרת דורשת $h \\to 0$.\n\n5. **גזירה ⇒ רציפות, לא להפך.** $|x|$ רציפה ב-$0$ אבל לא גזירה שם (פינה)."
-        },
-        "5pt": {
-          "body_en_md": "The limit definition of the derivative is crucial to understanding the concept of a derivative. However, there are common pitfalls to be aware of: assuming differentiability based on continuity, and not considering the order of limits. The tangent line interpretation provides a geometric understanding of the derivative, but it is essential to note that differentiability at a point does not imply differentiability in an interval. A function can be differentiable at a point without being differentiable in any neighborhood of that point.\n\n$$\\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h} = f'(x)$$\n\nWorked example: Find the derivative of $f(x) = x^2$ at $x = 2$ using the limit definition.\n\n$$\\lim_{h \\to 0} \\frac{(2 + h)^2 - 2^2}{h} = \\lim_{h \\to 0} \\frac{4 + 4h + h^2 - 4}{h} = \\lim_{h \\to 0} \\frac{4h + h^2}{h} = \\lim_{h \\to 0} (4 + h) = 4$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Forgetting the limit.** Writing $f'(x) = \\frac{f(x+h)-f(x)}{h}$ without taking $h\\to 0$ — the limit is the whole point.\n\n2. **Canceling $h$ without justification.** It is valid to cancel $h\\ne 0$ inside a limit (you're letting $h\\to 0$, never setting it to $0$ first).\n\n3. **Confusing the slope of a secant with the slope of the tangent.** The difference quotient gives the secant; only the *limit* gives the tangent.\n\n4. **Wrong tangent line formula.** The tangent at $x=a$ is $y=f(a)+f'(a)(x-a)$, not $y = f'(a)x$.\n\n5. **Assuming differentiability from continuity.** $f(x)=|x|$ is a classic counterexample: continuous at 0, but not differentiable there.",
+      "body_he_md": "1. **שכחת הגבול.** כתיבת $f'(x)=\\frac{f(x+h)-f(x)}{h}$ ללא $h\\to 0$ — הגבול הוא כל הנקודה.\n\n2. **צמצום $h$ ללא הצדקה.** מותר לצמצם $h\\ne 0$ בתוך גבול (אתם לא מציבים $h=0$, רק ניגשים אליו).\n\n3. **בלבול בין שיפוע סקנטה לשיפוע משיק.** מנת ההפרש נותנת את הסקנטה; רק ה*גבול* נותן את המשיק.\n\n4. **נוסחת משיק שגויה.** המשיק ב-$x=a$ הוא $y=f(a)+f'(a)(x-a)$, לא $y=f'(a)x$.\n\n5. **הנחת גזירות מרציפות.** $f(x)=|x|$ היא דוגמה קלאסית: רציפה ב-0, לא גזירה שם."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Notation table:**\n| Notation | Meaning |\n|----------|---------|\n| $f'(x)$ | Lagrange notation |\n| $\\dfrac{dy}{dx}$ | Leibniz notation |\n| $\\dot{f}$ | Newton / physics notation |\n| $D_x f$ | Operator notation |\n\n**Key formula:**\n$$f'(a) = \\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h} = \\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}$$\n\n**Tangent line at $(a, f(a))$:**\n$$y = f(a) + f'(a)(x-a)$$\n\n**Trigonometric limits you must know:**\n$$\\lim_{h\\to 0}\\frac{\\sin h}{h}=1, \\qquad \\lim_{h\\to 0}\\frac{\\cos h-1}{h}=0$$\n\n**What examiners look for:**\n- Correct setup of the difference quotient.\n- Algebraic simplification before the limit (no direct substitution of $h=0$ in $0/0$ form).\n- Correct application of limit laws after simplification.\n- Tangent line equation using the correct point.",
+      "body_he_md": "**טבלת סימונים:**\n| סימון | משמעות |\n|-------|--------|\n| $f'(x)$ | סימון לגראנז' |\n| $\\dfrac{dy}{dx}$ | סימון לייבניץ |\n| $\\dot{f}$ | סימון ניוטון / פיזיקה |\n| $D_x f$ | סימון אופרטורי |\n\n**נוסחה מרכזית:**\n$$f'(a) = \\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}$$\n\n**קו משיק:**\n$$y = f(a) + f'(a)(x-a)$$\n\n**גבולות טריגונומטריים שיש לזכור:**\n$$\\lim_{h\\to 0}\\frac{\\sin h}{h}=1, \\qquad \\lim_{h\\to 0}\\frac{\\cos h-1}{h}=0$$\n\n**מה הבוחנים מחפשים:**\n- הצבה נכונה של מנת ההפרש.\n- פישוט אלגברי לפני הגבול (אסור להציב $h=0$ ב-$0/0$).\n- שימוש נכון בחוקי הגבולות.\n- משוואת משיק עם הנקודה הנכונה."
     },
     {
       "kind": "summary",
-      "title_en": "Take-away",
+      "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- $f'(x) = \\lim_{h\\to 0}\\frac{f(x+h)-f(x)}{h}$.\n- Geometric: slope of tangent line.\n- Physical: instantaneous rate of change.\n- Differentiable ⇒ continuous, NOT reverse.\n- Tangent line: $y - f(a) = f'(a)(x - a)$.",
-      "body_he_md": "- $f'(x) = \\lim_{h\\to 0}\\frac{f(x+h)-f(x)}{h}$.\n- גיאומטרי: שיפוע משיק.\n- פיזיקלי: קצב שינוי רגעי.\n- גזירה ⇒ רציפה, לא הפוך.\n- משיק: $y - f(a) = f'(a)(x - a)$.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this lesson, we will introduce the concept of derivatives, which is a fundamental tool in calculus. The derivative of a function represents the rate of change of the function with respect to its input. It is a measure of how fast the output changes when the input changes. We will explore the concept of limits and how they relate to derivatives.\n\nA derivative can be thought of as the slope of the tangent line to the graph of a function at a given point. This can be calculated using the formula: $$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$$",
-          "body_he_md": "**סיכום לבגרות 4 נקודות (שאלון 804):**\n\n- $f'(x)$ = קצב שינוי רגעי = שיפוע משיק.\n- **כללים:** $(x^n)' = nx^{n-1}$, $(cf)' = cf'$, $(f \\pm g)' = f' \\pm g'$.\n- **נקודות קריטיות:** פותרים $f'(x) = 0$, בודקים שינוי סימן של $f'$.\n- **לא נדרש:** כלל שרשרת, כלל מכפלה, כלל מנה, גזירה מרומזת.\n- **הגדרת הגבול:** מושגית בלבד — בפועל משתמשים בכלל החזקה.\n- גזירה ⇒ רציפות (לא הפוך)."
-        },
-        "5pt": {
-          "body_en_md": "The derivative of a function $f(x)$ at a point $x=a$ is defined as the limit of the difference quotient as the change in $x$ approaches zero: $$\\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}.$$ This definition can be interpreted as the slope of the tangent line to the graph of $f(x)$ at the point $(a, f(a))$. A function is said to be differentiable at a point $x=a$ if this limit exists, and the derivative at that point is denoted as $f'(a)$.\n\nThe existence of the derivative at a point implies that the function is continuous at that point, but the converse is not necessarily true. In other words, a function can be continuous at a point without being differentiable there.",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "- The derivative $f'(a) = \\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}$ is the instantaneous rate of change and the slope of the tangent line at $a$.\n- Differentiability implies continuity; the converse is false ($|x|$ at 0).\n- Computing from the definition requires algebraic tricks: expanding, factoring, rationalizing, or using known trigonometric limits.\n- Key tangent-line equation: $y = f(a) + f'(a)(x-a)$.\n- Once you have the definition mastered, the differentiation *rules* (next lesson) make computation fast — but you must know where the rules come from.",
+      "body_he_md": "- הנגזרת $f'(a)=\\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}$ היא קצב השינוי הרגעי ושיפוע המשיק.\n- גזירות גוררת רציפות; ההפך אינו נכון ($|x|$ ב-0).\n- חישוב מהגדרה דורש טריקים אלגבריים: פיתוח, פיצול, רציונליזציה, או גבולות טריגונומטריים.\n- נוסחת משיק: $y = f(a) + f'(a)(x-a)$.\n- לאחר שליטה בהגדרה — *כללי הגזירה* (השיעור הבא) מהירים הרבה יותר."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "What does the derivative $f'(a)$ represent geometrically?",
-      "stem_he": "מה הנגזרת $f'(a)$ מייצגת גיאומטרית?",
-      "options_en": [
-        "The value of $f$ at $a$",
-        "The area under $f$ at $a$",
-        "The slope of the tangent line at $(a, f(a))$",
-        "The y-intercept of $f$"
-      ],
-      "options_he": [
-        "ערך $f$ ב-$a$",
-        "שטח מתחת ל-$f$ ב-$a$",
-        "שיפוע המשיק ב-$(a, f(a))$",
-        "נקודת חיתוך עם ציר ה-y"
-      ],
-      "correct_index": 2,
-      "explanation_en": "The derivative is defined as the limiting slope of secant lines — the slope of the tangent.",
-      "explanation_he": "הנגזרת מוגדרת כגבול שיפועי מיתרים — שיפוע המשיק.",
-      "skill_atoms": [
-        "derivative_geometric_meaning"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 2,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "If $f(x) = x^2$, what is $f'(3)$?",
-      "stem_he": "אם $f(x) = x^2$, כמה $f'(3)$?",
-      "correct_answer": "6",
-      "explanation_en": "$f'(x) = 2x$, so $f'(3) = 6$.",
-      "explanation_he": "$f'(x) = 2x$, אז $f'(3) = 6$.",
-      "skill_atoms": [
-        "derivative_polynomial"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Using the definition, find $f'(x)$ for $f(x) = 5x - 2$.",
-      "stem_he": "השתמשו בהגדרה למציאת $f'(x)$ עבור $f(x) = 5x - 2$.",
-      "options_en": [
-        "$5$",
-        "$5x$",
-        "$0$",
-        "$-2$"
-      ],
-      "options_he": [
-        "$5$",
-        "$5x$",
-        "$0$",
-        "$-2$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$\\frac{(5(x+h)-2) - (5x-2)}{h} = \\frac{5h}{h} = 5$. Limit is $5$. Linear functions have constant slope.",
-      "explanation_he": "$\\frac{(5(x+h)-2) - (5x-2)}{h} = 5$. הגבול הוא $5$. לפונקציות ליניאריות שיפוע קבוע.",
-      "skill_atoms": [
-        "derivative_from_definition"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Find the equation of the tangent line to $f(x) = x^2 + 1$ at the point $(2, 5)$.",
-      "stem_he": "מצאו את משוואת המשיק ל-$f(x) = x^2 + 1$ בנקודה $(2, 5)$.",
-      "rubric_en": "Full credit (3/3): computes $f'(x) = 2x$ then $f'(2) = 4$, applies point-slope: $y - 5 = 4(x - 2)$, optionally simplifies to $y = 4x - 3$.\nPartial (2/3): correct slope but wrong tangent equation form.\nMinimal (1/3): only finds $f'(x)$.",
-      "rubric_he": "ציון מלא (3/3): מחשב $f'(x) = 2x$, $f'(2) = 4$, משתמש בנוסחת נקודה-שיפוע: $y - 5 = 4(x - 2)$, אופציונלית מפשט ל-$y = 4x - 3$.\nחלקי (2/3): שיפוע נכון אבל צורת משוואה שגויה.\nמינימלי (1/3): רק מחשב $f'(x)$.",
-      "explanation_en": "$f'(x) = 2x \\Rightarrow f'(2) = 4$. Tangent: $y - 5 = 4(x - 2) \\Rightarrow y = 4x - 3$.",
-      "explanation_he": "$f'(x) = 2x \\Rightarrow f'(2) = 4$. משיק: $y - 5 = 4(x - 2) \\Rightarrow y = 4x - 3$.",
-      "skill_atoms": [
-        "tangent_line_equation"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "If $s(t) = t^2 + 3t$ is position, what is velocity at $t = 4$?",
-      "stem_he": "אם $s(t) = t^2 + 3t$ מיקום, מהי המהירות ב-$t = 4$?",
-      "options_en": [
-        "$11$",
-        "$8$",
-        "$16$",
-        "$5$"
-      ],
-      "options_he": [
-        "$11$",
-        "$8$",
-        "$16$",
-        "$5$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$v(t) = s'(t) = 2t + 3$. $v(4) = 8 + 3 = 11$.",
-      "explanation_he": "$v(t) = s'(t) = 2t + 3$. $v(4) = 11$.",
-      "skill_atoms": [
-        "physical_interpretation_derivative"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 6,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "Which function is continuous at $x = 0$ but NOT differentiable there?",
-      "stem_he": "איזו פונקציה רציפה ב-$x = 0$ אבל לא גזירה שם?",
-      "options_en": [
-        "$f(x) = x^2$",
-        "$f(x) = |x|$",
-        "$f(x) = 1/x$",
-        "$f(x) = \\sin x$"
-      ],
-      "options_he": [
-        "$f(x) = x^2$",
-        "$f(x) = |x|$",
-        "$f(x) = 1/x$",
-        "$f(x) = \\sin x$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$|x|$ has a corner at $x=0$: left slope $-1$, right slope $+1$. Continuous but not differentiable. $1/x$ isn't even continuous.",
-      "explanation_he": "ל-$|x|$ פינה ב-$x=0$: שיפוע שמאל $-1$, ימין $+1$. רציפה אבל לא גזירה. $1/x$ אפילו לא רציפה.",
-      "skill_atoms": [
-        "differentiability_corner"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 7,
-      "kind": "mcq_multi",
-      "difficulty": "medium",
-      "stem_en": "Which of the following are CORRECT statements about $f'(a)$? (Pick all that apply.)",
-      "stem_he": "אילו מהבאות הן טענות נכונות על $f'(a)$? (סמנו את כל הנכונות.)",
-      "options_en": [
-        "It equals the slope of the tangent line to $f$ at $x = a$.",
-        "It equals the value $f(a)$.",
-        "It equals the instantaneous rate of change of $f$ at $x = a$.",
-        "It always exists whenever $f$ is continuous at $x = a$.",
-        "For $f(x) = x^n$ (with $n$ a positive integer), it equals $n a^{n-1}$."
-      ],
-      "options_he": [
-        "שווה לשיפוע המשיק ל-$f$ ב-$x = a$.",
-        "שווה לערך $f(a)$.",
-        "שווה לקצב השינוי הרגעי של $f$ ב-$x = a$.",
-        "תמיד קיים כאשר $f$ רציפה ב-$x = a$.",
-        "עבור $f(x) = x^n$ ($n$ שלם חיובי), הוא שווה $n a^{n-1}$."
-      ],
-      "correct_indices": [
-        0,
-        2,
-        4
-      ],
-      "explanation_en": "B confuses value with slope. D is the classic trap: continuity is necessary, NOT sufficient ($|x|$ is the counterexample). The other three are the definition / geometric / physical / power-rule.",
-      "explanation_he": "ב' מבלבל ערך עם שיפוע. ד' המלכודת הקלאסית: רציפות הכרחית, לא מספקת ($|x|$ דוגמה נגדית). השלוש האחרות = הגדרה / משמעות גיאומטרית / פיזיקלית / כלל החזקה.",
-      "skill_atoms": [
-        "derivative_geometric_meaning",
-        "physical_interpretation_derivative",
-        "derivative_polynomial",
-        "differentiability_corner"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 8,
-      "kind": "true_false",
-      "difficulty": "easy",
-      "stem_en": "If $f$ is differentiable at $x = a$, then $f$ is continuous at $x = a$.",
-      "stem_he": "אם $f$ גזירה ב-$x = a$, אז $f$ רציפה ב-$x = a$.",
-      "correct_bool": true,
-      "explanation_en": "Differentiability is STRICTLY stronger than continuity: differentiable ⇒ continuous, but not vice versa.",
-      "explanation_he": "גזירות חזקה ממש מרציפות: גזירה ⇒ רציפה, אבל לא להפך.",
-      "skill_atoms": [
-        "differentiability_corner",
-        "derivative_geometric_meaning"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 9,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Write the limit definition of $f'(x)$. (Use $h \\to 0$ form.)",
-      "stem_he": "רשמו את ההגדרה הגבולית של $f'(x)$. (השתמשו בצורת $h \\to 0$.)",
-      "acceptable_answers": [
-        "lim h->0 (f(x+h)-f(x))/h",
-        "lim_{h->0} (f(x+h)-f(x))/h",
-        "lim h->0 [f(x+h)-f(x)]/h",
-        "limit h->0 (f(x+h)-f(x))/h",
-        "(f(x+h)-f(x))/h as h->0"
-      ],
-      "case_sensitive": false,
-      "explanation_en": "$f'(x) = \\lim_{h \\to 0}\\frac{f(x+h)-f(x)}{h}$.",
-      "explanation_he": "$f'(x) = \\lim_{h \\to 0}\\frac{f(x+h)-f(x)}{h}$.",
-      "skill_atoms": [
-        "derivative_from_definition"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 10,
-      "kind": "match",
-      "difficulty": "medium",
-      "stem_en": "Match each function with its derivative.",
-      "stem_he": "התאימו כל פונקציה לנגזרתה.",
-      "left_en": [
-        "$f(x) = x^3$",
-        "$f(x) = 7$",
-        "$f(x) = 2x + 5$",
-        "$f(x) = x^2 + 3x$"
-      ],
-      "left_he": [
-        "$f(x) = x^3$",
-        "$f(x) = 7$",
-        "$f(x) = 2x + 5$",
-        "$f(x) = x^2 + 3x$"
-      ],
-      "right_en": [
-        "$2x + 3$",
-        "$0$",
-        "$3x^2$",
-        "$2$"
-      ],
-      "right_he": [
-        "$2x + 3$",
-        "$0$",
-        "$3x^2$",
-        "$2$"
-      ],
-      "correct_pairs": [
-        2,
-        1,
-        3,
-        0
-      ],
-      "explanation_en": "Power rule: $(x^n)' = n x^{n-1}$. Constant: $0$. Linear: slope. Sum rule applies term-by-term.",
-      "explanation_he": "כלל החזקה: $(x^n)' = n x^{n-1}$. קבוע: $0$. ליניארית: שיפוע. כלל הסכום בנפרד לכל איבר.",
-      "skill_atoms": [
-        "derivative_polynomial"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 11,
-      "kind": "ordering",
-      "difficulty": "hard",
-      "stem_en": "Order the steps to compute $f'(2)$ for $f(x) = x^2$ DIRECTLY FROM THE LIMIT DEFINITION.",
-      "stem_he": "סדרו את השלבים לחישוב $f'(2)$ עבור $f(x) = x^2$ ישירות מההגדרה הגבולית.",
-      "steps_en": [
-        "Take the limit as $h \\to 0$: $f'(2) = 4$.",
-        "Compute $f(2+h) - f(2) = (2+h)^2 - 4 = 4 + 4h + h^2 - 4 = 4h + h^2$.",
-        "Divide by $h$: $\\frac{f(2+h) - f(2)}{h} = 4 + h$.",
-        "Write the difference quotient $\\frac{f(2+h) - f(2)}{h}$."
-      ],
-      "steps_he": [
-        "קחו גבול $h \\to 0$: $f'(2) = 4$.",
-        "חשבו $f(2+h) - f(2) = (2+h)^2 - 4 = 4 + 4h + h^2 - 4 = 4h + h^2$.",
-        "חלקו ב-$h$: $\\frac{f(2+h) - f(2)}{h} = 4 + h$.",
-        "רשמו את המנת ההפרשים $\\frac{f(2+h) - f(2)}{h}$."
-      ],
-      "correct_order": [
-        3,
-        1,
-        2,
-        0
-      ],
-      "explanation_en": "Standard chain: write the quotient → expand the numerator → simplify by dividing by $h$ → take the limit.",
-      "explanation_he": "שרשרת סטנדרטית: רשמו את המנה → פתחו את המונה → פשטו על-ידי חלוקה ב-$h$ → קחו גבול.",
-      "skill_atoms": [
-        "derivative_from_definition",
-        "derivative_polynomial"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 12,
-      "kind": "derivation",
-      "difficulty": "hard",
-      "stem_en": "A particle moves so its position is $s(t) = t^3 - 6t^2 + 9t$ (meters, seconds). Derive the time(s) at which the particle is momentarily at rest, and state whether it changes direction at each such time.",
-      "stem_he": "חלקיק נע כך שמיקומו $s(t) = t^3 - 6t^2 + 9t$ (מטר, שניות). גזרו את הזמן(ים) בהם החלקיק נח רגעית, וציינו אם הוא משנה כיוון בכל זמן כזה.",
-      "rubric_en": "Full credit (4/4): differentiates $v(t) = s'(t) = 3t^2 - 12t + 9$, factors $= 3(t-1)(t-3)$, solves $v = 0 \\Rightarrow t = 1, 3$ s. Checks sign of $v$ on either side of each root: $v(0)=9>0, v(2)=-3<0, v(4)=9>0$ → SIGN CHANGES at both ⇒ direction reversal at $t=1$ s AND at $t=3$ s. Deduct 1 for missing units, 1 for missing the sign analysis, 2 for arithmetic errors.",
-      "rubric_he": "ציון מלא (4/4): גוזר $v(t) = s'(t) = 3t^2 - 12t + 9$, מפרק $= 3(t-1)(t-3)$, פותר $v = 0 \\Rightarrow t = 1, 3$ שניות. בודק סימן של $v$ משני צדי כל שורש: $v(0)=9>0, v(2)=-3<0, v(4)=9>0$ → סימן משתנה בשניהם ⇒ שינוי כיוון ב-$t=1$ ש' וגם ב-$t=3$ ש'. הורידו 1 על יחידות חסרות, 1 על חוסר ניתוח סימנים, 2 על שגיאות חשבון.",
-      "expected_steps": [
-        "differentiate s(t) to get v(t)",
-        "solve v(t) = 0 for t",
-        "check sign of v on each side of each root",
-        "interpret sign change as direction reversal"
-      ],
-      "explanation_en": "$v(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$ so $v=0$ at $t=1,3$ s. Sign test: $v>0$ for $t<1$, $v<0$ for $1<t<3$, $v>0$ for $t>3$. Sign changes at both roots ⇒ direction reversal at $t=1$ AND $t=3$.",
-      "explanation_he": "$v(t) = 3t^2 - 12t + 9 = 3(t-1)(t-3)$ אז $v=0$ ב-$t=1,3$ ש'. מבחן סימנים: $v>0$ ל-$t<1$, $v<0$ ל-$1<t<3$, $v>0$ ל-$t>3$. סימן משתנה בשני השורשים ⇒ שינוי כיוון ב-$t=1$ וגם ב-$t=3$.",
-      "skill_atoms": [
-        "physical_interpretation_derivative",
-        "derivative_polynomial",
-        "sign_analysis",
-        "factor_quadratic"
-      ],
-      "points_level_min": "5pt"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "$f'(x) = \\lim_{h\\to 0}\\frac{f(x+h)-f(x)}{h}$ — the defining limit.",
-      "Geometric: slope of the tangent line at $(x, f(x))$.",
-      "Physical: instantaneous rate of change (velocity for position).",
-      "Differentiable ⇒ continuous, but corners/cusps/jumps break differentiability.",
-      "Tangent line equation: $y - f(a) = f'(a)(x - a)$."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Derivative is the value of the function",
-        "correction": "Derivative is the SLOPE/RATE OF CHANGE. $f(a)$ is height, $f'(a)$ is slope.",
-        "detect_phrase_en": "derivative is value",
-        "detect_phrase_he": "נגזרת זה הערך"
-      },
-      {
-        "wrong": "Continuous ⇒ differentiable",
-        "correction": "Continuous is necessary but not sufficient. $|x|$ at $0$: continuous but corner ⇒ not differentiable.",
-        "detect_phrase_en": "continuous differentiable",
-        "detect_phrase_he": "רציפה גזירה"
-      },
-      {
-        "wrong": "Tangent line touches the curve only at one point globally",
-        "correction": "Locally — and only required to match slope at the point of tangency. Tangent CAN cross the curve elsewhere.",
-        "detect_phrase_en": "tangent crosses",
-        "detect_phrase_he": "משיק חוצה"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "derivative_from_definition",
-      "derivative_geometric_meaning",
-      "tangent_line_equation",
-      "derivative_polynomial",
-      "physical_interpretation_derivative",
-      "differentiability_corner",
-      "sign_analysis",
-      "factor_quadratic"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "limits",
-      "continuity",
-      "functions_quadratic"
-    ],
-    "tutor_pacing_hint": "Always start with the secant→tangent picture. Compute one derivative from definition; then jump to the power rule next lesson. Connect to physics (velocity) for intuition.",
-    "coach_drill_skills": [
-      "derivative_from_definition",
-      "tangent_line_equation",
-      "derivative_polynomial"
-    ],
-    "diagnostic_signals": {
-      "if_learner_drops_the_limit": "Remind: the definition INCLUDES the limit. Without the limit it's just a quotient.",
-      "if_learner_uses_continuity_for_differentiability": "Show $|x|$ at $0$ as the canonical counterexample."
-    },
-    "next_recommended": [
-      "derivatives_rules",
-      "derivatives_applications"
-    ]
-  }
+  ]
 }

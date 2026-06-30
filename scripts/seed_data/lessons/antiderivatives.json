@@ -2,167 +2,224 @@
   "concept_id": "antiderivatives",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Antiderivatives & Integration Techniques",
-  "title_he": "פונקציה קדומה וטכניקות אינטגרציה",
-  "summary_en": "Antiderivatives, basic integral table, u-substitution, integration by parts, and initial-value problems — the inverse of differentiation for engineering models.",
-  "summary_he": "פונקציה קדומה, טבלת אינטגרלים, החלפת $u$, אינטגרציה בחלקים ובעיות ערך התחלתי — היפוך הנגזרות למודלים הנדסיים.",
-  "est_minutes": 35,
+  "math_track": ["calc1"],
+  "title_en": "Antiderivatives & the Indefinite Integral",
+  "title_he": "פונקציה קדומה ואינטגרל לא-מסוים",
+  "summary_en": "An antiderivative of $f$ is any function $F$ with $F'=f$. The indefinite integral $\\int f(x)\\,dx = F(x)+C$ collects all antiderivatives. A table of basic antiderivatives plus linearity handles most elementary functions.",
+  "summary_he": "פונקציה קדומה של $f$ היא פונקציה $F$ עם $F'=f$. האינטגרל הלא-מסוים $\\int f(x)\\,dx=F(x)+C$ אוסף את כל הקדומות. טבלת קדומות בסיסיות וליניאריות מכסות רוב הפונקציות האלמנטריות.",
+  "est_minutes": 50,
+  "agent_hints": "Emphasize that +C is not optional — a missing constant is an incorrect answer. When a learner omits it, ask: 'What is the most general antiderivative — is there only one?'",
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Antiderivatives and the constant $C$",
-      "title_he": "פונקציה קדומה והקבוע $C$",
-      "body_en_md": "$F$ is an **antiderivative** of $f$ on interval $I$ if $F'(x)=f(x)$ for all $x\\in I$.\n\n**General antiderivative:** if $F$ is one antiderivative, then all others are $F(x)+C$.\n\n**Notation:** $\\displaystyle\\int f(x)\\,dx = F(x)+C$.\n\n**Basic table:**\n$$\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C\\ (n\\ne -1),\\quad \\int e^x\\,dx=e^x+C,\\quad \\int \\frac{1}{x}\\,dx=\\ln|x|+C$$\n$$\\int \\sin x\\,dx=-\\cos x+C,\\quad \\int \\cos x\\,dx=\\sin x+C$$\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "$F$ **קדומה** של $f$ אם $F'=f$.\n\n**כל הקדומות:** $F(x)+C$.\n\n**סימון:** $\\displaystyle\\int f\\,dx = F(x)+C$.\n\n**טבלה:**\n$$\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C,\\quad \\int e^x\\,dx=e^x+C,\\quad \\int \\frac{1}{x}\\,dx=\\ln|x|+C$$\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "kind": "intro",
+      "title_en": "The Reverse Problem",
+      "title_he": "הבעיה ההפוכה",
+      "body_en_md": "Differentiation has an inverse: given $f$, find $F$ such that $F'=f$. This is **antidifferentiation** (or finding the **indefinite integral**).\n\n**Why it matters:**\n- **Physics:** Given velocity $v(t)$, find position $x(t)$.\n- **Engineering:** Given marginal cost $f(x)$, recover total cost.\n- **Differential equations:** Every solution starts with antidifferentiation.\n- **FTC:** The definite integral (area) is computed via antiderivatives.\n\nThe key difference from differentiation: **antiderivatives are not unique.** $F(x)$ and $F(x)+C$ (for any constant $C$) both have the same derivative. This is why we always write $+C$.",
+      "body_he_md": "לגזירה יש הפוך: בהינתן $f$, מצאו $F$ כך ש-$F'=f$. זוהי **אנטי-גזירה** (מציאת **האינטגרל הלא-מסוים**).\n\n**למה זה חשוב:**\n- **פיזיקה:** בהינתן מהירות $v(t)$, מצאו מיקום $x(t)$.\n- **הנדסה:** בהינתן עלות שולית, שחזרו עלות כוללת.\n- **משוואות דיפרנציאליות:** כל פתרון מתחיל באנטי-גזירה.\n- **FTC:** אינטגרל מסוים מחושב דרך קדומות.\n\nהבדל מרכזי מגזירה: **קדומות אינן יחידות.** $F(x)$ ו-$F(x)+C$ שניהם בעלי אותה נגזרת — לכן תמיד כותבים $+C$."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Antiderivative and Indefinite Integral",
+      "title_he": "פונקציה קדומה ואינטגרל לא-מסוים",
+      "body_en_md": "**Definition:** $F$ is an **antiderivative** of $f$ on an interval $I$ if $F'(x)=f(x)$ for all $x\\in I$.\n\n**Theorem:** If $F$ is one antiderivative of $f$ on $I$, then **every** antiderivative has the form $F(x)+C$ for some constant $C$.\n\n**Indefinite integral notation:**\n$$\\int f(x)\\,dx = F(x)+C$$\n\n**Linearity:**\n$$\\int[af(x)+bg(x)]\\,dx = a\\int f(x)\\,dx + b\\int g(x)\\,dx$$\n\n**Basic antiderivative table:**\n$$\\begin{array}{ll}\n\\int x^n\\,dx = \\dfrac{x^{n+1}}{n+1}+C & (n\\ne-1) \\\\\n\\int \\dfrac{1}{x}\\,dx = \\ln|x|+C & \\\\\n\\int e^x\\,dx = e^x+C & \\\\\n\\int a^x\\,dx = \\dfrac{a^x}{\\ln a}+C & (a>0,a\\ne 1)\\\\\n\\int \\sin x\\,dx = -\\cos x+C & \\\\\n\\int \\cos x\\,dx = \\sin x+C & \\\\\n\\int \\sec^2 x\\,dx = \\tan x+C & \\\\\n\\int \\dfrac{1}{x^2+1}\\,dx = \\arctan x+C & \\\\\n\\int \\dfrac{1}{\\sqrt{1-x^2}}\\,dx = \\arcsin x+C &\n\\end{array}$$",
+      "body_he_md": "**הגדרה:** $F$ היא **פונקציה קדומה** של $f$ על קטע $I$ אם $F'(x)=f(x)$ לכל $x\\in I$.\n\n**משפט:** אם $F$ קדומה אחת של $f$, אז **כל** קדומה היא מהצורה $F(x)+C$ עבור קבוע $C$.\n\n**סימון:**\n$$\\int f(x)\\,dx = F(x)+C$$\n\n**ליניאריות:**\n$$\\int[af+bg]\\,dx = a\\int f\\,dx+b\\int g\\,dx$$\n\n**טבלת קדומות:**\n$$\\begin{array}{l}\n\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C\\;(n\\ne-1) \\\\\n\\int\\frac{1}{x}\\,dx=\\ln|x|+C \\\\\n\\int e^x\\,dx=e^x+C \\\\\n\\int\\sin x\\,dx=-\\cos x+C \\\\\n\\int\\cos x\\,dx=\\sin x+C \\\\\n\\int\\sec^2 x\\,dx=\\tan x+C \\\\\n\\int\\frac{1}{x^2+1}\\,dx=\\arctan x+C \\\\\n\\int\\frac{1}{\\sqrt{1-x^2}}\\,dx=\\arcsin x+C\n\\end{array}$$"
     },
     {
       "kind": "theory",
-      "title_en": "u-substitution",
-      "title_he": "החלפת $u$",
-      "body_en_md": "If $u=g(x)$, then $\\displaystyle\\int f(g(x))g'(x)\\,dx = \\int f(u)\\,du$.\n\n**Example.** $\\int 2x\\cos(x^2)\\,dx$. Let $u=x^2$, $du=2x\\,dx$:\n$$\\int \\cos u\\,du = \\sin u + C = \\sin(x^2)+C.$$\n\n**Example.** $\\int \\dfrac{x}{x^2+1}\\,dx$. Let $u=x^2+1$:\n$$\\frac{1}{2}\\int \\frac{1}{u}\\,du = \\frac{1}{2}\\ln|u|+C = \\frac{1}{2}\\ln(x^2+1)+C.$$\n\n**Tip:** look for inner function whose derivative (up to constant) appears as factor.",
-      "body_he_md": "אם $u=g(x)$: $\\displaystyle\\int f(g(x))g'(x)\\,dx = \\int f(u)\\,du$.\n\n**דוגמה.** $\\int 2x\\cos(x^2)\\,dx = \\sin(x^2)+C$.\n\n**דוגמה.** $\\int \\dfrac{x}{x^2+1}\\,dx = \\frac{1}{2}\\ln(x^2+1)+C$.\n\n**טיפ:** חפשו פונקציה פנימית שנגזרתה מופיעה כגורם."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Integration by parts",
-      "title_he": "אינטגרציה בחלקים",
-      "body_en_md": "$$\\int u\\,dv = uv - \\int v\\,du$$\n\nChoose $u$ via **LIATE** priority: Log, Inverse trig, Algebraic, Trig, Exponential — $u$ is earlier in list.\n\n**Example.** $\\int x e^x\\,dx$. Take $u=x$, $dv=e^x dx$:\n$$=xe^x-\\int e^x\\,dx = xe^x-e^x+C = e^x(x-1)+C.$$\n\n**Example.** $\\int \\ln x\\,dx$. Take $u=\\ln x$, $dv=dx$:\n$$=x\\ln x - \\int x\\cdot\\frac{1}{x}\\,dx = x\\ln x - x + C.$$\n\n**Tabular method** helps repeated IBP (e.g. $x^2 e^x$).",
-      "body_he_md": "$$\\int u\\,dv = uv - \\int v\\,du$$\n\n**LIATE:** Log, Inverse, Algebraic, Trig, Exp.\n\n**דוגמה.** $\\int x e^x\\,dx = e^x(x-1)+C$.\n\n**דוגמה.** $\\int \\ln x\\,dx = x\\ln x - x + C$."
+      "title_en": "Strategy for Finding Antiderivatives",
+      "title_he": "אסטרטגיה למציאת קדומות",
+      "body_en_md": "**Step 1 — Simplify first.** Expand products, reduce fractions, split sums before integrating:\n$$\\int\\frac{x^3+2x}{x}\\,dx = \\int(x^2+2)\\,dx = \\frac{x^3}{3}+2x+C$$\n\n**Step 2 — Match table entries.** After simplifying, each term should match an entry in the basic table.\n\n**Step 3 — Apply linearity.** Integrate term by term, factor out constants.\n\n**Step 4 — Consider long division.** For integrals of the form $\\int\\frac{P(x)}{Q(x)}\\,dx$ where degree$(P)\\geq$degree$(Q)$: divide first.\n$$\\int\\frac{x^2}{x^2+1}\\,dx = \\int\\left(1-\\frac{1}{x^2+1}\\right)\\,dx = x-\\arctan x+C$$\n\n**Step 5 — Verify by differentiating.** Always check: $\\frac{d}{dx}[F(x)+C]=f(x)$?",
+      "body_he_md": "**שלב 1 — פשטו קודם.** פתחו מכפלות, צמצמו שברים, פצלו סכומים:\n$$\\int\\frac{x^3+2x}{x}\\,dx=\\int(x^2+2)\\,dx=\\frac{x^3}{3}+2x+C$$\n\n**שלב 2 — התאימו לטבלה.** כל איבר צריך להתאים לרשומה בטבלה.\n\n**שלב 3 — ליניאריות.** אינטגרציה איבר-איבר, הוצאת קבועים.\n\n**שלב 4 — חלוקה ארוכה.** לאינטגרלים $\\int\\frac{P(x)}{Q(x)}dx$ כאשר $\\deg P\\geq\\deg Q$: חלקו קודם.\n$$\\int\\frac{x^2}{x^2+1}\\,dx=\\int\\left(1-\\frac{1}{x^2+1}\\right)\\,dx=x-\\arctan x+C$$\n\n**שלב 5 — בדקו על-ידי גזירה.**"
     },
     {
       "kind": "worked_example",
-      "title_en": "Initial value problems",
-      "title_he": "בעיות ערך התחלתי",
-      "body_en_md": "Given $f'(x)$ and one point on $f$, find $f$.\n\n**Example.** $f'(x)=3x^2-2$, $f(1)=4$.\n$$f(x)=x^3-2x+C,\\quad f(1)=1-2+C=4 \\Rightarrow C=5.$$\nSo $f(x)=x^3-2x+5$.\n\n**Engineering:** velocity $v(t)$ from acceleration $a(t)$ with $v(0)=v_0$; position from velocity — two integration steps + constants from ICs.",
-      "body_he_md": "נתון $f'$ ונקודה — מצאו $f$.\n\n**דוגמה.** $f'=3x^2-2$, $f(1)=4$ $\\Rightarrow$ $f(x)=x^3-2x+5$.\n\n**הנדסה:** $v$ מ-$a$; $s$ מ-$v$ — שני שלבי אינטגרציה + תנאי התחלה."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Integrating a Polynomial",
+      "title_he": "דוגמה פתורה 1 — אינטגרציה של פולינום",
+      "body_en_md": "**Given:** $\\displaystyle\\int(3x^2-2x+1)\\,dx$.\n\n**Step 1 — Apply linearity:**\n$$= 3\\int x^2\\,dx - 2\\int x\\,dx + \\int 1\\,dx$$\n\n**Step 2 — Apply power rule to each term:**\n$$= 3\\cdot\\frac{x^3}{3} - 2\\cdot\\frac{x^2}{2} + x + C$$\n\n**Step 3 — Simplify:**\n$$= x^3 - x^2 + x + C$$\n\n**Answer:** $\\boxed{x^3 - x^2 + x + C}$ ✓\n\n*Verify: $(x^3-x^2+x+C)'=3x^2-2x+1$ ✓*",
+      "body_he_md": "**נתון:** $\\displaystyle\\int(3x^2-2x+1)\\,dx$.\n\n**שלב 1 — ליניאריות:**\n$$3\\int x^2\\,dx-2\\int x\\,dx+\\int 1\\,dx$$\n\n**שלב 2 — כלל חזקה:**\n$$3\\cdot\\frac{x^3}{3}-2\\cdot\\frac{x^2}{2}+x+C$$\n\n**שלב 3:**\n$$= x^3-x^2+x+C$$\n\n**תשובה:** $\\boxed{x^3-x^2+x+C}$ ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\int(5x^4+3x-2)\\,dx$.",
+      "body_he_md": "חשבו $\\displaystyle\\int(5x^4+3x-2)\\,dx$.",
+      "checkpoint_solution_en": "$x^5+\\frac{3x^2}{2}-2x+C$.",
+      "checkpoint_solution_he": "$x^5+\\frac{3x^2}{2}-2x+C$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Arctan and Arcsin Integrals",
+      "title_he": "דוגמה פתורה 2 — אינטגרלים של ארקטן ואקסין",
+      "body_en_md": "**Given:** Compute (a) $\\displaystyle\\int\\frac{1}{x^2+1}\\,dx$ and (b) $\\displaystyle\\int\\frac{1}{\\sqrt{1-x^2}}\\,dx$.\n\n**Part (a):**\nThis matches the table entry directly:\n$$\\int\\frac{1}{x^2+1}\\,dx = \\arctan x + C$$\n\n**Part (b):**\nAlso a direct table match:\n$$\\int\\frac{1}{\\sqrt{1-x^2}}\\,dx = \\arcsin x + C$$\n\n**Combined problem:** Find $\\displaystyle\\int\\left(\\frac{3}{x^2+1}+\\frac{2}{\\sqrt{1-x^2}}\\right)\\,dx$.\n\n**Apply linearity:**\n$$= 3\\arctan x + 2\\arcsin x + C$$\n\n**Answer:** $\\boxed{3\\arctan x + 2\\arcsin x + C}$ ✓\n\n*These two antiderivatives come up constantly in calculus and must be memorized.*",
+      "body_he_md": "**נתון:** חשבו (א) $\\displaystyle\\int\\frac{1}{x^2+1}\\,dx$ ו-(ב) $\\displaystyle\\int\\frac{1}{\\sqrt{1-x^2}}\\,dx$.\n\n**(א):** ישירות מהטבלה:\n$$\\arctan x+C$$\n\n**(ב):** ישירות מהטבלה:\n$$\\arcsin x+C$$\n\n**בעיה משולבת:**\n$$\\int\\left(\\frac{3}{x^2+1}+\\frac{2}{\\sqrt{1-x^2}}\\right)\\,dx = 3\\arctan x+2\\arcsin x+C$$\n\n**תשובה:** $\\boxed{3\\arctan x+2\\arcsin x+C}$ ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\displaystyle\\int\\left(e^x + \\frac{1}{x} + \\cos x\\right)\\,dx$.",
+      "body_he_md": "חשבו $\\displaystyle\\int\\left(e^x+\\frac{1}{x}+\\cos x\\right)\\,dx$.",
+      "checkpoint_solution_en": "$e^x+\\ln|x|+\\sin x+C$.",
+      "checkpoint_solution_he": "$e^x+\\ln|x|+\\sin x+C$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Long Division First: $\\int\\frac{x^2}{x^2+1}\\,dx$",
+      "title_he": "דוגמה פתורה 3 — חלוקה ארוכה קודם: $\\int\\frac{x^2}{x^2+1}\\,dx$",
+      "body_en_md": "**Given:** $\\displaystyle\\int\\frac{x^2}{x^2+1}\\,dx$.\n\n**Step 1 — Check degrees:** Numerator degree = 2, denominator degree = 2. They are equal (improper fraction). Must divide first.\n\n**Step 2 — Polynomial long division:**\n$$\\frac{x^2}{x^2+1} = 1 - \\frac{1}{x^2+1}$$\n*Verification:* $1\\cdot(x^2+1) - 1 = x^2$ ✓\n\n**Step 3 — Integrate:**\n$$\\int\\frac{x^2}{x^2+1}\\,dx = \\int\\left(1-\\frac{1}{x^2+1}\\right)\\,dx = \\int 1\\,dx - \\int\\frac{1}{x^2+1}\\,dx$$\n\n**Step 4 — Apply table:**\n$$= x - \\arctan x + C$$\n\n**Answer:** $\\boxed{x-\\arctan x+C}$ ✓\n\n*Key principle: never attempt to integrate an improper rational function without first performing polynomial division.*",
+      "body_he_md": "**נתון:** $\\displaystyle\\int\\frac{x^2}{x^2+1}\\,dx$.\n\n**שלב 1 — דרגות:** מונה = מכנה = 2. שבר לא-תקין — צריך לחלק קודם.\n\n**שלב 2 — חלוקה:**\n$$\\frac{x^2}{x^2+1} = 1-\\frac{1}{x^2+1}$$\n\n**שלב 3 — אינטגרציה:**\n$$\\int\\left(1-\\frac{1}{x^2+1}\\right)\\,dx$$\n\n**שלב 4 — טבלה:**\n$$= x-\\arctan x+C$$\n\n**תשובה:** $\\boxed{x-\\arctan x+C}$ ✓"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Which Technique for Which Integrand",
+      "title_he": "מדריך שיטות — איזה טכניקה למה",
+      "body_en_md": "| Integrand type | First move | Technique |\n|---------------|------------|----------|\n| Polynomial | Integrate term by term | Power rule |\n| $e^{ax}$, $\\sin(ax)$, $\\cos(ax)$ | Direct table | Linear substitution |\n| Rational $P/Q$, $\\deg P\\geq\\deg Q$ | Polynomial division | Then partial fractions or table |\n| $f(g(x))g'(x)$ | Spot inner function | $u$-substitution |\n| Product: poly $\\times$ exp/trig/log | No obvious substitution | IBP |\n| $\\frac{1}{x^2+a^2}$ | Scale to $\\frac{1}{x^2+1}$ form | Arctan formula |\n| $\\frac{1}{\\sqrt{a^2-x^2}}$ | Scale | Arcsin formula |",
+      "body_he_md": "| סוג אינטגרנד | צעד ראשון | טכניקה |\n|-------------|-----------|--------|\n| פולינום | אינטגרציה איבר-איבר | כלל חזקה |\n| $e^{ax}$, $\\sin(ax)$, $\\cos(ax)$ | טבלה ישירה | החלפה לינארית |\n| שברי $P/Q$, $\\deg P\\geq\\deg Q$ | חלוקה פולינומית | שברים חלקיים או טבלה |\n| $f(g(x))g'(x)$ | זהו פונקציה פנימית | החלפת $u$ |\n| מכפלה: פולינום × מעריכי/טריג/לוג | ללא החלפה ברורה | IBP |\n| $\\frac{1}{x^2+a^2}$ | כווננו לצורת ארקטן | נוסחת ארקטן |\n| $\\frac{1}{\\sqrt{a^2-x^2}}$ | כווננו | נוסחת ארקסין |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int(x^4-3x^2+7)\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int(x^4-3x^2+7)\\,dx$.",
+          "solution_en": "$\\frac{x^5}{5}-x^3+7x+C$.",
+          "solution_he": "$\\frac{x^5}{5}-x^3+7x+C$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int\\left(\\sqrt{x}+\\frac{1}{\\sqrt{x}}\\right)\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\left(\\sqrt{x}+\\frac{1}{\\sqrt{x}}\\right)\\,dx$.",
+          "solution_en": "$\\frac{2x^{3/2}}{3}+2\\sqrt{x}+C$.",
+          "solution_he": "$\\frac{2x^{3/2}}{3}+2\\sqrt{x}+C$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute $\\displaystyle\\int(2\\sin x - 3\\cos x)\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int(2\\sin x-3\\cos x)\\,dx$.",
+          "solution_en": "$-2\\cos x - 3\\sin x+C$.",
+          "solution_he": "$-2\\cos x-3\\sin x+C$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find $F(x)$ such that $F'(x)=x^2+e^x$ and $F(0)=1$.",
+          "body_he": "מצאו $F(x)$ כך ש-$F'(x)=x^2+e^x$ ו-$F(0)=1$.",
+          "solution_en": "$F(x)=\\frac{x^3}{3}+e^x+C$. At $x=0$: $1=0+1+C\\Rightarrow C=0$. So $F(x)=\\frac{x^3}{3}+e^x$.",
+          "solution_he": "$F(x)=\\frac{x^3}{3}+e^x+C$. $F(0)=1+C=1\\Rightarrow C=0$. $F(x)=\\frac{x^3}{3}+e^x$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\frac{x^3-x}{x}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{x^3-x}{x}\\,dx$.",
+          "solution_en": "Simplify: $\\int(x^2-1)\\,dx=\\frac{x^3}{3}-x+C$.",
+          "solution_he": "$\\frac{x^3}{3}-x+C$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\frac{2}{x^2+4}\\,dx$. (Hint: factor out 4 from denominator.)",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{2}{x^2+4}\\,dx$. (רמז: הוציאו 4 מהמכנה.)",
+          "solution_en": "$\\frac{2}{x^2+4}=\\frac{2}{4((x/2)^2+1)}=\\frac{1}{2}\\cdot\\frac{1}{(x/2)^2+1}$. Let $u=x/2$: $\\int\\frac{2}{x^2+4}dx=\\arctan(x/2)+C$.",
+          "solution_he": "$\\arctan(x/2)+C$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\frac{x^2+3x+1}{x}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{x^2+3x+1}{x}\\,dx$.",
+          "solution_en": "Split: $\\int(x+3+1/x)\\,dx=\\frac{x^2}{2}+3x+\\ln|x|+C$.",
+          "solution_he": "$\\frac{x^2}{2}+3x+\\ln|x|+C$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the position $x(t)$ given acceleration $a(t)=6t-2$, initial velocity $v(0)=1$, and initial position $x(0)=3$.",
+          "body_he": "מצאו מיקום $x(t)$ בהינתן תאוצה $a(t)=6t-2$, $v(0)=1$, $x(0)=3$.",
+          "solution_en": "$v(t)=\\int(6t-2)dt=3t^2-2t+C_1$. $v(0)=1\\Rightarrow C_1=1$. $x(t)=\\int(3t^2-2t+1)dt=t^3-t^2+t+C_2$. $x(0)=3\\Rightarrow C_2=3$. $x(t)=t^3-t^2+t+3$.",
+          "solution_he": "$v(t)=3t^2-2t+1$. $x(t)=t^3-t^2+t+3$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Compute $\\displaystyle\\int\\frac{x^3+1}{x^2}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{x^3+1}{x^2}\\,dx$.",
+          "solution_en": "Split: $\\int(x+x^{-2})\\,dx=\\frac{x^2}{2}-\\frac{1}{x}+C$.",
+          "solution_he": "$\\frac{x^2}{2}-\\frac{1}{x}+C$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\int\\frac{x^3}{x^2+1}\\,dx$ using polynomial long division.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{x^3}{x^2+1}\\,dx$ בעזרת חלוקה פולינומית.",
+          "solution_en": "$\\frac{x^3}{x^2+1}=x-\\frac{x}{x^2+1}$. $\\int\\left(x-\\frac{x}{x^2+1}\\right)dx=\\frac{x^2}{2}-\\frac{\\ln(x^2+1)}{2}+C$.",
+          "solution_he": "$\\frac{x^3}{x^2+1}=x-\\frac{x}{x^2+1}$. Integral: $\\frac{x^2}{2}-\\frac{\\ln(x^2+1)}{2}+C$.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Compute $\\displaystyle\\int\\frac{x^4+2x^2+3}{x^2+1}\\,dx$.",
+          "body_he": "חשבו $\\displaystyle\\int\\frac{x^4+2x^2+3}{x^2+1}\\,dx$.",
+          "solution_en": "Long division: $\\frac{x^4+2x^2+3}{x^2+1}=x^2+1+\\frac{2}{x^2+1}$. Integrate: $\\frac{x^3}{3}+x+2\\arctan x+C$.",
+          "solution_he": "חלוקה: $x^2+1+\\frac{2}{x^2+1}$. $\\frac{x^3}{3}+x+2\\arctan x+C$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A ball is thrown upward from height $h_0=5$ m with initial velocity $v_0=20$ m/s. Given $a(t)=-10$ m/s$^2$, find the maximum height and the time it returns to the ground.",
+          "body_he": "כדור נזרק כלפי מעלה מגובה $h_0=5$ מ' עם מהירות התחלתית $v_0=20$ מ/ש. $a(t)=-10$ מ/ש². מצאו את הגובה המרבי ואת הזמן שבו חוזר לקרקע.",
+          "solution_en": "$v(t)=-10t+20$. $h(t)=-5t^2+20t+5$. Max at $v=0$: $t=2$. $h(2)=-20+40+5=25$ m. Ground: $-5t^2+20t+5=0\\Rightarrow t^2-4t-1=0\\Rightarrow t=2+\\sqrt{5}\\approx 4.24$ s.",
+          "solution_he": "$h(t)=-5t^2+20t+5$. מרבי: $t=2$, $h=25$ מ'. קרקע: $t=2+\\sqrt{5}\\approx 4.24$ שניות.",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Mistakes",
+      "title_he": "טעויות נפוצות",
+      "body_en_md": "1. **Omitting $+C$.** This makes the answer incomplete — an antiderivative without $+C$ is a specific function, not the general family. Always write $+C$.\n\n2. **Power rule on $x^{-1}$.** $\\int x^{-1}\\,dx\\ne \\frac{x^0}{0}+C$ (division by zero!). The correct antiderivative is $\\ln|x|+C$.\n\n3. **Integrating with improper rational functions without dividing.** $\\int\\frac{x^2}{x^2+1}\\,dx\\ne \\frac{x^3/3}{x^3/3+x}+C$. Always divide first.\n\n4. **Confusing $\\int\\frac{1}{x}\\,dx = \\ln|x|+C$ vs $\\int\\frac{1}{x^2+1}\\,dx=\\arctan x+C$.** Common mix-up.\n\n5. **Missing the absolute value in $\\ln|x|$.** $\\int\\frac{1}{x}\\,dx = \\ln|x|+C$, NOT $\\ln x+C$.",
+      "body_he_md": "1. **חסר $+C$.** ללא $+C$ התשובה אינה שלמה.\n\n2. **כלל חזקה על $x^{-1}$.** $\\int x^{-1}dx\\ne\\frac{x^0}{0}$. הנכון: $\\ln|x|+C$.\n\n3. **אינטגרציה של שבר לא-תקין ללא חלוקה.** חלקו קודם.\n\n4. **בלבול $\\int\\frac{1}{x}dx=\\ln|x|$ מול $\\int\\frac{1}{x^2+1}dx=\\arctan x$.**\n\n5. **ערך מוחלט חסר:** $\\ln|x|$, לא $\\ln x$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Antiderivative table (must memorize):**\n$$\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C \\quad (n\\ne-1)$$\n$$\\int\\frac{1}{x}\\,dx=\\ln|x|+C, \\quad \\int e^x\\,dx=e^x+C$$\n$$\\int\\sin x\\,dx=-\\cos x+C, \\quad \\int\\cos x\\,dx=\\sin x+C$$\n$$\\int\\sec^2 x\\,dx=\\tan x+C, \\quad \\int\\frac{1}{x^2+1}\\,dx=\\arctan x+C$$\n$$\\int\\frac{1}{\\sqrt{1-x^2}}\\,dx=\\arcsin x+C$$\n\n**Linearity:** $\\int[af+bg]\\,dx=a\\int f\\,dx+b\\int g\\,dx$\n\n**Initial value problems:** Integrate, then use the initial condition to find $C$.\n\n**Exam tip:** Always differentiate your answer to verify. A 5-second check prevents losing marks.",
+      "body_he_md": "**טבלת קדומות (שיננו בעל-פה):**\n$$\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C,\\quad\\int\\frac{1}{x}\\,dx=\\ln|x|+C$$\n$$\\int e^x\\,dx=e^x+C,\\quad\\int\\sin x\\,dx=-\\cos x+C$$\n$$\\int\\cos x\\,dx=\\sin x+C,\\quad\\int\\frac{1}{x^2+1}\\,dx=\\arctan x+C$$\n\n**ליניאריות:** $\\int[af+bg]\\,dx=a\\int f\\,dx+b\\int g\\,dx$\n\n**בעיות ערך התחלתי:** אינטגרציה, אחר כך הציבו תנאי התחלה למציאת $C$.\n\n**טיפ לבחינה:** תמיד גזרו את התשובה לאימות — 5 שניות ומונעים אובדן נקודות."
     },
     {
       "kind": "summary",
-      "title_en": "Technique selection guide",
-      "title_he": "מדריך בחירת טכניקה",
-      "body_en_md": "| Integrand pattern | Try |\n|---|---|\n| Composite with inner derivative factor | $u$-sub |\n| Product of unlike types ($x e^x$, $\\ln x$) | Parts |\n| Rational simple | Partial fractions (later) or algebra |\n| Trig product | Identities or parts |\n\nAlways **check by differentiating** your answer — catches missing $+C$ and sign errors.",
-      "body_he_md": "| דפוס | טכניקה |\n|---|---|\n| הרכבה + נגזרת פנימית | $u$-sub |\n| מכפלה | חלקים |\n| רציונלית | שברים חלקיים |\n\n**אמתו בגזירה** — תופסים $+C$ חסר."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Antiderivatives & Integration Techniques: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Antiderivatives & Integration Techniques.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-פונקציה קדומה וטכניקות אינטגרציה: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-פונקציה קדומה וטכניקות אינטגרציה.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- An antiderivative $F$ satisfies $F'=f$; all antiderivatives are $F(x)+C$.\n- The indefinite integral $\\int f(x)\\,dx = F(x)+C$ — **never omit $+C$**.\n- Linearity: integrate term by term, factor out constants.\n- Memorize the basic table: power rule ($n\\ne-1$), $e^x$, $1/x$, $\\sin$, $\\cos$, $\\arctan$, $\\arcsin$.\n- For improper rational functions: divide first, then integrate.\n- Always verify by differentiating your answer.",
+      "body_he_md": "- קדומה $F$ מקיימת $F'=f$; כל הקדומות הן $F(x)+C$.\n- $\\int f(x)\\,dx=F(x)+C$ — **אל תשכחו $+C$**.\n- ליניאריות: איבר-איבר, הוצאת קבועים.\n- שיננו טבלה בסיסית: חזקה, $e^x$, $1/x$, סינוס, קוסינוס, ארקטן, ארקסין.\n- שברים לא-תקינים: חלקו קודם.\n- תמיד גזרו את התשובה."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$\\int 3x^2\\,dx=?$",
-      "stem_he": "$\\int 3x^2\\,dx=?$",
-      "options_en": [
-        "$x^3$",
-        "$x^3+C$",
-        "$6x+C$",
-        "$x^2+C$"
-      ],
-      "options_he": [
-        "$x^3$",
-        "$x^3+C$",
-        "$6x+C$",
-        "$x^2+C$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Antiderivative of $3x^2$ is $x^3$; never forget $+C$.",
-      "explanation_he": "קדומה $x^3+C$.",
-      "skill_atoms": [
-        "basic_antiderivative"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Antiderivatives & Integration Techniques'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'פונקציה קדומה וטכניקות אינטגרציה'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "u_substitution"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Antiderivatives & Integration Techniques' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'פונקציה קדומה וטכניקות אינטגרציה' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "integration_by_parts"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Antiderivatives & Integration Techniques'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'פונקציה קדומה וטכניקות אינטגרציה'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "initial_value_antiderivative"
-      ],
-      "points_level_min": "calc1"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Antiderivatives & Integration Techniques' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'פונקציה קדומה וטכניקות אינטגרציה' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "log_antiderivative"
-      ],
-      "points_level_min": "calc1"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Every antiderivative includes +C unless initial data fixes it.",
-      "u-sub needs inner function derivative as factor.",
-      "LIATE guides integration by parts choice."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Integral of 1/x is ln(x) without absolute value",
-        "correction": "Use ln|x| for all x≠0.",
-        "detect_phrase_en": "ln x only",
-        "detect_phrase_he": "ln x בלי ערך מוחלט"
-      }
-    ],
-    "tutor_pacing_hint": "Verify every antiderivative by differentiation on the board.",
-    "skill_atoms_unlocked": [
-      "basic_antiderivative",
-      "u_substitution",
-      "integration_by_parts",
-      "initial_value_antiderivative",
-      "log_antiderivative"
-    ]
-  }
+  ]
 }
