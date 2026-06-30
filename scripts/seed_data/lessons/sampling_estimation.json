@@ -1,16 +1,224 @@
 {
-  "concept_id": "sampling_estimation",
+  "id": "sampling_estimation",
+  "type": "interactive",
   "subject": "statistics_probability",
-  "level": "university",
-  "math_track": [
-    "stats_prob"
+  "title_en": "Sampling, Point Estimation & Confidence Intervals",
+  "title_he": "דגימה, אמידת נקודה ורווח בר-סמך",
+  "duration_min": 35,
+  "level_min": "university",
+  "agent_hints": "The CLT applies to the sample mean, not individual observations — and requires independent samples with finite variance. Students confuse standard deviation with standard error: SE = sigma/sqrt(n). For CI interpretation, mu is fixed — the interval is random. Sample-size formulas for proportions need a conservative p-hat = 0.5 when unknown. Connect to the confidence_intervals lesson for z vs t procedures.",
+  "sections": [
+    {
+      "id": "population_sample",
+      "title_en": "Population vs Sample",
+      "title_he": "אוכלוסייה לעומת מדגם",
+      "level_min": "university",
+      "body_en_md": "A **population** is the entire group of interest (all students, all manufactured parts). A **sample** is a subset drawn from the population.\n\n**Parameters** (unknown, fixed): $\\mu$ (mean), $\\sigma$ (std dev), $p$ (proportion).\n**Statistics** (computed from data, random): $\\bar{X}$, $s$, $\\hat{p}$.\n\n**Sampling distribution:** the probability distribution of a statistic over repeated samples.\n\n**Example:** population exam scores with $\\mu=72$, $\\sigma=15$. One sample of $n=25$ gives $\\bar{x}=68.4$ — this is one realization of $\\bar{X}$.\n\n**Bias:** a statistic is **unbiased** if $E[\\hat{\\theta}] = \\theta$. The sample mean is unbiased for $\\mu$; $s^2$ (with $n-1$) is unbiased for $\\sigma^2$.",
+      "body_he_md": "**אוכלוסייה** — כל הקבוצה; **מדגם** — תת-קבוצה.\n\n**פרמטרים:** $\\mu$, $\\sigma$, $p$. **סטטיסטיקות:** $\\bar{X}$, $s$, $\\hat{p}$.\n\n**התפלגות דגימה:** התפלגות הסטטיסטיקה על דגימות חוזרות.\n\n**דוגמה:** $\\mu=72$, $\\sigma=15$; מדגם $n=25$ נותן $\\bar{x}=68.4$.\n\n$\\bar{X}$ הוא אמוד לא-מוטה ל-$\\mu$."
+    },
+    {
+      "id": "clt",
+      "title_en": "Central Limit Theorem",
+      "title_he": "משפט הגבול המרכזי",
+      "level_min": "university",
+      "body_en_md": "Let $X_1, \\ldots, X_n$ be i.i.d. with mean $\\mu$ and variance $\\sigma^2$ (finite). Then for large $n$:\n$$\\boxed{\\bar{X} \\approx N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right)}$$\n\nEquivalently:\n$$\\frac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\approx N(0,1)$$\n\n**Key points:**\n- Applies to **sample means**, not single observations\n- Population can be any shape (roughly $n \\geq 30$ is a common rule)\n- Spread of $\\bar{X}$ shrinks as $1/\\sqrt{n}$\n\n**Example:** skewed service times with $\\mu=8$ min, $\\sigma=4$, $n=36$.\n$\\bar{X}$ is approximately $N(8, 16/36) = N(8, 0.444)$ — std error $= 4/6 \\approx 0.67$ min.",
+      "body_he_md": "ל-$X_1,\\ldots,X_n$ בלתי-תלויים עם $\\mu$ ו-$\\sigma^2$ סופית, ל-$n$ גדול:\n$$\\bar{X} \\approx N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right)$$\n\n**חשוב:** חל על **ממוצעי מדגם**, לא על תצפית בודדת.\n\n**דוגמה:** $n=36$, $\\sigma=4$ $\\Rightarrow$ SE $= 4/6 \\approx 0.67$."
+    },
+    {
+      "id": "point_estimation",
+      "title_en": "Point Estimation",
+      "title_he": "אמידת נקודה",
+      "level_min": "university",
+      "body_en_md": "A **point estimate** $\\hat{\\theta}$ is a single number summarizing a parameter.\n\n| Parameter | Estimator |\n|---|---|\n| $\\mu$ | $\\bar{X} = \\frac{1}{n}\\sum X_i$ |\n| $\\sigma^2$ | $s^2 = \\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$ |\n| $p$ | $\\hat{p} = \\frac{\\text{# successes}}{n}$ |\n\n**Desirable properties:**\n- **Unbiased:** $E[\\hat{\\theta}] = \\theta$\n- **Consistent:** $\\hat{\\theta} \\to \\theta$ as $n \\to \\infty$\n- **Efficient:** smallest variance among unbiased estimators\n\n**Worked example:** 400 voters sampled; 228 support a candidate.\n$\\hat{p} = 228/400 = 0.57$ estimates the population proportion $p$.",
+      "body_he_md": "**אמד נקודתי** $\\hat{\\theta}$ — מספר יחיד.\n\n$\\mu$ $\\to$ $\\bar{X}$; $p$ $\\to$ $\\hat{p}$.\n\n**תכונות:** לא-מוטה, עקבי, יעיל.\n\n**דוגמה:** 228 מתוך 400 $\\Rightarrow$ $\\hat{p}=0.57$."
+    },
+    {
+      "id": "ci_mean",
+      "title_en": "Confidence Interval for the Mean",
+      "title_he": "רווח סמך לממוצע",
+      "level_min": "university",
+      "body_en_md": "When $\\sigma$ is known (or $n$ large with $s$):\n$$\\boxed{\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}}$$\n\nWhen $\\sigma$ unknown (normal population):\n$$\\boxed{\\bar{x} \\pm t_{\\alpha/2,\\,n-1} \\cdot \\frac{s}{\\sqrt{n}}}$$\n\n**Standard error of the mean:** $\\text{SE} = s/\\sqrt{n}$.\n\n**Worked example:** $n=16$, $\\bar{x}=50$, $s=8$, 95% CI, $t_{0.025,15}=2.131$.\n$$50 \\pm 2.131 \\cdot \\frac{8}{\\sqrt{16}} = 50 \\pm 4.26 = (45.74,\\; 54.26).$$",
+      "body_he_md": "$\\sigma$ ידוע: $\\bar{x} \\pm z_{\\alpha/2} \\cdot \\sigma/\\sqrt{n}$.\n\n$\\sigma$ לא ידוע: $\\bar{x} \\pm t_{\\alpha/2,n-1} \\cdot s/\\sqrt{n}$.\n\n**שגיאת תקן:** $s/\\sqrt{n}$.\n\n**דוגמה:** $n=16$, $\\bar{x}=50$, $s=8$ $\\Rightarrow$ $(45.74, 54.26)$."
+    },
+    {
+      "id": "ci_proportion",
+      "title_en": "Confidence Interval for a Proportion & Sample Size",
+      "title_he": "רווח סמך לפרופורציה וגודל מדגם",
+      "level_min": "university",
+      "body_en_md": "For large $n$, an approximate $(1-\\alpha)$ CI for $p$ is:\n$$\\boxed{\\hat{p} \\pm z_{\\alpha/2} \\sqrt{\\frac{\\hat{p}(1-\\hat{p})}{n}}}$$\n\n**Sample size** for estimating $p$ within margin $E$ at confidence $1-\\alpha$:\n$$\\boxed{n \\geq \\left(\\frac{z_{\\alpha/2}}{E}\\right)^2 \\hat{p}(1-\\hat{p})}$$\n\nIf $\\hat{p}$ unknown, use conservative $\\hat{p}=0.5$ (maximizes $p(1-p)$).\n\n**Worked example:** $\\hat{p}=0.57$, $n=400$, 95% CI ($z=1.96$):\n$$0.57 \\pm 1.96\\sqrt{\\frac{0.57 \\cdot 0.43}{400}} = 0.57 \\pm 0.0485 = (0.521,\\; 0.619).$$\n\nFor $E=0.03$ at 95% with unknown $p$: $n \\geq (1.96/0.03)^2 \\cdot 0.25 \\approx 1068$.",
+      "body_he_md": "רווח סמך ל-$p$: $\\hat{p} \\pm z_{\\alpha/2}\\sqrt{\\hat{p}(1-\\hat{p})/n}$.\n\nגודל מדגם: $n \\geq (z_{\\alpha/2}/E)^2 \\hat{p}(1-\\hat{p})$; אם $p$ לא ידוע — $\\hat{p}=0.5$.\n\n**דוגמה:** $\\hat{p}=0.57$, $n=400$ $\\Rightarrow$ $(0.521, 0.619)$."
+    }
   ],
-  "title_en": "Sampling & Point Estimation",
-  "title_he": "דגימה ואמידה נקודתית",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "The Central Limit Theorem states that for large $n$, the sample mean $\\bar{X}$ is approximately:",
+      "body_he": "משפט הגבול המרכזי קובע של-$n$ גדול, ממוצע המדגם $\\bar{X}$ הוא בקירוב:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "Normal with mean $\\mu$ and variance $\\sigma^2$",
+          "text_he": "נורמלי עם ממוצע $\\mu$ ושונות $\\sigma^2$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "Normal with mean $\\mu$ and variance $\\sigma^2/n$",
+          "text_he": "נורמלי עם ממוצע $\\mu$ ושונות $\\sigma^2/n$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "Same distribution as the population",
+          "text_he": "באותה התפלגות כמו האוכלוסייה",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "Always exactly normal for any $n$",
+          "text_he": "תמיד נורמלי בדיוק לכל $n$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "CLT: $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$. Individual $X_i$ keep population variance $\\sigma^2$.",
+      "explanation_he": "מ.ג.מ.: $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "A sample of $n=49$ has $s=14$. The standard error of the mean is:",
+      "body_he": "מדגם $n=49$ עם $s=14$. שגיאת התקן של הממוצע:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$14$",
+          "text_he": "$14$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$7$",
+          "text_he": "$7$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$2$",
+          "text_he": "$2$",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text_en": "$98$",
+          "text_he": "$98$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$\\text{SE} = s/\\sqrt{n} = 14/\\sqrt{49} = 14/7 = 2$.",
+      "explanation_he": "$\\text{SE} = 14/\\sqrt{49} = 2$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "Given $n=25$, $\\bar{x}=100$, $\\sigma=20$, construct a 95% CI for $\\mu$ ($z_{0.025}=1.96$):",
+      "body_he": "נתון $n=25$, $\\bar{x}=100$, $\\sigma=20$. רווח סמך 95% ל-$\\mu$ ($z=1.96$):",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$(92.16,\\; 107.84)$",
+          "text_he": "$(92.16,\\; 107.84)$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$(80,\\; 120)$",
+          "text_he": "$(80,\\; 120)$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$(96,\\; 104)$",
+          "text_he": "$(96,\\; 104)$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$(84.08,\\; 115.92)$",
+          "text_he": "$(84.08,\\; 115.92)$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$E = 1.96 \\cdot 20/\\sqrt{25} = 1.96 \\cdot 4 = 7.84$. CI: $(100 \\pm 7.84)$.",
+      "explanation_he": "$E = 1.96 \\cdot 4 = 7.84$. רווח: $(92.16, 107.84)$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "A 95% confidence interval for $\\mu$ is $(45, 55)$. Which statement is correct?",
+      "body_he": "רווח סמך 95% ל-$\\mu$ הוא $(45, 55)$. איזו טענה נכונה?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "There is a 95% probability that $\\mu$ is between 45 and 55.",
+          "text_he": "יש 95% הסתברות ש-$\\mu$ בין 45 ל-55.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "95% of sample means fall between 45 and 55.",
+          "text_he": "95% ממוצעי המדגם בין 45 ל-55.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "If we repeated sampling, 95% of such intervals would contain $\\mu$.",
+          "text_he": "אם נחזור על הדגימה, 95% מהקטעים יכילו את $\\mu$.",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text_en": "$\\mu$ is definitely between 45 and 55.",
+          "text_he": "$\\mu$ בהחלט בין 45 ל-55.",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Frequentist interpretation: the procedure captures $\\mu$ in 95% of repeated samples; $\\mu$ is fixed.",
+      "explanation_he": "פרשנות תדרתנית: 95% מהקטעים יכילו את $\\mu$; $\\mu$ קבוע."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "For a 95% CI on a proportion with margin of error $E=0.04$ and unknown $p$, the minimum $n$ (using $p=0.5$) is approximately:",
+      "body_he": "לרווח סמך 95% לפרופורציה עם $E=0.04$ ו-$p$ לא ידוע ($p=0.5$), $n$ המינימלי בקירוב:",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$601$",
+          "text_he": "$601$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$400$",
+          "text_he": "$400$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$100$",
+          "text_he": "$100$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$2401$",
+          "text_he": "$2401$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$n \\geq (1.96/0.04)^2 \\cdot 0.25 = 49^2 \\cdot 0.25 = 600.25$, so $n \\geq 601$.",
+      "explanation_he": "$n \\geq (1.96/0.04)^2 \\cdot 0.25 \\approx 601$."
+    }
+  ]
 }

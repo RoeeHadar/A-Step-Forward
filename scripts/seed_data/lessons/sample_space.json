@@ -1,16 +1,224 @@
 {
-  "concept_id": "sample_space",
+  "id": "sample_space",
+  "type": "interactive",
   "subject": "statistics_probability",
-  "level": "university",
-  "math_track": [
-    "stats_prob"
+  "title_en": "Sample Space, Events & Probability Axioms",
+  "title_he": "מרחב מדגם, אירועים ואקסיומות ההסתברות",
+  "duration_min": 30,
+  "level_min": "university",
+  "agent_hints": "Students confuse 'equally likely' with 'any subset has probability |A|/|Omega|'. Emphasise that classical probability requires a symmetry argument. The complement rule P(A^c)=1-P(A) is the standard tool for 'at least one' problems. De Morgan's laws bridge set operations and probability — draw Venn diagrams first. Preview combinatorics: hypergeometric sampling without replacement needs careful counting.",
+  "sections": [
+    {
+      "id": "random_experiment",
+      "title_en": "Random Experiment & Sample Space",
+      "title_he": "ניסוי מקרי ומרחב מדגם",
+      "level_min": "university",
+      "body_en_md": "A **random experiment** is a procedure whose outcome is uncertain before it is performed.\n\nThe **sample space** $\\Omega$ is the set of all possible outcomes.\n\n**Examples:**\n- Flip a coin: $\\Omega = \\{H, T\\}$\n- Roll a die: $\\Omega = \\{1, 2, 3, 4, 5, 6\\}$\n- Two dice (ordered pairs): $\\Omega = \\{(i,j) : 1 \\leq i,j \\leq 6\\}$, so $|\\Omega| = 36$\n- Component lifetime (continuous): $\\Omega = [0, \\infty)$\n\nEach **outcome** $\\omega \\in \\Omega$ is one complete result of the experiment. For two dice, $(3,5)$ and $(5,3)$ are different outcomes if order matters.",
+      "body_he_md": "**ניסוי מקרי** הוא תהליך שתוצאתו אינה ידועה לפני ביצועו.\n\n**מרחב המדגם** $\\Omega$ הוא קבוצת כל התוצאות האפשריות.\n\n**דוגמאות:**\n- הטלת מטבע: $\\Omega = \\{H, T\\}$\n- הטלת קובייה: $\\Omega = \\{1, \\ldots, 6\\}$\n- שתי קוביות (זוגות מסודרים): $|\\Omega| = 36$\n- זמן חיים של רכיב (רציף): $\\Omega = [0, \\infty)$\n\nכל **תוצאה** $\\omega \\in \\Omega$ היא תוצאה מלאה אחת. בשתי קוביות, $(3,5)$ ו-$(5,3)$ שונות אם הסדר חשוב."
+    },
+    {
+      "id": "events",
+      "title_en": "Events & Set Operations",
+      "title_he": "אירועים ופעולות קבוצות",
+      "level_min": "university",
+      "body_en_md": "An **event** $A$ is a subset of $\\Omega$: $A \\subseteq \\Omega$.\n\n- **Simple event:** one outcome, e.g. $A = \\{6\\}$ on a die.\n- **Compound event:** several outcomes, e.g. $B = \\{2,4,6\\}$ (even roll).\n\n**Operations:**\n- Union: $A \\cup B$ — $A$ **or** $B$ (or both)\n- Intersection: $A \\cap B$ — $A$ **and** $B$\n- Complement: $A^c = \\Omega \\setminus A$\n\n**Mutually exclusive (disjoint):** $A \\cap B = \\emptyset$\n\n**Exhaustive:** $A \\cup B = \\Omega$\n\n**De Morgan's laws:**\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$\n\nDraw Venn diagrams — they prevent sign errors in inclusion–exclusion.",
+      "body_he_md": "**אירוע** $A$ הוא תת-קבוצה של $\\Omega$: $A \\subseteq \\Omega$.\n\n- **אירוע פשוט:** תוצאה אחת, למשל $A = \\{6\\}$.\n- **אירוע מורכב:** כמה תוצאות, למשל $B = \\{2,4,6\\}$ (זוגי).\n\n**פעולות:**\n- איחוד: $A \\cup B$ — $A$ **או** $B$\n- חיתוך: $A \\cap B$ — $A$ **וגם** $B$\n- משלים: $A^c = \\Omega \\setminus A$\n\n**זרים (disjoint):** $A \\cap B = \\emptyset$\n\n**מכסים (exhaustive):** $A \\cup B = \\Omega$\n\n**חוקי דה-מורגן:**\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$"
+    },
+    {
+      "id": "kolmogorov_axioms",
+      "title_en": "Probability Function & Kolmogorov Axioms",
+      "title_he": "פונקציית הסתברות ואקסיומות קולמוגורוב",
+      "level_min": "university",
+      "body_en_md": "A **probability function** $P$ assigns to each event $A$ a number $P(A) \\in [0,1]$.\n\n**Kolmogorov's three axioms:**\n1. $P(A) \\geq 0$ for every event $A$\n2. $P(\\Omega) = 1$\n3. **Countable additivity:** if $A \\cap B = \\emptyset$, then $P(A \\cup B) = P(A) + P(B)$ (extended to countable disjoint unions)\n\n**Consequences (prove from axioms):**\n- $P(\\emptyset) = 0$\n- $P(A^c) = 1 - P(A)$\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ (inclusion–exclusion)\n\nIf $A \\subseteq B$, then $P(A) \\leq P(B)$.",
+      "body_he_md": "**פונקציית הסתברות** $P$ מקצה לכל אירוע $A$ מספר $P(A) \\in [0,1]$.\n\n**שלוש אקסיומות קולמוגורוב:**\n1. $P(A) \\geq 0$\n2. $P(\\Omega) = 1$\n3. **אדיטיביות:** אם $A \\cap B = \\emptyset$, אז $P(A \\cup B) = P(A) + P(B)$\n\n**מסקנות:**\n- $P(\\emptyset) = 0$\n- $P(A^c) = 1 - P(A)$\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n\nאם $A \\subseteq B$, אז $P(A) \\leq P(B)$."
+    },
+    {
+      "id": "classical_probability",
+      "title_en": "Classical Probability (Equally Likely Outcomes)",
+      "title_he": "הסתברות קלאסית (תוצאות שוות-הסתברות)",
+      "level_min": "university",
+      "body_en_md": "When all outcomes in a **finite** $\\Omega$ are equally likely:\n$$\\boxed{P(A) = \\frac{|A|}{|\\Omega|}}$$\n\n**Die problems:** $P(\\text{even}) = 3/6 = 1/2$.\n\n**At least one 6 in two dice:** use complement.\n$P(\\text{no six on either die}) = (5/6)^2 = 25/36$, so\n$$P(\\text{at least one 6}) = 1 - 25/36 = 11/36.$$\n\n**Two aces from a 52-card deck (without replacement):**\n$$P = \\frac{4}{52} \\cdot \\frac{3}{51} = \\frac{12}{2652} \\approx 0.0045.$$\n\nClassical probability requires **careful counting** — the next lesson on combinatorics makes this systematic.",
+      "body_he_md": "כאשר כל התוצאות ב-$\\Omega$ **סופי** שוות-הסתברות:\n$$\\boxed{P(A) = \\frac{|A|}{|\\Omega|}}$$\n\n**קובייה:** $P(\\text{זוגי}) = 3/6 = 1/2$.\n\n**לפחות 6 אחת בשתי קוביות:** משלים.\n$P(\\text{אין 6}) = (5/6)^2 = 25/36$, לכן\n$$P(\\text{לפחות 6 אחת}) = 1 - 25/36 = 11/36.$$\n\n**שני אסים מחפיסה (ללא החזרה):**\n$$P = \\frac{4}{52} \\cdot \\frac{3}{51} \\approx 0.0045.$$\n\nהסתברות קלאסית דורשת **ספירה זהירה** — שיעור הקומבינטוריקה הבא."
+    },
+    {
+      "id": "quality_control_example",
+      "title_en": "Worked Example: Quality Control Sampling",
+      "title_he": "דוגמה מלאה: דגימת בקרת איכות",
+      "level_min": "university",
+      "body_en_md": "**Setup:** A factory produces 1000 items per day; 50 are defective. An inspector randomly selects 20 items **without replacement**.\n\nLet $A$ = \"at least 2 defective items in the sample.\"\n\n**Strategy:** compute $P(A^c) = P(0 \\text{ or } 1 \\text{ defective})$.\n\nTotal equally likely samples: $\\binom{1000}{20}$.\n\n$$P(0 \\text{ defective}) = \\frac{\\binom{50}{0}\\binom{950}{20}}{\\binom{1000}{20}}$$\n\n$$P(1 \\text{ defective}) = \\frac{\\binom{50}{1}\\binom{950}{19}}{\\binom{1000}{20}}$$\n\n$$P(A) = 1 - P(A^c) = 1 - \\bigl[P(0) + P(1)\\bigr]$$\n\nThis is a **hypergeometric** setting — common in engineering quality control. For large populations, the binomial approximation works well. Connection: `concept:combinatorics` unlocks efficient counting for such problems.",
+      "body_he_md": "**הגדרה:** מפעל מייצר 1000 פריטים ביום; 50 פגומים. מפקח בוחר 20 פריטים **ללא החזרה**.\n\nנגדיר $A$ = \"לפחות 2 פגומים במדגם.\"\n\n**אסטרטגיה:** נחשב $P(A^c) = P(0 \\text{ או } 1 \\text{ פגום})$.\n\nסך המדגמים: $\\binom{1000}{20}$.\n\n$$P(0 \\text{ פגומים}) = \\frac{\\binom{50}{0}\\binom{950}{20}}{\\binom{1000}{20}}$$\n\n$$P(1 \\text{ פגום}) = \\frac{\\binom{50}{1}\\binom{950}{19}}{\\binom{1000}{20}}$$\n\n$$P(A) = 1 - \\bigl[P(0) + P(1)\\bigr]$$\n\nזהו מודל **היפר-גיאומטרי** — נפוץ בבקרת איכות הנדסית."
+    }
   ],
-  "title_en": "Sample Space & Probability Axioms",
-  "title_he": "מרחב מדגם ואקסיומות הסתברות",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "A fair coin is flipped twice. Which is the correct sample space $\\Omega$?",
+      "body_he": "מטבע הוגן מוטל פעמיים. מהו מרחב המדגם $\\Omega$ הנכון?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$\\{H, T\\}$",
+          "text_he": "$\\{H, T\\}$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$\\{HH, HT, TH, TT\\}$",
+          "text_he": "$\\{HH, HT, TH, TT\\}$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$\\{0, 1, 2\\}$ (number of heads)",
+          "text_he": "$\\{0, 1, 2\\}$ (מספר ראשים)",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$\\{H, T, HH, TT\\}$",
+          "text_he": "$\\{H, T, HH, TT\\}$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Two flips produce ordered outcomes; there are $2 \\times 2 = 4$ equally likely results.",
+      "explanation_he": "שתי הטלות נותנות 4 תוצאות מסודרות שוות-הסתברות."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "If $P(A) = 0.35$, what is $P(A^c)$?",
+      "body_he": "אם $P(A) = 0.35$, מהו $P(A^c)$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$0.35$",
+          "text_he": "$0.35$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$0.65$",
+          "text_he": "$0.65$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$1.35$",
+          "text_he": "$1.35$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0$",
+          "text_he": "$0$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "By the complement rule: $P(A^c) = 1 - P(A) = 1 - 0.35 = 0.65$.",
+      "explanation_he": "לפי כלל המשלים: $P(A^c) = 1 - 0.35 = 0.65$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "For events $A$ and $B$ with $P(A)=0.4$, $P(B)=0.5$, $P(A \\cap B)=0.2$, find $P(A \\cup B)$.",
+      "body_he": "למאורעות $A$, $B$ עם $P(A)=0.4$, $P(B)=0.5$, $P(A \\cap B)=0.2$, מצאו $P(A \\cup B)$.",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$0.9$",
+          "text_he": "$0.9$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$0.7$",
+          "text_he": "$0.7$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$0.1$",
+          "text_he": "$0.1$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0.6$",
+          "text_he": "$0.6$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Inclusion–exclusion: $P(A \\cup B) = 0.4 + 0.5 - 0.2 = 0.7$.",
+      "explanation_he": "כלל החיבור: $P(A \\cup B) = 0.4 + 0.5 - 0.2 = 0.7$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "Two fair dice are rolled. What is $P(\\text{sum} = 7)$?",
+      "body_he": "שתי קוביות הוגנות. מה $P(\\text{סכום} = 7)$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$1/36$",
+          "text_he": "$1/36$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$1/6$",
+          "text_he": "$1/6$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$7/36$",
+          "text_he": "$7/36$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$1/12$",
+          "text_he": "$1/12$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Six favorable ordered pairs out of 36: $6/36 = 1/6$.",
+      "explanation_he": "6 זוגות מתוך 36: $6/36 = 1/6$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "Which identity expresses De Morgan's law for complements?",
+      "body_he": "איזו זהות מבטאת את חוק דה-מורגן למשלימים?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$(A \\cup B)^c = A^c \\cap B^c$",
+          "text_he": "$(A \\cup B)^c = A^c \\cap B^c$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$(A \\cup B)^c = A^c \\cup B^c$",
+          "text_he": "$(A \\cup B)^c = A^c \\cup B^c$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$P(A \\cup B) = P(A) + P(B)$",
+          "text_he": "$P(A \\cup B) = P(A) + P(B)$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$P(A^c) = P(A) - 1$",
+          "text_he": "$P(A^c) = P(A) - 1$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "De Morgan: complement of a union equals intersection of complements.",
+      "explanation_he": "דה-מורגן: משלים של איחוד = חיתוך של משלימים."
+    }
+  ]
 }

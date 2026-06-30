@@ -1,16 +1,224 @@
 {
-  "concept_id": "random_variables",
+  "id": "random_variables",
+  "type": "interactive",
   "subject": "statistics_probability",
-  "level": "university",
-  "math_track": [
-    "stats_prob"
+  "title_en": "Random Variables & Probability Distributions",
+  "title_he": "משתנים מקריים והתפלגויות",
+  "duration_min": 35,
+  "level_min": "university",
+  "agent_hints": "Students confuse PMF/PDF with probabilities of intervals — for continuous RVs, P(X = x) = 0; only intervals have positive probability. Emphasise that CDF is always non-decreasing with F(-inf)=0, F(inf)=1. Binomial vs Poisson: use Poisson when n is large and p is small with np moderate. For E[X] and Var, watch for linearity of expectation vs non-linearity of variance. Standard normal: always draw a sketch before reading z from tables.",
+  "sections": [
+    {
+      "id": "rv_cdf",
+      "title_en": "Random Variables & the CDF",
+      "title_he": "משתנים מקריים ופונקציית ההתפלגות המצטברת",
+      "level_min": "university",
+      "body_en_md": "A **random variable** $X$ is a function $X: \\Omega \\to \\mathbb{R}$ that assigns a real number to each outcome.\n\n- **Discrete:** $X$ takes countably many values (e.g. die roll, number of defects).\n- **Continuous:** $X$ takes values in an interval (e.g. lifetime, height).\n\nThe **cumulative distribution function (CDF)** is:\n$$\\boxed{F_X(x) = P(X \\leq x)}$$\n\n**Properties:**\n1. $0 \\leq F(x) \\leq 1$\n2. $F$ is non-decreasing\n3. $\\lim_{x \\to -\\infty} F(x) = 0$, $\\lim_{x \\to \\infty} F(x) = 1$\n\nFor discrete $X$: $F(x) = \\sum_{k \\leq x} p(k)$ (step function).\n\nFor continuous $X$: $F(x) = \\int_{-\\infty}^{x} f(t)\\,dt$ where $f$ is the PDF.\n\n**Worked example:** $X$ = number of heads in 2 fair coin flips.\n$p(0)=1/4$, $p(1)=1/2$, $p(2)=1/4$. Then $F(0)=1/4$, $F(1)=3/4$, $F(2)=1$.",
+      "body_he_md": "**משתנה מקרי** $X$ הוא פונקציה $X: \\Omega \\to \\mathbb{R}$.\n\n- **בדיד:** ערכים בני ספירה (למשל תוצאת קובייה).\n- **רציף:** ערכים בקטע (למשל זמן חיים).\n\n**פונקציית ההתפלגות המצטברת (CDF):**\n$$\\boxed{F_X(x) = P(X \\leq x)}$$\n\n**תכונות:** לא יורדת; $F(-\\infty)=0$, $F(\\infty)=1$.\n\nבדיד: $F$ מדרגות. רציף: $F(x) = \\int_{-\\infty}^{x} f(t)\\,dt$.\n\n**דוגמה:** $X$ = מספר ראשים ב-2 הטלות. $F(0)=1/4$, $F(1)=3/4$, $F(2)=1$."
+    },
+    {
+      "id": "discrete_distributions",
+      "title_en": "Discrete Distributions: Bernoulli, Binomial, Poisson",
+      "title_he": "התפלגויות בדידות: ברנולי, בינומית, פואסון",
+      "level_min": "university",
+      "body_en_md": "**Bernoulli($p$):** one trial, success prob. $p$.\n$$P(X=1)=p, \\quad P(X=0)=1-p$$\n\n**Binomial($n,p$):** $n$ independent Bernoulli trials; $X$ = number of successes.\n$$\\boxed{P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}, \\quad k=0,\\ldots,n}$$\n$E[X]=np$, $\\text{Var}(X)=np(1-p)$.\n\n**Worked example:** 10 items tested, each defective with $p=0.05$. $P(X=2) = \\binom{10}{2}(0.05)^2(0.95)^8 \\approx 0.0746$.\n\n**Poisson($\\lambda$):** models rare events in fixed interval; $np \\approx \\lambda$ when $n$ large, $p$ small.\n$$\\boxed{P(X=k) = e^{-\\lambda}\\frac{\\lambda^k}{k!}, \\quad k=0,1,2,\\ldots}$$\n$E[X]=\\lambda$, $\\text{Var}(X)=\\lambda$.\n\n**Example:** average 3 calls/hour $\\Rightarrow \\lambda=3$, $P(X=0)=e^{-3} \\approx 0.0498$.",
+      "body_he_md": "**ברנולי($p$):** ניסוי אחד, $P(X=1)=p$.\n\n**בינומית($n,p$):** $n$ ניסויים בלתי-תלויים.\n$$P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}$$\n$E[X]=np$, $\\text{Var}(X)=np(1-p)$.\n\n**דוגמה:** 10 פריטים, $p=0.05$. $P(X=2) \\approx 0.0746$.\n\n**פואסון($\\lambda$):** אירועים נדירים; $E[X]=\\text{Var}(X)=\\lambda$.\n$$P(X=k) = e^{-\\lambda}\\frac{\\lambda^k}{k!}$$"
+    },
+    {
+      "id": "continuous_distributions",
+      "title_en": "Continuous Distributions: Uniform & Exponential",
+      "title_he": "התפלגויות רציפות: אחידה ואקספוננציאלית",
+      "level_min": "university",
+      "body_en_md": "A **PDF** $f(x)$ satisfies $f(x) \\geq 0$ and $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$.\nThen $P(a \\leq X \\leq b) = \\int_a^b f(x)\\,dx$.\n\n**Uniform($a,b$):** constant density on $[a,b]$.\n$$f(x) = \\frac{1}{b-a}, \\quad a \\leq x \\leq b$$\n$E[X]=\\frac{a+b}{2}$, $\\text{Var}(X)=\\frac{(b-a)^2}{12}$.\n\n**Exponential($\\lambda$):** waiting time; memoryless.\n$$f(x) = \\lambda e^{-\\lambda x}, \\quad x \\geq 0$$\n$E[X]=1/\\lambda$, $\\text{Var}(X)=1/\\lambda^2$.\n\n**Worked example:** $X \\sim \\text{Uniform}(0,10)$.\n$$P(3 \\leq X \\leq 7) = \\int_3^7 \\frac{1}{10}\\,dx = \\frac{4}{10} = 0.4.$$\n\n**Exponential:** $\\lambda = 0.2$ per hour (mean wait 5 h).\n$P(X > 3) = e^{-0.2 \\times 3} = e^{-0.6} \\approx 0.5488$.",
+      "body_he_md": "**PDF** $f(x)$: $f \\geq 0$, $\\int f = 1$. $P(a \\leq X \\leq b) = \\int_a^b f$.\n\n**אחידה($a,b$):** $f = 1/(b-a)$ על $[a,b]$.\n\n**אקספוננציאלית($\\lambda$):** $f(x)=\\lambda e^{-\\lambda x}$, $x\\geq 0$; חסרת זיכרון.\n\n**דוגמה:** $X \\sim U(0,10)$. $P(3 \\leq X \\leq 7) = 0.4$.\n\n$\\lambda=0.2$: $P(X>3) = e^{-0.6} \\approx 0.5488$."
+    },
+    {
+      "id": "expectation_variance",
+      "title_en": "Expectation & Variance",
+      "title_he": "תוחלת ושונות",
+      "level_min": "university",
+      "body_en_md": "**Discrete:**\n$$\\boxed{E[X] = \\sum_x x\\,p(x), \\quad \\text{Var}(X) = E[(X-\\mu)^2] = E[X^2] - (E[X])^2}$$\n\n**Continuous:** replace sums by integrals.\n\n**Linearity:** $E[aX + bY] = aE[X] + bE[Y]$ (always).\n**Variance:** $\\text{Var}(aX+b) = a^2\\text{Var}(X)$; $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$ only if $X,Y$ independent.\n\n**Worked example:** $X$ with $p(1)=0.2$, $p(3)=0.5$, $p(5)=0.3$.\n$E[X] = 1(0.2)+3(0.5)+5(0.3) = 3.2$.\n$E[X^2] = 1^2(0.2)+3^2(0.5)+5^2(0.3) = 11.6$.\n$\\text{Var}(X) = 11.6 - 3.2^2 = 1.36$, so $\\sigma = 1.17$.\n\nFor $Y \\sim \\text{Binomial}(20, 0.4)$: $E[Y]=8$, $\\text{Var}(Y)=4.8$.",
+      "body_he_md": "**בדיד:** $E[X]=\\sum x\\,p(x)$, $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n\n**רציף:** אינטגרלים במקום סכומים.\n\n**לינאריות תוחלת:** $E[aX+bY]=aE[X]+bE[Y]$.\n\n**דוגמה:** $p(1)=0.2$, $p(3)=0.5$, $p(5)=0.3$.\n$E[X]=3.2$, $\\text{Var}(X)=1.36$.\n\nבינומית$(20,0.4)$: $E=8$, $\\text{Var}=4.8$."
+    },
+    {
+      "id": "normal_distribution",
+      "title_en": "The Normal (Gaussian) Distribution",
+      "title_he": "התפלגות נורמלית (גאוס)",
+      "level_min": "university",
+      "body_en_md": "$$X \\sim N(\\mu, \\sigma^2) \\quad \\Leftrightarrow \\quad f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} \\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right)$$\n\nBell-shaped, symmetric about $\\mu$; $\\sigma$ controls spread.\n\n**Standard normal:** $Z \\sim N(0,1)$ with CDF $\\Phi(z)$.\nStandardize: $Z = \\frac{X - \\mu}{\\sigma}$.\n\n**68–95–99.7 rule:** about 68% within $\\mu \\pm \\sigma$, 95% within $\\mu \\pm 2\\sigma$, 99.7% within $\\mu \\pm 3\\sigma$.\n\n**Worked example:** exam scores $X \\sim N(70, 100)$ (so $\\sigma=10$).\n$$P(X \\geq 85) = P\\!\\left(Z \\geq \\frac{85-70}{10}\\right) = P(Z \\geq 1.5) = 1 - \\Phi(1.5) \\approx 0.0668.$$\n\nThe normal is central in statistics via the CLT — sample means are approximately normal for large $n$ regardless of the population shape.",
+      "body_he_md": "$X \\sim N(\\mu, \\sigma^2)$ — צורת פעמון סימטרית.\n\n**נורמל סטנדרטי:** $Z=(X-\\mu)/\\sigma \\sim N(0,1)$.\n\n**כלל 68–95–99.7:** רוב הנתונים בתוך $\\mu \\pm \\sigma$, $\\pm 2\\sigma$, $\\pm 3\\sigma$.\n\n**דוגמה:** $X \\sim N(70,100)$, $\\sigma=10$.\n$P(X \\geq 85) = P(Z \\geq 1.5) \\approx 0.0668$.\n\nהנורמל מרכזי בזכות מ.ג.מ."
+    }
   ],
-  "title_en": "Random Variables — Discrete & Continuous",
-  "title_he": "משתנים מקריים — בדידים ורציפים",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "body_en": "A discrete RV $X$ has PMF $p(0)=0.1$, $p(1)=0.4$, $p(2)=0.5$. What is $P(X \\leq 1)$?",
+      "body_he": "ל-$X$ בדיד: $p(0)=0.1$, $p(1)=0.4$, $p(2)=0.5$. מה $P(X \\leq 1)$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$0.4$",
+          "text_he": "$0.4$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$0.5$",
+          "text_he": "$0.5$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$0.9$",
+          "text_he": "$0.9$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0.1$",
+          "text_he": "$0.1$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$P(X \\leq 1) = p(0)+p(1) = 0.1+0.4 = 0.5$.",
+      "explanation_he": "$P(X \\leq 1) = 0.1+0.4 = 0.5$."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "body_en": "If $X \\sim \\text{Binomial}(10, 0.3)$, what is $P(X = 3)$?",
+      "body_he": "אם $X \\sim \\text{Binomial}(10, 0.3)$, מה $P(X = 3)$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$\\binom{10}{3}(0.3)^3(0.7)^7 \\approx 0.267$",
+          "text_he": "$\\binom{10}{3}(0.3)^3(0.7)^7 \\approx 0.267$",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text_en": "$(0.3)^3(0.7)^7 \\approx 0.0022$",
+          "text_he": "$(0.3)^3(0.7)^7 \\approx 0.0022$",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text_en": "$\\binom{10}{3}(0.3)^7(0.7)^3$",
+          "text_he": "$\\binom{10}{3}(0.3)^7(0.7)^3$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0.3$",
+          "text_he": "$0.3$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Binomial PMF: $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$. Here $n=10$, $k=3$, $p=0.3$.",
+      "explanation_he": "נוסחת בינומית: $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$ עם $n=10$, $k=3$, $p=0.3$."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "body_en": "Let $X \\sim \\text{Uniform}(2, 8)$. What is $P(4 \\leq X \\leq 6)$?",
+      "body_he": "יהי $X \\sim \\text{Uniform}(2, 8)$. מה $P(4 \\leq X \\leq 6)$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$1/6$",
+          "text_he": "$1/6$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$1/3$",
+          "text_he": "$1/3$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$1/2$",
+          "text_he": "$1/2$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$2/3$",
+          "text_he": "$2/3$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "Length of interval is $6-4=2$; total length is $8-2=6$. So $P = 2/6 = 1/3$.",
+      "explanation_he": "אורך הקטע $2$, אורך כולל $6$. $P = 2/6 = 1/3$."
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "body_en": "Discrete $X$ has $p(0)=0.25$, $p(2)=0.75$. What is $E[X]$?",
+      "body_he": "ל-$X$ בדיד: $p(0)=0.25$, $p(2)=0.75$. מה $E[X]$?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$1.0$",
+          "text_he": "$1.0$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$1.5$",
+          "text_he": "$1.5$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$2.0$",
+          "text_he": "$2.0$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0.75$",
+          "text_he": "$0.75$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "$E[X] = 0(0.25) + 2(0.75) = 1.5$.",
+      "explanation_he": "$E[X] = 0(0.25) + 2(0.75) = 1.5$."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "body_en": "If $Z \\sim N(0,1)$, what is $P(Z \\leq -1.96)$ (approximately)?",
+      "body_he": "אם $Z \\sim N(0,1)$, מה $P(Z \\leq -1.96)$ (בקירוב)?",
+      "options": [
+        {
+          "id": "a",
+          "text_en": "$0.975$",
+          "text_he": "$0.975$",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text_en": "$0.025$",
+          "text_he": "$0.025$",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text_en": "$0.05$",
+          "text_he": "$0.05$",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text_en": "$0.5$",
+          "text_he": "$0.5$",
+          "correct": false
+        }
+      ],
+      "explanation_en": "By symmetry, $P(Z \\leq -1.96) = P(Z \\geq 1.96) = 0.025$ (two-tailed 5% tail beyond $\\pm 1.96$).",
+      "explanation_he": "לפי סימטריה, $P(Z \\leq -1.96) = 0.025$."
+    }
+  ]
 }
