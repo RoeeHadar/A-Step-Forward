@@ -2,7 +2,10 @@
   "concept_id": "hypothesis_testing",
   "subject": "statistics_probability",
   "level": "university",
-  "math_track": ["stats", "4pt"],
+  "math_track": [
+    "stats",
+    "4pt"
+  ],
   "title_en": "Hypothesis Testing — Z-Tests, p-values, and Errors",
   "title_he": "בדיקת השערות — מבחני Z, ערכי p ושגיאות",
   "summary_en": "Hypothesis testing is a formal framework for deciding, using sample data, whether to reject a default claim (H₀). We compute a test statistic, find its p-value, and compare to significance level α. The Z-test for means and proportions is the core tool at this level.",
@@ -14,35 +17,35 @@
       "title_en": "What is Hypothesis Testing?",
       "title_he": "מהי בדיקת השערות?",
       "body_en_md": "**Hypothesis testing** is a procedure for deciding whether sample evidence is strong enough to reject a default claim.\n\n### Setup\n\n- **Null hypothesis $H_0$:** the default / no-effect claim. Example: 'the defect rate is ≤ 2%'.\n- **Alternative hypothesis $H_1$:** what we'd believe if $H_0$ is rejected. Example: 'defect rate > 2%'.\n\n### Types of alternative\n\n| $H_1$ form | Test type |\n|---|---|\n| $\\mu \\ne \\mu_0$ | Two-tailed |\n| $\\mu > \\mu_0$ | Right-tailed |\n| $\\mu < \\mu_0$ | Left-tailed |\n\n### The logic\n\n1. Assume $H_0$ is true.\n2. Compute a **test statistic** from the sample.\n3. Find the **p-value**: $P(\\text{data at least as extreme} \\mid H_0)$.\n4. If $p < \\alpha$ (significance level): **reject $H_0$**.\n5. Otherwise: **fail to reject $H_0$** (never say 'accept $H_0$').\n\n### Why we never 'prove' $H_0$\n\n'Fail to reject' means: the data are consistent with $H_0$, but $H_0$ could still be false. Absence of evidence is not evidence of absence.\n\n**Analogy:** a criminal trial. $H_0$ = 'innocent'. We reject only if evidence is overwhelming. An acquittal does not prove innocence.",
-      "body_he_md": "**בדיקת השערות** היא תהליך החלטה האם ראיות המדגם חזקות מספיק כדי לדחות טענת ברירת מחדל.\n\n### הצבה\n\n- **השערת אפס $H_0$:** ברירת מחדל. דוגמה: 'שיעור הפגמים ≤ 2%'.\n- **השערה אלטרנטיבית $H_1$:** מה שנאמין אם נדחה $H_0$.\n\n### סוגי בדיקות\n\n| $H_1$ | סוג הבדיקה |\n|---|---|\n| $\\mu \\ne \\mu_0$ | דו-זנבית |\n| $\\mu > \\mu_0$ | חד-זנבית ימנית |\n| $\\mu < \\mu_0$ | חד-זנבית שמאלית |\n\n### הלוגיקה\n\n1. נניח $H_0$ נכון.\n2. נחשב **סטטיסטי מבחן** מהמדגם.\n3. נמצא **ערך p**: $P(\\text{נתונים קיצוניים לפחות כאלה} \\mid H_0)$.\n4. אם $p < \\alpha$: **דוחים $H_0$**.\n5. אחרת: **לא דוחים $H_0$** (לא 'מקבלים').\n\n### מדוע לא 'מוכיחים' $H_0$\n\n'לא דוחים' אומר שהנתונים תואמים $H_0$, אבל $H_0$ עדיין יכולה להיות שקרית."
+      "body_he_md": "**בדיקת השערות** היא תהליך להחלטה האם ראיות המדגם חזקות מספיק כדי לדחות טענת ברירת מחדל.\n\n### הצבה\n\n- **השערת האפס $H_0$:** טענת ברירת המחדל / 'אין אפקט'. דוגמה: 'שיעור הפגמים ≤ 2%'.\n- **השערה חלופית $H_1$:** מה שנאמין אם נדחה את $H_0$. דוגמה: 'שיעור הפגמים > 2%'.\n\n### סוגי השערה חלופית\n\n| צורת $H_1$ | סוג הבדיקה |\n|---|---|\n| $\\mu \\ne \\mu_0$ | דו-זנבית |\n| $\\mu > \\mu_0$ | חד-זנבית ימנית |\n| $\\mu < \\mu_0$ | חד-זנבית שמאלית |\n\n### הלוגיקה\n\n1. נניח ש-$H_0$ נכון.\n2. נחשב **סטטיסטי מבחן** מהמדגם.\n3. נמצא את **ערך p**: $P(\\text{נתונים קיצוניים לפחות כאלה} \\mid H_0)$.\n4. אם $p < \\alpha$ (רמת מובהקות): **דוחים $H_0$**.\n5. אחרת: **לא דוחים $H_0$** (לעולם לא אומרים 'מקבלים $H_0$').\n\n### מדוע לא 'מוכיחים' $H_0$\n\n'לא דוחים' פירושו: הנתונים תואמים את $H_0$, אך $H_0$ עדיין יכולה להיות שגויה. היעדר ראיות אינו ראיה להיעדר.\n\n**אנלוגיה:** משפט פלילי. $H_0$ = 'חף מפשע'. דוחים רק אם הראיות מכריעות. זיכוי אינו מוכיח חפות."
     },
     {
       "kind": "theory",
       "title_en": "The Z-Test for Proportions",
       "title_he": "מבחן Z לשיעורים",
       "body_en_md": "### When to use\n\nUse when testing a claim about a population proportion $p_0$, given a sample of size $n$ with sample proportion $\\hat{p} = x/n$.\n\n### Test statistic\n\n$$Z = \\frac{\\hat{p} - p_0}{\\sqrt{\\dfrac{p_0(1-p_0)}{n}}}.$$\n\nUnder $H_0$, $Z \\sim N(0,1)$ approximately (valid when $np_0 \\geq 5$ and $n(1-p_0) \\geq 5$).\n\n### Decision rule\n\n**Two-tailed ($H_1: p \\ne p_0$):** reject if $|Z| > z_{\\alpha/2}$.\n**Right-tailed ($H_1: p > p_0$):** reject if $Z > z_\\alpha$.\n**Left-tailed ($H_1: p < p_0$):** reject if $Z < -z_\\alpha$.\n\n**Standard critical values:**\n\n| $\\alpha$ | Two-tailed ($z_{\\alpha/2}$) | One-tailed ($z_\\alpha$) |\n|---|---|---|\n| 0.10 | 1.645 | 1.282 |\n| 0.05 | 1.960 | 1.645 |\n| 0.01 | 2.576 | 2.326 |\n\n### Worked example: manufacturer's claim\n\nA manufacturer claims a 95% success rate ($p_0 = 0.95$). A quality-control sample of $n = 200$ finds 186 successes. Test at $\\alpha = 0.05$ (two-tailed).\n\n**Hypotheses:** $H_0: p = 0.95$, $H_1: p \\ne 0.95$.\n\n**Sample proportion:** $\\hat{p} = 186/200 = 0.93$.\n\n**Test statistic:**\n$$Z = \\frac{0.93 - 0.95}{\\sqrt{0.95 \\cdot 0.05 / 200}} = \\frac{-0.02}{\\sqrt{0.0002375}} = \\frac{-0.02}{0.01541} \\approx -1.30.$$\n\n**Critical value:** $z_{0.025} = 1.96$. Since $|Z| = 1.30 < 1.96$, **fail to reject $H_0$**.\n\n**Conclusion:** Insufficient evidence to contradict the 95% claim at the 5% significance level.",
-      "body_he_md": "### מתי משתמשים\n\nכאשר בודקים טענה על שיעור אוכלוסייה $p_0$, בהינתן מדגם גודל $n$ עם שיעור מדגם $\\hat{p} = x/n$.\n\n### סטטיסטי המבחן\n\n$$Z = \\frac{\\hat{p} - p_0}{\\sqrt{p_0(1-p_0)/n}}.$$\n\n### כלל ההחלטה\n\n- דו-זנבי: דוחים אם $|Z| > z_{\\alpha/2}$.\n- חד-זנבי ימני: דוחים אם $Z > z_\\alpha$.\n\n### דוגמה פתורה\n\nיצרן טוען 95% הצלחה. מדגם $n=200$ נותן 186 הצלחות ($\\hat{p}=0.93$). $\\alpha=0.05$ דו-זנבי.\n\n$Z = \\frac{0.93-0.95}{\\sqrt{0.95\\cdot 0.05/200}} \\approx -1.30$.\n\n$|Z| = 1.30 < 1.96$ → **לא דוחים $H_0$**."
+      "body_he_md": "### מתי משתמשים\n\nכאשר בודקים טענה על שיעור אוכלוסייה $p_0$, בהינתן מדגם בגודל $n$ עם שיעור מדגם $\\hat{p} = x/n$.\n\n### סטטיסטי המבחן\n\n$$Z = \\frac{\\hat{p} - p_0}{\\sqrt{\\dfrac{p_0(1-p_0)}{n}}}.$$\n\nתחת $H_0$, $Z \\sim N(0,1)$ בקירוב (תקף כאשר $np_0 \\geq 5$ ו-$n(1-p_0) \\geq 5$).\n\n### כלל ההחלטה\n\n**דו-זנבית ($H_1: p \\ne p_0$):** דוחים אם $|Z| > z_{\\alpha/2}$.\n**חד-זנבית ימנית ($H_1: p > p_0$):** דוחים אם $Z > z_\\alpha$.\n**חד-זנבית שמאלית ($H_1: p < p_0$):** דוחים אם $Z < -z_\\alpha$.\n\n**ערכים קריטיים סטנדרטיים:**\n\n| $\\alpha$ | דו-זנבית ($z_{\\alpha/2}$) | חד-זנבית ($z_\\alpha$) |\n|---|---|---|\n| 0.10 | 1.645 | 1.282 |\n| 0.05 | 1.960 | 1.645 |\n| 0.01 | 2.576 | 2.326 |\n\n### דוגמה פתורה: טענת יצרן\n\nיצרן טוען לשיעור הצלחה של 95% ($p_0 = 0.95$). מדגם בקרת איכות בגודל $n = 200$ מוצא 186 הצלחות. בדיקה ב-$\\alpha = 0.05$ (דו-זנבית).\n\n**השערות:** $H_0: p = 0.95$, $H_1: p \\ne 0.95$.\n\n**שיעור המדגם:** $\\hat{p} = 186/200 = 0.93$.\n\n**סטטיסטי המבחן:**\n$$Z = \\frac{0.93 - 0.95}{\\sqrt{0.95 \\cdot 0.05 / 200}} = \\frac{-0.02}{\\sqrt{0.0002375}} = \\frac{-0.02}{0.01541} \\approx -1.30.$$\n\n**ערך קריטי:** $z_{0.025} = 1.96$. מאחר ש-$|Z| = 1.30 < 1.96$, **לא דוחים $H_0$**.\n\n**מסקנה:** אין ראיות מספיקות לסתור את טענת ה-95% ברמת מובהקות 5%."
     },
     {
       "kind": "theory",
       "title_en": "The Z-Test for Means (σ known)",
       "title_he": "מבחן Z לממוצעים (σ ידוע)",
       "body_en_md": "### Setup\n\nGiven: population standard deviation $\\sigma$ (known), sample size $n$, sample mean $\\bar{x}$. Test $H_0: \\mu = \\mu_0$.\n\n### Test statistic\n\n$$Z = \\frac{\\bar{x} - \\mu_0}{\\sigma / \\sqrt{n}}.$$\n\nUnder $H_0$, $Z \\sim N(0,1)$.\n\n### p-value\n\n- **Two-tailed ($H_1: \\mu \\ne \\mu_0$):** $p = 2P(Z > |z_{\\text{obs}}|)$.\n- **Right-tailed ($H_1: \\mu > \\mu_0$):** $p = P(Z > z_{\\text{obs}})$.\n- **Left-tailed ($H_1: \\mu < \\mu_0$):** $p = P(Z < z_{\\text{obs}})$.\n\nReject $H_0$ iff $p < \\alpha$.\n\n### Worked example: delivery time\n\nA delivery company claims mean delivery time $\\mu_0 = 30$ min. A random sample of $n = 36$ deliveries gives $\\bar{x} = 32$ min; known $\\sigma = 6$ min. Test $H_1: \\mu > 30$ at $\\alpha = 0.05$.\n\n**Test statistic:**\n$$Z = \\frac{32 - 30}{6/\\sqrt{36}} = \\frac{2}{1} = 2.0.$$\n\n**p-value (right-tailed):** $P(Z > 2.0) \\approx 0.0228$.\n\n**Decision:** $p = 0.023 < 0.05$ → **reject $H_0$**. Significant evidence that mean delivery time exceeds 30 minutes.",
-      "body_he_md": "### הגדרה\n\nנתון: $\\sigma$ (ידוע), $n$, $\\bar{x}$. בדיקה $H_0: \\mu = \\mu_0$.\n\n### סטטיסטי המבחן\n\n$$Z = \\frac{\\bar{x} - \\mu_0}{\\sigma / \\sqrt{n}}.$$\n\n### דוגמה: זמן משלוח\n\nחברה טוענת $\\mu_0 = 30$ דקות. מדגם $n=36$: $\\bar{x}=32$, $\\sigma=6$. $H_1: \\mu > 30$, $\\alpha=0.05$.\n\n$Z = \\frac{32-30}{6/\\sqrt{36}} = 2.0$.\n\n$P(Z>2.0) \\approx 0.023 < 0.05$ → **דוחים $H_0$**."
+      "body_he_md": "### הצבה\n\nנתון: סטיית תקן אוכלוסייה $\\sigma$ (ידועה), גודל מדגם $n$, ממוצע מדגם $\\bar{x}$. בודקים $H_0: \\mu = \\mu_0$.\n\n### סטטיסטי המבחן\n\n$$Z = \\frac{\\bar{x} - \\mu_0}{\\sigma / \\sqrt{n}}.$$\n\nתחת $H_0$, $Z \\sim N(0,1)$.\n\n### ערך p\n\n- **דו-זנבית ($H_1: \\mu \\ne \\mu_0$):** $p = 2P(Z > |z_{\\text{obs}}|)$.\n- **חד-זנבית ימנית ($H_1: \\mu > \\mu_0$):** $p = P(Z > z_{\\text{obs}})$.\n- **חד-זנבית שמאלית ($H_1: \\mu < \\mu_0$):** $p = P(Z < z_{\\text{obs}})$.\n\nדוחים $H_0$ אם ורק אם $p < \\alpha$.\n\n### דוגמה פתורה: זמן משלוח\n\nחברת משלוחים טוענת שזמן משלוח ממוצע $\\mu_0 = 30$ דק'. מדגם אקראי של $n = 36$ משלוחים נותן $\\bar{x} = 32$ דק'; $\\sigma = 6$ דק' (ידוע). בודקים $H_1: \\mu > 30$ ב-$\\alpha = 0.05$.\n\n**סטטיסטי המבחן:**\n$$Z = \\frac{32 - 30}{6/\\sqrt{36}} = \\frac{2}{1} = 2.0.$$\n\n**ערך p (חד-זנבית ימנית):** $P(Z > 2.0) \\approx 0.0228$.\n\n**החלטה:** $p = 0.023 < 0.05$ → **דוחים $H_0$**. יש ראיות מובהקות שזמן המשלוח הממוצע עולה על 30 דקות."
     },
     {
       "kind": "theory",
       "title_en": "Type I and Type II Errors",
       "title_he": "שגיאות מסוג I ו-II",
       "body_en_md": "### The error table\n\n| | $H_0$ is true | $H_0$ is false |\n|---|---|---|\n| Reject $H_0$ | **Type I error** ($\\alpha$) | Correct (power) |\n| Fail to reject | Correct | **Type II error** ($\\beta$) |\n\n- **Type I error (false positive):** $H_0$ is true but we reject it. Probability = $\\alpha$ (controlled by us).\n- **Type II error (false negative):** $H_0$ is false but we fail to reject it. Probability = $\\beta$ (depends on effect size, $n$, $\\alpha$).\n- **Power $= 1 - \\beta$:** probability of correctly rejecting a false $H_0$.\n\n### The trade-off\n\nLowering $\\alpha$ (stricter criterion) → fewer Type I errors, but more Type II errors. Raising $n$ reduces both simultaneously.\n\n### When Type II error is costlier\n\n*Example:* A test for a dangerous contagious disease. Here, missing a true case (Type II: $H_0$: 'no disease', $H_1$: 'disease') is far more costly than a false alarm (Type I). Clinicians often set $\\alpha = 0.10$ or higher for screening to minimize missed cases.\n\n### Statistical vs. practical significance\n\nWith large $n$, even a tiny effect becomes 'statistically significant'. Always ask: is the effect size large enough to matter in practice?",
-      "body_he_md": "### טבלת השגיאות\n\n| | $H_0$ נכון | $H_0$ שגוי |\n|---|---|---|\n| דוחים $H_0$ | **שגיאה מסוג I** ($\\alpha$) | נכון (עוצמה) |\n| לא דוחים | נכון | **שגיאה מסוג II** ($\\beta$) |\n\n- **שגיאה מסוג I (חיובי שווא):** $H_0$ נכון אבל דחינו אותו. הסתברות = $\\alpha$.\n- **שגיאה מסוג II (שלילי שווא):** $H_0$ שגוי אבל לא דחינו אותו. הסתברות = $\\beta$.\n- **עוצמה $= 1-\\beta$**.\n\n### הפשרה\n\nהקטנת $\\alpha$ → פחות Type I, יותר Type II. הגדלת $n$ מקטינה את שניהם בו-זמנית.\n\n### מובהקות סטטיסטית vs. מעשית\n\nעם $n$ גדול, אפקט זעיר הופך 'מובהק'. תמיד לשאול: האם גודל האפקט משמעותי בפועל?"
+      "body_he_md": "### טבלת השגיאות\n\n| | $H_0$ נכון | $H_0$ שגוי |\n|---|---|---|\n| דוחים $H_0$ | **שגיאה מסוג I** ($\\alpha$) | נכון (עוצמה) |\n| לא דוחים | נכון | **שגיאה מסוג II** ($\\beta$) |\n\n- **שגיאה מסוג I (חיובי שווא):** $H_0$ נכון אך דחינו אותו. הסתברות = $\\alpha$ (שליטה בידינו).\n- **שגיאה מסוג II (שלילי שווא):** $H_0$ שגוי אך לא דחינו אותו. הסתברות = $\\beta$ (תלוי בגודל אפקט, $n$, $\\alpha$).\n- **עוצמה $= 1 - \\beta$:** הסתברות לדחות נכון $H_0$ שגוי.\n\n### הפשרה\n\nהקטנת $\\alpha$ (קריטריון מחמיר יותר) → פחות שגיאות מסוג I, אך יותר שגיאות מסוג II. הגדלת $n$ מקטינה את שניהם בו-זמנית.\n\n### כאשר שגיאה מסוג II יקרה יותר\n\n*דוגמה:* בדיקה למחלה מדבקת מסוכנת. כאן, פספוס מקרה אמיתי (שגיאה מסוג II: $H_0$: 'אין מחלה', $H_1$: 'יש מחלה') יקר הרבה יותר מאזעקת שווא (שגיאה מסוג I). לעיתים קובעים $\\alpha = 0.10$ או יותר בסריקה כדי למזער מקרים שמוחמצים.\n\n### מובהקות סטטיסטית מול מובהקות מעשית\n\nעם $n$ גדול, אפילו אפקט זעיר הופך 'מובהק סטטיסטית'. תמיד שואלים: האם גודל האפקט גדול מספיק כדי שיהיה משמעותי בפועל?"
     },
     {
       "kind": "exam_problems",
       "title_en": "Exam-Style Problems",
       "title_he": "בעיות בסגנון בחינה",
       "body_en_md": "### Problem 1 — Defect rate (university / 472-level)\n\nA factory claims its defect rate is **at most 2%** ($H_0: p \\leq 0.02$). An inspector tests $n = 400$ items and finds 12 defective ($\\hat{p} = 0.03$). Test at $\\alpha = 0.05$.\n\n**Hypotheses:** $H_0: p = 0.02$ (boundary), $H_1: p > 0.02$ (right-tailed).\n\n**Test statistic:**\n$$Z = \\frac{0.03 - 0.02}{\\sqrt{0.02 \\cdot 0.98 / 400}} = \\frac{0.01}{\\sqrt{0.000049}} = \\frac{0.01}{0.007} \\approx 1.43.$$\n\n**Critical value (right-tailed $\\alpha=0.05$):** $z_{0.05} = 1.645$.\n\n**Decision:** $Z = 1.43 < 1.645$ → **fail to reject $H_0$**.\n\n**Conclusion:** At the 5% significance level, insufficient evidence that the true defect rate exceeds 2%.\n\n---\n\n### Problem 2 — Mean with known σ\n\nA pharmaceutical company claims its tablet contains $\\mu_0 = 500$ mg of active ingredient. A sample of $n = 25$ tablets gives $\\bar{x} = 492$ mg; known $\\sigma = 20$ mg. Test $H_1: \\mu \\ne 500$ at $\\alpha = 0.01$.\n\n$Z = \\frac{492-500}{20/\\sqrt{25}} = \\frac{-8}{4} = -2.0$.\n\nCritical value (two-tailed $\\alpha=0.01$): $\\pm 2.576$. Since $|Z|=2.0 < 2.576$, **fail to reject $H_0$**.",
-      "body_he_md": "### בעיה 1 — שיעור פגמים\n\nמפעל טוען שיעור פגמים ≤ 2%. בודק בודק 400 פריטים, מוצא 12 פגומים. $\\alpha=0.05$.\n\n$H_0: p=0.02$, $H_1: p>0.02$.\n\n$Z = \\frac{0.03-0.02}{\\sqrt{0.02\\cdot 0.98/400}} = \\frac{0.01}{0.007} \\approx 1.43$.\n\n$z_{0.05}=1.645$. $Z < 1.645$ → **לא דוחים $H_0$**.\n\n---\n\n### בעיה 2 — ממוצע עם σ ידוע\n\nטבלייה: $\\mu_0=500$ מ\"ג, $n=25$, $\\bar{x}=492$, $\\sigma=20$. $H_1: \\mu\\ne500$, $\\alpha=0.01$.\n\n$Z = -8/4 = -2.0$. $|Z|=2<2.576$ → **לא דוחים $H_0$**."
+      "body_he_md": "### בעיה 1 — שיעור פגמים (רמת אוניברסיטה / 472)\n\nמפעל טוען ששיעור הפגמים הוא **לכל היותר 2%** ($H_0: p \\leq 0.02$). בודק בודק $n = 400$ פריטים ומוצא 12 פגומים ($\\hat{p} = 0.03$). בדיקה ב-$\\alpha = 0.05$.\n\n**השערות:** $H_0: p = 0.02$ (גבול), $H_1: p > 0.02$ (חד-זנבית ימנית).\n\n**סטטיסטי המבחן:**\n$$Z = \\frac{0.03 - 0.02}{\\sqrt{0.02 \\cdot 0.98 / 400}} = \\frac{0.01}{\\sqrt{0.000049}} = \\frac{0.01}{0.007} \\approx 1.43.$$\n\n**ערך קריטי (חד-זנבית ימנית $\\alpha=0.05$):** $z_{0.05} = 1.645$.\n\n**החלטה:** $Z = 1.43 < 1.645$ → **לא דוחים $H_0$**.\n\n**מסקנה:** ברמת מובהקות 5%, אין ראיות מספיקות ששיעור הפגמים האמיתי עולה על 2%.\n\n---\n\n### בעיה 2 — ממוצע עם $\\sigma$ ידוע\n\nחברת תרופות טוענת שגלולה מכילה $\\mu_0 = 500$ מ\"ג חומר פעיל. מדגם של $n = 25$ גלולות נותן $\\bar{x} = 492$ מ\"ג; $\\sigma = 20$ מ\"ג (ידוע). בודקים $H_1: \\mu \\ne 500$ ב-$\\alpha = 0.01$.\n\n$Z = \\frac{492-500}{20/\\sqrt{25}} = \\frac{-8}{4} = -2.0$.\n\nערך קריטי (דו-זנבית $\\alpha=0.01$): $\\pm 2.576$. מאחר ש-$|Z|=2.0 < 2.576$, **לא דוחים $H_0$**."
     }
   ],
   "questions": [
@@ -52,12 +55,24 @@
       "difficulty": "easy",
       "stem_en": "If a test yields $p = 0.03$ at $\\alpha = 0.05$, the conclusion is:",
       "stem_he": "אם בדיקה נותנת $p = 0.03$ ב-$\\alpha = 0.05$, המסקנה:",
-      "options_en": ["Reject $H_0$", "Fail to reject $H_0$", "Accept $H_0$", "Test inconclusive"],
-      "options_he": ["דוחים $H_0$", "לא דוחים $H_0$", "מקבלים $H_0$", "אינו חד-משמעי"],
+      "options_en": [
+        "Reject $H_0$",
+        "Fail to reject $H_0$",
+        "Accept $H_0$",
+        "Test inconclusive"
+      ],
+      "options_he": [
+        "דוחים $H_0$",
+        "לא דוחים $H_0$",
+        "מקבלים $H_0$",
+        "אינו חד-משמעי"
+      ],
       "correct_index": 0,
       "explanation_en": "$p = 0.03 < 0.05 = \\alpha$, so reject $H_0$.",
       "explanation_he": "$p = 0.03 < 0.05$, דוחים $H_0$.",
-      "skill_atoms": ["reject_decision"],
+      "skill_atoms": [
+        "reject_decision"
+      ],
       "points_level_min": "4pt"
     },
     {
@@ -66,12 +81,24 @@
       "difficulty": "easy",
       "stem_en": "What is a Type I error?",
       "stem_he": "מהי שגיאה מסוג I?",
-      "options_en": ["Failing to reject a false $H_0$", "Rejecting a true $H_0$", "Confidence interval too wide", "Sample size too small"],
-      "options_he": ["אי-דחייה של $H_0$ שגוי", "דחייה של $H_0$ נכון", "רווח סמך רחב מדי", "מדגם קטן מדי"],
+      "options_en": [
+        "Failing to reject a false $H_0$",
+        "Rejecting a true $H_0$",
+        "Confidence interval too wide",
+        "Sample size too small"
+      ],
+      "options_he": [
+        "אי-דחייה של $H_0$ שגוי",
+        "דחייה של $H_0$ נכון",
+        "רווח סמך רחב מדי",
+        "מדגם קטן מדי"
+      ],
       "correct_index": 1,
       "explanation_en": "Type I = rejecting $H_0$ when it is actually true (false positive). Its probability equals $\\alpha$.",
-      "explanation_he": "Type I = דחיית $H_0$ נכון (חיובי שווא). הסתברותה שווה ל-$\\alpha$.",
-      "skill_atoms": ["error_types"],
+      "explanation_he": "שגיאה מסוג I = דחיית $H_0$ נכון (חיובי שווא). הסתברותה שווה ל-$\\alpha$.",
+      "skill_atoms": [
+        "error_types"
+      ],
       "points_level_min": "4pt"
     },
     {
@@ -84,7 +111,9 @@
       "rubric_he": "מלא (6/6): H₀, H₁ (1נ'); Z≈1.43 (3נ'); z=1.645, לא דוחים (2נ').\nחלקי (4/6): Z נכון, ערך קריטי שגוי.\nמינימלי (2/6): רק H₀/H₁.",
       "explanation_en": "$\\hat{p}=12/400=0.03$. $Z=(0.03-0.02)/\\sqrt{0.02\\cdot 0.98/400}\\approx 1.43 < 1.645$. Fail to reject $H_0$.",
       "explanation_he": "$\\hat{p}=0.03$. $Z \\approx 1.43 < 1.645$. לא דוחים $H_0$.",
-      "skill_atoms": ["proportion_z_test"],
+      "skill_atoms": [
+        "proportion_z_test"
+      ],
       "points_level_min": "4pt"
     },
     {
@@ -96,8 +125,11 @@
       "rubric_en": "Full (4/4): Type I = false positive (reject true H₀); Type II = false negative (fail to reject false H₀) (2pts); valid real-world example with explanation (2pts).\nPartial (2/4): correct definitions but weak example.\nMinimal (1/4): one definition only.",
       "rubric_he": "מלא (4/4): הגדרות שניהם (2נ'); דוגמה תקפה עם הסבר (2נ').",
       "explanation_en": "Type I: reject true H₀ (false alarm). Type II: fail to reject false H₀ (miss a real effect). Example: cancer screening — H₀: 'no cancer'. Type II (missing real cancer) is far more costly than Type I (false alarm requiring a follow-up test). Therefore screening tests use high sensitivity (low Type II rate), accepting more false alarms.",
-      "explanation_he": "Type I: דחיית H₀ נכונה (אזעקת שווא). Type II: אי-דחיית H₀ שגויה (פספוס). דוגמה: סריקה לסרטן — H₀: 'אין סרטן'. פספוס מקרה אמיתי (Type II) יקר הרבה יותר מאזעקת שווא (Type I). לכן מבחני סריקה רגישים מאוד, מקבלים יותר חיוביים שווא.",
-      "skill_atoms": ["error_types", "alpha_beta_tradeoff"],
+      "explanation_he": "שגיאה מסוג I: דחיית $H_0$ נכונה (אזעקת שווא). שגיאה מסוג II: אי-דחיית $H_0$ שגויה (פספוס). דוגמה: סריקה לסרטן — $H_0$: 'אין סרטן'. פספוס מקרה אמיתי (שגיאה מסוג II) יקר הרבה יותר מאזעקת שווא (שגיאה מסוג I). לכן מבחני סריקה רגישים מאוד, מקבלים יותר חיוביים שווא.",
+      "skill_atoms": [
+        "error_types",
+        "alpha_beta_tradeoff"
+      ],
       "points_level_min": "4pt"
     },
     {
@@ -106,12 +138,24 @@
       "difficulty": "medium",
       "stem_en": "Reducing $\\alpha$ from 0.05 to 0.01 (all else equal):",
       "stem_he": "הקטנת $\\alpha$ מ-0.05 ל-0.01 (השאר ללא שינוי):",
-      "options_en": ["Decreases both Type I and Type II error rates", "Decreases Type I, increases Type II", "Increases Type I, decreases Type II", "No change in either error rate"],
-      "options_he": ["מקטינה גם Type I וגם Type II", "מקטינה Type I, מגדילה Type II", "מגדילה Type I, מקטינה Type II", "ללא שינוי"],
+      "options_en": [
+        "Decreases both Type I and Type II error rates",
+        "Decreases Type I, increases Type II",
+        "Increases Type I, decreases Type II",
+        "No change in either error rate"
+      ],
+      "options_he": [
+        "מקטינה גם שגיאות מסוג I וגם מסוג II",
+        "מקטינה שגיאה מסוג I, מגדילה שגיאה מסוג II",
+        "מגדילה שגיאה מסוג I, מקטינה שגיאה מסוג II",
+        "ללא שינוי"
+      ],
       "correct_index": 1,
       "explanation_en": "Smaller $\\alpha$ ⇒ harder to reject ⇒ fewer false rejections (Type I ↓) but more missed true effects (Type II ↑).",
-      "explanation_he": "$\\alpha$ קטן → קשה יותר לדחות → פחות Type I, יותר Type II.",
-      "skill_atoms": ["alpha_beta_tradeoff"],
+      "explanation_he": "$\\alpha$ קטן → קשה יותר לדחות → פחות שגיאות מסוג I, יותר שגיאות מסוג II.",
+      "skill_atoms": [
+        "alpha_beta_tradeoff"
+      ],
       "points_level_min": "4pt"
     },
     {
@@ -135,7 +179,9 @@
       "correct_index": 1,
       "explanation_en": "p-value = $P(\\text{data this extreme or more} \\mid H_0)$. It is NOT the probability of any hypothesis, and significance does not measure effect size.",
       "explanation_he": "p-value = $P(\\text{נתונים קיצוניים לפחות} \\mid H_0)$. אינה הסתברות להשערה, ואינה מודדת גודל אפקט.",
-      "skill_atoms": ["p_value_interpretation"],
+      "skill_atoms": [
+        "p_value_interpretation"
+      ],
       "points_level_min": "4pt"
     }
   ],
@@ -170,8 +216,15 @@
       "alpha_beta_tradeoff",
       "reject_decision"
     ],
-    "prerequisites_to_check_before_teaching": ["distributions", "descriptive_stats", "normal_distribution_z_scores"],
+    "prerequisites_to_check_before_teaching": [
+      "distributions",
+      "descriptive_stats",
+      "normal_distribution_z_scores"
+    ],
     "tutor_pacing_hint": "Use the courtroom analogy: H₀ = innocent. Drill p-value interpretation aggressively — most students get it backwards. Show ONE complete Z-test (proportions) before doing variants. Always ask 'one-tailed or two-tailed?' before computing anything.",
-    "next_recommended": ["confidence_intervals", "hypothesis_testing_z_t"]
+    "next_recommended": [
+      "confidence_intervals",
+      "hypothesis_testing_z_t"
+    ]
   }
 }
