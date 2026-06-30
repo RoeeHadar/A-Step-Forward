@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { Check, X, HelpCircle, Sparkles, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
+import { Check, X, HelpCircle, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
 import type {
   LessonQuestionKind,
   LessonPointsLevel,
