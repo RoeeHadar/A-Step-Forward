@@ -56,31 +56,44 @@ export interface TopicOption {
   subject_label_he: string;
 }
 
-type KindMix = 'closed' | 'open' | 'mixed';
+interface QuizQuestionPart {
+  label: string;
+  body_en: string;
+  body_he: string;
+  points: number;
+}
 
 interface CustomQuizQuestion {
   ord: number;
-  kind: 'mcq' | 'true_false' | 'numeric' | 'short_answer' | 'open';
+  kind: 'open' | 'mcq' | 'true_false' | 'numeric' | 'short_answer'; // legacy kinds gracefully handled
   difficulty: 'easy' | 'medium' | 'hard';
   concept_id: string;
   skill_atoms: string[];
   stem_en: string;
   stem_he: string;
-  explanation_en: string;
-  explanation_he: string;
+  // Multi-part structure (Bagrut / university style)
+  parts?: QuizQuestionPart[];
+  total_points: number;
+  sample_solution_en: string;
+  sample_solution_he: string;
+  rubric_en: string;
+  rubric_he: string;
+  // MCQ only (university_mixed mode)
   options_en?: string[];
   options_he?: string[];
   correct_index?: number;
+  explanation_en?: string;
+  explanation_he?: string;
+  // Legacy fallback fields
   correct_bool?: boolean;
   correct_answer?: string;
   acceptable_answers?: string[];
-  rubric_en?: string;
-  rubric_he?: string;
 }
 
 interface CustomQuizEnvelope {
   quiz_id: string;
-  kind_mix: KindMix;
+  kind_mix: string;
+  mode?: 'bagrut_open' | 'university_open' | 'university_mixed';
   time_limit_s: number;
   concepts: Array<{ id: string; name: string; name_he: string | null; subject: string }>;
   questions: CustomQuizQuestion[];
@@ -90,15 +103,11 @@ interface CustomQuizEnvelope {
 
 const STR = {
   he: {
-    title: 'בנה מבחן מותאם אישית',
+    title: 'תרגול מבחן',
     subtitle:
-      'בחר סוג שאלות, מסגרת זמן, ונושאים אופציונליים. ה-AI יבנה מבחן בדיוק לפי מה שאתה יודע ומה שכדאי לחזק.',
-    typeLabel: 'סוג שאלות',
-    typeClosed: 'סגורות (בחירה / נכון-לא נכון / מספרי)',
-    typeOpen: 'פתוחות (קצרות / חיבור)',
-    typeMixed: 'משולב',
-    timeLabel: 'מסגרת זמן (דקות)',
-    timeHint: 'נשאל יותר שאלות בזמן ארוך יותר. טווח: 3–90 דקות.',
+      'שאלות פתוחות בסגנון בגרות ומבחני אוניברסיטה — הראה/י את כל שלבי הפתרון. ה-AI יבחר שאלות על הנושאים שאתה/את הכי צריך/ה לחזק.',
+    timeLabel: 'זמן תרגול (דקות)',
+    timeHint: 'כל שאלת בגרות לוקחת כ-22 דקות. שאלת אוניברסיטה כ-35 דקות.',
     quickTime: 'בחירה מהירה',
     topicsLabel: 'נושאים (אופציונלי)',
     topicsHint:
@@ -106,52 +115,50 @@ const STR = {
     topicsSelected: 'נבחרו {n}',
     topicsSearchPh: 'חפש נושא…',
     topicsClear: 'נקה',
-    topicsExpand: 'פתח הכל',
-    topicsCollapse: 'סגור הכל',
-    generate: 'צור מבחן',
-    generating: 'בונה מבחן…',
-    genError: 'המבחן לא נוצר. נסה זמן או נושאים אחרים.',
+    generate: 'התחל תרגול',
+    generating: 'מכין שאלות…',
+    genError: 'לא הצלחנו ליצור שאלות. נסה זמן או נושאים אחרים.',
     questionOf: 'שאלה {i} מתוך {n}',
     timeLeft: 'נשאר',
     timesUp: 'נגמר הזמן — עוד אפשר להגיש',
-    prev: 'הקודמת',
-    next: 'הבאה',
-    submit: 'הגש מבחן',
+    submit: 'הגש תשובות',
     submitting: 'מגיש…',
     truen: 'נכון',
     falsen: 'לא נכון',
-    writeAnswer: 'כתוב את התשובה כאן…',
-    rubric: 'קריטריון להערכה עצמית',
-    selfAssess: 'איך הייתי?',
-    selfCorrect: 'נכון',
+    writeAnswer: 'כתוב/י את הפתרון כאן — הראה/י את כל השלבים…',
+    showWorkHint: 'הראה/י את כל שלבי הפתרון כדי לקבל ניקוד מלא',
+    rubricLabel: 'קריטריוני הניקוד',
+    selfAssess: 'כמה ניקוד מגיע לך?',
+    selfCorrect: 'ניקוד מלא',
     selfPartial: 'חלקי',
-    selfWrong: 'לא נכון',
-    resultsTitle: 'תוצאות המבחן',
-    resultsScore: 'ציון',
+    selfWrong: 'עוד צריך לתרגל',
+    revealSolution: 'הצג פתרון מלא',
+    hideSolution: 'הסתר פתרון',
+    sampleSolution: 'פתרון לדוגמה',
+    markingScheme: 'סכמת ניקוד',
+    resultsTitle: 'תוצאות',
+    resultsScore: 'ניקוד עצמי',
     resultsTime: 'זמן',
     resultsPerConcept: 'לפי נושא',
-    resultsExplain: 'הסבר',
-    yourAnswer: 'התשובה שלך',
-    correctAnswer: 'התשובה הנכונה',
-    buildAnother: 'בנה מבחן נוסף',
-    newQuiz: 'מבחן חדש',
+    yourAnswer: 'הפתרון שלך',
+    buildAnother: 'תרגול נוסף',
+    newQuiz: 'תרגול חדש',
     backToDashboard: 'חזרה ללוח הבקרה',
     pickedFromTopics: 'מבוסס על הנושאים שבחרת',
-    pickedFromWeak: 'מבוסס על הנושאים שאתה הכי חלש בהם',
-    pickedFromBootstrap: 'התחלת היכרות — מבוסס על המקצועות שלך',
+    pickedFromWeak: 'מבוסס על הנושאים שאתה/את הכי חלש/ה בהם',
+    pickedFromBootstrap: 'היכרות ראשונית — מבוסס על המקצועות שלך',
     minute: 'דקה',
     minutes: 'דקות',
+    part: 'חלק',
+    points: 'נקודות',
+    partHint: 'הראה/י את כל שלבי הפתרון לחלק זה',
   },
   en: {
-    title: 'Build a custom quiz',
+    title: 'Exam Practice',
     subtitle:
-      'Pick a question type, a time budget, and optional topics. The AI will tailor the test to what you know and what to reinforce.',
-    typeLabel: 'Question type',
-    typeClosed: 'Closed (MCQ / true-false / numeric)',
-    typeOpen: 'Open (short answer / essay)',
-    typeMixed: 'Mixed',
-    timeLabel: 'Time budget (minutes)',
-    timeHint: 'More minutes ➜ more questions. Range: 3–90 minutes.',
+      'Open-ended questions in Bagrut and university exam style — show all your work for full credit. The AI picks questions based on your weakest topics.',
+    timeLabel: 'Practice time (minutes)',
+    timeHint: 'A Bagrut-style question takes ~22 min. A university question ~35 min.',
     quickTime: 'Quick picks',
     topicsLabel: 'Topics (optional)',
     topicsHint:
@@ -159,41 +166,43 @@ const STR = {
     topicsSelected: '{n} selected',
     topicsSearchPh: 'Search topics…',
     topicsClear: 'Clear',
-    topicsExpand: 'Expand all',
-    topicsCollapse: 'Collapse all',
-    generate: 'Generate quiz',
-    generating: 'Building your quiz…',
-    genError: 'Could not generate. Try a different time or topics.',
+    generate: 'Start Practice',
+    generating: 'Preparing questions…',
+    genError: 'Could not generate questions. Try a different time or topics.',
     questionOf: 'Question {i} of {n}',
     timeLeft: 'Left',
     timesUp: "Time's up — you can still submit",
-    prev: 'Previous',
-    next: 'Next',
-    submit: 'Submit quiz',
+    submit: 'Submit answers',
     submitting: 'Submitting…',
     truen: 'True',
     falsen: 'False',
-    writeAnswer: 'Write your answer here…',
-    rubric: 'Self-assessment rubric',
-    selfAssess: 'How did I do?',
-    selfCorrect: 'Correct',
+    writeAnswer: 'Write your solution here — show all steps…',
+    showWorkHint: 'Show all steps of your solution for full marks',
+    rubricLabel: 'Marking criteria',
+    selfAssess: 'How many points did you earn?',
+    selfCorrect: 'Full marks',
     selfPartial: 'Partial',
-    selfWrong: 'Wrong',
-    resultsTitle: 'Quiz results',
-    resultsScore: 'Score',
+    selfWrong: 'Need more practice',
+    revealSolution: 'Show full solution',
+    hideSolution: 'Hide solution',
+    sampleSolution: 'Sample solution',
+    markingScheme: 'Marking scheme',
+    resultsTitle: 'Results',
+    resultsScore: 'Self-assessed score',
     resultsTime: 'Time',
     resultsPerConcept: 'By concept',
-    resultsExplain: 'Explanation',
-    yourAnswer: 'Your answer',
-    correctAnswer: 'Correct answer',
-    buildAnother: 'Build another quiz',
-    newQuiz: 'New quiz',
+    yourAnswer: 'Your solution',
+    buildAnother: 'Practice more',
+    newQuiz: 'New practice',
     backToDashboard: 'Back to dashboard',
     pickedFromTopics: 'Based on the topics you chose',
     pickedFromWeak: 'Based on the topics you struggle with most',
-    pickedFromBootstrap: 'Starter quiz — based on your subjects',
+    pickedFromBootstrap: 'Starter session — based on your subjects',
     minute: 'minute',
     minutes: 'minutes',
+    part: 'Part',
+    points: 'points',
+    partHint: 'Show all steps for this part',
   },
 } as const;
 
@@ -238,7 +247,11 @@ interface AnswerState {
   mcq?: number;
   bool?: boolean;
   text?: string;
+  // Multi-part answers: keyed by part label (e.g. "א", "ב", "ג")
+  parts?: Record<string, string>;
   self?: 'correct' | 'partial' | 'wrong';
+  // Whether the sample solution has been revealed for this question
+  solutionRevealed?: boolean;
 }
 
 type Phase = 'builder' | 'generating' | 'running' | 'results';
@@ -252,7 +265,6 @@ interface QuizSessionPersist {
   cursor: number;
   secondsLeft: number;
   startedAt: number | null;
-  kindMix: KindMix;
   timeMin: number;
   selected: string[];
   results: {
@@ -279,7 +291,7 @@ function clearQuizSession() {
   }
 }
 
-const QUICK_TIMES = [5, 10, 15, 30, 45];
+const QUICK_TIMES = [22, 44, 35, 70];
 
 export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   const [language] = useLanguagePreference();
@@ -289,8 +301,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   const dir: 'rtl' | 'ltr' = isHe ? 'rtl' : 'ltr';
 
   const [phase, setPhase] = useState<Phase>('builder');
-  const [kindMix, setKindMix] = useState<KindMix>('mixed');
-  const [timeMin, setTimeMin] = useState(10);
+  const [timeMin, setTimeMin] = useState(22);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [genError, setGenError] = useState<string | null>(null);
@@ -331,8 +342,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           setCursor(saved.cursor ?? 0);
           setSecondsLeft(saved.secondsLeft ?? saved.envelope.time_limit_s);
           setStartedAt(saved.startedAt ?? null);
-          setKindMix(saved.kindMix ?? 'mixed');
-          setTimeMin(saved.timeMin ?? 10);
+          setTimeMin(saved.timeMin ?? 22);
           setSelected(new Set(saved.selected ?? []));
           setResults(saved.results ?? null);
           setPhase(saved.phase);
@@ -353,7 +363,6 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
       cursor,
       secondsLeft,
       startedAt,
-      kindMix,
       timeMin,
       selected: Array.from(selected),
       results,
@@ -367,7 +376,6 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     secondsLeft,
     startedAt,
     results,
-    kindMix,
     timeMin,
     selected,
   ]);
@@ -400,7 +408,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          kind_mix: kindMix,
+          kind_mix: 'open',
           time_limit_min: timeMin,
           topics: Array.from(selected),
         }),
@@ -428,24 +436,13 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   }
 
   function gradeOne(q: CustomQuizQuestion, a: AnswerState): boolean | null {
+    // MCQ (university_mixed mode only)
     if (q.kind === 'mcq') {
       if (a.mcq == null || q.correct_index == null) return null;
       return a.mcq === q.correct_index;
     }
-    if (q.kind === 'true_false') {
-      if (a.bool == null || q.correct_bool == null) return null;
-      return a.bool === q.correct_bool;
-    }
-    if (q.kind === 'numeric') {
-      if (!a.text || !q.correct_answer) return null;
-      return numericClose(a.text, q.correct_answer);
-    }
-    if (q.kind === 'short_answer') {
-      if (!a.text || !q.acceptable_answers) return null;
-      const norm = normalize(a.text);
-      return q.acceptable_answers.some((x) => normalize(x) === norm);
-    }
-    if (q.kind === 'open') {
+    // Open questions (Bagrut / university style) — self-assessed
+    if (q.kind === 'open' || q.kind === 'short_answer' || q.kind === 'numeric' || q.kind === 'true_false') {
       if (!a.self) return null;
       return a.self === 'correct';
     }
@@ -467,12 +464,13 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
       const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
       bucket.total += 1;
       if (isCorrect) bucket.correct += 1;
-      // Best-effort: record practice against the regular mastery pipeline
-      // so this quiz feeds skill_practice + concept_mastery just like an
-      // authored-lesson answer. Failure here is silent — the UI still
-      // shows results either way.
+      // Build the combined written answer for mastery tracking
+      const writtenAnswer =
+        q.parts && q.parts.length > 0 && a.parts
+          ? q.parts.map((p) => `${p.label}: ${a.parts?.[p.label] ?? ''}`).join('\n')
+          : (a.text ?? '');
       try {
-        if (graded != null) {
+        if (graded != null || writtenAnswer.trim()) {
           await fetch('/api/lesson/answer', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -482,14 +480,14 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
               concept_id: q.concept_id,
               correct: isCorrect,
               skill_atoms: q.skill_atoms ?? [],
-              user_answer: a,
+              user_answer: writtenAnswer,
               kind: q.kind,
               ephemeral: true,
             }),
           });
         }
       } catch {
-        // ignore
+        // ignore — UI still shows results
       }
     }
     const secondsUsed = startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0;
@@ -509,6 +507,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     setAnswers([]);
     setResults(null);
     setCursor(0);
+    setTimeMin(22);
     setPhase('builder');
   }
 
@@ -520,35 +519,6 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           <h1 className="font-display text-3xl font-bold">{t.title}</h1>
           <p className="mt-2 text-muted-foreground">{t.subtitle}</p>
         </header>
-
-        <section className="card-punch mb-6 rounded-2xl p-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            {t.typeLabel}
-          </h2>
-          <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            {(['closed', 'open', 'mixed'] as const).map((k) => {
-              const label =
-                k === 'closed' ? t.typeClosed : k === 'open' ? t.typeOpen : t.typeMixed;
-              const selectedNow = kindMix === k;
-              return (
-                <button
-                  key={k}
-                  type="button"
-                  onClick={() => setKindMix(k)}
-                  className={cn(
-                    'rounded-xl border px-4 py-3 text-start text-sm transition-colors',
-                    selectedNow
-                      ? 'border-primary bg-primary/10 text-foreground'
-                      : 'border-border bg-background hover:bg-muted',
-                  )}
-                  aria-pressed={selectedNow}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-        </section>
 
         <section className="card-punch mb-6 rounded-2xl p-6">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
@@ -717,6 +687,26 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
       });
     }
 
+    function setPartAnswer(label: string, value: string) {
+      setAnswers((prev) => {
+        const copy = [...prev];
+        const current = copy[cursor] ?? {};
+        copy[cursor] = {
+          ...current,
+          parts: { ...(current.parts ?? {}), [label]: value },
+        };
+        return copy;
+      });
+    }
+
+    // Determine if ALL parts of the current question have text entered
+    const allPartsAnswered =
+      q.kind === 'open' && q.parts && q.parts.length > 0
+        ? q.parts.every((p) => (a.parts?.[p.label] ?? '').trim().length > 0)
+        : q.kind === 'open'
+          ? (a.text ?? '').trim().length > 0
+          : true;
+
     return (
       <div className="mx-auto max-w-3xl" dir={dir}>
         <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -748,7 +738,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
         />
 
         <section className="card-punch rounded-2xl p-6">
-          <div className="mb-3 flex flex-wrap items-center gap-2">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
             <Badge variant="secondary">{tx(t.questionOf, { i: cursor + 1, n: total })}</Badge>
             <Badge
               className={cn(
@@ -760,121 +750,106 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
             >
               {q.difficulty}
             </Badge>
-            <Badge variant="outline">{q.kind}</Badge>
+            {q.total_points > 0 && (
+              <Badge variant="outline">{q.total_points} {t.points}</Badge>
+            )}
           </div>
 
-          <MarkdownInline content={stem} dir={dir} />
+          {/* Question stem — shared context / scenario */}
+          <div className="mb-5 rounded-xl border border-primary/20 bg-primary/5 p-4">
+            <MarkdownInline content={stem} dir={dir} />
+          </div>
 
-          <div className="mt-4">
-            {q.kind === 'mcq' && options ? (
-              <ul className="space-y-2">
-                {options.map((opt, idx) => {
-                  const selectedNow = a.mcq === idx;
-                  return (
-                    <li key={idx}>
-                      <button
-                        type="button"
-                        onClick={() => setAnswer({ mcq: idx })}
-                        className={cn(
-                          'w-full rounded-lg border px-4 py-3 text-start text-sm transition-colors',
-                          selectedNow
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border bg-background hover:bg-muted',
-                        )}
-                        aria-pressed={selectedNow}
-                      >
-                        <MarkdownInline content={opt} dir={dir} />
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : null}
-
-            {q.kind === 'true_false' ? (
-              <div className="flex gap-2">
-                {[
-                  { v: true, label: t.truen },
-                  { v: false, label: t.falsen },
-                ].map((opt) => {
-                  const selectedNow = a.bool === opt.v;
-                  return (
+          {/* MCQ (university_mixed only) */}
+          {q.kind === 'mcq' && options ? (
+            <ul className="space-y-2">
+              {options.map((opt, idx) => {
+                const selectedNow = a.mcq === idx;
+                return (
+                  <li key={idx}>
                     <button
-                      key={String(opt.v)}
                       type="button"
-                      onClick={() => setAnswer({ bool: opt.v })}
+                      onClick={() => setAnswer({ mcq: idx })}
                       className={cn(
-                        'flex-1 rounded-lg border px-4 py-3 text-sm transition-colors',
+                        'w-full rounded-lg border px-4 py-3 text-start text-sm transition-colors',
                         selectedNow
                           ? 'border-primary bg-primary/10'
                           : 'border-border bg-background hover:bg-muted',
                       )}
                       aria-pressed={selectedNow}
                     >
-                      {opt.label}
+                      <MarkdownInline content={opt} dir={dir} />
                     </button>
-                  );
-                })}
-              </div>
-            ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
 
-            {q.kind === 'numeric' || q.kind === 'short_answer' ? (
-              <Input
-                type="text"
-                value={a.text ?? ''}
-                onChange={(e) => setAnswer({ text: e.target.value })}
-                placeholder={t.writeAnswer}
-                dir="auto"
-              />
-            ) : null}
+          {/* Open question — multi-part (Bagrut / university style) */}
+          {(q.kind === 'open' || q.kind === 'short_answer' || q.kind === 'numeric' || q.kind === 'true_false') ? (
+            <div className="space-y-5">
+              {/* Show work hint */}
+              <p className="text-xs text-muted-foreground italic">{t.showWorkHint}</p>
 
-            {q.kind === 'open' ? (
-              <div className="space-y-3">
+              {/* Multi-part structure */}
+              {q.parts && q.parts.length > 0 ? (
+                <div className="space-y-4">
+                  {q.parts.map((part) => {
+                    const partBody = isHe ? part.body_he : part.body_en;
+                    const partValue = a.parts?.[part.label] ?? '';
+                    return (
+                      <div key={part.label} className="rounded-lg border border-border p-4">
+                        <div className="mb-3 flex items-center gap-3">
+                          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                            {part.label}
+                          </span>
+                          <div className="flex-1">
+                            <MarkdownInline content={partBody} dir={dir} />
+                          </div>
+                          <Badge variant="outline" className="shrink-0 text-xs">
+                            {part.points} {t.points}
+                          </Badge>
+                        </div>
+                        <Textarea
+                          rows={5}
+                          value={partValue}
+                          onChange={(e) => setPartAnswer(part.label, e.target.value)}
+                          placeholder={t.writeAnswer}
+                          dir="auto"
+                          className="resize-y text-sm"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* Flat open question (no parts) */
                 <Textarea
-                  rows={6}
+                  rows={8}
                   value={a.text ?? ''}
                   onChange={(e) => setAnswer({ text: e.target.value })}
                   placeholder={t.writeAnswer}
                   dir="auto"
+                  className="resize-y text-sm"
                 />
-                {q.rubric_en || q.rubric_he ? (
-                  <div className="rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
-                    <div className="mb-1 inline-flex items-center gap-1 font-semibold uppercase tracking-wider">
-                      <HelpCircle className="h-3 w-3" aria-hidden />
-                      {t.rubric}
-                    </div>
-                    <MarkdownInline content={isHe ? q.rubric_he ?? '' : q.rubric_en ?? ''} dir={dir} />
+              )}
+
+              {/* Rubric (shown during the question to guide the student) */}
+              {(q.rubric_en || q.rubric_he) ? (
+                <div className="rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
+                  <div className="mb-1 inline-flex items-center gap-1 font-semibold uppercase tracking-wider">
+                    <HelpCircle className="h-3 w-3" aria-hidden />
+                    {t.rubricLabel}
                   </div>
-                ) : null}
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs text-muted-foreground">{t.selfAssess}</span>
-                  {(['correct', 'partial', 'wrong'] as const).map((s) => {
-                    const label =
-                      s === 'correct' ? t.selfCorrect : s === 'partial' ? t.selfPartial : t.selfWrong;
-                    const selectedNow = a.self === s;
-                    return (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setAnswer({ self: s })}
-                        className={cn(
-                          'rounded-full border px-3 py-1 text-xs transition-colors',
-                          selectedNow
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border bg-background text-muted-foreground hover:bg-muted',
-                        )}
-                        aria-pressed={selectedNow}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
+                  <MarkdownInline content={isHe ? (q.rubric_he ?? '') : (q.rubric_en ?? '')} dir={dir} />
                 </div>
-              </div>
-            ) : null}
-          </div>
+              ) : null}
+            </div>
+          ) : null}
         </section>
 
+        {/* Navigation */}
         <div className="mt-6 flex items-center justify-between gap-2">
           <Button
             variant="outline"
@@ -883,15 +858,15 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
             className="gap-2"
           >
             {isHe ? <ChevronRight className="h-4 w-4" aria-hidden /> : <ChevronLeft className="h-4 w-4" aria-hidden />}
-            {t.prev}
+            {isHe ? 'הקודמת' : 'Previous'}
           </Button>
           {cursor < total - 1 ? (
             <Button onClick={() => setCursor((c) => Math.min(total - 1, c + 1))} className="gap-2">
-              {t.next}
+              {isHe ? 'הבאה' : 'Next'}
               {isHe ? <ChevronLeft className="h-4 w-4" aria-hidden /> : <ChevronRight className="h-4 w-4" aria-hidden />}
             </Button>
           ) : (
-            <Button onClick={submitQuiz} disabled={submitting} className="gap-2">
+            <Button onClick={submitQuiz} disabled={submitting || (!allPartsAnswered && !a.self)} className="gap-2">
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
               {submitting ? t.submitting : t.submit}
             </Button>
@@ -903,8 +878,6 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
 
   // ---------- results ------------------------------------------------------
   if (phase === 'results' && envelope && results) {
-    const percent =
-      results.total > 0 ? Math.round((results.correctCount / results.total) * 100) : 0;
     return (
       <div className="mx-auto max-w-3xl" dir={dir}>
         <header className="mb-6">
@@ -913,7 +886,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
 
         <section className="card-punch mb-6 rounded-2xl p-6">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            <Stat label={t.resultsScore} value={`${results.correctCount}/${results.total}`} sub={`${percent}%`} />
+            <Stat label={t.resultsScore} value={`${results.correctCount}/${results.total}`} />
             <Stat label={t.resultsTime} value={fmtT(results.secondsUsed)} />
           </div>
         </section>
@@ -931,9 +904,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
               return (
                 <li key={c.id} className="space-y-1">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="truncate text-sm" dir="auto">
-                      {name}
-                    </span>
+                    <span className="truncate text-sm" dir="auto">{name}</span>
                     <Badge variant={pct >= 70 ? 'success' : 'secondary'}>
                       {bucket.correct}/{bucket.total} · {pct}%
                     </Badge>
@@ -948,65 +919,144 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           </ul>
         </section>
 
+        {/* Per-question review with sample solution reveal */}
         <section className="card-punch mb-6 rounded-2xl p-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            {t.resultsExplain}
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            {isHe ? 'סקירת שאלות' : 'Question Review'}
           </h2>
-          <ul className="mt-3 space-y-4">
+          <ul className="space-y-6">
             {envelope.questions.map((q, i) => {
               const a = answers[i] ?? {};
               const graded = gradeOne(q, a);
               const stem = isHe ? q.stem_he : q.stem_en;
-              const explanation = isHe ? q.explanation_he : q.explanation_en;
+              const sampleSolution = isHe ? q.sample_solution_he : q.sample_solution_en;
+              const rubric = isHe ? q.rubric_he : q.rubric_en;
+              const revealed = a.solutionRevealed ?? false;
+
+              function toggleReveal() {
+                setAnswers((prev) => {
+                  const copy = [...prev];
+                  copy[i] = { ...(copy[i] ?? {}), solutionRevealed: !revealed };
+                  return copy;
+                });
+              }
+
               return (
-                <li key={i} className="border-b border-border pb-4 last:border-b-0">
-                  <div className="mb-2 flex items-center gap-2">
+                <li key={i} className="border-b border-border pb-6 last:border-b-0">
+                  {/* Question header */}
+                  <div className="mb-3 flex items-center gap-2">
                     <span className="font-mono text-xs text-muted-foreground">#{i + 1}</span>
+                    {q.total_points > 0 && (
+                      <Badge variant="outline" className="text-xs">{q.total_points} {t.points}</Badge>
+                    )}
                     {graded === true ? (
                       <Badge variant="success" className="gap-1">
                         <Check className="h-3 w-3" aria-hidden />
                         {t.selfCorrect}
                       </Badge>
                     ) : graded === false ? (
-                      <Badge
-                        variant="secondary"
-                        className="gap-1 bg-destructive/15 text-destructive"
-                      >
+                      <Badge variant="secondary" className="gap-1 bg-destructive/15 text-destructive">
                         <X className="h-3 w-3" aria-hidden />
                         {t.selfWrong}
                       </Badge>
+                    ) : a.self === 'partial' ? (
+                      <Badge variant="secondary" className="gap-1">{t.selfPartial}</Badge>
                     ) : (
                       <Badge variant="secondary">—</Badge>
                     )}
                   </div>
-                  <MarkdownInline content={stem} dir={dir} />
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    <strong>{t.yourAnswer}:</strong>{' '}
-                    {a.mcq != null
-                      ? `#${a.mcq + 1}`
-                      : a.bool != null
-                        ? a.bool
-                          ? t.truen
-                          : t.falsen
-                        : a.text ?? '—'}
+
+                  {/* Stem */}
+                  <div className="mb-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                    <MarkdownInline content={stem} dir={dir} />
                   </div>
-                  {q.correct_index != null || q.correct_bool != null || q.correct_answer || q.acceptable_answers ? (
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      <strong>{t.correctAnswer}:</strong>{' '}
-                      {q.correct_index != null
-                        ? `#${q.correct_index + 1}`
-                        : q.correct_bool != null
-                          ? q.correct_bool
-                            ? t.truen
-                            : t.falsen
-                          : q.correct_answer
-                            ? q.correct_answer
-                            : q.acceptable_answers?.join(' · ')}
+
+                  {/* Student's written answers */}
+                  {q.parts && q.parts.length > 0 ? (
+                    <div className="mb-3 space-y-2">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t.yourAnswer}</p>
+                      {q.parts.map((part) => {
+                        const partAnswer = a.parts?.[part.label] ?? '';
+                        const partBody = isHe ? part.body_he : part.body_en;
+                        return (
+                          <div key={part.label} className="rounded-lg border border-border p-3 text-sm">
+                            <div className="mb-1 flex items-center gap-2">
+                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted text-xs font-bold">
+                                {part.label}
+                              </span>
+                              <span className="text-xs text-muted-foreground" dir="auto">{partBody}</span>
+                            </div>
+                            <div className="mt-1 whitespace-pre-wrap text-sm" dir="auto">
+                              {partAnswer || <span className="text-muted-foreground italic">{isHe ? '(לא נענה)' : '(not answered)'}</span>}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : a.text ? (
+                    <div className="mb-3">
+                      <p className="mb-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t.yourAnswer}</p>
+                      <div className="rounded-lg border border-border p-3 text-sm whitespace-pre-wrap" dir="auto">
+                        {a.text}
+                      </div>
                     </div>
                   ) : null}
-                  <div className="mt-2">
-                    <MarkdownInline content={explanation} dir={dir} />
-                  </div>
+
+                  {/* Self-assessment (only for open questions in results) */}
+                  {q.kind !== 'mcq' && !a.self ? (
+                    <div className="mb-3 flex flex-wrap items-center gap-2">
+                      <span className="text-xs text-muted-foreground">{t.selfAssess}</span>
+                      {(['correct', 'partial', 'wrong'] as const).map((s) => {
+                        const label = s === 'correct' ? t.selfCorrect : s === 'partial' ? t.selfPartial : t.selfWrong;
+                        return (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => {
+                              setAnswers((prev) => {
+                                const copy = [...prev];
+                                copy[i] = { ...(copy[i] ?? {}), self: s };
+                                return copy;
+                              });
+                            }}
+                            className="rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted"
+                          >
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+
+                  {/* Rubric */}
+                  {rubric ? (
+                    <div className="mb-3 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
+                      <p className="mb-1 font-semibold uppercase tracking-wider">{t.markingScheme}</p>
+                      <MarkdownInline content={rubric} dir={dir} />
+                    </div>
+                  ) : null}
+
+                  {/* Sample solution reveal */}
+                  {sampleSolution ? (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={toggleReveal}
+                        className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+                      >
+                        <Sparkles className="h-3 w-3" aria-hidden />
+                        {revealed ? t.hideSolution : t.revealSolution}
+                      </button>
+                      {revealed ? (
+                        <div className="mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                            {t.sampleSolution}
+                          </p>
+                          <MarkdownInline content={sampleSolution} dir={dir} />
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </li>
               );
             })}

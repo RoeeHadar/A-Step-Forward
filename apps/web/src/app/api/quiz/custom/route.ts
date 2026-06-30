@@ -2,30 +2,23 @@
  * POST /api/quiz/custom
  *
  * Builds a fit-to-purpose AI quiz for the authenticated learner.
+ * Mode (bagrut_open vs university_open) is determined server-side from the
+ * learner's profile — the client's kind_mix hint is accepted for compat
+ * but no longer controls question style.
  *
- * Body shape (all fields optional except the first two):
+ * Body shape:
  *   {
- *     "kind_mix": "closed" | "open" | "mixed",
- *     "time_limit_min": number,           // clamped to [3, 90]
- *     "topics"?: string[]                 // concept ids; falls back to the
- *                                         //   learner's weakest mastery
- *                                         //   concepts or a subject
- *                                         //   bootstrap when omitted/empty
+ *     "kind_mix"?: string,           // ignored — kept for backward compat
+ *     "time_limit_min": number,      // clamped to [3, 90]
+ *     "topics"?: string[]            // concept ids; falls back to weakest mastery
  *   }
- *
- * Returns `CustomQuizEnvelope` on success, 503 if Groq is unavailable / the
- * model produced no valid questions, 400 on a malformed body, 401 if the
- * learner is not signed in. Quiz envelopes are NOT persisted — the client
- * holds them in component state until submission.
  */
 import { auth } from '@clerk/nextjs/server';
 import { getAuthContext } from '@/lib/auth';
-import { buildCustomQuiz, type QuizKindMix } from '@/lib/quiz-builder';
+import { buildCustomQuiz } from '@/lib/quiz-builder';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-
-const ALLOWED_MIX: QuizKindMix[] = ['closed', 'open', 'mixed'];
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -44,14 +37,7 @@ export async function POST(req: Request) {
   }
   const b = body as Record<string, unknown>;
 
-  const kindMix = b.kind_mix;
-  if (typeof kindMix !== 'string' || !ALLOWED_MIX.includes(kindMix as QuizKindMix)) {
-    return Response.json(
-      { error: 'kind_mix must be one of: closed | open | mixed' },
-      { status: 400 },
-    );
-  }
-  const timeLimit = Number(b.time_limit_min ?? 10);
+  const timeLimit = Number(b.time_limit_min ?? 22);
   if (!Number.isFinite(timeLimit) || timeLimit <= 0) {
     return Response.json(
       { error: 'time_limit_min must be a positive number' },
@@ -63,7 +49,6 @@ export async function POST(req: Request) {
     : undefined;
 
   const envelope = await buildCustomQuiz(ctx.learnerId, {
-    kind_mix: kindMix as QuizKindMix,
     time_limit_min: timeLimit,
     topics,
   });
