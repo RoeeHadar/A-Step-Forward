@@ -5,12 +5,159 @@
   "math_track": [
     "4pt"
   ],
-  "title_en": "Integration — Polynomial & Rational (4 Units)",
-  "title_he": "אינטegration — פולינום ורציונל (4 יחידות)",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "title_en": "Integration at 4pt Level",
+  "title_he": "אינטגרציה — רמת 4 יחידות",
+  "summary_en": "Antiderivatives, definite integrals, area under and between curves, and velocity/distance applications at Bagrut 4 units.",
+  "summary_he": "פונקציה קדומה, אינטגרל מסוים, שטח מתחת ושטח בין עקומות, ויישומי מהירות/מרחק ב-4 יחידות.",
+  "est_minutes": 30,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Antiderivative review",
+      "title_he": "חזרה על פונקציה קדומה",
+      "body_en_md": "If $F'(x) = f(x)$, then $F$ is an **antiderivative** of $f$ and we write:\n\n$$\\int f(x)\\,dx = F(x) + C$$\n\n**Power rule:** $\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$ ($n \\neq -1$).\n\n**Linearity:** $\\int [af(x) + bg(x)]\\,dx = a\\int f + b\\int g$.\n\n**Standard integrals (4pt):**\n- $\\int e^x\\,dx = e^x + C$\n- $\\int \\frac{1}{x}\\,dx = \\ln|x| + C$ (for $x > 0$ in 4pt: $\\ln x + C$)",
+      "body_he_md": "אם $F'(x) = f(x)$, אז $F$ היא **פונקציה קדומה** של $f$:\n\n$$\\int f(x)\\,dx = F(x) + C$$\n\n**כלל החזקה:** $\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C$.\n\n**לינאריות:** $\\int [af + bg]\\,dx = a\\int f + b\\int g$.\n\n**אינtegrals סטנדרטיים:**\n- $\\int e^x\\,dx = e^x + C$\n- $\\int \\frac{1}{x}\\,dx = \\ln x + C$ (ל-$x > 0$)"
+    },
+    {
+      "kind": "theory",
+      "title_en": "Definite integrals and area",
+      "title_he": "אינטגרל מסוים ושטח",
+      "body_en_md": "**Fundamental Theorem:** If $F' = f$, then\n\n$$\\int_a^b f(x)\\,dx = F(b) - F(a).$$\n\n**Signed area:** regions where $f(x) < 0$ contribute **negative** area.\n\n**Total area** on $[a,b]$: split at zeros, then\n\n$$\\text{Area} = \\int_a^b |f(x)|\\,dx.$$\n\n**Worked example:** $\\int_0^3 (x^2 - x)\\,dx$.\n\nAntiderivative: $\\frac{x^3}{3} - \\frac{x^2}{2}$.\n\n$\\left[\\frac{x^3}{3} - \\frac{x^2}{2}\\right]_0^3 = 9 - \\frac{9}{2} = \\frac{9}{2}$.\n\nSince $x^2 - x = x(x-1) \\geq 0$ on $[0,3]$, this equals the geometric area.",
+      "body_he_md": "**משפט יסוד:** אם $F' = f$:\n\n$$\\int_a^b f(x)\\,dx = F(b) - F(a).$$\n\n**שטח מסומן:** אזורים עם $f(x) < 0$ תורמים שטח **שלילי**.\n\n**שטח כולל:** $\\int_a^b |f(x)|\\,dx$.\n\n**דוגמה:** $\\int_0^3 (x^2 - x)\\,dx = \\frac{9}{2}$."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Integration of rational and exponential functions",
+      "title_he": "אינטגרציה של רציונליות ומעריכיות",
+      "body_en_md": "When degree of numerator $\\geq$ degree of denominator, use **polynomial long division** first.\n\n$$\\int \\frac{2x + 1}{x - 1}\\,dx: \\quad \\frac{2x+1}{x-1} = 2 + \\frac{3}{x-1}$$\n\n$$\\int = 2x + 3\\ln|x-1| + C.$$\n\n**Simple exponential:** $\\int e^{2x}\\,dx$. Let $u = 2x$, $du = 2\\,dx$:\n\n$$\\int e^{2x}\\,dx = \\frac{1}{2}e^{2x} + C.$$\n\nAt 4pt this is the only substitution you need — full u-sub is 5pt.",
+      "body_he_md": "כשמעלה המונה $\\geq$ מעלה המכנה — **חלוקת פולינומים**.\n\n$$\\int \\frac{2x + 1}{x - 1}\\,dx = 2x + 3\\ln|x-1| + C.$$\n\n**מעריכית:** $\\int e^{2x}\\,dx = \\frac{1}{2}e^{2x} + C$ (הצבה $u = 2x$).\n\nב-4 יח' זו ההצבה היחידה — u-sub מלא ב-5 יח'."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Area between curves",
+      "title_he": "שטח בין עקומות",
+      "body_en_md": "If $f(x) \\geq g(x)$ on $[a,b]$:\n\n$$\\text{Area} = \\int_a^b [f(x) - g(x)]\\,dx.$$\n\n**Bagrut example:** Area between $y = x^2$ and $y = 2x$.\n\nIntersection: $x^2 = 2x \\Rightarrow x(x-2) = 0$ → $x = 0, 2$.\n\nOn $[0,2]$: $2x \\geq x^2$ (check at $x=1$: $2 > 1$).\n\n$$\\text{Area} = \\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\frac{x^3}{3}\\right]_0^2 = 4 - \\frac{8}{3} = \\frac{4}{3}.$$\n\nAlways: find intersections, identify top curve, integrate (top − bottom).",
+      "body_he_md": "אם $f(x) \\geq g(x)$ ב-$[a,b]$:\n\n$$\\text{Area} = \\int_a^b [f(x) - g(x)]\\,dx.$$\n\n**דוגמה:** שטח בין $y = x^2$ ו-$y = 2x$.\n\nחיתוך: $x = 0, 2$. ב-$[0,2]$: $2x \\geq x^2$.\n\n$$\\text{Area} = \\int_0^2 (2x - x^2)\\,dx = \\frac{4}{3}.$$\n\nתמיד: מצאו חיתוכים, זהו עקומה עליונה, אינטגרציה (עליון − תחתון)."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Applications: distance and total change",
+      "title_he": "יישומים: מרחק ושינוי כולל",
+      "body_en_md": "If $v(t)$ is velocity:\n- **Displacement:** $\\int_a^b v(t)\\,dt$ (signed — direction matters).\n- **Total distance:** $\\int_a^b |v(t)|\\,dt$.\n\n**Example:** $v(t) = 3 - t$ on $[0, 4]$. Zero at $t = 3$.\n\nDisplacement: $\\int_0^4 (3-t)\\,dt = [3t - t^2/2]_0^4 = 12 - 8 = 4$ m.\n\nTotal distance: $\\int_0^3 (3-t)\\,dt + \\int_3^4 (t-3)\\,dt = 4.5 + 0.5 = 5$ m.\n\n**Profit:** if $R'(t)$ is marginal revenue rate, total profit over $[a,b]$ is $\\int_a^b R'(t)\\,dt = R(b) - R(a)$.",
+      "body_he_md": "אם $v(t)$ מהירות:\n- **העתקה:** $\\int_a^b v(t)\\,dt$ (מסומן).\n- **מרחק כולל:** $\\int_a^b |v(t)|\\,dt$.\n\n**דוגמה:** $v(t) = 3 - t$ ב-$[0, 4]$. אפס ב-$t = 3$.\n\nהעתקה = 4 מ'. מרחק כולל = 5 מ'.\n\n**רווח:** $\\int R'(t)\\,dt = R(b) - R(a)$."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Find $\\int (3x^2 + 2x)\\,dx$.",
+      "stem_he": "מצאו $\\int (3x^2 + 2x)\\,dx$.",
+      "options_en": [
+        "$x^3 + x^2 + C$",
+        "$6x + 2 + C$",
+        "$x^3 + 2x^2 + C$",
+        "$3x^3 + x^2 + C$"
+      ],
+      "options_he": [
+        "$x^3 + x^2 + C$",
+        "$6x + 2 + C$",
+        "$x^3 + 2x^2 + C$",
+        "$3x^3 + x^2 + C$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$\\int 3x^2 = x^3$, $\\int 2x = x^2$.",
+      "explanation_he": "$\\int 3x^2 = x^3$, $\\int 2x = x^2$."
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $\\int_0^2 x^2\\,dx$.",
+      "stem_he": "חשבו $\\int_0^2 x^2\\,dx$.",
+      "options_en": [
+        "$\\frac{8}{3}$",
+        "$4$",
+        "$2$",
+        "$\\frac{4}{3}$"
+      ],
+      "options_he": [
+        "$\\frac{8}{3}$",
+        "$4$",
+        "$2$",
+        "$\\frac{4}{3}$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$\\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3}$.",
+      "explanation_he": "$\\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3}$."
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Area under $y = x$ from $x = 0$ to $x = 3$:",
+      "stem_he": "שטח מתחת ל-$y = x$ מ-$0$ עד $3$:",
+      "options_en": [
+        "$3$",
+        "$\\frac{9}{2}$",
+        "$6$",
+        "$9$"
+      ],
+      "options_he": [
+        "$3$",
+        "$\\frac{9}{2}$",
+        "$6$",
+        "$9$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$\\int_0^3 x\\,dx = \\frac{x^2}{2}\\big|_0^3 = \\frac{9}{2}$.",
+      "explanation_he": "$\\int_0^3 x\\,dx = \\frac{9}{2}$."
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Area between $y = x^2$ and $y = x$ on $[0,1]$:",
+      "stem_he": "שטח בין $y = x^2$ ו-$y = x$ ב-$[0,1]$:",
+      "options_en": [
+        "$\\frac{1}{6}$",
+        "$\\frac{1}{3}$",
+        "$\\frac{1}{2}$",
+        "$1$"
+      ],
+      "options_he": [
+        "$\\frac{1}{6}$",
+        "$\\frac{1}{3}$",
+        "$\\frac{1}{2}$",
+        "$1$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$\\int_0^1 (x - x^2)\\,dx = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6}$.",
+      "explanation_he": "$\\int_0^1 (x - x^2)\\,dx = \\frac{1}{6}$."
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Velocity $v(t) = 2t$ m/s for $0 \\leq t \\leq 3$. Displacement?",
+      "stem_he": "מהירות $v(t) = 2t$ מ'/ש' ל-$0 \\leq t \\leq 3$. העתקה?",
+      "options_en": [
+        "$3$ m",
+        "$6$ m",
+        "$9$ m",
+        "$18$ m"
+      ],
+      "options_he": [
+        "$3$ מ'",
+        "$6$ מ'",
+        "$9$ מ'",
+        "$18$ מ'"
+      ],
+      "correct_index": 2,
+      "explanation_en": "$\\int_0^3 2t\\,dt = t^2\\big|_0^3 = 9$ m.",
+      "explanation_he": "$\\int_0^3 2t\\,dt = 9$ מ'."
+    }
+  ],
+  "agent_hints": "4pt integration stops at polynomial long division + simple exp substitution. Students forget +C on indefinite integrals and confuse signed area with total area. For between-curves problems, always find intersection points first. Links to lesson:derivatives_intro for FTC intuition."
 }

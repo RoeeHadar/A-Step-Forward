@@ -7,10 +7,157 @@
   ],
   "title_en": "Implicit Differentiation",
   "title_he": "גזירה סתומה",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
-  "sections": [],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "summary_en": "Differentiate curves defined implicitly, find tangent lines, and solve related-rates problems — core 5pt Bagrut calculus.",
+  "summary_he": "גזירה של עקומות מוגדרות באופן סתום, משיקים ובעיות קצבי שינוי קשורים — ליבת חשבון 5 יח'.",
+  "est_minutes": 25,
+  "sections": [
+    {
+      "kind": "intro",
+      "title_en": "Explicit vs implicit functions",
+      "title_he": "פונקציה מפורשת מול סתומה",
+      "body_en_md": "**Explicit:** $y = f(x)$ — $y$ is isolated (e.g. $y = x^2 + 1$).\n\n**Implicit:** $F(x, y) = 0$ — relationship not solved for $y$ (e.g. $x^2 + y^2 = r^2$).\n\nCircles, ellipses, and many curves are easier **implicitly**. The idea: differentiate **both sides** with respect to $x$, treating $y$ as a function of $x$.",
+      "body_he_md": "**מפורשת:** $y = f(x)$.\n\n**סתומה:** $F(x, y) = 0$ — הקשר לא פתור ל-$y$ (למשל $x^2 + y^2 = r^2$).\n\nמעגלים, אליפסות ועקומות רבות קלים יותר **בצורה סתומה**. הרעיון: גזרו **שני אגפים** ב-$x$, מתייחסים ל-$y$ כפונקציה של $x$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "The chain rule for $\\frac{d}{dx}[g(y)]$",
+      "title_he": "כלל השרשרת ל-$\\frac{d}{dx}[g(y)]$",
+      "body_en_md": "Since $y = y(x)$, by the chain rule:\n\n$$\\frac{d}{dx}[y^2] = 2y \\cdot \\frac{dy}{dx}, \\quad \\frac{d}{dx}[\\sin y] = \\cos y \\cdot \\frac{dy}{dx}.$$\n\n**General pattern:** $\\frac{d}{dx}[f(y)] = f'(y) \\cdot y'$.\n\nWrite $y' = \\frac{dy}{dx}$ for brevity. This is the **key step** in every implicit differentiation problem.",
+      "body_he_md": "מכיוון ש-$y = y(x)$, לפי כלל השרשרת:\n\n$$\\frac{d}{dx}[y^2] = 2y \\cdot y', \\quad \\frac{d}{dx}[\\sin y] = \\cos y \\cdot y'.$$\n\n**כלל כללי:** $\\frac{d}{dx}[f(y)] = f'(y) \\cdot y'$.\n\nזה **השלב המפתח** בכל בעיית גזירה סתומה."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "Worked example: circle",
+      "title_he": "דוגמה פתורה: מעגל",
+      "body_en_md": "$x^2 + y^2 = 25$. Differentiate:\n\n$$2x + 2y \\cdot y' = 0 \\Rightarrow y' = -\\frac{x}{y}.$$\n\n**Tangent at $(3, 4)$:** slope $= -\\frac{3}{4}$.\n\n$$y - 4 = -\\frac{3}{4}(x - 3).$$\n\n**Geometric check:** radius from origin to $(3,4)$ has slope $\\frac{4}{3}$; tangent slope $-\\frac{3}{4}$ — **perpendicular** ✓.",
+      "body_he_md": "$x^2 + y^2 = 25$. גזירה:\n\n$$2x + 2y \\cdot y' = 0 \\Rightarrow y' = -\\frac{x}{y}.$$\n\n**משיק ב-$(3, 4)$:** שיפוע $= -\\frac{3}{4}$.\n\n$$y - 4 = -\\frac{3}{4}(x - 3).$$\n\n**בדיקה גאומטרית:** רדיוס ⟂ משיק ✓."
+    },
+    {
+      "kind": "worked_example",
+      "title_en": "More worked examples",
+      "title_he": "דוגמאות נוספות",
+      "body_en_md": "**Folium of Descartes:** $x^3 + y^3 = 6xy$.\n\n$$3x^2 + 3y^2 y' = 6y + 6xy' \\Rightarrow y' = \\frac{2y - x^2}{y^2 - 2x}.$$\n\n**Ellipse** $\\frac{x^2}{9} + \\frac{y^2}{4} = 1$ at $\\left(\\frac{3}{\\sqrt{2}}, \\sqrt{2}\\right)$:\n\nImplicit diff: $\\frac{2x}{9} + \\frac{2y}{4}y' = 0$ → $y' = -\\frac{4x}{9y}$.\n\nAt the point: $y' = -\\frac{4 \\cdot 3/\\sqrt{2}}{9\\sqrt{2}} = -\\frac{2}{3}$.",
+      "body_he_md": "**עליון של דקארט:** $x^3 + y^3 = 6xy$ → $y' = \\frac{2y - x^2}{y^2 - 2x}$.\n\n**אליפסה** $\\frac{x^2}{9} + \\frac{y^2}{4} = 1$ ב-$\\left(\\frac{3}{\\sqrt{2}}, \\sqrt{2}\\right)$:\n\n$y' = -\\frac{4x}{9y} = -\\frac{2}{3}$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Related rates",
+      "title_he": "קצבי שינוי קשורים",
+      "body_en_md": "When variables depend on time $t$, differentiate with respect to $t$:\n\n**Ladder problem:** 10 m ladder, foot slides away at 2 m/s. How fast does the top slide down when foot is 6 m from wall?\n\n$x^2 + y^2 = 100$. Differentiate w.r.t. $t$:\n\n$$2x\\dot{x} + 2y\\dot{y} = 0 \\Rightarrow \\dot{y} = -\\frac{x}{y}\\dot{x}.$$\n\nAt $x = 6$: $y = 8$, $\\dot{x} = 2$ → $\\dot{y} = -\\frac{6}{8}(2) = -1.5$ m/s (top slides **down** at 1.5 m/s).",
+      "body_he_md": "כשמשתנים תלויים בזמן $t$, גזרו ב-$t$:\n\n**בעיית הסולם:** סולם 10 מ', בסיס זז 2 מ'/ש'. כמה מהר הראש יורד כשהבסיס 6 מ' מהקיר?\n\n$x^2 + y^2 = 100$ → $2x\\dot{x} + 2y\\dot{y} = 0$.\n\nב-$x = 6$, $y = 8$, $\\dot{x} = 2$ → $\\dot{y} = -1.5$ מ'/ש'."
+    }
+  ],
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "If $x^2 + y^2 = 16$, what is $\\frac{dy}{dx}$?",
+      "stem_he": "אם $x^2 + y^2 = 16$, מה $\\frac{dy}{dx}$?",
+      "options_en": [
+        "$-\\frac{x}{y}$",
+        "$\\frac{x}{y}$",
+        "$-\\frac{y}{x}$",
+        "$2x + 2y$"
+      ],
+      "options_he": [
+        "$-\\frac{x}{y}$",
+        "$\\frac{x}{y}$",
+        "$-\\frac{y}{x}$",
+        "$2x + 2y$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$2x + 2yy' = 0$ → $y' = -x/y$.",
+      "explanation_he": "$2x + 2yy' = 0$ → $y' = -x/y$."
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Slope of tangent to $x^2 + y^2 = 25$ at $(3, 4)$:",
+      "stem_he": "שיפוע משיק ל-$x^2 + y^2 = 25$ ב-$(3, 4)$:",
+      "options_en": [
+        "$\\frac{3}{4}$",
+        "$-\\frac{3}{4}$",
+        "$-\\frac{4}{3}$",
+        "$\\frac{4}{3}$"
+      ],
+      "options_he": [
+        "$\\frac{3}{4}$",
+        "$-\\frac{3}{4}$",
+        "$-\\frac{4}{3}$",
+        "$\\frac{4}{3}$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "$y' = -x/y = -3/4$.",
+      "explanation_he": "$y' = -3/4$."
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "For $x^3 + y^3 = 3xy$, find $y'$:",
+      "stem_he": "ל-$x^3 + y^3 = 3xy$, מצאו $y'$:",
+      "options_en": [
+        "$\\frac{y - x^2}{y^2 - x}$",
+        "$\\frac{y - x^2}{y^2 - 2x}$",
+        "$\\frac{x^2 - y}{y^2 - x}$",
+        "$\\frac{2y - x^2}{y^2 - 2x}$"
+      ],
+      "options_he": [
+        "$\\frac{y - x^2}{y^2 - x}$",
+        "$\\frac{y - x^2}{y^2 - 2x}$",
+        "$\\frac{x^2 - y}{y^2 - x}$",
+        "$\\frac{2y - x^2}{y^2 - 2x}$"
+      ],
+      "correct_index": 3,
+      "explanation_en": "Collect $y'$ terms: $y'(3y^2 - 6x) = 6y - 3x^2$.",
+      "explanation_he": "איסוף $y'$: $y'(3y^2 - 6x) = 6y - 3x^2$."
+    },
+    {
+      "ord": 4,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Tangent to $x^2 + y^2 = 25$ at $(3,4)$ has equation:",
+      "stem_he": "משיק ל-$x^2 + y^2 = 25$ ב-$(3,4)$:",
+      "options_en": [
+        "$y = -\\frac{3}{4}x + \\frac{25}{4}$",
+        "$3x + 4y = 25$",
+        "$y = \\frac{3}{4}x + \\frac{7}{4}$",
+        "$4x + 3y = 25$"
+      ],
+      "options_he": [
+        "$y = -\\frac{3}{4}x + \\frac{25}{4}$",
+        "$3x + 4y = 25$",
+        "$y = \\frac{3}{4}x + \\frac{7}{4}$",
+        "$4x + 3y = 25$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$y - 4 = -\\frac{3}{4}(x-3)$ → $y = -\\frac{3}{4}x + \\frac{25}{4}$.",
+      "explanation_he": "$y - 4 = -\\frac{3}{4}(x-3)$."
+    },
+    {
+      "ord": 5,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "stem_en": "Ladder 10 m, foot moves 2 m/s, foot 6 m from wall. Top speed?",
+      "stem_he": "סולם 10 מ', בסיס 2 מ'/ש', 6 מ' מהקיר. מהירות הראש?",
+      "options_en": [
+        "$1.5$ m/s downward",
+        "$2$ m/s downward",
+        "$1.5$ m/s upward",
+        "$0.75$ m/s downward"
+      ],
+      "options_he": [
+        "$1.5$ מ'/ש' למטה",
+        "$2$ מ'/ש' למטה",
+        "$1.5$ מ'/ש' למעלה",
+        "$0.75$ מ'/ש' למטה"
+      ],
+      "correct_index": 0,
+      "explanation_en": "$\\dot{y} = -(x/y)\\dot{x} = -(6/8)(2) = -1.5$ m/s.",
+      "explanation_he": "$\\dot{y} = -1.5$ מ'/ש'."
+    }
+  ],
+  "agent_hints": "Students forget the y' factor when differentiating g(y). Always collect y' terms on one side. For tangents, verify perpendicularity to radius on circles. Related rates: draw diagram, label rates, differentiate w.r.t. t, then substitute. Prerequisite: lesson:derivatives_intro chain rule."
 }
