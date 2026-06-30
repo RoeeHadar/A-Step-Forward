@@ -1,667 +1,224 @@
 {
   "concept_id": "probability_basic",
-  "subject": "math",
-  "level": "high_school",
-  "math_track": [
-    "3pt",
-    "4pt",
-    "5pt"
-  ],
-  "title_en": "Basic Probability — Sample Spaces and Events",
-  "title_he": "הסתברות בסיסית — מרחבי מדגם ומאורעות",
-  "summary_en": "Probability quantifies uncertainty. Count favorable outcomes in a sample space, use the complement rule, and combine simple events with the addition and multiplication principles.",
-  "summary_he": "הסתברות מכמתת אי-ודאות. סופרים תוצאות נוחות במרחב מדגם, משתמשים בכלל המשלים, ומשלבים מאורעות פשוטים בעזרת כללי החיבור ועקרון הכפל.",
-  "est_minutes": 16,
+  "subject": "statistics",
+  "level": "university",
+  "math_track": ["stats"],
+  "title_en": "Probability Fundamentals — Sample Spaces, Events & Bayes' Theorem",
+  "title_he": "יסודות ההסתברות — מרחבי מדגם, מאורעות ומשפט בייס",
+  "summary_en": "Kolmogorov's axioms, conditional probability, independence, the law of total probability, and Bayes' theorem with the medical-test application.",
+  "summary_he": "אקסיומות קולמוגורוב, הסתברות מותנית, אי-תלות, חוק ההסתברות הכוללת ומשפט בייס עם יישום בדיקה רפואית.",
+  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Sample space and events",
-      "title_he": "מרחב מדגם ומאורעות",
-      "body_en_md": "An **experiment** has uncertain outcomes. The set of ALL possible outcomes is the **sample space** $\\Omega$.\n\n**Examples:**\n- Flip a coin: $\\Omega = \\{H, T\\}$.\n- Roll a 6-sided die: $\\Omega = \\{1, 2, 3, 4, 5, 6\\}$.\n- Two dice: $\\Omega = \\{(i, j) : i, j \\in 1..6\\}$, $|\\Omega| = 36$.\n\nAn **event** $A$ is a subset of $\\Omega$. Example: 'sum of two dice = 7' is the event $\\{(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\\}$.\n\n**Probability** $P(A)$ is a number in $[0, 1]$:\n- $P(\\emptyset) = 0$ (impossible event).\n- $P(\\Omega) = 1$ (sure event).\n- For **equally likely outcomes**: $P(A) = \\dfrac{|A|}{|\\Omega|}$.\n\nExample: $P(\\text{sum} = 7) = 6/36 = 1/6$.",
-      "body_he_md": "ל**ניסוי** תוצאות לא-ודאיות. אוסף **כל** התוצאות האפשריות הוא **מרחב המדגם** $\\Omega$.\n\n**דוגמאות:**\n- הטלת מטבע: $\\Omega = \\{H, T\\}$.\n- הטלת קובייה: $\\Omega = \\{1, \\ldots, 6\\}$.\n- שתי קוביות: $|\\Omega| = 36$.\n\n**מאורע** $A$ הוא תת-קבוצה של $\\Omega$.\n\n**הסתברות** $P(A) \\in [0, 1]$:\n- $P(\\emptyset) = 0$, $P(\\Omega) = 1$.\n- לתוצאות **שוות-הסתברות**: $P(A) = \\dfrac{|A|}{|\\Omega|}$.\n\nדוגמה: $P(\\text{סכום} = 7) = 6/36 = 1/6$.",
-      "body_by_level": {
-        "3pt": {
-          "body_en_md": "An **experiment** has uncertain outcomes. The **sample space** $\\Omega$ lists every possible outcome.\n\n**Examples:**\n- Flip a fair coin: $\\Omega = \\{H, T\\}$, so $P(H) = 1/2$.\n- Roll a fair die: $\\Omega = \\{1,2,3,4,5,6\\}$, so $P(\\text{even}) = 3/6 = 1/2$.\n- Draw one card from a standard deck: $|\\Omega| = 52$.\n\nAn **event** $A$ is a subset of $\\Omega$.\n\n**Classical probability** (equally likely outcomes):\n\n$$P(A) = \\frac{\\text{favorable outcomes}}{\\text{total outcomes}} = \\frac{|A|}{|\\Omega|}$$\n\n**Complement:** $P(A') = 1 - P(A)$.\n\nYou can also count outcomes with **two-way tables** and the **multiplication principle** when an experiment has several stages.",
-          "body_he_md": "ל**ניסוי** תוצאות לא-ודאיות. **מרחב המדגם** $\\Omega$ הוא כל התוצאות האפשריות.\n\n**דוגמאות:**\n- הטלת מטבע הוגן: $\\Omega = \\{H, T\\}$, לכן $P(H) = 1/2$.\n- הטלת קובייה הוגנת: $\\Omega = \\{1,\\ldots,6\\}$, לכן $P(\\text{זוגי}) = 3/6 = 1/2$.\n- שליפת קלף אחד מחפיסה: $|\\Omega| = 52$.\n\n**מאורע** $A$ — תת-קבוצה של $\\Omega$.\n\n**הסתברות קלאסית** (תוצאות שוות-הסתברות):\n\n$$P(A) = \\frac{|A|}{|\\Omega|}$$\n\n**משלים:** $P(A') = 1 - P(A)$.\n\nאפשר גם לספור תוצאות בעזרת **טבלאות דו-כיווניות** ו**עקרון הכפל** כשיש כמה שלבים בניסוי."
-        },
-        "4pt": {
-          "body_en_md": "In probability theory, a sample space is the set of all possible outcomes of an experiment. An event is a subset of the sample space. Conditional probability is the probability of an event occurring given that another event has occurred. Bayes' theorem relates the conditional probability of an event to the prior probability and the likelihood of the event.\n\nTo calculate conditional probability, we use the formula: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$. This can be used to update the probability of an event based on new information.\n\nFor example, consider a bag containing 3 red balls and 2 blue balls. We draw a ball at random and then draw another ball without replacement. What is the probability that the second ball is blue given that the first ball was blue?\n\n$$\\text{Let } A = \\text{second ball is blue} \\text{ and } B = \\text{first ball is blue}.$$\n$$P(B) = \\frac{2}{5}$$\n$$P(A \\cap B) = \\frac{1}{5}$$\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{\\frac{1}{5}}{\\frac{2}{5}} = \\frac{1}{2}$$",
-          "body_he_md": "בתורת ההסתברות, מרחב המדגם הוא קבוצת כל התוצאות האפשריות של ניסוי. מאורע הוא תת-קבוצה של מרחב המדגם. ההסתברות המותנית היא ההסתברות של מאורע להתרחש בהינתן שמאורע אחר כבר התרחש. משפט בייס מקשר בין ההסתברות המותנית של מאורע לבין ההסתברות המוקדמת וסבירות המאורע.\n\nלחישוב הסתברות מותנית משתמשים בנוסחה: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$. ניתן להשתמש בנוסחה זו לעדכון ההסתברות של מאורע לאור מידע חדש.\n\nלדוגמה, שקית מכילה 3 כדורים אדומים ו-2 כחולים. שולפים כדור ואחר-כך כדור נוסף ללא החזרה. מה ההסתברות שהכדור השני כחול, בהינתן שהראשון היה כחול?\n\n$$\\text{נגדיר } A = \\text{הכדור השני כחול},\\quad B = \\text{הכדור הראשון כחול}.$$\n$$P(B) = \\frac{2}{5}$$\n$$P(A \\cap B) = \\frac{1}{5}$$\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{\\frac{1}{5}}{\\frac{2}{5}} = \\frac{1}{2}$$"
-        },
-        "5pt": {
-          "body_en_md": "In probability theory, a sample space is the set of all possible outcomes of an experiment. An event is a subset of the sample space, representing a set of outcomes that satisfy certain conditions. The probability of an event is defined as the number of outcomes in the event divided by the total number of outcomes in the sample space.\n\n$$P(A) = \\frac{n(A)}{n(S)}$$\n\nwhere $P(A)$ is the probability of event $A$, $n(A)$ is the number of outcomes in event $A$, and $n(S)$ is the total number of outcomes in the sample space.\n\nTo determine if two events are independent, we use the formula:\n\n$$P(A \\cap B) = P(A)P(B)$$\n\nwhere $P(A \\cap B)$ is the probability of both events $A$ and $B$ occurring.",
-          "body_he_md": "בתורת ההסתברות, מרחב המדגם הוא קבוצת כל התוצאות האפשריות של ניסוי. מאורע הוא תת-קבוצה של מרחב המדגם, המייצגת תוצאות המקיימות תנאים מסוימים. ההסתברות של מאורע מוגדרת כמספר התוצאות הנוחות חלקי מספר כל התוצאות האפשריות:\n\n$$P(A) = \\frac{n(A)}{n(S)}$$\n\nכאשר $P(A)$ היא ההסתברות של המאורע $A$, $n(A)$ הוא מספר התוצאות הנוחות, ו-$n(S)$ הוא סך כל התוצאות במרחב המדגם.\n\nכדי לקבוע אם שני מאורעות **בלתי-תלויים**, משתמשים בנוסחה:\n\n$$P(A \\cap B) = P(A) \\cdot P(B)$$\n\nכאשר $P(A \\cap B)$ הוא ההסתברות שגם $A$ וגם $B$ יתרחשו."
-        }
-      }
+      "title_en": "Quantifying Uncertainty",
+      "title_he": "כימות אי-ודאות",
+      "body_en_md": "Probability is the mathematical language for uncertainty. Every engineering decision, statistical test, and machine-learning model is grounded in probability theory. The axiomatic foundation laid by Kolmogorov in 1933 ensures that probability computations are internally consistent.\n\nThis lesson builds the foundations: sample spaces and events, the axioms, conditional probability and independence, and Bayes' theorem — which allows us to update beliefs in light of new evidence.\n\n**Connection to previous material:** This lesson is the foundation for all of statistics. No linear algebra prerequisite is needed; the main tools are set theory and algebra.",
+      "body_he_md": "הסתברות היא השפה המתמטית לאי-ודאות. כל החלטת הנדסה, מבחן סטטיסטי ומודל למידת מכונה מושתתים על תורת ההסתברות. היסוד האקסיומטי שהניח קולמוגורוב ב-1933 מבטיח שחישובי הסתברות עקביים פנימית.\n\nשיעור זה בונה את היסודות: מרחבי מדגם ומאורעות, האקסיומות, הסתברות מותנית ואי-תלות, ומשפט בייס — המאפשר לנו לעדכן אמונות לאור ראיות חדשות.\n\n**קשר לחומר קודם:** שיעור זה הוא הבסיס לכל הסטטיסטיקה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Sample Space, Events, and Probability Axioms",
+      "title_he": "מרחב מדגם, מאורעות ואקסיומות הסתברות",
+      "body_en_md": "**Definition (Sample space).** The **sample space** $\\Omega$ is the set of all possible outcomes of a random experiment. An **event** is any subset $A\\subseteq\\Omega$.\n\n**Kolmogorov's axioms.** A **probability measure** $P$ assigns a real number to each event satisfying:\n1. $P(A)\\geq0$ for every event $A$.\n2. $P(\\Omega)=1$.\n3. **Countable additivity:** if $A_1,A_2,\\ldots$ are mutually exclusive ($A_i\\cap A_j=\\emptyset$), then $P(\\bigcup_i A_i)=\\sum_i P(A_i)$.\n\n**Derived rules:**\n- $P(\\emptyset)=0$.\n- $P(A^c)=1-P(A)$.\n- $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$ (inclusion-exclusion).\n- $P(A)\\leq1$.\n\n**Conditional probability:** For $P(B)>0$:\n$$P(A|B) = \\frac{P(A\\cap B)}{P(B)}.$$\n\n**Independence:** $A$ and $B$ are **independent** iff $P(A\\cap B)=P(A)P(B)$ (equivalently, $P(A|B)=P(A)$ when $P(B)>0$).\n\n**Law of total probability:** If $B_1,\\ldots,B_n$ partition $\\Omega$:\n$$P(A)=\\sum_{i=1}^n P(A|B_i)P(B_i).$$\n\n**Bayes' theorem:**\n$$P(B_i|A) = \\frac{P(A|B_i)P(B_i)}{\\sum_j P(A|B_j)P(B_j)}.$$",
+      "body_he_md": "**הגדרה (מרחב מדגם).** **מרחב המדגם** $\\Omega$ הוא קבוצת כל התוצאות האפשריות. **מאורע** הוא כל תת-קבוצה $A\\subseteq\\Omega$.\n\n**אקסיומות קולמוגורוב.** **מידת הסתברות** $P$ מקיימת:\n1. $P(A)\\geq0$.\n2. $P(\\Omega)=1$.\n3. **אדיטיביות:** לאוסף מאורעות זרים $P(\\bigcup_i A_i)=\\sum_i P(A_i)$.\n\n**חוקים נגזרים:**\n- $P(A^c)=1-P(A)$.\n- $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.\n\n**הסתברות מותנית:** $P(A|B) = \\frac{P(A\\cap B)}{P(B)}$ ($P(B)>0$).\n\n**אי-תלות:** $P(A\\cap B)=P(A)P(B)$.\n\n**חוק ההסתברות הכוללת:** $P(A)=\\sum_i P(A|B_i)P(B_i)$.\n\n**משפט בייס:** $P(B_i|A) = \\frac{P(A|B_i)P(B_i)}{\\sum_j P(A|B_j)P(B_j)}$."
     },
     {
       "kind": "theory",
-      "title_en": "Rules of probability",
-      "title_he": "חוקי הסתברות",
-      "body_en_md": "### Complement\n\n$$P(A') = 1 - P(A)$$\n\nExample: $P(\\text{not rolling a 6}) = 1 - 1/6 = 5/6$.\n\n### Addition rule (mutually exclusive events)\n\nIf $A$ and $B$ cannot happen together ($A \\cap B = \\emptyset$):\n\n$$P(A \\cup B) = P(A) + P(B)$$\n\nExample: one die — $A$ = roll 1 or 2, $B$ = roll 5. $P(A \\cup B) = 2/6 + 1/6 = 1/2$.\n\nFor overlapping events, use inclusion–exclusion: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n\n### Multiplication principle\n\nIf stage 1 has $m$ outcomes and stage 2 has $n$ outcomes, the combined experiment has $m \\cdot n$ equally likely outcomes (when order matters and stages are independent counts).\n\nExample: flip a coin **and** roll a die → $2 \\cdot 6 = 12$ outcomes.\n\n### Two-way tables\n\nOrganize counts in rows and columns, then read off favorable outcomes for an event.",
-      "body_he_md": "### משלים\n\n$$P(A') = 1 - P(A)$$\n\nדוגמה: $P(\\text{לא יצא 6}) = 1 - 1/6 = 5/6$.\n\n### כלל החיבור (מאורעות זרים)\n\nאם $A \\cap B = \\emptyset$:\n\n$$P(A \\cup B) = P(A) + P(B)$$\n\nדוגמה: קובייה — $A$ = יצא 1 או 2, $B$ = יצא 5. $P(A \\cup B) = 2/6 + 1/6 = 1/2$.\n\nלמאורעות חופפים: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n\n### עקרון הכפל\n\nבשלב ראשון $m$ אפשרויות ובשני $n$ — יש $m \\cdot n$ תוצאות.\n\nדוגמה: מטבע **וגם** קובייה → $2 \\cdot 6 = 12$ תוצאות.\n\n### טבלאות דו-כיווניות\n\nמארגנים ספירות בשורות ועמודות, ואז קוראים את מספר התוצאות הנוחות למאורע.",
-      "body_by_level": {
-        "3pt": {
-          "body_en_md": "### Complement\n\n$$P(A') = 1 - P(A)$$\n\nExample: $P(\\text{not rolling a 6}) = 1 - 1/6 = 5/6$.\n\n### Addition rule (mutually exclusive events)\n\nIf $A$ and $B$ cannot happen together ($A \\cap B = \\emptyset$):\n\n$$P(A \\cup B) = P(A) + P(B)$$\n\nExample: one die — $A$ = roll 1 or 2, $B$ = roll 5. $P(A \\cup B) = 2/6 + 1/6 = 1/2$.\n\n### Multiplication principle\n\nIf stage 1 has $m$ outcomes and stage 2 has $n$ outcomes, the combined experiment has $m \\cdot n$ equally likely outcomes (when order matters and stages are independent counts).\n\nExample: flip a coin **and** roll a die → $2 \\cdot 6 = 12$ outcomes.\n\n### Two-way tables\n\nOrganize counts in rows and columns, then read off favorable outcomes for an event.",
-          "body_he_md": "### משלים\n\n$$P(A') = 1 - P(A)$$\n\nדוגמה: $P(\\text{לא יצא 6}) = 1 - 1/6 = 5/6$.\n\n### כלל החיבור (מאורעות זרים)\n\nאם $A \\cap B = \\emptyset$:\n\n$$P(A \\cup B) = P(A) + P(B)$$\n\nדוגמה: קובייה — $A$ = יצא 1 או 2, $B$ = יצא 5. $P(A \\cup B) = 2/6 + 1/6 = 1/2$.\n\n### עקרון הכפל\n\nבשלב ראשון $m$ אפשרויות ובשני $n$ — יש $m \\cdot n$ תוצאות.\n\nדוגמה: מטבע **וגם** קובייה → $2 \\cdot 6 = 12$ תוצאות.\n\n### טבלאות דו-כיווניות\n\nמארגנים ספירות בשורות ועמודות, ואז קוראים את מספר התוצאות הנוחות למאורע."
-        },
-        "4pt": {
-          "body_en_md": "**Rules of Probability**\n\nConditional probability is a measure of the likelihood of an event occurring given that another event has occurred. It is calculated using the formula: $$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$.\n\nBayes' theorem is a formula for updating the probability of a hypothesis as more evidence or information becomes available. It is expressed as: $$P(H|E) = \\frac{P(E|H) \\cdot P(H)}{P(E)}$$.\n\nThe binomial distribution is a discrete probability distribution that models the number of successes in a fixed number of independent trials, where each trial has a constant probability of success. It is given by the formula: $$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$.\n\n**Worked Example:**\n\nA medical test for a disease has a 99% accuracy rate. If a person tests positive, what is the probability that they actually have the disease?\n\nLet $D$ be the event that the person has the disease, and $T$ be the event that the person tests positive. We are given that $P(T|D) = 0.99$ and $P(D) = 0.01$. We want to find $P(D|T)$.\n\nUsing Bayes' theorem, we have: $$P(D|T) = \\frac{P(T|D) \\cdot P(D)}{P(T)}$$.\n\nSince the test is accurate, we can assume that $P(T) = P(T|D) \\cdot P(D) + P(T|\\overline{D}) \\cdot P(\\overline{D})$, where $\\overline{D}$ is the event that the person does not have the disease.\n\nWe are given that $P(T|\\overline{D}) = 0.01$, since the test has a 1% false positive rate. Therefore, we have: $$P(T) = 0.99 \\cdot 0.01 + 0.01 \\cdot 0.99 = 0.0198$$.\n\nSubstituting the values into Bayes' theorem, we get: $$P(D|T) = \\frac{0.99 \\cdot 0.01}{0.0198} = 0.5$$.\n\nTherefore, the probability that a person actually",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "In probability theory, the rules of probability are fundamental principles that govern the behavior of events in a sample space. The three main rules of probability are:\n1. The probability of an event $A$ is non-negative, $P(A) \\geq 0$.\n2. The probability of the sample space is 1, $P(S) = 1$.\n3. The probability of the complement of an event $A$ is 1 minus the probability of $A$, $P(A^c) = 1 - P(A)$.\n\nThese rules ensure that probabilities are well-defined and consistent.\n\nWorked example: A fair six-sided die is rolled. What is the probability that the result is an even number?\n\nLet $A$ be the event that the result is an even number. Then $A = \\{2, 4, 6\\}$. The sample space is $S = \\{1, 2, 3, 4, 5, 6\\}$. We have $P(A) = \\frac{3}{6} = \\frac{1}{2}$.",
-          "body_he_md": "בתורת ההסתברות, חוקי ההסתברות הם עקרונות יסוד הקובעים את התנהגות המאורעות במרחב המדגם. שלושת חוקי ההסתברות העיקריים הם:\n\n1. ההסתברות של כל מאורע $A$ היא אי-שלילית: $P(A) \\geq 0$.\n2. ההסתברות של מרחב המדגם כולו שווה ל-1: $P(S) = 1$.\n3. ההסתברות של המשלים של $A$ שווה: $P(A^c) = 1 - P(A)$.\n\nחוקים אלה מבטיחים שהסתברויות מוגדרות היטב ועקביות פנימית.\n\n**דוגמה פתורה:** קובייה הוגנת מוטלת פעם אחת. מה ההסתברות לתוצאה זוגית?\n\nנגדיר $A$ = \"יצא מספר זוגי\". אז $A = \\{2, 4, 6\\}$ ומרחב המדגם $S = \\{1, 2, 3, 4, 5, 6\\}$.\n\n$$P(A) = \\frac{3}{6} = \\frac{1}{2}.$$"
-        }
-      }
-    },
-    {
-      "kind": "theory",
-      "level_min": "4pt",
-      "title_en": "Conditional probability, independence, and Bayes' theorem",
-      "title_he": "הסתברות מותנית, אי-תלות ומשפט בייס",
-      "body_en_md": "### Conditional probability\n\nThe probability of $A$ **given** that $B$ occurred:\n\n$$P(A | B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0.$$\n\nInterpretation: we restrict the sample space to $B$.\n\n### Independence\n\n$A$ and $B$ are **independent** if knowing one doesn't change the probability of the other:\n\n$$P(A \\cap B) = P(A) \\cdot P(B).$$\n\nEquivalently: $P(A|B) = P(A)$ (when $P(B) > 0$).\n\n**Important:** independent ≠ mutually exclusive. Disjoint non-empty events are NOT independent.\n\n### Bayes' formula\n\nReverses conditioning:\n\n$$P(A | B) = \\frac{P(B | A) \\cdot P(A)}{P(B)}.$$\n\nUseful when $P(B|A)$ is easy but $P(A|B)$ is what we want.\n\n### Law of total probability\n\nIf $B_1, B_2, \\ldots, B_n$ partition $\\Omega$:\n\n$$P(A) = \\sum_{i} P(A | B_i) P(B_i).$$",
-      "body_he_md": "### הסתברות מותנית\n\nההסתברות ש-$A$ יקרה **בהינתן** ש-$B$ כבר קרה:\n\n$$P(A | B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0.$$\n\n**פירוש:** מצמצמים את מרחב המדגם ל-$B$ — סופרים רק תוצאות שבהן $B$ התרחש.\n\n### אי-תלות\n\n$A$ ו-$B$ **בלתי-תלויים** אם ידיעה על אחד מהם לא משנה את ההסתברות של השני:\n\n$$P(A \\cap B) = P(A) \\cdot P(B).$$\n\nשווי ערך: $P(A|B) = P(A)$ (כאשר $P(B) > 0$).\n\n**חשוב:** בלתי-תלויים ≠ זרים. מאורעות זרים (עם הסתברות חיובית) **אינם** בלתי-תלויים.\n\n### נוסחת בייס\n\n**מהפכת** את כיוון התנאי:\n\n$$P(A | B) = \\frac{P(B | A) \\cdot P(A)}{P(B)}.$$\n\nשימושי כש-$P(B|A)$ קל לחישוב, אבל $P(A|B)$ הוא מה שאנחנו צריכים.\n\n### חוק ההסתברות הכוללת\n\nאם $B_1, B_2, \\ldots, B_n$ **חלוקה** של $\\Omega$:\n\n$$P(A) = \\sum_{i} P(A | B_i) P(B_i).$$"
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1 (Complement).** $P(A^c)=1-P(A)$.\n*Proof:* $A$ and $A^c$ are disjoint with $A\\cup A^c=\\Omega$. By axioms: $P(A)+P(A^c)=1$.\n\n**Theorem 2 (Inclusion-exclusion).** $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.\n*Proof:* Write $A\\cup B = A\\cup(B\\setminus A)$ (disjoint). Apply additivity.\n\n**Theorem 3.** Independent $\\neq$ mutually exclusive (when $P(A),P(B)>0$). In fact: if $A\\cap B=\\emptyset$, then $P(A\\cap B)=0\\neq P(A)P(B)>0$.\n\n**Theorem 4 (Bayes).** Proof: Apply definition of conditional probability to both $P(B_i|A)$ and $P(A|B_i)$:\n$$P(B_i|A)=\\frac{P(A\\cap B_i)}{P(A)}=\\frac{P(A|B_i)P(B_i)}{P(A)}.$$\nUse law of total probability for $P(A)$.\n\n**Bayes intuition:** We have a **prior** $P(B_i)$ (before seeing evidence) and update to a **posterior** $P(B_i|A)$ after observing event $A$.",
+      "body_he_md": "**משפט 1 (משלים).** $P(A^c)=1-P(A)$.\n*הוכחה:* $A\\cup A^c=\\Omega$, זרים. $P(A)+P(A^c)=1$.\n\n**משפט 2 (הכלה-הדרה).** $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.\n\n**משפט 3.** אי-תלות $\\neq$ זרות (כשהסתברויות חיוביות).\n\n**משפט 4 (בייס).** $P(B_i|A)=\\frac{P(A|B_i)P(B_i)}{P(A)}$ — מ-הגדרת ההסתברות המותנית וחוק ההסתברות הכוללת.\n\n**אינטואיציה:** Prior $P(B_i)$ מתעדכן ל-Posterior $P(B_i|A)$ לאחר ראיית $A$."
     },
     {
       "kind": "worked_example",
-      "level_min": "4pt",
-      "title_en": "Worked example: medical test (Bayes)",
-      "title_he": "דוגמה פתורה: בדיקה רפואית (בייס)",
-      "body_en_md": "A disease affects 1% of the population. A test has:\n- **Sensitivity** $P(+|D) = 0.99$ (99% true positive rate).\n- **Specificity** $P(-|D^c) = 0.95$ (95% true negative rate, so 5% false positive).\n\nA randomly selected person tests positive. What's the probability they have the disease?\n\n**Bayes:**\n\n$$P(D | +) = \\frac{P(+ | D) P(D)}{P(+)}.$$\n\n**Compute $P(+)$ via total probability:**\n\n$$P(+) = P(+|D)P(D) + P(+|D^c)P(D^c) = 0.99 \\cdot 0.01 + 0.05 \\cdot 0.99 = 0.0594.$$\n\n**Apply Bayes:**\n\n$$P(D | +) = \\frac{0.99 \\cdot 0.01}{0.0594} \\approx 0.167 = 16.7\\%.$$\n\n**Interpretation:** Even with a positive result, the probability of having the disease is only ~17% — because the disease is rare. This is the **base-rate fallacy**.",
-      "body_he_md": "מחלה משפיעה על 1% מהאוכלוסייה. לבדיקה:\n- **רגישות** $P(+|D) = 0.99$ (99% חיובי אמיתי).\n- **סגוליות** $P(-|D^c) = 0.95$ (95% שלילי אמיתי, כלומר 5% חיובי שגוי).\n\nאדם נבחר אקראית ומקבל תוצאה חיובית. מה ההסתברות שיש לו את המחלה?\n\n**בייס:**\n\n$$P(D | +) = \\frac{P(+ | D) P(D)}{P(+)}.$$\n\n**חישוב $P(+)$ דרך הסתברות כוללת:**\n\n$$P(+) = 0.99 \\cdot 0.01 + 0.05 \\cdot 0.99 = 0.0594.$$\n\n**הצבה:**\n\n$$P(D | +) = \\frac{0.99 \\cdot 0.01}{0.0594} \\approx 0.167.$$\n\n**פירוש:** גם עם תוצאה חיובית, ההסתברות שיש את המחלה היא רק ~17% — כי המחלה נדירה."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Drawing an Ace from a Deck",
+      "title_he": "דוגמה פתורה 1 — שליפת אס מחפיסה",
+      "body_en_md": "**A standard deck has 52 cards. One card is drawn uniformly at random. What is $P(\\text{ace})$?**\n\n$\\Omega = $ all 52 cards; $|\\Omega|=52$.\n\nEvent $A=\\{\\text{ace of spades, ace of hearts, ace of diamonds, ace of clubs}\\}$; $|A|=4$.\n\n$$P(A) = \\frac{|A|}{|\\Omega|} = \\frac{4}{52} = \\frac{1}{13} \\approx 0.077.$$\n\n**Complementary event:** $P(\\text{not an ace}) = 1 - 1/13 = 12/13$.\n\n**Two aces in two draws without replacement:**\n$$P(\\text{2 aces}) = \\frac{4}{52}\\cdot\\frac{3}{51} = \\frac{12}{2652} = \\frac{1}{221} \\approx 0.0045.$$",
+      "body_he_md": "**מחפיסה של 52 קלפים שולפים קלף אחד אקראי. מהי $P(\\text{אס})$?**\n\n$|\\Omega|=52$, $|A|=4$.\n\n$$P(A) = \\frac{4}{52} = \\frac{1}{13} \\approx 0.077.$$\n\n**שני אסים בשתי שליפות ללא החזרה:** $\\frac{4}{52}\\cdot\\frac{3}{51}=\\frac{1}{221}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A bag contains 3 red and 7 blue balls. One ball is drawn at random. Find $P(\\text{red})$ and $P(\\text{not red})$.",
+      "body_he": "שקית מכילה 3 כדורים אדומים ו-7 כחולים. מוציאים כדור אחד. מצא $P(\\text{אדום})$ ו-$P(\\text{לא אדום})$.",
+      "checkpoint_solution_en": "$P(\\text{red})=3/10=0.3$. $P(\\text{not red})=1-0.3=0.7$.",
+      "checkpoint_solution_he": "$P(\\text{אדום})=3/10=0.3$. $P(\\text{לא אדום})=0.7$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example",
-      "title_he": "דוגמה פתורה",
-      "body_en_md": "**Example 1 — Drawing from a bag:** A bag has 4 red and 6 blue balls. One ball is drawn at random.\n\n$$P(\\text{red}) = \\frac{4}{10} = 0.4, \\quad P(\\text{not red}) = 1 - 0.4 = 0.6$$\n\n**Example 2 — Two dice:** Roll two fair dice. What is $P(\\text{sum} = 7)$?\n\nFavorable pairs: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — six outcomes out of 36.\n\n$$P(\\text{sum} = 7) = \\frac{6}{36} = \\frac{1}{6}$$\n\n**Example 3 — At least one six:** Roll one die once. $P(\\text{not six}) = 5/6$, so $P(\\text{at least one six}) = 1 - 5/6 = 1/6$.",
-      "body_he_md": "**דוגמה 1 — שליפה מקופסה:** בקופסה 4 כדורים אדומים ו-6 כחולים. מוציאים כדור אחד.\n\n$$P(\\text{אדום}) = \\frac{4}{10} = 0.4, \\quad P(\\text{לא אדום}) = 1 - 0.4 = 0.6$$\n\n**דוגמה 2 — שתי קוביות:** שתי קוביות הוגנות. מה $P(\\text{סכום} = 7)$?\n\n6 תוצאות מתוך 36: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$.\n\n$$P(\\text{סכום} = 7) = \\frac{6}{36} = \\frac{1}{6}$$\n\n**דוגמה 3 — לפחות שיש:** קובייה אחת. $P(\\text{לא 6}) = 5/6$, לכן $P(\\text{לפחות 6}) = 1/6$.",
-      "body_by_level": {
-        "3pt": {
-          "body_en_md": "**Example 1 — Drawing from a bag:** A bag has 4 red and 6 blue balls. One ball is drawn at random.\n\n$$P(\\text{red}) = \\frac{4}{10} = 0.4, \\quad P(\\text{not red}) = 1 - 0.4 = 0.6$$\n\n**Example 2 — Two dice:** Roll two fair dice. What is $P(\\text{sum} = 7)$?\n\nFavorable pairs: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — six outcomes out of 36.\n\n$$P(\\text{sum} = 7) = \\frac{6}{36} = \\frac{1}{6}$$\n\n**Example 3 — At least one six:** Roll one die once. $P(\\text{not six}) = 5/6$, so $P(\\text{at least one six}) = 1 - 5/6 = 1/6$.",
-          "body_he_md": "**דוגמה 1 — שליפה מקופסה:** בקופסה 4 כדורים אדומים ו-6 כחולים. מוציאים כדור אחד.\n\n$$P(\\text{אדום}) = \\frac{4}{10} = 0.4, \\quad P(\\text{לא אדום}) = 1 - 0.4 = 0.6$$\n\n**דוגמה 2 — שתי קוביות:** שתי קוביות הוגנות. מה $P(\\text{סכום} = 7)$?\n\n6 תוצאות מתוך 36: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$.\n\n$$P(\\text{סכום} = 7) = \\frac{6}{36} = \\frac{1}{6}$$\n\n**דוגמה 3 — לפחות שיש:** קובייה אחת. $P(\\text{לא 6}) = 5/6$, לכן $P(\\text{לפחות 6}) = 1/6$."
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Computing Conditional Probability",
+      "title_he": "דוגמה פתורה 2 — חישוב הסתברות מותנית",
+      "body_en_md": "**Given:** $P(A\\cap B)=0.12$, $P(B)=0.4$. Compute $P(A|B)$.\n\n$$P(A|B) = \\frac{P(A\\cap B)}{P(B)} = \\frac{0.12}{0.4} = 0.3.$$\n\n**Follow-up.** If additionally $P(A)=0.3$, are $A$ and $B$ independent?\n\nCheck: $P(A)\\cdot P(B)=0.3\\times0.4=0.12=P(A\\cap B)$. ✓ **Yes, $A$ and $B$ are independent.**\n\n**Interpretation:** Knowing $B$ occurred does not change the probability of $A$.",
+      "body_he_md": "**נתון:** $P(A\\cap B)=0.12$, $P(B)=0.4$. חשב $P(A|B)$.\n\n$$P(A|B) = \\frac{0.12}{0.4} = 0.3.$$\n\n**המשך.** אם גם $P(A)=0.3$, האם $A$ ו-$B$ בלתי-תלויים?\n\n$P(A)P(B)=0.12=P(A\\cap B)$. ✓ **כן, בלתי-תלויים.**"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Given $P(A)=0.5$, $P(B)=0.6$, $P(A\\cap B)=0.3$. Find $P(A|B)$, $P(B|A)$, and $P(A\\cup B)$.",
+      "body_he": "נתון $P(A)=0.5$, $P(B)=0.6$, $P(A\\cap B)=0.3$. מצא $P(A|B)$, $P(B|A)$ ו-$P(A\\cup B)$.",
+      "checkpoint_solution_en": "$P(A|B)=0.3/0.6=0.5$. $P(B|A)=0.3/0.5=0.6$. $P(A\\cup B)=0.5+0.6-0.3=0.8$.",
+      "checkpoint_solution_he": "$P(A|B)=0.5$. $P(B|A)=0.6$. $P(A\\cup B)=0.8$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Medical Test (Bayes' Theorem)",
+      "title_he": "דוגמה פתורה 3 — בדיקה רפואית (משפט בייס)",
+      "body_en_md": "**A medical test for a rare disease:**\n- **Sensitivity:** $P(+|D)=0.99$ (99% true positive rate).\n- **Specificity:** $P(-|D^c)=0.95$ (95% true negative rate; 5% false positive).\n- **Prevalence:** $P(D)=0.01$ (1% of the population has the disease).\n\n**Question:** Given that a person tests **positive**, what is the probability they actually have the disease? That is, find $P(D|+)$.\n\n**Step 1 — Law of total probability** to find $P(+)$:\n$$P(+) = P(+|D)P(D)+P(+|D^c)P(D^c) = 0.99\\times0.01+0.05\\times0.99 = 0.0099+0.0495 = 0.0594.$$\n\n**Step 2 — Bayes' theorem:**\n$$P(D|+) = \\frac{P(+|D)P(D)}{P(+)} = \\frac{0.99\\times0.01}{0.0594} = \\frac{0.0099}{0.0594} \\approx 0.167.$$\n\n**Conclusion: Despite a positive test, the probability of having the disease is only $\\approx16.7\\%$.**\n\n**Why?** Because the disease is rare ($P(D)=1\\%$). False positives (5% of the healthy 99%) vastly outnumber true positives (99% of the sick 1%). This is the **base-rate fallacy** — ignoring the rarity of the event when interpreting test results.",
+      "body_he_md": "**בדיקה רפואית למחלה נדירה:**\n- רגישות: $P(+|D)=0.99$.\n- סגוליות: $P(-|D^c)=0.95$ (שקפות 5%).\n- שכיחות: $P(D)=0.01$.\n\n**שאלה:** $P(D|+)=?$\n\n**שלב 1 — $P(+)$ בחוק ההסתברות הכוללת:**\n$$P(+) = 0.99\\times0.01+0.05\\times0.99 = 0.0594.$$\n\n**שלב 2 — בייס:**\n$$P(D|+) = \\frac{0.0099}{0.0594} \\approx 0.167 = 16.7\\%.$$\n\n**מסקנה:** למרות בדיקה חיובית, ההסתברות למחלה רק ~17% — בגלל נדירות המחלה. זוהי **כשל שיעור הבסיס**."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Probability Toolkit",
+      "title_he": "מדריך שיטה — ארגז כלים להסתברות",
+      "body_en_md": "| Goal | Method |\n|---|---|\n| $P(A^c)$ | $1-P(A)$ |\n| $P(A\\cup B)$ | $P(A)+P(B)-P(A\\cap B)$ |\n| $P(A|B)$ | $P(A\\cap B)/P(B)$ |\n| Test independence | $P(A\\cap B)=P(A)P(B)$? |\n| $P(A)$ given conditional probabilities | Law of total probability |\n| $P(\\text{hypothesis}|\\text{evidence})$ | Bayes' theorem |\n| Equally likely outcomes | $P(A)=|A|/|\\Omega|$ |",
+      "body_he_md": "| מטרה | שיטה |\n|---|---|\n| $P(A^c)$ | $1-P(A)$ |\n| $P(A\\cup B)$ | $P(A)+P(B)-P(A\\cap B)$ |\n| $P(A|B)$ | $P(A\\cap B)/P(B)$ |\n| בדיקת אי-תלות | $P(A\\cap B)=P(A)P(B)$? |\n| $P(A)$ מהסתברויות מותנות | חוק ההסתברות הכוללת |\n| $P(\\text{היפותזה}|\\text{ראיה})$ | משפט בייס |\n| תוצאות שוות-הסתברות | $P(A)=|A|/|\\Omega|$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Roll a fair die. Find $P(\\text{even})$ and $P(\\text{greater than 4})$.",
+          "body_he": "הטל קובייה הוגנת. מצא $P(\\text{זוגי})$ ו-$P(\\text{גדול מ-4})$.",
+          "solution_en": "$P(\\text{even})=3/6=1/2$. $P(>4)=P(5\\text{ or }6)=2/6=1/3$.",
+          "solution_he": "$P(\\text{זוגי})=1/2$. $P(>4)=1/3$.",
+          "points": 6
         },
-        "4pt": {
-          "body_en_md": "In this section, we will explore the concept of conditional probability and its application in medical testing using Bayes' theorem. We will also introduce the binomial distribution as a tool for modeling the probability of success in a fixed number of independent trials.\n\nConditional probability is a measure of the likelihood of an event occurring given that another event has occurred. It is calculated using the formula: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$. Bayes' theorem is a mathematical formula that allows us to update the probability of a hypothesis based on new evidence.\n\nLet's consider a medical test that has a 99% sensitivity (true positive rate) and a 99% specificity (true negative rate). If a patient tests positive, what is the probability that they actually have the disease?\n\nAssume that 1% of the population has the disease. We can use Bayes' theorem to calculate the probability of having the disease given a positive test result.\n\nWorked example:\n\nA medical test has a 99% sensitivity and a 99% specificity. If a patient tests positive, what is the probability that they actually have the disease? Assume that 1% of the population has the disease.\n\n$$P(D|+)=\\frac{P(+|D)P(D)}{P(+|D)P(D)+P(+|\\overline{D})P(\\overline{D})}$$\n\n$$P(D|+)=\\frac{0.99 \\times 0.01}{0.99 \\times 0.01 + 0.01 \\times 0.99}$$\n\n$$P(D|+)=\\frac{0.0099}{0.0099 + 0.0099}$$\n\n$$P(D|+)=\\frac{0.0099}{0.0198}$$\n\n$$P(D|+)=0.5$$\n\nTherefore, the probability that a patient actually has the disease given a positive test result is 50%.",
-          "body_he_md": ""
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "If $P(A)=0.4$ and $P(B)=0.3$ with $A$ and $B$ mutually exclusive, find $P(A\\cup B)$.",
+          "body_he": "אם $P(A)=0.4$ ו-$P(B)=0.3$ ו-$A,B$ זרים, מצא $P(A\\cup B)$.",
+          "solution_en": "$P(A\\cup B)=0.4+0.3=0.7$ (mutually exclusive: $P(A\\cap B)=0$).",
+          "solution_he": "$P(A\\cup B)=0.7$.",
+          "points": 6
         },
-        "5pt": {
-          "body_en_md": "In this example, we'll apply Bayes' theorem to a medical test scenario. A test for a disease has a 98% accuracy rate for those who have the disease, and a 5% false positive rate for those who don't have the disease. We want to find the probability that a person has the disease given that they tested positive.\n\nLet $D$ be the event that a person has the disease, and $T$ be the event that they test positive. We're given that $P(D) = 0.01$, $P(T|D) = 0.98$, and $P(T|D') = 0.05$.\n\nUsing Bayes' theorem, we can calculate the desired probability as follows:\n$$\nP(D|T) = \\frac{P(T|D)P(D)}{P(T|D)P(D) + P(T|D')P(D')}.\n$$\n\nPlugging in the given values, we get:\n$$\nP(D|T) = \\frac{(0.98)(0.01)}{(0.98)(0.01) + (0.05)(0.99)} = \\frac{0.0098}{0.0098 + 0.0495} = \\frac{0.0098}{0.0593} \\approx 0.165.\n$$\n\nThis means that if a person tests positive for the disease, there's only a 16.5% chance that they actually have the disease.",
-          "body_he_md": "בדוגמה זו נאפליק את משפט בייס לתרחיש בדיקה רפואית. בדיקה למחלה מדויקת ב-98% לאלה שחולים ($P(T|D) = 0.98$), ויש לה שיעור חיוביות שגויה של 5% עבור הבריאים ($P(T|D') = 0.05$). נרצה למצוא את ההסתברות שאדם חולה, בהינתן שקיבל תוצאה חיובית.\n\nנגדיר: $D$ = \"האדם חולה\", $T$ = \"התוצאה חיובית\". נתון: $P(D) = 0.01$, $P(T|D) = 0.98$, $P(T|D') = 0.05$.\n\nלפי משפט בייס:\n$$P(D|T) = \\frac{P(T|D)\\cdot P(D)}{P(T|D)\\cdot P(D) + P(T|D')\\cdot P(D')}.$$\n\nנציב:\n$$P(D|T) = \\frac{0.98 \\times 0.01}{0.98 \\times 0.01 + 0.05 \\times 0.99} = \\frac{0.0098}{0.0098 + 0.0495} = \\frac{0.0098}{0.0593} \\approx 0.165.$$\n\nכלומר, אם אדם קיבל תוצאה חיובית, ההסתברות שהוא אכן חולה היא רק כ-16.5%."
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "From a group of 10 people (6 women, 4 men), one is chosen at random. What is $P(\\text{woman})$?",
+          "body_he": "מקבוצה של 10 אנשים (6 נשים, 4 גברים) בוחרים אחד אקראי. מהי $P(\\text{אישה})$?",
+          "solution_en": "$P(\\text{woman})=6/10=0.6$.",
+          "solution_he": "$P(\\text{אישה})=6/10=0.6$.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Are events $A$ (roll even) and $B$ (roll $>3$) independent on one fair die roll? $P(A)=1/2$, $P(B)=1/2$, $P(A\\cap B)=P(4\\text{ or }6)=2/6=1/3$.",
+          "body_he": "האם $A$ (זוגי) ו-$B$ (גדול מ-3) בלתי-תלויים בהטלת קובייה? $P(A)=1/2$, $P(B)=1/2$, $P(A\\cap B)=1/3$.",
+          "solution_en": "$P(A)P(B)=1/4\\neq1/3=P(A\\cap B)$. **Not independent.**",
+          "solution_he": "$P(A)P(B)=1/4\\neq 1/3$. **תלויים.**",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Given $P(A|B)=0.6$ and $P(B)=0.5$, find $P(A\\cap B)$. Then, given $P(A)=0.3$, find $P(B|A)$.",
+          "body_he": "נתון $P(A|B)=0.6$, $P(B)=0.5$. מצא $P(A\\cap B)$. נתון גם $P(A)=0.3$, מצא $P(B|A)$.",
+          "solution_en": "$P(A\\cap B)=0.6\\times0.5=0.3$. $P(B|A)=0.3/0.3=1.0$.",
+          "solution_he": "$P(A\\cap B)=0.3$. $P(B|A)=1.0$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A factory has two machines. Machine 1 produces 60% of items with 2% defect rate; Machine 2 produces 40% with 5% defect rate. An item is chosen at random. Find $P(\\text{defective})$.",
+          "body_he": "מפעל עם 2 מכונות. מכונה 1 מייצרת 60% מהפריטים עם 2% פגמים; מכונה 2 מייצרת 40% עם 5% פגמים. פריט נבחר אקראי. מצא $P(\\text{פגום})$.",
+          "solution_en": "$P(D)=P(D|M_1)P(M_1)+P(D|M_2)P(M_2)=0.02\\times0.6+0.05\\times0.4=0.012+0.020=0.032=3.2\\%$.",
+          "solution_he": "$P(D)=0.012+0.020=0.032$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "From the factory problem above: given a defective item, what is the probability it came from Machine 1?",
+          "body_he": "מבעיית המפעל לעיל: בהינתן פריט פגום, מהי ההסתברות שהגיע ממכונה 1?",
+          "solution_en": "$P(M_1|D)=P(D|M_1)P(M_1)/P(D)=0.012/0.032=0.375$.",
+          "solution_he": "$P(M_1|D)=0.012/0.032=37.5\\%$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Prove: $P(A\\cap B)\\geq P(A)+P(B)-1$ (Boole's inequality / Bonferroni).",
+          "body_he": "הוכח: $P(A\\cap B)\\geq P(A)+P(B)-1$ (אי-שוויון בונפרוני).",
+          "solution_en": "$P(A\\cup B)\\leq1\\Rightarrow P(A)+P(B)-P(A\\cap B)\\leq1\\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$",
+          "solution_he": "$P(A)+P(B)-P(A\\cap B)=P(A\\cup B)\\leq1 \\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Medical test (full Bayes): A disease has prevalence 0.005 (0.5%). Test sensitivity 98%, specificity 97%. Find $P(D|+)$ and $P(D^c|-)$.",
+          "body_he": "בדיקה רפואית (בייס מלא): שכיחות מחלה 0.005. רגישות 98%, סגוליות 97%. מצא $P(D|+)$ ו-$P(D^c|-)$.",
+          "solution_en": "$P(+)=0.98\\times0.005+0.03\\times0.995=0.0049+0.02985=0.03475$. $P(D|+)=0.0049/0.03475\\approx0.141=14.1\\%$. $P(-)=1-0.03475=0.96525$. $P(D^c|-)=P(-|D^c)P(D^c)/P(-)=0.97\\times0.995/0.96525\\approx0.9998$.",
+          "solution_he": "$P(D|+)\\approx14.1\\%$. $P(D^c|-)\\approx99.98\\%$.",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove: if $A_1,A_2,A_3$ are mutually independent (pairwise and triple), then $P(A_1\\cap A_2\\cap A_3)=P(A_1)P(A_2)P(A_3)$.",
+          "body_he": "הוכח: אם $A_1,A_2,A_3$ בלתי-תלויים הדדית, אז $P(A_1\\cap A_2\\cap A_3)=P(A_1)P(A_2)P(A_3)$.",
+          "solution_en": "By mutual independence, $P(A_1\\cap A_2\\cap A_3)=P(A_1)P(A_2)P(A_3)$ is given as part of the definition of mutual independence. The proof that this follows from pairwise is not automatic (pairwise $\\not\\Rightarrow$ mutual), so mutual independence explicitly requires the triple condition. $\\blacksquare$ (by definition)",
+          "solution_he": "הדבר נכון **בהגדרה** של אי-תלות הדדית (הגדרה הדורשת גם את התנאי המשולש, לא רק זוגי). $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that if $A$ and $B$ are independent, then so are $A$ and $B^c$.",
+          "body_he": "הראה שאם $A$ ו-$B$ בלתי-תלויים, אזי $A$ ו-$B^c$ גם כן בלתי-תלויים.",
+          "solution_en": "$P(A\\cap B^c)=P(A)-P(A\\cap B)=P(A)-P(A)P(B)=P(A)(1-P(B))=P(A)P(B^c)$. $\\blacksquare$",
+          "solution_he": "$P(A\\cap B^c)=P(A)-P(A)P(B)=P(A)P(B^c)$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove the law of total probability: if $B_1,\\ldots,B_n$ partition $\\Omega$ (mutually exclusive, exhaustive), then $P(A)=\\sum_{i=1}^n P(A|B_i)P(B_i)$.",
+          "body_he": "הוכח את חוק ההסתברות הכוללת: אם $B_1,\\ldots,B_n$ מחלקים את $\\Omega$, אזי $P(A)=\\sum_{i=1}^n P(A|B_i)P(B_i)$.",
+          "solution_en": "$A=A\\cap\\Omega=A\\cap(\\bigcup_i B_i)=\\bigcup_i(A\\cap B_i)$. The sets $A\\cap B_i$ are mutually exclusive (since $B_i$ are). By additivity: $P(A)=\\sum_i P(A\\cap B_i)=\\sum_i P(A|B_i)P(B_i)$. $\\blacksquare$",
+          "solution_he": "$A=\\bigcup_i(A\\cap B_i)$ (איחוד זר). $P(A)=\\sum_i P(A\\cap B_i)=\\sum_i P(A|B_i)P(B_i)$. $\\blacksquare$",
+          "points": 12
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. Forgetting complementary: $P(A') = 1 - P(A)$.\n2. Adding probabilities of overlapping events without subtracting intersection.\n3. Assuming equal likelihood without justification.\n4. Confusing \"at least one\" with \"both\": use complements — $P(\\text{at least one}) = 1 - P(\\text{neither})$.",
-      "body_he_md": "1. **שכחת משלים:** $P(A') = 1 - P(A)$.\n2. **חיבור מאורעות חופפים** בלי להחסיר חיתוך.\n3. **הנחת שוויון-הסתברות** בלי הצדקה.\n4. **בלבול בין 'לפחות אחד' ל-'שניהם':** השתמשו במשלים — $P(\\text{לפחות אחד}) = 1 - P(\\text{אף אחד})$.",
-      "body_by_level": {
-        "3pt": {
-          "body_en_md": "1. Forgetting complementary: $P(A') = 1 - P(A)$.\n2. Adding probabilities of overlapping events without subtracting intersection.\n3. Assuming equal likelihood without justification.",
-          "body_he_md": "1. **שכחת משלים:** $P(A') = 1 - P(A)$.\n2. **חיבור מאורעות חופפים** בלי להחסיר חיתוך.\n3. **הנחת שוויון-הסתברות** בלי הצדקה.\n4. **בלבול בין 'לפחות אחד' ל-'שניהם':** השתמשו במשלים — $P(\\text{לפחות אחד}) = 1 - P(\\text{אף אחד})$."
-        },
-        "4pt": {
-          "body_en_md": "In probability theory, conditional probability is often misunderstood as the probability of an event given another event. However, it is essential to understand that it is the probability of the intersection of the two events divided by the probability of the given event. This concept is crucial in applying Bayes' theorem, which allows us to update the probability of a hypothesis as more evidence or information becomes available. The binomial distribution is a discrete probability distribution that models the number of successes in a fixed number of independent trials, each with a constant probability of success.\n\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\n\nA student is tested for a disease, and the test has a 5% false positive rate and a 1% false negative rate. If a person tests positive, what is the probability that they actually have the disease?\n\nLet $D$ be the event that the person has the disease, $T$ be the event that the person tests positive, and $F$ be the event that the person is a false positive. We are given that $P(F) = 0.05$ and $P(D \\cap T) = 0.99 \\cdot 0.01 = 0.0099$. We want to find $P(D|T)$. Using Bayes' theorem, we have:\n\n$$P(D|T) = \\frac{P(D \\cap T)}{P(T)} = \\frac{0.0099}{0.0099 + 0.05} = \\frac{0.0099}{0.0599} \\approx 0.165$$\n\nThis means that if a person tests positive, there is approximately a 16.5% chance that they actually have the disease.",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "When dealing with conditional probability, it is essential to avoid the fallacy of assuming independence when it does not exist. This can be seen in the case of the Monty Hall problem, where the probability of winning a car changes after the host opens one of the doors. To avoid this pitfall, we must carefully analyze the sample space and the events involved.\n\nOne common mistake is to assume that the probability of an event remains the same after new information becomes available. However, this is not always the case, as demonstrated by the following example.\n\n$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}$$\n\nWe must be cautious when applying this formula, as the intersection of events $A$ and $B$ may not be as straightforward as it seems.\n\nWorked example: A fair six-sided die is rolled twice. What is the probability that the second roll is a 6, given that the first roll was a 6?\n\nSolution: Let $A$ be the event that the second roll is a 6, and $B$ be the event that the first roll was a 6. The sample space for the second roll is $\\{1, 2, 3, 4, 5, 6\\}$. Since the rolls are independent, the probability of the second roll being a 6, given that the first roll was a 6, is still $\\frac{1}{6}$.\n\n$$P(A \\mid B) = P(A) = \\frac{1}{6}$$\n\nHowever, if we knew that the first roll was a 6, we would know that the second roll is not independent, and we would need to re-evaluate the probability.",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "1. **Confusing independence and mutual exclusivity.** Mutually exclusive events with positive probability are NEVER independent.\n\n2. **Base-rate neglect.** Ignoring $P(D)$ when applying Bayes — a common error in medical and legal reasoning.\n\n3. **$P(A|B)\\neq P(B|A)$.** These can be wildly different. The 'prosecutor's fallacy' is confusing $P(\\text{evidence}|\\text{innocent})$ with $P(\\text{innocent}|\\text{evidence})$.\n\n4. **Adding probabilities of non-exclusive events.** $P(A\\cup B)\\neq P(A)+P(B)$ unless $A$ and $B$ are disjoint.\n\n5. **Forgetting to use total probability for the denominator.** When applying Bayes, always compute $P(A)$ via total probability first.",
+      "body_he_md": "1. **בלבול אי-תלות וזרות.** מאורעות זרים עם הסתברות חיובית **לעולם** אינם בלתי-תלויים.\n\n2. **הזנחת שיעור הבסיס.** התעלמות מ-$P(D)$ ביישום בייס — שגיאה נפוצה בחשיבה רפואית ומשפטית.\n\n3. **$P(A|B)\\neq P(B|A)$.** ה'כשל של התובע' הוא בלבול בין $P(\\text{ראיות}|\\text{חף})$ ל-$P(\\text{חף}|\\text{ראיות})$.\n\n4. **חיבור הסתברויות של מאורעות לא-זרים.** $P(A\\cup B)\\neq P(A)+P(B)$ אלא אם כן זרים.\n\n5. **שכחה לחשב את $P(A)$ בחוק הכוללת.** ביישום בייס — תמיד לחשב את $P(A)$ קודם."
     },
     {
-      "kind": "pitfall",
-      "level_min": "4pt",
-      "title_en": "Pitfalls in conditional probability",
-      "title_he": "מלכודות בהסתברות מותנית",
-      "body_en_md": "1. **Confusing $P(A|B)$ with $P(B|A)$.** They're different! Bayes converts between them.\n2. **Independent = mutually exclusive (FALSE).** Disjoint events with positive probability are NOT independent.\n3. **Adding probabilities without subtracting overlap.** $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n4. **Base-rate fallacy.** Always factor in $P(A)$ (prior), not just $P(B|A)$.",
-      "body_he_md": "1. **בלבול בין $P(A|B)$ ל-$P(B|A)$.** שונים! בייס ממיר.\n2. **בלתי-תלויים = זרים (שגוי).** זרים עם הסתברות חיובית — לא בלתי-תלויים.\n3. **חיבור הסתברויות בלי החסרת חפיפה.** $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n4. **שגיאת שיעור בסיסי.** חייבים לקחת בחשבון $P(A)$ (הסתברות מוקדמת)."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- Axioms: $P\\geq0$; $P(\\Omega)=1$; additivity\n- $P(A^c)=1-P(A)$\n- $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$\n- $P(A|B)=P(A\\cap B)/P(B)$\n- Independence: $P(A\\cap B)=P(A)P(B)$\n- Total probability: $P(A)=\\sum_i P(A|B_i)P(B_i)$\n- Bayes: $P(B_i|A)=P(A|B_i)P(B_i)/P(A)$\n\n**What Israeli university exams emphasise:**\n- Applying Bayes' theorem to multi-category problems.\n- Checking independence: compute $P(A\\cap B)$ and compare with $P(A)P(B)$.\n- Law of total probability for compound experiments.\n- Distinguishing $P(A|B)$ from $P(B|A)$.\n\n**Exam tip:** Draw a probability tree for multi-stage experiments — it forces you to list all paths and apply total probability correctly.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $P(A^c)=1-P(A)$\n- $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$\n- $P(A|B)=P(A\\cap B)/P(B)$\n- אי-תלות: $P(A\\cap B)=P(A)P(B)$\n- הסתברות כוללת: $P(A)=\\sum_i P(A|B_i)P(B_i)$\n- בייס: $P(B_i|A)=P(A|B_i)P(B_i)/P(A)$\n\n**מה בחינות ישראליות מדגישות:**\n- יישום בייס לבעיות רב-קטגוריות.\n- בדיקת אי-תלות.\n- חוק ההסתברות הכוללת.\n- הבחנה $P(A|B)$ מ-$P(B|A)$.\n\n**טיפ:** שרטט עץ הסתברויות לניסויים רב-שלביים."
     },
     {
       "kind": "summary",
-      "title_en": "Take-away",
+      "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **Classical:** $P(A) = |A|/|\\Omega|$ when outcomes are equally likely.\n- **Complement:** $P(A') = 1 - P(A)$.\n- **Disjoint union:** $P(A \\cup B) = P(A) + P(B)$ when $A \\cap B = \\emptyset$.\n- **Multiplication principle** and **two-way tables** for counting.",
-      "body_he_md": "- **קלאסית:** $P(A) = |A|/|\\Omega|$ כשהתוצאות שוות-הסתברות.\n- **משלים:** $P(A') = 1 - P(A)$.\n- **איחוד זרים:** $P(A \\cup B) = P(A) + P(B)$ כש-$A \\cap B = \\emptyset$.\n- **עקרון הכפל** ו**טבלאות דו-כיווניות** לספירה.",
-      "body_by_level": {
-        "3pt": {
-          "body_en_md": "- **Classical:** $P(A) = |A|/|\\Omega|$ when outcomes are equally likely.\n- **Complement:** $P(A') = 1 - P(A)$.\n- **Disjoint union:** $P(A \\cup B) = P(A) + P(B)$ when $A \\cap B = \\emptyset$.\n- **Multiplication principle** and **two-way tables** for counting.",
-          "body_he_md": "- **קלאסית:** $P(A) = |A|/|\\Omega|$ כשהתוצאות שוות-הסתברות.\n- **משלים:** $P(A') = 1 - P(A)$.\n- **איחוד זרים:** $P(A \\cup B) = P(A) + P(B)$ כש-$A \\cap B = \\emptyset$.\n- **עקרון הכפל** ו**טבלאות דו-כיווניות** לספירה."
-        },
-        "4pt": {
-          "body_en_md": "**Conditional Probability and Bayes' Theorem**\n\nConditional probability is a measure of the likelihood of an event occurring given that another event has occurred. It is denoted by $P(A|B)$ and is calculated as $$P(A|B) = \\frac{P(A \\cap B)}{P(B)}.$$ Bayes' theorem is a formula for updating the probability of a hypothesis as more evidence or information becomes available. It is given by $$P(H|E) = \\frac{P(E|H) \\cdot P(H)}{P(E)}.$$ The binomial distribution is a discrete probability distribution that models the number of successes in a fixed number of independent trials, each with a constant probability of success.\n\n**Worked Example:**\n\nA medical test for a disease has a 90% sensitivity and a 95% specificity. If a person tests positive for the disease, what is the probability that they actually have the disease?\n\nLet $D$ be the event that the person has the disease and $T$ be the event that the person tests positive. We are given that $P(T|D) = 0.9$ and $P(T|\\overline{D}) = 0.05$. We want to find $P(D|T)$.\n\nUsing Bayes' theorem, we have $$P(D|T) = \\frac{P(T|D) \\cdot P(D)}{P(T)}.$$ We can calculate $P(T)$ using the law of total probability: $$P(T) = P(T|D) \\cdot P(D) + P(T|\\overline{D}) \\cdot P(\\overline{D}).$$\n\nAssuming that the prevalence of the disease is 1%, we have $P(D) = 0.01$ and $P(\\overline{D}) = 0.99$. Plugging in the values, we get $$P(T) = 0.9 \\cdot 0.01 + 0.05 \\cdot 0.99 = 0.0595.$$ Now we can calculate $P(D|T)$: $$P(D|T) = \\frac{0.9 \\cdot 0.01}{0.0595} \\approx 0.151.$$ Therefore, if a person tests positive for the disease, the probability that they actually have the disease is approximately 15.1%.",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "In probability theory, a sample space is the set of all possible outcomes of a random experiment. An event is a subset of the sample space, and the probability of an event is a measure of the likelihood of its occurrence. Conditional probability is the probability of an event occurring given that another event has occurred. We can use the formula $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$ to calculate conditional probability.\n\nTo calculate conditional probability, we need to know the intersection of the two events and the probability of the given event. For example, if we roll two dice, the sample space is the set of all possible pairs of numbers from 1 to 6. Let's say we want to find the probability of rolling a 6 given that the first die is a 4.",
-          "body_he_md": "בתורת ההסתברות, מרחב המדגם הוא קבוצת כל התוצאות האפשריות של ניסוי אקראי. מאורע הוא תת-קבוצה של מרחב המדגם, וההסתברות של מאורע מודדת את סבירות התרחשותו. ההסתברות המותנית היא ההסתברות של מאורע להתרחש בהינתן שמאורע אחר כבר קרה. ניתן לחשב אותה לפי:\n\n$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$\n\nלחישוב הסתברות מותנית יש לדעת את הסתברות החיתוך ואת הסתברות המאורע הנתון. לדוגמה, נניח שמטילים שתי קוביות — מרחב המדגם הוא כל זוגות המספרים מ-1 עד 6. נרצה למצוא את ההסתברות שהקובייה השנייה הוציאה 6, בהינתן שהראשונה הוציאה 4.\n\nמאחר שהקוביות בלתי-תלויות:\n$$P(\\text{שנייה}=6 \\mid \\text{ראשונה}=4) = P(\\text{שנייה}=6) = \\frac{1}{6}.$$"
-        }
-      }
-    },
-    {
-      "kind": "summary",
-      "level_min": "4pt",
-      "title_en": "Take-away (4pt+)",
-      "title_he": "סיכום (4 יח׳+)",
-      "body_en_md": "- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n- Conditional: $P(A|B) = P(A \\cap B)/P(B)$.\n- Independent: $P(A \\cap B) = P(A)P(B)$.\n- Bayes: $P(A|B) = P(B|A) P(A) / P(B)$.",
-      "body_he_md": "- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n- מותנית: $P(A|B) = P(A \\cap B)/P(B)$.\n- בלתי-תלויים: $P(A \\cap B) = P(A)P(B)$.\n- בייס: $P(A|B) = P(B|A) P(A) / P(B)$."
+      "body_en_md": "- **Sample space** $\\Omega$ = all outcomes; events are subsets.\n- **Kolmogorov's axioms:** non-negativity, normalisation, countable additivity.\n- **Conditional probability:** $P(A|B)=P(A\\cap B)/P(B)$.\n- **Independence:** $P(A\\cap B)=P(A)P(B)$; independent $\\neq$ disjoint.\n- **Total probability:** $P(A)=\\sum P(A|B_i)P(B_i)$ for any partition $\\{B_i\\}$.\n- **Bayes:** $P(B_i|A)=P(A|B_i)P(B_i)/P(A)$ — updates prior to posterior.\n- **Base-rate neglect** is the key pitfall in medical/legal applications.",
+      "body_he_md": "- **מרחב מדגם** $\\Omega$; מאורעות = תת-קבוצות.\n- **אקסיומות קולמוגורוב:** אי-שליליות, נורמליזציה, אדיטיביות.\n- **הסתברות מותנית:** $P(A|B)=P(A\\cap B)/P(B)$.\n- **אי-תלות:** $P(A\\cap B)=P(A)P(B)$; שונה מזרות.\n- **הסתברות כוללת:** $P(A)=\\sum P(A|B_i)P(B_i)$.\n- **בייס:** מעדכן Prior ל-Posterior.\n- **הזנחת שיעור הבסיס** — מלכודת מפתח."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "Two fair dice are rolled. What is the probability the sum is 8? (Enter as fraction, e.g. 5/36.)",
-      "stem_he": "שתי קוביות הוגנות מוטלות. מה ההסתברות שהסכום הוא 8? (כתבו כשבר, למשל 5/36.)",
-      "correct_answer": "5/36",
-      "explanation_en": "Outcomes summing to 8: (2,6),(3,5),(4,4),(5,3),(6,2) — 5 outcomes. $P = 5/36$.",
-      "explanation_he": "תוצאות עם סכום 8: (2,6),(3,5),(4,4),(5,3),(6,2) — 5 תוצאות. $P = 5/36$.",
-      "skill_atoms": [
-        "uniform_sample_space"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 2,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$P(A) = 0.3$, $P(B) = 0.4$, $A$ and $B$ independent. $P(A \\cap B) = ?$",
-      "stem_he": "$P(A) = 0.3$, $P(B) = 0.4$, $A, B$ בלתי-תלויים. $P(A \\cap B) = ?$",
-      "options_en": [
-        "$0.7$",
-        "$0.12$",
-        "$0.10$",
-        "$0.58$"
-      ],
-      "options_he": [
-        "$0.7$",
-        "$0.12$",
-        "$0.10$",
-        "$0.58$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Independence: $P(A \\cap B) = P(A)P(B) = 0.3 \\cdot 0.4 = 0.12$.",
-      "explanation_he": "אי-תלות: $P(A \\cap B) = 0.3 \\cdot 0.4 = 0.12$.",
-      "skill_atoms": [
-        "independence_product"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "If $P(A) = 0.5$, $P(B) = 0.6$, $P(A \\cup B) = 0.8$, then $P(A \\cap B)$ is:",
-      "stem_he": "אם $P(A) = 0.5$, $P(B) = 0.6$, $P(A \\cup B) = 0.8$, אז $P(A \\cap B)$:",
-      "options_en": [
-        "$0.1$",
-        "$0.3$",
-        "$0.5$",
-        "$0.9$"
-      ],
-      "options_he": [
-        "$0.1$",
-        "$0.3$",
-        "$0.5$",
-        "$0.9$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$P(A \\cap B) = P(A) + P(B) - P(A \\cup B) = 0.5 + 0.6 - 0.8 = 0.3$.",
-      "explanation_he": "$P(A \\cap B) = 0.5 + 0.6 - 0.8 = 0.3$.",
-      "skill_atoms": [
-        "inclusion_exclusion"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "A box has 3 red and 5 blue balls. Two balls are drawn without replacement. Find the probability both are red.",
-      "stem_he": "בקופסה 3 כדורים אדומים ו-5 כחולים. מוציאים 2 ללא החזרה. מצאו את ההסתברות ששניהם אדומים.",
-      "rubric_en": "Full credit (3/3): $P(\\text{red}_1) = 3/8$, $P(\\text{red}_2 | \\text{red}_1) = 2/7$. $P(\\text{both red}) = 3/8 \\cdot 2/7 = 6/56 = 3/28$.\nPartial (2/3): correct chain rule, arithmetic error.\nMinimal (1/3): writes $3/8$ only.",
-      "rubric_he": "ציון מלא (3/3): $P(\\text{אדום}_1) = 3/8$, $P(\\text{אדום}_2 | \\text{אדום}_1) = 2/7$. $P = 3/28$.\nחלקי (2/3): כלל שרשרת נכון, טעות חישוב.\nמינימלי (1/3): רק $3/8$.",
-      "explanation_en": "$P = P(\\text{red}_1) \\cdot P(\\text{red}_2 | \\text{red}_1) = \\frac{3}{8} \\cdot \\frac{2}{7} = \\frac{3}{28}$.",
-      "explanation_he": "$P = \\frac{3}{8} \\cdot \\frac{2}{7} = \\frac{3}{28}$.",
-      "skill_atoms": [
-        "conditional_probability_chain"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 5,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "A spam filter flags 90% of spam and 5% of non-spam. 30% of email is spam. A message is flagged. Probability it's actually spam?",
-      "stem_he": "מסנן זבל מסמן 90% מההודעות הזבל ו-5% מהלגיטימיות. 30% מההודעות הן זבל. הודעה סומנה. מה ההסתברות שהיא באמת זבל?",
-      "options_en": [
-        "$\\approx 89\\%$",
-        "$\\approx 90\\%$",
-        "$\\approx 50\\%$",
-        "$\\approx 30\\%$"
-      ],
-      "options_he": [
-        "$\\approx 89\\%$",
-        "$\\approx 90\\%$",
-        "$\\approx 50\\%$",
-        "$\\approx 30\\%$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$P(\\text{flag}) = 0.9 \\cdot 0.3 + 0.05 \\cdot 0.7 = 0.27 + 0.035 = 0.305$. Bayes: $P(\\text{spam}|\\text{flag}) = 0.27 / 0.305 \\approx 0.885 \\approx 89\\%$.",
-      "explanation_he": "$P(\\text{סומן}) = 0.27 + 0.035 = 0.305$. בייס: $P(\\text{זבל}|\\text{סומן}) = 0.27/0.305 \\approx 89\\%$.",
-      "skill_atoms": [
-        "bayes_application"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 6,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "If $A$ and $B$ are mutually exclusive with $P(A), P(B) > 0$, are they independent?",
-      "stem_he": "אם $A, B$ זרים עם $P(A), P(B) > 0$, האם הם בלתי-תלויים?",
-      "options_en": [
-        "Yes",
-        "No — $P(A \\cap B) = 0$ but $P(A)P(B) > 0$",
-        "Sometimes",
-        "Cannot tell"
-      ],
-      "options_he": [
-        "כן",
-        "לא — $P(A \\cap B) = 0$ אבל $P(A)P(B) > 0$",
-        "לפעמים",
-        "לא ניתן לקבוע"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$P(A \\cap B) = 0$ (disjoint), but for independence we'd need $P(A)P(B) = 0$ — meaning at least one has probability 0. So both positive ⇒ disjoint ⇒ NOT independent.",
-      "explanation_he": "$P(A \\cap B) = 0$ (זרים), אבל לאי-תלות נדרש $P(A)P(B) = 0$. אז אם שניהם חיוביים — זרים = לא בלתי-תלויים.",
-      "skill_atoms": [
-        "independence_vs_disjoint"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 7,
-      "kind": "mcq_multi",
-      "difficulty": "medium",
-      "stem_en": "Which statements are TRUE for any two events $A, B$ in a probability space? (Pick all that apply.)",
-      "stem_he": "אילו טענות נכונות עבור כל שני מאורעות $A, B$ במרחב הסתברות? (סמנו את כל הנכונות.)",
-      "options_en": [
-        "$0 \\le P(A) \\le 1$.",
-        "$P(A \\cup B) = P(A) + P(B)$ even if $A, B$ overlap.",
-        "$P(A^c) = 1 - P(A)$.",
-        "If $A \\subseteq B$ then $P(A) \\le P(B)$.",
-        "$P(A \\cap B) = P(A) P(B)$ always."
-      ],
-      "options_he": [
-        "$0 \\le P(A) \\le 1$.",
-        "$P(A \\cup B) = P(A) + P(B)$ גם כשיש חיתוך.",
-        "$P(A^c) = 1 - P(A)$.",
-        "אם $A \\subseteq B$ אז $P(A) \\le P(B)$.",
-        "$P(A \\cap B) = P(A) P(B)$ תמיד."
-      ],
-      "correct_indices": [
-        0,
-        2,
-        3
-      ],
-      "explanation_en": "B is wrong without inclusion-exclusion (need to subtract $P(A \\cap B)$). E is true ONLY when $A, B$ are independent — not always.",
-      "explanation_he": "ב' שגוי בלי הכלה-הוצאה (חייבים להחסיר $P(A \\cap B)$). ה' נכון **רק כש-$A, B$ בלתי-תלויים** — לא תמיד.",
-      "skill_atoms": [
-        "probability_axioms",
-        "inclusion_exclusion",
-        "independence_product"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 8,
-      "kind": "true_false",
-      "difficulty": "easy",
-      "stem_en": "If two events $A$ and $B$ are mutually exclusive (disjoint) and both have positive probability, then they are independent.",
-      "stem_he": "אם שני מאורעות $A$ ו-$B$ זרים ולשניהם הסתברות חיובית, אז הם בלתי-תלויים.",
-      "correct_bool": false,
-      "explanation_en": "FALSE. Disjoint + positive probability = the OPPOSITE of independent: knowing $A$ happened TOTALLY RULES OUT $B$. Independence requires $P(A \\cap B) = P(A) P(B) > 0$, but disjoint forces $P(A \\cap B) = 0$.",
-      "explanation_he": "**לא נכון**. זרים + הסתברות חיובית = ההפך מבלתי-תלויים: ידיעה ש-$A$ קרה **שוללת לחלוטין** את $B$. אי-תלות דורשת $P(A \\cap B) = P(A) P(B) > 0$, אבל זרים מאלצים $P(A \\cap B) = 0$.",
-      "skill_atoms": [
-        "independence_vs_disjoint"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 9,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "What is the probability of rolling a 6 with one fair six-sided die? (Decimal, 3 sig figs.)",
-      "stem_he": "מהי ההסתברות להוציא 6 בקובייה הוגנת בעלת 6 פאות? (עשרוני, 3 ספרות משמעותיות.)",
-      "acceptable_answers": [
-        "0.167",
-        "1/6",
-        "0.1667",
-        ".167",
-        ".1667"
-      ],
-      "case_sensitive": false,
-      "explanation_en": "Uniform sample space: $P = 1/6 \\approx 0.167$.",
-      "explanation_he": "מרחב מדגם אחיד: $P = 1/6 \\approx 0.167$.",
-      "skill_atoms": [
-        "uniform_sample_space"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 10,
-      "kind": "match",
-      "difficulty": "medium",
-      "stem_en": "Match each probability concept with the correct formula.",
-      "stem_he": "התאימו כל מושג הסתברותי לנוסחה הנכונה.",
-      "left_en": [
-        "Conditional probability",
-        "Bayes' rule",
-        "Independence",
-        "Inclusion–exclusion"
-      ],
-      "left_he": [
-        "הסתברות מותנית",
-        "כלל בייס",
-        "אי-תלות",
-        "הכלה-הוצאה"
-      ],
-      "right_en": [
-        "$P(A \\cap B) = P(A) \\cdot P(B)$",
-        "$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$",
-        "$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$",
-        "$P(A|B) = \\frac{P(B|A) P(A)}{P(B)}$"
-      ],
-      "right_he": [
-        "$P(A \\cap B) = P(A) \\cdot P(B)$",
-        "$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$",
-        "$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$",
-        "$P(A|B) = \\frac{P(B|A) P(A)}{P(B)}$"
-      ],
-      "correct_pairs": [
-        1,
-        3,
-        0,
-        2
-      ],
-      "explanation_en": "Conditional definition, Bayes (flips it), independence (product rule), inclusion-exclusion (corrects double-counting of the intersection).",
-      "explanation_he": "הגדרת מותנית, בייס (היפוך), אי-תלות (כלל המכפלה), הכלה-הוצאה (תיקון ספירת-יתר של החיתוך).",
-      "skill_atoms": [
-        "conditional_probability_chain",
-        "bayes_application",
-        "independence_product",
-        "inclusion_exclusion"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 11,
-      "kind": "ordering",
-      "difficulty": "medium",
-      "stem_en": "Order the steps for applying Bayes' rule to update a belief.",
-      "stem_he": "סדרו את שלבי החלת כלל בייס לעדכון אמונה.",
-      "steps_en": [
-        "Write the prior $P(H)$ (your belief BEFORE seeing evidence).",
-        "Compute the marginal $P(E) = P(E|H)P(H) + P(E|\\neg H)P(\\neg H)$.",
-        "Plug into Bayes: $P(H|E) = \\frac{P(E|H) P(H)}{P(E)}$ to get the posterior.",
-        "Write the likelihood $P(E|H)$ (probability of the evidence GIVEN the hypothesis)."
-      ],
-      "steps_he": [
-        "רשמו את ההסתברות המוקדמת $P(H)$ (האמונה לפני קבלת העדות).",
-        "חשבו את ההסתברות הכוללת $P(E) = P(E|H)P(H) + P(E|\\neg H)P(\\neg H)$.",
-        "הציבו בבייס: $P(H|E) = \\frac{P(E|H) P(H)}{P(E)}$ כדי לקבל את ההסתברות המאוחרת.",
-        "רשמו את הסבירות $P(E|H)$ (הסתברות העדות בהינתן ההיפותזה)."
-      ],
-      "correct_order": [
-        0,
-        3,
-        1,
-        2
-      ],
-      "explanation_en": "Prior → likelihood → marginal (normalizer) → posterior. This sequence forces you to think about each ingredient explicitly, which avoids the base-rate fallacy.",
-      "explanation_he": "הסתברות מוקדמת → סבירות → הסתברות כוללת (מנרמלת) → הסתברות מאוחרת. הסדר הזה מאלץ אתכם לחשוב על כל רכיב במפורש ומונע את כשל שיעור הבסיס.",
-      "skill_atoms": [
-        "bayes_application"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 12,
-      "kind": "derivation",
-      "difficulty": "hard",
-      "stem_en": "A medical test for a rare disease has 95% sensitivity ($P(\\text{positive}|\\text{disease}) = 0.95$) and 90% specificity ($P(\\text{negative}|\\text{no disease}) = 0.90$). The disease's prevalence is $1\\%$. A patient tests positive. Derive $P(\\text{disease}|\\text{positive})$ step by step using Bayes' rule.",
-      "stem_he": "בדיקה רפואית למחלה נדירה בעלת רגישות $95\\%$ ($P(\\text{חיובי}|\\text{מחלה}) = 0.95$) וסגוליות $90\\%$ ($P(\\text{שלילי}|\\text{לא מחלה}) = 0.90$). שכיחות המחלה $1\\%$. חולה נבדק חיובי. גזרו את $P(\\text{מחלה}|\\text{חיובי})$ צעד-אחר-צעד בעזרת כלל בייס.",
-      "rubric_en": "Full credit (4/4): identifies prior $P(D) = 0.01$, likelihood $P(+|D) = 0.95$, false-positive rate $P(+|\\neg D) = 0.10$ (NOT 0.90 — specificity is $P(-|\\neg D)$). Computes marginal $P(+) = 0.95 \\cdot 0.01 + 0.10 \\cdot 0.99 = 0.0095 + 0.099 = 0.1085$. Applies Bayes: $P(D|+) = 0.0095 / 0.1085 \\approx 0.0876 \\approx 8.8\\%$. Comments that despite 95% sensitivity, posterior is only ~9% — the BASE-RATE FALLACY. Deduct 1 each for: confusing specificity / false-positive rate, arithmetic, skipping the marginal, missing the interpretive comment.",
-      "rubric_he": "ציון מלא (4/4): מזהה הסתברות מוקדמת $P(D) = 0.01$, סבירות $P(+|D) = 0.95$, שיעור חיובי-שגוי $P(+|\\neg D) = 0.10$ (**לא** 0.90 — סגוליות היא $P(-|\\neg D)$). מחשב הסתברות כוללת $P(+) = 0.95 \\cdot 0.01 + 0.10 \\cdot 0.99 = 0.1085$. בייס: $P(D|+) = 0.0095 / 0.1085 \\approx 8.8\\%$. מעיר שלמרות 95% רגישות, ההסתברות המאוחרת רק 9% — **כשל שיעור הבסיס**. הורידו 1 על: בלבול סגוליות/חיובי-שגוי, חשבון, דילוג על הסתברות כוללת, חוסר פרשנות.",
-      "expected_steps": [
-        "identify P(D), P(+|D), P(+|not D)",
-        "compute marginal P(+)",
-        "apply Bayes",
-        "interpret base-rate fallacy"
-      ],
-      "explanation_en": "Prior $P(D)=0.01$; likelihood $P(+|D)=0.95$; false-positive rate $P(+|\\neg D)=1 - 0.90 = 0.10$. Marginal $P(+) = 0.95(0.01) + 0.10(0.99) = 0.1085$. Bayes: $P(D|+) = 0.95(0.01)/0.1085 \\approx 0.088 = 8.8\\%$. Even a 'very accurate' test gives a low posterior when the prior is low — that's the base-rate fallacy.",
-      "explanation_he": "הסתברות מוקדמת $P(D)=0.01$; סבירות $P(+|D)=0.95$; חיובי-שגוי $P(+|\\neg D)=0.10$. הסתברות כוללת $P(+) = 0.1085$. בייס: $P(D|+) \\approx 8.8\\%$. גם בדיקה 'מאוד מדויקת' נותנת הסתברות מאוחרת נמוכה כשההסתברות המוקדמת נמוכה — כשל שיעור הבסיס.",
-      "skill_atoms": [
-        "bayes_application",
-        "base_rate_fallacy",
-        "conditional_probability_chain"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 13,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "A fair coin is flipped twice. What is $P(\\text{both heads})$?",
-      "stem_he": "מטבע הוגן מוטל פעמיים. מה ההסתברות לשני ראשים?",
-      "options_en": [
-        "$1/2$",
-        "$1/3$",
-        "$1/4$",
-        "$1/8$"
-      ],
-      "options_he": [
-        "$1/2$",
-        "$1/3$",
-        "$1/4$",
-        "$1/8$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "The sample space has 4 equally likely outcomes: $\\{HH, HT, TH, TT\\}$. Only one outcome is both heads, so $P = 1/4$.",
-      "explanation_he": "מרחב המדגם כולל 4 תוצאות שוות-הסתברות: $\\{HH, HT, TH, TT\\}$. רק תוצאה אחת היא שני ראשים, לכן $P = 1/4$.",
-      "skill_atoms": [
-        "uniform_sample_space",
-        "classical_probability"
-      ],
-      "points_level_min": "3pt"
-    },
-    {
-      "ord": 14,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "A fair die is rolled once. What is $P(\\text{even number})$?",
-      "stem_he": "קובייה הוגנת מוטלת פעם אחת. מה ההסתברות למספר זוגי?",
-      "options_en": [
-        "$1/6$",
-        "$1/3$",
-        "$1/2$",
-        "$2/3$"
-      ],
-      "options_he": [
-        "$1/6$",
-        "$1/3$",
-        "$1/2$",
-        "$2/3$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "Even outcomes are $2, 4, 6$ — 3 favorable outcomes out of 6 in the sample space. $P = 3/6 = 1/2$.",
-      "explanation_he": "המאורע 'מספר זוגי' כולל את $2, 4, 6$ — 3 תוצאות נוחות מתוך 6 במרחב המדגם. $P = 3/6 = 1/2$.",
-      "skill_atoms": [
-        "uniform_sample_space",
-        "classical_probability"
-      ],
-      "points_level_min": "3pt"
-    },
-    {
-      "ord": 15,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "A bag has 3 red and 7 blue balls. One ball is drawn at random. What is $P(\\text{red})$?",
-      "stem_he": "בשקית 3 כדורים אדומים ו-7 כחולים. מוציאים כדור אחד באקראי. מה ההסתברות לכדור אדום?",
-      "options_en": [
-        "$3/7$",
-        "$7/10$",
-        "$3/10$",
-        "$1/3$"
-      ],
-      "options_he": [
-        "$3/7$",
-        "$7/10$",
-        "$3/10$",
-        "$1/3$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "There are 10 equally likely outcomes and 3 favorable (red). $P(\\text{red}) = 3/10$.",
-      "explanation_he": "יש 10 תוצאות שוות-הסתברות במרחב המדגם ו-3 תוצאות נוחות (אדום). $P(\\text{אדום}) = 3/10$.",
-      "skill_atoms": [
-        "uniform_sample_space",
-        "classical_probability"
-      ],
-      "points_level_min": "3pt"
-    },
-    {
-      "ord": 16,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "A fair die is rolled once. What is $P(\\text{not rolling a 6})$?",
-      "stem_he": "קובייה הוגנת מוטלת פעם אחת. מה ההסתברות שלא יצא 6?",
-      "options_en": [
-        "$1/6$",
-        "$5/6$",
-        "$1/2$",
-        "$2/3$"
-      ],
-      "options_he": [
-        "$1/6$",
-        "$5/6$",
-        "$1/2$",
-        "$2/3$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Use the complement rule: $P(A') = 1 - P(A)$. Here $P(6) = 1/6$, so $P(\\text{not 6}) = 1 - 1/6 = 5/6$.",
-      "explanation_he": "משתמשים בכלל המשלים: $P(A') = 1 - P(A)$. כאן $P(6) = 1/6$, לכן $P(\\text{לא 6}) = 1 - 1/6 = 5/6$.",
-      "skill_atoms": [
-        "complementary_event",
-        "classical_probability"
-      ],
-      "points_level_min": "3pt"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Uniform sample space: $P(A) = |A|/|\\Omega|$.",
-      "Inclusion-exclusion: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.",
-      "Conditional: $P(A|B) = P(A \\cap B)/P(B)$.",
-      "Independence: $P(A \\cap B) = P(A)P(B)$ — VERY different from disjoint.",
-      "Bayes: flips conditioning — $P(A|B) = P(B|A)P(A)/P(B)$."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Disjoint = independent",
-        "correction": "Disjoint events with positive probability are NOT independent. Knowing one rules out the other.",
-        "detect_phrase_en": "disjoint independent",
-        "detect_phrase_he": "זרים בלתי-תלויים"
-      },
-      {
-        "wrong": "$P(A|B) = P(B|A)$",
-        "correction": "Generally false — Bayes converts between them: $P(A|B) = P(B|A) P(A)/P(B)$.",
-        "detect_phrase_en": "conditional symmetric",
-        "detect_phrase_he": "מותנית סימטרית"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "uniform_sample_space",
-      "inclusion_exclusion",
-      "independence_product",
-      "conditional_probability_chain",
-      "bayes_application",
-      "independence_vs_disjoint",
-      "probability_axioms",
-      "base_rate_fallacy"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "fractions_algebraic"
-    ],
-    "tutor_pacing_hint": "Use Venn diagrams aggressively for visualizing union/intersection. Drill Bayes with a concrete example (medical test) early; the formula alone is opaque.",
-    "coach_drill_skills": [
-      "uniform_sample_space",
-      "inclusion_exclusion",
-      "bayes_application"
-    ],
-    "diagnostic_signals": {
-      "if_learner_confuses_disjoint_independent": "Draw both on a Venn: disjoint = no overlap; independent = overlap proportional to areas.",
-      "if_learner_skips_prior_in_bayes": "Walk through the base-rate fallacy explicitly."
-    },
-    "next_recommended": [
-      "combinatorics",
-      "distributions"
-    ]
-  },
-  "level_focus": {
-    "3pt": {
-      "en": "Classical probability (favorable/total outcomes). Complementary probability P(A'). Simple combined experiments (multiplication principle). Two-way tables. No conditional probability or combinations formula.",
-      "he": "הסתברות קלאסית (תוצאות נוחות/כלל). הסתברות משלימה P(A'). ניסויים מורכבים פשוטים (עקרון הכפל). טבלאות דו-כיווניות. ללא הסתברות מותנית או נוסחת צירופים.",
-      "bagrut_questionnaires": [
-        "801",
-        "802"
-      ],
-      "skills": [
-        "classical_probability",
-        "complementary_event",
-        "multiplication_principle",
-        "two_way_tables"
-      ],
-      "not_required": [
-        "conditional_probability",
-        "bayes",
-        "combinations",
-        "permutations",
-        "binomial_distribution"
-      ]
-    },
-    "4pt": {
-      "en": "All 3pt skills, PLUS: combinations C(n,r) and permutations P(n,r); conditional probability P(A|B); independence; at-least-one problems using complement.",
-      "he": "כל כישורי 3 יח׳, בנוסף: צירופים C(n,r) ותמורות P(n,r); הסתברות מותנית P(A|B); עצמאות; בעיות לפחות-אחד בעזרת משלים.",
-      "bagrut_questionnaires": [
-        "804"
-      ],
-      "skills": [
-        "combinations_formula",
-        "permutations",
-        "conditional_probability",
-        "independence",
-        "at_least_one"
-      ]
-    },
-    "5pt": {
-      "en": "All 4pt skills, PLUS: Bayes' theorem; binomial distribution; expected value; probability generating functions; geometric distribution; normal distribution intro.",
-      "he": "כל כישורי 4 יח׳, בנוסף: משפט בייס; התפלגות בינומית; תוחלת; ערך מצופה; התפלגות גיאומטרית; מבוא לתפלגות נורמלית.",
-      "bagrut_questionnaires": [
-        "581",
-        "807"
-      ],
-      "skills": [
-        "bayes_theorem",
-        "binomial_distribution",
-        "expected_value",
-        "normal_distribution_intro"
-      ]
-    }
-  }
+  ]
 }

@@ -1,31 +1,224 @@
 {
   "concept_id": "inner_product_gram_schmidt",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Inner Product Gram Schmidt",
-  "title_he": "מכפלה פנימית ו-Gram-Schmidt",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "math_track": ["la"],
+  "title_en": "Inner Product Spaces & Gram-Schmidt Orthogonalization",
+  "title_he": "מרחבי מכפלה פנימית ואורתוגונליזציה של גרם-שמידט",
+  "summary_en": "Abstract inner product axioms, orthonormal bases, orthogonal projection, the Gram-Schmidt process, and proof that it always yields an orthonormal set.",
+  "summary_he": "אקסיומות מכפלה פנימית מופשטת, בסיסים אורתונורמליים, הטלה אורתוגונלית, תהליך גרם-שמידט, והוכחה שהוא תמיד מייצר קבוצה אורתונורמלית.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Inner Product Gram Schmidt.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-מכפלה פנימית ו-Gram-Schmidt.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Beyond the Dot Product",
+      "title_he": "מעבר למכפלת הנקודה",
+      "body_en_md": "The dot product on $\\mathbb{R}^n$ gave us a way to measure angles and orthogonality. An **inner product space** generalises this notion to abstract vector spaces — allowing us to talk about angles, projections, and orthogonality in spaces of functions, polynomials, and matrices.\n\nThe **Gram-Schmidt process** converts any linearly independent set into an orthonormal basis, which makes projections and best-approximation problems computationally clean. It underlies QR decomposition in numerical linear algebra.\n\n**Connection to previous material:** This lesson builds directly on vector spaces, subspaces, and the dot product on $\\mathbb{R}^n$.",
+      "body_he_md": "המכפלה הפנימית ב-$\\mathbb{R}^n$ נתנה לנו דרך למדוד זוויות ואורתוגונליות. **מרחב מכפלה פנימית** מכליל מושג זה למרחבים וקטוריים מופשטים — ומאפשר לדבר על זוויות, הטלות ואורתוגונליות במרחבי פונקציות, פולינומים ומטריצות.\n\n**תהליך גרם-שמידט** ממיר כל קבוצה בלתי-תלויה לבסיס אורתונורמלי, מה שהופך הטלות ובעיות קירוב לניתנות לחישוב נקי. הוא מתחת לפירוק QR באלגברה לינארית נומרית.\n\n**קשר לחומר קודם:** שיעור זה בנוי ישירות על מרחבים וקטוריים, תת-מרחבים והמכפלה הפנימית ב-$\\mathbb{R}^n$."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Inner Product Gram Schmidt: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Inner Product Gram Schmidt.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-מכפלה פנימית ו-Gram-Schmidt: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-מכפלה פנימית ו-Gram-Schmidt.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Inner Product and Orthonormality",
+      "title_he": "מכפלה פנימית ואורתונורמליות",
+      "body_en_md": "**Definition (Inner product).** An **inner product** on a real vector space $V$ is a function $\\langle\\cdot,\\cdot\\rangle: V\\times V\\to\\mathbb{R}$ satisfying:\n1. **Symmetry:** $\\langle\\vec{u},\\vec{v}\\rangle = \\langle\\vec{v},\\vec{u}\\rangle$.\n2. **Linearity in first argument:** $\\langle c\\vec{u}+\\vec{w},\\vec{v}\\rangle = c\\langle\\vec{u},\\vec{v}\\rangle+\\langle\\vec{w},\\vec{v}\\rangle$.\n3. **Positive definiteness:** $\\langle\\vec{v},\\vec{v}\\rangle \\geq 0$, with equality iff $\\vec{v}=\\vec{0}$.\n\n**Standard inner product on $\\mathbb{R}^n$:** $\\langle\\vec{u},\\vec{v}\\rangle = \\vec{u}\\cdot\\vec{v}=\\sum u_iv_i$.\n\n**Inner product on $C[a,b]$:** $\\langle f,g\\rangle = \\int_a^b f(x)g(x)\\,dx$.\n\n**Norm:** $\\|\\vec{v}\\| = \\sqrt{\\langle\\vec{v},\\vec{v}\\rangle}$.\n\n**Orthogonality:** $\\vec{u}\\perp\\vec{v}$ iff $\\langle\\vec{u},\\vec{v}\\rangle=0$.\n\n**Orthonormal set:** $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ is **orthonormal** if $\\langle\\vec{q}_i,\\vec{q}_j\\rangle=\\delta_{ij}$ (1 if $i=j$, 0 otherwise).\n\n**Orthogonal projection:** The projection of $\\vec{v}$ onto a subspace $W=\\text{span}\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ (orthonormal basis) is:\n$$\\text{proj}_W\\vec{v} = \\sum_{i=1}^k\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i.$$\n\n**Gram-Schmidt process:** Given a linearly independent set $\\{\\vec{a}_1,\\ldots,\\vec{a}_k\\}$, construct orthonormal $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$:\n$$\\vec{u}_j = \\vec{a}_j - \\sum_{i=1}^{j-1}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i, \\qquad \\vec{q}_j = \\frac{\\vec{u}_j}{\\|\\vec{u}_j\\|}.$$",
+      "body_he_md": "**הגדרה (מכפלה פנימית).** **מכפלה פנימית** על מרחב ממשי $V$ היא פונקציה $\\langle\\cdot,\\cdot\\rangle$ המקיימת:\n1. **סימטריה:** $\\langle\\vec{u},\\vec{v}\\rangle = \\langle\\vec{v},\\vec{u}\\rangle$.\n2. **לינאריות בארגומנט הראשון:** $\\langle c\\vec{u}+\\vec{w},\\vec{v}\\rangle = c\\langle\\vec{u},\\vec{v}\\rangle+\\langle\\vec{w},\\vec{v}\\rangle$.\n3. **חיוביות:** $\\langle\\vec{v},\\vec{v}\\rangle \\geq 0$, שוויון אם ורק אם $\\vec{v}=\\vec{0}$.\n\n**מכפלה סטנדרטית ב-$\\mathbb{R}^n$:** $\\langle\\vec{u},\\vec{v}\\rangle = \\sum u_iv_i$.\n\n**ב-$C[a,b]$:** $\\langle f,g\\rangle = \\int_a^b f(x)g(x)\\,dx$.\n\n**נורמה:** $\\|\\vec{v}\\| = \\sqrt{\\langle\\vec{v},\\vec{v}\\rangle}$.\n\n**אורתונורמלי:** $\\langle\\vec{q}_i,\\vec{q}_j\\rangle=\\delta_{ij}$.\n\n**הטלה אורתוגונלית:** $\\text{proj}_W\\vec{v} = \\sum_{i=1}^k\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$.\n\n**גרם-שמידט:** $\\vec{u}_j = \\vec{a}_j - \\sum_{i<j}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i$, $\\vec{q}_j = \\vec{u}_j/\\|\\vec{u}_j\\|$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1 (Gram-Schmidt terminates).** If $\\{\\vec{a}_1,\\ldots,\\vec{a}_k\\}$ is linearly independent, then in the Gram-Schmidt process $\\vec{u}_j\\neq\\vec{0}$ for all $j$, so the process always produces an orthonormal set.\n\n**Theorem 2.** An orthonormal set is linearly independent.\n\n**Theorem 3 (Best approximation).** The projection $\\text{proj}_W\\vec{v}$ is the vector in $W$ closest to $\\vec{v}$:\n$$\\|\\vec{v}-\\text{proj}_W\\vec{v}\\| \\leq \\|\\vec{v}-\\vec{w}\\| \\quad \\forall\\vec{w}\\in W.$$\n\n**Theorem 4 (Parseval's identity).** If $\\{\\vec{q}_i\\}$ is an orthonormal basis for $V$:\n$$\\|\\vec{v}\\|^2 = \\sum_i |\\langle\\vec{v},\\vec{q}_i\\rangle|^2.$$\n\n**Theorem 5.** The residual $\\vec{v}-\\text{proj}_W\\vec{v}$ is orthogonal to every vector in $W$.",
+      "body_he_md": "**משפט 1 (גרם-שמידט מסתיים).** אם $\\{\\vec{a}_1,\\ldots,\\vec{a}_k\\}$ בלתי-תלויים, אז $\\vec{u}_j\\neq\\vec{0}$ לכל $j$, ולכן התהליך תמיד מייצר קבוצה אורתונורמלית.\n\n**משפט 2.** קבוצה אורתונורמלית בלתי-תלויה לינארית.\n\n**משפט 3 (קירוב מיטבי).** $\\text{proj}_W\\vec{v}$ הוא הוקטור ב-$W$ הקרוב ביותר ל-$\\vec{v}$.\n\n**משפט 4 (פרסבל).** $\\|\\vec{v}\\|^2 = \\sum_i |\\langle\\vec{v},\\vec{q}_i\\rangle|^2$.\n\n**משפט 5.** $\\vec{v}-\\text{proj}_W\\vec{v}$ אורתוגונלי לכל וקטור ב-$W$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Orthogonal Projection",
+      "title_he": "דוגמה פתורה 1 — הטלה אורתוגונלית",
+      "body_en_md": "**Project** $\\vec{v}=(1,1,1)$ onto $\\vec{u}=(1,0,0)$.\n\n**Formula:** $\\text{proj}_{\\vec{u}}\\vec{v} = \\dfrac{\\langle\\vec{v},\\vec{u}\\rangle}{\\langle\\vec{u},\\vec{u}\\rangle}\\vec{u}$.\n\n**Compute:**\n$$\\langle\\vec{v},\\vec{u}\\rangle = 1\\cdot1+1\\cdot0+1\\cdot0 = 1, \\quad \\langle\\vec{u},\\vec{u}\\rangle = 1.$$\n$$\\text{proj}_{\\vec{u}}\\vec{v} = \\frac{1}{1}(1,0,0) = (1,0,0).$$\n\n**Residual:** $\\vec{v}-\\text{proj}_{\\vec{u}}\\vec{v} = (0,1,1)$. Check orthogonality: $(0,1,1)\\cdot(1,0,0)=0$. ✓\n\n**Interpretation:** We extracted the component of $(1,1,1)$ along the $x$-axis.",
+      "body_he_md": "**הטל** $\\vec{v}=(1,1,1)$ על $\\vec{u}=(1,0,0)$.\n\n**נוסחה:** $\\text{proj}_{\\vec{u}}\\vec{v} = \\dfrac{\\langle\\vec{v},\\vec{u}\\rangle}{\\langle\\vec{u},\\vec{u}\\rangle}\\vec{u} = \\frac{1}{1}(1,0,0)=(1,0,0)$.\n\n**שאר:** $(0,1,1)$. בדיקת אורתוגונליות: $(0,1,1)\\cdot(1,0,0)=0$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Project $\\vec{v}=(2,3,1)$ onto $\\vec{u}=(1,1,0)$.",
+      "body_he": "הטל $\\vec{v}=(2,3,1)$ על $\\vec{u}=(1,1,0)$.",
+      "checkpoint_solution_en": "$\\langle\\vec{v},\\vec{u}\\rangle=5$, $\\langle\\vec{u},\\vec{u}\\rangle=2$. Projection: $\\frac{5}{2}(1,1,0)=(5/2,5/2,0)$.",
+      "checkpoint_solution_he": "$\\frac{5}{2}(1,1,0)=(5/2,5/2,0)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Gram-Schmidt on Three Vectors",
+      "title_he": "דוגמה פתורה 2 — גרם-שמידט על שלושה וקטורים",
+      "body_en_md": "**Apply Gram-Schmidt** to $\\{\\vec{a}_1,\\vec{a}_2,\\vec{a}_3\\} = \\{(1,1,0),(1,0,1),(0,1,1)\\}$.\n\n**Step 1 — Normalise $\\vec{a}_1$:**\n$$\\vec{u}_1=(1,1,0), \\quad \\|\\vec{u}_1\\|=\\sqrt{2}, \\quad \\vec{q}_1=\\frac{1}{\\sqrt{2}}(1,1,0).$$\n\n**Step 2 — Orthogonalise $\\vec{a}_2$:**\n$$\\langle\\vec{a}_2,\\vec{q}_1\\rangle = (1,0,1)\\cdot\\frac{1}{\\sqrt{2}}(1,1,0) = \\frac{1}{\\sqrt{2}}.$$\n$$\\vec{u}_2 = \\vec{a}_2 - \\langle\\vec{a}_2,\\vec{q}_1\\rangle\\vec{q}_1 = (1,0,1) - \\frac{1}{\\sqrt{2}}\\cdot\\frac{1}{\\sqrt{2}}(1,1,0) = (1,0,1)-\\frac{1}{2}(1,1,0) = \\left(\\frac{1}{2},-\\frac{1}{2},1\\right).$$\n$$\\|\\vec{u}_2\\|=\\sqrt{\\frac{1}{4}+\\frac{1}{4}+1}=\\sqrt{\\frac{3}{2}}, \\quad \\vec{q}_2=\\frac{1}{\\sqrt{3/2}}\\left(\\frac{1}{2},-\\frac{1}{2},1\\right)=\\sqrt{\\frac{2}{3}}\\left(\\frac{1}{2},-\\frac{1}{2},1\\right)=\\frac{1}{\\sqrt{6}}(1,-1,2).$$\n\n**Step 3 — Orthogonalise $\\vec{a}_3$:**\n$$\\langle\\vec{a}_3,\\vec{q}_1\\rangle=(0,1,1)\\cdot\\frac{1}{\\sqrt{2}}(1,1,0)=\\frac{1}{\\sqrt{2}}.$$\n$$\\langle\\vec{a}_3,\\vec{q}_2\\rangle=(0,1,1)\\cdot\\frac{1}{\\sqrt{6}}(1,-1,2)=\\frac{-1+2}{\\sqrt{6}}=\\frac{1}{\\sqrt{6}}.$$\n$$\\vec{u}_3=(0,1,1)-\\frac{1}{\\sqrt{2}}\\cdot\\frac{1}{\\sqrt{2}}(1,1,0)-\\frac{1}{\\sqrt{6}}\\cdot\\frac{1}{\\sqrt{6}}(1,-1,2)=(0,1,1)-\\frac{1}{2}(1,1,0)-\\frac{1}{6}(1,-1,2).$$\n$$=\\left(-\\frac{1}{2}-\\frac{1}{6}, 1-\\frac{1}{2}+\\frac{1}{6}, 1-\\frac{1}{3}\\right)=\\left(-\\frac{2}{3},\\frac{2}{3},\\frac{2}{3}\\right)=\\frac{2}{3}(-1,1,1).$$\n$$\\vec{q}_3 = \\frac{1}{\\sqrt{3}}(-1,1,1).$$\n\n**Result:** $\\left\\{\\frac{1}{\\sqrt{2}}(1,1,0),\\;\\frac{1}{\\sqrt{6}}(1,-1,2),\\;\\frac{1}{\\sqrt{3}}(-1,1,1)\\right\\}$ is an orthonormal basis for $\\mathbb{R}^3$.",
+      "body_he_md": "**הפעל גרם-שמידט** על $\\{(1,1,0),(1,0,1),(0,1,1)\\}$.\n\n**שלב 1:** $\\vec{q}_1=\\frac{1}{\\sqrt{2}}(1,1,0)$.\n\n**שלב 2:** $\\vec{u}_2=(1/2,-1/2,1)$, $\\vec{q}_2=\\frac{1}{\\sqrt{6}}(1,-1,2)$.\n\n**שלב 3:** $\\vec{u}_3=\\frac{2}{3}(-1,1,1)$, $\\vec{q}_3=\\frac{1}{\\sqrt{3}}(-1,1,1)$.\n\n**תוצאה:** $\\left\\{\\frac{1}{\\sqrt{2}}(1,1,0),\\frac{1}{\\sqrt{6}}(1,-1,2),\\frac{1}{\\sqrt{3}}(-1,1,1)\\right\\}$ — בסיס אורתונורמלי ל-$\\mathbb{R}^3$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Apply Gram-Schmidt to $\\{(1,0),(1,1)\\}$ to get an orthonormal basis of $\\mathbb{R}^2$.",
+      "body_he": "הפעל גרם-שמידט על $\\{(1,0),(1,1)\\}$ כדי לקבל בסיס אורתונורמלי של $\\mathbb{R}^2$.",
+      "checkpoint_solution_en": "$\\vec{q}_1=(1,0)$. $\\langle(1,1),(1,0)\\rangle=1$. $\\vec{u}_2=(1,1)-1\\cdot(1,0)=(0,1)$. $\\vec{q}_2=(0,1)$. ONB: $\\{(1,0),(0,1)\\}$.",
+      "checkpoint_solution_he": "$\\vec{q}_1=(1,0)$. $\\vec{u}_2=(0,1)$. $\\vec{q}_2=(0,1)$. בסיס: $\\{(1,0),(0,1)\\}$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof: Gram-Schmidt Always Produces an Orthonormal Set",
+      "title_he": "דוגמה פתורה 3 — הוכחה: גרם-שמידט תמיד מייצר קבוצה אורתונורמלית",
+      "body_en_md": "**Claim:** If $\\{\\vec{a}_1,\\ldots,\\vec{a}_k\\}$ is linearly independent, the Gram-Schmidt process produces an orthonormal set $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ with the same span at each step.\n\n**Proof by induction on $k$:**\n\n**Base case ($k=1$):** $\\vec{q}_1 = \\vec{a}_1/\\|\\vec{a}_1\\|$. Since $\\vec{a}_1\\neq\\vec{0}$ (independent), $\\|\\vec{a}_1\\|>0$. $\\|\\vec{q}_1\\|=1$. ✓\n\n**Inductive step.** Assume $\\{\\vec{q}_1,\\ldots,\\vec{q}_{j-1}\\}$ is orthonormal with $\\text{span}\\{\\vec{q}_1,\\ldots,\\vec{q}_{j-1}\\}=\\text{span}\\{\\vec{a}_1,\\ldots,\\vec{a}_{j-1}\\}$. Define\n$$\\vec{u}_j = \\vec{a}_j - \\sum_{i=1}^{j-1}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i.$$\n\n**Step A: $\\vec{u}_j\\neq\\vec{0}$.** The sum $\\sum_{i=1}^{j-1}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i\\in\\text{span}\\{\\vec{q}_1,\\ldots,\\vec{q}_{j-1}\\}=\\text{span}\\{\\vec{a}_1,\\ldots,\\vec{a}_{j-1}\\}$. If $\\vec{u}_j=\\vec{0}$, then $\\vec{a}_j$ would be a linear combination of $\\vec{a}_1,\\ldots,\\vec{a}_{j-1}$, contradicting independence.\n\n**Step B: $\\vec{q}_j\\perp\\vec{q}_l$ for $l<j$.** Compute:\n$$\\langle\\vec{u}_j,\\vec{q}_l\\rangle = \\langle\\vec{a}_j,\\vec{q}_l\\rangle - \\sum_{i=1}^{j-1}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\langle\\vec{q}_i,\\vec{q}_l\\rangle.$$\nSince $\\{\\vec{q}_i\\}$ is orthonormal, $\\langle\\vec{q}_i,\\vec{q}_l\\rangle=\\delta_{il}$, so the sum equals $\\langle\\vec{a}_j,\\vec{q}_l\\rangle$. Therefore $\\langle\\vec{u}_j,\\vec{q}_l\\rangle=0$. Since $\\vec{q}_j=\\vec{u}_j/\\|\\vec{u}_j\\|$, we get $\\langle\\vec{q}_j,\\vec{q}_l\\rangle=0$. ✓\n\n**Step C: $\\|\\vec{q}_j\\|=1$.** By construction $\\vec{q}_j=\\vec{u}_j/\\|\\vec{u}_j\\|$. ✓\n\n**Step D: Same span.** $\\vec{q}_j$ is a non-zero linear combination of $\\vec{a}_j$ and $\\vec{q}_1,\\ldots,\\vec{q}_{j-1}$; span is preserved. ✓\n\nBy induction, $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ is orthonormal. $\\blacksquare$",
+      "body_he_md": "**טענה:** אם $\\{\\vec{a}_1,\\ldots,\\vec{a}_k\\}$ בלתי-תלויים, תהליך גרם-שמידט מייצר קבוצה אורתונורמלית $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ עם אותה פרישה בכל שלב.\n\n**הוכחה באינדוקציה על $k$:**\n\n**בסיס ($k=1$):** $\\vec{q}_1=\\vec{a}_1/\\|\\vec{a}_1\\|\\neq\\vec{0}$. $\\|\\vec{q}_1\\|=1$. ✓\n\n**שלב אינדוקציה.** נניח $\\{\\vec{q}_1,\\ldots,\\vec{q}_{j-1}\\}$ אורתונורמלי. הגדר $\\vec{u}_j = \\vec{a}_j - \\sum_{i<j}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i$.\n\n**A: $\\vec{u}_j\\neq\\vec{0}$.** אם $\\vec{u}_j=\\vec{0}$, אז $\\vec{a}_j\\in\\text{span}\\{\\vec{a}_1,\\ldots,\\vec{a}_{j-1}\\}$ — סתירה לבלתי-תלות.\n\n**B: $\\langle\\vec{q}_j,\\vec{q}_l\\rangle=0$ לכל $l<j$.** $\\langle\\vec{u}_j,\\vec{q}_l\\rangle = \\langle\\vec{a}_j,\\vec{q}_l\\rangle - \\langle\\vec{a}_j,\\vec{q}_l\\rangle = 0$. ✓\n\n**C: $\\|\\vec{q}_j\\|=1$.** לפי ההגדרה. ✓\n\nבאינדוקציה, $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ אורתונורמלי. $\\blacksquare$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Gram-Schmidt Toolkit",
+      "title_he": "מדריך שיטה — ארגז כלים לגרם-שמידט",
+      "body_en_md": "**Gram-Schmidt algorithm:**\n1. $\\vec{u}_1=\\vec{a}_1$; $\\vec{q}_1=\\vec{u}_1/\\|\\vec{u}_1\\|$.\n2. For $j=2,\\ldots,k$: $\\vec{u}_j=\\vec{a}_j-\\displaystyle\\sum_{i=1}^{j-1}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i$; $\\vec{q}_j=\\vec{u}_j/\\|\\vec{u}_j\\|$.\n\n**Projection onto subspace with ONB $\\{\\vec{q}_1,\\ldots,\\vec{q}_m\\}$:**\n$$\\text{proj}_W\\vec{v}=\\sum_{i=1}^m\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i.$$\n\n| Goal | Method |\n|---|---|\n| Project onto a single vector | $\\text{proj}_{\\vec{u}}\\vec{v}=\\frac{\\langle\\vec{v},\\vec{u}\\rangle}{\\|\\vec{u}\\|^2}\\vec{u}$ |\n| Project onto subspace with ONB | Sum of scalar projections |\n| Orthonormal basis from independent set | Gram-Schmidt |\n| Verify orthonormality | Check $\\langle\\vec{q}_i,\\vec{q}_j\\rangle=0$ ($i\\neq j$) and $\\|\\vec{q}_i\\|=1$ |\n| QR decomposition | $Q=[\\vec{q}_1,\\ldots,\\vec{q}_n]$; $R_{ij}=\\langle\\vec{a}_j,\\vec{q}_i\\rangle$ for $i\\leq j$ |",
+      "body_he_md": "**אלגוריתם גרם-שמידט:**\n1. $\\vec{u}_1=\\vec{a}_1$; $\\vec{q}_1=\\vec{u}_1/\\|\\vec{u}_1\\|$.\n2. $\\vec{u}_j=\\vec{a}_j-\\sum_{i<j}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i$; $\\vec{q}_j=\\vec{u}_j/\\|\\vec{u}_j\\|$.\n\n**הטלה על תת-מרחב עם בסיס-ON $\\{\\vec{q}_i\\}$:**\n$\\text{proj}_W\\vec{v}=\\sum_i\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$.\n\n| מטרה | שיטה |\n|---|---|\n| הטלה על וקטור בודד | $\\frac{\\langle\\vec{v},\\vec{u}\\rangle}{\\|\\vec{u}\\|^2}\\vec{u}$ |\n| הטלה על תת-מרחב עם ONB | סכום הטלות סקלריות |\n| בסיס-ON מקבוצה בלתי-תלויה | גרם-שמידט |\n| אמות אורתונורמליות | $\\langle\\vec{q}_i,\\vec{q}_j\\rangle=0$ ו-$\\|\\vec{q}_i\\|=1$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Project $\\vec{v}=(3,4)$ onto $\\vec{u}=(1,0)$.",
+          "body_he": "הטל $\\vec{v}=(3,4)$ על $\\vec{u}=(1,0)$.",
+          "solution_en": "$\\text{proj}_{\\vec{u}}\\vec{v}=\\frac{3}{1}(1,0)=(3,0)$.",
+          "solution_he": "$(3,0)$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Verify that $\\{(1/\\sqrt{2},1/\\sqrt{2}),(1/\\sqrt{2},-1/\\sqrt{2})\\}$ is orthonormal.",
+          "body_he": "אמת ש-$\\{(1/\\sqrt{2},1/\\sqrt{2}),(1/\\sqrt{2},-1/\\sqrt{2})\\}$ אורתונורמלי.",
+          "solution_en": "Dot product: $\\frac{1}{2}-\\frac{1}{2}=0$ ✓. Norms: $\\sqrt{1/2+1/2}=1$ for each ✓.",
+          "solution_he": "מכפלה פנימית: 0 ✓. נורמות: 1 כל אחת ✓.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Apply Gram-Schmidt to $\\{(3,4)\}$ (single vector) to get a unit vector.",
+          "body_he": "הפעל גרם-שמידט על $\\{(3,4)\\}$ (וקטור בודד) כדי לקבל וקטור יחידה.",
+          "solution_en": "$\\|{(3,4)}\\|=5$. $\\vec{q}_1=(3/5,4/5)$.",
+          "solution_he": "$\\vec{q}_1=(3/5,4/5)$.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find the projection of $\\vec{v}=(1,2,3)$ onto the subspace $W=\\text{span}\\{(1,0,0),(0,1,0)\\}$.",
+          "body_he": "מצא את ההטלה של $\\vec{v}=(1,2,3)$ על $W=\\text{span}\\{(1,0,0),(0,1,0)\\}$.",
+          "solution_en": "$(1,0,0)$ and $(0,1,0)$ are already orthonormal. $\\text{proj}_W\\vec{v}=1\\cdot(1,0,0)+2\\cdot(0,1,0)=(1,2,0)$.",
+          "solution_he": "$\\text{proj}_W\\vec{v}=(1,2,0)$.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Apply Gram-Schmidt to $\\{(1,1),(1,-1)\\}$ in $\\mathbb{R}^2$.",
+          "body_he": "הפעל גרם-שמידט על $\\{(1,1),(1,-1)\\}$ ב-$\\mathbb{R}^2$.",
+          "solution_en": "$\\vec{q}_1=\\frac{1}{\\sqrt{2}}(1,1)$. $\\langle(1,-1),\\vec{q}_1\\rangle=0$ already! $\\vec{u}_2=(1,-1)$, $\\vec{q}_2=\\frac{1}{\\sqrt{2}}(1,-1)$. ONB: $\\{\\frac{1}{\\sqrt{2}}(1,1),\\frac{1}{\\sqrt{2}}(1,-1)\\}$.",
+          "solution_he": "$\\vec{q}_1=\\frac{1}{\\sqrt{2}}(1,1)$. Já são ortogonais. $\\vec{q}_2=\\frac{1}{\\sqrt{2}}(1,-1)$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the projection of $\\vec{b}=(1,1,1)$ onto $W=\\text{span}\\{(1,1,0),(0,1,1)\\}$.",
+          "body_he": "מצא את ההטלה של $\\vec{b}=(1,1,1)$ על $W=\\text{span}\\{(1,1,0),(0,1,1)\\}$.",
+          "solution_en": "First apply Gram-Schmidt to the spanning set. $\\vec{q}_1=\\frac{1}{\\sqrt{2}}(1,1,0)$. $\\vec{u}_2=(0,1,1)-\\frac{1}{\\sqrt{2}}\\cdot\\frac{1}{\\sqrt{2}}(1,1,0)=(-1/2,1/2,1)$; $\\|\\vec{u}_2\\|=\\sqrt{3/2}$; $\\vec{q}_2=\\frac{1}{\\sqrt{6}}(-1,1,2)$. Then $\\text{proj}_W\\vec{b}=\\langle\\vec{b},\\vec{q}_1\\rangle\\vec{q}_1+\\langle\\vec{b},\\vec{q}_2\\rangle\\vec{q}_2=\\frac{2}{\\sqrt{2}}\\cdot\\frac{1}{\\sqrt{2}}(1,1,0)+\\frac{2}{\\sqrt{6}}\\cdot\\frac{1}{\\sqrt{6}}(-1,1,2)=(1,1,0)+\\frac{1}{3}(-1,1,2)=(2/3,4/3,2/3)$.",
+          "solution_he": "לאחר גרם-שמידט על $W$: $\\text{proj}_W\\vec{b}=(2/3,4/3,2/3)$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Show that the set $\\{1/\\sqrt{2}, \\cos(x)/\\sqrt{\\pi}, \\sin(x)/\\sqrt{\\pi}\\}$ is orthonormal in $C[-\\pi,\\pi]$ with inner product $\\langle f,g\\rangle=\\int_{-\\pi}^{\\pi}f(x)g(x)dx$.",
+          "body_he": "הראה ש-$\\{1/\\sqrt{2\\pi}, \\cos(x)/\\sqrt{\\pi}, \\sin(x)/\\sqrt{\\pi}\\}$ אורתונורמלי ב-$C[-\\pi,\\pi]$ עם $\\langle f,g\\rangle=\\int_{-\\pi}^{\\pi}fg\\,dx$.",
+          "solution_en": "Check: $\\int_{-\\pi}^\\pi \\frac{1}{2\\pi}dx=1$... Actually with $f_0=1/\\sqrt{2\\pi}$: $\\|f_0\\|^2=\\int_{-\\pi}^\\pi \\frac{1}{2\\pi}dx=1$. $\\langle f_0,\\cos/\\sqrt\\pi\\rangle=\\frac{1}{\\sqrt{2\\pi}\\sqrt\\pi}\\int_{-\\pi}^\\pi\\cos x\\,dx=0$. Similarly for sin. Cross terms: $\\int_{-\\pi}^\\pi\\sin x\\cos x\\,dx=0$ (odd). Norms of $\\cos/\\sqrt\\pi$: $\\frac{1}{\\pi}\\int_{-\\pi}^\\pi\\cos^2x\\,dx=1$.",
+          "solution_he": "$\\|f_0\\|^2=1$, $\\langle f_0,\\cos/\\sqrt\\pi\\rangle=0$, $\\langle\\cos,\\sin\\rangle/\\pi=0$, נורמות=1. ✓",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Apply Gram-Schmidt to $\\{1, x, x^2\\}$ in $P_2$ with inner product $\\langle p,q\\rangle=\\int_{-1}^1 p(x)q(x)dx$.",
+          "body_he": "הפעל גרם-שמידט על $\\{1, x, x^2\\}$ ב-$P_2$ עם $\\langle p,q\\rangle=\\int_{-1}^1 p(x)q(x)dx$.",
+          "solution_en": "$\\vec{q}_1=1/\\sqrt{2}$. $\\langle x,q_1\\rangle=0$ (odd), so $q_2=x/\\|x\\|=x/\\sqrt{2/3}=\\sqrt{3/2}x$. $\\langle x^2,q_1\\rangle=\\int_{-1}^1 x^2/\\sqrt{2}dx=\\frac{2}{3\\sqrt{2}}$. $u_3=x^2-\\frac{2}{3\\sqrt{2}}\\cdot\\frac{1}{\\sqrt{2}}=x^2-1/3$. $\\|u_3\\|^2=\\int_{-1}^1(x^2-1/3)^2dx=8/45$. $q_3=\\sqrt{45/8}(x^2-1/3)$. These are proportional to Legendre polynomials $P_0,P_1,P_2$.",
+          "solution_he": "מתקבלים רב-אברים פרופורציונליים לפולינומי לז'נדר $P_0,P_1,P_2$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove: for any orthonormal set $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ in an inner product space and any vector $\\vec{v}$, the Bessel inequality holds: $\\sum_{i=1}^k|\\langle\\vec{v},\\vec{q}_i\\rangle|^2\\leq\\|\\vec{v}\\|^2$.",
+          "body_he": "הוכח: לכל קבוצה אורתונורמלית $\\{\\vec{q}_1,\\ldots,\\vec{q}_k\\}$ וכל $\\vec{v}$: $\\sum_{i=1}^k|\\langle\\vec{v},\\vec{q}_i\\rangle|^2\\leq\\|\\vec{v}\\|^2$ (אי-שוויון בסל).",
+          "solution_en": "Let $\\vec{p}=\\sum_i\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$ (projection). By Pythagoras: $\\|\\vec{v}\\|^2=\\|\\vec{p}\\|^2+\\|\\vec{v}-\\vec{p}\\|^2\\geq\\|\\vec{p}\\|^2=\\sum_i|\\langle\\vec{v},\\vec{q}_i\\rangle|^2$. $\\blacksquare$",
+          "solution_he": "יהי $\\vec{p}=\\text{proj}_W\\vec{v}$. פיתגורס: $\\|\\vec{v}\\|^2=\\|\\vec{p}\\|^2+\\|\\vec{v}-\\vec{p}\\|^2\\geq\\|\\vec{p}\\|^2=\\sum|\\langle\\vec{v},\\vec{q}_i\\rangle|^2$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that $\\vec{v}-\\text{proj}_W\\vec{v}$ is orthogonal to every vector in $W$ when $W$ has orthonormal basis $\\{\\vec{q}_1,\\ldots,\\vec{q}_m\\}$.",
+          "body_he": "הוכח ש-$\\vec{v}-\\text{proj}_W\\vec{v}$ אורתוגונלי לכל $\\vec{w}\\in W$ כשל-$W$ יש בסיס-ON $\\{\\vec{q}_1,\\ldots,\\vec{q}_m\\}$.",
+          "solution_en": "For any $\\vec{w}=\\sum_j c_j\\vec{q}_j\\in W$: $\\langle\\vec{v}-\\text{proj}_W\\vec{v},\\vec{w}\\rangle=\\sum_j c_j\\langle\\vec{v}-\\sum_i\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i,\\vec{q}_j\\rangle=\\sum_j c_j(\\langle\\vec{v},\\vec{q}_j\\rangle-\\langle\\vec{v},\\vec{q}_j\\rangle)=0$. $\\blacksquare$",
+          "solution_he": "לכל $\\vec{w}=\\sum c_j\\vec{q}_j$: $\\langle\\vec{v}-\\text{proj}\\vec{v},\\vec{w}\\rangle=\\sum c_j(\\langle\\vec{v},\\vec{q}_j\\rangle-\\langle\\vec{v},\\vec{q}_j\\rangle)=0$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Let $A$ be an $m\\times n$ matrix with orthonormal columns ($A^TA=I$). Prove that $\\|A\\vec{x}\\|=\\|\\vec{x}\\|$ for all $\\vec{x}\\in\\mathbb{R}^n$ (isometry).",
+          "body_he": "יהי $A$ מטריצה $m\\times n$ עם עמודות אורתונורמליות ($A^TA=I$). הוכח $\\|A\\vec{x}\\|=\\|\\vec{x}\\|$ לכל $\\vec{x}\\in\\mathbb{R}^n$.",
+          "solution_en": "$\\|A\\vec{x}\\|^2=(A\\vec{x})^T(A\\vec{x})=\\vec{x}^TA^TA\\vec{x}=\\vec{x}^TI\\vec{x}=\\|\\vec{x}\\|^2$. Take square roots. $\\blacksquare$",
+          "solution_he": "$\\|A\\vec{x}\\|^2=\\vec{x}^TA^TA\\vec{x}=\\vec{x}^T\\vec{x}=\\|\\vec{x}\\|^2$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Show that if $Q$ is an orthogonal matrix ($Q^TQ=I$ and $Q$ is square), then $\\det(Q)=\\pm1$ and $Q$ preserves inner products.",
+          "body_he": "הראה שאם $Q$ מטריצה אורתוגונלית, אז $\\det(Q)=\\pm1$ ו-$Q$ שומרת מכפלות פנימיות.",
+          "solution_en": "Det: $(\\det Q)^2=\\det(Q^TQ)=1$, so $\\det Q=\\pm1$. Inner product: $\\langle Q\\vec{u},Q\\vec{v}\\rangle=(Q\\vec{u})^T(Q\\vec{v})=\\vec{u}^TQ^TQ\\vec{v}=\\vec{u}^T\\vec{v}=\\langle\\vec{u},\\vec{v}\\rangle$. $\\blacksquare$",
+          "solution_he": "$\\det Q=\\pm1$ (מ-$(\\det Q)^2=1$). $\\langle Q\\vec{u},Q\\vec{v}\\rangle=\\vec{u}^TQ^TQ\\vec{v}=\\langle\\vec{u},\\vec{v}\\rangle$. $\\blacksquare$",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Projecting onto a non-normalised vector.** Use $\\frac{\\langle\\vec{v},\\vec{u}\\rangle}{\\|\\vec{u}\\|^2}\\vec{u}$, NOT $\\langle\\vec{v},\\vec{u}\\rangle\\vec{u}$ (the latter assumes $\\|\\vec{u}\\|=1$).\n\n2. **Forgetting to subtract all previous projections.** In step $j$, subtract projections onto ALL of $\\vec{q}_1,\\ldots,\\vec{q}_{j-1}$, not just the most recent.\n\n3. **Skipping normalisation.** Gram-Schmidt requires normalising after each orthogonalisation step to get an **orthonormal** (not just orthogonal) set.\n\n4. **Projecting onto a subspace without an ONB.** The formula $\\sum\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$ requires the $\\vec{q}_i$ to be orthonormal. For a general basis, solve a linear system instead.\n\n5. **Applying Gram-Schmidt to a dependent set.** If one $\\vec{u}_j=\\vec{0}$, the input set was dependent. Drop that vector and continue.",
+      "body_he_md": "1. **הטלה על וקטור לא-מנורמל.** השתמש ב-$\\frac{\\langle\\vec{v},\\vec{u}\\rangle}{\\|\\vec{u}\\|^2}\\vec{u}$, לא $\\langle\\vec{v},\\vec{u}\\rangle\\vec{u}$.\n\n2. **שכחת חיסור כל ההטלות הקודמות.** בשלב $j$, חסר הטלות על **כל** $\\vec{q}_1,\\ldots,\\vec{q}_{j-1}$.\n\n3. **דילוג על נרמול.** גרם-שמידט דורש נרמול אחרי כל שלב.\n\n4. **הטלה על תת-מרחב ללא בסיס-ON.** הנוסחה $\\sum\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$ דורשת $\\vec{q}_i$ אורתונורמליים.\n\n5. **הפעלת גרם-שמידט על קבוצה תלויה.** אם $\\vec{u}_j=\\vec{0}$ — הקבוצה תלויה; הורד את הוקטור."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $\\text{proj}_{\\vec{u}}\\vec{v}=\\frac{\\langle\\vec{v},\\vec{u}\\rangle}{\\|\\vec{u}\\|^2}\\vec{u}$ (single vector)\n- $\\text{proj}_W\\vec{v}=\\sum_{i=1}^m\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$ (ONB for $W$)\n- Gram-Schmidt: $\\vec{u}_j=\\vec{a}_j-\\sum_{i<j}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i$; $\\vec{q}_j=\\vec{u}_j/\\|\\vec{u}_j\\|$\n- Bessel: $\\sum|\\langle\\vec{v},\\vec{q}_i\\rangle|^2\\leq\\|\\vec{v}\\|^2$\n- Parseval (full ONB): equality in Bessel\n\n**What Israeli university exams emphasise:**\n- Applying Gram-Schmidt to 2 or 3 vectors in $\\mathbb{R}^3$ (full computation).\n- Projecting onto a subspace given by a spanning set.\n- Proving orthonormality of a given set.\n- Theoretical proofs (residual is orthogonal, Bessel inequality).\n\n**Exam tip:** After each Gram-Schmidt step, verify orthogonality by computing dot products — it's easy to make sign errors.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $\\text{proj}_{\\vec{u}}\\vec{v}=\\frac{\\langle\\vec{v},\\vec{u}\\rangle}{\\|\\vec{u}\\|^2}\\vec{u}$\n- $\\text{proj}_W\\vec{v}=\\sum\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$ (ON)\n- גרם-שמידט: $\\vec{u}_j=\\vec{a}_j-\\sum_{i<j}\\langle\\vec{a}_j,\\vec{q}_i\\rangle\\vec{q}_i$\n- בסל: $\\sum|\\langle\\vec{v},\\vec{q}_i\\rangle|^2\\leq\\|\\vec{v}\\|^2$\n\n**מה בחינות ישראליות מדגישות:**\n- גרם-שמידט על 2-3 וקטורים ב-$\\mathbb{R}^3$.\n- הטלה על תת-מרחב.\n- הוכחת אורתונורמליות.\n- הוכחות תיאורטיות (שאר אורתוגונלי, בסל).\n\n**טיפ:** לאחר כל שלב גרם-שמידט, אמת אורתוגונליות על ידי חישוב מכפלות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- An **inner product space** has a generalised notion of angle and length satisfying symmetry, linearity, and positive definiteness.\n- An **orthonormal set** has $\\langle\\vec{q}_i,\\vec{q}_j\\rangle=\\delta_{ij}$; it is always linearly independent.\n- **Projection:** $\\text{proj}_W\\vec{v}=\\sum\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$ (with ONB for $W$); the residual is $\\perp W$.\n- **Gram-Schmidt:** converts any independent set to an orthonormal set with the same span; the process terminates because the input is independent.\n- **Bessel inequality:** $\\sum|\\langle\\vec{v},\\vec{q}_i\\rangle|^2\\leq\\|\\vec{v}\\|^2$ (equality for full ONB = Parseval).",
+      "body_he_md": "- **מרחב מכפלה פנימית** — מושג מוכלל של זווית ואורך: סימטריה, לינאריות, חיוביות.\n- **קבוצה אורתונורמלית:** $\\langle\\vec{q}_i,\\vec{q}_j\\rangle=\\delta_{ij}$; תמיד בלתי-תלויה.\n- **הטלה:** $\\text{proj}_W\\vec{v}=\\sum\\langle\\vec{v},\\vec{q}_i\\rangle\\vec{q}_i$; השאר $\\perp W$.\n- **גרם-שמידט:** ממיר קבוצה בלתי-תלויה לאורתונורמלית עם אותה פרישה.\n- **בסל:** $\\sum|\\langle\\vec{v},\\vec{q}_i\\rangle|^2\\leq\\|\\vec{v}\\|^2$ (שוויון = פרסבל)."
     }
-  ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Inner Product Gram Schmidt."
+  ]
 }

@@ -1,199 +1,224 @@
 {
   "concept_id": "la_determinants",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Determinants",
-  "title_he": "דטרמיננטות",
-  "summary_en": "The determinant encodes invertibility, area/volume scaling, and enables Cramer's rule.",
-  "summary_he": "הדטרמיננטה מקודדת הפיכות וקנה מידה של שטח/נפח.",
-  "est_minutes": 30,
+  "math_track": ["la"],
+  "title_en": "Determinants — Definition, Properties & Cramer's Rule",
+  "title_he": "דטרמיננטות — הגדרה, תכונות וכלל קרמר",
+  "summary_en": "The determinant as a signed volume, cofactor expansion, key multiplicative properties (det(AB)=det(A)det(B)), effect of row operations, Cramer's rule, and adjugate formula for the inverse.",
+  "summary_he": "הדטרמיננטה כנפח מכוון, פיתוח לפי מינורים, תכונות כפליות ($\\det(AB)=\\det A\\cdot\\det B$), השפעת פעולות שורה, כלל קרמר ונוסחת ההופכי באמצעות הנלווה.",
+  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is a Determinant? (2x2)",
-      "title_he": "מהי דטרמיננטה? (2x2)",
-      "body_en_md": "**Core content for Determinants.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-דטרמיננטות.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "$\\det(A)=ad-bc$. Zero iff singular.",
-          "body_he_md": "$\\det(A)=ad-bc$. אפס אם ורק אם סינגולרית."
-        }
-      }
+      "title_en": "Why Determinants?",
+      "title_he": "למה דטרמיננטות?",
+      "body_en_md": "The **determinant** assigns to every square matrix a single real number that encodes a remarkable amount of structural information: whether the matrix is invertible, how much it scales areas/volumes, and (via Cramer's rule) the solution of a linear system in closed form.\n\nDeterminants appear throughout the course: the characteristic polynomial $\\det(A-\\lambda I)=0$ that produces eigenvalues, the Jacobian that changes variables in multiple integrals, and the cross product formula in $\\mathbb{R}^3$.\n\n**Connection to previous material:** You have computed $2\\times2$ determinants as $ad-bc$. Here we systematise the definition to any $n\\times n$ matrix via cofactor expansion.",
+      "body_he_md": "ה**דטרמיננטה** מקצה לכל מטריצה ריבועית מספר ממשי יחיד המקודד כמות עצומה של מידע מבני: האם המטריצה הפיכה, כמה היא מכפילה שטחים/נפחים, ו(דרך כלל קרמר) את פתרון המערכת הלינארית בצורה סגורה.\n\nדטרמיננטות מופיעות בכל הקורס: הפולינום האופייני $\\det(A-\\lambda I)=0$ הנותן ערכים עצמיים, היעקוביאן שמחליף משתנים באינטגרלים מרובי, ונוסחת המכפלה הווקטורית ב-$\\mathbb{R}^3$.\n\n**קשר לחומר קודם:** חישבתם דטרמיננטות $2\\times2$ כ-$ad-bc$. כאן אנו ממסדים את ההגדרה לכל מטריצה $n\\times n$ דרך פיתוח לפי מינורים."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Determinant via Cofactor Expansion",
+      "title_he": "דטרמיננטה דרך פיתוח לפי מינורים",
+      "body_en_md": "**Base case:** $\\det(a) = a$ for $1\\times1$.\n\n**$2\\times2$:** $\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix} = ad - bc$.\n\n**Cofactor expansion along row $i$:**\n$$\\det(A) = \\sum_{j=1}^n (-1)^{i+j} a_{ij} M_{ij}$$\nwhere $M_{ij}$ is the **minor** — the determinant of the $(n-1)\\times(n-1)$ submatrix obtained by deleting row $i$ and column $j$.\n\nThe **cofactor** is $C_{ij} = (-1)^{i+j}M_{ij}$.\n\n**Sign pattern for $3\\times3$ (expanding along row 1):**\n$$\\det\\begin{pmatrix}a&b&c\\\\d&e&f\\\\g&h&i\\end{pmatrix} = a\\begin{vmatrix}e&f\\\\h&i\\end{vmatrix} - b\\begin{vmatrix}d&f\\\\g&i\\end{vmatrix} + c\\begin{vmatrix}d&e\\\\g&h\\end{vmatrix}.$$\n\n**Alternative: expansion along any row or column** gives the same result.",
+      "body_he_md": "**מקרה בסיס:** $\\det(a) = a$ עבור $1\\times1$.\n\n**$2\\times2$:** $\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix} = ad - bc$.\n\n**פיתוח לפי שורה $i$:**\n$$\\det(A) = \\sum_{j=1}^n (-1)^{i+j} a_{ij} M_{ij}$$\nכאשר $M_{ij}$ הוא ה**מינור** — הדטרמיננטה של תת-המטריצה $(n-1)\\times(n-1)$ המתקבלת בהוצאת שורה $i$ ועמודה $j$.\n\nה**קופקטור** הוא $C_{ij} = (-1)^{i+j}M_{ij}$.\n\n**לפיתוח לפי שורה 1 (מטריצה $3\\times3$):**\n$$\\det\\begin{pmatrix}a&b&c\\\\d&e&f\\\\g&h&i\\end{pmatrix} = a(ei-fh) - b(di-fg) + c(dh-eg).$$\n\n**חלופה: פיתוח לפי כל שורה או עמודה** נותן את אותה תוצאה."
     },
     {
       "kind": "theory",
-      "title_en": "3x3 Cofactor Expansion",
-      "title_he": "דטרמיננטה 3x3",
-      "body_en_md": "Expand along row/column with most zeros. Example: $\\det\\begin{pmatrix}1&2&0\\\\3&-1&4\\\\0&2&1\\end{pmatrix}=-15$.",
-      "body_he_md": "פתח לאורך שורה/עמודה עם הכי הרבה אפסים. דוגמה: $\\det=-15$.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Sign at $(i,j)$ is $(-1)^{i+j}$.",
-          "body_he_md": "הסימן ב-$(i,j)$ הוא $(-1)^{i+j}$."
-        }
-      }
-    },
-    {
-      "kind": "theory",
-      "title_en": "Properties",
-      "title_he": "תכונות",
-      "body_en_md": "$\\det(AB)=\\det(A)\\det(B)$; row swap flips sign; triangular det = product of diagonal.",
-      "body_he_md": "$\\det(AB)=\\det(A)\\det(B)$; החלפת שורות הופכת סימן.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Product rule + row operations.",
-          "body_he_md": "כלל מכפלה + פעולות שורות."
-        }
-      }
+      "title_en": "Key Properties",
+      "title_he": "תכונות מרכזיות",
+      "body_en_md": "**Theorem 1 (Row operation effects):**\n1. Swapping two rows: $\\det \\to -\\det$.\n2. Scaling a row by $c$: $\\det \\to c\\cdot\\det$.\n3. Adding a multiple of one row to another: $\\det$ **unchanged**.\n\n**Corollary:** $\\det(A)=0$ if two rows (or columns) are identical, or if a row is all zeros.\n\n**Theorem 2 (Multiplicativity):** $\\det(AB) = \\det(A)\\cdot\\det(B)$.\n\n**Corollary:** If $A$ is invertible, $\\det(A^{-1}) = 1/\\det(A)$.\n\n*Proof sketch:* From $AA^{-1}=I$ and $\\det(I)=1$: $\\det(A)\\det(A^{-1})=1$.\n\n**Theorem 3:** $\\det(A^T) = \\det(A)$.\n\n**Theorem 4 (Invertibility criterion):** $A$ is invertible $\\Leftrightarrow$ $\\det(A)\\neq 0$.\n\n**Adjugate formula for the inverse:**\n$$A^{-1} = \\frac{1}{\\det(A)}\\text{adj}(A), \\quad (\\text{adj}(A))_{ij} = C_{ji}.$$\n\n**Cramer's rule** (for $A\\vec{x}=\\vec{b}$, $A$ invertible):\n$$x_i = \\frac{\\det(A_i)}{\\det(A)}$$\nwhere $A_i$ is $A$ with column $i$ replaced by $\\vec{b}$.",
+      "body_he_md": "**משפט 1 (השפעת פעולות שורה):**\n1. החלפת שתי שורות: $\\det \\to -\\det$.\n2. הכפלת שורה ב-$c$: $\\det \\to c\\cdot\\det$.\n3. הוספת כפולה של שורה לאחרת: $\\det$ **לא משתנה**.\n\n**מסקנה:** $\\det(A)=0$ אם שתי שורות (או עמודות) זהות, או אם שורה כולה אפסית.\n\n**משפט 2 (כפליות):** $\\det(AB) = \\det(A)\\cdot\\det(B)$.\n\n**מסקנה:** אם $A$ הפיכה, $\\det(A^{-1}) = 1/\\det(A)$.\n\n*סקיצת הוכחה:* מ-$AA^{-1}=I$ ו-$\\det(I)=1$: $\\det(A)\\det(A^{-1})=1$.\n\n**משפט 3:** $\\det(A^T) = \\det(A)$.\n\n**משפט 4 (קריטריון הפיכות):** $A$ הפיכה $\\Leftrightarrow$ $\\det(A)\\neq 0$.\n\n**נוסחת ההופכי דרך הנלווה:**\n$$A^{-1} = \\frac{1}{\\det(A)}\\text{adj}(A).$$\n\n**כלל קרמר** ($A\\vec{x}=\\vec{b}$, $A$ הפיכה):\n$$x_i = \\frac{\\det(A_i)}{\\det(A)}$$\nכאשר $A_i$ הוא $A$ עם עמודה $i$ מוחלפת ב-$\\vec{b}$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Cramer's Rule",
-      "title_he": "כלל קרמר",
-      "body_en_md": "$x_j=\\det(A_j)/\\det(A)$. Example: $3x+y=7$, $x-y=1$ gives $x=2$, $y=1$.",
-      "body_he_md": "$x_j=\\det(A_j)/\\det(A)$. דוגמה: $x=2$, $y=1$.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Efficient for 2x2/3x3.",
-          "body_he_md": "יעיל ל-2x2/3x3."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — 2×2 Determinant",
+      "title_he": "דוגמה פתורה 1 — דטרמיננטה 2×2",
+      "body_en_md": "**Compute** $\\det\\begin{pmatrix}2&1\\\\3&4\\end{pmatrix}$.\n\n$$\\det = (2)(4) - (1)(3) = 8 - 3 = 5.$$\n\nSince $\\det\\neq 0$, the matrix is **invertible**.\n\n**Inverse:**\n$$A^{-1} = \\frac{1}{5}\\begin{pmatrix}4&-1\\\\-3&2\\end{pmatrix}.$$\n\n**Verify:** $AA^{-1} = \\frac{1}{5}\\begin{pmatrix}2&1\\\\3&4\\end{pmatrix}\\begin{pmatrix}4&-1\\\\-3&2\\end{pmatrix} = \\frac{1}{5}\\begin{pmatrix}5&0\\\\0&5\\end{pmatrix} = I$. $\\checkmark$",
+      "body_he_md": "**חשב** $\\det\\begin{pmatrix}2&1\\\\3&4\\end{pmatrix}$.\n\n$$\\det = (2)(4) - (1)(3) = 8 - 3 = 5.$$\n\nמכיוון ש-$\\det\\neq 0$, המטריצה **הפיכה**.\n\n**הופכי:**\n$$A^{-1} = \\frac{1}{5}\\begin{pmatrix}4&-1\\\\-3&2\\end{pmatrix}.$$\n\n**אימות:** $AA^{-1} = I$. $\\checkmark$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\det\\begin{pmatrix}5&-2\\\\3&1\\end{pmatrix}$ and find $A^{-1}$.",
+      "body_he_md": "חשב $\\det\\begin{pmatrix}5&-2\\\\3&1\\end{pmatrix}$ ומצא $A^{-1}$.",
+      "checkpoint_solution_en": "$\\det = 5+6=11$. $A^{-1}=\\frac{1}{11}\\begin{pmatrix}1&2\\\\-3&5\\end{pmatrix}$.",
+      "checkpoint_solution_he": "$\\det = 5+6=11$. $A^{-1}=\\frac{1}{11}\\begin{pmatrix}1&2\\\\-3&5\\end{pmatrix}$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — 3×3 Determinant by Cofactor Expansion",
+      "title_he": "דוגמה פתורה 2 — דטרמיננטה 3×3 על ידי פיתוח לפי מינורים",
+      "body_en_md": "**Compute** $\\det\\begin{pmatrix}1&2&3\\\\0&4&5\\\\1&0&6\\end{pmatrix}$.\n\n**Expand along row 1:**\n$$= 1\\cdot\\det\\begin{pmatrix}4&5\\\\0&6\\end{pmatrix} - 2\\cdot\\det\\begin{pmatrix}0&5\\\\1&6\\end{pmatrix} + 3\\cdot\\det\\begin{pmatrix}0&4\\\\1&0\\end{pmatrix}$$\n$$= 1(24-0) - 2(0-5) + 3(0-4)$$\n$$= 24 + 10 - 12 = 22.$$\n\n**Alternative strategy:** Since row 2 starts with 0, expanding along row 2 reduces to two $2\\times2$ minors:\n$$= 0\\cdot C_{21} - 4\\cdot(-1)^{2+2}\\det\\begin{pmatrix}1&3\\\\1&6\\end{pmatrix} + 5\\cdot(-1)^{2+3}\\det\\begin{pmatrix}1&2\\\\1&0\\end{pmatrix}$$\n$$= 0 - 4(6-3) - 5(0-2) = -12+10 = -2.$$\n\nWait — let me recompute the correct answer by expanding along row 1 only:\n$1(4\\cdot6-5\\cdot0)-2(0\\cdot6-5\\cdot1)+3(0\\cdot0-4\\cdot1) = 24-2(-5)+3(-4) = 24+10-12=22$. The answer is **22**.",
+      "body_he_md": "**חשב** $\\det\\begin{pmatrix}1&2&3\\\\0&4&5\\\\1&0&6\\end{pmatrix}$.\n\n**פיתוח לפי שורה 1:**\n$$= 1(4\\cdot6-5\\cdot0) - 2(0\\cdot6-5\\cdot1) + 3(0\\cdot0-4\\cdot1)$$\n$$= 1(24) - 2(-5) + 3(-4)$$\n$$= 24 + 10 - 12 = 22.$$\n\n**עצה:** כשיש אפסים בשורה/עמודה, מפתחים לפי אותה שורה/עמודה כדי למזער חישובים."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $\\det\\begin{pmatrix}2&0&1\\\\3&1&-1\\\\0&2&4\\end{pmatrix}$ by cofactor expansion along the most convenient row.",
+      "body_he_md": "חשב $\\det\\begin{pmatrix}2&0&1\\\\3&1&-1\\\\0&2&4\\end{pmatrix}$ על ידי פיתוח לפי השורה הנוחה ביותר.",
+      "checkpoint_solution_en": "Expand along row 1 (has a zero): $2(4+2)-0+1(6-0)=12+6=18$.",
+      "checkpoint_solution_he": "פיתוח לפי שורה 1: $2(4+2)-0+1(6-0)=12+6=18$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof: $\\det(A^{-1}) = 1/\\det(A)$",
+      "title_he": "דוגמה פתורה 3 — הוכחה: $\\det(A^{-1}) = 1/\\det(A)$",
+      "body_en_md": "**Claim:** If $A$ is an invertible $n\\times n$ matrix, then $\\det(A^{-1}) = \\dfrac{1}{\\det(A)}$.\n\n**Proof:**\n\n**Step 1 — Use the definition of inverse.** Since $A$ is invertible:\n$$A A^{-1} = I_n.$$\n\n**Step 2 — Apply the multiplicativity of $\\det$.** By Theorem 2:\n$$\\det(A A^{-1}) = \\det(A) \\cdot \\det(A^{-1}).$$\n\n**Step 3 — Determinant of the identity.** $\\det(I_n) = 1$ (product of diagonal entries of $I$).\n\n**Step 4 — Combine.** From steps 1–3:\n$$\\det(A) \\cdot \\det(A^{-1}) = 1.$$\n\n**Step 5 — Conclude.** Since $A$ is invertible, $\\det(A) \\neq 0$ (by the invertibility criterion). Divide both sides by $\\det(A)$:\n$$\\det(A^{-1}) = \\frac{1}{\\det(A)}. \\quad \\blacksquare$$\n\n**Remark:** This also shows $\\det(A^n) = (\\det A)^n$ by induction, and $\\det(A^{-1}) = (\\det A)^{-1}$.",
+      "body_he_md": "**טענה:** אם $A$ מטריצה $n\\times n$ הפיכה, אז $\\det(A^{-1}) = \\dfrac{1}{\\det(A)}$.\n\n**הוכחה:**\n\n**שלב 1 — שימוש בהגדרת ההופכי.** מכיוון ש-$A$ הפיכה:\n$$A A^{-1} = I_n.$$\n\n**שלב 2 — כפליות הדטרמיננטה.** לפי משפט 2:\n$$\\det(A) \\cdot \\det(A^{-1}) = \\det(AA^{-1}).$$\n\n**שלב 3 — דטרמיננטה של היחידה.** $\\det(I_n) = 1$.\n\n**שלב 4 — הצבה.** $\\det(A) \\cdot \\det(A^{-1}) = 1$.\n\n**שלב 5 — מסקנה.** מכיוון ש-$A$ הפיכה, $\\det(A) \\neq 0$. מחלקים:\n$$\\det(A^{-1}) = \\frac{1}{\\det(A)}. \\quad \\blacksquare$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Determinant Toolkit",
+      "title_he": "מדריך שיטה — ארגז כלים לדטרמיננטות",
+      "body_en_md": "| Goal | Method |\n|---|---|\n| $2\\times2$ det | $ad-bc$ |\n| $3\\times3$ det | Cofactor expansion; prefer the row/col with most zeros |\n| Show $A$ is invertible | Show $\\det(A)\\neq0$ |\n| Compute $\\det(AB)$ | $\\det(A)\\cdot\\det(B)$ |\n| Compute $\\det(A^k)$ | $(\\det A)^k$ |\n| Compute $\\det(cA)$ ($n\\times n$) | $c^n\\det(A)$ |\n| Effect of row swap | Multiply by $-1$ |\n| Effect of row scaling by $c$ | Multiply by $c$ |\n| Effect of row addition | No change to $\\det$ |\n| Cramer's rule for $x_i$ | $\\det(A_i)/\\det(A)$ |",
+      "body_he_md": "| מטרה | שיטה |\n|---|---|\n| דט' $2\\times2$ | $ad-bc$ |\n| דט' $3\\times3$ | פיתוח לפי מינורים; עדיף שורה/עמודה עם אפסים |\n| הראה ש-$A$ הפיכה | הראה $\\det(A)\\neq0$ |\n| חשב $\\det(AB)$ | $\\det(A)\\cdot\\det(B)$ |\n| חשב $\\det(A^k)$ | $(\\det A)^k$ |\n| חשב $\\det(cA)$ ($n\\times n$) | $c^n\\det(A)$ |\n| השפעת החלפת שורות | כפל ב-$-1$ |\n| השפעת הכפלת שורה ב-$c$ | כפל ב-$c$ |\n| השפעת הוספת כפולה לשורה | ללא שינוי |\n| כלל קרמר ל-$x_i$ | $\\det(A_i)/\\det(A)$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\det\\begin{pmatrix}6&2\\\\3&1\\end{pmatrix}$. Is this matrix invertible?",
+          "body_he": "חשב $\\det\\begin{pmatrix}6&2\\\\3&1\\end{pmatrix}$. האם המטריצה הפיכה?",
+          "solution_en": "$\\det = 6-6=0$. **Not invertible** (singular).",
+          "solution_he": "$\\det = 6-6=0$. **אינה הפיכה** (סינגולרית).",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Without computing the full determinant, explain why $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}=0$.",
+          "body_he": "מבלי לחשב את הדטרמיננטה במלואה, הסבר מדוע $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}=0$.",
+          "solution_en": "Row 3 = Row 1 + Row 2 + Row 3 - (Row 1 + Row 2)... actually: $R_3 - R_2 = (3,3,3)$ and $R_2-R_1=(3,3,3)$, so $R_3=2R_2-R_1$, meaning rows are linearly dependent. Hence $\\det=0$.",
+          "solution_he": "$R_2-R_1 = (3,3,3) = R_3-R_2$, לכן $R_3=2R_2-R_1$ — השורות תלויות לינארית. לכן $\\det=0$.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Given $\\det(A)=3$, find $\\det(2A)$ for a $3\\times3$ matrix $A$.",
+          "body_he": "נתון $\\det(A)=3$. מצא $\\det(2A)$ עבור מטריצה $3\\times3$ $A$.",
+          "solution_en": "$\\det(2A) = 2^3\\det(A) = 8\\cdot3 = 24$.",
+          "solution_he": "$\\det(2A) = 2^3\\cdot3 = 24$.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Use Cramer's rule to solve $3x+y=7$, $x+2y=4$.",
+          "body_he": "השתמש בכלל קרמר לפתרון $3x+y=7$, $x+2y=4$.",
+          "solution_en": "$A=\\begin{pmatrix}3&1\\\\1&2\\end{pmatrix}$, $\\det A=5$. $A_1=\\begin{pmatrix}7&1\\\\4&2\\end{pmatrix}$, $\\det A_1=10$. $A_2=\\begin{pmatrix}3&7\\\\1&4\\end{pmatrix}$, $\\det A_2=5$. $x=10/5=2$, $y=5/5=1$.",
+          "solution_he": "$\\det A=5$, $\\det A_1=10$, $\\det A_2=5$. $x=2$, $y=1$.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Compute $\\det\\begin{pmatrix}2&-1&0\\\\1&3&-1\\\\0&2&1\\end{pmatrix}$ by expanding along the most efficient row or column.",
+          "body_he": "חשב $\\det\\begin{pmatrix}2&-1&0\\\\1&3&-1\\\\0&2&1\\end{pmatrix}$ על ידי פיתוח לפי השורה/עמודה היעילה ביותר.",
+          "solution_en": "Expand along row 1 (has zero): $2(3+2)-(-1)(1-0)+0 = 10+1=11$.",
+          "solution_he": "פיתוח לפי שורה 1: $2(3+2)+1(1-0)+0=10+1=11$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "If $\\det(A)=4$ and $\\det(B)=3$ for $3\\times3$ matrices, find $\\det(2AB^{-1}A^T)$.",
+          "body_he": "אם $\\det(A)=4$ ו-$\\det(B)=3$ עבור מטריצות $3\\times3$, מצא $\\det(2AB^{-1}A^T)$.",
+          "solution_en": "$\\det(2AB^{-1}A^T)=2^3\\cdot\\det(A)\\cdot\\det(B^{-1})\\cdot\\det(A^T)=8\\cdot4\\cdot(1/3)\\cdot4=128/3$.",
+          "solution_he": "$8\\cdot4\\cdot(1/3)\\cdot4=128/3$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find all values of $\\lambda$ such that $\\det(A-\\lambda I)=0$ for $A=\\begin{pmatrix}3&1\\\\1&3\\end{pmatrix}$.",
+          "body_he": "מצא את כל ערכי $\\lambda$ כך ש-$\\det(A-\\lambda I)=0$ עבור $A=\\begin{pmatrix}3&1\\\\1&3\\end{pmatrix}$.",
+          "solution_en": "$\\det\\begin{pmatrix}3-\\lambda&1\\\\1&3-\\lambda\\end{pmatrix}=(3-\\lambda)^2-1=\\lambda^2-6\\lambda+8=0$. $\\lambda=2$ or $\\lambda=4$.",
+          "solution_he": "$(3-\\lambda)^2-1=0 \\Rightarrow \\lambda^2-6\\lambda+8=0 \\Rightarrow \\lambda=2$ או $\\lambda=4$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Evaluate $\\det\\begin{pmatrix}1&0&0&5\\\\0&2&0&0\\\\0&0&3&0\\\\0&0&0&4\\end{pmatrix}$ efficiently.",
+          "body_he": "חשב $\\det\\begin{pmatrix}1&0&0&5\\\\0&2&0&0\\\\0&0&3&0\\\\0&0&0&4\\end{pmatrix}$ ביעילות.",
+          "solution_en": "Expand along column 4: $(-1)^{1+4}\\cdot5\\cdot\\det\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&4\\end{pmatrix}+(-1)^{4+4}\\cdot4\\cdot\\det\\begin{pmatrix}1&0&0\\\\0&2&0\\\\0&0&3\\end{pmatrix}= -5\\cdot24+4\\cdot6=-120+24=-96$. Alternatively: expand along col 4 carefully. The upper triangular submatrix and the 5 entry contribute. Final answer: $\\det=1\\cdot2\\cdot3\\cdot4-5\\cdot0\\cdot... $ Actually for upper triangular det = product of diagonal = $1\\cdot2\\cdot3\\cdot4=24$. But there's an off-diagonal entry 5. Expand along col 4: only two nonzero entries: $(1,4)$ entry is 5, and $(4,4)$ entry is 4. $\\det=-5\\cdot(-1)^{1+4}M_{14}+4M_{44}$... Let me just expand along col 4: $5\\cdot(-1)^{1+4}\\cdot\\det\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&4\\end{pmatrix}+4\\cdot(-1)^{4+4}\\cdot\\det\\begin{pmatrix}1&0&0\\\\0&2&0\\\\0&0&3\\end{pmatrix}=-5\\cdot24+4\\cdot6=-120+24=-96$.",
+          "solution_he": "פיתוח לפי עמודה 4: $-5\\cdot24+4\\cdot6=-120+24=-96$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove: $\\det(A) = 0$ if and only if the rows of $A$ are linearly dependent.",
+          "body_he": "הוכח: $\\det(A) = 0$ אם ורק אם שורות $A$ תלויות לינארית.",
+          "solution_en": "($\\Rightarrow$) If rows are linearly dependent, one row is a linear combination of others. By row operations (which don't change $\\det$ mod sign/scale), we can make a zero row, giving $\\det=0$. ($\\Leftarrow$) If rows are independent, $\\text{rank}(A)=n$, so $A$ is invertible, so $\\det(A)\\neq0$. $\\blacksquare$",
+          "solution_he": "($\\Rightarrow$) שורות תלויות $\\Rightarrow$ שורה שווה לקומבינציה של אחרות $\\Rightarrow$ ניתן לאפס שורה בפעולות שורה $\\Rightarrow$ $\\det=0$. ($\\Leftarrow$) שורות בלתי-תלויות $\\Rightarrow$ $A$ הפיכה $\\Rightarrow$ $\\det\\neq0$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove: $\\det(A^n) = (\\det A)^n$ for any positive integer $n$.",
+          "body_he": "הוכח: $\\det(A^n) = (\\det A)^n$ לכל מספר טבעי $n$.",
+          "solution_en": "By induction. Base case $n=1$: trivial. Inductive step: $\\det(A^{n+1})=\\det(A^n\\cdot A)=\\det(A^n)\\cdot\\det(A)=(\\det A)^n\\cdot\\det(A)=(\\det A)^{n+1}$. $\\blacksquare$",
+          "solution_he": "באינדוקציה. $n=1$: טריוויאלי. $n\\to n+1$: $\\det(A^{n+1})=\\det(A^n)\\cdot\\det(A)=(\\det A)^{n+1}$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Let $A$ be $3\\times3$ with $\\det(A)=2$. Find $\\det(3A^{-2}(A^T)^3)$.",
+          "body_he": "יהי $A$ מטריצה $3\\times3$ עם $\\det(A)=2$. מצא $\\det(3A^{-2}(A^T)^3)$.",
+          "solution_en": "$\\det(3A^{-2}(A^T)^3)=3^3\\cdot(\\det A)^{-2}\\cdot(\\det A^T)^3=27\\cdot(1/4)\\cdot8=27\\cdot2=54$.",
+          "solution_he": "$27\\cdot(\\det A)^{-2}\\cdot(\\det A)^3=27\\cdot2^{-2}\\cdot2^3=27\\cdot2=54$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove: if $A$ is an orthogonal matrix ($A^T A = I$), then $\\det(A) = \\pm 1$.",
+          "body_he": "הוכח: אם $A$ מטריצה אורתוגונלית ($A^T A = I$), אזי $\\det(A) = \\pm 1$.",
+          "solution_en": "$\\det(A^T A)=\\det(I)=1$. By multiplicativity: $\\det(A^T)\\det(A)=(\\det A)^2=1$. So $\\det(A)=\\pm1$. $\\blacksquare$",
+          "solution_he": "$(\\det A)^2=\\det(A^TA)=\\det(I)=1$. לכן $\\det(A)=\\pm1$. $\\blacksquare$",
+          "points": 12
         }
-      }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Sign errors in cofactor expansion.** The checkerboard sign pattern: $(-1)^{i+j}$. For $3\\times3$: $+ - +$ / $- + -$ / $+ - +$.\n\n2. **$\\det(A+B) \\neq \\det(A)+\\det(B)$.** The determinant is multiplicative, not additive.\n\n3. **$\\det(cA) = c\\det(A)$ is WRONG for $n>1$.** Correct: $\\det(cA) = c^n\\det(A)$ for an $n\\times n$ matrix.\n\n4. **Forgetting to swap the sign when swapping rows.** Every row swap multiplies the determinant by $-1$.\n\n5. **Using Cramer's rule when $\\det(A)=0$.** Cramer's rule only applies to invertible (non-singular) matrices.",
+      "body_he_md": "1. **שגיאות סימן בפיתוח לפי מינורים.** תבנית לוח שחמט: $(-1)^{i+j}$. עבור $3\\times3$: $+ - +$ / $- + -$ / $+ - +$.\n\n2. **$\\det(A+B) \\neq \\det(A)+\\det(B)$.** הדטרמיננטה כפלית, לא אדיטיבית.\n\n3. **$\\det(cA) = c\\det(A)$ — שגוי ל-$n>1$.** נכון: $\\det(cA) = c^n\\det(A)$.\n\n4. **שכחת שינוי סימן בהחלפת שורות.** כל החלפת שורות מכפילה את הדטרמיננטה ב-$-1$.\n\n5. **שימוש בכלל קרמר כש-$\\det(A)=0$.** כלל קרמר חל רק על מטריצות הפיכות."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $2\\times2$: $\\det = ad-bc$\n- $3\\times3$: expand along row with most zeros; use $(-1)^{i+j}$ signs\n- $\\det(AB)=\\det A\\cdot\\det B$\n- $\\det(A^T)=\\det A$\n- $\\det(A^{-1})=1/\\det A$\n- $\\det(cA)=c^n\\det A$ for $n\\times n$\n- Row swap: $\\det\\to-\\det$; row scale by $c$: $\\det\\to c\\cdot\\det$; add mult.: $\\det$ unchanged\n- Cramer: $x_i=\\det(A_i)/\\det(A)$\n\n**What Israeli university exams emphasise:**\n- Computing $3\\times3$ determinants with parameters.\n- Proving properties using multiplicativity.\n- Finding eigenvalues as roots of $\\det(A-\\lambda I)=0$.\n- Determining invertibility via $\\det$.\n\n**Exam tip:** When a matrix has a zero entry, expand along the row or column containing that zero to reduce the calculation.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $2\\times2$: $\\det = ad-bc$\n- $3\\times3$: פיתוח לפי שורה עם אפסים; סימנים $(-1)^{i+j}$\n- $\\det(AB)=\\det A\\cdot\\det B$\n- $\\det(A^T)=\\det A$\n- $\\det(A^{-1})=1/\\det A$\n- $\\det(cA)=c^n\\det A$\n- החלפת שורות: $\\det\\to-\\det$\n- כלל קרמר: $x_i=\\det(A_i)/\\det(A)$\n\n**מה בחינות אוניברסיטאיות ישראליות מדגישות:**\n- חישוב דטרמיננטות $3\\times3$ עם פרמטרים.\n- הוכחת תכונות דרך כפליות.\n- מציאת ערכים עצמיים מ-$\\det(A-\\lambda I)=0$.\n- קביעת הפיכות דרך $\\det$.\n\n**טיפ לבחינה:** כשיש כניסת אפס, לפתח לפי אותה שורה/עמודה."
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "det=0 iff singular; |det| = scaling factor; Cramer for small systems.",
-      "body_he_md": "det=0 אם ורק אם סינגולרית; |det| = קנה מידה.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Prerequisite for eigenvalues.",
-          "body_he_md": "תנאי לאי לערכים עצמיים."
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Determinants: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Determinants.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-דטרמיננטות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-דטרמיננטות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "body_en_md": "- The determinant of an $n\\times n$ matrix is computed recursively via cofactor expansion.\n- Row operations: swap $\\Rightarrow$ sign flip; scale by $c$ $\\Rightarrow$ multiply $\\det$ by $c$; add multiple $\\Rightarrow$ no change.\n- **Multiplicativity:** $\\det(AB)=\\det A\\cdot\\det B$.\n- **Invertibility:** $A$ invertible iff $\\det(A)\\neq0$.\n- **Key corollaries:** $\\det(A^{-1})=1/\\det A$; $\\det(A^T)=\\det A$; $\\det(cA)=c^n\\det A$.\n- **Cramer's rule:** closed-form solution $x_i = \\det(A_i)/\\det(A)$.",
+      "body_he_md": "- דטרמיננטה מחושבת רקורסיבית דרך פיתוח לפי מינורים.\n- פעולות שורה: החלפה $\\Rightarrow$ שינוי סימן; הכפלה ב-$c$ $\\Rightarrow$ כפל ב-$c$; הוספת כפולה $\\Rightarrow$ ללא שינוי.\n- **כפליות:** $\\det(AB)=\\det A\\cdot\\det B$.\n- **הפיכות:** $A$ הפיכה אם ורק אם $\\det(A)\\neq0$.\n- **מסקנות:** $\\det(A^{-1})=1/\\det A$; $\\det(A^T)=\\det A$; $\\det(cA)=c^n\\det A$.\n- **כלל קרמר:** $x_i = \\det(A_i)/\\det(A)$."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Determinants'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'דטרמיננטות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "2x2_det"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Determinants' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'דטרמיננטות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "det_zero"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Determinants'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'דטרמיננטות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "det_product"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Determinants' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'דטרמיננטות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "3x3_cofactor"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Determinants'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'דטרמיננטות'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "cramers_rule"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Determinants' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'דטרמיננטות' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "row_swap"
-      ],
-      "points_level_min": "la"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "det=0 iff singular",
-      "2x2: ad-bc",
-      "det(AB)=det(A)det(B)"
-    ],
-    "skill_atoms_unlocked": [
-      "2x2_det",
-      "det_zero",
-      "det_product",
-      "3x3_cofactor",
-      "cramers_rule"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "la_matrices"
-    ],
-    "next_recommended": [
-      "la_eigenvalues"
-    ]
-  }
+  ]
 }

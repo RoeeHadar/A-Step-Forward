@@ -1,227 +1,224 @@
 {
   "concept_id": "la_vector_spaces",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Vector Spaces — Span, Basis, Dimension",
-  "title_he": "מרחבי וקטורים — קבוצת פרישה, בסיס, מימד",
-  "summary_en": "A vector space generalizes ℝ². The triple (span, linear independence, basis) captures what 'building blocks' are needed to describe every vector.",
-  "summary_he": "מרחב וקטורי מכליל את ℝ². השלשה (פרישה, אי-תלות לינארית, בסיס) קובעת אילו 'אבני בניין' נחוצות לתיאור כל וקטור.",
-  "est_minutes": 18,
+  "math_track": ["la"],
+  "title_en": "Vector Spaces and Subspaces — Axioms, Span & Linear Independence",
+  "title_he": "מרחבים וקטוריים ותת-מרחבים — אקסיומות, פרישה ובלתי-תלות לינארית",
+  "summary_en": "Axiomatic definition of a vector space, examples and counterexamples, the three-condition subspace criterion, span as a subspace, and testing linear independence via row reduction.",
+  "summary_he": "הגדרה אקסיומטית של מרחב וקטורי, דוגמאות ודוגמאות-נגד, קריטריון תת-המרחב בשלושה תנאים, קבוצת הפרישה כתת-מרחב, ובדיקת בלתי-תלות לינארית דרך דירוג שורות.",
+  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is a vector space",
-      "title_he": "מהו מרחב וקטורי",
-      "body_en_md": "A **vector space** $V$ over $\\mathbb{R}$ is a set closed under addition and scalar multiplication, satisfying 8 axioms (associativity, identity, etc.).\n\nClassic examples: $\\mathbb{R}^n$, the set of $m \\times n$ matrices, the set of polynomials of degree $\\le n$, the set of continuous functions on $[a,b]$. Each looks different but plays by the same rules — that's the power of abstraction.\n\nThe central question: **how many linearly independent vectors do you need to describe everything in $V$?** That number is the **dimension**.",
-      "body_he_md": "**מרחב וקטורי** $V$ מעל $\\mathbb{R}$ הוא קבוצה סגורה תחת חיבור וכפל בסקלר, המקיימת 8 אקסיומות.\n\nדוגמאות: $\\mathbb{R}^n$, מטריצות $m \\times n$, פולינומים ממעלה $\\le n$, פונקציות רציפות. כולן נראות שונות אבל מצייתות לאותם כללים — זו עוצמת ההפשטה.\n\nהשאלה המרכזית: **כמה וקטורים בלתי-תלויים לינארית צריך כדי לתאר את כל $V$?** המספר הזה הוא **המימד**.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "A vector space is a set of vectors that satisfies certain properties, including closure under addition and scalar multiplication. These properties ensure that the set of vectors behaves consistently with the operations of addition and scalar multiplication. In other words, a vector space is a set of vectors that can be added and scaled without leaving the set.\n\nFormally, a vector space $V$ over a field $F$ is a set of vectors that satisfies the following properties:\n\n$$\\forall \\mathbf{u}, \\mathbf{v} \\in V, \\mathbf{u} + \\mathbf{v} \\in V$$\n$$\\forall \\mathbf{u} \\in V, \\forall c \\in F, c\\mathbf{u} \\in V$$\n$$\\mathbf{u} + \\mathbf{v} = \\mathbf{v} + \\mathbf{u}$$\n$$\\mathbf{u} + (\\mathbf{v} + \\mathbf{w}) = (\\mathbf{u} + \\mathbf{v}) + \\mathbf{w}$$\n$$c(\\mathbf{u} + \\mathbf{v}) = c\\mathbf{u} + c\\mathbf{v}$$\n$$c(\\mathbf{u} \\cdot \\mathbf{v}) = (c\\mathbf{u}) \\cdot \\mathbf{v} = \\mathbf{u} \\cdot (c\\mathbf{v})$$\n$$1\\mathbf{u} = \\mathbf{u}$$\n\nHere is a worked example:\n\nExample: Let $V = \\{(x, y) \\in \\mathbb{R}^2 \\mid x, y \\in \\mathbb{R}\\}$. Show that $V$ is a vector space.\n\nSolution: Let $\\mathbf{u} = (x_1, y_1)$ and $\\mathbf{v} = (x_2, y_2)$ be two vectors in $V$. Then, $\\mathbf{u} + \\mathbf{v} = (x_1 + x_2, y_1 + y_2) \\in V$, since $x_1 + x_2, y_1 + y_2 \\in \\mathbb{R}$. Similarly, for any",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "From Arrows to Abstract Spaces",
+      "title_he": "מחיצים לחלל מופשט",
+      "body_en_md": "So far, vectors have been $n$-tuples in $\\mathbb{R}^n$. But **matrices**, **polynomials**, and **continuous functions** share the same key algebraic properties: you can add them, scale them, and get another object of the same type. The **vector space** axioms abstract exactly those shared properties.\n\nThis abstraction is powerful: every theorem we prove for abstract vector spaces applies simultaneously to $\\mathbb{R}^n$, to function spaces, to solution spaces of differential equations, and more.\n\n**Connection to previous material:** Row spaces and null spaces of matrices are examples of subspaces; Gaussian elimination computes their dimensions.",
+      "body_he_md": "עד כה, וקטורים היו $n$-יות ב-$\\mathbb{R}^n$. אבל **מטריצות**, **פולינומים** ו**פונקציות רציפות** חולקים את אותן תכונות אלגבריות מפתח: אפשר לחבר אותם, לסלול אותם, ולקבל אובייקט מאותו סוג. **אקסיומות מרחב וקטורי** מפשטות בדיוק את התכונות המשותפות הללו.\n\nהפשטה זו עוצמתית: כל משפט שנוכיח למרחב וקטורי מופשט חל בו-זמנית על $\\mathbb{R}^n$, על מרחבי פונקציות, על מרחבי פתרונות של משוואות דיפרנציאליות, ועוד.\n\n**קשר לחומר קודם:** מרחבי שורה וגרעין של מטריצות הם דוגמאות לתת-מרחבים; אלימינציית גאוס מחשבת את ממדיהם."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Vector Space and Subspace",
+      "title_he": "מרחב וקטורי ותת-מרחב",
+      "body_en_md": "**Definition (Vector Space).** A **vector space** over $\\mathbb{R}$ is a set $V$ with two operations (addition $+$ and scalar multiplication $\\cdot$) satisfying 10 axioms:\n1. Closure: $\\vec{u}+\\vec{v}\\in V$; $c\\vec{u}\\in V$.\n2. Commutativity: $\\vec{u}+\\vec{v}=\\vec{v}+\\vec{u}$.\n3. Associativity: $(\\vec{u}+\\vec{v})+\\vec{w}=\\vec{u}+(\\vec{v}+\\vec{w})$.\n4. Zero vector: $\\exists\\vec{0}\\in V$ with $\\vec{u}+\\vec{0}=\\vec{u}$.\n5. Additive inverses: $\\exists(-\\vec{u})$ with $\\vec{u}+(-\\vec{u})=\\vec{0}$.\n6–10. Distributivity and compatibility of scalar multiplication.\n\n**Examples:** $\\mathbb{R}^n$; $P_n$ (polynomials of degree $\\leq n$); $M_{m\\times n}$ (all $m\\times n$ matrices); $C[a,b]$ (continuous functions on $[a,b]$).\n\n**Subspace Criterion.** $W\\subseteq V$ is a **subspace** of $V$ iff:\n1. $\\vec{0}\\in W$.\n2. $\\vec{u},\\vec{v}\\in W \\Rightarrow \\vec{u}+\\vec{v}\\in W$.\n3. $\\vec{u}\\in W,\\;c\\in\\mathbb{R} \\Rightarrow c\\vec{u}\\in W$.\n\n**One-step version:** $W$ is a subspace iff $\\vec{0}\\in W$ and $a\\vec{u}+b\\vec{v}\\in W$ for all $\\vec{u},\\vec{v}\\in W$ and $a,b\\in\\mathbb{R}$.\n\n**Span:** $\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\} = \\{c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k : c_i\\in\\mathbb{R}\\}$ — always a subspace.\n\n**Linear independence:** $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ is **linearly independent** if $c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k=\\vec{0} \\Rightarrow c_i=0$ for all $i$.",
+      "body_he_md": "**הגדרה (מרחב וקטורי).** **מרחב וקטורי** מעל $\\mathbb{R}$ הוא קבוצה $V$ עם שתי פעולות (חיבור $+$ וכפל בסקלר $\\cdot$) המקיימות 10 אקסיומות:\n1. סגירות: $\\vec{u}+\\vec{v}\\in V$; $c\\vec{u}\\in V$.\n2. קומוטטיביות: $\\vec{u}+\\vec{v}=\\vec{v}+\\vec{u}$.\n3. אסוציאטיביות.\n4. וקטור אפס: $\\exists\\vec{0}\\in V$.\n5. הופכיים: $\\exists(-\\vec{u})$.\n6–10. דיסטריבוטיביות.\n\n**דוגמאות:** $\\mathbb{R}^n$; $P_n$ (פולינומים מדרגה $\\leq n$); $M_{m\\times n}$; $C[a,b]$.\n\n**קריטריון תת-מרחב.** $W\\subseteq V$ הוא **תת-מרחב** אם ורק אם:\n1. $\\vec{0}\\in W$.\n2. $\\vec{u},\\vec{v}\\in W \\Rightarrow \\vec{u}+\\vec{v}\\in W$.\n3. $\\vec{u}\\in W,\\;c\\in\\mathbb{R} \\Rightarrow c\\vec{u}\\in W$.\n\n**קבוצת פרישה:** $\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ — תמיד תת-מרחב.\n\n**בלתי-תלות לינארית:** $c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k=\\vec{0} \\Rightarrow c_i=0$."
     },
     {
       "kind": "theory",
-      "title_en": "Span, independence, basis, dimension",
-      "title_he": "פרישה, אי-תלות, בסיס, מימד",
-      "body_en_md": "### Linear combination\n\nGiven $v_1, \\ldots, v_k$ in $V$, a **linear combination** is $c_1 v_1 + c_2 v_2 + \\ldots + c_k v_k$ with scalars $c_i$.\n\n### Span\n\nThe **span** of $\\{v_1, \\ldots, v_k\\}$ is the SET of all linear combinations. Notation: $\\text{span}(v_1, \\ldots, v_k)$.\n\nExample: $\\text{span}\\bigl((1,0), (0,1)\\bigr) = \\mathbb{R}^2$.\n\n### Linear independence\n\n$v_1, \\ldots, v_k$ are **linearly independent** if the only solution to $c_1 v_1 + \\ldots + c_k v_k = 0$ is $c_1 = \\ldots = c_k = 0$.\n\nEquivalently: NO vector can be written as a combination of the others.\n\nIf NOT independent ⇒ **linearly dependent**: there's a non-trivial combination summing to zero.\n\n### Basis\n\nA **basis** of $V$ is a set of vectors that is **both**:\n1. **Spans** $V$.\n2. **Linearly independent**.\n\nThe **standard basis** of $\\mathbb{R}^n$ is $e_1 = (1,0,\\ldots,0), e_2 = (0,1,0,\\ldots,0), \\ldots, e_n = (0,\\ldots,0,1)$.\n\n### Dimension\n\n**All bases of $V$ have the same number of vectors.** That number is $\\dim V$.\n\n- $\\dim \\mathbb{R}^n = n$.\n- $\\dim P_n$ (polynomials of degree $\\le n$) $= n+1$.\n- $\\dim M_{m \\times n} = mn$.\n\n### Practical test for independence (matrices)\n\nPut vectors as columns of a matrix $A$. They are linearly independent iff $\\text{rank}(A)$ equals the number of vectors. For $n$ vectors in $\\mathbb{R}^n$, independent ⇔ $\\det A \\ne 0$.\n\n### Subspace\n\nA **subspace** $W \\subseteq V$ is a subset that is itself a vector space (closed under $+$ and scalar mult, contains $\\vec{0}$).\n\nExample: a line through origin in $\\mathbb{R}^2$ is a 1-D subspace; a plane through origin in $\\mathbb{R}^3$ is a 2-D subspace.\n\n**Worked Example.** $U=\\{p\\in P_2 : p(1)=0\\}$: basis $\\{x-1, x^2-1\\}$, dim 2.\n\n**Worked Example 2.** Union of spans is generally NOT a subspace — counterexample in $\\mathbb{R}^2$.",
-      "body_he_md": "### צירוף לינארי\n\nבהינתן $v_1, \\ldots, v_k$ ב-$V$, **צירוף לינארי** הוא $c_1 v_1 + \\ldots + c_k v_k$.\n\n### פרישה\n\n**פרישה** של $\\{v_1, \\ldots, v_k\\}$ היא קבוצת כל הצירופים הלינאריים.\n\nדוגמה: $\\text{span}\\bigl((1,0), (0,1)\\bigr) = \\mathbb{R}^2$.\n\n### אי-תלות לינארית\n\nוקטורים $v_1, \\ldots, v_k$ הם **בלתי-תלויים לינארית** אם הפתרון היחיד ל-$c_1 v_1 + \\ldots + c_k v_k = 0$ הוא $c_1 = \\ldots = c_k = 0$.\n\nשווה ערך: אף וקטור אינו ניתן לכתיבה כצירוף של האחרים.\n\nאם תלויים: יש צירוף לא-טריוויאלי השווה לאפס.\n\n### בסיס\n\n**בסיס** של $V$ הוא קבוצה ש-**שתיים**:\n1. **פורשת** $V$.\n2. **בלתי-תלויה לינארית**.\n\n**הבסיס הסטנדרטי** של $\\mathbb{R}^n$: $e_1 = (1,0,\\ldots,0), \\ldots$\n\n### מימד\n\n**לכל הבסיסים של $V$ אותו מספר וקטורים.** המספר הזה הוא $\\dim V$.\n\n- $\\dim \\mathbb{R}^n = n$.\n- $\\dim P_n = n+1$.\n- $\\dim M_{m \\times n} = mn$.\n\n### מבחן מעשי לאי-תלות (מטריצות)\n\nשמים וקטורים כעמודות של מטריצה $A$. בלתי-תלויים ⇔ $\\text{rank}(A) = $ מספר הוקטורים. ל-$n$ וקטורים ב-$\\mathbb{R}^n$: ⇔ $\\det A \\ne 0$.\n\n### תת-מרחב\n\n**תת-מרחב** $W \\subseteq V$ הוא תת-קבוצה שהיא בעצמה מרחב וקטורי.\n\nדוגמה: ישר דרך הראשית ב-$\\mathbb{R}^2$ הוא תת-מרחב חד-מימדי.\n\n**דוגמה.** $p(1)=0$ ב-$P_2$: בסיס $\\{x-1,x^2-1\\}$.\n\n**דוגמה 2.** איחוד פרישות — לא תת-מרחב.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "In this section, we will explore the concepts of span, independence, basis, and dimension in vector spaces. A set of vectors $\\mathbf{v}_1, \\mathbf{v}_2, \\ldots, \\mathbf{v}_n$ spans a vector space $V$ if every vector in $V$ can be expressed as a linear combination of these vectors. A set of vectors is said to be linearly independent if none of the vectors can be expressed as a linear combination of the others.\n\nA basis of a vector space is a set of linearly independent vectors that span the space. The dimension of a vector space is the number of vectors in a basis for that space. We will use the following theorems to prove the existence of a basis and to find the dimension of a vector space.\n\nExample: Find the span of the vectors $\\mathbf{v}_1 = \\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix}$ and $\\mathbf{v}_2 = \\begin{pmatrix} 3 \\\\ 4 \\end{pmatrix}$ in $\\mathbb{R}^2$.\n\n$$\\text{span}(\\mathbf{v}_1, \\mathbf{v}_2) = \\left\\{ c_1 \\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} + c_2 \\begin{pmatrix} 3 \\\\ 4 \\end{pmatrix} \\mid c_1, c_2 \\in \\mathbb{R} \\right\\}$$\n\n$$= \\left\\{ \\begin{pmatrix} c_1 + 3c_2 \\\\ 2c_1 + 4c_2 \\end{pmatrix} \\mid c_1, c_2 \\in \\mathbb{R} \\right\\}$$\n\n$$= \\left\\{ \\begin{pmatrix} x \\\\ y \\end{pmatrix} \\mid x = c_1 + 3c_2, y = 2c_1 + 4c_2, c_1, c_2 \\in \\mathbb{R} \\right\\}$$\n\n$$= \\left\\{ \\begin{pmatrix} x \\\\ y \\end{pmatrix} \\mid x - 3y = -2c_2, y",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1.** The zero vector $\\vec{0}$ is unique in any vector space.\n\n**Theorem 2.** The span of any set of vectors is a subspace.\n*Proof:* Let $W=\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$. (1) $\\vec{0} = 0\\vec{v}_1+\\cdots+0\\vec{v}_k\\in W$. (2) If $\\vec{u},\\vec{w}\\in W$, write them as linear combinations; their sum is also a linear combination. (3) Scaling a linear combination gives another linear combination. $\\blacksquare$\n\n**Theorem 3.** Any set containing $\\vec{0}$ is linearly **dependent**.\n*Proof:* Take $c=1$ on $\\vec{0}$ and $0$ on all others: non-trivial combination summing to $\\vec{0}$.\n\n**Theorem 4.** If $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ is linearly dependent, at least one vector is a linear combination of the others.\n\n**Theorem 5 (Intersection of subspaces).** If $W_1$ and $W_2$ are subspaces of $V$, then $W_1\\cap W_2$ is also a subspace of $V$.\n*Proof:* (1) $\\vec{0}\\in W_1$ and $\\vec{0}\\in W_2$, so $\\vec{0}\\in W_1\\cap W_2$. (2) If $\\vec{u},\\vec{v}\\in W_1\\cap W_2$, then $\\vec{u}+\\vec{v}\\in W_1$ (subspace) and $\\vec{u}+\\vec{v}\\in W_2$, so $\\vec{u}+\\vec{v}\\in W_1\\cap W_2$. (3) Similarly for scalar multiplication. $\\blacksquare$\n\n**Note:** $W_1\\cup W_2$ is generally NOT a subspace.",
+      "body_he_md": "**משפט 1.** וקטור האפס $\\vec{0}$ יחיד בכל מרחב וקטורי.\n\n**משפט 2.** קבוצת הפרישה של כל קבוצת וקטורים היא תת-מרחב.\n*הוכחה:* (1) $\\vec{0}\\in\\text{span}$ (מקדמים אפסיים). (2) סכום שתי קומבינציות לינאריות הוא קומבינציה לינארית. (3) כפל בסקלר שומר על קומבינציה לינארית. $\\blacksquare$\n\n**משפט 3.** כל קבוצה המכילה $\\vec{0}$ תלויה לינארית.\n\n**משפט 4.** אם $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ תלויים לינארית, לפחות וקטור אחד הוא קומבינציה לינארית של האחרים.\n\n**משפט 5 (חיתוך תת-מרחבים).** אם $W_1$ ו-$W_2$ תת-מרחבים של $V$, אז $W_1\\cap W_2$ גם כן תת-מרחב.\n*הוכחה:* (1) $\\vec{0}\\in W_1\\cap W_2$. (2) סגירות לחיבור. (3) סגירות לכפל. $\\blacksquare$\n\n**הערה:** $W_1\\cup W_2$ בכלל **אינו** תת-מרחב."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: are these vectors a basis?",
-      "title_he": "דוגמה פתורה: האם הוקטורים בסיס?",
-      "body_en_md": "Check if $v_1 = (1, 2, 3)$, $v_2 = (0, 1, 4)$, $v_3 = (2, 5, 10)$ form a basis of $\\mathbb{R}^3$.\n\n**Three vectors in $\\mathbb{R}^3$:** they're a basis iff linearly independent iff $\\det \\ne 0$.\n\n$$A = \\begin{pmatrix} 1 & 0 & 2 \\\\ 2 & 1 & 5 \\\\ 3 & 4 & 10 \\end{pmatrix}.$$\n\nExpand along the first row:\n\n$$\\det A = 1 \\cdot (10 - 20) - 0 + 2 \\cdot (8 - 3) = -10 + 10 = 0.$$\n\n**$\\det = 0$** ⇒ **linearly dependent** ⇒ **NOT** a basis.\n\nLet's verify by finding the dependency: $v_3 = 2 v_1 + v_2$? $2(1,2,3) + (0,1,4) = (2, 5, 10)$ ✓ — yes!",
-      "body_he_md": "בדקו אם $v_1 = (1, 2, 3)$, $v_2 = (0, 1, 4)$, $v_3 = (2, 5, 10)$ מהווים בסיס של $\\mathbb{R}^3$.\n\n**שלושה וקטורים ב-$\\mathbb{R}^3$:** מהווים בסיס ⇔ בלתי-תלויים ⇔ $\\det \\ne 0$.\n\n$$\\det \\begin{pmatrix} 1 & 0 & 2 \\\\ 2 & 1 & 5 \\\\ 3 & 4 & 10 \\end{pmatrix} = 1 \\cdot (10 - 20) - 0 + 2 \\cdot (8 - 3) = 0.$$\n\n**$\\det = 0$** ⇒ **תלויים** ⇒ **לא** בסיס.\n\nאימות: $v_3 = 2 v_1 + v_2$ ✓.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "In this section, we will explore whether a given set of vectors forms a basis for a vector space. A basis is a set of vectors that spans the vector space and is linearly independent. To determine if a set of vectors is a basis, we need to check if it spans the vector space and if it is linearly independent.\n\nA set of vectors $\\{ \\mathbf{v}_1, \\mathbf{v}_2, \\ldots, \\mathbf{v}_n \\}$ is said to be linearly independent if the equation $a_1 \\mathbf{v}_1 + a_2 \\mathbf{v}_2 + \\cdots + a_n \\mathbf{v}_n = \\mathbf{0}$ implies that $a_1 = a_2 = \\cdots = a_n = 0$.\n\nHere is a worked example:\n\n### Example\n\nLet $\\mathbf{v}_1 = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}$ and $\\mathbf{v}_2 = \\begin{pmatrix} 1 \\\\ 1 \\end{pmatrix}$. Determine if the set $\\{ \\mathbf{v}_1, \\mathbf{v}_2 \\}$ is a basis for $\\mathbb{R}^2$.\n\n### Solution\n\nTo determine if the set is a basis, we need to check if it spans $\\mathbb{R}^2$ and if it is linearly independent. We can check if it spans $\\mathbb{R}^2$ by showing that any vector in $\\mathbb{R}^2$ can be written as a linear combination of $\\mathbf{v}_1$ and $\\mathbf{v}_2$. We can also check if it is linearly independent by solving the equation $a_1 \\mathbf{v}_1 + a_2 \\mathbf{v}_2 = \\mathbf{0}$ for $a_1$ and $a_2$.\n\nLet $\\mathbf{x} = \\begin{pmatrix} x \\\\ y \\end{pmatrix}$ be any vector in $\\mathbb{R}^2$. We can write $\\mathbf{x}$ as a linear combination of $\\mathbf{v}_1$ and $\\mathbf{v}_2$ as follows:\n\n$$\\mathbf{x",
-          "body_he_md": ""
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Is $W$ a Subspace of $\\mathbb{R}^3$?",
+      "title_he": "דוגמה פתורה 1 — האם $W$ תת-מרחב של $\\mathbb{R}^3$?",
+      "body_en_md": "**Is $W = \\{(x,y,z)\\in\\mathbb{R}^3 : x+y+z=0\\}$ a subspace of $\\mathbb{R}^3$?**\n\n**Step 1 — Zero vector.** $(0,0,0)$: $0+0+0=0$. ✓ $\\vec{0}\\in W$.\n\n**Step 2 — Closed under addition.** Let $\\vec{u}=(x_1,y_1,z_1)$ and $\\vec{v}=(x_2,y_2,z_2)$ both in $W$, so $x_1+y_1+z_1=0$ and $x_2+y_2+z_2=0$. Then\n$$\\vec{u}+\\vec{v}=(x_1+x_2,y_1+y_2,z_1+z_2), \\quad (x_1+x_2)+(y_1+y_2)+(z_1+z_2)=0+0=0.$$\nSo $\\vec{u}+\\vec{v}\\in W$. ✓\n\n**Step 3 — Closed under scalar multiplication.** $c\\vec{u}=(cx_1,cy_1,cz_1)$; $cx_1+cy_1+cz_1=c\\cdot0=0$. ✓\n\n**Conclusion: $W$ is a subspace of $\\mathbb{R}^3$.** (It is the plane through the origin with normal $(1,1,1)$.)",
+      "body_he_md": "**האם $W = \\{(x,y,z)\\in\\mathbb{R}^3 : x+y+z=0\\}$ תת-מרחב של $\\mathbb{R}^3$?**\n\n**שלב 1 — וקטור אפס.** $(0,0,0)$: $0+0+0=0$. ✓\n\n**שלב 2 — סגירות לחיבור.** אם $x_1+y_1+z_1=0$ ו-$x_2+y_2+z_2=0$, אז הסכום שלהם מקיים $(x_1+x_2)+(y_1+y_2)+(z_1+z_2)=0$. ✓\n\n**שלב 3 — סגירות לכפל.** $c\\cdot(x+y+z)=c\\cdot0=0$. ✓\n\n**מסקנה: $W$ הוא תת-מרחב** (מישור דרך הראשית עם נורמל $(1,1,1)$)."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Is $W = \\{(x,y)\\in\\mathbb{R}^2 : x+y=1\\}$ a subspace of $\\mathbb{R}^2$? Justify each condition.",
+      "body_he_md": "האם $W = \\{(x,y)\\in\\mathbb{R}^2 : x+y=1\\}$ תת-מרחב של $\\mathbb{R}^2$? הצדק כל תנאי.",
+      "checkpoint_solution_en": "**Fails condition 1:** $\\vec{0}=(0,0)$ has $0+0=0\\neq1$, so $\\vec{0}\\notin W$. Therefore $W$ is **not** a subspace.",
+      "checkpoint_solution_he": "**כשל בתנאי 1:** $\\vec{0}=(0,0)$: $0+0=0\\neq1$, לכן $\\vec{0}\\notin W$. אינה תת-מרחב."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Testing Linear Independence",
+      "title_he": "דוגמה פתורה 2 — בדיקת בלתי-תלות לינארית",
+      "body_en_md": "**Is $\\{\\vec{v}_1,\\vec{v}_2,\\vec{v}_3\\} = \\{(1,2,1),(2,3,1),(0,1,1)\\}$ linearly independent?**\n\n**Method:** Solve $c_1(1,2,1)+c_2(2,3,1)+c_3(0,1,1)=\\vec{0}$.\n\nSet up the matrix with these vectors as **columns** and row-reduce:\n$$\\begin{pmatrix}1&2&0\\\\2&3&1\\\\1&1&1\\end{pmatrix} \\xrightarrow{R_2-2R_1,\\;R_3-R_1} \\begin{pmatrix}1&2&0\\\\0&-1&1\\\\0&-1&1\\end{pmatrix} \\xrightarrow{R_3-R_2} \\begin{pmatrix}1&2&0\\\\0&-1&1\\\\0&0&0\\end{pmatrix}.$$\n\n**Rank = 2 < 3 vectors**, so there is a free variable $\\Rightarrow$ the homogeneous system has non-trivial solutions $\\Rightarrow$ the vectors are **linearly dependent**.\n\n**Find a dependency:** From the reduced system: $c_2 = c_3$; $c_1 = -2c_2$. Setting $c_3=1$: $c_1=-2$, $c_2=1$. Verify: $-2(1,2,1)+1(2,3,1)+1(0,1,1)=(0,0,0)$. ✓",
+      "body_he_md": "**האם $\\{(1,2,1),(2,3,1),(0,1,1)\\}$ בלתי-תלויים לינארית?**\n\n**שיטה:** פתור $c_1(1,2,1)+c_2(2,3,1)+c_3(0,1,1)=\\vec{0}$.\n\nהצב את הוקטורים כ**עמודות** ודרג:\n$$\\begin{pmatrix}1&2&0\\\\2&3&1\\\\1&1&1\\end{pmatrix} \\to \\begin{pmatrix}1&2&0\\\\0&-1&1\\\\0&0&0\\end{pmatrix}.$$\n\n**דרגה = 2 < 3 וקטורים** $\\Rightarrow$ יש משתנה חופשי $\\Rightarrow$ הוקטורים **תלויים לינארית**.\n\n**תלות:** $-2(1,2,1)+(2,3,1)+(0,1,1)=(0,0,0)$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Is $\\{(1,0,1),(0,1,1),(1,1,0)\\}$ linearly independent?",
+      "body_he_md": "האם $\\{(1,0,1),(0,1,1),(1,1,0)\\}$ בלתי-תלויים לינארית?",
+      "checkpoint_solution_en": "Form matrix with these as columns; row-reduce: $\\det = 1(0-1)-0+1(0-1)=-2\\neq0$ (or row reduce to find 3 pivots). **Linearly independent.**",
+      "checkpoint_solution_he": "הדטרמיננטה $= -2\\neq0$ (או 3 צירים בדירוג). **בלתי-תלויים לינארית.**"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Prove the Intersection of Two Subspaces is a Subspace",
+      "title_he": "דוגמה פתורה 3 — הוכחה: חיתוך שני תת-מרחבים הוא תת-מרחב",
+      "body_en_md": "**Claim:** If $W_1$ and $W_2$ are subspaces of a vector space $V$, then $W_1\\cap W_2$ is also a subspace of $V$.\n\n**Proof:**\n\n**Step 1 — Zero vector.** Since $W_1$ is a subspace, $\\vec{0}\\in W_1$. Since $W_2$ is a subspace, $\\vec{0}\\in W_2$. Therefore $\\vec{0}\\in W_1\\cap W_2$. ✓\n\n**Step 2 — Closed under addition.** Let $\\vec{u},\\vec{v}\\in W_1\\cap W_2$. This means:\n- $\\vec{u},\\vec{v}\\in W_1$, so $\\vec{u}+\\vec{v}\\in W_1$ (since $W_1$ is a subspace).\n- $\\vec{u},\\vec{v}\\in W_2$, so $\\vec{u}+\\vec{v}\\in W_2$ (since $W_2$ is a subspace).\n\nTherefore $\\vec{u}+\\vec{v}\\in W_1\\cap W_2$. ✓\n\n**Step 3 — Closed under scalar multiplication.** Let $\\vec{u}\\in W_1\\cap W_2$ and $c\\in\\mathbb{R}$:\n- $\\vec{u}\\in W_1\\Rightarrow c\\vec{u}\\in W_1$.\n- $\\vec{u}\\in W_2\\Rightarrow c\\vec{u}\\in W_2$.\n\nTherefore $c\\vec{u}\\in W_1\\cap W_2$. ✓\n\nAll three conditions hold, so $W_1\\cap W_2$ is a subspace of $V$. $\\blacksquare$\n\n**Remark:** This proof generalises to arbitrary intersections: $\\bigcap_{\\alpha} W_\\alpha$ is always a subspace.",
+      "body_he_md": "**טענה:** אם $W_1$ ו-$W_2$ תת-מרחבים של $V$, אז $W_1\\cap W_2$ גם כן תת-מרחב.\n\n**הוכחה:**\n\n**שלב 1 — וקטור אפס.** $\\vec{0}\\in W_1$ ו-$\\vec{0}\\in W_2$ (כי $W_1,W_2$ תת-מרחבים). לכן $\\vec{0}\\in W_1\\cap W_2$. ✓\n\n**שלב 2 — סגירות לחיבור.** יהיו $\\vec{u},\\vec{v}\\in W_1\\cap W_2$. אז $\\vec{u},\\vec{v}\\in W_1$ ולכן $\\vec{u}+\\vec{v}\\in W_1$. אנלוגית $\\vec{u}+\\vec{v}\\in W_2$. לכן $\\vec{u}+\\vec{v}\\in W_1\\cap W_2$. ✓\n\n**שלב 3 — סגירות לכפל.** $\\vec{u}\\in W_1\\cap W_2$, $c\\in\\mathbb{R}$. אז $c\\vec{u}\\in W_1$ ו-$c\\vec{u}\\in W_2$. לכן $c\\vec{u}\\in W_1\\cap W_2$. ✓\n\n$W_1\\cap W_2$ הוא תת-מרחב של $V$. $\\blacksquare$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Subspace & Independence Toolkit",
+      "title_he": "מדריך שיטה — ארגז כלים לתת-מרחב ובלתי-תלות",
+      "body_en_md": "| Goal | Method |\n|---|---|\n| Is $W$ a subspace? | Check 3 conditions: $\\vec{0}\\in W$, closed under $+$, closed under $\\cdot$ |\n| Show $W$ is NOT a subspace | Find ONE violation (usually $\\vec{0}\\notin W$ is fastest) |\n| Is $\\text{span}\\{\\vec{v}_1,\\ldots\\}$ a subspace? | Always yes — span is always a subspace |\n| Is $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ linearly independent? | Form matrix with vectors as columns; row-reduce; independent iff rank $=k$ |\n| Find a linear dependence relation | From the free-variable solution after row reduction |\n| Is $\\vec{b}\\in\\text{span}\\{\\vec{v}_i\\}$? | Row-reduce $[\\vec{v}_1,\\ldots,\\vec{v}_k|\\vec{b}]$; consistent iff $\\vec{b}\\in\\text{span}$ |",
+      "body_he_md": "| מטרה | שיטה |\n|---|---|\n| האם $W$ תת-מרחב? | בדוק 3 תנאים: $\\vec{0}\\in W$, סגור ל-$+$, סגור ל-$\\cdot$ |\n| הראה ש-$W$ אינו תת-מרחב | מצא הפרה אחת ($\\vec{0}\\notin W$ בדרך כלל מהיר) |\n| האם $\\text{span}\\{\\vec{v}_1,\\ldots\\}$ תת-מרחב? | תמיד כן |\n| האם $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ בלתי-תלויים? | מטריצה עם וקטורים כעמודות; דרג; בלתי-תלויים אם דרגה $=k$ |\n| מצא יחס תלות לינארית | מהפתרון עם משתנה חופשי |\n| האם $\\vec{b}\\in\\text{span}\\{\\vec{v}_i\\}$? | דרג $[\\vec{v}_1,\\ldots,\\vec{v}_k|\\vec{b}]$; עקבי $\\Leftrightarrow$ $\\vec{b}\\in\\text{span}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Is $W = \\{(x,y,z) : 2x-y+z=0\\}$ a subspace of $\\mathbb{R}^3$?",
+          "body_he": "האם $W = \\{(x,y,z) : 2x-y+z=0\\}$ תת-מרחב של $\\mathbb{R}^3$?",
+          "solution_en": "Yes. (1) $\\vec{0}$: $0-0+0=0$ ✓. (2) Closed under addition: $2(x_1+x_2)-(y_1+y_2)+(z_1+z_2)=0+0=0$ ✓. (3) Closed under scaling ✓.",
+          "solution_he": "כן. (1) $\\vec{0}\\in W$. (2) סגירות לחיבור. (3) סגירות לכפל. $W$ תת-מרחב.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Is $W = \\{(x,y): x\\geq0\\}$ a subspace of $\\mathbb{R}^2$?",
+          "body_he": "האם $W = \\{(x,y): x\\geq0\\}$ תת-מרחב של $\\mathbb{R}^2$?",
+          "solution_en": "No. $(1,0)\\in W$ but $(-1)(1,0)=(-1,0)\\notin W$. Fails scalar multiplication.",
+          "solution_he": "לא. $(1,0)\\in W$ אבל $(-1,0)\\notin W$. כשל בסגירות לכפל.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Is $\\{(1,2),(2,4)\\}$ linearly independent or dependent?",
+          "body_he": "האם $\\{(1,2),(2,4)\\}$ בלתי-תלויים או תלויים?",
+          "solution_en": "$(2,4)=2(1,2)$, so linearly **dependent**. Or: $\\det\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}=4-4=0$.",
+          "solution_he": "$(2,4)=2(1,2)$, לכן **תלויים**.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Show that $W = \\{A\\in M_{2\\times2} : A^T = A\\}$ (symmetric matrices) is a subspace of $M_{2\\times2}$.",
+          "body_he": "הראה ש-$W = \\{A\\in M_{2\\times2} : A^T = A\\}$ (מטריצות סימטריות) הוא תת-מרחב של $M_{2\\times2}$.",
+          "solution_en": "(1) $0^T=0$ ✓. (2) If $A^T=A,B^T=B$: $(A+B)^T=A^T+B^T=A+B$ ✓. (3) $(cA)^T=cA^T=cA$ ✓.",
+          "solution_he": "(1) $0^T=0$. (2) $(A+B)^T=A+B$. (3) $(cA)^T=cA$. תת-מרחב.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Is $(1,2,3)\\in\\text{span}\\{(1,0,1),(0,1,1)\\}$?",
+          "body_he": "האם $(1,2,3)\\in\\text{span}\\{(1,0,1),(0,1,1)\\}$?",
+          "solution_en": "Solve $c_1(1,0,1)+c_2(0,1,1)=(1,2,3)$: $c_1=1$, $c_2=2$, check $z$: $1+2=3$ ✓. Yes.",
+          "solution_he": "פתור: $c_1=1$, $c_2=2$, בדיקה: $1+2=3$. ✓ כן.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Is $\\{(1,1,0),(1,0,1),(0,1,1)\\}$ linearly independent? If not, find a dependency.",
+          "body_he": "האם $\\{(1,1,0),(1,0,1),(0,1,1)\\}$ בלתי-תלויים? אם לא, מצא תלות.",
+          "solution_en": "Row reduce matrix with these columns: det $= 1(-1)-1(1)+0 = -2\\neq0$. **Independent.**",
+          "solution_he": "דטרמיננטה $= -2\\neq0$. **בלתי-תלויים.**",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Determine whether $W = \\{p(x)\\in P_2 : p(0)=0\\}$ is a subspace of $P_2$.",
+          "body_he": "קבע האם $W = \\{p(x)\\in P_2 : p(0)=0\\}$ הוא תת-מרחב של $P_2$.",
+          "solution_en": "(1) $p(x)=0$: $p(0)=0$ ✓. (2) If $p(0)=0,q(0)=0$: $(p+q)(0)=0$ ✓. (3) $(cp)(0)=cp(0)=0$ ✓. Subspace.",
+          "solution_he": "כל שלושת התנאים מתקיימים. $W$ תת-מרחב.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Give an example of two subspaces $W_1,W_2$ of $\\mathbb{R}^2$ whose union $W_1\\cup W_2$ is NOT a subspace.",
+          "body_he": "תן דוגמה לשני תת-מרחבים $W_1,W_2$ של $\\mathbb{R}^2$ ש-$W_1\\cup W_2$ **אינו** תת-מרחב.",
+          "solution_en": "$W_1=\\text{span}\\{(1,0)\\}$ (x-axis), $W_2=\\text{span}\\{(0,1)\\}$ (y-axis). $(1,0)\\in W_1$ and $(0,1)\\in W_2$, but $(1,1)\\notin W_1\\cup W_2$. Not closed under addition.",
+          "solution_he": "$W_1=$ ציר $x$, $W_2=$ ציר $y$. $(1,0)+(0,1)=(1,1)\\notin W_1\\cup W_2$. אינו סגור לחיבור.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove: if $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ is linearly independent and $\\vec{v}_{k+1}\\notin\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$, then $\\{\\vec{v}_1,\\ldots,\\vec{v}_{k+1}\\}$ is linearly independent.",
+          "body_he": "הוכח: אם $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ בלתי-תלויים ו-$\\vec{v}_{k+1}\\notin\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$, אזי $\\{\\vec{v}_1,\\ldots,\\vec{v}_{k+1}\\}$ בלתי-תלויים.",
+          "solution_en": "Suppose $c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k+c_{k+1}\\vec{v}_{k+1}=\\vec{0}$. If $c_{k+1}\\neq0$, then $\\vec{v}_{k+1}=-(c_1/c_{k+1})\\vec{v}_1-\\cdots-(c_k/c_{k+1})\\vec{v}_k\\in\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$, contradiction. So $c_{k+1}=0$. Then $c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k=\\vec{0}$, and by independence $c_i=0$ for all $i$. $\\blacksquare$",
+          "solution_he": "נניח $\\sum c_i\\vec{v}_i+c_{k+1}\\vec{v}_{k+1}=\\vec{0}$. אם $c_{k+1}\\neq0$ אז $\\vec{v}_{k+1}\\in\\text{span}\\{\\vec{v}_1,\\ldots\\}$, סתירה. לכן $c_{k+1}=0$, ומהבלתי-תלות $c_i=0$ לכל $i$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that if $W_1\\subseteq W_2$ are both subspaces of $V$ with $\\dim W_1=\\dim W_2<\\infty$, then $W_1=W_2$.",
+          "body_he": "הוכח שאם $W_1\\subseteq W_2$ שניהם תת-מרחבים של $V$ עם $\\dim W_1=\\dim W_2<\\infty$, אז $W_1=W_2$.",
+          "solution_en": "Let $\\dim W_1=\\dim W_2=n$. Let $B=\\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ be a basis of $W_1$. Since $W_1\\subseteq W_2$, all $\\vec{b}_i\\in W_2$. They are linearly independent and $\\dim W_2=n$, so $B$ is a basis of $W_2$ too. Thus $W_1=\\text{span}(B)=W_2$. $\\blacksquare$",
+          "solution_he": "יהי $\\dim W_1=n$ ו-$B$ בסיס של $W_1$. כל $\\vec{b}_i\\in W_2$ (כי $W_1\\subseteq W_2$). הם בלתי-תלויים ו-$\\dim W_2=n$, לכן $B$ גם בסיס של $W_2$. לכן $W_1=W_2$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find a basis for $W = \\text{span}\\{(1,2,3),(2,4,6),(1,0,1),(0,2,2)\\}$ and state $\\dim W$.",
+          "body_he": "מצא בסיס ל-$W = \\text{span}\\{(1,2,3),(2,4,6),(1,0,1),(0,2,2)\\}$ וציין $\\dim W$.",
+          "solution_en": "Row reduce matrix with these as rows: $(2,4,6)=2(1,2,3)$ is redundant; $(0,2,2)=(1,2,3)-(1,0,1)$ is redundant. Basis: $\\{(1,2,3),(1,0,1)\\}$, $\\dim W=2$.",
+          "solution_he": "$(2,4,6)=2(1,2,3)$ מיותר; $(0,2,2)=(1,2,3)-(1,0,1)$ מיותר. בסיס: $\\{(1,2,3),(1,0,1)\\}$, $\\dim W=2$.",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove: the sum $W_1+W_2=\\{\\vec{w}_1+\\vec{w}_2:\\vec{w}_1\\in W_1,\\vec{w}_2\\in W_2\\}$ is a subspace of $V$.",
+          "body_he": "הוכח: הסכום $W_1+W_2=\\{\\vec{w}_1+\\vec{w}_2:\\vec{w}_1\\in W_1,\\vec{w}_2\\in W_2\\}$ הוא תת-מרחב של $V$.",
+          "solution_en": "(1) $\\vec{0}=\\vec{0}+\\vec{0}\\in W_1+W_2$. (2) $(\\vec{u}_1+\\vec{u}_2)+(\\vec{v}_1+\\vec{v}_2)=(\\vec{u}_1+\\vec{v}_1)+(\\vec{u}_2+\\vec{v}_2)\\in W_1+W_2$. (3) $c(\\vec{w}_1+\\vec{w}_2)=(c\\vec{w}_1)+(c\\vec{w}_2)\\in W_1+W_2$. $\\blacksquare$",
+          "solution_he": "(1) $\\vec{0}\\in W_1+W_2$. (2) סגור לחיבור. (3) סגור לכפל. $\\blacksquare$",
+          "points": 12
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Confusing span with basis.** A spanning set might be too BIG (linearly dependent); a basis is minimal.\n2. **Counting wrong.** $n$ vectors in $\\mathbb{R}^n$ are a basis IFF independent. Fewer than $n$ never spans; more than $n$ always dependent.\n3. **Forgetting zero vector in subspaces.** Every subspace contains $\\vec{0}$.\n4. **Linear dependence = parallel.** True for 2 vectors, false for 3+. Three vectors in $\\mathbb{R}^3$ can be pairwise non-parallel yet dependent.\n5. **Span vs subspace confusion.** $\\text{span}(S)$ is ALWAYS a subspace, even if $S$ is just one or two vectors.",
-      "body_he_md": "1. **בלבול בין פרישה לבסיס.** קבוצה פורשת יכולה להיות גדולה מדי (תלויה); בסיס מינימלי.\n2. **ספירה שגויה.** $n$ וקטורים ב-$\\mathbb{R}^n$ הם בסיס ⇔ בלתי-תלויים. פחות מ-$n$ לעולם לא פורש; יותר מ-$n$ תמיד תלוי.\n3. **שכחת וקטור האפס בתתי-מרחבים.** כל תת-מרחב מכיל $\\vec{0}$.\n4. **אי-תלות = מקבילים.** נכון לשני וקטורים, שגוי ל-3+.\n5. **בלבול פרישה ותת-מרחב.** $\\text{span}(S)$ תמיד תת-מרחב.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "When dealing with vector spaces, it's essential to avoid common pitfalls that can lead to incorrect conclusions. One such pitfall is assuming that a set of vectors is linearly independent without properly checking for linear combinations. This can result in incorrect conclusions about the span and basis of the vector space.\n\nFor instance, consider the set of vectors $\\{ \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}, \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix} \\}$. At first glance, it may seem that these vectors are linearly independent, but they are actually a basis for $\\mathbb{R}^2$.\n\nTo check for linear independence, we need to verify that the equation $a \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} + b \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix} = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix}$ has only the trivial solution $a=b=0$.\n\n$$a \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} + b \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix} = \\begin{pmatrix} a \\\\ b \\end{pmatrix} = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix}$$\n\nThis implies that $a=b=0$, and therefore the set of vectors is linearly independent.\n\nWorked Example:\nFind the span of the set of vectors $\\{ \\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix}, \\begin{pmatrix} 3 \\\\ 4 \\end{pmatrix} \\}$.\n\nSolution: To find the span, we need to find all possible linear combinations of the vectors. Let $a$ and $b$ be scalars, then the span is given by:\n\n$$a \\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} + b \\begin{pmatrix} 3 \\\\ 4 \\end{pmatrix} = \\begin{pmatrix} a+3b \\\\ 2a+4b \\end{pmatrix}$$\n\nThis implies that the span is the set of all vectors of the form $\\begin{pmatrix} a+3b \\\\ 2a+4b \\",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "1. **Forgetting to check $\\vec{0}\\in W$.** This is often the easiest condition to verify and the first failure for affine sets like $\\{x+y=1\\}$.\n\n2. **Thinking $W_1\\cup W_2$ is a subspace.** It is NOT unless one contains the other.\n\n3. **Confusing span with linear independence.** A set can span a large space and still be dependent (redundant vectors).\n\n4. **Forming the matrix with vectors as rows vs. columns.** When testing independence of $k$ vectors in $\\mathbb{R}^n$, form an $n\\times k$ matrix with vectors as **columns**; the rank of this matrix equals the number of independent vectors.\n\n5. **Declaring dependence based on zero determinant when $k\\neq n$.** The determinant test only applies when $k=n$ (square matrix). For $k\\neq n$, use row reduction.",
+      "body_he_md": "1. **שכחה לבדוק $\\vec{0}\\in W$.** זהו לעתים קרובות התנאי הקל ביותר לבדיקה והכישלון הראשון לקבוצות אפיניות כמו $\\{x+y=1\\}$.\n\n2. **מחשבה ש-$W_1\\cup W_2$ הוא תת-מרחב.** זה **לא** נכון, אלא אם כן אחד מכיל את השני.\n\n3. **בלבול בין span ובלתי-תלות.** קבוצה יכולה לפרוש מרחב גדול ועדיין להיות תלויה (וקטורים מיותרים).\n\n4. **הצבת הוקטורים כשורות במקום עמודות.** לבדיקת בלתי-תלות של $k$ וקטורים ב-$\\mathbb{R}^n$, בנה מטריצה $n\\times k$ עם הוקטורים כ**עמודות**.\n\n5. **הכרזת תלות בהתבסס על דטרמיננטה אפסית כש-$k\\neq n$.** בדיקת דטרמיננטה חלה רק כש-$k=n$ (מטריצה ריבועית)."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- Subspace: $\\vec{0}\\in W$; closed under $+$ and $\\cdot$\n- span is always a subspace\n- Independence test: form matrix with vectors as columns, row-reduce; independent iff rank $=k$\n- $W_1\\cap W_2$ is a subspace; $W_1\\cup W_2$ is NOT in general\n\n**What Israeli university exams emphasise:**\n- Proving or disproving subspace with 3-condition format.\n- Testing linear independence of 3 vectors in $\\mathbb{R}^3$ using row reduction or determinant.\n- Showing/disproving membership in a span.\n- Proving structural results (intersection, sum are subspaces).\n\n**Exam tip:** To show something is NOT a subspace, one counterexample suffices — find the fastest-failing condition.",
+      "body_he_md": "**גיליון נוסחאות:**\n- תת-מרחב: $\\vec{0}\\in W$; סגור ל-$+$ וכפל\n- span תמיד תת-מרחב\n- בדיקת בלתי-תלות: מטריצה עם וקטורים כעמודות, דרג; בלתי-תלויים אם דרגה $=k$\n- $W_1\\cap W_2$ תת-מרחב; $W_1\\cup W_2$ בדרך כלל לא\n\n**מה בחינות ישראליות מדגישות:**\n- הוכחה/הפרכה של תת-מרחב בפורמט 3 תנאים.\n- בדיקת בלתי-תלות של 3 וקטורים ב-$\\mathbb{R}^3$.\n- שייכות ל-span.\n- הוכחת תוצאות מבניות (חיתוך, סכום).\n\n**טיפ:** להראות שמשהו אינו תת-מרחב — דוגמת נגד אחת מספיקה."
     },
     {
       "kind": "summary",
-      "title_en": "Take-away",
+      "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- Vector space: closed under $+$ and scalar mult.\n- Span = all linear combinations.\n- Independent: only trivial combination = 0.\n- Basis: spans + independent.\n- Dimension: number of vectors in any basis.\n- For $n$ vectors in $\\mathbb{R}^n$: basis ⇔ $\\det \\ne 0$.",
-      "body_he_md": "- מרחב וקטורי: סגור תחת $+$ וכפל בסקלר.\n- פרישה = כל הצירופים הלינאריים.\n- בלתי-תלוי: רק הצירוף הטריוויאלי = 0.\n- בסיס: פורש + בלתי-תלוי.\n- מימד: מספר וקטורים בכל בסיס.\n- ל-$n$ וקטורים ב-$\\mathbb{R}^n$: בסיס ⇔ $\\det \\ne 0$.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "In this section, we will summarize the key concepts of vector spaces, including span, basis, and dimension. A **span** of a set of vectors is the set of all linear combinations of those vectors. A **basis** is a set of vectors that spans the vector space and is linearly independent. The **dimension** of a vector space is the number of vectors in a basis.\n\nA vector space has a finite dimension if and only if it has a finite basis. The dimension of a vector space is unique and is denoted by $$\\dim(V)$$.",
-          "body_he_md": "בסעיף זה, נסכם את הרעיונות המרכזיים של מרחבי וקטורים, כולל ספאן, בסיס וממד. **ספאן** של קבוצת וקטורים הוא הקבוצה של כל תמורות לינאריות של אלה וקטורים. **בסיס** הוא קבוצת וקטורים שסופרים את המרחב הווקטורי והם עצמאיים לינארית. **ממד** של מרחב וקטורי הוא מספר הווקטורים בבסיס.\n\nמרחב וקטורי יש ממד סופי אם ורק אם הוא יש בסיס סופי. **ממד** של מרחב וקטורי הוא יחידי ומסומן ב $$\\dim(V)$$.\n\n### Worked Example:\nConsider the set of"
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Let $U=\\{p\\in\\mathbb{R}_2[x] \\mid p(1)=0\\}$. Find a basis for $U$ and prove $U$ is a subspace.\n\n**Sample Solution:**\n**Subspace proof:** $0(1)=0\\in U$. If $p,q\\in U$ and $a,b\\in\\mathbb{R}$: $(ap+bq)(1)=ap(1)+bq(1)=0$. Closed under + and scalars.\n\n**Basis:** $p(x)=x-1$ has $p(1)=0$; $q(x)=x^2-1$ has $q(1)=0$. These are independent in $\\mathbb{R}_2[x]$ (degrees 1 and 2). Any $p\\in U$ with $\\deg\\leq 2$: $p(1)=0$ ⇒ $p(x)=(x-1)(ax+b)=a(x^2-1)+b(x-1)$. So $\\boxed{\\{x-1,\\ x^2-1\\}}$ is a basis, $\\dim U=2$.\n\n**Problem 2:** Prove or disprove: $\\text{span}(A)\\cup\\text{span}(B)$ is a subspace of $V$.\n\n**Sample Solution:**\n**Disproof.** In $\\mathbb{R}^2$, let $A=\\{(1,0)\\}$, $B=\\{(0,1)\\}$. Then $(1,0)\\in \\text{span}(A)\\cup\\text{span}(B)$ and $(0,1)$ is too, but $(1,0)+(0,1)=(1,1)\\notin \\text{span}(A)\\cup\\text{span}(B)$. Union is **not** a subspace (not closed under addition). $\\square$\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** $U=\\{p\\in\\mathbb{R}_2[x] \\mid p(1)=0\\}$. מצאו בסיס והוכיחו תת-מרחב.\n\n**פתרון לדוגמה:**\n**תת-מרחב:** סגירות. **בסיס:** $\\{x-1, x^2-1\\}$, $\\dim U=2$.\n\n**בעיה 2:** הוכיחו או הפריכו: $\\text{span}(A)\\cup\\text{span}(B)$ תת-מרחב.\n\n**פתרון לדוגמה:**\n**הפרכה:** ב-$\\\\mathbb{R}^2$, $(1,0)+(0,1)=(1,1)$ לא ביחוד — איחוד **אינו** תת-מרחב.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "body_en_md": "- A **vector space** satisfies 10 axioms; key examples: $\\mathbb{R}^n$, $P_n$, $M_{m\\times n}$, $C[a,b]$.\n- **Subspace criterion:** $\\vec{0}\\in W$, closed under addition, closed under scalar multiplication.\n- **Span** of any set is always a subspace.\n- **Linear independence:** only the trivial combination equals $\\vec{0}$; test via row reduction.\n- **Intersection** of subspaces is a subspace; **union** generally is not.\n- Any set containing $\\vec{0}$ is automatically dependent.",
+      "body_he_md": "- **מרחב וקטורי** מקיים 10 אקסיומות; דוגמאות: $\\mathbb{R}^n$, $P_n$, $M_{m\\times n}$, $C[a,b]$.\n- **קריטריון תת-מרחב:** $\\vec{0}\\in W$, סגור לחיבור, סגור לכפל.\n- **Span** של כל קבוצה הוא תמיד תת-מרחב.\n- **בלתי-תלות לינארית:** רק קומבינציה טריוויאלית שווה $\\vec{0}$; בדיקה דרך דירוג.\n- **חיתוך** תת-מרחבים הוא תת-מרחב; **איחוד** בדרך כלל לא.\n- כל קבוצה המכילה $\\vec{0}$ תלויה אוטומטית."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "What is $\\dim \\mathbb{R}^5$?",
-      "stem_he": "מה $\\dim \\mathbb{R}^5$?",
-      "correct_answer": "5",
-      "explanation_en": "Standard basis has 5 vectors $e_1, \\ldots, e_5$.",
-      "explanation_he": "הבסיס הסטנדרטי בעל 5 וקטורים.",
-      "skill_atoms": [
-        "dimension_rn"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $U=\\{p\\in\\mathbb{R}_2[x] \\mid p(1)=0\\}$. Prove $U$ is a subspace and find a basis.",
-      "stem_he": "יהי $U=\\{p\\in\\mathbb{R}_2[x] \\mid p(1)=0\\}$. הוכיחו תת-מרחב ומצאו בסיס.",
-      "rubric_en": "Full credit (10/10): subspace axioms + basis {x-1, x^2-1} + dim 2.\nPartial (6/10): basis without proof.\nMinimal (3/10): only states candidates.",
-      "rubric_he": "ציון מלא (10/10): אקסיומות + בסיס + dim 2.\nחלקי (6/10): בסיס בלבד.\nמינימלי (3/10): מועמדים בלבד.",
-      "explanation_en": "Basis $\\{x-1, x^2-1\\}$, $\\dim U=2$.",
-      "explanation_he": "בסיס $\\{x-1, x^2-1\\}$, $\\dim U=2$.",
-      "skill_atoms": [
-        "linear_independence_2_vectors"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or disprove: For sets $A,B$ in vector space $V$, $\\text{span}(A)\\cup\\text{span}(B)$ is a subspace.",
-      "stem_he": "הוכיחו או הפריכו: $\\\\text{span}(A)\\\\cup\\\\text{span}(B)$ תת-מרחב.",
-      "rubric_en": "Full credit (10/10): disproof with explicit counterexample, explains failure of closure.\nPartial (6/10): correct answer, weak counterexample.\nMinimal (3/10): guess only.",
-      "rubric_he": "ציון מלא (10/10): הפרכה עם דוגמה, אי-סגירות.\nחלקי (6/10): תשובה נכונה.\nמינימלי (3/10): ניחוש.",
-      "explanation_en": "Disprove: $(1,0)+(0,1)\\notin$ union in $\\mathbb{R}^2$.",
-      "explanation_he": "הפרכה: $(1,0)+(0,1)$ לא ביחוד.",
-      "skill_atoms": [
-        "dimension_polynomial_space"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Show that $v_1 = (1, 1, 0)$, $v_2 = (0, 1, 1)$, $v_3 = (1, 0, 1)$ form a basis of $\\mathbb{R}^3$.",
-      "stem_he": "הראו ש-$v_1 = (1, 1, 0)$, $v_2 = (0, 1, 1)$, $v_3 = (1, 0, 1)$ מהווים בסיס של $\\mathbb{R}^3$.",
-      "rubric_en": "Full credit (3/3): notes 3 vectors in $\\mathbb{R}^3$, computes $\\det \\begin{pmatrix} 1 & 0 & 1 \\\\ 1 & 1 & 0 \\\\ 0 & 1 & 1 \\end{pmatrix} = 1(1) - 0 + 1(1) = 2 \\ne 0$, concludes linearly independent and hence basis.\nPartial (2/3): correct det computation but missing conclusion.\nMinimal (1/3): writes the matrix only.",
-      "rubric_he": "ציון מלא (3/3): מציין 3 וקטורים ב-$\\mathbb{R}^3$, מחשב $\\det = 2 \\ne 0$, מסיק בלתי-תלויים ולכן בסיס.\nחלקי (2/3): חישוב נכון אבל ללא מסקנה.\nמינימלי (1/3): רק כותב מטריצה.",
-      "explanation_en": "Three vectors in $\\mathbb{R}^3$. Form matrix with them as columns. $\\det = 1(1 \\cdot 1 - 0) - 0 + 1(1 \\cdot 1 - 0) = 1 + 1 = 2 \\ne 0$. Therefore independent ⇒ basis.",
-      "explanation_he": "שלושה וקטורים ב-$\\mathbb{R}^3$. $\\det = 2 \\ne 0$ ⇒ בלתי-תלויים ⇒ בסיס.",
-      "skill_atoms": [
-        "check_basis_via_determinant"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $U=\\{p\\in\\mathbb{R}_2[x] \\mid p(1)=0\\}$. Prove $U$ is a subspace and find a basis.",
-      "stem_he": "יהי $U=\\{p\\in\\mathbb{R}_2[x] \\mid p(1)=0\\}$. הוכיחו תת-מרחב ומצאו בסיס.",
-      "rubric_en": "Full credit (10/10): subspace axioms + basis {x-1, x^2-1} + dim 2.\nPartial (6/10): basis without proof.\nMinimal (3/10): only states candidates.",
-      "rubric_he": "ציון מלא (10/10): אקסיומות + בסיס + dim 2.\nחלקי (6/10): בסיס בלבד.\nמינימלי (3/10): מועמדים בלבד.",
-      "explanation_en": "Basis $\\{x-1, x^2-1\\}$, $\\dim U=2$.",
-      "explanation_he": "בסיס $\\{x-1, x^2-1\\}$, $\\dim U=2$.",
-      "skill_atoms": [
-        "subspace_test"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or disprove: For sets $A,B$ in vector space $V$, $\\text{span}(A)\\cup\\text{span}(B)$ is a subspace.",
-      "stem_he": "הוכיחו או הפריכו: $\\\\text{span}(A)\\\\cup\\\\text{span}(B)$ תת-מרחב.",
-      "rubric_en": "Full credit (10/10): disproof with explicit counterexample, explains failure of closure.\nPartial (6/10): correct answer, weak counterexample.\nMinimal (3/10): guess only.",
-      "rubric_he": "ציון מלא (10/10): הפרכה עם דוגמה, אי-סגירות.\nחלקי (6/10): תשובה נכונה.\nמינימלי (3/10): ניחוש.",
-      "explanation_en": "Disprove: $(1,0)+(0,1)\\notin$ union in $\\mathbb{R}^2$.",
-      "explanation_he": "הפרכה: $(1,0)+(0,1)$ לא ביחוד.",
-      "skill_atoms": [
-        "dimension_argument"
-      ],
-      "points_level_min": "la"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Span = set of all linear combinations.",
-      "Independent ⇔ only trivial combination is 0.",
-      "Basis = spans AND independent.",
-      "Dimension = #vectors in any basis (well-defined).",
-      "For $n$ vectors in $\\mathbb{R}^n$: basis ⇔ $\\det \\ne 0$."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Independence means pairwise non-parallel",
-        "correction": "For 2 vectors yes; for 3+ in higher dimensions, can be pairwise non-parallel yet dependent.",
-        "detect_phrase_en": "independence pairwise",
-        "detect_phrase_he": "אי-תלות זוגית"
-      },
-      {
-        "wrong": "Any spanning set is a basis",
-        "correction": "Basis must ALSO be independent. A spanning set could be redundant.",
-        "detect_phrase_en": "spanning is basis",
-        "detect_phrase_he": "פורש זה בסיס"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "dimension_rn",
-      "linear_independence_2_vectors",
-      "dimension_polynomial_space",
-      "check_basis_via_determinant",
-      "subspace_test",
-      "dimension_argument"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "la_matrices",
-      "la_vectors"
-    ],
-    "tutor_pacing_hint": "Use $\\mathbb{R}^2$ pictures (arrows from origin) as the recurring intuition pump. Then port the same ideas to polynomial / matrix spaces by analogy.",
-    "coach_drill_skills": [
-      "linear_independence_2_vectors",
-      "check_basis_via_determinant",
-      "subspace_test"
-    ],
-    "diagnostic_signals": {
-      "if_learner_confuses_span_basis": "Show a spanning set with too many vectors; remove the redundant one to recover a basis.",
-      "if_learner_forgets_zero_in_subspace": "First test for any subspace candidate: does it contain $(0, 0, \\ldots, 0)$?"
-    },
-    "next_recommended": [
-      "la_eigenvalues",
-      "la_orthogonality"
-    ]
-  }
+  ]
 }

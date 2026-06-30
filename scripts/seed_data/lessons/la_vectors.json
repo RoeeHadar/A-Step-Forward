@@ -1,145 +1,224 @@
 {
   "concept_id": "la_vectors",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la",
-    "makhina"
-  ],
-  "title_en": "Vectors in Rⁿ",
-  "title_he": "וקטורים במרחב R^n",
-  "summary_en": "Vectors in $\\mathbb{R}^n$ are ordered $n$-tuples with geometric meaning. Master addition, scalar multiplication, dot product, linear independence, span, and the cross product in $\\mathbb{R}^3$.",
-  "summary_he": "וקטורים ב-$\\mathbb{R}^n$ הם $n$-יות מסודרות עם משמעות גיאומטרית. נלמד חיבור, כפל בסקלר, מכפלה סקלרית, בלתי-תלות לינארית, קבוצת פרישה, ומכפלה וקטורית ב-$\\mathbb{R}^3$.",
-  "est_minutes": 22,
+  "math_track": ["la"],
+  "title_en": "Vectors in ℝⁿ — Operations, Dot Product & Orthogonality",
+  "title_he": "וקטורים ב-ℝⁿ — פעולות, מכפלה פנימית ואורתוגונליות",
+  "summary_en": "Vectors in ℝⁿ, their addition and scalar multiplication, the dot product, Euclidean norm, unit vectors, the Cauchy-Schwarz inequality, and geometric orthogonality.",
+  "summary_he": "וקטורים ב-ℝⁿ, חיבור וכפל בסקלר, מכפלה פנימית, נורמה אוקלידית, וקטורים יחידה, אי-שוויון קושי-שוורץ ואורתוגונליות גיאומטרית.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is a vector in Rⁿ?",
-      "title_he": "מהו וקטור ב-Rⁿ?",
-      "body_en_md": "## Vectors as ordered n-tuples\n\nA **vector** in $\\mathbb{R}^n$ is an ordered list of $n$ real numbers:\n\n$$\\vec{v} = \\begin{pmatrix} v_1 \\\\ v_2 \\\\ \\vdots \\\\ v_n \\end{pmatrix}.$$\n\n### Column vs. row vectors\n\n- A **column vector** is an $n \\times 1$ matrix.\n- A **row vector** is a $1 \\times n$ matrix.\n\nWhen multiplying matrices, $A\\vec{x}$ requires $\\vec{x}$ to be an $n \\times 1$ **column** vector.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "## וקטורים כ-n-יות מסודרות\n\n**וקטור** ב-$\\mathbb{R}^n$ הוא רשימה מסודרת של $n$ מספרים ממשיים.\n\n### וקטור עמודה מול וקטור שורה\n\n- **וקטור עמודה** — מטריצה $n \\times 1$.\n- **וקטור שורה** — מטריצה $1 \\times n$.\n\nבכפל מטריצות, $A\\vec{x}$ דורש **עמודה** $n \\times 1$.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Column vectors are the default for $A\\vec{x}$.",
-          "body_he_md": "וקטורי עמודה הם ברירת המחדל ל-$A\\vec{x}$."
-        },
-        "makhina": {
-          "body_en_md": "Build geometric intuition: displacement, direction, components.",
-          "body_he_md": "בנו אינטואיציה גיאומטרית: הזזה, כיוון ורכיבים."
-        }
-      }
+      "title_en": "Why Vectors?",
+      "title_he": "למה וקטורים?",
+      "body_en_md": "Linear algebra begins with **vectors** — ordered tuples of numbers that encode magnitude and direction simultaneously. In $\\mathbb{R}^n$ we generalise the familiar 2-D and 3-D arrows to $n$ dimensions, which lets us model data points, physical states, and function coefficients with one unified language.\n\nThis lesson establishes the **algebraic engine**: addition, scalar multiplication, the dot product, and the norm. Every concept that follows in the course — subspaces, eigenvalues, least squares — is built on these primitives.\n\n**Connection to previous material:** You should already know how to work with points and directed arrows in the plane. Here we formalise and extend that intuition.",
+      "body_he_md": "האלגברה הלינארית מתחילה ב**וקטורים** — סדרות מסודרות של מספרים המקודדות גודל וכיוון בו-זמנית. ב-$\\mathbb{R}^n$ אנחנו מכלילים את החיצים המוכרים מהמישור ומהמרחב ל-$n$ ממדות, מה שמאפשר לנו לדגם נקודות נתונים, מצבים פיזיקליים ומקדמי פונקציות בשפה אחידה.\n\nשיעור זה מבסס את **המנגנון האלגברי**: חיבור, כפל בסקלר, מכפלה פנימית ונורמה. כל מושג שיבוא בהמשך הקורס — תת-מרחבים, ערכים עצמיים, ריבועים פחותים — נבנה על יסודות אלו.\n\n**קשר לחומר קודם:** עליכם לדעת לעבוד עם נקודות וחיצים מכוונים במישור. כאן אנו מפמלים ומרחיבים את האינטואיציה הזו."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Vectors, Addition, and Scalar Multiplication",
+      "title_he": "וקטורים, חיבור וכפל בסקלר",
+      "body_en_md": "**Definition.** A **vector** in $\\mathbb{R}^n$ is an ordered $n$-tuple $\\vec{u} = (u_1, u_2, \\ldots, u_n)$ where each $u_i \\in \\mathbb{R}$.\n\n**Vector addition:** $(u_1,\\ldots,u_n)+(v_1,\\ldots,v_n) = (u_1+v_1,\\ldots,u_n+v_n)$.\n\n**Scalar multiplication:** $c(u_1,\\ldots,u_n) = (cu_1,\\ldots,cu_n)$ for $c\\in\\mathbb{R}$.\n\n**Dot product:** $\\vec{u}\\cdot\\vec{v} = \\displaystyle\\sum_{i=1}^n u_i v_i$.\n\n**Euclidean norm (length):** $\\|\\vec{u}\\| = \\sqrt{\\vec{u}\\cdot\\vec{u}} = \\sqrt{\\displaystyle\\sum_{i=1}^n u_i^2}$.\n\n**Unit vector:** $\\hat{u} = \\dfrac{\\vec{u}}{\\|\\vec{u}\\|}$, satisfying $\\|\\hat{u}\\| = 1$.\n\n**Orthogonality:** $\\vec{u}\\perp\\vec{v}$ iff $\\vec{u}\\cdot\\vec{v} = 0$.",
+      "body_he_md": "**הגדרה.** **וקטור** ב-$\\mathbb{R}^n$ הוא $n$-יה מסודרת $\\vec{u} = (u_1, u_2, \\ldots, u_n)$ כאשר $u_i \\in \\mathbb{R}$.\n\n**חיבור וקטורים:** $(u_1,\\ldots,u_n)+(v_1,\\ldots,v_n) = (u_1+v_1,\\ldots,u_n+v_n)$.\n\n**כפל בסקלר:** $c(u_1,\\ldots,u_n) = (cu_1,\\ldots,cu_n)$ עבור $c\\in\\mathbb{R}$.\n\n**מכפלה פנימית (מכפלת נקודה):** $\\vec{u}\\cdot\\vec{v} = \\displaystyle\\sum_{i=1}^n u_i v_i$.\n\n**נורמה אוקלידית (אורך):** $\\|\\vec{u}\\| = \\sqrt{\\vec{u}\\cdot\\vec{u}} = \\sqrt{\\displaystyle\\sum_{i=1}^n u_i^2}$.\n\n**וקטור יחידה:** $\\hat{u} = \\dfrac{\\vec{u}}{\\|\\vec{u}\\|}$, מקיים $\\|\\hat{u}\\| = 1$.\n\n**אורתוגונליות:** $\\vec{u}\\perp\\vec{v}$ אם ורק אם $\\vec{u}\\cdot\\vec{v} = 0$."
     },
     {
       "kind": "theory",
-      "title_en": "Vector operations",
-      "title_he": "פעולות על וקטורים",
-      "body_en_md": "## Dot product\n\n$$\\boxed{\\vec{a} \\cdot \\vec{b} = \\sum_{i=1}^{n} a_i b_i}$$\n\n## Magnitude\n\n$$\\boxed{|\\vec{v}| = \\sqrt{v_1^2 + \\cdots + v_n^2}}$$\n\nScalar multiplication $c\\vec{a}$ scales components; dot product returns a **scalar**.",
-      "body_he_md": "## מכפלה סקלרית\n\n$$\\boxed{\\vec{a} \\cdot \\vec{b} = \\sum_{i=1}^{n} a_i b_i}$$\n\n## אורך\n\n$$\\boxed{|\\vec{v}| = \\sqrt{v_1^2 + \\cdots + v_n^2}}$$\n\nכפל בסקלר $c\\vec{a}$ מכפיל רכיבים; מכפלה סקלרית מחזירה **סקלר**.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Dot product = projection.",
-          "body_he_md": "מכפלה סקלרית = השלכה."
-        }
-      }
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1 (Properties of the dot product).** For all $\\vec{u},\\vec{v},\\vec{w}\\in\\mathbb{R}^n$ and $c\\in\\mathbb{R}$:\n1. $\\vec{u}\\cdot\\vec{v} = \\vec{v}\\cdot\\vec{u}$ (commutativity)\n2. $\\vec{u}\\cdot(\\vec{v}+\\vec{w}) = \\vec{u}\\cdot\\vec{v}+\\vec{u}\\cdot\\vec{w}$ (linearity)\n3. $(c\\vec{u})\\cdot\\vec{v} = c(\\vec{u}\\cdot\\vec{v})$\n4. $\\vec{u}\\cdot\\vec{u} \\geq 0$, with equality iff $\\vec{u} = \\vec{0}$.\n\n**Theorem 2 (Geometric interpretation).** $\\vec{u}\\cdot\\vec{v} = \\|\\vec{u}\\|\\|\\vec{v}\\|\\cos\\theta$ where $\\theta$ is the angle between the vectors. In particular, two non-zero vectors are orthogonal iff their dot product is zero.\n\n**Theorem 3 (Cauchy–Schwarz inequality).**\n$$|\\vec{u}\\cdot\\vec{v}| \\leq \\|\\vec{u}\\|\\|\\vec{v}\\|$$\nwith equality iff $\\vec{u}$ and $\\vec{v}$ are parallel (linearly dependent).\n\n*Proof sketch:* Consider $f(t) = \\|\\vec{u} - t\\vec{v}\\|^2 \\geq 0$ for all $t\\in\\mathbb{R}$. Expanding gives $\\|\\vec{u}\\|^2 - 2t(\\vec{u}\\cdot\\vec{v}) + t^2\\|\\vec{v}\\|^2 \\geq 0$. This is a non-negative quadratic in $t$, so its discriminant is $\\leq 0$: $4(\\vec{u}\\cdot\\vec{v})^2 - 4\\|\\vec{u}\\|^2\\|\\vec{v}\\|^2 \\leq 0$, giving the result.\n\n**Theorem 4 (Triangle inequality).** $\\|\\vec{u}+\\vec{v}\\| \\leq \\|\\vec{u}\\|+\\|\\vec{v}\\|$.\n\n*Proof:* Expand $\\|\\vec{u}+\\vec{v}\\|^2 = \\|\\vec{u}\\|^2 + 2\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2 \\leq \\|\\vec{u}\\|^2 + 2\\|\\vec{u}\\|\\|\\vec{v}\\| + \\|\\vec{v}\\|^2 = (\\|\\vec{u}\\|+\\|\\vec{v}\\|)^2$.",
+      "body_he_md": "**משפט 1 (תכונות המכפלה הפנימית).** לכל $\\vec{u},\\vec{v},\\vec{w}\\in\\mathbb{R}^n$ ו-$c\\in\\mathbb{R}$:\n1. $\\vec{u}\\cdot\\vec{v} = \\vec{v}\\cdot\\vec{u}$ (קומוטטיביות)\n2. $\\vec{u}\\cdot(\\vec{v}+\\vec{w}) = \\vec{u}\\cdot\\vec{v}+\\vec{u}\\cdot\\vec{w}$ (לינאריות)\n3. $(c\\vec{u})\\cdot\\vec{v} = c(\\vec{u}\\cdot\\vec{v})$\n4. $\\vec{u}\\cdot\\vec{u} \\geq 0$, שוויון iff $\\vec{u} = \\vec{0}$.\n\n**משפט 2 (פרשנות גיאומטרית).** $\\vec{u}\\cdot\\vec{v} = \\|\\vec{u}\\|\\|\\vec{v}\\|\\cos\\theta$ כאשר $\\theta$ הזווית בין הוקטורים. בפרט, שני וקטורים אי-אפסיים אורתוגונלים אם ורק אם מכפלתם הפנימית אפסית.\n\n**משפט 3 (אי-שוויון קושי-שוורץ).**\n$$|\\vec{u}\\cdot\\vec{v}| \\leq \\|\\vec{u}\\|\\|\\vec{v}\\|$$\nשוויון אם ורק אם $\\vec{u}$ ו-$\\vec{v}$ מקבילים.\n\n*סקיצת הוכחה:* נסתכל על $f(t) = \\|\\vec{u} - t\\vec{v}\\|^2 \\geq 0$ לכל $t\\in\\mathbb{R}$. הפיתוח נותן $\\|\\vec{u}\\|^2 - 2t(\\vec{u}\\cdot\\vec{v}) + t^2\\|\\vec{v}\\|^2 \\geq 0$. זהו ריבועי אי-שלילי ב-$t$, לכן הדיסקרימיננטה שלו $\\leq 0$: $4(\\vec{u}\\cdot\\vec{v})^2 - 4\\|\\vec{u}\\|^2\\|\\vec{v}\\|^2 \\leq 0$, ומכאן התוצאה.\n\n**משפט 4 (אי-שוויון המשולש).** $\\|\\vec{u}+\\vec{v}\\| \\leq \\|\\vec{u}\\|+\\|\\vec{v}\\|$.\n\n*הוכחה:* פותחים $\\|\\vec{u}+\\vec{v}\\|^2 = \\|\\vec{u}\\|^2 + 2\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2 \\leq (\\|\\vec{u}\\|+\\|\\vec{v}\\|)^2$."
     },
     {
-      "kind": "theory",
-      "title_en": "Linear independence and span",
-      "title_he": "בלתי-תלות לינארית וקבוצת פרישה",
-      "body_en_md": "Vectors are **linearly independent** if $c_1\\vec{v}_1 + \\cdots + c_k\\vec{v}_k = \\vec{0}$ only for $c_i = 0$.\n\n**Worked example:** $\\vec{v}_1=(1,0,1)$, $\\vec{v}_2=(2,1,0)$ — only trivial solution, so independent; they span a plane in $\\mathbb{R}^3$.",
-      "body_he_md": "וקטורים **בלתי-תלויים לינארית** אם $c_1\\vec{v}_1 + \\cdots + c_k\\vec{v}_k = \\vec{0}$ רק כאשר $c_i = 0$.\n\n**דוגמה:** $\\vec{v}_1=(1,0,1)$, $\\vec{v}_2=(2,1,0)$ — רק פתרון טריוויאלי, לכן בלתי-תלויים; הם פורשים מישור ב-$\\mathbb{R}^3$.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "At most $n$ independent vectors in $\\mathbb{R}^n$.",
-          "body_he_md": "לכל היותר $n$ וקטורים בלתי-תלויים ב-$\\mathbb{R}^n$."
-        }
-      }
-    },
-    {
-      "kind": "theory",
-      "title_en": "Cross product (R³)",
-      "title_he": "מכפלה וקטורית (R³)",
-      "body_en_md": "$$\\vec{a} \\times \\vec{b} = (a_2 b_3 - a_3 b_2,\\; a_3 b_1 - a_1 b_3,\\; a_1 b_2 - a_2 b_1)$$\n\nPerpendicular to both; $|\\vec{a}\\times\\vec{b}| = |\\vec{a}||\\vec{b}|\\sin\\theta$ = parallelogram area. **Right-hand rule**.",
-      "body_he_md": "$$\\vec{a} \\times \\vec{b} = (a_2 b_3 - a_3 b_2,\\; a_3 b_1 - a_1 b_3,\\; a_1 b_2 - a_2 b_1)$$\n\nניצב לשניהם; $|\\vec{a}\\times\\vec{b}|$ = שטח המקבילית. **כלל כף היד הימנית**.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Cross product only in $\\mathbb{R}^3$ on syllabus.",
-          "body_he_md": "מכפלה וקטורית רק ב-$\\mathbb{R}^3$ בתוכנית."
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Vectors in Rⁿ: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Vectors in Rⁿ.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-וקטורים במרחב R^n: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-וקטורים במרחב R^n.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Vectors in Rⁿ'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'וקטורים במרחב R^n'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "dot_product_compute"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Vectors in Rⁿ' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'וקטורים במרחב R^n' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "linear_independence_check"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "short_answer",
+      "kind": "worked_example",
       "difficulty": "easy",
-      "stem_en": "Dot product of $\\vec{u}=(3,-1,2)$ and $\\vec{v}=(1,4,-2)$.",
-      "stem_he": "מכפלה סקלרית של $\\vec{u}=(3,-1,2)$ ו-$\\vec{v}=(1,4,-2)$.",
-      "acceptable_answers": [
-        "-7",
-        "-7.0"
-      ],
-      "case_sensitive": false,
-      "explanation_en": "$3-4-4=-7$.",
-      "explanation_he": "$3-4-4=-7$.",
-      "skill_atoms": [
-        "dot_product_compute"
-      ],
-      "points_level_min": "la"
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Computing the Dot Product",
+      "title_he": "דוגמה פתורה 1 — חישוב מכפלה פנימית",
+      "body_en_md": "**Given:** $\\vec{u} = (2, 1, -1)$, $\\vec{v} = (3, -2, 1)$.\n\n**Task:** Compute $\\vec{u}\\cdot\\vec{v}$, $\\|\\vec{u}\\|$, $\\|\\vec{v}\\|$, and the unit vector $\\hat{u}$.\n\n**Step 1 — Dot product:**\n$$\\vec{u}\\cdot\\vec{v} = (2)(3) + (1)(-2) + (-1)(1) = 6 - 2 - 1 = 3.$$\n\n**Step 2 — Norms:**\n$$\\|\\vec{u}\\| = \\sqrt{4+1+1} = \\sqrt{6}, \\qquad \\|\\vec{v}\\| = \\sqrt{9+4+1} = \\sqrt{14}.$$\n\n**Step 3 — Unit vector:**\n$$\\hat{u} = \\frac{1}{\\sqrt{6}}(2,1,-1) = \\left(\\frac{2}{\\sqrt{6}},\\frac{1}{\\sqrt{6}},\\frac{-1}{\\sqrt{6}}\\right).$$\n\n**Step 4 — Verify Cauchy–Schwarz:**\n$$|\\vec{u}\\cdot\\vec{v}| = 3 \\leq \\sqrt{6}\\cdot\\sqrt{14} = \\sqrt{84} \\approx 9.17. \\checkmark$$",
+      "body_he_md": "**נתון:** $\\vec{u} = (2, 1, -1)$, $\\vec{v} = (3, -2, 1)$.\n\n**משימה:** חשב את $\\vec{u}\\cdot\\vec{v}$, $\\|\\vec{u}\\|$, $\\|\\vec{v}\\|$ ואת וקטור היחידה $\\hat{u}$.\n\n**שלב 1 — מכפלה פנימית:**\n$$\\vec{u}\\cdot\\vec{v} = (2)(3) + (1)(-2) + (-1)(1) = 6 - 2 - 1 = 3.$$\n\n**שלב 2 — נורמות:**\n$$\\|\\vec{u}\\| = \\sqrt{4+1+1} = \\sqrt{6}, \\qquad \\|\\vec{v}\\| = \\sqrt{9+4+1} = \\sqrt{14}.$$\n\n**שלב 3 — וקטור יחידה:**\n$$\\hat{u} = \\frac{1}{\\sqrt{6}}(2,1,-1) = \\left(\\frac{2}{\\sqrt{6}},\\frac{1}{\\sqrt{6}},\\frac{-1}{\\sqrt{6}}\\right).$$\n\n**שלב 4 — אימות קושי-שוורץ:**\n$$|\\vec{u}\\cdot\\vec{v}| = 3 \\leq \\sqrt{6}\\cdot\\sqrt{14} = \\sqrt{84} \\approx 9.17. \\checkmark$$"
     },
     {
-      "ord": 4,
-      "kind": "open",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Let $\\vec{a} = (1, -1, 2)$ and $\\vec{b} = (0, 3, 1)$.\n\n(a) Compute $\\vec{a}\\cdot\\vec{b}$ and determine whether the vectors are orthogonal.\n\n(b) Compute $\\|\\vec{a}\\|$ and write the unit vector $\\hat{a}$.",
+      "body_he_md": "יהיו $\\vec{a} = (1, -1, 2)$ ו-$\\vec{b} = (0, 3, 1)$.\n\n(א) חשב את $\\vec{a}\\cdot\\vec{b}$ וקבע האם הוקטורים אורתוגונלים.\n\n(ב) חשב את $\\|\\vec{a}\\|$ וכתוב את וקטור היחידה $\\hat{a}$.",
+      "checkpoint_solution_en": "(a) $\\vec{a}\\cdot\\vec{b} = (1)(0)+(-1)(3)+(2)(1) = 0-3+2 = -1 \\neq 0$, so they are **not** orthogonal.\n\n(b) $\\|\\vec{a}\\| = \\sqrt{1+1+4} = \\sqrt{6}$. Unit vector: $\\hat{a} = \\frac{1}{\\sqrt{6}}(1,-1,2)$.",
+      "checkpoint_solution_he": "(א) $\\vec{a}\\cdot\\vec{b} = 0-3+2 = -1 \\neq 0$, לכן הם **אינם** אורתוגונלים.\n\n(ב) $\\|\\vec{a}\\| = \\sqrt{1+1+4} = \\sqrt{6}$. וקטור יחידה: $\\hat{a} = \\frac{1}{\\sqrt{6}}(1,-1,2)$."
+    },
+    {
+      "kind": "worked_example",
       "difficulty": "medium",
-      "stem_en": "Prove $\\vec{a}=(1,2,-1)$ and $\\vec{b}=(3,-1,1)$ are orthogonal.",
-      "stem_he": "הוכיחו ש-$\\vec{a}=(1,2,-1)$ ו-$\\vec{b}=(3,-1,1)$ ניצבים.",
-      "rubric_en": "Full (3/3): dot product = 0, conclude orthogonality.",
-      "rubric_he": "מלא (3/3): מכפלה סקלרית = 0, מסקנת ניצבות.",
-      "explanation_en": "$\\vec{a}\\cdot\\vec{b}=0$.",
-      "explanation_he": "$\\vec{a}\\cdot\\vec{b}=0$.",
-      "skill_atoms": [
-        "orthogonality_dot_product"
-      ],
-      "points_level_min": "la"
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Vectors Orthogonal to Two Given Vectors",
+      "title_he": "דוגמה פתורה 2 — וקטורים האורתוגונלים לשני וקטורים",
+      "body_en_md": "**Task:** Find all vectors $\\vec{w} = (x,y,z)\\in\\mathbb{R}^3$ that are orthogonal to both $\\vec{u} = (1,2,0)$ and $\\vec{v} = (0,1,1)$.\n\n**Setup.** We need $\\vec{w}\\cdot\\vec{u} = 0$ and $\\vec{w}\\cdot\\vec{v} = 0$ simultaneously:\n$$x + 2y = 0 \\quad (1)$$\n$$y + z = 0 \\quad (2)$$\n\n**Solve the system.** From (2): $z = -y$. From (1): $x = -2y$. Setting $y = t$ (free parameter):\n$$\\vec{w} = (-2t, t, -t) = t(-2,1,-1), \\quad t\\in\\mathbb{R}.$$\n\n**Conclusion.** The set of all such vectors is the line (through the origin) $\\text{span}\\{(-2,1,-1)\\}$. Notice this is exactly the direction of the **cross product** $\\vec{u}\\times\\vec{v}$, which in $\\mathbb{R}^3$ always gives a vector perpendicular to both.",
+      "body_he_md": "**משימה:** מצא את כל הוקטורים $\\vec{w} = (x,y,z)\\in\\mathbb{R}^3$ האורתוגונלים גם ל-$\\vec{u} = (1,2,0)$ וגם ל-$\\vec{v} = (0,1,1)$.\n\n**הגדרת המערכת.** אנחנו צריכים $\\vec{w}\\cdot\\vec{u} = 0$ ו-$\\vec{w}\\cdot\\vec{v} = 0$ בו-זמנית:\n$$x + 2y = 0 \\quad (1)$$\n$$y + z = 0 \\quad (2)$$\n\n**פתרון המערכת.** מ-(2): $z = -y$. מ-(1): $x = -2y$. נגדיר $y = t$ (פרמטר חופשי):\n$$\\vec{w} = (-2t, t, -t) = t(-2,1,-1), \\quad t\\in\\mathbb{R}.$$\n\n**מסקנה.** קבוצת כל הוקטורים כאלה היא ישר (דרך הראשית) $\\text{span}\\{(-2,1,-1)\\}$. זוהי בדיוק כיוון **המכפלה הווקטורית** $\\vec{u}\\times\\vec{v}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find all vectors orthogonal to both $\\vec{p} = (1,0,2)$ and $\\vec{q} = (2,1,0)$.",
+      "body_he_md": "מצא את כל הוקטורים האורתוגונלים גם ל-$\\vec{p} = (1,0,2)$ וגם ל-$\\vec{q} = (2,1,0)$.",
+      "checkpoint_solution_en": "We need $x + 2z = 0$ and $2x+y = 0$. From the first: $x=-2z$; from the second: $y = -2x = 4z$. Setting $z=t$: $\\vec{w} = t(-2,4,1)$. Answer: $\\text{span}\\{(-2,4,1)\\}$.",
+      "checkpoint_solution_he": "צריך $x + 2z = 0$ ו-$2x+y = 0$. מהראשונה: $x=-2z$; מהשנייה: $y=-2x=4z$. עם $z=t$: $\\vec{w} = t(-2,4,1)$. תשובה: $\\text{span}\\{(-2,4,1)\\}$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof of Cauchy–Schwarz",
+      "title_he": "דוגמה פתורה 3 — הוכחת אי-שוויון קושי-שוורץ",
+      "body_en_md": "**Claim:** For all $\\vec{u},\\vec{v}\\in\\mathbb{R}^n$: $|\\vec{u}\\cdot\\vec{v}| \\leq \\|\\vec{u}\\|\\|\\vec{v}\\|$.\n\n**Proof:**\n\n**Step 1 — Trivial case.** If $\\vec{v} = \\vec{0}$, both sides are 0 and the inequality holds trivially.\n\n**Step 2 — Non-trivial case.** Assume $\\vec{v} \\neq \\vec{0}$. For any $t\\in\\mathbb{R}$, the squared norm is non-negative:\n$$f(t) = \\|\\vec{u} - t\\vec{v}\\|^2 \\geq 0.$$\n\n**Step 3 — Expand:**\n$$f(t) = \\vec{u}\\cdot\\vec{u} - 2t(\\vec{u}\\cdot\\vec{v}) + t^2(\\vec{v}\\cdot\\vec{v}) = \\|\\vec{u}\\|^2 - 2t(\\vec{u}\\cdot\\vec{v}) + t^2\\|\\vec{v}\\|^2.$$\n\n**Step 4 — Discriminant argument.** $f(t)$ is a quadratic in $t$ with positive leading coefficient $\\|\\vec{v}\\|^2 > 0$. Since $f(t)\\geq 0$ for all $t$, the quadratic has **at most one real root**, so its discriminant must satisfy:\n$$\\Delta = 4(\\vec{u}\\cdot\\vec{v})^2 - 4\\|\\vec{u}\\|^2\\|\\vec{v}\\|^2 \\leq 0.$$\n\n**Step 5 — Conclude:**\n$$(\\vec{u}\\cdot\\vec{v})^2 \\leq \\|\\vec{u}\\|^2\\|\\vec{v}\\|^2 \\Rightarrow |\\vec{u}\\cdot\\vec{v}| \\leq \\|\\vec{u}\\|\\|\\vec{v}\\|. \\quad \\blacksquare$$\n\n**Equality condition:** $\\Delta = 0$ iff $f(t) = 0$ for exactly one $t^* = \\frac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{v}\\|^2}$, meaning $\\vec{u} = t^*\\vec{v}$ — i.e., $\\vec{u}$ and $\\vec{v}$ are **linearly dependent**.",
+      "body_he_md": "**טענה:** לכל $\\vec{u},\\vec{v}\\in\\mathbb{R}^n$: $|\\vec{u}\\cdot\\vec{v}| \\leq \\|\\vec{u}\\|\\|\\vec{v}\\|$.\n\n**הוכחה:**\n\n**שלב 1 — מקרה טריוויאלי.** אם $\\vec{v} = \\vec{0}$, שני הצדדים אפסיים והאי-שוויון מתקיים.\n\n**שלב 2 — המקרה הכללי.** נניח $\\vec{v} \\neq \\vec{0}$. לכל $t\\in\\mathbb{R}$, הנורמה הריבועית אי-שלילית:\n$$f(t) = \\|\\vec{u} - t\\vec{v}\\|^2 \\geq 0.$$\n\n**שלב 3 — פיתוח:**\n$$f(t) = \\|\\vec{u}\\|^2 - 2t(\\vec{u}\\cdot\\vec{v}) + t^2\\|\\vec{v}\\|^2.$$\n\n**שלב 4 — טיעון הדיסקרימיננטה.** $f(t)$ הוא פולינום ריבועי ב-$t$ עם מקדם מוביל $\\|\\vec{v}\\|^2 > 0$. מכיוון ש-$f(t)\\geq 0$ לכל $t$, יש לו לכל היותר שורש ממשי אחד, ולכן:\n$$\\Delta = 4(\\vec{u}\\cdot\\vec{v})^2 - 4\\|\\vec{u}\\|^2\\|\\vec{v}\\|^2 \\leq 0.$$\n\n**שלב 5 — מסקנה:**\n$$(\\vec{u}\\cdot\\vec{v})^2 \\leq \\|\\vec{u}\\|^2\\|\\vec{v}\\|^2 \\Rightarrow |\\vec{u}\\cdot\\vec{v}| \\leq \\|\\vec{u}\\|\\|\\vec{v}\\|. \\quad \\blacksquare$$\n\n**תנאי השוויון:** $\\Delta = 0$ אם ורק אם $\\vec{u} = t^*\\vec{v}$ — כלומר $\\vec{u}$ ו-$\\vec{v}$ **תלויים לינארית**."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Dot Product Toolkit",
+      "title_he": "מדריך שיטה — ארגז הכלים של המכפלה הפנימית",
+      "body_en_md": "| Goal | Method | Key formula |\n|---|---|---|\n| Compute $\\vec{u}\\cdot\\vec{v}$ | Multiply component-wise, sum | $\\sum u_i v_i$ |\n| Find $\\|\\vec{u}\\|$ | Square root of dot product with itself | $\\sqrt{\\vec{u}\\cdot\\vec{u}}$ |\n| Unit vector | Divide by norm | $\\hat{u} = \\vec{u}/\\|\\vec{u}\\|$ |\n| Check orthogonality | Test if dot product = 0 | $\\vec{u}\\cdot\\vec{v}=0$? |\n| Find vectors $\\perp$ to $k$ given vectors | Set up homogeneous linear system, solve | $\\vec{u}_i\\cdot\\vec{w}=0$ for all $i$ |\n| Check Cauchy–Schwarz | Compute both sides | $|\\vec{u}\\cdot\\vec{v}|\\leq\\|\\vec{u}\\|\\|\\vec{v}\\|$? |\n| Find angle between vectors | Use cosine formula | $\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{u}\\|\\|\\vec{v}\\|}$ |",
+      "body_he_md": "| מטרה | שיטה | נוסחה מרכזית |\n|---|---|---|\n| חשב $\\vec{u}\\cdot\\vec{v}$ | כפל רכיב-רכיב, סכום | $\\sum u_i v_i$ |\n| מצא $\\|\\vec{u}\\|$ | שורש ריבועי של המכפלה הפנימית עם עצמה | $\\sqrt{\\vec{u}\\cdot\\vec{u}}$ |\n| וקטור יחידה | חלק בנורמה | $\\hat{u} = \\vec{u}/\\|\\vec{u}\\|$ |\n| בדיקת אורתוגונליות | בדוק אם מכפלה פנימית = 0 | $\\vec{u}\\cdot\\vec{v}=0$? |\n| מצא וקטורים $\\perp$ ל-$k$ וקטורים נתונים | הקם מערכת הומוגנית, פתור | $\\vec{u}_i\\cdot\\vec{w}=0$ לכל $i$ |\n| בדיקת קושי-שוורץ | חשב שני הצדדים | $|\\vec{u}\\cdot\\vec{v}|\\leq\\|\\vec{u}\\|\\|\\vec{v}\\|$? |\n| מצא זווית בין וקטורים | השתמש בנוסחת הקוסינוס | $\\cos\\theta = \\frac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{u}\\|\\|\\vec{v}\\|}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $\\vec{u}\\cdot\\vec{v}$ where $\\vec{u}=(1,3,-2)$ and $\\vec{v}=(2,-1,4)$.",
+          "body_he": "חשב את $\\vec{u}\\cdot\\vec{v}$ כאשר $\\vec{u}=(1,3,-2)$ ו-$\\vec{v}=(2,-1,4)$.",
+          "solution_en": "$\\vec{u}\\cdot\\vec{v} = 2-3-8 = -9$.",
+          "solution_he": "$\\vec{u}\\cdot\\vec{v} = 2-3-8 = -9$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find the unit vector in the direction of $\\vec{v} = (2, -2, 1)$.",
+          "body_he": "מצא את וקטור היחידה בכיוון $\\vec{v} = (2, -2, 1)$.",
+          "solution_en": "$\\|\\vec{v}\\| = \\sqrt{4+4+1}=3$. Unit vector: $\\hat{v} = \\frac{1}{3}(2,-2,1)$.",
+          "solution_he": "$\\|\\vec{v}\\| = \\sqrt{4+4+1}=3$. וקטור יחידה: $\\hat{v} = \\frac{1}{3}(2,-2,1)$.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Are $\\vec{a} = (2, 1, -1)$ and $\\vec{b} = (1, 0, 2)$ orthogonal?",
+          "body_he": "האם $\\vec{a} = (2, 1, -1)$ ו-$\\vec{b} = (1, 0, 2)$ אורתוגונלים?",
+          "solution_en": "$\\vec{a}\\cdot\\vec{b} = 2+0-2=0$. Yes, they are orthogonal.",
+          "solution_he": "$\\vec{a}\\cdot\\vec{b} = 2+0-2=0$. כן, הם אורתוגונלים.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Compute $\\|3\\vec{u} - 2\\vec{v}\\|$ for $\\vec{u}=(1,0)$, $\\vec{v}=(0,1)$.",
+          "body_he": "חשב את $\\|3\\vec{u} - 2\\vec{v}\\|$ עבור $\\vec{u}=(1,0)$, $\\vec{v}=(0,1)$.",
+          "solution_en": "$3\\vec{u}-2\\vec{v}=(3,-2)$. $\\|{\\cdot}\\| = \\sqrt{9+4}=\\sqrt{13}$.",
+          "solution_he": "$3\\vec{u}-2\\vec{v}=(3,-2)$. $\\|{\\cdot}\\| = \\sqrt{9+4}=\\sqrt{13}$.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find all vectors $\\vec{w}\\in\\mathbb{R}^3$ orthogonal to $\\vec{u}=(1,1,0)$ and $\\vec{v}=(1,-1,1)$.",
+          "body_he": "מצא את כל הוקטורים $\\vec{w}\\in\\mathbb{R}^3$ האורתוגונלים ל-$\\vec{u}=(1,1,0)$ ו-$\\vec{v}=(1,-1,1)$.",
+          "solution_en": "System: $x+y=0$ and $x-y+z=0$. From first: $y=-x$. Substitute: $2x+z=0 \\Rightarrow z=-2x$. With $x=t$: $\\vec{w}=t(1,-1,-2)$. Answer: $\\text{span}\\{(1,-1,-2)\\}$.",
+          "solution_he": "מערכת: $x+y=0$ ו-$x-y+z=0$. מהראשונה: $y=-x$. הצבה: $2x+z=0 \\Rightarrow z=-2x$. עם $x=t$: $\\vec{w}=t(1,-1,-2)$. תשובה: $\\text{span}\\{(1,-1,-2)\\}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the angle $\\theta$ between $\\vec{u}=(1,1,0)$ and $\\vec{v}=(1,0,1)$ (answer in degrees).",
+          "body_he": "מצא את הזווית $\\theta$ בין $\\vec{u}=(1,1,0)$ ו-$\\vec{v}=(1,0,1)$ (תשובה במעלות).",
+          "solution_en": "$\\vec{u}\\cdot\\vec{v}=1$, $\\|\\vec{u}\\|=\\|\\vec{v}\\|=\\sqrt{2}$. $\\cos\\theta = 1/2$. $\\theta = 60°$.",
+          "solution_he": "$\\vec{u}\\cdot\\vec{v}=1$, $\\|\\vec{u}\\|=\\|\\vec{v}\\|=\\sqrt{2}$. $\\cos\\theta = 1/2$. $\\theta = 60°$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "For what value of $k$ are $\\vec{u} = (k, 2, 1)$ and $\\vec{v} = (3, k, -1)$ orthogonal?",
+          "body_he": "עבור איזה ערך של $k$ הוקטורים $\\vec{u} = (k, 2, 1)$ ו-$\\vec{v} = (3, k, -1)$ אורתוגונלים?",
+          "solution_en": "$\\vec{u}\\cdot\\vec{v} = 3k+2k-1=5k-1=0 \\Rightarrow k=1/5$.",
+          "solution_he": "$\\vec{u}\\cdot\\vec{v} = 3k+2k-1=5k-1=0 \\Rightarrow k=1/5$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Let $\\vec{u}, \\vec{v}\\in\\mathbb{R}^n$ with $\\|\\vec{u}\\|=3$, $\\|\\vec{v}\\|=4$, $\\vec{u}\\cdot\\vec{v}=6$. Compute $\\|\\vec{u}+\\vec{v}\\|$ and $\\|\\vec{u}-\\vec{v}\\|$.",
+          "body_he": "יהיו $\\vec{u}, \\vec{v}\\in\\mathbb{R}^n$ עם $\\|\\vec{u}\\|=3$, $\\|\\vec{v}\\|=4$, $\\vec{u}\\cdot\\vec{v}=6$. חשב את $\\|\\vec{u}+\\vec{v}\\|$ ואת $\\|\\vec{u}-\\vec{v}\\|$.",
+          "solution_en": "$\\|\\vec{u}+\\vec{v}\\|^2=9+12+16=37$, so $\\|\\vec{u}+\\vec{v}\\|=\\sqrt{37}$. $\\|\\vec{u}-\\vec{v}\\|^2=9-12+16=13$, so $\\|\\vec{u}-\\vec{v}\\|=\\sqrt{13}$.",
+          "solution_he": "$\\|\\vec{u}+\\vec{v}\\|^2=9+12+16=37$, לכן $\\|\\vec{u}+\\vec{v}\\|=\\sqrt{37}$. $\\|\\vec{u}-\\vec{v}\\|^2=9-12+16=13$, לכן $\\|\\vec{u}-\\vec{v}\\|=\\sqrt{13}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove that for any $\\vec{u},\\vec{v}\\in\\mathbb{R}^n$: $\\|\\vec{u}+\\vec{v}\\|^2 + \\|\\vec{u}-\\vec{v}\\|^2 = 2(\\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2)$. (Parallelogram law.)",
+          "body_he": "הוכח שלכל $\\vec{u},\\vec{v}\\in\\mathbb{R}^n$: $\\|\\vec{u}+\\vec{v}\\|^2 + \\|\\vec{u}-\\vec{v}\\|^2 = 2(\\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2)$. (חוק המקבילית.)",
+          "solution_en": "Expand: $\\|\\vec{u}+\\vec{v}\\|^2 = \\|\\vec{u}\\|^2+2\\vec{u}\\cdot\\vec{v}+\\|\\vec{v}\\|^2$. $\\|\\vec{u}-\\vec{v}\\|^2 = \\|\\vec{u}\\|^2-2\\vec{u}\\cdot\\vec{v}+\\|\\vec{v}\\|^2$. Sum: $2\\|\\vec{u}\\|^2+2\\|\\vec{v}\\|^2 = 2(\\|\\vec{u}\\|^2+\\|\\vec{v}\\|^2)$. $\\blacksquare$",
+          "solution_he": "פיתוח: $\\|\\vec{u}+\\vec{v}\\|^2 = \\|\\vec{u}\\|^2+2\\vec{u}\\cdot\\vec{v}+\\|\\vec{v}\\|^2$. $\\|\\vec{u}-\\vec{v}\\|^2 = \\|\\vec{u}\\|^2-2\\vec{u}\\cdot\\vec{v}+\\|\\vec{v}\\|^2$. סכום: $2\\|\\vec{u}\\|^2+2\\|\\vec{v}\\|^2$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove the triangle inequality $\\|\\vec{u}+\\vec{v}\\| \\leq \\|\\vec{u}\\|+\\|\\vec{v}\\|$ using Cauchy–Schwarz.",
+          "body_he": "הוכח את אי-שוויון המשולש $\\|\\vec{u}+\\vec{v}\\| \\leq \\|\\vec{u}\\|+\\|\\vec{v}\\|$ תוך שימוש ב-Cauchy-Schwarz.",
+          "solution_en": "$\\|\\vec{u}+\\vec{v}\\|^2 = \\|\\vec{u}\\|^2+2\\vec{u}\\cdot\\vec{v}+\\|\\vec{v}\\|^2 \\leq \\|\\vec{u}\\|^2+2\\|\\vec{u}\\|\\|\\vec{v}\\|+\\|\\vec{v}\\|^2=(\\|\\vec{u}\\|+\\|\\vec{v}\\|)^2$ by Cauchy-Schwarz. Take square roots. $\\blacksquare$",
+          "solution_he": "$\\|\\vec{u}+\\vec{v}\\|^2 \\leq (\\|\\vec{u}\\|+\\|\\vec{v}\\|)^2$ לפי קושי-שוורץ. נוציא שורש. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Given $\\vec{u},\\vec{v}\\in\\mathbb{R}^n$ both non-zero, show that $\\vec{u}-\\text{proj}_{\\vec{v}}\\vec{u}$ is orthogonal to $\\vec{v}$, where $\\text{proj}_{\\vec{v}}\\vec{u} = \\dfrac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{v}\\|^2}\\vec{v}$.",
+          "body_he": "נתון $\\vec{u},\\vec{v}\\in\\mathbb{R}^n$ שניהם אי-אפסיים. הראה ש-$\\vec{u}-\\text{proj}_{\\vec{v}}\\vec{u}$ אורתוגונלי ל-$\\vec{v}$, כאשר $\\text{proj}_{\\vec{v}}\\vec{u} = \\dfrac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{v}\\|^2}\\vec{v}$.",
+          "solution_en": "$(\\vec{u}-\\frac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{v}\\|^2}\\vec{v})\\cdot\\vec{v} = \\vec{u}\\cdot\\vec{v} - \\frac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{v}\\|^2}\\|\\vec{v}\\|^2 = \\vec{u}\\cdot\\vec{v}-\\vec{u}\\cdot\\vec{v}=0$. $\\blacksquare$",
+          "solution_he": "$(\\vec{u}-\\frac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{v}\\|^2}\\vec{v})\\cdot\\vec{v} = \\vec{u}\\cdot\\vec{v}-\\vec{u}\\cdot\\vec{v}=0$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that if $\\vec{u}_1,\\ldots,\\vec{u}_k$ are mutually orthogonal non-zero vectors, then they are linearly independent.",
+          "body_he": "הוכח שאם $\\vec{u}_1,\\ldots,\\vec{u}_k$ הם וקטורים אי-אפסיים מוכלדיים (כל זוג אורתוגונלי), אזי הם בלתי-תלויים לינארית.",
+          "solution_en": "Suppose $\\sum c_i\\vec{u}_i=\\vec{0}$. Take the dot product with $\\vec{u}_j$: $c_j\\|\\vec{u}_j\\|^2 = 0$. Since $\\|\\vec{u}_j\\|^2>0$, we get $c_j=0$ for all $j$. $\\blacksquare$",
+          "solution_he": "נניח $\\sum c_i\\vec{u}_i=\\vec{0}$. נחשב מכפלה פנימית עם $\\vec{u}_j$: $c_j\\|\\vec{u}_j\\|^2 = 0$. מכיוון ש-$\\|\\vec{u}_j\\|^2>0$, מתקיים $c_j=0$ לכל $j$. $\\blacksquare$",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing dot product with regular multiplication.** $\\vec{u}\\cdot\\vec{v}$ is a **scalar**, not a vector. You cannot continue multiplying it as a vector.\n\n2. **Thinking orthogonal = opposite directions.** Orthogonal means the angle is $90°$; it has nothing to do with being antiparallel.\n\n3. **Norm of a sum is not the sum of norms.** $\\|\\vec{u}+\\vec{v}\\| \\neq \\|\\vec{u}\\|+\\|\\vec{v}\\|$ in general (equality only when $\\vec{u}$ and $\\vec{v}$ point in the same direction).\n\n4. **Forgetting to normalise when asked for a unit vector.** Always divide the vector by its norm.\n\n5. **Squaring both sides of Cauchy–Schwarz without checking signs.** Always state $|\\vec{u}\\cdot\\vec{v}|$ on the left side, not just $\\vec{u}\\cdot\\vec{v}$.",
+      "body_he_md": "1. **בלבול בין מכפלה פנימית לכפל רגיל.** $\\vec{u}\\cdot\\vec{v}$ הוא **סקלר**, לא וקטור. אי אפשר להמשיך לכפול אותו כוקטור.\n\n2. **סבורים שאורתוגונלי = כיוונים הפוכים.** אורתוגונלי פירושו זווית של $90°$; אין לזה קשר לאנטי-מקביל.\n\n3. **נורמת הסכום אינה סכום הנורמות.** $\\|\\vec{u}+\\vec{v}\\| \\neq \\|\\vec{u}\\|+\\|\\vec{v}\\|$ בכלל (שוויון רק כשמצביעים באותו כיוון).\n\n4. **שכחה לנרמל כשמבקשים וקטור יחידה.** תמיד לחלק את הוקטור בנורמה שלו.\n\n5. **ריבוע שני הצדדים של קושי-שוורץ מבלי לבדוק סימנים.** תמיד לכתוב $|\\vec{u}\\cdot\\vec{v}|$ בצד שמאל, לא $\\vec{u}\\cdot\\vec{v}$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $\\vec{u}\\cdot\\vec{v} = \\sum_{i=1}^n u_i v_i$\n- $\\|\\vec{u}\\| = \\sqrt{\\vec{u}\\cdot\\vec{u}}$\n- $\\hat{u} = \\vec{u}/\\|\\vec{u}\\|$\n- $\\vec{u}\\perp\\vec{v} \\Leftrightarrow \\vec{u}\\cdot\\vec{v}=0$\n- $\\cos\\theta = \\dfrac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{u}\\|\\|\\vec{v}\\|}$\n- Cauchy-Schwarz: $|\\vec{u}\\cdot\\vec{v}|\\leq\\|\\vec{u}\\|\\|\\vec{v}\\|$\n- Triangle inequality: $\\|\\vec{u}+\\vec{v}\\|\\leq\\|\\vec{u}\\|+\\|\\vec{v}\\|$\n- Parallelogram law: $\\|\\vec{u}+\\vec{v}\\|^2+\\|\\vec{u}-\\vec{v}\\|^2=2(\\|\\vec{u}\\|^2+\\|\\vec{v}\\|^2)$\n\n**What Israeli university exams emphasise:**\n- Computing dot products and verifying orthogonality (mechanical, quick points).\n- Proving inequalities using the discriminant / completing-the-square technique.\n- Finding vectors orthogonal to a given set (set up and solve homogeneous system).\n- Equality conditions in Cauchy–Schwarz — examiners love asking when equality holds.\n\n**Common proof pattern:** To prove $f(\\vec{u},\\vec{v})\\geq 0$, express $f$ as $\\|\\cdot\\|^2$ or invoke Cauchy–Schwarz directly.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $\\vec{u}\\cdot\\vec{v} = \\sum_{i=1}^n u_i v_i$\n- $\\|\\vec{u}\\| = \\sqrt{\\vec{u}\\cdot\\vec{u}}$\n- $\\hat{u} = \\vec{u}/\\|\\vec{u}\\|$\n- $\\vec{u}\\perp\\vec{v} \\Leftrightarrow \\vec{u}\\cdot\\vec{v}=0$\n- $\\cos\\theta = \\dfrac{\\vec{u}\\cdot\\vec{v}}{\\|\\vec{u}\\|\\|\\vec{v}\\|}$\n- קושי-שוורץ: $|\\vec{u}\\cdot\\vec{v}|\\leq\\|\\vec{u}\\|\\|\\vec{v}\\|$\n- אי-שוויון משולש: $\\|\\vec{u}+\\vec{v}\\|\\leq\\|\\vec{u}\\|+\\|\\vec{v}\\|$\n- חוק מקבילית: $\\|\\vec{u}+\\vec{v}\\|^2+\\|\\vec{u}-\\vec{v}\\|^2=2(\\|\\vec{u}\\|^2+\\|\\vec{v}\\|^2)$\n\n**מה בחינות אוניברסיטאיות ישראליות מדגישות:**\n- חישוב מכפלות פנימיות ואימות אורתוגונליות (מכאניות, נקודות קלות).\n- הוכחת אי-שוויונות תוך שימוש בטיעון הדיסקרימיננטה.\n- מציאת וקטורים האורתוגונלים לקבוצה נתונה (הקמת מערכת הומוגנית).\n- תנאי שוויון ב-Cauchy-Schwarz — בוחנים אוהבים לשאול מתי מתקיים שוויון.\n\n**תבנית הוכחה נפוצה:** להוכיח $f(\\vec{u},\\vec{v})\\geq 0$ — לבטא את $f$ כ-$\\|\\cdot\\|^2$ או להפעיל ישירות את Cauchy-Schwarz."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- A vector in $\\mathbb{R}^n$ is an ordered $n$-tuple; we add componentwise and scale componentwise.\n- The **dot product** $\\vec{u}\\cdot\\vec{v}=\\sum u_i v_i$ yields a scalar and encodes the angle between vectors.\n- The **norm** $\\|\\vec{u}\\|=\\sqrt{\\vec{u}\\cdot\\vec{u}}$ measures length; divide by it to get a unit vector.\n- **Orthogonality** is equivalent to $\\vec{u}\\cdot\\vec{v}=0$.\n- **Cauchy–Schwarz:** $|\\vec{u}\\cdot\\vec{v}|\\leq\\|\\vec{u}\\|\\|\\vec{v}\\|$ (equality iff linearly dependent).\n- **Triangle inequality:** $\\|\\vec{u}+\\vec{v}\\|\\leq\\|\\vec{u}\\|+\\|\\vec{v}\\|$.\n- To find all vectors orthogonal to a set, solve a homogeneous linear system.",
+      "body_he_md": "- וקטור ב-$\\mathbb{R}^n$ הוא $n$-יה מסודרת; חיבור וכפל בסקלר נעשים רכיב-רכיב.\n- **מכפלה פנימית** $\\vec{u}\\cdot\\vec{v}=\\sum u_i v_i$ נותנת סקלר ומקודדת את הזווית בין הוקטורים.\n- **נורמה** $\\|\\vec{u}\\|=\\sqrt{\\vec{u}\\cdot\\vec{u}}$ מודדת אורך; מחלקים בה כדי לקבל וקטור יחידה.\n- **אורתוגונליות** שקולה ל-$\\vec{u}\\cdot\\vec{v}=0$.\n- **קושי-שוורץ:** $|\\vec{u}\\cdot\\vec{v}|\\leq\\|\\vec{u}\\|\\|\\vec{v}\\|$ (שוויון אם ורק אם תלויים לינארית).\n- **אי-שוויון משולש:** $\\|\\vec{u}+\\vec{v}\\|\\leq\\|\\vec{u}\\|+\\|\\vec{v}\\|$.\n- למציאת כל הוקטורים האורתוגונלים לקבוצה — פתרון מערכת הומוגנית."
     }
-  ],
-  "agent_hints": "Focus on geometric interpretation — dot product as projection, cross product as perpendicular. Emphasize column vs. row vector distinction (critical for matrix multiplication). Common error: confusing scalar multiplication with dot product."
+  ]
 }

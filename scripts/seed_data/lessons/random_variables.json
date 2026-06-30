@@ -1,224 +1,225 @@
 {
-  "id": "random_variables",
-  "type": "interactive",
-  "subject": "statistics_probability",
-  "title_en": "Random Variables & Probability Distributions",
-  "title_he": "משתנים מקריים והתפלגויות",
-  "duration_min": 35,
-  "level_min": "university",
-  "agent_hints": "Students confuse PMF/PDF with probabilities of intervals — for continuous RVs, P(X = x) = 0; only intervals have positive probability. Emphasise that CDF is always non-decreasing with F(-inf)=0, F(inf)=1. Binomial vs Poisson: use Poisson when n is large and p is small with np moderate. For E[X] and Var, watch for linearity of expectation vs non-linearity of variance. Standard normal: always draw a sketch before reading z from tables.",
+  "concept_id": "random_variables",
+  "subject": "statistics",
+  "level": "university",
+  "math_track": ["stats"],
+  "title_en": "Random Variables — Distributions, Expectation & Variance",
+  "title_he": "משתנים אקראיים — התפלגויות, תוחלת ושונות",
+  "summary_en": "Discrete and continuous random variables, PMF, PDF, CDF, expected value, variance, and the computational formula Var(X) = E[X²] − (E[X])².",
+  "summary_he": "משתנים אקראיים בדידים ורציפים, PMF, PDF, CDF, תוחלת, שונות, ונוסחת החישוב $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
+  "est_minutes": 50,
   "sections": [
     {
-      "id": "rv_cdf",
-      "title_en": "Random Variables & the CDF",
-      "title_he": "משתנים מקריים ופונקציית ההתפלגות המצטברת",
-      "level_min": "university",
-      "body_en_md": "A **random variable** $X$ is a function $X: \\Omega \\to \\mathbb{R}$ that assigns a real number to each outcome.\n\n- **Discrete:** $X$ takes countably many values (e.g. die roll, number of defects).\n- **Continuous:** $X$ takes values in an interval (e.g. lifetime, height).\n\nThe **cumulative distribution function (CDF)** is:\n$$\\boxed{F_X(x) = P(X \\leq x)}$$\n\n**Properties:**\n1. $0 \\leq F(x) \\leq 1$\n2. $F$ is non-decreasing\n3. $\\lim_{x \\to -\\infty} F(x) = 0$, $\\lim_{x \\to \\infty} F(x) = 1$\n\nFor discrete $X$: $F(x) = \\sum_{k \\leq x} p(k)$ (step function).\n\nFor continuous $X$: $F(x) = \\int_{-\\infty}^{x} f(t)\\,dt$ where $f$ is the PDF.\n\n**Worked example:** $X$ = number of heads in 2 fair coin flips.\n$p(0)=1/4$, $p(1)=1/2$, $p(2)=1/4$. Then $F(0)=1/4$, $F(1)=3/4$, $F(2)=1$.",
-      "body_he_md": "**משתנה מקרי** $X$ הוא פונקציה $X: \\Omega \\to \\mathbb{R}$.\n\n- **בדיד:** ערכים בני ספירה (למשל תוצאת קובייה).\n- **רציף:** ערכים בקטע (למשל זמן חיים).\n\n**פונקציית ההתפלגות המצטברת (CDF):**\n$$\\boxed{F_X(x) = P(X \\leq x)}$$\n\n**תכונות:** לא יורדת; $F(-\\infty)=0$, $F(\\infty)=1$.\n\nבדיד: $F$ מדרגות. רציף: $F(x) = \\int_{-\\infty}^{x} f(t)\\,dt$.\n\n**דוגמה:** $X$ = מספר ראשים ב-2 הטלות. $F(0)=1/4$, $F(1)=3/4$, $F(2)=1$."
+      "kind": "intro",
+      "title_en": "From Outcomes to Numbers",
+      "title_he": "מתוצאות למספרים",
+      "body_en_md": "A random experiment produces outcomes in $\\Omega$, but we usually care about some numerical characteristic — the number of heads, the waiting time, the temperature. A **random variable** is the function that maps each outcome to a number.\n\nThe distribution of a random variable summarises all the probability information about that number. **Expectation** (the long-run average) and **variance** (the spread) are the two most important summary statistics.\n\n**Connection to previous material:** Random variables formalise the notion of probability into a numerically computable framework.",
+      "body_he_md": "ניסוי אקראי מייצר תוצאות ב-$\\Omega$, אך בדרך כלל אכפת לנו ממאפיין מספרי כלשהו — מספר הראשים, זמן ההמתנה, הטמפרטורה. **משתנה אקראי** הוא הפונקציה שממפה כל תוצאה למספר.\n\nהתפלגות המשתנה האקראי מסכמת את כל מידע ההסתברות על אותו מספר. **תוחלת** (ממוצע ארוך-טווח) ו**שונות** (פיזור) הם שני סטטיסטיקות הסיכום החשובות ביותר.",
+      "body_he_md2": "קשר לחומר קודם: משתנים אקראיים ממסדים את מושג ההסתברות למסגרת ניתנת לחישוב מספרי."
     },
     {
-      "id": "discrete_distributions",
-      "title_en": "Discrete Distributions: Bernoulli, Binomial, Poisson",
-      "title_he": "התפלגויות בדידות: ברנולי, בינומית, פואסון",
-      "level_min": "university",
-      "body_en_md": "**Bernoulli($p$):** one trial, success prob. $p$.\n$$P(X=1)=p, \\quad P(X=0)=1-p$$\n\n**Binomial($n,p$):** $n$ independent Bernoulli trials; $X$ = number of successes.\n$$\\boxed{P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}, \\quad k=0,\\ldots,n}$$\n$E[X]=np$, $\\text{Var}(X)=np(1-p)$.\n\n**Worked example:** 10 items tested, each defective with $p=0.05$. $P(X=2) = \\binom{10}{2}(0.05)^2(0.95)^8 \\approx 0.0746$.\n\n**Poisson($\\lambda$):** models rare events in fixed interval; $np \\approx \\lambda$ when $n$ large, $p$ small.\n$$\\boxed{P(X=k) = e^{-\\lambda}\\frac{\\lambda^k}{k!}, \\quad k=0,1,2,\\ldots}$$\n$E[X]=\\lambda$, $\\text{Var}(X)=\\lambda$.\n\n**Example:** average 3 calls/hour $\\Rightarrow \\lambda=3$, $P(X=0)=e^{-3} \\approx 0.0498$.",
-      "body_he_md": "**ברנולי($p$):** ניסוי אחד, $P(X=1)=p$.\n\n**בינומית($n,p$):** $n$ ניסויים בלתי-תלויים.\n$$P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}$$\n$E[X]=np$, $\\text{Var}(X)=np(1-p)$.\n\n**דוגמה:** 10 פריטים, $p=0.05$. $P(X=2) \\approx 0.0746$.\n\n**פואסון($\\lambda$):** אירועים נדירים; $E[X]=\\text{Var}(X)=\\lambda$.\n$$P(X=k) = e^{-\\lambda}\\frac{\\lambda^k}{k!}$$"
+      "kind": "definition",
+      "title_en": "Random Variables, PMF, PDF, CDF",
+      "title_he": "משתנים אקראיים, PMF, PDF, CDF",
+      "body_en_md": "**Definition.** A **random variable** (r.v.) $X$ is a function $X:\\Omega\\to\\mathbb{R}$.\n\n**Discrete r.v.:** Takes countably many values. Described by the **probability mass function (PMF)**:\n$$p(x) = P(X=x), \\quad \\sum_{x} p(x)=1.$$\n\n**Continuous r.v.:** Takes values in an interval. Described by the **probability density function (PDF)** $f(x)\\geq0$ with:\n$$P(a\\leq X\\leq b)=\\int_a^b f(x)\\,dx, \\quad \\int_{-\\infty}^{\\infty}f(x)\\,dx=1.$$\n\n**CDF:** $F(x)=P(X\\leq x)$. For continuous: $F(x)=\\int_{-\\infty}^x f(t)\\,dt$.\n\n**Expected value:**\n- Discrete: $E[X]=\\sum_x x\\,p(x)$.\n- Continuous: $E[X]=\\int_{-\\infty}^{\\infty} x\\,f(x)\\,dx$.\n\n**Variance:**\n$$\\text{Var}(X) = E[(X-\\mu)^2] = \\sum_x(x-\\mu)^2p(x) \\quad (\\text{discrete})$$\n\n**Standard deviation:** $\\sigma=\\sqrt{\\text{Var}(X)}$.\n\n**Linearity of expectation:** $E[aX+b]=aE[X]+b$.\n\n**Variance formula:** $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
+      "body_he_md": "**הגדרה.** **משתנה אקראי** $X:\\Omega\\to\\mathbb{R}$.\n\n**בדיד:** $p(x)=P(X=x)$, $\\sum p(x)=1$.\n\n**רציף:** $f(x)\\geq0$, $P(a\\leq X\\leq b)=\\int_a^b f(x)dx$, $\\int_{-\\infty}^\\infty f=1$.\n\n**CDF:** $F(x)=P(X\\leq x)$.\n\n**תוחלת:** $E[X]=\\sum x\\,p(x)$ (בדיד); $E[X]=\\int x f(x)dx$ (רציף).\n\n**שונות:** $\\text{Var}(X)=E[(X-\\mu)^2]$.\n\n**לינאריות:** $E[aX+b]=aE[X]+b$.\n\n**נוסחת שונות:** $\\text{Var}(X)=E[X^2]-(E[X])^2$."
     },
     {
-      "id": "continuous_distributions",
-      "title_en": "Continuous Distributions: Uniform & Exponential",
-      "title_he": "התפלגויות רציפות: אחידה ואקספוננציאלית",
-      "level_min": "university",
-      "body_en_md": "A **PDF** $f(x)$ satisfies $f(x) \\geq 0$ and $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$.\nThen $P(a \\leq X \\leq b) = \\int_a^b f(x)\\,dx$.\n\n**Uniform($a,b$):** constant density on $[a,b]$.\n$$f(x) = \\frac{1}{b-a}, \\quad a \\leq x \\leq b$$\n$E[X]=\\frac{a+b}{2}$, $\\text{Var}(X)=\\frac{(b-a)^2}{12}$.\n\n**Exponential($\\lambda$):** waiting time; memoryless.\n$$f(x) = \\lambda e^{-\\lambda x}, \\quad x \\geq 0$$\n$E[X]=1/\\lambda$, $\\text{Var}(X)=1/\\lambda^2$.\n\n**Worked example:** $X \\sim \\text{Uniform}(0,10)$.\n$$P(3 \\leq X \\leq 7) = \\int_3^7 \\frac{1}{10}\\,dx = \\frac{4}{10} = 0.4.$$\n\n**Exponential:** $\\lambda = 0.2$ per hour (mean wait 5 h).\n$P(X > 3) = e^{-0.2 \\times 3} = e^{-0.6} \\approx 0.5488$.",
-      "body_he_md": "**PDF** $f(x)$: $f \\geq 0$, $\\int f = 1$. $P(a \\leq X \\leq b) = \\int_a^b f$.\n\n**אחידה($a,b$):** $f = 1/(b-a)$ על $[a,b]$.\n\n**אקספוננציאלית($\\lambda$):** $f(x)=\\lambda e^{-\\lambda x}$, $x\\geq 0$; חסרת זיכרון.\n\n**דוגמה:** $X \\sim U(0,10)$. $P(3 \\leq X \\leq 7) = 0.4$.\n\n$\\lambda=0.2$: $P(X>3) = e^{-0.6} \\approx 0.5488$."
+      "kind": "theory",
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1 (LOTUS — Law of the Unconscious Statistician).** For a function $g$:\n$$E[g(X)] = \\sum_x g(x)p(x) \\quad (\\text{discrete}).$$\n\n**Theorem 2.** $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n*Proof:*\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2-2\\mu X+\\mu^2]=E[X^2]-2\\mu E[X]+\\mu^2=E[X^2]-2\\mu^2+\\mu^2=E[X^2]-\\mu^2.$$\n\n**Theorem 3.** $\\text{Var}(aX+b)=a^2\\text{Var}(X)$.\n\n**Theorem 4.** For independent r.v.'s: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$.\n\n**Theorem 5.** $\\text{Var}(X)\\geq0$ with equality iff $X$ is a constant a.s.",
+      "body_he_md": "**משפט 1 (LOTUS).** $E[g(X)]=\\sum g(x)p(x)$.\n\n**משפט 2.** $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n*הוכחה:* $E[(X-\\mu)^2]=E[X^2]-2\\mu E[X]+\\mu^2=E[X^2]-\\mu^2$.\n\n**משפט 3.** $\\text{Var}(aX+b)=a^2\\text{Var}(X)$.\n\n**משפט 4.** ל-r.v. בלתי-תלויים: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$.\n\n**משפט 5.** $\\text{Var}(X)\\geq0$; שוויון אם ורק אם $X$ קבוע."
     },
     {
-      "id": "expectation_variance",
-      "title_en": "Expectation & Variance",
-      "title_he": "תוחלת ושונות",
-      "level_min": "university",
-      "body_en_md": "**Discrete:**\n$$\\boxed{E[X] = \\sum_x x\\,p(x), \\quad \\text{Var}(X) = E[(X-\\mu)^2] = E[X^2] - (E[X])^2}$$\n\n**Continuous:** replace sums by integrals.\n\n**Linearity:** $E[aX + bY] = aE[X] + bE[Y]$ (always).\n**Variance:** $\\text{Var}(aX+b) = a^2\\text{Var}(X)$; $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$ only if $X,Y$ independent.\n\n**Worked example:** $X$ with $p(1)=0.2$, $p(3)=0.5$, $p(5)=0.3$.\n$E[X] = 1(0.2)+3(0.5)+5(0.3) = 3.2$.\n$E[X^2] = 1^2(0.2)+3^2(0.5)+5^2(0.3) = 11.6$.\n$\\text{Var}(X) = 11.6 - 3.2^2 = 1.36$, so $\\sigma = 1.17$.\n\nFor $Y \\sim \\text{Binomial}(20, 0.4)$: $E[Y]=8$, $\\text{Var}(Y)=4.8$.",
-      "body_he_md": "**בדיד:** $E[X]=\\sum x\\,p(x)$, $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n\n**רציף:** אינטגרלים במקום סכומים.\n\n**לינאריות תוחלת:** $E[aX+bY]=aE[X]+bE[Y]$.\n\n**דוגמה:** $p(1)=0.2$, $p(3)=0.5$, $p(5)=0.3$.\n$E[X]=3.2$, $\\text{Var}(X)=1.36$.\n\nבינומית$(20,0.4)$: $E=8$, $\\text{Var}=4.8$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Binomial: Heads in 3 Coin Flips",
+      "title_he": "דוגמה פתורה 1 — בינומי: ראשים ב-3 הטלות מטבע",
+      "body_en_md": "$X$ = number of heads in 3 fair coin flips. $X\\sim\\text{Bin}(3,1/2)$.\n\n**PMF:** $P(X=k)=\\binom{3}{k}(1/2)^3$ for $k=0,1,2,3$.\n\n| $x$ | 0 | 1 | 2 | 3 |\n|---|---|---|---|---|\n| $p(x)$ | 1/8 | 3/8 | 3/8 | 1/8 |\n\n**Expected value:**\n$$E[X] = 0\\cdot\\frac{1}{8}+1\\cdot\\frac{3}{8}+2\\cdot\\frac{3}{8}+3\\cdot\\frac{1}{8} = \\frac{0+3+6+3}{8} = \\frac{12}{8} = \\frac{3}{2}.$$\n\n**$E[X^2]$:**\n$$E[X^2]=0+\\frac{3}{8}+\\frac{12}{8}+\\frac{9}{8}=\\frac{24}{8}=3.$$\n\n**Variance:**\n$$\\text{Var}(X)=E[X^2]-(E[X])^2=3-(3/2)^2=3-9/4=3/4.$$\n\n**Check with $\\text{Bin}(n,p)$ formula:** $\\text{Var}=np(1-p)=3\\cdot(1/2)\\cdot(1/2)=3/4$. ✓",
+      "body_he_md": "$X$ = מספר ראשים ב-3 הטלות הוגנות. $X\\sim\\text{Bin}(3,1/2)$.\n\n**PMF:** $P(X=k)=\\binom{3}{k}/8$.\n\n**תוחלת:** $E[X]=12/8=3/2$.\n\n**$E[X^2]$:** $=24/8=3$.\n\n**שונות:** $\\text{Var}(X)=3-9/4=3/4$.\n\n**בדיקה:** $np(1-p)=3/4$. ✓"
     },
     {
-      "id": "normal_distribution",
-      "title_en": "The Normal (Gaussian) Distribution",
-      "title_he": "התפלגות נורמלית (גאוס)",
-      "level_min": "university",
-      "body_en_md": "$$X \\sim N(\\mu, \\sigma^2) \\quad \\Leftrightarrow \\quad f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} \\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right)$$\n\nBell-shaped, symmetric about $\\mu$; $\\sigma$ controls spread.\n\n**Standard normal:** $Z \\sim N(0,1)$ with CDF $\\Phi(z)$.\nStandardize: $Z = \\frac{X - \\mu}{\\sigma}$.\n\n**68–95–99.7 rule:** about 68% within $\\mu \\pm \\sigma$, 95% within $\\mu \\pm 2\\sigma$, 99.7% within $\\mu \\pm 3\\sigma$.\n\n**Worked example:** exam scores $X \\sim N(70, 100)$ (so $\\sigma=10$).\n$$P(X \\geq 85) = P\\!\\left(Z \\geq \\frac{85-70}{10}\\right) = P(Z \\geq 1.5) = 1 - \\Phi(1.5) \\approx 0.0668.$$\n\nThe normal is central in statistics via the CLT — sample means are approximately normal for large $n$ regardless of the population shape.",
-      "body_he_md": "$X \\sim N(\\mu, \\sigma^2)$ — צורת פעמון סימטרית.\n\n**נורמל סטנדרטי:** $Z=(X-\\mu)/\\sigma \\sim N(0,1)$.\n\n**כלל 68–95–99.7:** רוב הנתונים בתוך $\\mu \\pm \\sigma$, $\\pm 2\\sigma$, $\\pm 3\\sigma$.\n\n**דוגמה:** $X \\sim N(70,100)$, $\\sigma=10$.\n$P(X \\geq 85) = P(Z \\geq 1.5) \\approx 0.0668$.\n\nהנורמל מרכזי בזכות מ.ג.מ."
-    }
-  ],
-  "questions": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Let $X$ have PMF: $P(X=1)=0.2$, $P(X=2)=0.5$, $P(X=3)=0.3$. Compute $E[X]$.",
+      "body_he": "יהי $X$ עם PMF: $P(X=1)=0.2$, $P(X=2)=0.5$, $P(X=3)=0.3$. חשב $E[X]$.",
+      "checkpoint_solution_en": "$E[X]=1(0.2)+2(0.5)+3(0.3)=0.2+1.0+0.9=2.1$.",
+      "checkpoint_solution_he": "$E[X]=0.2+1.0+0.9=2.1$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A discrete RV $X$ has PMF $p(0)=0.1$, $p(1)=0.4$, $p(2)=0.5$. What is $P(X \\leq 1)$?",
-      "body_he": "ל-$X$ בדיד: $p(0)=0.1$, $p(1)=0.4$, $p(2)=0.5$. מה $P(X \\leq 1)$?",
-      "options": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — PMF Table: E[X], Var(X), P(X≥2)",
+      "title_he": "דוגמה פתורה 2 — טבלת PMF: E[X], Var(X), P(X≥2)",
+      "body_en_md": "**Given PMF:**\n\n| $x$ | 0 | 1 | 2 | 3 | 4 |\n|---|---|---|---|---|---|\n| $p(x)$ | 0.1 | 0.2 | 0.4 | 0.2 | 0.1 |\n\n**Step 1 — Verify:** $0.1+0.2+0.4+0.2+0.1=1.0$. ✓\n\n**Step 2 — $E[X]$:**\n$$E[X]=0(0.1)+1(0.2)+2(0.4)+3(0.2)+4(0.1)=0+0.2+0.8+0.6+0.4=2.0.$$\n\n**Step 3 — $E[X^2]$:**\n$$E[X^2]=0+1(0.2)+4(0.4)+9(0.2)+16(0.1)=0.2+1.6+1.8+1.6=5.2.$$\n\n**Step 4 — Var($X$):**\n$$\\text{Var}(X)=5.2-(2.0)^2=5.2-4.0=1.2.$$\n\n**Step 5 — $P(X\\geq2)$:**\n$$P(X\\geq2)=P(X=2)+P(X=3)+P(X=4)=0.4+0.2+0.1=0.7.$$\n(Or: $1-P(X\\leq1)=1-0.3=0.7$.)",
+      "body_he_md": "**PMF נתון:** $P(0)=0.1$, $P(1)=0.2$, $P(2)=0.4$, $P(3)=0.2$, $P(4)=0.1$.\n\n**$E[X]=2.0$. $E[X^2]=5.2$. $\\text{Var}(X)=1.2$. $P(X\\geq2)=0.7$.**"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For the PMF above, find Var$(X)$ using the direct formula $E[(X-\\mu)^2]$ and verify it equals 1.2.",
+      "body_he": "עבור ה-PMF לעיל, מצא Var$(X)$ ישירות עם $E[(X-\\mu)^2]$ ואמת שמתקבל 1.2.",
+      "checkpoint_solution_en": "$\\mu=2$. $(0-2)^2(0.1)+(1-2)^2(0.2)+(2-2)^2(0.4)+(3-2)^2(0.2)+(4-2)^2(0.1)=0.4+0.2+0+0.2+0.4=1.2$. ✓",
+      "checkpoint_solution_he": "$(4)(0.1)+(1)(0.2)+0+(1)(0.2)+(4)(0.1)=0.4+0.2+0.2+0.4=1.2$. ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof: Var(X) = E[X²] − (E[X])²",
+      "title_he": "דוגמה פתורה 3 — הוכחה: Var(X) = E[X²] − (E[X])²",
+      "body_en_md": "**Claim:** $\\text{Var}(X) = E[X^2] - (E[X])^2$.\n\n**Proof (discrete case; identical for continuous):**\n\nLet $\\mu = E[X]$.\n\n**Step 1 — Expand the squared deviation:**\n$$\\text{Var}(X) = E[(X-\\mu)^2] = E[X^2-2\\mu X+\\mu^2].$$\n\n**Step 2 — Use linearity of expectation:**\n$$= E[X^2] - 2\\mu E[X] + \\mu^2.$$\n\n**Step 3 — Substitute $E[X]=\\mu$:**\n$$= E[X^2] - 2\\mu\\cdot\\mu + \\mu^2 = E[X^2] - 2\\mu^2 + \\mu^2 = E[X^2] - \\mu^2.$$\n\n**Step 4 — Write in terms of $E[X]$:**\n$$\\text{Var}(X) = E[X^2] - (E[X])^2. \\quad \\blacksquare$$\n\n**Why it's useful:** Computing $E[X^2]$ and $(E[X])^2$ separately is often easier than computing $\\sum(x-\\mu)^2p(x)$ directly, especially when $\\mu$ is not an integer.",
+      "body_he_md": "**טענה:** $\\text{Var}(X) = E[X^2] - (E[X])^2$.\n\n**הוכחה:**\n\nיהי $\\mu=E[X]$.\n\n**שלב 1 — פיתוח:**\n$$\\text{Var}(X) = E[(X-\\mu)^2] = E[X^2-2\\mu X+\\mu^2].$$\n\n**שלב 2 — לינאריות התוחלת:**\n$$= E[X^2] - 2\\mu E[X] + \\mu^2.$$\n\n**שלב 3 — הצבה $E[X]=\\mu$:**\n$$= E[X^2] - 2\\mu^2 + \\mu^2 = E[X^2] - \\mu^2.\\ \\blacksquare$$\n\n**למה זה שימושי:** חישוב $E[X^2]$ ו-$(E[X])^2$ בנפרד לרוב קל יותר."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Expectation and Variance Toolkit",
+      "title_he": "מדריך שיטה — ארגז כלים לתוחלת ושונות",
+      "body_en_md": "| Goal | Discrete formula | Key note |\n|---|---|---|\n| $E[X]$ | $\\sum_x x\\,p(x)$ | Sum over all values |\n| $E[g(X)]$ | $\\sum_x g(x)p(x)$ | LOTUS |\n| $E[aX+b]$ | $aE[X]+b$ | Linearity |\n| $\\text{Var}(X)$ | $E[X^2]-(E[X])^2$ | Compute $E[X^2]$ first |\n| $\\text{Var}(aX+b)$ | $a^2\\text{Var}(X)$ | Constants vanish |\n| $\\text{SD}(X)$ | $\\sqrt{\\text{Var}(X)}$ | Same units as $X$ |\n| $P(X\\geq k)$ | $1-P(X\\leq k-1)=1-F(k-1)$ | Use complement |",
+      "body_he_md": "| מטרה | נוסחה בדידה | הערה |\n|---|---|---|\n| $E[X]$ | $\\sum x\\,p(x)$ | סכום על כל הערכים |\n| $E[g(X)]$ | $\\sum g(x)p(x)$ | LOTUS |\n| $E[aX+b]$ | $aE[X]+b$ | לינאריות |\n| $\\text{Var}(X)$ | $E[X^2]-(E[X])^2$ | חשב $E[X^2]$ קודם |\n| $\\text{Var}(aX+b)$ | $a^2\\text{Var}(X)$ | קבועים נעלמים |\n| $P(X\\geq k)$ | $1-F(k-1)$ | השתמש במשלים |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$0.4$",
-          "text_he": "$0.4$",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A fair die is rolled. Let $X$ = the outcome. Find $E[X]$ and Var$(X)$.",
+          "body_he": "קובייה הוגנת מוטלת. יהי $X$ = התוצאה. מצא $E[X]$ ו-Var$(X)$.",
+          "solution_en": "$E[X]=(1+2+3+4+5+6)/6=3.5$. $E[X^2]=(1+4+9+16+25+36)/6=91/6$. Var$=(91/6)-(3.5)^2=91/6-49/4=(182-147)/12=35/12\\approx2.917$.",
+          "solution_he": "$E[X]=3.5$. Var$(X)=35/12\\approx2.917$.",
+          "points": 6
         },
         {
-          "id": "b",
-          "text_en": "$0.5$",
-          "text_he": "$0.5$",
-          "correct": true
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Let $X$ have PMF $P(X=-1)=P(X=1)=1/2$. Find $E[X]$ and Var$(X)$.",
+          "body_he": "יהי $X$ עם $P(X=-1)=P(X=1)=1/2$. מצא $E[X]$ ו-Var$(X)$.",
+          "solution_en": "$E[X]=(-1)(1/2)+(1)(1/2)=0$. $E[X^2]=1$. Var$=1-0=1$.",
+          "solution_he": "$E[X]=0$. Var$(X)=1$.",
+          "points": 6
         },
         {
-          "id": "c",
-          "text_en": "$0.9$",
-          "text_he": "$0.9$",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "If $E[X]=3$ and Var$(X)=4$, find $E[2X-1]$ and Var$(2X-1)$.",
+          "body_he": "אם $E[X]=3$ ו-Var$(X)=4$, מצא $E[2X-1]$ ו-Var$(2X-1)$.",
+          "solution_en": "$E[2X-1]=2(3)-1=5$. Var$(2X-1)=4\\cdot4=16$.",
+          "solution_he": "$E[2X-1]=5$. Var$(2X-1)=16$.",
+          "points": 6
         },
         {
-          "id": "d",
-          "text_en": "$0.1$",
-          "text_he": "$0.1$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "An exponential r.v. $X$ with rate $\\lambda$ has PDF $f(x)=\\lambda e^{-\\lambda x}$ for $x\\geq0$. Verify $\\int_0^\\infty f(x)dx=1$.",
+          "body_he": "משתנה אקספוננציאלי $X$ עם קצב $\\lambda$ בעל $f(x)=\\lambda e^{-\\lambda x}$ ל-$x\\geq0$. אמת $\\int_0^\\infty f=1$.",
+          "solution_en": "$\\int_0^\\infty\\lambda e^{-\\lambda x}dx=[-e^{-\\lambda x}]_0^\\infty=0-(-1)=1$. ✓",
+          "solution_he": "$[-e^{-\\lambda x}]_0^\\infty=1$. ✓",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Let $X$ have PMF: $P(X=0)=0.3$, $P(X=1)=0.4$, $P(X=2)=0.2$, $P(X=3)=0.1$. Find $E[X]$, $E[X^2]$, Var$(X)$, $P(X\\geq1)$.",
+          "body_he": "יהי $X$ עם PMF: $P(X=0)=0.3$, $P(X=1)=0.4$, $P(X=2)=0.2$, $P(X=3)=0.1$. מצא $E[X]$, $E[X^2]$, Var$(X)$, $P(X\\geq1)$.",
+          "solution_en": "$E[X]=0+0.4+0.4+0.3=1.1$. $E[X^2]=0+0.4+0.8+0.9=2.1$. Var$=2.1-1.21=0.89$. $P(X\\geq1)=0.7$.",
+          "solution_he": "$E[X]=1.1$. Var$(X)=0.89$. $P(X\\geq1)=0.7$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "For $X\\sim\\text{Bin}(n,p)$, use the formula $E[X]=np$ and Var$(X)=np(1-p)$ to find the mean and variance of the number of 6's in 60 die rolls.",
+          "body_he": "ל-$X\\sim\\text{Bin}(n,p)$, השתמש ב-$E[X]=np$ ו-Var$(X)=np(1-p)$ למציאת תוחלת ושונות מספר ה-6 ב-60 הטלות קובייה.",
+          "solution_en": "$n=60$, $p=1/6$. $E[X]=10$. Var$(X)=60\\cdot(1/6)\\cdot(5/6)=50/6\\approx8.33$. $\\sigma\\approx2.89$.",
+          "solution_he": "$E[X]=10$. Var$(X)=50/6\\approx8.33$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Let $X\\sim\\text{Uniform}[0,1]$ with $f(x)=1$ on $[0,1]$. Compute $E[X]$ and Var$(X)$.",
+          "body_he": "יהי $X\\sim\\text{Uniform}[0,1]$ עם $f(x)=1$ ב-$[0,1]$. חשב $E[X]$ ו-Var$(X)$.",
+          "solution_en": "$E[X]=\\int_0^1 x\\,dx=1/2$. $E[X^2]=\\int_0^1 x^2\\,dx=1/3$. Var$=1/3-1/4=1/12$.",
+          "solution_he": "$E[X]=1/2$. Var$(X)=1/3-1/4=1/12$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Show that Var$(X)=0$ implies $X=c$ (constant) almost surely, using the fact that $E[(X-c)^2]=0$ implies $P(X=c)=1$.",
+          "body_he": "הראה ש-Var$(X)=0$ גורר $X=c$ (קבוע) כמעט-בוודאות.",
+          "solution_en": "Var$(X)=E[(X-\\mu)^2]=0$. Since $(X-\\mu)^2\\geq0$ and its expectation is 0, we must have $P((X-\\mu)^2=0)=1$, i.e., $P(X=\\mu)=1$. $\\blacksquare$",
+          "solution_he": "$(X-\\mu)^2\\geq0$ ו-$E[(X-\\mu)^2]=0$ $\\Rightarrow$ $P(X=\\mu)=1$. $\\blacksquare$",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove $E[aX+bY]=aE[X]+bE[Y]$ (linearity of expectation) for discrete r.v.'s.",
+          "body_he": "הוכח $E[aX+bY]=aE[X]+bE[Y]$ (לינאריות התוחלת) עבור משתנים אקראיים בדידים.",
+          "solution_en": "$E[aX+bY]=\\sum_{x,y}(ax+by)P(X=x,Y=y)=a\\sum_{x,y}xP(X=x,Y=y)+b\\sum_{x,y}yP(X=x,Y=y)=a\\sum_x xP(X=x)+b\\sum_y yP(Y=y)=aE[X]+bE[Y]$. $\\blacksquare$",
+          "solution_he": "פיתוח הסכום הכפול ופירוק נותן $aE[X]+bE[Y]$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove Var$(aX+b)=a^2$Var$(X)$.",
+          "body_he": "הוכח Var$(aX+b)=a^2$Var$(X)$.",
+          "solution_en": "$E[aX+b]=a\\mu+b$. Var$(aX+b)=E[(aX+b-(a\\mu+b))^2]=E[(aX-a\\mu)^2]=E[a^2(X-\\mu)^2]=a^2E[(X-\\mu)^2]=a^2$Var$(X)$. $\\blacksquare$",
+          "solution_he": "$E[(aX+b-a\\mu-b)^2]=a^2E[(X-\\mu)^2]=a^2$Var$(X)$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "For independent $X,Y$, prove Var$(X+Y)=$Var$(X)+$Var$(Y)$.",
+          "body_he": "עבור $X,Y$ בלתי-תלויים, הוכח Var$(X+Y)=$Var$(X)+$Var$(Y)$.",
+          "solution_en": "Var$(X+Y)=E[(X+Y)^2]-(E[X+Y])^2=E[X^2]+2E[XY]+E[Y^2]-(E[X])^2-2E[X]E[Y]-(E[Y])^2$. By independence $E[XY]=E[X]E[Y]$. So Var$(X+Y)=(E[X^2]-(E[X])^2)+(E[Y^2]-(E[Y])^2)=$Var$(X)+$Var$(Y)$. $\\blacksquare$",
+          "solution_he": "באי-תלות $E[XY]=E[X]E[Y]$. הפיתוח נותן Var$(X)+$Var$(Y)$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Let $X\\sim\\text{Poisson}(\\lambda)$ with $P(X=k)=e^{-\\lambda}\\lambda^k/k!$. Show $E[X]=\\lambda$ using the power series $\\sum_{k=0}^\\infty\\lambda^k/k!=e^\\lambda$.",
+          "body_he": "יהי $X\\sim\\text{Poisson}(\\lambda)$ עם $P(X=k)=e^{-\\lambda}\\lambda^k/k!$. הראה $E[X]=\\lambda$ תוך שימוש בטור $\\sum_{k=0}^\\infty\\lambda^k/k!=e^\\lambda$.",
+          "solution_en": "$E[X]=\\sum_{k=0}^\\infty k\\cdot e^{-\\lambda}\\lambda^k/k! = e^{-\\lambda}\\sum_{k=1}^\\infty\\lambda^k/(k-1)!=e^{-\\lambda}\\lambda\\sum_{j=0}^\\infty\\lambda^j/j!=e^{-\\lambda}\\lambda e^\\lambda=\\lambda$. $\\blacksquare$",
+          "solution_he": "$\\sum k e^{-\\lambda}\\lambda^k/k!=e^{-\\lambda}\\lambda\\sum\\lambda^j/j!=\\lambda$. $\\blacksquare$",
+          "points": 12
         }
-      ],
-      "explanation_en": "$P(X \\leq 1) = p(0)+p(1) = 0.1+0.4 = 0.5$.",
-      "explanation_he": "$P(X \\leq 1) = 0.1+0.4 = 0.5$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "If $X \\sim \\text{Binomial}(10, 0.3)$, what is $P(X = 3)$?",
-      "body_he": "אם $X \\sim \\text{Binomial}(10, 0.3)$, מה $P(X = 3)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\binom{10}{3}(0.3)^3(0.7)^7 \\approx 0.267$",
-          "text_he": "$\\binom{10}{3}(0.3)^3(0.7)^7 \\approx 0.267$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$(0.3)^3(0.7)^7 \\approx 0.0022$",
-          "text_he": "$(0.3)^3(0.7)^7 \\approx 0.0022$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$\\binom{10}{3}(0.3)^7(0.7)^3$",
-          "text_he": "$\\binom{10}{3}(0.3)^7(0.7)^3$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0.3$",
-          "text_he": "$0.3$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Binomial PMF: $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$. Here $n=10$, $k=3$, $p=0.3$.",
-      "explanation_he": "נוסחת בינומית: $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$ עם $n=10$, $k=3$, $p=0.3$."
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **$E[g(X)]\\neq g(E[X])$ in general (Jensen's inequality).** For example, $E[X^2]\\neq(E[X])^2$ — this difference IS the variance.\n\n2. **Variance is not linear.** $\\text{Var}(X+Y)\\neq\\text{Var}(X)+\\text{Var}(Y)$ unless $X$ and $Y$ are independent (or uncorrelated).\n\n3. **PDF is not a probability.** $f(x)$ can be greater than 1! Probability comes from the integral $\\int_a^b f$.\n\n4. **$P(X=x)=0$ for continuous r.v.** For continuous r.v.'s, the probability of any single point is 0. Use intervals.\n\n5. **Forgetting that $\\text{Var}(X+c)=\\text{Var}(X)$ but $\\text{Var}(cX)=c^2\\text{Var}(X)$.** Shifting doesn't change spread; scaling does.",
+      "body_he_md": "1. **$E[g(X)]\\neq g(E[X])$ בכלל.** $E[X^2]\\neq(E[X])^2$ — ההפרש הוא בדיוק השונות.\n\n2. **שונות אינה לינארית.** Var$(X+Y)\\neq$Var$(X)+$Var$(Y)$ אלא אם כן בלתי-תלויים.\n\n3. **PDF אינו הסתברות.** $f(x)>1$ אפשרי! הסתברות מגיעה מאינטגרל $\\int_a^b f$.\n\n4. **$P(X=x)=0$ למשתנה רציף.** הסתברות של נקודה בודדת = 0.\n\n5. **Var$(X+c)=$Var$(X)$ אבל Var$(cX)=c^2$Var$(X)$.** הזזה לא משנה פיזור; קנה-מידה משנה."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Let $X \\sim \\text{Uniform}(2, 8)$. What is $P(4 \\leq X \\leq 6)$?",
-      "body_he": "יהי $X \\sim \\text{Uniform}(2, 8)$. מה $P(4 \\leq X \\leq 6)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$1/6$",
-          "text_he": "$1/6$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$1/3$",
-          "text_he": "$1/3$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$1/2$",
-          "text_he": "$1/2$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$2/3$",
-          "text_he": "$2/3$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Length of interval is $6-4=2$; total length is $8-2=6$. So $P = 2/6 = 1/3$.",
-      "explanation_he": "אורך הקטע $2$, אורך כולל $6$. $P = 2/6 = 1/3$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $E[X]=\\sum xp(x)$ or $\\int xf(x)dx$\n- $\\text{Var}(X)=E[X^2]-(E[X])^2$\n- $E[aX+b]=aE[X]+b$; Var$(aX+b)=a^2$Var$(X)$\n- Var$(X+Y)=$Var$(X)+$Var$(Y)$ (independent)\n- Bin$(n,p)$: $E=np$, Var$=np(1-p)$\n- Poisson$(\\lambda)$: $E=$Var$=\\lambda$\n- Uniform$[a,b]$: $E=(a+b)/2$, Var$=(b-a)^2/12$\n\n**What Israeli university exams emphasise:**\n- Computing $E[X]$ and Var$(X)$ from a PMF table.\n- Proving Var$(X)=E[X^2]-(E[X])^2$.\n- Applying linearity properties.\n- Working with standard distributions (Binomial, Poisson, Exponential, Normal).\n\n**Exam tip:** Always compute $E[X]$ first, then $E[X^2]$, then subtract. Never try to compute $E[(X-\\mu)^2]$ directly unless $\\mu$ is a nice integer.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $E[X]=\\sum xp(x)$ או $\\int xf(x)dx$\n- Var$(X)=E[X^2]-(E[X])^2$\n- $E[aX+b]=aE[X]+b$; Var$(aX+b)=a^2$Var$(X)$\n- Bin: $E=np$, Var$=np(1-p)$\n- Poisson: $E=$Var$=\\lambda$\n\n**מה בחינות ישראליות מדגישות:**\n- חישוב $E[X]$ ו-Var$(X)$ מטבלת PMF.\n- הוכחת Var$(X)=E[X^2]-(E[X])^2$.\n- תכונות לינאריות.\n\n**טיפ:** תמיד חשב $E[X]$ קודם, אחר-כך $E[X^2]$, ואז חסר."
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "Discrete $X$ has $p(0)=0.25$, $p(2)=0.75$. What is $E[X]$?",
-      "body_he": "ל-$X$ בדיד: $p(0)=0.25$, $p(2)=0.75$. מה $E[X]$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$1.0$",
-          "text_he": "$1.0$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$1.5$",
-          "text_he": "$1.5$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$2.0$",
-          "text_he": "$2.0$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0.75$",
-          "text_he": "$0.75$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$E[X] = 0(0.25) + 2(0.75) = 1.5$.",
-      "explanation_he": "$E[X] = 0(0.25) + 2(0.75) = 1.5$."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "If $Z \\sim N(0,1)$, what is $P(Z \\leq -1.96)$ (approximately)?",
-      "body_he": "אם $Z \\sim N(0,1)$, מה $P(Z \\leq -1.96)$ (בקירוב)?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$0.975$",
-          "text_he": "$0.975$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$0.025$",
-          "text_he": "$0.025$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$0.05$",
-          "text_he": "$0.05$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0.5$",
-          "text_he": "$0.5$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "By symmetry, $P(Z \\leq -1.96) = P(Z \\geq 1.96) = 0.025$ (two-tailed 5% tail beyond $\\pm 1.96$).",
-      "explanation_he": "לפי סימטריה, $P(Z \\leq -1.96) = 0.025$."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- A **random variable** maps outcomes to numbers; described by PMF (discrete) or PDF (continuous).\n- **Expectation:** $E[X]=\\sum xp(x)$ — the probability-weighted average.\n- **Variance:** $\\text{Var}(X)=E[X^2]-(E[X])^2$ — measures spread.\n- **Key properties:** $E[aX+b]=aE[X]+b$; Var$(aX+b)=a^2$Var$(X)$; Var$(X+Y)=$Var$(X)+$Var$(Y)$ for independent.\n- **$E[g(X)]\\neq g(E[X])$** in general (Jensen's inequality).",
+      "body_he_md": "- **משתנה אקראי** ממפה תוצאות למספרים; מתואר ע\"י PMF (בדיד) או PDF (רציף).\n- **תוחלת:** $E[X]=\\sum xp(x)$ — ממוצע משוקלל בהסתברות.\n- **שונות:** $\\text{Var}(X)=E[X^2]-(E[X])^2$ — מודד פיזור.\n- **תכונות:** לינאריות תוחלת; שונות מושפעת ממשפחת קנה-מידה אך לא הזזה.\n- **$E[g(X)]\\neq g(E[X])$** בכלל."
     }
   ]
 }

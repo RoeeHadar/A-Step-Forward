@@ -2,169 +2,223 @@
   "concept_id": "vector_spaces_basis_dimension",
   "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Vector Spaces, Basis & Dimension",
-  "title_he": "מרחבים וקטוריים, בסיס וממד",
-  "summary_en": "Vector space axioms, subspaces, linear independence, span, basis, dimension, Rank–Nullity, and coordinates in a non-standard basis.",
-  "summary_he": "אקסיומות מרחב וקטורי, תת-מרחבים, בלתי-תלות לינארית, קבוצת פרישה, בסיס, ממד, משפט דרגה-גרעין וקואורדינטות בבסיס.",
-  "est_minutes": 35,
+  "math_track": ["la"],
+  "title_en": "Basis, Dimension & the Rank-Nullity Theorem",
+  "title_he": "בסיס, ממד ומשפט דרגה-גרעין",
+  "summary_en": "Basis as a minimal spanning set, uniqueness of dimension, finding bases for span and kernel, coordinates in non-standard bases, and the Rank-Nullity theorem: dim(ker T) + dim(Im T) = n.",
+  "summary_he": "בסיס כקבוצת פרישה מינימלית, ייחודיות הממד, מציאת בסיסים ל-span ולגרעין, קואורדינטות בבסיסים לא-סטנדרטיים, ומשפט דרגה-גרעין: $\\dim(\\ker T)+\\dim(\\text{Im} T)=n$.",
+  "est_minutes": 50,
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Vector space axioms",
-      "title_he": "אקסיומות מרחב וקטורי",
-      "body_en_md": "A **vector space** $V$ over $\\mathbb{R}$ satisfies 10 axioms (closure under $+$ and scalar multiply; associativity, commutativity; zero vector; additive inverses; distributivity).\n\n**Examples:** $\\mathbb{R}^n$; polynomials $P_n$ of degree $\\leq n$; matrices $M_{m\\times n}$; continuous functions $C[a,b]$.\n\n**Zero vector** $\\vec{0}$ is unique. **Counterexample:** the half-plane $\\{(x,y): x \\geq 0\\}$ is **not** a vector space — no additive inverses for most vectors.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "**מרחב וקטורי** $V$ מעל $\\mathbb{R}$ מקיים 10 אקסיומות (סגירות, אסוצiativיות, $\\vec{0}$, הופכים, דistributivיות).\n\n**דוגמאות:** $\\mathbb{R}^n$; פולינומים $P_n$; מטריצות $M_{m\\times n}$; פונקציות רציפות $C[a,b]$.\n\n**וקטור האפס** $\\vec{0}$ יחיד. **דוגמת נגד:** חצי-מישור $\\{(x,y): x \\geq 0\\}$ **אינו** מרחב וקטורי — אין הופכים.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "kind": "intro",
+      "title_en": "Why Basis and Dimension?",
+      "title_he": "למה בסיס וממד?",
+      "body_en_md": "Every vector space has a **basis** — a set of vectors that is simultaneously minimal (no redundancy) and maximal (everything is reachable). The number of basis vectors, the **dimension**, is the intrinsic size of the space.\n\nDimension lets us compare spaces: a plane is 2-dimensional, space is 3-dimensional, regardless of the particular coordinate system. The **Rank-Nullity theorem** quantifies how a linear map $T:\\mathbb{R}^n\\to\\mathbb{R}^m$ splits $n$ dimensions into those that map to zero (nullity) and those that map to something non-trivial (rank).\n\n**Connection to previous material:** Subspaces, linear independence, and span are the building blocks of this lesson.",
+      "body_he_md": "לכל מרחב וקטורי יש **בסיס** — קבוצת וקטורים שהיא גם מינימלית (ללא עודפות) וגם מקסימלית (הכל ניתן להשגה). מספר וקטורי הבסיס, ה**ממד**, הוא הגודל הפנימי של המרחב.\n\nממד מאפשר להשוות מרחבים: מישור הוא דו-ממדי, מרחב הוא תלת-ממדי, ללא תלות במערכת הקואורדינטות הספציפית. **משפט דרגה-גרעין** מכמת איך העתקה לינארית $T:\\mathbb{R}^n\\to\\mathbb{R}^m$ מחלקת $n$ ממדות לאלו שהולכות לאפס (גרעין) ולאלו שנותרות שונות (דרגה).\n\n**קשר לחומר קודם:** תת-מרחבים, בלתי-תלות לינארית וקבוצת פרישה הם אבני הבניין של שיעור זה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Basis, Dimension, and Coordinates",
+      "title_he": "בסיס, ממד וקואורדינטות",
+      "body_en_md": "**Definition (Basis).** A **basis** of a vector space $V$ is a set $B=\\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ that is:\n1. Linearly independent, AND\n2. Spans $V$ (i.e., $\\text{span}(B)=V$).\n\n**Theorem (Existence and uniqueness of dimension).** Any two bases of a finite-dimensional space have the same number of elements. This common count is the **dimension** $\\dim(V)$.\n\n**Standard bases:** $\\mathbb{R}^n$ has the standard basis $\\{\\vec{e}_1,\\ldots,\\vec{e}_n\\}$ where $\\vec{e}_i$ has $1$ in position $i$ and $0$ elsewhere. $\\dim(\\mathbb{R}^n)=n$.\n\n**Coordinates.** Every $\\vec{v}\\in V$ has a **unique** representation $\\vec{v}=c_1\\vec{b}_1+\\cdots+c_n\\vec{b}_n$. The **coordinate vector** is $[\\vec{v}]_B=(c_1,\\ldots,c_n)^T\\in\\mathbb{R}^n$.\n\n**Kernel and image.** For a linear map $T:V\\to W$:\n- $\\ker(T) = \\{\\vec{v}\\in V: T(\\vec{v})=\\vec{0}\\}$ — the **null space**.\n- $\\text{Im}(T) = \\{T(\\vec{v}):\\vec{v}\\in V\\}$ — the **column space** (for matrix maps: column space of $A$).\n\n**Rank-Nullity Theorem.** If $T:V\\to W$ is linear and $\\dim V=n$:\n$$\\dim(\\ker T)+\\dim(\\text{Im} T)=n.$$\nFor an $m\\times n$ matrix $A$: $\\text{nullity}(A)+\\text{rank}(A)=n$.",
+      "body_he_md": "**הגדרה (בסיס).** **בסיס** של מרחב וקטורי $V$ הוא קבוצה $B=\\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ שהיא:\n1. בלתי-תלויה לינארית, וגם\n2. פורשת את $V$.\n\n**משפט (ממד ייחודי).** כל שני בסיסים של מרחב ממדי-סופי מכילים את אותו מספר וקטורים. מספר זה הוא ה**ממד** $\\dim(V)$.\n\n**בסיס סטנדרטי:** ל-$\\mathbb{R}^n$ יש $\\{\\vec{e}_1,\\ldots,\\vec{e}_n\\}$; $\\dim(\\mathbb{R}^n)=n$.\n\n**קואורדינטות.** לכל $\\vec{v}\\in V$ יש **ייצוג יחיד** $\\vec{v}=c_1\\vec{b}_1+\\cdots+c_n\\vec{b}_n$. **וקטור הקואורדינטות** הוא $[\\vec{v}]_B=(c_1,\\ldots,c_n)^T$.\n\n**גרעין ואופי.** להעתקה לינארית $T:V\\to W$:\n- $\\ker(T) = \\{\\vec{v}: T(\\vec{v})=\\vec{0}\\}$ — מרחב האפס.\n- $\\text{Im}(T)$ — מרחב העמודות.\n\n**משפט דרגה-גרעין:** $\\dim(\\ker T)+\\dim(\\text{Im} T)=n$."
     },
     {
       "kind": "theory",
-      "title_en": "Subspaces",
-      "title_he": "תת-מרחבים",
-      "body_en_md": "$W \\subseteq V$ is a **subspace** iff:\n1. $\\vec{0} \\in W$\n2. Closed under addition: $\\vec{u},\\vec{v} \\in W \\Rightarrow \\vec{u}+\\vec{v} \\in W$\n3. Closed under scalar multiplication: $c\\vec{v} \\in W$ for all scalars $c$\n\n**Examples (subspaces):** $\\text{span}\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$; $\\ker(A) = \\{\\vec{x}: A\\vec{x}=\\vec{0}\\}$; solution space of $A\\vec{x}=\\vec{0}$.\n\n**NOT a subspace:** $\\{(x,y): x+y=1\\}$ — does not contain $\\vec{0}$.\n\n**Subspace test:** verify all three conditions (or the one-step: $c\\vec{u}+d\\vec{v} \\in W$).",
-      "body_he_md": "$W \\subseteq V$ הוא **תת-מרחב** iff:\n1. $\\vec{0} \\in W$\n2. סגור לחיבור\n3. סגור לכפל בסקalar\n\n**דוגמאות:** $\\text{span}$; $\\ker(A)$; מרחב פתרונות של $A\\vec{x}=\\vec{0}$.\n\n**לא תת-מרחב:** $\\{(x,y): x+y=1\\}$ — אין $\\vec{0}$."
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1 (Basis characterisation).** An $n$-element set in an $n$-dimensional space is a basis iff it is linearly independent (equivalently, iff it spans).\n\n**Theorem 2 (Extension and reduction).** Any independent set can be extended to a basis; any spanning set can be reduced to a basis.\n\n**Theorem 3 (Dimension of subspaces).** If $W$ is a subspace of $V$ and $\\dim V<\\infty$, then $\\dim W\\leq\\dim V$, with equality iff $W=V$.\n\n**Theorem 4 (Rank-Nullity). Proof sketch:**\nLet $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ be a basis of $\\ker T$ (so $\\dim\\ker T=r$). Extend to a basis $\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$ of $V$. We claim $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is a basis of $\\text{Im}(T)$.\n\n*Spanning:* Any $T(\\vec{v}) = \\sum c_iT(\\vec{k}_i)+\\sum c_jT(\\vec{v}_j) = \\sum c_jT(\\vec{v}_j)$.\n\n*Independence:* If $\\sum a_j T(\\vec{v}_j)=\\vec{0}$, then $T(\\sum a_j\\vec{v}_j)=\\vec{0}$, so $\\sum a_j\\vec{v}_j\\in\\ker T$. Write as a combination of $\\vec{k}_i$'s; by independence of the extended basis, all $a_j=0$.\n\nThus $\\dim\\text{Im}(T)=n-r$, giving $r+(n-r)=n$. $\\blacksquare$",
+      "body_he_md": "**משפט 1 (אפיון בסיס).** קבוצה בת $n$ איברים במרחב $n$-ממדי היא בסיס אם ורק אם בלתי-תלויה (או בשקילות: אם ורק אם פורשת).\n\n**משפט 2 (הרחבה וצמצום).** כל קבוצה בלתי-תלויה ניתנת להרחבה לבסיס; כל קבוצה פורשת ניתנת לצמצום לבסיס.\n\n**משפט 3 (ממד תת-מרחבים).** אם $W$ תת-מרחב של $V$: $\\dim W\\leq\\dim V$, שוויון אם ורק אם $W=V$.\n\n**משפט 4 (דרגה-גרעין). סקיצת הוכחה:**\nיהי $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ בסיס של $\\ker T$. נרחיב לבסיס $\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$ של $V$. אז $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ בסיס של $\\text{Im}(T)$ (פורש ובלתי-תלוי). לכן $\\dim\\text{Im}(T)=n-r$, ו-$r+(n-r)=n$. $\\blacksquare$"
     },
     {
       "kind": "worked_example",
-      "title_en": "Linear independence",
-      "title_he": "בלתי-תלות לינארית",
-      "body_en_md": "Vectors $\\vec{v}_1,\\ldots,\\vec{v}_k$ are **linearly independent** if\n$$c_1\\vec{v}_1 + \\cdots + c_k\\vec{v}_k = \\vec{0} \\Rightarrow c_i = 0 \\text{ for all } i.$$\n\n**Span:** $\\text{span}(\\vec{v}_1,\\ldots,\\vec{v}_k) = \\{c_1\\vec{v}_1+\\cdots+c_k\\vec{v}_k\\}$ — always a subspace.\n\n**Test via Gaussian elimination:** form matrix with vectors as columns; independent iff no free columns.\n\n**Worked example:** Are $(1,2,3), (0,1,2), (1,1,1)$ independent?\n$$\\left[\\begin{array}{ccc} 1 & 0 & 1 \\\\ 2 & 1 & 1 \\\\ 3 & 2 & 1 \\end{array}\\right] \\to \\text{REF: 3 pivots} \\Rightarrow \\text{independent}.$$",
-      "body_he_md": "$\\vec{v}_1,\\ldots,\\vec{v}_k$ **בלתי-תלויים לינארית** אם\n$$c_1\\vec{v}_1 + \\cdots + c_k\\vec{v}_k = \\vec{0} \\Rightarrow c_i = 0.$$\n\n**קבוצת פרישה (span):** כל הקומבינציות הלינאריות — תמיד תת-מרחב.\n\n**בדיקה:** מטריצה עם הוקטורים כעמודות; בלתי-תלויים iff 3 pivots.\n\n**דוגמה:** $(1,2,3), (0,1,2), (1,1,1)$ — 3 pivots ⇒ **בלתי-תלויים**."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Basis and dimension",
-      "title_he": "בסיס וממד",
-      "body_en_md": "A **basis** of $V$ is a linearly independent spanning set. **Dimension** $\\dim(V)$ = number of vectors in any basis.\n\n**Standard basis** of $\\mathbb{R}^n$: $\\vec{e}_1,\\ldots,\\vec{e}_n$.\n\n**Exchange lemma (stated):** in a finite-dimensional space, every linearly independent set can be extended to a basis; every basis has the same size.\n\n**Rank–Nullity:** for $A$ with $n$ columns,\n$$\\dim(\\ker A) + \\dim(\\text{col}(A)) = n.$$\n\nExample: $3\\times 3$ matrix with rank 2 has nullity 1.",
-      "body_he_md": "**בסיס** = קבוצה בלתי-תלויה וסוגרת. **ממד** = גודל כל בסיס.\n\n**בסיס סטנדרטי** ב-$\\mathbb{R}^n$: $\\vec{e}_1,\\ldots,\\vec{e}_n$.\n\n**למת החלפה (נוסח):** כל קבוצה בלתי-תלויה ניתנת להרחבה לבסיס; כל הבסיסים באותו גודל.\n\n**דרגה-גרעין:** $\\dim(\\ker A) + \\dim(\\text{col}(A)) = n$."
-    },
-    {
-      "kind": "worked_example",
-      "title_en": "Coordinates in a basis",
-      "title_he": "קואורדינטות בבסיס",
-      "body_en_md": "Every $\\vec{v}$ in a basis $B = \\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ has **unique** representation $\\vec{v} = c_1\\vec{b}_1 + \\cdots + c_n\\vec{b}_n$. The **coordinate vector** is $[\\vec{v}]_B = (c_1,\\ldots,c_n)^T$.\n\n**Technion-style problem:** Find coordinates of $(3,5,1)$ in $B = \\{(1,1,0), (0,1,1), (1,0,1)\\}$.\n\nSolve $c_1(1,1,0) + c_2(0,1,1) + c_3(1,0,1) = (3,5,1)$:\n$$\\begin{cases} c_1 + c_3 = 3 \\\\ c_1 + c_2 = 5 \\\\ c_2 + c_3 = 1 \\end{cases} \\Rightarrow c_1 = 2,\\; c_2 = 3,\\; c_3 = 1.$$\nSo $[(3,5,1)]_B = (2,3,1)^T$.",
-      "body_he_md": "ייצוג **יחיד:** $\\vec{v} = c_1\\vec{b}_1 + \\cdots + c_n\\vec{b}_n$; $[\\vec{v}]_B = (c_1,\\ldots,c_n)^T$.\n\n**בעיה:** קואורדינטות של $(3,5,1)$ ב-$B = \\{(1,1,0), (0,1,1), (1,0,1)\\}$.\n\n$$c_1 + c_3 = 3,\\; c_1 + c_2 = 5,\\; c_2 + c_3 = 1 \\Rightarrow (2,3,1)^T.$$"
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Vector Spaces, Basis & Dimension: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Vector Spaces, Basis & Dimension.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-מרחבים וקטוריים, בסיס וממד: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-מרחבים וקטוריים, בסיס וממד.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Which set is a subspace of $\\mathbb{R}^2$?",
-      "stem_he": "איזו קבוצה היא תת-מרחב של $\\mathbb{R}^2$?",
-      "options_en": [
-        "$\\{(x,y): x+y=1\\}$",
-        "$\\{(x,y): x=0\\}$ (the $y$-axis)",
-        "$\\{(x,y): x \\geq 0\\}$",
-        "$\\{(x,y): xy=0\\}$"
-      ],
-      "options_he": [
-        "$\\{(x,y): x+y=1\\}$",
-        "$\\{(x,y): x=0\\}$ (ציר $y$)",
-        "$\\{(x,y): x \\geq 0\\}$",
-        "$\\{(x,y): xy=0\\}$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "The y-axis contains 0, is closed under addition and scaling. The others fail (no 0, or not closed).",
-      "explanation_he": "ציר $y$ מכיל 0 וסגור לחיבור וכפל. השאר נכשלים.",
-      "skill_atoms": [
-        "verify_subspace"
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Finding a Basis for a Span",
+      "title_he": "דוגמה פתורה 1 — מציאת בסיס ל-span",
+      "body_en_md": "**Task:** Find a basis for $W = \\text{span}\\{(1,2),(2,4),(1,0)\\}$ in $\\mathbb{R}^2$.\n\n**Step 1 — Form matrix with vectors as rows:**\n$$\\begin{pmatrix}1&2\\\\2&4\\\\1&0\\end{pmatrix} \\xrightarrow{R_2-2R_1,\\;R_3-R_1} \\begin{pmatrix}1&2\\\\0&0\\\\0&-2\\end{pmatrix} \\xrightarrow{\\text{swap }R_2,R_3} \\begin{pmatrix}1&2\\\\0&-2\\\\0&0\\end{pmatrix}.$$\n\n**Step 2 — Pivot rows give the basis.** Two non-zero rows: the original vectors corresponding to rows 1 and 3.\n\n**Basis:** $\\{(1,2),(1,0)\\}$. **Dimension:** $\\dim W = 2$.\n\n**Check:** $(2,4)=2(1,2)$ — redundant as expected.",
+      "body_he_md": "**משימה:** מצא בסיס ל-$W = \\text{span}\\{(1,2),(2,4),(1,0)\\}$ ב-$\\mathbb{R}^2$.\n\n**שלב 1 — מטריצה עם וקטורים כשורות ודירוג:**\n$$\\begin{pmatrix}1&2\\\\2&4\\\\1&0\\end{pmatrix} \\to \\begin{pmatrix}1&2\\\\0&-2\\\\0&0\\end{pmatrix}.$$\n\n**שלב 2 — שורות ציריות נותנות הבסיס.** שתי שורות לא-אפסיות.\n\n**בסיס:** $\\{(1,2),(1,0)\\}$. **ממד:** $\\dim W = 2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find a basis for $\\text{span}\\{(1,0,2),(0,1,1),(2,1,5)\\}$ and state the dimension.",
+      "body_he_md": "מצא בסיס ל-$\\text{span}\\{(1,0,2),(0,1,1),(2,1,5)\\}$ וציין את הממד.",
+      "checkpoint_solution_en": "Row reduce: third vector $(2,1,5)=2(1,0,2)+(0,1,1)$, so it's redundant. Basis: $\\{(1,0,2),(0,1,1)\\}$, $\\dim=2$.",
+      "checkpoint_solution_he": "$(2,1,5)=2(1,0,2)+(0,1,1)$ — מיותר. בסיס: $\\{(1,0,2),(0,1,1)\\}$, $\\dim=2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Basis and Dimension of ker(A)",
+      "title_he": "דוגמה פתורה 2 — בסיס וממד של ker(A)",
+      "body_en_md": "**Task:** Find a basis and the dimension of $\\ker(A)$ for\n$$A = \\begin{pmatrix}1&2&0&-1\\\\2&4&1&0\\\\0&0&1&2\\end{pmatrix}.$$\n\n**Row reduce $A$:**\n$$\\xrightarrow{R_2-2R_1} \\begin{pmatrix}1&2&0&-1\\\\0&0&1&2\\\\0&0&1&2\\end{pmatrix} \\xrightarrow{R_3-R_2} \\begin{pmatrix}1&2&0&-1\\\\0&0&1&2\\\\0&0&0&0\\end{pmatrix}.$$\n\n**Identify free variables:** Pivot columns: 1, 3. Free variables: $x_2=s$, $x_4=t$.\n\n**Express pivot variables:**\n- Row 2: $x_3 + 2t = 0 \\Rightarrow x_3 = -2t$.\n- Row 1: $x_1 + 2s - t = 0 \\Rightarrow x_1 = -2s + t$.\n\n**General solution:**\n$$\\vec{x} = s\\begin{pmatrix}-2\\\\1\\\\0\\\\0\\end{pmatrix} + t\\begin{pmatrix}1\\\\0\\\\-2\\\\1\\end{pmatrix}.$$\n\n**Basis of $\\ker(A)$:** $\\left\\{(-2,1,0,0)^T,\\,(1,0,-2,1)^T\\right\\}$. **Nullity = 2.**\n\n**Rank-Nullity check:** rank$(A) = 2$; nullity $= 2$; $2+2=4=n$. ✓",
+      "body_he_md": "**משימה:** מצא בסיס וממד של $\\ker(A)$ עבור\n$$A = \\begin{pmatrix}1&2&0&-1\\\\2&4&1&0\\\\0&0&1&2\\end{pmatrix}.$$\n\n**דירוג $A$:**\n$$\\to \\begin{pmatrix}1&2&0&-1\\\\0&0&1&2\\\\0&0&0&0\\end{pmatrix}.$$\n\n**משתנים חופשיים:** $x_2=s$, $x_4=t$.\n\n**ביטוי משתני ציר:** $x_3=-2t$, $x_1=-2s+t$.\n\n**פתרון כללי:** $\\vec{x} = s(-2,1,0,0)^T + t(1,0,-2,1)^T$.\n\n**בסיס:** $\\{(-2,1,0,0)^T,\\,(1,0,-2,1)^T\\}$. **גרעין** = 2.\n\n**בדיקת דרגה-גרעין:** $2+2=4=n$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A matrix $A$ is $4\\times6$ with rank 3. What is nullity$(A)$? What is $\\dim(\\ker A)$?",
+      "body_he_md": "מטריצה $A$ היא $4\\times6$ עם דרגה 3. מהי גרעין$(A)$? מהו $\\dim(\\ker A)$?",
+      "checkpoint_solution_en": "Rank-Nullity: nullity $= 6-3=3$. So $\\dim(\\ker A)=3$.",
+      "checkpoint_solution_he": "דרגה-גרעין: גרעין $= 6-3=3$. לכן $\\dim(\\ker A)=3$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof of the Rank-Nullity Theorem",
+      "title_he": "דוגמה פתורה 3 — הוכחת משפט דרגה-גרעין",
+      "body_en_md": "**Claim:** If $T:V\\to W$ is a linear map and $\\dim V=n<\\infty$, then\n$$\\dim(\\ker T)+\\dim(\\text{Im}\\, T) = n.$$\n\n**Proof:**\n\n**Step 1 — Setup.** Let $r=\\dim(\\ker T)$. If $r=0$, then $\\ker T=\\{\\vec{0}\\}$ and $T$ is injective, so $\\dim(\\text{Im}\\, T)=n$. ✓ Assume $r\\geq1$.\n\n**Step 2 — Extend basis of ker.** Let $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ be a basis of $\\ker T$. By the extension theorem, there exist $\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\in V$ such that\n$$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$$\nis a basis of $V$.\n\n**Step 3 — Claim: $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ spans $\\text{Im}(T)$.** Any $T(\\vec{v})$ with $\\vec{v}=\\sum_{i=1}^r c_i\\vec{k}_i+\\sum_{j=r+1}^n c_j\\vec{v}_j$ gives $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (since $T(\\vec{k}_i)=\\vec{0}$).\n\n**Step 4 — Claim: $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is linearly independent.** Suppose $\\sum_{j=r+1}^n a_j T(\\vec{v}_j)=\\vec{0}$. Then $T(\\sum a_j\\vec{v}_j)=\\vec{0}$, so $\\vec{u}=\\sum a_j\\vec{v}_j\\in\\ker T$. Write $\\vec{u}=\\sum_{i=1}^r b_i\\vec{k}_i$. Then\n$$\\sum_{i=1}^r b_i\\vec{k}_i - \\sum_{j=r+1}^n a_j\\vec{v}_j = \\vec{0}.$$\nSince $\\mathcal{B}$ is a basis, all coefficients are zero: $b_i=0$ and $a_j=0$. ✓\n\n**Step 5 — Conclude.** $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is a basis of $\\text{Im}(T)$, so $\\dim(\\text{Im}\\,T)=n-r$. Therefore\n$$r + (n-r) = n. \\quad \\blacksquare$$",
+      "body_he_md": "**טענה:** אם $T:V\\to W$ לינארית ו-$\\dim V=n<\\infty$, אז $\\dim(\\ker T)+\\dim(\\text{Im}\\, T) = n$.\n\n**הוכחה:**\n\n**שלב 1.** יהי $r=\\dim(\\ker T)$. אם $r=0$, $T$ חד-חד ערכית ו-$\\dim(\\text{Im}\\,T)=n$. ✓ נניח $r\\geq1$.\n\n**שלב 2 — הרחבת בסיס.** יהי $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ בסיס של $\\ker T$. נרחיב ל-$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$ בסיס של $V$.\n\n**שלב 3 — $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ פורש את $\\text{Im}(T)$.** לכל $T(\\vec{v})$: $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (כי $T(\\vec{k}_i)=\\vec{0}$).\n\n**שלב 4 — בלתי-תלות.** אם $\\sum a_jT(\\vec{v}_j)=\\vec{0}$, אז $\\sum a_j\\vec{v}_j\\in\\ker T$. כתיבה כקומבינציה בבסיס $\\mathcal{B}$ מראה $a_j=0$.\n\n**שלב 5.** $\\dim(\\text{Im}\\,T)=n-r$, לכן $r+(n-r)=n$. $\\blacksquare$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Basis & Dimension Toolkit",
+      "title_he": "מדריך שיטה — ארגז כלים לבסיס וממד",
+      "body_en_md": "| Goal | Method |\n|---|---|\n| Find basis of span $\\{\\vec{v}_i\\}$ | Form matrix with $\\vec{v}_i$ as rows; row-reduce; keep pivot rows from original vectors |\n| Find basis of $\\ker A$ | Row-reduce $A$; identify free variables; write parametric solution; read off basis vectors |\n| Find basis of col$(A)$ = Im$(A)$ | Row-reduce $A$; keep **original** columns corresponding to pivot columns |\n| Compute rank$(A)$ | Count pivots in row echelon form |\n| Compute nullity$(A)$ | $n$ - rank$(A)$ |\n| Find $[\\vec{v}]_B$ coordinates | Solve $c_1\\vec{b}_1+\\cdots+c_n\\vec{b}_n=\\vec{v}$ |\n| Verify $B$ is a basis of $V$ | Check: $|B|=\\dim V$, vectors linearly independent (or spans $V$) |",
+      "body_he_md": "| מטרה | שיטה |\n|---|---|\n| בסיס של span $\\{\\vec{v}_i\\}$ | מטריצה עם $\\vec{v}_i$ כשורות; דרג; שמור שורות ציריות מהוקטורים המקוריים |\n| בסיס של $\\ker A$ | דרג $A$; זהה משתנים חופשיים; פתרון פרמטרי; קרא וקטורי בסיס |\n| בסיס של col$(A)$ = Im$(A)$ | דרג $A$; שמור **עמודות מקוריות** המתאימות לעמודות ציריות |\n| חשב rank$(A)$ | ספור צירים בצורת מדרגה |\n| חשב nullity$(A)$ | $n$ - rank$(A)$ |\n| מצא $[\\vec{v}]_B$ | פתור $c_1\\vec{b}_1+\\cdots+c_n\\vec{b}_n=\\vec{v}$ |\n| אמת ש-$B$ בסיס של $V$ | בדוק: $|B|=\\dim V$, בלתי-תלויים (או פורשים) |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find a basis for $\\text{span}\\{(1,2,3),(2,4,6),(0,1,0)\\}$.",
+          "body_he": "מצא בסיס ל-$\\text{span}\\{(1,2,3),(2,4,6),(0,1,0)\\}$.",
+          "solution_en": "$(2,4,6)=2(1,2,3)$, redundant. Basis: $\\{(1,2,3),(0,1,0)\\}$, $\\dim=2$.",
+          "solution_he": "$(2,4,6)$ מיותר. בסיס: $\\{(1,2,3),(0,1,0)\\}$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "What is $\\dim(\\ker A)$ if $A$ is $5\\times7$ with rank 4?",
+          "body_he": "מהו $\\dim(\\ker A)$ אם $A$ הוא $5\\times7$ עם דרגה 4?",
+          "solution_en": "Nullity $= 7-4=3$.",
+          "solution_he": "גרעין $= 7-4=3$.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find coordinates of $\\vec{v}=(3,1)$ in basis $B=\\{(1,1),(1,-1)\\}$.",
+          "body_he": "מצא קואורדינטות של $\\vec{v}=(3,1)$ בבסיס $B=\\{(1,1),(1,-1)\\}$.",
+          "solution_en": "Solve $c_1(1,1)+c_2(1,-1)=(3,1)$: $c_1+c_2=3$, $c_1-c_2=1$. $c_1=2$, $c_2=1$. $[\\vec{v}]_B=(2,1)^T$.",
+          "solution_he": "$c_1=2$, $c_2=1$. $[\\vec{v}]_B=(2,1)^T$.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Verify that $\\{(1,0,0),(0,1,0),(0,0,1)\\}$ is a basis of $\\mathbb{R}^3$.",
+          "body_he": "אמת ש-$\\{(1,0,0),(0,1,0),(0,0,1)\\}$ הוא בסיס של $\\mathbb{R}^3$.",
+          "solution_en": "3 vectors in a 3-dim space; they are clearly independent (identity matrix). Spans $\\mathbb{R}^3$. ✓",
+          "solution_he": "3 וקטורים, מטריצת היחידה — בלתי-תלויים ופורשים. ✓",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find a basis for $\\ker(A)$ where $A=\\begin{pmatrix}1&-2&1\\\\2&-4&2\\end{pmatrix}$.",
+          "body_he": "מצא בסיס ל-$\\ker(A)$ כאשר $A=\\begin{pmatrix}1&-2&1\\\\2&-4&2\\end{pmatrix}$.",
+          "solution_en": "Row reduce: $[1,-2,1;0,0,0]$. Free: $x_2=s,x_3=t$. $x_1=2s-t$. Basis: $\\{(2,1,0)^T,(-1,0,1)^T\\}$, nullity=2.",
+          "solution_he": "לאחר דירוג: $x_1=2s-t$. בסיס: $\\{(2,1,0)^T,(-1,0,1)^T\\}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find a basis for the column space of $A=\\begin{pmatrix}1&2&3\\\\0&1&2\\\\1&3&5\\end{pmatrix}$.",
+          "body_he": "מצא בסיס למרחב העמודות של $A=\\begin{pmatrix}1&2&3\\\\0&1&2\\\\1&3&5\\end{pmatrix}$.",
+          "solution_en": "Row reduce; pivot columns are 1 and 2. Basis (from original $A$): $\\{(1,0,1)^T,(2,1,3)^T\\}$. Rank=2.",
+          "solution_he": "עמודות ציריות: 1 ו-2. בסיס: $\\{(1,0,1)^T,(2,1,3)^T\\}$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A linear map $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ has $\\dim(\\ker T)=3$. Find $\\dim(\\text{Im}\\,T)$. Can $T$ be onto?",
+          "body_he": "להעתקה לינארית $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ יש $\\dim(\\ker T)=3$. מצא $\\dim(\\text{Im}\\,T)$. האם $T$ יכולה להיות על?",
+          "solution_en": "$\\dim(\\text{Im}\\,T)=5-3=2<3$. So $T$ is NOT onto ($\\text{Im}\\,T\\neq\\mathbb{R}^3$).",
+          "solution_he": "$\\dim(\\text{Im}\\,T)=2<3$. $T$ **אינה** על.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find coordinates of $p(x)=3+2x-x^2$ in the basis $B=\\{1,x,x^2\\}$ of $P_2$.",
+          "body_he": "מצא קואורדינטות של $p(x)=3+2x-x^2$ בבסיס $B=\\{1,x,x^2\\}$ של $P_2$.",
+          "solution_en": "$p = 3\\cdot1+2\\cdot x+(-1)\\cdot x^2$. Coordinates: $[p]_B=(3,2,-1)^T$.",
+          "solution_he": "$[p]_B=(3,2,-1)^T$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove: if $T:V\\to W$ is linear with $\\dim V=\\dim W=n$ and $\\ker T=\\{\\vec{0}\\}$, then $T$ is onto.",
+          "body_he": "הוכח: אם $T:V\\to W$ לינארית עם $\\dim V=\\dim W=n$ ו-$\\ker T=\\{\\vec{0}\\}$, אז $T$ על.",
+          "solution_en": "$\\ker T=\\{\\vec{0}\\}\\Rightarrow\\dim(\\ker T)=0$. By Rank-Nullity: $\\dim(\\text{Im}\\,T)=n-0=n=\\dim W$. Since $\\text{Im}\\,T\\subseteq W$ and $\\dim(\\text{Im}\\,T)=\\dim W$, we get $\\text{Im}\\,T=W$. $\\blacksquare$",
+          "solution_he": "$\\dim(\\ker T)=0 \\Rightarrow \\dim(\\text{Im}\\,T)=n=\\dim W \\Rightarrow \\text{Im}\\,T=W$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Let $A$ be an $n\\times n$ matrix. Prove: $A$ is invertible if and only if $\\ker A=\\{\\vec{0}\\}$.",
+          "body_he": "יהי $A$ מטריצה $n\\times n$. הוכח: $A$ הפיכה אם ורק אם $\\ker A=\\{\\vec{0}\\}$.",
+          "solution_en": "($\\Rightarrow$) If $A\\vec{x}=\\vec{0}$ and $A$ invertible: $\\vec{x}=A^{-1}\\vec{0}=\\vec{0}$. ($\\Leftarrow$) If $\\ker A=\\{\\vec{0}\\}$: nullity$=0\\Rightarrow$rank$=n\\Rightarrow$ all columns independent $\\Rightarrow$ $A$ invertible. $\\blacksquare$",
+          "solution_he": "($\\Rightarrow$) $A\\vec{x}=\\vec{0} \\Rightarrow \\vec{x}=A^{-1}\\vec{0}=\\vec{0}$. ($\\Leftarrow$) גרעין$=0\\Rightarrow$דרגה$=n\\Rightarrow A$ הפיכה. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$ (Dimension formula).",
+          "body_he": "הראה ש-$\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$ (נוסחת הממד).",
+          "solution_en": "Start with a basis $\\{\\vec{u}_1,\\ldots,\\vec{u}_k\\}$ of $W_1\\cap W_2$. Extend to $\\{\\vec{u}_i,\\vec{a}_j\\}$ for $W_1$ and $\\{\\vec{u}_i,\\vec{b}_l\\}$ for $W_2$. Show $\\{\\vec{u}_i,\\vec{a}_j,\\vec{b}_l\\}$ is a basis of $W_1+W_2$; count elements: $k+(\\dim W_1-k)+(\\dim W_2-k)=\\dim W_1+\\dim W_2-k$. $\\blacksquare$",
+          "solution_he": "בנה בסיס מאוחד מבסיסי $W_1$ ו-$W_2$ דרך בסיס $W_1\\cap W_2$. ספירת האיברים נותנת $\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A matrix $A$ is $6\\times4$. Explain why $A$ cannot have a trivial null space (i.e., $\\ker A=\\{\\vec 0\\}$).",
+          "body_he": "מטריצה $A$ היא $6\\times4$. הסבר מדוע $A$ לא יכולה להיות עם גרעין טריוויאלי ($\\ker A=\\{\\vec 0\\}$).",
+          "solution_en": "For $\\ker A=\\{\\vec0\\}$ we'd need rank$=4$ and $A$ would map $\\mathbb{R}^4$ injectively into $\\mathbb{R}^6$. While this is possible (rank 4 is achievable), the question may be about $4\\times6$ (more columns than rows). For $6\\times4$: rank$\\leq4$; if rank$=4$, nullity$=0$ and $\\ker A=\\{\\vec0\\}$ IS possible. Correction: the statement is only impossible for matrices with more columns than rows (underdetermined). For $6\\times4$, trivial kernel is possible when rank$=4$.",
+          "solution_he": "עבור $6\\times4$: דרגה$\\leq4$. אם דרגה$=4$, גרעין$=\\{\\vec0\\}$ אפשרי. גרעין טריוויאלי בלתי-אפשרי רק כשיש יותר עמודות משורות (מערכת חסרת-קביעה).",
+          "points": 12
+        }
       ]
     },
     {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Vector Spaces, Basis & Dimension'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'מרחבים וקטוריים, בסיס וממד'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "test_linear_independence"
-      ],
-      "points_level_min": "la"
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Keeping the wrong rows/columns after row reduction.** For a basis of the column space, use the **original** columns (before row reduction) that correspond to pivot positions. For a basis of the row space, use the **pivot rows of the reduced form**.\n\n2. **Confusing rank with dimension of the kernel.** rank$(A)=$ number of pivots; nullity$(A)=n-$rank.\n\n3. **Incorrect dimension count.** Rank-Nullity applies with respect to $n$ = **number of columns** of $A$ (the domain dimension), not the number of rows.\n\n4. **Computing coordinates in the wrong order.** $[\\vec{v}]_B=(c_1,c_2,\\ldots)^T$ where $\\vec{v}=c_1\\vec{b}_1+c_2\\vec{b}_2+\\ldots$ — the ordering must match the ordering of the basis.\n\n5. **Claiming a set with more vectors than the dimension can be independent.** In an $n$-dimensional space, any set of more than $n$ vectors is automatically dependent.",
+      "body_he_md": "1. **שמירת שורות/עמודות שגויות לאחר דירוג.** לבסיס של מרחב העמודות, השתמש ב**עמודות המקוריות** (לפני הדירוג) המתאימות לעמודות ציריות.\n\n2. **בלבול בין דרגה לממד הגרעין.** דרגה$(A)=$ מספר צירים; גרעין$(A)=n-$דרגה.\n\n3. **ספירת ממד שגויה.** דרגה-גרעין מתייחס ל-$n=$ **מספר העמודות** של $A$ (ממד הדומיין).\n\n4. **חישוב קואורדינטות בסדר שגוי.** $[\\vec{v}]_B=(c_1,c_2,\\ldots)^T$ — הסדר חייב להתאים לסדר הבסיס.\n\n5. **טענה שקבוצה עם יותר וקטורים מהממד בלתי-תלויה.** במרחב $n$-ממדי, כל קבוצה של יותר מ-$n$ וקטורים תלויה אוטומטית."
     },
     {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Vector Spaces, Basis & Dimension' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'מרחבים וקטוריים, בסיס וממד' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "dimension_of_span"
-      ],
-      "points_level_min": "la"
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- Basis = independent + spanning set\n- Rank-Nullity: rank$(A)+$nullity$(A)=n$ (columns of $A$)\n- $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$\n- Coordinates: solve $c_1\\vec{b}_1+\\cdots+c_n\\vec{b}_n=\\vec{v}$\n\n**What Israeli university exams emphasise:**\n- Finding basis and dimension of $\\ker A$ and col$(A)$ from a given matrix.\n- Applying Rank-Nullity to determine injectivity/surjectivity.\n- Coordinate computation in a non-standard basis.\n- Proofs using the dimension formula (Grassmann's formula).\n\n**Common proof pattern:** Extend a basis of the intersection/kernel to bases of the larger spaces, then count.",
+      "body_he_md": "**גיליון נוסחאות:**\n- בסיס = בלתי-תלוי + פורש\n- דרגה-גרעין: דרגה$(A)+$גרעין$(A)=n$\n- $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$\n- קואורדינטות: פתור $c_1\\vec{b}_1+\\cdots=\\vec{v}$\n\n**מה בחינות ישראליות מדגישות:**\n- מציאת בסיס וממד של $\\ker A$ ו-col$(A)$.\n- שימוש בדרגה-גרעין לקביעת חד-חד ערכיות/על.\n- חישוב קואורדינטות בבסיס לא-סטנדרטי.\n- הוכחות עם נוסחת הממד.\n\n**תבנית הוכחה נפוצה:** הרחב בסיס של החיתוך/הגרעין לבסיסים של המרחבים הגדולים יותר, ואז ספור."
     },
     {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Vector Spaces, Basis & Dimension'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'מרחבים וקטוריים, בסיס וממד'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "rank_nullity"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Vector Spaces, Basis & Dimension' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'מרחבים וקטוריים, בסיס וממד' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "coordinates_in_basis"
-      ],
-      "points_level_min": "la"
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- A **basis** is a linearly independent spanning set; **dimension** is the number of basis vectors (same for all bases).\n- In an $n$-dimensional space, any $n$ independent vectors form a basis.\n- **Rank-Nullity:** rank$(A)+$nullity$(A)=n$ (where $n$ = number of columns).\n- To find a basis for span: row-reduce and keep pivot rows. To find a basis for $\\ker A$: row-reduce $A$ and solve the parametric system.\n- $[\\vec{v}]_B$ coordinates are found by solving the linear system with the basis vectors.\n- $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$.",
+      "body_he_md": "- **בסיס** = בלתי-תלוי + פורש; **ממד** = מספר וקטורי בסיס (זהה לכל הבסיסים).\n- במרחב $n$-ממדי, כל $n$ וקטורים בלתי-תלויים מהווים בסיס.\n- **דרגה-גרעין:** דרגה$(A)+$גרעין$(A)=n$.\n- בסיס ל-span: דרג ושמור שורות ציריות. בסיס ל-$\\ker A$: דרג ופתור פרמטרית.\n- $[\\vec{v}]_B$ — פתור את המערכת הלינארית עם וקטורי הבסיס.\n- $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$."
     }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Subspace: contains 0, closed under + and scalar multiply.",
-      "Basis = independent + spanning; dim = |basis|.",
-      "Rank–Nullity: dim(ker A) + rank(A) = n (columns of A)."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Any subset of R^n is a subspace",
-        "correction": "Must contain 0 and be closed under linear combinations.",
-        "detect_phrase_en": "any subset",
-        "detect_phrase_he": "כל תת-קבוצה"
-      }
-    ],
-    "tutor_pacing_hint": "Test subspaces with the one-step combination rule before abstract axioms.",
-    "diagnostic_signals": {
-      "confuses span with basis": "Spanning is not enough — need independence too."
-    },
-    "skill_atoms_unlocked": [
-      "verify_subspace",
-      "test_linear_independence",
-      "dimension_of_span",
-      "rank_nullity",
-      "coordinates_in_basis"
-    ]
-  }
+  ]
 }

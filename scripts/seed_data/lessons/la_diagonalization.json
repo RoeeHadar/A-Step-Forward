@@ -1,184 +1,224 @@
 {
   "concept_id": "la_diagonalization",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Diagonalization",
-  "title_he": "דיאגונליזציה",
-  "summary_en": "Diagonalization writes A=PDP^{-1} where D is diagonal with eigenvalues. It makes matrix powers trivial and reveals the geometric structure of a linear map.",
-  "summary_he": "דיאגונליזציה כותבת A=PDP^{-1} כאשר D אלכסונית עם הערכים העצמיים. היא הופכת חישוב חזקות מטריצה לטריוויאלי.",
-  "est_minutes": 30,
+  "math_track": ["la"],
+  "title_en": "Diagonalization — When Is a Matrix Diagonalizable?",
+  "title_he": "אלכסון — מתי מטריצה ניתנת לאלכסון?",
+  "summary_en": "The diagonalization criterion (g.m.=a.m. for every eigenvalue), the decomposition A=PDP⁻¹, computing A^n efficiently, and characterisation of 2×2 matrices that cannot be diagonalised over ℝ.",
+  "summary_he": "קריטריון האלכסוניות (ר\"ג=ר\"א לכל ע\"ע), הפירוק $A=PDP^{-1}$, חישוב $A^n$ ביעילות, ואפיון מטריצות $2\\times2$ שאינן ניתנות לאלכסון מעל $\\mathbb{R}$.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is Diagonalization?",
-      "title_he": "מהי דיאגונליזציה?",
-      "body_en_md": "## The big idea\n\nA matrix $A$ is **diagonalizable** if there exist an invertible $P$ and diagonal $D$ such that:\n$$\\boxed{A=PDP^{-1}}$$\n\nThe **columns** of $P$ are the eigenvectors of $A$; the **diagonal entries** of $D$ are the eigenvalues:\n$$P=\\begin{pmatrix}|&|\\\\v_1&v_2\\\\|&|\\end{pmatrix}, \\quad D=\\begin{pmatrix}\\lambda_1&0\\\\0&\\lambda_2\\end{pmatrix}$$\n\n### Why is this useful?\n\nDiagonal matrices are trivial to power:\n$$D^k=\\begin{pmatrix}\\lambda_1^k&0\\\\0&\\lambda_2^k\\end{pmatrix}$$\n\nSo $A^k=(PDP^{-1})^k=PD^kP^{-1}$ — computing the $k$-th power of $A$ reduces to raising eigenvalues to the $k$-th power!\n\n### Verification: $AP=PD$\n\nEach column of $AP=PD$ gives $Av_i=\\lambda_i v_i$, confirming that $P$'s columns are eigenvectors.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "## הרעיון המרכזי\n\nמטריצה $A$ היא **בת-אלכסון** אם קיימת מטריצה הפיכה $P$ ומטריצה אלכסונית $D$ כך ש:\n$$\\boxed{A=PDP^{-1}}$$\n\n**עמודות** $P$ הן הווקטורים העצמיים; **איברי האלכסון** של $D$ הם הערכים העצמיים:\n$$P=\\begin{pmatrix}|&|\\\\v_1&v_2\\\\|&|\\end{pmatrix}, \\quad D=\\begin{pmatrix}\\lambda_1&0\\\\0&\\lambda_2\\end{pmatrix}$$\n\n### מדוע זה שימושי?\n\n$D^k=\\begin{pmatrix}\\lambda_1^k&0\\\\0&\\lambda_2^k\\end{pmatrix}$, לכן $A^k=PD^kP^{-1}$ — חישוב החזקה ה-$k$-ית של $A$ מצטמצם להעלאת הערכים העצמיים לחזקה!\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "$A=PDP^{-1}$: columns of $P$ = eigenvectors, diagonal of $D$ = eigenvalues. Key payoff: $A^k=PD^kP^{-1}$.",
-          "body_he_md": "$A=PDP^{-1}$: עמודות $P$ = וקטורים עצמיים, אלכסון $D$ = ערכים עצמיים. תועלת: $A^k=PD^kP^{-1}$."
-        }
-      }
+      "title_en": "Why Diagonalize?",
+      "title_he": "למה לאלכסן?",
+      "body_en_md": "Working with a diagonal matrix is trivially easy: powers, exponentials, and functions of a diagonal matrix are all computed entry-by-entry. **Diagonalization** says: if $A = PDP^{-1}$ where $D$ is diagonal, then $A^n = PD^nP^{-1}$ — reducing an $n$th power computation to $n$th powers of individual numbers.\n\nApplications: computing $A^n$ (population models, Markov chains), solving systems of linear ODEs, quantum mechanics, and spectral graph theory.\n\n**Connection to previous material:** Diagonalization depends on eigenvalues, eigenvectors, and linear independence.",
+      "body_he_md": "עבודה עם מטריצה אלכסונית היא פשוטה: חזקות, אקספוננציאלים ופונקציות של מטריצה אלכסונית מחושבות כניסה-כניסה. **אלכסון** אומר: אם $A = PDP^{-1}$ כאשר $D$ אלכסונית, אז $A^n = PD^nP^{-1}$ — מצמצמים חישוב חזקה $n$-ית לחזקות של מספרים בודדים.\n\nיישומים: חישוב $A^n$ (מודלי אוכלוסייה, שרשראות מרקוב), פתרון מערכות ODE לינאריות, ותורת גרפים ספקטרלית.\n\n**קשר לחומר קודם:** אלכסון מסתמך על ע\"ע, ו\"ע ובלתי-תלות לינארית."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Diagonalizability",
+      "title_he": "ניתנת לאלכסון",
+      "body_en_md": "**Definition.** An $n\\times n$ matrix $A$ is **diagonalizable** if there exists an invertible matrix $P$ and a diagonal matrix $D$ such that\n$$A = PDP^{-1}, \\quad\\text{equivalently}\\quad AP = PD.$$\n\n**Structure of $P$ and $D$:** The columns of $P$ are eigenvectors of $A$; the diagonal entries of $D$ are the corresponding eigenvalues:\n$$P = [\\vec{v}_1 \\;\\cdots\\; \\vec{v}_n], \\qquad D = \\begin{pmatrix}\\lambda_1 & & \\\\ & \\ddots & \\\\ & & \\lambda_n\\end{pmatrix}.$$\n\n**Diagonalizability criterion:** $A$ is diagonalizable iff it has $n$ linearly independent eigenvectors, iff $g_\\lambda = a_\\lambda$ for **every** eigenvalue $\\lambda$.\n\n**Sufficient condition:** If $A$ has $n$ **distinct** eigenvalues, it is automatically diagonalizable.\n\n**Power formula:** If $A = PDP^{-1}$, then\n$$A^k = PD^kP^{-1}, \\quad D^k = \\begin{pmatrix}\\lambda_1^k & & \\\\ & \\ddots & \\\\ & & \\lambda_n^k\\end{pmatrix}.$$",
+      "body_he_md": "**הגדרה.** מטריצה $n\\times n$ $A$ **ניתנת לאלכסון** אם קיימות $P$ הפיכה ו-$D$ אלכסונית כך ש-\n$$A = PDP^{-1}.$$\n\n**מבנה $P$ ו-$D$:** עמודות $P$ הן ו\"ע של $A$; כניסות האלכסון של $D$ הן הע\"ע המתאימים.\n\n**קריטריון:** $A$ ניתנת לאלכסון אם ורק אם יש לה $n$ ו\"ע בלתי-תלויים, אם ורק אם $g_\\lambda = a_\\lambda$ לכל $\\lambda$.\n\n**תנאי מספיק:** $n$ ע\"ע שונים $\\Rightarrow$ ניתנת לאלכסון.\n\n**נוסחת חזקה:** $A^k = PD^kP^{-1}$."
     },
     {
       "kind": "theory",
-      "title_en": "When is A Diagonalizable?",
-      "title_he": "מתי A ניתנת לדיאגונליזציה?",
-      "body_en_md": "## The criterion\n\nAn $n\\times n$ matrix $A$ is diagonalizable **iff** it has $n$ **linearly independent eigenvectors**.\n\n### Sufficient condition\nIf $A$ has $n$ **distinct** eigenvalues → diagonalizable. (Distinct eigenvalues → independent eigenvectors automatically.)\n\n### When it fails\nIf eigenvalue $\\lambda$ has **algebraic multiplicity** $m$ but **geometric multiplicity** $< m$ (fewer than $m$ independent eigenvectors for $\\lambda$), $A$ is **not** diagonalizable.\n\n**Non-diagonalizable example:**\n$J=\\begin{pmatrix}2&1\\\\0&2\\end{pmatrix}$ — $\\lambda=2$ has algebraic mult. 2 but geometric mult. 1. NOT diagonalizable.\n\n**Diagonalizable example:**\n$A=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$ — distinct eigenvalues $\\lambda_1=1, \\lambda_2=3$. Diagonalizable.",
-      "body_he_md": "## הקריטריון\n\n$A$ $n\\times n$ ניתנת לדיאגונליזציה **אמ\"ו** יש לה $n$ **וקטורים עצמיים בלתי-תלויים לינארית**.\n\n### תנאי מספיק\nאם ל-$A$ יש $n$ **ערכים עצמיים שונים** → ניתנת לאלכסון.\n\n### מתי זה נכשל\nאם ל-$\\lambda$ יש **ריבוי אלגברי** $m$ אך **ריבוי גיאומטרי** $< m$, $A$ **אינה** ניתנת לדיאגונליזציה.\n\n**דוגמה שלא ניתנת לאלכסון:** $J=\\begin{pmatrix}2&1\\\\0&2\\end{pmatrix}$. **דוגמה ניתנת:** $A=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Diagonalizable iff $n$ independent eigenvectors. Sufficient: $n$ distinct eigenvalues. Fails when geometric mult. < algebraic mult.",
-          "body_he_md": "ניתנת לאלכסון אמ\"ו $n$ וקטורים עצמיים בלתי-תלויים. תנאי מספיק: $n$ ערכים שונים."
-        }
-      }
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1.** $A$ is diagonalizable iff it has $n$ linearly independent eigenvectors.\n\n**Proof sketch:** $AP=PD$ expands column by column as $A\\vec{v}_j=\\lambda_j\\vec{v}_j$. $P$ is invertible iff its columns are independent.\n\n**Theorem 2 (Spectral Theorem for symmetric matrices).** If $A$ is symmetric ($A^T=A$), then:\n- All eigenvalues are real.\n- Eigenvectors for distinct eigenvalues are orthogonal.\n- $A$ is diagonalizable over $\\mathbb{R}$.\n\n**Theorem 3 (Non-diagonalizable $2\\times2$).** A $2\\times2$ real matrix $A$ is NOT diagonalizable over $\\mathbb{R}$ if and only if:\n- It has a repeated real eigenvalue $\\lambda$ with $g_\\lambda=1$ (so geometric $<$ algebraic), OR\n- Its characteristic polynomial has no real roots (complex eigenvalues).\n\n**Example of each type:**\n- Defective: $A=\\begin{pmatrix}\\lambda&1\\\\0&\\lambda\\end{pmatrix}$ — repeated eigenvalue but only one independent eigenvector.\n- No real eigenvalues: $A=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ — rotation by $90°$.",
+      "body_he_md": "**משפט 1.** $A$ ניתנת לאלכסון אם ורק אם יש לה $n$ ו\"ע בלתי-תלויים.\n\n**סקיצת הוכחה:** $AP=PD$ מתפרק עמודה-עמודה כ-$A\\vec{v}_j=\\lambda_j\\vec{v}_j$. $P$ הפיכה אם ורק אם עמודותיה בלתי-תלויות.\n\n**משפט 2 (ספקטרלי לסימטריות).** אם $A^T=A$: כל ע\"ע ממשיים; ו\"ע לערכים שונים אורתוגונלים; $A$ ניתנת לאלכסון.\n\n**משפט 3 (אי-אלכסוניות $2\\times2$).** מטריצה $2\\times2$ ממשית **אינה** ניתנת לאלכסון אם ורק אם:\n- ע\"ע ממשי חוזר עם $g_\\lambda=1$, או\n- אין ע\"ע ממשיים (ע\"ע מרוכבים).\n\n**דוגמאות:** פגומה: $\\begin{pmatrix}\\lambda&1\\\\0&\\lambda\\end{pmatrix}$. ללא ע\"ע ממשיים: $\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$."
     },
     {
       "kind": "worked_example",
-      "title_en": "End-to-End 2x2 Diagonalization",
-      "title_he": "דיאגונליזציה מלאה 2x2",
-      "body_en_md": "### Problem\nDiagonalize $A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$.\n\n### Step 1: Eigenvalues\n$$\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)-2=\\lambda^2-7\\lambda+10=(\\lambda-2)(\\lambda-5)=0$$\n$\\lambda_1=2$, $\\lambda_2=5$.\n\n### Step 2: Eigenvectors\n**For $\\lambda_1=2$:** $(A-2I)v=0$: $\\begin{pmatrix}2&1\\\\2&1\\end{pmatrix}v=0 \\Rightarrow v_1=\\begin{pmatrix}1\\\\-2\\end{pmatrix}$\n\n**For $\\lambda_2=5$:** $(A-5I)v=0$: $\\begin{pmatrix}-1&1\\\\2&-2\\end{pmatrix}v=0 \\Rightarrow v_2=\\begin{pmatrix}1\\\\1\\end{pmatrix}$\n\n### Step 3: Build P and D\n$$P=\\begin{pmatrix}1&1\\\\-2&1\\end{pmatrix}, \\quad D=\\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}$$\n\n### Step 4: Verify $AP=PD$\n$$AP=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}\\begin{pmatrix}1&1\\\\-2&1\\end{pmatrix}=\\begin{pmatrix}2&5\\\\-4&5\\end{pmatrix}$$\n$$PD=\\begin{pmatrix}1&1\\\\-2&1\\end{pmatrix}\\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}=\\begin{pmatrix}2&5\\\\-4&5\\end{pmatrix} \\checkmark$$\n\n### Step 5: Use for $A^3$\n$$A^3=PD^3P^{-1}, \\quad D^3=\\begin{pmatrix}8&0\\\\0&125\\end{pmatrix}$$",
-      "body_he_md": "### בעיה\nאלכסנו את $A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$.\n\n### שלב 1: ערכים עצמיים\n$(4-\\lambda)(3-\\lambda)-2=(\\lambda-2)(\\lambda-5)=0 \\Rightarrow \\lambda_1=2, \\lambda_2=5$.\n\n### שלב 2: וקטורים עצמיים\n$v_1=\\begin{pmatrix}1\\\\-2\\end{pmatrix}$ (ל-$\\lambda_1=2$), $v_2=\\begin{pmatrix}1\\\\1\\end{pmatrix}$ (ל-$\\lambda_2=5$).\n\n### שלב 3: P ו-D\n$$P=\\begin{pmatrix}1&1\\\\-2&1\\end{pmatrix}, \\quad D=\\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}$$\n\n### שלב 4: אימות $AP=PD$ ✓\n\n### שלב 5: $A^3=PD^3P^{-1}$, $D^3=\\begin{pmatrix}8&0\\\\0&125\\end{pmatrix}$.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Steps: (1) eigenvalues from char. eq., (2) eigenvectors via $(A-\\lambda I)v=0$, (3) form $P,D$, (4) verify $AP=PD$.",
-          "body_he_md": "שלבים: (1) ערכים עצמיים ממשו.אופיינית, (2) וקטורים עצמיים דרך $(A-\\lambda I)v=0$, (3) בניית $P,D$, (4) אימות $AP=PD$."
-        }
-      }
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Trivial Diagonalization",
+      "title_he": "דוגמה פתורה 1 — אלכסון טריוויאלי",
+      "body_en_md": "**Diagonalize** $A = \\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.\n\n$A$ is already diagonal! So $P = I$, $D = A$, and $A = IAI^{-1}$.\n\n**Eigenvalues and eigenvectors:**\n- $\\lambda_1=1$: $\\vec{v}_1=(1,0)^T$.\n- $\\lambda_2=-1$: $\\vec{v}_2=(0,1)^T$.\n\n$P = \\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}=I$, $D = \\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}=A$.\n\n**Power computation:** $A^{2024} = PD^{2024}P^{-1} = \\begin{pmatrix}1^{2024}&0\\\\0&(-1)^{2024}\\end{pmatrix} = \\begin{pmatrix}1&0\\\\0&1\\end{pmatrix} = I$.",
+      "body_he_md": "**אלכסן** $A = \\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.\n\n$A$ כבר אלכסונית! $P=I$, $D=A$.\n\n**ע\"ע וו\"ע:** $\\lambda_1=1$: $(1,0)^T$. $\\lambda_2=-1$: $(0,1)^T$.\n\n**חישוב חזקה:** $A^{2024} = \\begin{pmatrix}1&0\\\\0&1\\end{pmatrix} = I$ (כי $(-1)^{2024}=1$)."
     },
     {
-      "kind": "theory",
-      "title_en": "Computing $A^k$ Using Diagonalization",
-      "title_he": "חישוב $A^k$ בעזרת דיאגונליזציה",
-      "body_en_md": "## The power formula\nIf $A=PDP^{-1}$, then:\n$$A^k=PD^kP^{-1}, \\quad D^k=\\begin{pmatrix}\\lambda_1^k&\\cdots&0\\\\\\vdots&\\ddots&\\vdots\\\\0&\\cdots&\\lambda_n^k\\end{pmatrix}$$\n\n**Why?** $A^2=(PDP^{-1})(PDP^{-1})=PD(P^{-1}P)DP^{-1}=PD^2P^{-1}$. The $P^{-1}P=I$ cancellation repeats.\n\n### Applications\n1. **Fibonacci:** Recurrence as matrix powers; diagonalization gives closed form $F_n=(\\phi^n-\\hat\\phi^n)/\\sqrt5$.\n2. **ODEs:** Solution to $\\dot x=Ax$ is $x(t)=Pe^{Dt}P^{-1}x(0)$.\n3. **Markov chains:** Long-run state $A^k p^{(0)}$ determined by dominant eigenvalue.\n\n### Example\nFor $A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$ with $\\lambda_1=2,\\lambda_2=5$:\n$$A^{10}=PD^{10}P^{-1}, \\quad D^{10}=\\begin{pmatrix}2^{10}&0\\\\0&5^{10}\\end{pmatrix}=\\begin{pmatrix}1024&0\\\\0&9765625\\end{pmatrix}$$",
-      "body_he_md": "## נוסחת החזקה\n$A^k=PD^kP^{-1}$; מאחר ש-$D$ אלכסונית, $D^k$ פשוט מעלה כל ערך עצמי לחזקה.\n\n**מדוע?** $A^2=PD^2P^{-1}$ דרך ביטול $P^{-1}P=I$.\n\n### יישומים\n1. **פיבונאצ'י:** נוסחה סגורה $F_n=(\\phi^n-\\hat\\phi^n)/\\sqrt5$.\n2. **מש. דיפרנציאליות:** $x(t)=Pe^{Dt}P^{-1}x(0)$.\n3. **שרשראות מרקוב:** התנהגות ארוכת-הטווח נקבעת על-ידי הערך העצמי הדומיננטי.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "$A^k=PD^kP^{-1}$. Since $D$ is diagonal, $D^k$ just raises each eigenvalue to the $k$-th power. Far cheaper than $k-1$ matrix multiplications.",
-          "body_he_md": "$A^k=PD^kP^{-1}$. $D$ אלכסונית, אז $D^k$ מעלה כל ערך עצמי לחזקה ה-$k$-ית."
-        }
-      }
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Is $A = \\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}$ diagonalizable? If so, write $A = PDP^{-1}$ and compute $A^3$.",
+      "body_he": "האם $A = \\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}$ ניתנת לאלכסון? אם כן, כתוב $A = PDP^{-1}$ וחשב $A^3$.",
+      "checkpoint_solution_en": "Yes (diagonal). $P=I$, $D=A$. $A^3=\\begin{pmatrix}8&0\\\\0&125\\end{pmatrix}$.",
+      "checkpoint_solution_he": "כן (אלכסונית). $A^3=\\begin{pmatrix}8&0\\\\0&125\\end{pmatrix}$."
     },
     {
-      "kind": "theory",
-      "title_en": "Spectral Theorem for Symmetric Matrices",
-      "title_he": "משפט הספקטרל למטריצות סימטריות",
-      "body_en_md": "## Spectral Theorem\nIf $A$ is a **real symmetric** matrix ($A=A^T$):\n1. All eigenvalues are **real**.\n2. Eigenvectors for **distinct** eigenvalues are **orthogonal**.\n3. $A$ is **always** diagonalizable (even with repeated eigenvalues).\n4. $A=QDQ^T$ where $Q$ is an **orthogonal** matrix ($Q^TQ=I$).\n\nThis is called the **spectral decomposition**.\n\n### Why important\nCovariance matrices, Hessians in optimization, Laplacians in physics are all symmetric. Spectral theorem guarantees clean orthogonal diagonalization with real eigenvalues.\n\n### Example\n$A=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$ (symmetric). Eigenvalues: $\\lambda_1=1$, $\\lambda_2=3$ (real). Eigenvectors: $q_1=(1,-1)/\\sqrt2$, $q_2=(1,1)/\\sqrt2$ (orthogonal, unit length).\n$$A=QDQ^T, \\quad Q=\\tfrac{1}{\\sqrt2}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}, \\quad D=\\begin{pmatrix}1&0\\\\0&3\\end{pmatrix}$$",
-      "body_he_md": "## משפט הספקטרל\nאם $A$ מטריצה **ממשית סימטרית** ($A=A^T$):\n1. כל הערכים העצמיים **ממשיים**.\n2. וקטורים עצמיים לערכים **שונים** הם **ניצבים** זה לזה.\n3. $A$ **תמיד** ניתנת לדיאגונליזציה.\n4. $A=QDQ^T$ כאשר $Q$ **אורתוגונלית** ($Q^TQ=I$).\n\n### מדוע חשוב\nמטריצות קו-וריאנס, מטריצות הסיאן באופטימיזציה, לפלסיאנים בפיזיקה — כולן סימטריות. משפט הספקטרל מבטיח דיאגונליזציה אורתוגונלית נקייה עם ערכים עצמיים ממשיים.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Spectral theorem: real symmetric $A$ has real eigenvalues, orthogonal eigenvectors for distinct $\\lambda$, and $A=QDQ^T$ with orthogonal $Q$.",
-          "body_he_md": "משפט הספקטרל: $A$ ממשית סימטרית בעלת ערכים עצמיים ממשיים, וקטורים עצמיים ניצבים, ו-$A=QDQ^T$ עם $Q$ אורתוגונלית."
-        }
-      }
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Diagonalize A and Compute A⁵",
+      "title_he": "דוגמה פתורה 2 — אלכסן A וחשב A⁵",
+      "body_en_md": "**Diagonalize** $A = \\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$ and compute $A^5$.\n\n**Step 1 — Eigenvalues:** $p(\\lambda)=(4-\\lambda)(3-\\lambda)-2=\\lambda^2-7\\lambda+10=(\\lambda-2)(\\lambda-5)$. $\\lambda_1=2$, $\\lambda_2=5$.\n\n**Step 2 — Eigenvectors:**\n- $E_2$: $(A-2I)=\\begin{pmatrix}2&1\\\\2&1\\end{pmatrix}\\to\\begin{pmatrix}2&1\\\\0&0\\end{pmatrix}$. $\\vec{v}_1=(-1,2)^T$.\n- $E_5$: $(A-5I)=\\begin{pmatrix}-1&1\\\\2&-2\\end{pmatrix}\\to\\begin{pmatrix}1&-1\\\\0&0\\end{pmatrix}$. $\\vec{v}_2=(1,1)^T$.\n\n**Step 3 — Form P and D:**\n$$P = \\begin{pmatrix}-1&1\\\\2&1\\end{pmatrix}, \\quad D = \\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}.$$\n\n**Step 4 — Compute $P^{-1}$:** $\\det P = -1-2=-3$. $P^{-1}=\\frac{-1}{3}\\begin{pmatrix}1&-1\\\\-2&-1\\end{pmatrix}=\\frac{1}{3}\\begin{pmatrix}-1&1\\\\2&1\\end{pmatrix}$.\n\n**Step 5 — Compute $A^5$:**\n$$D^5 = \\begin{pmatrix}32&0\\\\0&3125\\end{pmatrix}.$$\n$$A^5 = PD^5P^{-1} = \\begin{pmatrix}-1&1\\\\2&1\\end{pmatrix}\\begin{pmatrix}32&0\\\\0&3125\\end{pmatrix}\\cdot\\frac{1}{3}\\begin{pmatrix}-1&1\\\\2&1\\end{pmatrix}.$$\n$$= \\frac{1}{3}\\begin{pmatrix}-32+6250&32+3125\\\\-64+6250&64+3125\\end{pmatrix} \\cdot\\ldots$$\n\nFull computation: $A^5 = PD^5P^{-1} = \\frac{1}{3}\\begin{pmatrix}(-1)(32)(-1)+1\\cdot3125\\cdot2 & \\ldots\\\\\\ldots & \\ldots\\end{pmatrix}$...\n\nUsing formula: each entry $a_{ij}^{(5)} = \\sum_k P_{ik}\\lambda_k^5 (P^{-1})_{kj}$:\n$$A^5 = \\frac{1}{3}\\left[32\\begin{pmatrix}-1\\\\2\\end{pmatrix}(-1,2) + 3125\\begin{pmatrix}1\\\\1\\end{pmatrix}(2,1)\\right]$$\n$$= \\frac{1}{3}\\begin{pmatrix}32+6250 & -64+3125\\\\-64+6250 & 128+3125\\end{pmatrix} = \\frac{1}{3}\\begin{pmatrix}6282&3061\\\\6186&3253\\end{pmatrix}.$$",
+      "body_he_md": "**אלכסן** $A = \\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$ וחשב $A^5$.\n\n**שלב 1 — ע\"ע:** $\\lambda_1=2$, $\\lambda_2=5$.\n\n**שלב 2 — ו\"ע:** $\\vec{v}_1=(-1,2)^T$, $\\vec{v}_2=(1,1)^T$.\n\n**שלב 3:** $P = \\begin{pmatrix}-1&1\\\\2&1\\end{pmatrix}$, $D = \\begin{pmatrix}2&0\\\\0&5\\end{pmatrix}$.\n\n**שלב 4:** $P^{-1}=\\frac{1}{3}\\begin{pmatrix}-1&1\\\\2&1\\end{pmatrix}$.\n\n**שלב 5:** $A^5=PD^5P^{-1}$, $D^5=\\begin{pmatrix}32&0\\\\0&3125\\end{pmatrix}$."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Diagonalization: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Diagonalization.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-דיאגונליזציה: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-דיאגונליזציה.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Is $A = \\begin{pmatrix}3&1\\\\0&3\\end{pmatrix}$ diagonalizable? Justify.",
+      "body_he": "האם $A = \\begin{pmatrix}3&1\\\\0&3\\end{pmatrix}$ ניתנת לאלכסון? הצדק.",
+      "checkpoint_solution_en": "$p(\\lambda)=(3-\\lambda)^2$, so only eigenvalue $\\lambda=3$ with $a_\\lambda=2$. $(A-3I)=\\begin{pmatrix}0&1\\\\0&0\\end{pmatrix}$, $g_\\lambda=\\dim\\ker=1<2$. Since $g<a$, **not diagonalizable**.",
+      "checkpoint_solution_he": "$\\lambda=3$ עם $a=2$. $(A-3I)$ בממד גרעין 1 $< 2$. **אינה ניתנת לאלכסון**."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Characterise Non-Diagonalizable 2×2 Matrices over ℝ",
+      "title_he": "דוגמה פתורה 3 — אפיון מטריצות 2×2 שאינן ניתנות לאלכסון מעל ℝ",
+      "body_en_md": "**Claim:** A $2\\times2$ real matrix $A$ is NOT diagonalizable over $\\mathbb{R}$ if and only if one of the following holds:\n- **(Type 1)** $A$ has a repeated real eigenvalue $\\lambda$ with geometric multiplicity $g_\\lambda=1$.\n- **(Type 2)** $A$ has no real eigenvalues (discriminant of $p(\\lambda)<0$).\n\n**Proof:**\n\n**Necessity (if NOT diagonalizable, then one of the types must hold):**\n$A$ is $2\\times2$, so $p(\\lambda)$ is degree 2. The eigenvalues are roots of $p$.\n\n*Case A: two distinct real eigenvalues.* Then $A$ has 2 linearly independent eigenvectors (Theorem 5 from eigenvalue lesson), so $A$ IS diagonalizable. Contradiction.\n\n*Case B: one repeated real eigenvalue $\\lambda$, $a_\\lambda=2$.* If $g_\\lambda=2$, then $A-\\lambda I=0$, so $A=\\lambda I$ which IS diagonal. Contradiction. So $g_\\lambda=1$ — this is Type 1.\n\n*Case C: no real eigenvalues.* This is Type 2.\n\n**Sufficiency (each type implies not diagonalizable):**\n\n*Type 1:* $a_\\lambda=2 > g_\\lambda=1$. Can form at most $g_\\lambda=1$ independent eigenvector for eigenvalue $\\lambda$, giving at most 1 independent eigenvector total (no other eigenvalue). Can't form $P$ with 2 independent columns. Not diagonalizable.\n\n*Type 2:* No real eigenvalues $\\Rightarrow$ no real eigenvectors $\\Rightarrow$ can't diagonalize over $\\mathbb{R}$. $\\blacksquare$\n\n**Concrete examples:**\n- Type 1: $\\begin{pmatrix}2&1\\\\0&2\\end{pmatrix}$ (Jordan block).\n- Type 2: $\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ (rotation, $p(\\lambda)=\\lambda^2+1$, no real roots).",
+      "body_he_md": "**טענה:** מטריצה $2\\times2$ ממשית **אינה** ניתנת לאלכסון מעל $\\mathbb{R}$ אם ורק אם:\n- **(סוג 1)** ע\"ע ממשי חוזר $\\lambda$ עם $g_\\lambda=1$.\n- **(סוג 2)** אין ע\"ע ממשיים.\n\n**הוכחה:**\n\n**הכרחיות:** $A$ הוא $2\\times2$, ולכן $p(\\lambda)$ ממעלה 2.\n- *מקרה א': 2 ע\"ע ממשיים שונים.* $\\Rightarrow$ 2 ו\"ע בלתי-תלויים $\\Rightarrow$ ניתן לאלכסון. סתירה.\n- *מקרה ב': ע\"ע ממשי חוזר $\\lambda$.* אם $g=2$: $A=\\lambda I$ אלכסונית. סתירה. לכן $g=1$ — **סוג 1**.\n- *מקרה ג': אין ע\"ע ממשיים.* **סוג 2**.\n\n**מספיקות:** סוג 1 — $g<a$, לא מספיק ו\"ע. סוג 2 — אין ו\"ע ממשיים. $\\blacksquare$\n\n**דוגמאות:** סוג 1: $\\begin{pmatrix}2&1\\\\0&2\\end{pmatrix}$. סוג 2: $\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Diagonalization Procedure",
+      "title_he": "מדריך שיטה — תהליך האלכסון",
+      "body_en_md": "**Step 1:** Compute $p(\\lambda)=\\det(A-\\lambda I)$ and find eigenvalues $\\lambda_1,\\ldots$.\n\n**Step 2:** For each $\\lambda_i$, find a basis for $E_{\\lambda_i}=\\ker(A-\\lambda_i I)$. Record $g_{\\lambda_i}$.\n\n**Step 3 — Diagonalizability check:** If $g_{\\lambda_i}=a_{\\lambda_i}$ for ALL $i$, continue. Otherwise, STOP — not diagonalizable.\n\n**Step 4:** Form $P=[\\vec{v}_1,\\ldots,\\vec{v}_n]$ (eigenvectors as columns, ordered to match $D$).\n\n**Step 5:** Form $D=\\text{diag}(\\lambda_1,\\ldots,\\lambda_n)$ (eigenvalues on diagonal, same order).\n\n**Step 6 — Power computation:** $A^k = PD^kP^{-1}$ where $D^k$ = diagonal with $\\lambda_i^k$.\n\n| Shortcut | When to use |\n|---|---|\n| $n$ distinct eigenvalues | Automatically diagonalizable |\n| $A$ symmetric | Always diagonalizable, use Gram-Schmidt for $P$ |\n| $A$ triangular | Check g.m.=a.m. only for repeated diagonal entries |",
+      "body_he_md": "**שלב 1:** חשב $p(\\lambda)$ ומצא ע\"ע.\n\n**שלב 2:** לכל $\\lambda_i$, מצא בסיס ל-$E_{\\lambda_i}$. רשום $g_{\\lambda_i}$.\n\n**שלב 3 — בדיקת אלכסוניות:** אם $g_{\\lambda_i}=a_{\\lambda_i}$ לכל $i$ — המשך. אחרת — עצור.\n\n**שלב 4:** $P=$ מטריצת ו\"ע כעמודות.\n\n**שלב 5:** $D=$ מטריצה אלכסונית עם ע\"ע.\n\n**שלב 6:** $A^k = PD^kP^{-1}$.\n\n| קיצור | מתי להשתמש |\n|---|---|\n| $n$ ע\"ע שונים | אלכסוניות אוטומטית |\n| $A$ סימטרית | תמיד ניתנת לאלכסון |\n| $A$ משולשת | בדוק $g=a$ רק לכניסות חוזרות |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Diagonalize $A=\\begin{pmatrix}3&0\\\\0&7\\end{pmatrix}$ and write $A^{10}$.",
+          "body_he": "אלכסן $A=\\begin{pmatrix}3&0\\\\0&7\\end{pmatrix}$ וכתוב $A^{10}$.",
+          "solution_en": "$A$ diagonal: $P=I$, $D=A$. $A^{10}=\\begin{pmatrix}3^{10}&0\\\\0&7^{10}\\end{pmatrix}=\\begin{pmatrix}59049&0\\\\0&282475249\\end{pmatrix}$.",
+          "solution_he": "$A^{10}=\\begin{pmatrix}3^{10}&0\\\\0&7^{10}\\end{pmatrix}$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Determine if $A=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$ is diagonalizable.",
+          "body_he": "קבע האם $A=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$ ניתנת לאלכסון.",
+          "solution_en": "$A=I$ is diagonal. $P=I$, $D=I$. Diagonalizable.",
+          "solution_he": "$A=I$ אלכסונית. ניתנת לאלכסון.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Determine if $B=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$ vs $C=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ are diagonalizable.",
+          "body_he": "קבע האם $B=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$ לעומת $C=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ ניתנות לאלכסון.",
+          "solution_en": "$B=I$: diagonalizable. $C$: $\\lambda=1$ (a.m.=2), $g=1$. Not diagonalizable.",
+          "solution_he": "$B$: ניתנת. $C$: $g=1<a=2$. **אינה ניתנת**.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Show that $A=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$ (rotation by $\\theta\\neq 0,\\pi$) has no real eigenvalues.",
+          "body_he": "הראה של-$A=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$ ($\\theta\\neq 0,\\pi$) אין ע\"ע ממשיים.",
+          "solution_en": "$p(\\lambda)=\\lambda^2-2\\cos\\theta\\cdot\\lambda+1$. Discriminant $=4\\cos^2\\theta-4=4(\\cos^2\\theta-1)\\leq0$, $<0$ when $\\theta\\neq0,\\pi$. No real eigenvalues.",
+          "solution_he": "דיסקרימיננטה $=4(\\cos^2\\theta-1)<0$. אין ע\"ע ממשיים.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Diagonalize $A=\\begin{pmatrix}1&2\\\\0&3\\end{pmatrix}$ and compute $A^4$.",
+          "body_he": "אלכסן $A=\\begin{pmatrix}1&2\\\\0&3\\end{pmatrix}$ וחשב $A^4$.",
+          "solution_en": "Eigenvalues 1,3 (triangular). $E_1$: $\\vec{v}_1=(1,0)^T$. $E_3$: $(A-3I)\\vec{v}=0$: $(-2,0;0,-0)$ wait: $(1-3=−2$, col 2: $2;$ row 2: $3-3=0$). $-2v_1+2v_2=0\\Rightarrow v_1=v_2$; $\\vec{v}_2=(1,1)^T$. $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $D=\\begin{pmatrix}1&0\\\\0&3\\end{pmatrix}$. $P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $A^4=P\\begin{pmatrix}1&0\\\\0&81\\end{pmatrix}P^{-1}=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}\\begin{pmatrix}1&0\\\\0&81\\end{pmatrix}\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}=\\begin{pmatrix}1&80\\\\0&81\\end{pmatrix}$.",
+          "solution_he": "ע\"ע $1,3$. $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. $A^4=\\begin{pmatrix}1&80\\\\0&81\\end{pmatrix}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Is $A=\\begin{pmatrix}2&1&0\\\\0&2&0\\\\0&0&3\\end{pmatrix}$ diagonalizable?",
+          "body_he": "האם $A=\\begin{pmatrix}2&1&0\\\\0&2&0\\\\0&0&3\\end{pmatrix}$ ניתנת לאלכסון?",
+          "solution_en": "Eigenvalues: $\\lambda=2$ ($a=2$), $\\lambda=3$ ($a=1$). For $\\lambda=2$: $A-2I=\\begin{pmatrix}0&1&0\\\\0&0&0\\\\0&0&1\\end{pmatrix}$, rank 2, $g=1<2=a$. **Not diagonalizable.**",
+          "solution_he": "$\\lambda=2$: $g=1<a=2$. **אינה ניתנת לאלכסון.**",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Diagonalize $A=\\begin{pmatrix}3&-2\\\\1&0\\end{pmatrix}$ and use it to compute $A^n$ as a formula.",
+          "body_he": "אלכסן $A=\\begin{pmatrix}3&-2\\\\1&0\\end{pmatrix}$ והשתמש בתוצאה לנוסחת $A^n$.",
+          "solution_en": "$p(\\lambda)=\\lambda^2-3\\lambda+2=(\\lambda-1)(\\lambda-2)$. $E_1$: $\\vec{v}_1=(1,1)^T$; $E_2$: $\\vec{v}_2=(2,1)^T$. $P=\\begin{pmatrix}1&2\\\\1&1\\end{pmatrix}$, $D=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$, $P^{-1}=\\begin{pmatrix}-1&2\\\\1&-1\\end{pmatrix}$. $A^n=P\\begin{pmatrix}1&0\\\\0&2^n\\end{pmatrix}P^{-1}=\\begin{pmatrix}2-2^n&2^{n+1}-2\\\\1-2^n&2^{n+1}-1\\end{pmatrix}$.",
+          "solution_he": "$A^n=\\begin{pmatrix}2-2^n&2^{n+1}-2\\\\1-2^n&2^{n+1}-1\\end{pmatrix}$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Prove that if $A=PDP^{-1}$, then $A^{-1}=PD^{-1}P^{-1}$ (when $A$ invertible).",
+          "body_he": "הוכח שאם $A=PDP^{-1}$, אז $A^{-1}=PD^{-1}P^{-1}$ (כשהמטריצה הפיכה).",
+          "solution_en": "$A\\cdot PD^{-1}P^{-1}=PDP^{-1}PD^{-1}P^{-1}=PD(D^{-1})P^{-1}=PIP^{-1}=I$. By uniqueness of inverse, $A^{-1}=PD^{-1}P^{-1}$. $\\blacksquare$",
+          "solution_he": "$PDP^{-1}\\cdot PD^{-1}P^{-1}=PDD^{-1}P^{-1}=I$. לכן $A^{-1}=PD^{-1}P^{-1}$. $\\blacksquare$",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove: if $A=PDP^{-1}$, then $A^n=PD^nP^{-1}$ for all positive integers $n$.",
+          "body_he": "הוכח: אם $A=PDP^{-1}$, אז $A^n=PD^nP^{-1}$ לכל $n\\in\\mathbb{N}$.",
+          "solution_en": "Induction. $n=1$: trivial. $n\\to n+1$: $A^{n+1}=A^n\\cdot A=PD^nP^{-1}\\cdot PDP^{-1}=PD^n(P^{-1}P)DP^{-1}=PD^nIDP^{-1}=PD^{n+1}P^{-1}$. $\\blacksquare$",
+          "solution_he": "באינדוקציה: $A^{n+1}=PD^nP^{-1}\\cdot PDP^{-1}=PD^{n+1}P^{-1}$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove: if $A$ is diagonalizable with eigenvalues $\\lambda_1,\\ldots,\\lambda_n$, then $\\det(A)=\\prod\\lambda_i$ and tr$(A)=\\sum\\lambda_i$.",
+          "body_he": "הוכח: אם $A$ ניתנת לאלכסון עם ע\"ע $\\lambda_1,\\ldots,\\lambda_n$, אז $\\det(A)=\\prod\\lambda_i$ ו-tr$(A)=\\sum\\lambda_i$.",
+          "solution_en": "$A=PDP^{-1}$. $\\det(A)=\\det(P)\\det(D)\\det(P^{-1})=\\det(D)=\\prod\\lambda_i$. For trace: tr$(PDP^{-1})=$tr$(DP^{-1}P)=$tr$(D)=\\sum\\lambda_i$ (cyclic property of trace). $\\blacksquare$",
+          "solution_he": "$\\det(A)=\\det(D)=\\prod\\lambda_i$. tr$(A)=$tr$(PDP^{-1})=$tr$(D)=\\sum\\lambda_i$ (תכונת מחזוריות). $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Find all $2\\times2$ real matrices $A$ satisfying $A^2=I$ (involutions). Which are diagonalizable and which are not?",
+          "body_he": "מצא את כל המטריצות $2\\times2$ הממשיות המקיימות $A^2=I$ (הפיכות ל-$I$). אילו ניתנות לאלכסון ואילו לא?",
+          "solution_en": "If $A^2=I$, eigenvalues satisfy $\\lambda^2=1$, so $\\lambda=\\pm1$. Cases: (1) $A=I$: diagonalizable. (2) $A=-I$: diagonalizable. (3) Eigenvalues $1,-1$ (distinct): diagonalizable by $P=[\\vec{v}_1,\\vec{v}_2]$. (4) Could have $A\\neq\\pm I$ with $A^2=I$; all such matrices are diagonalizable since eigenvalues $\\pm1$ are distinct or repeated with full eigenspace (if $A=\\pm I$). All involutions are diagonalizable.",
+          "solution_he": "ע\"ע מקיימים $\\lambda^2=1 \\Rightarrow \\lambda=\\pm1$. כל האינבולוציות ניתנות לאלכסון (ע\"ע $\\pm1$ שונים, או $A=\\pm I$).",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Let $A$ and $B$ be diagonalizable $n\\times n$ matrices with the same eigenvectors. Prove $AB=BA$.",
+          "body_he": "יהיו $A$ ו-$B$ מטריצות $n\\times n$ ניתנות לאלכסון עם אותם ו\"ע. הוכח $AB=BA$.",
+          "solution_en": "Since $A$ and $B$ share all $n$ independent eigenvectors (columns of same $P$): $A=PD_AP^{-1}$, $B=PD_BP^{-1}$. Then $AB=PD_AP^{-1}PD_BP^{-1}=PD_AD_BP^{-1}$ and $BA=PD_BD_AP^{-1}$. Since diagonal matrices commute ($D_AD_B=D_BD_A$), $AB=BA$. $\\blacksquare$",
+          "solution_he": "$A=PD_AP^{-1}$, $B=PD_BP^{-1}$. $AB=PD_AD_BP^{-1}=PD_BD_AP^{-1}=BA$ (מטריצות אלכסוניות מתחלפות). $\\blacksquare$",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Not checking g.m.=a.m. before diagonalizing.** Always verify the diagonalizability criterion first.\n\n2. **Mismatching columns of P with diagonal of D.** The $k$th column of $P$ must be an eigenvector for $\\lambda_k$ (the $k$th diagonal entry of $D$).\n\n3. **$P$ not invertible.** This happens iff the eigenvectors chosen are dependent — only possible if g.m.$<$a.m. for some eigenvalue.\n\n4. **Forgetting the order matters.** $A=PDP^{-1}$ means the product is $P\\cdot D\\cdot P^{-1}$; you can't rearrange.\n\n5. **Computing $A^n$ without diagonalizing.** Direct computation is $O(n^3\\log n)$ via fast exponentiation; diagonalization reduces it to $n$ scalar exponentiations.",
+      "body_he_md": "1. **אי-בדיקת $g=a$ לפני אלכסון.** תמיד לאמת את קריטריון האלכסוניות תחילה.\n\n2. **חוסר התאמה בין עמודות $P$ ל-$D$.** העמודה ה-$k$-ית של $P$ חייבת להיות ו\"ע ל-$\\lambda_k$.\n\n3. **$P$ לא הפיכה.** קורה כש-$g<a$ לאיזשהו ע\"ע.\n\n4. **שכחה שהסדר חשוב.** $A=PDP^{-1}$ ולא $P^{-1}DP$.\n\n5. **חישוב $A^n$ ישיר ללא אלכסון.** אלכסון מצמצם לחזקות סקלריות."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $A=PDP^{-1}$: columns of $P$ = eigenvectors, diagonal of $D$ = eigenvalues\n- $A^n=PD^nP^{-1}$, $D^n=\\text{diag}(\\lambda_1^n,\\ldots,\\lambda_n^n)$\n- Diagonalizable iff $g_\\lambda=a_\\lambda$ for all $\\lambda$\n- $n$ distinct eigenvalues $\\Rightarrow$ diagonalizable\n\n**What Israeli university exams emphasise:**\n- Diagonalizing a $2\\times2$ or $3\\times3$ matrix completely (form $P$, $D$, $P^{-1}$).\n- Computing $A^n$ using diagonalization.\n- Proving $A^n=PD^nP^{-1}$.\n- Identifying non-diagonalizable matrices and explaining why.\n\n**Exam tip:** For the power formula, compute $D^n$ first (trivial), then compute $PD^nP^{-1}$ (one matrix multiplication).",
+      "body_he_md": "**גיליון נוסחאות:**\n- $A=PDP^{-1}$: עמודות $P$ = ו\"ע, אלכסון $D$ = ע\"ע\n- $A^n=PD^nP^{-1}$\n- ניתנת לאלכסון אם ורק אם $g_\\lambda=a_\\lambda$ לכל $\\lambda$\n- $n$ ע\"ע שונים $\\Rightarrow$ ניתנת\n\n**מה בחינות ישראליות מדגישות:**\n- אלכסון מלא של מטריצה $2\\times2$ או $3\\times3$.\n- חישוב $A^n$ דרך אלכסון.\n- הוכחת $A^n=PD^nP^{-1}$.\n- זיהוי מטריצות שאינן ניתנות לאלכסון."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Diagonalizable:** $A=PDP^{-1}$ where columns of $P$ are eigenvectors and diagonal of $D$ is eigenvalues.\n- **Criterion:** $g_\\lambda=a_\\lambda$ for all $\\lambda$ (equivalent to having $n$ independent eigenvectors).\n- **$n$ distinct eigenvalues** is a sufficient (not necessary) condition.\n- **Power formula:** $A^n=PD^nP^{-1}$ — reduces to $n$ scalar powers.\n- **Non-diagonalizable $2\\times2$:** repeated eigenvalue with $g=1$, or no real eigenvalues.\n- Symmetric matrices are always diagonalizable (Spectral Theorem).",
+      "body_he_md": "- **ניתנת לאלכסון:** $A=PDP^{-1}$; עמודות $P$ = ו\"ע, אלכסון $D$ = ע\"ע.\n- **קריטריון:** $g_\\lambda=a_\\lambda$ לכל $\\lambda$.\n- **$n$ ע\"ע שונים** — תנאי מספיק.\n- **נוסחת חזקה:** $A^n=PD^nP^{-1}$.\n- **אי-אלכסוניות $2\\times2$:** ע\"ע חוזר עם $g=1$, או אין ע\"ע ממשיים.\n- מטריצות סימטריות תמיד ניתנות לאלכסון."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Diagonalization'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'דיאגונליזציה'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "eigenvalues from diagonal D in A=PDP^-1"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Diagonalization' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'דיאגונליזציה' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "diagonalizability geometric multiplicity"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Diagonalization'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'דיאגונליזציה'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "diagonal matrix power",
-        "A^k=PD^kP^{-1}"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Diagonalization' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'דיאגונליזציה' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "non-diagonalizable matrices",
-        "complex eigenvalues over reals"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Diagonalization'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'דיאגונליזציה'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "spectral theorem",
-        "symmetric matrix always diagonalizable"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Diagonalization' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'דיאגונליזציה' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "det(A^k)=det(A)^k",
-        "product of eigenvalues=det"
-      ],
-      "points_level_min": "la"
-    }
-  ],
-  "agent_hints": "This lesson covers matrix diagonalization at the university level. A matrix A is diagonalizable if it has n linearly independent eigenvectors. The key steps are: find eigenvalues via det(A-λI)=0, find eigenvectors for each eigenvalue, form P and D. Stress the geometric vs algebraic multiplicity condition. For computing A^k, guide students to use A^k = P D^k P^{-1} and point out that D^k is trivial to compute for diagonal matrices."
+  ]
 }

@@ -1,227 +1,224 @@
 {
   "concept_id": "la_matrices",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Matrices and Linear Systems",
-  "title_he": "מטריצות ומערכות לינאריות",
-  "summary_en": "A matrix is a rectangular array of numbers. Matrix multiplication composes linear transformations; Gaussian elimination solves linear systems systematically.",
-  "summary_he": "מטריצה היא מערך מלבני של מספרים. כפל מטריצות מרכיב טרנספורמציות לינאריות; חילוץ גאוס פותר מערכות לינאריות באופן שיטתי.",
-  "est_minutes": 20,
+  "math_track": ["la"],
+  "title_en": "Matrix Operations — Addition, Multiplication, Transpose & Inverse",
+  "title_he": "פעולות על מטריצות — חיבור, כפל, טרנספוז והופכי",
+  "summary_en": "Matrix addition, scalar multiplication, matrix multiplication (non-commutativity), the transpose and its algebraic laws, the identity matrix, and the concept of invertibility.",
+  "summary_he": "חיבור מטריצות, כפל בסקלר, כפל מטריצות (אי-קומוטטיביות), טרנספוז וחוקיו, מטריצת היחידה ומושג ההופכי.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Why matrices",
-      "title_he": "למה מטריצות",
-      "body_en_md": "A **matrix** $A$ of size $m \\times n$ is a grid of numbers with $m$ rows and $n$ columns. We use matrices to:\n\n- Represent and solve **linear systems** ($Ax = b$).\n- Encode **linear transformations** (rotations, scalings, projections).\n- Store data (tables, images, graphs).\n\nIn high school, you solved $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ by substitution. With $A = \\begin{pmatrix} 2 & 3 \\\\ 1 & -1 \\end{pmatrix}$ and $b = \\begin{pmatrix} 7 \\\\ 1 \\end{pmatrix}$ this becomes $Ax = b$ — and matrix theory gives a unified method that scales to thousands of equations.",
-      "body_he_md": "**מטריצה** $A$ בגודל $m \\times n$ היא רשת של מספרים עם $m$ שורות ו-$n$ עמודות. משתמשים במטריצות:\n\n- ייצוג ופתרון **מערכות לינאריות** ($Ax = b$).\n- קידוד **טרנספורמציות לינאריות** (סיבובים, שינויי גודל, השלכות).\n- אחסון נתונים.\n\nבתיכון פתרנו $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ בהצבה. עם $A = \\begin{pmatrix} 2 & 3 \\\\ 1 & -1 \\end{pmatrix}$ ו-$b = \\begin{pmatrix} 7 \\\\ 1 \\end{pmatrix}$ זה הופך ל-$Ax = b$ — תיאוריית המטריצות נותנת שיטה אחידה שמתרחבת לאלפי משוואות.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "Matrices are a fundamental concept in linear algebra, and they provide a powerful tool for solving systems of linear equations. A matrix is a rectangular array of numbers, and it can be used to represent a system of linear equations in a compact and efficient way. This is particularly useful when dealing with large systems of equations, where the use of matrices can simplify the solution process and make it more manageable.\n\nFor example, consider the system of linear equations:\n$$\n\\begin{align*}\n2x + 3y &= 7 \\\\\n4x - 2y &= -3\n\\end{align*}\n$$\nWe can represent this system as a matrix equation:\n$$\n\\begin{bmatrix}\n2 & 3 \\\\\n4 & -2\n\\end{bmatrix}\n\\begin{bmatrix}\nx \\\\\ny\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n7 \\\\\n-3\n\\end{bmatrix}\n$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Why Matrices?",
+      "title_he": "למה מטריצות?",
+      "body_en_md": "A **matrix** is a rectangular array of numbers — a compact encoding of a linear transformation or a system of equations. The ability to **compose** linear maps by multiplying their matrices is one of the most powerful computational tools in mathematics.\n\nThis lesson covers the arithmetic of matrices: how to add them, multiply them by scalars, multiply two matrices together, and form the transpose. We also introduce the inverse, which is the matrix analogue of dividing by a number.\n\n**Connection to previous material:** You have already seen vectors as $n\\times 1$ matrices (column vectors). Here we extend those ideas to rectangular arrays of arbitrary size.",
+      "body_he_md": "**מטריצה** היא מערך מלבני של מספרים — קידוד קומפקטי של טרנספורמציה לינארית או מערכת משוואות. היכולת **להרכיב** העתקות לינאריות על ידי כפל המטריצות שלהן היא אחד הכלים החישוביים החזקים ביותר במתמטיקה.\n\nשיעור זה מכסה את החשבון של מטריצות: חיבור, כפל בסקלר, כפל שתי מטריצות, וטרנספוז. כמו כן מציגים את ההופכי — האנלוג המטריציוני של חלוקה במספר.\n\n**קשר לחומר קודם:** כבר ראיתם וקטורים כמטריצות $n\\times 1$ (וקטורי עמודה). כאן מרחיבים רעיונות אלה למערכים מלבניים בגדלים שרירותיים."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Matrices and Basic Operations",
+      "title_he": "מטריצות ופעולות בסיסיות",
+      "body_en_md": "**Definition.** An $m\\times n$ **matrix** $A$ has $m$ rows and $n$ columns; entry $(i,j)$ is $a_{ij}$.\n\n**Addition:** $(A+B)_{ij} = a_{ij}+b_{ij}$ (requires same dimensions).\n\n**Scalar multiplication:** $(cA)_{ij} = c\\,a_{ij}$.\n\n**Matrix multiplication:** If $A$ is $m\\times k$ and $B$ is $k\\times n$, then $C = AB$ is $m\\times n$ with\n$$c_{ij} = \\sum_{l=1}^k a_{il}\\,b_{lj}.$$\n\n**Identity matrix** $I_n$: $n\\times n$ matrix with $1$s on the diagonal and $0$s elsewhere. Satisfies $AI = IA = A$ for any compatible $A$.\n\n**Transpose:** $(A^T)_{ij} = a_{ji}$. The transpose of an $m\\times n$ matrix is $n\\times m$.\n\n**Inverse:** An $n\\times n$ matrix $A$ is **invertible** (non-singular) if there exists $A^{-1}$ such that $AA^{-1} = A^{-1}A = I_n$. If no such matrix exists, $A$ is **singular**.",
+      "body_he_md": "**הגדרה.** מטריצה $m\\times n$ $A$ מכילה $m$ שורות ו-$n$ עמודות; הכניסה $(i,j)$ היא $a_{ij}$.\n\n**חיבור:** $(A+B)_{ij} = a_{ij}+b_{ij}$ (דורש אותן ממדות).\n\n**כפל בסקלר:** $(cA)_{ij} = c\\,a_{ij}$.\n\n**כפל מטריצות:** אם $A$ הוא $m\\times k$ ו-$B$ הוא $k\\times n$, אז $C = AB$ הוא $m\\times n$ עם\n$$c_{ij} = \\sum_{l=1}^k a_{il}\\,b_{lj}.$$\n\n**מטריצת היחידה** $I_n$: מטריצה $n\\times n$ עם $1$ על האלכסון ו-$0$ בכל מקום אחר. מקיימת $AI = IA = A$.\n\n**טרנספוז:** $(A^T)_{ij} = a_{ji}$. הטרנספוז של מטריצה $m\\times n$ הוא $n\\times m$.\n\n**הופכי:** מטריצה $n\\times n$ $A$ **הפיכה** (לא-סינגולרית) אם קיים $A^{-1}$ כך ש-$AA^{-1} = A^{-1}A = I_n$. אחרת $A$ **סינגולרית**."
     },
     {
       "kind": "theory",
-      "title_en": "Operations + Gaussian elimination",
-      "title_he": "פעולות + חילוץ גאוס",
-      "body_en_md": "### Matrix operations\n\n**Addition / scalar mult** are entry-wise: $(A + B)_{ij} = a_{ij} + b_{ij}$.\n\n**Matrix multiplication** $AB$ requires $A$ to be $m \\times n$ and $B$ to be $n \\times p$. Result is $m \\times p$:\n\n$$(AB)_{ij} = \\sum_{k=1}^n a_{ik} b_{kj}.$$\n\n*Row $i$ of $A$ dot column $j$ of $B$.*\n\n**Important:** $AB \\ne BA$ in general (non-commutative).\n\n**Identity matrix** $I$: $1$'s on diagonal, $0$'s elsewhere. $AI = IA = A$.\n\n**Transpose** $A^T$: rows become columns. $(A^T)_{ij} = a_{ji}$.\n\n### Linear systems → augmented matrix\n\nSystem $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ becomes:\n\n$$\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right].$$\n\n### Elementary row operations (preserve solutions)\n\n1. **Swap** two rows.\n2. **Scale** a row by a nonzero constant.\n3. **Add a multiple** of one row to another.\n\n### Gaussian elimination\n\nRepeatedly apply row operations to reach **row-echelon form** (zeros below the diagonal). Then **back-substitute**.\n\n**Three possible outcomes:**\n1. **Unique solution** — full rank.\n2. **No solution** — a row reduces to $[0, 0, \\ldots, 0 \\,|\\, c]$ with $c \\ne 0$ (contradiction).\n3. **Infinitely many solutions** — a free variable appears.\n\n### Inverse matrix\n\nFor square $A$, $A^{-1}$ (if it exists) satisfies $AA^{-1} = A^{-1}A = I$. When $A^{-1}$ exists, $Ax = b$ has the unique solution $x = A^{-1}b$.\n\nFor $2 \\times 2$: $A = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} \\Rightarrow A^{-1} = \\dfrac{1}{ad - bc} \\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$ (if $ad - bc \\ne 0$).\n\n**Worked Example (parametric).** System $x+ay=1$, $ax+y=a$: elimination gives $(1-a^2)y = 0$; cases $a=\\pm 1$ and generic $a$.\n\n**Worked Example 2.** $3\times 3$ with parameter in last pivot — classify by rank.",
-      "body_he_md": "### פעולות מטריצה\n\n**חיבור / כפל בסקלר** איבר-איבר: $(A + B)_{ij} = a_{ij} + b_{ij}$.\n\n**כפל מטריצות** $AB$ דורש ש-$A$ יהיה $m \\times n$ ו-$B$ יהיה $n \\times p$. תוצאה $m \\times p$:\n\n$$(AB)_{ij} = \\sum_{k=1}^n a_{ik} b_{kj}.$$\n\n**חשוב:** $AB \\ne BA$ בכלליות.\n\n**מטריצת יחידה** $I$: $1$'ים באלכסון, $0$'ים בשאר. $AI = IA = A$.\n\n**שיחלוף** $A^T$: שורות הופכות לעמודות.\n\n### מערכות לינאריות → מטריצה מורחבת\n\nהמערכת $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$ הופכת ל-\n\n$$\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right].$$\n\n### פעולות שורה אלמנטריות\n\n1. **החלפת** שני שורות.\n2. **כפל** שורה בקבוע שונה מאפס.\n3. **הוספת כפולה** של שורה לאחרת.\n\n### חילוץ גאוס\n\nמיישמים פעולות שורה עד לצורה מדורגת. ואז **הצבה לאחור**.\n\n**שלוש תוצאות אפשריות:**\n1. **פתרון יחיד** — דרגה מלאה.\n2. **אין פתרון** — שורה מצטמצמת ל-$[0, \\ldots | c]$ עם $c \\ne 0$.\n3. **אינסוף פתרונות** — משתנה חופשי.\n\n### מטריצה הופכית\n\nל-$A$ ריבועית, $A^{-1}$ (אם קיימת) מקיימת $AA^{-1} = I$. אז $x = A^{-1}b$ פותר $Ax = b$.\n\nל-$2 \\times 2$: $A^{-1} = \\dfrac{1}{ad - bc} \\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$ אם $ad - bc \\ne 0$.\n\n**דוגמה (פרמטר).** מערכת עם פרמטר $a$: חילוץ וסיווג.\n\n**דוגמה 2.** rank לפי pivot.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "In this section, we will explore the operations of matrices and how they can be used to solve linear systems using Gaussian elimination. We will learn how to add and multiply matrices, as well as how to perform elementary row operations to transform a matrix into row echelon form.\n\nThe main operations of matrices include:\n\n- Addition: $A + B = \\begin{bmatrix} a_{11} + b_{11} & a_{12} + b_{12} \\\\ a_{21} + b_{21} & a_{22} + b_{22} \\end{bmatrix}$\n- Scalar multiplication: $cA = \\begin{bmatrix} ca_{11} & ca_{12} \\\\ ca_{21} & ca_{22} \\end{bmatrix}$\n- Matrix multiplication: $AB = \\begin{bmatrix} a_{11}b_{11} + a_{12}b_{21} & a_{11}b_{12} + a_{12}b_{22} \\\\ a_{21}b_{11} + a_{22}b_{21} & a_{21}b_{12} + a_{22}b_{22} \\end{bmatrix}$\n\nWe will also learn how to use Gaussian elimination to solve linear systems by transforming the augmented matrix into row echelon form.\n\n### Worked Example\n\nSolve the linear system using Gaussian elimination:\n\n$$\\begin{align*}\n2x + y &= 4 \\\\\nx - 2y &= -3\n\\end{align*}$$\n\nFirst, we write the augmented matrix:\n\n$$\\begin{bmatrix} 2 & 1 & 4 \\\\ 1 & -2 & -3 \\end{bmatrix}$$\n\nWe perform elementary row operations to transform the matrix into row echelon form:\n\n$$\\begin{align*}\nR_2 \\leftarrow R_2 - \\frac{1}{2}R_1 \\\\\n\\begin{bmatrix} 2 & 1 & 4 \\\\ 0 & -\\frac{5}{2} & -\\frac{13}{2} \\end{bmatrix}\n\\end{align*}$$\n\nWe can now solve for $y$:\n\n$$-\\frac{5}{2}y = -\\frac{13}{2} \\Rightarrow y = \\frac{13}{5}$$\n\nSubstituting",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1 (Non-commutativity).** In general $AB \\neq BA$, even when both products are defined and of the same size.\n\n**Theorem 2 (Associativity).** $(AB)C = A(BC)$ whenever the dimensions match.\n\n**Theorem 3 (Transpose laws).** For matrices $A, B$ of compatible sizes and scalar $c$:\n1. $(A^T)^T = A$\n2. $(A+B)^T = A^T + B^T$\n3. $(cA)^T = cA^T$\n4. $(AB)^T = B^T A^T$ ← **order reverses!**\n\n**Proof of (4):** Let $C = AB$. Then $c_{ij} = \\sum_l a_{il}b_{lj}$. The $(i,j)$ entry of $(AB)^T$ is $c_{ji} = \\sum_l a_{jl}b_{li}$. The $(i,j)$ entry of $B^T A^T$ is $\\sum_l (B^T)_{il}(A^T)_{lj} = \\sum_l b_{li}a_{jl}$. These are equal. $\\blacksquare$\n\n**Theorem 4 (Inverse laws).** When $A$ and $B$ are invertible $n\\times n$ matrices:\n1. $(A^{-1})^{-1} = A$\n2. $(AB)^{-1} = B^{-1}A^{-1}$ ← order reverses!\n3. $(A^T)^{-1} = (A^{-1})^T$\n\n**Theorem 5 ($2\\times 2$ inverse formula).**\n$$\\text{If } A = \\begin{pmatrix}a & b \\\\ c & d\\end{pmatrix}, \\quad A^{-1} = \\frac{1}{ad-bc}\\begin{pmatrix}d & -b \\\\ -c & a\\end{pmatrix}, \\quad ad-bc\\neq 0.$$",
+      "body_he_md": "**משפט 1 (אי-קומוטטיביות).** בכלל $AB \\neq BA$, גם כשאר שתי הכפולות מוגדרות ובאותה גדולה.\n\n**משפט 2 (אסוציאטיביות).** $(AB)C = A(BC)$ כשהממדות תואמים.\n\n**משפט 3 (חוקי הטרנספוז).** לכל $A, B$ בממדות מתאימות ו-$c\\in\\mathbb{R}$:\n1. $(A^T)^T = A$\n2. $(A+B)^T = A^T + B^T$\n3. $(cA)^T = cA^T$\n4. $(AB)^T = B^T A^T$ ← **הסדר מתהפך!**\n\n**הוכחת (4):** יהי $C = AB$. אז $c_{ij} = \\sum_l a_{il}b_{lj}$. הכניסה $(i,j)$ של $(AB)^T$ היא $c_{ji} = \\sum_l a_{jl}b_{li}$. הכניסה $(i,j)$ של $B^T A^T$ היא $\\sum_l (B^T)_{il}(A^T)_{lj} = \\sum_l b_{li}a_{jl}$. אלה שווים. $\\blacksquare$\n\n**משפט 4 (חוקי ההופכי).** כש-$A$ ו-$B$ הפיכות:\n1. $(A^{-1})^{-1} = A$\n2. $(AB)^{-1} = B^{-1}A^{-1}$ ← הסדר מתהפך!\n3. $(A^T)^{-1} = (A^{-1})^T$\n\n**משפט 5 (נוסחת הופכי $2\\times 2$).**\n$$\\text{אם } A = \\begin{pmatrix}a & b \\\\ c & d\\end{pmatrix}, \\quad A^{-1} = \\frac{1}{ad-bc}\\begin{pmatrix}d & -b \\\\ -c & a\\end{pmatrix}, \\quad ad-bc\\neq 0.$$"
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: solve a 2×2 system",
-      "title_he": "דוגמה פתורה: פתרון מערכת 2×2",
-      "body_en_md": "Solve $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$.\n\n**Augmented:** $\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right]$.\n\n**$R_1 \\leftrightarrow R_2$** (swap):\n\n$$\\left[\\begin{array}{cc|c} 1 & -1 & 1 \\\\ 2 & 3 & 7 \\end{array}\\right].$$\n\n**$R_2 \\to R_2 - 2 R_1$:**\n\n$$\\left[\\begin{array}{cc|c} 1 & -1 & 1 \\\\ 0 & 5 & 5 \\end{array}\\right].$$\n\n**Back-substitute:** $5y = 5 \\Rightarrow y = 1$. $x - 1 = 1 \\Rightarrow x = 2$.\n\n**Verify:** $2(2) + 3(1) = 7$ ✓, $2 - 1 = 1$ ✓.",
-      "body_he_md": "פתרו $\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}$.\n\n**מורחבת:** $\\left[\\begin{array}{cc|c} 2 & 3 & 7 \\\\ 1 & -1 & 1 \\end{array}\\right]$.\n\n**$R_1 \\leftrightarrow R_2$**, ואז **$R_2 - 2R_1$**:\n\n$$\\left[\\begin{array}{cc|c} 1 & -1 & 1 \\\\ 0 & 5 & 5 \\end{array}\\right].$$\n\n**הצבה לאחור:** $y = 1$, $x = 2$.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "To solve a 2×2 linear system using matrices, we can represent the system as a matrix equation $\\mathbf{Ax} = \\mathbf{b}$, where $\\mathbf{A}$ is the coefficient matrix, $\\mathbf{x}$ is the variable matrix, and $\\mathbf{b}$ is the constant matrix. We can then use the formula $\\mathbf{x} = \\mathbf{A}^{-1}\\mathbf{b}$ to find the solution.\n\nThe formula for the inverse of a 2×2 matrix is $$\\begin{pmatrix}a & b\\\\c & d\\end{pmatrix}^{-1} = \\frac{1}{ad-bc}\\begin{pmatrix}d & -b\\\\-c & a\\end{pmatrix}.$$\n\nWe can use this formula to solve the system.\n\n### Worked Example\n\nSolve the system:\n\n$$\\begin{align*}\n2x + 3y &= 7\\\\\n4x + 5y &= 10\n\\end{align*}$$\n\n### Solution\n\nWe can represent the system as a matrix equation $\\mathbf{Ax} = \\mathbf{b}$, where $\\mathbf{A} = \\begin{pmatrix}2 & 3\\\\4 & 5\\end{pmatrix}$, $\\mathbf{x} = \\begin{pmatrix}x\\\\y\\end{pmatrix}$, and $\\mathbf{b} = \\begin{pmatrix}7\\\\10\\end{pmatrix}$.\n\nFirst, we need to find the inverse of $\\mathbf{A}$:\n\n$$\\mathbf{A}^{-1} = \\frac{1}{(2)(5)-(3)(4)}\\begin{pmatrix}5 & -3\\\\-4 & 2\\end{pmatrix} = \\frac{1}{-2}\\begin{pmatrix}5 & -3\\\\-4 & 2\\end{pmatrix} = \\begin{pmatrix}-5 & 3/2\\\\2 & -1\\end{pmatrix}.$$\n\nNow, we can use the formula $\\mathbf{x} = \\mathbf{A}^{-1}\\mathbf{b}$ to find the solution:\n\n$$\\begin{pmatrix}x\\\\y\\end{pmatrix} = \\begin{",
-          "body_he_md": ""
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Multiplying a 2×3 by a 3×2 Matrix",
+      "title_he": "דוגמה פתורה 1 — כפל מטריצה 2×3 במטריצה 3×2",
+      "body_en_md": "**Given:**\n$$A = \\begin{pmatrix}1 & 2 & 0\\\\ -1 & 3 & 2\\end{pmatrix}, \\quad B = \\begin{pmatrix}4 & 1\\\\ -1 & 2\\\\ 0 & 3\\end{pmatrix}.$$\n\n$A$ is $2\\times 3$ and $B$ is $3\\times 2$, so $AB$ is $2\\times 2$.\n\n**Compute each entry:**\n$$c_{11} = (1)(4)+(2)(-1)+(0)(0) = 4-2+0 = 2$$\n$$c_{12} = (1)(1)+(2)(2)+(0)(3) = 1+4+0 = 5$$\n$$c_{21} = (-1)(4)+(3)(-1)+(2)(0) = -4-3+0 = -7$$\n$$c_{22} = (-1)(1)+(3)(2)+(2)(3) = -1+6+6 = 11$$\n\n$$AB = \\begin{pmatrix}2 & 5\\\\ -7 & 11\\end{pmatrix}.$$\n\n**Note:** $BA$ is a $3\\times 3$ matrix — it has different dimensions from $AB$, confirming non-commutativity.",
+      "body_he_md": "**נתון:**\n$$A = \\begin{pmatrix}1 & 2 & 0\\\\ -1 & 3 & 2\\end{pmatrix}, \\quad B = \\begin{pmatrix}4 & 1\\\\ -1 & 2\\\\ 0 & 3\\end{pmatrix}.$$\n\n$A$ הוא $2\\times 3$ ו-$B$ הוא $3\\times 2$, אז $AB$ הוא $2\\times 2$.\n\n**חישוב כל כניסה:**\n$$c_{11} = 4-2+0 = 2, \\quad c_{12} = 1+4+0 = 5$$\n$$c_{21} = -4-3+0 = -7, \\quad c_{22} = -1+6+6 = 11$$\n\n$$AB = \\begin{pmatrix}2 & 5\\\\ -7 & 11\\end{pmatrix}.$$\n\n**הערה:** $BA$ הוא מטריצה $3\\times 3$ — ממדות שונות מ-$AB$, מה שמאשר אי-קומוטטיביות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Compute $AB$ and $BA$ for:\n$$A = \\begin{pmatrix}1 & 0\\\\ 2 & 3\\end{pmatrix}, \\quad B = \\begin{pmatrix}2 & 1\\\\ 0 & 4\\end{pmatrix}.$$\nAre they equal?",
+      "body_he_md": "חשב את $AB$ ואת $BA$ עבור:\n$$A = \\begin{pmatrix}1 & 0\\\\ 2 & 3\\end{pmatrix}, \\quad B = \\begin{pmatrix}2 & 1\\\\ 0 & 4\\end{pmatrix}.$$\nהאם הם שווים?",
+      "checkpoint_solution_en": "$AB = \\begin{pmatrix}2&1\\\\4+0&2+12\\end{pmatrix}=\\begin{pmatrix}2&1\\\\4&14\\end{pmatrix}$. $BA = \\begin{pmatrix}2+2&0+3\\\\0+8&0+12\\end{pmatrix}=\\begin{pmatrix}4&3\\\\8&12\\end{pmatrix}$. They are **not equal**, confirming non-commutativity.",
+      "checkpoint_solution_he": "$AB = \\begin{pmatrix}2&1\\\\4&14\\end{pmatrix}$. $BA = \\begin{pmatrix}4&3\\\\8&12\\end{pmatrix}$. הם **אינם שווים**, המאשר אי-קומוטטיביות."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Counterexample to Commutativity",
+      "title_he": "דוגמה פתורה 2 — דוגמת נגד לקומוטטיביות",
+      "body_en_md": "**Task:** Show explicitly that matrix multiplication is not commutative.\n\n**Counterexample:**\n$$A = \\begin{pmatrix}0 & 1\\\\ 0 & 0\\end{pmatrix}, \\quad B = \\begin{pmatrix}0 & 0\\\\ 1 & 0\\end{pmatrix}.$$\n\n$$AB = \\begin{pmatrix}0\\cdot0+1\\cdot1 & 0\\cdot0+1\\cdot0\\\\ 0\\cdot0+0\\cdot1 & 0\\cdot0+0\\cdot0\\end{pmatrix} = \\begin{pmatrix}1 & 0\\\\ 0 & 0\\end{pmatrix}.$$\n\n$$BA = \\begin{pmatrix}0\\cdot0+0\\cdot0 & 0\\cdot1+0\\cdot0\\\\ 1\\cdot0+0\\cdot0 & 1\\cdot1+0\\cdot0\\end{pmatrix} = \\begin{pmatrix}0 & 0\\\\ 0 & 1\\end{pmatrix}.$$\n\n$AB \\neq BA$. $\\blacksquare$\n\n**Deeper observation:** $AB = I - \\begin{pmatrix}0&0\\\\0&1\\end{pmatrix}$ and $BA = I - \\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$ — they are complementary projections, not the same.",
+      "body_he_md": "**משימה:** הראה במפורש שכפל מטריצות אינו קומוטטיבי.\n\n**דוגמת נגד:**\n$$A = \\begin{pmatrix}0 & 1\\\\ 0 & 0\\end{pmatrix}, \\quad B = \\begin{pmatrix}0 & 0\\\\ 1 & 0\\end{pmatrix}.$$\n\n$$AB = \\begin{pmatrix}1 & 0\\\\ 0 & 0\\end{pmatrix}, \\quad BA = \\begin{pmatrix}0 & 0\\\\ 0 & 1\\end{pmatrix}.$$\n\n$AB \\neq BA$. $\\blacksquare$\n\n**תצפית עמוקה:** $AB$ ו-$BA$ הן הטלות משלימות — לא אותה מטריצה."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Verify: $(A+B)^T = A^T + B^T$ for $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}0&-1\\\\2&1\\end{pmatrix}$.",
+      "body_he_md": "אמת: $(A+B)^T = A^T + B^T$ עבור $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}0&-1\\\\2&1\\end{pmatrix}$.",
+      "checkpoint_solution_en": "$A+B=\\begin{pmatrix}1&1\\\\5&5\\end{pmatrix}$, $(A+B)^T=\\begin{pmatrix}1&5\\\\1&5\\end{pmatrix}$. $A^T+B^T=\\begin{pmatrix}1&3\\\\2&4\\end{pmatrix}+\\begin{pmatrix}0&2\\\\-1&1\\end{pmatrix}=\\begin{pmatrix}1&5\\\\1&5\\end{pmatrix}$. Equal. $\\checkmark$",
+      "checkpoint_solution_he": "$A+B=\\begin{pmatrix}1&1\\\\5&5\\end{pmatrix}$, $(A+B)^T=\\begin{pmatrix}1&5\\\\1&5\\end{pmatrix}$. $A^T+B^T=\\begin{pmatrix}1&5\\\\1&5\\end{pmatrix}$. שווים. $\\checkmark$"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof: $(AB)^T = B^T A^T$",
+      "title_he": "דוגמה פתורה 3 — הוכחה: $(AB)^T = B^T A^T$",
+      "body_en_md": "**Claim:** For any $m\\times k$ matrix $A$ and $k\\times n$ matrix $B$: $(AB)^T = B^T A^T$.\n\n**Proof (entry-by-entry):**\n\n**Step 1 — Dimensions.** $AB$ is $m\\times n$, so $(AB)^T$ is $n\\times m$. Also $B^T$ is $n\\times k$ and $A^T$ is $k\\times m$, so $B^T A^T$ is $n\\times m$. Dimensions match.\n\n**Step 2 — Fix indices.** Let $1\\leq i\\leq n$ and $1\\leq j\\leq m$. We compare the $(i,j)$ entries of both sides.\n\n**Step 3 — Left side.** The $(i,j)$ entry of $(AB)^T$ equals the $(j,i)$ entry of $AB$:\n$$(AB)_{ji} = \\sum_{l=1}^k a_{jl}\\,b_{li}.$$\n\n**Step 4 — Right side.** The $(i,j)$ entry of $B^T A^T$ is:\n$$(B^T A^T)_{ij} = \\sum_{l=1}^k (B^T)_{il}\\,(A^T)_{lj} = \\sum_{l=1}^k b_{li}\\,a_{jl}.$$\n\n**Step 5 — Compare.** Both sums are $\\sum_{l=1}^k a_{jl}b_{li}$ — they are identical (multiplication of real numbers commutes).\n\nSince all $(i,j)$ entries are equal, $(AB)^T = B^T A^T$. $\\blacksquare$",
+      "body_he_md": "**טענה:** לכל מטריצה $m\\times k$ $A$ ומטריצה $k\\times n$ $B$: $(AB)^T = B^T A^T$.\n\n**הוכחה (כניסה-כניסה):**\n\n**שלב 1 — ממדות.** $AB$ הוא $m\\times n$, אז $(AB)^T$ הוא $n\\times m$. גם $B^T$ הוא $n\\times k$ ו-$A^T$ הוא $k\\times m$, לכן $B^T A^T$ הוא $n\\times m$. הממדות תואמות.\n\n**שלב 2 — קיבוע אינדקסים.** יהיו $1\\leq i\\leq n$ ו-$1\\leq j\\leq m$. נשווה את הכניסות $(i,j)$ בשני הצדדים.\n\n**שלב 3 — צד שמאל.** הכניסה $(i,j)$ של $(AB)^T$ שווה לכניסה $(j,i)$ של $AB$:\n$$(AB)_{ji} = \\sum_{l=1}^k a_{jl}\\,b_{li}.$$\n\n**שלב 4 — צד ימין.** הכניסה $(i,j)$ של $B^T A^T$:\n$$(B^T A^T)_{ij} = \\sum_{l=1}^k b_{li}\\,a_{jl}.$$\n\n**שלב 5 — השוואה.** שני הסכומים זהים (כפל מספרים ממשיים קומוטטיבי).\n\nמכיוון שכל כניסות $(i,j)$ שוות, $(AB)^T = B^T A^T$. $\\blacksquare$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Matrix Operations Checklist",
+      "title_he": "מדריך שיטה — רשימת תיוג לפעולות מטריצות",
+      "body_en_md": "| Goal | Check first | Formula/method |\n|---|---|---|\n| Is $AB$ defined? | Inner dimensions match: $A$ is $m\\times k$, $B$ is $k\\times n$ | Result is $m\\times n$ |\n| Compute $AB$ | Yes dimensions match | $c_{ij}=\\sum_l a_{il}b_{lj}$ (row $i$ of $A$ dot col $j$ of $B$) |\n| Is $AB=BA$? | Both square, same size | Almost never; find counterexample or prove special case |\n| Compute $A^T$ | Any $A$ | Reflect across main diagonal |\n| Simplify $(AB)^T$ | Yes | $= B^T A^T$ (order reverses) |\n| Find $A^{-1}$ for $2\\times2$ | $\\det A = ad-bc \\neq 0$ | $\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$ |\n| Verify $B = A^{-1}$ | — | Check $AB = I$ |\n| Show $A$ is not invertible | — | Show $\\det A=0$ or $\\ker A \\neq \\{\\vec{0}\\}$ |",
+      "body_he_md": "| מטרה | בדוק קודם | נוסחה/שיטה |\n|---|---|---|\n| האם $AB$ מוגדר? | ממדות פנימיות תואמות: $A$ הוא $m\\times k$, $B$ הוא $k\\times n$ | תוצאה $m\\times n$ |\n| חשב $AB$ | כן, ממדות תואמות | $c_{ij}=\\sum_l a_{il}b_{lj}$ (שורה $i$ של $A$ כפול עמודה $j$ של $B$) |\n| האם $AB=BA$? | שתיהן ריבועיות, אותה גדולה | כמעט אף פעם; מצא דוגמת נגד או הוכח מקרה מיוחד |\n| חשב $A^T$ | כל $A$ | שיקוף מעבר לאלכסון הראשי |\n| פשט $(AB)^T$ | כן | $= B^T A^T$ (הסדר מתהפך) |\n| מצא $A^{-1}$ ל-$2\\times2$ | $\\det A = ad-bc \\neq 0$ | $\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$ |\n| אמת $B = A^{-1}$ | — | בדוק $AB = I$ |\n| הראה ש-$A$ אינה הפיכה | — | הראה $\\det A=0$ או $\\ker A \\neq \\{\\vec{0}\\}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Compute $AB$ for $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
+          "body_he": "חשב את $AB$ עבור $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
+          "solution_en": "$AB=\\begin{pmatrix}2+2&8-1\\\\0-6&0+3\\end{pmatrix}=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.",
+          "solution_he": "$AB=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $(A+B)^T$ for $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
+          "body_he": "מצא $(A+B)^T$ עבור $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
+          "solution_en": "$A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.",
+          "solution_he": "$(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $A^{-1}$ for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, or show it doesn't exist.",
+          "body_he": "מצא $A^{-1}$ עבור $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, או הראה שאינה קיימת.",
+          "solution_en": "$\\det A = 6-5=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.",
+          "solution_he": "$\\det A=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Show that $A=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$ has no inverse.",
+          "body_he": "הראה שלמטריצה $A=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$ אין הופכי.",
+          "solution_en": "$\\det A = 4-4=0$, so $A$ is singular (not invertible).",
+          "solution_he": "$\\det A = 4-4=0$, לכן $A$ סינגולרית (לא הפיכה).",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find matrices $A$ and $B$ such that $AB = 0$ but $A\\neq 0$ and $B\\neq 0$ (zero divisors).",
+          "body_he": "מצא מטריצות $A$ ו-$B$ כך ש-$AB = 0$ אבל $A\\neq 0$ ו-$B\\neq 0$ (מחלקי אפס).",
+          "solution_en": "Example: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. Then $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$.",
+          "solution_he": "דוגמה: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. אז $AB=0$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Compute $A^3$ for $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ and deduce a formula for $A^n$.",
+          "body_he": "חשב את $A^3$ עבור $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ ומצא נוסחה ל-$A^n$.",
+          "solution_en": "$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. By induction, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.",
+          "solution_he": "$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. באינדוקציה: $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Verify directly that $(AB)^T = B^T A^T$ for $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) and $B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
+          "body_he": "אמת ישירות ש-$(AB)^T = B^T A^T$ עבור $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) ו-$B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
+          "solution_en": "$AB=11$ (scalar/1×1). $(AB)^T=11$. $B^T=(3,4)$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$. $B^TA^T=(3)(1)+(4)(2)=11$. Equal. $\\checkmark$",
+          "solution_he": "$AB=11$. $(AB)^T=11$. $B^TA^T=3+8=11$. שווים. $\\checkmark$",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Let $A$ be symmetric ($A^T=A$) and $B$ symmetric. Is $AB$ always symmetric? If not, give a counterexample.",
+          "body_he": "יהי $A$ סימטרית ($A^T=A$) ו-$B$ סימטרית. האם $AB$ תמיד סימטרית? אם לא, תן דוגמת נגד.",
+          "solution_en": "Not always. $(AB)^T=B^TA^T=BA$. For $AB$ to be symmetric we need $AB=BA$. Counterexample: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. $AB=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $BA=\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. $AB\\neq BA$, so $AB$ not symmetric.",
+          "solution_he": "לא תמיד. $(AB)^T=BA$. נדרש $AB=BA$. דוגמת נגד: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. $AB\\neq BA$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Prove: if $A$ is invertible and $AB=AC$, then $B=C$.",
+          "body_he": "הוכח: אם $A$ הפיכה ו-$AB=AC$, אזי $B=C$.",
+          "solution_en": "Multiply both sides on the left by $A^{-1}$: $A^{-1}(AB)=A^{-1}(AC)$. By associativity: $(A^{-1}A)B=(A^{-1}A)C$, so $IB=IC$, thus $B=C$. $\\blacksquare$",
+          "solution_he": "מכפילים משמאל ב-$A^{-1}$: $(A^{-1}A)B=(A^{-1}A)C \\Rightarrow B=C$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove: $(AB)^{-1} = B^{-1}A^{-1}$ when $A$ and $B$ are invertible $n\\times n$ matrices.",
+          "body_he": "הוכח: $(AB)^{-1} = B^{-1}A^{-1}$ כש-$A$ ו-$B$ הפיכות מסדר $n\\times n$.",
+          "solution_en": "Show $(AB)(B^{-1}A^{-1})=I$: $(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1}=A\\cdot I\\cdot A^{-1}=AA^{-1}=I$. Similarly $(B^{-1}A^{-1})(AB)=I$. By uniqueness of inverse, $(AB)^{-1}=B^{-1}A^{-1}$. $\\blacksquare$",
+          "solution_he": "נראה $(AB)(B^{-1}A^{-1})=I$: $A(BB^{-1})A^{-1}=AIA^{-1}=I$. באופן דומה ברצף הפוך. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A matrix $A$ satisfies $A^2 = A$ (idempotent). Prove that if $A$ is also invertible, then $A = I$.",
+          "body_he": "מטריצה $A$ מקיימת $A^2 = A$ (אידמפוטנטית). הוכח שאם $A$ גם הפיכה, אז $A = I$.",
+          "solution_en": "$A^2=A$. Multiply both sides on the right by $A^{-1}$: $A^2 A^{-1}=AA^{-1}$, so $A(AA^{-1})=I$, giving $AI=I$, thus $A=I$. $\\blacksquare$",
+          "solution_he": "$A^2=A$. מכפילים מימין ב-$A^{-1}$: $A=I$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that for any square matrix $A$, $A+A^T$ is symmetric and $A-A^T$ is skew-symmetric (i.e., $(A-A^T)^T = -(A-A^T)$).",
+          "body_he": "הוכח שלכל מטריצה ריבועית $A$, $A+A^T$ סימטרית ו-$A-A^T$ אנטי-סימטרית (כלומר $(A-A^T)^T = -(A-A^T)$).",
+          "solution_en": "$(A+A^T)^T = A^T+(A^T)^T = A^T+A = A+A^T$. ✓ $(A-A^T)^T = A^T-A = -(A-A^T)$. ✓ $\\blacksquare$",
+          "solution_he": "$(A+A^T)^T = A^T+A = A+A^T$. ✓ $(A-A^T)^T = A^T-A = -(A-A^T)$. ✓ $\\blacksquare$",
+          "points": 12
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **$AB \\ne BA$.** Matrix multiplication is NOT commutative.\n2. **Dimension mismatch.** $AB$ requires $A$'s columns = $B$'s rows.\n3. **Row operations done on columns.** Always rows.\n4. **Trying to invert a singular matrix.** If $\\det A = 0$, no inverse exists.\n5. **Forgetting the augmented bar.** Keep track of which entries are the RHS $b$.",
-      "body_he_md": "1. **$AB \\ne BA$.** כפל מטריצות אינו קומוטטיבי.\n2. **חוסר התאמת ממדים.** $AB$ דורש שעמודות $A$ = שורות $B$.\n3. **פעולות שורה על עמודות.** תמיד שורות.\n4. **ניסיון להפוך מטריצה סינגולרית.** אם $\\det A = 0$, אין הופכית.\n5. **שכחת קו המורחבת.** לעקוב אילו ערכים הם $b$.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "When working with matrices and linear systems, it's essential to be aware of common pitfalls that can lead to incorrect solutions. One common mistake is assuming that a matrix is invertible when it is not. This can occur when the determinant of the matrix is zero, indicating that the matrix is singular. Another mistake is incorrectly applying the rules of matrix multiplication.\n\nTo avoid these pitfalls, it's crucial to carefully check the dimensions of the matrices involved and ensure that the operations being performed are valid. Additionally, always calculate the determinant of a matrix before attempting to find its inverse.\n\n$$\\det \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix} = (1)(4) - (2)(3) = -2$$\n\nIn this example, the determinant of the matrix is -2, indicating that the matrix is invertible.",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "1. **Assuming $AB=BA$.** This almost never holds. Always check dimensions and don't rearrange products.\n\n2. **Wrong order in $(AB)^{-1}$.** It is $B^{-1}A^{-1}$, **not** $A^{-1}B^{-1}$.\n\n3. **Wrong order in $(AB)^T$.** It is $B^TA^T$, **not** $A^TB^T$.\n\n4. **Trying to divide by a matrix.** Matrices have no division — only multiplication by the inverse (when it exists).\n\n5. **$AB = 0$ does not imply $A=0$ or $B=0$.** Real numbers have no zero divisors, but matrices do.\n\n6. **Confusing $(A^T)^{-1}$ with $(A^{-1})^T$.** They are equal, but write it as $(A^{-T})$ to avoid confusion when simplifying.",
+      "body_he_md": "1. **הנחה ש-$AB=BA$.** זה כמעט אף פעם לא מתקיים. תמיד לבדוק ממדות ולא לשנות סדר כפולות.\n\n2. **סדר שגוי ב-$(AB)^{-1}$.** זה $B^{-1}A^{-1}$, **לא** $A^{-1}B^{-1}$.\n\n3. **סדר שגוי ב-$(AB)^T$.** זה $B^TA^T$, **לא** $A^TB^T$.\n\n4. **ניסיון לחלק במטריצה.** לא קיימת חלוקה — רק כפל בהופכי (כשקיים).\n\n5. **$AB = 0$ לא גורר $A=0$ או $B=0$.** למספרים ממשיים אין מחלקי אפס, אבל למטריצות יש.\n\n6. **בלבול בין $(A^T)^{-1}$ ל-$(A^{-1})^T$.** הם שווים, אבל יש לכתוב $A^{-T}$ כדי להימנע מבלבול."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $c_{ij}=\\sum_l a_{il}b_{lj}$ (matrix product)\n- $(AB)^T = B^T A^T$, $(AB)^{-1}=B^{-1}A^{-1}$\n- $2\\times2$ inverse: $\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$ when $ad-bc\\neq 0$\n- $A$ symmetric iff $A^T=A$; skew-symmetric iff $A^T=-A$\n\n**What Israeli university exams emphasise:**\n- Showing non-commutativity with a specific counterexample (2 points, quick).\n- Proving transpose / inverse formulas by direct entry comparison.\n- Properties of special matrices (idempotent, nilpotent, symmetric).\n- Using $AB=0$ does NOT imply $A$ or $B$ is zero — fill-in-the-blank style.\n\n**Common proof strategy:** For matrix identities, always compare the $(i,j)$ entry of both sides using the definition of matrix multiplication.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $c_{ij}=\\sum_l a_{il}b_{lj}$ (מכפלת מטריצות)\n- $(AB)^T = B^T A^T$, $(AB)^{-1}=B^{-1}A^{-1}$\n- הופכי $2\\times2$: $\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$\n- $A$ סימטרית אם $A^T=A$; אנטי-סימטרית אם $A^T=-A$\n\n**מה בחינות אוניברסיטאיות ישראליות מדגישות:**\n- הוכחת אי-קומוטטיביות עם דוגמת נגד ספציפית.\n- הוכחת נוסחאות טרנספוז/הופכי על ידי השוואת כניסות ישירה.\n- תכונות של מטריצות מיוחדות (אידמפוטנט, נילפוטנט, סימטרית).\n- $AB=0$ לא גורר $A=0$ או $B=0$ — שאלות השלמה.\n\n**אסטרטגיית הוכחה נפוצה:** לזהויות מטריצות, תמיד להשוות כניסת $(i,j)$ בשני הצדדים."
     },
     {
       "kind": "summary",
-      "title_en": "Take-away",
+      "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- Matrix = rectangular array; sizes matter for multiplication.\n- $AB \\ne BA$; $A I = A$; $(AB)^T = B^T A^T$.\n- Linear systems = $Ax = b$; solve via Gaussian elimination.\n- Three outcomes: unique, none, infinitely many.\n- $A^{-1}$ exists iff $\\det A \\ne 0$; then $x = A^{-1} b$.",
-      "body_he_md": "- מטריצה = מערך מלבני; ממדים חשובים לכפל.\n- $AB \\ne BA$; $A I = A$; $(AB)^T = B^T A^T$.\n- מערכות לינאריות = $Ax = b$; פותרים בחילוץ גאוס.\n- שלוש תוצאות: יחיד, אין, אינסוף.\n- $A^{-1}$ קיימת ⇔ $\\det A \\ne 0$; אז $x = A^{-1}b$.",
-      "body_by_level": {
-        "calc1": {
-          "body_en_md": "In this section, we will discuss the take-away from matrices and linear systems. A matrix is a rectangular array of numbers, and a linear system is a set of equations that can be represented in matrix form. We can use matrices to solve systems of linear equations, and the inverse of a matrix can be used to find the solution.\n\nThe main take-aways from this section are:\n\n* A matrix can be represented as $$\\begin{pmatrix} a_{11} & a_{12} \\\\ a_{21} & a_{22} \\end{pmatrix}$$\n* The inverse of a matrix $A$ is denoted as $A^{-1}$ and satisfies the property $AA^{-1} = I$\n* A linear system can be represented in matrix form as $$\\begin{pmatrix} a_{11} & a_{12} \\\\ a_{21} & a_{22} \\end{pmatrix}\\begin{pmatrix} x \\\\ y \\end{pmatrix} = \\begin{pmatrix} b_{1} \\\\ b_{2} \\end{pmatrix}$$\n\n### Worked Example\nFind the inverse of the matrix $$\\begin{pmatrix} 2 & 1 \\\\ 3 & 2 \\end{pmatrix}$$\n\nTo find the inverse, we first need to calculate the determinant of the matrix, which is $det(A) = (2)(2) - (1)(3) = 1$. The inverse of the matrix is then given by $$A^{-1} = \\frac{1}{det(A)}\\begin{pmatrix} 2 & -1 \\\\ -3 & 2 \\end{pmatrix} = \\begin{pmatrix} 2 & -1 \\\\ -3 & 2 \\end{pmatrix}$$\n\n### Key Concepts\n* Matrices and linear systems\n* Inverse of a matrix\n* Determinant of a matrix\n\n### Key Equations\n* $$A^{-1} = \\frac{1}{det(A)}adj(A)$$\n* $$det(A) = \\sum_{i=1}^{n}a_{ij}C_{ij}$$\n\n### Key Theorems\n* The inverse of a matrix is unique\n* The product of a matrix and its inverse is the identity matrix",
-          "body_he_md": ""
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** For all $a\\in\\mathbb{R}$, classify the system (unique / none / infinitely many solutions):\\n$$\\begin{cases} x + ay = 1 \\\\ ax + y = a \\end{cases}$$\n\n**Sample Solution:**\nAugmented matrix: $\\left[\\begin{array}{cc|c} 1 & a & 1 \\\\ a & 1 & a \\end{array}\\right]$.\n\n$R_2 \\leftarrow R_2 - aR_1$: $\\left[\\begin{array}{cc|c} 1 & a & 1 \\\\ 0 & 1-a^2 & 0 \\end{array}\\right]$.\n\n- **$a \\neq \\pm 1$:** $1-a^2 \\neq 0$ ⇒ **unique solution** $x = 1, y = 0$.\n- **$a = 1$:** row 2 is $[0\\ 0\\ |\\ 0]$ ⇒ **infinitely many** ($x+y=1$).\n- **$a = -1$:** row 2 is $[0\\ 0\\ |\\ -2]$ ⇒ **no solution**.\n\n**Problem 2:** Let $A=\\begin{pmatrix}1&2&a\\\\0&1&1\\\\0&0&a-2\\end{pmatrix}$. For which $a$ does $Ax=b$ have a unique solution for every $b$?\n\n**Sample Solution:**\nRow-echelon already. Unique solution for all $b$ iff rank$(A)=3$ iff **$a \\neq 2$** (and pivot in every column). If $a=2$, third row is zero ⇒ infinitely many or none depending on $b$.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** לכל $a\\in\\mathbb{R}$, סווגו: $\\begin{cases} x + ay = 1 \\\\ ax + y = a \\end{cases}$\n\n**פתרון לדוגמה:**\n**$a\\neq\\pm 1$:** יחיד. **$a=1$:** אינסוף. **$a=-1$:** אין פתרון.\n\n**בעיה 2:** מתי $Ax=b$ עם $A=\\begin{pmatrix}1&2&a\\\\0&1&1\\\\0&0&a-2\\end{pmatrix}$ יש פתרון יחיד לכל $b$?\n\n**פתרון לדוגמה:**\n**$a\\neq 2$** (rank 3).\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "body_en_md": "- Matrix multiplication is defined by $c_{ij}=\\sum_l a_{il}b_{lj}$; the inner dimensions must match.\n- **Non-commutativity:** $AB\\neq BA$ in general.\n- **Associativity:** $(AB)C=A(BC)$.\n- **Transpose:** $(AB)^T=B^TA^T$ — order reverses.\n- **Inverse:** $(AB)^{-1}=B^{-1}A^{-1}$ — order reverses; $2\\times2$ formula via $\\det$.\n- A matrix is singular iff $\\det A=0$ iff it is not invertible.\n- $AB=0$ does NOT imply $A=0$ or $B=0$.",
+      "body_he_md": "- כפל מטריצות מוגדר על ידי $c_{ij}=\\sum_l a_{il}b_{lj}$; הממדות הפנימיות חייבות להתאים.\n- **אי-קומוטטיביות:** $AB\\neq BA$ בכלל.\n- **אסוציאטיביות:** $(AB)C=A(BC)$.\n- **טרנספוז:** $(AB)^T=B^TA^T$ — הסדר מתהפך.\n- **הופכי:** $(AB)^{-1}=B^{-1}A^{-1}$ — הסדר מתהפך; נוסחת $2\\times2$ דרך $\\det$.\n- מטריצה סינגולרית אם ורק אם $\\det A=0$.\n- $AB=0$ לא גורר $A=0$ או $B=0$."
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "For each $a\\in\\mathbb{R}$, determine whether $Ax=b$ has a unique solution, no solution, or infinitely many for $\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$. Show full row reduction.",
-      "stem_he": "לכל $a\\in\\mathbb{R}$, קבעו: פתרון יחיד / אין / אינסוף ל-$\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$. הציגו חילוץ מלא.",
-      "rubric_en": "Full credit (10/10): full RREF, three cases $a\neq\\pm1$, $a=1$, $a=-1$ with conclusions.\nPartial (6/10): correct cases, incomplete reduction.\nMinimal (3/10): writes augmented matrix only.",
-      "rubric_he": "ציון מלא (10/10): RREF מלא, שלושה מקרים.\nחלקי (6/10): מקרים נכונים.\nמינימלי (3/10): רק מטריצה.",
-      "explanation_en": "Unique iff $a\\neq\\pm1$; $a=1$ infinite; $a=-1$ none.",
-      "explanation_he": "יחיד iff $a\\neq\\pm1$; $a=1$ אינסוף; $a=-1$ אין.",
-      "skill_atoms": [
-        "matrix_dimensions"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 2,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\det \\begin{pmatrix} 3 & 1 \\\\ 2 & 4 \\end{pmatrix}$.",
-      "stem_he": "חשבו $\\det \\begin{pmatrix} 3 & 1 \\\\ 2 & 4 \\end{pmatrix}$.",
-      "correct_answer": "10",
-      "explanation_en": "$\\det = ad - bc = 3 \\cdot 4 - 1 \\cdot 2 = 10$.",
-      "explanation_he": "$\\det = ad - bc = 3 \\cdot 4 - 1 \\cdot 2 = 10$.",
-      "skill_atoms": [
-        "det_2x2"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $U=\\{v\\in\\mathbb{R}^3 : Av=5v\\}$ where $A=\\begin{pmatrix}7&0&0\\\\0&2&0\\\\0&0&2\\end{pmatrix}$. Prove $U$ is a subspace and find $\\dim U$.",
-      "stem_he": "יהי $U=\\{v: Av=5v\\}$ עם $A=\\begin{pmatrix}7&0&0\\\\0&2&0\\\\0&0&2\\end{pmatrix}$. הוכיחו ש-$U$ תת-מרחב ומצאו $\\dim U$.",
-      "rubric_en": "Full credit (10/10): shows closed under + and scalars, solves $(A-5I)v=0$, $\\dim U=1$.\nPartial (6/10): finds dimension without subspace proof.\nMinimal (3/10): solves only.",
-      "rubric_he": "ציון מלא (10/10): הוכחת תת-מרחב + $\\dim U=1$.\nחלקי (6/10): מימד בלבד.\nמינימלי (3/10): רק פתרון.",
-      "explanation_en": "$U=\\ker(A-5I)=\\text{span}\\{(0,1,0)\\}$, $\\dim U=1$.",
-      "explanation_he": "$U=\\text{span}\\{(0,1,0)\\}$, $\\dim U=1$.",
-      "skill_atoms": [
-        "matrix_vector_product"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Solve $\\begin{cases} x + y + z = 6 \\\\ 2x - y + z = 3 \\\\ x + 2y - z = 2 \\end{cases}$ using Gaussian elimination.",
-      "stem_he": "פתרו $\\begin{cases} x + y + z = 6 \\\\ 2x - y + z = 3 \\\\ x + 2y - z = 2 \\end{cases}$ באמצעות חילוץ גאוס.",
-      "rubric_en": "Full credit (3/3): performs row reduction, finds $z = 3, y = 2, x = 1$.\nPartial (2/3): correct reduction, arithmetic error.\nMinimal (1/3): writes augmented matrix only.",
-      "rubric_he": "ציון מלא (3/3): מבצע חילוץ, מוצא $z = 3, y = 2, x = 1$.\nחלקי (2/3): חילוץ נכון, טעות חישוב.\nמינימלי (1/3): רק כותב מטריצה מורחבת.",
-      "explanation_en": "Augmented matrix → row reduction → $x = 1, y = 2, z = 3$. Verify: $1+2+3=6$ ✓.",
-      "explanation_he": "מטריצה מורחבת → חילוץ → $x = 1, y = 2, z = 3$. אימות: $1+2+3=6$ ✓.",
-      "skill_atoms": [
-        "gaussian_elimination_3x3"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "For each $a\\in\\mathbb{R}$, determine whether $Ax=b$ has a unique solution, no solution, or infinitely many for $\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$. Show full row reduction.",
-      "stem_he": "לכל $a\\in\\mathbb{R}$, קבעו: פתרון יחיד / אין / אינסוף ל-$\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$. הציגו חילוץ מלא.",
-      "rubric_en": "Full credit (10/10): full RREF, three cases $a\neq\\pm1$, $a=1$, $a=-1$ with conclusions.\nPartial (6/10): correct cases, incomplete reduction.\nMinimal (3/10): writes augmented matrix only.",
-      "rubric_he": "ציון מלא (10/10): RREF מלא, שלושה מקרים.\nחלקי (6/10): מקרים נכונים.\nמינימלי (3/10): רק מטריצה.",
-      "explanation_en": "Unique iff $a\\neq\\pm1$; $a=1$ infinite; $a=-1$ none.",
-      "explanation_he": "יחיד iff $a\\neq\\pm1$; $a=1$ אינסוף; $a=-1$ אין.",
-      "skill_atoms": [
-        "matrix_inverse_2x2"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $U=\\{v\\in\\mathbb{R}^3 : Av=5v\\}$ where $A=\\begin{pmatrix}7&0&0\\\\0&2&0\\\\0&0&2\\end{pmatrix}$. Prove $U$ is a subspace and find $\\dim U$.",
-      "stem_he": "יהי $U=\\{v: Av=5v\\}$ עם $A=\\begin{pmatrix}7&0&0\\\\0&2&0\\\\0&0&2\\end{pmatrix}$. הוכיחו ש-$U$ תת-מרחב ומצאו $\\dim U$.",
-      "rubric_en": "Full credit (10/10): shows closed under + and scalars, solves $(A-5I)v=0$, $\\dim U=1$.\nPartial (6/10): finds dimension without subspace proof.\nMinimal (3/10): solves only.",
-      "rubric_he": "ציון מלא (10/10): הוכחת תת-מרחב + $\\dim U=1$.\nחלקי (6/10): מימד בלבד.\nמינימלי (3/10): רק פתרון.",
-      "explanation_en": "$U=\\ker(A-5I)=\\text{span}\\{(0,1,0)\\}$, $\\dim U=1$.",
-      "explanation_he": "$U=\\text{span}\\{(0,1,0)\\}$, $\\dim U=1$.",
-      "skill_atoms": [
-        "singular_matrix_implications"
-      ],
-      "points_level_min": "la"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "$AB \\ne BA$ in general.",
-      "Matrix-vector product: row of $A$ · column of $x$.",
-      "Linear systems $Ax = b$: solve by Gaussian elimination on augmented matrix.",
-      "$A^{-1}$ exists ⇔ $\\det A \\ne 0$ ⇔ unique solution to $Ax = b$.",
-      "$\\det = 0$ ⇒ either no solution or infinitely many — never one."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Matrix multiplication is commutative",
-        "correction": "$AB \\ne BA$ in general. Order matters.",
-        "detect_phrase_en": "matrix multiplication commutative",
-        "detect_phrase_he": "כפל מטריצות קומוטטיבי"
-      },
-      {
-        "wrong": "Every square matrix has an inverse",
-        "correction": "Only if $\\det A \\ne 0$. Singular matrices have no inverse.",
-        "detect_phrase_en": "every matrix has inverse",
-        "detect_phrase_he": "לכל מטריצה הופכית"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "matrix_dimensions",
-      "matrix_vector_product",
-      "det_2x2",
-      "matrix_inverse_2x2",
-      "gaussian_elimination_3x3",
-      "singular_matrix_implications"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "la_vectors",
-      "equations_linear"
-    ],
-    "tutor_pacing_hint": "Always draw the matrix grid. Drill matrix-vector multiplication before matrix-matrix. Gaussian elimination is best taught by example, not formula.",
-    "coach_drill_skills": [
-      "matrix_vector_product",
-      "det_2x2",
-      "gaussian_elimination_3x3"
-    ],
-    "diagnostic_signals": {
-      "if_learner_swaps_factors": "Show $AB \\ne BA$ with a concrete example.",
-      "if_learner_does_columns_instead_of_rows_in_elimination": "Remind that rows correspond to equations; column ops break that."
-    },
-    "next_recommended": [
-      "la_determinants",
-      "la_vector_spaces"
-    ]
-  }
+  ]
 }

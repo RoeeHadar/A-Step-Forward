@@ -1,225 +1,224 @@
 {
   "concept_id": "la_eigenvalues",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
+  "math_track": ["la"],
   "title_en": "Eigenvalues and Eigenvectors",
   "title_he": "ערכים עצמיים ווקטורים עצמיים",
-  "summary_en": "An eigenvector of $A$ keeps its direction under multiplication by $A$; the eigenvalue is the scale factor. Eigenanalysis is the key to PCA, vibration modes, quantum mechanics, and Google's PageRank.",
-  "summary_he": "וקטור עצמי של $A$ שומר על כיוונו תחת כפל ב-$A$; הערך העצמי הוא גורם השינוי. אנליזת ערכים עצמיים היא המפתח ל-PCA, מודי תנודה, מכניקה קוונטית ו-PageRank של גוגל.",
-  "est_minutes": 20,
+  "summary_en": "Eigenvalue equation, characteristic polynomial, finding eigenspaces, geometric vs algebraic multiplicity, and the linear independence of eigenvectors for distinct eigenvalues.",
+  "summary_he": "משוואת הערך העצמי, הפולינום האופייני, מציאת מרחבים עצמיים, ריבוי גיאומטרי ואלגברי, ובלתי-תלות לינארית של וקטורים עצמיים לערכים עצמיים שונים.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is an eigenvector",
-      "title_he": "מהו וקטור עצמי",
-      "body_en_md": "When we multiply a vector $v$ by a matrix $A$, we usually get a vector in a NEW direction. But for **special** vectors, $Av$ points in the SAME direction as $v$ (only scaled). These special vectors are **eigenvectors**.\n\n$$\\boxed{A v = \\lambda v, \\quad v \\ne \\vec{0}.}$$\n\nHere $\\lambda$ (lambda) is the **eigenvalue** — how much $v$ gets scaled.\n\n**Why this matters:** the action of $A$ on its eigenvectors is just multiplication by a number. The most complicated matrix becomes simple along its eigenvector axes. This is the foundation of diagonalization, spectral decomposition, and dimensionality reduction.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "כשמכפילים וקטור $v$ במטריצה $A$, בדרך כלל מקבלים וקטור בכיוון חדש. אבל לוקטורים **מיוחדים**, $Av$ מצביע באותו כיוון של $v$ (רק בגודל שונה). הוקטורים המיוחדים האלה הם **וקטורים עצמיים**.\n\n$$\\boxed{A v = \\lambda v, \\quad v \\ne \\vec{0}.}$$\n\n$\\lambda$ (למבדה) הוא **ערך עצמי** — כמה $v$ מוכפל.\n\n**למה זה חשוב:** הפעולה של $A$ על וקטוריה העצמיים היא רק כפל במספר. המטריצה המסובכת ביותר הופכת לפשוטה לאורך צירי הוקטורים העצמיים.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "An eigenvector of a square matrix $A$ is a non-zero vector $\\mathbf{v}$ such that when the matrix multiplies the vector, the result is a scaled version of the same vector, i.e., $A\\mathbf{v} = \\lambda\\mathbf{v}$, where $\\lambda$ is a scalar called the eigenvalue. This relationship is often written as the equation $A\\mathbf{v} = \\lambda\\mathbf{I}\\mathbf{v}$, where $\\mathbf{I}$ is the identity matrix.\n\nTo find the eigenvectors of a matrix, we need to solve the equation $(A - \\lambda\\mathbf{I})\\mathbf{v} = \\mathbf{0}$, where $\\mathbf{0}$ is the zero vector. The values of $\\lambda$ that satisfy this equation are the eigenvalues of the matrix.\n\nEigenvectors are used to study the behavior of linear transformations and are a fundamental concept in linear algebra.",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Why Eigenvalues?",
+      "title_he": "למה ערכים עצמיים?",
+      "body_en_md": "A linear map $A:\\mathbb{R}^n\\to\\mathbb{R}^n$ typically moves vectors in complicated ways. But certain special directions are preserved — the map simply **scales** the vector without rotating it. These are the **eigenvectors**, and the scale factors are the **eigenvalues**.\n\nEigenvalues are fundamental to: diagonalisation (computing $A^n$ cheaply), differential equations (stability analysis), principal component analysis in statistics, quantum mechanics, and PageRank. Understanding eigenvalues is one of the most important milestones in the course.\n\n**Connection to previous material:** Eigenvalues require determinants (characteristic polynomial) and solving homogeneous linear systems (finding eigenvectors).",
+      "body_he_md": "העתקה לינארית $A:\\mathbb{R}^n\\to\\mathbb{R}^n$ בדרך כלל מזיזה וקטורים בדרכים מורכבות. אבל כיוונים מיוחדים מסוימים שמורים — ההעתקה פשוט **מכפילה** את הוקטור מבלי לסובב אותו. אלה הם ה**וקטורים העצמיים**, וגורמי הכפל הם ה**ערכים העצמיים**.\n\nערכים עצמיים הם בסיסיים ל: אלכסון (חישוב $A^n$ בזול), משוואות דיפרנציאליות (ניתוח יציבות), PCA בסטטיסטיקה, מכניקת קוונטים ו-PageRank. הבנת ערכים עצמיים היא אחת האבני-דרך החשובות ביותר בקורס.\n\n**קשר לחומר קודם:** ערכים עצמיים דורשים דטרמיננטות (פולינום אופייני) ופתרון מערכות הומוגניות (מציאת וקטורים עצמיים)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Eigenvalues, Eigenvectors, and Eigenspaces",
+      "title_he": "ערכים עצמיים, וקטורים עצמיים ומרחבים עצמיים",
+      "body_en_md": "**Definition.** Let $A$ be an $n\\times n$ matrix. A non-zero vector $\\vec{v}\\in\\mathbb{R}^n$ is an **eigenvector** of $A$ with **eigenvalue** $\\lambda\\in\\mathbb{R}$ if\n$$A\\vec{v} = \\lambda\\vec{v}.$$\n\n**Note:** $\\vec{v}\\neq\\vec{0}$ is required by definition. $\\lambda=0$ is allowed (zero eigenvalue means $A$ is singular).\n\n**Characteristic polynomial.** $\\lambda$ is an eigenvalue iff $(A-\\lambda I)\\vec{v}=\\vec{0}$ has a non-trivial solution, i.e., iff $\\det(A-\\lambda I)=0$. The polynomial\n$$p(\\lambda) = \\det(A-\\lambda I)$$\nis the **characteristic polynomial** of $A$.\n\n**Eigenspace.** For eigenvalue $\\lambda$, the **eigenspace** is\n$$E_\\lambda = \\ker(A-\\lambda I) = \\{\\vec{v}: A\\vec{v}=\\lambda\\vec{v}\\}.$$\n$E_\\lambda$ is a non-zero subspace.\n\n**Algebraic multiplicity** $a_\\lambda$ = multiplicity of $\\lambda$ as a root of $p(\\lambda)$.\n\n**Geometric multiplicity** $g_\\lambda = \\dim(E_\\lambda)$.\n\n**Theorem:** $1\\leq g_\\lambda\\leq a_\\lambda$ always.",
+      "body_he_md": "**הגדרה.** יהי $A$ מטריצה $n\\times n$. וקטור לא-אפסי $\\vec{v}\\in\\mathbb{R}^n$ הוא **וקטור עצמי** של $A$ עם **ערך עצמי** $\\lambda\\in\\mathbb{R}$ אם\n$$A\\vec{v} = \\lambda\\vec{v}.$$\n\n**הערה:** $\\vec{v}\\neq\\vec{0}$ נדרש בהגדרה. $\\lambda=0$ מותר (ערך עצמי אפס $\\Rightarrow$ $A$ סינגולרית).\n\n**פולינום אופייני.** $\\lambda$ ערך עצמי אם ורק אם $\\det(A-\\lambda I)=0$. הפולינום\n$$p(\\lambda) = \\det(A-\\lambda I)$$\nהוא ה**פולינום האופייני** של $A$.\n\n**מרחב עצמי:** $E_\\lambda = \\ker(A-\\lambda I)$.\n\n**ריבוי אלגברי** $a_\\lambda$ = ריבוי $\\lambda$ כשורש של $p(\\lambda)$.\n\n**ריבוי גיאומטרי** $g_\\lambda = \\dim(E_\\lambda)$.\n\n**משפט:** $1\\leq g_\\lambda\\leq a_\\lambda$ תמיד."
     },
     {
       "kind": "theory",
-      "title_en": "Finding eigenvalues + eigenvectors",
-      "title_he": "מציאת ערכים ווקטורים עצמיים",
-      "body_en_md": "### The characteristic equation\n\n$Av = \\lambda v$ rearranges to $(A - \\lambda I)v = 0$. For a **nonzero** $v$ to exist, the matrix $A - \\lambda I$ must be singular:\n\n$$\\boxed{\\det(A - \\lambda I) = 0.}$$\n\nThis is the **characteristic equation**. Solving it gives the eigenvalues.\n\n### Recipe\n\n1. Write $A - \\lambda I$ (subtract $\\lambda$ from each diagonal entry).\n2. Compute $\\det(A - \\lambda I)$ — a polynomial in $\\lambda$ (the **characteristic polynomial**).\n3. Solve $\\det = 0$ for $\\lambda$. The solutions are the eigenvalues.\n4. For each $\\lambda$, solve $(A - \\lambda I) v = 0$ to find eigenvectors.\n\n### Example: 2×2 matrix\n\nLet $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix}$.\n\n$A - \\lambda I = \\begin{pmatrix} 2 - \\lambda & 1 \\\\ 1 & 2 - \\lambda \\end{pmatrix}$.\n\n$\\det = (2 - \\lambda)^2 - 1 = \\lambda^2 - 4\\lambda + 3 = (\\lambda - 1)(\\lambda - 3)$.\n\nEigenvalues: $\\lambda_1 = 1$, $\\lambda_2 = 3$.\n\n**For $\\lambda_1 = 1$:** $(A - I) v = 0$: $\\begin{pmatrix} 1 & 1 \\\\ 1 & 1 \\end{pmatrix} v = 0 \\Rightarrow v_2 = -v_1$. So $v_1 = (1, -1)$ (or any nonzero multiple).\n\n**For $\\lambda_2 = 3$:** $(A - 3I) v = 0$: $\\begin{pmatrix} -1 & 1 \\\\ 1 & -1 \\end{pmatrix} v = 0 \\Rightarrow v_2 = v_1$. So $v_2 = (1, 1)$.\n\n### Properties\n\n- An $n \\times n$ matrix has $n$ eigenvalues (counted with multiplicity, possibly complex).\n- **Sum** of eigenvalues = trace($A$) = sum of diagonal.\n- **Product** of eigenvalues = $\\det A$.\n- Eigenvectors with DIFFERENT eigenvalues are linearly independent.\n\n### Diagonalization (when possible)\n\nIf $A$ has $n$ linearly independent eigenvectors, we can write $A = P D P^{-1}$ where $P$ has eigenvectors as columns and $D$ is diagonal with eigenvalues. This makes $A^k = P D^k P^{-1}$ — powers of $A$ become trivial.",
-      "body_he_md": "### המשוואה האופיינית\n\n$Av = \\lambda v$ מסתדר ל-$(A - \\lambda I)v = 0$. עבור $v$ **שונה מאפס**, המטריצה $A - \\lambda I$ חייבת להיות סינגולרית:\n\n$$\\boxed{\\det(A - \\lambda I) = 0.}$$\n\nזו **המשוואה האופיינית**.\n\n### מתכון\n\n1. כותבים $A - \\lambda I$.\n2. מחשבים $\\det(A - \\lambda I)$ — פולינום ב-$\\lambda$ (**הפולינום האופייני**).\n3. פותרים $\\det = 0$ עבור $\\lambda$.\n4. לכל $\\lambda$, פותרים $(A - \\lambda I) v = 0$ למציאת וקטורים עצמיים.\n\n### דוגמה: 2×2\n\n$A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix}$.\n\n$\\det = (2-\\lambda)^2 - 1 = (\\lambda - 1)(\\lambda - 3) = 0$.\n\nערכים עצמיים: $\\lambda_1 = 1$, $\\lambda_2 = 3$.\n\n**$\\lambda_1 = 1$:** $v_1 = (1, -1)$.\n**$\\lambda_2 = 3$:** $v_2 = (1, 1)$.\n\n### תכונות\n\n- מטריצה $n \\times n$ בעלת $n$ ערכים עצמיים (כולל ריבוי).\n- **סכום** = trace($A$).\n- **מכפלה** = $\\det A$.\n- וקטורים עצמיים בערכים שונים בלתי-תלויים.\n\n### דיאגונליזציה\n\nאם ל-$A$ יש $n$ וקטורים עצמיים בלתי-תלויים, $A = PDP^{-1}$ כאשר $P$ עמודות הוקטורים העצמיים ו-$D$ אלכסונית עם הערכים העצמיים.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "In this section, we will learn how to find eigenvalues and eigenvectors of a matrix. An eigenvalue is a scalar that represents how much change occurs in a linear transformation, while an eigenvector is a non-zero vector that, when the linear transformation is applied, results in a scaled version of itself.\n\nTo find eigenvalues and eigenvectors, we need to solve the characteristic equation, which is given by $$\\det(A - \\lambda I) = 0$$, where $A$ is the matrix, $\\lambda$ is the eigenvalue, and $I$ is the identity matrix.\n\nWe will also learn how to find the eigenvectors corresponding to each eigenvalue by solving the equation $(A - \\lambda I)v = 0$, where $v$ is the eigenvector.\n\n### Worked Example\n\nFind the eigenvalues and eigenvectors of the matrix $A = \\begin{bmatrix} 2 & 1 \\\\ 1 & 2 \\end{bmatrix}$.\n\n### Solution\n\nFirst, we need to find the characteristic equation:\n\n$$\\det(A - \\lambda I) = \\det\\begin{bmatrix} 2 - \\lambda & 1 \\\\ 1 & 2 - \\lambda \\end{bmatrix} = (2 - \\lambda)^2 - 1 = 0$$\n\nSolving for $\\lambda$, we get:\n\n$$(2 - \\lambda)^2 = 1$$\n\n$$2 - \\lambda = \\pm 1$$\n\n$$\\lambda = 3 \\text{ or } \\lambda = 1$$\n\nNow, we need to find the eigenvectors corresponding to each eigenvalue.\n\nFor $\\lambda = 3$, we need to solve the equation:\n\n$$(A - 3I)v = 0$$\n\n$$\\begin{bmatrix} -1 & 1 \\\\ 1 & -1 \\end{bmatrix}v = 0$$\n\nSolving for $v$, we get:\n\n$$v = \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}$$\n\nFor $\\lambda = 1$, we need to solve the equation:\n\n$$(A - I)v = 0$$\n\n$$\\begin{bmatrix} 1 & 1 \\\\ 1 & 1 \\end{bmatrix}v = 0$$\n\nSolving for $v$, we get",
-          "body_he_md": "כדי למצוא את הערכים העצמיים, פתח את המשוואה האפיינית: $\\det(A - \\lambda I) = 0$. פתרון המשוואה המאפיינת $p(\\lambda) = \\det(A-\\lambda I)$ נותן את כל הערכים העצמיים. לכל ערך עצמי $\\lambda_i$, פתור $(A - \\lambda_i I)\\mathbf{v} = \\mathbf{0}$ כדי למצוא את וקטורי המרחב האפסי."
-        }
-      }
+      "title_en": "Key Theorems",
+      "title_he": "משפטים מרכזיים",
+      "body_en_md": "**Theorem 1.** The eigenvalues of a triangular matrix are its diagonal entries.\n\n**Theorem 2.** Similar matrices ($B=P^{-1}AP$) have the same characteristic polynomial and hence the same eigenvalues.\n\n**Theorem 3.** $\\lambda=0$ is an eigenvalue of $A$ iff $A$ is singular (not invertible).\n\n**Theorem 4 (Trace and determinant).** For an $n\\times n$ matrix:\n$$\\text{tr}(A) = \\sum_{i=1}^n \\lambda_i, \\qquad \\det(A) = \\prod_{i=1}^n \\lambda_i.$$\n\n**Theorem 5 (Eigenvectors for distinct eigenvalues are independent).**\nIf $\\lambda_1,\\ldots,\\lambda_k$ are **distinct** eigenvalues of $A$ with corresponding eigenvectors $\\vec{v}_1,\\ldots,\\vec{v}_k$, then $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ is linearly independent.\n\n*Proof:* By induction on $k$. Base case $k=1$: single non-zero vector is independent. Inductive step: assume $\\{\\vec{v}_1,\\ldots,\\vec{v}_{k-1}\\}$ independent. Suppose $\\sum_{i=1}^k c_i\\vec{v}_i=\\vec{0}$. Multiply by $A$: $\\sum c_i\\lambda_i\\vec{v}_i=\\vec{0}$. Subtract $\\lambda_k$ times the original: $\\sum_{i=1}^{k-1}c_i(\\lambda_i-\\lambda_k)\\vec{v}_i=\\vec{0}$. By induction hypothesis, $c_i(\\lambda_i-\\lambda_k)=0$ for $i<k$. Since $\\lambda_i\\neq\\lambda_k$, $c_i=0$. Then $c_k\\vec{v}_k=\\vec{0}\\Rightarrow c_k=0$. $\\blacksquare$",
+      "body_he_md": "**משפט 1.** הערכים העצמיים של מטריצה משולשת הם הכניסות האלכסוניות שלה.\n\n**משפט 2.** מטריצות דומות ($B=P^{-1}AP$) בעלות אותו פולינום אופייני ואותם ערכים עצמיים.\n\n**משפט 3.** $\\lambda=0$ ערך עצמי של $A$ אם ורק אם $A$ סינגולרית.\n\n**משפט 4 (עקבה ודטרמיננטה):**\n$$\\text{tr}(A) = \\sum \\lambda_i, \\qquad \\det(A) = \\prod \\lambda_i.$$\n\n**משפט 5 (בלתי-תלות של ע\"ע לערכים שונים).** אם $\\lambda_1,\\ldots,\\lambda_k$ **ערכים שונים** עם ו\"ע $\\vec{v}_1,\\ldots,\\vec{v}_k$, אזי הם בלתי-תלויים.\n\n*הוכחה באינדוקציה:* נניח $\\sum c_i\\vec{v}_i=\\vec{0}$. נכפיל ב-$A$ ונחסר $\\lambda_k$ כפול המשוואה המקורית: $\\sum_{i<k}c_i(\\lambda_i-\\lambda_k)\\vec{v}_i=\\vec{0}$. מהנחת האינדוקציה ו-$\\lambda_i\\neq\\lambda_k$: $c_i=0$. לכן $c_k=0$. $\\blacksquare$"
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: 2×2 with complex eigenvalues",
-      "title_he": "דוגמה פתורה: 2×2 עם ערכים מרוכבים",
-      "body_en_md": "Find eigenvalues of $A = \\begin{pmatrix} 0 & -1 \\\\ 1 & 0 \\end{pmatrix}$ (rotation by 90°).\n\n**Characteristic equation:**\n\n$$\\det \\begin{pmatrix} -\\lambda & -1 \\\\ 1 & -\\lambda \\end{pmatrix} = \\lambda^2 + 1 = 0.$$\n\n**Solutions:** $\\lambda = \\pm i$ — pure imaginary.\n\n**Interpretation:** rotation has no REAL eigenvectors (no direction is preserved); but in $\\mathbb{C}^2$, the eigenvectors $(1, -i)$ and $(1, i)$ pick up complex phases.\n\n**Trace + det check:** trace = $0 + 0 = 0$ = $i + (-i)$ ✓. Det = $0 \\cdot 0 - (-1)(1) = 1$ = $i \\cdot (-i)$ ✓.",
-      "body_he_md": "מצאו ערכים עצמיים של $A = \\begin{pmatrix} 0 & -1 \\\\ 1 & 0 \\end{pmatrix}$ (סיבוב ב-90°).\n\n**משוואה אופיינית:**\n\n$$\\lambda^2 + 1 = 0.$$\n\n**פתרונות:** $\\lambda = \\pm i$.\n\n**פירוש:** לסיבוב אין וקטורים עצמיים ממשיים; ב-$\\mathbb{C}^2$ יש $(1, -i)$ ו-$(1, i)$.\n\n**בדיקה:** trace = 0 = $i + (-i)$ ✓. Det = 1 = $i \\cdot (-i)$ ✓.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "In this section, we will explore the concept of eigenvalues and eigenvectors for a 2x2 matrix with complex eigenvalues. We will use the characteristic equation to find the eigenvalues and eigenvectors of the matrix.\n\nTo find the eigenvalues and eigenvectors of a 2x2 matrix $$\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$$, we first need to find the characteristic equation, which is given by $$\\det(A - \\lambda I) = 0$$, where $$I$$ is the identity matrix and $$\\lambda$$ is the eigenvalue.\n\nLet's consider the matrix $$\\begin{pmatrix} 1 & 2 \\\\ 3 & 0 \\end{pmatrix}$$. We can find the characteristic equation by calculating $$\\det\\begin{pmatrix} 1-\\lambda & 2 \\\\ 3 & -\\lambda \\end{pmatrix} = 0$$.\n\nWorked example: Find the eigenvalues and eigenvectors of the matrix $$\\begin{pmatrix} 1 & 2 \\\\ 3 & 0 \\end{pmatrix}$$.\n\n$$\\det\\begin{pmatrix} 1-\\lambda & 2 \\\\ 3 & -\\lambda \\end{pmatrix} = (1-\\lambda)(-\\lambda) - 2(3) = \\lambda^2 - \\lambda - 6 = 0$$.\n\nUsing the quadratic formula, we get $$\\lambda = \\frac{1 \\pm \\sqrt{1 + 24}}{2} = \\frac{1 \\pm \\sqrt{25}}{2} = \\frac{1 \\pm 5}{2}$$.\n\nTherefore, the eigenvalues are $$\\lambda_1 = 3$$ and $$\\lambda_2 = -2$$.\n\nHowever, since the eigenvalues are complex, we need to use the complex conjugate root theorem, which states that if a polynomial equation has real coefficients, then any complex roots will occur in conjugate pairs.\n\nIn this case, the characteristic equation has complex roots, so we can write the eigenvalues as $$\\lambda_1 = 3 + 0i$$ and $$\\lambda_2 = -2 + 0i$$.\n\nHowever, since the eigenvalues are real, we made an error in our previous calculation. We need to rec",
-          "body_he_md": "דוגמא: $A = \\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.\nשלב 1: $\\det(A-\\lambda I) = (3-\\lambda)(2-\\lambda) = 0 \\Rightarrow \\lambda_1=3, \\lambda_2=2$.\nשלב 2: ל-$\\lambda_1=3$: $(A-3I)\\mathbf{v}=\\mathbf{0} \\Rightarrow \\mathbf{v}_1 = \\begin{pmatrix}1\\\\0\\end{pmatrix}$.\nל-$\\lambda_2=2$: $(A-2I)\\mathbf{v}=\\mathbf{0} \\Rightarrow \\mathbf{v}_2 = \\begin{pmatrix}1\\\\-1\\end{pmatrix}$."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Eigenvalues of an Upper Triangular Matrix",
+      "title_he": "דוגמה פתורה 1 — ערכים עצמיים של מטריצה משולשת עליונה",
+      "body_en_md": "**Find the eigenvalues of** $A = \\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.\n\n**Step 1 — Characteristic polynomial:**\n$$p(\\lambda) = \\det(A-\\lambda I) = \\det\\begin{pmatrix}3-\\lambda&1\\\\0&2-\\lambda\\end{pmatrix} = (3-\\lambda)(2-\\lambda).$$\n\n**Step 2 — Roots:**\n$$p(\\lambda)=0 \\Rightarrow \\lambda_1=3,\\quad \\lambda_2=2.$$\n\n**Step 3 — Eigenvectors for $\\lambda_1=3$:**\n$$(A-3I)\\vec{v}=\\vec{0}: \\begin{pmatrix}0&1\\\\0&-1\\end{pmatrix}\\vec{v}=\\vec{0} \\Rightarrow v_2=0, v_1\\text{ free}. \\quad E_3=\\text{span}\\{(1,0)^T\\}.$$\n\n**Step 4 — Eigenvectors for $\\lambda_2=2$:**\n$$(A-2I)\\vec{v}=\\vec{0}: \\begin{pmatrix}1&1\\\\0&0\\end{pmatrix}\\vec{v}=\\vec{0} \\Rightarrow v_1=-v_2. \\quad E_2=\\text{span}\\{(-1,1)^T\\}.$$",
+      "body_he_md": "**מצא את הערכים העצמיים של** $A = \\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.\n\n**שלב 1 — פולינום אופייני:**\n$$p(\\lambda) = (3-\\lambda)(2-\\lambda).$$\n\n**שלב 2 — שורשים:** $\\lambda_1=3$, $\\lambda_2=2$.\n\n**שלב 3 — ו\"ע ל-$\\lambda_1=3$:** $E_3=\\text{span}\\{(1,0)^T\\}$.\n\n**שלב 4 — ו\"ע ל-$\\lambda_2=2$:** $E_2=\\text{span}\\{(-1,1)^T\\}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the eigenvalues of $A=\\begin{pmatrix}4&0\\\\0&-3\\end{pmatrix}$ without computation. What are their eigenvectors?",
+      "body_he": "מצא את הערכים העצמיים של $A=\\begin{pmatrix}4&0\\\\0&-3\\end{pmatrix}$ ללא חישוב. מהם הוקטורים העצמיים?",
+      "checkpoint_solution_en": "$A$ is diagonal, so eigenvalues are diagonal entries: $\\lambda_1=4$, $\\lambda_2=-3$. Eigenvectors: $\\vec{e}_1=(1,0)^T$ for $\\lambda_1=4$; $\\vec{e}_2=(0,1)^T$ for $\\lambda_2=-3$.",
+      "checkpoint_solution_he": "$A$ אלכסונית, לכן $\\lambda_1=4$, $\\lambda_2=-3$. ו\"ע: $(1,0)^T$ ו-$(0,1)^T$ בהתאמה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Eigenvalues and Eigenvectors of a Symmetric Matrix",
+      "title_he": "דוגמה פתורה 2 — ערכים ווקטורים עצמיים של מטריצה סימטרית",
+      "body_en_md": "**Find the eigenvalues and eigenvectors of** $A = \\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$.\n\n**Characteristic polynomial:**\n$$p(\\lambda) = (2-\\lambda)^2-1 = \\lambda^2-4\\lambda+3 = (\\lambda-1)(\\lambda-3).$$\n\n**Eigenvalues:** $\\lambda_1=1$, $\\lambda_2=3$.\n\n**Eigenspace $E_1$ ($\\lambda=1$):**\n$$(A-I) = \\begin{pmatrix}1&1\\\\1&1\\end{pmatrix} \\to \\begin{pmatrix}1&1\\\\0&0\\end{pmatrix}. \\quad v_1=-v_2. \\quad E_1=\\text{span}\\{(-1,1)^T\\}.$$\n\n**Eigenspace $E_3$ ($\\lambda=3$):**\n$$(A-3I) = \\begin{pmatrix}-1&1\\\\1&-1\\end{pmatrix} \\to \\begin{pmatrix}1&-1\\\\0&0\\end{pmatrix}. \\quad v_1=v_2. \\quad E_3=\\text{span}\\{(1,1)^T\\}.$$\n\n**Observation:** The eigenvectors $(-1,1)^T$ and $(1,1)^T$ are **orthogonal** (their dot product is $-1+1=0$). This is guaranteed by the **Spectral Theorem** for symmetric matrices.",
+      "body_he_md": "**מצא ערכים ווקטורים עצמיים של** $A = \\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$.\n\n**פולינום אופייני:** $p(\\lambda) = (\\lambda-1)(\\lambda-3)$.\n\n**ערכים עצמיים:** $\\lambda_1=1$, $\\lambda_2=3$.\n\n**$E_1$:** $\\text{span}\\{(-1,1)^T\\}$.\n\n**$E_3$:** $\\text{span}\\{(1,1)^T\\}$.\n\n**תצפית:** הו\"ע **אורתוגונלים** — מובטח על ידי **משפט הספקטרום** למטריצות סימטריות."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the eigenvalues of $B=\\begin{pmatrix}1&2\\\\2&1\\end{pmatrix}$. Identify their algebraic multiplicities.",
+      "body_he": "מצא את הערכים העצמיים של $B=\\begin{pmatrix}1&2\\\\2&1\\end{pmatrix}$. זהה את הריבויים האלגבריים.",
+      "checkpoint_solution_en": "$p(\\lambda)=(1-\\lambda)^2-4=\\lambda^2-2\\lambda-3=(\\lambda-3)(\\lambda+1)$. Eigenvalues: $\\lambda=3$ (a.m.=1), $\\lambda=-1$ (a.m.=1).",
+      "checkpoint_solution_he": "$p(\\lambda)=(\\lambda-3)(\\lambda+1)$. ע\"ע: $\\lambda=3$ (ר\"א=1), $\\lambda=-1$ (ר\"א=1)."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Proof: Eigenvectors for Distinct Eigenvalues are Linearly Independent",
+      "title_he": "דוגמה פתורה 3 — הוכחה: ו\"ע לערכים עצמיים שונים בלתי-תלויים",
+      "body_en_md": "**Claim:** If $\\lambda_1,\\ldots,\\lambda_k$ are distinct eigenvalues of $A$ with corresponding non-zero eigenvectors $\\vec{v}_1,\\ldots,\\vec{v}_k$, then $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ is linearly independent.\n\n**Proof by induction on $k$:**\n\n**Base case ($k=1$):** $\\{\\vec{v}_1\\}$ is independent since $\\vec{v}_1\\neq\\vec{0}$. ✓\n\n**Inductive step:** Assume the result holds for any $k-1$ eigenvectors with distinct eigenvalues. Suppose\n$$c_1\\vec{v}_1+c_2\\vec{v}_2+\\cdots+c_k\\vec{v}_k = \\vec{0}. \\quad (*)$$\n\n**Apply $A$ to $(*)$:**\n$$c_1 A\\vec{v}_1+\\cdots+c_k A\\vec{v}_k = \\vec{0} \\Rightarrow c_1\\lambda_1\\vec{v}_1+\\cdots+c_k\\lambda_k\\vec{v}_k=\\vec{0}. \\quad (**)$$\n\n**Compute $(**) - \\lambda_k \\cdot (*)$:**\n$$c_1(\\lambda_1-\\lambda_k)\\vec{v}_1+c_2(\\lambda_2-\\lambda_k)\\vec{v}_2+\\cdots+c_{k-1}(\\lambda_{k-1}-\\lambda_k)\\vec{v}_{k-1}=\\vec{0}.$$\n\n**By the induction hypothesis**, $\\{\\vec{v}_1,\\ldots,\\vec{v}_{k-1}\\}$ is independent, so:\n$$c_i(\\lambda_i-\\lambda_k)=0 \\quad \\forall i=1,\\ldots,k-1.$$\n\n**Since eigenvalues are distinct**, $\\lambda_i-\\lambda_k\\neq0$, so $c_i=0$ for $i=1,\\ldots,k-1$.\n\n**Substituting back into $(*)$:** $c_k\\vec{v}_k=\\vec{0}$. Since $\\vec{v}_k\\neq\\vec{0}$, $c_k=0$.\n\nAll $c_i=0$, so $\\{\\vec{v}_1,\\ldots,\\vec{v}_k\\}$ is linearly independent. $\\blacksquare$",
+      "body_he_md": "**טענה:** אם $\\lambda_1,\\ldots,\\lambda_k$ ערכים עצמיים **שונים** עם ו\"ע $\\vec{v}_1,\\ldots,\\vec{v}_k$, אזי הם בלתי-תלויים.\n\n**הוכחה באינדוקציה על $k$:**\n\n**בסיס ($k=1$):** $\\{\\vec{v}_1\\}$ בלתי-תלוי כי $\\vec{v}_1\\neq\\vec{0}$. ✓\n\n**שלב האינדוקציה:** נניח נכון ל-$k-1$. נניח $\\sum c_i\\vec{v}_i=\\vec{0}$ $(*)$.\n\n**הפעל $A$ על $(*)$:** $\\sum c_i\\lambda_i\\vec{v}_i=\\vec{0}$ $(**)$.\n\n**$(**)-\\lambda_k\\cdot(*)$:** $\\sum_{i=1}^{k-1}c_i(\\lambda_i-\\lambda_k)\\vec{v}_i=\\vec{0}$.\n\n**מהנחת האינדוקציה:** $c_i(\\lambda_i-\\lambda_k)=0$. מכיוון שהערכים שונים: $c_i=0$ לכל $i<k$.\n\n**הצבה חוזרת ב-$(*)$:** $c_k=0$. כולם אפסיים. $\\blacksquare$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Eigenvalue Computation",
+      "title_he": "מדריך שיטה — חישוב ערכים עצמיים",
+      "body_en_md": "**Step 1:** Form $A-\\lambda I$.\n\n**Step 2:** Compute $p(\\lambda)=\\det(A-\\lambda I)$ (polynomial of degree $n$).\n\n**Step 3:** Solve $p(\\lambda)=0$ for the eigenvalues $\\lambda_1,\\ldots$.\n\n**Step 4:** For each $\\lambda_i$, row-reduce $A-\\lambda_i I$ and find $\\ker(A-\\lambda_i I)=E_{\\lambda_i}$.\n\n**Step 5:** Record algebraic multiplicity (root order) and geometric multiplicity ($\\dim E_{\\lambda_i}$).\n\n| Check | Meaning |\n|---|---|\n| $g_\\lambda < a_\\lambda$ | Matrix is NOT diagonalizable (for this eigenvalue) |\n| $g_\\lambda = a_\\lambda$ for ALL $\\lambda$ | Matrix IS diagonalizable |\n| tr$(A)=\\sum\\lambda_i$ | Quick sanity check |\n| $\\det(A)=\\prod\\lambda_i$ | Quick sanity check |",
+      "body_he_md": "**שלב 1:** בנה $A-\\lambda I$.\n\n**שלב 2:** חשב $p(\\lambda)=\\det(A-\\lambda I)$.\n\n**שלב 3:** פתור $p(\\lambda)=0$.\n\n**שלב 4:** לכל $\\lambda_i$, דרג $A-\\lambda_i I$ ומצא $E_{\\lambda_i}$.\n\n**שלב 5:** רשום ריבויים.\n\n| בדיקה | משמעות |\n|---|---|\n| $g_\\lambda < a_\\lambda$ | **אינה** ניתנת לאלכסון |\n| $g_\\lambda = a_\\lambda$ לכל $\\lambda$ | **ניתנת** לאלכסון |\n| tr$(A)=\\sum\\lambda_i$ | בדיקת שפיות |\n| $\\det(A)=\\prod\\lambda_i$ | בדיקת שפיות |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find eigenvalues of $A=\\begin{pmatrix}5&0\\\\0&-2\\end{pmatrix}$.",
+          "body_he": "מצא ע\"ע של $A=\\begin{pmatrix}5&0\\\\0&-2\\end{pmatrix}$.",
+          "solution_en": "$\\lambda_1=5$, $\\lambda_2=-2$ (diagonal matrix).",
+          "solution_he": "$\\lambda_1=5$, $\\lambda_2=-2$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Is $\\vec{v}=(1,2)^T$ an eigenvector of $A=\\begin{pmatrix}3&0\\\\0&3\\end{pmatrix}$? If so, what is the eigenvalue?",
+          "body_he": "האם $\\vec{v}=(1,2)^T$ ו\"ע של $A=\\begin{pmatrix}3&0\\\\0&3\\end{pmatrix}$? אם כן, מהו הע\"ע?",
+          "solution_en": "$A\\vec{v}=(3,6)^T=3(1,2)^T$. Yes, eigenvalue $\\lambda=3$.",
+          "solution_he": "$A\\vec{v}=3\\vec{v}$. כן, $\\lambda=3$.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find eigenvalues of $A=\\begin{pmatrix}0&1\\\\-2&3\\end{pmatrix}$ via the characteristic polynomial.",
+          "body_he": "מצא ע\"ע של $A=\\begin{pmatrix}0&1\\\\-2&3\\end{pmatrix}$ דרך הפולינום האופייני.",
+          "solution_en": "$p(\\lambda)=\\lambda(3-\\lambda)+2=\\lambda^2-3\\lambda+2=(\\lambda-1)(\\lambda-2)$. $\\lambda_1=1$, $\\lambda_2=2$.",
+          "solution_he": "$p(\\lambda)=(\\lambda-1)(\\lambda-2)$. $\\lambda_1=1$, $\\lambda_2=2$.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Given $A$ has eigenvalues $2$ and $5$, find tr$(A)$ and $\\det(A)$.",
+          "body_he": "נתון ל-$A$ ע\"ע $2$ ו-$5$. מצא tr$(A)$ ו-$\\det(A)$.",
+          "solution_en": "tr$(A)=2+5=7$, $\\det(A)=2\\cdot5=10$.",
+          "solution_he": "tr$(A)=7$, $\\det(A)=10$.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find eigenvalues and eigenvectors of $A=\\begin{pmatrix}4&-2\\\\1&1\\end{pmatrix}$.",
+          "body_he": "מצא ע\"ע וו\"ע של $A=\\begin{pmatrix}4&-2\\\\1&1\\end{pmatrix}$.",
+          "solution_en": "$p(\\lambda)=(4-\\lambda)(1-\\lambda)+2=\\lambda^2-5\\lambda+6=(\\lambda-2)(\\lambda-3)$. $E_2$: $(A-2I)\\to\\begin{pmatrix}2&-2\\\\1&-1\\end{pmatrix}$, $\\vec{v}=(1,1)^T$. $E_3$: $(A-3I)\\to\\begin{pmatrix}1&-2\\\\1&-2\\end{pmatrix}$, $\\vec{v}=(2,1)^T$.",
+          "solution_he": "$\\lambda_1=2$: $E_2=\\text{span}\\{(1,1)^T\\}$. $\\lambda_2=3$: $E_3=\\text{span}\\{(2,1)^T\\}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find a $3\\times3$ matrix with eigenvalues $1,-1,2$ (diagonal form).",
+          "body_he": "מצא מטריצה $3\\times3$ עם ע\"ע $1,-1,2$ (צורה אלכסונית).",
+          "solution_en": "$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$ (or any similar matrix).",
+          "solution_he": "$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find the eigenvalues of $A=\\begin{pmatrix}1&0&0\\\\2&3&0\\\\1&1&-1\\end{pmatrix}$ (triangular matrix).",
+          "body_he": "מצא ע\"ע של $A=\\begin{pmatrix}1&0&0\\\\2&3&0\\\\1&1&-1\\end{pmatrix}$ (משולשת).",
+          "solution_en": "$\\lambda_1=1,\\lambda_2=3,\\lambda_3=-1$ (diagonal entries of lower triangular matrix).",
+          "solution_he": "ע\"ע = כניסות אלכסוניות: $1,3,-1$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Show that $\\lambda=0$ is an eigenvalue of $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ and find the corresponding eigenspace.",
+          "body_he": "הראה ש-$\\lambda=0$ ע\"ע של $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ ומצא את המרחב העצמי.",
+          "solution_en": "$\\det(A)=4-4=0$, so $\\lambda=0$ is an eigenvalue. $E_0=\\ker(A)$: $A\\vec{v}=\\vec{0}\\Rightarrow v_1=-2v_2$. $E_0=\\text{span}\\{(-2,1)^T\\}$.",
+          "solution_he": "$\\det(A)=0$, לכן $\\lambda=0$ ע\"ע. $E_0=\\text{span}\\{(-2,1)^T\\}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Show that if $\\vec{v}$ is an eigenvector of $A$ with eigenvalue $\\lambda$, then $\\vec{v}$ is also an eigenvector of $A^2$ with eigenvalue $\\lambda^2$. Generalise to $A^k$.",
+          "body_he": "הראה שאם $\\vec{v}$ ו\"ע של $A$ עם ע\"ע $\\lambda$, אז $\\vec{v}$ גם ו\"ע של $A^2$ עם ע\"ע $\\lambda^2$. הכלל ל-$A^k$.",
+          "solution_en": "$A^2\\vec{v}=A(A\\vec{v})=A(\\lambda\\vec{v})=\\lambda A\\vec{v}=\\lambda^2\\vec{v}$. By induction: $A^k\\vec{v}=\\lambda^k\\vec{v}$. $\\blacksquare$",
+          "solution_he": "$A^2\\vec{v}=A(\\lambda\\vec{v})=\\lambda^2\\vec{v}$. באינדוקציה: $A^k\\vec{v}=\\lambda^k\\vec{v}$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that if $A$ is invertible and $\\lambda$ is an eigenvalue of $A$, then $1/\\lambda$ is an eigenvalue of $A^{-1}$.",
+          "body_he": "הוכח שאם $A$ הפיכה ו-$\\lambda$ ע\"ע של $A$, אז $1/\\lambda$ ע\"ע של $A^{-1}$.",
+          "solution_en": "Let $A\\vec{v}=\\lambda\\vec{v}$. Multiply on left by $A^{-1}$: $\\vec{v}=\\lambda A^{-1}\\vec{v}\\Rightarrow A^{-1}\\vec{v}=(1/\\lambda)\\vec{v}$. $\\blacksquare$ (Note: $\\lambda\\neq0$ since $A$ invertible.)",
+          "solution_he": "$A\\vec{v}=\\lambda\\vec{v}$ ⟹ $A^{-1}\\vec{v}=(1/\\lambda)\\vec{v}$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Let $A$ be $n\\times n$ with $A^2=A$ (idempotent). Prove that the only eigenvalues of $A$ are $0$ and $1$.",
+          "body_he": "יהי $A$ מטריצה $n\\times n$ עם $A^2=A$ (אידמפוטנטית). הוכח שהע\"ע היחידים של $A$ הם $0$ ו-$1$.",
+          "solution_en": "Let $A\\vec{v}=\\lambda\\vec{v}$ ($\\vec{v}\\neq0$). Then $A^2\\vec{v}=\\lambda^2\\vec{v}$. But $A^2=A$, so $\\lambda^2\\vec{v}=\\lambda\\vec{v}\\Rightarrow\\lambda(\\lambda-1)\\vec{v}=\\vec{0}\\Rightarrow\\lambda(\\lambda-1)=0$. So $\\lambda=0$ or $\\lambda=1$. $\\blacksquare$",
+          "solution_he": "מ-$A^2\\vec{v}=A\\vec{v}$: $\\lambda^2=\\lambda$, לכן $\\lambda=0$ או $\\lambda=1$. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Prove that $A$ and $A^T$ have the same eigenvalues.",
+          "body_he": "הוכח ש-$A$ ו-$A^T$ בעלים אותם ערכים עצמיים.",
+          "solution_en": "$\\det(A^T-\\lambda I)=\\det((A-\\lambda I)^T)=\\det(A-\\lambda I)$. So $A$ and $A^T$ have the same characteristic polynomial and hence the same eigenvalues. $\\blacksquare$",
+          "solution_he": "$\\det(A^T-\\lambda I)=\\det(A-\\lambda I)$ (כי $\\det(B^T)=\\det(B)$). לכן אותם ע\"ע. $\\blacksquare$",
+          "points": 12
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Zero vector as eigenvector.** $v = 0$ trivially satisfies $Av = \\lambda v$; we exclude it by convention.\n2. **Forgetting complex eigenvalues.** Real matrices can have complex eigenvalues (always in conjugate pairs).\n3. **Eigenvector unique?** No — any nonzero multiple of an eigenvector is also an eigenvector with the same $\\lambda$.\n4. **$\\det(A - \\lambda I) = \\det A - \\lambda \\det I$.** False. The determinant doesn't distribute that way.\n5. **Trace check.** Always verify: sum of eigenvalues = trace($A$). Great sanity check.",
-      "body_he_md": "1. **וקטור אפס כעצמי.** $v = 0$ פותר טריוויאלית; מוציאים אותו.\n2. **שכחת ערכים מרוכבים.** מטריצות ממשיות יכולות לקבל ערכים מרוכבים.\n3. **וקטור עצמי יחיד?** לא — כל כפולה אינה אפס של וקטור עצמי היא וקטור עצמי לאותו $\\lambda$.\n4. **$\\det(A - \\lambda I) \\ne \\det A - \\lambda \\det I$.** הדטרמיננטה לא מתפזרת ככה.\n5. **בדיקת trace.** תמיד מאמתים: סכום ערכים עצמיים = trace($A$).",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Eigenvalues and eigenvectors are fundamental concepts in linear algebra, but there are common pitfalls to be aware of when working with them. One mistake is assuming that if $\\lambda$ is an eigenvalue of $A$, then $\\lambda^2$ is also an eigenvalue of $A^2$. This is not necessarily true, as the eigenvalues of $A^2$ are the squares of the eigenvalues of $A$. Another pitfall is assuming that if $\\mathbf{v}$ is an eigenvector of $A$, then $\\mathbf{v}$ is also an eigenvector of $A^2$. This is not necessarily true, as the eigenvectors of $A^2$ are the eigenvectors of $A$ scaled by a factor of $\\lambda$.\n\nExample: Find the eigenvalues of $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix}$ and show that they are not the same as the eigenvalues of $A^2$.\n\n$$A^2 = \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix} \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix} = \\begin{pmatrix} 5 & 4 \\\\ 4 & 5 \\end{pmatrix}$$\n\nTo find the eigenvalues of $A$, we solve the characteristic equation $|A - \\lambda I| = 0$.\n\n$$\\begin{vmatrix} 2 - \\lambda & 1 \\\\ 1 & 2 - \\lambda \\end{vmatrix} = (2 - \\lambda)^2 - 1 = 0$$\n\n$$\\lambda^2 - 4\\lambda + 3 = 0$$\n\n$$(\\lambda - 3)(\\lambda - 1) = 0$$\n\n$$\\lambda = 3, 1$$\n\nTo find the eigenvalues of $A^2$, we solve the characteristic equation $|A^2 - \\lambda I| = 0$.\n\n$$\\begin{vmatrix} 5 - \\lambda & 4 \\\\ 4 & 5 - \\lambda \\end{vmatrix} = (5 - \\lambda)^2 - 16 = 0$$\n\n$$\\lambda^2 -",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "1. **Including $\\vec{0}$ as an eigenvector.** By definition, eigenvectors are non-zero. The zero vector trivially satisfies $A\\vec{0}=\\lambda\\vec{0}$ for any $\\lambda$ — it's excluded.\n\n2. **Computing $\\det(A-\\lambda I)$ with wrong signs.** It is $A-\\lambda I$, not $\\lambda I - A$ (though the roots are the same, the leading coefficient flips).\n\n3. **Forgetting that eigenspaces have dimension $\\geq1$.** Once $\\lambda$ is an eigenvalue, $E_\\lambda$ always has dimension $\\geq1$ — you can always find at least one eigenvector.\n\n4. **Confusing algebraic and geometric multiplicity.** A.m. is the root multiplicity in $p(\\lambda)$; g.m. is the dimension of the eigenspace. They need not be equal.\n\n5. **Missing complex eigenvalues.** For real matrices, complex eigenvalues come in conjugate pairs. If asked over $\\mathbb{R}$ only, say \"no real eigenvalues\" when the polynomial has no real roots.",
+      "body_he_md": "1. **כלול $\\vec{0}$ כוקטור עצמי.** לפי הגדרה, ו\"ע הם אי-אפסיים.\n\n2. **שגיאת סימן ב-$\\det(A-\\lambda I)$.** זהו $A-\\lambda I$, לא $\\lambda I-A$.\n\n3. **שכחה שמרחבים עצמיים בממד $\\geq1$.** לכל ע\"ע $\\lambda$ יש לפחות ו\"ע אחד.\n\n4. **בלבול ריבוי אלגברי וגיאומטרי.** ר\"א = ריבוי שורש ב-$p(\\lambda)$; ר\"ג = ממד המרחב העצמי.\n\n5. **פספוס ע\"ע מרוכבים.** למטריצות ממשיות, ע\"ע מרוכבים מגיעים בזוגות מצומדים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- $A\\vec{v}=\\lambda\\vec{v}$, $\\vec{v}\\neq\\vec{0}$\n- $p(\\lambda)=\\det(A-\\lambda I)=0$\n- $E_\\lambda=\\ker(A-\\lambda I)$\n- $1\\leq g_\\lambda\\leq a_\\lambda$\n- tr$(A)=\\sum\\lambda_i$, $\\det(A)=\\prod\\lambda_i$\n- Triangular/diagonal: eigenvalues = diagonal entries\n\n**What Israeli university exams emphasise:**\n- Finding all eigenvalues and eigenvectors of a $2\\times2$ or $3\\times3$ matrix (main bulk of marks).\n- Distinguishing algebraic vs geometric multiplicity.\n- Proving structural properties (eigenvectors of $A^k$, $A^{-1}$).\n- Checking diagonalisability criterion: $g_\\lambda=a_\\lambda$ for all $\\lambda$.\n\n**Exam tip:** Always verify your eigenvectors by computing $A\\vec{v}-\\lambda\\vec{v}$ and checking it is $\\vec{0}$.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $A\\vec{v}=\\lambda\\vec{v}$, $\\vec{v}\\neq\\vec{0}$\n- $p(\\lambda)=\\det(A-\\lambda I)=0$\n- $E_\\lambda=\\ker(A-\\lambda I)$\n- $1\\leq g_\\lambda\\leq a_\\lambda$\n- tr$(A)=\\sum\\lambda_i$, $\\det(A)=\\prod\\lambda_i$\n\n**מה בחינות ישראליות מדגישות:**\n- מציאת כל ע\"ע וו\"ע של $2\\times2$ או $3\\times3$.\n- הבחנה ריבוי אלגברי לעומת גיאומטרי.\n- הוכחת תכונות (ו\"ע של $A^k$, $A^{-1}$).\n- בדיקת אלכסוניות: $g_\\lambda=a_\\lambda$ לכל $\\lambda$.\n\n**טיפ:** תמיד אמת ו\"ע בחישוב $A\\vec{v}-\\lambda\\vec{v}=\\vec{0}$."
     },
     {
       "kind": "summary",
-      "title_en": "Take-away",
+      "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- Eigenvector: $Av = \\lambda v$, $v \\ne 0$.\n- Eigenvalues solve $\\det(A - \\lambda I) = 0$.\n- Sum eigenvalues = trace; product eigenvalues = det.\n- For each $\\lambda$, find eigenvector via $(A - \\lambda I)v = 0$.\n- $A = PDP^{-1}$ when $A$ has $n$ independent eigenvectors (diagonalization).",
-      "body_he_md": "- וקטור עצמי: $Av = \\lambda v$, $v \\ne 0$.\n- ערכים עצמיים פותרים $\\det(A - \\lambda I) = 0$.\n- סכום = trace; מכפלה = det.\n- לכל $\\lambda$, וקטור עצמי מ-$(A - \\lambda I)v = 0$.\n- $A = PDP^{-1}$ כאשר ל-$A$ יש $n$ וקטורים עצמיים בלתי-תלויים.",
-      "body_by_level": {
-        "la": {
-          "body_en_md": "Eigenvalues and eigenvectors are scalar and vector values that are associated with a square matrix. An eigenvalue $\\lambda$ and its corresponding eigenvector $\\mathbf{v}$ satisfy the equation $\\mathbf{Av} = \\lambda\\mathbf{v}$, where $\\mathbf{A}$ is the square matrix. This equation can be rewritten as $(\\mathbf{A} - \\lambda\\mathbf{I})\\mathbf{v} = \\mathbf{0}$, which is known as the characteristic equation. The eigenvalues and eigenvectors of a matrix can be used to diagonalize the matrix.",
-          "body_he_md": ""
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Eigenvalues and Eigenvectors: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Eigenvalues and Eigenvectors.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-ערכים עצמיים ווקטורים עצמיים: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-ערכים עצמיים ווקטורים עצמיים.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "body_en_md": "- **Eigenvalue equation:** $A\\vec{v}=\\lambda\\vec{v}$, $\\vec{v}\\neq\\vec{0}$.\n- **Characteristic polynomial:** $p(\\lambda)=\\det(A-\\lambda I)$; roots are eigenvalues.\n- **Eigenspace:** $E_\\lambda=\\ker(A-\\lambda I)$, always non-trivial when $\\lambda$ is an eigenvalue.\n- **Algebraic multiplicity** $\\geq$ **Geometric multiplicity** $\\geq 1$.\n- **Key identities:** tr$(A)=\\sum\\lambda_i$, $\\det(A)=\\prod\\lambda_i$.\n- **Triangular matrices:** eigenvalues are diagonal entries.\n- **Eigenvectors for distinct eigenvalues are linearly independent.**",
+      "body_he_md": "- **משוואת ע\"ע:** $A\\vec{v}=\\lambda\\vec{v}$, $\\vec{v}\\neq\\vec{0}$.\n- **פולינום אופייני:** $p(\\lambda)=\\det(A-\\lambda I)$; שורשים = ע\"ע.\n- **מרחב עצמי:** $E_\\lambda=\\ker(A-\\lambda I)$.\n- **ריבוי אלגברי $\\geq$ גיאומטרי $\\geq1$.**\n- **זהויות:** tr$(A)=\\sum\\lambda_i$, $\\det(A)=\\prod\\lambda_i$.\n- **מטריצות משולשות:** ע\"ע = כניסות אלכסוניות.\n- **ו\"ע לערכים שונים הם בלתי-תלויים.**"
     }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Eigenvalues and Eigenvectors'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'ערכים עצמיים ווקטורים עצמיים'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "eigenvalue_definition"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 2,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "If a $2 \\times 2$ matrix has eigenvalues $3$ and $-2$, what is its determinant?",
-      "stem_he": "אם למטריצה $2 \\times 2$ ערכים עצמיים $3$ ו-$-2$, מה הדטרמיננטה?",
-      "correct_answer": "-6",
-      "explanation_en": "Product of eigenvalues = det. $3 \\cdot (-2) = -6$.",
-      "explanation_he": "מכפלת ערכים עצמיים = det. $3 \\cdot (-2) = -6$.",
-      "skill_atoms": [
-        "product_eigenvalues_det"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Eigenvalues and Eigenvectors' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'ערכים עצמיים ווקטורים עצמיים' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "compute_eigenvalues_2x2"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Find an eigenvector of $A = \\begin{pmatrix} 2 & 0 \\\\ 0 & 5 \\end{pmatrix}$ corresponding to $\\lambda = 5$.",
-      "stem_he": "מצאו וקטור עצמי של $A = \\begin{pmatrix} 2 & 0 \\\\ 0 & 5 \\end{pmatrix}$ עבור $\\lambda = 5$.",
-      "rubric_en": "Full credit (3/3): $A - 5I = \\begin{pmatrix} -3 & 0 \\\\ 0 & 0 \\end{pmatrix}$. $(A - 5I)v = 0$ ⇒ $-3 v_1 = 0$, $v_2$ free. So $v = (0, 1)$ (or any nonzero multiple).\nPartial (2/3): correct setup, wrong vector.\nMinimal (1/3): writes $A - \\lambda I$ only.",
-      "rubric_he": "ציון מלא (3/3): $A - 5I = \\begin{pmatrix} -3 & 0 \\\\ 0 & 0 \\end{pmatrix}$. $v_1 = 0$, $v_2$ חופשי. אז $v = (0, 1)$.\nחלקי (2/3): הצבה נכונה, וקטור שגוי.\nמינימלי (1/3): רק כותב $A - \\lambda I$.",
-      "explanation_en": "Diagonal matrix: eigenvalues are diagonal entries ($2$ and $5$); eigenvectors are standard basis vectors. For $\\lambda = 5$: $v = (0, 1)$.",
-      "explanation_he": "מטריצה אלכסונית: ערכים עצמיים = אלכסון, וקטורים עצמיים = בסיס סטנדרטי. עבור $\\lambda = 5$: $v = (0, 1)$.",
-      "skill_atoms": [
-        "find_eigenvector"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Eigenvalues and Eigenvectors'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'ערכים עצמיים ווקטורים עצמיים'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "trace_det_to_eigenvalues"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Eigenvalues and Eigenvectors' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'ערכים עצמיים ווקטורים עצמיים' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "compute_eigenvalues_2x2"
-      ],
-      "points_level_min": "la"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Eigenvector $v$ keeps direction: $Av = \\lambda v$.",
-      "Eigenvalues solve $\\det(A - \\lambda I) = 0$ — the characteristic equation.",
-      "Sum of eigenvalues = trace; product = det. Use as sanity checks.",
-      "Real matrices can have complex eigenvalues (in conjugate pairs).",
-      "Diagonalization: $A = PDP^{-1}$ when independent eigenvectors exist."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Eigenvector is unique",
-        "correction": "Any nonzero multiple is also an eigenvector for the same eigenvalue. The 'direction' is what's preserved.",
-        "detect_phrase_en": "eigenvector unique",
-        "detect_phrase_he": "וקטור עצמי יחיד"
-      },
-      {
-        "wrong": "Zero vector is an eigenvector",
-        "correction": "By convention $v = 0$ is excluded; otherwise every $\\lambda$ would qualify.",
-        "detect_phrase_en": "zero vector eigenvector",
-        "detect_phrase_he": "וקטור אפס עצמי"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "eigenvalue_definition",
-      "compute_eigenvalues_2x2",
-      "find_eigenvector",
-      "product_eigenvalues_det",
-      "trace_det_to_eigenvalues"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "la_determinants",
-      "la_vector_spaces"
-    ],
-    "tutor_pacing_hint": "Always start with the geometric picture: 'find directions that don't rotate under $A$.' Then drill 2×2 by characteristic polynomial. Diagonalization can wait for an advanced lesson.",
-    "coach_drill_skills": [
-      "compute_eigenvalues_2x2",
-      "find_eigenvector",
-      "trace_det_to_eigenvalues"
-    ],
-    "diagnostic_signals": {
-      "if_learner_can't_solve_char_eq": "Recall quadratic formula; for 3×3 expand along a row with zeros.",
-      "if_learner_picks_zero_vector": "Re-anchor: 'every matrix sends 0 to 0 — that's not informative.'"
-    },
-    "next_recommended": [
-      "la_orthogonality"
-    ]
-  }
+  ]
 }

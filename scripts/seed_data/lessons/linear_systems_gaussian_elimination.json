@@ -1,126 +1,224 @@
 {
   "concept_id": "linear_systems_gaussian_elimination",
-  "subject": "math",
+  "subject": "linear_algebra",
   "level": "university",
-  "math_track": [
-    "calc1",
-    "la"
-  ],
-  "title_en": "Linear Systems — Gaussian Elimination",
-  "title_he": "מערכות לינאריות — חילוץ גאוס",
-  "summary_en": "Row reduction, RREF, and classifying solutions (unique / none / infinitely many) including parametric systems.",
-  "summary_he": "חילוף שורות, צורה מדורגת, סיווג פתרונות כולל מערכות עם פרמטר.",
-  "est_minutes": 30,
+  "math_track": ["la"],
+  "title_en": "Systems of Linear Equations — Gaussian Elimination & Solution Types",
+  "title_he": "מערכות משוואות לינאריות — אלימינציית גאוס וסוגי הפתרון",
+  "summary_en": "Solving linear systems via row reduction to echelon form and RREF; recognising unique solutions, infinite families, and inconsistency; working with parameter-dependent systems.",
+  "summary_he": "פתרון מערכות לינאריות על ידי דירוג מטריצות למדרגה ול-RREF; זיהוי פתרון יחיד, משפחות אינסופיות וחוסר עקביות; עבודה עם מערכות תלויות פרמטר.",
+  "est_minutes": 45,
   "sections": [
     {
+      "kind": "intro",
+      "title_en": "Why Gaussian Elimination?",
+      "title_he": "למה אלימינציית גאוס?",
+      "body_en_md": "Solving a system of $m$ equations in $n$ unknowns is the most fundamental computational task in linear algebra. Every technique in this course — matrix inversion, eigenvalue computation, least-squares — reduces ultimately to solving a linear system.\n\n**Gaussian elimination** is the systematic algorithm: apply row operations to transform the augmented matrix $[A|\\vec{b}]$ into a simpler form, then read off the solutions. It is efficient, general, and reveals structural information (rank, null space) as a by-product.\n\n**Connection to previous material:** You have seen the dot product and matrix operations. Here we use the augmented matrix notation and row operations on that matrix.",
+      "body_he_md": "פתרון מערכת של $m$ משוואות ב-$n$ נעלמים הוא המשימה החישובית הבסיסית ביותר באלגברה לינארית. כל טכניקה בקורס זה — היפוך מטריצות, חישוב ערכים עצמיים, ריבועים פחותים — מסתכמת בסופו של דבר בפתרון מערכת לינארית.\n\n**אלימינציית גאוס** היא האלגוריתם השיטתי: מפעילים פעולות שורה כדי להפוך את המטריצה המוגדלת $[A|\\vec{b}]$ לצורה פשוטה יותר, ואז קוראים את הפתרונות. הוא יעיל, כללי, וחושף מידע מבני (דרגה, מרחב האפס) כתוצר לוואי.\n\n**קשר לחומר קודם:** ראיתם את המכפלה הפנימית ופעולות מטריצות. כאן משתמשים בסימון המטריצה המוגדלת ובפעולות שורה עליה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Row Operations, Echelon Form, and RREF",
+      "title_he": "פעולות שורה, צורת מדרגה ו-RREF",
+      "body_en_md": "**Elementary row operations (preserve solution set):**\n1. $R_i \\leftrightarrow R_j$ — swap two rows\n2. $cR_i \\to R_i$ — scale a row by $c\\neq0$\n3. $R_i + kR_j \\to R_i$ — add a multiple of one row to another\n\n**Row Echelon Form (REF):** A matrix is in REF if:\n- All zero rows are at the bottom.\n- The leading entry (pivot) of each non-zero row is strictly to the right of the pivot above.\n\n**Reduced Row Echelon Form (RREF):** REF plus:\n- Each pivot equals $1$.\n- Each pivot is the **only** non-zero entry in its column.\n\n**Augmented matrix:** Write $[A|\\vec{b}]$ where $A\\vec{x}=\\vec{b}$. Row reduce this to find solutions.\n\n**Free and pivot variables:** Columns with pivots give pivot variables; columns without give free variables (the parameters of the solution).",
+      "body_he_md": "**פעולות שורה אלמנטריות (שומרות על קבוצת הפתרון):**\n1. $R_i \\leftrightarrow R_j$ — החלפת שתי שורות\n2. $cR_i \\to R_i$ — הכפלת שורה ב-$c\\neq0$\n3. $R_i + kR_j \\to R_i$ — הוספת כפולה של שורה לשורה אחרת\n\n**צורת מדרגה (REF):** מטריצה ב-REF אם:\n- כל שורות האפס נמצאות בתחתית.\n- הכניסה המובילה (ציר) של כל שורה לא-אפסית מימין לזו שמעליה.\n\n**RREF (צורת מדרגה מצומצמת):** REF בתוספת:\n- כל ציר שווה ל-$1$.\n- כל ציר הוא הכניסה הלא-אפסית **היחידה** בעמודתו.\n\n**מטריצה מוגדלת:** כותבים $[A|\\vec{b}]$ עבור $A\\vec{x}=\\vec{b}$. מדרגים לפתרון.\n\n**משתנים חופשיים ומשתני ציר:** עמודות עם ציר — משתני ציר; עמודות ללא — משתנים חופשיים (פרמטרים)."
+    },
+    {
       "kind": "theory",
-      "title_en": "Gaussian elimination",
-      "title_he": "חילוץ גאוס",
-      "body_en_md": "Elementary row operations preserve the solution set. Goal: **row-echelon form** (RREF).\n\n**Worked Example 1.** $\\begin{cases}x+2y=3\\\\2x+5y=4\\end{cases}$ ⇒ unique $(x,y)=(-7,5)$.\n\n**Worked Example 2 (parametric).** $\\begin{cases}x+ay=1\\\\ax+y=a\\end{cases}$: pivot $1-a^2$; cases $a=\\pm1$.",
-      "body_he_md": "פעולות שורה שומרות על קבוצת הפתרונות.\n\n**דוגמה 1.** פתרון יחיד.\n\n**דוגמה 2 (פרמטר).** pivot $1-a^2$."
+      "title_en": "Solution Types",
+      "title_he": "סוגי הפתרון",
+      "body_en_md": "**Theorem (Rouché–Capelli).** Let $[A|\\vec{b}]$ be the augmented matrix of a system of $m$ equations in $n$ unknowns. After row reduction:\n\n| Condition | Solution type |\n|---|---|\n| A row $[0\\;0\\;\\cdots\\;0\\;|\\;c]$ with $c\\neq0$ appears | **Inconsistent** (no solution) |\n| Consistent, $\\text{rank}(A) = n$ (no free variables) | **Unique solution** |\n| Consistent, $\\text{rank}(A) < n$ ($n-\\text{rank}(A)$ free variables) | **Infinitely many solutions** |\n\n**Homogeneous systems** ($\\vec{b}=\\vec{0}$): always consistent; unique solution iff $\\text{rank}(A)=n$ (only the trivial solution $\\vec{x}=\\vec{0}$).\n\n**Geometric picture:** In $\\mathbb{R}^3$, three planes (equations) can intersect in a point (unique), a line (infinite), a plane (infinite), or have no common point (inconsistent).",
+      "body_he_md": "**משפט (רושה-קפלי).** יהי $[A|\\vec{b}]$ המטריצה המוגדלת של מערכת עם $m$ משוואות ו-$n$ נעלמים. לאחר דירוג שורות:\n\n| תנאי | סוג פתרון |\n|---|---|\n| מופיעה שורה $[0\\;0\\;\\cdots\\;0\\;|\\;c]$ עם $c\\neq0$ | **אי-עקבי** (אין פתרון) |\n| עקבי, $\\text{rank}(A) = n$ (אין משתנים חופשיים) | **פתרון יחיד** |\n| עקבי, $\\text{rank}(A) < n$ ($n-\\text{rank}(A)$ משתנים חופשיים) | **אינסוף פתרונות** |\n\n**מערכות הומוגניות** ($\\vec{b}=\\vec{0}$): תמיד עקביות; פתרון יחיד אם ורק אם $\\text{rank}(A)=n$ (רק הפתרון הטריוויאלי $\\vec{x}=\\vec{0}$).\n\n**פרשנות גיאומטרית:** ב-$\\mathbb{R}^3$, שלושה מישורים (משוואות) יכולים להיחתך בנקודה (יחיד), ישר (אינסוף), מישור (אינסוף), או להיות ללא נקודה משותפת (אי-עקבי)."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** For all $a\\in\\mathbb{R}$, classify the system (unique / none / infinitely many solutions):\\n$$\\begin{cases} x + ay = 1 \\\\ ax + y = a \\end{cases}$$\n\n**Sample Solution:**\nAugmented matrix: $\\left[\\begin{array}{cc|c} 1 & a & 1 \\\\ a & 1 & a \\end{array}\\right]$.\n\n$R_2 \\leftarrow R_2 - aR_1$: $\\left[\\begin{array}{cc|c} 1 & a & 1 \\\\ 0 & 1-a^2 & 0 \\end{array}\\right]$.\n\n- **$a \\neq \\pm 1$:** $1-a^2 \\neq 0$ ⇒ **unique solution** $x = 1, y = 0$.\n- **$a = 1$:** row 2 is $[0\\ 0\\ |\\ 0]$ ⇒ **infinitely many** ($x+y=1$).\n- **$a = -1$:** row 2 is $[0\\ 0\\ |\\ -2]$ ⇒ **no solution**.\n\n**Problem 2:** Let $A=\\begin{pmatrix}1&2&a\\\\0&1&1\\\\0&0&a-2\\end{pmatrix}$. For which $a$ does $Ax=b$ have a unique solution for every $b$?\n\n**Sample Solution:**\nRow-echelon already. Unique solution for all $b$ iff rank$(A)=3$ iff **$a \\neq 2$** (and pivot in every column). If $a=2$, third row is zero ⇒ infinitely many or none depending on $b$.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** לכל $a\\in\\mathbb{R}$, סווגו: $\\begin{cases} x + ay = 1 \\\\ ax + y = a \\end{cases}$\n\n**פתרון לדוגמה:**\n**$a\\neq\\pm 1$:** יחיד. **$a=1$:** אינסוף. **$a=-1$:** אין פתרון.\n\n**בעיה 2:** מתי $Ax=b$ עם $A=\\begin{pmatrix}1&2&a\\\\0&1&1\\\\0&0&a-2\\end{pmatrix}$ יש פתרון יחיד לכל $b$?\n\n**פתרון לדוגמה:**\n**$a\\neq 2$** (rank 3).\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
+      "kind": "worked_example",
       "difficulty": "easy",
-      "stem_en": "A row $[0\\ 0\\ 0\\ |\\ 1]$ in RREF means:",
-      "stem_he": "שורה $[0\\ 0\\ 0\\ |\\ 1]$ ב-RREF פירושה:",
-      "options_en": [
-        "Unique solution",
-        "No solution",
-        "Infinitely many",
-        "Trivial solution only"
-      ],
-      "options_he": [
-        "פתרון יחיד",
-        "אין פתרון",
-        "אינסוף פתרונות",
-        "פתרון טריוויאלי"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Contradiction: $0=1$.",
-      "explanation_he": "סתירה: $0=1$.",
-      "skill_atoms": [
-        "gaussian_elimination_classify"
-      ],
-      "points_level_min": "la"
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Solving a 2×2 System",
+      "title_he": "דוגמה פתורה 1 — פתרון מערכת 2×2",
+      "body_en_md": "**System:**\n$$2x + 3y = 7$$\n$$4x - y = 5$$\n\n**Augmented matrix and row reduction:**\n$$\\begin{pmatrix}2&3&|&7\\\\4&-1&|&5\\end{pmatrix} \\xrightarrow{R_2-2R_1} \\begin{pmatrix}2&3&|&7\\\\0&-7&|&-9\\end{pmatrix}$$\n\n**Back substitution:**\nFrom row 2: $-7y = -9 \\Rightarrow y = 9/7$.\nFrom row 1: $2x = 7-3(9/7) = 49/7-27/7 = 22/7 \\Rightarrow x = 11/7$.\n\n**Solution:** $(x,y) = (11/7,\\, 9/7)$. **Unique** (no free variables).",
+      "body_he_md": "**מערכת:**\n$$2x + 3y = 7$$\n$$4x - y = 5$$\n\n**מטריצה מוגדלת ודירוג:**\n$$\\begin{pmatrix}2&3&|&7\\\\4&-1&|&5\\end{pmatrix} \\xrightarrow{R_2-2R_1} \\begin{pmatrix}2&3&|&7\\\\0&-7&|&-9\\end{pmatrix}$$\n\n**הצבה חוזרת:**\nמשורה 2: $y = 9/7$.\nמשורה 1: $x = 11/7$.\n\n**פתרון:** $(x,y) = (11/7,\\, 9/7)$. **יחיד** (אין משתנים חופשיים)."
     },
     {
-      "ord": 2,
-      "kind": "mcq",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Solve by Gaussian elimination:\n$$x + 2y = 5, \\quad 3x - y = 1.$$",
+      "body_he_md": "פתור על ידי אלימינציית גאוס:\n$$x + 2y = 5, \\quad 3x - y = 1.$$",
+      "checkpoint_solution_en": "$\\begin{pmatrix}1&2&|&5\\\\3&-1&|&1\\end{pmatrix}\\xrightarrow{R_2-3R_1}\\begin{pmatrix}1&2&|&5\\\\0&-7&|&-14\\end{pmatrix}$. So $y=2$, $x=1$. Solution: $(1,2)$.",
+      "checkpoint_solution_he": "$\\xrightarrow{R_2-3R_1}\\begin{pmatrix}1&2&|&5\\\\0&-7&|&-14\\end{pmatrix}$. לכן $y=2$, $x=1$. פתרון: $(1,2)$."
+    },
+    {
+      "kind": "worked_example",
       "difficulty": "medium",
-      "stem_en": "A free variable appears when:",
-      "stem_he": "משתנה חופשי מופיע כאשר:",
-      "options_en": [
-        "rank < number of variables",
-        "det = 0 only",
-        "Always",
-        "Never in consistent systems"
-      ],
-      "options_he": [
-        "rank < מספר משתנים",
-        "רק det = 0",
-        "תמיד",
-        "אף פעם"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Fewer pivots than variables ⇒ free variable.",
-      "explanation_he": "פחות pivots ממשתנים.",
-      "skill_atoms": [
-        "free_variable"
-      ],
-      "points_level_min": "la"
+      "example_number": 2,
+      "title_en": "Worked Example 2 — 3×3 System with Unique Solution",
+      "title_he": "דוגמה פתורה 2 — מערכת 3×3 עם פתרון יחיד",
+      "body_en_md": "**System:**\n$$x + y - z = 2$$\n$$2x - y + z = 3$$\n$$x - 2y + 3z = 0$$\n\n**Row reduce $[A|\\vec{b}]$:**\n$$\\begin{pmatrix}1&1&-1&|&2\\\\2&-1&1&|&3\\\\1&-2&3&|&0\\end{pmatrix}$$\n$\\xrightarrow{R_2-2R_1,\\;R_3-R_1}$\n$$\\begin{pmatrix}1&1&-1&|&2\\\\0&-3&3&|&-1\\\\0&-3&4&|&-2\\end{pmatrix}$$\n$\\xrightarrow{R_3-R_2}$\n$$\\begin{pmatrix}1&1&-1&|&2\\\\0&-3&3&|&-1\\\\0&0&1&|&-1\\end{pmatrix}$$\n\n**Back substitution:**\n- Row 3: $z = -1$.\n- Row 2: $-3y+3(-1)=-1 \\Rightarrow -3y=2 \\Rightarrow y=-2/3$.\n- Row 1: $x+(-2/3)-(-1)=2 \\Rightarrow x=2+2/3-1=5/3$.\n\n**Solution:** $(x,y,z) = (5/3,\\,-2/3,\\,-1)$. **Unique** (3 pivots = 3 unknowns).",
+      "body_he_md": "**מערכת:**\n$$x + y - z = 2, \\quad 2x - y + z = 3, \\quad x - 2y + 3z = 0$$\n\n**דירוג:**\n$$\\begin{pmatrix}1&1&-1&|&2\\\\0&-3&3&|&-1\\\\0&0&1&|&-1\\end{pmatrix}$$\n\n**הצבה חוזרת:**\n$z=-1$, $y=-2/3$, $x=5/3$.\n\n**פתרון:** $(5/3,\\,-2/3,\\,-1)$. **יחיד** (3 צירים = 3 נעלמים)."
     },
     {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "For each $a\\in\\mathbb{R}$, classify solutions of $\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$ with full row reduction.",
-      "stem_he": "לכל $a\\in\\mathbb{R}$, סווגו $\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$.",
-      "rubric_en": "Full credit (10/10): RREF + three cases.\nPartial (6/10): cases without full work.\nMinimal (3/10): matrix only.",
-      "rubric_he": "ציון מלא (10/10): RREF + 3 מקרים.\nחלקי (6/10): מקרים.\nמינימלי (3/10): מטריצה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "parametric_gaussian_elimination"
-      ],
-      "points_level_min": "la"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Classify (unique / infinite / inconsistent) without fully solving:\n$$\\begin{pmatrix}1&2&3\\\\0&0&4\\\\0&0&0\\end{pmatrix}\\vec{x} = \\begin{pmatrix}1\\\\2\\\\0\\end{pmatrix}$$",
+      "body_he_md": "סווג (יחיד / אינסוף / אי-עקבי) מבלי לפתור לגמרי:\n$$\\begin{pmatrix}1&2&3\\\\0&0&4\\\\0&0&0\\end{pmatrix}\\vec{x} = \\begin{pmatrix}1\\\\2\\\\0\\end{pmatrix}$$",
+      "checkpoint_solution_en": "The matrix is already in REF. Rank = 2 < 3 unknowns, and no row $[0\\;0\\;0\\;|\\;c]$ with $c\\neq0$. So the system is consistent with 1 free variable → **infinitely many solutions**.",
+      "checkpoint_solution_he": "המטריצה כבר ב-REF. דרגה = 2 < 3 נעלמים, ואין שורת סתירה. המערכת עקבית עם 1 משתנה חופשי → **אינסוף פתרונות**."
     },
     {
-      "ord": 4,
-      "kind": "open",
+      "kind": "worked_example",
       "difficulty": "hard",
-      "stem_en": "Prove $U=\\{v\\in\\mathbb{R}^3: Av=5v\\}$ is a subspace for any matrix $A$, and find $\\dim U$ when $A=\\text{diag}(7,2,2)$.",
-      "stem_he": "הוכיחו $U=\\{v: Av=5v\\}$ תת-מרחב; מצאו $\\dim U$ ל-$A=\\text{diag}(7,2,2)$.",
-      "rubric_en": "Full credit (10/10): kernel of $A-5I$, subspace proof, dim 1.\nPartial (6/10): dimension only.\nMinimal (3/10): definition only.",
-      "rubric_he": "ציון מלא (10/10): תת-מרחב + dim 1.\nחלקי (6/10): מימד.\nמינימלי (3/10): הגדרה.",
-      "explanation_en": "$\\dim U=1$.",
-      "explanation_he": "$\\dim U=1$.",
-      "skill_atoms": [
-        "eigenspace_subspace"
-      ],
-      "points_level_min": "la"
+      "example_number": 3,
+      "title_en": "Worked Example 3 — System with Parameter $k$",
+      "title_he": "דוגמה פתורה 3 — מערכת עם פרמטר $k$",
+      "body_en_md": "**System:**\n$$x + y + z = 1$$\n$$x + 2y + kz = 3$$\n$$x + ky + k^2 z = 5$$\n\n**Row reduce:**\n$$\\begin{pmatrix}1&1&1&|&1\\\\1&2&k&|&3\\\\1&k&k^2&|&5\\end{pmatrix}$$\n$\\xrightarrow{R_2-R_1,\\;R_3-R_1}$\n$$\\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&k-1&k^2-1&|&4\\end{pmatrix}$$\n$\\xrightarrow{R_3-(k-1)R_2}$\n$$\\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&0&(k^2-1)-(k-1)^2&|&4-2(k-1)\\end{pmatrix}$$\n\nSimplify the $(3,3)$ entry: $(k^2-1)-(k-1)^2 = k^2-1-(k^2-2k+1) = 2k-2 = 2(k-1)$.\n\nAnd the RHS: $4-2(k-1) = 6-2k$.\n\n**Case 1: $k\\neq 1$.** Third row: $2(k-1)z = 6-2k = -2(k-3)$. So $z = \\frac{-2(k-3)}{2(k-1)} = \\frac{3-k}{k-1}$. Back-substitute for unique $(x,y,z)$. **Unique solution.**\n\n**Case 2: $k = 1$.** Third row becomes $[0\\;0\\;0\\;|\\;4]$. $4\\neq0$ → **Inconsistent** (no solution).\n\n**Summary:**\n- $k=1$: no solution.\n- $k\\neq1$: unique solution.",
+      "body_he_md": "**מערכת:**\n$$x + y + z = 1, \\quad x + 2y + kz = 3, \\quad x + ky + k^2 z = 5$$\n\n**דירוג:**\nלאחר $R_2-R_1$, $R_3-R_1$ ואז $R_3-(k-1)R_2$:\n$$\\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&0&2(k-1)&|&6-2k\\end{pmatrix}$$\n\n**מקרה 1: $k\\neq 1$.** שורה 3: $z = \\frac{3-k}{k-1}$. הצבה חוזרת → **פתרון יחיד.**\n\n**מקרה 2: $k = 1$.** שורה 3: $[0\\;0\\;0\\;|\\;4]$. $4\\neq0$ → **אי-עקבי** (אין פתרון).\n\n**סיכום:**\n- $k=1$: אין פתרון.\n- $k\\neq1$: פתרון יחיד."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Gaussian Elimination — 6-Step Checklist",
+      "title_he": "אלימינציית גאוס — רשימת 6 שלבים",
+      "body_en_md": "1. **Write the augmented matrix** $[A|\\vec{b}]$.\n2. **Select the leftmost non-zero column** as the pivot column; swap rows if needed so the pivot is non-zero.\n3. **Eliminate below the pivot:** for each row below, add a suitable multiple to make the entry below the pivot zero.\n4. **Move to the next pivot:** ignore the top row and repeat steps 2–3 on the submatrix below.\n5. **Identify the solution type:** check for contradiction rows; count free variables.\n6. **Back-substitute** (or reduce to RREF) to express pivot variables in terms of free variables.\n\n| Situation after step 5 | Solution type |\n|---|---|\n| Row $[0\\cdots0\\;|\\;c]$, $c\\neq0$ | No solution |\n| Rank $= n$, no contradiction | Unique solution |\n| Rank $< n$, no contradiction | Infinitely many (parametric family) |",
+      "body_he_md": "1. **כתוב את המטריצה המוגדלת** $[A|\\vec{b}]$.\n2. **בחר את העמודה השמאלית ביותר עם כניסה לא-אפסית**; החלף שורות בעזרת $R_i\\leftrightarrow R_j$ אם נדרש.\n3. **אלים מתחת לציר:** עבור כל שורה מתחת, הוסף כפולה מתאימה כדי לאפס את הכניסה תחת הציר.\n4. **עבור לציר הבא:** התעלם מהשורה העליונה וחזור על שלבים 2–3.\n5. **זהה את סוג הפתרון:** בדוק שורות סתירה; ספור משתנים חופשיים.\n6. **הצבה חוזרת** (או צמצום ל-RREF) להבעת משתני ציר בפרמטרים.\n\n| מצב לאחר שלב 5 | סוג פתרון |\n|---|---|\n| שורה $[0\\cdots0\\;|\\;c]$, $c\\neq0$ | אין פתרון |\n| דרגה $= n$, אין סתירה | פתרון יחיד |\n| דרגה $< n$, אין סתירה | אינסוף פתרונות (משפחה פרמטרית) |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Solve: $x-y=3$, $2x+y=6$.",
+          "body_he": "פתור: $x-y=3$, $2x+y=6$.",
+          "solution_en": "$[1,-1|3;2,1|6]\\to[1,-1|3;0,3|0]$. $y=0$, $x=3$.",
+          "solution_he": "לאחר דירוג: $y=0$, $x=3$.",
+          "points": 6
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Solve: $x+2y-z=1$, $2x+y+z=5$, $x-y+2z=4$.",
+          "body_he": "פתור: $x+2y-z=1$, $2x+y+z=5$, $x-y+2z=4$.",
+          "solution_en": "Row reduce to get $(x,y,z)=(2,0,1)$.",
+          "solution_he": "דירוג שורות נותן $(x,y,z)=(2,0,1)$.",
+          "points": 6
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Determine (without full solution) whether the system $x+y=1$, $x+y=2$ is consistent.",
+          "body_he": "קבע (מבלי לפתור לגמרי) האם המערכת $x+y=1$, $x+y=2$ עקבית.",
+          "solution_en": "Subtract row 1 from row 2: $0=1$. Contradiction — **inconsistent**.",
+          "solution_he": "חסר שורה 1 משורה 2: $0=1$. סתירה — **אי-עקבי**.",
+          "points": 6
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Find all solutions to $x-2y=0$, $-2x+4y=0$.",
+          "body_he": "מצא את כל הפתרונות של $x-2y=0$, $-2x+4y=0$.",
+          "solution_en": "Both equations give $x=2y$. Free variable $y=t$: $(x,y)=(2t,t)=t(2,1)$. Infinite solutions.",
+          "solution_he": "שתי המשוואות נותנות $x=2y$. משתנה חופשי $y=t$: $(2t,t)$. אינסוף פתרונות.",
+          "points": 6
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Solve the system and express as a parametric family: $x+y+z=3$, $2x+y=4$.",
+          "body_he": "פתור את המערכת והבע כמשפחה פרמטרית: $x+y+z=3$, $2x+y=4$.",
+          "solution_en": "Row reduce: $[1,1,1|3;0,-1,-2|-2]$. Let $z=t$ (free). Then $y=2-2t$, $x=1+t$. Solution: $(1+t,\\,2-2t,\\,t)$, $t\\in\\mathbb{R}$.",
+          "solution_he": "לאחר דירוג, $z=t$ חופשי. $y=2-2t$, $x=1+t$. פתרון: $(1+t,\\,2-2t,\\,t)$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the RREF of $\\begin{pmatrix}1&2&1&3\\\\2&4&3&7\\\\-1&-2&0&-2\\end{pmatrix}$ and identify pivot/free variables.",
+          "body_he": "מצא את ה-RREF של $\\begin{pmatrix}1&2&1&3\\\\2&4&3&7\\\\-1&-2&0&-2\\end{pmatrix}$ וזהה משתנים ציריים וחופשיים.",
+          "solution_en": "RREF: $\\begin{pmatrix}1&2&0&2\\\\0&0&1&1\\\\0&0&0&0\\end{pmatrix}$. Pivot cols: 1,3 (pivot vars $x_1,x_3$). Free: $x_2=s$. Solution: $(2-2s,\\,s,\\,1,\\,0)$... wait, with 4 columns this is a $3\\times3$ augmented. Actually: augmented matrix has 3 unknowns ($x_1,x_2,x_3$) — after RREF, $x_2$ is free, $x_1=2-2x_2$, $x_3=1$.",
+          "solution_he": "RREF: $\\begin{pmatrix}1&2&0&2\\\\0&0&1&1\\\\0&0&0&0\\end{pmatrix}$. ציר: עמודות 1,3. חופשי: $x_2=s$. $x_1=2-2s$, $x_3=1$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "For what values of $c$ does the system $x+y=2$, $2x+2y=c$ have (a) no solution, (b) infinitely many solutions?",
+          "body_he": "עבור אילו ערכים של $c$ למערכת $x+y=2$, $2x+2y=c$ יש (א) אין פתרון, (ב) אינסוף פתרונות?",
+          "solution_en": "$R_2-2R_1$: $0=c-4$. (a) $c\\neq4$: inconsistent. (b) $c=4$: infinitely many (free variable $y=t$, $x=2-t$).",
+          "solution_he": "$R_2-2R_1$: $0=c-4$. (א) $c\\neq4$: אי-עקבי. (ב) $c=4$: אינסוף פתרונות.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A system of 3 equations in 5 unknowns has rank 3. How many free variables are there? Write the general solution form.",
+          "body_he": "למערכת 3 משוואות ב-5 נעלמים יש דרגה 3. כמה משתנים חופשיים יש? כתוב את צורת הפתרון הכללי.",
+          "solution_en": "$5-3=2$ free variables. General solution: $\\vec{x} = \\vec{x}_p + s\\vec{v}_1 + t\\vec{v}_2$ for $s,t\\in\\mathbb{R}$, where $\\vec{x}_p$ is a particular solution and $\\vec{v}_1,\\vec{v}_2$ are the null-space basis vectors.",
+          "solution_he": "$5-3=2$ משתנים חופשיים. פתרון כללי: $\\vec{x} = \\vec{x}_p + s\\vec{v}_1 + t\\vec{v}_2$, $s,t\\in\\mathbb{R}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Find all values of $k$ such that the system has (i) no solution, (ii) a unique solution, (iii) infinitely many solutions:\n$$x+y+z=2,\\quad x+2y+2z=3,\\quad x+2y+kz=k.$$",
+          "body_he": "מצא את כל ערכי $k$ כך שלמערכת יש (i) אין פתרון, (ii) פתרון יחיד, (iii) אינסוף פתרונות:\n$$x+y+z=2,\\quad x+2y+2z=3,\\quad x+2y+kz=k.$$",
+          "solution_en": "After $R_2-R_1$, $R_3-R_1$: $[1,1,1|2;0,1,1|1;0,1,k-1|k-2]$. After $R_3-R_2$: $[0,0,k-2|k-3]$. (i) $k=2$: row $[0,0,0|-1]$ → no solution. (ii) $k\\neq2$ and $k\\neq2$: actually $k\\neq2$ gives $z=(k-3)/(k-2)$, unique. Wait let me recheck: $k-2\\neq0 \\Rightarrow k\\neq2$ → unique. (iii) $k-2=0$ and $k-3=0$: need $k=2$ AND $k=3$ simultaneously — impossible. So: **no solution** for $k=2$, **unique** for $k\\neq2$, **never** infinitely many.",
+          "solution_he": "לאחר דירוג: שורה 3 הופכת ל-$[0,0,k-2|k-3]$. (i) $k=2$: שורת סתירה → אין פתרון. (ii) $k\\neq2$: פתרון יחיד. (iii) לא קיים $k$ שנותן אינסוף פתרונות.",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Prove that if $A\\vec{x}=\\vec{b}$ has two distinct solutions $\\vec{x}_1\\neq\\vec{x}_2$, then it has infinitely many solutions.",
+          "body_he": "הוכח שאם ל-$A\\vec{x}=\\vec{b}$ יש שני פתרונות שונים $\\vec{x}_1\\neq\\vec{x}_2$, אזי יש לה אינסוף פתרונות.",
+          "solution_en": "Let $\\vec{h}=\\vec{x}_1-\\vec{x}_2\\neq\\vec{0}$. Then $A\\vec{h}=A\\vec{x}_1-A\\vec{x}_2=\\vec{b}-\\vec{b}=\\vec{0}$. For any $t\\in\\mathbb{R}$, $\\vec{x}_1+t\\vec{h}$ is a solution: $A(\\vec{x}_1+t\\vec{h})=\\vec{b}+t\\vec{0}=\\vec{b}$. Since $\\vec{h}\\neq\\vec{0}$, these are infinitely many distinct solutions. $\\blacksquare$",
+          "solution_he": "נגדיר $\\vec{h}=\\vec{x}_1-\\vec{x}_2\\neq\\vec{0}$. אז $A\\vec{h}=\\vec{0}$. לכל $t\\in\\mathbb{R}$: $A(\\vec{x}_1+t\\vec{h})=\\vec{b}$. מכיוון ש-$\\vec{h}\\neq\\vec{0}$, יש אינסוף פתרונות שונים. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Prove that the solution set of a homogeneous system $A\\vec{x}=\\vec{0}$ is a subspace of $\\mathbb{R}^n$.",
+          "body_he": "הוכח שקבוצת הפתרונות של מערכת הומוגנית $A\\vec{x}=\\vec{0}$ היא תת-מרחב של $\\mathbb{R}^n$.",
+          "solution_en": "Let $W=\\{\\vec{x}:A\\vec{x}=\\vec{0}\\}$. (1) $\\vec{0}\\in W$: $A\\vec{0}=\\vec{0}$. ✓ (2) Closed under addition: if $A\\vec{u}=A\\vec{v}=\\vec{0}$, then $A(\\vec{u}+\\vec{v})=\\vec{0}$. ✓ (3) Closed under scaling: $A(c\\vec{u})=cA\\vec{u}=c\\vec{0}=\\vec{0}$. ✓ Hence $W$ is a subspace. $\\blacksquare$",
+          "solution_he": "יהי $W=\\{\\vec{x}:A\\vec{x}=\\vec{0}\\}$. (1) $\\vec{0}\\in W$. (2) סגור לחיבור. (3) סגור לכפל. לכן $W$ תת-מרחב. $\\blacksquare$",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Explain why a system of 5 equations in 3 unknowns over $\\mathbb{R}$ can still have a unique solution, and construct an explicit example.",
+          "body_he": "הסבר מדוע מערכת של 5 משוואות ב-3 נעלמים עלולה עדיין להיות בעלת פתרון יחיד, ובנה דוגמה מפורשת.",
+          "solution_en": "A unique solution requires rank$(A)=3$ (all 3 unknowns are pivot variables) and consistency. Extra equations are redundant but not contradictory. Example: take the $3\\times3$ identity system $x=1,y=2,z=3$ and add 2 consistent equations, e.g. $x+y=3$ and $y+z=5$. The system has unique solution $(1,2,3)$.",
+          "solution_he": "פתרון יחיד מחייב דרגה$(A)=3$ ועקביות. משוואות עודפות הן מיותרות אך לא סותרות. דוגמה: קח $x=1,y=2,z=3$ והוסף $x+y=3$, $y+z=5$. פתרון יחיד $(1,2,3)$.",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Losing the augmented column.** Always carry the $|\\vec{b}$ column through all row operations.\n\n2. **Applying operations to only part of a row.** Every row operation must be applied to the **entire** row, including the right-hand side.\n\n3. **Confusing REF with RREF.** REF is sufficient for back-substitution; RREF is needed to read off solutions directly. Know which you are doing.\n\n4. **Declaring a system inconsistent too early.** A row $[0\\cdots0\\;|\\;0]$ is fine (redundant equation); only $[0\\cdots0\\;|\\;c]$ with $c\\neq0$ is a contradiction.\n\n5. **Missing the parametric family.** When there are free variables, express ALL pivot variables in terms of the free ones — don't leave any undetermined.",
+      "body_he_md": "1. **אובדן עמודת ה-$\\vec{b}$.** תמיד לסחוב את עמודת $|\\vec{b}$ דרך כל פעולות השורה.\n\n2. **ביצוע פעולה על חלק מהשורה בלבד.** כל פעולת שורה חייבת להתבצע על **כל** השורה, כולל הצד הימני.\n\n3. **בלבול בין REF ל-RREF.** REF מספיק להצבה חוזרת; RREF נדרש לקריאה ישירה של הפתרון.\n\n4. **הכרזת אי-עקביות מוקדמת מדי.** שורה $[0\\cdots0\\;|\\;0]$ בסדר (משוואה מיותרת); רק $[0\\cdots0\\;|\\;c]$ עם $c\\neq0$ היא סתירה.\n\n5. **פספוס המשפחה הפרמטרית.** כשיש משתנים חופשיים, לבטא **את כל** משתני הציר בפרמטרים — אסור להשאיר נעלמים לא-מוגדרים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formula sheet:**\n- Three row operations: swap, scale, add multiple\n- After REF: count pivots = rank; free vars = $n - \\text{rank}$\n- Contradiction row: $[0\\;\\cdots\\;0\\;|\\;c]$, $c\\neq0$ → no solution\n- General solution: $\\vec{x} = \\vec{x}_p + \\text{null-space}$\n\n**What Israeli university exams emphasise:**\n- Solving a $3\\times3$ or $3\\times4$ system completely with RREF.\n- Parameter-dependent systems: finding the values of $k$ for each solution type.\n- Proving properties of the solution set (subspace, dimension).\n- Identifying rank from RREF and deducing the number of solutions.\n\n**Exam tip:** For parameter problems, always row-reduce symbolically first; then case-split on when pivots vanish.",
+      "body_he_md": "**גיליון נוסחאות:**\n- שלוש פעולות שורה: החלפה, הכפלה, הוספת כפולה\n- לאחר REF: ספור צירים = דרגה; משתנים חופשיים = $n - \\text{דרגה}$\n- שורת סתירה: $[0\\;\\cdots\\;0\\;|\\;c]$, $c\\neq0$ → אין פתרון\n- פתרון כללי: $\\vec{x} = \\vec{x}_p + \\text{מרחב האפס}$\n\n**מה בחינות אוניברסיטאיות ישראליות מדגישות:**\n- פתרון מלא של מערכת $3\\times3$ או $3\\times4$ ב-RREF.\n- מערכות תלויות פרמטר: מציאת ערכי $k$ לכל סוג פתרון.\n- הוכחת תכונות קבוצת הפתרון (תת-מרחב, ממד).\n- קביעת דרגה מ-RREF והסקה על מספר הפתרונות.\n\n**טיפ לבחינה:** לבעיות עם פרמטר, תמיד לדרג סימבולית תחילה; ואז לפצל מקרים לפי מתי הצירים מתאפסים."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- The three elementary row operations preserve the solution set of a linear system.\n- **Row Echelon Form (REF):** pivots descend to the right; zero rows at bottom.\n- **RREF:** each pivot is 1 and the only non-zero entry in its column.\n- **Solution classification:** contradiction row → no solution; rank = $n$ → unique; rank $< n$ → infinite.\n- The number of free variables equals $n - \\text{rank}(A)$.\n- The solution set of $A\\vec{x}=\\vec{0}$ is a subspace (the null space); the general solution of $A\\vec{x}=\\vec{b}$ is a particular solution plus the null space.",
+      "body_he_md": "- שלוש פעולות שורה אלמנטריות שומרות על קבוצת הפתרון.\n- **REF:** צירים יורדים ימינה; שורות אפס בתחתית.\n- **RREF:** כל ציר הוא 1 והכניסה הלא-אפסית היחידה בעמודתו.\n- **סיווג פתרונות:** שורת סתירה → אין פתרון; דרגה $= n$ → יחיד; דרגה $< n$ → אינסוף.\n- מספר המשתנים החופשיים = $n - \\text{דרגה}(A)$.\n- קבוצת הפתרון של $A\\vec{x}=\\vec{0}$ היא תת-מרחב (מרחב האפס); הפתרון הכללי של $A\\vec{x}=\\vec{b}$ הוא פתרון פרטי בתוספת מרחב האפס."
     }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "RREF reveals rank and free variables.",
-      "Parametric: track when pivot becomes zero.",
-      "Eigenspace = ker(A - λI) is always a subspace."
-    ],
-    "skill_atoms_unlocked": [
-      "gaussian_elimination_classify",
-      "parametric_gaussian_elimination",
-      "eigenspace_subspace"
-    ]
-  }
+  ]
 }
