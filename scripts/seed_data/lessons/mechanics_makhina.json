@@ -1,206 +1,217 @@
 {
-  "id": "mechanics_makhina",
-  "type": "interactive",
+  "concept_id": "mechanics_makhina",
   "subject": "makhina_physics",
-  "title_en": "Mechanics: Motion, Forces & Newton's Laws",
-  "title_he": "מכניקה: תנועה, כוחות וחוקי ניוטון",
-  "duration_min": 35,
-  "level_min": "makhina",
-  "agent_hints": "Makhina learners often mix up distance vs displacement and speed vs velocity — always ask 'scalar or vector?' before writing an equation. For projectiles, split into horizontal (constant v) and vertical (constant a = -g) components. Free-body diagrams before F=ma every time. On inclines, resolve weight into parallel/perpendicular components. Atwood: treat each mass separately; same acceleration magnitude, opposite directions.",
+  "level": "makhina",
+  "math_track": ["makhina"],
+  "title_en": "Classical Mechanics — Kinematics, Newton's Laws & Energy (מכינה)",
+  "title_he": "מכניקה קלאסית — קינמטיקה, חוקי ניוטון ואנרגיה (מכינה)",
+  "summary_en": "Bridges high-school physics to university mechanics. Covers 1D and 2D kinematics with constant acceleration, Newton's three laws with free-body diagrams, energy conservation, and momentum. Emphasis on problem-solving methodology: define axes, draw FBD, write equations, solve.",
+  "summary_he": "גשר בין פיזיקת תיכון למכניקה אוניברסיטאית. מכסה קינמטיקה חד- ודו-ממדית עם תאוצה קבועה, שלושת חוקי ניוטון עם דיאגרמות כוחות, שימור אנרגיה ותנע. דגש על מתודולוגיית פתרון: הגדירו צירים, ציירו FBD, כתבו משוואות, פתרו.",
+  "est_minutes": 75,
   "sections": [
     {
-      "id": "kinematics_1d",
-      "title_en": "One-Dimensional Kinematics",
-      "title_he": "קינמטיקה חד-ממדית",
-      "level_min": "makhina",
-      "body_en_md": "Welcome to mechanics! We describe **motion** before asking **why** things move.\n\n**Scalars:** distance, speed. **Vectors:** displacement $\\vec{s}$, velocity $\\vec{v}$, acceleration $\\vec{a}$.\n\nFor constant acceleration along a line:\n$$v = v_0 + at$$\n$$s = v_0 t + \\tfrac{1}{2}at^2$$\n$$v^2 = v_0^2 + 2as$$\n\n**Worked example:** A car starts from rest ($v_0=0$) and accelerates at $a=3\\,\\text{m/s}^2$ for $t=4\\,\\text{s}$.\n$v = 3 \\cdot 4 = 12\\,\\text{m/s}$; $s = \\tfrac{1}{2}(3)(16) = 24\\,\\text{m}$.\n\nAlways pick a **positive direction** and stick to sign conventions.",
-      "body_he_md": "במכניקה מתארים **תנועה** לפני ששואלים **למה**.\n\n**מרחק, מהירות** (ללא כיוון); **מיקום, מהירות, תאוצה** (עם כיוון).\n\nתאוצה קבועה:\n$$v = v_0 + at, \\quad s = v_0 t + \\tfrac{1}{2}at^2, \\quad v^2 = v_0^2 + 2as$$\n\n**דוגמה:** $v_0=0$, $a=3\\,\\text{m/s}^2$, $t=4\\,\\text{s}$ $\\Rightarrow$ $v=12\\,\\text{m/s}$, $s=24\\,\\text{m}$."
+      "kind": "intro",
+      "title_en": "Mechanics — The Foundation of All Physics",
+      "title_he": "מכניקה — הבסיס של כל הפיזיקה",
+      "body_en_md": "**Mechanics** is the study of motion and the forces that cause it. It underpins every branch of physics and engineering you will study. The university course assumes you can already:\n- Write the kinematic equations for constant acceleration.\n- Apply Newton's second law with a free-body diagram.\n- Use conservation of energy and momentum.\n\n**What this lesson adds over high school:**\n- Rigorous vector treatment (components, signs).\n- Multi-body systems (connected blocks, inclines with friction).\n- Energy methods as an alternative to force methods.\n- Dimensional analysis as a check on every answer.\n\n**Why it matters:** Every university physics topic — from oscillations to electromagnetism to quantum mechanics — uses the problem-solving framework established here: identify the system, choose coordinates, apply the relevant law, solve.",
+      "body_he_md": "**מכניקה** היא חקר התנועה והכוחות הגורמים לה. היא עומדת בבסיס כל ענף פיזיקה והנדסה שתלמדו. הקורס האוניברסיטאי מניח שאתם כבר:\n- יודעים לכתוב משוואות קינמטיות לתאוצה קבועה.\n- מיישמים את החוק השני של ניוטון עם דיאגרמת כוחות חופשית.\n- משתמשים בשימור אנרגיה ותנע.\n\n**מה השיעור הזה מוסיף על פני התיכון:**\n- טיפול וקטורי קפדני (רכיבים, סימנים).\n- מערכות גופים מרובים (גושים מחוברים, מדרונות עם חיכוך).\n- שיטות אנרגיה כחלופה לשיטות כוח.\n- ניתוח מימדים כבדיקה לכל תשובה.\n\n**מדוע חשוב:** כל נושא פיזיקה אוניברסיטאי — מתנודות לאלקטרומגנטיות לקוונטים — משתמש במסגרת פתרון הבעיות שנוצרת כאן."
     },
     {
-      "id": "projectiles_2d",
-      "title_en": "2D Motion: Vectors & Projectiles",
-      "title_he": "תנועה דו-ממדית: וקטורים וזריקות",
-      "level_min": "makhina",
-      "body_en_md": "Break 2D motion into **independent components**.\n\nFor a projectile launched at speed $v_0$ and angle $\\theta$ above horizontal (neglect air resistance, $g=9.8\\,\\text{m/s}^2$):\n$$v_{0x} = v_0\\cos\\theta, \\quad v_{0y} = v_0\\sin\\theta$$\n$$x = v_{0x} t, \\quad y = v_{0y} t - \\tfrac{1}{2}gt^2$$\n\n**Time of flight** (launch and land at same height):\n$$T = \\frac{2v_0\\sin\\theta}{g}$$\n\n**Range:**\n$$R = \\frac{v_0^2\\sin(2\\theta)}{g}$$\n\n**Example:** $v_0=20\\,\\text{m/s}$, $\\theta=30°$ ($\\sin 30°=0.5$, $\\sin 60°=0.866$).\n$R = \\frac{400 \\cdot 0.866}{9.8} \\approx 35.3\\,\\text{m}$.",
-      "body_he_md": "מפרקים תנועה ל**רכיבים בלתי-תלויים**.\n\nזריקה בזווית $\\theta$:\n$$R = \\frac{v_0^2\\sin(2\\theta)}{g}$$\n\n**דוגמה:** $v_0=20\\,\\text{m/s}$, $\\theta=30°$ $\\Rightarrow$ $R \\approx 35.3\\,\\text{m}$."
+      "kind": "definition",
+      "title_en": "Governing Laws — Kinematics, Newton & Energy",
+      "title_he": "חוקי הבסיס — קינמטיקה, ניוטון ואנרגיה",
+      "body_en_md": "### Kinematics (constant acceleration)\nFor motion along a line with constant acceleration $a$:\n$$v = v_0 + at, \\quad x = x_0 + v_0 t + \\tfrac{1}{2}at^2, \\quad v^2 = v_0^2 + 2a(x-x_0).$$\n\n**Variables:** $x_0, v_0$ = initial position and velocity; $v$ = velocity at time $t$; $a$ = (constant) acceleration.\n\n### Newton's Second Law (vector form)\n$$\\boxed{\\sum \\vec{F} = m\\vec{a}}$$\nSum of all external forces = mass × acceleration. Apply component by component.\n\n### Work-Energy Theorem\n$$W_{\\text{net}} = \\Delta KE = \\tfrac{1}{2}mv^2 - \\tfrac{1}{2}mv_0^2.$$\n\n### Conservation of Mechanical Energy (no friction)\n$$KE_i + PE_i = KE_f + PE_f \\quad \\Rightarrow \\quad \\tfrac{1}{2}mv_i^2 + mgh_i = \\tfrac{1}{2}mv_f^2 + mgh_f.$$\n\n### Conservation of Momentum\n$$\\vec{p}_{\\text{total}} = \\sum m_i \\vec{v}_i = \\text{const} \\quad \\text{(when } \\sum \\vec{F}_{\\text{ext}} = 0\\text{)}.$$",
+      "body_he_md": "### קינמטיקה (תאוצה קבועה)\n$$v = v_0 + at, \\quad x = x_0 + v_0 t + \\tfrac{1}{2}at^2, \\quad v^2 = v_0^2 + 2a(x-x_0).$$\n\n**משתנים:** $x_0, v_0$ = מיקום ומהירות התחלתיים; $v$ = מהירות בזמן $t$; $a$ = תאוצה (קבועה).\n\n### החוק השני של ניוטון (בוקטורים)\n$$\\boxed{\\sum \\vec{F} = m\\vec{a}}$$\nסכום כל הכוחות החיצוניים = מסה × תאוצה. יישמו לפי רכיבים.\n\n### משפט עבודה-אנרגיה\n$$W_{\\text{נטו}} = \\Delta KE = \\tfrac{1}{2}mv^2 - \\tfrac{1}{2}mv_0^2.$$\n\n### שימור אנרגיה מכנית (ללא חיכוך)\n$$\\tfrac{1}{2}mv_i^2 + mgh_i = \\tfrac{1}{2}mv_f^2 + mgh_f.$$\n\n### שימור תנע\n$$\\vec{p}_{\\text{כולל}} = \\sum m_i\\vec{v}_i = \\text{קבוע} \\quad (\\sum\\vec{F}_{\\text{חיצוני}}=0).$$"
     },
     {
-      "id": "newton_laws",
-      "title_en": "Newton's Three Laws",
-      "title_he": "שלושת חוקי ניוטון",
-      "level_min": "makhina",
-      "body_en_md": "**First law (inertia):** If $\\sum \\vec{F} = 0$, velocity is constant (including zero).\n\n**Second law:**\n$$\\boxed{\\sum \\vec{F} = m\\vec{a}}$$\nForce in newtons (N), mass in kg, acceleration in m/s².\n\n**Third law:** If body A exerts force $\\vec{F}$ on B, then B exerts $-\\vec{F}$ on A. Action–reaction pairs act on **different** bodies.\n\n**Common mistake:** weight $\\vec{W}=m\\vec{g}$ and normal force are NOT an action–reaction pair (they act on the same object).\n\n**Example:** $m=5\\,\\text{kg}$ pushed with net force $F=20\\,\\text{N}$.\n$a = F/m = 4\\,\\text{m/s}^2$.",
-      "body_he_md": "**חוק ראשון:** $\\sum \\vec{F}=0$ $\\Rightarrow$ מהירות קבועה.\n\n**חוק שני:** $\\sum \\vec{F} = m\\vec{a}$.\n\n**חוק שלישי:** כוחות פעולה-תגובה על **גופים שונים**.\n\n**דוגמה:** $m=5\\,\\text{kg}$, $F=20\\,\\text{N}$ $\\Rightarrow$ $a=4\\,\\text{m/s}^2$."
+      "kind": "theory",
+      "title_en": "Free-Body Diagrams, Friction, and Inclines",
+      "title_he": "דיאגרמות כוחות חופשיות, חיכוך ומדרונות",
+      "body_en_md": "### Free-Body Diagram (FBD) — mandatory first step\n1. Isolate the object.\n2. Draw every external force as an arrow from the object's center.\n3. Label each force with its magnitude and direction.\n4. Choose +/− direction. Apply $\\sum F = ma$.\n\n### Common forces\n| Force | Symbol | Formula | Direction |\n|---|---|---|---|\n| Weight | $W$ | $mg$ (down) | Vertically downward |\n| Normal | $N$ | Contact force | ⊥ surface, away from surface |\n| Friction (kinetic) | $f_k$ | $\\mu_k N$ | Opposing motion |\n| Friction (static) | $f_s$ | $\\leq \\mu_s N$ | Opposing tendency to slide |\n| Spring | $F_s$ | $kx$ | Opposite to displacement |\n\n### Incline geometry\nFor a block on an incline at angle $\\theta$:\n- Component of weight along slope (down): $mg\\sin\\theta$.\n- Component of weight perpendicular to slope: $mg\\cos\\theta$.\n- Normal force: $N = mg\\cos\\theta$.\n- Friction: $f = \\mu_k N = \\mu_k mg\\cos\\theta$.\n- Net acceleration down slope (with friction): $a = g(\\sin\\theta - \\mu_k \\cos\\theta)$.\n\n### Newton's Third Law reminder\nFor every force $\\vec{F}_{A\\to B}$, there is an equal and opposite $\\vec{F}_{B\\to A}$. They act on **different** objects — never cancel each other in the same FBD.",
+      "body_he_md": "### דיאגרמת כוחות חופשית (FBD) — שלב ראשון חובה\n1. בודדו את הגוף.\n2. ציירו כל כוח חיצוני כחץ ממרכז הגוף.\n3. תייגו כל כוח בגודלו וכיוונו.\n4. בחרו כיוון +/−. יישמו $\\sum F=ma$.\n\n### כוחות נפוצים\n| כוח | סמל | נוסחה | כיוון |\n|---|---|---|---|\n| משקל | $W$ | $mg$ | אנכי כלפי מטה |\n| נורמלי | $N$ | כוח מגע | ⊥ משטח, מהמשטח |\n| חיכוך (קינטי) | $f_k$ | $\\mu_k N$ | נגד תנועה |\n| חיכוך (סטטי) | $f_s$ | $\\leq\\mu_s N$ | נגד נטייה להחלקה |\n| קפיץ | $F_s$ | $kx$ | נגד תזוזה |\n\n### גיאומטריית מדרון\nגוש על מדרון בזווית $\\theta$:\n- רכיב משקל לאורך המדרון: $mg\\sin\\theta$.\n- רכיב משקל ניצב למדרון: $mg\\cos\\theta$.\n- כוח נורמלי: $N=mg\\cos\\theta$.\n- תאוצה למטה (עם חיכוך): $a=g(\\sin\\theta-\\mu_k\\cos\\theta)$.\n\n### תזכורת חוק שלישי\nלכל כוח $\\vec{F}_{A\\to B}$ יש $\\vec{F}_{B\\to A}$ שווה והפוך. הם פועלים על **גופים שונים** — לעולם לא מתבטלים ב-FBD אחד."
     },
     {
-      "id": "fma_applications",
-      "title_en": "Applying $F=ma$: Incline & Atwood Machine",
-      "title_he": "יישום $F=ma$: משופע ומכונת Atwood",
-      "level_min": "makhina",
-      "body_en_md": "**Incline** at angle $\\theta$: resolve weight $mg$ into\n- parallel: $mg\\sin\\theta$ (down the slope)\n- perpendicular: $mg\\cos\\theta$ (into the surface)\n\nBlock sliding without friction: $ma = mg\\sin\\theta$ $\\Rightarrow$ $a = g\\sin\\theta$.\n\n**Atwood machine:** two masses $m_1 > m_2$ connected over a pulley.\nNet pulling force along rope: $(m_1 - m_2)g$; total inertia: $m_1 + m_2$.\n$$a = \\frac{(m_1 - m_2)g}{m_1 + m_2}$$\n\n**Worked example:** $m_1=5\\,\\text{kg}$, $m_2=3\\,\\text{kg}$, $g=10\\,\\text{m/s}^2$.\n$a = \\frac{2 \\cdot 10}{8} = 2.5\\,\\text{m/s}^2$.\nTension: $T = m_2(g+a) = 3(12.5) = 37.5\\,\\text{N}$.",
-      "body_he_md": "**משופע** $\\theta$: $mg\\sin\\theta$ לאורך, $mg\\cos\\theta$ ניצב.\n\nללא חיכוך: $a = g\\sin\\theta$.\n\n**Atwood:** $a = \\frac{(m_1-m_2)g}{m_1+m_2}$.\n\n**דוגמה:** $m_1=5$, $m_2=3$, $g=10$ $\\Rightarrow$ $a=2.5\\,\\text{m/s}^2$, $T=37.5\\,\\text{N}$."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Braking Car: Stopping Distance",
+      "title_he": "דוגמה פתורה 1 — מכונית בבלימה: מרחק עצירה",
+      "body_en_md": "**Given:** A car decelerates from $v_0 = 25$ m/s at $a = -5$ m/s² (braking). Find the stopping distance.\n\n**Step 1: Identify knowns and unknown.**\n$v_0 = 25$ m/s, $a = -5$ m/s², $v_f = 0$ (stopped). Find $x$.\n\n**Step 2: Choose the right kinematic equation.**\nWe know $v_0$, $v_f$, $a$ — and want $x$. Use $v_f^2 = v_0^2 + 2ax$.\n\n**Step 3: Solve for $x$.**\n$$0 = 25^2 + 2(-5)x = 625 - 10x.$$\n$$x = \\frac{625}{10} = 62.5 \\text{ m}.$$\n\n**Step 4: Check dimensions.** $\\frac{(\\text{m/s})^2}{\\text{m/s}^2} = \\text{m}$. ✓\n\n**Answer:** The stopping distance is $\\boxed{62.5}$ m.\n\n**Physical insight:** Doubling speed quadruples stopping distance (since $x \\propto v_0^2$). This is why speed limits matter.",
+      "body_he_md": "**נתון:** מכונית מאיטה מ-$v_0=25$ מ\"ש עם $a=-5$ מ\"ש² (בלימה). מצאו מרחק עצירה.\n\n**שלב 1: זהו נתונים ונעלם.**\n$v_0=25$ מ\"ש, $a=-5$ מ\"ש², $v_f=0$. מצאו $x$.\n\n**שלב 2: בחרו משוואה קינמטית מתאימה.**\nידועים $v_0$, $v_f$, $a$ — רוצים $x$. השתמשו ב-$v_f^2=v_0^2+2ax$.\n\n**שלב 3: פתרו עבור $x$.**\n$$0=625+2(-5)x \\Rightarrow x=\\frac{625}{10}=62.5\\text{ מ'}.$$\n\n**שלב 4: בדקו מימדים.** $\\frac{(\\text{מ/ש})^2}{\\text{מ/ש}^2}=\\text{מ'}$. ✓\n\n**תשובה:** מרחק העצירה הוא $\\boxed{62.5}$ מ'.\n\n**תובנה פיזיקלית:** הכפלת מהירות → ארבע מרחק עצירה ($x\\propto v_0^2$). זו הסיבה להגבלות מהירות."
     },
     {
-      "id": "circular_motion",
-      "title_en": "Uniform Circular Motion",
-      "title_he": "תנועה מעגלית אחידה",
-      "level_min": "makhina",
-      "body_en_md": "In uniform circular motion, speed is constant but **velocity direction changes** — so there is centripetal acceleration toward the center:\n$$\\boxed{a_c = \\frac{v^2}{r} = \\omega^2 r}$$\n\nCentripetal force (net inward force):\n$$\\boxed{F_c = \\frac{mv^2}{r} = m\\omega^2 r}$$\n\nPeriod: $T = 2\\pi r / v = 2\\pi/\\omega$.\n\n**Example:** $m=2\\,\\text{kg}$ on a string, $r=0.5\\,\\text{m}$, $v=4\\,\\text{m/s}$.\n$F_c = 2 \\cdot 16 / 0.5 = 64\\,\\text{N}$ (tension provides this force).\n\nCentrifugal force is **not** a real force — it is a fictitious effect in a rotating frame.",
-      "body_he_md": "בתנועה מעגלית: $a_c = v^2/r$ לכיוון המרכז.\n\n$F_c = mv^2/r$.\n\n**דוגמה:** $m=2\\,\\text{kg}$, $r=0.5\\,\\text{m}$, $v=4\\,\\text{m/s}$ $\\Rightarrow$ $F_c=64\\,\\text{N}$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "**Question:** A ball is thrown upward from ground level with $v_0 = 20$ m/s. Take $g = 10$ m/s² downward.\n(a) How long until it reaches maximum height?\n(b) What is the maximum height?",
+      "body_he_md": "**שאלה:** כדור נזרק כלפי מעלה מהקרקע עם $v_0=20$ מ\"ש. $g=10$ מ\"ש² כלפי מטה.\n(א) כמה זמן עד גובה מקסימלי?\n(ב) מהו הגובה המקסימלי?",
+      "checkpoint_solution_en": "(a) At max height $v=0$. $v=v_0-gt=0\\Rightarrow t=v_0/g=20/10=2$ s. (b) $h=v_0 t-\\frac{1}{2}gt^2=40-20=20$ m. Or use $v^2=v_0^2-2gh\\Rightarrow h=v_0^2/(2g)=400/20=20$ m.",
+      "checkpoint_solution_he": "(א) $v=0\\Rightarrow t=20/10=2$ ש'. (ב) $h=20\\cdot2-\\frac{1}{2}\\cdot10\\cdot4=40-20=20$ מ'."
     },
     {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "makhina",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve or disprove: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ for $a,b\\geq0$.\n\n**Complete Solution:**\n\nSquare both sides (non-negative): $a+b\\leq a+b+2\\sqrt{ab}$ → $0\\leq2\\sqrt{ab}$ ✓ **True**.\n\nCounterexample for negative? Not in domain. Inequality holds for $a,b\\geq0$.\n\n---\n\n**Practice Problem 2:**\n\nFind $\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ from first principles (factor, no L'Hôpital).\n\n**Complete Solution:**\n\n$\\frac{x^2-4}{x-2}=\\frac{(x-2)(x+2)}{x-2}=x+2$ for $x\\neq2$. Limit $=4$.\n\n---\n\n**Practice Problem 3 (physics):**\n\nProjectile at $30°$, speed $v_0$. Express max height and range in terms of $v_0$ and $g$.\n\n**Complete Solution:**\n\n$H=\\frac{v_0^2\\sin^2\\theta}{2g}=\\frac{v_0^2}{8g}$. $R=\\frac{v_0^2\\sin2\\theta}{g}=\\frac{v_0^2\\sqrt3}{2g}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nהוכיחו או הפריכו: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ ל-$a,b\\geq0$.\n\n**פתרון:** נכון — $0\\leq2\\sqrt{ab}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ מעקרונות ראשונים.\n\n**פתרון:** $x+2\\to4$.\n\n---\n\n**שאלת תרגול 3:**\n\nזריקה ב-$30°$, מהירות $v_0$: גובה מקסימלי וטווח.\n\n**פתרון:** $H=\\frac{v_0^2}{8g}$, $R=\\frac{v_0^2\\sqrt3}{2g}$."
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Two-Block System on an Incline with Friction",
+      "title_he": "דוגמה פתורה 2 — מערכת שני גושים על מדרון עם חיכוך",
+      "body_en_md": "**Given:** Block A ($m_A = 4$ kg) sits on a frictionless table. It is connected by a massless string over a pulley to block B ($m_B = 2$ kg) hanging vertically. Find the acceleration of the system and the tension $T$ in the string. Take $g = 10$ m/s².\n\n**Step 1: Draw FBDs for each block.**\n- Block A (horizontal): $T$ to the right is the only horizontal force.\n- Block B (vertical): weight $m_B g = 20$ N down, tension $T$ up.\n\n**Step 2: Apply Newton's second law to each block.**\nLet $a$ be the common acceleration magnitude (A moves right, B moves down).\n- Block A: $T = m_A a$ → $T = 4a$.\n- Block B: $m_B g - T = m_B a$ → $20 - T = 2a$.\n\n**Step 3: Solve the system.**\nSubstitute $T = 4a$ into the B equation:\n$$20 - 4a = 2a \\implies 20 = 6a \\implies a = \\frac{20}{6} = \\frac{10}{3} \\approx 3.33 \\text{ m/s}^2.$$\n\n**Step 4: Find tension.**\n$$T = 4a = 4 \\times \\frac{10}{3} = \\frac{40}{3} \\approx 13.3 \\text{ N}.$$\n\n**Check:** For block B: $20 - 13.3 = 6.7 = 2 \\times 3.33$. ✓",
+      "body_he_md": "**נתון:** גוש A ($m_A=4$ ק\"ג) על שולחן חלק. מחובר בחוט דרך גלגלת לגוש B ($m_B=2$ ק\"ג) התלוי אנכית. מצאו תאוצת המערכת ומתח $T$ בחוט. $g=10$ מ\"ש².\n\n**שלב 1: ציירו FBD לכל גוש.**\n- גוש A (אופקי): $T$ ימינה — הכוח האופקי היחיד.\n- גוש B (אנכי): $m_B g=20$ N כלפי מטה, $T$ כלפי מעלה.\n\n**שלב 2: יישמו חוק שני של ניוטון לכל גוש.**\nתהי $a$ תאוצה משותפת (A ימינה, B למטה).\n- גוש A: $T=m_A a=4a$.\n- גוש B: $m_B g-T=m_B a$ → $20-T=2a$.\n\n**שלב 3: פתרו.**\nהציבו $T=4a$:\n$$20-4a=2a \\Rightarrow a=\\frac{10}{3}\\approx3.33\\text{ מ\"ש}^2.$$\n\n**שלב 4: מצאו מתח.**\n$$T=4\\times\\frac{10}{3}=\\frac{40}{3}\\approx13.3\\text{ N}.$$\n\n**בדיקה:** $20-13.3=6.7=2\\times3.33$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "**Question:** A 5 kg block slides down a 30° frictionless incline from rest. Find its speed after sliding 4 m along the incline. Use $g = 10$ m/s².",
+      "body_he_md": "**שאלה:** גוש 5 ק\"ג גולש ממנוחה על מדרון חלק ב-30°. מצאו מהירותו לאחר 4 מ' לאורך המדרון. $g=10$ מ\"ש².",
+      "checkpoint_solution_en": "Method 1 (kinematics): $a=g\\sin30°=5$ m/s². $v^2=0+2(5)(4)=40$. $v=\\sqrt{40}=2\\sqrt{10}\\approx6.32$ m/s. Method 2 (energy): height drop $h=4\\sin30°=2$ m. $\\frac{1}{2}mv^2=mgh\\Rightarrow v=\\sqrt{2gh}=\\sqrt{40}$. Same answer. ✓",
+      "checkpoint_solution_he": "שיטה 1 (קינמטיקה): $a=g\\sin30°=5$ מ\"ש². $v^2=2(5)(4)=40\\Rightarrow v=2\\sqrt{10}\\approx6.32$ מ\"ש. שיטה 2 (אנרגיה): גובה $h=4\\sin30°=2$ מ'. $v=\\sqrt{2gh}=\\sqrt{40}$. אותה תשובה. ✓"
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Block on Frictionless Quarter-Circle Ramp",
+      "title_he": "דוגמה פתורה 3 — גוש על רמפת רבע-עיגול חלקה",
+      "body_en_md": "**Given:** A block of mass $m$ slides from rest at the top of a frictionless quarter-circle ramp of radius $R$. Find its speed at the bottom using energy conservation.\n\n**Step 1: Define the reference height.**\nSet $h = 0$ at the bottom of the ramp. At the top, the block is at height $h = R$ (the radius of the quarter circle).\n\n**Step 2: Write conservation of mechanical energy.**\nSince the ramp is frictionless, no energy is lost:\n$$KE_i + PE_i = KE_f + PE_f.$$\nAt the top: $v_i = 0$ (starts from rest), $h_i = R$.\nAt the bottom: $h_f = 0$.\n$$\\frac{1}{2}mv_i^2 + mgR = \\frac{1}{2}mv_f^2 + 0.$$\n\n**Step 3: Substitute $v_i = 0$ and solve.**\n$$mgR = \\frac{1}{2}mv_f^2.$$\n\n**Step 4:** The mass $m$ cancels (just like free-fall).\n$$v_f^2 = 2gR \\implies \\boxed{v_f = \\sqrt{2gR}}.$$\n\n**Step 5: Discuss the result.**\nThis is exactly the speed gained by an object falling a vertical height $R$ from rest. The shape of the path (quarter circle, straight incline, spiral) doesn't matter — only the height change matters for frictionless problems. This is the power of energy methods over force methods.\n\n**Note:** If the ramp were not frictionless, we would subtract the work done by friction: $\\frac{1}{2}mv_f^2 = mgR - f \\cdot s$, where $s$ = arc length of the path.",
+      "body_he_md": "**נתון:** גוש ממסה $m$ גולש ממנוחה מראש רמפת רבע-עיגול חלקה ברדיוס $R$. מצאו מהירותו בתחתית בעזרת שימור אנרגיה.\n\n**שלב 1: הגדירו גובה ייחוס.**\nנציב $h=0$ בתחתית. בראש, הגוש בגובה $h=R$.\n\n**שלב 2: כתבו שימור אנרגיה מכנית.**\nמאחר שהרמפה חלקה, אין אובדן אנרגיה:\n$$KE_i + PE_i = KE_f + PE_f.$$\nבראש: $v_i=0$, $h_i=R$. בתחתית: $h_f=0$.\n$$\\frac{1}{2}mv_i^2 + mgR = \\frac{1}{2}mv_f^2.$$\n\n**שלב 3:** הציבו $v_i=0$:\n$$mgR = \\frac{1}{2}mv_f^2.$$\n\n**שלב 4:** המסה $m$ מתצמצמת:\n$$v_f^2=2gR \\Rightarrow \\boxed{v_f=\\sqrt{2gR}}.$$\n\n**שלב 5: דיון.**\nזוהי בדיוק המהירות שמשיגה גוף בנפילה חופשית מגובה $R$. צורת המסלול (רבע עיגול, מדרון ישר, ספירלה) לא משנה — רק הפרש הגבהים משנה בבעיות ללא חיכוך. זוהי עוצמת שיטות האנרגיה לעומת שיטות הכוח."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Force vs Energy Approach: When to Use Which",
+      "title_he": "מדריך שיטה — שיטת כוחות לעומת שיטת אנרגיה: מתי להשתמש בכל אחת",
+      "body_en_md": "| Situation | Preferred Method | Why |\n|---|---|---|\n| Need acceleration or tension | Newton's 2nd law (FBD) | Directly gives $\\vec{a}$ and internal forces |\n| Need speed at a point | Energy conservation | Path doesn't matter, one equation |\n| Friction present, need speed | Work-energy theorem | Include $W_{\\text{friction}} = -f_k d$ |\n| Need time | Kinematics after finding $a$ | Energy gives speed, kinematics gives time |\n| Multi-body system | Newton's 2nd law for each body | Write one equation per body |\n\n**Universal 5-step problem-solving protocol:**\n1. **Read carefully** — identify all objects and forces.\n2. **Draw FBD** for each object of interest.\n3. **Choose coordinates** — align with motion where possible.\n4. **Write equations** — $\\sum F_x = ma_x$, $\\sum F_y = ma_y$ (or energy equation).\n5. **Solve and check** — dimensional analysis, sign sanity, order-of-magnitude check.",
+      "body_he_md": "| מצב | שיטה מועדפת | מדוע |\n|---|---|---|\n| נדרשת תאוצה או מתח | חוק שני (FBD) | נותן ישירות $\\vec{a}$ וכוחות פנימיים |\n| נדרשת מהירות בנקודה | שימור אנרגיה | המסלול לא משנה, משוואה אחת |\n| חיכוך קיים, נדרשת מהירות | משפט עבודה-אנרגיה | כולל $W_{\\text{חיכוך}}=-f_k d$ |\n| נדרש זמן | קינמטיקה לאחר מציאת $a$ | אנרגיה נותנת מהירות, קינמטיקה נותנת זמן |\n| מערכת מרובת גופים | חוק שני לכל גוף | כתבו משוואה לכל גוף |\n\n**פרוטוקול פתרון 5 שלבים אוניברסלי:**\n1. **קראו בעיון** — זהו כל הגופים והכוחות.\n2. **ציירו FBD** לכל גוף רלוונטי.\n3. **בחרו קואורדינטות** — ישרו עם התנועה כאשר אפשר.\n4. **כתבו משוואות** — $\\sum F_x=ma_x$, $\\sum F_y=ma_y$ (או משוואת אנרגיה).\n5. **פתרו ובדקו** — ניתוח מימדים, הגיון סימנים, סדר גודל."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A train starts from rest and accelerates at $2$ m/s². How far does it travel in $10$ s?",
+          "body_he": "רכבת מתחילה ממנוחה ומאיצה ב-$2$ מ\"ש². כמה היא נוסעת ב-$10$ ש'?",
+          "solution_en": "$x = \\frac{1}{2}at^2 = \\frac{1}{2}(2)(100) = 100$ m.",
+          "solution_he": "$x=\\frac{1}{2}(2)(100)=100$ מ'.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A 10 kg box is pushed across a frictionless floor with a net force of 30 N. What is its acceleration?",
+          "body_he": "ארגז 10 ק\"ג נדחף על רצפה חלקה בכוח שקול 30 N. מהי תאוצתו?",
+          "solution_en": "$a = F/m = 30/10 = 3$ m/s².",
+          "solution_he": "$a=30/10=3$ מ\"ש².",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "What is the gravitational PE of a 2 kg mass at height $h = 5$ m above the ground? ($g = 10$ m/s²)",
+          "body_he": "מהי האנרגיה הפוטנציאלית הכבידה של מסה 2 ק\"ג בגובה $h=5$ מ'? ($g=10$ מ\"ש²)",
+          "solution_en": "$PE = mgh = 2 \\times 10 \\times 5 = 100$ J.",
+          "solution_he": "$PE=mgh=100$ J.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A 3 kg object moving at 4 m/s. What is its kinetic energy?",
+          "body_he": "גוף 3 ק\"ג נע ב-4 מ\"ש. מהי האנרגיה הקינטית שלו?",
+          "solution_en": "$KE = \\frac{1}{2}mv^2 = \\frac{1}{2}(3)(16) = 24$ J.",
+          "solution_he": "$KE=\\frac{1}{2}(3)(16)=24$ J.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A 5 kg block on a 37° incline (sin 37° = 0.6, cos 37° = 0.8) with kinetic friction $\\mu_k = 0.25$. Find the acceleration down the slope.",
+          "body_he": "גוש 5 ק\"ג על מדרון 37° (sin 37° = 0.6, cos 37° = 0.8) עם $\\mu_k=0.25$. מצאו תאוצה בירידה.",
+          "solution_en": "$N=mg\\cos37°=5(10)(0.8)=40$ N. $f_k=\\mu_k N=0.25(40)=10$ N. $ma=mg\\sin37°-f_k=30-10=20$ N. $a=20/5=4$ m/s².",
+          "solution_he": "$N=40$ N, $f_k=10$ N, $ma=30-10=20$ N, $a=4$ מ\"ש².",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A ball of mass 0.2 kg is dropped from a height of 5 m. Using energy conservation, find its speed just before hitting the ground. ($g = 10$ m/s²)",
+          "body_he": "כדור 0.2 ק\"ג נופל מגובה 5 מ'. בעזרת שימור אנרגיה, מצאו מהירותו רגע לפני הפגיעה בקרקע. ($g=10$ מ\"ש²)",
+          "solution_en": "$mgh = \\frac{1}{2}mv^2 \\Rightarrow v = \\sqrt{2gh} = \\sqrt{100} = 10$ m/s.",
+          "solution_he": "$v=\\sqrt{2gh}=\\sqrt{100}=10$ מ\"ש.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Two blocks, $m_1 = 3$ kg and $m_2 = 5$ kg, are connected by a string on a frictionless table. A horizontal force $F = 16$ N pulls $m_1$. Find the acceleration and the tension in the string.",
+          "body_he": "שני גושים $m_1=3$ ק\"ג ו-$m_2=5$ ק\"ג מחוברים בחוט על שולחן חלק. כוח $F=16$ N מושך את $m_1$. מצאו תאוצה ומתח בחוט.",
+          "solution_en": "$a = F/(m_1+m_2) = 16/8 = 2$ m/s². Tension: $T = m_2 a = 5(2) = 10$ N.",
+          "solution_he": "$a=16/8=2$ מ\"ש². $T=m_2 a=10$ N.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A car of mass 1200 kg is moving at 20 m/s. The brakes apply a friction force of 6000 N. Find (a) the deceleration and (b) the stopping distance.",
+          "body_he": "מכונית 1200 ק\"ג נעה ב-20 מ\"ש. הבלמים מפעילים כוח 6000 N. מצאו (א) תאוצה (ב) מרחק עצירה.",
+          "solution_en": "(a) $a = -F/m = -6000/1200 = -5$ m/s². (b) $v^2 = v_0^2 + 2ax \\Rightarrow 0 = 400 - 10x \\Rightarrow x = 40$ m.",
+          "solution_he": "(א) $a=-5$ מ\"ש². (ב) $x=40$ מ'.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "A ball of mass $m$ is released from rest at the top of a frictionless sphere of radius $R$. Using energy conservation and Newton's second law, find the angle $\\theta$ from the top where the ball leaves the sphere. Hint: it leaves when $N = 0$.",
+          "body_he": "כדור ממסה $m$ משוחרר ממנוחה מראש כדור חלק ברדיוס $R$. בעזרת שימור אנרגיה וחוק שני, מצאו את הזווית $\\theta$ מהראש שבה הכדור עוזב את הכדור. רמז: עוזב כשN=0.",
+          "solution_en": "Energy: $mgR(1-\\cos\\theta) = \\frac{1}{2}mv^2 \\Rightarrow v^2 = 2gR(1-\\cos\\theta)$. Centripetal: $mg\\cos\\theta - N = mv^2/R$. At departure $N=0$: $mg\\cos\\theta = mv^2/R = m\\cdot2g(1-\\cos\\theta) \\Rightarrow \\cos\\theta = 2-2\\cos\\theta \\Rightarrow 3\\cos\\theta=2 \\Rightarrow \\theta=\\arccos(2/3)\\approx48.2°$.",
+          "solution_he": "אנרגיה: $v^2=2gR(1-\\cos\\theta)$. צנטריפטלי ב-$N=0$: $\\cos\\theta=2/3$, לכן $\\theta\\approx48.2°$.",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A 2 kg block moves along a surface with $\\mu_k = 0.3$ and hits a spring ($k = 500$ N/m) at 4 m/s. Find the maximum compression of the spring. ($g = 10$ m/s²)",
+          "body_he": "גוש 2 ק\"ג נע על משטח עם $\\mu_k=0.3$ ופוגע בקפיץ ($k=500$ N/m) במהירות 4 מ\"ש. מצאו כיווץ מקסימלי. ($g=10$ מ\"ש²)",
+          "solution_en": "Let $x$ = max compression. Energy: $\\frac{1}{2}mv^2 - \\mu_k mg x = \\frac{1}{2}kx^2$. $\\frac{1}{2}(2)(16) - 0.3(2)(10)x = \\frac{1}{2}(500)x^2$. $16 - 6x = 250x^2$. Solving: $250x^2+6x-16=0$. $x=\\frac{-6+\\sqrt{36+16000}}{500}\\approx0.241$ m.",
+          "solution_he": "$250x^2+6x-16=0\\Rightarrow x\\approx0.241$ מ'.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A rocket of initial mass $M_0 = 500$ kg (including 400 kg of fuel) burns fuel at rate $\\dot{m} = 5$ kg/s with exhaust speed $v_e = 2000$ m/s. Ignoring gravity, find (a) the thrust force and (b) the initial acceleration.",
+          "body_he": "טיל בעל מסה התחלתית $M_0=500$ ק\"ג (כולל 400 ק\"ג דלק) שורף דלק בקצב $\\dot{m}=5$ ק\"ג/ש' עם מהירות פליטה $v_e=2000$ מ\"ש. התעלמו מכבידה. מצאו (א) כוח הדחף (ב) תאוצה התחלתית.",
+          "solution_en": "(a) Thrust $F_T = \\dot{m}v_e = 5 \\times 2000 = 10000$ N. (b) $a_0 = F_T/M_0 = 10000/500 = 20$ m/s².",
+          "solution_he": "(א) $F_T=5\\times2000=10000$ N. (ב) $a_0=10000/500=20$ מ\"ש².",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes in Mechanics",
+      "title_he": "הטעויות הנפוצות במכניקה",
+      "body_en_md": "1. **Missing forces in FBD.** Always check: weight, normal, friction, applied forces, tension. Gravity always acts unless specifically said otherwise.\n\n2. **Wrong sign convention.** Define positive direction at the start and stick to it. If you set down as positive, $a = +g$ for free-fall and write $mg - N = ma$.\n\n3. **Using energy when asked for tension or force.** Energy gives speeds, not internal forces. For tension, use Newton's 2nd law on each body.\n\n4. **Not accounting for friction in energy problems.** If there's friction, $KE_i + PE_i \\neq KE_f + PE_f$. Include $-f_k d$ (work done by friction, which is negative).\n\n5. **Confusing mass and weight.** $m$ is in kg; $W = mg$ is in N. Writing '$F = 5$ kg' is wrong — force is in newtons.",
+      "body_he_md": "1. **כוחות חסרים ב-FBD.** תמיד בדקו: משקל, נורמלי, חיכוך, כוחות מופעלים, מתח. כבידה תמיד פועלת אלא אם צוין אחרת.\n\n2. **מוסכמת סימנים שגויה.** הגדירו כיוון חיובי בתחילה והיצמדו. אם הגדרתם למטה חיובי, $a=+g$ בנפילה חופשית.\n\n3. **שימוש באנרגיה כשנדרש מתח או כוח.** אנרגיה נותנת מהירויות, לא כוחות פנימיים. למתח, השתמשו בחוק שני לכל גוף.\n\n4. **אי-כליאת חיכוך בבעיות אנרגיה.** אם יש חיכוך, $KE_i+PE_i\\neq KE_f+PE_f$. כללו $-f_k d$.\n\n5. **בלבול מסה ומשקל.** $m$ ב-ק\"ג; $W=mg$ ב-N. כתיבת '$F=5$ ק\"ג' היא שגיאה — כוח בנטיוטון."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Sheet & Exam Patterns",
+      "title_he": "לפני הבחינה — גיליון נוסחאות ותבניות שאלות",
+      "body_en_md": "### Essential Formulas\n- Kinematics: $v=v_0+at$; $x=v_0t+\\frac{1}{2}at^2$; $v^2=v_0^2+2ax$\n- Newton's 2nd: $\\sum F=ma$ (per component)\n- Weight: $W=mg$; Normal on incline: $N=mg\\cos\\theta$\n- Friction: $f_k=\\mu_k N$; $f_s\\leq\\mu_s N$\n- KE: $\\frac{1}{2}mv^2$; GPE: $mgh$\n- Energy conservation (no friction): $\\frac{1}{2}mv_i^2+mgh_i=\\frac{1}{2}mv_f^2+mgh_f$\n- Momentum: $p=mv$; $\\sum p=\\text{const}$ (isolated system)\n\n### Typical Exam Question Patterns\n1. **Kinematics:** given 3 of {$v_0,v,a,t,x$}, find the 4th or 5th.\n2. **FBD + Newton:** draw, label, write $\\Sigma F=ma$ for each direction.\n3. **Energy conservation:** identify $h_i, h_f, v_i, v_f$; write and solve.\n4. **Incline with friction:** resolve forces, apply $F=ma$ along slope.\n5. **Multi-body:** write one equation per body, solve simultaneously.\n\n### Marking Criteria\n- FBD: 30% correct forces, 30% correct labels, 40% correct equations.\n- Energy: 40% correct energy terms, 40% algebra, 20% answer.\n- Multi-body: 50% equation per body, 50% correct solution.",
+      "body_he_md": "### נוסחאות חיוניות\n- קינמטיקה: $v=v_0+at$; $x=v_0t+\\frac{1}{2}at^2$; $v^2=v_0^2+2ax$\n- חוק שני: $\\sum F=ma$ (לפי רכיבים)\n- משקל: $W=mg$; נורמלי במדרון: $N=mg\\cos\\theta$\n- חיכוך: $f_k=\\mu_k N$\n- KE: $\\frac{1}{2}mv^2$; GPE: $mgh$\n- שימור אנרגיה: $\\frac{1}{2}mv_i^2+mgh_i=\\frac{1}{2}mv_f^2+mgh_f$\n- תנע: $p=mv$; $\\sum p=\\text{קבוע}$\n\n### תבניות שאלות נפוצות\n1. **קינמטיקה:** 3 נתונים → מצאו הרביעי/חמישי.\n2. **FBD + ניוטון:** ציירו, תייגו, כתבו $\\sum F=ma$ לכל כיוון.\n3. **שימור אנרגיה:** זהו $h_i,h_f,v_i,v_f$; כתבו ופתרו.\n4. **מדרון עם חיכוך:** פרקו כוחות, יישמו $F=ma$ לאורך המדרון.\n5. **מרובה גופים:** משוואה לכל גוף, פתרו בו-זמנית.",
+      "body_he_md": "### נוסחאות חיוניות\n- קינמטיקה: $v=v_0+at$; $x=v_0t+\\frac{1}{2}at^2$; $v^2=v_0^2+2ax$\n- חוק שני: $\\sum F=ma$\n- נורמלי במדרון: $N=mg\\cos\\theta$\n- חיכוך: $f_k=\\mu_k N$\n- שימור אנרגיה: $\\frac{1}{2}mv_i^2+mgh_i=\\frac{1}{2}mv_f^2+mgh_f$"
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary — Key Equations",
+      "title_he": "סיכום — משוואות מפתח",
+      "body_en_md": "- **Kinematics (const $a$):** $v=v_0+at$; $x=v_0t+\\frac{1}{2}at^2$; $v^2=v_0^2+2ax$.\n- **Newton's 2nd:** $\\sum\\vec{F}=m\\vec{a}$ — apply per component.\n- **Incline:** $a=g(\\sin\\theta-\\mu_k\\cos\\theta)$ (with friction, sliding down).\n- **Energy conservation:** $KE_i+PE_i=KE_f+PE_f$ (frictionless).\n- **Work-energy theorem:** $W_{\\text{net}}=\\Delta KE$.\n- **Energy with friction:** $\\frac{1}{2}mv_f^2=\\frac{1}{2}mv_i^2+mgh_i-mgh_f-f_k d$.\n- **Momentum:** $p=mv$; conserved when $\\sum F_{\\text{ext}}=0$.",
+      "body_he_md": "- **קינמטיקה (תאוצה קבועה):** $v=v_0+at$; $x=v_0t+\\frac{1}{2}at^2$; $v^2=v_0^2+2ax$.\n- **חוק שני:** $\\sum\\vec{F}=m\\vec{a}$ — לפי רכיבים.\n- **מדרון:** $a=g(\\sin\\theta-\\mu_k\\cos\\theta)$ (עם חיכוך, בירידה).\n- **שימור אנרגיה:** $KE_i+PE_i=KE_f+PE_f$ (חלק).\n- **משפט עבודה-אנרגיה:** $W_{\\text{נטו}}=\\Delta KE$.\n- **תנע:** $p=mv$; נשמר כש-$\\sum F_{\\text{חיצוני}}=0$."
     }
   ],
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A body starts from rest with constant acceleration $a=2\\,\\text{m/s}^2$. What is its speed after $t=5\\,\\text{s}$?",
-      "body_he": "גוף מתחיל ממנוחה עם $a=2\\,\\text{m/s}^2$. מה המהירות אחרי $t=5\\,\\text{s}$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$5\\,\\text{m/s}$",
-          "text_he": "$5\\,\\text{m/s}$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$10\\,\\text{m/s}$",
-          "text_he": "$10\\,\\text{m/s}$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$25\\,\\text{m/s}$",
-          "text_he": "$25\\,\\text{m/s}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$12.5\\,\\text{m/s}$",
-          "text_he": "$12.5\\,\\text{m/s}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$v = v_0 + at = 0 + 2(5) = 10\\,\\text{m/s}$.",
-      "explanation_he": "$v = 2 \\cdot 5 = 10\\,\\text{m/s}$."
-    },
-    {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "A projectile is launched with $v_0=10\\,\\text{m/s}$ at $\\theta=45°$ ($g=10\\,\\text{m/s}^2$). What is the maximum horizontal range?",
-      "body_he": "זריקה ב-$v_0=10\\,\\text{m/s}$, $\\theta=45°$ ($g=10$). מה הטווח האופקי?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$5\\,\\text{m}$",
-          "text_he": "$5\\,\\text{m}$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$10\\,\\text{m}$",
-          "text_he": "$10\\,\\text{m}$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$20\\,\\text{m}$",
-          "text_he": "$20\\,\\text{m}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$7.07\\,\\text{m}$",
-          "text_he": "$7.07\\,\\text{m}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$R = v_0^2\\sin(2\\theta)/g = 100 \\cdot 1 / 10 = 10\\,\\text{m}$ (maximum at $45°$).",
-      "explanation_he": "$R = 100/10 = 10\\,\\text{m}$."
-    },
-    {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "A net force of $15\\,\\text{N}$ acts on a $3\\,\\text{kg}$ mass. The acceleration is:",
-      "body_he": "כוח שקול $15\\,\\text{N}$ על מסה $3\\,\\text{kg}$. התאוצה:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$45\\,\\text{m/s}^2$",
-          "text_he": "$45\\,\\text{m/s}^2$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$5\\,\\text{m/s}^2$",
-          "text_he": "$5\\,\\text{m/s}^2$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$12\\,\\text{m/s}^2$",
-          "text_he": "$12\\,\\text{m/s}^2$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0.2\\,\\text{m/s}^2$",
-          "text_he": "$0.2\\,\\text{m/s}^2$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Newton's 2nd law: $a = F/m = 15/3 = 5\\,\\text{m/s}^2$.",
-      "explanation_he": "$a = F/m = 5\\,\\text{m/s}^2$."
-    },
-    {
-      "id": "q4",
-      "type": "open",
-      "body_en": "Prove or disprove: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ for all $a,b\\geq 0$. Justify every step.",
-      "body_he": "הוכיחו או הפריכו: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ ל-$a,b\\geq 0$.",
-      "points": 10,
-      "expected_steps_en": [
-        "Note both sides non-negative for a,b≥0",
-        "Square inequality → 0 ≤ 2√(ab)",
-        "Conclude inequality holds"
-      ],
-      "expected_steps_he": [
-        "שני האגפים אינשליים",
-        "בריבוע: 0 ≤ 2√(ab)",
-        "האי-שוויון נכון"
-      ],
-      "sample_solution_en": "True. Squaring gives 0 ≤ 2√(ab), always valid for a,b≥0.",
-      "sample_solution_he": "נכון — 0 ≤ 2√(ab).",
-      "rubric_en": "4pts domain; 4pts algebraic proof; 2pts conclusion.",
-      "rubric_he": "4 נק' תחום; 4 נק' הוכחה; 2 נק' מסקנה."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "Find $\\lim_{x\\to 2}\\frac{x^2-4}{x-2}$ using factorization (first principles, not L'Hôpital).",
-      "body_he": "מצאו $\\lim_{x\\to 2}\\frac{x^2-4}{x-2}$ בפירוק (ללא L'Hôpital).",
-      "points": 10,
-      "expected_steps_en": [
-        "Factor numerator (x-2)(x+2)",
-        "Cancel (x-2) for x≠2",
-        "Substitute x=2 → limit 4"
-      ],
-      "expected_steps_he": [
-        "פירוק (x-2)(x+2)",
-        "צמצום",
-        "x→2 נותן 4"
-      ],
-      "sample_solution_en": "Limit = 4.",
-      "sample_solution_he": "הגבול = 4.",
-      "rubric_en": "4pts factorization; 3pts cancellation justification; 3pts limit value.",
-      "rubric_he": "4 נק' פירוק; 3 נק' צמצום; 3 נק' ערך."
-    }
-  ]
+  "agent_hints": "Pre-uni students often use energy methods when force methods are needed (e.g., for tension) and vice versa. Enforce the FBD-first discipline: never write F=ma without first drawing the FBD. For incline problems, the most common error is confusing which weight component is parallel vs perpendicular to the slope. Energy conservation: always check if friction is present — if yes, energy is NOT conserved and the work-energy theorem must include the friction work term."
 }

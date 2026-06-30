@@ -2,23 +2,215 @@
   "concept_id": "calculus_intro_makhina",
   "subject": "makhina",
   "level": "makhina",
-  "math_track": [
-    "makhina"
-  ],
-  "title_en": "Intro to Derivatives & Integrals (מכינה)",
-  "title_he": "מבוא לנגזרות ואינטegrals (מכינה)",
-  "summary_en": "Lesson stub — content to be authored.",
-  "summary_he": "שיעור stub — תוכן ייכתב בהמשך.",
-  "est_minutes": 20,
+  "math_track": ["makhina"],
+  "title_en": "Introduction to Calculus — Limits, Derivatives & Integrals (מכינה)",
+  "title_he": "מבוא לחשבון אינפיניטסימלי — גבולות, נגזרות ואינטגרלים (מכינה)",
+  "summary_en": "Bridges high-school algebra to university calculus. Limits capture the behaviour of a function as the input approaches a value. The derivative measures instantaneous rate of change; the integral measures accumulated area. These two concepts are linked by the Fundamental Theorem of Calculus.",
+  "summary_he": "שיעור גשר בין אלגברה תיכונית לחשבון אוניברסיטאי. גבולות תופסים את התנהגות פונקציה כשהמשתנה מתקרב לערך. הנגזרת מודדת שיעור שינוי מיידי; האינטגרל מודד שטח מצטבר. שני הרעיונות מחוברים על-ידי המשפט היסודי של החשבון האינפיניטסימלי.",
+  "est_minutes": 70,
   "sections": [
     {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nProve or disprove: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ for $a,b\\geq0$.\n\n**Complete Solution:**\n\nSquare both sides (non-negative): $a+b\\leq a+b+2\\sqrt{ab}$ → $0\\leq2\\sqrt{ab}$ ✓ **True**.\n\nCounterexample for negative? Not in domain. Inequality holds for $a,b\\geq0$.\n\n---\n\n**Practice Problem 2:**\n\nFind $\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ from first principles (factor, no L'Hôpital).\n\n**Complete Solution:**\n\n$\\frac{x^2-4}{x-2}=\\frac{(x-2)(x+2)}{x-2}=x+2$ for $x\\neq2$. Limit $=4$.\n\n---\n\n**Practice Problem 3 (physics):**\n\nProjectile at $30°$, speed $v_0$. Express max height and range in terms of $v_0$ and $g$.\n\n**Complete Solution:**\n\n$H=\\frac{v_0^2\\sin^2\\theta}{2g}=\\frac{v_0^2}{8g}$. $R=\\frac{v_0^2\\sin2\\theta}{g}=\\frac{v_0^2\\sqrt3}{2g}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\nהוכיחו או הפריכו: $\\sqrt{a+b}\\leq\\sqrt{a}+\\sqrt{b}$ ל-$a,b\\geq0$.\n\n**פתרון:** נכון — $0\\leq2\\sqrt{ab}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ מעקרונות ראשונים.\n\n**פתרון:** $x+2\\to4$.\n\n---\n\n**שאלת תרגול 3:**\n\nזריקה ב-$30°$, מהירות $v_0$: גובה מקסימלי וטווח.\n\n**פתרון:** $H=\\frac{v_0^2}{8g}$, $R=\\frac{v_0^2\\sqrt3}{2g}$."
+      "kind": "intro",
+      "title_en": "Why Calculus? Bridging High School to University",
+      "title_he": "למה חשבון? גשר מהתיכון לאוניברסיטה",
+      "body_en_md": "In high school you mastered algebra and functions. University physics and engineering require you to **describe change** — how fast a car accelerates, how quickly a charge builds up, how an area under a curve accumulates. Calculus is the language for all of this.\n\nTwo ideas drive the subject:\n1. **Derivative** — the instantaneous rate of change of $f$ at a point.\n2. **Integral** — the accumulated total (area under the curve).\n\nBefore reaching those, we need the concept of a **limit**, which answers: 'what value does $f(x)$ approach as $x$ gets arbitrarily close to $a$?'\n\n**Why it matters for your studies:** Almost every university physics equation (Newton's 2nd law as $F = m\\frac{dv}{dt}$, Faraday's law, the wave equation) involves derivatives. Fluency here will make the rest of your studies far easier.",
+      "body_he_md": "בתיכון שלטתם באלגברה ובפונקציות. פיזיקה והנדסה אוניברסיטאית דורשות **לתאר שינוי** — כמה מהר מאיצה מכונית, כמה מהר מצטבר מטען, איזה שטח מצטבר מתחת לגרף. חשבון אינפיניטסימלי הוא שפת כל אלה.\n\nשני רעיונות מרכזיים:\n1. **נגזרת** — שיעור השינוי המיידי של $f$ בנקודה.\n2. **אינטגרל** — הסכום המצטבר (שטח מתחת לגרף).\n\nלפני שמגיעים לשם, נצטרך את מושג ה**גבול**, שעונה: 'לאיזה ערך מתקרב $f(x)$ כש-$x$ מתקרב ל-$a$?'\n\n**מדוע חשוב לך:** כמעט כל משוואת פיזיקה אוניברסיטאית (חוק שני של ניוטון $F = m\\frac{dv}{dt}$, חוק פאראדיי, משוואת הגל) כוללת נגזרות. שליטה כאן תקל עליך מאוד את שאר הלימודים."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Limits, Derivatives, and Integrals — Core Definitions",
+      "title_he": "גבולות, נגזרות ואינטגרלים — הגדרות מרכזיות",
+      "body_en_md": "### Limit\n$$\\lim_{x \\to a} f(x) = L$$\nmeans: we can make $f(x)$ as close to $L$ as desired by taking $x$ sufficiently close (but not equal) to $a$.\n\n### Derivative (limit definition)\nThe **derivative** of $f$ at $x = a$ is:\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}$$\nGeometrically: slope of the tangent line to $f$ at $a$.\nPhysically: instantaneous rate of change (e.g., instantaneous velocity when $f$ = position).\n\n**Variables:** $h$ = increment, $f(a+h) - f(a)$ = rise, ratio = slope of secant $\\to$ tangent as $h \\to 0$.\n\n### Integral (Riemann sum concept)\nThe **definite integral** of $f$ from $a$ to $b$ measures the signed area:\n$$\\int_a^b f(x)\\,dx = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i)\\Delta x$$\n\n### Fundamental Theorem (FTC)\nIf $F'(x) = f(x)$, then $\\int_a^b f(x)\\,dx = F(b) - F(a)$.\nDerivatives and integrals are **inverse operations**.",
+      "body_he_md": "### גבול\n$$\\lim_{x \\to a} f(x) = L$$\nמשמעות: ניתן להתקרב ל-$L$ כרצוננו על-ידי לקיחת $x$ קרוב דיו (אך לא שווה) ל-$a$.\n\n### נגזרת (הגדרה כגבול)\n**הנגזרת** של $f$ ב-$x = a$:\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}$$\nגיאומטרית: שיפוע משיק ל-$f$ ב-$a$.\nפיזיקלית: שיעור שינוי מיידי (למשל: מהירות מיידית כאשר $f$ = מיקום).\n\n**משתנים:** $h$ = תוספת, $f(a+h)-f(a)$ = עלייה, יחס = שיפוע מיתר $\\to$ משיק כש-$h \\to 0$.\n\n### אינטגרל (סכום רימן)\n**האינטגרל המסוים** של $f$ מ-$a$ עד $b$ מודד שטח מסומן:\n$$\\int_a^b f(x)\\,dx = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i)\\Delta x$$\n\n### המשפט היסודי (FTC)\nאם $F'(x) = f(x)$, אז $\\int_a^b f(x)\\,dx = F(b) - F(a)$.\nנגזרות ואינטגרלים הן **פעולות הפוכות**."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Average vs Instantaneous Rate of Change — Key Observations",
+      "title_he": "שיעור שינוי ממוצע לעומת מיידי — תובנות מפתח",
+      "body_en_md": "### Average rate of change\nFor $f$ on $[a, b]$:\n$$\\text{ARC} = \\frac{f(b) - f(a)}{b - a}$$\nThis equals the **slope of the secant line** from $(a, f(a))$ to $(b, f(b))$.\n\n### As the interval shrinks: the instantaneous rate\nLet $b = a + h$ and take $h \\to 0$:\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}$$\nThe secant line rotates and approaches the **tangent line**.\n\n### Key connections\n- $f'(x) > 0$: $f$ is increasing; $f'(x) < 0$: $f$ is decreasing.\n- $f''(x) > 0$: $f'$ is increasing (concave up); $f''(x) < 0$: concave down.\n- Integral of velocity = displacement; integral of acceleration = velocity change.\n\n### Power rule (most-used derivative rule)\n$$\\frac{d}{dx}[x^n] = nx^{n-1}$$\nExamples: $(x^3)' = 3x^2$; $(x^{-1})' = -x^{-2}$; $(\\sqrt{x})' = \\frac{1}{2\\sqrt{x}}$.\n\n### Relating $f$, $f'$, $f''$ graphically\n- Where $f$ has a local max/min, $f' = 0$.\n- Where $f'$ changes sign, $f$ has a turning point.\n- Where $f''$ changes sign, $f$ has an inflection point.",
+      "body_he_md": "### שיעור שינוי ממוצע\nעבור $f$ על $[a, b]$:\n$$\\text{שינוי ממוצע} = \\frac{f(b) - f(a)}{b - a}$$\nשווה ל**שיפוע מיתר** מ-$(a, f(a))$ ל-$(b, f(b))$.\n\n### כאשר הקטע מתכווץ: שיעור שינוי מיידי\nנגדיר $b = a + h$ וניקח $h \\to 0$:\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}$$\nמיתר מסתובב ומתקרב ל**משיק**.\n\n### קשרים מרכזיים\n- $f'(x) > 0$: $f$ עולה; $f'(x) < 0$: $f$ יורדת.\n- $f''(x) > 0$: $f'$ עולה (קמור); $f''(x) < 0$: קעור.\n- אינטגרל של מהירות = תזוזה; אינטגרל של תאוצה = שינוי מהירות.\n\n### כלל החזקה (כלל הנגזרת הנפוץ ביותר)\n$$\\frac{d}{dx}[x^n] = nx^{n-1}$$\nדוגמאות: $(x^3)' = 3x^2$; $(x^{-1})' = -x^{-2}$; $(\\sqrt{x})' = \\frac{1}{2\\sqrt{x}}$.\n\n### קשר גרפי בין $f$, $f'$, $f''$\n- איפה ש-$f$ מגיעה לנקודת קיצון, $f' = 0$.\n- כשסימן $f'$ משתנה, יש ל-$f$ נקודת פנייה.\n- כשסימן $f''$ משתנה, יש ל-$f$ נקודת פיתול."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Average and Instantaneous Rate of Change of $x^2$",
+      "title_he": "דוגמה פתורה 1 — שיעור שינוי ממוצע ומיידי של $x^2$",
+      "body_en_md": "**Given:** $f(x) = x^2$.\n\n**Part A:** Find the average rate of change from $x = 1$ to $x = 3$.\n\n**Step 1:** Compute $f(1)$ and $f(3)$.\n$$f(1) = 1^2 = 1, \\quad f(3) = 3^2 = 9.$$\n\n**Step 2:** Apply the ARC formula.\n$$\\text{ARC} = \\frac{f(3) - f(1)}{3 - 1} = \\frac{9 - 1}{2} = \\frac{8}{2} = 4.$$\n\n**Interpretation:** On average, $f$ increases by 4 units per unit increase in $x$ over $[1, 3]$.\n\n**Part B:** Find the instantaneous rate of change at $x = 1$ (i.e., $f'(1)$) using limits.\n\n**Step 3:** Write the definition.\n$$f'(1) = \\lim_{h \\to 0} \\frac{f(1+h) - f(1)}{h}.$$\n\n**Step 4:** Expand the numerator.\n$$f(1+h) = (1+h)^2 = 1 + 2h + h^2.$$\n$$f(1+h) - f(1) = 1 + 2h + h^2 - 1 = 2h + h^2.$$\n\n**Step 5:** Simplify and take the limit.\n$$f'(1) = \\lim_{h \\to 0} \\frac{2h + h^2}{h} = \\lim_{h \\to 0}(2 + h) = 2.$$\n\n**Answer:** Average rate = 4; instantaneous rate at $x = 1$ is $f'(1) = 2$.",
+      "body_he_md": "**נתון:** $f(x) = x^2$.\n\n**חלק א:** מצאו שיעור שינוי ממוצע מ-$x = 1$ ל-$x = 3$.\n\n**שלב 1:** חשבו $f(1)$ ו-$f(3)$.\n$$f(1) = 1, \\quad f(3) = 9.$$\n\n**שלב 2:** הצב בנוסחת שיעור שינוי ממוצע.\n$$\\text{שינוי ממוצע} = \\frac{9 - 1}{3 - 1} = \\frac{8}{2} = 4.$$\n\n**פירוש:** בממוצע, $f$ גדלה ב-4 יחידות לכל יחידת $x$ על $[1,3]$.\n\n**חלק ב:** מצאו את שיעור השינוי המיידי ב-$x = 1$ (כלומר $f'(1)$) בעזרת גבולות.\n\n**שלב 3:** כתבו את ההגדרה.\n$$f'(1) = \\lim_{h \\to 0} \\frac{f(1+h) - f(1)}{h}.$$\n\n**שלב 4:** פתחו את המונה.\n$$f(1+h) = (1+h)^2 = 1 + 2h + h^2.$$\n$$f(1+h) - f(1) = 2h + h^2.$$\n\n**שלב 5:** פשטו וחשבו את הגבול.\n$$f'(1) = \\lim_{h \\to 0} \\frac{2h + h^2}{h} = \\lim_{h \\to 0}(2 + h) = 2.$$\n\n**תשובה:** שינוי ממוצע = 4; שיעור שינוי מיידי ב-$x=1$ הוא $f'(1) = 2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "**Question:** For $f(x) = x^2 + 3x$, find:\n(a) The average rate of change from $x = 0$ to $x = 2$.\n(b) The instantaneous rate of change at $x = 0$ using the limit definition.",
+      "body_he_md": "**שאלה:** עבור $f(x) = x^2 + 3x$, מצאו:\n(א) שיעור שינוי ממוצע מ-$x = 0$ ל-$x = 2$.\n(ב) שיעור שינוי מיידי ב-$x = 0$ בעזרת הגדרת הגבול.",
+      "checkpoint_solution_en": "(a) $f(0)=0$, $f(2)=4+6=10$. ARC $= (10-0)/(2-0) = 5$.\n(b) $f'(0) = \\lim_{h\\to0}\\frac{f(h)-f(0)}{h} = \\lim_{h\\to0}\\frac{h^2+3h}{h} = \\lim_{h\\to0}(h+3) = 3$.",
+      "checkpoint_solution_he": "(א) $f(0)=0$, $f(2)=10$. שינוי ממוצע $= 10/2 = 5$.\n(ב) $f'(0) = \\lim_{h\\to0}\\frac{h^2+3h}{h} = \\lim_{h\\to0}(h+3) = 3$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Derivative of $x^3$ from the Limit Definition",
+      "title_he": "דוגמה פתורה 2 — נגזרת $x^3$ מהגדרת הגבול",
+      "body_en_md": "**Given:** $f(x) = x^3$. Find $f'(x)$ from first principles.\n\n**Step 1:** Write the limit definition for general $x$.\n$$f'(x) = \\lim_{h \\to 0} \\frac{(x+h)^3 - x^3}{h}.$$\n\n**Step 2:** Expand $(x+h)^3$ using the binomial theorem.\n$$(x+h)^3 = x^3 + 3x^2 h + 3xh^2 + h^3.$$\n\n**Step 3:** Subtract $x^3$ from the expansion.\n$$(x+h)^3 - x^3 = 3x^2 h + 3xh^2 + h^3.$$\n\n**Step 4:** Divide by $h$ (valid since $h \\neq 0$ in a limit).\n$$\\frac{(x+h)^3 - x^3}{h} = 3x^2 + 3xh + h^2.$$\n\n**Step 5:** Take $h \\to 0$. Every term with $h$ vanishes.\n$$f'(x) = \\lim_{h \\to 0}(3x^2 + 3xh + h^2) = 3x^2.$$\n\n**Answer:** $f'(x) = 3x^2$. This confirms the power rule: $(x^3)' = 3x^{3-1} = 3x^2$.",
+      "body_he_md": "**נתון:** $f(x) = x^3$. מצאו $f'(x)$ מעקרונות ראשונים.\n\n**שלב 1:** כתבו הגדרת הגבול עבור $x$ כללי.\n$$f'(x) = \\lim_{h \\to 0} \\frac{(x+h)^3 - x^3}{h}.$$\n\n**שלב 2:** פרשו $(x+h)^3$ עם משפט הבינום.\n$$(x+h)^3 = x^3 + 3x^2 h + 3xh^2 + h^3.$$\n\n**שלב 3:** חסרו $x^3$.\n$$(x+h)^3 - x^3 = 3x^2 h + 3xh^2 + h^3.$$\n\n**שלב 4:** חלקו ב-$h$ (חוקי כיוון $h \\neq 0$ בגבול).\n$$\\frac{(x+h)^3 - x^3}{h} = 3x^2 + 3xh + h^2.$$\n\n**שלב 5:** קחו $h \\to 0$. כל האיברים עם $h$ מתאפסים.\n$$f'(x) = \\lim_{h \\to 0}(3x^2 + 3xh + h^2) = 3x^2.$$\n\n**תשובה:** $f'(x) = 3x^2$. אישור כלל החזקה: $(x^3)' = 3x^2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "**Question:** Use the limit definition to find $f'(x)$ for $f(x) = 2x^2 - 5x$. Then evaluate $f'(3)$.",
+      "body_he_md": "**שאלה:** השתמשו בהגדרת הגבול למציאת $f'(x)$ עבור $f(x) = 2x^2 - 5x$. לאחר מכן חשבו $f'(3)$.",
+      "checkpoint_solution_en": "$f'(x) = \\lim_{h\\to0}\\frac{2(x+h)^2-5(x+h)-(2x^2-5x)}{h} = \\lim_{h\\to0}\\frac{4xh+2h^2-5h}{h} = \\lim_{h\\to0}(4x+2h-5) = 4x-5$. So $f'(3) = 12-5 = 7$.",
+      "checkpoint_solution_he": "$f'(x) = \\lim_{h\\to0}\\frac{4xh+2h^2-5h}{h} = \\lim_{h\\to0}(4x+2h-5) = 4x-5$. לכן $f'(3) = 12-5 = 7$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Sketching $f$, $f'$, and $f''$ for $f(x) = \\sin x$",
+      "title_he": "דוגמה פתורה 3 — סרטוט $f$, $f'$ ו-$f''$ עבור $f(x) = \\sin x$",
+      "body_en_md": "**Given:** $f(x) = \\sin x$. Sketch and relate the graphs of $f$, $f'$, and $f''$.\n\n**Step 1: Identify $f' (x)$.** \nFrom standard differentiation: $f'(x) = \\cos x$.\n\n**Step 2: Identify $f''(x)$.**\n$f''(x) = (\\cos x)' = -\\sin x$. Note $f''(x) = -f(x)$ — this is the hallmark of SHM.\n\n**Step 3: Relate graphical features.**\n\n| Where $f$... | ...therefore $f'$... |\n|---|---|\n| Reaches max ($x = \\pi/2$) | Crosses zero (tangent horizontal) |\n| Crosses zero going up | Reaches max |\n| Reaches min ($x = 3\\pi/2$) | Crosses zero from above |\n| Crosses zero going down | Reaches min |\n\n**Step 4: Relate $f'$ and $f''$.**\nWhere $f' = \\cos x$ reaches max, $f''$ crosses zero. $f''$ is negative wherever $f' = \\cos x$ is decreasing.\n\n**Step 5: Concavity of $f$.**\n$f''(x) = -\\sin x$. When $f''< 0$ (i.e., $\\sin x > 0$, so $x \\in (0,\\pi)$), $f$ is concave down. When $f'' > 0$ ($x \\in (\\pi, 2\\pi)$), $f$ is concave up. Inflection points at $x = 0, \\pi, 2\\pi, \\ldots$ where $f'' = 0$.\n\n**Key observation:** Each graph is a horizontal shift of the next: $f \\xrightarrow{\\text{differentiate}} f' \\xrightarrow{\\text{differentiate}} f'' = -f$. This $90°$-shift structure is fundamental in oscillation physics.",
+      "body_he_md": "**נתון:** $f(x) = \\sin x$. סרטטו וקשרו את הגרפים של $f$, $f'$ ו-$f''$.\n\n**שלב 1: זהו את $f'(x)$.**\nמגזירה סטנדרטית: $f'(x) = \\cos x$.\n\n**שלב 2: זהו את $f''(x)$.**\n$f''(x) = (\\cos x)' = -\\sin x$. שימו לב: $f''(x) = -f(x)$ — זהו הסימן של תנועה הרמונית!\n\n**שלב 3: קשרו תכונות גרפיות.**\n\n| איפה ש-$f$... | ...לכן $f'$... |\n|---|---|\n| מגיעה למקסימום ($x = \\pi/2$) | חוצה אפס (משיק אופקי) |\n| חוצה אפס כלפי מעלה | מגיעה למקסימום |\n| מגיעה למינימום ($x = 3\\pi/2$) | חוצה אפס מלמעלה |\n| חוצה אפס כלפי מטה | מגיעה למינימום |\n\n**שלב 4: קשר $f'$ ל-$f''$.**\nאיפה ש-$f' = \\cos x$ מגיע למקסימום, $f''$ חוצה אפס. $f''$ שלילי איפה שהפונקציה $\\cos x$ יורדת.\n\n**שלב 5: קמירות של $f$.**\n$f''(x) = -\\sin x$. כאשר $f'' < 0$ ($x \\in (0,\\pi)$) — $f$ קעורה. כאשר $f'' > 0$ ($x \\in (\\pi,2\\pi)$) — $f$ קמורה. נקודות פיתול ב-$x = 0, \\pi, 2\\pi, \\ldots$\n\n**תובנה מרכזית:** כל גרף הוא הזזה אופקית של הבא: $f \\to f' \\to f'' = -f$. מבנה ה-$90°$ הזה בסיסי בפיזיקת תנודות."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Average vs Instantaneous Rate: When to Use Which",
+      "title_he": "מדריך שיטה — שינוי ממוצע לעומת מיידי: מתי להשתמש בכל אחד",
+      "body_en_md": "| Situation | Tool | Formula |\n|---|---|---|\n| \"Over an interval $[a,b]$\" | Average rate of change | $\\frac{f(b)-f(a)}{b-a}$ |\n| \"At a specific point $x=a$\" | Derivative (instantaneous) | $f'(a) = \\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}$ |\n| \"Total change accumulated\" | Definite integral | $\\int_a^b f(x)\\,dx = F(b)-F(a)$ |\n| \"Anti-derivative needed\" | Power rule (reverse) | $\\int x^n\\,dx = \\frac{x^{n+1}}{n+1}+C$, $n\\neq-1$ |\n\n**Decision flowchart:**\n1. Does the question involve an interval or a single point?\n   - Interval → average rate or integral.\n   - Single point → derivative.\n2. Does the question ask for a rate or an accumulated total?\n   - Rate → derivative.\n   - Accumulated total → integral.\n3. Is an exact expression needed or a numerical answer?\n   - Exact → use limit definition or FTC.\n   - Numerical → substitute values after differentiating.",
+      "body_he_md": "| מצב | כלי | נוסחה |\n|---|---|---|\n| \"על קטע $[a,b]$\" | שינוי ממוצע | $\\frac{f(b)-f(a)}{b-a}$ |\n| \"בנקודה ספציפית $x=a$\" | נגזרת (מיידית) | $f'(a) = \\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}$ |\n| \"שינוי כולל שהצטבר\" | אינטגרל מסוים | $\\int_a^b f(x)\\,dx = F(b)-F(a)$ |\n| \"נדרש אנטי-נגזרת\" | כלל חזקה הפוך | $\\int x^n\\,dx = \\frac{x^{n+1}}{n+1}+C$, $n\\neq-1$ |\n\n**תרשים החלטה:**\n1. האם השאלה עוסקת בקטע או בנקודה בודדת?\n   - קטע → שינוי ממוצע או אינטגרל.\n   - נקודה בודדת → נגזרת.\n2. האם השאלה שואלת על קצב שינוי או על סכום מצטבר?\n   - קצב → נגזרת.\n   - סכום מצטבר → אינטגרל.\n3. האם נדרש ביטוי מדויק או ערך מספרי?\n   - מדויק → הגדרת הגבול או FTC.\n   - מספרי → הצב ערכים לאחר גזירה."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find the average rate of change of $f(x) = 3x^2$ from $x = 1$ to $x = 4$.",
+          "body_he": "מצאו שיעור שינוי ממוצע של $f(x) = 3x^2$ מ-$x = 1$ עד $x = 4$.",
+          "solution_en": "ARC $= \\frac{f(4)-f(1)}{4-1} = \\frac{48-3}{3} = \\frac{45}{3} = 15$.",
+          "solution_he": "שינוי ממוצע $= \\frac{48-3}{3} = 15$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Compute $\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$ by factoring.",
+          "body_he": "חשבו $\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$ בפירוק.",
+          "solution_en": "$\\frac{x^2-9}{x-3} = \\frac{(x-3)(x+3)}{x-3} = x+3$ for $x\\neq3$. Limit $= 3+3 = 6$.",
+          "solution_he": "$\\frac{(x-3)(x+3)}{x-3} = x+3$. גבול $= 6$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Using the power rule, find $f'(x)$ for $f(x) = 5x^4 - 2x + 7$.",
+          "body_he": "בעזרת כלל החזקה, מצאו $f'(x)$ עבור $f(x) = 5x^4 - 2x + 7$.",
+          "solution_en": "$f'(x) = 20x^3 - 2$. (Constant 7 has zero derivative.)",
+          "solution_he": "$f'(x) = 20x^3 - 2$. (הקבוע 7 מתאפס.)",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A particle's position is $s(t) = t^2 - 4t$. Find its instantaneous velocity at $t = 3$.",
+          "body_he": "מיקום חלקיק: $s(t) = t^2 - 4t$. מצאו מהירותו המיידית ב-$t = 3$.",
+          "solution_en": "$v(t) = s'(t) = 2t - 4$. $v(3) = 6 - 4 = 2$ m/s.",
+          "solution_he": "$v(t) = 2t - 4$. $v(3) = 2$ מ\"ש.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Use the limit definition to find $f'(x)$ for $f(x) = \\frac{1}{x}$.",
+          "body_he": "השתמשו בהגדרת הגבול למציאת $f'(x)$ עבור $f(x) = \\frac{1}{x}$.",
+          "solution_en": "$f'(x) = \\lim_{h\\to0}\\frac{\\frac{1}{x+h}-\\frac{1}{x}}{h} = \\lim_{h\\to0}\\frac{x-(x+h)}{hx(x+h)} = \\lim_{h\\to0}\\frac{-h}{hx(x+h)} = \\lim_{h\\to0}\\frac{-1}{x(x+h)} = \\frac{-1}{x^2}$.",
+          "solution_he": "$f'(x) = \\lim_{h\\to0}\\frac{-h}{hx(x+h)} = -\\frac{1}{x^2}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Given $f(x) = x^3 - 3x$, find all $x$ where $f'(x) = 0$ and classify each as local max or min.",
+          "body_he": "עבור $f(x) = x^3 - 3x$, מצאו את כל $x$ שבהם $f'(x) = 0$ וסווגו כמקסימום/מינימום מקומי.",
+          "solution_en": "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = \\pm 1$. $f''(x) = 6x$. At $x=1$: $f''=6>0$ → local min. At $x=-1$: $f''=-6<0$ → local max.",
+          "solution_he": "$f'(x)=3x^2-3=0 \\Rightarrow x=\\pm1$. ב-$x=1$: $f''=6>0$ → מינימום. ב-$x=-1$: $f''=-6<0$ → מקסימום.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Compute $\\int_0^2 (3x^2 + 2x)\\,dx$ using the FTC.",
+          "body_he": "חשבו $\\int_0^2 (3x^2 + 2x)\\,dx$ בעזרת המשפט היסודי.",
+          "solution_en": "Anti-derivative: $F(x) = x^3 + x^2$. $F(2) - F(0) = 8 + 4 - 0 = 12$.",
+          "solution_he": "אנטי-נגזרת: $F(x) = x^3 + x^2$. $F(2)-F(0) = 12$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "The velocity of a car is $v(t) = 6t^2$ m/s. Find the total distance traveled from $t=0$ to $t=3$ s.",
+          "body_he": "מהירות מכונית: $v(t) = 6t^2$ מ\"ש. מצאו את המרחק הכולל מ-$t=0$ עד $t=3$ שניות.",
+          "solution_en": "$\\int_0^3 6t^2\\,dt = [2t^3]_0^3 = 2(27) - 0 = 54$ m.",
+          "solution_he": "$\\int_0^3 6t^2\\,dt = [2t^3]_0^3 = 54$ מ'.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "Let $f(x) = x^4 - 4x^2$. Find all critical points, classify them, identify inflection points, and sketch the graph indicating concavity.",
+          "body_he": "תהי $f(x) = x^4 - 4x^2$. מצאו נקודות קריטיות, סווגו אותן, מצאו נקודות פיתול ורשמו גרף המציין קמירות.",
+          "solution_en": "$f'(x) = 4x^3 - 8x = 4x(x^2-2) = 0 \\Rightarrow x = 0, \\pm\\sqrt{2}$. $f''(x) = 12x^2-8$. At $x=0$: $f''=-8<0$ (local max). At $x=\\pm\\sqrt{2}$: $f''=24-8=16>0$ (local min). Inflection: $f''=0 \\Rightarrow x = \\pm\\sqrt{2/3}$.",
+          "solution_he": "$f'(x)=4x(x^2-2)=0 \\Rightarrow x=0,\\pm\\sqrt{2}$. ב-$x=0$: $f''<0$ (מקסימום). ב-$x=\\pm\\sqrt{2}$: $f''>0$ (מינימום). נקודות פיתול: $x=\\pm\\sqrt{2/3}$.",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "From the definition of derivative, prove that $\\frac{d}{dx}[\\sin x] = \\cos x$. Use the limit $\\lim_{h\\to0}\\frac{\\sin h}{h}=1$ and $\\lim_{h\\to0}\\frac{\\cos h - 1}{h}=0$ as given.",
+          "body_he": "מהגדרת הנגזרת, הוכיחו כי $\\frac{d}{dx}[\\sin x] = \\cos x$. השתמשו ב-$\\lim_{h\\to0}\\frac{\\sin h}{h}=1$ ו-$\\lim_{h\\to0}\\frac{\\cos h-1}{h}=0$ כנתון.",
+          "solution_en": "$f'(x) = \\lim_{h\\to0}\\frac{\\sin(x+h)-\\sin x}{h}$. Using angle-addition: $\\sin(x+h) = \\sin x\\cos h + \\cos x\\sin h$. So numerator $= \\sin x(\\cos h -1)+\\cos x\\sin h$. Dividing by $h$: $\\sin x\\cdot\\frac{\\cos h-1}{h}+\\cos x\\cdot\\frac{\\sin h}{h}\\to\\sin x\\cdot0+\\cos x\\cdot1=\\cos x$.",
+          "solution_he": "$f'(x)=\\lim_{h\\to0}\\frac{\\sin x(\\cos h-1)+\\cos x\\sin h}{h}=\\sin x\\cdot0+\\cos x\\cdot1=\\cos x$.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that the area under $f(x)=x^2$ from $x=0$ to $x=1$ equals $1/3$ by evaluating the Riemann sum $\\lim_{n\\to\\infty}\\sum_{i=1}^n\\frac{i^2}{n^3}$ using the formula $\\sum_{i=1}^n i^2 = \\frac{n(n+1)(2n+1)}{6}$.",
+          "body_he": "הראו ששטח תחת $f(x)=x^2$ מ-$0$ עד $1$ שווה $1/3$ על-ידי חישוב $\\lim_{n\\to\\infty}\\sum_{i=1}^n\\frac{i^2}{n^3}$ תוך שימוש ב-$\\sum_{i=1}^n i^2=\\frac{n(n+1)(2n+1)}{6}$.",
+          "solution_en": "$\\sum_{i=1}^n\\frac{i^2}{n^3}=\\frac{1}{n^3}\\cdot\\frac{n(n+1)(2n+1)}{6}=\\frac{(n+1)(2n+1)}{6n^2}$. As $n\\to\\infty$: $\\frac{(n)(2n)}{6n^2}=\\frac{2}{6}=\\frac{1}{3}$.",
+          "solution_he": "$\\frac{(n+1)(2n+1)}{6n^2}\\to\\frac{2n^2}{6n^2}=\\frac{1}{3}$.",
+          "points": 12
+        }
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Top Mistakes in Introductory Calculus",
+      "title_he": "הטעויות הנפוצות ביותר בחשבון מבוא",
+      "body_en_md": "1. **Confusing average and instantaneous rate.** Average rate uses two points; instantaneous rate is a limit at one point. Never substitute $h = 0$ directly unless the indeterminate form resolves.\n\n2. **Incorrect limit evaluation by substitution.** $\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ cannot be computed by substituting $x=2$ (gives $0/0$). Always factor or use conjugates first.\n\n3. **Forgetting the $h \\to 0$ limit step.** Write the entire limit expression before simplifying — don't just algebraically manipulate and forget to evaluate the limit.\n\n4. **Confusing derivative with slope.** The derivative $f'(a)$ IS the slope of the tangent at $x=a$, but 'slope' alone is ambiguous — always specify 'tangent at which point'.\n\n5. **Neglecting the constant of integration.** Anti-derivatives always carry $+C$. Omitting it on a homework/exam loses marks.",
+      "body_he_md": "1. **בלבול שינוי ממוצע ומיידי.** שינוי ממוצע משתמש בשתי נקודות; שיעור מיידי הוא גבול בנקודה אחת. אל תציבו $h=0$ ישירות אלא אם הצורה $0/0$ מתפתרת.\n\n2. **חישוב גבול שגוי בהצבה ישירה.** $\\lim_{x\\to2}\\frac{x^2-4}{x-2}$ לא ניתן לחישוב בהצבת $x=2$ (נותן $0/0$). תמיד פרקו לגורמים קודם.\n\n3. **שכחת שלב $h\\to0$.** כתבו את כל ביטוי הגבול לפני פישוט — אל תשכחו לחשב את הגבול עצמו.\n\n4. **בלבול נגזרת ושיפוע.** $f'(a)$ הוא שיפוע המשיק ב-$x=a$, אך 'שיפוע' לבד מעורפל — ציינו תמיד 'משיק באיזו נקודה'.\n\n5. **השמטת קבוע האינטגרציה.** אנטי-נגזרות תמיד כוללות $+C$. השמטתו גורמת לאיבוד נקודות."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Sheet & Exam Patterns",
+      "title_he": "לפני הבחינה — גיליון נוסחאות ותבניות שאלות",
+      "body_en_md": "### Essential Formulas\n- Average rate: $\\frac{f(b)-f(a)}{b-a}$\n- Derivative definition: $f'(a)=\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}$\n- Power rule: $(x^n)'=nx^{n-1}$\n- Integral power rule: $\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C$ ($n\\neq-1$)\n- FTC: $\\int_a^b f(x)\\,dx = F(b)-F(a)$\n- $(\\sin x)'=\\cos x$; $(\\cos x)'=-\\sin x$; $(e^x)'=e^x$; $(\\ln x)'=1/x$\n\n### Typical Exam Question Patterns\n1. **Limit by factoring:** $\\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}$ — factor, cancel, substitute.\n2. **Derivative from definition:** Full expand-simplify-limit procedure.\n3. **Sketch $f'$ from graph of $f$:** identify zeros of $f'$ where $f$ has turning points.\n4. **Applied rate problem:** position → velocity → acceleration via differentiation.\n5. **Area computation:** set up integral, apply FTC.\n\n### Marking Criteria\n- Limit problems: 40% for correct algebraic setup, 40% for limit evaluation, 20% for final answer.\n- Derivative from definition: 25% set-up, 50% algebra, 25% conclusion.\n- Sketch problems: 30% correct zeros of $f'$, 40% correct sign of $f'$, 30% concavity.",
+      "body_he_md": "### נוסחאות חיוניות\n- שינוי ממוצע: $\\frac{f(b)-f(a)}{b-a}$\n- הגדרת נגזרת: $f'(a)=\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}$\n- כלל חזקה: $(x^n)'=nx^{n-1}$\n- כלל חזקה לאינטגרל: $\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C$\n- FTC: $\\int_a^b f(x)\\,dx=F(b)-F(a)$\n- $(\\sin x)'=\\cos x$; $(\\cos x)'=-\\sin x$; $(e^x)'=e^x$; $(\\ln x)'=1/x$\n\n### תבניות שאלות נפוצות בבחינה\n1. **גבול עם פירוק:** $\\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}$ — פרקו, צמצמו, הציבו.\n2. **נגזרת מהגדרה:** נפחו, פשטו, קחו גבול.\n3. **סרטוט $f'$ מגרף $f$:** זהו אפסי $f'$ שם ל-$f$ יש נקודות פנייה.\n4. **שאלת קצב שימושית:** מיקום → מהירות → תאוצה בגזירה.\n5. **חישוב שטח:** הגדירו אינטגרל, החילו FTC.\n\n### קריטריוני ניקוד\n- שאלות גבול: 40% הגדרה אלגברית, 40% חישוב גבול, 20% תשובה סופית.\n- נגזרת מהגדרה: 25% הגדרה, 50% אלגברה, 25% מסקנה.\n- סרטוט: 30% אפסי $f'$, 40% סימן $f'$, 30% קמירות."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary — Key Equations",
+      "title_he": "סיכום — משוואות מפתח",
+      "body_en_md": "- **Limit:** $\\lim_{x\\to a}f(x)=L$ — approach without touching.\n- **Derivative:** $f'(a)=\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}$ — instantaneous rate, tangent slope.\n- **Power rule:** $(x^n)'=nx^{n-1}$.\n- **Sign of $f'$:** $f'>0\\Rightarrow f\\uparrow$; $f'<0\\Rightarrow f\\downarrow$; $f'=0\\Rightarrow$ critical point.\n- **Sign of $f''$:** $f''>0\\Rightarrow$ concave up; $f''<0\\Rightarrow$ concave down.\n- **Integral:** $\\int_a^b f(x)\\,dx=F(b)-F(a)$ (FTC).\n- **Anti-derivative power rule:** $\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C$.",
+      "body_he_md": "- **גבול:** $\\lim_{x\\to a}f(x)=L$ — התקרבות ללא גישה.\n- **נגזרת:** $f'(a)=\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}$ — שיעור שינוי מיידי, שיפוע משיק.\n- **כלל חזקה:** $(x^n)'=nx^{n-1}$.\n- **סימן $f'$:** $f'>0\\Rightarrow f$ עולה; $f'<0\\Rightarrow f$ יורדת; $f'=0\\Rightarrow$ נקודה קריטית.\n- **סימן $f''$:** $f''>0\\Rightarrow$ קמור; $f''<0\\Rightarrow$ קעור.\n- **אינטגרל:** $\\int_a^b f(x)\\,dx=F(b)-F(a)$ (FTC).\n- **כלל חזקה לאינטגרל:** $\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Lesson stub — content to be authored."
+  "agent_hints": "Stress that the limit definition of the derivative is the source of all differentiation rules — never let students skip it. Limits of the form 0/0 must be resolved algebraically (factor, rationalize, expand). For graphical problems, always connect: where f has a peak/valley → f' = 0; where f' changes sign → turning point in f; f'' sign determines concavity. For pre-uni students, grounding in physical examples (position/velocity/acceleration) makes the abstract concrete."
 }

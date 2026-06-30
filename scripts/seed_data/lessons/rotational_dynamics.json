@@ -1,251 +1,216 @@
 {
   "concept_id": "rotational_dynamics",
   "subject": "physics",
-  "level": "high_school",
-  "title_en": "Rotational Motion — Angular Kinematics and Dynamics",
-  "title_he": "תנועה סיבובית — קינמטיקה ודינמיקה זוויתיות",
-  "summary_en": "Rotational analogs of translational motion: angle $\\theta$, angular velocity $\\omega$, angular acceleration $\\alpha$. Newton's 2nd law becomes $\\tau = I\\alpha$.",
-  "summary_he": "אנלוגיות סיבוביות לתנועה לינארית: זווית $\\theta$, מהירות זוויתית $\\omega$, תאוצה זוויתית $\\alpha$. החוק השני: $\\tau = I\\alpha$.",
-  "est_minutes": 17,
+  "level": "university",
+  "math_track": ["hs_physics"],
+  "title_en": "Rotational Dynamics — Torque, Moment of Inertia, and Angular Momentum",
+  "title_he": "דינמיקה סיבובית — מומנט כוח, מומנט התמדה ותנע זוויתי",
+  "summary_en": "Rotational dynamics is the rotational analog of Newton's second law: τ = Iα. Torque τ plays the role of force, moment of inertia I plays the role of mass, and angular acceleration α plays the role of linear acceleration. Angular momentum L = Iω is conserved when net torque is zero. Rotational kinetic energy ½Iω² adds to translational KE for rolling objects.",
+  "summary_he": "דינמיקה סיבובית היא האנלוג הסיבובי של חוק שני של ניוטון: $\\tau=I\\alpha$. מומנט כוח $\\tau$ — תפקיד הכוח. מומנט התמדה $I$ — תפקיד המסה. תנע זוויתי $L=I\\omega$ מתשמר כשהמומנט הנטו הוא אפס. אנרגיה קינטית סיבובית $\\frac{1}{2}I\\omega^2$ מתווספת ל-KE תנועתית עבור גופים מתגלגלים.",
+  "est_minutes": 65,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Angular quantities",
-      "title_he": "גדלים זוויתיים",
-      "body_en_md": "When an object rotates about a fixed axis, every point moves on a circle, so we describe motion with ANGULAR variables:\n\n- **Angular position** $\\theta$ (radians).\n- **Angular velocity** $\\omega = d\\theta/dt$ (rad/s).\n- **Angular acceleration** $\\alpha = d\\omega/dt$ (rad/s²).\n\n### Connection to linear\n\nFor a point at distance $r$ from the axis:\n\n$$s = r\\theta, \\quad v = r\\omega, \\quad a_t = r\\alpha.$$\n\n($a_t$ is tangential; there's also centripetal $a_c = r\\omega^2$.)\n\n### Constant $\\alpha$ kinematic equations\n\nDirect analogs of linear:\n\n$$\\omega = \\omega_0 + \\alpha t, \\quad \\theta = \\theta_0 + \\omega_0 t + \\tfrac{1}{2}\\alpha t^2, \\quad \\omega^2 = \\omega_0^2 + 2\\alpha(\\theta - \\theta_0).$$",
-      "body_he_md": "בסיבוב סביב ציר קבוע, כל נקודה נעה במעגל. משתמשים במשתנים **זוויתיים**:\n\n- **מיקום זוויתי** $\\theta$ (רדיאנים).\n- **מהירות זוויתית** $\\omega = d\\theta/dt$.\n- **תאוצה זוויתית** $\\alpha = d\\omega/dt$.\n\n### קשר ללינארי\n\nלנקודה במרחק $r$ מהציר: $s = r\\theta, v = r\\omega, a_t = r\\alpha$. (גם $a_c = r\\omega^2$.)\n\n### משוואות לתאוצה זוויתית קבועה\n\n$$\\omega = \\omega_0 + \\alpha t, \\quad \\theta = \\omega_0 t + \\tfrac{1}{2}\\alpha t^2, \\quad \\omega^2 = \\omega_0^2 + 2\\alpha\\Delta\\theta.$$",
-      "body_by_level": {
-        "hs_physics": {
-          "body_en_md": "**Angular Kinematics and Dynamics**\n\nIn rotational motion, we use angular quantities to describe the motion of an object. The **moment of inertia** ($$I$$) is a measure of an object's resistance to changes in its rotation. It depends on the object's mass distribution and its distance from the axis of rotation.\n\n**Formulae:**\n\n- **Moment of Inertia** ($$I$$): $$I = \\int r^2 dm$$, where $$r$$ is the distance from the axis of rotation and $$dm$$ is the mass element.\n- **Torque** ($$\\tau$$): $$\\tau = I \\alpha$$, where $$\\alpha$$ is the angular acceleration.\n- **Rotational Kinetic Energy** ($$K_R$$): $$K_R = \\frac{1}{2} I \\omega^2$$, where $$\\omega$$ is the angular velocity.\n\n**Rolling without Slipping:**\n\nWhen an object rolls without slipping, its linear velocity ($$v$$) is related to its angular velocity ($$\\omega$$) by $$v = R \\omega$$, where $$R$$ is the radius of the object.",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Why Torque? Beyond F = ma for Rotating Systems",
+      "title_he": "למה מומנט כוח? מעבר ל-F = ma עבור מערכות מסתובבות",
+      "body_en_md": "A force applied to a door hinge produces no rotation. The same force applied at the edge produces maximum rotation. The relevant quantity is not just force — it is **torque**: force times the perpendicular distance from the pivot.\n\nFor rotating systems, Newton's second law becomes:\n$$\\tau = I\\alpha$$\nwhere:\n- $\\tau$ = net torque (N·m) — the rotational cause\n- $I$ = moment of inertia (kg·m²) — the rotational inertia (resistance to $\\alpha$)\n- $\\alpha$ = angular acceleration (rad/s²) — the rotational effect\n\n**Why it matters:** Every motor, wheel, turbine, and rotating machine operates by this law. Understanding $I$ (how mass is distributed) tells you how easy it is to start or stop rotation. The yo-yo, the rolling cylinder, and the spinning top are all examples of rotational dynamics at work.",
+      "body_he_md": "כוח שמוחל על ציר דלת לא מסובב אותה. אותו כוח בקצה הדלת — סיבוב מקסימלי. הכמות הרלוונטית אינה הכוח בלבד — זהו **מומנט כוח**: כוח כפול מרחק ניצב מהציר.\n\nעבור מערכות מסתובבות, חוק שני של ניוטון הופך ל:\n$$\\tau=I\\alpha$$\n- $\\tau$ = מומנט כוח נטו (נ\"מ)\n- $I$ = מומנט התמדה (ק\"ג·מ²)\n- $\\alpha$ = תאוצה זוויתית (ראד/ש²)\n\n**מדוע חשוב:** כל מנוע, גלגל, טורבינה — פועלים לפי חוק זה."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Torque, Moment of Inertia, Angular Momentum, Rotational KE",
+      "title_he": "מומנט כוח, מומנט התמדה, תנע זוויתי, אנרגיה קינטית סיבובית",
+      "body_en_md": "### Torque\n$$\\tau = rF\\sin\\phi = r_{\\perp}F$$\nwhere $r$ = distance from axis to force application point, $\\phi$ = angle between $\\vec{r}$ and $\\vec{F}$, $r_{\\perp} = r\\sin\\phi$ = moment arm. Vector form: $\\vec{\\tau} = \\vec{r}\\times\\vec{F}$. Units: N·m.\n\n### Newton's 2nd law for rotation\n$$\\sum\\tau = I\\alpha.$$\n\n### Moment of inertia (common objects)\n| Object | Axis | $I$ |\n|---|---|---|\n| Point mass | Distance $r$ | $mr^2$ |\n| Solid disk | Central | $\\frac{1}{2}MR^2$ |\n| Solid sphere | Central | $\\frac{2}{5}MR^2$ |\n| Hollow cylinder (ring) | Central | $MR^2$ |\n| Uniform rod | End | $\\frac{1}{3}ML^2$ |\n| Uniform rod | Center | $\\frac{1}{12}ML^2$ |\n\n**Parallel axis theorem:** $I = I_{cm} + Md^2$, where $d$ = distance from cm to new axis.\n\n### Angular momentum\n$$L = I\\omega. \\quad \\sum\\tau = \\frac{dL}{dt}.$$\nWhen $\\sum\\tau = 0$: $L = \\text{const}$ (angular momentum conservation).\n\n### Rotational kinetic energy\n$$K_{rot} = \\tfrac{1}{2}I\\omega^2.$$\nFor rolling without slipping: $K_{total} = \\tfrac{1}{2}mv_{cm}^2 + \\tfrac{1}{2}I\\omega^2$.",
+      "body_he_md": "### מומנט כוח\n$$\\tau=rF\\sin\\phi=r_{\\perp}F.$$\nצורה וקטורית: $\\vec{\\tau}=\\vec{r}\\times\\vec{F}$. יחידות: נ\"מ.\n\n### חוק שני לסיבוב\n$$\\sum\\tau=I\\alpha.$$\n\n### מומנטי התמדה נפוצים\n| גוף | ציר | $I$ |\n|---|---|---|\n| מסה נקודתית | מרחק $r$ | $mr^2$ |\n| דיסקה מלאה | מרכז | $\\frac{1}{2}MR^2$ |\n| כדור מלא | מרכז | $\\frac{2}{5}MR^2$ |\n| טבעת | מרכז | $MR^2$ |\n| מוט אחיד | קצה | $\\frac{1}{3}ML^2$ |\n\n**משפט הצירים המקביליים:** $I=I_{cm}+Md^2$.\n\n### תנע זוויתי\n$$L=I\\omega. \\quad \\sum\\tau=dL/dt.$$\nכאשר $\\sum\\tau=0$: $L=\\text{קבוע}$.\n\n### אנרגיה קינטית סיבובית\n$$K_{\\text{סיב}}=\\tfrac{1}{2}I\\omega^2.$$\nגלגול: $K_{\\text{כולל}}=\\tfrac{1}{2}mv_{\\text{מ\"מ}}^2+\\tfrac{1}{2}I\\omega^2$."
     },
     {
       "kind": "theory",
-      "title_en": "Moment of inertia and Newton's 2nd law",
-      "title_he": "מומנט התמדה והחוק השני",
-      "body_en_md": "### Moment of inertia\n\nThe rotational analog of MASS:\n\n$$I = \\sum_i m_i r_i^2 \\quad \\text{(discrete)} \\quad \\text{or} \\quad I = \\int r^2 \\, dm \\quad \\text{(continuous)}.$$\n\nIt measures how 'hard' it is to rotationally accelerate an object — depends on mass AND how that mass is distributed (mass farther from axis = larger $I$).\n\n### Common moments of inertia\n\n| Shape (axis) | $I$ |\n|---|---|\n| Point mass at radius $r$ | $mr^2$ |\n| Thin hoop, axis through center | $MR^2$ |\n| Disk/cylinder, axis through center | $\\tfrac{1}{2}MR^2$ |\n| Solid sphere, through center | $\\tfrac{2}{5}MR^2$ |\n| Thin rod, through center | $\\tfrac{1}{12}ML^2$ |\n| Thin rod, through end | $\\tfrac{1}{3}ML^2$ |\n\n### Newton's 2nd law (rotational)\n\n$$\\boxed{\\tau_{\\text{net}} = I \\alpha}$$\n\nNet torque = moment of inertia × angular acceleration.\n\nTorque is the rotational analog of force (covered in torque lesson).\n\n### Rotational KE\n\n$$K_{\\text{rot}} = \\tfrac{1}{2} I \\omega^2.$$\n\nAnalogous to $K = \\tfrac{1}{2}mv^2$.\n\nFor a rolling object: $K_{\\text{total}} = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$ (translation + rotation).",
-      "body_he_md": "### מומנט התמדה\n\nאנלוג סיבובי ל**מסה**:\n\n$$I = \\sum_i m_i r_i^2 \\quad \\text{או} \\quad I = \\int r^2 \\, dm.$$\n\nמודד כמה 'קשה' להאיץ סיבובית — תלוי במסה **ובפיזורה** (מסה רחוקה מהציר = $I$ גדול).\n\n### מומנטי התמדה נפוצים\n\n| צורה (ציר) | $I$ |\n|---|---|\n| מסה נקודתית ב-$r$ | $mr^2$ |\n| חישוק דק | $MR^2$ |\n| דיסקה/גליל | $\\tfrac{1}{2}MR^2$ |\n| כדור מלא | $\\tfrac{2}{5}MR^2$ |\n| מוט דק (מרכז) | $\\tfrac{1}{12}ML^2$ |\n| מוט דק (קצה) | $\\tfrac{1}{3}ML^2$ |\n\n### חוק שני סיבובי\n\n$$\\boxed{\\tau_{\\text{נטו}} = I \\alpha}$$\n\n### אנרגיה קינטית סיבובית\n\n$$K_{\\text{סיב}} = \\tfrac{1}{2} I \\omega^2.$$\n\nגוף מתגלגל: $K = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$.",
-      "body_by_level": {
-        "hs_physics": {
-          "body_en_md": "**Moment of Inertia and Rotational Kinematics**\n\nMoment of inertia, $I$, is a measure of an object's resistance to changes in its rotational motion. It depends on the object's mass distribution and its distance from the axis of rotation. The unit of moment of inertia is $\\text{kg} \\cdot \\text{m}^2$.\n\nNewton's second law for rotational motion is given by $\\tau = I \\alpha$, where $\\tau$ is the net torque applied to the object, $I$ is the moment of inertia, and $\\alpha$ is the angular acceleration.\n\nThe rotational kinetic energy of an object is given by $K = \\frac{1}{2} I \\omega^2$, where $I$ is the moment of inertia and $\\omega$ is the angular velocity.\n\n**Worked Example:**\n\nA wheel of radius $0.5 \\text{ m}$ and mass $10 \\text{ kg}$ is rotating with an angular velocity of $2 \\text{ rad/s}$. If the wheel is brought to rest in $5 \\text{ s}$, what is its moment of inertia?\n\nGiven: $\\omega_i = 2 \\text{ rad/s}$, $\\omega_f = 0$, $t = 5 \\text{ s}$, $r = 0.5 \\text{ m}$, $m = 10 \\text{ kg}$\n\nFind: $I$\n\nFormula: $\\omega_f = \\omega_i + \\alpha t$\n\n$\\alpha = \\frac{\\omega_f - \\omega_i}{t} = \\frac{0 - 2}{5} = -0.4 \\text{ rad/s}^2$\n\n$\\tau = I \\alpha$\n\nSince $\\tau = 0$ (no net torque), $I \\alpha = 0$\n\n$I = \\frac{\\tau}{\\alpha} = 0$\n\nHowever, we can also use the rotational kinetic energy equation:\n\n$K_i = K_f$\n\n$\\frac{1}{2} I \\omega_i^2 = 0$\n\n$I = \\frac{2 K_i}{\\omega_i^2} = \\frac{2 \\cdot 0}{2^2} = 0$\n\nNote: This result is expected, as the wheel is brought to rest, its rotational kinetic energy is zero, and therefore its moment of inertia is also zero.",
-          "body_he_md": "**תנ"
-        }
-      }
+      "title_en": "Work–Energy Theorem for Rotation and Angular Momentum Conservation",
+      "title_he": "משפט עבודה-אנרגיה לסיבוב ושימור תנע זוויתי",
+      "body_en_md": "### Rotational work–energy\nThe work done by a torque through angle $\\theta$:\n$$W_{rot} = \\tau\\theta \\quad (\\text{constant }\\tau).$$\nWork–energy theorem: $W_{net} = \\Delta K_{rot} = \\tfrac{1}{2}I\\omega_f^2 - \\tfrac{1}{2}I\\omega_0^2.$\n\n### Rolling objects: energy split\nFor a solid cylinder ($I = \\tfrac{1}{2}mR^2$) rolling without slipping at speed $v_{cm}$:\n$$K_{total} = \\tfrac{1}{2}mv_{cm}^2 + \\tfrac{1}{2}\\cdot\\tfrac{1}{2}mR^2\\cdot\\frac{v_{cm}^2}{R^2} = \\tfrac{3}{4}mv_{cm}^2.$$\nSo **2/3 of KE is translational, 1/3 is rotational** for a solid cylinder.\n\n### Angular momentum conservation\nWhen no external torque acts, $L = I\\omega = \\text{const}$. If $I$ decreases, $\\omega$ increases (figure skater pulling arms in):\n$$I_1\\omega_1 = I_2\\omega_2.$$\n\n### Physical insight on $I$\n$I$ depends on both mass and how mass is distributed. More mass at the rim → larger $I$ → harder to accelerate/decelerate. That is why flywheels are made with mass concentrated at the rim.",
+      "body_he_md": "### עבודה-אנרגיה לסיבוב\n$$W_{\\text{סיב}}=\\tau\\theta, \\quad W_{\\text{נטו}}=\\Delta K_{\\text{סיב}}=\\tfrac{1}{2}I\\omega_f^2-\\tfrac{1}{2}I\\omega_0^2.$$\n\n### גלגול — חלוקת אנרגיה\nלגליל מלא ($I=\\tfrac{1}{2}mR^2$):\n$$K_{\\text{כולל}}=\\tfrac{3}{4}mv_{\\text{מ\"מ}}^2.$$\n2/3 תנועתית, 1/3 סיבובית.\n\n### שימור תנע זוויתי\n$I_1\\omega_1=I_2\\omega_2$ כאשר $\\sum\\tau=0$.\n\n### תובנה על $I$\nיותר מסה בקצה → $I$ גדול יותר → קשה יותר לתאץ/לבלום."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: rolling cylinder",
-      "title_he": "דוגמה פתורה: גליל מתגלגל",
-      "body_en_md": "A solid cylinder of mass $M$, radius $R$ rolls without slipping down an incline of height $h$. Find its speed at the bottom.\n\n**Setup:** rolling without slipping ⇒ $v = R\\omega$. Use energy conservation.\n\n$I = \\tfrac{1}{2}MR^2$ (solid cylinder).\n\n$$Mgh = \\tfrac{1}{2}Mv^2 + \\tfrac{1}{2}I\\omega^2 = \\tfrac{1}{2}Mv^2 + \\tfrac{1}{2} \\cdot \\tfrac{1}{2}MR^2 \\cdot \\frac{v^2}{R^2}.$$\n\n$$Mgh = \\tfrac{1}{2}Mv^2 + \\tfrac{1}{4}Mv^2 = \\tfrac{3}{4}Mv^2.$$\n\n$$v = \\sqrt{\\frac{4gh}{3}}.$$\n\n**Compare to sliding (no friction, no rotation):** $v_{\\text{slide}} = \\sqrt{2gh}$.\n\nThe rolling cylinder is **slower** — some KE goes into rotation.",
-      "body_he_md": "גליל מלא במסה $M$, רדיוס $R$, מתגלגל ללא החלקה במורד מדרון בגובה $h$. מהירות בתחתית?\n\n**הצבה:** ללא החלקה ⇒ $v = R\\omega$. שימור אנרגיה. $I = \\tfrac{1}{2}MR^2$.\n\n$$Mgh = \\tfrac{1}{2}Mv^2 + \\tfrac{1}{4}Mv^2 = \\tfrac{3}{4}Mv^2.$$\n\n$$v = \\sqrt{\\frac{4gh}{3}}.$$\n\n**השוואה להחלקה:** $v_{\\text{החלקה}} = \\sqrt{2gh}$. הגליל המתגלגל **איטי יותר** — חלק מ-KE הולך לסיבוב.",
-      "body_by_level": {
-        "hs_physics": {
-          "body_en_md": "Rotational motion is a fundamental concept in physics that describes the motion of objects around a central axis. In this section, we will explore the relationship between the moment of inertia, torque, and rotational kinetic energy.\n\nThe moment of inertia, denoted by $I$, is a measure of an object's resistance to changes in its rotational motion. It depends on the mass distribution of the object and is typically measured in units of $\\text{kg} \\cdot \\text{m}^2$. The torque, denoted by $\\tau$, is a measure of the rotational force applied to an object and is typically measured in units of $\\text{N} \\cdot \\text{m}$.\n\nThe rotational kinetic energy of an object is given by the formula $K = \\frac{1}{2}I\\omega^2$, where $\\omega$ is the angular velocity of the object. When an object rolls without slipping, the linear velocity of the object is related to the angular velocity by the formula $v = r\\omega$, where $r$ is the radius of the object.\n\nGiven example: A solid cylinder with a mass of $2\\text{ kg}$ and a radius of $0.2\\text{ m}$ is rolling without slipping with an angular velocity of $\\omega = 2\\text{ rad/s}$. Find the rotational kinetic energy of the cylinder.\n\nFormula: $K = \\frac{1}{2}I\\omega^2$\n\nAnswer: First, we need to find the moment of inertia of the cylinder. For a solid cylinder, the moment of inertia is given by $I = \\frac{1}{2}mr^2$. Substituting the given values, we get $I = \\frac{1}{2}(2\\text{ kg})(0.2\\text{ m})^2 = 0.02\\text{ kg} \\cdot \\text{m}^2$. Now, we can substitute this value into the formula for rotational kinetic energy: $K = \\frac{1}{2}(0.02\\text{ kg} \\cdot \\text{m}^2)(2\\text{ rad/s})^2 = 0.08\\text{ J}$.",
-          "body_he_md": "תנועה סיבובית היא רעיון מקיף בפיזיקה שמ"
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Disk with Net Torque: Angular Acceleration",
+      "title_he": "דוגמה פתורה 1 — דיסקה עם מומנט כוח נטו: תאוצה זוויתית",
+      "body_en_md": "**Given:** A disk has $I = 2$ kg·m². A net torque of $\\tau = 4$ N·m is applied. Find:\n(a) Angular acceleration $\\alpha$.\n(b) Time to reach $\\omega = 20$ rad/s from rest.\n(c) Rotational KE at $\\omega = 20$ rad/s.\n\n**Step 1 (a): Apply $\\tau = I\\alpha$.**\n$$\\alpha = \\frac{\\tau}{I} = \\frac{4}{2} = 2 \\text{ rad/s}^2.$$\n\n**Step 2 (b): Use $\\omega = \\omega_0 + \\alpha t$.**\n$$20 = 0 + 2t \\Rightarrow t = 10 \\text{ s}.$$\n\n**Step 3 (c): Rotational KE.**\n$$K_{rot} = \\tfrac{1}{2}I\\omega^2 = \\tfrac{1}{2}(2)(400) = 400 \\text{ J}.$$\n\n**Answer:** $\\alpha = 2$ rad/s²; $t = 10$ s; $K_{rot} = 400$ J.",
+      "body_he_md": "**נתון:** $I=2$ ק\"ג·מ², $\\tau=4$ נ\"מ. מצאו:\n(א) $\\alpha$. (ב) זמן להגיע ל-$\\omega=20$ ראד/ש ממנוחה. (ג) $K_{\\text{סיב}}$ ב-$\\omega=20$ ראד/ש.\n\n**שלב 1 (א):** $\\alpha=\\tau/I=4/2=2$ ראד/ש².\n\n**שלב 2 (ב):** $t=20/2=10$ ש'.\n\n**שלב 3 (ג):** $K_{\\text{סיב}}=\\tfrac{1}{2}\\cdot2\\cdot400=400$ ג'ול.\n\n**תשובה:** $\\alpha=2$ ראד/ש²; $t=10$ ש'; $K_{\\text{סיב}}=400$ ג'ול."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "**Question:** A solid disk ($m = 4$ kg, $R = 0.5$ m) starts from rest. A constant torque of 6 N·m is applied for 3 s. Find (a) $I$, (b) $\\alpha$, (c) $\\omega$ after 3 s.",
+      "body_he_md": "**שאלה:** דיסקה מלאה ($m=4$ ק\"ג, $R=0.5$ מ') ממנוחה. מומנט קבוע 6 נ\"מ מוחל 3 ש'. מצאו (א) $I$, (ב) $\\alpha$, (ג) $\\omega$ לאחר 3 ש'.",
+      "checkpoint_solution_en": "(a) $I=\\frac{1}{2}mR^2=\\frac{1}{2}(4)(0.25)=0.5$ kg·m². (b) $\\alpha=\\tau/I=6/0.5=12$ rad/s². (c) $\\omega=0+12\\times3=36$ rad/s.",
+      "checkpoint_solution_he": "(א) $I=0.5$ ק\"ג·מ². (ב) $\\alpha=12$ ראד/ש². (ג) $\\omega=36$ ראד/ש."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Solid Cylinder Rolling Down a 30° Incline",
+      "title_he": "דוגמה פתורה 2 — גליל מלא מתגלגל במדרון 30°",
+      "body_en_md": "**Given:** A solid cylinder ($m = 3$ kg, $R = 0.2$ m) rolls without slipping down a 30° incline. Find the linear acceleration of the center $a$.\n\n**Step 1: Identify forces and draw FBD.**\n- Weight component along incline: $mg\\sin30° = 3(10)(0.5) = 15$ N.\n- Normal force: $N = mg\\cos30°$.\n- Friction $f$ at base (static, acts up the incline — it is what causes rolling).\n\n**Step 2: Newton's 2nd law — translation.**\n$$mg\\sin\\theta - f = ma. \\quad (1)$$\n\n**Step 3: Newton's 2nd law — rotation (about center).**\nFriction $f$ acts at radius $R$, providing torque $\\tau = fR$:\n$$fR = I\\alpha = \\tfrac{1}{2}mR^2 \\cdot \\alpha. \\quad (2)$$\n\n**Step 4: Rolling constraint:** $a = R\\alpha \\Rightarrow \\alpha = a/R$. Substitute into (2):\n$$fR = \\tfrac{1}{2}mR^2 \\cdot (a/R) = \\tfrac{1}{2}mRa \\Rightarrow f = \\tfrac{1}{2}ma. \\quad (3)$$\n\n**Step 5: Substitute (3) into (1).**\n$$mg\\sin\\theta - \\tfrac{1}{2}ma = ma \\Rightarrow mg\\sin\\theta = \\tfrac{3}{2}ma.$$\n$$a = \\frac{2g\\sin\\theta}{3} = \\frac{2(10)(0.5)}{3} = \\frac{10}{3} \\approx 3.33 \\text{ m/s}^2.$$\n\n**General result:** For any solid cylinder on angle $\\theta$: $a = \\frac{2}{3}g\\sin\\theta$.",
+      "body_he_md": "**נתון:** גליל מלא ($m=3$ ק\"ג, $R=0.2$ מ') מתגלגל ללא החלקה במדרון 30°. מצאו $a$.\n\n**שלב 1:** כוחות — כוח גרביטציה לאורך המדרון $mg\\sin30°=15$ נ'.\n\n**שלב 2 (תנועה):** $mg\\sin\\theta-f=ma$.\n\n**שלב 3 (סיבוב):** $fR=I\\alpha=\\frac{1}{2}mR^2\\alpha$.\n\n**שלב 4 (אילוץ גלגול):** $a=R\\alpha\\Rightarrow f=\\frac{1}{2}ma$.\n\n**שלב 5:** $mg\\sin\\theta=\\frac{3}{2}ma\\Rightarrow a=\\frac{2g\\sin\\theta}{3}=\\frac{10}{3}\\approx3.33$ מ\"ש².\n\n**תוצאה כללית:** גליל מלא: $a=\\frac{2}{3}g\\sin\\theta$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "**Question:** A hoop (ring, $I = mR^2$) rolls without slipping down the same 30° incline. What is its acceleration? Compare with the solid cylinder.",
+      "body_he_md": "**שאלה:** טבעת ($I=mR^2$) מתגלגלת ללא החלקה באותו מדרון 30°. מהי תאוצתה? השוו לגליל המלא.",
+      "checkpoint_solution_en": "Following the same steps: $mg\\sin\\theta - f = ma$; $fR = mR^2(a/R)\\Rightarrow f=ma$. So $mg\\sin30° = 2ma\\Rightarrow a=g\\sin30°/2=(10\\times0.5)/2=2.5$ m/s². Solid cylinder: $\\approx3.33$ m/s². The hoop accelerates slower because more mass is at the rim (larger $I$ for same mass).",
+      "checkpoint_solution_he": "$a=g\\sin30°/2=2.5$ מ\"ש². גליל מלא: $\\approx3.33$ מ\"ש². הטבעת מאטה יותר כי מסה בקצה → $I$ גדול."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Yo-Yo: Derive Acceleration of Center of Mass",
+      "title_he": "דוגמה פתורה 3 — יו-יו: גזרו תאוצת מרכז המסה",
+      "body_en_md": "**Given:** A yo-yo has mass $m$, inner radius $r$ (where string is wound), outer radius $R$, and moment of inertia $I$ about its central axis. The string hangs vertically. The yo-yo unwinds from the string. Derive the acceleration of the center of mass $a$.\n\n**Step 1: Identify forces on the yo-yo.**\n- Weight: $mg$ downward.\n- Tension: $T$ upward (at inner radius $r$).\n\n**Step 2: Newton's 2nd law — translation (downward positive).**\n$$mg - T = ma. \\quad (1)$$\n\n**Step 3: Newton's 2nd law — rotation (about center of mass).**\nTension $T$ at radius $r$ produces torque $Tr$ (causes angular acceleration $\\alpha$, clockwise when yo-yo falls):\n$$Tr = I\\alpha. \\quad (2)$$\n\n**Step 4: Rolling/unwinding constraint.**\nAs the yo-yo descends distance $x$, it rotates by $\\theta = x/r$, so:\n$$a = r\\alpha \\Rightarrow \\alpha = a/r. \\quad (3)$$\n\n**Step 5: Substitute (3) into (2).**\n$$T = I\\alpha/r = Ia/r^2. \\quad (4)$$\n\n**Step 6: Substitute (4) into (1).**\n$$mg - \\frac{Ia}{r^2} = ma \\Rightarrow mg = a\\left(m + \\frac{I}{r^2}\\right).$$\n$$\\boxed{a = \\frac{mg}{m + I/r^2}.}$$\n\n**Step 7: Special case — solid disk** ($I = \\tfrac{1}{2}mR^2$, $r = R$):\n$$a = \\frac{mg}{m + m/2} = \\frac{2g}{3} \\approx 6.67 \\text{ m/s}^2.$$\nThis is exactly the same as a solid cylinder rolling down an incline — a beautiful connection!",
+      "body_he_md": "**נתון:** יו-יו עם מסה $m$, רדיוס פנימי $r$, מומנט התמדה $I$. החוט תלוי אנכית. גזרו $a$.\n\n**שלב 1:** כוחות — $mg$ למטה, מתח $T$ למעלה (ברדיוס $r$).\n\n**שלב 2 (תנועה):** $mg-T=ma$.\n\n**שלב 3 (סיבוב):** $Tr=I\\alpha$.\n\n**שלב 4 (אילוץ):** $a=r\\alpha\\Rightarrow\\alpha=a/r$.\n\n**שלב 5:** $T=Ia/r^2$.\n\n**שלב 6:**\n$$mg=a\\left(m+\\frac{I}{r^2}\\right)\\Rightarrow\\boxed{a=\\frac{mg}{m+I/r^2}.}$$\n\n**מקרה מיוחד** — דיסקה ($I=\\frac{1}{2}mR^2$, $r=R$): $a=2g/3$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Rotational Dynamics Decision Table",
+      "title_he": "מדריך שיטה — טבלת החלטה לדינמיקה סיבובית",
+      "body_en_md": "| Situation | Key law | What to find |\n|---|---|---|\n| Single rotating body, net torque known | $\\tau = I\\alpha$ | $\\alpha$ |\n| Rolling without slipping on incline | $F_{net}=ma$ + $\\tau=I\\alpha$ + $a=R\\alpha$ | $a$, friction $f$ |\n| Hanging mass / pulley system | Torque from tension on pulley; linear equation for mass | $a$, $T$ |\n| Conservation of angular momentum | $I_1\\omega_1 = I_2\\omega_2$ | New $\\omega$ after $I$ changes |\n| Energy method (no friction info needed) | $mgh = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$ | Speed at bottom |\n\n**Rolling-system protocol:**\n1. Free-body diagram — forces on object.\n2. $\\sum F = ma$ along motion axis.\n3. $\\sum\\tau = I\\alpha$ about center of mass.\n4. Apply rolling constraint $a = R\\alpha$.\n5. Solve the two equations simultaneously for $a$ and friction $f$.\n\n**Energy protocol (faster):**\n1. Set up energy conservation: $\\Delta PE = \\Delta KE_{trans} + \\Delta KE_{rot}$.\n2. Use $v = R\\omega$ to eliminate $\\omega$.\n3. Solve for $v$.",
+      "body_he_md": "| מצב | חוק מרכזי | מה למצוא |\n|---|---|---|\n| גוף מסתובב, מומנט ידוע | $\\tau=I\\alpha$ | $\\alpha$ |\n| גלגול ללא החלקה במדרון | $F_{\\text{נטו}}=ma$ + $\\tau=I\\alpha$ + $a=R\\alpha$ | $a$, חיכוך |\n| שיטת אנרגיה | $mgh=\\tfrac{1}{2}mv^2+\\tfrac{1}{2}I\\omega^2$ | מהירות בתחתית |\n| שימור תנע זוויתי | $I_1\\omega_1=I_2\\omega_2$ | $\\omega$ חדש |\n\n**פרוטוקול גלגול:**\n1. דיאגרמת כוחות.\n2. $\\sum F=ma$ לאורך התנועה.\n3. $\\sum\\tau=I\\alpha$ סביב מ\"מ.\n4. $a=R\\alpha$.\n5. פתרו שתי משוואות."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A net torque of 10 N·m acts on a flywheel with $I = 5$ kg·m². Find $\\alpha$.",
+          "body_he": "מומנט כוח נטו 10 נ\"מ פועל על גלגל תנופה עם $I=5$ ק\"ג·מ². מצאו $\\alpha$.",
+          "solution_en": "$\\alpha = \\tau/I = 10/5 = 2$ rad/s².",
+          "solution_he": "$\\alpha=2$ ראד/ש².",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find the moment of inertia of a solid sphere of mass 2 kg and radius 0.3 m about its center.",
+          "body_he": "מצאו מומנט התמדה של כדור מלא מסה 2 ק\"ג, רדיוס 0.3 מ' סביב מרכזו.",
+          "solution_en": "$I = \\frac{2}{5}mR^2 = \\frac{2}{5}(2)(0.09) = 0.072$ kg·m².",
+          "solution_he": "$I=0.072$ ק\"ג·מ².",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "A wheel ($I = 3$ kg·m²) spins at $\\omega = 10$ rad/s. Find its angular momentum $L$ and its rotational KE.",
+          "body_he": "גלגל ($I=3$ ק\"ג·מ²) מסתובב ב-$\\omega=10$ ראד/ש. מצאו $L$ ו-$K_{\\text{סיב}}$.",
+          "solution_en": "$L = I\\omega = 30$ kg·m²/s. $K_{rot} = \\frac{1}{2}(3)(100) = 150$ J.",
+          "solution_he": "$L=30$ ק\"ג·מ²/ש. $K_{\\text{סיב}}=150$ ג'ול.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A torque of 15 N·m acts on a rod of length 0.6 m and mass 2 kg rotating about one end. Find $\\alpha$.",
+          "body_he": "מומנט 15 נ\"מ פועל על מוט באורך 0.6 מ' ומסה 2 ק\"ג הסובב סביב קצהו. מצאו $\\alpha$.",
+          "solution_en": "$I = \\frac{1}{3}mL^2 = \\frac{1}{3}(2)(0.36) = 0.24$ kg·m². $\\alpha = 15/0.24 = 62.5$ rad/s².",
+          "solution_he": "$I=0.24$ ק\"ג·מ². $\\alpha=62.5$ ראד/ש².",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A figure skater ($I_1 = 4$ kg·m²) spins at $\\omega_1 = 3$ rad/s. She pulls her arms in and reduces her moment of inertia to $I_2 = 1.5$ kg·m². Find her new $\\omega_2$.",
+          "body_he": "מחליקה על קרח ($I_1=4$ ק\"ג·מ²) מסתובבת ב-$\\omega_1=3$ ראד/ש. היא מושכת זרועות ומורידה $I$ ל-$I_2=1.5$ ק\"ג·מ². מצאו $\\omega_2$.",
+          "solution_en": "$I_1\\omega_1 = I_2\\omega_2 \\Rightarrow \\omega_2 = (4\\times3)/1.5 = 8$ rad/s.",
+          "solution_he": "$\\omega_2=8$ ראד/ש.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A solid sphere ($m = 2$ kg, $R = 0.1$ m) rolls without slipping on a flat surface. $v_{cm} = 4$ m/s. Find total KE.",
+          "body_he": "כדור מלא ($m=2$ ק\"ג, $R=0.1$ מ') מתגלגל ב-$v_{\\text{מ\"מ}}=4$ מ\"ש. מצאו $K_{\\text{כולל}}$.",
+          "solution_en": "$I = \\frac{2}{5}mR^2 = \\frac{2}{5}(2)(0.01) = 0.008$ kg·m². $\\omega = v/R = 40$ rad/s. $K_{trans} = \\frac{1}{2}(2)(16) = 16$ J. $K_{rot} = \\frac{1}{2}(0.008)(1600) = 6.4$ J. Total = 22.4 J. (Alternatively: $K=\\frac{7}{10}mv^2=\\frac{7}{10}(2)(16)=22.4$ J.)",
+          "solution_he": "$K_{\\text{כולל}}=22.4$ ג'ול (שניים-עשרה פי שליש).",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A pulley ($I = 0.1$ kg·m², $R = 0.05$ m) has a mass of 5 kg hanging from the string. Find the linear acceleration of the mass and the tension in the string. (Assume massless string, no slip.)",
+          "body_he": "גלגלת ($I=0.1$ ק\"ג·מ², $R=0.05$ מ') עם מסה 5 ק\"ג תלויה מהחוט. מצאו תאוצה לינארית ומתח. (חוט קל, ללא החלקה.)",
+          "solution_en": "For mass: $mg - T = ma$. For pulley: $TR = I\\alpha = I(a/R) \\Rightarrow T = Ia/R^2 = 0.1a/0.0025 = 40a$. So $5(10) - 40a = 5a \\Rightarrow 50 = 45a \\Rightarrow a = 50/45 \\approx 1.11$ m/s². $T = 40(50/45) \\approx 44.4$ N.",
+          "solution_he": "$a\\approx1.11$ מ\"ש². $T\\approx44.4$ נ'.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A 3 kg hollow cylinder ($I = mR^2$, $R = 0.2$ m) rolls without slipping down a 37° incline. Find its acceleration. Compare to a solid cylinder.",
+          "body_he": "גליל חלול ($I=mR^2$, $m=3$ ק\"ג, $R=0.2$ מ') מתגלגל במדרון 37°. מצאו $a$. השוו לגליל מלא.",
+          "solution_en": "Hollow cylinder: $a = \\frac{g\\sin\\theta}{1+I/(mR^2)} = \\frac{g\\sin\\theta}{1+1} = \\frac{g\\sin37°}{2} = \\frac{10\\times0.6}{2} = 3$ m/s². Solid cylinder: $a=\\frac{2}{3}g\\sin37°=\\frac{2}{3}(6)=4$ m/s². Hollow is slower.",
+          "solution_he": "גליל חלול: $a=3$ מ\"ש². גליל מלא: $a=4$ מ\"ש². החלול אטי יותר.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "hard",
+          "body_en": "A rod of mass $M$ and length $L$ is pivoted at one end and released from horizontal. Derive (a) the angular acceleration $\\alpha$ at the moment of release, (b) the linear acceleration of the free end, and (c) the angular velocity $\\omega$ when vertical.",
+          "body_he": "מוט מסה $M$ ואורך $L$ מציר בקצהו, משוחרר ממצב אופקי. גזרו (א) $\\alpha$ ברגע השחרור, (ב) תאוצה לינארית של קצה חופשי, (ג) $\\omega$ במצב אנכי.",
+          "solution_en": "(a) Torque due to gravity at cm: $\\tau = Mg\\cdot\\frac{L}{2}$. $I_{end}=\\frac{1}{3}ML^2$. $\\alpha=\\tau/I=\\frac{MgL/2}{ML^2/3}=\\frac{3g}{2L}$. (b) $a_{tip}=L\\alpha=\\frac{3g}{2}$. (c) Energy: $Mg\\frac{L}{2}=\\frac{1}{2}I\\omega^2=\\frac{1}{2}\\frac{ML^2}{3}\\omega^2$. $\\omega=\\sqrt{\\frac{3g}{L}}$.",
+          "solution_he": "(א) $\\alpha=3g/(2L)$. (ב) $a_{\\text{קצה}}=3g/2$. (ג) $\\omega=\\sqrt{3g/L}$.",
+          "points": 12
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A solid sphere ($m$, $R$) starts from rest at height $h$ and rolls without slipping down a ramp. Using energy conservation, find $v_{cm}$ at the bottom.",
+          "body_he": "כדור מלא ($m$, $R$) ממנוחה בגובה $h$ מתגלגל ללא החלקה. מצאו $v_{\\text{מ\"מ}}$ בתחתית בעזרת שימור אנרגיה.",
+          "solution_en": "$mgh = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$. With $I=\\frac{2}{5}mR^2$ and $v=R\\omega$: $mgh=\\frac{1}{2}mv^2+\\frac{1}{2}\\cdot\\frac{2}{5}mR^2\\cdot\\frac{v^2}{R^2}=\\frac{1}{2}mv^2+\\frac{1}{5}mv^2=\\frac{7}{10}mv^2$. $v=\\sqrt{\\frac{10gh}{7}}$.",
+          "solution_he": "$v=\\sqrt{\\frac{10gh}{7}}$.",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Two disks: Disk A ($I_A = 2$ kg·m², $\\omega_A = 6$ rad/s) is dropped onto a stationary Disk B ($I_B = 4$ kg·m²). They reach a common $\\omega$ through friction. Find (a) $\\omega_f$ using angular momentum conservation and (b) the fraction of KE lost.",
+          "body_he": "דיסקה A ($I_A=2$ ק\"ג·מ², $\\omega_A=6$ ראד/ש) נופלת על דיסקה B נחה ($I_B=4$ ק\"ג·מ²). מגיעים ל-$\\omega$ משותף. מצאו (א) $\\omega_f$, (ב) שבר KE שאבד.",
+          "solution_en": "(a) $L_i=I_A\\omega_A=12$ kg·m²/s. $\\omega_f=12/(I_A+I_B)=12/6=2$ rad/s. (b) $K_i=\\frac{1}{2}(2)(36)=36$ J. $K_f=\\frac{1}{2}(6)(4)=12$ J. Fraction lost $= (36-12)/36 = 2/3$.",
+          "solution_he": "(א) $\\omega_f=2$ ראד/ש. (ב) שני שלישים מה-KE אבד.",
+          "points": 12
         }
-      }
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
-      "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Mixing rad and degrees.** All formulas assume radians.\n2. **Confusing $I$ values for different axes.** Same object, different $I$ depending on axis.\n3. **Forgetting rolling condition $v = R\\omega$.** Required for rolling without slipping.\n4. **Treating $\\omega$ as a scalar in 3D.** It's a vector along the rotation axis.\n5. **$I = MR^2$ for ALL spheres (wrong!).** Solid sphere: $\\tfrac{2}{5}MR^2$. Hollow shell: $\\tfrac{2}{3}MR^2$.\n6. **Counting linear and rotational KE twice (or once for rolling).** For rolling: BOTH terms.",
-      "body_he_md": "1. **בלבול רדיאנים ומעלות.** הנוסחאות דורשות רדיאנים.\n2. **בלבול $I$ לצירים שונים.**\n3. **שכחת תנאי גלגול $v = R\\omega$.**\n4. **$\\omega$ סקלר בתלת-ממד (שגוי).** וקטור לאורך ציר הסיבוב.\n5. **$I = MR^2$ לכל הכדורים (שגוי).** מלא: $\\tfrac{2}{5}MR^2$.\n6. **גלגול דורש **שני** האברים של KE.**",
-      "body_by_level": {
-        "hs_physics": {
-          "body_en_md": "**Common Pitfalls in Rotational Motion**\n\nWhen dealing with rotational motion, it's essential to understand the difference between moment of inertia (I), torque ($$\\tau$$), and rotational kinetic energy. The moment of inertia is a measure of an object's resistance to changes in its rotation, and it depends on the object's mass distribution.\n\nGiven: A solid cylinder with mass $m$ and radius $r$ is rotating with angular velocity $ω$. Find the rotational kinetic energy of the cylinder.\n\nFormula: $$K_{rot} = \\frac{1}{2}Iω^2$$\n\nAnswer: $$K_{rot} = \\frac{1}{2} \\cdot \\frac{1}{2}mr^2 \\cdot ω^2 = \\frac{1}{4}mr^2ω^2$$",
-          "body_he_md": "**מחשבות נפות בתנועה סיבובית**\n\nבעת עסקת בתנועה סיבובית, חשוב להבין את ההבדל בין רגישות סיבוב (I), סיבוב (τ) ואנרגיה סיבובית. רגישות סיבוב היא מדד להתנגדות האובייקט לשינויים בסיבובו, ותלויה בהפצת המסה של האובייקט.\n\nנתונים: גליל צק עם מסה $m$ ורדיוס $r$ המסתובב עם תדירות $ω$. האם ניתן למצוא את אנרגיית הסיבוב של הגליל?\n\nנוסחה: $$K_{rot} = \\frac{1}{2}Iω"
-        }
-      }
+      "title_en": "Top Mistakes in Rotational Dynamics",
+      "title_he": "הטעויות הנפוצות בדינמיקה סיבובית",
+      "body_en_md": "1. **Wrong $I$ formula.** Memorize the table. A solid disk $I=\\frac{1}{2}mR^2$; a ring $I=mR^2$; a solid sphere $I=\\frac{2}{5}mR^2$. Mixing them gives wrong $\\alpha$.\n\n2. **Forgetting the rolling constraint $a = R\\alpha$.** Without this equation, rolling problems are under-determined. Always write it explicitly.\n\n3. **Applying angular momentum conservation when external torques exist.** Gravity, friction, and applied forces can all produce torques. Only conserve $L$ when explicitly told there is no external torque, or when the axis is chosen at the point where friction acts.\n\n4. **KE of rolling = translational only.** For rolling bodies, total $KE = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$. Missing the rotational term causes significant errors.\n\n5. **Torque sign error.** Define a positive rotation direction first. Torques that produce CCW rotation are positive; CW are negative. Be consistent throughout.",
+      "body_he_md": "1. **נוסחת $I$ שגויה.** שננו: דיסקה $\\frac{1}{2}mR^2$; טבעת $mR^2$; כדור $\\frac{2}{5}mR^2$.\n\n2. **שכחת אילוץ הגלגול $a=R\\alpha$.** בלי זה, בעיות גלגול לא נפתרות.\n\n3. **שימור $L$ גם כשיש מומנטי כוח חיצוניים.** שמרו $L$ רק כאשר $\\sum\\tau=0$.\n\n4. **KE גלגול = תנועתית בלבד.** תמיד הוסיפו $\\frac{1}{2}I\\omega^2$.\n\n5. **סימן מומנט הפוך.** הגדירו כיוון חיובי מראש והיו עקביים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Sheet & Exam Patterns",
+      "title_he": "לפני הבחינה — גיליון נוסחאות ותבניות שאלות",
+      "body_en_md": "### Essential Formulas\n- **Torque:** $\\tau = rF\\sin\\phi = r_\\perp F$\n- **Newton 2nd (rotation):** $\\sum\\tau = I\\alpha$\n- **Moment of inertia:** disk $\\frac{1}{2}mR^2$; sphere $\\frac{2}{5}mR^2$; ring $mR^2$; rod (end) $\\frac{1}{3}mL^2$\n- **Parallel axis:** $I = I_{cm} + Md^2$\n- **Angular momentum:** $L = I\\omega$; $\\sum\\tau = dL/dt$\n- **Conservation:** $I_1\\omega_1 = I_2\\omega_2$ (when $\\sum\\tau = 0$)\n- **Rotational KE:** $K_{rot} = \\frac{1}{2}I\\omega^2$\n- **Rolling total KE:** $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$\n- **Rolling constraint:** $v_{cm} = R\\omega$; $a_{cm} = R\\alpha$\n\n### Typical Exam Questions\n1. Find $\\alpha$ given $\\tau$ and $I$.\n2. Rolling-without-slipping on incline — find $a$ and friction.\n3. Yo-yo / spool / pulley — derive $a$.\n4. Angular momentum conservation — spinning person changes $I$.\n5. Energy conservation for rolling object down ramp.",
+      "body_he_md": "### נוסחאות חיוניות\n- $\\tau=rF\\sin\\phi$\n- $\\sum\\tau=I\\alpha$\n- $L=I\\omega$; $I_1\\omega_1=I_2\\omega_2$ (ללא מומנט חיצוני)\n- $K_{\\text{סיב}}=\\frac{1}{2}I\\omega^2$\n- גלגול: $K=\\frac{1}{2}mv^2+\\frac{1}{2}I\\omega^2$; $v_{\\text{מ\"מ}}=R\\omega$"
     },
     {
       "kind": "summary",
-      "title_en": "Take-away",
-      "title_he": "סיכום",
-      "body_en_md": "- $\\theta, \\omega, \\alpha$ rotate; $s, v, a_t$ translate; linked by $r$.\n- Rotational kinematics ↔ linear (replace $x, v, a$ with $\\theta, \\omega, \\alpha$).\n- $I = \\sum m_i r_i^2$; depends on shape AND axis.\n- $\\tau = I\\alpha$.\n- $K_{\\text{rot}} = \\tfrac{1}{2}I\\omega^2$.\n- Rolling without slipping: $v = R\\omega$.",
-      "body_he_md": "- $\\theta, \\omega, \\alpha$ סיבוביים; $s, v, a_t$ לינאריים; קשורים ב-$r$.\n- $I = \\sum m_i r_i^2$.\n- $\\tau = I\\alpha$.\n- $K_{\\text{סיב}} = \\tfrac{1}{2}I\\omega^2$.\n- גלגול: $v = R\\omega$.",
-      "body_by_level": {
-        "hs_physics": {
-          "body_en_md": "Rotational motion is a fundamental concept in physics, describing the motion of objects rotating around a central axis. The key parameters involved in rotational motion are moment of inertia $I$, torque $\\tau$, angular acceleration $\\alpha$, and rotational kinetic energy.\n\n- **Moment of Inertia** ($I$): A measure of an object's resistance to changes in its rotational motion, dependent on the object's mass distribution and the distance from the axis of rotation. Unit: $\\text{kg} \\cdot \\text{m}^2$.\n- **Torque** ($\\tau$): A measure of the rotational force causing an object to rotate. Unit: $\\text{N} \\cdot \\text{m}$.\n- **Angular Acceleration** ($\\alpha$): The rate of change of an object's angular velocity. Unit: $\\text{rad} \\cdot \\text{s}^{-2}$.\n- **Rotational Kinetic Energy** ($\\frac{1}{2}I\\omega^2$): The energy of an object due to its rotational motion. Unit: $\\text{J}$.\n\nGiven example:\nA wheel of radius $0.5 \\text{ m}$ and mass $10 \\text{ kg}$ is rotating with an angular velocity of $2 \\text{ rad/s}$. If the wheel is subject to a constant torque of $5 \\text{ N} \\cdot \\text{m}$, find its moment of inertia and rotational kinetic energy.\n\nFormula:\n- Moment of Inertia ($I$): $I = mr^2$\n- Rotational Kinetic Energy ($E_k$): $E_k = \\frac{1}{2}I\\omega^2$\n\nFind:\n- Moment of Inertia ($I$)\n- Rotational Kinetic Energy ($E_k$)\n\nAnswer:\n- Moment of Inertia ($I$): $I = 10 \\text{ kg} \\cdot (0.5 \\text{ m})^2 = 2.5 \\text{ kg} \\cdot \\text{m}^2$\n- Rotational Kinetic Energy ($E_k$): $E_k = \\frac{1}{2} \\cdot 2.5 \\text{ kg} \\cdot \\text{m}^2 \\cdot (2 \\text{ rad/s})^2 = 5 \\text{ J}$",
-          "body_he_md": "תנועה ס"
-        }
-      }
-    },
-    {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nA ball is launched horizontally at 15 m/s from height 20 m ($g=10$).\n\n(a) Time to ground. (b) Horizontal distance. (c) Impact velocity.\n\n**Complete Solution:**\n\n(a) $t=2$ s. (b) 30 m. (c) $|\\vec{v}|=25$ m/s.\n\n---\n\n**Practice Problem 2:**\n\nMass on incline: find $a = g\\sin\\theta$ (no friction) and explain with free-body diagram.\n\n**Complete Solution:**\n\nFBD: $mg\\sin\\theta = ma$ → $a=g\\sin\\theta$. Weight component along slope causes acceleration.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:** זריקה אופקית 15 מ\"ש מ-20 מ' — זמן, מרחק, מהירות.\n\n**פתרון:** $t=2$ ש', 30 מ', 25 מ\"ש.\n\n---\n\n**שאלת תרגול 2:** משופע ללא חיכוך: $a=g\\sin\\theta$ עם FBD."
+      "title_en": "Summary — Key Equations",
+      "title_he": "סיכום — משוואות מפתח",
+      "body_en_md": "- **Newton 2nd (rotation):** $\\sum\\tau = I\\alpha$. Torque is the rotational cause; $I$ is the rotational inertia; $\\alpha$ is the rotational effect.\n- **Common $I$ values:** disk $\\frac{1}{2}mR^2$; sphere $\\frac{2}{5}mR^2$; ring $mR^2$; rod (end) $\\frac{1}{3}mL^2$.\n- **Angular momentum:** $L = I\\omega$; conserved when $\\sum\\tau = 0$.\n- **Rotational KE:** $\\frac{1}{2}I\\omega^2$; add to $\\frac{1}{2}mv^2$ for rolling.\n- **Rolling constraint:** $v_{cm} = R\\omega$; solve rolling problems with two equations + constraint.\n- **Parallel axis theorem:** $I = I_{cm} + Md^2$.",
+      "body_he_md": "- $\\sum\\tau=I\\alpha$ — חוק שני לסיבוב.\n- $I$: דיסקה $\\frac{1}{2}mR^2$; כדור $\\frac{2}{5}mR^2$; טבעת $mR^2$; מוט (קצה) $\\frac{1}{3}mL^2$.\n- $L=I\\omega$; מתשמר כש-$\\sum\\tau=0$.\n- $K_{\\text{סיב}}=\\frac{1}{2}I\\omega^2$; + $\\frac{1}{2}mv^2$ בגלגול.\n- $v_{\\text{מ\"מ}}=R\\omega$."
     }
   ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "A wheel rotates at $\\omega = 10$ rad/s. Linear speed of a point 0.2 m from the axis (m/s)?",
-      "stem_he": "גלגל נע ב-$\\omega = 10$ רד/ש. מהירות נקודה במרחק 0.2 מ' מהציר (מ\"ש)?",
-      "correct_answer": "2",
-      "explanation_en": "$v = r\\omega = 0.2 \\cdot 10 = 2$ m/s.",
-      "explanation_he": "$v = 0.2 \\cdot 10 = 2$ מ\"ש.",
-      "skill_atoms": [
-        "linear_from_angular"
-      ],
-      "points_level_min": "hs_physics"
-    },
-    {
-      "ord": 2,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Moment of inertia of a solid disk (mass M, radius R) about its central axis is:",
-      "stem_he": "מומנט התמדה של דיסקה מלאה (מסה M, רדיוס R) סביב הציר המרכזי הוא:",
-      "options_en": [
-        "$MR^2$",
-        "$\\tfrac{1}{2}MR^2$",
-        "$\\tfrac{2}{5}MR^2$",
-        "$\\tfrac{1}{12}MR^2$"
-      ],
-      "options_he": [
-        "$MR^2$",
-        "$\\tfrac{1}{2}MR^2$",
-        "$\\tfrac{2}{5}MR^2$",
-        "$\\tfrac{1}{12}MR^2$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Solid disk/cylinder: $I = \\tfrac{1}{2}MR^2$.",
-      "explanation_he": "דיסקה/גליל מלא: $I = \\tfrac{1}{2}MR^2$.",
-      "skill_atoms": [
-        "moment_inertia_recognize"
-      ],
-      "points_level_min": "hs_physics"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "A wheel of $I = 0.5$ kg·m² has constant torque 2 N·m applied. Angular acceleration?",
-      "stem_he": "גלגל עם $I = 0.5$ קג·מ² ומפעילים מומנט 2 N·m. תאוצה זוויתית?",
-      "options_en": [
-        "$1$ rad/s²",
-        "$2$ rad/s²",
-        "$4$ rad/s²",
-        "$0.25$ rad/s²"
-      ],
-      "options_he": [
-        "$1$ רד/ש²",
-        "$2$ רד/ש²",
-        "$4$ רד/ש²",
-        "$0.25$ רד/ש²"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$\\alpha = \\tau/I = 2/0.5 = 4$ rad/s².",
-      "explanation_he": "$\\alpha = 2/0.5 = 4$ רד/ש².",
-      "skill_atoms": [
-        "newton_second_rotational"
-      ],
-      "points_level_min": "hs_physics"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "A solid cylinder ($I = \\frac{1}{2}MR^2$) of mass 2 kg, radius 0.1 m rotates at 10 rad/s. Find its rotational KE.",
-      "stem_he": "גליל מלא מסה 2 ק\"ג, רדיוס 0.1 מ', מסתובב ב-10 רד/ש. אנרגיה קינטית סיבובית?",
-      "rubric_en": "Full credit (2/2): $I = \\frac{1}{2}(2)(0.01) = 0.01$ kg·m². $K = \\frac{1}{2}(0.01)(100) = 0.5$ J.\nPartial (1/2): correct $I$, KE error.",
-      "rubric_he": "ציון מלא (2/2): $I = 0.01$ kg·m². $K = 0.5$ J.\nחלקי (1/2): $I$ נכון.",
-      "explanation_en": "$K = \\frac{1}{2}I\\omega^2 = 0.5$ J.",
-      "explanation_he": "$K = 0.5$ J.",
-      "skill_atoms": [
-        "rotational_ke_compute"
-      ],
-      "points_level_min": "hs_physics"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "A ball is launched horizontally at 15 m/s from a height of 20 m ($g=10$ m/s²).\n\n(a) Time until it hits the ground.\n(b) Horizontal distance traveled.\n(c) Speed at impact (magnitude and direction).",
-      "stem_he": "כדור נזרק אופקית ב-15 מ\"ש מגובה 20 מ' ($g=10$).\n\n(א) זמן עד פגיעה.\n(ב) מרחק אופקי.\n(ג) מהירות בפגיעה.",
-      "rubric_en": "3pts time; 3pts distance; 4pts velocity components and magnitude.",
-      "rubric_he": "3 נק' זמן; 3 נק' מרחק; 4 נק' מהירות.",
-      "explanation_en": "(a) 2 s (b) 30 m (c) 25 m/s at arctan(4/3) below horizontal.",
-      "explanation_he": "(א) 2 ש' (ב) 30 מ' (ג) 25 מ\"ש.",
-      "skill_atoms": [
-        "rotational_kinematics_solve"
-      ],
-      "points_level_min": "hs_physics"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "A mass $m$ on an incline at angle $\\theta$ with coefficient of friction $\\mu$.\n\n(a) Draw a free-body diagram.\n(b) Find acceleration down the slope.\n(c) Find the friction force.",
-      "stem_he": "מסה $m$ על משופע $\\theta$ עם $\\mu$.\n\n(א) FBD.\n(ב) תאוצה.\n(ג) חיכוך.",
-      "rubric_en": "3pts FBD; 4pts Newton's 2nd; 3pts friction formula.",
-      "rubric_he": "3 נק' FBD; 4 נק' F=ma; 3 נק' חיכוך.",
-      "explanation_en": "a = g(sinθ - μcosθ), f = μmg cosθ.",
-      "explanation_he": "a = g(sinθ - μcosθ), f = μmg cosθ.",
-      "skill_atoms": [
-        "rotational_kinematics_solve"
-      ],
-      "points_level_min": "hs_physics"
-    }
-  ],
-  "agent_hints": {
-    "key_insights": [
-      "Angular kinematics mirrors linear: replace $x \\to \\theta, v \\to \\omega, a \\to \\alpha$.",
-      "Connection: $v = r\\omega$, $a_t = r\\alpha$.",
-      "Moment of inertia $I = \\sum m_i r_i^2$ depends on shape AND axis.",
-      "Newton's 2nd rotational: $\\tau = I\\alpha$.",
-      "$K_{\\text{rot}} = \\frac{1}{2}I\\omega^2$.",
-      "Rolling without slipping: $v = R\\omega$; total $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "$I$ depends only on mass",
-        "correction": "$I$ depends on mass AND distribution: $I = \\sum mr^2$. Hollow shell ≠ solid sphere.",
-        "detect_phrase_en": "moment inertia only mass",
-        "detect_phrase_he": "מומנט התמדה רק מסה"
-      },
-      {
-        "wrong": "Rolling object has only translational KE",
-        "correction": "Rolling: $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$. Don't forget rotational part.",
-        "detect_phrase_en": "rolling only translational",
-        "detect_phrase_he": "גלגול רק לינארי"
-      }
-    ],
-    "skill_atoms_unlocked": [
-      "linear_from_angular",
-      "moment_inertia_recognize",
-      "newton_second_rotational",
-      "rotational_ke_compute",
-      "rolling_race",
-      "rotational_kinematics_solve"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "circular_motion",
-      "newton_laws",
-      "work_energy"
-    ],
-    "tutor_pacing_hint": "Drill the translation↔rotation analogy ($x\\leftrightarrow\\theta$, $v\\leftrightarrow\\omega$, $a\\leftrightarrow\\alpha$, $m\\leftrightarrow I$, $F\\leftrightarrow\\tau$). Memorize 3-4 common $I$ values. Rolling problems always need both KE terms.",
-    "coach_drill_skills": [
-      "moment_inertia_recognize",
-      "rolling_race",
-      "rotational_kinematics_solve"
-    ],
-    "diagnostic_signals": {
-      "if_learner_ignores_rotational_ke_in_rolling": "Rolling = translation + rotation. ALWAYS include both KE terms.",
-      "if_learner_uses_degrees": "Switch to radians — all rotational formulas assume them."
-    },
-    "next_recommended": [
-      "torque",
-      "angular_momentum"
-    ]
-  },
-  "math_track": [
-    "hs_physics"
-  ]
+  "agent_hints": "The hardest concept: students confuse when to use τ=Iα (dynamics, time-domain) vs energy conservation (relates speeds at two positions). The golden rule: if you need FORCE or TORQUE, use Newton's law + rolling constraint. If you need SPEED at a position, energy is faster. For rolling problems: always write all three equations (F=ma, τ=Iα, a=Rα) even if you later use energy. The most-tested item: moment of inertia values. Make a flashcard for the 5 standard shapes."
 }
