@@ -1,206 +1,233 @@
 {
-  "id": "probability_conditional_3pt",
-  "type": "interactive",
-  "subject": "high_school_math_3pt",
-  "title_en": "Conditional Probability & Independence",
-  "title_he": "הסתברות מותנית ואי-תלות",
-  "duration_min": 25,
-  "level_min": "3pt",
-  "agent_hints": "Conditional probability is the concept students find most confusing in 3pt probability. Anchor everything to real stories (cloudy sky, card draws without replacement). The formula P(B|A) = P(A∩B)/P(A) is easy to misapply — always insist students identify P(A∩B) and P(A) separately before dividing. Tree diagrams are the most reliable problem-solving tool here; draw branches step by step and multiply along paths. The total probability (last worked example) is a very common Bagrut question pattern — make sure students recognise it by the 'choose a box' or 'choose a group' setup.",
+  "concept_id": "probability_conditional_3pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["3pt"],
+  "title_en": "Conditional Probability and Independence (3pt)",
+  "title_he": "הסתברות מותנית ואי-תלות (3 יח')",
+  "summary_en": "Conditional probability P(A|B) is the probability of A given that B has occurred. Two events are independent if knowing B gives no information about A.",
+  "summary_he": "הסתברות מותנית P(A|B) היא ההסתברות ש-A יקרה בהינתן שB קרה. שני אירועים בלתי-תלויים אם ידיעה על B לא נותנת מידע על A.",
+  "est_minutes": 55,
   "sections": [
     {
-      "id": "what_is_conditional",
-      "title_en": "What is Conditional Probability?",
-      "title_he": "מהי הסתברות מותנית?",
-      "level_min": "3pt",
-      "body_en_md": "**Conditional probability** answers this question:\n*Given that something has already happened, how likely is something else?*\n\nWe write $P(B \\mid A)$ and read it as \"probability of $B$ **given** $A$ happened\".\n\n**Everyday examples:**\n- \"What's the chance of rain, **given** it's already cloudy?\" — knowing it's cloudy changes the probability.\n- \"What's the chance of drawing a heart, **given** the first card drawn was a heart?\" — the deck has changed.\n- \"What's the chance of a student passing, **given** they studied?\" — studying is new information.\n\n**Why does conditioning matter?**\nBefore we see any clouds: maybe $P(\\text{rain}) = 0.2$.\nAfter we see clouds: $P(\\text{rain} \\mid \\text{cloudy}) = 0.6$.\nThe extra information changes everything.\n\n> 🌤️ Conditional probability is about **updating your belief** when you get new information.",
-      "body_he_md": "**הסתברות מותנית** עונה על השאלה הזו:\n*בהינתן שמשהו כבר קרה, כמה סביר שמשהו אחר יקרה?*\n\nכותבים $P(B \\mid A)$ וקוראים \"הסתברות של $B$ **בהינתן** ש-$A$ קרה\".\n\n**דוגמאות מהחיים:**\n- \"מה הסיכוי לגשם, **בהינתן** שכבר מעונן?\" — ידיעה שמעונן משנה את ההסתברות.\n- \"מה הסיכוי לשלוף לב, **בהינתן** שהקלף הראשון שנשלף היה לב?\" — החפיסה השתנתה.\n- \"מה הסיכוי שתלמיד יעבור, **בהינתן** שהוא למד?\" — הלמידה היא מידע חדש.\n\n**למה התניה חשובה?**\nלפני שרואים עננים: אולי $P(\\text{גשם}) = 0.2$.\nאחרי שרואים עננים: $P(\\text{גשם} \\mid \\text{מעונן}) = 0.6$.\nהמידע הנוסף משנה הכל.\n\n> 🌤️ הסתברות מותנית היא **עדכון האמונה** שלך כשמקבלים מידע חדש."
+      "kind": "intro",
+      "title_en": "Probability That Depends on What We Already Know",
+      "title_he": "הסתברות שתלויה במה שכבר אנחנו יודעים",
+      "body_en_md": "Imagine a bag with 3 red and 2 blue balls. You draw one — it's red. **Now** what is the probability that the second ball is also red? The answer changes because you now have extra information.\n\nThis is **conditional probability** — the probability of an event **given** that another event has already happened.\n\nReal-life examples:\n- A medical test: if the test is positive, what is the probability that the patient actually has the disease?\n- In a survey: if a person is a woman, what is the probability she voted for candidate A?\n- Cards: given that the first card drawn is a heart, what is the probability the second is also a heart?\n\nConditional probability helps us update our knowledge as new information arrives.",
+      "body_he_md": "דמיינו שקית עם 3 כדורים אדומים ו-2 כחולים. שלפתם אחד — הוא אדום. **עכשיו** מה ההסתברות שהכדור השני גם אדום? התשובה משתנה כי יש לכם עכשיו מידע נוסף.\n\nזוהי **הסתברות מותנית** — ההסתברות של אירוע **בהינתן** שאירוע אחר כבר קרה.\n\nדוגמאות מהחיים:\n- בדיקה רפואית: אם הבדיקה חיובית, מה ההסתברות שלחולה יש את המחלה?\n- בסקר: אם אדם הוא אישה, מה ההסתברות שהיא הצביעה לא' המועמד?\n- קלפים: בהינתן שהקלף הראשון הוא לב, מה ההסתברות שהשני גם לב?\n\nהסתברות מותנית עוזרת לנו לעדכן את הידע שלנו כשמגיע מידע חדש."
     },
     {
-      "id": "conditional_formula",
-      "title_en": "The Formula",
-      "title_he": "הנוסחה",
-      "level_min": "3pt",
-      "body_en_md": "$$\\boxed{P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)}}$$\n\n**How to read it:** To find the probability of $B$ given $A$, look at the fraction of $A$-outcomes that are also in $B$.\n\n**Intuition:** We've narrowed our world down to only outcomes where $A$ happened. Among those, what fraction also have $B$?\n\n**Worked Example — Drawing Balls:**\n\nA bag has **5 red** and **3 blue** balls (8 total). You draw one ball, it's red. Without replacing it, you draw again. What is $P(\\text{second is red} \\mid \\text{first is red})$?\n\nAfter drawing one red: 4 red and 3 blue remain (7 total).\n$$P(\\text{2nd red} \\mid \\text{1st red}) = \\frac{4}{7}$$\n\n**Using the formula directly:** Let $A$ = \"first is red\", $B$ = \"second is red\".\n$$P(A) = \\frac{5}{8}, \\quad P(A \\cap B) = \\frac{5}{8} \\cdot \\frac{4}{7} = \\frac{20}{56} = \\frac{5}{14}$$\n$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{5/14}{5/8} = \\frac{5}{14} \\cdot \\frac{8}{5} = \\frac{4}{7} \\checkmark$$\n\n> 📌 Always identify what event is being conditioned on (the \"given\") before plugging into the formula.",
-      "body_he_md": "$$\\boxed{P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)}}$$\n\n**איך לקרוא את זה:** כדי למצוא את ההסתברות של $B$ בהינתן $A$, מסתכלים על שבר תוצאות $A$ שהן גם ב-$B$.\n\n**אינטואיציה:** צמצמנו את העולם שלנו רק לתוצאות שבהן $A$ קרה. מביניהן, איזה שבר מכיל גם $B$?\n\n**דוגמה פתורה — שליפת כדורים:**\n\nשק עם **5 אדומים** ו**3 כחולים** (8 בסך). שלפת כדור אחד — הוא אדום. מבלי להחזיר אותו, שולפים שוב. מהי $P(\\text{שני אדום} \\mid \\text{ראשון אדום})$?\n\nאחרי שליפת אדום אחד: נשארו 4 אדומים ו-3 כחולים (7 בסך).\n$$P(\\text{שני אדום} \\mid \\text{ראשון אדום}) = \\frac{4}{7}$$\n\n**שימוש ישיר בנוסחה:** יהי $A$ = \"ראשון אדום\", $B$ = \"שני אדום\".\n$$P(A) = \\frac{5}{8}, \\quad P(A \\cap B) = \\frac{5}{8} \\cdot \\frac{4}{7} = \\frac{20}{56} = \\frac{5}{14}$$\n$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{5/14}{5/8} = \\frac{5}{14} \\cdot \\frac{8}{5} = \\frac{4}{7} \\checkmark$$\n\n> 📌 תמיד זהה על מה מתנים (ה\"בהינתן\") לפני שמציבים בנוסחה."
+      "kind": "definition",
+      "title_en": "Conditional Probability and Independence",
+      "title_he": "הסתברות מותנית ואי-תלות",
+      "body_en_md": "**Conditional probability of $A$ given $B$:**\n$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) \\neq 0$$\n\nThis reads: \"the probability of $A$, knowing that $B$ happened.\"\n\n**Equivalent form:** $P(A \\cap B) = P(B) \\cdot P(A \\mid B)$\n\n**Independence:** Events $A$ and $B$ are **independent** if:\n$$P(A \\mid B) = P(A)$$\nEquivalently: $P(A \\cap B) = P(A) \\cdot P(B)$.\n\nThis means knowing $B$ gives no information about whether $A$ happens.\n\n**Total probability (two-branch tree):**\nIf $B$ and $\\bar{B}$ partition the sample space:\n$$P(A) = P(A \\mid B) \\cdot P(B) + P(A \\mid \\bar{B}) \\cdot P(\\bar{B})$$",
+      "body_he_md": "**הסתברות מותנית של $A$ בהינתן $B$:**\n$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) \\neq 0$$\n\nקוראים: \"ההסתברות של $A$, בידיעה ש-$B$ קרה.\"\n\n**צורה שקולה:** $P(A \\cap B) = P(B) \\cdot P(A \\mid B)$\n\n**אי-תלות:** אירועים $A$ ו-$B$ הם **בלתי-תלויים** אם:\n$$P(A \\mid B) = P(A)$$\nבאופן שקול: $P(A \\cap B) = P(A) \\cdot P(B)$.\n\nכלומר ידיעה על $B$ לא נותנת מידע האם $A$ יקרה.\n\n**הסתברות כוללת (עץ עם שני ענפים):**\nאם $B$ ו-$\\bar{B}$ מחלקים את מרחב המדגם:\n$$P(A) = P(A \\mid B) \\cdot P(B) + P(A \\mid \\bar{B}) \\cdot P(\\bar{B})$$"
     },
     {
-      "id": "tree_diagrams",
-      "title_en": "Tree Diagrams",
-      "title_he": "דיאגרמות עץ",
-      "level_min": "3pt",
-      "body_en_md": "A **tree diagram** maps out multi-stage experiments visually. Each branch represents one outcome; multiply along branches, add across branches for combined events.\n\n**Rules:**\n1. Write the probability on **each branch**.\n2. To get the probability of a path, **multiply** the branch probabilities along it.\n3. To get the probability of an event that can happen via multiple paths, **add** the path probabilities.\n\n**Example — Coin then Die:**\nFlip a coin. If Heads, roll a die and record if it's even.\n\n```\nStart\n  ├── H (prob 1/2)\n  │     ├── Even  (prob 3/6 = 1/2)  → path prob = 1/2 × 1/2 = 1/4\n  │     └── Odd   (prob 3/6 = 1/2)  → path prob = 1/2 × 1/2 = 1/4\n  └── T (prob 1/2)\n        └── (no die roll)\n```\n\n$P(\\text{Heads AND even}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\n\n**Two-draw example (without replacement):** A bag has 3 red (R) and 2 blue (B). Draw twice.\n\n```\n1st draw\n  ├── R (3/5)\n  │     ├── R (2/4)  → RR: 3/5 × 2/4 = 6/20\n  │     └── B (2/4)  → RB: 3/5 × 2/4 = 6/20\n  └── B (2/5)\n        ├── R (3/4)  → BR: 2/5 × 3/4 = 6/20\n        └── B (1/4)  → BB: 2/5 × 1/4 = 2/20\n```\n\nCheck: $6 + 6 + 6 + 2 = 20$. Divide each by 20 — sums to 1. ✓\n\n$P(\\text{at least one R}) = 1 - P(\\text{BB}) = 1 - \\frac{2}{20} = \\frac{18}{20} = \\frac{9}{10}$",
-      "body_he_md": "**דיאגרמת עץ** ממפה ניסויים רב-שלביים בצורה חזותית. כל ענף מייצג תוצאה אחת; מכפילים לאורך ענפים, מחברים בין ענפים לאירועים משולבים.\n\n**כללים:**\n1. רשמו את ההסתברות על **כל ענף**.\n2. כדי לקבל את ההסתברות של מסלול, **הכפלו** את הסתברויות הענפים לאורכו.\n3. כדי לקבל את ההסתברות של אירוע שיכול לקרות דרך מסלולים שונים, **חברו** את הסתברויות המסלולים.\n\n**דוגמה — מטבע ואז קוביה:**\nמטילים מטבע. אם עץ, זורקים קוביה ורושמים אם הוא זוגי.\n\n```\nהתחלה\n  ├── עץ (הסת' 1/2)\n  │     ├── זוגי  (הסת' 3/6 = 1/2)  → הסת' מסלול = 1/2 × 1/2 = 1/4\n  │     └── אי-זוגי (הסת' 3/6 = 1/2) → הסת' מסלול = 1/2 × 1/2 = 1/4\n  └── פלי (הסת' 1/2)\n        └── (אין זריקת קוביה)\n```\n\n$P(\\text{עץ וגם זוגי}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\n\n**דוגמה עם שתי שליפות (ללא החזרה):** שק עם 3 אדומים (א) ו-2 כחולים (כ). שולפים פעמיים.\n\n```\nשליפה 1\n  ├── א (3/5)\n  │     ├── א (2/4)  → אא: 3/5 × 2/4 = 6/20\n  │     └── כ (2/4)  → אכ: 3/5 × 2/4 = 6/20\n  └── כ (2/5)\n        ├── א (3/4)  → כא: 2/5 × 3/4 = 6/20\n        └── כ (1/4)  → ככ: 2/5 × 1/4 = 2/20\n```\n\nבדיקה: $6 + 6 + 6 + 2 = 20$. מחלקים ב-20 — סכום 1. ✓\n\n$P(\\text{לפחות א אחד}) = 1 - P(\\text{ככ}) = 1 - \\frac{2}{20} = \\frac{18}{20} = \\frac{9}{10}$"
+      "kind": "theory",
+      "title_en": "Using Probability Trees and Tables",
+      "title_he": "שימוש בעצי הסתברות וטבלאות",
+      "body_en_md": "**Probability tree:** A useful tool when a problem has two or more stages. Multiply along the branches for joint probabilities; add across branches for total probabilities.\n\nExample structure:\n```\n          B (P(B))     → A: P(A∩B) = P(B)·P(A|B)\n         /\n Start  \n         \\\n          B̄ (P(B̄))   → A: P(A∩B̄) = P(B̄)·P(A|B̄)\n```\n\n**Two-way table:** Often used in survey problems.\n\n| | $B$ | $\\bar{B}$ | Total |\n|--|-----|-----------|-------|\n| $A$ | $P(A\\cap B)$ | $P(A\\cap\\bar{B})$ | $P(A)$ |\n| $\\bar{A}$ | $P(\\bar{A}\\cap B)$ | ... | $P(\\bar{A})$ |\n| Total | $P(B)$ | $P(\\bar{B})$ | 1 |\n\nTo find $P(A \\mid B)$: divide the $A\\cap B$ cell by the $B$ column total.",
+      "body_he_md": "**עץ הסתברות:** כלי שימושי כאשר לבעיה יש שני שלבים או יותר. כופלים לאורך הענפים להסתברויות משותפות; מסכמים על פני ענפים להסתברויות כוללות.\n\nמבנה לדוגמה:\n```\n          B (P(B))     → A: P(A∩B) = P(B)·P(A|B)\n         /\n התחלה  \n         \\\n          B̄ (P(B̄))   → A: P(A∩B̄) = P(B̄)·P(A|B̄)\n```\n\n**טבלה דו-ממדית:** לעיתים קרובות משמשת בבעיות סקר.\n\n| | $B$ | $\\bar{B}$ | סה\"כ |\n|--|-----|-----------|------|\n| $A$ | $P(A\\cap B)$ | $P(A\\cap\\bar{B})$ | $P(A)$ |\n| $\\bar{A}$ | $P(\\bar{A}\\cap B)$ | ... | $P(\\bar{A})$ |\n| סה\"כ | $P(B)$ | $P(\\bar{B})$ | 1 |\n\nלמציאת $P(A \\mid B)$: חלקו את תא $A\\cap B$ בסכום עמודת $B$."
     },
     {
-      "id": "independence",
-      "title_en": "Independence",
-      "title_he": "אי-תלות",
-      "level_min": "3pt",
-      "body_en_md": "Events $A$ and $B$ are **independent** if knowing that $A$ happened gives **no information** about whether $B$ happens.\n\n**Formal definition:**\n$$A \\text{ and } B \\text{ are independent} \\iff P(A \\cap B) = P(A) \\cdot P(B)$$\n\nEquivalently: $P(B \\mid A) = P(B)$ — conditioning on $A$ doesn't change $B$'s probability.\n\n**Independent example:** Two separate coin flips.\n- $P(\\text{H on flip 1}) = \\frac{1}{2}$\n- $P(\\text{H on flip 2}) = \\frac{1}{2}$\n- $P(\\text{both H}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\nThe first flip doesn't affect the second — they are independent.\n\n**Dependent example:** Drawing cards **without replacement**.\nAfter drawing one King, there are only 3 Kings left in 51 cards:\n$P(\\text{2nd King} \\mid \\text{1st King}) = \\frac{3}{51} \\neq \\frac{4}{52} = P(\\text{King})$\nThe draws are **not** independent.\n\n**Quick test for independence:** Compute $P(A) \\cdot P(B)$. If it equals $P(A \\cap B)$, they are independent. If not, they are dependent.\n\n> 🔗 \"Independent\" does **not** mean \"have nothing to do with each other\" in the everyday sense — it has a precise mathematical meaning.",
-      "body_he_md": "אירועים $A$ ו-$B$ הם **בלתי-תלויים** אם ידיעה ש-$A$ קרה **אינה נותנת מידע** האם $B$ יקרה.\n\n**הגדרה פורמלית:**\n$$A \\text{ ו-} B \\text{ בלתי-תלויים} \\iff P(A \\cap B) = P(A) \\cdot P(B)$$\n\nשקול: $P(B \\mid A) = P(B)$ — התניה על $A$ לא משנה את ההסתברות של $B$.\n\n**דוגמה לאי-תלות:** שתי הטלות מטבע נפרדות.\n- $P(\\text{עץ בהטלה 1}) = \\frac{1}{2}$\n- $P(\\text{עץ בהטלה 2}) = \\frac{1}{2}$\n- $P(\\text{שניהם עץ}) = \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$\nההטלה הראשונה לא משפיעה על השנייה — הן בלתי-תלויות.\n\n**דוגמה לתלות:** שליפת קלפים **ללא החזרה**.\nאחרי שליפת מלך אחד, נשארו רק 3 מלכים מתוך 51 קלפים:\n$P(\\text{מלך שני} \\mid \\text{מלך ראשון}) = \\frac{3}{51} \\neq \\frac{4}{52} = P(\\text{מלך})$\nהשליפות **אינן** בלתי-תלויות.\n\n**בדיקה מהירה לאי-תלות:** חשבו $P(A) \\cdot P(B)$. אם שווה ל-$P(A \\cap B)$, הם בלתי-תלויים. אם לא, הם תלויים.\n\n> 🔗 \"בלתי-תלוי\" **לא** אומר \"אין ביניהם קשר\" במובן היומיומי — יש לזה משמעות מתמטית מדויקת."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Using the Conditional Probability Formula",
+      "title_he": "דוגמה פתורה 1 — שימוש בנוסחת ההסתברות המותנית",
+      "body_en_md": "**Given:** $P(A) = 0.6$, $P(B) = 0.5$, $P(A \\cap B) = 0.3$.\n\n**Find:** (a) $P(A \\mid B)$, (b) $P(B \\mid A)$.\n\n**Part (a):**\n$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{0.3}{0.5} = 0.6$$\n\n**Part (b):**\n$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{0.3}{0.6} = 0.5$$\n\n**Bonus — Are $A$ and $B$ independent?**\n$P(A \\mid B) = 0.6 = P(A)$, so YES — knowing $B$ doesn't change the probability of $A$.\n\nCheck: $P(A) \\cdot P(B) = 0.6 \\times 0.5 = 0.3 = P(A \\cap B)$ ✓\n\n**Answers:** (a) $0.6$, (b) $0.5$.",
+      "body_he_md": "**נתון:** $P(A) = 0.6$, $P(B) = 0.5$, $P(A \\cap B) = 0.3$.\n\n**מצאו:** (א) $P(A \\mid B)$, (ב) $P(B \\mid A)$.\n\n**חלק (א):**\n$$P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{0.3}{0.5} = 0.6$$\n\n**חלק (ב):**\n$$P(B \\mid A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{0.3}{0.6} = 0.5$$\n\n**בונוס — האם $A$ ו-$B$ בלתי-תלויים?**\n$P(A \\mid B) = 0.6 = P(A)$, כן — ידיעת $B$ לא משנה את הסתברות $A$.\n\nבדיקה: $P(A) \\cdot P(B) = 0.6 \\times 0.5 = 0.3 = P(A \\cap B)$ ✓\n\n**תשובות:** (א) $0.6$, (ב) $0.5$."
     },
     {
-      "id": "total_probability_worked",
-      "title_en": "Worked Exam Problem — Total Probability",
-      "title_he": "בעיה פתורה ממבחן — הסתברות כוללת",
-      "level_min": "3pt",
-      "body_en_md": "This is a very common Bagrut question type. Learn to recognise it!\n\n**Problem:** Box 1 has **3 white** and **2 black** balls. Box 2 has **1 white** and **4 black** balls. A box is chosen at random (each with probability $\\frac{1}{2}$), then one ball is drawn. What is $P(\\text{white})$?\n\n**Solution using tree diagram:**\n\n```\nChoose box\n  ├── Box 1 (1/2)\n  │     ├── White (3/5)  → path: 1/2 × 3/5 = 3/10\n  │     └── Black (2/5)  → path: 1/2 × 2/5 = 2/10\n  └── Box 2 (1/2)\n        ├── White (1/5)  → path: 1/2 × 1/5 = 1/10\n        └── Black (4/5)  → path: 1/2 × 4/5 = 4/10\n```\n\nWhite can happen via two paths (Box 1 → White) or (Box 2 → White):\n$$P(\\text{white}) = \\frac{3}{10} + \\frac{1}{10} = \\frac{4}{10} = 0.4$$\n\n**The Total Probability Formula (general):**\n$$P(W) = P(\\text{Box 1}) \\cdot P(W \\mid \\text{Box 1}) + P(\\text{Box 2}) \\cdot P(W \\mid \\text{Box 2})$$\n$$= \\frac{1}{2} \\times \\frac{3}{5} + \\frac{1}{2} \\times \\frac{1}{5} = 0.3 + 0.1 = 0.4$$\n\n> ✅ The key recognition: when you \"choose a group first\" and then observe an event, it's always a total-probability setup. Draw the tree, multiply along paths, add across paths.",
-      "body_he_md": "זהו סוג שאלה נפוץ מאד בבגרות. למדו לזהות אותו!\n\n**בעיה:** קופסה 1 מכילה **3 לבנים** ו**2 שחורים**. קופסה 2 מכילה **1 לבן** ו**4 שחורים**. בוחרים קופסה באקראי (כל אחת עם הסתברות $\\frac{1}{2}$), ואז שולפים כדור אחד. מהי $P(\\text{לבן})$?\n\n**פתרון בעזרת דיאגרמת עץ:**\n\n```\nבחירת קופסה\n  ├── קופסה 1 (1/2)\n  │     ├── לבן (3/5)  → מסלול: 1/2 × 3/5 = 3/10\n  │     └── שחור (2/5) → מסלול: 1/2 × 2/5 = 2/10\n  └── קופסה 2 (1/2)\n        ├── לבן (1/5)  → מסלול: 1/2 × 1/5 = 1/10\n        └── שחור (4/5) → מסלול: 1/2 × 4/5 = 4/10\n```\n\nלבן יכול לקרות דרך שני מסלולים (קופסה 1 → לבן) או (קופסה 2 → לבן):\n$$P(\\text{לבן}) = \\frac{3}{10} + \\frac{1}{10} = \\frac{4}{10} = 0.4$$\n\n**נוסחת ההסתברות הכוללת (כללי):**\n$$P(L) = P(\\text{קופסה 1}) \\cdot P(L \\mid \\text{קופסה 1}) + P(\\text{קופסה 2}) \\cdot P(L \\mid \\text{קופסה 2})$$\n$$= \\frac{1}{2} \\times \\frac{3}{5} + \\frac{1}{2} \\times \\frac{1}{5} = 0.3 + 0.1 = 0.4$$\n\n> ✅ זיהוי המפתח: כשה\"בוחרים קבוצה תחילה\" ואז מתבוננים באירוע, זה תמיד מבנה של הסתברות כוללת. ציירו את העץ, הכפילו לאורך מסלולים, חברו בין מסלולים."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "$P(A) = 0.4$, $P(B) = 0.5$, $P(A \\cap B) = 0.1$. Find (a) $P(A \\mid B)$, (b) whether $A$ and $B$ are independent.",
+      "body_he_md": "$P(A) = 0.4$, $P(B) = 0.5$, $P(A \\cap B) = 0.1$. מצאו (א) $P(A \\mid B)$, (ב) האם $A$ ו-$B$ בלתי-תלויים.",
+      "checkpoint_solution_en": "(a) P(A|B) = 0.1/0.5 = 0.2. (b) P(A) = 0.4 ≠ 0.2 = P(A|B), so they are NOT independent.",
+      "checkpoint_solution_he": "(א) P(A|B) = 0.1/0.5 = 0.2. (ב) P(A) = 0.4 ≠ 0.2 = P(A|B), לכן הם אינם בלתי-תלויים."
     },
     {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "3pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\n(a) A bag has 5 red and 3 blue balls. Two balls are drawn **without replacement**. Find the probability both are the same color.\n\n(b) Given that the first ball drawn was red, find the probability the second is also red.\n\n**Complete Solution:**\n\n(a) Same color = both red OR both blue.\n$P(RR) = \\frac{5}{8}\\cdot\\frac{4}{7} = \\frac{20}{56}$, $P(BB) = \\frac{3}{8}\\cdot\\frac{2}{7} = \\frac{6}{56}$.\n$P(\\text{same}) = \\frac{26}{56} = \\frac{13}{28}$.\n\n(b) After one red remains 4 red of 7: $P(R_2|R_1) = \\frac{4}{7}$.\n\n---\n\n**Practice Problem 2:**\n\n(a) A fair coin is flipped three times. Find $P(\\text{at least two heads})$.\n\n(b) Use the complement rule to verify your answer.\n\n**Complete Solution:**\n\n(a) Favorable: HHH, HHT, HTH, THH → $P = \\frac{4}{8} = \\frac{1}{2}$.\n\n(b) Complement = 0 or 1 head: TTT, HTT, THT, TTH → $\\frac{4}{8} = \\frac{1}{2}$ ✓",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\n(א) בשק 5 כדורים אדומים ו-3 כחולים. שולפים **ללא החזרה** 2 כדורים. מצאו את ההסתברות ששניהם באותו צבע.\n\n(ב) ידוע שהראשון אדום — מה ההסתברות שגם השני אדום?\n\n**פתרון מלא:**\n\n(א) $P(RR)=\\frac{5}{8}\\cdot\\frac{4}{7}=\\frac{20}{56}$, $P(BB)=\\frac{3}{8}\\cdot\\frac{2}{7}=\\frac{6}{56}$ → $P=\\frac{13}{28}$.\n\n(ב) $P(R_2|R_1)=\\frac{4}{7}$.\n\n---\n\n**שאלת תרגול 2:**\n\n(א) מטבע הוגן נזרק 3 פעמים. מצאו $P(\\text{לפחות 2 עצים})$.\n\n(ב) אמתו עם כלל המשלים.\n\n**פתרון מלא:**\n\n(א) 4 מתוך 8 → $\\frac{1}{2}$. (ב) משלים = 0 או 1 עץ → $\\frac{1}{2}$ ✓"
-    }
-  ],
-  "questions": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Soccer and Basketball Survey",
+      "title_he": "דוגמה פתורה 2 — סקר כדורגל וכדורסל",
+      "body_en_md": "**Problem:** In a survey, 60% of people like soccer, and 40% like both soccer and basketball. If a person likes soccer, what is the probability that they also like basketball?\n\n**Step 1 — Define events:**\n- $S$ = likes soccer, $P(S) = 0.60$\n- $B$ = likes basketball\n- $P(S \\cap B) = 0.40$\n\n**Step 2 — Apply conditional probability:**\n$$P(B \\mid S) = \\frac{P(S \\cap B)}{P(S)} = \\frac{0.40}{0.60} = \\frac{2}{3} \\approx 0.667$$\n\n**Answer:** Given that a person likes soccer, there is a $\\dfrac{2}{3} \\approx 66.7\\%$ chance they also like basketball.",
+      "body_he_md": "**בעיה:** בסקר, 60% מהאנשים אוהבים כדורגל, ו-40% אוהבים גם כדורגל וגם כדורסל. אם אדם אוהב כדורגל, מה ההסתברות שהוא גם אוהב כדורסל?\n\n**שלב 1 — הגדרת אירועים:**\n- $S$ = אוהב כדורגל, $P(S) = 0.60$\n- $B$ = אוהב כדורסל\n- $P(S \\cap B) = 0.40$\n\n**שלב 2 — שימוש בהסתברות מותנית:**\n$$P(B \\mid S) = \\frac{P(S \\cap B)}{P(S)} = \\frac{0.40}{0.60} = \\frac{2}{3} \\approx 0.667$$\n\n**תשובה:** בהינתן שאדם אוהב כדורגל, יש $\\dfrac{2}{3} \\approx 66.7\\%$ סיכוי שהוא גם אוהב כדורסל."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A class has 20 students: 12 boys and 8 girls. 5 boys and 6 girls study music. A student is chosen at random. Given the student is a girl, what is $P(\\text{music} \\mid \\text{girl})$?",
-      "body_he": "כיתה עם 20 תלמידים: 12 בנים ו-8 בנות. 5 בנים ו-6 בנות לומדים מוזיקה. תלמיד נבחר באקראי. בהינתן שהתלמיד הוא בת, מהי $P(\\text{מוזיקה} \\mid \\text{בת})$?",
-      "options": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "In a class: 70% study math, 40% study both math and English. Find the probability that a student studies English, given that they study math.",
+      "body_he_md": "בכיתה: 70% לומדים מתמטיקה, 40% לומדים גם מתמטיקה וגם אנגלית. מצאו את ההסתברות שתלמיד לומד אנגלית, בהינתן שהוא לומד מתמטיקה.",
+      "checkpoint_solution_en": "P(M) = 0.7, P(M∩E) = 0.4. P(E|M) = 0.4/0.7 = 4/7 ≈ 0.571.",
+      "checkpoint_solution_he": "P(M) = 0.7, P(M∩E) = 0.4. P(E|M) = 0.4/0.7 = 4/7 ≈ 0.571."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Two-Urn Problem (Classic Bagrut 3pt)",
+      "title_he": "דוגמה פתורה 3 — בעיית שתי קלנות (בגרות 3 יח' קלאסי)",
+      "body_en_md": "**Problem:** Urn A has 4 red and 2 white balls. Urn B has 1 red and 3 white balls. A fair coin is tossed:\n- Heads → draw from Urn A.\n- Tails → draw from Urn B.\n\nFind: (a) $P(\\text{red ball drawn})$. (b) Given a red ball was drawn, what is $P(\\text{it came from Urn A})$?\n\n**Part (a) — Total probability:**\n$$P(R) = P(R \\mid A) \\cdot P(A) + P(R \\mid B) \\cdot P(B)$$\n$$= \\frac{4}{6} \\cdot \\frac{1}{2} + \\frac{1}{4} \\cdot \\frac{1}{2}$$\n$$= \\frac{4}{12} + \\frac{1}{8} = \\frac{2}{6} + \\frac{1}{8} = \\frac{8}{24} + \\frac{3}{24} = \\frac{11}{24}$$\n\n**Part (b) — Bayes' formula:**\n$$P(A \\mid R) = \\frac{P(R \\mid A) \\cdot P(A)}{P(R)} = \\frac{\\frac{4}{6} \\cdot \\frac{1}{2}}{\\frac{11}{24}} = \\frac{\\frac{4}{12}}{\\frac{11}{24}} = \\frac{4}{12} \\cdot \\frac{24}{11} = \\frac{8}{11}$$\n\n**Answers:** (a) $P(\\text{red}) = \\dfrac{11}{24}$. (b) $P(A \\mid R) = \\dfrac{8}{11}$.",
+      "body_he_md": "**בעיה:** קלנה A מכילה 4 אדומים ו-2 לבנים. קלנה B מכילה 1 אדום ו-3 לבנים. מטילים מטבע הוגן:\n- עץ → שולפים מקלנה A.\n- פלי → שולפים מקלנה B.\n\nמצאו: (א) $P(\\text{כדור אדום נשלף})$. (ב) בהינתן שנשלף כדור אדום, מה $P(\\text{מקלנה A})$?\n\n**חלק (א) — הסתברות כוללת:**\n$$P(R) = P(R \\mid A) \\cdot P(A) + P(R \\mid B) \\cdot P(B)$$\n$$= \\frac{4}{6} \\cdot \\frac{1}{2} + \\frac{1}{4} \\cdot \\frac{1}{2}$$\n$$= \\frac{4}{12} + \\frac{1}{8} = \\frac{8}{24} + \\frac{3}{24} = \\frac{11}{24}$$\n\n**חלק (ב) — נוסחת בייס:**\n$$P(A \\mid R) = \\frac{P(R \\mid A) \\cdot P(A)}{P(R)} = \\frac{\\frac{4}{6} \\cdot \\frac{1}{2}}{\\frac{11}{24}} = \\frac{\\frac{4}{12}}{\\frac{11}{24}} = \\frac{4}{12} \\cdot \\frac{24}{11} = \\frac{8}{11}$$\n\n**תשובות:** (א) $P(\\text{אדום}) = \\dfrac{11}{24}$. (ב) $P(A \\mid R) = \\dfrac{8}{11}$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Conditional Probability Strategy",
+      "title_he": "מדריך שיטה — אסטרטגיה להסתברות מותנית",
+      "body_en_md": "| Task | Formula |\n|------|--------|\n| Conditional probability | $P(A\\mid B) = \\frac{P(A\\cap B)}{P(B)}$ |\n| Joint from conditional | $P(A\\cap B) = P(B) \\cdot P(A\\mid B)$ |\n| Check independence | $P(A\\mid B) = P(A)$ OR $P(A\\cap B) = P(A)\\cdot P(B)$ |\n| Two-stage problem | Draw a probability tree; multiply branches |\n| Total probability (two cases) | $P(A) = P(A\\mid B)P(B) + P(A\\mid\\bar{B})P(\\bar{B})$ |\n| Bayes (given result, find cause) | $P(B\\mid A) = \\frac{P(A\\mid B)\\cdot P(B)}{P(A)}$ |",
+      "body_he_md": "| משימה | נוסחה |\n|-------|-------|\n| הסתברות מותנית | $P(A\\mid B) = \\frac{P(A\\cap B)}{P(B)}$ |\n| חיתוך ממותנית | $P(A\\cap B) = P(B) \\cdot P(A\\mid B)$ |\n| בדיקת אי-תלות | $P(A\\mid B) = P(A)$ או $P(A\\cap B) = P(A)\\cdot P(B)$ |\n| בעיה דו-שלבית | סרטטו עץ הסתברות; כפלו ענפים |\n| הסתברות כוללת (שני מקרים) | $P(A) = P(A\\mid B)P(B) + P(A\\mid\\bar{B})P(\\bar{B})$ |\n| בייס (נתון תוצאה, מצאו סיבה) | $P(B\\mid A) = \\frac{P(A\\mid B)\\cdot P(B)}{P(A)}$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים לתרגול",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$\\frac{6}{20}$",
-          "text_he": "$\\frac{6}{20}$",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "$P(A) = 0.7$, $P(B) = 0.4$, $P(A \\cap B) = 0.28$. Find $P(A \\mid B)$ and check independence.",
+          "body_he": "$P(A) = 0.7$, $P(B) = 0.4$, $P(A \\cap B) = 0.28$. מצאו $P(A \\mid B)$ ובדקו אי-תלות.",
+          "solution_en": "P(A|B) = 0.28/0.4 = 0.7 = P(A). Independent (also: 0.7×0.4 = 0.28 ✓).",
+          "solution_he": "P(A|B) = 0.28/0.4 = 0.7 = P(A). בלתי-תלויים (גם: 0.7×0.4 = 0.28 ✓).",
+          "points": 5
         },
         {
-          "id": "b",
-          "text_en": "$\\frac{5}{12}$",
-          "text_he": "$\\frac{5}{12}$",
-          "correct": false
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A die is rolled. $A$ = {even} = {2,4,6}, $B$ = {>3} = {4,5,6}. Find $P(A \\mid B)$.",
+          "body_he": "מטילים קוביה. $A$ = {זוגי} = {2,4,6}, $B$ = {>3} = {4,5,6}. מצאו $P(A \\mid B)$.",
+          "solution_en": "A∩B = {4,6}. P(A∩B) = 2/6. P(B) = 3/6. P(A|B) = (2/6)/(3/6) = 2/3.",
+          "solution_he": "A∩B = {4,6}. P(A∩B) = 2/6. P(B) = 3/6. P(A|B) = (2/6)/(3/6) = 2/3.",
+          "points": 5
         },
         {
-          "id": "c",
-          "text_en": "$\\frac{6}{8}$",
-          "text_he": "$\\frac{6}{8}$",
-          "correct": true
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Two events are independent: $P(A) = 0.3$, $P(B) = 0.6$. Find $P(A \\cap B)$.",
+          "body_he": "שני אירועים בלתי-תלויים: $P(A) = 0.3$, $P(B) = 0.6$. מצאו $P(A \\cap B)$.",
+          "solution_en": "P(A∩B) = P(A)·P(B) = 0.3 × 0.6 = 0.18.",
+          "solution_he": "P(A∩B) = P(A)·P(B) = 0.3 × 0.6 = 0.18.",
+          "points": 5
         },
         {
-          "id": "d",
-          "text_en": "$\\frac{11}{20}$",
-          "text_he": "$\\frac{11}{20}$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "$P(B) = 0.5$, $P(A \\mid B) = 0.4$. Find $P(A \\cap B)$.",
+          "body_he": "$P(B) = 0.5$, $P(A \\mid B) = 0.4$. מצאו $P(A \\cap B)$.",
+          "solution_en": "P(A∩B) = P(B)·P(A|B) = 0.5 × 0.4 = 0.2.",
+          "solution_he": "P(A∩B) = P(B)·P(A|B) = 0.5 × 0.4 = 0.2.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A bag has 5 red and 3 blue balls. Two are drawn without replacement. Find $P(\\text{2nd is red} \\mid \\text{1st is red})$ and $P(\\text{both red})$.",
+          "body_he": "שקית עם 5 אדומים ו-3 כחולים. שולפים שניים ללא החזרה. מצאו $P(\\text{שני אדום} \\mid \\text{ראשון אדום})$ ו-$P(\\text{שניהם אדומים})$.",
+          "solution_en": "P(2nd red | 1st red) = 4/7. P(both red) = (5/8)·(4/7) = 20/56 = 5/14.",
+          "solution_he": "P(שני אדום | ראשון אדום) = 4/7. P(שניהם אדומים) = (5/8)·(4/7) = 20/56 = 5/14.",
+          "points": 7
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "In a school: 55% are boys, 30% of boys play chess, 20% of girls play chess. A student is chosen at random. Find $P(\\text{plays chess})$.",
+          "body_he": "בבית ספר: 55% בנים, 30% מהבנים משחקים שחמט, 20% מהבנות משחקות שחמט. בוחרים תלמיד באקראי. מצאו $P(\\text{משחק שחמט})$.",
+          "solution_en": "P(chess) = 0.30×0.55 + 0.20×0.45 = 0.165 + 0.090 = 0.255.",
+          "solution_he": "P(שחמט) = 0.30×0.55 + 0.20×0.45 = 0.165 + 0.090 = 0.255.",
+          "points": 7
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "From the school in e6: given a student plays chess, find $P(\\text{the student is a boy})$.",
+          "body_he": "מבית הספר בתרגיל e6: בהינתן שהתלמיד משחק שחמט, מצאו $P(\\text{התלמיד הוא בן})$.",
+          "solution_en": "P(Boy|chess) = P(chess|Boy)·P(Boy)/P(chess) = (0.30×0.55)/0.255 = 0.165/0.255 = 11/17 ≈ 0.647.",
+          "solution_he": "P(בן|שחמט) = P(שחמט|בן)·P(בן)/P(שחמט) = (0.30×0.55)/0.255 = 0.165/0.255 = 11/17 ≈ 0.647.",
+          "points": 7
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Events $A$ and $B$: $P(A) = 0.5$, $P(B) = 0.6$, $P(A \\cup B) = 0.8$. Find $P(A \\mid B)$ and check if they are independent.",
+          "body_he": "אירועים $A$ ו-$B$: $P(A) = 0.5$, $P(B) = 0.6$, $P(A \\cup B) = 0.8$. מצאו $P(A \\mid B)$ ובדקו אי-תלות.",
+          "solution_en": "P(A∩B) = 0.5+0.6−0.8 = 0.3. P(A|B) = 0.3/0.6 = 0.5 = P(A). Independent.",
+          "solution_he": "P(A∩B) = 0.5+0.6−0.8 = 0.3. P(A|B) = 0.3/0.6 = 0.5 = P(A). בלתי-תלויים.",
+          "points": 7
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A factory has two machines. Machine A produces 60% of items; 3% are defective. Machine B produces 40% of items; 5% are defective. Find $P(\\text{random item is defective})$.",
+          "body_he": "מפעל עם שני מכונות. מכונה A מייצרת 60% מהפריטים; 3% פגומים. מכונה B מייצרת 40%; 5% פגומים. מצאו $P(\\text{פריט אקראי פגום})$.",
+          "solution_en": "P(defect) = 0.03×0.6 + 0.05×0.4 = 0.018 + 0.020 = 0.038 = 3.8%.",
+          "solution_he": "P(פגום) = 0.03×0.6 + 0.05×0.4 = 0.018 + 0.020 = 0.038 = 3.8%.",
+          "points": 7
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "From the factory in e9: given an item is defective, find the probability it came from machine B.",
+          "body_he": "מהמפעל בתרגיל e9: בהינתן שפריט פגום, מצאו את ההסתברות שהגיע ממכונה B.",
+          "solution_en": "P(B|defect) = P(defect|B)·P(B)/P(defect) = (0.05×0.4)/0.038 = 0.020/0.038 = 10/19 ≈ 0.526.",
+          "solution_he": "P(B|פגום) = P(פגום|B)·P(B)/P(פגום) = (0.05×0.4)/0.038 = 0.020/0.038 = 10/19 ≈ 0.526.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Urn 1: 3 white, 2 black. Urn 2: 1 white, 4 black. A die is rolled: if ≤ 4, pick from Urn 1; if > 4, pick from Urn 2. Find (a) P(white ball) and (b) P(Urn 1 | white ball).",
+          "body_he": "קלנה 1: 3 לבנים, 2 שחורים. קלנה 2: 1 לבן, 4 שחורים. מטילים קוביה: אם ≤ 4, לוקחים מקלנה 1; אם > 4, מקלנה 2. מצאו (א) P(לבן) ו-(ב) P(קלנה 1 | לבן).",
+          "solution_en": "(a) P(W) = (3/5)·(4/6) + (1/5)·(2/6) = 12/30 + 2/30 = 14/30 = 7/15. (b) P(U1|W) = (12/30)/(14/30) = 12/14 = 6/7.",
+          "solution_he": "(א) P(לבן) = (3/5)·(4/6) + (1/5)·(2/6) = 12/30 + 2/30 = 14/30 = 7/15. (ב) P(קלנה1|לבן) = (12/30)/(14/30) = 12/14 = 6/7.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A disease affects 1% of the population. A test is 95% accurate for positive cases (sensitivity) and 90% accurate for negative cases (specificity). If a person tests positive, what is the probability they actually have the disease?",
+          "body_he": "מחלה פוגעת ב-1% מהאוכלוסייה. בדיקה מדויקת ב-95% עבור חולים (רגישות) ו-90% עבור בריאים (ספציפיות). אם אדם נבדק חיובי, מה ההסתברות שיש לו את המחלה?",
+          "solution_en": "P(D) = 0.01. P(+|D) = 0.95. P(+|D̄) = 0.10. P(+) = 0.95×0.01 + 0.10×0.99 = 0.0095+0.099 = 0.1085. P(D|+) = 0.0095/0.1085 ≈ 8.76%.",
+          "solution_he": "P(M) = 0.01. P(+|M) = 0.95. P(+|לא M) = 0.10. P(+) = 0.95×0.01 + 0.10×0.99 = 0.0095+0.099 = 0.1085. P(M|+) = 0.0095/0.1085 ≈ 8.76%.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A card is drawn from a standard 52-card deck. Given that it is a face card (J, Q, K), find the probability it is a king.",
+          "body_he": "שולפים קלף מחפיסת 52 קלפים. בהינתן שהוא קלף פנים (J, Q, K), מצאו את ההסתברות שהוא מלך.",
+          "solution_en": "Face cards: 12 (J,Q,K in 4 suits). Kings: 4. P(King|Face) = 4/12 = 1/3.",
+          "solution_he": "קלפי פנים: 12 (J,Q,K בכל 4 סדרות). מלכים: 4. P(מלך|פנים) = 4/12 = 1/3.",
+          "points": 10
         }
-      ],
-      "explanation_en": "Given the student is a girl, the sample space shrinks to 8 girls. 6 of them study music. $P = \\frac{6}{8} = \\frac{3}{4}$.",
-      "explanation_he": "בהינתן שהתלמיד בת, מרחב המדגם מצטמצם ל-8 בנות. 6 מהן לומדות מוזיקה. $P = \\frac{6}{8} = \\frac{3}{4}$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "A bag has 4 red and 3 blue balls. You draw two balls **without replacement**. Using a tree diagram, what is $P(\\text{both red})$?",
-      "body_he": "שק עם 4 אדומים ו-3 כחולים. שולפים שני כדורים **ללא החזרה**. בעזרת דיאגרמת עץ, מהי $P(\\text{שניהם אדומים})$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\frac{16}{49}$",
-          "text_he": "$\\frac{16}{49}$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$\\frac{4}{7}$",
-          "text_he": "$\\frac{4}{7}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$\\frac{2}{7}$",
-          "text_he": "$\\frac{2}{7}$",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "$\\frac{1}{7}$",
-          "text_he": "$\\frac{1}{7}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "First red: $\\frac{4}{7}$. Second red given first red: $\\frac{3}{6} = \\frac{1}{2}$. Product: $\\frac{4}{7} \\times \\frac{1}{2} = \\frac{4}{14} = \\frac{2}{7}$.",
-      "explanation_he": "ראשון אדום: $\\frac{4}{7}$. שני אדום בהינתן ראשון אדום: $\\frac{3}{6} = \\frac{1}{2}$. מכפלה: $\\frac{4}{7} \\times \\frac{1}{2} = \\frac{4}{14} = \\frac{2}{7}$."
+      "kind": "pitfall",
+      "title_en": "Top 3 Mistakes to Avoid",
+      "title_he": "3 הטעויות הנפוצות ביותר",
+      "body_en_md": "**Mistake 1 — Confusing $P(A|B)$ with $P(B|A)$.**\n$P(A|B) \\neq P(B|A)$ in general. Always put the condition in the denominator. \"Given B\" → divide by $P(B)$.\n\n**Mistake 2 — Assuming independence when it's not stated.**\nOnly use $P(A\\cap B) = P(A)\\cdot P(B)$ if the problem explicitly says the events are independent. Otherwise use the conditional probability formula.\n\n**Mistake 3 — Forgetting to renormalize in a two-stage problem.**\nIn the two-urn or tree problems, after computing $P(A\\cap B_i)$, always divide by $P(A)$ (total probability) to get $P(B_i|A)$.",
+      "body_he_md": "**טעות 1 — בלבול בין $P(A|B)$ ל-$P(B|A)$.**\n$P(A|B) \\neq P(B|A)$ בדרך כלל. תמיד שימו את התנאי במכנה. \"בהינתן B\" → חלקו ב-$P(B)$.\n\n**טעות 2 — הנחת אי-תלות כשלא צוין.**\nהשתמשו ב-$P(A\\cap B) = P(A)\\cdot P(B)$ רק אם הבעיה אומרת במפורש שהאירועים בלתי-תלויים. אחרת השתמשו בנוסחת ההסתברות המותנית.\n\n**טעות 3 — שכחת נרמול בבעיה דו-שלבית.**\nבבעיות קלנות או עץ, לאחר חישוב $P(A\\cap B_i)$, תמיד חלקו ב-$P(A)$ (הסתברות כוללת) לקבלת $P(B_i|A)$."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "$P(A) = 0.5$, $P(B) = 0.4$, and $P(A \\cap B) = 0.2$. Are $A$ and $B$ independent?",
-      "body_he": "$P(A) = 0.5$, $P(B) = 0.4$, ו-$P(A \\cap B) = 0.2$. האם $A$ ו-$B$ בלתי-תלויים?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "Yes, because $P(A) \\cdot P(B) = P(A \\cap B)$",
-          "text_he": "כן, כי $P(A) \\cdot P(B) = P(A \\cap B)$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "No, because $P(A \\cap B) \\neq 0$",
-          "text_he": "לא, כי $P(A \\cap B) \\neq 0$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "Yes, because $P(A) + P(B) = 0.9$",
-          "text_he": "כן, כי $P(A) + P(B) = 0.9$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Cannot be determined",
-          "text_he": "לא ניתן לקבוע",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$P(A) \\cdot P(B) = 0.5 \\times 0.4 = 0.2 = P(A \\cap B)$. Since the product equals the intersection, they are independent.",
-      "explanation_he": "$P(A) \\cdot P(B) = 0.5 \\times 0.4 = 0.2 = P(A \\cap B)$. מכיוון שהמכפלה שווה לחיתוך, הם בלתי-תלויים."
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Key formulas:**\n- Conditional: $P(A\\mid B) = \\dfrac{P(A\\cap B)}{P(B)}$\n- Joint: $P(A\\cap B) = P(B)\\cdot P(A\\mid B)$\n- Independence: $P(A\\cap B) = P(A)\\cdot P(B)$\n- Total probability: $P(A) = P(A\\mid B)P(B) + P(A\\mid\\bar{B})P(\\bar{B})$\n- Bayes: $P(B\\mid A) = \\dfrac{P(A\\mid B)P(B)}{P(A)}$\n\n**Typical Bagrut 3pt patterns:**\n1. Given conditional info — find joint or total probability. (4 marks)\n2. Two-stage draw (with/without replacement). (4–5 marks)\n3. Classic two-urn Bayes problem. (5–6 marks)\n\n**Tip:** Always draw a probability tree for two-stage problems. Label each branch with its probability.",
+      "body_he_md": "**נוסחאות מרכזיות:**\n- מותנית: $P(A\\mid B) = \\dfrac{P(A\\cap B)}{P(B)}$\n- חיתוך: $P(A\\cap B) = P(B)\\cdot P(A\\mid B)$\n- אי-תלות: $P(A\\cap B) = P(A)\\cdot P(B)$\n- כוללת: $P(A) = P(A\\mid B)P(B) + P(A\\mid\\bar{B})P(\\bar{B})$\n- בייס: $P(B\\mid A) = \\dfrac{P(A\\mid B)P(B)}{P(A)}$\n\n**דפוסי שאלות טיפוסיות בבגרות 3 יח':**\n1. נתון מידע מותנה — מצאו חיתוך או הסתברות כוללת. (4 נקודות)\n2. שליפה דו-שלבית (עם/ללא החזרה). (4–5 נקודות)\n3. בעיית בייס קלאסית עם שתי קלנות. (5–6 נקודות)\n\n**טיפ:** תמיד סרטטו עץ הסתברות לבעיות דו-שלביות. סמנו כל ענף בהסתברותו."
     },
     {
-      "id": "q4",
-      "type": "open",
-      "body_en": "A bag contains 5 red and 3 blue balls. Two balls are drawn without replacement.\n\n(a) Find the probability both are the same color.\n(b) Given the first ball was red, find P(second is red).",
-      "body_he": "שק עם 5 כדורים אדומים ו-3 כחולים. שולפים 2 ללא החזרה.\n\n(א) הסתברות ששניהם באותו צבע.\n(ב) ידוע שהראשון אדום — P(שני אדום).",
-      "points": 10,
-      "expected_steps_en": [
-        "Compute P(both red) = (5/8)(4/7) and P(both blue) = (3/8)(2/7)",
-        "Add for same color: 13/28",
-        "Conditional: P(R2|R1) = 4/7"
-      ],
-      "expected_steps_he": [
-        "חשב P(RR) ו-P(BB)",
-        "סכום: 13/28",
-        "מותנית: 4/7"
-      ],
-      "sample_solution_en": "(a) P(same) = 20/56 + 6/56 = 13/28. (b) P(R2|R1) = 4/7.",
-      "sample_solution_he": "(א) 13/28. (ב) 4/7.",
-      "rubric_en": "4pts correct same-color probability with work; 3pts conditional probability; 3pts clear notation.",
-      "rubric_he": "4 נק' הסתברות אותו צבע; 3 נק' מותנית; 3 נק' סימון ברור."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "For $f(x)=x^2-6x+8$:\n\n(a) Find the vertex by completing the square.\n(b) Find x-intercepts.\n(c) Sketch the parabola showing vertex and intercepts.",
-      "body_he": "עבור $f(x)=x^2-6x+8$:\n\n(א) קודקוד בשלמות ריבוע.\n(ב) חיתוכי x.\n(ג) סקיצה.",
-      "points": 10,
-      "expected_steps_en": [
-        "Complete square: (x-3)²-1, vertex (3,-1)",
-        "Set f(x)=0 → x=2,4",
-        "Sketch upward parabola with labeled points"
-      ],
-      "expected_steps_he": [
-        "שלמות ריבוע: (x-3)²-1",
-        "אפסים: x=2,4",
-        "סקיצה עם קודקוד וחיתוכים"
-      ],
-      "sample_solution_en": "Vertex (3,-1), zeros x=2,4, opens up.",
-      "sample_solution_he": "קודקוד (3,-1), אפסים 2,4, פותח למעלה.",
-      "rubric_en": "3pts vertex; 3pts intercepts; 4pts sketch with labels.",
-      "rubric_he": "3 נק' קודקוד; 3 נק' חיתוכים; 4 נק' סקיצה."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- Conditional probability: $P(A\\mid B) = P(A\\cap B)/P(B)$ — restricts the sample space to $B$.\n- Joint probability: $P(A\\cap B) = P(B) \\cdot P(A\\mid B)$.\n- Independence: $P(A\\mid B) = P(A)$, equivalently $P(A\\cap B) = P(A)\\cdot P(B)$.\n- Total probability: use for two-stage problems — multiply along each branch, then sum.\n- Bayes: given an observed outcome, find which \"cause\" is most likely.\n- Always draw a tree for two-stage problems.",
+      "body_he_md": "- הסתברות מותנית: $P(A\\mid B) = P(A\\cap B)/P(B)$ — מגבילה את מרחב המדגם ל-$B$.\n- חיתוך: $P(A\\cap B) = P(B) \\cdot P(A\\mid B)$.\n- אי-תלות: $P(A\\mid B) = P(A)$, שקול ל-$P(A\\cap B) = P(A)\\cdot P(B)$.\n- הסתברות כוללת: שמשה לבעיות דו-שלביות — כפלו לאורך כל ענף, ואז סכמו.\n- בייס: בהינתן תוצאה שנצפתה, מצאו איזו \"סיבה\" סבירה יותר.\n- תמיד סרטטו עץ לבעיות דו-שלביות."
     }
   ]
 }

@@ -1,206 +1,233 @@
 {
-  "id": "probability_basics_3pt",
-  "type": "interactive",
-  "subject": "high_school_math_3pt",
-  "title_en": "Probability — Chance & Events",
-  "title_he": "הסתברות — סיכויים ואירועים",
-  "duration_min": 25,
-  "level_min": "3pt",
-  "agent_hints": "Hila is a reluctant Grade 11 learner. Keep the tone warm and encouraging throughout. The coin-flip intuition (0.5) is the best entry point — almost everyone has flipped a coin. Resist introducing formal notation before the intuition is solid. The complement shortcut P(A') = 1 − P(A) is very powerful for exam questions; make sure students see it as a time-saver, not extra theory. The Venn diagram description in the union/intersection section replaces a drawn diagram — paint it in words. The final 'putting it together' section deliberately revisits complement so students see two paths to the same answer.",
+  "concept_id": "probability_basics_3pt",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["3pt"],
+  "title_en": "Basic Probability — Sample Space, Events, and Simple Rules",
+  "title_he": "הסתברות בסיסית — מרחב מדגם, אירועים וכללים פשוטים",
+  "summary_en": "Probability measures how likely an event is, as a number between 0 and 1. P(A) = favourable outcomes / total outcomes. Key rules: complement, union, and intersection.",
+  "summary_he": "הסתברות מודדת כמה סביר שאירוע יקרה, כמספר בין 0 ל-1. P(A) = תוצאות רצויות / סך תוצאות. כללים מרכזיים: משלים, איחוד וחיתוך.",
+  "est_minutes": 55,
   "sections": [
     {
-      "id": "what_is_probability",
-      "title_en": "What is Probability?",
-      "title_he": "מהי הסתברות?",
-      "level_min": "3pt",
-      "body_en_md": "Probability is simply **how likely something is to happen**. Every day you already think in probabilities — you just might not use that word!\n\n- \"There's a 30% chance of rain\" — the weather app is giving you a probability.\n- \"I'll probably pass\" — you're estimating a probability.\n- \"It's impossible\" — that's a probability of **0**.\n- \"It's definitely happening\" — that's a probability of **1**.\n\nSo probabilities always live between 0 and 1:\n$$0 \\leq P(A) \\leq 1$$\n\n**The coin flip:** Flip a fair coin. You can get Heads (H) or Tails (T) — two equally likely outcomes. The probability of Heads is:\n$$P(\\text{Heads}) = \\frac{1}{2} = 0.5 = 50\\%$$\n\n**The formula:** In general, when all outcomes are equally likely:\n$$P(A) = \\frac{\\text{number of favorable outcomes}}{\\text{total number of outcomes}}$$\n\n**Weather analogy:** \"30% chance of rain\" means that in similar weather conditions, it rains about 30 out of every 100 days. The probability of **not** raining is 70% — because $30\\% + 70\\% = 100\\%$.\n\n> 💡 Think of probability as a number between 0 and 1 that measures *how confident* we are something will happen.",
-      "body_he_md": "הסתברות היא פשוט **איך סביר שמשהו יקרה**. בכל יום את/ה כבר חושב/ת בהסתברויות — רק אולי לא קראת לזה בשם הזה!\n\n- \"יש 30% סיכוי לגשם\" — אפליקציית מזג האוויר נותנת לך הסתברות.\n- \"בטח אעבור\" — את/ה מעריך/ה הסתברות.\n- \"זה בלתי אפשרי\" — זו הסתברות **0**.\n- \"זה בטוח לקרות\" — זו הסתברות **1**.\n\nכך הסתברויות תמיד נמצאות בין 0 ל-1:\n$$0 \\leq P(A) \\leq 1$$\n\n**הטלת מטבע:** זורקים מטבע הוגן. אפשר לקבל עץ (ע) או פלי (פ) — שתי תוצאות שוות סיכוי. ההסתברות לקבל עץ היא:\n$$P(\\text{עץ}) = \\frac{1}{2} = 0.5 = 50\\%$$\n\n**הנוסחה:** באופן כללי, כשכל התוצאות שוות סיכוי:\n$$P(A) = \\frac{\\text{מספר התוצאות הטובות}}{\\text{סך התוצאות האפשריות}}$$\n\n**אנלוגיית מזג האוויר:** \"30% סיכוי לגשם\" אומר שבתנאי מזג אוויר דומים, גשם בכ-30 מתוך 100 ימים. ההסתברות שלא ירד גשם היא 70% — כי $30\\% + 70\\% = 100\\%$.\n\n> 💡 חשב/י על הסתברות כמספר בין 0 ל-1 שמודד איך *בטוחים* שמשהו יקרה."
+      "kind": "intro",
+      "title_en": "Why Do We Study Probability?",
+      "title_he": "למה אנחנו לומדים הסתברות?",
+      "body_en_md": "Every day we make decisions under uncertainty:\n- Will it rain today? (Weather forecast — 70% chance of rain.)\n- What are the odds of winning the lottery?\n- If I roll a die, how likely is it to get a 6?\n\nProbability gives us a **mathematical language** for measuring uncertainty. A probability of 0 means **impossible**, a probability of 1 means **certain**, and anything in between measures the likelihood.\n\nIn this lesson you will learn the fundamental rules for counting outcomes and calculating probabilities — tools you will use throughout your Bagrut exam.",
+      "body_he_md": "כל יום אנחנו מקבלים החלטות תחת אי-ודאות:\n- האם ירד גשם היום? (תחזית מזג אוויר — 70% סיכוי לגשם.)\n- מה הסיכויים לזכות בלוטו?\n- אם אזרוק קוביה, מה הסיכוי לקבל 6?\n\nהסתברות נותנת לנו **שפה מתמטית** למדידת אי-ודאות. הסתברות 0 פירושה **בלתי אפשרי**, הסתברות 1 פירושה **ודאי**, וכל מה שביניהם מודד את הסיכוי.\n\nבשיעור זה תלמדו את הכללים הבסיסיים לספירת תוצאות וחישוב הסתברויות — כלים שתשתמשו בהם לאורך בחינת הבגרות."
     },
     {
-      "id": "sample_space_events",
-      "title_en": "Sample Space & Events",
-      "title_he": "מרחב מדגם ואירועים",
-      "level_min": "3pt",
-      "body_en_md": "**Sample space (S)** is the set of ALL possible outcomes of an experiment.\n\n**Examples:**\n- Roll a die: $S = \\{1, 2, 3, 4, 5, 6\\}$ — 6 possible outcomes.\n- Flip a coin: $S = \\{H, T\\}$ — 2 possible outcomes.\n- Draw a card from a standard deck: $S$ has 52 outcomes.\n\n**Event** is any subset of the sample space — a specific outcome or group of outcomes we care about.\n\n**Worked example — Die Roll:**\n\nLet event $A$ = \"get an even number\".\n- Even numbers on a die: $A = \\{2, 4, 6\\}$\n- $|A| = 3$ outcomes are favorable.\n- $|S| = 6$ total outcomes.\n$$P(A) = \\frac{3}{6} = \\frac{1}{2}$$\n\n**Another example — Card Draw:**\n\nLet event $B$ = \"draw a King\".\n- There are 4 Kings in the deck.\n$$P(B) = \\frac{4}{52} = \\frac{1}{13} \\approx 0.077$$\n\n**Key insight:** The larger the event (more outcomes in it), the higher its probability. An event that includes ALL outcomes has probability 1 (certain). An event with NO outcomes has probability 0 (impossible).\n\n> 🎲 The sample space is the \"universe\" — every possible story. An event is just one chapter of that story.",
-      "body_he_md": "**מרחב המדגם (S)** הוא קבוצת כל התוצאות האפשריות של ניסוי.\n\nדוגמאות:\n- זריקת קוביה: $S = \\{1, 2, 3, 4, 5, 6\\}$ — 6 תוצאות אפשריות.\n- הטלת מטבע: $S = \\{\\text{עץ}, \\text{פלי}\\}$ — 2 תוצאות.\n- שליפת קלף מחפיסת קלפים רגילה: ל-$S$ יש 52 תוצאות.\n\n**אירוע** הוא כל תת-קבוצה של מרחב המדגם — תוצאה ספציפית או קבוצת תוצאות שמעניינות אותנו.\n\n**דוגמה פתורה — זריקת קוביה:**\n\nנסמן אירוע $A$ = \"לקבל מספר זוגי\".\n- מספרים זוגיים על הקוביה: $A = \\{2, 4, 6\\}$\n- $|A| = 3$ תוצאות טובות.\n- $|S| = 6$ תוצאות בסך.\n$$P(A) = \\frac{3}{6} = \\frac{1}{2}$$\n\n**דוגמה נוספת — שליפת קלף:**\n\nאירוע $B$ = \"לשלוף מלך\".\n- יש 4 מלכים בחפיסה.\n$$P(B) = \\frac{4}{52} = \\frac{1}{13} \\approx 0.077$$\n\n**תובנה מפתחת:** כל שהאירוע גדול יותר (יותר תוצאות בו), כך הסתברותו גבוהה יותר. אירוע שכולל את כל התוצאות הוא בטוח (הסתברות 1). אירוע ריק הוא בלתי אפשרי (הסתברות 0).\n\n> 🎲 מרחב המדגם הוא \"היקום\" — כל סיפור אפשרי. אירוע הוא רק פרק אחד מאותו הסיפור."
+      "kind": "definition",
+      "title_en": "Key Terms",
+      "title_he": "מושגי יסוד",
+      "body_en_md": "- **Experiment:** a process with uncertain outcomes (e.g., rolling a die).\n- **Sample space** $S$: the set of ALL possible outcomes.\n  - Die: $S = \\{1, 2, 3, 4, 5, 6\\}$, so $|S| = 6$.\n- **Event** $A$: a subset of $S$ (e.g., $A = \\{2, 4, 6\\}$ = rolling an even number).\n- **Probability of $A$:**\n$$P(A) = \\frac{\\text{number of favourable outcomes}}{\\text{total number of equally likely outcomes}} = \\frac{|A|}{|S|}$$\n- $0 \\le P(A) \\le 1$ always.\n- **Complement** $\\bar{A}$ = the event \"$A$ does not happen\": $P(\\bar{A}) = 1 - P(A)$.\n- **Union** $A \\cup B$ = \"$A$ or $B$ (or both)\": $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n- **Intersection** $A \\cap B$ = \"both $A$ and $B$\".\n- **Mutually exclusive:** $A \\cap B = \\emptyset$, so $P(A \\cup B) = P(A) + P(B)$.",
+      "body_he_md": "- **ניסוי:** תהליך עם תוצאות לא-ודאיות (למשל, הטלת קוביה).\n- **מרחב מדגם** $S$: קבוצת כל התוצאות האפשריות.\n  - קוביה: $S = \\{1, 2, 3, 4, 5, 6\\}$, כלומר $|S| = 6$.\n- **אירוע** $A$: תת-קבוצה של $S$ (למשל, $A = \\{2, 4, 6\\}$ = הטלת מספר זוגי).\n- **הסתברות של $A$:**\n$$P(A) = \\frac{\\text{מספר התוצאות הרצויות}}{\\text{מספר כל התוצאות השקולות}} = \\frac{|A|}{|S|}$$\n- $0 \\le P(A) \\le 1$ תמיד.\n- **משלים** $\\bar{A}$ = האירוע \"$A$ לא קורה\": $P(\\bar{A}) = 1 - P(A)$.\n- **איחוד** $A \\cup B$ = \"$A$ או $B$ (או שניהם)\": $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.\n- **חיתוך** $A \\cap B$ = \"גם $A$ וגם $B$\".\n- **זרים (בלתי חופפים):** $A \\cap B = \\emptyset$, לכן $P(A \\cup B) = P(A) + P(B)$."
     },
     {
-      "id": "complement",
-      "title_en": "The Complement Rule",
-      "title_he": "כלל המשלים",
-      "level_min": "3pt",
-      "body_en_md": "The **complement** of event $A$ (written $A'$ or $\\bar{A}$) is the event that $A$ does **not** happen.\n\nSince $A$ either happens or it doesn't, and both options together cover all possibilities:\n$$P(A) + P(A') = 1$$\n$$\\boxed{P(A') = 1 - P(A)}$$\n\n**Weather example:**\n- $P(\\text{rain}) = 0.3$\n- $P(\\text{no rain}) = 1 - 0.3 = 0.7$\n\n**Exam example:** If the probability of passing a test is $P(\\text{pass}) = 0.75$, then:\n$$P(\\text{fail}) = 1 - 0.75 = 0.25$$\n\n**Why is this useful?** Sometimes it's much easier to calculate $P(A')$ directly, and then use the formula above to get $P(A)$.\n\n**Strategy tip:** If a question asks for P(\"at least one...\") or P(\"not all...\"), the complement is often the fastest path:\n$$P(\\text{at least one success}) = 1 - P(\\text{no successes at all})$$\n\n> 🔄 Think of it like a budget: if you spend 30% of your allowance, you automatically have 70% left. Probabilities work exactly the same way.",
-      "body_he_md": "ה**משלים** של אירוע $A$ (נכתב $A'$ או $\\bar{A}$) הוא האירוע ש-$A$ **לא** קורה.\n\nמכיוון ש-$A$ או קורה או לא, ושתי האפשרויות יחד מכסות את כל האפשרויות:\n$$P(A) + P(A') = 1$$\n$$\\boxed{P(A') = 1 - P(A)}$$\n\n**דוגמה ממזג אוויר:**\n- $P(\\text{גשם}) = 0.3$\n- $P(\\text{לא גשם}) = 1 - 0.3 = 0.7$\n\n**דוגמה ממבחן:** אם ההסתברות לעבור מבחן היא $P(\\text{עבר}) = 0.75$, אז:\n$$P(\\text{נכשל}) = 1 - 0.75 = 0.25$$\n\n**למה זה שימושי?** לפעמים קל יותר לחשב את $P(A')$ ישירות, ואז להשתמש בנוסחה למציאת $P(A)$.\n\n**טיפ אסטרטגיה:** אם שאלה מבקשת P(\"לפחות אחד...\") או P(\"לא כל...\"), המשלים הוא לעתים קרובות הדרך המהירה ביותר:\n$$P(\\text{לפחות הצלחה אחת}) = 1 - P(\\text{שום הצלחה})$$\n\n> 🔄 חשב/י על זה כמו תקציב: אם הוצאת/י 30% מדמי הכיס, אוטומטית נשאר לך 70%. הסתברויות עובדות בדיוק אותו הדבר."
+      "kind": "theory",
+      "title_en": "The Addition Rule and Complement Rule",
+      "title_he": "כלל החיבור וכלל המשלים",
+      "body_en_md": "**Complement rule:** Always faster when \"at least one\" or \"not\" appears:\n$$P(\\bar{A}) = 1 - P(A)$$\n\n**Addition rule (general):**\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$\nWe subtract $P(A \\cap B)$ because outcomes in both $A$ and $B$ are counted twice.\n\n**Special case — mutually exclusive ($A \\cap B = \\emptyset$):**\n$$P(A \\cup B) = P(A) + P(B)$$\n\n**Example:** Roll a die. $A$ = even, $B$ = greater than 4.\n- $P(A) = 3/6 = 1/2$; $P(B) = 2/6 = 1/3$; $A \\cap B = \\{6\\}$, so $P(A \\cap B) = 1/6$.\n- $P(A \\cup B) = 1/2 + 1/3 - 1/6 = 3/6 + 2/6 - 1/6 = 4/6 = 2/3$.",
+      "body_he_md": "**כלל המשלים:** תמיד מהיר יותר כאשר מופיע \"לפחות אחד\" או \"לא\":\n$$P(\\bar{A}) = 1 - P(A)$$\n\n**כלל החיבור (כללי):**\n$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$\nאנחנו מחסירים $P(A \\cap B)$ כי תוצאות ב-$A$ וב-$B$ נספרות פעמיים.\n\n**מקרה מיוחד — זרים ($A \\cap B = \\emptyset$):**\n$$P(A \\cup B) = P(A) + P(B)$$\n\n**דוגמה:** הטלת קוביה. $A$ = זוגי, $B$ = גדול מ-4.\n- $P(A) = 3/6 = 1/2$; $P(B) = 2/6 = 1/3$; $A \\cap B = \\{6\\}$, כלומר $P(A \\cap B) = 1/6$.\n- $P(A \\cup B) = 1/2 + 1/3 - 1/6 = 3/6 + 2/6 - 1/6 = 4/6 = 2/3$."
     },
     {
-      "id": "union_intersection",
-      "title_en": "Union and Intersection",
-      "title_he": "איחוד וחיתוך",
-      "level_min": "3pt",
-      "body_en_md": "**Intersection** $A \\cap B$: outcomes in **both** $A$ AND $B$. (\"A and B\")\n\n**Union** $A \\cup B$: outcomes in $A$ OR $B$ (or both). (\"A or B\")\n\n**The Addition Formula:**\n$$\\boxed{P(A \\cup B) = P(A) + P(B) - P(A \\cap B)}$$\n\nWhy subtract $P(A \\cap B)$? Because outcomes in both $A$ and $B$ get counted twice if we just add $P(A) + P(B)$, so we subtract once to fix the double-count.\n\n**Venn Diagram — Picture This:**\nImagine two overlapping circles. Left circle = event $A$. Right circle = event $B$. The overlapping middle region = $A \\cap B$. The entire shaded region of both circles = $A \\cup B$.\n\n**Worked Example — Class Survey:**\nA class of 30 students. 18 like math ($M$), 14 like science ($S$), and 8 like both.\n\n- $P(M) = \\frac{18}{30} = 0.6$\n- $P(S) = \\frac{14}{30} \\approx 0.467$\n- $P(M \\cap S) = \\frac{8}{30} \\approx 0.267$\n\n$$P(M \\cup S) = 0.6 + 0.467 - 0.267 = 0.8$$\n\nSo 80% of the class likes math or science (or both).\n\n**Special case — Mutually Exclusive Events:** If $A$ and $B$ cannot both happen (e.g. \"get a 1\" and \"get a 2\" on a single die roll), then $P(A \\cap B) = 0$, so:\n$$P(A \\cup B) = P(A) + P(B)$$",
-      "body_he_md": "חיתוך $A \\cap B$: תוצאות שנמצאות **בשני האירועים** $A$ ו-$B$. (\"גם $A$ וגם $B$\")\n\nאיחוד $A \\cup B$: תוצאות שנמצאות ב-$A$ או ב-$B$ (או בשניהם). (\"$A$ או $B$\")\n\nנוסחת האיחוד:\n$$\\boxed{P(A \\cup B) = P(A) + P(B) - P(A \\cap B)}$$\n\nלמה מספרים $P(A \\cap B)$? כי תוצאות שנמצאות בשני האירועים נספרות פעמיים אם פשוט מחברים $P(A) + P(B)$, אז מספרים פעם אחת כדי לתקן.\n\n**דיאגרמת וון — דמיינו את זה:**\nשתי עיגולות חופפות. עיגול שמאל = אירוע $A$. עיגול ימיני = אירוע $B$. אזור החפיפה האמצעי = $A \\cap B$. כל השטח המצויין בשתי העיגולות = $A \\cup B$.\n\n**דוגמה פתורה — סקר כיתה:**\nכיתה של 30 תלמידים. 18 אוהבים מתמטיקה ($M$), 14 אוהבים מדע ($S$), ו-8 אוהבים את שניהם.\n\n- $P(M) = \\frac{18}{30} = 0.6$\n- $P(S) = \\frac{14}{30} \\approx 0.467$\n- $P(M \\cap S) = \\frac{8}{30} \\approx 0.267$\n\n$$P(M \\cup S) = 0.6 + 0.467 - 0.267 = 0.8$$\n\nכלומר: 80% מהכיתה אוהבת מתמטיקה או מדע (או שניהם).\n\n**מקרה מיוחד — אירועים מנוגדים:** אם $A$ ו-$B$ לא יכולים שניהם לקרות בוויקת באת (למשל \"לקבל 1\" ו\"לקבל 2\" בזריקת קוביה אחת), אז $P(A \\cap B) = 0$ ו:\n$$P(A \\cup B) = P(A) + P(B)$$"
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Die Roll: P(even)",
+      "title_he": "דוגמה פתורה 1 — הטלת קוביה: P(זוגי)",
+      "body_en_md": "**Experiment:** A fair die is rolled once.\n\n**Find:** $P(\\text{even})$.\n\n**Step 1 — Write the sample space:**\n$$S = \\{1, 2, 3, 4, 5, 6\\}, \\quad |S| = 6$$\n\n**Step 2 — Identify the event:**\n$$A = \\{\\text{even}\\} = \\{2, 4, 6\\}, \\quad |A| = 3$$\n\n**Step 3 — Calculate:**\n$$P(A) = \\frac{|A|}{|S|} = \\frac{3}{6} = \\frac{1}{2}$$\n\n**Bonus — P(not even):**\n$$P(\\bar{A}) = 1 - \\frac{1}{2} = \\frac{1}{2}$$\n\n**Answer:** $P(\\text{even}) = \\dfrac{1}{2}$.",
+      "body_he_md": "**ניסוי:** מטילים קוביה הוגנת פעם אחת.\n\n**מצאו:** $P(\\text{זוגי})$.\n\n**שלב 1 — מרחב המדגם:**\n$$S = \\{1, 2, 3, 4, 5, 6\\}, \\quad |S| = 6$$\n\n**שלב 2 — זיהוי האירוע:**\n$$A = \\{\\text{זוגי}\\} = \\{2, 4, 6\\}, \\quad |A| = 3$$\n\n**שלב 3 — חישוב:**\n$$P(A) = \\frac{|A|}{|S|} = \\frac{3}{6} = \\frac{1}{2}$$\n\n**בונוס — P(לא זוגי):**\n$$P(\\bar{A}) = 1 - \\frac{1}{2} = \\frac{1}{2}$$\n\n**תשובה:** $P(\\text{זוגי}) = \\dfrac{1}{2}$."
     },
     {
-      "id": "putting_it_together",
-      "title_en": "Putting It Together",
-      "title_he": "משלבים הכל",
-      "level_min": "3pt",
-      "body_en_md": "Let's solve a classic exam-style problem from scratch.\n\n**Problem:** A fair coin is flipped **twice**. What is the probability of getting **at least one Head**?\n\n**Step 1 — Write the sample space:**\n$S = \\{HH, HT, TH, TT\\}$ — 4 equally likely outcomes.\n\n**Step 2 — Identify favorable outcomes:**\n\"At least one Head\" means: HH, HT, or TH. That's 3 outcomes.\n$$P(\\text{at least one H}) = \\frac{3}{4}$$\n\n**Step 3 — Check using the complement (shortcut):**\nThe complement of \"at least one H\" is \"zero Heads\" = only TT.\n$$P(\\text{at least one H}) = 1 - P(\\text{no H}) = 1 - \\frac{1}{4} = \\frac{3}{4} \\checkmark$$\n\nBoth methods give the same answer. The complement method is often faster when the \"at least one\" event has many favorable outcomes!\n\n---\n\n**Key formulas to remember:**\n\n| Formula | Meaning |\n|---|---|\n| $P(A) = \\frac{\\text{favorable}}{\\text{total}}$ | Basic probability |\n| $P(A') = 1 - P(A)$ | Complement |\n| $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ | Addition rule |\n\n> ✅ You've got the core toolkit for 3pt probability. Practice these formulas until they feel automatic!",
-      "body_he_md": "בואו נפתור שאלה קלאסית ממבחן מההתחלה.\n\n**בעיה:** מטבע הוגן נזרק **פעמיים**. מהי ההסתברות לקבל **לפחות עץ אחד**?\n\n**שלב 1 — רשום את מרחב המדגם:**\n$S = \\{\\text{עע}, \\text{עפ}, \\text{פע}, \\text{פפ}\\}$ — 4 תוצאות שוות סיכוי.\n\n**שלב 2 — זיהוי תוצאות טובות:**\n\"לפחות עץ אחד\" פירוש: עע, עפ, או פע. זה 3 תוצאות.\n$$P(\\text{לפחות עץ אחד}) = \\frac{3}{4}$$\n\n**שלב 3 — בדיקה עם המשלים (קיצור דרך):**\nהמשלים של \"לפחות עץ אחד\" הוא \"אפס עצים\" = רק פפ.\n$$P(\\text{לפחות עץ אחד}) = 1 - P(\\text{אף עץ}) = 1 - \\frac{1}{4} = \\frac{3}{4} \\checkmark$$\n\nשתי השיטות נותנות אותה תשובה. שיטת המשלים עדיפה מהירה כשלאירוע \"לפחות אחד\" יש הרבה תוצאות טובות!\n\n---\n\n**נוסחאות מפתח לזכור:**\n\n| נוסחה | משמעות |\n|---|---|\n| $P(A) = \\frac{\\text{טובות}}{\\text{סך}}$ | הסתברות בסיסית |\n| $P(A') = 1 - P(A)$ | משלים |\n| $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ | כלל האיחוד |\n\n> ✅ קיבלת/י את ארגז הכלים הבסיסי להסתברות ב-3 יחידות. תתרגל/י את הנוסחאות האלה עד שהן ירגישו אוטומטיות!"
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A fair die is rolled. Find: (a) $P(\\text{number} > 4)$, (b) $P(\\text{number} \\le 4)$.",
+      "body_he_md": "מטילים קוביה הוגנת. מצאו: (א) $P(\\text{מספר} > 4)$, (ב) $P(\\text{מספר} \\le 4)$.",
+      "checkpoint_solution_en": "(a) Outcomes > 4: {5, 6}. P = 2/6 = 1/3. (b) P(≤4) = 1 − 1/3 = 2/3. (Or count {1,2,3,4}: 4/6 = 2/3.)",
+      "checkpoint_solution_he": "(א) תוצאות > 4: {5, 6}. P = 2/6 = 1/3. (ב) P(≤4) = 1 − 1/3 = 2/3. (או לספור {1,2,3,4}: 4/6 = 2/3.)"
     },
     {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "3pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\n(a) A bag has 5 red and 3 blue balls. Two balls are drawn **without replacement**. Find the probability both are the same color.\n\n(b) Given that the first ball drawn was red, find the probability the second is also red.\n\n**Complete Solution:**\n\n(a) Same color = both red OR both blue.\n$P(RR) = \\frac{5}{8}\\cdot\\frac{4}{7} = \\frac{20}{56}$, $P(BB) = \\frac{3}{8}\\cdot\\frac{2}{7} = \\frac{6}{56}$.\n$P(\\text{same}) = \\frac{26}{56} = \\frac{13}{28}$.\n\n(b) After one red remains 4 red of 7: $P(R_2|R_1) = \\frac{4}{7}$.\n\n---\n\n**Practice Problem 2:**\n\n(a) A fair coin is flipped three times. Find $P(\\text{at least two heads})$.\n\n(b) Use the complement rule to verify your answer.\n\n**Complete Solution:**\n\n(a) Favorable: HHH, HHT, HTH, THH → $P = \\frac{4}{8} = \\frac{1}{2}$.\n\n(b) Complement = 0 or 1 head: TTT, HTT, THT, TTH → $\\frac{4}{8} = \\frac{1}{2}$ ✓",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\n(א) בשק 5 כדורים אדומים ו-3 כחולים. שולפים **ללא החזרה** 2 כדורים. מצאו את ההסתברות ששניהם באותו צבע.\n\n(ב) ידוע שהראשון אדום — מה ההסתברות שגם השני אדום?\n\n**פתרון מלא:**\n\n(א) $P(RR)=\\frac{5}{8}\\cdot\\frac{4}{7}=\\frac{20}{56}$, $P(BB)=\\frac{3}{8}\\cdot\\frac{2}{7}=\\frac{6}{56}$ → $P=\\frac{13}{28}$.\n\n(ב) $P(R_2|R_1)=\\frac{4}{7}$.\n\n---\n\n**שאלת תרגול 2:**\n\n(א) מטבע הוגן נזרק 3 פעמים. מצאו $P(\\text{לפחות 2 עצים})$.\n\n(ב) אמתו עם כלל המשלים.\n\n**פתרון מלא:**\n\n(א) 4 מתוך 8 → $\\frac{1}{2}$. (ב) משלים = 0 או 1 עץ → $\\frac{1}{2}$ ✓"
-    }
-  ],
-  "questions": [
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Cards 1–10: P(prime)",
+      "title_he": "דוגמה פתורה 2 — קלפים 1–10: P(ראשוני)",
+      "body_en_md": "**Experiment:** From 10 cards numbered 1–10, one is drawn at random.\n\n**Find:** $P(\\text{prime number})$.\n\n**Step 1 — Sample space:**\n$$S = \\{1, 2, 3, 4, 5, 6, 7, 8, 9, 10\\}, \\quad |S| = 10$$\n\n**Step 2 — Identify prime numbers (divisible only by 1 and themselves):**\n- 1 is NOT prime.\n- Primes in $S$: $\\{2, 3, 5, 7\\}$, so $|A| = 4$.\n\n**Step 3 — Calculate:**\n$$P(\\text{prime}) = \\frac{4}{10} = \\frac{2}{5}$$\n\n**Bonus — P(not prime):**\n$$P(\\overline{\\text{prime}}) = 1 - \\frac{2}{5} = \\frac{3}{5}$$\n\n**Answer:** $P(\\text{prime}) = \\dfrac{2}{5} = 0.4$.",
+      "body_he_md": "**ניסוי:** מ-10 קלפים הממוספרים 1–10 שולפים קלף אחד באקראי.\n\n**מצאו:** $P(\\text{מספר ראשוני})$.\n\n**שלב 1 — מרחב מדגם:**\n$$S = \\{1, 2, 3, 4, 5, 6, 7, 8, 9, 10\\}, \\quad |S| = 10$$\n\n**שלב 2 — זיהוי מספרים ראשוניים (מתחלקים רק ב-1 ובעצמם):**\n- 1 הוא לא ראשוני.\n- ראשוניים ב-$S$: $\\{2, 3, 5, 7\\}$, כלומר $|A| = 4$.\n\n**שלב 3 — חישוב:**\n$$P(\\text{ראשוני}) = \\frac{4}{10} = \\frac{2}{5}$$\n\n**בונוס — P(לא ראשוני):**\n$$P(\\overline{\\text{ראשוני}}) = 1 - \\frac{2}{5} = \\frac{3}{5}$$\n\n**תשובה:** $P(\\text{ראשוני}) = \\dfrac{2}{5} = 0.4$."
+    },
     {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A bag contains 4 red balls and 6 blue balls. You draw one ball at random. What is $P(\\text{red})$?",
-      "body_he": "שק מכיל 4 כדורים אדומים ו-6 כדורים כחולים. שולף/ת כדור אחד באקראי. מהי $P(\\text{אדום})$?",
-      "options": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "From cards 1–10, find: (a) $P(\\text{even or prime})$. (b) $P(\\text{even and prime})$.",
+      "body_he_md": "מקלפים 1–10, מצאו: (א) $P(\\text{זוגי או ראשוני})$. (ב) $P(\\text{זוגי וראשוני})$.",
+      "checkpoint_solution_en": "Even: {2,4,6,8,10}, |A|=5. Prime: {2,3,5,7}, |B|=4. Intersection: {2}, |A∩B|=1. (a) P(A∪B) = 5/10 + 4/10 − 1/10 = 8/10 = 4/5. (b) P(A∩B) = 1/10.",
+      "checkpoint_solution_he": "זוגי: {2,4,6,8,10}, |A|=5. ראשוני: {2,3,5,7}, |B|=4. חיתוך: {2}, |A∩B|=1. (א) P(A∪B) = 5/10 + 4/10 − 1/10 = 8/10 = 4/5. (ב) P(A∩B) = 1/10."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Choosing Two from a Class",
+      "title_he": "דוגמה פתורה 3 — בחירת שניים מכיתה",
+      "body_en_md": "**Problem:** A class has 15 boys and 10 girls (25 students total). Two students are chosen at random (without replacement).\n\n**Find:** $P(\\text{both girls})$.\n\n**Step 1 — Total ways to choose 2 from 25:**\n$$\\binom{25}{2} = \\frac{25 \\times 24}{2} = 300$$\n\n**Step 2 — Ways to choose 2 girls from 10:**\n$$\\binom{10}{2} = \\frac{10 \\times 9}{2} = 45$$\n\n**Step 3 — Probability:**\n$$P(\\text{both girls}) = \\frac{45}{300} = \\frac{3}{20} = 0.15$$\n\n**Alternative (using conditional probability):**\n$$P = \\frac{10}{25} \\times \\frac{9}{24} = \\frac{90}{600} = \\frac{3}{20}$$\n\n**Answer:** $P(\\text{both girls}) = \\dfrac{3}{20} = 15\\%$.",
+      "body_he_md": "**בעיה:** בכיתה יש 15 בנים ו-10 בנות (25 תלמידים סה\"כ). בוחרים שני תלמידים באקראי (ללא החזרה).\n\n**מצאו:** $P(\\text{שתי בנות})$.\n\n**שלב 1 — סך הדרכים לבחור 2 מתוך 25:**\n$$\\binom{25}{2} = \\frac{25 \\times 24}{2} = 300$$\n\n**שלב 2 — דרכים לבחור 2 בנות מתוך 10:**\n$$\\binom{10}{2} = \\frac{10 \\times 9}{2} = 45$$\n\n**שלב 3 — הסתברות:**\n$$P(\\text{שתי בנות}) = \\frac{45}{300} = \\frac{3}{20} = 0.15$$\n\n**חלופה (הסתברות מותנית):**\n$$P = \\frac{10}{25} \\times \\frac{9}{24} = \\frac{90}{600} = \\frac{3}{20}$$\n\n**תשובה:** $P(\\text{שתי בנות}) = \\dfrac{3}{20} = 15\\%$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Basic Probability Checklist",
+      "title_he": "מדריך שיטה — רשימת בדיקה להסתברות בסיסית",
+      "body_en_md": "| Task | Formula / Method |\n|------|------------------|\n| Simple event | $P(A) = \\frac{|A|}{|S|}$ |\n| Complement | $P(\\bar{A}) = 1 - P(A)$ |\n| Union (general) | $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ |\n| Union (mutually exclusive) | $P(A \\cup B) = P(A) + P(B)$ |\n| Choose without replacement | Multiply: $\\frac{k}{n} \\times \\frac{k-1}{n-1}$ or use $\\binom{n}{r}$ |\n\n**Workflow for any problem:**\n1. Identify $S$ and compute $|S|$.\n2. Identify the event $A$ and compute $|A|$.\n3. Apply the formula.",
+      "body_he_md": "| משימה | נוסחה / שיטה |\n|-------|-------------|\n| אירוע פשוט | $P(A) = \\frac{|A|}{|S|}$ |\n| משלים | $P(\\bar{A}) = 1 - P(A)$ |\n| איחוד (כללי) | $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ |\n| איחוד (זרים) | $P(A \\cup B) = P(A) + P(B)$ |\n| בחירה ללא החזרה | כפל: $\\frac{k}{n} \\times \\frac{k-1}{n-1}$ או שימוש ב-$\\binom{n}{r}$ |\n\n**תהליך עבודה לכל בעיה:**\n1. זהו את $S$ וחשבו $|S|$.\n2. זהו את האירוע $A$ וחשבו $|A|$.\n3. הפעילו את הנוסחה."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים לתרגול",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "$\\frac{1}{4}$",
-          "text_he": "$\\frac{1}{4}$",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A fair die is rolled. Find $P(3)$ and $P(\\text{not } 3)$.",
+          "body_he": "מטילים קוביה הוגנת. מצאו $P(3)$ ו-$P(\\text{לא } 3)$.",
+          "solution_en": "P(3) = 1/6. P(not 3) = 1 − 1/6 = 5/6.",
+          "solution_he": "P(3) = 1/6. P(לא 3) = 1 − 1/6 = 5/6.",
+          "points": 4
         },
         {
-          "id": "b",
-          "text_en": "$\\frac{2}{5}$",
-          "text_he": "$\\frac{2}{5}$",
-          "correct": true
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A bag has 4 red balls and 6 blue balls. One ball is drawn. Find $P(\\text{red})$.",
+          "body_he": "שקית מכילה 4 כדורים אדומים ו-6 כדורים כחולים. שולפים כדור אחד. מצאו $P(\\text{אדום})$.",
+          "solution_en": "|S| = 10. |red| = 4. P(red) = 4/10 = 2/5.",
+          "solution_he": "|S| = 10. |אדום| = 4. P(אדום) = 4/10 = 2/5.",
+          "points": 4
         },
         {
-          "id": "c",
-          "text_en": "$\\frac{3}{5}$",
-          "text_he": "$\\frac{3}{5}$",
-          "correct": false
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "A spinner has sections: 1, 2, 3, 4, 5 (equal size). Find $P(\\text{odd})$.",
+          "body_he": "גלגל מחולק ל-5 חלקים שווים: 1, 2, 3, 4, 5. מצאו $P(\\text{אי-זוגי})$.",
+          "solution_en": "Odd: {1,3,5}. P(odd) = 3/5.",
+          "solution_he": "אי-זוגי: {1,3,5}. P(אי-זוגי) = 3/5.",
+          "points": 4
         },
         {
-          "id": "d",
-          "text_en": "$\\frac{1}{2}$",
-          "text_he": "$\\frac{1}{2}$",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Events $A$ and $B$ are mutually exclusive. $P(A) = 0.3$, $P(B) = 0.4$. Find $P(A \\cup B)$.",
+          "body_he": "אירועים $A$ ו-$B$ זרים. $P(A) = 0.3$, $P(B) = 0.4$. מצאו $P(A \\cup B)$.",
+          "solution_en": "P(A∪B) = 0.3 + 0.4 = 0.7.",
+          "solution_he": "P(A∪B) = 0.3 + 0.4 = 0.7.",
+          "points": 4
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "From cards 1–20, one is chosen. Find $P(\\text{divisible by 3 or by 5})$.",
+          "body_he": "מקלפים 1–20, בוחרים אחד. מצאו $P(\\text{מתחלק ב-3 או ב-5})$.",
+          "solution_en": "Div by 3: {3,6,9,12,15,18} → 6. Div by 5: {5,10,15,20} → 4. Div by 15: {15} → 1. P = (6+4−1)/20 = 9/20.",
+          "solution_he": "מתחלק ב-3: {3,6,9,12,15,18} → 6. מתחלק ב-5: {5,10,15,20} → 4. מתחלק ב-15: {15} → 1. P = (6+4−1)/20 = 9/20.",
+          "points": 6
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "$P(A) = 0.5$, $P(B) = 0.4$, $P(A \\cap B) = 0.2$. Find (a) $P(A \\cup B)$, (b) $P(\\bar{A})$, (c) $P(\\bar{A} \\cap \\bar{B})$.",
+          "body_he": "$P(A) = 0.5$, $P(B) = 0.4$, $P(A \\cap B) = 0.2$. מצאו (א) $P(A \\cup B)$, (ב) $P(\\bar{A})$, (ג) $P(\\bar{A} \\cap \\bar{B})$.",
+          "solution_en": "(a) 0.5+0.4−0.2 = 0.7. (b) 1−0.5 = 0.5. (c) P(not A and not B) = 1 − P(A∪B) = 1 − 0.7 = 0.3.",
+          "solution_he": "(א) 0.5+0.4−0.2 = 0.7. (ב) 1−0.5 = 0.5. (ג) P(לא A ולא B) = 1 − P(A∪B) = 1 − 0.7 = 0.3.",
+          "points": 6
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A bag has 5 red, 3 green, 2 blue balls. One ball is drawn. Find $P(\\text{red or blue})$.",
+          "body_he": "שקית מכילה 5 אדומים, 3 ירוקים, 2 כחולים. שולפים כדור. מצאו $P(\\text{אדום או כחול})$.",
+          "solution_en": "|S|=10. Red or blue = 5+2 = 7 (mutually exclusive). P = 7/10.",
+          "solution_he": "|S|=10. אדום או כחול = 5+2 = 7 (זרים). P = 7/10.",
+          "points": 6
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A fair coin is flipped twice. Find $P(\\text{at least one head})$.",
+          "body_he": "מטילים מטבע הוגן פעמיים. מצאו $P(\\text{לפחות עץ אחד})$.",
+          "solution_en": "S = {HH,HT,TH,TT}. P(no heads) = P(TT) = 1/4. P(at least one head) = 1 − 1/4 = 3/4.",
+          "solution_he": "S = {עע,עפ,פע,פפ}. P(אין עץ) = P(פפ) = 1/4. P(לפחות עץ) = 1 − 1/4 = 3/4.",
+          "points": 6
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A group of 6 boys and 4 girls. A leader is chosen at random. Find $P(\\text{girl})$ and $P(\\text{not boy})$.",
+          "body_he": "קבוצה של 6 בנים ו-4 בנות. בוחרים מנהיג באקראי. מצאו $P(\\text{בת})$ ו-$P(\\text{לא בן})$.",
+          "solution_en": "P(girl) = 4/10 = 2/5. P(not boy) = P(girl) = 2/5.",
+          "solution_he": "P(בת) = 4/10 = 2/5. P(לא בן) = P(בת) = 2/5.",
+          "points": 6
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A class has 12 boys and 8 girls. Two students are chosen without replacement. Find $P(\\text{one of each})$.",
+          "body_he": "בכיתה 12 בנים ו-8 בנות. בוחרים שניים ללא החזרה. מצאו $P(\\text{אחד מכל סוג})$.",
+          "solution_en": "Total: C(20,2) = 190. Ways: C(12,1)·C(8,1) = 96. P = 96/190 = 48/95.",
+          "solution_he": "סה\"כ: C(20,2) = 190. דרכים: C(12,1)·C(8,1) = 96. P = 96/190 = 48/95.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Three fair coins are flipped. Find $P(\\text{exactly two heads})$.",
+          "body_he": "מטילים שלושה מטבעות הוגנים. מצאו $P(\\text{בדיוק שני עצים})$.",
+          "solution_en": "S = 8 outcomes. Exactly 2 heads: HHT,HTH,THH → 3. P = 3/8.",
+          "solution_he": "S = 8 תוצאות. בדיוק 2 עצים: עעפ,עפע,פעע → 3. P = 3/8.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A box has 6 red, 4 white marbles. Two marbles are drawn without replacement. Find $P(\\text{both the same colour})$.",
+          "body_he": "קופסה מכילה 6 גולות אדומות ו-4 לבנות. שולפים שתיים ללא החזרה. מצאו $P(\\text{שתיהן מאותו צבע})$.",
+          "solution_en": "Total: C(10,2) = 45. Both red: C(6,2)=15. Both white: C(4,2)=6. P = (15+6)/45 = 21/45 = 7/15.",
+          "solution_he": "סה\"כ: C(10,2) = 45. שתי אדומות: C(6,2)=15. שתי לבנות: C(4,2)=6. P = (15+6)/45 = 21/45 = 7/15.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Two dice are rolled. Find $P(\\text{sum} = 7)$ and $P(\\text{sum} \\ge 10)$.",
+          "body_he": "מטילים שתי קוביות. מצאו $P(\\text{סכום} = 7)$ ו-$P(\\text{סכום} \\ge 10)$.",
+          "solution_en": "Total outcomes: 36. Sum=7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) → 6. P = 6/36 = 1/6. Sum≥10: (4,6),(5,5),(6,4),(5,6),(6,5),(6,6) → 6. P = 6/36 = 1/6.",
+          "solution_he": "סה\"כ: 36. סכום=7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) → 6. P = 6/36 = 1/6. סכום≥10: (4,6),(5,5),(6,4),(5,6),(6,5),(6,6) → 6. P = 6/36 = 1/6.",
+          "points": 10
         }
-      ],
-      "explanation_en": "4 red out of 10 total. $P = \\frac{4}{10} = \\frac{2}{5}$.",
-      "explanation_he": "4 אדומים מתוך 10 בסך. $P = \\frac{4}{10} = \\frac{2}{5}$."
+      ]
     },
     {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "The probability it will rain tomorrow is 0.35. What is the probability it will NOT rain?",
-      "body_he": "ההסתברות שירד גשם מחר היא 0.35. מהי ההסתברות שלא ירד גשם?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "0.35",
-          "text_he": "0.35",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "0.50",
-          "text_he": "0.50",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "0.65",
-          "text_he": "0.65",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "1.35",
-          "text_he": "1.35",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$P(\\text{no rain}) = 1 - 0.35 = 0.65$. Complement rule.",
-      "explanation_he": "$P(\\text{לא גשם}) = 1 - 0.35 = 0.65$. כלל המשלים."
+      "kind": "pitfall",
+      "title_en": "Top 3 Mistakes to Avoid",
+      "title_he": "3 הטעויות הנפוצות ביותר",
+      "body_en_md": "**Mistake 1 — Adding without subtracting the intersection.**\nFor overlapping events: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$. Forgetting to subtract $P(A \\cap B)$ counts the overlap twice.\n\n**Mistake 2 — Forgetting that 1 is not a prime number.**\nPrime numbers start at 2. In any problem involving primes, exclude 1 from your list.\n\n**Mistake 3 — Treating selection without replacement as with replacement.**\nWhen selecting without replacement, after the first pick the total decreases by 1. Use $\\frac{k}{n} \\times \\frac{k-1}{n-1}$, not $\\left(\\frac{k}{n}\\right)^2$.",
+      "body_he_md": "**טעות 1 — חיבור ללא חיסור החיתוך.**\nלאירועים חופפים: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$. שכחת חיסור $P(A \\cap B)$ סופרת את החפיפה פעמיים.\n\n**טעות 2 — שכחה ש-1 אינו ראשוני.**\nמספרים ראשוניים מתחילים ב-2. בכל בעיה עם ראשוניים, הוציאו 1 מהרשימה.\n\n**טעות 3 — התייחסות לבחירה ללא החזרה כאילו היא עם החזרה.**\nבבחירה ללא החזרה, אחרי הבחירה הראשונה הסך הכולל קטן ב-1. השתמשו ב-$\\frac{k}{n} \\times \\frac{k-1}{n-1}$, לא ב-$\\left(\\frac{k}{n}\\right)^2$."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "A fair die is rolled once. How many outcomes are in the sample space?",
-      "body_he": "קוביה הוגנת נזרקת פעם אחת. כמה תוצאות יש במרחב המדגם?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "3",
-          "text_he": "3",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "4",
-          "text_he": "4",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "6",
-          "text_he": "6",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "12",
-          "text_he": "12",
-          "correct": false
-        }
-      ],
-      "explanation_en": "A standard die has faces 1, 2, 3, 4, 5, 6 — so $|S| = 6$.",
-      "explanation_he": "לקוביה רגילה יש פאות 1, 2, 3, 4, 5, 6 — אז $|S| = 6$."
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Key formulas:**\n- $P(A) = \\dfrac{|A|}{|S|}$, where $0 \\le P(A) \\le 1$\n- Complement: $P(\\bar{A}) = 1 - P(A)$\n- Union: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n- Mutually exclusive: $P(A \\cup B) = P(A) + P(B)$\n- Combinations: $\\binom{n}{r} = \\dfrac{n!}{r!(n-r)!}$\n\n**Typical Bagrut 3pt patterns:**\n1. Simple event from a sample space. (2–3 marks)\n2. Complement or union of two events. (3 marks)\n3. Selecting without replacement from a group. (4–5 marks)\n\n**Marking tips:** Always write out $|S|$ and $|A|$ before computing. Show the formula, then substitute.",
+      "body_he_md": "**נוסחאות מרכזיות:**\n- $P(A) = \\dfrac{|A|}{|S|}$, כאשר $0 \\le P(A) \\le 1$\n- משלים: $P(\\bar{A}) = 1 - P(A)$\n- איחוד: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n- זרים: $P(A \\cup B) = P(A) + P(B)$\n- צירופים: $\\binom{n}{r} = \\dfrac{n!}{r!(n-r)!}$\n\n**דפוסי שאלות טיפוסיות בבגרות 3 יח':**\n1. אירוע פשוט ממרחב מדגם. (2–3 נקודות)\n2. משלים או איחוד של שני אירועים. (3 נקודות)\n3. בחירה ללא החזרה מקבוצה. (4–5 נקודות)\n\n**טיפים לניקוד:** תמיד כתבו $|S|$ ו-$|A|$ לפני החישוב. הציגו את הנוסחה, ואז הציבו."
     },
     {
-      "id": "q4",
-      "type": "open",
-      "body_en": "A bag contains 5 red and 3 blue balls. Two balls are drawn without replacement.\n\n(a) Find the probability both are the same color.\n(b) Given the first ball was red, find P(second is red).",
-      "body_he": "שק עם 5 כדורים אדומים ו-3 כחולים. שולפים 2 ללא החזרה.\n\n(א) הסתברות ששניהם באותו צבע.\n(ב) ידוע שהראשון אדום — P(שני אדום).",
-      "points": 10,
-      "expected_steps_en": [
-        "Compute P(both red) = (5/8)(4/7) and P(both blue) = (3/8)(2/7)",
-        "Add for same color: 13/28",
-        "Conditional: P(R2|R1) = 4/7"
-      ],
-      "expected_steps_he": [
-        "חשב P(RR) ו-P(BB)",
-        "סכום: 13/28",
-        "מותנית: 4/7"
-      ],
-      "sample_solution_en": "(a) P(same) = 20/56 + 6/56 = 13/28. (b) P(R2|R1) = 4/7.",
-      "sample_solution_he": "(א) 13/28. (ב) 4/7.",
-      "rubric_en": "4pts correct same-color probability with work; 3pts conditional probability; 3pts clear notation.",
-      "rubric_he": "4 נק' הסתברות אותו צבע; 3 נק' מותנית; 3 נק' סימון ברור."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "For $f(x)=x^2-6x+8$:\n\n(a) Find the vertex by completing the square.\n(b) Find x-intercepts.\n(c) Sketch the parabola showing vertex and intercepts.",
-      "body_he": "עבור $f(x)=x^2-6x+8$:\n\n(א) קודקוד בשלמות ריבוע.\n(ב) חיתוכי x.\n(ג) סקיצה.",
-      "points": 10,
-      "expected_steps_en": [
-        "Complete square: (x-3)²-1, vertex (3,-1)",
-        "Set f(x)=0 → x=2,4",
-        "Sketch upward parabola with labeled points"
-      ],
-      "expected_steps_he": [
-        "שלמות ריבוע: (x-3)²-1",
-        "אפסים: x=2,4",
-        "סקיצה עם קודקוד וחיתוכים"
-      ],
-      "sample_solution_en": "Vertex (3,-1), zeros x=2,4, opens up.",
-      "sample_solution_he": "קודקוד (3,-1), אפסים 2,4, פותח למעלה.",
-      "rubric_en": "3pts vertex; 3pts intercepts; 4pts sketch with labels.",
-      "rubric_he": "3 נק' קודקוד; 3 נק' חיתוכים; 4 נק' סקיצה."
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- $P(A) = \\frac{|A|}{|S|}$, always between 0 and 1.\n- Complement: $P(\\bar{A}) = 1 - P(A)$ — use when asking for \"not\" or \"at least one\".\n- Union: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$. For mutually exclusive events, drop the last term.\n- Intersection: list outcomes that satisfy both conditions.\n- Without replacement: after each pick, the total decreases by 1.\n- Use combinations $\\binom{n}{r}$ when order doesn't matter.",
+      "body_he_md": "- $P(A) = \\frac{|A|}{|S|}$, תמיד בין 0 ל-1.\n- משלים: $P(\\bar{A}) = 1 - P(A)$ — השתמשו כאשר שואלים \"לא\" או \"לפחות אחד\".\n- איחוד: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$. לאירועים זרים, הסירו את האיבר האחרון.\n- חיתוך: רשמו תוצאות המקיימות שני התנאים.\n- ללא החזרה: אחרי כל שליפה הסך הכולל קטן ב-1.\n- השתמשו בצירופים $\\binom{n}{r}$ כאשר הסדר לא משנה."
     }
   ]
 }

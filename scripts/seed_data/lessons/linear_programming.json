@@ -1,147 +1,233 @@
 {
-  "id": "linear_programming",
-  "subject": "high_school_math_3pt",
-  "title_en": "Linear Programming",
-  "title_he": "תכנון לינארי",
-  "duration_min": 30,
-  "type": "interactive",
-  "level_min": "3pt",
-  "agent_hints": "LP in Bagrut 372: define x,y, graph constraints, find corners, evaluate Z=ax+by at each vertex.",
+  "concept_id": "linear_programming",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["4pt"],
+  "title_en": "Linear Programming (4pt) — Feasible Region and Optimizing a Linear Objective",
+  "title_he": "תכנות לינארי (4 יח') — אזור הכדאיות ומיטוב פונקציה לינארית",
+  "summary_en": "Linear programming finds the maximum or minimum of a linear objective function subject to linear constraints. The optimal value always occurs at a corner (vertex) of the feasible region.",
+  "summary_he": "תכנות לינארי מוצא מקסימום או מינימום של פונקציית מטרה לינארית בכפוף לאילוצים לינאריים. הערך האופטימלי תמיד מתרחש בקודקוד (פינה) של אזור הכדאיות.",
+  "est_minutes": 60,
   "sections": [
     {
-      "id": "what_is_lp",
-      "title_en": "What is Linear Programming?",
-      "title_he": "מהו תכנון לינארי?",
-      "body_en_md": "**Linear programming** optimizes $Z=ax+by$ subject to linear constraints. The **feasible region** is the intersection of half-planes.\n\n**Factory example:** chairs $x$, tables $y$; $2x+4y\\le120$; $3x+2y\\le90$; maximize $Z=40x+60y$.",
-      "body_he_md": "LP — מקס/מין של $Z=ax+by$ תחת אילוצים. דוגמה: $2x+4y\\le120$, $3x+2y\\le90$, מקס $Z=40x+60y$.",
-      "level_min": "3pt"
+      "kind": "intro",
+      "title_en": "Optimization in the Real World",
+      "title_he": "אופטימיזציה בעולם האמיתי",
+      "body_en_md": "A bakery can make cakes and cookies. It has limited flour, sugar, and oven time. The baker wants to **maximize profit**. How many of each should be made?\n\nThis is a **linear programming** problem — and it's one of the most practically important mathematical tools in industry:\n- **Airlines** use it to assign planes to routes.\n- **Factories** use it to plan production schedules.\n- **Farmers** use it to decide which crops to grow.\n\nThe key insight: when the constraints and objective are all linear, the **optimal solution always happens at a corner of the feasible region** — so you only need to check a finite number of points.",
+      "body_he_md": "מאפייה יכולה לאפות עוגות ועוגיות. יש לה כמות מוגבלת של קמח, סוכר וזמן תנור. הקונדיטור רוצה **למקסם רווח**. כמה מכל אחד לייצר?\n\nזוהי בעיית **תכנות לינארי** — אחד הכלים המתמטיים החשובים ביותר בתעשייה:\n- **חברות תעופה** משתמשות בו להקצאת מטוסים לטיסות.\n- **מפעלים** משתמשות בו לתכנון לוח הייצור.\n- **חקלאים** משתמשים בו להחלטה אילו גידולים לגדל.\n\nתובנת המפתח: כאשר האילוצים ופונקציית המטרה לינאריים, הפתרון האופטימלי **תמיד מתרחש בקודקוד של אזור הכדאיות** — לכן צריך לבדוק רק מספר סופי של נקודות."
     },
     {
-      "id": "constraints",
-      "title_en": "Setting Up Constraints",
-      "title_he": "הגדרת אילוצים",
-      "body_en_md": "Define variables, write inequalities, graph lines, find **corner points**.\n\nExample: $x+2y\\le10$, $2x+y\\le12$. Corners: $(0,0)$, $(0,5)$, $(14/3,8/3)$, $(6,0)$.",
-      "body_he_md": "משתנים, אילוצים, גרף, **קודקודים**.",
-      "level_min": "3pt"
+      "kind": "definition",
+      "title_en": "Key Terms in Linear Programming",
+      "title_he": "מושגי יסוד בתכנות לינארי",
+      "body_en_md": "**Decision variables:** the quantities to be determined (e.g., $x$ = units of product A, $y$ = units of product B).\n\n**Objective function:** the linear expression to maximize or minimize:\n$$z = ax + by$$\n\n**Constraints:** linear inequalities that restrict the variables:\n$$c_1 x + d_1 y \\le e_1, \\quad c_2 x + d_2 y \\le e_2, \\quad x \\ge 0, \\quad y \\ge 0$$\n\n**Feasible region:** the set of all $(x, y)$ satisfying ALL constraints simultaneously — the shaded polygon on the graph.\n\n**Corner Point Theorem:** If an optimal solution exists, it occurs at a **vertex (corner point)** of the feasible region.\n\n**Method:**\n1. Graph all constraints → identify feasible region.\n2. Find all corner points (intersect pairs of boundary lines).\n3. Evaluate $z$ at each corner.\n4. Pick the corner giving the maximum (or minimum).",
+      "body_he_md": "**משתני החלטה:** הכמויות לקביעה (למשל, $x$ = יחידות מוצר א, $y$ = יחידות מוצר ב).\n\n**פונקציית מטרה:** הביטוי הלינארי למיקסום או מינימיזציה:\n$$z = ax + by$$\n\n**אילוצים:** אי-שוויונות לינאריים המגבילים את המשתנים:\n$$c_1 x + d_1 y \\le e_1, \\quad c_2 x + d_2 y \\le e_2, \\quad x \\ge 0, \\quad y \\ge 0$$\n\n**אזור הכדאיות:** קבוצת כל $(x, y)$ המקיימים את כל האילוצים בו-זמנית — המצולע המוצל בגרף.\n\n**משפט נקודות הקודקוד:** אם פתרון אופטימלי קיים, הוא מתרחש ב**קודקוד (פינת)** אזור הכדאיות.\n\n**שיטה:**\n1. שרטוט כל האילוצים → זיהוי אזור הכדאיות.\n2. מציאת כל נקודות הקודקוד (חיתוך זוגות של קווי גבול).\n3. חישוב $z$ בכל פינה.\n4. בחירת הפינה הנותנת מקסימום (או מינימום)."
     },
     {
-      "id": "optimal",
-      "title_en": "Finding the Optimal Solution",
-      "title_he": "מציאת הפתרון",
-      "body_en_md": "**Corner-point theorem:** optimum of bounded LP is at a vertex. Evaluate $Z$ at each corner.\n\nMax $Z=3x+2y$ gives $58/3$ at $(14/3,8/3)$.",
-      "body_he_md": "משפט נקודות קיצון: optimum בקודקוד.",
-      "level_min": "3pt"
+      "kind": "theory",
+      "title_en": "How to Graph Constraints and Find the Feasible Region",
+      "title_he": "איך לשרטט אילוצים ולמצוא את אזור הכדאיות",
+      "body_en_md": "**Graphing a linear inequality:**\n1. Replace $\\le$ or $\\ge$ with $=$ and graph the line.\n2. Pick a test point not on the line (e.g., the origin $(0,0)$).\n3. If the test point satisfies the inequality, shade that side; otherwise shade the other side.\n\n**Non-negativity constraints:** $x \\ge 0$ means we stay to the right of the y-axis; $y \\ge 0$ means above the x-axis. These restrict us to the first quadrant.\n\n**Finding corner points:**\n- At each corner, two boundary lines intersect.\n- Solve the system of two equations to find the corner coordinates.\n- Also include corners at axis intercepts.\n\n**Checking unboundedness:** If the feasible region is not closed (extends to infinity), the maximum may not exist — but the minimum still might.",
+      "body_he_md": "**שרטוט אי-שוויון לינארי:**\n1. החליפו $\\le$ או $\\ge$ ב-$=$ ושרטטו את הקו.\n2. בחרו נקודת בדיקה שאינה על הקו (למשל, הראשית $(0,0)$).\n3. אם נקודת הבדיקה מקיימת את האי-שוויון, הצלו את הצד הזה; אחרת הצלו את הצד האחר.\n\n**אילוצי אי-שליליות:** $x \\ge 0$ פירושו שנשאר לימין ציר $y$; $y \\ge 0$ פירושו מעל ציר $x$. אלה מגבילים אותנו לרביע הראשון.\n\n**מציאת נקודות קודקוד:**\n- בכל פינה, שני קווי גבול נחתכים.\n- פתרון מערכת שתי משוואות למציאת קואורדינטות הפינה.\n- כלול גם פינות בחיתוכי הצירים.\n\n**בדיקת פתיחות:** אם אזור הכדאיות אינו סגור (מתפשט לאינסוף), המקסימום עשוי שלא להיות — אבל המינימום עדיין עשוי להיות."
     },
     {
-      "id": "exam",
-      "title_en": "Exam-Style Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "**Problem 1:** 100 acres, 8000 NIS. A: 3 NIS/acre, 20 kg; B: 5 NIS/acre, 35 kg; max 60 each. **Answer:** $(50,50)$, 2750 kg yield.\n\n**Problem 2:** Parametric $Z=kx+(10-k)y$ under standard constraints.",
-      "body_he_md": "בעיה 1: (50,50), 2750 ק\"ג.",
-      "level_min": "3pt"
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Maximize a Simple Objective",
+      "title_he": "דוגמה פתורה 1 — מיקסום פונקציית מטרה פשוטה",
+      "body_en_md": "**Maximize** $z = 2x + 3y$ subject to:\n$$x + y \\le 4, \\quad x \\ge 0, \\quad y \\ge 0$$\n\n**Step 1 — Graph the feasible region:**\nThe constraint $x + y \\le 4$ is the region below the line $x + y = 4$, combined with $x \\ge 0$ and $y \\ge 0$.\n\n**Step 2 — Find corner points:**\n- $(0, 0)$: origin.\n- $(4, 0)$: x-intercept of $x + y = 4$.\n- $(0, 4)$: y-intercept of $x + y = 4$.\n\n**Step 3 — Evaluate $z$ at each corner:**\n| Point | $z = 2x + 3y$ |\n|-------|---------------|\n| $(0, 0)$ | $0$ |\n| $(4, 0)$ | $8$ |\n| $(0, 4)$ | $12$ |\n\n**Step 4 — Maximum:**\n$z = 12$ at $(0, 4)$.\n\n**Answer:** Maximum $z = 12$ at the point $(0, 4)$.",
+      "body_he_md": "**מקסמו** $z = 2x + 3y$ בכפוף ל:\n$$x + y \\le 4, \\quad x \\ge 0, \\quad y \\ge 0$$\n\n**שלב 1 — שרטוט אזור הכדאיות:**\nהאילוץ $x + y \\le 4$ הוא האזור מתחת לקו $x + y = 4$, יחד עם $x \\ge 0$ ו-$y \\ge 0$.\n\n**שלב 2 — נקודות קודקוד:**\n- $(0, 0)$: ראשית.\n- $(4, 0)$: חיתוך $x$ של $x + y = 4$.\n- $(0, 4)$: חיתוך $y$ של $x + y = 4$.\n\n**שלב 3 — חישוב $z$ בכל פינה:**\n| נקודה | $z = 2x + 3y$ |\n|-------|---------------|\n| $(0, 0)$ | $0$ |\n| $(4, 0)$ | $8$ |\n| $(0, 4)$ | $12$ |\n\n**שלב 4 — מקסימום:**\n$z = 12$ ב-$(0, 4)$.\n\n**תשובה:** מקסימום $z = 12$ בנקודה $(0, 4)$."
     },
     {
-      "id": "strategy",
-      "title_en": "Strategy for Bagrut (372)",
-      "title_he": "אסטרטגיה לבגרות",
-      "body_en_md": "Steps: variables, constraints, graph, corners, evaluate $Z$. Traps: open region, wrong inequality, missing $x,y\\ge0$.",
-      "body_he_md": "משתנים → אילוצים → גרף → קודקודים → $Z$.",
-      "level_min": "3pt"
-    }
-  ],
-  "questions": [
-    {
-      "id": "q1",
-      "type": "open",
-      "body_en": "Bakery: $2x+y\\le40$, $x+2y\\le50$, max $Z=3x+2y$. Graph, corners, max profit.",
-      "body_he": "מאפיה: $2x+y\\le40$, $x+2y\\le50$, מקס $Z=3x+2y$.",
-      "points": 10,
-      "sample_solution_en": "Max Z=80 at (20,10).",
-      "sample_solution_he": "Z=80 ב-(20,10)."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Minimize $z = x + 2y$ subject to $x + y \\ge 3$, $x \\ge 0$, $y \\ge 0$.",
+      "body_he_md": "מינימיזו $z = x + 2y$ בכפוף ל-$x + y \\ge 3$, $x \\ge 0$, $y \\ge 0$.",
+      "checkpoint_solution_en": "Feasible region: above x+y=3, first quadrant. Vertices of the boundary: (3,0) and (0,3). z(3,0)=3; z(0,3)=6. Minimum z=3 at (3,0).",
+      "checkpoint_solution_he": "אזור הכדאיות: מעל x+y=3, רביע ראשון. קודקודים: (3,0) ו-(0,3). z(3,0)=3; z(0,3)=6. מינימום z=3 ב-(3,0)."
     },
     {
-      "id": "q2",
-      "type": "open",
-      "body_en": "Explain corner-point theorem for bounded LP.",
-      "body_he": "הסבירו משפט נקודות קיצון.",
-      "points": 8
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Factory Production Problem",
+      "title_he": "דוגמה פתורה 2 — בעיית ייצור במפעל",
+      "body_en_md": "**Problem:** A factory makes tables ($x$) and chairs ($y$).\n- Each table needs 4 hours of work and 3 kg of wood.\n- Each chair needs 2 hours and 5 kg of wood.\n- Available: 40 hours of work and 45 kg of wood.\n- Profit: 200₪/table, 150₪/chair.\n- Maximize profit.\n\n**Step 1 — Set up:**\n$$\\text{Maximize: } z = 200x + 150y$$\n$$\\text{Subject to: } 4x + 2y \\le 40 \\implies 2x + y \\le 20$$\n$$3x + 5y \\le 45$$\n$$x \\ge 0, \\quad y \\ge 0$$\n\n**Step 2 — Find corner points:**\n- $(0, 0)$: obvious corner.\n- $(10, 0)$: from $2x + y = 20$ with $y = 0$ → $x = 10$. Check: $3(10)+5(0)=30 \\le 45$ ✓\n- $(0, 9)$: from $3x + 5y = 45$ with $x = 0$ → $y = 9$. Check: $2(0)+9=9 \\le 20$ ✓\n- Intersection of $2x+y=20$ and $3x+5y=45$:\n  - From first: $y = 20 - 2x$. Sub: $3x + 5(20-2x) = 45$ → $3x + 100 - 10x = 45$ → $-7x = -55$ → $x = 55/7 \\approx 7.86$.\n  - $y = 20 - 2(55/7) = 20 - 110/7 = 30/7 \\approx 4.29$.\n  - Corner: $(55/7, 30/7)$.\n\n**Step 3 — Evaluate $z$:**\n| Corner | $z = 200x + 150y$ |\n|--------|-------------------|\n| $(0,0)$ | $0$ |\n| $(10,0)$ | $2000$ |\n| $(0,9)$ | $1350$ |\n| $(55/7, 30/7)$ | $200(55/7)+150(30/7) = 11000/7+4500/7 = 15500/7 \\approx 2214$ |\n\n**Answer:** Maximum profit ≈ **2214₪** (2214.3₪) at $x = 55/7 \\approx 7.86$ tables and $y = 30/7 \\approx 4.29$ chairs.\n\n*Note: In practice $x$ and $y$ must be integers; the feasible integer points near $(7.86, 4.29)$ should be checked: $(7,4)$: $z=1400+600=2000$; $(8,4)$: check feasibility: $2(8)+4=20 ✓$, $3(8)+5(4)=44 \\le 45 ✓$, $z=1600+600=2200$.*",
+      "body_he_md": "**בעיה:** מפעל מייצר שולחנות ($x$) וכסאות ($y$).\n- כל שולחן: 4 שעות עבודה ו-3 ק\"ג עץ.\n- כל כסא: 2 שעות ו-5 ק\"ג עץ.\n- זמינות: 40 שעות עבודה ו-45 ק\"ג עץ.\n- רווח: 200₪/שולחן, 150₪/כסא.\n- מקסמו רווח.\n\n**שלב 1 — הגדרה:**\n$$\\text{מקסמו: } z = 200x + 150y$$\n$$2x + y \\le 20, \\quad 3x + 5y \\le 45, \\quad x,y \\ge 0$$\n\n**שלב 2 — נקודות קודקוד:**\n- $(0,0)$, $(10,0)$, $(0,9)$.\n- חיתוך $2x+y=20$ ו-$3x+5y=45$: $x=55/7$, $y=30/7$.\n\n**שלב 3 — חישוב $z$:**\n| פינה | $z$ |\n|------|-----|\n| $(0,0)$ | $0$ |\n| $(10,0)$ | $2000$ |\n| $(0,9)$ | $1350$ |\n| $(55/7, 30/7)$ | $15500/7 \\approx 2214$ |\n\n**תשובה:** מקסימום רווח $\\approx$ **2214₪** ב-$x \\approx 7.86$, $y \\approx 4.29$."
     },
     {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Max $Z=4x+3y$ on $x+y\\le6$, $2x+y\\le8$, $x,y\\ge0$?",
-      "body_he": "מקס $Z=4x+3y$?",
-      "options": [
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A store sells product A at 50₪ profit and product B at 80₪ profit. Constraints: $x + y \\le 10$, $x \\le 6$, $y \\le 8$, $x,y \\ge 0$. Find the maximum profit.",
+      "body_he_md": "חנות מוכרת מוצר A ברווח 50₪ ומוצר B ברווח 80₪. אילוצים: $x + y \\le 10$, $x \\le 6$, $y \\le 8$, $x,y \\ge 0$. מצאו רווח מקסימלי.",
+      "checkpoint_solution_en": "z=50x+80y. Corners: (0,0)→0, (6,0)→300, (6,4)→300+320=620, (2,8)→100+640=740, (0,8)→640. Max z=740 at (2,8).",
+      "checkpoint_solution_he": "z=50x+80y. פינות: (0,0)→0, (6,0)→300, (6,4)→620, (2,8)→740, (0,8)→640. מקסימום z=740 ב-(2,8)."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Classic Bagrut 4pt LP with 3 Constraints",
+      "title_he": "דוגמה פתורה 3 — בגרות 4 יח' קלאסי: 3 אילוצים",
+      "body_en_md": "**Problem:** Maximize $z = 5x + 4y$ subject to:\n$$6x + 4y \\le 24$$\n$$x + 2y \\le 6$$\n$$x \\ge 0, \\quad y \\ge 0$$\n\n**Step 1 — Simplify constraints:**\n- $6x + 4y \\le 24 \\implies 3x + 2y \\le 12$\n- $x + 2y \\le 6$\n\n**Step 2 — Find corner points:**\n\n*Corner A:* $(0, 0)$ (origin).\n\n*Corner B:* $x = 0$ in $3x+2y=12$: $y = 6$. Check $x+2y=12 > 6$: NOT feasible.\nTry $x=0$ in $x+2y=6$: $y=3$. Corner $(0, 3)$.\n\n*Corner C:* $y = 0$ in $3x+2y=12$: $x = 4$. Check $x+2y=4 \\le 6$ ✓. Corner $(4, 0)$.\n\n*Corner D:* Intersection of $3x+2y=12$ and $x+2y=6$:\n$$(3x+2y) - (x+2y) = 12-6 \\implies 2x = 6 \\implies x = 3$$\n$$3 + 2y = 6 \\implies y = \\frac{3}{2}$$\nCorner: $\\left(3, \\dfrac{3}{2}\\right)$.\n\n**Step 3 — Evaluate $z = 5x + 4y$:**\n| Corner | $z$ |\n|--------|-----|\n| $(0, 0)$ | $0$ |\n| $(0, 3)$ | $12$ |\n| $(4, 0)$ | $20$ |\n| $(3, 1.5)$ | $15 + 6 = 21$ |\n\n**Answer:** Maximum $z = 21$ at $(3, 1.5)$.",
+      "body_he_md": "**בעיה:** מקסמו $z = 5x + 4y$ בכפוף ל:\n$$6x + 4y \\le 24, \\quad x + 2y \\le 6, \\quad x,y \\ge 0$$\n\n**שלב 1 — פינוי אילוצים:**\n- $3x + 2y \\le 12$\n- $x + 2y \\le 6$\n\n**שלב 2 — נקודות קודקוד:**\n- $(0,0)$, $(0,3)$, $(4,0)$.\n- חיתוך $3x+2y=12$ ו-$x+2y=6$: $2x=6 \\to x=3$, $y=3/2$. פינה $(3, 3/2)$.\n\n**שלב 3 — חישוב $z$:**\n| פינה | $z$ |\n|------|-----|\n| $(0,0)$ | $0$ |\n| $(0,3)$ | $12$ |\n| $(4,0)$ | $20$ |\n| $(3, 3/2)$ | $21$ |\n\n**תשובה:** מקסימום $z = 21$ ב-$(3, 1.5)$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Linear Programming Steps",
+      "title_he": "מדריך שיטה — שלבי תכנות לינארי",
+      "body_en_md": "| Step | Action |\n|------|--------|\n| 1 | Define variables: what does $x$ represent? $y$? |\n| 2 | Write objective function: maximize or minimize $z = ax+by$ |\n| 3 | Write all constraints as inequalities |\n| 4 | Graph each constraint; shade feasible side |\n| 5 | Identify feasible region (overlap of all shaded areas) |\n| 6 | List all corner points; solve intersecting pairs algebraically |\n| 7 | Evaluate $z$ at every corner |\n| 8 | State the optimal value and the point that achieves it |",
+      "body_he_md": "| שלב | פעולה |\n|-----|-------|\n| 1 | הגדירו משתנים: מה $x$ מייצג? $y$? |\n| 2 | כתבו פונקציית מטרה: מקסמו או מינמיזו $z = ax+by$ |\n| 3 | כתבו את כל האילוצים כאי-שוויונות |\n| 4 | שרטטו כל אילוץ; הצלו את הצד הכדאי |\n| 5 | זהו את אזור הכדאיות (חפיפת כל האזורים המוצלים) |\n| 6 | רשמו את כל נקודות הקודקוד; פתרו זוגות חותכים אלגברית |\n| 7 | חשבו $z$ בכל פינה |\n| 8 | ציינו הערך האופטימלי והנקודה שמשיגה אותו |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים לתרגול",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
         {
-          "id": "a",
-          "text_en": "(0,0)",
-          "text_he": "(0,0)",
-          "correct": false
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Maximize $z = x + y$ subject to $2x + y \\le 10$, $x \\ge 0$, $y \\ge 0$.",
+          "body_he": "מקסמו $z = x + y$ בכפוף ל-$2x + y \\le 10$, $x \\ge 0$, $y \\ge 0$.",
+          "solution_en": "Corners: (0,0)→0, (5,0)→5, (0,10)→10. Max z=10 at (0,10).",
+          "solution_he": "פינות: (0,0)→0, (5,0)→5, (0,10)→10. מקסימום z=10 ב-(0,10).",
+          "points": 5
         },
         {
-          "id": "b",
-          "text_en": "(0,6)",
-          "text_he": "(0,6)",
-          "correct": false
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Minimize $z = 3x + 2y$ subject to $x + y \\ge 4$, $x \\ge 0$, $y \\ge 0$.",
+          "body_he": "מינימיזו $z = 3x + 2y$ בכפוף ל-$x + y \\ge 4$, $x \\ge 0$, $y \\ge 0$.",
+          "solution_en": "Corner vertices of the lower boundary: (4,0) and (0,4). z(4,0)=12; z(0,4)=8. Minimum z=8 at (0,4).",
+          "solution_he": "פינות הגבול: (4,0) ו-(0,4). z(4,0)=12; z(0,4)=8. מינימום z=8 ב-(0,4).",
+          "points": 5
         },
         {
-          "id": "c",
-          "text_en": "(2,4)",
-          "text_he": "(2,4)",
-          "correct": true
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "List all corner points of the feasible region: $x+y \\le 6$, $x \\ge 1$, $y \\ge 2$.",
+          "body_he": "רשמו את כל נקודות הקודקוד של אזור הכדאיות: $x+y \\le 6$, $x \\ge 1$, $y \\ge 2$.",
+          "solution_en": "Corners: (1,2), (4,2), (1,5). [Intersect x=1,y=2→(1,2); x=1,x+y=6→(1,5); y=2,x+y=6→(4,2).]",
+          "solution_he": "פינות: (1,2), (4,2), (1,5).",
+          "points": 5
         },
         {
-          "id": "d",
-          "text_en": "(4,0)",
-          "text_he": "(4,0)",
-          "correct": false
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Is $(2, 3)$ in the feasible region of: $x+y \\le 6$, $x \\ge 0$, $y \\ge 0$, $2x+y \\le 8$?",
+          "body_he": "האם $(2, 3)$ נמצאת באזור הכדאיות של: $x+y \\le 6$, $x \\ge 0$, $y \\ge 0$, $2x+y \\le 8$?",
+          "solution_en": "2+3=5≤6 ✓; 2≥0 ✓; 3≥0 ✓; 4+3=7≤8 ✓. Yes, (2,3) is feasible.",
+          "solution_he": "2+3=5≤6 ✓; 4+3=7≤8 ✓. כן, (2,3) כדאית.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Maximize $z = 3x + 5y$ subject to $x \\le 4$, $y \\le 6$, $x+y \\le 8$, $x,y \\ge 0$.",
+          "body_he": "מקסמו $z = 3x + 5y$ בכפוף ל-$x \\le 4$, $y \\le 6$, $x+y \\le 8$, $x,y \\ge 0$.",
+          "solution_en": "Corners: (0,0), (4,0), (4,4), (2,6), (0,6). z values: 0, 12, 32, 36, 30. Max z=36 at (2,6).",
+          "solution_he": "פינות: (0,0), (4,0), (4,4), (2,6), (0,6). z: 0, 12, 32, 36, 30. מקסימום z=36 ב-(2,6).",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A farmer can plant wheat ($x$ acres) or corn ($y$ acres). Profit: 300₪/acre wheat, 500₪/acre corn. Constraints: $x+y \\le 100$, $x \\ge 20$, $y \\ge 10$. Maximize profit.",
+          "body_he": "חקלאי יכול לגדל חיטה ($x$ דונם) או תירס ($y$ דונם). רווח: 300₪/דונם חיטה, 500₪/דונם תירס. אילוצים: $x+y \\le 100$, $x \\ge 20$, $y \\ge 10$. מקסמו רווח.",
+          "solution_en": "z=300x+500y. Corners: (20,10)→6000+5000=11000, (90,10)→27000+5000=32000, (20,80)→6000+40000=46000. Max z=46000 at (20,80).",
+          "solution_he": "z=300x+500y. פינות: (20,10)→11000, (90,10)→32000, (20,80)→46000. מקסימום z=46000 ב-(20,80).",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Minimize $z = 2x + 3y$ subject to $x+y \\ge 4$, $2x+y \\ge 6$, $x,y \\ge 0$.",
+          "body_he": "מינימיזו $z = 2x + 3y$ בכפוף ל-$x+y \\ge 4$, $2x+y \\ge 6$, $x,y \\ge 0$.",
+          "solution_en": "Intersection: x+y=4 and 2x+y=6 → x=2, y=2. Corners: (0,6), (2,2), (4,0). z: 18, 10, 8. Minimum z=8 at (4,0).",
+          "solution_he": "חיתוך: x=2, y=2. פינות: (0,6), (2,2), (4,0). z: 18, 10, 8. מינימום z=8 ב-(4,0).",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Explain why the optimal solution of any LP problem (if it exists) must be at a corner of the feasible region.",
+          "body_he": "הסביר למה הפתרון האופטימלי של כל בעיית תכנות לינארי (אם קיים) חייב להיות בקודקוד של אזור הכדאיות.",
+          "solution_en": "The objective function z=ax+by is a family of parallel lines. As we move these lines to increase (or decrease) z, the last feasible point touched is a corner of the polygon (since the polygon is convex). No interior or edge point can give a better value than a corner.",
+          "solution_he": "פונקציית המטרה z=ax+by היא משפחת קווים מקבילים. כאשר מזיזים קווים אלה לשיפור z, הנקודה הכדאית האחרונה שנוגעים בה היא פינה של המצולע (כי המצולע קמור). אין נקודה פנימית או על קצה שיכולה לתת ערך טוב יותר מפינה.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Graph the feasible region: $x+2y \\le 8$, $3x+y \\le 9$, $x,y \\ge 0$. List all vertices.",
+          "body_he": "שרטטו את אזור הכדאיות: $x+2y \\le 8$, $3x+y \\le 9$, $x,y \\ge 0$. רשמו את כל הקודקודים.",
+          "solution_en": "Vertices: (0,0), (3,0), (2,3), (0,4). [x+2y=8 and 3x+y=9: solve → 5x=10 → x=2, y=3.]",
+          "solution_he": "קודקודים: (0,0), (3,0), (2,3), (0,4).",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A juice company mixes orange (O) and apple (A) juice. Each litre of orange requires 2 kg of oranges and 0 kg of apples; each litre of apple requires 0 kg of oranges and 3 kg of apples. Available: 20 kg oranges, 24 kg apples. Profit: 8₪/litre orange, 6₪/litre apple. Also: total output ≤ 12 litres. Maximize profit.",
+          "body_he": "חברת מיצים מוזגת מיץ תפוזים (O) ותפוחים (A). כל ליטר תפוזים דורש 2 ק\"ג תפוזים; כל ליטר תפוחים דורש 3 ק\"ג תפוחים. זמין: 20 ק\"ג תפוזים, 24 ק\"ג תפוחים. רווח: 8₪/ל' תפוזים, 6₪/ל' תפוחים. גם: ייצור כולל ≤ 12 ל'. מקסמו רווח.",
+          "solution_en": "Variables: x=litres orange, y=litres apple. z=8x+6y. Constraints: 2x≤20→x≤10; 3y≤24→y≤8; x+y≤12; x,y≥0. Vertices: (0,0),(10,0),(10,2),(4,8),(0,8). z: 0,80,96,80,48. Max z=96 at (10,2).",
+          "solution_he": "z=8x+6y. אילוצים: x≤10, y≤8, x+y≤12. פינות: (0,0),(10,0),(10,2),(4,8),(0,8). z: 0,80,96,80,48. מקסימום z=96 ב-(10,2).",
+          "points": 12
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Maximize $z = 4x + 7y$ subject to: $x + y \\le 8$, $2x + y \\le 12$, $x + 3y \\le 15$, $x,y \\ge 0$.",
+          "body_he": "מקסמו $z = 4x + 7y$ בכפוף ל: $x + y \\le 8$, $2x + y \\le 12$, $x + 3y \\le 15$, $x,y \\ge 0$.",
+          "solution_en": "Find all vertices. (0,0),(6,0): from 2x+y=12 with y=0. (0,5): from x+3y=15 with x=0. Intersect x+y=8 & x+3y=15: subtract→2y=7→y=3.5,x=4.5. Intersect 2x+y=12 & x+y=8: x=4,y=4. Check (4,4): x+3y=4+12=16>15 NOT feasible. Feasible corners: (0,0),(6,0),(4.5,3.5),(0,5). z: 0,24,49.5,35. Max z=49.5 at (4.5,3.5).",
+          "solution_he": "פינות כדאיות: (0,0),(6,0),(4.5,3.5),(0,5). z: 0,24,49.5,35. מקסימום z=49.5 ב-(4.5,3.5).",
+          "points": 12
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A school has 40 hours of teacher time and 1000₪ budget. Activity A costs 50₪ and 2 hours; Activity B costs 30₪ and 3 hours. Each A benefits 5 students; each B benefits 4 students. Maximize students benefited.",
+          "body_he": "בית ספר מקצה 40 שעות מורה ו-1000₪ תקציב. פעילות A עולה 50₪ ו-2 שעות; פעילות B עולה 30₪ ו-3 שעות. כל A מועילה ל-5 תלמידים; כל B ל-4 תלמידים. מקסמו תלמידים מועדפים.",
+          "solution_en": "x=units A, y=units B. z=5x+4y. Constraints: 2x+3y≤40, 50x+30y≤1000→5x+3y≤100. x,y≥0. Intersect: 2x+3y=40 and 5x+3y=100 → 3x=60 → x=20, y=0. Vertices: (0,0),(20,0),(0,13.3). Check 20: z=100. (0,100/3≈13.3): z=53.3. But also check (20,0): feasible for hours: 40≤40✓. Max z=100 at (20,0).",
+          "solution_he": "x=יחידות A, y=יחידות B. z=5x+4y. אילוצים: 2x+3y≤40, 5x+3y≤100. פינות: (0,0),(20,0),(0,13.3). z: 0,100,53. מקסימום z=100 ב-(20,0).",
+          "points": 12
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A feasible region has vertices $(0,0)$, $(8,0)$, $(6,4)$, $(0,6)$. For what values of $a$ does $z = ax + y$ achieve its maximum at $(6,4)$?",
+          "body_he": "לאזור כדאיות יש קודקודים $(0,0)$, $(8,0)$, $(6,4)$, $(0,6)$. עבור אילו ערכי $a$ ה-$z = ax + y$ מגיע למקסימום ב-$(6,4)$?",
+          "solution_en": "z at corners: (0,0)=0, (8,0)=8a, (6,4)=6a+4, (0,6)=6. For (6,4) to be max: 6a+4≥8a → 4≥2a → a≤2. Also 6a+4≥6 → 6a≥2 → a≥1/3. So 1/3≤a≤2.",
+          "solution_he": "z בפינות: (0,0)=0, (8,0)=8a, (6,4)=6a+4, (0,6)=6. כדי ש-(6,4) יהיה מקסימום: 6a+4≥8a → a≤2 וגם 6a+4≥6 → a≥1/3. לכן 1/3≤a≤2.",
+          "points": 12
         }
-      ],
-      "explanation_en": "Z=20 at (2,4).",
-      "explanation_he": "Z=20."
+      ]
     },
     {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "Steepest increase of $Z=ax+by$?",
-      "body_he": "כיוון עלייה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "(a,b)",
-          "text_he": "(a,b)",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "(b,a)",
-          "text_he": "(b,a)",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "(-a,-b)",
-          "text_he": "(-a,-b)",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Origin",
-          "text_he": "Origin",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Gradient (a,b).",
-      "explanation_he": "(a,b)."
+      "kind": "pitfall",
+      "title_en": "Top 3 Mistakes to Avoid",
+      "title_he": "3 הטעויות הנפוצות ביותר",
+      "body_en_md": "**Mistake 1 — Missing a corner point.**\nEvery corner must come from an intersection of exactly two boundary lines. Systematically check ALL pairs — including axis intersections.\n\n**Mistake 2 — Not checking if a corner is actually feasible.**\nAfter solving for the intersection of two constraint lines, always substitute back into ALL constraints to confirm the point is feasible.\n\n**Mistake 3 — Shading the wrong region.**\nTo determine which side to shade: substitute the origin $(0,0)$ into the constraint. If it satisfies the inequality, shade the origin's side. If not, shade the other side.",
+      "body_he_md": "**טעות 1 — פספוס נקודת קודקוד.**\nכל פינה חייבת לבוא מחיתוך בדיוק שני קווי גבול. בדקו שיטתית את כל הזוגות — כולל חיתוכי הצירים.\n\n**טעות 2 — אי-בדיקה שפינה אכן כדאית.**\nלאחר פתרון חיתוך שני קווי אילוץ, תמיד הציבו בכל האילוצים לאישור שהנקודה כדאית.\n\n**טעות 3 — הצללת הצד הלא נכון.**\nלקביעת איזה צד להצל: הציבו את הראשית $(0,0)$ באילוץ. אם הוא מקיים את האי-שוויון, הצלו את הצד של הראשית. אם לא, הצלו את הצד האחר."
     },
     {
-      "id": "q5",
-      "type": "open",
-      "body_en": "Farmer LP: 100 acres, 8000 NIS, max yield.",
-      "body_he": "חקלאי: 100 דונם, 8000 ש\"ח.",
-      "points": 10,
-      "sample_solution_en": "(50,50), 2750 kg.",
-      "sample_solution_he": "(50,50), 2750 ק\"ג."
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Key steps:**\n1. Define variables.\n2. Write $z = ax + by$ (objective).\n3. Write all constraints as inequalities.\n4. Graph and shade feasible region.\n5. Find all corner points (solve intersection systems).\n6. Evaluate $z$ at every corner.\n7. State optimal $z$ and the corner achieving it.\n\n**Corner Point Theorem:** Optimal value ALWAYS at a vertex.\n\n**Typical Bagrut 4pt patterns:**\n1. Set up LP from a word problem. (3–4 marks)\n2. Graph the feasible region. (3 marks)\n3. Find optimal value and point. (4–5 marks)\n\n**Marking tips:** Label all constraint lines on the graph. Number the corners and evaluate each one in a table.",
+      "body_he_md": "**שלבי מפתח:**\n1. הגדירו משתנים.\n2. כתבו $z = ax + by$ (מטרה).\n3. כתבו את כל האילוצים כאי-שוויונות.\n4. שרטטו והצלו את אזור הכדאיות.\n5. מצאו את כל נקודות הקודקוד (פתרון מערכות חיתוך).\n6. חשבו $z$ בכל פינה.\n7. ציינו $z$ האופטימלי ופינה שמשיגה אותו.\n\n**משפט הקודקוד:** הערך האופטימלי תמיד בקודקוד.\n\n**דפוסי שאלות טיפוסיות בבגרות 4 יח':**\n1. הגדרת תכנות לינארי מבעיית מילים. (3–4 נקודות)\n2. שרטוט אזור הכדאיות. (3 נקודות)\n3. מציאת ערך אופטימלי ונקודה. (4–5 נקודות)\n\n**טיפים לניקוד:** סמנו את כל קווי האילוץ בגרף. מספרו את הפינות וחשבו כל אחת בטבלה."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- LP: maximize or minimize a linear objective $z = ax + by$ subject to linear constraints.\n- The feasible region is the set of all points satisfying ALL constraints.\n- Corner Point Theorem: the optimal value occurs at a vertex of the feasible region.\n- Method: graph → find corners → evaluate $z$ → pick the best.\n- For word problems: clearly define variables, set up constraints, and interpret the final answer in context.",
+      "body_he_md": "- תכנות לינארי: מיקסום או מינימיזציה של פונקציית מטרה לינארית $z = ax + by$ בכפוף לאילוצים לינאריים.\n- אזור הכדאיות הוא קבוצת כל הנקודות המקיימות את כל האילוצים.\n- משפט הקודקוד: הערך האופטימלי מתרחש בקודקוד של אזור הכדאיות.\n- שיטה: שרטוט → מציאת פינות → חישוב $z$ → בחירת הטוב.\n- לבעיות מילים: הגדירו בבירור משתנים, הגדירו אילוצים, ופרשו את התשובה הסופית בהקשר."
     }
   ]
 }
