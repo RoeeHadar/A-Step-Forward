@@ -1,224 +1,344 @@
 {
-  "id": "center_of_mass_uni",
-  "subject": "university_physics_1",
-  "title_en": "Center of Mass and Systems of Particles — Calculus Treatment (University)",
-  "title_he": "מרכז מסה ומערכות חלקיקים — גישה בחשבון אינטגרלי (אוניברסיטה)",
-  "duration_min": 25,
-  "type": "interactive",
-  "level_min": "university",
-  "agent_hints": "The key conceptual leap is Newton's 2nd law for a system: only external forces accelerate the CM — all internal forces cancel in pairs (Newton's 3rd law). Use this to explain why a person cannot move the CM of their own body by purely internal muscle forces. The rocket equation is subtle: stress that $M$ changes with time and the standard $F = ma$ form must be replaced by the momentum form $d(Mv)/dt = F_{ext}$, leading to the Tsiolkovsky equation. For CM integrals, always set up $dm = \\rho\\,dV$ (or $\\lambda\\,dx$ for 1-D) before integrating.",
+  "concept_id": "center_of_mass_uni",
+  "title_en": "Center of Mass — University Level",
+  "title_he": "מרכז המסה — רמה אוניברסיטאית",
+  "subject": "physics",
+  "difficulty": "advanced",
+  "estimated_minutes": 50,
   "sections": [
     {
-      "id": "cm_discrete",
-      "title_en": "Center of Mass — Discrete Systems",
-      "title_he": "מרכז מסה — מערכות דיסקרטיות",
-      "level_min": "university",
-      "body_en_md": "## Definition for a Discrete System\n\nFor a system of $N$ particles with masses $m_i$ and position vectors $\\vec{r}_i$, the **center of mass** (CM) is:\n$$\\boxed{\\vec{r}_{cm} = \\frac{\\sum_{i=1}^N m_i \\vec{r}_i}{M_{\\text{total}}}}$$\nwhere $M_{\\text{total}} = \\sum_i m_i$.\n\nIn components:\n$$x_{cm} = \\frac{\\sum m_i x_i}{M}, \\qquad y_{cm} = \\frac{\\sum m_i y_i}{M}, \\qquad z_{cm} = \\frac{\\sum m_i z_i}{M}$$\n\n## Velocity and Momentum of the CM\n\n$$\\vec{v}_{cm} = \\frac{d\\vec{r}_{cm}}{dt} = \\frac{\\sum m_i \\vec{v}_i}{M} = \\frac{\\vec{p}_{\\text{total}}}{M}$$\n\nThe CM velocity is the total linear momentum divided by total mass.\n\n**Example:** Two particles: $m_1 = 2$ kg at $x_1 = 1$ m, $m_2 = 4$ kg at $x_2 = 4$ m:\n$$x_{cm} = \\frac{(2)(1) + (4)(4)}{2+4} = \\frac{18}{6} = 3 \\text{ m}$$\nNote the CM is closer to the heavier particle (as expected).",
-      "body_he_md": "## הגדרה למערכת דיסקרטית\n\nעבור מערכת של $N$ חלקיקים עם מסות $m_i$ ווקטורי מיקום $\\vec{r}_i$, **מרכז המסה** (CM) הוא:\n$$\\boxed{\\vec{r}_{cm} = \\frac{\\sum_{i=1}^N m_i \\vec{r}_i}{M_{\\text{כולל}}}}$$\nכאשר $M_{\\text{כולל}} = \\sum_i m_i$.\n\n## מהירות ותנע של ה-CM\n\n$$\\vec{v}_{cm} = \\frac{\\sum m_i \\vec{v}_i}{M} = \\frac{\\vec{p}_{\\text{כולל}}}{M}$$\n\nמהירות ה-CM היא התנע הכולל חלקי המסה הכוללת.\n\n**דוגמה:** שני חלקיקים: $m_1 = 2$ kg ב-$x_1 = 1$ m, $m_2 = 4$ kg ב-$x_2 = 4$ m:\n$$x_{cm} = \\frac{(2)(1) + (4)(4)}{6} = \\frac{18}{6} = 3 \\text{ m}$$"
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "From Formulas to Integrals",
+      "title_he": "מנוסחאות לאינטגרלים",
+      "body_en_md": "In high school, center of mass is computed for discrete particles. At university, we integrate over continuous mass distributions — rods with varying density, 2D plates, 3D solids. The same ideas connect directly to **moment of inertia** (also an integral), making this topic a gateway to all of rigid-body mechanics.\n\n**This lesson covers:**\n- CM via 1D, 2D, and 3D integration\n- Connection to moment of inertia\n- CM in the reference frame of the CM\n- Reduced mass for two-body problems",
+      "body_he_md": "בתיכון, מרכז המסה מחושב לחלקיקים בדידים. באוניברסיטה, אנו מאחדים על פני פילוגי מסה רציפים — מוטות עם צפיפות משתנה, פלטות 2D, גופים 3D. אותם רעיונות מתחברים ישירות ל**מומנט אינרציה** (גם הוא אינטגרל), מה שהופך נושא זה לשער לכל מכניקת הגוף הקשיח.\n\n**שיעור זה מכסה:**\n- CM באמצעות אינטגרציה 1D, 2D ו-3D\n- קשר למומנט אינרציה\n- CM במסגרת ייחוס של CM\n- מסה מוקטנת לבעיות שני גופים"
     },
     {
-      "id": "cm_continuous",
-      "title_en": "Center of Mass — Continuous Bodies",
-      "title_he": "מרכז מסה — גופים רציפים",
-      "level_min": "university",
-      "body_en_md": "## Integral Formula\n\nFor a continuous body with mass element $dm$:\n$$\\boxed{\\vec{r}_{cm} = \\frac{1}{M}\\int \\vec{r}\\,dm}$$\n\nIn 1-D with linear density $\\lambda(x)$ [kg/m]: $dm = \\lambda(x)\\,dx$.\nIn 2-D with surface density $\\sigma$ [kg/m²]: $dm = \\sigma\\,dA$.\nIn 3-D with volume density $\\rho$ [kg/m³]: $dm = \\rho\\,dV$.\n\n## Derivation 1 — Uniform Rod of Length $L$\n\nPlace the rod along the x-axis from 0 to $L$. Uniform linear density $\\lambda = M/L$.\n$$x_{cm} = \\frac{1}{M}\\int_0^L x\\,\\lambda\\,dx = \\frac{\\lambda}{M}\\int_0^L x\\,dx = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\frac{(M/L)}{M}\\cdot\\frac{L^2}{2} = \\boxed{\\frac{L}{2}}$$\nThe CM is at the midpoint — as expected by symmetry.\n\n## Derivation 2 — Right Triangle\n\nFor a uniform right triangle with base $b$ along x-axis and height $h$ along y-axis. The width at height $y$ is $w(y) = b(1 - y/h)$ (linear taper).\n$$y_{cm} = \\frac{1}{M}\\int_0^h y\\,\\sigma\\,w(y)\\,dy = \\frac{\\sigma b}{M}\\int_0^h y\\left(1-\\frac{y}{h}\\right)dy$$\nEvaluating: $\\int_0^h y(1-y/h)dy = h^2/2 - h^2/3 = h^2/6$.\nWith $M = \\frac{1}{2}\\sigma b h$: $y_{cm} = \\frac{\\sigma b}{M}\\cdot\\frac{h^2}{6} = \\frac{h}{3}$.\n$$\\boxed{y_{cm} = \\frac{h}{3}}\\text{ (one-third from the base)}$$",
-      "body_he_md": "## נוסחת האינטגרל\n\nלגוף רציף עם אלמנט מסה $dm$:\n$$\\boxed{\\vec{r}_{cm} = \\frac{1}{M}\\int \\vec{r}\\,dm}$$\n\nב-1D עם צפיפות ליניארית $\\lambda(x)$: $dm = \\lambda(x)\\,dx$.\nב-2D עם צפיפות שטחית $\\sigma$: $dm = \\sigma\\,dA$.\nב-3D עם צפיפות נפחית $\\rho$: $dm = \\rho\\,dV$.\n\n## גזירה 1 — מוט אחיד באורך $L$\n\nהמוט לאורך ציר x מ-0 עד $L$. $\\lambda = M/L$.\n$$x_{cm} = \\frac{1}{M}\\int_0^L x\\lambda\\,dx = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\boxed{\\frac{L}{2}}$$\n\n## גזירה 2 — משולש ישר-זווית\n\nמשולש אחיד בעל בסיס $b$ (לאורך x) וגובה $h$ (לאורך y):\n$$y_{cm} = \\frac{h}{3} \\qquad \\text{(שליש מהבסיס)}$$"
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Continuous Mass Distributions",
+      "title_he": "פילוגי מסה רציפים",
+      "body_en_md": "**1D (rod, length along x-axis):**\n$$x_{\\text{cm}} = \\frac{\\int_0^L x\\,\\lambda(x)\\,dx}{\\int_0^L \\lambda(x)\\,dx} = \\frac{\\int x\\,dm}{M}$$\nwhere $\\lambda(x)$ is the linear mass density (kg/m).\n\n**2D (plate, area $A$):**\n$$x_{\\text{cm}} = \\frac{\\iint x\\,\\sigma(x,y)\\,dA}{M}, \\quad y_{\\text{cm}} = \\frac{\\iint y\\,\\sigma\\,dA}{M}$$\nwhere $\\sigma$ is surface mass density (kg/m²).\n\n**3D (solid volume):**\n$$\\vec{r}_{\\text{cm}} = \\frac{\\iiint \\vec{r}\\,\\rho(x,y,z)\\,dV}{M}$$\nwhere $\\rho$ is volume mass density (kg/m³).\n\n**Reduced mass** (two-body problem, masses $m_1$, $m_2$):\n$$\\mu = \\frac{m_1 m_2}{m_1 + m_2}$$\nIn the CM frame, a two-body problem reduces to a one-body problem with mass $\\mu$.",
+      "body_he_md": "**1D (מוט, לאורך ציר x):**\n$$x_{\\text{cm}} = \\frac{\\int_0^L x\\,\\lambda(x)\\,dx}{M}$$\nכאשר $\\lambda(x)$ היא צפיפות מסה קווית (kg/m).\n\n**2D (פלטה):**\n$$x_{\\text{cm}} = \\frac{\\iint x\\,\\sigma\\,dA}{M}$$\nכאשר $\\sigma$ היא צפיפות מסה שטחית.\n\n**3D (גוף מוצק):**\n$$\\vec{r}_{\\text{cm}} = \\frac{\\iiint \\vec{r}\\,\\rho\\,dV}{M}$$\n\n**מסה מוקטנת:**\n$$\\mu = \\frac{m_1 m_2}{m_1 + m_2}$$"
     },
     {
-      "id": "newtons_law_system",
-      "title_en": "Newton's Second Law for a System",
-      "title_he": "חוק ניוטון השני למערכת חלקיקים",
-      "level_min": "university",
-      "body_en_md": "## $\\vec{F}_{ext} = M\\vec{a}_{cm}$\n\nDifferentiate $M\\vec{v}_{cm} = \\vec{p}_{\\text{total}}$ with respect to time:\n$$\\frac{d\\vec{p}_{\\text{total}}}{dt} = \\sum_i \\frac{d\\vec{p}_i}{dt} = \\sum_i \\vec{F}_i^{\\text{total}}$$\n\nThe forces on particle $i$ consist of external forces $\\vec{F}_i^{\\text{ext}}$ and internal forces $\\vec{F}_{ij}$ from other particles. By Newton's 3rd law, internal forces cancel in pairs:\n$$\\sum_{i \\ne j}\\vec{F}_{ij} = 0$$\n\nTherefore:\n$$\\boxed{\\vec{F}_{\\text{ext}} = M\\vec{a}_{cm}}$$\n\n**Consequence:** Only external forces can change the motion of the CM. A system of particles with no external forces has its CM moving at constant velocity (or at rest).\n\n## Conservation of Momentum\n\nIf $\\vec{F}_{\\text{ext}} = 0$, then $\\vec{p}_{\\text{total}} = M\\vec{v}_{cm} = \\text{const}$.\n\n## CM Reference Frame\n\nIn the **center-of-mass (CM) frame**, the total momentum is zero by definition:\n$$\\sum_i m_i \\vec{v}_i' = 0$$\nwhere $\\vec{v}_i' = \\vec{v}_i - \\vec{v}_{cm}$ are velocities relative to the CM.\n\nThe total kinetic energy in the CM frame ($K_{\\text{CM frame}}$) is the minimum possible kinetic energy of the system — the remaining energy $\\frac{1}{2}Mv_{cm}^2$ is associated with CM motion.",
-      "body_he_md": "## $\\vec{F}_{ext} = M\\vec{a}_{cm}$\n\nנגזור $M\\vec{v}_{cm} = \\vec{p}_{\\text{כולל}}$ לפי זמן. כוחות פנימיים מבוטלים בזוגות (חוק שלישי של ניוטון):\n$$\\boxed{\\vec{F}_{\\text{חיצוני}} = M\\vec{a}_{cm}}$$\n\n**מסקנה:** רק כוחות חיצוניים יכולים לשנות את תנועת מרכז המסה.\n\n## שימור תנע\n\nאם $\\vec{F}_{\\text{חיצוני}} = 0$, אז $\\vec{p}_{\\text{כולל}} = M\\vec{v}_{cm} = \\text{const}$.\n\n## מערכת ייחוס CM\n\nב**מערכת ייחוס מרכז המסה**, התנע הכולל הוא אפס בהגדרה:\n$$\\sum_i m_i \\vec{v}_i' = 0$$\nהאנרגיה הקינטית במערכת CM היא המינימלית האפשרית למערכת."
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "CM Frame and Moment of Inertia Connection",
+      "title_he": "מסגרת CM וקשר למומנט אינרציה",
+      "body_en_md": "### The CM reference frame\n\nIn the CM frame, $\\sum_i m_i\\vec{v}'_i = 0$ (total momentum is zero). The total KE splits:\n$$K_{\\text{total}} = K_{\\text{cm}} + K_{\\text{internal}} = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\frac{1}{2}\\sum_i m_i v_i'^2$$\n\nThis is König's theorem — extremely useful for collisions.\n\n### Moment of inertia via integration\n\nFor a continuous body rotating about axis $z$:\n$$I_z = \\int r_{\\perp}^2\\,dm$$\nwhere $r_{\\perp}$ is the perpendicular distance from the rotation axis.\n\n**Standard integrals:**\n- Solid cylinder (axis): $I = \\frac{1}{2}MR^2$\n- Thin rod (center, $\\perp$): $I = \\frac{1}{12}ML^2$\n- Solid sphere (diameter): $I = \\frac{2}{5}MR^2$\n\n### Parallel axis theorem (derived from CM integral)\n\n$$I = I_{\\text{cm}} + Md^2$$\n\nThis follows from expanding $I = \\int(\\vec{r}_{\\perp} - \\vec{d})^2 dm$ and using the definition of CM.",
+      "body_he_md": "### מסגרת ייחוס של CM\n\nבמסגרת CM, $\\sum_i m_i\\vec{v}'_i = 0$. האנרגיה הקינטית מתפצלת:\n$$K_{\\text{כולל}} = \\frac{1}{2}Mv_{\\text{cm}}^2 + K_{\\text{פנימי}}$$\n\nזהו משפט קניג — שימושי מאוד להתנגשויות.\n\n### מומנט אינרציה באמצעות אינטגרציה\n\n$$I_z = \\int r_{\\perp}^2\\,dm$$\n\n### משפט הציר המקביל\n\n$$I = I_{\\text{cm}} + Md^2$$"
     },
     {
-      "id": "rocket_equation",
-      "title_en": "The Rocket Equation (Tsiolkovsky)",
-      "title_he": "משוואת הרקטה (צ'יולקובסקי)",
-      "level_min": "university",
-      "body_en_md": "## Variable-Mass Systems\n\nA rocket ejects exhaust gas at velocity $\\vec{u}$ **relative to the rocket**. Let $M(t)$ be the rocket mass at time $t$, and $v(t)$ its velocity (in an inertial frame).\n\nIn time $dt$: mass $|dM|$ is ejected. The exhaust velocity in the inertial frame is $v + u$ (if $u$ is defined as backward, i.e., $u < 0$ so exhaust moves backward). Conservation of momentum (no external force):\n\n$$M\\,dv = -u\\,dM \\implies M\\frac{dv}{dt} = -u\\frac{dM}{dt}$$\n\nHere $dM/dt < 0$ (mass is decreasing), and $-u\\,dM/dt > 0$ (thrust). Integrating from $M_0$ to $M_f$:\n$$\\int_{v_0}^{v_f}dv = -u\\int_{M_0}^{M_f}\\frac{dM}{M} = u\\ln\\frac{M_0}{M_f}$$\n$$\\boxed{\\Delta v = u\\ln\\frac{M_0}{M_f}}$$\n\nThis is the **Tsiolkovsky rocket equation** (Δv budget equation in orbital mechanics).\n\n**Physical insight:** $\\ln(M_0/M_f)$ grows slowly — to double $\\Delta v$, you need to square the mass ratio. Efficient rockets maximize exhaust velocity $u$ (specific impulse).\n\n**Example:** Exhaust speed $u = 3000$ m/s, $M_0/M_f = e^2 \\approx 7.4$. Then $\\Delta v = 3000 \\times 2 = 6000$ m/s.",
-      "body_he_md": "## מערכות בעלות מסה משתנה\n\nרקטה מפליטה גז פליטה במהירות $u$ **ביחס לרקטה**. $M(t)$ = מסת הרקטה, $v(t)$ = מהירותה.\n\nשימור תנע (ללא כוח חיצוני): $M\\,dv = -u\\,dM$.\nאינטגרציה מ-$M_0$ ל-$M_f$:\n$$\\boxed{\\Delta v = u\\ln\\frac{M_0}{M_f}}$$\n\nזוהי **משוואת הרקטה של צ'יולקובסקי**.\n\n**תובנה פיזיקלית:** $\\ln(M_0/M_f)$ גדל לאט — להכפלת $\\Delta v$ יש לריבוע יחס המסות. רקטות יעילות ממקסמות את מהירות הפליטה $u$.\n\n**דוגמה:** $u = 3000$ m/s, $M_0/M_f = e^2 \\approx 7.4$ $\\Rightarrow$ $\\Delta v = 6000$ m/s."
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — CM of a Non-Uniform Rod",
+      "title_he": "דוגמה פתורה 1 — CM של מוט לא-אחיד",
+      "body_en_md": "**Given:** A rod of length $L = 2\\;\\text{m}$ with linear density $\\lambda(x) = 3x^2\\;\\text{kg/m}$ (denser toward $x = L$). Find $x_{\\text{cm}}$.\n\n**Step 1 — Total mass:**\n$$M = \\int_0^2 3x^2\\,dx = [x^3]_0^2 = 8\\;\\text{kg}$$\n\n**Step 2 — $\\int x\\,dm$:**\n$$\\int_0^2 x\\cdot 3x^2\\,dx = 3\\int_0^2 x^3\\,dx = 3\\left[\\frac{x^4}{4}\\right]_0^2 = 3\\cdot 4 = 12\\;\\text{kg·m}$$\n\n**Step 3 — CM:**\n$$x_{\\text{cm}} = \\frac{12}{8} = 1.5\\;\\text{m}$$\n\n**Check:** $x_{\\text{cm}} = 1.5 > 1.0$ (midpoint), pulled toward the denser end at $x=2$. ✓",
+      "body_he_md": "**נתון:** מוט $L = 2\\;\\text{m}$ עם $\\lambda(x) = 3x^2$. מצא $x_{\\text{cm}}$.\n\n**מסה כוללת:** $M = \\int_0^2 3x^2\\,dx = 8\\;\\text{kg}$\n\n**$\\int x\\,dm$:** $= 12\\;\\text{kg·m}$\n\n**CM:** $x_{\\text{cm}} = 12/8 = 1.5\\;\\text{m}$"
     },
     {
-      "id": "cm_applications_summary",
-      "title_en": "Applications and Problem-Solving Summary",
-      "title_he": "יישומים וסיכום פתרון בעיות",
-      "level_min": "university",
-      "body_en_md": "## Key Problem Types\n\n1. **Find CM position:** Use $\\vec{r}_{cm} = (\\sum m_i\\vec{r}_i)/M$ for discrete; integral for continuous.\n2. **CM doesn't move:** If $\\vec{F}_{ext} = 0$, then $\\Delta\\vec{r}_{cm} = 0$. Example: person walks on a floating raft — the raft moves backward as the person moves forward, keeping CM fixed.\n3. **Explosion/collision:** CM velocity unchanged during collision/explosion (internal forces only).\n4. **Rocket problem:** Use Tsiolkovsky or work incrementally: $M(t) = M_0 - \\dot{m}t$, thrust $= u\\dot{m}$.\n\n## Technion-Style Example\n\n*A bullet of mass $m = 0.01$ kg is fired horizontally at $v_0 = 300$ m/s into a stationary wooden block of mass $M = 2$ kg resting on a frictionless surface. The bullet embeds in the block. Find the CM velocity before and after.*\n\n- **Before:** $v_{cm} = (m v_0)/(m+M) = (0.01 \\times 300)/(2.01) \\approx 1.49$ m/s.\n- **After:** Same — CM velocity is conserved! The block+bullet system moves at 1.49 m/s.\n- This follows from $\\vec{F}_{ext} = 0$ (no friction), so $\\vec{p}_{\\text{total}} = \\text{const}$.",
-      "body_he_md": "## סוגי בעיות מרכזיים\n\n1. **מציאת מיקום CM:** $\\vec{r}_{cm} = (\\sum m_i\\vec{r}_i)/M$ לדיסקרטי; אינטגרל לרציף.\n2. **CM אינו זז:** אם $\\vec{F}_{ext} = 0$, אז $\\Delta\\vec{r}_{cm} = 0$.\n3. **פיצוץ/התנגשות:** מהירות ה-CM אינה משתנה (רק כוחות פנימיים).\n4. **בעיית רקטה:** שימוש במשוואת צ'יולקובסקי.\n\n## דוגמה בסגנון הטכניון\n\n*כדור ($m = 0.01$ kg, $v_0 = 300$ m/s) נורה לתוך בלוק עץ ($M = 2$ kg) על משטח חלק. מצא מהירות CM לפני ואחרי.*\n\n$v_{cm} = (mv_0)/(m+M) = 3/(2.01) \\approx 1.49$ m/s — שמורה לפני ואחרי!"
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A rod of length $L$ has linear density $\\lambda(x) = \\lambda_0(1 + x/L)$ (uniformly increasing from $\\lambda_0$ to $2\\lambda_0$). Find $x_{\\text{cm}}$.",
+      "body_he_md": "מוט אורך $L$ עם $\\lambda(x) = \\lambda_0(1 + x/L)$. מצא $x_{\\text{cm}}$.",
+      "checkpoint_solution_en": "$M = \\int_0^L \\lambda_0(1+x/L)\\,dx = \\lambda_0[x + x^2/(2L)]_0^L = \\lambda_0(L + L/2) = 3\\lambda_0 L/2$. $\\int x\\,dm = \\lambda_0\\int_0^L x(1+x/L)\\,dx = \\lambda_0[x^2/2 + x^3/(3L)]_0^L = \\lambda_0(L^2/2 + L^2/3) = 5\\lambda_0 L^2/6$. $x_{\\text{cm}} = \\frac{5\\lambda_0 L^2/6}{3\\lambda_0 L/2} = \\frac{5L}{9}$.",
+      "checkpoint_solution_he": "$x_{\\text{cm}} = 5L/9$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — CM of a Solid Hemisphere",
+      "title_he": "דוגמה פתורה 2 — CM של חצי-כדור מוצק",
+      "body_en_md": "**Given:** A solid hemisphere of mass $M$, radius $R$, flat face down. Find $z_{\\text{cm}}$ above the flat face.\n\n**Step 1 — Set up:** Slice at height $z$ above flat face; slice radius $r = \\sqrt{R^2 - z^2}$; slice volume $dV = \\pi r^2 dz$.\n\n**Step 2 — Total mass:**\n$$M = \\int_0^R \\rho\\pi(R^2-z^2)\\,dz = \\rho\\pi\\left[R^2 z - \\frac{z^3}{3}\\right]_0^R = \\rho\\pi\\cdot\\frac{2R^3}{3}$$\n\n**Step 3 — $\\int z\\,dm$:**\n$$\\int_0^R z\\cdot\\rho\\pi(R^2-z^2)\\,dz = \\rho\\pi\\left[\\frac{R^2 z^2}{2} - \\frac{z^4}{4}\\right]_0^R = \\rho\\pi\\cdot\\frac{R^4}{4}$$\n\n**Step 4:**\n$$z_{\\text{cm}} = \\frac{\\rho\\pi R^4/4}{\\rho\\pi 2R^3/3} = \\frac{R^4/4}{2R^3/3} = \\frac{3R}{8}$$\n\n**Answer:** $z_{\\text{cm}} = \\frac{3R}{8}$ above the flat face.",
+      "body_he_md": "**נתון:** חצי-כדור מוצק עם מסה $M$, רדיוס $R$, פנים שטוחות למטה. מצא $z_{\\text{cm}}$.\n\n**שכבות:** $dV = \\pi(R^2-z^2)\\,dz$.\n\n$M = \\rho\\pi\\cdot 2R^3/3$; $\\int z\\,dm = \\rho\\pi R^4/4$.\n\n$$z_{\\text{cm}} = \\frac{3R}{8}$$"
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A 2D triangular plate with vertices at $(0,0)$, $(a,0)$, and $(0,b)$ has uniform surface density $\\sigma$. Find $(x_{\\text{cm}}, y_{\\text{cm}})$.",
+      "body_he_md": "פלטה משולשת עם קודקודים ב-$(0,0)$, $(a,0)$, $(0,b)$ עם צפיפות $\\sigma$ אחידה. מצא $(x_{\\text{cm}}, y_{\\text{cm}})$.",
+      "checkpoint_solution_en": "For any uniform triangle, CM is at the centroid: $(x_{\\text{cm}}, y_{\\text{cm}}) = \\left(\\frac{0+a+0}{3}, \\frac{0+0+b}{3}\\right) = \\left(\\frac{a}{3}, \\frac{b}{3}\\right)$.",
+      "checkpoint_solution_he": "$(x_{\\text{cm}}, y_{\\text{cm}}) = (a/3, b/3)$ — הצנטרואיד."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — König's Theorem for Collision",
+      "title_he": "דוגמה פתורה 3 — משפט קניג להתנגשות",
+      "body_en_md": "**Given:** Mass $m_1 = 3\\;\\text{kg}$ at $v_1 = 8\\;\\text{m/s}$ collides with $m_2 = 1\\;\\text{kg}$ at rest. Find (a) $v_{\\text{cm}}$, (b) total KE in lab frame, (c) KE in CM frame.\n\n**Part (a):**\n$$v_{\\text{cm}} = \\frac{m_1 v_1 + m_2 v_2}{M} = \\frac{(3)(8) + 0}{4} = 6\\;\\text{m/s}$$\n\n**Part (b) — KE in lab:**\n$$K_{\\text{lab}} = \\frac{1}{2}m_1 v_1^2 = \\frac{1}{2}(3)(64) = 96\\;\\text{J}$$\n\n**Part (c) — KE in CM frame:**\n$$K_{\\text{cm}} = \\frac{1}{2}Mv_{\\text{cm}}^2 = \\frac{1}{2}(4)(36) = 72\\;\\text{J}$$\n$$K_{\\text{internal}} = K_{\\text{lab}} - K_{\\text{cm}} = 96 - 72 = 24\\;\\text{J}$$\n\n$K_{\\text{internal}}$ is the kinetic energy available for internal processes (deformation, heat, etc.).\n\n**Alternative:** reduced mass $\\mu = m_1 m_2/(m_1+m_2) = 3/4\\;\\text{kg}$; relative velocity $v_{\\text{rel}} = 8\\;\\text{m/s}$. $K_{\\text{internal}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2 = \\frac{1}{2}(3/4)(64) = 24\\;\\text{J}$ ✓",
+      "body_he_md": "**נתון:** $m_1 = 3\\;\\text{kg}$ ב-$v_1 = 8\\;\\text{m/s}$ מתנגש עם $m_2 = 1\\;\\text{kg}$ בשקט.\n\n**(א):** $v_{\\text{cm}} = 6\\;\\text{m/s}$\n\n**(ב):** $K_{\\text{מעבדה}} = 96\\;\\text{J}$\n\n**(ג):** $K_{\\text{cm}} = 72\\;\\text{J}$; $K_{\\text{פנימי}} = 24\\;\\text{J}$\n\n**לחלופין:** $K_{\\text{פנימי}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2 = 24\\;\\text{J}$ ✓"
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide — Integration Strategy",
+      "title_he": "מדריך שיטה — אסטרטגיית אינטגרציה",
+      "body_en_md": "| Dimension | Slice | $dm$ |\n|---|---|---|\n| 1D rod | Segment $dx$ | $\\lambda(x)\\,dx$ |\n| 2D plate (strip) | Strip of width $dx$ | $\\sigma\\cdot h(x)\\,dx$ |\n| 3D solid (disk) | Disk at height $z$ | $\\rho\\pi r(z)^2\\,dz$ |\n\n**Step-by-step:**\n1. Express $dm$ in terms of one variable\n2. Find $M = \\int dm$\n3. Find $\\int r\\,dm$\n4. $r_{\\text{cm}} = \\frac{\\int r\\,dm}{M}$\n\n**König's theorem:** $K_{\\text{total}} = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\sum\\frac{1}{2}m_i v_i'^2$",
+      "body_he_md": "| ממד | חיתוך | $dm$ |\n|---|---|---|\n| מוט 1D | קטע $dx$ | $\\lambda(x)\\,dx$ |\n| פלטה 2D | רצועה ברוחב $dx$ | $\\sigma h(x)\\,dx$ |\n| גוף 3D (דיסק) | דיסק בגובה $z$ | $\\rho\\pi r(z)^2\\,dz$ |\n\n**שלבים:**\n1. ביטוי $dm$ במשתנה אחד\n2. חישוב $M = \\int dm$\n3. חישוב $\\int r\\,dm$\n4. $r_{\\text{cm}} = \\frac{\\int r\\,dm}{M}$"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A rod of length $L = 3\\;\\text{m}$ has $\\lambda(x) = 2x\\;\\text{kg/m}$. Find $M$ and $x_{\\text{cm}}$.",
+          "body_he": "מוט $L = 3\\;\\text{m}$ עם $\\lambda(x) = 2x$. מצא $M$ ו-$x_{\\text{cm}}$.",
+          "solution_en": "$M = \\int_0^3 2x\\,dx = [x^2]_0^3 = 9\\;\\text{kg}$. $\\int x\\,dm = \\int_0^3 2x^2\\,dx = [2x^3/3]_0^3 = 18\\;\\text{kg·m}$. $x_{\\text{cm}} = 18/9 = 2\\;\\text{m}$.",
+          "solution_he": "$M = 9\\;\\text{kg}$, $x_{\\text{cm}} = 2\\;\\text{m}$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A uniform triangular plate has vertices at $(0,0)$, $(6,0)$, $(0,4)$. Find CM.",
+          "body_he": "פלטה משולשת אחידה עם קודקודים ב-$(0,0)$, $(6,0)$, $(0,4)$. מצא CM.",
+          "solution_en": "Centroid: $((0+6+0)/3, (0+0+4)/3) = (2, 4/3)$.",
+          "solution_he": "CM ב-$(2, 4/3)$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Compute the reduced mass for $m_1 = 2\\;\\text{kg}$ and $m_2 = 6\\;\\text{kg}$.",
+          "body_he": "חשב מסה מוקטנת עבור $m_1 = 2\\;\\text{kg}$ ו-$m_2 = 6\\;\\text{kg}$.",
+          "solution_en": "$\\mu = m_1 m_2/(m_1+m_2) = 12/8 = 1.5\\;\\text{kg}$.",
+          "solution_he": "$\\mu = 1.5\\;\\text{kg}$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Apply König's theorem: a 2 kg object moves at 5 m/s and a 3 kg object moves at 2 m/s in the same direction. Find (a) $v_{\\text{cm}}$, (b) $K_{\\text{cm}}$, (c) $K_{\\text{internal}}$.",
+          "body_he": "משפט קניג: גוף 2 kg נע ב-5 m/s וגוף 3 kg ב-2 m/s באותו כיוון. (א) $v_{\\text{cm}}$, (ב) $K_{\\text{cm}}$, (ג) $K_{\\text{פנימי}}$.",
+          "solution_en": "(a) $v_{\\text{cm}} = (10+6)/5 = 3.2\\;\\text{m/s}$. (b) $K_{\\text{cm}} = \\frac{1}{2}(5)(3.2)^2 = 25.6\\;\\text{J}$. (c) $K_{\\text{lab}} = \\frac{1}{2}(2)(25)+\\frac{1}{2}(3)(4) = 25+6 = 31\\;\\text{J}$. $K_{\\text{int}} = 31 - 25.6 = 5.4\\;\\text{J}$.",
+          "solution_he": "(א) $v_{\\text{cm}} = 3.2\\;\\text{m/s}$. (ב) $K_{\\text{cm}} = 25.6\\;\\text{J}$. (ג) $K_{\\text{פנימי}} = 5.4\\;\\text{J}$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A rod of length $L$ has $\\lambda(x) = \\lambda_0(x/L)^2$. Find (a) $M$, (b) $x_{\\text{cm}}$, (c) $I$ about the end at $x=0$.",
+          "body_he": "מוט $L$ עם $\\lambda(x) = \\lambda_0(x/L)^2$. (א) $M$, (ב) $x_{\\text{cm}}$, (ג) $I$ סביב קצה $x=0$.",
+          "solution_en": "(a) $M = \\int_0^L \\lambda_0(x/L)^2 dx = \\lambda_0 L/3$. (b) $\\int x\\,dm = \\lambda_0/L^2\\int_0^L x^3 dx = \\lambda_0 L^2/4$. $x_{\\text{cm}} = \\frac{\\lambda_0 L^2/4}{\\lambda_0 L/3} = 3L/4$. (c) $I = \\int_0^L x^2\\cdot\\lambda_0(x/L)^2 dx = (\\lambda_0/L^2)\\int_0^L x^4 dx = \\lambda_0 L^3/5 = (3M/L)(L^3/5) = 3ML^2/5$... Actually $M = \\lambda_0 L/3$, so $I = (\\lambda_0/L^2)(L^5/5) = \\lambda_0 L^3/5 = (3M)L^2/5$. But $M = \\lambda_0 L/3$, so $\\lambda_0 = 3M/L$ and $I = (3M/L)(L^3/5)(1/L) = 3ML^2/5$. Wait: $I = (\\lambda_0/L^2)\\cdot L^5/5 = \\lambda_0 L^3/5$. With $\\lambda_0 = 3M/L$: $I = 3ML^2/5$.",
+          "solution_he": "(א) $M = \\lambda_0 L/3$. (ב) $x_{\\text{cm}} = 3L/4$. (ג) $I = 3ML^2/5$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find the CM of a solid cone of height $H$ and base radius $R$ (apex at origin, base at $z = H$).",
+          "body_he": "מצא CM של חרוט מוצק גובה $H$ ורדיוס בסיס $R$ (קודקוד בראשית, בסיס ב-$z=H$).",
+          "solution_en": "Disk at $z$: radius $r = Rz/H$, $dm = \\rho\\pi(Rz/H)^2 dz$. $M = \\rho\\pi R^2 H/3$. $\\int z\\,dm = \\rho\\pi R^2/H^2\\int_0^H z^3 dz = \\rho\\pi R^2 H^2/4$. $z_{\\text{cm}} = \\frac{\\rho\\pi R^2 H^2/4}{\\rho\\pi R^2 H/3} = 3H/4$.",
+          "solution_he": "$z_{\\text{cm}} = 3H/4$ מהקודקוד ($H/4$ מהבסיס).",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Find the moment of inertia of a uniform thin rod of mass $M$ and length $L$ about an axis perpendicular to the rod through its center. Use integration.",
+          "body_he": "מצא מומנט אינרציה של מוט דק אחיד מסה $M$ אורך $L$ סביב ציר מאונך למוט דרך מרכזו. השתמש באינטגרציה.",
+          "solution_en": "Linear density $\\lambda = M/L$. $I = \\int_{-L/2}^{L/2} x^2 (M/L) dx = (M/L)[x^3/3]_{-L/2}^{L/2} = (M/L)\\cdot 2(L/2)^3/3 = (M/L)\\cdot L^3/12 = ML^2/12$.",
+          "solution_he": "$I = ML^2/12$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Find the CM of a solid cylinder that is half filled: one half is aluminum ($\\rho_1$) and the other half is titanium ($\\rho_2$), separated by a vertical plane through the axis. Radius $R$, height $H$.",
+          "body_he": "מצא CM של גליל מוצק חצי-מלא: חצי אלומיניום ($\\rho_1$) וחצי טיטניום ($\\rho_2$), מופרדים על-ידי מישור אנכי דרך הציר. רדיוס $R$, גובה $H$.",
+          "solution_en": "Each half-cylinder: volume $= \\pi R^2 H/2$; CM of half-cylinder at $x_{\\text{half}} = 4R/(3\\pi)$ from axis (standard result for half-disk). $m_1 = \\rho_1\\pi R^2 H/2$, $m_2 = \\rho_2\\pi R^2 H/2$. $x_{\\text{cm}} = \\frac{m_1(4R/3\\pi) + m_2(-4R/3\\pi)}{m_1+m_2} = \\frac{4R}{3\\pi}\\cdot\\frac{\\rho_1-\\rho_2}{\\rho_1+\\rho_2}$.",
+          "solution_he": "$x_{\\text{cm}} = \\frac{4R}{3\\pi}\\cdot\\frac{\\rho_1-\\rho_2}{\\rho_1+\\rho_2}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Use König's theorem: two equal masses $m$ move toward each other at $\\pm v_0$. What is $K_{\\text{cm}}$ and $K_{\\text{internal}}$?",
+          "body_he": "משפט קניג: שתי מסות שוות $m$ נעות לעבר זו את זו ב-$\\pm v_0$. מהם $K_{\\text{cm}}$ ו-$K_{\\text{פנימי}}$?",
+          "solution_en": "$v_{\\text{cm}} = (mv_0 + m(-v_0))/(2m) = 0$. $K_{\\text{cm}} = 0$. $K_{\\text{internal}} = K_{\\text{lab}} = \\frac{1}{2}mv_0^2 + \\frac{1}{2}mv_0^2 = mv_0^2$. All KE is available for internal processes (maximum for a head-on collision).",
+          "solution_he": "$K_{\\text{cm}} = 0$; $K_{\\text{פנימי}} = mv_0^2$ (כל האנרגיה זמינה לתהליכים פנימיים).",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find the CM of a solid paraboloid of revolution $z = r^2/a^2$ (for $0 \\leq r \\leq R$, $0 \\leq z \\leq R^2/a^2 = H$), with uniform density.",
+          "body_he": "מצא CM של פרבולואיד מוצק של מהפכה $z = r^2/a^2$, עם צפיפות אחידה.",
+          "solution_en": "Slicing into disks at height $z$: radius $r = a\\sqrt{z}$, $dm = \\rho\\pi a^2 z\\,dz$. $M = \\rho\\pi a^2\\int_0^H z\\,dz = \\rho\\pi a^2 H^2/2$. $\\int z\\,dm = \\rho\\pi a^2\\int_0^H z^2\\,dz = \\rho\\pi a^2 H^3/3$. $z_{\\text{cm}} = \\frac{H^3/3}{H^2/2} = 2H/3$.",
+          "solution_he": "$z_{\\text{cm}} = 2H/3$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Derive the moment of inertia of a solid sphere about a diameter using the disk method. Show $I = 2MR^2/5$.",
+          "body_he": "גזור את מומנט האינרציה של כדור מוצק סביב קוטר תוך שימוש בשיטת הדיסקים. הראה $I = 2MR^2/5$.",
+          "solution_en": "Disk at height $z$: radius $r = \\sqrt{R^2-z^2}$, $dI = \\frac{1}{2}r^2\\,dm = \\frac{1}{2}(R^2-z^2)\\rho\\pi(R^2-z^2)\\,dz$. $I = \\frac{\\rho\\pi}{2}\\int_{-R}^{R}(R^2-z^2)^2\\,dz = \\frac{\\rho\\pi}{2}\\cdot\\frac{16R^5}{15} = \\frac{8\\rho\\pi R^5}{15}$. With $M = \\frac{4}{3}\\rho\\pi R^3$: $I = \\frac{8\\rho\\pi R^5}{15} = \\frac{2}{5}\\cdot\\frac{4\\rho\\pi R^3}{3}\\cdot R^2 = \\frac{2MR^2}{5}$.",
+          "solution_he": "שיטת הדיסקים נותנת $I = \\frac{2MR^2}{5}$.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A thin ring of mass $M$, radius $R$ is in the $xy$-plane. Find $I$ about (a) the $z$-axis, (b) a diameter ($x$-axis). Use the perpendicular axis theorem for part (b).",
+          "body_he": "טבעת דקה מסה $M$ רדיוס $R$ במישור $xy$. מצא $I$ סביב (א) ציר $z$, (ב) קוטר (ציר $x$). השתמש במשפט הציר המאונך עבור (ב).",
+          "solution_en": "(a) All mass at radius $R$: $I_z = MR^2$. (b) Perpendicular axis theorem: $I_z = I_x + I_y$. By symmetry $I_x = I_y$. So $I_x = I_z/2 = MR^2/2$.",
+          "solution_he": "(א) $I_z = MR^2$. (ב) $I_x = MR^2/2$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Two bodies: $m_1 = 4\\;\\text{kg}$ at $v_1 = 6\\;\\text{m/s}$ and $m_2 = 2\\;\\text{kg}$ at $v_2 = -3\\;\\text{m/s}$ collide. Find: (a) $v_{\\text{cm}}$, (b) $K_{\\text{internal}}$ available, (c) maximum $Q$ (heat) that could be generated in a perfectly inelastic collision.",
+          "body_he": "שני גופים: $m_1 = 4\\;\\text{kg}$ ב-$v_1 = 6\\;\\text{m/s}$ ו-$m_2 = 2\\;\\text{kg}$ ב-$v_2 = -3\\;\\text{m/s}$ מתנגשים. (א) $v_{\\text{cm}}$, (ב) $K_{\\text{פנימי}}$ זמין, (ג) $Q$ מקסימלי.",
+          "solution_en": "(a) $v_{\\text{cm}} = (24-6)/6 = 3\\;\\text{m/s}$. (b) $\\mu = 4\\cdot2/6 = 4/3\\;\\text{kg}$; $v_{\\text{rel}} = 6-(-3) = 9\\;\\text{m/s}$; $K_{\\text{int}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2 = \\frac{1}{2}(4/3)(81) = 54\\;\\text{J}$. (c) In perfectly inelastic collision all internal KE is released: $Q_{\\text{max}} = 54\\;\\text{J}$.",
+          "solution_he": "(א) $v_{\\text{cm}} = 3\\;\\text{m/s}$. (ב) $K_{\\text{פנימי}} = 54\\;\\text{J}$. (ג) $Q_{\\text{max}} = 54\\;\\text{J}$.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Setting up $dm$ incorrectly.** Always express $dm = \\lambda\\,dx$ (1D), $dm = \\sigma\\,dA$ (2D), or $dm = \\rho\\,dV$ (3D) using the appropriate density and differential element.\n\n2. **Not finding $M$ first.** Always compute the total mass before dividing.\n\n3. **Confusing CM height and CM location.** In 3D, the CM has 3 coordinates — by symmetry, two may be zero, but you must verify.\n\n4. **Forgetting the perpendicular axis theorem.** $I_z = I_x + I_y$ only for flat (2D) objects in the $xy$-plane.",
+      "body_he_md": "1. **הגדרת $dm$ לא נכונה.** תמיד הביעו $dm = \\lambda\\,dx$, $\\sigma\\,dA$, או $\\rho\\,dV$ עם אלמנט הגזירה המתאים.\n\n2. **אי-מציאת $M$ קודם.** תמיד חשבו את המסה הכוללת לפני החלוקה.\n\n3. **בלבול בין גובה CM ומיקום CM.** ב-3D ל-CM שלושה קואורדינטות — מסימטריה שניים עשויים להיות אפס.\n\n4. **שכחת משפט הציר המאונך.** $I_z = I_x + I_y$ רק לעצמים שטוחים (2D) במישור $xy$."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**CM integrals:**\n- $x_{\\text{cm}} = \\int x\\,dm / M$\n- $M = \\int dm$\n\n**Key CM results:**\n- Uniform rod: $L/2$; hemisphere: $3R/8$; solid cone: $H/4$ from base\n\n**Moment of inertia:**\n- $I = \\int r_{\\perp}^2\\,dm$; parallel axis: $I = I_{\\text{cm}} + Md^2$\n- Perpendicular axis theorem (2D only): $I_z = I_x + I_y$\n\n**König's theorem:** $K = \\frac{1}{2}Mv_{\\text{cm}}^2 + K_{\\text{internal}}$\n\n**Reduced mass:** $\\mu = m_1 m_2/(m_1+m_2)$; $K_{\\text{internal}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2$",
+      "body_he_md": "**אינטגרלי CM:**\n- $x_{\\text{cm}} = \\int x\\,dm / M$\n\n**תוצאות CM מרכזיות:**\n- מוט אחיד: $L/2$; חצי-כדור: $3R/8$; חרוט: $H/4$ מהבסיס\n\n**מומנט אינרציה:** $I = \\int r_{\\perp}^2\\,dm$\n\n**קניג:** $K = \\frac{1}{2}Mv_{\\text{cm}}^2 + K_{\\text{פנימי}}$\n\n**מסה מוקטנת:** $\\mu = m_1 m_2/(m_1+m_2)$"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_he": "סיכום",
+      "title_en": "Summary",
+      "body_en_md": "- **Continuous CM:** $\\vec{r}_{\\text{cm}} = \\int\\vec{r}\\,dm/M$; set up $dm$ from geometry\n- **Hemisphere:** $z_{\\text{cm}} = 3R/8$; **Solid cone:** $z_{\\text{cm}} = H/4$ from base\n- **Moment of inertia:** $I = \\int r_{\\perp}^2\\,dm$; parallel axis: $I = I_{\\text{cm}} + Md^2$\n- **König's theorem:** $K_{\\text{total}} = K_{\\text{cm}} + K_{\\text{internal}}$\n- **Reduced mass:** $\\mu = m_1 m_2/M$; $K_{\\text{int}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2$",
+      "body_he_md": "- **CM רציף:** $x_{\\text{cm}} = \\int x\\,dm/M$\n- **חצי-כדור:** $3R/8$; **חרוט:** $H/4$ מהבסיס\n- **מומנט אינרציה:** $I = \\int r_{\\perp}^2\\,dm$\n- **קניג:** $K = K_{\\text{cm}} + K_{\\text{פנימי}}$\n- **מסה מוקטנת:** $\\mu = m_1 m_2/M$"
     }
   ],
   "questions": [
     {
       "id": "q1",
-      "type": "mcq",
-      "body_en": "Three masses are placed along the x-axis: $m_1 = 1$ kg at $x = 0$, $m_2 = 3$ kg at $x = 2$ m, $m_3 = 2$ kg at $x = 5$ m. Where is the center of mass?",
-      "body_he": "שלוש מסות מונחות לאורך ציר x: $m_1 = 1$ kg ב-$x = 0$, $m_2 = 3$ kg ב-$x = 2$ m, $m_3 = 2$ kg ב-$x = 5$ m. היכן מרכז המסה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$x_{cm} \\approx 2.67$ m",
-          "text_he": "$x_{cm} \\approx 2.67$ m",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$x_{cm} = 2.33$ m",
-          "text_he": "$x_{cm} = 2.33$ m",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$x_{cm} = 2.00$ m",
-          "text_he": "$x_{cm} = 2.00$ m",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$x_{cm} = 3.50$ m",
-          "text_he": "$x_{cm} = 3.50$ m",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$M = 1+3+2 = 6$ kg. $x_{cm} = [(1)(0)+(3)(2)+(2)(5)]/6 = (0+6+10)/6 = 16/6 \\approx 2.67$ m. The CM lies between $m_2$ and $m_3$ but closer to $m_2$, the heaviest particle.",
-      "explanation_he": "$M = 6$ kg. $x_{cm} = (0 + 6 + 10)/6 = 16/6 \\approx 2.67$ m. מרכז המסה קרוב יותר ל-$m_2$, המסה הכבדה ביותר."
+      "kind": "numeric",
+      "difficulty": 2,
+      "skill_atoms": ["cm_integration"],
+      "stem_en": "A rod $L = 4\\;\\text{m}$ has $\\lambda(x) = 2x\\;\\text{kg/m}$. Find $x_{\\text{cm}}$ in meters.",
+      "stem_he": "מוט $L = 4\\;\\text{m}$ עם $\\lambda(x) = 2x$. מצא $x_{\\text{cm}}$ במטרים.",
+      "answer_payload": {"value": 2.667, "tolerance": 0.05, "unit_en": "m", "unit_he": "m"},
+      "explanation_en": "$M = \\int_0^4 2x\\,dx = 16\\;\\text{kg}$. $\\int x\\,dm = \\int_0^4 2x^2\\,dx = 128/3\\;\\text{kg·m}$. $x_{\\text{cm}} = (128/3)/16 = 8/3 \\approx 2.667\\;\\text{m}$.",
+      "explanation_he": "$x_{\\text{cm}} = 8/3 \\approx 2.667\\;\\text{m}$."
     },
     {
       "id": "q2",
-      "type": "mcq",
-      "body_en": "A uniform thin rod of length $L = 0.8$ m and mass $M$ lies along the x-axis from $x = 0$ to $x = 0.8$ m. Using $x_{cm} = \\frac{1}{M}\\int_0^L x\\lambda\\,dx$, the center of mass is at:",
-      "body_he": "מוט דק אחיד באורך $L = 0.8$ m ומסה $M$ מונח לאורך ציר x מ-$x = 0$ עד $x = 0.8$ m. לפי $x_{cm} = \\frac{1}{M}\\int_0^L x\\lambda\\,dx$, מרכז המסה נמצא ב:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$x_{cm} = 0.4$ m",
-          "text_he": "$x_{cm} = 0.4$ m",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$x_{cm} = 0.267$ m",
-          "text_he": "$x_{cm} = 0.267$ m",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$x_{cm} = 0.6$ m",
-          "text_he": "$x_{cm} = 0.6$ m",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$x_{cm} = 0$ m",
-          "text_he": "$x_{cm} = 0$ m",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\lambda = M/L$. $x_{cm} = \\frac{\\lambda}{M}\\int_0^L x\\,dx = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\frac{L}{2} = 0.4$ m. The CM of a uniform rod is always at its midpoint.",
-      "explanation_he": "$\\lambda = M/L$. $x_{cm} = \\frac{\\lambda}{M}\\cdot\\frac{L^2}{2} = \\frac{L}{2} = 0.4$ m. מרכז המסה של מוט אחיד נמצא תמיד באמצעו."
+      "kind": "mcq",
+      "difficulty": 3,
+      "skill_atoms": ["cm_integration"],
+      "stem_en": "The CM of a uniform solid hemisphere (radius $R$) above its flat base is:",
+      "stem_he": "מרכז המסה של חצי-כדור מוצק אחיד (רדיוס $R$) מעל בסיסו השטוח הוא:",
+      "answer_payload": {
+        "options_en": ["$R/2$", "$R/4$", "$3R/8$", "$2R/3$"],
+        "options_he": ["$R/2$", "$R/4$", "$3R/8$", "$2R/3$"],
+        "correct_index": 2
+      },
+      "explanation_en": "By integration (slicing into horizontal disks): $z_{\\text{cm}} = 3R/8$.",
+      "explanation_he": "בשיטת הדיסקים: $z_{\\text{cm}} = 3R/8$."
     },
     {
       "id": "q3",
-      "type": "mcq",
-      "body_en": "Two ice skaters (masses $M_1 = 60$ kg and $M_2 = 80$ kg) stand at rest on frictionless ice and push off each other. After the push, $v_1 = 2$ m/s to the right. What is $v_2$?",
-      "body_he": "שני מחליקי קרח (מסות $M_1 = 60$ kg ו-$M_2 = 80$ kg) עומדים במנוחה על קרח חלק ודוחפים אחד את השני. לאחר הדחיפה, $v_1 = 2$ m/s ימינה. מהי $v_2$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$v_2 = 1.5$ m/s to the left",
-          "text_he": "$v_2 = 1.5$ m/s שמאלה",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$v_2 = 2.0$ m/s to the left",
-          "text_he": "$v_2 = 2.0$ m/s שמאלה",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$v_2 = 1.5$ m/s to the right",
-          "text_he": "$v_2 = 1.5$ m/s ימינה",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$v_2 = 2.67$ m/s to the left",
-          "text_he": "$v_2 = 2.67$ m/s שמאלה",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Initially at rest, $\\vec{p}_{\\text{total}} = 0$. After: $M_1 v_1 + M_2 v_2 = 0 \\Rightarrow v_2 = -M_1 v_1/M_2 = -(60)(2)/80 = -1.5$ m/s. Negative = to the left.",
-      "explanation_he": "בהתחלה במנוחה, $\\vec{p}_{\\text{כולל}} = 0$. לאחר: $M_1 v_1 + M_2 v_2 = 0 \\Rightarrow v_2 = -(60)(2)/80 = -1.5$ m/s (שמאלה)."
+      "kind": "numeric",
+      "difficulty": 3,
+      "skill_atoms": ["reduced_mass", "kings_theorem"],
+      "stem_en": "$m_1 = 3\\;\\text{kg}$ at $v_1 = 10\\;\\text{m/s}$, $m_2 = 7\\;\\text{kg}$ at rest. Find $K_{\\text{internal}}$ (internal KE in CM frame) in joules.",
+      "stem_he": "$m_1 = 3\\;\\text{kg}$ ב-$10\\;\\text{m/s}$, $m_2 = 7\\;\\text{kg}$ בשקט. מצא $K_{\\text{פנימי}}$ בג'ול.",
+      "answer_payload": {"value": 105.0, "tolerance": 1, "unit_en": "J", "unit_he": "J"},
+      "explanation_en": "$\\mu = 3\\cdot7/10 = 2.1\\;\\text{kg}$; $v_{\\text{rel}} = 10\\;\\text{m/s}$. $K_{\\text{int}} = \\frac{1}{2}(2.1)(100) = 105\\;\\text{J}$.",
+      "explanation_he": "$K_{\\text{פנימי}} = 105\\;\\text{J}$."
     },
     {
       "id": "q4",
-      "type": "mcq",
-      "body_en": "A 70 kg astronaut and a 10 kg toolbox are initially at rest in space. The astronaut pushes the toolbox away at 5 m/s relative to the initial frame. What is the astronaut's recoil speed?",
-      "body_he": "אסטרונאוט (70 kg) וארגז כלים (10 kg) נמצאים בתחילה במנוחה בחלל. האסטרונאוט דוחף את הארגז בתנועה של 5 m/s ביחס למסגרת ההתייחסות ההתחלתית. מהי מהירות הרתע של האסטרונאוט?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\approx 0.71$ m/s (opposite direction)",
-          "text_he": "$\\approx 0.71$ m/s (כיוון הפוך)",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$5$ m/s",
-          "text_he": "$5$ m/s",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$0.5$ m/s",
-          "text_he": "$0.5$ m/s",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$3.5$ m/s",
-          "text_he": "$3.5$ m/s",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$p_{\\text{total}} = 0$. $10(5) + 70 v_{\\text{astro}} = 0 \\Rightarrow v_{\\text{astro}} = -50/70 \\approx -0.714$ m/s. The astronaut recoils at $\\approx 0.71$ m/s in the opposite direction.",
-      "explanation_he": "$p_{\\text{כולל}} = 0$. $10(5) + 70 v_{\\text{אסטרונאוט}} = 0 \\Rightarrow v_{\\text{אסטרונאוט}} = -50/70 \\approx -0.71$ m/s (כיוון הפוך)."
+      "kind": "true_false",
+      "difficulty": 2,
+      "skill_atoms": ["parallel_axis_theorem"],
+      "stem_en": "True or False: The perpendicular axis theorem $I_z = I_x + I_y$ applies to any 3D solid object.",
+      "stem_he": "נכון או לא נכון: משפט הציר המאונך $I_z = I_x + I_y$ חל על כל גוף 3D מוצק.",
+      "answer_payload": {"correct": false},
+      "explanation_en": "The perpendicular axis theorem applies **only to flat (2D) objects** (laminas) lying in the $xy$-plane.",
+      "explanation_he": "משפט הציר המאונך חל **רק על עצמים שטוחים (2D)** המונחים במישור $xy$."
     },
     {
       "id": "q5",
-      "type": "mcq",
-      "body_en": "A rocket has initial mass $M_0 = 10{,}000$ kg and final mass $M_f = 2{,}000$ kg after burning all fuel. The exhaust speed is $u = 2500$ m/s. What is $\\Delta v$?",
-      "body_he": "לרקטה מסה התחלתית $M_0 = 10{,}000$ kg ומסה סופית $M_f = 2{,}000$ kg לאחר שריפת כל הדלק. מהירות הפליטה $u = 2500$ m/s. מהו $\\Delta v$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\Delta v \\approx 4024$ m/s",
-          "text_he": "$\\Delta v \\approx 4024$ m/s",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$\\Delta v = 2500$ m/s",
-          "text_he": "$\\Delta v = 2500$ m/s",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$\\Delta v \\approx 8000$ m/s",
-          "text_he": "$\\Delta v \\approx 8000$ m/s",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\Delta v = 20{,}000$ m/s",
-          "text_he": "$\\Delta v = 20{,}000$ m/s",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\Delta v = u\\ln(M_0/M_f) = 2500\\ln(10000/2000) = 2500\\ln 5 = 2500 \\times 1.609 \\approx 4023$ m/s.",
-      "explanation_he": "$\\Delta v = u\\ln(M_0/M_f) = 2500\\ln(5) = 2500 \\times 1.609 \\approx 4023$ m/s."
+      "kind": "derivation",
+      "difficulty": 4,
+      "skill_atoms": ["cm_integration"],
+      "stem_en": "Derive $z_{\\text{cm}} = 3R/8$ for a solid uniform hemisphere of radius $R$ with flat base at $z=0$.",
+      "stem_he": "גזור $z_{\\text{cm}} = 3R/8$ לחצי-כדור מוצק אחיד ברדיוס $R$ עם בסיס שטוח ב-$z=0$.",
+      "answer_payload": {
+        "steps_en": [
+          "At height $z$, horizontal disk has radius $r(z) = \\sqrt{R^2-z^2}$",
+          "$dm = \\rho\\pi r^2 dz = \\rho\\pi(R^2-z^2)\\,dz$",
+          "$M = \\rho\\pi\\int_0^R(R^2-z^2)\\,dz = \\rho\\pi[R^2z - z^3/3]_0^R = \\frac{2\\rho\\pi R^3}{3}$",
+          "$\\int_0^R z\\,dm = \\rho\\pi\\int_0^R z(R^2-z^2)\\,dz = \\rho\\pi[R^2z^2/2 - z^4/4]_0^R = \\rho\\pi R^4/4$",
+          "$z_{\\text{cm}} = \\frac{\\rho\\pi R^4/4}{2\\rho\\pi R^3/3} = \\frac{R^4/4}{2R^3/3} = \\frac{3R}{8}$ ∎"
+        ],
+        "steps_he": [
+          "בגובה $z$: דיסק ברדיוס $r = \\sqrt{R^2-z^2}$",
+          "$dm = \\rho\\pi(R^2-z^2)\\,dz$",
+          "$M = 2\\rho\\pi R^3/3$",
+          "$\\int z\\,dm = \\rho\\pi R^4/4$",
+          "$z_{\\text{cm}} = 3R/8$ ∎"
+        ]
+      },
+      "explanation_en": "This integral appears frequently in university exams.",
+      "explanation_he": "אינטגרל זה מופיע לעתים קרובות בבחינות אוניברסיטאיות."
     }
-  ]
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "CM via integration: $x_{\\text{cm}} = \\int x\\,dm/M$. Always find $M$ first.",
+      "Solid hemisphere: $z_{\\text{cm}} = 3R/8$. Solid cone: $z_{\\text{cm}} = H/4$ from base.",
+      "König's theorem: $K_{\\text{total}} = K_{\\text{cm}} + K_{\\text{internal}}$.",
+      "Reduced mass: $\\mu = m_1m_2/(m_1+m_2)$; $K_{\\text{int}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2$.",
+      "Perpendicular axis theorem $I_z = I_x + I_y$ is valid ONLY for 2D (flat) objects."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Perpendicular axis theorem applies to 3D objects",
+        "correction": "Only valid for 2D (flat) laminas in the xy-plane.",
+        "detect_phrase_en": "perpendicular axis 3D",
+        "detect_phrase_he": "משפט ציר מאונך תלת-מימד"
+      }
+    ],
+    "tutor_pacing_hint": "First master the 1D rod integral. Then hemisphere (the disk method). Connect to moment of inertia integrals — same structure.",
+    "skill_atoms_unlocked": [
+      "cm_integration",
+      "kings_theorem",
+      "reduced_mass",
+      "moment_of_inertia_integration",
+      "parallel_axis_theorem"
+    ]
+  }
 }

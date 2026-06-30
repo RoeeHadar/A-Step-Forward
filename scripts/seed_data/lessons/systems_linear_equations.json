@@ -1,176 +1,46 @@
 {
   "concept_id": "systems_linear_equations",
-  "subject": "linear_algebra",
-  "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Systems of Linear Equations & Gaussian Elimination",
-  "title_he": "מערכות משוואות לינאריות ואלימינציה גאוסית",
-  "summary_en": "Solve $m \\times n$ linear systems via augmented matrices, elementary row operations, REF/RREF, and the Rouché–Capelli rank criteria — the Technion/TAU entry point to linear algebra.",
-  "summary_he": "פתרון מערכות $m \\times n$ באמצעות מטריצה מורחבת, פעולות שורה, REF/RREF וקריטריוני דרגה (רושה-קפלי) — נקודת הכניסה לאלגברה לינארית בטכניון/TAU.",
-  "est_minutes": 40,
+  "title_en": "Systems of Linear Equations — Substitution, Elimination, and Gaussian",
+  "title_he": "מערכות משוואות לינאריות — הצבה, חיסור, ואלימינציה גאוסית",
+  "subject": "math",
+  "difficulty": "intermediate",
+  "estimated_minutes": 55,
   "sections": [
-    {
-      "kind": "theory",
-      "title_en": "Systems and augmented matrices",
-      "title_he": "מערכות ומטריצות מורחבות",
-      "body_en_md": "A **system of linear equations** in $n$ unknowns $x_1,\\ldots,x_n$ has the form:\n$$a_{11}x_1 + \\cdots + a_{1n}x_n = b_1, \\quad \\ldots, \\quad a_{m1}x_1 + \\cdots + a_{mn}x_n = b_m.$$\n\nIn **matrix notation**: $A\\vec{x} = \\vec{b}$, where $A$ is $m \\times n$, $\\vec{x} \\in \\mathbb{R}^n$, $\\vec{b} \\in \\mathbb{R}^m$.\n\nThe **augmented matrix** $[A|\\vec{b}]$ stores coefficients and constants side by side — row operations on it solve the system without rewriting variables each time.\n\n**Three solution types:**\n1. **Unique** — exactly one $\\vec{x}$.\n2. **Infinitely many** — an affine subspace of dimension $\\geq 1$.\n3. **None** — inconsistent (contradiction).\n\n**Geometry (2D/3D):** each equation is a line/plane/hyperplane. A unique solution = transversal intersection; none = parallel objects; infinitely many = overlap along a subspace (e.g. two coincident planes in $\\mathbb{R}^3$).\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "**מערכת משוואות לינאריות** ב-$n$ נעלמים $x_1,\\ldots,x_n$:\n$$a_{11}x_1 + \\cdots + a_{1n}x_n = b_1, \\quad \\ldots, \\quad a_{m1}x_1 + \\cdots + a_{mn}x_n = b_m.$$\n\n**סימון מטריצי:** $A\\vec{x} = \\vec{b}$, כאשר $A$ בגודל $m \\times n$.\n\n**המטריצה המורחבת** $[A|\\vec{b}]$ מאחסנת מקדמים ואגפים יחד — פעולות שורה עליה פותרות את המערכת.\n\n**שלושה סוגי פתרונות:**\n1. **יחיד** — $\\vec{x}$ אחד בדיוק.\n2. **אינסוף רבים** — תת-מרחב אפיני.\n3. **אין** — מערכת סותרת.\n\n**גיאומטריה:** כל משוואה = ישר/מישור. חיתוך יחיד / אין חיתוך / חפיפה לאורך תת-מרחב.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Elementary row operations",
-      "title_he": "פעולות שורה אלמנטריות",
-      "body_en_md": "Three **elementary row operations (EROs)** — each preserves the solution set:\n\n1. **Swap:** $R_i \\leftrightarrow R_j$.\n2. **Scale:** $R_i \\leftarrow cR_i$ with $c \\neq 0$.\n3. **Add multiple:** $R_i \\leftarrow R_i + cR_j$.\n\n**Goal:** reach **Row Echelon Form (REF)** — pivots move right as you go down; zeros below each pivot. **Reduced REF (RREF)** additionally has zeros above pivots and pivot entries equal to 1.\n\nEvery ERO is reversible, so solutions of $[A|\\vec{b}]$ and its REF/RREF are identical.\n\n**Exam tip:** scaling a row by $-1$ or swapping rows does not change consistency — but forgetting to apply the same operation to $\\vec{b}$ in the augmented matrix *does* change the system.",
-      "body_he_md": "שלוש **פעולות שורה אלמנטריות** — כל אחת שומרת על קבוצת הפתרונות:\n\n1. **החלפה:** $R_i \\leftrightarrow R_j$.\n2. **כפל:** $R_i \\leftarrow cR_i$ ($c \\neq 0$).\n3. **חיבור כפולה:** $R_i \\leftarrow R_i + cR_j$.\n\n**מטרה:** **צורת מדרגות (REF)** — אפסים מתחת לכל pivot; pivots זזים ימינה. **RREF** — גם אפסים מעל pivots וערכי pivot = 1.\n\n**טיפ למבחן:** החלפת שורות לא משנה עקביות — אבל שכחה לעדכן את $\\vec{b}$ במטריצה המורחבת כן."
-    },
-    {
-      "kind": "worked_example",
-      "title_en": "Gaussian elimination — 3×3 example",
-      "title_he": "אלימינציה גאוסית — דוגמה 3×3",
-      "body_en_md": "Solve:\n$$\\begin{cases} x + 2y + z = 9 \\\\ 2x + 5y + 3z = 23 \\\\ x + 4y + 2z = 14 \\end{cases}$$\n\nAugmented matrix and forward elimination:\n$$\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 2 & 5 & 3 & 23 \\\\ 1 & 4 & 2 & 14 \\end{array}\\right]\n\\xrightarrow{R_2-2R_1,\\; R_3-R_1}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 2 & 1 & 5 \\end{array}\\right]\n\\xrightarrow{R_3-2R_2}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 0 & -1 & -5 \\end{array}\\right]$$\n\n**Back-substitution:** $-z = -5 \\Rightarrow z = 5$; $y + z = 5 \\Rightarrow y = 0$; $x + 2y + z = 9 \\Rightarrow x = 4$.\n\n**Unique solution:** $(x,y,z) = (4, 0, 5)$.\n\nWhen fewer pivots than unknowns, **free variables** appear — assign parameters (e.g. $x_3 = t$) and express basic variables in terms of $t$.",
-      "body_he_md": "פתרו:\n$$\\begin{cases} x + 2y + z = 9 \\\\ 2x + 5y + 3z = 23 \\\\ x + 4y + 2z = 14 \\end{cases}$$\n\n$$\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 2 & 5 & 3 & 23 \\\\ 1 & 4 & 2 & 14 \\end{array}\\right]\n\\xrightarrow{R_2-2R_1,\\; R_3-R_1}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 2 & 1 & 5 \\end{array}\\right]\n\\xrightarrow{R_3-2R_2}\n\\left[\\begin{array}{ccc|c} 1 & 2 & 1 & 9 \\\\ 0 & 1 & 1 & 5 \\\\ 0 & 0 & -1 & -5 \\end{array}\\right]$$\n\n**הצבה לאחור:** $z = 5$, $y = 0$, $x = 4$. **פתרון יחיד:** $(4,0,5)$.\n\nכשיש פחות pivots מנעלמים — **משתנים חופשיים** (למשל $x_3 = t$)."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Solution structure and rank",
-      "title_he": "מבנה הפתרון ודרגה",
-      "body_en_md": "**Rank** = number of pivot columns in REF of $A$ = $\\text{rank}(A)$.\n\nIf $\\text{rank}(A) = r$ and there are $n$ unknowns, the solution set (when consistent) is an **affine subspace** of dimension $n - r$.\n\nFor **homogeneous** $A\\vec{x} = \\vec{0}$: always has the trivial $\\vec{0}$; nontrivial solutions iff $r < n$.\n\n**General solution:** $\\vec{x} = \\vec{x}_p + \\vec{x}_h$, where $\\vec{x}_p$ is any particular solution and $\\vec{x}_h \\in \\ker(A)$.\n\n**Technion-style example with parameter $k$:**\n$$\\begin{cases} x + y = 2 \\\\ 2x + 2y = k \\end{cases}$$\nRow 2 gives $k = 4$ for consistency. If $k = 4$: infinitely many $(x,y) = (2-t, t)$; if $k \\neq 4$: no solution.",
-      "body_he_md": "**דרגה** = מספר עמודות pivot ב-REF של $A$.\n\nאם $\\text{rank}(A) = r$ ו-$n$ נעלמים, קבוצת הפתרונות (אם עקבית) היא **תת-מרחב אפיני** במימד $n-r$.\n\nל**הומогנית** $A\\vec{x} = \\vec{0}$: תמיד $\\vec{0}$; פתרונות לא-טריוויאליים iff $r < n$.\n\n**פתרון כללי:** $\\vec{x} = \\vec{x}_p + \\vec{x}_h$.\n\n**דוגמה עם פרמטר $k$:**\n$$\\begin{cases} x + y = 2 \\\\ 2x + 2y = k \\end{cases}$$\nעקביות דורשת $k = 4$. אם $k = 4$: $(2-t, t)$; אם $k \\neq 4$: אין פתרון."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Unique / infinite / no solution — Rouché–Capelli",
-      "title_he": "פתרון יחיד / אינסוף / אין — רושה-קפלי",
-      "body_en_md": "**Inconsistent (no solution):** a row $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ with $c \\neq 0$ — a pivot in the augmented column with no variable.\n\n**Rouché–Capelli theorem (stated):** $A\\vec{x} = \\vec{b}$ is consistent iff $\\text{rank}(A) = \\text{rank}([A|\\vec{b}])$.\n\n| Condition | Outcome |\n|---|---|\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) = n$ | **Unique** solution |\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) < n$ | **Infinitely many** |\n| $\\text{rank}(A) < \\text{rank}([A|\\vec{b}])$ | **No** solution |\n\n**Exam type:** *For which $k$ does the system have a solution?* — eliminate and read the condition on the last row without fully solving.\n\n**Connection:** $\\dim(\\ker A) = n - \\text{rank}(A)$ (preview of Rank–Nullity).",
-      "body_he_md": "**אין פתרון:** שורה $[0\\,0\\,\\cdots\\,0\\,|\\,c]$ עם $c \\neq 0$.\n\n**משפט רושה-קפלי:** $A\\vec{x} = \\vec{b}$ עקבית iff $\\text{rank}(A) = \\text{rank}([A|\\vec{b}])$.\n\n| תנאי | תוצאה |\n|---|---|\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) = n$ | **פתרון יחיד** |\n| $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) < n$ | **אינסוף רבים** |\n| $\\text{rank}(A) < \\text{rank}([A|\\vec{b}])$ | **אין** פתרון |\n\n**סוג מבחן:** *לערך איזה $k$ יש פתרון?* — אלימינציה וקריאת התנאי בשורה האחרונה."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Systems of Linear Equations & Gaussian Elimination: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Systems of Linear Equations & Gaussian Elimination.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-מערכות משוואות לינאריות ואלימינציה גאוסית: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-מערכות משוואות לינאריות ואלימינציה גאוסית.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
+    {"id": "intro","kind": "intro","title_en": "Why Systems of Equations Matter","title_he": "למה מערכות משוואות חשובות","body_en_md": "A single equation in one variable has one unknown. But most real-world problems involve **multiple unknowns** that interact — prices, quantities, velocities, currents. A system of equations models all constraints simultaneously.\n\n**Three solution outcomes:**\n- **Unique solution** — lines intersect at one point\n- **Infinitely many solutions** — lines coincide (dependent equations)\n- **No solution** — lines are parallel (inconsistent)\n\n**Exam relevance:** Bagrut 3-5 units, linear algebra (university), engineering entry.","body_he_md": "מערכות משוואות מדגמנות מציאות עם מספר אילוצים.\n\n**שלושה מצבים:** פתרון יחיד, אינסוף פתרונות, אין פתרון.\n\n**מיקוד בחינה:** בגרות 3-5 יחידות, אלגברה לינארית."},
+    {"id": "definition","kind": "definition","title_en": "2×2 and 3×3 Linear Systems","title_he": "מערכות $2\\times2$ ו-$3\\times3$","body_en_md": "A **2×2 linear system:**\n$$\\begin{cases} a_1 x + b_1 y = c_1 \\\\ a_2 x + b_2 y = c_2 \\end{cases}$$\n\nA **3×3 linear system:** $A\\vec{x} = \\vec{b}$ where $A$ is $3\\times3$.\n\n**Augmented matrix $[A|\\vec{b}]$:** stores all coefficients and constants:\n$$\\left[\\begin{array}{cc|c} a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2 \\end{array}\\right]$$\n\n**Rouché-Capelli (consistency):** Consistent iff $\\text{rank}(A) = \\text{rank}([A|\\vec{b}])$.","body_he_md": "$$\\begin{cases} a_1x+b_1y=c_1 \\\\ a_2x+b_2y=c_2 \\end{cases}$$\n\n**מטריצה מורחבת:** $[A|\\vec{b}]$.\n\n**רושה-קפלי:** עקבית אמ\"מ $\\text{rank}(A) = \\text{rank}([A|\\vec{b}])$."},
+    {"id": "theory","kind": "theory","title_en": "Three Solution Methods","title_he": "שלוש שיטות פתרון","body_en_md": "### Method 1: Substitution\nSolve one equation for one variable, substitute into the other.\n\n### Method 2: Elimination (adding/subtracting equations)\nMultiply equations so coefficients cancel when added/subtracted.\n\n### Method 3: Gaussian Elimination\n1. Write augmented matrix\n2. Row-reduce to echelon form using:\n   - Swap: $R_i \\leftrightarrow R_j$\n   - Scale: $R_i \\leftarrow cR_i$ ($c\\neq0$)\n   - Add multiple: $R_i \\leftarrow R_i + cR_j$\n3. Back-substitute\n\n**Free variables:** When fewer pivots than unknowns, set free variables $= t$ and express others in terms of $t$.","body_he_md": "**שיטה 1 — הצבה:** פתור נעלם אחד, הצב.\n\n**שיטה 2 — חיסור (אלימינציה):** כפל ובטל נעלם.\n\n**שיטה 3 — אלימינציה גאוסית:**\n1. מטריצה מורחבת\n2. פעולות שורה\n3. הצבה לאחור"},
+    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Substitution (2×2)","title_he": "דוגמה פתורה 1 — הצבה ($2\\times2$)","body_en_md": "**Solve:**\n$$\\begin{cases} x + 2y = 8 \\\\ 3x - y = 3 \\end{cases}$$\n\n**Step 1:** From equation 1: $x = 8 - 2y$\n\n**Step 2:** Substitute into equation 2:\n$3(8-2y) - y = 3 \\Rightarrow 24 - 6y - y = 3 \\Rightarrow 7y = 21 \\Rightarrow y = 3$\n\n**Step 3:** $x = 8 - 6 = 2$\n\n**Solution:** $(x, y) = (2, 3)$\n\n**Check:** $2+6=8$ ✓; $6-3=3$ ✓","body_he_md": "$x+2y=8$; $3x-y=3$.\n\n$x=8-2y$. הצבה: $24-7y=3 \\Rightarrow y=3$.\n\n$x=2$. **פתרון:** $(2,3)$."},
+    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Solve by elimination:\n$$\\begin{cases} 2x + 3y = 12 \\\\ x - y = 1 \\end{cases}$$","body_he_md": "פתור בחיסור:\n$$\\begin{cases} 2x+3y=12 \\\\ x-y=1 \\end{cases}$$","checkpoint_solution_en": "From eq 2: $x=1+y$. Substitute: $2+2y+3y=12 \\Rightarrow 5y=10 \\Rightarrow y=2$, $x=3$. Or multiply eq 2 by 2: $2x-2y=2$; subtract from eq 1: $5y=10 \\Rightarrow y=2$, $x=3$.","checkpoint_solution_he": "$(x,y)=(3,2)$."},
+    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Gaussian Elimination (3×3)","title_he": "דוגמה פתורה 2 — אלימינציה גאוסית ($3\\times3$)","body_en_md": "**Solve:**\n$$\\begin{cases} x+2y+z=9 \\\\ 2x+5y+3z=23 \\\\ x+4y+2z=14 \\end{cases}$$\n\n**Augmented matrix:**\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\2&5&3&23\\\\1&4&2&14\\end{array}\\right]$$\n\n**$R_2 \\leftarrow R_2-2R_1$; $R_3 \\leftarrow R_3-R_1$:**\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\0&1&1&5\\\\0&2&1&5\\end{array}\\right]$$\n\n**$R_3 \\leftarrow R_3-2R_2$:**\n$$\\left[\\begin{array}{ccc|c}1&2&1&9\\\\0&1&1&5\\\\0&0&-1&-5\\end{array}\\right]$$\n\n**Back-substitute:** $z=5$; $y+5=5 \\Rightarrow y=0$; $x+0+5=9 \\Rightarrow x=4$.\n\n**Solution:** $(4, 0, 5)$","body_he_md": "אחרי אלימינציה: $z=5$, $y=0$, $x=4$.\n\n**פתרון:** $(4,0,5)$."},
+    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "For what value of $k$ does the system have no solution?\n$$\\begin{cases} x+y=2 \\\\ 2x+2y=k \\end{cases}$$","body_he_md": "לאיזה $k$ אין פתרון?\n$$\\begin{cases} x+y=2 \\\\ 2x+2y=k \\end{cases}$$","checkpoint_solution_en": "Row 2 = 2×Row 1 gives: $2x+2y=4$. If $k\\neq4$, row 2 contradicts row 1 → no solution. If $k=4$: infinitely many solutions.","checkpoint_solution_he": "אם $k\\neq4$: אין פתרון. אם $k=4$: אינסוף פתרונות."},
+    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Free Variables and Parametric Solution","title_he": "דוגמה פתורה 3 — משתנים חופשיים ופתרון פרמטרי","body_en_md": "**Solve:**\n$$\\begin{cases} x + y + z = 6 \\\\ 2x + y + 3z = 13 \\end{cases}$$\n\n**Augmented matrix:**\n$$\\left[\\begin{array}{ccc|c}1&1&1&6\\\\2&1&3&13\\end{array}\\right]$$\n\n**$R_2 \\leftarrow R_2-2R_1$:**\n$$\\left[\\begin{array}{ccc|c}1&1&1&6\\\\0&-1&1&1\\end{array}\\right]$$\n\nRank = 2 < 3 unknowns → **one free variable**. Let $z = t$.\n\n**From $R_2$:** $-y + t = 1 \\Rightarrow y = t - 1$\n\n**From $R_1$:** $x = 6 - y - z = 6-(t-1)-t = 7-2t$\n\n**General solution:**\n$$\\vec{x} = \\begin{pmatrix}7\\\\-1\\\\0\\end{pmatrix} + t\\begin{pmatrix}-2\\\\1\\\\1\\end{pmatrix}, \\quad t \\in \\mathbb{R}$$","body_he_md": "מדרגה 2 < 3 נעלמים → **משתנה חופשי** $z=t$.\n\n$y=t-1$, $x=7-2t$.\n\n$$\\vec{x} = (7,-1,0)^T + t(-2,1,1)^T$$"},
+    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Situation | Method |\n|---|---|\n| 2×2, simple | Substitution or elimination |\n| 3×3 or larger | Gaussian elimination |\n| Checking consistency | Row-reduce; look for $[0\\,0\\,\\cdots|c]$ with $c\\neq0$ |\n| Free variables | Count: #unknowns $-$ #pivots |\n| Parametric solution | Each free variable = parameter $t, s, ...$ |\n| Geometric interpretation | Check lines: parallel/intersecting/coincident |","body_he_md": "| מצב | שיטה |\n|---|---|\n| $2\\times2$ | הצבה / חיסור |\n| $3\\times3$+ | אלימינציה גאוסית |\n| עקביות | חפש $[0\\cdots|c\\neq0]$ |\n| משתנים חופשיים | $n - \\text{pivots}$ |"},
+    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
+      {"id": "e1","difficulty": "easy","body_en": "Solve: $x+y=5$, $x-y=1$.","body_he": "פתור: $x+y=5$, $x-y=1$.","solution_en": "Adding: $2x=6 \\Rightarrow x=3$, $y=2$.","solution_he": "$(3,2)$.","points": 5},
+      {"id": "e2","difficulty": "easy","body_en": "Solve: $2x+3y=12$, $y=2$.","body_he": "פתור: $2x+3y=12$, $y=2$.","solution_en": "$2x+6=12 \\Rightarrow x=3$. $(3,2)$.","solution_he": "$(3,2)$.","points": 5},
+      {"id": "e3","difficulty": "easy","body_en": "Does $x+y=3$, $2x+2y=8$ have a solution? Why?","body_he": "האם $x+y=3$, $2x+2y=8$ עקבית?","solution_en": "Row 2 = 2×Row 1 gives $2x+2y=6\\neq8$. No solution (inconsistent).","solution_he": "אין פתרון (סותרות).","points": 5},
+      {"id": "e4","difficulty": "easy","body_en": "How many solutions does $x+2y=4$, $2x+4y=8$ have?","body_he": "כמה פתרונות ל-$x+2y=4$, $2x+4y=8$?","solution_en": "Row 2 = 2×Row 1 exactly → identical equations. Infinitely many solutions.","solution_he": "אינסוף פתרונות.","points": 5},
+      {"id": "e5","difficulty": "medium","body_en": "Solve by Gaussian elimination:\n$x-y+z=4$\n$2x+y-z=2$\n$x+2y+2z=6$","body_he": "פתור באלימינציה גאוסית:\n$x-y+z=4$, $2x+y-z=2$, $x+2y+2z=6$.","solution_en": "Augmented: $R_2-2R_1$: $[0,3,-3|-6]$; $R_3-R_1$: $[0,3,1|2]$. $R_3-R_2$: $[0,0,4|8]$. $z=2$, $y=0$, $x=2$. $(2,0,2)$.","solution_he": "$(2,0,2)$.","points": 8},
+      {"id": "e6","difficulty": "medium","body_en": "A system of two equations in three unknowns has rank 2. How many free variables are there?","body_he": "מערכת של שתי משוואות בשלושה נעלמים, דרגה 2. כמה משתנים חופשיים?","solution_en": "Free variables = 3 - 2 = 1.","solution_he": "1 משתנה חופשי.","points": 8},
+      {"id": "e7","difficulty": "medium","body_en": "Find $k$ such that the system has infinitely many solutions:\n$x+2y=3$, $2x+ky=6$.","body_he": "מצא $k$ עבורו יש אינסוף פתרונות:\n$x+2y=3$, $2x+ky=6$.","solution_en": "$R_2-2R_1$: $(k-4)y=0$. For infinitely many: $k=4$.","solution_he": "$k=4$.","points": 8},
+      {"id": "e8","difficulty": "medium","body_en": "A baker makes rolls (R) and loaves (L). Each R uses 50g flour and 10g butter; each L uses 200g flour and 50g butter. He has 3000g flour and 700g butter. How many of each can he make?","body_he": "לחמניות (ל) ולחמים (ח): כל ל: 50g קמח, 10g חמאה; כל ח: 200g קמח, 50g חמאה. יש 3000g קמח, 700g חמאה. כמה מכל סוג?","solution_en": "$50R+200L=3000$ and $10R+50L=700$. From 2nd: $R=70-5L$. Substitute: $50(70-5L)+200L=3000 \\Rightarrow 3500+50L=3000 \\Rightarrow L=-10$. Negative — no valid integer solution with full use of both resources; the system is inconsistent for exact use. If question asks just for solution: $L=-10$ (impractical; adjust constraints).","solution_he": "מערכת זו סותרת לשימוש מלא בשני המשאבים — הנח שאחד אינו מנוצל לגמרי.","points": 8},
+      {"id": "e9","difficulty": "medium","body_en": "Write the general solution of:\n$\\begin{cases} x + y + z = 5 \\\\ 2x + 2y + 2z = 10 \\end{cases}$","body_he": "כתוב פתרון כללי:\n$x+y+z=5$, $2x+2y+2z=10$.","solution_en": "Rank = 1. Two free variables: let $y=s$, $z=t$. $x=5-s-t$. General: $(5-s-t, s, t)$.","solution_he": "$(5-s-t, s, t)$ עבור $s,t \\in \\mathbb{R}$.","points": 8},
+      {"id": "e10","difficulty": "hard","body_en": "Find all values of $a$ for which the system has:\n(a) no solution\n(b) exactly one solution\n(c) infinitely many solutions:\n$x+y=2$, $ax+y=a^2$.","body_he": "מצא $a$ עבורו:\n(א) אין פתרון (ב) פתרון יחיד (ג) אינסוף פתרונות:\n$x+y=2$, $ax+y=a^2$.","solution_en": "$R_2-aR_1$: $(1-a)y = a^2-2a = a(a-2)$. If $a=1$: $0 \\cdot y = -1$ → no solution. If $a\\neq1$: $y=a(a-2)/(1-a) = -a$; $x=2+a$. Unique solution for $a\\neq1$. If $a=2$: $y=-2, x=4$ (still unique). Check $a=2$: (1-2)y=2(0)=0 → y=0. Hmm, let me redo. $(1-a)y = a(a-2)$. If $a=1$: $0=1(−1)=-1$ → no solution. If $a\\neq1$: one solution. If $a=2$: $(1-2)y=2(0)=0 \\Rightarrow y=0$, $x=2$. So unique. Actually for infinitely many: need $(1-a)=0$ AND $a(a-2)=0$: $a=1$ AND $a=0$ or $a=2$ → impossible. So: no solution when $a=1$; unique solution for all $a\\neq1$; never infinitely many.","solution_he": "אין פתרון: $a=1$. פתרון יחיד: $a\\neq1$. אינסוף: לעולם לא.","points": 10},
+      {"id": "e11","difficulty": "hard","body_en": "Solve by Gaussian elimination:\n$x+y+z+w=10$\n$2x+y+z=8$\n$x+3y+w=12$","body_he": "פתור באלימינציה גאוסית:\n$x+y+z+w=10$, $2x+y+z=8$, $x+3y+w=12$.","solution_en": "Augmented $[A|b]$: $R_2-2R_1$: $[0,-1,-1,-2|-12]$. $R_3-R_1$: $[0,2,−1,−1|2]$. $R_3+2R_2$: $[0,0,-3,-5|-22]$. Rank=3, 4 unknowns → 1 free variable. Let $w=t$: $-3z-5t=-22 \\Rightarrow z=(22-5t)/3$; $-y-z-2t=-12 \\Rightarrow y=12-z-2t$; $x=10-y-z-t$. Parametric family.","solution_he": "דרגה 3, 4 נעלמים → 1 משתנה חופשי $w=t$. פתרון פרמטרי.","points": 10},
+      {"id": "e12","difficulty": "hard","body_en": "Prove: if a system $Ax=b$ is inconsistent and we add an extra equation $c^Tx = d$ that is a linear combination of the existing equations, the system remains inconsistent.","body_he": "הוכח: אם מערכת $Ax=b$ סותרת ונוסיף משוואה שהיא צירוף לינארי של הקיימות, המערכת תישאר סותרת.","solution_en": "If the system is inconsistent, $\\text{rank}(A) < \\text{rank}([A|b])$. A new equation that is a linear combination of existing rows adds a new row $c^T = \\sum \\lambda_i a_i^T$ to $A$ and $d = \\sum \\lambda_i b_i$ to $b$. But if the original system is inconsistent, the linear combination of the contradiction is still a contradiction. More formally: the new row operation doesn't change the rank relationship. The row space of $A$ is unchanged, but the inconsistency in $b$ persists.","solution_he": "הוספת צירוף לינארי לא משנה את דרגת $A$ ואת אי-העקביות. הסתירה ב-$b$ נשמרת.","points": 10},
+      {"id": "e13","difficulty": "hard","body_en": "Two factories produce goods A and B. Factory 1: 3A, 2B per day. Factory 2: 1A, 4B per day. We need exactly 24A and 32B per week (7 days). How many days should each factory operate?","body_he": "שני מפעלים מייצרים A ו-B. מפעל 1: 3A, 2B ליום. מפעל 2: 1A, 4B ליום. צריך 24A ו-32B בשבוע. כמה ימים כל מפעל?","solution_en": "Let $x$ = days factory 1 operates, $y$ = days factory 2. $3x+y=24$ and $2x+4y=32 \\Rightarrow x+2y=16$. From 1st: $y=24-3x$. Substitute: $x+2(24-3x)=16 \\Rightarrow x+48-6x=16 \\Rightarrow -5x=-32 \\Rightarrow x=6.4$. Non-integer; nearest integer: $x=6$ or $x=7$... checking: $x=6$: $y=24-18=6$: $2(6)+4(6)=12+24=36\\neq32$. So exact integer solution doesn't exist for these numbers. Answer: $x=6.4$ days, $y=4.8$ days (approximately).","solution_he": "$x=6.4$ ימים, $y=4.8$ ימים (קירוב).","points": 10}
+    ]},
+    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Forgetting to update all equations.** When multiplying a row to eliminate a variable, ALL terms (including the RHS) must be updated.\n\n2. **Sign errors in elimination.** $R_2 - 2R_1$ subtracts, not adds.\n\n3. **Declaring 'no solution' prematurely.** Row-reduce completely before concluding.\n\n4. **Missing free variables.** If rank < #unknowns and consistent, there are infinitely many solutions.\n\n5. **Not checking solutions.** Always substitute back into ALL original equations.","body_he_md": "1. **לעדכן את כל האיברים** כולל אגף ימין בפעולת שורה.\n2. **שגיאות סימן** — $R_2-2R_1$ מחסר!\n3. **לא למהר לקבוע 'אין פתרון'** לפני השלמת הצמצום.\n4. **משתנים חופשיים** — אם דרגה < נעלמים ועקבי.\n5. **לבדוק תמיד** את הפתרון בכל המשוואות המקוריות."},
+    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam","title_he": "לפני הבחינה","body_en_md": "- 2×2: substitution or elimination\n- 3×3: Gaussian elimination on augmented matrix\n- Inconsistent: row $[0\\cdots0|c\\neq0]$\n- Infinitely many: rank$(A)$ = rank$([A|b])$ < $n$\n- Free variables: $n$ − rank\n- Always check solution in original equations","body_he_md": "- $2\\times2$: הצבה/חיסור\n- $3\\times3$: אלימינציה גאוסית\n- סותרת: $[0\\cdots|c\\neq0]$\n- אינסוף: דרגה < נעלמים (ועקבית)\n- בדוק תמיד בכל המשוואות"},
+    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **3 outcomes:** unique, infinite, no solution\n- **Substitution:** express one variable, substitute\n- **Elimination:** multiply and add/subtract equations\n- **Gaussian:** augmented matrix + row operations → echelon form → back-sub\n- **Consistency:** rank$(A)$ = rank$([A|b])$\n- **Free variables:** when consistent and rank$(A) < n$","body_he_md": "- 3 מצבים: יחיד, אינסוף, אין\n- הצבה / חיסור / אלימינציה גאוסית\n- עקביות: דרגה$(A)$ = דרגה$([A|b])$\n- משתנים חופשיים: $n$ − דרגה"}
   ],
   "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Which row operation is **not** elementary?",
-      "stem_he": "איזו פעולת שורה **אינה** אלמנטרית?",
-      "options_en": [
-        "$R_1 \\leftrightarrow R_2$",
-        "$R_1 \\leftarrow 3R_1$",
-        "$R_2 \\leftarrow R_2 + 2R_1$",
-        "$R_1 \\leftarrow R_1 + R_2$ then $R_2 \\leftarrow R_1 - R_2$"
-      ],
-      "options_he": [
-        "$R_1 \\leftrightarrow R_2$",
-        "$R_1 \\leftarrow 3R_1$",
-        "$R_2 \\leftarrow R_2 + 2R_1$",
-        "$R_1 \\leftarrow R_1 + R_2$ ואז $R_2 \\leftarrow R_1 - R_2$"
-      ],
-      "correct_index": 3,
-      "explanation_en": "The fourth option combines two dependent row replacements that are not a single ERO; the standard three EROs are swap, scale ($c\\neq 0$), and add-multiple.",
-      "explanation_he": "האפשרות הרביעית אינה אחת משלוש הפעולות הסטנדרטיות (החלפה, כפל ב-$c\\neq 0$, חיבור כפולה).",
-      "skill_atoms": [
-        "perform_row_operations"
-      ]
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Systems of Linear Equations & Gaussian Elimination'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'מערכות משוואות לינאריות ואלימינציה גאוסית'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "find_ref_rank"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Systems of Linear Equations & Gaussian Elimination' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'מערכות משוואות לינאריות ואלימינציה גאוסית' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "determine_solution_type"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Systems of Linear Equations & Gaussian Elimination'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'מערכות משוואות לינאריות ואלימינציה גאוסית'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "general_solution_free_variable"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Systems of Linear Equations & Gaussian Elimination' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'מערכות משוואות לינאריות ואלימינציה גאוסית' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "parametric_consistency"
-      ],
-      "points_level_min": "la"
-    }
+    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["linear_systems","substitution"],"stem_en": "Solve: $x+y=7$, $x-y=3$.","stem_he": "פתור: $x+y=7$, $x-y=3$.","answer_payload": {"options_en": ["$(2,5)$","$(5,2)$","$(3,4)$","$(4,3)$"],"options_he": ["$(2,5)$","$(5,2)$","$(3,4)$","$(4,3)$"],"correct_index": 1},"explanation_en": "Adding: $2x=10 \\Rightarrow x=5$; $y=2$.","explanation_he": "$2x=10 \\Rightarrow x=5$; $y=2$."}
   ],
   "agent_hints": {
-    "key_insights": [
-      "$A\\vec{x}=\\vec{b}$; augmented matrix $[A|\\vec{b}]$; EROs preserve solutions.",
-      "Rank = pivot count; Rouché–Capelli: consistent iff rank(A) = rank([A|b]).",
-      "General solution = particular + homogeneous; free variables when rank < n."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "More equations than unknowns always means no solution",
-        "correction": "Redundant equations can still be consistent; check ranks, not just m vs n.",
-        "detect_phrase_en": "more equations",
-        "detect_phrase_he": "יותר משוואות"
-      },
-      {
-        "wrong": "Zero row means no solution",
-        "correction": "[0...0|0] is fine; only [0...0|c] with c≠0 is inconsistent.",
-        "detect_phrase_en": "zero row no solution",
-        "detect_phrase_he": "שורת אפסים אין פתרון"
-      }
-    ],
-    "tutor_pacing_hint": "Work one 3×3 elimination completely before stating rank theorems.",
-    "diagnostic_signals": {
-      "confuses REF and RREF": "Show pivot positions are the same; RREF is for reading solutions directly."
-    },
-    "skill_atoms_unlocked": [
-      "perform_row_operations",
-      "find_ref_rank",
-      "determine_solution_type",
-      "general_solution_free_variable",
-      "parametric_consistency"
-    ]
+    "key_insights": ["Always write the augmented matrix for 3×3+ systems — tracking variables in equations leads to errors.", "A row of all zeros [0 0 0 | 0] means dependent equation (free variable). A row [0 0 0 | c≠0] means inconsistent.", "Free variables: if rank(A) < n (number of unknowns) and consistent, there are n-rank free variables.", "Always verify by substituting back into ALL original equations."],
+    "common_misconceptions": [{"wrong": "A row of zeros means no solution","correction": "A row of zeros in the augmented matrix [0 0 ... 0 | 0] means a redundant equation (infinitely many solutions, assuming no other inconsistency). Only [0 0 ... 0 | c≠0] means no solution.","detect_phrase_en": "row of zeros","detect_phrase_he": "שורת אפסים"}],
+    "tutor_pacing_hint": "Start with 2×2 substitution for concrete intuition. Show geometric interpretation (intersection of lines). Then move to 3×3 Gaussian elimination. Spend extra time on the three-case classification (unique/infinite/none).",
+    "skill_atoms_unlocked": ["substitution_method","elimination_method","gaussian_elimination","augmented_matrix","consistency_conditions","free_variables","parametric_solutions"]
   }
 }

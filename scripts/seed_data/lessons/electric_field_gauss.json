@@ -1,224 +1,349 @@
 {
-  "id": "electric_field_gauss",
-  "type": "interactive",
-  "subject": "university_physics_2",
-  "title_en": "Gauss's Law — Electric Flux and Symmetric Fields",
-  "title_he": "חוק גאוס — שטף חשמלי ושדות בעלי סימטריה",
-  "duration_min": 30,
-  "level_min": "university",
-  "agent_hints": "Stress the two-step strategy: (1) argue by symmetry that |E| is constant and angle is known on the chosen surface, (2) evaluate the surface integral as a simple product E·A. Common errors: applying Gauss's law to non-symmetric charge distributions; forgetting that Q_enc is the TOTAL enclosed charge; confusing the direction of dA for a closed surface (always outward normal). For the sphere inside/outside distinction, make students re-derive Q_enc(r) for r<R by using the volume fraction. Connect to conductors: show that E=0 inside follows directly from Gauss's law applied to a surface just inside the conductor.",
+  "concept_id": "electric_field_gauss",
+  "title_en": "Gauss's Law for the Electric Field",
+  "title_he": "חוק גאוס לשדה החשמלי",
+  "subject": "physics",
+  "difficulty": "advanced",
+  "estimated_minutes": 50,
   "sections": [
     {
-      "id": "electric_flux",
-      "title_en": "Electric Flux",
-      "title_he": "שטף חשמלי",
-      "level_min": "university",
-      "body_en_md": "## Electric Flux\n\nThe **electric flux** through a surface $S$ is defined as the surface integral of the electric field over that surface:\n\n$$\\Phi_E = \\iint_S \\vec{E} \\cdot d\\vec{A}$$\n\nwhere $d\\vec{A} = \\hat{n}\\,dA$ is an area element whose direction is the outward unit normal $\\hat{n}$.\n\n**Units:** $[\\Phi_E] = \\text{N}\\cdot\\text{m}^2/\\text{C} = \\text{V}\\cdot\\text{m}$.\n\n**Sign convention:** Flux is *positive* when $\\vec{E}$ has a component along the outward normal (field lines leaving the surface), and *negative* when it has a component against the outward normal (field lines entering).\n\nFor a *uniform* field $\\vec{E}$ through a *flat* surface of area $A$ with $\\vec{E}$ at angle $\\theta$ to the normal:\n\n$$\\Phi_E = EA\\cos\\theta$$\n\n**Physical meaning:** Flux counts the net number of field lines piercing the surface. It is not a vector—it is a scalar that can be positive, negative, or zero.",
-      "body_he_md": "## שטף חשמלי\n\n**השטף החשמלי** דרך משטח $S$ מוגדר כאינטגרל המשטחי של השדה החשמלי על המשטח:\n\n$$\\Phi_E = \\iint_S \\vec{E} \\cdot d\\vec{A}$$\n\nכאשר $d\\vec{A} = \\hat{n}\\,dA$ הוא אלמנט שטח שכיוונו הוא הנורמל החיצוני היחידה $\\hat{n}$.\n\n**יחידות:** $[\\Phi_E] = \\text{N}\\cdot\\text{m}^2/\\text{C} = \\text{V}\\cdot\\text{m}$.\n\n**קונבנציית סימן:** שטף *חיובי* כאשר ל-$\\vec{E}$ יש רכיב בכיוון הנורמל החיצוני (קווי שדה יוצאים מהמשטח), ו*שלילי* כאשר הרכיב הוא נגד הנורמל (קווי שדה נכנסים).\n\nעבור שדה *אחיד* $\\vec{E}$ דרך משטח *שטוח* בשטח $A$ עם זווית $\\theta$ בין $\\vec{E}$ לנורמל:\n\n$$\\Phi_E = EA\\cos\\theta$$\n\n**משמעות פיזיקלית:** השטף סופר את המספר הנטו של קווי השדה החוצים את המשטח. הוא סקלר (לא וקטור) שיכול להיות חיובי, שלילי או אפס."
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Why Gauss's Law?",
+      "title_he": "למה חוק גאוס?",
+      "body_en_md": "Coulomb's law can compute the field of any charge distribution — but only if you integrate over every charge element. Gauss's law provides a dramatic shortcut: for charge distributions with **high symmetry**, you can find the field in three lines of algebra.\n\n**In Israeli university physics**, Gauss's law is used to find $\\vec{E}$:\n- Outside/inside a charged sphere\n- Near an infinite sheet of charge\n- Near an infinite cylinder\n\nThe key insight: the **total electric flux** through any closed surface equals $Q_{\\text{enc}}/\\epsilon_0$.",
+      "body_he_md": "חוק קולון יכול לחשב את השדה של כל פילוג מטען — אבל רק אם מאחדים על כל אלמנט מטען. חוק גאוס מספק קיצור דרך דרמטי: עבור פילוגי מטען עם **סימטריה גבוהה**, ניתן למצוא את השדה בשלושה שורות של אלגברה.\n\n**בפיזיקה אוניברסיטאית ישראלית**, חוק גאוס משמש למציאת $\\vec{E}$:\n- מחוץ/בתוך כדור טעון\n- ליד גיליון מטען אינסופי\n- ליד גליל אינסופי\n\nתובנת המפתח: **השטף החשמלי הכולל** דרך כל משטח סגור שווה $Q_{\\text{enc}}/\\epsilon_0$."
     },
     {
-      "id": "gauss_law_statement",
-      "title_en": "Gauss's Law — Statement and Intuition",
-      "title_he": "חוק גאוס — ניסוח ואינטואיציה",
-      "level_min": "university",
-      "body_en_md": "## Gauss's Law\n\nFor any closed surface $S$ (a *Gaussian surface*), the total electric flux equals the net enclosed charge divided by $\\epsilon_0$:\n\n$$\\oint_S \\vec{E} \\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\n\nwhere $Q_{\\text{enc}}$ is the **total charge enclosed** by $S$, and $\\epsilon_0 = 8.854\\times10^{-12}\\;\\text{C}^2/(\\text{N}\\cdot\\text{m}^2)$ is the permittivity of free space.\n\n**Intuition:** Every line of electric field that originates on a positive charge $+q$ must cross any closed surface that encloses $q$ exactly once outward. So the net outward flux through any closed surface depends *only* on the total enclosed charge, not on the shape of the surface or on charges outside it.\n\n**Charges outside** the Gaussian surface contribute field lines that enter and exit the surface the same number of times—their net contribution to the flux is zero.\n\nGauss's law is one of Maxwell's four equations and is *equivalent* to Coulomb's law for static charges, but it is far more powerful when combined with symmetry.",
-      "body_he_md": "## חוק גאוס\n\nעבור כל משטח סגור $S$ (משטח גאוסי), הזרם החשמלי הכולל שווה למטען הכלוא נטו חלקי $\\epsilon_0$:\n\n$$\\oint_S \\vec{E} \\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\n\nכאשר $Q_{\\text{enc}}$ הוא **המטען הכולל הכלוא** ב-$S$, ו-$\\epsilon_0 = 8.854\\times10^{-12}\\;\\text{C}^2/(\\text{N}\\cdot\\text{m}^2)$ הוא מקדם הדיאלקטריות של ריק.\n\n**אינטואיציה:** כל קו שדה חשמלי היוצא ממטען חיובי $+q$ חייב לחצות כל משטח סגור המכיל את $q$ פעם אחת כלפי חוץ. לפיכך, השטף החיצוני הנטו דרך כל משטח סגור תלוי *רק* במטען הכלוא הכולל — לא בצורת המשטח ולא במטענים מחוץ לו.\n\n**מטענים מחוץ** למשטח הגאוסי תורמים קווי שדה הנכנסים ויוצאים מספר שווה של פעמים — תרומתם הנטו לשטף היא אפס.\n\nחוק גאוס הוא אחת מארבע משוואות מקסוול ו*שקול* לחוק קולון עבור מטענים סטטיים, אך הוא עוצמתי בהרבה בשילוב עם סימטריה."
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Gauss's Law — Statement",
+      "title_he": "חוק גאוס — ניסוח",
+      "body_en_md": "**Gauss's law:**\n$$\\oint_S \\vec{E} \\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\n\n**Terms:**\n- $\\oint_S \\vec{E} \\cdot d\\vec{A}$ — **electric flux** through a closed surface $S$ (the Gaussian surface)\n- $d\\vec{A}$ — outward area element (direction: outward normal)\n- $Q_{\\text{enc}}$ — total charge **enclosed** by the surface\n- $\\epsilon_0 = 8.85 \\times 10^{-12}\\;\\text{C}^2/(\\text{N·m}^2)$ — permittivity of free space\n- SI unit of flux: N·m²/C = V·m\n\n**Equivalence to Coulomb's law:** Gauss's law is not an independent law — it follows from Coulomb's law and the superposition principle. But it is much more practical for symmetric distributions.",
+      "body_he_md": "**חוק גאוס:**\n$$\\oint_S \\vec{E} \\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\n\n**מונחים:**\n- $\\oint_S \\vec{E} \\cdot d\\vec{A}$ — **שטף חשמלי** דרך משטח סגור $S$\n- $d\\vec{A}$ — אלמנט שטח חיצוני\n- $Q_{\\text{enc}}$ — מטען **כלוא** בתוך המשטח\n- $\\epsilon_0 = 8.85 \\times 10^{-12}\\;\\text{C}^2/(\\text{N·m}^2)$\n\n**שקילות לחוק קולון:** חוק גאוס נובע מחוק קולון ועיקרון הסופרפוזיציה. אבל הוא הרבה יותר פרקטי לפילוגים סימטריים."
     },
     {
-      "id": "gaussian_surface_choice",
-      "title_en": "Choosing a Gaussian Surface — Symmetry Arguments",
-      "title_he": "בחירת משטח גאוסי — ארגומנטים של סימטריה",
-      "level_min": "university",
-      "body_en_md": "## When Can We Use Gauss's Law to Find $\\vec{E}$?\n\nGauss's law is *always true*, but it lets you solve for $|\\vec{E}|$ algebraically only when you can show that:\n1. $|\\vec{E}|$ is **constant** over (part of) the Gaussian surface, **and**\n2. $\\vec{E}$ is either **parallel** or **perpendicular** to $d\\vec{A}$ everywhere on that part.\n\nWhen both conditions hold, $\\oint \\vec{E}\\cdot d\\vec{A}$ reduces to $E \\cdot A_{\\parallel}$ (the area where $\\vec{E}\\parallel\\hat{n}$).\n\n**The three standard geometries:**\n\n| Charge distribution | Symmetry | Gaussian surface |\n|---|---|---|\n| Infinite plane (charge density $\\sigma$) | Planar | Pillbox (cylinder with axis ⊥ plane) |\n| Infinite line (charge density $\\lambda$) | Cylindrical | Co-axial cylinder |\n| Sphere (charge $Q$, radius $R$) | Spherical | Concentric sphere |\n\n**Key rule:** The Gaussian surface is a *mathematical* construction—it has no physical reality. You may choose any shape; only symmetry determines the best choice.",
-      "body_he_md": "## מתי ניתן להשתמש בחוק גאוס למציאת $\\vec{E}$?\n\nחוק גאוס *תמיד נכון*, אך הוא מאפשר לפתור אלגברית את $|\\vec{E}|$ רק כאשר ניתן להראות:\n1. $|\\vec{E}|$ הוא **קבוע** על (חלק מ)המשטח הגאוסי, **וגם**\n2. $\\vec{E}$ הוא **מקביל** או **מאונך** ל-$d\\vec{A}$ בכל מקום על אותו חלק.\n\nכאשר שני התנאים מתקיימים, $\\oint \\vec{E}\\cdot d\\vec{A}$ מצטמצם ל-$E \\cdot A_{\\parallel}$ (השטח שבו $\\vec{E}\\parallel\\hat{n}$).\n\n**שלוש הגיאומטריות הסטנדרטיות:**\n\n| פיזור מטען | סימטריה | משטח גאוסי |\n|---|---|---|\n| מישור אינסופי (צפיפות שטחית $\\sigma$) | מישורית | פחית (גליל עם ציר ⊥ מישור) |\n| קו אינסופי (צפיפות ליניארית $\\lambda$) | גלילית | גליל קואקסיאלי |\n| כדור (מטען $Q$, רדיוס $R$) | כדורית | כדור קונצנטרי |\n\n**כלל מרכזי:** המשטח הגאוסי הוא בנייה *מתמטית* — אין לו מציאות פיזיקלית. ניתן לבחור כל צורה; רק הסימטריה קובעת את הבחירה הטובה ביותר."
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Three Standard Symmetries",
+      "title_he": "שלוש הסימטריות הסטנדרטיות",
+      "body_en_md": "### 1. Spherical symmetry\n\nFor any spherically symmetric charge distribution (total charge $Q$, radius $R$):\n\n**Outside** ($r > R$): Gaussian sphere of radius $r$ encloses all $Q$.\n$$E(4\\pi r^2) = Q/\\epsilon_0 \\implies \\boxed{E = \\frac{Q}{4\\pi\\epsilon_0 r^2} = \\frac{kQ}{r^2}}$$\n\n**Inside uniform sphere** ($r < R$): Enclosed charge $Q_{\\text{enc}} = Q(r/R)^3$.\n$$E = \\frac{kQr}{R^3} \\quad (r < R)$$\nField is linear inside, falls as $1/r^2$ outside.\n\n### 2. Infinite line charge (linear density $\\lambda$)\n\nCylindrical Gaussian surface (radius $r$, length $L$):\n$$E(2\\pi r L) = \\lambda L/\\epsilon_0 \\implies \\boxed{E = \\frac{\\lambda}{2\\pi\\epsilon_0 r} = \\frac{2k\\lambda}{r}}$$\n\n### 3. Infinite plane (surface charge density $\\sigma$)\n\nPill-box Gaussian surface (area $A$ on each face):\n$$E \\cdot 2A = \\sigma A/\\epsilon_0 \\implies \\boxed{E = \\frac{\\sigma}{2\\epsilon_0}}$$\nField is uniform, perpendicular to the plane.",
+      "body_he_md": "### 1. סימטריה כדורית\n\n**מחוץ** ($r > R$): $E = \\frac{kQ}{r^2}$\n\n**בתוך כדור אחיד** ($r < R$): $Q_{\\text{enc}} = Q(r/R)^3$, ולכן $E = \\frac{kQr}{R^3}$\n\n### 2. קו מטען אינסופי ($\\lambda$)\n\nמשטח גאוס גלילי: $\\boxed{E = \\frac{\\lambda}{2\\pi\\epsilon_0 r}}$\n\n### 3. מישור אינסופי ($\\sigma$)\n\nמשטח גאוס כמו קופסת גלולה: $\\boxed{E = \\frac{\\sigma}{2\\epsilon_0}}$\nהשדה אחיד, מאונך למישור."
     },
     {
-      "id": "applications",
-      "title_en": "Derivations — Plane, Line Charge, and Sphere",
-      "title_he": "גזירות — מישור, מטען קווי וכדור",
-      "level_min": "university",
-      "body_en_md": "## Application 1: Infinite Plane — Pillbox Surface\n\nConsider an infinite plane with uniform surface charge density $\\sigma$ (C/m²). By symmetry, $\\vec{E}$ points perpendicular to the plane and has the same magnitude on both sides.\n\nChoose a cylindrical pillbox of cross-sectional area $A$ centered on the plane. The three surfaces of the pillbox:\n- Two flat end-caps (area $A$ each), $\\vec{E}\\parallel\\hat{n}$: flux $= 2EA$\n- Curved side: $\\vec{E}\\perp\\hat{n}$: flux $= 0$\n\nApplying Gauss's law: $2EA = \\frac{\\sigma A}{\\epsilon_0}$, giving:\n\n$$\\boxed{E = \\frac{\\sigma}{2\\epsilon_0}}$$\n\n## Application 2: Infinite Line Charge — Coaxial Cylinder\n\nAn infinite line charge with linear charge density $\\lambda$ (C/m). By symmetry, $\\vec{E}$ points radially outward and depends only on $r$.\n\nChoose a coaxial cylinder of radius $r$ and length $L$:\n- Curved surface (area $2\\pi r L$): $\\vec{E}\\parallel\\hat{n}$, flux $= E(2\\pi r L)$\n- Two end-caps: $\\vec{E}\\perp\\hat{n}$, flux $= 0$\n\nEnclosed charge: $Q_{\\text{enc}} = \\lambda L$. Gauss's law:\n\n$$E(2\\pi r L) = \\frac{\\lambda L}{\\epsilon_0} \\implies \\boxed{E = \\frac{\\lambda}{2\\pi\\epsilon_0 r}}$$\n\n## Application 3: Uniformly Charged Sphere\n\nCharge $Q$ uniformly distributed throughout a sphere of radius $R$. By symmetry, $\\vec{E}$ is radial.\n\n**Outside ($r > R$):** Gaussian sphere of radius $r$:\n$$E(4\\pi r^2) = \\frac{Q}{\\epsilon_0} \\implies E = \\frac{1}{4\\pi\\epsilon_0}\\frac{Q}{r^2} = \\frac{kQ}{r^2}$$\nIdentical to a point charge at the origin.\n\n**Inside ($r < R$):** Enclosed charge $Q_{\\text{enc}} = Q\\cdot\\frac{r^3}{R^3}$ (volume fraction):\n$$E(4\\pi r^2) = \\frac{Q r^3}{\\epsilon_0 R^3} \\implies E = \\frac{kQ}{R^3}r$$\nFor a conducting shell: all charge is on the surface, so $Q_{\\text{enc}}=0$ for $r<R$ and $E=0$ inside.",
-      "body_he_md": "## יישום 1: מישור אינסופי — משטח פחית\n\nנבחן מישור אינסופי עם צפיפות מטען שטחית אחידה $\\sigma$ (C/m²). מסימטריה, $\\vec{E}$ מאונך למישור ובעל אותה עוצמה משני צדיו.\n\nנבחר גליל פחית עם שטח חתך $A$ ממורכז על המישור. שלושת המשטחים:\n- שני מכסים שטוחים (שטח $A$ כל אחד), $\\vec{E}\\parallel\\hat{n}$: שטף $= 2EA$\n- צד מעוקל: $\\vec{E}\\perp\\hat{n}$: שטף $= 0$\n\nמחוק גאוס: $2EA = \\frac{\\sigma A}{\\epsilon_0}$, ולכן:\n\n$$\\boxed{E = \\frac{\\sigma}{2\\epsilon_0}}$$\n\n## יישום 2: מטען קווי אינסופי — גליל קואקסיאלי\n\nקו מטען אינסופי עם צפיפות מטען ליניארית $\\lambda$ (C/m). מסימטריה, $\\vec{E}$ מופנה רדיאלית החוצה ותלוי רק ב-$r$.\n\nנבחר גליל קואקסיאלי ברדיוס $r$ ואורך $L$:\n- משטח מעוקל (שטח $2\\pi r L$): $\\vec{E}\\parallel\\hat{n}$, שטף $= E(2\\pi r L)$\n- שני מכסים: $\\vec{E}\\perp\\hat{n}$, שטף $= 0$\n\nמטען כלוא: $Q_{\\text{enc}} = \\lambda L$. מחוק גאוס:\n\n$$E(2\\pi r L) = \\frac{\\lambda L}{\\epsilon_0} \\implies \\boxed{E = \\frac{\\lambda}{2\\pi\\epsilon_0 r}}$$\n\n## יישום 3: כדור טעון אחיד\n\nמטען $Q$ מפוזר אחידות בתוך כדור ברדיוס $R$. מסימטריה, $\\vec{E}$ הוא רדיאלי.\n\n**מחוץ לכדור ($r > R$):** כדור גאוסי ברדיוס $r$:\n$$E(4\\pi r^2) = \\frac{Q}{\\epsilon_0} \\implies E = \\frac{kQ}{r^2}$$\nזהה למטען נקודתי בראשית.\n\n**בתוך הכדור ($r < R$):** מטען כלוא $Q_{\\text{enc}} = Q\\cdot\\frac{r^3}{R^3}$ (חלק הנפח):\n$$E(4\\pi r^2) = \\frac{Q r^3}{\\epsilon_0 R^3} \\implies E = \\frac{kQ}{R^3}r$$\nעבור קליפת מוליך: כל המטען על פני השטח, $Q_{\\text{enc}}=0$ ל-$r<R$ ו-$E=0$ בפנים."
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Conducting Sphere",
+      "title_he": "דוגמה פתורה 1 — כדור מוליך",
+      "body_en_md": "**Given:** A conducting sphere of radius $R = 5\\;\\text{cm}$ carries charge $Q = 4\\;\\text{nC}$. Find $E$ at (a) $r = 10\\;\\text{cm}$ (outside) and (b) $r = 3\\;\\text{cm}$ (inside).\n\n**Part (a) — Outside:**\n$$E = \\frac{kQ}{r^2} = \\frac{(9\\times10^9)(4\\times10^{-9})}{(0.10)^2} = \\frac{36}{0.01} = 3600\\;\\text{N/C}$$\n\n**Part (b) — Inside a conductor:** All excess charge resides on the surface. Inside, $Q_{\\text{enc}} = 0$.\n$$E = 0 \\quad \\text{(inside the conductor)}$$\n\n**Answer:** (a) $3600\\;\\text{N/C}$ outward; (b) $E = 0$.",
+      "body_he_md": "**נתון:** כדור מוליך $R = 5\\;\\text{cm}$, $Q = 4\\;\\text{nC}$. מצא $E$ ב-(א) $r = 10\\;\\text{cm}$ ו-(ב) $r = 3\\;\\text{cm}$.\n\n**(א):** $E = kQ/r^2 = 3600\\;\\text{N/C}$\n\n**(ב):** בתוך מוליך $Q_{\\text{enc}} = 0$, לכן $E = 0$."
     },
     {
-      "id": "conductors",
-      "title_en": "Conductors in Electrostatic Equilibrium",
-      "title_he": "מוליכים בשיווי-משקל אלקטרוסטטי",
-      "level_min": "university",
-      "body_en_md": "## Conductors in Electrostatic Equilibrium\n\nIn a conductor in electrostatic equilibrium, free charges redistribute until $\\vec{E} = 0$ everywhere inside the conductor. Three consequences follow directly from Gauss's law:\n\n1. **$E = 0$ inside the conductor.** Apply Gauss's law to any surface inside the conductor: since $\\vec{E} = 0$ on the surface, $\\Phi_E = 0$, hence $Q_{\\text{enc}} = 0$. Any net charge must reside on the *surface*.\n\n2. **All excess charge resides on the surface.** (Proven above.)\n\n3. **$\\vec{E}$ is perpendicular to the surface** just outside. If a tangential component existed, charges would accelerate along the surface—contradicting equilibrium. A pillbox argument gives:\n$$E_{\\text{surface}} = \\frac{\\sigma}{\\epsilon_0}$$\n(note: factor 2 difference from the *infinite plane* result because here the conductor contributes only one side to the integral).\n\n4. **Cavity inside a conductor:** If a charge $+q$ is placed in a cavity, then by Gauss's law a charge $-q$ is induced on the inner surface, and $+q$ appears on the outer surface. The field inside the conductor walls remains zero.",
-      "body_he_md": "## מוליכים בשיווי-משקל אלקטרוסטטי\n\nבמוליך בשיווי-משקל אלקטרוסטטי, מטענים חופשיים מתפזרים עד ש-$\\vec{E} = 0$ בכל מקום בתוך המוליך. שלוש תוצאות נובעות ישירות מחוק גאוס:\n\n1. **$E = 0$ בתוך המוליך.** נפעיל את חוק גאוס על כל משטח בתוך המוליך: מאחר ש-$\\vec{E} = 0$ על המשטח, $\\Phi_E = 0$, ולפיכך $Q_{\\text{enc}} = 0$. כל מטען נטו חייב לשהות על *פני השטח*.\n\n2. **כל המטען העודף שוכן על פני השטח.** (הוכח לעיל.)\n\n3. **$\\vec{E}$ מאונך לפני השטח** ממש מחוץ למוליך. אם היה רכיב משיקי, מטענים היו מואצים לאורך פני השטח — בסתירה לשיווי-משקל. ארגומנט פחית נותן:\n$$E_{\\text{surface}} = \\frac{\\sigma}{\\epsilon_0}$$\n(שים לב: גורם 2 בהבדל מתוצאת *המישור האינסופי*, כי כאן המוליך תורם רק צד אחד לאינטגרל).\n\n4. **חלל בתוך מוליך:** אם מטען $+q$ ממוקם בחלל, אז מחוק גאוס מטען $-q$ מושרה על פני השטח הפנימי, ו-$+q$ מופיע על פני השטח החיצוני. השדה בתוך דפנות המוליך נשאר אפס."
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "An infinite plane carries surface charge density $\\sigma = 3\\;\\mu\\text{C/m}^2$. Find $E$ near the plane.",
+      "body_he_md": "מישור אינסופי נושא $\\sigma = 3\\;\\mu\\text{C/m}^2$. מצא $E$ ליד המישור.",
+      "checkpoint_solution_en": "$E = \\sigma/(2\\epsilon_0) = (3\\times10^{-6})/(2\\times8.85\\times10^{-12}) = 3\\times10^{-6}/(1.77\\times10^{-11}) \\approx 1.69\\times10^5\\;\\text{N/C}$.",
+      "checkpoint_solution_he": "$E = \\sigma/(2\\epsilon_0) \\approx 1.69\\times10^5\\;\\text{N/C}$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Infinite Cylindrical Shell",
+      "title_he": "דוגמה פתורה 2 — קליפה גלילית אינסופית",
+      "body_en_md": "**Given:** An infinitely long cylindrical shell of radius $R = 3\\;\\text{cm}$ carries surface charge density $\\sigma = 2\\;\\mu\\text{C/m}^2$. Find $E$ at (a) $r = 5\\;\\text{cm}$ and (b) $r = 1\\;\\text{cm}$.\n\n**Step 1 — Linear charge density:**\n$$\\lambda = \\sigma(2\\pi R) = (2\\times10^{-6})(2\\pi)(0.03) = 1.2\\pi\\times10^{-7}\\;\\text{C/m}$$\n\n**Part (a) — Outside ($r = 0.05\\;\\text{m}$):**\n$$E = \\frac{\\lambda}{2\\pi\\epsilon_0 r} = \\frac{(9\\times10^9)(2)(1.2\\pi\\times10^{-7})}{0.05} = \\frac{2.16\\pi\\times10^3}{0.05} \\approx 1.36\\times10^5\\;\\text{N/C}$$\n\n(Or: $E = \\lambda/(2\\pi\\epsilon_0 r) = 2k\\lambda/r = 2(9\\times10^9)(1.2\\pi\\times10^{-7})/(0.05) \\approx 1.36\\times10^5\\;\\text{N/C}$.)\n\n**Part (b) — Inside ($r < R$):** No charge is enclosed by the Gaussian cylinder.\n$$Q_{\\text{enc}} = 0 \\implies E = 0$$",
+      "body_he_md": "**נתון:** קליפה גלילית אינסופית $R = 3\\;\\text{cm}$, $\\sigma = 2\\;\\mu\\text{C/m}^2$. מצא $E$ ב-(א) $r = 5\\;\\text{cm}$ ו-(ב) $r = 1\\;\\text{cm}$.\n\n**(א) מחוץ:** $E = \\frac{\\lambda}{2\\pi\\epsilon_0 r} \\approx 1.36\\times10^5\\;\\text{N/C}$\n\n**(ב) בפנים:** $Q_{\\text{enc}} = 0 \\Rightarrow E = 0$"
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A uniformly charged sphere of radius $R = 4\\;\\text{cm}$ and total charge $Q = 8\\;\\text{nC}$. Find $E$ at $r = 2\\;\\text{cm}$ (inside) and $r = 8\\;\\text{cm}$ (outside).",
+      "body_he_md": "כדור טעון אחיד $R = 4\\;\\text{cm}$, $Q = 8\\;\\text{nC}$. מצא $E$ ב-$r = 2\\;\\text{cm}$ (פנים) ו-$r = 8\\;\\text{cm}$ (חוץ).",
+      "checkpoint_solution_en": "Inside ($r=0.02$): $E_{\\text{in}} = kQr/R^3 = (9\\times10^9)(8\\times10^{-9})(0.02)/(0.04)^3 = 72(0.02)/(6.4\\times10^{-5}) = 1.44/6.4\\times10^{-5} = 22500\\;\\text{N/C}$. Outside ($r=0.08$): $E_{\\text{out}} = kQ/r^2 = 72/(0.0064) = 11250\\;\\text{N/C}$.",
+      "checkpoint_solution_he": "פנים: $E = 22500\\;\\text{N/C}$. חוץ: $E = 11250\\;\\text{N/C}$."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Two Parallel Infinite Plates",
+      "title_he": "דוגמה פתורה 3 — שני לוחות אינסופיים מקבילים",
+      "body_en_md": "**Given:** Two infinite parallel plates: Plate A with $+\\sigma$, Plate B with $-\\sigma$. Find $\\vec{E}$ in regions (I) left of A, (II) between A and B, and (III) right of B.\n\n**Step 1 — Field from each plate:**\n- Plate A ($+\\sigma$): $E_A = \\sigma/(2\\epsilon_0)$, pointing away from A on both sides\n- Plate B ($-\\sigma$): $E_B = \\sigma/(2\\epsilon_0)$, pointing toward B on both sides\n\n**Step 2 — Superposition:**\n\n| Region | From A | From B | Net |\n|---|---|---|---|\n| I (left of A) | $\\leftarrow$ | $\\rightarrow$ | Cancel: $E = 0$ |\n| II (between) | $\\rightarrow$ | $\\rightarrow$ | Add: $E = \\sigma/\\epsilon_0$ |\n| III (right of B) | $\\rightarrow$ | $\\leftarrow$ | Cancel: $E = 0$ |\n\n**Answer:** The field is $\\sigma/\\epsilon_0$ only **between** the plates, pointing from $+$ to $-$. This is the ideal parallel-plate capacitor!",
+      "body_he_md": "**נתון:** שני לוחות מקבילים אינסופיים: לוח A עם $+\\sigma$, לוח B עם $-\\sigma$.\n\n**סופרפוזיציה:**\n- שמאל ל-A: שדות מבטלים זה את זה → $E = 0$\n- בין הלוחות: שדות מתחברים → $E = \\sigma/\\epsilon_0$\n- ימין ל-B: שדות מבטלים → $E = 0$\n\nזהו הקבל הלוחות המקבילים האידיאלי!"
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide — Choosing the Gaussian Surface",
+      "title_he": "מדריך שיטה — בחירת משטח גאוס",
+      "body_en_md": "| Symmetry | Gaussian surface | Why |\n|---|---|---|\n| Spherical | Concentric sphere | $|\\vec{E}|$ const; $\\vec{E} \\perp$ surface |\n| Cylindrical | Coaxial cylinder | $|\\vec{E}|$ const on curved surface; zero on flat ends |\n| Planar | Pill-box | Two flat faces $\\perp$ to $\\vec{E}$ |\n\n**Decision tree:**\n1. Identify symmetry (sphere/cylinder/plane)\n2. Draw Gaussian surface matching the symmetry\n3. Argue that $|E|$ is constant on the surface\n4. Pull $E$ out: $E \\cdot A_{\\text{eff}} = Q_{\\text{enc}}/\\epsilon_0$\n5. Solve for $E$",
+      "body_he_md": "| סימטריה | משטח גאוס | למה |\n|---|---|---|\n| כדורית | כדור קונצנטרי | $|E|$ קבוע; $\\vec{E} \\perp$ משטח |\n| גלילית | גליל קואקסיאלי | $|E|$ קבוע על המשטח המעוקל |\n| מישורית | קופסת גלולה | שני פנים $\\perp$ ל-$\\vec{E}$ |\n\n**עץ החלטות:**\n1. זהה סימטריה\n2. צייר משטח גאוס מתאים\n3. טען ש-$|E|$ קבוע\n4. הוצא $E$: $E\\cdot A_{\\text{eff}} = Q_{\\text{enc}}/\\epsilon_0$\n5. פתור"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A point charge $q = 5\\;\\text{nC}$ is at the center of a sphere of radius $r = 20\\;\\text{cm}$. Find the total electric flux through the sphere.",
+          "body_he": "מטען נקודתי $q = 5\\;\\text{nC}$ במרכז כדור ברדיוס $r = 20\\;\\text{cm}$. מצא את השטף הכולל דרך הכדור.",
+          "solution_en": "$\\Phi = Q_{\\text{enc}}/\\epsilon_0 = (5\\times10^{-9})/(8.85\\times10^{-12}) \\approx 565\\;\\text{N·m}^2/\\text{C}$.",
+          "solution_he": "$\\Phi \\approx 565\\;\\text{N·m}^2/\\text{C}$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A conducting sphere ($R = 6\\;\\text{cm}$, $Q = -3\\;\\text{nC}$). Find $E$ at $r = 10\\;\\text{cm}$.",
+          "body_he": "כדור מוליך ($R = 6\\;\\text{cm}$, $Q = -3\\;\\text{nC}$). מצא $E$ ב-$r = 10\\;\\text{cm}$.",
+          "solution_en": "$E = k|Q|/r^2 = (9\\times10^9)(3\\times10^{-9})/(0.01) = 2700\\;\\text{N/C}$, pointing inward (toward negative charge).",
+          "solution_he": "$E = 2700\\;\\text{N/C}$ (פנימה, לכיוון המטען השלילי).",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "An infinite line charge with $\\lambda = 8\\;\\mu\\text{C/m}$. Find $E$ at $r = 4\\;\\text{cm}$.",
+          "body_he": "קו מטען אינסופי עם $\\lambda = 8\\;\\mu\\text{C/m}$. מצא $E$ ב-$r = 4\\;\\text{cm}$.",
+          "solution_en": "$E = \\lambda/(2\\pi\\epsilon_0 r) = (8\\times10^{-6})/(2\\pi(8.85\\times10^{-12})(0.04)) = 8\\times10^{-6}/(2.23\\times10^{-12}) \\approx 3.59\\times10^6\\;\\text{N/C}$.",
+          "solution_he": "$E \\approx 3.59\\;\\text{MN/C}$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "An infinite plane with $\\sigma = 10\\;\\mu\\text{C/m}^2$. Find $E$.",
+          "body_he": "מישור אינסופי עם $\\sigma = 10\\;\\mu\\text{C/m}^2$. מצא $E$.",
+          "solution_en": "$E = \\sigma/(2\\epsilon_0) = (10\\times10^{-6})/(2\\times8.85\\times10^{-12}) \\approx 5.65\\times10^5\\;\\text{N/C}$.",
+          "solution_he": "$E \\approx 5.65\\times10^5\\;\\text{N/C}$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A uniformly charged solid sphere ($R = 5\\;\\text{cm}$, total charge $Q = 10\\;\\text{nC}$). Find $E$ at (a) $r = 2\\;\\text{cm}$, (b) $r = 5\\;\\text{cm}$, (c) $r = 10\\;\\text{cm}$.",
+          "body_he": "כדור מוצק טעון אחיד ($R = 5\\;\\text{cm}$, $Q = 10\\;\\text{nC}$). מצא $E$ ב-(א) $r = 2\\;\\text{cm}$, (ב) $r = 5\\;\\text{cm}$, (ג) $r = 10\\;\\text{cm}$.",
+          "solution_en": "(a) Inside: $E = kQr/R^3 = (9e9)(10e-9)(0.02)/(0.05)^3 = 1.8/(1.25e-4) = 14400\\;\\text{N/C}$. (b) Surface: $E = kQ/R^2 = 90/0.0025 = 36000\\;\\text{N/C}$. (c) Outside: $E = kQ/r^2 = 90/0.01 = 9000\\;\\text{N/C}$.",
+          "solution_he": "(א) $14400\\;\\text{N/C}$. (ב) $36000\\;\\text{N/C}$. (ג) $9000\\;\\text{N/C}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A long solid cylinder of radius $R$ has uniform volume charge density $\\rho$. Find $E$ at (a) $r < R$ and (b) $r > R$.",
+          "body_he": "גליל מוצק ארוך ברדיוס $R$ עם צפיפות מטען נפחית אחידה $\\rho$. מצא $E$ ב-(א) $r < R$ ו-(ב) $r > R$.",
+          "solution_en": "(a) Gaussian cylinder length $L$: $Q_{\\text{enc}} = \\rho\\pi r^2 L$. $E(2\\pi rL) = \\rho\\pi r^2 L/\\epsilon_0$. $E = \\rho r/(2\\epsilon_0)$. (b) $Q_{\\text{enc}} = \\rho\\pi R^2 L$. $E = \\rho R^2/(2\\epsilon_0 r)$.",
+          "solution_he": "(א) $E = \\rho r/(2\\epsilon_0)$. (ב) $E = \\rho R^2/(2\\epsilon_0 r)$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A spherical shell of radius $R$, charge $Q$. Find $E$ at (a) $r < R$ and (b) $r > R$.",
+          "body_he": "קליפה כדורית רדיוס $R$, מטען $Q$. מצא $E$ ב-(א) $r < R$ ו-(ב) $r > R$.",
+          "solution_en": "(a) $Q_{\\text{enc}} = 0 \\Rightarrow E = 0$. (b) $E = kQ/r^2$ (same as if all charge at center).",
+          "solution_he": "(א) $E = 0$. (ב) $E = kQ/r^2$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Two concentric spherical shells: inner shell ($R_1 = 2\\;\\text{cm}$, $Q_1 = +5\\;\\text{nC}$) and outer shell ($R_2 = 5\\;\\text{cm}$, $Q_2 = -3\\;\\text{nC}$). Find $E$ at (a) $r = 1\\;\\text{cm}$, (b) $r = 3\\;\\text{cm}$, (c) $r = 8\\;\\text{cm}$.",
+          "body_he": "שתי קליפות כדוריות קונצנטריות: פנימית ($R_1 = 2\\;\\text{cm}$, $Q_1 = +5\\;\\text{nC}$) וחיצונית ($R_2 = 5\\;\\text{cm}$, $Q_2 = -3\\;\\text{nC}$). מצא $E$ ב-(א) $r = 1\\;\\text{cm}$, (ב) $r = 3\\;\\text{cm}$, (ג) $r = 8\\;\\text{cm}$.",
+          "solution_en": "(a) No enclosed charge: $E = 0$. (b) $Q_{\\text{enc}} = Q_1 = 5\\;\\text{nC}$: $E = kQ_1/r^2 = (9e9)(5e-9)/(0.03)^2 = 45/0.0009 = 50000\\;\\text{N/C}$. (c) $Q_{\\text{enc}} = Q_1 + Q_2 = 2\\;\\text{nC}$: $E = k(2e-9)/(0.08)^2 = 18/0.0064 \\approx 2813\\;\\text{N/C}$.",
+          "solution_he": "(א) $E = 0$. (ב) $E = 50000\\;\\text{N/C}$. (ג) $E \\approx 2813\\;\\text{N/C}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A cube of side $a$ is placed in a uniform electric field $E_0$ pointing in the $+z$ direction. Find the total flux through the cube.",
+          "body_he": "קוביה בצלע $a$ ממוקמת בשדה חשמלי אחיד $E_0$ בכיוון $+z$. מצא את השטף הכולל דרך הקוביה.",
+          "solution_en": "In a uniform field with no enclosed charge: $\\Phi_{\\text{total}} = Q_{\\text{enc}}/\\epsilon_0 = 0$. Flux in through bottom = $E_0 a^2$; flux out through top = $E_0 a^2$; all side faces zero. Total = 0.",
+          "solution_he": "שטף כולל = 0 (ללא מטען כלוא; שטף נכנס = שטף יוצא).",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A solid non-conducting sphere of radius $R$ has charge density $\\rho(r) = \\rho_0(1-r/R)$ for $r \\leq R$. Find $E(r)$ everywhere.",
+          "body_he": "כדור מוצק לא-מוליך ברדיוס $R$ עם $\\rho(r) = \\rho_0(1-r/R)$ עבור $r \\leq R$. מצא $E(r)$ בכל מקום.",
+          "solution_en": "Total charge: $Q = \\int_0^R \\rho_0(1-r/R)4\\pi r^2 dr = 4\\pi\\rho_0[r^3/3 - r^4/(4R)]_0^R = 4\\pi\\rho_0(R^3/3 - R^3/4) = \\pi\\rho_0 R^3/3$. Inside ($r<R$): $Q_{\\text{enc}} = 4\\pi\\rho_0[r^3/3 - r^4/(4R)]$. $E = Q_{\\text{enc}}/(4\\pi\\epsilon_0 r^2) = \\frac{\\rho_0}{\\epsilon_0}\\left(\\frac{r}{3}-\\frac{r^2}{4R}\\right)$. Outside: $E = Q/(4\\pi\\epsilon_0 r^2) = \\frac{\\rho_0 R^3}{12\\epsilon_0 r^2}$.",
+          "solution_he": "פנים: $E = \\frac{\\rho_0}{\\epsilon_0}\\left(\\frac{r}{3}-\\frac{r^2}{4R}\\right)$. חוץ: $E = \\frac{\\rho_0 R^3}{12\\epsilon_0 r^2}$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A coaxial capacitor: inner conducting cylinder of radius $a$, outer of radius $b$, length $L$, charge $+Q$ on inner and $-Q$ on outer. Find (a) $E$ in the gap, (b) $V$ between cylinders, (c) $C$.",
+          "body_he": "קבל קואקסיאלי: גליל מוליך פנימי רדיוס $a$, חיצוני $b$, אורך $L$, מטען $+Q$ על הפנימי ו-$-Q$ על החיצוני. מצא (א) $E$ בסדק, (ב) $V$ בין הגלילים, (ג) $C$.",
+          "solution_en": "(a) Linear charge density $\\lambda = Q/L$. $E = \\lambda/(2\\pi\\epsilon_0 r) = Q/(2\\pi\\epsilon_0 r L)$. (b) $V = \\int_a^b E\\,dr = \\frac{Q}{2\\pi\\epsilon_0 L}\\ln(b/a)$. (c) $C = Q/V = 2\\pi\\epsilon_0 L/\\ln(b/a)$.",
+          "solution_he": "(א) $E = Q/(2\\pi\\epsilon_0 r L)$. (ב) $V = \\frac{Q}{2\\pi\\epsilon_0 L}\\ln(b/a)$. (ג) $C = 2\\pi\\epsilon_0 L/\\ln(b/a)$.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Inside a uniformly charged non-conducting sphere, show that the electric field grows linearly with $r$. Then use this to find the potential $V(r)$ inside the sphere, relative to $V = 0$ at $r = \\infty$.",
+          "body_he": "בתוך כדור לא-מוליך טעון אחידות, הראה שהשדה גדל ליניארית עם $r$. השתמש בזה כדי למצוא את הפוטנציאל $V(r)$ בתוך הכדור, ביחס ל-$V = 0$ ב-$r = \\infty$.",
+          "solution_en": "Inside: $E_{\\text{in}} = kQr/R^3$ (linear). For $r > R$: $V_{\\text{out}} = kQ/r$. At $r = R$: $V_R = kQ/R$. Inside, $V(r) = V_R - \\int_R^r (-kQ/R^3)r'\\,dr' = kQ/R + kQ(R^2-r^2)/(2R^3) = \\frac{kQ}{2R}\\left(3 - \\frac{r^2}{R^2}\\right)$.",
+          "solution_he": "$V(r) = \\frac{kQ}{2R}\\left(3 - \\frac{r^2}{R^2}\\right)$ עבור $r \\leq R$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A large flat non-conducting slab of thickness $2d$ has uniform volume charge density $\\rho$. Find $E$ at distance $x$ from the midplane for (a) $|x| < d$ and (b) $|x| > d$.",
+          "body_he": "לוח גדול לא-מוליך עם עובי $2d$ ו-$\\rho$ אחיד. מצא $E$ במרחק $x$ ממישור האמצע עבור (א) $|x| < d$ ו-(ב) $|x| > d$.",
+          "solution_en": "Pill-box with area $A$ at $|x|$. (a) Inside: $Q_{\\text{enc}} = \\rho\\cdot 2|x|A$. Two faces contribute: $2E\\cdot A = \\rho\\cdot 2|x|A/\\epsilon_0$. $E = \\rho|x|/\\epsilon_0$. (b) Outside: $Q_{\\text{enc}} = \\rho\\cdot 2dA$. $2E\\cdot A = 2\\rho dA/\\epsilon_0$. $E = \\rho d/\\epsilon_0$.",
+          "solution_he": "(א) $E = \\rho|x|/\\epsilon_0$ (גדל ליניארית). (ב) $E = \\rho d/\\epsilon_0$ (אחיד).",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing $Q_{\\text{enc}}$ with total charge.** Only the charge INSIDE the Gaussian surface appears on the right side.\n\n2. **Using Gauss's law when symmetry doesn't hold.** Gauss's law is always true, but only solvable for $E$ with spherical, cylindrical, or planar symmetry.\n\n3. **Wrong direction for $d\\vec{A}$.** By convention, $d\\vec{A}$ points OUTWARD. If $Q_{\\text{enc}} < 0$, the flux is negative (field points inward).\n\n4. **Conductor vs. insulator.** Inside a conductor: $E = 0$ always. Inside a uniformly charged insulator: $E \\neq 0$.\n\n5. **Forgetting the factor of 2 for infinite planes.** $E = \\sigma/(2\\epsilon_0)$ for ONE plane. Between two parallel planes with $+\\sigma$ and $-\\sigma$: $E = \\sigma/\\epsilon_0$.",
+      "body_he_md": "1. **בלבול בין $Q_{\\text{enc}}$ למטען הכולל.** רק המטען בתוך משטח גאוס מופיע בצד ימין.\n\n2. **שימוש בחוק גאוס כשאין סימטריה.** חוק גאוס תמיד נכון, אך ניתן לפתרון רק לסימטריה כדורית, גלילית או מישורית.\n\n3. **כיוון שגוי של $d\\vec{A}$.** $d\\vec{A}$ מצביע החוצה. אם $Q_{\\text{enc}} < 0$, השטף שלילי.\n\n4. **מוליך לעומת מבודד.** בתוך מוליך: $E = 0$ תמיד. בתוך מבודד טעון: $E \\neq 0$.\n\n5. **שכחת גורם 2 למישורים אינסופיים.** $E = \\sigma/(2\\epsilon_0)$ למישור אחד. בין שני לוחות $\\pm\\sigma$: $E = \\sigma/\\epsilon_0$."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Core formula:** $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$\n\n| Geometry | $E$ |\n|---|---|\n| Point charge / outside sphere | $kQ/r^2$ |\n| Inside uniform sphere | $kQr/R^3$ |\n| Infinite line charge | $\\lambda/(2\\pi\\epsilon_0 r) = 2k\\lambda/r$ |\n| Infinite plane | $\\sigma/(2\\epsilon_0)$ |\n| Between capacitor plates ($\\pm\\sigma$) | $\\sigma/\\epsilon_0$ |\n| Inside conductor | $0$ |\n\n**Constants:** $k = 9\\times10^9\\;\\text{N·m}^2/\\text{C}^2$; $\\epsilon_0 = 8.85\\times10^{-12}\\;\\text{F/m}$; $k = 1/(4\\pi\\epsilon_0)$.",
+      "body_he_md": "**נוסחה מרכזית:** $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$\n\n| גיאומטריה | $E$ |\n|---|---|\n| מטען נקודתי / מחוץ לכדור | $kQ/r^2$ |\n| בתוך כדור אחיד | $kQr/R^3$ |\n| קו מטען אינסופי | $\\lambda/(2\\pi\\epsilon_0 r)$ |\n| מישור אינסופי | $\\sigma/(2\\epsilon_0)$ |\n| בין לוחות קבל | $\\sigma/\\epsilon_0$ |\n| בתוך מוליך | $0$ |"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Gauss's law:** $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$\n- **Point/sphere (outside):** $E = kQ/r^2$\n- **Uniform sphere (inside):** $E = kQr/R^3$ — linear\n- **Infinite line:** $E = \\lambda/(2\\pi\\epsilon_0 r)$\n- **Infinite plane:** $E = \\sigma/(2\\epsilon_0)$ — uniform\n- **Inside conductor:** $E = 0$ always\n- **Choose Gaussian surface** to match symmetry; pull $E$ out when $|E|$ is constant",
+      "body_he_md": "- **חוק גאוס:** $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$\n- **כדור (חוץ):** $E = kQ/r^2$\n- **כדור אחיד (פנים):** $E = kQr/R^3$\n- **קו אינסופי:** $E = \\lambda/(2\\pi\\epsilon_0 r)$\n- **מישור אינסופי:** $E = \\sigma/(2\\epsilon_0)$\n- **מוליך:** $E = 0$"
     }
   ],
   "questions": [
     {
       "id": "q1",
-      "type": "mcq",
-      "body_en": "A Gaussian surface is a closed surface that (select the BEST answer):",
-      "body_he": "משטח גאוסי הוא משטח סגור ש(בחר את התשובה הטובה ביותר):",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "Must coincide with a real physical surface, such as a conductor surface.",
-          "text_he": "חייב להיות על משטח פיזיקלי ממשי, כמו פני מוליך.",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "Is an imaginary mathematical surface chosen to exploit symmetry when applying Gauss's law.",
-          "text_he": "הוא משטח מתמטי דמיוני שנבחר לנצל סימטריה בהפעלת חוק גאוס.",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "Must enclose all charges in the problem.",
-          "text_he": "חייב לכלוא את כל המטענים בבעיה.",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Can only be used for spherically symmetric charge distributions.",
-          "text_he": "ניתן לשימוש רק עבור פיזורי מטען בעלי סימטריה כדורית.",
-          "correct": false
-        }
-      ],
-      "explanation_en": "A Gaussian surface is a purely mathematical construction—it has no physical reality. It can be any closed surface; the best choice exploits the symmetry of the charge distribution to make $|\\vec{E}|$ constant and the angle between $\\vec{E}$ and $d\\vec{A}$ uniform on the surface.",
-      "explanation_he": "משטח גאוסי הוא בנייה מתמטית בלבד — אין לו מציאות פיזיקלית. ניתן לבחור כל משטח סגור; הבחירה הטובה ביותר מנצלת את סימטריית פיזור המטען כדי ש-$|\\vec{E}|$ יהיה קבוע וזווית $\\vec{E}$ עם $d\\vec{A}$ תהיה אחידה."
+      "kind": "numeric",
+      "difficulty": 2,
+      "skill_atoms": ["gauss_law_apply"],
+      "stem_en": "A sphere of radius $r = 15\\;\\text{cm}$ encloses a point charge $q = 6\\;\\text{nC}$. Find the total electric flux (in N·m²/C).",
+      "stem_he": "כדור ברדיוס $r = 15\\;\\text{cm}$ מכיל מטען $q = 6\\;\\text{nC}$. מצא שטף חשמלי כולל.",
+      "answer_payload": {"value": 677.6, "tolerance": 5, "unit_en": "N·m²/C", "unit_he": "N·m²/C"},
+      "explanation_en": "$\\Phi = Q/\\epsilon_0 = 6\\times10^{-9}/(8.85\\times10^{-12}) \\approx 678\\;\\text{N·m}^2/\\text{C}$.",
+      "explanation_he": "$\\Phi = 6\\text{nC}/\\epsilon_0 \\approx 678\\;\\text{N·m}^2/\\text{C}$."
     },
     {
       "id": "q2",
-      "type": "mcq",
-      "body_en": "A point charge $+Q$ is placed at the center of a cube of side $a$. What is the total electric flux through the cube?",
-      "body_he": "מטען נקודתי $+Q$ ממוקם במרכז קובייה עם צלע $a$. מהו השטף החשמלי הכולל דרך הקובייה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$Q/(6\\epsilon_0)$",
-          "text_he": "$Q/(6\\epsilon_0)$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$Q/\\epsilon_0$",
-          "text_he": "$Q/\\epsilon_0$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$6Q/\\epsilon_0$",
-          "text_he": "$6Q/\\epsilon_0$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "It depends on the size $a$ of the cube.",
-          "text_he": "תלוי בגודל $a$ של הקובייה.",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Gauss's law states $\\Phi_E = Q_{\\text{enc}}/\\epsilon_0$ regardless of the surface shape. The cube is a valid closed Gaussian surface enclosing charge $Q$, so $\\Phi_E = Q/\\epsilon_0$. The fact that $|\\vec{E}|$ is not constant over the cube's faces is irrelevant—the law gives the total flux without requiring uniformity.",
-      "explanation_he": "חוק גאוס קובע $\\Phi_E = Q_{\\text{enc}}/\\epsilon_0$ ללא קשר לצורת המשטח. הקובייה היא משטח גאוסי סגור תקין המכיל מטען $Q$, לכן $\\Phi_E = Q/\\epsilon_0$. העובדה ש-$|\\vec{E}|$ אינו קבוע על פני הקובייה אינה רלוונטית — החוק נותן את השטף הכולל ללא דרישת אחידות."
+      "kind": "mcq",
+      "difficulty": 2,
+      "skill_atoms": ["conductor_field"],
+      "stem_en": "Inside a charged conducting sphere, $E$ is:",
+      "stem_he": "בתוך כדור מוליך טעון, $E$ הוא:",
+      "answer_payload": {
+        "options_en": ["Maximum at the center", "Proportional to $r$", "Zero everywhere", "Equal to $kQ/R^2$"],
+        "options_he": ["מקסימלי במרכז", "יחסי ל-$r$", "אפס בכל מקום", "שווה ל-$kQ/R^2$"],
+        "correct_index": 2
+      },
+      "explanation_en": "All excess charge sits on the surface of a conductor; Gauss's law gives $E = 0$ inside.",
+      "explanation_he": "כל המטען העודף נמצא על פני המוליך; חוק גאוס נותן $E = 0$ בפנים."
     },
     {
       "id": "q3",
-      "type": "mcq",
-      "body_en": "An infinite line charge has linear charge density $\\lambda = 4\\;\\mu\\text{C/m}$. Using a cylindrical Gaussian surface of radius $r = 0.02\\;\\text{m}$, what is the magnitude of the electric field at that radius?",
-      "body_he": "קו מטען אינסופי בעל צפיפות מטען ליניארית $\\lambda = 4\\;\\mu\\text{C/m}$. בשימוש במשטח גאוסי גלילי ברדיוס $r = 0.02\\;\\text{m}$, מהי עוצמת השדה החשמלי ברדיוס זה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$1.8\\times10^6\\;\\text{N/C}$",
-          "text_he": "$1.8\\times10^6\\;\\text{N/C}$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$3.6\\times10^6\\;\\text{N/C}$",
-          "text_he": "$3.6\\times10^6\\;\\text{N/C}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$9.0\\times10^4\\;\\text{N/C}$",
-          "text_he": "$9.0\\times10^4\\;\\text{N/C}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$9.0\\times10^6\\;\\text{N/C}$",
-          "text_he": "$9.0\\times10^6\\;\\text{N/C}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "From Gauss's law: $E = \\frac{\\lambda}{2\\pi\\epsilon_0 r}$. With $\\lambda = 4\\times10^{-6}$ C/m, $r = 0.02$ m: $E = \\frac{4\\times10^{-6}}{2\\pi(8.854\\times10^{-12})(0.02)} = \\frac{4\\times10^{-6}}{1.113\\times10^{-12}\\times\\pi\\times0.04}\\approx 1.8\\times10^6$ N/C.",
-      "explanation_he": "מחוק גאוס: $E = \\frac{\\lambda}{2\\pi\\epsilon_0 r}$. עם $\\lambda = 4\\times10^{-6}$ C/m, $r = 0.02$ m: $E \\approx 1.8\\times10^6$ N/C."
+      "kind": "mcq",
+      "difficulty": 3,
+      "skill_atoms": ["gauss_surface_choice"],
+      "stem_en": "For finding $E$ due to an infinite line charge, which Gaussian surface is best?",
+      "stem_he": "למציאת $E$ מקו מטען אינסופי, איזה משטח גאוס הכי טוב?",
+      "answer_payload": {
+        "options_en": ["Sphere centered on the line", "Cylinder coaxial with the line", "Rectangular box around the line", "Hemisphere"],
+        "options_he": ["כדור במרכז הקו", "גליל קואקסיאלי לקו", "קופסה מלבנית סביב הקו", "חצי-כדור"],
+        "correct_index": 1
+      },
+      "explanation_en": "A coaxial cylinder exploits cylindrical symmetry: $|E|$ is constant on the curved surface and $\\vec{E} \\perp$ surface. The flat ends contribute zero.",
+      "explanation_he": "גליל קואקסיאלי מנצל סימטריה גלילית: $|E|$ קבוע על המשטח המעוקל."
     },
     {
       "id": "q4",
-      "type": "mcq",
-      "body_en": "A solid insulating sphere of radius $R = 0.10\\;\\text{m}$ carries a total charge $Q = 8\\;\\text{nC}$ uniformly distributed throughout its volume. What is the electric field at $r = 0.05\\;\\text{m}$ (inside the sphere)?",
-      "body_he": "כדור מבודד מוצק ברדיוס $R = 0.10\\;\\text{m}$ נושא מטען כולל $Q = 8\\;\\text{nC}$ המפוזר אחידות בנפחו. מהו השדה החשמלי ב-$r = 0.05\\;\\text{m}$ (בתוך הכדור)?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$7200\\;\\text{N/C}$",
-          "text_he": "$7200\\;\\text{N/C}$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$3600\\;\\text{N/C}$",
-          "text_he": "$3600\\;\\text{N/C}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$18000\\;\\text{N/C}$",
-          "text_he": "$18000\\;\\text{N/C}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$3600\\;\\text{N/C}$ — wait, recalculate: $E = kQr/R^3 = (9\\times10^9)(8\\times10^{-9})(0.05)/(0.001) = 3600\\;\\text{N/C}$",
-          "text_he": "$3600\\;\\text{N/C}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Inside a uniformly charged solid sphere: $E = \\frac{kQ}{R^3}r$. With $k = 9\\times10^9$, $Q = 8\\times10^{-9}$ C, $R = 0.10$ m, $r = 0.05$ m: $E = \\frac{(9\\times10^9)(8\\times10^{-9})}{(0.10)^3}(0.05) = \\frac{72}{0.001}\\times0.05 = 72000\\times0.05 = 3600$ N/C.",
-      "explanation_he": "בתוך כדור מוצק טעון אחיד: $E = \\frac{kQ}{R^3}r$. עם $k = 9\\times10^9$, $Q = 8\\times10^{-9}$ C, $R = 0.10$ m, $r = 0.05$ m: $E = 3600$ N/C."
+      "kind": "numeric",
+      "difficulty": 3,
+      "skill_atoms": ["gauss_law_apply", "sphere_field"],
+      "stem_en": "A solid sphere ($R = 4\\;\\text{cm}$, $Q = 10\\;\\text{nC}$, uniform). Find $E$ in N/C at $r = 2\\;\\text{cm}$.",
+      "stem_he": "כדור מוצק ($R = 4\\;\\text{cm}$, $Q = 10\\;\\text{nC}$, אחיד). מצא $E$ ב-N/C ב-$r = 2\\;\\text{cm}$.",
+      "answer_payload": {"value": 28125, "tolerance": 500, "unit_en": "N/C", "unit_he": "N/C"},
+      "explanation_en": "Inside: $E = kQr/R^3 = (9e9)(10e-9)(0.02)/(0.04)^3 = 1.8/(6.4e-5) \\approx 28125\\;\\text{N/C}$.",
+      "explanation_he": "$E = kQr/R^3 \\approx 28125\\;\\text{N/C}$."
     },
     {
       "id": "q5",
-      "type": "mcq",
-      "body_en": "A solid copper sphere (conductor) carries a net charge $+Q$. Which statement about the electric field and charge distribution is correct?",
-      "body_he": "כדור נחושת מוצק (מוליך) נושא מטען נטו $+Q$. איזו טענה לגבי השדה החשמלי ופיזור המטען נכונה?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "The field inside the conductor is $E = kQ/R^2$ (same as outside at the surface).",
-          "text_he": "השדה בתוך המוליך הוא $E = kQ/R^2$ (זהה לחיצוני על פני השטח).",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "The charge $+Q$ is distributed uniformly throughout the volume of the sphere.",
-          "text_he": "המטען $+Q$ מפוזר אחידות בנפח הכדור.",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$E = 0$ inside the conductor, and all charge $+Q$ resides on the surface, with $E = \\sigma/\\epsilon_0$ just outside.",
-          "text_he": "$E = 0$ בתוך המוליך, וכל המטען $+Q$ שוכן על פני השטח, עם $E = \\sigma/\\epsilon_0$ ממש מחוץ.",
-          "correct": true
-        },
-        {
-          "id": "d",
-          "text_en": "The field just inside the surface equals $\\sigma/(2\\epsilon_0)$.",
-          "text_he": "השדה ממש מתחת לפני השטח שווה $\\sigma/(2\\epsilon_0)$.",
-          "correct": false
-        }
-      ],
-      "explanation_en": "In a conductor in electrostatic equilibrium: $\\vec{E} = 0$ inside (free charges shield the interior), all net charge is on the surface, and $E = \\sigma/\\epsilon_0$ just outside the surface (not $\\sigma/(2\\epsilon_0)$, which applies to an infinite plane with charges on both sides).",
-      "explanation_he": "במוליך בשיווי-משקל אלקטרוסטטי: $\\vec{E} = 0$ בפנים (מטענים חופשיים מגנים על הפנים), כל המטען הנטו על פני השטח, ו-$E = \\sigma/\\epsilon_0$ ממש מחוץ (לא $\\sigma/(2\\epsilon_0)$, שמתייחס למישור אינסופי עם מטענים משני הצדדים)."
+      "kind": "derivation",
+      "difficulty": 4,
+      "skill_atoms": ["gauss_law_apply"],
+      "stem_en": "Use Gauss's law to derive $E = \\sigma/(2\\epsilon_0)$ for an infinite uniformly charged plane with surface charge density $\\sigma$.",
+      "stem_he": "השתמש בחוק גאוס לגזירת $E = \\sigma/(2\\epsilon_0)$ למישור טעון אחיד אינסופי עם $\\sigma$.",
+      "answer_payload": {
+        "steps_en": [
+          "By symmetry, $\\vec{E}$ points perpendicular to the plane and has the same magnitude on both sides",
+          "Choose a pill-box Gaussian surface with faces of area $A$ parallel to the plane, one on each side",
+          "Flux through the two faces: $\\Phi = E\\cdot A + E\\cdot A = 2EA$ (the cylindrical sides contribute zero)",
+          "Enclosed charge: $Q_{\\text{enc}} = \\sigma A$",
+          "Gauss's law: $2EA = \\sigma A/\\epsilon_0 \\implies E = \\sigma/(2\\epsilon_0)$ ∎"
+        ],
+        "steps_he": [
+          "מסימטריה, $\\vec{E}$ מאונך למישור עם אותו גודל משני הצדדים",
+          "בחר קופסת גלולה עם פנים שטח $A$ מקביל למישור, אחד מכל צד",
+          "שטף: $2EA$ (הצדדים אפס)",
+          "מטען כלוא: $Q_{\\text{enc}} = \\sigma A$",
+          "גאוס: $E = \\sigma/(2\\epsilon_0)$ ∎"
+        ]
+      },
+      "explanation_en": "The factor of 2 comes from having two faces of the pill-box.",
+      "explanation_he": "גורם ה-2 מגיע משתי הפנים של קופסת הגלולה."
     }
-  ]
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Gauss's law: $\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ — always true, useful only with symmetry.",
+      "Sphere: outside $E = kQ/r^2$; inside uniform sphere $E = kQr/R^3$.",
+      "Line charge: $E = \\lambda/(2\\pi\\epsilon_0 r)$.",
+      "Plane: $E = \\sigma/(2\\epsilon_0)$; two plates ±σ: $E = \\sigma/\\epsilon_0$ between, 0 outside.",
+      "Conductor interior: $E = 0$ always."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Inside a conductor there is a non-zero field",
+        "correction": "Any excess charge goes to the surface; inside $E = 0$.",
+        "detect_phrase_en": "field inside conductor",
+        "detect_phrase_he": "שדה בתוך מוליך"
+      }
+    ],
+    "tutor_pacing_hint": "Start with point charge / sphere (familiar). Then line charge. Then plane — the pill-box argument. Contrast with Biot-Savart analogy.",
+    "skill_atoms_unlocked": [
+      "gauss_law_apply",
+      "sphere_field",
+      "cylinder_field",
+      "plane_field",
+      "conductor_field",
+      "gauss_surface_choice"
+    ]
+  }
 }

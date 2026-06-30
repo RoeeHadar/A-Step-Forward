@@ -1,198 +1,46 @@
 {
-  "id": "logarithms",
-  "type": "interactive",
-  "subject": "high_school_math_4pt",
-  "title_en": "Logarithms — The Inverse of Exponentials",
-  "title_he": "לוגריתמים — ההופכי של מעריכיים",
-  "duration_min": 20,
-  "level_min": "4pt",
-  "agent_hints": "Logarithms are confusing for students precisely because the definition is non-constructive: you cannot compute $\\log_2 7$ by hand without a calculator or change of base. Ground everything in the equivalence $\\log_b a = c \\Leftrightarrow b^c = a$. The three log laws follow directly from the exponent laws — derive each one rather than listing them. Domain checking (argument must be positive) is the most commonly missed step in solving equations.",
+  "concept_id": "logarithms",
+  "title_en": "Logarithms — Definition, Laws, and Solving Equations",
+  "title_he": "לוגריתמים — הגדרה, חוקים, ופתרון משוואות",
+  "subject": "math",
+  "difficulty": "intermediate",
+  "estimated_minutes": 50,
   "sections": [
-    {
-      "id": "definition",
-      "title_en": "What Is a Logarithm?",
-      "title_he": "מהו לוגריתם?",
-      "level_min": "4pt",
-      "body_en_md": "The **logarithm** $\\log_b a$ answers: \"To what power must I raise $b$ to get $a$?\"\n\n$$\\boxed{\\log_b a = c \\quad \\Longleftrightarrow \\quad b^c = a}$$\n\nRequirements: $b > 0$, $b \\neq 1$, $a > 0$.\n\n**Examples:**\n- $\\log_2 8 = 3$ because $2^3 = 8$\n- $\\log_3 (1/9) = -2$ because $3^{-2} = 1/9$\n- $\\log_{10} 1000 = 3$ because $10^3 = 1000$\n- $\\log_5 1 = 0$ because $5^0 = 1$\n\n**Special cases:** For any valid base $b$:\n- $\\log_b 1 = 0$ (always)\n- $\\log_b b = 1$ (always)\n\n**Special bases:**\n- $\\log = \\log_{10}$ — the **common** (decimal) logarithm\n- $\\ln = \\log_e$ — the **natural** logarithm, base $e \\approx 2.718$\n\nLogarithm and exponential are **inverses**: $\\log_b(b^x) = x$ and $b^{\\log_b x} = x$.",
-      "body_he_md": "**הלוגריתם** $\\log_b a$ עונה: \"לאיזו חזקה צריך להעלות את $b$ כדי לקבל $a$?\"\n\n$$\\boxed{\\log_b a = c \\quad \\Longleftrightarrow \\quad b^c = a}$$\n\nתנאים: $b > 0$, $b \\neq 1$, $a > 0$.\n\n**דוגמאות:**\n- $\\log_2 8 = 3$ כי $2^3 = 8$\n- $\\log_3 (1/9) = -2$ כי $3^{-2} = 1/9$\n- $\\log_{10} 1000 = 3$ כי $10^3 = 1000$\n- $\\log_5 1 = 0$ כי $5^0 = 1$\n\n**מקרים מיוחדים:** לכל בסיס $b$ תקף:\n- $\\log_b 1 = 0$ (תמיד)\n- $\\log_b b = 1$ (תמיד)\n\n**בסיסים מיוחדים:**\n- $\\log = \\log_{10}$ — לוגריתם **עשרוני** (נפוץ)\n- $\\ln = \\log_e$ — לוגריתם **טבעי**, בסיס $e \\approx 2.718$\n\nלוגריתם וחזקה הם **הפכיים**: $\\log_b(b^x) = x$ ו-$b^{\\log_b x} = x$."
-    },
-    {
-      "id": "laws",
-      "title_en": "The Three Log Laws and Change of Base",
-      "title_he": "שלושת חוקי הלוגריתם והחלפת בסיס",
-      "level_min": "4pt",
-      "body_en_md": "These laws transform multiplication/division/powers into addition/subtraction/multiplication:\n\n| Law | Formula | Comes from |\n|---|---|---|\n| **Product** | $\\log_b(xy) = \\log_b x + \\log_b y$ | $b^{m+n} = b^m \\cdot b^n$ |\n| **Quotient** | $\\log_b(x/y) = \\log_b x - \\log_b y$ | $b^{m-n} = b^m/b^n$ |\n| **Power** | $\\log_b(x^k) = k\\log_b x$ | $(b^m)^k = b^{mk}$ |\n\nAll require $x, y > 0$.\n\n**Change of base:**\n$$\\log_b a = \\frac{\\ln a}{\\ln b} = \\frac{\\log a}{\\log b}$$\n\nThis converts any logarithm to natural log or common log (calculator-friendly).\n\n**⚠ Warning:** $\\log_b(x + y) \\neq \\log_b x + \\log_b y$. Only products split into sums.",
-      "body_he_md": "חוקים אלה הופכים כפל/חילוק/חזקות לחיבור/חיסור/כפל:\n\n| חוק | נוסחה | נגזר מ- |\n|---|---|---|\n| **כפל** | $\\log_b(xy) = \\log_b x + \\log_b y$ | $b^{m+n} = b^m \\cdot b^n$ |\n| **חילוק** | $\\log_b(x/y) = \\log_b x - \\log_b y$ | $b^{m-n} = b^m/b^n$ |\n| **חזקה** | $\\log_b(x^k) = k\\log_b x$ | $(b^m)^k = b^{mk}$ |\n\nכל החוקים דורשים $x, y > 0$.\n\n**החלפת בסיס:**\n$$\\log_b a = \\frac{\\ln a}{\\ln b} = \\frac{\\log a}{\\log b}$$\n\nזה ממיר כל לוגריתם ללוג טבעי או עשרוני (ידידותי למחשבון).\n\n**⚠ אזהרה:** $\\log_b(x + y) \\neq \\log_b x + \\log_b y$. רק **מכפלות** מתפצלות לסכומים."
-    },
-    {
-      "id": "solving_equations",
-      "title_en": "Solving Exponential and Logarithmic Equations",
-      "title_he": "פתרון משוואות מעריכיות ולוגריתמיות",
-      "level_min": "4pt",
-      "body_en_md": "### Strategy for exponential equations\n\n1. Isolate the exponential.\n2. Take $\\log$ of both sides.\n3. Use the power law.\n\n**Example:** Solve $2^{x+1} = 5^x$.\n$$\\ln(2^{x+1}) = \\ln(5^x)$$\n$$(x+1)\\ln 2 = x \\ln 5$$\n$$x \\ln 2 + \\ln 2 = x \\ln 5$$\n$$\\ln 2 = x(\\ln 5 - \\ln 2) = x \\ln\\frac{5}{2}$$\n$$x = \\frac{\\ln 2}{\\ln(5/2)} \\approx \\frac{0.693}{0.916} \\approx 0.756.$$\n\n### Strategy for logarithmic equations\n\n1. **Check domain first** (all log arguments must be $> 0$).\n2. Combine logs using the laws.\n3. Rewrite as an exponential.\n4. Solve and check.\n\n**Example:** Solve $\\log_2 x + \\log_2(x-2) = 3$.\n- Domain: $x > 2$.\n- Combine: $\\log_2[x(x-2)] = 3 \\Rightarrow x(x-2) = 8$.\n- Quadratic: $x^2 - 2x - 8 = 0 \\Rightarrow (x-4)(x+2)=0$.\n- $x = 4$ (valid, $4 > 2$) or $x = -2$ (rejected: $-2 < 2$).\n- **Answer:** $x = 4$.",
-      "body_he_md": "### אסטרטגיה למשוואות מעריכיות\n\n1. בידודו את המעריכי.\n2. קחו $\\ln$ משני האגפים.\n3. השתמשו בחוק החזקה.\n\n**דוגמה:** פתרו $2^{x+1} = 5^x$.\n$$(x+1)\\ln 2 = x \\ln 5$$\n$$x \\ln 2 + \\ln 2 = x \\ln 5$$\n$$\\ln 2 = x(\\ln 5 - \\ln 2) = x \\ln\\frac{5}{2}$$\n$$x = \\frac{\\ln 2}{\\ln(5/2)} \\approx 0.756.$$\n\n### אסטרטגיה למשוואות לוגריתמיות\n\n1. **בדקו תחום הגדרה קודם** (כל ארגומנטי הלוג חייבים להיות $> 0$).\n2. אחדו לוגריתמים בעזרת החוקים.\n3. כתבו מחדש כמשוואה מעריכית.\n4. פתרו ובדקו.\n\n**דוגמה:** פתרו $\\log_2 x + \\log_2(x-2) = 3$.\n- תחום: $x > 2$.\n- איחוד: $\\log_2[x(x-2)] = 3 \\Rightarrow x(x-2) = 8$.\n- ריבועית: $x^2 - 2x - 8 = 0 \\Rightarrow (x-4)(x+2)=0$.\n- $x = 4$ (תקף, $4 > 2$) או $x = -2$ (נפסל: $-2 < 2$).\n- **תשובה:** $x = 4$."
-    },
-    {
-      "id": "log_function",
-      "title_en": "The Logarithmic Function and Its Properties",
-      "title_he": "פונקציית הלוגריתם ותכונותיה",
-      "level_min": "4pt",
-      "body_en_md": "The function $f(x) = \\log_b x$ has:\n- **Domain:** $x > 0$\n- **Range:** all reals $(-\\infty, \\infty)$\n- **$x$-intercept:** $(1, 0)$ (since $\\log_b 1 = 0$)\n- **Asymptote:** vertical at $x = 0$ (the $y$-axis)\n- **Monotone increasing** for $b > 1$; **decreasing** for $0 < b < 1$\n\n**Derivative (preview for 5pt):**\n$$(\\ln x)' = \\frac{1}{x}, \\qquad (a^x)' = a^x \\ln a.$$\n\nThe logarithm and exponential graphs are **reflections of each other** across the line $y = x$.",
-      "body_he_md": "הפונקציה $f(x) = \\log_b x$ מקיימת:\n- **תחום הגדרה:** $x > 0$\n- **טווח:** כל הממשיים $(-\\infty, \\infty)$\n- **חיתוך עם ציר $x$:** $(1, 0)$ (כי $\\log_b 1 = 0$)\n- **אסימפטוטה:** אנכית ב-$x = 0$ (ציר ה-$y$)\n- **מונוטונית עולה** עבור $b > 1$; **יורדת** עבור $0 < b < 1$\n\n**נגזרת (תצוגה מקדימה ל-5 יח'):**\n$$(\\ln x)' = \\frac{1}{x}, \\qquad (a^x)' = a^x \\ln a.$$\n\nגרפי הלוגריתם והמעריכי הם **השתקפויות** זה של זה סביב הישר $y = x$."
-    },
-    {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "4pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nGiven $f(x)=x^3-6x^2+9x$:\n\n(a) Find domain, zeros, and local extrema.\n\n(b) Sketch the graph.\n\n(c) Find the area between $f$ and the $x$-axis from $x=0$ to $x=3$.\n\n**Complete Solution:**\n\n(a) Domain $\\mathbb{R}$. $f(x)=x(x-3)^2$ → zeros $0,3$ (double). $f'=3(x-1)(x-3)$ → max at $(1,4)$, min at $(3,0)$.\n\n(b) Crosses origin, peaks at $(1,4)$, touches $x$-axis at 3.\n\n(c) $\\int_0^3 f(x)\\,dx = \\frac{27}{4}$.\n\n---\n\n**Practice Problem 2:**\n\n$P(\\text{drawing 2 apples without replacement})=\\frac{1}{36}$ from a bag with 2 apples and $n$ peaches. Find $n$, then $P(\\text{same type}\\mid\\text{2 drawn})$.\n\n**Complete Solution:**\n\n$\\frac{2}{n+2}\\cdot\\frac{1}{n+1}=\\frac{1}{36}$ → $(n+2)(n+1)=72$ → $n=7$.\n$P(\\text{same})=P(AA)+P(PP)=\\frac{1}{36}+\\frac{7\\cdot6}{9\\cdot8}=\\frac{43}{144}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\n$f(x)=x^3-6x^2+9x$: (א) תחום, אפסים, קיצון. (ב) סקיצה. (ג) שטח ב-$[0,3]$.\n\n**פתרון:** מקס $(1,4)$, מין $(3,0)$, שטח $\\frac{27}{4}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$P(2\\ \\text{תפוחים})=\\frac{1}{36}$, 2 תפוחים ו-$n$ אפרסקים. מצאו $n$ ו-$P(\\text{אותו סוג})$.\n\n**פתרון:** $n=7$, $P=\\frac{43}{144}$."
-    }
+    {"id": "intro","kind": "intro","title_en": "Why Logarithms Matter","title_he": "למה לוגריתמים חשובים","body_en_md": "Logarithms are the **inverse of exponentials** and appear in every domain: pH in chemistry, the Richter scale for earthquakes, decibels for sound, and exponential decay in physics. In the Israeli Bagrut (4-5 units), logarithms appear in function analysis, equation solving, and word problems on compound growth.\n\n**Exam relevance:**\n- Simplifying expressions using log laws\n- Solving exponential and log equations\n- Change of base formula\n- Log function analysis (domain, range, monotonicity)","body_he_md": "לוגריתמים הם ה**הפכיים של פונקציות מעריכיות**: pH בכימיה, סקלת ריכטר לרעידות אדמה, דציבלים לצליל, דעיכה מעריכית בפיזיקה.\n\n**נושאי בגרות:**\n- פישוט ביטויים לוגריתמיים\n- פתרון משוואות מעריכיות ולוגריתמיות\n- החלפת בסיס\n- ניתוח פונקציה לוגריתמית"},
+    {"id": "definition","kind": "definition","title_en": "The Logarithm Definition","title_he": "הגדרת הלוגריתם","body_en_md": "$$\\boxed{\\log_b a = c \\quad\\Longleftrightarrow\\quad b^c = a}$$\n\n**Conditions:** $b > 0$, $b \\neq 1$, $a > 0$.\n\n**Special values:**\n- $\\log_b 1 = 0$ (since $b^0 = 1$)\n- $\\log_b b = 1$ (since $b^1 = b$)\n- $b^{\\log_b x} = x$ and $\\log_b(b^x) = x$\n\n**Special bases:**\n- $\\log = \\log_{10}$ (common logarithm)\n- $\\ln = \\log_e$ where $e \\approx 2.71828$ (natural logarithm)","body_he_md": "$$\\boxed{\\log_b a = c \\quad\\Longleftrightarrow\\quad b^c = a}$$\n\nתנאים: $b > 0$, $b \\neq 1$, $a > 0$.\n\n**ערכים מיוחדים:** $\\log_b 1 = 0$; $\\log_b b = 1$.\n\n**בסיסים מיוחדים:** $\\log = \\log_{10}$; $\\ln = \\log_e$."},
+    {"id": "theory","kind": "theory","title_en": "The Three Log Laws and Change of Base","title_he": "שלושת חוקי הלוגריתם והחלפת בסיס","body_en_md": "| Law | Formula | Derived from |\n|---|---|---|\n| **Product** | $\\log_b(xy) = \\log_b x + \\log_b y$ | $b^{m+n} = b^m \\cdot b^n$ |\n| **Quotient** | $\\log_b(x/y) = \\log_b x - \\log_b y$ | $b^{m-n} = b^m/b^n$ |\n| **Power** | $\\log_b(x^k) = k\\log_b x$ | $(b^m)^k = b^{mk}$ |\n\nAll require $x, y > 0$.\n\n**Change of base:**\n$$\\log_b a = \\frac{\\ln a}{\\ln b} = \\frac{\\log a}{\\log b}$$\n\n**Warning:** $\\log_b(x+y) \\neq \\log_b x + \\log_b y$ — only products split, not sums!\n\n**Log function $f(x) = \\log_b x$:**\n- Domain: $x > 0$; Range: $\\mathbb{R}$\n- x-intercept: $(1, 0)$; Vertical asymptote: $x = 0$\n- Increasing when $b > 1$; Decreasing when $0 < b < 1$","body_he_md": "| חוק | נוסחה |\n|---|---|\n| כפל | $\\log_b(xy) = \\log_b x + \\log_b y$ |\n| חילוק | $\\log_b(x/y) = \\log_b x - \\log_b y$ |\n| חזקה | $\\log_b(x^k) = k\\log_b x$ |\n\n**החלפת בסיס:** $\\log_b a = \\ln a / \\ln b$.\n\n**אזהרה:** $\\log(x+y) \\neq \\log x + \\log y$!"},
+    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Evaluating and Simplifying","title_he": "דוגמה פתורה 1 — חישוב ופישוט","body_en_md": "**Part A:** Evaluate $\\log_2 8 + \\log_3(1/9)$.\n\n$\\log_2 8 = 3$ (since $2^3 = 8$)\n\n$\\log_3(1/9) = \\log_3 3^{-2} = -2$\n\n**Answer:** $3 + (-2) = 1$\n\n**Part B:** Simplify $\\log_5 10 + \\log_5 2.5$.\n\n$= \\log_5(10 \\times 2.5) = \\log_5 25 = 2$","body_he_md": "**חלק א:** $\\log_2 8 + \\log_3(1/9) = 3 + (-2) = 1$.\n\n**חלק ב:** $\\log_5 10 + \\log_5 2.5 = \\log_5 25 = 2$."},
+    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Simplify: $\\log_4 16 + \\log_4 4 - \\log_4 8$.","body_he_md": "פשט: $\\log_4 16 + \\log_4 4 - \\log_4 8$.","checkpoint_solution_en": "$\\log_4 16 = 2$; $\\log_4 4 = 1$; $\\log_4 8 = 3/2$. Sum $= 2 + 1 - 3/2 = 3/2$.","checkpoint_solution_he": "$2 + 1 - 3/2 = 3/2$."},
+    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Solving a Logarithmic Equation","title_he": "דוגמה פתורה 2 — פתרון משוואה לוגריתמית","body_en_md": "**Solve:** $\\log_2 x + \\log_2(x-2) = 3$\n\n**Step 1 — Domain:** $x > 0$ and $x - 2 > 0 \\Rightarrow x > 2$\n\n**Step 2 — Combine:** $\\log_2[x(x-2)] = 3$\n\n**Step 3 — Rewrite as exponential:** $x(x-2) = 2^3 = 8$\n\n**Step 4 — Solve quadratic:** $x^2 - 2x - 8 = 0 \\Rightarrow (x-4)(x+2) = 0$\n\n$x = 4$ or $x = -2$\n\n**Step 5 — Check domain:** $x = -2 < 2$ rejected; $x = 4 > 2$ ✓\n\n**Answer:** $x = 4$","body_he_md": "**פתרון:** $\\log_2 x + \\log_2(x-2) = 3$\n\nתחום: $x > 2$.\n\n$\\log_2[x(x-2)] = 3 \\Rightarrow x(x-2) = 8$.\n\n$x^2 - 2x - 8 = 0 \\Rightarrow x = 4$ (תקף) או $x = -2$ (נפסל).\n\nתשובה: $x = 4$."},
+    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Solve: $\\log_3(2x+1) = 2$.","body_he_md": "פתור: $\\log_3(2x+1) = 2$.","checkpoint_solution_en": "$2x + 1 = 3^2 = 9 \\Rightarrow x = 4$.","checkpoint_solution_he": "$2x + 1 = 9 \\Rightarrow x = 4$."},
+    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Exponential Equation with Change of Base","title_he": "דוגמה פתורה 3 — משוואה מעריכית עם החלפת בסיס","body_en_md": "**Solve:** $2^{x+1} = 5^x$\n\n**Step 1:** Take $\\ln$ of both sides:\n$\\ln(2^{x+1}) = \\ln(5^x)$\n\n**Step 2 — Power law:**\n$(x+1)\\ln 2 = x\\ln 5$\n\n**Step 3 — Expand:**\n$x\\ln 2 + \\ln 2 = x\\ln 5$\n\n**Step 4 — Isolate $x$:**\n$\\ln 2 = x(\\ln 5 - \\ln 2) = x\\ln\\frac{5}{2}$\n\n**Step 5:**\n$$x = \\frac{\\ln 2}{\\ln(5/2)} \\approx \\frac{0.693}{0.916} \\approx 0.756$$","body_he_md": "$2^{x+1} = 5^x$\n\nלוקחים $\\ln$: $(x+1)\\ln 2 = x\\ln 5$.\n\n$\\ln 2 = x(\\ln 5 - \\ln 2)$.\n\n$$x = \\frac{\\ln 2}{\\ln(5/2)} \\approx 0.756$$"},
+    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Type | Method |\n|---|---|\n| Evaluate $\\log_b a$ | Ask: $b^? = a$; convert to exponential |\n| Simplify log expression | Apply product/quotient/power laws |\n| Solve $\\log_b(\\text{expr}) = c$ | Domain first! Then rewrite as $\\text{expr} = b^c$ |\n| Solve exponential $a^{f(x)} = b^{g(x)}$ | Take $\\ln$ both sides; use power law |\n| Different bases | Change-of-base: $\\log_b a = \\ln a / \\ln b$ |\n| Domain of $\\log$ function | Argument $> 0$ only |","body_he_md": "| סוג | שיטה |\n|---|---|\n| חישוב $\\log_b a$ | $b^? = a$ |\n| פישוט | חוקי כפל/חילוק/חזקה |\n| $\\log_b(\\text{ביטוי}) = c$ | תחום קודם! ואז $= b^c$ |\n| משוואה מעריכית | $\\ln$ משני האגפים |\n| בסיסים שונים | החלפת בסיס |\n| תחום | ארגומנט $> 0$ |"},
+    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
+      {"id": "e1","difficulty": "easy","body_en": "Evaluate $\\log_3 81$.","body_he": "חשב $\\log_3 81$.","solution_en": "$3^4 = 81 \\Rightarrow \\log_3 81 = 4$.","solution_he": "4.","points": 5},
+      {"id": "e2","difficulty": "easy","body_en": "Evaluate $\\log_5 1$.","body_he": "חשב $\\log_5 1$.","solution_en": "$5^0 = 1 \\Rightarrow \\log_5 1 = 0$.","solution_he": "0.","points": 5},
+      {"id": "e3","difficulty": "easy","body_en": "Simplify $\\log_2 32 - \\log_2 8$.","body_he": "פשט $\\log_2 32 - \\log_2 8$.","solution_en": "$\\log_2(32/8) = \\log_2 4 = 2$.","solution_he": "2.","points": 5},
+      {"id": "e4","difficulty": "easy","body_en": "Write the domain of $f(x) = \\log_3(5-x)$.","body_he": "כתוב תחום הגדרה של $f(x) = \\log_3(5-x)$.","solution_en": "$5 - x > 0 \\Rightarrow x < 5$.","solution_he": "$x < 5$.","points": 5},
+      {"id": "e5","difficulty": "medium","body_en": "Solve $\\log_5(x^2 - 4) = 1$.","body_he": "פתור $\\log_5(x^2 - 4) = 1$.","solution_en": "$x^2 - 4 = 5 \\Rightarrow x^2 = 9 \\Rightarrow x = \\pm 3$. Check: both valid since $x^2 - 4 = 5 > 0$.","solution_he": "$x = \\pm 3$.","points": 8},
+      {"id": "e6","difficulty": "medium","body_en": "Simplify $3\\log_2 a - \\log_2 b + \\log_2 c^2$.","body_he": "פשט $3\\log_2 a - \\log_2 b + \\log_2 c^2$.","solution_en": "$\\log_2\\frac{a^3 c^2}{b}$.","solution_he": "$\\log_2(a^3 c^2 / b)$.","points": 8},
+      {"id": "e7","difficulty": "medium","body_en": "Solve $\\log(x+2) + \\log(x-1) = 1$ (base 10).","body_he": "פתור $\\log(x+2) + \\log(x-1) = 1$ (בסיס 10).","solution_en": "Domain: $x > 1$. $\\log[(x+2)(x-1)] = 1$. $(x+2)(x-1) = 10$. $x^2 + x - 12 = 0$. $(x+4)(x-3) = 0$. $x = 3$ (valid); $x = -4$ rejected.","solution_he": "$x = 3$.","points": 8},
+      {"id": "e8","difficulty": "medium","body_en": "Use change of base to compute $\\log_7 50$.","body_he": "השתמש בהחלפת בסיס לחישוב $\\log_7 50$.","solution_en": "$\\log_7 50 = \\ln 50 / \\ln 7 = 3.912/1.946 \\approx 2.01$.","solution_he": "$\\approx 2.01$.","points": 8},
+      {"id": "e9","difficulty": "medium","body_en": "Solve $3^{2x} = 7^{x+1}$.","body_he": "פתור $3^{2x} = 7^{x+1}$.","solution_en": "$2x\\ln 3 = (x+1)\\ln 7$. $x(2\\ln 3 - \\ln 7) = \\ln 7$. $x = \\ln 7/(2\\ln 3 - \\ln 7) \\approx 1.946/0.253 \\approx 7.69$.","solution_he": "$x \\approx 7.69$.","points": 8},
+      {"id": "e10","difficulty": "hard","body_en": "Solve: $\\log_3(\\log_2 x) = 1$.","body_he": "פתור: $\\log_3(\\log_2 x) = 1$.","solution_en": "$\\log_2 x = 3^1 = 3$. $x = 2^3 = 8$.","solution_he": "$x = 8$.","points": 10},
+      {"id": "e11","difficulty": "hard","body_en": "A bacteria culture triples every 5 hours. After how many hours will it be 100 times its original size?","body_he": "תרבית חיידקים משלשת עצמה כל 5 שעות. אחרי כמה שעות תהיה פי 100 מהמקורית?","solution_en": "$3^{t/5} = 100$. $(t/5)\\ln 3 = \\ln 100$. $t = 5\\ln 100/\\ln 3 = 5\\times4.605/1.099 \\approx 20.95$ hours.","solution_he": "$t \\approx 20.95$ שעות.","points": 10},
+      {"id": "e12","difficulty": "hard","body_en": "Prove that $\\log_a b \\cdot \\log_b c = \\log_a c$ using change of base.","body_he": "הוכח $\\log_a b \\cdot \\log_b c = \\log_a c$ בעזרת החלפת בסיס.","solution_en": "$\\log_a b \\cdot \\log_b c = \\frac{\\ln b}{\\ln a} \\cdot \\frac{\\ln c}{\\ln b} = \\frac{\\ln c}{\\ln a} = \\log_a c$. ∎","solution_he": "$(\\ln b/\\ln a)\\cdot(\\ln c/\\ln b) = \\ln c/\\ln a = \\log_a c$. ■","points": 10},
+      {"id": "e13","difficulty": "hard","body_en": "Find all $x$: $\\log_4 x + \\log_8 x = 5$.","body_he": "מצא את כל $x$: $\\log_4 x + \\log_8 x = 5$.","solution_en": "Convert to $\\log_2$: $\\frac{\\log_2 x}{2} + \\frac{\\log_2 x}{3} = 5$. Let $u = \\log_2 x$: $u/2 + u/3 = 5 \\Rightarrow 5u/6 = 5 \\Rightarrow u = 6$. $x = 2^6 = 64$.","solution_he": "הצבה $u = \\log_2 x$: $u/2 + u/3 = 5 \\Rightarrow u = 6 \\Rightarrow x = 64$.","points": 10}
+    ]},
+    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Log of a sum ≠ sum of logs.** $\\log(x+y) \\neq \\log x + \\log y$ — this is false! Only PRODUCT of arguments splits.\n\n2. **Skipping domain check.** Always verify that log arguments are positive BEFORE solving. Check solutions at the end.\n\n3. **Forgetting $\\log_b b = 1$.** Students sometimes say $\\log_5 5 = 5$.\n\n4. **Wrong change-of-base direction.** $\\log_b a = \\ln a / \\ln b$, NOT $\\ln b / \\ln a$.\n\n5. **Applying power law incorrectly.** $\\log(x^2)$ = $2\\log|x|$ for domain considerations, not just $2\\log x$.","body_he_md": "1. **לוג של סכום ≠ סכום לוגים.** $\\log(x+y) \\neq \\log x + \\log y$!\n2. **לא לשכוח לבדוק תחום** לפני הפתרון ואחריו.\n3. **$\\log_b b = 1$**, לא $b$.\n4. **החלפת בסיס: $\\ln a/\\ln b$**, לא $\\ln b/\\ln a$.\n5. **חוק החזקה על שלמות:** $\\log(x^2) = 2\\log|x|$."},
+    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam","title_he": "לפני הבחינה","body_en_md": "**Formula card:**\n- $\\log_b a = c \\Leftrightarrow b^c = a$\n- $\\log_b(xy) = \\log_b x + \\log_b y$\n- $\\log_b(x/y) = \\log_b x - \\log_b y$\n- $\\log_b(x^k) = k\\log_b x$\n- $\\log_b a = \\ln a/\\ln b$\n- Domain: argument must be $> 0$\n\n**Exam patterns:**\n- Simplify/evaluate using laws\n- Solve equations (domain first!)\n- Analyze log function (intercepts, asymptote, monotonicity)","body_he_md": "**כרטיס נוסחאות:** $\\log_b(xy) = +$; $\\log_b(x/y) = -$; $\\log_b(x^k) = k\\cdot$; החלפת בסיס $= \\ln a/\\ln b$.\n\n**תחום:** ארגומנט $> 0$!"},
+    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **Definition:** $\\log_b a = c \\Leftrightarrow b^c = a$\n- **Product:** $\\log_b(xy) = \\log_b x + \\log_b y$\n- **Quotient:** $\\log_b(x/y) = \\log_b x - \\log_b y$\n- **Power:** $\\log_b(x^k) = k\\log_b x$\n- **Change of base:** $\\log_b a = \\ln a/\\ln b$\n- **Equation solving:** Domain first → combine → exponentiate → verify","body_he_md": "- הגדרה: $\\log_b a = c \\Leftrightarrow b^c = a$\n- חוקים: כפל, חילוק, חזקה\n- החלפת בסיס: $\\ln a / \\ln b$\n- פתרון: תחום קודם!"}
   ],
   "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "Evaluate $\\log_3 81$.",
-      "body_he": "חשבו $\\log_3 81$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$3$",
-          "text_he": "$3$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$4$",
-          "text_he": "$4$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$27$",
-          "text_he": "$27$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$9$",
-          "text_he": "$9$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$3^4 = 81$, so $\\log_3 81 = 4$. Systematically: $3^1=3$, $3^2=9$, $3^3=27$, $3^4=81$.",
-      "explanation_he": "$3^4 = 81$, לכן $\\log_3 81 = 4$. באופן שיטתי: $3^1=3$, $3^2=9$, $3^3=27$, $3^4=81$."
-    },
-    {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "Simplify $\\log_5 10 + \\log_5 2.5$.",
-      "body_he": "פשטו $\\log_5 10 + \\log_5 2.5$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\log_5 12.5$",
-          "text_he": "$\\log_5 12.5$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$2$",
-          "text_he": "$2$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$\\log_5 25$",
-          "text_he": "$\\log_5 25$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$5$",
-          "text_he": "$5$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Product law: $\\log_5 10 + \\log_5 2.5 = \\log_5(10 \\times 2.5) = \\log_5 25 = 2$ (since $5^2 = 25$).",
-      "explanation_he": "חוק הכפל: $\\log_5 10 + \\log_5 2.5 = \\log_5(10 \\times 2.5) = \\log_5 25 = 2$ (כי $5^2 = 25$)."
-    },
-    {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "Which is the domain of $f(x) = \\log_2(5 - x)$?",
-      "body_he": "מהו תחום ההגדרה של $f(x) = \\log_2(5 - x)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$x > 5$",
-          "text_he": "$x > 5$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$x < 5$",
-          "text_he": "$x < 5$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$x > 0$",
-          "text_he": "$x > 0$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "All real numbers",
-          "text_he": "כל הממשיים",
-          "correct": false
-        }
-      ],
-      "explanation_en": "The argument $5-x$ must be $> 0$: $5 - x > 0 \\Rightarrow x < 5$.",
-      "explanation_he": "הארגומנט $5-x$ חייב להיות $> 0$: $5 - x > 0 \\Rightarrow x < 5$."
-    },
-    {
-      "id": "q4",
-      "type": "open",
-      "body_en": "Investigate $f(x)=x^3-6x^2+9x$:\n\n(a) Domain and zeros.\n(b) Monotonicity and local extrema.\n(c) Area between $f$ and the x-axis on $[0,3]$.",
-      "body_he": "חקור $f(x)=x^3-6x^2+9x$:\n\n(א) תחום ואפסים.\n(ב) מונוטוניות וקיצון.\n(ג) שטח ב-$[0,3]$.",
-      "points": 10,
-      "expected_steps_en": [
-        "Factor: x(x-3)², zeros 0 and 3",
-        "f'=3(x-1)(x-3), max at (1,4), min at (3,0)",
-        "∫₀³ f(x)dx = 27/4"
-      ],
-      "expected_steps_he": [
-        "אפסים 0,3",
-        "קיצון: מקס (1,4), מין (3,0)",
-        "שטח 27/4"
-      ],
-      "sample_solution_en": "Zeros 0,3; max (1,4); area 27/4.",
-      "sample_solution_he": "אפסים 0,3; מקס (1,4); שטח 27/4.",
-      "rubric_en": "3pts domain/zeros; 4pts derivative analysis; 3pts integral.",
-      "rubric_he": "3 נק' תחום/אפסים; 4 נק' נגזרת; 3 נק' אינטגרל."
-    },
-    {
-      "id": "q5",
-      "type": "open",
-      "body_en": "Bag: 2 apples and $n$ peaches. P(two apples without replacement) = 1/36.\n\n(a) Find $n$.\n(b) Find P(both same type | two drawn).",
-      "body_he": "2 תפוחים ו-$n$ אפרסקים. P(2 תפוחים)=1/36.\n\n(א) מצא $n$.\n(ב) P(אותו סוג | 2 נשלפו).",
-      "points": 10,
-      "expected_steps_en": [
-        "Set (2/(n+2))(1/(n+1)) = 1/36",
-        "Solve (n+2)(n+1)=72 → n=7",
-        "P(same)=1/36 + P(two peaches)"
-      ],
-      "expected_steps_he": [
-        "הצבה: (n+2)(n+1)=72",
-        "n=7",
-        "P(אותו סוג)=43/144"
-      ],
-      "sample_solution_en": "n=7. P(same type)=43/144.",
-      "sample_solution_he": "n=7. P=43/144.",
-      "rubric_en": "5pts find n with algebra; 5pts conditional/total probability.",
-      "rubric_he": "5 נק' מציאת n; 5 נק' הסתברות."
-    }
-  ]
+    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["log_evaluation","log_laws"],"stem_en": "Evaluate $\\log_2 8 + \\log_3(1/9)$.","stem_he": "חשב $\\log_2 8 + \\log_3(1/9)$.","answer_payload": {"options_en": ["$5$","$1$","$0$","$-1$"],"options_he": ["$5$","$1$","$0$","$-1$"],"correct_index": 1},"explanation_en": "$\\log_2 8 = 3$; $\\log_3(1/9) = -2$. Sum $= 1$.","explanation_he": "$3 + (-2) = 1$."}
+  ],
+  "agent_hints": {
+    "key_insights": ["The key equivalence: log_b(a) = c ↔ b^c = a. Every log problem reduces to this.", "Log laws come from exponent laws — understand derivation, not memorization.", "ALWAYS check domain (argument > 0) BEFORE solving a log equation.", "When bases differ in an equation, take ln of both sides."],
+    "common_misconceptions": [{"wrong": "log(x+y) = log(x) + log(y)","correction": "ONLY log(xy) = log(x) + log(y). Sum inside a log stays inside.","detect_phrase_en": "log of a sum","detect_phrase_he": "לוג של סכום"}],
+    "tutor_pacing_hint": "Start with concrete evaluation (log₂8=?) to build confidence. Then derive product law from exponent laws. Spend most time on equation solving — domain check is non-negotiable.",
+    "skill_atoms_unlocked": ["log_definition","log_product_law","log_quotient_law","log_power_law","change_of_base","log_equations","log_function_analysis"]
+  }
 }

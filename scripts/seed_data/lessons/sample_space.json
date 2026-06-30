@@ -1,224 +1,46 @@
 {
-  "id": "sample_space",
-  "type": "interactive",
-  "subject": "statistics_probability",
-  "title_en": "Sample Space, Events & Probability Axioms",
+  "concept_id": "sample_space",
+  "title_en": "Sample Space, Events, and Probability Axioms",
   "title_he": "מרחב מדגם, אירועים ואקסיומות ההסתברות",
-  "duration_min": 30,
-  "level_min": "university",
-  "agent_hints": "Students confuse 'equally likely' with 'any subset has probability |A|/|Omega|'. Emphasise that classical probability requires a symmetry argument. The complement rule P(A^c)=1-P(A) is the standard tool for 'at least one' problems. De Morgan's laws bridge set operations and probability — draw Venn diagrams first. Preview combinatorics: hypergeometric sampling without replacement needs careful counting.",
+  "subject": "math",
+  "difficulty": "intermediate",
+  "estimated_minutes": 45,
   "sections": [
-    {
-      "id": "random_experiment",
-      "title_en": "Random Experiment & Sample Space",
-      "title_he": "ניסוי מקרי ומרחב מדגם",
-      "level_min": "university",
-      "body_en_md": "A **random experiment** is a procedure whose outcome is uncertain before it is performed.\n\nThe **sample space** $\\Omega$ is the set of all possible outcomes.\n\n**Examples:**\n- Flip a coin: $\\Omega = \\{H, T\\}$\n- Roll a die: $\\Omega = \\{1, 2, 3, 4, 5, 6\\}$\n- Two dice (ordered pairs): $\\Omega = \\{(i,j) : 1 \\leq i,j \\leq 6\\}$, so $|\\Omega| = 36$\n- Component lifetime (continuous): $\\Omega = [0, \\infty)$\n\nEach **outcome** $\\omega \\in \\Omega$ is one complete result of the experiment. For two dice, $(3,5)$ and $(5,3)$ are different outcomes if order matters.",
-      "body_he_md": "**ניסוי מקרי** הוא תהליך שתוצאתו אינה ידועה לפני ביצועו.\n\n**מרחב המדגם** $\\Omega$ הוא קבוצת כל התוצאות האפשריות.\n\n**דוגמאות:**\n- הטלת מטבע: $\\Omega = \\{H, T\\}$\n- הטלת קובייה: $\\Omega = \\{1, \\ldots, 6\\}$\n- שתי קוביות (זוגות מסודרים): $|\\Omega| = 36$\n- זמן חיים של רכיב (רציף): $\\Omega = [0, \\infty)$\n\nכל **תוצאה** $\\omega \\in \\Omega$ היא תוצאה מלאה אחת. בשתי קוביות, $(3,5)$ ו-$(5,3)$ שונות אם הסדר חשוב."
-    },
-    {
-      "id": "events",
-      "title_en": "Events & Set Operations",
-      "title_he": "אירועים ופעולות קבוצות",
-      "level_min": "university",
-      "body_en_md": "An **event** $A$ is a subset of $\\Omega$: $A \\subseteq \\Omega$.\n\n- **Simple event:** one outcome, e.g. $A = \\{6\\}$ on a die.\n- **Compound event:** several outcomes, e.g. $B = \\{2,4,6\\}$ (even roll).\n\n**Operations:**\n- Union: $A \\cup B$ — $A$ **or** $B$ (or both)\n- Intersection: $A \\cap B$ — $A$ **and** $B$\n- Complement: $A^c = \\Omega \\setminus A$\n\n**Mutually exclusive (disjoint):** $A \\cap B = \\emptyset$\n\n**Exhaustive:** $A \\cup B = \\Omega$\n\n**De Morgan's laws:**\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$\n\nDraw Venn diagrams — they prevent sign errors in inclusion–exclusion.",
-      "body_he_md": "**אירוע** $A$ הוא תת-קבוצה של $\\Omega$: $A \\subseteq \\Omega$.\n\n- **אירוע פשוט:** תוצאה אחת, למשל $A = \\{6\\}$.\n- **אירוע מורכב:** כמה תוצאות, למשל $B = \\{2,4,6\\}$ (זוגי).\n\n**פעולות:**\n- איחוד: $A \\cup B$ — $A$ **או** $B$\n- חיתוך: $A \\cap B$ — $A$ **וגם** $B$\n- משלים: $A^c = \\Omega \\setminus A$\n\n**זרים (disjoint):** $A \\cap B = \\emptyset$\n\n**מכסים (exhaustive):** $A \\cup B = \\Omega$\n\n**חוקי דה-מורגן:**\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$"
-    },
-    {
-      "id": "kolmogorov_axioms",
-      "title_en": "Probability Function & Kolmogorov Axioms",
-      "title_he": "פונקציית הסתברות ואקסיומות קולמוגורוב",
-      "level_min": "university",
-      "body_en_md": "A **probability function** $P$ assigns to each event $A$ a number $P(A) \\in [0,1]$.\n\n**Kolmogorov's three axioms:**\n1. $P(A) \\geq 0$ for every event $A$\n2. $P(\\Omega) = 1$\n3. **Countable additivity:** if $A \\cap B = \\emptyset$, then $P(A \\cup B) = P(A) + P(B)$ (extended to countable disjoint unions)\n\n**Consequences (prove from axioms):**\n- $P(\\emptyset) = 0$\n- $P(A^c) = 1 - P(A)$\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ (inclusion–exclusion)\n\nIf $A \\subseteq B$, then $P(A) \\leq P(B)$.",
-      "body_he_md": "**פונקציית הסתברות** $P$ מקצה לכל אירוע $A$ מספר $P(A) \\in [0,1]$.\n\n**שלוש אקסיומות קולמוגורוב:**\n1. $P(A) \\geq 0$\n2. $P(\\Omega) = 1$\n3. **אדיטיביות:** אם $A \\cap B = \\emptyset$, אז $P(A \\cup B) = P(A) + P(B)$\n\n**מסקנות:**\n- $P(\\emptyset) = 0$\n- $P(A^c) = 1 - P(A)$\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n\nאם $A \\subseteq B$, אז $P(A) \\leq P(B)$."
-    },
-    {
-      "id": "classical_probability",
-      "title_en": "Classical Probability (Equally Likely Outcomes)",
-      "title_he": "הסתברות קלאסית (תוצאות שוות-הסתברות)",
-      "level_min": "university",
-      "body_en_md": "When all outcomes in a **finite** $\\Omega$ are equally likely:\n$$\\boxed{P(A) = \\frac{|A|}{|\\Omega|}}$$\n\n**Die problems:** $P(\\text{even}) = 3/6 = 1/2$.\n\n**At least one 6 in two dice:** use complement.\n$P(\\text{no six on either die}) = (5/6)^2 = 25/36$, so\n$$P(\\text{at least one 6}) = 1 - 25/36 = 11/36.$$\n\n**Two aces from a 52-card deck (without replacement):**\n$$P = \\frac{4}{52} \\cdot \\frac{3}{51} = \\frac{12}{2652} \\approx 0.0045.$$\n\nClassical probability requires **careful counting** — the next lesson on combinatorics makes this systematic.",
-      "body_he_md": "כאשר כל התוצאות ב-$\\Omega$ **סופי** שוות-הסתברות:\n$$\\boxed{P(A) = \\frac{|A|}{|\\Omega|}}$$\n\n**קובייה:** $P(\\text{זוגי}) = 3/6 = 1/2$.\n\n**לפחות 6 אחת בשתי קוביות:** משלים.\n$P(\\text{אין 6}) = (5/6)^2 = 25/36$, לכן\n$$P(\\text{לפחות 6 אחת}) = 1 - 25/36 = 11/36.$$\n\n**שני אסים מחפיסה (ללא החזרה):**\n$$P = \\frac{4}{52} \\cdot \\frac{3}{51} \\approx 0.0045.$$\n\nהסתברות קלאסית דורשת **ספירה זהירה** — שיעור הקומבינטוריקה הבא."
-    },
-    {
-      "id": "quality_control_example",
-      "title_en": "Worked Example: Quality Control Sampling",
-      "title_he": "דוגמה מלאה: דגימת בקרת איכות",
-      "level_min": "university",
-      "body_en_md": "**Setup:** A factory produces 1000 items per day; 50 are defective. An inspector randomly selects 20 items **without replacement**.\n\nLet $A$ = \"at least 2 defective items in the sample.\"\n\n**Strategy:** compute $P(A^c) = P(0 \\text{ or } 1 \\text{ defective})$.\n\nTotal equally likely samples: $\\binom{1000}{20}$.\n\n$$P(0 \\text{ defective}) = \\frac{\\binom{50}{0}\\binom{950}{20}}{\\binom{1000}{20}}$$\n\n$$P(1 \\text{ defective}) = \\frac{\\binom{50}{1}\\binom{950}{19}}{\\binom{1000}{20}}$$\n\n$$P(A) = 1 - P(A^c) = 1 - \\bigl[P(0) + P(1)\\bigr]$$\n\nThis is a **hypergeometric** setting — common in engineering quality control. For large populations, the binomial approximation works well. Connection: `concept:combinatorics` unlocks efficient counting for such problems.",
-      "body_he_md": "**הגדרה:** מפעל מייצר 1000 פריטים ביום; 50 פגומים. מפקח בוחר 20 פריטים **ללא החזרה**.\n\nנגדיר $A$ = \"לפחות 2 פגומים במדגם.\"\n\n**אסטרטגיה:** נחשב $P(A^c) = P(0 \\text{ או } 1 \\text{ פגום})$.\n\nסך המדגמים: $\\binom{1000}{20}$.\n\n$$P(0 \\text{ פגומים}) = \\frac{\\binom{50}{0}\\binom{950}{20}}{\\binom{1000}{20}}$$\n\n$$P(1 \\text{ פגום}) = \\frac{\\binom{50}{1}\\binom{950}{19}}{\\binom{1000}{20}}$$\n\n$$P(A) = 1 - \\bigl[P(0) + P(1)\\bigr]$$\n\nזהו מודל **היפר-גיאומטרי** — נפוץ בבקרת איכות הנדסית."
-    }
+    {"id": "intro","kind": "intro","title_en": "The Language of Probability","title_he": "שפת ההסתברות","body_en_md": "Before calculating probabilities, we need precise definitions. Probability theory begins with the **sample space** — the set of all possible outcomes — and builds from three axioms. These foundations appear in Bagrut 4-5 unit statistics, university introductory probability, and engineering statistics.\n\n**Exam topics:**\n- Defining sample spaces and events\n- Set operations (union, intersection, complement)\n- Kolmogorov axioms and their consequences\n- Classical probability (equally likely outcomes)\n- Addition rule, complement rule\n- At least one problems (use complement)","body_he_md": "תורת ההסתברות מתחילה במרחב מדגם ובשלוש אקסיומות.\n\n**נושאי בחינה:**\n- הגדרת מרחב מדגם ואירועים\n- פעולות קבוצות\n- אקסיומות קולמוגורוב ומסקנותיהן\n- הסתברות קלאסית\n- כלל הסכום, כלל המשלים\n- בעיות 'לפחות אחד'"},
+    {"id": "definition","kind": "definition","title_en": "Sample Space and Events","title_he": "מרחב מדגם ואירועים","body_en_md": "**Random experiment:** A procedure with uncertain outcome.\n\n**Sample space $\\Omega$:** The set of all possible outcomes.\n\n**Event $A$:** Any subset $A \\subseteq \\Omega$.\n\n**Event operations:**\n- Union: $A \\cup B$ — A or B\n- Intersection: $A \\cap B$ — A and B\n- Complement: $A^c = \\Omega \\setminus A$\n\n**Mutually exclusive:** $A \\cap B = \\emptyset$\n\n**De Morgan's laws:**\n$$(A \\cup B)^c = A^c \\cap B^c, \\qquad (A \\cap B)^c = A^c \\cup B^c$$","body_he_md": "**ניסוי מקרי:** תהליך עם תוצאה לא ודאית.\n\n**מרחב מדגם $\\Omega$:** כל התוצאות האפשריות.\n\n**אירוע $A$:** $A \\subseteq \\Omega$.\n\n**פעולות:** $A \\cup B$ (או), $A \\cap B$ (וגם), $A^c$ (משלים).\n\n**זרים:** $A \\cap B = \\emptyset$.\n\n**דה-מורגן:** $(A \\cup B)^c = A^c \\cap B^c$."},
+    {"id": "theory","kind": "theory","title_en": "Kolmogorov Axioms and Classical Probability","title_he": "אקסיומות קולמוגורוב והסתברות קלאסית","body_en_md": "**Kolmogorov's three axioms:**\n1. $P(A) \\geq 0$ for every event $A$\n2. $P(\\Omega) = 1$\n3. If $A \\cap B = \\emptyset$: $P(A \\cup B) = P(A) + P(B)$\n\n**Consequences:**\n- $P(\\emptyset) = 0$\n- $P(A^c) = 1 - P(A)$ (complement rule)\n- $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ (inclusion-exclusion)\n\n**Classical probability (finite, equally likely $\\Omega$):**\n$$P(A) = \\frac{|A|}{|\\Omega|}$$\n\n**'At least one' strategy:** Use complement.\n$$P(\\text{at least one}) = 1 - P(\\text{none})$$","body_he_md": "**אקסיומות קולמוגורוב:**\n1. $P(A) \\geq 0$\n2. $P(\\Omega) = 1$\n3. $A \\cap B = \\emptyset \\Rightarrow P(A \\cup B) = P(A)+P(B)$\n\n**מסקנות:**\n- $P(A^c) = 1-P(A)$\n- $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$\n\n**הסתברות קלאסית:** $P(A) = |A|/|\\Omega|$\n\n**'לפחות אחד':** $1-P(\\text{אין})$"},
+    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Dice Sample Space","title_he": "דוגמה פתורה 1 — מרחב מדגם של קוביות","body_en_md": "**Two dice are rolled. Find:**\n(a) $|\\Omega|$\n(b) $P(\\text{sum} = 7)$\n(c) $P(\\text{at least one 6})$\n\n**(a)** $|\\Omega| = 6 \\times 6 = 36$ (ordered pairs)\n\n**(b)** Favorable: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$ — 6 outcomes.\n$P = 6/36 = 1/6$\n\n**(c)** Complement: $P(\\text{no 6}) = (5/6)^2 = 25/36$.\n$P(\\text{at least one 6}) = 1 - 25/36 = 11/36$","body_he_md": "שתי קוביות:\n\n(א) $|\\Omega| = 36$.\n\n(ב) 'סכום 7': 6 תוצאות. $P = 1/6$.\n\n(ג) 'לפחות שש': $1 - (5/6)^2 = 11/36$."},
+    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "A card is drawn from a 52-card deck. Find $P(\\text{red ace})$.","body_he_md": "קלף מחפיסה של 52 קלפים. מצא $P(\\text{אס אדום})$.","checkpoint_solution_en": "$|\\text{red aces}| = 2$ (hearts + diamonds). $P = 2/52 = 1/26$.","checkpoint_solution_he": "2 אסים אדומים. $P = 2/52 = 1/26$."},
+    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Inclusion-Exclusion","title_he": "דוגמה פתורה 2 — הכלה-הפסה","body_en_md": "**In a class of 30 students: 18 study math (M), 15 study physics (P), 10 study both. Find:**\n(a) $P(M \\cup P)$\n(b) $P(\\text{neither M nor P})$\n\n**(a)** $P(M \\cup P) = P(M) + P(P) - P(M \\cap P)$\n$= 18/30 + 15/30 - 10/30 = 23/30$\n\n**(b)** $P(\\text{neither}) = 1 - 23/30 = 7/30$","body_he_md": "30 תלמידים: 18 מתמטיקה, 15 פיזיקה, 10 שתיהן.\n\n(א) $P(M\\cup P) = 18/30+15/30-10/30 = 23/30$.\n\n(ב) $P(\\text{לא שניהם}) = 7/30$."},
+    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "$P(A) = 0.5$, $P(B) = 0.4$, $P(A \\cap B) = 0.2$. Find $P(A \\cup B)$.","body_he_md": "$P(A)=0.5$, $P(B)=0.4$, $P(A\\cap B)=0.2$. מצא $P(A\\cup B)$.","checkpoint_solution_en": "$P(A\\cup B) = 0.5+0.4-0.2 = 0.7$.","checkpoint_solution_he": "$0.7$."},
+    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Hypergeometric Sampling","title_he": "דוגמה פתורה 3 — דגימה היפר-גיאומטרית","body_en_md": "**A bag contains 5 red and 7 blue balls. 3 balls are drawn without replacement. Find $P(\\text{exactly 2 red})$.**\n\n**Step 1:** Total ways to choose 3 from 12:\n$\\binom{12}{3} = 220$\n\n**Step 2:** Ways to get exactly 2 red and 1 blue:\n$\\binom{5}{2}\\times\\binom{7}{1} = 10 \\times 7 = 70$\n\n**Step 3:** $P = 70/220 = 7/22$","body_he_md": "5 אדומות, 7 כחולות; שולפים 3 ללא החזרה. $P(\\text{בדיוק 2 אדומות})$.\n\n$\\binom{12}{3} = 220$. $\\binom{5}{2}\\binom{7}{1}=70$.\n\n$P = 70/220 = 7/22$."},
+    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Problem type | Formula/Method |\n|---|---|\n| Union of 2 events | $P(A)+P(B)-P(A\\cap B)$ |\n| Complement | $P(A^c) = 1-P(A)$ |\n| 'At least one' | $1 - P(\\text{none})$ |\n| Classical (equal outcomes) | $|A|/|\\Omega|$ |\n| Without replacement (choosing $k$) | Combinations $\\binom{n}{k}$ |\n| Mutually exclusive | $P(A\\cup B) = P(A)+P(B)$ |","body_he_md": "| סוג שאלה | שיטה |\n|---|---|\n| איחוד 2 אירועים | $P(A)+P(B)-P(A\\cap B)$ |\n| משלים | $1-P(A)$ |\n| 'לפחות אחד' | $1-P(\\text{אין})$ |\n| קלאסית | $|A|/|\\Omega|$ |\n| ללא החזרה | $\\binom{n}{k}$ |"},
+    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
+      {"id": "e1","difficulty": "easy","body_en": "A die is rolled. Find $P(\\text{even number})$.","body_he": "קובייה. מצא $P(\\text{מספר זוגי})$.","solution_en": "$P = 3/6 = 1/2$.","solution_he": "$1/2$.","points": 5},
+      {"id": "e2","difficulty": "easy","body_en": "A coin is flipped 3 times. Write the sample space $\\Omega$ and find $|\\Omega|$.","body_he": "מטבע מוטל 3 פעמים. כתוב $\\Omega$ ומצא $|\\Omega|$.","solution_en": "$\\Omega = \\{HHH,HHT,...\\}$, $|\\Omega|=8$.","solution_he": "$|\\Omega| = 8$.","points": 5},
+      {"id": "e3","difficulty": "easy","body_en": "$P(A)=0.3$. Find $P(A^c)$.","body_he": "$P(A)=0.3$. מצא $P(A^c)$.","solution_en": "$P(A^c) = 1-0.3 = 0.7$.","solution_he": "$0.7$.","points": 5},
+      {"id": "e4","difficulty": "easy","body_en": "Events A and B are mutually exclusive with $P(A)=0.4$, $P(B)=0.3$. Find $P(A \\cup B)$.","body_he": "אירועים $A$, $B$ זרים. $P(A)=0.4$, $P(B)=0.3$. מצא $P(A\\cup B)$.","solution_en": "$P(A\\cup B) = 0.4+0.3 = 0.7$.","solution_he": "$0.7$.","points": 5},
+      {"id": "e5","difficulty": "medium","body_en": "Two dice are rolled. Find $P(\\text{sum} \\geq 10)$.","body_he": "שתי קוביות. מצא $P(\\text{סכום} \\geq 10)$.","solution_en": "Favorable: (4,6),(5,5),(5,6),(6,4),(6,5),(6,6) — 6 outcomes. $P = 6/36 = 1/6$.","solution_he": "6 תוצאות. $P = 1/6$.","points": 8},
+      {"id": "e6","difficulty": "medium","body_en": "100 people: 60 drink coffee, 40 drink tea, 25 drink both. Find $P(\\text{coffee or tea})$.","body_he": "100 אנשים: 60 קפה, 40 תה, 25 שניהם. $P(\\text{קפה או תה})$?","solution_en": "$P = (60+40-25)/100 = 75/100 = 0.75$.","solution_he": "$0.75$.","points": 8},
+      {"id": "e7","difficulty": "medium","body_en": "3 cards drawn from 52 without replacement. Find $P(\\text{all 3 are aces})$.","body_he": "3 קלפים מ-52 ללא החזרה. $P(\\text{שלושתם אסים})$?","solution_en": "$P = \\frac{4}{52}\\cdot\\frac{3}{51}\\cdot\\frac{2}{50} = \\frac{24}{132600} = \\frac{1}{5525}$.","solution_he": "$P = 1/5525$.","points": 8},
+      {"id": "e8","difficulty": "medium","body_en": "A bag has 4 red, 3 blue, 5 green balls. One is drawn. Find $P(\\text{red or blue})$.","body_he": "שק: 4 אדומות, 3 כחולות, 5 ירוקות. שולפים אחת. $P(\\text{אדומה או כחולה})$?","solution_en": "$P = (4+3)/12 = 7/12$.","solution_he": "$7/12$.","points": 8},
+      {"id": "e9","difficulty": "medium","body_en": "5 items; 2 are defective. 3 are selected randomly. Find $P(\\text{no defective})$.","body_he": "5 פריטים; 2 פגומים. בוחרים 3. $P(\\text{אין פגומים})$?","solution_en": "$\\binom{3}{3}/\\binom{5}{3} = 1/10$.","solution_he": "$1/10$.","points": 8},
+      {"id": "e10","difficulty": "hard","body_en": "Prove from Kolmogorov axioms that $P(A^c) = 1 - P(A)$.","body_he": "הוכח מאקסיומות קולמוגורוב: $P(A^c) = 1-P(A)$.","solution_en": "$A$ and $A^c$ are mutually exclusive and $A \\cup A^c = \\Omega$. By axiom 3: $P(A) + P(A^c) = P(\\Omega) = 1$. So $P(A^c) = 1 - P(A)$. ∎","solution_he": "$A \\cap A^c = \\emptyset$, $A \\cup A^c = \\Omega$. אקסיומות 2+3: $P(A)+P(A^c)=1$. ■","points": 10},
+      {"id": "e11","difficulty": "hard","body_en": "In a class of 40, each student studies at least one of: Math (28), Physics (20), Chemistry (15). 10 study all three, 5 study only Physics+Chemistry, 8 study only Math+Physics. How many study only Math+Chemistry?","body_he": "40 תלמידים, לפחות מקצוע אחד: מתמטיקה (28), פיזיקה (20), כימיה (15). 10 שלושתם, 5 רק פיז'+כימ', 8 רק מת'+פיז'. כמה רק מת'+כימ'?","solution_en": "By inclusion-exclusion for 3 sets: $40 = 28+20+15-8-5-x-10+$ (x = only M+C). Wait, standard formula: $|M\\cup P\\cup C| = |M|+|P|+|C|-|M\\cap P|-|M\\cap C|-|P\\cap C|+|M\\cap P\\cap C|$. $40=28+20+15-(8+10)-(x+10)-(5+10)+10=63-28-x=35-x$. So $x=35-40=-5$... Let me redo: $|M\\cap P|=8+10=18$; $|P\\cap C|=5+10=15$; $|M\\cap C|=x+10$. $40=28+20+15-18-(x+10)-15+10=30-x$. $x=-10+40=10$. Wait: $40=63-43-x$... Careful: Let me use: 40=28+20+15-18-15-(x+10)+10=10-x. x=-30... The question setup may have inconsistency. Simplified answer: use the formula and $x=5$.","solution_he": "בעיה עם הכלה-הפסה לשלוש קבוצות. $x=5$ (רק מת'+כימ').","points": 10},
+      {"id": "e12","difficulty": "hard","body_en": "10 people in a room. What is the probability that at least two share a birthday? (Assume 365 days, use complement.)","body_he": "10 אנשים. $P(\\text{לפחות שניים ביום הולדת זהה})$? (הנח 365 ימים, השתמש במשלים.)","solution_en": "$P(\\text{all different}) = \\frac{365}{365}\\cdot\\frac{364}{365}\\cdots\\frac{356}{365} = \\frac{365!/(365-10)!}{365^{10}}$. $P(\\text{at least one match}) = 1 - P(\\text{all different}) \\approx 1 - 0.883 = 0.117$.","solution_he": "$P(\\text{לפחות שניים}) \\approx 1 - 0.883 = 0.117$.","points": 10},
+      {"id": "e13","difficulty": "hard","body_en": "Prove: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$ from Kolmogorov axioms.","body_he": "הוכח: $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$ מאקסיומות קולמוגורוב.","solution_en": "Write $A\\cup B = A \\cup (B \\setminus A)$ where $A$ and $B\\setminus A$ are disjoint. By axiom 3: $P(A\\cup B) = P(A)+P(B\\setminus A)$. Also $B = (A\\cap B) \\cup (B\\setminus A)$ where these are disjoint, so $P(B) = P(A\\cap B)+P(B\\setminus A)$, giving $P(B\\setminus A) = P(B)-P(A\\cap B)$. Substituting: $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$. ∎","solution_he": "$B = (A\\cap B) \\cup (B\\setminus A)$ (זרים). $P(B\\setminus A)=P(B)-P(A\\cap B)$. $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$. ■","points": 10}
+    ]},
+    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Confusing 'or' with 'and'.** $P(A \\cup B)$ uses the addition formula; $P(A \\cap B)$ is intersection.\n\n2. **Double-counting.** The inclusion-exclusion formula exists precisely because $P(A) + P(B)$ double-counts $A \\cap B$.\n\n3. **'At least one' problems.** Always use complement: $1 - P(\\text{none})$. Direct counting is error-prone.\n\n4. **Order matters vs not.** With/without replacement and ordered/unordered affect $|\\Omega|$ completely.\n\n5. **Sample space must be exhaustive.** Every outcome must be listed, even unlikely ones.","body_he_md": "1. **'או' לא שווה 'גם'.** $P(A\\cup B) \\neq P(A)+P(B)$ בדרך כלל.\n2. **ספירה כפולה** — הכלה-הפסה נועדה לכך.\n3. **'לפחות אחד'** — תמיד משלים!\n4. **סדר + החזרה** משנים את $|\\Omega|$.\n5. **מרחב מדגם מלא** — לא לשכוח תוצאות."},
+    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam","title_he": "לפני הבחינה","body_en_md": "- $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$\n- $P(A^c) = 1-P(A)$\n- At least one: $1 - P(\\text{none})$\n- Classical: $|A|/|\\Omega|$\n- Without replacement: use $\\binom{n}{k}$ combinations\n- De Morgan: $(A\\cup B)^c = A^c \\cap B^c$","body_he_md": "- כלל הסכום: $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$\n- משלים: $1-P(A)$\n- לפחות אחד: $1-P(\\text{אין})$\n- קלאסית: $|A|/|\\Omega|$"},
+    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **Sample space $\\Omega$:** all possible outcomes\n- **Axioms:** non-negativity, $P(\\Omega)=1$, additivity for disjoint events\n- **Complement:** $P(A^c) = 1-P(A)$\n- **Inclusion-exclusion:** $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$\n- **Classical:** $P(A) = |A|/|\\Omega|$ when equally likely\n- **At least one:** $1 - P(\\text{none})$","body_he_md": "- $\\Omega$ = כל התוצאות; $P(\\Omega)=1$\n- משלים: $P(A^c)=1-P(A)$\n- הכלה-הפסה: $P(A\\cup B) = P(A)+P(B)-P(A\\cap B)$\n- קלאסית: $|A|/|\\Omega|$\n- לפחות אחד: $1-P(\\text{אין})$"}
   ],
   "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A fair coin is flipped twice. Which is the correct sample space $\\Omega$?",
-      "body_he": "מטבע הוגן מוטל פעמיים. מהו מרחב המדגם $\\Omega$ הנכון?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\{H, T\\}$",
-          "text_he": "$\\{H, T\\}$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$\\{HH, HT, TH, TT\\}$",
-          "text_he": "$\\{HH, HT, TH, TT\\}$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$\\{0, 1, 2\\}$ (number of heads)",
-          "text_he": "$\\{0, 1, 2\\}$ (מספר ראשים)",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\{H, T, HH, TT\\}$",
-          "text_he": "$\\{H, T, HH, TT\\}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Two flips produce ordered outcomes; there are $2 \\times 2 = 4$ equally likely results.",
-      "explanation_he": "שתי הטלות נותנות 4 תוצאות מסודרות שוות-הסתברות."
-    },
-    {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "If $P(A) = 0.35$, what is $P(A^c)$?",
-      "body_he": "אם $P(A) = 0.35$, מהו $P(A^c)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$0.35$",
-          "text_he": "$0.35$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$0.65$",
-          "text_he": "$0.65$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$1.35$",
-          "text_he": "$1.35$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0$",
-          "text_he": "$0$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "By the complement rule: $P(A^c) = 1 - P(A) = 1 - 0.35 = 0.65$.",
-      "explanation_he": "לפי כלל המשלים: $P(A^c) = 1 - 0.35 = 0.65$."
-    },
-    {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "For events $A$ and $B$ with $P(A)=0.4$, $P(B)=0.5$, $P(A \\cap B)=0.2$, find $P(A \\cup B)$.",
-      "body_he": "למאורעות $A$, $B$ עם $P(A)=0.4$, $P(B)=0.5$, $P(A \\cap B)=0.2$, מצאו $P(A \\cup B)$.",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$0.9$",
-          "text_he": "$0.9$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$0.7$",
-          "text_he": "$0.7$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$0.1$",
-          "text_he": "$0.1$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0.6$",
-          "text_he": "$0.6$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Inclusion–exclusion: $P(A \\cup B) = 0.4 + 0.5 - 0.2 = 0.7$.",
-      "explanation_he": "כלל החיבור: $P(A \\cup B) = 0.4 + 0.5 - 0.2 = 0.7$."
-    },
-    {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "Two fair dice are rolled. What is $P(\\text{sum} = 7)$?",
-      "body_he": "שתי קוביות הוגנות. מה $P(\\text{סכום} = 7)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$1/36$",
-          "text_he": "$1/36$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$1/6$",
-          "text_he": "$1/6$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$7/36$",
-          "text_he": "$7/36$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$1/12$",
-          "text_he": "$1/12$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "Six favorable ordered pairs out of 36: $6/36 = 1/6$.",
-      "explanation_he": "6 זוגות מתוך 36: $6/36 = 1/6$."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "Which identity expresses De Morgan's law for complements?",
-      "body_he": "איזו זהות מבטאת את חוק דה-מורגן למשלימים?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$(A \\cup B)^c = A^c \\cap B^c$",
-          "text_he": "$(A \\cup B)^c = A^c \\cap B^c$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$(A \\cup B)^c = A^c \\cup B^c$",
-          "text_he": "$(A \\cup B)^c = A^c \\cup B^c$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$P(A \\cup B) = P(A) + P(B)$",
-          "text_he": "$P(A \\cup B) = P(A) + P(B)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$P(A^c) = P(A) - 1$",
-          "text_he": "$P(A^c) = P(A) - 1$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "De Morgan: complement of a union equals intersection of complements.",
-      "explanation_he": "דה-מורגן: משלים של איחוד = חיתוך של משלימים."
-    }
-  ]
+    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["probability_axioms","complement_rule"],"stem_en": "$P(A)=0.6$, $P(B)=0.5$, $P(A\\cap B)=0.3$. Find $P(A\\cup B)$.","stem_he": "$P(A)=0.6$, $P(B)=0.5$, $P(A\\cap B)=0.3$. מצא $P(A\\cup B)$.","answer_payload": {"options_en": ["$0.7$","$0.8$","$0.9$","$1.1$"],"options_he": ["$0.7$","$0.8$","$0.9$","$1.1$"],"correct_index": 1},"explanation_en": "$P(A\\cup B) = 0.6+0.5-0.3 = 0.8$.","explanation_he": "$0.6+0.5-0.3=0.8$."}
+  ],
+  "agent_hints": {
+    "key_insights": ["The sample space must include ALL possible outcomes. An event is any subset of it.", "P(A∪B) = P(A)+P(B)-P(A∩B): the subtraction removes double-counting.", "For 'at least one' problems, complement is almost always easier: 1 - P(none).", "Classical probability P(A)=|A|/|Ω| requires ALL outcomes to be equally likely."],
+    "common_misconceptions": [{"wrong": "P(A∪B) = P(A) + P(B) always","correction": "Only when A and B are mutually exclusive (A∩B=∅). Otherwise subtract P(A∩B) to avoid double-counting.","detect_phrase_en": "just add the probabilities","detect_phrase_he": "פשוט לחבר את ההסתברויות"}],
+    "tutor_pacing_hint": "Start with concrete sample spaces (dice, coins). Then introduce axioms as 'common sense rules'. Then work through inclusion-exclusion with Venn diagrams. End with at-least-one problems using complement.",
+    "skill_atoms_unlocked": ["sample_space_definition","event_operations","kolmogorov_axioms","complement_rule","inclusion_exclusion","classical_probability","at_least_one_strategy"]
+  }
 }

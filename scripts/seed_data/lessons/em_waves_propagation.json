@@ -1,31 +1,342 @@
 {
   "concept_id": "em_waves_propagation",
+  "title_en": "Electromagnetic Waves — Propagation",
+  "title_he": "גלים אלקטרומגנטיים — התפשטות",
   "subject": "physics",
-  "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Em Waves Propagation",
-  "title_he": "גלים אלקטרומגנטיים",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "difficulty": "advanced",
+  "estimated_minutes": 50,
   "sections": [
     {
+      "id": "intro",
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Em Waves Propagation.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-גלים אלקטרומגנטיים.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Light as an EM Wave",
+      "title_he": "אור כגל אלקטרומגנטי",
+      "body_en_md": "In 1865, Maxwell predicted that oscillating electric and magnetic fields can propagate through empty space — at the speed of light. This unified electricity, magnetism, and optics into a single framework. Every wireless signal, X-ray, and microwave is the same phenomenon: a **transverse electromagnetic wave**.\n\n**In Israeli university EM courses**, this topic includes:\n- Derivation of the wave equation from Maxwell's equations\n- Speed $c = 1/\\sqrt{\\mu_0\\epsilon_0}$\n- Poynting vector and energy transport\n- Polarization",
+      "body_he_md": "בשנת 1865, מקסוול חזה ששדות חשמליים ומגנטיים מתנדנדים יכולים להתפשט בחלל ריק — במהירות האור. זה איחד חשמל, מגנטיות ואופטיקה למסגרת אחת. כל אות אלחוטי, קרן X ומיקרוגל הם אותה תופעה: **גל אלקטרומגנטי רוחבי**.\n\n**בקורסי EM אוניברסיטאיים ישראליים**, נושא זה כולל:\n- גזירת משוואת הגל ממשוואות מקסוול\n- מהירות $c = 1/\\sqrt{\\mu_0\\epsilon_0}$\n- וקטור פוינטינג והעברת אנרגיה\n- פולריזציה"
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Em Waves Propagation: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Em Waves Propagation.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-גלים אלקטרומגנטיים: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-גלים אלקטרומגנטיים.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Key Quantities",
+      "title_he": "כמויות מרכזיות",
+      "body_en_md": "**Speed of light (vacuum):**\n$$c = \\frac{1}{\\sqrt{\\mu_0\\epsilon_0}} = 3\\times10^8\\;\\text{m/s}$$\n\n**Wave parameters:**\n- $f$ = frequency (Hz)\n- $\\lambda$ = wavelength (m)\n- $\\omega = 2\\pi f$ (rad/s)\n- $k = 2\\pi/\\lambda$ (rad/m)\n- $c = \\lambda f = \\omega/k$\n\n**Fields in a plane wave** (propagating in $+z$ direction):\n$$\\vec{E} = E_0\\cos(kz - \\omega t)\\hat{x}$$\n$$\\vec{B} = B_0\\cos(kz - \\omega t)\\hat{y}$$\nwith $E_0/B_0 = c$ and $\\vec{E} \\perp \\vec{B} \\perp \\hat{z}$ (transverse).\n\n**Poynting vector** (energy flux, W/m²):\n$$\\vec{S} = \\frac{1}{\\mu_0}\\vec{E}\\times\\vec{B}$$\n\n**Intensity** (time-averaged power per area):\n$$I = \\langle S\\rangle = \\frac{E_0 B_0}{2\\mu_0} = \\frac{E_0^2}{2\\mu_0 c} = \\frac{c\\epsilon_0 E_0^2}{2}$$",
+      "body_he_md": "**מהירות האור (ריק):**\n$$c = \\frac{1}{\\sqrt{\\mu_0\\epsilon_0}} = 3\\times10^8\\;\\text{m/s}$$\n\n**גל מישורי** (בכיוון $+z$):\n$$\\vec{E} = E_0\\cos(kz-\\omega t)\\hat{x}, \\quad \\vec{B} = B_0\\cos(kz-\\omega t)\\hat{y}$$\nעם $E_0/B_0 = c$ ו-$\\vec{E} \\perp \\vec{B} \\perp \\hat{z}$.\n\n**וקטור פוינטינג:**\n$$\\vec{S} = \\frac{\\vec{E}\\times\\vec{B}}{\\mu_0}$$\n\n**עוצמה (ממוצע זמן):**\n$$I = \\frac{c\\epsilon_0 E_0^2}{2}$$"
+    },
+    {
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Wave Equation Derivation",
+      "title_he": "גזירת משוואת הגל",
+      "body_en_md": "### From Maxwell's equations in vacuum\n\nStarting from Faraday's and Ampère-Maxwell's laws (in differential form for vacuum, no charges or currents):\n$$\\nabla\\times\\vec{E} = -\\frac{\\partial\\vec{B}}{\\partial t}, \\qquad \\nabla\\times\\vec{B} = \\mu_0\\epsilon_0\\frac{\\partial\\vec{E}}{\\partial t}$$\n\nTake the curl of the first equation and substitute the second:\n$$\\nabla\\times(\\nabla\\times\\vec{E}) = -\\frac{\\partial}{\\partial t}(\\nabla\\times\\vec{B}) = -\\mu_0\\epsilon_0\\frac{\\partial^2\\vec{E}}{\\partial t^2}$$\n\nUsing $\\nabla\\times(\\nabla\\times\\vec{E}) = \\nabla(\\nabla\\cdot\\vec{E}) - \\nabla^2\\vec{E}$ and Gauss's law ($\\nabla\\cdot\\vec{E} = 0$ in vacuum):\n$$\\boxed{\\nabla^2\\vec{E} = \\mu_0\\epsilon_0\\frac{\\partial^2\\vec{E}}{\\partial t^2}}$$\n\nThis is the **wave equation** with speed $v = 1/\\sqrt{\\mu_0\\epsilon_0} = c$.\n\n### Polarization\n\nLinear polarization: $\\vec{E}$ oscillates in a fixed plane. When polarized light passes through a polarizer at angle $\\theta$:\n$$I_{\\text{transmitted}} = I_0\\cos^2\\theta \\qquad \\text{(Malus's law)}$$",
+      "body_he_md": "### ממשוואות מקסוול בריק\n\nמחוק פאראדי ואמפר-מקסוול (בצורה דיפרנציאלית בריק):\n$$\\nabla\\times\\vec{E} = -\\frac{\\partial\\vec{B}}{\\partial t}, \\quad \\nabla\\times\\vec{B} = \\mu_0\\epsilon_0\\frac{\\partial\\vec{E}}{\\partial t}$$\n\nלאחר גזירת הרוטור ממשוואת פאראדי:\n$$\\boxed{\\nabla^2\\vec{E} = \\mu_0\\epsilon_0\\frac{\\partial^2\\vec{E}}{\\partial t^2}}$$\n\nמשוואת גל עם מהירות $c = 1/\\sqrt{\\mu_0\\epsilon_0}$.\n\n### פולריזציה — חוק מאלוס\n$$I = I_0\\cos^2\\theta$$"
+    },
+    {
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Wave Parameters",
+      "title_he": "דוגמה פתורה 1 — פרמטרי גל",
+      "body_en_md": "**Given:** A radio wave has frequency $f = 100\\;\\text{MHz}$. Find (a) wavelength $\\lambda$, (b) wave number $k$, (c) angular frequency $\\omega$.\n\n**(a):** $\\lambda = c/f = (3\\times10^8)/(10^8) = 3\\;\\text{m}$\n\n**(b):** $k = 2\\pi/\\lambda = 2\\pi/3 \\approx 2.09\\;\\text{rad/m}$\n\n**(c):** $\\omega = 2\\pi f = 2\\pi\\times10^8 \\approx 6.28\\times10^8\\;\\text{rad/s}$",
+      "body_he_md": "**נתון:** גל רדיו $f = 100\\;\\text{MHz}$. מצא (א) $\\lambda$, (ב) $k$, (ג) $\\omega$.\n\n**(א):** $\\lambda = c/f = 3\\;\\text{m}$\n\n**(ב):** $k = 2\\pi/3 \\approx 2.09\\;\\text{rad/m}$\n\n**(ג):** $\\omega = 2\\pi\\times10^8\\;\\text{rad/s}$"
+    },
+    {
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "An EM wave has $E_0 = 100\\;\\text{V/m}$. Find (a) $B_0$ and (b) the intensity $I$.",
+      "body_he_md": "גל EM עם $E_0 = 100\\;\\text{V/m}$. מצא (א) $B_0$ ו-(ב) עוצמה $I$.",
+      "checkpoint_solution_en": "(a) $B_0 = E_0/c = 100/(3\\times10^8) \\approx 3.33\\times10^{-7}\\;\\text{T}$. (b) $I = c\\epsilon_0 E_0^2/2 = (3\\times10^8)(8.85\\times10^{-12})(10^4)/2 = 13.3\\;\\text{W/m}^2$.",
+      "checkpoint_solution_he": "(א) $B_0 = 3.33\\times10^{-7}\\;\\text{T}$. (ב) $I = 13.3\\;\\text{W/m}^2$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Intensity and Distance",
+      "title_he": "דוגמה פתורה 2 — עוצמה ומרחק",
+      "body_en_md": "**Given:** A radio transmitter radiates $P = 50\\;\\text{kW}$ isotropically. Find the intensity and $E_0$ at $r = 10\\;\\text{km}$.\n\n**Step 1 — Intensity:**\n$$I = \\frac{P}{4\\pi r^2} = \\frac{5\\times10^4}{4\\pi(10^4)^2} = \\frac{5\\times10^4}{4\\pi\\times10^8} \\approx 3.98\\times10^{-5}\\;\\text{W/m}^2$$\n\n**Step 2 — $E_0$:**\n$$E_0 = \\sqrt{\\frac{2I}{c\\epsilon_0}} = \\sqrt{\\frac{2(3.98\\times10^{-5})}{(3\\times10^8)(8.85\\times10^{-12})}} = \\sqrt{\\frac{7.96\\times10^{-5}}{2.655\\times10^{-3}}} \\approx \\sqrt{0.030} \\approx 0.173\\;\\text{V/m}$$",
+      "body_he_md": "**נתון:** משדר $P = 50\\;\\text{kW}$ איזוטרופי. מצא $I$ ו-$E_0$ ב-$r = 10\\;\\text{km}$.\n\n$I = P/(4\\pi r^2) \\approx 3.98\\times10^{-5}\\;\\text{W/m}^2$\n\n$E_0 = \\sqrt{2I/(c\\epsilon_0)} \\approx 0.173\\;\\text{V/m}$"
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Polarized light of intensity $I_0$ passes through two polarizers at $30°$ and $60°$ to the original polarization. Find final intensity.",
+      "body_he_md": "אור מקוטב בעוצמה $I_0$ עובר דרך שני מקטבים ב-$30°$ וב-$60°$ לכיוון הקיטוב המקורי. מצא עוצמה סופית.",
+      "checkpoint_solution_en": "After first polarizer ($\\theta_1 = 30°$): $I_1 = I_0\\cos^2 30° = I_0(3/4) = 0.75I_0$. After second polarizer (at $60°$ to original = $30°$ to first): $I_2 = I_1\\cos^2 30° = 0.75I_0\\times0.75 = 0.5625 I_0$.",
+      "checkpoint_solution_he": "$I_{\\text{סופי}} = I_0\\cos^4(30°) = 0.5625\\,I_0$."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Poynting Vector and Radiation Pressure",
+      "title_he": "דוגמה פתורה 3 — וקטור פוינטינג ולחץ קרינה",
+      "body_en_md": "**Given:** A laser beam has intensity $I = 10^6\\;\\text{W/m}^2$ and strikes a perfect mirror (beam cross-section $A = 1\\;\\text{cm}^2 = 10^{-4}\\;\\text{m}^2$).\n\n**(a) Find $E_0$ and $B_0$:**\n$$E_0 = \\sqrt{\\frac{2I}{c\\epsilon_0}} = \\sqrt{\\frac{2\\times10^6}{(3\\times10^8)(8.85\\times10^{-12})}} = \\sqrt{\\frac{2\\times10^6}{2.655\\times10^{-3}}} \\approx \\sqrt{7.53\\times10^8} \\approx 2.74\\times10^4\\;\\text{V/m}$$\n$$B_0 = E_0/c \\approx 9.15\\times10^{-5}\\;\\text{T}$$\n\n**(b) Radiation pressure on the mirror:**\nFor perfect reflection: $P_{\\text{rad}} = 2I/c$ (factor 2: momentum is reversed).\n$$F = P_{\\text{rad}} \\cdot A = \\frac{2IA}{c} = \\frac{2(10^6)(10^{-4})}{3\\times10^8} = 6.67\\times10^{-7}\\;\\text{N}$$",
+      "body_he_md": "**נתון:** קרן לייזר $I = 10^6\\;\\text{W/m}^2$ פוגעת במראה מושלמת, $A = 10^{-4}\\;\\text{m}^2$.\n\n**(א):** $E_0 \\approx 2.74\\times10^4\\;\\text{V/m}$; $B_0 \\approx 9.15\\times10^{-5}\\;\\text{T}$\n\n**(ב) לחץ קרינה** (השתקפות מושלמת: $P_{\\text{rad}} = 2I/c$):\n$$F = \\frac{2IA}{c} = 6.67\\times10^{-7}\\;\\text{N}$$"
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide",
+      "title_he": "מדריך שיטה",
+      "body_en_md": "| Task | Formula |\n|---|---|\n| Find $\\lambda$ from $f$ | $\\lambda = c/f$ |\n| Find $B_0$ from $E_0$ | $B_0 = E_0/c$ |\n| Find intensity from $E_0$ | $I = c\\epsilon_0 E_0^2/2$ |\n| Find $E_0$ from $I$ | $E_0 = \\sqrt{2I/(c\\epsilon_0)}$ |\n| Poynting vector | $\\vec{S} = \\vec{E}\\times\\vec{B}/\\mu_0$ |\n| Intensity at distance $r$ | $I = P/(4\\pi r^2)$ |\n| Malus's law | $I = I_0\\cos^2\\theta$ |\n| Radiation pressure (absorb) | $P = I/c$ |\n| Radiation pressure (reflect) | $P = 2I/c$ |",
+      "body_he_md": "| משימה | נוסחה |\n|---|---|\n| $\\lambda$ מ-$f$ | $\\lambda = c/f$ |\n| $B_0$ מ-$E_0$ | $B_0 = E_0/c$ |\n| עוצמה מ-$E_0$ | $I = c\\epsilon_0 E_0^2/2$ |\n| $E_0$ מ-$I$ | $E_0 = \\sqrt{2I/(c\\epsilon_0)}$ |\n| פוינטינג | $\\vec{S} = \\vec{E}\\times\\vec{B}/\\mu_0$ |\n| עוצמה במרחק | $I = P/(4\\pi r^2)$ |\n| מאלוס | $I = I_0\\cos^2\\theta$ |"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find the wavelength of a 500 MHz microwave.",
+          "body_he": "מצא אורך גל של מיקרוגל 500 MHz.",
+          "solution_en": "$\\lambda = c/f = (3\\times10^8)/(5\\times10^8) = 0.6\\;\\text{m}$.",
+          "solution_he": "$\\lambda = 0.6\\;\\text{m}$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "An EM wave has $E_0 = 50\\;\\text{V/m}$. Find $B_0$.",
+          "body_he": "גל EM עם $E_0 = 50\\;\\text{V/m}$. מצא $B_0$.",
+          "solution_en": "$B_0 = E_0/c = 50/(3\\times10^8) \\approx 1.67\\times10^{-7}\\;\\text{T}$.",
+          "solution_he": "$B_0 \\approx 1.67\\times10^{-7}\\;\\text{T}$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Visible light has $\\lambda = 600\\;\\text{nm}$. Find $f$ and $E$ in eV.",
+          "body_he": "אור נראה $\\lambda = 600\\;\\text{nm}$. מצא $f$ ואנרגיה ב-eV.",
+          "solution_en": "$f = c/\\lambda = 5\\times10^{14}\\;\\text{Hz}$. $E = hf = (6.63\\times10^{-34})(5\\times10^{14}) = 3.31\\times10^{-19}\\;\\text{J} = 2.07\\;\\text{eV}$.",
+          "solution_he": "$f = 5\\times10^{14}\\;\\text{Hz}$, $E = 2.07\\;\\text{eV}$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Polarized light ($I_0$) passes through a polarizer at $45°$. Find final intensity.",
+          "body_he": "אור מקוטב ($I_0$) עובר דרך מקטב ב-$45°$. מצא עוצמה סופית.",
+          "solution_en": "$I = I_0\\cos^2(45°) = I_0/2$.",
+          "solution_he": "$I = I_0/2$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "The Sun radiates $P = 3.8\\times10^{26}\\;\\text{W}$. Find $I$ and $E_0$ at Earth ($r = 1.5\\times10^{11}\\;\\text{m}$).",
+          "body_he": "השמש מקרינה $P = 3.8\\times10^{26}\\;\\text{W}$. מצא $I$ ו-$E_0$ בכדור הארץ ($r = 1.5\\times10^{11}\\;\\text{m}$).",
+          "solution_en": "$I = P/(4\\pi r^2) = 3.8\\times10^{26}/(4\\pi(2.25\\times10^{22})) = 3.8\\times10^{26}/(2.83\\times10^{23}) \\approx 1343\\;\\text{W/m}^2$. $E_0 = \\sqrt{2I/(c\\epsilon_0)} = \\sqrt{2(1343)/(3\\times10^8\\times8.85\\times10^{-12})} = \\sqrt{1.01\\times10^6} \\approx 1006\\;\\text{V/m}$.",
+          "solution_he": "$I \\approx 1343\\;\\text{W/m}^2$, $E_0 \\approx 1006\\;\\text{V/m}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "An EM wave has $\\vec{E} = 200\\cos(2\\pi\\times10^9 t - kz)\\hat{x}\\;\\text{V/m}$. Find (a) $f$, (b) $\\lambda$, (c) $k$, (d) $I$.",
+          "body_he": "גל EM: $\\vec{E} = 200\\cos(2\\pi\\times10^9 t - kz)\\hat{x}$. מצא (א) $f$, (ב) $\\lambda$, (ג) $k$, (ד) $I$.",
+          "solution_en": "(a) $f = 10^9\\;\\text{Hz} = 1\\;\\text{GHz}$. (b) $\\lambda = 0.3\\;\\text{m}$. (c) $k = 2\\pi/0.3 \\approx 20.9\\;\\text{rad/m}$. (d) $I = c\\epsilon_0 E_0^2/2 = (3\\times10^8)(8.85\\times10^{-12})(40000)/2 \\approx 53.1\\;\\text{W/m}^2$.",
+          "solution_he": "(א) 1 GHz. (ב) 0.3 m. (ג) 20.9 rad/m. (ד) 53.1 W/m².",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Natural (unpolarized) light of intensity $I_0$ passes through 3 polarizers at $0°$, $30°$, and $90°$. Find final intensity.",
+          "body_he": "אור טבעי $I_0$ עובר ב-3 מקטבים ב-$0°$, $30°$, $90°$. מצא עוצמה סופית.",
+          "solution_en": "After first polarizer: $I_1 = I_0/2$ (unpolarized → polarized). After second ($30°$ from first): $I_2 = I_1\\cos^2(30°) = (I_0/2)(3/4) = 3I_0/8$. After third ($60°$ from second): $I_3 = I_2\\cos^2(60°) = (3I_0/8)(1/4) = 3I_0/32$.",
+          "solution_he": "$I_{\\text{סופי}} = 3I_0/32$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A laser emits $P = 1\\;\\text{W}$ in a beam of radius $r = 1\\;\\text{mm}$. Find $I$, $E_0$, and the radiation force on a perfect absorber.",
+          "body_he": "לייזר פולט $P = 1\\;\\text{W}$ בקרן רדיוס $r = 1\\;\\text{mm}$. מצא $I$, $E_0$, וכוח קרינה על בולע מושלם.",
+          "solution_en": "$A = \\pi(10^{-3})^2 = \\pi\\times10^{-6}\\;\\text{m}^2$. $I = P/A = 10^6/\\pi \\approx 3.18\\times10^5\\;\\text{W/m}^2$. $E_0 = \\sqrt{2I/(c\\epsilon_0)} \\approx \\sqrt{2(3.18\\times10^5)/(2.655\\times10^{-3})} \\approx \\sqrt{2.40\\times10^8} \\approx 1.55\\times10^4\\;\\text{V/m}$. $F = P/c = 1/(3\\times10^8) = 3.33\\times10^{-9}\\;\\text{N}$.",
+          "solution_he": "$I \\approx 3.18\\times10^5\\;\\text{W/m}^2$, $E_0 \\approx 1.55\\times10^4\\;\\text{V/m}$, $F = 3.33\\;\\text{nN}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "The EM spectrum: identify which region has $\\lambda = 0.1\\;\\text{nm}$, $\\lambda = 550\\;\\text{nm}$, $\\lambda = 1\\;\\text{cm}$, $f = 1\\;\\text{MHz}$.",
+          "body_he": "ספקטרום EM: זהה איזה אזור: $\\lambda = 0.1\\;\\text{nm}$, $\\lambda = 550\\;\\text{nm}$, $\\lambda = 1\\;\\text{cm}$, $f = 1\\;\\text{MHz}$.",
+          "solution_en": "$0.1\\;\\text{nm}$: X-ray (hard). $550\\;\\text{nm}$: visible green. $1\\;\\text{cm}$: microwave. $f=1\\;\\text{MHz}$: AM radio ($\\lambda = 300\\;\\text{m}$).",
+          "solution_he": "$0.1\\;\\text{nm}$: קרני X. $550\\;\\text{nm}$: אור נראה ירוק. $1\\;\\text{cm}$: מיקרוגל. $1\\;\\text{MHz}$: רדיו AM.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Derive the relationship $E_0/B_0 = c$ for a plane EM wave in vacuum, starting from Faraday's law.",
+          "body_he": "גזור את הקשר $E_0/B_0 = c$ לגל EM מישורי בריק, החל מחוק פאראדי.",
+          "solution_en": "For $\\vec{E} = E_0\\cos(kz-\\omega t)\\hat{x}$, Faraday's law: $\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$. $\\partial E_x/\\partial z = -kE_0\\sin(kz-\\omega t) = -\\partial B_y/\\partial t = -\\omega B_0\\sin(kz-\\omega t)$. Therefore $kE_0 = \\omega B_0 \\Rightarrow E_0/B_0 = \\omega/k = c$.",
+          "solution_he": "מחוק פאראדי: $kE_0 = \\omega B_0$, לכן $E_0/B_0 = \\omega/k = c$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A parallel plate capacitor has plates separated by $d = 2\\;\\text{mm}$, area $A = 100\\;\\text{cm}^2$, and is charged with $V = 1000\\;\\text{V}$. Find the energy stored and verify using the energy density formula $u = \\epsilon_0 E^2/2$.",
+          "body_he": "קבל לוחות מקבילים $d = 2\\;\\text{mm}$, $A = 100\\;\\text{cm}^2$, $V = 1000\\;\\text{V}$. מצא אנרגיה מאוחסנת ואמת תוך שימוש בצפיפות אנרגיה $u = \\epsilon_0 E^2/2$.",
+          "solution_en": "$C = \\epsilon_0 A/d = (8.85\\times10^{-12})(0.01)/(0.002) = 44.25\\times10^{-12}\\;\\text{F}$. $U = \\frac{1}{2}CV^2 = \\frac{1}{2}(44.25\\times10^{-12})(10^6) = 22.1\\;\\mu\\text{J}$. Using field: $E = V/d = 5\\times10^5\\;\\text{V/m}$. $u = \\frac{1}{2}\\epsilon_0 E^2 = \\frac{1}{2}(8.85\\times10^{-12})(25\\times10^{10}) = 1107.5\\;\\text{J/m}^3$. Volume = $Ad = 2\\times10^{-5}\\;\\text{m}^3$. $U = u\\times V_{\\text{ol}} = 1107.5\\times2\\times10^{-5} = 22.1\\;\\mu\\text{J}$ ✓",
+          "solution_he": "$U = 22.1\\;\\mu\\text{J}$ (שני הדרכים מסכימים).",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A plane wave hits a surface at normal incidence. Reflectivity $R = 0.9$ (90% reflected). Power $P = 1000\\;\\text{W}$ on area $A = 0.01\\;\\text{m}^2$. Find the net radiation force.",
+          "body_he": "גל מישורי פוגע בניצב על משטח. $R = 0.9$. $P = 1000\\;\\text{W}$ על $A = 0.01\\;\\text{m}^2$. מצא כוח קרינה נטו.",
+          "solution_en": "$I = P/A = 10^5\\;\\text{W/m}^2$. Absorbed fraction = 0.1: force $F_1 = 0.1P/c$. Reflected fraction = 0.9: force $F_2 = 2(0.9P)/c$ (momentum reversal). Total $F = F_1 + F_2 = P(0.1 + 1.8)/c = 1.9P/c = 1.9(1000)/(3\\times10^8) = 6.33\\times10^{-6}\\;\\text{N}$. Or simply: $F = P(1+R)/c = 1000(1.9)/(3\\times10^8) = 6.33\\;\\mu\\text{N}$.",
+          "solution_he": "$F = P(1+R)/c = 6.33\\;\\mu\\text{N}$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Show from Maxwell's equations that EM waves in vacuum are transverse: $\\vec{E}$ and $\\vec{B}$ are perpendicular to the propagation direction.",
+          "body_he": "הראה ממשוואות מקסוול שגלי EM בריק הם רוחביים: $\\vec{E}$ ו-$\\vec{B}$ מאונכים לכיוון ההתפשטות.",
+          "solution_en": "For a plane wave propagating in $\\hat{z}$: $\\vec{E} = \\vec{E}_0 e^{i(kz-\\omega t)}$. Gauss's law in vacuum: $\\nabla\\cdot\\vec{E} = 0 \\Rightarrow \\frac{\\partial E_z}{\\partial z} = ikE_z = 0 \\Rightarrow E_z = 0$. Similarly $B_z = 0$ from $\\nabla\\cdot\\vec{B} = 0$. Hence both fields have no component along $\\hat{z}$ (propagation direction) — they are transverse.",
+          "solution_he": "מחוק גאוס: $\\nabla\\cdot\\vec{E} = 0 \\Rightarrow E_z = 0$. אותו הדבר ל-$\\vec{B}$. לכן שניהם מאונכים לכיוון ההתפשטות — רוחביים.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Confusing $I$ with $|S|$.** The Poynting vector $S$ oscillates; the intensity $I = \\langle S\\rangle = E_0^2/(2\\mu_0 c)$ is the time-averaged value.\n\n2. **$E_0/B_0 = c$, not equal.** The electric and magnetic amplitudes are related by $c$, not equal.\n\n3. **Malus's law angle.** The angle $\\theta$ in $I = I_0\\cos^2\\theta$ is between the polarization of the incident wave and the polarizer axis.\n\n4. **Unpolarized light through first polarizer loses half its intensity.** $I = I_0/2$ for the first polarizer (if light is unpolarized).",
+      "body_he_md": "1. **בלבול בין $I$ ל-$|S|$.** $S$ מתנדנד; העוצמה $I = \\langle S\\rangle$ היא הממוצע בזמן.\n\n2. **$E_0/B_0 = c$, לא שווים.** האמפליטודות קשורות על-ידי $c$.\n\n3. **זווית בחוק מאלוס.** $\\theta$ היא בין קיטוב הגל הנכנס לציר המקטב.\n\n4. **אור לא מקוטב דרך מקטב ראשון — מאבד חצי עוצמה:** $I = I_0/2$."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Key relations:**\n- $c = 3\\times10^8\\;\\text{m/s} = 1/\\sqrt{\\mu_0\\epsilon_0}$\n- $\\lambda f = c$; $\\omega = 2\\pi f$; $k = 2\\pi/\\lambda$; $c = \\omega/k$\n- $E_0/B_0 = c$\n- $I = c\\epsilon_0 E_0^2/2 = E_0 B_0/(2\\mu_0)$\n- $\\vec{S} = \\vec{E}\\times\\vec{B}/\\mu_0$; $I = P/(4\\pi r^2)$\n- Malus: $I = I_0\\cos^2\\theta$; unpolarized → polarized: $I_0/2$\n- Radiation pressure: $P = I/c$ (absorb); $P = 2I/c$ (reflect)",
+      "body_he_md": "**קשרים מרכזיים:**\n- $c = 1/\\sqrt{\\mu_0\\epsilon_0} = 3\\times10^8\\;\\text{m/s}$\n- $\\lambda f = c$; $E_0/B_0 = c$\n- $I = c\\epsilon_0 E_0^2/2$\n- מאלוס: $I = I_0\\cos^2\\theta$\n- לחץ קרינה: $I/c$ (בליעה), $2I/c$ (השתקפות)"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **EM waves:** transverse; $\\vec{E}\\perp\\vec{B}\\perp\\hat{k}$\n- **Speed:** $c = 1/\\sqrt{\\mu_0\\epsilon_0} = 3\\times10^8\\;\\text{m/s}$\n- **Amplitude ratio:** $E_0/B_0 = c$\n- **Intensity:** $I = c\\epsilon_0 E_0^2/2 = P/(4\\pi r^2)$\n- **Poynting vector:** $\\vec{S} = \\vec{E}\\times\\vec{B}/\\mu_0$\n- **Malus's law:** $I = I_0\\cos^2\\theta$; unpolarized: $I_0/2$ after first polarizer\n- **Radiation force:** $F = P/c$ (absorb); $F = 2P/c$ (reflect)",
+      "body_he_md": "- **גלי EM:** רוחביים; $E_0/B_0 = c$\n- **$c = 1/\\sqrt{\\mu_0\\epsilon_0}$**\n- **עוצמה:** $I = c\\epsilon_0 E_0^2/2$\n- **מאלוס:** $I = I_0\\cos^2\\theta$\n- **כוח קרינה:** $P/c$ (בליעה), $2P/c$ (השתקפות)"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Em Waves Propagation."
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": 2,
+      "skill_atoms": ["em_wave_parameters"],
+      "stem_en": "The speed of EM waves in vacuum equals:",
+      "stem_he": "מהירות גלי EM בריק שווה ל:",
+      "answer_payload": {
+        "options_en": ["$\\sqrt{\\mu_0\\epsilon_0}$", "$1/\\sqrt{\\mu_0\\epsilon_0}$", "$\\mu_0/\\epsilon_0$", "$\\sqrt{\\mu_0/\\epsilon_0}$"],
+        "options_he": ["$\\sqrt{\\mu_0\\epsilon_0}$", "$1/\\sqrt{\\mu_0\\epsilon_0}$", "$\\mu_0/\\epsilon_0$", "$\\sqrt{\\mu_0/\\epsilon_0}$"],
+        "correct_index": 1
+      },
+      "explanation_en": "$c = 1/\\sqrt{\\mu_0\\epsilon_0}$ — from the wave equation derived from Maxwell's equations.",
+      "explanation_he": "$c = 1/\\sqrt{\\mu_0\\epsilon_0}$ — ממשוואת הגל הנגזרת ממשוואות מקסוול."
+    },
+    {
+      "id": "q2",
+      "kind": "numeric",
+      "difficulty": 2,
+      "skill_atoms": ["em_wave_parameters"],
+      "stem_en": "An EM wave has $E_0 = 200\\;\\text{V/m}$. Find $B_0$ in $\\mu\\text{T}$.",
+      "stem_he": "גל EM עם $E_0 = 200\\;\\text{V/m}$. מצא $B_0$ ב-$\\mu\\text{T}$.",
+      "answer_payload": {"value": 0.667, "tolerance": 0.01, "unit_en": "μT", "unit_he": "μT"},
+      "explanation_en": "$B_0 = E_0/c = 200/(3\\times10^8) = 6.67\\times10^{-7}\\;\\text{T} = 0.667\\;\\mu\\text{T}$.",
+      "explanation_he": "$B_0 = E_0/c = 0.667\\;\\mu\\text{T}$."
+    },
+    {
+      "id": "q3",
+      "kind": "numeric",
+      "difficulty": 3,
+      "skill_atoms": ["em_wave_intensity"],
+      "stem_en": "An EM wave has intensity $I = 100\\;\\text{W/m}^2$. Find $E_0$ in V/m.",
+      "stem_he": "גל EM בעל עוצמה $I = 100\\;\\text{W/m}^2$. מצא $E_0$ ב-V/m.",
+      "answer_payload": {"value": 274.5, "tolerance": 5, "unit_en": "V/m", "unit_he": "V/m"},
+      "explanation_en": "$E_0 = \\sqrt{2I/(c\\epsilon_0)} = \\sqrt{2(100)/(3\\times10^8\\times8.85\\times10^{-12})} = \\sqrt{7.53\\times10^4} \\approx 274.5\\;\\text{V/m}$.",
+      "explanation_he": "$E_0 \\approx 274.5\\;\\text{V/m}$."
+    },
+    {
+      "id": "q4",
+      "kind": "true_false",
+      "difficulty": 2,
+      "skill_atoms": ["polarization"],
+      "stem_en": "True or False: When unpolarized light passes through an ideal polarizer, the transmitted intensity is always $I_0/2$ regardless of the polarizer's orientation.",
+      "stem_he": "נכון או לא נכון: כאשר אור לא מקוטב עובר דרך מקטב אידיאלי, העוצמה המועברת היא תמיד $I_0/2$ ללא קשר לכיוון המקטב.",
+      "answer_payload": {"correct": true},
+      "explanation_en": "Unpolarized light has equal intensity in all directions; the polarizer selects one component. By symmetry, the transmitted intensity is always $I_0/2$ for any orientation.",
+      "explanation_he": "לאור לא מקוטב יש עוצמה שווה בכל הכיוונים; המקטב בוחר רכיב אחד ותמיד $I_0/2$."
+    },
+    {
+      "id": "q5",
+      "kind": "derivation",
+      "difficulty": 4,
+      "skill_atoms": ["em_wave_equation"],
+      "stem_en": "Outline the derivation of the EM wave equation from Faraday's and Ampère-Maxwell's laws in vacuum.",
+      "stem_he": "תאר את גזירת משוואת הגל EM מחוקי פאראדי ואמפר-מקסוול בריק.",
+      "answer_payload": {
+        "steps_en": [
+          "Start with $\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$ (Faraday) and $\\nabla\\times\\vec{B} = \\mu_0\\epsilon_0\\partial\\vec{E}/\\partial t$ (Ampère-Maxwell)",
+          "Take $\\nabla\\times$ of Faraday's law: $\\nabla\\times(\\nabla\\times\\vec{E}) = -\\partial(\\nabla\\times\\vec{B})/\\partial t$",
+          "Substitute Ampère-Maxwell: $= -\\mu_0\\epsilon_0\\partial^2\\vec{E}/\\partial t^2$",
+          "Use vector identity $\\nabla\\times(\\nabla\\times\\vec{E}) = \\nabla(\\nabla\\cdot\\vec{E}) - \\nabla^2\\vec{E}$",
+          "In vacuum, $\\nabla\\cdot\\vec{E} = 0$: $\\nabla^2\\vec{E} = \\mu_0\\epsilon_0\\partial^2\\vec{E}/\\partial t^2$ — wave equation with $c = 1/\\sqrt{\\mu_0\\epsilon_0}$"
+        ],
+        "steps_he": [
+          "פאראדי: $\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$; אמפר-מקסוול: $\\nabla\\times\\vec{B} = \\mu_0\\epsilon_0\\partial\\vec{E}/\\partial t$",
+          "רוטור על פאראדי + הצבת אמפר-מקסוול",
+          "זהות וקטורית + גאוס ($\\nabla\\cdot\\vec{E} = 0$)",
+          "$\\nabla^2\\vec{E} = \\mu_0\\epsilon_0\\partial^2\\vec{E}/\\partial t^2$ — משוואת גל עם $c = 1/\\sqrt{\\mu_0\\epsilon_0}$ ∎"
+        ]
+      },
+      "explanation_en": "The same procedure gives the wave equation for $\\vec{B}$.",
+      "explanation_he": "אותו הליך נותן משוואת גל גם ל-$\\vec{B}$."
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "EM waves: transverse, $E_0/B_0 = c$, speed $c = 1/\\sqrt{\\mu_0\\epsilon_0}$.",
+      "Intensity: $I = c\\epsilon_0 E_0^2/2$; Poynting: $\\vec{S} = \\vec{E}\\times\\vec{B}/\\mu_0$.",
+      "Malus's law: $I = I_0\\cos^2\\theta$; unpolarized → polarized loses half.",
+      "Radiation pressure: $I/c$ (absorb), $2I/c$ (reflect)."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "$E_0 = B_0$ for an EM wave",
+        "correction": "$E_0/B_0 = c = 3\\times10^8\\;\\text{m/s}$. In SI units they have vastly different magnitudes.",
+        "detect_phrase_en": "E equals B in wave",
+        "detect_phrase_he": "E שווה B בגל"
+      }
+    ],
+    "tutor_pacing_hint": "Start with wave parameters ($\\lambda$, $f$, $k$, $\\omega$, $c$). Then $E_0/B_0 = c$. Then intensity. Malus's law is straightforward once polarization is defined.",
+    "skill_atoms_unlocked": [
+      "em_wave_parameters",
+      "em_wave_intensity",
+      "polarization",
+      "poynting_vector",
+      "em_wave_equation"
+    ]
+  }
 }

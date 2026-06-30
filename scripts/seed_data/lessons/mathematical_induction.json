@@ -1,151 +1,46 @@
 {
-  "id": "mathematical_induction",
-  "type": "interactive",
-  "subject": "high_school_math_5pt",
-  "title_en": "Mathematical Induction",
-  "title_he": "אינדוקציה מתמטית",
-  "duration_min": 35,
-  "est_minutes": 35,
-  "level_min": "5pt",
-  "math_track": ["5pt"],
-  "summary_en": "Mathematical induction is a formal proof technique for showing a statement P(n) holds for every natural number n ≥ n₀. It has exactly two parts: verify P(n₀) (base case), then prove that P(k) implies P(k+1) (inductive step). Both parts are mandatory.",
-  "summary_he": "אינדוקציה מתמטית היא שיטת הוכחה פורמלית להראות שטענה P(n) נכונה לכל מספר טבעי n ≥ n₀. יש לה בדיוק שני חלקים: אימות P(n₀) (בסיס), ואז הוכחה ש-P(k) גורר P(k+1) (צעד האינדוקציה). שני החלקים חובה.",
-  "agent_hints": "Mathematical induction is a proof technique with a strict two-part structure: base case and inductive step. Students must write complete, formal proofs — not just verify examples. The most common errors are: forgetting the base case, circular reasoning in the inductive step, and not using the inductive hypothesis. For divisibility proofs, students must show the algebraic manipulation explicitly. For inequality proofs, the chain of inequalities must be justified step by step.",
+  "concept_id": "mathematical_induction",
+  "title_en": "Mathematical Induction — Base Case, Inductive Step, and Applications",
+  "title_he": "אינדוקציה מתמטית — בסיס, צעד אינדוקציה ויישומים",
+  "subject": "math",
+  "difficulty": "intermediate",
+  "estimated_minutes": 50,
   "sections": [
-    {
-      "id": "principle",
-      "title_en": "The Principle of Mathematical Induction",
-      "title_he": "עיקרון האינדוקציה המתמטית",
-      "level_min": "5pt",
-      "body_en_md": "**Mathematical induction** is a proof technique for showing that a statement $P(n)$ is true for every natural number $n \\geq n_0$.\n\n### The domino analogy\n\nImagine an infinite row of dominoes standing upright:\n- If the **first domino** falls (base case), AND\n- Each falling domino knocks over the next one (inductive step),\n\nthen **all dominoes fall** — the statement is true for every $n$.\n\n### Formal structure\n\nA complete induction proof has **exactly two steps**:\n\n**Step 1 — Base case:** Verify $P(n_0)$ directly. For most problems $n_0 = 1$.\n\n**Step 2 — Inductive step:**\n- **Inductive hypothesis (IH):** Assume $P(k)$ is true for some arbitrary $k \\geq n_0$.\n- **Goal:** Prove that $P(k+1)$ is then true, using the IH.\n\nOnce both steps are complete, we conclude: $P(n)$ is true **for all** $n \\geq n_0$. $\\blacksquare$\n\n### What 'assume P(k) is true' means\n\nThe inductive hypothesis is NOT circular reasoning. We are saying: 'IF the formula happens to hold for some particular $k$, THEN we can show it holds for $k+1$.' Combined with the base case, this chain of implications covers all $n$.\n\n> **Critical:** If you never verify the base case, the inductive step is useless — there is no first domino to start the chain.",
-      "body_he_md": "**אינדוקציה מתמטית** היא שיטת הוכחה המראה שטענה $P(n)$ נכונה לכל מספר טבעי $n \\geq n_0$.\n\n### אנלוגיית הדומינו\n\nדמיינו שורה אינסופית של דומינו זקופים:\n- אם הדומינו **הראשון** נופל (בסיס האינדוקציה), וגם\n- כל דומינו נופל מפיל את הבא (צעד האינדוקציה),\n\nאז **כל הדומינו יפלו** — הטענה נכונה לכל $n$.\n\n### המבנה הפורמלי\n\nהוכחה באינדוקציה מלאה כוללת **בדיוק שני שלבים**:\n\n**שלב 1 — בסיס האינדוקציה:** אמתו ישירות ש-$P(n_0)$ נכון. ברוב הבעיות $n_0 = 1$.\n\n**שלב 2 — צעד האינדוקציה:**\n- **הנחת האינדוקציה (ה.א.):** נניח ש-$P(k)$ נכון עבור $k \\geq n_0$ כלשהו שרירותי.\n- **מטרה:** נוכיח ש-$P(k+1)$ נכון, תוך שימוש בה.א.\n\nלאחר שני השלבים, מסיקים: $P(n)$ נכון **לכל** $n \\geq n_0$. $\\blacksquare$\n\n### מה 'נניח P(k) נכון' אומר\n\nהנחת האינדוקציה אינה הנמקה מעגלית. אנחנו אומרים: 'אם הנוסחה מתקיימת ל-$k$ כלשהו, אז אפשר להוכיח שהיא מתקיימת ל-$k+1$.' בשילוב עם הבסיס, שרשרת ההשלכות מכסה את כל $n$.\n\n> **חיוני:** ללא הבסיס, צעד האינדוקציה חסר תועלת — אין דומינו ראשון שיתחיל את השרשרת."
-    },
-    {
-      "id": "sum_formulas",
-      "title_en": "Sum Formulas",
-      "title_he": "נוסחאות סכום",
-      "level_min": "5pt",
-      "body_en_md": "### Proof 1: $\\sum_{k=1}^n k = \\dfrac{n(n+1)}{2}$\n\n**Claim:** For every $n \\geq 1$: $1 + 2 + \\cdots + n = \\dfrac{n(n+1)}{2}$.\n\n**Base case ($n = 1$):**\n$$\\text{LHS} = 1, \\qquad \\text{RHS} = \\frac{1 \\cdot 2}{2} = 1. \\quad \\checkmark$$\n\n**Inductive hypothesis (IH):** Assume for some $k \\geq 1$:\n$$1 + 2 + \\cdots + k = \\frac{k(k+1)}{2}.$$\n\n**Inductive step:** We must show:\n$$1 + 2 + \\cdots + k + (k+1) = \\frac{(k+1)(k+2)}{2}.$$\n\nStarting from the left side:\n$$\\underbrace{1 + 2 + \\cdots + k}_{= \\,k(k+1)/2 \\;\\text{(by IH)}} + (k+1) = \\frac{k(k+1)}{2} + (k+1) = (k+1)\\left(\\frac{k}{2} + 1\\right) = (k+1) \\cdot \\frac{k+2}{2} = \\frac{(k+1)(k+2)}{2}. \\; \\checkmark$$\n\n**Conclusion:** By the principle of mathematical induction, the formula holds for all $n \\geq 1$. $\\blacksquare$\n\n---\n\n### Proof 2: $\\sum_{k=1}^n k^2 = \\dfrac{n(n+1)(2n+1)}{6}$\n\n**Claim:** For every $n \\geq 1$: $1^2 + 2^2 + \\cdots + n^2 = \\dfrac{n(n+1)(2n+1)}{6}$.\n\n**Base case ($n = 1$):** LHS $= 1$. RHS $= \\frac{1 \\cdot 2 \\cdot 3}{6} = 1$. $\\checkmark$\n\n**IH:** Assume $\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$ for some $n \\geq 1$. (Using $n$ here instead of $k$ for readability.)\n\n**Inductive step:** Show for $n+1$:\n$$\\sum_{k=1}^{n+1} k^2 = \\sum_{k=1}^{n} k^2 + (n+1)^2 = \\frac{n(n+1)(2n+1)}{6} + (n+1)^2.$$\n\nFactor out $(n+1)$:\n$$= (n+1)\\left[\\frac{n(2n+1)}{6} + (n+1)\\right] = (n+1) \\cdot \\frac{n(2n+1) + 6(n+1)}{6} = (n+1) \\cdot \\frac{2n^2 + 7n + 6}{6}.$$\n\nFactor the numerator: $2n^2 + 7n + 6 = (n+2)(2n+3)$.\n\n$$= \\frac{(n+1)(n+2)(2n+3)}{6}. \\quad \\checkmark$$\n\nThis matches the required formula with $n$ replaced by $n+1$. $\\blacksquare$",
-      "body_he_md": "### הוכחה 1: $\\sum_{k=1}^n k = \\dfrac{n(n+1)}{2}$\n\n**בסיס ($n=1$):** צ\"ש $= 1$, צ\"י $= \\frac{1\\cdot 2}{2} = 1$. $\\checkmark$\n\n**ה.א.:** נניח $1+2+\\cdots+k = \\frac{k(k+1)}{2}$ עבור $k \\geq 1$ כלשהו.\n\n**צעד:** נוכיח ל-$k+1$:\n$$\\underbrace{1+\\cdots+k}_{k(k+1)/2} + (k+1) = \\frac{k(k+1)}{2} + (k+1) = (k+1)\\cdot\\frac{k+2}{2} = \\frac{(k+1)(k+2)}{2}. \\;\\checkmark$$\n\n**מסקנה:** הנוסחה מתקיימת לכל $n \\geq 1$. $\\blacksquare$\n\n---\n\n### הוכחה 2: $\\sum_{k=1}^n k^2 = \\dfrac{n(n+1)(2n+1)}{6}$\n\n**בסיס ($n=1$):** $1 = \\frac{1\\cdot 2\\cdot 3}{6}$. $\\checkmark$\n\n**ה.א.:** נניח $\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}$.\n\n**צעד:** $\\sum_{k=1}^{n+1}k^2 = \\frac{n(n+1)(2n+1)}{6} + (n+1)^2 = (n+1)\\cdot\\frac{2n^2+7n+6}{6} = \\frac{(n+1)(n+2)(2n+3)}{6}$. $\\checkmark$ $\\blacksquare$"
-    },
-    {
-      "id": "divisibility_proofs",
-      "title_en": "Divisibility Proofs",
-      "title_he": "הוכחות של כלילות",
-      "level_min": "5pt",
-      "body_en_md": "### Proof 1: $6^n - 1$ is divisible by 5 for all $n \\geq 1$\n\n**Claim:** $5 \\mid (6^n - 1)$ for every $n \\geq 1$.\n\n**Base case ($n = 1$):** $6^1 - 1 = 5$. Indeed $5 \\mid 5$. $\\checkmark$\n\n**IH:** Assume $5 \\mid (6^k - 1)$ for some $k \\geq 1$. That is, $6^k - 1 = 5m$ for some integer $m$.\n\n**Inductive step:** Show $5 \\mid (6^{k+1} - 1)$.\n\n$$6^{k+1} - 1 = 6 \\cdot 6^k - 1 = 6(6^k - 1) + 6 - 1 = 6(6^k - 1) + 5.$$\n\nBy IH, $6^k - 1 = 5m$, so:\n$$6^{k+1} - 1 = 6 \\cdot 5m + 5 = 5(6m + 1).$$\n\nSince $6m + 1$ is an integer, $5 \\mid (6^{k+1} - 1)$. $\\checkmark$\n\n**Conclusion:** By induction, $5 \\mid (6^n - 1)$ for all $n \\geq 1$. $\\blacksquare$\n\n> **Key technique:** Write $6^{k+1} = 6 \\cdot 6^k = 6(6^k - 1) + 6$ to introduce $(6^k - 1)$, which is divisible by the IH.\n\n---\n\n### Proof 2: $3^{2n} - 1$ is divisible by 8 for all $n \\geq 1$\n\n**Claim:** $8 \\mid (3^{2n} - 1)$ for every $n \\geq 1$.\n\n**Base case ($n = 1$):** $3^2 - 1 = 8$. Indeed $8 \\mid 8$. $\\checkmark$\n\n**IH:** Assume $8 \\mid (3^{2k} - 1)$, i.e., $3^{2k} - 1 = 8m$ for some integer $m$.\n\n**Inductive step:** Note $3^{2(k+1)} = 3^{2k+2} = 9 \\cdot 3^{2k}$.\n\n$$3^{2(k+1)} - 1 = 9 \\cdot 3^{2k} - 1 = 9(3^{2k} - 1) + 9 - 1 = 9(3^{2k} - 1) + 8.$$\n\nBy IH, $3^{2k} - 1 = 8m$:\n$$3^{2(k+1)} - 1 = 9 \\cdot 8m + 8 = 8(9m + 1).$$\n\nSince $9m+1$ is an integer, $8 \\mid (3^{2(k+1)} - 1)$. $\\checkmark$\n\n**Conclusion:** By induction, $8 \\mid (3^{2n} - 1)$ for all $n \\geq 1$. $\\blacksquare$",
-      "body_he_md": "### הוכחה 1: $6^n - 1$ מתחלק ב-5 לכל $n \\geq 1$\n\n**בסיס ($n=1$):** $6^1 - 1 = 5$, ו-$5|5$. $\\checkmark$\n\n**ה.א.:** נניח $5|(6^k - 1)$, כלומר $6^k - 1 = 5m$ עבור $m$ שלם.\n\n**צעד:** $6^{k+1} - 1 = 6 \\cdot 6^k - 1 = 6(6^k - 1) + 5 = 6 \\cdot 5m + 5 = 5(6m+1)$. $\\checkmark$\n\n**מסקנה:** $5|(6^n - 1)$ לכל $n \\geq 1$. $\\blacksquare$\n\n> **טכניקה:** כותבים $6^{k+1} = 6(6^k - 1) + 6$ כדי להכניס את $(6^k - 1)$ שמתחלק לפי ה.א.\n\n---\n\n### הוכחה 2: $3^{2n} - 1$ מתחלק ב-8 לכל $n \\geq 1$\n\n**בסיס ($n=1$):** $3^2 - 1 = 8$. $\\checkmark$\n\n**ה.א.:** $8|(3^{2k}-1)$, כלומר $3^{2k}-1=8m$.\n\n**צעד:** $3^{2(k+1)}-1 = 9\\cdot 3^{2k}-1 = 9(3^{2k}-1)+8 = 9\\cdot 8m + 8 = 8(9m+1)$. $\\checkmark$ $\\blacksquare$"
-    },
-    {
-      "id": "inequality_proofs",
-      "title_en": "Inequalities by Induction",
-      "title_he": "אי-שוויונות באינדוקציה",
-      "level_min": "5pt",
-      "body_en_md": "### Proof 1: $2^n > n^2$ for all $n \\geq 5$\n\n**Claim:** $2^n > n^2$ for every integer $n \\geq 5$.\n\n**Base case ($n = 5$):** $2^5 = 32 > 25 = 5^2$. $\\checkmark$\n\n**IH:** Assume $2^k > k^2$ for some $k \\geq 5$.\n\n**Inductive step:** We want to show $2^{k+1} > (k+1)^2$.\n\n$$2^{k+1} = 2 \\cdot 2^k > 2k^2 \\quad (\\text{by IH}).$$\n\nIt remains to show $2k^2 \\geq (k+1)^2 = k^2 + 2k + 1$, i.e., $k^2 - 2k - 1 \\geq 0$.\n\nFor $k \\geq 5$: $k^2 - 2k - 1 = k(k-2) - 1 \\geq 5 \\cdot 3 - 1 = 14 > 0$. $\\checkmark$\n\nTherefore: $2^{k+1} > 2k^2 \\geq (k+1)^2$. $\\checkmark$\n\n**Conclusion:** $2^n > n^2$ for all $n \\geq 5$. $\\blacksquare$\n\n> **Lesson:** For inequality induction, you often need to show an *auxiliary inequality* ($2k^2 \\geq (k+1)^2$). State and prove it explicitly.\n\n---\n\n### Proof 2: $n! > 2^n$ for all $n \\geq 4$\n\n**Claim:** $n! > 2^n$ for every $n \\geq 4$.\n\n**Base case ($n = 4$):** $4! = 24 > 16 = 2^4$. $\\checkmark$\n\n**IH:** Assume $k! > 2^k$ for some $k \\geq 4$.\n\n**Inductive step:** Show $(k+1)! > 2^{k+1}$.\n\n$$(k+1)! = (k+1) \\cdot k! > (k+1) \\cdot 2^k \\quad (\\text{by IH}).$$\n\nSince $k \\geq 4$, we have $k+1 \\geq 5 > 2$, so:\n$$(k+1) \\cdot 2^k > 2 \\cdot 2^k = 2^{k+1}. \\quad \\checkmark$$\n\n**Conclusion:** $n! > 2^n$ for all $n \\geq 4$. $\\blacksquare$",
-      "body_he_md": "### הוכחה 1: $2^n > n^2$ לכל $n \\geq 5$\n\n**בסיס ($n=5$):** $32 > 25$. $\\checkmark$\n\n**ה.א.:** $2^k > k^2$ עבור $k \\geq 5$.\n\n**צעד:** $2^{k+1} = 2 \\cdot 2^k > 2k^2$ (מה.א.). נוכיח $2k^2 \\geq (k+1)^2$: $k^2-2k-1 = k(k-2)-1 \\geq 5\\cdot 3 - 1 = 14 > 0$ עבור $k \\geq 5$. $\\checkmark$\n\n**מסקנה:** $2^n > n^2$ לכל $n \\geq 5$. $\\blacksquare$\n\n---\n\n### הוכחה 2: $n! > 2^n$ לכל $n \\geq 4$\n\n**בסיס ($n=4$):** $24 > 16$. $\\checkmark$\n\n**ה.א.:** $k! > 2^k$ עבור $k \\geq 4$.\n\n**צעד:** $(k+1)! = (k+1)\\cdot k! > (k+1)\\cdot 2^k > 2\\cdot 2^k = 2^{k+1}$ (כי $k+1\\geq 5 > 2$). $\\checkmark$ $\\blacksquare$"
-    },
-    {
-      "id": "exam_problems",
-      "title_en": "Exam-Style Problems with Full Solutions",
-      "title_he": "בעיות בסגנון בחינה עם פתרונות מלאים",
-      "level_min": "5pt",
-      "body_en_md": "### Problem 1 (571-level): Prove $\\displaystyle\\sum_{i=1}^n i(i+1) = \\dfrac{n(n+1)(n+2)}{3}$\n\n**Base case ($n=1$):** LHS $= 1 \\cdot 2 = 2$. RHS $= \\frac{1\\cdot 2\\cdot 3}{3} = 2$. $\\checkmark$\n\n**IH:** Assume $\\displaystyle\\sum_{i=1}^k i(i+1) = \\frac{k(k+1)(k+2)}{3}$.\n\n**Inductive step:**\n$$\\sum_{i=1}^{k+1} i(i+1) = \\underbrace{\\sum_{i=1}^k i(i+1)}_{=\\,k(k+1)(k+2)/3} + (k+1)(k+2)$$\n$$= \\frac{k(k+1)(k+2)}{3} + (k+1)(k+2) = (k+1)(k+2)\\left(\\frac{k}{3} + 1\\right) = (k+1)(k+2) \\cdot \\frac{k+3}{3} = \\frac{(k+1)(k+2)(k+3)}{3}. \\; \\checkmark$$\n\n**Conclusion:** The formula holds for all $n \\geq 1$. $\\blacksquare$\n\n**Rubric:** 2pts base; 3pts IH statement; 5pts inductive step algebra.\n\n---\n\n### Problem 2 (571-level): Prove $4^n - 1$ is divisible by 3 for all $n \\geq 1$\n\n**Base case ($n=1$):** $4^1 - 1 = 3$. $3 \\mid 3$. $\\checkmark$\n\n**IH:** Assume $3 \\mid (4^k - 1)$, i.e., $4^k - 1 = 3m$ for some integer $m$.\n\n**Inductive step:**\n$$4^{k+1} - 1 = 4 \\cdot 4^k - 1 = 4(4^k - 1) + 4 - 1 = 4(4^k - 1) + 3 = 4 \\cdot 3m + 3 = 3(4m + 1).$$\n\nSince $4m+1$ is an integer, $3 \\mid (4^{k+1}-1)$. $\\checkmark$\n\n**Conclusion:** By induction, $3 \\mid (4^n - 1)$ for all $n \\geq 1$. $\\blacksquare$\n\n**Rubric:** 2pts base; 3pts IH; 5pts algebraic manipulation showing $4^{k+1}-1 = 3(\\cdots)$.\n\n### Common pitfalls\n\n1. **Circular reasoning:** Assuming $P(k+1)$ to prove $P(k+1)$. The IH must be $P(k)$, and the goal $P(k+1)$.\n2. **Missing base case:** Without it the chain never starts.\n3. **Not using the IH:** If $P(k)$ never appears in your proof of $P(k+1)$, something is wrong.\n4. **Wrong base case:** For claims valid only for $n \\geq 5$, the base case is $n = 5$, not $n = 1$.",
-      "body_he_md": "### בעיה 1: הוכיחו $\\sum_{i=1}^n i(i+1) = \\frac{n(n+1)(n+2)}{3}$\n\n**בסיס ($n=1$):** $1\\cdot 2 = 2 = \\frac{1\\cdot 2\\cdot 3}{3}$. $\\checkmark$\n\n**ה.א.:** $\\sum_{i=1}^k i(i+1) = \\frac{k(k+1)(k+2)}{3}$.\n\n**צעד:**\n$$\\sum_{i=1}^{k+1} = \\frac{k(k+1)(k+2)}{3} + (k+1)(k+2) = (k+1)(k+2)\\cdot\\frac{k+3}{3} = \\frac{(k+1)(k+2)(k+3)}{3}. \\;\\checkmark$$\n\n$\\blacksquare$\n\n---\n\n### בעיה 2: הוכיחו $3|(4^n - 1)$ לכל $n \\geq 1$\n\n**בסיס:** $4^1 - 1 = 3$. $\\checkmark$\n\n**ה.א.:** $4^k - 1 = 3m$.\n\n**צעד:** $4^{k+1}-1 = 4(4^k-1)+3 = 4\\cdot 3m + 3 = 3(4m+1)$. $\\checkmark$ $\\blacksquare$"
-    }
+    {"id": "intro","kind": "intro","title_en": "Infinite Staircase Argument","title_he": "טיעון המדרגות האינסופי","body_en_md": "Mathematical induction is like proving an infinite chain of dominoes will all fall: you prove the first falls (base case), then show if any one falls, the next must too (inductive step). Together, these prove a statement for ALL natural numbers.\n\n**Exam topics:**\n- Sum formulas\n- Divisibility proofs\n- Inequality proofs\n- Fibonacci and recursive sequences","body_he_md": "אינדוקציה = הוכחת שרשרת אינסופית של דומינו.\n\n**נושאי בגרות:**\n- נוסחאות סכום\n- הוכחות חלוקה\n- הוכחות אי-שוויון\n- סדרות רקורסיביות"},
+    {"id": "definition","kind": "definition","title_en": "Principle of Mathematical Induction","title_he": "עקרון האינדוקציה המתמטית","body_en_md": "**Principle of Mathematical Induction:**\nLet $P(n)$ be a statement for $n \\in \\mathbb{N}$. If:\n1. **Base case:** $P(1)$ (or $P(n_0)$) is true\n2. **Inductive step:** For all $k \\geq 1$, $P(k) \\Rightarrow P(k+1)$\n\nThen $P(n)$ is true for all $n \\geq 1$ (or all $n \\geq n_0$).\n\n**Strong induction:** Assume $P(1), P(2), ..., P(k)$ all true, then prove $P(k+1)$.\n\n**Inductive hypothesis:** The assumption $P(k)$ is true.","body_he_md": "1. **בסיס:** $P(1)$ אמת\n2. **צעד אינדוקציה:** $P(k)$ אמת $\\Rightarrow P(k+1)$ אמת\n\n**מסקנה:** $P(n)$ לכל $n \\geq 1$."},
+    {"id": "theory","kind": "theory","title_en": "How to Write an Induction Proof","title_he": "כיצד לכתוב הוכחת אינדוקציה","body_en_md": "### Standard template\n**Claim:** $P(n)$ for all $n \\geq 1$.\n\n**Base case ($n=1$):** Show $P(1)$ is true.\n\n**Inductive step:** Assume $P(k)$ is true (the **inductive hypothesis**). Under this assumption, prove $P(k+1)$.\n\n**Conclusion:** By the principle of mathematical induction, $P(n)$ is true for all $n \\geq 1$.\n\n### Common pitfalls\n- Don't assume what you're trying to prove\n- The inductive step must work for ARBITRARY $k$, not just specific values\n- Strong induction: assume all previous cases, not just $P(k)$","body_he_md": "### תבנית סטנדרטית\n1. **בסיס:** הראה $P(1)$.\n2. **הנחת האינדוקציה (ה.א.):** הניח $P(k)$.\n3. **צעד:** הוכח $P(k+1)$ תחת ה.א.\n4. **סיכום:** לפי עקרון האינדוקציה, $P(n)$ לכל $n$."},
+    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Sum of First $n$ Integers","title_he": "דוגמה פתורה 1 — סכום $n$ המספרים הראשונים","body_en_md": "**Claim:** $\\sum_{i=1}^n i = \\dfrac{n(n+1)}{2}$ for all $n \\geq 1$.\n\n**Base case ($n=1$):** LHS = $1$; RHS = $1\\cdot2/2 = 1$. ✓\n\n**Inductive step:** Assume $\\sum_{i=1}^k i = k(k+1)/2$ (IH). Prove for $k+1$:\n$$\\sum_{i=1}^{k+1} i = \\left(\\sum_{i=1}^k i\\right) + (k+1) = \\frac{k(k+1)}{2} + (k+1) = (k+1)\\left(\\frac{k}{2}+1\\right) = \\frac{(k+1)(k+2)}{2}$$\nThis is exactly the formula with $n = k+1$. ✓\n\n**Conclusion:** True for all $n \\geq 1$. $\\square$","body_he_md": "**בסיס:** $n=1$: $1 = 1\\cdot2/2$. ✓\n\n**צעד:** ה.א.: $\\sum_{i=1}^k i = k(k+1)/2$.\n\n$\\sum_{i=1}^{k+1} i = k(k+1)/2 + (k+1) = (k+1)(k+2)/2$. ✓"},
+    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "What is the base case and inductive hypothesis for proving $\\sum_{i=1}^n i^2 = \\dfrac{n(n+1)(2n+1)}{6}$?","body_he": "מהם הבסיס וה.א. של ההוכחה: $\\sum i^2 = n(n+1)(2n+1)/6$?","checkpoint_solution_en": "Base case ($n=1$): $1^2 = 1$; RHS = $1\\cdot2\\cdot3/6 = 1$ ✓. Inductive hypothesis: Assume $\\sum_{i=1}^k i^2 = k(k+1)(2k+1)/6$.","checkpoint_solution_he": "בסיס: $1 = 1\\cdot2\\cdot3/6 = 1$ ✓. ה.א.: $\\sum_{i=1}^k i^2 = k(k+1)(2k+1)/6$."},
+    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Divisibility Proof","title_he": "דוגמה פתורה 2 — הוכחת חלוקה","body_en_md": "**Claim:** $3^n - 1$ is divisible by 2 for all $n \\geq 1$.\n\n**Base case ($n=1$):** $3^1 - 1 = 2$. $2\\mid2$ ✓\n\n**Inductive step:** Assume $2\\mid(3^k - 1)$, i.e., $3^k - 1 = 2m$ for some integer $m$.\n\n$$3^{k+1} - 1 = 3\\cdot3^k - 1 = 3(3^k - 1) + 3 - 1 = 3(2m) + 2 = 2(3m + 1)$$\n\nThis is divisible by 2. ✓\n\n**Conclusion:** True for all $n \\geq 1$. $\\square$","body_he_md": "**בסיס:** $3^1 - 1 = 2$. $2|2$ ✓.\n\n**ה.א.:** $3^k - 1 = 2m$.\n\n$3^{k+1} - 1 = 3(2m) + 2 = 2(3m+1)$. $2\\mid2(3m+1)$ ✓."},
+    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Verify the base case and write the inductive hypothesis for proving $n! \\geq 2^{n-1}$ for $n \\geq 1$.","body_he": "אמת את הבסיס וכתוב ה.א. עבור: $n! \\geq 2^{n-1}$ לכל $n \\geq 1$.","checkpoint_solution_en": "Base ($n=1$): $1! = 1 \\geq 2^0 = 1$ ✓. IH: Assume $k! \\geq 2^{k-1}$.","checkpoint_solution_he": "בסיס: $1 \\geq 1$ ✓. ה.א.: $k! \\geq 2^{k-1}$."},
+    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Inequality Proof","title_he": "דוגמה פתורה 3 — הוכחת אי-שוויון","body_en_md": "**Claim:** $2^n > n^2$ for all $n \\geq 5$.\n\n**Base case ($n=5$):** $2^5 = 32 > 25 = 5^2$ ✓\n\n**Inductive step:** Assume $2^k > k^2$ for some $k \\geq 5$. Prove $2^{k+1} > (k+1)^2$.\n\n$2^{k+1} = 2\\cdot2^k > 2k^2$ (by IH)\n\nNeed to show $2k^2 \\geq (k+1)^2 = k^2 + 2k + 1$:\n$2k^2 - k^2 - 2k - 1 = k^2 - 2k - 1 = (k-1)^2 - 2$\n\nFor $k \\geq 5$: $(k-1)^2 - 2 \\geq 16 - 2 = 14 > 0$ ✓\n\nSo $2^{k+1} > 2k^2 \\geq (k+1)^2$. ✓\n\n**Conclusion:** $2^n > n^2$ for all $n \\geq 5$. $\\square$","body_he_md": "**בסיס:** $n=5$: $32 > 25$ ✓.\n\n**ה.א.:** $2^k > k^2$.\n\n$2^{k+1} = 2\\cdot2^k > 2k^2 \\geq (k+1)^2$ (כי $k^2 - 2k - 1 \\geq 0$ עבור $k \\geq 5$). ✓"},
+    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Step | What to write |\n|---|---|\n| 1. State claim | \"Prove $P(n)$ for all $n \\geq 1$\" |\n| 2. Base case | Show $P(1)$ explicitly |\n| 3. IH | \"Assume $P(k)$ is true for some $k \\geq 1$\" |\n| 4. Inductive step | Use IH to show $P(k+1)$ |\n| 5. Conclude | \"By induction, $P(n)$ is true for all $n \\geq 1$\" |","body_he_md": "1. הכרז: הוכח $P(n)$\n2. בסיס: הראה $P(1)$\n3. ה.א.: הניח $P(k)$\n4. צעד: הוכח $P(k+1)$ ע\"י ה.א.\n5. סיכום"},
+    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
+      {"id": "e1","difficulty": "easy","body_en": "Verify the base case $n=1$ for the claim $\\sum_{i=1}^n (2i-1) = n^2$.","body_he": "אמת בסיס $n=1$: $\\sum_{i=1}^n (2i-1) = n^2$.","solution_en": "LHS = $2(1)-1 = 1$. RHS = $1^2 = 1$. ✓","solution_he": "LHS = 1 = RHS ✓.","points": 5},
+      {"id": "e2","difficulty": "easy","body_en": "Write the inductive hypothesis for proving $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.","body_he": "כתוב ה.א. עבור: $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.","solution_en": "IH: Assume $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ for some $k \\geq 1$.","solution_he": "ה.א.: $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$.","points": 5},
+      {"id": "e3","difficulty": "easy","body_en": "What is the base case for proving $n^3 + 2n$ is divisible by 3?","body_he": "מהו הבסיס להוכחה ש-$n^3 + 2n$ מתחלק ב-3?","solution_en": "$n=1$: $1 + 2 = 3$. $3\\mid3$ ✓.","solution_he": "$n=1$: $3$ מתחלק ב-3 ✓.","points": 5},
+      {"id": "e4","difficulty": "easy","body_en": "The sum of first $n$ odd numbers equals $n^2$. Verify for $n = 4$.","body_he": "סכום $n$ מספרים אי-זוגיים ראשונים = $n^2$. אמת ל-$n=4$.","solution_en": "First 4 odds: $1+3+5+7 = 16 = 4^2$ ✓.","solution_he": "$1+3+5+7 = 16 = 4^2$ ✓.","points": 5},
+      {"id": "e5","difficulty": "medium","body_en": "Prove by induction: $\\sum_{i=1}^n i(i+1) = \\dfrac{n(n+1)(n+2)}{3}$.","body_he": "הוכח באינדוקציה: $\\sum_{i=1}^n i(i+1) = n(n+1)(n+2)/3$.","solution_en": "Base ($n=1$): $1\\cdot2 = 2 = 1\\cdot2\\cdot3/3 = 2$ ✓. IH: assume true for $k$. $\\sum_{i=1}^{k+1} i(i+1) = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3$. ✓","solution_he": "הוכח: $\\sum^{k+1} = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)(k+3)/3$. ✓","points": 8},
+      {"id": "e6","difficulty": "medium","body_en": "Prove by induction: $5^n - 1$ is divisible by 4 for all $n \\geq 1$.","body_he": "הוכח: $5^n - 1$ מתחלק ב-4 לכל $n \\geq 1$.","solution_en": "Base: $5^1 - 1 = 4$. $4\\mid4$ ✓. IH: $4\\mid(5^k-1)$, so $5^k = 4m+1$. $5^{k+1} - 1 = 5\\cdot5^k - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$. ✓","solution_he": "$5^{k+1} - 1 = 4(5m+1)$ — מתחלק ב-4. ✓","points": 8},
+      {"id": "e7","difficulty": "medium","body_en": "Prove by induction: $n! \\geq 2^{n-1}$ for all $n \\geq 1$.","body_he": "הוכח: $n! \\geq 2^{n-1}$ לכל $n \\geq 1$.","solution_en": "Base ($n=1$): $1 \\geq 1$ ✓. IH: $k! \\geq 2^{k-1}$. $(k+1)! = (k+1)\\cdot k! \\geq (k+1)\\cdot2^{k-1} \\geq 2\\cdot2^{k-1} = 2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓","solution_he": "$(k+1)! \\geq (k+1)2^{k-1} \\geq 2^k$ ✓.","points": 8},
+      {"id": "e8","difficulty": "medium","body_en": "Prove that $3^{2n} - 1$ is divisible by 8 for all $n \\geq 1$.","body_he": "הוכח: $3^{2n} - 1$ מתחלק ב-8 לכל $n \\geq 1$.","solution_en": "Base: $3^2 - 1 = 8$. ✓. IH: $8\\mid(3^{2k}-1)$. $3^{2(k+1)} - 1 = 9\\cdot3^{2k} - 1 = 9(3^{2k}-1) + 8$. Both $9(3^{2k}-1)$ and $8$ are divisible by 8. ✓","solution_he": "$3^{2k+2}-1 = 9(3^{2k}-1)+8$. Beide divisible by 8. ✓","points": 8},
+      {"id": "e9","difficulty": "medium","body_en": "Use strong induction to prove that every integer $n \\geq 2$ can be written as a product of prime numbers.","body_he": "הוכח באינדוקציה חזקה: כל $n \\geq 2$ הוא מכפלה של ראשוניים.","solution_en": "Base: $n=2$ is prime. IH (strong): assume true for all $2 \\leq j < k+1$. Case 1: $k+1$ is prime → done. Case 2: $k+1 = ab$ with $2 \\leq a, b < k+1$. By IH, $a$ and $b$ are products of primes, so $k+1 = ab$ is also. ✓","solution_he": "אם $k+1$ ראשוני: סיום. אם $k+1 = ab$: לפי ה.א. החזקה, $a$ ו-$b$ הם מכפלות ראשוניים → $k+1$ גם. ✓","points": 8},
+      {"id": "e10","difficulty": "hard","body_en": "Prove by induction: $\\sum_{i=1}^n i^2 = \\dfrac{n(n+1)(2n+1)}{6}$.","body_he": "הוכח: $\\sum_{i=1}^n i^2 = n(n+1)(2n+1)/6$.","solution_en": "Base ($n=1$): $1 = 1\\cdot2\\cdot3/6 = 1$ ✓. IH: $\\sum_{i=1}^k i^2 = k(k+1)(2k+1)/6$. Sum to $k+1$: $k(k+1)(2k+1)/6 + (k+1)^2 = (k+1)[k(2k+1)/6 + (k+1)] = (k+1)[(2k^2+k+6k+6)/6] = (k+1)(2k^2+7k+6)/6 = (k+1)(k+2)(2k+3)/6$. ✓","solution_he": "$(k+1)(k+2)(2k+3)/6$ — נוסחה ל-$n = k+1$. ✓","points": 10},
+      {"id": "e11","difficulty": "hard","body_en": "Prove that $2^n \\geq n + 1$ for all $n \\geq 0$.","body_he": "הוכח: $2^n \\geq n+1$ לכל $n \\geq 0$.","solution_en": "Base ($n=0$): $1 \\geq 1$ ✓. IH: $2^k \\geq k+1$. $2^{k+1} = 2\\cdot2^k \\geq 2(k+1) = 2k+2 \\geq k+2 = (k+1)+1$ (since $k \\geq 0 \\Rightarrow 2k+2 \\geq k+2$). ✓","solution_he": "$2^{k+1} \\geq 2(k+1) = 2k+2 \\geq k+2$ ✓.","points": 10},
+      {"id": "e12","difficulty": "hard","body_en": "The Fibonacci sequence: $F_1 = 1$, $F_2 = 1$, $F_n = F_{n-1} + F_{n-2}$. Prove $F_n < 2^n$ for all $n \\geq 1$.","body_he": "סדרת פיבונאצ'י: $F_1 = F_2 = 1$, $F_n = F_{n-1} + F_{n-2}$. הוכח $F_n < 2^n$.","solution_en": "Base: $F_1 = 1 < 2 = 2^1$ ✓; $F_2 = 1 < 4 = 2^2$ ✓. Strong IH: assume $F_j < 2^j$ for all $j \\leq k$ where $k \\geq 2$. $F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 2^{k-1}(2+1) = 3\\cdot2^{k-1} < 4\\cdot2^{k-1} = 2^{k+1}$. ✓","solution_he": "$F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 3\\cdot2^{k-1} < 2^{k+1}$. ✓","points": 10},
+      {"id": "e13","difficulty": "hard","body_en": "Prove: for all $n \\geq 1$, $\\left(1 + \\dfrac{1}{n}\\right)^n < 3$.","body_he": "הוכח: לכל $n \\geq 1$, $\\left(1 + \\frac{1}{n}\\right)^n < 3$.","solution_en": "This is a classic result. For $n=1$: $(1+1)^1 = 2 < 3$ ✓. The full induction proof requires showing $(1+1/(k+1))^{k+1} < 3$ given $(1+1/k)^k < 3$ — this is non-trivial but can be shown using the inequality $(1+1/(k+1))^{k+1} \\leq e < 3$. The result follows since the sequence is increasing and bounded by $e < 3$.","solution_he": "הסדרה $(1+1/n)^n$ עולה וחסומה ב-$e < 3$. ✓ (הוכחה קדם-חשבונאית).","points": 10}
+    ]},
+    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Don't assume what you're proving.** The IH says $P(k)$ is true; you must use it to PROVE $P(k+1)$.\n\n2. **Both steps are required.** The base case alone (without inductive step) doesn't prove anything for $n > 1$. The inductive step alone doesn't start the chain.\n\n3. **Start base case at the right $n$.** Some statements are only true for $n \\geq 5$ — verify this and start the base case at $n = 5$.\n\n4. **In divisibility, express as multiple explicitly.** Write $3^k - 1 = 2m$ (not just \"it's divisible\").","body_he_md": "1. **אל תניח מה שמוכיחים.** ה.א. = $P(k)$ נכון; הוכח $P(k+1)$.\n\n2. **שני שלבים נדרשים:** גם בסיס וגם צעד.\n\n3. **בסיס בנקודה הנכונה.** חלק מהטענות נכונות רק מ-$n \\geq 5$.\n\n4. **בחלוקה:** כתוב במפורש: $5^k - 1 = 4m$."},
+    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam","title_he": "לפני הבחינה","body_en_md": "- Base case: verify $P(1)$ (or $P(n_0)$) explicitly\n- IH: write \"Assume $P(k)$\" clearly\n- Inductive step: use IH to reach $P(k+1)$\n- Conclude with standard closing phrase\n- For divisibility: let $P(k) = nm$ and substitute","body_he_md": "- בסיס: הוכח $P(1)$\n- ה.א.: \"הניח $P(k)$ נכון\"\n- צעד: הוכח $P(k+1)$ ע\"י ה.א.\n- סיום: \"לפי עקרון האינדוקציה...\""},
+    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **Two steps:** Base case + Inductive step → proven for all $n$\n- **IH:** Assume $P(k)$; prove $P(k+1)$\n- **Sum formulas:** manipulate $\\sum_{i=1}^{k+1} = \\sum_{i=1}^{k} + (k+1)$ term\n- **Divisibility:** write $P(k)$ as $km$ for integer $m$\n- **Inequality:** often need algebraic bounding tricks","body_he_md": "- בסיס + צעד → לכל $n$\n- ה.א.: הניח; הוכח $+1$\n- סכומים: $\\sum^{k+1} = \\sum^k + (k+1)$\n- חלוקה: $P(k) = nm$"}
   ],
   "questions": [
-    {
-      "id": "q1",
-      "type": "open",
-      "body_en": "Prove by mathematical induction that for all $n \\geq 1$:\n$$\\sum_{i=1}^n (2i-1) = n^2.$$\nShow all three components: base case, inductive hypothesis, and inductive step.",
-      "body_he": "הוכיחו באינדוקציה מתמטית שלכל $n \\geq 1$:\n$$\\sum_{i=1}^n (2i-1) = n^2.$$\nהציגו את שלושת המרכיבים: בסיס האינדוקציה, הנחת האינדוקציה, וצעד האינדוקציה.",
-      "points": 10,
-      "expected_steps_en": [
-        "Base case n=1: LHS=1, RHS=1² =1 ✓",
-        "IH: Assume sum to k equals k²",
-        "Inductive step: sum to k+1 = k² + (2(k+1)-1) = k² + 2k+1 = (k+1)²  ✓",
-        "Conclusion"
-      ],
-      "expected_steps_he": [
-        "בסיס n=1: 1=1² ✓",
-        "ה.א.: הסכום עד k שווה k²",
-        "צעד: k² + (2k+1) = (k+1)² ✓",
-        "מסקנה"
-      ],
-      "sample_solution_en": "Base (n=1): LHS=2(1)-1=1, RHS=1. ✓  IH: Assume 1+3+...+(2k-1)=k².  Step: sum to k+1 = k² + (2(k+1)-1) = k²+2k+1=(k+1)². ✓  Conclusion: by induction, true for all n≥1. ■",
-      "sample_solution_he": "בסיס (n=1): 2(1)-1=1=1². ✓  ה.א.: הסכום עד k שווה k².  צעד: k² + (2k+1) = (k+1)². ✓  מסקנה: נכון לכל n≥1 לפי עקרון האינדוקציה. ■",
-      "rubric_en": "2pts base case (show both sides equal); 3pts IH stated correctly; 5pts inductive step algebra + conclusion.",
-      "rubric_he": "2 נק' בסיס (שני הצדדים שווים); 3 נק' ה.א. ניסוח נכון; 5 נק' צעד אלגברי + מסקנה."
-    },
-    {
-      "id": "q2",
-      "type": "open",
-      "body_en": "Prove that for all $n \\geq 1$: $5^n - 1$ is divisible by 4.\n\nState the base case, inductive hypothesis, and inductive step explicitly. In the inductive step, show the algebraic manipulation that produces a factor of 4.",
-      "body_he": "הוכיחו שלכל $n \\geq 1$: $5^n - 1$ מתחלק ב-4.\n\nציינו במפורש את בסיס האינדוקציה, הנחת האינדוקציה, וצעד האינדוקציה. בצעד, הציגו את המניפולציה האלגברית המוציאה גורם 4.",
-      "points": 10,
-      "expected_steps_en": [
-        "Base n=1: 5¹-1=4, 4|4 ✓",
-        "IH: 4|(5^k-1), i.e. 5^k-1=4m",
-        "Step: 5^(k+1)-1 = 5·5^k - 1 = 5(5^k-1)+4 = 5·4m+4 = 4(5m+1) ✓",
-        "Conclusion"
-      ],
-      "expected_steps_he": [
-        "בסיס n=1: 4|4 ✓",
-        "ה.א.: 5^k-1=4m",
-        "צעד: 5^(k+1)-1 = 5(5^k-1)+4 = 4(5m+1) ✓",
-        "מסקנה"
-      ],
-      "sample_solution_en": "Base (n=1): 5-1=4, 4|4 ✓.  IH: 5^k-1=4m.  Step: 5^(k+1)-1=5·5^k-1=5(5^k-1)+(5-1)=5·4m+4=4(5m+1). Since 5m+1 is integer, 4|(5^(k+1)-1). ✓  ■",
-      "sample_solution_he": "בסיס: 5-1=4. ✓  ה.א.: 5^k-1=4m.  צעד: 5^(k+1)-1=5·4m+4=4(5m+1). ✓  ■",
-      "rubric_en": "2pts base; 3pts IH; 5pts algebraic chain 5^(k+1)-1 = 5(5^k-1)+4 = 4(5m+1).",
-      "rubric_he": "2 נק' בסיס; 3 נק' ה.א.; 5 נק' שרשרת אלגברית."
-    },
-    {
-      "id": "q3",
-      "type": "open",
-      "body_en": "A student argues: 'I proved that if P(k) is true then P(k+1) is true for all k ≥ 1. Therefore P(n) is true for all n ≥ 1.'\n\nBut suppose P(1) is false. What is wrong with the student's argument? Give a concrete counterexample — a statement P(n) where the inductive step holds but P(1) is false.",
-      "body_he": "תלמיד טוען: 'הוכחתי שאם P(k) נכון אז P(k+1) נכון לכל k ≥ 1. לכן P(n) נכון לכל n ≥ 1.'\n\nאבל נניח ש-P(1) שקרי. מה לא בסדר בטיעון של התלמיד? תנו דוגמה נגדית קונקרטית — טענה P(n) שבה צעד האינדוקציה מתקיים אבל P(1) שקרית.",
-      "points": 8,
-      "expected_steps_en": [
-        "The inductive step only shows: IF P(k) is true THEN P(k+1) is true",
-        "If P(1) is false, the chain never starts — all implications are vacuously true but P(n) is false for all n",
-        "Counterexample: e.g. P(n): 'n=n+1' — vacuously the inductive step holds (since P(k) is always false, implication P(k)→P(k+1) is vacuously true), but P(1) is false"
-      ],
-      "expected_steps_he": [
-        "צעד האינדוקציה אומר רק: אם P(k) אז P(k+1)",
-        "אם P(1) שקרי, השרשרת לא מתחילה — כל ההשלכות נכונות בואקום",
-        "דוגמה נגדית: P(n): n=n+1 — צעד האינדוקציה מתקיים באקום, אבל P(n) שקרית לכל n"
-      ],
-      "sample_solution_en": "The flaw: the inductive step is a conditional statement 'P(k) ⟹ P(k+1)'. If P(1) is false, we cannot start the chain — there is no 'first true case' to propagate from. All implications P(1)⟹P(2), P(2)⟹P(3), ... are vacuously true (a false antecedent makes any conditional true), but this tells us nothing about whether P(n) is actually true. Example: let P(n) be 'n > 2n'. Then P(k)⟹P(k+1) holds vacuously since P(k) is always false. But P(1) is '1 > 2' which is false, and P(n) is false for all n.",
-      "sample_solution_he": "הפגם: צעד האינדוקציה הוא משפט תנאי 'P(k) ⟹ P(k+1)'. אם P(1) שקרי, אי אפשר להתחיל את השרשרת. כל ההשלכות נכונות בואקום (אנטצדנט שקרי הופך כל השלכה לנכונה), אבל זה לא אומר ש-P(n) נכון בפועל. דוגמה: P(n): n > 2n — שקרית לכל n, ולכן צעד האינדוקציה נכון בואקום."
-    },
-    {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "In a proof by induction of P(n) for all n ≥ 1, what is the **inductive hypothesis**?",
-      "body_he": "בהוכחה באינדוקציה של P(n) לכל n ≥ 1, מהי **הנחת האינדוקציה**?",
-      "options": [
-        {"id": "a", "text_en": "P(1) is true.", "text_he": "P(1) נכון.", "correct": false},
-        {"id": "b", "text_en": "Assuming P(k) is true for some arbitrary k ≥ 1.", "text_he": "ההנחה ש-P(k) נכון עבור k ≥ 1 שרירותי כלשהו.", "correct": true},
-        {"id": "c", "text_en": "P(k+1) is true.", "text_he": "P(k+1) נכון.", "correct": false},
-        {"id": "d", "text_en": "P(n) is true for all n.", "text_he": "P(n) נכון לכל n.", "correct": false}
-      ],
-      "explanation_en": "The inductive hypothesis is the assumption that P(k) holds for a specific (but arbitrary) k ≥ 1. The base case proves P(1); the inductive step uses P(k) to derive P(k+1).",
-      "explanation_he": "הנחת האינדוקציה היא ההנחה ש-P(k) מתקיים עבור k ספציפי (אך שרירותי). הבסיס מוכיח P(1); צעד האינדוקציה משתמש ב-P(k) להסיק P(k+1)."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "A student claims to prove $1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$ by writing: 'Assume $1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$, then clearly $1+2+\\cdots+k = \\frac{k(k+1)}{2}$.' What error has the student made?",
-      "body_he": "תלמיד מנסה להוכיח $1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$ על ידי: 'נניח ש-$1+2+\\cdots+(k+1) = \\frac{(k+1)(k+2)}{2}$, ואז ברור ש-$1+2+\\cdots+k = \\frac{k(k+1)}{2}$.' איזו שגיאה עשה התלמיד?",
-      "options": [
-        {"id": "a", "text_en": "The algebra is incorrect.", "text_he": "האלגברה שגויה.", "correct": false},
-        {"id": "b", "text_en": "The base case was forgotten.", "text_he": "הבסיס נשכח.", "correct": false},
-        {"id": "c", "text_en": "The student assumed P(k+1) to prove P(k+1) — circular reasoning.", "text_he": "התלמיד הניח P(k+1) כדי להוכיח P(k+1) — הנמקה מעגלית.", "correct": true},
-        {"id": "d", "text_en": "The inductive step must go from P(k+2) to P(k+1).", "text_he": "צעד האינדוקציה צריך ללכת מ-P(k+2) ל-P(k+1).", "correct": false}
-      ],
-      "explanation_en": "Circular reasoning: the student assumed exactly what needs to be proved. Correct direction: assume P(k) (the inductive hypothesis), then prove P(k+1) from it.",
-      "explanation_he": "הנמקה מעגלית: התלמיד הניח את מה שצריך להוכיח. הכיוון הנכון: מניחים P(k) (ה.א.), ומוכיחים P(k+1) ממנה."
-    }
-  ]
+    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["mathematical_induction","proof_structure"],"stem_en": "In a proof by mathematical induction, the inductive hypothesis is:","stem_he": "בהוכחת אינדוקציה, הנחת האינדוקציה (ה.א.) היא:","answer_payload": {"options_en": ["Proving $P(1)$","Assuming $P(k)$ is true for some arbitrary $k$","Proving $P(k)$ is true for all $k$","Showing $P(k+1)$ follows from nothing"],"options_he": ["הוכחת $P(1)$","הנחת אמיתות $P(k)$ לערך $k$ שרירותי","הוכחת $P(k)$ לכל $k$","הצגת $P(k+1)$ ללא הנחות"],"correct_index": 1},"explanation_en": "The inductive hypothesis (IH) is the assumption that $P(k)$ holds for some arbitrary $k \\geq 1$.","explanation_he": "ה.א. = הנחה ש-$P(k)$ אמת לאיזשהו $k$ שרירותי."}
+  ],
+  "agent_hints": {
+    "key_insights": ["Two required steps: Base case (show P(1) true) + Inductive step (P(k) → P(k+1)).", "Key move: write sum up to k+1 = (sum to k) + (k+1)-th term, then apply IH.", "For divisibility: let P(k) = 'expression = m·d' for integer m. Substitute and simplify.", "Strong induction: assume ALL previous cases. Useful for Fibonacci-like sequences."],
+    "common_misconceptions": [{"wrong": "Induction proves P(n) for n=k by assuming P(k)","correction": "IH is the ASSUMPTION, not what's proven. You assume P(k) to then PROVE P(k+1). Never prove both at once.","detect_phrase_en": "prove p k assuming p k","detect_phrase_he": "מוכיח p k בהנחת p k"}],
+    "tutor_pacing_hint": "Start with sum formulas (most concrete). Then divisibility. Inequality proofs (like 2ⁿ > n²) require more algebraic creativity — do last.",
+    "skill_atoms_unlocked": ["base_case","inductive_hypothesis","inductive_step","divisibility_induction","sum_formulas_induction","inequality_induction"]
+  }
 }

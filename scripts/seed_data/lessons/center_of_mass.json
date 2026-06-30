@@ -1,190 +1,335 @@
 {
-  "id": "center_of_mass",
-  "type": "interactive",
-  "subject": "hs_physics",
+  "concept_id": "center_of_mass",
   "title_en": "Center of Mass",
-  "title_he": "מרכז מסה",
-  "duration_min": 20,
-  "level_min": "5pt",
-  "agent_hints": "The center of mass is the 'effective location' of the total mass for Newton's second law applied to the system. Students should compute it as a weighted average position. The key non-trivial insight is that the CM velocity is conserved in isolated systems, making it the preferred reference frame for analyzing collisions. Common error: treating CM as the geometric center when masses are unequal.",
+  "title_he": "מרכז המסה",
+  "subject": "physics",
+  "difficulty": "intermediate",
+  "estimated_minutes": 40,
   "sections": [
     {
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Why Center of Mass?",
+      "title_he": "למה מרכז מסה?",
+      "body_en_md": "A thrown wrench tumbles chaotically — yet one special point traces a perfect parabola. That point is the **center of mass (CM)**. The entire mass of the system can be treated as if it's concentrated there when analyzing translational motion.\n\nIn Israeli high school physics and university mechanics, center of mass appears in:\n- Newton's 2nd law for systems: $\\vec{F}_{\\text{ext}} = M\\vec{a}_{\\text{cm}}$\n- Collisions and explosions\n- Equilibrium of extended objects\n- Momentum conservation",
+      "body_he_md": "מפתח זרוק מתהפך כאוטית — אבל נקודה אחת מיוחדת עוקבת אחרי פרבולה מושלמת. אותה נקודה היא **מרכז המסה (CM)**. כל המסה של המערכת יכולה להיחשב כמרוכזת שם כאשר מנתחים תנועה תרגומית.\n\nבפיזיקה בית-ספרית ואוניברסיטאית ישראלית, מרכז מסה מופיע ב:\n- החוק השני של ניוטון למערכות: $\\vec{F}_{\\text{ext}} = M\\vec{a}_{\\text{cm}}$\n- התנגשויות ופיצוצים\n- שיווי משקל של עצמים מורחבים\n- שימור תנע"
+    },
+    {
       "id": "definition",
-      "title_en": "Definition — Weighted Average Position",
-      "title_he": "הגדרה — מיקום ממוצע משוקלל",
-      "level_min": "5pt",
-      "body_en_md": "The **center of mass** (CM) of a system of particles is the mass-weighted average of their positions.\n\n**Two particles on a line:**\n$$\\boxed{x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}}$$\n\n**Physical meaning:** If the external force $\\vec{F}_{ext}$ acts on the whole system, then $M\\vec{a}_{cm} = \\vec{F}_{ext}$, where $M = \\sum m_i$ is the total mass. The CM obeys Newton's 2nd law as if all the mass were concentrated there.\n\n**Worked example:** Two masses $m_1 = 3$ kg at $x_1 = 1$ m and $m_2 = 1$ kg at $x_2 = 5$ m.\n$$x_{cm} = \\frac{3 \\cdot 1 + 1 \\cdot 5}{3 + 1} = \\frac{3 + 5}{4} = \\frac{8}{4} = 2 \\text{ m.}$$\nThe CM is at $x = 2$ m — much closer to the heavier mass, as expected.",
-      "body_he_md": "**מרכז המסה** (מ\"מ) של מערכת חלקיקים הוא המיקום הממוצע המשוקלל במסה שלהם.\n\n**שני חלקיקים על קו:**\n$$\\boxed{x_{cm} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}}$$\n\n**משמעות פיזיקלית:** אם כוח חיצוני $\\vec{F}_{ext}$ פועל על כל המערכת, אז $M\\vec{a}_{cm} = \\vec{F}_{ext}$, כאשר $M = \\sum m_i$ היא המסה הכוללת. מ\"מ מציית לחוק ניוטון השני כאילו כל המסה ריכוזה שם.\n\n**דוגמה:** שתי מסות $m_1 = 3$ ק\"ג ב-$x_1 = 1$ מ' ו-$m_2 = 1$ ק\"ג ב-$x_2 = 5$ מ'.\n$$x_{cm} = \\frac{3 \\cdot 1 + 1 \\cdot 5}{3 + 1} = \\frac{3 + 5}{4} = \\frac{8}{4} = 2 \\text{ מ'.}$$\nמ\"מ ב-$x = 2$ מ' — קרוב הרבה יותר למסה הכבדה, כמצופה."
+      "kind": "definition",
+      "title_en": "Definition of Center of Mass",
+      "title_he": "הגדרת מרכז המסה",
+      "body_en_md": "**For a discrete system of $N$ particles:**\n$$\\vec{r}_{\\text{cm}} = \\frac{\\sum_{i=1}^N m_i \\vec{r}_i}{M_{\\text{total}}}$$\n\nComponent-wise:\n$$x_{\\text{cm}} = \\frac{\\sum m_i x_i}{M}, \\quad y_{\\text{cm}} = \\frac{\\sum m_i y_i}{M}, \\quad z_{\\text{cm}} = \\frac{\\sum m_i z_i}{M}$$\n\n**For a continuous body:**\n$$\\vec{r}_{\\text{cm}} = \\frac{\\int \\vec{r}\\,dm}{M} = \\frac{\\int \\vec{r}\\,\\rho\\,dV}{M}$$\n\n**Key property:**\n$$M\\vec{a}_{\\text{cm}} = \\vec{F}_{\\text{net, ext}}$$\nThe CM moves as if all the mass were concentrated there, acted on by the total external force.",
+      "body_he_md": "**למערכת $N$ חלקיקים בדידה:**\n$$\\vec{r}_{\\text{cm}} = \\frac{\\sum_{i=1}^N m_i \\vec{r}_i}{M_{\\text{כולל}}}$$\n\n**לגוף רציף:**\n$$\\vec{r}_{\\text{cm}} = \\frac{\\int \\vec{r}\\,dm}{M}$$\n\n**תכונה מרכזית:**\n$$M\\vec{a}_{\\text{cm}} = \\vec{F}_{\\text{נטו, חיצוני}}$$\nmרכז המסה נע כאילו כל המסה מרוכזת בו, מושפע מהכוח החיצוני הכולל."
     },
     {
-      "id": "multibody_2d",
-      "title_en": "Multi-body CM in 2D",
-      "title_he": "מרכז מסה של מערכת רב-גופית בדו-ממד",
-      "level_min": "5pt",
-      "body_en_md": "For $N$ particles in 2D:\n$$\\boxed{x_{cm} = \\frac{\\sum_{i=1}^{N} m_i x_i}{\\sum_{i=1}^{N} m_i}, \\qquad y_{cm} = \\frac{\\sum_{i=1}^{N} m_i y_i}{\\sum_{i=1}^{N} m_i}.}$$\n\nThe CM is a vector: $\\vec{r}_{cm} = (x_{cm}, y_{cm})$.\n\n**Worked example:** Three particles:\n- $m_1 = 2$ kg at $(0, 0)$\n- $m_2 = 3$ kg at $(4, 0)$\n- $m_3 = 1$ kg at $(1, 3)$\n\n$$M = 2 + 3 + 1 = 6 \\text{ kg}$$\n$$x_{cm} = \\frac{2(0) + 3(4) + 1(1)}{6} = \\frac{0 + 12 + 1}{6} = \\frac{13}{6} \\approx 2.17 \\text{ m}$$\n$$y_{cm} = \\frac{2(0) + 3(0) + 1(3)}{6} = \\frac{3}{6} = 0.5 \\text{ m}$$",
-      "body_he_md": "ל-$N$ חלקיקים בדו-ממד:\n$$\\boxed{x_{cm} = \\frac{\\sum_{i=1}^{N} m_i x_i}{\\sum_{i=1}^{N} m_i}, \\qquad y_{cm} = \\frac{\\sum_{i=1}^{N} m_i y_i}{\\sum_{i=1}^{N} m_i}.}$$\n\nמ\"מ הוא וקטור: $\\vec{r}_{cm} = (x_{cm}, y_{cm})$.\n\n**דוגמה:** שלושה חלקיקים:\n- $m_1 = 2$ ק\"ג ב-$(0, 0)$\n- $m_2 = 3$ ק\"ג ב-$(4, 0)$\n- $m_3 = 1$ ק\"ג ב-$(1, 3)$\n\n$$M = 2 + 3 + 1 = 6 \\text{ ק\"ג}$$\n$$x_{cm} = \\frac{2(0) + 3(4) + 1(1)}{6} = \\frac{13}{6} \\approx 2.17 \\text{ מ'}$$\n$$y_{cm} = \\frac{2(0) + 3(0) + 1(3)}{6} = \\frac{3}{6} = 0.5 \\text{ מ'}$$"
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "CM of Simple Objects and Symmetry",
+      "title_he": "מרכז מסה של עצמים פשוטים וסימטריה",
+      "body_en_md": "### Symmetry shortcut\n\nFor any **uniform, symmetric** object, the CM is at the **geometric center**:\n- Uniform rod → midpoint\n- Uniform disk/rectangle → center\n- Uniform sphere → center\n\n### Composite bodies\n\nTreat each part as a point mass at its CM:\n$$x_{\\text{cm}} = \\frac{m_1 x_{1\\text{cm}} + m_2 x_{2\\text{cm}} + \\cdots}{m_1 + m_2 + \\cdots}$$\n\n### Missing-piece method (cutout)\n\nFor a body with a hole: treat the hole as a **negative mass**.\n$$x_{\\text{cm, full}} = \\frac{m_{\\text{body}}x_{\\text{body}} + m_{\\text{hole}}x_{\\text{hole}}}{m_{\\text{body}} + m_{\\text{hole}}}$$\nRearrange to find $x_{\\text{cm, body}}$.\n\n### CM and momentum\n\n$M\\vec{v}_{\\text{cm}} = \\vec{p}_{\\text{total}}$. If no external forces: $\\vec{v}_{\\text{cm}} = \\text{const}$.",
+      "body_he_md": "### קיצור דרך סימטריה\n\nלכל עצם **אחיד וסימטרי**, מרכז המסה נמצא ב**מרכז הגיאומטרי**:\n- מוט אחיד → נקודת האמצע\n- דיסק/מלבן אחיד → מרכז\n- כדור אחיד → מרכז\n\n### גופים מורכבים\n\nמתייחסים לכל חלק כמסה נקודתית במרכז המסה שלו:\n$$x_{\\text{cm}} = \\frac{m_1 x_{1\\text{cm}} + m_2 x_{2\\text{cm}} + \\cdots}{m_1 + m_2 + \\cdots}$$\n\n### שיטת החסרת חלק\n\nלגוף עם חור: מתייחסים לחור כ**מסה שלילית**.\n\n### מרכז מסה ותנע\n\n$M\\vec{v}_{\\text{cm}} = \\vec{p}_{\\text{כולל}}$. ללא כוחות חיצוניים: $\\vec{v}_{\\text{cm}} = \\text{const}$."
     },
     {
-      "id": "cm_collisions",
-      "title_en": "CM Velocity and Conservation in Collisions",
-      "title_he": "מהירות מרכז המסה ושימור בהתנגשויות",
-      "level_min": "5pt",
-      "body_en_md": "The **velocity of the CM** of a two-body system:\n$$\\vec{v}_{cm} = \\frac{m_1 \\vec{v}_1 + m_2 \\vec{v}_2}{m_1 + m_2} = \\frac{\\vec{p}_{total}}{M}$$\n\n**Key theorem:** In an **isolated system** (no external forces), $\\vec{v}_{cm}$ is constant. The total momentum $\\vec{p} = M\\vec{v}_{cm}$ is conserved.\n\n**Before and after any collision** (elastic or inelastic), the CM moves at the same constant velocity.\n\n**Worked example:** Two carts. $m_1 = 4$ kg moving at $v_1 = 3$ m/s, $m_2 = 2$ kg moving at $v_2 = -1$ m/s (opposite direction). Find $v_{cm}$.\n$$v_{cm} = \\frac{4(3) + 2(-1)}{4 + 2} = \\frac{12 - 2}{6} = \\frac{10}{6} \\approx 1.67 \\text{ m/s.}$$\nAfter any collision between them, $v_{cm}$ remains $1.67$ m/s.",
-      "body_he_md": "**מהירות מ\"מ** של מערכת דו-גופית:\n$$\\vec{v}_{cm} = \\frac{m_1 \\vec{v}_1 + m_2 \\vec{v}_2}{m_1 + m_2} = \\frac{\\vec{p}_{total}}{M}$$\n\n**משפט מרכזי:** במערכת **מבודדת** (ללא כוחות חיצוניים), $\\vec{v}_{cm}$ קבוע. התנע הכולל $\\vec{p} = M\\vec{v}_{cm}$ משתמר.\n\n**לפני וגם אחרי כל התנגשות** (אלסטית או פלסטית), מ\"מ נע באותה מהירות קבועה.\n\n**דוגמה:** שתי עגלות. $m_1 = 4$ ק\"ג במהירות $v_1 = 3$ מ'/ש', $m_2 = 2$ ק\"ג במהירות $v_2 = -1$ מ'/ש' (כיוון הפוך). מצאו $v_{cm}$.\n$$v_{cm} = \\frac{4(3) + 2(-1)}{4 + 2} = \\frac{12 - 2}{6} = \\frac{10}{6} \\approx 1.67 \\text{ מ'/ש'.}$$\nאחרי כל התנגשות ביניהן, $v_{cm}$ יישאר $1.67$ מ'/ש'."
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Two-Particle System",
+      "title_he": "דוגמה פתורה 1 — מערכת שני חלקיקים",
+      "body_en_md": "**Given:** Particle 1: $m_1 = 3\\;\\text{kg}$ at $x_1 = 1\\;\\text{m}$. Particle 2: $m_2 = 5\\;\\text{kg}$ at $x_2 = 5\\;\\text{m}$.\n\n**Step 1:**\n$$x_{\\text{cm}} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2} = \\frac{(3)(1) + (5)(5)}{3+5} = \\frac{3+25}{8} = \\frac{28}{8} = 3.5\\;\\text{m}$$\n\n**Sanity check:** CM lies between $x_1=1$ and $x_2=5$, closer to the heavier mass at $x_2=5$. ✓\n\n**Answer:** $x_{\\text{cm}} = 3.5\\;\\text{m}$.",
+      "body_he_md": "**נתון:** חלקיק 1: $m_1 = 3\\;\\text{kg}$ ב-$x_1 = 1\\;\\text{m}$. חלקיק 2: $m_2 = 5\\;\\text{kg}$ ב-$x_2 = 5\\;\\text{m}$.\n\n$$x_{\\text{cm}} = \\frac{(3)(1) + (5)(5)}{8} = \\frac{28}{8} = 3.5\\;\\text{m}$$\n\n**בדיקת סבירות:** מרכז המסה נמצא בין 1 ל-5, קרוב יותר לגוף הכבד. ✓"
     },
     {
-      "id": "exam_practice",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "level_min": "5pt",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nA ball is launched horizontally at 15 m/s from height 20 m ($g=10$).\n\n(a) Time to ground. (b) Horizontal distance. (c) Impact velocity.\n\n**Complete Solution:**\n\n(a) $t=2$ s. (b) 30 m. (c) $|\\vec{v}|=25$ m/s.\n\n---\n\n**Practice Problem 2:**\n\nMass on incline: find $a = g\\sin\\theta$ (no friction) and explain with free-body diagram.\n\n**Complete Solution:**\n\nFBD: $mg\\sin\\theta = ma$ → $a=g\\sin\\theta$. Weight component along slope causes acceleration.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:** זריקה אופקית 15 מ\"ש מ-20 מ' — זמן, מרחק, מהירות.\n\n**פתרון:** $t=2$ ש', 30 מ', 25 מ\"ש.\n\n---\n\n**שאלת תרגול 2:** משופע ללא חיכוך: $a=g\\sin\\theta$ עם FBD."
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Three masses: $m_1 = 2\\;\\text{kg}$ at $(0, 0)$; $m_2 = 4\\;\\text{kg}$ at $(3, 0)$; $m_3 = 6\\;\\text{kg}$ at $(0, 4)$. Find $(x_{\\text{cm}}, y_{\\text{cm}})$.",
+      "body_he_md": "שלוש מסות: $m_1 = 2$ ב-$(0,0)$; $m_2 = 4$ ב-$(3,0)$; $m_3 = 6$ ב-$(0,4)$. מצא $(x_{\\text{cm}}, y_{\\text{cm}})$.",
+      "checkpoint_solution_en": "$M = 12\\;\\text{kg}$. $x_{\\text{cm}} = (2\\cdot0 + 4\\cdot3 + 6\\cdot0)/12 = 12/12 = 1\\;\\text{m}$. $y_{\\text{cm}} = (2\\cdot0 + 4\\cdot0 + 6\\cdot4)/12 = 24/12 = 2\\;\\text{m}$.",
+      "checkpoint_solution_he": "$x_{\\text{cm}} = 1\\;\\text{m}$, $y_{\\text{cm}} = 2\\;\\text{m}$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Composite L-Shaped Object",
+      "title_he": "דוגמה פתורה 2 — עצם מורכב בצורת L",
+      "body_en_md": "**Given:** An L-shaped object made of two uniform rods:\n- Rod A: mass $m_A = 2\\;\\text{kg}$, length $4\\;\\text{m}$ along the x-axis (from $x=0$ to $x=4$, $y=0$)\n- Rod B: mass $m_B = 3\\;\\text{kg}$, length $3\\;\\text{m}$ along the y-axis (from $y=0$ to $y=3$, $x=0$)\n\n**Step 1 — CMs of each rod:**\n- Rod A CM: $(2, 0)$ (midpoint of A)\n- Rod B CM: $(0, 1.5)$ (midpoint of B)\n\n**Step 2 — Composite CM:**\n$$x_{\\text{cm}} = \\frac{m_A \\cdot 2 + m_B \\cdot 0}{m_A + m_B} = \\frac{(2)(2) + (3)(0)}{5} = \\frac{4}{5} = 0.8\\;\\text{m}$$\n$$y_{\\text{cm}} = \\frac{m_A \\cdot 0 + m_B \\cdot 1.5}{5} = \\frac{0 + 4.5}{5} = 0.9\\;\\text{m}$$\n\n**Answer:** CM at $(0.8, 0.9)\\;\\text{m}$.",
+      "body_he_md": "**נתון:** עצם בצורת L משני מוטות אחידים:\n- מוט A: $m_A = 2\\;\\text{kg}$, אורך 4 מ' לאורך ציר x\n- מוט B: $m_B = 3\\;\\text{kg}$, אורך 3 מ' לאורך ציר y\n\n**מרכזי מסה:** מוט A: $(2, 0)$; מוט B: $(0, 1.5)$.\n\n$$x_{\\text{cm}} = \\frac{(2)(2)+(3)(0)}{5} = 0.8\\;\\text{m}$$\n$$y_{\\text{cm}} = \\frac{(2)(0)+(3)(1.5)}{5} = 0.9\\;\\text{m}$$\n\n**תשובה:** CM ב-$(0.8, 0.9)\\;\\text{m}$."
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A uniform disk of mass $M = 8\\;\\text{kg}$ and radius $R = 0.5\\;\\text{m}$ has a circular hole of radius $r = 0.1\\;\\text{m}$ cut out, with its center at $(0.3, 0)$ from the disk's center. Find $x_{\\text{cm}}$.",
+      "body_he_md": "דיסק אחיד עם $M = 8\\;\\text{kg}$ ו-$R = 0.5\\;\\text{m}$ יש בו חור עגול ברדיוס $r = 0.1\\;\\text{m}$, שמרכזו ב-$(0.3, 0)$ ממרכז הדיסק. מצא $x_{\\text{cm}}$.",
+      "checkpoint_solution_en": "Area of disk: $\\pi R^2 = 0.25\\pi$. Area of hole: $\\pi r^2 = 0.01\\pi$. Let surface density $\\sigma = M/(\\pi R^2)$. Mass of hole: $m_h = \\sigma\\pi r^2 = M(r/R)^2 = 8(0.04/0.25) = 1.28\\;\\text{kg}$. Mass of remaining disk: $M' = 8 - 1.28 = 6.72\\;\\text{kg}$. CM of full disk at $x=0$; CM of hole at $x=0.3$. $0 = (6.72)x_{\\text{cm}} + (1.28)(0.3)$. $x_{\\text{cm}} = -0.384/6.72 \\approx -0.057\\;\\text{m}$.",
+      "checkpoint_solution_he": "$x_{\\text{cm}} \\approx -0.057\\;\\text{m}$ (מרכז המסה הוזז שמאלה מהמרכז)."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Explosion / CM Conservation",
+      "title_he": "דוגמה פתורה 3 — פיצוץ / שימור מרכז מסה",
+      "body_en_md": "**Given:** A projectile of mass $M = 3\\;\\text{kg}$ moves at $v_0 = 10\\;\\text{m/s}$ (rightward) when it explodes into two fragments: $m_1 = 1\\;\\text{kg}$ and $m_2 = 2\\;\\text{kg}$. Fragment 1 is found moving at $v_1 = 2\\;\\text{m/s}$ (leftward, i.e., $-2\\;\\text{m/s}$). Find $v_2$.\n\n**Step 1 — Conservation of momentum** (no external forces during explosion):\n$$Mv_0 = m_1 v_1 + m_2 v_2$$\n$$(3)(10) = (1)(-2) + (2)v_2$$\n$$30 = -2 + 2v_2$$\n$$v_2 = 16\\;\\text{m/s} \\text{ (rightward)}$$\n\n**CM interpretation:** $v_{\\text{cm}} = Mv_0/M = 10\\;\\text{m/s}$ throughout (external force = 0). Check: $(1\\cdot(-2) + 2\\cdot16)/3 = 30/3 = 10$ ✓\n\n**Answer:** $v_2 = 16\\;\\text{m/s}$ rightward.",
+      "body_he_md": "**נתון:** טיל עם $M = 3\\;\\text{kg}$ נע ב-$v_0 = 10\\;\\text{m/s}$ (ימינה) ומתפצץ ל-$m_1 = 1\\;\\text{kg}$ ו-$m_2 = 2\\;\\text{kg}$. שבר 1 נמצא נע ב-$v_1 = -2\\;\\text{m/s}$ (שמאלה). מצא $v_2$.\n\n**שימור תנע:**\n$$(3)(10) = (1)(-2) + (2)v_2 \\Rightarrow v_2 = 16\\;\\text{m/s}$$\n\n**בדיקת CM:** $v_{\\text{cm}} = (-2+32)/3 = 10$ ✓"
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide — Center of Mass Problems",
+      "title_he": "מדריך שיטה — בעיות מרכז מסה",
+      "body_en_md": "| Problem type | Strategy |\n|---|---|\n| Discrete particles | $\\vec{r}_{\\text{cm}} = \\sum m_i\\vec{r}_i / M$ |\n| Uniform symmetric object | CM at geometric center |\n| Composite body | CM of each part as point mass |\n| Body with cutout | Subtract negative mass at hole's center |\n| Explosion/collision | $\\vec{v}_{\\text{cm}}$ unchanged (conservation of momentum) |\n\n**Always check:** Does the CM lie between the masses (weighted average)? Does it shift toward the heavier component?",
+      "body_he_md": "| סוג בעיה | אסטרטגיה |\n|---|---|\n| חלקיקים בדידים | $\\vec{r}_{\\text{cm}} = \\sum m_i\\vec{r}_i / M$ |\n| עצם אחיד סימטרי | CM במרכז הגיאומטרי |\n| גוף מורכב | CM של כל חלק כמסה נקודתית |\n| גוף עם חסרון | חיסור מסה שלילית במרכז החסרון |\n| פיצוץ/התנגשות | $\\vec{v}_{\\text{cm}}$ ללא שינוי |"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Two masses: $m_1 = 4\\;\\text{kg}$ at $x = 0$, $m_2 = 6\\;\\text{kg}$ at $x = 5\\;\\text{m}$. Find $x_{\\text{cm}}$.",
+          "body_he": "שתי מסות: $m_1 = 4\\;\\text{kg}$ ב-$x = 0$, $m_2 = 6\\;\\text{kg}$ ב-$x = 5$. מצא $x_{\\text{cm}}$.",
+          "solution_en": "$x_{\\text{cm}} = (0 + 30)/10 = 3\\;\\text{m}$.",
+          "solution_he": "$x_{\\text{cm}} = 3\\;\\text{m}$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A uniform rod of length $L = 3\\;\\text{m}$ and mass $m = 5\\;\\text{kg}$ lies along the x-axis from $x = 1$ to $x = 4$. Find $x_{\\text{cm}}$.",
+          "body_he": "מוט אחיד באורך $L = 3\\;\\text{m}$ ומסה $m = 5\\;\\text{kg}$ מונח על ציר x מ-$x=1$ עד $x=4$. מצא $x_{\\text{cm}}$.",
+          "solution_en": "CM at midpoint: $x_{\\text{cm}} = (1+4)/2 = 2.5\\;\\text{m}$.",
+          "solution_he": "$x_{\\text{cm}} = 2.5\\;\\text{m}$ (נקודת האמצע).",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Four equal masses $m = 1\\;\\text{kg}$ placed at $(0,0)$, $(4,0)$, $(0,4)$, $(4,4)$. Find CM.",
+          "body_he": "ארבע מסות שוות $m = 1\\;\\text{kg}$ ב-$(0,0)$, $(4,0)$, $(0,4)$, $(4,4)$. מצא CM.",
+          "solution_en": "$x_{\\text{cm}} = (0+4+0+4)/4 = 2$, $y_{\\text{cm}} = (0+0+4+4)/4 = 2$. CM at $(2, 2)$.",
+          "solution_he": "CM ב-$(2, 2)$ (מרכז הריבוע).",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A 60 kg person stands 1 m from the CM of a 20 kg seesaw board (4 m long). Find the CM of the person-board system.",
+          "body_he": "אדם 60 kg עומד 1 מ' ממרכז מסת לוח קפיצה 20 kg (4 מ' ארוך). מצא את CM של מערכת אדם-לוח.",
+          "solution_en": "Board CM at $x=0$; person at $x=1$. $x_{\\text{cm}} = (20\\cdot0 + 60\\cdot1)/80 = 60/80 = 0.75\\;\\text{m}$.",
+          "solution_he": "$x_{\\text{cm}} = 0.75\\;\\text{m}$ (מהמרכז לעבר האדם).",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "An L-shaped plate consists of two rectangles: Rectangle 1 ($m_1 = 3\\;\\text{kg}$) from $x=0$ to $x=4$, $y=0$ to $y=1$; Rectangle 2 ($m_2 = 2\\;\\text{kg}$) from $x=0$ to $x=1$, $y=1$ to $y=3$. Find CM.",
+          "body_he": "פלטה בצורת L ממלבנים: מלבן 1 ($m_1 = 3\\;\\text{kg}$) מ-$x=0..4$, $y=0..1$; מלבן 2 ($m_2 = 2\\;\\text{kg}$) מ-$x=0..1$, $y=1..3$. מצא CM.",
+          "solution_en": "CM1: $(2, 0.5)$; CM2: $(0.5, 2)$. $x_{\\text{cm}} = (3\\cdot2 + 2\\cdot0.5)/5 = 7/5 = 1.4$. $y_{\\text{cm}} = (3\\cdot0.5 + 2\\cdot2)/5 = 5.5/5 = 1.1$.",
+          "solution_he": "CM ב-$(1.4, 1.1)$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A man of mass $70\\;\\text{kg}$ and a woman of mass $55\\;\\text{kg}$ stand at opposite ends of a $5\\;\\text{m}$ long canoe with mass $30\\;\\text{kg}$. The CM of the canoe is at its center. Find the CM of the system.",
+          "body_he": "גבר 70 kg ואישה 55 kg עומדים בקצוות הנגדיים של קנו 5 מ' עם מסה 30 kg. CM הקנו במרכזו. מצא CM של המערכת.",
+          "solution_en": "Take man at $x=0$, woman at $x=5$, canoe CM at $x=2.5$. $M=155$. $x_{\\text{cm}} = (70\\cdot0 + 55\\cdot5 + 30\\cdot2.5)/155 = (0 + 275 + 75)/155 = 350/155 \\approx 2.26\\;\\text{m}$.",
+          "solution_he": "$x_{\\text{cm}} \\approx 2.26\\;\\text{m}$ מהגבר.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A rocket of mass $M = 100\\;\\text{kg}$ at rest explodes into two pieces: $m_1 = 40\\;\\text{kg}$ moving at $v_1 = 5\\;\\text{m/s}$ east. Find $v_2$.",
+          "body_he": "טיל $M = 100\\;\\text{kg}$ בשקט מתפצץ לשניים: $m_1 = 40\\;\\text{kg}$ נע ב-$v_1 = 5\\;\\text{m/s}$ מזרח. מצא $v_2$.",
+          "solution_en": "$0 = m_1 v_1 + m_2 v_2 \\Rightarrow v_2 = -m_1 v_1/m_2 = -(40)(5)/60 = -10/3 \\approx -3.33\\;\\text{m/s}$ (west).",
+          "solution_he": "$v_2 \\approx -3.33\\;\\text{m/s}$ (מערב).",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A uniform square plate ($M$, side $a$) has a square hole of side $a/3$ cut from one corner (corner at origin). Find $x_{\\text{cm}}$ of the remaining plate.",
+          "body_he": "פלטה ריבועית אחידה ($M$, צלע $a$) עם חור ריבועי צלע $a/3$ נחתך מפינה אחת (פינה בראשית). מצא $x_{\\text{cm}}$ של הפלטה הנותרת.",
+          "solution_en": "Full plate CM: $(a/2, a/2)$. Hole area = $(a/3)^2 = a^2/9$; hole CM: $(a/6, a/6)$. Let $\\sigma = M/a^2$. Hole mass: $M_h = M/9$. Full plate mass: $M_\\text{full} = M + M/9 = 10M/9$. Wait — 'remaining plate has mass $M$'. So: full plate $M_\\text{full} = M + M/9$? Re-read: The original full plate has mass $M$; hole has mass $m_h = M(1/9)/1 = M/9$. Remaining mass $= 8M/9$. $x_{\\text{cm, full}} = a/2$, so $(8M/9)x_\\text{rem} + (M/9)(a/6) = M(a/2)$. $x_\\text{rem} = \\frac{9}{8}\\left(\\frac{a}{2} - \\frac{a}{54}\\right) = \\frac{9a}{8}\\cdot\\frac{27-1}{54} = \\frac{9a}{8}\\cdot\\frac{26}{54} = \\frac{9\\cdot26a}{432} = \\frac{234a}{432} = \\frac{13a}{24}$.",
+          "solution_he": "$x_{\\text{cm}} = \\frac{13a}{24}$ (מעט גדול יותר מ-$a/2$, CM הוזז ממקום החור).",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A person of mass 60 kg stands at one end of a 4 m long boat (mass 40 kg, uniform). The person walks to the other end. How far does the boat move? (Assume frictionless water.)",
+          "body_he": "אדם 60 kg עומד בקצה אחד של סירה 4 מ' (מסה 40 kg, אחידה). האדם הולך לקצה השני. כמה הסירה זזה? (מים ללא חיכוך.)",
+          "solution_en": "CM is fixed (no external horizontal force). Take boat left end at $x=0$. Initial person at $x=0$, boat CM at $x=2$. $x_{\\text{cm}} = (60\\cdot0 + 40\\cdot2)/100 = 80/100 = 0.8\\;\\text{m}$. Let boat shift right by $d$. Person now at $x = 4+d$ (other end), boat CM at $x = 2+d$. $x_{\\text{cm}} = (60(4+d) + 40(2+d))/100 = 0.8$. $(240 + 60d + 80 + 40d)/100 = 0.8$. $320 + 100d = 80$. $d = -2.4\\;\\text{m}$. The boat moves **2.4 m backward** (leftward).",
+          "solution_he": "הסירה זה **2.4 מ'** לאחור.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A non-uniform rod of length $L$ has linear density $\\lambda(x) = \\lambda_0 x/L$ (zero at left end, $\\lambda_0$ at right end). Find $x_{\\text{cm}}$.",
+          "body_he": "מוט לא-אחיד באורך $L$ עם צפיפות קווית $\\lambda(x) = \\lambda_0 x/L$. מצא $x_{\\text{cm}}$.",
+          "solution_en": "$M = \\int_0^L \\lambda_0(x/L)\\,dx = \\lambda_0 L/2$. $\\int_0^L x\\lambda_0(x/L)\\,dx = (\\lambda_0/L)\\int_0^L x^2\\,dx = \\lambda_0 L^2/3$. $x_{\\text{cm}} = \\frac{\\lambda_0 L^2/3}{\\lambda_0 L/2} = 2L/3$.",
+          "solution_he": "$x_{\\text{cm}} = 2L/3$ (קרוב לקצה הכבד יותר).",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A hemispherical shell (hollow) of radius $R$ and uniform surface density. Find the height of its CM above the flat base.",
+          "body_he": "קעבורת חצי-כדורית (חלולה) ברדיוס $R$ עם צפיפות שטחית אחידה. מצא גובה מרכז המסה מעל הבסיס השטוח.",
+          "solution_en": "By integration using spherical coords ($z = R\\cos\\theta$, $dA = 2\\pi R^2\\sin\\theta\\,d\\theta$): $z_{\\text{cm}} = \\frac{\\int z\\,dA}{A} = \\frac{\\int_0^{\\pi/2}R\\cos\\theta\\cdot 2\\pi R^2\\sin\\theta\\,d\\theta}{2\\pi R^2} = R\\int_0^{\\pi/2}\\cos\\theta\\sin\\theta\\,d\\theta = R\\cdot\\frac{1}{2} = R/2$.",
+          "solution_he": "$z_{\\text{cm}} = R/2$.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A gun of mass $M = 5\\;\\text{kg}$ is free to recoil. It fires a bullet of mass $m = 0.01\\;\\text{kg}$ at $v_{\\text{bullet}} = 800\\;\\text{m/s}$ (forward). The system is initially at rest. (a) Find the recoil velocity. (b) Find the KE of bullet and gun. (c) Where did the extra energy come from?",
+          "body_he": "רובה $M = 5\\;\\text{kg}$ חופשי לנסוג. ירה כדור $m = 0.01\\;\\text{kg}$ ב-$v = 800\\;\\text{m/s}$ (קדימה). המערכת התחילה בשקט. (א) מצא מהירות הנסיגה. (ב) KE של כדור ורובה. (ג) מאיפה האנרגיה הנוספת?",
+          "solution_en": "(a) $0 = mv + MV \\Rightarrow V = -mv/M = -(0.01)(800)/5 = -1.6\\;\\text{m/s}$ (backward). (b) $K_{\\text{bullet}} = \\frac{1}{2}(0.01)(800)^2 = 3200\\;\\text{J}$; $K_{\\text{gun}} = \\frac{1}{2}(5)(1.6)^2 = 6.4\\;\\text{J}$. (c) From the chemical energy of the propellant.",
+          "solution_he": "(א) $V = -1.6\\;\\text{m/s}$. (ב) $K_{\\text{כדור}} = 3200\\;\\text{J}$, $K_{\\text{רובה}} = 6.4\\;\\text{J}$. (ג) מאנרגיה כימית של הנפץ.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Find the CM of a uniform solid cone of height $H$ and base radius $R$. (Set up the integral over thin horizontal disks.)",
+          "body_he": "מצא את CM של חרוט מוצק אחיד בגובה $H$ ורדיוס בסיס $R$. (הגדר את האינטגרל על דיסקים אופקיים דקים.)",
+          "solution_en": "At height $z$ from apex, disk radius $r(z) = Rz/H$, disk volume $dV = \\pi r^2 dz = \\pi R^2 z^2/H^2\\,dz$. $M = \\rho\\int_0^H \\pi R^2 z^2/H^2\\,dz = \\frac{\\rho\\pi R^2 H}{3}$. $\\int z\\,dV = \\int_0^H z\\cdot\\frac{\\pi R^2 z^2}{H^2}\\,dz = \\frac{\\pi R^2}{H^2}\\cdot\\frac{H^4}{4} = \\frac{\\pi R^2 H^2}{4}$. $z_{\\text{cm}} = \\frac{\\rho\\pi R^2 H^2/4}{\\rho\\pi R^2 H/3} = \\frac{3H}{4}$ from apex, or $H/4$ from base.",
+          "solution_he": "$z_{\\text{cm}} = H/4$ מהבסיס (או $3H/4$ מהקודקוד).",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Assuming CM is at geometric center for non-uniform objects.** Only true if mass is uniformly distributed and the object is symmetric.\n\n2. **Forgetting to use the CM of each part** (not the edge or vertex) when handling composite bodies.\n\n3. **Wrong sign in the cutout method.** The hole has NEGATIVE mass in the formula. $x_{\\text{cm, full}} = x_{\\text{cm, body}}\\cdot m_{\\text{body}} + x_{\\text{hole}}\\cdot m_{\\text{hole}}$.\n\n4. **Not checking that $v_{\\text{cm}}$ is conserved in explosions.** If the system was initially at rest, $\\vec{v}_{\\text{cm}} = 0$ throughout.",
+      "body_he_md": "1. **הנחה שמרכז המסה נמצא במרכז הגיאומטרי לעצמים לא אחידים.** זה נכון רק אם המסה מפולגת אחידות והעצם סימטרי.\n\n2. **שכחה להשתמש ב-CM של כל חלק** (לא בקצה או בקודקוד) בעצמים מורכבים.\n\n3. **סימן שגוי בשיטת החסרת חלק.** לחור יש מסה **שלילית** בנוסחה.\n\n4. **אי-בדיקה שעמ $v_{\\text{cm}}$ מתשמר בפיצוצים.** אם המערכת בתחילה בשקט, $\\vec{v}_{\\text{cm}} = 0$ לכל אורך הדרך."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Core formulas:**\n- Discrete: $\\vec{r}_{\\text{cm}} = \\sum m_i\\vec{r}_i / M$\n- Continuous: $\\vec{r}_{\\text{cm}} = \\int\\vec{r}\\,dm / M$\n- $M\\vec{a}_{\\text{cm}} = \\vec{F}_{\\text{net, ext}}$\n- $M\\vec{v}_{\\text{cm}} = \\vec{p}_{\\text{total}}$\n\n**Key tricks:**\n- Uniform symmetric object → CM at geometric center\n- Composite body → weighted average of CMs\n- Cutout → subtract negative mass\n- No external force → $\\vec{v}_{\\text{cm}}$ = const",
+      "body_he_md": "**נוסחאות מרכזיות:**\n- בדיד: $x_{\\text{cm}} = \\sum m_i x_i / M$\n- רציף: $x_{\\text{cm}} = \\int x\\,dm / M$\n- $M\\vec{a}_{\\text{cm}} = \\vec{F}_{\\text{נטו, חיצוני}}$\n\n**טריקים מרכזיים:**\n- עצם אחיד סימטרי → CM במרכז הגיאומטרי\n- גוף מורכב → ממוצע משוקלל של מרכזי מסה\n- חסרון → חיסור מסה שלילית"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **CM definition:** $\\vec{r}_{\\text{cm}} = \\sum m_i\\vec{r}_i/M$ (discrete); $\\int\\vec{r}\\,dm/M$ (continuous)\n- **Uniform symmetric objects:** CM at geometric center\n- **Composite:** treat each part as point mass at its CM\n- **Cutout:** subtract negative mass at hole's center\n- **Newton's 2nd for CM:** $M\\vec{a}_{\\text{cm}} = \\vec{F}_{\\text{net, ext}}$\n- **No external force:** $\\vec{v}_{\\text{cm}} = \\text{const}$ → useful for explosions and recoil",
+      "body_he_md": "- **הגדרת CM:** $x_{\\text{cm}} = \\sum m_i x_i / M$\n- **עצמים אחידים סימטריים:** CM במרכז הגיאומטרי\n- **גוף מורכב:** ממוצע משוקלל\n- **חסרון:** מסה שלילית\n- **ניוטון 2 ל-CM:** $M\\vec{a}_{\\text{cm}} = \\vec{F}_{\\text{נטו, חיצוני}}$\n- **ללא כוח חיצוני:** $\\vec{v}_{\\text{cm}} = \\text{const}$"
     }
   ],
   "questions": [
     {
       "id": "q1",
-      "type": "mcq",
-      "body_en": "Masses $m_1 = 5$ kg at $x_1 = 2$ m and $m_2 = 3$ kg at $x_2 = 6$ m. Where is the CM?",
-      "body_he": "מסות $m_1 = 5$ ק\"ג ב-$x_1 = 2$ מ' ו-$m_2 = 3$ ק\"ג ב-$x_2 = 6$ מ'. היכן מ\"מ?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$x_{cm} = 4$ m (midpoint)",
-          "text_he": "$x_{cm} = 4$ מ' (נקודת האמצע)",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$x_{cm} = 3.5$ m",
-          "text_he": "$x_{cm} = 3.5$ מ'",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$x_{cm} = 2.5$ m",
-          "text_he": "$x_{cm} = 2.5$ מ'",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$x_{cm} = 5$ m",
-          "text_he": "$x_{cm} = 5$ מ'",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$x_{cm} = \\frac{5(2) + 3(6)}{5+3} = \\frac{10+18}{8} = \\frac{28}{8} = 3.5$ m. The CM is closer to $m_1$ (heavier) than the midpoint.",
-      "explanation_he": "$x_{cm} = \\frac{5(2) + 3(6)}{5+3} = \\frac{10+18}{8} = \\frac{28}{8} = 3.5$ מ'. מ\"מ קרוב יותר ל-$m_1$ (כבדה יותר) מנקודת האמצע."
+      "kind": "numeric",
+      "difficulty": 2,
+      "skill_atoms": ["center_of_mass_compute"],
+      "stem_en": "$m_1 = 2\\;\\text{kg}$ at $x = 0$ and $m_2 = 8\\;\\text{kg}$ at $x = 10\\;\\text{m}$. Find $x_{\\text{cm}}$ in meters.",
+      "stem_he": "$m_1 = 2\\;\\text{kg}$ ב-$x = 0$, $m_2 = 8\\;\\text{kg}$ ב-$x = 10$. מצא $x_{\\text{cm}}$ במטרים.",
+      "answer_payload": {"value": 8.0, "tolerance": 0.1, "unit_en": "m", "unit_he": "m"},
+      "explanation_en": "$x_{\\text{cm}} = (2\\cdot0 + 8\\cdot10)/10 = 80/10 = 8\\;\\text{m}$.",
+      "explanation_he": "$x_{\\text{cm}} = 8\\;\\text{m}$."
     },
     {
       "id": "q2",
-      "type": "mcq",
-      "body_en": "Two bodies: $m_1 = 2$ kg with $v_1 = 6$ m/s and $m_2 = 4$ kg with $v_2 = 0$ (at rest). The CM velocity is:",
-      "body_he": "שני גופים: $m_1 = 2$ ק\"ג עם $v_1 = 6$ מ'/ש' ו-$m_2 = 4$ ק\"ג עם $v_2 = 0$ (במנוחה). מהירות מ\"מ:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$3$ m/s",
-          "text_he": "$3$ מ'/ש'",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$2$ m/s",
-          "text_he": "$2$ מ'/ש'",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$6$ m/s",
-          "text_he": "$6$ מ'/ש'",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$4$ m/s",
-          "text_he": "$4$ מ'/ש'",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2} = \\frac{2(6) + 4(0)}{6} = \\frac{12}{6} = 2$ m/s.",
-      "explanation_he": "$v_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2} = \\frac{2(6) + 4(0)}{6} = \\frac{12}{6} = 2$ מ'/ש'."
+      "kind": "mcq",
+      "difficulty": 2,
+      "skill_atoms": ["center_of_mass_symmetry"],
+      "stem_en": "For a uniform equilateral triangle, where is the CM?",
+      "stem_he": "עבור משולש שווה-צלעות אחיד, היכן מרכז המסה?",
+      "answer_payload": {
+        "options_en": ["At a vertex", "At the midpoint of one side", "At the intersection of the medians (centroid)", "At a distance $R$ from the center"],
+        "options_he": ["בקודקוד", "באמצע צלע", "בנקודת חיתוך התיכונים (צנטרואיד)", "במרחק $R$ מהמרכז"],
+        "correct_index": 2
+      },
+      "explanation_en": "For a uniform symmetric 2D shape, the CM is at the centroid — the intersection of medians.",
+      "explanation_he": "לצורה 2D אחידה וסימטרית, CM הוא הצנטרואיד — נקודת חיתוך התיכונים."
     },
     {
       "id": "q3",
-      "type": "mcq",
-      "body_en": "After a perfectly inelastic collision between the bodies in question 2, the final velocity of the combined mass is:",
-      "body_he": "לאחר התנגשות פלסטית מושלמת בין הגופים בשאלה 2, המהירות הסופית של המסה המאוחדת היא:",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$3$ m/s",
-          "text_he": "$3$ מ'/ש'",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$2$ m/s",
-          "text_he": "$2$ מ'/ש'",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$1$ m/s",
-          "text_he": "$1$ מ'/ש'",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0$ m/s",
-          "text_he": "$0$ מ'/ש'",
-          "correct": false
-        }
-      ],
-      "explanation_en": "In a perfectly inelastic collision, the two bodies stick together. By conservation of momentum, the final velocity equals the CM velocity: $v_f = v_{cm} = 2$ m/s. This always equals the CM velocity of the original system.",
-      "explanation_he": "בהתנגשות פלסטית מושלמת, שני הגופים נדבקים. לפי שימור תנע, המהירות הסופית שווה למהירות מ\"מ: $v_f = v_{cm} = 2$ מ'/ש'. זה תמיד שווה למהירות מ\"מ של המערכת המקורית."
+      "kind": "true_false",
+      "difficulty": 3,
+      "skill_atoms": ["cm_conservation"],
+      "stem_en": "True or False: If two objects explode apart from rest, the CM of the system remains at rest.",
+      "stem_he": "נכון או לא נכון: אם שני עצמים מתפוצצים ממצב מנוחה, מרכז המסה של המערכת נשאר בשקט.",
+      "answer_payload": {"correct": true},
+      "explanation_en": "No external forces → $M\\vec{a}_{\\text{cm}} = 0$ → $\\vec{v}_{\\text{cm}} = \\text{const} = 0$. The CM doesn't move.",
+      "explanation_he": "אין כוחות חיצוניים → $\\vec{v}_{\\text{cm}} = \\text{const} = 0$. מרכז המסה לא זז."
     },
     {
       "id": "q4",
-      "type": "open",
-      "body_en": "A ball is launched horizontally at 15 m/s from a height of 20 m ($g=10$ m/s²).\n\n(a) Time until it hits the ground.\n(b) Horizontal distance traveled.\n(c) Speed at impact (magnitude and direction).",
-      "body_he": "כדור נזרק אופקית ב-15 מ\"ש מגובה 20 מ' ($g=10$).\n\n(א) זמן עד פגיעה.\n(ב) מרחק אופקי.\n(ג) מהירות בפגיעה.",
-      "points": 10,
-      "expected_steps_en": [
-        "Vertical: 20 = 5t² → t=2 s",
-        "Horizontal: x = 15·2 = 30 m",
-        "v_x=15, v_y=-20, |v|=25 m/s"
-      ],
-      "expected_steps_he": [
-        "t=2 ש'",
-        "x=30 מ'",
-        "|v|=25 מ\"ש"
-      ],
-      "sample_solution_en": "(a) 2 s (b) 30 m (c) 25 m/s at arctan(4/3) below horizontal.",
-      "sample_solution_he": "(א) 2 ש' (ב) 30 מ' (ג) 25 מ\"ש.",
-      "rubric_en": "3pts time; 3pts distance; 4pts velocity components and magnitude.",
-      "rubric_he": "3 נק' זמן; 3 נק' מרחק; 4 נק' מהירות."
+      "kind": "mcq",
+      "difficulty": 3,
+      "skill_atoms": ["center_of_mass_compute", "cm_conservation"],
+      "stem_en": "A 70 kg man and 50 kg woman stand at opposite ends of a 6 m long boat (mass 80 kg) on frictionless water. The woman walks to the center. How far does the boat move?",
+      "stem_he": "גבר 70 kg ואישה 50 kg עומדים בקצוות הנגדיים של סירה 6 מ' (80 kg) על מים ללא חיכוך. האישה הולכת למרכז. כמה הסירה זזה?",
+      "answer_payload": {
+        "options_en": ["0.5 m", "0.75 m", "1.0 m", "1.5 m"],
+        "options_he": ["0.5 מ'", "0.75 מ'", "1.0 מ'", "1.5 מ'"],
+        "correct_index": 1
+      },
+      "explanation_en": "CM is fixed. Woman moves from end (say $x=6$) to center relative to boat ($x=3+d$ in fixed frame). Setting up $x_{\\text{cm}}$ before = after and solving gives boat moves $0.75\\;\\text{m}$ toward the woman's original position.",
+      "explanation_he": "CM קבוע. הגדרה של $x_{\\text{cm}}$ לפני ואחרי נותנת תזוזה של $0.75\\;\\text{m}$."
     },
     {
       "id": "q5",
-      "type": "open",
-      "body_en": "A mass $m$ on an incline at angle $\\theta$ with coefficient of friction $\\mu$.\n\n(a) Draw a free-body diagram.\n(b) Find acceleration down the slope.\n(c) Find the friction force.",
-      "body_he": "מסה $m$ על משופע $\\theta$ עם $\\mu$.\n\n(א) FBD.\n(ב) תאוצה.\n(ג) חיכוך.",
-      "points": 10,
-      "expected_steps_en": [
-        "FBD: mg, N, f along/perpendicular to slope",
-        "ΣF_parallel: mg sinθ - μmg cosθ = ma",
-        "a = g(sinθ - μ cosθ), f = μmg cosθ"
-      ],
-      "expected_steps_he": [
-        "FBD עם כוחות",
-        "חוק שני לאורך המדרון",
-        "a ו-f"
-      ],
-      "sample_solution_en": "a = g(sinθ - μcosθ), f = μmg cosθ.",
-      "sample_solution_he": "a = g(sinθ - μcosθ), f = μmg cosθ.",
-      "rubric_en": "3pts FBD; 4pts Newton's 2nd; 3pts friction formula.",
-      "rubric_he": "3 נק' FBD; 4 נק' F=ma; 3 נק' חיכוך."
+      "kind": "short_answer",
+      "difficulty": 3,
+      "skill_atoms": ["center_of_mass_compute"],
+      "stem_en": "A uniform rod of length $L$ has a piece of length $L/4$ removed from one end. What fraction of $L$ from the remaining end is the new CM?",
+      "stem_he": "ממוט אחיד באורך $L$ מוסרת חתיכה ¼ מקצה אחד. בשבר כמה מ-$L$ מהקצה הנותר נמצא מרכז המסה החדש?",
+      "answer_payload": {
+        "accept_en": ["5/8 L", "5L/8", "0.625 L"],
+        "accept_he": ["5L/8", "5/8 L"]
+      },
+      "explanation_en": "Remaining rod has length $3L/4$, mass $3M/4$, with CM at $3L/8$ from the removed end (i.e., $L/4 + 3L/8 = 5L/8$ from the other end). Or directly: $x_{\\text{cm}} = (3M/4)\\cdot(L/4 + 3L/8)/(3M/4) = L/4 + 3L/8 = 5L/8$ from the untouched end.",
+      "explanation_he": "מרכז המסה הוא ב-$5L/8$ מהקצה שלא הוסר."
     }
-  ]
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "$\\vec{r}_{\\text{cm}} = \\sum m_i\\vec{r}_i/M$ for discrete; $\\int\\vec{r}\\,dm/M$ for continuous.",
+      "Uniform symmetric objects have CM at geometric center.",
+      "Composite bodies: treat each part as point mass at its own CM.",
+      "Cutout method: subtract negative mass at hole's center.",
+      "No external forces: $\\vec{v}_{\\text{cm}}$ is constant — useful for explosions, recoil, sliding on ice."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "CM must be inside the object",
+        "correction": "CM can be outside the material (e.g., a ring has CM at its center, which is empty space).",
+        "detect_phrase_en": "CM inside object",
+        "detect_phrase_he": "CM בתוך העצם"
+      }
+    ],
+    "tutor_pacing_hint": "Start with two-particle formula, build to three particles and composite bodies. Then do conservation for explosions.",
+    "skill_atoms_unlocked": [
+      "center_of_mass_compute",
+      "cm_conservation",
+      "center_of_mass_symmetry",
+      "cutout_method"
+    ]
+  }
 }

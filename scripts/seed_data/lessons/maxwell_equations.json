@@ -1,216 +1,47 @@
 {
-  "id": "maxwell_equations",
-  "type": "interactive",
-  "subject": "university_physics_2",
-  "title_en": "Maxwell's Equations and Electromagnetic Waves",
-  "title_he": "משוואות מקסוול וגלים אלקטרומגנטיים",
-  "duration_min": 35,
-  "level_min": "university",
-  "agent_hints": "Maxwell's equations are the culmination of E&M. Students need to see them first in integral form, understand what each term means physically, and then see the wave equation derived heuristically. Key points: (1) displacement current is NOT a real current of charges, it is epsilon_0 * dPhi_E/dt; (2) Gauss for B says no magnetic monopoles exist; (3) Faraday's law with the minus sign is Lenz's law; (4) the wave speed c = 1/sqrt(mu_0 epsilon_0) is a profound prediction from pure electromagnetic theory. Poynting vector direction: use the right-hand rule for E x B. Emphasize E = cB for plane waves.",
+  "concept_id": "maxwell_equations",
+  "title_en": "Maxwell's Equations",
+  "title_he": "משוואות מקסוול",
+  "subject": "physics",
+  "difficulty": "advanced",
+  "estimated_minutes": 50,
   "sections": [
-    {
-      "id": "displacement_current",
-      "title_en": "Displacement Current",
-      "title_he": "זרם תזוזה",
-      "level_min": "university",
-      "body_en_md": "## The Problem with Ampère's Law\n\nWhen a capacitor charges, there is current $I$ in the wires but *no* current between the plates—yet the electric field there changes. The original Ampère's law gives different answers for different bounding surfaces on the same loop, which is inconsistent.\n\n## Maxwell's Displacement Current\n\nMaxwell introduced an additional term:\n\n$$I_d = \\epsilon_0 \\frac{d\\Phi_E}{dt}$$\n\ncalled the **displacement current**. It has the dimensions of current (amperes) and is created by a *changing electric flux*, even in a vacuum. The modified **Ampère-Maxwell law** is:\n\n$$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0\\left(I_{\\text{enc}} + \\epsilon_0\\frac{d\\Phi_E}{dt}\\right)$$\n\n**Between the capacitor plates:** No conduction current, but $E$ changes at rate $I/(\\epsilon_0 A)$, giving $I_d = \\epsilon_0(dE/dt)\\cdot A = I$. The two terms are now equal for both bounding surfaces—consistency restored.\n\n**Physical meaning:** A changing electric field acts as a source of magnetic field, just like a real current.",
-      "body_he_md": "## הבעיה עם חוק אמפר\n\nכאשר קבל מתטען, יש זרם $I$ בחוטים אך *אין* זרם בין הלוחות — אך השדה החשמלי שם משתנה. חוק אמפר המקורי נותן תשובות שונות למשטחים גובלים שונים על אותה לולאה, שהוא לא-עקבי.\n\n## זרם התזוזה של מקסוול\n\nמקסוול הכניס איבר נוסף:\n\n$$I_d = \\epsilon_0 \\frac{d\\Phi_E}{dt}$$\n\nהנקרא **זרם תזוזה**. יש לו ממדים של זרם (אמפר) ונוצר על-ידי *שטף חשמלי משתנה*, גם בריק. חוק **אמפר-מקסוול** המתוקן:\n\n$$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0\\left(I_{\\text{enc}} + \\epsilon_0\\frac{d\\Phi_E}{dt}\\right)$$\n\n**בין לוחות הקבל:** אין זרם הולכה, אבל $E$ משתנה בקצב $I/(\\epsilon_0 A)$, נותן $I_d = I$. שני האיברים עכשיו שווים לשני המשטחים הגובלים — עקביות שוחזרה.\n\n**משמעות פיזיקלית:** שדה חשמלי משתנה פועל כמקור לשדה מגנטי, בדיוק כמו זרם ממשי."
-    },
-    {
-      "id": "four_maxwell_equations",
-      "title_en": "The Four Maxwell Equations",
-      "title_he": "ארבע משוואות מקסוול",
-      "level_min": "university",
-      "body_en_md": "## Maxwell's Equations (Integral Form)\n\nThe complete laws of classical electromagnetism are encoded in four equations:\n\n**1. Gauss's Law for $\\vec{E}$:**\n$$\\oint \\vec{E}\\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\nElectric field lines originate on positive charges and end on negative charges.\n\n**2. Gauss's Law for $\\vec{B}$:**\n$$\\oint \\vec{B}\\cdot d\\vec{A} = 0$$\nMagnetic field lines have no sources or sinks—there are no magnetic monopoles.\n\n**3. Faraday's Law:**\n$$\\oint \\vec{E}\\cdot d\\vec{l} = -\\frac{d\\Phi_B}{dt}$$\nA changing magnetic flux induces an electric field (with the sign from Lenz's law).\n\n**4. Ampère-Maxwell Law:**\n$$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0\\frac{d\\Phi_E}{dt}$$\nA current *or* a changing electric flux creates a magnetic field.\n\nThese four equations, together with the Lorentz force law $\\vec{F} = q(\\vec{E} + \\vec{v}\\times\\vec{B})$, completely describe all classical electromagnetic phenomena.",
-      "body_he_md": "## משוואות מקסוול (צורה אינטגרלית)\n\nחוקי האלקטרומגנטיות הקלאסית המלאים מוצפנים בארבע משוואות:\n\n**1. חוק גאוס ל-$\\vec{E}$:**\n$$\\oint \\vec{E}\\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\nקווי שדה חשמלי יוצאים ממטענים חיוביים ומסתיימים במטענים שליליים.\n\n**2. חוק גאוס ל-$\\vec{B}$:**\n$$\\oint \\vec{B}\\cdot d\\vec{A} = 0$$\nלקווי השדה המגנטי אין מקורות — אין מונופולים מגנטיים.\n\n**3. חוק פאראדיי:**\n$$\\oint \\vec{E}\\cdot d\\vec{l} = -\\frac{d\\Phi_B}{dt}$$\nשטף מגנטי משתנה מושרה שדה חשמלי (הסימן מחוק לנץ).\n\n**4. חוק אמפר-מקסוול:**\n$$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0\\frac{d\\Phi_E}{dt}$$\nזרם *או* שטף חשמלי משתנה יוצר שדה מגנטי.\n\nארבע משוואות אלה, יחד עם חוק כוח לורנץ $\\vec{F} = q(\\vec{E} + \\vec{v}\\times\\vec{B})$, מתארות כל תופעה אלקטרומגנטית קלאסית."
-    },
-    {
-      "id": "em_waves",
-      "title_en": "Electromagnetic Waves",
-      "title_he": "גלים אלקטרומגנטיים",
-      "level_min": "university",
-      "body_en_md": "## From Maxwell's Equations to EM Waves\n\nMaxwell's equations in free space (no charges, no currents) predict waves. Taking the curl of Faraday's law and substituting the Ampère-Maxwell law leads to the **wave equations**:\n\n$$\\frac{\\partial^2 E}{\\partial x^2} = \\mu_0\\epsilon_0\\frac{\\partial^2 E}{\\partial t^2}, \\qquad \\frac{\\partial^2 B}{\\partial x^2} = \\mu_0\\epsilon_0\\frac{\\partial^2 B}{\\partial t^2}$$\n\nThis is a wave traveling at speed:\n\n$$\\boxed{c = \\frac{1}{\\sqrt{\\mu_0\\epsilon_0}} = \\frac{1}{\\sqrt{(4\\pi\\times10^{-7})(8.854\\times10^{-12})}} \\approx 3\\times10^8\\;\\text{m/s}}$$\n\n**Properties of plane EM waves:**\n- $\\vec{E}\\perp\\vec{B}\\perp\\hat{k}$ (the propagation direction): the fields are mutually perpendicular and both perpendicular to the direction of propagation\n- $E = cB$ (the amplitude ratio)\n- The wave is transverse\n\nFor a plane wave propagating in $+\\hat{x}$:\n$$E_y = E_0\\cos(kx - \\omega t), \\quad B_z = \\frac{E_0}{c}\\cos(kx - \\omega t)$$",
-      "body_he_md": "## ממשוואות מקסוול לגלים EM\n\nמשוואות מקסוול בחלל חופשי (ללא מטענים, ללא זרמים) מנבאות גלים. נטילת רוטור של חוק פאראדיי והצבת חוק אמפר-מקסוול מובילה ל**משוואות גל**:\n\n$$\\frac{\\partial^2 E}{\\partial x^2} = \\mu_0\\epsilon_0\\frac{\\partial^2 E}{\\partial t^2}, \\qquad \\frac{\\partial^2 B}{\\partial x^2} = \\mu_0\\epsilon_0\\frac{\\partial^2 B}{\\partial t^2}$$\n\nזהו גל הנע במהירות:\n\n$$\\boxed{c = \\frac{1}{\\sqrt{\\mu_0\\epsilon_0}} \\approx 3\\times10^8\\;\\text{m/s}}$$\n\n**תכונות גלי EM מישוריים:**\n- $\\vec{E}\\perp\\vec{B}\\perp\\hat{k}$: השדות מאוניים זה לזה ושניהם מאוניים לכיוון התפשטות הגל\n- $E = cB$ (יחס העוצמות)\n- הגל הוא רוחבי (transverse)\n\nעבור גל מישורי המתפשט ב-$+\\hat{x}$:\n$$E_y = E_0\\cos(kx - \\omega t), \\quad B_z = \\frac{E_0}{c}\\cos(kx - \\omega t)$$"
-    },
-    {
-      "id": "poynting_vector",
-      "title_en": "Energy Transport — Poynting Vector",
-      "title_he": "הובלת אנרגיה — וקטור פוינטינג",
-      "level_min": "university",
-      "body_en_md": "## The Poynting Vector\n\nThe energy flux (power per unit area) of an electromagnetic wave is given by the **Poynting vector**:\n\n$$\\vec{S} = \\frac{1}{\\mu_0}\\vec{E}\\times\\vec{B}$$\n\n- $\\vec{S}$ points in the direction of energy propagation (same as $\\hat{k}$, the wave propagation direction)\n- $|\\vec{S}|$ gives the instantaneous power per unit area (W/m²)\n\nThe **intensity** (time-averaged power per unit area) of a plane wave with peak amplitude $E_0$:\n\n$$I = \\langle |\\vec{S}| \\rangle = \\frac{E_0^2}{2\\mu_0 c} = \\frac{1}{2}\\epsilon_0 c E_0^2$$\n\n**Energy density:** The energy is shared equally between $\\vec{E}$ and $\\vec{B}$:\n$$u = \\epsilon_0 E^2 = \\frac{B^2}{\\mu_0}$$\n\nThe intensity and Poynting vector are used to analyze solar radiation, antenna radiation patterns, and optical fiber communication.",
-      "body_he_md": "## וקטור פוינטינג\n\nצפיפות שטף האנרגיה (הספק ליחידת שטח) של גל אלקטרומגנטי נתון על-ידי **וקטור פוינטינג**:\n\n$$\\vec{S} = \\frac{1}{\\mu_0}\\vec{E}\\times\\vec{B}$$\n\n- $\\vec{S}$ מצביע בכיוון התפשטות האנרגיה (זהה ל-$\\hat{k}$)\n- $|\\vec{S}|$ נותן את ההספק הרגעי ליחידת שטח (W/m²)\n\n**העוצמה** (הספק ממוצע בזמן ליחידת שטח) של גל מישורי עם עוצמת שיא $E_0$:\n\n$$I = \\langle |\\vec{S}| \\rangle = \\frac{E_0^2}{2\\mu_0 c} = \\frac{1}{2}\\epsilon_0 c E_0^2$$\n\n**צפיפות אנרגיה:** האנרגיה מחולקת שווה בין $\\vec{E}$ ל-$\\vec{B}$:\n$$u = \\epsilon_0 E^2 = \\frac{B^2}{\\mu_0}$$\n\nוקטור פוינטינג משמש לניתוח קרינת השמש, דפוסי קרינת אנטנות ותקשורת בסיבים אופטיים."
-    }
+    {"id": "intro","kind": "intro","title_en": "The Four Equations Unifying Electromagnetism","title_he": "ארבע המשוואות המאחדות את האלקטרומגנטיות","body_en_md": "Maxwell's four equations are the foundation of all of classical electromagnetism — and, with the Lorentz force law, describe every electromagnetic phenomenon we encounter. They predict EM waves, unify electricity and magnetism, and laid the groundwork for special relativity.\n\n**Exam topics:**\n- Gauss's law for E and B\n- Faraday's law\n- Ampère-Maxwell law (displacement current)\n- Physical meaning of each equation\n- Deriving EM wave speed","body_he_md": "ארבע משוואות מקסוול הן הבסיס לכל האלקטרומגנטיות הקלאסית. הן מנבאות גלי EM, מאחדות חשמל ומגנטיות.\n\n**נושאים:**\n- חוק גאוס ל-E וּל-B\n- חוק פאראדי\n- חוק אמפר-מקסוול (זרם תזוזה)\n- משמעות פיזיקלית; גזירת $c$"},
+    {"id": "definition","kind": "definition","title_en": "Maxwell's Four Equations (Integral Form)","title_he": "ארבע משוואות מקסוול (צורה אינטגרלית)","body_en_md": "**I. Gauss's Law for E** (electric charges create E field):\n$$\\oint \\vec{E}\\cdot d\\vec{A} = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$$\n\n**II. Gauss's Law for B** (no magnetic monopoles):\n$$\\oint \\vec{B}\\cdot d\\vec{A} = 0$$\n\n**III. Faraday's Law** (changing B creates E):\n$$\\oint \\vec{E}\\cdot d\\vec{\\ell} = -\\frac{d\\Phi_B}{dt}$$\n\n**IV. Ampère-Maxwell Law** (currents AND changing E create B):\n$$\\oint \\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0\\frac{d\\Phi_E}{dt}$$\n\nThe term $\\mu_0\\epsilon_0\\frac{d\\Phi_E}{dt}$ is Maxwell's **displacement current** — the key addition that predicts EM waves.","body_he_md": "**I. גאוס ל-E:** $\\oint\\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$\n\n**II. גאוס ל-B:** $\\oint\\vec{B}\\cdot d\\vec{A} = 0$ (אין מונופולים מגנטיים)\n\n**III. פאראדי:** $\\oint\\vec{E}\\cdot d\\vec{\\ell} = -d\\Phi_B/dt$\n\n**IV. אמפר-מקסוול:** $\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0 d\\Phi_E/dt$\n\nהאיבר $\\mu_0\\epsilon_0 d\\Phi_E/dt$ = **זרם תזוזה** — תוספת מקסוול שמנבאת גלי EM."},
+    {"id": "theory","kind": "theory","title_en": "Physical Meaning and Displacement Current","title_he": "משמעות פיזיקלית וזרם תזוזה","body_en_md": "### Summary table\n| Equation | Physical meaning |\n|---|---|\n| Gauss for E | Electric charges are sources of $\\vec{E}$ field lines |\n| Gauss for B | Magnetic field lines form closed loops (no monopoles) |\n| Faraday | A changing $\\vec{B}$ drives an EMF (induces $\\vec{E}$) |\n| Ampère-Maxwell | Currents AND changing $\\vec{E}$ create circulating $\\vec{B}$ |\n\n### Displacement current in a capacitor\nWhen charging a capacitor, real current $I$ flows in the wire but not between the plates. However, the changing electric field between the plates acts as a displacement current $I_d = \\epsilon_0 d\\Phi_E/dt$, which maintains $\\oint\\vec{B}\\cdot d\\vec{\\ell}$ continuity across any surface bounded by the Ampèrian loop.\n\n### Speed of light\nThe wave equation derived from III and IV gives:\n$$c = \\frac{1}{\\sqrt{\\mu_0\\epsilon_0}} = \\frac{1}{\\sqrt{(4\\pi\\times10^{-7})(8.85\\times10^{-12})}} \\approx 3\\times10^8\\;\\text{m/s}$$","body_he_md": "### טבלת סיכום\n| משוואה | משמעות פיזיקלית |\n|---|---|\n| גאוס E | מטענים חשמליים הם מקורות לקווי $\\vec{E}$ |\n| גאוס B | קווי $\\vec{B}$ סגורים (אין מונופולים) |\n| פאראדי | $\\vec{B}$ משתנה → $\\vec{E}$ מושרה |\n| אמפר-מקסוול | זרמים + $\\vec{E}$ משתנה → $\\vec{B}$ |\n\n### זרם תזוזה בקבל\nבזמן טעינה של קבל, $I_d = \\epsilon_0 d\\Phi_E/dt$ — שומר על רציפות $\\vec{B}$.\n\n### מהירות האור: $c = 1/\\sqrt{\\mu_0\\epsilon_0}$"},
+    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Identifying Which Equation Applies","title_he": "דוגמה פתורה 1 — זיהוי המשוואה המתאימה","body_en_md": "**Given:** Identify which of Maxwell's equations to use for each scenario:\n(a) Finding $\\vec{E}$ outside a uniformly charged sphere.\n(b) Showing that magnetic field lines never start or end.\n(c) Calculating the induced EMF in a rotating loop.\n(d) Finding $\\vec{B}$ around a current-carrying wire.\n\n**(a)** Gauss's law for E (high symmetry, closed surface).\n**(b)** Gauss's law for B ($\\oint\\vec{B}\\cdot d\\vec{A} = 0$ → no sources or sinks).\n**(c)** Faraday's law ($\\mathcal{E} = -d\\Phi_B/dt$).\n**(d)** Ampère's law (Ampère-Maxwell, with only the $\\mu_0 I$ term when $\\partial E/\\partial t = 0$).","body_he_md": "(א) גאוס ל-E. (ב) גאוס ל-B. (ג) פאראדי. (ד) אמפר-מקסוול (רק $\\mu_0 I$ כשאין שינוי $E$)."},
+    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "A parallel-plate capacitor ($A = 10\\;\\text{cm}^2 = 10^{-3}\\;\\text{m}^2$) is being charged. The electric field between the plates increases at $dE/dt = 3\\times10^{11}\\;\\text{V/(m·s)}$. Find the displacement current.","body_he_md": "קבל ($A = 10^{-3}\\;\\text{m}^2$) נטען. $dE/dt = 3\\times10^{11}\\;\\text{V/(m·s)}$. מצא זרם תזוזה.","checkpoint_solution_en": "$I_d = \\epsilon_0 A\\frac{dE}{dt} = (8.85\\times10^{-12})(10^{-3})(3\\times10^{11}) = 8.85\\times10^{-12}\\times3\\times10^8 = 2.655\\times10^{-3}\\;\\text{A} \\approx 2.65\\;\\text{mA}$.","checkpoint_solution_he": "$I_d = \\epsilon_0 A\\,dE/dt \\approx 2.65\\;\\text{mA}$."},
+    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Gauss's Law for B","title_he": "דוגמה פתורה 2 — גאוס ל-B","body_en_md": "**Given:** A magnetic dipole (bar magnet) produces a non-uniform field. Explain why the total flux through any closed surface surrounding the magnet is zero, even though the field is non-uniform.\n\n**Step 1 — Gauss's law for B:**\n$$\\oint\\vec{B}\\cdot d\\vec{A} = 0$$\nThis holds for ANY closed surface, everywhere.\n\n**Step 2 — Physical reason:**\nMagnetic field lines have no starting or ending points (there are no magnetic monopoles). Every field line that exits the surface must return and re-enter it. The total outward flux exactly cancels.\n\n**Step 3 — Comparison with E:**\nFor electric flux: $\\oint\\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0 \\neq 0$ if charges are present. No such source/sink for B.","body_he_md": "**גאוס ל-B:** $\\oint\\vec{B}\\cdot d\\vec{A} = 0$ לכל משטח סגור.\n\n**סיבה:** קווי שדה מגנטי לא מתחילים ולא נגמרים (אין מונופולים). כל קו שיוצא חייב לחזור — השטף הכולל מתבטל."},
+    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Maxwell's displacement current was crucial for predicting EM waves. Explain in 2-3 sentences why it was needed and what problem it solved.","body_he_md": "זרם התזוזה של מקסוול היה חיוני לניבוי גלי EM. הסבר ב-2-3 משפטים מדוע היה דרוש.","checkpoint_solution_en": "Without the displacement current term, the Ampère-Maxwell law would give a contradiction: the line integral of $\\vec{B}$ around a loop encircling a charging capacitor would depend on which surface you chose — giving different answers for the flat plate surface (no current) vs. a surface through the wire. Maxwell's addition ($\\mu_0\\epsilon_0 d\\Phi_E/dt$) ensures consistency. More profoundly, it means changing electric fields create magnetic fields — exactly parallel to Faraday's law (changing B creates E) — and this symmetry allows self-sustaining EM waves.","checkpoint_solution_he": "ללא זרם התזוזה, חוק אמפר היה סותר עצמו בנוכחות קבל נטען (תוצאה שונה לפי משטח הבחירה). מקסוול פתר זאת עם $\\mu_0\\epsilon_0 d\\Phi_E/dt$ — שדה E משתנה מייצר $\\vec{B}$, בדומה לפאראדי — מה שמאפשר גלי EM."},
+    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Deriving $c$ from Maxwell's Equations","title_he": "דוגמה פתורה 3 — גזירת $c$ ממשוואות מקסוול","body_en_md": "**Objective:** Show that Maxwell's equations predict EM waves with speed $c = 1/\\sqrt{\\mu_0\\epsilon_0}$.\n\n**Step 1 — Take the differential forms (in vacuum, $\\rho = 0$, $J = 0$):**\n$$\\nabla\\times\\vec{E} = -\\frac{\\partial\\vec{B}}{\\partial t} \\quad (\\text{III})$$\n$$\\nabla\\times\\vec{B} = \\mu_0\\epsilon_0\\frac{\\partial\\vec{E}}{\\partial t} \\quad (\\text{IV})$$\n\n**Step 2 — Take $\\nabla\\times$ of equation III:**\n$$\\nabla\\times(\\nabla\\times\\vec{E}) = -\\frac{\\partial}{\\partial t}(\\nabla\\times\\vec{B}) = -\\mu_0\\epsilon_0\\frac{\\partial^2\\vec{E}}{\\partial t^2}$$\n\n**Step 3 — Use the vector identity** and Gauss's law ($\\nabla\\cdot\\vec{E}=0$):\n$$\\nabla^2\\vec{E} = \\mu_0\\epsilon_0\\frac{\\partial^2\\vec{E}}{\\partial t^2}$$\n\n**Step 4 — Compare with the wave equation** $\\nabla^2 f = (1/v^2)\\partial^2 f/\\partial t^2$:\n$$v^2 = \\frac{1}{\\mu_0\\epsilon_0} \\Rightarrow \\boxed{c = \\frac{1}{\\sqrt{\\mu_0\\epsilon_0}}}$$\n\nNumerically: $c = 1/\\sqrt{(4\\pi\\times10^{-7})(8.85\\times10^{-12})} = 3\\times10^8\\;\\text{m/s}$ ✓","body_he_md": "**שלב 1:** צורות דיפרנציאליות (ריק): $\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$; $\\nabla\\times\\vec{B} = \\mu_0\\epsilon_0\\partial\\vec{E}/\\partial t$.\n\n**שלב 2-3:** רוטור של III + אמפר + גאוס:\n$$\\nabla^2\\vec{E} = \\mu_0\\epsilon_0\\frac{\\partial^2\\vec{E}}{\\partial t^2}$$\n\n**שלב 4:** השוואה למשוואת גל: $c = 1/\\sqrt{\\mu_0\\epsilon_0}$ ✓"},
+    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide — Which Equation to Use","title_he": "מדריך שיטה — איזו משוואה להשתמש","body_en_md": "| Situation | Equation | Form |\n|---|---|---|\n| E field of symmetric charge distribution | Gauss for E | $\\oint\\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ |\n| Total flux of B through closed surface | Gauss for B | $= 0$ always |\n| EMF from changing B | Faraday | $\\mathcal{E} = -d\\Phi_B/dt$ |\n| B around symmetric current | Ampère-Maxwell | $\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I_{\\text{enc}}$ |\n| Capacitor charging (no wire current) | Ampère-Maxwell with $I_d$ | $\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0\\epsilon_0 d\\Phi_E/dt$ |\n| Speed of EM waves | III + IV → wave equation | $c = 1/\\sqrt{\\mu_0\\epsilon_0}$ |","body_he_md": "| מצב | משוואה |\n|---|---|\n| E של סימטריה | גאוס ל-E |\n| שטף B | גאוס ל-B (= 0) |\n| EMF | פאראדי |\n| B סביב זרם | אמפר-מקסוול |\n| זרם תזוזה | $I_d = \\epsilon_0 d\\Phi_E/dt$ |\n| מהירות EM | $c = 1/\\sqrt{\\mu_0\\epsilon_0}$ |"},
+    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
+      {"id": "e1","difficulty": "easy","body_en": "State Gauss's law for B in words and explain its physical significance.","body_he": "נסח חוק גאוס ל-B במילים והסבר משמעותו הפיזיקלית.","solution_en": "The total magnetic flux through any closed surface is zero. Physically: there are no magnetic monopoles — every field line that exits a closed surface must return and re-enter it. Magnetic field lines always form closed loops.","solution_he": "השטף המגנטי הכולל דרך כל משטח סגור הוא אפס — אין מונופולים מגנטיים.","points": 5},
+      {"id": "e2","difficulty": "easy","body_en": "A capacitor is being charged at a rate such that $dE/dt = 10^{12}\\;\\text{V/(m·s)}$ between the plates ($A = 1\\;\\text{cm}^2$). Find the displacement current.","body_he": "קבל נטען: $dE/dt = 10^{12}\\;\\text{V/(m·s)}$, $A = 1\\;\\text{cm}^2$. מצא זרם תזוזה.","solution_en": "$I_d = \\epsilon_0 A(dE/dt) = (8.85\\times10^{-12})(10^{-4})(10^{12}) = 8.85\\times10^{-4}\\;\\text{A} \\approx 0.885\\;\\text{mA}$.","solution_he": "$I_d \\approx 0.885\\;\\text{mA}$.","points": 5},
+      {"id": "e3","difficulty": "easy","body_en": "In differential form in vacuum, write Faraday's law.","body_he": "כתוב את חוק פאראדי בצורה דיפרנציאלית בריק.","solution_en": "$\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$.","solution_he": "$\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$.","points": 5},
+      {"id": "e4","difficulty": "easy","body_en": "What did Maxwell add to Ampère's law, and why was it necessary?","body_he": "מה הוסיף מקסוול לחוק אמפר, ומדוע היה זה נדרש?","solution_en": "He added the displacement current term $\\mu_0\\epsilon_0 d\\Phi_E/dt$. It was needed to resolve the contradiction that Ampère's law gave different results depending on which surface was used when a capacitor was being charged. It also predicts that changing E fields create B fields, enabling EM wave propagation.","solution_he": "הוסיף $\\mu_0\\epsilon_0 d\\Phi_E/dt$: פתר סתירה עם קבל נטען ומנה את גלי EM.","points": 5},
+      {"id": "e5","difficulty": "medium","body_en": "Explain why magnetic field lines must form closed loops, starting from Gauss's law for B.","body_he": "הסבר מדוע קווי השדה המגנטי חייבים ליצור לולאות סגורות, בהתבסס על חוק גאוס ל-B.","solution_en": "$\\oint\\vec{B}\\cdot d\\vec{A} = 0$ for any closed surface. This means the net outward flux is zero — equal amounts of flux enter and exit any closed surface. If a field line ended inside, the flux integral over a small surface enclosing the end would be non-zero (net inward). So field lines cannot begin or end — they must form closed loops.","solution_he": "אם קו שדה יסתיים בפנים, שטף על משטח קטן סביבו יהיה $\\neq 0$ — סתירה. לכן קווים לא יכולים להסתיים.","points": 8},
+      {"id": "e6","difficulty": "medium","body_en": "A parallel plate capacitor ($A = 4\\;\\text{cm}^2$, $d = 1\\;\\text{mm}$) is charging. If $I = 0.5\\;\\text{mA}$, find (a) $dE/dt$ between plates, (b) $dB/dr$ at radius $r = 1\\;\\text{cm}$ outside the plates (like Ampère for displacement current).","body_he": "קבל ($A = 4\\;\\text{cm}^2$, $d = 1\\;\\text{mm}$), $I = 0.5\\;\\text{mA}$. מצא (א) $dE/dt$ בין הלוחות, (ב) $B$ ב-$r = 1\\;\\text{cm}$ מחוץ ללוחות.","solution_en": "(a) $I_d = I = \\epsilon_0 A(dE/dt) \\Rightarrow dE/dt = I/(\\epsilon_0 A) = 5\\times10^{-4}/((8.85\\times10^{-12})(4\\times10^{-4})) = 5\\times10^{-4}/(3.54\\times10^{-15}) = 1.41\\times10^{11}\\;\\text{V/(m·s)}$. (b) By symmetry, Ampère for displacement: $B(2\\pi r) = \\mu_0\\epsilon_0(dE/dt)(\\pi r^2) = \\mu_0 I_d(\\pi r^2/A)$. For $r = 0.01\\;\\text{m} < \\sqrt{A/\\pi}$... actually for $r < R_{\\text{plate}}$: $B = \\mu_0 I_d r/(2\\pi A)$... simplifying: $B(2\\pi r) = \\mu_0 I(r^2/R^2)$ for $r < R$; for $r > R$: $B = \\mu_0 I/(2\\pi r) = (4\\pi\\times10^{-7})(5\\times10^{-4})/(2\\pi\\times0.01) = 10^{-8}\\;\\text{T} = 10\\;\\text{nT}$.","solution_he": "(א) $dE/dt \\approx 1.41\\times10^{11}\\;\\text{V/(m·s)}$. (ב) $B = \\mu_0 I/(2\\pi r) = 10\\;\\text{nT}$ (עבור $r > R_{\\text{plate}}$).","points": 8},
+      {"id": "e7","difficulty": "medium","body_en": "Write all four Maxwell's equations in differential form in a medium with permittivity $\\epsilon$ and permeability $\\mu$ (free charges and currents present).","body_he": "כתוב ארבעת משוואות מקסוול בצורה דיפרנציאלית בתווך עם $\\epsilon$, $\\mu$ (מטענים וזרמים חופשיים).","solution_en": "$\\nabla\\cdot\\vec{D} = \\rho_f$ (Gauss E). $\\nabla\\cdot\\vec{B} = 0$ (Gauss B). $\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$ (Faraday). $\\nabla\\times\\vec{H} = \\vec{J}_f + \\partial\\vec{D}/\\partial t$ (Ampère-Maxwell). Where $\\vec{D} = \\epsilon\\vec{E}$ and $\\vec{B} = \\mu\\vec{H}$.","solution_he": "$\\nabla\\cdot\\vec{D}=\\rho_f$; $\\nabla\\cdot\\vec{B}=0$; $\\nabla\\times\\vec{E}=-\\partial\\vec{B}/\\partial t$; $\\nabla\\times\\vec{H}=\\vec{J}_f+\\partial\\vec{D}/\\partial t$.","points": 8},
+      {"id": "e8","difficulty": "medium","body_en": "In a vacuum region where there are no charges or currents, which of Maxwell's equations becomes trivial (zero equals zero)? Explain.","body_he": "באזור ריק ללא מטענים או זרמים, איזו ממשוואות מקסוול הופכת טריוויאלית? הסבר.","solution_en": "Gauss's law for E: $\\oint\\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0 = 0$ (trivially zero since no enclosed charge). The remaining three equations still have non-trivial content: Gauss for B is always zero but constrains field topology; Faraday and Ampère-Maxwell couple E and B.","solution_he": "גאוס ל-E: $Q_{\\text{enc}} = 0$ לכן $\\oint\\vec{E}\\cdot d\\vec{A} = 0$ — טריוויאלי. האחרות עדיין עוצמות.","points": 8},
+      {"id": "e9","difficulty": "medium","body_en": "An EM wave travels in the $+x$ direction. If $\\vec{E} = E_0\\cos(kx-\\omega t)\\hat{y}$, find $\\vec{B}$ using Faraday's law.","body_he": "גל EM בכיוון $+x$. $\\vec{E} = E_0\\cos(kx-\\omega t)\\hat{y}$. מצא $\\vec{B}$ על-ידי חוק פאראדי.","solution_en": "Faraday: $\\nabla\\times\\vec{E} = -\\partial\\vec{B}/\\partial t$. $\\nabla\\times\\vec{E} = (\\partial E_y/\\partial x - \\partial E_z/\\partial y)\\hat{z} - ...$. Specifically, $\\partial E_y/\\partial x = -kE_0\\sin(kx-\\omega t)$ (only $z$-component of curl is non-zero). So $-\\partial B_z/\\partial t = -kE_0\\sin(kx-\\omega t)$. $B_z = -kE_0\\cos(kx-\\omega t)/\\omega = -E_0\\cos(kx-\\omega t)/c$. Thus $\\vec{B} = -(E_0/c)\\cos(kx-\\omega t)\\hat{z}$.","solution_he": "$\\vec{B} = -(E_0/c)\\cos(kx-\\omega t)\\hat{z}$ (מאונך ל-$\\vec{E}$ ולכיוון ההתפשטות).","points": 8},
+      {"id": "e10","difficulty": "hard","body_en": "Derive the wave equation $\\nabla^2\\vec{B} = \\mu_0\\epsilon_0\\partial^2\\vec{B}/\\partial t^2$ from Maxwell's equations in vacuum.","body_he": "גזור $\\nabla^2\\vec{B} = \\mu_0\\epsilon_0\\partial^2\\vec{B}/\\partial t^2$ ממשוואות מקסוול בריק.","solution_en": "Take $\\nabla\\times$ of Ampère-Maxwell: $\\nabla\\times(\\nabla\\times\\vec{B}) = \\mu_0\\epsilon_0\\nabla\\times(\\partial\\vec{E}/\\partial t) = \\mu_0\\epsilon_0\\frac{\\partial}{\\partial t}(\\nabla\\times\\vec{E}) = \\mu_0\\epsilon_0\\frac{\\partial}{\\partial t}(-\\partial\\vec{B}/\\partial t) = -\\mu_0\\epsilon_0\\frac{\\partial^2\\vec{B}}{\\partial t^2}$. LHS: $\\nabla\\times(\\nabla\\times\\vec{B}) = \\nabla(\\nabla\\cdot\\vec{B}) - \\nabla^2\\vec{B} = 0 - \\nabla^2\\vec{B}$ (Gauss for B). Thus $\\nabla^2\\vec{B} = \\mu_0\\epsilon_0\\partial^2\\vec{B}/\\partial t^2$ ∎","solution_he": "רוטור על אמפר-מקסוול + זהות וקטורית + $\\nabla\\cdot\\vec{B}=0$: $\\nabla^2\\vec{B} = \\mu_0\\epsilon_0\\partial^2\\vec{B}/\\partial t^2$ ∎","points": 10},
+      {"id": "e11","difficulty": "hard","body_en": "Show that Gauss's law for E is consistent with charge conservation: use the continuity equation $\\partial\\rho/\\partial t + \\nabla\\cdot\\vec{J} = 0$ and the Ampère-Maxwell law.","body_he": "הראה שחוק גאוס ל-E עקבי עם שימור מטען.","solution_en": "Take divergence of Ampère-Maxwell: $\\nabla\\cdot(\\nabla\\times\\vec{B}) = 0 = \\mu_0\\nabla\\cdot\\vec{J} + \\mu_0\\epsilon_0\\nabla\\cdot(\\partial\\vec{E}/\\partial t)$. Since $\\nabla\\cdot\\nabla\\times = 0$: $\\mu_0\\nabla\\cdot\\vec{J} + \\mu_0\\epsilon_0\\frac{\\partial}{\\partial t}(\\nabla\\cdot\\vec{E}) = 0$. Using Gauss: $\\nabla\\cdot\\vec{E} = \\rho/\\epsilon_0$: $\\nabla\\cdot\\vec{J} + \\partial\\rho/\\partial t = 0$ — the continuity equation. ∎","solution_he": "דיברגנץ על אמפר-מקסוול + גאוס ל-E → משוואת רציפות $\\nabla\\cdot\\vec{J} + \\partial\\rho/\\partial t = 0$ ∎","points": 10},
+      {"id": "e12","difficulty": "hard","body_en": "In 1865, before Maxwell's equations, Faraday had shown that changing B creates E, but the converse (changing E creates B) was not known. Why is this symmetry important, and what would happen to EM waves without it?","body_he": "לפני מקסוול, פאראדי הראה ש-B משתנה יוצר E. מדוע הסימטריה (E משתנה יוצר B) חשובה? מה יקרה לגלי EM ללא זאת?","solution_en": "Without displacement current, there would be no mechanism for a changing E field to sustain a magnetic field in free space. The chain E→B→E→... (required for a self-sustaining EM wave) would be broken: once you're away from actual currents, B cannot be maintained by E alone (without the $\\partial E/\\partial t$ term). EM waves could not propagate in vacuum — light would not exist as a wave.","solution_he": "ללא הסימטריה, השרשרת E→B→E (הנדרשת לגל EM) תישבר. גלי EM לא יכלו להתפשט בריק — האור לא היה קיים כגל.","points": 10},
+      {"id": "e13","difficulty": "hard","body_en": "Explain how the concept of displacement current resolves the paradox of applying Ampère's law to two different surfaces bounded by the same loop near a charging capacitor.","body_he": "הסבר כיצד זרם התזוזה פותר את הפרדוקס של החלת חוק אמפר על שני משטחים שונים הגבולים באותה לולאה ליד קבל נטען.","solution_en": "Consider an Ampèrian loop surrounding the wire leading to a charging capacitor. Surface 1 (cuts the wire): $\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I$ (real current flows through). Surface 2 (passes between the plates): no real current, but there's a changing E field. Without displacement current, Surface 2 gives zero — contradiction. With displacement current $I_d = \\epsilon_0 d\\Phi_E/dt = I$ (since $Q = \\epsilon_0 E A$ and $dQ/dt = I = \\epsilon_0 A dE/dt = I_d$), Surface 2 also gives $\\mu_0 I_d = \\mu_0 I$. Both surfaces agree — the paradox is resolved. ∎","solution_he": "משטח 1 (חותך חוט): $\\mu_0 I$. משטח 2 (בין לוחות): $I = 0$ אבל $I_d = I$! עם $I_d = \\epsilon_0 dQ/(dt)/\\epsilon_0$: שני המשטחים נותנים $\\mu_0 I$ — עקביות ∎","points": 10}
+    ]},
+    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Gauss's law for E gives the enclosed charge, not the field from a single charge.** Use symmetry to extract $E$ from the flux integral.\n\n2. **Gauss's law for B = 0 always** — it's a constraint, not a formula for finding B.\n\n3. **Faraday's integral law** gives the EMF around a loop, not $E$ pointwise.\n\n4. **Displacement current** doesn't flow through insulating plates — it's a name for $\\epsilon_0 d\\Phi_E/dt$ which acts like a current in Ampère's law.","body_he_md": "1. **גאוס E → שטף ≠ שדה.** צריך סימטריה כדי לחלץ E.\n\n2. **גאוס B = 0 תמיד** — אילוץ, לא נוסחה לחישוב B.\n\n3. **פאראדי אינטגרלי** — נותן EMF סביב לולאה, לא E בנקודה.\n\n4. **זרם תזוזה** לא זורם פיזית — הוא $\\epsilon_0 d\\Phi_E/dt$."},
+    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam — Formula Card","title_he": "לפני הבחינה — כרטיס נוסחאות","body_en_md": "| # | Equation | Key Word |\n|---|---|---|\n| I | $\\oint\\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ | Charges → E |\n| II | $\\oint\\vec{B}\\cdot d\\vec{A} = 0$ | No monopoles |\n| III | $\\oint\\vec{E}\\cdot d\\vec{\\ell} = -d\\Phi_B/dt$ | Changing B → EMF |\n| IV | $\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I + \\mu_0\\epsilon_0 d\\Phi_E/dt$ | Currents + changing E → B |\n\n- Displacement current: $I_d = \\epsilon_0 d\\Phi_E/dt$\n- EM wave speed: $c = 1/\\sqrt{\\mu_0\\epsilon_0}$","body_he_md": "| # | משוואה | מילת מפתח |\n|---|---|---|\n| I | $\\oint\\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ | מטענים → E |\n| II | $\\oint\\vec{B}\\cdot d\\vec{A} = 0$ | אין מונופולים |\n| III | $\\oint\\vec{E}\\cdot d\\vec{\\ell} = -d\\Phi_B/dt$ | B משתנה → EMF |\n| IV | $\\oint\\vec{B}\\cdot d\\vec{\\ell} = \\mu_0 I + \\mu_0\\epsilon_0 d\\Phi_E/dt$ | זרם + E משתנה → B |"},
+    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **4 equations** unify all of electromagnetism\n- **I:** Charges → E flux ($\\oint\\vec{E}\\cdot d\\vec{A} = Q/\\epsilon_0$)\n- **II:** No magnetic monopoles ($\\oint\\vec{B}\\cdot d\\vec{A} = 0$)\n- **III:** Changing B → EMF ($\\mathcal{E} = -d\\Phi_B/dt$)\n- **IV:** Currents + changing E → B (Ampère-Maxwell); includes displacement current\n- **EM waves:** self-sustaining via III↔IV; speed $c = 1/\\sqrt{\\mu_0\\epsilon_0}$","body_he_md": "- 4 משוואות מאחדות אלקטרומגנטיות\n- I: מטענים → שטף E\n- II: אין מונופולים מגנטיים\n- III: B משתנה → EMF\n- IV: זרמים + E משתנה → B\n- גלי EM: $c = 1/\\sqrt{\\mu_0\\epsilon_0}$"}
   ],
   "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "body_en": "A capacitor with plate area $A = 0.01\\;\\text{m}^2$ is being charged so that the electric field between the plates increases at a rate $dE/dt = 5\\times10^{11}\\;\\text{V/(m}\\cdot\\text{s)}$. What is the displacement current between the plates?",
-      "body_he": "קבל עם שטח לוח $A = 0.01\\;\\text{m}^2$ מתטען כך שהשדה החשמלי בין הלוחות גדל בקצב $dE/dt = 5\\times10^{11}\\;\\text{V/(m}\\cdot\\text{s)}$. מהו זרם התזוזה בין הלוחות?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$4.43\\times10^{-2}\\;\\text{A}$",
-          "text_he": "$4.43\\times10^{-2}\\;\\text{A}$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$5.0\\times10^{9}\\;\\text{A}$",
-          "text_he": "$5.0\\times10^{9}\\;\\text{A}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$8.85\\times10^{-3}\\;\\text{A}$",
-          "text_he": "$8.85\\times10^{-3}\\;\\text{A}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$0.177\\;\\text{A}$",
-          "text_he": "$0.177\\;\\text{A}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$I_d = \\epsilon_0\\frac{d\\Phi_E}{dt} = \\epsilon_0 A\\frac{dE}{dt} = (8.854\\times10^{-12})(0.01)(5\\times10^{11}) = (8.854\\times10^{-12})(5\\times10^9) = 4.43\\times10^{-2}$ A.",
-      "explanation_he": "$I_d = \\epsilon_0 A\\frac{dE}{dt} = (8.854\\times10^{-12})(0.01)(5\\times10^{11}) \\approx 4.43\\times10^{-2}$ A."
-    },
-    {
-      "id": "q2",
-      "type": "mcq",
-      "body_en": "Which of Maxwell's four equations states that there are no magnetic monopoles?",
-      "body_he": "איזו ממשוואות מקסוול קובעת שאין מונופולים מגנטיים?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ (Gauss for $E$)",
-          "text_he": "$\\oint \\vec{E}\\cdot d\\vec{A} = Q_{\\text{enc}}/\\epsilon_0$ (גאוס ל-$E$)",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$\\oint \\vec{B}\\cdot d\\vec{A} = 0$ (Gauss for $B$)",
-          "text_he": "$\\oint \\vec{B}\\cdot d\\vec{A} = 0$ (גאוס ל-$B$)",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$\\oint \\vec{E}\\cdot d\\vec{l} = -d\\Phi_B/dt$ (Faraday)",
-          "text_he": "$\\oint \\vec{E}\\cdot d\\vec{l} = -d\\Phi_B/dt$ (פאראדיי)",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0 d\\Phi_E/dt$ (Ampère-Maxwell)",
-          "text_he": "$\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}} + \\mu_0\\epsilon_0 d\\Phi_E/dt$ (אמפר-מקסוול)",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\oint \\vec{B}\\cdot d\\vec{A} = 0$ states that the net magnetic flux through any closed surface is zero—there are no magnetic sources (monopoles). Every field line that enters a closed surface must exit it. Compare with Gauss's law for $E$, where the flux equals $Q_{\\text{enc}}/\\epsilon_0$ because electric monopoles (charges) exist.",
-      "explanation_he": "$\\oint \\vec{B}\\cdot d\\vec{A} = 0$ קובעת שהשטף המגנטי הנטו דרך כל משטח סגור הוא אפס — אין מקורות מגנטיים (מונופולים). כל קו שדה הנכנס למשטח סגור חייב לצאת ממנו. השווה עם חוק גאוס ל-$E$, שם השטף שווה $Q_{\\text{enc}}/\\epsilon_0$ כי מטענים חשמליים (מונופולים חשמליים) קיימים."
-    },
-    {
-      "id": "q3",
-      "type": "mcq",
-      "body_en": "For a plane electromagnetic wave propagating in the $+z$ direction with $\\vec{E} = E_0\\hat{x}\\cos(kz - \\omega t)$, what is $\\vec{B}$?",
-      "body_he": "עבור גל אלקטרומגנטי מישורי המתפשט בכיוון $+z$ עם $\\vec{E} = E_0\\hat{x}\\cos(kz - \\omega t)$, מהו $\\vec{B}$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\vec{B} = \\frac{E_0}{c}\\hat{x}\\cos(kz - \\omega t)$",
-          "text_he": "$\\vec{B} = \\frac{E_0}{c}\\hat{x}\\cos(kz - \\omega t)$",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "$\\vec{B} = \\frac{E_0}{c}\\hat{y}\\cos(kz - \\omega t)$",
-          "text_he": "$\\vec{B} = \\frac{E_0}{c}\\hat{y}\\cos(kz - \\omega t)$",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "$\\vec{B} = \\frac{E_0}{c}\\hat{z}\\cos(kz - \\omega t)$",
-          "text_he": "$\\vec{B} = \\frac{E_0}{c}\\hat{z}\\cos(kz - \\omega t)$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\vec{B} = -\\frac{E_0}{c}\\hat{y}\\cos(kz - \\omega t)$",
-          "text_he": "$\\vec{B} = -\\frac{E_0}{c}\\hat{y}\\cos(kz - \\omega t)$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "For a plane EM wave: $\\vec{E}\\times\\vec{B}$ must point in the propagation direction $+\\hat{z}$. With $\\vec{E}\\parallel\\hat{x}$, we need $\\hat{x}\\times\\hat{B} = \\hat{z}$, so $\\hat{B} = \\hat{y}$ (since $\\hat{x}\\times\\hat{y} = \\hat{z}$). Also $B = E/c$, so $\\vec{B} = (E_0/c)\\hat{y}\\cos(kz-\\omega t)$.",
-      "explanation_he": "עבור גל EM מישורי: $\\vec{E}\\times\\vec{B}$ חייב להצביע בכיוון ההתפשטות $+\\hat{z}$. עם $\\vec{E}\\parallel\\hat{x}$, נצטרך $\\hat{x}\\times\\hat{B} = \\hat{z}$, ולכן $\\hat{B} = \\hat{y}$ (כי $\\hat{x}\\times\\hat{y} = \\hat{z}$). גם $B = E/c$, ולכן $\\vec{B} = (E_0/c)\\hat{y}\\cos(kz-\\omega t)$."
-    },
-    {
-      "id": "q4",
-      "type": "mcq",
-      "body_en": "An EM wave has $\\vec{E}$ pointing in $+\\hat{y}$ and $\\vec{B}$ pointing in $+\\hat{z}$. What is the direction of the Poynting vector $\\vec{S} = \\frac{1}{\\mu_0}\\vec{E}\\times\\vec{B}$?",
-      "body_he": "לגל EM יש $\\vec{E}$ המצביע ב-$+\\hat{y}$ ו-$\\vec{B}$ המצביע ב-$+\\hat{z}$. מהו כיוון וקטור פוינטינג $\\vec{S} = \\frac{1}{\\mu_0}\\vec{E}\\times\\vec{B}$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$+\\hat{x}$",
-          "text_he": "$+\\hat{x}$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$-\\hat{x}$",
-          "text_he": "$-\\hat{x}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$+\\hat{y}$",
-          "text_he": "$+\\hat{y}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$+\\hat{z}$",
-          "text_he": "$+\\hat{z}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$\\hat{y}\\times\\hat{z} = \\hat{x}$. So $\\vec{S}\\propto\\vec{E}\\times\\vec{B}\\propto\\hat{y}\\times\\hat{z} = +\\hat{x}$.",
-      "explanation_he": "$\\hat{y}\\times\\hat{z} = \\hat{x}$. לכן $\\vec{S}\\propto\\vec{E}\\times\\vec{B}\\propto+\\hat{x}$."
-    },
-    {
-      "id": "q5",
-      "type": "mcq",
-      "body_en": "What is the speed of light in vacuum predicted by Maxwell's equations, given $\\mu_0 = 4\\pi\\times10^{-7}\\;\\text{T}\\cdot\\text{m/A}$ and $\\epsilon_0 = 8.854\\times10^{-12}\\;\\text{C}^2/(\\text{N}\\cdot\\text{m}^2)$?",
-      "body_he": "מהי מהירות האור בריק כפי שמנבאות משוואות מקסוול, בהינתן $\\mu_0 = 4\\pi\\times10^{-7}\\;\\text{T}\\cdot\\text{m/A}$ ו-$\\epsilon_0 = 8.854\\times10^{-12}\\;\\text{C}^2/(\\text{N}\\cdot\\text{m}^2)$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$3.0\\times10^8\\;\\text{m/s}$",
-          "text_he": "$3.0\\times10^8\\;\\text{m/s}$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$1.5\\times10^8\\;\\text{m/s}$",
-          "text_he": "$1.5\\times10^8\\;\\text{m/s}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$9.0\\times10^{16}\\;\\text{m/s}$",
-          "text_he": "$9.0\\times10^{16}\\;\\text{m/s}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$6.0\\times10^8\\;\\text{m/s}$",
-          "text_he": "$6.0\\times10^8\\;\\text{m/s}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$c = 1/\\sqrt{\\mu_0\\epsilon_0} = 1/\\sqrt{(4\\pi\\times10^{-7})(8.854\\times10^{-12})} = 1/\\sqrt{1.113\\times10^{-17}} \\approx 3.0\\times10^8$ m/s. This was a profound theoretical prediction that the speed of light equals $1/\\sqrt{\\mu_0\\epsilon_0}$, confirming that light is an electromagnetic wave.",
-      "explanation_he": "$c = 1/\\sqrt{\\mu_0\\epsilon_0} \\approx 3.0\\times10^8$ m/s. זה היה ניבוי תיאורטי עמוק שמהירות האור שווה ל-$1/\\sqrt{\\mu_0\\epsilon_0}$, המאשר שאור הוא גל אלקטרומגנטי."
-    }
-  ]
+    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["maxwell_equations"],"stem_en": "Which Maxwell's equation tells us there are no magnetic monopoles?","stem_he": "איזו ממשוואות מקסוול אומרת שאין מונופולים מגנטיים?","answer_payload": {"options_en": ["Gauss's law for E","Gauss's law for B","Faraday's law","Ampère-Maxwell law"],"options_he": ["גאוס ל-E","גאוס ל-B","פאראדי","אמפר-מקסוול"],"correct_index": 1},"explanation_en": "$\\oint\\vec{B}\\cdot d\\vec{A} = 0$ — the zero indicates no magnetic charges (monopoles).","explanation_he": "$\\oint\\vec{B}\\cdot d\\vec{A} = 0$ — אפס מציין שאין מונופולים."},
+    {"id": "q2","kind": "numeric","difficulty": 3,"skill_atoms": ["displacement_current"],"stem_en": "A capacitor ($A = 5\\;\\text{cm}^2$) charges with $I = 1\\;\\text{mA}$. Find $dE/dt$ between the plates in $\\text{V/(m·s)}$.","stem_he": "קבל ($A = 5\\;\\text{cm}^2$) נטען ב-$I = 1\\;\\text{mA}$. מצא $dE/dt$ בין הלוחות.","answer_payload": {"value": 2.26e9,"tolerance": 1e8,"unit_en": "V/(m·s)","unit_he": "V/(m·s)"},"explanation_en": "$I_d = \\epsilon_0 A(dE/dt) \\Rightarrow dE/dt = I/(\\epsilon_0 A) = 10^{-3}/((8.85\\times10^{-12})(5\\times10^{-4})) = 10^{-3}/(4.425\\times10^{-15}) = 2.26\\times10^{11}\\;\\text{V/(m·s)}$.","explanation_he": "$dE/dt = I/(\\epsilon_0 A) \\approx 2.26\\times10^{11}\\;\\text{V/(m·s)}$."}
+  ],
+  "agent_hints": {
+    "key_insights": ["Maxwell's 4 equations: Gauss E, Gauss B, Faraday, Ampère-Maxwell.", "Displacement current $I_d = \\epsilon_0 d\\Phi_E/dt$ completes Ampère's law.", "Symmetry (III↔IV) allows self-sustaining EM waves; $c = 1/\\sqrt{\\mu_0\\epsilon_0}$."],
+    "common_misconceptions": [{"wrong": "Displacement current is a real current","correction": "Displacement current $\\epsilon_0 d\\Phi_E/dt$ is not a flow of charge — it's a term that acts like a current in Ampère's law when E is changing (e.g., between capacitor plates).","detect_phrase_en": "displacement current flows through","detect_phrase_he": "זרם תזוזה זורם דרך"}],
+    "tutor_pacing_hint": "Memorize all 4 equations with their physical meaning first. Displacement current is the hardest conceptual point — use the charging capacitor example. Then show how III+IV give EM waves.",
+    "skill_atoms_unlocked": ["maxwell_equations","displacement_current","em_wave_equation","gauss_law","faraday_law_integral"]
+  }
 }

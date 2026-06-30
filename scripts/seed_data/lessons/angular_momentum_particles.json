@@ -1,224 +1,349 @@
 {
-  "id": "angular_momentum_particles",
-  "subject": "university_physics_1",
-  "title_en": "Angular Momentum — Particles, Rigid Bodies, and Rolling (University)",
-  "title_he": "תנע זוויתי — חלקיקים, גופים קשיחים וגלגול (אוניברסיטה)",
-  "duration_min": 27,
-  "type": "interactive",
-  "level_min": "university",
-  "agent_hints": "Angular momentum conservation is the rotational analog of linear momentum conservation — stress the exact parallel. For rolling without slipping, students must understand that $v_{cm} = R\\omega$ connects translational and rotational motion and must be applied before doing energy conservation. Common error: computing only $\\frac{1}{2}Mv_{cm}^2$ and forgetting the rotational KE $\\frac{1}{2}I\\omega^2$. The ice-skater example beautifully illustrates $I_1\\omega_1 = I_2\\omega_2$: as $I$ decreases (arms in), $\\omega$ increases to conserve $L$.",
+  "concept_id": "angular_momentum_particles",
+  "title_en": "Angular Momentum of Particle Systems and Rigid Bodies",
+  "title_he": "תנע זוויתי של מערכות חלקיקים וגופים קשיחים",
+  "subject": "physics",
+  "difficulty": "advanced",
+  "estimated_minutes": 50,
   "sections": [
     {
-      "id": "angular_momentum_particle",
-      "title_en": "Angular Momentum of a Particle",
-      "title_he": "תנע זוויתי של חלקיק",
-      "level_min": "university",
-      "body_en_md": "## Definition\n\nFor a particle of mass $m$ at position $\\vec{r}$ with momentum $\\vec{p} = m\\vec{v}$, the **angular momentum** about the origin is:\n$$\\boxed{\\vec{L} = \\vec{r} \\times \\vec{p} = m(\\vec{r} \\times \\vec{v})}$$\n\n**Magnitude:** $L = mrv\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{v}$.\n\n**Units:** kg·m²/s.\n\n**Direction:** right-hand rule on $\\vec{r} \\times \\vec{p}$ — perpendicular to the plane of $\\vec{r}$ and $\\vec{v}$.\n\n**Important:** $\\vec{L}$ depends on the choice of origin. Always specify the origin.\n\n## Special Cases\n\n- **Circular motion** (radius $r$, speed $v$, $\\theta = 90°$): $L = mrv = mr^2\\omega$\n- **Projectile at peak** (horizontal velocity $v_x$, height $h$ above launch): $L = mhv_x$ (about launch point)\n- **Radial motion** ($\\vec{v}\\parallel\\vec{r}$, $\\theta = 0$ or 180°): $L = 0$ — no angular momentum!\n\n**Example:** A 0.2 kg ball moves at 5 m/s in a circle of radius 0.3 m. $L = (0.2)(0.3)(5) = 0.30$ kg·m²/s.",
-      "body_he_md": "## הגדרה\n\nלחלקיק בעל מסה $m$ במיקום $\\vec{r}$ עם תנע $\\vec{p} = m\\vec{v}$, **התנע הזוויתי** סביב הראשית:\n$$\\boxed{\\vec{L} = \\vec{r} \\times \\vec{p} = m(\\vec{r} \\times \\vec{v})}$$\n\n**עוצמה:** $L = mrv\\sin\\theta$, כאשר $\\theta$ הזווית בין $\\vec{r}$ ל-$\\vec{v}$.\n\n**יחידות:** kg·m²/s.\n\n**כיוון:** כלל היד הימנית על $\\vec{r} \\times \\vec{p}$.\n\n**חשוב:** $\\vec{L}$ תלוי בבחירת הראשית.\n\n## מקרים מיוחדים\n\n- **תנועה מעגלית** (רדיוס $r$, מהירות $v$): $L = mrv = mr^2\\omega$\n- **תנועה רדיאלית** ($\\vec{v}\\parallel\\vec{r}$): $L = 0$\n\n**דוגמה:** כדור (0.2 kg) בתנועה מעגלית (r = 0.3 m, v = 5 m/s): $L = 0.30$ kg·m²/s."
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "From Particles to Rigid Bodies",
+      "title_he": "מחלקיקים לגופים קשיחים",
+      "body_en_md": "A single spinning coin and a spinning galaxy both obey the same angular momentum laws — but one is a single particle, the other is a system of $10^{11}$ stars. How do we handle collections of particles?\n\nThis lesson bridges the gap: we sum angular momenta of individual particles to get the total, then connect to the rigid-body formulas $L = I\\omega$ and the parallel-axis theorem. We also touch on **precession**, the surprising result when a torque acts on a spinning object.\n\n**Appears in Israeli university physics in:**\n- Rigid body dynamics problems\n- Torque and angular acceleration ($\\tau = I\\alpha$)\n- Gyroscope and precession (often as a bonus problem)",
+      "body_he_md": "מטבע מסתובב וגלקסיה מסתובבת שניהם מציתים אותם חוקי תנע זוויתי — אבל אחד הוא חלקיק בודד, השני הוא מערכת של $10^{11}$ כוכבים. כיצד נתמודד עם אוספי חלקיקים?\n\nשיעור זה גשר בין השניים: אנו מסכמים תנעים זוויתיים של חלקיקים בודדים כדי לקבל את הסכום, ואז מתחברים לנוסחאות הגוף הקשיח $L = I\\omega$ ומשפט הציר המקביל. אנו גם נוגעים ב**פרצסיה**, התוצאה המפתיעה כאשר מומנט כוח פועל על עצם מסתובב.\n\n**מופיע בפיזיקה אוניברסיטאית ישראלית ב:**\n- בעיות דינמיקת גוף קשיח\n- מומנט כוח ותאוצה זוויתית ($\\tau = I\\alpha$)\n- ג'ירוסקופ ופרצסיה (לרוב כבעיית בונוס)"
     },
     {
-      "id": "torque_angular_momentum",
-      "title_en": "Torque and the Angular Momentum Theorem",
-      "title_he": "מומנט כוח ומשפט התנע הזוויתי",
-      "level_min": "university",
-      "body_en_md": "## The Angular Momentum Theorem\n\nDifferentiate $\\vec{L} = \\vec{r} \\times \\vec{p}$:\n$$\\frac{d\\vec{L}}{dt} = \\frac{d\\vec{r}}{dt}\\times\\vec{p} + \\vec{r}\\times\\frac{d\\vec{p}}{dt} = \\vec{v}\\times m\\vec{v} + \\vec{r}\\times\\vec{F} = 0 + \\vec{\\tau}$$\n\n(since $\\vec{v}\\times\\vec{v} = 0$)\n\n$$\\boxed{\\vec{\\tau} = \\frac{d\\vec{L}}{dt}}$$\n\nThis is the **rotational analog of Newton's 2nd law**. For a system of particles, only **external** torques change the total $\\vec{L}$.\n\n## Conservation of Angular Momentum\n\nIf $\\vec{\\tau}_{\\text{ext}} = 0$, then:\n$$\\frac{d\\vec{L}}{dt} = 0 \\implies \\vec{L} = \\text{const}$$\n\n**Application — ice skater:** A skater spinning with arms extended (large $I_1$, angular velocity $\\omega_1$) pulls arms in (smaller $I_2$):\n$$I_1\\omega_1 = I_2\\omega_2 \\implies \\omega_2 = \\frac{I_1}{I_2}\\omega_1 > \\omega_1$$\nNo external torque about the vertical axis → $L = I\\omega$ conserved → faster spin.\n\n**Application — satellite orbit:** As a satellite moves closer to Earth (smaller $r$), its orbital speed increases to conserve $L = mrv$ (Kepler's second law follows).",
-      "body_he_md": "## משפט התנע הזוויתי\n\nגזירת $\\vec{L} = \\vec{r} \\times \\vec{p}$:\n$$\\boxed{\\vec{\\tau} = \\frac{d\\vec{L}}{dt}}$$\n\nזהו **האנלוג הסיבובי לחוק ניוטון השני**. רק מומנטים **חיצוניים** משנים את $\\vec{L}$ הכולל.\n\n## שימור תנע זוויתי\n\nאם $\\vec{\\tau}_{\\text{חיצוני}} = 0$:\n$$\\vec{L} = \\text{const}$$\n\n**יישום — מחלקת קרח:** מחלק ידיים פרוסות ($I_1$ גדול, $\\omega_1$) מושך ידיים פנימה ($I_2$ קטן):\n$$I_1\\omega_1 = I_2\\omega_2 \\implies \\omega_2 = \\frac{I_1}{I_2}\\omega_1 > \\omega_1$$\n\n**יישום — לוויין במסלול:** כאשר לוויין מתקרב לכדה\"א, מהירותו גדלה לשימור $L = mrv$ (חוק שני של קפלר)."
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Total Angular Momentum of a System",
+      "title_he": "התנע הזוויתי הכולל של מערכת",
+      "body_en_md": "**For a system of $N$ particles:**\n$$\\vec{L}_{\\text{total}} = \\sum_{i=1}^{N} \\vec{L}_i = \\sum_{i=1}^{N} \\vec{r}_i \\times m_i\\vec{v}_i$$\n\n**For a rigid body rotating about a fixed axis $z$:**\n$$L_z = I_z \\omega$$\nwhere the **moment of inertia** is:\n$$I_z = \\sum_i m_i r_i^2 \\quad \\text{(discrete)} \\qquad I_z = \\int r^2 \\, dm \\quad \\text{(continuous)}$$\nand $r_i$ is the perpendicular distance from particle $i$ to the axis.\n\n**Parallel axis theorem:**\n$$I = I_{\\text{cm}} + Md^2$$\nwhere $I_{\\text{cm}}$ is the moment about the center of mass, $M$ is total mass, and $d$ is the distance from the CM to the new axis.\n\n**Newton's 2nd law for rotation:**\n$$\\vec{\\tau}_{\\text{net, ext}} = \\frac{d\\vec{L}_{\\text{total}}}{dt}$$\nOnly **external** torques change the total angular momentum.",
+      "body_he_md": "**למערכת $N$ חלקיקים:**\n$$\\vec{L}_{\\text{כולל}} = \\sum_{i=1}^{N} \\vec{L}_i = \\sum_{i=1}^{N} \\vec{r}_i \\times m_i\\vec{v}_i$$\n\n**לגוף קשיח המסתובב סביב ציר קבוע $z$:**\n$$L_z = I_z \\omega$$\nכאשר **מומנט האינרציה** הוא:\n$$I_z = \\sum_i m_i r_i^2 \\quad \\text{(בדיד)} \\qquad I_z = \\int r^2 \\, dm \\quad \\text{(רציף)}$$\n\n**משפט הציר המקביל:**\n$$I = I_{\\text{cm}} + Md^2$$\n\n**החוק השני של ניוטון לסיבוב:**\n$$\\vec{\\tau}_{\\text{נטו, חיצוני}} = \\frac{d\\vec{L}_{\\text{כולל}}}{dt}$$\nרק מומנטי כוח **חיצוניים** משנים את התנע הזוויתי הכולל."
     },
     {
-      "id": "rigid_body_angular_momentum",
-      "title_en": "Angular Momentum of a Rigid Body",
-      "title_he": "תנע זוויתי של גוף קשיח",
-      "level_min": "university",
-      "body_en_md": "## Rigid Body Rotating About a Fixed Symmetry Axis\n\nFor a rigid body rotating with angular velocity $\\omega$ about a principal axis:\n$$\\boxed{L = I\\omega}$$\nwhere $I = \\int r^2\\,dm$ is the moment of inertia about that axis.\n\nThe angular momentum theorem then gives:\n$$\\tau_{\\text{net}} = \\frac{dL}{dt} = I\\frac{d\\omega}{dt} = I\\alpha$$\n(recovering $\\tau = I\\alpha$).\n\n## Rolling Without Slipping\n\nFor a symmetric object (sphere, disk, cylinder) of mass $M$, radius $R$, rolling without slipping on a surface:\n\n**Rolling constraint:** $v_{cm} = R\\omega$ (the contact point is momentarily at rest).\n\n**Total kinetic energy:**\n$$KE_{\\text{total}} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2$$\nThe first term is translational KE of CM; the second is rotational KE about CM.\n\nSubstituting $\\omega = v_{cm}/R$:\n$$KE_{\\text{total}} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\frac{v_{cm}^2}{R^2} = \\frac{1}{2}v_{cm}^2\\left(M + \\frac{I_{cm}}{R^2}\\right)$$\n\n**Total angular momentum** about contact point:\n$$L = I_{\\text{contact}}\\omega = (I_{cm} + MR^2)\\omega$$\n(parallel-axis theorem for $I_{\\text{contact}}$).",
-      "body_he_md": "## גוף קשיח המסתובב סביב ציר סימטריה קבוע\n\nלגוף קשיח המסתובב עם $\\omega$ סביב ציר ראשי:\n$$\\boxed{L = I\\omega}$$\nכאשר $I = \\int r^2\\,dm$. משפט התנע הזוויתי נותן:\n$$\\tau_{\\text{net}} = I\\alpha$$\n\n## גלגול ללא החלקה\n\nלעצם סימטרי (כדור, דיסק, גליל) בעל מסה $M$ ורדיוס $R$ הגולל ללא החלקה:\n\n**תנאי גלגול:** $v_{cm} = R\\omega$.\n\n**אנרגיה קינטית כוללת:**\n$$KE_{\\text{כולל}} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2 = \\frac{1}{2}v_{cm}^2\\left(M + \\frac{I_{cm}}{R^2}\\right)$$"
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Moments of Inertia and Precession",
+      "title_he": "מומנטי אינרציה ופרצסיה",
+      "body_en_md": "### Standard moments of inertia\n\n| Object | Axis | $I$ |\n|---|---|---|\n| Solid sphere | Through center | $\\frac{2}{5}MR^2$ |\n| Hollow sphere | Through center | $\\frac{2}{3}MR^2$ |\n| Solid cylinder/disk | Central axis | $\\frac{1}{2}MR^2$ |\n| Thin ring | Central axis | $MR^2$ |\n| Thin rod | Through center, $\\perp$ | $\\frac{1}{12}ML^2$ |\n| Thin rod | Through end, $\\perp$ | $\\frac{1}{3}ML^2$ |\n\n### Precession of a gyroscope\n\nA gyroscope with angular momentum $\\vec{L}$ experiences a torque $\\vec{\\tau} = \\vec{r} \\times M\\vec{g}$ (gravity acting at CM, with moment arm $r$ from pivot). Since $\\vec{\\tau} \\perp \\vec{L}$, the torque changes the **direction** of $\\vec{L}$ without changing its magnitude.\n\nPrecession angular velocity:\n$$\\Omega_{\\text{prec}} = \\frac{\\tau}{L} = \\frac{Mgr}{I\\omega}$$\n\nSmall precession rate → high spin rate. This is why a spinning top doesn't fall over.",
+      "body_he_md": "### מומנטי אינרציה סטנדרטיים\n\n| עצם | ציר | $I$ |\n|---|---|---|\n| כדור מוצק | דרך המרכז | $\\frac{2}{5}MR^2$ |\n| כדור חלול | דרך המרכז | $\\frac{2}{3}MR^2$ |\n| גליל/דיסק מוצק | ציר מרכזי | $\\frac{1}{2}MR^2$ |\n| טבעת דקה | ציר מרכזי | $MR^2$ |\n| מוט דק | דרך המרכז, $\\perp$ | $\\frac{1}{12}ML^2$ |\n| מוט דק | דרך הקצה, $\\perp$ | $\\frac{1}{3}ML^2$ |\n\n### פרצסיה של ג'ירוסקופ\n\nג'ירוסקופ עם תנע זוויתי $\\vec{L}$ חווה מומנט כוח $\\vec{\\tau} = \\vec{r} \\times M\\vec{g}$. מכיוון ש-$\\vec{\\tau} \\perp \\vec{L}$, מומנט הכוח משנה את **כיוון** $\\vec{L}$ מבלי לשנות את גודלו.\n\nמהירות פרצסיה:\n$$\\Omega_{\\text{prec}} = \\frac{\\tau}{L} = \\frac{Mgr}{I\\omega}$$"
     },
     {
-      "id": "rolling_down_incline",
-      "title_en": "Worked Example — Ball Rolling Down an Incline",
-      "title_he": "דוגמה מלאה — כדור הגולל במורד מדרון",
-      "level_min": "university",
-      "body_en_md": "## Uniform Solid Ball Rolling Down an Incline\n\n**Setup:** A uniform solid sphere of mass $M$ and radius $R$ starts from rest at the top of an incline of height $h$. It rolls without slipping. Find the speed $v_{cm}$ at the bottom.\n\n**Method: Energy Conservation**\n\nInitial energy: $E_i = Mgh$ (all potential, at rest).\nFinal energy: $E_f = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}I_{cm}\\omega^2$.\n\nFor solid sphere: $I_{cm} = \\frac{2}{5}MR^2$.\nRolling: $\\omega = v_{cm}/R$.\n\n$$E_f = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}\\cdot\\frac{2}{5}MR^2\\cdot\\frac{v_{cm}^2}{R^2} = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{5}Mv_{cm}^2 = \\frac{7}{10}Mv_{cm}^2$$\n\nSetting $E_i = E_f$:\n$$Mgh = \\frac{7}{10}Mv_{cm}^2 \\implies \\boxed{v_{cm} = \\sqrt{\\frac{10gh}{7}}}$$\n\n**Compare with sliding (no friction, no rotation):** $v_{\\text{slide}} = \\sqrt{2gh}$.\n\nRatio: $v_{\\text{roll}}/v_{\\text{slide}} = \\sqrt{10/14} = \\sqrt{5/7} \\approx 0.845$.\n\nThe rolling ball is **slower** because some energy goes into rotation. Objects with larger $I/MR^2$ ratios are even slower (hollow sphere $> $ solid sphere $> $ disk $> $ ring).",
-      "body_he_md": "## כדור מלא אחיד הגולל במורד מדרון\n\n**ניסוח:** כדור מלא אחיד ($M$, $R$) מתחיל ממנוחה בגובה $h$ וגולל ללא החלקה. מצא $v_{cm}$ בתחתית.\n\n**שיטה: שימור אנרגיה**\n\n$I_{cm} = \\frac{2}{5}MR^2$, $\\omega = v_{cm}/R$.\n\n$$Mgh = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}\\cdot\\frac{2}{5}MR^2\\cdot\\frac{v_{cm}^2}{R^2} = \\frac{7}{10}Mv_{cm}^2$$\n\n$$\\boxed{v_{cm} = \\sqrt{\\frac{10gh}{7}}}$$\n\n**השוואה להחלקה (ללא חיכוך):** $v_{\\text{החלקה}} = \\sqrt{2gh}$.\n\nיחס: $v_{\\text{גלגול}}/v_{\\text{החלקה}} = \\sqrt{5/7} \\approx 0.845$.\n\nהכדור הגולל **איטי יותר** כי חלק מהאנרגיה הולך לסיבוב."
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Two-Particle Angular Momentum",
+      "title_he": "דוגמה פתורה 1 — תנע זוויתי של שני חלקיקים",
+      "body_en_md": "**Given:** Two particles rotate in the same circle of radius $R = 1\\;\\text{m}$ at speed $v = 5\\;\\text{m/s}$. Particle 1: $m_1 = 2\\;\\text{kg}$; Particle 2: $m_2 = 3\\;\\text{kg}$. Both move counterclockwise.\n\n**Step 1:** Each particle has $L_i = m_i v R$ (velocity perpendicular to radius):\n$$L_1 = (2)(5)(1) = 10\\;\\text{kg·m}^2/\\text{s}$$\n$$L_2 = (3)(5)(1) = 15\\;\\text{kg·m}^2/\\text{s}$$\n\n**Step 2:** Same direction (both CCW), so add:\n$$L_{\\text{total}} = 10 + 15 = 25\\;\\text{kg·m}^2/\\text{s}$$\n\n**Step 3 — Alternative via $I\\omega$:** $\\omega = v/R = 5\\;\\text{rad/s}$; $I = (m_1 + m_2)R^2 = 5$; $L = I\\omega = 25\\;\\text{kg·m}^2/\\text{s}$ ✓",
+      "body_he_md": "**נתון:** שני חלקיקים מסתובבים באותו מעגל ברדיוס $R = 1\\;\\text{m}$ במהירות $v = 5\\;\\text{m/s}$. חלקיק 1: $m_1 = 2\\;\\text{kg}$; חלקיק 2: $m_2 = 3\\;\\text{kg}$. שניהם נעים נגד כיוון השעון.\n\n**שלב 1:** לכל חלקיק $L_i = m_i v R$:\n$$L_1 = 10, \\quad L_2 = 15\\;\\text{kg·m}^2/\\text{s}$$\n\n**שלב 2:** אותו כיוון, לכן מחברים:\n$$L_{\\text{כולל}} = 25\\;\\text{kg·m}^2/\\text{s}$$\n\n**שלב 3 — לחלופין:** $\\omega = 5$, $I = 5$, $L = I\\omega = 25$ ✓"
     },
     {
-      "id": "angular_momentum_summary",
-      "title_en": "Summary — Parallels with Linear Mechanics",
-      "title_he": "סיכום — מקבילות עם מכניקה לינארית",
-      "level_min": "university",
-      "body_en_md": "## Translational ↔ Rotational Analogies\n\n| Linear | Rotational |\n|---|---|\n| $m$ (mass) | $I = \\int r^2\\,dm$ (moment of inertia) |\n| $\\vec{p} = m\\vec{v}$ (momentum) | $\\vec{L} = I\\vec{\\omega}$ (angular momentum) |\n| $\\vec{F} = m\\vec{a}$ | $\\vec{\\tau} = I\\vec{\\alpha}$ |\n| $\\vec{F} = d\\vec{p}/dt$ | $\\vec{\\tau} = d\\vec{L}/dt$ |\n| $\\vec{F}_{ext} = 0 \\Rightarrow \\vec{p} = \\text{const}$ | $\\vec{\\tau}_{ext} = 0 \\Rightarrow \\vec{L} = \\text{const}$ |\n| $KE = \\frac{1}{2}mv^2$ | $KE = \\frac{1}{2}I\\omega^2$ |\n\n## Gyroscope Precession (Preview)\n\nA spinning gyroscope tilted at angle $\\theta$ from vertical: the torque $\\vec{\\tau} = \\vec{r}\\times M\\vec{g}$ is horizontal (perpendicular to $\\vec{L}$), causing $\\vec{L}$ to precess (rotate) about the vertical with precession rate:\n$$\\Omega_{\\text{prec}} = \\frac{\\tau}{L} = \\frac{MgL_{cm}}{I\\omega}$$\n\nThis is a direct consequence of $\\vec{\\tau} = d\\vec{L}/dt$.",
-      "body_he_md": "## מקבילות תרגום ↔ סיבוב\n\n| לינארי | סיבובי |\n|---|---|\n| $m$ | $I = \\int r^2\\,dm$ |\n| $\\vec{p} = m\\vec{v}$ | $\\vec{L} = I\\vec{\\omega}$ |\n| $\\vec{F} = m\\vec{a}$ | $\\vec{\\tau} = I\\vec{\\alpha}$ |\n| $\\vec{F} = d\\vec{p}/dt$ | $\\vec{\\tau} = d\\vec{L}/dt$ |\n| $\\vec{F}_{ext} = 0 \\Rightarrow \\vec{p} = \\text{const}$ | $\\vec{\\tau}_{ext} = 0 \\Rightarrow \\vec{L} = \\text{const}$ |\n| $KE = \\frac{1}{2}mv^2$ | $KE = \\frac{1}{2}I\\omega^2$ |\n\n## פרצסיה של ג'ירוסקופ (תצוגה מקדימה)\n\nג'ירוסקופ מסתובב בזווית $\\theta$ מהאנכי: המומנט $\\vec{\\tau} = \\vec{r}\\times M\\vec{g}$ גורם ל-$\\vec{L}$ לפרצס (להסתובב) סביב האנכי במהירות:\n$$\\Omega_{\\text{פרצסיה}} = \\frac{\\tau}{L} = \\frac{MgL_{cm}}{I\\omega}$$"
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A thin rod of mass $M = 2\\;\\text{kg}$ and length $L = 1\\;\\text{m}$ rotates about one end at $\\omega = 4\\;\\text{rad/s}$. Find the angular momentum.",
+      "body_he_md": "מוט דק בעל מסה $M = 2\\;\\text{kg}$ ואורך $L = 1\\;\\text{m}$ מסתובב סביב קצהו ב-$\\omega = 4\\;\\text{rad/s}$. מצא את התנע הזוויתי.",
+      "checkpoint_solution_en": "$I = \\frac{1}{3}ML^2 = \\frac{1}{3}(2)(1) = \\frac{2}{3}\\;\\text{kg·m}^2$. $L_{\\text{ang}} = I\\omega = \\frac{2}{3}\\cdot 4 = \\frac{8}{3} \\approx 2.67\\;\\text{kg·m}^2/\\text{s}$.",
+      "checkpoint_solution_he": "$I = \\frac{1}{3}ML^2 = \\frac{2}{3}\\;\\text{kg·m}^2$. $L = I\\omega = \\frac{8}{3} \\approx 2.67\\;\\text{kg·m}^2/\\text{s}$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Parallel Axis Theorem",
+      "title_he": "דוגמה פתורה 2 — משפט הציר המקביל",
+      "body_en_md": "**Given:** A uniform disk of mass $M = 3\\;\\text{kg}$, radius $R = 0.4\\;\\text{m}$. Find the moment of inertia about an axis parallel to the central axis and passing through the rim.\n\n**Step 1:** Moment of inertia about center (central axis):\n$$I_{\\text{cm}} = \\frac{1}{2}MR^2 = \\frac{1}{2}(3)(0.16) = 0.24\\;\\text{kg·m}^2$$\n\n**Step 2:** Distance from center to rim: $d = R = 0.4\\;\\text{m}$\n\n**Step 3 — Apply parallel axis theorem:**\n$$I = I_{\\text{cm}} + Md^2 = 0.24 + (3)(0.16) = 0.24 + 0.48 = 0.72\\;\\text{kg·m}^2$$\n\n**Note:** $I = \\frac{1}{2}MR^2 + MR^2 = \\frac{3}{2}MR^2$ — a useful formula for a disk about its rim.",
+      "body_he_md": "**נתון:** דיסק אחיד עם מסה $M = 3\\;\\text{kg}$, רדיוס $R = 0.4\\;\\text{m}$. מצא את מומנט האינרציה סביב ציר מקביל לציר המרכזי ועובר דרך הגדה.\n\n**שלב 1:** מומנט אינרציה סביב המרכז:\n$$I_{\\text{cm}} = \\frac{1}{2}(3)(0.16) = 0.24\\;\\text{kg·m}^2$$\n\n**שלב 2:** מרחק ממרכז לגדה: $d = R = 0.4\\;\\text{m}$\n\n**שלב 3 — משפט הציר המקביל:**\n$$I = 0.24 + (3)(0.16) = 0.72\\;\\text{kg·m}^2$$\n\n**הערה:** $I = \\frac{3}{2}MR^2$ — נוסחה שימושית לדיסק סביב גדתו."
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A solid sphere ($M = 4\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) rotates about an axis passing through a point on its surface. Find $I$.",
+      "body_he": "כדור מוצק ($M = 4\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) מסתובב סביב ציר העובר דרך נקודה על פניו. מצא $I$.",
+      "body_he_md": "כדור מוצק ($M = 4\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) מסתובב סביב ציר העובר דרך נקודה על פניו. מצא $I$.",
+      "checkpoint_solution_en": "$I_{\\text{cm}} = \\frac{2}{5}MR^2 = \\frac{2}{5}(4)(0.09) = 0.144\\;\\text{kg·m}^2$. $I = I_{\\text{cm}} + MR^2 = 0.144 + (4)(0.09) = 0.144 + 0.36 = 0.504\\;\\text{kg·m}^2$.",
+      "checkpoint_solution_he": "$I = \\frac{2}{5}MR^2 + MR^2 = \\frac{7}{5}MR^2 = 0.504\\;\\text{kg·m}^2$."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Precession of a Gyroscope",
+      "title_he": "דוגמה פתורה 3 — פרצסיה של ג'ירוסקופ",
+      "body_en_md": "**Given:** A gyroscope has $I = 0.05\\;\\text{kg·m}^2$, spins at $\\omega = 100\\;\\text{rad/s}$, and its CM is $r = 0.20\\;\\text{m}$ from the pivot. Mass $M = 0.5\\;\\text{kg}$. Find the precession rate $\\Omega$.\n\n**Step 1 — Angular momentum magnitude:**\n$$L = I\\omega = (0.05)(100) = 5\\;\\text{kg·m}^2/\\text{s}$$\n\n**Step 2 — Torque due to gravity:**\n$$\\tau = Mgr = (0.5)(10)(0.20) = 1.0\\;\\text{N·m}$$\n\n**Step 3 — Precession:** Since $\\vec{\\tau} \\perp \\vec{L}$, the torque causes $\\vec{L}$ to rotate:\n$$\\Omega = \\frac{\\tau}{L} = \\frac{1.0}{5} = 0.2\\;\\text{rad/s}$$\n\n**Interpretation:** The gyroscope axis sweeps one full circle every $T = 2\\pi/\\Omega = 2\\pi/0.2 \\approx 31.4\\;\\text{s}$.\n\n**Answer:** $\\Omega = 0.2\\;\\text{rad/s}$.",
+      "body_he_md": "**נתון:** ג'ירוסקופ עם $I = 0.05\\;\\text{kg·m}^2$, מסתובב ב-$\\omega = 100\\;\\text{rad/s}$, ומרכז המסה שלו נמצא $r = 0.20\\;\\text{m}$ מהציר. מסה $M = 0.5\\;\\text{kg}$. מצא את קצב הפרצסיה $\\Omega$.\n\n**שלב 1:** $L = I\\omega = 5\\;\\text{kg·m}^2/\\text{s}$\n\n**שלב 2 — מומנט כוח של כבידה:**\n$$\\tau = Mgr = (0.5)(10)(0.20) = 1.0\\;\\text{N·m}$$\n\n**שלב 3 — פרצסיה:** $\\vec{\\tau} \\perp \\vec{L}$, לכן מומנט הכוח גורם ל-$\\vec{L}$ להסתובב:\n$$\\Omega = \\frac{\\tau}{L} = \\frac{1.0}{5} = 0.2\\;\\text{rad/s}$$\n\n**תשובה:** $\\Omega = 0.2\\;\\text{rad/s}$."
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide — Choosing the Right Formula",
+      "title_he": "מדריך שיטה — בחירת הנוסחה הנכונה",
+      "body_en_md": "| Problem type | Formula |\n|---|---|\n| System of particles, total $L$ | $\\sum_i m_i r_i^2 \\omega = I_{\\text{total}}\\omega$ |\n| Axis through CM | Use table of standard $I$ values |\n| Axis NOT through CM | Parallel axis: $I = I_{\\text{cm}} + Md^2$ |\n| Conservation (no ext. torque) | $I_1\\omega_1 = I_2\\omega_2$ |\n| Gyroscope precession | $\\Omega = Mgr/(I\\omega)$ |\n\n**Steps for any rigid-body angular-momentum problem:**\n1. Identify all contributing masses and their distances from the axis\n2. Compute $I$ (use table + parallel axis if needed)\n3. Check if external torque is zero → conservation\n4. Set up $L_i = L_f$ or $\\tau = dL/dt$",
+      "body_he_md": "| סוג בעיה | נוסחה |\n|---|---|\n| מערכת חלקיקים, $L$ כולל | $I_{\\text{כולל}}\\omega$ |\n| ציר דרך מרכז מסה | טבלת $I$ סטנדרטיים |\n| ציר לא דרך מרכז מסה | $I = I_{\\text{cm}} + Md^2$ |\n| שימור (ללא מומנט חיצוני) | $I_1\\omega_1 = I_2\\omega_2$ |\n| פרצסיה ג'ירוסקופ | $\\Omega = Mgr/(I\\omega)$ |\n\n**שלבים לכל בעיית תנע זוויתי לגוף קשיח:**\n1. זיהוי כל המסות ומרחקיהן מהציר\n2. חישוב $I$ (טבלה + ציר מקביל במידת הצורך)\n3. בדיקה האם מומנט כוח חיצוני אפס → שימור\n4. הצבת $L_i = L_f$ או $\\tau = dL/dt$"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $I$ for a solid disk ($M = 5\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) about its central axis.",
+          "body_he": "מצא $I$ לדיסק מוצק ($M = 5\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) סביב ציר מרכזי.",
+          "solution_en": "$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.25) = 0.625\\;\\text{kg·m}^2$.",
+          "solution_he": "$I = 0.625\\;\\text{kg·m}^2$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Find $I$ for a thin ring ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) about its symmetry axis.",
+          "body_he": "מצא $I$ לטבעת דקה ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) סביב ציר הסימטריה.",
+          "solution_en": "$I = MR^2 = (2)(0.09) = 0.18\\;\\text{kg·m}^2$.",
+          "solution_he": "$I = MR^2 = 0.18\\;\\text{kg·m}^2$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Find $I$ for a thin rod ($M = 1\\;\\text{kg}$, length $L = 2\\;\\text{m}$) rotating about its center.",
+          "body_he": "מצא $I$ למוט דק ($M = 1\\;\\text{kg}$, אורך $L = 2\\;\\text{m}$) המסתובב סביב מרכזו.",
+          "solution_en": "$I = \\frac{1}{12}ML^2 = \\frac{1}{12}(1)(4) = \\frac{1}{3}\\;\\text{kg·m}^2 \\approx 0.333\\;\\text{kg·m}^2$.",
+          "solution_he": "$I = \\frac{1}{3}\\;\\text{kg·m}^2$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Three equal masses $m = 1\\;\\text{kg}$ are at the vertices of an equilateral triangle inscribed in a circle of radius $R = 1\\;\\text{m}$. Find $I$ about the central axis.",
+          "body_he": "שלוש מסות שוות $m = 1\\;\\text{kg}$ נמצאות בקודקודי משולש שווה-צלעות חסום במעגל ברדיוס $R = 1\\;\\text{m}$. מצא $I$ סביב הציר המרכזי.",
+          "solution_en": "Each mass is at distance $R = 1\\;\\text{m}$ from center. $I = 3 \\cdot mR^2 = 3(1)(1) = 3\\;\\text{kg·m}^2$.",
+          "solution_he": "$I = 3mR^2 = 3\\;\\text{kg·m}^2$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A solid disk ($M = 4\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) spins at $\\omega_1 = 6\\;\\text{rad/s}$. A ring ($m = 2\\;\\text{kg}$, same radius) is dropped onto it. Find final $\\omega$.",
+          "body_he": "דיסק מוצק ($M = 4\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) מסתובב ב-$\\omega_1 = 6\\;\\text{rad/s}$. טבעת ($m = 2\\;\\text{kg}$, אותו רדיוס) מונחת עליו. מצא $\\omega$ סופי.",
+          "solution_en": "$I_1 = \\frac{1}{2}MR^2 = \\frac{1}{2}(4)(0.25) = 0.5\\;\\text{kg·m}^2$. $I_2 = I_1 + mR^2 = 0.5 + (2)(0.25) = 1.0\\;\\text{kg·m}^2$. $\\omega_2 = I_1\\omega_1/I_2 = (0.5)(6)/1.0 = 3\\;\\text{rad/s}$.",
+          "solution_he": "$\\omega_2 = 3\\;\\text{rad/s}$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Find $I$ for a solid cylinder ($M = 6\\;\\text{kg}$, $R = 0.4\\;\\text{m}$) about an axis parallel to the main axis and displaced by $d = 0.6\\;\\text{m}$.",
+          "body_he": "מצא $I$ לגליל מוצק ($M = 6\\;\\text{kg}$, $R = 0.4\\;\\text{m}$) סביב ציר מקביל לציר הראשי ומוזז ב-$d = 0.6\\;\\text{m}$.",
+          "solution_en": "$I_{\\text{cm}} = \\frac{1}{2}MR^2 = \\frac{1}{2}(6)(0.16) = 0.48\\;\\text{kg·m}^2$. $I = I_{\\text{cm}} + Md^2 = 0.48 + (6)(0.36) = 0.48 + 2.16 = 2.64\\;\\text{kg·m}^2$.",
+          "solution_he": "$I = 2.64\\;\\text{kg·m}^2$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A thin rod ($M = 2\\;\\text{kg}$, $L = 1.5\\;\\text{m}$) is released from horizontal position and pivots about one end. Find the angular velocity when it reaches vertical.",
+          "body_he": "מוט דק ($M = 2\\;\\text{kg}$, $L = 1.5\\;\\text{m}$) משוחרר ממצב אופקי ומסתובב סביב קצהו. מצא את המהירות הזוויתית כשמגיע למאונך.",
+          "solution_en": "Energy conservation: $Mg(L/2) = \\frac{1}{2}I\\omega^2$ where $I = \\frac{1}{3}ML^2 = \\frac{1}{3}(2)(2.25) = 1.5\\;\\text{kg·m}^2$. $\\omega = \\sqrt{MgL/I} = \\sqrt{(2)(10)(1.5)/1.5} = \\sqrt{20} \\approx 4.47\\;\\text{rad/s}$.",
+          "solution_he": "$\\omega = \\sqrt{MgL/I} \\approx 4.47\\;\\text{rad/s}$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A solid sphere ($M = 2\\;\\text{kg}$, $R = 0.2\\;\\text{m}$) rolls without slipping at $v_{\\text{cm}} = 4\\;\\text{m/s}$. Find total kinetic energy.",
+          "body_he": "כדור מוצק ($M = 2\\;\\text{kg}$, $R = 0.2\\;\\text{m}$) מתגלגל ללא החלקה ב-$v_{\\text{cm}} = 4\\;\\text{m/s}$. מצא את האנרגיה הקינטית הכוללת.",
+          "solution_en": "$K_{\\text{trans}} = \\frac{1}{2}Mv^2 = \\frac{1}{2}(2)(16) = 16\\;\\text{J}$. $\\omega = v/R = 20\\;\\text{rad/s}$. $I = \\frac{2}{5}MR^2 = \\frac{2}{5}(2)(0.04) = 0.032\\;\\text{kg·m}^2$. $K_{\\text{rot}} = \\frac{1}{2}I\\omega^2 = \\frac{1}{2}(0.032)(400) = 6.4\\;\\text{J}$. $K_{\\text{total}} = 22.4\\;\\text{J}$.",
+          "solution_he": "$K_{\\text{total}} = 22.4\\;\\text{J}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A gyroscope has $M = 0.3\\;\\text{kg}$, $r = 0.1\\;\\text{m}$ (CM from pivot), $I = 0.01\\;\\text{kg·m}^2$, $\\omega = 200\\;\\text{rad/s}$. Find $\\Omega_{\\text{prec}}$.",
+          "body_he": "ג'ירוסקופ עם $M = 0.3\\;\\text{kg}$, $r = 0.1\\;\\text{m}$, $I = 0.01\\;\\text{kg·m}^2$, $\\omega = 200\\;\\text{rad/s}$. מצא $\\Omega_{\\text{prec}}$.",
+          "solution_en": "$\\tau = Mgr = (0.3)(10)(0.1) = 0.3\\;\\text{N·m}$. $L = I\\omega = (0.01)(200) = 2\\;\\text{kg·m}^2/\\text{s}$. $\\Omega = \\tau/L = 0.3/2 = 0.15\\;\\text{rad/s}$.",
+          "solution_he": "$\\Omega = 0.15\\;\\text{rad/s}$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A composite object: solid cylinder ($M_1 = 3\\;\\text{kg}$, $R = 0.4\\;\\text{m}$) with a thin ring ($M_2 = 1\\;\\text{kg}$, same $R$) welded at the rim. Find $I$ about the central axis, then find $L$ at $\\omega = 8\\;\\text{rad/s}$.",
+          "body_he": "עצם מורכב: גליל מוצק ($M_1 = 3\\;\\text{kg}$, $R = 0.4\\;\\text{m}$) עם טבעת דקה ($M_2 = 1\\;\\text{kg}$, אותו $R$) מוצמדת לגדה. מצא $I$ סביב הציר המרכזי, ואז $L$ ב-$\\omega = 8\\;\\text{rad/s}$.",
+          "solution_en": "$I = I_{\\text{cyl}} + I_{\\text{ring}} = \\frac{1}{2}M_1R^2 + M_2R^2 = \\frac{1}{2}(3)(0.16)+(1)(0.16) = 0.24+0.16 = 0.40\\;\\text{kg·m}^2$. $L = I\\omega = (0.40)(8) = 3.2\\;\\text{kg·m}^2/\\text{s}$.",
+          "solution_he": "$I = 0.40\\;\\text{kg·m}^2$, $L = 3.2\\;\\text{kg·m}^2/\\text{s}$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "A ball ($m = 0.1\\;\\text{kg}$, $R = 0.05\\;\\text{m}$, solid sphere) rolls down an incline of height $h = 1.5\\;\\text{m}$. Find the speed at the bottom using energy conservation (include rotational KE).",
+          "body_he": "כדור ($m = 0.1\\;\\text{kg}$, $R = 0.05\\;\\text{m}$, כדור מוצק) מתגלגל מורידה בגובה $h = 1.5\\;\\text{m}$. מצא את המהירות בתחתית תוך שימוש בשימור אנרגיה (כולל KE סיבובי).",
+          "solution_en": "$mgh = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}mv^2 + \\frac{1}{2}\\cdot\\frac{2}{5}mR^2\\cdot(v/R)^2 = \\frac{1}{2}mv^2(1 + \\frac{2}{5}) = \\frac{7}{10}mv^2$. So $v = \\sqrt{\\frac{10gh}{7}} = \\sqrt{\\frac{10(10)(1.5)}{7}} = \\sqrt{\\frac{150}{7}} \\approx 4.63\\;\\text{m/s}$.",
+          "solution_he": "$v = \\sqrt{\\frac{10gh}{7}} \\approx 4.63\\;\\text{m/s}$.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A spinning bicycle wheel ($I_W = 0.2\\;\\text{kg·m}^2$, $\\omega = 50\\;\\text{rad/s}$, $M = 1.5\\;\\text{kg}$, $R_W = 0.35\\;\\text{m}$) is held by a pivot at one end of its axle. Find the precession angular velocity.",
+          "body_he": "גלגל אופניים מסתובב ($I_W = 0.2\\;\\text{kg·m}^2$, $\\omega = 50\\;\\text{rad/s}$, $M = 1.5\\;\\text{kg}$, $R_W = 0.35\\;\\text{m}$) מוחזק על ידי ציר בקצה ציר הגלגל. מצא את מהירות הפרצסיה הזוויתית.",
+          "solution_en": "$L = I_W\\omega = (0.2)(50) = 10\\;\\text{kg·m}^2/\\text{s}$. $\\tau = MgR_W = (1.5)(10)(0.35) = 5.25\\;\\text{N·m}$. $\\Omega = \\tau/L = 5.25/10 = 0.525\\;\\text{rad/s}$.",
+          "solution_he": "$\\Omega = 0.525\\;\\text{rad/s}$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Derive the moment of inertia of a solid sphere about a diameter using integration. Set up the integral, evaluate it, and confirm $I = \\frac{2}{5}MR^2$.",
+          "body_he": "גזור את מומנט האינרציה של כדור מוצק סביב קוטר תוך שימוש בינטגרציה. הצב את האינטגרל, חשב אותו, ואשר $I = \\frac{2}{5}MR^2$.",
+          "solution_en": "Slice the sphere into thin disks of radius $r = R\\sin\\theta$, thickness $dz = R\\cos\\theta\\,d\\theta$. $dm = \\rho\\pi r^2 dz$. $dI = \\frac{1}{2}r^2 dm$. Integrating from $-R$ to $R$ in $z$: $I = \\int_{-R}^{R} \\frac{1}{2}(R^2-z^2)\\rho\\pi(R^2-z^2)\\,dz = \\frac{\\rho\\pi}{2}\\int_{-R}^{R}(R^2-z^2)^2\\,dz = \\frac{\\rho\\pi}{2}\\cdot\\frac{16R^5}{15} = \\frac{8\\rho\\pi R^5}{15}$. With $M = \\frac{4}{3}\\rho\\pi R^3$: $I = \\frac{8\\rho\\pi R^5}{15} = \\frac{2}{5}\\cdot\\frac{4}{3}\\rho\\pi R^3\\cdot R^2 = \\frac{2}{5}MR^2$.",
+          "solution_he": "פורסים את הכדור לדיסקים דקים, מחשבים $dI$ לכל דיסק, ומאחדים. התוצאה היא $I = \\frac{2}{5}MR^2$.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Using $I_{\\text{cm}}$ for a non-CM axis without the parallel axis theorem.** Always add $Md^2$ when the axis isn't through the CM.\n\n2. **Confusing ring and disk formulas.** Ring: $I = MR^2$. Disk: $I = \\frac{1}{2}MR^2$. The ring has ALL its mass at radius $R$; the disk has mass distributed from 0 to $R$.\n\n3. **Forgetting rotational KE in energy problems.** For rolling objects: $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$.\n\n4. **Rolling without slipping condition:** $v = R\\omega$. Must state this explicitly.\n\n5. **Precession formula only valid for fast-spinning gyroscope.** The formula $\\Omega = Mgr/(I\\omega)$ assumes $\\omega \\gg \\Omega$.",
+      "body_he_md": "1. **שימוש ב-$I_{\\text{cm}}$ לציר שאינו ציר מרכז מסה ללא משפט הציר המקביל.** תמיד הוסיפו $Md^2$ כאשר הציר אינו דרך מרכז המסה.\n\n2. **בלבול בין נוסחאות טבעת ודיסק.** טבעת: $I = MR^2$. דיסק: $I = \\frac{1}{2}MR^2$.\n\n3. **שכחת אנרגיה קינטית סיבובית בבעיות אנרגיה.** לעצמים מתגלגלים: $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$.\n\n4. **תנאי התגלגלות ללא החלקה:** $v = R\\omega$. חובה לציין זאת במפורש.\n\n5. **נוסחת הפרצסיה תקפה רק לג'ירוסקופ מסתובב מהר.** $\\Omega = Mgr/(I\\omega)$ מניח $\\omega \\gg \\Omega$."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Key formulas:**\n- System: $L = I_{\\text{total}}\\omega$; $I_{\\text{total}} = \\sum m_i r_i^2$\n- Parallel axis: $I = I_{\\text{cm}} + Md^2$\n- Standard $I$ values: solid sphere $\\frac{2}{5}MR^2$; disk $\\frac{1}{2}MR^2$; ring $MR^2$; rod (center) $\\frac{1}{12}ML^2$; rod (end) $\\frac{1}{3}ML^2$\n- Rolling KE: $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}mv^2(1 + I/(mR^2))$\n- Precession: $\\Omega = Mgr/(I\\omega)$\n\n**Exam patterns:**\n- Always check: is the axis through the CM? If not, use parallel axis theorem.\n- Rolling without slipping: $v_{\\text{cm}} = R\\omega$.\n- For precession: identify $r$ (distance from pivot to CM).",
+      "body_he_md": "**נוסחאות מרכזיות:**\n- מערכת: $L = I_{\\text{כולל}}\\omega$\n- ציר מקביל: $I = I_{\\text{cm}} + Md^2$\n- $I$ סטנדרטיים: כדור מוצק $\\frac{2}{5}MR^2$; דיסק $\\frac{1}{2}MR^2$; טבעת $MR^2$; מוט (מרכז) $\\frac{1}{12}ML^2$; מוט (קצה) $\\frac{1}{3}ML^2$\n- KE התגלגלות: $K = \\frac{1}{2}mv^2(1 + I/(mR^2))$\n- פרצסיה: $\\Omega = Mgr/(I\\omega)$"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Total $L$ of system:** $\\vec{L}_{\\text{total}} = \\sum_i \\vec{r}_i\\times m_i\\vec{v}_i = I\\vec{\\omega}$\n- **Moment of inertia:** $I = \\sum m_i r_i^2 = \\int r^2\\,dm$\n- **Parallel axis theorem:** $I = I_{\\text{cm}} + Md^2$\n- **Conservation:** $I_1\\omega_1 = I_2\\omega_2$ when $\\tau_{\\text{ext}} = 0$\n- **Rolling KE:** $K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2$\n- **Precession:** $\\Omega = Mgr/(I\\omega)$ — torque perpendicular to $L$ rotates the spin axis",
+      "body_he_md": "- **$L$ כולל:** $I\\vec{\\omega}$\n- **מומנט אינרציה:** $I = \\int r^2\\,dm$\n- **ציר מקביל:** $I = I_{\\text{cm}} + Md^2$\n- **שימור:** $I_1\\omega_1 = I_2\\omega_2$\n- **KE התגלגלות:** $K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2$\n- **פרצסיה:** $\\Omega = Mgr/(I\\omega)$"
     }
   ],
   "questions": [
     {
       "id": "q1",
-      "type": "mcq",
-      "body_en": "A particle of mass 2 kg moves at 4 m/s. Its position vector relative to the origin has magnitude $r = 3$ m, and the angle between $\\vec{r}$ and $\\vec{v}$ is 60°. What is the magnitude of its angular momentum about the origin?",
-      "body_he": "חלקיק בעל מסה 2 kg נע במהירות 4 m/s. וקטור המיקום שלו ביחס לראשית הוא $r = 3$ m, והזווית בין $\\vec{r}$ ל-$\\vec{v}$ היא 60°. מהו גודל התנע הזוויתי שלו סביב הראשית?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$L = 12\\sqrt{3} \\approx 20.8$ kg·m²/s",
-          "text_he": "$L = 12\\sqrt{3} \\approx 20.8$ kg·m²/s",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$L = 24$ kg·m²/s",
-          "text_he": "$L = 24$ kg·m²/s",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$L = 12$ kg·m²/s",
-          "text_he": "$L = 12$ kg·m²/s",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$L = 6$ kg·m²/s",
-          "text_he": "$L = 6$ kg·m²/s",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$L = mrv\\sin\\theta = (2)(3)(4)\\sin 60° = 24 \\times (\\sqrt{3}/2) = 12\\sqrt{3} \\approx 20.8$ kg·m²/s.",
-      "explanation_he": "$L = mrv\\sin\\theta = (2)(3)(4)\\sin 60° = 24 \\times (\\sqrt{3}/2) = 12\\sqrt{3} \\approx 20.8$ kg·m²/s."
+      "kind": "mcq",
+      "difficulty": 2,
+      "skill_atoms": ["moment_of_inertia_compute"],
+      "stem_en": "A solid cylinder ($M = 4\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) rotates about its axis. What is $I$?",
+      "stem_he": "גליל מוצק ($M = 4\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) מסתובב סביב צירו. מהו $I$?",
+      "answer_payload": {
+        "options_en": ["$0.25\\;\\text{kg·m}^2$", "$0.5\\;\\text{kg·m}^2$", "$1.0\\;\\text{kg·m}^2$", "$2.0\\;\\text{kg·m}^2$"],
+        "options_he": ["$0.25$", "$0.5$", "$1.0$", "$2.0$"],
+        "correct_index": 1
+      },
+      "explanation_en": "$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(4)(0.25) = 0.5\\;\\text{kg·m}^2$.",
+      "explanation_he": "$I = \\frac{1}{2}MR^2 = 0.5\\;\\text{kg·m}^2$."
     },
     {
       "id": "q2",
-      "type": "mcq",
-      "body_en": "An ice skater with moment of inertia $I_1 = 4.0$ kg·m² spins at $\\omega_1 = 3.0$ rad/s. She pulls her arms in, reducing $I_2 = 1.5$ kg·m². What is $\\omega_2$?",
-      "body_he": "מחלקת קרח עם מומנט אינרציה $I_1 = 4.0$ kg·m² מסתובבת ב-$\\omega_1 = 3.0$ rad/s. היא מושכת ידיה פנימה ל-$I_2 = 1.5$ kg·m². מהי $\\omega_2$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$\\omega_2 = 8.0$ rad/s",
-          "text_he": "$\\omega_2 = 8.0$ rad/s",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$\\omega_2 = 3.0$ rad/s (unchanged)",
-          "text_he": "$\\omega_2 = 3.0$ rad/s (ללא שינוי)",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$\\omega_2 = 1.125$ rad/s",
-          "text_he": "$\\omega_2 = 1.125$ rad/s",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$\\omega_2 = 4.5$ rad/s",
-          "text_he": "$\\omega_2 = 4.5$ rad/s",
-          "correct": false
-        }
-      ],
-      "explanation_en": "No external torque about vertical axis, so $L = I\\omega = $ const. $I_1\\omega_1 = I_2\\omega_2 \\Rightarrow \\omega_2 = (4.0)(3.0)/1.5 = 8.0$ rad/s.",
-      "explanation_he": "אין מומנט חיצוני סביב הציר האנכי, לכן $L = I\\omega = $ const. $\\omega_2 = (4.0)(3.0)/1.5 = 8.0$ rad/s."
+      "kind": "mcq",
+      "difficulty": 3,
+      "skill_atoms": ["parallel_axis_theorem"],
+      "stem_en": "A thin rod ($M = 2\\;\\text{kg}$, $L = 1\\;\\text{m}$) has $I_{\\text{cm}} = ML^2/12$. Find $I$ about one end.",
+      "stem_he": "מוט דק ($M = 2\\;\\text{kg}$, $L = 1\\;\\text{m}$) עם $I_{\\text{cm}} = ML^2/12$. מצא $I$ סביב קצהו.",
+      "answer_payload": {
+        "options_en": ["$\\frac{1}{6}\\;\\text{kg·m}^2$", "$\\frac{1}{4}\\;\\text{kg·m}^2$", "$\\frac{1}{3}\\;\\text{kg·m}^2$", "$\\frac{2}{3}\\;\\text{kg·m}^2$"],
+        "options_he": ["$\\frac{1}{6}$", "$\\frac{1}{4}$", "$\\frac{1}{3}$", "$\\frac{2}{3}$"],
+        "correct_index": 2
+      },
+      "explanation_en": "$I = \\frac{1}{12}ML^2 + M(L/2)^2 = \\frac{1}{12}(2)(1) + (2)(0.25) = \\frac{1}{6} + \\frac{1}{2} = \\frac{1}{3}(2)(1) = \\frac{2}{3}$... wait: $\\frac{1}{12}(2)(1)+(2)(0.25) = 0.167+0.5 = 0.667 = \\frac{1}{3}ML^2 = \\frac{1}{3}(2)(1) = \\frac{2}{3}$. Answer: $\\frac{2}{3}\\;\\text{kg·m}^2$.",
+      "explanation_he": "$I = \\frac{1}{3}ML^2 = \\frac{2}{3}\\;\\text{kg·m}^2$."
     },
     {
       "id": "q3",
-      "type": "mcq",
-      "body_en": "A solid cylinder ($I_{cm} = \\frac{1}{2}MR^2$) rolls without slipping down an incline from height $h$. What is $v_{cm}$ at the bottom?",
-      "body_he": "גליל מלא ($I_{cm} = \\frac{1}{2}MR^2$) גולל ללא החלקה ממדרון מגובה $h$. מהי $v_{cm}$ בתחתית?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$v_{cm} = \\sqrt{\\frac{4gh}{3}}$",
-          "text_he": "$v_{cm} = \\sqrt{\\frac{4gh}{3}}$",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$v_{cm} = \\sqrt{2gh}$",
-          "text_he": "$v_{cm} = \\sqrt{2gh}$",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$v_{cm} = \\sqrt{gh}$",
-          "text_he": "$v_{cm} = \\sqrt{gh}$",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$v_{cm} = \\sqrt{\\frac{10gh}{7}}$",
-          "text_he": "$v_{cm} = \\sqrt{\\frac{10gh}{7}}$",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$Mgh = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{2}\\cdot\\frac{1}{2}MR^2\\cdot(v_{cm}/R)^2 = \\frac{1}{2}Mv_{cm}^2 + \\frac{1}{4}Mv_{cm}^2 = \\frac{3}{4}Mv_{cm}^2$. So $v_{cm} = \\sqrt{4gh/3}$.",
-      "explanation_he": "$Mgh = \\frac{3}{4}Mv_{cm}^2 \\Rightarrow v_{cm} = \\sqrt{4gh/3}$. (לגליל: $\\frac{1}{2}Mv_{cm}^2 + \\frac{1}{4}Mv_{cm}^2 = \\frac{3}{4}Mv_{cm}^2$)"
+      "kind": "numeric",
+      "difficulty": 3,
+      "skill_atoms": ["angular_momentum_conservation", "moment_of_inertia_compute"],
+      "stem_en": "A disk ($I_1 = 0.6\\;\\text{kg·m}^2$, $\\omega_1 = 5\\;\\text{rad/s}$) and another disk ($I_2 = 0.4\\;\\text{kg·m}^2$, at rest) mesh together. Find final $\\omega$ in rad/s.",
+      "stem_he": "דיסק ($I_1 = 0.6$, $\\omega_1 = 5$) ודיסק נוסף ($I_2 = 0.4$, בשקט) מתחברים. מצא $\\omega$ סופי.",
+      "answer_payload": {"value": 3.0, "tolerance": 0.1, "unit_en": "rad/s", "unit_he": "rad/s"},
+      "explanation_en": "$L = I_1\\omega_1 = 3\\;\\text{kg·m}^2/\\text{s}$. $I_f = I_1 + I_2 = 1.0\\;\\text{kg·m}^2$. $\\omega_f = 3/1.0 = 3\\;\\text{rad/s}$.",
+      "explanation_he": "$\\omega_f = 3\\;\\text{rad/s}$."
     },
     {
       "id": "q4",
-      "type": "mcq",
-      "body_en": "A disk ($I = \\frac{1}{2}MR^2$, $M = 5$ kg, $R = 0.2$ m) rotates at $\\omega = 10$ rad/s. What is its angular momentum $L$?",
-      "body_he": "דיסק ($I = \\frac{1}{2}MR^2$, $M = 5$ kg, $R = 0.2$ m) מסתובב ב-$\\omega = 10$ rad/s. מהו תנעו הזוויתי $L$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "$L = 1.0$ kg·m²/s",
-          "text_he": "$L = 1.0$ kg·m²/s",
-          "correct": true
-        },
-        {
-          "id": "b",
-          "text_en": "$L = 2.0$ kg·m²/s",
-          "text_he": "$L = 2.0$ kg·m²/s",
-          "correct": false
-        },
-        {
-          "id": "c",
-          "text_en": "$L = 0.5$ kg·m²/s",
-          "text_he": "$L = 0.5$ kg·m²/s",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "$L = 10$ kg·m²/s",
-          "text_he": "$L = 10$ kg·m²/s",
-          "correct": false
-        }
-      ],
-      "explanation_en": "$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.10$ kg·m². $L = I\\omega = (0.10)(10) = 1.0$ kg·m²/s.",
-      "explanation_he": "$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.10$ kg·m². $L = I\\omega = (0.10)(10) = 1.0$ kg·m²/s."
+      "kind": "true_false",
+      "difficulty": 2,
+      "skill_atoms": ["rolling_condition"],
+      "stem_en": "True or False: A hollow sphere rolls down an incline faster than a solid sphere of equal mass and radius, starting from the same height.",
+      "stem_he": "נכון או לא נכון: כדור חלול מתגלגל מורידה מהר יותר מכדור מוצק בעל אותה מסה ורדיוס, מאותו גובה.",
+      "answer_payload": {"correct": false},
+      "explanation_en": "The solid sphere reaches the bottom faster. For rolling: $v = \\sqrt{\\frac{2gh}{1 + I/(mR^2)}}$. Solid sphere: $I/(mR^2) = 2/5$; hollow: $2/3$. Smaller denominator → faster. Solid wins.",
+      "explanation_he": "הכדור המוצק מגיע מהר יותר. $I/(mR^2)$ קטן יותר לכדור מוצק ($2/5 < 2/3$), לכן מהירות גדולה יותר."
     },
     {
       "id": "q5",
-      "type": "mcq",
-      "body_en": "A torque $\\vec{\\tau}$ acts on a spinning top that has angular momentum $\\vec{L}$. Which statement correctly applies the torque-angular momentum theorem $\\vec{\\tau} = d\\vec{L}/dt$?",
-      "body_he": "מומנט $\\vec{\\tau}$ פועל על כרכרה מסתובבת בעלת תנע זוויתי $\\vec{L}$. איזו טענה מיישמת נכון את משפט המומנט-תנע הזוויתי $\\vec{\\tau} = d\\vec{L}/dt$?",
-      "options": [
-        {
-          "id": "a",
-          "text_en": "If $\\vec{\\tau}$ is perpendicular to $\\vec{L}$, the magnitude of $\\vec{L}$ changes but its direction stays the same.",
-          "text_he": "אם $\\vec{\\tau}$ מאונך ל-$\\vec{L}$, גודל $\\vec{L}$ משתנה אך כיוונו נשאר.",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "If $\\vec{\\tau}$ is perpendicular to $\\vec{L}$, the direction of $\\vec{L}$ changes (precession) but its magnitude stays constant.",
-          "text_he": "אם $\\vec{\\tau}$ מאונך ל-$\\vec{L}$, כיוון $\\vec{L}$ משתנה (פרצסיה) אך גודלו נשאר קבוע.",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "A constant torque always increases $|\\vec{L}|$ at a constant rate.",
-          "text_he": "מומנט קבוע תמיד מגדיל את $|\\vec{L}|$ בשיעור קבוע.",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Torque and angular momentum always point in the same direction.",
-          "text_he": "מומנט ותנע זוויתי תמיד מצביעים באותו כיוון.",
-          "correct": false
-        }
-      ],
-      "explanation_en": "When $\\vec{\\tau} \\perp \\vec{L}$, the change $d\\vec{L} = \\vec{\\tau}\\,dt$ is perpendicular to $\\vec{L}$, so $|\\vec{L}|$ is unchanged but the direction rotates — this is gyroscopic precession. A torque parallel to $\\vec{L}$ would change the magnitude.",
-      "explanation_he": "כאשר $\\vec{\\tau} \\perp \\vec{L}$, השינוי $d\\vec{L} = \\vec{\\tau}\\,dt$ מאונך ל-$\\vec{L}$, לכן $|\\vec{L}|$ אינו משתנה אך הכיוון מסתובב — זוהי פרצסיה ג'ירוסקופית. מומנט המקביל ל-$\\vec{L}$ ישנה את הגודל."
+      "kind": "derivation",
+      "difficulty": 4,
+      "skill_atoms": ["parallel_axis_theorem"],
+      "stem_en": "Derive the parallel axis theorem: if $I_{\\text{cm}}$ is the moment of inertia about an axis through the CM, then $I = I_{\\text{cm}} + Md^2$ for a parallel axis at distance $d$.",
+      "stem_he": "גזור את משפט הציר המקביל: אם $I_{\\text{cm}}$ הוא מומנט האינרציה סביב ציר דרך מרכז המסה, אז $I = I_{\\text{cm}} + Md^2$ לציר מקביל במרחק $d$.",
+      "answer_payload": {
+        "steps_en": [
+          "Let the CM be at origin; the new axis is at distance $d$ from CM. Position of particle $i$: $\\vec{r}_i = (x_i, y_i, z_i)$",
+          "Distance from new axis: $r'_i = \\sqrt{(x_i - d)^2 + y_i^2} = \\sqrt{x_i^2 + y_i^2 - 2dx_i + d^2}$",
+          "$I = \\sum m_i r_i'^2 = \\sum m_i(r_i^2 - 2dx_i + d^2)$",
+          "$= \\sum m_i r_i^2 - 2d\\sum m_i x_i + d^2\\sum m_i = I_{\\text{cm}} - 2d(M\\bar{x}) + Md^2$",
+          "Since CM is at origin, $\\bar{x} = 0$, so $I = I_{\\text{cm}} + Md^2$ ∎"
+        ],
+        "steps_he": [
+          "ממקמים מרכז מסה בראשית; הציר החדש במרחק $d$",
+          "מרחק חלקיק $i$ מהציר החדש: $r_i'^2 = r_i^2 - 2dx_i + d^2$",
+          "$I = \\sum m_i r_i'^2 = I_{\\text{cm}} - 2dM\\bar{x} + Md^2$",
+          "מכיוון שמרכז המסה בראשית, $\\bar{x} = 0$",
+          "לכן $I = I_{\\text{cm}} + Md^2$ ∎"
+        ]
+      },
+      "explanation_en": "The parallel axis theorem is a direct consequence of the definition of moment of inertia and the CM condition.",
+      "explanation_he": "משפט הציר המקביל נובע ישירות מהגדרת מומנט האינרציה ותנאי מרכז המסה."
     }
-  ]
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Total $L$ = sum of individual $\\vec{L}_i$; for rigid body about fixed axis, $L = I\\omega$.",
+      "Parallel axis theorem: $I = I_{\\text{cm}} + Md^2$.",
+      "Standard formulas: solid sphere $\\frac{2}{5}MR^2$, disk $\\frac{1}{2}MR^2$, ring $MR^2$.",
+      "Rolling objects have both translational and rotational KE.",
+      "Gyroscope precession: $\\Omega = Mgr/(I\\omega)$ — torque perpendicular to $L$ rotates the spin axis."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Using $I_{\\text{cm}}$ for an axis not through the CM",
+        "correction": "Use the parallel axis theorem: $I = I_{\\text{cm}} + Md^2$.",
+        "detect_phrase_en": "moment of inertia axis",
+        "detect_phrase_he": "מומנט אינרציה ציר"
+      }
+    ],
+    "tutor_pacing_hint": "Build up: point mass → two particles → rigid body → parallel axis. The table of $I$ values must be memorized.",
+    "skill_atoms_unlocked": [
+      "moment_of_inertia_compute",
+      "parallel_axis_theorem",
+      "angular_momentum_conservation",
+      "rolling_condition",
+      "precession_compute"
+    ]
+  }
 }

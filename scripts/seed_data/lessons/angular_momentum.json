@@ -1,205 +1,357 @@
 {
-  "id": "angular_momentum",
   "concept_id": "angular_momentum",
-  "type": "interactive",
-  "subject": "university_physics_1",
-  "level": "university",
-  "title_en": "Angular Momentum — Conservation, Collisions, and Orbital Mechanics",
-  "title_he": "תנע זוויתי — שימור, התנגשויות ומכניקת מסלולים",
-  "duration_min": 35,
-  "est_minutes": 35,
-  "level_min": "university",
-  "math_track": [
-    "university_physics_1",
-    "hs_physics"
-  ],
-  "summary_en": "Angular momentum L = Iω (rigid body) or L = r × p (particle) is conserved when the net external torque is zero. When I changes, ω changes inversely. Kinetic energy need not be conserved when L is. This principle governs spinning skaters, gyroscopes, and planetary orbits.",
-  "summary_he": "תנע זוויתי L = Iω (גוף קשיח) או L = r × p (חלקיק) נשמר כאשר מומנט כוח חיצוני נטו הוא אפס. כאשר I משתנה, ω משתנה הפוך. אנרגיה קינטית אינה חייבת להישמר כש-L נשמר. עיקרון זה שולט בסקייטרים מסתובבים, גירוסקופים ומסלולי כוכבי לכת.",
+  "title_en": "Angular Momentum",
+  "title_he": "תנע זוויתי",
+  "subject": "physics",
+  "difficulty": "advanced",
+  "estimated_minutes": 50,
   "sections": [
     {
-      "id": "definition_properties",
-      "title_en": "Definition and Properties",
-      "title_he": "הגדרה ותכונות",
-      "level_min": "hs_physics",
-      "body_en_md": "### For a rigid body rotating about a fixed axis\n\n$$L = I\\omega.$$\n\n- Vector direction: along the rotation axis (right-hand rule).\n- SI units: kg·m²/s.\n\n### For a point particle\n\n$$\\vec{L} = \\vec{r} \\times \\vec{p} = m\\vec{r} \\times \\vec{v}.$$\n\nMagnitude: $|\\vec{L}| = mvr\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{v}$.\n\n**Important:** A particle moving in a straight line can have nonzero $L$ about an off-path point. For a particle at position $\\vec{r}$ from the origin moving with velocity $\\vec{v}$, $|\\vec{L}| = mv \\cdot d$, where $d$ is the perpendicular distance from the origin to the line of motion.\n\n### Geometric interpretation\n\n$L = mvr\\sin\\theta$ equals $m$ times twice the rate of area swept by $\\vec{r}$. This is the heart of Kepler's 2nd law.\n\n### Newton's 2nd law (rotational, general)\n\n$$\\vec{\\tau}_{\\text{net}} = \\frac{d\\vec{L}}{dt}.$$\n\nFor a rigid body with constant $I$: $\\tau = I\\alpha$. For variable $I$ (e.g., deforming body): must use $\\tau = dL/dt$, NOT $I\\alpha$.",
-      "body_he_md": "### לגוף קשיח המסתובב סביב ציר קבוע\n\n$$L = I\\omega.$$\n\n- כיוון וקטורי: לאורך ציר הסיבוב (כלל יד ימין).\n- יחידות SI: kg·m²/s.\n\n### לחלקיק נקודתי\n\n$$\\vec{L} = \\vec{r} \\times \\vec{p} = m\\vec{r} \\times \\vec{v}.$$\n\nגודל: $|\\vec{L}| = mvr\\sin\\theta$, כאשר $\\theta$ היא הזווית בין $\\vec{r}$ ל-$\\vec{v}$.\n\n**חשוב:** חלקיק הנע בקו ישר יכול להיות בעל $L \\ne 0$ יחסית לנקודה מחוץ למסלול. לחלקיק במיקום $\\vec{r}$ מהמקור עם מהירות $\\vec{v}$, $|\\vec{L}| = mv \\cdot d$, כאשר $d$ הוא המרחק הניצב מהמקור לקו התנועה.\n\n### פרשנות גאומטרית\n\n$L = mvr\\sin\\theta$ שווה ל-$m$ כפול פי שניים מקצב שטח הסריקה של $\\vec{r}$. זה לב ליבו של חוק קפלר השני.\n\n### חוק שני ניוטון (סיבובי, כללי)\n\n$$\\vec{\\tau}_{\\text{net}} = \\frac{d\\vec{L}}{dt}.$$\n\nלגוף קשיח עם $I$ קבוע: $\\tau = I\\alpha$. ל-$I$ משתנה (למשל גוף מתעצב): חייבים להשתמש ב-$\\tau = dL/dt$, **לא** ב-$I\\alpha$."
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Why Angular Momentum?",
+      "title_he": "למה תנע זוויתי?",
+      "body_en_md": "A spinning ice-skater pulls in their arms and suddenly spins faster — without any external torque. A planet near the Sun moves faster than when it's far away. Both phenomena are explained by a single conservation law: **conservation of angular momentum**.\n\nAngular momentum is the rotational analogue of linear momentum. Just as $\\vec{p} = m\\vec{v}$ is conserved when there's no net force, $\\vec{L}$ is conserved when there's no net torque.\n\n**In Israeli university physics exams**, angular momentum appears in:\n- Rigid body rotation ($\\vec{L} = I\\vec{\\omega}$)\n- Particle orbits (Kepler's 2nd law)\n- Conservation-law problems with changing moment of inertia\n- Collisions involving rotation",
+      "body_he_md": "מחליקה על קרח מושכת את זרועותיה פנימה ופתאום מסתובבת מהר יותר — ללא כל מומנט חיצוני. פלנטה קרובה לשמש נעה מהר יותר מאשר כשהיא רחוקה. שני התופעות מוסברות על-ידי חוק שימור אחד: **שימור התנע הזוויתי**.\n\nהתנע הזוויתי הוא האנלוג הסיבובי של התנע הליניארי. בדיוק כפי ש-$\\vec{p} = m\\vec{v}$ מתשמר כשאין כוח נטו, $\\vec{L}$ מתשמר כשאין מומנט כוח נטו.\n\n**בבחינות פיזיקה אוניברסיטאיות בישראל**, התנע הזוויתי מופיע ב:\n- סיבוב גוף קשיח ($\\vec{L} = I\\vec{\\omega}$)\n- מסלולי חלקיקים (החוק השני של קפלר)\n- בעיות שימור עם מומנט אינרציה משתנה\n- התנגשויות הכוללות סיבוב"
     },
     {
-      "id": "conservation",
-      "title_en": "Conservation of Angular Momentum",
-      "title_he": "שימור תנע זוויתי",
-      "level_min": "hs_physics",
-      "body_en_md": "### The conservation law\n\n**If $\\vec{\\tau}_{\\text{net,ext}} = 0$:**\n$$\\boxed{\\vec{L} = I\\vec{\\omega} = \\text{constant}.}$$\n\nThis is exact — like linear momentum conservation but for rotation. Internal forces and torques do not change $\\vec{L}$.\n\n### When $I$ changes\n\nIf the body reshapes itself (skater pulling arms in, diver tucking), $I$ changes and $\\omega$ must adjust:\n$$I_1\\omega_1 = I_2\\omega_2.$$\n\n### Canonical examples\n\n**Ice skater:** arms extended ($I_1$ large, $\\omega_1$ small) → arms in ($I_2$ small, $\\omega_2$ large). Spins faster.\n\n**Diver:** tucks for somersaults (small $I$, fast spin); extends to slow down for entry.\n\n**Neutron star pulsar:** collapse from stellar radius to ~10 km → $I$ shrinks enormously → $\\omega$ enormous → millisecond rotation periods.\n\n### Worked example: student on turntable\n\nA student (body: $I_0 = 3$ kg·m²) sits on a frictionless turntable spinning at $\\omega_1 = 2$ rev/s. The student holds weights at arm's length $R = 0.8$ m (each $m = 1$ kg) and pulls them in to $R' = 0.2$ m.\n\n**Initial:** $I_1 = I_0 + 2mR^2 = 3 + 2(1)(0.64) = 3 + 1.28 = 4.28$ kg·m².\n\n**Final:** $I_2 = I_0 + 2mR'^2 = 3 + 2(1)(0.04) = 3 + 0.08 = 3.08$ kg·m².\n\n**New angular velocity:** $\\omega_2 = \\frac{I_1}{I_2}\\omega_1 = \\frac{4.28}{3.08} \\times 2 \\approx 2.78$ rev/s.\n\n**Kinetic energy:**\n- $K_1 = \\frac{1}{2}I_1\\omega_1^2 = \\frac{1}{2}(4.28)(4\\pi^2) \\approx 84.7$ J.\n- $K_2 = \\frac{1}{2}I_2\\omega_2^2 = \\frac{1}{2}(3.08)(2.78 \\cdot 2\\pi)^2 \\approx 117.8$ J.\n\n$K_2 > K_1$. The extra ~33 J came from the student's **muscle work** pulling the weights inward against the centrifugal tendency.",
-      "body_he_md": "### חוק השימור\n\n**אם $\\vec{\\tau}_{\\text{net,ext}} = 0$:**\n$$\\boxed{\\vec{L} = I\\vec{\\omega} = \\text{קבוע}.}$$\n\nזהו שימור מדויק — כמו שימור תנע קווי, אך לסיבוב. כוחות ומומנטים פנימיים אינם משנים את $\\vec{L}$.\n\n### כאשר $I$ משתנה\n\nאם הגוף משנה צורה (מחליקה מושכת זרועות, צולל מתכופף), $I$ משתנה ו-$\\omega$ חייב להתאים:\n$$I_1\\omega_1 = I_2\\omega_2.$$\n\n### דוגמאות קלאסיות\n\n**מחליקה על קרח:** זרועות פרושות ($I_1$ גדול, $\\omega_1$ קטן) → זרועות צמודות ($I_2$ קטן, $\\omega_2$ גדול). הסיבוב מאיץ.\n\n**צולל:** מתכופף ($I$ קטן, סיבוב מהיר); פורש לפני כניסה למים כדי להאט.\n\n**פulsar של כוכב נויטרונים:** התמוטטות מרדיוס כוכבי ל-~10 ק\"מ → $I$ מתכווץ בצורה דרמטית → $\\omega$ ענק → תקופות סיבוב של מילישניות.\n\n### דוגמה פתורה: סטודנט על קרש מסתובב\n\nסטודנט (גוף: $I_0 = 3$ kg·m²) יושב על קרש מסתובב חסר חיכוך המסתובב ב-$\\omega_1 = 2$ סיב/ש. הסטודנט מחזיק משקולות בקצה זרועות באורך $R = 0.8$ מ' (כל אחת $m = 1$ ק\"ג) ומושך אותן פנימה ל-$R' = 0.2$ מ'.\n\n**ראשוני:** $I_1 = I_0 + 2mR^2 = 3 + 2(1)(0.64) = 3 + 1.28 = 4.28$ kg·m².\n\n**סופי:** $I_2 = I_0 + 2mR'^2 = 3 + 2(1)(0.04) = 3 + 0.08 = 3.08$ kg·m².\n\n**מהירות זוויתית חדשה:** $\\omega_2 = \\frac{I_1}{I_2}\\omega_1 = \\frac{4.28}{3.08} \\times 2 \\approx 2.78$ סיב/ש.\n\n**אנרגיה קינטית:**\n- $K_1 = \\frac{1}{2}I_1\\omega_1^2 = \\frac{1}{2}(4.28)(4\\pi^2) \\approx 84.7$ J.\n- $K_2 = \\frac{1}{2}I_2\\omega_2^2 = \\frac{1}{2}(3.08)(2.78 \\cdot 2\\pi)^2 \\approx 117.8$ J.\n\n$K_2 > K_1$. כ-33 J הנוספים הגיעו מ**עבודת השרירים** של הסטודנט שמושך את המשקולות פנימה נגד הנטייה הצנטריפוגלית."
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Definition of Angular Momentum",
+      "title_he": "הגדרת התנע הזוויתי",
+      "body_en_md": "**For a particle:**\n$$\\vec{L} = \\vec{r} \\times \\vec{p} = \\vec{r} \\times (m\\vec{v})$$\n\n- $\\vec{r}$: position vector from the chosen origin (meters)\n- $\\vec{p} = m\\vec{v}$: linear momentum (kg·m/s)\n- $\\times$: cross product\n- SI unit: **kg·m²/s** (= J·s)\n- Magnitude: $L = rp\\sin\\theta = mvr\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{v}$\n\n**For a rigid body rotating about a fixed axis:**\n$$L = I\\omega$$\nwhere $I$ is the moment of inertia (kg·m²) and $\\omega$ is the angular velocity (rad/s).\n\n**In vector form:** $\\vec{L} = I\\vec{\\omega}$ (direction given by right-hand rule along the rotation axis)\n\n**Newton's 2nd law for rotation:**\n$$\\vec{\\tau}_{\\text{net}} = \\frac{d\\vec{L}}{dt}$$\n\n**Conservation law:** If $\\vec{\\tau}_{\\text{net}} = 0$, then $\\vec{L} = \\text{const}$.",
+      "body_he_md": "**לחלקיק:**\n$$\\vec{L} = \\vec{r} \\times \\vec{p} = \\vec{r} \\times (m\\vec{v})$$\n\n- $\\vec{r}$: וקטור מיקום מהראשית הנבחרת (מטרים)\n- $\\vec{p} = m\\vec{v}$: תנע ליניארי (kg·m/s)\n- $\\times$: מכפלה וקטורית\n- יחידת SI: **kg·m²/s** (= J·s)\n- גודל: $L = rp\\sin\\theta = mvr\\sin\\theta$, כאשר $\\theta$ היא הזווית בין $\\vec{r}$ ל-$\\vec{v}$\n\n**לגוף קשיח המסתובב סביב ציר קבוע:**\n$$L = I\\omega$$\nכאשר $I$ הוא מומנט האינרציה (kg·m²) ו-$\\omega$ הוא המהירות הזוויתית (rad/s).\n\n**בצורה וקטורית:** $\\vec{L} = I\\vec{\\omega}$\n\n**החוק השני של ניוטון לסיבוב:**\n$$\\vec{\\tau}_{\\text{net}} = \\frac{d\\vec{L}}{dt}$$\n\n**חוק שימור:** אם $\\vec{\\tau}_{\\text{net}} = 0$, אז $\\vec{L} = \\text{const}$."
     },
     {
-      "id": "gyroscopes_precession",
-      "title_en": "Gyroscopes and Precession (Conceptual)",
-      "title_he": "גירוסקופים ופרצסיה (תפיסתי)",
-      "level_min": "university",
-      "body_en_md": "### Why a spinning top does not fall\n\nA non-spinning top subject to gravity torque $\\vec{\\tau} = \\vec{r} \\times M\\vec{g}$ would simply fall. A spinning top has a large $\\vec{L}$ along its spin axis. The torque $\\vec{\\tau}$ does not reduce $L$ (the magnitude) — it continuously **rotates $\\vec{L}$** by $d\\vec{L} = \\vec{\\tau}\\,dt$. This causes the axis to precess.\n\n### Precession rate\n\nFor a gyroscope with spin angular momentum $L = I\\omega_s$, subject to torque $\\tau$:\n\n$$\\Omega_{\\text{prec}} = \\frac{\\tau}{L} = \\frac{MgR}{I\\omega_s}.$$\n\nAs the spin slows (friction), $L$ decreases → $\\Omega_{\\text{prec}}$ increases → the top wobbles faster before falling.\n\n### Qualitative understanding\n\n$d\\vec{L} = \\vec{\\tau}\\,dt$ is perpendicular to $\\vec{L}$ (the torque is horizontal for gravity). So $\\vec{L}$ rotates in the horizontal plane — the top precesses around the vertical without falling.",
-      "body_he_md": "### מדוע כיפה מסתובבת אינה נופלת\n\nכיפה שאינה מסתובבת, תחת מומנט כוח $\\vec{\\tau} = \\vec{r} \\times M\\vec{g}$, פשוט תיפול. לכיפה מסתובבת יש $\\vec{L}$ גדול לאורך ציר הסיבוב. המומנט $\\vec{\\tau}$ אינו מקטין את $L$ (את גודלו) — הוא **מסובב** את $\\vec{L}$ ברציפות ב-$d\\vec{L} = \\vec{\\tau}\\,dt$. זה גורם לפרצסיה של הציר.\n\n### קצב הפרצסיה\n\nלגירוסקופ עם תנע זוויתי סיבוב $L = I\\omega_s$, תחת מומנט $\\tau$:\n\n$$\\Omega_{\\text{prec}} = \\frac{\\tau}{L} = \\frac{MgR}{I\\omega_s}.$$\n\nככל שהסיבוב מאט (חיכוך), $L$ קטן → $\\Omega_{\\text{prec}}$ גדל → הכיפה 'מתנדנדת' מהר יותר לפני הנפילה.\n\n### הבנה איכותית\n\n$d\\vec{L} = \\vec{\\tau}\\,dt$ ניצב ל-$\\vec{L}$ (המומנט אופקי תחת כבידה). לכן $\\vec{L}$ מסתובב במישור האופקי — הכיפה מפרצסת סביב האנכי בלי ליפול."
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Conservation and Applications",
+      "title_he": "שימור ויישומים",
+      "body_en_md": "### Proof of conservation\n\nFrom Newton's 2nd law: $\\vec{F} = d\\vec{p}/dt$. Taking the torque:\n$$\\vec{\\tau} = \\vec{r} \\times \\vec{F} = \\vec{r} \\times \\frac{d\\vec{p}}{dt} = \\frac{d}{dt}(\\vec{r} \\times \\vec{p}) = \\frac{d\\vec{L}}{dt}$$\n(using $\\frac{d\\vec{r}}{dt} \\times \\vec{p} = \\vec{v} \\times m\\vec{v} = 0$)\n\nSo if $\\vec{\\tau}_{\\text{net}} = 0$, then $\\vec{L}$ is conserved.\n\n### Kepler's Second Law\n\nFor a planet orbiting the Sun: gravity is **central** (directed along $\\vec{r}$), so $\\vec{\\tau} = \\vec{r} \\times \\vec{F}_g = 0$. Thus $\\vec{L}$ is conserved.\n\nThe area swept per unit time:\n$$\\frac{dA}{dt} = \\frac{1}{2}|\\vec{r} \\times \\vec{v}| = \\frac{L}{2m} = \\text{const}$$\n\nThis is Kepler's 2nd law: equal areas in equal times.\n\n### Changing moment of inertia\n\nIf $I$ changes (e.g., arms pulled in): $L = I_1\\omega_1 = I_2\\omega_2$, so\n$$\\omega_2 = \\frac{I_1}{I_2}\\omega_1$$\n\nSmaller $I$ → faster rotation. This is why a spinning skater speeds up when pulling in their arms.",
+      "body_he_md": "### הוכחת השימור\n\nמהחוק השני של ניוטון: $\\vec{F} = d\\vec{p}/dt$. לוקחים מומנט כוח:\n$$\\vec{\\tau} = \\vec{r} \\times \\vec{F} = \\frac{d}{dt}(\\vec{r} \\times \\vec{p}) = \\frac{d\\vec{L}}{dt}$$\n\nלכן, אם $\\vec{\\tau}_{\\text{net}} = 0$, אז $\\vec{L}$ מתשמר.\n\n### החוק השני של קפלר\n\nעבור פלנטה בסביב השמש: כבידה **מרכזית** (לאורך $\\vec{r}$), לכן $\\vec{\\tau} = \\vec{r} \\times \\vec{F}_g = 0$. כך $\\vec{L}$ מתשמר.\n\nהשטח שנסחף ביחידת זמן:\n$$\\frac{dA}{dt} = \\frac{L}{2m} = \\text{const}$$\n\nזהו החוק השני של קפלר: שטחים שווים בזמנים שווים.\n\n### שינוי מומנט אינרציה\n\nאם $I$ משתנה (למשל, זרועות נמשכות פנימה): $L = I_1\\omega_1 = I_2\\omega_2$, לכן\n$$\\omega_2 = \\frac{I_1}{I_2}\\omega_1$$\n\n$I$ קטן יותר → סיבוב מהיר יותר."
     },
     {
-      "id": "orbital_mechanics",
-      "title_en": "Angular Momentum and Orbital Mechanics",
-      "title_he": "תנע זוויתי ומכניקת מסלולים",
-      "level_min": "university",
-      "body_en_md": "### Central force → L conserved\n\nA central force points along $\\vec{r}$ (toward/away from origin). The torque $\\vec{\\tau} = \\vec{r} \\times \\vec{F}$ vanishes because $\\vec{r} \\parallel \\vec{F}$. Therefore **L is conserved** for any central-force problem — gravity, Coulomb, etc.\n\n### Kepler's 2nd law from L conservation\n\nIn time $dt$, the position vector $\\vec{r}$ sweeps out an area:\n$$dA = \\frac{1}{2}|\\vec{r} \\times \\vec{v}|\\,dt = \\frac{L}{2m}\\,dt.$$\n\nSince $L$ is constant, $dA/dt = L/(2m) = \\text{const}$: **equal areas in equal times** — Kepler's 2nd law.\n\n### Angular momentum determines orbit shape\n\nFor a given energy, the orbit shape (eccentricity) is determined by $L$. More $L$ → more 'round' orbit; less $L$ → more elongated. A radial plunge orbit ($L = 0$) is a straight line through the center.",
-      "body_he_md": "### כוח מרכזי → שימור $L$\n\nכוח מרכזי מצביע לאורך $\\vec{r}$ (לכיוון/מכיוון המקור). המומנט $\\vec{\\tau} = \\vec{r} \\times \\vec{F}$ מתאפס כי $\\vec{r} \\parallel \\vec{F}$. לכן **$L$ נשמר** בכל בעיית כוח מרכזי — כבידה, קולון וכו'.\n\n### חוק קפלר השני משימור $L$\n\nבזמן $dt$, וקטור המיקום $\\vec{r}$ סוחף שטח:\n$$dA = \\frac{1}{2}|\\vec{r} \\times \\vec{v}|\\,dt = \\frac{L}{2m}\\,dt.$$\n\nמאחר ש-$L$ קבוע, $dA/dt = L/(2m) = \\text{const}$: **שטחים שווים בזמנים שווים** — חוק קפלר השני.\n\n### $L$ קובע את צורת המסלול\n\nלאנרגיה נתונה, צורת המסלול (אקסentricity) נקבעת על ידי $L$. $L$ גדול יותר → מסלול 'עגול' יותר; $L$ קטן יותר → מסלול מוארך. מסלול נפילה רדיאלית ($L = 0$) הוא קו ישר דרך המרכז."
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Angular Momentum of a Particle",
+      "title_he": "דוגמה פתורה 1 — תנע זוויתי של חלקיק",
+      "body_en_md": "**Given:** A particle of mass $m = 0.5\\;\\text{kg}$ moves at $v = 6\\;\\text{m/s}$ at a perpendicular distance $d = 3\\;\\text{m}$ from the origin (i.e., the angle between $\\vec{r}$ and $\\vec{v}$ is $90°$).\n\n**Step 1 — Use the formula:**\n$$L = mvr\\sin\\theta = (0.5)(6)(3)\\sin90° = 9\\;\\text{kg·m}^2/\\text{s}$$\n\n**Step 2 — Direction:** by the right-hand rule, $\\vec{L}$ points out of the plane (if motion is counterclockwise).\n\n**Answer:** $L = 9\\;\\text{kg·m}^2/\\text{s}$, perpendicular to the plane of motion.",
+      "body_he_md": "**נתון:** חלקיק בעל מסה $m = 0.5\\;\\text{kg}$ נע ב-$v = 6\\;\\text{m/s}$ במרחק ניצב $d = 3\\;\\text{m}$ מהראשית (זווית בין $\\vec{r}$ ל-$\\vec{v}$ היא $90°$).\n\n**שלב 1 — שימוש בנוסחה:**\n$$L = mvr\\sin\\theta = (0.5)(6)(3)(1) = 9\\;\\text{kg·m}^2/\\text{s}$$\n\n**שלב 2 — כיוון:** לפי כלל יד-ימין, $\\vec{L}$ מצביע מחוץ למישור (אם התנועה בכיוון נגד השעון).\n\n**תשובה:** $L = 9\\;\\text{kg·m}^2/\\text{s}$, מאונך למישור התנועה."
     },
     {
-      "id": "exam_problems",
-      "title_en": "Exam-Style Problems",
-      "title_he": "בעיות בסגנון בחינה",
-      "level_min": "university",
-      "body_en_md": "### Problem 1 — Student on turntable with weights\n\nA student ($I_0 = 3$ kg·m²) spins at $\\omega_1 = 2$ rev/s on a frictionless stool, holding two 1 kg weights at $R = 0.8$ m. She pulls them to $R' = 0.2$ m.\n\n**(a)** Find $\\omega_2$.\n**(b)** Find the ratio $K_2/K_1$.\n**(c)** Where does the energy difference come from?\n\n**Solution:**\n\n$I_1 = 3 + 2(1)(0.64) = 4.28$ kg·m², $I_2 = 3 + 2(1)(0.04) = 3.08$ kg·m².\n\n$\\omega_2 = (I_1/I_2)\\omega_1 = (4.28/3.08)(2) \\approx 2.78$ rev/s.\n\n$K_2/K_1 = (I_1/I_2)(\\omega_2/\\omega_1)^2 = (I_1/I_2)^2 \\cdot (\\omega_1/\\omega_1) = I_1/I_2 = 4.28/3.08 \\approx 1.39$.\n\nActually: $K = L^2/(2I)$. Since $L$ is conserved: $K_2/K_1 = I_1/I_2 \\approx 1.39$.\n\nEnergy source: the student does **work** pulling the weights inward against the centrifugal tendency (the weights want to fly outward). This internal work increases KE.\n\n---\n\n### Problem 2 — Clay on rotating disk\n\nA disk ($I = 0.25$ kg·m²) rotates at $\\omega_0 = 10$ rad/s. A lump of clay ($m = 0.5$ kg) is dropped (no initial angular velocity) onto the disk's rim at radius $R = 0.4$ m.\n\n**(a)** Find the new angular velocity $\\omega_f$.\n**(b)** Is kinetic energy conserved? Calculate $K_i$ and $K_f$.\n\n**Solution:**\n\n**(a)** L conserved: $L_i = I\\omega_0 = 0.25 \\times 10 = 2.5$ kg·m²/s.\n\n$I_f = I + mR^2 = 0.25 + 0.5(0.16) = 0.25 + 0.08 = 0.33$ kg·m².\n\n$\\omega_f = L_i/I_f = 2.5/0.33 \\approx 7.58$ rad/s.\n\n**(b)** $K_i = \\frac{1}{2}(0.25)(100) = 12.5$ J. $K_f = \\frac{1}{2}(0.33)(57.5) \\approx 9.5$ J.\n\n$K_f < K_i$: **energy is NOT conserved** (this is an inelastic rotational collision). The lost energy (≈ 3 J) goes to heat/deformation.",
-      "body_he_md": "### בעיה 1 — סטודנטית עם משקולות על קרש מסתובב\n\nסטודנטית ($I_0 = 3$ kg·m²) מסתובבת ב-$\\omega_1 = 2$ סיב/ש על כיסא חסר חיכוך, מחזיקה שתי משקולות של 1 ק\"ג ב-$R = 0.8$ מ'. היא מושכת אותן ל-$R' = 0.2$ מ'.\n\n**(א)** מצאו $\\omega_2$.\n**(ב)** מצאו את היחס $K_2/K_1$.\n**(ג)** מאין מגיע הפרש האנרגיה?\n\n**פתרון:**\n\n$I_1 = 3 + 2(1)(0.64) = 4.28$ kg·m², $I_2 = 3 + 2(1)(0.04) = 3.08$ kg·m².\n\n$\\omega_2 = (I_1/I_2)\\omega_1 = (4.28/3.08)(2) \\approx 2.78$ סיב/ש.\n\n$K_2/K_1 = (I_1/I_2)(\\omega_2/\\omega_1)^2 = (I_1/I_2)^2 \\cdot (\\omega_1/\\omega_1) = I_1/I_2 = 4.28/3.08 \\approx 1.39$.\n\nלמעשה: $K = L^2/(2I)$. מאחר ש-$L$ נשמר: $K_2/K_1 = I_1/I_2 \\approx 1.39$.\n\nמקור האנרגיה: הסטודנטית **עושה עבודה** כשמושכת את המשקולות פנימה נגד הנטייה הצנטריפוגלית (המשקולות 'רוצות' לעוף החוצה). עבודה פנימית זו מגדילה את $K$.\n\n---\n\n### בעיה 2 — חימר על דיסקה מסתובבת\n\nדיסקה ($I = 0.25$ kg·m²) מסתובבת ב-$\\omega_0 = 10$ רד/ש. גוש חימר ($m = 0.5$ ק\"ג) נופל (ללא מהירות זוויתית ראשונית) על שולי הדיסקה ברדיוס $R = 0.4$ מ'.\n\n**(א)** מצאו את $\\omega_f$ החדשה.\n**(ב)** האם אנרגיה קינטית נשמרת? חשבו $K_i$ ו-$K_f$.\n\n**פתרון:**\n\n**(א)** $L$ נשמר: $L_i = I\\omega_0 = 0.25 \\times 10 = 2.5$ kg·m²/s.\n\n$I_f = I + mR^2 = 0.25 + 0.5(0.16) = 0.25 + 0.08 = 0.33$ kg·m².\n\n$\\omega_f = L_i/I_f = 2.5/0.33 \\approx 7.58$ רד/ש.\n\n**(ב)** $K_i = \\frac{1}{2}(0.25)(100) = 12.5$ J. $K_f = \\frac{1}{2}(0.33)(57.5) \\approx 9.5$ J.\n\n$K_f < K_i$: **אנרגיה אינה נשמרת** (זו התנגשות סיבובית לא-אלסטית). האנרגיה האבודה (≈ 3 J) הולכת לחום/עיוות."
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A disk with moment of inertia $I = 2\\;\\text{kg·m}^2$ rotates at $\\omega = 5\\;\\text{rad/s}$. What is its angular momentum?",
+      "body_he_md": "דיסק עם מומנט אינרציה $I = 2\\;\\text{kg·m}^2$ מסתובב ב-$\\omega = 5\\;\\text{rad/s}$. מהו התנע הזוויתי שלו?",
+      "checkpoint_solution_en": "$L = I\\omega = (2)(5) = 10\\;\\text{kg·m}^2/\\text{s}$.",
+      "checkpoint_solution_he": "$L = I\\omega = (2)(5) = 10\\;\\text{kg·m}^2/\\text{s}$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Ice Skater Conservation",
+      "title_he": "דוגמה פתורה 2 — שימור תנע זוויתי של מחליקה",
+      "body_en_md": "**Given:** An ice skater spins with arms out: $I_1 = 4\\;\\text{kg·m}^2$, $\\omega_1 = 2\\;\\text{rad/s}$. She pulls in her arms to $I_2 = 1\\;\\text{kg·m}^2$. Find $\\omega_2$.\n\n**Step 1 — Check conservation conditions:** No external torque (ice provides negligible friction torque), so $L$ is conserved.\n\n**Step 2 — Apply conservation:**\n$$L_1 = L_2 \\implies I_1\\omega_1 = I_2\\omega_2$$\n\n**Step 3 — Solve:**\n$$\\omega_2 = \\frac{I_1\\omega_1}{I_2} = \\frac{(4)(2)}{1} = 8\\;\\text{rad/s}$$\n\n**Step 4 — Check kinetic energy:** $K_1 = \\frac{1}{2}I_1\\omega_1^2 = \\frac{1}{2}(4)(4) = 8\\;\\text{J}$; $K_2 = \\frac{1}{2}(1)(64) = 32\\;\\text{J}$. Energy increased! The extra energy comes from the skater's muscles doing work pulling the arms in.\n\n**Answer:** $\\omega_2 = 8\\;\\text{rad/s}$ (angular velocity quadrupled since $I$ was reduced by factor 4).",
+      "body_he_md": "**נתון:** מחליקה על קרח מסתובבת עם זרועות פתוחות: $I_1 = 4\\;\\text{kg·m}^2$, $\\omega_1 = 2\\;\\text{rad/s}$. היא מושכת זרועותיה ל-$I_2 = 1\\;\\text{kg·m}^2$. מצא $\\omega_2$.\n\n**שלב 1 — בדיקת תנאי שימור:** אין מומנט חיצוני, לכן $L$ מתשמר.\n\n**שלב 2 — החלת שימור:**\n$$I_1\\omega_1 = I_2\\omega_2$$\n\n**שלב 3 — פתרון:**\n$$\\omega_2 = \\frac{(4)(2)}{1} = 8\\;\\text{rad/s}$$\n\n**שלב 4 — בדיקת אנרגיה קינטית:** $K$ גדל מ-8 J ל-32 J. האנרגיה הנוספת מגיעה מהשרירים.\n\n**תשובה:** $\\omega_2 = 8\\;\\text{rad/s}$."
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A student sits on a frictionless stool holding a spinning bicycle wheel (horizontal axis). The wheel has $L = 5\\;\\text{kg·m}^2/\\text{s}$ pointing up. The student flips the wheel upside down. If the student's moment of inertia is $I_s = 2.5\\;\\text{kg·m}^2$, find the student's angular velocity after the flip.",
+      "body_he_md": "סטודנט יושב על כיסא בלי חיכוך ומחזיק גלגל אופניים מסתובב (ציר אופקי). לגלגל $L = 5\\;\\text{kg·m}^2/\\text{s}$ מכוון למעלה. הסטודנט הופך את הגלגל הפוך. אם מומנט האינרציה של הסטודנט הוא $I_s = 2.5\\;\\text{kg·m}^2$, מצא את המהירות הזוויתית של הסטודנט לאחר ההיפוך.",
+      "checkpoint_solution_en": "Initial: $L_{\\text{total}} = L_{\\text{wheel}} = 5\\;\\text{kg·m}^2/\\text{s}$ (up). After flip: wheel's $L = -5$ (down). Conservation: $L_s + (-5) = 5 \\Rightarrow L_s = 10\\;\\text{kg·m}^2/\\text{s}$. So $\\omega_s = L_s/I_s = 10/2.5 = 4\\;\\text{rad/s}$.",
+      "checkpoint_solution_he": "לפני: $L_{\\text{כולל}} = 5$ (למעלה). לאחר היפוך: גלגל $L = -5$. שימור: $L_s = 10$, ולכן $\\omega_s = 4\\;\\text{rad/s}$."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Kepler's Second Law",
+      "title_he": "דוגמה פתורה 3 — החוק השני של קפלר",
+      "body_en_md": "**Given:** A planet has perihelion distance $r_p = 0.5\\;\\text{AU}$ with speed $v_p = 60\\;\\text{km/s}$, and aphelion distance $r_a = 5\\;\\text{AU}$. Find the speed at aphelion.\n\n**Step 1 — Identify conservation:** Gravity is a central force; no torque about the Sun. $\\vec{L}$ is conserved.\n\n**Step 2 — At perihelion and aphelion**, $\\vec{r} \\perp \\vec{v}$ (by geometry of ellipse), so:\n$$L = m v_p r_p = m v_a r_a$$\n\n**Step 3 — Solve for $v_a$:**\n$$v_a = \\frac{v_p r_p}{r_a} = \\frac{(60)(0.5)}{5} = 6\\;\\text{km/s}$$\n\n**Step 4 — Verify Kepler's 2nd law:** At perihelion the planet moves 10× faster (over a 10× smaller distance), sweeping the same area per unit time.\n\n**Answer:** $v_a = 6\\;\\text{km/s}$.\n\n**Bonus — Kepler's 3rd law check:** $T^2 \\propto a^3$ where $a = (r_p + r_a)/2 = 2.75\\;\\text{AU}$.",
+      "body_he_md": "**נתון:** לפלנטה מרחק פריהליון $r_p = 0.5\\;\\text{AU}$ עם מהירות $v_p = 60\\;\\text{km/s}$, ומרחק אפהליון $r_a = 5\\;\\text{AU}$. מצא את המהירות באפהליון.\n\n**שלב 1 — זיהוי שימור:** כבידה היא כוח מרכזי; אין מומנט כוח סביב השמש. $\\vec{L}$ מתשמר.\n\n**שלב 2 — בפריהליון ובאפהליון**, $\\vec{r} \\perp \\vec{v}$ (מגיאומטריה של אליפסה), לכן:\n$$L = m v_p r_p = m v_a r_a$$\n\n**שלב 3 — פתרון:**\n$$v_a = \\frac{v_p r_p}{r_a} = \\frac{(60)(0.5)}{5} = 6\\;\\text{km/s}$$\n\n**תשובה:** $v_a = 6\\;\\text{km/s}$."
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide — Angular Momentum Problems",
+      "title_he": "מדריך שיטה — בעיות תנע זוויתי",
+      "body_en_md": "| Type of problem | What to do |\n|---|---|\n| Compute $L$ for a particle | $L = mvr\\sin\\theta$; identify $\\theta$ from geometry |\n| Compute $L$ for rigid body | $L = I\\omega$ |\n| Conservation (no external torque) | Set $I_1\\omega_1 = I_2\\omega_2$ |\n| Orbital mechanics | $v_1r_1 = v_2r_2$ at turning points ($\\perp$ case) |\n| Torque changes $L$ | $\\Delta L = \\vec{\\tau} \\cdot \\Delta t$ |\n\n**Check for conservation:**\n1. Is there an external torque? (friction, applied force with moment arm)\n2. If no → $L$ is conserved\n3. If yes → $\\Delta L = \\tau \\Delta t$\n\n**Common calculation path:**\n$L = I\\omega \\to I_1\\omega_1 = I_2\\omega_2 \\to \\omega_2 = (I_1/I_2)\\omega_1$",
+      "body_he_md": "| סוג בעיה | מה לעשות |\n|---|---|\n| חישוב $L$ לחלקיק | $L = mvr\\sin\\theta$; זיהוי $\\theta$ מגיאומטריה |\n| חישוב $L$ לגוף קשיח | $L = I\\omega$ |\n| שימור (ללא מומנט חיצוני) | הצבת $I_1\\omega_1 = I_2\\omega_2$ |\n| מכניקת מסלולים | $v_1r_1 = v_2r_2$ בנקודות פנייה (מקרה ניצב) |\n| מומנט כוח משנה $L$ | $\\Delta L = \\vec{\\tau} \\cdot \\Delta t$ |\n\n**בדיקה לשימור:**\n1. האם יש מומנט כוח חיצוני? (חיכוך, כוח מופעל עם זרוע כוח)\n2. אם לא → $L$ מתשמר\n3. אם כן → $\\Delta L = \\tau \\Delta t$"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "",
+      "body_he_md": "",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "A particle of mass $2\\;\\text{kg}$ moves at $v = 4\\;\\text{m/s}$ at distance $r = 5\\;\\text{m}$ perpendicular to the position vector. Find $L$.",
+          "body_he": "חלקיק בעל מסה $2\\;\\text{kg}$ נע ב-$v = 4\\;\\text{m/s}$ במרחק $r = 5\\;\\text{m}$ ניצב לוקטור המיקום. מצא $L$.",
+          "solution_en": "$L = mvr\\sin90° = (2)(4)(5) = 40\\;\\text{kg·m}^2/\\text{s}$.",
+          "solution_he": "$L = mvr = 40\\;\\text{kg·m}^2/\\text{s}$.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A flywheel with $I = 3\\;\\text{kg·m}^2$ rotates at $\\omega = 10\\;\\text{rad/s}$. Find $L$.",
+          "body_he": "גלגל תנופה עם $I = 3\\;\\text{kg·m}^2$ מסתובב ב-$\\omega = 10\\;\\text{rad/s}$. מצא $L$.",
+          "solution_en": "$L = I\\omega = (3)(10) = 30\\;\\text{kg·m}^2/\\text{s}$.",
+          "solution_he": "$L = 30\\;\\text{kg·m}^2/\\text{s}$.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "A top has $L = 0.8\\;\\text{kg·m}^2/\\text{s}$ and $I = 0.04\\;\\text{kg·m}^2$. Find $\\omega$.",
+          "body_he": "סביבון בעל $L = 0.8\\;\\text{kg·m}^2/\\text{s}$ ו-$I = 0.04\\;\\text{kg·m}^2$. מצא $\\omega$.",
+          "solution_en": "$\\omega = L/I = 0.8/0.04 = 20\\;\\text{rad/s}$.",
+          "solution_he": "$\\omega = 20\\;\\text{rad/s}$.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A planet at perihelion moves at $v_p = 40\\;\\text{km/s}$ at distance $r_p = 1\\;\\text{AU}$. Its aphelion is at $r_a = 4\\;\\text{AU}$. Find $v_a$.",
+          "body_he": "פלנטה בפריהליון נעה ב-$v_p = 40\\;\\text{km/s}$ במרחק $r_p = 1\\;\\text{AU}$. האפהליון ב-$r_a = 4\\;\\text{AU}$. מצא $v_a$.",
+          "solution_en": "$v_a = v_p r_p / r_a = (40)(1)/4 = 10\\;\\text{km/s}$.",
+          "solution_he": "$v_a = 10\\;\\text{km/s}$.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A skater spins at $\\omega_1 = 3\\;\\text{rad/s}$ with $I_1 = 6\\;\\text{kg·m}^2$. She pulls in arms to $I_2 = 2\\;\\text{kg·m}^2$. (a) Find $\\omega_2$. (b) Find the ratio $K_2/K_1$.",
+          "body_he": "מחליקה מסתובבת ב-$\\omega_1 = 3\\;\\text{rad/s}$ עם $I_1 = 6\\;\\text{kg·m}^2$. היא מושכת זרועות ל-$I_2 = 2\\;\\text{kg·m}^2$. (א) מצא $\\omega_2$. (ב) מצא את היחס $K_2/K_1$.",
+          "solution_en": "(a) $\\omega_2 = I_1\\omega_1/I_2 = (6)(3)/2 = 9\\;\\text{rad/s}$. (b) $K_1=\\frac{1}{2}I_1\\omega_1^2=27\\;\\text{J}$, $K_2=\\frac{1}{2}(2)(81)=81\\;\\text{J}$, ratio $= 3$.",
+          "solution_he": "(א) $\\omega_2 = 9\\;\\text{rad/s}$. (ב) $K_2/K_1 = 3$.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A disk ($I = 5\\;\\text{kg·m}^2$, $\\omega = 4\\;\\text{rad/s}$) catches a clay lump ($m = 0.5\\;\\text{kg}$) at the rim ($r = 2\\;\\text{m}$). Find the final $\\omega$.",
+          "body_he": "דיסק ($I = 5\\;\\text{kg·m}^2$, $\\omega = 4\\;\\text{rad/s}$) לוכד גוש חימר ($m = 0.5\\;\\text{kg}$) על הגדה ($r = 2\\;\\text{m}$). מצא את $\\omega$ הסופי.",
+          "solution_en": "$L_i = I\\omega = 20\\;\\text{kg·m}^2/\\text{s}$ (clay initially at rest). $I_f = I + mr^2 = 5 + (0.5)(4) = 7\\;\\text{kg·m}^2$. $\\omega_f = L_i/I_f = 20/7 \\approx 2.86\\;\\text{rad/s}$.",
+          "solution_he": "$I_f = 7\\;\\text{kg·m}^2$, $\\omega_f = 20/7 \\approx 2.86\\;\\text{rad/s}$.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A torque of $\\tau = 4\\;\\text{N·m}$ is applied to a wheel for $t = 3\\;\\text{s}$. The initial angular momentum is $L_0 = 10\\;\\text{kg·m}^2/\\text{s}$. Find the final $L$.",
+          "body_he": "מומנט $\\tau = 4\\;\\text{N·m}$ מופעל על גלגל למשך $t = 3\\;\\text{s}$. התנע הזוויתי ההתחלתי הוא $L_0 = 10\\;\\text{kg·m}^2/\\text{s}$. מצא את $L$ הסופי.",
+          "solution_en": "$\\Delta L = \\tau \\cdot t = (4)(3) = 12\\;\\text{kg·m}^2/\\text{s}$. $L_f = L_0 + \\Delta L = 10 + 12 = 22\\;\\text{kg·m}^2/\\text{s}$.",
+          "solution_he": "$L_f = 10 + 12 = 22\\;\\text{kg·m}^2/\\text{s}$.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "An asteroid of mass $m = 10^{15}\\;\\text{kg}$ moves at $v = 20\\;\\text{km/s}$ past Earth with closest approach $d = 10^7\\;\\text{m}$ (perpendicular to velocity). Find its angular momentum about Earth's center.",
+          "body_he": "אסטרואיד בעל מסה $m = 10^{15}\\;\\text{kg}$ נע ב-$v = 20\\;\\text{km/s}$ ליד כדור הארץ עם קרבה מירבית $d = 10^7\\;\\text{m}$ (ניצב למהירות). מצא את התנע הזוויתי שלו סביב מרכז כדור הארץ.",
+          "solution_en": "$L = mvd = (10^{15})(2\\times10^4)(10^7) = 2\\times10^{26}\\;\\text{kg·m}^2/\\text{s}$.",
+          "solution_he": "$L = mvd = 2\\times10^{26}\\;\\text{kg·m}^2/\\text{s}$.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A diver tucks from $I_1 = 8\\;\\text{kg·m}^2$ to $I_2 = 2\\;\\text{kg·m}^2$ mid-dive. If she completes 2 rotations in $0.5\\;\\text{s}$ when extended, how many rotations per second does she complete when tucked?",
+          "body_he": "צוללת מתקפלת מ-$I_1 = 8\\;\\text{kg·m}^2$ ל-$I_2 = 2\\;\\text{kg·m}^2$ במהלך הצלילה. אם היא משלימה 2 סיבובים ב-$0.5\\;\\text{s}$ כשהיא פשוטה, כמה סיבובים לשנייה היא משלימה כשהיא מקופלת?",
+          "solution_en": "Extended: $\\omega_1 = 2\\pi(2/0.5) = 8\\pi\\;\\text{rad/s}$. Tucked: $\\omega_2 = (I_1/I_2)\\omega_1 = 4 \\cdot 8\\pi = 32\\pi\\;\\text{rad/s}$, so $f_2 = \\omega_2/(2\\pi) = 16\\;\\text{rev/s}$.",
+          "solution_he": "$f_2 = 16\\;\\text{סיבובים/שנייה}$.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "A bullet ($m = 0.01\\;\\text{kg}$, $v = 300\\;\\text{m/s}$) embeds in the edge of a stationary disk ($M = 2\\;\\text{kg}$, $R = 0.5\\;\\text{m}$, $I_{\\text{disk}} = \\frac{1}{2}MR^2$). The bullet hits tangentially at the rim. Find $\\omega$ after impact and the fraction of kinetic energy lost.",
+          "body_he": "כדור ($m = 0.01\\;\\text{kg}$, $v = 300\\;\\text{m/s}$) נטמע בשפת דיסק נייח ($M = 2\\;\\text{kg}$, $R = 0.5\\;\\text{m}$, $I_{\\text{disk}} = \\frac{1}{2}MR^2$). הכדור פוגע משיקי בשפה. מצא $\\omega$ לאחר הפגיעה ואת שבר האנרגיה הקינטית שאבד.",
+          "solution_en": "Initial $L = mvR = (0.01)(300)(0.5) = 1.5\\;\\text{kg·m}^2/\\text{s}$. $I_f = \\frac{1}{2}MR^2 + mR^2 = \\frac{1}{2}(2)(0.25)+(0.01)(0.25) = 0.25+0.0025 = 0.2525\\;\\text{kg·m}^2$. $\\omega = L/I_f = 1.5/0.2525 \\approx 5.94\\;\\text{rad/s}$. $K_i = \\frac{1}{2}mv^2 = \\frac{1}{2}(0.01)(90000) = 450\\;\\text{J}$. $K_f = \\frac{1}{2}I_f\\omega^2 \\approx \\frac{1}{2}(0.2525)(35.3) \\approx 4.46\\;\\text{J}$. Fraction lost $\\approx 1 - 4.46/450 \\approx 0.990$.",
+          "solution_he": "$\\omega \\approx 5.94\\;\\text{rad/s}$. שבר האנרגיה שאבד $\\approx 99\\%$.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Earth's orbit: perihelion $r_p = 1.47\\times10^{11}\\;\\text{m}$, aphelion $r_a = 1.52\\times10^{11}\\;\\text{m}$. Given $v_p = 30.3\\;\\text{km/s}$, find $v_a$ and the ratio of areal sweep rates.",
+          "body_he": "מסלול כדור הארץ: פריהליון $r_p = 1.47\\times10^{11}\\;\\text{m}$, אפהליון $r_a = 1.52\\times10^{11}\\;\\text{m}$. בהינתן $v_p = 30.3\\;\\text{km/s}$, מצא $v_a$ ואת יחס קצבי הסחיפה של השטח.",
+          "solution_en": "$v_a = v_p r_p/r_a = (30.3)(1.47/1.52) \\approx 29.3\\;\\text{km/s}$. Areal sweep rate $= L/(2m) = \\text{const}$, so the ratio is 1 (Kepler's 2nd law).",
+          "solution_he": "$v_a \\approx 29.3\\;\\text{km/s}$. יחס קצבי הסחיפה = 1 (שווים, החוק השני של קפלר).",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A turntable ($I_0 = 0.5\\;\\text{kg·m}^2$) rotates at $\\omega_0 = 4\\;\\text{rad/s}$. A student ($m_s = 60\\;\\text{kg}$) stands at radius $r = 1\\;\\text{m}$ from center. She walks to $r = 0.3\\;\\text{m}$. Find final $\\omega$. (Treat the student as a point mass.)",
+          "body_he": "שולחן סיבוב ($I_0 = 0.5\\;\\text{kg·m}^2$) מסתובב ב-$\\omega_0 = 4\\;\\text{rad/s}$. סטודנטית ($m_s = 60\\;\\text{kg}$) עומדת ברדיוס $r = 1\\;\\text{m}$ מהמרכז. היא הולכת ל-$r = 0.3\\;\\text{m}$. מצא $\\omega$ סופי.",
+          "solution_en": "$I_1 = I_0 + m_s r_1^2 = 0.5 + 60 = 60.5\\;\\text{kg·m}^2$. $I_2 = I_0 + m_s r_2^2 = 0.5 + 60(0.09) = 0.5+5.4 = 5.9\\;\\text{kg·m}^2$. $\\omega_2 = I_1\\omega_1/I_2 = (60.5)(4)/5.9 \\approx 41.0\\;\\text{rad/s}$.",
+          "solution_he": "$\\omega_2 \\approx 41.0\\;\\text{rad/s}$.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Show that for circular orbital motion, the angular momentum $L = m\\sqrt{GMr}$, where $G$ is the gravitational constant, $M$ is the central mass, and $r$ is the orbital radius.",
+          "body_he": "הראה שעבור תנועה מעגלית מסלולית, התנע הזוויתי הוא $L = m\\sqrt{GMr}$, כאשר $G$ הוא קבוע הכבידה, $M$ הוא מסת הגוף המרכזי, ו-$r$ הוא רדיוס המסלול.",
+          "solution_en": "For circular orbit: $\\frac{mv^2}{r} = \\frac{GMm}{r^2} \\Rightarrow v = \\sqrt{GM/r}$. Then $L = mvr = m\\sqrt{GM/r}\\cdot r = m\\sqrt{GMr}$.",
+          "solution_he": "למסלול מעגלי: $v = \\sqrt{GM/r}$. אז $L = mvr = m\\sqrt{GMr}$.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Choosing the wrong origin.** Angular momentum depends on the reference point. Always specify it. For orbital problems, the center of force (e.g., the Sun) is the natural choice.\n\n2. **Forgetting $\\sin\\theta$.** $L = mvr\\sin\\theta$, not $mvr$. Only when $\\vec{v} \\perp \\vec{r}$ does $L = mvr$.\n\n3. **Confusing $L$ conservation with energy conservation.** When $I$ decreases and $\\omega$ increases ($L$ conserved), kinetic energy INCREASES (the muscles do work). Don't assume $K$ is also conserved.\n\n4. **Wrong sign for torque.** Use the right-hand rule consistently. A torque opposing the rotation decreases $L$.\n\n5. **Treating angular momentum like a scalar in 3D.** In 3D, $\\vec{L} = \\vec{r} \\times \\vec{p}$ is a vector, and direction matters for problems like the gyroscope or precession.",
+      "body_he_md": "1. **בחירת ראשית שגויה.** התנע הזוויתי תלוי בנקודת הייחוס. תמיד ציינו אותה. לבעיות מסלוליות, מרכז הכוח (למשל, השמש) הוא הבחירה הטבעית.\n\n2. **שכחת $\\sin\\theta$.** $L = mvr\\sin\\theta$, לא $mvr$. רק כאשר $\\vec{v} \\perp \\vec{r}$ נקבל $L = mvr$.\n\n3. **בלבול שימור $L$ עם שימור אנרגיה.** כאשר $I$ יורד ו-$\\omega$ עולה ($L$ מתשמר), האנרגיה הקינטית **עולה**. אל תניחו ש-$K$ גם מתשמר.\n\n4. **סימן שגוי למומנט כוח.** השתמשו בכלל יד-ימין בעקביות. מומנט כוח מתנגד לסיבוב מקטין את $L$.\n\n5. **יחס לתנע זוויתי כסקלר בתלת-מימד.** בתלת-מימד, $\\vec{L} = \\vec{r} \\times \\vec{p}$ הוא וקטור, וכיוון חשוב לבעיות כמו ג'ירוסקופ או פרצסיה."
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "**Core formulas:**\n- Particle: $\\vec{L} = \\vec{r} \\times \\vec{p}$; $L = mvr\\sin\\theta$\n- Rigid body: $L = I\\omega$\n- Newton's 2nd for rotation: $\\vec{\\tau} = d\\vec{L}/dt$\n- Conservation: $I_1\\omega_1 = I_2\\omega_2$ (when $\\tau_{\\text{net}} = 0$)\n- Kepler's 2nd: $dA/dt = L/(2m) = \\text{const}$\n- Impulse: $\\Delta L = \\tau \\Delta t$\n\n**Exam patterns:**\n- Identify whether torque is zero (conservation) or nonzero (impulse).\n- At perihelion/aphelion: $\\vec{v} \\perp \\vec{r}$, so $L = mvr$.\n- For objects attaching to rotating body: $L_{\\text{before}} = L_{\\text{after}}$ (angular momentum of system).",
+      "body_he_md": "**נוסחאות מרכזיות:**\n- חלקיק: $\\vec{L} = \\vec{r} \\times \\vec{p}$; $L = mvr\\sin\\theta$\n- גוף קשיח: $L = I\\omega$\n- החוק השני של ניוטון לסיבוב: $\\vec{\\tau} = d\\vec{L}/dt$\n- שימור: $I_1\\omega_1 = I_2\\omega_2$ (כאשר $\\tau_{\\text{net}} = 0$)\n- קפלר שני: $dA/dt = L/(2m) = \\text{const}$\n- אימפולס זוויתי: $\\Delta L = \\tau \\Delta t$\n\n**דפוסי בחינה:**\n- זהו האם מומנט הכוח אפס (שימור) או לא אפס (אימפולס).\n- בפריהליון/אפהליון: $\\vec{v} \\perp \\vec{r}$, לכן $L = mvr$.\n- לעצמים הנוצמדים לגוף מסתובב: $L_{\\text{לפני}} = L_{\\text{אחרי}}$."
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Particle:** $\\vec{L} = \\vec{r}\\times\\vec{p}$; $L = mvr\\sin\\theta$\n- **Rigid body:** $L = I\\omega$; $\\vec{L} = I\\vec{\\omega}$\n- **Newton's 2nd (rotation):** $\\vec{\\tau}_{\\text{net}} = d\\vec{L}/dt$\n- **Conservation:** $\\tau_{\\text{net}} = 0 \\Rightarrow \\vec{L} = \\text{const} \\Rightarrow I_1\\omega_1 = I_2\\omega_2$\n- **Kepler's 2nd law:** $dA/dt = L/(2m) = \\text{const}$ — equal areas in equal times\n- **Impulse:** $\\Delta L = \\tau \\Delta t$\n- Energy is NOT conserved when $I$ changes (muscles/springs do work)",
+      "body_he_md": "- **חלקיק:** $\\vec{L} = \\vec{r}\\times\\vec{p}$; $L = mvr\\sin\\theta$\n- **גוף קשיח:** $L = I\\omega$\n- **החוק השני (סיבוב):** $\\vec{\\tau}_{\\text{net}} = d\\vec{L}/dt$\n- **שימור:** $\\tau_{\\text{net}} = 0 \\Rightarrow I_1\\omega_1 = I_2\\omega_2$\n- **קפלר שני:** $dA/dt = L/(2m) = \\text{const}$\n- **אימפולס זוויתי:** $\\Delta L = \\tau \\Delta t$\n- אנרגיה **אינה** מתשמרת כאשר $I$ משתנה"
     }
   ],
   "questions": [
     {
-      "ord": 1,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "A skater with arms extended ($I = 4$ kg·m²) spins at 1 revolution per second. She pulls her arms in, reducing $I$ to 1 kg·m².\n\n(a) Find her new angular velocity.\n(b) Find the ratio of final to initial kinetic energy.\n(c) Where does the extra energy come from?",
-      "stem_he": "מחליקה עם זרועות פתוחות ($I = 4$ kg·m²) מסתובבת ב-1 סיבוב לשנייה. היא מושכת את זרועותיה, ומורידה את $I$ ל-1 kg·m².\n\n(א) מצאו את המהירות הזוויתית החדשה.\n(ב) מצאו את יחס אנרגיות הסיבוב הסופית לראשונית.\n(ג) מאין מגיעה האנרגיה הנוספת?",
-      "rubric_en": "Full (6/6): (a) L conserved: I₁ω₁=I₂ω₂ → 4(1)=1·ω₂ → ω₂=4 rev/s (2pts). (b) K=L²/(2I): K₂/K₁=I₁/I₂=4/1=4 (2pts). (c) Muscle work pulling arms against centrifugal force (2pts).",
-      "rubric_he": "מלא (6/6): (א) L נשמר → ω₂=4 סיב/ש (2נ'). (ב) K₂/K₁=I₁/I₂=4 (2נ'). (ג) עבודת שרירים (2נ').",
-      "explanation_en": "(a) 4 rev/s. (b) K₂/K₁ = I₁/I₂ = 4. (c) The extra KE comes from muscle work — the skater pulls her arms inward against the outward centrifugal tendency, doing positive work.",
-      "explanation_he": "(א) 4 סיב/ש. (ב) יחס 4. (ג) עבודת השרירים.",
-      "skill_atoms": [
-        "L_conservation_apply",
-        "L_vs_K_conservation"
-      ],
-      "points_level_min": "university"
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove that for a planet in an elliptical orbit around the Sun, equal areas are swept by the radius vector in equal times (Kepler's 2nd law). Use conservation of angular momentum in your proof.",
-      "stem_he": "הוכיחו שעבור כוכב לכת במסלול אליפטי סביב השמש, שטחים שווים נסחפים על ידי וקטור הרדיוס בזמנים שווים (חוק קפלר 2). השתמשו בשימור תנע זוויתי בהוכחתכם.",
-      "rubric_en": "Full (6/6): Gravity is central → τ=r×F=0 → L conserved (2pts). Area swept: dA = ½|r×v|dt = L/(2m)·dt (2pts). Conclude dA/dt = L/(2m) = const (2pts).",
-      "rubric_he": "מלא (6/6): כוח מרכזי → τ=0 → L נשמר (2נ'). שטח: dA = L/(2m)·dt (2נ'). dA/dt = const (2נ').",
-      "explanation_en": "Gravity is central (F∥r) → τ=r×F=0 → L=const. Area swept in dt: dA = ½|r×(v dt)| = (L/2m)dt. Since L is constant, dA/dt = L/(2m) = constant. ■",
-      "explanation_he": "כבידה מרכזית → τ=0 → L קבוע. שטח ב-dt: dA = (L/2m)dt. מאחר ש-L קבוע, dA/dt = const. ■",
-      "skill_atoms": [
-        "L_conservation_apply",
-        "central_force_L"
-      ],
-      "points_level_min": "university"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "A disk ($I = 0.25$ kg·m²) rotating at 10 rad/s has a lump of clay ($m = 0.5$ kg) dropped onto its edge (radius $R = 0.4$ m) with no initial angular velocity.\n\n(a) Find the new angular velocity after the clay sticks.\n(b) Is kinetic energy conserved? Calculate $K_i$ and $K_f$ to verify.",
-      "stem_he": "דיסקה ($I = 0.25$ kg·m²) מסתובבת ב-10 רד/ש. גוש חימר ($m = 0.5$ ק\"ג) נופל על שולי הדיסקה (רדיוס $R = 0.4$ מ') ללא מהירות זוויתית ראשונית.\n\n(א) מצאו את המהירות הזוויתית החדשה לאחר שהחימר נדבק.\n(ב) האם אנרגיה קינטית נשמרת? חשבו $K_i$ ו-$K_f$ לאימות.",
-      "rubric_en": "Full (6/6): L_i = 0.25×10 = 2.5; I_f = 0.25+0.5(0.16)=0.33; ω_f=2.5/0.33≈7.58 rad/s (3pts). K_i=12.5J, K_f≈9.5J, KE not conserved (3pts).",
-      "rubric_he": "מלא (6/6): L_i=2.5; I_f=0.33; ω_f≈7.58 (3נ'). K_i=12.5, K_f≈9.5, לא נשמרת (3נ').",
-      "explanation_en": "ω_f = 7.58 rad/s. K_i = 12.5 J, K_f ≈ 9.5 J. Energy is NOT conserved — this is an inelastic rotational collision; ~3 J goes to heat/deformation.",
-      "explanation_he": "ω_f ≈ 7.58 רד/ש. K_i=12.5 J, K_f≈9.5 J. אנרגיה אינה נשמרת — התנגשות סיבובית לא-אלסטית.",
-      "skill_atoms": [
-        "L_collision_problem",
-        "L_vs_K_conservation"
-      ],
-      "points_level_min": "university"
-    },
-    {
-      "ord": 4,
+      "id": "q1",
       "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "A disk with $I = 0.5$ kg·m² spins at $\\omega = 4$ rad/s. Its angular momentum is:",
-      "stem_he": "דיסקה עם $I = 0.5$ kg·m² מסתובבת ב-$\\omega = 4$ רד/ש. תנעה הזוויתי:",
-      "options_en": [
-        "1 kg·m²/s",
-        "2 kg·m²/s",
-        "4 kg·m²/s",
-        "8 kg·m²/s"
-      ],
-      "options_he": [
-        "1 kg·m²/s",
-        "2 kg·m²/s",
-        "4 kg·m²/s",
-        "8 kg·m²/s"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$L = I\\omega = 0.5 \\times 4 = 2$ kg·m²/s.",
-      "explanation_he": "$L = 0.5 \\times 4 = 2$ kg·m²/s.",
-      "skill_atoms": [
-        "angular_momentum_compute"
-      ],
-      "points_level_min": "hs_physics"
+      "difficulty": 2,
+      "skill_atoms": ["angular_momentum_compute"],
+      "stem_en": "A disk ($I = 2\\;\\text{kg·m}^2$) spins at $6\\;\\text{rad/s}$. What is $L$?",
+      "stem_he": "דיסק ($I = 2\\;\\text{kg·m}^2$) מסתובב ב-$6\\;\\text{rad/s}$. מהו $L$?",
+      "answer_payload": {
+        "options_en": ["$3\\;\\text{kg·m}^2/\\text{s}$", "$6\\;\\text{kg·m}^2/\\text{s}$", "$12\\;\\text{kg·m}^2/\\text{s}$", "$8\\;\\text{kg·m}^2/\\text{s}$"],
+        "options_he": ["$3$", "$6$", "$12$", "$8$"],
+        "correct_index": 2
+      },
+      "explanation_en": "$L = I\\omega = (2)(6) = 12\\;\\text{kg·m}^2/\\text{s}$.",
+      "explanation_he": "$L = I\\omega = 12\\;\\text{kg·m}^2/\\text{s}$."
     },
     {
-      "ord": 5,
+      "id": "q2",
+      "kind": "true_false",
+      "difficulty": 2,
+      "skill_atoms": ["angular_momentum_conservation"],
+      "stem_en": "True or False: When a spinning skater pulls in her arms (reducing $I$), both angular momentum and kinetic energy are conserved.",
+      "stem_he": "נכון או לא נכון: כאשר מחליקה מסתובבת מושכת זרועותיה פנימה (מקטינה $I$), גם התנע הזוויתי וגם האנרגיה הקינטית מתשמרים.",
+      "answer_payload": {"correct": false},
+      "explanation_en": "Angular momentum is conserved (no external torque), but kinetic energy INCREASES because the skater's muscles do positive work pulling the arms in.",
+      "explanation_he": "התנע הזוויתי מתשמר, אך האנרגיה הקינטית **עולה** כי שרירי המחליקה עושים עבודה חיובית."
+    },
+    {
+      "id": "q3",
+      "kind": "numeric",
+      "difficulty": 3,
+      "skill_atoms": ["angular_momentum_conservation"],
+      "stem_en": "A skater goes from $I_1 = 5\\;\\text{kg·m}^2$, $\\omega_1 = 2\\;\\text{rad/s}$ to $I_2 = 1\\;\\text{kg·m}^2$. Find $\\omega_2$ in rad/s.",
+      "stem_he": "מחליקה עוברת מ-$I_1 = 5$, $\\omega_1 = 2$ ל-$I_2 = 1$. מצא $\\omega_2$ בrad/s.",
+      "answer_payload": {"value": 10.0, "tolerance": 0.1, "unit_en": "rad/s", "unit_he": "rad/s"},
+      "explanation_en": "$\\omega_2 = I_1\\omega_1/I_2 = (5)(2)/1 = 10\\;\\text{rad/s}$.",
+      "explanation_he": "$\\omega_2 = 10\\;\\text{rad/s}$."
+    },
+    {
+      "id": "q4",
       "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "When a figure skater pulls her arms inward (no external torque), her rotational kinetic energy:",
-      "stem_he": "כשמחליקה מושכת את זרועותיה פנימה (ללא מומנט חיצוני), האנרגיה הקינטית הסיבובית שלה:",
-      "options_en": [
-        "Stays the same",
-        "Decreases",
-        "Increases",
-        "Cannot be determined"
-      ],
-      "options_he": [
-        "נשאר זהה",
-        "יורד",
-        "עולה",
-        "לא ניתן לקבוע"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$K = L^2/(2I)$. Since $L$ is conserved and $I$ decreases, $K$ **increases**. The extra energy comes from muscle work.",
-      "explanation_he": "$K = L^2/(2I)$. $L$ נשמר, $I$ קטן → $K$ **עולה**. האנרגיה הנוספת מגיעה מהשרירים.",
-      "skill_atoms": [
-        "L_vs_K_conservation"
-      ],
-      "points_level_min": "hs_physics"
+      "difficulty": 3,
+      "skill_atoms": ["kepler_second_law"],
+      "stem_en": "Why does a planet move faster at perihelion than at aphelion?",
+      "stem_he": "מדוע פלנטה נעה מהר יותר בפריהליון מאשר באפהליון?",
+      "answer_payload": {
+        "options_en": [
+          "Gravity is stronger at perihelion, increasing kinetic energy",
+          "Angular momentum is conserved; smaller $r$ requires larger $v$ to keep $L = mvr$ constant",
+          "The planet has more mass near the Sun",
+          "Kinetic energy is conserved, so smaller $r$ means faster speed"
+        ],
+        "options_he": [
+          "כבידה חזקה יותר בפריהליון, מגדילה אנרגיה קינטית",
+          "התנע הזוויתי מתשמר; $r$ קטן יותר דורש $v$ גדולה יותר כדי לשמור $L = mvr$ קבוע",
+          "לפלנטה יש יותר מסה קרוב לשמש",
+          "האנרגיה הקינטית מתשמרת, לכן $r$ קטן יותר פירושו מהירות גבוהה יותר"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "At turning points, $\\vec{v} \\perp \\vec{r}$, so $L = mvr$. With $L$ conserved: $v_p r_p = v_a r_a$, so $v_p > v_a$ when $r_p < r_a$.",
+      "explanation_he": "בנקודות פנייה, $L = mvr$. עם שימור $L$: $v_p r_p = v_a r_a$, לכן $v_p > v_a$ כאשר $r_p < r_a$."
+    },
+    {
+      "id": "q5",
+      "kind": "derivation",
+      "difficulty": 4,
+      "skill_atoms": ["angular_momentum_from_torque", "kepler_second_law"],
+      "stem_en": "Derive Kepler's 2nd law from Newton's law of gravity and the definition of angular momentum.",
+      "stem_he": "גזור את החוק השני של קפלר מחוק הכבידה של ניוטון וההגדרה של תנע זוויתי.",
+      "answer_payload": {
+        "steps_en": [
+          "Gravity: $\\vec{F}_g = -\\frac{GMm}{r^2}\\hat{r}$ (directed along $\\vec{r}$, central force)",
+          "Torque about the Sun: $\\vec{\\tau} = \\vec{r}\\times\\vec{F}_g = \\vec{r}\\times(-F\\hat{r}) = 0$ (cross product of parallel vectors is zero)",
+          "Therefore $d\\vec{L}/dt = \\vec{\\tau} = 0$, so $\\vec{L} = \\text{const}$",
+          "Areal velocity: $dA = \\frac{1}{2}|\\vec{r}\\times\\vec{v}|dt = \\frac{L}{2m}dt$",
+          "Therefore $dA/dt = L/(2m) = \\text{const}$ — equal areas in equal times ∎"
+        ],
+        "steps_he": [
+          "כבידה: $\\vec{F}_g = -\\frac{GMm}{r^2}\\hat{r}$ (כוח מרכזי לאורך $\\vec{r}$)",
+          "מומנט כוח סביב השמש: $\\vec{\\tau} = \\vec{r}\\times\\vec{F}_g = 0$ (מכפלה וקטורית של וקטורים מקבילים היא אפס)",
+          "לכן $d\\vec{L}/dt = 0$, לכן $\\vec{L} = \\text{const}$",
+          "מהירות שטח: $dA = \\frac{L}{2m}dt$",
+          "לכן $dA/dt = L/(2m) = \\text{const}$ — שטחים שווים בזמנים שווים ∎"
+        ]
+      },
+      "explanation_en": "This is a fundamental result: any central force (not just gravity) conserves angular momentum, leading to equal areas.",
+      "explanation_he": "זהו תוצאה יסודית: כל כוח מרכזי (לא רק כבידה) שומר על תנע זוויתי, מה שמוביל לשטחים שווים."
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "L = Iω (rigid body) or L = r×p (particle).",
-      "τ_net = dL/dt. If τ_ext = 0, then L is conserved.",
-      "I₁ω₁ = I₂ω₂ when body reshapes (skater).",
-      "L conserved ≠ KE conserved. KE = L²/(2I) changes when I changes.",
-      "Gravity is a central force → L conserved in orbits → Kepler's 2nd law.",
-      "Clay-on-disk is an inelastic rotational collision: L conserved, KE lost."
+      "$\\vec{L} = \\vec{r}\\times m\\vec{v}$ for a particle; $L = I\\omega$ for a rigid body.",
+      "Conservation holds when the net external torque is zero.",
+      "Kepler's 2nd law follows directly from $L$ conservation under a central force.",
+      "When $I$ decreases and $\\omega$ increases, kinetic energy increases — the muscles do work.",
+      "Impulse-angular momentum theorem: $\\Delta L = \\tau \\Delta t$."
     ],
     "common_misconceptions": [
       {
-        "wrong": "L is conserved only when no force acts",
-        "correction": "L is conserved when net external TORQUE is zero. Central forces (radial) exert no torque about the center.",
-        "detect_phrase_en": "angular momentum force zero",
-        "detect_phrase_he": "תנע זוויתי כוח אפס"
-      },
-      {
-        "wrong": "KE is conserved when L is conserved",
-        "correction": "KE = L²/(2I). If I changes, KE changes even though L is constant. Skater pulling arms in: KE INCREASES.",
-        "detect_phrase_en": "energy conserved angular momentum",
-        "detect_phrase_he": "אנרגיה נשמרת תנע זוויתי"
+        "wrong": "Kinetic energy is conserved when a skater pulls in arms",
+        "correction": "Angular momentum is conserved, but kinetic energy increases because the skater's muscles do work.",
+        "detect_phrase_en": "energy conserved skater",
+        "detect_phrase_he": "אנרגיה מתשמרת מחליקה"
       }
     ],
+    "tutor_pacing_hint": "Start with the ice-skater example — it's visceral. Then derive Kepler's 2nd law from first principles.",
     "skill_atoms_unlocked": [
       "angular_momentum_compute",
-      "conservation_condition",
-      "L_conservation_apply",
-      "L_vs_K_conservation",
-      "L_collision_problem",
-      "central_force_L",
-      "kepler_second_law"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "rigid_body_dynamics",
-      "rigid_body_torque_equilibrium",
-      "work_energy"
-    ],
-    "tutor_pacing_hint": "Ice skater is the canonical entry point. Establish L = Iω first, then discuss what happens when I changes. The critical insight is KE = L²/(2I): when I decreases with L fixed, KE increases — energy must come from somewhere (muscles). Use the clay-on-disk problem to show L conserved but KE lost (inelastic rotational collision).",
-    "next_recommended": [
-      "harmonic_oscillation",
-      "center_of_mass_uni"
+      "angular_momentum_conservation",
+      "kepler_second_law",
+      "angular_momentum_from_torque"
     ]
   }
 }

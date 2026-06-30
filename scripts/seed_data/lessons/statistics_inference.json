@@ -1,123 +1,46 @@
 {
   "concept_id": "statistics_inference",
+  "title_en": "Statistical Inference — Normal Distribution, Confidence Intervals, and Hypothesis Testing",
+  "title_he": "הסקה סטטיסטית — התפלגות נורמלית, רווחי סמך ומבחני השערות",
   "subject": "math",
-  "level": "university",
-  "math_track": ["makhina"],
-  "title_en": "Statistical Inference — Distributions & Hypothesis Testing",
-  "title_he": "הסקה סטטיסטית — התפלגויות ומבחני השערות",
-  "summary_en": "Build on descriptive statistics and probability: normal distribution, sampling distributions, confidence intervals, and hypothesis testing with p-values and Type I/II errors.",
-  "summary_he": "המשך לסטטיסטיקה תיאורית והסתברות: התפלגות נורמלית, התפלגויות דגימה, רווחי סמך ומבחני השערות עם ערכי p ושגיאות סוג I/II.",
-  "est_minutes": 30,
+  "difficulty": "advanced",
+  "estimated_minutes": 60,
   "sections": [
-    {
-      "kind": "intro",
-      "title_en": "Normal distribution",
-      "title_he": "התפלגות נורמלית",
-      "body_en_md": "## The bell curve\n\n$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} \\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right).$$\n\nStandardize: $$Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1).$$\n\nEmpirical rule: ~68% within $\\mu \\pm \\sigma$, ~95% within $\\mu \\pm 2\\sigma$.",
-      "body_he_md": "## עקומת הפעמון\n\n$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} \\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right).$$\n\nתקנון: $$Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1).$$\n\nכלל 68-95-99.7: ~68% ב-$\\mu \\pm \\sigma$, ~95% ב-$\\mu \\pm 2\\sigma$.",
-      "body_by_level": {
-        "makhina": {
-          "body_en_md": "Use $Z = (X-\\mu)/\\sigma$ with standard normal tables.",
-          "body_he_md": "השתמשו ב-$Z = (X-\\mu)/\\sigma$ עם טבלאות נורמלית תקנית."
-        }
-      }
-    },
-    {
-      "kind": "theory",
-      "title_en": "Sampling distribution and CLT",
-      "title_he": "התפלגות דגימה ומשפט הגבול המרכזי",
-      "body_en_md": "## Standard error\n\n$$SE = \\frac{\\sigma}{\\sqrt{n}}$$\n\n## CLT\n\nFor large $n$: $$\\bar{X} \\approx N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right).$$\n\nEquivalently: $Z = \\dfrac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\approx N(0,1)$.",
-      "body_he_md": "## שגיאת תקן\n\n$$SE = \\frac{\\sigma}{\\sqrt{n}}$$\n\n## משפט הגבול המרכזי\n\nל-$n$ גדול: $$\\bar{X} \\approx N\\!\\left(\\mu, \\frac{\\sigma^2}{n}\\right).$$\n\nשקול: $Z = \\dfrac{\\bar{X} - \\mu}{\\sigma/\\sqrt{n}} \\approx N(0,1)$.",
-      "body_by_level": {
-        "makhina": {
-          "body_en_md": "Larger $n$ → smaller SE.",
-          "body_he_md": "$n$ גדול יותר → $SE$ קטן יותר."
-        }
-      }
-    },
-    {
-      "kind": "theory",
-      "title_en": "Confidence intervals",
-      "title_he": "רווחי סמך",
-      "body_en_md": "95% CI for $\\mu$ (known $\\sigma$):\n\n$$\\bar{x} \\pm z^* \\cdot SE, \\quad z^* \\approx 1.96.$$\n\nInterpretation: about 95% of such intervals contain the true $\\mu$ over repeated sampling.",
-      "body_he_md": "רווח סמך 95% ל-$\\mu$ ($\\sigma$ ידוע):\n\n$$\\bar{x} \\pm z^* \\cdot SE, \\quad z^* \\approx 1.96.$$\n\nפרשנות: כ-95% מהרווחים כאלה יכילו את $\\mu$ האמיתי בדגימות חוזרות.",
-      "body_by_level": {
-        "makhina": {
-          "body_en_md": "CI width $\\propto 1/\\sqrt{n}$.",
-          "body_he_md": "רוחב הרווח $\\propto 1/\\sqrt{n}$."
-        }
-      }
-    },
-    {
-      "kind": "theory",
-      "title_en": "Hypothesis testing",
-      "title_he": "מבחני השערות",
-      "body_en_md": "- $H_0$ vs $H_1$\n- **p-value** under $H_0$\n- Reject if $p < \\alpha$ (often 0.05)\n- Type I ($\\alpha$): reject true $H_0$; Type II ($\\beta$): fail to reject false $H_0$\n\nExample: $H_0:\\mu=50$, $n=36$, $\\bar{x}=52$, $\\sigma=6$ → $Z=2$, two-tailed $p\\approx0.046$ → reject.",
-      "body_he_md": "- $H_0$ מול $H_1$\n- **ערך p** תחת $H_0$\n- דוחים אם $p < \\alpha$ (לרוב 0.05)\n- סוג I ($\\alpha$): דוחים $H_0$ נכונה; סוג II ($\\beta$): לא דוחים $H_0$ שגויה\n\nדוגמה: $H_0:\\mu=50$, $n=36$, $\\bar{x}=52$, $\\sigma=6$ → $Z=2$, p דו-זנבי $\\approx0.046$ → דוחים.",
-      "body_by_level": {
-        "makhina": {
-          "body_en_md": "Fail to reject $\\ne$ accept $H_0$.",
-          "body_he_md": "לא לדחות $\\ne$ לקבל $H_0$."
-        }
-      }
-    }
+    {"id": "intro","kind": "intro","title_en": "From Data to Conclusions","title_he": "מנתונים למסקנות","body_en_md": "Statistical inference lets us draw conclusions about a **population** from a **sample**. While descriptive statistics summarizes data, inference answers: 'Could this result be due to chance?' or 'What range likely contains the true mean?'\n\n**Key tools:**\n- Normal distribution and standardization\n- Central Limit Theorem (CLT)\n- Confidence intervals for $\\mu$\n- Hypothesis tests ($z$-test, $t$-test)\n- $p$-values and significance levels","body_he_md": "הסקה סטטיסטית מאפשרת הסקת מסקנות על **אוכלוסייה** מ**מדגם**.\n\n**כלים מרכזיים:**\n- התפלגות נורמלית ותקנון\n- משפט הגבול המרכזי\n- רווחי סמך ל-$\\mu$\n- מבחני השערות ($z$, $t$)\n- ערכי $p$ ורמות מובהקות"},
+    {"id": "definition","kind": "definition","title_en": "Normal Distribution and Standardization","title_he": "התפלגות נורמלית ותקנון","body_en_md": "**Normal distribution** $X \\sim N(\\mu, \\sigma^2)$:\n$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}}\\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right)$$\n\n**Standardization:** $Z = \\dfrac{X - \\mu}{\\sigma} \\sim N(0,1)$\n\n**Empirical rule:**\n- $P(\\mu - \\sigma < X < \\mu + \\sigma) \\approx 68\\%$\n- $P(\\mu - 2\\sigma < X < \\mu + 2\\sigma) \\approx 95\\%$\n- $P(\\mu - 3\\sigma < X < \\mu + 3\\sigma) \\approx 99.7\\%$\n\n**Standard error (SE):** $SE = \\sigma/\\sqrt{n}$\n\n**Central Limit Theorem:** For large $n$: $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$","body_he_md": "$X \\sim N(\\mu,\\sigma^2)$: $Z = (X-\\mu)/\\sigma \\sim N(0,1)$.\n\n**כלל 68-95-99.7.**\n\n**שגיאת תקן:** $SE = \\sigma/\\sqrt{n}$.\n\n**משפט הגבול המרכזי:** $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$ ל-$n$ גדול."},
+    {"id": "theory","kind": "theory","title_en": "Confidence Intervals and Hypothesis Tests","title_he": "רווחי סמך ומבחני השערות","body_en_md": "### Confidence interval for mean ($\\sigma$ known)\n$$\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}}$$\n- 95% CI: $z_{0.025} = 1.96$\n- 99% CI: $z_{0.005} = 2.576$\n\n### Confidence interval ($\\sigma$ unknown, use $t$)\n$$\\bar{x} \\pm t_{\\alpha/2, n-1} \\cdot \\frac{s}{\\sqrt{n}}$$\n\n### Hypothesis testing framework\n1. State $H_0$ (null) and $H_1$ (alternative)\n2. Choose $\\alpha$ (significance level, usually 0.05)\n3. Compute test statistic: $z = (\\bar{x} - \\mu_0)/(\\sigma/\\sqrt{n})$\n4. Find $p$-value or compare to critical value\n5. Reject $H_0$ if $p < \\alpha$ (or test stat > critical value)\n\n### Type I and Type II errors\n- **Type I error ($\\alpha$):** Reject $H_0$ when it's true (false positive)\n- **Type II error ($\\beta$):** Fail to reject $H_0$ when it's false (false negative)\n- **Power = $1 - \\beta$**","body_he_md": "### רווח סמך לממוצע ($\\sigma$ ידוע)\n$\\bar{x} \\pm z_{\\alpha/2} \\cdot \\sigma/\\sqrt{n}$. 95%: $z=1.96$; 99%: $z=2.576$.\n\n### מבחן השערות\n1. $H_0$, $H_1$\n2. $\\alpha$ (לרוב 0.05)\n3. סטטיסטיקת מבחן: $z=(\\bar{x}-\\mu_0)/(\\sigma/\\sqrt{n})$\n4. ערך $p$\n5. דחה $H_0$ אם $p < \\alpha$\n\n**שגיאה מסוג I:** דחיית $H_0$ כשהיא נכונה. **שגיאה מסוג II:** אי-דחייה כשהיא שגויה."},
+    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Normal Probability Calculation","title_he": "דוגמה פתורה 1 — חישוב הסתברות נורמלית","body_en_md": "**Heights of adults are $N(170, 100)$ (mean 170 cm, std 10 cm). Find $P(X > 185)$.**\n\n**Step 1:** Standardize: $Z = (185 - 170)/10 = 1.5$\n\n**Step 2:** $P(X > 185) = P(Z > 1.5) = 1 - P(Z < 1.5)$\n\n**Step 3:** From table: $P(Z < 1.5) = 0.9332$\n\n**Answer:** $P(X > 185) = 1 - 0.9332 = 0.0668 \\approx 6.7\\%$","body_he_md": "גבהות: $N(170, 100)$. $P(X > 185)$?\n\n$Z = (185-170)/10 = 1.5$.\n\n$P(Z > 1.5) = 1-0.9332 = 0.0668$."},
+    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Exam scores are $N(75, 25)$ (mean 75, std 5). Find $P(X < 65)$.","body_he_md": "ציוני בחינה $N(75,25)$. מצא $P(X<65)$.","checkpoint_solution_en": "$Z = (65-75)/5 = -2$. $P(Z < -2) = P(Z > 2) = 1-0.9772 = 0.0228$.","checkpoint_solution_he": "$Z=-2$. $P = 0.0228$."},
+    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — 95% Confidence Interval","title_he": "דוגמה פתורה 2 — רווח סמך 95%","body_en_md": "**A sample of $n=36$ students has mean score $\\bar{x} = 72$. Population std $\\sigma = 12$. Construct a 95% CI for the population mean.**\n\n**Step 1:** $SE = \\sigma/\\sqrt{n} = 12/6 = 2$\n\n**Step 2:** 95% CI: $z_{0.025} = 1.96$\n\n**Step 3:**\n$$72 \\pm 1.96 \\times 2 = 72 \\pm 3.92$$\n\n**Answer:** $CI = (68.08,\\ 75.92)$\n\n**Interpretation:** We are 95% confident the true mean lies between 68.08 and 75.92.","body_he_md": "$n=36$, $\\bar{x}=72$, $\\sigma=12$. רווח סמך 95%.\n\n$SE = 12/6 = 2$. $72 \\pm 1.96\\times2 = (68.08, 75.92)$."},
+    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "A 99% CI with $n=100$, $\\bar{x}=50$, $\\sigma=15$. Find the interval.","body_he_md": "רווח סמך 99%: $n=100$, $\\bar{x}=50$, $\\sigma=15$. מצא הרווח.","checkpoint_solution_en": "$SE=15/10=1.5$. $50\\pm2.576\\times1.5=50\\pm3.864=(46.14, 53.86)$.","checkpoint_solution_he": "$(46.14, 53.86)$."},
+    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — One-Sample z-Test","title_he": "דוגמה פתורה 3 — מבחן $z$ חד-מדגמי","body_en_md": "**A company claims average battery life = 500 hours. A sample of $n=64$ gives $\\bar{x}=490$ hours, $\\sigma=40$. Test at $\\alpha=0.05$.**\n\n**Step 1:** $H_0: \\mu = 500$ vs $H_1: \\mu \\neq 500$ (two-tailed)\n\n**Step 2:** Test statistic:\n$$z = \\frac{490 - 500}{40/\\sqrt{64}} = \\frac{-10}{5} = -2$$\n\n**Step 3:** Critical region: $|z| > z_{0.025} = 1.96$\n\n**Step 4:** $|-2| = 2 > 1.96$ → **Reject $H_0$**\n\n**Conclusion:** At 5% significance, there is sufficient evidence that the mean battery life differs from 500 hours.\n\n**$p$-value:** $P = 2P(Z < -2) = 2(0.0228) = 0.0456 < 0.05$","body_he_md": "טענה: $\\mu=500$. מדגם: $n=64$, $\\bar{x}=490$, $\\sigma=40$. $\\alpha=0.05$.\n\n$H_0: \\mu=500$ מול $H_1: \\mu\\neq500$.\n\n$z = (490-500)/(40/8) = -10/5 = -2$.\n\n$|-2| > 1.96$ → **דחה $H_0$**. ערך $p=0.046 < 0.05$."},
+    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Task | Formula |\n|---|---|\n| Standardize | $Z = (X-\\mu)/\\sigma$ |\n| SE | $\\sigma/\\sqrt{n}$ |\n| 95% CI ($\\sigma$ known) | $\\bar{x} \\pm 1.96 \\cdot SE$ |\n| 99% CI | $\\bar{x} \\pm 2.576 \\cdot SE$ |\n| $z$-test statistic | $z = (\\bar{x}-\\mu_0)/SE$ |\n| Reject $H_0$ | $|z| > z_{\\alpha/2}$ or $p < \\alpha$ |\n| Type I error | $\\alpha$ (size of rejection region) |\n| Type II error | $\\beta$ (missed true effect) |","body_he_md": "| משימה | נוסחה |\n|---|---|\n| תקנון | $Z=(X-\\mu)/\\sigma$ |\n| שגיאת תקן | $\\sigma/\\sqrt{n}$ |\n| CI 95% | $\\bar{x}\\pm1.96\\cdot SE$ |\n| $z$-מבחן | $z=(\\bar{x}-\\mu_0)/SE$ |\n| דחה $H_0$ | $|z|>z_{\\alpha/2}$ |"},
+    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
+      {"id": "e1","difficulty": "easy","body_en": "If $X \\sim N(50, 16)$ (mean 50, std 4), find $P(X < 58)$.","body_he": "$X \\sim N(50,16)$. מצא $P(X<58)$.","solution_en": "$Z=(58-50)/4=2$. $P(Z<2)=0.9772$.","solution_he": "$0.9772$.","points": 5},
+      {"id": "e2","difficulty": "easy","body_en": "State the empirical rule: what % of data falls within $\\pm2$ standard deviations of the mean?","body_he": "כלל אמפירי: כמה אחוז נתונים בתוך $\\pm2$ סטיות תקן מהממוצע?","solution_en": "Approximately 95%.","solution_he": "כ-95%.","points": 5},
+      {"id": "e3","difficulty": "easy","body_en": "A 95% CI for a mean is $(42, 58)$. What is the sample mean $\\bar{x}$?","body_he": "רווח סמך 95% הוא $(42,58)$. מה ממוצע המדגם?","solution_en": "$\\bar{x} = (42+58)/2 = 50$.","solution_he": "$50$.","points": 5},
+      {"id": "e4","difficulty": "easy","body_en": "What is SE for $n=100$, $\\sigma=30$?","body_he": "מה שגיאת תקן עבור $n=100$, $\\sigma=30$?","solution_en": "$SE = 30/\\sqrt{100} = 3$.","solution_he": "$3$.","points": 5},
+      {"id": "e5","difficulty": "medium","body_en": "A sample of $n=25$ has $\\bar{x}=80$, $\\sigma=10$ (known). Build a 95% CI.","body_he": "$n=25$, $\\bar{x}=80$, $\\sigma=10$. בנה רווח סמך 95%.","solution_en": "$SE=10/5=2$. $80\\pm1.96\\times2 = (76.08, 83.92)$.","solution_he": "$(76.08, 83.92)$.","points": 8},
+      {"id": "e6","difficulty": "medium","body_en": "Test $H_0: \\mu=100$ vs $H_1: \\mu > 100$ at $\\alpha=0.05$ with $\\bar{x}=105$, $\\sigma=20$, $n=100$.","body_he": "מבחן $H_0:\\mu=100$ מול $H_1:\\mu>100$, $\\alpha=0.05$: $\\bar{x}=105$, $\\sigma=20$, $n=100$.","solution_en": "$z=(105-100)/(20/10)=5/2=2.5$. Critical value: $z_{0.05}=1.645$. $2.5>1.645$ → reject $H_0$.","solution_he": "$z=2.5>1.645$ → דחה $H_0$.","points": 8},
+      {"id": "e7","difficulty": "medium","body_en": "$P(Z < 1.645) = 0.95$. What is the 90% CI formula (one-sided)?","body_he": "$P(Z<1.645)=0.95$. מה נוסחת רווח סמך 90% חד-צדדי?","solution_en": "Upper bound: $\\bar{x} + 1.645 \\cdot SE$. For 90% two-sided: $\\bar{x} \\pm 1.645 \\cdot SE$.","solution_he": "חד-צדדי: $\\bar{x}+1.645\\cdot SE$. דו-צדדי: $\\bar{x}\\pm1.645\\cdot SE$.","points": 8},
+      {"id": "e8","difficulty": "medium","body_en": "A researcher gets $p=0.03$ with $\\alpha=0.05$. State the conclusion.","body_he": "חוקר קיבל $p=0.03$, $\\alpha=0.05$. מה המסקנה?","solution_en": "$p < \\alpha$: Reject $H_0$. The result is statistically significant at the 5% level.","solution_he": "$p < \\alpha$ → דחה $H_0$. התוצאה מובהקת סטטיסטית ב-5%.","points": 8},
+      {"id": "e9","difficulty": "medium","body_en": "If $n$ quadruples, how does the SE change?","body_he": "אם $n$ מוכפל ב-4, מה קורה לשגיאת התקן?","solution_en": "$SE = \\sigma/\\sqrt{n}$. If $n \\to 4n$: $SE \\to \\sigma/\\sqrt{4n} = SE/2$. SE is halved.","solution_he": "SE מתחלק ב-2.","points": 8},
+      {"id": "e10","difficulty": "hard","body_en": "The government claims average income is \\$50,000. A random sample of $n=400$ gives $\\bar{x}=\\$48,500$, $s=\\$15,000$ (use $s$ as $\\sigma$). Test at $\\alpha=0.01$ (two-tailed). Find the $p$-value.","body_he": "טענה: הכנסה ממוצעת $50000\\$$. $n=400$, $\\bar{x}=48500\\$$, $s=15000\\$$. מבחן $\\alpha=0.01$. מצא ערך $p$.","solution_en": "$z=(48500-50000)/(15000/20)=-1500/750=-2$. $p=2P(Z<-2)=2(0.0228)=0.0456$. $0.0456 > 0.01$ → Fail to reject $H_0$ at 1% level (but would reject at 5%).","solution_he": "$z=-2$, $p=0.046 > 0.01$ → לא דוחים $H_0$ ברמה 1% (דוחים ב-5%).","points": 10},
+      {"id": "e11","difficulty": "hard","body_en": "Explain: How does increasing sample size $n$ affect (a) SE, (b) width of CI, (c) power of a test?","body_he": "הסבר: כיצד גדילת $n$ משפיעה על (א) שגיאת תקן, (ב) רוחב רווח סמך, (ג) עצמת מבחן?","solution_en": "(a) SE = σ/√n decreases as n increases. (b) CI width = 2×z×SE narrows. (c) Larger n → smaller SE → larger |z| for same effect → higher power (less Type II error).","solution_he": "(א) SE קטנה. (ב) רווח סמך צר יותר. (ג) עצמה גדלה (פחות שגיאת סוג II).","points": 10},
+      {"id": "e12","difficulty": "hard","body_en": "Systolic blood pressure: $N(120, 225)$ (σ=15). If a new drug lowers mean to 115, and we test $H_0: \\mu=120$ vs $H_1: \\mu<115$ with $n=36$, $\\alpha=0.05$: (a) find critical value (b) find power.","body_he": "לחץ דם: $N(120,225)$. תרופה מורידה לממוצע 115. $n=36$, $\\alpha=0.05$. (א) ערך קריטי (ב) עצמת מבחן.","solution_en": "(a) $SE=15/6=2.5$. Reject if $z<-1.645$, i.e. $\\bar{x}<120-1.645\\times2.5=115.89$. (b) Power = $P(\\bar{X}<115.89 | \\mu=115) = P(Z < (115.89-115)/2.5) = P(Z<0.356)\\approx0.639$. Power ≈ 64%.","solution_he": "(א) $\\bar{x}<115.89$. (ב) עצמה $\\approx 64\\%$.","points": 10},
+      {"id": "e13","difficulty": "hard","body_en": "Why is it wrong to say: 'There is a 95% probability that $\\mu$ is in the interval (72, 84)'? What is the correct interpretation?","body_he": "מדוע שגוי לומר: 'יש 95% הסתברות שהממוצע $\\mu$ נמצא ברווח (72,84)'? מה הפירוש הנכון?","solution_en": "μ is a fixed (unknown) constant, not a random variable. Once we compute the interval, it either contains μ or it doesn't. The correct interpretation: 'If we repeated this sampling procedure many times, 95% of the resulting intervals would contain μ.'","solution_he": "$\\mu$ הוא קבוע לא ידוע. הפירוש הנכון: '95% מהרווחים הנוצרים בהליך דגימה חוזר יכילו את $\\mu$'.","points": 10}
+    ]},
+    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Confusing $\\sigma$ (population std) with $SE = \\sigma/\\sqrt{n}$.** The SE is ALWAYS smaller than $\\sigma$.\n\n2. **Misinterpreting a confidence interval.** The CI does NOT mean '95% probability μ is inside'. It means 95% of such intervals would contain μ.\n\n3. **Two-tailed vs one-tailed.** A two-tailed test uses $z_{\\alpha/2}$ (e.g. 1.96 for 5%). One-tailed uses $z_\\alpha$ (e.g. 1.645).\n\n4. **$p$-value misuse.** $p < 0.05$ means 'unusual if $H_0$ true', NOT 'there's a 95% chance $H_1$ is true'.\n\n5. **Using $z$ when $\\sigma$ is unknown.** Use $t$-distribution when $\\sigma$ is estimated from a small sample.","body_he_md": "1. **$\\sigma$ ≠ $SE$.** $SE = \\sigma/\\sqrt{n}$ — תמיד קטן מ-$\\sigma$.\n2. **CI לא אומר '95% הסתברות'** — $\\mu$ קבוע.\n3. **דו-צדדי vs חד-צדדי:** $z_{\\alpha/2}$ לעומת $z_\\alpha$.\n4. **ערך $p$** לא = הסתברות שההשערה נכונה.\n5. **$z$ vs $t$:** כאשר $\\sigma$ לא ידוע, השתמש ב-$t$."},
+    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam","title_he": "לפני הבחינה","body_en_md": "- $Z = (X-\\mu)/\\sigma$\n- $SE = \\sigma/\\sqrt{n}$\n- 95% CI: $\\bar{x} \\pm 1.96 \\cdot SE$\n- 99% CI: $\\bar{x} \\pm 2.576 \\cdot SE$\n- $z$-test: $z = (\\bar{x}-\\mu_0)/SE$\n- Reject $H_0$ when $|z| > z_{\\alpha/2}$ or $p < \\alpha$\n- Type I = $\\alpha$ (false positive); Type II = $\\beta$ (false negative); Power = $1-\\beta$","body_he_md": "- $Z=(X-\\mu)/\\sigma$; $SE=\\sigma/\\sqrt{n}$\n- CI 95%: $\\pm1.96\\cdot SE$; CI 99%: $\\pm2.576\\cdot SE$\n- מבחן: $z=(\\bar{x}-\\mu_0)/SE$; דחה כש$|z|>z_{\\alpha/2}$\n- שגיאה I: $\\alpha$; שגיאה II: $\\beta$; עצמה: $1-\\beta$"},
+    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **Normal:** $Z = (X-\\mu)/\\sigma$; 68-95-99.7 rule\n- **CLT:** $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$; $SE = \\sigma/\\sqrt{n}$\n- **CI (95%):** $\\bar{x} \\pm 1.96 \\cdot SE$\n- **Hypothesis test:** $z = (\\bar{x}-\\mu_0)/SE$; reject if $|z| > z_{\\alpha/2}$\n- **Errors:** Type I ($\\alpha$), Type II ($\\beta$), Power ($1-\\beta$)","body_he_md": "- $Z=(X-\\mu)/\\sigma$; כלל 68-95-99.7\n- $SE=\\sigma/\\sqrt{n}$; CI 95%: $\\pm1.96\\cdot SE$\n- מבחן $z$: $(\\bar{x}-\\mu_0)/SE$\n- שגיאות: I ($\\alpha$), II ($\\beta$), עצמה ($1-\\beta$)"}
   ],
   "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "If $X \\sim N(100, 25)$, what is the z-score of $X = 110$?",
-      "stem_he": "אם $X \\sim N(100, 25)$, מהו ציון ה-z של $X = 110$?",
-      "options_en": ["$0.4$", "$1.0$", "$2.0$", "$2.5$"],
-      "options_he": ["$0.4$", "$1.0$", "$2.0$", "$2.5$"],
-      "correct_index": 2,
-      "explanation_en": "$\\sigma=5$, $Z=(110-100)/5=2$.",
-      "explanation_he": "$\\sigma=5$, $Z=(110-100)/5=2$.",
-      "skill_atoms": ["z_score_compute"],
-      "points_level_min": "makhina"
-    },
-    {
-      "ord": 2,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Why does $SE = \\sigma/\\sqrt{n}$ decrease as $n$ increases?",
-      "stem_he": "מדוע $SE = \\sigma/\\sqrt{n}$ קטנה ככל ש-$n$ גדל?",
-      "options_en": ["Larger samples average out random variation", "Population $\\sigma$ shrinks", "CLT stops applying", "Confidence level drops"],
-      "options_he": ["מדגמים גדולים ממוצעים שונות", "סטיית תקן האוכלוסייה קטנה", "CLT מפסיק לחול", "רמת הסמך יורדת"],
-      "correct_index": 0,
-      "explanation_en": "Averaging reduces variability of $\\bar{X}$.",
-      "explanation_he": "ממוצע מקטין שונות של $\\bar{X}$.",
-      "skill_atoms": ["standard_error_clt"],
-      "points_level_min": "makhina"
-    },
-    {
-      "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$n=64$, $\\bar{x}=50$, $\\sigma=8$. 95% CI lower bound ($z^*=1.96$)?",
-      "stem_he": "$n=64$, $\\bar{x}=50$, $\\sigma=8$. גבול תחתון לרווח 95% ($z^*=1.96$)?",
-      "acceptable_answers": ["48.04", "48.040"],
-      "case_sensitive": false,
-      "explanation_en": "$SE=1$, lower $=50-1.96=48.04$.",
-      "explanation_he": "$SE=1$, תחתון $=50-1.96=48.04$.",
-      "skill_atoms": ["confidence_interval_compute"],
-      "points_level_min": "makhina"
-    },
-    {
-      "ord": 4,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "Test gives $p=0.03$ at $\\alpha=0.05$. Which is TRUE?",
-      "stem_he": "מבחן נותן $p=0.03$ ב-$\\alpha=0.05$. מה נכון?",
-      "options_en": ["Reject $H_0$; 3% chance $H_0$ true", "Reject $H_0$; if $H_0$ true, 3% chance of data this extreme", "Accept $H_0$", "Type II error is 0.03"],
-      "options_he": ["דוחים; 3% ש-$H_0$ נכונה", "דוחים; אם $H_0$ נכונה, 3% לנתונים קיצוניים", "מקבלים $H_0$", "שגיאת סוג II היא 0.03"],
-      "correct_index": 1,
-      "explanation_en": "$p<\\alpha$ so reject; p is $P(data|H_0)$.",
-      "explanation_he": "$p<\\alpha$ לכן דוחים; p הוא $P(נתונים|H_0)$.",
-      "skill_atoms": ["hypothesis_p_value_interpret"],
-      "points_level_min": "makhina"
-    }
+    {"id": "q1","kind": "mcq","difficulty": 3,"skill_atoms": ["z_standardization","confidence_intervals"],"stem_en": "$X \\sim N(100, 225)$ (σ=15). Find $P(85 < X < 115)$.","stem_he": "$X \\sim N(100, 225)$. מצא $P(85<X<115)$.","answer_payload": {"options_en": ["68%","95%","99.7%","90%"],"options_he": ["68%","95%","99.7%","90%"],"correct_index": 0},"explanation_en": "$85 = 100-15 = \\mu-\\sigma$ and $115 = \\mu+\\sigma$. By empirical rule, $\\approx 68\\%$.","explanation_he": "$85=\\mu-\\sigma$, $115=\\mu+\\sigma$. כלל 68-95-99.7: $\\approx68\\%$."}
   ],
-  "agent_hints": "Connect normal tables to z-scores, then CLT for sample means. Stress CI interpretation vs p-values. Common trap: confusing P(H0|data) with p-value."
+  "agent_hints": {
+    "key_insights": ["SE = σ/√n (not σ). SE decreases as n grows — more data means more precise estimates.", "A 95% CI means: in repeated sampling, 95% of such intervals contain μ. NOT '95% chance μ is here' (μ is fixed).", "Always state H₀ and H₁ before computing. For two-tailed test, p-value = 2×(one-tail probability).", "Type I error (false positive) = α. Type II error (false negative) = β. Power = 1−β (probability of catching a real effect)."],
+    "common_misconceptions": [{"wrong": "The p-value tells us the probability that H₀ is true","correction": "The p-value is P(observing this data OR more extreme | H₀ is true). It says nothing about the probability of H₀ itself.","detect_phrase_en": "probability that the null is true","detect_phrase_he": "הסתברות שההשערת האפס נכונה"}],
+    "tutor_pacing_hint": "Start with normal distribution visualization and the 68-95-99.7 rule. Build to standardization. Then confidence intervals before hypothesis tests — CIs are more intuitive. End with the subtle interpretation questions.",
+    "skill_atoms_unlocked": ["normal_distribution","standardization","empirical_rule","central_limit_theorem","confidence_intervals","hypothesis_testing","p_values","type_i_type_ii_errors"]
+  }
 }
