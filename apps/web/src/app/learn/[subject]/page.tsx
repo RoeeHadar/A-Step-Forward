@@ -110,6 +110,8 @@ const SUBJECT_ALIASES: Record<string, string> = {
   physics_2: 'university_physics_2',
   calculus: 'calculus_1',
   university_prep: 'makhina',
+  physics_pre_university: 'makhina',
+  math_pre_university: 'makhina',
 };
 
 export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {

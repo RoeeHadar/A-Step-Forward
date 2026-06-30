@@ -30,16 +30,6 @@ const UNIVERSITY_SLUGS = [
   'statistics_probability',
 ];
 
-// Legacy slugs to suppress from the catalog when canonical slugs are present.
-const SUPPRESS_LEGACY = new Set([
-  'calculus',
-  'math-hs-3', 'math-hs-4', 'math-hs-5',
-  'high_school_math_3_points', 'high_school_math_4_points', 'high_school_math_5_points',
-  'physics-hs', 'physics_high_school', 'high_school_physics',
-  'linear-algebra',
-  'math_pre_university',
-]);
-
 type SubjectCard = {
   subject: string;
   section_count: number;
@@ -114,17 +104,10 @@ export default async function LearnPage() {
   const universityCards = UNIVERSITY_SLUGS.map(card);
   const makhinaCard = card('makhina');
 
-  // Collect remaining DB subjects that are not in any group and not suppressed.
-  const groupedSlugs = new Set([...BAGRUT_SLUGS, ...UNIVERSITY_SLUGS, 'makhina']);
-  const extraCards = subjects.filter(
-    (s) => !groupedSlugs.has(s.subject) && !SUPPRESS_LEGACY.has(s.subject),
-  );
-
   const groups = [
     { id: 'bagrut', he: 'בגרות', en: 'Bagrut', cards: bagrutCards },
     { id: 'university', he: 'אוניברסיטה', en: 'University', cards: universityCards },
-    { id: 'makhina', he: 'מכינה', en: 'University Prep', cards: [makhinaCard] },
-    ...(extraCards.length > 0 ? [{ id: 'other', he: 'נוסף', en: 'Other', cards: extraCards }] : []),
+    { id: 'makhina', he: 'מכינה', en: 'University Preparation', cards: [makhinaCard] },
   ];
 
   return (
