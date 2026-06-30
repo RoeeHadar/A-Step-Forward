@@ -1,145 +1,186 @@
 {
   "id": "rigid_body_dynamics",
-  "subject": "university_physics_1",
-  "title_en": "Rigid Body Dynamics",
-  "title_he": "דינמיקה של גוף קשיח",
-  "duration_min": 40,
   "type": "interactive",
+  "subject": "university_physics_1",
+  "title_en": "Rigid Body Dynamics — Rotation, Torque, and Rolling",
+  "title_he": "דינמיקה של גוף קשיח — סיבוב, מומנט כוח וגלגול",
+  "duration_min": 40,
+  "est_minutes": 40,
   "level_min": "university",
-  "agent_hints": "Rolling: v=R*omega. tau=I*alpha. Use translation + rotation. Parallel axis I=Icm+M*d^2.",
+  "math_track": ["university_physics_1"],
+  "summary_en": "A rigid body has both translational and rotational degrees of freedom. Newton's second law for rotation is τ = Iα. The moment of inertia I depends on mass distribution; the parallel-axis (Steiner) theorem extends it. Rolling without slipping couples translation and rotation through v_cm = Rω.",
+  "summary_he": "לגוף קשיח יש דרגות חופש של תנועה קווית וסיבובית. חוק שני ניוטון לסיבוב הוא τ = Iα. מומנט האינרציה I תלוי בפיזור המסה; משפט ציר המקביל (שטיינר) מרחיב אותו. גלגול ללא החלקה מקשר תנועה קווית וסיבובית דרך v_cm = Rω.",
   "sections": [
     {
-      "id": "intro",
+      "id": "from_particles_to_rigid_bodies",
       "title_en": "From Particles to Rigid Bodies",
-      "title_he": "Rigid bodies intro",
-      "body_en_md": "Rigid body: fixed shape. Torque tau=r x F. Right-hand rule.",
-      "body_he_md": "Torque and rotational DOF.",
-      "level_min": "university"
+      "title_he": "מחלקיקים לגופים קשיחים",
+      "level_min": "university",
+      "body_en_md": "### What is a rigid body?\n\nA **rigid body** is an idealized object in which the distance between any two points is fixed — it does not deform. Real objects are approximately rigid if the forces are well below the elastic limit.\n\n### Degrees of freedom\n\nA rigid body in 3D has **6 degrees of freedom**: 3 translational (center of mass motion, described by $\\vec{F}_{\\text{net}} = m\\vec{a}_{\\text{cm}}$) and 3 rotational. In 2D problems (Bagrut / Physics 1 level) we have 1 rotational DOF — rotation about a fixed axis.\n\n### Torque\n\n**Torque** $\\vec{\\tau} = \\vec{r} \\times \\vec{F}$ is the rotational analog of force.\n\n- **Magnitude:** $\\tau = rF\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{F}$. Equivalently, $\\tau = r_\\perp F$ where $r_\\perp$ is the moment arm.\n- **Direction:** right-hand rule — curl fingers from $\\vec{r}$ to $\\vec{F}$; thumb points in direction of $\\vec{\\tau}$.\n- **Units:** N·m (note: same dimension as energy, but torque is **not** energy).\n\n### Sign convention (2D)\n\nCounterclockwise torque = **positive** (by convention). A torque tending to rotate counterclockwise is $+\\tau$; clockwise is $-\\tau$.\n\n### Quick example\n\nA wrench of length $r = 0.3$ m applies a force $F = 50$ N perpendicular to the handle. Torque: $\\tau = 0.3 \\times 50 = 15$ N·m.",
+      "body_he_md": "### מהו גוף קשיח?\n\n**גוף קשיח** הוא אובייקט אידיאלי שבו המרחק בין כל שתי נקודות קבוע — הוא אינו מתעוות.\n\n### דרגות חופש\n\nגוף קשיח ב-3D: **6 דרגות חופש** — 3 קוויות ($\\vec{F} = m\\vec{a}_{\\text{cm}}$) ו-3 סיבוביות. בבעיות 2D: סיבוב סביב ציר קבוע.\n\n### מומנט כוח (טורק)\n\n$\\vec{\\tau} = \\vec{r} \\times \\vec{F}$.\n\n- גודל: $\\tau = rF\\sin\\theta = r_\\perp F$. יחידות: N·m.\n- כיוון: כלל יד ימין.\n- קונבנציה ב-2D: נגד כיוון השעון = חיובי.\n\n### דוגמה\n\nמפתח באורך $r=0.3$ מ', כוח $F=50$ N מאונך לידית. $\\tau = 0.3\\cdot 50 = 15$ N·m."
     },
     {
-      "id": "inertia",
+      "id": "moment_of_inertia",
       "title_en": "Moment of Inertia",
-      "title_he": "Moment of inertia",
-      "body_en_md": "I=sum m_i r_i^2. Rod end ML^2/3, center ML^2/12, disk MR^2/2, ring MR^2, sphere 2MR^2/5. Steiner: I=Icm+Md^2.",
-      "body_he_md": "Common I formulas and parallel axis.",
-      "level_min": "university"
+      "title_he": "מומנט אינרציה",
+      "level_min": "university",
+      "body_en_md": "### Definition\n\nThe **moment of inertia** $I$ is the rotational analog of mass — it measures resistance to angular acceleration.\n\n$$I = \\sum_i m_i r_i^2 \\quad (\\text{discrete}), \\qquad I = \\int r^2\\, dm \\quad (\\text{continuous}).$$\n\n$r_i$ is the perpendicular distance of mass $m_i$ from the rotation axis.\n\n### Standard results (memorize these)\n\n| Object | Axis | $I$ |\n|--------|------|-----|\n| Thin rod (mass $M$, length $L$) | About one end | $\\frac{1}{3}ML^2$ |\n| Thin rod | About center | $\\frac{1}{12}ML^2$ |\n| Solid disk / cylinder | About central axis | $\\frac{1}{2}MR^2$ |\n| Thin ring / hollow cylinder | About central axis | $MR^2$ |\n| Solid sphere | About diameter | $\\frac{2}{5}MR^2$ |\n| Hollow sphere | About diameter | $\\frac{2}{3}MR^2$ |\n\n### Parallel-axis theorem (Steiner's theorem)\n\nIf $I_{\\text{cm}}$ is the moment of inertia about an axis through the **center of mass**, then about a **parallel** axis at distance $d$:\n\n$$\\boxed{I = I_{\\text{cm}} + Md^2.}$$\n\n> Note: $I_{\\text{cm}}$ is always the **minimum** moment about any parallel axis.\n\n### Worked example: composite body\n\nA thin rod (mass $M$, length $L$) has a point mass $m$ attached at its far end. What is the moment of inertia about the free end?\n\n- Rod about end: $I_{\\text{rod}} = \\frac{1}{3}ML^2$.\n- Point mass at distance $L$: $I_{\\text{mass}} = mL^2$.\n- Total: $I = \\frac{1}{3}ML^2 + mL^2 = \\left(\\frac{M}{3} + m\\right)L^2$.",
+      "body_he_md": "### הגדרה\n\n**מומנט אינרציה** $I$ הוא האנלוג הסיבובי של מסה.\n\n$$I = \\sum_i m_i r_i^2, \\qquad I = \\int r^2\\,dm.$$\n\n### תוצאות סטנדרטיות (לשינון)\n\n| גוף | ציר | $I$ |\n|---|---|---|\n| מוט דק | קצה | $\\frac{1}{3}ML^2$ |\n| מוט דק | מרכז | $\\frac{1}{12}ML^2$ |\n| דיסקה/גליל מלא | ציר מרכזי | $\\frac{1}{2}MR^2$ |\n| טבעת/גליל חלול | ציר מרכזי | $MR^2$ |\n| כדור מלא | קוטר | $\\frac{2}{5}MR^2$ |\n\n### משפט ציר המקביל (שטיינר)\n\n$$I = I_{\\text{cm}} + Md^2$$\n\n### דוגמה: גוף מורכב\n\nמוט (M, L) עם מסה נקודתית m בקצהו הרחוק. $I$ סביב הקצה החופשי:\n$I = \\frac{1}{3}ML^2 + mL^2 = \\left(\\frac{M}{3}+m\\right)L^2$."
     },
     {
-      "id": "newton_rot",
+      "id": "newtons_second_law_rotation",
       "title_en": "Newton's Second Law for Rotation",
-      "title_he": "Newton for rotation",
-      "body_en_md": "tau_net=I*alpha. Cylinder on incline: a=(2/3)*g*sin(theta), f=(1/3)*Mg*sin(theta) up slope.",
-      "body_he_md": "tau=I*alpha and incline example.",
-      "level_min": "university"
+      "title_he": "חוק שני ניוטון לסיבוב",
+      "level_min": "university",
+      "body_en_md": "### The law\n\n$$\\boxed{\\tau_{\\text{net}} = I\\alpha}$$\n\nwhere $\\alpha = d\\omega/dt$ is the angular acceleration. This is the exact rotational analog of $F_{\\text{net}} = ma$.\n\n### Rotational kinematics\n\nFor constant $\\alpha$ (like constant $a$ in linear kinematics):\n\n| Linear | Rotational |\n|--------|------------|\n| $v = v_0 + at$ | $\\omega = \\omega_0 + \\alpha t$ |\n| $x = v_0 t + \\frac{1}{2}at^2$ | $\\theta = \\omega_0 t + \\frac{1}{2}\\alpha t^2$ |\n| $v^2 = v_0^2 + 2ax$ | $\\omega^2 = \\omega_0^2 + 2\\alpha\\theta$ |\n\n### Worked example: cylinder on incline (full solution)\n\nA **solid cylinder** (mass $M$, radius $R$) rolls without slipping down an incline of angle $\\theta$. Find the acceleration $a_{\\text{cm}}$.\n\n**Free-body diagram:** weight $Mg$ downward; normal force $N$ perpendicular to surface; static friction $f$ up the incline.\n\n**Newton's 2nd (translation, along incline):**\n$$Mg\\sin\\theta - f = Ma_{\\text{cm}}. \\quad (1)$$\n\n**Newton's 2nd (rotation, about cm):**\n$$fR = I_{\\text{cm}}\\alpha = \\frac{1}{2}MR^2 \\cdot \\alpha. \\quad (2)$$\n\n**Rolling constraint:** $a_{\\text{cm}} = R\\alpha$. Substitute into (2): $f = \\frac{1}{2}Ma_{\\text{cm}}$.\n\nSubstitute into (1):\n$$Mg\\sin\\theta - \\frac{1}{2}Ma_{\\text{cm}} = Ma_{\\text{cm}} \\Rightarrow a_{\\text{cm}} = \\frac{2}{3}g\\sin\\theta.$$\n\nNote: this is **less** than $g\\sin\\theta$ (a sliding frictionless block). Friction does not do work but it causes the torque needed to spin the cylinder.\n\n**Friction force:** $f = \\frac{1}{2}Ma_{\\text{cm}} = \\frac{1}{3}Mg\\sin\\theta$ (directed up the incline).",
+      "body_he_md": "### החוק\n\n$$\\tau_{\\text{נטו}} = I\\alpha$$\n\nהאנלוג הסיבובי של $F = ma$.\n\n### קינמטיקה סיבובית (תאוצה קבועה)\n\n$\\omega = \\omega_0 + \\alpha t$, $\\theta = \\omega_0 t + \\frac{1}{2}\\alpha t^2$, $\\omega^2 = \\omega_0^2 + 2\\alpha\\theta$.\n\n### דוגמה: גליל על משופע (פתרון מלא)\n\nגליל מלא ($M$, $R$) מתגלגל ללא החלקה על משופע בזווית $\\theta$. מצאו $a_{\\text{cm}}$.\n\n**תנועה קווית (לאורך משופע):** $Mg\\sin\\theta - f = Ma_{\\text{cm}}$. (1)\n\n**סיבוב סביב מרכז מסה:** $fR = \\frac{1}{2}MR^2\\alpha$. (2)\n\n**אילוץ גלגול:** $a_{\\text{cm}} = R\\alpha$. מ-(2): $f = \\frac{1}{2}Ma_{\\text{cm}}$.\n\nמ-(1): $Mg\\sin\\theta - \\frac{1}{2}Ma_{\\text{cm}} = Ma_{\\text{cm}}$ → $a_{\\text{cm}} = \\frac{2}{3}g\\sin\\theta$.\n\n**כוח חיכוך:** $f = \\frac{1}{3}Mg\\sin\\theta$ (כלפי מעלה)."
     },
     {
-      "id": "rolling",
-      "title_en": "Rolling Without Slipping",
-      "title_he": "Rolling without slipping",
-      "body_en_md": "v_cm=R*omega. KE=1/2*M*v^2+1/2*I*omega^2. Disk beats ring on incline (energy).",
-      "body_he_md": "Rolling constraint and energy.",
-      "level_min": "university"
+      "id": "rolling_without_slipping",
+      "title_en": "Rolling Without Slipping — Energy Analysis",
+      "title_he": "גלגול ללא החלקה — ניתוח אנרגיה",
+      "level_min": "university",
+      "body_en_md": "### The rolling constraint\n\nFor an object rolling without slipping: $v_{\\text{cm}} = R\\omega$.\n\nThis means the contact point has **zero velocity** relative to the surface at every instant.\n\n### Kinetic energy of rolling\n\n$$K_{\\text{total}} = K_{\\text{trans}} + K_{\\text{rot}} = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\frac{1}{2}I_{\\text{cm}}\\omega^2.$$\n\nUsing the rolling constraint $\\omega = v_{\\text{cm}}/R$:\n$$K_{\\text{total}} = \\frac{1}{2}Mv_{\\text{cm}}^2\\left(1 + \\frac{I_{\\text{cm}}}{MR^2}\\right) = \\frac{1}{2}Mv_{\\text{cm}}^2(1 + \\beta),$$\n\nwhere $\\beta = I_{\\text{cm}}/(MR^2)$.\n\n| Object | $\\beta$ | Fraction of $K$ that is rotational |\n|--------|---------|------------------------------------|\n| Disk / solid cylinder | $1/2$ | $1/3$ |\n| Hollow cylinder / ring | $1$ | $1/2$ |\n| Solid sphere | $2/5$ | $2/7$ |\n\n### Disk vs. ring race down an incline\n\nFrom height $h$, released from rest. Energy conservation (friction does no work for rolling):\n$$Mgh = \\frac{1}{2}Mv_{\\text{cm}}^2(1+\\beta) \\Rightarrow v_{\\text{cm}} = \\sqrt{\\frac{2gh}{1+\\beta}}.$$\n\n**Smaller $\\beta$ → faster at the bottom.** The disk ($\\beta = 1/2$) always beats the ring ($\\beta = 1$), regardless of mass or radius. The ratio $\\beta = I_{\\text{cm}}/(MR^2)$ determines the speed — nothing else.\n\n**Why?** More mass concentrated near the rim (ring) → larger $I_{\\text{cm}}$ → more energy goes to spinning → less to translation.\n\n### What happens on a frictionless surface?\n\nNo friction → no torque → no angular acceleration. The object **slides without rotating** (or continues at whatever $\\omega$ it had). It does not slow down translationally (no friction force), but the rolling constraint $v = R\\omega$ is violated.",
+      "body_he_md": "### אילוץ הגלגול\n\n$v_{\\text{cm}} = R\\omega$. נקודת המגע במנוחה ביחס לפני השטח.\n\n### אנרגיה קינטית של גלגול\n\n$$K = \\frac{1}{2}Mv_{\\text{cm}}^2\\left(1 + \\frac{I_{\\text{cm}}}{MR^2}\\right).$$\n\n### מירוץ דיסקה vs. טבעת\n\nמגובה $h$: $v_{\\text{cm}} = \\sqrt{\\frac{2gh}{1+\\beta}}$, כאשר $\\beta = I_{\\text{cm}}/(MR^2)$.\n\nדיסקה: $\\beta=\\frac{1}{2}$ → $v_{\\text{cm}} = \\sqrt{\\frac{4gh}{3}}$.\nטבעת: $\\beta=1$ → $v_{\\text{cm}} = \\sqrt{gh}$.\n\n**הדיסקה תנצח תמיד** — ללא תלות במסה או רדיוס. ה-$\\beta$ הוא שקובע."
     },
     {
-      "id": "exam",
+      "id": "exam_problems",
       "title_en": "Exam-Style Problems",
-      "title_he": "Exam problems",
-      "body_en_md": "Cylinder M=4kg, R=0.2m, theta=30, L=2m: a~3.27 m/s^2, v~3.61 m/s, f~6.53 N.\n\nAtwood with pulley I=0.5, R=0.15, m1=3, m2=5: a~0.59 m/s^2.",
-      "body_he_md": "TAU-style rolling and Atwood problems.",
-      "level_min": "university"
+      "title_he": "בעיות בסגנון בחינה",
+      "level_min": "university",
+      "body_en_md": "### Problem 1 (TAU/Technion-style) — Cylinder on incline\n\nA solid cylinder: $M = 4$ kg, $R = 0.2$ m. Rolls without slipping down an incline: $\\theta = 30°$, length $L = 2$ m, starting from rest.\n\n**(a)** Find the acceleration $a_{\\text{cm}}$.\n**(b)** Find the time $t$ to reach the bottom.\n**(c)** Find the speed $v$ at the bottom.\n**(d)** Find the friction force magnitude and direction.\n\n**Solution:**\n\n**(a)** $a_{\\text{cm}} = \\frac{2}{3}g\\sin 30° = \\frac{2}{3}(10)(0.5) = \\frac{10}{3} \\approx 3.33$ m/s².\n\n**(b)** $L = \\frac{1}{2}a_{\\text{cm}}t^2 \\Rightarrow 2 = \\frac{1}{2}(10/3)t^2 \\Rightarrow t^2 = 1.2 \\Rightarrow t = \\sqrt{1.2} \\approx 1.10$ s.\n\n**(c)** $v^2 = 2a_{\\text{cm}}L = 2(10/3)(2) = 40/3 \\Rightarrow v = \\sqrt{40/3} \\approx 3.65$ m/s. Or: energy: $Mgh = \\frac{3}{4}Mv^2 \\Rightarrow v = \\sqrt{4gh/3}$ with $h = L\\sin 30° = 1$ m: $v = \\sqrt{40/3}$ ✓.\n\n**(d)** $f = \\frac{1}{3}Mg\\sin\\theta = \\frac{1}{3}(4)(10)(0.5) = \\frac{20}{3} \\approx 6.67$ N, directed **up the incline**.\n\n---\n\n### Problem 2 — Atwood machine with massive pulley\n\nAn Atwood machine: masses $m_1 = 3$ kg and $m_2 = 5$ kg hanging over a pulley with moment of inertia $I = 0.5$ kg·m² and radius $R = 0.15$ m. Find the acceleration $a$ of the masses.\n\n**Setup:** Let $a$ = acceleration of masses. The pulley rotates with angular acceleration $\\alpha = a/R$.\n\n**Equations of motion:**\n- Mass $m_2$ (heavier, moves down): $m_2 g - T_2 = m_2 a$. → $T_2 = m_2(g-a)$.\n- Mass $m_1$ (lighter, moves up): $T_1 - m_1 g = m_1 a$. → $T_1 = m_1(g+a)$.\n- Pulley rotation (net torque = $T_2 R - T_1 R = I\\alpha = Ia/R$):\n$$(T_2 - T_1)R = Ia/R \\Rightarrow T_2 - T_1 = Ia/R^2.$$\n\n$$m_2(g-a) - m_1(g+a) = Ia/R^2$$\n$$(m_2 - m_1)g = \\left(m_1 + m_2 + \\frac{I}{R^2}\\right)a$$\n$$a = \\frac{(m_2 - m_1)g}{m_1 + m_2 + I/R^2} = \\frac{(5-3)(10)}{3+5+0.5/0.0225} = \\frac{20}{8 + 22.2} = \\frac{20}{30.2} \\approx 0.66 \\text{ m/s}^2.$$",
+      "body_he_md": "### בעיה 1 — גליל על משופע\n\n$M=4$ ק\"ג, $R=0.2$ מ', $\\theta=30°$, $L=2$ מ', מנוחה.\n\n**(א)** $a=\\frac{2}{3}g\\sin 30°=\\frac{10}{3}\\approx 3.33$ מ/ש².\n**(ב)** $t=\\sqrt{2L/a}\\approx 1.10$ ש'.\n**(ג)** $v=\\sqrt{2aL}\\approx 3.65$ מ/ש.\n**(ד)** $f=\\frac{1}{3}Mg\\sin\\theta\\approx 6.67$ N, כלפי מעלה.\n\n---\n\n### בעיה 2 — מכונת אטווד עם גלגלת מסיבית\n\n$m_1=3$, $m_2=5$ ק\"ג, $I=0.5$ kg·m², $R=0.15$ מ'.\n\n$a = \\frac{(m_2-m_1)g}{m_1+m_2+I/R^2} = \\frac{20}{8+22.2} \\approx 0.66$ מ/ש²."
     }
   ],
   "questions": [
     {
       "id": "q1",
       "type": "open",
-      "body_en": "Uniform rod pivoted at end, released horizontal: (a) alpha at release (b) tip speed at vertical (c) pivot normal at vertical.",
-      "body_he": "Rod pivot problem.",
+      "body_en": "A uniform rod (mass $M$, length $L$) is pivoted at one end and released from horizontal.\n\n(a) Find the angular acceleration $\\alpha$ at the moment of release.\n(b) Use energy conservation to find the speed of the free end when the rod reaches vertical.\n(c) Find the normal force from the pivot when the rod is vertical.",
+      "body_he": "מוט אחיד (מסה $M$, אורך $L$) מצירי בקצהו ומשוחרר ממצב אופקי.\n\n(א) מצאו את התאוצה הזוויתית $\\alpha$ ברגע השחרור.\n(ב) השתמשו בשימור אנרגיה למציאת המהירות של הקצה החופשי כשהמוט מגיע לאנכי.\n(ג) מצאו את כוח הנורמל מהציר כשהמוט אנכי.",
       "points": 12,
-      "sample_solution_en": "alpha=3g/(2L); v=sqrt(3gL); N=4Mg.",
-      "sample_solution_he": "alpha=3g/(2L)."
+      "expected_steps_en": [
+        "(a) τ = Mg(L/2), I = ML²/3 about end → α = τ/I = 3g/(2L)",
+        "(b) Energy: Mg(L/2) = ½Iω² = ½(ML²/3)ω² → ω² = 3g/L → v_end = Lω = √(3gL)",
+        "(c) At vertical: centripetal acceleration a_c = ω²(L/2) = 3g/2 (upward toward pivot). Newton's 2nd: N - Mg = Ma_c = M(3g/2) → N = Mg + 3Mg/2 = 5Mg/2"
+      ],
+      "expected_steps_he": [
+        "(א) τ=Mg(L/2), I=ML²/3 → α=3g/(2L)",
+        "(ב) Mg(L/2)=½(ML²/3)ω² → ω²=3g/L → v=√(3gL)",
+        "(ג) מרכז מסה: a_c=ω²(L/2)=3g/2 → N-Mg=M(3g/2) → N=5Mg/2"
+      ],
+      "sample_solution_en": "(a) α = 3g/(2L). (b) v_end = √(3gL). (c) N = 5Mg/2.",
+      "sample_solution_he": "(א) α=3g/(2L). (ב) v=√(3gL). (ג) N=5Mg/2.",
+      "rubric_en": "4pts (a): correct τ and I; 4pts (b): correct energy equation and ω→v_end; 4pts (c): centripetal analysis at vertical.",
+      "rubric_he": "4 נק' (א): τ ו-I נכונים; 4 נק' (ב): שימור אנרגיה; 4 נק' (ג): ניתוח צנטריפטלי."
     },
     {
       "id": "q2",
       "type": "open",
-      "body_en": "Disk vs ring on incline — energy proof disk arrives first.",
-      "body_he": "Disk vs ring.",
-      "points": 10
+      "body_en": "A disk and a ring, both of mass $M$ and radius $R$, start from rest at the top of an incline of height $h$.\n\n(a) Using energy methods, prove that the disk always reaches the bottom faster, regardless of $M$ or $R$.\n(b) What is the speed of each at the bottom? Show your work.\n(c) What determines the winner — the total moment of inertia, or the ratio $I_{\\text{cm}}/(MR^2)$? Explain.",
+      "body_he": "דיסקה וטבעת, שתיהן עם מסה $M$ ורדיוס $R$, מתחילות ממנוחה בראש משופע גובה $h$.\n\n(א) בשיטת אנרגיה, הוכיחו שהדיסקה תגיע לתחתית מהר יותר תמיד, ללא תלות ב-$M$ או ב-$R$.\n(ב) מהי מהירות כל אחת בתחתית?\n(ג) מה קובע את המנצח — מומנט האינרציה הכולל, או היחס $I_{\\text{cm}}/(MR^2)$? הסבירו.",
+      "points": 10,
+      "expected_steps_en": [
+        "Energy conservation: Mgh = ½Mv² + ½I_cm·ω² = ½Mv²(1 + I_cm/(MR²))",
+        "Disk: β=½ → v_disk = √(4gh/3); Ring: β=1 → v_ring = √(gh)",
+        "Since √(4gh/3) > √(gh) for all g,h > 0, disk wins regardless of M or R",
+        "The ratio β = I_cm/(MR²) determines speed; absolute I does not matter"
+      ],
+      "expected_steps_he": [
+        "שימור אנרגיה: Mgh = ½Mv²(1+β)",
+        "דיסקה β=½: v=√(4gh/3); טבעת β=1: v=√(gh)",
+        "4gh/3 > gh → דיסקה מנצחת ללא תלות ב-M, R",
+        "β=I_cm/(MR²) קובע — לא I המוחלט"
+      ],
+      "sample_solution_en": "For rolling: Mgh = ½Mv²(1+β). Disk (β=½): v=√(4gh/3). Ring (β=1): v=√(gh). Ratio: v_disk/v_ring = √(4/3) > 1. Winner depends only on β = I_cm/(MR²), not on M or R.",
+      "sample_solution_he": "דיסקה: v=√(4gh/3). טבעת: v=√(gh). יחס: v_disk/v_ring = √(4/3) > 1. הקובע הוא β=I_cm/(MR²) בלבד."
     },
     {
       "id": "q3",
       "type": "open",
-      "body_en": "Cylinder rolling without slipping: find friction. What if frictionless?",
-      "body_he": "Rolling friction.",
-      "points": 8
+      "body_en": "A solid cylinder rolls without slipping on a horizontal surface under a horizontal force $F$ applied at the top of the cylinder.\n\n(a) Set up the equations of motion (translation and rotation).\n(b) Find the acceleration $a_{\\text{cm}}$ and the friction force $f$.\n(c) If the surface becomes frictionless, describe the subsequent motion qualitatively. Does the cylinder speed up, slow down, or keep the same translational speed? What happens to the rotation?",
+      "body_he": "גליל מלא מתגלגל ללא החלקה על משטח אופקי תחת כוח אופקי $F$ המופעל בראש הגליל.\n\n(א) הציבו את משוואות התנועה (קווי וסיבובי).\n(ב) מצאו $a_{\\text{cm}}$ ואת כוח החיכוך $f$.\n(ג) אם המשטח הופך חסר-חיכוך, תארו את התנועה הבאה בצורה איכותית. האם הגליל מאיץ, מאט, או שומר על מהירות קווית? מה קורה לסיבוב?",
+      "points": 10,
+      "expected_steps_en": [
+        "(a) Translation: F + f_friction = Ma_cm (forward). Wait — friction acts backward for rolling under top force. Rotation: FR - fR = I_cm·α = ½MR²·α. Rolling: a_cm = Rα.",
+        "Actually: Force F at top, friction f at bottom (backward). Net force: F - f = Ma_cm. Net torque about cm: FR + fR = I_cm·α (both torques add — F at top gives CCW torque if F is forward and f at bottom gives CW... need to check sign carefully).",
+        "For F at the top applied horizontally in rolling direction: F - f = Ma; (F + f)R = ½MR²(a/R) → F + f = Ma/2. Add: 2F = 3Ma/2 → a = 4F/(3M). Then f = Ma - F = 4F/3 - F = F/3 (backward).",
+        "(c) No friction: torque from F still acts (at top), so angular acceleration continues. But no friction means no horizontal force from ground — translational acceleration = F/M (all from applied force). Angular acceleration = FR/(I_cm) = 2F/(MR). The rolling constraint v=Rω is immediately violated."
+      ],
+      "expected_steps_he": [
+        "(א) כוח F בראש, חיכוך f בתחתית (לאחור): F-f=Ma, (F+f)R=½MR²(a/R).",
+        "(ב) מחיבור: 2F=3Ma/2 → a=4F/(3M), f=F/3 (לאחור).",
+        "(ג) ללא חיכוך: אין כוח לאחור → תאוצה קווית גדלה ל-F/M. תאוצה זוויתית גדלה ל-2F/(MR). אילוץ הגלגול מופר."
+      ],
+      "sample_solution_en": "(a)-(b) a_cm = 4F/(3M), f = F/3 backward. (c) With no friction: translational acceleration = F/M (larger), angular acceleration = 2F/(MR) (larger), but v_cm ≠ Rω so the cylinder slides and spins simultaneously.",
+      "sample_solution_he": "(א)-(ב) a=4F/(3M), f=F/3 לאחור. (ג) ללא חיכוך: תנועה קווית וסיבוב בו-זמנית עם החלקה; אילוץ הגלגול מופר."
     },
     {
       "id": "q4",
       "type": "mcq",
-      "body_en": "Cylinder rolling down incline — friction points:",
-      "body_he": "Friction direction",
+      "body_en": "A solid disk ($I_{\\text{cm}} = \\frac{1}{2}MR^2$) and a hollow ring ($I_{\\text{cm}} = MR^2$) are released from rest at the top of an incline. Which reaches the bottom first?",
+      "body_he": "דיסקה מלאה ($I_{\\text{cm}} = \\frac{1}{2}MR^2$) וטבעת חלולה ($I_{\\text{cm}} = MR^2$) משוחררות ממנוחה בראש משופע. מי תגיע ראשונה לתחתית?",
       "options": [
-        {
-          "id": "a",
-          "text_en": "Down incline",
-          "text_he": "Down",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "Up incline",
-          "text_he": "Up",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "Zero",
-          "text_he": "Zero",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "Normal only",
-          "text_he": "Normal",
-          "correct": false
-        }
+        {"id": "a", "text_en": "The ring, because it has more moment of inertia", "text_he": "הטבעת, כי מומנט האינרציה שלה גדול יותר", "correct": false},
+        {"id": "b", "text_en": "The disk, because its β = I/(MR²) is smaller", "text_he": "הדיסקה, כי β = I/(MR²) שלה קטן יותר", "correct": true},
+        {"id": "c", "text_en": "They tie, because they have the same M and R", "text_he": "הן מגיעות בו-זמנית, כי יש להן אותן M ו-R", "correct": false},
+        {"id": "d", "text_en": "The heavier one wins", "text_he": "הכבדה יותר מנצחת", "correct": false}
       ],
-      "explanation_en": "Up incline.",
-      "explanation_he": "Up."
+      "explanation_en": "v = √(2gh/(1+β)). Disk: β=½ → larger v. Ring: β=1 → smaller v. The ratio β = I_cm/(MR²) determines who wins — M and R cancel out.",
+      "explanation_he": "v = √(2gh/(1+β)). דיסקה: β=½ → v גדולה יותר. טבעת: β=1 → v קטנה יותר. רק β קובע — M ו-R מתבטלים."
     },
     {
       "id": "q5",
       "type": "mcq",
-      "body_en": "Rod about end: I equals",
-      "body_he": "Rod I",
+      "body_en": "A solid cylinder (mass $M$, radius $R$) rolls without slipping. The friction force from the surface:",
+      "body_he": "גליל מלא ($M$, $R$) מתגלגל ללא החלקה. כוח החיכוך מהמשטח:",
       "options": [
-        {
-          "id": "a",
-          "text_en": "ML^2/12",
-          "text_he": "a",
-          "correct": false
-        },
-        {
-          "id": "b",
-          "text_en": "ML^2/3",
-          "text_he": "b",
-          "correct": true
-        },
-        {
-          "id": "c",
-          "text_en": "ML^2/2",
-          "text_he": "c",
-          "correct": false
-        },
-        {
-          "id": "d",
-          "text_en": "ML^2",
-          "text_he": "d",
-          "correct": false
-        }
+        {"id": "a", "text_en": "Does positive work on the cylinder", "text_he": "עושה עבודה חיובית על הגליל", "correct": false},
+        {"id": "b", "text_en": "Does negative work on the cylinder", "text_he": "עושה עבודה שלילית על הגליל", "correct": false},
+        {"id": "c", "text_en": "Does zero work on the cylinder", "text_he": "עושה עבודה אפסית על הגליל", "correct": true},
+        {"id": "d", "text_en": "Cannot be determined without knowing the angle", "text_he": "לא ניתן לקבוע ללא הזווית", "correct": false}
       ],
-      "explanation_en": "ML^2/3.",
-      "explanation_he": "ML^2/3."
+      "explanation_en": "For rolling without slipping, the contact point has zero velocity. Work = F·displacement of contact point = F·0 = 0. Friction provides the torque but does no work — that is why energy conservation works without including friction.",
+      "explanation_he": "בגלגול ללא החלקה, לנקודת המגע אין מהירות. עבודה = כוח × תזוזת נקודת הכוח = 0. החיכוך מספק מומנט כוח אבל לא עושה עבודה — לכן שימור אנרגיה עובד ללא התחשבות בחיכוך."
     }
-  ]
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "τ = Iα is the rotational analog of F = ma.",
+      "I = Σmᵢrᵢ² (discrete) or ∫r²dm (continuous). Steiner: I = I_cm + Md².",
+      "Rolling without slipping: v_cm = Rω; contact point is momentarily at rest.",
+      "K_total = ½Mv²(1 + β) where β = I_cm/(MR²).",
+      "Friction in rolling does ZERO work (contact point velocity = 0).",
+      "On an incline: a_cm = g sinθ / (1 + β) for any rolling object."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "Friction opposes motion so it slows the cylinder",
+        "correction": "Static friction in rolling acts to cause rotation, not to oppose translation. It does zero work.",
+        "detect_phrase_en": "friction slows rolling",
+        "detect_phrase_he": "חיכוך מאט גלגול"
+      },
+      {
+        "wrong": "Heavier cylinders roll faster",
+        "correction": "For rolling on an incline, mass cancels out. Only β = I_cm/(MR²) determines the speed.",
+        "detect_phrase_en": "heavier rolls faster",
+        "detect_phrase_he": "כבד יותר גולל מהר"
+      }
+    ],
+    "skill_atoms_unlocked": [
+      "torque_compute",
+      "moment_of_inertia_table",
+      "steiner_theorem",
+      "rolling_constraint",
+      "rolling_energy",
+      "newton_rotation_apply"
+    ],
+    "prerequisites_to_check_before_teaching": [
+      "newton_laws",
+      "work_energy",
+      "rigid_body_torque_equilibrium"
+    ],
+    "tutor_pacing_hint": "Establish I = Σmr² first with discrete examples before any continuous body. Always draw a FBD for the rolling problem — students frequently forget friction acts at the contact point, not at the cm. The disk-vs-ring energy argument is the clearest way to show that β = I/(MR²) is the only thing that matters.",
+    "next_recommended": ["angular_momentum_particles", "harmonic_oscillation"]
+  }
 }
