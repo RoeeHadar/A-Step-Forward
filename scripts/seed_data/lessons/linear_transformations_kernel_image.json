@@ -15,8 +15,8 @@
       "kind": "theory",
       "title_en": "Definition of linear transformation",
       "title_he": "הגדרת העתקה לינארית",
-      "body_en_md": "$T: V \\to W$ is **linear** if for all $\\vec{u},\\vec{v} \\in V$ and scalars $a,b$:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\nEquivalently: $T(\\vec{u}+\\vec{v}) = T(\\vec{u})+T(\\vec{v})$ and $T(c\\vec{v}) = cT(\\vec{v})$.\n\n**Immediate consequence:** $T(\\vec{0}) = \\vec{0}$.\n\n**Examples:** $T(x,y) = (2x+y, x-3y)$; differentiation on $P_n$; projection onto a line; rotation by $\\theta$ in $\\mathbb{R}^2$.",
-      "body_he_md": "$T: V \\to W$ **לינארית** אם:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\n**מסקנה:** $T(\\vec{0}) = \\vec{0}$.\n\n**דוגמאות:** $T(x,y) = (2x+y, x-3y)$; גזירה; הטלה; סיבוב בזווית $\\theta$."
+      "body_en_md": "$T: V \\to W$ is **linear** if for all $\\vec{u},\\vec{v} \\in V$ and scalars $a,b$:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\nEquivalently: $T(\\vec{u}+\\vec{v}) = T(\\vec{u})+T(\\vec{v})$ and $T(c\\vec{v}) = cT(\\vec{v})$.\n\n**Immediate consequence:** $T(\\vec{0}) = \\vec{0}$.\n\n**Examples:** $T(x,y) = (2x+y, x-3y)$; differentiation on $P_n$; projection onto a line; rotation by $\\theta$ in $\\mathbb{R}^2$.\n\n**Worked Example.** $T(U+W)=T(U)+T(W)$ from linearity.\n\n**Worked Example 2.** Antisymmetric odd-size: $\\det A = 0$.",
+      "body_he_md": "$T: V \\to W$ **לינארית** אם:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\n**מסקנה:** $T(\\vec{0}) = \\vec{0}$.\n\n**דוגמאות:** $T(x,y) = (2x+y, x-3y)$; גזירה; הטלה; סיבוב בזווית $\\theta$.\n\n**דוגמה.** $T(U+W)=T(U)+T(W)$.\n\n**דוגמה 2.** אנטי-סימטרית, $n$ אי-זוגי: $\\det=0$."
     },
     {
       "kind": "theory",
@@ -45,6 +45,13 @@
       "title_he": "איזומורפיזמים והפיכות",
       "body_en_md": "$T$ is **invertible** iff bijective (injective + surjective). For $T: \\mathbb{R}^n \\to \\mathbb{R}^n$, the following are equivalent:\n- $\\ker(T) = \\{\\vec{0}\\}$\n- $\\text{rank}(T) = n$\n- $A$ is invertible / $\\det(A) \\neq 0$\n\n**Exam problem:** Is $T(x,y) = (x+y, x-y)$ invertible?\n$A = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$, $\\det A = -2 \\neq 0$ ⇒ yes.\n$$A^{-1} = \\frac{1}{-2}\\begin{pmatrix} -1 & -1 \\\\ -1 & 1 \\end{pmatrix} = \\begin{pmatrix} 1/2 & 1/2 \\\\ 1/2 & -1/2 \\end{pmatrix}.$$\nSo $T^{-1}(u,v) = (\\frac{u+v}{2}, \\frac{u-v}{2})$.",
       "body_he_md": "$T$ **הפיכה** iff חד-חד-ערכית ועל. ל-$T: \\mathbb{R}^n \\to \\mathbb{R}^n$ שקולים: $\\ker=\\{0\\}$, rank=$n$, $\\det A \\neq 0$.\n\n**מבחן:** $T(x,y)=(x+y,x-y)$, $\\det=-2\\neq 0$ ⇒ כן.\n$T^{-1}(u,v) = (\\frac{u+v}{2}, \\frac{u-v}{2})$."
+    },
+    {
+      "kind": "exam_problems",
+      "title_en": "Exam-Style Practice Problems",
+      "title_he": "תרגול בסגנון בחינה",
+      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Let $T:V\\to V$ be linear and invertible, $U,W$ subspaces. Prove $\\text{Im}(T)=T(V)$ and if $V=U+W$ then $T(V)=T(U)+T(W)$.\n\n**Sample Solution:**\n$T(V)=\\{T(v):v\\in V\\}=\\text{Im}(T)$ by definition.\n\nIf $v\\in U+W$, write $v=u+w$. Then $T(v)=T(u)+T(w)\\in T(U)+T(W)$, so $T(V)\\subseteq T(U)+T(W)$.\n\nConversely, every element of $T(U)+T(W)$ is $T(u)+T(w)=T(u+w)\\in T(V)$. Hence $T(V)=T(U)+T(W)$. $\\square$\n\n**Problem 2:** Prove or disprove: If $A$ is antisymmetric ($A^T=-A$) and $n$ is odd, then $A$ is not invertible.\n\n**Sample Solution:**\n**Proof.** If $A^T=-A$, then $A^T A = (-A)A = -A^2$. Also $A^T A$ is symmetric PSD, so $\\det(A^T A)=\\det(A)^2\\geq 0$.\n\nFor odd $n$: $\\det(-A)=(-1)^n\\det(A)=-\\det(A)$. But $\\det(A^T)=\\det(A)$ and $\\det(A^T A)=\\det(A)^2$, while from $A^T=-A$ we get $\\det(A)=-\\det(A)$, so $\\det(A)=0$. **Not invertible.** $\\square$\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
+      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** יהי $T$ לינארית והפיכה. הוכיחו $T(V)=T(U)+T(W)$ אם $V=U+W$.\n\n**פתרון לדוגמה:**\n$T(u+w)=T(u)+T(w)$ ⇒ $T(V)=T(U)+T(W)$. $\\square$\n\n**בעיה 2:** הוכיחו/הפריכו: $A$ אנטי-סימטרית, $n$ אי-זוגי ⇒ $A$ לא הפיכה.\n\n**פתרון לדוגמה:**\n$\\det(A)=-\\det(A)$ ⇒ $\\det(A)=0$. **לא הפיכה.** $\\square$\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
     }
   ],
   "questions": [
@@ -75,103 +82,63 @@
     },
     {
       "ord": 2,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Matrix of $T(x,y,z)=(x+2z, y-z)$ is:",
-      "stem_he": "מטריצה של $T(x,y,z)=(x+2z, y-z)$:",
-      "options_en": [
-        "$\\begin{pmatrix}1&0&2\\\\0&1&-1\\end{pmatrix}$",
-        "$\\begin{pmatrix}1&2&0\\\\0&-1&1\\end{pmatrix}$",
-        "$\\begin{pmatrix}1&0&2\\\\0&1&1\\end{pmatrix}$",
-        "$\\begin{pmatrix}2&0&1\\\\-1&1&0\\end{pmatrix}$"
-      ],
-      "options_he": [
-        "$\\begin{pmatrix}1&0&2\\\\0&1&-1\\end{pmatrix}$",
-        "$\\begin{pmatrix}1&2&0\\\\0&-1&1\\end{pmatrix}$",
-        "$\\begin{pmatrix}1&0&2\\\\0&1&1\\end{pmatrix}$",
-        "$\\begin{pmatrix}2&0&1\\\\-1&1&0\\end{pmatrix}$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Columns are $T(1,0,0)=(1,0)$, $T(0,1,0)=(0,1)$, $T(0,0,1)=(2,-1)$.",
-      "explanation_he": "עמודות: $T(e_1), T(e_2), T(e_3)$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Let $T:V\\to V$ be linear, $U,W$ subspaces with $V=U+W$. Prove $T(V)=T(U)+T(W)$.",
+      "stem_he": "יהי $T$ לינארית, $V=U+W$. הוכיחו $T(V)=T(U)+T(W)$.",
+      "rubric_en": "Full credit (10/10): both inclusions using $v=u+w$.\nPartial (6/10): one direction only.\nMinimal (3/10): cites linearity only.",
+      "rubric_he": "ציון מלא (10/10): שני כיוונים.\nחלקי (6/10): כיוון אחד.\nמינימלי (3/10): רק לינאריות.",
+      "explanation_en": "$T(v)=T(u+w)=T(u)+T(w)$.",
+      "explanation_he": "$T(v)=T(u)+T(w)$.",
       "skill_atoms": [
         "matrix_of_transformation"
-      ]
+      ],
+      "points_level_min": "la"
     },
     {
       "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\ker(T)$ for $T(x,y)=(2x,2y)$ in $\\mathbb{R}^2$ is:",
-      "stem_he": "$\\ker(T)$ עבור $T(x,y)=(2x,2y)$ ב-$\\mathbb{R}^2$:",
-      "options_en": [
-        "$\\{(0,0)\\}$ only",
-        "All of $\\mathbb{R}^2$",
-        "The $x$-axis",
-        "The line $y=x$"
-      ],
-      "options_he": [
-        "$\\{(0,0)\\}$ בלבד",
-        "כל $\\mathbb{R}^2$",
-        "ציר $x$",
-        "הישר $y=x$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Only (0,0) maps to 0; scaling by 2 is invertible on each coordinate.",
-      "explanation_he": "רק $(0,0)$ מתאפס — כפל ב-2 הפיך.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove or disprove: If $A\\in\\mathbb{R}^{n\\times n}$ is antisymmetric and $n$ is odd, then $A$ is not invertible.",
+      "stem_he": "הוכיחו/הפריכו: $A$ אנטי-סימטרית, $n$ אי-זוגי ⇒ $A$ לא הפיכה.",
+      "rubric_en": "Full credit (10/10): shows $\\det(A)=-\\det(A)$ so $\\det=0$.\nPartial (6/10): correct conclusion, incomplete proof.\nMinimal (3/10): answer only.",
+      "rubric_he": "ציון מלא (10/10): $\\det(A)=0$.\nחלקי (6/10): מסקנה.\nמינימלי (3/10): תשובה.",
+      "explanation_en": "True: $\\det(A)=0$ for odd antisymmetric.",
+      "explanation_he": "נכון: $\\det(A)=0$.",
       "skill_atoms": [
         "compute_kernel"
-      ]
+      ],
+      "points_level_min": "la"
     },
     {
       "ord": 4,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$A$ is $3\\times 5$ with rank 2. $\\dim(\\text{Im}(T))$ and nullity are:",
-      "stem_he": "$A$ בגודל $3\\times 5$ עם rank 2. $\\dim(\\text{Im}(T))$ ו-nullity:",
-      "options_en": [
-        "$2$ and $3$",
-        "$3$ and $2$",
-        "$5$ and $0$",
-        "$2$ and $2$"
-      ],
-      "options_he": [
-        "$2$ ו-$3$",
-        "$3$ ו-$2$",
-        "$5$ ו-$0$",
-        "$2$ ו-$2$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "rank = dim(Im) = 2; nullity = 5 - 2 = 3.",
-      "explanation_he": "rank = dim(Im) = 2; nullity = 5 - 2 = 3.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Let $T:V\\to V$ be linear, $U,W$ subspaces with $V=U+W$. Prove $T(V)=T(U)+T(W)$.",
+      "stem_he": "יהי $T$ לינארית, $V=U+W$. הוכיחו $T(V)=T(U)+T(W)$.",
+      "rubric_en": "Full credit (10/10): both inclusions using $v=u+w$.\nPartial (6/10): one direction only.\nMinimal (3/10): cites linearity only.",
+      "rubric_he": "ציון מלא (10/10): שני כיוונים.\nחלקי (6/10): כיוון אחד.\nמינימלי (3/10): רק לינאריות.",
+      "explanation_en": "$T(v)=T(u+w)=T(u)+T(w)$.",
+      "explanation_he": "$T(v)=T(u)+T(w)$.",
       "skill_atoms": [
         "image_rank"
-      ]
+      ],
+      "points_level_min": "la"
     },
     {
       "ord": 5,
-      "kind": "mcq",
+      "kind": "open",
       "difficulty": "hard",
-      "stem_en": "$T: \\mathbb{R}^2 \\to \\mathbb{R}^2$, $T(x,y)=(x+y,x+y)$. Which is true?",
-      "stem_he": "$T: \\mathbb{R}^2 \\to \\mathbb{R}^2$, $T(x,y)=(x+y,x+y)$. מה נכון?",
-      "options_en": [
-        "Invertible",
-        "Rank 1, not invertible",
-        "Surjective",
-        "Kernel is empty"
-      ],
-      "options_he": [
-        "הפיכה",
-        "Rank 1, לא הפיכה",
-        "על",
-        "גרעין ריק"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Image is line $u=v$ — rank 1 < 2; kernel is $\\{(t,-t)\\}$.",
-      "explanation_he": "תמונה = ישר $u=v$ — rank 1; $\\ker = \\{(t,-t)\\}$.",
+      "stem_en": "Prove or disprove: If $A\\in\\mathbb{R}^{n\\times n}$ is antisymmetric and $n$ is odd, then $A$ is not invertible.",
+      "stem_he": "הוכיחו/הפריכו: $A$ אנטי-סימטרית, $n$ אי-זוגי ⇒ $A$ לא הפיכה.",
+      "rubric_en": "Full credit (10/10): shows $\\det(A)=-\\det(A)$ so $\\det=0$.\nPartial (6/10): correct conclusion, incomplete proof.\nMinimal (3/10): answer only.",
+      "rubric_he": "ציון מלא (10/10): $\\det(A)=0$.\nחלקי (6/10): מסקנה.\nמינימלי (3/10): תשובה.",
+      "explanation_en": "True: $\\det(A)=0$ for odd antisymmetric.",
+      "explanation_he": "נכון: $\\det(A)=0$.",
       "skill_atoms": [
         "rank_nullity_transform"
-      ]
+      ],
+      "points_level_min": "la"
     }
   ],
   "agent_hints": {

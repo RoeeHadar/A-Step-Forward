@@ -3,22 +3,124 @@
   "subject": "math",
   "level": "university",
   "math_track": [
-    "calc1"
+    "calc1",
+    "la"
   ],
-  "title_en": "Linear Systems Gaussian Elimination",
-  "title_he": "מערכות לינאריות — eliminación גאוס",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "Linear Systems — Gaussian Elimination",
+  "title_he": "מערכות לינאריות — חילוץ גאוס",
+  "summary_en": "Row reduction, RREF, and classifying solutions (unique / none / infinitely many) including parametric systems.",
+  "summary_he": "חילוף שורות, צורה מדורגת, סיווג פתרונות כולל מערכות עם פרמטר.",
+  "est_minutes": 30,
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "kind": "theory",
+      "title_en": "Gaussian elimination",
+      "title_he": "חילוץ גאוס",
+      "body_en_md": "Elementary row operations preserve the solution set. Goal: **row-echelon form** (RREF).\n\n**Worked Example 1.** $\\begin{cases}x+2y=3\\\\2x+5y=4\\end{cases}$ ⇒ unique $(x,y)=(-7,5)$.\n\n**Worked Example 2 (parametric).** $\\begin{cases}x+ay=1\\\\ax+y=a\\end{cases}$: pivot $1-a^2$; cases $a=\\pm1$.",
+      "body_he_md": "פעולות שורה שומרות על קבוצת הפתרונות.\n\n**דוגמה 1.** פתרון יחיד.\n\n**דוגמה 2 (פרמטר).** pivot $1-a^2$."
+    },
+    {
+      "kind": "exam_problems",
+      "title_en": "Exam-Style Practice Problems",
+      "title_he": "תרגול בסגנון בחינה",
+      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** For all $a\\in\\mathbb{R}$, classify the system (unique / none / infinitely many solutions):\\n$$\\begin{cases} x + ay = 1 \\\\ ax + y = a \\end{cases}$$\n\n**Sample Solution:**\nAugmented matrix: $\\left[\\begin{array}{cc|c} 1 & a & 1 \\\\ a & 1 & a \\end{array}\\right]$.\n\n$R_2 \\leftarrow R_2 - aR_1$: $\\left[\\begin{array}{cc|c} 1 & a & 1 \\\\ 0 & 1-a^2 & 0 \\end{array}\\right]$.\n\n- **$a \\neq \\pm 1$:** $1-a^2 \\neq 0$ ⇒ **unique solution** $x = 1, y = 0$.\n- **$a = 1$:** row 2 is $[0\\ 0\\ |\\ 0]$ ⇒ **infinitely many** ($x+y=1$).\n- **$a = -1$:** row 2 is $[0\\ 0\\ |\\ -2]$ ⇒ **no solution**.\n\n**Problem 2:** Let $A=\\begin{pmatrix}1&2&a\\\\0&1&1\\\\0&0&a-2\\end{pmatrix}$. For which $a$ does $Ax=b$ have a unique solution for every $b$?\n\n**Sample Solution:**\nRow-echelon already. Unique solution for all $b$ iff rank$(A)=3$ iff **$a \\neq 2$** (and pivot in every column). If $a=2$, third row is zero ⇒ infinitely many or none depending on $b$.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
+      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** לכל $a\\in\\mathbb{R}$, סווגו: $\\begin{cases} x + ay = 1 \\\\ ax + y = a \\end{cases}$\n\n**פתרון לדוגמה:**\n**$a\\neq\\pm 1$:** יחיד. **$a=1$:** אינסוף. **$a=-1$:** אין פתרון.\n\n**בעיה 2:** מתי $Ax=b$ עם $A=\\begin{pmatrix}1&2&a\\\\0&1&1\\\\0&0&a-2\\end{pmatrix}$ יש פתרון יחיד לכל $b$?\n\n**פתרון לדוגמה:**\n**$a\\neq 2$** (rank 3).\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Linear Systems Gaussian Elimination."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "A row $[0\\ 0\\ 0\\ |\\ 1]$ in RREF means:",
+      "stem_he": "שורה $[0\\ 0\\ 0\\ |\\ 1]$ ב-RREF פירושה:",
+      "options_en": [
+        "Unique solution",
+        "No solution",
+        "Infinitely many",
+        "Trivial solution only"
+      ],
+      "options_he": [
+        "פתרון יחיד",
+        "אין פתרון",
+        "אינסוף פתרונות",
+        "פתרון טריוויאלי"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Contradiction: $0=1$.",
+      "explanation_he": "סתירה: $0=1$.",
+      "skill_atoms": [
+        "gaussian_elimination_classify"
+      ],
+      "points_level_min": "la"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "A free variable appears when:",
+      "stem_he": "משתנה חופשי מופיע כאשר:",
+      "options_en": [
+        "rank < number of variables",
+        "det = 0 only",
+        "Always",
+        "Never in consistent systems"
+      ],
+      "options_he": [
+        "rank < מספר משתנים",
+        "רק det = 0",
+        "תמיד",
+        "אף פעם"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Fewer pivots than variables ⇒ free variable.",
+      "explanation_he": "פחות pivots ממשתנים.",
+      "skill_atoms": [
+        "free_variable"
+      ],
+      "points_level_min": "la"
+    },
+    {
+      "ord": 3,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For each $a\\in\\mathbb{R}$, classify solutions of $\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$ with full row reduction.",
+      "stem_he": "לכל $a\\in\\mathbb{R}$, סווגו $\\begin{cases} x+ay=1 \\\\ ax+y=a \\end{cases}$.",
+      "rubric_en": "Full credit (10/10): RREF + three cases.\nPartial (6/10): cases without full work.\nMinimal (3/10): matrix only.",
+      "rubric_he": "ציון מלא (10/10): RREF + 3 מקרים.\nחלקי (6/10): מקרים.\nמינימלי (3/10): מטריצה.",
+      "explanation_en": "See exam section.",
+      "explanation_he": "ראו סעיף בחינה.",
+      "skill_atoms": [
+        "parametric_gaussian_elimination"
+      ],
+      "points_level_min": "la"
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove $U=\\{v\\in\\mathbb{R}^3: Av=5v\\}$ is a subspace for any matrix $A$, and find $\\dim U$ when $A=\\text{diag}(7,2,2)$.",
+      "stem_he": "הוכיחו $U=\\{v: Av=5v\\}$ תת-מרחב; מצאו $\\dim U$ ל-$A=\\text{diag}(7,2,2)$.",
+      "rubric_en": "Full credit (10/10): kernel of $A-5I$, subspace proof, dim 1.\nPartial (6/10): dimension only.\nMinimal (3/10): definition only.",
+      "rubric_he": "ציון מלא (10/10): תת-מרחב + dim 1.\nחלקי (6/10): מימד.\nמינימלי (3/10): הגדרה.",
+      "explanation_en": "$\\dim U=1$.",
+      "explanation_he": "$\\dim U=1$.",
+      "skill_atoms": [
+        "eigenspace_subspace"
+      ],
+      "points_level_min": "la"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "RREF reveals rank and free variables.",
+      "Parametric: track when pivot becomes zero.",
+      "Eigenspace = ker(A - λI) is always a subspace."
+    ],
+    "skill_atoms_unlocked": [
+      "gaussian_elimination_classify",
+      "parametric_gaussian_elimination",
+      "eigenspace_subspace"
+    ]
+  }
 }

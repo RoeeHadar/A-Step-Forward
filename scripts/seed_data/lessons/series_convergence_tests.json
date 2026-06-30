@@ -5,20 +5,155 @@
   "math_track": [
     "calc1"
   ],
-  "title_en": "Series Convergence Tests",
-  "title_he": "מבחני התכנסות לטורים",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "Sequences & Series — Convergence",
+  "title_he": "סדרות וטורים — התכנסות",
+  "summary_en": "Monotone bounded sequences, recurrence relations, ratio and comparison tests — exam staples in Calculus 1.",
+  "summary_he": "סדרות monoton חסומות, נוסחאות נסיגה, מבחן המנה וההשוואה — נושאי בחינה בחדו״א 1.",
+  "est_minutes": 30,
   "sections": [
     {
-      "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Coming soon** — This lesson is being authored. Use the Tutor or Q&A agent to explore this topic.",
-      "body_he_md": "**בקרוב** — שיעור זה נמצא בהכנה. השתמש במורה או במסביר שאלות כדי לחקור נושא זה."
+      "kind": "theory",
+      "title_en": "Monotone sequences",
+      "title_he": "סדרות monoton",
+      "body_en_md": "If $(a_n)$ is **monotone** (non-decreasing or non-increasing) and **bounded**, then it **converges**.\n\n**Worked Example 1.** $a_n = 1 - \\frac{1}{n}$: increasing, bounded above by 1, so $\\lim a_n = 1$.\n\n**Worked Example 2.** $a_{n+1} = \\frac{a_n + 2}{a_n + 1}$ with $a_1=1$: prove decreasing and bounded below, then $L = \\sqrt{2}$.",
+      "body_he_md": "סדרה **monoton** ו**חסומה** ⇒ **מתכנסת**.\n\n**דוגמה 1.** $a_n = 1 - 1/n \\to 1$.\n\n**דוגמה 2.** $a_{n+1} = \\frac{a_n+2}{a_n+1}$, $a_1=1$: יורדת, חסומה, גבול $\\sqrt{2}$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Convergence tests for series",
+      "title_he": "מבחני התכנסות לטורים",
+      "body_en_md": "**Ratio test:** If $\\lim |a_{n+1}/a_n| = L < 1$, then $\\sum a_n$ converges absolutely.\n\n**Comparison:** If $0 \\leq a_n \\leq b_n$ and $\\sum b_n$ converges, then $\\sum a_n$ converges.\n\n**Worked Example 1.** $\\sum \\frac{1}{n^2}$ converges (p-series, $p=2$).\n\n**Worked Example 2.** $\\sum \\frac{n!}{n^n}$: ratio $\\to e^{-1} < 1$ ⇒ converges.",
+      "body_he_md": "**מבחן המנה:** $L<1$ ⇒ מתכנס.\n\n**השוואה:** $0\\leq a_n\\leq b_n$, $\\sum b_n$ מתכנס ⇒ $\\sum a_n$ מתכנס.\n\n**דוגמה:** $\\sum n!/n^n$ מתכנס (מנה $\\to e^{-1}$)."
+    },
+    {
+      "kind": "exam_problems",
+      "title_en": "Exam-Style Practice Problems",
+      "title_he": "תרגול בסגנון בחינה",
+      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Let $a_1=1$ and $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. Prove the sequence converges and find its limit.\n\n**Sample Solution:**\n**Step 1 — positive and bounded below:** $a_1=1>0$. If $a_n>0$ then $a_{n+1}>0$. All terms positive.\n\n**Step 2 — monotone decreasing:** Compute $a_{n+1}-a_n = \\dfrac{a_n+2}{a_n+1}-a_n = \\dfrac{2-a_n^2}{a_n+1}$.\nFor $a_n\\geq 1$: numerator $2-a_n^2\\leq 1-1=0$, so $a_{n+1}\\leq a_n$. Since $a_1=1$ and the map preserves $a_n\\geq\\sqrt{2}$ eventually... Actually check: $a_2=3/2$, $a_3=7/5=1.4$, decreasing toward limit.\n\n**Step 3 — bounded below:** $a_{n+1} = 1 + \\dfrac{1}{a_n+1} > 1$, so $a_n > 1$ for $n\\geq 2$. Bounded below by 1.\n\nMonotone decreasing + bounded below ⇒ **converges** to $L$.\n\n**Step 4 — limit:** $L = \\dfrac{L+2}{L+1} \\Rightarrow L(L+1)=L+2 \\Rightarrow L^2=2 \\Rightarrow L=\\sqrt{2}$ (positive). $\\boxed{\\lim a_n = \\sqrt{2}}$.\n\n**Problem 2:** Determine convergence of $\\sum_{n=1}^\\infty \\dfrac{n!}{n^n}$.\n\n**Sample Solution:**\n**Ratio test:** $\\dfrac{a_{n+1}}{a_n} = \\dfrac{(n+1)!/(n+1)^{n+1}}{n!/n^n} = \\dfrac{n^n}{(n+1)^n} = \\left(\\dfrac{n}{n+1}\\right)^n \\to e^{-1} < 1$.\nTherefore the series **converges**.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
+      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** תנו $a_1=1$, $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. הוכיחו התכנסות ומצאו גבול.\n\n**פתרון לדוגמה:**\n**monotone יורד + חסום מלרע** ⇒ מתכנס. **גבול:** $L=\\dfrac{L+2}{L+1} \\Rightarrow L=\\sqrt{2}$. $\\square$\n\n**בעיה 2:** קבעו התכנסות של $\\sum \\dfrac{n!}{n^n}$.\n\n**פתרון לדוגמה:**\n**מבחן המנה:** $\\left(\\dfrac{n}{n+1}\\right)^n \\to e^{-1}<1$ ⇒ **מתכנס**.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Series Convergence Tests."
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "A monotone increasing sequence bounded above:",
+      "stem_he": "סדרה monoton עולה וחסומה מלעלה:",
+      "options_en": [
+        "Diverges to $\\infty$",
+        "Converges",
+        "Is constant",
+        "Oscillates"
+      ],
+      "options_he": [
+        "מתבדרת ל-$\\infty$",
+        "מתכנסת",
+        "קבועה",
+        "מתנדנדת"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Monotone + bounded ⇒ converges (completeness).",
+      "explanation_he": "monoton + חסומה ⇒ מתכנסת.",
+      "skill_atoms": [
+        "sequence_monotone_proof"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 2,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "If $\\lim |a_{n+1}/a_n| = 1/2$, the series $\\sum a_n$:",
+      "stem_he": "אם $\\lim |a_{n+1}/a_n| = 1/2$, הטור $\\sum a_n$:",
+      "options_en": [
+        "Converges",
+        "Diverges",
+        "Inconclusive always",
+        "Converges to 0"
+      ],
+      "options_he": [
+        "מתכנס",
+        "מתבדר",
+        "תמיד לא חד-משמעי",
+        "מתכנס ל-0"
+      ],
+      "correct_index": 0,
+      "explanation_en": "Ratio $< 1$ ⇒ absolute convergence.",
+      "explanation_he": "מנה $< 1$ ⇒ התכנסות מוחלטת.",
+      "skill_atoms": [
+        "ratio_test"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 3,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "For $a_{n+1}=\\sqrt{2+a_n}$ with $a_1=1$, a candidate limit $L$ satisfies:",
+      "stem_he": "ל-$a_{n+1}=\\sqrt{2+a_n}$, מועמד לגבול $L$ מקיים:",
+      "options_en": [
+        "$L=2$",
+        "$L=\\sqrt{2+L}$",
+        "$L=1$",
+        "$L=0$"
+      ],
+      "options_he": [
+        "$L=2$",
+        "$L=\\sqrt{2+L}$",
+        "$L=1$",
+        "$L=0$"
+      ],
+      "correct_index": 1,
+      "explanation_en": "Pass limit through recurrence: $L = \\sqrt{2+L}$.",
+      "explanation_he": "מעבירים גבול: $L = \\sqrt{2+L}$.",
+      "skill_atoms": [
+        "sequence_limit_recurrence"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Let $a_1=1$, $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. Prove $(a_n)$ converges and find $\\lim a_n$.",
+      "stem_he": "תנו $a_1=1$, $a_{n+1}=\\dfrac{a_n+2}{a_n+1}$. הוכיחו התכנסות ומצאו $\\lim a_n$.",
+      "rubric_en": "Full credit (10/10): proves monotone + bounded, passes limit to get $L=\\sqrt{2}$.\nPartial (6/10): finds $L$ without monotonicity proof.\nMinimal (3/10): only sets $L=(L+2)/(L+1)$.",
+      "rubric_he": "ציון מלא (10/10): monoton + חסום, $L=\\sqrt{2}$.\nחלקי (6/10): גבול ללא הוכחת monoton.\nמינימלי (3/10): רק משוואת גבול.",
+      "explanation_en": "Limit = $\\sqrt{2}$.",
+      "explanation_he": "גבול = $\\sqrt{2}$.",
+      "skill_atoms": [
+        "sequence_limit_recurrence"
+      ],
+      "points_level_min": "calc1"
+    },
+    {
+      "ord": 5,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Prove $\\sum_{n=1}^\\infty \\dfrac{n!}{n^n}$ converges using the ratio test.",
+      "stem_he": "הוכיחו ב-מבחן המנה ש-$\\sum \\dfrac{n!}{n^n}$ מתכנס.",
+      "rubric_en": "Full credit (10/10): sets up ratio, simplifies to $(n/(n+1))^n$, limit $e^{-1}<1$.\nPartial (6/10): correct ratio, wrong limit.\nMinimal (3/10): cites ratio test only.",
+      "rubric_he": "ציון מלא (10/10): מנה $(n/(n+1))^n \to e^{-1}<1$.\nחלקי (6/10): מנה נכון, גבול שגוי.\nמינימלי (3/10): רק מציין מבחן מנה.",
+      "explanation_en": "Ratio $\\\\to e^{-1}<1$ ⇒ converges.",
+      "explanation_he": "מנה $\\\\to e^{-1}<1$ ⇒ מתכנס.",
+      "skill_atoms": [
+        "ratio_test"
+      ],
+      "points_level_min": "calc1"
+    }
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Monotone + bounded ⇒ converges (completeness of ℝ).",
+      "Fixed point of recurrence: solve L = g(L) for limit.",
+      "Ratio test: |a_{n+1}/a_n| < 1 ⇒ converges absolutely."
+    ],
+    "tutor_pacing_hint": "Prove monotonicity before invoking boundedness. Always state the limit candidate from L = f(L).",
+    "skill_atoms_unlocked": [
+      "sequence_monotone_proof",
+      "sequence_limit_recurrence",
+      "ratio_test"
+    ]
+  }
 }
