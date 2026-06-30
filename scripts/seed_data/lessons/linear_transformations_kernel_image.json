@@ -1,170 +1,144 @@
 {
   "concept_id": "linear_transformations_kernel_image",
-  "subject": "linear_algebra",
+  "subject": "math",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Linear Transformations, Kernel & Image",
-  "title_he": "העתקות לינאריות, גרעין ותמונה",
-  "summary_en": "Define linear maps, matrix representation, kernel (null space), image (column space), Rank–Nullity, and invertibility for $T: \\mathbb{R}^n \\to \\mathbb{R}^n$.",
-  "summary_he": "הגדרת העתקות לינאריות, ייצוג מטריצי, גרעין, תמונה, משפט דרגה-גרעין והפיכות.",
-  "est_minutes": 35,
+  "title_en": "Linear Transformations: Kernel and Image",
+  "title_he": "טרנספורמציות לינאריות: גרעין ותמונה",
+  "summary_en": "Definition of linear transformations, kernel (null space), image (range), rank-nullity theorem, injective, surjective, bijective maps.",
+  "summary_he": "הגדרת טרנספורמציות לינאריות, גרעין (מרחב אפסי), תמונה, משפט הדרגה-אפסיות, חד-חד ערכיות, על ורביעות.",
+  "est_minutes": 45,
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Definition of linear transformation",
-      "title_he": "הגדרת העתקה לינארית",
-      "body_en_md": "$T: V \\to W$ is **linear** if for all $\\vec{u},\\vec{v} \\in V$ and scalars $a,b$:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\nEquivalently: $T(\\vec{u}+\\vec{v}) = T(\\vec{u})+T(\\vec{v})$ and $T(c\\vec{v}) = cT(\\vec{v})$.\n\n**Immediate consequence:** $T(\\vec{0}) = \\vec{0}$.\n\n**Examples:** $T(x,y) = (2x+y, x-3y)$; differentiation on $P_n$; projection onto a line; rotation by $\\theta$ in $\\mathbb{R}^2$.\n\n**Worked Example.** $T(U+W)=T(U)+T(W)$ from linearity.\n\n**Worked Example 2.** Antisymmetric odd-size: $\\det A = 0$.",
-      "body_he_md": "$T: V \\to W$ **לינארית** אם:\n$$T(a\\vec{u} + b\\vec{v}) = aT(\\vec{u}) + bT(\\vec{v}).$$\n\n**מסקנה:** $T(\\vec{0}) = \\vec{0}$.\n\n**דוגמאות:** $T(x,y) = (2x+y, x-3y)$; גזירה; הטלה; סיבוב בזווית $\\theta$.\n\n**דוגמה.** $T(U+W)=T(U)+T(W)$.\n\n**דוגמה 2.** אנטי-סימטרית, $n$ אי-זוגי: $\\det=0$."
+      "kind": "intro",
+      "title_en": "Mappings Between Vector Spaces",
+      "title_he": "העתקות בין מרחבי וקטורים",
+      "body_en_md": "A **linear transformation** (linear map) $T:V\\to W$ is a function between vector spaces that respects addition and scalar multiplication:\n$$T(u+v)=T(u)+T(v), \\quad T(\\alpha v)=\\alpha T(v).$$\n\nExamples: rotation, reflection, projection, differentiation, integration.\n\nThe two most important subspaces associated with $T$ are:\n- **Kernel (null space)**: all vectors mapped to $\\mathbf{0}$.\n- **Image (range)**: all vectors that $T$ can produce.",
+      "body_he_md": "**טרנספורמציה לינארית** $T:V\\to W$ שומרת חיבור וכפל סקלרי:\n$T(u+v)=T(u)+T(v)$, $T(\\alpha v)=\\alpha T(v)$.\n\nשני תת-מרחבים מרכזיים:\n- **גרעין**: כל $v$ כך ש-$T(v)=\\mathbf{0}$.\n- **תמונה**: כל הוקטורים שאפשר לקבל."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Kernel, Image, and Rank-Nullity",
+      "title_he": "גרעין, תמונה ומשפט הדרגה-אפסיות",
+      "body_en_md": "**Kernel:** $\\ker(T)=\\{v\\in V : T(v)=\\mathbf{0}\\}$. Always a subspace of $V$.\n\n**Image:** $\\text{Im}(T)=\\{T(v) : v\\in V\\}$. Always a subspace of $W$.\n\n**Nullity:** $\\text{nullity}(T)=\\dim(\\ker(T))$.\n**Rank:** $\\text{rank}(T)=\\dim(\\text{Im}(T))$.\n\n**Rank-Nullity Theorem:**\n$$\\text{rank}(T)+\\text{nullity}(T)=\\dim(V).$$\n\n**Injective** (one-to-one): $\\ker(T)=\\{\\mathbf{0}\\}$.\n**Surjective** (onto): $\\text{Im}(T)=W$.\n**Bijective** (invertible): injective AND surjective.",
+      "body_he_md": "**גרעין:** $\\ker(T)=\\{v:T(v)=\\mathbf{0}\\}$.\n\n**תמונה:** $\\text{Im}(T)=\\{T(v):v\\in V\\}$.\n\n**משפט:** $\\text{rank}+\\text{nullity}=\\dim(V)$.\n\n**חד-חד ערכי:** $\\ker=\\{\\mathbf{0}\\}$. **על:** $\\text{Im}=W$. **חח\"ע ועל:** הפיכה."
     },
     {
       "kind": "theory",
-      "title_en": "Matrix representation",
-      "title_he": "ייצוג מטריצי",
-      "body_en_md": "Every linear $T: \\mathbb{R}^n \\to \\mathbb{R}^m$ equals $T(\\vec{x}) = A\\vec{x}$ where\n$$A = [T(\\vec{e}_1)\\,|\\,T(\\vec{e}_2)\\,|\\,\\cdots\\,|\\,T(\\vec{e}_n)].$$\n\n**Example:** $T(x,y) = (2x+y, x-3y)$ gives $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & -3 \\end{pmatrix}$.\n\n**Composition:** $(T_2 \\circ T_1)(\\vec{x}) = T_2(T_1(\\vec{x}))$ corresponds to $A_2 A_1$ (order matters).\n\n**Rotation:** $R_\\theta = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}$.",
-      "body_he_md": "כל $T: \\mathbb{R}^n \\to \\mathbb{R}^m$ שווה ל-$A\\vec{x}$ עם\n$$A = [T(\\vec{e}_1)\\,|\\,\\cdots\\,|\\,T(\\vec{e}_n)].$$\n\n**דוגמה:** $T(x,y) = (2x+y, x-3y)$ ⇒ $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & -3 \\end{pmatrix}$.\n\n**הרכבה:** $A_2 A_1$. **סיבוב:** $R_\\theta$ עם $\\cos,\\sin$."
+      "title_en": "Matrix Representation and Computing Kernel/Image",
+      "title_he": "ייצוג מטריציוני וחישוב גרעין/תמונה",
+      "body_en_md": "Every linear map $T:\\mathbb{R}^n\\to\\mathbb{R}^m$ can be represented by an $m\\times n$ matrix $A$: $T(x)=Ax$.\n\n**Finding kernel:** Solve $Ax=0$ (reduced row echelon form).\n\n**Finding image:** Column space of $A$ = image. Basis: the pivot columns of $A$.\n\n**Rank = number of pivot columns = number of independent rows.**\n\n**Nullity = number of free variables in $Ax=0$.**",
+      "body_he_md": "$T(x)=Ax$ ($m\\times n$ מטריצה).\n\n**גרעין:** פתור $Ax=0$ (שורות מדורגות).\n\n**תמונה:** מרחב עמודות של $A$. בסיס: עמודות ציר.\n\n$\\text{rank}=$ מספר עמודות ציר. $\\text{nullity}=$ משתנים חופשיים."
     },
     {
       "kind": "worked_example",
-      "title_en": "Kernel (null space)",
-      "title_he": "גרעין (מרחב האפסים)",
-      "body_en_md": "$\\ker(T) = \\{\\vec{v} \\in V : T(\\vec{v}) = \\vec{0}\\}$ — always a subspace of the **domain**.\n\nFind by solving $A\\vec{x} = \\vec{0}$. **Nullity** = $\\dim(\\ker T)$.\n\n$T$ is **injective** (one-to-one) iff $\\ker(T) = \\{\\vec{0}\\}$.\n\n**Worked example:** $T(x,y,z) = (x+y, y+z, x+z)$.\n$$A = \\begin{pmatrix} 1 & 1 & 0 \\\\ 0 & 1 & 1 \\\\ 1 & 0 & 1 \\end{pmatrix} \\Rightarrow \\ker = \\text{span}\\{(1,-1,1)\\},\\; \\text{nullity} = 1.$$",
-      "body_he_md": "$\\ker(T) = \\{\\vec{v}: T(\\vec{v}) = \\vec{0}\\}$ — תת-מרחב של **תחום**.\n\n**Nullity** = $\\dim(\\ker T)$. **חד-חד-ערכית** iff $\\ker = \\{\\vec{0}\\}$.\n\n**דוגמה:** $T(x,y,z) = (x+y, y+z, x+z)$ ⇒ $\\ker = \\text{span}\\{(1,-1,1)\\}$, nullity = 1."
-    },
-    {
-      "kind": "theory",
-      "title_en": "Image (range) and Rank–Nullity",
-      "title_he": "תמונה (Range) ודרגה-גרעין",
-      "body_en_md": "$\\text{Im}(T) = \\{T(\\vec{v}) : \\vec{v} \\in V\\}$ — subspace of the **codomain**.\n\nFor $T(\\vec{x})=A\\vec{x}$: $\\text{Im}(T) = \\text{col}(A)$ (column space). **Rank** = $\\dim(\\text{Im}(T))$.\n\n$T$ is **surjective** onto $\\mathbb{R}^m$ iff $\\text{rank}(A) = m$.\n\n**Rank–Nullity theorem:**\n$$\\text{nullity}(T) + \\text{rank}(T) = \\dim(V).$$\n\nFor a $3\\times 3$ matrix: rank 2 ⇒ nullity 1.",
-      "body_he_md": "$\\text{Im}(T)$ — תת-מרחב של **טווח**. עבור $A\\vec{x}$: $\\text{Im}(T) = \\text{col}(A)$.\n\n**דרגה** = $\\dim(\\text{Im}(T))$. **על** iff rank = $m$.\n\n**דרגה-גרעין:** nullity + rank = $\\dim(V)$."
-    },
-    {
-      "kind": "worked_example",
-      "title_en": "Isomorphisms and invertibility",
-      "title_he": "איזומורפיזמים והפיכות",
-      "body_en_md": "$T$ is **invertible** iff bijective (injective + surjective). For $T: \\mathbb{R}^n \\to \\mathbb{R}^n$, the following are equivalent:\n- $\\ker(T) = \\{\\vec{0}\\}$\n- $\\text{rank}(T) = n$\n- $A$ is invertible / $\\det(A) \\neq 0$\n\n**Exam problem:** Is $T(x,y) = (x+y, x-y)$ invertible?\n$A = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}$, $\\det A = -2 \\neq 0$ ⇒ yes.\n$$A^{-1} = \\frac{1}{-2}\\begin{pmatrix} -1 & -1 \\\\ -1 & 1 \\end{pmatrix} = \\begin{pmatrix} 1/2 & 1/2 \\\\ 1/2 & -1/2 \\end{pmatrix}.$$\nSo $T^{-1}(u,v) = (\\frac{u+v}{2}, \\frac{u-v}{2})$.",
-      "body_he_md": "$T$ **הפיכה** iff חד-חד-ערכית ועל. ל-$T: \\mathbb{R}^n \\to \\mathbb{R}^n$ שקולים: $\\ker=\\{0\\}$, rank=$n$, $\\det A \\neq 0$.\n\n**מבחן:** $T(x,y)=(x+y,x-y)$, $\\det=-2\\neq 0$ ⇒ כן.\n$T^{-1}(u,v) = (\\frac{u+v}{2}, \\frac{u-v}{2})$."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Let $T:V\\to V$ be linear and invertible, $U,W$ subspaces. Prove $\\text{Im}(T)=T(V)$ and if $V=U+W$ then $T(V)=T(U)+T(W)$.\n\n**Sample Solution:**\n$T(V)=\\{T(v):v\\in V\\}=\\text{Im}(T)$ by definition.\n\nIf $v\\in U+W$, write $v=u+w$. Then $T(v)=T(u)+T(w)\\in T(U)+T(W)$, so $T(V)\\subseteq T(U)+T(W)$.\n\nConversely, every element of $T(U)+T(W)$ is $T(u)+T(w)=T(u+w)\\in T(V)$. Hence $T(V)=T(U)+T(W)$. $\\square$\n\n**Problem 2:** Prove or disprove: If $A$ is antisymmetric ($A^T=-A$) and $n$ is odd, then $A$ is not invertible.\n\n**Sample Solution:**\n**Proof.** If $A^T=-A$, then $A^T A = (-A)A = -A^2$. Also $A^T A$ is symmetric PSD, so $\\det(A^T A)=\\det(A)^2\\geq 0$.\n\nFor odd $n$: $\\det(-A)=(-1)^n\\det(A)=-\\det(A)$. But $\\det(A^T)=\\det(A)$ and $\\det(A^T A)=\\det(A)^2$, while from $A^T=-A$ we get $\\det(A)=-\\det(A)$, so $\\det(A)=0$. **Not invertible.** $\\square$\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** יהי $T$ לינארית והפיכה. הוכיחו $T(V)=T(U)+T(W)$ אם $V=U+W$.\n\n**פתרון לדוגמה:**\n$T(u+w)=T(u)+T(w)$ ⇒ $T(V)=T(U)+T(W)$. $\\square$\n\n**בעיה 2:** הוכיחו/הפריכו: $A$ אנטי-סימטרית, $n$ אי-זוגי ⇒ $A$ לא הפיכה.\n\n**פתרון לדוגמה:**\n$\\det(A)=-\\det(A)$ ⇒ $\\det(A)=0$. **לא הפיכה.** $\\square$\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Which map is **not** linear?",
-      "stem_he": "איזו העתקה **אינה** לינארית?",
-      "options_en": [
-        "$T(x,y)=(2x,y)$",
-        "$T(x,y)=(x+1,y)$",
-        "$T(x)=3x$",
-        "$T(x,y)=(x-y,0)$"
-      ],
-      "options_he": [
-        "$T(x,y)=(2x,y)$",
-        "$T(x,y)=(x+1,y)$",
-        "$T(x)=3x$",
-        "$T(x,y)=(x-y,0)$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$T(0,0)=(1,0)\\neq(0,0)$ — constant term breaks linearity.",
-      "explanation_he": "$T(0,0)=(1,0)\\neq(0,0)$ — איבר קבוע שובר לינאריות.",
-      "skill_atoms": [
-        "verify_linearity"
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Kernel of a Matrix",
+      "title_he": "דוגמה פתורה 1 — גרעין מטריצה",
+      "body_en_md": "**Find $\\ker(T)$** for $T(x,y)=(x+y, 2x+2y)$. Matrix: $A=\\begin{pmatrix}1&1\\\\2&2\\end{pmatrix}$.\n\nSolve $Ax=0$: RREF gives $\\begin{pmatrix}1&1\\\\0&0\\end{pmatrix}$.\n\n$x+y=0\\Rightarrow x=-y$. Free variable $y=t$:\n$$\\ker(T)=\\left\\{t\\begin{pmatrix}-1\\\\1\\end{pmatrix}:t\\in\\mathbb{R}\\right\\}.$$\n\nNullity $=1$. Rank $=1$ (by rank-nullity, $1+1=2=\\dim(\\mathbb{R}^2)$).",
+      "body_he_md": "$RREF$: $x+y=0$. $\\ker=\\text{span}\\{(-1,1)^T\\}$. Nullity $=1$, Rank $=1$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Is $T$ in the example injective? Surjective?",
+      "body_he_md": "האם $T$ בדוגמה חד-חד ערכי? על?",
+      "checkpoint_solution_en": "Injective: NO, $\\ker\\ne\\{0\\}$ (nullity=1). Surjective: NO, $\\text{Im}(T)$ is 1-dim subspace of $\\mathbb{R}^2$ (not all of $\\mathbb{R}^2$).",
+      "checkpoint_solution_he": "חח\"ע: לא ($\\ker\\ne\\{0\\}$). על: לא (תמונה 1-ממדית, לא כל $\\mathbb{R}^2$)."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Image and Basis",
+      "title_he": "דוגמה פתורה 2 — תמונה ובסיס",
+      "body_en_md": "**Find a basis for Im$(T)$** where $A=\\begin{pmatrix}1&0&2\\\\2&1&3\\\\0&1&-1\\end{pmatrix}$.\n\n**Row reduce $A$:**\n$R_2\\to R_2-2R_1$: $\\begin{pmatrix}1&0&2\\\\0&1&-1\\\\0&1&-1\\end{pmatrix}$.\n$R_3\\to R_3-R_2$: $\\begin{pmatrix}1&0&2\\\\0&1&-1\\\\0&0&0\\end{pmatrix}$.\n\nPivot columns: 1 and 2.\n\n**Basis of Im$(T)$:** $\\left\\{\\begin{pmatrix}1\\\\2\\\\0\\end{pmatrix},\\begin{pmatrix}0\\\\1\\\\1\\end{pmatrix}\\right\\}$.\n\nRank $=2$. Nullity $=3-2=1$ (one free variable, $x_3=t$, $x_2=t$, $x_1=-2t$).",
+      "body_he_md": "RREF: שתי עמודות ציר (1, 2). בסיס תמונה: עמודות 1 ו-2 של $A$ המקורית. Rank $=2$, Nullity $=1$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "$A$ is $4\\times5$ with rank 3. Find nullity$(A)$.",
+      "body_he_md": "$A$ ממימד $4\\times5$, rank 3. מצא nullity$(A)$.",
+      "checkpoint_solution_en": "Rank-nullity: $3+\\text{nullity}=5\\Rightarrow\\text{nullity}=2$.",
+      "checkpoint_solution_he": "Nullity $=5-3=2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Injective/Surjective, Rank-Nullity",
+      "title_he": "דוגמה פתורה 3 — חח\"ע/על, משפט הדרגה",
+      "body_en_md": "**$T:\\mathbb{R}^3\\to\\mathbb{R}^3$** with matrix $A=\\begin{pmatrix}1&2&3\\\\0&1&4\\\\0&0&0\\end{pmatrix}$.\n\n**Step 1:** Rank = 2 (two nonzero rows in RREF). Nullity $=3-2=1$.\n\n**Step 2:** $\\ker(T)\\ne\\{\\mathbf{0}\\}$ → NOT injective.\n\n**Step 3:** $\\text{Im}(T)$ has dimension 2 < 3 = $\\dim(\\mathbb{R}^3)$ → NOT surjective.\n\n**Basis of Im$(T)$:** $\\{(1,0,0)^T,(2,1,0)^T\\}$.\n\n**Basis of $\\ker(T)$:** Solve $Ax=0$: $x_1=-2x_2-3x_3=-11t$, $x_2=-4t$, $x_3=t$ → $\\ker=\\text{span}\\{(-11,-4,1)^T\\}$ (wait, let $x_3=t$: from row 2, $x_2=-4t$; row 1: $x_1=-2(-4t)-3t=8t-3t=5t$). So $\\ker=\\text{span}\\{(5,-4,1)^T\\}$.",
+      "body_he_md": "Rank $=2$, Nullity $=1$. לא חח\"ע ולא על.\n$\\ker=\\text{span}\\{(5,-4,1)^T\\}$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Kernel, Image, Rank-Nullity",
+      "title_he": "מדריך שיטה — גרעין, תמונה, משפט הדרגה",
+      "body_en_md": "1. Write matrix $A$ of $T$.\n2. **Kernel:** Solve $Ax=0$. Free variables → basis vectors of kernel.\n3. **Image:** Pivot columns of $A$ → basis of Im$(T)$.\n4. **Rank:** Number of pivot columns.\n5. **Nullity:** $\\dim(V)-\\text{rank}$.\n6. **Injective:** iff nullity $=0$ (i.e., $\\ker=\\{\\mathbf{0}\\}$).\n7. **Surjective:** iff rank $=\\dim(W)$.\n8. **Bijective:** injective AND surjective (for square matrix: iff $\\det(A)\\ne0$).",
+      "body_he_md": "1. כתוב מטריצה $A$.\n2. גרעין: $Ax=0$ → משתנים חופשיים.\n3. תמונה: עמודות ציר של $A$.\n4. Rank = עמודות ציר. Nullity = $\\dim(V)-\\text{rank}$.\n5. חח\"ע: nullity $=0$. על: rank $=\\dim(W)$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"Is $T:\\mathbb{R}^2\\to\\mathbb{R}^2$, $T(x,y)=(x+y,x+y)$ linear?","body_he":"האם $T(x,y)=(x+y,x+y)$ לינארית?","solution_en":"Yes: $T(u+v)=T(u)+T(v)$ and $T(\\alpha u)=\\alpha T(u)$.","solution_he":"כן."},
+        {"id":"e2","difficulty":"easy","body_en":"Find $\\ker(T)$ for $T(x,y)=(x+y,x+y)$.","body_he":"מצא $\\ker(T)$ ל-$T(x,y)=(x+y,x+y)$.","solution_en":"$x+y=0\\Rightarrow x=-y$. $\\ker=\\text{span}\\{(-1,1)^T\\}$.","solution_he":"$\\ker=\\text{span}\\{(-1,1)^T\\}$."},
+        {"id":"e3","difficulty":"easy","body_en":"$T:\\mathbb{R}^2\\to\\mathbb{R}^2$ with matrix $\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$. Kernel?","body_he":"$T=I$. גרעין?","solution_en":"$Ix=0\\Rightarrow x=0$. $\\ker=\\{\\mathbf{0}\\}$.","solution_he":"$\\ker=\\{\\mathbf{0}\\}$."},
+        {"id":"e4","difficulty":"easy","body_en":"$A$ is $3\\times4$, rank 2. Find nullity.","body_he":"$3\\times4$, rank 2. Nullity?","solution_en":"Nullity $=4-2=2$.","solution_he":"$2$."},
+        {"id":"e5","difficulty":"medium","body_en":"$A=\\begin{pmatrix}1&-1\\\\-1&1\\end{pmatrix}$. Find $\\ker(A)$, $\\text{Im}(A)$, rank, nullity.","body_he":"$A=\\begin{pmatrix}1&-1\\\\-1&1\\end{pmatrix}$. גרעין, תמונה, rank, nullity?","solution_en":"RREF: $\\begin{pmatrix}1&-1\\\\0&0\\end{pmatrix}$. Ker: $x=y=t$, $\\ker=\\text{span}\\{(1,1)^T\\}$. Im: col 1: $\\{(1,-1)^T\\}$. Rank=1, Nullity=1.","solution_he":"Ker: $\\text{span}\\{(1,1)^T\\}$. Im: $\\text{span}\\{(1,-1)^T\\}$. Rank $=1$, Nullity $=1$."},
+        {"id":"e6","difficulty":"medium","body_en":"Verify rank-nullity for Ex. e5.","body_he":"בדוק משפט דרגה-אפסיות עבור e5.","solution_en":"$\\dim(\\mathbb{R}^2)=2$. Rank $+$ Nullity $=1+1=2$. ✓","solution_he":"$1+1=2=\\dim$ ✓."},
+        {"id":"e7","difficulty":"medium","body_en":"$T$ is injective iff $\\ker(T)=\\{\\mathbf{0}\\}$. Verify for $T:\\mathbb{R}^2\\to\\mathbb{R}^3$ with matrix $\\begin{pmatrix}1&0\\\\0&1\\\\1&1\\end{pmatrix}$.","body_he":"בדוק חח\"ע ל-$T:\\mathbb{R}^2\\to\\mathbb{R}^3$, $A=\\begin{pmatrix}1&0\\\\0&1\\\\1&1\\end{pmatrix}$.","solution_en":"RREF: $\\begin{pmatrix}1&0\\\\0&1\\\\0&0\\end{pmatrix}$. Only solution to $Ax=0$: $x=0$. Ker $=\\{\\mathbf{0}\\}$, injective. ✓","solution_he":"Ker $=\\{\\mathbf{0}\\}$ → חח\"ע ✓."},
+        {"id":"e8","difficulty":"medium","body_en":"Is projection $P:\\mathbb{R}^3\\to\\mathbb{R}^3$, $P(x,y,z)=(x,y,0)$ surjective?","body_he":"האם הטלה $P(x,y,z)=(x,y,0)$ על?","solution_en":"Im$(P)=\\{(x,y,0)\\}\\ne\\mathbb{R}^3$. NOT surjective (can't reach $(0,0,1)$).","solution_he":"Im$(P)\\ne\\mathbb{R}^3$ → לא על."},
+        {"id":"e9","difficulty":"medium","body_en":"$A$ is $n\\times n$, rank $n$. Is $T(x)=Ax$ bijective?","body_he":"$A$ ממימד $n\\times n$, rank $n$. $T$ חד-חד ערכי ועל?","solution_en":"Rank $=n$, nullity $=0$: injective. Im $=\\mathbb{R}^n$: surjective. Bijective iff $\\det(A)\\ne0$.","solution_he":"rank $=n$ → nullity $=0$ → חח\"ע ועל → חד-חד ערכי ועל."},
+        {"id":"e10","difficulty":"hard","body_en":"$T:\\mathbb{R}^4\\to\\mathbb{R}^3$. Can $T$ be injective? Surjective?","body_he":"$T:\\mathbb{R}^4\\to\\mathbb{R}^3$. אפשרי שחח\"ע? שעל?","solution_en":"Injective: rank-nullity $\\Rightarrow$ rank $+$ nullity $=4$; for injective, nullity $=0\\Rightarrow$ rank $=4>3=\\dim(\\mathbb{R}^3)$. Impossible. So $T$ cannot be injective. Surjective: possible if rank $=3$ (nullity $=1$).","solution_he":"חח\"ע: לא. דרוש rank $=4>3$ — בלתי אפשרי. על: אפשרי אם rank $=3$."},
+        {"id":"e11","difficulty":"hard","body_en":"Find a matrix $A$ such that $\\ker(A)=\\text{span}\\{(1,2,1)^T\\}$.","body_he":"מצא מטריצה $A$ כך ש-$\\ker(A)=\\text{span}\\{(1,2,1)^T\\}$.","solution_en":"We need $A(1,2,1)^T=0$. Example: $A=\\begin{pmatrix}2&-1&0\\\\1&0&-1\\end{pmatrix}$. Check: $A(1,2,1)^T=(2-2,1-1)^T=(0,0)^T$. ✓ Nullity=1, rank=2, $\\ker=\\text{span}\\{(1,2,1)^T\\}$.","solution_he":"$A=\\begin{pmatrix}2&-1&0\\\\1&0&-1\\end{pmatrix}$. $A(1,2,1)^T=\\mathbf{0}$. ✓"},
+        {"id":"e12","difficulty":"hard","body_en":"$T:\\mathbb{R}^3\\to\\mathbb{R}^3$, rank 1. Describe Im$(T)$ and $\\ker(T)$.","body_he":"$T:\\mathbb{R}^3\\to\\mathbb{R}^3$, rank 1. תאר Im ו-$\\ker$.","solution_en":"Im$(T)$ is 1-dimensional (a line through origin). Ker$(T)$ is 2-dimensional (a plane through origin). Rank-nullity: $1+2=3$.","solution_he":"Im: קו דרך הראשית (1-ממד). Ker: מישור דרך הראשית (2-ממד)."},
+        {"id":"e13","difficulty":"hard","body_en":"Prove: $\\ker(T)$ is a subspace of $V$.","body_he":"הוכח: $\\ker(T)$ הוא תת-מרחב של $V$.","solution_en":"1. $T(\\mathbf{0})=\\mathbf{0}$ → $\\mathbf{0}\\in\\ker$. 2. $u,v\\in\\ker$: $T(u+v)=T(u)+T(v)=\\mathbf{0}+\\mathbf{0}=\\mathbf{0}$ → $u+v\\in\\ker$. 3. $u\\in\\ker$, $\\alpha\\in\\mathbb{R}$: $T(\\alpha u)=\\alpha T(u)=\\mathbf{0}$ → $\\alpha u\\in\\ker$. ✓","solution_he":"סגור תחת חיבור וכפל סקלרי, מכיל $\\mathbf{0}$."}
       ]
     },
     {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $T:V\\to V$ be linear, $U,W$ subspaces with $V=U+W$. Prove $T(V)=T(U)+T(W)$.",
-      "stem_he": "יהי $T$ לינארית, $V=U+W$. הוכיחו $T(V)=T(U)+T(W)$.",
-      "rubric_en": "Full credit (10/10): both inclusions using $v=u+w$.\nPartial (6/10): one direction only.\nMinimal (3/10): cites linearity only.",
-      "rubric_he": "ציון מלא (10/10): שני כיוונים.\nחלקי (6/10): כיוון אחד.\nמינימלי (3/10): רק לינאריות.",
-      "explanation_en": "$T(v)=T(u+w)=T(u)+T(w)$.",
-      "explanation_he": "$T(v)=T(u)+T(w)$.",
-      "skill_atoms": [
-        "matrix_of_transformation"
-      ],
-      "points_level_min": "la"
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Basis of kernel**: free variable columns give the kernel vectors — not pivot columns.\n2. **Basis of image**: use original (pre-RREF) pivot columns.\n3. **Injective ≠ surjective**: possible to be one but not both for non-square maps.\n4. **Rank-nullity**: $\\dim(V)$ on the right, not $\\dim(W)$.",
+      "body_he_md": "1. **גרעין**: משתנים חופשיים (לא עמודות ציר).\n2. **תמונה**: עמודות ציר של $A$ המקורית.\n3. **חח\"ע ≠ על** למטריצות לא ריבועיות.\n4. **משפט**: $\\text{rank}+\\text{nullity}=\\dim(V)$ (מרחב התחום)."
     },
     {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or disprove: If $A\\in\\mathbb{R}^{n\\times n}$ is antisymmetric and $n$ is odd, then $A$ is not invertible.",
-      "stem_he": "הוכיחו/הפריכו: $A$ אנטי-סימטרית, $n$ אי-זוגי ⇒ $A$ לא הפיכה.",
-      "rubric_en": "Full credit (10/10): shows $\\det(A)=-\\det(A)$ so $\\det=0$.\nPartial (6/10): correct conclusion, incomplete proof.\nMinimal (3/10): answer only.",
-      "rubric_he": "ציון מלא (10/10): $\\det(A)=0$.\nחלקי (6/10): מסקנה.\nמינימלי (3/10): תשובה.",
-      "explanation_en": "True: $\\det(A)=0$ for odd antisymmetric.",
-      "explanation_he": "נכון: $\\det(A)=0$.",
-      "skill_atoms": [
-        "compute_kernel"
-      ],
-      "points_level_min": "la"
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- Kernel: solve $Ax=0$; free variables give basis.\n- Image: pivot columns of $A$ give basis.\n- Rank = dim(Im). Nullity = dim(ker).\n- Rank + Nullity = dim(domain).\n- Injective iff nullity = 0. Surjective iff rank = dim(W).",
+      "body_he_md": "- גרעין: $Ax=0$; משתנים חופשיים.\n- תמונה: עמודות ציר.\n- Rank + Nullity = $\\dim$ (תחום).\n- חח\"ע: nullity $=0$. על: rank $=\\dim(W)$."
     },
     {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $T:V\\to V$ be linear, $U,W$ subspaces with $V=U+W$. Prove $T(V)=T(U)+T(W)$.",
-      "stem_he": "יהי $T$ לינארית, $V=U+W$. הוכיחו $T(V)=T(U)+T(W)$.",
-      "rubric_en": "Full credit (10/10): both inclusions using $v=u+w$.\nPartial (6/10): one direction only.\nMinimal (3/10): cites linearity only.",
-      "rubric_he": "ציון מלא (10/10): שני כיוונים.\nחלקי (6/10): כיוון אחד.\nמינימלי (3/10): רק לינאריות.",
-      "explanation_en": "$T(v)=T(u+w)=T(u)+T(w)$.",
-      "explanation_he": "$T(v)=T(u)+T(w)$.",
-      "skill_atoms": [
-        "image_rank"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or disprove: If $A\\in\\mathbb{R}^{n\\times n}$ is antisymmetric and $n$ is odd, then $A$ is not invertible.",
-      "stem_he": "הוכיחו/הפריכו: $A$ אנטי-סימטרית, $n$ אי-זוגי ⇒ $A$ לא הפיכה.",
-      "rubric_en": "Full credit (10/10): shows $\\det(A)=-\\det(A)$ so $\\det=0$.\nPartial (6/10): correct conclusion, incomplete proof.\nMinimal (3/10): answer only.",
-      "rubric_he": "ציון מלא (10/10): $\\det(A)=0$.\nחלקי (6/10): מסקנה.\nמינימלי (3/10): תשובה.",
-      "explanation_en": "True: $\\det(A)=0$ for odd antisymmetric.",
-      "explanation_he": "נכון: $\\det(A)=0$.",
-      "skill_atoms": [
-        "rank_nullity_transform"
-      ],
-      "points_level_min": "la"
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Kernel and image are subspaces.\n- Rank-nullity: $\\text{rank}+\\text{nullity}=\\dim(V)$.\n- Injective: trivial kernel. Surjective: maximal image.",
+      "body_he_md": "- גרעין ותמונה — תת-מרחבים.\n- Rank + Nullity = $\\dim(V)$.\n- חח\"ע: $\\ker=\\{0\\}$. על: Im $=W$."
     }
+  ],
+  "questions": [
+    {"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"$T$ is injective iff:","stem_he":"$T$ חח\"ע אמ\"מ:","options_en":["$\\ker(T)=V$","$\\ker(T)=\\{\\mathbf{0}\\}$","Im$(T)=W$","rank $=0$"],"options_he":["$\\ker(T)=V$","$\\ker(T)=\\{\\mathbf{0}\\}$","Im$(T)=W$","rank $=0$"],"correct_index":1,"explanation_en":"Injective means different inputs give different outputs, equivalent to trivial kernel.","explanation_he":"חח\"ע שקול לגרעין טריוויאלי.","skill_atoms":["kernel","injectivity"]}
   ],
   "agent_hints": {
     "key_insights": [
-      "Linear: T(0)=0; matrix columns = T(e_i).",
-      "ker(T) in domain; Im(T) in codomain = col(A).",
-      "Rank–Nullity: nullity + rank = dim(domain)."
+      "Kernel = null space of A (solve Ax=0).",
+      "Image = column space of A (pivot columns).",
+      "Rank + Nullity = dim(domain).",
+      "Injective iff nullity=0. Surjective iff rank=dim(W)."
     ],
     "common_misconceptions": [
-      {
-        "wrong": "Linear maps can have T(0) ≠ 0",
-        "correction": "T(0) must be 0 for any linear map.",
-        "detect_phrase_en": "T(0) not zero",
-        "detect_phrase_he": "T(0) לא אפס"
-      }
+      {"wrong": "Basis of image comes from RREF columns","correction": "Use the original columns corresponding to pivot positions.","detect_phrase_en":"image basis rref column","detect_phrase_he":"תמונה בסיס שורות"}
     ],
-    "tutor_pacing_hint": "Build matrix from images of basis vectors before computing kernel.",
-    "diagnostic_signals": {
-      "confuses kernel and image spaces": "Kernel lives in domain; image in codomain."
-    },
-    "skill_atoms_unlocked": [
-      "verify_linearity",
-      "matrix_of_transformation",
-      "compute_kernel",
-      "image_rank",
-      "rank_nullity_transform"
-    ]
+    "skill_atoms_unlocked": ["kernel","image","rank","nullity","rank_nullity","injectivity","surjectivity"],
+    "tutor_pacing_hint": "Kernel first (solve Ax=0), then image (pivot columns), then rank-nullity, then injective/surjective.",
+    "next_recommended": ["la_vector_spaces","la_matrices"]
   }
 }

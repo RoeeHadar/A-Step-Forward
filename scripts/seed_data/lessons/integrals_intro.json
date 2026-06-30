@@ -1,101 +1,128 @@
 {
   "concept_id": "integrals_intro",
-  "subject": "math",
-  "level": "high_school",
-  "math_track": [
-    "4pt",
-    "5pt"
-  ],
-  "title_en": "Integrals — Introduction",
-  "title_he": "אינטגרלים — מבוא",
-  "summary_en": "An antiderivative reverses differentiation. The indefinite integral collects all antiderivatives; the basic table mirrors the derivative table.",
-  "summary_he": "פונקציה קדומה הופכת את הגזירה. האינטגרל הלא מסוים אוסף את כל הפונקציות הקדומות; הטבלה הבסיסית משקפת את טבלת הנגזרות.",
-  "est_minutes": 14,
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1","5pt"],
+  "title_en": "Introduction to Integration",
+  "title_he": "מבוא לאינטגרציה",
+  "summary_en": "Antiderivatives, indefinite integrals, and basic integration rules. The connection between differentiation and integration (FTC). Power rule, constant rule, basic trig and exponential integrals.",
+  "summary_he": "נגזרות הפוכות, אינטגרלים לא מסויימים, וכללי אינטגרציה בסיסיים. הקשר בין גזירה ואינטגרציה (משפט יסודי החשבון). כלל החזקה, פונקציות טריגו ומעריכי.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Reversing the derivative",
-      "title_he": "היפוך הגזירה",
-      "body_en_md": "We know $\\dfrac{d}{dx}(x^3) = 3x^2$. Reverse the question: given $f'(x) = 3x^2$, what is $f(x)$?\n\nAnswer: $f(x) = x^3$. But also $x^3 + 5$, $x^3 - 100$, $x^3 + C$ for any constant $C$ — all have the same derivative. We capture all of them with $+C$:\n\n$$\\int 3x^2 \\, dx = x^3 + C.$$\n\nThis is an **indefinite integral** (אינטגרל לא מסוים). The function $F$ with $F' = f$ is an **antiderivative** (פונקציה קדומה) of $f$.\n\nNotation:\n- $\\int f(x) \\, dx$ = the set of all antiderivatives of $f$.\n- $dx$ marks the variable of integration (just like $\\frac{d}{dx}$ marks differentiation variable).\n- The $+C$ (integration constant) is mandatory.",
-      "body_he_md": "אנחנו יודעים $\\dfrac{d}{dx}(x^3) = 3x^2$. הופכים את השאלה: בהינתן $f'(x) = 3x^2$, מהי $f(x)$?\n\nתשובה: $f(x) = x^3$. אבל גם $x^3 + 5$, $x^3 - 100$, $x^3 + C$ לכל $C$ — לכולם אותה נגזרת. אוספים את כולם עם $+C$:\n\n$$\\int 3x^2 \\, dx = x^3 + C.$$\n\nזה **אינטגרל לא מסוים**. הפונקציה $F$ עם $F' = f$ היא **פונקציה קדומה** של $f$.\n\nסימון:\n- $\\int f(x) \\, dx$ = קבוצת כל הקדומות.\n- $dx$ מסמן את משתנה האינטגרציה.\n- $+C$ (קבוע אינטגרציה) חובה.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "The concept of integrals is a fundamental idea in calculus, and it is closely related to the concept of derivatives. In fact, the process of integration is often referred to as \"reversing\" the process of differentiation. This means that if we have a function and its derivative, we can use integration to find the original function.\n\nTo understand why this is the case, consider the following: the derivative of a function represents the rate of change of the function with respect to the input variable. By integrating this rate of change, we can recover the original function. This is because the integral of the derivative of a function is equal to the function itself, as stated by the Fundamental Theorem of Calculus.\n\n$$\\int \\frac{d}{dx} f(x) \\, dx = f(x) + C$$\n\nwhere $C$ is the constant of integration.",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "The concept of an antiderivative is central to the study of integrals. An antiderivative of a function $f(x)$ is a function $F(x)$ such that $\\frac{d}{dx}F(x) = f(x)$. This is denoted as $$\\int f(x) \\, dx = F(x) + C$$ where $C$ is the constant of integration. The power rule for integrals states that $$\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C$$ for $n \\neq -1$.",
-          "body_he_md": "המושג של אנטי-דריבטיב הוא רכיב עיקרי בלימודי השילובים. אנטי-דריבטיב של פונקציה $f(x)$ הוא פונקציה $F(x)$ כך ש-$\\frac{d}{dx}F(x) = f(x)$. זה נקרא $$\\int f(x) \\, dx = F(x) + C$$ שם $C$ הוא קבוע התגלית.  כלל השלטת הכוח לשילובים קובע ש- $$\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C$$  ל-$n \\neq -1$.\n\n### Worked Example:\n\nFind the antiderivative of $f(x) = x^2$.\n\n$$\\int x^2 \\, dx = \\frac{x^{2+1}}{2+1} + C = \\frac{x^3}{3} + C$$"
-        }
-      }
+      "title_en": "The Reverse of Differentiation",
+      "title_he": "ההפוך של גזירה",
+      "body_en_md": "Differentiation answers: *given $f(x)$, find $f'(x)$.*\n\n**Integration** answers the reverse question: *given $f'(x)$, find $f(x)$.*\n\nExample: We know $\\frac{d}{dx}(x^2) = 2x$. So an **antiderivative** of $2x$ is $x^2$.\n\nBut also $x^2+5$, $x^2-7$, ... all have derivative $2x$. So the antiderivative is not unique — it includes an arbitrary constant $+C$.\n\n**Why integration matters:**\n- Compute areas under curves and between curves.\n- Recover position from velocity, velocity from acceleration.\n- Solve differential equations.\n- Compute total quantities (total work, total charge, etc.).",
+      "body_he_md": "גזירה עונה: *בהינתן $f(x)$, מצא $f'(x)$.*\n\n**אינטגרציה** עונה על ההפוך: *בהינתן $f'(x)$, מצא $f(x)$.*\n\nדוגמה: $d(x^2)/dx=2x$. לכן נגזרת הפוכה של $2x$ היא $x^2$.\n\nאבל גם $x^2+5$, $x^2-7$,... יש להן נגזרת $2x$. לכן הנגזרת ההפוכה כוללת קבוע שרירותי $+C$.\n\n**חשיבות:** שטחים, מיקום ממהירות, מ\"ד, כמויות כוללות."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Antiderivative and Indefinite Integral",
+      "title_he": "נגזרת הפוכה ואינטגרל לא מסויים",
+      "body_en_md": "**Antiderivative:** $F(x)$ is an antiderivative of $f(x)$ if $F'(x) = f(x)$.\n\n**Indefinite integral:**\n$$\\int f(x)\\,dx = F(x) + C,$$\nwhere $F'(x)=f(x)$ and $C$ is an arbitrary constant (**constant of integration**).\n\n**Key connection (FTC Part 2):** If $F'(x)=f(x)$ then\n$$\\int_a^b f(x)\\,dx = F(b) - F(a).$$\n\n**Notation:** $[F(x)]_a^b = F(b)-F(a)$.",
+      "body_he_md": "**נגזרת הפוכה:** $F(x)$ היא נגזרת הפוכה של $f(x)$ אם $F'(x)=f(x)$.\n\n**אינטגרל לא מסויים:**\n$$\\int f(x)\\,dx = F(x)+C.$$\n\n**קשר מרכזי (FTC 2):**\n$$\\int_a^b f(x)\\,dx = F(b)-F(a).$$"
     },
     {
       "kind": "theory",
-      "title_en": "Basic integration table + linearity",
-      "title_he": "טבלת אינטגרציה בסיסית + ליניאריות",
-      "body_en_md": "### The basic table (memorize)\n\n| $f(x)$ | $\\int f(x)\\,dx$ |\n| --- | --- |\n| $0$ | $C$ |\n| $1$ | $x + C$ |\n| $x^n$ ($n \\ne -1$) | $\\dfrac{x^{n+1}}{n+1} + C$ |\n| $\\dfrac{1}{x}$ | $\\ln|x| + C$ |\n| $\\sin x$ | $-\\cos x + C$ |\n| $\\cos x$ | $\\sin x + C$ |\n| $\\sec^2 x$ | $\\tan x + C$ |\n| $e^x$ | $e^x + C$ |\n| $a^x$ ($a > 0, a \\ne 1$) | $\\dfrac{a^x}{\\ln a} + C$ |\n\n### The power rule for integration\n\n$$\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C, \\quad n \\ne -1.$$\n\nVerify: differentiating gives $\\dfrac{(n+1)x^n}{n+1} = x^n$ ✓.\n\nThe $n = -1$ case is special: $\\int \\frac{1}{x} dx = \\ln|x| + C$.\n\n### Linearity\n\nIntegration is **linear**:\n\n$$\\int \\bigl(a f(x) + b g(x)\\bigr) \\, dx = a \\int f(x) \\, dx + b \\int g(x) \\, dx.$$\n\nSplit sums, pull constants. (Just like derivatives.)\n\n### Verification by differentiation\n\nIf you're unsure of an integration result, **differentiate it**. If you get back the integrand, you're done. This is the single most useful sanity check.\n\nExample: I claim $\\int (2x + 3) \\, dx = x^2 + 3x + C$. Check: $\\frac{d}{dx}(x^2 + 3x + C) = 2x + 3$ ✓.",
-      "body_he_md": "### הטבלה הבסיסית (לזכור)\n\n| $f(x)$ | $\\int f(x)\\,dx$ |\n| --- | --- |\n| $0$ | $C$ |\n| $1$ | $x + C$ |\n| $x^n$ ($n \\ne -1$) | $\\dfrac{x^{n+1}}{n+1} + C$ |\n| $\\dfrac{1}{x}$ | $\\ln|x| + C$ |\n| $\\sin x$ | $-\\cos x + C$ |\n| $\\cos x$ | $\\sin x + C$ |\n| $\\frac{1}{\\cos^2 x}$ | $\\tan x + C$ |\n| $e^x$ | $e^x + C$ |\n| $a^x$ | $\\dfrac{a^x}{\\ln a} + C$ |\n\n### חוק החזקה לאינטגרציה\n\n$$\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C, \\quad n \\ne -1.$$\n\nאימות: גוזרים ומקבלים $x^n$ ✓.\n\nהמקרה $n = -1$: $\\int \\frac{1}{x} dx = \\ln|x| + C$.\n\n### ליניאריות\n\n$$\\int \\bigl(a f(x) + b g(x)\\bigr) \\, dx = a \\int f(x) \\, dx + b \\int g(x) \\, dx.$$\n\nמפצלים סכומים, מוציאים קבועים.\n\n### אימות על ידי גזירה\n\nאם לא בטוחים בתוצאת אינטגרציה, **גוזרים אותה**. אם מקבלים את האינטגרנד, סיימתם. בדיקת השפיות הכי שימושית.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this lesson, we will introduce the concept of basic integration and explore the linearity property of integrals. The linearity property states that the integral of a sum is the sum of the integrals, and the integral of a constant times a function is the constant times the integral of the function. This property allows us to break down complex integrals into simpler ones.\n\n$$\\int (f(x) + g(x)) dx = \\int f(x) dx + \\int g(x) dx$$\n\n$$\\int af(x) dx = a\\int f(x) dx$$\n\nWe will also introduce a basic integration table that summarizes common integrals.",
-          "body_he_md": "בשיעור זה, נודיע על רעיון הבסיסי של השילוב ונחקור בתכונת הרציפות של השילוב. תכונת הרציפות טוענת כי שילוב של סכום הוא שילוב של השילובים, ושילוב של קבוע פעולה פונקציה הוא קבוע פעולה שילוב הפונקציה. תכונה זו מאפשרת לנו לפרק אינטגרלים מורכבים לאינטגרלים פשוטים יותר.\n\n$$\\int (f(x) + g(x)) dx = \\int f(x) dx + \\int g(x) dx$$\n\n$$\\int af(x) dx = a\\int f(x) dx$$\n\nנציג גם טבלת שילוב בסיסי שמסכם אינטגרלים נפוצים.\n\n### Worked Example"
-        },
-        "5pt": {
-          "body_en_md": "The concept of an antiderivative is central to integration. An antiderivative of a function $f(x)$ is a function $F(x)$ such that $\\frac{d}{dx}F(x) = f(x)$. The indefinite integral of $f(x)$ is denoted as $\\int f(x) \\,dx$ and is defined as the family of antiderivatives of $f(x)$, i.e., $F(x) + C$, where $C$ is the constant of integration. The power rule for integrals states that $\\int x^n \\,dx = \\frac{x^{n+1}}{n+1} + C$ for $n \\neq -1$.\n\nA fundamental property of integrals is linearity, which states that $\\int [af(x) + bg(x)] \\,dx = a\\int f(x) \\,dx + b\\int g(x) \\,dx$ for any constants $a$ and $b$.\n\n### Worked Example:\n\nFind $\\int (2x^3 + 3x^2 - 4x) \\,dx$.\n\n$$\\int (2x^3 + 3x^2 - 4x) \\,dx = \\int 2x^3 \\,dx + \\int 3x^2 \\,dx - \\int 4x \\,dx$$\n$$= 2 \\int x^3 \\,dx + 3 \\int x^2 \\,dx - 4 \\int x \\,dx$$\n$$= 2 \\cdot \\frac{x^4}{4} + 3 \\cdot \\frac{x^3}{3} - 4 \\cdot \\frac{x^2}{2} + C$$\n$$= \\frac{x^4}{2} + x^3 - 2x^2 + C$$\n\n",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Basic Integration Rules",
+      "title_he": "כללי אינטגרציה בסיסיים",
+      "body_en_md": "**Power rule** ($n\\ne-1$): $\\int x^n\\,dx = \\dfrac{x^{n+1}}{n+1}+C$.\n\n**Reciprocal:** $\\int \\dfrac{1}{x}\\,dx = \\ln|x|+C$.\n\n**Exponential:** $\\int e^x\\,dx = e^x+C$. $\\int a^x\\,dx = \\dfrac{a^x}{\\ln a}+C$.\n\n**Trigonometric:**\n- $\\int \\sin x\\,dx = -\\cos x+C$.\n- $\\int \\cos x\\,dx = \\sin x+C$.\n- $\\int \\sec^2 x\\,dx = \\tan x+C$.\n\n**Linearity:**\n$$\\int [f(x)\\pm g(x)]\\,dx = \\int f\\,dx \\pm \\int g\\,dx.$$\n$$\\int kf(x)\\,dx = k\\int f(x)\\,dx.$$\n\n**Check:** Always differentiate your answer to verify.",
+      "body_he_md": "**כלל חזקה** ($n\\ne-1$): $\\int x^n\\,dx=x^{n+1}/(n+1)+C$.\n\n**הדדי:** $\\int 1/x\\,dx=\\ln|x|+C$.\n\n**מעריכי:** $\\int e^x\\,dx=e^x+C$.\n\n**טריגונומטרי:**\n- $\\int\\sin x=-\\cos x+C$.\n- $\\int\\cos x=\\sin x+C$.\n- $\\int\\sec^2x=\\tan x+C$.\n\n**ליניאריות:** $\\int[f\\pm g]=\\int f\\pm\\int g$, $\\int kf=k\\int f$.\n\n**בדיקה:** גזרו את התשובה לאימות."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: polynomial integral",
-      "title_he": "דוגמה פתורה: אינטגרל פולינומי",
-      "body_en_md": "Compute $\\int (4x^3 - 6x + 7) \\, dx$.\n\n**Apply linearity:** integrate term by term.\n\n$$\\int 4x^3 \\, dx = 4 \\cdot \\frac{x^4}{4} = x^4.$$\n\n$$\\int (-6x) \\, dx = -6 \\cdot \\frac{x^2}{2} = -3x^2.$$\n\n$$\\int 7 \\, dx = 7x.$$\n\nCombine + add $C$:\n\n$$\\int (4x^3 - 6x + 7) \\, dx = x^4 - 3x^2 + 7x + C.$$\n\n**Verify**: $\\frac{d}{dx}(x^4 - 3x^2 + 7x + C) = 4x^3 - 6x + 7$ ✓",
-      "body_he_md": "חשבו $\\int (4x^3 - 6x + 7) \\, dx$.\n\n**מחילים ליניאריות:** אינטגרציה איבר-איבר.\n\n$$\\int 4x^3 \\, dx = x^4, \\quad \\int (-6x) \\, dx = -3x^2, \\quad \\int 7 \\, dx = 7x.$$\n\nמחברים + מוסיפים $C$:\n\n$$\\int (4x^3 - 6x + 7) \\, dx = x^4 - 3x^2 + 7x + C.$$\n\n**אימות**: $\\frac{d}{dx}(x^4 - 3x^2 + 7x + C) = 4x^3 - 6x + 7$ ✓",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this lesson, we will introduce the concept of integrals and their application in solving problems. We will begin with the integration of polynomials, which is a fundamental concept in calculus.\n\nA polynomial integral is the antiderivative of a polynomial function. The process of finding the antiderivative of a polynomial involves using the power rule of integration, which states that $$\\int x^n \\,dx = \\frac{x^{n+1}}{n+1} + C$$.\n\nWe will use this rule to find the antiderivative of a given polynomial function.\n\n### Worked Example:\n\nFind the integral of $$f(x) = 3x^2 - 2x + 1$$.\n\n### Solution:\n\nUsing the power rule of integration, we can integrate each term separately:\n\n$$\\int f(x) \\,dx = \\int (3x^2 - 2x + 1) \\,dx$$\n$$= \\int 3x^2 \\,dx - \\int 2x \\,dx + \\int 1 \\,dx$$\n$$= 3 \\cdot \\frac{x^3}{3} - 2 \\cdot \\frac{x^2}{2} + x + C$$\n$$= x^3 - x^2 + x + C$$\n\nTherefore, the integral of $$f(x) = 3x^2 - 2x + 1$$ is $$F(x) = x^3 - x^2 + x + C$$.",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "The concept of an antiderivative is central to the study of integrals. The antiderivative of a function $f(x)$ is a function $F(x)$ such that $\\frac{d}{dx}F(x) = f(x)$. The indefinite integral of $f(x)$ is denoted as $\\int f(x) dx$ and represents the family of antiderivatives of $f(x)$, including the constant of integration $C$. The power rule for integrals states that $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ for $n \\neq -1$.\n\nTo find the antiderivative of $f(x) = x^3$, we can apply the power rule for integrals. We have $\\int x^3 dx = \\frac{x^{3+1}}{3+1} + C = \\frac{x^4}{4} + C$.",
-          "body_he_md": ""
-        }
-      }
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Basic Antiderivatives",
+      "title_he": "דוגמה פתורה 1 — נגזרות הפוכות בסיסיות",
+      "body_en_md": "**Find** $\\int (3x^2 + 2x - 5)\\,dx$.\n\n**Step 1:** Apply power rule to each term.\n$$\\int 3x^2\\,dx = 3\\cdot\\frac{x^3}{3} = x^3.$$\n$$\\int 2x\\,dx = 2\\cdot\\frac{x^2}{2} = x^2.$$\n$$\\int (-5)\\,dx = -5x.$$\n\n**Step 2:** Combine.\n$$\\int (3x^2+2x-5)\\,dx = x^3+x^2-5x+C.$$\n\n**Step 3:** Verify. $\\frac{d}{dx}(x^3+x^2-5x+C)=3x^2+2x-5$. ✓",
+      "body_he_md": "**מצאו** $\\int(3x^2+2x-5)\\,dx$.\n\n**שלב 1:** כלל חזקה לכל איבר.\n$\\int3x^2=x^3$, $\\int2x=x^2$, $\\int-5=-5x$.\n\n**שלב 2:** $x^3+x^2-5x+C$.\n\n**שלב 3:** גזור לאמות. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find: (a) $\\int \\frac{1}{x^2}\\,dx$, (b) $\\int \\sqrt{x}\\,dx$, (c) $\\int (e^x + \\cos x)\\,dx$.",
+      "body_he_md": "מצאו: (א) $\\int x^{-2}\\,dx$, (ב) $\\int \\sqrt{x}\\,dx$, (ג) $\\int(e^x+\\cos x)\\,dx$.",
+      "checkpoint_solution_en": "(a) $\\int x^{-2}\\,dx = \\frac{x^{-1}}{-1}+C = -\\frac{1}{x}+C$.\n\n(b) $\\int x^{1/2}\\,dx = \\frac{x^{3/2}}{3/2}+C = \\frac{2}{3}x^{3/2}+C$.\n\n(c) $e^x+\\sin x+C$.",
+      "checkpoint_solution_he": "(א) $-1/x+C$. (ב) $\\frac{2}{3}x^{3/2}+C$. (ג) $e^x+\\sin x+C$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Definite Integral (FTC)",
+      "title_he": "דוגמה פתורה 2 — אינטגרל מסויים (FTC)",
+      "body_en_md": "**Evaluate** $\\int_1^3 (x^2-4x+3)\\,dx$.\n\n**Step 1:** Find antiderivative. $F(x) = \\frac{x^3}{3}-2x^2+3x$.\n\n**Step 2:** Apply FTC.\n$$F(3) = \\frac{27}{3}-2(9)+3(3) = 9-18+9 = 0.$$\n$$F(1) = \\frac{1}{3}-2+3 = \\frac{4}{3}.$$\n\n**Step 3:** $\\int_1^3(x^2-4x+3)\\,dx = F(3)-F(1) = 0-\\frac{4}{3} = -\\frac{4}{3}$.\n\n**Note:** The negative value indicates the net signed area; the curve dips below the $x$-axis between $x=1$ and $x=3$.",
+      "body_he_md": "**חשבו** $\\int_1^3(x^2-4x+3)\\,dx$.\n\n**שלב 1:** $F(x)=x^3/3-2x^2+3x$.\n\n**שלב 2:** $F(3)=9-18+9=0$. $F(1)=1/3-2+3=4/3$.\n\n**שלב 3:** $0-4/3=-4/3$.\n\n**הערה:** ערך שלילי = שטח עם סימן; העקומה מתחת לציר $x$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Evaluate $\\int_0^\\pi \\sin x\\,dx$ and explain why $\\int_0^{2\\pi}\\sin x\\,dx=0$.",
+      "body_he_md": "חשבו $\\int_0^\\pi\\sin x\\,dx$ והסבירו מדוע $\\int_0^{2\\pi}\\sin x\\,dx=0$.",
+      "checkpoint_solution_en": "$\\int_0^\\pi\\sin x\\,dx=[-\\cos x]_0^\\pi=(-\\cos\\pi)-(-\\cos0)=1+1=2$.\n\n$\\int_0^{2\\pi}\\sin x\\,dx=[-\\cos x]_0^{2\\pi}=(-1)-(-1)=0$. Explanation: The integral from $0$ to $\\pi$ equals $+2$ (positive area), and from $\\pi$ to $2\\pi$ equals $-2$ (negative area). They cancel.",
+      "checkpoint_solution_he": "$\\int_0^\\pi\\sin x\\,dx=2$.\n$\\int_0^{2\\pi}\\sin x\\,dx=0$: השטח החיובי $[0,\\pi]$ מתבטל עם השלילי $[\\pi,2\\pi]$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Initial Value Problem (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — בעיית ערך התחלתי (רמת בחינה)",
+      "body_en_md": "**Given:** $f''(x) = 6x-2$, $f'(0)=1$, $f(0)=3$. Find $f(x)$.\n\n**Step 1:** Integrate $f''$ to get $f'$.\n$$f'(x) = \\int(6x-2)\\,dx = 3x^2-2x+C_1.$$\nUse $f'(0)=1$: $1=0-0+C_1\\Rightarrow C_1=1$.\n$$f'(x) = 3x^2-2x+1.$$\n\n**Step 2:** Integrate $f'$ to get $f$.\n$$f(x) = \\int(3x^2-2x+1)\\,dx = x^3-x^2+x+C_2.$$\nUse $f(0)=3$: $3=0-0+0+C_2\\Rightarrow C_2=3$.\n\n**Result:** $f(x) = x^3-x^2+x+3$.",
+      "body_he_md": "**נתון:** $f''=6x-2$, $f'(0)=1$, $f(0)=3$. מצאו $f(x)$.\n\n**שלב 1:** $f'(x)=3x^2-2x+C_1$. $f'(0)=1\\Rightarrow C_1=1$.\n\n**שלב 2:** $f(x)=x^3-x^2+x+C_2$. $f(0)=3\\Rightarrow C_2=3$.\n\n**תוצאה:** $f(x)=x^3-x^2+x+3$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Integration",
+      "title_he": "מדריך שיטה — אינטגרציה",
+      "body_en_md": "**Indefinite integral:**\n1. Identify the function type (polynomial, trig, exponential).\n2. Apply the matching rule.\n3. Add $+C$.\n4. Verify by differentiating.\n\n**Definite integral (FTC):**\n1. Find $F(x)$ (any antiderivative, no $+C$ needed).\n2. Compute $F(b)-F(a)$.\n\n**Initial value problem:**\n1. Integrate repeatedly.\n2. At each step, use the initial condition to solve for the constant.\n\n| Function | Integral |\n|---|---|\n| $x^n$ ($n\\ne-1$) | $x^{n+1}/(n+1)+C$ |\n| $1/x$ | $\\ln|x|+C$ |\n| $e^x$ | $e^x+C$ |\n| $\\sin x$ | $-\\cos x+C$ |\n| $\\cos x$ | $\\sin x+C$ |\n| $\\sec^2x$ | $\\tan x+C$ |",
+      "body_he_md": "**לא מסויים:** זהה טיפוס, החל כלל, הוסף $+C$, בדוק בגזירה.\n\n**מסויים (FTC):** $F(b)-F(a)$.\n\n**בעיית ערך התחלתי:** אינטגרל חוזר + שימוש בתנאים.\n\n| פונקציה | אינטגרל |\n|---|---|\n| $x^n$ | $x^{n+1}/(n+1)$ |\n| $1/x$ | $\\ln|x|$ |\n| $e^x$ | $e^x$ |\n| $\\sin x$ | $-\\cos x$ |\n| $\\cos x$ | $\\sin x$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$\\int(4x^3-3x+1)\\,dx$","body_he":"$\\int(4x^3-3x+1)\\,dx$","solution_en":"$x^4-\\frac{3x^2}{2}+x+C$.","solution_he":"$x^4-\\frac{3x^2}{2}+x+C$."},
+        {"id":"e2","difficulty":"easy","body_en":"$\\int(\\sin x+e^x)\\,dx$","body_he":"$\\int(\\sin x+e^x)\\,dx$","solution_en":"$-\\cos x+e^x+C$.","solution_he":"$-\\cos x+e^x+C$."},
+        {"id":"e3","difficulty":"easy","body_en":"Evaluate $\\int_0^2 x^3\\,dx$.","body_he":"חשבו $\\int_0^2 x^3\\,dx$.","solution_en":"$[x^4/4]_0^2=16/4=4$.","solution_he":"$4$."},
+        {"id":"e4","difficulty":"easy","body_en":"$\\int\\left(\\frac{1}{x^3}+\\sqrt[3]{x}\\right)dx$","body_he":"$\\int(x^{-3}+x^{1/3})\\,dx$","solution_en":"$\\int x^{-3}\\,dx+\\int x^{1/3}\\,dx=-x^{-2}/2+\\frac{3x^{4/3}}{4}+C$.","solution_he":"$-1/(2x^2)+\\frac{3}{4}x^{4/3}+C$."},
+        {"id":"e5","difficulty":"medium","body_en":"$\\int\\frac{x^2+x-1}{x^2}\\,dx$ (split the fraction first).","body_he":"$\\int(x^2+x-1)/x^2\\,dx$ (פצלו ראשה).","solution_en":"$(x^2+x-1)/x^2=1+1/x-x^{-2}$. $\\int=x+\\ln|x|+1/x+C$.","solution_he":"$x+\\ln|x|+1/x+C$."},
+        {"id":"e6","difficulty":"medium","body_en":"Find $f(x)$ if $f'(x)=3e^x-2\\sin x$ and $f(0)=1$.","body_he":"מצאו $f$ אם $f'=3e^x-2\\sin x$, $f(0)=1$.","solution_en":"$f(x)=3e^x+2\\cos x+C$. $f(0)=3+2+C=1\\Rightarrow C=-4$. $f(x)=3e^x+2\\cos x-4$.","solution_he":"$f(x)=3e^x+2\\cos x-4$."},
+        {"id":"e7","difficulty":"medium","body_en":"Evaluate $\\int_{-1}^1(x^3+x)\\,dx$ (use symmetry).","body_he":"חשבו $\\int_{-1}^1(x^3+x)\\,dx$ (השתמשו בסימטריה).","solution_en":"$x^3+x$ is an odd function ($f(-x)=-f(x)$). By symmetry, $\\int_{-a}^a f(x)\\,dx=0$. Answer: $0$.","solution_he":"פונקציה אי-זוגית. $\\int_{-1}^1 f=0$."},
+        {"id":"e8","difficulty":"medium","body_en":"$\\int_0^{\\pi/2}(\\sin x+2\\cos x)\\,dx$","body_he":"$\\int_0^{\\pi/2}(\\sin x+2\\cos x)\\,dx$","solution_en":"$[-\\cos x+2\\sin x]_0^{\\pi/2}=(0+2)-(-1+0)=3$.","solution_he":"$3$."},
+        {"id":"e9","difficulty":"medium","body_en":"If $f''(x)=\\cos x$ and $f'(0)=0$, $f(0)=1$, find $f(x)$.","body_he":"$f''=\\cos x$, $f'(0)=0$, $f(0)=1$. מצאו $f$.","solution_en":"$f'(x)=\\sin x+C_1$; $f'(0)=0\\Rightarrow C_1=0$. $f(x)=-\\cos x+C_2$; $f(0)=-1+C_2=1\\Rightarrow C_2=2$. $f(x)=2-\\cos x$.","solution_he":"$f(x)=2-\\cos x$."},
+        {"id":"e10","difficulty":"hard","body_en":"$\\int\\frac{2x+1}{\\sqrt{x}}\\,dx$ (split and simplify).","body_he":"$\\int(2x+1)/\\sqrt{x}\\,dx$.","solution_en":"$(2x+1)/\\sqrt{x}=2\\sqrt{x}+x^{-1/2}$. $\\int=\\frac{4x^{3/2}}{3}+2\\sqrt{x}+C$.","solution_he":"$\\frac{4}{3}x^{3/2}+2\\sqrt{x}+C$."},
+        {"id":"e11","difficulty":"hard","body_en":"Show that $\\int_a^b f(x)\\,dx = -\\int_b^a f(x)\\,dx$.","body_he":"הראו ש-$\\int_a^b f=−\\int_b^a f$.","solution_en":"By FTC: $\\int_a^b f\\,dx=F(b)-F(a)$. $-\\int_b^a f\\,dx=-(F(a)-F(b))=F(b)-F(a)$. Equal. ✓","solution_he":"$\\int_a^b f=F(b)-F(a)$. $-\\int_b^a f=-(F(a)-F(b))=F(b)-F(a)$. ✓"},
+        {"id":"e12","difficulty":"hard","body_en":"Find the total area (not signed) between $y=x^2-1$ and the $x$-axis on $[-2,2]$.","body_he":"שטח כולל (לא עם סימן) בין $y=x^2-1$ לציר $x$ על $[-2,2]$.","solution_en":"$x^2-1=0$ at $x=\\pm1$. On $(-1,1)$: $x^2-1<0$. On $[-2,-1]$ and $[1,2]$: $x^2-1>0$.\n$A=\\int_{-2}^{-1}(x^2-1)\\,dx+\\int_{-1}^1|x^2-1|\\,dx+\\int_1^2(x^2-1)\\,dx$\n$=\\int_{-2}^{-1}(x^2-1)\\,dx+\\int_{-1}^1(1-x^2)\\,dx+\\int_1^2(x^2-1)\\,dx$\n$=[x^3/3-x]_{-2}^{-1}+[x-x^3/3]_{-1}^1+[x^3/3-x]_1^2=\\frac{2}{3}+\\frac{4}{3}+\\frac{2}{3}=\\frac{8}{3}$. (vs. net signed $=0$)","solution_he":"$8/3$ (שטח כולל)."},
+        {"id":"e13","difficulty":"hard","body_en":"The velocity of a particle is $v(t)=t^2-4$ m/s. Find the displacement from $t=0$ to $t=3$ and the total distance traveled.","body_he":"$v(t)=t^2-4$ מ\"ש. מצאו העתק ומרחק כולל בין $t=0$ ל-$t=3$.","solution_en":"Displacement: $\\int_0^3(t^2-4)\\,dt=[t^3/3-4t]_0^3=9-12=-3$ m.\nTotal distance: $v(t)=0$ at $t=2$. Distance $=|\\int_0^2(t^2-4)\\,dt|+\\int_2^3(t^2-4)\\,dt=|[t^3/3-4t]_0^2|+[t^3/3-4t]_2^3=|8/3-8|+|(9-12)-(8/3-8)|=16/3+1/3=17/3$ m.","solution_he":"העתק: $-3$ מ'. מרחק כולל: $17/3$ מ'."}
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Forgetting $+C$.** Indefinite integrals ALWAYS need the constant of integration.\n2. **Wrong power rule exponent.** $\\int x^n dx = \\frac{x^{n+1}}{n+1}$, NOT $\\frac{x^{n-1}}{n-1}$. (Add 1, don't subtract.)\n3. **$\\int \\frac{1}{x} dx \\ne \\frac{x^0}{0}$.** Division by zero — the power rule fails for $n = -1$. Answer: $\\ln|x| + C$.\n4. **'Sign flip for $\\sin$' direction.** $\\int \\sin x \\, dx = -\\cos x + C$ (negative). $\\int \\cos x \\, dx = +\\sin x + C$ (positive).\n5. **No general product rule for integration.** Don't try $\\int fg = (\\int f)(\\int g)$. Integration by parts is a different beast.",
-      "body_he_md": "1. **שכחת $+C$.** אינטגרלים לא מסוימים תמיד צריכים את קבוע האינטגרציה.\n2. **מעריך שגוי בחוק חזקה.** $\\int x^n dx = \\frac{x^{n+1}}{n+1}$, לא $\\frac{x^{n-1}}{n-1}$. (מוסיפים 1.)\n3. **$\\int \\frac{1}{x} dx \\ne \\frac{x^0}{0}$.** חלוקה באפס. תשובה: $\\ln|x| + C$.\n4. **כיוון הפיכת סימן ב-$\\sin$.** $\\int \\sin x \\, dx = -\\cos x + C$.\n5. **אין חוק מכפלה כללי לאינטגרציה.** לא $\\int fg = (\\int f)(\\int g)$.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "When evaluating definite integrals, it's essential to avoid common pitfalls that can lead to incorrect answers. One common mistake is not considering the sign of the function within the interval of integration. For example, if the function $f(x) = -x^2$ is integrated from $0$ to $1$, the result will be different from integrating $f(x) = x^2$ over the same interval.\n\nA sign chart can be used to visualize the sign of the function within the interval of integration. For instance, if we have a function $f(x) = x^3 - 2x^2 + x$, we can create a sign chart to determine the intervals where the function is positive or negative.\n\n$$\\int_{0}^{1} (x^3 - 2x^2 + x) \\, dx = \\left[ \\frac{x^4}{4} - \\frac{2x^3}{3} + \\frac{x^2}{2} \\right]_0^1$$\n\nWorked example: Evaluate the definite integral $$\\int_{-1}^{2} (x^2 - 3x + 2) \\, dx$$.\n\nSolution: To evaluate this integral, we first need to find the antiderivative of the function $f(x) = x^2 - 3x + 2$. Using the power rule of integration, we get $$F(x) = \\frac{x^3}{3} - \\frac{3x^2}{2} + 2x$$. Then, we can apply the Fundamental Theorem of Calculus to evaluate the definite integral:\n\n$$\\int_{-1}^{2} (x^2 - 3x + 2) \\, dx = \\left[ \\frac{x^3}{3} - \\frac{3x^2}{2} + 2x \\right]_{-1}^2$$\n\n$$= \\left( \\frac{2^3}{3} - \\frac{3(2)^2}{2} + 2(2) \\right) - \\left( \\frac{(-1)^3}{3} - \\frac{3(-1)^2}{2} + 2(-1) \\right)$$\n\n$$= \\left( \\frac{8}{3} - 6 + 4 \\right) - \\",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "In this section, we will discuss common pitfalls when working with integrals. One key concept is the antiderivative, which is a function that, when differentiated, returns the original function. The indefinite integral, denoted as $$\\int f(x) \\, dx$$, represents the antiderivative of $f(x)$. The power rule for integrals states that $$\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C$$, where $n$ is a real number and $C$ is the constant of integration.\n\nWhen applying the power rule, it is essential to consider the case where $n = -1$, which leads to $$\\int \\frac{1}{x} \\, dx = \\ln|x| + C$$. Additionally, when integrating a function with a constant multiple, we can factor out the constant: $$\\int af(x) \\, dx = a\\int f(x) \\, dx$$.\n\nTo avoid common pitfalls, it is crucial to remember that the constant of integration, $C$, is arbitrary and can be any real number. When evaluating definite integrals, we need to apply the Fundamental Theorem of Calculus, which states that $$\\int_a^b f(x) \\, dx = F(b) - F(a)$$, where $F(x)$ is the antiderivative of $f(x)$.\n\n### Worked Example\n\nFind the indefinite integral of $f(x) = x^2 + 3x - 2$.\n\n$$\\int (x^2 + 3x - 2) \\, dx = \\int x^2 \\, dx + \\int 3x \\, dx - \\int 2 \\, dx$$\n\nUsing the power rule, we get:\n\n$$\\int (x^2 + 3x - 2) \\, dx = \\frac{x^3}{3} + \\frac{3x^2}{2} - 2x + C$$\n\n",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "1. **Forgetting $+C$.** For indefinite integrals, always include the constant of integration.\n2. **Power rule for $n=-1$.** $\\int x^{-1}\\,dx = \\ln|x|+C$, NOT $x^0/0$.\n3. **Signed vs. unsigned area.** $\\int_a^b f(x)\\,dx$ gives signed area. For total area, split at zeros and take absolute values.\n4. **Differentiating to verify.** Always check your answer: differentiate and see if you get the integrand back.",
+      "body_he_md": "1. **שכחת $+C$.** תמיד בלא מסויים.\n2. **כלל חזקה עבור $n=-1$.** $\\int x^{-1}=\\ln|x|$, לא $x^0/0$.\n3. **שטח עם/בלי סימן.** לשטח כולל — פצלו בנקודות אפס.\n4. **בדקו בגזירה.**"
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Quick reference:**\n$$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1}+C \\quad (n\\ne-1).$$\n$$\\int \\frac{1}{x}\\,dx = \\ln|x|+C.$$\n$$\\int e^x\\,dx = e^x+C. \\quad \\int e^{ax}\\,dx = \\frac{e^{ax}}{a}+C.$$\n\n**FTC:** $\\int_a^b f(x)\\,dx = F(b)-F(a)$.\n\n**Checklist:**\n- [ ] Power rule: divide by NEW exponent, not old.\n- [ ] $+C$ for indefinite.\n- [ ] Verify by differentiating.",
+      "body_he_md": "**עזר מהיר:**\n$$\\int x^n=x^{n+1}/(n+1)+C.$$\n$$\\int e^{ax}=e^{ax}/a+C.$$\n**FTC:** $\\int_a^b f=F(b)-F(a)$.\n\n**בדיקה:** חלק בחזקה החדשה, לא הישנה. $+C$ ללא מסויים. גזור לאמות."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- $\\int f(x) dx = F(x) + C$ where $F'(x) = f(x)$.\n- Power: $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ ($n \\ne -1$).\n- $\\int 1/x \\, dx = \\ln|x| + C$ (the $n = -1$ exception).\n- Trig: $\\int \\sin = -\\cos$, $\\int \\cos = +\\sin$.\n- Always verify: differentiate the answer; should match the integrand.\n- **Never forget $+C$.**",
-      "body_he_md": "- $\\int f(x) dx = F(x) + C$ כאשר $F'(x) = f(x)$.\n- חזקה: $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ ($n \\ne -1$).\n- $\\int 1/x \\, dx = \\ln|x| + C$ (החריג ל-$n = -1$).\n- טריג: $\\int \\sin = -\\cos$, $\\int \\cos = +\\sin$.\n- תמיד מאמתים: גוזרים, אמורים לקבל את האינטגרנד.\n- **לא לשכוח $+C$.**",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this section, we will introduce the concept of integrals, which is a fundamental idea in calculus. The integral of a function $f(x)$, denoted as $\\int f(x) \\, dx$, represents the area under the curve of $f(x)$ between two points. This concept is crucial in solving problems involving accumulation of quantities, such as finding the area under curves, volumes of solids, and more.\n\nWe will focus on the basic properties of integrals, including the power rule, constant multiple rule, and sum rule. These rules will help us evaluate definite integrals, which are essential in solving problems in physics, engineering, and other fields.\n\nTo understand the concept of integrals, let's consider a simple example:\n\nWorked Example: Find the area under the curve $y = x^2$ from $x = 0$ to $x = 4$.\n\n$$\\int_0^4 x^2 \\, dx = \\left[ \\frac{x^3}{3} \\right]_0^4 = \\frac{4^3}{3} - \\frac{0^3}{3} = \\frac{64}{3}$$\n\nThis example illustrates how integrals can be used to find the area under curves, which is a fundamental concept in calculus.",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "The concept of an antiderivative is central to the introduction of integrals. An antiderivative of a function $f(x)$ is a function $F(x)$ such that $\\frac{d}{dx}F(x) = f(x)$. This leads to the definition of an indefinite integral, denoted as $\\int f(x) \\, dx$, which represents the family of antiderivatives of $f(x)$. The power rule for integrals states that $\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C$, where $C$ is the constant of integration. The constant of integration arises due to the fact that the derivative of a constant is zero.\n\nA worked example:\nFind the indefinite integral of $f(x) = 3x^2$.\n\n$$\\int 3x^2 \\, dx = 3 \\int x^2 \\, dx = 3 \\cdot \\frac{x^3}{3} + C = x^3 + C$$",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "- Integration is the reverse of differentiation.\n- $\\int f(x)\\,dx = F(x)+C$ where $F'=f$.\n- FTC: $\\int_a^b f(x)\\,dx = F(b)-F(a)$.\n- Basic rules: power rule, $\\ln$ for $1/x$, $e^x$ stays, $\\sin\\to-\\cos$, $\\cos\\to\\sin$.\n- Always verify by differentiating.",
+      "body_he_md": "- אינטגרציה = הפוך של גזירה.\n- $\\int f=F+C$, $F'=f$.\n- FTC: $F(b)-F(a)$.\n- כללים בסיסיים: חזקה, $\\ln$, $e^x$, טריגו.\n- תמיד בדקו בגזירה."
     }
   ],
   "questions": [
@@ -103,202 +130,45 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Compute $\\int x^4 \\, dx$.",
-      "stem_he": "חשבו $\\int x^4 \\, dx$.",
-      "options_en": [
-        "$\\frac{x^5}{5} + C$",
-        "$4x^3 + C$",
-        "$\\frac{x^3}{3} + C$",
-        "$5x^5 + C$"
-      ],
-      "options_he": [
-        "$\\frac{x^5}{5} + C$",
-        "$4x^3 + C$",
-        "$\\frac{x^3}{3} + C$",
-        "$5x^5 + C$"
-      ],
+      "stem_en": "$\\int x^4\\,dx =$",
+      "stem_he": "$\\int x^4\\,dx=$",
+      "options_en": ["$x^5/5+C$","$4x^3+C$","$x^5+C$","$5x^5+C$"],
+      "options_he": ["$x^5/5+C$","$4x^3+C$","$x^5+C$","$5x^5+C$"],
       "correct_index": 0,
-      "explanation_en": "Power rule: add 1 to exponent, divide by new exponent. $\\frac{x^5}{5} + C$.",
-      "explanation_he": "חוק חזקה: מוסיפים 1 למעריך, מחלקים במעריך החדש. $\\frac{x^5}{5} + C$.",
-      "skill_atoms": [
-        "power_integration"
-      ],
-      "points_level_min": "4pt"
+      "explanation_en": "Power rule: $x^{4+1}/(4+1)=x^5/5+C$.",
+      "explanation_he": "$x^5/5+C$.",
+      "skill_atoms": ["power_rule_integration"]
     },
     {
       "ord": 2,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\int \\cos x \\, dx$.",
-      "stem_he": "חשבו $\\int \\cos x \\, dx$.",
-      "options_en": [
-        "$\\sin x + C$",
-        "$-\\sin x + C$",
-        "$\\cos x + C$",
-        "$-\\cos x + C$"
-      ],
-      "options_he": [
-        "$\\sin x + C$",
-        "$-\\sin x + C$",
-        "$\\cos x + C$",
-        "$-\\cos x + C$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$\\int \\cos = \\sin$, no sign flip. Verify: $(\\sin x)' = \\cos x$ ✓.",
-      "explanation_he": "$\\int \\cos = \\sin$, בלי הפיכת סימן. אימות: $(\\sin x)' = \\cos x$ ✓.",
-      "skill_atoms": [
-        "trig_integration"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\int (3x^2 + 2/x) \\, dx$.",
-      "stem_he": "חשבו $\\int (3x^2 + 2/x) \\, dx$.",
-      "options_en": [
-        "$x^3 + 2\\ln|x| + C$",
-        "$x^3 - 2/x^2 + C$",
-        "$3x^3 + 2\\ln|x| + C$",
-        "$x^3 + 2/x^2 + C$"
-      ],
-      "options_he": [
-        "$x^3 + 2\\ln|x| + C$",
-        "$x^3 - 2/x^2 + C$",
-        "$3x^3 + 2\\ln|x| + C$",
-        "$x^3 + 2/x^2 + C$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$\\int 3x^2 dx = x^3$. $\\int 2/x \\, dx = 2\\ln|x|$. Add $+C$.",
-      "explanation_he": "$\\int 3x^2 dx = x^3$. $\\int 2/x \\, dx = 2\\ln|x|$. מוסיפים $+C$.",
-      "skill_atoms": [
-        "power_integration",
-        "reciprocal_integration"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 4,
       "kind": "open",
       "difficulty": "medium",
-      "stem_en": "Find $f(x)$ such that $f'(x) = 6x^2 - 4x + 5$ and $f(0) = 7$.",
-      "stem_he": "מצאו $f(x)$ כך ש-$f'(x) = 6x^2 - 4x + 5$ ו-$f(0) = 7$.",
-      "rubric_en": "Full credit (3/3): integrates $f(x) = 2x^3 - 2x^2 + 5x + C$, applies $f(0) = 7 \\Rightarrow C = 7$, so $f(x) = 2x^3 - 2x^2 + 5x + 7$.\nPartial (2/3): correct antiderivative but wrong $C$.\nMinimal (1/3): only finds $\\int f'$.",
-      "rubric_he": "ציון מלא (3/3): אינטגרציה $f(x) = 2x^3 - 2x^2 + 5x + C$, מחיל $f(0) = 7 \\Rightarrow C = 7$, אז $f(x) = 2x^3 - 2x^2 + 5x + 7$.\nחלקי (2/3): קדומה נכונה אבל $C$ שגוי.\nמינימלי (1/3): רק $\\int f'$.",
-      "explanation_en": "Integrate: $f(x) = 2x^3 - 2x^2 + 5x + C$. Use $f(0) = 7$: $0 - 0 + 0 + C = 7 \\Rightarrow C = 7$. So $f(x) = 2x^3 - 2x^2 + 5x + 7$.",
-      "explanation_he": "אינטגרציה: $f(x) = 2x^3 - 2x^2 + 5x + C$. משתמשים ב-$f(0) = 7$: $C = 7$. אז $f(x) = 2x^3 - 2x^2 + 5x + 7$.",
-      "skill_atoms": [
-        "antiderivative_with_initial_condition"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 5,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "What is $\\int \\frac{1}{x^2} \\, dx$?",
-      "stem_he": "מה $\\int \\frac{1}{x^2} \\, dx$?",
-      "options_en": [
-        "$-\\frac{1}{x} + C$",
-        "$\\frac{1}{x} + C$",
-        "$\\ln|x^2| + C$",
-        "$\\frac{x^{-1}}{-1} + C$"
-      ],
-      "options_he": [
-        "$-\\frac{1}{x} + C$",
-        "$\\frac{1}{x} + C$",
-        "$\\ln|x^2| + C$",
-        "$\\frac{x^{-1}}{-1} + C$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$\\frac{1}{x^2} = x^{-2}$. Power rule: $\\frac{x^{-1}}{-1} = -\\frac{1}{x}$. (Options A and D are the same — A is simplified.)",
-      "explanation_he": "$\\frac{1}{x^2} = x^{-2}$. חוק חזקה: $\\frac{x^{-1}}{-1} = -\\frac{1}{x}$.",
-      "skill_atoms": [
-        "power_integration",
-        "negative_exponent_integration"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 6,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "Which is the correct antiderivative of $f(x) = e^{2x}$?",
-      "stem_he": "מה הפונקציה הקדומה הנכונה של $f(x) = e^{2x}$?",
-      "options_en": [
-        "$e^{2x} + C$",
-        "$\\frac{1}{2}e^{2x} + C$",
-        "$2e^{2x} + C$",
-        "$e^{2x}/x + C$"
-      ],
-      "options_he": [
-        "$e^{2x} + C$",
-        "$\\frac{1}{2}e^{2x} + C$",
-        "$2e^{2x} + C$",
-        "$e^{2x}/x + C$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Verify B: $\\frac{d}{dx}\\bigl(\\frac{1}{2}e^{2x}\\bigr) = \\frac{1}{2} \\cdot e^{2x} \\cdot 2 = e^{2x}$ ✓ (chain rule). A would give $2e^{2x}$ when differentiated.",
-      "explanation_he": "אימות ב': $\\frac{d}{dx}\\bigl(\\frac{1}{2}e^{2x}\\bigr) = \\frac{1}{2} \\cdot e^{2x} \\cdot 2 = e^{2x}$ ✓.",
-      "skill_atoms": [
-        "exponential_integration_with_chain"
-      ],
-      "points_level_min": "4pt"
+      "stem_en": "Evaluate $\\int_1^4\\left(\\sqrt{x}-\\frac{1}{x^2}\\right)dx$.",
+      "stem_he": "חשבו $\\int_1^4(\\sqrt{x}-1/x^2)\\,dx$.",
+      "rubric_en": "$[2x^{3/2}/3+1/x]_1^4=(16/3+1/4)-(2/3+1)=14/3-3/4=47/12$.",
+      "rubric_he": "$47/12$.",
+      "explanation_en": "Antiderivative: $2x^{3/2}/3+x^{-1}/(-1)\\cdot(-1)=2x^{3/2}/3+1/x$? Wait: $\\int x^{-2}=-x^{-1}$. So $\\int(\\sqrt{x}-x^{-2})=2x^{3/2}/3-(-1/x)=2x^{3/2}/3+1/x$. At $x=4$: $2(8)/3+1/4=16/3+1/4$. At $x=1$: $2/3+1$. Diff: $(16/3+1/4)-(2/3+1)=14/3-3/4=56/12-9/12=47/12$.",
+      "explanation_he": "$47/12$.",
+      "skill_atoms": ["power_rule_integration","fundamental_theorem"]
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "Antiderivative reverses derivative.",
-      "Indefinite integral $\\int f \\, dx$ collects ALL antiderivatives via $+C$.",
-      "Power rule: $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ ($n \\ne -1$).",
-      "$\\int 1/x \\, dx = \\ln|x| + C$ — the exception.",
-      "Verification: differentiate the answer and compare to the integrand."
+      "Integration is the reverse of differentiation — check by differentiating your answer.",
+      "Power rule: add 1 to exponent, divide by new exponent. Exception: n=-1 gives ln|x|.",
+      "FTC: definite integral = antiderivative at upper limit minus lower limit.",
+      "Signed area vs total area: for total area, split at zeros."
     ],
     "common_misconceptions": [
       {
-        "wrong": "Omitting $+C$ is fine",
-        "correction": "$+C$ is mandatory. Without it, the answer is just ONE antiderivative, not the indefinite integral.",
-        "detect_phrase_en": "no plus C",
-        "detect_phrase_he": "בלי פלוס C"
-      },
-      {
-        "wrong": "$\\int 1/x = -x^{-2}$ (power rule)",
-        "correction": "Power rule breaks at $n = -1$. Special case: $\\int 1/x = \\ln|x| + C$.",
-        "detect_phrase_en": "integral of 1 over x",
-        "detect_phrase_he": "אינטגרל של אחד חלקי x"
-      },
-      {
-        "wrong": "$\\int \\sin x = \\cos x + C$",
-        "correction": "Negative sign: $\\int \\sin x = -\\cos x + C$.",
-        "detect_phrase_en": "integral of sin",
-        "detect_phrase_he": "אינטגרל סינוס"
+        "wrong": "Applying power rule to 1/x giving x^0/0",
+        "correction": "For n=-1: integral of 1/x = ln|x|+C, not x^0/0 (which is undefined).",
+        "detect_phrase_en": "integral 1/x power rule",
+        "detect_phrase_he": "אינטגרל 1/x כלל חזקה"
       }
     ],
-    "skill_atoms_unlocked": [
-      "power_integration",
-      "reciprocal_integration",
-      "trig_integration",
-      "exponential_integration_with_chain",
-      "antiderivative_with_initial_condition",
-      "negative_exponent_integration"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "derivatives_rules"
-    ],
-    "tutor_pacing_hint": "Always remind learners to differentiate their answer back. Build muscle memory through the basic table. Save substitution for the techniques lesson.",
-    "coach_drill_skills": [
-      "power_integration",
-      "trig_integration",
-      "antiderivative_with_initial_condition"
-    ],
-    "diagnostic_signals": {
-      "if_learner_forgets_plus_C": "Mark it wrong even if everything else is right. The constant is part of the answer.",
-      "if_learner_applies_power_rule_to_1_over_x": "Reproduce the contradiction: $n + 1 = 0$ ⇒ division by zero. Lead them to $\\ln|x|$."
-    },
-    "next_recommended": [
-      "integrals_techniques",
-      "definite_integrals"
-    ]
+    "skill_atoms_unlocked": ["antiderivative","power_rule_integration","fundamental_theorem","integration_trig","integration_exp"],
+    "tutor_pacing_hint": "Start with polynomial integrals. Then FTC with definite integrals. Then initial value problems.",
+    "next_recommended": ["integrals_techniques","definite_integrals"]
   }
 }

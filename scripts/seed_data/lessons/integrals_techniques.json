@@ -1,231 +1,174 @@
 {
   "concept_id": "integrals_techniques",
-  "subject": "math",
-  "level": "high_school",
-  "math_track": [
-    "5pt"
-  ],
-  "title_en": "Integration Techniques — Substitution and By-Parts",
-  "title_he": "שיטות אינטגרציה — הצבה ולפי חלקים",
-  "summary_en": "Two techniques handle most non-trivial integrals: $u$-substitution reverses the chain rule; integration by parts reverses the product rule.",
-  "summary_he": "שתי שיטות מטפלות ברוב האינטגרלים הלא-טריוויאליים: הצבה ($u$) הופכת את כלל השרשרת; אינטגרציה לפי חלקים הופכת את כלל המכפלה.",
-  "est_minutes": 22,
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1","5pt"],
+  "title_en": "Integration Techniques Overview",
+  "title_he": "סקירת שיטות אינטגרציה",
+  "summary_en": "Choosing the right integration technique: u-substitution, integration by parts (IBP), partial fractions, and trigonometric substitution. Method guide is the core of this lesson.",
+  "summary_he": "בחירת שיטת האינטגרציה המתאימה: החלפת משתנים (u-sub), אינטגרציה בחלקים (IBP), שברים חלקיים, והצבה טריגונומטרית. מדריך השיטה הוא ליבת השיעור.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "When the basic table isn't enough",
-      "title_he": "כשהטבלה הבסיסית לא מספיקה",
-      "body_en_md": "The basic integration table handles $x^n$, $\\sin$, $\\cos$, $e^x$, $\\ln$ in isolation. But what about composites like $\\sin(3x^2 + 1) \\cdot 6x$, or products like $x \\cdot e^x$?\n\nThese require **integration techniques**:\n\n1. **$u$-substitution** — reverses the chain rule. Recognize a composite where the *inner derivative* appears as a factor.\n2. **Integration by parts** — reverses the product rule. Used when the integrand is a product of two functions of different families (e.g. polynomial × exponential, polynomial × logarithm).",
-      "body_he_md": "טבלת האינטגרציה הבסיסית מטפלת ב-$x^n$, $\\sin$, $\\cos$, $e^x$, $\\ln$ בנפרד. אבל מה לגבי הרכבות כמו $\\sin(3x^2 + 1) \\cdot 6x$, או מכפלות כמו $x \\cdot e^x$?\n\nאלה דורשות **שיטות אינטגרציה**:\n\n1. **הצבה ($u$)** — הופכת את כלל השרשרת.\n2. **אינטגרציה לפי חלקים** — הופכת את כלל המכפלה.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "When the basic table isn't enough, we need to employ more advanced integration techniques. One such technique is substitution, where we replace a part of the integral with a new variable, $u$, to simplify the expression. Another technique is integration by parts, which is useful for integrals of the form $\\int f(x)g'(x)dx$. We will also introduce trigonometric integrals and partial fractions, which can be used to simplify complex integrals.\n\nTo apply the substitution method, we set $u = f(x)$ and $du = f'(x)dx$. This allows us to rewrite the integral in terms of $u$ and $du$. For example, consider the integral $\\int \\frac{1}{x^2+1}dx$. We can substitute $u = x$ and $du = dx$ to get $\\int \\frac{1}{u^2+1}du$.\n\nWorked Example: Evaluate $\\int \\frac{1}{x^2+1}dx$.\n\n$$\\int \\frac{1}{x^2+1}dx = \\int \\frac{1}{u^2+1}du = \\arctan(u) + C = \\arctan(x) + C$$",
-          "body_he_md": "אם הטבלה הבסיסית אינה מספיקה, נצטרך להשתמש בטכניקות הביצועיות של השלמה. אחת מהטכניקות הללו היא השלמה, שבה אנחנו מחליפים חלק מהביצועיות במשתנה חדש, $u$, כדי לפשט את הביטוי. טכניקה אחרת היא השלמה על ידי חלקים, המועילה לביצועיות של צורה $\\int f(x)g'(x)dx$. נצ"
-        }
-      }
+      "title_en": "When Basic Rules Are Not Enough",
+      "title_he": "כאשר הכללים הבסיסיים לא מספיקים",
+      "body_en_md": "The basic integration rules (power rule, $\\sin$, $\\cos$, $e^x$) handle simple functions. But what about:\n- $\\int x e^{x^2}\\,dx$ — a composed function.\n- $\\int x\\ln x\\,dx$ — a product.\n- $\\int \\frac{1}{x^2-1}\\,dx$ — a rational function.\n- $\\int \\sqrt{1-x^2}\\,dx$ — a square root with a sum.\n\nEach requires a different technique. This lesson teaches you to **recognize which technique to apply** and how to execute it.",
+      "body_he_md": "הכללים הבסיסיים מטפלים בפונקציות פשוטות. אבל:\n- $\\int xe^{x^2}\\,dx$ — פונקציה מורכבת.\n- $\\int x\\ln x\\,dx$ — מכפלה.\n- $\\int 1/(x^2-1)\\,dx$ — רציונלית.\n- $\\int\\sqrt{1-x^2}\\,dx$ — שורש עם סכום.\n\nכל אחד דורש שיטה שונה. שיעור זה מלמד **לזהות** איזו שיטה להשתמש."
+    },
+    {
+      "kind": "definition",
+      "title_en": "The Four Main Techniques",
+      "title_he": "ארבע השיטות המרכזיות",
+      "body_en_md": "**1. u-Substitution (chain rule in reverse):**\n$$\\int f(g(x))g'(x)\\,dx = \\int f(u)\\,du, \\quad u=g(x).$$\n\n**2. Integration by Parts (IBP) (product rule in reverse):**\n$$\\int u\\,dv = uv - \\int v\\,du.$$\nLIATE order for choosing $u$: Logarithm, Inverse trig, Algebraic, Trig, Exponential.\n\n**3. Partial Fractions:**\nFor rational functions $P(x)/Q(x)$. Factor $Q$, decompose into simple fractions.\n\n**4. Trigonometric Substitution:**\nFor integrals with $\\sqrt{a^2-x^2}$, $\\sqrt{a^2+x^2}$, $\\sqrt{x^2-a^2}$.\n- $\\sqrt{a^2-x^2}$: let $x=a\\sin\\theta$.\n- $\\sqrt{a^2+x^2}$: let $x=a\\tan\\theta$.\n- $\\sqrt{x^2-a^2}$: let $x=a\\sec\\theta$.",
+      "body_he_md": "**1. החלפת משתנים (u-sub) — כלל השרשרת הפוך:**\n$$\\int f(g(x))g'(x)\\,dx=\\int f(u)\\,du.$$\n\n**2. אינטגרציה בחלקים (IBP) — כלל המכפלה הפוך:**\n$$\\int u\\,dv=uv-\\int v\\,du.$$\nLIATE לבחירת $u$.\n\n**3. שברים חלקיים:** לרציונליות. פרקו מכנה.\n\n**4. הצבה טריגונומטרית:**\n- $\\sqrt{a^2-x^2}$: $x=a\\sin\\theta$.\n- $\\sqrt{a^2+x^2}$: $x=a\\tan\\theta$.\n- $\\sqrt{x^2-a^2}$: $x=a\\sec\\theta$."
     },
     {
       "kind": "theory",
-      "title_en": "Two techniques",
-      "title_he": "שתי שיטות",
-      "body_en_md": "### Technique 1 — $u$-substitution\n\n**When to use:** the integrand has the form $f(g(x)) \\cdot g'(x)$.\n\n**Recipe:**\n1. Let $u = g(x)$.\n2. Compute $du = g'(x) \\, dx$ — i.e., $dx = du / g'(x)$.\n3. Rewrite the integral entirely in terms of $u$ and $du$. Every $x$ must disappear.\n4. Integrate.\n5. Substitute back $u = g(x)$.\n\n**Quick example:** $\\int \\cos(3x) \\, dx$.\n- $u = 3x$, $du = 3 \\, dx$, so $dx = du/3$.\n- $\\int \\cos u \\cdot \\frac{du}{3} = \\frac{1}{3}\\sin u + C = \\frac{1}{3}\\sin(3x) + C$.\n\n**Pattern check:** if differentiating one part of the integrand produces another factor (up to a constant), $u$-sub will work.\n\n### Technique 2 — Integration by parts\n\nReverses the product rule. Starting from $(uv)' = u'v + uv'$, integrate both sides and rearrange:\n\n$$\\boxed{\\int u \\, dv = uv - \\int v \\, du.}$$\n\n**When to use:** integrand is a product where one factor *simplifies* when differentiated (like $x^n$, $\\ln x$) and the other can be integrated easily (like $e^x$, $\\sin x$, $\\cos x$).\n\n**Choosing $u$ and $dv$:** the LIATE heuristic (in decreasing priority for $u$):\n- **L**ogarithmic (e.g. $\\ln x$)\n- **I**nverse trig (e.g. $\\arctan x$)\n- **A**lgebraic (e.g. $x, x^2$)\n- **T**rigonometric (e.g. $\\sin x$)\n- **E**xponential (e.g. $e^x$)\n\nWhatever's earliest in this list, take as $u$; the rest is $dv$.\n\n**Example:** $\\int x e^x \\, dx$.\n- $u = x$ (A, before E), $dv = e^x \\, dx$.\n- $du = dx$, $v = e^x$.\n- $\\int x e^x \\, dx = x e^x - \\int e^x \\, dx = xe^x - e^x + C = e^x(x - 1) + C$.\n\n**Verify:** $\\frac{d}{dx}\\bigl(e^x(x - 1)\\bigr) = e^x(x-1) + e^x = xe^x$ ✓.\n\n### A useful 'special' substitution\n\n$$\\int \\frac{f'(x)}{f(x)} \\, dx = \\ln|f(x)| + C.$$\n\nThis is just $u$-sub with $u = f(x)$. Very common: $\\int \\frac{2x}{x^2 + 5} dx = \\ln|x^2 + 5| + C$.\n\n**Exam Example.** $\\int \\tan^2 x\\, dx = \\tan x - x + C$ using $\\sec^2-1$.\n\n**Exam Example 2.** By parts: $\\int x e^{-x} dx = -xe^{-x} - e^{-x} + C$.",
-      "body_he_md": "### שיטה 1 — הצבה ($u$)\n\n**מתי משתמשים:** האינטגרנד מהצורה $f(g(x)) \\cdot g'(x)$.\n\n**מתכון:**\n1. מסמנים $u = g(x)$.\n2. מחשבים $du = g'(x) \\, dx$.\n3. כותבים את האינטגרל כולו במונחי $u$ ו-$du$. כל $x$ חייב להעלם.\n4. אינטגרציה.\n5. מחזירים $u = g(x)$.\n\n**דוגמה מהירה:** $\\int \\cos(3x) \\, dx$. $u = 3x$, $du = 3 dx$. אינטגרל: $\\frac{1}{3}\\sin(3x) + C$.\n\n### שיטה 2 — לפי חלקים\n\nהופכת את כלל המכפלה. מ-$(uv)' = u'v + uv'$, אינטגרציה ושינוי סדר:\n\n$$\\boxed{\\int u \\, dv = uv - \\int v \\, du.}$$\n\n**מתי משתמשים:** מכפלה שבה גורם אחד מתפשט כשגוזרים אותו (כמו $x^n, \\ln x$) והאחר ניתן לאינטגרציה בקלות (כמו $e^x, \\sin x, \\cos x$).\n\n**בחירת $u$ ו-$dv$:** הוריסטיקת LIATE (סדר עדיפות עבור $u$):\n- **L**ogarithmic\n- **I**nverse trig\n- **A**lgebraic\n- **T**rigonometric\n- **E**xponential\n\n**דוגמה:** $\\int x e^x \\, dx$. $u = x$, $dv = e^x dx$. $du = dx$, $v = e^x$. תוצאה: $e^x(x - 1) + C$.\n\n### הצבה 'מיוחדת' שימושית\n\n$$\\int \\frac{f'(x)}{f(x)} \\, dx = \\ln|f(x)| + C.$$\n\n**בחינה.** $\\int \\tan^2 x\\, dx = \\tan x - x + C$.\n\n**בחינה 2.** חלקים ל-$x e^{-x}$.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "**Integration Techniques**\n\nIn this section, we will cover two fundamental techniques for evaluating definite integrals: substitution and integration by parts.\n\n**Substitution Method (u-sub)**: This technique involves replacing a part of the integral with a new variable, $u$, and then differentiating and integrating with respect to $u$. The formula for the substitution method is $$\\int f(g(x))g'(x)dx = \\int f(u)du$$ where $u=g(x)$.\n\n**Integration by Parts**: This technique involves differentiating one function and integrating the other, and then switching the order of differentiation and integration. The formula for integration by parts is $$\\int u\\frac{dv}{dx}dx = uv - \\int v\\frac{du}{dx}dx$$ where $u$ and $v$ are functions of $x$.\n\n**Trigonometric Integrals**: We will also cover the integration of trigonometric functions using the substitution method.\n\n**Partial Fractions**: We will introduce the concept of partial fractions, which is a technique for decomposing rational functions into simpler fractions.\n\n**Worked Example**:\n\nEvaluate the integral $$\\int \\frac{x^2}{x^2+1}dx$$ using the substitution method.\n\nLet $u=x^2+1$, then $du=2xdx$. We can rewrite the integral as $$\\int \\frac{x^2}{x^2+1}dx = \\frac{1}{2}\\int \\frac{2x^2}{x^2+1}dx = \\frac{1}{2}\\int \\frac{du}{u} = \\frac{1}{2}\\ln|u| + C = \\frac{1}{2}\\ln|x^2+1| + C$$",
-          "body_he_md": "**אינטגרציה**\n\nבסעיף זה, נסכים שני טכניקות יסודיות לביצוע אינטגרציה: החלפת פארמטרים ואינטגרציה בחלקים.\n\n**שיטת החלפת פארמ"
-        }
-      }
+      "title_en": "When to Use Each Technique",
+      "title_he": "מתי להשתמש בכל שיטה",
+      "body_en_md": "**u-Substitution:** Look for $f(g(x))\\cdot g'(x)$ — inner function and its derivative present.\n\nExamples: $\\int 2x\\cdot e^{x^2}\\,dx$, $\\int \\cos(3x)\\,dx$, $\\int \\frac{x}{x^2+1}\\,dx$.\n\n**Integration by Parts:** Product of two different function types.\n\nExamples: $\\int xe^x\\,dx$, $\\int x\\ln x\\,dx$, $\\int e^x\\sin x\\,dx$ (apply IBP twice).\n\n**Partial Fractions:** Rational function $P/Q$ with $\\deg P < \\deg Q$ (or reducible after long division).\n\nExamples: $\\int \\frac{1}{x^2-1}\\,dx$, $\\int \\frac{x}{(x+1)(x-2)}\\,dx$.\n\n**Trig Substitution:** Square roots involving $a^2\\pm x^2$ or $x^2-a^2$.\n\nExamples: $\\int \\sqrt{4-x^2}\\,dx$, $\\int \\frac{1}{x^2\\sqrt{x^2+9}}\\,dx$.\n\n**Tip:** Sometimes combine methods. For $\\int \\frac{x}{\\sqrt{x^2+1}}\\,dx$: u-sub works ($u=x^2+1$). For $\\int\\frac{1}{\\sqrt{x^2+1}}\\,dx$: trig sub.",
+      "body_he_md": "**u-sub:** $f(g(x))\\cdot g'(x)$ — פונקציה פנימית ונגזרתה.\n\n**IBP:** מכפלה משני טיפוסים שונים.\n\n**שברים חלקיים:** פונקציה רציונלית.\n\n**הצבה טריגו:** שורשים עם $a^2\\pm x^2$ או $x^2-a^2$.\n\n**טיפ:** לפעמים משלבים שיטות."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: $u$-sub on $\\int 2x \\sqrt{x^2 + 1} \\, dx$",
-      "title_he": "דוגמה פתורה: הצבה על $\\int 2x \\sqrt{x^2 + 1} \\, dx$",
-      "body_en_md": "Recognize: the derivative of $x^2 + 1$ is $2x$, which is exactly the other factor.\n\n**Substitute:** $u = x^2 + 1 \\Rightarrow du = 2x \\, dx$.\n\nThe integral becomes\n\n$$\\int \\sqrt{u} \\, du = \\int u^{1/2} \\, du = \\frac{u^{3/2}}{3/2} = \\frac{2}{3} u^{3/2}.$$\n\n**Substitute back:**\n\n$$\\int 2x \\sqrt{x^2 + 1} \\, dx = \\frac{2}{3}(x^2 + 1)^{3/2} + C.$$\n\n**Verify** (chain rule): $\\frac{d}{dx}\\bigl[\\frac{2}{3}(x^2+1)^{3/2}\\bigr] = \\frac{2}{3} \\cdot \\frac{3}{2}(x^2+1)^{1/2} \\cdot 2x = 2x \\sqrt{x^2+1}$ ✓",
-      "body_he_md": "מזהים: הנגזרת של $x^2 + 1$ היא $2x$ — בדיוק הגורם השני.\n\n**הצבה:** $u = x^2 + 1 \\Rightarrow du = 2x \\, dx$.\n\nהאינטגרל הופך ל-\n\n$$\\int \\sqrt{u} \\, du = \\frac{2}{3} u^{3/2}.$$\n\n**מחזירים:**\n\n$$\\int 2x \\sqrt{x^2 + 1} \\, dx = \\frac{2}{3}(x^2 + 1)^{3/2} + C.$$\n\n**אימות** (שרשרת): $\\frac{d}{dx}\\bigl[\\frac{2}{3}(x^2+1)^{3/2}\\bigr] = 2x \\sqrt{x^2+1}$ ✓",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "In this example, we will use the substitution method to evaluate the integral $\\int 2x \\sqrt{x^2 + 1} \\, dx$. Let $u = x^2 + 1$, then $du = 2x \\, dx$. We can rewrite the integral as $\\int \\sqrt{u} \\, du$.\n\n$$\\int 2x \\sqrt{x^2 + 1} \\, dx = \\int \\sqrt{u} \\, du = \\frac{2}{3}u^{\\frac{3}{2}} + C$$\n\nSubstituting back $u = x^2 + 1$, we get:\n\n$$\\int 2x \\sqrt{x^2 + 1} \\, dx = \\frac{2}{3}(x^2 + 1)^{\\frac{3}{2}} + C$$\n\nWorked example: Evaluate $\\int 2x \\sqrt{x^2 + 1} \\, dx$ when $x = 2$.\n\n$$\\int 2x \\sqrt{x^2 + 1} \\, dx = \\frac{2}{3}(2^2 + 1)^{\\frac{3}{2}} + C = \\frac{2}{3}(5)^{\\frac{3}{2}} + C = \\frac{50}{3}$$",
-          "body_he_md": ""
-        }
-      }
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — u-Substitution",
+      "title_he": "דוגמה פתורה 1 — החלפת משתנים",
+      "body_en_md": "**Evaluate** $\\int 2x\\cos(x^2)\\,dx$.\n\n**Step 1:** Identify the inner function. $u = x^2$, $du = 2x\\,dx$.\n\n**Step 2:** Substitute.\n$$\\int 2x\\cos(x^2)\\,dx = \\int \\cos(u)\\,du.$$\n\n**Step 3:** Integrate.\n$$\\int \\cos(u)\\,du = \\sin(u)+C.$$\n\n**Step 4:** Back-substitute.\n$$\\sin(x^2)+C.$$\n\n**Verify:** $\\frac{d}{dx}\\sin(x^2)=\\cos(x^2)\\cdot 2x$. ✓",
+      "body_he_md": "**חשבו** $\\int 2x\\cos(x^2)\\,dx$.\n\n**שלב 1:** $u=x^2$, $du=2x\\,dx$.\n\n**שלב 2:** $\\int\\cos(u)\\,du$.\n\n**שלב 3:** $\\sin(u)+C$.\n\n**שלב 4:** $\\sin(x^2)+C$. גזור לאמות. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $\\int \\frac{3x^2}{x^3+1}\\,dx$ using u-substitution.",
+      "body_he_md": "מצאו $\\int 3x^2/(x^3+1)\\,dx$ בהחלפת משתנים.",
+      "checkpoint_solution_en": "$u=x^3+1$, $du=3x^2\\,dx$.\n$\\int \\frac{1}{u}\\,du = \\ln|u|+C = \\ln|x^3+1|+C$.",
+      "checkpoint_solution_he": "$u=x^3+1$, $du=3x^2\\,dx$. $\\ln|x^3+1|+C$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Integration by Parts",
+      "title_he": "דוגמה פתורה 2 — אינטגרציה בחלקים",
+      "body_en_md": "**Evaluate** $\\int x e^x\\,dx$.\n\n**Step 1:** Choose $u$ and $dv$. LIATE: Algebraic ($x$) before Exponential ($e^x$).\n$$u = x, \\quad dv = e^x\\,dx.$$\n$$du = dx, \\quad v = e^x.$$\n\n**Step 2:** Apply IBP formula.\n$$\\int xe^x\\,dx = xe^x - \\int e^x\\,dx = xe^x - e^x + C = (x-1)e^x+C.$$\n\n**Verify:** $\\frac{d}{dx}[(x-1)e^x] = e^x+(x-1)e^x = xe^x$. ✓",
+      "body_he_md": "**חשבו** $\\int xe^x\\,dx$.\n\n**שלב 1:** LIATE: $u=x$, $dv=e^x\\,dx$. $du=dx$, $v=e^x$.\n\n**שלב 2:** $xe^x-\\int e^x\\,dx=(x-1)e^x+C$.\n\nגזור לאמות: $e^x+(x-1)e^x=xe^x$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Evaluate $\\int x\\ln x\\,dx$ (IBP; choose $u=\\ln x$).",
+      "body_he_md": "חשבו $\\int x\\ln x\\,dx$ (IBP; בחרו $u=\\ln x$).",
+      "checkpoint_solution_en": "$u=\\ln x$, $dv=x\\,dx$. $du=1/x\\,dx$, $v=x^2/2$.\n$\\int x\\ln x\\,dx=\\frac{x^2}{2}\\ln x-\\int\\frac{x^2}{2}\\cdot\\frac{1}{x}\\,dx=\\frac{x^2}{2}\\ln x-\\frac{x^2}{4}+C$.",
+      "checkpoint_solution_he": "$u=\\ln x$, $v=x^2/2$. $\\frac{x^2}{2}\\ln x-\\frac{x^2}{4}+C$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Trigonometric Substitution (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — הצבה טריגונומטרית (רמת בחינה)",
+      "body_en_md": "**Evaluate** $\\int \\frac{x^2}{\\sqrt{4-x^2}}\\,dx$.\n\n**Step 1:** Pattern $\\sqrt{4-x^2}=\\sqrt{a^2-x^2}$ with $a=2$. Use $x=2\\sin\\theta$.\n$$dx = 2\\cos\\theta\\,d\\theta, \\quad \\sqrt{4-x^2}=\\sqrt{4-4\\sin^2\\theta}=2\\cos\\theta.$$\n\n**Step 2:** Substitute.\n$$\\int \\frac{4\\sin^2\\theta}{2\\cos\\theta}\\cdot 2\\cos\\theta\\,d\\theta = \\int 4\\sin^2\\theta\\,d\\theta.$$\n\n**Step 3:** Use $\\sin^2\\theta=(1-\\cos2\\theta)/2$.\n$$4\\int\\frac{1-\\cos2\\theta}{2}\\,d\\theta = 2\\theta - \\sin2\\theta + C.$$\n\n**Step 4:** Back-substitute. $\\theta=\\arcsin(x/2)$, $\\sin2\\theta=2\\sin\\theta\\cos\\theta=2\\cdot\\frac{x}{2}\\cdot\\frac{\\sqrt{4-x^2}}{2}=\\frac{x\\sqrt{4-x^2}}{2}$.\n$$= 2\\arcsin\\frac{x}{2} - \\frac{x\\sqrt{4-x^2}}{2} + C.$$",
+      "body_he_md": "**חשבו** $\\int x^2/\\sqrt{4-x^2}\\,dx$.\n\n**שלב 1:** $x=2\\sin\\theta$, $dx=2\\cos\\theta\\,d\\theta$, $\\sqrt{4-x^2}=2\\cos\\theta$.\n\n**שלב 2:** $\\int 4\\sin^2\\theta\\,d\\theta$.\n\n**שלב 3:** $\\sin^2\\theta=(1-\\cos2\\theta)/2$. תוצאה: $2\\theta-\\sin2\\theta+C$.\n\n**שלב 4:** $\\theta=\\arcsin(x/2)$. $\\sin2\\theta=x\\sqrt{4-x^2}/2$.\n$$2\\arcsin(x/2)-\\frac{x\\sqrt{4-x^2}}{2}+C.$$"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Which Integration Technique?",
+      "title_he": "מדריך שיטה — איזו טכניקה לאינטגרציה?",
+      "body_en_md": "| Integrand looks like | Technique | Key action |\n|---|---|---|\n| $f(g(x))\\cdot g'(x)$ | u-sub | $u=g(x)$, $du=g'(x)\\,dx$ |\n| product of two types (poly × exp, poly × ln, poly × trig) | IBP | LIATE for $u$ |\n| $P(x)/Q(x)$ rational | Partial fractions | Factor $Q$, decompose |\n| $\\sqrt{a^2-x^2}$ | Trig sub: $x=a\\sin\\theta$ | |\n| $\\sqrt{a^2+x^2}$ | Trig sub: $x=a\\tan\\theta$ | |\n| $\\sqrt{x^2-a^2}$ | Trig sub: $x=a\\sec\\theta$ | |\n| $\\int\\sin^m x\\cos^n x$ | Trig identity | half-angle, Pythagorean |\n| missing obvious feature | Try algebraic manipulation first | multiply by $1=\\frac{a-b}{a-b}$ etc. |\n\n**IBP when to stop:** After IBP, if you get the original integral back → solve for it algebraically.\n\n**u-sub quick test:** Can you identify the inner function AND its derivative (up to a constant) in the integrand?",
+      "body_he_md": "| מבנה האינטגרנד | שיטה | פעולה |\n|---|---|---|\n| $f(g(x))\\cdot g'(x)$ | u-sub | $u=g(x)$ |\n| מכפלת שני טיפוסים | IBP | LIATE |\n| $P/Q$ רציונלי | שברים חלקיים | פרק $Q$ |\n| $\\sqrt{a^2-x^2}$ | $x=a\\sin\\theta$ | |\n| $\\sqrt{a^2+x^2}$ | $x=a\\tan\\theta$ | |\n| $\\sqrt{x^2-a^2}$ | $x=a\\sec\\theta$ | |\n\n**IBP לולאה:** אם קיבלת שוב את האינטגרל המקורי — פתור אלגברית."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$\\int (2x+1)^5\\,dx$ (u-sub)","body_he":"$\\int(2x+1)^5\\,dx$ (u-sub)","solution_en":"$u=2x+1$, $du=2\\,dx$. $\\int u^5\\,du/2=u^6/12+C=(2x+1)^6/12+C$.","solution_he":"$(2x+1)^6/12+C$."},
+        {"id":"e2","difficulty":"easy","body_en":"$\\int xe^{x^2}\\,dx$ (u-sub)","body_he":"$\\int xe^{x^2}\\,dx$","solution_en":"$u=x^2$, $du=2x\\,dx$. $\\int e^u\\,du/2=e^u/2+C=e^{x^2}/2+C$.","solution_he":"$e^{x^2}/2+C$."},
+        {"id":"e3","difficulty":"easy","body_en":"$\\int xe^x\\,dx$ (IBP)","body_he":"$\\int xe^x\\,dx$ (IBP)","solution_en":"$u=x$, $dv=e^x\\,dx$. $(x-1)e^x+C$.","solution_he":"$(x-1)e^x+C$."},
+        {"id":"e4","difficulty":"easy","body_en":"$\\int \\frac{2x}{x^2+5}\\,dx$","body_he":"$\\int 2x/(x^2+5)\\,dx$","solution_en":"$u=x^2+5$, $du=2x\\,dx$. $\\ln|x^2+5|+C=\\ln(x^2+5)+C$.","solution_he":"$\\ln(x^2+5)+C$."},
+        {"id":"e5","difficulty":"medium","body_en":"$\\int x^2e^x\\,dx$ (IBP twice)","body_he":"$\\int x^2e^x\\,dx$ (IBP פעמיים)","solution_en":"First IBP: $u=x^2$, $dv=e^x\\,dx$. $x^2e^x-2\\int xe^x\\,dx$. Second IBP: $x^2e^x-2(x-1)e^x=(x^2-2x+2)e^x+C$.","solution_he":"$(x^2-2x+2)e^x+C$."},
+        {"id":"e6","difficulty":"medium","body_en":"$\\int \\frac{1}{x^2-4}\\,dx$ (partial fractions)","body_he":"$\\int 1/(x^2-4)\\,dx$ (שברים חלקיים)","solution_en":"$\\frac{1}{(x-2)(x+2)}=\\frac{1/4}{x-2}-\\frac{1/4}{x+2}$. $\\int=\\frac{1}{4}\\ln|\\frac{x-2}{x+2}|+C$.","solution_he":"$\\frac{1}{4}\\ln|\\frac{x-2}{x+2}|+C$."},
+        {"id":"e7","difficulty":"medium","body_en":"$\\int \\ln x\\,dx$ (IBP: $u=\\ln x$, $dv=dx$)","body_he":"$\\int\\ln x\\,dx$ (IBP)","solution_en":"$u=\\ln x$, $dv=dx$. $x\\ln x-x+C$.","solution_he":"$x\\ln x-x+C$."},
+        {"id":"e8","difficulty":"medium","body_en":"$\\int \\sin^2 x\\,dx$ (half-angle identity)","body_he":"$\\int\\sin^2x\\,dx$ (זהות זווית חצי)","solution_en":"$\\sin^2x=(1-\\cos2x)/2$. $\\int=x/2-\\sin2x/4+C$.","solution_he":"$x/2-\\sin2x/4+C$."},
+        {"id":"e9","difficulty":"medium","body_en":"$\\int_0^1 \\frac{1}{\\sqrt{1-x^2}}\\,dx$ (trig sub or recognize arcsin)","body_he":"$\\int_0^1 1/\\sqrt{1-x^2}\\,dx$","solution_en":"This equals $[\\arcsin x]_0^1=\\pi/2-0=\\pi/2$.","solution_he":"$[\\arcsin x]_0^1=\\pi/2$."},
+        {"id":"e10","difficulty":"hard","body_en":"$\\int e^x\\sin x\\,dx$ (IBP loop)","body_he":"$\\int e^x\\sin x\\,dx$ (IBP לולאה)","solution_en":"IBP1: $u=\\sin x$, $dv=e^x\\,dx$. $e^x\\sin x-\\int e^x\\cos x\\,dx$.\nIBP2: $u=\\cos x$: $-\\int e^x\\cos x\\,dx = -e^x\\cos x-\\int e^x\\sin x\\,dx$.\nSo $I=e^x\\sin x-e^x\\cos x-I\\Rightarrow 2I=e^x(\\sin x-\\cos x)$. $I=\\frac{e^x(\\sin x-\\cos x)}{2}+C$.","solution_he":"IBP לולאה: $I=e^x(\\sin x-\\cos x)/2+C$."},
+        {"id":"e11","difficulty":"hard","body_en":"$\\int \\frac{x^2}{\\sqrt{9-x^2}}\\,dx$ (trig sub)","body_he":"$\\int x^2/\\sqrt{9-x^2}\\,dx$ (הצבה טריגו)","solution_en":"$x=3\\sin\\theta$. $\\int 9\\sin^2\\theta\\,d\\theta=9(\\theta/2-\\sin2\\theta/4)+C$. Back-sub: $\\frac{9}{2}\\arcsin(x/3)-\\frac{x\\sqrt{9-x^2}}{2}+C$.","solution_he":"$\\frac{9}{2}\\arcsin(x/3)-\\frac{x\\sqrt{9-x^2}}{2}+C$."},
+        {"id":"e12","difficulty":"hard","body_en":"$\\int \\frac{x^3+x}{x^2-1}\\,dx$ (long division first, then partial fractions)","body_he":"$\\int(x^3+x)/(x^2-1)\\,dx$ (חלוקה ראשה + שברים חלקיים)","solution_en":"$(x^3+x)/(x^2-1)=x+(2x)/(x^2-1)=x+1/(x-1)+1/(x+1)$ (after partial fractions for $2x/(x^2-1)$). $\\int=x^2/2+\\ln|x-1|+\\ln|x+1|+C$.","solution_he":"$x^2/2+\\ln|(x-1)(x+1)|+C$."},
+        {"id":"e13","difficulty":"hard","body_en":"$\\int_0^1 \\arctan x\\,dx$ (IBP)","body_he":"$\\int_0^1\\arctan x\\,dx$ (IBP)","solution_en":"$u=\\arctan x$, $dv=dx$. $[x\\arctan x]_0^1-\\int_0^1\\frac{x}{1+x^2}\\,dx=\\pi/4-[\\frac{1}{2}\\ln(1+x^2)]_0^1=\\pi/4-\\frac{\\ln2}{2}$.","solution_he":"$\\pi/4-\\ln2/2$."}
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Not changing $dx$ to $du$ in substitution.** Every part of the integrand must convert; $dx$ alone is wrong.\n2. **Leaving $x$ in the answer before back-substitution.** Once you integrate in $u$, you must substitute back.\n3. **Wrong $u$ in by-parts.** LIATE helps but is heuristic — sometimes try the other choice and see which leads to a simpler $\\int v \\, du$.\n4. **Forgetting the minus in $\\int u\\,dv = uv - \\int v\\,du$.**\n5. **Trying to use $u$-sub when the inner derivative doesn't appear.** $\\int \\sin(x^2) dx$ has NO elementary antiderivative.\n6. **Forgetting $+C$.**",
-      "body_he_md": "1. **לא מחליפים $dx$ ל-$du$.** כל חלק מהאינטגרנד חייב להמיר.\n2. **השארת $x$ בתשובה לפני החזרה.** חייבים להחזיר אחרי האינטגרציה ב-$u$.\n3. **$u$ שגוי בלפי חלקים.** LIATE עוזר אבל הוריסטי — לפעמים שווה לנסות הפוך.\n4. **שכחת המינוס ב-$\\int u\\,dv = uv - \\int v\\,du$.**\n5. **ניסיון הצבה כשהנגזרת הפנימית לא מופיעה.** ל-$\\int \\sin(x^2) dx$ אין קדומה אלמנטרית.\n6. **שכחת $+C$.**",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "When dealing with integration techniques, it's essential to recognize common pitfalls that can lead to incorrect solutions. One such pitfall is the misuse of the substitution method, where the substitution is not properly chosen to simplify the integral. Additionally, integration by parts can be tricky when the chosen functions do not satisfy the required conditions. Furthermore, trigonometric integrals often require careful manipulation to simplify the expression.\n\nFor example, consider the integral $$\\int \\frac{1}{1+x^2} dx$$. A common mistake is to use the substitution $u = x^2$, which leads to $du = 2x dx$. However, this substitution does not simplify the integral, and the correct approach is to use the trigonometric substitution $x = \\tan(\\theta)$.",
-          "body_he_md": "אחד הטעויות הנפוצות ביותר בשיטות האינטגרציה היא השימוש הלא נכון בשיטת החליפה, שבה החליפה לא נבחרה כדי לפשט את האינטגרל. כמו כן, שיטת החלקים עשויה להיות מסובכת כאשר הפונקציות שנבחרו לא מקיימות את התנאים הדרושים. כמו כן, אינטגרלים טריגונומטריים דורשים תיקון זהיר לפשט את הביטוי.\n\nדוגמה: בדוגמה $$\\int \\frac{1}{1+x^2} dx$$, טעות נפוצה היא להשתמש בחליפה $u = x^2$, אשר מ"
-        }
-      }
+      "body_en_md": "1. **Wrong choice for IBP.** Follow LIATE — if $\\ln$ or $\\arctan$ is present, it should be $u$.\n2. **Forgetting to change limits in definite integral u-sub.** If $u=g(x)$, new limits are $g(a)$ and $g(b)$.\n3. **Not completing the back-substitution.** After trig sub, always go back to the original variable.\n4. **Using u-sub when IBP is needed.** If no inner derivative is visible, try IBP.\n5. **IBP loop:** When IBP gives back the original integral $I$, solve $2I = \\ldots$ algebraically.",
+      "body_he_md": "1. **בחירה שגויה ל-IBP.** LIATE — $\\ln$ ו-$\\arctan$ תמיד $u$.\n2. **שכחת עדכון גבולות ב-u-sub מסויים.** גבולות חדשים: $g(a)$, $g(b)$.\n3. **אי-חזרה למשתנה המקורי אחרי הצבה טריגו.**\n4. **u-sub ללא נגזרת פנימית נראית — עבור ל-IBP.**\n5. **IBP לולאה:** $I$ מופיע שוב → פתור $2I=...$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Decision tree:**\n```\nIs there an inner function + derivative? → u-sub\n  Otherwise, product of two types? → IBP (LIATE)\n    Otherwise, rational function P/Q? → Partial fractions\n      Otherwise, square root with a²±x² or x²-a²? → Trig sub\n```\n\n**u-sub for definite integral:** Either change limits OR back-substitute before evaluating.\n\n**IBP table method:** For $\\int x^n e^x\\,dx$, differentiate $x^n$ column, integrate $e^x$ column, alternate signs.",
+      "body_he_md": "**עץ החלטות:**\n```\nיש פונקציה פנימית ונגזרתה? → u-sub\n  אחרת, מכפלת שני טיפוסים? → IBP (LIATE)\n    אחרת, פונקציה רציונלית? → שברים חלקיים\n      אחרת, שורש עם a²±x²? → הצבה טריגו\n```\n\n**u-sub מסויים:** עדכן גבולות.\n\n**שיטת טבלה ל-IBP.**"
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- $u$-substitution: $u = g(x)$, $du = g'(x)dx$ — must convert everything.\n- Integration by parts: $\\int u\\,dv = uv - \\int v\\,du$.\n- LIATE for choosing $u$: Log > Inverse trig > Algebraic > Trig > Exp.\n- $\\int \\frac{f'}{f} dx = \\ln|f| + C$.\n- Always verify by differentiating.",
-      "body_he_md": "- הצבה: $u = g(x)$, $du = g'(x)dx$ — חייבים להמיר הכל.\n- לפי חלקים: $\\int u\\,dv = uv - \\int v\\,du$.\n- LIATE לבחירת $u$: לוג > טריג הופכי > אלגברי > טריג > מעריכי.\n- $\\int \\frac{f'}{f} dx = \\ln|f| + C$.\n- תמיד מאמתים על ידי גזירה.",
-      "body_by_level": {
-        "5pt": {
-          "body_en_md": "In this section, we will cover two fundamental integration techniques: substitution and integration by parts. Substitution involves replacing a function with a simpler expression, while integration by parts is used to integrate products of functions. We will also introduce trigonometric integrals and partial fractions, which are essential tools for solving complex integrals.\n\nThe substitution method involves replacing a function with a simpler expression, $u$, and then integrating the resulting expression. This can be done using the formula $$\\int f(g(x))g'(x)dx = \\int f(u)du$$ where $u=g(x)$.\n\nIntegration by parts is used to integrate products of functions, and involves the formula $$\\int u \\frac{dv}{dx} dx = uv - \\int v \\frac{du}{dx} dx$$ where $u$ and $v$ are functions of $x$.\n\nWe will also introduce trigonometric integrals, which involve integrating functions of the form $\\sin(ax)$ and $\\cos(ax)$. These can be integrated using the formulas $$\\int \\sin(ax) dx = -\\frac{1}{a}\\cos(ax) + C$$ and $$\\int \\cos(ax) dx = \\frac{1}{a}\\sin(ax) + C$$.\n\nFinally, we will introduce partial fractions, which involve expressing a rational function as a sum of simpler fractions.",
-          "body_he_md": ""
-        }
-      }
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Compute $\\int \\tan^2(x)\\,dx$.\n\n**Sample Solution:**\n$\\tan^2 x = \\sec^2 x - 1$, so $\\int \\tan^2 x\\, dx = \\tan x - x + C$.\n\n**Problem 2:** Evaluate $\\int_0^1 x e^{-x}\\,dx$ by parts.\n\n**Sample Solution:**\n$u=x$, $dv=e^{-x}dx$: $\\int_0^1 x e^{-x}dx = [-xe^{-x}]_0^1 + \\int_0^1 e^{-x}dx = -e^{-1} + [-e^{-x}]_0^1 = -e^{-1} + 1 - e^{-1} = 1 - 2/e$.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** חשבו $\\int \\tan^2(x)\\,dx$.\n\n**פתרון לדוגמה:**\n$\\tan x - x + C$.\n\n**בעיה 2:** חשבו $\\int_0^1 x e^{-x}\\,dx$ בחלקים.\n\n**פתרון לדוגמה:**\n$1 - 2/e$.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "body_en_md": "- **u-sub:** inner function + derivative visible → substitute to simplify.\n- **IBP:** $\\int u\\,dv = uv-\\int v\\,du$; LIATE for choosing $u$.\n- **Partial fractions:** rational function → factor, decompose, integrate each part.\n- **Trig sub:** $\\sqrt{a^2-x^2}$→$\\sin$; $\\sqrt{a^2+x^2}$→$\\tan$; $\\sqrt{x^2-a^2}$→$\\sec$.\n- Always verify your answer by differentiating.",
+      "body_he_md": "- **u-sub:** פונקציה פנימית + נגזרת.\n- **IBP:** LIATE.\n- **שברים חלקיים:** רציונלי.\n- **הצבה טריגו:** שורש.\n- בדוק בגזירה."
     }
   ],
   "questions": [
     {
       "ord": 1,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute $\\int \\tan^2(x)\\,dx$ and verify.",
-      "stem_he": "חשבו $\\int \\tan^2(x)\\,dx$ ואמתו.",
-      "rubric_en": "Full credit (10/10): identity + antiderivative + verification.\nPartial (6/10): antiderivative only.\nMinimal (3/10): identity only.",
-      "rubric_he": "ציון מלא (10/10): זהות + קדומה + אימות.\nחלקי (6/10): קדומה.\nמינימלי (3/10): זהות.",
-      "explanation_en": "$\\tan x - x + C$.",
-      "explanation_he": "$\\tan x - x + C$.",
-      "skill_atoms": [
-        "linear_substitution"
-      ],
-      "points_level_min": "5pt"
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "Which technique is most appropriate for $\\int x^2\\ln x\\,dx$?",
+      "stem_he": "איזו שיטה מתאימה ביותר ל-$\\int x^2\\ln x\\,dx$?",
+      "options_en": ["IBP with $u=\\ln x$","u-substitution","Partial fractions","Trig substitution"],
+      "options_he": ["IBP עם $u=\\ln x$","u-sub","שברים חלקיים","הצבה טריגו"],
+      "correct_index": 0,
+      "explanation_en": "Product of algebraic ($x^2$) and logarithmic ($\\ln x$). LIATE: L=logarithm → $u=\\ln x$.",
+      "explanation_he": "מכפלת $x^2$ ו-$\\ln x$. LIATE: L ראשון → $u=\\ln x$.",
+      "skill_atoms": ["integration_by_parts","technique_selection"]
     },
     {
       "ord": 2,
       "kind": "open",
       "difficulty": "hard",
-      "stem_en": "Evaluate $\\int_0^1 x e^{-x}\\,dx$ using integration by parts. Show all steps.",
-      "stem_he": "חשבו $\\int_0^1 x e^{-x}\\,dx$ בחלקים.",
-      "rubric_en": "Full credit (10/10): LIATE choice, full computation, $1-2/e$.\nPartial (6/10): setup correct, arithmetic error.\nMinimal (3/10): states by parts only.",
-      "rubric_he": "ציון מלא (10/10): $1-2/e$.\nחלקי (6/10): הגדרה נכונה.\nמינימלי (3/10): רק 'לפי חלקים'.",
-      "explanation_en": "$1 - 2/e$.",
-      "explanation_he": "$1 - 2/e$.",
-      "skill_atoms": [
-        "log_derivative_pattern"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute $\\int \\tan^2(x)\\,dx$ and verify.",
-      "stem_he": "חשבו $\\int \\tan^2(x)\\,dx$ ואמתו.",
-      "rubric_en": "Full credit (10/10): identity + antiderivative + verification.\nPartial (6/10): antiderivative only.\nMinimal (3/10): identity only.",
-      "rubric_he": "ציון מלא (10/10): זהות + קדומה + אימות.\nחלקי (6/10): קדומה.\nמינימלי (3/10): זהות.",
-      "explanation_en": "$\\tan x - x + C$.",
-      "explanation_he": "$\\tan x - x + C$.",
-      "skill_atoms": [
-        "u_substitution_polynomial"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\int x \\cos x \\, dx$ using integration by parts.",
-      "stem_he": "חשבו $\\int x \\cos x \\, dx$ באמצעות אינטגרציה לפי חלקים.",
-      "rubric_en": "Full credit (3/3): selects $u = x$ (algebraic before trig), $dv = \\cos x \\, dx$. So $du = dx$, $v = \\sin x$. Formula: $x \\sin x - \\int \\sin x \\, dx = x \\sin x + \\cos x + C$.\nPartial (2/3): correct setup but sign or arithmetic error.\nMinimal (1/3): names by-parts formula only.",
-      "rubric_he": "ציון מלא (3/3): בוחר $u = x$ (אלגברי לפני טריג), $dv = \\cos x \\, dx$. $du = dx$, $v = \\sin x$. נוסחה: $x \\sin x - \\int \\sin x \\, dx = x \\sin x + \\cos x + C$.\nחלקי (2/3): הגדרה נכונה אבל טעות סימן.\nמינימלי (1/3): רק שם נוסחה.",
-      "explanation_en": "$u = x \\Rightarrow du = dx$. $dv = \\cos x \\, dx \\Rightarrow v = \\sin x$. $\\int x \\cos x \\, dx = x \\sin x - \\int \\sin x \\, dx = x \\sin x + \\cos x + C$.",
-      "explanation_he": "$u = x$, $du = dx$. $dv = \\cos x \\, dx$, $v = \\sin x$. תוצאה: $x \\sin x + \\cos x + C$.",
-      "skill_atoms": [
-        "integration_by_parts",
-        "liate_heuristic"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Evaluate $\\int_0^1 x e^{-x}\\,dx$ using integration by parts. Show all steps.",
-      "stem_he": "חשבו $\\int_0^1 x e^{-x}\\,dx$ בחלקים.",
-      "rubric_en": "Full credit (10/10): LIATE choice, full computation, $1-2/e$.\nPartial (6/10): setup correct, arithmetic error.\nMinimal (3/10): states by parts only.",
-      "rubric_he": "ציון מלא (10/10): $1-2/e$.\nחלקי (6/10): הגדרה נכונה.\nמינימלי (3/10): רק 'לפי חלקים'.",
-      "explanation_en": "$1 - 2/e$.",
-      "explanation_he": "$1 - 2/e$.",
-      "skill_atoms": [
-        "integration_by_parts",
-        "log_integration"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute $\\int \\frac{x}{\\sqrt{1 - x^2}} \\, dx$.",
-      "stem_he": "חשבו $\\int \\frac{x}{\\sqrt{1 - x^2}} \\, dx$.",
-      "rubric_en": "Full credit (3/3): $u = 1 - x^2$, $du = -2x \\, dx$, so $x \\, dx = -du/2$. Integral becomes $\\int \\frac{-du/2}{\\sqrt{u}} = -\\frac{1}{2}\\int u^{-1/2} du = -\\frac{1}{2} \\cdot 2u^{1/2} = -\\sqrt{u} = -\\sqrt{1-x^2} + C$.\nPartial (2/3): correct substitution but sign error.\nMinimal (1/3): identifies $u$.",
-      "rubric_he": "ציון מלא (3/3): $u = 1 - x^2$, $du = -2x dx$. אינטגרל הופך ל-$-\\sqrt{1-x^2} + C$.\nחלקי (2/3): הצבה נכונה אבל טעות סימן.\nמינימלי (1/3): רק מזהה $u$.",
-      "explanation_en": "$u = 1 - x^2$, $du = -2x \\, dx$, $x \\, dx = -du/2$. $\\int \\frac{-du/2}{\\sqrt{u}} = -\\sqrt{u} + C = -\\sqrt{1-x^2} + C$.",
-      "explanation_he": "$u = 1 - x^2$, $du = -2x dx$. תוצאה: $-\\sqrt{1-x^2} + C$.",
-      "skill_atoms": [
-        "u_substitution_square_root"
-      ],
-      "points_level_min": "5pt"
+      "stem_en": "Evaluate $\\int e^x\\cos x\\,dx$.",
+      "stem_he": "חשבו $\\int e^x\\cos x\\,dx$.",
+      "rubric_en": "IBP loop: $I=e^x\\sin x+e^x\\cos x-I$. $I=e^x(\\sin x+\\cos x)/2+C$.",
+      "rubric_he": "$e^x(\\sin x+\\cos x)/2+C$.",
+      "explanation_en": "IBP1: $u=\\cos x$, $dv=e^x$. $e^x\\cos x+\\int e^x\\sin x\\,dx$.\nIBP2: $u=\\sin x$. Result: $e^x\\cos x+e^x\\sin x-I$.\n$2I=e^x(\\cos x+\\sin x)$. $I=e^x(\\cos x+\\sin x)/2+C$.",
+      "explanation_he": "IBP לולאה. $I=e^x(\\cos x+\\sin x)/2+C$.",
+      "skill_atoms": ["integration_by_parts","ibp_loop"]
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "$u$-substitution reverses the chain rule. Required pattern: $\\int f(g(x)) g'(x) dx$.",
-      "Always convert $dx$ to $du$; leave NO $x$ behind in the integral.",
-      "Integration by parts: $\\int u dv = uv - \\int v du$ (reverses product rule).",
-      "LIATE selects $u$: Log > Inverse trig > Algebraic > Trig > Exponential.",
-      "$\\int \\frac{f'}{f} dx = \\ln|f| + C$ — pattern shortcut."
+      "Technique selection is the skill: u-sub for inner function, IBP for products, partial fractions for rationals, trig sub for radical expressions.",
+      "LIATE order for IBP: logarithm/inverse-trig should be u, not v.",
+      "IBP loop: when applying IBP twice gives back the original integral I, solve 2I = (expression).",
+      "u-sub for definite integral: update the limits."
     ],
     "common_misconceptions": [
       {
-        "wrong": "Substitution works for any composite",
-        "correction": "Only when the inner derivative ALSO appears as a factor. Otherwise need other tricks (or no elementary answer exists).",
-        "detect_phrase_en": "substitution any composite",
-        "detect_phrase_he": "הצבה כל הרכבה"
-      },
-      {
-        "wrong": "Forget the minus sign in by-parts",
-        "correction": "$\\int u dv = uv \\textbf{-} \\int v du$. Sign error is the most common mistake.",
-        "detect_phrase_en": "integration by parts no minus",
-        "detect_phrase_he": "לפי חלקים בלי מינוס"
+        "wrong": "Using u-sub when IBP is needed (no derivative of inner function visible)",
+        "correction": "If no obvious inner function + its derivative, try IBP (product of two types).",
+        "detect_phrase_en": "u-sub product no derivative",
+        "detect_phrase_he": "u-sub מכפלה בלי נגזרת"
       }
     ],
-    "skill_atoms_unlocked": [
-      "u_substitution_polynomial",
-      "u_substitution_square_root",
-      "linear_substitution",
-      "log_derivative_pattern",
-      "integration_by_parts",
-      "liate_heuristic",
-      "log_integration"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "integrals_intro",
-      "derivatives_rules"
-    ],
-    "tutor_pacing_hint": "Substitution first — drill the recognition step ('does the inner derivative appear as a factor?'). By-parts second; LIATE is a great teaching scaffold. Always have the learner verify by differentiating.",
-    "coach_drill_skills": [
-      "u_substitution_polynomial",
-      "linear_substitution",
-      "integration_by_parts"
-    ],
-    "diagnostic_signals": {
-      "if_learner_skips_du_conversion": "Demand: write $du$ in terms of $dx$ and $x$ before doing anything else.",
-      "if_learner_picks_wrong_u_in_by_parts": "Walk through LIATE; check whether $\\int v \\, du$ is simpler than the original."
-    },
-    "next_recommended": [
-      "definite_integrals",
-      "integrals_applications"
-    ]
+    "skill_atoms_unlocked": ["u_substitution","integration_by_parts","technique_selection","trig_substitution"],
+    "tutor_pacing_hint": "Spend most time on technique selection (method guide). Examples: one per technique, then mixed exercises.",
+    "next_recommended": ["improper_integrals","integration_partial_fractions","integrals_applications"]
   }
 }

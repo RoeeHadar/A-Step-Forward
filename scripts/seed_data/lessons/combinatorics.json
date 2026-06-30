@@ -2,272 +2,161 @@
   "concept_id": "combinatorics",
   "subject": "math",
   "level": "high_school",
-  "math_track": [
-    "4pt",
-    "5pt"
-  ],
-  "title_en": "Combinatorics — Counting Principles, Permutations, Combinations",
-  "title_he": "קומבינטוריקה — עקרונות ספירה, חליפות וצירופים",
-  "summary_en": "Combinatorics counts arrangements: the multiplication and addition principles, permutations (order matters), combinations (order doesn't), and binomial coefficients.",
-  "summary_he": "קומבינטוריקה סופרת סידורים: עקרונות הכפל והחיבור, חליפות (סדר חשוב), צירופים (סדר לא חשוב) ומקדמי בינום.",
-  "est_minutes": 15,
+  "math_track": ["4pt","5pt"],
+  "title_en": "Combinatorics",
+  "title_he": "קומבינטוריקה",
+  "summary_en": "Counting principles: permutations, combinations, Pascal's triangle, binomial coefficient properties, and the binomial theorem.",
+  "summary_he": "עקרונות ספירה: תמורות, צירופים, משולש פסקל, תכונות מקדם הבינום ומשפט הבינום.",
+  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Why count?",
-      "title_he": "למה לספור?",
-      "body_en_md": "Many probability problems boil down to: 'how many ways can this happen?' Combinatorics gives systematic counting tools.\n\n**Two basic principles:**\n\n### Multiplication principle\n\nIf task A can be done in $m$ ways and task B in $n$ ways (independently), the combined task can be done in $m \\cdot n$ ways.\n\n*Example:* 3 shirts × 4 pants = 12 outfits.\n\n### Addition principle\n\nIf task A can be done in $m$ ways OR task B in $n$ ways (mutually exclusive), there are $m + n$ ways.\n\n*Example:* choose a math book (5 options) OR a physics book (3 options) = 8 ways.",
-      "body_he_md": "הרבה בעיות הסתברות מסתכמות ב'בכמה דרכים זה יכול לקרות?'.\n\n**שני עקרונות יסוד:**\n\n### עקרון הכפל\n\nאם משימה A ב-$m$ דרכים ו-B ב-$n$ דרכים (אי-תלויות), יחד ב-$m \\cdot n$ דרכים.\n\n*דוגמה:* 3 חולצות × 4 מכנסיים = 12 תלבושות.\n\n### עקרון החיבור\n\nאם משימה A ב-$m$ דרכים **או** B ב-$n$ דרכים (זרות), אז $m + n$ דרכים.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In combinatorics, we count the number of ways to arrange objects in a specific order or without considering order. Permutations refer to ordered arrangements, while combinations refer to unordered selections. The Pascal triangle and binomial theorem are essential tools in combinatorics, allowing us to calculate the number of permutations and combinations efficiently.\n\nThe Pascal triangle is a triangular array of the binomial coefficients, where each number is the sum of the two numbers directly above it. The binomial theorem states that $$(a+b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^k$$, where $\\binom{n}{k}$ is the binomial coefficient.\n\nWe use combinatorics to solve problems in various fields, such as computer science, engineering, and economics.\n\n### Worked Example\nFind the number of ways to choose 3 books from a shelf of 5 books, where the order of selection does not matter.\n\n$$\\binom{5}{3} = \\frac{5!}{3!(5-3)!} = \\frac{5!}{3!2!} = \\frac{5 \\times 4}{2 \\times 1} = 10$$\n\nThere are 10 ways to choose 3 books from a shelf of 5 books.",
-          "body_he_md": "בקומבינטוריקה, אנחנו מונים את מספר הדרכים להסדיר עצמים בסדר ספציפי או ללא תשומת לב לסדר. הסדרים מתייחסים להסדרים מסודרים, בעוד הבחירות מתייחסות לבחירות ללא תשומת לב לסדר. המשולש של פסקל והמשפט הבינומי הם כלי חשובים בקומבינט"
-        },
-        "5pt": {
-          "body_en_md": "In combinatorics, we often need to count the number of ways to arrange or select objects from a set. This is essential in various fields such as computer science, statistics, and engineering. Counting principles help us understand how many different outcomes are possible in a given situation. By applying these principles, we can solve problems involving permutations and combinations.\n\nTo illustrate this, consider a simple example: a student needs to choose 3 books from a shelf of 5 books. We can use the combination formula: $C(n, k) = \\frac{n!}{k!(n-k)!}$, where $n$ is the total number of items and $k$ is the number of items to choose.",
-          "body_he_md": "בקומבינטוריקה, אנחנו נדרשים לספור את מספר הדרכים להסדר או לבחור עצמים מקבוצה. זה חשוב בתחומים שונים כגון מדע המחשב, סטטיסטיקה והנדסה. עקרונות הספירה מאפשרים לנו להבין את מספר התוצאות השונות האפשריות במצב מסוים. באמצעות היישום של אלה, אנחנו יכולים לפתור בעיות הקשורות להסדרים ולבחירות.\n\nדוגמה פשוטה: תלמיד הזקוק לבחור 3 ספרים מקומת 5 ספרים. אנחנו יכולים להש"
-        }
-      }
+      "title_en": "Counting Without Listing",
+      "title_he": "ספירה ללא רשימה",
+      "body_en_md": "How many ways can 3 students be chosen from a class of 30? How many 4-digit PIN codes are possible? Listing all options is impractical — we need formulas.\n\nCombinatorics gives us:\n- **Permutations** — ordered arrangements.\n- **Combinations** — unordered selections.\n- **The binomial theorem** — expansion of $(a+b)^n$.\n\nThis topic appears on Bagrut 4pt and 5pt exams.",
+      "body_he_md": "כמה דרכים לבחור 3 תלמידים מ-30? כמה קודי PIN של 4 ספרות? רשימה אינה מעשית — נדרשות נוסחאות.\n\nקומבינטוריקה נותנת:\n- **תמורות** — סידורים מסודרים.\n- **צירופים** — בחירות לא מסודרות.\n- **משפט הבינום.**"
+    },
+    {
+      "kind": "definition",
+      "title_en": "Fundamental Counting Principle, Permutations, Combinations",
+      "title_he": "עקרון הכפל, תמורות וצירופים",
+      "body_en_md": "**Fundamental Counting Principle:** If task 1 can be done in $m$ ways and task 2 in $n$ ways, together there are $m\\times n$ ways.\n\n**Factorial:** $n! = n(n-1)(n-2)\\cdots2\\cdot1$. By convention $0!=1$.\n\n**Permutation (ordered):** Arrange $r$ items from $n$:\n$$P(n,r) = \\frac{n!}{(n-r)!}.$$\n\n**Combination (unordered):** Choose $r$ items from $n$:\n$$\\binom{n}{r} = C(n,r) = \\frac{n!}{r!(n-r)!}.$$\n\n**Key properties:**\n- $\\binom{n}{0}=\\binom{n}{n}=1$.\n- $\\binom{n}{r}=\\binom{n}{n-r}$ (symmetry).\n- $\\binom{n}{r}+\\binom{n}{r+1}=\\binom{n+1}{r+1}$ (Pascal's identity).",
+      "body_he_md": "**עקרון הכפל:** $m$ × $n$ דרכים.\n\n**עצרת:** $n!=n(n-1)\\cdots1$. $0!=1$.\n\n**תמורה (מסודר):** $P(n,r)=n!/(n-r)!$.\n\n**צירוף (לא מסודר):** $\\binom{n}{r}=n!/[r!(n-r)!]$.\n\n**תכונות:** $\\binom{n}{r}=\\binom{n}{n-r}$. $\\binom{n}{r}+\\binom{n}{r+1}=\\binom{n+1}{r+1}$."
     },
     {
       "kind": "theory",
-      "title_en": "Permutations and combinations",
-      "title_he": "חליפות וצירופים",
-      "body_en_md": "### Factorial\n\n$n! = n \\cdot (n-1) \\cdot (n-2) \\cdots 2 \\cdot 1$. $0! = 1$ by convention.\n\nThis counts the number of orderings of $n$ distinct objects.\n\n### Permutations (order matters)\n\nChoose $k$ objects from $n$ distinct objects in a specific order:\n\n$$P(n, k) = \\frac{n!}{(n-k)!} = n(n-1)\\cdots(n-k+1).$$\n\n*Example:* 5 runners, gold/silver/bronze medals: $P(5, 3) = 5 \\cdot 4 \\cdot 3 = 60$ ways.\n\n### Combinations (order doesn't matter)\n\nChoose $k$ objects from $n$:\n\n$$\\binom{n}{k} = \\frac{n!}{k! \\, (n-k)!}.$$\n\nThe division by $k!$ removes the $k!$ orderings of each subset.\n\n*Example:* choose 3 players from 10 for a committee: $\\binom{10}{3} = \\frac{10!}{3! \\, 7!} = \\frac{10 \\cdot 9 \\cdot 8}{6} = 120$.\n\n### Useful identities\n\n- $\\binom{n}{0} = \\binom{n}{n} = 1$.\n- $\\binom{n}{k} = \\binom{n}{n-k}$ (symmetry).\n- $\\binom{n}{k} + \\binom{n}{k+1} = \\binom{n+1}{k+1}$ (Pascal's rule).\n- **Binomial theorem:** $(a+b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^k$.",
-      "body_he_md": "### עצרת\n\n$n! = n \\cdot (n-1) \\cdots 1$, $0! = 1$.\n\nסופרת סידורים של $n$ עצמים שונים.\n\n### חליפות (סדר חשוב)\n\n$$P(n, k) = \\frac{n!}{(n-k)!}.$$\n\n*דוגמה:* 5 רצים, מדליות זהב/כסף/ארד: $P(5, 3) = 60$.\n\n### צירופים (סדר לא חשוב)\n\n$$\\binom{n}{k} = \\frac{n!}{k! \\, (n-k)!}.$$\n\n*דוגמה:* בחירת 3 שחקנים מ-10: $\\binom{10}{3} = 120$.\n\n### זהויות שימושיות\n\n- $\\binom{n}{0} = \\binom{n}{n} = 1$.\n- $\\binom{n}{k} = \\binom{n}{n-k}$.\n- $\\binom{n}{k} + \\binom{n}{k+1} = \\binom{n+1}{k+1}$ (פסקל).\n- **בינום ניוטון:** $(a+b)^n = \\sum_{k} \\binom{n}{k} a^{n-k} b^k$.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "Permutations and combinations are fundamental concepts in combinatorics, which enable us to count the number of ways to arrange objects in different orders. A permutation is an ordered arrangement of objects, while a combination is an unordered selection of objects. The binomial theorem is a powerful tool for expanding expressions of the form $(a + b)^n$, where $n$ is a positive integer.\n\nThe number of permutations of $n$ distinct objects taken $r$ at a time is given by the formula $P(n, r) = \\frac{n!}{(n-r)!}$, where $n!$ denotes the factorial of $n$. The number of combinations of $n$ distinct objects taken $r$ at a time is given by the formula $C(n, r) = \\frac{n!}{r!(n-r)!}$.\n\nPascal's triangle is a triangular array of the binomial coefficients, where each number is the sum of the two numbers directly above it. The binomial theorem states that $(a + b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k}b^k$, where $\\binom{n}{k}$ is the binomial coefficient.\n\nExample: Find the number of permutations of 5 distinct objects taken 3 at a time.\n$$P(5, 3) = \\frac{5!}{(5-3)!} = \\frac{5!}{2!} = \\frac{5\\cdot 4\\cdot 3\\cdot 2!}{2!} = 5\\cdot 4\\cdot 3 = 60$$",
-          "body_he_md": "הסדר והבחירה הם רעיונות מקובלים בקומבינטוריקה, המאפשרים לנו לספור את מספר הדרכים להסדיר חפצים בסדרים שונים. הסדר הוא הסדר רשום של חפצים, בעוד שבחירה היא בח"
-        },
-        "5pt": {
-          "body_en_md": "In combinatorics, we often need to count the number of ways to arrange objects. A permutation is an arrangement of objects in a specific order, while a combination is a selection of objects without regard to order. The formula for permutations of $n$ objects taken $r$ at a time is given by:\n$$\nP(n,r) = \\frac{n!}{(n-r)!}\n$$\nwhere $n!$ denotes the factorial of $n$. The formula for combinations of $n$ objects taken $r$ at a time is given by:\n$$\nC(n,r) = \\frac{n!}{r!(n-r)!}\n$$\nWe can prove the permutation formula using the definition of factorial:\n$$\nP(n,r) = \\frac{n!}{(n-r)!} = \\frac{n(n-1)(n-2)\\cdots(n-r+1)}{(n-r)!} = \\frac{n(n-1)(n-2)\\cdots(n-r+1)(n-r)(n-r-1)\\cdots 1}{(n-r)(n-r-1)\\cdots 1} = n(n-1)(n-2)\\cdots(n-r+1)\n$$\n\nWorked example: Find the number of permutations of the letters in the word \"listen\" taken 5 at a time.\n$$\nP(7,5) = \\frac{7!}{(7-5)!} = \\frac{7!}{2!} = \\frac{7\\cdot 6\\cdot 5\\cdot 4\\cdot 3\\cdot 2\\cdot 1}{2\\cdot 1} = 7\\cdot 6\\cdot 5\\cdot 4\\cdot 3 = 2520\n$$",
-          "body_he_md": "בקומבינטוריקה, אנחנו נזדקק לספור את מספר הדרכים להסדר חפצים. הסדר הוא הסדר של חפצים בסדר ספציפי, בעוד שבחירה היא בחירת"
-        }
-      }
+      "title_en": "Pascal's Triangle and the Binomial Theorem",
+      "title_he": "משולש פסקל ומשפט הבינום",
+      "body_en_md": "**Pascal's triangle:** Each entry is $\\binom{n}{k}$.\n\n```\nRow 0:    1\nRow 1:   1 1\nRow 2:  1 2 1\nRow 3: 1 3 3 1\nRow 4:1 4 6 4 1\n```\n\nProperty: each entry = sum of two above it.\n\n**Binomial theorem:**\n$$(a+b)^n = \\sum_{k=0}^n \\binom{n}{k}a^{n-k}b^k.$$\n\n**Sum of row $n$:** $\\sum_{k=0}^n\\binom{n}{k}=2^n$.\n\n**Alternating sum:** $\\sum_{k=0}^n(-1)^k\\binom{n}{k}=0$.",
+      "body_he_md": "**משולש פסקל:** כל ערך = $\\binom{n}{k}$.\n\n**משפט הבינום:**\n$(a+b)^n=\\sum_{k=0}^n\\binom{n}{k}a^{n-k}b^k$.\n\n**סכום שורה:** $\\sum\\binom{n}{k}=2^n$.\n\n**סכום אלטרנטיבי:** $\\sum(-1)^k\\binom{n}{k}=0$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: poker hands",
-      "title_he": "דוגמה פתורה: ידיים בפוקר",
-      "body_en_md": "From a 52-card deck, how many 5-card hands contain exactly 2 aces?\n\n**Strategy: multiplication principle.**\n\n**Step 1.** Choose 2 aces from 4: $\\binom{4}{2} = 6$.\n\n**Step 2.** Choose 3 non-aces from 48: $\\binom{48}{3} = \\frac{48 \\cdot 47 \\cdot 46}{6} = 17296$.\n\n**Step 3.** Multiply: $6 \\cdot 17296 = 103776$ hands.\n\n**Sanity:** total 5-card hands = $\\binom{52}{5} = 2598960$, so $P(\\text{exactly 2 aces}) = 103776/2598960 \\approx 0.04$.",
-      "body_he_md": "מחפיסה של 52 קלפים, כמה ידיים של 5 קלפים מכילות בדיוק 2 אסים?\n\n**אסטרטגיה: עקרון הכפל.**\n\n**שלב 1.** בחירת 2 אסים מ-4: $\\binom{4}{2} = 6$.\n\n**שלב 2.** בחירת 3 קלפים שאינם אסים מתוך 48: $\\binom{48}{3} = 17296$.\n\n**שלב 3.** מכפלה: $6 \\cdot 17296 = 103776$ ידיים.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In poker, a hand consists of 5 cards chosen from a deck of 52 cards. We can use permutations and combinations to count the number of possible hands. A permutation is an ordered arrangement of objects, while a combination is an unordered selection of objects.\n\nTo calculate the number of possible poker hands, we need to consider the number of ways to choose 5 cards from 52. This can be done using combinations, as the order of the cards does not matter. The formula for combinations is $$\\binom{n}{r} = \\frac{n!}{r!(n-r)!}$$, where $n$ is the total number of objects and $r$ is the number of objects chosen.\n\nLet's calculate the number of possible poker hands using combinations: $$\\binom{52}{5} = \\frac{52!}{5!(52-5)!} = \\frac{52!}{5!47!}$$.\n\nWe can simplify this expression by canceling out common factors in the numerator and denominator. This will give us the final answer.\n\nWorked example: Calculate the number of possible poker hands using combinations.\n\n$$\\binom{52}{5} = \\frac{52 \\cdot 51 \\cdot 50 \\cdot 49 \\cdot 48}{5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1} = 2,598,960$$.\n\nThis means that there are 2,598,960 possible poker hands.",
-          "body_he_md": "בפוקר, יד כוללת 5 קלפים שנבחרים מעגלת 52 קלפים. אנחנו יכולים להשתמש בהסדרים ובבחירות לספור את מספר הידיים האפשריות. הסדר הוא הסדר רשום של אובייקטים, בעוד שבחירה היא בחירת אובייקטים ללא סדר.\n\nלחשב את מ"
-        },
-        "5pt": {
-          "body_en_md": "In a standard deck of 52 cards, we want to find the number of possible poker hands of 5 cards. A poker hand consists of 5 cards, and the order in which the cards are drawn does not matter. We can use the combination formula to solve this problem: $$\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$$ where $n$ is the total number of items and $k$ is the number of items being chosen.\n\nFor a poker hand, we have $n=52$ cards and $k=5$ cards. Plugging these values into the combination formula, we get: $$\\binom{52}{5} = \\frac{52!}{5!(52-5)!}$$\n\nTo simplify this expression, we can cancel out the common factors in the numerator and denominator: $$\\binom{52}{5} = \\frac{52 \\cdot 51 \\cdot 50 \\cdot 49 \\cdot 48}{5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1}$$\n\nEvaluating this expression, we get: $$\\binom{52}{5} = 2,598,960$$\n\nThis means that there are 2,598,960 possible poker hands of 5 cards in a standard deck of 52 cards.",
-          "body_he_md": "במשחק אומנות, נרצה למצוא את מספר האפשרויות לידי כארט של 5 קלפים. ידי כארט מורכבת מ-5 קלפים, וסדר הגרירה של הקלפים אינו חשוב. אנו יכולים להשתמש בנוסחה לבחירות לפתרון זה: $\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$, שם $n$ הוא מספר האיברים ו-$k"
-        }
-      }
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Permutations and Combinations",
+      "title_he": "דוגמה פתורה 1 — תמורות וצירופים",
+      "body_en_md": "**Problem:** A committee of 3 must be chosen from 8 people.\n(a) How many ways if order doesn't matter?\n(b) How many ways if the first person chosen is president, second is secretary, third is treasurer?\n\n**(a) Combination (unordered):**\n$$\\binom{8}{3} = \\frac{8!}{3!\\cdot5!} = \\frac{8\\times7\\times6}{3\\times2\\times1} = 56.$$\n\n**(b) Permutation (ordered):**\n$$P(8,3) = \\frac{8!}{5!} = 8\\times7\\times6 = 336.$$\n\n**Relationship:** $P(8,3)=3!\\times\\binom{8}{3}=6\\times56=336$. ✓",
+      "body_he_md": "(א) צירוף: $\\binom{8}{3}=56$.\n(ב) תמורה: $P(8,3)=336$.\n\n$P=3!\\times C=6\\times56$. ✓"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "How many 3-digit numbers can be formed from $\\{1,2,3,4,5\\}$ if:\n(a) digits can repeat, (b) digits cannot repeat?",
+      "body_he_md": "כמה מספרים בני 3 ספרות מ-$\\{1,...,5\\}$:\n(א) עם חזרות, (ב) ללא חזרות?",
+      "checkpoint_solution_en": "(a) $5\\times5\\times5=125$.\n(b) $P(5,3)=5\\times4\\times3=60$.",
+      "checkpoint_solution_he": "(א) $125$. (ב) $60$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Binomial Theorem",
+      "title_he": "דוגמה פתורה 2 — משפט הבינום",
+      "body_en_md": "**Expand** $(2x-3)^4$ using the binomial theorem.\n\n$$\\sum_{k=0}^4\\binom{4}{k}(2x)^{4-k}(-3)^k.$$\n\n| $k$ | $\\binom{4}{k}$ | $(2x)^{4-k}$ | $(-3)^k$ | Term |\n|---|---|---|---|---|\n| $0$ | $1$ | $16x^4$ | $1$ | $16x^4$ |\n| $1$ | $4$ | $8x^3$ | $-3$ | $-96x^3$ |\n| $2$ | $6$ | $4x^2$ | $9$ | $216x^2$ |\n| $3$ | $4$ | $2x$ | $-27$ | $-216x$ |\n| $4$ | $1$ | $1$ | $81$ | $81$ |\n\nResult: $16x^4-96x^3+216x^2-216x+81$.",
+      "body_he_md": "$(2x-3)^4=\\sum\\binom{4}{k}(2x)^{4-k}(-3)^k$.\n\n$16x^4-96x^3+216x^2-216x+81$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the coefficient of $x^2$ in the expansion of $(1+2x)^5$.",
+      "body_he_md": "מצאו מקדם $x^2$ בפיתוח $(1+2x)^5$.",
+      "checkpoint_solution_en": "$k=2$: $\\binom{5}{2}(1)^3(2x)^2=10\\times4x^2=40x^2$. Coefficient: $40$.",
+      "checkpoint_solution_he": "$\\binom{5}{2}\\times4=40$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Counting with Restrictions (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — ספירה עם אילוצים (רמת בחינה)",
+      "body_en_md": "**Problem:** A group of 4 men and 5 women. How many committees of 4 can be formed with at least 2 women?\n\n**Step 1:** Complement approach vs direct.\n\n**Directly:** exactly 2 women + exactly 3 women + exactly 4 women.\n\nExactly 2 women: $\\binom{5}{2}\\binom{4}{2}=10\\times6=60$.\nExactly 3 women: $\\binom{5}{3}\\binom{4}{1}=10\\times4=40$.\nExactly 4 women: $\\binom{5}{4}\\binom{4}{0}=5\\times1=5$.\n\nTotal: $60+40+5=105$.\n\n**Check (complement):** Total committees: $\\binom{9}{4}=126$.\n0 women: $\\binom{4}{4}=1$. 1 woman: $\\binom{5}{1}\\binom{4}{3}=20$.\nCompllement: $126-1-20=105$. ✓",
+      "body_he_md": "4 גברים, 5 נשים. ועדות של 4 עם לפחות 2 נשים.\n\nישירות: $60+40+5=105$.\n\nמשלים: $126-1-20=105$. ✓"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Combinatorics",
+      "title_he": "מדריך שיטה — קומבינטוריקה",
+      "body_en_md": "| Situation | Formula |\n|---|---|\n| Order matters, no repetition | $P(n,r)=n!/(n-r)!$ |\n| Order doesn't matter, no repetition | $\\binom{n}{r}=n!/[r!(n-r)!]$ |\n| With repetition, order matters | $n^r$ |\n| 'At least' problems | Use complement: Total $-$ unwanted |\n| Binomial expansion term $k$ | $\\binom{n}{k}a^{n-k}b^k$ |\n\n**Decision:** Does order matter? Permutation. Doesn't matter? Combination.",
+      "body_he_md": "| מצב | נוסחה |\n|---|---|\n| סדר חשוב, ללא חזרה | $P(n,r)$ |\n| סדר לא חשוב | $\\binom{n}{r}$ |\n| עם חזרה | $n^r$ |\n| לפחות... | משלים |\n| איבר $k$ בבינום | $\\binom{n}{k}a^{n-k}b^k$ |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"How many ways can 5 people stand in a line?","body_he":"כמה דרכים ל-5 אנשים לעמוד בשורה?","solution_en":"$5!=120$.","solution_he":"$120$."},
+        {"id":"e2","difficulty":"easy","body_en":"Calculate $\\binom{7}{2}$.","body_he":"חשבו $\\binom{7}{2}$.","solution_en":"$21$.","solution_he":"$21$."},
+        {"id":"e3","difficulty":"easy","body_en":"How many 2-letter codes from $\\{A,B,C,D\\}$ with no repetition?","body_he":"כמה קודים דו-אותיים מ-$\\{A,B,C,D\\}$ ללא חזרות?","solution_en":"$P(4,2)=12$.","solution_he":"$12$."},
+        {"id":"e4","difficulty":"easy","body_en":"Expand $(1+x)^3$ using Pascal's triangle.","body_he":"פתחו $(1+x)^3$.","solution_en":"$1+3x+3x^2+x^3$.","solution_he":"$1+3x+3x^2+x^3$."},
+        {"id":"e5","difficulty":"medium","body_en":"From 10 students, 4 are to be seated in a row of 4 chairs. How many arrangements?","body_he":"מ-10 תלמידים, 4 מושבים בשורה. כמה סידורים?","solution_en":"$P(10,4)=5040$.","solution_he":"$5040$."},
+        {"id":"e6","difficulty":"medium","body_en":"A pizza can have any subset of 8 toppings. How many different pizzas?","body_he":"פיצה מתוך 8 תוספות — כל תת-קבוצה אפשרית. כמה פיצות?","solution_en":"$2^8=256$ (including no toppings).","solution_he":"$2^8=256$."},
+        {"id":"e7","difficulty":"medium","body_en":"Find the middle term in the expansion of $(x+y)^6$.","body_he":"מצאו את האיבר האמצעי בפיתוח $(x+y)^6$.","solution_en":"$n=6$, middle term is $k=3$: $\\binom{6}{3}x^3y^3=20x^3y^3$.","solution_he":"$20x^3y^3$."},
+        {"id":"e8","difficulty":"medium","body_en":"Prove $\\binom{n}{r}=\\binom{n}{n-r}$ using the formula.","body_he":"הוכיחו $\\binom{n}{r}=\\binom{n}{n-r}$.","solution_en":"$\\binom{n}{n-r}=n!/[(n-r)!(n-(n-r))!]=n!/[(n-r)!r!]=\\binom{n}{r}$. ✓","solution_he":"$n!/[(n-r)!r!]=\\binom{n}{r}$. ✓"},
+        {"id":"e9","difficulty":"medium","body_en":"How many committees of 3 from 6 people include a specific person $A$?","body_he":"כמה ועדות של 3 מ-6 אנשים כוללות את $A$?","solution_en":"Fix $A$; choose 2 from remaining 5: $\\binom{5}{2}=10$.","solution_he":"$\\binom{5}{2}=10$."},
+        {"id":"e10","difficulty":"hard","body_en":"Find the term containing $x^3$ in the expansion of $(2+3x)^7$.","body_he":"מצאו את האיבר המכיל $x^3$ בפיתוח $(2+3x)^7$.","solution_en":"$k=3$: $\\binom{7}{3}2^4(3x)^3=35\\times16\\times27x^3=15120x^3$.","solution_he":"$15120x^3$."},
+        {"id":"e11","difficulty":"hard","body_en":"Show that $\\sum_{k=0}^n\\binom{n}{k}=2^n$.","body_he":"הראו ש-$\\sum_{k=0}^n\\binom{n}{k}=2^n$.","solution_en":"Apply binomial theorem with $a=b=1$: $(1+1)^n=\\sum\\binom{n}{k}1^{n-k}1^k=\\sum\\binom{n}{k}=2^n$. ✓","solution_he":"$(1+1)^n=2^n=\\sum\\binom{n}{k}$. ✓"},
+        {"id":"e12","difficulty":"hard","body_en":"How many 5-card hands from a standard 52-card deck contain exactly 2 aces?","body_he":"כמה ידות של 5 קלפים מ-52 מכילות בדיוק 2 אסים?","solution_en":"Choose 2 aces from 4: $\\binom{4}{2}=6$. Choose 3 non-aces from 48: $\\binom{48}{3}=17296$. Total: $6\\times17296=103776$.","solution_he":"$\\binom{4}{2}\\times\\binom{48}{3}=103776$."},
+        {"id":"e13","difficulty":"hard","body_en":"Prove Pascal's identity: $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$.","body_he":"הוכיחו $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$.","solution_en":"$\\binom{n}{k}+\\binom{n}{k+1}=\\frac{n!}{k!(n-k)!}+\\frac{n!}{(k+1)!(n-k-1)!}=\\frac{n!(k+1)}{(k+1)!(n-k)!}+\\frac{n!(n-k)}{(k+1)!(n-k)!}=\\frac{n!(k+1+n-k)}{(k+1)!(n-k)!}=\\frac{(n+1)!}{(k+1)!(n-k)!}=\\binom{n+1}{k+1}$. ✓","solution_he":"$\\frac{n!(k+1)+n!(n-k)}{(k+1)!(n-k)!}=\\frac{(n+1)!}{(k+1)!(n-k)!}=\\binom{n+1}{k+1}$. ✓"}
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Order vs. no order confusion.** 'Pick a president and vice-president' = permutation. 'Pick a committee of 2' = combination.\n2. **Double-counting.** When using multiplication, ensure each outcome is counted exactly once.\n3. **Forgetting to subtract impossible cases.** 'At least one' problems: easier as $1 - P(\\text{none})$.\n4. **Repetition allowed vs. not.** With repetition ($n^k$) is different from without ($P(n,k)$).\n5. **$\\binom{n}{k}$ vs. $n^k$.** Number of subsets vs. number of sequences. Very different!",
-      "body_he_md": "1. **סדר vs. אי-סדר.** 'נשיא וסגן' = חליפה. 'ועדה של 2' = צירוף.\n2. **ספירה כפולה.** במכפלה — כל תוצאה חייבת להיספר בדיוק פעם אחת.\n3. **'לפחות אחד'.** קל יותר כ-$1 - P(\\text{אף אחד לא})$.\n4. **עם חזרות vs. בלי.** עם ($n^k$) שונה מבלי ($P(n,k)$).\n5. **$\\binom{n}{k}$ vs. $n^k$.** מספר תת-קבוצות vs. מספר סדרות.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In combinatorics, it's essential to understand the difference between permutations and combinations. A permutation is an ordered arrangement of objects, while a combination is an unordered selection of objects. This distinction is crucial when applying the formulas for permutations ($n!$) and combinations ($\\binom{n}{r} = \\frac{n!}{r!(n-r)!}$). A common pitfall is misapplying these formulas, leading to incorrect results.\n\nWhen using Pascal's triangle or the binomial theorem ($$(a+b)^n = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k}b^k$$), it's essential to understand the underlying combinatorial principles. For instance, each entry in Pascal's triangle represents a combination, while the binomial theorem provides a way to expand expressions with binomial coefficients.\n\n### Worked Example\n\nFind the number of permutations of 5 objects taken 3 at a time:\n$$\\text{Permutations} = \\frac{5!}{(5-3)!} = \\frac{5!}{2!} = \\frac{5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1}{2 \\cdot 1} = 5 \\cdot 4 \\cdot 3 = 60$$\n\n",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "When dealing with counting principles, it's essential to be aware of common pitfalls that can lead to incorrect calculations. One such pitfall is the failure to account for repeated elements or distinguishable objects. For instance, in permutations, if there are repeated elements, the total number of permutations is reduced due to the repeated elements being indistinguishable. Similarly, in combinations, if the order of selection does not matter, we must divide by the factorial of the number of repeated elements.\n\n$$\\text{Permutations with repeated elements: } \\frac{n!}{n_1!n_2!\\cdots n_k!}$$\n\n$$\\text{Combinations with repeated elements: } \\frac{n!}{n_1!n_2!\\cdots n_k!(n-n_1-n_2-\\cdots-n_k)!}$$",
-          "body_he_md": "אחד הסכנות הגדולות ביותר בעת שימוש בעקרונות הספירה היא חוסר ההתחשבות באירועים שוברים או באובייקטים ניתנים להבחנה.  לדוגמה, במקרי הסדר, אם יש אירועים שוברים, מספר ההסדרים הכולל הוא נמוך יותר כתוצאה מאירועים שוברים שאינם ניתנים להבחנה.  דוגמה נוספת, במקרי הבחירה, אם הסדר של הבחירה אינו חשוב, יש לחלק בפקטוריאל של מספר האירועים השוברים.\n\n$$\\text{"
-        }
-      }
+      "body_en_md": "1. **Permutation vs. Combination.** \"In a line\" → order matters → permutation. \"A committee\" → order doesn't matter → combination.\n2. **$0!=1$** — not $0$!\n3. **Overcounting with repeated items.** If items are identical, divide by the factorial of the repeated count.\n4. **'At least' problems:** Use complement (total minus 'at most' complement).",
+      "body_he_md": "1. **תמורה לעומת צירוף.** \"בשורה\" → תמורה. \"ועדה\" → צירוף.\n2. **$0!=1$** — לא אפס!\n3. **ספירה כפולה עם איברים זהים.** חלק בעצרת המספר החוזר.\n4. **\"לפחות\":*** משלים."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- $P(n,r)=n!/(n-r)!$ (order matters, no repetition).\n- $\\binom{n}{r}=n!/[r!(n-r)!]$ (order irrelevant).\n- With repetition: $n^r$.\n- 'At least 1': Total $-$ none.\n- Binomial expansion: $\\binom{n}{k}a^{n-k}b^k$ for term $k$.\n- Sum of row $n$: $2^n$.",
+      "body_he_md": "- $P(n,r)$ (מסודר). $\\binom{n}{r}$ (לא מסודר). $n^r$ (עם חזרות).\n- לפחות 1: כולל $-$ אפס.\n- בינום: $\\binom{n}{k}a^{n-k}b^k$.\n- סכום שורה: $2^n$."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- **Multiplication**: $m \\cdot n$ for 'A AND B'.\n- **Addition**: $m + n$ for disjoint 'A OR B'.\n- **Permutation**: $P(n,k) = n!/(n-k)!$ — order matters.\n- **Combination**: $\\binom{n}{k} = n!/(k!(n-k)!)$ — order doesn't.\n- **Binomial:** $(a+b)^n = \\sum \\binom{n}{k} a^{n-k} b^k$.",
-      "body_he_md": "- **כפל**: $m \\cdot n$ עבור 'A וגם B'.\n- **חיבור**: $m + n$ עבור 'A או B' זרות.\n- **חליפה**: $P(n,k) = n!/(n-k)!$ — סדר חשוב.\n- **צירוף**: $\\binom{n}{k} = n!/(k!(n-k)!)$ — סדר לא חשוב.\n- **בינום:** $(a+b)^n = \\sum \\binom{n}{k} a^{n-k} b^k$.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In combinatorics, we often need to count the number of ways to choose items from a set. A permutation is an ordered arrangement of items, while a combination is an unordered selection of items. The binomial theorem relates to the expansion of $(a+b)^n$, where $n$ is a positive integer. Pascal's triangle is a triangular array of the binomial coefficients.\n\nTo calculate the number of permutations of $n$ items taken $r$ at a time, we use the formula $P(n,r) = \\frac{n!}{(n-r)!}$. For combinations, we use the formula $C(n,r) = \\frac{n!}{r!(n-r)!}$.\n\nHere's a worked example:\n\nFind the number of permutations of 5 items taken 3 at a time.\n\n$$P(5,3) = \\frac{5!}{(5-3)!} = \\frac{5!}{2!} = \\frac{5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1}{2 \\cdot 1} = 5 \\cdot 4 \\cdot 3 = 60$$",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "In combinatorics, the take-away principle is a method for counting the number of ways to choose a certain number of items from a larger set, given that a certain number of items are already chosen. This principle is often used in conjunction with the product rule and the sum rule. The take-away principle can be expressed as $$\\binom{n}{r} = \\frac{n!}{r!(n-r)!}$$ where $n$ is the total number of items and $r$ is the number of items to be chosen.\n\nThe take-away principle can be used to count the number of permutations and combinations of a set. A permutation is an arrangement of objects in a specific order, while a combination is a selection of objects without regard to order. The number of permutations of a set of $n$ objects taken $r$ at a time is given by $$P(n,r) = \\frac{n!}{(n-r)!}$$ while the number of combinations is given by $$C(n,r) = \\frac{n!}{r!(n-r)!}$$.\n\nTo find the number of ways to choose 3 items from a set of 5, given that 2 items are already chosen, we can use the take-away principle: $$\\binom{5}{3} = \\frac{5!}{3!(5-3)!} = \\frac{5!}{3!2!} = \\frac{5 \\cdot 4 \\cdot 3!}{3! \\cdot 2 \\cdot 1} = \\frac{5 \\cdot 4}{2 \\cdot 1} = 10$$.",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "- Counting: Multiplication principle, permutations, combinations.\n- Order matters → permutation; order irrelevant → combination.\n- Pascal's triangle: row $n$ gives $\\binom{n}{k}$.\n- Binomial theorem: $(a+b)^n=\\sum\\binom{n}{k}a^{n-k}b^k$.",
+      "body_he_md": "- ספירה: כפל, תמורות, צירופים.\n- סדר חשוב → תמורה; לא → צירוף.\n- משולש פסקל, משפט הבינום."
     }
   ],
   "questions": [
     {
       "ord": 1,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\binom{6}{2}$.",
-      "stem_he": "חשבו $\\binom{6}{2}$.",
-      "correct_answer": "15",
-      "explanation_en": "$\\binom{6}{2} = \\frac{6 \\cdot 5}{2} = 15$.",
-      "explanation_he": "$\\binom{6}{2} = \\frac{6 \\cdot 5}{2} = 15$.",
-      "skill_atoms": [
-        "binomial_coefficient_compute"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 2,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "How many different 4-digit PINs are there (digits 0–9, repetition allowed)?",
-      "stem_he": "כמה קודי PIN בני 4 ספרות שונים יש (ספרות 0–9, חזרות מותרות)?",
-      "options_en": [
-        "$5040$",
-        "$10000$",
-        "$10^4$ = 10 000",
-        "$10!$"
-      ],
-      "options_he": [
-        "$5040$",
-        "$10000$",
-        "$10^4$ = 10 000",
-        "$10!$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "4 independent digits, each 10 choices: $10^4 = 10000$.",
-      "explanation_he": "4 ספרות, כל אחת 10 אפשרויות: $10^4 = 10000$.",
-      "skill_atoms": [
-        "multiplication_principle"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "How many ways to arrange the letters of 'MATH'?",
-      "stem_he": "בכמה דרכים אפשר לסדר את אותיות המילה 'MATH'?",
-      "options_en": [
-        "$4$",
-        "$16$",
-        "$24$",
-        "$256$"
-      ],
-      "options_he": [
-        "$4$",
-        "$16$",
-        "$24$",
-        "$256$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$4! = 24$ orderings of 4 distinct letters.",
-      "explanation_he": "$4! = 24$ סידורים של 4 אותיות שונות.",
-      "skill_atoms": [
-        "permutation_distinct"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "A team of 4 is chosen from 9 people. In how many ways? Then, in how many ways if one specific person MUST be on the team?",
-      "stem_he": "בוחרים צוות של 4 מתוך 9 אנשים. בכמה דרכים? וכמה אם אדם מסוים **חייב** להיכלל?",
-      "rubric_en": "Full credit (3/3): $\\binom{9}{4} = 126$; with one fixed: choose 3 more from 8 = $\\binom{8}{3} = 56$.\nPartial (2/3): one correct.\nMinimal (1/3): correct formula stated.",
-      "rubric_he": "ציון מלא (3/3): $\\binom{9}{4} = 126$; עם אדם קבוע: $\\binom{8}{3} = 56$.\nחלקי (2/3): אחד נכון.\nמינימלי (1/3): נוסחה נכונה.",
-      "explanation_en": "Total: $\\binom{9}{4} = 126$. With a fixed member: select the other 3 from remaining 8 = $\\binom{8}{3} = 56$.",
-      "explanation_he": "סה\"כ: $\\binom{9}{4} = 126$. עם חבר קבוע: $\\binom{8}{3} = 56$.",
-      "skill_atoms": [
-        "combination_compute",
-        "case_split"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 5,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "From a class of 12 boys and 8 girls, a committee of 5 with EXACTLY 2 girls is formed. How many ways?",
-      "stem_he": "מכיתה עם 12 בנים ו-8 בנות בוחרים ועדה של 5 עם **בדיוק** 2 בנות. בכמה דרכים?",
-      "options_en": [
-        "$\\binom{20}{5}$",
-        "$\\binom{8}{2} \\cdot \\binom{12}{3}$",
-        "$\\binom{8}{2} + \\binom{12}{3}$",
-        "$\\binom{12}{2} \\cdot \\binom{8}{3}$"
-      ],
-      "options_he": [
-        "$\\binom{20}{5}$",
-        "$\\binom{8}{2} \\cdot \\binom{12}{3}$",
-        "$\\binom{8}{2} + \\binom{12}{3}$",
-        "$\\binom{12}{2} \\cdot \\binom{8}{3}$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Choose 2 girls from 8: $\\binom{8}{2}$. Choose 3 boys from 12: $\\binom{12}{3}$. Multiply: $\\binom{8}{2}\\binom{12}{3} = 28 \\cdot 220 = 6160$.",
-      "explanation_he": "בחירת 2 בנות מ-8: $\\binom{8}{2}$. בחירת 3 בנים מ-12: $\\binom{12}{3}$. מכפלה: $28 \\cdot 220 = 6160$.",
-      "skill_atoms": [
-        "combination_constrained"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 6,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Find the coefficient of $x^3$ in the expansion of $(2x + 1)^5$.",
-      "stem_he": "מצאו את המקדם של $x^3$ בפיתוח של $(2x + 1)^5$.",
-      "rubric_en": "Full credit (4/4): general term $\\binom{5}{k}(2x)^{5-k} \\cdot 1^k$, want $5-k = 3 \\Rightarrow k = 2$. Coefficient = $\\binom{5}{2} \\cdot 2^3 = 10 \\cdot 8 = 80$.\nPartial (3/4): correct $k$, arithmetic error.\nMinimal (2/4): binomial theorem written correctly.",
-      "rubric_he": "ציון מלא (4/4): איבר כללי $\\binom{5}{k}(2x)^{5-k}$, מבקשים $5-k=3 \\Rightarrow k=2$. מקדם = $\\binom{5}{2} \\cdot 2^3 = 80$.\nחלקי (3/4): $k$ נכון, טעות חישוב.\nמינימלי (2/4): כתיבת בינום.",
-      "explanation_en": "Coefficient of $x^3 = \\binom{5}{2} \\cdot 2^3 \\cdot 1^2 = 10 \\cdot 8 = 80$.",
-      "explanation_he": "המקדם של $x^3 = \\binom{5}{2} \\cdot 2^3 = 80$.",
-      "skill_atoms": [
-        "binomial_theorem_apply"
-      ],
-      "points_level_min": "4pt"
+      "stem_en": "Number of ways to choose 2 books from 7:",
+      "stem_he": "דרכים לבחור 2 ספרים מ-7:",
+      "options_en": ["$21$","$42$","$14$","$7$"],
+      "options_he": ["$21$","$42$","$14$","$7$"],
+      "correct_index": 0,
+      "explanation_en": "$\\binom{7}{2}=7\\times6/2=21$.",
+      "explanation_he": "$21$.",
+      "skill_atoms": ["combinations"]
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "Multiplication principle for 'AND'; addition for disjoint 'OR'.",
-      "Permutation: order matters; Combination: order doesn't.",
-      "$\\binom{n}{k} = n!/(k!(n-k)!)$; symmetric in $k \\leftrightarrow n-k$.",
-      "Binomial theorem: $(a+b)^n = \\sum \\binom{n}{k} a^{n-k} b^k$.",
-      "'At least one' problems: complement strategy."
+      "Order matters → permutation P(n,r); order doesn't matter → combination C(n,r).",
+      "At-least problems: use complement = Total - (at most less than threshold).",
+      "Sum of row n in Pascal's triangle = 2^n.",
+      "Binomial theorem term k: C(n,k)·a^(n-k)·b^k."
     ],
     "common_misconceptions": [
       {
-        "wrong": "Use $n^k$ for committee selection",
-        "correction": "$n^k$ counts sequences with repetition; committees (subsets) use $\\binom{n}{k}$.",
-        "detect_phrase_en": "committee n^k",
-        "detect_phrase_he": "ועדה n בחזקת"
-      },
-      {
-        "wrong": "$P(n, k) = \\binom{n}{k}$",
-        "correction": "$P(n,k) = k! \\binom{n}{k}$ — permutation is $k!$ times the combination.",
-        "detect_phrase_en": "permutation combination same",
-        "detect_phrase_he": "חליפה צירוף שווים"
+        "wrong": "Using permutation when order does not matter",
+        "correction": "For committees, teams, sets: use combination. For ordered lines, codes, rankings: use permutation.",
+        "detect_phrase_en": "committee ordered permutation",
+        "detect_phrase_he": "ועדה תמורה"
       }
     ],
-    "skill_atoms_unlocked": [
-      "multiplication_principle",
-      "permutation_distinct",
-      "combination_compute",
-      "binomial_theorem_apply",
-      "case_split"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "arithmetic"
-    ],
-    "tutor_pacing_hint": "Drill order vs. no-order with concrete examples (committee vs. president/vp). Use small cases first ($\\binom{4}{2} = 6$ by listing) before formulas.",
-    "coach_drill_skills": [
-      "combination_compute",
-      "permutation_distinct",
-      "binomial_theorem_apply"
-    ],
-    "diagnostic_signals": {
-      "if_learner_uses_n_pow_k_for_subsets": "Distinguish: $n^k$ = sequences with repetition; $\\binom{n}{k}$ = subsets.",
-      "if_learner_skips_division_by_k_factorial": "Remind: subsets don't care about order, so divide by $k!$."
-    },
-    "next_recommended": [
-      "probability_basic",
-      "distributions"
-    ]
+    "skill_atoms_unlocked": ["permutations","combinations","binomial_theorem","pascals_triangle"],
+    "tutor_pacing_hint": "Permutation vs combination decision first. Then binomial theorem.",
+    "next_recommended": ["probability_basics_3pt","sequences_arithmetic"]
   }
 }

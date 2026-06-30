@@ -1,170 +1,144 @@
 {
   "concept_id": "matrix_representation",
-  "subject": "linear_algebra",
+  "subject": "math",
   "level": "university",
-  "math_track": [
-    "la"
-  ],
-  "title_en": "Matrices as Linear Transformations & Change of Basis",
-  "title_he": "מטריצות כהעתקות לינאריות ומעבר בסיסים",
-  "summary_en": "$A\\vec{x}$ as column combinations, matrix of $T$ in non-standard bases, similarity $P^{-1}AP$, diagonalization, and principal axes in engineering.",
-  "summary_he": "$A\\vec{x}$ כקומבינציה של עמודות, מטריצת $T$ בבסיסים, דמיון $P^{-1}AP$, אלכסון וצירים ראשיים בהנדסה.",
-  "est_minutes": 30,
+  "title_en": "Matrix Representation of Linear Maps",
+  "title_he": "ייצוג מטריציוני של העתקות לינאריות",
+  "summary_en": "Matrix representation of a linear map relative to a basis. Change of basis formula. Similarity and diagonalization connection.",
+  "summary_he": "ייצוג מטריציוני של העתקה לינארית יחסית לבסיס. נוסחת שינוי בסיס. קשר לדמיון ואלכסון.",
+  "est_minutes": 45,
   "sections": [
     {
-      "kind": "theory",
-      "title_en": "Matrix–vector product as transformation",
-      "title_he": "מכפלת מטריצה-וקטור כהעתקה",
-      "body_en_md": "$A\\vec{x} = x_1\\vec{a}_1 + x_2\\vec{a}_2 + \\cdots$ — linear combination of **columns** of $A$.\n\n**Column space** $\\text{col}(A)$ = image of $L(\\vec{x})=A\\vec{x}$.\n\n**Geometric $2\\times 2$ examples:**\n- $\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}$ — uniform scaling by 2.\n- $\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ — rotation $90°$.\n- $\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ — shear (fixes $x$-axis, slides $y$).\n- $\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$ — projection onto $x$-axis.\n\n**Worked Example 2 (exam level):** Multi-step problem — show every algebraic manipulation and justify each theorem used.",
-      "body_he_md": "$A\\vec{x}$ = קומבינציה לינארית של **עמודות** $A$. $\\text{col}(A)$ = תמונה.\n\n**דוגמאות גיאומטריות 2×2:** scaling, סיבוב 90°, share, הטלה על ציר $x$.\n\n**דוגמה 2 (רמת בחינה):** בעיה רב-שלבית — כל שלב מוצדק."
+      "kind": "intro",
+      "title_en": "Why Basis Matters",
+      "title_he": "מדוע הבסיס חשוב",
+      "body_en_md": "A linear transformation $T:V\\to V$ is an abstract object. To compute with it, we need **coordinates** — which depend on a chosen basis.\n\nThe same transformation can have very different matrix representations in different bases. The right choice of basis can simplify the matrix dramatically (e.g., to diagonal form).\n\nThis is the bridge between abstract linear algebra and computational linear algebra.",
+      "body_he_md": "טרנספורמציה $T$ היא אובייקט אבסטרקטי. לחישוב נדרשות **קואורדינטות** — התלויות בבחירת הבסיס.\n\nאותה טרנספורמציה עשויה להיראות שונה מאוד בבסיסים שונים. בחירה נכונה פשטת את המטריצה (ייאלכסון)."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Matrix of a Linear Map Relative to a Basis",
+      "title_he": "מטריצת העתקה ביחס לבסיס",
+      "body_en_md": "Let $V$ be an $n$-dim space with basis $B=\\{v_1,\\ldots,v_n\\}$, $T:V\\to V$.\n\n**Coordinate vector:** $[v]_B=$ coefficients of $v$ in basis $B$.\n\n**Matrix of $T$ in basis $B$:**\n$$[T]_B = \\bigl([T(v_1)]_B \\mid [T(v_2)]_B \\mid \\cdots \\mid [T(v_n)]_B\\bigr)$$\n\n(Column $j$ = coordinate vector of $T(v_j)$ in $B$.)\n\n**Then:** $[T(v)]_B = [T]_B \\cdot [v]_B$.\n\n**Change of basis:** If $P$ = change-of-basis matrix from $B$ to $C$, and $[T]_B$ is known:\n$$[T]_C = P^{-1}[T]_B P.$$",
+      "body_he_md": "**מטריצת $T$ בבסיס $B$:** עמודה $j$ = $[T(v_j)]_B$.\n\n**שינוי בסיס:** $[T]_C=P^{-1}[T]_B P$. (מטריצות **דומות**.)"
     },
     {
       "kind": "theory",
-      "title_en": "Matrix of T in a non-standard basis",
-      "title_he": "מטריצת T בבסיס לא-סטנדרטי",
-      "body_en_md": "If $B = \\{\\vec{b}_1,\\ldots,\\vec{b}_n\\}$ is a basis of $V$ and $C$ of $W$, the matrix $[T]_{B,C}$ has columns $[T(\\vec{b}_j)]_C$.\n\nIn standard coordinates, if $A$ represents $T$ and $P_B$ has basis vectors as columns:\n$$[T]_B = P^{-1} A P_B$$\n(change-of-basis between standard and $B$).\n\n**Idea:** express what $T$ does to each basis vector of $B$, then write results in coordinates of $C$.",
-      "body_he_md": "$[T]_{B,C}$: עמודה $j$ = $[T(\\vec{b}_j)]_C$.\n\nבקואורדינטות סטנדרטיות: $[T]_B = P^{-1} A P_B$.\n\n**רעיון:** מה $T$ עושה לכל וקטור בסיס $B$, וכתיבת התוצאה בקואורדינטות $C$."
+      "title_en": "Change-of-Basis Matrix and Similarity",
+      "title_he": "מטריצת מעבר ודמיון",
+      "body_en_md": "**Transition matrix $P$ from $B$ to standard basis $E$:**\n$$P = [v_1 | v_2 | \\cdots | v_n]$$\n(columns = basis vectors of $B$ in standard coordinates).\n\n**Similarity:** $A$ and $B$ are **similar** if $B=P^{-1}AP$ for some invertible $P$. Similar matrices represent the same linear map in different bases.\n\n**Invariants under similarity:** trace, determinant, eigenvalues, rank, characteristic polynomial.\n\n**Goal:** Find a basis in which $[T]_B$ is diagonal (if $T$ is diagonalizable) — this is the eigenvector basis!",
+      "body_he_md": "**מטריצת מעבר $P$ מ-$B$ לסטנדרטי:** עמודות = וקטורי הבסיס $B$.\n\n**דמיון:** $B=P^{-1}AP$. מטריצות דומות — אותה העתקה, בסיס שונה.\n\n**אינוואריאנטים:** עקבה, דטרמיננט, ערכים עצמיים.\n\n**מטרה:** מצא בסיס שבו $[T]$ אלכסוני = בסיס וקטורים עצמיים."
     },
     {
-      "kind": "theory",
-      "title_en": "Change of basis and similar matrices",
-      "title_he": "מעבר בסיסים ומטריצות דומות",
-      "body_en_md": "$P_B = [\\vec{b}_1\\,|\\,\\cdots\\,|\\,\\vec{b}_n]$ — change-of-basis matrix (columns = basis vectors in standard coords).\n\n$$[\\vec{v}]_B = P_B^{-1}\\vec{v}.$$\n\nIf $[T]_B = P^{-1} A P$, then $A$ and $[T]_B$ are **similar**. **Similar matrices share eigenvalues** (same characteristic polynomial).\n\nDiagonalization $A = PDP^{-1}$: $D$ = eigenvalues on diagonal, columns of $P$ = eigenvectors — this is $[T]_B$ in the eigenbasis.",
-      "body_he_md": "$P_B$ — מטריצת מעבר בסיס. $[\\vec{v}]_B = P_B^{-1}\\vec{v}$.\n\n$A$ ו-$P^{-1}AP$ **דומות** — **אותם ערכים עצמיים**.\n\n$A = PDP^{-1}$: $D$ ערכים עצמיים, $P$ וקטורים עצמיים — $[T]$ בבסיס העצמי."
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Matrix in a New Basis",
+      "title_he": "דוגמה פתורה 1 — מטריצה בבסיס חדש",
+      "body_en_md": "**$T:\\mathbb{R}^2\\to\\mathbb{R}^2$:** $T(x,y)=(x+y, x-y)$. Standard basis $E$: $[T]_E=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$.\n\n**New basis $B=\\{v_1,v_2\\}$** with $v_1=(1,1)^T$, $v_2=(1,-1)^T$.\n\n$T(v_1)=T(1,1)=(2,0)=[T]_E v_1$. In basis $B$: $[T(v_1)]_B=?$ We need to express $(2,0)$ as $\\alpha(1,1)+\\beta(1,-1)$: $\\alpha+\\beta=2$, $\\alpha-\\beta=0$. $\\alpha=1$, $\\beta=1$. $[T(v_1)]_B=(1,1)^T$.\n\n$T(v_2)=T(1,-1)=(0,2)$. Express: $\\alpha(1,1)+\\beta(1,-1)=(0,2)$. $\\alpha=1$, $\\beta=-1$. $[T(v_2)]_B=(1,-1)^T$.\n\n$[T]_B=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. (Same as $E$ in this case — a coincidence.)",
+      "body_he_md": "$[T(v_1)]_B=(1,1)^T$, $[T(v_2)]_B=(1,-1)^T$.\n$[T]_B=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$."
     },
     {
-      "kind": "theory",
-      "title_en": "Diagonalization revisited",
-      "title_he": "אלכסון — חזרה",
-      "body_en_md": "$A = PDP^{-1}$ where $D = \\text{diag}(\\lambda_1,\\ldots,\\lambda_n)$, $P$ invertible with eigenvector columns.\n\n**When does an eigenbasis exist?**\n- $n$ distinct eigenvalues ⇒ $n$ independent eigenvectors.\n- Or: enough independent eigenvectors even with repeated $\\lambda$.\n\n**Powers:** $A^k = PD^k P^{-1}$ — easy when $D^k$ is diagonal.\n\n**Application:** decouple coupled systems (physics, differential equations).",
-      "body_he_md": "$A = PDP^{-1}$. **מתי קיים בסיס עצמי?** $n$ ערכים שונים, או מספיק וקטורים עצמיים בלתי-תלויים.\n\n**חזקות:** $A^k = PD^k P^{-1}$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "What is the transition matrix $P$ from basis $B=\\{(1,1)^T,(1,-1)^T\\}$ to standard?",
+      "body_he_md": "מהי מטריצת המעבר $P$ מבסיס $B=\\{(1,1)^T,(1,-1)^T\\}$ לסטנדרטי?",
+      "checkpoint_solution_en": "$P=[v_1|v_2]=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$.",
+      "checkpoint_solution_he": "$P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$."
     },
     {
-      "kind": "theory",
-      "title_en": "Engineering: principal axes",
-      "title_he": "יישום הנדסי: צירים ראשיים",
-      "body_en_md": "Symmetric **stress tensor** $\\Sigma$ (materials engineering): eigenvalues = **principal stresses**, eigenvectors = **principal directions**.\n\nRotate coordinates to the eigenbasis → $\\Sigma$ becomes diagonal (no shear stress in those directions). Brief link to **Mohr's circle** for 2D stress states.\n\nSimilarly, the **moment of inertia tensor** diagonalizes in principal axes — simplifying rotational dynamics (links to `concept:angular_momentum`).\n\n**Statistics connection:** least-squares normal equations use $(A^T A)$ — symmetric, often analyzed via eigenvalues for conditioning.",
-      "body_he_md": "טנזור **מתח סימטרי** $\\Sigma$: ערכים עצמיים = **מתחים ראשיים**, וקטורים עצמיים = **כיוונים ראשיים**.\n\nסיבוב לבסיס העצמי → $\\Sigma$ אלכסונית (ללא גזירה). קשר ל**מעגל מור** (2D).\n\n**טנזור מומנט אינרציה** — אלכסון בצירים ראשיים. קשר לרגרסיה: $(A^T A)$ סימטרית."
-    },
-    {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Matrices as Linear Transformations & Change of Basis: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Matrices as Linear Transformations & Change of Basis.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-מטריצות כהעתקות לינאריות ומעבר בסיסים: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-מטריצות כהעתקות לינאריות ומעבר בסיסים.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
+      "kind": "worked_example",
       "difficulty": "medium",
-      "stem_en": "Columns of $A$ are $(1,0), (1,1)$. $A\\begin{pmatrix}2\\\\-1\\end{pmatrix}$ equals:",
-      "stem_he": "עמודות $A$: $(1,0), (1,1)$. $A\\begin{pmatrix}2\\\\-1\\end{pmatrix}$ שווה ל:",
-      "options_en": [
-        "$(1,-1)$",
-        "$(1,1)$",
-        "$(2,0)$",
-        "$(0,1)$"
-      ],
-      "options_he": [
-        "$(1,-1)$",
-        "$(1,1)$",
-        "$(2,0)$",
-        "$(0,1)$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "$2(1,0) + (-1)(1,1) = (2-1, 0-1) = (1,-1)$.",
-      "explanation_he": "$2(1,0) + (-1)(1,1) = (1,-1)$.",
-      "skill_atoms": [
-        "matrix_vector_transformation"
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Change of Basis Formula",
+      "title_he": "דוגמה פתורה 2 — נוסחת שינוי בסיס",
+      "body_en_md": "**$T:\\mathbb{R}^2\\to\\mathbb{R}^2$** with $[T]_E=\\begin{pmatrix}2&1\\\\0&3\\end{pmatrix}$.\n\nNew basis $B=\\{(1,0)^T,(1,1)^T\\}$.\n\n$P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$.\n\n$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$.\n\n$[T]_B=P^{-1}[T]_E P=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}\\begin{pmatrix}2&1\\\\0&3\\end{pmatrix}\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$\n\n$=\\begin{pmatrix}2&-2\\\\0&3\\end{pmatrix}\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\nThe matrix became **diagonal** — because $B$ is the eigenvector basis!",
+      "body_he_md": "$[T]_B=P^{-1}[T]_EP=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$ — המטריצה התאלכסנה!"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Two matrices $A$ and $B=P^{-1}AP$ are similar. Do they have the same eigenvalues?",
+      "body_he_md": "$A$ ו-$B=P^{-1}AP$ דומות. האם להן אותם ערכים עצמיים?",
+      "checkpoint_solution_en": "Yes. Similar matrices have the same characteristic polynomial, hence the same eigenvalues.",
+      "checkpoint_solution_he": "כן. למטריצות דומות פולינום מאפיין זהה → ערכים עצמיים זהים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Finding Diagonalizing Basis",
+      "title_he": "דוגמה פתורה 3 — מציאת בסיס מאלכסן",
+      "body_en_md": "**$A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$. Find basis $B$ so that $[T]_B$ is diagonal.**\n\n**Step 1:** Eigenvalues: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)-2=\\lambda^2-7\\lambda+10=(\\lambda-5)(\\lambda-2)=0$. $\\lambda_1=5$, $\\lambda_2=2$.\n\n**Step 2:** Eigenvectors:\n- $\\lambda_1=5$: $(A-5I)v=0$: $\\begin{pmatrix}-1&1\\\\2&-2\\end{pmatrix}\\to v_1=(1,1)^T$.\n- $\\lambda_2=2$: $(A-2I)v=0$: $\\begin{pmatrix}2&1\\\\2&1\\end{pmatrix}\\to v_2=(1,-2)^T$.\n\n**Step 3:** Basis $B=\\{v_1,v_2\\}$.\n$$[T]_B=P^{-1}AP=\\begin{pmatrix}5&0\\\\0&2\\end{pmatrix}.$$",
+      "body_he_md": "$\\lambda_1=5$: $v_1=(1,1)^T$. $\\lambda_2=2$: $v_2=(1,-2)^T$.\n$P=[v_1|v_2]$. $[T]_B=P^{-1}AP=\\begin{pmatrix}5&0\\\\0&2\\end{pmatrix}$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Matrix Representation",
+      "title_he": "מדריך שיטה — ייצוג מטריציוני",
+      "body_en_md": "**Matrix of $T$ in basis $B$:**\n1. Apply $T$ to each basis vector: compute $T(v_j)$.\n2. Express each $T(v_j)$ as a linear combination in basis $B$.\n3. Put coefficients as columns → $[T]_B$.\n\n**Change of basis:**\n1. Form $P=[v_1|\\cdots|v_n]$ (B-to-standard).\n2. Compute $P^{-1}$.\n3. $[T]_C=P^{-1}[T]_EP$.\n\n**Diagonalization:**\n1. Find eigenvalues: $\\det(A-\\lambda I)=0$.\n2. Find eigenvectors for each.\n3. $P=[e_1|e_2|\\cdots]$, $D=P^{-1}AP$ = diagonal matrix.",
+      "body_he_md": "**מטריצה בבסיס $B$:** הפעל $T$ על בסיס, בטא בקואורדינטות $B$.\n\n**שינוי בסיס:** $[T]_C=P^{-1}[T]_EP$.\n\n**אלכסון:** ערכים עצמיים → וקטורים עצמיים → $P$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$T(e_1)=2e_1$, $T(e_2)=3e_2$. Matrix of $T$ in standard basis?","body_he":"$T(e_1)=2e_1$, $T(e_2)=3e_2$. מטריצה?","solution_en":"$[T]_E=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$."},
+        {"id":"e2","difficulty":"easy","body_en":"Transition matrix from $B=\\{(2,0)^T,(0,3)^T\\}$ to standard?","body_he":"מטריצת מעבר מ-$B=\\{(2,0)^T,(0,3)^T\\}$ לסטנדרטי?","solution_en":"$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.","solution_he":"$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$."},
+        {"id":"e3","difficulty":"easy","body_en":"Similar matrices have the same determinant. True or false?","body_he":"למטריצות דומות $\\det$ זהה. נכון?","solution_en":"True: $\\det(P^{-1}AP)=\\det(P^{-1})\\det(A)\\det(P)=\\det(A)$.","solution_he":"נכון: $\\det(P^{-1}AP)=\\det(A)$."},
+        {"id":"e4","difficulty":"easy","body_en":"What does it mean for two matrices to be similar?","body_he":"מתי שתי מטריצות דומות?","solution_en":"$A\\sim B$ if $B=P^{-1}AP$ for some invertible $P$. They represent the same linear map in different bases.","solution_he":"$B=P^{-1}AP$. אותה העתקה, בסיס שונה."},
+        {"id":"e5","difficulty":"medium","body_en":"$[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. Find $[T]_B=P^{-1}[T]_EP$.","body_he":"חשב $[T]_B=P^{-1}[T]_EP$ עם $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$.","solution_en":"$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}[T]_E=\\begin{pmatrix}3&-5\\\\0&5\\end{pmatrix}$. $\\times P=\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$."},
+        {"id":"e6","difficulty":"medium","body_en":"For $A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, find all $B$ similar to $A$ via $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$.","body_he":"$A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. חשב $B=P^{-1}AP$.","solution_en":"$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. $\\times P=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$. Same as $A$ (since $A=P$, it commutes).","solution_he":"$B=A$ (מקרה מיוחד)."},
+        {"id":"e7","difficulty":"medium","body_en":"Reflection $T$ over $y$-axis in $\\mathbb{R}^2$: $T(x,y)=(-x,y)$. Write $[T]_E$.","body_he":"שיקוף $T$ מעל ציר $y$: $T(x,y)=(-x,y)$. מטריצה?","solution_en":"$T(e_1)=(-1,0)$, $T(e_2)=(0,1)$. $[T]_E=\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$."},
+        {"id":"e8","difficulty":"medium","body_en":"Rotation by $90°$ counterclockwise: $T(x,y)=(-y,x)$. Matrix?","body_he":"סיבוב ב-$90°$ נגד כיוון שעון: $T(x,y)=(-y,x)$. מטריצה?","solution_en":"$T(e_1)=(0,1)$, $T(e_2)=(-1,0)$. $[T]_E=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$."},
+        {"id":"e9","difficulty":"medium","body_en":"Similar matrices have the same eigenvalues. Why?","body_he":"למטריצות דומות ערכים עצמיים זהים. מדוע?","solution_en":"$\\det(P^{-1}AP-\\lambda I)=\\det(P^{-1}(A-\\lambda I)P)=\\det(A-\\lambda I)$. Same characteristic polynomial → same eigenvalues.","solution_he":"$\\det(P^{-1}AP-\\lambda I)=\\det(A-\\lambda I)$. אותו פולינום מאפיין."},
+        {"id":"e10","difficulty":"hard","body_en":"$A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ (swap transformation). Find diagonalizing matrix $P$ and diagonal form.","body_he":"$A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. מצא $P$ ואלכסון.","solution_en":"Eigenvalues: $\\lambda^2-1=0$: $\\lambda=1,-1$. $v_1=(1,1)^T$ ($\\lambda=1$), $v_2=(1,-1)^T$ ($\\lambda=-1$). $P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. $D=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.","solution_he":"$\\lambda=\\pm1$. $P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. $D=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$."},
+        {"id":"e11","difficulty":"hard","body_en":"Express the coordinate vector of $v=(3,5)^T$ in basis $B=\\{(1,2)^T,(0,1)^T\\}$.","body_he":"בטא $v=(3,5)^T$ בבסיס $B=\\{(1,2)^T,(0,1)^T\\}$.","solution_en":"$3\\cdot(1,2)+b_2(0,1)=(3,5)$: $3=3$ ✓, $6+b_2=5\\Rightarrow b_2=-1$. Wait: $\\alpha(1,2)+\\beta(0,1)=(3,5)$: $\\alpha=3$, $2\\alpha+\\beta=5\\Rightarrow\\beta=-1$. $[v]_B=(3,-1)^T$.","solution_he":"$[v]_B=(3,-1)^T$."},
+        {"id":"e12","difficulty":"hard","body_en":"$T$ has matrix $A=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}$ in standard basis. Compute $[T^2]_E$.","body_he":"$[T]_E=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}$. חשב $[T^2]_E$.","solution_en":"$A^2=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}^2=\\begin{pmatrix}25-6&-10\\\\15&-6\\end{pmatrix}=\\begin{pmatrix}19&-10\\\\15&-6\\end{pmatrix}$.","solution_he":"$A^2=\\begin{pmatrix}19&-10\\\\15&-6\\end{pmatrix}$."},
+        {"id":"e13","difficulty":"hard","body_en":"Why is it useful to diagonalize a matrix?","body_he":"מדוע שימושי לאלכסן מטריצה?","solution_en":"Powers: $A^n=PD^nP^{-1}$ and $D^n$ is trivial. Solving ODEs. Computing matrix exponentials. Spectral analysis. All simplify dramatically with diagonal $D$.","solution_he":"$A^n=PD^nP^{-1}$, $D^n$ טריוויאלי. מועיל לחזקות, ОDEs, אקספוננט מטריציוני."}
       ]
     },
     {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Matrices as Linear Transformations & Change of Basis'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'מטריצות כהעתקות לינאריות ומעבר בסיסים'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "change_of_basis_matrix"
-      ],
-      "points_level_min": "la"
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Column vs row in $[T]_B$**: columns = images of basis vectors in $B$, not rows.\n2. **$P$ direction**: $P$ from $B$ to standard means columns = $B$ vectors in standard coords.\n3. **Change of basis**: $[T]_C=P^{-1}[T]_BP$ — $P$ on the right, $P^{-1}$ on the left.\n4. **Not all matrices are diagonalizable**: requires $n$ independent eigenvectors.",
+      "body_he_md": "1. **עמודות, לא שורות** ב-$[T]_B$.\n2. **כיוון $P$**: עמודות = וקטורי $B$ בקואורדינטות סטנדרטיות.\n3. **שינוי בסיס**: $P^{-1}AP$ (לא $PAP^{-1}$).\n4. **לא תמיד ניתן לאלכסן**: צריך $n$ וקטורים עצמיים עצמאיים."
     },
     {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Matrices as Linear Transformations & Change of Basis' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'מטריצות כהעתקות לינאריות ומעבר בסיסים' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "similar_eigenvalues"
-      ],
-      "points_level_min": "la"
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- $[T]_B$: column $j$ = $[T(v_j)]_B$.\n- Change of basis: $[T]_C=P^{-1}[T]_EP$.\n- $P$ = transition matrix = columns are $B$-vectors in standard coordinates.\n- Similar matrices: same eigenvalues, trace, determinant.\n- Diagonalize: $D=P^{-1}AP$ where $P$ = eigenvectors, $D$ = eigenvalues on diagonal.",
+      "body_he_md": "- $[T]_B$: עמודה $j$ = $[T(v_j)]_B$.\n- שינוי: $P^{-1}[T]_EP$.\n- דומות: ערכים עצמיים, עקבה, $\\det$ זהים.\n- אלכסון: $D=P^{-1}AP$."
     },
     {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Exam problem: solve a multi-step problem using the core techniques from 'Matrices as Linear Transformations & Change of Basis'. Show all work.",
-      "stem_he": "בעיית בחינה: פתרו בעיה רב-שלבית מ-'מטריצות כהעתקות לינאריות ומעבר בסיסים'. הציגו את כל העבודה.",
-      "rubric_en": "Full credit (10/10): correct method, complete steps, correct answer.\nPartial (6/10): method correct, minor error.\nMinimal (3/10): attempt only.",
-      "rubric_he": "ציון מלא (10/10): שיטה + שלבים + תשובה.\nחלקי (6/10): שיטה נכונה.\nמינימלי (3/10): ניסיון.",
-      "explanation_en": "See exam section for sample solution.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "diagonalization"
-      ],
-      "points_level_min": "la"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Prove or explain a key result from 'Matrices as Linear Transformations & Change of Basis' as you would on a university final exam.",
-      "stem_he": "הוכיחו או הסבירו תוצאה מרכזית מ-'מטריצות כהעתקות לינאריות ומעבר בסיסים' כבבחינה.",
-      "rubric_en": "Full credit (10/10): precise statement + complete proof.\nPartial (6/10): proof with gap.\nMinimal (3/10): statement only.",
-      "rubric_he": "ציון מלא (10/10): ניסוח + הוכחה.\nחלקי (6/10): פער.\nמינימלי (3/10): אמירה.",
-      "explanation_en": "See exam section.",
-      "explanation_he": "ראו סעיף בחינה.",
-      "skill_atoms": [
-        "principal_axes_application"
-      ],
-      "points_level_min": "la"
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Matrix of $T$ depends on chosen basis.\n- Change of basis: $P^{-1}AP$.\n- Diagonalization: $P$ = eigenvectors, $D$ = eigenvalues.\n- Similar matrices = same transformation, different coordinates.",
+      "body_he_md": "- מטריצה תלויה בבסיס.\n- שינוי: $P^{-1}AP$.\n- אלכסון: $P$ = וקטורים עצמיים, $D$ = ערכים עצמיים.\n- דומות = אותה העתקה, בסיס שונה."
     }
+  ],
+  "questions": [
+    {"ord":1,"kind":"mcq","difficulty":"medium","stem_en":"$B=P^{-1}AP$ means $A$ and $B$ are:","stem_he":"$B=P^{-1}AP$: $A$ ו-$B$ הן:","options_en":["Orthogonal","Similar","Identical","Transpose of each other"],"options_he":["אורתוגונליות","דומות","זהות","חצי זו של זו"],"correct_index":1,"explanation_en":"$B=P^{-1}AP$ is the definition of similar matrices.","explanation_he":"$B=P^{-1}AP$ — הגדרת מטריצות דומות.","skill_atoms":["change_of_basis","similar_matrices"]}
   ],
   "agent_hints": {
     "key_insights": [
-      "A x = linear combo of columns; col(A) = image.",
-      "Similar matrices: P^{-1}AP; same eigenvalues.",
-      "Diagonalization: eigenbasis makes T diagonal."
+      "Matrix of T in basis B: column j = [T(v_j)]_B.",
+      "Change of basis: [T]_C = P^{-1}[T]_E P.",
+      "Similar matrices represent the same transformation in different bases.",
+      "Diagonalization: P = eigenvectors, D = P^{-1}AP = diagonal eigenvalues."
     ],
     "common_misconceptions": [
-      {
-        "wrong": "Change of basis changes the transformation",
-        "correction": "Same T; only coordinate representation changes.",
-        "detect_phrase_en": "changes the map",
-        "detect_phrase_he": "משנה את ההעתקה"
-      }
+      {"wrong": "Change of basis formula is PAP^{-1}","correction": "It is P^{-1}AP.","detect_phrase_en":"change basis PAP inverse","detect_phrase_he":"שינוי בסיס PAP הופכי"}
     ],
-    "tutor_pacing_hint": "Show one 2×2 geometric example (rotation/shear) before abstract P^{-1}AP.",
-    "diagnostic_signals": {
-      "confuses A with P^{-1}AP": "Similarity is same operator, different basis."
-    },
-    "skill_atoms_unlocked": [
-      "matrix_vector_transformation",
-      "change_of_basis_matrix",
-      "similar_eigenvalues",
-      "diagonalization",
-      "principal_axes_application"
-    ]
+    "skill_atoms_unlocked": ["matrix_representation","change_of_basis","similar_matrices","diagonalization"],
+    "tutor_pacing_hint": "Matrix in basis first, then transition matrix, then change-of-basis formula.",
+    "next_recommended": ["la_eigenvalues","la_diagonalization"]
   }
 }

@@ -1,296 +1,174 @@
 {
   "concept_id": "integrals_applications",
-  "subject": "math",
-  "level": "high_school",
-  "math_track": [
-    "4pt",
-    "5pt"
-  ],
-  "title_en": "Applications of Integrals — Area, Volume, Average",
-  "title_he": "יישומי אינטגרלים — שטח, נפח, ממוצע",
-  "summary_en": "Definite integrals measure area between curves, volumes of solids of revolution, and the average value of a function. Three core applications that appear on every exam.",
-  "summary_he": "אינטגרלים מסוימים מודדים שטח בין עקומות, נפחי גופי סיבוב וממוצע פונקציה. שלושה יישומים מרכזיים שמופיעים בכל מבחן.",
-  "est_minutes": 18,
+  "subject": "calculus_1",
+  "level": "university",
+  "math_track": ["calc1","5pt"],
+  "title_en": "Applications of Integration",
+  "title_he": "יישומי אינטגרציה",
+  "summary_en": "Applications of the definite integral: area between curves, volume of revolution by disk, washer, and shell methods.",
+  "summary_he": "יישומי האינטגרל המסויים: שטח בין עקומות, נפח סביבת ציר בשיטות דיסק, מכבסה וקליפה.",
+  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "From area-under-curve to general measurement",
-      "title_he": "משטח-מתחת-לעקומה למדידה כללית",
-      "body_en_md": "We already saw $\\int_a^b f(x) \\, dx$ as signed area under $f$. The same machinery — slice the region, sum, take a limit — measures:\n\n- **Area between two curves**.\n- **Volumes of solids of revolution** (disk / washer methods).\n- **Average value of a function** over an interval.\n- **Distance traveled** given a velocity function.\n\nThe pattern is always: write a small element (\"slice\"), integrate.",
-      "body_he_md": "ראינו $\\int_a^b f(x) \\, dx$ כשטח מסומן מתחת ל-$f$. אותה מכונה — חיתוך לפרוסות, סכימה, גבול — מודדת:\n\n- **שטח בין שתי עקומות**.\n- **נפחי גופי סיבוב** (שיטות הדיסקים / הטבעות).\n- **ערך ממוצע של פונקציה** על קטע.\n- **דרך שעברה** בהינתן פונקציית מהירות.\n\nהדפוס תמיד: כותבים אלמנט קטן ('פרוסה'), מבצעים אינטגרציה.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "The concept of area under a curve can be extended to find the area of more complex shapes, such as the area between curves, and the area of surfaces of revolution. This can be achieved by using definite integrals, which provide a powerful tool for calculating these quantities. The area between two curves can be found by taking the difference of the integrals of the two functions, while the surface area of a solid of revolution can be found by using the formula $A = 2\\pi\\int_{a}^{b} f(x)\\sqrt{1 + (f'(x))^2} dx$.\n\n### Worked Example:\n\nFind the area between the curves $y = x^2$ and $y = 3x$ from $x = 0$ to $x = 1$.\n\n$$\\text{Area} = \\int_{0}^{1} (3x - x^2) dx = \\left[\\frac{3x^2}{2} - \\frac{x^3}{3}\\right]_0^1 = \\frac{1}{2}$$",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "The concept of area under a curve can be generalized to find the area between two curves, the volume of a solid of revolution, and the average value of a function over an interval. To find the area between two curves, we use the formula $$\\int_{a}^{b} [f(x) - g(x)] \\, dx$$ where $f(x)$ and $g(x)$ are the two functions. The volume of a solid of revolution can be found using the disk method or the shell method, and the average value of a function is given by $$\\frac{1}{b-a} \\int_{a}^{b} f(x) \\, dx$$. We will also introduce the concept of arc length.\n\n### Worked Example:\n\nFind the area between the curves $y = x^2$ and $y = 2x$ from $x = 0$ to $x = 2$.\n\n$$\\int_{0}^{2} [2x - x^2] \\, dx = \\left[ x^2 - \\frac{x^3}{3} \\right]_0^2 = \\frac{8}{3}$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "What Can Integration Measure?",
+      "title_he": "מה יכול האינטגרל למדוד?",
+      "body_en_md": "The definite integral $\\int_a^b f(x)\\,dx$ measures the **signed area** between the curve $y=f(x)$ and the $x$-axis.\n\nBut we can use integration to compute much more:\n- **Area between two curves:** the region trapped between $y=f(x)$ and $y=g(x)$.\n- **Volume of revolution:** rotating a region around an axis generates a 3D solid whose volume can be computed by integration.\n\nApplications appear in physics (work, pressure), engineering (fluid dynamics, centroids), and exam problems.",
+      "body_he_md": "האינטגרל המסויים $\\int_a^b f(x)\\,dx$ מודד **שטח עם סימן** בין $y=f(x)$ לציר $x$.\n\nאבל ניתן להשתמש בו לעוד:\n- **שטח בין עקומות:** האזור הכלוא בין $y=f(x)$ ל-$y=g(x)$.\n- **נפח סביבת ציר:** סיבוב אזור סביב ציר מייצר גוף תלת-ממדי.\n\nיישומים בפיזיקה, הנדסה, ובחינות."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Area and Volume Formulas",
+      "title_he": "נוסחאות שטח ונפח",
+      "body_en_md": "**Area between two curves (vertical slices):**\n$$A = \\int_a^b [f(x) - g(x)]\\,dx, \\quad f(x) \\ge g(x) \\text{ on } [a,b].$$\n\n**Volume of revolution — Disk method** (rotating $y=f(x)$ around $x$-axis):\n$$V = \\pi \\int_a^b [f(x)]^2\\,dx.$$\n\n**Volume of revolution — Washer method** (rotating region between $f(x)$ and $g(x)$, $f\\ge g\\ge0$, around $x$-axis):\n$$V = \\pi \\int_a^b \\left([f(x)]^2 - [g(x)]^2\\right)dx.$$\n\n**Volume of revolution — Shell method** (rotating region around $y$-axis):\n$$V = 2\\pi \\int_a^b x f(x)\\,dx \\quad (f(x)\\ge0, 0\\le a < b).$$",
+      "body_he_md": "**שטח בין עקומות:**\n$$A=\\int_a^b[f(x)-g(x)]\\,dx, \\quad f\\ge g \\text{ על } [a,b].$$\n\n**נפח — שיטת דיסק** (סיבוב $y=f(x)$ סביב ציר $x$):\n$$V=\\pi\\int_a^b[f(x)]^2\\,dx.$$\n\n**שיטת מכבסה** ($f\\ge g\\ge0$):\n$$V=\\pi\\int_a^b\\left([f(x)]^2-[g(x)]^2\\right)dx.$$\n\n**שיטת קליפה** (סביב ציר $y$):\n$$V=2\\pi\\int_a^b xf(x)\\,dx.$$"
     },
     {
       "kind": "theory",
-      "title_en": "Four formulas",
-      "title_he": "ארבע נוסחאות",
-      "body_en_md": "### 1. Area between two curves\n\nIf $f(x) \\ge g(x)$ on $[a, b]$:\n\n$$A = \\int_a^b \\bigl(f(x) - g(x)\\bigr) \\, dx.$$\n\n**Always 'upper minus lower'.** If the curves cross at some $c$, split: $\\int_a^c (f - g) + \\int_c^b (g - f)$ — choose 'upper - lower' in each subinterval, OR equivalently $\\int_a^b |f - g| \\, dx$.\n\n### 2. Average value of a function\n\n$$\\bar{f} = \\frac{1}{b - a} \\int_a^b f(x) \\, dx.$$\n\n**Interpretation:** the height of the rectangle on $[a, b]$ with the same area as the region under $f$.\n\n### 3. Volume of revolution — disk method\n\nRotate the region under $y = f(x)$ on $[a, b]$ around the $x$-axis. Each cross-section is a disk of radius $f(x)$ and thickness $dx$, area $\\pi f(x)^2$.\n\n$$V = \\pi \\int_a^b \\bigl(f(x)\\bigr)^2 \\, dx.$$\n\n### 4. Volume of revolution — washer method\n\nFor a region between $y = f(x)$ (outer) and $y = g(x)$ (inner), rotated around $x$-axis:\n\n$$V = \\pi \\int_a^b \\bigl(f(x)^2 - g(x)^2\\bigr) \\, dx.$$\n\nThink of each slice as a ring with outer radius $f$ and inner radius $g$.\n\n### Bonus: distance traveled\n\nFor a particle with velocity $v(t)$ on $[t_1, t_2]$:\n- **Net displacement** = $\\int_{t_1}^{t_2} v(t) \\, dt$ (signed).\n- **Total distance** = $\\int_{t_1}^{t_2} |v(t)| \\, dt$ (positive).",
-      "body_he_md": "### 1. שטח בין שתי עקומות\n\nאם $f(x) \\ge g(x)$ על $[a, b]$:\n\n$$A = \\int_a^b \\bigl(f(x) - g(x)\\bigr) \\, dx.$$\n\n**תמיד 'עליון פחות תחתון'.** אם העקומות נחתכות ב-$c$, מפצלים.\n\n### 2. ערך ממוצע של פונקציה\n\n$$\\bar{f} = \\frac{1}{b - a} \\int_a^b f(x) \\, dx.$$\n\n**פירוש:** גובה המלבן על $[a, b]$ בעל אותו שטח כמו האזור מתחת ל-$f$.\n\n### 3. נפח סיבוב — שיטת הדיסקים\n\nמסובבים את האזור מתחת ל-$y = f(x)$ סביב ציר ה-$x$. כל חתך הוא דיסק ברדיוס $f(x)$ ועובי $dx$, שטח $\\pi f(x)^2$.\n\n$$V = \\pi \\int_a^b \\bigl(f(x)\\bigr)^2 \\, dx.$$\n\n### 4. נפח סיבוב — שיטת הטבעות\n\nאזור בין $y = f(x)$ (חיצוני) ו-$y = g(x)$ (פנימי), מסובב סביב ציר $x$:\n\n$$V = \\pi \\int_a^b \\bigl(f(x)^2 - g(x)^2\\bigr) \\, dx.$$\n\nכל פרוסה היא טבעת.\n\n### בונוס: דרך שעברה\n\nחלקיק במהירות $v(t)$ על $[t_1, t_2]$:\n- **תזוזה** = $\\int_{t_1}^{t_2} v(t) \\, dt$.\n- **דרך כוללת** = $\\int_{t_1}^{t_2} |v(t)| \\, dt$.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this section, we will explore four fundamental formulas derived from the concept of integrals: the area between curves, the volume of solids of revolution, the average value of a function, and the surface area of a solid of revolution. These formulas have numerous applications in various fields, including physics, engineering, and economics.\n\nThe four formulas are:\n\n1. The area between two curves: $$\\int_{a}^{b} [f(x) - g(x)] dx$$\n2. The volume of a solid of revolution (disk method): $$\\pi \\int_{a}^{b} [f(x)]^2 dx$$\n3. The average value of a function: $$\\frac{1}{b-a} \\int_{a}^{b} f(x) dx$$\n4. The surface area of a solid of revolution (shell method): $$2\\pi \\int_{a}^{b} f(x) \\sqrt{1 + [f'(x)]^2} dx$$\n\nLet's consider an example to illustrate the application of these formulas.\n\nWorked Example:\n\nFind the area between the curves $y = x^2$ and $y = x^3$ from $x = 0$ to $x = 1$.\n\n$$\\int_{0}^{1} [x^2 - x^3] dx = \\left[ \\frac{x^3}{3} - \\frac{x^4}{4} \\right]_0^1 = \\frac{1}{3} - \\frac{1}{4} = \\frac{1}{12}$$",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "The applications of integrals are essential in various fields of mathematics and science. In this section, we will cover four fundamental formulas: area between curves, volume of revolution, average value, and arc length. These formulas will be derived and explained in detail.\n\nThe area between two curves can be calculated using the formula: $$A = \\int_{a}^{b} \\left( f(x) - g(x) \\right) dx$$ where $f(x)$ and $g(x)$ are the two curves.\n\nThe volume of revolution can be calculated using the formula: $$V = \\pi \\int_{a}^{b} \\left( f(x) \\right)^2 dx$$ where $f(x)$ is the function being rotated.\n\nThe average value of a function can be calculated using the formula: $$\\bar{f} = \\frac{1}{b-a} \\int_{a}^{b} f(x) dx$$\n\nThe arc length of a function can be calculated using the formula: $$L = \\int_{a}^{b} \\sqrt{1 + \\left( f'(x) \\right)^2} dx$$\n\n### Worked Example:\nFind the area between the curves $y = x^2$ and $y = 2x$ from $x = 0$ to $x = 2$.\n\n$$A = \\int_{0}^{2} \\left( 2x - x^2 \\right) dx$$\n$$A = \\left[ x^2 - \\frac{x^3}{3} \\right]_0^2$$\n$$A = \\left( 4 - \\frac{8}{3} \\right) - 0$$\n$$A = \\frac{4}{3}$$",
-          "body_he_md": ""
-        }
-      }
+      "title_en": "Finding Intersection Points and Choosing Method",
+      "title_he": "מציאת נקודות חיתוך ובחירת שיטה",
+      "body_en_md": "**Finding the intersection points:** Solve $f(x) = g(x)$. The solutions are the limits $a$ and $b$.\n\n**Determining which function is on top:** Plug in a test point between $a$ and $b$.\n\n**Area between curves — horizontal slices** (useful when functions are given as $x = h(y)$):\n$$A = \\int_c^d [h_1(y) - h_2(y)]\\,dy.$$\n\n**Choosing disk vs. shell:**\n- Disk/Washer: easier when rotating around an **axis parallel** to the variable of integration. Typical: $y=f(x)$, rotate around $x$-axis → integrate over $x$.\n- Shell: easier when rotating around an axis **perpendicular** to the natural integration variable. Typical: $y=f(x)$, rotate around $y$-axis → shell integrates over $x$.\n\n**Volume by washer — around $y=k$ (horizontal axis):**\nOuter radius $R(x)=|f(x)-k|$, inner radius $r(x)=|g(x)-k|$.\n$V=\\pi\\int_a^b(R^2-r^2)\\,dx$.",
+      "body_he_md": "**נקודות חיתוך:** פתרו $f(x)=g(x)$.\n\n**קביעת איזו פונקציה למעלה:** הכניסו נקודת בדיקה.\n\n**שיטות:**\n- דיסק/מכבסה: סיבוב סביב **ציר מקביל** לכיוון האינטגרציה.\n- קליפה: סיבוב סביב **ציר ניצב** לכיוון האינטגרציה.\n\n**נפח סביב $y=k$:** R-radius חיצוני ו-r-radius פנימי."
     },
     {
       "kind": "worked_example",
-      "title_en": "Worked example: volume of a paraboloid",
-      "title_he": "דוגמה פתורה: נפח פרבולואיד",
-      "body_en_md": "Find the volume of the solid formed by rotating $y = \\sqrt{x}$ on $[0, 4]$ around the $x$-axis.\n\n**Disk method:** radius is $f(x) = \\sqrt{x}$, so $f(x)^2 = x$.\n\n$$V = \\pi \\int_0^4 (\\sqrt{x})^2 \\, dx = \\pi \\int_0^4 x \\, dx = \\pi \\cdot \\frac{x^2}{2}\\Big|_0^4 = \\pi \\cdot 8 = 8\\pi.$$\n\n**Sanity:** the shape is a paraboloid (cup-on-its-side) with max radius 2 at $x = 4$. The volume formula for a paraboloid is $\\frac{1}{2}\\pi R^2 h = \\frac{1}{2}\\pi \\cdot 4 \\cdot 4 = 8\\pi$ ✓.",
-      "body_he_md": "מצאו את הנפח הנוצר על ידי סיבוב $y = \\sqrt{x}$ על $[0, 4]$ סביב ציר ה-$x$.\n\n**שיטת הדיסקים:** רדיוס $f(x) = \\sqrt{x}$, אז $f(x)^2 = x$.\n\n$$V = \\pi \\int_0^4 x \\, dx = \\pi \\cdot 8 = 8\\pi.$$\n\n**אימות:** הצורה היא פרבולואיד, נוסחת נפח $\\frac{1}{2}\\pi R^2 h = 8\\pi$ ✓.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "The volume of a paraboloid can be calculated using the integral of a function. The paraboloid is defined by the equation $z = \\frac{1}{2}x^2$, where $x$ is the horizontal distance from the axis of symmetry. To find the volume, we integrate the function with respect to $x$ over the interval $[-a,a]$, where $a$ is the distance from the axis of symmetry to the edge of the paraboloid.\n\nThe volume of the paraboloid is given by the integral $$V = \\int_{-a}^{a} \\frac{1}{2}x^2 dx$$.\n\nSolving this integral, we get $$V = \\left[\\frac{1}{6}x^3\\right]_{-a}^{a} = \\frac{1}{6}a^3 - \\frac{1}{6}(-a)^3 = \\frac{2}{3}a^3$$.\n\nThis result shows that the volume of the paraboloid is proportional to the cube of the distance from the axis of symmetry to the edge.\n\nWorked example: Find the volume of a paraboloid with a distance of 4 units from the axis of symmetry to the edge.\n\n$$V = \\frac{2}{3}a^3 = \\frac{2}{3}(4)^3 = \\frac{2}{3}(64) = \\frac{128}{3}$$ cubic units.",
-          "body_he_md": "הנושא: היישומים של אינטגרלים - שטח, נפח, תיאבול - | דוגמה עבודה: נפח של פרבולואיד | רמה: 4pt\n\nהנפח של פרבולואיד ניתן לחישוב באמצעות אינטגרל של פונקציה. הפרבולואיד מוגדר על ידי המשוואה $z = \\frac{1}{2}x"
-        },
-        "5pt": {
-          "body_en_md": "The volume of a paraboloid can be calculated using the disk method. Given the paraboloid $z = x^2$, we want to find the volume of the solid formed by rotating the region bounded by the paraboloid and the $xy$-plane about the $x$-axis. The volume is given by the integral $$V = \\pi \\int_{a}^{b} (x^2)^2 dx = \\pi \\int_{a}^{b} x^4 dx.$$ To evaluate this integral, we use the power rule of integration, which states that $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$. Applying this rule, we get $$V = \\pi \\left[\\frac{x^5}{5}\\right]_{a}^{b} = \\frac{\\pi}{5} (b^5 - a^5).$$\n\nWorked example: Find the volume of the solid formed by rotating the region bounded by the paraboloid $z = x^2$ and the $xy$-plane about the $x$-axis, from $x = 0$ to $x = 2$.\n\n$$V = \\frac{\\pi}{5} (2^5 - 0^5) = \\frac{\\pi}{5} \\cdot 32 = \\frac{32\\pi}{5}.$$",
-          "body_he_md": "הנושא: הפשטת השטח, נפח, וערך ממוצע | דוגמה עבודה: נפח של פאראבולואיד\nהנפח של פאראבולואיד ניתן לחישוב באמצעות שיטת הדיסקים. נתון הפאראבולואיד $z = x^2$, ואנו רוצים למצוא את הנפח של הגוף הנוצר על ידי הסיבוב של הא"
-        }
-      }
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Area Between Curves",
+      "title_he": "דוגמה פתורה 1 — שטח בין עקומות",
+      "body_en_md": "**Find** the area between $y = x^2$ and $y = x$ on $[0,1]$.\n\n**Step 1:** Find intersection points. $x^2=x\\Rightarrow x(x-1)=0\\Rightarrow x=0,1$. So $a=0$, $b=1$.\n\n**Step 2:** Which is on top? At $x=1/2$: $f(1/2)=1/2$, $g(1/2)=1/4$. So $y=x$ is on top.\n\n**Step 3:** Set up and evaluate.\n$$A = \\int_0^1 (x - x^2)\\,dx = \\left[\\frac{x^2}{2} - \\frac{x^3}{3}\\right]_0^1 = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6}.$$",
+      "body_he_md": "**מצאו** שטח בין $y=x^2$ ל-$y=x$ על $[0,1]$.\n\n**שלב 1:** חיתוך: $x=0,1$.\n\n**שלב 2:** $y=x$ מעל $y=x^2$ על $[0,1]$.\n\n**שלב 3:**\n$$A=\\int_0^1(x-x^2)\\,dx=\\left[\\frac{x^2}{2}-\\frac{x^3}{3}\\right]_0^1=\\frac{1}{6}.$$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the area enclosed between $y = \\sqrt{x}$ and $y = x^2$.",
+      "body_he_md": "מצאו שטח הכלוא בין $y=\\sqrt{x}$ ל-$y=x^2$.",
+      "checkpoint_solution_en": "Intersections: $\\sqrt{x}=x^2\\Rightarrow x^{1/2}=x^2\\Rightarrow x^4=x\\Rightarrow x(x^3-1)=0\\Rightarrow x=0,1$.\n$\\sqrt{x}\\ge x^2$ on $[0,1]$ (test $x=1/4$: $1/2>1/16$).\n$$A=\\int_0^1(\\sqrt{x}-x^2)\\,dx=\\left[\\frac{2x^{3/2}}{3}-\\frac{x^3}{3}\\right]_0^1=\\frac{2}{3}-\\frac{1}{3}=\\frac{1}{3}.$$",
+      "checkpoint_solution_he": "$x=0,1$. $A=\\int_0^1(\\sqrt{x}-x^2)\\,dx=2/3-1/3=1/3$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Volume by Disk Method",
+      "title_he": "דוגמה פתורה 2 — נפח בשיטת דיסק",
+      "body_en_md": "**Find** the volume generated by rotating $y = \\sqrt{x}$ around the $x$-axis for $0 \\le x \\le 4$.\n\n**Step 1:** Disk formula: $V = \\pi \\int_0^4 [f(x)]^2\\,dx = \\pi \\int_0^4 x\\,dx$.\n\n**Step 2:** Evaluate.\n$$V = \\pi \\left[\\frac{x^2}{2}\\right]_0^4 = \\pi \\cdot 8 = 8\\pi.$$",
+      "body_he_md": "**מצאו** נפח סיבוב $y=\\sqrt{x}$ סביב ציר $x$, $0\\le x\\le4$.\n\n**שלב 1:** $V=\\pi\\int_0^4 x\\,dx$.\n\n**שלב 2:** $V=\\pi[x^2/2]_0^4=8\\pi$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "The region between $y=1/x$, $x=1$, $x=e$, and the $x$-axis is rotated around the $x$-axis. Find the volume.",
+      "body_he_md": "האזור בין $y=1/x$, $x=1$, $x=e$, וציר $x$ מסתובב סביב ציר $x$. מצאו הנפח.",
+      "checkpoint_solution_en": "$V=\\pi\\int_1^e (1/x)^2\\,dx=\\pi\\int_1^e x^{-2}\\,dx=\\pi[-1/x]_1^e=\\pi(-1/e+1)=\\pi(1-1/e)$.",
+      "checkpoint_solution_he": "$V=\\pi\\int_1^e x^{-2}\\,dx=\\pi(1-1/e)$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Shell Method and Washer Comparison (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — שיטת קליפה ושיטת מכבסה (רמת בחינה)",
+      "body_en_md": "**Find** the volume of the solid obtained by rotating the region bounded by $y = x^2$ and $y = 2x$ around the $y$-axis.\n\n**Step 1:** Find intersection. $x^2=2x\\Rightarrow x=0,2$. On $[0,2]$: $2x\\ge x^2$.\n\n**Method 1 — Shell:**\n$$V = 2\\pi \\int_0^2 x \\cdot [2x - x^2]\\,dx = 2\\pi \\int_0^2 (2x^2 - x^3)\\,dx.$$\n$$= 2\\pi \\left[\\frac{2x^3}{3} - \\frac{x^4}{4}\\right]_0^2 = 2\\pi \\left(\\frac{16}{3} - 4\\right) = 2\\pi \\cdot \\frac{4}{3} = \\frac{8\\pi}{3}.$$\n\n**Method 2 — Washer (rotating around $y$-axis, integrating over $y$):**\nFrom $y=x^2$: $x=\\sqrt{y}$ (outer boundary for $y$-axis rotation).\nFrom $y=2x$: $x=y/2$ (inner boundary).\n$y$ ranges from $0$ to $4$.\n$$V = \\pi\\int_0^4 \\left[(\\sqrt{y})^2 - (y/2)^2\\right]dy = \\pi\\int_0^4\\left[y - \\frac{y^2}{4}\\right]dy = \\pi\\left[\\frac{y^2}{2}-\\frac{y^3}{12}\\right]_0^4 = \\pi(8-64/12)=\\pi\\cdot\\frac{8}{3}=\\frac{8\\pi}{3}. \\checkmark$$",
+      "body_he_md": "**מצאו** נפח האזור בין $y=x^2$ ו-$y=2x$ המסתובב סביב ציר $y$.\n\nחיתוך: $x=0,2$.\n\n**שיטת קליפה:**\n$$V=2\\pi\\int_0^2 x(2x-x^2)\\,dx=2\\pi[2x^3/3-x^4/4]_0^2=2\\pi\\cdot4/3=\\frac{8\\pi}{3}.$$\n\n**שיטת מכבסה (ל-$y$ — בדיקה):**\n$V=\\pi\\int_0^4(y-y^2/4)\\,dy=\\pi(8-16/3)=8\\pi/3$. ✓"
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Applications of Integration",
+      "title_he": "מדריך שיטה — יישומי אינטגרציה",
+      "body_en_md": "**Area:**\n1. Find intersection points.\n2. Determine which curve is on top (test a point).\n3. $A=\\int_a^b[f(x)-g(x)]\\,dx$.\n\n**Volume — which method?**\n\n| Rotation axis | Integration variable | Method |\n|---|---|---|\n| $x$-axis | $x$ | Disk/Washer |\n| $y$-axis | $x$ | Shell |\n| $y$-axis | $y$ | Washer |\n| $x=k$ | adapt | Washer with shifted radius |\n\n**Key:**\n- Disk: $V=\\pi\\int R(x)^2\\,dx$ (one curve, solid).\n- Washer: $V=\\pi\\int(R^2-r^2)\\,dx$ (hole in middle).\n- Shell: $V=2\\pi\\int x\\cdot h(x)\\,dx$ (height $h(x)=$ top$-$bottom).",
+      "body_he_md": "**שטח:** 1. מצא חיתוך. 2. קבע מי למעלה. 3. $\\int[f-g]$.\n\n**נפח — איזו שיטה?**\n\n| ציר סיבוב | משתנה | שיטה |\n|---|---|---|\n| ציר $x$ | $x$ | דיסק/מכבסה |\n| ציר $y$ | $x$ | קליפה |\n| ציר $y$ | $y$ | מכבסה |\n\n**מרכזי:** דיסק: $\\pi R^2$. מכבסה: $\\pi(R^2-r^2)$. קליפה: $2\\pi xh$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"Find the area between $y=4$ and $y=x^2$ on $[-2,2]$.","body_he":"מצאו שטח בין $y=4$ ל-$y=x^2$ על $[-2,2]$.","solution_en":"$A=\\int_{-2}^2(4-x^2)\\,dx=[4x-x^3/3]_{-2}^2=(8-8/3)-(-8+8/3)=16-16/3=32/3$.","solution_he":"$32/3$."},
+        {"id":"e2","difficulty":"easy","body_en":"Find the volume when $y=x$ on $[0,3]$ is rotated about the $x$-axis.","body_he":"מצאו נפח סיבוב $y=x$, $x\\in[0,3]$ סביב ציר $x$.","solution_en":"$V=\\pi\\int_0^3 x^2\\,dx=\\pi[x^3/3]_0^3=9\\pi$.","solution_he":"$9\\pi$."},
+        {"id":"e3","difficulty":"easy","body_en":"Find the area between $y=x+2$ and $y=x^2$.","body_he":"מצאו שטח בין $y=x+2$ ל-$y=x^2$.","solution_en":"$x+2=x^2\\Rightarrow x^2-x-2=0\\Rightarrow(x-2)(x+1)=0$. $A=\\int_{-1}^2(x+2-x^2)\\,dx=[x^2/2+2x-x^3/3]_{-1}^2=(2+4-8/3)-(1/2-2+1/3)=10/3+7/6=9/2$.","solution_he":"$9/2$."},
+        {"id":"e4","difficulty":"easy","body_en":"Volume of sphere radius $r$: Rotate semicircle $y=\\sqrt{r^2-x^2}$ about the $x$-axis.","body_he":"נפח כדור רדיוס $r$: סובבו $y=\\sqrt{r^2-x^2}$ סביב ציר $x$.","solution_en":"$V=\\pi\\int_{-r}^r(r^2-x^2)\\,dx=\\pi[r^2x-x^3/3]_{-r}^r=\\pi(2r^3-2r^3/3)=4\\pi r^3/3$.","solution_he":"$V=4\\pi r^3/3$. ✓"},
+        {"id":"e5","difficulty":"medium","body_en":"Find the volume when the region between $y=x^2$ and $y=x$ is rotated about the $x$-axis (Washer method).","body_he":"נפח סיבוב האזור בין $y=x^2$ ו-$y=x$ סביב ציר $x$ (מכבסה).","solution_en":"Region: $[0,1]$, $f=x\\ge g=x^2$. $V=\\pi\\int_0^1(x^2-x^4)\\,dx=\\pi[x^3/3-x^5/5]_0^1=\\pi(1/3-1/5)=2\\pi/15$.","solution_he":"$2\\pi/15$."},
+        {"id":"e6","difficulty":"medium","body_en":"Use Shell method to find the volume when the region bounded by $y=x^2$, $x=0$, $y=4$ is rotated about the $y$-axis.","body_he":"שיטת קליפה: נפח האזור $y=x^2$, $x=0$, $y=4$ סביב ציר $y$.","solution_en":"$x$ ranges from 0 to 2. $h(x)=4-x^2$. $V=2\\pi\\int_0^2 x(4-x^2)\\,dx=2\\pi[2x^2-x^4/4]_0^2=2\\pi(8-4)=8\\pi$.","solution_he":"$V=2\\pi\\int_0^2 x(4-x^2)\\,dx=8\\pi$."},
+        {"id":"e7","difficulty":"medium","body_en":"Find the area enclosed by $y=\\cos x$ and $y=\\sin x$ on $[0, \\pi/4]$ and $[\\pi/4, \\pi/2]$, combining both parts.","body_he":"מצאו שטח בין $y=\\cos x$ ל-$y=\\sin x$ על $[0,\\pi/2]$ (שני חלקים).","solution_en":"$\\cos=\\sin$ at $x=\\pi/4$. On $[0,\\pi/4]$: $\\cos\\ge\\sin$. On $[\\pi/4,\\pi/2]$: $\\sin\\ge\\cos$.\n$A=\\int_0^{\\pi/4}(\\cos x-\\sin x)\\,dx+\\int_{\\pi/4}^{\\pi/2}(\\sin x-\\cos x)\\,dx=[\\sin x+\\cos x]_0^{\\pi/4}+[-\\cos x-\\sin x]_{\\pi/4}^{\\pi/2}=(\\sqrt{2}-1)+(\\sqrt{2}-1)=2(\\sqrt{2}-1)$.","solution_he":"$2(\\sqrt{2}-1)$."},
+        {"id":"e8","difficulty":"medium","body_en":"Rotate the region bounded by $y=2$, $y=0$, $x=4$ about the $y$-axis using the Washer method.","body_he":"סובבו $y=2$, $y=0$, $x=4$ סביב ציר $y$ (מכבסה).","solution_en":"Integrate over $y\\in[0,2]$. Outer radius $R=4$ (from $x=4$). But there's no inner boundary (the solid is full). $V=\\pi\\int_0^2 4^2\\,dy=\\pi\\cdot16\\cdot2=32\\pi$. (This is a cylinder of radius 4, height 2.)","solution_he":"$V=\\pi\\cdot16\\cdot2=32\\pi$ (גליל)."},
+        {"id":"e9","difficulty":"medium","body_en":"Find the area between $y=e^x$, $y=1$, and $x=1$.","body_he":"מצאו שטח בין $y=e^x$, $y=1$, $x=1$.","solution_en":"$e^x=1$ at $x=0$. Region: $x\\in[0,1]$, $e^x\\ge1$. $A=\\int_0^1(e^x-1)\\,dx=[e^x-x]_0^1=(e-1)-(1)=e-2$.","solution_he":"$A=e-2$."},
+        {"id":"e10","difficulty":"hard","body_en":"Find the volume when the region bounded by $y=x^3$, $x=1$, and $y=0$ is rotated about $x=1$.","body_he":"מצאו נפח האזור $y=x^3$, $x=1$, $y=0$ מסתובב סביב $x=1$.","solution_en":"Shell method, axis $x=1$: $V=2\\pi\\int_0^1(1-x)x^3\\,dx=2\\pi\\int_0^1(x^3-x^4)\\,dx=2\\pi[x^4/4-x^5/5]_0^1=2\\pi(1/4-1/5)=2\\pi/20=\\pi/10$.","solution_he":"$V=2\\pi\\int_0^1(1-x)x^3\\,dx=\\pi/10$."},
+        {"id":"e11","difficulty":"hard","body_en":"Find the volume generated by rotating the region bounded by $y=\\ln x$, $x=1$, $x=e$, $y=0$ about the $x$-axis.","body_he":"נפח: $y=\\ln x$, $x\\in[1,e]$, סביב ציר $x$.","solution_en":"$V=\\pi\\int_1^e(\\ln x)^2\\,dx$. IBP twice: $\\int(\\ln x)^2\\,dx=x(\\ln x)^2-2x\\ln x+2x$. $V=\\pi[x((\\ln x)^2-2\\ln x+2)]_1^e=\\pi[(e(1-2+2))-(1(0-0+2))]=\\pi(e-2)$.","solution_he":"$V=\\pi(e-2)$."},
+        {"id":"e12","difficulty":"hard","body_en":"The region between $y=x^2$ and $y=1$ is rotated about $y=1$. Find the volume.","body_he":"האזור בין $y=x^2$ ל-$y=1$ מסתובב סביב $y=1$. מצאו נפח.","solution_en":"Intersections: $x^2=1\\Rightarrow x=\\pm1$. Washer around $y=1$: $R=1-x^2$ (from $y=x^2$ to $y=1$), $r=0$. $V=\\pi\\int_{-1}^1(1-x^2)^2\\,dx=2\\pi\\int_0^1(1-2x^2+x^4)\\,dx=2\\pi[x-2x^3/3+x^5/5]_0^1=2\\pi(1-2/3+1/5)=2\\pi\\cdot8/15=16\\pi/15$.","solution_he":"$V=16\\pi/15$."},
+        {"id":"e13","difficulty":"hard","body_en":"Using integration, show that the volume of a cone with base radius $r$ and height $h$ is $V=\\pi r^2 h/3$.","body_he":"הוכיחו שנפח חרוט עם בסיס רדיוס $r$ וגובה $h$ הוא $\\pi r^2 h/3$.","solution_en":"The cone can be generated by rotating the line $y=(r/h)x$ around the $x$-axis for $x\\in[0,h]$. $V=\\pi\\int_0^h(r/h)^2x^2\\,dx=\\pi\\frac{r^2}{h^2}[x^3/3]_0^h=\\pi\\frac{r^2}{h^2}\\cdot\\frac{h^3}{3}=\\frac{\\pi r^2 h}{3}$. ✓","solution_he":"$y=(r/h)x$, $V=\\pi(r^2/h^2)\\int_0^h x^2\\,dx=\\pi r^2 h/3$. ✓"}
+      ]
     },
     {
       "kind": "pitfall",
-      "title_en": "Common pitfalls",
+      "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Wrong order in 'area between curves'.** Always upper minus lower; if curves cross, split.\n2. **Forgetting $\\pi$ in volume formulas.**\n3. **Squaring before subtracting in washer method.** $V \\ne \\pi \\int (f - g)^2$; it's $\\pi \\int (f^2 - g^2)$.\n4. **Confusing average value with integral.** Average = $\\frac{1}{b-a} \\int_a^b f$, not just $\\int_a^b f$.\n5. **Distance vs displacement.** Total distance needs absolute value; displacement does not.\n6. **Skipping the intersection step for area.** Always find $a, b$ by setting $f(x) = g(x)$ first.",
-      "body_he_md": "1. **סדר שגוי בשטח בין עקומות.** תמיד עליון פחות תחתון; אם נחתכות, מפצלים.\n2. **שכחת $\\pi$ בנוסחאות נפח.**\n3. **בריבוע לפני חיסור בטבעות.** $V \\ne \\pi \\int (f - g)^2$; זה $\\pi \\int (f^2 - g^2)$.\n4. **בלבול בין ממוצע לאינטגרל.** ממוצע = $\\frac{1}{b-a} \\int_a^b f$.\n5. **דרך מול תזוזה.** דרך כוללת צריכה ערך מוחלט.\n6. **דילוג על חישוב נקודות חיתוך.** תמיד מוצאים $a, b$ עם $f(x) = g(x)$ קודם.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "When evaluating definite integrals, it's essential to consider the domain of the function and the limits of integration. A common pitfall is to forget to include the endpoints of the interval or to integrate over an incorrect domain. This can lead to incorrect results, especially when dealing with functions that are undefined at certain points.\n\nFor example, consider the function $f(x) = \\frac{1}{x}$, which is undefined at $x=0$. If we want to find the area under the curve from $x=0$ to $x=1$, we must exclude the point $x=0$ from the domain, since the function is undefined there.\n\n$$\\int_{0}^{1} \\frac{1}{x} dx = \\lim_{\\epsilon \\to 0^+} \\int_{\\epsilon}^{1} \\frac{1}{x} dx$$\n\nWorked example: Find the area under the curve $f(x) = x^2$ from $x=0$ to $x=2$.\n\n$$\\int_{0}^{2} x^2 dx = \\left[\\frac{x^3}{3}\\right]_0^2 = \\frac{8}{3}$$",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "When dealing with applications of integrals, it's essential to be aware of common pitfalls that can lead to incorrect solutions. One common mistake is failing to consider the correct order of integration when calculating the area between curves or the volume of revolution. Additionally, when finding the average value of a function, it's crucial to ensure that the limits of integration are correctly defined. Lastly, when calculating arc length, one must be cautious of the sign of the derivative and the direction of the curve.\n\nFor example, consider the problem of finding the area between the curves $y = x^2$ and $y = x^3$ from $x = 0$ to $x = 1$. To solve this, we need to find the difference between the two functions and integrate it over the given interval: $$\\int_{0}^{1} (x^2 - x^3) dx = \\left[\\frac{x^3}{3} - \\frac{x^4}{4}\\right]_0^1 = \\frac{1}{3} - \\frac{1}{4} = \\frac{1}{12}.$$",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "1. **Wrong direction of subtraction in area.** Must use $[\\text{top}] - [\\text{bottom}]$. If unsure, use $|f-g|$ and split at intersections.\n2. **Squaring the wrong thing in disk method.** $V=\\pi\\int [f(x)]^2\\,dx$, not $\\pi[\\int f(x)\\,dx]^2$.\n3. **Forgetting $2\\pi$ factor in shell method.**\n4. **Not finding all intersection points** when curves intersect multiple times.\n5. **Washer: forgetting to subtract inner radius squared.**",
+      "body_he_md": "1. **כיוון שגוי בחיסור בשטח.** $[\\text{עליון}]-[\\text{תחתון}]$.\n2. **ריבוע שגוי בשיטת דיסק.** $\\pi\\int[f]^2$, לא $\\pi(\\int f)^2$.\n3. **שכחת $2\\pi$ בשיטת קליפה.**\n4. **פספוס נקודות חיתוך.**\n5. **מכבסה: שכחת לחסר רדיוס פנימי בריבוע.**"
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Formulas to memorize:**\n$$A = \\int_a^b [f(x)-g(x)]\\,dx.$$\n$$V_{\\text{disk}} = \\pi\\int [R(x)]^2\\,dx.$$\n$$V_{\\text{washer}} = \\pi\\int([R(x)]^2-[r(x)]^2)\\,dx.$$\n$$V_{\\text{shell}} = 2\\pi\\int x\\cdot h(x)\\,dx.$$\n\n**Strategy:**\n1. Draw a sketch!\n2. Find all intersection points.\n3. Check which function is on top.\n4. Choose disk vs washer vs shell based on axis and ease of integration.",
+      "body_he_md": "**נוסחאות:**\n$$A=\\int[f-g]\\,dx.$$\n$$V_{\\text{דיסק}}=\\pi\\int R^2\\,dx.$$\n$$V_{\\text{מכבסה}}=\\pi\\int(R^2-r^2)\\,dx.$$\n$$V_{\\text{קליפה}}=2\\pi\\int xh\\,dx.$$\n\n**אסטרטגיה:** 1. שרטוט! 2. חיתוקים. 3. מי למעלה. 4. בחר שיטה."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- Area between curves: $\\int_a^b (\\text{upper} - \\text{lower}) \\, dx$.\n- Average: $\\frac{1}{b-a}\\int_a^b f$.\n- Disk volume: $V = \\pi \\int_a^b f(x)^2 \\, dx$.\n- Washer volume: $V = \\pi \\int_a^b (f^2 - g^2) \\, dx$.\n- Distance: $\\int|v|dt$; displacement: $\\int v\\,dt$.",
-      "body_he_md": "- שטח בין עקומות: $\\int_a^b (\\text{עליון} - \\text{תחתון}) \\, dx$.\n- ממוצע: $\\frac{1}{b-a}\\int_a^b f$.\n- נפח דיסק: $V = \\pi \\int_a^b f(x)^2 \\, dx$.\n- נפח טבעת: $V = \\pi \\int_a^b (f^2 - g^2) \\, dx$.\n- דרך: $\\int|v|dt$; תזוזה: $\\int v\\,dt$.",
-      "body_by_level": {
-        "4pt": {
-          "body_en_md": "In this section, we will explore the applications of integrals in calculating area, volume, and average value of functions. We will learn how to use integrals to find the area between curves, the volume of solids of revolution, and the average value of a function over an interval.\n\nThe area between two curves can be calculated using the formula $$\\int_{a}^{b} [f(x) - g(x)] \\, dx$$, where $f(x)$ and $g(x)$ are the two functions.\n\nThe volume of a solid of revolution can be calculated using the formula $$\\int_{a}^{b} \\pi [f(x)]^2 \\, dx$$, where $f(x)$ is the function being revolved around the x-axis.\n\nThe average value of a function can be calculated using the formula $$\\frac{1}{b-a} \\int_{a}^{b} f(x) \\, dx$$.\n\nLet's consider an example where we want to find the area between the curves $y = x^2$ and $y = 3x$ from $x = 0$ to $x = 2$.\n\nWorked Example:\nFind the area between the curves $y = x^2$ and $y = 3x$ from $x = 0$ to $x = 2$.\n\n$$\\int_{0}^{2} [3x - x^2] \\, dx = \\left[ \\frac{3x^2}{2} - \\frac{x^3}{3} \\right]_0^2 = \\frac{12}{2} - \\frac{8}{3} = 6 - \\frac{8}{3} = \\frac{10}{3}$$",
-          "body_he_md": ""
-        },
-        "5pt": {
-          "body_en_md": "The applications of integrals are crucial in various fields of science and engineering. We will cover three main topics: finding the area between two curves, calculating the volume of a solid of revolution, and determining the average value of a function over an interval. Additionally, we will introduce the concept of arc length, which is essential in many real-world applications.\n\nTo find the area between two curves, we use the formula $$A = \\int_{a}^{b} (f(x) - g(x)) \\, dx$$, where $f(x)$ and $g(x)$ are the two functions and $[a, b]$ is the interval of interest.\n\nTo calculate the volume of a solid of revolution, we use the method of disks or washers, depending on the shape of the solid. For example, if we want to find the volume of a solid formed by revolving a region about the x-axis, we use the formula $$V = \\pi \\int_{a}^{b} [f(x)]^2 \\, dx$$.\n\nTo determine the average value of a function over an interval, we use the formula $$\\text{Average Value} = \\frac{1}{b-a} \\int_{a}^{b} f(x) \\, dx$$.\n\nWorked example: Find the area between the curves $y = x^2$ and $y = 3x$ over the interval $[0, 2]$.\n\n$$A = \\int_{0}^{2} (3x - x^2) \\, dx$$\n$$A = \\left[\\frac{3}{2}x^2 - \\frac{1}{3}x^3\\right]_{0}^{2}$$\n$$A = \\left(\\frac{3}{2}(2)^2 - \\frac{1}{3}(2)^3\\right) - \\left(\\frac{3}{2}(0)^2 - \\frac{1}{3}(0)^3\\right)$$\n$$A = \\left(6 - \\frac{8}{3}\\right) - 0$$\n$$A = \\frac{10}{3}$$",
-          "body_he_md": ""
-        }
-      }
+      "body_en_md": "- Area between curves: $\\int_a^b[f-g]\\,dx$. Find intersections first.\n- Disk: $\\pi\\int R^2\\,dx$ — simple rotation, solid region.\n- Washer: $\\pi\\int(R^2-r^2)\\,dx$ — rotation with a hole.\n- Shell: $2\\pi\\int x\\cdot h(x)\\,dx$ — rotation about $y$-axis, integrate over $x$.\n- Always draw the region!",
+      "body_he_md": "- שטח: $\\int[f-g]$. מצא חיתוקים.\n- דיסק: $\\pi\\int R^2$.\n- מכבסה: $\\pi\\int(R^2-r^2)$.\n- קליפה: $2\\pi\\int xh$.\n- תמיד שרטטו!"
     }
   ],
   "questions": [
     {
       "ord": 1,
-      "kind": "numeric",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Find the area between $y = x^2$ and $y = 0$ on $[0, 2]$.",
-      "stem_he": "מצאו את השטח בין $y = x^2$ ו-$y = 0$ על $[0, 2]$.",
-      "correct_answer": "8/3",
-      "explanation_en": "$\\int_0^2 x^2 \\, dx = x^3/3 |_0^2 = 8/3$.",
-      "explanation_he": "$\\int_0^2 x^2 \\, dx = 8/3$.",
-      "skill_atoms": [
-        "area_under_curve"
-      ],
-      "points_level_min": "4pt"
+      "stem_en": "Area between $y=x$ and $y=x^2$ from $x=0$ to $x=1$ equals:",
+      "stem_he": "שטח בין $y=x$ ל-$y=x^2$ על $[0,1]$ שווה:",
+      "options_en": ["$1/6$","$1/3$","$1/2$","$1/4$"],
+      "options_he": ["$1/6$","$1/3$","$1/2$","$1/4$"],
+      "correct_index": 0,
+      "explanation_en": "$\\int_0^1(x-x^2)\\,dx=1/2-1/3=1/6$.",
+      "explanation_he": "$1/2-1/3=1/6$.",
+      "skill_atoms": ["area_between_curves"]
     },
     {
       "ord": 2,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Average value of $f(x) = 3x^2$ on $[0, 2]$ is:",
-      "stem_he": "הערך הממוצע של $f(x) = 3x^2$ על $[0, 2]$:",
-      "options_en": [
-        "$2$",
-        "$4$",
-        "$8$",
-        "$12$"
-      ],
-      "options_he": [
-        "$2$",
-        "$4$",
-        "$8$",
-        "$12$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "$\\bar{f} = \\frac{1}{2 - 0}\\int_0^2 3x^2 dx = \\frac{1}{2} \\cdot 8 = 4$.",
-      "explanation_he": "$\\bar{f} = \\frac{1}{2}\\int_0^2 3x^2 dx = \\frac{1}{2} \\cdot 8 = 4$.",
-      "skill_atoms": [
-        "average_value"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Volume of revolution of $y = x$ on $[0, 1]$ around the $x$-axis is:",
-      "stem_he": "נפח סיבוב של $y = x$ על $[0, 1]$ סביב ציר $x$:",
-      "options_en": [
-        "$\\frac{\\pi}{3}$",
-        "$\\frac{\\pi}{2}$",
-        "$\\pi$",
-        "$\\frac{2\\pi}{3}$"
-      ],
-      "options_he": [
-        "$\\frac{\\pi}{3}$",
-        "$\\frac{\\pi}{2}$",
-        "$\\pi$",
-        "$\\frac{2\\pi}{3}$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Disk: $V = \\pi \\int_0^1 x^2 dx = \\pi \\cdot 1/3 = \\pi/3$. (This is the volume of a cone with $R = 1, h = 1$: $\\frac{1}{3}\\pi R^2 h = \\pi/3$.)",
-      "explanation_he": "דיסק: $V = \\pi \\int_0^1 x^2 dx = \\pi/3$. (זה נפח חרוט עם $R = 1, h = 1$.)",
-      "skill_atoms": [
-        "disk_method"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 4,
       "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Find the area enclosed between $y = x^2$ and $y = x + 2$.",
-      "stem_he": "מצאו את השטח הסגור בין $y = x^2$ ו-$y = x + 2$.",
-      "rubric_en": "Full credit (3/3): finds intersections $x^2 = x + 2 \\Rightarrow x = 2, -1$. Determines line is upper. $A = \\int_{-1}^{2}(x + 2 - x^2)dx = [\\frac{x^2}{2} + 2x - \\frac{x^3}{3}]_{-1}^2 = (2 + 4 - 8/3) - (1/2 - 2 + 1/3) = \\frac{10}{3} - (-\\frac{7}{6}) = \\frac{20 + 7}{6} = \\frac{27}{6} = \\frac{9}{2}$.\nPartial (2/3): correct intersections, error in evaluation.\nMinimal (1/3): only finds intersections.",
-      "rubric_he": "ציון מלא (3/3): מוצא נקודות חיתוך $x = 2, -1$. הישר עליון. $A = \\int_{-1}^{2}(x + 2 - x^2)dx = \\frac{9}{2}$.\nחלקי (2/3): נקודות חיתוך נכונות, טעות בהערכה.\nמינימלי (1/3): רק נקודות חיתוך.",
-      "explanation_en": "Intersect: $x^2 = x + 2 \\Rightarrow x = 2, -1$. Line above parabola on $[-1, 2]$. $A = \\int_{-1}^{2}(x + 2 - x^2) dx = 9/2$.",
-      "explanation_he": "חיתוך: $x = 2, -1$. ישר מעל פרבולה על $[-1, 2]$. $A = \\int_{-1}^{2}(x + 2 - x^2) dx = 9/2$.",
-      "skill_atoms": [
-        "area_between_curves",
-        "intersection_points"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "mcq",
       "difficulty": "hard",
-      "stem_en": "A particle has velocity $v(t) = t - 2$ on $[0, 3]$. Total distance traveled:",
-      "stem_he": "חלקיק במהירות $v(t) = t - 2$ על $[0, 3]$. דרך כוללת:",
-      "options_en": [
-        "$3/2$",
-        "$2$",
-        "$5/2$",
-        "$1/2$"
-      ],
-      "options_he": [
-        "$3/2$",
-        "$2$",
-        "$5/2$",
-        "$1/2$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "$v$ changes sign at $t = 2$. Total distance = $\\int_0^2 |t-2| dt + \\int_2^3 |t-2| dt = \\int_0^2 (2-t) dt + \\int_2^3 (t-2) dt = 2 + 1/2 = 5/2$.",
-      "explanation_he": "$v$ משנה סימן ב-$t = 2$. דרך כוללת = $\\int_0^2 (2-t) dt + \\int_2^3 (t-2) dt = 2 + 1/2 = 5/2$.",
-      "skill_atoms": [
-        "distance_vs_displacement",
-        "absolute_value_integral"
-      ],
-      "points_level_min": "4pt"
-    },
-    {
-      "ord": 6,
-      "kind": "mcq",
-      "difficulty": "hard",
-      "stem_en": "Volume of region between $y = x$ and $y = x^2$ on $[0, 1]$ rotated around $x$-axis:",
-      "stem_he": "נפח של אזור בין $y = x$ ו-$y = x^2$ על $[0, 1]$ מסובב סביב ציר $x$:",
-      "options_en": [
-        "$\\frac{\\pi}{6}$",
-        "$\\frac{\\pi}{3}$",
-        "$\\frac{2\\pi}{15}$",
-        "$\\frac{\\pi}{2}$"
-      ],
-      "options_he": [
-        "$\\frac{\\pi}{6}$",
-        "$\\frac{\\pi}{3}$",
-        "$\\frac{2\\pi}{15}$",
-        "$\\frac{\\pi}{2}$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "On $[0, 1]$, $x \\ge x^2$. Washer: $V = \\pi \\int_0^1 (x^2 - x^4) dx = \\pi(1/3 - 1/5) = \\pi \\cdot 2/15$.",
-      "explanation_he": "על $[0, 1]$, $x \\ge x^2$. טבעת: $V = \\pi \\int_0^1 (x^2 - x^4) dx = \\pi \\cdot 2/15$.",
-      "skill_atoms": [
-        "washer_method"
-      ],
-      "points_level_min": "4pt"
+      "stem_en": "Find the volume generated by rotating the region bounded by $y=x^2$ and $y=4$ about the $y$-axis using the Shell method.",
+      "stem_he": "מצאו נפח: $y=x^2$, $y=4$ מסתובב סביב ציר $y$ — שיטת קליפה.",
+      "rubric_en": "$V=2\\pi\\int_0^2 x(4-x^2)\\,dx=2\\pi[2x^2-x^4/4]_0^2=8\\pi$.",
+      "rubric_he": "$V=8\\pi$.",
+      "explanation_en": "Shell height $=4-x^2$ (from $x$-axis view). $V=2\\pi\\int_0^2 x(4-x^2)\\,dx$.",
+      "explanation_he": "גובה קליפה $=4-x^2$. $V=8\\pi$.",
+      "skill_atoms": ["volume_shell_method"]
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "Area between curves: $\\int (\\text{upper} - \\text{lower}) dx$ — always.",
-      "Average value: $\\frac{1}{b-a}\\int_a^b f$.",
-      "Disk method: $V = \\pi \\int f(x)^2 dx$ (rotating around the $x$-axis).",
-      "Washer method: $V = \\pi \\int (f^2 - g^2) dx$ — NOT $(f-g)^2$.",
-      "Distance: $\\int |v| dt$; displacement: $\\int v dt$."
+      "Always draw the region before integrating.",
+      "For area: find intersections, check which function is on top.",
+      "For volume: match the method to the axis of rotation.",
+      "Shell method avoids solving for x in terms of y."
     ],
     "common_misconceptions": [
       {
-        "wrong": "Washer = $\\pi \\int (f - g)^2 dx$",
-        "correction": "Washer = $\\pi \\int (f^2 - g^2) dx$. Square first, then subtract.",
-        "detect_phrase_en": "washer subtract first",
-        "detect_phrase_he": "טבעת מחסירים קודם"
-      },
-      {
-        "wrong": "Average value = $\\int_a^b f$",
-        "correction": "Average = $\\frac{1}{b-a}\\int_a^b f$. The $\\frac{1}{b-a}$ factor is essential.",
-        "detect_phrase_en": "average value integral",
-        "detect_phrase_he": "ערך ממוצע אינטגרל"
-      },
-      {
-        "wrong": "Total distance = $|\\int v \\, dt|$",
-        "correction": "Total distance = $\\int |v| \\, dt$. Absolute value INSIDE.",
-        "detect_phrase_en": "distance absolute value",
-        "detect_phrase_he": "דרך ערך מוחלט"
+        "wrong": "Squaring the integral in disk method",
+        "correction": "V = π·integral of [f(x)]² dx, not (π·integral of f(x)dx)².",
+        "detect_phrase_en": "square the integral volume",
+        "detect_phrase_he": "ריבוע האינטגרל נפח"
       }
     ],
-    "skill_atoms_unlocked": [
-      "area_under_curve",
-      "area_between_curves",
-      "average_value",
-      "disk_method",
-      "washer_method",
-      "distance_vs_displacement",
-      "intersection_points",
-      "absolute_value_integral"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "integrals_techniques",
-      "definite_integrals"
-    ],
-    "tutor_pacing_hint": "Always start every problem with a SKETCH. The picture reveals upper/lower curves, intersection points, sign of $v(t)$. Without a sketch, errors compound.",
-    "coach_drill_skills": [
-      "area_between_curves",
-      "disk_method",
-      "washer_method",
-      "average_value"
-    ],
-    "diagnostic_signals": {
-      "if_learner_doesn't_sketch": "Force them to draw before integrating; even a rough graph.",
-      "if_learner_uses_f_minus_g_squared_in_washer": "Concrete counterexample: $f = 2, g = 1$ on $[0,1]$ ⇒ $V = \\pi(4 - 1) \\cdot 1 = 3\\pi$ vs $(2-1)^2 \\pi = \\pi$. Big difference."
-    },
-    "next_recommended": [
-      "differential_equations_intro",
-      "uni_integrals"
-    ]
+    "skill_atoms_unlocked": ["area_between_curves","volume_disk_method","volume_washer_method","volume_shell_method"],
+    "tutor_pacing_hint": "Area first (builds intuition). Then disk. Then washer (extension of disk). Then shell (different setup).",
+    "next_recommended": ["improper_integrals","integrals_techniques"]
   }
 }

@@ -2,30 +2,143 @@
   "concept_id": "orthogonal_matrices",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
   "title_en": "Orthogonal Matrices",
   "title_he": "מטריצות אורתוגונליות",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "summary_en": "Definition and properties of orthogonal matrices. QᵀQ = I, rotations, reflections, preservation of norms and angles, determinant ±1.",
+  "summary_he": "הגדרה ותכונות של מטריצות אורתוגונליות. $Q^TQ=I$, סיבובים, שיקופים, שימור נורמות וזוויות, דטרמיננט $\\pm1$.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Orthogonal Matrices.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-מטריצות אורתוגונליות.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Transformations That Preserve Geometry",
+      "title_he": "טרנספורמציות ששומרות על הגיאומטריה",
+      "body_en_md": "Some linear transformations preserve the shape of objects — they don't stretch or shear, just **rotate** or **reflect**. These are represented by **orthogonal matrices**.\n\nOrthogonal matrices are the matrices of isometries — distance-preserving transformations.\n\nApplications: computer graphics (rotations), signal processing (FFT), quantum mechanics (unitary operators).",
+      "body_he_md": "כמה טרנספורמציות שומרות על צורות — לא מתיחה, רק **סיבוב** או **שיקוף**. אלה **מטריצות אורתוגונליות** — מטריצות של איזומטריות.\n\nיישומים: גרפיקה (סיבובים), עיבוד אותות, מכניקת הקוונטים."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Orthogonal Matrices: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Orthogonal Matrices.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-מטריצות אורתוגונליות: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-מטריצות אורתוגונליות.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Orthogonal Matrix — Definition and Properties",
+      "title_he": "מטריצה אורתוגונלית — הגדרה ותכונות",
+      "body_en_md": "A square matrix $Q$ is **orthogonal** if:\n$$Q^TQ = QQ^T = I \\quad \\Leftrightarrow \\quad Q^{-1}=Q^T.$$\n\n**Equivalent conditions:**\n- The columns of $Q$ form an orthonormal basis: $\\langle q_i,q_j\\rangle=\\delta_{ij}$.\n- The rows of $Q$ form an orthonormal basis.\n- $Q$ preserves inner products: $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$.\n- $Q$ preserves norms: $\\|Qv\\|=\\|v\\|$.\n\n**Determinant:** $\\det(Q)=\\pm1$.\n- $\\det(Q)=+1$: rotation (orientation preserved).\n- $\\det(Q)=-1$: reflection (orientation reversed).",
+      "body_he_md": "**מטריצה אורתוגונלית:** $Q^TQ=I$, כלומר $Q^{-1}=Q^T$.\n\nתנאים שקולים:\n- עמודות = בסיס אורתונורמלי.\n- שורות = בסיס אורתונורמלי.\n- שומרת מכפלות פנימיות ונורמות.\n\n$\\det(Q)=\\pm1$. $+1$: סיבוב. $-1$: שיקוף."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Rotation and Reflection Matrices",
+      "title_he": "מטריצות סיבוב ושיקוף",
+      "body_en_md": "**2D rotation by angle $\\theta$:**\n$$R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}, \\quad \\det=1.$$\n\n**2D reflection over line at angle $\\theta/2$:**\n$$H=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\\\sin\\theta&-\\cos\\theta\\end{pmatrix}, \\quad \\det=-1.$$\n\n**Reflection over $x$-axis:** $H_x=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.\n\n**Key properties:**\n- $R_{\\alpha}R_{\\beta}=R_{\\alpha+\\beta}$.\n- $R_\\theta^{-1}=R_{-\\theta}=R_\\theta^T$.\n- Eigenvalues of orthogonal matrix: $|\\lambda|=1$ (complex: $e^{\\pm i\\theta}$; real: $\\pm1$).",
+      "body_he_md": "**סיבוב:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$, $\\det=1$.\n\n**שיקוף:** $\\det=-1$.\n\n**ערכים עצמיים:** $|\\lambda|=1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Verifying Orthogonality",
+      "title_he": "דוגמה פתורה 1 — בדיקת אורתוגונליות",
+      "body_en_md": "**Is $Q=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$ orthogonal?**\n\n$Q^T=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}$.\n\n$Q^TQ=\\frac{1}{2}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}=\\frac{1}{2}\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}=I$. ✓\n\nYes, $Q$ is orthogonal. $\\det(Q)=(1\\cdot1-(-1)\\cdot1)/2=(1+1)/2\\cdot\\frac{1}{\\sqrt{2}^2}=2/2=1$. It's a rotation by $45°$.",
+      "body_he_md": "$Q^TQ=I$ ✓. $\\det(Q)=1$ → סיבוב ב-$45°$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Check if the columns of $Q$ in example 1 are orthonormal.",
+      "body_he_md": "בדוק שהעמודות של $Q$ בדוגמה 1 הן אורתונורמליות.",
+      "checkpoint_solution_en": "Column 1: $\\frac{1}{\\sqrt{2}}(1,1)^T$, norm $=1$ ✓. Column 2: $\\frac{1}{\\sqrt{2}}(-1,1)^T$, norm $=1$ ✓. Dot product: $\\frac{1}{2}(1\\cdot(-1)+1\\cdot1)=0$ ✓. Orthonormal.",
+      "checkpoint_solution_he": "נורמה 1 ✓. מכפלה פנימית 0 ✓. אורתונורמלי."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Rotation Matrix",
+      "title_he": "דוגמה פתורה 2 — מטריצת סיבוב",
+      "body_en_md": "**Rotate the vector $v=(3,0)^T$ by $60°$.**\n\n$R_{60°}=\\begin{pmatrix}\\cos60°&-\\sin60°\\\\\\sin60°&\\cos60°\\end{pmatrix}=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\\\\\sqrt{3}/2&1/2\\end{pmatrix}$.\n\n$Rv=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\\\\\sqrt{3}/2&1/2\\end{pmatrix}\\begin{pmatrix}3\\\\0\\end{pmatrix}=\\begin{pmatrix}3/2\\\\3\\sqrt{3}/2\\end{pmatrix}$.\n\n**Verify norm preserved:** $\\|v\\|=3$. $\\|Rv\\|=\\sqrt{9/4+27/4}=\\sqrt{36/4}=3$. ✓",
+      "body_he_md": "$R_{60°}v=(3/2, 3\\sqrt{3}/2)^T$. $\\|Rv\\|=3=\\|v\\|$ ✓."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $R_{90°}$ and compute $R_{90°}(1,0)^T$.",
+      "body_he_md": "מצא $R_{90°}$ וחשב $R_{90°}(1,0)^T$.",
+      "checkpoint_solution_en": "$R_{90°}=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$. $R_{90°}(1,0)^T=(0,1)^T$.",
+      "checkpoint_solution_he": "$R_{90°}(1,0)^T=(0,1)^T$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Constructing an Orthogonal Matrix",
+      "title_he": "דוגמה פתורה 3 — בניית מטריצה אורתוגונלית",
+      "body_en_md": "**Build a $3\\times3$ orthogonal matrix** with first column $q_1=\\frac{1}{3}(1,2,2)^T$.\n\n**Step 1:** Verify $\\|q_1\\|=\\frac{1}{9}(1+4+4)=1$. ✓\n\n**Step 2:** Find $q_2$ orthogonal to $q_1$. Choose $q_2=\\frac{1}{\\sqrt{2}}(1,-1,0)^T$:\n$\\langle q_1,q_2\\rangle=\\frac{1}{3\\sqrt{2}}(1-2+0)=\\frac{-1}{3\\sqrt{2}}\\ne0$. Adjust: $q_2=(a,b,c)$ with $a+2b+2c=0$, $a^2+b^2+c^2=1$. Try $q_2=\\frac{1}{\\sqrt{5}}(2,-1,0)^T$: $2-2=0$ ✓, norm $=\\sqrt{5/5}=1$. ✓\n\n**Step 3:** $q_3=q_1\\times q_2$ (cross product gives orthogonal unit vector):\n$q_3=\\frac{1}{3\\sqrt{5}}(1,2,2)\\times(2,-1,0)=\\frac{1}{3\\sqrt{5}}((2\\cdot0-2\\cdot(-1)),-(1\\cdot0-2\\cdot2),(1\\cdot(-1)-2\\cdot2))=\\frac{1}{3\\sqrt{5}}(2,4,-5)$.\nNorm: $\\sqrt{4+16+25}/(3\\sqrt{5})=\\sqrt{45}/(3\\sqrt{5})=\\sqrt{45/45}=1$. ✓\n\n$$Q=\\begin{pmatrix}1/3&2/\\sqrt{5}&2/(3\\sqrt{5})\\\\2/3&-1/\\sqrt{5}&4/(3\\sqrt{5})\\\\2/3&0&-5/(3\\sqrt{5})\\end{pmatrix}$$",
+      "body_he_md": "$q_1=\\frac{1}{3}(1,2,2)^T$. $q_2=\\frac{1}{\\sqrt{5}}(2,-1,0)^T$. $q_3=q_1\\times q_2=\\frac{1}{3\\sqrt{5}}(2,4,-5)^T$.\n$Q=[q_1|q_2|q_3]$ — אורתוגונלית."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Orthogonal Matrices",
+      "title_he": "מדריך שיטה — מטריצות אורתוגונליות",
+      "body_en_md": "**Check if $Q$ is orthogonal:**\n1. Compute $Q^TQ$. If $=I$: orthogonal.\n2. OR: check each column is unit-length and columns are mutually orthogonal.\n\n**Inverse of orthogonal:** $Q^{-1}=Q^T$.\n\n**Determinant:**\n- $\\det(Q)=+1$: rotation (in SO(n)).\n- $\\det(Q)=-1$: reflection/improper rotation.\n\n**2D rotation:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n\n**Applying $Q$:** $\\|Qv\\|=\\|v\\|$ (norms preserved), $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$ (angles preserved).",
+      "body_he_md": "**בדיקה:** $Q^TQ=I$, או עמודות אורתונורמליות.\n\n**הופכית:** $Q^{-1}=Q^T$.\n\n**$\\det=+1$:** סיבוב. **$\\det=-1$:** שיקוף.\n\n**$R_\\theta$:** $\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n\n**שימור:** נורמות וזוויות."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$Q=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$. Is it orthogonal? What transformation?","body_he":"$Q=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$. אורתוגונלית? טרנספורמציה?","solution_en":"$Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$ ✓. $\\det=1$: rotation by $90°$.","solution_he":"$Q^TQ=I$ ✓. $\\det=1$ → סיבוב $90°$."},
+        {"id":"e2","difficulty":"easy","body_en":"$Q=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$. $\\det(Q)$? What transformation?","body_he":"$\\det\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$? טרנספורמציה?","solution_en":"$\\det=-1$: reflection over $x$-axis.","solution_he":"$\\det=-1$ → שיקוף מעל ציר $x$."},
+        {"id":"e3","difficulty":"easy","body_en":"If $Q$ is orthogonal, what is $Q^{-1}$?","body_he":"אם $Q$ אורתוגונלית, מה $Q^{-1}$?","solution_en":"$Q^{-1}=Q^T$.","solution_he":"$Q^{-1}=Q^T$."},
+        {"id":"e4","difficulty":"easy","body_en":"$v=(1,0)^T$. $R_{45°}v=?$","body_he":"$R_{45°}(1,0)^T=?$","solution_en":"$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$.","solution_he":"$(1/\\sqrt{2},1/\\sqrt{2})^T$."},
+        {"id":"e5","difficulty":"medium","body_en":"Verify $Q=\\frac{1}{5}\\begin{pmatrix}3&4\\\\-4&3\\end{pmatrix}$ is orthogonal. Find $\\det$ and identify.","body_he":"בדוק ש-$Q=\\frac{1}{5}\\begin{pmatrix}3&4\\\\-4&3\\end{pmatrix}$ אורתוגונלית. $\\det$?","solution_en":"Columns: $(3/5,−4/5)$, $(4/5,3/5)$. Norms: $\\sqrt{9+16}/5=1$. Dot: $(3\\cdot4+(-4)\\cdot3)/25=0$ ✓. $\\det=(9+16)/25=1$. Rotation by $\\theta=\\arctan(-4/3)$.","solution_he":"אורתוגונלית ✓. $\\det=1$ → סיבוב."},
+        {"id":"e6","difficulty":"medium","body_en":"If $Q_1$ and $Q_2$ are orthogonal, is $Q_1Q_2$ orthogonal?","body_he":"אם $Q_1,Q_2$ אורתוגונליות, האם $Q_1Q_2$ אורתוגונלית?","solution_en":"$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=Q_2^TQ_2=I$. Yes.","solution_he":"$(Q_1Q_2)^T(Q_1Q_2)=I$ ✓."},
+        {"id":"e7","difficulty":"medium","body_en":"$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\\\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det(Q)$?","body_he":"$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\\\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det$?","solution_en":"$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.","solution_he":"$\\det=-1$ → שיקוף."},
+        {"id":"e8","difficulty":"medium","body_en":"Eigenvalues of $R_{90°}$?","body_he":"ערכים עצמיים של $R_{90°}$?","solution_en":"$\\det(R_{90°}-\\lambda I)=\\lambda^2+1=0\\Rightarrow\\lambda=\\pm i$. Complex eigenvalues — no real eigenvalues (no invariant lines for $90°$ rotation).","solution_he":"$\\lambda=\\pm i$ — אין ערכים עצמיים ממשיים."},
+        {"id":"e9","difficulty":"medium","body_en":"For an orthogonal $Q$: $|\\det(Q)|=1$. Prove this.","body_he":"$Q$ אורתוגונלית → $|\\det(Q)|=1$. הוכח.","solution_en":"$Q^TQ=I\\Rightarrow\\det(Q^T)\\det(Q)=1\\Rightarrow(\\det Q)^2=1\\Rightarrow|\\det Q|=1$.","solution_he":"$(\\det Q)^2=\\det(Q^TQ)=\\det(I)=1$."},
+        {"id":"e10","difficulty":"hard","body_en":"Find all $2\\times2$ orthogonal matrices with $\\det=-1$ (reflections).","body_he":"מצא את כל המטריצות האורתוגונליות $2\\times2$ עם $\\det=-1$.","solution_en":"General form: $\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\\\sin\\theta&-\\cos\\theta\\end{pmatrix}$ for any $\\theta$. These are reflections over lines at angle $\\theta/2$.","solution_he":"$\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\\\sin\\theta&-\\cos\\theta\\end{pmatrix}$ לכל $\\theta$ (שיקופים על קו בזווית $\\theta/2$)."},
+        {"id":"e11","difficulty":"hard","body_en":"$Q$ orthogonal. Show: if $\\lambda$ is eigenvalue, $|\\lambda|=1$.","body_he":"$Q$ אורתוגונלית, $\\lambda$ ערך עצמי. הוכח $|\\lambda|=1$.","solution_en":"$Qv=\\lambda v\\Rightarrow\\|Qv\\|=|\\lambda|\\|v\\|$. Since $Q$ preserves norms: $\\|Qv\\|=\\|v\\|$. So $|\\lambda|\\|v\\|=\\|v\\|\\Rightarrow|\\lambda|=1$.","solution_he":"$\\|Qv\\|=\\|v\\|$ → $|\\lambda|\\|v\\|=\\|v\\|$ → $|\\lambda|=1$."},
+        {"id":"e12","difficulty":"hard","body_en":"$Q_1=R_{30°}$, $Q_2=R_{60°}$. Compute $Q_1^T Q_2$.","body_he":"$Q_1=R_{30°}$, $Q_2=R_{60°}$. חשב $Q_1^TQ_2$.","solution_en":"$Q_1^T=R_{30°}^T=R_{-30°}=R_{330°}$. $Q_1^TQ_2=R_{-30°}R_{60°}=R_{30°}$. ","solution_he":"$Q_1^TQ_2=R_{-30°+60°}=R_{30°}$."},
+        {"id":"e13","difficulty":"hard","body_en":"Prove that $\\|Qv\\|=\\|v\\|$ for any orthogonal $Q$ and any vector $v$.","body_he":"הוכח $\\|Qv\\|=\\|v\\|$ לכל $Q$ אורתוגונלית ו-$v$.","solution_en":"$\\|Qv\\|^2=\\langle Qv,Qv\\rangle=(Qv)^T(Qv)=v^TQ^TQv=v^TIv=v^Tv=\\|v\\|^2$.","solution_he":"$\\|Qv\\|^2=v^TQ^TQv=v^Tv=\\|v\\|^2$ ✓."}
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **$Q^{-1}=Q^T$, not $Q^{-1}=Q$** (unless $Q=Q^T$, i.e., symmetric).\n2. **Rotation matrix**: counter-clockwise by $\\theta$ — don't mix up row/column conventions.\n3. **$\\det=\\pm1$, not just $\\det=1$** — reflections also give orthogonal matrices.\n4. **Complex eigenvalues**: real orthogonal matrices can have complex eigenvalues ($\\pm i$ for $90°$ rotation).",
+      "body_he_md": "1. **$Q^{-1}=Q^T$** (לא $Q^{-1}=Q$ בכלל).\n2. **כיוון סיבוב**: נגד כיוון שעון — אל תבלבל שורות/עמודות.\n3. **$\\det=\\pm1$** — שיקופים גם אורתוגונליות.\n4. **ערכים עצמיים מרוכבים**: אפשרי למטריצות אורתוגונליות ממשיות."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- Orthogonal: $Q^TQ=I$, $Q^{-1}=Q^T$.\n- Columns (and rows) are orthonormal.\n- $\\det(Q)=\\pm1$: $+1$ rotation, $-1$ reflection.\n- $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n- Norms and inner products preserved.",
+      "body_he_md": "- $Q^TQ=I$, $Q^{-1}=Q^T$.\n- עמודות/שורות — בסיס אורתונורמלי.\n- $\\det=+1$: סיבוב; $-1$: שיקוף.\n- $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{pmatrix}$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Orthogonal matrix: $Q^TQ=I$, $Q^{-1}=Q^T$.\n- $\\det=\\pm1$.\n- Preserves lengths and angles.\n- $+1$: rotation; $-1$: reflection.",
+      "body_he_md": "- $Q^TQ=I$, $Q^{-1}=Q^T$.\n- $\\det=\\pm1$.\n- שימור אורכים וזוויות.\n- $+1$: סיבוב; $-1$: שיקוף."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Orthogonal Matrices."
+  "questions": [
+    {"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"$Q^TQ=I$ means:","stem_he":"$Q^TQ=I$ פירושו:","options_en":["$Q$ is diagonal","$Q$ is orthogonal","$Q=Q^T$","$Q=I$"],"options_he":["$Q$ אלכסונית","$Q$ אורתוגונלית","$Q=Q^T$","$Q=I$"],"correct_index":1,"explanation_en":"Definition of orthogonal matrix.","explanation_he":"הגדרת מטריצה אורתוגונלית.","skill_atoms":["orthogonal_matrix","definition"]}
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "Q is orthogonal iff Q^TQ = I (equivalently, Q^{-1} = Q^T).",
+      "Columns (and rows) form an orthonormal basis.",
+      "det(Q) = ±1: +1 = rotation, -1 = reflection.",
+      "Orthogonal matrices preserve norms and inner products."
+    ],
+    "common_misconceptions": [
+      {"wrong": "Orthogonal means Q = Q^T","correction": "Orthogonal means Q^TQ = I (not necessarily symmetric).","detect_phrase_en":"orthogonal symmetric equal transpose","detect_phrase_he":"אורתוגונלי סימטרי שווה מחכפלה"}
+    ],
+    "skill_atoms_unlocked": ["orthogonal_matrix","rotation_matrix","reflection_matrix","det_orthogonal","norm_preservation"],
+    "tutor_pacing_hint": "Definition + verification first, then rotation/reflection examples, then properties.",
+    "next_recommended": ["la_orthogonality","inner_product_gram_schmidt"]
+  }
 }

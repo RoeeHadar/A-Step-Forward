@@ -2,30 +2,144 @@
   "concept_id": "determinants_cramer",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Determinants Cramer",
-  "title_he": "דטרמיננטות וכלל קramer",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "Determinants and Cramer's Rule",
+  "title_he": "דטרמיננטים וכלל קרמר",
+  "summary_en": "Definition and properties of determinants, cofactor expansion, row operations, Cramer's rule for solving linear systems.",
+  "summary_he": "הגדרה ותכונות של דטרמיננטים, פיתוח לפי קופקטורים, פעולות שורה, כלל קרמר לפתרון מערכות לינאריות.",
+  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Determinants Cramer.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-דטרמיננטות וכלל קramer.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "What Is a Determinant?",
+      "title_he": "מהו דטרמיננט?",
+      "body_en_md": "The **determinant** is a scalar associated with every square matrix. It encodes geometric and algebraic information:\n- $\\det(A)\\ne0$ iff the matrix is invertible.\n- $|\\det(A)|$ = volume scaling factor of the linear transformation.\n- Sign of $\\det(A)$ = whether orientation is preserved.\n\n**Cramer's Rule** uses determinants to give explicit formulas for solutions of $Ax=b$. It's mostly used for $2\\times2$ and $3\\times3$ systems in exams.",
+      "body_he_md": "**דטרמיננט** הוא סקלר הקשור למטריצה ריבועית:\n- $\\det(A)\\ne0$ אמ\"מ המטריצה הפיכה.\n- $|\\det(A)|$ = גורם קנה-מידה נפחי.\n- כלל קרמר: נוסחאות מפורשות לפתרון $Ax=b$."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Determinants Cramer: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Determinants Cramer.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-דטרמיננטות וכלל קramer: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-דטרמיננטות וכלל קramer.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Determinant Formulas",
+      "title_he": "נוסחאות דטרמיננט",
+      "body_en_md": "**$2\\times2$:**\n$$\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}=ad-bc$$\n\n**$3\\times3$ (cofactor expansion along first row):**\n$$\\det(A)=a_{11}C_{11}+a_{12}C_{12}+a_{13}C_{13}$$\nwhere $C_{ij}=(-1)^{i+j}M_{ij}$ and $M_{ij}$ = minor (determinant of submatrix with row $i$, col $j$ removed).\n\n**Cramer's rule** for $Ax=b$, $A$ invertible:\n$$x_i=\\frac{\\det(A_i)}{\\det(A)}$$\nwhere $A_i$ = $A$ with $i$-th column replaced by $b$.",
+      "body_he_md": "**$2\\times2$:** $\\det=ad-bc$.\n\n**$3\\times3$:** פיתוח לפי שורה ראשונה עם קופקטורים.\n\n**קרמר:** $x_i=\\det(A_i)/\\det(A)$, כשעמודה $i$ של $A$ מוחלפת ב-$b$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Properties of Determinants",
+      "title_he": "תכונות דטרמיננטים",
+      "body_en_md": "1. $\\det(I)=1$.\n2. Interchanging two rows: $\\det$ changes sign.\n3. Multiplying a row by $k$: $\\det$ multiplied by $k$.\n4. Adding a multiple of one row to another: $\\det$ unchanged.\n5. $\\det(AB)=\\det(A)\\cdot\\det(B)$.\n6. $\\det(A^T)=\\det(A)$.\n7. $\\det(A^{-1})=1/\\det(A)$.\n8. If two rows are identical: $\\det=0$.\n9. If a row is all zeros: $\\det=0$.\n10. Upper/lower triangular: $\\det=$ product of diagonal entries.",
+      "body_he_md": "1. $\\det(I)=1$. 2. החלפת שורות → שינוי סימן. 3. כפל שורה ב-$k$ → $\\det$ כפול $k$. 4. הוספת כפולת שורה → $\\det$ ללא שינוי. 5. $\\det(AB)=\\det(A)\\det(B)$. 6. $\\det(A^T)=\\det(A)$. 7. משולשית → מכפלת האלכסון."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — 2×2 Determinant and Cramer",
+      "title_he": "דוגמה פתורה 1 — דטרמיננט 2×2 וקרמר",
+      "body_en_md": "**Solve** by Cramer's rule: $2x+3y=8$, $x-y=1$.\n\n$A=\\begin{pmatrix}2&3\\\\1&-1\\end{pmatrix}$, $b=\\begin{pmatrix}8\\\\1\\end{pmatrix}$.\n\n$\\det(A)=2(-1)-3(1)=-5$.\n\n$A_1=\\begin{pmatrix}8&3\\\\1&-1\\end{pmatrix}$: $\\det(A_1)=-8-3=-11$. $x_1=-11/-5=2.2$.\n\n$A_2=\\begin{pmatrix}2&8\\\\1&1\\end{pmatrix}$: $\\det(A_2)=2-8=-6$. $x_2=-6/-5=1.2$.\n\n**Answer:** $x=2.2$, $y=1.2$. Verify: $2(2.2)+3(1.2)=4.4+3.6=8$. ✓",
+      "body_he_md": "$\\det(A)=-5$. $x=(-11)/(-5)=2.2$, $y=(-6)/(-5)=1.2$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $\\det\\begin{pmatrix}3&-2\\\\4&5\\end{pmatrix}$.",
+      "body_he_md": "חשב $\\det\\begin{pmatrix}3&-2\\\\4&5\\end{pmatrix}$.",
+      "checkpoint_solution_en": "$3\\cdot5-(-2)\\cdot4=15+8=23$.",
+      "checkpoint_solution_he": "$15+8=23$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — 3×3 Determinant (Cofactor Expansion)",
+      "title_he": "דוגמה פתורה 2 — דטרמיננט 3×3 (פיתוח קופקטורים)",
+      "body_en_md": "$$A=\\begin{pmatrix}1&2&3\\\\0&4&5\\\\1&0&6\\end{pmatrix}$$\n\nExpand along first row:\n$\\det=1\\cdot\\det\\begin{pmatrix}4&5\\\\0&6\\end{pmatrix}-2\\cdot\\det\\begin{pmatrix}0&5\\\\1&6\\end{pmatrix}+3\\cdot\\det\\begin{pmatrix}0&4\\\\1&0\\end{pmatrix}$\n$=1(24-0)-2(0-5)+3(0-4)=24+10-12=22$.",
+      "body_he_md": "$\\det=1(24)-2(-5)+3(-4)=24+10-12=22$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "If $A$ is $3\\times3$ with $\\det(A)=6$, find $\\det(2A)$.",
+      "body_he_md": "אם $\\det(A)=6$ ל-$A$ ממימד $3\\times3$, מצא $\\det(2A)$.",
+      "checkpoint_solution_en": "$\\det(2A)=2^3\\det(A)=8\\times6=48$.",
+      "checkpoint_solution_he": "$\\det(2A)=8\\times6=48$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Cramer's Rule for 3×3 System",
+      "title_he": "דוגמה פתורה 3 — כלל קרמר למערכת 3×3",
+      "body_en_md": "**Solve:** $x+y+z=6$, $2x-y+z=3$, $x+2y-z=2$.\n\n$A=\\begin{pmatrix}1&1&1\\\\2&-1&1\\\\1&2&-1\\end{pmatrix}$, $b=\\begin{pmatrix}6\\\\3\\\\2\\end{pmatrix}$.\n\n**Step 1:** $\\det(A)=1[(1)(−1)−(1)(2)]−1[(2)(−1)−(1)(1)]+1[(2)(2)−(−1)(1)]$\n$=1(−1−2)−1(−2−1)+1(4+1)=−3+3+5=5$.\n\n**Step 2:** $A_1$ (replace col 1 by $b$): $\\det=6[1−2]−1[3(−1)−1(2)]+1[3\\cdot2−(−1)\\cdot2]=−6−(−5)+(8)=7$. $x=7/5=1.4$.\n\n(Remaining Cramer calculations give $y=1.6$, $z=3.0$.)",
+      "body_he_md": "$\\det(A)=5$. $x=7/5=1.4$, $y=8/5=1.6$, $z=15/5=3$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Determinants and Cramer",
+      "title_he": "מדריך שיטה — דטרמיננטים וקרמר",
+      "body_en_md": "**$2\\times2$:** $\\det=ad-bc$.\n\n**$3\\times3$ cofactor:** Expand along row with most zeros. $C_{ij}=(-1)^{i+j}M_{ij}$.\n\n**Row operations on determinant:**\n- Row swap → $\\times(-1)$.\n- Row $\\times k$ → $\\det\\times k$.\n- Add multiple of row → no change.\n\n**Cramer's rule:**\n1. Compute $\\det(A)$. If 0: no unique solution.\n2. For each variable $x_i$: replace col $i$ by $b$, compute new det.\n3. $x_i=\\det(A_i)/\\det(A)$.",
+      "body_he_md": "**$2\\times2$:** $ad-bc$.\n\n**$3\\times3$:** פיתוח לאורך שורה עם כמה אפסים.\n\n**פעולות שורה:** החלפה → $(-1)$. כפל שורה ב-$k$ → $\\det\\times k$. חיבור → ללא שינוי.\n\n**קרמר:** $x_i=\\det(A_i)/\\det(A)$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$","body_he":"$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$","solution_en":"$20-6=14$.","solution_he":"$14$."},
+        {"id":"e2","difficulty":"easy","body_en":"$\\det\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$","body_he":"$\\det(I_2)$","solution_en":"$1$.","solution_he":"$1$."},
+        {"id":"e3","difficulty":"easy","body_en":"Use Cramer's rule: $x+y=5$, $2x-y=1$.","body_he":"קרמר: $x+y=5$, $2x-y=1$.","solution_en":"$\\det(A)=-3$. $x=(-5-1)/(-3)=2$, $y=(1-10)/(-3)=3$.","solution_he":"$x=2$, $y=3$."},
+        {"id":"e4","difficulty":"easy","body_en":"$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. Find $\\det(A)$.","body_he":"$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. $\\det(A)$?","solution_en":"Diagonal: $3\\times5=15$.","solution_he":"$15$."},
+        {"id":"e5","difficulty":"medium","body_en":"$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$","body_he":"$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$","solution_en":"Expand along row 1: $2[(-1)(2)-(4)(0)]-1[(3)(2)-(4)(1)]+0=2(-2)-1(2)=-4-2=-6$.","solution_he":"$-6$."},
+        {"id":"e6","difficulty":"medium","body_en":"$\\det(A)=4$. $B$ is $A$ with two rows swapped. Find $\\det(B)$.","body_he":"$\\det(A)=4$. $B$ — שורות מוחלפות. $\\det(B)$?","solution_en":"$\\det(B)=-\\det(A)=-4$.","solution_he":"$-4$."},
+        {"id":"e7","difficulty":"medium","body_en":"Use Cramer for: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.","body_he":"קרמר: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.","solution_en":"$\\det(A)=1[(1+1)+1[(2+1)+1[(2-1)]=2+3+1=6$. $x=\\det(A_1)/6$... $x=1$, $y=-1$, $z=2$.","solution_he":"$x=1$, $y=-1$, $z=2$."},
+        {"id":"e8","difficulty":"medium","body_en":"$A$ is $3\\times3$. $\\det(A)=5$. Find $\\det(3A)$.","body_he":"$\\det(A)=5$, $3\\times3$. $\\det(3A)$?","solution_en":"$3^3\\det(A)=27\\times5=135$.","solution_he":"$135$."},
+        {"id":"e9","difficulty":"medium","body_en":"Prove that if $A$ has two identical rows, $\\det(A)=0$.","body_he":"הוכח שאם ל-$A$ שתי שורות זהות, $\\det(A)=0$.","solution_en":"Swapping the two identical rows changes sign: $\\det(A)=-\\det(A)$ → $2\\det(A)=0$ → $\\det(A)=0$.","solution_he":"החלפת שורות זהות: $\\det=-\\det$ → $2\\det=0$ → $\\det=0$."},
+        {"id":"e10","difficulty":"hard","body_en":"Find all $k$ such that $\\det\\begin{pmatrix}k&1\\\\3&k-2\\end{pmatrix}=0$.","body_he":"מצא $k$: $\\det\\begin{pmatrix}k&1\\\\3&k-2\\end{pmatrix}=0$.","solution_en":"$k(k-2)-3=k^2-2k-3=(k-3)(k+1)=0$. $k=3$ or $k=-1$.","solution_he":"$k=3$ או $k=-1$."},
+        {"id":"e11","difficulty":"hard","body_en":"$\\det(A)=7$, $\\det(B)=3$. Find $\\det(AB)$, $\\det(A^{-1})$, $\\det(A^2)$.","body_he":"$\\det(A)=7$, $\\det(B)=3$. $\\det(AB)$, $\\det(A^{-1})$, $\\det(A^2)$?","solution_en":"$\\det(AB)=21$. $\\det(A^{-1})=1/7$. $\\det(A^2)=49$.","solution_he":"$21$, $1/7$, $49$."},
+        {"id":"e12","difficulty":"hard","body_en":"Use row operations to simplify $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.","body_he":"פשט ע\"י פעולות שורה ומצא $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.","solution_en":"$R_2\\to R_2-4R_1$, $R_3\\to R_3-7R_1$: $\\begin{pmatrix}1&2&3\\\\0&-3&-6\\\\0&-6&-12\\end{pmatrix}$. $R_3\\to R_3-2R_2$: $\\begin{pmatrix}1&2&3\\\\0&-3&-6\\\\0&0&0\\end{pmatrix}$. Third row all zeros → $\\det=0$.","solution_he":"שורה שלישית מתאפסת → $\\det=0$."},
+        {"id":"e13","difficulty":"hard","body_en":"State and prove: $\\det(AB)=\\det(A)\\det(B)$ for $2\\times2$ matrices.","body_he":"הוכח: $\\det(AB)=\\det(A)\\det(B)$ ל-$2\\times2$.","solution_en":"Let $A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$, $B=\\begin{pmatrix}e&f\\\\g&h\\end{pmatrix}$. $AB=\\begin{pmatrix}ae+bg&af+bh\\\\ce+dg&cf+dh\\end{pmatrix}$. $\\det(AB)=(ae+bg)(cf+dh)-(af+bh)(ce+dg)=$ (expand and collect) $= (ad-bc)(eh-fg)=\\det(A)\\det(B)$.","solution_he":"חשב ישירות: $(ae+bg)(cf+dh)-(af+bh)(ce+dg)=(ad-bc)(eh-fg)$."}
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Sign in cofactor**: $C_{ij}=(-1)^{i+j}M_{ij}$. The checkerboard sign pattern for $3\\times3$: $+,-,+$ / $-,+,-$ / $+,-,+$.\n2. **Cramer requires $\\det(A)\\ne0$**: if $\\det(A)=0$, Cramer doesn't apply.\n3. **$\\det(kA)=k^n\\det(A)$** for $n\\times n$ matrix, not $k\\cdot\\det(A)$.",
+      "body_he_md": "1. **סימן קופקטור:** $(-1)^{i+j}$.\n2. **קרמר דורש $\\det(A)\\ne0$**.\n3. **$\\det(kA)=k^n\\det(A)$** — לא $k\\cdot\\det$."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- $2\\times2$: $\\det=ad-bc$.\n- $3\\times3$: cofactor expansion, watch signs.\n- Row swap: $\\times(-1)$. Row $\\times k$: $\\det\\times k$. Add multiple: no change.\n- Cramer: $x_i=\\det(A_i)/\\det(A)$.\n- $\\det(AB)=\\det(A)\\det(B)$.",
+      "body_he_md": "- $2\\times2$: $ad-bc$. $3\\times3$: פיתוח קופקטורים.\n- פעולות שורה → אפקט על $\\det$.\n- קרמר: $x_i=\\det(A_i)/\\det(A)$.\n- $\\det(AB)=\\det(A)\\det(B)$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Determinant: scalar test for invertibility, encodes volume.\n- $\\det=0$: singular. $\\det\\ne0$: invertible.\n- Cramer's rule: explicit formula using determinants.",
+      "body_he_md": "- $\\det=0$: סינגולרית. $\\det\\ne0$: הפיכה.\n- קרמר: $x_i=\\det(A_i)/\\det(A)$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Determinants Cramer."
+  "questions": [
+    {"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"$\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}=$","stem_he":"$\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}=$","options_en":["10","14","6","8"],"options_he":["10","14","6","8"],"correct_index":0,"explanation_en":"$4\\cdot3-2\\cdot1=12-2=10$.","explanation_he":"$12-2=10$.","skill_atoms":["determinant_2x2"]}
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "det(A) = 0 iff A is singular (non-invertible).",
+      "2×2: det = ad - bc.",
+      "3×3: cofactor expansion; sign = (-1)^(i+j).",
+      "Cramer: x_i = det(A_i)/det(A).",
+      "det(AB) = det(A)det(B)."
+    ],
+    "common_misconceptions": [
+      {"wrong": "det(kA) = k·det(A)","correction": "det(kA) = k^n·det(A) for n×n matrix.","detect_phrase_en":"det scalar multiple","detect_phrase_he":"דטרמיננט כפל סקלרי"}
+    ],
+    "skill_atoms_unlocked": ["determinant_2x2","determinant_3x3","cofactor_expansion","cramer_rule","det_properties"],
+    "tutor_pacing_hint": "2×2 det first, then properties, then 3×3, then Cramer.",
+    "next_recommended": ["matrix_operations_inverse","la_matrices"]
+  }
 }

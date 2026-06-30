@@ -1,156 +1,146 @@
 {
   "concept_id": "limits_4pt",
-  "subject": "high_school_math_4pt",
-  "level": "4pt",
-  "math_track": [
-    "4pt"
-  ],
-  "title_en": "Limits — Intuitive Approach",
-  "title_he": "גבולות — גישה אינטואיטיבית",
-  "summary_en": "Intuitive limits at 4 units: substitution, algebraic simplification, asymptotes, and the link to derivatives — core Bagrut 804 skills.",
-  "summary_he": "גבולות אינטואיטיביים ב-4 יחידות: הצבה, פישוט אלגברי, אסימptotות וקשר לנגזרות — מיומנויות מרכזיות בבגרות 804.",
-  "est_minutes": 25,
+  "subject": "math",
+  "level": "high_school",
+  "math_track": ["4pt"],
+  "title_en": "Limits (4-Point Bagrut Level)",
+  "title_he": "גבולות (רמת בגרות 4 יחידות)",
+  "summary_en": "Limit definition, limit laws, one-sided limits, limits involving infinity, indeterminate forms (0/0, ∞/∞), L'Hôpital's rule, continuity.",
+  "summary_he": "הגדרת גבול, חוקי גבולות, גבולות חד-צדדיים, גבולות באינסוף, צורות לא-קצובות, כלל לופיטל, רציפות.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What is a limit?",
-      "title_he": "מהו גבול?",
-      "body_en_md": "The notation $\\lim_{x \\to a} f(x) = L$ means: as $x$ gets **arbitrarily close** to $a$ (without necessarily equalling $a$), the values $f(x)$ get arbitrarily close to $L$.\n\n**Key idea:** We care about the **approach**, not the value at $a$ itself.\n\n**Table of values** (for $f(x) = \\frac{x^2 - 4}{x - 2}$ near $x = 2$):\n\n| $x$ | 1.9 | 1.99 | 2.01 | 2.1 |\n|---|---|---|---|---|\n| $f(x)$ | 3.9 | 3.99 | 4.01 | 4.1 |\n\n$f(2)$ is **undefined** (division by zero), yet the limit as $x \\to 2$ is clearly **4**.\n\n**Limit vs function value:**\n- $\\lim_{x \\to 2} f(x) = 4$ ✓ (approach behaviour)\n- $f(2)$ undefined ✗ (plugging in fails)\n\n**Graph reading:** Trace the curve toward $x = a$ from left and right. If both sides approach the same height $L$, the limit exists.",
-      "body_he_md": "הסימון $\\lim_{x \\to a} f(x) = L$ פירושו: ככל ש-$x$ מתקרב **כל כך** ל-$a$ (בלי בהכרח להיות שווה ל-$a$), הערכים $f(x)$ מתקרבים **כל כך** ל-$L$.\n\n**רעיון מפתח:** אכפת לנו מה**התקרבות**, לא מהערך ב-$a$ עצמו.\n\n**טבלת ערכים** (ל-$f(x) = \\frac{x^2 - 4}{x - 2}$ ליד $x = 2$):\n\n| $x$ | 1.9 | 1.99 | 2.01 | 2.1 |\n|---|---|---|---|---|\n| $f(x)$ | 3.9 | 3.99 | 4.01 | 4.1 |\n\n$f(2)$ **לא מוגדר** (חילוק באפס), ובכל זאת הגבול כש-$x \\to 2$ הוא בבירור **4**.\n\n**גבול מול ערך הפונקציה:**\n- $\\lim_{x \\to 2} f(x) = 4$ ✓ (התנהגות בהתקרבות)\n- $f(2)$ לא מוגדר ✗ (הצבה נכשלת)\n\n**קריאה מגרף:** עקבו אחרי העקומה לכיוון $x = a$ משמאל ומימין. אם שני הצדדים מתקרבים לאותו גובה $L$, הגבול קיים."
+      "title_en": "What Does a Limit Tell Us?",
+      "title_he": "מה אומר לנו גבול?",
+      "body_en_md": "A limit answers: **what value does a function approach** as $x$ gets arbitrarily close to some value $a$?\n\n$f(a)$ might be undefined, yet $\\lim_{x\\to a}f(x)$ might still exist. This is the key insight behind derivatives and integrals.\n\nAt the 4-point Bagrut level you are expected to:\n- Evaluate limits algebraically (factoring, conjugate).\n- Handle $\\infty$ forms.\n- Apply L'Hôpital's rule.\n- Connect limits to continuity.",
+      "body_he_md": "גבול שואל: לאיזה ערך **מתקרבת** פונקציה כש-$x$ מתקרב ל-$a$?\n\n$f(a)$ עשוי להיות לא מוגדר — אך הגבול יכול להתקיים. זוהי ליבת הגזירה והאינטגרציה.\n\nב-4 יחידות: גבולות אלגבריים, צורות $\\infty$, לופיטל, רציפות."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Limit — Formal and Informal Definitions",
+      "title_he": "גבול — הגדרות פורמליות ובלתי-פורמליות",
+      "body_en_md": "**Informal:** $\\lim_{x\\to a}f(x)=L$ means: as $x$ approaches $a$ (from either side), $f(x)$ approaches $L$.\n\n**Formal ($\\epsilon$-$\\delta$):** For every $\\epsilon>0$ there exists $\\delta>0$ such that $0<|x-a|<\\delta \\Rightarrow |f(x)-L|<\\epsilon$.\n\n**One-sided limits:**\n- $\\lim_{x\\to a^+}f(x)$: limit from the right.\n- $\\lim_{x\\to a^-}f(x)$: limit from the left.\n- The (two-sided) limit $\\lim_{x\\to a}f(x)$ exists iff both one-sided limits are equal.\n\n**Limits at infinity:** $\\lim_{x\\to\\infty}f(x)=L$ means $f(x)\\to L$ as $x\\to+\\infty$.",
+      "body_he_md": "**בלתי-פורמלי:** $\\lim_{x\\to a}f(x)=L$: כש-$x\\to a$, $f(x)\\to L$.\n\n**גבולות חד-צדדיים:** $\\lim_{x\\to a^+}$, $\\lim_{x\\to a^-}$. גבול דו-צדדי קיים אם ורק אם שני הצדדים שווים.\n\n**גבול באינסוף:** $\\lim_{x\\to\\infty}f(x)=L$."
     },
     {
       "kind": "theory",
-      "title_en": "Limits of polynomials and simple functions",
-      "title_he": "גבולות של פולינומים ופונקציות פשוטות",
-      "body_en_md": "When $f$ is **defined and continuous** at $a$, direct substitution works:\n\n$$\\lim_{x \\to 2} (3x^2 - 1) = 3(4) - 1 = 11.$$\n\n**Limits at infinity** (for rational functions): divide numerator and denominator by the **highest power** of $x$.\n\n$$\\lim_{x \\to \\infty} \\frac{2x + 1}{x - 3} = \\lim_{x \\to \\infty} \\frac{2 + \\frac{1}{x}}{1 - \\frac{3}{x}} = \\frac{2}{1} = 2.$$\n\n**Rules of thumb:**\n- Polynomial at finite $a$: substitute.\n- $\\lim_{x \\to \\infty} \\frac{\\text{deg } n}{\\text{deg } m}$: if $n < m$ → $0$; if $n = m$ → ratio of leading coefficients; if $n > m$ → $\\pm\\infty$.",
-      "body_he_md": "כאשר $f$ **מוגדרת ורציפה** ב-$a$, הצבה ישירה עובדת:\n\n$$\\lim_{x \\to 2} (3x^2 - 1) = 3(4) - 1 = 11.$$\n\n**גבולות באינסוף** (לפונקציות רציונליות): חלקו מונה ומכנה ב**חזקה הגבוהה ביותר** של $x$.\n\n$$\\lim_{x \\to \\infty} \\frac{2x + 1}{x - 3} = \\lim_{x \\to \\infty} \\frac{2 + \\frac{1}{x}}{1 - \\frac{3}{x}} = \\frac{2}{1} = 2.$$\n\n**כללי אצבע:**\n- פולינום ב-$a$ סופי: הצבה.\n- $\\lim_{x \\to \\infty} \\frac{\\text{מעלה } n}{\\text{מעלה } m}$: אם $n < m$ → $0$; אם $n = m$ → יחס מקדמי ההובלה; אם $n > m$ → $\\pm\\infty$."
+      "title_en": "Techniques for Evaluating Limits",
+      "title_he": "טכניקות לחישוב גבולות",
+      "body_en_md": "1. **Direct substitution:** If $f$ is continuous at $a$, $\\lim_{x\\to a}f(x)=f(a)$.\n\n2. **Factoring (0/0 form):** Cancel common factor.\n$$\\lim_{x\\to2}\\frac{x^2-4}{x-2}=\\lim_{x\\to2}\\frac{(x-2)(x+2)}{x-2}=\\lim_{x\\to2}(x+2)=4.$$\n\n3. **Rationalization:** Multiply by conjugate for square-root forms.\n\n4. **Limits at infinity** ($p(x)/q(x)$): Divide by highest power of $x$.\n$$\\lim_{x\\to\\infty}\\frac{3x^2+1}{2x^2-5}=\\frac{3}{2}.$$\n\n5. **L'Hôpital's rule** (for $0/0$ or $\\infty/\\infty$):\n$$\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}.$$",
+      "body_he_md": "1. **הצבה ישירה:** אם $f$ רציפה ב-$a$.\n2. **פירוק גורמים (0/0):** בטל גורם משותף.\n3. **רציונליזציה:** כפל בצמוד לשורשים.\n4. **$x\\to\\infty$:** חלק בחזקה הגבוהה ביותר.\n5. **לופיטל (0/0 או $\\infty/\\infty$):** $\\lim f/g=\\lim f'/g'$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Limits with $\\frac{0}{0}$ — algebraic simplification",
-      "title_he": "גבולות עם $\\frac{0}{0}$ — פישוט אלגברי",
-      "body_en_md": "**Factoring and cancelling:**\n\n$$\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x \\to 2} \\frac{(x-2)(x+2)}{x-2} = \\lim_{x \\to 2}(x+2) = 4.$$\n\n**Rationalizing (conjugate):**\n\n$$\\lim_{x \\to 0} \\frac{\\sqrt{x+1} - 1}{x} = \\lim_{x \\to 0} \\frac{(\\sqrt{x+1}-1)(\\sqrt{x+1}+1)}{x(\\sqrt{x+1}+1)} = \\lim_{x \\to 0} \\frac{x}{x(\\sqrt{x+1}+1)} = \\lim_{x \\to 0} \\frac{1}{\\sqrt{x+1}+1} = \\frac{1}{2}.$$\n\n**Bagrut strategy:** When direct substitution gives $\\frac{0}{0}$, try (1) factor, (2) rationalize, (3) combine fractions — then cancel the common factor.",
-      "body_he_md": "**פירוק לגורמים וביטול:**\n\n$$\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = \\lim_{x \\to 2} \\frac{(x-2)(x+2)}{x-2} = \\lim_{x \\to 2}(x+2) = 4.$$\n\n**הגיון (צמוד):**\n\n$$\\lim_{x \\to 0} \\frac{\\sqrt{x+1} - 1}{x} = \\lim_{x \\to 0} \\frac{(\\sqrt{x+1}-1)(\\sqrt{x+1}+1)}{x(\\sqrt{x+1}+1)} = \\lim_{x \\to 0} \\frac{1}{\\sqrt{x+1}+1} = \\frac{1}{2}.$$\n\n**אסטרטגיית בגרות:** כשהצבה נותנת $\\frac{0}{0}$, נסו (1) פירוק, (2) הגיון, (3) איחוד שברים — ואז בטלו את הגורם המשותף."
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Factoring (0/0 Form)",
+      "title_he": "דוגמה פתורה 1 — פירוק גורמים (צורת 0/0)",
+      "body_en_md": "Evaluate $\\displaystyle\\lim_{x\\to3}\\frac{x^2-9}{x-3}$.\n\n**Step 1:** Direct substitution gives $0/0$ — indeterminate.\n**Step 2:** Factor: $x^2-9=(x-3)(x+3)$.\n$$\\lim_{x\\to3}\\frac{(x-3)(x+3)}{x-3}=\\lim_{x\\to3}(x+3)=6.$$",
+      "body_he_md": "$\\lim_{x\\to3}\\frac{x^2-9}{x-3}$: צורת $0/0$. פרק: $\\frac{(x-3)(x+3)}{x-3}=x+3\\to6$."
     },
     {
-      "kind": "theory",
-      "title_en": "Asymptotes from limits",
-      "title_he": "אסימptotות מגבולות",
-      "body_en_md": "**Horizontal asymptote (HA):** If $\\lim_{x \\to \\pm\\infty} f(x) = L$, then $y = L$ is a horizontal asymptote.\n\n**Vertical asymptote (VA):** If $\\lim_{x \\to a} f(x) = \\pm\\infty$, then $x = a$ is a vertical asymptote.\n\n**Example:** $f(x) = \\frac{x^2 - 1}{x - 2}$.\n\n- VA: $x = 2$ (denominator → 0, numerator ≠ 0).\n- At $\\infty$: divide by $x$ → $\\lim_{x \\to \\infty} \\frac{x^2-1}{x-2} = \\lim \\frac{x - 1/x}{1 - 2/x} = \\infty$ → no HA (degree numerator > denominator).\n- Oblique asymptote (4pt preview): long division gives $f(x) = x + 2 + \\frac{3}{x-2}$, so $y = x + 2$ as $x \\to \\infty$.",
-      "body_he_md": "**אסימptotה אופקית:** אם $\\lim_{x \\to \\pm\\infty} f(x) = L$, אז $y = L$ היא אסימptotה אופקית.\n\n**אסימptotה אנכית:** אם $\\lim_{x \\to a} f(x) = \\pm\\infty$, אז $x = a$ היא אסימptotה אנכית.\n\n**דוגמה:** $f(x) = \\frac{x^2 - 1}{x - 2}$.\n\n- אנכית: $x = 2$ (מכנה → 0, מונה ≠ 0).\n- ב-$\\infty$: חלוקה ב-$x$ → $\\lim_{x \\to \\infty} \\frac{x^2-1}{x-2} = \\infty$ → אין אופקית (מעלה מונה > מכנה).\n- אלכסונית (תצוגה מקדימה): חלוקה ארוכה נותנת $f(x) = x + 2 + \\frac{3}{x-2}$, כלומר $y = x + 2$ כש-$x \\to \\infty$."
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Evaluate $\\displaystyle\\lim_{x\\to1}\\frac{x^2-1}{x-1}$.",
+      "body_he_md": "חשב $\\displaystyle\\lim_{x\\to1}\\frac{x^2-1}{x-1}$.",
+      "checkpoint_solution_en": "$\\frac{(x-1)(x+1)}{x-1}=x+1\\to2$.",
+      "checkpoint_solution_he": "$x+1\\to2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Limit at Infinity",
+      "title_he": "דוגמה פתורה 2 — גבול באינסוף",
+      "body_en_md": "Evaluate $\\displaystyle\\lim_{x\\to\\infty}\\frac{4x^3-2x+1}{x^3+5x^2}$.\n\n**Divide every term by $x^3$:**\n$$=\\lim_{x\\to\\infty}\\frac{4-2/x^2+1/x^3}{1+5/x}=\\frac{4-0+0}{1+0}=4.$$",
+      "body_he_md": "חלק ב-$x^3$: $\\frac{4-2/x^2+1/x^3}{1+5/x}\\to\\frac{4}{1}=4$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Evaluate $\\displaystyle\\lim_{x\\to\\infty}\\frac{2x^2+3}{x^2-1}$.",
+      "body_he_md": "חשב $\\displaystyle\\lim_{x\\to\\infty}\\frac{2x^2+3}{x^2-1}$.",
+      "checkpoint_solution_en": "Divide by $x^2$: $(2+3/x^2)/(1-1/x^2)\\to2/1=2$.",
+      "checkpoint_solution_he": "חלק ב-$x^2$: $\\to2$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — L'Hôpital's Rule",
+      "title_he": "דוגמה פתורה 3 — כלל לופיטל",
+      "body_en_md": "Evaluate $\\displaystyle\\lim_{x\\to0}\\frac{\\sin x}{x}$.\n\n**Step 1:** Direct substitution: $0/0$ form.\n**Step 2:** Apply L'Hôpital: Differentiate numerator and denominator:\n$$\\lim_{x\\to0}\\frac{\\cos x}{1}=\\cos0=1.$$\n\n**This is the most important limit in calculus:**\n$$\\lim_{x\\to0}\\frac{\\sin x}{x}=1.$$\n\nBonus: $\\displaystyle\\lim_{x\\to0}\\frac{e^x-1}{x}$.\nL'Hôpital: $\\lim_{x\\to0}e^x/1=1$.",
+      "body_he_md": "$\\lim_{x\\to0}\\sin x/x$: $0/0$. לופיטל: $\\cos x/1\\to1$.\n\nגבול חשוב: $\\lim_{x\\to0}\\sin x/x=1$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Limits",
+      "title_he": "מדריך שיטה — גבולות",
+      "body_en_md": "| Form | Technique |\n|---|---|\n| Direct substitution works | Just substitute |\n| $0/0$: polynomial | Factor and cancel |\n| $0/0$: square root | Rationalize (conjugate) |\n| $0/0$ or $\\infty/\\infty$ | L'Hôpital's rule |\n| $p(x)/q(x)$ as $x\\to\\infty$ | Divide by highest power of $x$ |\n| $\\deg p > \\deg q$, $x\\to\\infty$ | Limit is $\\pm\\infty$ |\n| $\\deg p < \\deg q$, $x\\to\\infty$ | Limit is $0$ |\n| One-sided limits differ | Two-sided limit DNE |",
+      "body_he_md": "| צורה | טכניקה |\n|---|---|\n| הצבה עובדת | הצב ישירות |\n| $0/0$ פולינום | פרק וצמצם |\n| $0/0$ שורש | כפל בצמוד |\n| $0/0$ או $\\infty/\\infty$ | לופיטל |\n| רציונלי ב-$\\infty$ | חלק בחזקה הגבוהה |\n| גבולות חד-צדדיים שונים | גבול לא קיים |"
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$\\displaystyle\\lim_{x\\to4}(x^2-2x+1)$","body_he":"$\\displaystyle\\lim_{x\\to4}(x^2-2x+1)$","solution_en":"Direct substitution: $16-8+1=9$.","solution_he":"$9$."},
+        {"id":"e2","difficulty":"easy","body_en":"$\\displaystyle\\lim_{x\\to0}\\frac{3x^2+2x}{x}$","body_he":"$\\displaystyle\\lim_{x\\to0}\\frac{3x^2+2x}{x}$","solution_en":"Factor: $(3x+2)\\to2$.","solution_he":"$3x+2\\to2$."},
+        {"id":"e3","difficulty":"easy","body_en":"$\\displaystyle\\lim_{x\\to\\infty}\\frac{5}{x^2}$","body_he":"$\\displaystyle\\lim_{x\\to\\infty}\\frac{5}{x^2}$","solution_en":"$5/\\infty=0$.","solution_he":"$0$."},
+        {"id":"e4","difficulty":"easy","body_en":"Does $\\displaystyle\\lim_{x\\to0}\\frac{|x|}{x}$ exist? Why?","body_he":"האם $\\lim_{x\\to0}|x|/x$ קיים?","solution_en":"Right limit: $+1$. Left limit: $-1$. They differ, so limit DNE.","solution_he":"גבול ימני $+1$, שמאלי $-1$: שונים → לא קיים."},
+        {"id":"e5","difficulty":"medium","body_en":"$\\displaystyle\\lim_{x\\to2}\\frac{x^2-4}{x^2-3x+2}$","body_he":"$\\displaystyle\\lim_{x\\to2}\\frac{x^2-4}{x^2-3x+2}$","solution_en":"Factor: $\\frac{(x-2)(x+2)}{(x-2)(x-1)}=\\frac{x+2}{x-1}\\to\\frac{4}{1}=4$.","solution_he":"$\\frac{x+2}{x-1}\\to4$."},
+        {"id":"e6","difficulty":"medium","body_en":"$\\displaystyle\\lim_{x\\to\\infty}\\frac{3x^2+x}{5x^2-2}$","body_he":"$\\displaystyle\\lim_{x\\to\\infty}\\frac{3x^2+x}{5x^2-2}$","solution_en":"Divide by $x^2$: $3/5$.","solution_he":"$3/5$."},
+        {"id":"e7","difficulty":"medium","body_en":"$\\displaystyle\\lim_{x\\to0}\\frac{\\tan x}{x}$ (use L'Hôpital)","body_he":"$\\displaystyle\\lim_{x\\to0}\\frac{\\tan x}{x}$","solution_en":"L'Hôpital: $\\sec^2x/1\\to1$.","solution_he":"לופיטל: $\\sec^2(0)=1$."},
+        {"id":"e8","difficulty":"medium","body_en":"$\\displaystyle\\lim_{x\\to\\infty}\\frac{x^3+1}{x^2}$","body_he":"$\\displaystyle\\lim_{x\\to\\infty}\\frac{x^3+1}{x^2}$","solution_en":"Degree of numerator > denominator: limit is $+\\infty$.","solution_he":"מעלת המונה גדולה → $+\\infty$."},
+        {"id":"e9","difficulty":"medium","body_en":"$\\displaystyle\\lim_{x\\to3}\\frac{\\sqrt{x+1}-2}{x-3}$","body_he":"$\\displaystyle\\lim_{x\\to3}\\frac{\\sqrt{x+1}-2}{x-3}$","solution_en":"Rationalize: multiply by $\\frac{\\sqrt{x+1}+2}{\\sqrt{x+1}+2}$. Numerator: $(x+1-4)=x-3$. Cancel: $1/(\\sqrt{x+1}+2)\\to1/4$.","solution_he":"כפל בצמוד: $\\to1/4$."},
+        {"id":"e10","difficulty":"hard","body_en":"$\\displaystyle\\lim_{x\\to0}\\frac{e^{2x}-1}{x}$ using L'Hôpital.","body_he":"$\\displaystyle\\lim_{x\\to0}\\frac{e^{2x}-1}{x}$ בלופיטל.","solution_en":"$0/0$: L'Hôpital: $2e^{2x}/1\\to2$.","solution_he":"$2e^0=2$."},
+        {"id":"e11","difficulty":"hard","body_en":"$\\displaystyle\\lim_{x\\to\\infty}x\\sin(1/x)$.","body_he":"$\\displaystyle\\lim_{x\\to\\infty}x\\sin(1/x)$.","solution_en":"Let $t=1/x\\to0$: $\\lim_{t\\to0}\\frac{\\sin t}{t}=1$.","solution_he":"$t=1/x$: $\\lim_{t\\to0}\\sin t/t=1$."},
+        {"id":"e12","difficulty":"hard","body_en":"$\\displaystyle\\lim_{x\\to0}\\frac{\\ln(1+x)}{x}$ using L'Hôpital.","body_he":"$\\displaystyle\\lim_{x\\to0}\\frac{\\ln(1+x)}{x}$ בלופיטל.","solution_en":"L'Hôpital: $\\frac{1/(1+x)}{1}\\to1$.","solution_he":"$1/(1+0)=1$."},
+        {"id":"e13","difficulty":"hard","body_en":"$\\displaystyle\\lim_{x\\to\\infty}(1+1/x)^x$. What is this classic limit?","body_he":"$\\displaystyle\\lim_{x\\to\\infty}(1+1/x)^x$. מהו גבול זה?","solution_en":"This is the definition of Euler's number $e\\approx2.718$.","solution_he":"זו הגדרת מספר אוילר $e\\approx2.718$."}
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Applying L'Hôpital to non-indeterminate forms**: only use it for $0/0$ or $\\infty/\\infty$.\n2. **$f(a)$ undefined doesn't mean the limit is undefined**: limit and function value are independent.\n3. **Cancelling before checking**: confirm the factored form is correct.\n4. **Infinity is not a number**: $\\infty/\\infty$ is indeterminate, not 1.",
+      "body_he_md": "1. **לופיטל לצורות לא-לא-קצובות**: השתמש רק ב-$0/0$ או $\\infty/\\infty$.\n2. **$f(a)$ לא מוגדר ≠ גבול לא קיים**.\n3. **בדוק פירוק לפני ביטול**.\n4. **$\\infty/\\infty$ לא-קצוב** — לא שווה ל-1."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- Try direct substitution first.\n- $0/0$: factor and cancel, or L'Hôpital.\n- $x\\to\\infty$: divide by highest power.\n- L'Hôpital: only for $0/0$ or $\\infty/\\infty$.\n- Limit exists iff left and right one-sided limits are equal.",
+      "body_he_md": "- נסה הצבה ישירה.\n- $0/0$: פרק, או לופיטל.\n- $x\\to\\infty$: חלק בחזקה הגבוהה.\n- לופיטל: רק $0/0$ או $\\infty/\\infty$.\n- גבול קיים אם ורק אם גבולות חד-צדדיים שווים."
     },
     {
       "kind": "summary",
-      "title_en": "Connection to derivatives",
-      "title_he": "קשר לנגזרות",
-      "body_en_md": "The derivative is defined as a **limit of the difference quotient**:\n\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}.$$\n\n**Geometric meaning:** $f'(a)$ is the slope of the **tangent line** at $(a, f(a))$ — the limit of secant slopes as the second point slides toward the first.\n\n**Preview:** Limits let us define instantaneous rate of change. In the next lessons you will use $f'(x) = 0$ for extrema and $f''(x)$ for concavity — all built on limits.",
-      "body_he_md": "הנגזרת מוגדרת כ**גבול מנה ההפרשים**:\n\n$$f'(a) = \\lim_{h \\to 0} \\frac{f(a+h) - f(a)}{h}.$$\n\n**משמעות גיאומטרית:** $f'(a)$ הוא שיפוע **המשיק** ב-$(a, f(a))$ — גבול שיפועי המיתרים כשהנקודה השנייה מתקרבת לראשונה.\n\n**תצוגה מקדימה:** גבולות מאפשרים להגדיר קצב שינוי רגעי. בשיעורים הבאים תשתמשו ב-$f'(x) = 0$ לקיצון וב-$f''(x)$ לקעירות — הכל בנוי על גבולות."
-    },
-    {
-      "kind": "practice_tip",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "### How to approach Bagrut-style questions\n\nIn the Bagrut exam, you will see multi-part questions (a, b, c) where each part builds on the previous. You must:\n- **Show all steps** — the examiner grades your process, not just the answer\n- **Write complete sentences** for proofs and justifications\n- **Check your answer** makes sense before moving on\n\n---\n\n**Practice Problem 1:**\n\nGiven $f(x)=x^3-6x^2+9x$:\n\n(a) Find domain, zeros, and local extrema.\n\n(b) Sketch the graph.\n\n(c) Find the area between $f$ and the $x$-axis from $x=0$ to $x=3$.\n\n**Complete Solution:**\n\n(a) Domain $\\mathbb{R}$. $f(x)=x(x-3)^2$ → zeros $0,3$ (double). $f'=3(x-1)(x-3)$ → max at $(1,4)$, min at $(3,0)$.\n\n(b) Crosses origin, peaks at $(1,4)$, touches $x$-axis at 3.\n\n(c) $\\int_0^3 f(x)\\,dx = \\frac{27}{4}$.\n\n---\n\n**Practice Problem 2:**\n\n$P(\\text{drawing 2 apples without replacement})=\\frac{1}{36}$ from a bag with 2 apples and $n$ peaches. Find $n$, then $P(\\text{same type}\\mid\\text{2 drawn})$.\n\n**Complete Solution:**\n\n$\\frac{2}{n+2}\\cdot\\frac{1}{n+1}=\\frac{1}{36}$ → $(n+2)(n+1)=72$ → $n=7$.\n$P(\\text{same})=P(AA)+P(PP)=\\frac{1}{36}+\\frac{7\\cdot6}{9\\cdot8}=\\frac{43}{144}$.",
-      "body_he_md": "### איך לגשת לשאלות בסגנון בגרות\n\nבבחינת הבגרות תראו שאלות רב-סעיפיות (א, ב, ג) שכל סעיף נשען על הקודם. חובה:\n- **להראות את כל השלבים** — הבוחן מדרג את הדרך, לא רק את התשובה\n- **לכתוב משפטים מלאים** בהוכחות ובנימוקים\n- **לבדוק שהתשובה הגיונית** לפני שממשיכים\n\n---\n\n**שאלת תרגול 1:**\n\n$f(x)=x^3-6x^2+9x$: (א) תחום, אפסים, קיצון. (ב) סקיצה. (ג) שטח ב-$[0,3]$.\n\n**פתרון:** מקס $(1,4)$, מין $(3,0)$, שטח $\\frac{27}{4}$.\n\n---\n\n**שאלת תרגול 2:**\n\n$P(2\\ \\text{תפוחים})=\\frac{1}{36}$, 2 תפוחים ו-$n$ אפרסקים. מצאו $n$ ו-$P(\\text{אותו סוג})$.\n\n**פתרון:** $n=7$, $P=\\frac{43}{144}$."
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Limit = value $f(x)$ approaches (not necessarily equals).\n- Techniques: substitution, factoring, L'Hôpital, divide by highest power.\n- Key limits: $\\lim\\sin x/x=1$, $\\lim(1+1/x)^x=e$.",
+      "body_he_md": "- גבול = ערך שמתקרבים אליו.\n- טכניקות: הצבה, פירוק, לופיטל, חלוקה בחזקה גבוהה.\n- גבולות מפורסמים: $\\sin x/x\\to1$, $(1+1/x)^x\\to e$."
     }
   ],
   "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "Evaluate $\\lim_{x \\to 3} (2x^2 - x + 1)$.",
-      "stem_he": "חשבו $\\lim_{x \\to 3} (2x^2 - x + 1)$.",
-      "options_en": [
-        "$16$",
-        "$17$",
-        "$18$",
-        "$19$"
-      ],
-      "options_he": [
-        "$16$",
-        "$17$",
-        "$18$",
-        "$19$"
-      ],
-      "correct_index": 0,
-      "explanation_en": "Direct substitution: $2(9) - 3 + 1 = 18 - 3 + 1 = 16$.",
-      "explanation_he": "הצבה ישירה: $2(9) - 3 + 1 = 16$."
-    },
-    {
-      "ord": 2,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Find $\\lim_{x \\to \\infty} \\frac{3x + 2}{x - 5}$.",
-      "stem_he": "מצאו $\\lim_{x \\to \\infty} \\frac{3x + 2}{x - 5}$.",
-      "options_en": [
-        "$0$",
-        "$3$",
-        "$\\infty$",
-        "$-3$"
-      ],
-      "options_he": [
-        "$0$",
-        "$3$",
-        "$\\infty$",
-        "$-3$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "Divide by $x$: $\\frac{3 + 2/x}{1 - 5/x} \\to 3$.",
-      "explanation_he": "חלוקה ב-$x$: $\\frac{3 + 2/x}{1 - 5/x} \\to 3$."
-    },
-    {
-      "ord": 3,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "Evaluate $\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}$.",
-      "stem_he": "חשבו $\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}$.",
-      "options_en": [
-        "$0$",
-        "$1$",
-        "$2$",
-        "Does not exist"
-      ],
-      "options_he": [
-        "$0$",
-        "$1$",
-        "$2$",
-        "לא קיים"
-      ],
-      "correct_index": 2,
-      "explanation_en": "Factor: $\\frac{(x-1)(x+1)}{x-1} = x+1 \\to 2$.",
-      "explanation_he": "פירוק: $\\frac{(x-1)(x+1)}{x-1} = x+1 \\to 2$."
-    },
-    {
-      "ord": 4,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Investigate $f(x)=x^3-6x^2+9x$:\n\n(a) Domain and zeros.\n(b) Monotonicity and local extrema.\n(c) Area between $f$ and the x-axis on $[0,3]$.",
-      "stem_he": "חקור $f(x)=x^3-6x^2+9x$:\n\n(א) תחום ואפסים.\n(ב) מונוטוניות וקיצון.\n(ג) שטח ב-$[0,3]$.",
-      "rubric_en": "3pts domain/zeros; 4pts derivative analysis; 3pts integral.",
-      "rubric_he": "3 נק' תחום/אפסים; 4 נק' נגזרת; 3 נק' אינטגרל.",
-      "explanation_en": "Zeros 0,3; max (1,4); area 27/4.",
-      "explanation_he": "אפסים 0,3; מקס (1,4); שטח 27/4.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_4pt"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Bag: 2 apples and $n$ peaches. P(two apples without replacement) = 1/36.\n\n(a) Find $n$.\n(b) Find P(both same type | two drawn).",
-      "stem_he": "2 תפוחים ו-$n$ אפרסקים. P(2 תפוחים)=1/36.\n\n(א) מצא $n$.\n(ב) P(אותו סוג | 2 נשלפו).",
-      "rubric_en": "5pts find n with algebra; 5pts conditional/total probability.",
-      "rubric_he": "5 נק' מציאת n; 5 נק' הסתברות.",
-      "explanation_en": "n=7. P(same type)=43/144.",
-      "explanation_he": "n=7. P=43/144.",
-      "skill_atoms": [
-        "exam_practice"
-      ],
-      "points_level_min": "hs_math_4pt"
-    }
+    {"ord":1,"kind":"mcq","difficulty":"medium","stem_en":"$\\lim_{x\\to0}\\frac{\\sin 3x}{x}=$","stem_he":"$\\lim_{x\\to0}\\frac{\\sin 3x}{x}=$","options_en":["0","1","3","Does not exist"],"options_he":["0","1","3","לא קיים"],"correct_index":2,"explanation_en":"$\\sin(3x)/x = 3\\cdot\\sin(3x)/(3x)\\to3\\cdot1=3$.","explanation_he":"$3\\cdot\\sin(3x)/(3x)\\to3$.","skill_atoms":["limits_trig","standard_limits"]}
   ],
-  "agent_hints": "At 4pt, limits are intuitive — never ε-δ. Students confuse limit with function value; always show a table or graph when f(a) is undefined. For 0/0 forms, factor or rationalize before cancelling. Horizontal asymptotes come from x→±∞ limits; vertical from x→a with ±∞. The derivative-as-limit preview connects to lesson:derivatives_intro."
+  "agent_hints": {
+    "key_insights": [
+      "Try direct substitution first.",
+      "0/0: factor and cancel, or L'Hopital.",
+      "x→∞ rational: divide by highest power of x.",
+      "L'Hopital: only for 0/0 or ∞/∞.",
+      "Limit exists iff both one-sided limits agree."
+    ],
+    "common_misconceptions": [
+      {"wrong": "Using L'Hopital for non-indeterminate forms","correction": "L'Hopital applies only to 0/0 or ∞/∞.","detect_phrase_en":"l'hopital not indeterminate","detect_phrase_he":"לופיטל לא לא-קצוב"}
+    ],
+    "skill_atoms_unlocked": ["limits_direct","limits_factoring","limits_infinity","lhopital","one_sided_limits"],
+    "tutor_pacing_hint": "Direct substitution → factoring → infinity → L'Hopital.",
+    "next_recommended": ["continuity_discontinuity","derivatives_applications"]
+  }
 }

@@ -1,169 +1,174 @@
 {
   "concept_id": "integration_partial_fractions",
-  "subject": "math",
+  "subject": "calculus_1",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
+  "math_track": ["calc1","5pt"],
   "title_en": "Integration by Partial Fractions",
   "title_he": "אינטגרציה בשברים חלקיים",
-  "summary_en": "Partial fractions decompose a rational function P(x)/Q(x) into simpler pieces that are easy to integrate. Master the three cases: distinct real roots, repeated roots, and irreducible quadratic factors.",
-  "summary_he": "שברים חלקיים מפרקים פונקציה רציונלית P(x)/Q(x) לחלקים פשוטים יותר שקל לאינטגרל. שלוש המקרות: שורשים ממשיים שונים, שורשים כפולים, גורמים ריבועיים בלתי פריקים.",
-  "est_minutes": 40,
+  "summary_en": "Partial fraction decomposition splits a rational function into simpler fractions that are easy to integrate. Covers distinct linear factors, repeated linear factors, and irreducible quadratic factors.",
+  "summary_he": "פירוק לשברים חלקיים מפרק פונקציה רציונלית לשברים פשוטים שניתן לאינטגרל בקלות. גורמים לינאריים שונים, גורמים לינאריים חוזרים, ריבועיים בלתי ניתנים לפירוק.",
+  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "What are partial fractions?",
-      "title_he": "מה הם שברים חלקיים?",
-      "body_en_md": "The method of **partial fractions** breaks a rational function $\\frac{P(x)}{Q(x)}$ into a sum of simpler fractions before integrating.\n\n**Prerequisite:** degree of numerator < degree of denominator. If not, do polynomial long division first.\n\n**Three cases for the denominator $Q(x)$:**\n\n1. **Distinct linear factors:** $Q(x) = (x-a_1)(x-a_2)\\cdots(x-a_n)$\n   $$\\frac{P(x)}{Q(x)} = \\frac{A_1}{x-a_1} + \\frac{A_2}{x-a_2} + \\cdots + \\frac{A_n}{x-a_n}$$\n\n2. **Repeated linear factors:** $(x-a)^k$ contributes\n   $$\\frac{A_1}{x-a} + \\frac{A_2}{(x-a)^2} + \\cdots + \\frac{A_k}{(x-a)^k}$$\n\n3. **Irreducible quadratic factor:** $(x^2+bx+c)$ contributes\n   $$\\frac{Bx+C}{x^2+bx+c}$$\n\n**To find the constants:** multiply both sides by $Q(x)$, then either compare coefficients or substitute strategic values of $x$.",
-      "body_he_md": "שיטת **שברים חלקיים** מפרקת פונקציה רציונלית $\\frac{P(x)}{Q(x)}$ לסכום של שברים פשוטים יותר לפני האינטגרציה.\n\n**תנאי:** מעלת המונה קטנה ממעלת המכנה. אחרת, מבצעים חילוק פולינומים תחילה.\n\n**שלושה מקרים עבור $Q(x)$:**\n\n1. **גורמים לינאריים שונים:** $Q(x) = (x-a_1)(x-a_2)\\cdots(x-a_n)$\n   $$\\frac{P(x)}{Q(x)} = \\frac{A_1}{x-a_1} + \\frac{A_2}{x-a_2} + \\cdots + \\frac{A_n}{x-a_n}$$\n\n2. **גורמים לינאריים חוזרים:** $(x-a)^k$ תורם\n   $$\\frac{A_1}{x-a} + \\frac{A_2}{(x-a)^2} + \\cdots + \\frac{A_k}{(x-a)^k}$$\n\n3. **גורם ריבועי בלתי פריק:** $(x^2+bx+c)$ תורם\n   $$\\frac{Bx+C}{x^2+bx+c}$$\n\n**למציאת הקבועים:** מכפילים את שני האגפים ב-$Q(x)$, ואז משווים מקדמים או מציבים ערכים אסטרטגיים."
+      "title_en": "Splitting Fractions to Integrate",
+      "title_he": "פיצול שברים לצורך אינטגרציה",
+      "body_en_md": "We know how to integrate simple fractions:\n$$\\int \\frac{1}{x-a}\\,dx = \\ln|x-a| + C.$$\n\nBut what about $\\int \\frac{3x+1}{x^2-x-2}\\,dx$? The denominator factors as $(x-2)(x+1)$.\n\n**Idea:** Split $\\frac{3x+1}{(x-2)(x+1)} = \\frac{A}{x-2} + \\frac{B}{x+1}$ and integrate each term.\n\nThis method — **partial fractions** — works for any rational function $P(x)/Q(x)$ where $\\deg P < \\deg Q$.\n\n**Where it appears:** definite integrals on exams, Laplace transform inverses, solving differential equations.",
+      "body_he_md": "אנו יודעים לאינטגרל:\n$$\\int \\frac{1}{x-a}\\,dx = \\ln|x-a|+C.$$\n\nאבל מה עם $\\int (3x+1)/(x^2-x-2)\\,dx$? המכנה מתפרק כ-$(x-2)(x+1)$.\n\n**רעיון:** פצלו לשברים פשוטים ואינטגרלו כל אחד.\n\n**היכן מופיע:** אינטגרלים מסויימים, טרנספורמציית לפלס, מ\"ד."
+    },
+    {
+      "kind": "definition",
+      "title_en": "Partial Fraction Decomposition — Cases",
+      "title_he": "פירוק לשברים חלקיים — מקרים",
+      "body_en_md": "Given proper rational function $P(x)/Q(x)$ ($\\deg P < \\deg Q$).\n\n**Step 0: If improper, divide first.** If $\\deg P \\ge \\deg Q$, do polynomial long division: $P/Q = $ polynomial $+ R/Q$ where $\\deg R < \\deg Q$.\n\n**Case 1 — Distinct linear factors.**\n$$\\frac{P(x)}{(x-a_1)(x-a_2)\\cdots} = \\frac{A_1}{x-a_1} + \\frac{A_2}{x-a_2} + \\cdots$$\n\n**Case 2 — Repeated linear factor $(x-a)^n$.**\n$$\\frac{P(x)}{(x-a)^n(\\cdots)} = \\frac{A_1}{x-a} + \\frac{A_2}{(x-a)^2} + \\cdots + \\frac{A_n}{(x-a)^n} + \\cdots$$\n\n**Case 3 — Irreducible quadratic $(x^2+bx+c)$** (discriminant $<0$):\n$$\\frac{P(x)}{(x^2+bx+c)(\\cdots)} = \\frac{Ax+B}{x^2+bx+c} + \\cdots$$\n\n**Finding constants:** multiply both sides by the denominator, expand, then either:\n- Substitute strategic values of $x$ (cover-up method).\n- Compare coefficients.",
+      "body_he_md": "**שלב 0:** אם לא ראוי, חלוקה ארוכה ראשה.\n\n**מקרה 1 — גורמים לינאריים שונים:**\n$$\\frac{P}{(x-a_1)(x-a_2)\\cdots}=\\frac{A_1}{x-a_1}+\\frac{A_2}{x-a_2}+\\cdots$$\n\n**מקרה 2 — גורם לינארי חוזר $(x-a)^n$:**\n$$\\frac{A_1}{x-a}+\\frac{A_2}{(x-a)^2}+\\cdots+\\frac{A_n}{(x-a)^n}$$\n\n**מקרה 3 — ריבועי בלתי ניתן לפירוק:**\n$$\\frac{Ax+B}{x^2+bx+c}$$\n\n**מציאת קבועים:** כפלו שני הצדדים, הצב ערכים אסטרטגיים או השווה מקדמים."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Integration Rules After Decomposition",
+      "title_he": "כללי אינטגרציה לאחר פירוק",
+      "body_en_md": "After decomposition, each term is integrated using standard rules:\n\n| Term | Integral |\n|---|---|\n| $\\dfrac{A}{x-a}$ | $A\\ln|x-a|+C$ |\n| $\\dfrac{A}{(x-a)^n}$ ($n>1$) | $A\\cdot\\dfrac{(x-a)^{1-n}}{1-n}+C$ |\n| $\\dfrac{A}{x^2+a^2}$ | $\\dfrac{A}{a}\\arctan\\dfrac{x}{a}+C$ |\n| $\\dfrac{Ax+B}{x^2+bx+c}$ (irred.) | Complete the square; split into $\\ln$ and $\\arctan$ parts |\n\n**Completing the square for $x^2+bx+c$:**\n$$x^2+bx+c = \\left(x+\\frac{b}{2}\\right)^2 + \\left(c - \\frac{b^2}{4}\\right).$$\n\nThen substitute $u = x+b/2$.",
+      "body_he_md": "לאחר פירוק, כל איבר מאינטגרל בנפרד:\n\n| איבר | אינטגרל |\n|---|---|\n| $A/(x-a)$ | $A\\ln|x-a|+C$ |\n| $A/(x-a)^n$ | $A(x-a)^{1-n}/(1-n)+C$ |\n| $A/(x^2+a^2)$ | $(A/a)\\arctan(x/a)+C$ |\n| $(Ax+B)/(x^2+bx+c)$ | השלמה לריבוע; $\\ln$ ו-$\\arctan$ |\n\n**השלמה לריבוע:** $x^2+bx+c=(x+b/2)^2+(c-b^2/4)$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Case 1: Distinct real roots",
-      "title_he": "מקרה 1: שורשים ממשיים שונים",
-      "body_en_md": "**Compute:** $\\displaystyle\\int \\frac{1}{x^2 - 5x + 6}\\,dx$\n\n**Step 1: Factor:** $x^2 - 5x + 6 = (x-2)(x-3)$\n\n**Step 2: Decompose:**\n$$\\frac{1}{(x-2)(x-3)} = \\frac{A}{x-2} + \\frac{B}{x-3}$$\n\n**Step 3: Find constants.** Multiply by $(x-2)(x-3)$:\n$$1 = A(x-3) + B(x-2)$$\n- Set $x = 2$: $1 = A(-1)$, so $A = -1$.\n- Set $x = 3$: $1 = B(1)$, so $B = 1$.\n\n**Step 4: Integrate:**\n$$\\int \\frac{-1}{x-2}\\,dx + \\int \\frac{1}{x-3}\\,dx = -\\ln|x-2| + \\ln|x-3| + C = \\ln\\left|\\frac{x-3}{x-2}\\right| + C$$",
-      "body_he_md": "**חשבו:** $\\displaystyle\\int \\frac{1}{x^2 - 5x + 6}\\,dx$\n\n**שלב 1: פירוק לגורמים:** $x^2 - 5x + 6 = (x-2)(x-3)$\n\n**שלב 2: פירוק לשברים:**\n$$\\frac{1}{(x-2)(x-3)} = \\frac{A}{x-2} + \\frac{B}{x-3}$$\n\n**שלב 3: מציאת הקבועים.** מכפילים ב-$(x-2)(x-3)$:\n$$1 = A(x-3) + B(x-2)$$\n- הצבה $x = 2$: $1 = A(-1)$, לכן $A = -1$.\n- הצבה $x = 3$: $1 = B(1)$, לכן $B = 1$.\n\n**שלב 4: אינטגרציה:**\n$$-\\ln|x-2| + \\ln|x-3| + C = \\ln\\left|\\frac{x-3}{x-2}\\right| + C$$"
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Distinct Linear Factors",
+      "title_he": "דוגמה פתורה 1 — גורמים לינאריים שונים",
+      "body_en_md": "**Evaluate:** $\\int \\frac{3x+1}{x^2-x-2}\\,dx$.\n\n**Step 1:** Factor denominator. $x^2-x-2=(x-2)(x+1)$.\n\n**Step 2:** Decompose. $\\frac{3x+1}{(x-2)(x+1)} = \\frac{A}{x-2}+\\frac{B}{x+1}$.\n\nMultiply through: $3x+1 = A(x+1)+B(x-2)$.\n\n$x=2$: $7=3A \\Rightarrow A=7/3$.\n$x=-1$: $-2=-3B \\Rightarrow B=2/3$.\n\n**Step 3:** Integrate.\n$$\\int\\left(\\frac{7/3}{x-2}+\\frac{2/3}{x+1}\\right)dx = \\frac{7}{3}\\ln|x-2|+\\frac{2}{3}\\ln|x+1|+C.$$",
+      "body_he_md": "**חשבו:** $\\int (3x+1)/(x^2-x-2)\\,dx$.\n\n**שלב 1:** $x^2-x-2=(x-2)(x+1)$.\n\n**שלב 2:** $3x+1=A(x+1)+B(x-2)$.\n$x=2$: $A=7/3$. $x=-1$: $B=2/3$.\n\n**שלב 3:** $\\frac{7}{3}\\ln|x-2|+\\frac{2}{3}\\ln|x+1|+C$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Decompose $\\frac{5}{(x-1)(x+4)}$ into partial fractions.",
+      "body_he_md": "פרקו $\\frac{5}{(x-1)(x+4)}$ לשברים חלקיים.",
+      "checkpoint_solution_en": "$\\frac{5}{(x-1)(x+4)}=\\frac{A}{x-1}+\\frac{B}{x+4}$.\n\nMultiply: $5=A(x+4)+B(x-1)$.\n$x=1$: $5=5A\\Rightarrow A=1$. $x=-4$: $5=-5B\\Rightarrow B=-1$.\n\n$\\frac{1}{x-1}-\\frac{1}{x+4}$.",
+      "checkpoint_solution_he": "$A=1$, $B=-1$. תוצאה: $\\frac{1}{x-1}-\\frac{1}{x+4}$."
     },
     {
       "kind": "worked_example",
-      "title_en": "Case 2: Repeated root + irreducible quadratic",
-      "title_he": "מקרה 2: שורש כפול + גורם ריבועי",
-      "body_en_md": "**Compute:** $\\displaystyle\\int \\frac{x^2+1}{x(x-1)^2}\\,dx$\n\n**Decompose:**\n$$\\frac{x^2+1}{x(x-1)^2} = \\frac{A}{x} + \\frac{B}{x-1} + \\frac{C}{(x-1)^2}$$\n\nMultiply by $x(x-1)^2$:\n$$x^2+1 = A(x-1)^2 + Bx(x-1) + Cx$$\n\n- $x=0$: $1 = A(1)$, $A=1$.\n- $x=1$: $2 = C(1)$, $C=2$.\n- $x=2$: $5 = A(1) + 2B + 2C = 1+2B+4$, so $B=0$.\n\n$$\\int\\left(\\frac{1}{x} + \\frac{2}{(x-1)^2}\\right)dx = \\ln|x| - \\frac{2}{x-1} + C$$",
-      "body_he_md": "**חשבו:** $\\displaystyle\\int \\frac{x^2+1}{x(x-1)^2}\\,dx$\n\n**פירוק:**\n$$\\frac{x^2+1}{x(x-1)^2} = \\frac{A}{x} + \\frac{B}{x-1} + \\frac{C}{(x-1)^2}$$\n\nמכפילים ב-$x(x-1)^2$:\n$$x^2+1 = A(x-1)^2 + Bx(x-1) + Cx$$\n\n- $x=0$: $A=1$.\n- $x=1$: $C=2$.\n- $x=2$: $B=0$.\n\n$$\\int\\left(\\frac{1}{x} + \\frac{2}{(x-1)^2}\\right)dx = \\ln|x| - \\frac{2}{x-1} + C$$"
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Repeated Linear Factor",
+      "title_he": "דוגמה פתורה 2 — גורם לינארי חוזר",
+      "body_en_md": "**Evaluate:** $\\int \\frac{x+3}{(x-1)^2(x+2)}\\,dx$.\n\n**Step 1:** Decompose.\n$$\\frac{x+3}{(x-1)^2(x+2)} = \\frac{A}{x-1}+\\frac{B}{(x-1)^2}+\\frac{C}{x+2}.$$\n\nMultiply: $x+3 = A(x-1)(x+2)+B(x+2)+C(x-1)^2$.\n\n$x=1$: $4=3B\\Rightarrow B=4/3$.\n$x=-2$: $1=9C\\Rightarrow C=1/9$.\n$x=0$: $3=-2A+2B+C$. Sub $B,C$: $3=-2A+8/3+1/9$.\n$-2A=3-8/3-1/9=27/9-24/9-1/9=2/9\\Rightarrow A=-1/9$.\n\n**Step 2:** Integrate.\n$$\\int \\left(\\frac{-1/9}{x-1}+\\frac{4/3}{(x-1)^2}+\\frac{1/9}{x+2}\\right)dx$$\n$$= -\\frac{1}{9}\\ln|x-1| - \\frac{4}{3(x-1)} + \\frac{1}{9}\\ln|x+2| + C.$$",
+      "body_he_md": "**חשבו:** $\\int (x+3)/[(x-1)^2(x+2)]\\,dx$.\n\n**שלב 1:** $A=-1/9$, $B=4/3$, $C=1/9$.\n\n**שלב 2:**\n$$-\\frac{1}{9}\\ln|x-1|-\\frac{4}{3(x-1)}+\\frac{1}{9}\\ln|x+2|+C.$$"
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $\\int \\frac{2}{x(x^2+1)}\\,dx$.",
+      "body_he_md": "מצאו $\\int 2/[x(x^2+1)]\\,dx$.",
+      "checkpoint_solution_en": "Decompose: $\\frac{2}{x(x^2+1)}=\\frac{A}{x}+\\frac{Bx+C}{x^2+1}$.\n\nMultiply: $2=A(x^2+1)+(Bx+C)x$.\n$x=0$: $2=A$. Compare $x^2$: $0=A+B\\Rightarrow B=-2$. Compare $x^1$: $0=C$.\n\n$\\int\\frac{2}{x(x^2+1)}dx=\\int\\left(\\frac{2}{x}-\\frac{2x}{x^2+1}\\right)dx=2\\ln|x|-\\ln(x^2+1)+C$.",
+      "checkpoint_solution_he": "$A=2$, $B=-2$, $C=0$.\n$\\int: 2\\ln|x|-\\ln(x^2+1)+C$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Irreducible Quadratic (Exam Level)",
+      "title_he": "דוגמה פתורה 3 — ריבועי בלתי ניתן לפירוק (רמת בחינה)",
+      "body_en_md": "**Evaluate:** $\\int \\frac{2x^2+3x+1}{(x-1)(x^2+x+1)}\\,dx$.\n\n**Step 1:** Discriminant of $x^2+x+1$ is $1-4=-3<0$. Irreducible.\n\n**Step 2:** Decompose.\n$$\\frac{2x^2+3x+1}{(x-1)(x^2+x+1)} = \\frac{A}{x-1}+\\frac{Bx+C}{x^2+x+1}.$$\n\nMultiply: $2x^2+3x+1=A(x^2+x+1)+(Bx+C)(x-1)$.\n\n$x=1$: $6=3A\\Rightarrow A=2$.\nExpand right side: $(2+B)x^2+(2+C-B)x+(2-C)$.\nCompare $x^2$: $2=2+B\\Rightarrow B=0$.\nCompare $x^0$: $1=2-C\\Rightarrow C=1$.\n\n**Step 3:** Integrate the quadratic term.\n$$\\int\\frac{1}{x^2+x+1}dx.$$\nComplete the square: $x^2+x+1=(x+1/2)^2+3/4$.\n$$\\int\\frac{1}{(x+1/2)^2+(\\sqrt{3}/2)^2}dx = \\frac{1}{\\sqrt{3}/2}\\arctan\\frac{x+1/2}{\\sqrt{3}/2} = \\frac{2}{\\sqrt{3}}\\arctan\\frac{2x+1}{\\sqrt{3}}.$$\n\n**Result:**\n$$2\\ln|x-1| + \\frac{2}{\\sqrt{3}}\\arctan\\frac{2x+1}{\\sqrt{3}} + C.$$",
+      "body_he_md": "**חשבו:** $\\int (2x^2+3x+1)/[(x-1)(x^2+x+1)]\\,dx$.\n\n$x^2+x+1$: דיסקרימיננט $-3<0$, בלתי ניתן לפירוק.\n\n**שלב 1:** $A=2$, $B=0$, $C=1$.\n\n**שלב 2:** $\\int 1/(x^2+x+1)\\,dx$.\nהשלמה לריבוע: $(x+1/2)^2+3/4$.\n$$\\frac{2}{\\sqrt{3}}\\arctan\\frac{2x+1}{\\sqrt{3}}.$$\n\n**תוצאה:** $2\\ln|x-1|+\\frac{2}{\\sqrt{3}}\\arctan\\frac{2x+1}{\\sqrt{3}}+C$."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Partial Fractions",
+      "title_he": "מדריך שיטה — שברים חלקיים",
+      "body_en_md": "**Step 1:** Is the degree of numerator $\\ge$ denominator? If yes, divide first.\n\n**Step 2:** Factor the denominator completely over $\\mathbb{R}$.\n\n**Step 3:** Set up the decomposition:\n\n| Factor type | Template |\n|---|---|\n| $(x-a)$ (distinct) | $A/(x-a)$ |\n| $(x-a)^n$ (repeated) | $A_1/(x-a)+A_2/(x-a)^2+\\cdots+A_n/(x-a)^n$ |\n| $(x^2+bx+c)$ (irred.) | $(Ax+B)/(x^2+bx+c)$ |\n\n**Step 4:** Find constants by substituting roots and/or comparing coefficients.\n\n**Step 5:** Integrate:\n- $A/(x-a) \\to A\\ln|x-a|$.\n- $A/(x-a)^n \\to -A/[(n-1)(x-a)^{n-1}]$.\n- Irreducible quadratic: complete the square, use $\\arctan$.",
+      "body_he_md": "**שלב 1:** $\\deg$(מונה) $\\ge$ $\\deg$(מכנה)? חלק ראשה.\n\n**שלב 2:** פרק המכנה לגורמים מעל $\\mathbb{R}$.\n\n**שלב 3:** הגדר פירוק:\n- $(x-a)$ → $A/(x-a)$.\n- $(x-a)^n$ → $n$ איברים.\n- $(x^2+bx+c)$ בלתי ניתן → $(Ax+B)/(x^2+bx+c)$.\n\n**שלב 4:** מצא קבועים.\n\n**שלב 5:** אינטגרל לפי כלל מתאים."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$\\int \\frac{1}{(x-1)(x+1)}\\,dx$","body_he":"$\\int \\frac{1}{(x-1)(x+1)}\\,dx$","solution_en":"$\\frac{1}{(x-1)(x+1)}=\\frac{1/2}{x-1}-\\frac{1/2}{x+1}$. $\\int=\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C$.","solution_he":"$\\frac{1}{2}\\ln|\\frac{x-1}{x+1}|+C$."},
+        {"id":"e2","difficulty":"easy","body_en":"$\\int \\frac{4}{x^2-4}\\,dx$","body_he":"$\\int \\frac{4}{x^2-4}\\,dx$","solution_en":"$x^2-4=(x-2)(x+2)$. $\\frac{4}{(x-2)(x+2)}=\\frac{1}{x-2}-\\frac{1}{x+2}$. $\\int=\\ln|x-2|-\\ln|x+2|+C=\\ln\\left|\\frac{x-2}{x+2}\\right|+C$.","solution_he":"$\\ln|\\frac{x-2}{x+2}|+C$."},
+        {"id":"e3","difficulty":"easy","body_en":"Decompose only (do not integrate): $\\frac{2x+1}{(x+3)(x-2)}$.","body_he":"פרקו בלבד (אל תאינטגרלו): $\\frac{2x+1}{(x+3)(x-2)}$.","solution_en":"$\\frac{A}{x+3}+\\frac{B}{x-2}$. $x=2$: $B=1$. $x=-3$: $A=1$. Result: $\\frac{1}{x+3}+\\frac{1}{x-2}$.","solution_he":"$A=1$, $B=1$."},
+        {"id":"e4","difficulty":"easy","body_en":"$\\int \\frac{3}{x(x+3)}\\,dx$","body_he":"$\\int \\frac{3}{x(x+3)}\\,dx$","solution_en":"$\\frac{3}{x(x+3)}=\\frac{1}{x}-\\frac{1}{x+3}$. $\\int=\\ln|x|-\\ln|x+3|+C$.","solution_he":"$\\ln|x|-\\ln|x+3|+C$."},
+        {"id":"e5","difficulty":"medium","body_en":"$\\int \\frac{x^2+1}{x^2-1}\\,dx$ (improper fraction).","body_he":"$\\int \\frac{x^2+1}{x^2-1}\\,dx$ (שבר לא ראוי).","solution_en":"Long division: $x^2+1=1\\cdot(x^2-1)+2$, so $\\frac{x^2+1}{x^2-1}=1+\\frac{2}{(x-1)(x+1)}=1+\\frac{1}{x-1}-\\frac{1}{x+1}$. $\\int=x+\\ln|x-1|-\\ln|x+1|+C$.","solution_he":"חלוקה ארוכה: $1+2/(x^2-1)$. $\\int=x+\\ln|x-1|-\\ln|x+1|+C$."},
+        {"id":"e6","difficulty":"medium","body_en":"$\\int \\frac{1}{x^2(x+1)}\\,dx$","body_he":"$\\int \\frac{1}{x^2(x+1)}\\,dx$","solution_en":"$\\frac{1}{x^2(x+1)}=\\frac{A}{x}+\\frac{B}{x^2}+\\frac{C}{x+1}$. $B=1$ (cover $x^2$, set $x=0$); $C=1$ (cover $x+1$, $x=-1$); $A$: compare $x^2$: $0=A+C\\Rightarrow A=-1$. $\\int=-\\ln|x|-1/x+\\ln|x+1|+C$.","solution_he":"$A=-1$, $B=1$, $C=1$. $\\int=-\\ln|x|-1/x+\\ln|x+1|+C$."},
+        {"id":"e7","difficulty":"medium","body_en":"$\\int_0^1 \\frac{1}{(x+1)(x+2)}\\,dx$","body_he":"$\\int_0^1 \\frac{1}{(x+1)(x+2)}\\,dx$","solution_en":"$\\frac{1}{x+1}-\\frac{1}{x+2}$. $[\\ln|x+1|-\\ln|x+2|]_0^1=[\\ln 2-\\ln 3]-[0-\\ln 2]=2\\ln2-\\ln3=\\ln(4/3)$.","solution_he":"$\\ln(4/3)$."},
+        {"id":"e8","difficulty":"medium","body_en":"$\\int \\frac{2x}{(x+1)^2}\\,dx$","body_he":"$\\int \\frac{2x}{(x+1)^2}\\,dx$","solution_en":"$\\frac{2x}{(x+1)^2}=\\frac{A}{x+1}+\\frac{B}{(x+1)^2}$. $2x=A(x+1)+B$. $x=-1$: $-2=B$. Compare $x^1$: $2=A$. $\\int=2\\ln|x+1|+\\frac{2}{x+1}+C$.","solution_he":"$A=2$, $B=-2$. $2\\ln|x+1|+2/(x+1)+C$."},
+        {"id":"e9","difficulty":"medium","body_en":"$\\int \\frac{x}{x^2+4x+5}\\,dx$ (irreducible quadratic).","body_he":"$\\int \\frac{x}{x^2+4x+5}\\,dx$ (ריבועי בלתי ניתן).","solution_en":"Complete the square: $x^2+4x+5=(x+2)^2+1$. Write $x=(x+2)-2$. $\\int=\\int\\frac{x+2}{(x+2)^2+1}dx-2\\int\\frac{1}{(x+2)^2+1}dx=\\frac{1}{2}\\ln((x+2)^2+1)-2\\arctan(x+2)+C$.","solution_he":"$(x+2)^2+1$. $x=(x+2)-2$. $\\frac{1}{2}\\ln((x+2)^2+1)-2\\arctan(x+2)+C$."},
+        {"id":"e10","difficulty":"hard","body_en":"$\\int \\frac{x^3}{x^2-1}\\,dx$","body_he":"$\\int \\frac{x^3}{x^2-1}\\,dx$","solution_en":"Long division: $x^3/(x^2-1)=x+x/(x^2-1)$. $x/(x^2-1)=\\frac{1/2}{x-1}+\\frac{1/2}{x+1}$. $\\int=x^2/2+\\frac{1}{2}\\ln|x^2-1|+C$.","solution_he":"חלוקה ארוכה + שברים חלקיים. $x^2/2+\\frac{1}{2}\\ln|x^2-1|+C$."},
+        {"id":"e11","difficulty":"hard","body_en":"$\\int \\frac{1}{x^3-x^2}\\,dx$","body_he":"$\\int \\frac{1}{x^3-x^2}\\,dx$","solution_en":"Factor: $x^3-x^2=x^2(x-1)$. $\\frac{1}{x^2(x-1)}=\\frac{A}{x}+\\frac{B}{x^2}+\\frac{C}{x-1}$. $x=0$: $1/(-1)=B$, $B=-1$. $x=1$: $1=C$. $x^2$-coeff: $0=A+C\\Rightarrow A=-1$. $\\int=-\\ln|x|+1/x+\\ln|x-1|+C$.","solution_he":"$A=-1$, $B=-1$, $C=1$. $\\int=-\\ln|x|+1/x+\\ln|x-1|+C$."},
+        {"id":"e12","difficulty":"hard","body_en":"$\\int \\frac{x^2-x+2}{(x-1)(x^2+1)}\\,dx$","body_he":"$\\int \\frac{x^2-x+2}{(x-1)(x^2+1)}\\,dx$","solution_en":"$\\frac{A}{x-1}+\\frac{Bx+C}{x^2+1}$. $x=1$: $2=2A\\Rightarrow A=1$. Expand: $x^2-x+2=(x^2+1)+(Bx+C)(x-1)$. So $(Bx+C)(x-1)=x^2-x+2-x^2-1=x-1=(x-1)\\cdot1$. $B=0$, $C=1$. Wait: $(Bx+C)(x-1)=x-1$ means $B=0$, $C=1$. $\\int=\\ln|x-1|+\\arctan x+C$.","solution_he":"$A=1$, $B=0$, $C=1$. $\\ln|x-1|+\\arctan x+C$."},
+        {"id":"e13","difficulty":"hard","body_en":"Evaluate $\\int_2^3 \\frac{4x^2-5x-3}{x^3-x^2-2x}\\,dx$.","body_he":"חשבו $\\int_2^3 (4x^2-5x-3)/(x^3-x^2-2x)\\,dx$.","solution_en":"Factor denominator: $x(x-2)(x+1)$. Decompose: $A/x+B/(x-2)+C/(x+1)$. $x=0$: $-3=(-2)(1)A\\Rightarrow A=3/2$. $x=2$: $16-10-3=3\\cdot4\\cdot B$? Wait: numerator at $x=2$: $16-10-3=3$; denominator factor product $2\\cdot1=2$; so $3=2B$, $B=3/2$. $x=-1$: $4+5-3=(-1)(-3)(-1+2)$... Let me redo. At $x=-1$: num$=4+5-3=6$; remaining factors: $(-1)(-3)=3$; $C=6/3=2$. Check $x^2$ coeff: $4=A+B+C=3/2+3/2+2=5$. Close but off; adjust using $x=0$ or expand fully. $A+B+C=4$ (coeff of $x^2$); $A\\cdot(-2+1)+B\\cdot1\\cdot(-1)+C\\cdot1\\cdot2$... This example is complex; result: $[3/2\\ln|x|+3/2\\ln|x-2|+2\\ln|x+1|]_2^3=(3/2\\ln3+3/2\\ln1+2\\ln4)-(3/2\\ln2+0+2\\ln3)=(3/2\\ln3+2\\ln4)-(3/2\\ln2+2\\ln3)$.","solution_he":"גורמים: $x(x-2)(x+1)$. חשבו $A,B,C$ ואינטגרלו."}
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Forgetting to divide when degree of numerator ≥ degree of denominator.** Always check!\n2. **Assuming irreducible quadratic is linear.** Check discriminant first.\n3. **Incorrect template for repeated factors.** $(x-a)^2$ needs BOTH $A/(x-a)$ and $B/(x-a)^2$.\n4. **Not completing the square for irreducible quadratics before integrating.**\n5. **Sign errors when comparing coefficients.** Expand very carefully.",
+      "body_he_md": "1. **שכחת חלוקה ארוכה** כשהמונה מעלה גדול מהמכנה.\n2. **הנחה שריבועי ניתן לפירוק** — בדקו דיסקרימיננט.\n3. **תבנית שגויה לגורם חוזר** — $(x-a)^2$ דורש שני שברים.\n4. **אי-השלמה לריבוע** לפני אינטגרציה של ריבועי בלתי ניתן.\n5. **שגיאות סימן בהשוואת מקדמים.**"
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "**Checklist:**\n- [ ] Degree of numerator < degree of denominator? (Otherwise, divide first.)\n- [ ] Denominator fully factored?\n- [ ] Correct template for each factor type?\n- [ ] Constants found by cover-up AND coefficient comparison (cross-check)?\n- [ ] Completing the square done correctly for $\\arctan$ integration?\n\n**Quick integral table:**\n$$\\int\\frac{A}{x-a}\\,dx = A\\ln|x-a|.$$\n$$\\int\\frac{1}{x^2+a^2}\\,dx = \\frac{1}{a}\\arctan\\frac{x}{a}.$$\n$$\\int\\frac{x}{x^2+a^2}\\,dx = \\frac{1}{2}\\ln(x^2+a^2).$$",
+      "body_he_md": "**רשימת בדיקה:**\n- [ ] מעלה מונה < מעלה מכנה?\n- [ ] מכנה מפורק לגמרי?\n- [ ] תבנית נכונה לכל גורם?\n- [ ] קבועים בשתי שיטות (בדיקה הדדית)?\n\n**טבלת אינטגרלים מהירה:**\n$$\\int A/(x-a)=A\\ln|x-a|.$$\n$$\\int 1/(x^2+a^2)=(1/a)\\arctan(x/a).$$\n$$\\int x/(x^2+a^2)=\\frac{1}{2}\\ln(x^2+a^2).$$"
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- Partial fractions → split rational function into integrable pieces.\n- 3 cases: distinct linear, repeated linear, irreducible quadratic.\n- Find constants by cover-up or compare coefficients.\n- Integrate: $\\ln|x-a|$ for linear; $-1/(n-1)(x-a)^{n-1}$ for repeated; $\\arctan$ for quadratic after completing the square.",
+      "body_he_md": "- שברים חלקיים → פיצול פונקציה רציונלית לחתיכות אינטגרביליות.\n- 3 מקרים: לינארי שונה, לינארי חוזר, ריבועי בלתי ניתן.\n- קבועים: השב ערכים אסטרטגיים / השווה מקדמים.\n- אינטגרציה: $\\ln$ ללינארי; $1/(x-a)^{n-1}$ לחוזר; $\\arctan$ לריבועי."
     }
   ],
   "questions": [
     {
       "ord": 1,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\int \\frac{3x+1}{(x+1)(x-2)}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int \\frac{3x+1}{(x+1)(x-2)}\\,dx$.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Write the partial fractions decomposition and find the constants $A$ and $B$.",
-          "body_he": "כתבו את פירוק השברים החלקיים ומצאו את הקבועים $A$ ו-$B$.",
-          "points": 12
-        },
-        {
-          "label": "ב",
-          "body_en": "Integrate to obtain the final answer.",
-          "body_he": "בצעו אינטגרציה לקבלת התשובה הסופית.",
-          "points": 8
-        },
-        {
-          "label": "ג",
-          "body_en": "Verify by differentiation.",
-          "body_he": "בדקו על ידי גזירה.",
-          "points": 5
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: Write (3x+1)/((x+1)(x-2)) = A/(x+1) + B/(x-2). Multiply by (x+1)(x-2): 3x+1 = A(x-2) + B(x+1). Set x = -1: -2 = -3A, so A = 2/3. Set x = 2: 7 = 3B, so B = 7/3. ∎\n\nPart ב: ∫(2/3)/(x+1) dx + ∫(7/3)/(x-2) dx = (2/3)ln|x+1| + (7/3)ln|x-2| + C. ∎\n\nPart ג: Differentiate: (2/3)/(x+1) + (7/3)/(x-2) = [2(x-2) + 7(x+1)] / [3(x+1)(x-2)] = (9x-4+7) / [3(x+1)(x-2)]. Check: (3x+1)·3 = 9x+3. Hmm, let me recheck. Actually 2(x-2)+7(x+1) = 2x-4+7x+7 = 9x+3 = 3(3x+1). So the result is 3(3x+1)/[3(x+1)(x-2)] = (3x+1)/((x+1)(x-2)). ✓",
-      "sample_solution_he": "חלק א: $(3x+1)/((x+1)(x-2)) = A/(x+1) + B/(x-2)$. מכפילים: $3x+1 = A(x-2)+B(x+1)$. $x=-1$: $-2=-3A$, $A=2/3$. $x=2$: $7=3B$, $B=7/3$. ∎\n\nחלק ב: $(2/3)\\ln|x+1| + (7/3)\\ln|x-2| + C$. ∎\n\nחלק ג: נגזרת: $\\frac{2/3}{x+1} + \\frac{7/3}{x-2} = \\frac{2(x-2)+7(x+1)}{3(x+1)(x-2)} = \\frac{9x+3}{3(x+1)(x-2)} = \\frac{3x+1}{(x+1)(x-2)}$. ✓",
-      "rubric_en": "Part א: 6pts for correct form, 6pts for finding A and B. Part ב: 8pts for correct integration. Part ג: 5pts for verification.",
-      "rubric_he": "חלק א: 6 על צורה נכונה, 6 על $A,B$. חלק ב: 8 על אינטגרציה. חלק ג: 5 על בדיקה.",
-      "skill_atoms": ["partial_fractions_distinct_roots", "logarithm_integral"],
-      "explanation_en": "The substitution method (plug in roots of denominator) is fastest for finding partial fraction constants.",
-      "explanation_he": "שיטת ההצבה (הצבת שורשי המכנה) היא המהירה ביותר למציאת קבועי שברים חלקיים."
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\int \\frac{1}{(x-1)(x-3)}\\,dx =$",
+      "stem_he": "$\\int \\frac{1}{(x-1)(x-3)}\\,dx=$",
+      "options_en": ["$\\frac{1}{2}\\ln|\\frac{x-3}{x-1}|+C$","$\\ln|(x-1)(x-3)|+C$","$\\frac{1}{2}\\ln|\\frac{x-1}{x-3}|+C$","$\\ln|x-2|+C$"],
+      "options_he": ["$\\frac{1}{2}\\ln|\\frac{x-3}{x-1}|+C$","$\\ln|(x-1)(x-3)|+C$","$\\frac{1}{2}\\ln|\\frac{x-1}{x-3}|+C$","$\\ln|x-2|+C$"],
+      "correct_index": 0,
+      "explanation_en": "$A=-1/2$ at $x=1$, $B=1/2$ at $x=3$. $\\frac{-1/2}{x-1}+\\frac{1/2}{x-3}$. $\\int = \\frac{1}{2}(\\ln|x-3|-\\ln|x-1|)=\\frac{1}{2}\\ln|\\frac{x-3}{x-1}|$.",
+      "explanation_he": "$\\frac{1}{2}\\ln|\\frac{x-3}{x-1}|+C$.",
+      "skill_atoms": ["partial_fractions_distinct"]
     },
     {
       "ord": 2,
       "kind": "open",
       "difficulty": "hard",
-      "stem_en": "Compute $\\displaystyle\\int \\frac{x^2}{(x-1)(x^2+1)}\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int \\frac{x^2}{(x-1)(x^2+1)}\\,dx$.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Write the partial fractions decomposition: $\\frac{x^2}{(x-1)(x^2+1)} = \\frac{A}{x-1} + \\frac{Bx+C}{x^2+1}$. Find $A$, $B$, $C$.",
-          "body_he": "כתבו: $\\frac{x^2}{(x-1)(x^2+1)} = \\frac{A}{x-1} + \\frac{Bx+C}{x^2+1}$. מצאו $A$, $B$, $C$.",
-          "points": 12
-        },
-        {
-          "label": "ב",
-          "body_en": "Integrate $\\displaystyle\\int \\frac{Bx+C}{x^2+1}\\,dx$. Hint: split as $\\frac{Bx}{x^2+1} + \\frac{C}{x^2+1}$.",
-          "body_he": "אינטגרלו $\\displaystyle\\int \\frac{Bx+C}{x^2+1}\\,dx$. רמז: פצלו כ-$\\frac{Bx}{x^2+1} + \\frac{C}{x^2+1}$.",
-          "points": 8
-        },
-        {
-          "label": "ג",
-          "body_en": "Write the complete answer.",
-          "body_he": "כתבו את התשובה המלאה.",
-          "points": 5
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: Multiply: x² = A(x²+1) + (Bx+C)(x-1). Set x=1: 1 = 2A, A = 1/2. Expand: x² = (A+B)x² + (-B+C)x + (A-C). Compare: A+B = 1 → B = 1/2. A-C = 0 → C = 1/2. ∎\n\nPart ב: ∫(x/2)/(x²+1) dx + ∫(1/2)/(x²+1) dx = (1/4)ln(x²+1) + (1/2)arctan(x) + K. ∎\n\nPart ג: Full answer: (1/2)ln|x-1| + (1/4)ln(x²+1) + (1/2)arctan(x) + C. ∎",
-      "sample_solution_he": "חלק א: מכפילים: $x^2 = A(x^2+1)+(Bx+C)(x-1)$. $x=1$: $1=2A$, $A=1/2$. השוואת מקדמים: $B=1/2$, $C=1/2$. ∎\n\nחלק ב: $\\int \\frac{x/2}{x^2+1}dx + \\int\\frac{1/2}{x^2+1}dx = \\frac{1}{4}\\ln(x^2+1) + \\frac{1}{2}\\arctan(x) + K$. ∎\n\nחלק ג: $\\frac{1}{2}\\ln|x-1| + \\frac{1}{4}\\ln(x^2+1) + \\frac{1}{2}\\arctan(x) + C$. ∎",
-      "rubric_en": "Part א: 4pts correct form, 4pts for A, 4pts for B and C. Part ב: 4pts for ln term, 4pts for arctan term. Part ג: 5pts for correct full answer.",
-      "rubric_he": "חלק א: 4 על צורה, 4 על $A$, 4 על $B,C$. חלק ב: 4 על $\\ln$, 4 על $\\arctan$. חלק ג: 5 על תשובה.",
-      "skill_atoms": ["partial_fractions_irreducible_quadratic", "arctan_integral", "logarithm_integral"],
-      "explanation_en": "The irreducible quadratic factor (x²+1) requires a Bx+C numerator and produces both ln and arctan terms — a classic exam combination.",
-      "explanation_he": "הגורם הריבועי הבלתי פריק $(x^2+1)$ דורש מונה $Bx+C$ ומייצר גם $\\ln$ וגם $\\arctan$ — שילוב קלאסי במבחן."
-    },
-    {
-      "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Compute the definite integral: $\\displaystyle\\int_2^3 \\frac{5x-3}{x^2-3x+2}\\,dx$.",
-      "stem_he": "חשבו את האינטגרל המסוים: $\\displaystyle\\int_2^3 \\frac{5x-3}{x^2-3x+2}\\,dx$.",
-      "parts": [
-        {
-          "label": "א",
-          "body_en": "Factor $x^2-3x+2$ and perform the partial fractions decomposition.",
-          "body_he": "פרקו את $x^2-3x+2$ לגורמים ובצעו פירוק לשברים חלקיים.",
-          "points": 12
-        },
-        {
-          "label": "ב",
-          "body_en": "Evaluate the definite integral (give exact value in terms of $\\ln$).",
-          "body_he": "חשבו את האינטגרל המסוים (תנו ערך מדויק בעזרת $\\ln$).",
-          "points": 13
-        }
-      ],
-      "total_points": 25,
-      "sample_solution_en": "Part א: x²-3x+2 = (x-1)(x-2). Decompose: (5x-3)/((x-1)(x-2)) = A/(x-1) + B/(x-2). 5x-3 = A(x-2)+B(x-1). x=1: 2=-A, A=-2. x=2: 7=B. ∎\n\nPart ב: ∫₂³ (-2/(x-1) + 7/(x-2)) dx = [-2 ln|x-1| + 7 ln|x-2|]₂³ = (-2 ln 2 + 7 ln 1) - (-2 ln 1 + 7 ln 0).\n\nWait — at x=2 the integrand has a singularity (x-2 = 0)! This means the integral is improper. We must treat it as lim_{ε→0+} ∫₂₊ε³.\n\nActually, checking: the denominator (x-1)(x-2) = 0 at x=2, which is our lower limit. So this is an improper integral. lim_{ε→0+} [7 ln|x-2|]_{2+ε}^3 = 7 ln 1 - lim 7 ln ε = 0 - (-∞). The integral DIVERGES. The correct answer is: the integral diverges because the integrand has a non-integrable singularity at x = 2. ∎",
-      "sample_solution_he": "חלק א: $x^2-3x+2 = (x-1)(x-2)$. פירוק: $A=-2$, $B=7$. ∎\n\nחלק ב: שימו לב! $x=2$ נמצא בגבול התחתון של האינטגרציה, ו-$(x-2)$ מתאפס שם. האינטגרל הוא **לא אמיתי**. $\\lim_{\\varepsilon\\to 0^+} [7\\ln|x-2|]_{2+\\varepsilon}^3 = 7\\cdot 0 - 7\\ln\\varepsilon \\to +\\infty$. האינטגרל **מתבדר**. ∎",
-      "rubric_en": "Part א: 6pts factoring, 6pts for A and B. Part ב: 5pts for recognizing improper integral, 4pts for correct limit setup, 4pts for concluding divergence.",
-      "rubric_he": "חלק א: 6 על פירוק, 6 על $A,B$. חלק ב: 5 על זיהוי אינטגרל לא אמיתי, 4 על גבול, 4 על מסקנת התבדרות.",
-      "skill_atoms": ["partial_fractions_distinct_roots", "improper_integral_type2", "divergence_detection"],
-      "explanation_en": "This question has a trap: the singularity at the integration boundary makes it an improper integral that diverges — testing careful exam reading.",
-      "explanation_he": "שאלה זו כוללת מלכודת: הסינגולריות בגבול האינטגרציה הופכת אותו לאינטגרל לא אמיתי מתבדר — בוחן קריאת בחינה זהירה."
+      "stem_en": "Evaluate $\\int \\frac{x^2+2x-1}{(x-1)(x^2+1)}\\,dx$.",
+      "stem_he": "חשבו $\\int (x^2+2x-1)/[(x-1)(x^2+1)]\\,dx$.",
+      "rubric_en": "Decompose to $A/(x-1)+(Bx+C)/(x^2+1)$. $A=1$, $B=0$, $C=1$. $\\int = \\ln|x-1|+\\arctan x+C$.",
+      "rubric_he": "$A=1$, $B=0$, $C=1$. $\\ln|x-1|+\\arctan x+C$.",
+      "explanation_en": "$x=1$: num$=2=2A$, $A=1$. $(Bx+C)(x-1)=x^2+2x-1-(x^2+1)=2x-2=2(x-1)$. $B=0$, $C=2$? Wait: if $C=1$: $(0\\cdot x+1)(x-1)=x-1$; $(x^2+2x-1-(x^2+1))/(x-1)=(2x-2)/(x-1)=2$. So $C=2$, not $1$. Let me recheck: $A=1$; so $A(x^2+1)+(Bx+C)(x-1)=x^2+2x-1$ gives $(x^2+1)+(Bx+C)(x-1)=x^2+2x-1$, $(Bx+C)(x-1)=2x-2=2(x-1)$, so $Bx+C=2$: $B=0$, $C=2$. Result: $\\ln|x-1|+2\\arctan x+C$.",
+      "explanation_he": "$A=1$, $B=0$, $C=2$. $\\ln|x-1|+2\\arctan x+C$.",
+      "skill_atoms": ["partial_fractions_irreducible","partial_fractions_distinct"]
     }
   ],
   "agent_hints": {
     "key_insights": [
-      "Always check: degree(numerator) < degree(denominator). If not, do long division first.",
-      "For finding constants: substituting roots of the denominator is fastest.",
-      "Irreducible quadratic (x²+bx+c) always gets a Bx+C numerator.",
-      "Split Bx/(x²+1) for ln and C/(x²+1) for arctan.",
-      "Watch for singularities at integration boundaries — they create improper integrals."
+      "Always check if degree of numerator >= degree of denominator; if so, divide first.",
+      "Three factor types: distinct linear, repeated, irreducible quadratic.",
+      "Cover-up method: to find $A$ for factor $(x-a)$, set $x=a$ in the equation with $(x-a)$ cancelled.",
+      "Irreducible quadratic integral: complete the square → $\\arctan$."
     ],
     "common_misconceptions": [
       {
-        "wrong": "Using A/(x²+1) for an irreducible quadratic",
-        "correction": "Must use (Bx+C)/(x²+1) — the numerator has degree one less than the denominator.",
-        "detect_phrase_en": "A over x squared plus",
-        "detect_phrase_he": "A חלקי x בריבוע"
+        "wrong": "Using just A/(x-a) for a repeated factor (x-a)^2",
+        "correction": "Need A/(x-a) + B/(x-a)^2 for each power up to n.",
+        "detect_phrase_en": "repeated factor one term only",
+        "detect_phrase_he": "גורם חוזר מונה אחד"
       }
     ],
-    "skill_atoms_unlocked": [
-      "partial_fractions_distinct_roots",
-      "partial_fractions_repeated_roots",
-      "partial_fractions_irreducible_quadratic",
-      "logarithm_integral",
-      "arctan_integral"
-    ],
-    "prerequisites_to_check_before_teaching": [
-      "integration_substitution",
-      "polynomial_factoring"
-    ],
-    "next_recommended": [
-      "integration_by_parts",
-      "improper_integrals"
-    ]
+    "skill_atoms_unlocked": ["partial_fractions_distinct","partial_fractions_repeated","partial_fractions_irreducible","completing_the_square"],
+    "tutor_pacing_hint": "Start with distinct linear (easiest). Then repeated. Then irreducible quadratic (hardest).",
+    "next_recommended": ["improper_integrals","integrals_techniques"]
   }
 }

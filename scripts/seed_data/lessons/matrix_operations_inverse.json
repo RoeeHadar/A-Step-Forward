@@ -2,30 +2,143 @@
   "concept_id": "matrix_operations_inverse",
   "subject": "math",
   "level": "university",
-  "math_track": [
-    "calc1"
-  ],
-  "title_en": "Matrix Operations Inverse",
-  "title_he": "פעולות מטריצות והפוכה",
-  "summary_en": "Coming soon.",
-  "summary_he": "בקרוב.",
-  "est_minutes": 20,
+  "title_en": "Matrix Inverse",
+  "title_he": "מטריצה הופכית",
+  "summary_en": "Conditions for invertibility, formula for 2×2 inverse, Gauss-Jordan elimination for 3×3, properties of the inverse.",
+  "summary_he": "תנאים להפיכות, נוסחה ל-$2\\times2$, שיטת גאוס-ג'ורדן ל-$3\\times3$, תכונות ההופכית.",
+  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
-      "title_en": "Introduction",
-      "title_he": "מבוא",
-      "body_en_md": "**Core content for Matrix Operations Inverse.**\n\n**Worked Example 1 (exam level):** Apply the main definition with all steps shown.\n\n**Worked Example 2 (harder):** Multi-step problem at Ariel University final-exam difficulty.",
-      "body_he_md": "**תוכן מרכזי ל-פעולות מטריצות והפוכה.**\n\n**דוגמה 1 (רמת בחינה):** יישום ההגדרה עם כל השלבים.\n\n**דוגמה 2 (קשה יותר):** בעיה רב-שלבית ברמת בחינה."
+      "title_en": "Inverse: Undoing a Linear Transformation",
+      "title_he": "הופכית: ביטול טרנספורמציה לינארית",
+      "body_en_md": "The **inverse** of a square matrix $A$ is the matrix $A^{-1}$ such that $AA^{-1}=A^{-1}A=I$.\n\nInvertible matrices represent linear transformations that can be undone — they are one-to-one and onto.\n\n**When does $A^{-1}$ exist?**\n- Iff $\\det(A)\\ne0$.\n- Iff the rows (columns) are linearly independent.\n- Iff $Ax=0$ has only the trivial solution.",
+      "body_he_md": "**הופכית** $A^{-1}$: $AA^{-1}=A^{-1}A=I$.\n\nמתי קיימת?\n- אמ\"מ $\\det(A)\\ne0$.\n- אמ\"מ השורות/עמודות בלתי-תלויות לינארית.\n- אמ\"מ $Ax=0$ מוסבר רק על ידי $x=0$."
     },
     {
-      "kind": "exam_problems",
-      "title_en": "Exam-Style Practice Problems",
-      "title_he": "תרגול בסגנון בחינה",
-      "body_en_md": "The following problems are at the level of actual university final exams (Ariel University 38-111 Calculus, 88112 Linear Algebra). Practice writing complete solutions with all steps justified.\n\n**Problem 1:** Exam-level problem for Matrix Operations Inverse: apply the main theorem or technique with full justification.\n\n**Sample Solution:**\nWrite every step explicitly; state the final conclusion clearly.\n\n**Problem 2:** Multi-step exam problem combining two ideas from Matrix Operations Inverse.\n\n**Sample Solution:**\nComplete solution with all intermediate results shown.\n\n\n\n**What examiners look for:**\n- Every step written explicitly\n- No computational shortcuts without justification\n- Clear statement of what was proven or found at each stage",
-      "body_he_md": "הבעיות הבאות ברמת בחינות סופיות אמיתיות (38-111 חדו״א, 88112 אלגברה לינארית). תרגלו כתיבת פתרונות מלאים עם הנמקה לכל שלב.\n\n**בעיה 1:** בעיה ברמת בחינה ב-פעולות מטריצות והפוכה: יישום משפט/טכניקה מרכזית.\n\n**פתרון לדוגמה:**\nכל שלב במפורש; מסקנה ברורה.\n\n**בעיה 2:** בעיה רב-שלבית המשלבת שני רעיונות מ-פעולות מטריצות והפוכה.\n\n**פתרון לדוגמה:**\nפתרון מלא עם כל התוצאות הביניים.\n\n\n\n**מה בודקים בבחינה:**\n- כל שלב כתוב במפורש\n- ללא קיצורי דרך ללא הנמקה\n- הצהרה ברורה מה הוכח או נמצא בכל שלב"
+      "kind": "definition",
+      "title_en": "Inverse Formulas and Gauss-Jordan",
+      "title_he": "נוסחאות ושיטת גאוס-ג'ורדן",
+      "body_en_md": "**$2\\times2$ inverse formula:**\n$$A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix},\\quad A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$$\n\nOnly works when $\\det(A)=ad-bc\\ne0$.\n\n**$n\\times n$ inverse via Gauss-Jordan:**\n1. Form augmented matrix $[A|I]$.\n2. Apply row operations to reduce $A$ to $I$.\n3. The right side transforms into $A^{-1}$: $[I|A^{-1}]$.\n\n**Properties:**\n- $(A^{-1})^{-1}=A$.\n- $(AB)^{-1}=B^{-1}A^{-1}$.\n- $(A^T)^{-1}=(A^{-1})^T$.\n- $\\det(A^{-1})=1/\\det(A)$.",
+      "body_he_md": "**$2\\times2$:** $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.\n\n**גאוס-ג'ורדן:** $[A|I]\\xrightarrow{\\text{שורות}}[I|A^{-1}]$.\n\n**תכונות:** $(AB)^{-1}=B^{-1}A^{-1}$. $\\det(A^{-1})=1/\\det(A)$."
+    },
+    {
+      "kind": "theory",
+      "title_en": "Solving $Ax=b$ with the Inverse",
+      "title_he": "פתרון $Ax=b$ עם ההופכית",
+      "body_en_md": "If $A$ is invertible:\n$$Ax=b \\Rightarrow x=A^{-1}b.$$\n\nThis gives a unique solution.\n\n**Applications:**\n- Cryptography (invertible matrix encoding/decoding).\n- Circuit analysis.\n- Computer graphics (inverse transformations).\n\n**Note:** Computing $A^{-1}$ is usually more work than Gaussian elimination for a single system. Use Gauss-Jordan for $A^{-1}$ only when you need to solve multiple right-hand sides.",
+      "body_he_md": "$Ax=b$ → $x=A^{-1}b$ (פתרון יחיד).\n\n**יישומים:** קריפטוגרפיה, ניתוח מעגלים, גרפיקה.\n\n**הערה:** לשיטת גאוס עדיפה לשיטת $b$ בודד. $A^{-1}$ כדאי כש-$b$ מרובים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — 2×2 Inverse",
+      "title_he": "דוגמה פתורה 1 — הופכית 2×2",
+      "body_en_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$.\n\n$\\det(A)=6-5=1$.\n$$A^{-1}=\\frac{1}{1}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}.$$\n\nVerify: $AA^{-1}=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$. ✓",
+      "body_he_md": "$\\det=1$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$. $AA^{-1}=I$ ✓."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find $A^{-1}$ for $A=\\begin{pmatrix}4&3\\\\3&2\\end{pmatrix}$.",
+      "body_he_md": "מצא $A^{-1}$ ל-$A=\\begin{pmatrix}4&3\\\\3&2\\end{pmatrix}$.",
+      "checkpoint_solution_en": "$\\det=8-9=-1$. $A^{-1}=\\frac{1}{-1}\\begin{pmatrix}2&-3\\\\-3&4\\end{pmatrix}=\\begin{pmatrix}-2&3\\\\3&-4\\end{pmatrix}$.",
+      "checkpoint_solution_he": "$A^{-1}=\\begin{pmatrix}-2&3\\\\3&-4\\end{pmatrix}$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Gauss-Jordan for 3×3",
+      "title_he": "דוגמה פתורה 2 — גאוס-ג'ורדן ל-3×3",
+      "body_en_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}1&0&0\\\\1&1&0\\\\1&1&1\\end{pmatrix}$ (lower triangular).\n\nForm $[A|I]$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\1&1&0&|&0&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n$R_2\\to R_2-R_1$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n$R_3\\to R_3-R_1-R_2$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&0&1&|&0&-1&1\\end{pmatrix}$$\n\n$$A^{-1}=\\begin{pmatrix}1&0&0\\\\-1&1&0\\\\0&-1&1\\end{pmatrix}.$$",
+      "body_he_md": "גאוס-ג'ורדן: $A^{-1}=\\begin{pmatrix}1&0&0\\\\-1&1&0\\\\0&-1&1\\end{pmatrix}$."
+    },
+    {
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "For what value of $k$ is $A=\\begin{pmatrix}k&2\\\\3&6\\end{pmatrix}$ not invertible?",
+      "body_he_md": "עבור איזה $k$ המטריצה $\\begin{pmatrix}k&2\\\\3&6\\end{pmatrix}$ לא הפיכה?",
+      "checkpoint_solution_en": "$\\det=6k-6=0\\Rightarrow k=1$.",
+      "checkpoint_solution_he": "$k=1$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Using Inverse to Solve $Ax=b$",
+      "title_he": "דוגמה פתורה 3 — שימוש בהופכית לפתרון $Ax=b$",
+      "body_en_md": "**Given** $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$, solve $Ax=\\begin{pmatrix}8\\\\13\\end{pmatrix}$.\n\n**Step 1:** $\\det(A)=6-5=1$. $A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$.\n\n**Step 2:** $x=A^{-1}b=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}\\begin{pmatrix}8\\\\13\\end{pmatrix}=\\begin{pmatrix}24-13\\\\-40+26\\end{pmatrix}=\\begin{pmatrix}11\\\\-14\\end{pmatrix}$.\n\n**Verify:** $\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}\\begin{pmatrix}11\\\\-14\\end{pmatrix}=\\begin{pmatrix}22-14\\\\55-42\\end{pmatrix}=\\begin{pmatrix}8\\\\13\\end{pmatrix}$. ✓",
+      "body_he_md": "$A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$. $x=A^{-1}b=\\begin{pmatrix}11\\\\-14\\end{pmatrix}$ ✓."
+    },
+    {
+      "kind": "method_guide",
+      "title_en": "Method Guide — Matrix Inverse",
+      "title_he": "מדריך שיטה — הופכית",
+      "body_en_md": "**Check invertibility:** $\\det(A)\\ne0$.\n\n**$2\\times2$:**\n$$\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$$\n(Swap diagonal, negate off-diagonal, divide by det.)\n\n**$3\\times3$ (or larger):** Gauss-Jordan on $[A|I]$.\n\n**Solve $Ax=b$:** $x=A^{-1}b$ (only if $A$ invertible).",
+      "body_he_md": "**בדיקה:** $\\det(A)\\ne0$.\n\n**$2\\times2$:** החלף אלכסון, שלל את מחוץ לאלכסון, חלק ב-$\\det$.\n\n**$3\\times3$:** גאוס-ג'ורדן על $[A|I]$.\n\n**$Ax=b$:** $x=A^{-1}b$."
+    },
+    {
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "", "body_he_md": "",
+      "exercises": [
+        {"id":"e1","difficulty":"easy","body_en":"$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. Find $A^{-1}$.","body_he":"$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. $A^{-1}$?","solution_en":"$A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$."},
+        {"id":"e2","difficulty":"easy","body_en":"Is $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ invertible?","body_he":"האם $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ הפיכה?","solution_en":"$\\det=4-4=0$. Not invertible.","solution_he":"$\\det=0$ → לא הפיכה."},
+        {"id":"e3","difficulty":"easy","body_en":"$A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$. Solve $Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$.","body_he":"$Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$. פתרון?","solution_en":"$x_1=3$, $x_2=2$. ($A^{-1}b$)","solution_he":"$x=(3,2)^T$."},
+        {"id":"e4","difficulty":"easy","body_en":"$(AB)^{-1}=?$","body_he":"$(AB)^{-1}=?$","solution_en":"$(AB)^{-1}=B^{-1}A^{-1}$.","solution_he":"$B^{-1}A^{-1}$."},
+        {"id":"e5","difficulty":"medium","body_en":"$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. Find $A^{-1}$ and verify.","body_he":"$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. $A^{-1}$ ובדיקה.","solution_en":"$\\det=1$. $A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$. $AA^{-1}=I$. ✓","solution_he":"$A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$."},
+        {"id":"e6","difficulty":"medium","body_en":"Gauss-Jordan: find $A^{-1}$ for $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$.","body_he":"גאוס-ג'ורדן: $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$. $A^{-1}$?","solution_en":"$[A|I]\\to\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}\\to\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.","solution_he":"$A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$."},
+        {"id":"e7","difficulty":"medium","body_en":"$\\det(A)=3$, $A$ is $3\\times3$. Find $\\det(A^{-1})$.","body_he":"$\\det(A)=3$. $\\det(A^{-1})$?","solution_en":"$\\det(A^{-1})=1/3$.","solution_he":"$1/3$."},
+        {"id":"e8","difficulty":"medium","body_en":"$A=\\begin{pmatrix}1&1\\\\1&2\\end{pmatrix}$. Solve $Ax=\\begin{pmatrix}5\\\\9\\end{pmatrix}$.","body_he":"$Ax=\\begin{pmatrix}5\\\\9\\end{pmatrix}$. פתרון?","solution_en":"$\\det=1$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-1&1\\end{pmatrix}$. $x=\\begin{pmatrix}10-9\\\\-5+9\\end{pmatrix}=\\begin{pmatrix}1\\\\4\\end{pmatrix}$.","solution_he":"$x=(1,4)^T$."},
+        {"id":"e9","difficulty":"medium","body_en":"If $A^2=I$, what is $A^{-1}$?","body_he":"אם $A^2=I$, מהי $A^{-1}$?","solution_en":"$A\\cdot A=I\\Rightarrow A^{-1}=A$.","solution_he":"$A^{-1}=A$."},
+        {"id":"e10","difficulty":"hard","body_en":"Find $A^{-1}$ for $A=\\begin{pmatrix}1&2&0\\\\0&1&3\\\\0&0&1\\end{pmatrix}$.","body_he":"$A=\\begin{pmatrix}1&2&0\\\\0&1&3\\\\0&0&1\\end{pmatrix}$. $A^{-1}$?","solution_en":"$[A|I]$, reduce: back-substitute. $A^{-1}=\\begin{pmatrix}1&-2&6\\\\0&1&-3\\\\0&0&1\\end{pmatrix}$.","solution_he":"$A^{-1}=\\begin{pmatrix}1&-2&6\\\\0&1&-3\\\\0&0&1\\end{pmatrix}$."},
+        {"id":"e11","difficulty":"hard","body_en":"Prove: if $A$ is invertible, then $Ax=b$ has a unique solution.","body_he":"הוכח: אם $A$ הפיכה, $Ax=b$ מוסבר יחידאית.","solution_en":"$x=A^{-1}b$: this is a solution (verify $A(A^{-1}b)=Ib=b$). Unique: if $Ax=b$ and $Ay=b$, then $A(x-y)=0\\Rightarrow x-y=A^{-1}\\cdot0=0\\Rightarrow x=y$.","solution_he":"$x=A^{-1}b$ פתרון. יחידאי: $A(x-y)=0\\Rightarrow x=y$."},
+        {"id":"e12","difficulty":"hard","body_en":"$A$ and $B$ are invertible $n\\times n$. Show $(AB)^{-1}=B^{-1}A^{-1}$.","body_he":"הוכח $(AB)^{-1}=B^{-1}A^{-1}$.","solution_en":"$(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AIA^{-1}=AA^{-1}=I$. ✓","solution_he":"$(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=I$ ✓."},
+        {"id":"e13","difficulty":"hard","body_en":"For what values of $k$ does $A=\\begin{pmatrix}k&1&0\\\\1&k&1\\\\0&1&k\\end{pmatrix}$ have no inverse?","body_he":"עבור אילו $k$ המטריצה $\\begin{pmatrix}k&1&0\\\\1&k&1\\\\0&1&k\\end{pmatrix}$ אינה הפיכה?","solution_en":"$\\det(A)=k(k^2-1)-1(k-0)=k^3-k-k=k^3-2k=k(k^2-2)=0$. $k=0$, $k=\\pm\\sqrt{2}$.","solution_he":"$k=0$, $k=\\pm\\sqrt{2}$."}
+      ]
+    },
+    {
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **$2\\times2$ inverse**: swap the diagonal entries (not the off-diagonal).\n2. **$(AB)^{-1}\\ne A^{-1}B^{-1}$**: order reverses.\n3. **Non-invertible**: if $\\det=0$, stop — no inverse exists.\n4. **Gauss-Jordan**: row reduce only — no column operations.",
+      "body_he_md": "1. **$2\\times2$**: החלף אלכסון, שלל מחוץ לאלכסון.\n2. **$(AB)^{-1}=B^{-1}A^{-1}$** — לא $A^{-1}B^{-1}$.\n3. **$\\det=0$**: אין הופכית.\n4. **גאוס-ג'ורדן**: פעולות שורה בלבד."
+    },
+    {
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- $2\\times2$: $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.\n- $3\\times3$: Gauss-Jordan $[A|I]\\to[I|A^{-1}]$.\n- $(AB)^{-1}=B^{-1}A^{-1}$.\n- $\\det(A^{-1})=1/\\det(A)$.",
+      "body_he_md": "- $2\\times2$: נוסחה ישירה.\n- $3\\times3$: גאוס-ג'ורדן.\n- $(AB)^{-1}=B^{-1}A^{-1}$.\n- $\\det(A^{-1})=1/\\det(A)$."
+    },
+    {
+      "kind": "summary",
+      "title_en": "Take-away",
+      "title_he": "סיכום",
+      "body_en_md": "- $A^{-1}$ exists iff $\\det(A)\\ne0$.\n- $2\\times2$: swap/negate/divide formula.\n- $3\\times3$: Gauss-Jordan.\n- Solve $Ax=b$: $x=A^{-1}b$.",
+      "body_he_md": "- הופכית קיימת אמ\"מ $\\det\\ne0$.\n- $2\\times2$: נוסחה. $3\\times3$: גאוס-ג'ורדן.\n- $x=A^{-1}b$."
     }
   ],
-  "questions": [],
-  "agent_hints": "Brief teaching notes for Matrix Operations Inverse."
+  "questions": [
+    {"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"$A=\\begin{pmatrix}2&3\\\\1&2\\end{pmatrix}$. $\\det(A)=$","stem_he":"$\\det\\begin{pmatrix}2&3\\\\1&2\\end{pmatrix}=$","options_en":["1","7","4","-1"],"options_he":["1","7","4","-1"],"correct_index":0,"explanation_en":"$2\\times2-3\\times1=4-3=1$.","explanation_he":"$4-3=1$.","skill_atoms":["matrix_inverse","determinant_2x2"]}
+  ],
+  "agent_hints": {
+    "key_insights": [
+      "A^{-1} exists iff det(A) ≠ 0.",
+      "2×2: swap diagonal, negate off-diagonal, divide by det.",
+      "3×3: Gauss-Jordan on [A|I] → [I|A^{-1}].",
+      "(AB)^{-1} = B^{-1}A^{-1} (order reverses)."
+    ],
+    "common_misconceptions": [
+      {"wrong": "(AB)^{-1} = A^{-1}B^{-1}","correction": "(AB)^{-1} = B^{-1}A^{-1}.","detect_phrase_en":"inverse product order","detect_phrase_he":"הופכית מכפלה סדר"}
+    ],
+    "skill_atoms_unlocked": ["matrix_inverse","gauss_jordan","invertibility","inverse_properties"],
+    "tutor_pacing_hint": "2×2 formula first, then conditions for invertibility, then Gauss-Jordan.",
+    "next_recommended": ["determinants_cramer","la_matrices"]
+  }
 }
