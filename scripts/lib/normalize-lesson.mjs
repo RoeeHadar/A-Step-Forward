@@ -3,6 +3,8 @@
  * Used by seed-lessons.mjs and generate-lessons-artifacts.mjs.
  */
 
+import { normalizeLessonLatex } from './normalize-latex.mjs';
+
 export const SECTION_KINDS = new Set([
   'intro',
   'definition',
@@ -88,7 +90,7 @@ export function normalizeLesson(raw, fileBase) {
   const sections = (raw.sections ?? []).map(normalizeSection);
   const questions = (raw.questions ?? []).map(normalizeQuestion);
 
-  return {
+  const lesson = {
     concept_id: conceptId,
     subject: raw.subject ?? 'math',
     level: inferLevel(raw),
@@ -106,6 +108,7 @@ export function normalizeLesson(raw, fileBase) {
     level_focus: raw.level_focus ?? null,
     skill_atom_bank: raw.skill_atom_bank ?? null,
   };
+  return normalizeLessonLatex(lesson);
 }
 
 export function validateLesson(file, l) {

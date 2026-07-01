@@ -1,10 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+import { MarkdownMath } from '@/components/markdown-math';
 import { Clock, MessageSquare } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
@@ -14,7 +11,6 @@ import {
   InteractiveSeedQuestions,
   type InteractiveSeedQuestion,
 } from '@/components/interactive-seed-questions';
-import 'katex/dist/katex.min.css';
 
 export type InteractiveSeedSection = {
   id: string;
@@ -74,13 +70,8 @@ export function InteractiveSeedLessonView({
             <CardHeader>
               <CardTitle className="text-lg">{secTitle}</CardTitle>
             </CardHeader>
-            <CardContent className="prose prose-neutral dark:prose-invert max-w-none" dir={dir}>
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm, remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-              >
-                {body}
-              </ReactMarkdown>
+            <CardContent dir={dir}>
+              <MarkdownMath className="prose-neutral">{body}</MarkdownMath>
             </CardContent>
           </Card>
         );

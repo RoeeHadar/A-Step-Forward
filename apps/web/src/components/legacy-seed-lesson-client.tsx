@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
+import { MarkdownMath } from '@/components/markdown-math';
 import { Clock, MessageSquare } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
@@ -18,7 +16,6 @@ import {
   getLessonEngagementTrack,
 } from '@/components/three-pt-lesson-engagement';
 import type { Lesson } from '@asf/schemas/curriculum';
-import 'katex/dist/katex.min.css';
 
 type LegacySeedLessonClientProps = {
   lesson: Lesson;
@@ -67,7 +64,7 @@ export function LegacySeedLessonClient({
       </div>
 
       <Card className="mb-8">
-        <CardContent className="prose prose-neutral dark:prose-invert max-w-none pt-6">
+        <CardContent className="pt-6">
           {lesson.body_md.trim().length === 0 ? (
             <div className="not-prose space-y-2 text-muted-foreground">
               <p className="text-base font-medium text-foreground">Lesson coming soon</p>
@@ -77,9 +74,7 @@ export function LegacySeedLessonClient({
               </p>
             </div>
           ) : (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeKatex]}>
-              {lesson.body_md}
-            </ReactMarkdown>
+            <MarkdownMath className="prose-neutral">{lesson.body_md}</MarkdownMath>
           )}
         </CardContent>
       </Card>

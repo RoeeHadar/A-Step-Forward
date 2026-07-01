@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
+import { MarkdownMath } from '@/components/markdown-math';
 import { Clock, MessageSquare } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
@@ -10,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { PageHeader } from '@/components/page-header';
 import type { InteractiveSeedLesson } from '@/components/interactive-seed-lesson-view';
 import { InteractiveSeedLessonView } from '@/components/interactive-seed-lesson-view';
-import 'katex/dist/katex.min.css';
 import {
   LegacySeedProgressBar,
   LegacySeedCompleteArea,
@@ -57,7 +54,7 @@ export async function LegacySeedLessonView({
       </div>
 
       <Card className="mb-8">
-        <CardContent className="prose prose-neutral dark:prose-invert max-w-none pt-6">
+        <CardContent className="pt-6">
           {lesson.body_md.trim().length === 0 ? (
             <div className="not-prose space-y-2 text-muted-foreground">
               <p className="text-base font-medium text-foreground">Lesson coming soon</p>
@@ -67,9 +64,7 @@ export async function LegacySeedLessonView({
               </p>
             </div>
           ) : (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeKatex]}>
-              {lesson.body_md}
-            </ReactMarkdown>
+            <MarkdownMath className="prose-neutral">{lesson.body_md}</MarkdownMath>
           )}
         </CardContent>
       </Card>

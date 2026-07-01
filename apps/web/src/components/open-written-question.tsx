@@ -1,23 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+import { MarkdownMath } from '@/components/markdown-math';
 import { Eye, EyeOff, Pencil } from 'lucide-react';
-import 'katex/dist/katex.min.css';
 
 type Lang = 'en' | 'he';
 
 function MarkdownBlock({ content, dir }: { content: string; dir: 'ltr' | 'rtl' }) {
-  return (
-    <div className="prose prose-sm dark:prose-invert max-w-none" dir={dir}>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
+  return <MarkdownMath dir={dir}>{content}</MarkdownMath>;
 }
 
 export type OpenWrittenQuestionContent = {

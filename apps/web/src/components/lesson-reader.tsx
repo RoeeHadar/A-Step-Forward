@@ -1,10 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import {
@@ -26,6 +22,8 @@ import {
   Trophy,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { normalizeLatexInMarkdown } from '@/lib/normalize-latex';
+import { MarkdownMath } from '@/components/markdown-math';
 import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 // MATH_GLOSSARY terms (see @/lib/math-glossary) could be wrapped with
 // GlossaryTooltip for inline hover hints; full Markdown post-processing is
@@ -38,7 +36,8 @@ import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/li
  * full markdown but may contain inline math.
  */
 function MathText({ text, dir }: { text: string; dir?: 'ltr' | 'rtl' }) {
-  const parts = text.split(/(\$[^$\n]+\$)/g);
+  const normalized = normalizeLatexInMarkdown(text);
+  const parts = normalized.split(/(\$[^$\n]+\$)/g);
   return (
     <span dir={dir}>
       {parts.map((part, i) => {
@@ -248,11 +247,7 @@ function CheckpointCard({
         </span>
       </div>
       <div className="px-5 py-4" dir={dir}>
-        <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
-          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-            {body}
-          </ReactMarkdown>
-        </div>
+        <MarkdownMath>{body}</MarkdownMath>
         {solution ? (
           <div className="mt-4">
             <button
@@ -269,11 +264,7 @@ function CheckpointCard({
                 <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                   {lang === 'he' ? 'פתרון' : 'Solution'}
                 </p>
-                <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
-                  <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                    {solution}
-                  </ReactMarkdown>
-                </div>
+                <MarkdownMath>{solution}</MarkdownMath>
               </div>
             ) : null}
           </div>
@@ -306,11 +297,7 @@ function ExerciseItem({
           <span className="text-[10px] text-muted-foreground">{exercise.points} pts</span>
         ) : null}
       </div>
-      <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40" dir={dir}>
-        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-          {body}
-        </ReactMarkdown>
-      </div>
+      <MarkdownMath dir={dir}>{body}</MarkdownMath>
       {solution ? (
         <>
           <button
@@ -324,11 +311,7 @@ function ExerciseItem({
           </button>
           {showSolution ? (
             <div className="mt-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
-              <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40" dir={dir}>
-                <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                  {solution}
-                </ReactMarkdown>
-              </div>
+              <MarkdownMath dir={dir}>{solution}</MarkdownMath>
             </div>
           ) : null}
         </>
@@ -361,11 +344,7 @@ function ExerciseSetCard({
           <ExerciseItem key={ex.id || String(i)} exercise={ex} lang={lang} dir={dir} />
         ))}
         {!section.exercises ? (
-          <div className="prose prose-sm dark:prose-invert max-w-none px-1 prose-headings:font-display prose-pre:bg-muted/40" dir={dir}>
-            <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-              {lang === 'he' ? section.body_he_md : section.body_en_md}
-            </ReactMarkdown>
-          </div>
+          <MarkdownMath dir={dir}>{lang === 'he' ? section.body_he_md : section.body_en_md}</MarkdownMath>
         ) : null}
       </div>
     </div>
@@ -461,14 +440,7 @@ function SectionCard({
       )}
       dir={dir}
     >
-      <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:font-display prose-pre:bg-muted/40">
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkMath]}
-          rehypePlugins={[rehypeKatex]}
-        >
-          {body}
-        </ReactMarkdown>
-      </div>
+      <MarkdownMath dir={dir}>{body}</MarkdownMath>
     </div>
   );
 

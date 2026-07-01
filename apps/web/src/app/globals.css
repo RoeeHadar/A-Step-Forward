@@ -245,6 +245,15 @@ span.katex *,
   text-align: center !important;
 }
 
+/* Unparsed math nodes (before KaTeX) must stay LTR inside Hebrew prose. */
+[dir='rtl'] .prose code.language-math,
+[dir='rtl'] .prose span.math-inline,
+[dir='rtl'] .prose div.math-display {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
 @theme inline {
   --font-sans: var(--font-heebo), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --color-background: hsl(var(--background));

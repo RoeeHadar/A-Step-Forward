@@ -23,11 +23,7 @@
  */
 
 import { useMemo, useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css';
+import { MarkdownMath } from '@/components/markdown-math';
 import {
   ChevronLeft,
   ChevronRight,
@@ -207,13 +203,7 @@ const STR = {
 } as const;
 
 function MarkdownInline({ content, dir }: { content: string; dir: 'rtl' | 'ltr' }) {
-  return (
-    <div className="prose prose-sm dark:prose-invert max-w-none" dir={dir}>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
+  return <MarkdownMath dir={dir}>{content}</MarkdownMath>;
 }
 
 function fmtT(s: number): string {

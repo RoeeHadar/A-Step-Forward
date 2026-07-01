@@ -1,9 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
+import { MarkdownMath } from '@/components/markdown-math';
 import { ArrowLeft, BookOpen, Clock, MessageSquare } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
@@ -11,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { SiteHeader } from '@/components/site-header';
 import { fetchLessonPublic } from '@/lib/data';
 import { listSeedLessonIds, seedCourse } from '@/lib/seed-lessons';
-import 'katex/dist/katex.min.css';
 
 export const dynamic = 'force-dynamic';
 
@@ -69,10 +66,8 @@ export default async function PublicLessonPage({
         </div>
 
         <Card className="mb-8">
-          <CardContent className="prose prose-neutral dark:prose-invert max-w-none pt-6">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeKatex]}>
-              {lesson.body_md}
-            </ReactMarkdown>
+          <CardContent className="pt-6">
+            <MarkdownMath className="prose-neutral">{lesson.body_md}</MarkdownMath>
           </CardContent>
         </Card>
 

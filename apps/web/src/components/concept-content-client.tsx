@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { MarkdownMath } from '@/components/markdown-math';
 import { ExternalLink } from 'lucide-react';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
 
@@ -97,9 +96,7 @@ export function ConceptContentClient({
           <p className="mb-4 text-sm italic text-muted-foreground">{active.summary}</p>
         ) : null}
 
-        <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{active.body_md}</ReactMarkdown>
-        </div>
+        <MarkdownMath className="md:prose-base">{active.body_md}</MarkdownMath>
 
         <footer className="mt-6 border-t border-border/60 pt-4 text-xs text-muted-foreground">
           <p>

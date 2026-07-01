@@ -2,12 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+import { MarkdownMath } from '@/components/markdown-math';
 import { Clock, CheckCircle2, ArrowLeft } from 'lucide-react';
-import 'katex/dist/katex.min.css';
 import { OpenWrittenQuestion } from '@/components/open-written-question';
 import type { SeedMockExam, MockExamIndexEntry } from '@/lib/mock-exam-seed-types';
 
@@ -24,13 +20,7 @@ function formatTime(totalSeconds: number): string {
 }
 
 function ExamMarkdown({ content, dir }: { content: string; dir: 'ltr' | 'rtl' }) {
-  return (
-    <div className="prose prose-sm max-w-none dark:prose-invert" dir={dir}>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
+  return <MarkdownMath dir={dir}>{content}</MarkdownMath>;
 }
 
 function MockExamRunner({

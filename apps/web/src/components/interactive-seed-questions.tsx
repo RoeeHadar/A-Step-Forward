@@ -1,11 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css';
+import { MarkdownMath } from '@/components/markdown-math';
 import { OpenWrittenQuestion } from '@/components/open-written-question';
 
 export type InteractiveSeedMcqOption = {
@@ -40,13 +36,7 @@ export type InteractiveSeedQuestion =
 type Lang = 'en' | 'he';
 
 function MarkdownInline({ content, dir }: { content: string; dir: 'ltr' | 'rtl' }) {
-  return (
-    <div className="prose prose-sm dark:prose-invert max-w-none" dir={dir}>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-        {content}
-      </ReactMarkdown>
-    </div>
-  );
+  return <MarkdownMath dir={dir}>{content}</MarkdownMath>;
 }
 
 function McqQuestion({

@@ -4,8 +4,7 @@ import { useChat } from 'ai/react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { MarkdownMath } from '@/components/markdown-math';
 import { Send, Loader2, X } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
@@ -235,9 +234,7 @@ export function AgentChat({ agent }: { agent: string }) {
                 }
               >
                 {m.role === 'assistant' ? (
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
-                  </div>
+                  <MarkdownMath>{m.content}</MarkdownMath>
                 ) : (
                   m.content
                 )}
