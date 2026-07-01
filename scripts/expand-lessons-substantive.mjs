@@ -10,6 +10,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 import { callGroq, parseJsonLoose, getGroqApiKey, sleep } from './lib/groq-client.mjs';
 import {
   wordCount,
@@ -41,7 +42,8 @@ const DRY = Boolean(flag('dry-run', false));
 const FORCE = Boolean(flag('force', false));
 const DELAY_MS = Number(flag('delay-ms', 8000));
 const SECTION_BATCH = Number(flag('section-batch', 1));
-const QUESTION_BATCH = Number(flag('question-batch', 3));
+const COMMIT_EVERY = Number(flag('commit-every', 5));
+const AUTO_COMMIT = process.env.AUTO_COMMIT === 'true';
 
 const SYSTEM_PROMPT = `You are the lead bilingual curriculum author for "A Step Forward" — an AI tutoring platform for Israeli high-school (Bagrut 3/4/5 יח"ל) and first-year university students (חדו"א, אלגברה לינארית, פיזיקה).
 
@@ -80,6 +82,29 @@ function loadProgress() {
 
 function saveProgress(progress) {
   fs.writeFileSync(PROGRESS_PATH, `${JSON.stringify(progress, null, 2)}\n`, 'utf8');
+}
+
+function maybePushCommit(completedCount) {
+  if (!AUTO_COMMIT || DRY) return;
+  try {
+    execSync('git config user.name "github-actions[bot]"', { stdio: 'pipe' });
+    execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"', {
+      stdio: 'pipe',
+    });
+    execSync('git add scripts/seed_data/lessons/ scripts/.expand-substantive-progress.json', {
+      stdio: 'pipe',
+    });
+    execSync(
+      `git commit -m "feat(curriculum): substantive expansion progress (${completedCount} lessons)"`,
+      { stdio: 'pipe' },
+    );
+    execSync('git pull --rebase origin main', { stdio: 'pipe' });
+    execSync('git push origin HEAD:main', { stdio: 'pipe' });
+    console.log(`[expand-substantive] pushed incremental commit (${completedCount} lessons)`);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn(`[expand-substantive] incremental commit skipped: ${msg.slice(0, 160)}`);
+  }
 }
 
 function sectionNeedsWork(section) {
@@ -276,6 +301,7 @@ async function main() {
   let updated = 0;
   let skipped = 0;
   let failed = 0;
+  let sinceCommit = 0;
 
   for (const file of files) {
     if (processed >= LIMIT) break;
@@ -306,8 +332,13 @@ async function main() {
       completedSet.add(conceptId);
       delete progress.failed?.[conceptId];
       updated++;
+      sinceCommit++;
       saveProgress({ ...progress, completed: [...completedSet] });
       console.log(`  ✓ ${conceptId} written`);
+      if (sinceCommit >= COMMIT_EVERY) {
+        maybePushCommit(completedSet.size);
+        sinceCommit = 0;
+      }
     } catch (err) {
       failed++;
       progress.failed = progress.failed ?? {};
@@ -321,7 +352,8 @@ async function main() {
 
   console.log('\n[expand-substantive] Done');
   console.log(`  updated: ${updated}, skipped: ${skipped}, failed: ${failed}, dry-run: ${DRY}`);
-  if (failed > 0) process.exit(1);
+  if (sinceCommit > 0) maybePushCommit(completedSet.size);
+  if (failed > 0 && updated === 0) process.exit(1);
 }
 
 main();
