@@ -10,8 +10,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
 import { callGroq, parseJsonLoose, getGroqApiKey, sleep } from './lib/groq-client.mjs';
+import { pushProgressCommit } from './lib/git-push-progress.mjs';
 import {
   wordCount,
   hebrewBodyWeak,
@@ -40,9 +40,10 @@ const ONLY = (() => {
 })();
 const DRY = Boolean(flag('dry-run', false));
 const FORCE = Boolean(flag('force', false));
-const DELAY_MS = Number(flag('delay-ms', 8000));
+const DELAY_MS = Number(flag('delay-ms', 5000));
 const SECTION_BATCH = Number(flag('section-batch', 1));
-const COMMIT_EVERY = Number(flag('commit-every', 5));
+const QUESTION_BATCH = Number(flag('question-batch', 3));
+const COMMIT_EVERY = Number(flag('commit-every', 2));
 const AUTO_COMMIT = process.env.AUTO_COMMIT === 'true';
 
 const SYSTEM_PROMPT = `You are the lead bilingual curriculum author for "A Step Forward" — an AI tutoring platform for Israeli high-school (Bagrut 3/4/5 יח"ל) and first-year university students (חדו"א, אלגברה לינארית, פיזיקה).
@@ -84,27 +85,10 @@ function saveProgress(progress) {
   fs.writeFileSync(PROGRESS_PATH, `${JSON.stringify(progress, null, 2)}\n`, 'utf8');
 }
 
-function maybePushCommit(completedCount) {
-  if (!AUTO_COMMIT || DRY) return;
-  try {
-    execSync('git config user.name "github-actions[bot]"', { stdio: 'pipe' });
-    execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"', {
-      stdio: 'pipe',
-    });
-    execSync('git add scripts/seed_data/lessons/ scripts/.expand-substantive-progress.json', {
-      stdio: 'pipe',
-    });
-    execSync(
-      `git commit -m "feat(curriculum): substantive expansion progress (${completedCount} lessons)"`,
-      { stdio: 'pipe' },
-    );
-    execSync('git pull --rebase origin main', { stdio: 'pipe' });
-    execSync('git push origin HEAD:main', { stdio: 'pipe' });
-    console.log(`[expand-substantive] pushed incremental commit (${completedCount} lessons)`);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.warn(`[expand-substantive] incremental commit skipped: ${msg.slice(0, 160)}`);
-  }
+function persistProgress(progress, completedSet) {
+  const snapshot = { ...progress, completed: [...completedSet], updated_at: new Date().toISOString() };
+  saveProgress(snapshot);
+  return snapshot;
 }
 
 function sectionNeedsWork(section) {
@@ -250,6 +234,7 @@ async function expandLesson(lesson) {
   let current = structuredClone(lesson);
 
   for (const batch of chunkArray(expandable, SECTION_BATCH)) {
+    console.log(`  [section batch] ${batch.map((s) => s.kind).join(', ')}`);
     const userPrompt = buildUserPrompt(current, batch, []);
     const resp = await callGroq(
       [
@@ -289,13 +274,18 @@ async function main() {
     process.exit(2);
   }
 
-  const progress = loadProgress();
+  let progress = loadProgress();
   const completedSet = new Set(progress.completed ?? []);
 
   const files = fs
     .readdirSync(LESSONS_DIR)
     .filter((f) => f.endsWith('.json'))
     .sort();
+
+  console.log(
+    `[expand-substantive] AUTO_COMMIT=${AUTO_COMMIT} COMMIT_EVERY=${COMMIT_EVERY} DELAY_MS=${DELAY_MS} QUESTION_BATCH=${QUESTION_BATCH}`,
+  );
+  console.log(`[expand-substantive] resume: ${completedSet.size}/${files.length} already completed`);
 
   let processed = 0;
   let updated = 0;
@@ -333,17 +323,17 @@ async function main() {
       delete progress.failed?.[conceptId];
       updated++;
       sinceCommit++;
-      saveProgress({ ...progress, completed: [...completedSet] });
-      console.log(`  ✓ ${conceptId} written`);
+      progress = persistProgress(progress, completedSet);
+      console.log(`  ✓ ${conceptId} written (${completedSet.size} total)`);
       if (sinceCommit >= COMMIT_EVERY) {
-        maybePushCommit(completedSet.size);
+        pushProgressCommit(completedSet.size, { dryRun: DRY });
         sinceCommit = 0;
       }
     } catch (err) {
       failed++;
       progress.failed = progress.failed ?? {};
       progress.failed[conceptId] = String(err.message ?? err);
-      saveProgress({ ...progress, completed: [...completedSet] });
+      progress = persistProgress(progress, completedSet);
       console.error(`  ✗ ${conceptId}: ${err.message}`);
     }
 
@@ -352,7 +342,18 @@ async function main() {
 
   console.log('\n[expand-substantive] Done');
   console.log(`  updated: ${updated}, skipped: ${skipped}, failed: ${failed}, dry-run: ${DRY}`);
-  if (sinceCommit > 0) maybePushCommit(completedSet.size);
+  if (sinceCommit > 0) pushProgressCommit(completedSet.size, { dryRun: DRY });
+
+  const total = files.length;
+  const done = completedSet.size;
+  if (done < total && updated > 0 && process.env.AUTO_RESUME === 'true') {
+    console.log(`[expand-substantive] ${done}/${total} complete — resume signal emitted`);
+    fs.writeFileSync(
+      path.resolve('scripts/.expand-substantive-needs-resume'),
+      `${done}/${total}\n`,
+      'utf8',
+    );
+  }
   if (failed > 0 && updated === 0) process.exit(1);
 }
 

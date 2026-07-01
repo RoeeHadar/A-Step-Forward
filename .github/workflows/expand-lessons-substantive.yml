@@ -22,7 +22,7 @@ on:
       seed_after:
         description: "Run lessons-from-json seed after expansion"
         required: false
-        default: "true"
+        default: "false"
         type: choice
         options:
           - "true"
@@ -37,10 +37,15 @@ jobs:
     name: Groq substantive expansion
     runs-on: ubuntu-latest
     timeout-minutes: 4320
+    # Manual dispatch only; resume-if-incomplete job chains follow-up runs
+    if: github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
       - uses: actions/setup-node@v4
         with:
@@ -56,7 +61,7 @@ jobs:
             echo "GROQ_API_KEY secret is missing."
             exit 1
           fi
-          ARGS="--limit ${{ inputs.limit }}"
+          ARGS="--limit ${{ inputs.limit || '9999' }} --commit-every 2 --delay-ms 5000"
           if [ -n "${{ inputs.only }}" ]; then
             ARGS="$ARGS --only ${{ inputs.only }}"
           fi
@@ -66,17 +71,19 @@ jobs:
           node scripts/expand-lessons-substantive.mjs $ARGS
           node scripts/seed-lessons.mjs --dry-run
 
-      - name: Commit expanded lessons
+      - name: Final commit (leftover changes)
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/seed_data/lessons/ scripts/.expand-substantive-progress.json 2>/dev/null || true
           if git diff --staged --quiet; then
-            echo "No lesson file changes to commit."
+            echo "No leftover changes."
             exit 0
           fi
-          git commit -m "feat(curriculum): substantive Groq expansion for authored lessons"
-          git push
+          git commit -m "feat(curriculum): substantive expansion batch (final)"
+          git pull --rebase origin main || true
+          git push origin HEAD:main
 
       - uses: astral-sh/setup-uv@v5
         if: inputs.seed_after == 'true'
@@ -91,3 +98,39 @@ jobs:
           npm install --no-save --no-package-lock @neondatabase/serverless
           node scripts/generate-lessons-artifacts.mjs
           node scripts/seed-lessons.mjs
+
+  resume-if-incomplete:
+    name: Auto-resume if lessons remain
+    needs: expand
+    if: always() && needs.expand.result != 'cancelled'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Re-trigger when progress < 207
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -f scripts/.expand-substantive-progress.json ]; then
+            echo "No progress file yet — skip auto-resume"
+            exit 0
+          fi
+          DONE=$(node -e "const p=JSON.parse(require('fs').readFileSync('scripts/.expand-substantive-progress.json','utf8')); console.log((p.completed||[]).length)")
+          echo "Progress: $DONE / 207"
+          if [ "$DONE" -ge 207 ]; then
+            echo "All lessons expanded."
+            exit 0
+          fi
+          RUNNING=$(gh run list --workflow "Expand Lessons (substantive)" --limit 5 --json status --jq '.[] | select(.status=="in_progress" or .status=="queued") | .status' | head -1)
+          if [ -n "$RUNNING" ]; then
+            echo "Another expansion run already active — skip"
+            exit 0
+          fi
+          echo "Triggering resume run…"
+          gh workflow run "Expand Lessons (substantive)" -f limit=9999 -f seed_after=false

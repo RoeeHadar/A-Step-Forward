@@ -13,7 +13,7 @@ function parseRetryAfterMs(resp) {
     const sec = Number.parseFloat(header);
     if (!Number.isNaN(sec)) return Math.ceil(sec * 1000);
   }
-  return 65_000;
+  return 45_000;
 }
 
 export async function callGroq(messages, { maxTokens = 4096, temperature = 0.45, timeoutMs = 120_000, maxRetries = 6 } = {}) {
