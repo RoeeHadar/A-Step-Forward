@@ -1,5 +1,5 @@
 /**
- * Bagrut-style timed mock exam generator — Neon/Vercel path (Groq + cache).
+ * Bagrut-style timed mock exam generator — Neon/Vercel path (LLM + cache).
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
@@ -35,8 +35,7 @@ export interface StoredMockExamQuestion extends ClientMockExamQuestion {
   rubric_en?: string;
 }
 
-const GROQ_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
-const GROQ_TIMEOUT_MS = 45_000;
+import { llmCompleteJson } from '@/lib/llm-provider';
 
 const VALID_DURATIONS = new Set([45, 60, 90]);
 
@@ -216,15 +215,12 @@ function validateQuestion(raw: unknown, index: number): StoredMockExamQuestion |
   return base;
 }
 
-async function callGroqForMockExam(
+async function callLLMForMockExam(
   subject: string,
   level: string,
   durationMinutes: number,
   locale: 'he' | 'en' = 'he',
 ): Promise<StoredMockExamQuestion[] | null> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return null;
-
   const userPrompt = buildUserPrompt(subject, level, durationMinutes, locale);
   const systemPrompt =
     locale === 'en'
@@ -234,50 +230,23 @@ async function callGroqForMockExam(
         )
       : SYSTEM_PROMPT;
 
-  for (const model of GROQ_MODELS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
-    try {
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          response_format: { type: 'json_object' },
-          max_tokens: 8000,
-          temperature: 0.35,
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      if (!resp.ok) {
-        if (resp.status === 401 || resp.status === 403) return null;
-        continue;
-      }
-      const body = (await resp.json()) as { choices?: Array<{ message?: { content?: string } }> };
-      const raw = body.choices?.[0]?.message?.content;
-      if (!raw) continue;
-      const parsed = JSON.parse(raw) as { questions?: unknown[] };
-      if (!Array.isArray(parsed.questions)) continue;
+  const parsed = await llmCompleteJson<{ questions?: unknown[] }>({
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userPrompt }],
+    maxTokens: 8000,
+    temperature: 0.35,
+    timeoutMs: 45_000,
+    modelTier: 'primary',
+    jsonMode: true,
+  });
+  if (!parsed || !Array.isArray(parsed.json.questions)) return null;
 
-      const validated: StoredMockExamQuestion[] = [];
-      for (let i = 0; i < parsed.questions.length; i += 1) {
-        const q = validateQuestion(parsed.questions[i], i);
-        if (q) validated.push(q);
-      }
-      if (validated.length >= 15) return validated;
-    } catch {
-      clearTimeout(timeoutId);
-    }
+  const validated: StoredMockExamQuestion[] = [];
+  for (let i = 0; i < parsed.json.questions.length; i += 1) {
+    const q = validateQuestion(parsed.json.questions[i], i);
+    if (q) validated.push(q);
   }
-  return null;
+  return validated.length >= 15 ? validated : null;
 }
 
 export async function getOrCreateMockExam(
@@ -315,7 +284,7 @@ export async function getOrCreateMockExam(
     // proceed to generate
   }
 
-  const generated = await callGroqForMockExam(subject, level, duration, locale);
+  const generated = await callLLMForMockExam(subject, level, duration, locale);
   if (!generated || generated.length === 0) return null;
 
   try {

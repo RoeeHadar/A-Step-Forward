@@ -35,6 +35,7 @@ import {
   type LearnerPersona,
   type LearnerAgentNote,
 } from '@/lib/neon-db';
+import { llmCompleteJson } from '@/lib/llm-provider';
 
 neonConfig.fetchConnectionCache = true;
 const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
@@ -43,12 +44,6 @@ const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
 const PERSONA_CHAR_CAP = 4000;
 const MIN_NOTES_TO_CONSOLIDATE = 6;
 const MAX_NOTES_PER_RUN = 80;
-const GROQ_TIMEOUT_MS = 25_000;
-const GROQ_MODELS = [
-  'llama-3.3-70b-versatile',
-  'llama-3.1-8b-instant',
-  'gemma2-9b-it',
-];
 
 export interface ConsolidationResult {
   ran: boolean;
@@ -127,71 +122,36 @@ function buildUserPrompt(
   ].join('\n');
 }
 
-interface GroqJsonResult {
+interface ConsolidationJsonResult extends Record<string, unknown> {
   persona: string;
   promoted_ids: string[];
   notes?: string;
 }
 
-async function callGroq(
+async function callLLMForConsolidation(
   systemPrompt: string,
   userPrompt: string,
-): Promise<{ json: GroqJsonResult; model: string } | null> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return null;
-  for (const model of GROQ_MODELS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
-    try {
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          response_format: { type: 'json_object' },
-          max_tokens: 2048,
-          temperature: 0.2,
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      if (!resp.ok) {
-        if (resp.status === 401 || resp.status === 403) return null;
-        continue;
-      }
-      const body = (await resp.json()) as {
-        choices?: Array<{ message?: { content?: string } }>;
-      };
-      const raw = body.choices?.[0]?.message?.content;
-      if (!raw) continue;
-      let parsed: GroqJsonResult;
-      try {
-        parsed = JSON.parse(raw) as GroqJsonResult;
-      } catch {
-        continue;
-      }
-      if (typeof parsed.persona !== 'string' || !Array.isArray(parsed.promoted_ids)) {
-        continue;
-      }
-      return { json: parsed, model };
-    } catch {
-      clearTimeout(timeoutId);
-    }
+): Promise<{ json: ConsolidationJsonResult; model: string } | null> {
+  const result = await llmCompleteJson<ConsolidationJsonResult>({
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userPrompt }],
+    maxTokens: 2048,
+    temperature: 0.2,
+    timeoutMs: 25_000,
+    modelTier: 'cheap',
+    jsonMode: true,
+  });
+  if (!result) return null;
+  if (typeof result.json.persona !== 'string' || !Array.isArray(result.json.promoted_ids)) {
+    return null;
   }
-  return null;
+  return { json: result.json, model: result.model };
 }
 
 /**
  * Consolidate the live per-(learner, agent) notes for one learner into the
  * shared persona. Returns a summary of what was done. Safe to call when
- * `GROQ_API_KEY` is missing (returns `{ ran: false, reason: 'no_groq' }`).
+ * `LLM_API_KEY` is missing (returns `{ ran: false, reason: 'no_llm' }`).
  */
 export async function consolidateLearnerMemory(
   learnerId: string,
@@ -222,11 +182,11 @@ export async function consolidateLearnerMemory(
       notes_archived: 0,
     };
   }
-  const result = await callGroq(SYSTEM_PROMPT, buildUserPrompt(currentPersona, notes));
+  const result = await callLLMForConsolidation(SYSTEM_PROMPT, buildUserPrompt(currentPersona, notes));
   if (!result) {
     return {
       ran: false,
-      reason: 'groq_unavailable_or_parse_failed',
+      reason: 'llm_unavailable_or_parse_failed',
       persona_chars_before: currentPersona.length,
       persona_chars_after: currentPersona.length,
       notes_considered: notes.length,

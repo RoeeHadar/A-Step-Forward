@@ -1,14 +1,13 @@
 /**
- * Live Groq smoke — verifies Mentor emits a sanitizable ASF_PLAN_UPDATE tag.
- * Skipped when GROQ_API_KEY is unset. Does NOT write to Neon.
+ * Live LLM smoke — verifies Mentor emits a sanitizable ASF_PLAN_UPDATE tag.
+ * Skipped when LLM is not configured. Does NOT write to Neon.
  */
 import { describe, expect, it } from 'vitest';
 import { extractPlanUpdate, learnerConfirmedChange } from './plan-actions';
 import { sanitizePlanUpdatePayload } from './plan-catalog';
+import { llmComplete, llmConfigured } from './llm-provider';
 
-const hasGroq = Boolean(process.env.GROQ_API_KEY?.trim());
-
-describe.skipIf(!hasGroq)('mentor plan tag (live Groq)', () => {
+describe.skipIf(!llmConfigured())('mentor plan tag (live LLM)', () => {
   it('returns ASF_PLAN_UPDATE with in-catalog concept after confirm scenario', async () => {
     const system = [
       'You are the Mentor on A Step Forward.',
@@ -21,35 +20,23 @@ describe.skipIf(!hasGroq)('mentor plan tag (live Groq)', () => {
     const userMessage = 'yes, please update my plan to focus on limits';
     expect(learnerConfirmedChange(userMessage)).toBe(true);
 
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: system },
-          {
-            role: 'user',
-            content:
-              'I want to focus more on limits for my bagrut prep. yes, please update my plan to focus on limits',
-          },
-        ],
-        max_tokens: 600,
-        temperature: 0.2,
-      }),
+    const result = await llmComplete({
+      system,
+      messages: [
+        {
+          role: 'user',
+          content:
+            'I want to focus more on limits for my bagrut prep. yes, please update my plan to focus on limits',
+        },
+      ],
+      maxTokens: 600,
+      temperature: 0.2,
+      timeoutMs: 45_000,
+      modelTier: 'primary',
     });
 
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`Groq API ${res.status}: ${errText.slice(0, 200)}`);
-    }
-    const json = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const content = json.choices?.[0]?.message?.content ?? '';
+    expect(result).not.toBeNull();
+    const content = result!.content;
     expect(content.length).toBeGreaterThan(20);
 
     const { visible, payload } = extractPlanUpdate(content);
@@ -59,5 +46,5 @@ describe.skipIf(!hasGroq)('mentor plan tag (live Groq)', () => {
     expect(sanitizePlanUpdatePayload(payload!)).not.toBeNull();
     expect(payload!.priority_concepts).toContain('limits');
     expect(content.toLowerCase()).not.toMatch(/khan academy|youtube\.com/);
-  }, 45_000);
+  }, 60_000);
 });

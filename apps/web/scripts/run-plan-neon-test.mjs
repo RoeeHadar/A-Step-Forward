@@ -18,7 +18,7 @@ try {
     if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
       val = val.slice(1, -1);
     }
-    if (key === 'DATABASE_URL' || key === 'POSTGRES_URL' || key === 'GROQ_API_KEY') {
+    if (key === 'DATABASE_URL' || key === 'POSTGRES_URL' || key === 'GROQ_API_KEY' || key === 'LLM_API_KEY' || key === 'LLM_BASE_URL') {
       process.env[key] = val;
     } else if (!process.env[key]) {
       process.env[key] = val;
@@ -39,7 +39,7 @@ if (!valid) {
 
 const result = spawnSync(
   'npm',
-  ['run', 'test', '--', 'src/lib/plan-neon.integration.test.ts', 'src/lib/plan-groq.integration.test.ts'],
+  ['run', 'test', '--', 'src/lib/plan-neon.integration.test.ts', 'src/lib/plan-llm.integration.test.ts', 'src/lib/llm-provider.test.ts'],
   { cwd: root, stdio: 'inherit', env: { ...process.env, NODE_OPTIONS: '--use-system-ca' }, shell: true },
 );
 process.exit(result.status ?? 1);

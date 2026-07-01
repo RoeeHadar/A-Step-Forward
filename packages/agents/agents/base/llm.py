@@ -163,7 +163,7 @@ class LLM:
         keep working.
         """
         agent_label = str(request.metadata.get("trace_name") or self.model)
-        if not self._settings.groq_api_key:
+        if not self._settings.resolved_api_key:
             return _stub_response(request, self.model, agent_label)
 
         client = await self._get_client()
@@ -188,7 +188,7 @@ class LLM:
         so the orchestrator's streaming path always produces output.
         """
         agent_label = str(request.metadata.get("trace_name") or self.model)
-        if not self._settings.groq_api_key:
+        if not self._settings.resolved_api_key:
             yield _stub_response(request, self.model, agent_label).text
             return
 
@@ -221,8 +221,8 @@ class LLM:
                 from groq import AsyncGroq
 
                 self._client = AsyncGroq(
-                    api_key=self._settings.groq_api_key,
-                    base_url=self._settings.groq_base_url,
+                    api_key=self._settings.resolved_api_key,
+                    base_url=self._settings.resolved_base_url,
                     timeout=self._settings.llm_timeout_seconds,
                     max_retries=0,  # we own retries below
                 )

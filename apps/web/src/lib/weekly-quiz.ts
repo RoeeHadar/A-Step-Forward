@@ -14,6 +14,7 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { getConceptMastery, getLearnerProfile } from './neon-db';
+import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
 import type { QuizStartResponse, QuizQuestion } from '@asf/schemas/learning_path';
 
@@ -49,9 +50,6 @@ interface StoredWeeklyQuestion {
 }
 
 // ── LLM call ─────────────────────────────────────────────────────────────────
-
-const GROQ_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
-const GROQ_TIMEOUT_MS = 28_000;
 
 const SYSTEM_PROMPT = `You are a bilingual (Hebrew + English) math/physics exam author for Israeli high-school students preparing for Bagrut exams.
 
@@ -102,83 +100,53 @@ ${conceptBlocks}
 Return JSON only.`;
 }
 
-async function callGroqForWeeklyQuiz(
+async function callLLMForWeeklyQuiz(
   concepts: Array<{ id: string; name: string; subject: string; mastery: number | null; atoms: string[] }>,
   count: number,
   goal: string | null,
 ): Promise<StoredWeeklyQuestion[] | null> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return null;
-
   const userPrompt = buildUserPrompt(concepts, count, goal);
 
-  for (const model of GROQ_MODELS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
-    try {
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: userPrompt },
-          ],
-          response_format: { type: 'json_object' },
-          max_tokens: 3000,
-          temperature: 0.4,
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      if (!resp.ok) {
-        if (resp.status === 401 || resp.status === 403) return null;
-        continue;
-      }
-      const body = (await resp.json()) as { choices?: Array<{ message?: { content?: string } }> };
-      const raw = body.choices?.[0]?.message?.content;
-      if (!raw) continue;
-      const parsed = JSON.parse(raw) as { questions?: unknown };
-      if (!Array.isArray(parsed.questions)) continue;
+  const parsed = await llmCompleteJson<{ questions?: unknown }>({
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: userPrompt }],
+    maxTokens: 3000,
+    temperature: 0.4,
+    timeoutMs: 28_000,
+    modelTier: 'primary',
+    jsonMode: true,
+  });
+  if (!parsed || !Array.isArray(parsed.json.questions)) return null;
 
-      const validConcepts = new Set(concepts.map((c) => c.id));
-      const validated: StoredWeeklyQuestion[] = [];
-      for (const q of parsed.questions) {
-        if (!q || typeof q !== 'object') continue;
-        const { topic, subject, difficulty, stem, options, correct } = q as Record<string, unknown>;
-        if (typeof topic !== 'string' || !validConcepts.has(topic)) continue;
-        if (typeof subject !== 'string') continue;
-        if (typeof stem !== 'string' || stem.trim().length === 0) continue;
-        if (!Array.isArray(options) || options.length < 4) continue;
-        if (typeof correct !== 'string' || !['A', 'B', 'C', 'D'].includes(correct.toUpperCase())) continue;
-        const mappedOptions: { key: string; text: string }[] = [];
-        for (const opt of options.slice(0, 4)) {
-          if (!opt || typeof opt !== 'object') break;
-          const o = opt as Record<string, unknown>;
-          if (typeof o.key !== 'string' || typeof o.text !== 'string') break;
-          mappedOptions.push({ key: o.key, text: o.text });
-        }
-        if (mappedOptions.length !== 4) continue;
-        validated.push({
-          id: randomUUID(),
-          topic,
-          subject,
-          difficulty: typeof difficulty === 'number' ? Math.max(0, Math.min(1, difficulty)) : 0.5,
-          stem: stem.trim().slice(0, 600),
-          options: mappedOptions,
-          correct: (correct as string).toUpperCase(),
-        });
-      }
-      if (validated.length > 0) return validated;
-    } catch {
-      clearTimeout(timeoutId);
+  const validConcepts = new Set(concepts.map((c) => c.id));
+  const validated: StoredWeeklyQuestion[] = [];
+  for (const q of parsed.json.questions) {
+    if (!q || typeof q !== 'object') continue;
+    const { topic, subject, difficulty, stem, options, correct } = q as Record<string, unknown>;
+    if (typeof topic !== 'string' || !validConcepts.has(topic)) continue;
+    if (typeof subject !== 'string') continue;
+    if (typeof stem !== 'string' || stem.trim().length === 0) continue;
+    if (!Array.isArray(options) || options.length < 4) continue;
+    if (typeof correct !== 'string' || !['A', 'B', 'C', 'D'].includes(correct.toUpperCase())) continue;
+    const mappedOptions: { key: string; text: string }[] = [];
+    for (const opt of options.slice(0, 4)) {
+      if (!opt || typeof opt !== 'object') break;
+      const o = opt as Record<string, unknown>;
+      if (typeof o.key !== 'string' || typeof o.text !== 'string') break;
+      mappedOptions.push({ key: o.key, text: o.text });
     }
+    if (mappedOptions.length !== 4) continue;
+    validated.push({
+      id: randomUUID(),
+      topic,
+      subject,
+      difficulty: typeof difficulty === 'number' ? Math.max(0, Math.min(1, difficulty)) : 0.5,
+      stem: stem.trim().slice(0, 600),
+      options: mappedOptions,
+      correct: (correct as string).toUpperCase(),
+    });
   }
-  return null;
+  return validated.length > 0 ? validated : null;
 }
 
 // ── Main export ──────────────────────────────────────────────────────────────
@@ -276,7 +244,7 @@ export async function generateWeeklyQuizForUser(
   });
 
   const questionCount = Math.min(10, Math.max(5, weakEntries.length + 2));
-  const generated = await callGroqForWeeklyQuiz(
+  const generated = await callLLMForWeeklyQuiz(
     conceptsCtx,
     questionCount,
     profile?.goal ?? null,

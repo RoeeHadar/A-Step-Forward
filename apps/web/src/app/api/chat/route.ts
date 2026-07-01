@@ -24,6 +24,7 @@ import {
   planPayloadToOptions,
   PLAN_AGENT_INSTRUCTIONS,
 } from '@/lib/plan-actions';
+import { llmStream, llmConfigured } from '@/lib/llm-provider';
 import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
@@ -34,7 +35,6 @@ export const runtime = 'nodejs';
 // Vercel functions have a 60s timeout on Pro, 10s on Hobby for non-streaming.
 // We stream, so the connection stays open as long as we keep yielding chunks.
 // Keep the upstream LLM timeout well under that.
-const GROQ_TIMEOUT_MS = 25_000;
 const MAX_MEMORY_TURNS = 10;
 
 interface KgConcept {
@@ -209,12 +209,12 @@ async function* streamAgentResponse(
   // inside Vercel function timeouts.
   let emitted = false;
   try {
-    for await (const chunk of streamFromGroq(userId, message, agent, opts)) {
+    for await (const chunk of streamFromLLM(userId, message, agent, opts)) {
       emitted = true;
       yield chunk;
     }
   } catch (err) {
-    logger.warn('groq stream raised', { err: String(err) });
+    logger.warn('llm stream raised', { err: String(err) });
   }
   if (!emitted) {
     yield friendlyFallback(message, agent);
@@ -508,24 +508,14 @@ async function buildContextPrompt(
   };
 }
 
-// Ordered from highest quality to fastest fallback. We try each in turn on
-// transient failure (429 / 5xx / network). ``llama-3.1-70b-versatile`` was
-// retired by Groq in 2025 and intentionally omitted.
-const GROQ_MODELS = [
-  'llama-3.3-70b-versatile',
-  'llama-3.1-8b-instant',
-  'gemma2-9b-it',
-];
-
-async function* streamFromGroq(
+async function* streamFromLLM(
   userId: string,
   message: string,
   agent: string,
-  opts: { quickMode?: boolean; quickDuration?: string } = {},
+  opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
 ): AsyncGenerator<string> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    logger.warn('GROQ_API_KEY missing — skipping Groq');
+  if (!llmConfigured()) {
+    logger.warn('LLM not configured — set LLM_API_KEY + LLM_BASE_URL (or GROQ_API_KEY)');
     return;
   }
 
@@ -538,81 +528,19 @@ async function* streamFromGroq(
     context = { system: bareSystem, memory: [] };
   }
 
-  const messages: Array<{ role: string; content: string }> = [
-    { role: 'system', content: context.system },
+  const messages = [
     ...context.memory,
-    { role: 'user', content: message },
+    { role: 'user' as const, content: message },
   ];
 
-  // Try each model with its own short timeout; fall through on 429 / 5xx / network errors.
-  for (const model of GROQ_MODELS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
-    try {
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          max_tokens: 1024,
-          temperature: 0.4,
-          stream: true,
-        }),
-        signal: controller.signal,
-      });
-
-      if (!resp.ok || !resp.body) {
-        const status = resp.status;
-        clearTimeout(timeoutId);
-        logger.warn('groq non-ok, trying next model', { status, model });
-        if (status === 401 || status === 403) {
-          // Bad key — no point retrying with other models.
-          return;
-        }
-        continue;
-      }
-
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-      let emitted = false;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') break;
-          try {
-            const parsed = JSON.parse(data) as {
-              choices?: Array<{ delta?: { content?: string } }>;
-            };
-            const token = parsed.choices?.[0]?.delta?.content;
-            if (token) {
-              emitted = true;
-              yield token;
-            }
-          } catch {
-            // ignore parse errors
-          }
-        }
-      }
-      clearTimeout(timeoutId);
-      if (emitted) return; // success
-    } catch (err) {
-      clearTimeout(timeoutId);
-      logger.warn('groq attempt threw', { model, err: String(err) });
-    }
-  }
+  yield* llmStream({
+    system: context.system,
+    messages,
+    maxTokens: 1024,
+    temperature: 0.4,
+    timeoutMs: 25_000,
+    modelTier: 'primary',
+  });
 }
 
 /**

@@ -25,6 +25,11 @@ class LLMSettings(BaseSettings):
         extra="ignore",
     )
 
+    # Unified OpenAI-compatible provider (preferred)
+    llm_api_key: str | None = None
+    llm_base_url: str = "https://api.groq.com/openai/v1"
+
+    # Legacy Groq env names (backward compatible)
     groq_api_key: str | None = None
     groq_base_url: str = "https://api.groq.com/openai/v1"
 
@@ -34,6 +39,15 @@ class LLMSettings(BaseSettings):
     llm_timeout_seconds: float = 30.0
     llm_max_retries: int = 3
     llm_retry_base_delay: float = 0.5
+
+    @property
+    def resolved_api_key(self) -> str | None:
+        return self.llm_api_key or self.groq_api_key
+
+    @property
+    def resolved_base_url(self) -> str:
+        base = (self.llm_base_url or self.groq_base_url or "").strip()
+        return base or "https://api.groq.com/openai/v1"
 
 
 @lru_cache(maxsize=1)

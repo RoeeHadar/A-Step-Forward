@@ -23,6 +23,7 @@ import {
   fetchLessonAgentHintsByConceptIds,
   type LearnerProfileRow,
 } from '@/lib/neon-db';
+import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from '@/lib/kg-data.json';
 import { effectiveGradeLevel } from '@/lib/grade-level';
 
@@ -338,58 +339,21 @@ Spread questions across the listed concepts where possible.
 Follow ALL rules in the system message. Return JSON only.`;
 }
 
-// ── Groq ----------------------------------------------------------------------
-const GROQ_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
-const GROQ_TIMEOUT_MS = 45_000; // longer timeout — open questions need more tokens
+// ── LLM ──────────────────────────────────────────────────────────────────────
 
-async function callGroq(systemPrompt: string, userPrompt: string) {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return null;
-  for (const model of GROQ_MODELS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
-    try {
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          response_format: { type: 'json_object' },
-          max_tokens: 6000, // open questions with solutions need more space
-          temperature: 0.4,
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      if (!resp.ok) {
-        if (resp.status === 401 || resp.status === 403) return null;
-        continue;
-      }
-      const body = (await resp.json()) as {
-        choices?: Array<{ message?: { content?: string } }>;
-      };
-      const raw = body.choices?.[0]?.message?.content;
-      if (!raw) continue;
-      try {
-        const parsed = JSON.parse(raw) as { questions?: unknown };
-        if (Array.isArray(parsed.questions)) {
-          return { questions: parsed.questions, model };
-        }
-      } catch {
-        // try next model
-      }
-    } catch {
-      clearTimeout(timeoutId);
-    }
-  }
-  return null;
+async function callLLMForQuiz(systemPrompt: string, userPrompt: string) {
+  const result = await llmCompleteJson<{ questions?: unknown }>({
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userPrompt }],
+    maxTokens: 6000,
+    temperature: 0.4,
+    timeoutMs: 45_000,
+    modelTier: 'primary',
+    jsonMode: true,
+  });
+  if (!result) return null;
+  if (!Array.isArray(result.json.questions)) return null;
+  return { questions: result.json.questions, model: result.model };
 }
 
 function isStr(x: unknown): x is string {
@@ -552,11 +516,11 @@ export async function buildCustomQuiz(
   const count = questionCountFromBudget(req.time_limit_min, profile);
   const conceptSet = new Set(ctx.map((c) => c.id));
 
-  const groq = await callGroq(SYSTEM_PROMPT, buildUserPrompt(ctx, mode, count, profile));
-  if (!groq) return null;
+  const llmResult = await callLLMForQuiz(SYSTEM_PROMPT, buildUserPrompt(ctx, mode, count, profile));
+  if (!llmResult) return null;
 
   const validated: CustomQuizQuestion[] = [];
-  for (const raw of groq.questions) {
+  for (const raw of llmResult.questions) {
     const q = validateQuestion(raw, mode, conceptSet, validated.length + 1);
     if (q) validated.push(q);
   }
@@ -575,6 +539,6 @@ export async function buildCustomQuiz(
     })),
     questions: validated,
     picked_reason: picked.reason,
-    model: groq.model,
+    model: llmResult.model,
   };
 }
