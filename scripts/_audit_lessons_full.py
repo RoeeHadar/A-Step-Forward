@@ -129,7 +129,7 @@ def audit() -> dict[str, list]:
             kind = s.get("kind")
 
             if kind in {"intro", "definition", "theory", "pitfall", "before_exam", "summary", "method_guide", "worked_example"}:
-                if len(en) > 60 and not has_hebrew(en) is False and prose_hebrew_ratio(en) > 0.45:
+                if len(en) > 60 and has_hebrew(en) and prose_hebrew_ratio(en) > 0.45:
                     issues["he_in_en_body"].append((name, i, kind))
                 if len(he) > 60:
                     if not has_hebrew(he):
