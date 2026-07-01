@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
+import { ChatHistoryPanel } from '@/components/chat-history-panel';
+import { extractPlanUpdate } from '@/lib/plan-actions';
 import { Send, Loader2, X } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
@@ -41,7 +43,25 @@ const agentGradients: Partial<Record<AgentName, string>> = {
   accessibility: 'from-primary to-accent-cyan',
 };
 
-export function AgentChat({ agent }: { agent: string }) {
+function chatSessionKey(agent: AgentName): string {
+  return `asf-chat-session-${agent}`;
+}
+
+function stripPlanTag(content: string): string {
+  return extractPlanUpdate(content).visible;
+}
+
+export function AgentChat({
+  agent,
+  topic,
+  compact = false,
+  showHistory = true,
+}: {
+  agent: string;
+  topic?: string;
+  compact?: boolean;
+  showHistory?: boolean;
+}) {
   const { messages: i18nMessages, locale } = useI18n();
   const isHe = locale === 'he';
   const parsed = agentNameSchema.safeParse(agent);
@@ -63,6 +83,9 @@ export function AgentChat({ agent }: { agent: string }) {
   const [remainingSeconds, setRemainingSeconds] = useState(totalQuickSeconds);
   const [timeUp, setTimeUp] = useState(false);
   const [timeUpDismissed, setTimeUpDismissed] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [historyReady, setHistoryReady] = useState(false);
+  const [chatKey, setChatKey] = useState(0);
 
   useEffect(() => {
     if (!quickMode) return;
@@ -91,9 +114,66 @@ export function AgentChat({ agent }: { agent: string }) {
     fetch('/api/warmup').catch(() => {});
   }, []);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload } = useChat({
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    let id = localStorage.getItem(chatSessionKey(agentName));
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem(chatSessionKey(agentName), id);
+    }
+    setSessionId(id);
+  }, [agentName]);
+
+  useEffect(() => {
+    if (!sessionId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const params = new URLSearchParams({
+          agent: agentName,
+          limit: '40',
+          session_id: sessionId,
+        });
+        const res = await fetch(`/api/chat/history?${params}`);
+        if (!res.ok || cancelled) return;
+        const data = (await res.json()) as {
+          messages: Array<{ id: string; role: string; content: string }>;
+        };
+        if (!cancelled && data.messages?.length) {
+          setChatKey((k) => k + 1);
+        }
+      } finally {
+        if (!cancelled) setHistoryReady(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [agentName, sessionId]);
+
+  function startNewChat() {
+    const id = crypto.randomUUID();
+    localStorage.setItem(chatSessionKey(agentName), id);
+    setSessionId(id);
+    setChatKey((k) => k + 1);
+    setHistoryReady(true);
+  }
+
+  const topicFromUrl = searchParams.get('topic') ?? undefined;
+  const studyTopic = topic ?? topicFromUrl;
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages } =
+    useChat({
     api: '/api/chat',
-    body: { agent: agentName, quickMode, quickDuration: quickMode ? quickDuration : undefined },
+    id: `${agentName}-${sessionId ?? 'pending'}-${chatKey}`,
+    body: {
+      agent: agentName,
+      quickMode,
+      quickDuration: quickMode ? quickDuration : undefined,
+      sessionId,
+      topic: studyTopic,
+    },
+    initialMessages: undefined,
     onError: () => {
       if (!hasAutoRetriedRef.current && userMessageCountRef.current <= 1) {
         hasAutoRetriedRef.current = true;
@@ -101,6 +181,34 @@ export function AgentChat({ agent }: { agent: string }) {
       }
     },
   });
+
+  useEffect(() => {
+    if (!historyReady || !sessionId) return;
+    let cancelled = false;
+    (async () => {
+      const params = new URLSearchParams({
+        agent: agentName,
+        limit: '40',
+        session_id: sessionId,
+      });
+      const res = await fetch(`/api/chat/history?${params}`);
+      if (!res.ok || cancelled) return;
+      const data = (await res.json()) as {
+        messages: Array<{ id: string; role: string; content: string }>;
+      };
+      if (cancelled || !data.messages?.length) return;
+      setMessages(
+        data.messages.map((m) => ({
+          id: m.id,
+          role: m.role as 'user' | 'assistant',
+          content: m.role === 'assistant' ? stripPlanTag(m.content) : m.content,
+        })),
+      );
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [historyReady, sessionId, agentName, setMessages, chatKey]);
 
   useEffect(() => {
     userMessageCountRef.current = messages.filter((m) => m.role === 'user').length;
@@ -157,8 +265,33 @@ export function AgentChat({ agent }: { agent: string }) {
   const gradient = agentGradients[agentName] ?? 'from-primary to-accent-cyan';
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col">
-      <header className="mb-4 flex flex-wrap items-center gap-3">
+    <div
+      className={cn(
+        'flex flex-col',
+        compact ? 'h-full min-h-0' : 'h-[calc(100vh-8rem)]',
+        showHistory && !compact ? 'lg:flex-row lg:gap-4' : '',
+      )}
+    >
+      {showHistory && !compact ? (
+        <ChatHistoryPanel
+          agent={agentName}
+          locale={locale === 'he' ? 'he' : 'en'}
+          activeSessionId={sessionId}
+          onSelectSession={(sid) => {
+            if (sid) {
+              localStorage.setItem(chatSessionKey(agentName), sid);
+              setSessionId(sid);
+              setChatKey((k) => k + 1);
+              setHistoryReady(true);
+            }
+          }}
+          onNewChat={startNewChat}
+          className="mb-4 w-full shrink-0 lg:mb-0 lg:flex lg:w-56 xl:w-64"
+        />
+      ) : null}
+
+      <div className="flex min-h-0 flex-1 flex-col">
+      <header className={cn('mb-4 flex flex-wrap items-center gap-3', compact && 'mb-2')}>
         <div
           className={cn('h-3 w-3 rounded-full bg-gradient-to-br', gradient)}
           aria-hidden
@@ -188,7 +321,7 @@ export function AgentChat({ agent }: { agent: string }) {
         <PremiumBadge />
       </header>
 
-      <div className="glass-surface flex flex-1 flex-col overflow-hidden rounded-2xl">
+      <div className="glass-surface flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl">
         {quickMode && timeUp && !timeUpDismissed ? (
           <div
             className="flex flex-wrap items-center justify-between gap-3 border-b border-accent-amber/30 bg-accent-amber/10 px-4 py-3 text-sm"
@@ -234,7 +367,7 @@ export function AgentChat({ agent }: { agent: string }) {
                 }
               >
                 {m.role === 'assistant' ? (
-                  <MarkdownMath>{m.content}</MarkdownMath>
+                  <MarkdownMath>{stripPlanTag(m.content)}</MarkdownMath>
                 ) : (
                   m.content
                 )}
@@ -292,6 +425,7 @@ export function AgentChat({ agent }: { agent: string }) {
             <Send className="h-4 w-4 rtl:rotate-180" />
           </Button>
         </form>
+      </div>
       </div>
     </div>
   );

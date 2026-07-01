@@ -12,8 +12,18 @@ import {
   fetchAgentNotes,
   getDueReviews,
   markAtomPracticed,
+  getCurrentPlan,
+  applyPlanProfileUpdates,
+  generateLearningPlan,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
+import { buildLessonCatalogSummary, buildPlanAllowlistBlock, PLAN_GROUNDING_RULES } from '@/lib/plan-catalog';
+import {
+  extractPlanUpdate,
+  learnerConfirmedChange,
+  planPayloadToOptions,
+  PLAN_AGENT_INSTRUCTIONS,
+} from '@/lib/plan-actions';
 import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
@@ -52,7 +62,14 @@ export async function POST(req: Request) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
-  let body: { messages?: { role: string; content: string }[]; agent?: string; quickMode?: boolean; quickDuration?: string };
+  let body: {
+    messages?: { role: string; content: string }[];
+    agent?: string;
+    quickMode?: boolean;
+    quickDuration?: string;
+    sessionId?: string;
+    topic?: string;
+  };
   try {
     body = (await req.json()) as typeof body;
   } catch {
@@ -64,9 +81,11 @@ export async function POST(req: Request) {
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
   const quickMode = body.quickMode === true;
   const quickDuration = body.quickDuration ?? '15';
+  const sessionId = body.sessionId?.trim() || undefined;
+  const topic = body.topic?.trim() || undefined;
 
   // Record user turn (fire-and-forget — does not block streaming).
-  void recordChatTurn(userId, agent, 'user', lastMessage);
+  void recordChatTurn(userId, agent, 'user', lastMessage, sessionId);
 
   // Coach drill: mark top due FSRS atoms as practiced on substantive replies.
   if (agent === 'coach' && lastMessage.trim().length > 10) {
@@ -82,7 +101,11 @@ export async function POST(req: Request) {
     })();
   }
 
-  const gen = streamAgentResponse(userId, lastMessage, agent, { quickMode, quickDuration });
+  const gen = streamAgentResponse(userId, lastMessage, agent, {
+    quickMode,
+    quickDuration,
+    topic,
+  });
   const encoder = new TextEncoder();
   let assistantBuffer = '';
 
@@ -101,7 +124,15 @@ export async function POST(req: Request) {
         if (done) {
           controller.enqueue(encodeFinish());
           controller.close();
-          if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
+          if (assistantBuffer) {
+            void finalizeAssistantTurn(
+              userId,
+              agent,
+              lastMessage,
+              assistantBuffer,
+              sessionId,
+            );
+          }
         } else {
           assistantBuffer += value;
           controller.enqueue(encodeToken(value));
@@ -113,7 +144,9 @@ export async function POST(req: Request) {
         controller.enqueue(encodeToken(fallback));
         controller.enqueue(encodeFinish());
         controller.close();
-        if (assistantBuffer) void recordChatTurn(userId, agent, 'assistant', assistantBuffer);
+        if (assistantBuffer) {
+          void finalizeAssistantTurn(userId, agent, lastMessage, assistantBuffer, sessionId);
+        }
       }
     },
   });
@@ -128,11 +161,49 @@ export async function POST(req: Request) {
   });
 }
 
+async function finalizeAssistantTurn(
+  userId: string,
+  agent: string,
+  userMessage: string,
+  assistantRaw: string,
+  sessionId?: string,
+): Promise<void> {
+  const { visible, payload } = extractPlanUpdate(assistantRaw);
+  await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+
+  if (
+    payload?.confirmed &&
+    (agent === 'mentor' || agent === 'tutor') &&
+    learnerConfirmedChange(userMessage)
+  ) {
+    try {
+      await applyPlanProfileUpdates(userId, {
+        goal: payload.goal,
+        next_test_date: payload.next_test_date,
+        final_goal_date: payload.final_goal_date,
+        hours_per_week: payload.hours_per_week,
+        goal_key: payload.goal_key,
+      });
+      const plan = await generateLearningPlan(userId, planPayloadToOptions(payload));
+      logger.info('chat: plan updated via ASF_PLAN_UPDATE tag', {
+        agent,
+        reason: payload.reason,
+        planId: plan.id,
+        weeks: plan.weeks.length,
+      });
+    } catch (err) {
+      logger.warn('chat: plan update failed', { err: String(err) });
+    }
+  } else if (payload && !learnerConfirmedChange(userMessage)) {
+    logger.warn('chat: ASF_PLAN_UPDATE ignored — learner did not confirm in this turn');
+  }
+}
+
 async function* streamAgentResponse(
   userId: string,
   message: string,
   agent: string,
-  opts: { quickMode?: boolean; quickDuration?: string } = {},
+  opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
 ): AsyncGenerator<string> {
   // Direct Groq path — no Render dependency. Designed to fit comfortably
   // inside Vercel function timeouts.
@@ -172,9 +243,9 @@ async function buildContextPrompt(
   userId: string,
   agent: string,
   message: string,
-  opts: { quickMode?: boolean; quickDuration?: string } = {},
+  opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
-  const { quickMode = false, quickDuration = '15' } = opts;
+  const { quickMode = false, quickDuration = '15', topic } = opts;
   // Each helper catches its own errors so a single DB issue cannot break chat.
   const [profile, mastery, recent, persona, agentNotes, cookieStore] = await Promise.all([
     getLearnerProfile(userId).catch(() => null),
@@ -276,7 +347,43 @@ async function buildContextPrompt(
     if (strongConcepts.length) context += `\n- Strong areas: ${strongConcepts.join(', ')}`;
   }
 
-  const related = findRelevantConcepts(message, profile?.subjects ?? []);
+  if (profile && (agent === 'mentor' || agent === 'tutor')) {
+    const plan = await getCurrentPlan(userId).catch(() => null);
+    if (plan?.weeks?.length) {
+      context += `\n\n## Current weekly learning plan (authoritative — from onboarding + diagnostic)`;
+      context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
+      for (const w of plan.weeks) {
+        const names = w.concepts
+          .map((c) => `${c.concept_id} (${c.name}${c.name_he ? ` / ${c.name_he}` : ''})`)
+          .join(', ');
+        context += `\n- Week ${w.week_number} [${w.status}]: ${names || '(empty)'}`;
+      }
+    } else {
+      context += `\n\n## Current weekly learning plan`;
+      context += `\nNo active plan in the database yet. If the learner asks to change their plan, explain they should complete onboarding + diagnostic first, or offer to help set goals then call POST /api/plans/generate after confirmation.`;
+    }
+    context += `\n\n## Platform catalog (what we can assign — in-house only)`;
+    context += `\n${buildLessonCatalogSummary(profile.subjects ?? [])}`;
+    context += `\n\n## Plan mutation allowlist`;
+    context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
+    context += `\n\n${PLAN_GROUNDING_RULES}`;
+    context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
+  }
+
+  if (topic) {
+    context += `\n\n## Active study context`;
+    context += `\nThe learner is currently studying concept \`${topic}\` on the lesson page. Ground your answer in this topic when relevant.`;
+    const topicConcept = kgByName[topic];
+    if (topicConcept) {
+      context += `\n- ${topicConcept.name} (${topicConcept.id})`;
+      if (topicConcept.prerequisites?.length) {
+        context += ` — prerequisites: ${topicConcept.prerequisites.join(', ')}`;
+      }
+    }
+  }
+
+  const searchMessage = topic && !message.trim() ? topic.replace(/_/g, ' ') : message;
+  const related = findRelevantConcepts(searchMessage, profile?.subjects ?? []);
   if (related.length) {
     context += `\n\n## Relevant curriculum context`;
     for (const c of related) {
@@ -348,10 +455,12 @@ async function buildContextPrompt(
       agent === 'curriculum_designer' ||
       agent === 'progress_analyzer'
     ) {
-      const goal = related[0]!.id;
+      const goalConcept =
+        related[0]?.id ?? (topic && kgByName[topic] ? topic : weakConcepts[0] ?? null);
+      if (goalConcept) {
       const plan = await buildLearningPlan({
         learnerId: userId,
-        goalConceptId: goal,
+        goalConceptId: goalConcept,
         maxNodes: 6,
       }).catch(() => null);
       if (plan && plan.path.length > 0) {
@@ -369,6 +478,7 @@ async function buildContextPrompt(
           const tops = plan.blocking_atoms.slice(0, 4).map((a) => `${a.atom} (${Math.round(a.mastery * 100)}%)`).join(', ');
           context += `\n- Most-blocking atoms across the path: ${tops}`;
         }
+      }
       }
     }
   }

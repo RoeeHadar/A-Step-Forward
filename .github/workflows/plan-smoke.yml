@@ -1,0 +1,36 @@
+name: Plan smoke (Neon)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  plan-neon-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Live Neon plan persistence smoke
+        working-directory: apps/web
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: npm run test -- src/lib/plan-neon.integration.test.ts
+
+      - name: Mentor Groq plan-tag smoke (no DB write)
+        working-directory: apps/web
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: npm run test -- src/lib/plan-groq.integration.test.ts

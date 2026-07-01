@@ -61,23 +61,23 @@ def _template_item(concept: dict, difficulty: float) -> dict:
     name_he = concept.get("name_he") or name
     d = int(difficulty)
     correct = "B"
-    stem_en = f"[Difficulty {d}/10] Which statement best describes **{name}**?"
+    stem_en = f"Which statement best describes **{name}**?"
     options_en = {
         "choices": [
-            f"A generic unrelated fact about {name}",
+            f"A statement that does not apply to {name}",
             f"A core, accurate property of {name}",
-            f"A common misconception about {name}",
-            f"An oversimplified claim that ignores prerequisites for {name}",
+            f"A common student error about {name}",
+            f"An oversimplified claim missing key conditions for {name}",
         ],
         "correct": correct,
     }
-    stem_he = f"[רמת קושי {d}/10] איזה משפט מתאר בצורה הטובה ביותר **{name_he}**?"
+    stem_he = f"איזה משפט מתאר בצורה הטובה ביותר **{name_he}**?"
     options_he = {
         "choices": [
-            f"עובדה כללית ולא קשורה לגבי {name_he}",
+            f"משפט שלא מתאים ל-{name_he}",
             f"תכונה ליבה ומדויקת של {name_he}",
-            f"תפיסה שגויה נפוצה לגבי {name_he}",
-            f"טענה פשטנית מדי שמתעלמת מהדרישות הקודמות של {name_he}",
+            f"טעות נפוצה של תלמידים ב-{name_he}",
+            f"טענה פשטנית מדי שמתעלמת מתנאים חשובים ב-{name_he}",
         ],
         "correct": correct,
     }

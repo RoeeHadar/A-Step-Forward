@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { useI18n } from '@/providers/i18n-provider';
 import { cn } from '@asf/ui';
+import { resolveConceptTitles } from '@/lib/concept-display-names';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -150,6 +151,8 @@ const STR = {
     s3_title: 'Rate your understanding',
     s3_sub:
       'Be honest — this is just the starting point. The diagnostic will verify and adapt.',
+    s3_scale_low: '1 — never studied',
+    s3_scale_high: '10 — exam-ready',
     s4_title: 'How do you prefer to learn with the Tutor?',
     s4_sub:
       'Pick the style that feels most comfortable. You can change this later in settings.',
@@ -226,6 +229,8 @@ const STR = {
     s3_title: 'דרג/י את ההבנה שלך',
     s3_sub:
       'בכנות — זו רק נקודת ההתחלה. האבחון יאמת ויתאים את עצמו.',
+    s3_scale_low: '1 — לא למדתי',
+    s3_scale_high: '10 — מוכן/ה לבחינה',
     s4_title: 'כיצד אתה מעדיף ללמוד עם המורה?',
     s4_sub: 'בחר/י את הסגנון שהכי נוח לך. אפשר לשנות את זה בהמשך בהגדרות.',
     s4_direct: 'הסבר לי ישירות',
@@ -429,7 +434,12 @@ type ConceptEntry = { id: string; label_en: string; label_he: string };
 
 function conceptEntry(id: string): ConceptEntry {
   const meta = ALL_CONCEPTS[id];
-  return { id, label_en: meta?.label_en ?? id, label_he: meta?.label_he ?? id };
+  const resolved = resolveConceptTitles(id);
+  return {
+    id,
+    label_en: meta?.label_en ?? resolved.title_en,
+    label_he: meta?.label_he ?? resolved.title_he ?? resolved.title_en,
+  };
 }
 
 // ── Goal → concept list mapping ──────────────────────────────────────────────
@@ -534,6 +544,19 @@ const SELF_SCORE_CONCEPTS_BY_GOAL: Partial<Record<Goal, string[]>> = {
     'derivatives_applications', 'integrals_intro', 'definite_integrals',
   ],
   linear_algebra: ['la_vectors', 'la_matrices', 'la_eigenvalues'],
+  university_prep: [
+    'limits', 'derivatives_intro', 'integrals_intro', 'la_vectors', 'la_matrices',
+  ],
+  other: [],
+};
+
+const ADULT_SELF_SCORE_BY_GOAL: Record<string, string[]> = {
+  bagrut_math: [
+    'algebra_basics', 'equations_quadratic', 'functions_quadratic',
+    'trigonometry_ratios', 'geometry_basics', 'probability_basic',
+  ],
+  university_course: ['limits', 'derivatives_intro', 'integrals_intro', 'la_vectors'],
+  general_improvement: ['arithmetic', 'algebra_basics', 'equations_linear', 'functions_intro'],
 };
 
 // ── Step components ──────────────────────────────────────────────────────────
@@ -718,6 +741,10 @@ export default function OnboardingPage() {
   // Capped to MAX_SELF_SCORE = 10 regardless to prevent overwhelm.
   const MAX_SELF_SCORE = 10;
   const conceptsForStep4: ConceptEntry[] = (() => {
+    if (isAdultLearner && s1.adultGoal) {
+      const curated = ADULT_SELF_SCORE_BY_GOAL[s1.adultGoal];
+      if (curated) return curated.slice(0, MAX_SELF_SCORE).map(conceptEntry);
+    }
     if (s1.goal && s1.goal !== 'other') {
       const curated = SELF_SCORE_CONCEPTS_BY_GOAL[s1.goal];
       if (curated) return curated.slice(0, MAX_SELF_SCORE).map(conceptEntry);
@@ -803,6 +830,7 @@ export default function OnboardingPage() {
             learning_style: s2.style,
             attention_span_min: s2.attentionSpan,
             hours_per_week: s2.hoursPerWeek,
+            goal_key: isAdultLearner ? s1.adultGoal : s1.goal || null,
             ...(isAdultLearner
               ? { adult_learner: true, years_gap: s1.yearsGap, adult_goal: s1.adultGoal }
               : {}),
@@ -1364,6 +1392,9 @@ export default function OnboardingPage() {
             </div>
 
             <div className="space-y-5">
+              <p className="text-xs text-muted-foreground">
+                {t.s3_scale_low} ··· {t.s3_scale_high}
+              </p>
               {conceptsForStep4.map((c) => (
                 <SliderField
                   key={c.id}

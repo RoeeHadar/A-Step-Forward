@@ -14,6 +14,7 @@ import { randomUUID } from 'node:crypto';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
+import { canonicalConceptId, goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -279,9 +280,15 @@ export async function fetchDiagnosticItems(
       CASE WHEN ${levelFilter}::text IS NOT NULL AND ${levelFilter}::text = ANY(COALESCE(points_levels, ARRAY[]::text[]))
            THEN 0 ELSE 1 END,
       random()
-    LIMIT ${limit}
+    LIMIT ${Math.max(limit * 6, 24)}
   `) as DiagnosticItem[];
-  return rows;
+
+  const isTemplatePlaceholder = (stem: string) =>
+    /generic unrelated fact|עובדה כללית ולא קשורה|\[Difficulty \d+\/10\]/i.test(stem);
+
+  const quality = rows.filter((r) => !isTemplatePlaceholder(r.stem));
+  const pool = quality.length >= Math.min(limit, 3) ? quality : rows;
+  return pool.slice(0, limit);
 }
 
 export function itemToQuestion(item: DiagnosticItem): DiagnosticQuestion {
@@ -431,18 +438,25 @@ function collectWorklist(
 ): Set<string> {
   const worklist = new Set<string>();
   for (const [c, score] of Object.entries(mastery)) {
-    if (score < WEAK_THRESHOLD) worklist.add(c);
+    const canonical = canonicalConceptId(c);
+    if (canonical && score < WEAK_THRESHOLD) worklist.add(canonical);
   }
   // expand with prerequisites of weak concepts
   for (const c of [...worklist]) {
     for (const prereq of kgPrereqMap[c] ?? []) {
-      if ((mastery[prereq] ?? 0.5) < WEAK_THRESHOLD) worklist.add(prereq);
+      const canonical = canonicalConceptId(prereq);
+      if (canonical && (mastery[canonical] ?? mastery[prereq] ?? 0.5) < WEAK_THRESHOLD) {
+        worklist.add(canonical);
+      }
     }
   }
   // if nothing weak yet, seed from self-scores or subject roots
   if (worklist.size === 0) {
     if (selfScores) {
-      for (const c of Object.keys(selfScores)) worklist.add(c);
+      for (const c of Object.keys(selfScores)) {
+        const canonical = canonicalConceptId(c);
+        if (canonical) worklist.add(canonical);
+      }
     } else if (subjects.length > 0) {
       const roots = kgConcepts.filter(
         (c) => subjects.includes(c.subject) && c.prerequisites.length === 0,
@@ -484,7 +498,19 @@ export interface LearningPlan {
   weeks: PlanWeek[];
 }
 
-export async function generateLearningPlan(learnerId: string): Promise<LearningPlan> {
+export interface GeneratePlanOptions {
+  goalOverride?: string;
+  priorityConcepts?: string[];
+  prependConcepts?: string[];
+  excludeConcepts?: string[];
+  numWeeksOverride?: number;
+  planChangeReason?: string;
+}
+
+export async function generateLearningPlan(
+  learnerId: string,
+  options: GeneratePlanOptions = {},
+): Promise<LearningPlan> {
   const s = requireSql();
   const profile = await getLearnerProfile(learnerId);
   if (!profile) {
@@ -492,11 +518,29 @@ export async function generateLearningPlan(learnerId: string): Promise<LearningP
   }
 
   const mastery = await getConceptMastery(learnerId);
-  const worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
+  let worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
+
+  const excludeConcepts = sanitizeConceptIds(options.excludeConcepts);
+  const prependConcepts = sanitizeConceptIds(options.prependConcepts);
+  const priorityConcepts = sanitizeConceptIds(options.priorityConcepts);
+
+  if (excludeConcepts.length) {
+    const exclude = new Set(excludeConcepts);
+    for (const c of exclude) worklist.delete(c);
+  }
+  for (const c of prependConcepts) worklist.add(c);
+  for (const c of priorityConcepts) worklist.add(c);
+  if (worklist.size === 0) {
+    worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
+  }
+
+  const goalText = options.goalOverride?.trim() || profile.goal;
 
   // Determine number of weeks from next_test_date / final_goal_date
   let numWeeks = 4;
-  if (profile.next_test_date) {
+  if (options.numWeeksOverride != null) {
+    numWeeks = options.numWeeksOverride;
+  } else if (profile.next_test_date) {
     const days = Math.ceil(
       (new Date(profile.next_test_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
@@ -508,11 +552,15 @@ export async function generateLearningPlan(learnerId: string): Promise<LearningP
     numWeeks = Math.max(2, Math.min(16, Math.ceil(days / 7)));
   }
 
-  // Sort by prerequisite depth (roots first)
+  // Sort by prerequisite depth (roots first); priority concepts first
   const memo = new Map<string, number>();
-  const sorted = [...worklist].sort(
-    (a, b) => depthOf(a, worklist, memo) - depthOf(b, worklist, memo),
-  );
+  const priority = new Set(priorityConcepts);
+  const sorted = [...worklist].sort((a, b) => {
+    const pa = priority.has(a) ? 0 : 1;
+    const pb = priority.has(b) ? 0 : 1;
+    if (pa !== pb) return pa - pb;
+    return depthOf(a, worklist, memo) - depthOf(b, worklist, memo);
+  });
 
   // Chunk into weeks (round-robin so each week has roughly equal load)
   const weekGroups: string[][] = Array.from({ length: numWeeks }, () => []);
@@ -538,8 +586,22 @@ export async function generateLearningPlan(learnerId: string): Promise<LearningP
   await s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`;
   await s`
     INSERT INTO learning_plans (id, learner_id, goal, start_date, end_date, status, created_at, updated_at)
-    VALUES (${planId}, ${learnerId}, ${profile.goal}, ${startStr}, ${endStr}, 'active', NOW(), NOW())
+    VALUES (${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active', NOW(), NOW())
   `;
+
+  if (options.planChangeReason) {
+    const existing = (profile.personality_profile ?? {}) as Record<string, unknown>;
+    const history = Array.isArray(existing.plan_change_history)
+      ? (existing.plan_change_history as unknown[])
+      : [];
+    history.push({ at: new Date().toISOString(), reason: options.planChangeReason });
+    await s`
+      UPDATE learner_profiles
+      SET personality_profile = ${JSON.stringify({ ...existing, plan_change_history: history.slice(-10) })}::jsonb,
+          updated_at = NOW()
+      WHERE learner_id = ${learnerId}
+    `;
+  }
 
   const weeks: PlanWeek[] = [];
   for (let i = 0; i < weekGroups.length; i++) {
@@ -588,12 +650,41 @@ export async function generateLearningPlan(learnerId: string): Promise<LearningP
   return {
     id: planId,
     learner_id: learnerId,
-    goal: profile.goal,
+    goal: goalText,
     start_date: startStr,
     end_date: endStr,
     status: 'active',
     weeks,
   };
+}
+
+export async function applyPlanProfileUpdates(
+  learnerId: string,
+  updates: {
+    goal?: string;
+    next_test_date?: string | null;
+    final_goal_date?: string | null;
+    hours_per_week?: number;
+    goal_key?: string;
+  },
+): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const personality = { ...(profile.personality_profile ?? {}) };
+  const pointsGroup = goalKeyToPointsGroup(updates.goal_key);
+  if (updates.goal_key) personality.goal_key = updates.goal_key;
+  await s`
+    UPDATE learner_profiles SET
+      goal = COALESCE(${updates.goal ?? null}, goal),
+      next_test_date = COALESCE(${updates.next_test_date ?? null}, next_test_date),
+      final_goal_date = COALESCE(${updates.final_goal_date ?? null}, final_goal_date),
+      hours_per_week = COALESCE(${updates.hours_per_week ?? null}, hours_per_week),
+      points_group = COALESCE(${pointsGroup}, points_group),
+      personality_profile = ${JSON.stringify(personality)}::jsonb,
+      updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
 }
 
 export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | null> {
@@ -709,6 +800,114 @@ export async function fetchRecentChatTurns(
     return rows.reverse(); // oldest first for chat context
   } catch (err) {
     console.warn('[neon-db] fetchRecentChatTurns failed', err);
+    return [];
+  }
+}
+
+export interface ChatHistoryMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  created_at: string;
+}
+
+export async function fetchChatHistory(
+  learnerId: string,
+  agent: string,
+  limit = 50,
+  sessionId?: string | null,
+): Promise<ChatHistoryMessage[]> {
+  if (!sql) return [];
+  try {
+    const rows = sessionId
+      ? ((await sql`
+          SELECT id::text, role, content, created_at
+          FROM chat_turns
+          WHERE learner_id = ${learnerId} AND agent = ${agent}
+            AND session_id = ${sessionId}
+          ORDER BY created_at ASC
+          LIMIT ${limit}
+        `) as ChatHistoryMessage[])
+      : ((await sql`
+          SELECT id::text, role, content, created_at
+          FROM chat_turns
+          WHERE learner_id = ${learnerId} AND agent = ${agent}
+          ORDER BY created_at DESC
+          LIMIT ${limit}
+        `) as ChatHistoryMessage[]);
+    return sessionId ? rows : rows.reverse();
+  } catch (err) {
+    console.warn('[neon-db] fetchChatHistory failed', err);
+    return [];
+  }
+}
+
+export interface ChatSessionSummary {
+  session_id: string | null;
+  agent: string;
+  started_at: string;
+  last_at: string;
+  turn_count: number;
+  preview: string;
+}
+
+export async function fetchChatSessionSummaries(
+  learnerId: string,
+  agent?: string,
+  limit = 25,
+): Promise<ChatSessionSummary[]> {
+  if (!sql) return [];
+  try {
+    const rows = agent
+      ? ((await sql`
+          SELECT
+            session_id,
+            agent,
+            MIN(created_at)::text AS started_at,
+            MAX(created_at)::text AS last_at,
+            COUNT(*)::int AS turn_count,
+            (
+              SELECT left(t2.content, 120)
+              FROM chat_turns t2
+              WHERE t2.learner_id = ${learnerId}
+                AND t2.agent = ${agent}
+                AND COALESCE(t2.session_id, '') = COALESCE(chat_turns.session_id, '')
+                AND t2.role = 'user'
+              ORDER BY t2.created_at ASC
+              LIMIT 1
+            ) AS preview
+          FROM chat_turns
+          WHERE learner_id = ${learnerId} AND agent = ${agent}
+          GROUP BY session_id, agent
+          ORDER BY MAX(created_at) DESC
+          LIMIT ${limit}
+        `) as ChatSessionSummary[])
+      : ((await sql`
+          SELECT
+            session_id,
+            agent,
+            MIN(created_at)::text AS started_at,
+            MAX(created_at)::text AS last_at,
+            COUNT(*)::int AS turn_count,
+            (
+              SELECT left(t2.content, 120)
+              FROM chat_turns t2
+              WHERE t2.learner_id = ${learnerId}
+                AND t2.agent = chat_turns.agent
+                AND COALESCE(t2.session_id, '') = COALESCE(chat_turns.session_id, '')
+                AND t2.role = 'user'
+              ORDER BY t2.created_at ASC
+              LIMIT 1
+            ) AS preview
+          FROM chat_turns
+          WHERE learner_id = ${learnerId}
+          GROUP BY session_id, agent
+          ORDER BY MAX(created_at) DESC
+          LIMIT ${limit}
+        `) as ChatSessionSummary[]);
+    return rows;
+  } catch (err) {
+    console.warn('[neon-db] fetchChatSessionSummaries failed', err);
     return [];
   }
 }

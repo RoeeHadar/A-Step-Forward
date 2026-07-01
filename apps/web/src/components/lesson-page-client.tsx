@@ -8,6 +8,7 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { LessonReader } from './lesson-reader';
 import { LessonQuizPanel } from './lesson-quiz-panel';
 import { LessonCompleteButton } from './lesson-complete-button';
+import { LessonChatSidebar } from './lesson-chat-sidebar';
 import {
   ThreePtCompletionMessage,
   ThreePtProgressBar,
@@ -171,6 +172,8 @@ export function LessonPageClient({
           <ThreePtCompletionMessage lang={lang} track={engagementTrack} />
         ) : null}
       </div>
+
+      <LessonChatSidebar conceptId={conceptId} />
     </div>
   );
 }

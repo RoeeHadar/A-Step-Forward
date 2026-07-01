@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'server-only': path.resolve(__dirname, './src/test-utils/server-only-stub.ts'),
       '@asf/schemas': path.resolve(__dirname, '../../packages/schemas/ts/index.ts'),
       '@asf/schemas/agents': path.resolve(__dirname, '../../packages/schemas/ts/agents.ts'),
       '@asf/schemas/memory': path.resolve(__dirname, '../../packages/schemas/ts/memory.ts'),
