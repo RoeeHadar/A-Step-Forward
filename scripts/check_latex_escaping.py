@@ -42,7 +42,7 @@ def main() -> None:
                         idx = t.find("\\\\lim")
                         if idx == -1:
                             idx = t.find("\\\\frac")
-                        samples.append(f"{fp.name}:{key} -> {repr(t[max(0, idx - 10): idx + 40])}")
+                        samples.append(f"{fp.name}:{key} -> {t[max(0, idx - 10): idx + 40]!r}")
             for ex in s.get("exercises") or []:
                 for key in ("body_en", "body_he", "solution_en", "solution_he"):
                     t = ex.get(key) or ""
