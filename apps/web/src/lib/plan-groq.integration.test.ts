@@ -42,7 +42,10 @@ describe.skipIf(!hasGroq)('mentor plan tag (live Groq)', () => {
       }),
     });
 
-    expect(res.ok).toBe(true);
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Groq API ${res.status}: ${errText.slice(0, 200)}`);
+    }
     const json = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
