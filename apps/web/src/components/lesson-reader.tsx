@@ -24,6 +24,7 @@ import {
 import { cn } from '@/lib/utils';
 import { normalizeLatexInMarkdown } from '@/lib/normalize-latex';
 import { MarkdownMath } from '@/components/markdown-math';
+import { pickLessonText, lessonTextDir } from '@/lib/lesson-locale';
 import type { LessonSection, LessonWithQuestions, LessonPointsLevel } from '@/lib/neon-db';
 // MATH_GLOSSARY terms (see @/lib/math-glossary) could be wrapped with
 // GlossaryTooltip for inline hover hints; full Markdown post-processing is
@@ -85,14 +86,8 @@ function levelVariantBody(
   fallback: string,
 ): string {
   if (!variant) return fallback;
-  const text = lang === 'he' ? variant.body_he_md : variant.body_en_md;
-  if (!text?.trim()) return fallback;
-  // Guard against truncated Hebrew level variants (common seed-data issue)
-  if (lang === 'he' && variant.body_en_md?.trim()) {
-    const ratio = text.length / variant.body_en_md.length;
-    if (ratio < 0.65) return fallback;
-  }
-  return text;
+  const text = pickLessonText(lang, variant.body_he_md, variant.body_en_md);
+  return text || fallback;
 }
 
 function getBodyForLevel(
@@ -100,15 +95,15 @@ function getBodyForLevel(
   lang: Lang,
   learnerLevel: LessonPointsLevel | null,
 ): string {
-  const fallback = lang === 'he' ? section.body_he_md : section.body_en_md;
+  const fallback = pickLessonText(lang, section.body_he_md, section.body_en_md);
   if (learnerLevel && section.body_by_level) {
-    // Try exact level first, then fall back to the closest lower level
     const idx = levelIndex(learnerLevel);
     for (let i = idx; i >= 0; i--) {
       const lvl = LEVEL_ORDER[i];
       const variant = lvl ? section.body_by_level[lvl] : undefined;
       if (variant) {
-        return levelVariantBody(variant, lang, fallback);
+        const variantText = levelVariantBody(variant, lang, fallback);
+        if (variantText.trim()) return variantText;
       }
     }
   }
@@ -241,8 +236,12 @@ function CheckpointCard({
   dir: 'rtl' | 'ltr';
 }) {
   const [showSolution, setShowSolution] = useState(false);
-  const body = lang === 'he' ? section.body_he_md : section.body_en_md;
-  const solution = lang === 'he' ? section.checkpoint_solution_he : section.checkpoint_solution_en;
+  const body = pickLessonText(lang, section.body_he_md, section.body_en_md);
+  const solution = pickLessonText(
+    lang,
+    section.checkpoint_solution_he,
+    section.checkpoint_solution_en,
+  );
 
   return (
     <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-500/5 overflow-hidden">
@@ -292,8 +291,8 @@ function ExerciseItem({
   dir: 'rtl' | 'ltr';
 }) {
   const [showSolution, setShowSolution] = useState(false);
-  const body = lang === 'he' ? exercise.body_he : exercise.body_en;
-  const solution = lang === 'he' ? exercise.solution_he : exercise.solution_en;
+  const body = pickLessonText(lang, exercise.body_he, exercise.body_en);
+  const solution = pickLessonText(lang, exercise.solution_he, exercise.solution_en);
 
   return (
     <div className="rounded-xl border border-border bg-background/60 p-4">
@@ -350,7 +349,9 @@ function ExerciseSetCard({
           <ExerciseItem key={ex.id || String(i)} exercise={ex} lang={lang} dir={dir} />
         ))}
         {!section.exercises ? (
-          <MarkdownMath dir={dir}>{lang === 'he' ? section.body_he_md : section.body_en_md}</MarkdownMath>
+          <MarkdownMath dir={dir}>
+            {pickLessonText(lang, section.body_he_md, section.body_en_md)}
+          </MarkdownMath>
         ) : null}
       </div>
     </div>
@@ -399,7 +400,7 @@ function SectionCard({
   const [open, setOpen] = useState(defaultOpen);
   const meta = SECTION_META[section.kind];
   const Icon = meta.icon;
-  const title = lang === 'he' ? section.title_he : section.title_en;
+  const title = pickLessonText(lang, section.title_he, section.title_en);
   const label = lang === 'he' ? meta.label_he : meta.label_en;
   const body = getBodyForLevel(section, lang, learnerLevel);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
@@ -504,7 +505,7 @@ export function LessonReader({
   onSectionFocus?: (sectionNumber: number) => void;
 }) {
   const { lesson } = data;
-  const summary = lang === 'he' ? lesson.summary_he : lesson.summary_en;
+  const summary = pickLessonText(lang, lesson.summary_he, lesson.summary_en);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const level = learnerLevel ?? null;
 
@@ -584,7 +585,7 @@ export function LessonReader({
             {visibleSections.map((s, i) => {
               const tocMeta = SECTION_META[s.kind];
               const TocIcon = tocMeta?.icon ?? BookOpen;
-              const tocTitle = lang === 'he' ? s.title_he : s.title_en;
+              const tocTitle = pickLessonText(lang, s.title_he, s.title_en);
               return (
                 <li key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
                   <TocIcon className="h-3 w-3 shrink-0" />

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { MarkdownMath } from '@/components/markdown-math';
 import { Check, X, HelpCircle, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
+import { pickLessonText } from '@/lib/lesson-locale';
 import type {
   LessonQuestionKind,
   LessonPointsLevel,
@@ -149,10 +150,13 @@ function QuestionCard({
   const [busy, setBusy] = useState(false);
 
   const dir = lang === 'he' ? 'rtl' : 'ltr';
-  const stem = lang === 'he' ? question.stem_he : question.stem_en;
-  const explanation = lang === 'he' ? question.explanation_he : question.explanation_en;
-  const rubric = lang === 'he' ? question.rubric_he : question.rubric_en;
-  const options = lang === 'he' ? question.options_he : question.options_en;
+  const stem = pickLessonText(lang, question.stem_he, question.stem_en);
+  const explanation = pickLessonText(lang, question.explanation_he, question.explanation_en);
+  const rubric = pickLessonText(lang, question.rubric_he, question.rubric_en);
+  const options =
+    lang === 'he'
+      ? (question.options_he?.length ? question.options_he : [])
+      : (question.options_en?.length ? question.options_en : []);
   const kindLabel = KIND_LABEL[question.kind][lang];
   const payload = question.answer_payload;
 
@@ -480,8 +484,8 @@ function QuestionCard({
       {/* match — left list with a dropdown picking the corresponding right item */}
       {question.kind === 'match' && payload?.left_en && payload?.right_en ? (
         <div className="space-y-2">
-          {(lang === 'he' ? payload.left_he ?? payload.left_en : payload.left_en).map((left, i) => {
-            const rightOptions = lang === 'he' ? payload.right_he ?? payload.right_en! : payload.right_en!;
+          {(lang === 'he' ? payload.left_he ?? [] : payload.left_en).map((left, i) => {
+            const rightOptions = lang === 'he' ? payload.right_he ?? [] : payload.right_en ?? [];
             const userChoice = matchSelections[i] ?? null;
             const correctIdx = (payload.correct_pairs ?? [])[i] ?? -1;
             const correctRight = correctIdx >= 0 ? rightOptions[correctIdx] ?? '' : '';
@@ -537,7 +541,7 @@ function QuestionCard({
       {question.kind === 'ordering' && payload?.steps_en ? (
         <div className="space-y-2">
           {ordering.map((stepIdx, displayIdx) => {
-            const steps = lang === 'he' ? payload.steps_he ?? payload.steps_en! : payload.steps_en!;
+            const steps = lang === 'he' ? payload.steps_he ?? [] : payload.steps_en ?? [];
             const stepText = steps[stepIdx] ?? '';
             const correctPos = (payload.correct_order ?? []).indexOf(stepIdx);
             let cls = 'border-border';

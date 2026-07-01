@@ -1,0 +1,92 @@
+name: Expand Lessons (substantive)
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max lessons to process this run (9999 = all)"
+        required: false
+        default: "9999"
+      only:
+        description: "Comma-separated concept_ids (optional)"
+        required: false
+        default: ""
+      force:
+        description: "Re-expand even if previously completed"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      seed_after:
+        description: "Run lessons-from-json seed after expansion"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+concurrency:
+  group: expand-lessons-substantive
+  cancel-in-progress: false
+
+jobs:
+  expand:
+    name: Groq substantive expansion
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Expand lesson corpus (Groq)
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          LLM_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "GROQ_API_KEY secret is missing."
+            exit 1
+          fi
+          ARGS="--limit ${{ inputs.limit }}"
+          if [ -n "${{ inputs.only }}" ]; then
+            ARGS="$ARGS --only ${{ inputs.only }}"
+          fi
+          if [ "${{ inputs.force }}" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          node scripts/expand-lessons-substantive.mjs $ARGS
+          node scripts/seed-lessons.mjs --dry-run
+
+      - name: Commit expanded lessons
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/seed_data/lessons/ scripts/.expand-substantive-progress.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No lesson file changes to commit."
+            exit 0
+          fi
+          git commit -m "feat(curriculum): substantive Groq expansion for authored lessons"
+          git push
+
+      - uses: astral-sh/setup-uv@v5
+        if: inputs.seed_after == 'true'
+        with:
+          enable-cache: true
+
+      - name: Seed lessons to Neon
+        if: inputs.seed_after == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save --no-package-lock @neondatabase/serverless
+          node scripts/generate-lessons-artifacts.mjs
+          node scripts/seed-lessons.mjs
