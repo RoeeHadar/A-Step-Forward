@@ -403,7 +403,7 @@ function SectionCard({
   const title = pickLessonText(lang, section.title_he, section.title_en);
   const label = lang === 'he' ? meta.label_he : meta.label_en;
   const body = getBodyForLevel(section, lang, learnerLevel);
-  const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const dir = lessonTextDir(lang);
 
   // Sections with dedicated card renderers bypass the accordion entirely
   if (section.kind === 'checkpoint') {
@@ -506,7 +506,7 @@ export function LessonReader({
 }) {
   const { lesson } = data;
   const summary = pickLessonText(lang, lesson.summary_he, lesson.summary_en);
-  const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const dir = lessonTextDir(lang);
   const level = learnerLevel ?? null;
 
   // Level focus block for this student
