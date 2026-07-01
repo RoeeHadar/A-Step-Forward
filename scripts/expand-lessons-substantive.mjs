@@ -10,7 +10,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { callGroq, parseJsonLoose, getGroqApiKey } from './lib/groq-client.mjs';
+import { callGroq, parseJsonLoose, getGroqApiKey, sleep } from './lib/groq-client.mjs';
 import {
   wordCount,
   hebrewBodyWeak,
@@ -39,7 +39,9 @@ const ONLY = (() => {
 })();
 const DRY = Boolean(flag('dry-run', false));
 const FORCE = Boolean(flag('force', false));
-const DELAY_MS = Number(flag('delay-ms', 1200));
+const DELAY_MS = Number(flag('delay-ms', 8000));
+const SECTION_BATCH = Number(flag('section-batch', 1));
+const QUESTION_BATCH = Number(flag('question-batch', 3));
 
 const SYSTEM_PROMPT = `You are the lead bilingual curriculum author for "A Step Forward" — an AI tutoring platform for Israeli high-school (Bagrut 3/4/5 יח"ל) and first-year university students (חדו"א, אלגברה לינארית, פיזיקה).
 
@@ -80,10 +82,6 @@ function saveProgress(progress) {
   fs.writeFileSync(PROGRESS_PATH, `${JSON.stringify(progress, null, 2)}\n`, 'utf8');
 }
 
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
-}
-
 function sectionNeedsWork(section) {
   if (!EXPAND_SECTION_KINDS.has(section.kind)) return false;
   const min = MIN_WORDS[section.kind] ?? { en: 90, he: 75 };
@@ -110,6 +108,11 @@ function lessonNeedsWork(lesson) {
   return false;
 }
 
+function trunc(text, max = 480) {
+  const s = text ?? '';
+  return s.length <= max ? s : `${s.slice(0, max)}…`;
+}
+
 function buildSectionPayload(lesson, sections) {
   return sections.map((s) => ({
     index: s.index,
@@ -118,35 +121,32 @@ function buildSectionPayload(lesson, sections) {
     title_he: s.title_he,
     difficulty: s.difficulty,
     example_number: s.example_number,
-    body_en_md: s.body_en_md ?? '',
-    body_he_md: s.body_he_md ?? '',
+    body_en_md: trunc(s.body_en_md),
+    body_he_md: trunc(s.body_he_md),
     ...(s.kind === 'checkpoint'
       ? {
-          body_en_md: s.body_en_md ?? '',
-          checkpoint_solution_en: s.checkpoint_solution_en ?? '',
-          checkpoint_solution_he: s.checkpoint_solution_he ?? '',
+          checkpoint_solution_en: trunc(s.checkpoint_solution_en, 240),
+          checkpoint_solution_he: trunc(s.checkpoint_solution_he, 240),
         }
       : {}),
   }));
 }
 
-function buildUserPrompt(lesson, sectionSlice, includeQuestions) {
+function buildUserPrompt(lesson, sectionSlice, questionSlice) {
   const hints = lesson.agent_hints ?? {};
   const misconceptions = (hints.common_misconceptions ?? [])
     .slice(0, 3)
     .map((m) => (typeof m === 'string' ? m : `${m.wrong ?? ''} → ${m.correction ?? ''}`))
     .join('\n');
 
-  const qSlice = includeQuestions
-    ? (lesson.questions ?? []).map((q) => ({
-        ord: q.ord,
-        kind: q.kind,
-        difficulty: q.difficulty,
-        stem_en: (q.stem_en ?? '').slice(0, 200),
-        explanation_en: q.explanation_en ?? '',
-        explanation_he: q.explanation_he ?? '',
-      }))
-    : [];
+  const qSlice = questionSlice.map((q) => ({
+    ord: q.ord,
+    kind: q.kind,
+    difficulty: q.difficulty,
+    stem_en: trunc(q.stem_en, 160),
+    explanation_en: trunc(q.explanation_en, 200),
+    explanation_he: trunc(q.explanation_he, 200),
+  }));
 
   return `Concept: ${lesson.concept_id}
 Subject: ${lesson.subject}
@@ -164,9 +164,15 @@ ${misconceptions || 'n/a'}
 Sections to rewrite (expand deeply; keep same kind/titles; return by index):
 ${JSON.stringify(buildSectionPayload(lesson, sectionSlice), null, 2)}
 
-${includeQuestions ? `Questions — expand explanation_en and explanation_he (return by ord):\n${JSON.stringify(qSlice, null, 2)}` : ''}
+${questionSlice.length > 0 ? `Questions — expand explanation_en and explanation_he (return by ord):\n${JSON.stringify(qSlice, null, 2)}` : ''}
 
 Rewrite ALL listed sections/questions. Make English and Hebrew equally rich. Return JSON only.`;
+}
+
+function chunkArray(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
 }
 
 function mergeExpansion(lesson, parsed) {
@@ -216,20 +222,16 @@ async function expandLesson(lesson) {
     (s) => EXPAND_SECTION_KINDS.has(s.kind) || s.kind === 'checkpoint',
   );
 
-  // Two batches max for sections (avoid token overflow)
-  const mid = Math.ceil(expandable.length / 2);
-  const batches = [expandable.slice(0, mid), expandable.slice(mid)].filter((b) => b.length > 0);
-
   let current = structuredClone(lesson);
 
-  for (const batch of batches) {
-    const userPrompt = buildUserPrompt(current, batch, false);
+  for (const batch of chunkArray(expandable, SECTION_BATCH)) {
+    const userPrompt = buildUserPrompt(current, batch, []);
     const resp = await callGroq(
       [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userPrompt },
       ],
-      { maxTokens: 8192, temperature: 0.4 },
+      { maxTokens: 4096, temperature: 0.4 },
     );
     if (!resp) throw new Error('Groq call failed (sections batch)');
     const parsed = parseJsonLoose(resp.content);
@@ -237,19 +239,20 @@ async function expandLesson(lesson) {
     await sleep(DELAY_MS);
   }
 
-  // Questions batch
-  if ((current.questions ?? []).length > 0) {
-    const userPrompt = buildUserPrompt(current, [], true);
+  const questions = current.questions ?? [];
+  for (const qBatch of chunkArray(questions, QUESTION_BATCH)) {
+    const userPrompt = buildUserPrompt(current, [], qBatch);
     const resp = await callGroq(
       [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userPrompt },
       ],
-      { maxTokens: 8192, temperature: 0.4 },
+      { maxTokens: 4096, temperature: 0.4 },
     );
     if (!resp) throw new Error('Groq call failed (questions batch)');
     const parsed = parseJsonLoose(resp.content);
     current = mergeExpansion(current, parsed);
+    await sleep(DELAY_MS);
   }
 
   return normalizeLesson(current);
