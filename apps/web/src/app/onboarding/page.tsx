@@ -740,6 +740,7 @@ export default function OnboardingPage() {
   // for known goals. Falls back to the full goal list for "other".
   // Capped to MAX_SELF_SCORE = 10 regardless to prevent overwhelm.
   const MAX_SELF_SCORE = 10;
+  const isAdultLearner = s1.gradeLevel === 'adult_learner';
   const conceptsForStep4: ConceptEntry[] = (() => {
     if (isAdultLearner && s1.adultGoal) {
       const curated = ADULT_SELF_SCORE_BY_GOAL[s1.adultGoal];
@@ -760,8 +761,6 @@ export default function OnboardingPage() {
       : [];
     return [...new Set([...mathIds, ...physicsIds])].slice(0, MAX_SELF_SCORE).map(conceptEntry);
   })();
-
-  const isAdultLearner = s1.gradeLevel === 'adult_learner';
 
   const needsPointsGroup =
     s1.subjects.includes('math') &&
