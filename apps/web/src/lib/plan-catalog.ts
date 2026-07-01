@@ -14,7 +14,9 @@ export interface PlanUpdatePayload {
   goal?: string;
   goal_key?: string;
   next_test_date?: string | null;
+  next_test_name?: string | null;
   final_goal_date?: string | null;
+  clear_next_test?: boolean;
   hours_per_week?: number;
   priority_concepts?: string[];
   prepend_concepts?: string[];
@@ -122,6 +124,7 @@ export function sanitizePlanUpdatePayload(
     priority_concepts: sanitizeConceptIds(payload.priority_concepts),
     prepend_concepts: sanitizeConceptIds(payload.prepend_concepts),
     exclude_concepts: sanitizeConceptIds(payload.exclude_concepts),
+    clear_next_test: payload.clear_next_test === true ? true : undefined,
   };
 }
 

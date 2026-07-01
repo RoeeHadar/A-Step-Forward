@@ -10,8 +10,10 @@ import {
   getGoalCompletionStatus,
   getCurrentPlan,
   getLearnerStreak,
+  getLatestPlanChange,
   dbConfigured,
 } from '@/lib/neon-db';
+import { PlanChangeBanner } from '@/components/plan-change-banner';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +34,7 @@ export default async function DashboardPage() {
   }
   if (!auth) redirect('/sign-in');
 
-  const [profile, goalStatus, plan, streak] = await Promise.all([
+  const [profile, goalStatus, plan, streak, latestPlanChange] = await Promise.all([
     dbConfigured
       ? getLearnerProfile(auth.learnerId).catch(() => null)
       : Promise.resolve(null),
@@ -45,11 +47,15 @@ export default async function DashboardPage() {
     dbConfigured
       ? getLearnerStreak(auth.learnerId).catch(() => ({ ...EMPTY_STREAK }))
       : Promise.resolve({ ...EMPTY_STREAK }),
+    dbConfigured
+      ? getLatestPlanChange(auth.learnerId).catch(() => null)
+      : Promise.resolve(null),
   ]);
 
   return (
     <>
       {goalStatus ? <GoalCompletionBanner status={goalStatus} /> : null}
+      {latestPlanChange ? <PlanChangeBanner change={latestPlanChange} /> : null}
       <AgentsIntroBanner />
       <Suspense fallback={null}>
         <MicroWinToast />
@@ -58,6 +64,7 @@ export default async function DashboardPage() {
         displayName={auth.displayName}
         plan={plan}
         nextTestDate={profile?.next_test_date ?? null}
+        finalGoalDate={profile?.final_goal_date ?? null}
         streak={streak}
         pointsGroup={profile?.points_group ?? null}
         subjects={profile?.subjects ?? null}

@@ -32,7 +32,10 @@ const STR = {
     subtitleNoDate: 'בוא נלמד משהו חדש היום',
     makhinaCue: 'המסע שלך לאוניברסיטה',
     daysUntilExam: (n: number) => `${n} ימים עד הבגרות`,
+    daysUntilGoal: (n: number) => `${n} ימים עד יעד הלימוד`,
     examToday: 'הבגרות היום!',
+    goalToday: 'יום היעד!',
+    viewFullPlan: 'צפה בתוכנית המלאה →',
     streak: (n: number) => `🔥 ${n} ימים רצף`,
     estGrade: (g: number) => `ציון משוער: ~${g}`,
     planTitle: 'התוכנית שלי לשבוע זה',
@@ -55,7 +58,10 @@ const STR = {
     subtitleNoDate: "Let's learn something new today",
     makhinaCue: 'Your university prep journey',
     daysUntilExam: (n: number) => `${n} days until exam`,
+    daysUntilGoal: (n: number) => `${n} days until your goal`,
     examToday: 'Exam day!',
+    goalToday: 'Goal day!',
+    viewFullPlan: 'View full projected plan →',
     streak: (n: number) => `🔥 ${n}-day streak`,
     estGrade: (g: number) => `Est. grade: ~${g}`,
     planTitle: 'My Plan for This Week',
@@ -320,6 +326,7 @@ export function DashboardContent({
   displayName,
   plan,
   nextTestDate,
+  finalGoalDate,
   streak,
   pointsGroup,
   subjects,
@@ -328,6 +335,7 @@ export function DashboardContent({
   displayName: string;
   plan: LearningPlan | null;
   nextTestDate?: string | null;
+  finalGoalDate?: string | null;
   streak?: LearnerStreak;
   pointsGroup?: string | null;
   subjects?: string[] | null;
@@ -339,16 +347,30 @@ export function DashboardContent({
   const name = firstName(displayName);
 
   const { subtitle, isExamCountdown } = useMemo(() => {
-    if (!nextTestDate) {
-      return { subtitle: t.subtitleNoDate, isExamCountdown: false };
+    const countdownDate =
+      finalGoalDate &&
+      (!nextTestDate ||
+        new Date(finalGoalDate).getTime() > new Date(nextTestDate).getTime())
+        ? finalGoalDate
+        : nextTestDate;
+
+    if (!countdownDate) {
+      return { subtitle: goal ?? t.subtitleNoDate, isExamCountdown: false };
     }
-    const exam = new Date(nextTestDate);
-    const daysLeft = Math.ceil((exam.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    const target = new Date(countdownDate);
+    const daysLeft = Math.ceil((target.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    const isGoalCountdown = countdownDate === finalGoalDate;
     if (daysLeft <= 0) {
-      return { subtitle: t.examToday, isExamCountdown: true };
+      return {
+        subtitle: isGoalCountdown ? t.goalToday : t.examToday,
+        isExamCountdown: true,
+      };
     }
-    return { subtitle: t.daysUntilExam(daysLeft), isExamCountdown: true };
-  }, [nextTestDate, t]);
+    return {
+      subtitle: isGoalCountdown ? t.daysUntilGoal(daysLeft) : t.daysUntilExam(daysLeft),
+      isExamCountdown: true,
+    };
+  }, [nextTestDate, finalGoalDate, goal, t]);
 
   const week = plan ? currentActiveWeek(plan) : undefined;
   const planItems = (week?.concepts ?? []).slice(0, MAX_PLAN_ITEMS);
@@ -408,6 +430,11 @@ export function DashboardContent({
         <SectionHeading accent="cyan">{t.planTitle}</SectionHeading>
         {planItems.length > 0 ? (
           <div className="space-y-3">
+            {goal ? (
+              <p className="text-sm text-muted-foreground" dir="auto">
+                {goal}
+              </p>
+            ) : null}
             {planItems.map((concept, idx) => (
               <PlanItemRow
                 key={concept.concept_id}
@@ -418,6 +445,12 @@ export function DashboardContent({
                 isFirst={idx === 0}
               />
             ))}
+            <Link
+              href="/app/plan"
+              className="inline-block text-sm font-medium text-primary hover:underline"
+            >
+              {t.viewFullPlan}
+            </Link>
           </div>
         ) : (
           <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-magenta/5 p-6 text-center">

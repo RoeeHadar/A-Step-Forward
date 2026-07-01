@@ -7,7 +7,17 @@ import {
   sanitizeConceptIds,
   sanitizePlanUpdatePayload,
 } from './plan-catalog';
-import { extractPlanUpdate, learnerConfirmedChange } from './plan-actions';
+import {
+  extractPlanUpdate,
+  inferConceptIdsFromText,
+  inferGoalMetaFromText,
+  learnerConfirmedChange,
+  learnerExplicitChangeRequest,
+  looksLikePlanApplyIntent,
+  looksLikePlanProposal,
+  proposalToUpdatePayload,
+  shouldApplyPlanChange,
+} from './plan-actions';
 
 describe('plan-catalog grounding', () => {
   it('recognizes KG concept ids', () => {
@@ -62,6 +72,59 @@ describe('plan-actions', () => {
   it('requires explicit learner confirmation phrases', () => {
     expect(learnerConfirmedChange('yes, update my plan')).toBe(true);
     expect(learnerConfirmedChange('עדכן')).toBe(true);
+    expect(learnerConfirmedChange('כן, אני מסכים')).toBe(true);
     expect(learnerConfirmedChange('maybe later')).toBe(false);
+  });
+
+  it('infers discrete-math concepts from Hebrew topic names', () => {
+    const ids = inferConceptIdsFromText(
+      'תורת הקבוצות, תורת הגרפים, קומבינטוריקה',
+      'מתמטיקה בדידה באוניברסיטה הפתוחה',
+    );
+    expect(ids).toContain('combinatorics');
+    expect(ids).toContain('probability_basic');
+  });
+
+  it('detects plan proposal language', () => {
+    const text =
+      'אני מציע להוסיף קומבינטוריקה. האם אתה מסכים?';
+    expect(looksLikePlanProposal(text)).toBe(true);
+  });
+
+  it('converts stored proposal to confirmed update payload', () => {
+    const payload = proposalToUpdatePayload({
+      reason: 'discrete math prep',
+      prepend_concepts: ['combinatorics'],
+    });
+    expect(payload.confirmed).toBe(true);
+    expect(payload.prepend_concepts).toEqual(['combinatorics']);
+  });
+
+  it('infers goal and 8-month horizon from Hebrew goal-change request', () => {
+    const userMsg =
+      'שנה את המטרה שלי במערכת - אני לא עושה בגרות עוד תשעה ימים, המטרה החדשה שלי היא מבחן במתמטיקה בדידה בעוד 8 חודשים';
+    const meta = inferGoalMetaFromText(userMsg);
+    expect(meta.goal).toContain('מתמטיקה בדידה');
+    expect(meta.goal_key).toBe('university_prep');
+    expect(meta.clear_next_test).toBe(true);
+    expect(meta.final_goal_date).toBeTruthy();
+    expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
+  });
+
+  it('applies plan when user gives explicit goal change and tutor commits', () => {
+    const userMsg =
+      'שנה את המטרה שלי - המטרה החדשה שלי היא מבחן במתמטיקה בדידה בעוד 8 חודשים';
+    const assistant =
+      'המטרה החדשה שלך היא מבחן במתמטיקה בדידה. אני אעדכן את התוכנית השבועית שלך בהתאם.';
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+    expect(looksLikePlanApplyIntent(assistant)).toBe(true);
+    const payload = proposalToUpdatePayload({
+      reason: 'goal change',
+      ...inferGoalMetaFromText(userMsg, assistant),
+      prepend_concepts: inferConceptIdsFromText(userMsg),
+    });
+    expect(payload.goal).toBeTruthy();
+    expect(payload.clear_next_test).toBe(true);
+    expect(payload.prepend_concepts).toContain('combinatorics');
   });
 });

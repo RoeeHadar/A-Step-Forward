@@ -13,17 +13,21 @@ import {
   getDueReviews,
   markAtomPracticed,
   getCurrentPlan,
-  applyPlanProfileUpdates,
-  generateLearningPlan,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import { buildLessonCatalogSummary, buildPlanAllowlistBlock, PLAN_GROUNDING_RULES } from '@/lib/plan-catalog';
 import {
   extractPlanUpdate,
-  learnerConfirmedChange,
-  planPayloadToOptions,
+  shouldApplyPlanChange,
+  stripPlanMachineTags,
   PLAN_AGENT_INSTRUCTIONS,
 } from '@/lib/plan-actions';
+import {
+  executePlanUpdate,
+  resolvePayloadForApply,
+  saveProposalFromAssistantTurn,
+  type PlanApplyResult,
+} from '@/lib/plan-apply';
 import { llmStream, llmConfigured } from '@/lib/llm-provider';
 import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
@@ -108,31 +112,49 @@ export async function POST(req: Request) {
   });
   const encoder = new TextEncoder();
   let assistantBuffer = '';
+  const cookieStore = await cookies();
+  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
   // Vercel AI SDK "data stream" protocol: every text token is emitted on its
   // own line, prefixed by `0:` and JSON-stringified, terminated with `\n`.
   // The final line is `d:{...}` for the finish message. This is the format
   // useChat expects by default.
   const encodeToken = (text: string) => encoder.encode(`0:${JSON.stringify(text)}\n`);
+  const encodeData = (data: unknown) => encoder.encode(`2:${JSON.stringify([data])}\n`);
   const encodeFinish = () =>
     encoder.encode(`d:${JSON.stringify({ finishReason: 'stop', usage: { promptTokens: 0, completionTokens: 0 } })}\n`);
 
   const readable = new ReadableStream({
     async pull(controller) {
       try {
-        const { value, done } = await gen.next();
+      const { value, done } = await gen.next();
         if (done) {
-          controller.enqueue(encodeFinish());
-          controller.close();
+          let planResult: PlanApplyResult | null = null;
           if (assistantBuffer) {
-            void finalizeAssistantTurn(
+            planResult = await finalizeAssistantTurn(
               userId,
               agent,
               lastMessage,
               assistantBuffer,
               sessionId,
+              locale,
             );
+            if (planResult?.applied) {
+              const notice =
+                locale === 'en' ? planResult.noticeEn! : planResult.noticeHe!;
+              assistantBuffer += notice;
+              controller.enqueue(encodeToken(notice));
+              controller.enqueue(
+                encodeData({
+                  type: 'plan_updated',
+                  planId: planResult.planId,
+                  reason: planResult.reason,
+                }),
+              );
+            }
           }
+          controller.enqueue(encodeFinish());
+          controller.close();
         } else {
           assistantBuffer += value;
           controller.enqueue(encodeToken(value));
@@ -142,11 +164,31 @@ export async function POST(req: Request) {
         const fallback = friendlyFallback(lastMessage, agent);
         assistantBuffer += fallback;
         controller.enqueue(encodeToken(fallback));
+        let planResult: PlanApplyResult | null = null;
+        if (assistantBuffer) {
+          planResult = await finalizeAssistantTurn(
+            userId,
+            agent,
+            lastMessage,
+            assistantBuffer,
+            sessionId,
+            locale,
+          );
+          if (planResult?.applied) {
+            const notice =
+              locale === 'en' ? planResult.noticeEn! : planResult.noticeHe!;
+            controller.enqueue(encodeToken(notice));
+            controller.enqueue(
+              encodeData({
+                type: 'plan_updated',
+                planId: planResult.planId,
+                reason: planResult.reason,
+              }),
+            );
+          }
+        }
         controller.enqueue(encodeFinish());
         controller.close();
-        if (assistantBuffer) {
-          void finalizeAssistantTurn(userId, agent, lastMessage, assistantBuffer, sessionId);
-        }
       }
     },
   });
@@ -167,36 +209,93 @@ async function finalizeAssistantTurn(
   userMessage: string,
   assistantRaw: string,
   sessionId?: string,
-): Promise<void> {
-  const { visible, payload } = extractPlanUpdate(assistantRaw);
-  await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+  locale: 'he' | 'en' = 'he',
+): Promise<PlanApplyResult | null> {
+  const visible = stripPlanMachineTags(assistantRaw);
+  const isPlanAgent = agent === 'mentor' || agent === 'tutor';
 
-  if (
-    payload?.confirmed &&
-    (agent === 'mentor' || agent === 'tutor') &&
-    learnerConfirmedChange(userMessage)
-  ) {
-    try {
-      await applyPlanProfileUpdates(userId, {
-        goal: payload.goal,
-        next_test_date: payload.next_test_date,
-        final_goal_date: payload.final_goal_date,
-        hours_per_week: payload.hours_per_week,
-        goal_key: payload.goal_key,
-      });
-      const plan = await generateLearningPlan(userId, planPayloadToOptions(payload));
-      logger.info('chat: plan updated via ASF_PLAN_UPDATE tag', {
+  let priorAssistant: string | undefined;
+  let priorUser: string | undefined;
+  if (isPlanAgent) {
+    const recent = await fetchRecentChatTurns(userId, agent, 6).catch(() => []);
+    priorAssistant = recent
+      .filter((t) => t.role === 'assistant')
+      .map((t) => t.content)
+      .at(-1);
+    priorUser = recent
+      .filter((t) => t.role === 'user')
+      .map((t) => t.content)
+      .at(-1);
+  }
+
+  if (!isPlanAgent) {
+    await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+    return null;
+  }
+
+  const applyNow = shouldApplyPlanChange(userMessage, assistantRaw, priorUser);
+
+  if (applyNow) {
+    const payload = await resolvePayloadForApply(
+      userId,
+      userMessage,
+      assistantRaw,
+      priorUser,
+      priorAssistant,
+    );
+
+    if (!payload) {
+      logger.warn('chat: learner confirmed plan change but no resolvable payload', {
         agent,
-        reason: payload.reason,
-        planId: plan.id,
-        weeks: plan.weeks.length,
+        userMessage: userMessage.slice(0, 80),
       });
-    } catch (err) {
-      logger.warn('chat: plan update failed', { err: String(err) });
+      await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+      return null;
     }
-  } else if (payload && !learnerConfirmedChange(userMessage)) {
+
+    try {
+      const result = await executePlanUpdate(userId, payload, {
+        agent,
+        source: 'chat',
+      });
+      if (result.applied) {
+        const notice =
+          locale === 'en' ? result.noticeEn ?? '' : result.noticeHe ?? '';
+        const full = notice ? `${visible}\n\n${notice}` : visible;
+        await recordChatTurn(userId, agent, 'assistant', full, sessionId);
+        logger.info('chat: plan updated', {
+          agent,
+          reason: payload.reason,
+          planId: result.planId,
+          weeks: result.weekSummaries?.length,
+        });
+      } else {
+        logger.warn('chat: plan update failed', { error: result.error });
+      }
+      if (!result.applied) {
+        await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+      }
+      return result;
+    } catch (err) {
+      logger.warn('chat: plan update threw', { err: String(err) });
+      await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+      return { applied: false, error: String(err) };
+    }
+  }
+
+  const { payload: prematureUpdate } = extractPlanUpdate(assistantRaw);
+  if (prematureUpdate?.confirmed) {
     logger.warn('chat: ASF_PLAN_UPDATE ignored — learner did not confirm in this turn');
   }
+
+  try {
+    await saveProposalFromAssistantTurn(userId, agent, userMessage, assistantRaw);
+  } catch (err) {
+    logger.warn('chat: save pending plan proposal failed', { err: String(err) });
+  }
+
+  await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+  return null;
 }
 
 async function* streamAgentResponse(
@@ -358,7 +457,7 @@ async function buildContextPrompt(
           .join(', ');
         context += `\n- Week ${w.week_number} [${w.status}]: ${names || '(empty)'}`;
       }
-    } else {
+        } else {
       context += `\n\n## Current weekly learning plan`;
       context += `\nNo active plan in the database yet. If the learner asks to change their plan, explain they should complete onboarding + diagnostic first, or offer to help set goals then call POST /api/plans/generate after confirmation.`;
     }

@@ -6,7 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
-import { extractPlanUpdate } from '@/lib/plan-actions';
+import { extractPlanUpdate, stripPlanMachineTags } from '@/lib/plan-actions';
+import { useRouter } from 'next/navigation';
 import { Send, Loader2, X } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { Textarea } from '@asf/ui/textarea';
@@ -48,7 +49,7 @@ function chatSessionKey(agent: AgentName): string {
 }
 
 function stripPlanTag(content: string): string {
-  return extractPlanUpdate(content).visible;
+  return stripPlanMachineTags(extractPlanUpdate(content).visible);
 }
 
 export function AgentChat({
@@ -63,6 +64,7 @@ export function AgentChat({
   showHistory?: boolean;
 }) {
   const { messages: i18nMessages, locale } = useI18n();
+  const router = useRouter();
   const isHe = locale === 'he';
   const parsed = agentNameSchema.safeParse(agent);
   const agentName: AgentName = parsed.success ? parsed.data : 'tutor';
@@ -178,6 +180,14 @@ export function AgentChat({
       if (!hasAutoRetriedRef.current && userMessageCountRef.current <= 1) {
         hasAutoRetriedRef.current = true;
         window.setTimeout(() => reload(), 500);
+      }
+    },
+    onFinish: (message) => {
+      if (
+        message.content.includes('המטרה והתוכנית השבועית עודכנו') ||
+        message.content.includes('Your goal and weekly plan were updated')
+      ) {
+        router.refresh();
       }
     },
   });

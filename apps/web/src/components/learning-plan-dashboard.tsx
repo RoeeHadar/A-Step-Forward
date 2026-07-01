@@ -32,6 +32,7 @@ const STR = {
     week_status: (n: number, status: string) => `${n} מושגים · סטטוס: ${statusHe(status)}`,
     start_week_quiz: 'התחל מבחן שבועי',
     all_weeks: 'כל השבועות',
+    future_weeks: 'שבועות עתידיים (עשויים להשתנות לפי התקדמות)',
     week_chip: (n: number, c: number) => `שבוע ${n}: ${c} מושגים`,
     no_weeks: 'אין עדיין שבועות בתכנית.',
     progress: 'התקדמות',
@@ -39,6 +40,11 @@ const STR = {
     browse_subject: (s: string, lang: Lang) => `עיין בתכני ${getSubjectLabel(s, lang)}`,
     not_assessed: 'טרם הוערך',
     mastery_pct: (p: number) => `${p}% שליטה`,
+    target_date: (d: string) => `יעד: ${d}`,
+    plan_horizon: (start: string, end: string) => `תקופת התוכנית: ${start} – ${end}`,
+    week_until: (d: string) => `עד ${d}`,
+    projected_note:
+      'זו תוכנית מ-projected — השבועות הבאים עשויים להשתנות לפי ציונים, מבחנים והתקדמות בפועל.',
   },
   en: {
     title: 'Your learning plan',
@@ -46,6 +52,7 @@ const STR = {
     week_status: (n: number, status: string) => `${n} concepts · status: ${status}`,
     start_week_quiz: 'Start Week Quiz',
     all_weeks: 'All weeks',
+    future_weeks: 'Upcoming weeks (may shift based on your progress)',
     week_chip: (n: number, c: number) => `Week ${n}: ${c} concepts`,
     no_weeks: 'No weeks in this plan yet.',
     progress: 'Progress',
@@ -53,6 +60,11 @@ const STR = {
     browse_subject: (s: string, lang: Lang) => `Browse ${getSubjectLabel(s, lang)} content`,
     not_assessed: 'Not assessed',
     mastery_pct: (p: number) => `${p}% mastery`,
+    target_date: (d: string) => `Target: ${d}`,
+    plan_horizon: (start: string, end: string) => `Plan period: ${start} – ${end}`,
+    week_until: (d: string) => `Through ${d}`,
+    projected_note:
+      'This is a projected plan — upcoming weeks may change based on quizzes and mastery.',
   },
 } as const;
 
@@ -161,21 +173,54 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
   );
 }
 
-export function LearningPlanDashboard({ plan }: { plan: LearningPlan }) {
+function formatShortDate(iso: string, lang: Lang): string {
+  try {
+    return new Date(iso).toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  } catch {
+    return iso;
+  }
+}
+
+export function LearningPlanDashboard({
+  plan,
+  finalGoalDate,
+  nextTestDate,
+}: {
+  plan: LearningPlan;
+  finalGoalDate?: string | null;
+  nextTestDate?: string | null;
+}) {
   const [lang] = useLanguagePreference('he');
   const t = STR[lang];
   const isHe = lang === 'he';
   const week = currentActiveWeek(plan);
+  const planEnd = plan.end_date ?? finalGoalDate ?? null;
 
   return (
     <div className="space-y-8" dir={isHe ? 'rtl' : 'ltr'}>
       <header>
         <h1 className="font-display text-3xl font-bold">{t.title}</h1>
-        {/* `goal` is free-text the learner wrote during onboarding; let the
-            browser pick direction per their actual string. */}
-        <p className="mt-2 text-muted-foreground" dir="auto">
+        <p className="mt-2 text-lg font-medium" dir="auto">
           {plan.goal}
         </p>
+        {plan.start_date && planEnd ? (
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t.plan_horizon(
+              formatShortDate(plan.start_date, lang),
+              formatShortDate(planEnd, lang),
+            )}
+          </p>
+        ) : null}
+        {finalGoalDate && !nextTestDate ? (
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t.target_date(formatShortDate(finalGoalDate, lang))}
+          </p>
+        ) : null}
+        <p className="mt-3 text-xs text-muted-foreground">{t.projected_note}</p>
       </header>
 
       {week ? (
@@ -211,9 +256,9 @@ export function LearningPlanDashboard({ plan }: { plan: LearningPlan }) {
       )}
 
       {plan.weeks.length > 1 ? (
-        <section>
-          <h3 className="mb-3 text-sm font-medium text-muted-foreground">
-            {t.all_weeks}
+        <section className="space-y-4">
+          <h3 className="text-sm font-medium text-muted-foreground">
+            {t.future_weeks}
           </h3>
           <div className="flex flex-wrap gap-2">
             {plan.weeks.map((w) => (
@@ -223,6 +268,39 @@ export function LearningPlanDashboard({ plan }: { plan: LearningPlan }) {
               >
                 {t.week_chip(w.week_number, w.concepts.length)}
               </Badge>
+            ))}
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            {plan.weeks.map((w) => (
+              <Card
+                key={w.id}
+                className={
+                  w.status === 'active' ? 'border-primary/50 bg-primary/5' : 'border-border/60'
+                }
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <CardTitle className="text-sm">{t.week(w.week_number)}</CardTitle>
+                    <Badge variant={w.status === 'active' ? 'default' : 'outline'}>
+                      {lang === 'he' ? statusHe(w.status) : w.status}
+                    </Badge>
+                  </div>
+                  {w.quiz_due_at ? (
+                    <p className="text-xs text-muted-foreground">
+                      {t.week_until(formatShortDate(w.quiz_due_at, lang))}
+                    </p>
+                  ) : null}
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    {w.concepts.map((c) => (
+                      <li key={c.concept_id} dir="auto">
+                        {displayName(c, lang)}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </section>

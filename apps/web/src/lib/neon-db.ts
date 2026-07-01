@@ -538,18 +538,29 @@ export async function generateLearningPlan(
 
   // Determine number of weeks from next_test_date / final_goal_date
   let numWeeks = 4;
+  const nextTestDate = profile.next_test_date ? new Date(profile.next_test_date) : null;
+  const finalGoalDate = profile.final_goal_date ? new Date(profile.final_goal_date) : null;
+  const useFinalGoal =
+    finalGoalDate &&
+    (!nextTestDate || finalGoalDate.getTime() > nextTestDate.getTime());
+
   if (options.numWeeksOverride != null) {
     numWeeks = options.numWeeksOverride;
-  } else if (profile.next_test_date) {
+  } else if (useFinalGoal && finalGoalDate) {
     const days = Math.ceil(
-      (new Date(profile.next_test_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+      (finalGoalDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+    );
+    numWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
+  } else if (nextTestDate) {
+    const days = Math.ceil(
+      (nextTestDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
     numWeeks = Math.max(1, Math.min(12, Math.ceil(days / 7)));
-  } else if (profile.final_goal_date) {
+  } else if (finalGoalDate) {
     const days = Math.ceil(
-      (new Date(profile.final_goal_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+      (finalGoalDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
-    numWeeks = Math.max(2, Math.min(16, Math.ceil(days / 7)));
+    numWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
   }
 
   // Sort by prerequisite depth (roots first); priority concepts first
@@ -588,20 +599,6 @@ export async function generateLearningPlan(
     INSERT INTO learning_plans (id, learner_id, goal, start_date, end_date, status, created_at, updated_at)
     VALUES (${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active', NOW(), NOW())
   `;
-
-  if (options.planChangeReason) {
-    const existing = (profile.personality_profile ?? {}) as Record<string, unknown>;
-    const history = Array.isArray(existing.plan_change_history)
-      ? (existing.plan_change_history as unknown[])
-      : [];
-    history.push({ at: new Date().toISOString(), reason: options.planChangeReason });
-    await s`
-      UPDATE learner_profiles
-      SET personality_profile = ${JSON.stringify({ ...existing, plan_change_history: history.slice(-10) })}::jsonb,
-          updated_at = NOW()
-      WHERE learner_id = ${learnerId}
-    `;
-  }
 
   const weeks: PlanWeek[] = [];
   for (let i = 0; i < weekGroups.length; i++) {
@@ -663,9 +660,11 @@ export async function applyPlanProfileUpdates(
   updates: {
     goal?: string;
     next_test_date?: string | null;
+    next_test_name?: string | null;
     final_goal_date?: string | null;
     hours_per_week?: number;
     goal_key?: string;
+    clear_next_test?: boolean;
   },
 ): Promise<void> {
   const s = requireSql();
@@ -674,17 +673,151 @@ export async function applyPlanProfileUpdates(
   const personality = { ...(profile.personality_profile ?? {}) };
   const pointsGroup = goalKeyToPointsGroup(updates.goal_key);
   if (updates.goal_key) personality.goal_key = updates.goal_key;
+
+  const nextTestDate = updates.clear_next_test
+    ? null
+    : 'next_test_date' in updates
+      ? (updates.next_test_date ?? null)
+      : profile.next_test_date;
+  const nextTestName = updates.clear_next_test
+    ? null
+    : 'next_test_name' in updates
+      ? (updates.next_test_name ?? null)
+      : profile.next_test_name;
+  const finalGoalDate =
+    'final_goal_date' in updates
+      ? (updates.final_goal_date ?? null)
+      : profile.final_goal_date;
+
   await s`
     UPDATE learner_profiles SET
       goal = COALESCE(${updates.goal ?? null}, goal),
-      next_test_date = COALESCE(${updates.next_test_date ?? null}, next_test_date),
-      final_goal_date = COALESCE(${updates.final_goal_date ?? null}, final_goal_date),
+      next_test_date = ${nextTestDate},
+      next_test_name = ${nextTestName},
+      final_goal_date = ${finalGoalDate},
       hours_per_week = COALESCE(${updates.hours_per_week ?? null}, hours_per_week),
       points_group = COALESCE(${pointsGroup}, points_group),
       personality_profile = ${JSON.stringify(personality)}::jsonb,
       updated_at = NOW()
     WHERE learner_id = ${learnerId}
   `;
+}
+
+export interface PendingPlanProposal {
+  reason: string;
+  agent: string;
+  proposed_at: string;
+  goal?: string;
+  goal_key?: string;
+  next_test_date?: string | null;
+  next_test_name?: string | null;
+  final_goal_date?: string | null;
+  clear_next_test?: boolean;
+  priority_concepts?: string[];
+  prepend_concepts?: string[];
+  exclude_concepts?: string[];
+}
+
+export interface PlanChangeHistoryEntry {
+  id: string;
+  at: string;
+  reason: string;
+  agent?: string;
+  source?: 'chat' | 'api';
+  goal?: string;
+  final_goal_date?: string;
+  concepts_added?: string[];
+  week_preview?: Array<{ week: number; conceptIds: string[] }>;
+  plan_id?: string;
+}
+
+export async function setPendingPlanProposal(
+  learnerId: string,
+  proposal: PendingPlanProposal,
+): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const existing = (profile.personality_profile ?? {}) as Record<string, unknown>;
+  await s`
+    UPDATE learner_profiles
+    SET personality_profile = ${JSON.stringify({ ...existing, pending_plan_proposal: proposal })}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
+export async function getPendingPlanProposal(
+  learnerId: string,
+): Promise<PendingPlanProposal | null> {
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile?.personality_profile) return null;
+  const pending = (profile.personality_profile as Record<string, unknown>)
+    .pending_plan_proposal;
+  if (!pending || typeof pending !== 'object') return null;
+  return pending as PendingPlanProposal;
+}
+
+export async function clearPendingPlanProposal(learnerId: string): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const existing = { ...(profile.personality_profile ?? {}) } as Record<string, unknown>;
+  delete existing.pending_plan_proposal;
+  await s`
+    UPDATE learner_profiles
+    SET personality_profile = ${JSON.stringify(existing)}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
+export async function recordPlanChangeHistory(
+  learnerId: string,
+  entry: Omit<PlanChangeHistoryEntry, 'id' | 'at'> & { at?: string },
+): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const existing = (profile.personality_profile ?? {}) as Record<string, unknown>;
+  const history = Array.isArray(existing.plan_change_history)
+    ? (existing.plan_change_history as PlanChangeHistoryEntry[])
+    : [];
+  const full: PlanChangeHistoryEntry = {
+    id: randomUUID(),
+    at: entry.at ?? new Date().toISOString(),
+    reason: entry.reason,
+    agent: entry.agent,
+    source: entry.source,
+    goal: entry.goal,
+    final_goal_date: entry.final_goal_date,
+    concepts_added: entry.concepts_added,
+    week_preview: entry.week_preview,
+    plan_id: entry.plan_id,
+  };
+  history.push(full);
+  await s`
+    UPDATE learner_profiles
+    SET personality_profile = ${JSON.stringify({
+      ...existing,
+      plan_change_history: history.slice(-10),
+      last_plan_change_at: full.at,
+      last_plan_change_id: full.id,
+    })}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
+export async function getLatestPlanChange(
+  learnerId: string,
+): Promise<PlanChangeHistoryEntry | null> {
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile?.personality_profile) return null;
+  const history = (profile.personality_profile as Record<string, unknown>)
+    .plan_change_history;
+  if (!Array.isArray(history) || history.length === 0) return null;
+  return history[history.length - 1] as PlanChangeHistoryEntry;
 }
 
 export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | null> {
