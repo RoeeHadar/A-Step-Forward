@@ -2,11 +2,11 @@
   "concept_id": "determinants_cramer",
   "subject": "math",
   "level": "university",
+  "math_track": [],
   "title_en": "Determinants and Cramer's Rule",
   "title_he": "דטרמיננטים וכלל קרמר",
   "summary_en": "Definition and properties of determinants, cofactor expansion, row operations, Cramer's rule for solving linear systems.",
   "summary_he": "הגדרה ותכונות של דטרמיננטים, פיתוח לפי קופקטורים, פעולות שורה, כלל קרמר לפתרון מערכות לינאריות.",
-  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
@@ -19,7 +19,7 @@
       "kind": "definition",
       "title_en": "Determinant Formulas",
       "title_he": "נוסחאות דטרמיננט",
-      "body_en_md": "**$2\\times2$:**\n$$\\det\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}=ad-bc$$\n\n**$3\\times3$ (cofactor expansion along first row):**\n$$\\det(A)=a_{11}C_{11}+a_{12}C_{12}+a_{13}C_{13}$$\nwhere $C_{ij}=(-1)^{i+j}M_{ij}$ and $M_{ij}$ = minor (determinant of submatrix with row $i$, col $j$ removed).\n\n**Cramer's rule** for $Ax=b$, $A$ invertible:\n$$x_i=\\frac{\\det(A_i)}{\\det(A)}$$\nwhere $A_i$ = $A$ with $i$-th column replaced by $b$.",
+      "body_en_md": "**$2\\times2$:**\n$$\\det\\begin{pmatrix}a&b\\c&d\\end{pmatrix}=ad-bc$$\n\n**$3\\times3$ (cofactor expansion along first row):**\n$$\\det(A)=a_{11}C_{11}+a_{12}C_{12}+a_{13}C_{13}$$\nwhere $C_{ij}=(-1)^{i+j}M_{ij}$ and $M_{ij}$ = minor (determinant of submatrix with row $i$, col $j$ removed).\n\n**Cramer's rule** for $Ax=b$, $A$ invertible:\n$$x_i=\\frac{\\det(A_i)}{\\det(A)}$$\nwhere $A_i$ = $A$ with $i$-th column replaced by $b$.",
       "body_he_md": "**$2\\times2$:** $\\det=ad-bc$.\n\n**$3\\times3$:** פיתוח לפי שורה ראשונה עם קופקטורים.\n\n**קרמר:** $x_i=\\det(A_i)/\\det(A)$, כשעמודה $i$ של $A$ מוחלפת ב-$b$."
     },
     {
@@ -36,7 +36,7 @@
       "title_en": "Worked Example 1 — 2×2 Determinant and Cramer",
       "title_he": "דוגמה פתורה 1 — דטרמיננט 2×2 וקרמר",
       "body_en_md": "**Solve** by Cramer's rule: $2x+3y=8$, $x-y=1$.\n\n$A=\\begin{pmatrix}2&3\\\\1&-1\\end{pmatrix}$, $b=\\begin{pmatrix}8\\\\1\\end{pmatrix}$.\n\n$\\det(A)=2(-1)-3(1)=-5$.\n\n$A_1=\\begin{pmatrix}8&3\\\\1&-1\\end{pmatrix}$: $\\det(A_1)=-8-3=-11$. $x_1=-11/-5=2.2$.\n\n$A_2=\\begin{pmatrix}2&8\\\\1&1\\end{pmatrix}$: $\\det(A_2)=2-8=-6$. $x_2=-6/-5=1.2$.\n\n**Answer:** $x=2.2$, $y=1.2$. Verify: $2(2.2)+3(1.2)=4.4+3.6=8$. ✓",
-      "body_he_md": "$\\det(A)=-5$. $x=(-11)/(-5)=2.2$, $y=(-6)/(-5)=1.2$."
+      "body_he_md": "$\\det(A)=2(-1)-3(1)=-5$."
     },
     {
       "kind": "checkpoint",
@@ -54,7 +54,7 @@
       "title_en": "Worked Example 2 — 3×3 Determinant (Cofactor Expansion)",
       "title_he": "דוגמה פתורה 2 — דטרמיננט 3×3 (פיתוח קופקטורים)",
       "body_en_md": "$$A=\\begin{pmatrix}1&2&3\\\\0&4&5\\\\1&0&6\\end{pmatrix}$$\n\nExpand along first row:\n$\\det=1\\cdot\\det\\begin{pmatrix}4&5\\\\0&6\\end{pmatrix}-2\\cdot\\det\\begin{pmatrix}0&5\\\\1&6\\end{pmatrix}+3\\cdot\\det\\begin{pmatrix}0&4\\\\1&0\\end{pmatrix}$\n$=1(24-0)-2(0-5)+3(0-4)=24+10-12=22$.",
-      "body_he_md": "$\\det=1(24)-2(-5)+3(-4)=24+10-12=22$."
+      "body_he_md": "$$A=\\begin{pmatrix}1&2&3\\\\0&4&5\\\\1&0&6\\end{pmatrix}$$\n\nExpand along first row:\n$\\det=1\\cdot\\det\\begin{pmatrix}4&5\\\\0&6\\end{pmatrix}-2\\cdot\\det\\begin{pmatrix}0&5\\\\1&6\\end{pmatrix}+3\\cdot\\det\\begin{pmatrix}0&4\\\\1&0\\end{pmatrix}$\n$=1(24-0)-2(0-5)+3(0-4)=24+10-12=22$."
     },
     {
       "kind": "checkpoint",
@@ -71,61 +71,158 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Cramer's Rule for 3×3 System",
       "title_he": "דוגמה פתורה 3 — כלל קרמר למערכת 3×3",
-      "body_en_md": "**Solve:** $x+y+z=6$, $2x-y+z=3$, $x+2y-z=2$.\n\n$A=\\begin{pmatrix}1&1&1\\\\2&-1&1\\\\1&2&-1\\end{pmatrix}$, $b=\\begin{pmatrix}6\\\\3\\\\2\\end{pmatrix}$.\n\n**Step 1:** $\\det(A)=1[(1)(−1)−(1)(2)]−1[(2)(−1)−(1)(1)]+1[(2)(2)−(−1)(1)]$\n$=1(−1−2)−1(−2−1)+1(4+1)=−3+3+5=5$.\n\n**Step 2:** $A_1$ (replace col 1 by $b$): $\\det=6[1−2]−1[3(−1)−1(2)]+1[3\\cdot2−(−1)\\cdot2]=−6−(−5)+(8)=7$. $x=7/5=1.4$.\n\n(Remaining Cramer calculations give $y=1.6$, $z=3.0$.)",
-      "body_he_md": "$\\det(A)=5$. $x=7/5=1.4$, $y=8/5=1.6$, $z=15/5=3$."
+      "body_en_md": "**Solve:** $x+y+z=6$, $2x-y+z=3$, $x+2y-z=2$.\n\n$A=\\begin{pmatrix}1&1&1\\\\2&-1&1\\\\1&2&-1\\end{pmatrix}$, $b=\\begin{pmatrix}6\\\\3\\\\2\\end{pmatrix}$.\n\n### Move 1 $\\det(A)=1[(1)(−1)−(1)(2)]−1[(2)(−1)−(1)(1)]+1[(2)(2)−(−1)(1)]$\n$=1(−1−2)−1(−2−1)+1(4+1)=−3+3+5=5$.\n\n### Move 2 $A_1$ (replace col 1 by $b$): $\\det=6[1−2]−1[3(−1)−1(2)]+1[3\\cdot2−(−1)\\cdot2]=−6−(−5)+(8)=7$. $x=7/5=1.4$.\n\n(Remaining Cramer calculations give $y=1.6$, $z=3.0$.)",
+      "body_he_md": "### צעד 1 $\\det(A)=1[(1)(−1)−(1)(2)]−1[(2)(−1)−(1)(1)]+1[(2)(2)−(−1)(1)]$\n$=1(−1−2)−1(−2−1)+1(4+1)=−3+3+5=5$.\n\n### צעד 2 $A_1$ (replace col 1 by $b$): $\\det=6[1−2]−1[3(−1)−1(2)]+1[3\\cdot2−(−1)\\cdot2]=−6−(−5)+(8)=7$. $x=7/5=1.4$."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Determinants and Cramer",
       "title_he": "מדריך שיטה — דטרמיננטים וקרמר",
-      "body_en_md": "**$2\\times2$:** $\\det=ad-bc$.\n\n**$3\\times3$ cofactor:** Expand along row with most zeros. $C_{ij}=(-1)^{i+j}M_{ij}$.\n\n**Row operations on determinant:**\n- Row swap → $\\times(-1)$.\n- Row $\\times k$ → $\\det\\times k$.\n- Add multiple of row → no change.\n\n**Cramer's rule:**\n1. Compute $\\det(A)$. If 0: no unique solution.\n2. For each variable $x_i$: replace col $i$ by $b$, compute new det.\n3. $x_i=\\det(A_i)/\\det(A)$.",
-      "body_he_md": "**$2\\times2$:** $ad-bc$.\n\n**$3\\times3$:** פיתוח לאורך שורה עם כמה אפסים.\n\n**פעולות שורה:** החלפה → $(-1)$. כפל שורה ב-$k$ → $\\det\\times k$. חיבור → ללא שינוי.\n\n**קרמר:** $x_i=\\det(A_i)/\\det(A)$."
+      "body_en_md": "**$2\\times2$:** $\\det=ad-bc$.\n\n**$3\\times3$ cofactor:** Expand along row with most zeros. $C_{ij}=(-1)^{i+j}M_{ij}$.\n\n**Row operations on determinant:**\n- Row swap → $\\times(-1)$.\n- Row $\\times k$ → $\\det\\times k$.\n- Add multiple of row → no change.\n\n**Cramer's rule:**\n1. Compute $\\det(A)$. If 0: no unique solution.\n2. For each variable $x_i$: replace col $i$ by $b$, compute new det.\n3. $x_i=\\det(A_i)/\\det(A)$.\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
+      "body_he_md": "**$2\\times2$:** $ad-bc$.\n\n**$3\\times3$:** פיתוח לאורך שורה עם כמה אפסים.\n\n**פעולות שורה:** החלפה → $(-1)$. כפל שורה ב-$k$ → $\\det\\times k$. חיבור → ללא שינוי.\n\n**קרמר:** $x_i=\\det(A_i)/\\det(A)$.\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers.\n\n**$2\\times2$:** $\\det=ad-bc$."
     },
     {
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "", "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
-        {"id":"e1","difficulty":"easy","body_en":"$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$","body_he":"$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$","solution_en":"$20-6=14$.","solution_he":"$14$."},
-        {"id":"e2","difficulty":"easy","body_en":"$\\det\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$","body_he":"$\\det(I_2)$","solution_en":"$1$.","solution_he":"$1$."},
-        {"id":"e3","difficulty":"easy","body_en":"Use Cramer's rule: $x+y=5$, $2x-y=1$.","body_he":"קרמר: $x+y=5$, $2x-y=1$.","solution_en":"$\\det(A)=-3$. $x=(-5-1)/(-3)=2$, $y=(1-10)/(-3)=3$.","solution_he":"$x=2$, $y=3$."},
-        {"id":"e4","difficulty":"easy","body_en":"$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. Find $\\det(A)$.","body_he":"$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. $\\det(A)$?","solution_en":"Diagonal: $3\\times5=15$.","solution_he":"$15$."},
-        {"id":"e5","difficulty":"medium","body_en":"$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$","body_he":"$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$","solution_en":"Expand along row 1: $2[(-1)(2)-(4)(0)]-1[(3)(2)-(4)(1)]+0=2(-2)-1(2)=-4-2=-6$.","solution_he":"$-6$."},
-        {"id":"e6","difficulty":"medium","body_en":"$\\det(A)=4$. $B$ is $A$ with two rows swapped. Find $\\det(B)$.","body_he":"$\\det(A)=4$. $B$ — שורות מוחלפות. $\\det(B)$?","solution_en":"$\\det(B)=-\\det(A)=-4$.","solution_he":"$-4$."},
-        {"id":"e7","difficulty":"medium","body_en":"Use Cramer for: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.","body_he":"קרמר: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.","solution_en":"$\\det(A)=1[(1+1)+1[(2+1)+1[(2-1)]=2+3+1=6$. $x=\\det(A_1)/6$... $x=1$, $y=-1$, $z=2$.","solution_he":"$x=1$, $y=-1$, $z=2$."},
-        {"id":"e8","difficulty":"medium","body_en":"$A$ is $3\\times3$. $\\det(A)=5$. Find $\\det(3A)$.","body_he":"$\\det(A)=5$, $3\\times3$. $\\det(3A)$?","solution_en":"$3^3\\det(A)=27\\times5=135$.","solution_he":"$135$."},
-        {"id":"e9","difficulty":"medium","body_en":"Prove that if $A$ has two identical rows, $\\det(A)=0$.","body_he":"הוכח שאם ל-$A$ שתי שורות זהות, $\\det(A)=0$.","solution_en":"Swapping the two identical rows changes sign: $\\det(A)=-\\det(A)$ → $2\\det(A)=0$ → $\\det(A)=0$.","solution_he":"החלפת שורות זהות: $\\det=-\\det$ → $2\\det=0$ → $\\det=0$."},
-        {"id":"e10","difficulty":"hard","body_en":"Find all $k$ such that $\\det\\begin{pmatrix}k&1\\\\3&k-2\\end{pmatrix}=0$.","body_he":"מצא $k$: $\\det\\begin{pmatrix}k&1\\\\3&k-2\\end{pmatrix}=0$.","solution_en":"$k(k-2)-3=k^2-2k-3=(k-3)(k+1)=0$. $k=3$ or $k=-1$.","solution_he":"$k=3$ או $k=-1$."},
-        {"id":"e11","difficulty":"hard","body_en":"$\\det(A)=7$, $\\det(B)=3$. Find $\\det(AB)$, $\\det(A^{-1})$, $\\det(A^2)$.","body_he":"$\\det(A)=7$, $\\det(B)=3$. $\\det(AB)$, $\\det(A^{-1})$, $\\det(A^2)$?","solution_en":"$\\det(AB)=21$. $\\det(A^{-1})=1/7$. $\\det(A^2)=49$.","solution_he":"$21$, $1/7$, $49$."},
-        {"id":"e12","difficulty":"hard","body_en":"Use row operations to simplify $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.","body_he":"פשט ע\"י פעולות שורה ומצא $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.","solution_en":"$R_2\\to R_2-4R_1$, $R_3\\to R_3-7R_1$: $\\begin{pmatrix}1&2&3\\\\0&-3&-6\\\\0&-6&-12\\end{pmatrix}$. $R_3\\to R_3-2R_2$: $\\begin{pmatrix}1&2&3\\\\0&-3&-6\\\\0&0&0\\end{pmatrix}$. Third row all zeros → $\\det=0$.","solution_he":"שורה שלישית מתאפסת → $\\det=0$."},
-        {"id":"e13","difficulty":"hard","body_en":"State and prove: $\\det(AB)=\\det(A)\\det(B)$ for $2\\times2$ matrices.","body_he":"הוכח: $\\det(AB)=\\det(A)\\det(B)$ ל-$2\\times2$.","solution_en":"Let $A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$, $B=\\begin{pmatrix}e&f\\\\g&h\\end{pmatrix}$. $AB=\\begin{pmatrix}ae+bg&af+bh\\\\ce+dg&cf+dh\\end{pmatrix}$. $\\det(AB)=(ae+bg)(cf+dh)-(af+bh)(ce+dg)=$ (expand and collect) $= (ad-bc)(eh-fg)=\\det(A)\\det(B)$.","solution_he":"חשב ישירות: $(ae+bg)(cf+dh)-(af+bh)(ce+dg)=(ad-bc)(eh-fg)$."}
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$",
+          "body_he": "$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$",
+          "solution_en": "**Solution:**\n\n$20-6=14$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$14$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "$\\det\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$",
+          "body_he": "$\\det(I_2)$",
+          "solution_en": "**Solution:**\n\n$1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Use Cramer's rule: $x+y=5$, $2x-y=1$.",
+          "body_he": "קרמר: $x+y=5$, $2x-y=1$.",
+          "solution_en": "$\\det(A)=-3$. $x=(-5-1)/(-3)=2$, $y=(1-10)/(-3)=3$.",
+          "solution_he": "**פתרון:**\n\n$x=2$, $y=3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. Find $\\det(A)$.",
+          "body_he": "$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. $\\det(A)$?",
+          "solution_en": "**Solution:**\n\nDiagonal: $3\\times5=15$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$15$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$",
+          "body_he": "$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nExpand along row 1: $2[(-1)(2)-(4)(0)]-1[(3)(2)-(4)(1)]+0=2(-2)-1(2)=-4-2=-6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "$\\det(A)=4$. $B$ is $A$ with two rows swapped. Find $\\det(B)$.",
+          "body_he": "$\\det(A)=4$. $B$ — שורות מוחלפות. $\\det(B)$?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(B)=-\\det(A)=-4$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Use Cramer for: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.",
+          "body_he": "קרמר: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(A)=1[(1+1)+1[(2+1)+1[(2-1)]=2+3+1=6$. $x=\\det(A_1)/6$... $x=1$, $y=-1$, $z=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x=1$, $y=-1$, $z=2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "$A$ is $3\\times3$. $\\det(A)=5$. Find $\\det(3A)$.",
+          "body_he": "$\\det(A)=5$, $3\\times3$. $\\det(3A)$?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$3^3\\det(A)=27\\times5=135$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$135$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Prove that if $A$ has two identical rows, $\\det(A)=0$.",
+          "body_he": "הוכח שאם ל-$A$ שתי שורות זהות, $\\det(A)=0$.",
+          "solution_en": "Swapping the two identical rows changes sign: $\\det(A)=-\\det(A)$ → $2\\det(A)=0$ → $\\det(A)=0$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nהחלפת שורות זהות: $\\det=-\\det$ → $2\\det=0$ → $\\det=0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Find all $k$ such that $\\det\\begin{pmatrix}k&1\\\\3&k-2\\end{pmatrix}=0$.",
+          "body_he": "מצא $k$: $\\det\\begin{pmatrix}k&1\\\\3&k-2\\end{pmatrix}=0$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$k(k-2)-3=k^2-2k-3=(k-3)(k+1)=0$. $k=3$ or $k=-1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$k=3$ או $k=-1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "$\\det(A)=7$, $\\det(B)=3$. Find $\\det(AB)$, $\\det(A^{-1})$, $\\det(A^2)$.",
+          "body_he": "$\\det(A)=7$, $\\det(B)=3$. $\\det(AB)$, $\\det(A^{-1})$, $\\det(A^2)$?",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\det(AB)=21$. $\\det(A^{-1})=1/7$. $\\det(A^2)=49$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$21$, $1/7$, $49$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Use row operations to simplify $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.",
+          "body_he": "פשט ע\"י פעולות שורה ומצא $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$R_2\\to R_2-4R_1$, $R_3\\to R_3-7R_1$: $\\begin{pmatrix}1&2&3\\\\0&-3&-6\\\\0&-6&-12\\end{pmatrix}$. $R_3\\to R_3-2R_2$: $\\begin{pmatrix}1&2&3\\\\0&-3&-6\\\\0&0&0\\end{pmatrix}$. Third row all zeros → $\\det=0$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nשורה שלישית מתאפסת → $\\det=0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "State and prove: $\\det(AB)=\\det(A)\\det(B)$ for $2\\times2$ matrices.",
+          "body_he": "הוכח: $\\det(AB)=\\det(A)\\det(B)$ ל-$2\\times2$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nLet $A=\\begin{pmatrix}a&b\\c&d\\end{pmatrix}$, $B=\\begin{pmatrix}e&f\\g&h\\end{pmatrix}$. $AB=\\begin{pmatrix}ae+bg&af+bh\\ce+dg&cf+dh\\end{pmatrix}$. $\\det(AB)=(ae+bg)(cf+dh)-(af+bh)(ce+dg)=$ (expand and collect) $= (ad-bc)(eh-fg)=\\det(A)\\det(B)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nחשב ישירות: $(ae+bg)(cf+dh)-(af+bh)(ce+dg)=(ad-bc)(eh-fg)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        }
       ]
     },
     {
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Sign in cofactor**: $C_{ij}=(-1)^{i+j}M_{ij}$. The checkerboard sign pattern for $3\\times3$: $+,-,+$ / $-,+,-$ / $+,-,+$.\n2. **Cramer requires $\\det(A)\\ne0$**: if $\\det(A)=0$, Cramer doesn't apply.\n3. **$\\det(kA)=k^n\\det(A)$** for $n\\times n$ matrix, not $k\\cdot\\det(A)$.",
-      "body_he_md": "1. **סימן קופקטור:** $(-1)^{i+j}$.\n2. **קרמר דורש $\\det(A)\\ne0$**.\n3. **$\\det(kA)=k^n\\det(A)$** — לא $k\\cdot\\det$."
+      "body_en_md": "1. **Sign in cofactor**: $C_{ij}=(-1)^{i+j}M_{ij}$. The checkerboard sign pattern for $3\\times3$: $+,-,+$ / $-,+,-$ / $+,-,+$.\n2. **Cramer requires $\\det(A)\\ne0$**: if $\\det(A)=0$, Cramer doesn't apply.\n3. **$\\det(kA)=k^n\\det(A)$** for $n\\times n$ matrix, not $k\\cdot\\det(A)$.\n\n**Example misconception:** det(kA) = k·det(A)\n\n**Fix:** det(kA) = k^n·det(A) for n×n matrix.",
+      "body_he_md": "1. **סימן קופקטור:** $(-1)^{i+j}$.\n2. **קרמר דורש $\\det(A)\\ne0$**.\n3. **$\\det(kA)=k^n\\det(A)$** — לא $k\\cdot\\det$.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Recommended next topics:**\n- `concept:matrix_operations_inverse` **matrix operations inverse**\n- `concept:la_matrices` **Matrices & Linear Systems**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**נושאים מומלצים להמשך:**\n- `concept:matrix_operations_inverse` **matrix operations inverse**\n- `concept:la_matrices` **מטריצות ומערכות לינאריות**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- $2\\times2$: $\\det=ad-bc$.\n- $3\\times3$: cofactor expansion, watch signs.\n- Row swap: $\\times(-1)$. Row $\\times k$: $\\det\\times k$. Add multiple: no change.\n- Cramer: $x_i=\\det(A_i)/\\det(A)$.\n- $\\det(AB)=\\det(A)\\det(B)$.",
+      "body_en_md": "- $2\\times2$: $\\det=ad-bc$.\n- $3\\times3$: cofactor expansion, watch signs.\n- Row swap: $\\times(-1)$. Row $\\times k$: $\\det\\times k$. Add multiple: no change.\n- Cramer: $x_i=\\det(A_i)/\\det(A)$.\n- $\\det(AB)=\\det(A)\\det(B)$.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "- $2\\times2$: $ad-bc$. $3\\times3$: פיתוח קופקטורים.\n- פעולות שורה → אפקט על $\\det$.\n- קרמר: $x_i=\\det(A_i)/\\det(A)$.\n- $\\det(AB)=\\det(A)\\det(B)$."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- Determinant: scalar test for invertibility, encodes volume.\n- $\\det=0$: singular. $\\det\\ne0$: invertible.\n- Cramer's rule: explicit formula using determinants.",
+      "body_en_md": "- Determinant: scalar test for invertibility, encodes volume.\n- $\\det=0$: singular. $\\det\\ne0$: invertible.\n- Cramer's rule: explicit formula using determinants.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
       "body_he_md": "- $\\det=0$: סינגולרית. $\\det\\ne0$: הפיכה.\n- קרמר: $x_i=\\det(A_i)/\\det(A)$."
     }
-  ],
-  "questions": [
-    {"ord":1,"kind":"mcq","difficulty":"easy","stem_en":"$\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}=$","stem_he":"$\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}=$","options_en":["10","14","6","8"],"options_he":["10","14","6","8"],"correct_index":0,"explanation_en":"$4\\cdot3-2\\cdot1=12-2=10$.","explanation_he":"$12-2=10$.","skill_atoms":["determinant_2x2"]}
   ],
   "agent_hints": {
     "key_insights": [
@@ -136,10 +233,202 @@
       "det(AB) = det(A)det(B)."
     ],
     "common_misconceptions": [
-      {"wrong": "det(kA) = k·det(A)","correction": "det(kA) = k^n·det(A) for n×n matrix.","detect_phrase_en":"det scalar multiple","detect_phrase_he":"דטרמיננט כפל סקלרי"}
+      {
+        "wrong": "det(kA) = k·det(A)",
+        "correction": "det(kA) = k^n·det(A) for n×n matrix.",
+        "detect_phrase_en": "det scalar multiple",
+        "detect_phrase_he": "דטרמיננט כפל סקלרי"
+      }
     ],
-    "skill_atoms_unlocked": ["determinant_2x2","determinant_3x3","cofactor_expansion","cramer_rule","det_properties"],
+    "skill_atoms_unlocked": [
+      "determinant_2x2",
+      "determinant_3x3",
+      "cofactor_expansion",
+      "cramer_rule",
+      "det_properties"
+    ],
     "tutor_pacing_hint": "2×2 det first, then properties, then 3×3, then Cramer.",
-    "next_recommended": ["matrix_operations_inverse","la_matrices"]
-  }
+    "next_recommended": [
+      "matrix_operations_inverse",
+      "la_matrices"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}=$",
+      "stem_he": "$\\det\\begin{pmatrix}4&2\\\\1&3\\end{pmatrix}=$",
+      "options_en": [
+        "10",
+        "14",
+        "6",
+        "8"
+      ],
+      "options_he": [
+        "10",
+        "14",
+        "6",
+        "8"
+      ],
+      "correct_index": 0,
+      "explanation_en": "**Why this is correct:**\n$4\\cdot3-2\\cdot1=12-2=10$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$12-2=10$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "determinant_2x2"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$",
+      "stem_he": "$\\det\\begin{pmatrix}5&2\\\\3&4\\end{pmatrix}$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$20-6=14$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "14$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "14"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$20-6=14$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$14$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$\\det\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$",
+      "stem_he": "$\\det(I_2)$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$1$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Use Cramer's rule: $x+y=5$, $2x-y=1$.",
+      "stem_he": "קרמר: $x+y=5$, $2x-y=1$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\det(A)=-3$. $x=(-5-1)/(-3)=2$, $y=(1-10)/(-3)=3$",
+          "3$",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\det(A)=-3$. $x=(-5-1)/(-3)=2$, $y=(1-10)/(-3)=3$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$x=2$, $y=3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. Find $\\det(A)$.",
+      "stem_he": "$A=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$. $\\det(A)$?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\nDiagonal: $3\\times5=15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "15"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\nDiagonal: $3\\times5=15$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$15$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$",
+      "stem_he": "$\\det\\begin{pmatrix}2&1&0\\\\3&-1&4\\\\1&0&2\\end{pmatrix}$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nExpand along row 1: $2[(-1)(2)-(4)(0)]-1[(3)(2)-(4)(1)]+0=2(-2)-1(2)=-4-2=-6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-6"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nExpand along row 1: $2[(-1)(2)-(4)(0)]-1[(3)(2)-(4)(1)]+0=2(-2)-1(2)=-4-2=-6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "$\\det(A)=4$. $B$ is $A$ with two rows swapped. Find $\\det(B)$.",
+      "stem_he": "$\\det(A)=4$. $B$ — שורות מוחלפות. $\\det(B)$?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(B)=-\\det(A)=-4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-4"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(B)=-\\det(A)=-4$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Use Cramer for: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.",
+      "stem_he": "קרמר: $x-y+z=4$, $2x+y-z=0$, $x+y+z=2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(A)=1[(1+1)+1[(2+1)+1[(2-1)]=2+3+1=6$. $x=\\det(A_1)/6$... $x=1$, $y=-1$, $z=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(A)=1[(1+1)+1[(2+1)+1[(2-1)]=2+3+1=6$. $x=\\det(A_1)/6$... $x=1$, $y=-1$, $z=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x=1$, $y=-1$, $z=2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": [
+        "determinant_2x2",
+        "determinant_3x3"
+      ]
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

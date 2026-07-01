@@ -85,13 +85,15 @@ console.log(`Sections:           ${corpus.sections}  (avg ${(corpus.sections/cor
 console.log(`Questions:          ${corpus.questions} (avg ${(corpus.questions/corpus.files).toFixed(1)}/lesson)`);
 console.log(`Unique skill atoms: ${corpus.skill_atoms.size}`);
 
+const fmtKey = (k) => String(k ?? 'unknown');
+
 console.log('\nQuestions by kind:');
 for (const [k, n] of [...corpus.by_kind.entries()].sort((a, b) => b[1] - a[1])) {
-  console.log(`  ${k.padEnd(20)} ${n}`);
+  console.log(`  ${fmtKey(k).padEnd(20)} ${n}`);
 }
 console.log('\nQuestions by difficulty:');
-for (const [k, n] of [...corpus.by_difficulty.entries()].sort()) {
-  console.log(`  ${k.padEnd(20)} ${n}`);
+for (const [k, n] of [...corpus.by_difficulty.entries()].sort((a, b) => fmtKey(a[0]).localeCompare(fmtKey(b[0])))) {
+  console.log(`  ${fmtKey(k).padEnd(20)} ${n}`);
 }
 
 console.log('\nBilingual gaps (rows where HE missing while EN present):');

@@ -102,3 +102,8 @@ jobs:
       - name: Vitest
         working-directory: apps/web
         run: pnpm exec vitest run --exclude 'src/lib/schemas.test.ts'
+
+      - name: Validate lesson corpus (schema + depth)
+        run: |
+          node scripts/seed-lessons.mjs --dry-run
+          node scripts/audit-lesson-depth.mjs --strict --phase=4

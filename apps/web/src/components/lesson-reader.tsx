@@ -200,6 +200,12 @@ const SECTION_META: Record<
     icon: Trophy,
     tint: 'border-rose-500/50 bg-rose-500/5',
   },
+  why_matters: {
+    label_en: 'Why It Matters',
+    label_he: 'למה זה חשוב',
+    icon: Target,
+    tint: 'border-indigo-500/50 bg-indigo-500/5',
+  },
 };
 
 // ── Difficulty badge helper ──────────────────────────────────────────────────

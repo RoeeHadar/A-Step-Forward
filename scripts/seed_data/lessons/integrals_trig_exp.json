@@ -2,11 +2,13 @@
   "concept_id": "integrals_trig_exp",
   "subject": "high_school_math_5pt",
   "level": "5pt",
+  "math_track": [
+    "5pt"
+  ],
   "title_en": "Integrals of Trig, Exponential & Log (5 Units)",
   "title_he": "אינטגרלים של טריג, מעריכית ולוג (5 יחידות)",
   "summary_en": "Master the standard anti-derivatives of sin, cos, e^x and ln x, plus the chain-rule-reversal trick for linear substitutions.",
   "summary_he": "שולטים בנגזרות ההפוכות הסטנדרטיות של sin, cos, e^x ו-ln x, ועל טריק היפוך כלל השרשרת להצבות לינאריות.",
-  "est_minutes": 25,
   "sections": [
     {
       "id": "intro",
@@ -22,7 +24,7 @@
       "title_en": "Standard integral table",
       "title_he": "טבלת אינטגרלים סטנדרטית",
       "body_en_md": "$$\\int \\sin x \\, dx = -\\cos x + C$$\n$$\\int \\cos x \\, dx = \\sin x + C$$\n$$\\int e^x \\, dx = e^x + C$$\n$$\\int \\frac{1}{x} \\, dx = \\ln|x| + C \\quad (x \\neq 0)$$\n\n**Chain-rule reversal** for $f(ax+b)$:\n$$\\int f(ax+b)\\,dx = \\frac{1}{a}F(ax+b)+C$$\nwhere $F'=f$.",
-      "body_he_md": "$$\\int \\sin x \\, dx = -\\cos x + C$$\n$$\\int \\cos x \\, dx = \\sin x + C$$\n$$\\int e^x \\, dx = e^x + C$$\n$$\\int \\frac{1}{x} \\, dx = \\ln|x| + C$$\n\n**היפוך כלל השרשרת** עבור $f(ax+b)$:\n$$\\int f(ax+b)\\,dx = \\frac{1}{a}F(ax+b)+C$$"
+      "body_he_md": "**אינטואיציה:** Four base rules + chain reversal covers most 5-pt problems."
     },
     {
       "id": "theory",
@@ -39,7 +41,7 @@
       "difficulty": "easy",
       "title_en": "Worked Example 1 — $\\int 3\\cos(2x)\\,dx$",
       "title_he": "דוגמה פתורה 1 — $\\int 3\\cos(2x)\\,dx$",
-      "body_en_md": "**Step 1 — identify the form.** Inner function $g(x)=2x$, so $a=2$, $f=\\cos$.\n\n**Step 2 — chain-rule reversal.**\n$$\\int \\cos(2x)\\,dx = \\frac{1}{2}\\sin(2x)+C.$$\n\n**Step 3 — multiply by the constant 3.**\n$$\\int 3\\cos(2x)\\,dx = \\frac{3}{2}\\sin(2x)+C.$$\n\n**Verify:** differentiate $\\frac{3}{2}\\sin(2x)$: $\\frac{3}{2}\\cdot 2\\cos(2x)=3\\cos(2x)$ âœ“",
+      "body_en_md": "### Move 1 Inner function $g(x)=2x$, so $a=2$, $f=\\cos$.\n\n### Move 2\n$$\\int \\cos(2x)\\,dx = \\frac{1}{2}\\sin(2x)+C.$$\n\n### Move 3\n$$\\int 3\\cos(2x)\\,dx = \\frac{3}{2}\\sin(2x)+C.$$\n\n**Verify:** differentiate $\\frac{3}{2}\\sin(2x)$: $\\frac{3}{2}\\cdot 2\\cos(2x)=3\\cos(2x)$ âœ“",
       "body_he_md": "**שלב 1:** פונקציה פנימית $g(x)=2x$, $a=2$, $f=\\cos$.\n\n**שלב 2:** היפוך כלל שרשרת: $\\int\\cos(2x)dx=\\frac{1}{2}\\sin(2x)+C$.\n\n**שלב 3:** $\\int 3\\cos(2x)dx=\\frac{3}{2}\\sin(2x)+C$.\n\n**בדיקה:** $\\frac{d}{dx}[\\frac{3}{2}\\sin(2x)]=3\\cos(2x)$ ✓"
     },
     {
@@ -60,7 +62,7 @@
       "title_en": "Worked Example 2 — $\\int e^{-3x}\\sin x\\,dx$ (IBP twice)",
       "title_he": "דוגמה פתורה 2 — $\\int e^{-3x}\\sin x\\,dx$ (IBP פעמיים)",
       "body_en_md": "Let $I=\\int e^{-3x}\\sin x\\,dx$.\n\n**IBP #1:** $u=\\sin x$, $dv=e^{-3x}dx$ â†’ $du=\\cos x\\,dx$, $v=-\\frac{1}{3}e^{-3x}$.\n$$I=-\\frac{1}{3}e^{-3x}\\sin x+\\frac{1}{3}\\int e^{-3x}\\cos x\\,dx.$$\n\n**IBP #2** on $\\int e^{-3x}\\cos x\\,dx$: $u=\\cos x$, $dv=e^{-3x}dx$.\n$$\\int e^{-3x}\\cos x\\,dx=-\\frac{1}{3}e^{-3x}\\cos x-\\frac{1}{3}\\int e^{-3x}\\sin x\\,dx=-\\frac{1}{3}e^{-3x}\\cos x-\\frac{I}{3}.$$\n\n**Substitute back:**\n$$I=-\\frac{1}{3}e^{-3x}\\sin x+\\frac{1}{3}\\left(-\\frac{1}{3}e^{-3x}\\cos x-\\frac{I}{3}\\right)$$\n$$I=-\\frac{1}{3}e^{-3x}\\sin x-\\frac{1}{9}e^{-3x}\\cos x-\\frac{I}{9}.$$\n$$\\frac{10}{9}I = -\\frac{e^{-3x}}{9}(3\\sin x+\\cos x) \\implies I=\\frac{-e^{-3x}(3\\sin x+\\cos x)}{10}+C.$$",
-      "body_he_md": "נסמן $I=\\int e^{-3x}\\sin x\\,dx$. IBP פעמיים ואז פתרון ל-$I$:\n$$I=\\frac{-e^{-3x}(3\\sin x+\\cos x)}{10}+C.$$"
+      "body_he_md": "Let $I=\\int e^{-3x}\\sin x\\,dx$."
     },
     {
       "id": "checkpoint_2",
@@ -80,31 +82,31 @@
       "title_en": "Worked Example 3 — $\\int \\frac{\\sin x}{\\cos^2 x}\\,dx$ and $\\int \\tan x\\,dx$",
       "title_he": "דוגמה פתורה 3 — $\\int \\frac{\\sin x}{\\cos^2 x}\\,dx$ ו-$\\int \\tan x\\,dx$",
       "body_en_md": "**Part A:** $\\int \\frac{\\sin x}{\\cos^2 x}\\,dx$.\n\nLet $u=\\cos x$, $du=-\\sin x\\,dx$:\n$$\\int \\frac{\\sin x}{\\cos^2 x}dx = -\\int \\frac{du}{u^2} = -\\int u^{-2}du = \\frac{1}{u}+C = \\frac{1}{\\cos x}+C = \\sec x + C.$$\n\n**Part B:** $\\int \\tan x\\,dx = \\int \\frac{\\sin x}{\\cos x}\\,dx$.\n\nLet $u=\\cos x$, $du=-\\sin x\\,dx$:\n$$\\int \\tan x\\,dx = -\\int \\frac{du}{u} = -\\ln|u|+C = -\\ln|\\cos x|+C.$$",
-      "body_he_md": "**חלק א:** הצבה $u=\\cos x$: $\\int\\frac{\\sin x}{\\cos^2 x}dx=\\sec x+C$.\n\n**חלק ב:** $\\int\\tan x\\,dx=-\\ln|\\cos x|+C$."
+      "body_he_md": "**Part A:** $\\int \\frac{\\sin x}{\\cos^2 x}\\,dx$.\n\nLet $u=\\cos x$, $du=-\\sin x\\,dx$:\n$$\\int \\frac{\\sin x}{\\cos^2 x}dx = -\\int \\frac{du}{u^2} = -\\int u^{-2}du = \\frac{1}{u}+C = \\frac{1}{\\cos x}+C = \\sec x + C.$$\n\n**Part B:** $\\int \\tan x\\,dx = \\int \\frac{\\sin x}{\\cos x}\\,dx$.\n\nLet $u=\\cos x$, $du=-\\sin x\\,dx$:\n$$\\int \\tan x\\,dx = -\\int \\frac{du}{u} = -\\ln|u|+C = -\\ln|\\cos x|+C.$$"
     },
     {
       "id": "method_guide",
       "kind": "method_guide",
       "title_en": "Method guide — choosing the technique",
       "title_he": "מדריך שיטה — בחירת הטכניקה",
-      "body_en_md": "| Integrand form | Technique |\n|---|---|\n| $f(ax+b)$ | Chain-rule reversal: divide by $a$ |\n| polynomial × exp/trig | IBP (LIATE order) |\n| $\\sin x / \\cos^n x$ | Sub $u=\\cos x$ |\n| $\\tan x$ | Write as $\\sin/\\cos$, sub $u=\\cos x$ |\n| $\\ln x$ alone | IBP: $u=\\ln x$, $dv=dx$ |\n| $e^{ax}\\sin(bx)$ | IBP twice, solve for $I$ |",
-      "body_he_md": "| צורת האינטגרנד | טכניקה |\n|---|---|\n| $f(ax+b)$ | היפוך שרשרת: חלק ב-$a$ |\n| פולינום × מעריכי/טריג | IBP (סדר LIATE) |\n| $\\sin x/\\cos^n x$ | הצבה $u=\\cos x$ |\n| $\\tan x$ | כתוב $\\sin/\\cos$, הצב $u=\\cos x$ |\n| $\\ln x$ בלבד | IBP: $u=\\ln x$, $dv=dx$ |\n| $e^{ax}\\sin(bx)$ | IBP פעמיים, פתור ל-$I$ |"
+      "body_en_md": "| Integrand form | Technique |\n|---|---|\n| $f(ax+b)$ | Chain-rule reversal: divide by $a$ |\n| polynomial × exp/trig | IBP (LIATE order) |\n| $\\sin x / \\cos^n x$ | Sub $u=\\cos x$ |\n| $\\tan x$ | Write as $\\sin/\\cos$, sub $u=\\cos x$ |\n| $\\ln x$ alone | IBP: $u=\\ln x$, $dv=dx$ |\n| $e^{ax}\\sin(bx)$ | IBP twice, solve for $I$ |\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
+      "body_he_md": "| צורת האינטגרנד | טכניקה |\n|---|---|\n| $f(ax+b)$ | היפוך שרשרת: חלק ב-$a$ |\n| פולינום × מעריכי/טריג | IBP (סדר LIATE) |\n| $\\sin x/\\cos^n x$ | הצבה $u=\\cos x$ |\n| $\\tan x$ | כתוב $\\sin/\\cos$, הצב $u=\\cos x$ |\n| $\\ln x$ בלבד | IBP: $u=\\ln x$, $dv=dx$ |\n| $e^{ax}\\sin(bx)$ | IBP פעמיים, פתור ל-$I$ |\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
     },
     {
       "id": "exercise_set",
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
           "difficulty": "easy",
           "body_en": "$\\int 4\\sin(3x)\\,dx$",
           "body_he": "$\\int 4\\sin(3x)\\,dx$",
-          "solution_en": "$-\\frac{4}{3}\\cos(3x)+C$",
-          "solution_he": "$-\\frac{4}{3}\\cos(3x)+C$",
+          "solution_en": "**Solution:**\n\n$-\\frac{4}{3}\\cos(3x)+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$-\\frac{4}{3}\\cos(3x)+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -112,8 +114,8 @@
           "difficulty": "easy",
           "body_en": "$\\int 2e^{5x}\\,dx$",
           "body_he": "$\\int 2e^{5x}\\,dx$",
-          "solution_en": "$\\frac{2}{5}e^{5x}+C$",
-          "solution_he": "$\\frac{2}{5}e^{5x}+C$",
+          "solution_en": "**Solution:**\n\n$\\frac{2}{5}e^{5x}+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\frac{2}{5}e^{5x}+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -121,8 +123,8 @@
           "difficulty": "easy",
           "body_en": "$\\int \\frac{3}{x}\\,dx$ for $x>0$",
           "body_he": "$\\int \\frac{3}{x}\\,dx$ עבור $x>0$",
-          "solution_en": "$3\\ln x+C$",
-          "solution_he": "$3\\ln x+C$",
+          "solution_en": "**Solution:**\n\n$3\\ln x+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$3\\ln x+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -130,8 +132,8 @@
           "difficulty": "easy",
           "body_en": "$\\int \\cos(\\pi x)\\,dx$",
           "body_he": "$\\int \\cos(\\pi x)\\,dx$",
-          "solution_en": "$\\frac{1}{\\pi}\\sin(\\pi x)+C$",
-          "solution_he": "$\\frac{1}{\\pi}\\sin(\\pi x)+C$",
+          "solution_en": "**Solution:**\n\n$\\frac{1}{\\pi}\\sin(\\pi x)+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\frac{1}{\\pi}\\sin(\\pi x)+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -139,8 +141,8 @@
           "difficulty": "medium",
           "body_en": "$\\int x\\sin x\\,dx$",
           "body_he": "$\\int x\\sin x\\,dx$",
-          "solution_en": "IBP: $u=x$, $dv=\\sin x\\,dx$. $\\int x\\sin x\\,dx = -x\\cos x+\\sin x+C$.",
-          "solution_he": "IBP: $-x\\cos x+\\sin x+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP: $u=x$, $dv=\\sin x\\,dx$. $\\int x\\sin x\\,dx = -x\\cos x+\\sin x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nIBP: $-x\\cos x+\\sin x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -148,8 +150,8 @@
           "difficulty": "medium",
           "body_en": "$\\int x^2 e^x\\,dx$",
           "body_he": "$\\int x^2 e^x\\,dx$",
-          "solution_en": "IBP twice: $e^x(x^2-2x+2)+C$.",
-          "solution_he": "IBP פעמיים: $e^x(x^2-2x+2)+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nIBP פעמיים: $e^x(x^2-2x+2)+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -157,8 +159,8 @@
           "difficulty": "medium",
           "body_en": "$\\int \\sin^2 x\\,dx$ using half-angle identity",
           "body_he": "$\\int \\sin^2 x\\,dx$ עם זהות חצי-זווית",
-          "solution_en": "$\\sin^2 x=\\frac{1-\\cos 2x}{2}$. Integral $= \\frac{x}{2}-\\frac{\\sin 2x}{4}+C$.",
-          "solution_he": "$\\frac{x}{2}-\\frac{\\sin 2x}{4}+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\sin^2 x=\\frac{1-\\cos 2x}{2}$. Integral $= \\frac{x}{2}-\\frac{\\sin 2x}{4}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\frac{x}{2}-\\frac{\\sin 2x}{4}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -166,8 +168,8 @@
           "difficulty": "medium",
           "body_en": "$\\int \\ln x\\,dx$",
           "body_he": "$\\int \\ln x\\,dx$",
-          "solution_en": "IBP: $u=\\ln x$, $dv=dx$. $\\int\\ln x\\,dx=x\\ln x-x+C$.",
-          "solution_he": "$x\\ln x-x+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP: $u=\\ln x$, $dv=dx$. $\\int\\ln x\\,dx=x\\ln x-x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x\\ln x-x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -175,8 +177,8 @@
           "difficulty": "medium",
           "body_en": "$\\int_0^1 xe^{x}\\,dx$",
           "body_he": "$\\int_0^1 xe^x\\,dx$",
-          "solution_en": "IBP: $e^x(x-1)\\Big|_0^1=(0)-(âˆ’1)=1$.",
-          "solution_he": "ערך: $1$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP: $e^x(x-1)\\Big|_0^1=(0)-(âˆ’1)=1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nערך: $1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -184,8 +186,8 @@
           "difficulty": "hard",
           "body_en": "$\\int \\frac{\\cos x}{\\sin^2 x}\\,dx$",
           "body_he": "$\\int \\frac{\\cos x}{\\sin^2 x}\\,dx$",
-          "solution_en": "Sub $u=\\sin x$: $\\int u^{-2}du=-\\frac{1}{\\sin x}+C=-\\csc x+C$.",
-          "solution_he": "הצבה $u=\\sin x$: $-\\csc x+C$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nSub $u=\\sin x$: $\\int u^{-2}du=-\\frac{1}{\\sin x}+C=-\\csc x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהצבה $u=\\sin x$: $-\\csc x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -193,8 +195,8 @@
           "difficulty": "hard",
           "body_en": "$\\int e^{2x}\\cos x\\,dx$",
           "body_he": "$\\int e^{2x}\\cos x\\,dx$",
-          "solution_en": "IBP twice, $I=e^{2x}\\cos x+2e^{2x}\\sin x-4I$ so $5I=e^{2x}(\\cos x+2\\sin x)$, $I=\\frac{e^{2x}(\\cos x+2\\sin x)}{5}+C$.",
-          "solution_he": "$\\frac{e^{2x}(\\cos x+2\\sin x)}{5}+C$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nIBP twice, $I=e^{2x}\\cos x+2e^{2x}\\sin x-4I$ so $5I=e^{2x}(\\cos x+2\\sin x)$, $I=\\frac{e^{2x}(\\cos x+2\\sin x)}{5}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\frac{e^{2x}(\\cos x+2\\sin x)}{5}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -202,8 +204,8 @@
           "difficulty": "hard",
           "body_en": "$\\int_1^e \\ln x\\,dx$",
           "body_he": "$\\int_1^e \\ln x\\,dx$",
-          "solution_en": "$[x\\ln x-x]_1^e=(e\\cdot1-e)-(1\\cdot0-1)=0+1=1$.",
-          "solution_he": "ערך: $1$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$[x\\ln x-x]_1^e=(e\\cdot1-e)-(1\\cdot0-1)=0+1=1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nערך: $1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -211,8 +213,8 @@
           "difficulty": "hard",
           "body_en": "$\\int x^2\\sin x\\,dx$",
           "body_he": "$\\int x^2\\sin x\\,dx$",
-          "solution_en": "IBP twice: $-x^2\\cos x+2x\\sin x+2\\cos x+C$.",
-          "solution_he": "$-x^2\\cos x+2x\\sin x+2\\cos x+C$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nIBP twice: $-x^2\\cos x+2x\\sin x+2\\cos x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$-x^2\\cos x+2x\\sin x+2\\cos x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         }
       ]
@@ -222,15 +224,23 @@
       "kind": "pitfall",
       "title_en": "Common pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Forgetting $+C$** on indefinite integrals.\n2. **Chain-rule reversal sign error:** $\\int\\sin(ax)dx = -\\frac{1}{a}\\cos(ax)+C$ (note the minus).\n3. **Wrong LIATE order:** For $\\int x\\ln x\\,dx$ choose $u=\\ln x$, not $u=x$.\n4. **IBP direction:** if the integral grows more complex, swap $u$ and $dv$.\n5. **Definite integral:** substitute limits AFTER finding the anti-derivative.",
-      "body_he_md": "1. **שכחת $+C$** באינטגרל לא מסוים.\n2. **שגיאת סימן בהיפוך שרשרת:** $\\int\\sin(ax)dx=-\\frac{1}{a}\\cos(ax)+C$.\n3. **סדר LIATE שגוי:** עבור $\\int x\\ln x\\,dx$ בחר $u=\\ln x$.\n4. **כיוון IBP:** אם האינטגרל הולך ומסתבך, החלף $u$ ו-$dv$.\n5. **אינטגרל מסוים:** הצב גבולות לאחר מציאת הנגזרת ההפוכה."
+      "body_en_md": "1. **Forgetting $+C$** on indefinite integrals.\n2. **Chain-rule reversal sign error:** $\\int\\sin(ax)dx = -\\frac{1}{a}\\cos(ax)+C$ (note the minus).\n3. **Wrong LIATE order:** For $\\int x\\ln x\\,dx$ choose $u=\\ln x$, not $u=x$.\n4. **IBP direction:** if the integral grows more complex, swap $u$ and $dv$.\n5. **Definite integral:** substitute limits AFTER finding the anti-derivative.\n\n**Example misconception:** \\int f(ax)dx = F(ax)\n\n**Fix:** Must divide by $a$: $\\frac{1}{a}F(ax)+C$.",
+      "body_he_md": "1. **שכחת $+C$** באינטגרל לא מסוים.\n2. **שגיאת סימן בהיפוך שרשרת:** $\\int\\sin(ax)dx=-\\frac{1}{a}\\cos(ax)+C$.\n3. **סדר LIATE שגוי:** עבור $\\int x\\ln x\\,dx$ בחר $u=\\ln x$.\n4. **כיוון IBP:** אם האינטגרל הולך ומסתבך, החלף $u$ ו-$dv$.\n5. **אינטגרל מסוים:** הצב גבולות לאחר מציאת הנגזרת ההפוכה.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "id": "before_exam",
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- $\\int\\sin x\\,dx=-\\cos x+C$; $\\int\\cos x\\,dx=\\sin x+C$; $\\int e^x\\,dx=e^x+C$; $\\int\\frac{1}{x}dx=\\ln|x|+C$.\n- Chain reversal: $\\int f(ax+b)dx=\\frac{1}{a}F(ax+b)+C$.\n- IBP: $\\int u\\,dv=uv-\\int v\\,du$. LIATE for choosing $u$.\n- $\\int\\tan x\\,dx=-\\ln|\\cos x|+C$.\n- Always verify by differentiating your answer.",
+      "body_en_md": "- $\\int\\sin x\\,dx=-\\cos x+C$; $\\int\\cos x\\,dx=\\sin x+C$; $\\int e^x\\,dx=e^x+C$; $\\int\\frac{1}{x}dx=\\ln|x|+C$.\n- Chain reversal: $\\int f(ax+b)dx=\\frac{1}{a}F(ax+b)+C$.\n- IBP: $\\int u\\,dv=uv-\\int v\\,du$. LIATE for choosing $u$.\n- $\\int\\tan x\\,dx=-\\ln|\\cos x|+C$.\n- Always verify by differentiating your answer.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "- $\\int\\sin x=-\\cos x+C$; $\\int\\cos x=\\sin x+C$; $\\int e^x=e^x+C$; $\\int\\frac{1}{x}=\\ln|x|+C$.\n- היפוך שרשרת: $\\frac{1}{a}F(ax+b)+C$.\n- IBP: $\\int u\\,dv=uv-\\int v\\,du$. LIATE לבחירת $u$.\n- $\\int\\tan x=-\\ln|\\cos x|+C$.\n- תמיד בדוק בנגזרת."
     },
     {
@@ -238,58 +248,8 @@
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- Four base anti-derivatives: sin, cos, $e^x$, $1/x$.\n- Linear substitution adds the $1/a$ factor.\n- IBP handles products; use LIATE to pick $u$.\n- Apply IBP twice when exp × trig and solve for $I$.\n- $\\tan x$ integrates via $u=\\cos x$ substitution.",
+      "body_en_md": "- Four base anti-derivatives: sin, cos, $e^x$, $1/x$.\n- Linear substitution adds the $1/a$ factor.\n- IBP handles products; use LIATE to pick $u$.\n- Apply IBP twice when exp × trig and solve for $I$.\n- $\\tan x$ integrates via $u=\\cos x$ substitution.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
       "body_he_md": "- ארבע נגזרות הפוכות בסיס: sin, cos, $e^x$, $1/x$.\n- הצבה לינארית מוסיפה גורם $1/a$.\n- IBP לכפל; LIATE לבחירת $u$.\n- IBP פעמיים עבור מעריכי × טריג.\n- $\\tan x$ על-ידי הצבה $u=\\cos x$."
-    }
-  ],
-  "questions": [
-    {
-      "id": "q1",
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$\\int \\cos x\\,dx = ?$",
-      "stem_he": "$\\int \\cos x\\,dx = ?$",
-      "answer_payload": {
-        "options_en": [
-          "$-\\sin x+C$",
-          "$\\sin x+C$",
-          "$\\cos x+C$",
-          "$-\\cos x+C$"
-        ],
-        "options_he": [
-          "$-\\sin x+C$",
-          "$\\sin x+C$",
-          "$\\cos x+C$",
-          "$-\\cos x+C$"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "Derivative of $\\sin x$ is $\\cos x$, so anti-derivative is $\\sin x+C$.",
-      "explanation_he": "הנגזרת של $\\sin x$ היא $\\cos x$, לכן האינטגרל הוא $\\sin x+C$."
-    },
-    {
-      "id": "q2",
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\int e^{3x}\\,dx = ?$",
-      "stem_he": "$\\int e^{3x}\\,dx = ?$",
-      "answer_payload": {
-        "options_en": [
-          "$3e^{3x}+C$",
-          "$e^{3x}+C$",
-          "$\\frac{1}{3}e^{3x}+C$",
-          "$\\frac{1}{3}e^x+C$"
-        ],
-        "options_he": [
-          "$3e^{3x}+C$",
-          "$e^{3x}+C$",
-          "$\\frac{1}{3}e^{3x}+C$",
-          "$\\frac{1}{3}e^x+C$"
-        ],
-        "correct_index": 2
-      },
-      "explanation_en": "Chain reversal with $a=3$: $\\frac{1}{3}e^{3x}+C$.",
-      "explanation_he": "היפוך שרשרת $a=3$: $\\frac{1}{3}e^{3x}+C$."
     }
   ],
   "agent_hints": {
@@ -317,7 +277,209 @@
     ],
     "tutor_pacing_hint": "Drill the four base rules first; then chain reversal as a small multiplier adjustment. IBP is its own session."
   },
-  "math_track": [
-    "5pt"
-  ]
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\int \\cos x\\,dx = ?$",
+      "stem_he": "$\\int \\cos x\\,dx = ?$",
+      "answer_payload": {
+        "options_en": [
+          "$-\\sin x+C$",
+          "$\\sin x+C$",
+          "$\\cos x+C$",
+          "$-\\cos x+C$"
+        ],
+        "options_he": [
+          "$-\\sin x+C$",
+          "$\\sin x+C$",
+          "$\\cos x+C$",
+          "$-\\cos x+C$"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "**Why this is correct:**\nDerivative of $\\sin x$ is $\\cos x$, so anti-derivative is $\\sin x+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nהנגזרת של $\\sin x$ היא $\\cos x$, לכן האינטגרל הוא $\\sin x+C$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 1,
+      "options_en": [
+        "$-\\sin x+C$",
+        "$\\sin x+C$",
+        "$\\cos x+C$",
+        "$-\\cos x+C$"
+      ],
+      "options_he": [
+        "$-\\sin x+C$",
+        "$\\sin x+C$",
+        "$\\cos x+C$",
+        "$-\\cos x+C$"
+      ],
+      "correct_index": 1,
+      "skill_atoms": []
+    },
+    {
+      "id": "q2",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$\\int e^{3x}\\,dx = ?$",
+      "stem_he": "$\\int e^{3x}\\,dx = ?$",
+      "answer_payload": {
+        "options_en": [
+          "$3e^{3x}+C$",
+          "$e^{3x}+C$",
+          "$\\frac{1}{3}e^{3x}+C$",
+          "$\\frac{1}{3}e^x+C$"
+        ],
+        "options_he": [
+          "$3e^{3x}+C$",
+          "$e^{3x}+C$",
+          "$\\frac{1}{3}e^{3x}+C$",
+          "$\\frac{1}{3}e^x+C$"
+        ],
+        "correct_index": 2
+      },
+      "explanation_en": "**Why this is correct:**\nChain reversal with $a=3$: $\\frac{1}{3}e^{3x}+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nהיפוך שרשרת $a=3$: $\\frac{1}{3}e^{3x}+C$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 2,
+      "options_en": [
+        "$3e^{3x}+C$",
+        "$e^{3x}+C$",
+        "$\\frac{1}{3}e^{3x}+C$",
+        "$\\frac{1}{3}e^x+C$"
+      ],
+      "options_he": [
+        "$3e^{3x}+C$",
+        "$e^{3x}+C$",
+        "$\\frac{1}{3}e^{3x}+C$",
+        "$\\frac{1}{3}e^x+C$"
+      ],
+      "correct_index": 2,
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$\\int 4\\sin(3x)\\,dx$",
+      "stem_he": "$\\int 4\\sin(3x)\\,dx$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$-\\frac{4}{3}\\cos(3x)+C$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$-\\frac{4}{3}\\cos(3x)+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$-\\frac{4}{3}\\cos(3x)+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "integral_sin_cos",
+        "integral_exp"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$\\int 2e^{5x}\\,dx$",
+      "stem_he": "$\\int 2e^{5x}\\,dx$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\frac{2}{5}e^{5x}+C$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "5"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\frac{2}{5}e^{5x}+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\frac{2}{5}e^{5x}+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "integral_sin_cos",
+        "integral_exp"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$\\int \\frac{3}{x}\\,dx$ for $x>0$",
+      "stem_he": "$\\int \\frac{3}{x}\\,dx$ עבור $x>0$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$3\\ln x+C$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$3\\ln x+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$3\\ln x+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "integral_sin_cos",
+        "integral_exp"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$\\int \\cos(\\pi x)\\,dx$",
+      "stem_he": "$\\int \\cos(\\pi x)\\,dx$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\frac{1}{\\pi}\\sin(\\pi x)+C$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\frac{1}{\\pi}\\sin(\\pi x)+C$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\frac{1}{\\pi}\\sin(\\pi x)+C$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "integral_sin_cos",
+        "integral_exp"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "$\\int x\\sin x\\,dx$",
+      "stem_he": "$\\int x\\sin x\\,dx$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP: $u=x$, $dv=\\sin x\\,dx$. $\\int x\\sin x\\,dx = -x\\cos x+\\sin x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-x\\cos x+\\sin x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP: $u=x$, $dv=\\sin x\\,dx$. $\\int x\\sin x\\,dx = -x\\cos x+\\sin x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nIBP: $-x\\cos x+\\sin x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "integral_sin_cos",
+        "integral_exp"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "$\\int x^2 e^x\\,dx$",
+      "stem_he": "$\\int x^2 e^x\\,dx$",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nIBP פעמיים: $e^x(x^2-2x+2)+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "integral_sin_cos",
+        "integral_exp"
+      ]
+    }
+  ],
+  "est_minutes": 25,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

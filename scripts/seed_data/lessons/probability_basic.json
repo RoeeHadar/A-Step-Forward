@@ -9,7 +9,6 @@
   "title_he": "יסודות ההסתברות — מרחבי מדגם, מאורעות ומשפט בייס",
   "summary_en": "Kolmogorov's axioms, conditional probability, independence, the law of total probability, and Bayes' theorem with the medical-test application.",
   "summary_he": "אקסיומות קולמוגורוב, הסתברות מותנית, אי-תלות, חוק ההסתברות הכוללת ומשפט בייס עם יישום בדיקה רפואית.",
-  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
@@ -30,7 +29,7 @@
       "title_en": "Key Theorems",
       "title_he": "משפטים מרכזיים",
       "body_en_md": "**Theorem 1 (Complement).** $P(A^c)=1-P(A)$.\n*Proof:* $A$ and $A^c$ are disjoint with $A\\cup A^c=\\Omega$. By axioms: $P(A)+P(A^c)=1$.\n\n**Theorem 2 (Inclusion-exclusion).** $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.\n*Proof:* Write $A\\cup B = A\\cup(B\\setminus A)$ (disjoint). Apply additivity.\n\n**Theorem 3.** Independent $\\neq$ mutually exclusive (when $P(A),P(B)>0$). In fact: if $A\\cap B=\\emptyset$, then $P(A\\cap B)=0\\neq P(A)P(B)>0$.\n\n**Theorem 4 (Bayes).** Proof: Apply definition of conditional probability to both $P(B_i|A)$ and $P(A|B_i)$:\n$$P(B_i|A)=\\frac{P(A\\cap B_i)}{P(A)}=\\frac{P(A|B_i)P(B_i)}{P(A)}.$$\nUse law of total probability for $P(A)$.\n\n**Bayes intuition:** We have a **prior** $P(B_i)$ (before seeing evidence) and update to a **posterior** $P(B_i|A)$ after observing event $A$.",
-      "body_he_md": "**משפט 1 (משלים).** $P(A^c)=1-P(A)$.\n*הוכחה:* $A\\cup A^c=\\Omega$, זרים. $P(A)+P(A^c)=1$.\n\n**משפט 2 (הכלה-הדרה).** $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.\n\n**משפט 3.** אי-תלות $\\neq$ זרות (כשהסתברויות חיוביות).\n\n**משפט 4 (בייס).** $P(B_i|A)=\\frac{P(A|B_i)P(B_i)}{P(A)}$ — מ-הגדרת ההסתברות המותנית וחוק ההסתברות הכוללת.\n\n**אינטואיציה:** Prior $P(B_i)$ מתעדכן ל-Posterior $P(B_i|A)$ לאחר ראיית $A$."
+      "body_he_md": "**משפט 1 (משלים).** $P(A^c)=1-P(A)$.\n*הוכחה:* $A\\cup A^c=\\Omega$, זרים. $P(A)+P(A^c)=1$.\n\n**משפט 2 (הכלה-הדרה).** $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.\n\n**משפט 3.** אי-תלות $\\neq$ זרות (כשהסתברויות חיוביות).\n\n**משפט 4 (בייס).** $P(B_i|A)=\\frac{P(A|B_i)P(B_i)}{P(A)}$ — מ-הגדרת ההסתברות המותנית וחוק ההסתברות הכוללת."
     },
     {
       "kind": "worked_example",
@@ -76,30 +75,30 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Medical Test (Bayes' Theorem)",
       "title_he": "דוגמה פתורה 3 — בדיקה רפואית (משפט בייס)",
-      "body_en_md": "**A medical test for a rare disease:**\n- **Sensitivity:** $P(+|D)=0.99$ (99% true positive rate).\n- **Specificity:** $P(-|D^c)=0.95$ (95% true negative rate; 5% false positive).\n- **Prevalence:** $P(D)=0.01$ (1% of the population has the disease).\n\n**Question:** Given that a person tests **positive**, what is the probability they actually have the disease? That is, find $P(D|+)$.\n\n**Step 1 — Law of total probability** to find $P(+)$:\n$$P(+) = P(+|D)P(D)+P(+|D^c)P(D^c) = 0.99\\times0.01+0.05\\times0.99 = 0.0099+0.0495 = 0.0594.$$\n\n**Step 2 — Bayes' theorem:**\n$$P(D|+) = \\frac{P(+|D)P(D)}{P(+)} = \\frac{0.99\\times0.01}{0.0594} = \\frac{0.0099}{0.0594} \\approx 0.167.$$\n\n**Conclusion: Despite a positive test, the probability of having the disease is only $\\approx16.7\\%$.**\n\n**Why?** Because the disease is rare ($P(D)=1\\%$). False positives (5% of the healthy 99%) vastly outnumber true positives (99% of the sick 1%). This is the **base-rate fallacy** — ignoring the rarity of the event when interpreting test results.",
-      "body_he_md": "**בדיקה רפואית למחלה נדירה:**\n- רגישות: $P(+|D)=0.99$.\n- סגוליות: $P(-|D^c)=0.95$ (שקפות 5%).\n- שכיחות: $P(D)=0.01$.\n\n**שאלה:** $P(D|+)=?$\n\n**שלב 1 — $P(+)$ בחוק ההסתברות הכוללת:**\n$$P(+) = 0.99\\times0.01+0.05\\times0.99 = 0.0594.$$\n\n**שלב 2 — בייס:**\n$$P(D|+) = \\frac{0.0099}{0.0594} \\approx 0.167 = 16.7\\%.$$\n\n**מסקנה:** למרות בדיקה חיובית, ההסתברות למחלה רק ~17% — בגלל נדירות המחלה. זוהי **כשל שיעור הבסיס**."
+      "body_en_md": "**A medical test for a rare disease:**\n- **Sensitivity:** $P(+|D)=0.99$ (99% true positive rate).\n- **Specificity:** $P(-|D^c)=0.95$ (95% true negative rate; 5% false positive).\n- **Prevalence:** $P(D)=0.01$ (1% of the population has the disease).\n\n**Question:** Given that a person tests **positive**, what is the probability they actually have the disease? That is, find $P(D|+)$.\n\n### Move 1 to find $P(+)$:\n$$P(+) = P(+|D)P(D)+P(+|D^c)P(D^c) = 0.99\\times0.01+0.05\\times0.99 = 0.0099+0.0495 = 0.0594.$$\n\n### Move 2\n$$P(D|+) = \\frac{P(+|D)P(D)}{P(+)} = \\frac{0.99\\times0.01}{0.0594} = \\frac{0.0099}{0.0594} \\approx 0.167.$$\n\n**Conclusion: Despite a positive test, the probability of having the disease is only $\\approx16.7\\%$.**\n\n**Why?** Because the disease is rare ($P(D)=1\\%$). False positives (5% of the healthy 99%) vastly outnumber true positives (99% of the sick 1%). This is the **base-rate fallacy** — ignoring the rarity of the event when interpreting test results.",
+      "body_he_md": "**בדיקה רפואית למחלה נדירה:**\n- רגישות: $P(+|D)=0.99$.\n- סגוליות: $P(-|D^c)=0.95$ (שקפות 5%).\n- שכיחות: $P(D)=0.01$.\n\n**שאלה:** $P(D|+)=?$\n\n**שלב 1 — $P(+)$ בחוק ההסתברות הכוללת:**\n$$P(+) = 0.99\\times0.01+0.05\\times0.99 = 0.0594.$$\n\n**שלב 2 — בייס:**\n$$P(D|+) = \\frac{0.0099}{0.0594} \\approx 0.167 = 16.7\\%.$$\n\n**מסקנה:** למרות בדיקה חיובית, ההסתברות למחלה רק ~17% — בגלל נדירות המחלה. זוהי **כשל שיעור הבסיס**.\n\n### צעד 1 to find $P(+)$:\n$$P(+) = P(+|D)P(D)+P(+|D^c)P(D^c) = 0.99\\times0.01+0.05\\times0.99 = 0.0099+0.0495 = 0.0594.$$\n\n### צעד 2\n$$P(D|+) = \\frac{P(+|D)P(D)}{P(+)} = \\frac{0.99\\times0.01}{0.0594} = \\frac{0.0099}{0.0594} \\approx 0.167.$$"
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Probability Toolkit",
       "title_he": "מדריך שיטה — ארגז כלים להסתברות",
-      "body_en_md": "| Goal | Method |\n|---|---|\n| $P(A^c)$ | $1-P(A)$ |\n| $P(A\\cup B)$ | $P(A)+P(B)-P(A\\cap B)$ |\n| $P(A|B)$ | $P(A\\cap B)/P(B)$ |\n| Test independence | $P(A\\cap B)=P(A)P(B)$? |\n| $P(A)$ given conditional probabilities | Law of total probability |\n| $P(\\text{hypothesis}|\\text{evidence})$ | Bayes' theorem |\n| Equally likely outcomes | $P(A)=|A|/|\\Omega|$ |",
-      "body_he_md": "| מטרה | שיטה |\n|---|---|\n| $P(A^c)$ | $1-P(A)$ |\n| $P(A\\cup B)$ | $P(A)+P(B)-P(A\\cap B)$ |\n| $P(A|B)$ | $P(A\\cap B)/P(B)$ |\n| בדיקת אי-תלות | $P(A\\cap B)=P(A)P(B)$? |\n| $P(A)$ מהסתברויות מותנות | חוק ההסתברות הכוללת |\n| $P(\\text{היפותזה}|\\text{ראיה})$ | משפט בייס |\n| תוצאות שוות-הסתברות | $P(A)=|A|/|\\Omega|$ |"
+      "body_en_md": "| Goal | Method |\n|---|---|\n| $P(A^c)$ | $1-P(A)$ |\n| $P(A\\cup B)$ | $P(A)+P(B)-P(A\\cap B)$ |\n| $P(A|B)$ | $P(A\\cap B)/P(B)$ |\n| Test independence | $P(A\\cap B)=P(A)P(B)$? |\n| $P(A)$ given conditional probabilities | Law of total probability |\n| $P(\\text{hypothesis}|\\text{evidence})$ | Bayes' theorem |\n| Equally likely outcomes | $P(A)=|A|/|\\Omega|$ |\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.\n\n**Tip:** If two rows seem to fit, list the givens and match them to the table columns before calculating.",
+      "body_he_md": "| מטרה | שיטה |\n|---|---|\n| $P(A^c)$ | $1-P(A)$ |\n| $P(A\\cup B)$ | $P(A)+P(B)-P(A\\cap B)$ |\n| $P(A|B)$ | $P(A\\cap B)/P(B)$ |\n| בדיקת אי-תלות | $P(A\\cap B)=P(A)P(B)$? |\n| $P(A)$ מהסתברויות מותנות | חוק ההסתברות הכוללת |\n| $P(\\text{היפותזה}|\\text{ראיה})$ | משפט בייס |\n| תוצאות שוות-הסתברות | $P(A)=|A|/|\\Omega|$ |\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
     },
     {
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
           "difficulty": "easy",
           "body_en": "Roll a fair die. Find $P(\\text{even})$ and $P(\\text{greater than 4})$.",
           "body_he": "הטל קובייה הוגנת. מצא $P(\\text{זוגי})$ ו-$P(\\text{גדול מ-4})$.",
-          "solution_en": "$P(\\text{even})=3/6=1/2$. $P(>4)=P(5\\text{ or }6)=2/6=1/3$.",
-          "solution_he": "$P(\\text{זוגי})=1/2$. $P(>4)=1/3$.",
+          "solution_en": "**Solution:**\n\n$P(\\text{even})=3/6=1/2$. $P(>4)=P(5\\text{ or }6)=2/6=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$P(\\text{זוגי})=1/2$. $P(>4)=1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -107,8 +106,8 @@
           "difficulty": "easy",
           "body_en": "If $P(A)=0.4$ and $P(B)=0.3$ with $A$ and $B$ mutually exclusive, find $P(A\\cup B)$.",
           "body_he": "אם $P(A)=0.4$ ו-$P(B)=0.3$ ו-$A,B$ זרים, מצא $P(A\\cup B)$.",
-          "solution_en": "$P(A\\cup B)=0.4+0.3=0.7$ (mutually exclusive: $P(A\\cap B)=0$).",
-          "solution_he": "$P(A\\cup B)=0.7$.",
+          "solution_en": "**Solution:**\n\n$P(A\\cup B)=0.4+0.3=0.7$ (mutually exclusive: $P(A\\cap B)=0$).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$P(A\\cup B)=0.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -116,8 +115,8 @@
           "difficulty": "easy",
           "body_en": "From a group of 10 people (6 women, 4 men), one is chosen at random. What is $P(\\text{woman})$?",
           "body_he": "מקבוצה של 10 אנשים (6 נשים, 4 גברים) בוחרים אחד אקראי. מהי $P(\\text{אישה})$?",
-          "solution_en": "$P(\\text{woman})=6/10=0.6$.",
-          "solution_he": "$P(\\text{אישה})=6/10=0.6$.",
+          "solution_en": "**Solution:**\n\n$P(\\text{woman})=6/10=0.6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$P(\\text{אישה})=6/10=0.6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -125,8 +124,8 @@
           "difficulty": "easy",
           "body_en": "Are events $A$ (roll even) and $B$ (roll $>3$) independent on one fair die roll? $P(A)=1/2$, $P(B)=1/2$, $P(A\\cap B)=P(4\\text{ or }6)=2/6=1/3$.",
           "body_he": "האם $A$ (זוגי) ו-$B$ (גדול מ-3) בלתי-תלויים בהטלת קובייה? $P(A)=1/2$, $P(B)=1/2$, $P(A\\cap B)=1/3$.",
-          "solution_en": "$P(A)P(B)=1/4\\neq1/3=P(A\\cap B)$. **Not independent.**",
-          "solution_he": "$P(A)P(B)=1/4\\neq 1/3$. **תלויים.**",
+          "solution_en": "**Solution:**\n\n$P(A)P(B)=1/4\\neq1/3=P(A\\cap B)$. **Not independent.**\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$P(A)P(B)=1/4\\neq 1/3$. **תלויים.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -134,8 +133,8 @@
           "difficulty": "medium",
           "body_en": "Given $P(A|B)=0.6$ and $P(B)=0.5$, find $P(A\\cap B)$. Then, given $P(A)=0.3$, find $P(B|A)$.",
           "body_he": "נתון $P(A|B)=0.6$, $P(B)=0.5$. מצא $P(A\\cap B)$. נתון גם $P(A)=0.3$, מצא $P(B|A)$.",
-          "solution_en": "$P(A\\cap B)=0.6\\times0.5=0.3$. $P(B|A)=0.3/0.3=1.0$.",
-          "solution_he": "$P(A\\cap B)=0.3$. $P(B|A)=1.0$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(A\\cap B)=0.6\\times0.5=0.3$. $P(B|A)=0.3/0.3=1.0$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(A\\cap B)=0.3$. $P(B|A)=1.0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -143,8 +142,8 @@
           "difficulty": "medium",
           "body_en": "A factory has two machines. Machine 1 produces 60% of items with 2% defect rate; Machine 2 produces 40% with 5% defect rate. An item is chosen at random. Find $P(\\text{defective})$.",
           "body_he": "מפעל עם 2 מכונות. מכונה 1 מייצרת 60% מהפריטים עם 2% פגמים; מכונה 2 מייצרת 40% עם 5% פגמים. פריט נבחר אקראי. מצא $P(\\text{פגום})$.",
-          "solution_en": "$P(D)=P(D|M_1)P(M_1)+P(D|M_2)P(M_2)=0.02\\times0.6+0.05\\times0.4=0.012+0.020=0.032=3.2\\%$.",
-          "solution_he": "$P(D)=0.012+0.020=0.032$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(D)=P(D|M_1)P(M_1)+P(D|M_2)P(M_2)=0.02\\times0.6+0.05\\times0.4=0.012+0.020=0.032=3.2\\%$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(D)=0.012+0.020=0.032$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -152,8 +151,8 @@
           "difficulty": "medium",
           "body_en": "From the factory problem above: given a defective item, what is the probability it came from Machine 1?",
           "body_he": "מבעיית המפעל לעיל: בהינתן פריט פגום, מהי ההסתברות שהגיע ממכונה 1?",
-          "solution_en": "$P(M_1|D)=P(D|M_1)P(M_1)/P(D)=0.012/0.032=0.375$.",
-          "solution_he": "$P(M_1|D)=0.012/0.032=37.5\\%$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(M_1|D)=P(D|M_1)P(M_1)/P(D)=0.012/0.032=0.375$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(M_1|D)=0.012/0.032=37.5\\%$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -161,8 +160,8 @@
           "difficulty": "medium",
           "body_en": "Prove: $P(A\\cap B)\\geq P(A)+P(B)-1$ (Boole's inequality / Bonferroni).",
           "body_he": "הוכח: $P(A\\cap B)\\geq P(A)+P(B)-1$ (אי-שוויון בונפרוני).",
-          "solution_en": "$P(A\\cup B)\\leq1\\Rightarrow P(A)+P(B)-P(A\\cap B)\\leq1\\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$",
-          "solution_he": "$P(A)+P(B)-P(A\\cap B)=P(A\\cup B)\\leq1 \\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(A\\cup B)\\leq1\\Rightarrow P(A)+P(B)-P(A\\cap B)\\leq1\\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(A)+P(B)-P(A\\cap B)=P(A\\cup B)\\leq1 \\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -170,8 +169,8 @@
           "difficulty": "hard",
           "body_en": "Medical test (full Bayes): A disease has prevalence 0.005 (0.5%). Test sensitivity 98%, specificity 97%. Find $P(D|+)$ and $P(D^c|-)$.",
           "body_he": "בדיקה רפואית (בייס מלא): שכיחות מחלה 0.005. רגישות 98%, סגוליות 97%. מצא $P(D|+)$ ו-$P(D^c|-)$.",
-          "solution_en": "$P(+)=0.98\\times0.005+0.03\\times0.995=0.0049+0.02985=0.03475$. $P(D|+)=0.0049/0.03475\\approx0.141=14.1\\%$. $P(-)=1-0.03475=0.96525$. $P(D^c|-)=P(-|D^c)P(D^c)/P(-)=0.97\\times0.995/0.96525\\approx0.9998$.",
-          "solution_he": "$P(D|+)\\approx14.1\\%$. $P(D^c|-)\\approx99.98\\%$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$P(+)=0.98\\times0.005+0.03\\times0.995=0.0049+0.02985=0.03475$. $P(D|+)=0.0049/0.03475\\approx0.141=14.1\\%$. $P(-)=1-0.03475=0.96525$. $P(D^c|-)=P(-|D^c)P(D^c)/P(-)=0.97\\times0.995/0.96525\\approx0.9998$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$P(D|+)\\approx14.1\\%$. $P(D^c|-)\\approx99.98\\%$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -188,8 +187,8 @@
           "difficulty": "hard",
           "body_en": "Show that if $A$ and $B$ are independent, then so are $A$ and $B^c$.",
           "body_he": "הראה שאם $A$ ו-$B$ בלתי-תלויים, אזי $A$ ו-$B^c$ גם כן בלתי-תלויים.",
-          "solution_en": "$P(A\\cap B^c)=P(A)-P(A\\cap B)=P(A)-P(A)P(B)=P(A)(1-P(B))=P(A)P(B^c)$. $\\blacksquare$",
-          "solution_he": "$P(A\\cap B^c)=P(A)-P(A)P(B)=P(A)P(B^c)$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$P(A\\cap B^c)=P(A)-P(A\\cap B)=P(A)-P(A)P(B)=P(A)(1-P(B))=P(A)P(B^c)$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$P(A\\cap B^c)=P(A)-P(A)P(B)=P(A)P(B^c)$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -197,8 +196,8 @@
           "difficulty": "hard",
           "body_en": "Prove the law of total probability: if $B_1,\\ldots,B_n$ partition $\\Omega$ (mutually exclusive, exhaustive), then $P(A)=\\sum_{i=1}^n P(A|B_i)P(B_i)$.",
           "body_he": "הוכח את חוק ההסתברות הכוללת: אם $B_1,\\ldots,B_n$ מחלקים את $\\Omega$, אזי $P(A)=\\sum_{i=1}^n P(A|B_i)P(B_i)$.",
-          "solution_en": "$A=A\\cap\\Omega=A\\cap(\\bigcup_i B_i)=\\bigcup_i(A\\cap B_i)$. The sets $A\\cap B_i$ are mutually exclusive (since $B_i$ are). By additivity: $P(A)=\\sum_i P(A\\cap B_i)=\\sum_i P(A|B_i)P(B_i)$. $\\blacksquare$",
-          "solution_he": "$A=\\bigcup_i(A\\cap B_i)$ (איחוד זר). $P(A)=\\sum_i P(A\\cap B_i)=\\sum_i P(A|B_i)P(B_i)$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$A=A\\cap\\Omega=A\\cap(\\bigcup_i B_i)=\\bigcup_i(A\\cap B_i)$. The sets $A\\cap B_i$ are mutually exclusive (since $B_i$ are). By additivity: $P(A)=\\sum_i P(A\\cap B_i)=\\sum_i P(A|B_i)P(B_i)$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A=\\bigcup_i(A\\cap B_i)$ (איחוד זר). $P(A)=\\sum_i P(A\\cap B_i)=\\sum_i P(A|B_i)P(B_i)$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         }
       ]
@@ -209,6 +208,14 @@
       "title_he": "מלכודות נפוצות",
       "body_en_md": "1. **Confusing independence and mutual exclusivity.** Mutually exclusive events with positive probability are NEVER independent.\n\n2. **Base-rate neglect.** Ignoring $P(D)$ when applying Bayes — a common error in medical and legal reasoning.\n\n3. **$P(A|B)\\neq P(B|A)$.** These can be wildly different. The 'prosecutor's fallacy' is confusing $P(\\text{evidence}|\\text{innocent})$ with $P(\\text{innocent}|\\text{evidence})$.\n\n4. **Adding probabilities of non-exclusive events.** $P(A\\cup B)\\neq P(A)+P(B)$ unless $A$ and $B$ are disjoint.\n\n5. **Forgetting to use total probability for the denominator.** When applying Bayes, always compute $P(A)$ via total probability first.",
       "body_he_md": "1. **בלבול אי-תלות וזרות.** מאורעות זרים עם הסתברות חיובית **לעולם** אינם בלתי-תלויים.\n\n2. **הזנחת שיעור הבסיס.** התעלמות מ-$P(D)$ ביישום בייס — שגיאה נפוצה בחשיבה רפואית ומשפטית.\n\n3. **$P(A|B)\\neq P(B|A)$.** ה'כשל של התובע' הוא בלבול בין $P(\\text{ראיות}|\\text{חף})$ ל-$P(\\text{חף}|\\text{ראיות})$.\n\n4. **חיבור הסתברויות של מאורעות לא-זרים.** $P(A\\cup B)\\neq P(A)+P(B)$ אלא אם כן זרים.\n\n5. **שכחה לחשב את $P(A)$ בחוק הכוללת.** ביישום בייס — תמיד לחשב את $P(A)$ קודם."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**You will use this to unlock:**\n- `concept:distributions` **Probability Distributions** (prereq)\n- `concept:modern_physics_intro` **Quantum Physics Basics (Photoelectric Effect)** (applies_to) — Quantum probabilities, decay statistics.\n\n**Builds on:**\n- `concept:combinatorics` **Combinatorics (Counting Methods)**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:distributions` **התפלגויות הסתברות** (prereq)\n- `concept:modern_physics_intro` **מבוא לפיזיקה קוונטית (אפקט פוטואלקטרי)** (applies_to) — Quantum probabilities, decay statistics.\n\n**מבוסס על:**\n- `concept:combinatorics` **קומבינטוריקה**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
@@ -224,5 +231,156 @@
       "body_en_md": "- **Sample space** $\\Omega$ = all outcomes; events are subsets.\n- **Kolmogorov's axioms:** non-negativity, normalisation, countable additivity.\n- **Conditional probability:** $P(A|B)=P(A\\cap B)/P(B)$.\n- **Independence:** $P(A\\cap B)=P(A)P(B)$; independent $\\neq$ disjoint.\n- **Total probability:** $P(A)=\\sum P(A|B_i)P(B_i)$ for any partition $\\{B_i\\}$.\n- **Bayes:** $P(B_i|A)=P(A|B_i)P(B_i)/P(A)$ — updates prior to posterior.\n- **Base-rate neglect** is the key pitfall in medical/legal applications.",
       "body_he_md": "- **מרחב מדגם** $\\Omega$; מאורעות = תת-קבוצות.\n- **אקסיומות קולמוגורוב:** אי-שליליות, נורמליזציה, אדיטיביות.\n- **הסתברות מותנית:** $P(A|B)=P(A\\cap B)/P(B)$.\n- **אי-תלות:** $P(A\\cap B)=P(A)P(B)$; שונה מזרות.\n- **הסתברות כוללת:** $P(A)=\\sum P(A|B_i)P(B_i)$.\n- **בייס:** מעדכן Prior ל-Posterior.\n- **הזנחת שיעור הבסיס** — מלכודת מפתח."
     }
-  ]
+  ],
+  "agent_hints": {},
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Roll a fair die. Find $P(\\text{even})$ and $P(\\text{greater than 4})$.",
+      "stem_he": "הטל קובייה הוגנת. מצא $P(\\text{זוגי})$ ו-$P(\\text{גדול מ-4})$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P(\\text{even})=3/6=1/2$. $P(>4)=P(5\\text{ or }6)=2/6=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(\\text{even})=3/6=1/2$. $P(>4)=P(5\\text{ or }6)=2/6=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(\\text{זוגי})=1/2$. $P(>4)=1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "If $P(A)=0.4$ and $P(B)=0.3$ with $A$ and $B$ mutually exclusive, find $P(A\\cup B)$.",
+      "stem_he": "אם $P(A)=0.4$ ו-$P(B)=0.3$ ו-$A,B$ זרים, מצא $P(A\\cup B)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P(A\\cup B)=0.4+0.3=0.7$ (mutually exclusive: $P(A\\cap B)=0$).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0$).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(A\\cup B)=0.4+0.3=0.7$ (mutually exclusive: $P(A\\cap B)=0$).\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(A\\cup B)=0.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "From a group of 10 people (6 women, 4 men), one is chosen at random. What is $P(\\text{woman})$?",
+      "stem_he": "מקבוצה של 10 אנשים (6 נשים, 4 גברים) בוחרים אחד אקראי. מהי $P(\\text{אישה})$?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P(\\text{woman})=6/10=0.6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.6"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(\\text{woman})=6/10=0.6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(\\text{אישה})=6/10=0.6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Are events $A$ (roll even) and $B$ (roll $>3$) independent on one fair die roll? $P(A)=1/2$, $P(B)=1/2$, $P(A\\cap B)=P(4\\text{ or }6)=2/6=1/3$.",
+      "stem_he": "האם $A$ (זוגי) ו-$B$ (גדול מ-3) בלתי-תלויים בהטלת קובייה? $P(A)=1/2$, $P(B)=1/2$, $P(A\\cap B)=1/3$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P(A)P(B)=1/4\\neq1/3=P(A\\cap B)$. **Not independent.**\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "P(A\\cap B)$. **Not independent.**\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(A)P(B)=1/4\\neq1/3=P(A\\cap B)$. **Not independent.**\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(A)P(B)=1/4\\neq 1/3$. **תלויים.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Given $P(A|B)=0.6$ and $P(B)=0.5$, find $P(A\\cap B)$. Then, given $P(A)=0.3$, find $P(B|A)$.",
+      "stem_he": "נתון $P(A|B)=0.6$, $P(B)=0.5$. מצא $P(A\\cap B)$. נתון גם $P(A)=0.3$, מצא $P(B|A)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(A\\cap B)=0.6\\times0.5=0.3$. $P(B|A)=0.3/0.3=1.0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1.0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1.0"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(A\\cap B)=0.6\\times0.5=0.3$. $P(B|A)=0.3/0.3=1.0$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(A\\cap B)=0.3$. $P(B|A)=1.0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A factory has two machines. Machine 1 produces 60% of items with 2% defect rate; Machine 2 produces 40% with 5% defect rate. An item is chosen at random. Find $P(\\text{defective})$.",
+      "stem_he": "מפעל עם 2 מכונות. מכונה 1 מייצרת 60% מהפריטים עם 2% פגמים; מכונה 2 מייצרת 40% עם 5% פגמים. פריט נבחר אקראי. מצא $P(\\text{פגום})$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(D)=P(D|M_1)P(M_1)+P(D|M_2)P(M_2)=0.02\\times0.6+0.05\\times0.4=0.012+0.020=0.032=3.2\\%$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3.2\\%$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3.2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(D)=P(D|M_1)P(M_1)+P(D|M_2)P(M_2)=0.02\\times0.6+0.05\\times0.4=0.012+0.020=0.032=3.2\\%$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(D)=0.012+0.020=0.032$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "From the factory problem above: given a defective item, what is the probability it came from Machine 1?",
+      "stem_he": "מבעיית המפעל לעיל: בהינתן פריט פגום, מהי ההסתברות שהגיע ממכונה 1?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(M_1|D)=P(D|M_1)P(M_1)/P(D)=0.012/0.032=0.375$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.375$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.375"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(M_1|D)=P(D|M_1)P(M_1)/P(D)=0.012/0.032=0.375$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(M_1|D)=0.012/0.032=37.5\\%$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Prove: $P(A\\cap B)\\geq P(A)+P(B)-1$ (Boole's inequality / Bonferroni).",
+      "stem_he": "הוכח: $P(A\\cap B)\\geq P(A)+P(B)-1$ (אי-שוויון בונפרוני).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(A\\cup B)\\leq1\\Rightarrow P(A)+P(B)-P(A\\cap B)\\leq1\\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(A\\cup B)\\leq1\\Rightarrow P(A)+P(B)-P(A\\cap B)\\leq1\\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(A)+P(B)-P(A\\cap B)=P(A\\cup B)\\leq1 \\Rightarrow P(A\\cap B)\\geq P(A)+P(B)-1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

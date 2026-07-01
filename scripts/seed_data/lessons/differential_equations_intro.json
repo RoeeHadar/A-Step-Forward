@@ -2,12 +2,14 @@
   "concept_id": "differential_equations_intro",
   "subject": "math",
   "level": "university",
-  "math_track": ["calculus1", "ode"],
+  "math_track": [
+    "calculus1",
+    "ode"
+  ],
   "title_en": "Introduction to Differential Equations",
   "title_he": "מבוא למשוואות דיפרנציאליות",
   "summary_en": "First-order ODEs: separable equations, integrating factor for linear equations, and applications (exponential growth, Newton's law of cooling).",
   "summary_he": "משוואות דיפרנציאליות מסדר ראשון: משוואות ספריות, גורם אינטגרציה למשוואות לינאריות, ויישומים (גידול מעריכי, חוק ניוטון לקירור).",
-  "est_minutes": 60,
   "sections": [
     {
       "kind": "intro",
@@ -28,7 +30,7 @@
       "title_en": "Exponential Growth and Newton's Cooling",
       "title_he": "גידול מעריכי וחוק ניוטון לקירור",
       "body_en_md": "**Exponential growth/decay:** $\\dfrac{dy}{dt}=ky$.\n\nSeparable: $\\int dy/y=\\int k\\,dt\\Rightarrow\\ln|y|=kt+C_1\\Rightarrow y=Ae^{kt}$ ($A=e^{C_1}$).\n\nWith $y(0)=y_0$: $A=y_0$, so $y(t)=y_0e^{kt}$.\n- $k>0$: exponential growth (population, compound interest).\n- $k<0$: exponential decay (radioactivity, drug concentration).\n\n**Half-life:** $T_{1/2}=\\ln2/|k|$.\n\n**Newton's law of cooling:** $\\dfrac{dT}{dt}=-k(T-T_e)$ where $T_e$ = environmental temperature.\n\nSubstitute $u=T-T_e$: $du/dt=-ku\\Rightarrow u=Ae^{-kt}\\Rightarrow T(t)=T_e+(T_0-T_e)e^{-kt}$.\n\n$T\\to T_e$ as $t\\to\\infty$.",
-      "body_he_md": "**גידול/ריקבון מעריכי:** $dy/dt=ky$.\n\nמשוואה ספרית: $y=y_0e^{kt}$.\n- $k>0$: גידול; $k<0$: ריקבון.\n- **חצי-חיים:** $T_{1/2}=\\ln2/|k|$.\n\n**חוק ניוטון לקירור:** $dT/dt=-k(T-T_e)$.\n\nהצב $u=T-T_e$: $u=Ae^{-kt}\\Rightarrow T(t)=T_e+(T_0-T_e)e^{-kt}$.\n\n$T\\to T_e$ כאשר $t\\to\\infty$."
+      "body_he_md": "**גידול/ריקבון מעריכי:** $dy/dt=ky$.\n\nמשוואה ספרית: $y=y_0e^{kt}$.\n- $k>0$: גידול; $k<0$: ריקבון.\n- **חצי-חיים:** $T_{1/2}=\\ln2/|k|$.\n\n**חוק ניוטון לקירור:** $dT/dt=-k(T-T_e)$.\n\nהצב $u=T-T_e$: $u=Ae^{-kt}\\Rightarrow T(t)=T_e+(T_0-T_e)e^{-kt}$.\n\n$T\\to T_e$ כאשר $t\\to\\infty$.\n\n$T\\to T_e$ as $t\\to\\infty$."
     },
     {
       "kind": "worked_example",
@@ -36,7 +38,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Separable ODE",
       "title_he": "דוגמה פתורה 1 — ODE ספרית",
-      "body_en_md": "**Solve:** $\\dfrac{dy}{dx} = 2xy$, with $y(0)=3$.\n\n**Step 1 — Separate variables:**\n$$\\frac{dy}{y} = 2x\\,dx.$$\n\n**Step 2 — Integrate both sides:**\n$$\\int\\frac{dy}{y} = \\int 2x\\,dx \\implies \\ln|y| = x^2 + C_1.$$\n\n**Step 3 — Exponentiate:**\n$$|y| = e^{x^2+C_1} = e^{C_1}e^{x^2} \\implies y = Ae^{x^2} \\quad (A=\\pm e^{C_1}).$$\n\n**Step 4 — Apply initial condition $y(0)=3$:**\n$$3 = Ae^0 = A \\implies A=3.$$\n\n**Particular solution:** $y = 3e^{x^2}$.",
+      "body_en_md": "**Solve:** $\\dfrac{dy}{dx} = 2xy$, with $y(0)=3$.\n\n### Move 1\n$$\\frac{dy}{y} = 2x\\,dx.$$\n\n### Move 2\n$$\\int\\frac{dy}{y} = \\int 2x\\,dx \\implies \\ln|y| = x^2 + C_1.$$\n\n### Move 3\n$$|y| = e^{x^2+C_1} = e^{C_1}e^{x^2} \\implies y = Ae^{x^2} \\quad (A=\\pm e^{C_1}).$$\n\n### Move 4\n$$3 = Ae^0 = A \\implies A=3.$$\n\n**Particular solution:** $y = 3e^{x^2}$.",
       "body_he_md": "**פתור:** $dy/dx=2xy$, $y(0)=3$.\n\n**שלב 1:** $dy/y=2x\\,dx$.\n\n**שלב 2:** $\\ln|y|=x^2+C_1$.\n\n**שלב 3:** $y=Ae^{x^2}$.\n\n**שלב 4:** $y(0)=A=3$.\n\n**פתרון פרטי:** $y=3e^{x^2}$."
     },
     {
@@ -54,7 +56,7 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Linear ODE with Integrating Factor",
       "title_he": "דוגמה פתורה 2 — ODE לינארית עם גורם אינטגרציה",
-      "body_en_md": "**Solve:** $\\dfrac{dy}{dx}+\\dfrac{2}{x}y = x^2$, $x>0$.\n\n**Step 1 — Identify $P(x)$ and $Q(x)$:** $P=2/x$, $Q=x^2$.\n\n**Step 2 — Integrating factor:**\n$$\\mu = e^{\\int(2/x)\\,dx} = e^{2\\ln x} = x^2.$$\n\n**Step 3 — Multiply both sides by $\\mu=x^2$:**\n$$x^2y'+2xy = x^4 \\implies \\frac{d}{dx}[x^2 y] = x^4.$$\n\n**Step 4 — Integrate both sides:**\n$$x^2 y = \\frac{x^5}{5}+C \\implies y = \\frac{x^3}{5}+\\frac{C}{x^2}.$$",
+      "body_en_md": "**Solve:** $\\dfrac{dy}{dx}+\\dfrac{2}{x}y = x^2$, $x>0$.\n\n### Move 1 $P=2/x$, $Q=x^2$.\n\n### Move 2\n$$\\mu = e^{\\int(2/x)\\,dx} = e^{2\\ln x} = x^2.$$\n\n### Move 3\n$$x^2y'+2xy = x^4 \\implies \\frac{d}{dx}[x^2 y] = x^4.$$\n\n### Move 4\n$$x^2 y = \\frac{x^5}{5}+C \\implies y = \\frac{x^3}{5}+\\frac{C}{x^2}.$$",
       "body_he_md": "**פתור:** $y'+(2/x)y=x^2$, $x>0$.\n\n**שלב 1:** $P=2/x$, $Q=x^2$.\n\n**שלב 2 — גורם אינטגרציה:** $\\mu=e^{\\int 2/x\\,dx}=x^2$.\n\n**שלב 3:** $x^2y'+2xy=x^4$, כלומר $d/dx[x^2y]=x^4$.\n\n**שלב 4:** $x^2y=x^5/5+C\\Rightarrow y=x^3/5+C/x^2$."
     },
     {
@@ -72,7 +74,7 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Newton's Law of Cooling Application",
       "title_he": "דוגמה פתורה 3 — יישום: חוק ניוטון לקירור",
-      "body_en_md": "**Problem:** A cup of coffee at $95°C$ is placed in a room at $20°C$. After 5 minutes the coffee is $80°C$. Find the temperature as a function of time, and determine when the coffee reaches $50°C$.\n\n**Step 1 — Set up ODE:**\n$$\\frac{dT}{dt} = -k(T-20), \\quad T(0)=95.$$\n\n**Step 2 — Substitution $u=T-20$:** $du/dt=-ku$, $u(0)=75$.\n$$u(t) = 75e^{-kt} \\implies T(t) = 20+75e^{-kt}.$$\n\n**Step 3 — Find $k$ using $T(5)=80$:**\n$$80 = 20+75e^{-5k} \\implies e^{-5k} = \\frac{60}{75} = \\frac{4}{5}.$$\n$$-5k = \\ln(4/5) \\implies k = \\frac{\\ln(5/4)}{5} \\approx \\frac{0.2231}{5} \\approx 0.04463\\text{ min}^{-1}.$$\n\n**Step 4 — Temperature function:**\n$$T(t) = 20+75e^{-0.04463t}.$$\n\n**Step 5 — Find when $T=50$:**\n$$50 = 20+75e^{-0.04463t} \\implies e^{-0.04463t} = \\frac{30}{75} = 0.4$$\n$$t = \\frac{\\ln(1/0.4)}{0.04463} = \\frac{\\ln(2.5)}{0.04463} \\approx \\frac{0.9163}{0.04463} \\approx 20.5\\text{ min}.$$",
+      "body_en_md": "**Problem:** A cup of coffee at $95°C$ is placed in a room at $20°C$. After 5 minutes the coffee is $80°C$. Find the temperature as a function of time, and determine when the coffee reaches $50°C$.\n\n### Move 1\n$$\\frac{dT}{dt} = -k(T-20), \\quad T(0)=95.$$\n\n### Move 2 $du/dt=-ku$, $u(0)=75$.\n$$u(t) = 75e^{-kt} \\implies T(t) = 20+75e^{-kt}.$$\n\n### Move 3\n$$80 = 20+75e^{-5k} \\implies e^{-5k} = \\frac{60}{75} = \\frac{4}{5}.$$\n$$-5k = \\ln(4/5) \\implies k = \\frac{\\ln(5/4)}{5} \\approx \\frac{0.2231}{5} \\approx 0.04463\\text{ min}^{-1}.$$\n\n### Move 4\n$$T(t) = 20+75e^{-0.04463t}.$$\n\n### Move 5\n$$50 = 20+75e^{-0.04463t} \\implies e^{-0.04463t} = \\frac{30}{75} = 0.4$$\n$$t = \\frac{\\ln(1/0.4)}{0.04463} = \\frac{\\ln(2.5)}{0.04463} \\approx \\frac{0.9163}{0.04463} \\approx 20.5\\text{ min}.$$",
       "body_he_md": "**בעיה:** כוס קפה ב-$95°C$ בחדר ב-$20°C$. לאחר 5 דקות: $80°C$. מצא $T(t)$ ואת הזמן עד $50°C$.\n\n**שלב 1:** $dT/dt=-k(T-20)$, $T(0)=95$.\n\n**שלב 2:** $u=T-20$: $T(t)=20+75e^{-kt}$.\n\n**שלב 3 — מציאת $k$:** $T(5)=80\\Rightarrow e^{-5k}=4/5\\Rightarrow k=\\ln(5/4)/5\\approx0.04463$.\n\n**שלב 4:** $T(t)=20+75e^{-0.04463t}$.\n\n**שלב 5 — $T=50$:** $e^{-0.04463t}=0.4\\Rightarrow t\\approx20.5$ דק'."
     },
     {
@@ -86,16 +88,16 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
           "difficulty": "easy",
           "body_en": "Solve $dy/dt=4y$, $y(0)=2$.",
           "body_he": "פתור $dy/dt=4y$, $y(0)=2$.",
-          "solution_en": "$y=Ae^{4t}$. $y(0)=2\\Rightarrow y=2e^{4t}$.",
-          "solution_he": "$y=2e^{4t}$.",
+          "solution_en": "**Solution:**\n\n$y=Ae^{4t}$. $y(0)=2\\Rightarrow y=2e^{4t}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$y=2e^{4t}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 4
         },
         {
@@ -121,8 +123,8 @@
           "difficulty": "easy",
           "body_en": "Find the integrating factor for $y'+3y=6$.",
           "body_he": "מצא גורם אינטגרציה עבור $y'+3y=6$.",
-          "solution_en": "$P=3$. $\\mu=e^{\\int3\\,dx}=e^{3x}$.",
-          "solution_he": "$\\mu=e^{3x}$.",
+          "solution_en": "**Solution:**\n\n$P=3$. $\\mu=e^{\\int3\\,dx}=e^{3x}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\mu=e^{3x}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 4
         },
         {
@@ -131,7 +133,7 @@
           "body_en": "Solve $y'+3y=6$ with $y(0)=1$.",
           "body_he": "פתור $y'+3y=6$, $y(0)=1$.",
           "solution_en": "$\\mu=e^{3x}$. $d/dx[e^{3x}y]=6e^{3x}$. $e^{3x}y=2e^{3x}+C$. $y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$.",
-          "solution_he": "$y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -139,8 +141,8 @@
           "difficulty": "medium",
           "body_en": "Solve $y'=xy/(1+x^2)$, $y(0)=2$.",
           "body_he": "פתור $y'=xy/(1+x^2)$, $y(0)=2$.",
-          "solution_en": "Separate: $dy/y=x/(1+x^2)\\,dx$. $\\ln|y|=\\frac{1}{2}\\ln(1+x^2)+C$. $y=A\\sqrt{1+x^2}$. $y(0)=A=2$. $y=2\\sqrt{1+x^2}$.",
-          "solution_he": "$y=A\\sqrt{1+x^2}$. $y(0)=2\\Rightarrow y=2\\sqrt{1+x^2}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSeparate: $dy/y=x/(1+x^2)\\,dx$. $\\ln|y|=\\frac{1}{2}\\ln(1+x^2)+C$. $y=A\\sqrt{1+x^2}$. $y(0)=A=2$. $y=2\\sqrt{1+x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=A\\sqrt{1+x^2}$. $y(0)=2\\Rightarrow y=2\\sqrt{1+x^2}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -148,8 +150,8 @@
           "difficulty": "medium",
           "body_en": "A radioactive substance has half-life 5 years. If $100g$ initially, find the amount after 15 years.",
           "body_he": "לחומר רדיואקטיבי חצי-חיים של 5 שנים. אם התחלנו עם $100g$, כמה נשאר לאחר 15 שנים?",
-          "solution_en": "$k=\\ln2/5$. $m(t)=100e^{-kt}$. $m(15)=100e^{-3\\ln2}=100/2^3=100/8=12.5$ g.",
-          "solution_he": "$m(15)=100/2^3=12.5$ ג'.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$k=\\ln2/5$. $m(t)=100e^{-kt}$. $m(15)=100e^{-3\\ln2}=100/2^3=100/8=12.5$ g.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$m(15)=100/2^3=12.5$ ג'.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -158,7 +160,7 @@
           "body_en": "Solve $xy'+y=x\\cos x$.",
           "body_he": "פתור $xy'+y=x\\cos x$.",
           "solution_en": "Rewrite: $y'+y/x=\\cos x$. $P=1/x$, $\\mu=x$. $d/dx[xy]=x\\cos x$. $xy=\\int x\\cos x\\,dx=x\\sin x+\\cos x+C$. $y=\\sin x+\\cos(x)/x+C/x$.",
-          "solution_he": "$y'+y/x=\\cos x$. $\\mu=x$. $xy=x\\sin x+\\cos x+C\\Rightarrow y=\\sin x+\\cos x/x+C/x$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y'+y/x=\\cos x$. $\\mu=x$. $xy=x\\sin x+\\cos x+C\\Rightarrow y=\\sin x+\\cos x/x+C/x$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -166,8 +168,8 @@
           "difficulty": "medium",
           "body_en": "A tank contains 100 L of brine with 10 kg salt. Pure water enters at 5 L/min, and well-mixed brine drains at 5 L/min. Find the salt $S(t)$ at time $t$.",
           "body_he": "מיכל מכיל 100 ל' מי מלח עם 10 ק\"ג מלח. מים טהורים נכנסים ב-5 ל'/דק' ומי מלח מעורבים יוצאים ב-5 ל'/דק'. מצא $S(t)$.",
-          "solution_en": "$dS/dt=0\\cdot5-S/100\\cdot5=-S/20$. Separable: $S=Ce^{-t/20}$. $S(0)=10\\Rightarrow S(t)=10e^{-t/20}$ kg.",
-          "solution_he": "$dS/dt=-S/20$. $S=10e^{-t/20}$ ק\"ג.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$dS/dt=0\\cdot5-S/100\\cdot5=-S/20$. Separable: $S=Ce^{-t/20}$. $S(0)=10\\Rightarrow S(t)=10e^{-t/20}$ kg.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$dS/dt=-S/20$. $S=10e^{-t/20}$ ק\"ג.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -175,8 +177,8 @@
           "difficulty": "hard",
           "body_en": "A body cools from $60°C$ to $40°C$ in 10 minutes in a room at $20°C$. How long to cool from $60°C$ to $25°C$?",
           "body_he": "גוף מתקרר מ-$60°C$ ל-$40°C$ ב-10 דקות בחדר ב-$20°C$. כמה זמן להתקרר מ-$60°C$ ל-$25°C$?",
-          "solution_en": "$T(t)=20+(60-20)e^{-kt}=20+40e^{-kt}$. $T(10)=40\\Rightarrow e^{-10k}=1/2\\Rightarrow k=\\ln2/10$. Find $t$: $25=20+40e^{-kt}\\Rightarrow e^{-kt}=1/8\\Rightarrow kt=\\ln8=3\\ln2\\Rightarrow t=30$ min.",
-          "solution_he": "$k=\\ln2/10$. $25=20+40e^{-kt}\\Rightarrow e^{-kt}=1/8\\Rightarrow t=30$ דק'.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$T(t)=20+(60-20)e^{-kt}=20+40e^{-kt}$. $T(10)=40\\Rightarrow e^{-10k}=1/2\\Rightarrow k=\\ln2/10$. Find $t$: $25=20+40e^{-kt}\\Rightarrow e^{-kt}=1/8\\Rightarrow kt=\\ln8=3\\ln2\\Rightarrow t=30$ min.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$k=\\ln2/10$. $25=20+40e^{-kt}\\Rightarrow e^{-kt}=1/8\\Rightarrow t=30$ דק'.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -185,7 +187,7 @@
           "body_en": "Solve the Bernoulli equation $y'+y=xy^3$. (Hint: let $v=y^{-2}$.)",
           "body_he": "פתור את משוואת ברנולי $y'+y=xy^3$. (רמז: הצב $v=y^{-2}$.)",
           "solution_en": "Divide by $y^3$: $y^{-3}y'+y^{-2}=x$. Let $v=y^{-2}$, $v'=-2y^{-3}y'$. So $-v'/2+v=x$, i.e., $v'-2v=-2x$. Integrating factor: $\\mu=e^{-2x}$. $d/dx[e^{-2x}v]=e^{-2x}(-2x)$. $e^{-2x}v=-2\\int xe^{-2x}\\,dx=-2(-xe^{-2x}/2-e^{-2x}/4)=xe^{-2x}+e^{-2x}/2+C$. $v=x+1/2+Ce^{2x}$. So $y^{-2}=x+1/2+Ce^{2x}$.",
-          "solution_he": "הצב $v=y^{-2}$: $v'-2v=-2x$. $\\mu=e^{-2x}$. $v=x+1/2+Ce^{2x}$. לכן $y^{-2}=x+1/2+Ce^{2x}$.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהצב $v=y^{-2}$: $v'-2v=-2x$. $\\mu=e^{-2x}$. $v=x+1/2+Ce^{2x}$. לכן $y^{-2}=x+1/2+Ce^{2x}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -194,7 +196,7 @@
           "body_en": "Solve the logistic equation $dy/dt=ry(1-y/K)$ with $y(0)=y_0$. (Hint: partial fractions.)",
           "body_he": "פתור משוואת הלוגיסטי $dy/dt=ry(1-y/K)$, $y(0)=y_0$. (רמז: שברים חלקיים.)",
           "solution_en": "Separate: $\\int dy/(y(1-y/K))=\\int r\\,dt$. Partial fractions: $1/(y(1-y/K))=1/y+1/(K-y)$ (check: $1/y+1/(K-y)=(K-y+y)/(y(K-y))=K/(y(K-y))$... rework: $1/(y(1-y/K))=K/(y(K-y))$). Use $K/(y(K-y))=1/y+1/(K-y)$. Integrate: $\\ln|y|-\\ln|K-y|=rt+C$. $y/(K-y)=Ae^{rt}$. Apply $y(0)=y_0$: $A=y_0/(K-y_0)$. Solve for $y$: $y=K/(1+(K/y_0-1)e^{-rt})$.",
-          "solution_he": "הפרד: $1/(y(K-y))\\,dy=(r/K)\\,dt$. שברים חלקיים: $\\ln|y|-\\ln|K-y|=(r)t+C$. $y=K/(1+(K/y_0-1)e^{-rt})$.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהפרד: $1/(y(K-y))\\,dy=(r/K)\\,dt$. שברים חלקיים: $\\ln|y|-\\ln|K-y|=(r)t+C$. $y=K/(1+(K/y_0-1)e^{-rt})$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -203,7 +205,7 @@
           "body_en": "Prove that the general solution of $y'+P(x)y=Q(x)$ is given by $y=e^{-\\int P\\,dx}\\left(\\int e^{\\int P\\,dx}Q\\,dx+C\\right)$.",
           "body_he": "הוכח שהפתרון הכללי של $y'+Py=Q$ הוא $y=e^{-\\int P\\,dx}\\left(\\int e^{\\int P\\,dx}Q\\,dx+C\\right)$.",
           "solution_en": "Let $\\mu=e^{\\int P\\,dx}$. Multiply the ODE by $\\mu$: $\\mu y'+\\mu Py=\\mu Q$. Note $d(\\mu y)/dx=\\mu y'+\\mu'y=\\mu y'+\\mu Py$ (since $\\mu'=P\\mu$). So $d/dx[\\mu y]=\\mu Q$. Integrate: $\\mu y=\\int\\mu Q\\,dx+C$. Divide by $\\mu$: $y=(1/\\mu)(\\int\\mu Q\\,dx+C)=e^{-\\int P\\,dx}(\\int e^{\\int P\\,dx}Q\\,dx+C)$. $\\blacksquare$",
-          "solution_he": "הצב $\\mu=e^{\\int P\\,dx}$. $\\mu y'+\\mu Py=d/dx[\\mu y]=\\mu Q$. $\\mu y=\\int\\mu Q\\,dx+C$. חלק ב-$\\mu$: $y=e^{-\\int P\\,dx}(\\int e^{\\int P\\,dx}Q\\,dx+C)$. $\\blacksquare$",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהצב $\\mu=e^{\\int P\\,dx}$. $\\mu y'+\\mu Py=d/dx[\\mu y]=\\mu Q$. $\\mu y=\\int\\mu Q\\,dx+C$. חלק ב-$\\mu$: $y=e^{-\\int P\\,dx}(\\int e^{\\int P\\,dx}Q\\,dx+C)$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         }
       ]
@@ -216,10 +218,18 @@
       "body_he_md": "1. **שכחת קבוע אינטגרציה.** אחרי אינטגרציה — תמיד כתוב $+C$. בלי $C$ מקבלים פתרון פרטי ולא כללי.\n\n2. **אי-חלוקה לצורה סטנדרטית לפני גורם אינטגרציה.** $2y'+4xy=6$: חלק ב-2 קודם, אז $\\mu$.\n\n3. **אובדן פתרונות בחלוקה ב-0.** בהפרדת $dy/y$ עלול לאבד $y=0$. בדוק פתרונות קבועים.\n\n4. **גורם אינטגרציה שגוי.** $\\mu=e^{\\int P(x)\\,dx}$ — לא $e^{P(x)}$. אינטגר את $P$!\n\n5. **הצבת תנאי התחלה לפני פתרון ODE.** פתור כללי קודם, אז הצב תנאי התחלה."
     },
     {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**You will use this to unlock:**\n- `concept:simple_harmonic_motion` **Simple Harmonic Motion (SHM)** (generalizes) — m x'' + k x = 0.\n- `concept:ac_circuits` **AC Circuits** (generalizes) — L q'' + R q' + q/C = V(t).\n\n**Builds on:**\n- `concept:la_eigenvalues` **Eigenvalues & Eigenvectors**\n- `concept:derivatives_applications` **Function Analysis Using Derivatives**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:simple_harmonic_motion` **תנועה הרמונית פשוטה** (generalizes) — m x'' + k x = 0.\n- `concept:ac_circuits` **מעגלי זרם חילופין** (generalizes) — L q'' + R q' + q/C = V(t).\n\n**מבוסס על:**\n- `concept:la_eigenvalues` **ערכים ווקטורים עצמיים**\n- `concept:derivatives_applications` **חקירת פונקציה (ניתוח בעזרת נגזרות)**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Separable:** $dy/h(y)=g(x)\\,dx$ → integrate both sides → general solution → apply IC.\n\n**Linear $y'+Py=Q$:** $\\mu=e^{\\int P\\,dx}$ → $d/dx[\\mu y]=\\mu Q$ → integrate → divide by $\\mu$ → apply IC.\n\n**Key applications:**\n- $y'=ky$: $y=y_0e^{kt}$ (growth/decay).\n- $T'=-k(T-T_e)$: $T=T_e+(T_0-T_e)e^{-kt}$ (cooling).\n- Half-life: $T_{1/2}=\\ln2/k$.\n\n**Exam patterns:** Solve separable ODE; solve linear ODE; apply cooling/growth model.",
+      "body_en_md": "**Separable:** $dy/h(y)=g(x)\\,dx$ → integrate both sides → general solution → apply IC.\n\n**Linear $y'+Py=Q$:** $\\mu=e^{\\int P\\,dx}$ → $d/dx[\\mu y]=\\mu Q$ → integrate → divide by $\\mu$ → apply IC.\n\n**Key applications:**\n- $y'=ky$: $y=y_0e^{kt}$ (growth/decay).\n- $T'=-k(T-T_e)$: $T=T_e+(T_0-T_e)e^{-kt}$ (cooling).\n- Half-life: $T_{1/2}=\\ln2/k$.\n\n**Exam patterns:** Solve separable ODE; solve linear ODE; apply cooling/growth model.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "**ספרית:** $dy/h(y)=g(x)\\,dx$ → אינטגר → $+C$ → הצב IC.\n\n**לינארית $y'+Py=Q$:** $\\mu=e^{\\int P\\,dx}$ → $d/dx[\\mu y]=\\mu Q$ → אינטגר → חלק ב-$\\mu$ → הצב IC.\n\n**יישומים:**\n- $y=y_0e^{kt}$ (גידול/ריקבון).\n- $T=T_e+(T_0-T_e)e^{-kt}$ (קירור).\n- חצי-חיים: $T_{1/2}=\\ln2/k$."
     },
     {
@@ -229,5 +239,157 @@
       "body_en_md": "- **Separable ODE** $y'=g(x)h(y)$: separate variables, integrate, solve for $y$, apply IC.\n- **Linear ODE** $y'+P(x)y=Q(x)$: integrating factor $\\mu=e^{\\int P\\,dx}$; solution $y=(\\int\\mu Q\\,dx+C)/\\mu$.\n- **Exponential growth/decay:** $y=y_0e^{kt}$; half-life $T_{1/2}=\\ln2/k$.\n- **Newton's cooling:** $T(t)=T_e+(T_0-T_e)e^{-kt}$.\n- Always write $+C$; apply IC after solving the ODE.",
       "body_he_md": "- **ODE ספרית:** $y'=g(x)h(y)$ — הפרד, אינטגר, פתור, הצב IC.\n- **ODE לינארית:** $\\mu=e^{\\int P\\,dx}$; $y=(\\int\\mu Q\\,dx+C)/\\mu$.\n- **גידול/ריקבון:** $y=y_0e^{kt}$; חצי-חיים $=\\ln2/k$.\n- **קירור ניוטון:** $T=T_e+(T_0-T_e)e^{-kt}$.\n- תמיד $+C$; הצב IC אחרי פתרון."
     }
-  ]
+  ],
+  "agent_hints": {},
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Solve $dy/dt=4y$, $y(0)=2$.",
+      "stem_he": "פתור $dy/dt=4y$, $y(0)=2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$y=Ae^{4t}$. $y(0)=2\\Rightarrow y=2e^{4t}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2e^{4t}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "4"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$y=Ae^{4t}$. $y(0)=2\\Rightarrow y=2e^{4t}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$y=2e^{4t}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Solve $y'=y^2$ with $y(0)=1$.",
+      "stem_he": "פתור $y'=y^2$, $y(0)=1$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$dy/y^2=dx$. $-1/y=x+C$. $y=-1/(x+C)$. $y(0)=1\\Rightarrow C=-1$. $y=1/(1-x)$",
+          "1/(1-x)$",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$dy/y^2=dx$. $-1/y=x+C$. $y=-1/(x+C)$. $y(0)=1\\Rightarrow C=-1$. $y=1/(1-x)$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$dy/y^2=dx$. $-1/y=x+C$. $y(0)=1\\Rightarrow C=-1$. $y=1/(1-x)$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A population doubles every 10 years. Write and solve the ODE for $P(t)$.",
+      "stem_he": "אוכלוסייה מכפילה את עצמה כל 10 שנים. כתוב ופתור ODE עבור $P(t)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$P'=kP$, $P=P_0e^{kt}$. $P(10)=2P_0\\Rightarrow e^{10k}=2\\Rightarrow k=\\ln2/10$. $P(t)=P_0\\cdot2^{t/10}$",
+          "P_0\\cdot2^{t/10}$",
+          "10"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$P'=kP$, $P=P_0e^{kt}$. $P(10)=2P_0\\Rightarrow e^{10k}=2\\Rightarrow k=\\ln2/10$. $P(t)=P_0\\cdot2^{t/10}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$P'=kP$, $k=\\ln2/10$. $P(t)=P_0\\cdot 2^{t/10}$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find the integrating factor for $y'+3y=6$.",
+      "stem_he": "מצא גורם אינטגרציה עבור $y'+3y=6$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P=3$. $\\mu=e^{\\int3\\,dx}=e^{3x}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "e^{3x}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P=3$. $\\mu=e^{\\int3\\,dx}=e^{3x}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\mu=e^{3x}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Solve $y'+3y=6$ with $y(0)=1$.",
+      "stem_he": "פתור $y'+3y=6$, $y(0)=1$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\mu=e^{3x}$. $d/dx[e^{3x}y]=6e^{3x}$. $e^{3x}y=2e^{3x}+C$. $y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$",
+          "2-e^{-3x}$",
+          "-3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\mu=e^{3x}$. $d/dx[e^{3x}y]=6e^{3x}$. $e^{3x}y=2e^{3x}+C$. $y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=2+Ce^{-3x}$. $y(0)=1\\Rightarrow C=-1$. $y=2-e^{-3x}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Solve $y'=xy/(1+x^2)$, $y(0)=2$.",
+      "stem_he": "פתור $y'=xy/(1+x^2)$, $y(0)=2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSeparate: $dy/y=x/(1+x^2)\\,dx$. $\\ln|y|=\\frac{1}{2}\\ln(1+x^2)+C$. $y=A\\sqrt{1+x^2}$. $y(0)=A=2$. $y=2\\sqrt{1+x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2\\sqrt{1+x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSeparate: $dy/y=x/(1+x^2)\\,dx$. $\\ln|y|=\\frac{1}{2}\\ln(1+x^2)+C$. $y=A\\sqrt{1+x^2}$. $y(0)=A=2$. $y=2\\sqrt{1+x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=A\\sqrt{1+x^2}$. $y(0)=2\\Rightarrow y=2\\sqrt{1+x^2}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A radioactive substance has half-life 5 years. If $100g$ initially, find the amount after 15 years.",
+      "stem_he": "לחומר רדיואקטיבי חצי-חיים של 5 שנים. אם התחלנו עם $100g$, כמה נשאר לאחר 15 שנים?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$k=\\ln2/5$. $m(t)=100e^{-kt}$. $m(15)=100e^{-3\\ln2}=100/2^3=100/8=12.5$ g.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "12.5$ g.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "12.5"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$k=\\ln2/5$. $m(t)=100e^{-kt}$. $m(15)=100e^{-3\\ln2}=100/2^3=100/8=12.5$ g.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$m(15)=100/2^3=12.5$ ג'.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Solve $xy'+y=x\\cos x$.",
+      "stem_he": "פתור $xy'+y=x\\cos x$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Rewrite: $y'+y/x=\\cos x$. $P=1/x$, $\\mu=x$. $d/dx[xy]=x\\cos x$. $xy=\\int x\\cos x\\,dx=x\\sin x+\\cos x+C$. $y=\\sin x+\\cos(x)/x+C/x$",
+          "\\sin x+\\cos(x)/x+C/x$",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nRewrite: $y'+y/x=\\cos x$. $P=1/x$, $\\mu=x$. $d/dx[xy]=x\\cos x$. $xy=\\int x\\cos x\\,dx=x\\sin x+\\cos x+C$. $y=\\sin x+\\cos(x)/x+C/x$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y'+y/x=\\cos x$. $\\mu=x$. $xy=x\\sin x+\\cos x+C\\Rightarrow y=\\sin x+\\cos x/x+C/x$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 60,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

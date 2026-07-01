@@ -1,46 +1,473 @@
 {
   "concept_id": "quadratic_model_fitting",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [],
   "title_en": "Quadratic Model Fitting — Finding a, b, c from Data",
   "title_he": "התאמת מודל ריבועי — מציאת a, b, c מנתונים",
-  "subject": "math",
-  "difficulty": "intermediate",
-  "estimated_minutes": 45,
+  "summary_en": "When data follows a curved (non-linear) pattern, a quadratic model often provides a good fit.",
+  "summary_he": "כאשר נתונים מראים דפוס עקמומי, מודל ריבועי הוא בחירה טבעית. שלוש שיטות: 1. התאמה מדויקת דרך 3 נקודות 2. צורת קודקוד 3.",
   "sections": [
-    {"id": "intro","kind": "intro","title_en": "Why Fit a Quadratic Model?","title_he": "למה להתאים מודל ריבועי?","body_en_md": "When data follows a curved (non-linear) pattern, a quadratic model $y = ax^2 + bx + c$ often provides a good fit. Engineers model projectile paths, economists model revenue curves, and scientists model parabolic relationships.\n\n**Three methods:**\n1. **Exact fit** through 3 points — solve a 3×3 system\n2. **Vertex form** — when vertex is known\n3. **Regression** — least-squares fit for many data points\n\n**Exam relevance:** Bagrut math 4-5 units, engineering entrance exams.","body_he_md": "כאשר נתונים מראים דפוס עקמומי, מודל ריבועי $y = ax^2 + bx + c$ הוא בחירה טבעית.\n\n**שלוש שיטות:**\n1. התאמה מדויקת דרך 3 נקודות\n2. צורת קודקוד\n3. רגרסיה (ריבועי פחות)"},
-    {"id": "definition","kind": "definition","title_en": "Three-Point Exact Fitting","title_he": "התאמה מדויקת דרך 3 נקודות","body_en_md": "Given three points $(x_1,y_1)$, $(x_2,y_2)$, $(x_3,y_3)$, substitute into $y = ax^2 + bx + c$ to get:\n$$\\begin{cases} ax_1^2 + bx_1 + c = y_1 \\\\ ax_2^2 + bx_2 + c = y_2 \\\\ ax_3^2 + bx_3 + c = y_3 \\end{cases}$$\n\nSolve this **3×3 linear system** for $a$, $b$, $c$.\n\n**Vertex form:** If vertex $(h, k)$ is known:\n$$y = a(x-h)^2 + k$$\nUse one more point to find $a$.\n\n**Axis of symmetry:** $x = -b/(2a)$; Vertex $y$-coordinate: $y = c - b^2/(4a)$.","body_he_md": "נציב 3 נקודות ב-$y = ax^2+bx+c$ לקבל מערכת $3\\times3$.\n\n**צורת קודקוד:** $y = a(x-h)^2+k$ אם קודקוד $(h,k)$ ידוע."},
-    {"id": "theory","kind": "theory","title_en": "Setting Up and Solving the System","title_he": "הצבת המערכת ופתרונה","body_en_md": "### Step-by-step approach\n1. Write one equation per given point.\n2. Eliminate $c$: subtract equation 1 from equations 2 and 3.\n3. Get a 2×2 system in $a$ and $b$.\n4. Solve for $a$, then $b$, then back-substitute for $c$.\n5. Write the final parabola equation.\n\n### Regression (least squares)\nFor $n > 3$ data points, minimize $\\sum_{i=1}^n (y_i - ax_i^2 - bx_i - c)^2$. In practice, use a calculator or computer. The result is the 'best fit' parabola.\n\n### Choosing $a > 0$ vs $a < 0$\n- $a > 0$: parabola opens upward (minimum)\n- $a < 0$: parabola opens downward (maximum)","body_he_md": "### גישה שלב-אחר-שלב\n1. כתוב משוואה לכל נקודה.\n2. הפחת כדי לבטל $c$ — מקבלים $2\\times 2$.\n3. פתור ל-$a,b,c$.\n\n**רגרסיה:** לנתונים רבים — מינימיזציה של $\\sum(y_i - ax_i^2 - bx_i - c)^2$."},
-    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Fitting Through 3 Points","title_he": "דוגמה פתורה 1 — התאמה דרך 3 נקודות","body_en_md": "**Find** $y = ax^2 + bx + c$ through $(0,1)$, $(1,2)$, $(2,7)$.\n\n**Point $(0,1)$:** $c = 1$\n\n**Point $(1,2)$:** $a + b + 1 = 2 \\Rightarrow a + b = 1$ ... (i)\n\n**Point $(2,7)$:** $4a + 2b + 1 = 7 \\Rightarrow 4a + 2b = 6 \\Rightarrow 2a + b = 3$ ... (ii)\n\n**(ii) − (i):** $a = 2$\n\nFrom (i): $b = 1 - 2 = -1$\n\n**Answer:** $y = 2x^2 - x + 1$","body_he_md": "נקודות: $(0,1), (1,2), (2,7)$.\n\nמ-$(0,1)$: $c=1$.\n\nמ-$(1,2)$: $a+b=1$. מ-$(2,7)$: $2a+b=3$.\n\n$a=2, b=-1, c=1$.\n\nתשובה: $y = 2x^2 - x + 1$."},
-    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "Find the parabola $y=ax^2+bx+c$ through $(0,3)$, $(1,4)$, $(-1,6)$.","body_he_md": "מצא פרבולה $y=ax^2+bx+c$ דרך $(0,3), (1,4), (-1,6)$.","checkpoint_solution_en": "$(0,3)$: $c=3$. $(1,4)$: $a+b+3=4 \\Rightarrow a+b=1$. $(-1,6)$: $a-b+3=6 \\Rightarrow a-b=3$. Adding: $2a=4 \\Rightarrow a=2$, $b=-1$. $y=2x^2-x+3$.","checkpoint_solution_he": "$y=2x^2-x+3$."},
-    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Using Vertex Form","title_he": "דוגמה פתורה 2 — צורת קודקוד","body_en_md": "**A parabola has vertex $(2, -3)$ and passes through $(4, 5)$. Find its equation.**\n\n**Step 1:** Write vertex form: $y = a(x-2)^2 - 3$\n\n**Step 2:** Substitute $(4, 5)$:\n$5 = a(4-2)^2 - 3 = 4a - 3$\n$4a = 8 \\Rightarrow a = 2$\n\n**Step 3:** Expand:\n$y = 2(x-2)^2 - 3 = 2x^2 - 8x + 8 - 3 = 2x^2 - 8x + 5$","body_he_md": "קודקוד $(2,-3)$, עובר $(4,5)$.\n\n$y = a(x-2)^2-3$. מציבים $(4,5)$: $4a=8 \\Rightarrow a=2$.\n\n$y = 2x^2-8x+5$."},
-    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "A parabola with vertex $(-1, 4)$ passes through $(1, -4)$. Find the equation.","body_he_md": "פרבולה עם קודקוד $(-1,4)$ ועוברת ב-$(1,-4)$. מצא משוואה.","checkpoint_solution_en": "$y=a(x+1)^2+4$. $(1,-4)$: $-4=4a+4 \\Rightarrow a=-2$. $y=-2(x+1)^2+4=-2x^2-4x+2$.","checkpoint_solution_he": "$y=-2x^2-4x+2$."},
-    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Projectile Model","title_he": "דוגמה פתורה 3 — מודל קליעי","body_en_md": "**A ball is launched from ground level $(0,0)$, reaches maximum height 20 m at $x=30$ m, and lands at $x=60$ m. Find the quadratic model.**\n\n**Step 1:** Vertex is at $(30, 20)$ (maximum height at midpoint since the parabola is symmetric). Vertex form: $y = a(x-30)^2 + 20$.\n\n**Step 2:** At $(0,0)$: $0 = a(900) + 20 \\Rightarrow a = -1/45$.\n\n**Step 3:** $y = -\\frac{1}{45}(x-30)^2 + 20$\n\n**Verify:** At $x=60$: $y = -\\frac{900}{45}+20 = -20+20=0$ ✓","body_he_md": "כדור מהמקור, גובה מקסימלי 20 מ' ב-$x=30$, נוחת ב-$x=60$.\n\nקודקוד $(30,20)$: $y = a(x-30)^2+20$.\n\nמ-$(0,0)$: $a = -1/45$.\n\n$y = -\\frac{1}{45}(x-30)^2+20$."},
-    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Given | Method |\n|---|---|\n| 3 exact points | Substitute → 3×3 system |\n| Vertex + 1 point | Vertex form $y=a(x-h)^2+k$ |\n| x-intercepts + 1 point | Intercept form $y=a(x-r_1)(x-r_2)$ |\n| $n>3$ data points | Regression (calculator) |\n\n**Check:** substitute all given points into your model to verify!","body_he_md": "| נתון | שיטה |\n|---|---|\n| 3 נקודות | מערכת $3\\times3$ |\n| קודקוד + נקודה | $y=a(x-h)^2+k$ |\n| שורשים + נקודה | $y=a(x-r_1)(x-r_2)$ |\n| $n>3$ נקודות | רגרסיה |"},
-    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
-      {"id": "e1","difficulty": "easy","body_en": "Find $y=ax^2+bx+c$ through $(0,0)$, $(1,3)$, $(2,8)$.","body_he": "מצא $y=ax^2+bx+c$ דרך $(0,0),(1,3),(2,8)$.","solution_en": "$c=0$. $a+b=3$. $4a+2b=8 \\Rightarrow 2a+b=4$. $a=1,b=2$. $y=x^2+2x$.","solution_he": "$y=x^2+2x$.","points": 5},
-      {"id": "e2","difficulty": "easy","body_en": "A parabola passes through $(0,5)$ and has vertex at $(1,3)$. Find its equation.","body_he": "פרבולה עוברת $(0,5)$, קודקוד $(1,3)$. מצא משוואה.","solution_en": "$y=a(x-1)^2+3$. $(0,5)$: $a+3=5 \\Rightarrow a=2$. $y=2(x-1)^2+3=2x^2-4x+5$.","solution_he": "$y=2x^2-4x+5$.","points": 5},
-      {"id": "e3","difficulty": "easy","body_en": "A parabola has x-intercepts at $x=1$ and $x=5$, and passes through $(3,4)$. Find $a$.","body_he": "פרבולה חותכת את ציר $x$ ב-$1$ וב-$5$, עוברת $(3,4)$. מצא $a$.","solution_en": "$y=a(x-1)(x-5)$. $(3,4)$: $4=a(2)(-2)=-4a$. $a=-1$.","solution_he": "$a=-1$.","points": 5},
-      {"id": "e4","difficulty": "easy","body_en": "Expand $y=3(x-2)^2-1$ into standard form.","body_he": "פתח $y=3(x-2)^2-1$ לצורת $ax^2+bx+c$.","solution_en": "$y=3(x^2-4x+4)-1=3x^2-12x+11$.","solution_he": "$y=3x^2-12x+11$.","points": 5},
-      {"id": "e5","difficulty": "medium","body_en": "Find the parabola through $(-1,6)$, $(0,2)$, $(1,0)$.","body_he": "מצא פרבולה דרך $(-1,6),(0,2),(1,0)$.","solution_en": "$c=2$. $a-b+2=6 \\Rightarrow a-b=4$. $a+b+2=0 \\Rightarrow a+b=-2$. $2a=2 \\Rightarrow a=1$, $b=-3$. $y=x^2-3x+2$.","solution_he": "$y=x^2-3x+2$.","points": 8},
-      {"id": "e6","difficulty": "medium","body_en": "A quadratic function has a maximum of 8 at $x=3$. Its y-intercept is 5. Find the equation.","body_he": "פונקציה ריבועית: מקסימום 8 ב-$x=3$, חותכת $y$-ציר ב-$5$. מצא משוואה.","solution_en": "$y=a(x-3)^2+8$. $(0,5)$: $9a+8=5 \\Rightarrow a=-1/3$. $y=-\\frac{1}{3}(x-3)^2+8$.","solution_he": "$y=-\\frac{1}{3}(x-3)^2+8$.","points": 8},
-      {"id": "e7","difficulty": "medium","body_en": "Revenue $R(x) = -2x^2 + 80x$. Find maximum revenue and the price $x$ that achieves it.","body_he": "הכנסה $R(x) = -2x^2+80x$. מצא מקסימום הכנסה ומחיר מיטבי.","solution_en": "Vertex at $x = -80/(2\\times(-2)) = 20$. $R(20) = -2(400)+1600 = 800$.","solution_he": "$x=20$, $R=800$.","points": 8},
-      {"id": "e8","difficulty": "medium","body_en": "The points $(1,5)$, $(2,8)$, $(3,9)$ lie on $y=ax^2+bx+c$. Find $a+b+c$.","body_he": "הנקודות $(1,5),(2,8),(3,9)$ על $y=ax^2+bx+c$. מצא $a+b+c$.","solution_en": "$a+b+c=5$ directly from the point $(1,5)$.","solution_he": "$a+b+c=5$ מ-$(1,5)$.","points": 8},
-      {"id": "e9","difficulty": "medium","body_en": "A arch bridge has parabolic shape with width 20m at base and maximum height 8m. Find the equation with origin at the center of the base.","body_he": "גשר קשת: רוחב 20 מ', גובה מקסימלי 8 מ'. מצא משוואה עם ראשית קואורדינטות במרכז הבסיס.","solution_en": "Vertex at $(0,8)$; x-intercepts at $\\pm10$. $y=a x^2+8$. $(-10,0)$: $100a+8=0 \\Rightarrow a=-0.08$. $y=-0.08x^2+8$.","solution_he": "$y=-0.08x^2+8$.","points": 8},
-      {"id": "e10","difficulty": "hard","body_en": "Data: $(0,1),(1,3),(2,9),(3,21)$. Does a quadratic model fit exactly? If not, fit to the first 3 points and find the residual at $x=3$.","body_he": "נתונים: $(0,1),(1,3),(2,9),(3,21)$. האם מודל ריבועי מתאים בדיוק? אם לא, התאם לשלוש ראשונות ומצא שארית ב-$x=3$.","solution_en": "Fit $(0,1),(1,3),(2,9)$: $c=1$, $a+b=2$, $4a+2b=8 \\Rightarrow 2a+b=4 \\Rightarrow a=2, b=0$. $y=2x^2+1$. At $x=3$: $y=19$. Actual: 21. Residual $= 21-19 = 2$. Not exact.","solution_he": "$y=2x^2+1$. שארית ב-$x=3$: $21-19=2$. לא מדויק.","points": 10},
-      {"id": "e11","difficulty": "hard","body_en": "Show that the unique parabola through 3 non-collinear points (with distinct x-coordinates) is determined by solving a Vandermonde system.","body_he": "הראה שהפרבולה היחידה דרך 3 נקודות עם קואורדינטות-$x$ שונות נקבעת על ידי מערכת ואנדרמונד.","solution_en": "Matrix $\\begin{pmatrix}x_1^2 & x_1 & 1 \\\\ x_2^2 & x_2 & 1 \\\\ x_3^2 & x_3 & 1\\end{pmatrix}$ is a Vandermonde matrix (transposed). Its determinant $= (x_2-x_1)(x_3-x_1)(x_3-x_2) \\neq 0$ when $x_i$ distinct, so the system has a unique solution.","solution_he": "מטריצת ואנדרמונד: דטרמיננטה $=(x_2-x_1)(x_3-x_1)(x_3-x_2)\\neq 0$ כאשר $x_i$ שונים → פתרון יחיד.","points": 10},
-      {"id": "e12","difficulty": "hard","body_en": "A ball is thrown and follows $h = -5t^2 + 20t + 2$ (height in meters, time in seconds). When does it reach max height? When does it land?","body_he": "כדור בצניחה: $h=-5t^2+20t+2$. מתי מגיע לגובה מקסימלי? מתי נוחת?","solution_en": "Max at $t=-20/(-10)=2$ s. $h(2)=-20+40+2=22$ m. Landing: $-5t^2+20t+2=0$. $t=(-20\\pm\\sqrt{400+40})/(-10)$. $t=(20+\\sqrt{440})/10 \\approx 4.1$ s.","solution_he": "מקסימום ב-$t=2$ שניות, $h=22$ מ'. נוחת ב-$t\\approx4.1$ שניות.","points": 10},
-      {"id": "e13","difficulty": "hard","body_en": "Prove that if $f(x) = ax^2+bx+c$ with $a>0$, the minimum value is $c - b^2/(4a)$.","body_he": "הוכח: ל-$f(x)=ax^2+bx+c$ עם $a>0$, ערך מינימלי הוא $c - b^2/(4a)$.","solution_en": "Complete the square: $f(x) = a(x+b/(2a))^2 + (c-b^2/(4a))$. Minimum when $(x+b/(2a))^2=0$, i.e. $x=-b/(2a)$. Minimum value $= c-b^2/(4a)$. ∎","solution_he": "השלמה לריבוע: $a(x+b/(2a))^2 + (c-b^2/(4a))$. מינימום ב-$x=-b/(2a)$, ערך $c-b^2/(4a)$. ■","points": 10}
-    ]},
-    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Not checking the solution.** Always substitute found $a$, $b$, $c$ back into all given points.\n\n2. **Confusing vertex x-coordinate with axis of symmetry direction.** Axis is $x = -b/(2a)$, not $x = b/(2a)$.\n\n3. **Sign errors in vertex form expansion.** $(x-h)^2 = x^2 - 2hx + h^2$ — note the minus sign.\n\n4. **Using regression for exact 3-point fit.** For exactly 3 points, solve the system. Regression is for overdetermined data.","body_he_md": "1. **לא לבדוק** — להציב תמיד חזרה בנקודות.\n2. **ציר סימטריה:** $x = -b/(2a)$, לא $+b/(2a)$.\n3. **שגיאות סימן** בפיתוח $(x-h)^2$.\n4. **לא להשתמש ברגרסיה** כאשר יש בדיוק 3 נקודות."},
-    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam","title_he": "לפני הבחינה","body_en_md": "- 3 points → 3×3 system; eliminate $c$ first\n- Vertex known → $y=a(x-h)^2+k$; use 1 extra point\n- x-intercepts known → $y=a(x-r_1)(x-r_2)$; use 1 extra point\n- Axis: $x=-b/(2a)$; vertex y: $c-b^2/(4a)$","body_he_md": "- 3 נקודות: מערכת $3\\times3$\n- קודקוד: $y=a(x-h)^2+k$\n- שורשים: $y=a(x-r_1)(x-r_2)$\n- ציר: $x=-b/(2a)$"},
-    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **Standard form:** $y=ax^2+bx+c$ (3 unknowns → need 3 equations)\n- **3 points:** substitute → solve 3×3 system\n- **Vertex form:** $y=a(x-h)^2+k$ (vertex at $(h,k)$)\n- **Intercept form:** $y=a(x-r_1)(x-r_2)$ (roots at $r_1, r_2$)\n- **Axis:** $x=-b/(2a)$; **Vertex y:** $c-b^2/(4a)$","body_he_md": "- 3 אלמונים → 3 משוואות\n- צורת קודקוד: $y=a(x-h)^2+k$\n- צורת שורשים: $y=a(x-r_1)(x-r_2)$\n- ציר: $x=-b/(2a)$"}
-  ],
-  "questions": [
-    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["quadratic_fitting","vertex_form"],"stem_en": "A parabola with vertex $(3,7)$ passes through $(5,3)$. What is $a$?","stem_he": "פרבולה עם קודקוד $(3,7)$ עוברת $(5,3)$. מה $a$?","answer_payload": {"options_en": ["$-1$","$1$","$-2$","$2$"],"options_he": ["$-1$","$1$","$-2$","$2$"],"correct_index": 0},"explanation_en": "$y=a(x-3)^2+7$. $(5,3)$: $3=4a+7 \\Rightarrow 4a=-4 \\Rightarrow a=-1$.","explanation_he": "$4a=-4 \\Rightarrow a=-1$."}
+    {
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Why Fit a Quadratic Model?",
+      "title_he": "למה להתאים מודל ריבועי?",
+      "body_en_md": "When data follows a curved (non-linear) pattern, a quadratic model $y = ax^2 + bx + c$ often provides a good fit. Engineers model projectile paths, economists model revenue curves, and scientists model parabolic relationships.\n\n**Three methods:**\n1. **Exact fit** through 3 points — solve a 3×3 system\n2. **Vertex form** — when vertex is known\n3. **Regression** — least-squares fit for many data points\n\n**Exam relevance:** Bagrut math 4-5 units, engineering entrance exams.",
+      "body_he_md": "כאשר נתונים מראים דפוס עקמומי, מודל ריבועי $y = ax^2 + bx + c$ הוא בחירה טבעית.\n\n**שלוש שיטות:**\n1. התאמה מדויקת דרך 3 נקודות\n2. צורת קודקוד\n3. רגרסיה (ריבועי פחות)"
+    },
+    {
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Three-Point Exact Fitting",
+      "title_he": "התאמה מדויקת דרך 3 נקודות",
+      "body_en_md": "Given three points $(x_1,y_1)$, $(x_2,y_2)$, $(x_3,y_3)$, substitute into $y = ax^2 + bx + c$ to get:\n$$\\begin{cases} ax_1^2 + bx_1 + c = y_1 \\\\ ax_2^2 + bx_2 + c = y_2 \\\\ ax_3^2 + bx_3 + c = y_3 \\end{cases}$$\n\nSolve this **3×3 linear system** for $a$, $b$, $c$.\n\n**Vertex form:** If vertex $(h, k)$ is known:\n$$y = a(x-h)^2 + k$$\nUse one more point to find $a$.\n\n**Axis of symmetry:** $x = -b/(2a)$; Vertex $y$-coordinate: $y = c - b^2/(4a)$.",
+      "body_he_md": "נציב 3 נקודות ב-$y = ax^2+bx+c$ לקבל מערכת $3\\times3$.\n\n**צורת קודקוד:** $y = a(x-h)^2+k$ אם קודקוד $(h,k)$ ידוע."
+    },
+    {
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Setting Up and Solving the System",
+      "title_he": "הצבת המערכת ופתרונה",
+      "body_en_md": "### Step-by-step approach\n1. Write one equation per given point.\n2. Eliminate $c$: subtract equation 1 from equations 2 and 3.\n3. Get a 2×2 system in $a$ and $b$.\n4. Solve for $a$, then $b$, then back-substitute for $c$.\n5. Write the final parabola equation.\n\n### Regression (least squares)\nFor $n > 3$ data points, minimize $\\sum_{i=1}^n (y_i - ax_i^2 - bx_i - c)^2$. In practice, use a calculator or computer. The result is the 'best fit' parabola.\n\n### Choosing $a > 0$ vs $a < 0$\n- $a > 0$: parabola opens upward (minimum)\n- $a < 0$: parabola opens downward (maximum)",
+      "body_he_md": "### גישה שלב-אחר-שלב\n1. כתוב משוואה לכל נקודה.\n2. הפחת כדי לבטל $c$ — מקבלים $2\\times 2$.\n3. פתור ל-$a,b,c$.\n\n**רגרסיה:** לנתונים רבים — מינימיזציה של $\\sum(y_i - ax_i^2 - bx_i - c)^2$."
+    },
+    {
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Fitting Through 3 Points",
+      "title_he": "דוגמה פתורה 1 — התאמה דרך 3 נקודות",
+      "body_en_md": "**Find** $y = ax^2 + bx + c$ through $(0,1)$, $(1,2)$, $(2,7)$.\n\n**Point $(0,1)$:** $c = 1$\n\n**Point $(1,2)$:** $a + b + 1 = 2 \\Rightarrow a + b = 1$ ... (i)\n\n**Point $(2,7)$:** $4a + 2b + 1 = 7 \\Rightarrow 4a + 2b = 6 \\Rightarrow 2a + b = 3$ ... (ii)\n\n**(ii) − (i):** $a = 2$\n\nFrom (i): $b = 1 - 2 = -1$\n\n**Answer:** $y = 2x^2 - x + 1$",
+      "body_he_md": "נקודות: $(0,1), (1,2), (2,7)$.\n\nמ-$(0,1)$: $c=1$.\n\nמ-$(1,2)$: $a+b=1$. מ-$(2,7)$: $2a+b=3$.\n\n$a=2, b=-1, c=1$.\n\nתשובה: $y = 2x^2 - x + 1$.\n\nFrom (i): $b = 1 - 2 = -1$\n\n**Answer:** $y = 2x^2 - x + 1$"
+    },
+    {
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "Find the parabola $y=ax^2+bx+c$ through $(0,3)$, $(1,4)$, $(-1,6)$.",
+      "body_he_md": "מצא פרבולה $y=ax^2+bx+c$ דרך $(0,3), (1,4), (-1,6)$.",
+      "checkpoint_solution_en": "$(0,3)$: $c=3$. $(1,4)$: $a+b+3=4 \\Rightarrow a+b=1$. $(-1,6)$: $a-b+3=6 \\Rightarrow a-b=3$. Adding: $2a=4 \\Rightarrow a=2$, $b=-1$. $y=2x^2-x+3$.",
+      "checkpoint_solution_he": "$y=2x^2-x+3$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Using Vertex Form",
+      "title_he": "דוגמה פתורה 2 — צורת קודקוד",
+      "body_en_md": "**A parabola has vertex $(2, -3)$ and passes through $(4, 5)$. Find its equation.**\n\n### Move 1 Write vertex form: $y = a(x-2)^2 - 3$\n\n### Move 2 Substitute $(4, 5)$:\n$5 = a(4-2)^2 - 3 = 4a - 3$\n$4a = 8 \\Rightarrow a = 2$\n\n### Move 3 Expand:\n$y = 2(x-2)^2 - 3 = 2x^2 - 8x + 8 - 3 = 2x^2 - 8x + 5$",
+      "body_he_md": "קודקוד $(2,-3)$, עובר $(4,5)$.\n\n$y = a(x-2)^2-3$. מציבים $(4,5)$: $4a=8 \\Rightarrow a=2$.\n\n$y = 2x^2-8x+5$.\n\n### צעד 3 Expand:\n$y = 2(x-2)^2 - 3 = 2x^2 - 8x + 8 - 3 = 2x^2 - 8x + 5$"
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A parabola with vertex $(-1, 4)$ passes through $(1, -4)$. Find the equation.",
+      "body_he_md": "פרבולה עם קודקוד $(-1,4)$ ועוברת ב-$(1,-4)$. מצא משוואה.",
+      "checkpoint_solution_en": "$y=a(x+1)^2+4$. $(1,-4)$: $-4=4a+4 \\Rightarrow a=-2$. $y=-2(x+1)^2+4=-2x^2-4x+2$.",
+      "checkpoint_solution_he": "$y=-2x^2-4x+2$."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Projectile Model",
+      "title_he": "דוגמה פתורה 3 — מודל קליעי",
+      "body_en_md": "**A ball is launched from ground level $(0,0)$, reaches maximum height 20 m at $x=30$ m, and lands at $x=60$ m. Find the quadratic model.**\n\n### Move 1 Vertex is at $(30, 20)$ (maximum height at midpoint since the parabola is symmetric). Vertex form: $y = a(x-30)^2 + 20$.\n\n### Move 2 At $(0,0)$: $0 = a(900) + 20 \\Rightarrow a = -1/45$.\n\n### Move 3 $y = -\\frac{1}{45}(x-30)^2 + 20$\n\n**Verify:** At $x=60$: $y = -\\frac{900}{45}+20 = -20+20=0$ ✓",
+      "body_he_md": "כדור מהמקור, גובה מקסימלי 20 מ' ב-$x=30$, נוחת ב-$x=60$.\n\nקודקוד $(30,20)$: $y = a(x-30)^2+20$.\n\nמ-$(0,0)$: $a = -1/45$.\n\n$y = -\\frac{1}{45}(x-30)^2+20$.\n\n### צעד 1 Vertex is at $(30, 20)$ (maximum height at midpoint since the parabola is symmetric). Vertex form: $y = a(x-30)^2 + 20$.\n\n### צעד 2 At $(0,0)$: $0 = a(900) + 20 \\Rightarrow a = -1/45$.\n\n### צעד 3 $y = -\\frac{1}{45}(x-30)^2 + 20$"
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide",
+      "title_he": "מדריך שיטה",
+      "body_en_md": "| Given | Method |\n|---|---|\n| 3 exact points | Substitute → 3×3 system |\n| Vertex + 1 point | Vertex form $y=a(x-h)^2+k$ |\n| x-intercepts + 1 point | Intercept form $y=a(x-r_1)(x-r_2)$ |\n| $n>3$ data points | Regression (calculator) |\n\n**Check:** substitute all given points into your model to verify!\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
+      "body_he_md": "| נתון | שיטה |\n|---|---|\n| 3 נקודות | מערכת $3\\times3$ |\n| קודקוד + נקודה | $y=a(x-h)^2+k$ |\n| שורשים + נקודה | $y=a(x-r_1)(x-r_2)$ |\n| $n>3$ נקודות | רגרסיה |\n\n**בדיקה:** substitute all given points into your model to verify!\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find $y=ax^2+bx+c$ through $(0,0)$, $(1,3)$, $(2,8)$.",
+          "body_he": "מצא $y=ax^2+bx+c$ דרך $(0,0),(1,3),(2,8)$.",
+          "solution_en": "$c=0$. $a+b=3$. $4a+2b=8 \\Rightarrow 2a+b=4$. $a=1,b=2$. $y=x^2+2x$.",
+          "solution_he": "**פתרון:**\n\n$y=x^2+2x$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A parabola passes through $(0,5)$ and has vertex at $(1,3)$. Find its equation.",
+          "body_he": "פרבולה עוברת $(0,5)$, קודקוד $(1,3)$. מצא משוואה.",
+          "solution_en": "$y=a(x-1)^2+3$. $(0,5)$: $a+3=5 \\Rightarrow a=2$. $y=2(x-1)^2+3=2x^2-4x+5$.",
+          "solution_he": "**פתרון:**\n\n$y=2x^2-4x+5$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "A parabola has x-intercepts at $x=1$ and $x=5$, and passes through $(3,4)$. Find $a$.",
+          "body_he": "פרבולה חותכת את ציר $x$ ב-$1$ וב-$5$, עוברת $(3,4)$. מצא $a$.",
+          "solution_en": "$y=a(x-1)(x-5)$. $(3,4)$: $4=a(2)(-2)=-4a$. $a=-1$.",
+          "solution_he": "**פתרון:**\n\n$a=-1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Expand $y=3(x-2)^2-1$ into standard form.",
+          "body_he": "פתח $y=3(x-2)^2-1$ לצורת $ax^2+bx+c$.",
+          "solution_en": "**Solution:**\n\n$y=3(x^2-4x+4)-1=3x^2-12x+11$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$y=3x^2-12x+11$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Find the parabola through $(-1,6)$, $(0,2)$, $(1,0)$.",
+          "body_he": "מצא פרבולה דרך $(-1,6),(0,2),(1,0)$.",
+          "solution_en": "$c=2$. $a-b+2=6 \\Rightarrow a-b=4$. $a+b+2=0 \\Rightarrow a+b=-2$. $2a=2 \\Rightarrow a=1$, $b=-3$. $y=x^2-3x+2$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=x^2-3x+2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A quadratic function has a maximum of 8 at $x=3$. Its y-intercept is 5. Find the equation.",
+          "body_he": "פונקציה ריבועית: מקסימום 8 ב-$x=3$, חותכת $y$-ציר ב-$5$. מצא משוואה.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$y=a(x-3)^2+8$. $(0,5)$: $9a+8=5 \\Rightarrow a=-1/3$. $y=-\\frac{1}{3}(x-3)^2+8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=-\\frac{1}{3}(x-3)^2+8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Revenue $R(x) = -2x^2 + 80x$. Find maximum revenue and the price $x$ that achieves it.",
+          "body_he": "הכנסה $R(x) = -2x^2+80x$. מצא מקסימום הכנסה ומחיר מיטבי.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nVertex at $x = -80/(2\\times(-2)) = 20$. $R(20) = -2(400)+1600 = 800$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x=20$, $R=800$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "The points $(1,5)$, $(2,8)$, $(3,9)$ lie on $y=ax^2+bx+c$. Find $a+b+c$.",
+          "body_he": "הנקודות $(1,5),(2,8),(3,9)$ על $y=ax^2+bx+c$. מצא $a+b+c$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$a+b+c=5$ directly from the point $(1,5)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$a+b+c=5$ מ-$(1,5)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A arch bridge has parabolic shape with width 20m at base and maximum height 8m. Find the equation with origin at the center of the base.",
+          "body_he": "גשר קשת: רוחב 20 מ', גובה מקסימלי 8 מ'. מצא משוואה עם ראשית קואורדינטות במרכז הבסיס.",
+          "solution_en": "Vertex at $(0,8)$; x-intercepts at $\\pm10$. $y=a x^2+8$. $(-10,0)$: $100a+8=0 \\Rightarrow a=-0.08$. $y=-0.08x^2+8$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=-0.08x^2+8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "Data: $(0,1),(1,3),(2,9),(3,21)$. Does a quadratic model fit exactly? If not, fit to the first 3 points and find the residual at $x=3$.",
+          "body_he": "נתונים: $(0,1),(1,3),(2,9),(3,21)$. האם מודל ריבועי מתאים בדיוק? אם לא, התאם לשלוש ראשונות ומצא שארית ב-$x=3$.",
+          "solution_en": "Fit $(0,1),(1,3),(2,9)$: $c=1$, $a+b=2$, $4a+2b=8 \\Rightarrow 2a+b=4 \\Rightarrow a=2, b=0$. $y=2x^2+1$. At $x=3$: $y=19$. Actual: 21. Residual $= 21-19 = 2$. Not exact.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$y=2x^2+1$. שארית ב-$x=3$: $21-19=2$. לא מדויק.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that the unique parabola through 3 non-collinear points (with distinct x-coordinates) is determined by solving a Vandermonde system.",
+          "body_he": "הראה שהפרבולה היחידה דרך 3 נקודות עם קואורדינטות-$x$ שונות נקבעת על ידי מערכת ואנדרמונד.",
+          "solution_en": "Matrix $\\begin{pmatrix}x_1^2 & x_1 & 1 \\\\ x_2^2 & x_2 & 1 \\\\ x_3^2 & x_3 & 1\\end{pmatrix}$ is a Vandermonde matrix (transposed). Its determinant $= (x_2-x_1)(x_3-x_1)(x_3-x_2) \\neq 0$ when $x_i$ distinct, so the system has a unique solution.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nמטריצת ואנדרמונד: דטרמיננטה $=(x_2-x_1)(x_3-x_1)(x_3-x_2)\\neq 0$ כאשר $x_i$ שונים → פתרון יחיד.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A ball is thrown and follows $h = -5t^2 + 20t + 2$ (height in meters, time in seconds). When does it reach max height? When does it land?",
+          "body_he": "כדור בצניחה: $h=-5t^2+20t+2$. מתי מגיע לגובה מקסימלי? מתי נוחת?",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nMax at $t=-20/(-10)=2$ s. $h(2)=-20+40+2=22$ m. Landing: $-5t^2+20t+2=0$. $t=(-20\\pm\\sqrt{400+40})/(-10)$. $t=(20+\\sqrt{440})/10 \\approx 4.1$ s.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nמקסימום ב-$t=2$ שניות, $h=22$ מ'. נוחת ב-$t\\approx4.1$ שניות.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Prove that if $f(x) = ax^2+bx+c$ with $a>0$, the minimum value is $c - b^2/(4a)$.",
+          "body_he": "הוכח: ל-$f(x)=ax^2+bx+c$ עם $a>0$, ערך מינימלי הוא $c - b^2/(4a)$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nComplete the square: $f(x) = a(x+b/(2a))^2 + (c-b^2/(4a))$. Minimum when $(x+b/(2a))^2=0$, i.e. $x=-b/(2a)$. Minimum value $= c-b^2/(4a)$. ∎\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהשלמה לריבוע: $a(x+b/(2a))^2 + (c-b^2/(4a))$. מינימום ב-$x=-b/(2a)$, ערך $c-b^2/(4a)$. ■\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Not checking the solution.** Always substitute found $a$, $b$, $c$ back into all given points.\n\n2. **Confusing vertex x-coordinate with axis of symmetry direction.** Axis is $x = -b/(2a)$, not $x = b/(2a)$.\n\n3. **Sign errors in vertex form expansion.** $(x-h)^2 = x^2 - 2hx + h^2$ — note the minus sign.\n\n4. **Using regression for exact 3-point fit.** For exactly 3 points, solve the system. Regression is for overdetermined data.\n\n**Example misconception:** The vertex x-coordinate is b/(2a)\n\n**Fix:** Axis of symmetry is x = -b/(2a) (minus sign!) from completing the square.",
+      "body_he_md": "1. **לא לבדוק** — להציב תמיד חזרה בנקודות.\n2. **ציר סימטריה:** $x = -b/(2a)$, לא $+b/(2a)$.\n3. **שגיאות סימן** בפיתוח $(x-h)^2$.\n4. **לא להשתמש ברגרסיה** כאשר יש בדיוק 3 נקודות.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam",
+      "title_he": "לפני הבחינה",
+      "body_en_md": "- 3 points → 3×3 system; eliminate $c$ first\n- Vertex known → $y=a(x-h)^2+k$; use 1 extra point\n- x-intercepts known → $y=a(x-r_1)(x-r_2)$; use 1 extra point\n- Axis: $x=-b/(2a)$; vertex y: $c-b^2/(4a)$\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
+      "body_he_md": "- 3 נקודות: מערכת $3\\times3$\n- קודקוד: $y=a(x-h)^2+k$\n- שורשים: $y=a(x-r_1)(x-r_2)$\n- ציר: $x=-b/(2a)$"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Standard form:** $y=ax^2+bx+c$ (3 unknowns → need 3 equations)\n- **3 points:** substitute → solve 3×3 system\n- **Vertex form:** $y=a(x-h)^2+k$ (vertex at $(h,k)$)\n- **Intercept form:** $y=a(x-r_1)(x-r_2)$ (roots at $r_1, r_2$)\n- **Axis:** $x=-b/(2a)$; **Vertex y:** $c-b^2/(4a)$\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
+      "body_he_md": "- 3 אלמונים → 3 משוואות\n- צורת קודקוד: $y=a(x-h)^2+k$\n- צורת שורשים: $y=a(x-r_1)(x-r_2)$\n- ציר: $x=-b/(2a)$"
+    }
   ],
   "agent_hints": {
-    "key_insights": ["Three points determine a unique parabola (when x-coordinates are distinct). Substituting gives a 3×3 linear system.", "Vertex form y=a(x-h)²+k is faster when the vertex is given. You only need one more point to find a.", "Always verify by back-substituting all given points into your final equation.", "Intercept form y=a(x-r₁)(x-r₂) is best when x-intercepts (roots) are given."],
-    "common_misconceptions": [{"wrong": "The vertex x-coordinate is b/(2a)","correction": "Axis of symmetry is x = -b/(2a) (minus sign!) from completing the square.","detect_phrase_en": "b over 2a","detect_phrase_he": "b חלקי 2a"}],
+    "key_insights": [
+      "Three points determine a unique parabola (when x-coordinates are distinct). Substituting gives a 3×3 linear system.",
+      "Vertex form y=a(x-h)²+k is faster when the vertex is given. You only need one more point to find a.",
+      "Always verify by back-substituting all given points into your final equation.",
+      "Intercept form y=a(x-r₁)(x-r₂) is best when x-intercepts (roots) are given."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "The vertex x-coordinate is b/(2a)",
+        "correction": "Axis of symmetry is x = -b/(2a) (minus sign!) from completing the square.",
+        "detect_phrase_en": "b over 2a",
+        "detect_phrase_he": "b חלקי 2a"
+      }
+    ],
     "tutor_pacing_hint": "Start with the 3-point system method (most common in exams). Practice eliminating c first. Then teach vertex form as a shortcut. End with real-world word problems (arch, projectile).",
-    "skill_atoms_unlocked": ["three_point_parabola","vertex_form_parabola","intercept_form_parabola","quadratic_regression_concept","model_fitting"]
-  }
+    "skill_atoms_unlocked": [
+      "three_point_parabola",
+      "vertex_form_parabola",
+      "intercept_form_parabola",
+      "quadratic_regression_concept",
+      "model_fitting"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "quadratic_fitting",
+        "vertex_form"
+      ],
+      "stem_en": "A parabola with vertex $(3,7)$ passes through $(5,3)$. What is $a$?",
+      "stem_he": "פרבולה עם קודקוד $(3,7)$ עוברת $(5,3)$. מה $a$?",
+      "answer_payload": {
+        "options_en": [
+          "$-1$",
+          "$1$",
+          "$-2$",
+          "$2$"
+        ],
+        "options_he": [
+          "$-1$",
+          "$1$",
+          "$-2$",
+          "$2$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "**Why this is correct:**\n$y=a(x-3)^2+7$. $(5,3)$: $3=4a+7 \\Rightarrow 4a=-4 \\Rightarrow a=-1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$4a=-4 \\Rightarrow a=-1$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 1,
+      "options_en": [
+        "$-1$",
+        "$1$",
+        "$-2$",
+        "$2$"
+      ],
+      "options_he": [
+        "$-1$",
+        "$1$",
+        "$-2$",
+        "$2$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find $y=ax^2+bx+c$ through $(0,0)$, $(1,3)$, $(2,8)$.",
+      "stem_he": "מצא $y=ax^2+bx+c$ דרך $(0,0),(1,3),(2,8)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$c=0$. $a+b=3$. $4a+2b=8 \\Rightarrow 2a+b=4$. $a=1,b=2$. $y=x^2+2x$",
+          "x^2+2x$",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$c=0$. $a+b=3$. $4a+2b=8 \\Rightarrow 2a+b=4$. $a=1,b=2$. $y=x^2+2x$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$y=x^2+2x$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A parabola passes through $(0,5)$ and has vertex at $(1,3)$. Find its equation.",
+      "stem_he": "פרבולה עוברת $(0,5)$, קודקוד $(1,3)$. מצא משוואה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$y=a(x-1)^2+3$. $(0,5)$: $a+3=5 \\Rightarrow a=2$. $y=2(x-1)^2+3=2x^2-4x+5$",
+          "2x^2-4x+5$",
+          "5"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$y=a(x-1)^2+3$. $(0,5)$: $a+3=5 \\Rightarrow a=2$. $y=2(x-1)^2+3=2x^2-4x+5$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$y=2x^2-4x+5$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A parabola has x-intercepts at $x=1$ and $x=5$, and passes through $(3,4)$. Find $a$.",
+      "stem_he": "פרבולה חותכת את ציר $x$ ב-$1$ וב-$5$, עוברת $(3,4)$. מצא $a$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$y=a(x-1)(x-5)$. $(3,4)$: $4=a(2)(-2)=-4a$. $a=-1$",
+          "-1$",
+          "-1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$y=a(x-1)(x-5)$. $(3,4)$: $4=a(2)(-2)=-4a$. $a=-1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$a=-1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Expand $y=3(x-2)^2-1$ into standard form.",
+      "stem_he": "פתח $y=3(x-2)^2-1$ לצורת $ax^2+bx+c$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$y=3(x^2-4x+4)-1=3x^2-12x+11$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3x^2-12x+11$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "11"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$y=3(x^2-4x+4)-1=3x^2-12x+11$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$y=3x^2-12x+11$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find the parabola through $(-1,6)$, $(0,2)$, $(1,0)$.",
+      "stem_he": "מצא פרבולה דרך $(-1,6),(0,2),(1,0)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$c=2$. $a-b+2=6 \\Rightarrow a-b=4$. $a+b+2=0 \\Rightarrow a+b=-2$. $2a=2 \\Rightarrow a=1$, $b=-3$. $y=x^2-3x+2$",
+          "x^2-3x+2$",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$c=2$. $a-b+2=6 \\Rightarrow a-b=4$. $a+b+2=0 \\Rightarrow a+b=-2$. $2a=2 \\Rightarrow a=1$, $b=-3$. $y=x^2-3x+2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=x^2-3x+2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A quadratic function has a maximum of 8 at $x=3$. Its y-intercept is 5. Find the equation.",
+      "stem_he": "פונקציה ריבועית: מקסימום 8 ב-$x=3$, חותכת $y$-ציר ב-$5$. מצא משוואה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$y=a(x-3)^2+8$. $(0,5)$: $9a+8=5 \\Rightarrow a=-1/3$. $y=-\\frac{1}{3}(x-3)^2+8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-\\frac{1}{3}(x-3)^2+8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "8"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$y=a(x-3)^2+8$. $(0,5)$: $9a+8=5 \\Rightarrow a=-1/3$. $y=-\\frac{1}{3}(x-3)^2+8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$y=-\\frac{1}{3}(x-3)^2+8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Revenue $R(x) = -2x^2 + 80x$. Find maximum revenue and the price $x$ that achieves it.",
+      "stem_he": "הכנסה $R(x) = -2x^2+80x$. מצא מקסימום הכנסה ומחיר מיטבי.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nVertex at $x = -80/(2\\times(-2)) = 20$. $R(20) = -2(400)+1600 = 800$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "800$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "800"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nVertex at $x = -80/(2\\times(-2)) = 20$. $R(20) = -2(400)+1600 = 800$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x=20$, $R=800$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "three_point_parabola",
+        "vertex_form_parabola"
+      ]
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

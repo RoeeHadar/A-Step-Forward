@@ -1,10 +1,12 @@
 {
   "concept_id": "ampere_law",
+  "subject": "physics",
+  "level": "university",
+  "math_track": [],
   "title_en": "Ampère's Law",
   "title_he": "חוק אמפר",
-  "subject": "physics",
-  "difficulty": "advanced",
-  "estimated_minutes": 50,
+  "summary_en": "Biot-Savart gives the magnetic field of any current, but the integral is often brutal.",
+  "summary_he": "ביו-סבר נותן את השדה המגנטי של כל זרם, אבל האינטגרל לרוב קשה מאוד.",
   "sections": [
     {
       "id": "intro",
@@ -20,7 +22,7 @@
       "title_en": "Ampère's Law — Statement",
       "title_he": "חוק אמפר — ניסוח",
       "body_en_md": "For any closed path $C$ (Ampèrian loop) in space:\n\n$$\\oint_C \\vec{B} \\cdot d\\vec{l} = \\mu_0 \\, I_{\\text{enc}}$$\n\n**Terms:**\n- $\\oint_C \\vec{B} \\cdot d\\vec{l}$ — line integral of $\\vec{B}$ around the closed path (SI unit: T·m)\n- $\\mu_0 = 4\\pi \\times 10^{-7}\\;\\text{T·m/A}$ — permeability of free space\n- $I_{\\text{enc}}$ — **net current** threading through any surface bounded by $C$, with sign given by the **right-hand rule** (curl fingers in the direction of traversal; thumb gives positive current direction)\n\n**Validity:** The original form is valid for steady (time-independent) currents. For time-varying fields, the displacement current $\\epsilon_0 \\frac{d\\Phi_E}{dt}$ must be added (see Maxwell's equations).",
-      "body_he_md": "לכל מסלול סגור $C$ (לולאת אמפר) במרחב:\n\n$$\\oint_C \\vec{B} \\cdot d\\vec{l} = \\mu_0 \\, I_{\\text{enc}}$$\n\n**מונחים:**\n- $\\oint_C \\vec{B} \\cdot d\\vec{l}$ — אינטגרל קווי של $\\vec{B}$ לאורך המסלול הסגור (יחידה: T·m)\n- $\\mu_0 = 4\\pi \\times 10^{-7}\\;\\text{T·m/A}$ — חדירות מגנטית של הריק\n- $I_{\\text{enc}}$ — **הזרם הנטו** החוצה דרך כל משטח הגובל ב-$C$, עם סימן לפי **כלל יד-ימין** (עוטפים אצבעות בכיוון המעבר; האגודל מצביע לכיוון הזרם החיובי)\n\n**תחולה:** הצורה המקורית תקפה לזרמים יציבים (בלתי תלויים בזמן). לשדות משתנים, יש להוסיף את זרם התזוזה $\\epsilon_0 \\frac{d\\Phi_E}{dt}$ (ראו משוואות מקסוול)."
+      "body_he_md": "לכל מסלול סגור $C$ (לולאת אמפר) במרחב:\n\n**מונחים:**\n- $\\oint_C \\vec{B} \\cdot d\\vec{l}$ — אינטגרל קווי של $\\vec{B}$ לאורך המסלול הסגור (יחידה: T·m)\n- $\\mu_0 = 4\\pi \\times 10^{-7}\\;\\text{T·m/A}$ — חדירות מגנטית של הריק\n- $I_{\\text{enc}}$ — **הזרם הנטו** החוצה דרך כל משטח הגובל ב-$C$, עם סימן לפי **כלל יד-ימין** (עוטפים אצבעות בכיוון המעבר; האגודל מצביע לכיוון הזרם החיובי)\n\n**תחולה:** הצורה המקורית תקפה לזרמים יציבים (בלתי תלויים בזמן). לשדות משתנים, יש להוסיף את זרם התזוזה $\\epsilon_0 \\frac{d\\Phi_E}{dt}$ (ראו משוואות מקסוול)."
     },
     {
       "id": "theory",
@@ -28,7 +30,7 @@
       "title_en": "Using Ampère's Law — Symmetry Strategy",
       "title_he": "שימוש בחוק אמפר — אסטרטגיית סימטריה",
       "body_en_md": "### When can you solve algebraically?\n\nAmpère's law is **always true**, but only **solvable** when you can argue:\n1. $|\\vec{B}|$ is **constant** along the chosen loop, AND\n2. $\\vec{B}$ makes a **constant angle** with $d\\vec{l}$ everywhere on the loop\n\nThis allows pulling $B$ outside the integral: $\\oint \\vec{B} \\cdot d\\vec{l} = B \\cdot L$ where $L$ is the loop's circumference (for a circular loop) or its relevant length.\n\n### The three standard geometries\n\n| Geometry | Loop shape | Result |\n|---|---|---|\n| Infinite straight wire | Circle of radius $r$ | $B = \\frac{\\mu_0 I}{2\\pi r}$ |\n| Infinite solenoid ($n$ turns/m) | Rectangle (one side inside, one outside) | $B = \\mu_0 n I$ (inside); $B = 0$ (outside) |\n| Toroid ($N$ total turns) | Circle inside the toroid | $B = \\frac{\\mu_0 N I}{2\\pi r}$ |\n\n### Inside a solid cylindrical conductor\n\nFor a solid conductor of radius $R$ with uniform current $I$, the enclosed current at radius $r < R$ is:\n$$I_{\\text{enc}} = I \\cdot \\frac{r^2}{R^2}$$\n$$B(2\\pi r) = \\mu_0 I \\frac{r^2}{R^2} \\implies B = \\frac{\\mu_0 I r}{2\\pi R^2} \\quad (r < R)$$\n\nField grows linearly inside, then falls as $1/r$ outside.",
-      "body_he_md": "### מתי ניתן לפתור אלגברית?\n\nחוק אמפר **תמיד נכון**, אך **ניתן לפתרון** רק כאשר אפשר לטעון:\n1. $|\\vec{B}|$ **קבוע** לאורך הלולאה הנבחרת, וגם\n2. $\\vec{B}$ עושה **זווית קבועה** עם $d\\vec{l}$ בכל מקום על הלולאה\n\nזה מאפשר להוציא $B$ מחוץ לאינטגרל: $\\oint \\vec{B} \\cdot d\\vec{l} = B \\cdot L$ כאשר $L$ הוא היקף הלולאה.\n\n### שלוש הגיאומטריות הסטנדרטיות\n\n| גיאומטריה | צורת הלולאה | תוצאה |\n|---|---|---|\n| חוט ישר אינסופי | מעגל ברדיוס $r$ | $B = \\frac{\\mu_0 I}{2\\pi r}$ |\n| סולנואיד אינסופי ($n$ כריכות/מ') | מלבן (צד אחד פנים, אחד חוץ) | $B = \\mu_0 n I$ (פנים); $B = 0$ (חוץ) |\n| טורואיד ($N$ כריכות כולל) | מעגל בתוך הטורואיד | $B = \\frac{\\mu_0 N I}{2\\pi r}$ |\n\n### בתוך מוליך גלילי מוצק\n\nלמוליך מוצק ברדיוס $R$ עם זרם $I$ אחיד, הזרם הכלוא ברדיוס $r < R$ הוא:\n$$I_{\\text{enc}} = I \\cdot \\frac{r^2}{R^2}$$\n$$B = \\frac{\\mu_0 I r}{2\\pi R^2} \\quad (r < R)$$\n\nהשדה גדל ליניארית בפנים, ואחר כך יורד כ-$1/r$ מחוץ."
+      "body_he_md": "### מתי ניתן לפתור אלגברית?\n\nחוק אמפר **תמיד נכון**, אך **ניתן לפתרון** רק כאשר אפשר לטעון:\n1. $|\\vec{B}|$ **קבוע** לאורך הלולאה הנבחרת, וגם\n2. $\\vec{B}$ עושה **זווית קבועה** עם $d\\vec{l}$ בכל מקום על הלולאה\n\nזה מאפשר להוציא $B$ מחוץ לאינטגרל: $\\oint \\vec{B} \\cdot d\\vec{l} = B \\cdot L$ כאשר $L$ הוא היקף הלולאה.\n\n### שלוש הגיאומטריות הסטנדרטיות\n\n| גיאומטריה | צורת הלולאה | תוצאה |\n|---|---|---|\n| חוט ישר אינסופי | מעגל ברדיוס $r$ | $B = \\frac{\\mu_0 I}{2\\pi r}$ |\n| סולנואיד אינסופי ($n$ כריכות/מ') | מלבן (צד אחד פנים, אחד חוץ) | $B = \\mu_0 n I$ (פנים); $B = 0$ (חוץ) |\n| טורואיד ($N$ כריכות כולל) | מעגל בתוך הטורואיד | $B = \\frac{\\mu_0 N I}{2\\pi r}$ |\n\n### בתוך מוליך גלילי מוצק\n\nלמוליך מוצק ברדיוס $R$ עם זרם $I$ אחיד, הזרם הכלוא ברדיוס $r < R$ הוא:\n$$I_{\\text{enc}} = I \\cdot \\frac{r^2}{R^2}$$\n$$B = \\frac{\\mu_0 I r}{2\\pi R^2} \\quad (r < R)$$\n\nהשדה גדל ליניארית בפנים, ואחר כך יורד כ-$1/r$ מחוץ.\n\n### When can you solve algebraically?\n\n### The three standard geometries"
     },
     {
       "id": "worked_example_1",
@@ -37,7 +39,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Magnetic Field of an Infinite Wire",
       "title_he": "דוגמה פתורה 1 — שדה מגנטי של חוט אינסופי",
-      "body_en_md": "**Given:** An infinitely long straight wire carries current $I = 4\\;\\text{A}$. Find the magnetic field at distance $r = 5\\;\\text{cm} = 0.05\\;\\text{m}$ from the wire.\n\n**Step 1 — Choose the Ampèrian loop:** By cylindrical symmetry, choose a circle of radius $r = 0.05\\;\\text{m}$ centered on the wire, in the plane perpendicular to the wire.\n\n**Step 2 — Argue symmetry:** On this circle, $|\\vec{B}|$ is constant (cylindrical symmetry) and $\\vec{B}$ is everywhere tangent to the circle (parallel to $d\\vec{l}$), so $\\vec{B} \\cdot d\\vec{l} = B\\,dl$.\n\n**Step 3 — Apply Ampère's law:**\n$$\\oint \\vec{B} \\cdot d\\vec{l} = B(2\\pi r) = \\mu_0 I_{\\text{enc}} = \\mu_0 I$$\n\n**Step 4 — Solve:**\n$$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi \\times 10^{-7})(4)}{2\\pi (0.05)} = \\frac{16\\pi \\times 10^{-7}}{0.1\\pi} = 1.6 \\times 10^{-5}\\;\\text{T}$$\n\n**Answer:** $B = 16\\;\\mu\\text{T}$, directed by the right-hand rule (counterclockwise when viewed from the direction of current flow).",
+      "body_en_md": "**Given:** An infinitely long straight wire carries current $I = 4\\;\\text{A}$. Find the magnetic field at distance $r = 5\\;\\text{cm} = 0.05\\;\\text{m}$ from the wire.\n\n### Move 1 By cylindrical symmetry, choose a circle of radius $r = 0.05\\;\\text{m}$ centered on the wire, in the plane perpendicular to the wire.\n\n### Move 2 On this circle, $|\\vec{B}|$ is constant (cylindrical symmetry) and $\\vec{B}$ is everywhere tangent to the circle (parallel to $d\\vec{l}$), so $\\vec{B} \\cdot d\\vec{l} = B\\,dl$.\n\n### Move 3\n$$\\oint \\vec{B} \\cdot d\\vec{l} = B(2\\pi r) = \\mu_0 I_{\\text{enc}} = \\mu_0 I$$\n\n### Move 4\n$$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi \\times 10^{-7})(4)}{2\\pi (0.05)} = \\frac{16\\pi \\times 10^{-7}}{0.1\\pi} = 1.6 \\times 10^{-5}\\;\\text{T}$$\n\n**Answer:** $B = 16\\;\\mu\\text{T}$, directed by the right-hand rule (counterclockwise when viewed from the direction of current flow).",
       "body_he_md": "**נתון:** חוט ישר אינסופי נושא זרם $I = 4\\;\\text{A}$. מצא את השדה המגנטי במרחק $r = 5\\;\\text{cm} = 0.05\\;\\text{m}$ מהחוט.\n\n**שלב 1 — בחירת לולאת אמפר:** מסימטריה גלילית, נבחר מעגל ברדיוס $r = 0.05\\;\\text{m}$ ממורכז על החוט, במישור מאונך לחוט.\n\n**שלב 2 — ארגומנט סימטריה:** על מעגל זה, $|\\vec{B}|$ קבוע (סימטריה גלילית) ו-$\\vec{B}$ משיק למעגל בכל מקום (מקביל ל-$d\\vec{l}$), ולכן $\\vec{B} \\cdot d\\vec{l} = B\\,dl$.\n\n**שלב 3 — יישום חוק אמפר:**\n$$B(2\\pi r) = \\mu_0 I_{\\text{enc}} = \\mu_0 I$$\n\n**שלב 4 — פתרון:**\n$$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi \\times 10^{-7})(4)}{2\\pi (0.05)} = 1.6 \\times 10^{-5}\\;\\text{T}$$\n\n**תשובה:** $B = 16\\;\\mu\\text{T}$, בכיוון שנקבע על-ידי כלל יד-ימין."
     },
     {
@@ -57,7 +59,7 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Magnetic Field Inside a Solenoid",
       "title_he": "דוגמה פתורה 2 — שדה מגנטי בתוך סולנואיד",
-      "body_en_md": "**Given:** An ideal solenoid has $n = 3000\\;\\text{turns/m}$ and carries $I = 2\\;\\text{A}$. Find the field inside.\n\n**Step 1 — Draw the Ampèrian rectangle:** Choose a rectangle with:\n- Side $\\ell$ parallel to the axis **inside** the solenoid (where $\\vec{B} \\parallel d\\vec{l}$)\n- Side $\\ell$ **outside** the solenoid (where $B \\approx 0$)\n- Two short sides **perpendicular** to $\\vec{B}$ (zero contribution)\n\n**Step 2 — Evaluate the line integral:**\n$$\\oint \\vec{B} \\cdot d\\vec{l} = B_{\\text{in}} \\cdot \\ell + 0 + 0 + 0 = B_{\\text{in}} \\ell$$\n\n**Step 3 — Count enclosed current:** The rectangle of length $\\ell$ encloses $n\\ell$ turns, each carrying $I$:\n$$I_{\\text{enc}} = n \\ell I$$\n\n**Step 4 — Apply Ampère's law:**\n$$B_{\\text{in}} \\ell = \\mu_0 n \\ell I \\implies \\boxed{B = \\mu_0 n I}$$\n\n**Compute:** $B = (4\\pi \\times 10^{-7})(3000)(2) = 24\\pi \\times 10^{-4} \\approx 7.54\\;\\text{mT}$.",
+      "body_en_md": "**Given:** An ideal solenoid has $n = 3000\\;\\text{turns/m}$ and carries $I = 2\\;\\text{A}$. Find the field inside.\n\n### Move 1 Choose a rectangle with:\n- Side $\\ell$ parallel to the axis **inside** the solenoid (where $\\vec{B} \\parallel d\\vec{l}$)\n- Side $\\ell$ **outside** the solenoid (where $B \\approx 0$)\n- Two short sides **perpendicular** to $\\vec{B}$ (zero contribution)\n\n### Move 2\n$$\\oint \\vec{B} \\cdot d\\vec{l} = B_{\\text{in}} \\cdot \\ell + 0 + 0 + 0 = B_{\\text{in}} \\ell$$\n\n### Move 3 The rectangle of length $\\ell$ encloses $n\\ell$ turns, each carrying $I$:\n$$I_{\\text{enc}} = n \\ell I$$\n\n### Move 4\n$$B_{\\text{in}} \\ell = \\mu_0 n \\ell I \\implies \\boxed{B = \\mu_0 n I}$$\n\n**Compute:** $B = (4\\pi \\times 10^{-7})(3000)(2) = 24\\pi \\times 10^{-4} \\approx 7.54\\;\\text{mT}$.",
       "body_he_md": "**נתון:** סולנואיד אידיאלי בעל $n = 3000\\;\\text{כריכות/מ'}$ נושא $I = 2\\;\\text{A}$. מצא את השדה בפנים.\n\n**שלב 1 — צייר מלבן אמפר:** נבחר מלבן עם:\n- צלע $\\ell$ מקבילה לציר **בתוך** הסולנואיד (שם $\\vec{B} \\parallel d\\vec{l}$)\n- צלע $\\ell$ **מחוץ** לסולנואיד (שם $B \\approx 0$)\n- שתי צלעות קצרות **מאונכות** ל-$\\vec{B}$ (תרומה אפס)\n\n**שלב 2 — חשב את האינטגרל:**\n$$\\oint \\vec{B} \\cdot d\\vec{l} = B_{\\text{in}} \\ell + 0 + 0 + 0 = B_{\\text{in}} \\ell$$\n\n**שלב 3 — ספור זרם כלוא:** המלבן באורך $\\ell$ כולל $n\\ell$ כריכות, כל אחת נושאת $I$:\n$$I_{\\text{enc}} = n \\ell I$$\n\n**שלב 4 — יישום:**\n$$B_{\\text{in}} \\ell = \\mu_0 n \\ell I \\implies \\boxed{B = \\mu_0 n I}$$\n\n**חישוב:** $B = (4\\pi \\times 10^{-7})(3000)(2) \\approx 7.54\\;\\text{mT}$."
     },
     {
@@ -93,16 +95,16 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
           "difficulty": "easy",
           "body_en": "A long wire carries $I = 6\\;\\text{A}$. Find $B$ at $r = 3\\;\\text{cm}$.",
           "body_he": "חוט ארוך נושא $I = 6\\;\\text{A}$. מצא $B$ ב-$r = 3\\;\\text{cm}$.",
-          "solution_en": "$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(6)}{2\\pi(0.03)} = 4\\times10^{-5}\\;\\text{T} = 40\\;\\mu\\text{T}$.",
-          "solution_he": "$B = \\frac{\\mu_0 I}{2\\pi r} = 40\\;\\mu\\text{T}$.",
+          "solution_en": "**Solution:**\n\n$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(6)}{2\\pi(0.03)} = 4\\times10^{-5}\\;\\text{T} = 40\\;\\mu\\text{T}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$B = \\frac{\\mu_0 I}{2\\pi r} = 40\\;\\mu\\text{T}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -110,8 +112,8 @@
           "difficulty": "easy",
           "body_en": "A solenoid has $n = 2000\\;\\text{turns/m}$ and $I = 0.5\\;\\text{A}$. Find $B$ inside.",
           "body_he": "סולנואיד בעל $n = 2000\\;\\text{כריכות/מ'}$ ו-$I = 0.5\\;\\text{A}$. מצא $B$ בפנים.",
-          "solution_en": "$B = \\mu_0 n I = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.",
-          "solution_he": "$B = \\mu_0 n I \\approx 1.26\\;\\text{mT}$.",
+          "solution_en": "**Solution:**\n\n$B = \\mu_0 n I = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$B = \\mu_0 n I \\approx 1.26\\;\\text{mT}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -119,8 +121,8 @@
           "difficulty": "easy",
           "body_en": "At what distance from a wire carrying $I = 20\\;\\text{A}$ is the field equal to $B = 50\\;\\mu\\text{T}$?",
           "body_he": "באיזה מרחק מחוט נושא $I = 20\\;\\text{A}$ השדה שווה $B = 50\\;\\mu\\text{T}$?",
-          "solution_en": "$r = \\frac{\\mu_0 I}{2\\pi B} = \\frac{(4\\pi\\times10^{-7})(20)}{2\\pi(50\\times10^{-6})} = 0.08\\;\\text{m} = 8\\;\\text{cm}$.",
-          "solution_he": "$r = \\frac{\\mu_0 I}{2\\pi B} = 8\\;\\text{cm}$.",
+          "solution_en": "**Solution:**\n\n$r = \\frac{\\mu_0 I}{2\\pi B} = \\frac{(4\\pi\\times10^{-7})(20)}{2\\pi(50\\times10^{-6})} = 0.08\\;\\text{m} = 8\\;\\text{cm}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$r = \\frac{\\mu_0 I}{2\\pi B} = 8\\;\\text{cm}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -128,8 +130,8 @@
           "difficulty": "easy",
           "body_en": "What current in a solenoid with $n=1000\\;\\text{turns/m}$ produces $B = 1\\;\\text{mT}$?",
           "body_he": "איזה זרם בסולנואיד עם $n=1000\\;\\text{כריכות/מ'}$ מייצר $B = 1\\;\\text{mT}$?",
-          "solution_en": "$I = \\frac{B}{\\mu_0 n} = \\frac{10^{-3}}{(4\\pi\\times10^{-7})(1000)} = \\frac{10^{-3}}{4\\pi\\times10^{-4}} \\approx 0.80\\;\\text{A}$.",
-          "solution_he": "$I = \\frac{B}{\\mu_0 n} \\approx 0.80\\;\\text{A}$.",
+          "solution_en": "**Solution:**\n\n$I = \\frac{B}{\\mu_0 n} = \\frac{10^{-3}}{(4\\pi\\times10^{-7})(1000)} = \\frac{10^{-3}}{4\\pi\\times10^{-4}} \\approx 0.80\\;\\text{A}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$I = \\frac{B}{\\mu_0 n} \\approx 0.80\\;\\text{A}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -138,7 +140,7 @@
           "body_en": "A solid cylindrical conductor of radius $R = 2\\;\\text{cm}$ carries total current $I = 8\\;\\text{A}$ uniformly distributed. Find $B$ at (a) $r = 1\\;\\text{cm}$ and (b) $r = 4\\;\\text{cm}$.",
           "body_he": "מוליך גלילי מוצק ברדיוס $R = 2\\;\\text{cm}$ נושא זרם כולל $I = 8\\;\\text{A}$ מפוזר אחידות. מצא $B$ ב-(א) $r = 1\\;\\text{cm}$ ו-(ב) $r = 4\\;\\text{cm}$.",
           "solution_en": "(a) $r=0.01\\;\\text{m} < R$: $B = \\frac{\\mu_0 I r}{2\\pi R^2} = \\frac{(4\\pi\\times10^{-7})(8)(0.01)}{2\\pi(0.02)^2} = 2\\times10^{-3}\\;\\text{T} = 2\\;\\text{mT}$. (b) $r=0.04\\;\\text{m} > R$: $B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(8)}{2\\pi(0.04)} = 4\\times10^{-5}\\times100 = 4\\times10^{-5}\\;\\text{T}$. Actually: $B=\\frac{(4\\pi\\times10^{-7})(8)}{(2\\pi)(0.04)}=\\frac{32\\pi\\times10^{-7}}{8\\pi\\times10^{-2}}=4\\times10^{-5}\\;\\text{T}=40\\;\\mu\\text{T}$.",
-          "solution_he": "(א) $B = \\frac{\\mu_0 I r}{2\\pi R^2} = 2\\;\\text{mT}$. (ב) $B = \\frac{\\mu_0 I}{2\\pi r} = 40\\;\\mu\\text{T}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n(א) $B = \\frac{\\mu_0 I r}{2\\pi R^2} = 2\\;\\text{mT}$. (ב) $B = \\frac{\\mu_0 I}{2\\pi r} = 40\\;\\mu\\text{T}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -146,8 +148,8 @@
           "difficulty": "medium",
           "body_en": "A toroid has $N = 600$ turns, mean radius $r = 10\\;\\text{cm}$, and $I = 3\\;\\text{A}$. Find the approximate field inside.",
           "body_he": "טורואיד בעל $N = 600$ כריכות, רדיוס ממוצע $r = 10\\;\\text{cm}$, ו-$I = 3\\;\\text{A}$. מצא את השדה המקורב בפנים.",
-          "solution_en": "$B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(600)(3)}{2\\pi(0.10)} = \\frac{720\\pi\\times10^{-7}}{0.2\\pi} = 3.6\\times10^{-3}\\;\\text{T} = 3.6\\;\\text{mT}$.",
-          "solution_he": "$B = \\frac{\\mu_0 NI}{2\\pi r} = 3.6\\;\\text{mT}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(600)(3)}{2\\pi(0.10)} = \\frac{720\\pi\\times10^{-7}}{0.2\\pi} = 3.6\\times10^{-3}\\;\\text{T} = 3.6\\;\\text{mT}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$B = \\frac{\\mu_0 NI}{2\\pi r} = 3.6\\;\\text{mT}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -164,8 +166,8 @@
           "difficulty": "medium",
           "body_en": "A solenoid of length $L = 30\\;\\text{cm}$ has $N = 900$ turns and carries $I = 2\\;\\text{A}$. Find (a) $n$, (b) $B$ inside.",
           "body_he": "סולנואיד באורך $L = 30\\;\\text{cm}$ בעל $N = 900$ כריכות נושא $I = 2\\;\\text{A}$. מצא (א) $n$, (ב) $B$ בפנים.",
-          "solution_en": "(a) $n = N/L = 900/0.30 = 3000\\;\\text{turns/m}$. (b) $B = \\mu_0 nI = (4\\pi\\times10^{-7})(3000)(2) = 24\\pi\\times10^{-4} \\approx 7.54\\;\\text{mT}$.",
-          "solution_he": "(א) $n = 3000\\;\\text{כריכות/מ'}$. (ב) $B \\approx 7.54\\;\\text{mT}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n(a) $n = N/L = 900/0.30 = 3000\\;\\text{turns/m}$. (b) $B = \\mu_0 nI = (4\\pi\\times10^{-7})(3000)(2) = 24\\pi\\times10^{-4} \\approx 7.54\\;\\text{mT}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n(א) $n = 3000\\;\\text{כריכות/מ'}$. (ב) $B \\approx 7.54\\;\\text{mT}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -174,7 +176,7 @@
           "body_en": "A hollow cylindrical conductor (inner radius $a$, outer radius $b$) carries total current $I$ uniformly distributed in its cross-section. Find $B$ for $a < r < b$.",
           "body_he": "מוליך גלילי חלול (רדיוס פנימי $a$, רדיוס חיצוני $b$) נושא זרם כולל $I$ מפוזר אחידות בחתך. מצא $B$ עבור $a < r < b$.",
           "solution_en": "The current density is $J = I/(\\pi(b^2-a^2))$. Enclosed current at radius $r$: $I_{\\text{enc}} = J\\cdot\\pi(r^2-a^2) = I\\frac{r^2-a^2}{b^2-a^2}$. Ampère: $B(2\\pi r) = \\mu_0 I\\frac{r^2-a^2}{b^2-a^2}$, giving $B = \\frac{\\mu_0 I}{2\\pi r}\\cdot\\frac{r^2-a^2}{b^2-a^2}$.",
-          "solution_he": "$B = \\frac{\\mu_0 I}{2\\pi r}\\cdot\\frac{r^2-a^2}{b^2-a^2}$ עבור $a < r < b$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$B = \\frac{\\mu_0 I}{2\\pi r}\\cdot\\frac{r^2-a^2}{b^2-a^2}$ עבור $a < r < b$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -191,8 +193,8 @@
           "difficulty": "hard",
           "body_en": "A toroid has inner radius $a = 5\\;\\text{cm}$, outer radius $b = 9\\;\\text{cm}$, $N = 1000$ turns, $I = 2\\;\\text{A}$. (a) Find $B$ at $r = 7\\;\\text{cm}$. (b) Find $B$ at $r = 12\\;\\text{cm}$. (c) If the cross-sectional radius is $c = (b-a)/2 = 2\\;\\text{cm}$, estimate the flux $\\Phi$ through one cross-section.",
           "body_he": "טורואיד עם רדיוס פנימי $a = 5\\;\\text{cm}$, רדיוס חיצוני $b = 9\\;\\text{cm}$, $N = 1000$ כריכות, $I = 2\\;\\text{A}$. (א) מצא $B$ ב-$r = 7\\;\\text{cm}$. (ב) מצא $B$ ב-$r = 12\\;\\text{cm}$. (ג) אם רדיוס חתך העיגול הוא $c = 2\\;\\text{cm}$, אמוד את השטף $\\Phi$ דרך חתך אחד.",
-          "solution_en": "(a) $B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(1000)(2)}{2\\pi(0.07)} \\approx 5.71\\;\\text{mT}$. (b) $B = 0$ (outside). (c) Approximating $B$ as uniform at $r=0.07\\;\\text{m}$: $\\Phi \\approx B\\cdot\\pi c^2 = (5.71\\times10^{-3})\\pi(0.02)^2 \\approx 7.18\\times10^{-6}\\;\\text{Wb}$.",
-          "solution_he": "(א) $B \\approx 5.71\\;\\text{mT}$. (ב) $B = 0$. (ג) $\\Phi \\approx 7.18\\;\\text{nWb}$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n(a) $B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(1000)(2)}{2\\pi(0.07)} \\approx 5.71\\;\\text{mT}$. (b) $B = 0$ (outside). (c) Approximating $B$ as uniform at $r=0.07\\;\\text{m}$: $\\Phi \\approx B\\cdot\\pi c^2 = (5.71\\times10^{-3})\\pi(0.02)^2 \\approx 7.18\\times10^{-6}\\;\\text{Wb}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n(א) $B \\approx 5.71\\;\\text{mT}$. (ב) $B = 0$. (ג) $\\Phi \\approx 7.18\\;\\text{nWb}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -200,8 +202,8 @@
           "difficulty": "hard",
           "body_en": "Two long solenoids are coaxial. The inner has $n_1 = 2000\\;\\text{turns/m}$, $I_1 = 1\\;\\text{A}$; the outer has $n_2 = 1000\\;\\text{turns/m}$, $I_2 = 2\\;\\text{A}$ (opposing current). Find the field (a) inside both, (b) between them, (c) outside both.",
           "body_he": "שני סולנואידים ארוכים קואקסיאליים. הפנימי: $n_1 = 2000\\;\\text{כריכות/מ'}$, $I_1 = 1\\;\\text{A}$; החיצוני: $n_2 = 1000\\;\\text{כריכות/מ'}$, $I_2 = 2\\;\\text{A}$ (זרם מנוגד). מצא את השדה (א) בתוך שניהם, (ב) בין השניים, (ג) מחוץ לשניהם.",
-          "solution_en": "(a) $B = \\mu_0(n_1 I_1 - n_2 I_2) = \\mu_0(2000 - 2000) = 0$. (b) Only inner contributes: $B = \\mu_0 n_1 I_1 = (4\\pi\\times10^{-7})(2000)(1) \\approx 2.51\\;\\text{mT}$. (c) Both contribute but cancel: $n_1 I_1 = n_2 I_2 = 2000$, so $B = 0$.",
-          "solution_he": "(א) $B = 0$. (ב) $B \\approx 2.51\\;\\text{mT}$. (ג) $B = 0$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n(a) $B = \\mu_0(n_1 I_1 - n_2 I_2) = \\mu_0(2000 - 2000) = 0$. (b) Only inner contributes: $B = \\mu_0 n_1 I_1 = (4\\pi\\times10^{-7})(2000)(1) \\approx 2.51\\;\\text{mT}$. (c) Both contribute but cancel: $n_1 I_1 = n_2 I_2 = 2000$, so $B = 0$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n(א) $B = 0$. (ב) $B \\approx 2.51\\;\\text{mT}$. (ג) $B = 0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -209,8 +211,8 @@
           "difficulty": "hard",
           "body_en": "Derive the displacement current correction: A parallel-plate capacitor is being charged at rate $dQ/dt = 2\\;\\text{A}$. The plates have area $A = 0.01\\;\\text{m}^2$. Find the displacement current density $J_d$ between the plates and the magnetic field at radius $r = 1\\;\\text{cm}$ from the axis.",
           "body_he": "גזור את תיקון זרם התזוזה: קבל לוחות מקבילים מתטען בקצב $dQ/dt = 2\\;\\text{A}$. ללוחות שטח $A = 0.01\\;\\text{m}^2$. מצא את צפיפות זרם התזוזה $J_d$ בין הלוחות ואת השדה המגנטי ברדיוס $r = 1\\;\\text{cm}$ מהציר.",
-          "solution_en": "$I_d = \\epsilon_0 dE/dt \\cdot A = dQ/dt = 2\\;\\text{A}$ (matches conduction current). $J_d = I_d/A = 200\\;\\text{A/m}^2$. For $r < \\sqrt{A/\\pi}$, using Ampère-Maxwell: $B(2\\pi r) = \\mu_0 I_d (r^2\\pi/A)$; at $r=0.01\\;\\text{m}$: $B = \\frac{\\mu_0 I_d r}{2A} = \\frac{(4\\pi\\times10^{-7})(2)(0.01)}{2(0.01)} = 4\\pi\\times10^{-7}\\times10 \\approx 1.26\\;\\mu\\text{T}$.",
-          "solution_he": "$J_d = 200\\;\\text{A/m}^2$. $B \\approx 1.26\\;\\mu\\text{T}$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$I_d = \\epsilon_0 dE/dt \\cdot A = dQ/dt = 2\\;\\text{A}$ (matches conduction current). $J_d = I_d/A = 200\\;\\text{A/m}^2$. For $r < \\sqrt{A/\\pi}$, using Ampère-Maxwell: $B(2\\pi r) = \\mu_0 I_d (r^2\\pi/A)$; at $r=0.01\\;\\text{m}$: $B = \\frac{\\mu_0 I_d r}{2A} = \\frac{(4\\pi\\times10^{-7})(2)(0.01)}{2(0.01)} = 4\\pi\\times10^{-7}\\times10 \\approx 1.26\\;\\mu\\text{T}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$J_d = 200\\;\\text{A/m}^2$. $B \\approx 1.26\\;\\mu\\text{T}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         }
       ]
@@ -222,6 +224,14 @@
       "title_he": "מלכודות נפוצות",
       "body_en_md": "1. **Confusing the surface with the loop.** Ampère's law uses a closed **line** integral (1D loop), not a surface integral. Gauss's law uses a surface. Don't mix them up.\n\n2. **Wrong $I_{\\text{enc}}$.** The enclosed current is the net current threading through ANY surface bounded by the loop, not the current at the loop itself. For the capacitor problem, a surface bulging between the plates has zero conduction current — you must add displacement current.\n\n3. **Using Ampère's law when symmetry fails.** Ampère's law is always true, but useless for computing $B$ unless you can argue both $|B|=\\text{const}$ and $\\theta=\\text{const}$ on the loop. A short wire, a bent wire, or an asymmetric distribution requires Biot-Savart.\n\n4. **Sign errors in $I_{\\text{enc}}$.** Currents in opposite directions partially cancel. In a coaxial cable or toroid exterior, they cancel completely.\n\n5. **Forgetting that $B = 0$ outside an ideal solenoid.** This requires the argument that the solenoid is infinite. For a finite solenoid, $B \\neq 0$ outside near the ends.",
       "body_he_md": "1. **בלבול בין משטח ללולאה.** חוק אמפר משתמש באינטגרל **קווי** סגור (לולאה 1D), לא באינטגרל משטחי. חוק גאוס משתמש במשטח. אל תערבבו.\n\n2. **$I_{\\text{enc}}$ שגוי.** הזרם הכלוא הוא הזרם הנטו החוצה דרך כל משטח הגובל בלולאה, לא הזרם בלולאה עצמה. בבעיית הקבל, משטח הבולט בין הלוחות נושא אפס זרם הולכה — חובה להוסיף זרם תזוזה.\n\n3. **שימוש בחוק אמפר כאשר הסימטריה נכשלת.** חוק אמפר תמיד נכון, אבל חסר תועלת לחישוב $B$ אלא אם ניתן לטעון ש-$|B|=\\text{const}$ וגם $\\theta=\\text{const}$ על הלולאה. חוט קצר, חוט כפוף, או פילוג אסימטרי דורשים ביו-סבר.\n\n4. **טעויות סימן ב-$I_{\\text{enc}}$.** זרמים בכיוונים מנוגדים מבטלים חלקית. בכבל קואקסיאלי או מחוץ לטורואיד הם מבטלים לחלוטין.\n\n5. **שכחה ש-$B = 0$ מחוץ לסולנואיד אידיאלי.** הטיעון דורש שהסולנואיד אינסופי. לסולנואיד סופי, $B \\neq 0$ מחוץ קרוב לקצוות."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "id": "before_exam",
@@ -238,123 +248,6 @@
       "title_he": "סיכום",
       "body_en_md": "- **Ampère's law:** $\\oint \\vec{B} \\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ (steady currents)\n- **Long wire:** $B = \\mu_0 I / (2\\pi r)$\n- **Solenoid:** $B = \\mu_0 n I$ inside; $B = 0$ outside\n- **Toroid:** $B = \\mu_0 NI / (2\\pi r)$ inside; $B = 0$ outside\n- **Solid cylinder** ($r < R$): $B = \\mu_0 I r / (2\\pi R^2)$ — linear growth\n- **Strategy:** choose loop with $|B|=\\text{const}$ and fixed angle; exploit symmetry\n- **Limitation:** original Ampère fails for time-varying $E$; add displacement current $\\epsilon_0 d\\Phi_E/dt$",
       "body_he_md": "- **חוק אמפר:** $\\oint \\vec{B} \\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ (זרמים יציבים)\n- **חוט ארוך:** $B = \\mu_0 I / (2\\pi r)$\n- **סולנואיד:** $B = \\mu_0 n I$ פנים; $B = 0$ חוץ\n- **טורואיד:** $B = \\mu_0 NI / (2\\pi r)$ פנים; $B = 0$ חוץ\n- **גליל מוצק** ($r < R$): $B = \\mu_0 I r / (2\\pi R^2)$ — גידול ליניארי\n- **אסטרטגיה:** בחר לולאה עם $|B|=\\text{const}$ וזווית קבועה; נצל סימטריה\n- **מגבלה:** אמפר המקורי נכשל ל-$E$ משתנה בזמן; יש להוסיף זרם תזוזה $\\epsilon_0 d\\Phi_E/dt$"
-    }
-  ],
-  "questions": [
-    {
-      "id": "q1",
-      "kind": "mcq",
-      "difficulty": 2,
-      "skill_atoms": ["ampere_law_apply", "solenoid_field"],
-      "stem_en": "An infinite solenoid has $n = 2000\\;\\text{turns/m}$ and $I = 0.5\\;\\text{A}$. Find $B$ inside.",
-      "stem_he": "סולנואיד אינסופי בעל $n = 2000\\;\\text{כריכות/מ'}$ ו-$I = 0.5\\;\\text{A}$. מצא $B$ בפנים.",
-      "answer_payload": {
-        "options_en": ["$4\\pi\\times10^{-4}\\;\\text{T}\\approx1.26\\;\\text{mT}$", "$2\\pi\\times10^{-4}\\;\\text{T}$", "$8\\pi\\times10^{-4}\\;\\text{T}$", "$1.0\\;\\text{mT}$"],
-        "options_he": ["$4\\pi\\times10^{-4}\\;\\text{T}\\approx1.26\\;\\text{mT}$", "$2\\pi\\times10^{-4}\\;\\text{T}$", "$8\\pi\\times10^{-4}\\;\\text{T}$", "$1.0\\;\\text{mT}$"],
-        "correct_index": 0
-      },
-      "explanation_en": "$B = \\mu_0 nI = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.",
-      "explanation_he": "$B = \\mu_0 nI = (4\\pi\\times10^{-7})(2000)(0.5) \\approx 1.26\\;\\text{mT}$."
-    },
-    {
-      "id": "q2",
-      "kind": "true_false",
-      "difficulty": 2,
-      "skill_atoms": ["ampere_law_apply"],
-      "stem_en": "True or False: Ampère's law $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ is valid for any closed loop, regardless of symmetry.",
-      "stem_he": "נכון או לא נכון: חוק אמפר $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ תקף לכל לולאה סגורה, ללא קשר לסימטריה.",
-      "answer_payload": {"correct": true},
-      "explanation_en": "Ampère's law is always true. However, it is only *useful* for computing $B$ algebraically when symmetry allows $B$ to be factored out of the integral.",
-      "explanation_he": "חוק אמפר תמיד נכון. אולם, הוא שימושי לחישוב $B$ אלגברי רק כאשר הסימטריה מאפשרת להוציא $B$ מחוץ לאינטגרל."
-    },
-    {
-      "id": "q3",
-      "kind": "numeric",
-      "difficulty": 3,
-      "skill_atoms": ["ampere_law_apply", "toroid_field"],
-      "stem_en": "A toroid: $N = 500$, $r = 7\\;\\text{cm}$, $I = 2\\;\\text{A}$. Find $B$ (in mT) inside.",
-      "stem_he": "טורואיד: $N = 500$, $r = 7\\;\\text{cm}$, $I = 2\\;\\text{A}$. מצא $B$ (ב-mT) בפנים.",
-      "answer_payload": {"value": 2.857, "tolerance": 0.05, "unit_en": "mT", "unit_he": "mT"},
-      "explanation_en": "$B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(500)(2)}{2\\pi(0.07)} = \\frac{4\\times10^{-4}}{0.14} \\approx 2.857\\;\\text{mT}$.",
-      "explanation_he": "$B = \\frac{\\mu_0 NI}{2\\pi r} \\approx 2.857\\;\\text{mT}$."
-    },
-    {
-      "id": "q4",
-      "kind": "mcq",
-      "difficulty": 3,
-      "skill_atoms": ["ampere_loop_choice", "symmetry_argument"],
-      "stem_en": "For a solenoid, why is a rectangular Ampèrian loop preferred over a circular one?",
-      "stem_he": "עבור סולנואיד, מדוע לולאת אמפר מלבנית עדיפה על מעגלית?",
-      "answer_payload": {
-        "options_en": [
-          "A circle encloses more current than a rectangle",
-          "The rectangle has one side inside (where $\\vec{B}\\parallel d\\vec{l}$) and one outside (where $B\\approx0$), making the integral solvable",
-          "Circular loops violate Ampère's law for solenoids",
-          "A rectangle has a larger perimeter, giving a stronger field"
-        ],
-        "options_he": [
-          "מעגל כולל יותר זרם ממלבן",
-          "למלבן צד אחד בפנים (שם $\\vec{B}\\parallel d\\vec{l}$) וצד אחד בחוץ (שם $B\\approx0$), מה שהופך את האינטגרל לפתיר",
-          "לולאות מעגליות מפרות את חוק אמפר לסולנואידים",
-          "למלבן היקף גדול יותר, מה שנותן שדה חזק יותר"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "For a circular coaxial loop, $\\vec{B}$ is perpendicular to $d\\vec{l}$ (field is axial, loop is circumferential), so $\\oint \\vec{B}\\cdot d\\vec{l} = 0$ — useless. The rectangle exploits the geometry.",
-      "explanation_he": "ללולאה מעגלית קואקסיאלית, $\\vec{B}$ מאונך ל-$d\\vec{l}$ (השדה צירי, הלולאה היקפית), ולכן $\\oint=0$ — חסר תועלת. המלבן מנצל את הגיאומטריה."
-    },
-    {
-      "id": "q5",
-      "kind": "ordering",
-      "difficulty": 3,
-      "skill_atoms": ["ampere_law_apply", "solenoid_field"],
-      "stem_en": "Put these steps for finding $B$ inside a solenoid in the correct order:",
-      "stem_he": "סדר את השלבים למציאת $B$ בתוך סולנואיד בסדר הנכון:",
-      "answer_payload": {
-        "steps_en": [
-          "Draw a rectangular Ampèrian loop, one side inside the solenoid, one side outside",
-          "Argue that outside $B\\approx0$ and the short sides contribute zero",
-          "Write $\\oint \\vec{B}\\cdot d\\vec{l} = B_{\\text{in}}\\ell$",
-          "Count the enclosed turns: $I_{\\text{enc}} = n\\ell I$",
-          "Set equal and solve: $B = \\mu_0 nI$"
-        ],
-        "steps_he": [
-          "ציירו מלבן אמפר, צד אחד בפנים, צד אחד בחוץ",
-          "טיעון: מחוץ $B\\approx0$ והצלעות הקצרות תרומתן אפס",
-          "כתבו $\\oint \\vec{B}\\cdot d\\vec{l} = B_{\\text{in}}\\ell$",
-          "ספרו כריכות כלואות: $I_{\\text{enc}} = n\\ell I$",
-          "השוו ופתרו: $B = \\mu_0 nI$"
-        ],
-        "correct_order": [0, 1, 2, 3, 4]
-      },
-      "explanation_en": "The standard Ampère's law derivation for a solenoid follows these five steps in order.",
-      "explanation_he": "גזירת חוק אמפר הסטנדרטית לסולנואיד עוקבת אחרי חמשת השלבים הללו בסדר."
-    },
-    {
-      "id": "q6",
-      "kind": "derivation",
-      "difficulty": 4,
-      "skill_atoms": ["ampere_law_apply", "symmetry_argument"],
-      "stem_en": "Derive the formula for the magnetic field inside a toroid of $N$ turns, inner radius $a$, outer radius $b$, carrying current $I$.",
-      "stem_he": "גזור את הנוסחה לשדה מגנטי בתוך טורואיד עם $N$ כריכות, רדיוס פנימי $a$, רדיוס חיצוני $b$, נושא זרם $I$.",
-      "answer_payload": {
-        "steps_en": [
-          "Choose a circular Ampèrian loop of radius $r$ ($a < r < b$) coaxial with the toroid. By symmetry, $|\\vec{B}|$ is constant and $\\vec{B}$ is tangential.",
-          "Evaluate: $\\oint \\vec{B}\\cdot d\\vec{l} = B(2\\pi r)$",
-          "Count enclosed current: all $N$ turns pass through the surface, so $I_{\\text{enc}} = NI$",
-          "Apply Ampère: $B(2\\pi r) = \\mu_0 NI$",
-          "Solve: $B = \\frac{\\mu_0 NI}{2\\pi r}$ (valid for $a < r < b$)"
-        ],
-        "steps_he": [
-          "בחר לולאת אמפר מעגלית ברדיוס $r$ ($a < r < b$) קואקסיאלית לטורואיד. מסימטריה, $|\\vec{B}|$ קבוע ו-$\\vec{B}$ משיקי.",
-          "חשב: $\\oint \\vec{B}\\cdot d\\vec{l} = B(2\\pi r)$",
-          "ספור זרם כלוא: כל $N$ הכריכות חוצות את המשטח, ולכן $I_{\\text{enc}} = NI$",
-          "החל אמפר: $B(2\\pi r) = \\mu_0 NI$",
-          "פתור: $B = \\frac{\\mu_0 NI}{2\\pi r}$ (תקף ל-$a < r < b$)"
-        ]
-      },
-      "explanation_en": "Outside ($r > b$): $I_{\\text{enc}} = NI - NI = 0 \\Rightarrow B = 0$. Inside hole ($r < a$): $I_{\\text{enc}} = 0 \\Rightarrow B = 0$.",
-      "explanation_he": "מחוץ ($r > b$): $I_{\\text{enc}} = 0 \\Rightarrow B = 0$. בחור הפנימי ($r < a$): $I_{\\text{enc}} = 0 \\Rightarrow B = 0$."
     }
   ],
   "agent_hints": {
@@ -392,5 +285,241 @@
       "symmetry_argument",
       "displacement_current"
     ]
-  }
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "ampere_law_apply",
+        "solenoid_field"
+      ],
+      "stem_en": "An infinite solenoid has $n = 2000\\;\\text{turns/m}$ and $I = 0.5\\;\\text{A}$. Find $B$ inside.",
+      "stem_he": "סולנואיד אינסופי בעל $n = 2000\\;\\text{כריכות/מ'}$ ו-$I = 0.5\\;\\text{A}$. מצא $B$ בפנים.",
+      "answer_payload": {
+        "options_en": [
+          "$4\\pi\\times10^{-4}\\;\\text{T}\\approx1.26\\;\\text{mT}$",
+          "$2\\pi\\times10^{-4}\\;\\text{T}$",
+          "$8\\pi\\times10^{-4}\\;\\text{T}$",
+          "$1.0\\;\\text{mT}$"
+        ],
+        "options_he": [
+          "$4\\pi\\times10^{-4}\\;\\text{T}\\approx1.26\\;\\text{mT}$",
+          "$2\\pi\\times10^{-4}\\;\\text{T}$",
+          "$8\\pi\\times10^{-4}\\;\\text{T}$",
+          "$1.0\\;\\text{mT}$"
+        ],
+        "correct_index": 0
+      },
+      "explanation_en": "**Why this is correct:**\n$B = \\mu_0 nI = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$B = \\mu_0 nI = (4\\pi\\times10^{-7})(2000)(0.5) \\approx 1.26\\;\\text{mT}$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 1,
+      "options_en": [
+        "$4\\pi\\times10^{-4}\\;\\text{T}\\approx1.26\\;\\text{mT}$",
+        "$2\\pi\\times10^{-4}\\;\\text{T}$",
+        "$8\\pi\\times10^{-4}\\;\\text{T}$",
+        "$1.0\\;\\text{mT}$"
+      ],
+      "options_he": [
+        "$4\\pi\\times10^{-4}\\;\\text{T}\\approx1.26\\;\\text{mT}$",
+        "$2\\pi\\times10^{-4}\\;\\text{T}$",
+        "$8\\pi\\times10^{-4}\\;\\text{T}$",
+        "$1.0\\;\\text{mT}$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "id": "q2",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "ampere_law_apply"
+      ],
+      "stem_en": "True or False: Ampère's law $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ is valid for any closed loop, regardless of symmetry.",
+      "stem_he": "נכון או לא נכון: חוק אמפר $\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$ תקף לכל לולאה סגורה, ללא קשר לסימטריה.",
+      "answer_payload": {
+        "correct": true
+      },
+      "explanation_en": "**Why this is correct:**\nAmpère's law is always true. However, it is only *useful* for computing $B$ algebraically when symmetry allows $B$ to be factored out of the integral.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nחוק אמפר תמיד נכון. אולם, הוא שימושי לחישוב $B$ אלגברי רק כאשר הסימטריה מאפשרת להוציא $B$ מחוץ לאינטגרל.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 2
+    },
+    {
+      "id": "q3",
+      "kind": "numeric",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "ampere_law_apply",
+        "toroid_field"
+      ],
+      "stem_en": "A toroid: $N = 500$, $r = 7\\;\\text{cm}$, $I = 2\\;\\text{A}$. Find $B$ (in mT) inside.",
+      "stem_he": "טורואיד: $N = 500$, $r = 7\\;\\text{cm}$, $I = 2\\;\\text{A}$. מצא $B$ (ב-mT) בפנים.",
+      "answer_payload": {
+        "value": 2.857,
+        "tolerance": 0.05,
+        "unit_en": "mT",
+        "unit_he": "mT"
+      },
+      "explanation_en": "**Why this is correct:**\n$B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(500)(2)}{2\\pi(0.07)} = \\frac{4\\times10^{-4}}{0.14} \\approx 2.857\\;\\text{mT}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$B = \\frac{\\mu_0 NI}{2\\pi r} \\approx 2.857\\;\\text{mT}$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 3
+    },
+    {
+      "id": "q4",
+      "kind": "mcq",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "ampere_loop_choice",
+        "symmetry_argument"
+      ],
+      "stem_en": "For a solenoid, why is a rectangular Ampèrian loop preferred over a circular one?",
+      "stem_he": "עבור סולנואיד, מדוע לולאת אמפר מלבנית עדיפה על מעגלית?",
+      "answer_payload": {
+        "options_en": [
+          "A circle encloses more current than a rectangle",
+          "The rectangle has one side inside (where $\\vec{B}\\parallel d\\vec{l}$) and one outside (where $B\\approx0$), making the integral solvable",
+          "Circular loops violate Ampère's law for solenoids",
+          "A rectangle has a larger perimeter, giving a stronger field"
+        ],
+        "options_he": [
+          "מעגל כולל יותר זרם ממלבן",
+          "למלבן צד אחד בפנים (שם $\\vec{B}\\parallel d\\vec{l}$) וצד אחד בחוץ (שם $B\\approx0$), מה שהופך את האינטגרל לפתיר",
+          "לולאות מעגליות מפרות את חוק אמפר לסולנואידים",
+          "למלבן היקף גדול יותר, מה שנותן שדה חזק יותר"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "**Why this is correct:**\nFor a circular coaxial loop, $\\vec{B}$ is perpendicular to $d\\vec{l}$ (field is axial, loop is circumferential), so $\\oint \\vec{B}\\cdot d\\vec{l} = 0$ — useless. The rectangle exploits the geometry.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nללולאה מעגלית קואקסיאלית, $\\vec{B}$ מאונך ל-$d\\vec{l}$ (השדה צירי, הלולאה היקפית), ולכן $\\oint=0$ — חסר תועלת. המלבן מנצל את הגיאומטריה.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 4,
+      "options_en": [
+        "A circle encloses more current than a rectangle",
+        "The rectangle has one side inside (where $\\vec{B}\\parallel d\\vec{l}$) and one outside (where $B\\approx0$), making the integral solvable",
+        "Circular loops violate Ampère's law for solenoids",
+        "A rectangle has a larger perimeter, giving a stronger field"
+      ],
+      "options_he": [
+        "מעגל כולל יותר זרם ממלבן",
+        "למלבן צד אחד בפנים (שם $\\vec{B}\\parallel d\\vec{l}$) וצד אחד בחוץ (שם $B\\approx0$), מה שהופך את האינטגרל לפתיר",
+        "לולאות מעגליות מפרות את חוק אמפר לסולנואידים",
+        "למלבן היקף גדול יותר, מה שנותן שדה חזק יותר"
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "q5",
+      "kind": "ordering",
+      "difficulty": "hard",
+      "skill_atoms": [
+        "ampere_law_apply",
+        "solenoid_field"
+      ],
+      "stem_en": "Put these steps for finding $B$ inside a solenoid in the correct order:",
+      "stem_he": "סדר את השלבים למציאת $B$ בתוך סולנואיד בסדר הנכון:",
+      "answer_payload": {
+        "steps_en": [
+          "Draw a rectangular Ampèrian loop, one side inside the solenoid, one side outside",
+          "Argue that outside $B\\approx0$ and the short sides contribute zero",
+          "Write $\\oint \\vec{B}\\cdot d\\vec{l} = B_{\\text{in}}\\ell$",
+          "Count the enclosed turns: $I_{\\text{enc}} = n\\ell I$",
+          "Set equal and solve: $B = \\mu_0 nI$"
+        ],
+        "steps_he": [
+          "ציירו מלבן אמפר, צד אחד בפנים, צד אחד בחוץ",
+          "טיעון: מחוץ $B\\approx0$ והצלעות הקצרות תרומתן אפס",
+          "כתבו $\\oint \\vec{B}\\cdot d\\vec{l} = B_{\\text{in}}\\ell$",
+          "ספרו כריכות כלואות: $I_{\\text{enc}} = n\\ell I$",
+          "השוו ופתרו: $B = \\mu_0 nI$"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "explanation_en": "**Why this is correct:**\nThe standard Ampère's law derivation for a solenoid follows these five steps in order.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nגזירת חוק אמפר הסטנדרטית לסולנואיד עוקבת אחרי חמשת השלבים הללו בסדר.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 5
+    },
+    {
+      "id": "q6",
+      "kind": "derivation",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "ampere_law_apply",
+        "symmetry_argument"
+      ],
+      "stem_en": "Derive the formula for the magnetic field inside a toroid of $N$ turns, inner radius $a$, outer radius $b$, carrying current $I$.",
+      "stem_he": "גזור את הנוסחה לשדה מגנטי בתוך טורואיד עם $N$ כריכות, רדיוס פנימי $a$, רדיוס חיצוני $b$, נושא זרם $I$.",
+      "answer_payload": {
+        "steps_en": [
+          "Choose a circular Ampèrian loop of radius $r$ ($a < r < b$) coaxial with the toroid. By symmetry, $|\\vec{B}|$ is constant and $\\vec{B}$ is tangential.",
+          "Evaluate: $\\oint \\vec{B}\\cdot d\\vec{l} = B(2\\pi r)$",
+          "Count enclosed current: all $N$ turns pass through the surface, so $I_{\\text{enc}} = NI$",
+          "Apply Ampère: $B(2\\pi r) = \\mu_0 NI$",
+          "Solve: $B = \\frac{\\mu_0 NI}{2\\pi r}$ (valid for $a < r < b$)"
+        ],
+        "steps_he": [
+          "בחר לולאת אמפר מעגלית ברדיוס $r$ ($a < r < b$) קואקסיאלית לטורואיד. מסימטריה, $|\\vec{B}|$ קבוע ו-$\\vec{B}$ משיקי.",
+          "חשב: $\\oint \\vec{B}\\cdot d\\vec{l} = B(2\\pi r)$",
+          "ספור זרם כלוא: כל $N$ הכריכות חוצות את המשטח, ולכן $I_{\\text{enc}} = NI$",
+          "החל אמפר: $B(2\\pi r) = \\mu_0 NI$",
+          "פתור: $B = \\frac{\\mu_0 NI}{2\\pi r}$ (תקף ל-$a < r < b$)"
+        ]
+      },
+      "explanation_en": "**Why this is correct:**\nOutside ($r > b$): $I_{\\text{enc}} = NI - NI = 0 \\Rightarrow B = 0$. Inside hole ($r < a$): $I_{\\text{enc}} = 0 \\Rightarrow B = 0$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nמחוץ ($r > b$): $I_{\\text{enc}} = 0 \\Rightarrow B = 0$. בחור הפנימי ($r < a$): $I_{\\text{enc}} = 0 \\Rightarrow B = 0$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 6
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A long wire carries $I = 6\\;\\text{A}$. Find $B$ at $r = 3\\;\\text{cm}$.",
+      "stem_he": "חוט ארוך נושא $I = 6\\;\\text{A}$. מצא $B$ ב-$r = 3\\;\\text{cm}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(6)}{2\\pi(0.03)} = 4\\times10^{-5}\\;\\text{T} = 40\\;\\mu\\text{T}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "40\\;\\mu\\text{T}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "40"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$B = \\frac{\\mu_0 I}{2\\pi r} = \\frac{(4\\pi\\times10^{-7})(6)}{2\\pi(0.03)} = 4\\times10^{-5}\\;\\text{T} = 40\\;\\mu\\text{T}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$B = \\frac{\\mu_0 I}{2\\pi r} = 40\\;\\mu\\text{T}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "ampere_law_apply",
+        "solenoid_field"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A solenoid has $n = 2000\\;\\text{turns/m}$ and $I = 0.5\\;\\text{A}$. Find $B$ inside.",
+      "stem_he": "סולנואיד בעל $n = 2000\\;\\text{כריכות/מ'}$ ו-$I = 0.5\\;\\text{A}$. מצא $B$ בפנים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$B = \\mu_0 n I = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1.26"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$B = \\mu_0 n I = (4\\pi\\times10^{-7})(2000)(0.5) = 4\\pi\\times10^{-4}\\approx1.26\\;\\text{mT}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$B = \\mu_0 n I \\approx 1.26\\;\\text{mT}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "ampere_law_apply",
+        "solenoid_field"
+      ]
+    }
+  ],
+  "est_minutes": 50,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

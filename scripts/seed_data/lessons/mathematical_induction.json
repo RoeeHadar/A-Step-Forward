@@ -1,10 +1,12 @@
 {
   "concept_id": "mathematical_induction",
+  "subject": "math",
+  "level": "high_school",
+  "math_track": [],
   "title_en": "Mathematical Induction — Base Case, Inductive Step, and Applications",
   "title_he": "אינדוקציה מתמטית — בסיס, צעד אינדוקציה ויישומים",
-  "subject": "math",
-  "difficulty": "intermediate",
-  "estimated_minutes": 50,
+  "summary_en": "Mathematical induction is like proving an infinite chain of dominoes will all fall: you prove the first falls (base case), then show if any one falls, the next must too (inductive step).",
+  "summary_he": "אינדוקציה = הוכחת שרשרת אינסופית של דומינו. נושאי בגרות: - נוסחאות סכום - הוכחות חלוקה - הוכחות אי-שוויון - סדרות רקורסיביות.",
   "sections": [
     {
       "id": "intro",
@@ -38,7 +40,7 @@
       "title_en": "Worked Example 1 — Sum of First $n$ Integers",
       "title_he": "דוגמה פתורה 1 — סכום $n$ המספרים הראשונים",
       "body_en_md": "**Claim:** $\\sum_{i=1}^n i = \\dfrac{n(n+1)}{2}$ for all $n \\geq 1$.\n\n**Base case ($n=1$):** LHS = $1$; RHS = $1\\cdot2/2 = 1$. ✓\n\n**Inductive step:** Assume $\\sum_{i=1}^k i = k(k+1)/2$ (IH). Prove for $k+1$:\n$$\\sum_{i=1}^{k+1} i = \\left(\\sum_{i=1}^k i\\right) + (k+1) = \\frac{k(k+1)}{2} + (k+1) = (k+1)\\left(\\frac{k}{2}+1\\right) = \\frac{(k+1)(k+2)}{2}$$\nThis is exactly the formula with $n = k+1$. ✓\n\n**Conclusion:** True for all $n \\geq 1$. $\\square$",
-      "body_he_md": "**בסיס:** $n=1$: $1 = 1\\cdot2/2$. ✓\n\n**צעד:** ה.א.: $\\sum_{i=1}^k i = k(k+1)/2$.\n\n$\\sum_{i=1}^{k+1} i = k(k+1)/2 + (k+1) = (k+1)(k+2)/2$. ✓"
+      "body_he_md": "**Claim:** $\\sum_{i=1}^n i = \\dfrac{n(n+1)}{2}$ for all $n \\geq 1$.\n\n**Base case ($n=1$):** LHS = $1$; RHS = $1\\cdot2/2 = 1$. ✓\n\n**Inductive step:** Assume $\\sum_{i=1}^k i = k(k+1)/2$ (IH). Prove for $k+1$:\n$$\\sum_{i=1}^{k+1} i = \\left(\\sum_{i=1}^k i\\right) + (k+1) = \\frac{k(k+1)}{2} + (k+1) = (k+1)\\left(\\frac{k}{2}+1\\right) = \\frac{(k+1)(k+2)}{2}$$\nThis is exactly the formula with $n = k+1$. ✓\n\n**Conclusion:** True for all $n \\geq 1$. $\\square$"
     },
     {
       "id": "checkpoint_1",
@@ -59,7 +61,7 @@
       "title_en": "Worked Example 2 — Divisibility Proof",
       "title_he": "דוגמה פתורה 2 — הוכחת חלוקה",
       "body_en_md": "**Claim:** $3^n - 1$ is divisible by 2 for all $n \\geq 1$.\n\n**Base case ($n=1$):** $3^1 - 1 = 2$. $2\\mid2$ ✓\n\n**Inductive step:** Assume $2\\mid(3^k - 1)$, i.e., $3^k - 1 = 2m$ for some integer $m$.\n\n$$3^{k+1} - 1 = 3\\cdot3^k - 1 = 3(3^k - 1) + 3 - 1 = 3(2m) + 2 = 2(3m + 1)$$\n\nThis is divisible by 2. ✓\n\n**Conclusion:** True for all $n \\geq 1$. $\\square$",
-      "body_he_md": "**בסיס:** $3^1 - 1 = 2$. $2|2$ ✓.\n\n**ה.א.:** $3^k - 1 = 2m$.\n\n$3^{k+1} - 1 = 3(2m) + 2 = 2(3m+1)$. $2\\mid2(3m+1)$ ✓."
+      "body_he_md": "This is divisible by 2. ✓"
     },
     {
       "id": "checkpoint_2",
@@ -80,23 +82,23 @@
       "title_en": "Worked Example 3 — Inequality Proof",
       "title_he": "דוגמה פתורה 3 — הוכחת אי-שוויון",
       "body_en_md": "**Claim:** $2^n > n^2$ for all $n \\geq 5$.\n\n**Base case ($n=5$):** $2^5 = 32 > 25 = 5^2$ ✓\n\n**Inductive step:** Assume $2^k > k^2$ for some $k \\geq 5$. Prove $2^{k+1} > (k+1)^2$.\n\n$2^{k+1} = 2\\cdot2^k > 2k^2$ (by IH)\n\nNeed to show $2k^2 \\geq (k+1)^2 = k^2 + 2k + 1$:\n$2k^2 - k^2 - 2k - 1 = k^2 - 2k - 1 = (k-1)^2 - 2$\n\nFor $k \\geq 5$: $(k-1)^2 - 2 \\geq 16 - 2 = 14 > 0$ ✓\n\nSo $2^{k+1} > 2k^2 \\geq (k+1)^2$. ✓\n\n**Conclusion:** $2^n > n^2$ for all $n \\geq 5$. $\\square$",
-      "body_he_md": "**בסיס:** $n=5$: $32 > 25$ ✓.\n\n**ה.א.:** $2^k > k^2$.\n\n$2^{k+1} = 2\\cdot2^k > 2k^2 \\geq (k+1)^2$ (כי $k^2 - 2k - 1 \\geq 0$ עבור $k \\geq 5$). ✓"
+      "body_he_md": "**בסיס:** $n=5$: $32 > 25$ ✓.\n\n**ה.א.:** $2^k > k^2$.\n\n$2^{k+1} = 2\\cdot2^k > 2k^2 \\geq (k+1)^2$ (כי $k^2 - 2k - 1 \\geq 0$ עבור $k \\geq 5$). ✓\n\n$2^{k+1} = 2\\cdot2^k > 2k^2$ (by IH)\n\nSo $2^{k+1} > 2k^2 \\geq (k+1)^2$. ✓"
     },
     {
       "id": "method_guide",
       "kind": "method_guide",
       "title_en": "Method Guide",
       "title_he": "מדריך שיטה",
-      "body_en_md": "| Step | What to write |\n|---|---|\n| 1. State claim | \"Prove $P(n)$ for all $n \\geq 1$\" |\n| 2. Base case | Show $P(1)$ explicitly |\n| 3. IH | \"Assume $P(k)$ is true for some $k \\geq 1$\" |\n| 4. Inductive step | Use IH to show $P(k+1)$ |\n| 5. Conclude | \"By induction, $P(n)$ is true for all $n \\geq 1$\" |",
-      "body_he_md": "1. הכרז: הוכח $P(n)$\n2. בסיס: הראה $P(1)$\n3. ה.א.: הניח $P(k)$\n4. צעד: הוכח $P(k+1)$ ע\"י ה.א.\n5. סיכום"
+      "body_en_md": "| Step | What to write |\n|---|---|\n| 1. State claim | \"Prove $P(n)$ for all $n \\geq 1$\" |\n| 2. Base case | Show $P(1)$ explicitly |\n| 3. IH | \"Assume $P(k)$ is true for some $k \\geq 1$\" |\n| 4. Inductive step | Use IH to show $P(k+1)$ |\n| 5. Conclude | \"By induction, $P(n)$ is true for all $n \\geq 1$\" |\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
+      "body_he_md": "1. הכרז: הוכח $P(n)$\n2. בסיס: הראה $P(1)$\n3. ה.א.: הניח $P(k)$\n4. צעד: הוכח $P(k+1)$ ע\"י ה.א.\n5. סיכום\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
     },
     {
       "id": "exercise_set",
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
@@ -113,7 +115,7 @@
           "body_en": "Write the inductive hypothesis for proving $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.",
           "body_he": "כתוב ה.א. עבור: $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.",
           "solution_en": "IH: Assume $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ for some $k \\geq 1$.",
-          "solution_he": "ה.א.: $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$.",
+          "solution_he": "**פתרון:**\n\nה.א.: $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -130,8 +132,8 @@
           "difficulty": "easy",
           "body_en": "The sum of first $n$ odd numbers equals $n^2$. Verify for $n = 4$.",
           "body_he": "סכום $n$ מספרים אי-זוגיים ראשונים = $n^2$. אמת ל-$n=4$.",
-          "solution_en": "First 4 odds: $1+3+5+7 = 16 = 4^2$ ✓.",
-          "solution_he": "$1+3+5+7 = 16 = 4^2$ ✓.",
+          "solution_en": "**Solution:**\n\nFirst 4 odds: $1+3+5+7 = 16 = 4^2$ ✓.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1+3+5+7 = 16 = 4^2$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -140,7 +142,7 @@
           "body_en": "Prove by induction: $\\sum_{i=1}^n i(i+1) = \\dfrac{n(n+1)(n+2)}{3}$.",
           "body_he": "הוכח באינדוקציה: $\\sum_{i=1}^n i(i+1) = n(n+1)(n+2)/3$.",
           "solution_en": "Base ($n=1$): $1\\cdot2 = 2 = 1\\cdot2\\cdot3/3 = 2$ ✓. IH: assume true for $k$. $\\sum_{i=1}^{k+1} i(i+1) = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3$. ✓",
-          "solution_he": "הוכח: $\\sum^{k+1} = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)(k+3)/3$. ✓",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nהוכח: $\\sum^{k+1} = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)(k+3)/3$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -149,7 +151,7 @@
           "body_en": "Prove by induction: $5^n - 1$ is divisible by 4 for all $n \\geq 1$.",
           "body_he": "הוכח: $5^n - 1$ מתחלק ב-4 לכל $n \\geq 1$.",
           "solution_en": "Base: $5^1 - 1 = 4$. $4\\mid4$ ✓. IH: $4\\mid(5^k-1)$, so $5^k = 4m+1$. $5^{k+1} - 1 = 5\\cdot5^k - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$. ✓",
-          "solution_he": "$5^{k+1} - 1 = 4(5m+1)$ — מתחלק ב-4. ✓",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$5^{k+1} - 1 = 4(5m+1)$ — מתחלק ב-4. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -158,7 +160,7 @@
           "body_en": "Prove by induction: $n! \\geq 2^{n-1}$ for all $n \\geq 1$.",
           "body_he": "הוכח: $n! \\geq 2^{n-1}$ לכל $n \\geq 1$.",
           "solution_en": "Base ($n=1$): $1 \\geq 1$ ✓. IH: $k! \\geq 2^{k-1}$. $(k+1)! = (k+1)\\cdot k! \\geq (k+1)\\cdot2^{k-1} \\geq 2\\cdot2^{k-1} = 2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓",
-          "solution_he": "$(k+1)! \\geq (k+1)2^{k-1} \\geq 2^k$ ✓.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(k+1)! \\geq (k+1)2^{k-1} \\geq 2^k$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -167,7 +169,7 @@
           "body_en": "Prove that $3^{2n} - 1$ is divisible by 8 for all $n \\geq 1$.",
           "body_he": "הוכח: $3^{2n} - 1$ מתחלק ב-8 לכל $n \\geq 1$.",
           "solution_en": "Base: $3^2 - 1 = 8$. ✓. IH: $8\\mid(3^{2k}-1)$. $3^{2(k+1)} - 1 = 9\\cdot3^{2k} - 1 = 9(3^{2k}-1) + 8$. Both $9(3^{2k}-1)$ and $8$ are divisible by 8. ✓",
-          "solution_he": "$3^{2k+2}-1 = 9(3^{2k}-1)+8$. Beide divisible by 8. ✓",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$3^{2k+2}-1 = 9(3^{2k}-1)+8$. Beide divisible by 8. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -184,8 +186,8 @@
           "difficulty": "hard",
           "body_en": "Prove by induction: $\\sum_{i=1}^n i^2 = \\dfrac{n(n+1)(2n+1)}{6}$.",
           "body_he": "הוכח: $\\sum_{i=1}^n i^2 = n(n+1)(2n+1)/6$.",
-          "solution_en": "Base ($n=1$): $1 = 1\\cdot2\\cdot3/6 = 1$ ✓. IH: $\\sum_{i=1}^k i^2 = k(k+1)(2k+1)/6$. Sum to $k+1$: $k(k+1)(2k+1)/6 + (k+1)^2 = (k+1)[k(2k+1)/6 + (k+1)] = (k+1)[(2k^2+k+6k+6)/6] = (k+1)(2k^2+7k+6)/6 = (k+1)(k+2)(2k+3)/6$. ✓",
-          "solution_he": "$(k+1)(k+2)(2k+3)/6$ — נוסחה ל-$n = k+1$. ✓",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nBase ($n=1$): $1 = 1\\cdot2\\cdot3/6 = 1$ ✓. IH: $\\sum_{i=1}^k i^2 = k(k+1)(2k+1)/6$. Sum to $k+1$: $k(k+1)(2k+1)/6 + (k+1)^2 = (k+1)[k(2k+1)/6 + (k+1)] = (k+1)[(2k^2+k+6k+6)/6] = (k+1)(2k^2+7k+6)/6 = (k+1)(k+2)(2k+3)/6$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$(k+1)(k+2)(2k+3)/6$ — נוסחה ל-$n = k+1$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -193,8 +195,8 @@
           "difficulty": "hard",
           "body_en": "Prove that $2^n \\geq n + 1$ for all $n \\geq 0$.",
           "body_he": "הוכח: $2^n \\geq n+1$ לכל $n \\geq 0$.",
-          "solution_en": "Base ($n=0$): $1 \\geq 1$ ✓. IH: $2^k \\geq k+1$. $2^{k+1} = 2\\cdot2^k \\geq 2(k+1) = 2k+2 \\geq k+2 = (k+1)+1$ (since $k \\geq 0 \\Rightarrow 2k+2 \\geq k+2$). ✓",
-          "solution_he": "$2^{k+1} \\geq 2(k+1) = 2k+2 \\geq k+2$ ✓.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nBase ($n=0$): $1 \\geq 1$ ✓. IH: $2^k \\geq k+1$. $2^{k+1} = 2\\cdot2^k \\geq 2(k+1) = 2k+2 \\geq k+2 = (k+1)+1$ (since $k \\geq 0 \\Rightarrow 2k+2 \\geq k+2$). ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$2^{k+1} \\geq 2(k+1) = 2k+2 \\geq k+2$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -202,8 +204,8 @@
           "difficulty": "hard",
           "body_en": "The Fibonacci sequence: $F_1 = 1$, $F_2 = 1$, $F_n = F_{n-1} + F_{n-2}$. Prove $F_n < 2^n$ for all $n \\geq 1$.",
           "body_he": "סדרת פיבונאצ'י: $F_1 = F_2 = 1$, $F_n = F_{n-1} + F_{n-2}$. הוכח $F_n < 2^n$.",
-          "solution_en": "Base: $F_1 = 1 < 2 = 2^1$ ✓; $F_2 = 1 < 4 = 2^2$ ✓. Strong IH: assume $F_j < 2^j$ for all $j \\leq k$ where $k \\geq 2$. $F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 2^{k-1}(2+1) = 3\\cdot2^{k-1} < 4\\cdot2^{k-1} = 2^{k+1}$. ✓",
-          "solution_he": "$F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 3\\cdot2^{k-1} < 2^{k+1}$. ✓",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nBase: $F_1 = 1 < 2 = 2^1$ ✓; $F_2 = 1 < 4 = 2^2$ ✓. Strong IH: assume $F_j < 2^j$ for all $j \\leq k$ where $k \\geq 2$. $F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 2^{k-1}(2+1) = 3\\cdot2^{k-1} < 4\\cdot2^{k-1} = 2^{k+1}$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 3\\cdot2^{k-1} < 2^{k+1}$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -212,7 +214,7 @@
           "body_en": "Prove: for all $n \\geq 1$, $\\left(1 + \\dfrac{1}{n}\\right)^n < 3$.",
           "body_he": "הוכח: לכל $n \\geq 1$, $\\left(1 + \\frac{1}{n}\\right)^n < 3$.",
           "solution_en": "This is a classic result. For $n=1$: $(1+1)^1 = 2 < 3$ ✓. The full induction proof requires showing $(1+1/(k+1))^{k+1} < 3$ given $(1+1/k)^k < 3$ — this is non-trivial but can be shown using the inequality $(1+1/(k+1))^{k+1} \\leq e < 3$. The result follows since the sequence is increasing and bounded by $e < 3$.",
-          "solution_he": "הסדרה $(1+1/n)^n$ עולה וחסומה ב-$e < 3$. ✓ (הוכחה קדם-חשבונאית).",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהסדרה $(1+1/n)^n$ עולה וחסומה ב-$e < 3$. ✓ (הוכחה קדם-חשבונאית).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         }
       ]
@@ -226,11 +228,19 @@
       "body_he_md": "1. **אל תניח מה שמוכיחים.** ה.א. = $P(k)$ נכון; הוכח $P(k+1)$.\n\n2. **שני שלבים נדרשים:** גם בסיס וגם צעד.\n\n3. **בסיס בנקודה הנכונה.** חלק מהטענות נכונות רק מ-$n \\geq 5$.\n\n4. **בחלוקה:** כתוב במפורש: $5^k - 1 = 4m$."
     },
     {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
       "id": "before_exam",
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- Base case: verify $P(1)$ (or $P(n_0)$) explicitly\n- IH: write \"Assume $P(k)$\" clearly\n- Inductive step: use IH to reach $P(k+1)$\n- Conclude with standard closing phrase\n- For divisibility: let $P(k) = nm$ and substitute",
+      "body_en_md": "- Base case: verify $P(1)$ (or $P(n_0)$) explicitly\n- IH: write \"Assume $P(k)$\" clearly\n- Inductive step: use IH to reach $P(k+1)$\n- Conclude with standard closing phrase\n- For divisibility: let $P(k) = nm$ and substitute\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "- בסיס: הוכח $P(1)$\n- ה.א.: \"הניח $P(k)$ נכון\"\n- צעד: הוכח $P(k+1)$ ע\"י ה.א.\n- סיום: \"לפי עקרון האינדוקציה...\""
     },
     {
@@ -238,38 +248,8 @@
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **Two steps:** Base case + Inductive step → proven for all $n$\n- **IH:** Assume $P(k)$; prove $P(k+1)$\n- **Sum formulas:** manipulate $\\sum_{i=1}^{k+1} = \\sum_{i=1}^{k} + (k+1)$ term\n- **Divisibility:** write $P(k)$ as $km$ for integer $m$\n- **Inequality:** often need algebraic bounding tricks",
+      "body_en_md": "- **Two steps:** Base case + Inductive step → proven for all $n$\n- **IH:** Assume $P(k)$; prove $P(k+1)$\n- **Sum formulas:** manipulate $\\sum_{i=1}^{k+1} = \\sum_{i=1}^{k} + (k+1)$ term\n- **Divisibility:** write $P(k)$ as $km$ for integer $m$\n- **Inequality:** often need algebraic bounding tricks\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
       "body_he_md": "- בסיס + צעד → לכל $n$\n- ה.א.: הניח; הוכח $+1$\n- סכומים: $\\sum^{k+1} = \\sum^k + (k+1)$\n- חלוקה: $P(k) = nm$"
-    }
-  ],
-  "questions": [
-    {
-      "id": "q1",
-      "kind": "mcq",
-      "difficulty": 2,
-      "skill_atoms": [
-        "mathematical_induction",
-        "proof_structure"
-      ],
-      "stem_en": "In a proof by mathematical induction, the inductive hypothesis is:",
-      "stem_he": "בהוכחת אינדוקציה, הנחת האינדוקציה (ה.א.) היא:",
-      "answer_payload": {
-        "options_en": [
-          "Proving $P(1)$",
-          "Assuming $P(k)$ is true for some arbitrary $k$",
-          "Proving $P(k)$ is true for all $k$",
-          "Showing $P(k+1)$ follows from nothing"
-        ],
-        "options_he": [
-          "הוכחת $P(1)$",
-          "הנחת אמיתות $P(k)$ לערך $k$ שרירותי",
-          "הוכחת $P(k)$ לכל $k$",
-          "הצגת $P(k+1)$ ללא הנחות"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "The inductive hypothesis (IH) is the assumption that $P(k)$ holds for some arbitrary $k \\geq 1$.",
-      "explanation_he": "ה.א. = הנחה ש-$P(k)$ אמת לאיזשהו $k$ שרירותי."
     }
   ],
   "agent_hints": {
@@ -296,5 +276,201 @@
       "sum_formulas_induction",
       "inequality_induction"
     ]
-  }
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "mathematical_induction",
+        "proof_structure"
+      ],
+      "stem_en": "In a proof by mathematical induction, the inductive hypothesis is:",
+      "stem_he": "בהוכחת אינדוקציה, הנחת האינדוקציה (ה.א.) היא:",
+      "answer_payload": {
+        "options_en": [
+          "Proving $P(1)$",
+          "Assuming $P(k)$ is true for some arbitrary $k$",
+          "Proving $P(k)$ is true for all $k$",
+          "Showing $P(k+1)$ follows from nothing"
+        ],
+        "options_he": [
+          "הוכחת $P(1)$",
+          "הנחת אמיתות $P(k)$ לערך $k$ שרירותי",
+          "הוכחת $P(k)$ לכל $k$",
+          "הצגת $P(k+1)$ ללא הנחות"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "**Why this is correct:**\nThe inductive hypothesis (IH) is the assumption that $P(k)$ holds for some arbitrary $k \\geq 1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nה.א. = הנחה ש-$P(k)$ אמת לאיזשהו $k$ שרירותי.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 1,
+      "options_en": [
+        "Proving $P(1)$",
+        "Assuming $P(k)$ is true for some arbitrary $k$",
+        "Proving $P(k)$ is true for all $k$",
+        "Showing $P(k+1)$ follows from nothing"
+      ],
+      "options_he": [
+        "הוכחת $P(1)$",
+        "הנחת אמיתות $P(k)$ לערך $k$ שרירותי",
+        "הוכחת $P(k)$ לכל $k$",
+        "הצגת $P(k+1)$ ללא הנחות"
+      ],
+      "correct_index": 1
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Verify the base case $n=1$ for the claim $\\sum_{i=1}^n (2i-1) = n^2$.",
+      "stem_he": "אמת בסיס $n=1$: $\\sum_{i=1}^n (2i-1) = n^2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "LHS = $2(1)-1 = 1$. RHS = $1^2 = 1$. ✓",
+          "1$. ✓",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nLHS = $2(1)-1 = 1$. RHS = $1^2 = 1$. ✓\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\nLHS = 1 = RHS ✓.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Write the inductive hypothesis for proving $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.",
+      "stem_he": "כתוב ה.א. עבור: $\\sum_{i=1}^n 2^i = 2^{n+1} - 2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "IH: Assume $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ for some $k \\geq 1$",
+          "2^{k+1} - 2$ for some $k \\geq 1$",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nIH: Assume $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$ for some $k \\geq 1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\nה.א.: $\\sum_{i=1}^k 2^i = 2^{k+1} - 2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "What is the base case for proving $n^3 + 2n$ is divisible by 3?",
+      "stem_he": "מהו הבסיס להוכחה ש-$n^3 + 2n$ מתחלק ב-3?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$n=1$: $1 + 2 = 3$. $3\\mid3$ ✓",
+          "3$. $3\\mid3$ ✓",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$n=1$: $1 + 2 = 3$. $3\\mid3$ ✓.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$n=1$: $3$ מתחלק ב-3 ✓.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "The sum of first $n$ odd numbers equals $n^2$. Verify for $n = 4$.",
+      "stem_he": "סכום $n$ מספרים אי-זוגיים ראשונים = $n^2$. אמת ל-$n=4$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\nFirst 4 odds: $1+3+5+7 = 16 = 4^2$ ✓.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "4^2$ ✓.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\nFirst 4 odds: $1+3+5+7 = 16 = 4^2$ ✓.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1+3+5+7 = 16 = 4^2$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Prove by induction: $\\sum_{i=1}^n i(i+1) = \\dfrac{n(n+1)(n+2)}{3}$.",
+      "stem_he": "הוכח באינדוקציה: $\\sum_{i=1}^n i(i+1) = n(n+1)(n+2)/3$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Base ($n=1$): $1\\cdot2 = 2 = 1\\cdot2\\cdot3/3 = 2$ ✓. IH: assume true for $k$. $\\sum_{i=1}^{k+1} i(i+1) = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3$. ✓",
+          "(k+1)(k+2)(k+3)/3$. ✓",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nBase ($n=1$): $1\\cdot2 = 2 = 1\\cdot2\\cdot3/3 = 2$ ✓. IH: assume true for $k$. $\\sum_{i=1}^{k+1} i(i+1) = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3$. ✓\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nהוכח: $\\sum^{k+1} = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)(k+3)/3$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Prove by induction: $5^n - 1$ is divisible by 4 for all $n \\geq 1$.",
+      "stem_he": "הוכח: $5^n - 1$ מתחלק ב-4 לכל $n \\geq 1$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Base: $5^1 - 1 = 4$. $4\\mid4$ ✓. IH: $4\\mid(5^k-1)$, so $5^k = 4m+1$. $5^{k+1} - 1 = 5\\cdot5^k - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$. ✓",
+          "4(5m+1)$. ✓",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nBase: $5^1 - 1 = 4$. $4\\mid4$ ✓. IH: $4\\mid(5^k-1)$, so $5^k = 4m+1$. $5^{k+1} - 1 = 5\\cdot5^k - 1 = 5(4m+1) - 1 = 20m + 4 = 4(5m+1)$. ✓\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$5^{k+1} - 1 = 4(5m+1)$ — מתחלק ב-4. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Prove by induction: $n! \\geq 2^{n-1}$ for all $n \\geq 1$.",
+      "stem_he": "הוכח: $n! \\geq 2^{n-1}$ לכל $n \\geq 1$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Base ($n=1$): $1 \\geq 1$ ✓. IH: $k! \\geq 2^{k-1}$. $(k+1)! = (k+1)\\cdot k! \\geq (k+1)\\cdot2^{k-1} \\geq 2\\cdot2^{k-1} = 2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓",
+          "2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nBase ($n=1$): $1 \\geq 1$ ✓. IH: $k! \\geq 2^{k-1}$. $(k+1)! = (k+1)\\cdot k! \\geq (k+1)\\cdot2^{k-1} \\geq 2\\cdot2^{k-1} = 2^k$ (since $k+1 \\geq 2$ for $k \\geq 1$). ✓\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(k+1)! \\geq (k+1)2^{k-1} \\geq 2^k$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "base_case",
+        "inductive_hypothesis"
+      ]
+    }
+  ],
+  "est_minutes": 50,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

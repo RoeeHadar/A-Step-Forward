@@ -2,12 +2,13 @@
   "concept_id": "la_matrices",
   "subject": "linear_algebra",
   "level": "university",
-  "math_track": ["la"],
+  "math_track": [
+    "la"
+  ],
   "title_en": "Matrix Operations — Addition, Multiplication, Transpose & Inverse",
   "title_he": "פעולות על מטריצות — חיבור, כפל, טרנספוז והופכי",
   "summary_en": "Matrix addition, scalar multiplication, matrix multiplication (non-commutativity), the transpose and its algebraic laws, the identity matrix, and the concept of invertibility.",
   "summary_he": "חיבור מטריצות, כפל בסקלר, כפל מטריצות (אי-קומוטטיביות), טרנספוז וחוקיו, מטריצת היחידה ומושג ההופכי.",
-  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
@@ -37,7 +38,7 @@
       "title_en": "Worked Example 1 — Multiplying a 2×3 by a 3×2 Matrix",
       "title_he": "דוגמה פתורה 1 — כפל מטריצה 2×3 במטריצה 3×2",
       "body_en_md": "**Given:**\n$$A = \\begin{pmatrix}1 & 2 & 0\\\\ -1 & 3 & 2\\end{pmatrix}, \\quad B = \\begin{pmatrix}4 & 1\\\\ -1 & 2\\\\ 0 & 3\\end{pmatrix}.$$\n\n$A$ is $2\\times 3$ and $B$ is $3\\times 2$, so $AB$ is $2\\times 2$.\n\n**Compute each entry:**\n$$c_{11} = (1)(4)+(2)(-1)+(0)(0) = 4-2+0 = 2$$\n$$c_{12} = (1)(1)+(2)(2)+(0)(3) = 1+4+0 = 5$$\n$$c_{21} = (-1)(4)+(3)(-1)+(2)(0) = -4-3+0 = -7$$\n$$c_{22} = (-1)(1)+(3)(2)+(2)(3) = -1+6+6 = 11$$\n\n$$AB = \\begin{pmatrix}2 & 5\\\\ -7 & 11\\end{pmatrix}.$$\n\n**Note:** $BA$ is a $3\\times 3$ matrix — it has different dimensions from $AB$, confirming non-commutativity.",
-      "body_he_md": "**נתון:**\n$$A = \\begin{pmatrix}1 & 2 & 0\\\\ -1 & 3 & 2\\end{pmatrix}, \\quad B = \\begin{pmatrix}4 & 1\\\\ -1 & 2\\\\ 0 & 3\\end{pmatrix}.$$\n\n$A$ הוא $2\\times 3$ ו-$B$ הוא $3\\times 2$, אז $AB$ הוא $2\\times 2$.\n\n**חישוב כל כניסה:**\n$$c_{11} = 4-2+0 = 2, \\quad c_{12} = 1+4+0 = 5$$\n$$c_{21} = -4-3+0 = -7, \\quad c_{22} = -1+6+6 = 11$$\n\n$$AB = \\begin{pmatrix}2 & 5\\\\ -7 & 11\\end{pmatrix}.$$\n\n**הערה:** $BA$ הוא מטריצה $3\\times 3$ — ממדות שונות מ-$AB$, מה שמאשר אי-קומוטטיביות."
+      "body_he_md": "**נתון:**\n$$A = \\begin{pmatrix}1 & 2 & 0\\\\ -1 & 3 & 2\\end{pmatrix}, \\quad B = \\begin{pmatrix}4 & 1\\\\ -1 & 2\\\\ 0 & 3\\end{pmatrix}.$$\n\n$A$ הוא $2\\times 3$ ו-$B$ הוא $3\\times 2$, אז $AB$ הוא $2\\times 2$.\n\n**חישוב כל כניסה:**\n$$c_{11} = 4-2+0 = 2, \\quad c_{12} = 1+4+0 = 5$$\n$$c_{21} = -4-3+0 = -7, \\quad c_{22} = -1+6+6 = 11$$\n\n**הערה:** $BA$ הוא מטריצה $3\\times 3$ — ממדות שונות מ-$AB$, מה שמאשר אי-קומוטטיביות."
     },
     {
       "kind": "checkpoint",
@@ -72,7 +73,7 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Proof: $(AB)^T = B^T A^T$",
       "title_he": "דוגמה פתורה 3 — הוכחה: $(AB)^T = B^T A^T$",
-      "body_en_md": "**Claim:** For any $m\\times k$ matrix $A$ and $k\\times n$ matrix $B$: $(AB)^T = B^T A^T$.\n\n**Proof (entry-by-entry):**\n\n**Step 1 — Dimensions.** $AB$ is $m\\times n$, so $(AB)^T$ is $n\\times m$. Also $B^T$ is $n\\times k$ and $A^T$ is $k\\times m$, so $B^T A^T$ is $n\\times m$. Dimensions match.\n\n**Step 2 — Fix indices.** Let $1\\leq i\\leq n$ and $1\\leq j\\leq m$. We compare the $(i,j)$ entries of both sides.\n\n**Step 3 — Left side.** The $(i,j)$ entry of $(AB)^T$ equals the $(j,i)$ entry of $AB$:\n$$(AB)_{ji} = \\sum_{l=1}^k a_{jl}\\,b_{li}.$$\n\n**Step 4 — Right side.** The $(i,j)$ entry of $B^T A^T$ is:\n$$(B^T A^T)_{ij} = \\sum_{l=1}^k (B^T)_{il}\\,(A^T)_{lj} = \\sum_{l=1}^k b_{li}\\,a_{jl}.$$\n\n**Step 5 — Compare.** Both sums are $\\sum_{l=1}^k a_{jl}b_{li}$ — they are identical (multiplication of real numbers commutes).\n\nSince all $(i,j)$ entries are equal, $(AB)^T = B^T A^T$. $\\blacksquare$",
+      "body_en_md": "**Claim:** For any $m\\times k$ matrix $A$ and $k\\times n$ matrix $B$: $(AB)^T = B^T A^T$.\n\n**Proof (entry-by-entry):**\n\n### Move 1 $AB$ is $m\\times n$, so $(AB)^T$ is $n\\times m$. Also $B^T$ is $n\\times k$ and $A^T$ is $k\\times m$, so $B^T A^T$ is $n\\times m$. Dimensions match.\n\n### Move 2 Let $1\\leq i\\leq n$ and $1\\leq j\\leq m$. We compare the $(i,j)$ entries of both sides.\n\n### Move 3 The $(i,j)$ entry of $(AB)^T$ equals the $(j,i)$ entry of $AB$:\n$$(AB)_{ji} = \\sum_{l=1}^k a_{jl}\\,b_{li}.$$\n\n### Move 4 The $(i,j)$ entry of $B^T A^T$ is:\n$$(B^T A^T)_{ij} = \\sum_{l=1}^k (B^T)_{il}\\,(A^T)_{lj} = \\sum_{l=1}^k b_{li}\\,a_{jl}.$$\n\n### Move 5 Both sums are $\\sum_{l=1}^k a_{jl}b_{li}$ — they are identical (multiplication of real numbers commutes).\n\nSince all $(i,j)$ entries are equal, $(AB)^T = B^T A^T$. $\\blacksquare$",
       "body_he_md": "**טענה:** לכל מטריצה $m\\times k$ $A$ ומטריצה $k\\times n$ $B$: $(AB)^T = B^T A^T$.\n\n**הוכחה (כניסה-כניסה):**\n\n**שלב 1 — ממדות.** $AB$ הוא $m\\times n$, אז $(AB)^T$ הוא $n\\times m$. גם $B^T$ הוא $n\\times k$ ו-$A^T$ הוא $k\\times m$, לכן $B^T A^T$ הוא $n\\times m$. הממדות תואמות.\n\n**שלב 2 — קיבוע אינדקסים.** יהיו $1\\leq i\\leq n$ ו-$1\\leq j\\leq m$. נשווה את הכניסות $(i,j)$ בשני הצדדים.\n\n**שלב 3 — צד שמאל.** הכניסה $(i,j)$ של $(AB)^T$ שווה לכניסה $(j,i)$ של $AB$:\n$$(AB)_{ji} = \\sum_{l=1}^k a_{jl}\\,b_{li}.$$\n\n**שלב 4 — צד ימין.** הכניסה $(i,j)$ של $B^T A^T$:\n$$(B^T A^T)_{ij} = \\sum_{l=1}^k b_{li}\\,a_{jl}.$$\n\n**שלב 5 — השוואה.** שני הסכומים זהים (כפל מספרים ממשיים קומוטטיבי).\n\nמכיוון שכל כניסות $(i,j)$ שוות, $(AB)^T = B^T A^T$. $\\blacksquare$"
     },
     {
@@ -86,16 +87,16 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
           "difficulty": "easy",
           "body_en": "Compute $AB$ for $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
           "body_he": "חשב את $AB$ עבור $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
-          "solution_en": "$AB=\\begin{pmatrix}2+2&8-1\\\\0-6&0+3\\end{pmatrix}=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.",
-          "solution_he": "$AB=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.",
+          "solution_en": "**Solution:**\n\n$AB=\\begin{pmatrix}2+2&8-1\\\\0-6&0+3\\end{pmatrix}=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$AB=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -103,8 +104,8 @@
           "difficulty": "easy",
           "body_en": "Find $(A+B)^T$ for $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
           "body_he": "מצא $(A+B)^T$ עבור $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
-          "solution_en": "$A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.",
-          "solution_he": "$(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.",
+          "solution_en": "**Solution:**\n\n$A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -112,8 +113,8 @@
           "difficulty": "easy",
           "body_en": "Find $A^{-1}$ for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, or show it doesn't exist.",
           "body_he": "מצא $A^{-1}$ עבור $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, או הראה שאינה קיימת.",
-          "solution_en": "$\\det A = 6-5=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.",
-          "solution_he": "$\\det A=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.",
+          "solution_en": "**Solution:**\n\n$\\det A = 6-5=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\det A=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -130,8 +131,8 @@
           "difficulty": "medium",
           "body_en": "Find matrices $A$ and $B$ such that $AB = 0$ but $A\\neq 0$ and $B\\neq 0$ (zero divisors).",
           "body_he": "מצא מטריצות $A$ ו-$B$ כך ש-$AB = 0$ אבל $A\\neq 0$ ו-$B\\neq 0$ (מחלקי אפס).",
-          "solution_en": "Example: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. Then $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$.",
-          "solution_he": "דוגמה: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. אז $AB=0$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nExample: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. Then $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nדוגמה: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. אז $AB=0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -139,8 +140,8 @@
           "difficulty": "medium",
           "body_en": "Compute $A^3$ for $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ and deduce a formula for $A^n$.",
           "body_he": "חשב את $A^3$ עבור $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ ומצא נוסחה ל-$A^n$.",
-          "solution_en": "$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. By induction, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.",
-          "solution_he": "$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. באינדוקציה: $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. By induction, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. באינדוקציה: $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -149,7 +150,7 @@
           "body_en": "Verify directly that $(AB)^T = B^T A^T$ for $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) and $B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
           "body_he": "אמת ישירות ש-$(AB)^T = B^T A^T$ עבור $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) ו-$B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
           "solution_en": "$AB=11$ (scalar/1×1). $(AB)^T=11$. $B^T=(3,4)$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$. $B^TA^T=(3)(1)+(4)(2)=11$. Equal. $\\checkmark$",
-          "solution_he": "$AB=11$. $(AB)^T=11$. $B^TA^T=3+8=11$. שווים. $\\checkmark$",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$AB=11$. $(AB)^T=11$. $B^TA^T=3+8=11$. שווים. $\\checkmark$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -167,7 +168,7 @@
           "body_en": "Prove: if $A$ is invertible and $AB=AC$, then $B=C$.",
           "body_he": "הוכח: אם $A$ הפיכה ו-$AB=AC$, אזי $B=C$.",
           "solution_en": "Multiply both sides on the left by $A^{-1}$: $A^{-1}(AB)=A^{-1}(AC)$. By associativity: $(A^{-1}A)B=(A^{-1}A)C$, so $IB=IC$, thus $B=C$. $\\blacksquare$",
-          "solution_he": "מכפילים משמאל ב-$A^{-1}$: $(A^{-1}A)B=(A^{-1}A)C \\Rightarrow B=C$. $\\blacksquare$",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nמכפילים משמאל ב-$A^{-1}$: $(A^{-1}A)B=(A^{-1}A)C \\Rightarrow B=C$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -175,8 +176,8 @@
           "difficulty": "hard",
           "body_en": "Prove: $(AB)^{-1} = B^{-1}A^{-1}$ when $A$ and $B$ are invertible $n\\times n$ matrices.",
           "body_he": "הוכח: $(AB)^{-1} = B^{-1}A^{-1}$ כש-$A$ ו-$B$ הפיכות מסדר $n\\times n$.",
-          "solution_en": "Show $(AB)(B^{-1}A^{-1})=I$: $(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1}=A\\cdot I\\cdot A^{-1}=AA^{-1}=I$. Similarly $(B^{-1}A^{-1})(AB)=I$. By uniqueness of inverse, $(AB)^{-1}=B^{-1}A^{-1}$. $\\blacksquare$",
-          "solution_he": "נראה $(AB)(B^{-1}A^{-1})=I$: $A(BB^{-1})A^{-1}=AIA^{-1}=I$. באופן דומה ברצף הפוך. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nShow $(AB)(B^{-1}A^{-1})=I$: $(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1}=A\\cdot I\\cdot A^{-1}=AA^{-1}=I$. Similarly $(B^{-1}A^{-1})(AB)=I$. By uniqueness of inverse, $(AB)^{-1}=B^{-1}A^{-1}$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nנראה $(AB)(B^{-1}A^{-1})=I$: $A(BB^{-1})A^{-1}=AIA^{-1}=I$. באופן דומה ברצף הפוך. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -185,7 +186,7 @@
           "body_en": "A matrix $A$ satisfies $A^2 = A$ (idempotent). Prove that if $A$ is also invertible, then $A = I$.",
           "body_he": "מטריצה $A$ מקיימת $A^2 = A$ (אידמפוטנטית). הוכח שאם $A$ גם הפיכה, אז $A = I$.",
           "solution_en": "$A^2=A$. Multiply both sides on the right by $A^{-1}$: $A^2 A^{-1}=AA^{-1}$, so $A(AA^{-1})=I$, giving $AI=I$, thus $A=I$. $\\blacksquare$",
-          "solution_he": "$A^2=A$. מכפילים מימין ב-$A^{-1}$: $A=I$. $\\blacksquare$",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A^2=A$. מכפילים מימין ב-$A^{-1}$: $A=I$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -193,8 +194,8 @@
           "difficulty": "hard",
           "body_en": "Prove that for any square matrix $A$, $A+A^T$ is symmetric and $A-A^T$ is skew-symmetric (i.e., $(A-A^T)^T = -(A-A^T)$).",
           "body_he": "הוכח שלכל מטריצה ריבועית $A$, $A+A^T$ סימטרית ו-$A-A^T$ אנטי-סימטרית (כלומר $(A-A^T)^T = -(A-A^T)$).",
-          "solution_en": "$(A+A^T)^T = A^T+(A^T)^T = A^T+A = A+A^T$. ✓ $(A-A^T)^T = A^T-A = -(A-A^T)$. ✓ $\\blacksquare$",
-          "solution_he": "$(A+A^T)^T = A^T+A = A+A^T$. ✓ $(A-A^T)^T = A^T-A = -(A-A^T)$. ✓ $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$(A+A^T)^T = A^T+(A^T)^T = A^T+A = A+A^T$. ✓ $(A-A^T)^T = A^T-A = -(A-A^T)$. ✓ $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$(A+A^T)^T = A^T+A = A+A^T$. ✓ $(A-A^T)^T = A^T-A = -(A-A^T)$. ✓ $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         }
       ]
@@ -205,6 +206,14 @@
       "title_he": "מלכודות נפוצות",
       "body_en_md": "1. **Assuming $AB=BA$.** This almost never holds. Always check dimensions and don't rearrange products.\n\n2. **Wrong order in $(AB)^{-1}$.** It is $B^{-1}A^{-1}$, **not** $A^{-1}B^{-1}$.\n\n3. **Wrong order in $(AB)^T$.** It is $B^TA^T$, **not** $A^TB^T$.\n\n4. **Trying to divide by a matrix.** Matrices have no division — only multiplication by the inverse (when it exists).\n\n5. **$AB = 0$ does not imply $A=0$ or $B=0$.** Real numbers have no zero divisors, but matrices do.\n\n6. **Confusing $(A^T)^{-1}$ with $(A^{-1})^T$.** They are equal, but write it as $(A^{-T})$ to avoid confusion when simplifying.",
       "body_he_md": "1. **הנחה ש-$AB=BA$.** זה כמעט אף פעם לא מתקיים. תמיד לבדוק ממדות ולא לשנות סדר כפולות.\n\n2. **סדר שגוי ב-$(AB)^{-1}$.** זה $B^{-1}A^{-1}$, **לא** $A^{-1}B^{-1}$.\n\n3. **סדר שגוי ב-$(AB)^T$.** זה $B^TA^T$, **לא** $A^TB^T$.\n\n4. **ניסיון לחלק במטריצה.** לא קיימת חלוקה — רק כפל בהופכי (כשקיים).\n\n5. **$AB = 0$ לא גורר $A=0$ או $B=0$.** למספרים ממשיים אין מחלקי אפס, אבל למטריצות יש.\n\n6. **בלבול בין $(A^T)^{-1}$ ל-$(A^{-1})^T$.** הם שווים, אבל יש לכתוב $A^{-T}$ כדי להימנע מבלבול."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**You will use this to unlock:**\n- `concept:la_vector_spaces` **Vector Spaces** (prereq)\n- `concept:kinematics_2d` **Kinematics in 2D** (tooling_for) — Rotation matrices for changes of frame.\n\n**Builds on:**\n- `concept:vectors_basics` **Vectors — Basics**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:la_vector_spaces` **מרחבי וקטורים** (prereq)\n- `concept:kinematics_2d` **קינמטיקה בשני ממדים** (tooling_for) — Rotation matrices for changes of frame.\n\n**מבוסס על:**\n- `concept:vectors_basics` **וקטורים — יסודות**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
@@ -220,5 +229,157 @@
       "body_en_md": "- Matrix multiplication is defined by $c_{ij}=\\sum_l a_{il}b_{lj}$; the inner dimensions must match.\n- **Non-commutativity:** $AB\\neq BA$ in general.\n- **Associativity:** $(AB)C=A(BC)$.\n- **Transpose:** $(AB)^T=B^TA^T$ — order reverses.\n- **Inverse:** $(AB)^{-1}=B^{-1}A^{-1}$ — order reverses; $2\\times2$ formula via $\\det$.\n- A matrix is singular iff $\\det A=0$ iff it is not invertible.\n- $AB=0$ does NOT imply $A=0$ or $B=0$.",
       "body_he_md": "- כפל מטריצות מוגדר על ידי $c_{ij}=\\sum_l a_{il}b_{lj}$; הממדות הפנימיות חייבות להתאים.\n- **אי-קומוטטיביות:** $AB\\neq BA$ בכלל.\n- **אסוציאטיביות:** $(AB)C=A(BC)$.\n- **טרנספוז:** $(AB)^T=B^TA^T$ — הסדר מתהפך.\n- **הופכי:** $(AB)^{-1}=B^{-1}A^{-1}$ — הסדר מתהפך; נוסחת $2\\times2$ דרך $\\det$.\n- מטריצה סינגולרית אם ורק אם $\\det A=0$.\n- $AB=0$ לא גורר $A=0$ או $B=0$."
     }
-  ]
+  ],
+  "agent_hints": {},
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Compute $AB$ for $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
+      "stem_he": "חשב את $AB$ עבור $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$AB=\\begin{pmatrix}2+2&8-1\\\\0-6&0+3\\end{pmatrix}=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$AB=\\begin{pmatrix}2+2&8-1\\\\0-6&0+3\\end{pmatrix}=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$AB=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find $(A+B)^T$ for $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
+      "stem_he": "מצא $(A+B)^T$ עבור $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find $A^{-1}$ for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, or show it doesn't exist.",
+      "stem_he": "מצא $A^{-1}$ עבור $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, או הראה שאינה קיימת.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\det A = 6-5=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\det A = 6-5=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\det A=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Show that $A=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$ has no inverse.",
+      "stem_he": "הראה שלמטריצה $A=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$ אין הופכי.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\det A = 4-4=0$, so $A$ is singular (not invertible)",
+          "0$, so $A$ is singular (not invertible)",
+          "0"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\det A = 4-4=0$, so $A$ is singular (not invertible).\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$\\det A = 4-4=0$, לכן $A$ סינגולרית (לא הפיכה).\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find matrices $A$ and $B$ such that $AB = 0$ but $A\\neq 0$ and $B\\neq 0$ (zero divisors).",
+      "stem_he": "מצא מטריצות $A$ ו-$B$ כך ש-$AB = 0$ אבל $A\\neq 0$ ו-$B\\neq 0$ (מחלקי אפס).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nExample: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. Then $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nExample: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. Then $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nדוגמה: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. אז $AB=0$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Compute $A^3$ for $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ and deduce a formula for $A^n$.",
+      "stem_he": "חשב את $A^3$ עבור $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ ומצא נוסחה ל-$A^n$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. By induction, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. By induction, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. באינדוקציה: $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Verify directly that $(AB)^T = B^T A^T$ for $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) and $B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
+      "stem_he": "אמת ישירות ש-$(AB)^T = B^T A^T$ עבור $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) ו-$B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$AB=11$ (scalar/1×1). $(AB)^T=11$. $B^T=(3,4)$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$. $B^TA^T=(3)(1)+(4)(2)=11$. Equal. $\\checkmark$",
+          "11$. Equal. $\\checkmark$",
+          "11"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$AB=11$ (scalar/1×1). $(AB)^T=11$. $B^T=(3,4)$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$. $B^TA^T=(3)(1)+(4)(2)=11$. Equal. $\\checkmark$\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$AB=11$. $(AB)^T=11$. $B^TA^T=3+8=11$. שווים. $\\checkmark$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Let $A$ be symmetric ($A^T=A$) and $B$ symmetric. Is $AB$ always symmetric? If not, give a counterexample.",
+      "stem_he": "יהי $A$ סימטרית ($A^T=A$) ו-$B$ סימטרית. האם $AB$ תמיד סימטרית? אם לא, תן דוגמת נגד.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Not always. $(AB)^T=B^TA^T=BA$. For $AB$ to be symmetric we need $AB=BA$. Counterexample: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. $AB=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $BA=\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. $AB\\neq BA$, so $AB$ not symmetric",
+          "\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. $AB\\neq BA$, so $AB$ not symmetric",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nNot always. $(AB)^T=B^TA^T=BA$. For $AB$ to be symmetric we need $AB=BA$. Counterexample: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. $AB=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $BA=\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. $AB\\neq BA$, so $AB$ not symmetric.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\nלא תמיד. $(AB)^T=BA$. נדרש $AB=BA$. דוגמת נגד: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. $AB\\neq BA$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 40,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

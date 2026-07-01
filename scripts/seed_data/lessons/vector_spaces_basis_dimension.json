@@ -2,12 +2,13 @@
   "concept_id": "vector_spaces_basis_dimension",
   "subject": "linear_algebra",
   "level": "university",
-  "math_track": ["la"],
+  "math_track": [
+    "la"
+  ],
   "title_en": "Basis, Dimension & the Rank-Nullity Theorem",
   "title_he": "בסיס, ממד ומשפט דרגה-גרעין",
   "summary_en": "Basis as a minimal spanning set, uniqueness of dimension, finding bases for span and kernel, coordinates in non-standard bases, and the Rank-Nullity theorem: dim(ker T) + dim(Im T) = n.",
   "summary_he": "בסיס כקבוצת פרישה מינימלית, ייחודיות הממד, מציאת בסיסים ל-span ולגרעין, קואורדינטות בבסיסים לא-סטנדרטיים, ומשפט דרגה-גרעין: $\\dim(\\ker T)+\\dim(\\text{Im} T)=n$.",
-  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
@@ -36,8 +37,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Finding a Basis for a Span",
       "title_he": "דוגמה פתורה 1 — מציאת בסיס ל-span",
-      "body_en_md": "**Task:** Find a basis for $W = \\text{span}\\{(1,2),(2,4),(1,0)\\}$ in $\\mathbb{R}^2$.\n\n**Step 1 — Form matrix with vectors as rows:**\n$$\\begin{pmatrix}1&2\\\\2&4\\\\1&0\\end{pmatrix} \\xrightarrow{R_2-2R_1,\\;R_3-R_1} \\begin{pmatrix}1&2\\\\0&0\\\\0&-2\\end{pmatrix} \\xrightarrow{\\text{swap }R_2,R_3} \\begin{pmatrix}1&2\\\\0&-2\\\\0&0\\end{pmatrix}.$$\n\n**Step 2 — Pivot rows give the basis.** Two non-zero rows: the original vectors corresponding to rows 1 and 3.\n\n**Basis:** $\\{(1,2),(1,0)\\}$. **Dimension:** $\\dim W = 2$.\n\n**Check:** $(2,4)=2(1,2)$ — redundant as expected.",
-      "body_he_md": "**משימה:** מצא בסיס ל-$W = \\text{span}\\{(1,2),(2,4),(1,0)\\}$ ב-$\\mathbb{R}^2$.\n\n**שלב 1 — מטריצה עם וקטורים כשורות ודירוג:**\n$$\\begin{pmatrix}1&2\\\\2&4\\\\1&0\\end{pmatrix} \\to \\begin{pmatrix}1&2\\\\0&-2\\\\0&0\\end{pmatrix}.$$\n\n**שלב 2 — שורות ציריות נותנות הבסיס.** שתי שורות לא-אפסיות.\n\n**בסיס:** $\\{(1,2),(1,0)\\}$. **ממד:** $\\dim W = 2$."
+      "body_en_md": "**Task:** Find a basis for $W = \\text{span}\\{(1,2),(2,4),(1,0)\\}$ in $\\mathbb{R}^2$.\n\n### Move 1\n$$\\begin{pmatrix}1&2\\\\2&4\\\\1&0\\end{pmatrix} \\xrightarrow{R_2-2R_1,\\;R_3-R_1} \\begin{pmatrix}1&2\\\\0&0\\\\0&-2\\end{pmatrix} \\xrightarrow{\\text{swap }R_2,R_3} \\begin{pmatrix}1&2\\\\0&-2\\\\0&0\\end{pmatrix}.$$\n\n### Move 2 Two non-zero rows: the original vectors corresponding to rows 1 and 3.\n\n**Basis:** $\\{(1,2),(1,0)\\}$. **Dimension:** $\\dim W = 2$.\n\n**Check:** $(2,4)=2(1,2)$ — redundant as expected.",
+      "body_he_md": "**משימה:** מצא בסיס ל-$W = \\text{span}\\{(1,2),(2,4),(1,0)\\}$ ב-$\\mathbb{R}^2$.\n\n**שלב 1 — מטריצה עם וקטורים כשורות ודירוג:**\n$$\\begin{pmatrix}1&2\\\\2&4\\\\1&0\\end{pmatrix} \\to \\begin{pmatrix}1&2\\\\0&-2\\\\0&0\\end{pmatrix}.$$\n\n**שלב 2 — שורות ציריות נותנות הבסיס.** שתי שורות לא-אפסיות.\n\n**בסיס:** $\\{(1,2),(1,0)\\}$. **ממד:** $\\dim W = 2$.\n\n**בדיקה:** $(2,4)=2(1,2)$ — redundant as expected."
     },
     {
       "kind": "checkpoint",
@@ -72,8 +73,8 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Proof of the Rank-Nullity Theorem",
       "title_he": "דוגמה פתורה 3 — הוכחת משפט דרגה-גרעין",
-      "body_en_md": "**Claim:** If $T:V\\to W$ is a linear map and $\\dim V=n<\\infty$, then\n$$\\dim(\\ker T)+\\dim(\\text{Im}\\, T) = n.$$\n\n**Proof:**\n\n**Step 1 — Setup.** Let $r=\\dim(\\ker T)$. If $r=0$, then $\\ker T=\\{\\vec{0}\\}$ and $T$ is injective, so $\\dim(\\text{Im}\\, T)=n$. ✓ Assume $r\\geq1$.\n\n**Step 2 — Extend basis of ker.** Let $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ be a basis of $\\ker T$. By the extension theorem, there exist $\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\in V$ such that\n$$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$$\nis a basis of $V$.\n\n**Step 3 — Claim: $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ spans $\\text{Im}(T)$.** Any $T(\\vec{v})$ with $\\vec{v}=\\sum_{i=1}^r c_i\\vec{k}_i+\\sum_{j=r+1}^n c_j\\vec{v}_j$ gives $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (since $T(\\vec{k}_i)=\\vec{0}$).\n\n**Step 4 — Claim: $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is linearly independent.** Suppose $\\sum_{j=r+1}^n a_j T(\\vec{v}_j)=\\vec{0}$. Then $T(\\sum a_j\\vec{v}_j)=\\vec{0}$, so $\\vec{u}=\\sum a_j\\vec{v}_j\\in\\ker T$. Write $\\vec{u}=\\sum_{i=1}^r b_i\\vec{k}_i$. Then\n$$\\sum_{i=1}^r b_i\\vec{k}_i - \\sum_{j=r+1}^n a_j\\vec{v}_j = \\vec{0}.$$\nSince $\\mathcal{B}$ is a basis, all coefficients are zero: $b_i=0$ and $a_j=0$. ✓\n\n**Step 5 — Conclude.** $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is a basis of $\\text{Im}(T)$, so $\\dim(\\text{Im}\\,T)=n-r$. Therefore\n$$r + (n-r) = n. \\quad \\blacksquare$$",
-      "body_he_md": "**טענה:** אם $T:V\\to W$ לינארית ו-$\\dim V=n<\\infty$, אז $\\dim(\\ker T)+\\dim(\\text{Im}\\, T) = n$.\n\n**הוכחה:**\n\n**שלב 1.** יהי $r=\\dim(\\ker T)$. אם $r=0$, $T$ חד-חד ערכית ו-$\\dim(\\text{Im}\\,T)=n$. ✓ נניח $r\\geq1$.\n\n**שלב 2 — הרחבת בסיס.** יהי $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ בסיס של $\\ker T$. נרחיב ל-$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$ בסיס של $V$.\n\n**שלב 3 — $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ פורש את $\\text{Im}(T)$.** לכל $T(\\vec{v})$: $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (כי $T(\\vec{k}_i)=\\vec{0}$).\n\n**שלב 4 — בלתי-תלות.** אם $\\sum a_jT(\\vec{v}_j)=\\vec{0}$, אז $\\sum a_j\\vec{v}_j\\in\\ker T$. כתיבה כקומבינציה בבסיס $\\mathcal{B}$ מראה $a_j=0$.\n\n**שלב 5.** $\\dim(\\text{Im}\\,T)=n-r$, לכן $r+(n-r)=n$. $\\blacksquare$"
+      "body_en_md": "**Claim:** If $T:V\\to W$ is a linear map and $\\dim V=n<\\infty$, then\n$$\\dim(\\ker T)+\\dim(\\text{Im}\\, T) = n.$$\n\n**Proof:**\n\n### Move 1 Let $r=\\dim(\\ker T)$. If $r=0$, then $\\ker T=\\{\\vec{0}\\}$ and $T$ is injective, so $\\dim(\\text{Im}\\, T)=n$. ✓ Assume $r\\geq1$.\n\n### Move 2 Let $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ be a basis of $\\ker T$. By the extension theorem, there exist $\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\in V$ such that\n$$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$$\nis a basis of $V$.\n\n### Move 3 Any $T(\\vec{v})$ with $\\vec{v}=\\sum_{i=1}^r c_i\\vec{k}_i+\\sum_{j=r+1}^n c_j\\vec{v}_j$ gives $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (since $T(\\vec{k}_i)=\\vec{0}$).\n\n### Move 4 Suppose $\\sum_{j=r+1}^n a_j T(\\vec{v}_j)=\\vec{0}$. Then $T(\\sum a_j\\vec{v}_j)=\\vec{0}$, so $\\vec{u}=\\sum a_j\\vec{v}_j\\in\\ker T$. Write $\\vec{u}=\\sum_{i=1}^r b_i\\vec{k}_i$. Then\n$$\\sum_{i=1}^r b_i\\vec{k}_i - \\sum_{j=r+1}^n a_j\\vec{v}_j = \\vec{0}.$$\nSince $\\mathcal{B}$ is a basis, all coefficients are zero: $b_i=0$ and $a_j=0$. ✓\n\n### Move 5 $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is a basis of $\\text{Im}(T)$, so $\\dim(\\text{Im}\\,T)=n-r$. Therefore\n$$r + (n-r) = n. \\quad \\blacksquare$$",
+      "body_he_md": "**טענה:** אם $T:V\\to W$ לינארית ו-$\\dim V=n<\\infty$, אז $\\dim(\\ker T)+\\dim(\\text{Im}\\, T) = n$.\n\n**הוכחה:**\n\n**שלב 1.** יהי $r=\\dim(\\ker T)$. אם $r=0$, $T$ חד-חד ערכית ו-$\\dim(\\text{Im}\\,T)=n$. ✓ נניח $r\\geq1$.\n\n**שלב 2 — הרחבת בסיס.** יהי $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ בסיס של $\\ker T$. נרחיב ל-$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$ בסיס של $V$.\n\n**שלב 3 — $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ פורש את $\\text{Im}(T)$.** לכל $T(\\vec{v})$: $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (כי $T(\\vec{k}_i)=\\vec{0}$).\n\n**שלב 4 — בלתי-תלות.** אם $\\sum a_jT(\\vec{v}_j)=\\vec{0}$, אז $\\sum a_j\\vec{v}_j\\in\\ker T$. כתיבה כקומבינציה בבסיס $\\mathcal{B}$ מראה $a_j=0$.\n\n**שלב 5.** $\\dim(\\text{Im}\\,T)=n-r$, לכן $r+(n-r)=n$. $\\blacksquare$\n\n**Proof:**\n\n### צעד 1 Let $r=\\dim(\\ker T)$. If $r=0$, then $\\ker T=\\{\\vec{0}\\}$ and $T$ is injective, so $\\dim(\\text{Im}\\, T)=n$. ✓ Assume $r\\geq1$.\n\n### צעד 2 Let $\\{\\vec{k}_1,\\ldots,\\vec{k}_r\\}$ be a basis of $\\ker T$. By the extension theorem, there exist $\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\in V$ such that\n$$\\mathcal{B}=\\{\\vec{k}_1,\\ldots,\\vec{k}_r,\\vec{v}_{r+1},\\ldots,\\vec{v}_n\\}$$\nis a basis of $V$.\n\n### צעד 3 Any $T(\\vec{v})$ with $\\vec{v}=\\sum_{i=1}^r c_i\\vec{k}_i+\\sum_{j=r+1}^n c_j\\vec{v}_j$ gives $T(\\vec{v})=\\sum c_jT(\\vec{v}_j)$ (since $T(\\vec{k}_i)=\\vec{0}$).\n\n### צעד 4 Suppose $\\sum_{j=r+1}^n a_j T(\\vec{v}_j)=\\vec{0}$. Then $T(\\sum a_j\\vec{v}_j)=\\vec{0}$, so $\\vec{u}=\\sum a_j\\vec{v}_j\\in\\ker T$. Write $\\vec{u}=\\sum_{i=1}^r b_i\\vec{k}_i$. Then\n$$\\sum_{i=1}^r b_i\\vec{k}_i - \\sum_{j=r+1}^n a_j\\vec{v}_j = \\vec{0}.$$\nSince $\\mathcal{B}$ is a basis, all coefficients are zero: $b_i=0$ and $a_j=0$. ✓\n\n### צעד 5 $\\{T(\\vec{v}_{r+1}),\\ldots,T(\\vec{v}_n)\\}$ is a basis of $\\text{Im}(T)$, so $\\dim(\\text{Im}\\,T)=n-r$. Therefore\n$$r + (n-r) = n. \\quad \\blacksquare$$"
     },
     {
       "kind": "method_guide",
@@ -86,8 +87,8 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
@@ -103,8 +104,8 @@
           "difficulty": "easy",
           "body_en": "What is $\\dim(\\ker A)$ if $A$ is $5\\times7$ with rank 4?",
           "body_he": "מהו $\\dim(\\ker A)$ אם $A$ הוא $5\\times7$ עם דרגה 4?",
-          "solution_en": "Nullity $= 7-4=3$.",
-          "solution_he": "גרעין $= 7-4=3$.",
+          "solution_en": "**Solution:**\n\nNullity $= 7-4=3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\nגרעין $= 7-4=3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -131,7 +132,7 @@
           "body_en": "Find a basis for $\\ker(A)$ where $A=\\begin{pmatrix}1&-2&1\\\\2&-4&2\\end{pmatrix}$.",
           "body_he": "מצא בסיס ל-$\\ker(A)$ כאשר $A=\\begin{pmatrix}1&-2&1\\\\2&-4&2\\end{pmatrix}$.",
           "solution_en": "Row reduce: $[1,-2,1;0,0,0]$. Free: $x_2=s,x_3=t$. $x_1=2s-t$. Basis: $\\{(2,1,0)^T,(-1,0,1)^T\\}$, nullity=2.",
-          "solution_he": "לאחר דירוג: $x_1=2s-t$. בסיס: $\\{(2,1,0)^T,(-1,0,1)^T\\}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nלאחר דירוג: $x_1=2s-t$. בסיס: $\\{(2,1,0)^T,(-1,0,1)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -140,7 +141,7 @@
           "body_en": "Find a basis for the column space of $A=\\begin{pmatrix}1&2&3\\\\0&1&2\\\\1&3&5\\end{pmatrix}$.",
           "body_he": "מצא בסיס למרחב העמודות של $A=\\begin{pmatrix}1&2&3\\\\0&1&2\\\\1&3&5\\end{pmatrix}$.",
           "solution_en": "Row reduce; pivot columns are 1 and 2. Basis (from original $A$): $\\{(1,0,1)^T,(2,1,3)^T\\}$. Rank=2.",
-          "solution_he": "עמודות ציריות: 1 ו-2. בסיס: $\\{(1,0,1)^T,(2,1,3)^T\\}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nעמודות ציריות: 1 ו-2. בסיס: $\\{(1,0,1)^T,(2,1,3)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -148,8 +149,8 @@
           "difficulty": "medium",
           "body_en": "A linear map $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ has $\\dim(\\ker T)=3$. Find $\\dim(\\text{Im}\\,T)$. Can $T$ be onto?",
           "body_he": "להעתקה לינארית $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ יש $\\dim(\\ker T)=3$. מצא $\\dim(\\text{Im}\\,T)$. האם $T$ יכולה להיות על?",
-          "solution_en": "$\\dim(\\text{Im}\\,T)=5-3=2<3$. So $T$ is NOT onto ($\\text{Im}\\,T\\neq\\mathbb{R}^3$).",
-          "solution_he": "$\\dim(\\text{Im}\\,T)=2<3$. $T$ **אינה** על.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\dim(\\text{Im}\\,T)=5-3=2<3$. So $T$ is NOT onto ($\\text{Im}\\,T\\neq\\mathbb{R}^3$).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\dim(\\text{Im}\\,T)=2<3$. $T$ **אינה** על.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -157,8 +158,8 @@
           "difficulty": "medium",
           "body_en": "Find coordinates of $p(x)=3+2x-x^2$ in the basis $B=\\{1,x,x^2\\}$ of $P_2$.",
           "body_he": "מצא קואורדינטות של $p(x)=3+2x-x^2$ בבסיס $B=\\{1,x,x^2\\}$ של $P_2$.",
-          "solution_en": "$p = 3\\cdot1+2\\cdot x+(-1)\\cdot x^2$. Coordinates: $[p]_B=(3,2,-1)^T$.",
-          "solution_he": "$[p]_B=(3,2,-1)^T$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$p = 3\\cdot1+2\\cdot x+(-1)\\cdot x^2$. Coordinates: $[p]_B=(3,2,-1)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$[p]_B=(3,2,-1)^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -166,8 +167,8 @@
           "difficulty": "hard",
           "body_en": "Prove: if $T:V\\to W$ is linear with $\\dim V=\\dim W=n$ and $\\ker T=\\{\\vec{0}\\}$, then $T$ is onto.",
           "body_he": "הוכח: אם $T:V\\to W$ לינארית עם $\\dim V=\\dim W=n$ ו-$\\ker T=\\{\\vec{0}\\}$, אז $T$ על.",
-          "solution_en": "$\\ker T=\\{\\vec{0}\\}\\Rightarrow\\dim(\\ker T)=0$. By Rank-Nullity: $\\dim(\\text{Im}\\,T)=n-0=n=\\dim W$. Since $\\text{Im}\\,T\\subseteq W$ and $\\dim(\\text{Im}\\,T)=\\dim W$, we get $\\text{Im}\\,T=W$. $\\blacksquare$",
-          "solution_he": "$\\dim(\\ker T)=0 \\Rightarrow \\dim(\\text{Im}\\,T)=n=\\dim W \\Rightarrow \\text{Im}\\,T=W$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\ker T=\\{\\vec{0}\\}\\Rightarrow\\dim(\\ker T)=0$. By Rank-Nullity: $\\dim(\\text{Im}\\,T)=n-0=n=\\dim W$. Since $\\text{Im}\\,T\\subseteq W$ and $\\dim(\\text{Im}\\,T)=\\dim W$, we get $\\text{Im}\\,T=W$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\dim(\\ker T)=0 \\Rightarrow \\dim(\\text{Im}\\,T)=n=\\dim W \\Rightarrow \\text{Im}\\,T=W$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -176,7 +177,7 @@
           "body_en": "Let $A$ be an $n\\times n$ matrix. Prove: $A$ is invertible if and only if $\\ker A=\\{\\vec{0}\\}$.",
           "body_he": "יהי $A$ מטריצה $n\\times n$. הוכח: $A$ הפיכה אם ורק אם $\\ker A=\\{\\vec{0}\\}$.",
           "solution_en": "($\\Rightarrow$) If $A\\vec{x}=\\vec{0}$ and $A$ invertible: $\\vec{x}=A^{-1}\\vec{0}=\\vec{0}$. ($\\Leftarrow$) If $\\ker A=\\{\\vec{0}\\}$: nullity$=0\\Rightarrow$rank$=n\\Rightarrow$ all columns independent $\\Rightarrow$ $A$ invertible. $\\blacksquare$",
-          "solution_he": "($\\Rightarrow$) $A\\vec{x}=\\vec{0} \\Rightarrow \\vec{x}=A^{-1}\\vec{0}=\\vec{0}$. ($\\Leftarrow$) גרעין$=0\\Rightarrow$דרגה$=n\\Rightarrow A$ הפיכה. $\\blacksquare$",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n($\\Rightarrow$) $A\\vec{x}=\\vec{0} \\Rightarrow \\vec{x}=A^{-1}\\vec{0}=\\vec{0}$. ($\\Leftarrow$) גרעין$=0\\Rightarrow$דרגה$=n\\Rightarrow A$ הפיכה. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -207,6 +208,14 @@
       "body_he_md": "1. **שמירת שורות/עמודות שגויות לאחר דירוג.** לבסיס של מרחב העמודות, השתמש ב**עמודות המקוריות** (לפני הדירוג) המתאימות לעמודות ציריות.\n\n2. **בלבול בין דרגה לממד הגרעין.** דרגה$(A)=$ מספר צירים; גרעין$(A)=n-$דרגה.\n\n3. **ספירת ממד שגויה.** דרגה-גרעין מתייחס ל-$n=$ **מספר העמודות** של $A$ (ממד הדומיין).\n\n4. **חישוב קואורדינטות בסדר שגוי.** $[\\vec{v}]_B=(c_1,c_2,\\ldots)^T$ — הסדר חייב להתאים לסדר הבסיס.\n\n5. **טענה שקבוצה עם יותר וקטורים מהממד בלתי-תלויה.** במרחב $n$-ממדי, כל קבוצה של יותר מ-$n$ וקטורים תלויה אוטומטית."
     },
     {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
@@ -220,5 +229,154 @@
       "body_en_md": "- A **basis** is a linearly independent spanning set; **dimension** is the number of basis vectors (same for all bases).\n- In an $n$-dimensional space, any $n$ independent vectors form a basis.\n- **Rank-Nullity:** rank$(A)+$nullity$(A)=n$ (where $n$ = number of columns).\n- To find a basis for span: row-reduce and keep pivot rows. To find a basis for $\\ker A$: row-reduce $A$ and solve the parametric system.\n- $[\\vec{v}]_B$ coordinates are found by solving the linear system with the basis vectors.\n- $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$.",
       "body_he_md": "- **בסיס** = בלתי-תלוי + פורש; **ממד** = מספר וקטורי בסיס (זהה לכל הבסיסים).\n- במרחב $n$-ממדי, כל $n$ וקטורים בלתי-תלויים מהווים בסיס.\n- **דרגה-גרעין:** דרגה$(A)+$גרעין$(A)=n$.\n- בסיס ל-span: דרג ושמור שורות ציריות. בסיס ל-$\\ker A$: דרג ופתור פרמטרית.\n- $[\\vec{v}]_B$ — פתור את המערכת הלינארית עם וקטורי הבסיס.\n- $\\dim(W_1+W_2)=\\dim W_1+\\dim W_2-\\dim(W_1\\cap W_2)$."
     }
-  ]
+  ],
+  "agent_hints": {},
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find a basis for $\\text{span}\\{(1,2,3),(2,4,6),(0,1,0)\\}$.",
+      "stem_he": "מצא בסיס ל-$\\text{span}\\{(1,2,3),(2,4,6),(0,1,0)\\}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$(2,4,6)=2(1,2,3)$, redundant. Basis: $\\{(1,2,3),(0,1,0)\\}$, $\\dim=2$",
+          "2$",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$(2,4,6)=2(1,2,3)$, redundant. Basis: $\\{(1,2,3),(0,1,0)\\}$, $\\dim=2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$(2,4,6)$ מיותר. בסיס: $\\{(1,2,3),(0,1,0)\\}$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "What is $\\dim(\\ker A)$ if $A$ is $5\\times7$ with rank 4?",
+      "stem_he": "מהו $\\dim(\\ker A)$ אם $A$ הוא $5\\times7$ עם דרגה 4?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\nNullity $= 7-4=3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\nNullity $= 7-4=3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\nגרעין $= 7-4=3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find coordinates of $\\vec{v}=(3,1)$ in basis $B=\\{(1,1),(1,-1)\\}$.",
+      "stem_he": "מצא קואורדינטות של $\\vec{v}=(3,1)$ בבסיס $B=\\{(1,1),(1,-1)\\}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Solve $c_1(1,1)+c_2(1,-1)=(3,1)$: $c_1+c_2=3$, $c_1-c_2=1$. $c_1=2$, $c_2=1$. $[\\vec{v}]_B=(2,1)^T$",
+          "(2,1)^T$",
+          "2,1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nSolve $c_1(1,1)+c_2(1,-1)=(3,1)$: $c_1+c_2=3$, $c_1-c_2=1$. $c_1=2$, $c_2=1$. $[\\vec{v}]_B=(2,1)^T$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$c_1=2$, $c_2=1$. $[\\vec{v}]_B=(2,1)^T$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Verify that $\\{(1,0,0),(0,1,0),(0,0,1)\\}$ is a basis of $\\mathbb{R}^3$.",
+      "stem_he": "אמת ש-$\\{(1,0,0),(0,1,0),(0,0,1)\\}$ הוא בסיס של $\\mathbb{R}^3$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "3 vectors in a 3-dim space; they are clearly independent (identity matrix). Spans $\\mathbb{R}^3$. ✓",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n3 vectors in a 3-dim space; they are clearly independent (identity matrix). Spans $\\mathbb{R}^3$. ✓\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n3 וקטורים, מטריצת היחידה — בלתי-תלויים ופורשים. ✓\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find a basis for $\\ker(A)$ where $A=\\begin{pmatrix}1&-2&1\\\\2&-4&2\\end{pmatrix}$.",
+      "stem_he": "מצא בסיס ל-$\\ker(A)$ כאשר $A=\\begin{pmatrix}1&-2&1\\\\2&-4&2\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Row reduce: $[1,-2,1;0,0,0]$. Free: $x_2=s,x_3=t$. $x_1=2s-t$. Basis: $\\{(2,1,0)^T,(-1,0,1)^T\\}$, nullity=2",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nRow reduce: $[1,-2,1;0,0,0]$. Free: $x_2=s,x_3=t$. $x_1=2s-t$. Basis: $\\{(2,1,0)^T,(-1,0,1)^T\\}$, nullity=2.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nלאחר דירוג: $x_1=2s-t$. בסיס: $\\{(2,1,0)^T,(-1,0,1)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find a basis for the column space of $A=\\begin{pmatrix}1&2&3\\\\0&1&2\\\\1&3&5\\end{pmatrix}$.",
+      "stem_he": "מצא בסיס למרחב העמודות של $A=\\begin{pmatrix}1&2&3\\\\0&1&2\\\\1&3&5\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Row reduce; pivot columns are 1 and 2. Basis (from original $A$): $\\{(1,0,1)^T,(2,1,3)^T\\}$. Rank=2",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nRow reduce; pivot columns are 1 and 2. Basis (from original $A$): $\\{(1,0,1)^T,(2,1,3)^T\\}$. Rank=2.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nעמודות ציריות: 1 ו-2. בסיס: $\\{(1,0,1)^T,(2,1,3)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A linear map $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ has $\\dim(\\ker T)=3$. Find $\\dim(\\text{Im}\\,T)$. Can $T$ be onto?",
+      "stem_he": "להעתקה לינארית $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ יש $\\dim(\\ker T)=3$. מצא $\\dim(\\text{Im}\\,T)$. האם $T$ יכולה להיות על?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\dim(\\text{Im}\\,T)=5-3=2<3$. So $T$ is NOT onto ($\\text{Im}\\,T\\neq\\mathbb{R}^3$).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2<3$. So $T$ is NOT onto ($\\text{Im}\\,T\\neq\\mathbb{R}^3$).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\dim(\\text{Im}\\,T)=5-3=2<3$. So $T$ is NOT onto ($\\text{Im}\\,T\\neq\\mathbb{R}^3$).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\dim(\\text{Im}\\,T)=2<3$. $T$ **אינה** על.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find coordinates of $p(x)=3+2x-x^2$ in the basis $B=\\{1,x,x^2\\}$ of $P_2$.",
+      "stem_he": "מצא קואורדינטות של $p(x)=3+2x-x^2$ בבסיס $B=\\{1,x,x^2\\}$ של $P_2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$p = 3\\cdot1+2\\cdot x+(-1)\\cdot x^2$. Coordinates: $[p]_B=(3,2,-1)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "(3,2,-1)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$p = 3\\cdot1+2\\cdot x+(-1)\\cdot x^2$. Coordinates: $[p]_B=(3,2,-1)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$[p]_B=(3,2,-1)^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 50,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

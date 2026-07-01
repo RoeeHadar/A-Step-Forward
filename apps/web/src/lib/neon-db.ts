@@ -1175,7 +1175,8 @@ export interface LessonSection {
     | 'before_exam'
     | 'exercise_set'
     | 'definition'
-    | 'exam_problems';
+    | 'exam_problems'
+    | 'why_matters';
   title_en: string;
   title_he: string;
   body_en_md: string;

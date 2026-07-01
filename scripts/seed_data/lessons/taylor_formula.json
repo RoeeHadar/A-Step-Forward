@@ -2,19 +2,19 @@
   "concept_id": "taylor_formula",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": ["calc1"],
+  "math_track": [
+    "calc1"
+  ],
   "title_en": "Taylor Polynomials and Taylor Series",
   "title_he": "פולינומים של טיילור וסדרות טיילור",
   "summary_en": "The Taylor polynomial of degree $n$ approximates $f$ near $a$ using derivatives of $f$ at $a$. The Lagrange remainder bounds the error. The key series ($e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$) must be memorized for computing limits and approximations.",
   "summary_he": "פולינום טיילור מדרגה $n$ מקרב את $f$ ליד $a$ באמצעות נגזרות $f$ ב-$a$. שארית לגראנז' חוסמת את השגיאה. הסדרות המרכזיות ($e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$) חייבות להיות שמורות לחישוב גבולות וקירובים.",
-  "est_minutes": 65,
-  "agent_hints": "When a learner asks for a Taylor series, always ask: 'Around which point? To what degree?' For limit computations, guide them to expand to one more term than needed so the answer is clear. The Lagrange remainder requires bounding |f^(n+1)| on an interval.",
   "sections": [
     {
       "kind": "intro",
       "title_en": "Why Taylor Polynomials?",
       "title_he": "למה פולינומים של טיילור?",
-      "body_en_md": "Polynomials are the easiest functions to work with — they're easy to differentiate, integrate, and evaluate. Taylor's theorem says: **every smooth function is locally approximated by a polynomial.** \n\n**Applications:**\n- **Numerical approximation:** $\\cos(0.1)\\approx 1-0.01/2 = 0.995$.\n- **Limits:** compute $\\lim_{x\\to 0}\\frac{e^x-1-x}{x^2}$ without L'Hôpital.\n- **Physics and engineering:** linearization ($\\sin x\\approx x$ for small $x$).\n- **Every university calculus final** includes at least one Taylor series problem.",
+      "body_en_md": "Polynomials are the easiest functions to work with — they're easy to differentiate, integrate, and evaluate. Taylor's theorem says: **every smooth function is locally approximated by a polynomial.**\n\n**Applications:**\n- **Numerical approximation:** $\\cos(0.1)\\approx 1-0.01/2 = 0.995$.\n- **Limits:** compute $\\lim_{x\\to 0}\\frac{e^x-1-x}{x^2}$ without L'Hôpital.\n- **Physics and engineering:** linearization ($\\sin x\\approx x$ for small $x$).\n- **Every university calculus final** includes at least one Taylor series problem.",
       "body_he_md": "פולינומים הם הפונקציות הקלות ביותר לעבודה — קל לגזור, לאנטגרר ולחשב. משפט טיילור אומר: **כל פונקציה חלקה מקורבת מקומית על-ידי פולינום.**\n\n**יישומים:**\n- **קירוב מספרי:** $\\cos(0.1)\\approx 1-0.01/2=0.995$.\n- **גבולות:** $\\lim_{x\\to 0}\\frac{e^x-1-x}{x^2}$ ללא לופיטל.\n- **פיזיקה והנדסה:** לינאריזציה ($\\sin x\\approx x$ עבור $x$ קטן).\n- **כל בחינה אוניברסיטאית** כוללת לפחות שאלה אחת על טיילור."
     },
     {
@@ -37,7 +37,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — $T_3(x)$ for $e^x$ around $0$",
       "title_he": "דוגמה פתורה 1 — $T_3(x)$ של $e^x$ סביב $0$",
-      "body_en_md": "**Given:** Write the Taylor polynomial of degree 3 for $f(x)=e^x$ at $a=0$.\n\n**Step 1 — Compute derivatives at $a=0$:**\n$$f(x)=e^x,\\quad f'(x)=e^x,\\quad f''(x)=e^x,\\quad f'''(x)=e^x$$\n$$f(0)=f'(0)=f''(0)=f'''(0)=1$$\n\n**Step 2 — Apply Taylor formula:**\n$$T_3(x) = f(0)+f'(0)x+\\frac{f''(0)}{2!}x^2+\\frac{f'''(0)}{3!}x^3$$\n$$= 1+x+\\frac{x^2}{2}+\\frac{x^3}{6}$$\n\n**Answer:** $\\boxed{T_3(x) = 1+x+\\dfrac{x^2}{2}+\\dfrac{x^3}{6}}$ ✓\n\n*Check: $T_3(0)=1=e^0$ ✓. $T_3'(0)=1=e^0$ ✓.*",
+      "body_en_md": "**Given:** Write the Taylor polynomial of degree 3 for $f(x)=e^x$ at $a=0$.\n\n### Move 1\n$$f(x)=e^x,\\quad f'(x)=e^x,\\quad f''(x)=e^x,\\quad f'''(x)=e^x$$\n$$f(0)=f'(0)=f''(0)=f'''(0)=1$$\n\n### Move 2\n$$T_3(x) = f(0)+f'(0)x+\\frac{f''(0)}{2!}x^2+\\frac{f'''(0)}{3!}x^3$$\n$$= 1+x+\\frac{x^2}{2}+\\frac{x^3}{6}$$\n\n**Answer:** $\\boxed{T_3(x) = 1+x+\\dfrac{x^2}{2}+\\dfrac{x^3}{6}}$ ✓\n\n*Check: $T_3(0)=1=e^0$ ✓. $T_3'(0)=1=e^0$ ✓.*",
       "body_he_md": "**נתון:** כתבו פולינום טיילור מדרגה 3 עבור $f(x)=e^x$ ב-$a=0$.\n\n**שלב 1 — נגזרות ב-$a=0$:**\n$$f(0)=f'(0)=f''(0)=f'''(0)=1$$\n\n**שלב 2 — נוסחת טיילור:**\n$$T_3(x)=1+x+\\frac{x^2}{2}+\\frac{x^3}{6}$$\n\n**תשובה:** $\\boxed{1+x+\\dfrac{x^2}{2}+\\dfrac{x^3}{6}}$ ✓"
     },
     {
@@ -55,7 +55,7 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Approximate $\\cos(0.1)$ Using $T_4$ and Bound the Error",
       "title_he": "דוגמה פתורה 2 — קירוב $\\cos(0.1)$ בעזרת $T_4$ ואומדן שגיאה",
-      "body_en_md": "**Given:** Approximate $\\cos(0.1)$ using $T_4$ for $\\cos x$ at $a=0$. Bound the error $|R_4(0.1)|$.\n\n**Step 1 — Write $T_4$ for $\\cos x$:**\n$$T_4(x) = 1-\\frac{x^2}{2!}+\\frac{x^4}{4!} = 1-\\frac{x^2}{2}+\\frac{x^4}{24}$$\n*(The odd terms $x,x^3$ vanish since all odd derivatives of $\\cos$ are $\\sin$ evaluated at 0.)*\n\n**Step 2 — Evaluate at $x=0.1$:**\n$$T_4(0.1) = 1-\\frac{(0.1)^2}{2}+\\frac{(0.1)^4}{24} = 1-\\frac{0.01}{2}+\\frac{0.0001}{24} = 1-0.005+0.0000041\\overline{6}\\approx 0.9950042$$\n\n**Step 3 — Bound the error (Lagrange):**\nThe remainder is $R_4(x)=\\frac{f^{(5)}(\\xi)}{5!}x^5$. For $\\cos x$: $f^{(5)}(x)=-\\sin x$ or $\\cos x$, so $|f^{(5)}(\\xi)|\\leq 1$.\n$$|R_4(0.1)|\\leq\\frac{1}{5!}(0.1)^5=\\frac{0.00001}{120}\\approx 8.3\\times 10^{-8}$$\n\n**Answer:** $\\cos(0.1)\\approx 0.99500417$ with error $<10^{-7}$ ✓\n\n*Actual value: $\\cos(0.1)\\approx 0.99500417$ — our approximation is accurate to 7 decimal places.*",
+      "body_en_md": "**Given:** Approximate $\\cos(0.1)$ using $T_4$ for $\\cos x$ at $a=0$. Bound the error $|R_4(0.1)|$.\n\n### Move 1\n$$T_4(x) = 1-\\frac{x^2}{2!}+\\frac{x^4}{4!} = 1-\\frac{x^2}{2}+\\frac{x^4}{24}$$\n*(The odd terms $x,x^3$ vanish since all odd derivatives of $\\cos$ are $\\sin$ evaluated at 0.)*\n\n### Move 2\n$$T_4(0.1) = 1-\\frac{(0.1)^2}{2}+\\frac{(0.1)^4}{24} = 1-\\frac{0.01}{2}+\\frac{0.0001}{24} = 1-0.005+0.0000041\\overline{6}\\approx 0.9950042$$\n\n### Move 3\nThe remainder is $R_4(x)=\\frac{f^{(5)}(\\xi)}{5!}x^5$. For $\\cos x$: $f^{(5)}(x)=-\\sin x$ or $\\cos x$, so $|f^{(5)}(\\xi)|\\leq 1$.\n$$|R_4(0.1)|\\leq\\frac{1}{5!}(0.1)^5=\\frac{0.00001}{120}\\approx 8.3\\times 10^{-8}$$\n\n**Answer:** $\\cos(0.1)\\approx 0.99500417$ with error $<10^{-7}$ ✓\n\n*Actual value: $\\cos(0.1)\\approx 0.99500417$ — our approximation is accurate to 7 decimal places.*",
       "body_he_md": "**נתון:** קרבו את $\\cos(0.1)$ עם $T_4$ של $\\cos x$ ב-$a=0$. חסמו את השגיאה.\n\n**שלב 1 — $T_4$ של $\\cos x$:**\n$$T_4(x)=1-\\frac{x^2}{2}+\\frac{x^4}{24}$$\n\n**שלב 2 — הצבה ב-$x=0.1$:**\n$$T_4(0.1)=1-0.005+0.0000042\\approx 0.9950042$$\n\n**שלב 3 — חסם שארית לגראנז':**\n$|f^{(5)}(\\xi)|\\leq 1$, לכן:\n$$|R_4(0.1)|\\leq\\frac{(0.1)^5}{120}\\approx 8.3\\times 10^{-8}$$\n\n**תשובה:** $\\cos(0.1)\\approx 0.99500417$ עם שגיאה $<10^{-7}$ ✓"
     },
     {
@@ -73,8 +73,8 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Limit via Taylor (Not L'Hôpital)",
       "title_he": "דוגמה פתורה 3 — גבול באמצעות טיילור (ללא לופיטל)",
-      "body_en_md": "**Given:** Compute $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$ using Taylor series.\n\n**Step 1 — Expand $e^x$ to degree 3 (one beyond denominator degree):**\n$$e^x = 1+x+\\frac{x^2}{2!}+\\frac{x^3}{3!}+O(x^4) = 1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+O(x^4)$$\n\n**Step 2 — Subtract $1+x+x^2/2$ from the expansion:**\n$$e^x - 1 - x - \\frac{x^2}{2} = \\frac{x^3}{6}+O(x^4)$$\n\n**Step 3 — Divide by $x^3$:**\n$$\\frac{e^x-1-x-x^2/2}{x^3} = \\frac{x^3/6+O(x^4)}{x^3} = \\frac{1}{6}+O(x)$$\n\n**Step 4 — Take the limit:**\n$$\\lim_{x\\to 0}\\left(\\frac{1}{6}+O(x)\\right) = \\frac{1}{6}$$\n\n**Answer:** $\\boxed{\\dfrac{1}{6}}$ ✓\n\n*Compare: L'Hôpital requires 3 differentiations. Taylor requires reading off one coefficient. For such limits, Taylor is far faster.*",
-      "body_he_md": "**נתון:** $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$ בעזרת טיילור.\n\n**שלב 1 — פיתוח $e^x$ עד דרגה 3:**\n$$e^x=1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+O(x^4)$$\n\n**שלב 2 — חיסור $1+x+x^2/2$:**\n$$e^x-1-x-\\frac{x^2}{2}=\\frac{x^3}{6}+O(x^4)$$\n\n**שלב 3 — חלקו ב-$x^3$:**\n$$\\frac{1/6+O(x)}{1}\\to\\frac{1}{6}$$\n\n**תשובה:** $\\boxed{\\dfrac{1}{6}}$ ✓"
+      "body_en_md": "**Given:** Compute $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$ using Taylor series.\n\n### Move 1\n$$e^x = 1+x+\\frac{x^2}{2!}+\\frac{x^3}{3!}+O(x^4) = 1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+O(x^4)$$\n\n### Move 2\n$$e^x - 1 - x - \\frac{x^2}{2} = \\frac{x^3}{6}+O(x^4)$$\n\n### Move 3\n$$\\frac{e^x-1-x-x^2/2}{x^3} = \\frac{x^3/6+O(x^4)}{x^3} = \\frac{1}{6}+O(x)$$\n\n### Move 4\n$$\\lim_{x\\to 0}\\left(\\frac{1}{6}+O(x)\\right) = \\frac{1}{6}$$\n\n**Answer:** $\\boxed{\\dfrac{1}{6}}$ ✓\n\n*Compare: L'Hôpital requires 3 differentiations. Taylor requires reading off one coefficient. For such limits, Taylor is far faster.*",
+      "body_he_md": "**נתון:** $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$ בעזרת טיילור.\n\n**שלב 1 — פיתוח $e^x$ עד דרגה 3:**\n$$e^x=1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+O(x^4)$$\n\n**שלב 2 — חיסור $1+x+x^2/2$:**\n$$e^x-1-x-\\frac{x^2}{2}=\\frac{x^3}{6}+O(x^4)$$\n\n**שלב 3 — חלקו ב-$x^3$:**\n$$\\frac{1/6+O(x)}{1}\\to\\frac{1}{6}$$\n\n**תשובה:** $\\boxed{\\dfrac{1}{6}}$ ✓\n\n**Answer:** $\\boxed{\\dfrac{1}{6}}$ ✓"
     },
     {
       "kind": "method_guide",
@@ -87,16 +87,16 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
           "difficulty": "easy",
           "body_en": "Write $T_4(x)$ for $\\cos x$ at $a=0$.",
           "body_he": "כתבו $T_4(x)$ של $\\cos x$ ב-$a=0$.",
-          "solution_en": "$T_4(x)=1-\\frac{x^2}{2}+\\frac{x^4}{24}$.",
-          "solution_he": "$1-\\frac{x^2}{2}+\\frac{x^4}{24}$.",
+          "solution_en": "**Solution:**\n\n$T_4(x)=1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -104,8 +104,8 @@
           "difficulty": "easy",
           "body_en": "Write $T_3(x)$ for $\\ln(1+x)$ at $a=0$.",
           "body_he": "כתבו $T_3(x)$ של $\\ln(1+x)$ ב-$a=0$.",
-          "solution_en": "$T_3(x)=x-\\frac{x^2}{2}+\\frac{x^3}{3}$.",
-          "solution_he": "$x-\\frac{x^2}{2}+\\frac{x^3}{3}$.",
+          "solution_en": "**Solution:**\n\n$T_3(x)=x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -114,7 +114,7 @@
           "body_en": "Write the Maclaurin polynomial $T_2(x)$ for $f(x)=(1+x)^{1/2}$.",
           "body_he": "כתבו $T_2(x)$ של $f(x)=(1+x)^{1/2}$ (מקלורן).",
           "solution_en": "$(1+x)^{1/2}\\approx 1+\\frac{1}{2}x-\\frac{1}{8}x^2$. (Using $(1+x)^\\alpha$ with $\\alpha=1/2$.)",
-          "solution_he": "$1+\\frac{x}{2}-\\frac{x^2}{8}$.",
+          "solution_he": "**פתרון:**\n\n$1+\\frac{x}{2}-\\frac{x^2}{8}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -123,7 +123,7 @@
           "body_en": "Write $T_3(x)$ for $e^x$ at $a=1$.",
           "body_he": "כתבו $T_3(x)$ של $e^x$ ב-$a=1$.",
           "solution_en": "All derivatives of $e^x$ at $x=1$ equal $e$. $T_3(x)=e+e(x-1)+\\frac{e}{2}(x-1)^2+\\frac{e}{6}(x-1)^3=e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.",
-          "solution_he": "$e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.",
+          "solution_he": "**פתרון:**\n\n$e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -131,8 +131,8 @@
           "difficulty": "medium",
           "body_en": "Use Taylor series to compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\cos x-1}{x^2}$.",
           "body_he": "השתמשו בסדרות טיילור לחישוב $\\displaystyle\\lim_{x\\to 0}\\frac{\\cos x-1}{x^2}$.",
-          "solution_en": "$\\cos x=1-x^2/2+O(x^4)$. $\\frac{\\cos x-1}{x^2}=\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.",
-          "solution_he": "$\\cos x-1=-x^2/2+O(x^4)$. גבול: $-1/2$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\cos x=1-x^2/2+O(x^4)$. $\\frac{\\cos x-1}{x^2}=\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\cos x-1=-x^2/2+O(x^4)$. גבול: $-1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -140,8 +140,8 @@
           "difficulty": "medium",
           "body_en": "Write the Maclaurin series for $f(x)=e^{-x^2}$ up to degree 4.",
           "body_he": "כתבו את סדרת המקלורן של $f(x)=e^{-x^2}$ עד דרגה 4.",
-          "solution_en": "Replace $x$ with $-x^2$ in $e^x=1+x+x^2/2+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\cdots$.",
-          "solution_he": "$1-x^2+\\frac{x^4}{2}+\\cdots$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nReplace $x$ with $-x^2$ in $e^x=1+x+x^2/2+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\cdots$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$1-x^2+\\frac{x^4}{2}+\\cdots$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -149,8 +149,8 @@
           "difficulty": "medium",
           "body_en": "Use $T_3$ for $\\sin x$ to approximate $\\sin(0.2)$ and bound the error.",
           "body_he": "השתמשו ב-$T_3$ של $\\sin x$ לקירוב $\\sin(0.2)$ ואומדן שגיאה.",
-          "solution_en": "$T_3(0.2)=0.2-(0.2)^3/6=0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.",
-          "solution_he": "$\\approx 0.19867$. שגיאה $\\leq 2.7\\times 10^{-7}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T_3(0.2)=0.2-(0.2)^3/6=0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\approx 0.19867$. שגיאה $\\leq 2.7\\times 10^{-7}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -158,8 +158,8 @@
           "difficulty": "medium",
           "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x - x}{x^3}$ using Taylor series.",
           "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}$ בסדרות טיילור.",
-          "solution_en": "$\\sin x=x-x^3/6+O(x^5)$. $\\sin x-x=-x^3/6+O(x^5)$. $\\frac{-x^3/6}{x^3}=-1/6$.",
-          "solution_he": "$-1/6$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\sin x=x-x^3/6+O(x^5)$. $\\sin x-x=-x^3/6+O(x^5)$. $\\frac{-x^3/6}{x^3}=-1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-1/6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -167,8 +167,8 @@
           "difficulty": "medium",
           "body_en": "Write $T_4(x)$ for $f(x)=x\\sin x$ at $a=0$ using a product of series.",
           "body_he": "כתבו $T_4(x)$ של $f(x)=x\\sin x$ ב-$a=0$ כמכפלת סדרות.",
-          "solution_en": "$x\\sin x=x\\cdot(x-x^3/6+O(x^5))=x^2-x^4/6+O(x^6)$. $T_4(x)=x^2-x^4/6$.",
-          "solution_he": "$T_4(x)=x^2-\\frac{x^4}{6}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$x\\sin x=x\\cdot(x-x^3/6+O(x^5))=x^2-x^4/6+O(x^6)$. $T_4(x)=x^2-x^4/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$T_4(x)=x^2-\\frac{x^4}{6}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -176,8 +176,8 @@
           "difficulty": "hard",
           "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$ using Taylor (not L'Hôpital).",
           "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x-x^2/2}{x^3}$ בטיילור (ללא לופיטל).",
-          "solution_en": "$e^x=1+x+x^2/2+x^3/6+O(x^4)$. Numerator: $x^3/6+O(x^4)$. Divide by $x^3$: $1/6+O(x)\\to 1/6$.",
-          "solution_he": "מונה: $x^3/6+O(x^4)$. גבול: $1/6$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$e^x=1+x+x^2/2+x^3/6+O(x^4)$. Numerator: $x^3/6+O(x^4)$. Divide by $x^3$: $1/6+O(x)\\to 1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nמונה: $x^3/6+O(x^4)$. גבול: $1/6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -185,8 +185,8 @@
           "difficulty": "hard",
           "body_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\ln(1+x)-\\sin x}{x^2}$ using Taylor series.",
           "body_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{\\ln(1+x)-\\sin x}{x^2}$ בסדרות טיילור.",
-          "solution_en": "$\\ln(1+x)=x-x^2/2+x^3/3-\\cdots$. $\\sin x=x-x^3/6+\\cdots$. Difference: $-x^2/2+x^3(1/3+1/6)+\\cdots$. Divide by $x^2$: $-1/2+O(x)\\to -1/2$.",
-          "solution_he": "$\\ln(1+x)-\\sin x=-x^2/2+O(x^3)$. Divided by $x^2$: $-1/2$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\ln(1+x)=x-x^2/2+x^3/3-\\cdots$. $\\sin x=x-x^3/6+\\cdots$. Difference: $-x^2/2+x^3(1/3+1/6)+\\cdots$. Divide by $x^2$: $-1/2+O(x)\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\ln(1+x)-\\sin x=-x^2/2+O(x^3)$. Divided by $x^2$: $-1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -195,7 +195,7 @@
           "body_en": "How many terms of the $\\cos x$ series are needed to compute $\\cos(0.5)$ accurate to $10^{-6}$? Find the minimum $n$.",
           "body_he": "כמה איברים של סדרת $\\cos x$ דרושים לחישוב $\\cos(0.5)$ בדיוק $10^{-6}$? מצאו $n$ מינימלי.",
           "solution_en": "Error $|R_n(0.5)|\\leq\\frac{(0.5)^{n+1}}{(n+1)!}$. Check: $n=4$: $(0.5)^5/120\\approx 2.6\\times 10^{-4}$ (not enough). $n=6$: $(0.5)^7/5040\\approx 2.4\\times 10^{-6}$ (close). $n=8$: $(0.5)^9/362880\\approx 2.7\\times 10^{-9}<10^{-6}$ ✓. But also check $n=6$: $\\frac{(0.5)^7}{5040}\\approx 2.5\\times 10^{-6}$ — not quite. $n=8$ suffices (using $T_8$).",
-          "solution_he": "שגיאה: $\\frac{(0.5)^{n+1}}{(n+1)!}<10^{-6}$. $n=8$ ($T_8$) מספיק.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nשגיאה: $\\frac{(0.5)^{n+1}}{(n+1)!}<10^{-6}$. $n=8$ ($T_8$) מספיק.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         }
       ]
@@ -208,10 +208,18 @@
       "body_he_md": "1. **פיתוח בסדר לא מספיק.** אם מכנה הוא $x^3$, פתחו מונה לפחות ל-$x^3$.\n\n2. **עצרת שגויה.** האיבר ה-$n$ הוא $\\frac{f^{(n)}(a)}{n!}(x-a)^n$ — $n!$ במכנה.\n\n3. **שכחת השארית באומדן שגיאה.** השגיאה היא $R_n(x)$, לא האיבר הבא לבד.\n\n4. **שימוש בלופיטל כאשר טיילור מהיר יותר.** לגבולות עם $\\sin$, $e^x$, $\\ln(1+x)$ ליד 0 — נסו טיילור קודם.\n\n5. **הצבה שגויה בסדרה ידועה.** $\\cos(x^2)$ — הציבו $x^2$ בסדרת $\\cos$ — אל תגזרו $\\cos(x^2)$ מאפס."
     },
     {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Standard Maclaurin series (must memorize):**\n$$e^x = \\sum_{n=0}^\\infty\\frac{x^n}{n!} = 1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+\\cdots$$\n$$\\sin x = x-\\frac{x^3}{6}+\\frac{x^5}{120}-\\cdots, \\quad \\cos x = 1-\\frac{x^2}{2}+\\frac{x^4}{24}-\\cdots$$\n$$\\ln(1+x) = x-\\frac{x^2}{2}+\\frac{x^3}{3}-\\cdots \\quad (|x|\\leq 1, x\\ne -1)$$\n$$(1+x)^\\alpha = 1+\\alpha x+\\frac{\\alpha(\\alpha-1)}{2}x^2+\\cdots$$\n\n**Lagrange error bound:** $|R_n(x)|\\leq\\frac{M_{n+1}}{(n+1)!}|x-a|^{n+1}$ where $M_{n+1}=\\max|f^{(n+1)}|$.\n\n**Exam patterns:**\n- Write $T_n$: use formula with successive derivatives.\n- Estimate error: use Lagrange bound, find $M$, plug in.\n- Compute limit: expand, cancel, read coefficient.\n- Combine series: substitute, multiply, add — avoid term-by-term differentiation when possible.",
+      "body_en_md": "**Standard Maclaurin series (must memorize):**\n$$e^x = \\sum_{n=0}^\\infty\\frac{x^n}{n!} = 1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+\\cdots$$\n$$\\sin x = x-\\frac{x^3}{6}+\\frac{x^5}{120}-\\cdots, \\quad \\cos x = 1-\\frac{x^2}{2}+\\frac{x^4}{24}-\\cdots$$\n$$\\ln(1+x) = x-\\frac{x^2}{2}+\\frac{x^3}{3}-\\cdots \\quad (|x|\\leq 1, x\\ne -1)$$\n$$(1+x)^\\alpha = 1+\\alpha x+\\frac{\\alpha(\\alpha-1)}{2}x^2+\\cdots$$\n\n**Lagrange error bound:** $|R_n(x)|\\leq\\frac{M_{n+1}}{(n+1)!}|x-a|^{n+1}$ where $M_{n+1}=\\max|f^{(n+1)}|$.\n\n**Exam patterns:**\n- Write $T_n$: use formula with successive derivatives.\n- Estimate error: use Lagrange bound, find $M$, plug in.\n- Compute limit: expand, cancel, read coefficient.\n- Combine series: substitute, multiply, add — avoid term-by-term differentiation when possible.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "**סדרות מקלורן (חובה לשנן):**\n$$e^x=1+x+\\frac{x^2}{2}+\\frac{x^3}{6}+\\cdots$$\n$$\\sin x=x-\\frac{x^3}{6}+\\cdots,\\quad \\cos x=1-\\frac{x^2}{2}+\\cdots$$\n$$\\ln(1+x)=x-\\frac{x^2}{2}+\\frac{x^3}{3}-\\cdots$$\n\n**חסם שארית לגראנז':** $|R_n(x)|\\leq\\frac{M_{n+1}}{(n+1)!}|x-a|^{n+1}$.\n\n**דפוסי בחינה:**\n- כתיבת $T_n$: נוסחה עם נגזרות עוקבות.\n- אומדן שגיאה: חסם לגראנז', מצאו $M$.\n- גבול: פתחו, בטלו, קראו מקדם.\n- שילוב סדרות: הציבו, הכפילו, חברו."
     },
     {
@@ -221,5 +229,157 @@
       "body_en_md": "- The Taylor polynomial $T_n(x)=\\sum_{k=0}^n\\frac{f^{(k)}(a)}{k!}(x-a)^k$ approximates $f$ near $a$.\n- **Lagrange remainder:** $|R_n(x)|\\leq\\frac{M_{n+1}}{(n+1)!}|x-a|^{n+1}$ — use to bound approximation error.\n- **Memorize:** $e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$, $(1+x)^\\alpha$ at $a=0$.\n- For limits: expand to the degree of the denominator and read the coefficient.\n- For composed series (e.g., $e^{x^2}$): substitute into the standard series, don't differentiate from scratch.",
       "body_he_md": "- $T_n(x)=\\sum_{k=0}^n\\frac{f^{(k)}(a)}{k!}(x-a)^k$ מקרב את $f$ ליד $a$.\n- **שארית לגראנז':** $|R_n|\\leq\\frac{M_{n+1}}{(n+1)!}|x-a|^{n+1}$.\n- **שיננו:** $e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$, $(1+x)^\\alpha$ ב-$a=0$.\n- לגבולות: פתחו עד דרגת המכנה וקראו המקדם.\n- לסדרות מורכבות: הציבו בסדרה הידועה."
     }
-  ]
+  ],
+  "agent_hints": "When a learner asks for a Taylor series, always ask: 'Around which point? To what degree?' For limit computations, guide them to expand to one more term than needed so the answer is clear. The Lagrange remainder requires bounding |f^(n+1)| on an interval.",
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Write $T_4(x)$ for $\\cos x$ at $a=0$.",
+      "stem_he": "כתבו $T_4(x)$ של $\\cos x$ ב-$a=0$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$T_4(x)=1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "24"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$T_4(x)=1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Write $T_3(x)$ for $\\ln(1+x)$ at $a=0$.",
+      "stem_he": "כתבו $T_3(x)$ של $\\ln(1+x)$ ב-$a=0$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$T_3(x)=x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$T_3(x)=x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Write the Maclaurin polynomial $T_2(x)$ for $f(x)=(1+x)^{1/2}$.",
+      "stem_he": "כתבו $T_2(x)$ של $f(x)=(1+x)^{1/2}$ (מקלורן).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$(1+x)^{1/2}\\approx 1+\\frac{1}{2}x-\\frac{1}{8}x^2$. (Using $(1+x)^\\alpha$ with $\\alpha=1/2$.)",
+          "1/2$.)",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$(1+x)^{1/2}\\approx 1+\\frac{1}{2}x-\\frac{1}{8}x^2$. (Using $(1+x)^\\alpha$ with $\\alpha=1/2$.)\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1+\\frac{x}{2}-\\frac{x^2}{8}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Write $T_3(x)$ for $e^x$ at $a=1$.",
+      "stem_he": "כתבו $T_3(x)$ של $e^x$ ב-$a=1$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "All derivatives of $e^x$ at $x=1$ equal $e$. $T_3(x)=e+e(x-1)+\\frac{e}{2}(x-1)^2+\\frac{e}{6}(x-1)^3=e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$",
+          "e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$",
+          "6"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nAll derivatives of $e^x$ at $x=1$ equal $e$. $T_3(x)=e+e(x-1)+\\frac{e}{2}(x-1)^2+\\frac{e}{6}(x-1)^3=e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Use Taylor series to compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\cos x-1}{x^2}$.",
+      "stem_he": "השתמשו בסדרות טיילור לחישוב $\\displaystyle\\lim_{x\\to 0}\\frac{\\cos x-1}{x^2}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\cos x=1-x^2/2+O(x^4)$. $\\frac{\\cos x-1}{x^2}=\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\cos x=1-x^2/2+O(x^4)$. $\\frac{\\cos x-1}{x^2}=\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\cos x-1=-x^2/2+O(x^4)$. גבול: $-1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Write the Maclaurin series for $f(x)=e^{-x^2}$ up to degree 4.",
+      "stem_he": "כתבו את סדרת המקלורן של $f(x)=e^{-x^2}$ עד דרגה 4.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nReplace $x$ with $-x^2$ in $e^x=1+x+x^2/2+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\cdots$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1-x^2+\\frac{x^4}{2}-\\cdots$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nReplace $x$ with $-x^2$ in $e^x=1+x+x^2/2+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\cdots$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$1-x^2+\\frac{x^4}{2}+\\cdots$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Use $T_3$ for $\\sin x$ to approximate $\\sin(0.2)$ and bound the error.",
+      "stem_he": "השתמשו ב-$T_3$ של $\\sin x$ לקירוב $\\sin(0.2)$ ואומדן שגיאה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T_3(0.2)=0.2-(0.2)^3/6=0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-7"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T_3(0.2)=0.2-(0.2)^3/6=0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\approx 0.19867$. שגיאה $\\leq 2.7\\times 10^{-7}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x - x}{x^3}$ using Taylor series.",
+      "stem_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}$ בסדרות טיילור.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\sin x=x-x^3/6+O(x^5)$. $\\sin x-x=-x^3/6+O(x^5)$. $\\frac{-x^3/6}{x^3}=-1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "6"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\sin x=x-x^3/6+O(x^5)$. $\\sin x-x=-x^3/6+O(x^5)$. $\\frac{-x^3/6}{x^3}=-1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-1/6$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 65,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

@@ -2,12 +2,13 @@
   "concept_id": "linear_regression_least_squares",
   "subject": "math",
   "level": "university",
-  "math_track": ["statistics"],
+  "math_track": [
+    "statistics"
+  ],
   "title_en": "Linear Regression — Least Squares",
   "title_he": "רגרסיה לינארית — שיטת הריבועים הפחותים",
   "summary_en": "Least squares regression: deriving the slope estimator, intercept, residuals, R-squared, and inference on regression coefficients.",
   "summary_he": "רגרסיה בריבועים פחותים: גזירת אומד השיפוע, נקודת החיתוך, שאריות, R-squared, והסקה על מקדמי הרגרסיה.",
-  "est_minutes": 55,
   "sections": [
     {
       "kind": "intro",
@@ -36,8 +37,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Computing OLS Slope and Intercept",
       "title_he": "דוגמה פתורה 1 — חישוב שיפוע ונקודת חיתוך OLS",
-      "body_en_md": "**Data:** $(x,y)$: $(1,2),(2,3),(3,5),(4,4),(5,6)$.\n\n**Step 1 — Means:** $\\bar{x}=3$, $\\bar{y}=4$.\n\n**Step 2 — $S_{xy}$ and $S_{xx}$:**\n\n| $i$ | $x_i-\\bar{x}$ | $y_i-\\bar{y}$ | product | $(x-\\bar{x})^2$ |\n|---|---|---|---|---|\n| 1 | -2 | -2 | 4 | 4 |\n| 2 | -1 | -1 | 1 | 1 |\n| 3 | 0 | 1 | 0 | 0 |\n| 4 | 1 | 0 | 0 | 1 |\n| 5 | 2 | 2 | 4 | 4 |\n| **Sum** | | | **9** | **10** |\n\n$$\\hat{\\beta}_1 = \\frac{9}{10} = 0.9, \\qquad \\hat{\\beta}_0 = 4 - 0.9 \\times 3 = 4 - 2.7 = 1.3.$$\n\n**Regression line:** $\\hat{y} = 1.3 + 0.9x$.\n\n**Interpretation:** For each 1-unit increase in $x$, predicted $y$ increases by 0.9.",
-      "body_he_md": "**נתונים:** $(x,y)$: $(1,2),(2,3),(3,5),(4,4),(5,6)$.\n\n**שלב 1:** $\\bar{x}=3$, $\\bar{y}=4$.\n\n**שלב 2:** $S_{xy}=9$, $S_{xx}=10$.\n\n$$\\hat{\\beta}_1=\\frac{9}{10}=0.9, \\qquad \\hat{\\beta}_0=4-0.9\\times3=1.3.$$\n\n**קו רגרסיה:** $\\hat{y}=1.3+0.9x$.\n\n**פרשנות:** לכל עלייה של 1 ב-$x$, $y$ החזוי עולה ב-0.9."
+      "body_en_md": "**Data:** $(x,y)$: $(1,2),(2,3),(3,5),(4,4),(5,6)$.\n\n### Move 1 $\\bar{x}=3$, $\\bar{y}=4$.\n\n### Move 2\n\n| $i$ | $x_i-\\bar{x}$ | $y_i-\\bar{y}$ | product | $(x-\\bar{x})^2$ |\n|---|---|---|---|---|\n| 1 | -2 | -2 | 4 | 4 |\n| 2 | -1 | -1 | 1 | 1 |\n| 3 | 0 | 1 | 0 | 0 |\n| 4 | 1 | 0 | 0 | 1 |\n| 5 | 2 | 2 | 4 | 4 |\n| **Sum** | | | **9** | **10** |\n\n$$\\hat{\\beta}_1 = \\frac{9}{10} = 0.9, \\qquad \\hat{\\beta}_0 = 4 - 0.9 \\times 3 = 4 - 2.7 = 1.3.$$\n\n**Regression line:** $\\hat{y} = 1.3 + 0.9x$.\n\n**Interpretation:** For each 1-unit increase in $x$, predicted $y$ increases by 0.9.",
+      "body_he_md": "**נתונים:** $(x,y)$: $(1,2),(2,3),(3,5),(4,4),(5,6)$.\n\n**שלב 1:** $\\bar{x}=3$, $\\bar{y}=4$.\n\n**שלב 2:** $S_{xy}=9$, $S_{xx}=10$.\n\n$$\\hat{\\beta}_1=\\frac{9}{10}=0.9, \\qquad \\hat{\\beta}_0=4-0.9\\times3=1.3.$$\n\n**קו רגרסיה:** $\\hat{y}=1.3+0.9x$.\n\n**פרשנות:** לכל עלייה של 1 ב-$x$, $y$ החזוי עולה ב-0.9.\n\n### צעד 1 $\\bar{x}=3$, $\\bar{y}=4$.\n\n### צעד 2"
     },
     {
       "kind": "checkpoint",
@@ -55,7 +56,7 @@
       "title_en": "Worked Example 2 — Computing $R^2$ and Residuals",
       "title_he": "דוגמה פתורה 2 — חישוב $R^2$ ושאריות",
       "body_en_md": "Using the data from Example 1 ($\\hat{y}=1.3+0.9x$), compute residuals, SSR, SST, and $R^2$.\n\n**Residuals:**\n\n| $i$ | $x_i$ | $y_i$ | $\\hat{y}_i=1.3+0.9x_i$ | $e_i=y_i-\\hat{y}_i$ | $e_i^2$ | $(y_i-\\bar{y})^2$ |\n|---|---|---|---|---|---|---|\n| 1 | 1 | 2 | 2.2 | -0.2 | 0.04 | 4 |\n| 2 | 2 | 3 | 3.1 | -0.1 | 0.01 | 1 |\n| 3 | 3 | 5 | 4.0 | 1.0 | 1.00 | 1 |\n| 4 | 4 | 4 | 4.9 | -0.9 | 0.81 | 0 |\n| 5 | 5 | 6 | 5.8 | 0.2 | 0.04 | 4 |\n| **Sum** | | | | **0** | **1.90** | **10** |\n\n$$\\text{SSR} = 1.90, \\quad \\text{SST} = 10, \\quad R^2 = 1 - \\frac{1.90}{10} = 0.81.$$\n\n**Interpretation:** 81% of the variance in $y$ is explained by the linear relationship with $x$.",
-      "body_he_md": "משתמשים בנתוני דוגמה 1 ($\\hat{y}=1.3+0.9x$). חשב שאריות, SSR, SST ו-$R^2$.\n\n**שאריות:** (ראה טבלה)\n\n$$\\text{SSR}=1.90, \\quad \\text{SST}=10, \\quad R^2=1-1.90/10=0.81.$$\n\n**פרשנות:** 81% מהשונות ב-$y$ מוסברת על ידי הקשר הלינארי עם $x$."
+      "body_he_md": "משתמשים בנתוני דוגמה 1 ($\\hat{y}=1.3+0.9x$). חשב שאריות, SSR, SST ו-$R^2$.\n\n**שאריות:** (ראה טבלה)\n\n$$\\text{SSR}=1.90, \\quad \\text{SST}=10, \\quad R^2=1-1.90/10=0.81.$$\n\n**פרשנות:** 81% מהשונות ב-$y$ מוסברת על ידי הקשר הלינארי עם $x$.\n\n**Residuals:**"
     },
     {
       "kind": "checkpoint",
@@ -72,8 +73,8 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Deriving the OLS Formulas",
       "title_he": "דוגמה פתורה 3 — גזירת נוסחאות OLS",
-      "body_en_md": "**Derive the formulas for $\\hat{\\beta}_0$ and $\\hat{\\beta}_1$ that minimise SSR.**\n\n**Step 1 — Define the objective:**\n$$Q = \\sum_{i=1}^n (y_i - \\beta_0 - \\beta_1 x_i)^2.$$\n\n**Step 2 — First-order conditions** (set partial derivatives to zero):\n$$\\frac{\\partial Q}{\\partial \\beta_0} = -2\\sum(y_i-\\beta_0-\\beta_1 x_i) = 0 \\Rightarrow \\sum y_i = n\\beta_0 + \\beta_1\\sum x_i. \\quad (1)$$\n$$\\frac{\\partial Q}{\\partial \\beta_1} = -2\\sum x_i(y_i-\\beta_0-\\beta_1 x_i) = 0 \\Rightarrow \\sum x_iy_i = \\beta_0\\sum x_i + \\beta_1\\sum x_i^2. \\quad (2)$$\n\n**Step 3 — Solve:** Divide equation (1) by $n$: $\\bar{y} = \\beta_0 + \\beta_1\\bar{x} \\Rightarrow \\hat{\\beta}_0 = \\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n\nSubstitute into (2) and simplify:\n$$\\sum x_i y_i - n\\bar{x}\\bar{y} = \\hat{\\beta}_1(\\sum x_i^2 - n\\bar{x}^2)$$\n$$\\Rightarrow \\hat{\\beta}_1 = \\frac{\\sum x_iy_i - n\\bar{x}\\bar{y}}{\\sum x_i^2 - n\\bar{x}^2} = \\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$",
-      "body_he_md": "**גזור את הנוסחאות ל-$\\hat{\\beta}_0$ ו-$\\hat{\\beta}_1$ שממזערות SSR.**\n\n**שלב 1:** $Q=\\sum(y_i-\\beta_0-\\beta_1 x_i)^2$.\n\n**שלב 2 — תנאי ראשון:**\n$$\\partial Q/\\partial\\beta_0=0 \\Rightarrow \\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}.$$\n$$\\partial Q/\\partial\\beta_1=0 \\Rightarrow \\hat{\\beta}_1=\\frac{\\sum x_iy_i-n\\bar{x}\\bar{y}}{\\sum x_i^2-n\\bar{x}^2}=\\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$"
+      "body_en_md": "**Derive the formulas for $\\hat{\\beta}_0$ and $\\hat{\\beta}_1$ that minimise SSR.**\n\n### Move 1\n$$Q = \\sum_{i=1}^n (y_i - \\beta_0 - \\beta_1 x_i)^2.$$\n\n### Move 2 (set partial derivatives to zero):\n$$\\frac{\\partial Q}{\\partial \\beta_0} = -2\\sum(y_i-\\beta_0-\\beta_1 x_i) = 0 \\Rightarrow \\sum y_i = n\\beta_0 + \\beta_1\\sum x_i. \\quad (1)$$\n$$\\frac{\\partial Q}{\\partial \\beta_1} = -2\\sum x_i(y_i-\\beta_0-\\beta_1 x_i) = 0 \\Rightarrow \\sum x_iy_i = \\beta_0\\sum x_i + \\beta_1\\sum x_i^2. \\quad (2)$$\n\n### Move 3 Divide equation (1) by $n$: $\\bar{y} = \\beta_0 + \\beta_1\\bar{x} \\Rightarrow \\hat{\\beta}_0 = \\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n\nSubstitute into (2) and simplify:\n$$\\sum x_i y_i - n\\bar{x}\\bar{y} = \\hat{\\beta}_1(\\sum x_i^2 - n\\bar{x}^2)$$\n$$\\Rightarrow \\hat{\\beta}_1 = \\frac{\\sum x_iy_i - n\\bar{x}\\bar{y}}{\\sum x_i^2 - n\\bar{x}^2} = \\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$",
+      "body_he_md": "**גזור את הנוסחאות ל-$\\hat{\\beta}_0$ ו-$\\hat{\\beta}_1$ שממזערות SSR.**\n\n**שלב 1:** $Q=\\sum(y_i-\\beta_0-\\beta_1 x_i)^2$.\n\n**שלב 2 — תנאי ראשון:**\n$$\\partial Q/\\partial\\beta_0=0 \\Rightarrow \\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}.$$\n$$\\partial Q/\\partial\\beta_1=0 \\Rightarrow \\hat{\\beta}_1=\\frac{\\sum x_iy_i-n\\bar{x}\\bar{y}}{\\sum x_i^2-n\\bar{x}^2}=\\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$\n\n### צעד 3 Divide equation (1) by $n$: $\\bar{y} = \\beta_0 + \\beta_1\\bar{x} \\Rightarrow \\hat{\\beta}_0 = \\bar{y}-\\hat{\\beta}_1\\bar{x}$."
     },
     {
       "kind": "method_guide",
@@ -86,8 +87,8 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
@@ -112,8 +113,8 @@
           "difficulty": "easy",
           "body_en": "SST = 100, SSR = 20. Find $R^2$.",
           "body_he": "SST = 100, SSR = 20. מצא $R^2$.",
-          "solution_en": "$R^2=1-20/100=0.80$.",
-          "solution_he": "$R^2=0.80$.",
+          "solution_en": "**Solution:**\n\n$R^2=1-20/100=0.80$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$R^2=0.80$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 4
         },
         {
@@ -121,8 +122,8 @@
           "difficulty": "easy",
           "body_en": "Verify that for residuals: $\\sum e_i = 0$ when $\\hat{\\beta}_0$ is the OLS intercept.",
           "body_he": "אמת שלשאריות: $\\sum e_i=0$ כאשר $\\hat{\\beta}_0$ הוא נקודת החיתוך של OLS.",
-          "solution_en": "$\\sum e_i = \\sum(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i = n\\bar{y}-n(\\bar{y}-\\hat{\\beta}_1\\bar{x})-\\hat{\\beta}_1 n\\bar{x}=0$. $\\blacksquare$",
-          "solution_he": "$\\sum e_i=\\sum y_i-n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i=n\\bar{y}-n\\bar{y}=0$. $\\blacksquare$",
+          "solution_en": "**Solution:**\n\n$\\sum e_i = \\sum(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i = n\\bar{y}-n(\\bar{y}-\\hat{\\beta}_1\\bar{x})-\\hat{\\beta}_1 n\\bar{x}=0$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\sum e_i=\\sum y_i-n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i=n\\bar{y}-n\\bar{y}=0$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 4
         },
         {
@@ -148,8 +149,8 @@
           "difficulty": "medium",
           "body_en": "Prove that $R^2 = r^2$ (the square of the Pearson correlation).",
           "body_he": "הוכח ש-$R^2=r^2$ (ריבוע מקדם המתאם של פירסון).",
-          "solution_en": "$\\hat{\\beta}_1=S_{xy}/S_{xx}$. $\\text{SSE (explained)} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2=\\text{SSE}/\\text{SST}=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$",
-          "solution_he": "$\\text{SSE}=\\hat{\\beta}_1^2 S_{xx}=S_{xy}^2/S_{xx}$. $R^2=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\hat{\\beta}_1=S_{xy}/S_{xx}$. $\\text{SSE (explained)} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2=\\text{SSE}/\\text{SST}=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\text{SSE}=\\hat{\\beta}_1^2 S_{xx}=S_{xy}^2/S_{xx}$. $R^2=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -157,8 +158,8 @@
           "difficulty": "medium",
           "body_en": "A regression has $n=20$, SSR = 40. Find the residual standard error $s$.",
           "body_he": "לרגרסיה עם $n=20$, SSR = 40. מצא שגיאה סטנדרטית $s$.",
-          "solution_en": "$s=\\sqrt{40/(20-2)}=\\sqrt{40/18}=\\sqrt{2.22}\\approx1.49$.",
-          "solution_he": "$s=\\sqrt{40/18}\\approx1.49$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$s=\\sqrt{40/(20-2)}=\\sqrt{40/18}=\\sqrt{2.22}\\approx1.49$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$s=\\sqrt{40/18}\\approx1.49$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -176,7 +177,7 @@
           "body_en": "Prove that $\\hat{\\beta}_1$ is unbiased for $\\beta_1$ under the classical OLS assumptions.",
           "body_he": "הוכח ש-$\\hat{\\beta}_1$ חסר הטיה ל-$\\beta_1$ תחת הנחות OLS הקלאסיות.",
           "solution_en": "$\\hat{\\beta}_1=S_{xy}/S_{xx}=\\sum(x_i-\\bar{x})y_i/S_{xx}$. Since $y_i=\\beta_0+\\beta_1 x_i+\\varepsilon_i$: $\\hat{\\beta}_1=\\beta_1\\sum(x_i-\\bar{x})x_i/S_{xx}+\\sum(x_i-\\bar{x})\\varepsilon_i/S_{xx}$. The first term equals $\\beta_1$ (since $\\sum(x_i-\\bar{x})x_i=S_{xx}$). Taking expectation: $E[\\hat{\\beta}_1]=\\beta_1+0=\\beta_1$ (since $E[\\varepsilon_i]=0$). $\\blacksquare$",
-          "solution_he": "$\\hat{\\beta}_1=\\sum(x_i-\\bar{x})y_i/S_{xx}$. הצב $y_i=\\beta_0+\\beta_1x_i+\\varepsilon_i$: $E[\\hat{\\beta}_1]=\\beta_1+\\sum(x_i-\\bar{x})E[\\varepsilon_i]/S_{xx}=\\beta_1+0=\\beta_1$. $\\blacksquare$",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\hat{\\beta}_1=\\sum(x_i-\\bar{x})y_i/S_{xx}$. הצב $y_i=\\beta_0+\\beta_1x_i+\\varepsilon_i$: $E[\\hat{\\beta}_1]=\\beta_1+\\sum(x_i-\\bar{x})E[\\varepsilon_i]/S_{xx}=\\beta_1+0=\\beta_1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -184,8 +185,8 @@
           "difficulty": "hard",
           "body_en": "Given the regression $\\hat{y}=2+3x$ and $n=10$, SSR = 18, SST = 90. Conduct a $t$-test of $H_0:\\beta_1=0$ at $\\alpha=0.05$. ($S_{xx}=6$; $t_{0.025,8}=2.306$).",
           "body_he": "בהינתן $\\hat{y}=2+3x$, $n=10$, SSR = 18, SST = 90. ערוך מבחן $t$ על $H_0:\\beta_1=0$ ב-$\\alpha=0.05$. ($S_{xx}=6$; $t_{0.025,8}=2.306$).",
-          "solution_en": "$s=\\sqrt{18/8}=\\sqrt{2.25}=1.5$. $\\text{SE}(\\hat{\\beta}_1)=s/\\sqrt{S_{xx}}=1.5/\\sqrt{6}\\approx0.612$. $t=3/0.612\\approx4.9$. Since $|t|=4.9>2.306$: **reject $H_0$**. The slope is significantly different from zero.",
-          "solution_he": "$s=1.5$. $\\text{SE}(\\hat{\\beta}_1)=1.5/\\sqrt{6}\\approx0.612$. $t=3/0.612\\approx4.9>2.306$: **דוחים $H_0$**. השיפוע שונה מובהקית מאפס.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$s=\\sqrt{18/8}=\\sqrt{2.25}=1.5$. $\\text{SE}(\\hat{\\beta}_1)=s/\\sqrt{S_{xx}}=1.5/\\sqrt{6}\\approx0.612$. $t=3/0.612\\approx4.9$. Since $|t|=4.9>2.306$: **reject $H_0$**. The slope is significantly different from zero.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$s=1.5$. $\\text{SE}(\\hat{\\beta}_1)=1.5/\\sqrt{6}\\approx0.612$. $t=3/0.612\\approx4.9>2.306$: **דוחים $H_0$**. השיפוע שונה מובהקית מאפס.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -193,8 +194,8 @@
           "difficulty": "hard",
           "body_en": "Show that $\\text{Var}(\\hat{\\beta}_1) = \\sigma^2/S_{xx}$ under the classical OLS assumptions.",
           "body_he": "הראה ש-$\\text{Var}(\\hat{\\beta}_1)=\\sigma^2/S_{xx}$ תחת הנחות OLS הקלאסיות.",
-          "solution_en": "$\\hat{\\beta}_1=\\sum c_i y_i$ where $c_i=(x_i-\\bar{x})/S_{xx}$. Since $y_i$ are independent with $\\text{Var}(y_i)=\\sigma^2$: $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2\\sum c_i^2=\\sigma^2\\sum(x_i-\\bar{x})^2/S_{xx}^2=\\sigma^2S_{xx}/S_{xx}^2=\\sigma^2/S_{xx}$. $\\blacksquare$",
-          "solution_he": "$\\hat{\\beta}_1=\\sum c_i y_i$ עם $c_i=(x_i-\\bar{x})/S_{xx}$. $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2\\sum c_i^2=\\sigma^2/S_{xx}$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\hat{\\beta}_1=\\sum c_i y_i$ where $c_i=(x_i-\\bar{x})/S_{xx}$. Since $y_i$ are independent with $\\text{Var}(y_i)=\\sigma^2$: $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2\\sum c_i^2=\\sigma^2\\sum(x_i-\\bar{x})^2/S_{xx}^2=\\sigma^2S_{xx}/S_{xx}^2=\\sigma^2/S_{xx}$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\hat{\\beta}_1=\\sum c_i y_i$ עם $c_i=(x_i-\\bar{x})/S_{xx}$. $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2\\sum c_i^2=\\sigma^2/S_{xx}$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 10
         },
         {
@@ -216,18 +217,178 @@
       "body_he_md": "1. **היפוך $x$ ו-$y$.** קו OLS לחיזוי $y$ מ-$x$ שונה מחיזוי $x$ מ-$y$ — לא אותו קו!\n\n2. **שימוש ב-$R^2$ כקריטריון יחיד.** $R^2$ גבוה יכול לנבוע מערכים קיצוניים, over-fitting, או לא-לינאריות.\n\n3. **אי-בדיקת גרפי שאריות.** אם שאריות מראות דפוס — מפרט המודל שגוי.\n\n4. **אקסטרפולציה.** חיזוי מחוץ לתחום הנתונים — לא אמין.\n\n5. **הסקת סיבתיות.** OLS מודד קשר, לא סיבתיות."
     },
     {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Formula card:**\n- $\\hat{\\beta}_1=S_{xy}/S_{xx}$\n- $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$\n- $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$; $S_{xx}=\\sum(x_i-\\bar{x})^2$\n- $R^2=1-\\text{SSR}/\\text{SST}=r^2$\n- $s=\\sqrt{\\text{SSR}/(n-2)}$\n- $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2/S_{xx}$; $t$-stat $=\\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1)\\sim t(n-2)$\n\n**Exam patterns:** Compute OLS line; find $R^2$; test $H_0:\\beta_1=0$; derive OLS formulas.",
+      "body_en_md": "**Formula card:**\n- $\\hat{\\beta}_1=S_{xy}/S_{xx}$\n- $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$\n- $S_{xy}=\\sum(x_i-\\bar{x})(y_i-\\bar{y})$; $S_{xx}=\\sum(x_i-\\bar{x})^2$\n- $R^2=1-\\text{SSR}/\\text{SST}=r^2$\n- $s=\\sqrt{\\text{SSR}/(n-2)}$\n- $\\text{Var}(\\hat{\\beta}_1)=\\sigma^2/S_{xx}$; $t$-stat $=\\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1)\\sim t(n-2)$\n\n**Exam patterns:** Compute OLS line; find $R^2$; test $H_0:\\beta_1=0$; derive OLS formulas.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "**גיליון נוסחאות:**\n- $\\hat{\\beta}_1=S_{xy}/S_{xx}$\n- $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$\n- $R^2=1-\\text{SSR}/\\text{SST}$\n- $s=\\sqrt{\\text{SSR}/(n-2)}$\n- $t=\\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1)\\sim t(n-2)$"
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **OLS** minimises $\\sum(y_i-\\hat{y}_i)^2$; formulas: $\\hat{\\beta}_1=S_{xy}/S_{xx}$, $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n- **Residuals:** $e_i=y_i-\\hat{y}_i$; $\\sum e_i=0$ always.\n- **$R^2=1-\\text{SSR}/\\text{SST}$:** proportion of variance explained; equals $r^2$.\n- **Gauss-Markov:** OLS is BLUE under classical assumptions.\n- **Inference:** $t$-statistic for $\\hat{\\beta}_1$ follows $t(n-2)$ under normality.",
+      "body_en_md": "- **OLS** minimises $\\sum(y_i-\\hat{y}_i)^2$; formulas: $\\hat{\\beta}_1=S_{xy}/S_{xx}$, $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n- **Residuals:** $e_i=y_i-\\hat{y}_i$; $\\sum e_i=0$ always.\n- **$R^2=1-\\text{SSR}/\\text{SST}$:** proportion of variance explained; equals $r^2$.\n- **Gauss-Markov:** OLS is BLUE under classical assumptions.\n- **Inference:** $t$-statistic for $\\hat{\\beta}_1$ follows $t(n-2)$ under normality.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
       "body_he_md": "- **OLS** ממזער $\\sum e_i^2$; $\\hat{\\beta}_1=S_{xy}/S_{xx}$, $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n- **שאריות:** $e_i=y_i-\\hat{y}_i$; $\\sum e_i=0$ תמיד.\n- **$R^2=1-\\text{SSR}/\\text{SST}$:** שיעור שונות מוסבר; שווה ל-$r^2$.\n- **גאוס-מרקוב:** OLS הוא BLUE תחת הנחות קלאסיות.\n- **הסקה:** $t$-סטטיסטיקה ל-$\\hat{\\beta}_1$ מקיימת $t(n-2)$."
     }
-  ]
+  ],
+  "agent_hints": {},
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Data: $\\bar{x}=4$, $\\bar{y}=10$, $S_{xy}=20$, $S_{xx}=5$. Find the regression line.",
+      "stem_he": "נתונים: $\\bar{x}=4$, $\\bar{y}=10$, $S_{xy}=20$, $S_{xx}=5$. מצא קו הרגרסיה.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\hat{\\beta}_1=4$. $\\hat{\\beta}_0=10-16=-6$. Line: $\\hat{y}=-6+4x$",
+          "-6+4x$",
+          "4"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\hat{\\beta}_1=4$. $\\hat{\\beta}_0=10-16=-6$. Line: $\\hat{y}=-6+4x$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$\\hat{\\beta}_1=4$, $\\hat{\\beta}_0=-6$. קו: $\\hat{y}=-6+4x$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "The regression line always passes through which point?",
+      "stem_he": "קו הרגרסיה תמיד עובר דרך איזו נקודה?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "The centroid $(\\bar{x},\\bar{y})$. This follows from $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$",
+          "\\bar{y}-\\hat{\\beta}_1\\bar{x}$",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nThe centroid $(\\bar{x},\\bar{y})$. This follows from $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\nהנקודה $( \\bar{x},\\bar{y})$. נובע מ-$\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "SST = 100, SSR = 20. Find $R^2$.",
+      "stem_he": "SST = 100, SSR = 20. מצא $R^2$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$R^2=1-20/100=0.80$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.80$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.80"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$R^2=1-20/100=0.80$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$R^2=0.80$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Verify that for residuals: $\\sum e_i = 0$ when $\\hat{\\beta}_0$ is the OLS intercept.",
+      "stem_he": "אמת שלשאריות: $\\sum e_i=0$ כאשר $\\hat{\\beta}_0$ הוא נקודת החיתוך של OLS.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\sum e_i = \\sum(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i = n\\bar{y}-n(\\bar{y}-\\hat{\\beta}_1\\bar{x})-\\hat{\\beta}_1 n\\bar{x}=0$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\sum e_i = \\sum(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i = n\\bar{y}-n(\\bar{y}-\\hat{\\beta}_1\\bar{x})-\\hat{\\beta}_1 n\\bar{x}=0$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\sum e_i=\\sum y_i-n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i=n\\bar{y}-n\\bar{y}=0$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Data: $(2,5),(4,9),(6,11),(8,13),(10,17)$. Compute $\\hat{\\beta}_1$ and $\\hat{\\beta}_0$.",
+      "stem_he": "נתונים: $(2,5),(4,9),(6,11),(8,13),(10,17)$. חשב $\\hat{\\beta}_1$ ו-$\\hat{\\beta}_0$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\bar{x}=6$, $\\bar{y}=11$. $S_{xy}=(2-6)(5-11)+...=(-4)(-6)+(-2)(-2)+(0)(0)+(2)(2)+(4)(6)=24+4+0+4+24=56$. $S_{xx}=16+4+0+4+16=40$. $\\hat{\\beta}_1=56/40=1.4$. $\\hat{\\beta}_0=11-1.4(6)=11-8.4=2.6$. Line: $\\hat{y}=2.6+1.4x$",
+          "2.6+1.4x$",
+          "1.4"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\bar{x}=6$, $\\bar{y}=11$. $S_{xy}=(2-6)(5-11)+...=(-4)(-6)+(-2)(-2)+(0)(0)+(2)(2)+(4)(6)=24+4+0+4+24=56$. $S_{xx}=16+4+0+4+16=40$. $\\hat{\\beta}_1=56/40=1.4$. $\\hat{\\beta}_0=11-1.4(6)=11-8.4=2.6$. Line: $\\hat{y}=2.6+1.4x$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$S_{xy}=56$, $S_{xx}=40$. $\\hat{\\beta}_1=1.4$, $\\hat{\\beta}_0=2.6$. קו: $\\hat{y}=2.6+1.4x$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Using the line from e5, compute $R^2$. First find SST.",
+      "stem_he": "בעזרת הקו מ-e5, חשב $R^2$. מצא קודם SST.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$S_{yy}=(-6)^2+(-2)^2+0^2+2^2+6^2=36+4+0+4+36=80=\\text{SST}$. SSR $=\\sum e_i^2$: $e_1=5-5.4=-0.4$; $e_2=9-8.2=0.8$; $e_3=11-11=0$; $e_4=13-13.8=-0.8$; $e_5=17-16.6=0.4$. SSR $=0.16+0.64+0+0.64+0.16=1.6$. $R^2=1-1.6/80=0.98$",
+          "0.98$",
+          "0.98"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$S_{yy}=(-6)^2+(-2)^2+0^2+2^2+6^2=36+4+0+4+36=80=\\text{SST}$. SSR $=\\sum e_i^2$: $e_1=5-5.4=-0.4$; $e_2=9-8.2=0.8$; $e_3=11-11=0$; $e_4=13-13.8=-0.8$; $e_5=17-16.6=0.4$. SSR $=0.16+0.64+0+0.64+0.16=1.6$. $R^2=1-1.6/80=0.98$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\nSST $=80$. SSR $=1.6$. $R^2=0.98$. פרשנות: 98% מהשונות מוסברת.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Prove that $R^2 = r^2$ (the square of the Pearson correlation).",
+      "stem_he": "הוכח ש-$R^2=r^2$ (ריבוע מקדם המתאם של פירסון).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\hat{\\beta}_1=S_{xy}/S_{xx}$. $\\text{SSE (explained)} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2=\\text{SSE}/\\text{SST}=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "r^2$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\hat{\\beta}_1=S_{xy}/S_{xx}$. $\\text{SSE (explained)} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2=\\text{SSE}/\\text{SST}=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\text{SSE}=\\hat{\\beta}_1^2 S_{xx}=S_{xy}^2/S_{xx}$. $R^2=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A regression has $n=20$, SSR = 40. Find the residual standard error $s$.",
+      "stem_he": "לרגרסיה עם $n=20$, SSR = 40. מצא שגיאה סטנדרטית $s$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$s=\\sqrt{40/(20-2)}=\\sqrt{40/18}=\\sqrt{2.22}\\approx1.49$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\sqrt{2.22}\\approx1.49$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1.49"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$s=\\sqrt{40/(20-2)}=\\sqrt{40/18}=\\sqrt{2.22}\\approx1.49$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$s=\\sqrt{40/18}\\approx1.49$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 55,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

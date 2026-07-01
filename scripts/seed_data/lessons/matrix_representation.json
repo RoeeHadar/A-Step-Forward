@@ -2,11 +2,11 @@
   "concept_id": "matrix_representation",
   "subject": "math",
   "level": "university",
+  "math_track": [],
   "title_en": "Matrix Representation of Linear Maps",
   "title_he": "ייצוג מטריציוני של העתקות לינאריות",
   "summary_en": "Matrix representation of a linear map relative to a basis. Change of basis formula. Similarity and diagonalization connection.",
   "summary_he": "ייצוג מטריציוני של העתקה לינארית יחסית לבסיס. נוסחת שינוי בסיס. קשר לדמיון ואלכסון.",
-  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
@@ -36,7 +36,7 @@
       "title_en": "Worked Example 1 — Matrix in a New Basis",
       "title_he": "דוגמה פתורה 1 — מטריצה בבסיס חדש",
       "body_en_md": "**$T:\\mathbb{R}^2\\to\\mathbb{R}^2$:** $T(x,y)=(x+y, x-y)$. Standard basis $E$: $[T]_E=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$.\n\n**New basis $B=\\{v_1,v_2\\}$** with $v_1=(1,1)^T$, $v_2=(1,-1)^T$.\n\n$T(v_1)=T(1,1)=(2,0)=[T]_E v_1$. In basis $B$: $[T(v_1)]_B=?$ We need to express $(2,0)$ as $\\alpha(1,1)+\\beta(1,-1)$: $\\alpha+\\beta=2$, $\\alpha-\\beta=0$. $\\alpha=1$, $\\beta=1$. $[T(v_1)]_B=(1,1)^T$.\n\n$T(v_2)=T(1,-1)=(0,2)$. Express: $\\alpha(1,1)+\\beta(1,-1)=(0,2)$. $\\alpha=1$, $\\beta=-1$. $[T(v_2)]_B=(1,-1)^T$.\n\n$[T]_B=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. (Same as $E$ in this case — a coincidence.)",
-      "body_he_md": "$[T(v_1)]_B=(1,1)^T$, $[T(v_2)]_B=(1,-1)^T$.\n$[T]_B=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$."
+      "body_he_md": "**$T:\\mathbb{R}^2\\to\\mathbb{R}^2$:** $T(x,y)=(x+y, x-y)$. Standard basis $E$: $[T]_E=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$.\n\n**New basis $B=\\{v_1,v_2\\}$** with $v_1=(1,1)^T$, $v_2=(1,-1)^T$.\n\n$T(v_1)=T(1,1)=(2,0)=[T]_E v_1$. In basis $B$: $[T(v_1)]_B=?$ We need to express $(2,0)$ as $\\alpha(1,1)+\\beta(1,-1)$: $\\alpha+\\beta=2$, $\\alpha-\\beta=0$. $\\alpha=1$, $\\beta=1$. $[T(v_1)]_B=(1,1)^T$.\n\n$T(v_2)=T(1,-1)=(0,2)$. Express: $\\alpha(1,1)+\\beta(1,-1)=(0,2)$. $\\alpha=1$, $\\beta=-1$. $[T(v_2)]_B=(1,-1)^T$.\n\n$[T]_B=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. (Same as $E$ in this case — a coincidence.)"
     },
     {
       "kind": "checkpoint",
@@ -54,7 +54,7 @@
       "title_en": "Worked Example 2 — Change of Basis Formula",
       "title_he": "דוגמה פתורה 2 — נוסחת שינוי בסיס",
       "body_en_md": "**$T:\\mathbb{R}^2\\to\\mathbb{R}^2$** with $[T]_E=\\begin{pmatrix}2&1\\\\0&3\\end{pmatrix}$.\n\nNew basis $B=\\{(1,0)^T,(1,1)^T\\}$.\n\n$P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$.\n\n$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$.\n\n$[T]_B=P^{-1}[T]_E P=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}\\begin{pmatrix}2&1\\\\0&3\\end{pmatrix}\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$\n\n$=\\begin{pmatrix}2&-2\\\\0&3\\end{pmatrix}\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\nThe matrix became **diagonal** — because $B$ is the eigenvector basis!",
-      "body_he_md": "$[T]_B=P^{-1}[T]_EP=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$ — המטריצה התאלכסנה!"
+      "body_he_md": "New basis $B=\\{(1,0)^T,(1,1)^T\\}$."
     },
     {
       "kind": "checkpoint",
@@ -71,8 +71,8 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Finding Diagonalizing Basis",
       "title_he": "דוגמה פתורה 3 — מציאת בסיס מאלכסן",
-      "body_en_md": "**$A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$. Find basis $B$ so that $[T]_B$ is diagonal.**\n\n**Step 1:** Eigenvalues: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)-2=\\lambda^2-7\\lambda+10=(\\lambda-5)(\\lambda-2)=0$. $\\lambda_1=5$, $\\lambda_2=2$.\n\n**Step 2:** Eigenvectors:\n- $\\lambda_1=5$: $(A-5I)v=0$: $\\begin{pmatrix}-1&1\\\\2&-2\\end{pmatrix}\\to v_1=(1,1)^T$.\n- $\\lambda_2=2$: $(A-2I)v=0$: $\\begin{pmatrix}2&1\\\\2&1\\end{pmatrix}\\to v_2=(1,-2)^T$.\n\n**Step 3:** Basis $B=\\{v_1,v_2\\}$.\n$$[T]_B=P^{-1}AP=\\begin{pmatrix}5&0\\\\0&2\\end{pmatrix}.$$",
-      "body_he_md": "$\\lambda_1=5$: $v_1=(1,1)^T$. $\\lambda_2=2$: $v_2=(1,-2)^T$.\n$P=[v_1|v_2]$. $[T]_B=P^{-1}AP=\\begin{pmatrix}5&0\\\\0&2\\end{pmatrix}$."
+      "body_en_md": "**$A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$. Find basis $B$ so that $[T]_B$ is diagonal.**\n\n### Move 1 Eigenvalues: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)-2=\\lambda^2-7\\lambda+10=(\\lambda-5)(\\lambda-2)=0$. $\\lambda_1=5$, $\\lambda_2=2$.\n\n### Move 2 Eigenvectors:\n- $\\lambda_1=5$: $(A-5I)v=0$: $\\begin{pmatrix}-1&1\\\\2&-2\\end{pmatrix}\\to v_1=(1,1)^T$.\n- $\\lambda_2=2$: $(A-2I)v=0$: $\\begin{pmatrix}2&1\\\\2&1\\end{pmatrix}\\to v_2=(1,-2)^T$.\n\n### Move 3 Basis $B=\\{v_1,v_2\\}$.\n$$[T]_B=P^{-1}AP=\\begin{pmatrix}5&0\\\\0&2\\end{pmatrix}.$$",
+      "body_he_md": "### צעד 1 Eigenvalues: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)-2=\\lambda^2-7\\lambda+10=(\\lambda-5)(\\lambda-2)=0$. $\\lambda_1=5$, $\\lambda_2=2$.\n\n### צעד 2 Eigenvectors:\n- $\\lambda_1=5$: $(A-5I)v=0$: $\\begin{pmatrix}-1&1\\\\2&-2\\end{pmatrix}\\to v_1=(1,1)^T$.\n- $\\lambda_2=2$: $(A-2I)v=0$: $\\begin{pmatrix}2&1\\\\2&1\\end{pmatrix}\\to v_2=(1,-2)^T$.\n\n### צעד 3 Basis $B=\\{v_1,v_2\\}$.\n$$[T]_B=P^{-1}AP=\\begin{pmatrix}5&0\\\\0&2\\end{pmatrix}.$$"
     },
     {
       "kind": "method_guide",
@@ -85,47 +85,144 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "", "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
-        {"id":"e1","difficulty":"easy","body_en":"$T(e_1)=2e_1$, $T(e_2)=3e_2$. Matrix of $T$ in standard basis?","body_he":"$T(e_1)=2e_1$, $T(e_2)=3e_2$. מטריצה?","solution_en":"$[T]_E=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$."},
-        {"id":"e2","difficulty":"easy","body_en":"Transition matrix from $B=\\{(2,0)^T,(0,3)^T\\}$ to standard?","body_he":"מטריצת מעבר מ-$B=\\{(2,0)^T,(0,3)^T\\}$ לסטנדרטי?","solution_en":"$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.","solution_he":"$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$."},
-        {"id":"e3","difficulty":"easy","body_en":"Similar matrices have the same determinant. True or false?","body_he":"למטריצות דומות $\\det$ זהה. נכון?","solution_en":"True: $\\det(P^{-1}AP)=\\det(P^{-1})\\det(A)\\det(P)=\\det(A)$.","solution_he":"נכון: $\\det(P^{-1}AP)=\\det(A)$."},
-        {"id":"e4","difficulty":"easy","body_en":"What does it mean for two matrices to be similar?","body_he":"מתי שתי מטריצות דומות?","solution_en":"$A\\sim B$ if $B=P^{-1}AP$ for some invertible $P$. They represent the same linear map in different bases.","solution_he":"$B=P^{-1}AP$. אותה העתקה, בסיס שונה."},
-        {"id":"e5","difficulty":"medium","body_en":"$[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. Find $[T]_B=P^{-1}[T]_EP$.","body_he":"חשב $[T]_B=P^{-1}[T]_EP$ עם $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$.","solution_en":"$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}[T]_E=\\begin{pmatrix}3&-5\\\\0&5\\end{pmatrix}$. $\\times P=\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$."},
-        {"id":"e6","difficulty":"medium","body_en":"For $A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, find all $B$ similar to $A$ via $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$.","body_he":"$A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. חשב $B=P^{-1}AP$.","solution_en":"$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. $\\times P=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$. Same as $A$ (since $A=P$, it commutes).","solution_he":"$B=A$ (מקרה מיוחד)."},
-        {"id":"e7","difficulty":"medium","body_en":"Reflection $T$ over $y$-axis in $\\mathbb{R}^2$: $T(x,y)=(-x,y)$. Write $[T]_E$.","body_he":"שיקוף $T$ מעל ציר $y$: $T(x,y)=(-x,y)$. מטריצה?","solution_en":"$T(e_1)=(-1,0)$, $T(e_2)=(0,1)$. $[T]_E=\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$."},
-        {"id":"e8","difficulty":"medium","body_en":"Rotation by $90°$ counterclockwise: $T(x,y)=(-y,x)$. Matrix?","body_he":"סיבוב ב-$90°$ נגד כיוון שעון: $T(x,y)=(-y,x)$. מטריצה?","solution_en":"$T(e_1)=(0,1)$, $T(e_2)=(-1,0)$. $[T]_E=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$.","solution_he":"$\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$."},
-        {"id":"e9","difficulty":"medium","body_en":"Similar matrices have the same eigenvalues. Why?","body_he":"למטריצות דומות ערכים עצמיים זהים. מדוע?","solution_en":"$\\det(P^{-1}AP-\\lambda I)=\\det(P^{-1}(A-\\lambda I)P)=\\det(A-\\lambda I)$. Same characteristic polynomial → same eigenvalues.","solution_he":"$\\det(P^{-1}AP-\\lambda I)=\\det(A-\\lambda I)$. אותו פולינום מאפיין."},
-        {"id":"e10","difficulty":"hard","body_en":"$A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ (swap transformation). Find diagonalizing matrix $P$ and diagonal form.","body_he":"$A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. מצא $P$ ואלכסון.","solution_en":"Eigenvalues: $\\lambda^2-1=0$: $\\lambda=1,-1$. $v_1=(1,1)^T$ ($\\lambda=1$), $v_2=(1,-1)^T$ ($\\lambda=-1$). $P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. $D=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.","solution_he":"$\\lambda=\\pm1$. $P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. $D=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$."},
-        {"id":"e11","difficulty":"hard","body_en":"Express the coordinate vector of $v=(3,5)^T$ in basis $B=\\{(1,2)^T,(0,1)^T\\}$.","body_he":"בטא $v=(3,5)^T$ בבסיס $B=\\{(1,2)^T,(0,1)^T\\}$.","solution_en":"$3\\cdot(1,2)+b_2(0,1)=(3,5)$: $3=3$ ✓, $6+b_2=5\\Rightarrow b_2=-1$. Wait: $\\alpha(1,2)+\\beta(0,1)=(3,5)$: $\\alpha=3$, $2\\alpha+\\beta=5\\Rightarrow\\beta=-1$. $[v]_B=(3,-1)^T$.","solution_he":"$[v]_B=(3,-1)^T$."},
-        {"id":"e12","difficulty":"hard","body_en":"$T$ has matrix $A=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}$ in standard basis. Compute $[T^2]_E$.","body_he":"$[T]_E=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}$. חשב $[T^2]_E$.","solution_en":"$A^2=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}^2=\\begin{pmatrix}25-6&-10\\\\15&-6\\end{pmatrix}=\\begin{pmatrix}19&-10\\\\15&-6\\end{pmatrix}$.","solution_he":"$A^2=\\begin{pmatrix}19&-10\\\\15&-6\\end{pmatrix}$."},
-        {"id":"e13","difficulty":"hard","body_en":"Why is it useful to diagonalize a matrix?","body_he":"מדוע שימושי לאלכסן מטריצה?","solution_en":"Powers: $A^n=PD^nP^{-1}$ and $D^n$ is trivial. Solving ODEs. Computing matrix exponentials. Spectral analysis. All simplify dramatically with diagonal $D$.","solution_he":"$A^n=PD^nP^{-1}$, $D^n$ טריוויאלי. מועיל לחזקות, ОDEs, אקספוננט מטריציוני."}
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "$T(e_1)=2e_1$, $T(e_2)=3e_2$. Matrix of $T$ in standard basis?",
+          "body_he": "$T(e_1)=2e_1$, $T(e_2)=3e_2$. מטריצה?",
+          "solution_en": "**Solution:**\n\n$[T]_E=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Transition matrix from $B=\\{(2,0)^T,(0,3)^T\\}$ to standard?",
+          "body_he": "מטריצת מעבר מ-$B=\\{(2,0)^T,(0,3)^T\\}$ לסטנדרטי?",
+          "solution_en": "**Solution:**\n\n$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Similar matrices have the same determinant. True or false?",
+          "body_he": "למטריצות דומות $\\det$ זהה. נכון?",
+          "solution_en": "**Solution:**\n\nTrue: $\\det(P^{-1}AP)=\\det(P^{-1})\\det(A)\\det(P)=\\det(A)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\nנכון: $\\det(P^{-1}AP)=\\det(A)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "What does it mean for two matrices to be similar?",
+          "body_he": "מתי שתי מטריצות דומות?",
+          "solution_en": "$A\\sim B$ if $B=P^{-1}AP$ for some invertible $P$. They represent the same linear map in different bases.",
+          "solution_he": "$B=P^{-1}AP$. אותה העתקה, בסיס שונה."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "$[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. Find $[T]_B=P^{-1}[T]_EP$.",
+          "body_he": "חשב $[T]_B=P^{-1}[T]_EP$ עם $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}[T]_E=\\begin{pmatrix}3&-5\\\\0&5\\end{pmatrix}$. $\\times P=\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "For $A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, find all $B$ similar to $A$ via $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$.",
+          "body_he": "$A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. חשב $B=P^{-1}AP$.",
+          "solution_en": "$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. $\\times P=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$. Same as $A$ (since $A=P$, it commutes).",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$B=A$ (מקרה מיוחד).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Reflection $T$ over $y$-axis in $\\mathbb{R}^2$: $T(x,y)=(-x,y)$. Write $[T]_E$.",
+          "body_he": "שיקוף $T$ מעל ציר $y$: $T(x,y)=(-x,y)$. מטריצה?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T(e_1)=(-1,0)$, $T(e_2)=(0,1)$. $[T]_E=\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Rotation by $90°$ counterclockwise: $T(x,y)=(-y,x)$. Matrix?",
+          "body_he": "סיבוב ב-$90°$ נגד כיוון שעון: $T(x,y)=(-y,x)$. מטריצה?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T(e_1)=(0,1)$, $T(e_2)=(-1,0)$. $[T]_E=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Similar matrices have the same eigenvalues. Why?",
+          "body_he": "למטריצות דומות ערכים עצמיים זהים. מדוע?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(P^{-1}AP-\\lambda I)=\\det(P^{-1}(A-\\lambda I)P)=\\det(A-\\lambda I)$. Same characteristic polynomial → same eigenvalues.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\det(P^{-1}AP-\\lambda I)=\\det(A-\\lambda I)$. אותו פולינום מאפיין.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "$A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ (swap transformation). Find diagonalizing matrix $P$ and diagonal form.",
+          "body_he": "$A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. מצא $P$ ואלכסון.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nEigenvalues: $\\lambda^2-1=0$: $\\lambda=1,-1$. $v_1=(1,1)^T$ ($\\lambda=1$), $v_2=(1,-1)^T$ ($\\lambda=-1$). $P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. $D=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\lambda=\\pm1$. $P=\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}$. $D=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Express the coordinate vector of $v=(3,5)^T$ in basis $B=\\{(1,2)^T,(0,1)^T\\}$.",
+          "body_he": "בטא $v=(3,5)^T$ בבסיס $B=\\{(1,2)^T,(0,1)^T\\}$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$3\\cdot(1,2)+b_2(0,1)=(3,5)$: $3=3$ ✓, $6+b_2=5\\Rightarrow b_2=-1$. Wait: $\\alpha(1,2)+\\beta(0,1)=(3,5)$: $\\alpha=3$, $2\\alpha+\\beta=5\\Rightarrow\\beta=-1$. $[v]_B=(3,-1)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$[v]_B=(3,-1)^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "$T$ has matrix $A=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}$ in standard basis. Compute $[T^2]_E$.",
+          "body_he": "$[T]_E=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}$. חשב $[T^2]_E$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$A^2=\\begin{pmatrix}5&-2\\\\3&0\\end{pmatrix}^2=\\begin{pmatrix}25-6&-10\\\\15&-6\\end{pmatrix}=\\begin{pmatrix}19&-10\\\\15&-6\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A^2=\\begin{pmatrix}19&-10\\\\15&-6\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Why is it useful to diagonalize a matrix?",
+          "body_he": "מדוע שימושי לאלכסן מטריצה?",
+          "solution_en": "Powers: $A^n=PD^nP^{-1}$ and $D^n$ is trivial. Solving ODEs. Computing matrix exponentials. Spectral analysis. All simplify dramatically with diagonal $D$.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A^n=PD^nP^{-1}$, $D^n$ טריוויאלי. מועיל לחזקות, ОDEs, אקספוננט מטריציוני.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        }
       ]
     },
     {
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Column vs row in $[T]_B$**: columns = images of basis vectors in $B$, not rows.\n2. **$P$ direction**: $P$ from $B$ to standard means columns = $B$ vectors in standard coords.\n3. **Change of basis**: $[T]_C=P^{-1}[T]_BP$ — $P$ on the right, $P^{-1}$ on the left.\n4. **Not all matrices are diagonalizable**: requires $n$ independent eigenvectors.",
-      "body_he_md": "1. **עמודות, לא שורות** ב-$[T]_B$.\n2. **כיוון $P$**: עמודות = וקטורי $B$ בקואורדינטות סטנדרטיות.\n3. **שינוי בסיס**: $P^{-1}AP$ (לא $PAP^{-1}$).\n4. **לא תמיד ניתן לאלכסן**: צריך $n$ וקטורים עצמיים עצמאיים."
+      "body_en_md": "1. **Column vs row in $[T]_B$**: columns = images of basis vectors in $B$, not rows.\n2. **$P$ direction**: $P$ from $B$ to standard means columns = $B$ vectors in standard coords.\n3. **Change of basis**: $[T]_C=P^{-1}[T]_BP$ — $P$ on the right, $P^{-1}$ on the left.\n4. **Not all matrices are diagonalizable**: requires $n$ independent eigenvectors.\n\n**Example misconception:** Change of basis formula is PAP^{-1}\n\n**Fix:** It is P^{-1}AP.",
+      "body_he_md": "1. **עמודות, לא שורות** ב-$[T]_B$.\n2. **כיוון $P$**: עמודות = וקטורי $B$ בקואורדינטות סטנדרטיות.\n3. **שינוי בסיס**: $P^{-1}AP$ (לא $PAP^{-1}$).\n4. **לא תמיד ניתן לאלכסן**: צריך $n$ וקטורים עצמיים עצמאיים.\n\n**Fix:** It is P^{-1}AP.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\"\n\n**Fix:** It is P^{-1}AP."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Recommended next topics:**\n- `concept:la_eigenvalues` **Eigenvalues & Eigenvectors**\n- `concept:la_diagonalization` **Matrix Diagonalization**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**נושאים מומלצים להמשך:**\n- `concept:la_eigenvalues` **ערכים ווקטורים עצמיים**\n- `concept:la_diagonalization` **אלכסון מטריצות**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- $[T]_B$: column $j$ = $[T(v_j)]_B$.\n- Change of basis: $[T]_C=P^{-1}[T]_EP$.\n- $P$ = transition matrix = columns are $B$-vectors in standard coordinates.\n- Similar matrices: same eigenvalues, trace, determinant.\n- Diagonalize: $D=P^{-1}AP$ where $P$ = eigenvectors, $D$ = eigenvalues on diagonal.",
+      "body_en_md": "- $[T]_B$: column $j$ = $[T(v_j)]_B$.\n- Change of basis: $[T]_C=P^{-1}[T]_EP$.\n- $P$ = transition matrix = columns are $B$-vectors in standard coordinates.\n- Similar matrices: same eigenvalues, trace, determinant.\n- Diagonalize: $D=P^{-1}AP$ where $P$ = eigenvectors, $D$ = eigenvalues on diagonal.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "- $[T]_B$: עמודה $j$ = $[T(v_j)]_B$.\n- שינוי: $P^{-1}[T]_EP$.\n- דומות: ערכים עצמיים, עקבה, $\\det$ זהים.\n- אלכסון: $D=P^{-1}AP$."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- Matrix of $T$ depends on chosen basis.\n- Change of basis: $P^{-1}AP$.\n- Diagonalization: $P$ = eigenvectors, $D$ = eigenvalues.\n- Similar matrices = same transformation, different coordinates.",
+      "body_en_md": "- Matrix of $T$ depends on chosen basis.\n- Change of basis: $P^{-1}AP$.\n- Diagonalization: $P$ = eigenvectors, $D$ = eigenvalues.\n- Similar matrices = same transformation, different coordinates.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
       "body_he_md": "- מטריצה תלויה בבסיס.\n- שינוי: $P^{-1}AP$.\n- אלכסון: $P$ = וקטורים עצמיים, $D$ = ערכים עצמיים.\n- דומות = אותה העתקה, בסיס שונה."
     }
-  ],
-  "questions": [
-    {"ord":1,"kind":"mcq","difficulty":"medium","stem_en":"$B=P^{-1}AP$ means $A$ and $B$ are:","stem_he":"$B=P^{-1}AP$: $A$ ו-$B$ הן:","options_en":["Orthogonal","Similar","Identical","Transpose of each other"],"options_he":["אורתוגונליות","דומות","זהות","חצי זו של זו"],"correct_index":1,"explanation_en":"$B=P^{-1}AP$ is the definition of similar matrices.","explanation_he":"$B=P^{-1}AP$ — הגדרת מטריצות דומות.","skill_atoms":["change_of_basis","similar_matrices"]}
   ],
   "agent_hints": {
     "key_insights": [
@@ -135,10 +232,203 @@
       "Diagonalization: P = eigenvectors, D = P^{-1}AP = diagonal eigenvalues."
     ],
     "common_misconceptions": [
-      {"wrong": "Change of basis formula is PAP^{-1}","correction": "It is P^{-1}AP.","detect_phrase_en":"change basis PAP inverse","detect_phrase_he":"שינוי בסיס PAP הופכי"}
+      {
+        "wrong": "Change of basis formula is PAP^{-1}",
+        "correction": "It is P^{-1}AP.",
+        "detect_phrase_en": "change basis PAP inverse",
+        "detect_phrase_he": "שינוי בסיס PAP הופכי"
+      }
     ],
-    "skill_atoms_unlocked": ["matrix_representation","change_of_basis","similar_matrices","diagonalization"],
+    "skill_atoms_unlocked": [
+      "matrix_representation",
+      "change_of_basis",
+      "similar_matrices",
+      "diagonalization"
+    ],
     "tutor_pacing_hint": "Matrix in basis first, then transition matrix, then change-of-basis formula.",
-    "next_recommended": ["la_eigenvalues","la_diagonalization"]
-  }
+    "next_recommended": [
+      "la_eigenvalues",
+      "la_diagonalization"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "$B=P^{-1}AP$ means $A$ and $B$ are:",
+      "stem_he": "$B=P^{-1}AP$: $A$ ו-$B$ הן:",
+      "options_en": [
+        "Orthogonal",
+        "Similar",
+        "Identical",
+        "Transpose of each other"
+      ],
+      "options_he": [
+        "אורתוגונליות",
+        "דומות",
+        "זהות",
+        "חצי זו של זו"
+      ],
+      "correct_index": 1,
+      "explanation_en": "**Why this is correct:**\n$B=P^{-1}AP$ is the definition of similar matrices.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$B=P^{-1}AP$ — הגדרת מטריצות דומות.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "change_of_basis",
+        "similar_matrices"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$T(e_1)=2e_1$, $T(e_2)=3e_2$. Matrix of $T$ in standard basis?",
+      "stem_he": "$T(e_1)=2e_1$, $T(e_2)=3e_2$. מטריצה?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$[T]_E=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$[T]_E=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Transition matrix from $B=\\{(2,0)^T,(0,3)^T\\}$ to standard?",
+      "stem_he": "מטריצת מעבר מ-$B=\\{(2,0)^T,(0,3)^T\\}$ לסטנדרטי?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Similar matrices have the same determinant. True or false?",
+      "stem_he": "למטריצות דומות $\\det$ זהה. נכון?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\nTrue: $\\det(P^{-1}AP)=\\det(P^{-1})\\det(A)\\det(P)=\\det(A)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\det(A)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\nTrue: $\\det(P^{-1}AP)=\\det(P^{-1})\\det(A)\\det(P)=\\det(A)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\nנכון: $\\det(P^{-1}AP)=\\det(A)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "What does it mean for two matrices to be similar?",
+      "stem_he": "מתי שתי מטריצות דומות?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$A\\sim B$ if $B=P^{-1}AP$ for some invertible $P$. They represent the same linear map in different bases",
+          "P^{-1}AP$ for some invertible $P$. They represent the same linear map in different bases",
+          "-1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$A\\sim B$ if $B=P^{-1}AP$ for some invertible $P$. They represent the same linear map in different bases.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$B=P^{-1}AP$. אותה העתקה, בסיס שונה.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "$[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. Find $[T]_B=P^{-1}[T]_EP$.",
+      "stem_he": "חשב $[T]_B=P^{-1}[T]_EP$ עם $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $[T]_E=\\begin{pmatrix}3&0\\\\0&5\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}[T]_E=\\begin{pmatrix}3&-5\\\\0&5\\end{pmatrix}$. $\\times P=\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "5"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}[T]_E=\\begin{pmatrix}3&-5\\\\0&5\\end{pmatrix}$. $\\times P=\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\begin{pmatrix}3&-2\\\\0&5\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "For $A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, find all $B$ similar to $A$ via $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$.",
+      "stem_he": "$A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $P=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. חשב $B=P^{-1}AP$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. $\\times P=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$. Same as $A$ (since $A=P$, it commutes)",
+          "P$, it commutes)",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$P^{-1}=\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}$. $P^{-1}A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$. $\\times P=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$. Same as $A$ (since $A=P$, it commutes).\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$B=A$ (מקרה מיוחד).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Reflection $T$ over $y$-axis in $\\mathbb{R}^2$: $T(x,y)=(-x,y)$. Write $[T]_E$.",
+      "stem_he": "שיקוף $T$ מעל ציר $y$: $T(x,y)=(-x,y)$. מטריצה?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T(e_1)=(-1,0)$, $T(e_2)=(0,1)$. $[T]_E=\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T(e_1)=(-1,0)$, $T(e_2)=(0,1)$. $[T]_E=\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\begin{pmatrix}-1&0\\\\0&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "matrix_representation",
+        "change_of_basis"
+      ]
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

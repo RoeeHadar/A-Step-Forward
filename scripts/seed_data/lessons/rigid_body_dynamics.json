@@ -1,47 +1,469 @@
 {
   "concept_id": "rigid_body_dynamics",
+  "subject": "physics",
+  "level": "university",
+  "math_track": [],
   "title_en": "Rigid Body Dynamics — Rotation and Rolling",
   "title_he": "דינמיקת גוף נוקשה — סיבוב וגלגול",
-  "subject": "physics",
-  "difficulty": "advanced",
-  "estimated_minutes": 55,
+  "summary_en": "Real objects have shape and size.",
+  "summary_he": "גופים אמיתיים בעלי צורה ממדית. דינמיקת גוף נוקשה: סיבוב הוא האנלוג הזוויתי של תנועה לינארית , עם מומנט אינרציה במקום מסה.",
   "sections": [
-    {"id": "intro","kind": "intro","title_en": "Beyond Point Masses","title_he": "מעבר למסות נקודתיות","body_en_md": "Real objects have shape and size. When a wheel rolls, a top spins, or a diver tucks — we need rigid body dynamics. The key insight: **rotation is the angular analogue of translation**, with moment of inertia $I$ playing the role of mass.\n\n**Exam topics:**\n- Moment of inertia (formula and parallel axis theorem)\n- Newton's second law for rotation: $\\tau = I\\alpha$\n- Rolling without slipping\n- Combined translational + rotational kinetic energy","body_he_md": "גופים אמיתיים בעלי צורה ממדית. דינמיקת גוף נוקשה: **סיבוב הוא האנלוג הזוויתי של תנועה לינארית**, עם מומנט אינרציה $I$ במקום מסה.\n\n**נושאים:**\n- מומנט אינרציה (נוסחאות ומשפט ציר מקביל)\n- חוק ניוטון לסיבוב: $\\tau = I\\alpha$\n- גלגול ללא החלקה\n- אנרגיה קינטית מוחלטת"},
-    {"id": "definition","kind": "definition","title_en": "Key Quantities and Formulas","title_he": "כמויות ונוסחאות מרכזיות","body_en_md": "**Moment of inertia:**\n$$I = \\sum_i m_i r_i^2 \\quad \\text{(discrete)}$$\n$$I = \\int r^2\\,dm \\quad \\text{(continuous)}$$\n\n**Common values:**\n| Shape | Axis | $I$ |\n|---|---|---|\n| Solid cylinder (disk) | Through center | $\\frac{1}{2}MR^2$ |\n| Thin ring | Through center | $MR^2$ |\n| Solid sphere | Through center | $\\frac{2}{5}MR^2$ |\n| Hollow sphere | Through center | $\\frac{2}{3}MR^2$ |\n| Thin rod | Through center | $\\frac{1}{12}ML^2$ |\n| Thin rod | Through end | $\\frac{1}{3}ML^2$ |\n\n**Parallel axis theorem:** $I = I_{\\text{cm}} + Md^2$\n\n**Newton's second law for rotation:**\n$$\\tau_{\\text{net}} = I\\alpha$$\n\n**Rolling without slipping:** $v_{\\text{cm}} = R\\omega$, $a_{\\text{cm}} = R\\alpha$\n\n**Total kinetic energy (rolling):**\n$$K = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\frac{1}{2}I\\omega^2$$","body_he_md": "**מומנט אינרציה:**\n- דיסק/גליל מלא: $I = \\frac{1}{2}MR^2$\n- טבעת: $I = MR^2$\n- כדור מלא: $I = \\frac{2}{5}MR^2$\n- מוט (מרכז): $I = \\frac{1}{12}ML^2$\n\n**משפט ציר מקביל:** $I = I_{\\text{cm}} + Md^2$\n\n**חוק ניוטון לסיבוב:** $\\tau = I\\alpha$\n\n**גלגול ללא החלקה:** $v_{\\text{cm}} = R\\omega$\n\n**אנרגיה קינטית:** $K = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\frac{1}{2}I\\omega^2$"},
-    {"id": "theory","kind": "theory","title_en": "Rolling Without Slipping and Energy","title_he": "גלגול ללא החלקה ואנרגיה","body_en_md": "### What does \"rolling without slipping\" mean?\nThe contact point of a rolling object has zero velocity (instantaneously at rest). This gives the constraint:\n$$v_{\\text{cm}} = R\\omega \\Rightarrow a_{\\text{cm}} = R\\alpha$$\n\n### Kinetic energy of a rolling object\nTotal KE = translational + rotational:\n$$K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}Mv^2\\left(1 + \\frac{I}{MR^2}\\right)$$\n\nFor a solid cylinder: $I = \\frac{1}{2}MR^2 \\Rightarrow K = \\frac{3}{4}Mv^2$\nFor a hollow sphere: $I = \\frac{2}{3}MR^2 \\Rightarrow K = \\frac{5}{6}Mv^2$\n\n### Which rolls down a ramp faster?\nUsing energy conservation ($mgh = K$):\n$$v = \\sqrt{\\frac{2gh}{1 + I/(MR^2)}}$$\nSmaller $I/(MR^2)$ → larger $v$. Solid sphere (0.4) rolls faster than solid cylinder (0.5) rolls faster than hollow sphere (0.67).","body_he_md": "### גלגול ללא החלקה\nנקודת מגע נמצאת ברגע מנוחה: $v_{\\text{cm}} = R\\omega$.\n\n### אנרגיה קינטית בגלגול\n$K = \\frac{1}{2}Mv^2(1 + I/(MR^2))$\n\n### מי מגלגל מהר יותר?\n$v = \\sqrt{2gh/(1+I_{\\text{rel}})}$ כאשר $I_{\\text{rel}} = I/(MR^2)$. ל-$I_{\\text{rel}}$ קטן יותר → מהירות גבוהה יותר."},
-    {"id": "worked_example_1","kind": "worked_example","difficulty": "easy","example_number": 1,"title_en": "Worked Example 1 — Angular Acceleration","title_he": "דוגמה פתורה 1 — תאוצה זוויתית","body_en_md": "**Given:** A solid disk ($M = 5\\;\\text{kg}$, $R = 0.2\\;\\text{m}$) has a net torque $\\tau = 4\\;\\text{N·m}$ applied. Find angular acceleration $\\alpha$.\n\n**Step 1 — Moment of inertia:**\n$$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.1\\;\\text{kg·m}^2$$\n\n**Step 2 — Newton's law for rotation:**\n$$\\alpha = \\frac{\\tau}{I} = \\frac{4}{0.1} = 40\\;\\text{rad/s}^2$$","body_he_md": "**נתון:** דיסק $M = 5\\;\\text{kg}$, $R = 0.2\\;\\text{m}$, $\\tau = 4\\;\\text{N·m}$. מצא $\\alpha$.\n\n$I = \\frac{1}{2}MR^2 = 0.1\\;\\text{kg·m}^2$\n$\\alpha = \\tau/I = 40\\;\\text{rad/s}^2$"},
-    {"id": "checkpoint_1","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "A thin rod ($M = 2\\;\\text{kg}$, $L = 1\\;\\text{m}$) rotates about one end. Find its moment of inertia.","body_he_md": "מוט דק ($M = 2\\;\\text{kg}$, $L = 1\\;\\text{m}$) מסתובב סביב קצהו. מצא מומנט אינרציה.","checkpoint_solution_en": "For a rod about its end: $I = \\frac{1}{3}ML^2 = \\frac{1}{3}(2)(1)^2 = \\frac{2}{3}\\;\\text{kg·m}^2 \\approx 0.667\\;\\text{kg·m}^2$. (Alternatively, using parallel axis theorem: $I = I_{\\text{cm}} + Md^2 = \\frac{1}{12}ML^2 + M(L/2)^2 = \\frac{1}{12}ML^2 + \\frac{1}{4}ML^2 = \\frac{1}{3}ML^2$.)","checkpoint_solution_he": "$I = \\frac{1}{3}ML^2 = \\frac{2}{3}\\;\\text{kg·m}^2$."},
-    {"id": "worked_example_2","kind": "worked_example","difficulty": "medium","example_number": 2,"title_en": "Worked Example 2 — Rolling Down a Ramp","title_he": "דוגמה פתורה 2 — גלגול על מדרון","body_en_md": "**Given:** A solid sphere ($M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) rolls without slipping from rest down a $h = 1.5\\;\\text{m}$ ramp. Find the speed at the bottom.\n\n**Energy conservation:**\n$$Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2$$\n\nWith $I = \\frac{2}{5}MR^2$ and $\\omega = v/R$:\n$$Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}\\left(\\frac{2}{5}MR^2\\right)\\frac{v^2}{R^2} = \\frac{1}{2}Mv^2 + \\frac{1}{5}Mv^2 = \\frac{7}{10}Mv^2$$\n\n$$v = \\sqrt{\\frac{10gh}{7}} = \\sqrt{\\frac{10(10)(1.5)}{7}} = \\sqrt{\\frac{150}{7}} \\approx 4.63\\;\\text{m/s}$$","body_he_md": "**נתון:** כדור מלא, $h = 1.5\\;\\text{m}$. מצא מהירות בתחתית.\n\n$mgh = \\frac{7}{10}mv^2 \\Rightarrow v = \\sqrt{10gh/7} \\approx 4.63\\;\\text{m/s}$"},
-    {"id": "checkpoint_2","kind": "checkpoint","title_en": "Stop & Practice","title_he": "עצור ותרגל","body_en_md": "A solid cylinder and a hollow cylinder (same $M$, $R$, $h$) start from rest at the top of a ramp. Which reaches the bottom first? Why?","body_he_md": "גליל מלא וגליל חלול (אותם $M$, $R$, $h$) מתחילים ממנוחה. מי מגיע ראשון לתחתית?","checkpoint_solution_en": "Solid: $I = \\frac{1}{2}MR^2$, $v = \\sqrt{4gh/3}$. Hollow: $I = MR^2$, $v = \\sqrt{gh}$. Solid cylinder reaches bottom first (higher $v$, lower $I/MR^2 = 0.5$ vs 1). More of the energy goes to translation.","checkpoint_solution_he": "גליל מלא: $v = \\sqrt{4gh/3}$; חלול: $v = \\sqrt{gh}$. מלא מהיר יותר ($I/MR^2 = 0.5 < 1$)."},
-    {"id": "worked_example_3","kind": "worked_example","difficulty": "hard","example_number": 3,"title_en": "Worked Example 3 — Atwood Machine with Pulley","title_he": "דוגמה פתורה 3 — מכונת אטווד עם גלגלת","body_en_md": "**Given:** Two masses ($m_1 = 3\\;\\text{kg}$, $m_2 = 5\\;\\text{kg}$) hang over a pulley (disk, $M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$). Find the acceleration of the system.\n\n**Step 1 — Newton's 2nd law for each mass:**\n$$m_2 g - T_2 = m_2 a$$\n$$T_1 - m_1 g = m_1 a$$\n\n**Step 2 — Rotation equation for pulley:**\n$$\\tau_{\\text{net}} = (T_2 - T_1)R = I_{\\text{pulley}}\\alpha = \\frac{1}{2}MR^2\\cdot\\frac{a}{R} = \\frac{1}{2}MRa$$\n$$(T_2 - T_1) = \\frac{1}{2}Ma$$\n\n**Step 3 — Combine:**\nSubtract mass equations: $(m_2 - m_1)g - (T_2 - T_1) = (m_1 + m_2)a$\n$$(m_2 - m_1)g - \\frac{1}{2}Ma = (m_1 + m_2)a$$\n$$a = \\frac{(m_2 - m_1)g}{m_1 + m_2 + M/2} = \\frac{(5-3)(10)}{3+5+1} = \\frac{20}{9} \\approx 2.22\\;\\text{m/s}^2$$","body_he_md": "**נתון:** $m_1 = 3\\;\\text{kg}$, $m_2 = 5\\;\\text{kg}$, גלגלת-דיסק $M = 2\\;\\text{kg}$.\n\n$a = (m_2-m_1)g/(m_1+m_2+M/2) = 20/9 \\approx 2.22\\;\\text{m/s}^2$"},
-    {"id": "method_guide","kind": "method_guide","title_en": "Method Guide","title_he": "מדריך שיטה","body_en_md": "| Problem | Method |\n|---|---|\n| Find $I$ for complex shape | Parallel axis theorem: $I = I_{\\text{cm}} + Md^2$ |\n| Angular acceleration | $\\alpha = \\tau_{\\text{net}}/I$ |\n| Rolling without slipping | $v = R\\omega$, $a = R\\alpha$; use energy or Newton's laws |\n| Rolling down ramp | Energy: $mgh = \\frac{1}{2}mv^2(1 + I/(mR^2))$ |\n| Atwood with pulley | Write Newton for each mass + torque for pulley |\n| Which rolls faster? | Smaller $I/(MR^2)$ wins |","body_he_md": "| בעיה | שיטה |\n|---|---|\n| $I$ לצורה מורכבת | משפט ציר מקביל |\n| $\\alpha$ | $\\tau/I$ |\n| גלגול על מדרון | שימור אנרגיה: $mgh = \\frac{1}{2}mv^2(1+I/MR^2)$ |\n| אטווד עם גלגלת | ניוטון לכל מסה + מומנט לגלגלת |"},
-    {"id": "exercise_set","kind": "exercise_set","title_en": "Practice Exercises","title_he": "תרגילים","body_en_md": "","body_he_md": "","exercises": [
-      {"id": "e1","difficulty": "easy","body_en": "Find the moment of inertia of a solid sphere ($M = 3\\;\\text{kg}$, $R = 0.15\\;\\text{m}$) about its center.","body_he": "מצא מומנט אינרציה של כדור מלא ($M = 3\\;\\text{kg}$, $R = 0.15\\;\\text{m}$).","solution_en": "$I = \\frac{2}{5}MR^2 = \\frac{2}{5}(3)(0.0225) = 0.027\\;\\text{kg·m}^2$.","solution_he": "$I = 0.027\\;\\text{kg·m}^2$.","points": 5},
-      {"id": "e2","difficulty": "easy","body_en": "A torque $\\tau = 10\\;\\text{N·m}$ acts on a flywheel with $I = 2\\;\\text{kg·m}^2$. Find $\\alpha$.","body_he": "מומנט $\\tau = 10\\;\\text{N·m}$ על גלגל תנופה $I = 2\\;\\text{kg·m}^2$. מצא $\\alpha$.","solution_en": "$\\alpha = \\tau/I = 10/2 = 5\\;\\text{rad/s}^2$.","solution_he": "$\\alpha = 5\\;\\text{rad/s}^2$.","points": 5},
-      {"id": "e3","difficulty": "easy","body_en": "A rolling disk (solid, $R = 0.2\\;\\text{m}$) moves at $v = 6\\;\\text{m/s}$. Find $\\omega$.","body_he": "דיסק גולל ($R = 0.2\\;\\text{m}$), $v = 6\\;\\text{m/s}$. מצא $\\omega$.","solution_en": "$\\omega = v/R = 6/0.2 = 30\\;\\text{rad/s}$.","solution_he": "$\\omega = 30\\;\\text{rad/s}$.","points": 5},
-      {"id": "e4","difficulty": "easy","body_en": "Use the parallel axis theorem to find $I$ for a solid disk ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) about an axis at its rim.","body_he": "משפט ציר מקביל: $I$ של דיסק ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) סביב ציר בשפתו.","solution_en": "$I_{\\text{cm}} = \\frac{1}{2}MR^2 = 0.02\\;\\text{kg·m}^2$. $d = R = 0.1\\;\\text{m}$. $I = I_{\\text{cm}} + MR^2 = 0.02 + 0.04 = 0.06\\;\\text{kg·m}^2$.","solution_he": "$I = \\frac{1}{2}MR^2 + MR^2 = \\frac{3}{2}MR^2 = 0.06\\;\\text{kg·m}^2$.","points": 5},
-      {"id": "e5","difficulty": "medium","body_en": "A solid cylinder ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) rolls without slipping from $h = 2\\;\\text{m}$. Find speed at bottom.","body_he": "גליל מלא ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) גולל מ-$h = 2\\;\\text{m}$. מצא מהירות.","solution_en": "$v = \\sqrt{4gh/3} = \\sqrt{4(10)(2)/3} = \\sqrt{80/3} \\approx 5.16\\;\\text{m/s}$.","solution_he": "$v = \\sqrt{4gh/3} \\approx 5.16\\;\\text{m/s}$.","points": 8},
-      {"id": "e6","difficulty": "medium","body_en": "A disk ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) starts from rest and reaches $\\omega = 20\\;\\text{rad/s}$ in $t = 4\\;\\text{s}$. Find net torque applied.","body_he": "דיסק ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) מגיע ל-$\\omega = 20\\;\\text{rad/s}$ ב-$t = 4\\;\\text{s}$. מצא מומנט.","solution_en": "$\\alpha = \\omega/t = 5\\;\\text{rad/s}^2$. $I = \\frac{1}{2}(2)(0.09) = 0.09\\;\\text{kg·m}^2$. $\\tau = I\\alpha = 0.09\\times5 = 0.45\\;\\text{N·m}$.","solution_he": "$\\tau = I\\alpha = 0.45\\;\\text{N·m}$.","points": 8},
-      {"id": "e7","difficulty": "medium","body_en": "A hoop ($M = 1\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) and a disk (same $M$, $R$) roll down the same ramp from the same height. Find the ratio of their final speeds.","body_he": "טבעת וגליל (אותם $M$, $R$, $h$) גוללים. מצא יחס מהירויות סופיות.","solution_en": "$v_{\\text{hoop}} = \\sqrt{gh}$ (since $I/(MR^2) = 1$, gives $v = \\sqrt{2gh/2} = \\sqrt{gh}$). $v_{\\text{disk}} = \\sqrt{4gh/3}$. Ratio: $v_{\\text{disk}}/v_{\\text{hoop}} = \\sqrt{4/3} \\approx 1.15$.","solution_he": "$v_{\\text{disk}}/v_{\\text{hoop}} = \\sqrt{4/3} \\approx 1.15$.","points": 8},
-      {"id": "e8","difficulty": "medium","body_en": "A sphere ($M = 1\\;\\text{kg}$, $R = 0.1\\;\\text{m}$, $I = 2MR^2/5$) rolls at $v = 4\\;\\text{m/s}$. Find total KE.","body_he": "כדור ($M = 1\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) גולל ב-$v = 4\\;\\text{m/s}$. מצא KE כולל.","solution_en": "$K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}(1)(16) + \\frac{1}{2}(\\frac{2}{5})(1)(0.01)(1600) = 8 + \\frac{1}{2}(\\frac{2}{5})(16) = 8 + 3.2 = 11.2\\;\\text{J}$. Or: $K = \\frac{7}{10}Mv^2 = \\frac{7}{10}(1)(16) = 11.2\\;\\text{J}$.","solution_he": "$K = \\frac{7}{10}Mv^2 = 11.2\\;\\text{J}$.","points": 8},
-      {"id": "e9","difficulty": "medium","body_en": "A rod ($M = 3\\;\\text{kg}$, $L = 1.2\\;\\text{m}$) is initially horizontal, pivoted at one end. Released from rest, find angular velocity when vertical.","body_he": "מוט ($M = 3\\;\\text{kg}$, $L = 1.2\\;\\text{m}$) אופקי, ציר בקצהו. שוחרר. מצא $\\omega$ כשהוא אנכי.","solution_en": "CM falls by $L/2 = 0.6\\;\\text{m}$. Energy: $Mg(L/2) = \\frac{1}{2}I\\omega^2 = \\frac{1}{2}(\\frac{1}{3}ML^2)\\omega^2$. $g(L/2) = \\frac{L^2\\omega^2}{6}$. $\\omega^2 = 3g/L = 30/1.2 = 25$. $\\omega = 5\\;\\text{rad/s}$.","solution_he": "$\\omega = \\sqrt{3g/L} = 5\\;\\text{rad/s}$.","points": 8},
-      {"id": "e10","difficulty": "hard","body_en": "An Atwood machine has $m_1 = 2\\;\\text{kg}$, $m_2 = 4\\;\\text{kg}$, and a pulley that is a solid disk $M = 1\\;\\text{kg}$, $R = 0.1\\;\\text{m}$. Find the acceleration and the tensions $T_1$ and $T_2$.","body_he": "מכונת אטווד: $m_1 = 2\\;\\text{kg}$, $m_2 = 4\\;\\text{kg}$, גלגלת-דיסק $M = 1\\;\\text{kg}$. מצא $a$, $T_1$, $T_2$.","solution_en": "$a = (m_2-m_1)g/(m_1+m_2+M/2) = 2(10)/(6+0.5) = 20/6.5 \\approx 3.08\\;\\text{m/s}^2$. $T_1 = m_1(g+a) = 2(10+3.08) = 26.15\\;\\text{N}$. $T_2 = m_2(g-a) = 4(10-3.08) = 27.69\\;\\text{N}$.","solution_he": "$a \\approx 3.08\\;\\text{m/s}^2$; $T_1 \\approx 26.2\\;\\text{N}$; $T_2 \\approx 27.7\\;\\text{N}$.","points": 10},
-      {"id": "e11","difficulty": "hard","body_en": "Derive the formula for the acceleration of a solid cylinder rolling without slipping down an incline (angle $\\theta$) using Newton's laws (both translational and rotational).","body_he": "גזור תאוצה של גליל מלא הגולל ללא החלקה על מישור משופע (זווית $\\theta$) בעזרת חוקי ניוטון.","solution_en": "Translational: $Mg\\sin\\theta - f = Ma_{\\text{cm}}$. Rotational (about CM): $fR = I_{\\text{cm}}\\alpha = \\frac{1}{2}MR^2(a_{\\text{cm}}/R) = \\frac{1}{2}MRa_{\\text{cm}}$. So $f = \\frac{1}{2}Ma_{\\text{cm}}$. Substitute: $Mg\\sin\\theta - \\frac{1}{2}Ma_{\\text{cm}} = Ma_{\\text{cm}}$. $a_{\\text{cm}} = \\frac{2g\\sin\\theta}{3}$.","solution_he": "$a_{\\text{cm}} = \\frac{2g\\sin\\theta}{3}$ (גליל מלא).","points": 10},
-      {"id": "e12","difficulty": "hard","body_en": "A disk ($I = \\frac{1}{2}MR^2$) has a rope wrapped around it. The rope hangs over the edge of a table and is attached to a hanging mass $m$. Disk mass $M$, radius $R$. Find the acceleration.","body_he": "דיסק ($I = \\frac{1}{2}MR^2$) עם חבל קשור. החבל עובר על קצה שולחן ומחובר למסה $m$. מצא תאוצה.","solution_en": "Mass $m$: $mg - T = ma$. Disk rotation: $TR = I\\alpha = \\frac{1}{2}MR^2(a/R) = \\frac{1}{2}MRa$, so $T = \\frac{1}{2}Ma$. Substituting: $mg = (m + M/2)a \\Rightarrow a = mg/(m + M/2) = 2mg/(2m+M)$.","solution_he": "$a = 2mg/(2m+M)$.","points": 10},
-      {"id": "e13","difficulty": "hard","body_en": "A solid ball is placed on top of a hemisphere (radius $R$) and given a tiny push. At what angle (from vertical) does it leave the surface? (Use energy conservation and centripetal condition; treat ball as point mass for simplicity.)","body_he": "כדור ממוקם על חצי כדור (רדיוס $R$) ומקבל דחיפה זעירה. באיזה זווית עוזב את המשטח?","solution_en": "Let $\\theta$ = angle from vertical. Height dropped = $R - R\\cos\\theta = R(1-\\cos\\theta)$. Energy: $mgR(1-\\cos\\theta) = \\frac{1}{2}mv^2$. $v^2 = 2gR(1-\\cos\\theta)$. At separation, normal force = 0: centripetal = gravity component: $mg\\cos\\theta = mv^2/R$. $g\\cos\\theta = 2g(1-\\cos\\theta)$. $3\\cos\\theta = 2$. $\\cos\\theta = 2/3$. $\\theta = \\arccos(2/3) \\approx 48.2°$.","solution_he": "$\\cos\\theta = 2/3 \\Rightarrow \\theta \\approx 48.2°$.","points": 10}
-    ]},
-    {"id": "pitfall","kind": "pitfall","title_en": "Common Pitfalls","title_he": "מלכודות נפוצות","body_en_md": "1. **Using the wrong $I$.** Always identify the axis of rotation. Use the parallel axis theorem when the axis doesn't pass through the CM.\n\n2. **Rolling constraint.** Only use $v = R\\omega$ when rolling WITHOUT slipping.\n\n3. **Kinetic energy.** For a rolling object, $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$ — don't forget the rotational part.\n\n4. **Torque direction.** Net torque determines direction of angular acceleration ($\\alpha = \\tau/I$).","body_he_md": "1. **$I$ שגוי** — תמיד זהה את ציר הסיבוב. משפט ציר מקביל כשהציר אינו דרך CM.\n\n2. **קשר גלגול:** רק בגלגול ללא החלקה: $v = R\\omega$.\n\n3. **אנרגיה קינטית:** $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$.\n\n4. **כיוון מומנט** קובע כיוון $\\alpha$."},
-    {"id": "before_exam","kind": "before_exam","title_en": "Before the Exam — Formula Card","title_he": "לפני הבחינה — כרטיס נוסחאות","body_en_md": "- Solid disk/cylinder: $I = \\frac{1}{2}MR^2$; Ring: $MR^2$; Solid sphere: $\\frac{2}{5}MR^2$\n- Rod (center): $\\frac{1}{12}ML^2$; Rod (end): $\\frac{1}{3}ML^2$\n- Parallel axis: $I = I_{\\text{cm}} + Md^2$\n- Newton's 2nd (rotation): $\\tau = I\\alpha$\n- Rolling: $v = R\\omega$; $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$\n- Ramp: $v = \\sqrt{2gh/(1+I/MR^2)}$","body_he_md": "- דיסק: $\\frac{1}{2}MR^2$; טבעת: $MR^2$; כדור: $\\frac{2}{5}MR^2$; מוט (מרכז): $\\frac{1}{12}ML^2$\n- משפט ציר מקביל: $I = I_{\\text{cm}} + Md^2$\n- $\\tau = I\\alpha$; גלגול: $v = R\\omega$; $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$"},
-    {"id": "summary","kind": "summary","title_en": "Summary","title_he": "סיכום","body_en_md": "- **Moment of inertia $I$:** measure of rotational inertia; $I = \\int r^2\\,dm$\n- **Newton's 2nd (rotation):** $\\tau_{\\text{net}} = I\\alpha$\n- **Parallel axis:** $I = I_{\\text{cm}} + Md^2$\n- **Rolling:** $v = R\\omega$; total KE = translational + rotational\n- **Ramp winner:** smallest $I/(MR^2)$ rolls fastest","body_he_md": "- $I = \\int r^2\\,dm$; $\\tau = I\\alpha$\n- משפט ציר מקביל: $I = I_{\\text{cm}} + Md^2$\n- גלגול: $v = R\\omega$; KE כולל = תנועתי + סיבובי"}
-  ],
-  "questions": [
-    {"id": "q1","kind": "mcq","difficulty": 2,"skill_atoms": ["moment_of_inertia"],"stem_en": "A solid sphere and a hollow sphere of equal mass and radius roll down the same ramp. Which reaches the bottom first?","stem_he": "כדור מלא וכדור חלול (שווי מסה ורדיוס) גוללים. מי מגיע ראשון?","answer_payload": {"options_en": ["Hollow sphere","Solid sphere","They arrive at the same time","It depends on the height"],"options_he": ["כדור חלול","כדור מלא","מגיעים יחד","תלוי בגובה"],"correct_index": 1},"explanation_en": "Solid sphere: $I/(MR^2) = 2/5 = 0.4$. Hollow sphere: $2/3 \\approx 0.67$. Smaller $I/(MR^2)$ → more energy to translation → faster.","explanation_he": "מלא: $I/(MR^2) = 0.4$ < חלול: $0.67$ → מלא מהיר יותר."},
-    {"id": "q2","kind": "numeric","difficulty": 2,"skill_atoms": ["rolling"],"stem_en": "A solid disk rolls at $v = 5\\;\\text{m/s}$ ($M = 2\\;\\text{kg}$). Find total KE (J).","stem_he": "דיסק גולל ב-$v = 5\\;\\text{m/s}$ ($M = 2\\;\\text{kg}$). KE כולל (J)?","answer_payload": {"value": 37.5,"tolerance": 0.5,"unit_en": "J","unit_he": "J"},"explanation_en": "$K = \\frac{3}{4}Mv^2 = \\frac{3}{4}(2)(25) = 37.5\\;\\text{J}$.","explanation_he": "$K = \\frac{3}{4}Mv^2 = 37.5\\;\\text{J}$."}
+    {
+      "id": "intro",
+      "kind": "intro",
+      "title_en": "Beyond Point Masses",
+      "title_he": "מעבר למסות נקודתיות",
+      "body_en_md": "Real objects have shape and size. When a wheel rolls, a top spins, or a diver tucks — we need rigid body dynamics. The key insight: **rotation is the angular analogue of translation**, with moment of inertia $I$ playing the role of mass.\n\n**Exam topics:**\n- Moment of inertia (formula and parallel axis theorem)\n- Newton's second law for rotation: $\\tau = I\\alpha$\n- Rolling without slipping\n- Combined translational + rotational kinetic energy",
+      "body_he_md": "גופים אמיתיים בעלי צורה ממדית. דינמיקת גוף נוקשה: **סיבוב הוא האנלוג הזוויתי של תנועה לינארית**, עם מומנט אינרציה $I$ במקום מסה.\n\n**נושאים:**\n- מומנט אינרציה (נוסחאות ומשפט ציר מקביל)\n- חוק ניוטון לסיבוב: $\\tau = I\\alpha$\n- גלגול ללא החלקה\n- אנרגיה קינטית מוחלטת"
+    },
+    {
+      "id": "definition",
+      "kind": "definition",
+      "title_en": "Key Quantities and Formulas",
+      "title_he": "כמויות ונוסחאות מרכזיות",
+      "body_en_md": "**Moment of inertia:**\n$$I = \\sum_i m_i r_i^2 \\quad \\text{(discrete)}$$\n$$I = \\int r^2\\,dm \\quad \\text{(continuous)}$$\n\n**Common values:**\n| Shape | Axis | $I$ |\n|---|---|---|\n| Solid cylinder (disk) | Through center | $\\frac{1}{2}MR^2$ |\n| Thin ring | Through center | $MR^2$ |\n| Solid sphere | Through center | $\\frac{2}{5}MR^2$ |\n| Hollow sphere | Through center | $\\frac{2}{3}MR^2$ |\n| Thin rod | Through center | $\\frac{1}{12}ML^2$ |\n| Thin rod | Through end | $\\frac{1}{3}ML^2$ |\n\n**Parallel axis theorem:** $I = I_{\\text{cm}} + Md^2$\n\n**Newton's second law for rotation:**\n$$\\tau_{\\text{net}} = I\\alpha$$\n\n**Rolling without slipping:** $v_{\\text{cm}} = R\\omega$, $a_{\\text{cm}} = R\\alpha$\n\n**Total kinetic energy (rolling):**\n$$K = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\frac{1}{2}I\\omega^2$$",
+      "body_he_md": "**מומנט אינרציה:**\n- דיסק/גליל מלא: $I = \\frac{1}{2}MR^2$\n- טבעת: $I = MR^2$\n- כדור מלא: $I = \\frac{2}{5}MR^2$\n- מוט (מרכז): $I = \\frac{1}{12}ML^2$\n\n**משפט ציר מקביל:** $I = I_{\\text{cm}} + Md^2$\n\n**חוק ניוטון לסיבוב:** $\\tau = I\\alpha$\n\n**גלגול ללא החלקה:** $v_{\\text{cm}} = R\\omega$\n\n**אנרגיה קינטית:** $K = \\frac{1}{2}Mv_{\\text{cm}}^2 + \\frac{1}{2}I\\omega^2$"
+    },
+    {
+      "id": "theory",
+      "kind": "theory",
+      "title_en": "Rolling Without Slipping and Energy",
+      "title_he": "גלגול ללא החלקה ואנרגיה",
+      "body_en_md": "### What does \"rolling without slipping\" mean?\nThe contact point of a rolling object has zero velocity (instantaneously at rest). This gives the constraint:\n$$v_{\\text{cm}} = R\\omega \\Rightarrow a_{\\text{cm}} = R\\alpha$$\n\n### Kinetic energy of a rolling object\nTotal KE = translational + rotational:\n$$K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}Mv^2\\left(1 + \\frac{I}{MR^2}\\right)$$\n\nFor a solid cylinder: $I = \\frac{1}{2}MR^2 \\Rightarrow K = \\frac{3}{4}Mv^2$\nFor a hollow sphere: $I = \\frac{2}{3}MR^2 \\Rightarrow K = \\frac{5}{6}Mv^2$\n\n### Which rolls down a ramp faster?\nUsing energy conservation ($mgh = K$):\n$$v = \\sqrt{\\frac{2gh}{1 + I/(MR^2)}}$$\nSmaller $I/(MR^2)$ → larger $v$. Solid sphere (0.4) rolls faster than solid cylinder (0.5) rolls faster than hollow sphere (0.67).",
+      "body_he_md": "### גלגול ללא החלקה\nנקודת מגע נמצאת ברגע מנוחה: $v_{\\text{cm}} = R\\omega$.\n\n### אנרגיה קינטית בגלגול\n$K = \\frac{1}{2}Mv^2(1 + I/(MR^2))$\n\n### מי מגלגל מהר יותר?\n$v = \\sqrt{2gh/(1+I_{\\text{rel}})}$ כאשר $I_{\\text{rel}} = I/(MR^2)$. ל-$I_{\\text{rel}}$ קטן יותר → מהירות גבוהה יותר."
+    },
+    {
+      "id": "worked_example_1",
+      "kind": "worked_example",
+      "difficulty": "easy",
+      "example_number": 1,
+      "title_en": "Worked Example 1 — Angular Acceleration",
+      "title_he": "דוגמה פתורה 1 — תאוצה זוויתית",
+      "body_en_md": "**Given:** A solid disk ($M = 5\\;\\text{kg}$, $R = 0.2\\;\\text{m}$) has a net torque $\\tau = 4\\;\\text{N·m}$ applied. Find angular acceleration $\\alpha$.\n\n### Move 1\n$$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.1\\;\\text{kg·m}^2$$\n\n### Move 2\n$$\\alpha = \\frac{\\tau}{I} = \\frac{4}{0.1} = 40\\;\\text{rad/s}^2$$",
+      "body_he_md": "### צעד 1\n$$I = \\frac{1}{2}MR^2 = \\frac{1}{2}(5)(0.04) = 0.1\\;\\text{kg·m}^2$$\n\n### צעד 2\n$$\\alpha = \\frac{\\tau}{I} = \\frac{4}{0.1} = 40\\;\\text{rad/s}^2$$"
+    },
+    {
+      "id": "checkpoint_1",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A thin rod ($M = 2\\;\\text{kg}$, $L = 1\\;\\text{m}$) rotates about one end. Find its moment of inertia.",
+      "body_he_md": "מוט דק ($M = 2\\;\\text{kg}$, $L = 1\\;\\text{m}$) מסתובב סביב קצהו. מצא מומנט אינרציה.",
+      "checkpoint_solution_en": "For a rod about its end: $I = \\frac{1}{3}ML^2 = \\frac{1}{3}(2)(1)^2 = \\frac{2}{3}\\;\\text{kg·m}^2 \\approx 0.667\\;\\text{kg·m}^2$. (Alternatively, using parallel axis theorem: $I = I_{\\text{cm}} + Md^2 = \\frac{1}{12}ML^2 + M(L/2)^2 = \\frac{1}{12}ML^2 + \\frac{1}{4}ML^2 = \\frac{1}{3}ML^2$.)",
+      "checkpoint_solution_he": "$I = \\frac{1}{3}ML^2 = \\frac{2}{3}\\;\\text{kg·m}^2$."
+    },
+    {
+      "id": "worked_example_2",
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 2,
+      "title_en": "Worked Example 2 — Rolling Down a Ramp",
+      "title_he": "דוגמה פתורה 2 — גלגול על מדרון",
+      "body_en_md": "**Given:** A solid sphere ($M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) rolls without slipping from rest down a $h = 1.5\\;\\text{m}$ ramp. Find the speed at the bottom.\n\n**Energy conservation:**\n$$Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2$$\n\nWith $I = \\frac{2}{5}MR^2$ and $\\omega = v/R$:\n$$Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}\\left(\\frac{2}{5}MR^2\\right)\\frac{v^2}{R^2} = \\frac{1}{2}Mv^2 + \\frac{1}{5}Mv^2 = \\frac{7}{10}Mv^2$$\n\n$$v = \\sqrt{\\frac{10gh}{7}} = \\sqrt{\\frac{10(10)(1.5)}{7}} = \\sqrt{\\frac{150}{7}} \\approx 4.63\\;\\text{m/s}$$",
+      "body_he_md": "**נתון:** A solid sphere ($M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) rolls without slipping from rest down a $h = 1.5\\;\\text{m}$ ramp. Find the speed at the bottom.\n\n**Energy conservation:**\n$$Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2$$\n\nWith $I = \\frac{2}{5}MR^2$ and $\\omega = v/R$:\n$$Mgh = \\frac{1}{2}Mv^2 + \\frac{1}{2}\\left(\\frac{2}{5}MR^2\\right)\\frac{v^2}{R^2} = \\frac{1}{2}Mv^2 + \\frac{1}{5}Mv^2 = \\frac{7}{10}Mv^2$$\n\n$$v = \\sqrt{\\frac{10gh}{7}} = \\sqrt{\\frac{10(10)(1.5)}{7}} = \\sqrt{\\frac{150}{7}} \\approx 4.63\\;\\text{m/s}$$"
+    },
+    {
+      "id": "checkpoint_2",
+      "kind": "checkpoint",
+      "title_en": "Stop & Practice",
+      "title_he": "עצור ותרגל",
+      "body_en_md": "A solid cylinder and a hollow cylinder (same $M$, $R$, $h$) start from rest at the top of a ramp. Which reaches the bottom first? Why?",
+      "body_he_md": "גליל מלא וגליל חלול (אותם $M$, $R$, $h$) מתחילים ממנוחה. מי מגיע ראשון לתחתית?",
+      "checkpoint_solution_en": "Solid: $I = \\frac{1}{2}MR^2$, $v = \\sqrt{4gh/3}$. Hollow: $I = MR^2$, $v = \\sqrt{gh}$. Solid cylinder reaches bottom first (higher $v$, lower $I/MR^2 = 0.5$ vs 1). More of the energy goes to translation.",
+      "checkpoint_solution_he": "גליל מלא: $v = \\sqrt{4gh/3}$; חלול: $v = \\sqrt{gh}$. מלא מהיר יותר ($I/MR^2 = 0.5 < 1$)."
+    },
+    {
+      "id": "worked_example_3",
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 3,
+      "title_en": "Worked Example 3 — Atwood Machine with Pulley",
+      "title_he": "דוגמה פתורה 3 — מכונת אטווד עם גלגלת",
+      "body_en_md": "**Given:** Two masses ($m_1 = 3\\;\\text{kg}$, $m_2 = 5\\;\\text{kg}$) hang over a pulley (disk, $M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$). Find the acceleration of the system.\n\n### Move 1\n$$m_2 g - T_2 = m_2 a$$\n$$T_1 - m_1 g = m_1 a$$\n\n### Move 2\n$$\\tau_{\\text{net}} = (T_2 - T_1)R = I_{\\text{pulley}}\\alpha = \\frac{1}{2}MR^2\\cdot\\frac{a}{R} = \\frac{1}{2}MRa$$\n$$(T_2 - T_1) = \\frac{1}{2}Ma$$\n\n### Move 3\nSubtract mass equations: $(m_2 - m_1)g - (T_2 - T_1) = (m_1 + m_2)a$\n$$(m_2 - m_1)g - \\frac{1}{2}Ma = (m_1 + m_2)a$$\n$$a = \\frac{(m_2 - m_1)g}{m_1 + m_2 + M/2} = \\frac{(5-3)(10)}{3+5+1} = \\frac{20}{9} \\approx 2.22\\;\\text{m/s}^2$$",
+      "body_he_md": "### צעד 1\n$$m_2 g - T_2 = m_2 a$$\n$$T_1 - m_1 g = m_1 a$$\n\n### צעד 2\n$$\\tau_{\\text{net}} = (T_2 - T_1)R = I_{\\text{pulley}}\\alpha = \\frac{1}{2}MR^2\\cdot\\frac{a}{R} = \\frac{1}{2}MRa$$\n$$(T_2 - T_1) = \\frac{1}{2}Ma$$\n\n### צעד 3\nSubtract mass equations: $(m_2 - m_1)g - (T_2 - T_1) = (m_1 + m_2)a$\n$$(m_2 - m_1)g - \\frac{1}{2}Ma = (m_1 + m_2)a$$\n$$a = \\frac{(m_2 - m_1)g}{m_1 + m_2 + M/2} = \\frac{(5-3)(10)}{3+5+1} = \\frac{20}{9} \\approx 2.22\\;\\text{m/s}^2$$"
+    },
+    {
+      "id": "method_guide",
+      "kind": "method_guide",
+      "title_en": "Method Guide",
+      "title_he": "מדריך שיטה",
+      "body_en_md": "| Problem | Method |\n|---|---|\n| Find $I$ for complex shape | Parallel axis theorem: $I = I_{\\text{cm}} + Md^2$ |\n| Angular acceleration | $\\alpha = \\tau_{\\text{net}}/I$ |\n| Rolling without slipping | $v = R\\omega$, $a = R\\alpha$; use energy or Newton's laws |\n| Rolling down ramp | Energy: $mgh = \\frac{1}{2}mv^2(1 + I/(mR^2))$ |\n| Atwood with pulley | Write Newton for each mass + torque for pulley |\n| Which rolls faster? | Smaller $I/(MR^2)$ wins |",
+      "body_he_md": "| בעיה | שיטה |\n|---|---|\n| $I$ לצורה מורכבת | משפט ציר מקביל |\n| $\\alpha$ | $\\tau/I$ |\n| גלגול על מדרון | שימור אנרגיה: $mgh = \\frac{1}{2}mv^2(1+I/MR^2)$ |\n| אטווד עם גלגלת | ניוטון לכל מסה + מומנט לגלגלת |"
+    },
+    {
+      "id": "exercise_set",
+      "kind": "exercise_set",
+      "title_en": "Practice Exercises",
+      "title_he": "תרגילים",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
+      "exercises": [
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Find the moment of inertia of a solid sphere ($M = 3\\;\\text{kg}$, $R = 0.15\\;\\text{m}$) about its center.",
+          "body_he": "מצא מומנט אינרציה של כדור מלא ($M = 3\\;\\text{kg}$, $R = 0.15\\;\\text{m}$).",
+          "solution_en": "**Solution:**\n\n$I = \\frac{2}{5}MR^2 = \\frac{2}{5}(3)(0.0225) = 0.027\\;\\text{kg·m}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$I = 0.027\\;\\text{kg·m}^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "A torque $\\tau = 10\\;\\text{N·m}$ acts on a flywheel with $I = 2\\;\\text{kg·m}^2$. Find $\\alpha$.",
+          "body_he": "מומנט $\\tau = 10\\;\\text{N·m}$ על גלגל תנופה $I = 2\\;\\text{kg·m}^2$. מצא $\\alpha$.",
+          "solution_en": "**Solution:**\n\n$\\alpha = \\tau/I = 10/2 = 5\\;\\text{rad/s}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\alpha = 5\\;\\text{rad/s}^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "A rolling disk (solid, $R = 0.2\\;\\text{m}$) moves at $v = 6\\;\\text{m/s}$. Find $\\omega$.",
+          "body_he": "דיסק גולל ($R = 0.2\\;\\text{m}$), $v = 6\\;\\text{m/s}$. מצא $\\omega$.",
+          "solution_en": "**Solution:**\n\n$\\omega = v/R = 6/0.2 = 30\\;\\text{rad/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\omega = 30\\;\\text{rad/s}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Use the parallel axis theorem to find $I$ for a solid disk ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) about an axis at its rim.",
+          "body_he": "משפט ציר מקביל: $I$ של דיסק ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) סביב ציר בשפתו.",
+          "solution_en": "$I_{\\text{cm}} = \\frac{1}{2}MR^2 = 0.02\\;\\text{kg·m}^2$. $d = R = 0.1\\;\\text{m}$. $I = I_{\\text{cm}} + MR^2 = 0.02 + 0.04 = 0.06\\;\\text{kg·m}^2$.",
+          "solution_he": "**פתרון:**\n\n$I = \\frac{1}{2}MR^2 + MR^2 = \\frac{3}{2}MR^2 = 0.06\\;\\text{kg·m}^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 5
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "A solid cylinder ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) rolls without slipping from $h = 2\\;\\text{m}$. Find speed at bottom.",
+          "body_he": "גליל מלא ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) גולל מ-$h = 2\\;\\text{m}$. מצא מהירות.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$v = \\sqrt{4gh/3} = \\sqrt{4(10)(2)/3} = \\sqrt{80/3} \\approx 5.16\\;\\text{m/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$v = \\sqrt{4gh/3} \\approx 5.16\\;\\text{m/s}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "A disk ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) starts from rest and reaches $\\omega = 20\\;\\text{rad/s}$ in $t = 4\\;\\text{s}$. Find net torque applied.",
+          "body_he": "דיסק ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) מגיע ל-$\\omega = 20\\;\\text{rad/s}$ ב-$t = 4\\;\\text{s}$. מצא מומנט.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\alpha = \\omega/t = 5\\;\\text{rad/s}^2$. $I = \\frac{1}{2}(2)(0.09) = 0.09\\;\\text{kg·m}^2$. $\\tau = I\\alpha = 0.09\\times5 = 0.45\\;\\text{N·m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\tau = I\\alpha = 0.45\\;\\text{N·m}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "A hoop ($M = 1\\;\\text{kg}$, $R = 0.5\\;\\text{m}$) and a disk (same $M$, $R$) roll down the same ramp from the same height. Find the ratio of their final speeds.",
+          "body_he": "טבעת וגליל (אותם $M$, $R$, $h$) גוללים. מצא יחס מהירויות סופיות.",
+          "solution_en": "$v_{\\text{hoop}} = \\sqrt{gh}$ (since $I/(MR^2) = 1$, gives $v = \\sqrt{2gh/2} = \\sqrt{gh}$). $v_{\\text{disk}} = \\sqrt{4gh/3}$. Ratio: $v_{\\text{disk}}/v_{\\text{hoop}} = \\sqrt{4/3} \\approx 1.15$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$v_{\\text{disk}}/v_{\\text{hoop}} = \\sqrt{4/3} \\approx 1.15$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "A sphere ($M = 1\\;\\text{kg}$, $R = 0.1\\;\\text{m}$, $I = 2MR^2/5$) rolls at $v = 4\\;\\text{m/s}$. Find total KE.",
+          "body_he": "כדור ($M = 1\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) גולל ב-$v = 4\\;\\text{m/s}$. מצא KE כולל.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2 = \\frac{1}{2}(1)(16) + \\frac{1}{2}(\\frac{2}{5})(1)(0.01)(1600) = 8 + \\frac{1}{2}(\\frac{2}{5})(16) = 8 + 3.2 = 11.2\\;\\text{J}$. Or: $K = \\frac{7}{10}Mv^2 = \\frac{7}{10}(1)(16) = 11.2\\;\\text{J}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$K = \\frac{7}{10}Mv^2 = 11.2\\;\\text{J}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "A rod ($M = 3\\;\\text{kg}$, $L = 1.2\\;\\text{m}$) is initially horizontal, pivoted at one end. Released from rest, find angular velocity when vertical.",
+          "body_he": "מוט ($M = 3\\;\\text{kg}$, $L = 1.2\\;\\text{m}$) אופקי, ציר בקצהו. שוחרר. מצא $\\omega$ כשהוא אנכי.",
+          "solution_en": "CM falls by $L/2 = 0.6\\;\\text{m}$. Energy: $Mg(L/2) = \\frac{1}{2}I\\omega^2 = \\frac{1}{2}(\\frac{1}{3}ML^2)\\omega^2$. $g(L/2) = \\frac{L^2\\omega^2}{6}$. $\\omega^2 = 3g/L = 30/1.2 = 25$. $\\omega = 5\\;\\text{rad/s}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\omega = \\sqrt{3g/L} = 5\\;\\text{rad/s}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 8
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "An Atwood machine has $m_1 = 2\\;\\text{kg}$, $m_2 = 4\\;\\text{kg}$, and a pulley that is a solid disk $M = 1\\;\\text{kg}$, $R = 0.1\\;\\text{m}$. Find the acceleration and the tensions $T_1$ and $T_2$.",
+          "body_he": "מכונת אטווד: $m_1 = 2\\;\\text{kg}$, $m_2 = 4\\;\\text{kg}$, גלגלת-דיסק $M = 1\\;\\text{kg}$. מצא $a$, $T_1$, $T_2$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$a = (m_2-m_1)g/(m_1+m_2+M/2) = 2(10)/(6+0.5) = 20/6.5 \\approx 3.08\\;\\text{m/s}^2$. $T_1 = m_1(g+a) = 2(10+3.08) = 26.15\\;\\text{N}$. $T_2 = m_2(g-a) = 4(10-3.08) = 27.69\\;\\text{N}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$a \\approx 3.08\\;\\text{m/s}^2$; $T_1 \\approx 26.2\\;\\text{N}$; $T_2 \\approx 27.7\\;\\text{N}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Derive the formula for the acceleration of a solid cylinder rolling without slipping down an incline (angle $\\theta$) using Newton's laws (both translational and rotational).",
+          "body_he": "גזור תאוצה של גליל מלא הגולל ללא החלקה על מישור משופע (זווית $\\theta$) בעזרת חוקי ניוטון.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nTranslational: $Mg\\sin\\theta - f = Ma_{\\text{cm}}$. Rotational (about CM): $fR = I_{\\text{cm}}\\alpha = \\frac{1}{2}MR^2(a_{\\text{cm}}/R) = \\frac{1}{2}MRa_{\\text{cm}}$. So $f = \\frac{1}{2}Ma_{\\text{cm}}$. Substitute: $Mg\\sin\\theta - \\frac{1}{2}Ma_{\\text{cm}} = Ma_{\\text{cm}}$. $a_{\\text{cm}} = \\frac{2g\\sin\\theta}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$a_{\\text{cm}} = \\frac{2g\\sin\\theta}{3}$ (גליל מלא).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "A disk ($I = \\frac{1}{2}MR^2$) has a rope wrapped around it. The rope hangs over the edge of a table and is attached to a hanging mass $m$. Disk mass $M$, radius $R$. Find the acceleration.",
+          "body_he": "דיסק ($I = \\frac{1}{2}MR^2$) עם חבל קשור. החבל עובר על קצה שולחן ומחובר למסה $m$. מצא תאוצה.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nMass $m$: $mg - T = ma$. Disk rotation: $TR = I\\alpha = \\frac{1}{2}MR^2(a/R) = \\frac{1}{2}MRa$, so $T = \\frac{1}{2}Ma$. Substituting: $mg = (m + M/2)a \\Rightarrow a = mg/(m + M/2) = 2mg/(2m+M)$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$a = 2mg/(2m+M)$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "A solid ball is placed on top of a hemisphere (radius $R$) and given a tiny push. At what angle (from vertical) does it leave the surface? (Use energy conservation and centripetal condition; treat ball as point mass for simplicity.)",
+          "body_he": "כדור ממוקם על חצי כדור (רדיוס $R$) ומקבל דחיפה זעירה. באיזה זווית עוזב את המשטח?",
+          "solution_en": "Let $\\theta$ = angle from vertical. Height dropped = $R - R\\cos\\theta = R(1-\\cos\\theta)$. Energy: $mgR(1-\\cos\\theta) = \\frac{1}{2}mv^2$. $v^2 = 2gR(1-\\cos\\theta)$. At separation, normal force = 0: centripetal = gravity component: $mg\\cos\\theta = mv^2/R$. $g\\cos\\theta = 2g(1-\\cos\\theta)$. $3\\cos\\theta = 2$. $\\cos\\theta = 2/3$. $\\theta = \\arccos(2/3) \\approx 48.2°$.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\cos\\theta = 2/3 \\Rightarrow \\theta \\approx 48.2°$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "kind": "pitfall",
+      "title_en": "Common Pitfalls",
+      "title_he": "מלכודות נפוצות",
+      "body_en_md": "1. **Using the wrong $I$.** Always identify the axis of rotation. Use the parallel axis theorem when the axis doesn't pass through the CM.\n\n2. **Rolling constraint.** Only use $v = R\\omega$ when rolling WITHOUT slipping.\n\n3. **Kinetic energy.** For a rolling object, $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$ — don't forget the rotational part.\n\n4. **Torque direction.** Net torque determines direction of angular acceleration ($\\alpha = \\tau/I$).\n\n**Example misconception:** All objects rolling from same height reach same speed\n\n**Fix:** Speed depends on $I/(MR^2)$. Objects with lower rotational inertia fraction move faster because more energy goes to translation.",
+      "body_he_md": "1. **$I$ שגוי** — תמיד זהה את ציר הסיבוב. משפט ציר מקביל כשהציר אינו דרך CM.\n\n2. **קשר גלגול:** רק בגלגול ללא החלקה: $v = R\\omega$.\n\n3. **אנרגיה קינטית:** $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$.\n\n4. **כיוון מומנט** קובע כיוון $\\alpha$.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+    },
+    {
+      "id": "before_exam",
+      "kind": "before_exam",
+      "title_en": "Before the Exam — Formula Card",
+      "title_he": "לפני הבחינה — כרטיס נוסחאות",
+      "body_en_md": "- Solid disk/cylinder: $I = \\frac{1}{2}MR^2$; Ring: $MR^2$; Solid sphere: $\\frac{2}{5}MR^2$\n- Rod (center): $\\frac{1}{12}ML^2$; Rod (end): $\\frac{1}{3}ML^2$\n- Parallel axis: $I = I_{\\text{cm}} + Md^2$\n- Newton's 2nd (rotation): $\\tau = I\\alpha$\n- Rolling: $v = R\\omega$; $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$\n- Ramp: $v = \\sqrt{2gh/(1+I/MR^2)}$\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
+      "body_he_md": "- דיסק: $\\frac{1}{2}MR^2$; טבעת: $MR^2$; כדור: $\\frac{2}{5}MR^2$; מוט (מרכז): $\\frac{1}{12}ML^2$\n- משפט ציר מקביל: $I = I_{\\text{cm}} + Md^2$\n- $\\tau = I\\alpha$; גלגול: $v = R\\omega$; $K = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$"
+    },
+    {
+      "id": "summary",
+      "kind": "summary",
+      "title_en": "Summary",
+      "title_he": "סיכום",
+      "body_en_md": "- **Moment of inertia $I$:** measure of rotational inertia; $I = \\int r^2\\,dm$\n- **Newton's 2nd (rotation):** $\\tau_{\\text{net}} = I\\alpha$\n- **Parallel axis:** $I = I_{\\text{cm}} + Md^2$\n- **Rolling:** $v = R\\omega$; total KE = translational + rotational\n- **Ramp winner:** smallest $I/(MR^2)$ rolls fastest\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
+      "body_he_md": "- $I = \\int r^2\\,dm$; $\\tau = I\\alpha$\n- משפט ציר מקביל: $I = I_{\\text{cm}} + Md^2$\n- גלגול: $v = R\\omega$; KE כולל = תנועתי + סיבובי"
+    }
   ],
   "agent_hints": {
-    "key_insights": ["$\\tau = I\\alpha$ is Newton's 2nd for rotation.", "$I$ depends on mass distribution and axis — use parallel axis theorem for non-CM axes.", "Rolling: $v = R\\omega$; total KE = translational + rotational. Smaller $I/(MR^2)$ rolls faster."],
-    "common_misconceptions": [{"wrong": "All objects rolling from same height reach same speed","correction": "Speed depends on $I/(MR^2)$. Objects with lower rotational inertia fraction move faster because more energy goes to translation.","detect_phrase_en": "all rolling objects same speed","detect_phrase_he": "כל הגופים הגוללים אותה מהירות"}],
+    "key_insights": [
+      "$\\tau = I\\alpha$ is Newton's 2nd for rotation.",
+      "$I$ depends on mass distribution and axis — use parallel axis theorem for non-CM axes.",
+      "Rolling: $v = R\\omega$; total KE = translational + rotational. Smaller $I/(MR^2)$ rolls faster."
+    ],
+    "common_misconceptions": [
+      {
+        "wrong": "All objects rolling from same height reach same speed",
+        "correction": "Speed depends on $I/(MR^2)$. Objects with lower rotational inertia fraction move faster because more energy goes to translation.",
+        "detect_phrase_en": "all rolling objects same speed",
+        "detect_phrase_he": "כל הגופים הגוללים אותה מהירות"
+      }
+    ],
     "tutor_pacing_hint": "Start with $\\tau = I\\alpha$ (analogue of $F = ma$). Then tabulate $I$ values. Parallel axis theorem is key for complex shapes. Rolling problems: always write both $F = ma$ and $\\tau = I\\alpha$.",
-    "skill_atoms_unlocked": ["moment_of_inertia","parallel_axis_theorem","rotation_newton_law","rolling_condition","rolling_energy"]
-  }
+    "skill_atoms_unlocked": [
+      "moment_of_inertia",
+      "parallel_axis_theorem",
+      "rotation_newton_law",
+      "rolling_condition",
+      "rolling_energy"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "moment_of_inertia"
+      ],
+      "stem_en": "A solid sphere and a hollow sphere of equal mass and radius roll down the same ramp. Which reaches the bottom first?",
+      "stem_he": "כדור מלא וכדור חלול (שווי מסה ורדיוס) גוללים. מי מגיע ראשון?",
+      "answer_payload": {
+        "options_en": [
+          "Hollow sphere",
+          "Solid sphere",
+          "They arrive at the same time",
+          "It depends on the height"
+        ],
+        "options_he": [
+          "כדור חלול",
+          "כדור מלא",
+          "מגיעים יחד",
+          "תלוי בגובה"
+        ],
+        "correct_index": 1
+      },
+      "explanation_en": "**Why this is correct:**\nSolid sphere: $I/(MR^2) = 2/5 = 0.4$. Hollow sphere: $2/3 \\approx 0.67$. Smaller $I/(MR^2)$ → more energy to translation → faster.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nמלא: $I/(MR^2) = 0.4$ < חלול: $0.67$ → מלא מהיר יותר.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 1,
+      "options_en": [
+        "Hollow sphere",
+        "Solid sphere",
+        "They arrive at the same time",
+        "It depends on the height"
+      ],
+      "options_he": [
+        "כדור חלול",
+        "כדור מלא",
+        "מגיעים יחד",
+        "תלוי בגובה"
+      ],
+      "correct_index": 1
+    },
+    {
+      "id": "q2",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "skill_atoms": [
+        "rolling"
+      ],
+      "stem_en": "A solid disk rolls at $v = 5\\;\\text{m/s}$ ($M = 2\\;\\text{kg}$). Find total KE (J).",
+      "stem_he": "דיסק גולל ב-$v = 5\\;\\text{m/s}$ ($M = 2\\;\\text{kg}$). KE כולל (J)?",
+      "answer_payload": {
+        "value": 37.5,
+        "tolerance": 0.5,
+        "unit_en": "J",
+        "unit_he": "J"
+      },
+      "explanation_en": "**Why this is correct:**\n$K = \\frac{3}{4}Mv^2 = \\frac{3}{4}(2)(25) = 37.5\\;\\text{J}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$K = \\frac{3}{4}Mv^2 = 37.5\\;\\text{J}$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "ord": 2
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find the moment of inertia of a solid sphere ($M = 3\\;\\text{kg}$, $R = 0.15\\;\\text{m}$) about its center.",
+      "stem_he": "מצא מומנט אינרציה של כדור מלא ($M = 3\\;\\text{kg}$, $R = 0.15\\;\\text{m}$).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$I = \\frac{2}{5}MR^2 = \\frac{2}{5}(3)(0.0225) = 0.027\\;\\text{kg·m}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.027\\;\\text{kg·m}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$I = \\frac{2}{5}MR^2 = \\frac{2}{5}(3)(0.0225) = 0.027\\;\\text{kg·m}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$I = 0.027\\;\\text{kg·m}^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "moment_of_inertia",
+        "parallel_axis_theorem"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A torque $\\tau = 10\\;\\text{N·m}$ acts on a flywheel with $I = 2\\;\\text{kg·m}^2$. Find $\\alpha$.",
+      "stem_he": "מומנט $\\tau = 10\\;\\text{N·m}$ על גלגל תנופה $I = 2\\;\\text{kg·m}^2$. מצא $\\alpha$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\alpha = \\tau/I = 10/2 = 5\\;\\text{rad/s}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "5\\;\\text{rad/s}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\alpha = \\tau/I = 10/2 = 5\\;\\text{rad/s}^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\alpha = 5\\;\\text{rad/s}^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "moment_of_inertia",
+        "parallel_axis_theorem"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A rolling disk (solid, $R = 0.2\\;\\text{m}$) moves at $v = 6\\;\\text{m/s}$. Find $\\omega$.",
+      "stem_he": "דיסק גולל ($R = 0.2\\;\\text{m}$), $v = 6\\;\\text{m/s}$. מצא $\\omega$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\omega = v/R = 6/0.2 = 30\\;\\text{rad/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "30\\;\\text{rad/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "30"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\omega = v/R = 6/0.2 = 30\\;\\text{rad/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\omega = 30\\;\\text{rad/s}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "moment_of_inertia",
+        "parallel_axis_theorem"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Use the parallel axis theorem to find $I$ for a solid disk ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) about an axis at its rim.",
+      "stem_he": "משפט ציר מקביל: $I$ של דיסק ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) סביב ציר בשפתו.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$I_{\\text{cm}} = \\frac{1}{2}MR^2 = 0.02\\;\\text{kg·m}^2$. $d = R = 0.1\\;\\text{m}$. $I = I_{\\text{cm}} + MR^2 = 0.02 + 0.04 = 0.06\\;\\text{kg·m}^2$",
+          "0.06\\;\\text{kg·m}^2$",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$I_{\\text{cm}} = \\frac{1}{2}MR^2 = 0.02\\;\\text{kg·m}^2$. $d = R = 0.1\\;\\text{m}$. $I = I_{\\text{cm}} + MR^2 = 0.02 + 0.04 = 0.06\\;\\text{kg·m}^2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$I = \\frac{1}{2}MR^2 + MR^2 = \\frac{3}{2}MR^2 = 0.06\\;\\text{kg·m}^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "moment_of_inertia",
+        "parallel_axis_theorem"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A solid cylinder ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) rolls without slipping from $h = 2\\;\\text{m}$. Find speed at bottom.",
+      "stem_he": "גליל מלא ($M = 4\\;\\text{kg}$, $R = 0.1\\;\\text{m}$) גולל מ-$h = 2\\;\\text{m}$. מצא מהירות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$v = \\sqrt{4gh/3} = \\sqrt{4(10)(2)/3} = \\sqrt{80/3} \\approx 5.16\\;\\text{m/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\sqrt{80/3} \\approx 5.16\\;\\text{m/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "5.16"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$v = \\sqrt{4gh/3} = \\sqrt{4(10)(2)/3} = \\sqrt{80/3} \\approx 5.16\\;\\text{m/s}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$v = \\sqrt{4gh/3} \\approx 5.16\\;\\text{m/s}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "moment_of_inertia",
+        "parallel_axis_theorem"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "A disk ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) starts from rest and reaches $\\omega = 20\\;\\text{rad/s}$ in $t = 4\\;\\text{s}$. Find net torque applied.",
+      "stem_he": "דיסק ($M = 2\\;\\text{kg}$, $R = 0.3\\;\\text{m}$) מגיע ל-$\\omega = 20\\;\\text{rad/s}$ ב-$t = 4\\;\\text{s}$. מצא מומנט.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\alpha = \\omega/t = 5\\;\\text{rad/s}^2$. $I = \\frac{1}{2}(2)(0.09) = 0.09\\;\\text{kg·m}^2$. $\\tau = I\\alpha = 0.09\\times5 = 0.45\\;\\text{N·m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.45\\;\\text{N·m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.45"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\alpha = \\omega/t = 5\\;\\text{rad/s}^2$. $I = \\frac{1}{2}(2)(0.09) = 0.09\\;\\text{kg·m}^2$. $\\tau = I\\alpha = 0.09\\times5 = 0.45\\;\\text{N·m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\tau = I\\alpha = 0.45\\;\\text{N·m}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "moment_of_inertia",
+        "parallel_axis_theorem"
+      ]
+    }
+  ],
+  "est_minutes": 55,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

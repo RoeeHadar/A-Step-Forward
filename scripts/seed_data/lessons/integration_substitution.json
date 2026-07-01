@@ -2,13 +2,13 @@
   "concept_id": "integration_substitution",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": ["calc1"],
+  "math_track": [
+    "calc1"
+  ],
   "title_en": "Integration by Substitution ($u$-Substitution)",
   "title_he": "אינטגרציה בהחלפת משתנה (החלפת $u$)",
   "summary_en": "$u$-substitution is the chain rule in reverse: by substituting $u=g(x)$, we convert a complicated integral into a simpler one in $u$. It is the most important single integration technique.",
   "summary_he": "החלפת $u$ היא כלל השרשרת הפוך: על-ידי הצבת $u=g(x)$ אנו הופכים אינטגרל מסובך לאינטגרל פשוט ב-$u$. זוהי טכניקת האינטגרציה החשובה ביותר.",
-  "est_minutes": 55,
-  "agent_hints": "When a learner is stuck on u-substitution, ask: 'What is the inner function? What is its derivative — does it appear in the integrand?' If yes, let u equal the inner function. Require the learner to always change dx to du explicitly.",
   "sections": [
     {
       "kind": "intro",
@@ -29,7 +29,7 @@
       "title_en": "Choosing $u$ — Strategy and Patterns",
       "title_he": "בחירת $u$ — אסטרטגיה ותבניות",
       "body_en_md": "**Pattern recognition:**\n\n| Integrand form | Substitution | Result |\n|---------------|--------------|--------|\n| $f(ax+b)$ | $u=ax+b$ | $\\frac{1}{a}\\int f(u)\\,du$ |\n| $f(g(x))\\cdot g'(x)$ | $u=g(x)$ | $\\int f(u)\\,du$ |\n| $\\dfrac{g'(x)}{g(x)}$ | $u=g(x)$ | $\\ln|u|+C$ |\n| $[g(x)]^n\\cdot g'(x)$ | $u=g(x)$ | $\\dfrac{u^{n+1}}{n+1}+C$ |\n| $f(\\sqrt{x})$ | $u=\\sqrt{x}$ (then $dx=2u\\,du$) | Simplifies |\n\n**When substitution WON'T work easily:**\n- No clear inner function (try IBP or partial fractions).\n- The remaining factor after substitution still involves $x$.\n\n**Adjusting for a missing constant:** $\\int 5x(x^2+1)^3\\,dx$ — let $u=x^2+1$, $du=2x\\,dx$, so $x\\,dx=du/2$:\n$$\\int 5x(x^2+1)^3\\,dx = \\frac{5}{2}\\int u^3\\,du.$$",
-      "body_he_md": "**זיהוי תבניות:**\n\n| צורת האינטגרנד | החלפה | תוצאה |\n|----------------|-------|-------|\n| $f(ax+b)$ | $u=ax+b$ | $\\frac{1}{a}\\int f(u)\\,du$ |\n| $f(g(x))\\cdot g'(x)$ | $u=g(x)$ | $\\int f(u)\\,du$ |\n| $\\frac{g'(x)}{g(x)}$ | $u=g(x)$ | $\\ln|u|+C$ |\n| $[g(x)]^n\\cdot g'(x)$ | $u=g(x)$ | $\\frac{u^{n+1}}{n+1}+C$ |\n| $f(\\sqrt{x})$ | $u=\\sqrt{x}$ | מפשט |\n\n**כאשר החלפה לא עובדת בקלות:**\n- אין פונקציה פנימית ברורה — נסו IBP או שברים חלקיים.\n- הגורם שנותר עדיין תלוי ב-$x$."
+      "body_he_md": "**זיהוי תבניות:**\n\n| צורת האינטגרנד | החלפה | תוצאה |\n|----------------|-------|-------|\n| $f(ax+b)$ | $u=ax+b$ | $\\frac{1}{a}\\int f(u)\\,du$ |\n| $f(g(x))\\cdot g'(x)$ | $u=g(x)$ | $\\int f(u)\\,du$ |\n| $\\frac{g'(x)}{g(x)}$ | $u=g(x)$ | $\\ln|u|+C$ |\n| $[g(x)]^n\\cdot g'(x)$ | $u=g(x)$ | $\\frac{u^{n+1}}{n+1}+C$ |\n| $f(\\sqrt{x})$ | $u=\\sqrt{x}$ | מפשט |\n\n**כאשר החלפה לא עובדת בקלות:**\n- אין פונקציה פנימית ברורה — נסו IBP או שברים חלקיים.\n- הגורם שנותר עדיין תלוי ב-$x$.\n\n**Pattern recognition:**"
     },
     {
       "kind": "worked_example",
@@ -37,7 +37,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — $\\int 2x(x^2+1)^3\\,dx$",
       "title_he": "דוגמה פתורה 1 — $\\int 2x(x^2+1)^3\\,dx$",
-      "body_en_md": "**Given:** $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.\n\n**Step 1 — Identify $u$:** The inner function is $x^2+1$ and its derivative $2x$ appears as a factor.\n$$u = x^2+1, \\qquad du = 2x\\,dx$$\n\n**Step 2 — Rewrite the integral in $u$:**\n$$\\int (x^2+1)^3 \\cdot 2x\\,dx = \\int u^3\\,du$$\n\n**Step 3 — Integrate:**\n$$\\int u^3\\,du = \\frac{u^4}{4} + C$$\n\n**Step 4 — Back-substitute $u = x^2+1$:**\n$$= \\frac{(x^2+1)^4}{4} + C$$\n\n**Answer:** $\\boxed{\\dfrac{(x^2+1)^4}{4} + C}$ ✓\n\n*Verify by differentiating: $\\frac{d}{dx}\\left[\\frac{(x^2+1)^4}{4}\\right] = (x^2+1)^3 \\cdot 2x$ ✓*",
+      "body_en_md": "**Given:** $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.\n\n### Move 1 The inner function is $x^2+1$ and its derivative $2x$ appears as a factor.\n$$u = x^2+1, \\qquad du = 2x\\,dx$$\n\n### Move 2\n$$\\int (x^2+1)^3 \\cdot 2x\\,dx = \\int u^3\\,du$$\n\n### Move 3\n$$\\int u^3\\,du = \\frac{u^4}{4} + C$$\n\n### Move 4\n$$= \\frac{(x^2+1)^4}{4} + C$$\n\n**Answer:** $\\boxed{\\dfrac{(x^2+1)^4}{4} + C}$ ✓\n\n*Verify by differentiating: $\\frac{d}{dx}\\left[\\frac{(x^2+1)^4}{4}\\right] = (x^2+1)^3 \\cdot 2x$ ✓*",
       "body_he_md": "**נתון:** $\\displaystyle\\int 2x(x^2+1)^3\\,dx$.\n\n**שלב 1 — בחרו $u$:** $u=x^2+1$, $du=2x\\,dx$.\n\n**שלב 2 — כתבו ב-$u$:**\n$$\\int u^3\\,du$$\n\n**שלב 3 — אינטגרציה:**\n$$\\frac{u^4}{4}+C$$\n\n**שלב 4 — הציבו חזרה:**\n$$\\frac{(x^2+1)^4}{4}+C$$\n\n**תשובה:** $\\boxed{\\dfrac{(x^2+1)^4}{4}+C}$ ✓"
     },
     {
@@ -55,7 +55,7 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — $\\int\\dfrac{x}{\\sqrt{x^2+4}}\\,dx$",
       "title_he": "דוגמה פתורה 2 — $\\int\\dfrac{x}{\\sqrt{x^2+4}}\\,dx$",
-      "body_en_md": "**Given:** $\\displaystyle\\int\\frac{x}{\\sqrt{x^2+4}}\\,dx$.\n\n**Step 1 — Identify $u$:** Inner function is $x^2+4$; its derivative $2x$ appears (up to constant).\n$$u = x^2+4, \\qquad du = 2x\\,dx \\implies x\\,dx = \\frac{du}{2}$$\n\n**Step 2 — Rewrite:**\n$$\\int\\frac{x\\,dx}{\\sqrt{x^2+4}} = \\int\\frac{1}{\\sqrt{u}}\\cdot\\frac{du}{2} = \\frac{1}{2}\\int u^{-1/2}\\,du$$\n\n**Step 3 — Integrate using power rule:**\n$$\\frac{1}{2}\\cdot\\frac{u^{1/2}}{1/2} + C = u^{1/2}+C = \\sqrt{u}+C$$\n\n**Step 4 — Back-substitute:**\n$$= \\sqrt{x^2+4}+C$$\n\n**Answer:** $\\boxed{\\sqrt{x^2+4}+C}$ ✓\n\n*Check: $\\frac{d}{dx}\\sqrt{x^2+4} = \\frac{1}{2\\sqrt{x^2+4}}\\cdot 2x = \\frac{x}{\\sqrt{x^2+4}}$ ✓*",
+      "body_en_md": "**Given:** $\\displaystyle\\int\\frac{x}{\\sqrt{x^2+4}}\\,dx$.\n\n### Move 1 Inner function is $x^2+4$; its derivative $2x$ appears (up to constant).\n$$u = x^2+4, \\qquad du = 2x\\,dx \\implies x\\,dx = \\frac{du}{2}$$\n\n### Move 2\n$$\\int\\frac{x\\,dx}{\\sqrt{x^2+4}} = \\int\\frac{1}{\\sqrt{u}}\\cdot\\frac{du}{2} = \\frac{1}{2}\\int u^{-1/2}\\,du$$\n\n### Move 3\n$$\\frac{1}{2}\\cdot\\frac{u^{1/2}}{1/2} + C = u^{1/2}+C = \\sqrt{u}+C$$\n\n### Move 4\n$$= \\sqrt{x^2+4}+C$$\n\n**Answer:** $\\boxed{\\sqrt{x^2+4}+C}$ ✓\n\n*Check: $\\frac{d}{dx}\\sqrt{x^2+4} = \\frac{1}{2\\sqrt{x^2+4}}\\cdot 2x = \\frac{x}{\\sqrt{x^2+4}}$ ✓*",
       "body_he_md": "**נתון:** $\\displaystyle\\int\\frac{x}{\\sqrt{x^2+4}}\\,dx$.\n\n**שלב 1:** $u=x^2+4$, $x\\,dx=du/2$.\n\n**שלב 2:**\n$$\\frac{1}{2}\\int u^{-1/2}\\,du$$\n\n**שלב 3:**\n$$\\frac{1}{2}\\cdot 2\\sqrt{u}+C=\\sqrt{u}+C$$\n\n**שלב 4:**\n$$\\sqrt{x^2+4}+C$$\n\n**תשובה:** $\\boxed{\\sqrt{x^2+4}+C}$ ✓"
     },
     {
@@ -73,7 +73,7 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — $\\int\\dfrac{\\ln x}{x}\\,dx$ and a Definite Integral",
       "title_he": "דוגמה פתורה 3 — $\\int\\dfrac{\\ln x}{x}\\,dx$ ואינטגרל מסוים",
-      "body_en_md": "**Part A — Indefinite integral:** $\\displaystyle\\int\\frac{\\ln x}{x}\\,dx$.\n\n**Step 1 — Choose $u$:** $u=\\ln x$, $du=\\dfrac{1}{x}dx \\implies \\dfrac{dx}{x}=du$.\n\n**Step 2 — Rewrite:**\n$$\\int\\frac{\\ln x}{x}\\,dx = \\int u\\,du$$\n\n**Step 3 — Integrate:**\n$$= \\frac{u^2}{2}+C = \\frac{(\\ln x)^2}{2}+C$$\n\n**Answer Part A:** $\\boxed{\\dfrac{(\\ln x)^2}{2}+C}$ ✓\n\n---\n\n**Part B — Definite integral:** $\\displaystyle\\int_1^e \\frac{\\ln x}{x}\\,dx$.\n\n**Method: change limits.**\nWhen $x=1$: $u=\\ln 1=0$.\nWhen $x=e$: $u=\\ln e=1$.\n\n$$\\int_1^e\\frac{\\ln x}{x}\\,dx = \\int_0^1 u\\,du = \\left[\\frac{u^2}{2}\\right]_0^1 = \\frac{1}{2}-0 = \\frac{1}{2}$$\n\n**Answer Part B:** $\\boxed{\\dfrac{1}{2}}$ ✓",
+      "body_en_md": "**Part A — Indefinite integral:** $\\displaystyle\\int\\frac{\\ln x}{x}\\,dx$.\n\n### Move 1 $u=\\ln x$, $du=\\dfrac{1}{x}dx \\implies \\dfrac{dx}{x}=du$.\n\n### Move 2\n$$\\int\\frac{\\ln x}{x}\\,dx = \\int u\\,du$$\n\n### Move 3\n$$= \\frac{u^2}{2}+C = \\frac{(\\ln x)^2}{2}+C$$\n\n**Answer Part A:** $\\boxed{\\dfrac{(\\ln x)^2}{2}+C}$ ✓\n\n---\n\n**Part B — Definite integral:** $\\displaystyle\\int_1^e \\frac{\\ln x}{x}\\,dx$.\n\n**Method: change limits.**\nWhen $x=1$: $u=\\ln 1=0$.\nWhen $x=e$: $u=\\ln e=1$.\n\n$$\\int_1^e\\frac{\\ln x}{x}\\,dx = \\int_0^1 u\\,du = \\left[\\frac{u^2}{2}\\right]_0^1 = \\frac{1}{2}-0 = \\frac{1}{2}$$\n\n**Answer Part B:** $\\boxed{\\dfrac{1}{2}}$ ✓",
       "body_he_md": "**חלק א' — אינטגרל לא-מסוים:** $\\displaystyle\\int\\frac{\\ln x}{x}\\,dx$.\n\n**שלב 1:** $u=\\ln x$, $du=dx/x$.\n\n**שלב 2:**\n$$\\int u\\,du = \\frac{u^2}{2}+C = \\frac{(\\ln x)^2}{2}+C$$\n\n**תשובה חלק א':** $\\boxed{\\dfrac{(\\ln x)^2}{2}+C}$ ✓\n\n---\n\n**חלק ב' — אינטגרל מסוים:** $\\displaystyle\\int_1^e\\frac{\\ln x}{x}\\,dx$.\n\nשינוי גבולות: $x=1\\Rightarrow u=0$; $x=e\\Rightarrow u=1$.\n\n$$\\int_0^1 u\\,du = \\frac{1}{2}$$\n\n**תשובה חלק ב':** $\\boxed{\\dfrac{1}{2}}$ ✓"
     },
     {
@@ -81,14 +81,14 @@
       "title_en": "Method Guide — How to Choose $u$",
       "title_he": "מדריך שיטות — כיצד לבחור $u$",
       "body_en_md": "**Step 1 — Look for a composite function.** Is there an inner function $g(x)$ nested inside another function?\n\n**Step 2 — Check if $g'(x)$ appears as a factor.** If yes: set $u=g(x)$.\n\n**Step 3 — If $g'(x)$ appears up to a constant:** adjust by multiplying and dividing by that constant.\n\n**Step 4 — If substitution leaves an $x$ in the integrand that cannot be expressed in $u$:** try a different $u$, or use IBP.\n\n**Common $u$ choices:**\n| Integrand contains... | Try $u=$ |\n|----------------------|----------|\n| $(ax+b)^n$ | $ax+b$ |\n| $e^{g(x)}$ | $g(x)$ |\n| $\\sin(g(x))$ or $\\cos(g(x))$ | $g(x)$ |\n| $\\ln(g(x))/g(x)$ | $\\ln(g(x))$ |\n| $\\sqrt{g(x)}$ with $g'$ present | $g(x)$ |\n| $g'(x)/g(x)$ | $g(x)$ |",
-      "body_he_md": "**שלב 1 — חפשו פונקציה מורכבת.** האם יש פונקציה פנימית $g(x)$?\n\n**שלב 2 — בדקו אם $g'(x)$ מופיע כגורם.** אם כן: $u=g(x)$.\n\n**שלב 3 — אם $g'(x)$ מופיע עד קבוע:** הכפילו וחלקו בקבוע.\n\n**שלב 4 — אם נותר $x$ שלא ניתן לביטוי ב-$u$:** נסו $u$ אחר, או IBP.\n\n**בחירות $u$ נפוצות:**\n| האינטגרנד מכיל... | נסו $u=$ |\n|-------------------|----------|\n| $(ax+b)^n$ | $ax+b$ |\n| $e^{g(x)}$ | $g(x)$ |\n| $\\sin(g(x))$ | $g(x)$ |\n| $\\ln(g(x))/g(x)$ | $\\ln(g(x))$ |\n| $\\sqrt{g(x)}$ עם $g'$ | $g(x)$ |\n| $g'(x)/g(x)$ | $g(x)$ |"
+      "body_he_md": "**שלב 1 — חפשו פונקציה מורכבת.** האם יש פונקציה פנימית $g(x)$?\n\n**שלב 2 — בדקו אם $g'(x)$ מופיע כגורם.** אם כן: $u=g(x)$.\n\n**שלב 3 — אם $g'(x)$ מופיע עד קבוע:** הכפילו וחלקו בקבוע.\n\n**שלב 4 — אם נותר $x$ שלא ניתן לביטוי ב-$u$:** נסו $u$ אחר, או IBP.\n\n**בחירות $u$ נפוצות:**\n| האינטגרנד מכיל... | נסו $u=$ |\n|-------------------|----------|\n| $(ax+b)^n$ | $ax+b$ |\n| $e^{g(x)}$ | $g(x)$ |\n| $\\sin(g(x))$ | $g(x)$ |\n| $\\ln(g(x))/g(x)$ | $\\ln(g(x))$ |\n| $\\sqrt{g(x)}$ עם $g'$ | $g(x)$ |\n| $g'(x)/g(x)$ | $g(x)$ |\n\n**צעד 1:** Is there an inner function $g(x)$ nested inside another function?\n\n**צעד 2:** If yes: set $u=g(x)$.\n\n**צעד 3:** adjust by multiplying and dividing by that constant.\n\n**צעד 4:** try a different $u$, or use IBP."
     },
     {
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
@@ -96,7 +96,7 @@
           "body_en": "Compute $\\displaystyle\\int (2x+3)^5\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int(2x+3)^5\\,dx$.",
           "solution_en": "$u=2x+3$, $du=2\\,dx$. $\\frac{1}{2}\\int u^5\\,du=\\frac{u^6}{12}+C=\\frac{(2x+3)^6}{12}+C$.",
-          "solution_he": "$u=2x+3$: $\\frac{(2x+3)^6}{12}+C$.",
+          "solution_he": "**פתרון:**\n\n$u=2x+3$: $\\frac{(2x+3)^6}{12}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -105,7 +105,7 @@
           "body_en": "Compute $\\displaystyle\\int e^{3x}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int e^{3x}\\,dx$.",
           "solution_en": "$u=3x$, $du=3\\,dx$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{3x}}{3}+C$.",
-          "solution_he": "$\\frac{e^{3x}}{3}+C$.",
+          "solution_he": "**פתרון:**\n\n$\\frac{e^{3x}}{3}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -113,8 +113,8 @@
           "difficulty": "easy",
           "body_en": "Compute $\\displaystyle\\int\\sin(4x)\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\sin(4x)\\,dx$.",
-          "solution_en": "$u=4x$: $-\\frac{\\cos(4x)}{4}+C$.",
-          "solution_he": "$-\\frac{\\cos(4x)}{4}+C$.",
+          "solution_en": "**Solution:**\n\n$u=4x$: $-\\frac{\\cos(4x)}{4}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$-\\frac{\\cos(4x)}{4}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -122,8 +122,8 @@
           "difficulty": "easy",
           "body_en": "Compute $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
-          "solution_en": "$u=3x+1$: $\\frac{1}{3}\\ln|3x+1|+C$.",
-          "solution_he": "$\\frac{\\ln|3x+1|}{3}+C$.",
+          "solution_en": "**Solution:**\n\n$u=3x+1$: $\\frac{1}{3}\\ln|3x+1|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\frac{\\ln|3x+1|}{3}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 5
         },
         {
@@ -131,8 +131,8 @@
           "difficulty": "medium",
           "body_en": "Compute $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
-          "solution_en": "$u=x^3$, $du=3x^2\\,dx$, $x^2\\,dx=du/3$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{x^3}}{3}+C$.",
-          "solution_he": "$u=x^3$: $\\frac{e^{x^3}}{3}+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^3$, $du=3x^2\\,dx$, $x^2\\,dx=du/3$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{x^3}}{3}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=x^3$: $\\frac{e^{x^3}}{3}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -140,8 +140,8 @@
           "difficulty": "medium",
           "body_en": "Compute $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
-          "solution_en": "$u=\\sin x$, $du=\\cos x\\,dx$. $\\int u^{-3}\\,du=-\\frac{u^{-2}}{2}+C=-\\frac{1}{2\\sin^2 x}+C$.",
-          "solution_he": "$u=\\sin x$: $-\\frac{1}{2\\sin^2 x}+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=\\sin x$, $du=\\cos x\\,dx$. $\\int u^{-3}\\,du=-\\frac{u^{-2}}{2}+C=-\\frac{1}{2\\sin^2 x}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=\\sin x$: $-\\frac{1}{2\\sin^2 x}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -149,8 +149,8 @@
           "difficulty": "medium",
           "body_en": "Compute $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
-          "solution_en": "$u=x^2+1$. Limits: $u(0)=1$, $u(1)=2$. $\\int_1^2\\sqrt{u}\\,du=\\left[\\frac{2u^{3/2}}{3}\\right]_1^2=\\frac{2(2\\sqrt{2}-1)}{3}$.",
-          "solution_he": "$u=x^2+1$. גבולות $1\\to 2$. $\\frac{2(2\\sqrt{2}-1)}{3}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^2+1$. Limits: $u(0)=1$, $u(1)=2$. $\\int_1^2\\sqrt{u}\\,du=\\left[\\frac{2u^{3/2}}{3}\\right]_1^2=\\frac{2(2\\sqrt{2}-1)}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=x^2+1$. גבולות $1\\to 2$. $\\frac{2(2\\sqrt{2}-1)}{3}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -158,8 +158,8 @@
           "difficulty": "medium",
           "body_en": "Compute $\\displaystyle\\int\\tan x\\,dx$ by writing $\\tan x = \\sin x/\\cos x$.",
           "body_he": "חשבו $\\displaystyle\\int\\tan x\\,dx$ תוך כתיבה $\\tan x=\\sin x/\\cos x$.",
-          "solution_en": "$\\int\\frac{\\sin x}{\\cos x}\\,dx$. Let $u=\\cos x$, $du=-\\sin x\\,dx$. $-\\int\\frac{1}{u}\\,du=-\\ln|\\cos x|+C=\\ln|\\sec x|+C$.",
-          "solution_he": "$u=\\cos x$: $-\\ln|\\cos x|+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int\\frac{\\sin x}{\\cos x}\\,dx$. Let $u=\\cos x$, $du=-\\sin x\\,dx$. $-\\int\\frac{1}{u}\\,du=-\\ln|\\cos x|+C=\\ln|\\sec x|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=\\cos x$: $-\\ln|\\cos x|+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -167,8 +167,8 @@
           "difficulty": "medium",
           "body_en": "Compute $\\displaystyle\\int\\frac{x}{(x^2+1)^2}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\frac{x}{(x^2+1)^2}\\,dx$.",
-          "solution_en": "$u=x^2+1$, $x\\,dx=du/2$. $\\frac{1}{2}\\int u^{-2}\\,du=-\\frac{1}{2(x^2+1)}+C$.",
-          "solution_he": "$-\\frac{1}{2(x^2+1)}+C$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^2+1$, $x\\,dx=du/2$. $\\frac{1}{2}\\int u^{-2}\\,du=-\\frac{1}{2(x^2+1)}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-\\frac{1}{2(x^2+1)}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -185,8 +185,8 @@
           "difficulty": "hard",
           "body_en": "Compute $\\displaystyle\\int\\frac{e^x}{e^x+1}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\frac{e^x}{e^x+1}\\,dx$.",
-          "solution_en": "$u=e^x+1$, $du=e^x\\,dx$. $\\int\\frac{du}{u}=\\ln|e^x+1|+C=\\ln(e^x+1)+C$.",
-          "solution_he": "$u=e^x+1$: $\\ln(e^x+1)+C$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$u=e^x+1$, $du=e^x\\,dx$. $\\int\\frac{du}{u}=\\ln|e^x+1|+C=\\ln(e^x+1)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$u=e^x+1$: $\\ln(e^x+1)+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -194,8 +194,8 @@
           "difficulty": "hard",
           "body_en": "Compute $\\displaystyle\\int\\frac{\\arctan x}{1+x^2}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\frac{\\arctan x}{1+x^2}\\,dx$.",
-          "solution_en": "$u=\\arctan x$, $du=\\frac{1}{1+x^2}\\,dx$. $\\int u\\,du=\\frac{u^2}{2}+C=\\frac{(\\arctan x)^2}{2}+C$.",
-          "solution_he": "$u=\\arctan x$: $\\frac{(\\arctan x)^2}{2}+C$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$u=\\arctan x$, $du=\\frac{1}{1+x^2}\\,dx$. $\\int u\\,du=\\frac{u^2}{2}+C=\\frac{(\\arctan x)^2}{2}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$u=\\arctan x$: $\\frac{(\\arctan x)^2}{2}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         }
       ]
@@ -206,6 +206,14 @@
       "title_he": "טעויות נפוצות",
       "body_en_md": "1. **Not converting $dx$ to $du$.** You MUST write $du = g'(x)\\,dx$ and replace $dx$ — don't leave a mixed $x$-$u$ integral.\n\n2. **Forgetting to back-substitute.** For indefinite integrals, the final answer must be in terms of $x$, not $u$.\n\n3. **Forgetting to change the limits.** For definite integrals with limit change, compute $u(a)$ and $u(b)$ and use them — do not substitute back and use the old limits.\n\n4. **Wrong sign when $du$ has a minus.** If $u=\\cos x$ then $du=-\\sin x\\,dx$. The minus must be tracked carefully.\n\n5. **Trying substitution when no inner function exists.** $\\int x^2 e^x\\,dx$ has no hidden inner function — use IBP.",
       "body_he_md": "1. **אי-המרת $dx$ ל-$du$.** חובה לכתוב $du=g'(x)\\,dx$ ולהחליף את $dx$ — אסור להשאיר אינטגרל מעורב ב-$x$ ו-$u$.\n\n2. **שכחת ההצבה חזרה.** לאינטגרל לא-מסוים — התשובה חייבת להיות ב-$x$.\n\n3. **שכחת שינוי הגבולות.** לאינטגרל מסוים עם שינוי גבולות — חשבו $u(a)$ ו-$u(b)$.\n\n4. **סימן שגוי כאשר $du$ שלילי.** $u=\\cos x$ ← $du=-\\sin x\\,dx$ — עקבו אחרי המינוס.\n\n5. **ניסיון החלפה ללא פונקציה פנימית.** $\\int x^2 e^x\\,dx$ — אין מה להחליף, השתמשו ב-IBP."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
@@ -221,5 +229,157 @@
       "body_en_md": "- $u$-substitution is the chain rule in reverse: set $u=g(x)$, $du=g'(x)\\,dx$, convert, integrate, back-substitute.\n- The key signal: the integrand is a product of an inner function and (a multiple of) its derivative.\n- For definite integrals: either change the limits to $u$-values, or back-substitute and use the original limits.\n- Always verify by differentiating the answer.\n- When substitution fails, the next technique to try is integration by parts.",
       "body_he_md": "- החלפת $u$ היא כלל שרשרת הפוך: $u=g(x)$, $du=g'(x)\\,dx$, המרה, אינטגרציה, הצבה חזרה.\n- האות המרכזית: האינטגרנד הוא מכפלה של פונקציה פנימית ונגזרתה.\n- לאינטגרל מסוים: שנו גבולות ל-$u$ או הציבו חזרה.\n- תמיד אמתו על-ידי גזירת התשובה.\n- כאשר ההחלפה נכשלת — נסו אינטגרציה בחלקים."
     }
-  ]
+  ],
+  "agent_hints": "When a learner is stuck on u-substitution, ask: 'What is the inner function? What is its derivative — does it appear in the integrand?' If yes, let u equal the inner function. Require the learner to always change dx to du explicitly.",
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int (2x+3)^5\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int(2x+3)^5\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$u=2x+3$, $du=2\\,dx$. $\\frac{1}{2}\\int u^5\\,du=\\frac{u^6}{12}+C=\\frac{(2x+3)^6}{12}+C$",
+          "\\frac{(2x+3)^6}{12}+C$",
+          "12"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$u=2x+3$, $du=2\\,dx$. $\\frac{1}{2}\\int u^5\\,du=\\frac{u^6}{12}+C=\\frac{(2x+3)^6}{12}+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$u=2x+3$: $\\frac{(2x+3)^6}{12}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int e^{3x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int e^{3x}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$u=3x$, $du=3\\,dx$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{3x}}{3}+C$",
+          "\\frac{e^{3x}}{3}+C$",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$u=3x$, $du=3\\,dx$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{3x}}{3}+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\frac{e^{3x}}{3}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int\\sin(4x)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int\\sin(4x)\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$u=4x$: $-\\frac{\\cos(4x)}{4}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "4x$: $-\\frac{\\cos(4x)}{4}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "4"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$u=4x$: $-\\frac{\\cos(4x)}{4}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$-\\frac{\\cos(4x)}{4}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int\\frac{1}{3x+1}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$u=3x+1$: $\\frac{1}{3}\\ln|3x+1|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3x+1$: $\\frac{1}{3}\\ln|3x+1|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$u=3x+1$: $\\frac{1}{3}\\ln|3x+1|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\frac{\\ln|3x+1|}{3}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int x^2 e^{x^3}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^3$, $du=3x^2\\,dx$, $x^2\\,dx=du/3$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{x^3}}{3}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\frac{e^{x^3}}{3}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^3$, $du=3x^2\\,dx$, $x^2\\,dx=du/3$. $\\frac{1}{3}\\int e^u\\,du=\\frac{e^{x^3}}{3}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=x^3$: $\\frac{e^{x^3}}{3}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int\\frac{\\cos x}{\\sin^3 x}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=\\sin x$, $du=\\cos x\\,dx$. $\\int u^{-3}\\,du=-\\frac{u^{-2}}{2}+C=-\\frac{1}{2\\sin^2 x}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-\\frac{1}{2\\sin^2 x}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=\\sin x$, $du=\\cos x\\,dx$. $\\int u^{-3}\\,du=-\\frac{u^{-2}}{2}+C=-\\frac{1}{2\\sin^2 x}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=\\sin x$: $-\\frac{1}{2\\sin^2 x}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1 2x\\sqrt{x^2+1}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^2+1$. Limits: $u(0)=1$, $u(1)=2$. $\\int_1^2\\sqrt{u}\\,du=\\left[\\frac{2u^{3/2}}{3}\\right]_1^2=\\frac{2(2\\sqrt{2}-1)}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\frac{2(2\\sqrt{2}-1)}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=x^2+1$. Limits: $u(0)=1$, $u(1)=2$. $\\int_1^2\\sqrt{u}\\,du=\\left[\\frac{2u^{3/2}}{3}\\right]_1^2=\\frac{2(2\\sqrt{2}-1)}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=x^2+1$. גבולות $1\\to 2$. $\\frac{2(2\\sqrt{2}-1)}{3}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int\\tan x\\,dx$ by writing $\\tan x = \\sin x/\\cos x$.",
+      "stem_he": "חשבו $\\displaystyle\\int\\tan x\\,dx$ תוך כתיבה $\\tan x=\\sin x/\\cos x$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int\\frac{\\sin x}{\\cos x}\\,dx$. Let $u=\\cos x$, $du=-\\sin x\\,dx$. $-\\int\\frac{1}{u}\\,du=-\\ln|\\cos x|+C=\\ln|\\sec x|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\ln|\\sec x|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int\\frac{\\sin x}{\\cos x}\\,dx$. Let $u=\\cos x$, $du=-\\sin x\\,dx$. $-\\int\\frac{1}{u}\\,du=-\\ln|\\cos x|+C=\\ln|\\sec x|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$u=\\cos x$: $-\\ln|\\cos x|+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 55,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

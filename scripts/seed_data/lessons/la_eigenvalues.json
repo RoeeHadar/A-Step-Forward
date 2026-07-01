@@ -9,7 +9,6 @@
   "title_he": "ערכים עצמיים ווקטורים עצמיים",
   "summary_en": "Eigenvalue equation, characteristic polynomial, finding eigenspaces, geometric vs algebraic multiplicity, and the linear independence of eigenvectors for distinct eigenvalues.",
   "summary_he": "משוואת הערך העצמי, הפולינום האופייני, מציאת מרחבים עצמיים, ריבוי גיאומטרי ואלגברי, ובלתי-תלות לינארית של וקטורים עצמיים לערכים עצמיים שונים.",
-  "est_minutes": 50,
   "sections": [
     {
       "kind": "intro",
@@ -38,7 +37,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Eigenvalues of an Upper Triangular Matrix",
       "title_he": "דוגמה פתורה 1 — ערכים עצמיים של מטריצה משולשת עליונה",
-      "body_en_md": "**Find the eigenvalues of** $A = \\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.\n\n**Step 1 — Characteristic polynomial:**\n$$p(\\lambda) = \\det(A-\\lambda I) = \\det\\begin{pmatrix}3-\\lambda&1\\\\0&2-\\lambda\\end{pmatrix} = (3-\\lambda)(2-\\lambda).$$\n\n**Step 2 — Roots:**\n$$p(\\lambda)=0 \\Rightarrow \\lambda_1=3,\\quad \\lambda_2=2.$$\n\n**Step 3 — Eigenvectors for $\\lambda_1=3$:**\n$$(A-3I)\\vec{v}=\\vec{0}: \\begin{pmatrix}0&1\\\\0&-1\\end{pmatrix}\\vec{v}=\\vec{0} \\Rightarrow v_2=0, v_1\\text{ free}. \\quad E_3=\\text{span}\\{(1,0)^T\\}.$$\n\n**Step 4 — Eigenvectors for $\\lambda_2=2$:**\n$$(A-2I)\\vec{v}=\\vec{0}: \\begin{pmatrix}1&1\\\\0&0\\end{pmatrix}\\vec{v}=\\vec{0} \\Rightarrow v_1=-v_2. \\quad E_2=\\text{span}\\{(-1,1)^T\\}.$$",
+      "body_en_md": "**Find the eigenvalues of** $A = \\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.\n\n### Move 1\n$$p(\\lambda) = \\det(A-\\lambda I) = \\det\\begin{pmatrix}3-\\lambda&1\\\\0&2-\\lambda\\end{pmatrix} = (3-\\lambda)(2-\\lambda).$$\n\n### Move 2\n$$p(\\lambda)=0 \\Rightarrow \\lambda_1=3,\\quad \\lambda_2=2.$$\n\n### Move 3\n$$(A-3I)\\vec{v}=\\vec{0}: \\begin{pmatrix}0&1\\\\0&-1\\end{pmatrix}\\vec{v}=\\vec{0} \\Rightarrow v_2=0, v_1\\text{ free}. \\quad E_3=\\text{span}\\{(1,0)^T\\}.$$\n\n### Move 4\n$$(A-2I)\\vec{v}=\\vec{0}: \\begin{pmatrix}1&1\\\\0&0\\end{pmatrix}\\vec{v}=\\vec{0} \\Rightarrow v_1=-v_2. \\quad E_2=\\text{span}\\{(-1,1)^T\\}.$$",
       "body_he_md": "**מצא את הערכים העצמיים של** $A = \\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.\n\n**שלב 1 — פולינום אופייני:**\n$$p(\\lambda) = (3-\\lambda)(2-\\lambda).$$\n\n**שלב 2 — שורשים:** $\\lambda_1=3$, $\\lambda_2=2$.\n\n**שלב 3 — ו\"ע ל-$\\lambda_1=3$:** $E_3=\\text{span}\\{(1,0)^T\\}$.\n\n**שלב 4 — ו\"ע ל-$\\lambda_2=2$:** $E_2=\\text{span}\\{(-1,1)^T\\}$."
     },
     {
@@ -84,14 +83,14 @@
       "title_en": "Method Guide — Eigenvalue Computation",
       "title_he": "מדריך שיטה — חישוב ערכים עצמיים",
       "body_en_md": "**Step 1:** Form $A-\\lambda I$.\n\n**Step 2:** Compute $p(\\lambda)=\\det(A-\\lambda I)$ (polynomial of degree $n$).\n\n**Step 3:** Solve $p(\\lambda)=0$ for the eigenvalues $\\lambda_1,\\ldots$.\n\n**Step 4:** For each $\\lambda_i$, row-reduce $A-\\lambda_i I$ and find $\\ker(A-\\lambda_i I)=E_{\\lambda_i}$.\n\n**Step 5:** Record algebraic multiplicity (root order) and geometric multiplicity ($\\dim E_{\\lambda_i}$).\n\n| Check | Meaning |\n|---|---|\n| $g_\\lambda < a_\\lambda$ | Matrix is NOT diagonalizable (for this eigenvalue) |\n| $g_\\lambda = a_\\lambda$ for ALL $\\lambda$ | Matrix IS diagonalizable |\n| tr$(A)=\\sum\\lambda_i$ | Quick sanity check |\n| $\\det(A)=\\prod\\lambda_i$ | Quick sanity check |",
-      "body_he_md": "**שלב 1:** בנה $A-\\lambda I$.\n\n**שלב 2:** חשב $p(\\lambda)=\\det(A-\\lambda I)$.\n\n**שלב 3:** פתור $p(\\lambda)=0$.\n\n**שלב 4:** לכל $\\lambda_i$, דרג $A-\\lambda_i I$ ומצא $E_{\\lambda_i}$.\n\n**שלב 5:** רשום ריבויים.\n\n| בדיקה | משמעות |\n|---|---|\n| $g_\\lambda < a_\\lambda$ | **אינה** ניתנת לאלכסון |\n| $g_\\lambda = a_\\lambda$ לכל $\\lambda$ | **ניתנת** לאלכסון |\n| tr$(A)=\\sum\\lambda_i$ | בדיקת שפיות |\n| $\\det(A)=\\prod\\lambda_i$ | בדיקת שפיות |"
+      "body_he_md": "**שלב 1:** בנה $A-\\lambda I$.\n\n**שלב 2:** חשב $p(\\lambda)=\\det(A-\\lambda I)$.\n\n**שלב 3:** פתור $p(\\lambda)=0$.\n\n**שלב 4:** לכל $\\lambda_i$, דרג $A-\\lambda_i I$ ומצא $E_{\\lambda_i}$.\n\n**שלב 5:** רשום ריבויים.\n\n| בדיקה | משמעות |\n|---|---|\n| $g_\\lambda < a_\\lambda$ | **אינה** ניתנת לאלכסון |\n| $g_\\lambda = a_\\lambda$ לכל $\\lambda$ | **ניתנת** לאלכסון |\n| tr$(A)=\\sum\\lambda_i$ | בדיקת שפיות |\n| $\\det(A)=\\prod\\lambda_i$ | בדיקת שפיות |\n\n**צעד 1:** Form $A-\\lambda I$.\n\n**צעד 2:** Compute $p(\\lambda)=\\det(A-\\lambda I)$ (polynomial of degree $n$).\n\n**צעד 3:** Solve $p(\\lambda)=0$ for the eigenvalues $\\lambda_1,\\ldots$.\n\n**צעד 4:** For each $\\lambda_i$, row-reduce $A-\\lambda_i I$ and find $\\ker(A-\\lambda_i I)=E_{\\lambda_i}$.\n\n**צעד 5:** Record algebraic multiplicity (root order) and geometric multiplicity ($\\dim E_{\\lambda_i}$)."
     },
     {
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "",
-      "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
         {
           "id": "e1",
@@ -99,7 +98,7 @@
           "body_en": "Find eigenvalues of $A=\\begin{pmatrix}5&0\\\\0&-2\\end{pmatrix}$.",
           "body_he": "מצא ע\"ע של $A=\\begin{pmatrix}5&0\\\\0&-2\\end{pmatrix}$.",
           "solution_en": "$\\lambda_1=5$, $\\lambda_2=-2$ (diagonal matrix).",
-          "solution_he": "$\\lambda_1=5$, $\\lambda_2=-2$.",
+          "solution_he": "**פתרון:**\n\n$\\lambda_1=5$, $\\lambda_2=-2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 6
         },
         {
@@ -125,7 +124,7 @@
           "difficulty": "easy",
           "body_en": "Given $A$ has eigenvalues $2$ and $5$, find tr$(A)$ and $\\det(A)$.",
           "body_he": "נתון ל-$A$ ע\"ע $2$ ו-$5$. מצא tr$(A)$ ו-$\\det(A)$.",
-          "solution_en": "tr$(A)=2+5=7$, $\\det(A)=2\\cdot5=10$.",
+          "solution_en": "**Solution:**\n\ntr$(A)=2+5=7$, $\\det(A)=2\\cdot5=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
           "solution_he": "tr$(A)=7$, $\\det(A)=10$.",
           "points": 6
         },
@@ -135,7 +134,7 @@
           "body_en": "Find eigenvalues and eigenvectors of $A=\\begin{pmatrix}4&-2\\\\1&1\\end{pmatrix}$.",
           "body_he": "מצא ע\"ע וו\"ע של $A=\\begin{pmatrix}4&-2\\\\1&1\\end{pmatrix}$.",
           "solution_en": "$p(\\lambda)=(4-\\lambda)(1-\\lambda)+2=\\lambda^2-5\\lambda+6=(\\lambda-2)(\\lambda-3)$. $E_2$: $(A-2I)\\to\\begin{pmatrix}2&-2\\\\1&-1\\end{pmatrix}$, $\\vec{v}=(1,1)^T$. $E_3$: $(A-3I)\\to\\begin{pmatrix}1&-2\\\\1&-2\\end{pmatrix}$, $\\vec{v}=(2,1)^T$.",
-          "solution_he": "$\\lambda_1=2$: $E_2=\\text{span}\\{(1,1)^T\\}$. $\\lambda_2=3$: $E_3=\\text{span}\\{(2,1)^T\\}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\lambda_1=2$: $E_2=\\text{span}\\{(1,1)^T\\}$. $\\lambda_2=3$: $E_3=\\text{span}\\{(2,1)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -143,8 +142,8 @@
           "difficulty": "medium",
           "body_en": "Find a $3\\times3$ matrix with eigenvalues $1,-1,2$ (diagonal form).",
           "body_he": "מצא מטריצה $3\\times3$ עם ע\"ע $1,-1,2$ (צורה אלכסונית).",
-          "solution_en": "$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$ (or any similar matrix).",
-          "solution_he": "$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$ (or any similar matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -152,8 +151,8 @@
           "difficulty": "medium",
           "body_en": "Find the eigenvalues of $A=\\begin{pmatrix}1&0&0\\\\2&3&0\\\\1&1&-1\\end{pmatrix}$ (triangular matrix).",
           "body_he": "מצא ע\"ע של $A=\\begin{pmatrix}1&0&0\\\\2&3&0\\\\1&1&-1\\end{pmatrix}$ (משולשת).",
-          "solution_en": "$\\lambda_1=1,\\lambda_2=3,\\lambda_3=-1$ (diagonal entries of lower triangular matrix).",
-          "solution_he": "ע\"ע = כניסות אלכסוניות: $1,3,-1$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\lambda_1=1,\\lambda_2=3,\\lambda_3=-1$ (diagonal entries of lower triangular matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nע\"ע = כניסות אלכסוניות: $1,3,-1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -162,7 +161,7 @@
           "body_en": "Show that $\\lambda=0$ is an eigenvalue of $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ and find the corresponding eigenspace.",
           "body_he": "הראה ש-$\\lambda=0$ ע\"ע של $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ ומצא את המרחב העצמי.",
           "solution_en": "$\\det(A)=4-4=0$, so $\\lambda=0$ is an eigenvalue. $E_0=\\ker(A)$: $A\\vec{v}=\\vec{0}\\Rightarrow v_1=-2v_2$. $E_0=\\text{span}\\{(-2,1)^T\\}$.",
-          "solution_he": "$\\det(A)=0$, לכן $\\lambda=0$ ע\"ע. $E_0=\\text{span}\\{(-2,1)^T\\}$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\det(A)=0$, לכן $\\lambda=0$ ע\"ע. $E_0=\\text{span}\\{(-2,1)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 8
         },
         {
@@ -170,8 +169,8 @@
           "difficulty": "hard",
           "body_en": "Show that if $\\vec{v}$ is an eigenvector of $A$ with eigenvalue $\\lambda$, then $\\vec{v}$ is also an eigenvector of $A^2$ with eigenvalue $\\lambda^2$. Generalise to $A^k$.",
           "body_he": "הראה שאם $\\vec{v}$ ו\"ע של $A$ עם ע\"ע $\\lambda$, אז $\\vec{v}$ גם ו\"ע של $A^2$ עם ע\"ע $\\lambda^2$. הכלל ל-$A^k$.",
-          "solution_en": "$A^2\\vec{v}=A(A\\vec{v})=A(\\lambda\\vec{v})=\\lambda A\\vec{v}=\\lambda^2\\vec{v}$. By induction: $A^k\\vec{v}=\\lambda^k\\vec{v}$. $\\blacksquare$",
-          "solution_he": "$A^2\\vec{v}=A(\\lambda\\vec{v})=\\lambda^2\\vec{v}$. באינדוקציה: $A^k\\vec{v}=\\lambda^k\\vec{v}$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$A^2\\vec{v}=A(A\\vec{v})=A(\\lambda\\vec{v})=\\lambda A\\vec{v}=\\lambda^2\\vec{v}$. By induction: $A^k\\vec{v}=\\lambda^k\\vec{v}$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A^2\\vec{v}=A(\\lambda\\vec{v})=\\lambda^2\\vec{v}$. באינדוקציה: $A^k\\vec{v}=\\lambda^k\\vec{v}$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -179,8 +178,8 @@
           "difficulty": "hard",
           "body_en": "Prove that if $A$ is invertible and $\\lambda$ is an eigenvalue of $A$, then $1/\\lambda$ is an eigenvalue of $A^{-1}$.",
           "body_he": "הוכח שאם $A$ הפיכה ו-$\\lambda$ ע\"ע של $A$, אז $1/\\lambda$ ע\"ע של $A^{-1}$.",
-          "solution_en": "Let $A\\vec{v}=\\lambda\\vec{v}$. Multiply on left by $A^{-1}$: $\\vec{v}=\\lambda A^{-1}\\vec{v}\\Rightarrow A^{-1}\\vec{v}=(1/\\lambda)\\vec{v}$. $\\blacksquare$ (Note: $\\lambda\\neq0$ since $A$ invertible.)",
-          "solution_he": "$A\\vec{v}=\\lambda\\vec{v}$ ⟹ $A^{-1}\\vec{v}=(1/\\lambda)\\vec{v}$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nLet $A\\vec{v}=\\lambda\\vec{v}$. Multiply on left by $A^{-1}$: $\\vec{v}=\\lambda A^{-1}\\vec{v}\\Rightarrow A^{-1}\\vec{v}=(1/\\lambda)\\vec{v}$. $\\blacksquare$ (Note: $\\lambda\\neq0$ since $A$ invertible.)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A\\vec{v}=\\lambda\\vec{v}$ ⟹ $A^{-1}\\vec{v}=(1/\\lambda)\\vec{v}$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -188,8 +187,8 @@
           "difficulty": "hard",
           "body_en": "Let $A$ be $n\\times n$ with $A^2=A$ (idempotent). Prove that the only eigenvalues of $A$ are $0$ and $1$.",
           "body_he": "יהי $A$ מטריצה $n\\times n$ עם $A^2=A$ (אידמפוטנטית). הוכח שהע\"ע היחידים של $A$ הם $0$ ו-$1$.",
-          "solution_en": "Let $A\\vec{v}=\\lambda\\vec{v}$ ($\\vec{v}\\neq0$). Then $A^2\\vec{v}=\\lambda^2\\vec{v}$. But $A^2=A$, so $\\lambda^2\\vec{v}=\\lambda\\vec{v}\\Rightarrow\\lambda(\\lambda-1)\\vec{v}=\\vec{0}\\Rightarrow\\lambda(\\lambda-1)=0$. So $\\lambda=0$ or $\\lambda=1$. $\\blacksquare$",
-          "solution_he": "מ-$A^2\\vec{v}=A\\vec{v}$: $\\lambda^2=\\lambda$, לכן $\\lambda=0$ או $\\lambda=1$. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nLet $A\\vec{v}=\\lambda\\vec{v}$ ($\\vec{v}\\neq0$). Then $A^2\\vec{v}=\\lambda^2\\vec{v}$. But $A^2=A$, so $\\lambda^2\\vec{v}=\\lambda\\vec{v}\\Rightarrow\\lambda(\\lambda-1)\\vec{v}=\\vec{0}\\Rightarrow\\lambda(\\lambda-1)=0$. So $\\lambda=0$ or $\\lambda=1$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nמ-$A^2\\vec{v}=A\\vec{v}$: $\\lambda^2=\\lambda$, לכן $\\lambda=0$ או $\\lambda=1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         },
         {
@@ -197,8 +196,8 @@
           "difficulty": "hard",
           "body_en": "Prove that $A$ and $A^T$ have the same eigenvalues.",
           "body_he": "הוכח ש-$A$ ו-$A^T$ בעלים אותם ערכים עצמיים.",
-          "solution_en": "$\\det(A^T-\\lambda I)=\\det((A-\\lambda I)^T)=\\det(A-\\lambda I)$. So $A$ and $A^T$ have the same characteristic polynomial and hence the same eigenvalues. $\\blacksquare$",
-          "solution_he": "$\\det(A^T-\\lambda I)=\\det(A-\\lambda I)$ (כי $\\det(B^T)=\\det(B)$). לכן אותם ע\"ע. $\\blacksquare$",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\det(A^T-\\lambda I)=\\det((A-\\lambda I)^T)=\\det(A-\\lambda I)$. So $A$ and $A^T$ have the same characteristic polynomial and hence the same eigenvalues. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\det(A^T-\\lambda I)=\\det(A-\\lambda I)$ (כי $\\det(B^T)=\\det(B)$). לכן אותם ע\"ע. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
           "points": 12
         }
       ]
@@ -209,6 +208,14 @@
       "title_he": "מלכודות נפוצות",
       "body_en_md": "1. **Including $\\vec{0}$ as an eigenvector.** By definition, eigenvectors are non-zero. The zero vector trivially satisfies $A\\vec{0}=\\lambda\\vec{0}$ for any $\\lambda$ — it's excluded.\n\n2. **Computing $\\det(A-\\lambda I)$ with wrong signs.** It is $A-\\lambda I$, not $\\lambda I - A$ (though the roots are the same, the leading coefficient flips).\n\n3. **Forgetting that eigenspaces have dimension $\\geq1$.** Once $\\lambda$ is an eigenvalue, $E_\\lambda$ always has dimension $\\geq1$ — you can always find at least one eigenvector.\n\n4. **Confusing algebraic and geometric multiplicity.** A.m. is the root multiplicity in $p(\\lambda)$; g.m. is the dimension of the eigenspace. They need not be equal.\n\n5. **Missing complex eigenvalues.** For real matrices, complex eigenvalues come in conjugate pairs. If asked over $\\mathbb{R}$ only, say \"no real eigenvalues\" when the polynomial has no real roots.",
       "body_he_md": "1. **כלול $\\vec{0}$ כוקטור עצמי.** לפי הגדרה, ו\"ע הם אי-אפסיים.\n\n2. **שגיאת סימן ב-$\\det(A-\\lambda I)$.** זהו $A-\\lambda I$, לא $\\lambda I-A$.\n\n3. **שכחה שמרחבים עצמיים בממד $\\geq1$.** לכל ע\"ע $\\lambda$ יש לפחות ו\"ע אחד.\n\n4. **בלבול ריבוי אלגברי וגיאומטרי.** ר\"א = ריבוי שורש ב-$p(\\lambda)$; ר\"ג = ממד המרחב העצמי.\n\n5. **פספוס ע\"ע מרוכבים.** למטריצות ממשיות, ע\"ע מרוכבים מגיעים בזוגות מצומדים."
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**You will use this to unlock:**\n- `concept:differential_equations_intro` **differential equations intro** (tooling_for) — Eigenmodes of coupled linear ODEs.\n\n**Builds on:**\n- `concept:la_vector_spaces` **Vector Spaces**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:differential_equations_intro` **differential equations intro** (tooling_for) — Eigenmodes of coupled linear ODEs.\n\n**מבוסס על:**\n- `concept:la_vector_spaces` **מרחבי וקטורים**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
@@ -224,5 +231,157 @@
       "body_en_md": "- **Eigenvalue equation:** $A\\vec{v}=\\lambda\\vec{v}$, $\\vec{v}\\neq\\vec{0}$.\n- **Characteristic polynomial:** $p(\\lambda)=\\det(A-\\lambda I)$; roots are eigenvalues.\n- **Eigenspace:** $E_\\lambda=\\ker(A-\\lambda I)$, always non-trivial when $\\lambda$ is an eigenvalue.\n- **Algebraic multiplicity** $\\geq$ **Geometric multiplicity** $\\geq 1$.\n- **Key identities:** tr$(A)=\\sum\\lambda_i$, $\\det(A)=\\prod\\lambda_i$.\n- **Triangular matrices:** eigenvalues are diagonal entries.\n- **Eigenvectors for distinct eigenvalues are linearly independent.**",
       "body_he_md": "- **משוואת ע\"ע:** $A\\vec{v}=\\lambda\\vec{v}$, $\\vec{v}\\neq\\vec{0}$.\n- **פולינום אופייני:** $p(\\lambda)=\\det(A-\\lambda I)$; שורשים = ע\"ע.\n- **מרחב עצמי:** $E_\\lambda=\\ker(A-\\lambda I)$.\n- **ריבוי אלגברי $\\geq$ גיאומטרי $\\geq1$.**\n- **זהויות:** tr$(A)=\\sum\\lambda_i$, $\\det(A)=\\prod\\lambda_i$.\n- **מטריצות משולשות:** ע\"ע = כניסות אלכסוניות.\n- **ו\"ע לערכים שונים הם בלתי-תלויים.**"
     }
-  ]
+  ],
+  "agent_hints": {},
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find eigenvalues of $A=\\begin{pmatrix}5&0\\\\0&-2\\end{pmatrix}$.",
+      "stem_he": "מצא ע\"ע של $A=\\begin{pmatrix}5&0\\\\0&-2\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\lambda_1=5$, $\\lambda_2=-2$ (diagonal matrix)",
+          "-2$ (diagonal matrix)",
+          "-2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\lambda_1=5$, $\\lambda_2=-2$ (diagonal matrix).\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\lambda_1=5$, $\\lambda_2=-2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 2,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Is $\\vec{v}=(1,2)^T$ an eigenvector of $A=\\begin{pmatrix}3&0\\\\0&3\\end{pmatrix}$? If so, what is the eigenvalue?",
+      "stem_he": "האם $\\vec{v}=(1,2)^T$ ו\"ע של $A=\\begin{pmatrix}3&0\\\\0&3\\end{pmatrix}$? אם כן, מהו הע\"ע?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$A\\vec{v}=(3,6)^T=3(1,2)^T$. Yes, eigenvalue $\\lambda=3$",
+          "3$",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$A\\vec{v}=(3,6)^T=3(1,2)^T$. Yes, eigenvalue $\\lambda=3$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$A\\vec{v}=3\\vec{v}$. כן, $\\lambda=3$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Find eigenvalues of $A=\\begin{pmatrix}0&1\\\\-2&3\\end{pmatrix}$ via the characteristic polynomial.",
+      "stem_he": "מצא ע\"ע של $A=\\begin{pmatrix}0&1\\\\-2&3\\end{pmatrix}$ דרך הפולינום האופייני.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$p(\\lambda)=\\lambda(3-\\lambda)+2=\\lambda^2-3\\lambda+2=(\\lambda-1)(\\lambda-2)$. $\\lambda_1=1$, $\\lambda_2=2$",
+          "2$",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$p(\\lambda)=\\lambda(3-\\lambda)+2=\\lambda^2-3\\lambda+2=(\\lambda-1)(\\lambda-2)$. $\\lambda_1=1$, $\\lambda_2=2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$p(\\lambda)=(\\lambda-1)(\\lambda-2)$. $\\lambda_1=1$, $\\lambda_2=2$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Given $A$ has eigenvalues $2$ and $5$, find tr$(A)$ and $\\det(A)$.",
+      "stem_he": "נתון ל-$A$ ע\"ע $2$ ו-$5$. מצא tr$(A)$ ו-$\\det(A)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\ntr$(A)=2+5=7$, $\\det(A)=2\\cdot5=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "10$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "10"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\ntr$(A)=2+5=7$, $\\det(A)=2\\cdot5=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\ntr$(A)=7$, $\\det(A)=10$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find eigenvalues and eigenvectors of $A=\\begin{pmatrix}4&-2\\\\1&1\\end{pmatrix}$.",
+      "stem_he": "מצא ע\"ע וו\"ע של $A=\\begin{pmatrix}4&-2\\\\1&1\\end{pmatrix}$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$p(\\lambda)=(4-\\lambda)(1-\\lambda)+2=\\lambda^2-5\\lambda+6=(\\lambda-2)(\\lambda-3)$. $E_2$: $(A-2I)\\to\\begin{pmatrix}2&-2\\\\1&-1\\end{pmatrix}$, $\\vec{v}=(1,1)^T$. $E_3$: $(A-3I)\\to\\begin{pmatrix}1&-2\\\\1&-2\\end{pmatrix}$, $\\vec{v}=(2,1)^T$",
+          "(2,1)^T$",
+          "2,1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$p(\\lambda)=(4-\\lambda)(1-\\lambda)+2=\\lambda^2-5\\lambda+6=(\\lambda-2)(\\lambda-3)$. $E_2$: $(A-2I)\\to\\begin{pmatrix}2&-2\\\\1&-1\\end{pmatrix}$, $\\vec{v}=(1,1)^T$. $E_3$: $(A-3I)\\to\\begin{pmatrix}1&-2\\\\1&-2\\end{pmatrix}$, $\\vec{v}=(2,1)^T$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\lambda_1=2$: $E_2=\\text{span}\\{(1,1)^T\\}$. $\\lambda_2=3$: $E_3=\\text{span}\\{(2,1)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find a $3\\times3$ matrix with eigenvalues $1,-1,2$ (diagonal form).",
+      "stem_he": "מצא מטריצה $3\\times3$ עם ע\"ע $1,-1,2$ (צורה אלכסונית).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$ (or any similar matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$ (or any similar matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$ (or any similar matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A=\\begin{pmatrix}1&0&0\\\\0&-1&0\\\\0&0&2\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find the eigenvalues of $A=\\begin{pmatrix}1&0&0\\\\2&3&0\\\\1&1&-1\\end{pmatrix}$ (triangular matrix).",
+      "stem_he": "מצא ע\"ע של $A=\\begin{pmatrix}1&0&0\\\\2&3&0\\\\1&1&-1\\end{pmatrix}$ (משולשת).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\lambda_1=1,\\lambda_2=3,\\lambda_3=-1$ (diagonal entries of lower triangular matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-1$ (diagonal entries of lower triangular matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "-1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\lambda_1=1,\\lambda_2=3,\\lambda_3=-1$ (diagonal entries of lower triangular matrix).\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nע\"ע = כניסות אלכסוניות: $1,3,-1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": []
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Show that $\\lambda=0$ is an eigenvalue of $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ and find the corresponding eigenspace.",
+      "stem_he": "הראה ש-$\\lambda=0$ ע\"ע של $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ ומצא את המרחב העצמי.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$\\det(A)=4-4=0$, so $\\lambda=0$ is an eigenvalue. $E_0=\\ker(A)$: $A\\vec{v}=\\vec{0}\\Rightarrow v_1=-2v_2$. $E_0=\\text{span}\\{(-2,1)^T\\}$",
+          "\\text{span}\\{(-2,1)^T\\}$",
+          "-2,1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$\\det(A)=4-4=0$, so $\\lambda=0$ is an eigenvalue. $E_0=\\ker(A)$: $A\\vec{v}=\\vec{0}\\Rightarrow v_1=-2v_2$. $E_0=\\text{span}\\{(-2,1)^T\\}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\det(A)=0$, לכן $\\lambda=0$ ע\"ע. $E_0=\\text{span}\\{(-2,1)^T\\}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": []
+    }
+  ],
+  "est_minutes": 50,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

@@ -2,12 +2,14 @@
   "concept_id": "improper_integrals",
   "subject": "calculus_1",
   "level": "university",
-  "math_track": ["calc1","5pt"],
+  "math_track": [
+    "calc1",
+    "5pt"
+  ],
   "title_en": "Improper Integrals",
   "title_he": "אינטגרלים לא אמיתיים",
   "summary_en": "Improper integrals extend the definite integral to infinite limits or discontinuous integrands. Convergence determined by taking limits. Comparison test for convergence without explicit evaluation.",
   "summary_he": "אינטגרלים לא אמיתיים מרחיבים את האינטגרל המסויים לגבולות אינסופיים או פונקציות עם אי-רציפויות. התכנסות נבדקת על ידי לקיחת גבולות.",
-  "est_minutes": 45,
   "sections": [
     {
       "kind": "intro",
@@ -36,7 +38,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Type I Integral",
       "title_he": "דוגמה פתורה 1 — אינטגרל טיפוס I",
-      "body_en_md": "**Evaluate:** $\\int_1^\\infty \\frac{1}{x^2}\\,dx$.\n\n**Step 1:** Write as a limit.\n$$\\int_1^\\infty \\frac{1}{x^2}\\,dx = \\lim_{b\\to\\infty} \\int_1^b x^{-2}\\,dx.$$\n\n**Step 2:** Evaluate the definite integral.\n$$\\int_1^b x^{-2}\\,dx = \\left[\\frac{x^{-1}}{-1}\\right]_1^b = -\\frac{1}{b} + 1.$$\n\n**Step 3:** Take the limit.\n$$\\lim_{b\\to\\infty} \\left(1 - \\frac{1}{b}\\right) = 1.$$\n\n**Converges** to $1$.",
+      "body_en_md": "**Evaluate:** $\\int_1^\\infty \\frac{1}{x^2}\\,dx$.\n\n### Move 1 Write as a limit.\n$$\\int_1^\\infty \\frac{1}{x^2}\\,dx = \\lim_{b\\to\\infty} \\int_1^b x^{-2}\\,dx.$$\n\n### Move 2 Evaluate the definite integral.\n$$\\int_1^b x^{-2}\\,dx = \\left[\\frac{x^{-1}}{-1}\\right]_1^b = -\\frac{1}{b} + 1.$$\n\n### Move 3 Take the limit.\n$$\\lim_{b\\to\\infty} \\left(1 - \\frac{1}{b}\\right) = 1.$$\n\n**Converges** to $1$.",
       "body_he_md": "**חשבו:** $\\int_1^\\infty x^{-2}\\,dx$.\n\n**שלב 1:** כגבול: $\\lim_{b\\to\\infty}\\int_1^b x^{-2}\\,dx$.\n\n**שלב 2:** $\\int_1^b x^{-2}\\,dx=[-1/x]_1^b=-1/b+1$.\n\n**שלב 3:** $\\lim_{b\\to\\infty}(1-1/b)=1$.\n\n**מתכנס ל-$1$.**"
     },
     {
@@ -54,7 +56,7 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Type II Integral",
       "title_he": "דוגמה פתורה 2 — אינטגרל טיפוס II",
-      "body_en_md": "**Evaluate:** $\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx$.\n\n**Step 1:** $f(x) = x^{-1/2}$ has a singularity at $x=0$. Write as a limit:\n$$\\int_0^1 x^{-1/2}\\,dx = \\lim_{t\\to 0^+} \\int_t^1 x^{-1/2}\\,dx.$$\n\n**Step 2:** Evaluate.\n$$\\int_t^1 x^{-1/2}\\,dx = [2\\sqrt{x}]_t^1 = 2 - 2\\sqrt{t}.$$\n\n**Step 3:** Take the limit.\n$$\\lim_{t\\to 0^+} (2 - 2\\sqrt{t}) = 2.$$\n\n**Converges** to $2$. (This is $p=1/2 < 1$ ✓)",
+      "body_en_md": "**Evaluate:** $\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx$.\n\n### Move 1 $f(x) = x^{-1/2}$ has a singularity at $x=0$. Write as a limit:\n$$\\int_0^1 x^{-1/2}\\,dx = \\lim_{t\\to 0^+} \\int_t^1 x^{-1/2}\\,dx.$$\n\n### Move 2 Evaluate.\n$$\\int_t^1 x^{-1/2}\\,dx = [2\\sqrt{x}]_t^1 = 2 - 2\\sqrt{t}.$$\n\n### Move 3 Take the limit.\n$$\\lim_{t\\to 0^+} (2 - 2\\sqrt{t}) = 2.$$\n\n**Converges** to $2$. (This is $p=1/2 < 1$ ✓)",
       "body_he_md": "**חשבו:** $\\int_0^1 x^{-1/2}\\,dx$.\n\n**שלב 1:** $x^{-1/2}$ מתפוצץ ב-$x=0$. כגבול:\n$$\\lim_{t\\to0^+}\\int_t^1 x^{-1/2}\\,dx.$$\n\n**שלב 2:** $[2\\sqrt{x}]_t^1=2-2\\sqrt{t}$.\n\n**שלב 3:** $\\lim(2-2\\sqrt{t})=2$.\n\n**מתכנס ל-$2$.**"
     },
     {
@@ -80,35 +82,135 @@
       "title_en": "Method Guide — Improper Integrals",
       "title_he": "מדריך שיטה — אינטגרלים לא אמיתיים",
       "body_en_md": "**Step 1: Identify the type.**\n- Type I: upper or lower limit is $\\pm\\infty$.\n- Type II: integrand is undefined/infinite at some $c \\in [a,b]$.\n- Mixed: infinite limit AND singularity — treat both.\n\n**Step 2: Split if necessary.**\n- Two infinite limits: $\\int_{-\\infty}^\\infty = \\int_{-\\infty}^0 + \\int_0^\\infty$ (split at any finite point).\n- Singularity in interior: $\\int_a^b = \\int_a^c + \\int_c^b$.\n\n**Step 3: Replace problematic limit by a parameter, evaluate, then take the limit.**\n\n**Step 4: Comparison test if direct evaluation is hard.**\n- Compare to $1/x^p$ or $e^{-ax}$.\n\n| Integral | Converges | Diverges |\n|---|---|---|\n| $\\int_1^\\infty x^{-p}\\,dx$ | $p>1$ | $p\\le1$ |\n| $\\int_0^1 x^{-p}\\,dx$ | $p<1$ | $p\\ge1$ |\n| $\\int_0^\\infty e^{-ax}\\,dx$ | $a>0$ | $a\\le0$ |",
-      "body_he_md": "**שלב 1: זהה את הטיפוס.**\n- I: גבול $\\pm\\infty$.\n- II: אי-רציפות ב-$[a,b]$.\n- מעורב: שניהם.\n\n**שלב 2: פצל במידת הצורך.**\n\n**שלב 3: החלף גבול בעייתי בפרמטר, חשב, לקח גבול.**\n\n**שלב 4: מבחן השוואה עם $1/x^p$ או $e^{-ax}$.**\n\n| אינטגרל | מתכנס | מתבדר |\n|---|---|---|\n| $\\int_1^\\infty x^{-p}$ | $p>1$ | $p\\le1$ |\n| $\\int_0^1 x^{-p}$ | $p<1$ | $p\\ge1$ |\n| $\\int_0^\\infty e^{-ax}$ | $a>0$ | $a\\le0$ |"
+      "body_he_md": "**שלב 1: זהה את הטיפוס.**\n- I: גבול $\\pm\\infty$.\n- II: אי-רציפות ב-$[a,b]$.\n- מעורב: שניהם.\n\n**שלב 2: פצל במידת הצורך.**\n\n**שלב 3: החלף גבול בעייתי בפרמטר, חשב, לקח גבול.**\n\n**שלב 4: מבחן השוואה עם $1/x^p$ או $e^{-ax}$.**\n\n| אינטגרל | מתכנס | מתבדר |\n|---|---|---|\n| $\\int_1^\\infty x^{-p}$ | $p>1$ | $p\\le1$ |\n| $\\int_0^1 x^{-p}$ | $p<1$ | $p\\ge1$ |\n| $\\int_0^\\infty e^{-ax}$ | $a>0$ | $a\\le0$ |\n\n**צעד 3:**\n\n**צעד 4:**\n- Compare to $1/x^p$ or $e^{-ax}$."
     },
     {
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "", "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
-        {"id":"e1","difficulty":"easy","body_en":"Evaluate $\\int_2^\\infty \\frac{1}{x^3}\\,dx$.","body_he":"חשבו $\\int_2^\\infty x^{-3}\\,dx$.","solution_en":"$[x^{-2}/(-2)]_2^\\infty=0-(-1/8)=1/8$.","solution_he":"$1/8$."},
-        {"id":"e2","difficulty":"easy","body_en":"Does $\\int_1^\\infty \\frac{1}{x}\\,dx$ converge?","body_he":"האם $\\int_1^\\infty x^{-1}\\,dx$ מתכנס?","solution_en":"$[\\ln x]_1^\\infty = \\infty$. **Diverges.** ($p=1$)","solution_he":"$\\ln b\\to\\infty$. **מתבדר.**"},
-        {"id":"e3","difficulty":"easy","body_en":"Evaluate $\\int_0^\\infty e^{-3x}\\,dx$.","body_he":"חשבו $\\int_0^\\infty e^{-3x}\\,dx$.","solution_en":"$\\lim_{b\\to\\infty}[-e^{-3x}/3]_0^b=0+1/3=1/3$.","solution_he":"$1/3$."},
-        {"id":"e4","difficulty":"easy","body_en":"Evaluate $\\int_0^4 \\frac{1}{\\sqrt{4-x}}\\,dx$.","body_he":"חשבו $\\int_0^4 (4-x)^{-1/2}\\,dx$.","solution_en":"Singularity at $x=4$. $\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=0-(-4)=4$.","solution_he":"$\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=4$."},
-        {"id":"e5","difficulty":"medium","body_en":"Use the comparison test: does $\\int_1^\\infty \\frac{\\sin^2x}{x^2}\\,dx$ converge?","body_he":"מבחן השוואה: האם $\\int_1^\\infty \\sin^2x/x^2\\,dx$ מתכנס?","solution_en":"$0\\le\\sin^2x\\le1$, so $\\sin^2x/x^2\\le1/x^2$. Since $\\int_1^\\infty 1/x^2\\,dx=1<\\infty$, by comparison **converges**.","solution_he":"$0\\le\\sin^2x/x^2\\le1/x^2$. $\\int 1/x^2$ מתכנס ⟹ **מתכנס**."},
-        {"id":"e6","difficulty":"medium","body_en":"Evaluate $\\int_0^\\infty x^2 e^{-x}\\,dx$ (= $\\Gamma(3) = 2!$).","body_he":"חשבו $\\int_0^\\infty x^2 e^{-x}\\,dx$ ($=\\Gamma(3)=2!$).","solution_en":"IBP twice: $\\int_0^\\infty x^2e^{-x}\\,dx=2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.","solution_he":"אינטגרציה בחלקים פעמיים: $2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$."},
-        {"id":"e7","difficulty":"medium","body_en":"Determine convergence of $\\int_1^\\infty \\frac{\\ln x}{x^2}\\,dx$.","body_he":"קבעו התכנסות $\\int_1^\\infty (\\ln x)/x^2\\,dx$.","solution_en":"IBP: $u=\\ln x$, $dv=x^{-2}\\,dx$. Result: $[-\\ln x/x]_1^\\infty+\\int_1^\\infty x^{-2}\\,dx=0+1=1$. **Converges** to $1$.","solution_he":"אינטגרציה בחלקים. תוצאה: $1$. **מתכנס**."},
-        {"id":"e8","difficulty":"medium","body_en":"Does $\\int_{-\\infty}^\\infty \\frac{1}{1+x^2}\\,dx$ converge? Evaluate it.","body_he":"האם $\\int_{-\\infty}^\\infty 1/(1+x^2)\\,dx$ מתכנס? חשבו.","solution_en":"$\\int_{-\\infty}^\\infty\\frac{1}{1+x^2}\\,dx=[\\arctan x]_{-\\infty}^\\infty=\\pi/2-(-\\pi/2)=\\pi$. **Converges** to $\\pi$.","solution_he":"$[\\arctan x]_{-\\infty}^\\infty=\\pi/2+\\pi/2=\\pi$. **מתכנס**."},
-        {"id":"e9","difficulty":"medium","body_en":"Does $\\int_0^1 \\frac{1}{x^2}\\,dx$ converge?","body_he":"האם $\\int_0^1 x^{-2}\\,dx$ מתכנס?","solution_en":"$\\lim_{t\\to0^+}[-1/x]_t^1=-1-(−1/t)=−1+1/t\\to\\infty$. **Diverges.** ($p=2>1$)","solution_he":"$-1+1/t\\to\\infty$. **מתבדר.**"},
-        {"id":"e10","difficulty":"hard","body_en":"For which values of $p$ does $\\int_e^\\infty \\frac{1}{x(\\ln x)^p}\\,dx$ converge?","body_he":"לאילו $p$ מתכנס $\\int_e^\\infty 1/(x(\\ln x)^p)\\,dx$?","solution_en":"Sub $u=\\ln x$, $du=dx/x$. Becomes $\\int_1^\\infty u^{-p}\\,du$. By $p$-test: **converges iff $p>1$**.","solution_he":"הצבה $u=\\ln x$: $\\int_1^\\infty u^{-p}\\,du$. מתכנס אמ\"מ $p>1$."},
-        {"id":"e11","difficulty":"hard","body_en":"Show that $\\int_1^\\infty e^{-x}/x\\,dx$ converges by comparison.","body_he":"הראו שמתכנס $\\int_1^\\infty e^{-x}/x\\,dx$ על ידי השוואה.","solution_en":"For $x\\ge1$: $e^{-x}/x\\le e^{-x}$. $\\int_1^\\infty e^{-x}\\,dx=e^{-1}<\\infty$. By comparison **converges**.","solution_he":"$e^{-x}/x\\le e^{-x}$. $\\int_1^\\infty e^{-x}\\,dx=e^{-1}$. לכן **מתכנס**."},
-        {"id":"e12","difficulty":"hard","body_en":"Evaluate $\\int_0^\\infty \\frac{1}{(1+x)^3}\\,dx$.","body_he":"חשבו $\\int_0^\\infty (1+x)^{-3}\\,dx$.","solution_en":"$[-(1+x)^{-2}/2]_0^\\infty=0+1/2=1/2$.","solution_he":"$1/2$."},
-        {"id":"e13","difficulty":"hard","body_en":"Determine if $\\int_0^1 x^{-1/3}(1-x)^{-2/3}\\,dx$ converges. (Hint: Beta function — treat singularities at both ends.)","body_he":"קבעו התכנסות $\\int_0^1 x^{-1/3}(1-x)^{-2/3}\\,dx$ (פונקציית בטא — אי-רציפויות בשני קצוות).","solution_en":"Split at $1/2$. Near $x=0$: integrand $\\approx x^{-1/3}$, $p=1/3<1$ → converges. Near $x=1$: integrand $\\approx (1-x)^{-2/3}$, $p=2/3<1$ → converges. **Both parts converge**, so the integral converges. (This equals $B(2/3,1/3)=\\pi/\\sin(\\pi/3)=2\\pi/\\sqrt{3}$.)","solution_he":"פצלו ב-$1/2$. ליד $0$: $\\approx x^{-1/3}$, $p=1/3<1$ ✓. ליד $1$: $\\approx(1-x)^{-2/3}$, $p=2/3<1$ ✓. **מתכנס**."}
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_2^\\infty \\frac{1}{x^3}\\,dx$.",
+          "body_he": "חשבו $\\int_2^\\infty x^{-3}\\,dx$.",
+          "solution_en": "**Solution:**\n\n$[x^{-2}/(-2)]_2^\\infty=0-(-1/8)=1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1/8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "Does $\\int_1^\\infty \\frac{1}{x}\\,dx$ converge?",
+          "body_he": "האם $\\int_1^\\infty x^{-1}\\,dx$ מתכנס?",
+          "solution_en": "**Solution:**\n\n$[\\ln x]_1^\\infty = \\infty$. **Diverges.** ($p=1$)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$\\ln b\\to\\infty$. **מתבדר.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_0^\\infty e^{-3x}\\,dx$.",
+          "body_he": "חשבו $\\int_0^\\infty e^{-3x}\\,dx$.",
+          "solution_en": "**Solution:**\n\n$\\lim_{b\\to\\infty}[-e^{-3x}/3]_0^b=0+1/3=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "Evaluate $\\int_0^4 \\frac{1}{\\sqrt{4-x}}\\,dx$.",
+          "body_he": "חשבו $\\int_0^4 (4-x)^{-1/2}\\,dx$.",
+          "solution_en": "Singularity at $x=4$. $\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=0-(-4)=4$.",
+          "solution_he": "**פתרון:**\n\n$\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Use the comparison test: does $\\int_1^\\infty \\frac{\\sin^2x}{x^2}\\,dx$ converge?",
+          "body_he": "מבחן השוואה: האם $\\int_1^\\infty \\sin^2x/x^2\\,dx$ מתכנס?",
+          "solution_en": "$0\\le\\sin^2x\\le1$, so $\\sin^2x/x^2\\le1/x^2$. Since $\\int_1^\\infty 1/x^2\\,dx=1<\\infty$, by comparison **converges**.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$0\\le\\sin^2x/x^2\\le1/x^2$. $\\int 1/x^2$ מתכנס ⟹ **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "Evaluate $\\int_0^\\infty x^2 e^{-x}\\,dx$ (= $\\Gamma(3) = 2!$).",
+          "body_he": "חשבו $\\int_0^\\infty x^2 e^{-x}\\,dx$ ($=\\Gamma(3)=2!$).",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $\\int_0^\\infty x^2e^{-x}\\,dx=2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאינטגרציה בחלקים פעמיים: $2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Determine convergence of $\\int_1^\\infty \\frac{\\ln x}{x^2}\\,dx$.",
+          "body_he": "קבעו התכנסות $\\int_1^\\infty (\\ln x)/x^2\\,dx$.",
+          "solution_en": "IBP: $u=\\ln x$, $dv=x^{-2}\\,dx$. Result: $[-\\ln x/x]_1^\\infty+\\int_1^\\infty x^{-2}\\,dx=0+1=1$. **Converges** to $1$.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאינטגרציה בחלקים. תוצאה: $1$. **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "Does $\\int_{-\\infty}^\\infty \\frac{1}{1+x^2}\\,dx$ converge? Evaluate it.",
+          "body_he": "האם $\\int_{-\\infty}^\\infty 1/(1+x^2)\\,dx$ מתכנס? חשבו.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_{-\\infty}^\\infty\\frac{1}{1+x^2}\\,dx=[\\arctan x]_{-\\infty}^\\infty=\\pi/2-(-\\pi/2)=\\pi$. **Converges** to $\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$[\\arctan x]_{-\\infty}^\\infty=\\pi/2+\\pi/2=\\pi$. **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "Does $\\int_0^1 \\frac{1}{x^2}\\,dx$ converge?",
+          "body_he": "האם $\\int_0^1 x^{-2}\\,dx$ מתכנס?",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\lim_{t\\to0^+}[-1/x]_t^1=-1-(−1/t)=−1+1/t\\to\\infty$. **Diverges.** ($p=2>1$)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$-1+1/t\\to\\infty$. **מתבדר.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "For which values of $p$ does $\\int_e^\\infty \\frac{1}{x(\\ln x)^p}\\,dx$ converge?",
+          "body_he": "לאילו $p$ מתכנס $\\int_e^\\infty 1/(x(\\ln x)^p)\\,dx$?",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nSub $u=\\ln x$, $du=dx/x$. Becomes $\\int_1^\\infty u^{-p}\\,du$. By $p$-test: **converges iff $p>1$**.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nהצבה $u=\\ln x$: $\\int_1^\\infty u^{-p}\\,du$. מתכנס אמ\"מ $p>1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that $\\int_1^\\infty e^{-x}/x\\,dx$ converges by comparison.",
+          "body_he": "הראו שמתכנס $\\int_1^\\infty e^{-x}/x\\,dx$ על ידי השוואה.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nFor $x\\ge1$: $e^{-x}/x\\le e^{-x}$. $\\int_1^\\infty e^{-x}\\,dx=e^{-1}<\\infty$. By comparison **converges**.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$e^{-x}/x\\le e^{-x}$. $\\int_1^\\infty e^{-x}\\,dx=e^{-1}$. לכן **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "Evaluate $\\int_0^\\infty \\frac{1}{(1+x)^3}\\,dx$.",
+          "body_he": "חשבו $\\int_0^\\infty (1+x)^{-3}\\,dx$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$[-(1+x)^{-2}/2]_0^\\infty=0+1/2=1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Determine if $\\int_0^1 x^{-1/3}(1-x)^{-2/3}\\,dx$ converges. (Hint: Beta function — treat singularities at both ends.)",
+          "body_he": "קבעו התכנסות $\\int_0^1 x^{-1/3}(1-x)^{-2/3}\\,dx$ (פונקציית בטא — אי-רציפויות בשני קצוות).",
+          "solution_en": "Split at $1/2$. Near $x=0$: integrand $\\approx x^{-1/3}$, $p=1/3<1$ → converges. Near $x=1$: integrand $\\approx (1-x)^{-2/3}$, $p=2/3<1$ → converges. **Both parts converge**, so the integral converges. (This equals $B(2/3,1/3)=\\pi/\\sin(\\pi/3)=2\\pi/\\sqrt{3}$.)",
+          "solution_he": "פצלו ב-$1/2$. ליד $0$: $\\approx x^{-1/3}$, $p=1/3<1$ ✓. ליד $1$: $\\approx(1-x)^{-2/3}$, $p=2/3<1$ ✓. **מתכנס**."
+        }
       ]
     },
     {
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Missing a singularity.** Don't compute $\\int_0^2 1/x\\,dx = [\\ln|x|]_0^2$ without checking — undefined at $x=0$!\n2. **Symmetric integrals.** $\\int_{-\\infty}^\\infty f(x)\\,dx \\ne \\lim_{R\\to\\infty}\\int_{-R}^R f(x)\\,dx$ in general (that's the Cauchy principal value).\n3. **$p$-test confusion.** For $\\int_1^\\infty$: $p>1$ ↔ converges. For $\\int_0^1$: $p<1$ ↔ converges. They're OPPOSITE.\n4. **Applying FTC to improper integrals.** Always write the limit first.",
-      "body_he_md": "1. **פספוס אי-רציפות.** אל תחשבו $\\int_0^2 1/x\\,dx$ ישירות — אי-מוגדר ב-$x=0$!\n2. **אינטגרלים סימטריים.** $\\int_{-\\infty}^\\infty\\ne\\lim_{R}\\int_{-R}^R$ בכלל.\n3. **בלבול $p$-מבחן.** $\\int_1^\\infty$: $p>1$ ↔ מתכנס. $\\int_0^1$: $p<1$ ↔ מתכנס. **הפוכים**.\n4. **החלת FTC לפני כתיבת הגבול.**"
+      "body_en_md": "1. **Missing a singularity.** Don't compute $\\int_0^2 1/x\\,dx = [\\ln|x|]_0^2$ without checking — undefined at $x=0$!\n2. **Symmetric integrals.** $\\int_{-\\infty}^\\infty f(x)\\,dx \\ne \\lim_{R\\to\\infty}\\int_{-R}^R f(x)\\,dx$ in general (that's the Cauchy principal value).\n3. **$p$-test confusion.** For $\\int_1^\\infty$: $p>1$ ↔ converges. For $\\int_0^1$: $p<1$ ↔ converges. They're OPPOSITE.\n4. **Applying FTC to improper integrals.** Always write the limit first.\n\n**Example misconception:** Direct FTC without limit\n\n**Fix:** Always introduce parameter (b or t), compute integral with finite limits, then take the limit.",
+      "body_he_md": "1. **פספוס אי-רציפות.** אל תחשבו $\\int_0^2 1/x\\,dx$ ישירות — אי-מוגדר ב-$x=0$!\n2. **אינטגרלים סימטריים.** $\\int_{-\\infty}^\\infty\\ne\\lim_{R}\\int_{-R}^R$ בכלל.\n3. **בלבול $p$-מבחן.** $\\int_1^\\infty$: $p>1$ ↔ מתכנס. $\\int_0^1$: $p<1$ ↔ מתכנס. **הפוכים**.\n4. **החלת FTC לפני כתיבת הגבול.**\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Recommended next topics:**\n- `concept:series_convergence_advanced` **series convergence advanced**\n- `concept:integration_partial_fractions` **integration partial fractions**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**נושאים מומלצים להמשך:**\n- `concept:series_convergence_advanced` **series convergence advanced**\n- `concept:integration_partial_fractions` **integration partial fractions**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
@@ -123,33 +225,6 @@
       "title_he": "סיכום",
       "body_en_md": "- **Type I:** replace $\\infty$ with $b$, evaluate, take $b\\to\\infty$.\n- **Type II:** replace singular endpoint with $t$, evaluate, take $t\\to$ singularity.\n- **$p$-test:** $\\int_1^\\infty x^{-p}$: $p>1$ converges; $\\int_0^1 x^{-p}$: $p<1$ converges.\n- **Comparison:** sandwich between convergent/divergent known integrals.\n- Always find and handle ALL singularities.",
       "body_he_md": "- **טיפוס I:** $\\infty\\to b$, חשב, $b\\to\\infty$.\n- **טיפוס II:** נקודת הבעייתית $\\to t$, חשב, $t\\to$ אי-רציפות.\n- **$p$-מבחן:** $\\int_1^\\infty$: $p>1$; $\\int_0^1$: $p<1$.\n- **השוואה:** לכד בין ידועים.\n- מצא וטפל בכל אי-הרציפויות."
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$\\int_1^\\infty x^{-3}\\,dx =$",
-      "stem_he": "$\\int_1^\\infty x^{-3}\\,dx=$",
-      "options_en": ["$1/2$","$1/3$","$2$","Diverges"],
-      "options_he": ["$1/2$","$1/3$","$2$","מתבדר"],
-      "correct_index": 0,
-      "explanation_en": "$[x^{-2}/(-2)]_1^\\infty=0+1/2=1/2$.",
-      "explanation_he": "$1/2$.",
-      "skill_atoms": ["improper_integral_type1","p_integral"]
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Evaluate $\\int_0^\\infty xe^{-2x}\\,dx$.",
-      "stem_he": "חשבו $\\int_0^\\infty xe^{-2x}\\,dx$.",
-      "rubric_en": "IBP: $u=x$, $dv=e^{-2x}\\,dx$. Result: $1/4$.",
-      "rubric_he": "אינטגרציה בחלקים. תוצאה: $1/4$.",
-      "explanation_en": "$\\int_0^b xe^{-2x}\\,dx=[-xe^{-2x}/2]_0^b+\\int_0^b e^{-2x}/2\\,dx=-be^{-2b}/2+[-e^{-2x}/4]_0^b\\to0+1/4=1/4$.",
-      "explanation_he": "אינטגרציה בחלקים; תוצאה $1/4$.",
-      "skill_atoms": ["improper_integral_type1","integration_by_parts"]
     }
   ],
   "agent_hints": {
@@ -167,8 +242,190 @@
         "detect_phrase_he": "ישירות FTC לא אמיתי"
       }
     ],
-    "skill_atoms_unlocked": ["improper_integral_type1","improper_integral_type2","p_integral","comparison_test_integrals"],
+    "skill_atoms_unlocked": [
+      "improper_integral_type1",
+      "improper_integral_type2",
+      "p_integral",
+      "comparison_test_integrals"
+    ],
     "tutor_pacing_hint": "Start with Type I, clear $p$-integral cases. Then Type II. Then comparison for 'harder' functions.",
-    "next_recommended": ["series_convergence_advanced","integration_partial_fractions"]
-  }
+    "next_recommended": [
+      "series_convergence_advanced",
+      "integration_partial_fractions"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$\\int_1^\\infty x^{-3}\\,dx =$",
+      "stem_he": "$\\int_1^\\infty x^{-3}\\,dx=$",
+      "options_en": [
+        "$1/2$",
+        "$1/3$",
+        "$2$",
+        "Diverges"
+      ],
+      "options_he": [
+        "$1/2$",
+        "$1/3$",
+        "$2$",
+        "מתבדר"
+      ],
+      "correct_index": 0,
+      "explanation_en": "**Why this is correct:**\n$[x^{-2}/(-2)]_1^\\infty=0+1/2=1/2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$1/2$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "p_integral"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Evaluate $\\int_0^\\infty xe^{-2x}\\,dx$.",
+      "stem_he": "חשבו $\\int_0^\\infty xe^{-2x}\\,dx$.",
+      "rubric_en": "IBP: $u=x$, $dv=e^{-2x}\\,dx$. Result: $1/4$.",
+      "rubric_he": "אינטגרציה בחלקים. תוצאה: $1/4$.",
+      "explanation_en": "**Why this is correct:**\n$\\int_0^b xe^{-2x}\\,dx=[-xe^{-2x}/2]_0^b+\\int_0^b e^{-2x}/2\\,dx=-be^{-2b}/2+[-e^{-2x}/4]_0^b\\to0+1/4=1/4$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\nאינטגרציה בחלקים; תוצאה $1/4$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "integration_by_parts"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $\\int_2^\\infty \\frac{1}{x^3}\\,dx$.",
+      "stem_he": "חשבו $\\int_2^\\infty x^{-3}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$[x^{-2}/(-2)]_2^\\infty=0-(-1/8)=1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "8"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$[x^{-2}/(-2)]_2^\\infty=0-(-1/8)=1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1/8$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "improper_integral_type2"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Does $\\int_1^\\infty \\frac{1}{x}\\,dx$ converge?",
+      "stem_he": "האם $\\int_1^\\infty x^{-1}\\,dx$ מתכנס?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$[\\ln x]_1^\\infty = \\infty$. **Diverges.** ($p=1$)\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1$)\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$[\\ln x]_1^\\infty = \\infty$. **Diverges.** ($p=1$)\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\ln b\\to\\infty$. **מתבדר.**\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "improper_integral_type2"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $\\int_0^\\infty e^{-3x}\\,dx$.",
+      "stem_he": "חשבו $\\int_0^\\infty e^{-3x}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$\\lim_{b\\to\\infty}[-e^{-3x}/3]_0^b=0+1/3=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\lim_{b\\to\\infty}[-e^{-3x}/3]_0^b=0+1/3=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "improper_integral_type2"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $\\int_0^4 \\frac{1}{\\sqrt{4-x}}\\,dx$.",
+      "stem_he": "חשבו $\\int_0^4 (4-x)^{-1/2}\\,dx$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "Singularity at $x=4$. $\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=0-(-4)=4$",
+          "4$",
+          "4"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\nSingularity at $x=4$. $\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=0-(-4)=4$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "improper_integral_type2"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Use the comparison test: does $\\int_1^\\infty \\frac{\\sin^2x}{x^2}\\,dx$ converge?",
+      "stem_he": "מבחן השוואה: האם $\\int_1^\\infty \\sin^2x/x^2\\,dx$ מתכנס?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$0\\le\\sin^2x\\le1$, so $\\sin^2x/x^2\\le1/x^2$. Since $\\int_1^\\infty 1/x^2\\,dx=1<\\infty$, by comparison **converges**",
+          "1<\\infty$, by comparison **converges**",
+          "1"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$0\\le\\sin^2x\\le1$, so $\\sin^2x/x^2\\le1/x^2$. Since $\\int_1^\\infty 1/x^2\\,dx=1<\\infty$, by comparison **converges**.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$0\\le\\sin^2x/x^2\\le1/x^2$. $\\int 1/x^2$ מתכנס ⟹ **מתכנס**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "improper_integral_type2"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $\\int_0^\\infty x^2 e^{-x}\\,dx$ (= $\\Gamma(3) = 2!$).",
+      "stem_he": "חשבו $\\int_0^\\infty x^2 e^{-x}\\,dx$ ($=\\Gamma(3)=2!$).",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $\\int_0^\\infty x^2e^{-x}\\,dx=2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $\\int_0^\\infty x^2e^{-x}\\,dx=2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאינטגרציה בחלקים פעמיים: $2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "improper_integral_type1",
+        "improper_integral_type2"
+      ]
+    }
+  ],
+  "est_minutes": 45,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

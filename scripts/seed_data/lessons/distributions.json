@@ -2,12 +2,14 @@
   "concept_id": "distributions",
   "subject": "math",
   "level": "university",
-  "math_track": ["stats","calc1"],
+  "math_track": [
+    "stats",
+    "calc1"
+  ],
   "title_en": "Probability Distributions",
   "title_he": "התפלגויות הסתברות",
   "summary_en": "Probability distributions: discrete (binomial, Poisson) and continuous (normal, uniform, exponential). PDF, CDF, mean, variance.",
   "summary_he": "התפלגויות הסתברות: בדידות (בינומית, פואסון) ורציפות (נורמלית, אחידה, מעריכית). פונקציות PDF, CDF, ממוצע, שונות.",
-  "est_minutes": 40,
   "sections": [
     {
       "kind": "intro",
@@ -28,7 +30,7 @@
       "title_en": "Key Distributions",
       "title_he": "התפלגויות מרכזיות",
       "body_en_md": "### Uniform (continuous) $U[a,b]$\n\n$$f(x) = \\frac{1}{b-a}, \\quad a \\le x \\le b. \\quad E[X]=\\frac{a+b}{2}, \\quad \\text{Var}=\\frac{(b-a)^2}{12}.$$\n\n### Normal $N(\\mu, \\sigma^2)$\n\n$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}.$$\n\nStandard normal $Z \\sim N(0,1)$. Standardize: $Z = (X-\\mu)/\\sigma$.\n\n68-95-99.7 rule: $P(|X-\\mu| < k\\sigma)$ for $k=1,2,3$ is approximately $68\\%, 95\\%, 99.7\\%$.\n\n### Exponential $\\text{Exp}(\\lambda)$\n\n$$f(x) = \\lambda e^{-\\lambda x}, \\quad x \\ge 0. \\quad E[X]=1/\\lambda, \\quad \\text{Var}=1/\\lambda^2.$$\n\nMemoryless property: $P(X > s+t | X > s) = P(X > t)$. Used for time to first event (Poisson process).\n\n### Binomial $B(n,p)$ (discrete)\n\n$$P(X=k) = \\binom{n}{k}p^k(1-p)^{n-k}, \\quad E[X]=np, \\quad \\text{Var}=np(1-p).$$\n\n### Poisson $\\text{Poi}(\\lambda)$ (discrete)\n\n$$P(X=k) = \\frac{\\lambda^k e^{-\\lambda}}{k!}, \\quad E[X]=\\text{Var}(X)=\\lambda.$$",
-      "body_he_md": "### אחידה $U[a,b]$\n$$f(x)=\\frac{1}{b-a}. \\quad E[X]=\\frac{a+b}{2}, \\quad \\text{Var}=\\frac{(b-a)^2}{12}.$$\n\n### נורמלית $N(\\mu,\\sigma^2)$\n$$f(x)=\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}.$$\nנרמול: $Z=(X-\\mu)/\\sigma$. כלל 68-95-99.7.\n\n### מעריכית $\\text{Exp}(\\lambda)$\n$$f(x)=\\lambda e^{-\\lambda x}, x\\ge0. \\quad E[X]=1/\\lambda, \\quad \\text{Var}=1/\\lambda^2.$$\nחסרת זיכרון. זמן עד אירוע.\n\n### בינומית $B(n,p)$ (בדידה)\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}. \\quad E=np, \\text{Var}=np(1-p).$$\n\n### פואסון $\\text{Poi}(\\lambda)$ (בדידה)\n$$P(X=k)=\\lambda^k e^{-\\lambda}/k!. \\quad E=\\text{Var}=\\lambda.$$"
+      "body_he_md": "### אחידה $U[a,b]$\n$$f(x)=\\frac{1}{b-a}. \\quad E[X]=\\frac{a+b}{2}, \\quad \\text{Var}=\\frac{(b-a)^2}{12}.$$\n\n### נורמלית $N(\\mu,\\sigma^2)$\n$$f(x)=\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}.$$\nנרמול: $Z=(X-\\mu)/\\sigma$. כלל 68-95-99.7.\n\n### מעריכית $\\text{Exp}(\\lambda)$\n$$f(x)=\\lambda e^{-\\lambda x}, x\\ge0. \\quad E[X]=1/\\lambda, \\quad \\text{Var}=1/\\lambda^2.$$\nחסרת זיכרון. זמן עד אירוע.\n\n### בינומית $B(n,p)$ (בדידה)\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}. \\quad E=np, \\text{Var}=np(1-p).$$\n\n### פואסון $\\text{Poi}(\\lambda)$ (בדידה)\n$$P(X=k)=\\lambda^k e^{-\\lambda}/k!. \\quad E=\\text{Var}=\\lambda.$$\n\n### Exponential $\\text{Exp}(\\lambda)$\n\n### Binomial $B(n,p)$ (discrete)"
     },
     {
       "kind": "worked_example",
@@ -36,7 +38,7 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Uniform Distribution",
       "title_he": "דוגמה פתורה 1 — התפלגות אחידה",
-      "body_en_md": "**Given:** A bus arrives uniformly at random between 9:00 and 9:20 (20 minutes). Find the probability that the wait is more than 12 minutes.\n\n**Step 1:** $X \\sim U[0, 20]$. $f(x) = 1/20$ on $[0, 20]$.\n\n**Step 2:** $P(X > 12) = \\int_{12}^{20} \\frac{1}{20}\\,dx = \\frac{20-12}{20} = \\frac{8}{20} = 0.4$.\n\n**Step 3:** Expected wait time. $E[X] = (0+20)/2 = 10$ minutes.\n\n**Answer:** 40% chance of waiting more than 12 minutes; average wait is 10 minutes.",
+      "body_en_md": "**Given:** A bus arrives uniformly at random between 9:00 and 9:20 (20 minutes). Find the probability that the wait is more than 12 minutes.\n\n### Move 1 $X \\sim U[0, 20]$. $f(x) = 1/20$ on $[0, 20]$.\n\n### Move 2 $P(X > 12) = \\int_{12}^{20} \\frac{1}{20}\\,dx = \\frac{20-12}{20} = \\frac{8}{20} = 0.4$.\n\n### Move 3 Expected wait time. $E[X] = (0+20)/2 = 10$ minutes.\n\n**Answer:** 40% chance of waiting more than 12 minutes; average wait is 10 minutes.",
       "body_he_md": "**נתון:** אוטובוס מגיע אחיד אקראי בין 9:00 ל-9:20 (20 דקות). הסתברות להמתנה יותר מ-12 דקות?\n\n**שלב 1:** $X\\sim U[0,20]$. $f(x)=1/20$.\n\n**שלב 2:** $P(X>12) = (20-12)/20 = 8/20 = 0.4$.\n\n**שלב 3:** $E[X]=10$ דקות.\n\n**תשובה:** 40% סיכוי להמתין יותר מ-12 דקות; ממוצע 10 דקות."
     },
     {
@@ -54,8 +56,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Normal Distribution",
       "title_he": "דוגמה פתורה 2 — התפלגות נורמלית",
-      "body_en_md": "**Given:** Exam scores are normally distributed with $\\mu = 70$, $\\sigma = 10$. A student scores 85.\n\n(a) What is the $z$-score?\n(b) What fraction of students scored below 85?\n(c) Using the 68-95-99.7 rule, what fraction scored between 50 and 90?\n\n**Step 1:** (a) Standardize.\n$$z = \\frac{X - \\mu}{\\sigma} = \\frac{85 - 70}{10} = 1.5.$$\n\n**Step 2:** (b) $P(X < 85) = P(Z < 1.5) \\approx 0.9332$ (from $z$-table).\n\nAbout 93.3% of students scored below 85.\n\n**Step 3:** (c) 68-95-99.7 rule: $\\mu \\pm 2\\sigma = 70 \\pm 20 = [50, 90]$.\n$P(50 < X < 90) \\approx 95\\%$.",
-      "body_he_md": "**נתון:** ציוני בחינה: $N(70, 100)$ ($\\mu=70$, $\\sigma=10$). תלמיד קיבל 85.\n\n(א) $z$-ציון?\n(ב) כמה תלמידים קיבלו פחות מ-85?\n(ג) כמה בין 50 ל-90 (כלל 68-95-99.7)?\n\n**שלב 1:** $z=(85-70)/10=1.5$.\n\n**שלב 2:** $P(X<85)=P(Z<1.5)\\approx0.933$. כ-93.3% קיבלו פחות מ-85.\n\n**שלב 3:** $\\mu\\pm2\\sigma=[50,90]$. $P(50<X<90)\\approx95\\%$."
+      "body_en_md": "**Given:** Exam scores are normally distributed with $\\mu = 70$, $\\sigma = 10$. A student scores 85.\n\n(a) What is the $z$-score?\n(b) What fraction of students scored below 85?\n(c) Using the 68-95-99.7 rule, what fraction scored between 50 and 90?\n\n### Move 1 (a) Standardize.\n$$z = \\frac{X - \\mu}{\\sigma} = \\frac{85 - 70}{10} = 1.5.$$\n\n### Move 2 (b) $P(X < 85) = P(Z < 1.5) \\approx 0.9332$ (from $z$-table).\n\nAbout 93.3% of students scored below 85.\n\n### Move 3 (c) 68-95-99.7 rule: $\\mu \\pm 2\\sigma = 70 \\pm 20 = [50, 90]$.\n$P(50 < X < 90) \\approx 95\\%$.",
+      "body_he_md": "**נתון:** ציוני בחינה: $N(70, 100)$ ($\\mu=70$, $\\sigma=10$). תלמיד קיבל 85.\n\n(א) $z$-ציון?\n(ב) כמה תלמידים קיבלו פחות מ-85?\n(ג) כמה בין 50 ל-90 (כלל 68-95-99.7)?\n\n**שלב 1:** $z=(85-70)/10=1.5$.\n\n**שלב 2:** $P(X<85)=P(Z<1.5)\\approx0.933$. כ-93.3% קיבלו פחות מ-85.\n\n**שלב 3:** $\\mu\\pm2\\sigma=[50,90]$. $P(50<X<90)\\approx95\\%$.\n\n### צעד 3 (c) 68-95-99.7 rule: $\\mu \\pm 2\\sigma = 70 \\pm 20 = [50, 90]$.\n$P(50 < X < 90) \\approx 95\\%$."
     },
     {
       "kind": "checkpoint",
@@ -72,8 +74,8 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Exponential CDF and Percentile (Exam Level)",
       "title_he": "דוגמה פתורה 3 — CDF מעריכי ואחוזון (רמת בחינה)",
-      "body_en_md": "**Given:** Customer service calls arrive according to an exponential distribution with mean 5 minutes. Find: (a) The PDF and CDF of waiting time $T$. (b) Median waiting time. (c) The 90th percentile.\n\n**Step 1:** $\\lambda = 1/E[T] = 1/5 = 0.2$ min$^{-1}$.\n$$f(t) = 0.2 e^{-0.2t}, \\quad t \\ge 0.$$\n$$F(t) = 1 - e^{-0.2t}.$$\n\n**Step 2:** Median: $F(t_{0.5}) = 0.5$.\n$$1 - e^{-0.2t_{0.5}} = 0.5 \\Rightarrow e^{-0.2t_{0.5}} = 0.5 \\Rightarrow t_{0.5} = -\\frac{\\ln 0.5}{0.2} = \\frac{\\ln 2}{0.2} \\approx 3.47 \\text{ min.}$$\n\n**Step 3:** 90th percentile: $F(t_{0.9}) = 0.9$.\n$$1 - e^{-0.2t_{0.9}} = 0.9 \\Rightarrow e^{-0.2t_{0.9}} = 0.1 \\Rightarrow t_{0.9} = \\frac{\\ln 10}{0.2} \\approx 11.5 \\text{ min.}$$\n\n**Note:** Mean (5 min) > Median (3.47 min) — the exponential distribution is right-skewed.",
-      "body_he_md": "**נתון:** שיחות שירות: $\\text{Exp}(\\mu=5)$ דקות. (א) PDF ו-CDF. (ב) חציון. (ג) האחוזון ה-90.\n\n**שלב 1:** $\\lambda=1/5=0.2$.\n$$f(t)=0.2e^{-0.2t}, \\quad F(t)=1-e^{-0.2t}.$$\n\n**שלב 2:** חציון: $F(t_{0.5})=0.5$.\n$$t_{0.5}=\\ln2/0.2\\approx3.47\\text{ דקות.}$$\n\n**שלב 3:** אחוזון 90: $F(t_{0.9})=0.9$.\n$$t_{0.9}=\\ln10/0.2\\approx11.5\\text{ דקות.}$$\n\n**הערה:** ממוצע > חציון → ההתפלגות מוטה ימינה."
+      "body_en_md": "**Given:** Customer service calls arrive according to an exponential distribution with mean 5 minutes. Find: (a) The PDF and CDF of waiting time $T$. (b) Median waiting time. (c) The 90th percentile.\n\n### Move 1 $\\lambda = 1/E[T] = 1/5 = 0.2$ min$^{-1}$.\n$$f(t) = 0.2 e^{-0.2t}, \\quad t \\ge 0.$$\n$$F(t) = 1 - e^{-0.2t}.$$\n\n### Move 2 Median: $F(t_{0.5}) = 0.5$.\n$$1 - e^{-0.2t_{0.5}} = 0.5 \\Rightarrow e^{-0.2t_{0.5}} = 0.5 \\Rightarrow t_{0.5} = -\\frac{\\ln 0.5}{0.2} = \\frac{\\ln 2}{0.2} \\approx 3.47 \\text{ min.}$$\n\n### Move 3 90th percentile: $F(t_{0.9}) = 0.9$.\n$$1 - e^{-0.2t_{0.9}} = 0.9 \\Rightarrow e^{-0.2t_{0.9}} = 0.1 \\Rightarrow t_{0.9} = \\frac{\\ln 10}{0.2} \\approx 11.5 \\text{ min.}$$\n\n**Note:** Mean (5 min) > Median (3.47 min) — the exponential distribution is right-skewed.",
+      "body_he_md": "**נתון:** שיחות שירות: $\\text{Exp}(\\mu=5)$ דקות. (א) PDF ו-CDF. (ב) חציון. (ג) האחוזון ה-90.\n\n**שלב 1:** $\\lambda=1/5=0.2$.\n$$f(t)=0.2e^{-0.2t}, \\quad F(t)=1-e^{-0.2t}.$$\n\n**שלב 2:** חציון: $F(t_{0.5})=0.5$.\n$$t_{0.5}=\\ln2/0.2\\approx3.47\\text{ דקות.}$$\n\n**שלב 3:** אחוזון 90: $F(t_{0.9})=0.9$.\n$$t_{0.9}=\\ln10/0.2\\approx11.5\\text{ דקות.}$$\n\n**הערה:** ממוצע > חציון → ההתפלגות מוטה ימינה.\n\n### צעד 1 $\\lambda = 1/E[T] = 1/5 = 0.2$ min$^{-1}$.\n$$f(t) = 0.2 e^{-0.2t}, \\quad t \\ge 0.$$\n$$F(t) = 1 - e^{-0.2t}.$$\n\n### צעד 2 Median: $F(t_{0.5}) = 0.5$.\n$$1 - e^{-0.2t_{0.5}} = 0.5 \\Rightarrow e^{-0.2t_{0.5}} = 0.5 \\Rightarrow t_{0.5} = -\\frac{\\ln 0.5}{0.2} = \\frac{\\ln 2}{0.2} \\approx 3.47 \\text{ min.}$$\n\n### צעד 3 90th percentile: $F(t_{0.9}) = 0.9$.\n$$1 - e^{-0.2t_{0.9}} = 0.9 \\Rightarrow e^{-0.2t_{0.9}} = 0.1 \\Rightarrow t_{0.9} = \\frac{\\ln 10}{0.2} \\approx 11.5 \\text{ min.}$$"
     },
     {
       "kind": "method_guide",
@@ -86,70 +88,143 @@
       "kind": "exercise_set",
       "title_en": "Practice Exercises",
       "title_he": "תרגילים",
-      "body_en_md": "", "body_he_md": "",
+      "body_en_md": "Work through every exercise below. **Try each one before opening the solution** — the steps matter as much as the final answer.",
+      "body_he_md": "פתרו את כל התרגילים למטה. **נסו כל תרגיל לפני שפותחים את הפתרון** — הצעדים חשובים לא פחות מהתשובה הסופית.",
       "exercises": [
-        {"id":"e1","difficulty":"easy","body_en":"$X\\sim U[0,10]$. Find $P(X<3)$.","body_he":"$X\\sim U[0,10]$. מצאו $P(X<3)$.","solution_en":"$P(X<3)=3/10=0.3$.","solution_he":"$P(X<3)=0.3$."},
-        {"id":"e2","difficulty":"easy","body_en":"$T\\sim\\text{Exp}(\\lambda=0.5)$. Find $E[T]$ and $P(T>4)$.","body_he":"$T\\sim\\text{Exp}(0.5)$. מצאו $E[T]$ ו-$P(T>4)$.","solution_en":"$E[T]=1/0.5=2$. $P(T>4)=e^{-2}\\approx0.135$.","solution_he":"$E[T]=2$. $P(T>4)=e^{-2}\\approx0.135$."},
-        {"id":"e3","difficulty":"easy","body_en":"Heights follow $N(170, 100)$ (cm). What fraction are above 180 cm?","body_he":"גבהים: $N(170,100)$. כמה אחוז מעל 180 ס\"מ?","solution_en":"$z=(180-170)/10=1$. $P(Z>1)=1-\\Phi(1)\\approx1-0.841=0.159$. About 15.9%.","solution_he":"$z=1$. $P(Z>1)\\approx0.159$. כ-15.9%."},
-        {"id":"e4","difficulty":"easy","body_en":"A fair die is rolled 12 times. $X$ = number of 6's. Find $E[X]$ and $P(X=0)$.","body_he":"קובייה הוגנת מוטלת 12 פעמים. $X$ = מספר ה-6. מצאו $E[X]$ ו-$P(X=0)$.","solution_en":"$X\\sim B(12,1/6)$. $E[X]=12/6=2$. $P(X=0)=(5/6)^{12}\\approx0.112$.","solution_he":"$X\\sim B(12,1/6)$. $E[X]=2$. $P(X=0)=(5/6)^{12}\\approx0.112$."},
-        {"id":"e5","difficulty":"medium","body_en":"Verify that $f(x)=2e^{-2x}$ for $x\\ge0$ is a valid PDF and find the mean.","body_he":"אמתו ש-$f(x)=2e^{-2x}$ ($x\\ge0$) הוא PDF תקף ומצאו הממוצע.","solution_en":"$\\int_0^\\infty 2e^{-2x}\\,dx=[-e^{-2x}]_0^\\infty=0-(-1)=1$. ✓ This is $\\text{Exp}(2)$. $E[X]=1/2$.","solution_he":"$\\int_0^\\infty 2e^{-2x}\\,dx=1$. ✓ זו $\\text{Exp}(2)$. $E[X]=1/2$."},
-        {"id":"e6","difficulty":"medium","body_en":"$X\\sim N(100,225)$ (i.e., $\\mu=100$, $\\sigma=15$). Find the value below which 95% of scores fall (95th percentile).","body_he":"$X\\sim N(100,225)$ ($\\sigma=15$). מצאו האחוזון ה-95.","solution_en":"$z_{0.95}\\approx1.645$. $x=\\mu+z\\sigma=100+1.645\\times15=100+24.7=124.7$.","solution_he":"$z_{0.95}\\approx1.645$. $x=100+1.645\\times15\\approx124.7$."},
-        {"id":"e7","difficulty":"medium","body_en":"Average number of accidents per day at a junction: $\\lambda=2$. Find $P(X=0)$ and $P(X\\ge2)$ using Poisson.","body_he":"ממוצע 2 תאונות ליום בצומת. מצאו $P(X=0)$ ו-$P(X\\ge2)$.","solution_en":"$P(X=0)=e^{-2}\\approx0.135$. $P(X\\ge2)=1-P(X=0)-P(X=1)=1-e^{-2}-2e^{-2}=1-3e^{-2}\\approx1-0.406=0.594$.","solution_he":"$P(X=0)=e^{-2}\\approx0.135$. $P(X\\ge2)=1-3e^{-2}\\approx0.594$."},
-        {"id":"e8","difficulty":"medium","body_en":"The median of $\\text{Exp}(\\lambda)$ is $\\ln2/\\lambda$. Verify this for $\\lambda=1$ by computing $F(\\ln2)$.","body_he":"חציון $\\text{Exp}(\\lambda)$ הוא $\\ln2/\\lambda$. אמתו ל-$\\lambda=1$ על ידי חישוב $F(\\ln2)$.","solution_en":"$F(\\ln2)=1-e^{-\\ln2}=1-1/2=1/2$. ✓ So $\\ln2$ is the median.","solution_he":"$F(\\ln2)=1-e^{-\\ln2}=1-1/2=1/2$. ✓"},
-        {"id":"e9","difficulty":"medium","body_en":"$X\\sim U[a,b]$. Show that $\\text{Var}(X)=(b-a)^2/12$.","body_he":"$X\\sim U[a,b]$. הוכיחו ש-$\\text{Var}(X)=(b-a)^2/12$.","solution_en":"$E[X]=(a+b)/2$. $E[X^2]=\\int_a^b x^2/(b-a)\\,dx=[x^3/(3(b-a))]_a^b=(b^3-a^3)/(3(b-a))=(a^2+ab+b^2)/3$. $\\text{Var}=(a^2+ab+b^2)/3-(a+b)^2/4=(b-a)^2/12$.","solution_he":"$E[X^2]=(a^2+ab+b^2)/3$. $\\text{Var}=E[X^2]-(E[X])^2=(b-a)^2/12$. ✓"},
-        {"id":"e10","difficulty":"hard","body_en":"$X\\sim\\text{Exp}(\\lambda)$. Prove the memoryless property: $P(X>s+t|X>s)=P(X>t)$.","body_he":"$X\\sim\\text{Exp}(\\lambda)$. הוכיחו את תכונת חוסר הזיכרון: $P(X>s+t|X>s)=P(X>t)$.","solution_en":"$P(X>s+t|X>s)=P(X>s+t)/P(X>s)=e^{-\\lambda(s+t)}/e^{-\\lambda s}=e^{-\\lambda t}=P(X>t)$. ✓","solution_he":"$P(X>s+t|X>s)=e^{-\\lambda(s+t)}/e^{-\\lambda s}=e^{-\\lambda t}=P(X>t)$. ✓"},
-        {"id":"e11","difficulty":"hard","body_en":"Show that if $X\\sim N(\\mu,\\sigma^2)$ then $Z=(X-\\mu)/\\sigma\\sim N(0,1)$.","body_he":"הראו שאם $X\\sim N(\\mu,\\sigma^2)$ אז $Z=(X-\\mu)/\\sigma\\sim N(0,1)$.","solution_en":"$F_Z(z)=P(Z\\le z)=P((X-\\mu)/\\sigma\\le z)=P(X\\le\\mu+z\\sigma)=F_X(\\mu+z\\sigma)$. Differentiate: $f_Z(z)=\\sigma f_X(\\mu+z\\sigma)=\\sigma\\cdot\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-z^2/2}=\\frac{1}{\\sqrt{2\\pi}}e^{-z^2/2}$, which is $N(0,1)$. ✓","solution_he":"$f_Z(z)=\\sigma f_X(\\mu+z\\sigma)=\\frac{1}{\\sqrt{2\\pi}}e^{-z^2/2}$. ✓"},
-        {"id":"e12","difficulty":"hard","body_en":"$X\\sim B(100, 0.1)$. Use normal approximation ($E[X]=10$, $\\text{Var}=9$) to estimate $P(7\\le X\\le 13)$.","body_he":"$X\\sim B(100,0.1)$. השתמשו בקירוב נורמלי ($E=10$, $\\text{Var}=9$) לאמוד $P(7\\le X\\le13)$.","solution_en":"$X\\approx N(10,9)$, $\\sigma=3$. Apply continuity correction: $P(6.5\\le X\\le13.5)$. $z_1=(6.5-10)/3=-1.167$, $z_2=(13.5-10)/3=1.167$. $P(-1.167<Z<1.167)\\approx2\\Phi(1.167)-1\\approx2(0.879)-1=0.758$.","solution_he":"$z_1=-1.167$, $z_2=1.167$. $P\\approx0.758$."},
-        {"id":"e13","difficulty":"hard","body_en":"Find the variance of $X\\sim\\text{Exp}(\\lambda)$ directly from $\\text{Var}(X)=E[X^2]-(E[X])^2$.","body_he":"מצאו שונות $X\\sim\\text{Exp}(\\lambda)$ ישירות מ-$\\text{Var}=E[X^2]-(E[X])^2$.","solution_en":"$E[X]=1/\\lambda$. $E[X^2]=\\int_0^\\infty x^2\\lambda e^{-\\lambda x}\\,dx$. IBP twice: $E[X^2]=2/\\lambda^2$. $\\text{Var}=2/\\lambda^2-1/\\lambda^2=1/\\lambda^2$.","solution_he":"$E[X^2]=2/\\lambda^2$. $\\text{Var}=2/\\lambda^2-1/\\lambda^2=1/\\lambda^2$."}
+        {
+          "id": "e1",
+          "difficulty": "easy",
+          "body_en": "$X\\sim U[0,10]$. Find $P(X<3)$.",
+          "body_he": "$X\\sim U[0,10]$. מצאו $P(X<3)$.",
+          "solution_en": "**Solution:**\n\n$P(X<3)=3/10=0.3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$P(X<3)=0.3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e2",
+          "difficulty": "easy",
+          "body_en": "$T\\sim\\text{Exp}(\\lambda=0.5)$. Find $E[T]$ and $P(T>4)$.",
+          "body_he": "$T\\sim\\text{Exp}(0.5)$. מצאו $E[T]$ ו-$P(T>4)$.",
+          "solution_en": "**Solution:**\n\n$E[T]=1/0.5=2$. $P(T>4)=e^{-2}\\approx0.135$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**פתרון:**\n\n$E[T]=2$. $P(T>4)=e^{-2}\\approx0.135$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e3",
+          "difficulty": "easy",
+          "body_en": "Heights follow $N(170, 100)$ (cm). What fraction are above 180 cm?",
+          "body_he": "גבהים: $N(170,100)$. כמה אחוז מעל 180 ס\"מ?",
+          "solution_en": "$z=(180-170)/10=1$. $P(Z>1)=1-\\Phi(1)\\approx1-0.841=0.159$. About 15.9%.",
+          "solution_he": "$z=1$. $P(Z>1)\\approx0.159$. כ-15.9%."
+        },
+        {
+          "id": "e4",
+          "difficulty": "easy",
+          "body_en": "A fair die is rolled 12 times. $X$ = number of 6's. Find $E[X]$ and $P(X=0)$.",
+          "body_he": "קובייה הוגנת מוטלת 12 פעמים. $X$ = מספר ה-6. מצאו $E[X]$ ו-$P(X=0)$.",
+          "solution_en": "$X\\sim B(12,1/6)$. $E[X]=12/6=2$. $P(X=0)=(5/6)^{12}\\approx0.112$.",
+          "solution_he": "$X\\sim B(12,1/6)$. $E[X]=2$. $P(X=0)=(5/6)^{12}\\approx0.112$."
+        },
+        {
+          "id": "e5",
+          "difficulty": "medium",
+          "body_en": "Verify that $f(x)=2e^{-2x}$ for $x\\ge0$ is a valid PDF and find the mean.",
+          "body_he": "אמתו ש-$f(x)=2e^{-2x}$ ($x\\ge0$) הוא PDF תקף ומצאו הממוצע.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^\\infty 2e^{-2x}\\,dx=[-e^{-2x}]_0^\\infty=0-(-1)=1$. ✓ This is $\\text{Exp}(2)$. $E[X]=1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\int_0^\\infty 2e^{-2x}\\,dx=1$. ✓ זו $\\text{Exp}(2)$. $E[X]=1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e6",
+          "difficulty": "medium",
+          "body_en": "$X\\sim N(100,225)$ (i.e., $\\mu=100$, $\\sigma=15$). Find the value below which 95% of scores fall (95th percentile).",
+          "body_he": "$X\\sim N(100,225)$ ($\\sigma=15$). מצאו האחוזון ה-95.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$z_{0.95}\\approx1.645$. $x=\\mu+z\\sigma=100+1.645\\times15=100+24.7=124.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$z_{0.95}\\approx1.645$. $x=100+1.645\\times15\\approx124.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e7",
+          "difficulty": "medium",
+          "body_en": "Average number of accidents per day at a junction: $\\lambda=2$. Find $P(X=0)$ and $P(X\\ge2)$ using Poisson.",
+          "body_he": "ממוצע 2 תאונות ליום בצומת. מצאו $P(X=0)$ ו-$P(X\\ge2)$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=0)=e^{-2}\\approx0.135$. $P(X\\ge2)=1-P(X=0)-P(X=1)=1-e^{-2}-2e^{-2}=1-3e^{-2}\\approx1-0.406=0.594$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(X=0)=e^{-2}\\approx0.135$. $P(X\\ge2)=1-3e^{-2}\\approx0.594$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e8",
+          "difficulty": "medium",
+          "body_en": "The median of $\\text{Exp}(\\lambda)$ is $\\ln2/\\lambda$. Verify this for $\\lambda=1$ by computing $F(\\ln2)$.",
+          "body_he": "חציון $\\text{Exp}(\\lambda)$ הוא $\\ln2/\\lambda$. אמתו ל-$\\lambda=1$ על ידי חישוב $F(\\ln2)$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$F(\\ln2)=1-e^{-\\ln2}=1-1/2=1/2$. ✓ So $\\ln2$ is the median.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$F(\\ln2)=1-e^{-\\ln2}=1-1/2=1/2$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e9",
+          "difficulty": "medium",
+          "body_en": "$X\\sim U[a,b]$. Show that $\\text{Var}(X)=(b-a)^2/12$.",
+          "body_he": "$X\\sim U[a,b]$. הוכיחו ש-$\\text{Var}(X)=(b-a)^2/12$.",
+          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=(a+b)/2$. $E[X^2]=\\int_a^b x^2/(b-a)\\,dx=[x^3/(3(b-a))]_a^b=(b^3-a^3)/(3(b-a))=(a^2+ab+b^2)/3$. $\\text{Var}=(a^2+ab+b^2)/3-(a+b)^2/4=(b-a)^2/12$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X^2]=(a^2+ab+b^2)/3$. $\\text{Var}=E[X^2]-(E[X])^2=(b-a)^2/12$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e10",
+          "difficulty": "hard",
+          "body_en": "$X\\sim\\text{Exp}(\\lambda)$. Prove the memoryless property: $P(X>s+t|X>s)=P(X>t)$.",
+          "body_he": "$X\\sim\\text{Exp}(\\lambda)$. הוכיחו את תכונת חוסר הזיכרון: $P(X>s+t|X>s)=P(X>t)$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$P(X>s+t|X>s)=P(X>s+t)/P(X>s)=e^{-\\lambda(s+t)}/e^{-\\lambda s}=e^{-\\lambda t}=P(X>t)$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$P(X>s+t|X>s)=e^{-\\lambda(s+t)}/e^{-\\lambda s}=e^{-\\lambda t}=P(X>t)$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e11",
+          "difficulty": "hard",
+          "body_en": "Show that if $X\\sim N(\\mu,\\sigma^2)$ then $Z=(X-\\mu)/\\sigma\\sim N(0,1)$.",
+          "body_he": "הראו שאם $X\\sim N(\\mu,\\sigma^2)$ אז $Z=(X-\\mu)/\\sigma\\sim N(0,1)$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$F_Z(z)=P(Z\\le z)=P((X-\\mu)/\\sigma\\le z)=P(X\\le\\mu+z\\sigma)=F_X(\\mu+z\\sigma)$. Differentiate: $f_Z(z)=\\sigma f_X(\\mu+z\\sigma)=\\sigma\\cdot\\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-z^2/2}=\\frac{1}{\\sqrt{2\\pi}}e^{-z^2/2}$, which is $N(0,1)$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$f_Z(z)=\\sigma f_X(\\mu+z\\sigma)=\\frac{1}{\\sqrt{2\\pi}}e^{-z^2/2}$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e12",
+          "difficulty": "hard",
+          "body_en": "$X\\sim B(100, 0.1)$. Use normal approximation ($E[X]=10$, $\\text{Var}=9$) to estimate $P(7\\le X\\le 13)$.",
+          "body_he": "$X\\sim B(100,0.1)$. השתמשו בקירוב נורמלי ($E=10$, $\\text{Var}=9$) לאמוד $P(7\\le X\\le13)$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$X\\approx N(10,9)$, $\\sigma=3$. Apply continuity correction: $P(6.5\\le X\\le13.5)$. $z_1=(6.5-10)/3=-1.167$, $z_2=(13.5-10)/3=1.167$. $P(-1.167<Z<1.167)\\approx2\\Phi(1.167)-1\\approx2(0.879)-1=0.758$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$z_1=-1.167$, $z_2=1.167$. $P\\approx0.758$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        },
+        {
+          "id": "e13",
+          "difficulty": "hard",
+          "body_en": "Find the variance of $X\\sim\\text{Exp}(\\lambda)$ directly from $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
+          "body_he": "מצאו שונות $X\\sim\\text{Exp}(\\lambda)$ ישירות מ-$\\text{Var}=E[X^2]-(E[X])^2$.",
+          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$E[X]=1/\\lambda$. $E[X^2]=\\int_0^\\infty x^2\\lambda e^{-\\lambda x}\\,dx$. IBP twice: $E[X^2]=2/\\lambda^2$. $\\text{Var}=2/\\lambda^2-1/\\lambda^2=1/\\lambda^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$E[X^2]=2/\\lambda^2$. $\\text{Var}=2/\\lambda^2-1/\\lambda^2=1/\\lambda^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+        }
       ]
     },
     {
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **PDF vs PMF.** For continuous distributions, $P(X=x)=0$. Only intervals have positive probability.\n2. **Forgetting $\\int f(x)\\,dx = 1$ check.** Always verify a PDF integrates to 1.\n3. **$z$-score sign error.** $z = (x-\\mu)/\\sigma$ — note it's $x-\\mu$, not $\\mu-x$.\n4. **Exponential $\\lambda$ vs mean.** $\\lambda$ is the RATE, mean is $1/\\lambda$. Don't confuse them.\n5. **Normal approximation to binomial.** Use continuity correction: $P(X=k) \\approx P(k-0.5 < Y < k+0.5)$.",
-      "body_he_md": "1. **PDF לעומת PMF.** לרציף: $P(X=x)=0$. רק קטעים בעלי הסתברות חיובית.\n2. **שכחת בדיקת $\\int f=1$.** תמיד אמת.\n3. **שגיאת סימן ב-$z$.** $z=(x-\\mu)/\\sigma$, לא $\\mu-x$.\n4. **$\\lambda$ לעומת ממוצע.** $\\lambda$ = קצב, ממוצע = $1/\\lambda$.\n5. **קירוב נורמלי לבינומי.** תיקון רציפות: $P(X=k)\\approx P(k-0.5<Y<k+0.5)$."
+      "body_en_md": "1. **PDF vs PMF.** For continuous distributions, $P(X=x)=0$. Only intervals have positive probability.\n2. **Forgetting $\\int f(x)\\,dx = 1$ check.** Always verify a PDF integrates to 1.\n3. **$z$-score sign error.** $z = (x-\\mu)/\\sigma$ — note it's $x-\\mu$, not $\\mu-x$.\n4. **Exponential $\\lambda$ vs mean.** $\\lambda$ is the RATE, mean is $1/\\lambda$. Don't confuse them.\n5. **Normal approximation to binomial.** Use continuity correction: $P(X=k) \\approx P(k-0.5 < Y < k+0.5)$.\n\n**Example misconception:** P(X=x)>0 for continuous distributions\n\n**Fix:** For continuous RV, P(X=x)=0 for any single value. Only P(a<X<b)>0.",
+      "body_he_md": "1. **PDF לעומת PMF.** לרציף: $P(X=x)=0$. רק קטעים בעלי הסתברות חיובית.\n2. **שכחת בדיקת $\\int f=1$.** תמיד אמת.\n3. **שגיאת סימן ב-$z$.** $z=(x-\\mu)/\\sigma$, לא $\\mu-x$.\n4. **$\\lambda$ לעומת ממוצע.** $\\lambda$ = קצב, ממוצע = $1/\\lambda$.\n5. **קירוב נורמלי לבינומי.** תיקון רציפות: $P(X=k)\\approx P(k-0.5<Y<k+0.5)$.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+    },
+    {
+      "id": "why_matters",
+      "kind": "why_matters",
+      "title_en": "Why it matters",
+      "title_he": "למה זה חשוב",
+      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**You will use this to unlock:**\n- `concept:hypothesis_testing` **hypothesis testing** (prereq)\n- `concept:nuclear_physics` **Nuclear Physics & Radioactivity** (applies_to)\n\n**Builds on:**\n- `concept:probability_basic` **Basic Probability**\n- `concept:descriptive_stats` **Statistics — Advanced (Normal Distribution)**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
+      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:hypothesis_testing` **hypothesis testing** (prereq)\n- `concept:nuclear_physics` **פיזיקה גרעינית ורדיואקטיביות** (applies_to)\n\n**מבוסס על:**\n- `concept:probability_basic` **הסתברות בסיסית**\n- `concept:descriptive_stats` **סטטיסטיקה מתקדמת (התפלגות נורמלית)**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Key formulas table:**\n\n| | Mean | Variance | $P(X>x)$ |\n|---|---|---|---|\n| $U[a,b]$ | $(a+b)/2$ | $(b-a)^2/12$ | $(b-x)/(b-a)$ |\n| $N(\\mu,\\sigma^2)$ | $\\mu$ | $\\sigma^2$ | $1-\\Phi((x-\\mu)/\\sigma)$ |\n| $\\text{Exp}(\\lambda)$ | $1/\\lambda$ | $1/\\lambda^2$ | $e^{-\\lambda x}$ |\n\n**Percentile calculation:**\n- Uniform: $x_p = a + p(b-a)$.\n- Exponential: $x_p = -\\ln(1-p)/\\lambda$.\n- Normal: $x_p = \\mu + z_p \\sigma$ (look up $z_p$ in table).",
+      "body_en_md": "**Key formulas table:**\n\n| | Mean | Variance | $P(X>x)$ |\n|---|---|---|---|\n| $U[a,b]$ | $(a+b)/2$ | $(b-a)^2/12$ | $(b-x)/(b-a)$ |\n| $N(\\mu,\\sigma^2)$ | $\\mu$ | $\\sigma^2$ | $1-\\Phi((x-\\mu)/\\sigma)$ |\n| $\\text{Exp}(\\lambda)$ | $1/\\lambda$ | $1/\\lambda^2$ | $e^{-\\lambda x}$ |\n\n**Percentile calculation:**\n- Uniform: $x_p = a + p(b-a)$.\n- Exponential: $x_p = -\\ln(1-p)/\\lambda$.\n- Normal: $x_p = \\mu + z_p \\sigma$ (look up $z_p$ in table).\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
       "body_he_md": "**טבלת נוסחאות:**\n\n| | ממוצע | שונות | $P(X>x)$ |\n|---|---|---|---|\n| $U[a,b]$ | $(a+b)/2$ | $(b-a)^2/12$ | $(b-x)/(b-a)$ |\n| $N(\\mu,\\sigma^2)$ | $\\mu$ | $\\sigma^2$ | $1-\\Phi(z)$ |\n| $\\text{Exp}(\\lambda)$ | $1/\\lambda$ | $1/\\lambda^2$ | $e^{-\\lambda x}$ |\n\n**חישוב אחוזון:**\n- אחידה: $x_p=a+p(b-a)$.\n- מעריכית: $x_p=-\\ln(1-p)/\\lambda$.\n- נורמלית: $x_p=\\mu+z_p\\sigma$."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- Uniform: flat PDF, $E=(a+b)/2$, $P = $ length ratio.\n- Normal: bell curve, standardize $z=(x-\\mu)/\\sigma$, use $z$-table.\n- Exponential: $f=\\lambda e^{-\\lambda x}$, $E=1/\\lambda$, memoryless, $P(T>t)=e^{-\\lambda t}$.\n- Binomial: $n$ trials, prob $p$, $E=np$.\n- Always verify $\\int f = 1$ for PDF.",
+      "body_en_md": "- Uniform: flat PDF, $E=(a+b)/2$, $P = $ length ratio.\n- Normal: bell curve, standardize $z=(x-\\mu)/\\sigma$, use $z$-table.\n- Exponential: $f=\\lambda e^{-\\lambda x}$, $E=1/\\lambda$, memoryless, $P(T>t)=e^{-\\lambda t}$.\n- Binomial: $n$ trials, prob $p$, $E=np$.\n- Always verify $\\int f = 1$ for PDF.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
       "body_he_md": "- אחידה: PDF שטוח, $E=(a+b)/2$.\n- נורמלית: פעמון, $z=(x-\\mu)/\\sigma$.\n- מעריכית: $f=\\lambda e^{-\\lambda x}$, $E=1/\\lambda$, חסרת זיכרון.\n- בינומית: $n$ ניסויים, $p$, $E=np$.\n- תמיד אמת $\\int f=1$."
-    }
-  ],
-  "questions": [
-    {
-      "ord": 1,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "$X\\sim U[0,6]$. $P(1<X<4)=$",
-      "stem_he": "$X\\sim U[0,6]$. $P(1<X<4)=$",
-      "options_en": ["$1/2$","$1/3$","$2/3$","$1/6$"],
-      "options_he": ["$1/2$","$1/3$","$2/3$","$1/6$"],
-      "correct_index": 0,
-      "explanation_en": "$(4-1)/(6-0)=3/6=1/2$.",
-      "explanation_he": "$3/6=1/2$.",
-      "skill_atoms": ["uniform_distribution"]
-    },
-    {
-      "ord": 2,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "$T\\sim\\text{Exp}(\\lambda=0.1)$ hours. Find $P(T>20)$ and the median.",
-      "stem_he": "$T\\sim\\text{Exp}(0.1)$ שעות. מצאו $P(T>20)$ ואת החציון.",
-      "rubric_en": "$P(T>20)=e^{-2}\\approx0.135$. Median $=\\ln2/0.1\\approx6.93$ hours.",
-      "rubric_he": "$P(T>20)=e^{-2}\\approx0.135$. חציון $\\approx6.93$ שעות.",
-      "explanation_en": "CDF: $F(t)=1-e^{-0.1t}$. $P(T>20)=e^{-2}$. Median: $1-e^{-0.1m}=0.5$, $m=10\\ln2$.",
-      "explanation_he": "$P(T>20)=e^{-2}$. חציון $=10\\ln2$.",
-      "skill_atoms": ["exponential_distribution","percentile_calculation"]
     }
   ],
   "agent_hints": {
@@ -167,8 +242,190 @@
         "detect_phrase_he": "הסתברות שווה ערך ספציפי רציף"
       }
     ],
-    "skill_atoms_unlocked": ["uniform_distribution","normal_distribution","exponential_distribution","percentile_calculation","pdf_cdf"],
+    "skill_atoms_unlocked": [
+      "uniform_distribution",
+      "normal_distribution",
+      "exponential_distribution",
+      "percentile_calculation",
+      "pdf_cdf"
+    ],
     "tutor_pacing_hint": "Start with uniform (simplest PDF, geometric intuition). Then normal (central to stats). Then exponential (connects to Poisson).",
-    "next_recommended": ["hypothesis_testing","series_convergence_advanced"]
-  }
+    "next_recommended": [
+      "hypothesis_testing",
+      "series_convergence_advanced"
+    ]
+  },
+  "questions": [
+    {
+      "ord": 1,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "$X\\sim U[0,6]$. $P(1<X<4)=$",
+      "stem_he": "$X\\sim U[0,6]$. $P(1<X<4)=$",
+      "options_en": [
+        "$1/2$",
+        "$1/3$",
+        "$2/3$",
+        "$1/6$"
+      ],
+      "options_he": [
+        "$1/2$",
+        "$1/3$",
+        "$2/3$",
+        "$1/6$"
+      ],
+      "correct_index": 0,
+      "explanation_en": "**Why this is correct:**\n$(4-1)/(6-0)=3/6=1/2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$3/6=1/2$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "uniform_distribution"
+      ]
+    },
+    {
+      "ord": 2,
+      "kind": "open",
+      "difficulty": "medium",
+      "stem_en": "$T\\sim\\text{Exp}(\\lambda=0.1)$ hours. Find $P(T>20)$ and the median.",
+      "stem_he": "$T\\sim\\text{Exp}(0.1)$ שעות. מצאו $P(T>20)$ ואת החציון.",
+      "rubric_en": "$P(T>20)=e^{-2}\\approx0.135$. Median $=\\ln2/0.1\\approx6.93$ hours.",
+      "rubric_he": "$P(T>20)=e^{-2}\\approx0.135$. חציון $\\approx6.93$ שעות.",
+      "explanation_en": "**Why this is correct:**\nCDF: $F(t)=1-e^{-0.1t}$. $P(T>20)=e^{-2}$. Median: $1-e^{-0.1m}=0.5$, $m=10\\ln2$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
+      "explanation_he": "**למה זה נכון:**\n$P(T>20)=e^{-2}$. חציון $=10\\ln2$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "exponential_distribution",
+        "percentile_calculation"
+      ]
+    },
+    {
+      "ord": 3,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$X\\sim U[0,10]$. Find $P(X<3)$.",
+      "stem_he": "$X\\sim U[0,10]$. מצאו $P(X<3)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$P(X<3)=3/10=0.3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.3"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(X<3)=3/10=0.3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(X<3)=0.3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "uniform_distribution",
+        "normal_distribution"
+      ]
+    },
+    {
+      "ord": 4,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "$T\\sim\\text{Exp}(\\lambda=0.5)$. Find $E[T]$ and $P(T>4)$.",
+      "stem_he": "$T\\sim\\text{Exp}(0.5)$. מצאו $E[T]$ ו-$P(T>4)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution:**\n\n$E[T]=1/0.5=2$. $P(T>4)=e^{-2}\\approx0.135$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "e^{-2}\\approx0.135$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "0.135"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$E[T]=1/0.5=2$. $P(T>4)=e^{-2}\\approx0.135$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$E[T]=2$. $P(T>4)=e^{-2}\\approx0.135$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "uniform_distribution",
+        "normal_distribution"
+      ]
+    },
+    {
+      "ord": 5,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "Heights follow $N(170, 100)$ (cm). What fraction are above 180 cm?",
+      "stem_he": "גבהים: $N(170,100)$. כמה אחוז מעל 180 ס\"מ?",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$z=(180-170)/10=1$. $P(Z>1)=1-\\Phi(1)\\approx1-0.841=0.159$. About 15.9%",
+          "0.159$. About 15.9%",
+          "15.9"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$z=(180-170)/10=1$. $P(Z>1)=1-\\Phi(1)\\approx1-0.841=0.159$. About 15.9%.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$z=1$. $P(Z>1)\\approx0.159$. כ-15.9%.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "uniform_distribution",
+        "normal_distribution"
+      ]
+    },
+    {
+      "ord": 6,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "stem_en": "A fair die is rolled 12 times. $X$ = number of 6's. Find $E[X]$ and $P(X=0)$.",
+      "stem_he": "קובייה הוגנת מוטלת 12 פעמים. $X$ = מספר ה-6. מצאו $E[X]$ ו-$P(X=0)$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "$X\\sim B(12,1/6)$. $E[X]=12/6=2$. $P(X=0)=(5/6)^{12}\\approx0.112$",
+          "(5/6)^{12}\\approx0.112$",
+          "0.112"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n$X\\sim B(12,1/6)$. $E[X]=12/6=2$. $P(X=0)=(5/6)^{12}\\approx0.112$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n$X\\sim B(12,1/6)$. $E[X]=2$. $P(X=0)=(5/6)^{12}\\approx0.112$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "skill_atoms": [
+        "uniform_distribution",
+        "normal_distribution"
+      ]
+    },
+    {
+      "ord": 7,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Verify that $f(x)=2e^{-2x}$ for $x\\ge0$ is a valid PDF and find the mean.",
+      "stem_he": "אמתו ש-$f(x)=2e^{-2x}$ ($x\\ge0$) הוא PDF תקף ומצאו הממוצע.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^\\infty 2e^{-2x}\\,dx=[-e^{-2x}]_0^\\infty=0-(-1)=1$. ✓ This is $\\text{Exp}(2)$. $E[X]=1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "2"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^\\infty 2e^{-2x}\\,dx=[-e^{-2x}]_0^\\infty=0-(-1)=1$. ✓ This is $\\text{Exp}(2)$. $E[X]=1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\int_0^\\infty 2e^{-2x}\\,dx=1$. ✓ זו $\\text{Exp}(2)$. $E[X]=1/2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "skill_atoms": [
+        "uniform_distribution",
+        "normal_distribution"
+      ]
+    },
+    {
+      "ord": 8,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "$X\\sim N(100,225)$ (i.e., $\\mu=100$, $\\sigma=15$). Find the value below which 95% of scores fall (95th percentile).",
+      "stem_he": "$X\\sim N(100,225)$ ($\\sigma=15$). מצאו האחוזון ה-95.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$z_{0.95}\\approx1.645$. $x=\\mu+z\\sigma=100+1.645\\times15=100+24.7=124.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "124.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "124.7"
+        ],
+        "case_sensitive": false
+      },
+      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$z_{0.95}\\approx1.645$. $x=\\mu+z\\sigma=100+1.645\\times15=100+24.7=124.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
+      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$z_{0.95}\\approx1.645$. $x=100+1.645\\times15\\approx124.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "skill_atoms": [
+        "uniform_distribution",
+        "normal_distribution"
+      ]
+    }
+  ],
+  "est_minutes": 40,
+  "author": "cursor-claude-2026",
+  "version": 1,
+  "level_focus": null,
+  "skill_atom_bank": null
 }

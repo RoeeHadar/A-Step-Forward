@@ -18,6 +18,7 @@ export const SECTION_KINDS = new Set([
   'exam_problems',
   'practice_tip',
   'summary',
+  'why_matters',
 ]);
 
 export const Q_KINDS = new Set([
