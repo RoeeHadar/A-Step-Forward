@@ -83,5 +83,5 @@ describe.skipIf(!hasDb)('plan persistence (live Neon)', () => {
 
     const profile = await getLearnerProfile(learnerId);
     expect(profile?.points_group).toBe('5pt');
-  });
+  }, 60_000);
 });
