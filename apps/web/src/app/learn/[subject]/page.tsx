@@ -29,6 +29,39 @@ interface KgConcept {
 }
 const kgConcepts: KgConcept[] = (kg as { concepts: KgConcept[] }).concepts;
 
+function hasHebrewText(value: string | null | undefined): boolean {
+  return Boolean(value && /[\u0590-\u05FF]/.test(value));
+}
+
+function resolveConceptForCatalog(
+  id: string,
+  kgById: Map<string, KgConcept>,
+  kgSubject: 'math' | 'physics' | null,
+): KgConcept {
+  const aliasId = resolveConceptAlias(id);
+  const indexEntry =
+    getLessonIndexEntry(id) ??
+    getLessonIndexEntry(aliasId) ??
+    getLessonIndexEntry(resolveConceptAlias(aliasId));
+  const fromKg = kgById.get(id) ?? kgById.get(aliasId);
+
+  const titleEn = indexEntry?.title_en ?? fromKg?.name ?? id.replace(/_/g, ' ');
+  const titleHe =
+    (hasHebrewText(indexEntry?.title_he) ? indexEntry!.title_he : null) ??
+    (hasHebrewText(fromKg?.name_he) ? fromKg!.name_he : null);
+
+  if (fromKg) {
+    return { ...fromKg, id, name: titleEn, name_he: titleHe };
+  }
+
+  return {
+    id,
+    name: titleEn,
+    name_he: titleHe,
+    subject: kgSubject ?? 'math',
+  };
+}
+
 // Legacy allowlists removed — curriculum category concept_ids drive all tracks.
 
 interface UiSubjectFilter {
@@ -163,22 +196,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const filter = uiSubjectFilter(subject);
   const kgById = new Map(kgConcepts.map((c) => [c.id, c]));
 
-  const conceptsForSubject = filter.conceptAllowlist.map((id) => {
-    const fromKg = kgById.get(id);
-    if (fromKg) return fromKg;
-    const aliasId = resolveConceptAlias(id);
-    const fromAlias = kgById.get(aliasId);
-    if (fromAlias) {
-      return { ...fromAlias, id, name: fromAlias.name, name_he: fromAlias.name_he };
-    }
-    const indexEntry = getLessonIndexEntry(id) ?? getLessonIndexEntry(aliasId);
-    return {
-      id,
-      name: indexEntry?.title_en ?? id.replace(/_/g, ' '),
-      name_he: indexEntry?.title_he ?? null,
-      subject: filter.kgSubject ?? 'math',
-    };
-  });
+  const conceptsForSubject = filter.conceptAllowlist.map((id) =>
+    resolveConceptForCatalog(id, kgById, filter.kgSubject),
+  );
 
   const conceptIds = conceptsForSubject.map((c) => c.id);
   const [bagrut, coverage, lessonMeta, clerkUser] = await Promise.all([
@@ -351,7 +371,10 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                   {group.concepts.map((c) => {
                     const statusCfg = c.status ? STATUS_CONFIG[c.status] : null;
                     const StatusIcon = statusCfg?.icon ?? BookOpen;
-                    const titles = resolveConceptTitles(c.id);
+                    const titles = resolveConceptTitles(c.id, {
+                      title_en: c.name,
+                      title_he: c.name_he,
+                    });
                     const cardTitle = pickConceptTitle(titles, locale);
 
                     const contentBadge = c.hasLesson ? t.lessonBadge : null;

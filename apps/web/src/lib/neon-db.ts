@@ -1004,7 +1004,8 @@ async function hydrateLessonRow(lesson: LessonRow): Promise<LessonWithQuestions>
  * deep-links stay stable across re-seeds.
  */
 export async function fetchLessonById(lessonId: string): Promise<LessonWithQuestions | null> {
-  if (!sql) return null;
+  const { mergeLessonWithBundle } = await import('./lesson-bundle');
+  if (!sql) return mergeLessonWithBundle(null, lessonId);
   try {
     const lessonRows = (await sql`
       SELECT id, concept_id, subject, level, math_track,
@@ -1017,20 +1018,22 @@ export async function fetchLessonById(lessonId: string): Promise<LessonWithQuest
       LIMIT 1
     `) as LessonRow[];
     const lesson = lessonRows[0];
-    if (!lesson) return null;
-    return hydrateLessonRow(lesson);
+    const conceptId = lesson?.concept_id ?? lessonId;
+    const fromDb = lesson ? await hydrateLessonRow(lesson) : null;
+    return mergeLessonWithBundle(fromDb, conceptId);
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('fetchLessonById failed:', err);
     }
-    return null;
+    return mergeLessonWithBundle(null, lessonId);
   }
 }
 
 export async function fetchLessonByConceptId(
   conceptId: string,
 ): Promise<LessonWithQuestions | null> {
-  if (!sql) return null;
+  const { mergeLessonWithBundle } = await import('./lesson-bundle');
+  if (!sql) return mergeLessonWithBundle(null, conceptId);
   try {
     const lessonRows = (await sql`
       SELECT id, concept_id, subject, level, math_track,
@@ -1042,13 +1045,14 @@ export async function fetchLessonByConceptId(
       LIMIT 1
     `) as LessonRow[];
     const lesson = lessonRows[0];
-    if (!lesson) return null;
-    return hydrateLessonRow(lesson);
+    const fromDb = lesson ? await hydrateLessonRow(lesson) : null;
+    return mergeLessonWithBundle(fromDb, conceptId);
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('fetchLessonByConceptId failed:', err);
     }
-    return null;
+    const { mergeLessonWithBundle } = await import('./lesson-bundle');
+    return mergeLessonWithBundle(null, conceptId);
   }
 }
 

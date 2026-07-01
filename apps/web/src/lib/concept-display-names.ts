@@ -6,6 +6,7 @@
  */
 import kg from './kg-data.json';
 import lessonsIndex from './lessons-index.generated.json';
+import { resolveConceptAlias } from './concept-aliases';
 
 interface KgConcept {
   id: string;
@@ -72,7 +73,12 @@ export interface ConceptTitles {
 }
 
 function resolveCanonicalTitles(conceptId: string): ConceptTitles {
-  const lesson = lessonsById.get(conceptId) ?? findPrefixMatch(conceptId, lessons);
+  const canonical = resolveConceptAlias(conceptId);
+  const lesson =
+    lessonsById.get(conceptId) ??
+    lessonsById.get(canonical) ??
+    findPrefixMatch(conceptId, lessons) ??
+    findPrefixMatch(canonical, lessons);
   if (lesson) {
     return {
       title_en: lesson.title_en,
@@ -80,9 +86,18 @@ function resolveCanonicalTitles(conceptId: string): ConceptTitles {
     };
   }
 
-  const kgInfo = kgById[conceptId] ?? findPrefixMatch(conceptId, Object.values(kgById));
+  const kgInfo =
+    kgById[conceptId] ??
+    kgById[canonical] ??
+    findPrefixMatch(conceptId, Object.values(kgById)) ??
+    findPrefixMatch(canonical, Object.values(kgById));
   if (kgInfo) {
-    return { title_en: kgInfo.name, title_he: kgInfo.name_he };
+    const he = kgInfo.name_he;
+    const enLooksHebrew = he && he !== kgInfo.name && /[\u0590-\u05FF]/.test(he);
+    return {
+      title_en: kgInfo.name,
+      title_he: enLooksHebrew ? he : null,
+    };
   }
 
   const alias = CHAPTER_ALIASES[conceptId];

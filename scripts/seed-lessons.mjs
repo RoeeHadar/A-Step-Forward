@@ -15,13 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { neon } from '@neondatabase/serverless';
-
-const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
-if (!url) {
-  console.error('DATABASE_URL must be set');
-  process.exit(1);
-}
-const sql = neon(url);
+import { normalizeLesson, validateLesson } from './lib/normalize-lesson.mjs';
 
 const args = new Map();
 for (const arg of process.argv.slice(2)) {
@@ -40,122 +34,11 @@ if (!fs.existsSync(dir)) {
 const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json')).sort();
 console.log(`[seed-lessons] ${files.length} lesson files in ${dir}`);
 
-// ---------- validation ----------------------------------------------------
-const SECTION_KINDS = new Set([
-  'intro',
-  'theory',
-  'worked_example',
-  'pitfall',
-  'practice_tip',
-  'summary',
-]);
 const Q_KINDS = new Set([
-  'mcq',
-  'mcq_multi',
-  'true_false',
-  'open',
-  'short_answer',
-  'fill_blank',
-  'numeric',
-  'match',
-  'ordering',
-  'derivation',
+  'mcq', 'mcq_multi', 'true_false', 'open', 'short_answer',
+  'fill_blank', 'numeric', 'match', 'ordering', 'derivation',
 ]);
-const DIFFICULTIES = new Set(['easy', 'medium', 'hard']);
 
-function fail(file, msg) {
-  console.error(`  [invalid] ${file}: ${msg}`);
-  process.exit(2);
-}
-
-function validateLesson(file, l) {
-  const need = ['concept_id', 'subject', 'level', 'title_en', 'title_he',
-    'summary_en', 'summary_he', 'sections', 'agent_hints', 'questions'];
-  for (const k of need) if (l[k] === undefined) fail(file, `missing field ${k}`);
-  if (!Array.isArray(l.sections) || l.sections.length === 0) fail(file, 'sections must be non-empty array');
-  if (!Array.isArray(l.questions) || l.questions.length < 4) fail(file, 'questions must be array of >=4');
-  for (const [i, s] of l.sections.entries()) {
-    if (!SECTION_KINDS.has(s.kind)) fail(file, `section[${i}].kind invalid: ${s.kind}`);
-    for (const k of ['title_en', 'title_he', 'body_en_md', 'body_he_md']) {
-      if (typeof s[k] !== 'string' || !s[k].trim()) fail(file, `section[${i}].${k} required`);
-    }
-  }
-  const seenOrd = new Set();
-  for (const [i, q] of l.questions.entries()) {
-    if (!Q_KINDS.has(q.kind)) fail(file, `q[${i}].kind invalid: ${q.kind}`);
-    if (!DIFFICULTIES.has(q.difficulty)) fail(file, `q[${i}].difficulty invalid: ${q.difficulty}`);
-    if (typeof q.ord !== 'number') fail(file, `q[${i}].ord must be number`);
-    if (seenOrd.has(q.ord)) fail(file, `duplicate q.ord ${q.ord}`);
-    seenOrd.add(q.ord);
-    for (const k of ['stem_en', 'stem_he', 'explanation_en', 'explanation_he']) {
-      if (typeof q[k] !== 'string' || !q[k].trim()) fail(file, `q[${i}].${k} required`);
-    }
-    if (q.kind === 'mcq') {
-      if (!Array.isArray(q.options_en) || !Array.isArray(q.options_he)) fail(file, `q[${i}] mcq needs options_en/he`);
-      if (q.options_en.length !== q.options_he.length) fail(file, `q[${i}] options length mismatch`);
-      if (typeof q.correct_index !== 'number' || q.correct_index < 0 || q.correct_index >= q.options_en.length) {
-        fail(file, `q[${i}] correct_index out of range`);
-      }
-    } else if (q.kind === 'mcq_multi') {
-      if (!Array.isArray(q.options_en) || !Array.isArray(q.options_he)) fail(file, `q[${i}] mcq_multi needs options_en/he`);
-      if (q.options_en.length !== q.options_he.length) fail(file, `q[${i}] options length mismatch`);
-      if (!Array.isArray(q.correct_indices) || q.correct_indices.length === 0) {
-        fail(file, `q[${i}] mcq_multi needs correct_indices: int[]`);
-      }
-      for (const idx of q.correct_indices) {
-        if (typeof idx !== 'number' || idx < 0 || idx >= q.options_en.length) {
-          fail(file, `q[${i}] correct_indices contains out-of-range index ${idx}`);
-        }
-      }
-    } else if (q.kind === 'true_false') {
-      if (typeof q.correct_bool !== 'boolean') fail(file, `q[${i}] true_false needs correct_bool: boolean`);
-    } else if (q.kind === 'open' || q.kind === 'derivation') {
-      if (!q.rubric_en || !q.rubric_he) fail(file, `q[${i}] ${q.kind} needs rubric_en/he`);
-    } else if (q.kind === 'short_answer') {
-      if (!Array.isArray(q.acceptable_answers) || q.acceptable_answers.length === 0) {
-        fail(file, `q[${i}] short_answer needs acceptable_answers: string[]`);
-      }
-    } else if (q.kind === 'match') {
-      if (!Array.isArray(q.left_en) || !Array.isArray(q.left_he) ||
-          !Array.isArray(q.right_en) || !Array.isArray(q.right_he)) {
-        fail(file, `q[${i}] match needs left_en/he + right_en/he arrays`);
-      }
-      if (q.left_en.length !== q.left_he.length || q.right_en.length !== q.right_he.length) {
-        fail(file, `q[${i}] match left/right EN-HE length mismatch`);
-      }
-      if (!Array.isArray(q.correct_pairs) || q.correct_pairs.length !== q.left_en.length) {
-        fail(file, `q[${i}] match needs correct_pairs: int[] with one entry per left item`);
-      }
-      for (const idx of q.correct_pairs) {
-        if (typeof idx !== 'number' || idx < 0 || idx >= q.right_en.length) {
-          fail(file, `q[${i}] correct_pairs contains out-of-range index ${idx}`);
-        }
-      }
-    } else if (q.kind === 'ordering') {
-      if (!Array.isArray(q.steps_en) || !Array.isArray(q.steps_he)) {
-        fail(file, `q[${i}] ordering needs steps_en/he`);
-      }
-      if (q.steps_en.length !== q.steps_he.length) {
-        fail(file, `q[${i}] ordering steps EN-HE length mismatch`);
-      }
-      if (!Array.isArray(q.correct_order) || q.correct_order.length !== q.steps_en.length) {
-        fail(file, `q[${i}] ordering needs correct_order: int[] permutation of step indices`);
-      }
-    } else {
-      // fill_blank / numeric
-      if (typeof q.correct_answer !== 'string' || !q.correct_answer.trim()) {
-        fail(file, `q[${i}] ${q.kind} needs correct_answer`);
-      }
-    }
-    if (!Array.isArray(q.skill_atoms)) fail(file, `q[${i}].skill_atoms must be array`);
-  }
-}
-
-// ---------- answer_payload extraction ------------------------------------
-// For each question kind, builds the structured-answer JSONB blob the grader
-// reads from `lesson_questions.answer_payload`. Legacy `correct_index` /
-// `correct_answer` columns are kept populated for backward-compat with
-// existing `mcq` and `numeric` grading code paths.
 function buildAnswerPayload(q) {
   switch (q.kind) {
     case 'mcq_multi':
@@ -176,15 +59,15 @@ function buildAnswerPayload(q) {
         correct_order: q.correct_order,
       };
     case 'derivation':
-      // Derivation is rubric-graded server-side; payload optionally lists
-      // expected-step keywords the LLM-judge can look for.
       return q.expected_steps ? { expected_steps: q.expected_steps } : null;
     default:
-      return null;
+      return q.answer_payload ?? null;
   }
 }
 
 const lessons = [];
+const validationErrors = [];
+
 for (const file of files) {
   const fp = path.join(dir, file);
   let raw;
@@ -194,17 +77,38 @@ for (const file of files) {
     console.error(`[seed-lessons] JSON parse error in ${file}: ${e.message}`);
     process.exit(1);
   }
-  validateLesson(file, raw);
-  lessons.push({ file, data: raw });
+  const data = normalizeLesson(raw, file);
+  const errs = validateLesson(file, data);
+  if (errs.length) {
+    validationErrors.push({ file, errors: errs });
+    continue;
+  }
+  lessons.push({ file, data });
 }
-console.log(`[seed-lessons] validated ${lessons.length} lessons`);
+
+console.log(`[seed-lessons] validated ${lessons.length}/${files.length} lessons`);
+if (validationErrors.length) {
+  for (const { file, errors } of validationErrors.slice(0, 15)) {
+    console.error(`  [invalid] ${file}: ${errors.join('; ')}`);
+  }
+  if (validationErrors.length > 15) {
+    console.error(`  ... and ${validationErrors.length - 15} more invalid files`);
+  }
+  process.exit(2);
+}
 
 if (dryRun) {
   console.log('[seed-lessons] --dry-run: skipping DB writes');
   process.exit(0);
 }
 
-// ---------- DB writes -----------------------------------------------------
+const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+if (!url) {
+  console.error('DATABASE_URL must be set');
+  process.exit(1);
+}
+const sql = neon(url);
+
 let inserted = 0;
 let questionsInserted = 0;
 const errors = [];
@@ -271,10 +175,6 @@ for (const { file, data } of lessons) {
       questionsInserted += 1;
     }
 
-    // Backfill the first-class `skill_atoms` and `lesson_skill_atoms` tables.
-    // Each atom from either the lesson's `skill_atoms_unlocked` list (the
-    // lesson teaches it) or any of its questions' `skill_atoms` arrays (the
-    // questions exercise it). Subject defaults to the lesson's subject.
     const taughtAtoms = new Set(data.agent_hints?.skill_atoms_unlocked ?? []);
     const exercisedAtoms = new Set();
     for (const q of data.questions) for (const a of q.skill_atoms ?? []) exercisedAtoms.add(a);
@@ -287,7 +187,6 @@ for (const { file, data } of lessons) {
         ON CONFLICT (id) DO NOTHING
       `;
     }
-    // Clear previous links for this lesson, then re-insert.
     await sql`DELETE FROM lesson_skill_atoms WHERE lesson_id = ${lessonId}::uuid`;
     for (const atom of taughtAtoms) {
       await sql`
@@ -313,9 +212,6 @@ for (const { file, data } of lessons) {
   }
 }
 
-// ---------- KG cross-edges backfill --------------------------------------
-// Read the curated cross-subject edges JSON and upsert into kg_edges so the
-// path planner has a single SQL surface to query against. Idempotent.
 try {
   const crossEdgesPath = 'apps/web/src/lib/kg-cross-edges.json';
   if (fs.existsSync(crossEdgesPath)) {

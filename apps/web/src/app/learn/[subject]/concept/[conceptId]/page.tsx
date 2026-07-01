@@ -14,6 +14,7 @@ import { LessonPageClient } from '@/components/lesson-page-client';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
+import { isConceptInBundle } from '@/lib/lesson-bundle';
 import { MathGlossaryPanel } from '@/components/math-glossary-panel';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
 
@@ -126,7 +127,11 @@ export default async function ConceptPage({
   ]);
 
   const indexEntry = getLessonIndexEntry(conceptId) ?? getLessonIndexEntry(canonicalLessonId);
-  const hasAuthoredLesson = Boolean(lessonData) || Boolean(indexEntry);
+  const hasAuthoredLesson =
+    Boolean(lessonData) ||
+    Boolean(indexEntry) ||
+    isConceptInBundle(conceptId) ||
+    isConceptInBundle(canonicalLessonId);
 
   if (!concept && !hasAuthoredLesson) {
     notFound();
