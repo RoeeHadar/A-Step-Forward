@@ -1,0 +1,832 @@
+#!/usr/bin/env python3
+"""Expand rotational_dynamics.json to MIN_WORDS depth gates."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+LESSON = ROOT / "scripts/seed_data/lessons/rotational_dynamics.json"
+
+SECTION_UPDATES = {
+    "intro": {
+        "body_en_md": (
+            "A force applied directly at a door hinge produces no rotation at all. "
+            "The same force applied at the far edge of the door produces maximum rotation. "
+            "The relevant quantity is not force alone — it is **torque**: the product of force "
+            "and the perpendicular distance (moment arm) from the pivot axis.\n\n"
+            "For rotating rigid bodies, Newton's second law takes the rotational form:\n"
+            "$$\\tau = I\\alpha$$\n"
+            "where:\n"
+            "- $\\tau$ = net torque (N·m) — the rotational **cause**\n"
+            "- $I$ = moment of inertia (kg·m²) — rotational inertia, resistance to $\\alpha$\n"
+            "- $\\alpha$ = angular acceleration (rad/s²) — the rotational **effect**\n\n"
+            "Just as mass resists linear acceleration, $I$ resists angular acceleration — but $I$ "
+            "depends on **how mass is distributed**, not just how much mass there is. "
+            "Mass at the rim contributes far more to $I$ than mass near the axis.\n\n"
+            "**Why it matters:** Every motor, wheel, turbine, flywheel, and spinning athlete "
+            "obeys $\\tau = I\\alpha$. Bagrut and university mechanics both test whether you can "
+            "switch between torque dynamics ($\\tau = I\\alpha$), angular momentum conservation "
+            "($L = I\\omega$), and rolling energy ($K = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$). "
+            "The yo-yo, the rolling cylinder on an incline, and the figure skater pulling in her "
+            "arms are classic examples where rotational dynamics explains real motion."
+        ),
+        "body_he_md": (
+            "כוח שמוחל ישירות על ציר דלת לא מסובב אותה כלל. אותו כוח בקצה הרחוק של הדלת "
+            "יוצר סיבוב מקסימali. הכמות הרלוונטית אינה הכוח בלבד — זהו **מומנט כוח**: "
+            "כפל של כוח במרחק ניצב (זרוע מומנט) מהציר.\n\n"
+            "עבור גופים קשיחים מסתובבים, חוק שני של ניוטון מקבל צורה סיבובית:\n"
+            "$$\\tau=I\\alpha$$\n"
+            "כאשר:\n"
+            "- $\\tau$ = מומנט כוח נטו (נ\"מ) — **הגורם** הסיבובי\n"
+            "- $I$ = מומנט התמדה (ק\"ג·מ²) — התנגדות ל-$\\alpha$, כמו מסה ל-$a$\n"
+            "- $\\alpha$ = תאוצה זוויתית (ראד/ש²) — **התוצאה** הסיבובית\n\n"
+            "כמו שמסה מתנגדת לתאוצה לינארית, $I$ מתנגד לתאוצה זוויתית — אך $I$ תלוי "
+            "**בהתפלגות המסה**, לא רק בכמותה. מסה בקצה תורמת ל-$I$ הרבה יותר ממסה ליד הציר.\n\n"
+            "**מדוע חשוב:** כל מנוע, גלגל, טורבינה, גלגל תנופה וספורטאית מסתובבת מצייתים ל-$\\tau=I\\alpha$. "
+            "בבגרות ובמכניקה באוניברסיטה בודקים מעבר בין דינמיקת מומנט ($\\tau=I\\alpha$), "
+            "שימור תנע זוויתי ($L=I\\omega$) ואנרגיית גלגול. יו-יו, גליל במדרון ומחליקה "
+            "שמושכת זרועות — דוגמאות קלאסיות שבהן דינמיקה סיבובית מסבירה תנועה אמיתית."
+        ),
+    },
+    "definition": {
+        "body_en_md": (
+            "### Torque\n"
+            "$$\\tau = rF\\sin\\phi = r_{\\perp}F$$\n"
+            "where $r$ = distance from axis to force point, $\\phi$ = angle between "
+            "$\\vec{r}$ and $\\vec{F}$, $r_{\\perp} = r\\sin\\phi$ = moment arm. "
+            "Vector form: $\\vec{\\tau} = \\vec{r}\\times\\vec{F}$. Units: N·m (not joules!). "
+            "Define a positive rotation direction before summing torques.\n\n"
+            "### Newton's 2nd law for rotation\n"
+            "$$\\sum\\tau = I\\alpha.$$\n"
+            "Only **external** torques about the chosen axis enter $\\sum\\tau$. "
+            "Internal torques cancel in pairs for a rigid body.\n\n"
+            "### Moment of inertia (common objects)\n"
+            "| Object | Axis | $I$ |\n"
+            "|---|---|---|\n"
+            "| Point mass | Distance $r$ | $mr^2$ |\n"
+            "| Solid disk | Central | $\\frac{1}{2}MR^2$ |\n"
+            "| Solid sphere | Central | $\\frac{2}{5}MR^2$ |\n"
+            "| Hollow cylinder (ring) | Central | $MR^2$ |\n"
+            "| Uniform rod | End | $\\frac{1}{3}ML^2$ |\n"
+            "| Uniform rod | Center | $\\frac{1}{12}ML^2$ |\n\n"
+            "**Parallel axis theorem:** $I = I_{cm} + Md^2$, where $d$ = distance from CM to new axis. "
+            "Use this whenever the rotation axis is not through the centre of mass.\n\n"
+            "### Angular momentum\n"
+            "$$L = I\\omega. \\quad \\sum\\tau = \\frac{dL}{dt}.$$\n"
+            "When $\\sum\\tau_{ext} = 0$: $L = \\text{const}$ (angular momentum conservation). "
+            "If $I$ decreases, $\\omega$ must increase to keep $L$ fixed.\n\n"
+            "### Rotational kinetic energy\n"
+            "$$K_{rot} = \\tfrac{1}{2}I\\omega^2.$$\n"
+            "For rolling without slipping: $K_{total} = \\tfrac{1}{2}mv_{cm}^2 + \\tfrac{1}{2}I\\omega^2$. "
+            "The rolling constraint $v_{cm} = R\\omega$ links translational and rotational motion."
+        ),
+        "body_he_md": (
+            "### מומנט כוח\n"
+            "$$\\tau=rF\\sin\\phi=r_{\\perp}F.$$\n"
+            "$r$ = מרחק מהציר לנקודת הפעלת הכוח, $\\phi$ = זווית בין $\\vec{r}$ ל-$\\vec{F}$, "
+            "$r_{\\perp}=r\\sin\\phi$ = זרוע מומנט. צורה וקטורית: $\\vec{\\tau}=\\vec{r}\\times\\vec{F}$. "
+            "יחידות: נ\"מ (לא ג'ול!). הגדירו כיוון סיבוב חיובי לפני סיכום מומנטים.\n\n"
+            "### חוק שני לסיבוב\n"
+            "$$\\sum\\tau=I\\alpha.$$\n"
+            "רק מומנטי כוח **חיצוניים** סביב הציר הנבחר נכנסים ל-$\\sum\\tau$. "
+            "מומנטים פנימיים מתבטלים בזוגות בגוף קשיח.\n\n"
+            "### מומנטי התמדה נפוצים\n"
+            "| גוף | ציר | $I$ |\n"
+            "|---|---|---|\n"
+            "| מסה נקודתית | מרחק $r$ | $mr^2$ |\n"
+            "| דיסקה מלאה | מרכז | $\\frac{1}{2}MR^2$ |\n"
+            "| כדור מלא | מרכז | $\\frac{2}{5}MR^2$ |\n"
+            "| טבעת / גליל חלול | מרכז | $MR^2$ |\n"
+            "| מוט אחיד | קצה | $\\frac{1}{3}ML^2$ |\n"
+            "| מוט אחיד | מרכז | $\\frac{1}{12}ML^2$ |\n\n"
+            "**משפט הצירים המקביליים:** $I=I_{cm}+Md^2$, $d$ = מרחק מ-מ\"מ לציר החדש. "
+            "השתמשו כשהציר לא עובר דרך מרכז המסה.\n\n"
+            "### תנע זוויתי\n"
+            "$$L=I\\omega. \\quad \\sum\\tau=\\frac{dL}{dt}.$$\n"
+            "כאשר $\\sum\\tau_{\\text{חיצוני}}=0$: $L=\\text{קבוע}$ (שימור תנע זוויתי). "
+            "אם $I$ קטן, $\\omega$ חייב לגדול.\n\n"
+            "### אנרגיה קינטית סיבובית\n"
+            "$$K_{\\text{סיב}}=\\tfrac{1}{2}I\\omega^2.$$\n"
+            "גלגול ללא החלקה: $K_{\\text{כולל}}=\\tfrac{1}{2}mv_{\\text{מ\"מ}}^2+\\tfrac{1}{2}I\\omega^2$. "
+            "אילוץ הגלגול $v_{\\text{מ\"מ}}=R\\omega$ מקשר תנועה תנועתית לסיבובית."
+        ),
+    },
+}
+
+# Fix typo in intro Hebrew
+SECTION_UPDATES["intro"]["body_he_md"] = SECTION_UPDATES["intro"]["body_he_md"].replace(
+    "מקסימali", "מקסימלי"
+)
+
+SECTION_UPDATES["theory"] = {
+    "body_en_md": (
+        "### Rotational work–energy\n"
+        "The work done by a constant torque through angle $\\theta$:\n"
+        "$$W_{rot} = \\tau\\theta.$$\n"
+        "Work–energy theorem for rotation: $W_{net} = \\Delta K_{rot} = "
+        "\\tfrac{1}{2}I\\omega_f^2 - \\tfrac{1}{2}I\\omega_0^2$. "
+        "This is the rotational analogue of $W = \\Delta K$ for translation.\n\n"
+        "### Rolling objects: energy split\n"
+        "For a solid cylinder ($I = \\tfrac{1}{2}mR^2$) rolling without slipping at $v_{cm}$:\n"
+        "$$K_{total} = \\tfrac{1}{2}mv_{cm}^2 + \\tfrac{1}{2}\\cdot\\tfrac{1}{2}mR^2\\cdot"
+        "\\frac{v_{cm}^2}{R^2} = \\tfrac{3}{4}mv_{cm}^2.$$\n"
+        "So **2/3 of KE is translational, 1/3 is rotational** for a solid cylinder. "
+        "A hollow ring ($I = mR^2$) stores half its total KE in rotation — it rolls slower "
+        "down an incline than a solid cylinder of the same mass and radius.\n\n"
+        "### Angular momentum conservation\n"
+        "When no external torque acts about an axis, $L = I\\omega = \\text{const}$. "
+        "If $I$ decreases (figure skater pulling arms in), $\\omega$ increases:\n"
+        "$$I_1\\omega_1 = I_2\\omega_2.$$\n"
+        "Friction between colliding disks can transfer angular momentum within the system "
+        "while total $L$ is conserved — but mechanical energy is generally **not** conserved "
+        "in inelastic rotational collisions.\n\n"
+        "### Physical insight on $I$\n"
+        "$I$ depends on both total mass and how mass is distributed. "
+        "More mass at the rim → larger $I$ → harder to accelerate or decelerate. "
+        "Flywheels concentrate mass at the rim to store rotational energy efficiently. "
+        "Exam tip: always identify the correct $I$ formula and axis before writing $\\tau = I\\alpha$."
+    ),
+    "body_he_md": (
+        "### עבודה-אנרגיה לסיבוב\n"
+        "עבודה של מומנט קבוע דרך זווית $\\theta$:\n"
+        "$$W_{\\text{סיב}}=\\tau\\theta.$$\n"
+        "משפט עבודה-אנרגיה: $W_{\\text{נטו}}=\\Delta K_{\\text{סיב}}="
+        "\\tfrac{1}{2}I\\omega_f^2-\\tfrac{1}{2}I\\omega_0^2$. "
+        "זה האנלוג הסיבובי ל-$W=\\Delta K$ בתנועה לינארית.\n\n"
+        "### גלגול — חלוקת אנרגיה\n"
+        "לגליל מלא ($I=\\tfrac{1}{2}mR^2$) ללא החלקה ב-$v_{\\text{מ\"מ}}$:\n"
+        "$$K_{\\text{כולל}}=\\tfrac{3}{4}mv_{\\text{מ\"מ}}^2.$$\n"
+        "2/3 מהאנרגיה תנועתית, 1/3 סיבובית. טבעת ($I=mR^2$) מאחסנת חצי מה-KE בסיבוב — "
+        "מתגלגלת לאט יותר במדרון מגליל מלא באותה מסה ורדיוס.\n\n"
+        "### שימור תנע זוויתי\n"
+        "ללא מומנט כוח חיצוני סביב ציר: $L=I\\omega=\\text{קבוע}$. "
+        "אם $I$ קטן (מחליקה מושכת זרועות), $\\omega$ גדל:\n"
+        "$$I_1\\omega_1=I_2\\omega_2.$$\n"
+        "חיכוך בין דיסקות מעביר תנע זוויתי בתוך המערכת — $L$ הכולל נשמר, "
+        "אך אנרגיה מכנית בדרך כלל **לא** נשמרת בהתנגשות סיבובית לא-אלסטית.\n\n"
+        "### תובנה על $I$\n"
+        "$I$ תלוי במסה ובהתפלגותה. יותר מסה בקצה → $I$ גדול → קשה יותר לתאץ/לבלום. "
+        "גלגלי תנופה מרכזים מסה בקצה לאחסון אנרגיה. "
+        "טיפ לבחינה: זהו נוסחת $I$ וציר נכונים לפני $\\tau=I\\alpha$."
+    ),
+}
+
+WORKED_EXAMPLES = {
+    1: {
+        "body_en_md": (
+            "**Given:** A disk has $I = 2$ kg·m². A net torque of $\\tau = 4$ N·m is applied. Find:\n"
+            "(a) Angular acceleration $\\alpha$.\n"
+            "(b) Time to reach $\\omega = 20$ rad/s from rest.\n"
+            "(c) Rotational KE at $\\omega = 20$ rad/s.\n\n"
+            "This is the direct application of $\\tau = I\\alpha$ — the rotational analogue of $F = ma$.\n\n"
+            "### Move 1: Angular acceleration\n"
+            "$$\\alpha = \\frac{\\tau}{I} = \\frac{4}{2} = 2 \\text{ rad/s}^2.$$\n\n"
+            "### Move 2: Time from rest\n"
+            "With constant $\\alpha$ and $\\omega_0 = 0$: $\\omega = \\alpha t$.\n"
+            "$$20 = 0 + 2t \\Rightarrow t = 10 \\text{ s}.$$\n\n"
+            "### Move 3: Rotational kinetic energy\n"
+            "$$K_{rot} = \\tfrac{1}{2}I\\omega^2 = \\tfrac{1}{2}(2)(400) = 400 \\text{ J}.$$\n\n"
+            "**Answer:** $\\alpha = 2$ rad/s²; $t = 10$ s; $K_{rot} = 400$ J.\n\n"
+            "**Sanity check:** Larger $I$ would give smaller $\\alpha$ for the same torque — "
+            "consistent with rotational inertia. The KE grows as $\\omega^2$, so doubling "
+            "$\\omega$ quadruples $K_{rot}$.\n\n"
+            "**Exam tip:** When $\\tau$ and $I$ are given directly, never integrate unnecessarily — "
+            "$\\alpha = \\tau/I$ is one step. If asked for angle rotated, use $\\theta = \\tfrac{1}{2}\\alpha t^2$."
+        ),
+        "body_he_md": (
+            "**נתון:** דיסקה $I=2$ ק\"ג·מ², מומנט נטו $\\tau=4$ נ\"מ. מצאו:\n"
+            "(א) $\\alpha$. (ב) זמן להגיע ל-$\\omega=20$ ראד/ש ממנוחה. (ג) $K_{\\text{סיב}}$ ב-$\\omega=20$ ראד/ש.\n\n"
+            "יישום ישיר של $\\tau=I\\alpha$ — האנלוג הסיבובי ל-$F=ma$. זו בעיית \"מומנט ידוע, $I$ ידוע\".\n\n"
+            "### צעד 1: תאוצה זוויתית\n"
+            "$$\\alpha=\\frac{\\tau}{I}=\\frac{4}{2}=2\\text{ ראד/ש}^2.$$\n\n"
+            "### צעד 2: זמן ממנוחה\n"
+            "עם $\\alpha$ קבוע ו-$\\omega_0=0$: $\\omega=\\alpha t$.\n"
+            "$$20=2t\\Rightarrow t=10\\text{ ש'}.$$\n\n"
+            "### צעד 3: אנרגיה קינטית סיבובית\n"
+            "$$K_{\\text{סיב}}=\\tfrac{1}{2}I\\omega^2=\\tfrac{1}{2}(2)(400)=400\\text{ ג'ול}.$$\n\n"
+            "**תשובה:** $\\alpha=2$ ראד/ש²; $t=10$ ש'; $K_{\\text{סיב}}=400$ ג'ול.\n\n"
+            "**בדיקת הגיון:** $I$ גדול יותר → $\\alpha$ קטן יותר לאותו $\\tau$. "
+            "ה-KE גדל כ-$\\omega^2$ — הכפלת $\\omega$ פי 2 מכפילה את $K$ פי 4.\n\n"
+            "**טיפ לבחינה:** כש-$\\tau$ ו-$I$ נתונים ישירות, $\\alpha=\\tau/I$ בשלב אחד. "
+            "אם שואלים על זווית סיבוב, השתמשו ב-$\\theta=\\tfrac{1}{2}\\alpha t^2$."
+        ),
+    },
+    2: {
+        "body_en_md": (
+            "**Given:** A solid cylinder ($m = 3$ kg, $R = 0.2$ m) rolls without slipping "
+            "down a 30° incline. Find the linear acceleration $a$ of the centre of mass.\n\n"
+            "Rolling problems require **two** Newton's laws plus the rolling constraint.\n\n"
+            "### Move 1: Free-body diagram\n"
+            "- Weight component along incline: $mg\\sin30° = 3(10)(0.5) = 15$ N.\n"
+            "- Normal force: $N = mg\\cos30°$.\n"
+            "- Static friction $f$ at contact point (acts up the incline — enables rolling).\n\n"
+            "### Move 2: Translation\n"
+            "$$mg\\sin\\theta - f = ma. \\quad (1)$$\n\n"
+            "### Move 3: Rotation about CM\n"
+            "Friction at radius $R$ provides torque $\\tau = fR$:\n"
+            "$$fR = I\\alpha = \\tfrac{1}{2}mR^2 \\cdot \\alpha. \\quad (2)$$\n\n"
+            "### Move 4: Rolling constraint\n"
+            "$a = R\\alpha \\Rightarrow \\alpha = a/R$. Substitute into (2):\n"
+            "$$f = \\tfrac{1}{2}ma. \\quad (3)$$\n\n"
+            "### Move 5: Solve\n"
+            "$$mg\\sin\\theta - \\tfrac{1}{2}ma = ma \\Rightarrow a = \\frac{2g\\sin\\theta}{3} "
+            "= \\frac{2(10)(0.5)}{3} \\approx 3.33 \\text{ m/s}^2.$$\n\n"
+            "**General result:** Solid cylinder on angle $\\theta$: $a = \\tfrac{2}{3}g\\sin\\theta$ — "
+            "independent of mass and radius. Exam tip: hollow objects ($I = mR^2$) give $a = \\tfrac{1}{2}g\\sin\\theta$.\n\n"
+            "**Sanity check:** If friction vanished, the block would slide at $a = g\\sin\\theta = 5$ m/s². "
+            "Rolling at $3.33$ m/s² is slower because some gravitational energy spins the cylinder. "
+            "Static friction does **positive** work through a torque — it is essential for rolling.\n\n"
+            "**Exam pattern:** Bagrut rolling incline questions almost always use this three-equation "
+            "method. Label equations (1)–(3) clearly; examiners award partial credit for correct setup."
+        ),
+        "body_he_md": (
+            "**נתון:** גליל מלא ($m=3$ ק\"ג, $R=0.2$ מ') מתגלגל ללא החלקה במדרון 30°. מצאו $a$.\n\n"
+            "בעיות גלגול דורשות **שני** חוקי ניוטון ואילוץ גלגול.\n\n"
+            "### צעד 1: דיאגרמת כוחות\n"
+            "- רכיב משקל לאורך המדרון: $mg\\sin30°=15$ נ'.\n"
+            "- כוח נורמלי: $N=mg\\cos30°$.\n"
+            "- חיכוך סטטי $f$ בנקודת המגע (פועל כלפי מעלה — מאפשר גלגול).\n\n"
+            "### צעד 2: תנועה לינארית\n"
+            "$$mg\\sin\\theta-f=ma. \\quad (1)$$\n\n"
+            "### צעד 3: סיבוב סביב מ\"מ\n"
+            "חיכוך ברדיוס $R$ יוצר מומנט $\\tau=fR$:\n"
+            "$$fR=I\\alpha=\\tfrac{1}{2}mR^2\\alpha. \\quad (2)$$\n\n"
+            "### צעד 4: אילוץ גלגול\n"
+            "$a=R\\alpha\\Rightarrow f=\\tfrac{1}{2}ma. \\quad (3)$$\n\n"
+            "### צעד 5: פתרון\n"
+            "$$mg\\sin\\theta=\\tfrac{3}{2}ma\\Rightarrow a=\\frac{2g\\sin\\theta}{3}"
+            "=\\frac{10}{3}\\approx3.33\\text{ מ/ש}^2.$$\n\n"
+            "**תוצאה כללית:** גליל מלא: $a=\\tfrac{2}{3}g\\sin\\theta$ — לא תלוי במסה ורדיוס. "
+            "טיפ: גוף חלול ($I=mR^2$) נותן $a=\\tfrac{1}{2}g\\sin\\theta$.\n\n"
+            "**בדיקת הגיון:** ללא חיכוך, $a=g\\sin\\theta=5$ מ/ש². גלגול ב-$3.33$ מ/ש² איטי יותר "
+            "כי חלק מהאנרגיה הולך לסיבוב. חיכוך סטטי עושה עבודה חיובית דרך מומנט — הכרחי לגלגול.\n\n"
+            "**תבנית בחינה:** שאלות גלגול במדרון בבגרות משתמשות בשיטת שלוש המשוואות. "
+            "סמנו (1)–(3) בבירור — נותנים נקודות חלקיות על הגדרה נכונה."
+        ),
+    },
+    3: {
+        "body_en_md": (
+            "**Given:** A yo-yo has mass $m$, inner radius $r$ (string wound), outer radius $R$, "
+            "and moment of inertia $I$ about its central axis. The string hangs vertically. "
+            "Derive the acceleration $a$ of the centre of mass as the yo-yo unwinds.\n\n"
+            "### Move 1: Forces\n"
+            "- Weight $mg$ downward.\n"
+            "- Tension $T$ upward at inner radius $r$.\n\n"
+            "### Move 2: Translation\n"
+            "$$mg - T = ma. \\quad (1)$$\n\n"
+            "### Move 3: Rotation\n"
+            "Tension at radius $r$ produces torque $Tr$:\n"
+            "$$Tr = I\\alpha. \\quad (2)$$\n\n"
+            "### Move 4: Unwinding constraint\n"
+            "As the yo-yo descends distance $x$, it rotates $\\theta = x/r$, so $a = r\\alpha$.\n\n"
+            "### Move 5: Eliminate $T$\n"
+            "$$T = \\frac{Ia}{r^2}. \\quad (3)$$\n\n"
+            "### Move 6: Solve for $a$\n"
+            "$$mg = a\\left(m + \\frac{I}{r^2}\\right) \\Rightarrow "
+            "\\boxed{a = \\frac{mg}{m + I/r^2}}.$$\n\n"
+            "### Move 7: Solid disk ($I = \\tfrac{1}{2}mR^2$, $r = R$)\n"
+            "$$a = \\frac{mg}{m + m/2} = \\frac{2g}{3} \\approx 6.67 \\text{ m/s}^2.$$\n"
+            "Same as a solid cylinder rolling down an incline — a deep connection between "
+            "yo-yo dynamics and rolling motion. Exam tip: identify whether tension acts at "
+            "inner radius $r$ or outer radius $R$ before writing the torque equation.\n\n"
+            "**Sanity check:** If $I = 0$ (point mass on string), $a = g$ — free fall. "
+            "If $I$ is large, $a \\to 0$ — the yo-yo barely accelerates. "
+            "The denominator $m + I/r^2$ captures effective rotational mass.\n\n"
+            "**Exam pattern:** Yo-yo and spool problems appear whenever a string unwinds "
+            "without slipping. Write $mg - T = ma$ and $Tr = I\\alpha$ first; "
+            "the constraint $a = r\\alpha$ is always the third equation."
+        ),
+        "body_he_md": (
+            "**נתון:** יו-יו מסה $m$, רדיוס פנימי $r$ (חוט כרוך), רדיוס חיצוני $R$, "
+            "מומנט התמדה $I$ סביב הציר. החוט תלוי אנכית. גזרו $a$ בעת פירוק.\n\n"
+            "### צעד 1: כוחות\n"
+            "- משקל $mg$ למטה.\n"
+            "- מתח $T$ למעלה ברדיוס $r$.\n\n"
+            "### צעד 2: תנועה\n"
+            "$$mg-T=ma. \\quad (1)$$\n\n"
+            "### צעד 3: סיבוב\n"
+            "מתח ברדיוס $r$ יוצר מומנט $Tr$:\n"
+            "$$Tr=I\\alpha. \\quad (2)$$\n\n"
+            "### צעד 4: אילוץ פירוק\n"
+            "ירידה $x$ → סיבוב $\\theta=x/r$, לכן $a=r\\alpha$.\n\n"
+            "### צעד 5: סילוק $T$\n"
+            "$$T=\\frac{Ia}{r^2}. \\quad (3)$$\n\n"
+            "### צעד 6: פתרון ל-$a$\n"
+            "$$mg=a\\left(m+\\frac{I}{r^2}\\right)\\Rightarrow"
+            "\\boxed{a=\\frac{mg}{m+I/r^2}}.$$\n\n"
+            "### צעד 7: דיסקה ($I=\\tfrac{1}{2}mR^2$, $r=R$)\n"
+            "$$a=\\frac{2g}{3}\\approx6.67\\text{ מ/ש}^2.$$\n"
+            "זהה לגליל מלא במדרון — קשר עמוק בין יו-יו לגלגול. "
+            "טיפ: בדקו אם המתח פועל ב-$r$ או ב-$R$ לפני משוואת המומנט.\n\n"
+            "**בדיקת הגיון:** אם $I=0$ (מסה נקודתית), $a=g$ — נפילה חופשית. "
+            "אם $I$ גדול, $a\\to0$. המכנה $m+I/r^2$ מייצג \"מסה סיבובית אפקטיבית\".\n\n"
+            "**תבנית בחינה:** בעיות יו-יו וגלגלת מופיעות כשחוט מתפרק ללא החלקה. "
+            "כתבו $mg-T=ma$ ו-$Tr=I\\alpha$ קודם; $a=r\\alpha$ היא המשוואה השלישית."
+        ),
+    },
+}
+
+CHECKPOINTS = {
+    0: {
+        "checkpoint_solution_en": (
+            "**Step 1 — Moment of inertia:**\n"
+            "$$I=\\tfrac{1}{2}mR^2=\\tfrac{1}{2}(4)(0.25)=0.5\\text{ kg·m}^2.$$\n\n"
+            "**Step 2 — Angular acceleration:**\n"
+            "$$\\alpha=\\tau/I=6/0.5=12\\text{ rad/s}^2.$$\n\n"
+            "**Step 3 — Angular velocity after 3 s:**\n"
+            "$$\\omega=\\omega_0+\\alpha t=0+12\\times3=36\\text{ rad/s}.$$\n\n"
+            "**Answer:** (a) $I=0.5$ kg·m²; (b) $\\alpha=12$ rad/s²; (c) $\\omega=36$ rad/s."
+        ),
+        "checkpoint_solution_he": (
+            "**שלב 1 — מומנט התמדה:**\n"
+            "$$I=\\tfrac{1}{2}mR^2=\\tfrac{1}{2}(4)(0.25)=0.5\\text{ ק\"ג·מ}^2.$$\n\n"
+            "**שלב 2 — תאוצה זוויתית:**\n"
+            "$$\\alpha=\\tau/I=6/0.5=12\\text{ ראד/ש}^2.$$\n\n"
+            "**שלב 3 — מהירות זוויתית אחרי 3 ש':**\n"
+            "$$\\omega=0+12\\times3=36\\text{ ראד/ש}.$$\n\n"
+            "**תשובה:** (א) $I=0.5$ ק\"ג·מ²; (ב) $\\alpha=12$ ראד/ש²; (ג) $\\omega=36$ ראד/ש."
+        ),
+    },
+    1: {
+        "checkpoint_solution_en": (
+            "**Step 1 — Same rolling setup as solid cylinder, but $I = mR^2$:**\n"
+            "From $fR = mR^2(a/R)$: $f = ma$.\n\n"
+            "**Step 2 — Force equation:**\n"
+            "$$mg\\sin30° - ma = ma \\Rightarrow a = \\frac{g\\sin30°}{2} "
+            "= \\frac{10\\times0.5}{2} = 2.5\\text{ m/s}^2.$$\n\n"
+            "**Step 3 — Compare:**\n"
+            "Solid cylinder: $a \\approx 3.33$ m/s². The hoop is slower because "
+            "more rotational inertia ($I/mR^2 = 1$ vs $\\tfrac{1}{2}$) means more "
+            "energy goes into spinning rather than translating.\n\n"
+            "**Answer:** Hoop $a = 2.5$ m/s²; solid cylinder $\\approx 3.33$ m/s²."
+        ),
+        "checkpoint_solution_he": (
+            "**שלב 1 — אותה הגדרה, אך $I=mR^2$:**\n"
+            "מ-$fR=mR^2(a/R)$: $f=ma$.\n\n"
+            "**שלב 2 — משוואת כוח:**\n"
+            "$$mg\\sin30°-ma=ma\\Rightarrow a=\\frac{g\\sin30°}{2}=2.5\\text{ מ/ש}^2.$$\n\n"
+            "**שלב 3 — השוואה:**\n"
+            "גליל מלא: $a\\approx3.33$ מ/ש². הטבעת איטית יותר כי $I/mR^2=1$ "
+            "(לעומת $\\tfrac{1}{2}$) — יותר אנרגיה בסיבוב, פחות בתנועה.\n\n"
+            "**תשובה:** טבעת $a=2.5$ מ/ש²; גליל מלא $\\approx3.33$ מ/ש²."
+        ),
+    },
+}
+
+SECTION_UPDATES["method_guide"] = {
+    "body_en_md": (
+        "Use this decision table on every rotational dynamics problem.\n\n"
+        "| Situation | Key law | What to find |\n"
+        "|---|---|---|\n"
+        "| Single rotating body, net torque known | $\\tau = I\\alpha$ | $\\alpha$, $t$, $\\omega$ |\n"
+        "| Rolling without slipping on incline | $F_{net}=ma$ + $\\tau=I\\alpha$ + $a=R\\alpha$ | $a$, friction $f$ |\n"
+        "| Hanging mass / pulley system | Torque from tension; $mg-T=ma$ for mass | $a$, $T$ |\n"
+        "| Conservation of angular momentum | $I_1\\omega_1 = I_2\\omega_2$ | New $\\omega$ after $I$ changes |\n"
+        "| Energy method (no friction info needed) | $mgh = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$ | Speed at bottom |\n\n"
+        "**Rolling-system protocol:**\n"
+        "1. Free-body diagram — all forces on the object.\n"
+        "2. $\\sum F = ma$ along the direction of motion.\n"
+        "3. $\\sum\\tau = I\\alpha$ about the centre of mass.\n"
+        "4. Apply rolling constraint $a = R\\alpha$ (or $v = R\\omega$).\n"
+        "5. Solve the system for $a$ and $f$.\n\n"
+        "**Golden rule:** Need force or torque at an instant → Newton + constraint. "
+        "Need speed at a position → energy is faster."
+    ),
+    "body_he_md": (
+        "השתמשו בטבלת ההחלטה בכל בעיית דינמיקה סיבובית.\n\n"
+        "| מצב | חוק מרכזי | מה למצוא |\n"
+        "|---|---|---|\n"
+        "| גוף מסתובב, מומנט ידוע | $\\tau=I\\alpha$ | $\\alpha$, $t$, $\\omega$ |\n"
+        "| גלגול ללא החלקה במדרון | $F_{\\text{נטו}}=ma$ + $\\tau=I\\alpha$ + $a=R\\alpha$ | $a$, חיכוך |\n"
+        "| מסה תלויה / גלגלת | מומנט ממתח; $mg-T=ma$ | $a$, $T$ |\n"
+        "| שימור תנע זוויתי | $I_1\\omega_1=I_2\\omega_2$ | $\\omega$ חדש |\n"
+        "| שיטת אנרגיה | $mgh=\\tfrac{1}{2}mv^2+\\tfrac{1}{2}I\\omega^2$ | מהירות |\n\n"
+        "**פרוטוקול גלגול:**\n"
+        "1. דיאגרמת כוחות.\n"
+        "2. $\\sum F=ma$ לאורך התנועה.\n"
+        "3. $\\sum\\tau=I\\alpha$ סביב מ\"מ.\n"
+        "4. $a=R\\alpha$.\n"
+        "5. פתרו את המערכת.\n\n"
+        "**כלל זהב:** צריך כוח/מומנט ברגע → ניוטון + אילוץ. "
+        "צריך מהירות במיקום → אנרגיה מהירה יותר."
+    ),
+}
+
+SECTION_UPDATES["pitfall"] = {
+    "body_en_md": (
+        "1. **Wrong $I$ formula.** A solid disk has $I=\\tfrac{1}{2}mR^2$; a ring has $I=mR^2$; "
+        "a solid sphere has $I=\\tfrac{2}{5}mR^2$. Mixing these gives wrong $\\alpha$ and wrong "
+        "rolling speeds. Always check axis (end vs centre for rods).\n\n"
+        "2. **Forgetting the rolling constraint $a = R\\alpha$.** Without it, rolling problems "
+        "are under-determined. Always write it explicitly as the third equation.\n\n"
+        "3. **Applying angular momentum conservation when external torques exist.** "
+        "Gravity and applied forces can produce external torques. Only conserve $L$ when "
+        "$\\sum\\tau_{ext} = 0$ about the chosen axis.\n\n"
+        "4. **KE of rolling = translational only.** Total $KE = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$. "
+        "Missing the rotational term causes significant errors on incline and collision problems.\n\n"
+        "5. **Torque sign error.** Define CCW or CW as positive first. Torques that oppose "
+        "your chosen positive direction are negative. Inconsistent signs flip the answer."
+    ),
+    "body_he_md": (
+        "1. **נוסחת $I$ שגויה.** דיסקה $\\tfrac{1}{2}mR^2$; טבעת $mR^2$; כדור $\\tfrac{2}{5}mR^2$. "
+        "ערבוב נותן $\\alpha$ ומהירות גלגול שגויות. בדקו ציר (קצה מול מרכז למוט).\n\n"
+        "2. **שכחת אילוץ $a=R\\alpha$.** בלי זה בעיות גלגול לא נקבעות. כתבו אותו כמשוואה שלישית.\n\n"
+        "3. **שימור $L$ כשיש מומנטים חיצוניים.** כבידה וכוחות מוחלים יוצרים מומנטים. "
+        "שמרו $L$ רק כש-$\\sum\\tau_{\\text{חיצוני}}=0$.\n\n"
+        "4. **KE גלגול = תנועתית בלבד.** תמיד $K=\\tfrac{1}{2}mv^2+\\tfrac{1}{2}I\\omega^2$. "
+        "השמטת הסיבובית גורמת לשגיאות במדרונות ובהתנגשויות.\n\n"
+        "5. **סימן מומנט.** הגדירו CCW או CW חיובי מראש. מומנטים נגדיים — שליליים. "
+        "סימנים לא עקביים הופכים את התשובה."
+    ),
+}
+
+SECTION_UPDATES["why_matters"] = {
+    "body_en_md": (
+        "Rotational dynamics is not an isolated topic — it connects across mechanics, "
+        "engineering, and your learning path on A Step Forward.\n\n"
+        "**You will use this to unlock:**\n"
+        "- `concept:torque` **Torque & Static Equilibrium** (prerequisite)\n"
+        "- `concept:angular_momentum` **Angular Momentum** (prerequisite)\n\n"
+        "**Builds on:**\n"
+        "- `concept:circular_motion` **Circular Motion** — $\\omega$, $\\alpha$, centripetal ideas\n\n"
+        "**Why it matters for exams:** Bagrut and university courses reward *transfer* — "
+        "applying $\\tau = I\\alpha$ in yo-yo, pulley, rolling, and skater contexts. "
+        "When you study, ask: \"Which $I$ formula? Which axis? Is $L$ conserved?\" "
+        "These three questions solve most exam problems."
+    ),
+    "body_he_md": (
+        "דינמיקה סיבובית אינה נושא מבודד — היא מחוברת למכניקה, הנדסה ומסלול הלימוד ב-A Step Forward.\n\n"
+        "**תשתמשו בזה כדי להתקדם ל:**\n"
+        "- `concept:torque` **מומנט ושיווי משקל סטטי** (דרישת קדם)\n"
+        "- `concept:angular_momentum` **תנע זוויתי** (דרישת קדם)\n\n"
+        "**מבוסס על:**\n"
+        "- `concept:circular_motion` **תנועה מעגלית** — $\\omega$, $\\alpha$, רעיונות צנטריפטיים\n\n"
+        "**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — "
+        "יישום $\\tau=I\\alpha$ בהקשרי יו-יו, גלגלת, גלגול ומחליקה. "
+        "בלימוד, שאלו: \"איזו נוסחת $I$? איזה ציר? האם $L$ מתשמר?\" "
+        "שלוש השאלות פותרות רוב בעיות הבחינה."
+    ),
+}
+
+SECTION_UPDATES["before_exam"] = {
+    "body_en_md": (
+        "### Essential Formulas\n"
+        "- **Torque:** $\\tau = rF\\sin\\phi = r_\\perp F$; $\\vec{\\tau} = \\vec{r}\\times\\vec{F}$\n"
+        "- **Newton 2nd (rotation):** $\\sum\\tau = I\\alpha$\n"
+        "- **Moment of inertia:** disk $\\tfrac{1}{2}mR^2$; sphere $\\tfrac{2}{5}mR^2$; "
+        "ring $mR^2$; rod (end) $\\tfrac{1}{3}mL^2$; parallel axis $I = I_{cm}+Md^2$\n"
+        "- **Angular momentum:** $L = I\\omega$; $\\sum\\tau = dL/dt$; "
+        "conservation: $I_1\\omega_1 = I_2\\omega_2$\n"
+        "- **Rotational KE:** $K_{rot} = \\tfrac{1}{2}I\\omega^2$; rolling: "
+        "$K = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2$\n"
+        "- **Rolling constraint:** $v_{cm} = R\\omega$; $a_{cm} = R\\alpha$\n\n"
+        "### Typical Exam Questions\n"
+        "1. Find $\\alpha$ given $\\tau$ and $I$.\n"
+        "2. Rolling without slipping on incline — find $a$ and friction.\n"
+        "3. Yo-yo / spool / pulley — derive $a$.\n"
+        "4. Angular momentum conservation — skater changes $I$.\n"
+        "5. Energy conservation for rolling object down ramp.\n"
+        "6. Two disks collide — find common $\\omega$ and KE lost."
+    ),
+    "body_he_md": (
+        "### נוסחאות חיוניות\n"
+        "- **מומנט:** $\\tau=rF\\sin\\phi$; $\\vec{\\tau}=\\vec{r}\\times\\vec{F}$\n"
+        "- **חוק שני לסיבוב:** $\\sum\\tau=I\\alpha$\n"
+        "- **מומנט התמדה:** דיסקה $\\tfrac{1}{2}mR^2$; כדור $\\tfrac{2}{5}mR^2$; "
+        "טבעת $mR^2$; מוט (קצה) $\\tfrac{1}{3}mL^2$; צירים מקבילים $I=I_{cm}+Md^2$\n"
+        "- **תנע זוויתי:** $L=I\\omega$; שימור $I_1\\omega_1=I_2\\omega_2$\n"
+        "- **KE סיבובית:** $\\tfrac{1}{2}I\\omega^2$; גלגול: $\\tfrac{1}{2}mv^2+\\tfrac{1}{2}I\\omega^2$\n"
+        "- **גלגול:** $v_{\\text{מ\"מ}}=R\\omega$; $a=R\\alpha$\n\n"
+        "### תבניות שאלות\n"
+        "1. $\\alpha$ מ-$\\tau$ ו-$I$.\n"
+        "2. גלגול במדרון — $a$ וחיכוך.\n"
+        "3. יו-יו / גלגלת — גזירת $a$.\n"
+        "4. שימור $L$ — מחליקה משנה $I$.\n"
+        "5. אנרגיה — גלגול במדרון.\n"
+        "6. שתי דיסקות — $\\omega$ משותף ו-KE אבוד."
+    ),
+}
+
+SECTION_UPDATES["summary"] = {
+    "body_en_md": (
+        "- **Newton 2nd (rotation):** $\\sum\\tau = I\\alpha$. Torque causes angular acceleration; "
+        "$I$ resists it like mass resists linear acceleration.\n"
+        "- **Common $I$:** disk $\\tfrac{1}{2}mR^2$; sphere $\\tfrac{2}{5}mR^2$; ring $mR^2$; "
+        "rod end $\\tfrac{1}{3}mL^2$. Use parallel axis when axis shifts.\n"
+        "- **Angular momentum:** $L = I\\omega$; conserved when $\\sum\\tau_{ext} = 0$.\n"
+        "- **Rotational KE:** $\\tfrac{1}{2}I\\omega^2$; add $\\tfrac{1}{2}mv^2$ for rolling.\n"
+        "- **Rolling:** write $F=ma$, $\\tau=I\\alpha$, and $a=R\\alpha$ together.\n"
+        "- **Decision:** forces/torques → Newton; speeds at positions → energy."
+    ),
+    "body_he_md": (
+        "- **חוק שני לסיבוב:** $\\sum\\tau=I\\alpha$ — מומנט גורם ל-$\\alpha$; $I$ מתנגד כמו מסה ל-$a$.\n"
+        "- **$I$ נפוץ:** דיסקה $\\tfrac{1}{2}mR^2$; כדור $\\tfrac{2}{5}mR^2$; טבעת $mR^2$; "
+        "מוט קצה $\\tfrac{1}{3}mL^2$. משפט צירים מקבילים כשהציר זז.\n"
+        "- **תנע זוויתי:** $L=I\\omega$; מתשמר כש-$\\sum\\tau_{\\text{חיצוני}}=0$.\n"
+        "- **KE סיבובית:** $\\tfrac{1}{2}I\\omega^2$; + $\\tfrac{1}{2}mv^2$ בגלגול.\n"
+        "- **גלגול:** $F=ma$, $\\tau=I\\alpha$, $a=R\\alpha$ יחד.\n"
+        "- **החלטה:** כוחות/מומנטים → ניוטון; מהירויות → אנרגיה."
+    ),
+}
+
+QUESTION_EXPLANATIONS = {
+    1: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "Newton's second law for rotation gives $\\alpha = \\tau/I$ directly. "
+            "With $\\tau = 10$ N·m and $I = 5$ kg·m²: $\\alpha = 10/5 = 2$ rad/s².\n\n"
+            "**How to think about it:**\n"
+            "Torque is the rotational cause; $I$ is the resistance. "
+            "Double the torque → double $\\alpha$ (if $I$ fixed). Double $I$ → half $\\alpha$.\n\n"
+            "**Common slip:**\n"
+            "Using $\\alpha = I/\\tau$ (inverted). Confusing N·m with joules. "
+            "Forgetting that only **net** torque enters the equation.\n\n"
+            "**Exam tip:**\n"
+            "When $\\tau$ and $I$ are given, $\\alpha = \\tau/I$ is one line — "
+            "no integration needed unless time or $\\omega$ is asked."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "חוק שני לסיבוב הוא האנלוג הישיר של $F=ma$: $\\alpha=\\tau/I$. "
+            "עם מומנט נטו $\\tau=10$ נ\"מ ומומנט התמדה $I=5$ ק\"ג·מ² מקבלים "
+            "$\\alpha=10/5=2$ ראד/ש². יחידות: נ\"מ חלקי ק\"ג·מ² = ראד/ש².\n\n"
+            "**איך לחשוב על זה:**\n"
+            "מומנט כוח הוא הגורם הסיבובי; $I$ הוא ההתנגדות — כמו שמסה מתנגדת ל-$a$. "
+            "כפל $\\tau$ → כפל $\\alpha$ (אם $I$ קבוע). כפל $I$ → חצי $\\alpha$. "
+            "גלגל תנופה עם $I$ גדול מאט להאיץ.\n\n"
+            "**טעות נפוצה:**\n"
+            "כתיבת $\\alpha=I/\\tau$ (הפוך). בלבול נ\"מ (מומנט) עם ג'ול (אנרגיה). "
+            "שימוש במומנט בודד במקום מומנט **נטו** — רק $\\sum\\tau$ נכנס לחוק.\n\n"
+            "**טיפ לבחינה:**\n"
+            "כש-$\\tau$ ו-$I$ נתונים ישירות, $\\alpha=\\tau/I$ בשורה אחת. "
+            "אין צורך באינטגרציה אלא אם שואלים על זמן $t$ או $\\omega$ סופי."
+        ),
+    },
+    2: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "A solid sphere about its centre: $I = \\tfrac{2}{5}mR^2$. "
+            "With $m = 2$ kg and $R = 0.3$ m: "
+            "$I = \\tfrac{2}{5}(2)(0.09) = 0.072$ kg·m².\n\n"
+            "**How to think about it:**\n"
+            "The $\\tfrac{2}{5}$ factor (not $\\tfrac{1}{2}$ like a disk) comes from "
+            "integrating $r^2\\,dm$ over a solid sphere. Mass near the centre contributes less.\n\n"
+            "**Common slip:**\n"
+            "Using disk formula $\\tfrac{1}{2}mR^2$ or ring formula $mR^2$. "
+            "Forgetting to square the radius ($0.3^2 = 0.09$, not $0.3$).\n\n"
+            "**Exam tip:**\n"
+            "Flashcard the five standard shapes: point, disk, sphere, ring, rod. "
+            "Bagrut often gives dimensions and asks only for $I$ — one formula, one calculation."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "לכדור מלא סביב מרכזו: $I=\\tfrac{2}{5}mR^2$. "
+            "הציבו $m=2$ ק\"ג, $R=0.3$ מ': $R^2=0.09$, "
+            "לכן $I=\\tfrac{2}{5}(2)(0.09)=0.072$ ק\"ג·מ².\n\n"
+            "**איך לחשוב על זה:**\n"
+            "הגורם $\\tfrac{2}{5}$ (לא $\\tfrac{1}{2}$ כמו דיסקה) נובע מאינטגרציה $r^2\\,dm$ על כדור תלת-ממדי. "
+            "מסה קרובה למרכז תורמת פחות ל-$I$ — לכן $I$ של כדור קטן מ-$I$ של טבעת באותה מסה.\n\n"
+            "**טעות נפוצה:**\n"
+            "שימוש בנוסחת דיסקה $\\tfrac{1}{2}mR^2$ או טבעת $mR^2$. "
+            "שכחת לרבע את $R$ ($0.3^2=0.09$, לא $0.3$). בלבול בין כדור מלא לכדור חלול.\n\n"
+            "**טיפ לבחינה:**\n"
+            "שיננו חמישה צורות: נקודה $mr^2$, דיסקה $\\tfrac{1}{2}mR^2$, כדור $\\tfrac{2}{5}mR^2$, "
+            "טבעת $mR^2$, מוט $\\tfrac{1}{3}mL^2$ (קצה). בבגרות — נוסחה אחת, חישוב אחד."
+        ),
+    },
+    3: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "Angular momentum: $L = I\\omega = 3 \\times 10 = 30$ kg·m²/s. "
+            "Rotational KE: $K_{rot} = \\tfrac{1}{2}I\\omega^2 = \\tfrac{1}{2}(3)(100) = 150$ J. "
+            "Both use the same $I = 3$ kg·m² and $\\omega = 10$ rad/s from the stem.\n\n"
+            "**How to think about it:**\n"
+            "$L$ is linear in $\\omega$; $K_{rot}$ is quadratic ($\\propto \\omega^2$). "
+            "Doubling $\\omega$ doubles $L$ but quadruples $K_{rot}$. "
+            "A spinning wheel stores energy in $K_{rot}$, not in $L$ directly.\n\n"
+            "**Common slip:**\n"
+            "Using $K = \\tfrac{1}{2}m\\omega^2$ (wrong — need $I$, not $m$). "
+            "Reporting only $L$ when both are asked. Mixing units: $L$ in kg·m²/s, $K$ in joules.\n\n"
+            "**Exam tip:**\n"
+            "When both $L$ and $K_{rot}$ are requested, compute $I\\omega$ first, "
+            "then $\\tfrac{1}{2}I\\omega^2$ — reuse $I$ and $\\omega$ without re-reading the stem."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "תנע זוויתי: $L=I\\omega=3\\times10=30$ ק\"ג·מ²/ש. "
+            "אנרגיה קינטית סיבובית: $K_{\\text{סיב}}=\\tfrac{1}{2}I\\omega^2=\\tfrac{1}{2}(3)(100)=150$ ג'ול. "
+            "שניהם משתמשים באותם $I=3$ ק\"ג·מ² ו-$\\omega=10$ ראד/ש מהנתון.\n\n"
+            "**איך לחשוב על זה:**\n"
+            "$L$ לינארי ב-$\\omega$; $K_{\\text{סיב}}$ ריבועי ($\\propto\\omega^2$). "
+            "הכפלת $\\omega$ → כפל $L$, כפל $K$ פי 4. גלגל מסתובב מאחסן אנרגיה ב-$K_{\\text{סיב}}$, לא ב-$L$ ישירות.\n\n"
+            "**טעות נפוצה:**\n"
+            "$K=\\tfrac{1}{2}m\\omega^2$ (שגוי — צריך $I$, לא $m$). דיווח רק $L$ כששניהם נשאלים. "
+            "ערבוב יחידות: $L$ בק\"ג·מ²/ש, $K$ בג'ול.\n\n"
+            "**טיפ לבחינה:**\n"
+            "כשמבקשים $L$ ו-$K_{\\text{סיב}}$, חשבו $I\\omega$ קודם, "
+            "אחר כך $\\tfrac{1}{2}I\\omega^2$ — אל תחזרו לקרוא את הנתון."
+        ),
+    },
+    4: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "Rod about end: $I = \\tfrac{1}{3}mL^2 = \\tfrac{1}{3}(2)(0.36) = 0.24$ kg·m². "
+            "Then $\\alpha = \\tau/I = 15/0.24 = 62.5$ rad/s².\n\n"
+            "**How to think about it:**\n"
+            "Two steps: (1) correct $I$ for axis at end (not centre — that would be "
+            "$\\tfrac{1}{12}mL^2$); (2) apply $\\tau = I\\alpha$.\n\n"
+            "**Common slip:**\n"
+            "Using $\\tfrac{1}{12}mL^2$ (centre axis) when rod rotates about end. "
+            "Dividing $I$ by $\\tau$ instead of $\\tau$ by $I$.\n\n"
+            "**Exam tip:**\n"
+            "Underline \"about one end\" in the stem. End pivot → $\\tfrac{1}{3}mL^2$; "
+            "centre pivot → $\\tfrac{1}{12}mL^2$. This distinction appears on every mechanics exam."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "מוט סביב קצה: $I=\\tfrac{1}{3}mL^2=\\tfrac{1}{3}(2)(0.6^2)=\\tfrac{1}{3}(2)(0.36)=0.24$ ק\"ג·מ². "
+            "אז $\\alpha=\\tau/I=15/0.24=62.5$ ראד/ש². שני שלבים: קודם $I$, אחר כך $\\tau=I\\alpha$.\n\n"
+            "**איך לחשוב על זה:**\n"
+            "ציר בקצה נותן $\\tfrac{1}{3}mL^2$ — פי 4 יותר מ-$\\tfrac{1}{12}mL^2$ בציר במרכז. "
+            "כל המסה רחוקה יותר מהציר → $I$ גדול → $\\alpha$ קטן יותר לאותו $\\tau$.\n\n"
+            "**טעות נפוצה:**\n"
+            "$\\tfrac{1}{12}mL^2$ (ציר במרכז) כשהמוט סובב סביב **קצה**. חלוקה הפוכה $I/\\tau$. "
+            "שכחת לרבע את $L$ ($0.6^2=0.36$).\n\n"
+            "**טיפ לבחינה:**\n"
+            "סמנו \"סביב קצה\" בנתון. קצה → $\\tfrac{1}{3}mL^2$; מרכז → $\\tfrac{1}{12}mL^2$. "
+            "ההבחנה חוזרת בכל בחינת מכניקה."
+        ),
+    },
+    5: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "No external torque on the skater (ice is low friction). "
+            "Conservation: $I_1\\omega_1 = I_2\\omega_2$. "
+            "$\\omega_2 = (4 \\times 3)/1.5 = 12/1.5 = 8$ rad/s.\n\n"
+            "**How to think about it:**\n"
+            "Pulling arms in reduces $I$ by factor $4/1.5 \\approx 2.67$. "
+            "To keep $L$ constant, $\\omega$ must increase by the same factor: "
+            "$3 \\times 2.67 \\approx 8$ rad/s.\n\n"
+            "**Common slip:**\n"
+            "Writing $I_1/\\omega_1 = I_2/\\omega_2$ (inverted). "
+            "Assuming energy is conserved — it is not; the skater does work pulling arms in.\n\n"
+            "**Exam tip:**\n"
+            "Skater problems always use $I_1\\omega_1 = I_2\\omega_2$. "
+            "If $I$ decreases, $\\omega$ increases — never the reverse."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "אין מומנט כוח חיצוני משמעותי על המחליקה (הקרח חלק). "
+            "שימור תנע זוויתי: $I_1\\omega_1=I_2\\omega_2$. "
+            "$\\omega_2=(4\\times3)/1.5=12/1.5=8$ ראד/ש — כמעט פי 2.67 מהירות מקורית.\n\n"
+            "**איך לחשוב על זה:**\n"
+            "משיכת זרועות מקטינה $I$ בגורם $4/1.5\\approx2.67$. "
+            "לשמירת $L$ קבוע, $\\omega$ חייב לגדול באותו גורם: $3\\times2.67\\approx8$. "
+            "המחליקה עושה עבודה — אנרגיה **לא** מתשמרת.\n\n"
+            "**טעות נפוצה:**\n"
+            "$I_1/\\omega_1=I_2/\\omega_2$ (הפוך). הנחה ש-$K$ נשמר. "
+            "חישוב $\\omega_2=I_2\\omega_1/I_1$ (הפוך).\n\n"
+            "**טיפ לבחינה:**\n"
+            "בעיות מחליקה: $I_1\\omega_1=I_2\\omega_2$ תמיד. "
+            "אם $I$ קטן, $\\omega$ גדל — לעולם לא להפך. זו שאלה קלאסית בבגרות."
+        ),
+    },
+    6: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "$I = \\tfrac{2}{5}mR^2 = \\tfrac{2}{5}(2)(0.01) = 0.008$ kg·m². "
+            "Rolling constraint: $\\omega = v/R = 4/0.1 = 40$ rad/s. "
+            "$K_{trans} = \\tfrac{1}{2}(2)(16) = 16$ J. "
+            "$K_{rot} = \\tfrac{1}{2}(0.008)(1600) = 6.4$ J. Total = 22.4 J. "
+            "Shortcut: solid sphere $K_{total} = \\tfrac{7}{10}mv^2 = \\tfrac{7}{10}(2)(16) = 22.4$ J.\n\n"
+            "**How to think about it:**\n"
+            "Rolling KE has two parts. For a sphere, rotational fraction is "
+            "$K_{rot}/K_{total} = \\tfrac{2}{7} \\approx 29\\%$; translational is $\\tfrac{5}{7}$.\n\n"
+            "**Common slip:**\n"
+            "Using only $\\tfrac{1}{2}mv^2$ (translational). Wrong $I$ formula. "
+            "Forgetting $\\omega = v/R$ to link rotation to translation.\n\n"
+            "**Exam tip:**\n"
+            "Memorise rolling KE fractions for Bagrut: solid sphere total $K = \\tfrac{7}{10}mv^2$; "
+            "solid cylinder $K = \\tfrac{3}{4}mv^2$; ring or hoop $K = \\tfrac{1}{2}mv^2$ when rolling without slip."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "$I=\\tfrac{2}{5}mR^2=\\tfrac{2}{5}(2)(0.01)=0.008$ ק\"ג·מ². "
+            "אילוץ גלגול: $\\omega=v/R=4/0.1=40$ ראד/ש. "
+            "$K_{\\text{תנ}}=\\tfrac{1}{2}(2)(16)=16$ ג'ול. "
+            "$K_{\\text{סיב}}=\\tfrac{1}{2}(0.008)(1600)=6.4$ ג'ול. סה\"כ 22.4 ג'ול. "
+            "קיצור: $K=\\tfrac{7}{10}mv^2=22.4$ ג'ול.\n\n"
+            "**איך לחשוב על זה:**\n"
+            "KE גלגול = שני חלקים. בכדור מלא, חלק סיבובי $\\tfrac{2}{7}\\approx29\\%$; "
+            "תנועתי $\\tfrac{5}{7}$. אל תשכחו $\\tfrac{1}{2}I\\omega^2$ — זו הטעות הנפוצה ביותר בגלגול.\n\n"
+            "**טעות נפוצה:**\n"
+            "רק $\\tfrac{1}{2}mv^2$ (תנועתי בלבד). $I$ שגוי (דיסקה במקום כדור). "
+            "שכחת $\\omega=v/R$.\n\n"
+            "**טיפ לבחינה:**\n"
+            "שיננו לבגרות: כדור $\\tfrac{7}{10}mv^2$; גליל $\\tfrac{3}{4}mv^2$; טבעת $\\tfrac{1}{2}mv^2$. "
+            "בדקו תמיד בסוף: $K_{\\text{תנ}}+K_{\\text{סיב}}=K_{\\text{כולל}}$."
+        ),
+    },
+    7: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "For hanging mass: $mg - T = ma$. For pulley: $TR = I\\alpha = I(a/R)$, "
+            "so $T = Ia/R^2 = 0.1a/0.0025 = 40a$. "
+            "Substitute: $50 - 40a = 5a \\Rightarrow a = 50/45 \\approx 1.11$ m/s². "
+            "$T = 40a \\approx 44.4$ N.\n\n"
+            "**How to think about it:**\n"
+            "Pulley problems couple linear motion (mass) with rotation (pulley). "
+            "The pulley's $I$ reduces acceleration below free fall ($g = 10$ m/s²).\n\n"
+            "**Common slip:**\n"
+            "Treating pulley as massless ($T = mg$ on both sides). "
+            "Using $T = Ia/R$ instead of $T = Ia/R^2$ for tension from torque.\n\n"
+            "**Exam tip:**\n"
+            "Always write two equations: $mg - T = ma$ for mass and $TR = I\\alpha$ for pulley. "
+            "Link with $a = R\\alpha$. Solve for $a$ first, then $T$."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "למסה התלויה: $mg-T=ma$, כלומר $50-T=5a$. "
+            "לגלגלת: $TR=I\\alpha=I(a/R)$, לכן $T=Ia/R^2=0.1a/0.0025=40a$. "
+            "הצבה: $50-40a=5a\\Rightarrow a=50/45\\approx1.11$ מ/ש². $T=40a\\approx44.4$ נ'.\n\n"
+            "**איך לחשוב על זה:**\n"
+            "גלגלת עם $I$ מקשרת תנועה לינארית (מסה) לסיבוב (גלגלת). "
+            "ה-$I$ מקטין $a$ מתחת ל-$g=10$ מ/ש² — המסה לא נופלת חופשית. "
+            "המתח $T\\approx44.4$ נ' קרוב ל-$mg=50$ נ'.\n\n"
+            "**טעות נפוצה:**\n"
+            "גלגלת חסרת מסה ($T=mg$, $a=g$). $T=Ia/R$ במקום $T=Ia/R^2$. "
+            "שכחת משוואת הסיבוב $TR=I\\alpha$.\n\n"
+            "**טיפ לבחינה:**\n"
+            "שתי משוואות: $mg-T=ma$ ו-$TR=I\\alpha$. קשר $a=R\\alpha$. "
+            "פתרו $a$ קודם, אחר כך $T$ — סדר קבוע בבגרות."
+        ),
+    },
+    8: {
+        "explanation_en": (
+            "**Why this is correct:**\n"
+            "General rolling formula: $a = g\\sin\\theta / (1 + I/(mR^2))$. "
+            "Hollow cylinder ($I = mR^2$): $a = g\\sin37°/2 = 6/2 = 3$ m/s². "
+            "Solid cylinder ($I = \\tfrac{1}{2}mR^2$): "
+            "$a = \\tfrac{2}{3}g\\sin37° = \\tfrac{2}{3}(6) = 4$ m/s².\n\n"
+            "**How to think about it:**\n"
+            "Larger $I/(mR^2)$ → more energy in rotation → slower linear acceleration. "
+            "Hollow ($I/(mR^2)=1$) vs solid ($\\tfrac{1}{2}$).\n\n"
+            "**Common slip:**\n"
+            "Using $a = g\\sin\\theta$ (ignoring rotation). "
+            "Same $a$ for hollow and solid. Wrong trig: $\\sin37° \\approx 0.6$, not $0.5$.\n\n"
+            "**Exam tip:**\n"
+            "Compare rolling objects with $a \\propto 1/(1+I/(mR^2))$. "
+            "Solid always beats hollow on the same incline — a favourite Bagrut comparison question."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:**\n"
+            "נוסחה כללית לגלגול: $a=g\\sin\\theta/(1+I/(mR^2))$. "
+            "גליל חלול ($I=mR^2$): $a=g\\sin37°/2=(10\\times0.6)/2=3$ מ/ש². "
+            "גליל מלא ($I=\\tfrac{1}{2}mR^2$): $a=\\tfrac{2}{3}g\\sin37°=\\tfrac{2}{3}(6)=4$ מ/ש².\n\n"
+            "**איך לחשוב על זה:**\n"
+            "$I/(mR^2)$ גדול יותר → יותר אנרגיה בסיבוב → $a$ קטן יותר. "
+            "חלול ($I/(mR^2)=1$) מול מלא ($\\tfrac{1}{2}$). "
+            "ההפרש 3 מ/ש² לעומת 4 מ/ש² — כ-$25\\%$ איטי יותר.\n\n"
+            "**טעות נפוצה:**\n"
+            "$a=g\\sin\\theta$ (התעלמות מסיבוב). אותו $a$ לחלול ומלא. "
+            "$\\sin37°\\approx0.6$, לא $0.5$ ($\\sin30°$).\n\n"
+            "**טיפ לבחינה:**\n"
+            "השוו עם $a\\propto1/(1+I/(mR^2))$. מלא תמיד מהיר יותר מחלול — "
+            "שאלת השוואה קלאסית בבגרות. כתבו את שני החישובים בבירור."
+        ),
+    },
+}
+
+
+def apply_updates(data):
+    we_idx = 0
+    cp_idx = 0
+    for sec in data["sections"]:
+        kind = sec.get("kind")
+        if kind in SECTION_UPDATES:
+            sec.update(SECTION_UPDATES[kind])
+        if kind == "worked_example":
+            we_idx += 1
+            if we_idx in WORKED_EXAMPLES:
+                sec.update(WORKED_EXAMPLES[we_idx])
+        if kind == "checkpoint":
+            if cp_idx in CHECKPOINTS:
+                sec.update(CHECKPOINTS[cp_idx])
+            cp_idx += 1
+    for q in data["questions"]:
+        ord_ = q.get("ord")
+        if ord_ in QUESTION_EXPLANATIONS:
+            q.update(QUESTION_EXPLANATIONS[ord_])
+
+
+def main():
+    data = json.loads(LESSON.read_text(encoding="utf-8"))
+    apply_updates(data)
+    LESSON.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(f"Wrote {LESSON}")
+
+
+if __name__ == "__main__":
+    main()
