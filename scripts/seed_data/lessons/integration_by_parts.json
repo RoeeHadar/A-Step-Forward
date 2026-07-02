@@ -14,22 +14,22 @@
       "kind": "intro",
       "title_en": "Why Integration by Parts?",
       "title_he": "למה אינטגרציה בחלקים?",
-      "body_en_md": "Some integrals cannot be cracked by substitution because the integrand is a **product of two unrelated functions.** For example:\n$$\\int x e^x\\,dx, \\qquad \\int x\\ln x\\,dx, \\qquad \\int e^x\\sin x\\,dx$$\n\nThese require **Integration by Parts (IBP)**, derived directly from the product rule:\n$$(uv)' = u'v + uv' \\implies uv' = (uv)' - u'v$$\n$$\\implies \\int uv'\\,dx = uv - \\int u'v\\,dx$$\n\nThis is the IBP formula. It **shifts the difficulty** from one integral to another — the art is choosing $u$ and $dv$ so the new integral is easier.",
-      "body_he_md": "חלק מהאינטגרלים אינם ניתנים לפתרון בהחלפה כי האינטגרנד הוא **מכפלה של שתי פונקציות שאינן קשורות.** למשל:\n$$\\int xe^x\\,dx,\\quad \\int x\\ln x\\,dx,\\quad \\int e^x\\sin x\\,dx$$\n\nאלה דורשים **אינטגרציה בחלקים (IBP)**, הנגזרת ישירות מכלל המכפלה:\n$$(uv)'=u'v+uv' \\implies \\int uv'\\,dx = uv - \\int u'v\\,dx$$\n\nהנוסחה **מעבירה את הקושי** מאינטגרל אחד לאחר — האמנות היא לבחור $u$ ו-$dv$ כך שהאינטגרל החדש פשוט יותר."
+      "body_en_md": "Substitution handles integrands where an **inner function and its derivative** appear together — like $\\int 2x e^{x^2}\\,dx$ with $u=x^2$. Many Calc I and university integrals fail that test because the integrand is a **product of two unrelated function types** with no hidden chain-rule structure:\n\n$$\\int x e^x\\,dx, \\qquad \\int x\\ln x\\,dx, \\qquad \\int e^x\\sin x\\,dx, \\qquad \\int \\arctan x\\,dx$$\n\nThese require **Integration by Parts (IBP)** — the product rule run in reverse. Starting from $(uv)' = u'v + uv'$, rearrange to isolate $\\int uv'\\,dx$:\n$$\\int uv'\\,dx = uv - \\int u'v\\,dx \\qquad\\text{equivalently}\\qquad \\int u\\,dv = uv - \\int v\\,du.$$\n\nIBP does not magically simplify every integral; it **transfers** difficulty from one factor to another. The skill is choosing $u$ and $dv$ so that $\\int v\\,du$ is easier than the original — or, in cyclic cases, so that the original integral reappears and you can solve algebraically. This lesson builds that selection skill from LIATE through reduction formulas and exam-level definite integrals.",
+      "body_he_md": "החלפת משתנים מטפלת באינטגרנדים שבהם **פונקציה פנימית ונגזרתה** מופיעים יחד — כמו $\\int 2x e^{x^2}\\,dx$ עם $u=x^2$. אינטגרלים רבים בחשבון 1 ובאוניברסיטה לא עוברים את הבדיקה הזו, כי האינטגרנד הוא **מכפלה של שני סוגי פונקציות שאינם קשורים** בלי מבנה שרשרת נסתר:\n\n$$\\int xe^x\\,dx,\\quad \\int x\\ln x\\,dx,\\quad \\int e^x\\sin x\\,dx,\\quad \\int \\arctan x\\,dx$$\n\nאלה דורשים **אינטגרציה בחלקים (IBP)** — כלל המכפלה הפוך. מ-$(uv)'=u'v+uv'$ מקבלים:\n$$\\int u\\,dv = uv - \\int v\\,du.$$\n\nIBP לא מפשט כל אינטגרל; הוא **מעביר** קושי מגורם אחד לאחר. המיומנות היא לבחור $u$ ו-$dv$ כך ש-$\\int v\\,du$ פשוט יותר מהמקור — או, במקרים מחזוריים, שהאינטגרל המקורי חוזר ואפשר לפתור אלגברית. שיעור זה בונה את מיומנות הבחירה מ-LIATE דרך נוסחאות רדוקציה ועד אינטגרלים מסוימים ברמת בחינה."
     },
     {
       "kind": "definition",
       "title_en": "The IBP Formula and the LIATE Rule",
       "title_he": "נוסחת IBP וכלל LIATE",
-      "body_en_md": "**Integration by Parts formula:**\n$$\\int u\\,dv = uv - \\int v\\,du$$\n\nwhere $u=u(x)$, $dv=v'(x)\\,dx$, $v=\\int dv$, $du=u'(x)\\,dx$.\n\n**For definite integrals:**\n$$\\int_a^b u\\,dv = \\Big[uv\\Big]_a^b - \\int_a^b v\\,du$$\n\n**The LIATE rule** — priority order for choosing $u$:\n| Letter | Function type | Example |\n|--------|---------------|---------|\n| **L** | Logarithm | $\\ln x$ |\n| **I** | Inverse trig | $\\arctan x$ |\n| **A** | Algebraic (polynomial) | $x^2$, $x$ |\n| **T** | Trigonometric | $\\sin x$, $\\cos x$ |\n| **E** | Exponential | $e^x$ |\n\nChoose $u$ as the function **higher** in the LIATE list. The remaining factor (times $dx$) becomes $dv$.",
-      "body_he_md": "**נוסחת IBP:**\n$$\\int u\\,dv = uv - \\int v\\,du$$\n\n**לאינטגרל מסוים:**\n$$\\int_a^b u\\,dv = \\Big[uv\\Big]_a^b - \\int_a^b v\\,du$$\n\n**כלל LIATE** — סדר עדיפות לבחירת $u$:\n| אות | סוג פונקציה | דוגמה |\n|-----|-------------|-------|\n| **L** | לוגריתם | $\\ln x$ |\n| **I** | טריגונומטרי הפוך | $\\arctan x$ |\n| **A** | אלגברית (פולינום) | $x^2$, $x$ |\n| **T** | טריגונומטרי | $\\sin x$, $\\cos x$ |\n| **E** | מעריכי | $e^x$ |\n\nבחרו $u$ כפונקציה **גבוה יותר** ברשימת LIATE."
+      "body_en_md": "**Integration by Parts (IBP) formula:**\n$$\\int u\\,dv = uv - \\int v\\,du$$\n\nwhere $u=u(x)$ is the part you differentiate, $dv$ is the rest of the integrand (including $dx$), $du=u'(x)\\,dx$, and $v=\\int dv$ (an antiderivative — any constant is fine because it cancels in the final answer).\n\n**For definite integrals**, evaluate the boundary term before integrating the remainder:\n$$\\int_a^b u\\,dv = \\Big[uv\\Big]_a^b - \\int_a^b v\\,du.$$\n\n**The LIATE rule** — priority order for choosing $u$ when the integrand is a product:\n| Letter | Function type | Example |\n|--------|---------------|---------|\n| **L** | Logarithm | $\\ln x$, $\\ln(2x+1)$ |\n| **I** | Inverse trig | $\\arctan x$, $\\arcsin x$ |\n| **A** | Algebraic (polynomial) | $x^2$, $x$, $3x-1$ |\n| **T** | Trigonometric | $\\sin x$, $\\cos x$ |\n| **E** | Exponential | $e^x$, $2^x$ |\n\nChoose $u$ as the function **higher** in LIATE; everything else (times $dx$) becomes $dv$. When a function stands alone — $\\int\\ln x\\,dx$, $\\int\\arctan x\\,dx$ — take $u$ as that function and $dv=dx$. **Exam habit:** write $u$, $dv$, $du$, $v$ in a four-line box before substituting into the formula.",
+      "body_he_md": "**נוסחת אינטגרציה בחלקים (IBP):**\n$$\\int u\\,dv = uv - \\int v\\,du$$\n\nכאן $u=u(x)$ הוא החלק שגוזרים, $dv$ הוא שאר האינטגרנד (כולל $dx$), $du=u'(x)\\,dx$, ו-$v=\\int dv$ (אינטגרל — כל קבוע מתבטל בסוף).\n\n**לאינטגרל מסוים**, חשבו תחילה את איבר הגבולות:\n$$\\int_a^b u\\,dv = \\Big[uv\\Big]_a^b - \\int_a^b v\\,du.$$\n\n**כלל LIATE** — סדר עדיפות לבחירת $u$ במכפלה:\n| אות | סוג פונקציה | דוגמה |\n|-----|-------------|-------|\n| **L** | לוגריתם | $\\ln x$, $\\ln(2x+1)$ |\n| **I** | טריגונומטרי הפוך | $\\arctan x$, $\\arcsin x$ |\n| **A** | אלגברית (פולינום) | $x^2$, $x$, $3x-1$ |\n| **T** | טריגונומטרי | $\\sin x$, $\\cos x$ |\n| **E** | מעריכי | $e^x$, $2^x$ |\n\nבחרו $u$ כפונקציה **גבוה יותר** ב-LIATE; השאר (כפול $dx$) הוא $dv$. כשפונקציה לבד — $\\int\\ln x\\,dx$, $\\int\\arctan x\\,dx$ — קחו $u$ כפונקציה זו ו-$dv=dx$. **הרגל לבחינה:** כתבו $u$, $dv$, $du$, $v$ בתיבה של ארבע שורות לפני ההצבה."
     },
     {
       "kind": "theory",
       "title_en": "How to Execute IBP",
       "title_he": "כיצד לבצע IBP",
-      "body_en_md": "**Step-by-step:**\n1. Identify $u$ (using LIATE) and $dv$ (the rest of the integrand times $dx$).\n2. Compute $du = u'\\,dx$ and $v = \\int dv$.\n3. Apply $\\int u\\,dv = uv - \\int v\\,du$.\n4. Evaluate or simplify $\\int v\\,du$.\n\n**When to apply IBP twice:**\n- If $\\int v\\,du$ is still a product, apply IBP again.\n- If applying IBP twice gives back the **original integral** (cyclic case, e.g. $\\int e^x\\sin x\\,dx$): let $I$ = original integral, collect terms, solve algebraically.\n\n**IBP for $\\int\\ln x\\,dx$:** Use $u=\\ln x$, $dv=dx$:\n$$\\int\\ln x\\,dx = x\\ln x - \\int x\\cdot\\frac{1}{x}\\,dx = x\\ln x - x + C.$$\n\n**Reduction formulas:** For $\\int x^n e^x\\,dx$, IBP gives a recurrence reducing the power of $x$ by 1 each time.",
-      "body_he_md": "**צעד-אחר-צעד:**\n1. זהו $u$ (לפי LIATE) ו-$dv$ (שאר האינטגרנד כפול $dx$).\n2. חשבו $du=u'\\,dx$ ו-$v=\\int dv$.\n3. הפעילו $\\int u\\,dv=uv-\\int v\\,du$.\n4. חשבו $\\int v\\,du$.\n\n**כאשר מפעילים IBP פעמיים:**\n- אם $\\int v\\,du$ עדיין מכפלה — הפעילו שוב.\n- אם קיבלנו חזרה את האינטגרל המקורי (מחזורי) — $I=$ אינטגרל מקורי, קיבצו, פתרו.\n\n**IBP עבור $\\int\\ln x\\,dx$:** $u=\\ln x$, $dv=dx$:\n$$\\int\\ln x\\,dx = x\\ln x - x+C.$$"
+      "body_en_md": "**Step-by-step execution:**\n1. **Classify** the integrand: product of two types → IBP; lone $\\ln x$ or inverse trig → IBP with $dv=dx$.\n2. **Choose** $u$ via LIATE and set $dv$ to the remaining factor times $dx$.\n3. **Compute** $du=u'\\,dx$ and $v=\\int dv$ (include any missing constants from the inner function).\n4. **Apply** $\\int u\\,dv=uv-\\int v\\,du$ — watch the **minus sign**.\n5. **Finish** $\\int v\\,du$ by another IBP, u-sub, or known formula; differentiate to verify.\n\n**When to apply IBP twice (or more):**\n- Polynomial $\\times$ exponential/trig: each IBP lowers the polynomial degree — e.g. $\\int x^2 e^x\\,dx$ needs two steps.\n- **Tabular IBP** helps for $\\int x^n e^x\\,dx$: differentiate $x^n$ down a column, integrate $e^x$ up the other, alternate signs.\n\n**Cyclic case** ($\\int e^x\\sin x\\,dx$, $\\int e^x\\cos x\\,dx$): IBP twice returns the original integral $I$. Name it, substitute back, collect $I$ on one side, divide, add $+C$. **Keep the same type as $u$ both times** (both trig or both exponential) or you get $0=0$.\n\n**Classic lone-log result:** $u=\\ln x$, $dv=dx$ gives $\\int\\ln x\\,dx=x\\ln x-x+C$.\n\n**Reduction formula:** IBP on $\\int x^n e^x\\,dx$ with $u=x^n$ yields $\\int x^n e^x\\,dx=x^n e^x-n\\int x^{n-1}e^x\\,dx$ — repeat until $n=0$.",
+      "body_he_md": "**ביצוע צעד-אחר-צעד:**\n1. **סווגו** את האינטגרנד: מכפלה של שני סוגים → IBP; $\\ln x$ או טריג הפוך לבד → IBP עם $dv=dx$.\n2. **בחרו** $u$ לפי LIATE וקבעו $dv$ לשאר (כפול $dx$).\n3. **חשבו** $du=u'\\,dx$ ו-$v=\\int dv$ (כללו קבועים חסרים מהפונקציה הפנימית).\n4. **הפעילו** $\\int u\\,dv=uv-\\int v\\,du$ — שימו לב ל**סימן המינוס**.\n5. **סיימו** את $\\int v\\,du$ ב-IBP נוסף, u-sub או נוסחה ידועה; אמתו בגזירה.\n\n**מתי IBP פעמיים (או יותר):**\n- פולינום $\\times$ מעריך/טריג: כל IBP מוריד דרגת פולינום — $\\int x^2 e^x\\,dx$ דורש שני שלבים.\n- **IBP טבלאי** עוזר ל-$\\int x^n e^x\\,dx$: גזרו $x^n$ בעמודה, אינטגרל $e^x$ בשנייה, סימנים מתחלפים.\n\n**מקרה מחזורי** ($\\int e^x\\sin x\\,dx$): IBP פעמיים מחזיר $I$. סמנו, הציבו, אספו $I$, חלקו, הוסיפו $+C$. **שמרו אותו סוג כ-$u$ בשניהם** — אחרת מקבלים $0=0$.\n\n**תוצאה קלאסית:** $u=\\ln x$, $dv=dx$ → $\\int\\ln x\\,dx=x\\ln x-x+C$.\n\n**נוסחת רדוקציה:** IBP על $\\int x^n e^x\\,dx$ עם $u=x^n$ נותן $\\int x^n e^x\\,dx=x^n e^x-n\\int x^{n-1}e^x\\,dx$ — חזרו עד $n=0$."
     },
     {
       "kind": "worked_example",
@@ -37,8 +37,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — $\\int xe^x\\,dx$",
       "title_he": "דוגמה פתורה 1 — $\\int xe^x\\,dx$",
-      "body_en_md": "**Given:** $\\displaystyle\\int xe^x\\,dx$.\n\n### Move 1\n- $u = x$ (algebraic — higher in LIATE than $e^x$)\n- $dv = e^x\\,dx$\n\n### Move 2\n$$du = dx, \\qquad v = \\int e^x\\,dx = e^x$$\n\n### Move 3\n$$\\int xe^x\\,dx = uv - \\int v\\,du = xe^x - \\int e^x\\,dx$$\n\n### Move 4\n$$= xe^x - e^x + C = e^x(x-1)+C$$\n\n**Answer:** $\\boxed{e^x(x-1)+C}$ ✓\n\n*Verify: $[e^x(x-1)]' = e^x(x-1)+e^x = xe^x$ ✓*",
-      "body_he_md": "**נתון:** $\\displaystyle\\int xe^x\\,dx$.\n\n**שלב 1 — LIATE:** $u=x$ (אלגברי), $dv=e^x\\,dx$.\n\n**שלב 2:** $du=dx$, $v=e^x$.\n\n**שלב 3 — IBP:**\n$$xe^x - \\int e^x\\,dx$$\n\n**שלב 4:**\n$$= xe^x - e^x + C = e^x(x-1)+C$$\n\n**תשובה:** $\\boxed{e^x(x-1)+C}$ ✓"
+      "body_en_md": "**Given:** $\\displaystyle\\int xe^x\\,dx$.\n\nA product of polynomial ($x$) and exponential ($e^x$) — IBP, not u-sub (no inner-derivative pattern).\n\n### Move 1 Choose $u$ and $dv$ via LIATE.\nAlgebraic before Exponential: $u=x$, $dv=e^x\\,dx$.\n\n### Move 2 Compute $du$ and $v$.\n$$du = dx, \\qquad v = \\int e^x\\,dx = e^x$$\n\n### Move 3 Apply the IBP formula.\n$$\\int xe^x\\,dx = uv - \\int v\\,du = xe^x - \\int e^x\\,dx$$\nThe new integral has no product — strictly simpler.\n\n### Move 4 Finish and verify.\n$$= xe^x - e^x + C = e^x(x-1)+C$$\n\n**Answer:** $\\boxed{e^x(x-1)+C}$ ✓\n\n**Verify:** $\\frac{d}{dx}[(x-1)e^x]=e^x+(x-1)e^x=xe^x$ ✓.\n\n**Exam note:** If you chose $u=e^x$, $dv=x\\,dx$, you get $\\frac{x^2}{2}e^x-\\int\\frac{x^2}{2}e^x\\,dx$ — the integral got **harder**. LIATE prevents that trap.\n\n**Exam habit:** After finding an antiderivative, differentiate once — ten seconds that catch sign and missing constant errors before you move on.\n\n**Transfer:** The same poly $\\times$ exp pattern and LIATE choice reappear in reduction formulas, tabular IBP, and definite integrals later in this lesson.\n\n**Pattern note:** When the exponential has an inner coefficient like $e^{2x}$, remember to adjust $v=\\int e^{2x}\\,dx=e^{2x}/2$ — the chain-rule constant propagates through IBP exactly as in u-substitution.",
+      "body_he_md": "**נתון:** $\\displaystyle\\int xe^x\\,dx$.\n\nמכפלה של פולינום ($x$) ומעריך ($e^x$) — IBP, לא u-sub (אין דפוס נגזרת פנימית).\n\n### צעד 1 בחירת $u$ ו-$dv$ לפי LIATE.\nאלגברה לפני מעריך: $u=x$, $dv=e^x\\,dx$.\n\n### צעד 2 חישוב $du$ ו-$v$.\n$$du=dx, \\qquad v=e^x$$\n\n### צעד 3 יישום נוסחת IBP.\n$$\\int xe^x\\,dx = xe^x - \\int e^x\\,dx$$\nהאינטגרל החדש ללא מכפלה — פשוט יותר.\n\n### צעד 4 סיום ואימות.\n$$= xe^x - e^x + C = e^x(x-1)+C$$\n\n**תשובה:** $\\boxed{e^x(x-1)+C}$ ✓\n\n**אימות:** $\\frac{d}{dx}[(x-1)e^x]=xe^x$ ✓.\n\n**הערת בחינה:** אם בחרו $u=e^x$, $dv=x\\,dx$, האינטגרל **מקשה**. LIATE מונע את המלכודת.\n\n**הרגל לבחינה:** לאחר מציאת האינטגרל, גזרו פעם אחת — עשר שניות שתופסות טעויות סימן וקבוע חסר.\n\n**העברה:** אותו דפוס פולינום $\\times$ מעריך ובחירת LIATE חוזרים בנוסחאות רדוקציה, IBP טבלאי ואינטגרלים מסוימים בשיעור."
     },
     {
       "kind": "checkpoint",
@@ -46,8 +46,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Compute $\\displaystyle\\int x\\cos x\\,dx$.",
       "body_he_md": "חשבו $\\displaystyle\\int x\\cos x\\,dx$.",
-      "checkpoint_solution_en": "LIATE: $u=x$, $dv=\\cos x\\,dx$. $du=dx$, $v=\\sin x$.\n$\\int x\\cos x\\,dx = x\\sin x - \\int\\sin x\\,dx = x\\sin x + \\cos x + C$.",
-      "checkpoint_solution_he": "$u=x$, $dv=\\cos x\\,dx$. $v=\\sin x$.\n$x\\sin x+\\cos x+C$."
+      "checkpoint_solution_en": "Compute $\\displaystyle\\int x\\cos x\\,dx$.\n\n**Step 1 — LIATE choice.** Algebraic before Trig: $u=x$, $dv=\\cos x\\,dx$.\nThen $du=dx$, $v=\\sin x$.\n\n**Step 2 — Apply IBP.**\n$$\\int x\\cos x\\,dx = x\\sin x - \\int \\sin x\\,dx$$\n\n**Step 3 — Integrate the remainder.**\n$$= x\\sin x + \\cos x + C$$\n\n**Verify:** $\\frac{d}{dx}(x\\sin x+\\cos x)=\\sin x+x\\cos x-\\sin x=x\\cos x$ ✓.",
+      "checkpoint_solution_he": "חשבו $\\displaystyle\\int x\\cos x\\,dx$.\n\n**שלב 1 — בחירת LIATE.** אלגברה לפני טריג: $u=x$, $dv=\\cos x\\,dx$.\nאז $du=dx$, $v=\\sin x$.\n\n**שלב 2 — יישום IBP.**\n$$\\int x\\cos x\\,dx = x\\sin x - \\int \\sin x\\,dx$$\n\n**שלב 3 — אינטגרציה של השארית.**\n$$= x\\sin x + \\cos x + C$$\n\n**אימות:** גזירה נותנת $x\\cos x$ ✓."
     },
     {
       "kind": "worked_example",
@@ -55,8 +55,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — $\\int x\\ln x\\,dx$",
       "title_he": "דוגמה פתורה 2 — $\\int x\\ln x\\,dx$",
-      "body_en_md": "**Given:** $\\displaystyle\\int x\\ln x\\,dx$.\n\n### Move 1\n- $u = \\ln x$ (L = logarithm — top of LIATE)\n- $dv = x\\,dx$\n\n### Move 2\n$$du = \\frac{1}{x}\\,dx, \\qquad v = \\int x\\,dx = \\frac{x^2}{2}$$\n\n### Move 3\n$$\\int x\\ln x\\,dx = \\frac{x^2}{2}\\cdot\\ln x - \\int\\frac{x^2}{2}\\cdot\\frac{1}{x}\\,dx = \\frac{x^2\\ln x}{2} - \\frac{1}{2}\\int x\\,dx$$\n\n### Move 4\n$$= \\frac{x^2\\ln x}{2} - \\frac{1}{2}\\cdot\\frac{x^2}{2} + C = \\frac{x^2\\ln x}{2} - \\frac{x^2}{4}+C$$\n\n**Answer:** $\\boxed{\\dfrac{x^2}{2}\\ln x - \\dfrac{x^2}{4}+C}$ ✓\n\n*Why $u=\\ln x$ not $u=x$? If we chose $u=x$, $dv=\\ln x\\,dx$, we'd need $v=\\int\\ln x\\,dx$ — itself requiring IBP. Always take $\\ln x$ as $u$.*",
-      "body_he_md": "**נתון:** $\\displaystyle\\int x\\ln x\\,dx$.\n\n**שלב 1 — LIATE:** $u=\\ln x$ (L), $dv=x\\,dx$.\n\n**שלב 2:** $du=dx/x$, $v=x^2/2$.\n\n**שלב 3:**\n$$\\frac{x^2\\ln x}{2} - \\frac{1}{2}\\int x\\,dx$$\n\n**שלב 4:**\n$$= \\frac{x^2\\ln x}{2} - \\frac{x^2}{4}+C$$\n\n**תשובה:** $\\boxed{\\dfrac{x^2}{2}\\ln x-\\dfrac{x^2}{4}+C}$ ✓"
+      "body_en_md": "**Given:** $\\displaystyle\\int x\\ln x\\,dx$.\n\nLogarithm times polynomial — LIATE puts Logarithm first.\n\n### Move 1 Choose $u$ and $dv$.\n$u=\\ln x$ (L beats A), $dv=x\\,dx$.\n\n### Move 2 Compute $du$ and $v$.\n$$du = \\frac{1}{x}\\,dx, \\qquad v = \\int x\\,dx = \\frac{x^2}{2}$$\n\n### Move 3 Apply IBP.\n$$\\int x\\ln x\\,dx = \\frac{x^2}{2}\\ln x - \\int \\frac{x^2}{2}\\cdot\\frac{1}{x}\\,dx = \\frac{x^2\\ln x}{2} - \\frac{1}{2}\\int x\\,dx$$\n\n### Move 4 Finish.\n$$= \\frac{x^2\\ln x}{2} - \\frac{x^2}{4} + C$$\n\n**Answer:** $\\boxed{\\dfrac{x^2}{2}\\ln x - \\dfrac{x^2}{4}+C}$ ✓\n\n**Why $u=\\ln x$ not $u=x$?** If $u=x$, $dv=\\ln x\\,dx$, then $v=\\int\\ln x\\,dx$ — itself requiring IBP. Always take $\\ln x$ as $u$.\n\n**Verify:** Product rule on $\\frac{x^2}{2}\\ln x$ gives $x\\ln x$ ✓.\n\n**Exam habit:** When $\\ln x$ appears in any product, mark it as $u$ before writing the IBP formula — LIATE is worth memorizing verbatim.\n\n**Transfer:** This template extends to $\\int x^n\\ln x\\,dx$ and definite integrals like $\\int_1^e x\\ln x\\,dx$ using the same $u=\\ln x$ choice.\n\n**Why the remainder simplifies:** After IBP, $\\int \\frac{x^2}{2}\\cdot\\frac{1}{x}\\,dx$ reduces to $\\frac{1}{2}\\int x\\,dx$ because the $x$ terms cancel — always simplify before integrating.",
+      "body_he_md": "**נתון:** $\\displaystyle\\int x\\ln x\\,dx$.\n\nלוגריתם כפול פולינום — LIATE שם לוגריתם ראשון. זהו דפוס קלאסי שבו בחירת $u$ שגויה מכריחה אותנו לאינטגרל $\\int\\ln x\\,dx$ בתוך $v$, וזה מאריך את הפתרון בלי צורך.\n\n### צעד 1 בחירת $u$ ו-$dv$.\n$u=\\ln x$ (L לפני A), $dv=x\\,dx$.\n\n### צעד 2 חישוב $du$ ו-$v$.\n$$du=\\frac{1}{x}\\,dx, \\qquad v=\\frac{x^2}{2}$$\n\n### צעד 3 יישום IBP.\n$$\\int x\\ln x\\,dx = \\frac{x^2}{2}\\ln x - \\frac{1}{2}\\int x\\,dx$$\n\n### צעד 4 סיום.\n$$= \\frac{x^2\\ln x}{2} - \\frac{x^2}{4} + C$$\n\n**תשובה:** $\\boxed{\\dfrac{x^2}{2}\\ln x-\\dfrac{x^2}{4}+C}$ ✓\n\n**למה $u=\\ln x$ ולא $u=x$?** אם $u=x$, נדרש $v=\\int\\ln x\\,dx$ — IBP נוסף. תמיד $\\ln x$ הוא $u$.\n\n**אימות:** כלל המכפלה על $\\frac{x^2}{2}\\ln x$ נותן $x\\ln x$ ✓.\n\n**הרגל לבחינה:** כש-$\\ln x$ במכפלה, סמנו אותו כ-$u$ לפני הנוסחה — LIATE שווה שינון.\n\n**העברה:** התבנית מתרחבת ל-$\\int x^n\\ln x\\,dx$ ולאינטגרלים מסוימים כמו $\\int_1^e x\\ln x\\,dx$ עם אותה בחירת $u=\\ln x$."
     },
     {
       "kind": "checkpoint",
@@ -64,8 +64,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Compute $\\displaystyle\\int\\arctan x\\,dx$.",
       "body_he_md": "חשבו $\\displaystyle\\int\\arctan x\\,dx$.",
-      "checkpoint_solution_en": "LIATE: $u=\\arctan x$, $dv=dx$. $du=\\frac{1}{1+x^2}dx$, $v=x$.\n$x\\arctan x - \\int\\frac{x}{1+x^2}\\,dx$. For the last integral: let $w=1+x^2$, giving $\\frac{1}{2}\\ln(1+x^2)$.\nAnswer: $x\\arctan x - \\frac{1}{2}\\ln(1+x^2)+C$.",
-      "checkpoint_solution_he": "$u=\\arctan x$, $dv=dx$. $v=x$, $du=\\frac{dx}{1+x^2}$.\n$x\\arctan x-\\frac{1}{2}\\ln(1+x^2)+C$."
+      "checkpoint_solution_en": "Compute $\\displaystyle\\int\\arctan x\\,dx$.\n\n**Step 1 — Lone inverse trig.** $u=\\arctan x$, $dv=dx$.\nThen $du=\\frac{1}{1+x^2}\\,dx$, $v=x$.\n\n**Step 2 — Apply IBP.**\n$$\\int\\arctan x\\,dx = x\\arctan x - \\int \\frac{x}{1+x^2}\\,dx$$\n\n**Step 3 — u-sub on the remainder.** Let $w=1+x^2$, $dw=2x\\,dx$:\n$$\\int \\frac{x}{1+x^2}\\,dx = \\frac{1}{2}\\ln(1+x^2)$$\n\n**Answer:** $x\\arctan x - \\frac{1}{2}\\ln(1+x^2)+C$ ✓",
+      "checkpoint_solution_he": "חשבו $\\displaystyle\\int\\arctan x\\,dx$.\n\n**שלב 1 — טריג הפוך לבד.** $u=\\arctan x$, $dv=dx$.\nאז $du=\\frac{1}{1+x^2}\\,dx$, $v=x$.\n\n**שלב 2 — יישום IBP.**\n$$\\int\\arctan x\\,dx = x\\arctan x - \\int \\frac{x}{1+x^2}\\,dx$$\n\n**שלב 3 — u-sub על השארית.** $w=1+x^2$, $dw=2x\\,dx$:\n$$\\int \\frac{x}{1+x^2}\\,dx = \\frac{1}{2}\\ln(1+x^2)$$\n\n**תשובה:** $x\\arctan x - \\frac{1}{2}\\ln(1+x^2)+C$ ✓"
     },
     {
       "kind": "worked_example",
@@ -73,15 +73,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — $\\int e^x\\sin x\\,dx$ (Cyclic IBP)",
       "title_he": "דוגמה פתורה 3 — $\\int e^x\\sin x\\,dx$ (IBP מחזורי)",
-      "body_en_md": "**Given:** $I = \\displaystyle\\int e^x\\sin x\\,dx$.\n\n### Move 1 Choose $u=\\sin x$, $dv=e^x\\,dx$.\n$$du = \\cos x\\,dx, \\qquad v = e^x$$\n$$I = e^x\\sin x - \\int e^x\\cos x\\,dx$$\n\n### Move 2 Choose $u=\\cos x$, $dv=e^x\\,dx$.\n$$du = -\\sin x\\,dx, \\qquad v = e^x$$\n$$\\int e^x\\cos x\\,dx = e^x\\cos x - \\int e^x(-\\sin x)\\,dx = e^x\\cos x + \\int e^x\\sin x\\,dx = e^x\\cos x + I$$\n\n### Move 3\n$$I = e^x\\sin x - (e^x\\cos x + I)$$\n$$I = e^x\\sin x - e^x\\cos x - I$$\n$$2I = e^x(\\sin x - \\cos x)$$\n\n### Move 4\n$$I = \\frac{e^x(\\sin x - \\cos x)}{2} + C$$\n\n**Answer:** $\\boxed{\\displaystyle\\int e^x\\sin x\\,dx = \\frac{e^x(\\sin x-\\cos x)}{2}+C}$ ✓\n\n*The key insight: applying IBP twice with the SAME type of $u$ each time produces a cycle. Collecting $I$ on both sides and solving algebraically is the standard technique.*",
-      "body_he_md": "**נתון:** $I=\\displaystyle\\int e^x\\sin x\\,dx$.\n\n**שלב 1 — IBP ראשון:** $u=\\sin x$, $dv=e^x\\,dx$. $v=e^x$.\n$$I = e^x\\sin x - \\int e^x\\cos x\\,dx$$\n\n**שלב 2 — IBP שני על $\\int e^x\\cos x\\,dx$:** $u=\\cos x$, $dv=e^x\\,dx$.\n$$\\int e^x\\cos x\\,dx = e^x\\cos x + I$$\n\n**שלב 3 — הציבו חזרה:**\n$$I = e^x\\sin x - e^x\\cos x - I$$\n$$2I = e^x(\\sin x-\\cos x)$$\n\n**שלב 4:**\n$$I = \\frac{e^x(\\sin x-\\cos x)}{2}+C$$\n\n**תשובה:** $\\boxed{\\dfrac{e^x(\\sin x-\\cos x)}{2}+C}$ ✓"
+      "body_en_md": "**Given:** $I = \\displaystyle\\int e^x\\sin x\\,dx$.\n\nExponential–trig products always loop after two IBP steps. Name the integral $I$ before starting.\n\n### Move 1 First IBP: $u=\\sin x$, $dv=e^x\\,dx$.\n$$du = \\cos x\\,dx, \\qquad v = e^x$$\n$$I = e^x\\sin x - \\int e^x\\cos x\\,dx$$\n\n### Move 2 Second IBP on $\\int e^x\\cos x\\,dx$: $u=\\cos x$, $dv=e^x\\,dx$.\n$$\\int e^x\\cos x\\,dx = e^x\\cos x + \\int e^x\\sin x\\,dx = e^x\\cos x + I$$\nKeep trig as $u$ both times — switching to $u=e^x$ gives $0=0$.\n\n### Move 3 Substitute back and collect $I$.\n$$I = e^x\\sin x - e^x\\cos x - I \\implies 2I = e^x(\\sin x - \\cos x)$$\n\n### Move 4 Solve and add $+C$.\n$$I = \\frac{e^x(\\sin x - \\cos x)}{2} + C$$\n\n**Answer:** $\\boxed{\\dfrac{e^x(\\sin x-\\cos x)}{2}+C}$ ✓\n\n**Verify:** Differentiate — product rule on each term reconstructs $e^x\\sin x$ ✓.\n\n**Exam habit:** Write $I=$ in the margin at the start and keep the same function type as $u$ in both IBP steps — switching types gives $0=0$.\n\n**Transfer:** The companion integral $\\int e^x\\cos x\\,dx$ loops with a plus sign instead of minus; both appear in the before-exam checklist.\n\n**Sign tracking:** Each IBP introduces a minus from the formula; in cyclic problems, write every sign change on its own line so the final collection $I=\\ldots - I$ is unambiguous.",
+      "body_he_md": "**נתון:** $I=\\displaystyle\\int e^x\\sin x\\,dx$.\n\nמכפלות מעריך–טריג תמיד יוצרות לולאה אחרי שני IBP. סמנו $I$ לפני ההתחלה.\n\n### צעד 1 IBP ראשון: $u=\\sin x$, $dv=e^x\\,dx$.\n$$du=\\cos x\\,dx, \\qquad v=e^x$$\n$$I = e^x\\sin x - \\int e^x\\cos x\\,dx$$\n\n### צעד 2 IBP שני על $\\int e^x\\cos x\\,dx$: $u=\\cos x$, $dv=e^x\\,dx$.\n$$\\int e^x\\cos x\\,dx = e^x\\cos x + I$$\nשמרו טריג כ-$u$ בשניהם — מעבר ל-$u=e^x$ נותן $0=0$.\n\n### צעד 3 הציבו חזרה ואספו $I$.\n$$I = e^x\\sin x - e^x\\cos x - I \\implies 2I = e^x(\\sin x-\\cos x)$$\n\n### צעד 4 פתרו והוסיפו $+C$.\n$$I = \\frac{e^x(\\sin x-\\cos x)}{2}+C$$\n\n**תשובה:** $\\boxed{\\dfrac{e^x(\\sin x-\\cos x)}{2}+C}$ ✓\n\n**אימות:** גזירה — כלל המכפלה על כל איבר מחזיר $e^x\\sin x$ ✓.\n\n**הרגל לבחינה:** כתבו $I=$ בשוליים והשאירו אותו סוג כ-$u$ בשני IBP — החלפת סוג נותנת $0=0$.\n\n**העברה:** $\\int e^x\\cos x\\,dx$ לולאת עם סימן פלוס; שניהם ברשימת הבחינה.\n\n**מעקב סימנים:** כל IBP מוסיף מינוס מהנוסחה; בבעיות מחזוריות, כתבו כל שינוי סימן בשורה נפרדת כדי ש-$I=\\ldots-I$ יהיה חד-משמעי."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — IBP Decision Tree",
       "title_he": "מדריך שיטות — עץ החלטות ל-IBP",
-      "body_en_md": "**When to use IBP:**\n- Integrand is a product of two different function types.\n- Substitution doesn't work (no inner function + its derivative).\n- Function is $\\ln x$, $\\arctan x$, $\\arcsin x$ alone (use $dv=dx$).\n\n**Choosing $u$ and $dv$ — LIATE priority:**\n1. $u = $ (L) Log functions: $\\ln x$, $\\log_a x$\n2. $u = $ (I) Inverse trig: $\\arctan x$, $\\arcsin x$\n3. $u = $ (A) Algebraic: $x^n$, polynomials\n4. $u = $ (T) Trig: $\\sin x$, $\\cos x$\n5. $u = $ (E) Exponential: $e^x$, $a^x$\n\n**If IBP gives a harder integral:** swap $u$ and $dv$.\n\n**Cyclic case** (result includes the original integral):\n- Name the integral $I$.\n- Collect $I$ terms on one side.\n- Divide and add $+C$ at the end.\n\n**Reduction formulas** (useful to know):\n$$\\int x^n e^x\\,dx = x^n e^x - n\\int x^{n-1}e^x\\,dx$$",
-      "body_he_md": "**מתי להשתמש ב-IBP:**\n- מכפלה של שני סוגי פונקציות שונים.\n- החלפה לא עובדת.\n- $\\ln x$, $\\arctan x$ לבדם (עם $dv=dx$).\n\n**בחירת $u$ — עדיפות LIATE:**\n1. L: $\\ln x$\n2. I: $\\arctan x$, $\\arcsin x$\n3. A: $x^n$\n4. T: $\\sin x$, $\\cos x$\n5. E: $e^x$\n\n**מקרה מחזורי:**\n- קראו לאינטגרל $I$.\n- קיבצו $I$ לצד אחד.\n- חלקו, הוסיפו $+C$.\n\n**נוסחת רדוקציה:**\n$$\\int x^n e^x\\,dx = x^n e^x-n\\int x^{n-1}e^x\\,dx$$"
+      "body_en_md": "**When to use IBP:**\n- Integrand is a **product** of two different function types (poly $\\times$ exp, poly $\\times$ log, exp $\\times$ trig).\n- u-sub fails: no inner function $g(x)$ with $g'(x)\\,dx$ visible (up to a constant).\n- Lone $\\ln x$, $\\arctan x$, $\\arcsin x$: set $u$ to that function and $dv=dx$.\n\n**LIATE priority for $u$:**\n| Priority | Type | Examples |\n|---|---|---|\n| L | Logarithm | $\\ln x$, $\\log_2 x$ |\n| I | Inverse trig | $\\arctan x$, $\\arcsin x$ |\n| A | Algebraic | $x^n$, polynomials |\n| T | Trigonometric | $\\sin x$, $\\cos x$ |\n| E | Exponential | $e^x$, $2^x$ |\n\n**Decision workflow:** (1) Scan for product → IBP. (2) Choose $u$ via LIATE; rest is $dv$. (3) If $\\int v\\,du$ is still a product, IBP again. (4) If original integral $I$ reappears, collect and solve. (5) Differentiate to verify.\n\n**If IBP makes the integral harder:** swap $u$ and $dv$ — you likely violated LIATE.\n\n**Reduction:** $\\int x^n e^x\\,dx = x^n e^x - n\\int x^{n-1}e^x\\,dx$. Tabular IBP saves time for large $n$.",
+      "body_he_md": "**מתי להשתמש ב-IBP:**\n- האינטגרנד הוא **מכפלה** של שני סוגי פונקציות (פולינום $\\times$ מעריך, פולינום $\\times$ לוג, מעריך $\\times$ טריג).\n- u-sub נכשל: אין $g(x)$ עם $g'(x)\\,dx$ (עד קבוע).\n- $\\ln x$, $\\arctan x$, $\\arcsin x$ לבד: $u$ = הפונקציה, $dv=dx$.\n\n**עדיפות LIATE ל-$u$:**\n| עדיפות | סוג | דוגמאות |\n|---|---|---|\n| L | לוגריתם | $\\ln x$, $\\log_2 x$ |\n| I | טריג הפוך | $\\arctan x$, $\\arcsin x$ |\n| A | אלגברי | $x^n$, פולינומים |\n| T | טריגונומטרי | $\\sin x$, $\\cos x$ |\n| E | מעריכי | $e^x$, $2^x$ |\n\n**תהליך:** (1) מכפלה → IBP. (2) $u$ לפי LIATE; השאר $dv$. (3) אם $\\int v\\,du$ עדיין מכפלה — IBP שוב. (4) אם $I$ חוזר — אספו ופתרו. (5) אמתו בגזירה.\n\n**אם IBP מקשה:** החליפו $u$ ו-$dv$ — כנראה הפרתם LIATE.\n\n**רדוקציה:** $\\int x^n e^x\\,dx = x^n e^x - n\\int x^{n-1}e^x\\,dx$. IBP טבלאי חוסך זמן ל-$n$ גדול."
     },
     {
       "kind": "exercise_set",
@@ -96,7 +96,7 @@
           "body_en": "Compute $\\displaystyle\\int xe^{2x}\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int xe^{2x}\\,dx$.",
           "solution_en": "$u=x$, $dv=e^{2x}\\,dx$. $v=e^{2x}/2$. $\\frac{xe^{2x}}{2}-\\frac{1}{2}\\int e^{2x}\\,dx=\\frac{xe^{2x}}{2}-\\frac{e^{2x}}{4}+C=\\frac{e^{2x}(2x-1)}{4}+C$.",
-          "solution_he": "**פתרון:**\n\n$\\frac{e^{2x}(2x-1)}{4}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** $u=x$, $dv=e^{2x}\\,dx$, $v=e^{2x}/2$. $\\frac{xe^{2x}}{2}-\\frac{1}{2}\\int e^{2x}\\,dx=\\frac{e^{2x}(2x-1)}{4}+C$. **אימות:** גזירה נותנת $xe^{2x}$.",
           "points": 5
         },
         {
@@ -105,7 +105,7 @@
           "body_en": "Compute $\\displaystyle\\int x\\sin x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int x\\sin x\\,dx$.",
           "solution_en": "$u=x$, $dv=\\sin x\\,dx$. $v=-\\cos x$. $-x\\cos x+\\int\\cos x\\,dx=-x\\cos x+\\sin x+C$.",
-          "solution_he": "**פתרון:**\n\n$\\sin x-x\\cos x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** $u=x$, $dv=\\sin x\\,dx$, $v=-\\cos x$. $-x\\cos x+\\int\\cos x\\,dx=-x\\cos x+\\sin x+C$. **אימות:** גזירה נותנת $x\\sin x$.",
           "points": 5
         },
         {
@@ -114,7 +114,7 @@
           "body_en": "Compute $\\displaystyle\\int\\ln x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\ln x\\,dx$.",
           "solution_en": "$u=\\ln x$, $dv=dx$. $v=x$. $x\\ln x-\\int dx=x\\ln x-x+C$.",
-          "solution_he": "**פתרון:**\n\n$x\\ln x-x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** $u=\\ln x$, $dv=dx$, $v=x$. $x\\ln x-\\int dx=x\\ln x-x+C$. **אימות:** גזירה נותנת $\\ln x$.",
           "points": 5
         },
         {
@@ -123,7 +123,7 @@
           "body_en": "Compute $\\displaystyle\\int_0^1 xe^x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int_0^1 xe^x\\,dx$.",
           "solution_en": "IBP: $u=x$, $dv=e^x dx$. $[xe^x-e^x]_0^1=(e-e)-(0-1)=1$.",
-          "solution_he": "**פתרון:**\n\n$[xe^x-e^x]_0^1=1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** IBP: $u=x$, $dv=e^x\\,dx$. $[xe^x-e^x]_0^1=(e-e)-(0-1)=1$. **טיפ:** ב-$x=0$ האיבר הוא $-1$, לא $0$.",
           "points": 5
         },
         {
@@ -132,7 +132,7 @@
           "body_en": "Compute $\\displaystyle\\int x^2 e^x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int x^2 e^x\\,dx$.",
           "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $u=x^2$, $dv=e^x dx$. $x^2e^x-2\\int xe^x dx=x^2e^x-2(xe^x-e^x)+C=e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$e^x(x^2-2x+2)+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** IBP פעמיים: $u=x^2$, $dv=e^x\\,dx$ → $x^2e^x-2\\int xe^x\\,dx$. IBP שני על $\\int xe^x\\,dx$ נותן $e^x(x^2-2x+2)+C$. **טיפ:** כל IBP מוריד דרגת פולינום ב-1.",
           "points": 8
         },
         {
@@ -141,7 +141,7 @@
           "body_en": "Compute $\\displaystyle\\int x^2\\ln x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int x^2\\ln x\\,dx$.",
           "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=\\ln x$, $dv=x^2dx$. $v=x^3/3$. $\\frac{x^3\\ln x}{3}-\\frac{1}{3}\\int x^2 dx=\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** $u=\\ln x$, $dv=x^2\\,dx$, $v=x^3/3$. $\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$. **טיפ:** לוג תמיד $u$ ב-LIATE.",
           "points": 8
         },
         {
@@ -150,7 +150,7 @@
           "body_en": "Compute $\\displaystyle\\int e^x\\cos x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int e^x\\cos x\\,dx$.",
           "solution_en": "Let $I=\\int e^x\\cos x\\,dx$. IBP: $u=\\cos x$, $v=e^x$: $e^x\\cos x+\\int e^x\\sin x\\,dx$. IBP again: $e^x\\cos x+e^x\\sin x-I$. $2I=e^x(\\cos x+\\sin x)$. $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** נסמן $I=\\int e^x\\cos x\\,dx$. IBP פעמיים, $I$ חוזר: $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$. **טיפ:** כתבו $I=$ בשוליים.",
           "points": 8
         },
         {
@@ -159,7 +159,7 @@
           "body_en": "Compute $\\displaystyle\\int_1^e x\\ln x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int_1^e x\\ln x\\,dx$.",
           "solution_en": "From earlier: antiderivative $=\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}$. At $x=e$: $\\frac{e^2}{2}-\\frac{e^2}{4}=\\frac{e^2}{4}$. At $x=1$: $0-\\frac{1}{4}=-\\frac{1}{4}$. Answer: $\\frac{e^2}{4}+\\frac{1}{4}=\\frac{e^2+1}{4}$.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\frac{e^2+1}{4}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** אינטגרל: $\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}$. ב-$e$: $\\frac{e^2}{4}$; ב-$1$: $-\\frac{1}{4}$. סה\"כ $\\frac{e^2+1}{4}$.",
           "points": 8
         },
         {
@@ -168,7 +168,7 @@
           "body_en": "Compute $\\displaystyle\\int\\arcsin x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int\\arcsin x\\,dx$.",
           "solution_en": "$u=\\arcsin x$, $dv=dx$. $v=x$, $du=\\frac{dx}{\\sqrt{1-x^2}}$. $x\\arcsin x-\\int\\frac{x}{\\sqrt{1-x^2}}\\,dx$. Sub $w=1-x^2$: last integral $=\\sqrt{1-x^2}$. Answer: $x\\arcsin x+\\sqrt{1-x^2}+C$.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x\\arcsin x+\\sqrt{1-x^2}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** $u=\\arcsin x$, $dv=dx$, $v=x$. $x\\arcsin x-\\int\\frac{x}{\\sqrt{1-x^2}}\\,dx$. u-sub: $w=1-x^2$ → $x\\arcsin x+\\sqrt{1-x^2}+C$.",
           "points": 8
         },
         {
@@ -177,7 +177,7 @@
           "body_en": "Derive the reduction formula $\\int x^n e^x\\,dx = x^n e^x - n\\int x^{n-1}e^x\\,dx$ and use it to compute $\\int x^3 e^x\\,dx$.",
           "body_he": "גזרו את נוסחת הרדוקציה $\\int x^n e^x\\,dx=x^n e^x-n\\int x^{n-1}e^x\\,dx$ והשתמשו בה לחישוב $\\int x^3 e^x\\,dx$.",
           "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nIBP: $u=x^n$, $dv=e^x dx$. $du=nx^{n-1}dx$, $v=e^x$. Formula follows. For $n=3$: $x^3e^x-3\\int x^2e^x dx=x^3e^x-3(x^2e^x-2xe^x+2e^x)+C=e^x(x^3-3x^2+6x-6)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nנוסחה: IBP עם $u=x^n$, $dv=e^x dx$. עבור $n=3$: $e^x(x^3-3x^2+6x-6)+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** IBP: $u=x^n$, $dv=e^x\\,dx$ → נוסחת רדוקציה. ל-$n=3$: $e^x(x^3-3x^2+6x-6)+C$. **טיפ:** חזרו עד $n=0$.",
           "points": 12
         },
         {
@@ -186,7 +186,7 @@
           "body_en": "Compute $\\displaystyle\\int_0^\\pi x^2\\cos x\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int_0^\\pi x^2\\cos x\\,dx$.",
           "solution_en": "IBP twice. First: $u=x^2$, $dv=\\cos x dx$. $[x^2\\sin x]_0^\\pi - 2\\int_0^\\pi x\\sin x dx$. First term $=0$. Second IBP: $[-x\\cos x]_0^\\pi+\\int_0^\\pi\\cos x dx=\\pi+[\\sin x]_0^\\pi=\\pi$. So $-2\\cdot\\pi=-2\\pi$. Wait: $\\int_0^\\pi x\\sin x dx = [-x\\cos x+\\sin x]_0^\\pi = \\pi$. Final: $-2\\pi$.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nשני IBP. $\\int_0^\\pi x^2\\cos x dx=-2\\pi$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** IBP פעמיים. ראשון: $u=x^2$, $dv=\\cos x\\,dx$ → $-2\\int_0^\\pi x\\sin x\\,dx$ (איבר גבולות $=0$). שני: $\\int_0^\\pi x\\sin x\\,dx=\\pi$. תשובה: $-2\\pi$.",
           "points": 12
         },
         {
@@ -195,7 +195,7 @@
           "body_en": "Compute $\\displaystyle\\int(\\ln x)^2\\,dx$.",
           "body_he": "חשבו $\\displaystyle\\int(\\ln x)^2\\,dx$.",
           "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$u=(\\ln x)^2$, $dv=dx$. $v=x$, $du=2\\ln x/x\\,dx$. $x(\\ln x)^2-2\\int\\ln x\\,dx=x(\\ln x)^2-2(x\\ln x-x)+C=x(\\ln x)^2-2x\\ln x+2x+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$x(\\ln x)^2-2x\\ln x+2x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_he": "**פתרון:** $u=(\\ln x)^2$, $dv=dx$, $v=x$. $x(\\ln x)^2-2\\int\\ln x\\,dx=x(\\ln x)^2-2x\\ln x+2x+C$. **טיפ:** השתמשו ב-$\\int\\ln x\\,dx$ ידוע.",
           "points": 12
         }
       ]
@@ -204,30 +204,30 @@
       "kind": "pitfall",
       "title_en": "Common Mistakes",
       "title_he": "טעויות נפוצות",
-      "body_en_md": "1. **Wrong choice of $u$.** Choosing $u=e^x$ and $dv=\\ln x\\,dx$ makes the problem harder. Follow LIATE: logarithm goes as $u$.\n\n2. **Forgetting the minus sign.** $\\int u\\,dv = uv \\mathbf{-} \\int v\\,du$. The minus is crucial.\n\n3. **Not adding $+C$ after solving the cyclic equation.** $2I=e^x(\\sin x-\\cos x)$ gives $I=\\frac{e^x(\\sin x-\\cos x)}{2}+C$ — don't forget the constant.\n\n4. **Computing $v$ by differentiating instead of integrating.** $v=\\int dv$, not $v=du/dx$.\n\n5. **Switching $u$ between the two IBP applications** in a cyclic problem. Keep the same type of function as $u$ both times, or you'll end up with $0=0$.",
-      "body_he_md": "1. **בחירת $u$ שגויה.** $u=e^x$ עם $dv=\\ln x\\,dx$ מקשה. LIATE: לוגריתם הוא $u$.\n\n2. **שכחת המינוס.** $\\int u\\,dv=uv\\mathbf{-}\\int v\\,du$. המינוס קריטי.\n\n3. **אי-הוספת $+C$ אחרי פתרון המחזורי.** $2I=...$ נותן $I=...+C$.\n\n4. **גזירה במקום אינטגרציה ל-$v$.** $v=\\int dv$, לא נגזרת.\n\n5. **החלפת $u$ בין שני יישומי IBP מחזוריים.** שמרו אותו סוג פונקציה כ-$u$ בשניהם."
+      "body_en_md": "1. **Wrong choice of $u$.** Picking $u=e^x$ with $dv=\\ln x\\,dx$ forces you to integrate $\\ln x$ inside $v$ — harder, not simpler. LIATE always puts logarithm as $u$ in a log–exp product.\n\n2. **Forgetting the minus sign.** $\\int u\\,dv = uv \\mathbf{-} \\int v\\,du$. Dropping the minus gives a derivative of the negative of the answer — easy to catch by differentiating, but costly on timed exams.\n\n3. **Missing $+C$ after the cyclic solve.** $2I=e^x(\\sin x-\\cos x)$ gives $I=\\frac{e^x(\\sin x-\\cos x)}{2}+C$. Without $+C$, indefinite integrals are incomplete.\n\n4. **Differentiating instead of integrating for $v$.** $v=\\int dv$, not $v=u'$. A common slip: $dv=\\cos x\\,dx$ but writing $v=-\\sin x$ from $\\frac{d}{dx}\\sin x$ instead of integrating.\n\n5. **Switching $u$ type in cyclic IBP.** In $\\int e^x\\sin x\\,dx$, keep trig as $u$ both times. If the second IBP uses $u=e^x$, you get $0=0$ and no progress.\n\n6. **Stopping after one IBP when the polynomial degree is still $>0$.** $\\int x^2 e^x\\,dx$ needs two IBP steps — the remainder $\\int xe^x\\,dx$ is not elementary without another round.",
+      "body_he_md": "1. **בחירת $u$ שגויה.** $u=e^x$ עם $dv=\\ln x\\,dx$ מכריח אינטגרציה של $\\ln x$ בתוך $v$ — קשה יותר. LIATE תמיד שם לוגריתם כ-$u$.\n\n2. **שכחת המינוס.** $\\int u\\,dv=uv\\mathbf{-}\\int v\\,du$. השמטת המינוס נותנת נגזרת של שליל התשובה — נתפס בגזירה, אך יקר בבחינה.\n\n3. **חסר $+C$ אחרי פתרון מחזורי.** $2I=e^x(\\sin x-\\cos x)$ → $I=\\frac{e^x(\\sin x-\\cos x)}{2}+C$. בלי $+C$ — אינטגרל לא מוגדר.\n\n4. **גזירה במקום אינטגרציה ל-$v$.** $v=\\int dv$, לא $u'$. טעות: $dv=\\cos x\\,dx$ אך $v=-\\sin x$ מגזירה במקום אינטגרציה.\n\n5. **החלפת סוג $u$ ב-IBP מחזורי.** ב-$\\int e^x\\sin x\\,dx$, שמרו טריג כ-$u$ בשניהם. IBP שני עם $u=e^x$ נותן $0=0$.\n\n6. **עצירה אחרי IBP אחד כשדרגת הפולינום עדיין $>0$.** $\\int x^2 e^x\\,dx$ דורש שני IBP — $\\int xe^x\\,dx$ דורש סיבוב נוסף."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "Integration by Parts is the bridge between **differentiation tools** and **harder antiderivatives** in Calc I and university analysis.\n\n**Connections in the knowledge graph:** IBP builds directly on `concept:derivatives_rules` (product rule) and feeds into `concept:integrals_techniques` (technique selection), `concept:integrals_applications` (areas and volumes with non-elementary integrands), and `concept:uni_integrals` (reduction formulas on exams).\n\n**Why it matters for exams:** University problem sets and bagrut-style transfer questions reward recognizing **product structure** — not just plugging a formula. Cyclic IBP ($\\int e^x\\sin x\\,dx$) and definite IBP ($\\int_0^1 xe^x\\,dx$) appear repeatedly because they test both technique and algebra.\n\n**Real use:** IBP underlies expectation formulas in probability ($\\int x f(x)\\,dx$), Fourier coefficient integrals, and solving first-order linear ODEs — the same \"transfer difficulty to a simpler integral\" idea recurs everywhere.",
+      "body_he_md": "אינטגרציה בחלקים היא הגשר בין **כלי הגזירה** ל**אינטגרלs קשים יותר** בחשבון 1 ובאנליזה.\n\n**קשרים בגרף הידע:** IBP נשען על `concept:derivatives_rules` (כלל המכפלה) ומזין את `concept:integrals_techniques` (בחירת שיטה), `concept:integrals_applications` (שטחים ונפחים), ו-`concept:uni_integrals` (נוסחאות רדוקציה בבחינות).\n\n**למה זה חשוב לבחינות:** תרגילי אוניברסיטה ושאלות העברה מעריכים זיהוי **מבנה מכפלה** — לא רק הצבה לנוסחה. IBP מחזורי ו-IBP מסוים חוזרים כי הם בודקים טכניקה ואלגברה יחד.\n\n**שימוש אמיתי:** IBP עומד בבסיס נוסחאות בהסתברות, מקדמי Fourier, ופתרון ODE לינאריים — אותה רעיון של \"העברת קושי לאינטגרל פשוט יותר\" חוזר בכל מקום."
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**IBP formula:** $\\displaystyle\\int u\\,dv = uv - \\int v\\,du$\n\n**LIATE order:** Log > Inverse trig > Algebraic > Trig > Exponential\n\n**Must-know results:**\n$$\\int\\ln x\\,dx = x\\ln x - x + C$$\n$$\\int xe^x\\,dx = e^x(x-1)+C$$\n$$\\int e^x\\sin x\\,dx = \\frac{e^x(\\sin x-\\cos x)}{2}+C$$\n$$\\int e^x\\cos x\\,dx = \\frac{e^x(\\sin x+\\cos x)}{2}+C$$\n\n**Exam patterns:**\n- Product of polynomial and exponential: IBP once per power (reduction formula).\n- Product of exponential and trig: cyclic IBP, solve algebraically.\n- Lone $\\ln x$, $\\arctan x$, $\\arcsin x$: IBP with $dv=dx$.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
-      "body_he_md": "**נוסחה:** $\\int u\\,dv=uv-\\int v\\,du$\n\n**LIATE:** לוגריתם > טריג' הפוך > אלגברי > טריגונומטרי > מעריכי\n\n**תוצאות שחובה לשנן:**\n$$\\int\\ln x\\,dx=x\\ln x-x+C$$\n$$\\int xe^x\\,dx=e^x(x-1)+C$$\n$$\\int e^x\\sin x\\,dx=\\frac{e^x(\\sin x-\\cos x)}{2}+C$$\n\n**דפוסי בחינה:**\n- מכפלת פולינום ומעריכי: IBP בכל חזקה.\n- מכפלת מעריכי וטריגונומטרי: IBP מחזורי.\n- $\\ln x$, $\\arctan x$ לבדם: $dv=dx$."
+      "body_en_md": "**IBP formula:** $\\displaystyle\\int u\\,dv = uv - \\int v\\,du$ — write $u$, $dv$, $du$, $v$ before substituting.\n\n**LIATE order:** Log > Inverse trig > Algebraic > Trig > Exponential\n\n**Must-know antiderivatives:**\n$$\\int\\ln x\\,dx = x\\ln x - x + C$$\n$$\\int xe^x\\,dx = e^x(x-1)+C$$\n$$\\int e^x\\sin x\\,dx = \\frac{e^x(\\sin x-\\cos x)}{2}+C$$\n$$\\int e^x\\cos x\\,dx = \\frac{e^x(\\sin x+\\cos x)}{2}+C$$\n\n**Exam patterns:**\n- Poly $\\times$ exp/trig: IBP once per power (reduction formula or tabular IBP).\n- Exp $\\times$ trig: cyclic IBP — name $I$, solve algebraically, add $+C$.\n- Lone $\\ln x$, $\\arctan x$, $\\arcsin x$: $u$ = that function, $dv=dx$; remainder often u-sub.\n- Definite IBP: evaluate $[uv]_a^b$ first, then integrate the remainder.\n\n**Last review:** Derive IBP from the product rule once, then solve $\\int x\\cos x\\,dx$ and $\\int e^x\\sin x\\,dx$ without notes.",
+      "body_he_md": "**נוסחת IBP:** $\\int u\\,dv=uv-\\int v\\,du$ — כתבו $u$, $dv$, $du$, $v$ לפני ההצבה.\n\n**LIATE:** לוגריתם > טריג' הפוך > אלגברי > טריגונומטרי > מעריכי\n\n**אינטגרלs שחובה לשנן:**\n$$\\int\\ln x\\,dx=x\\ln x-x+C$$\n$$\\int xe^x\\,dx=e^x(x-1)+C$$\n$$\\int e^x\\sin x\\,dx=\\frac{e^x(\\sin x-\\cos x)}{2}+C$$\n$$\\int e^x\\cos x\\,dx=\\frac{e^x(\\sin x+\\cos x)}{2}+C$$\n\n**דפוסי בחינה:**\n- פולינום $\\times$ מעריך/טריג: IBP לכל חזקה (רדוקציה או טבלה).\n- מעריך $\\times$ טריג: IBP מחזורי — $I$, אלגברה, $+C$.\n- $\\ln x$, $\\arctan x$ לבד: $u$ = הפונקציה, $dv=dx$; השארית לעתים u-sub.\n- IBP מסוים: חשבו $[uv]_a^b$ תחילה.\n\n**חזרה אחרונה:** גזרו IBP מכלל המכפלה, ואז פתרו $\\int x\\cos x\\,dx$ ו-$\\int e^x\\sin x\\,dx$ בלי רשימות."
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **IBP formula:** $\\int u\\,dv = uv - \\int v\\,du$ — the product rule reversed.\n- **LIATE** determines which factor to take as $u$ (earlier in the list = $u$).\n- Apply IBP **twice** for products of polynomials with exponentials/trig.\n- **Cyclic integrals:** IBP twice, name the integral $I$, collect and solve.\n- Always verify by differentiating the answer.\n- When IBP gives a harder integral, try swapping $u$ and $dv$.",
-      "body_he_md": "- **נוסחה:** $\\int u\\,dv=uv-\\int v\\,du$ — כלל מכפלה הפוך.\n- **LIATE** קובע מה $u$.\n- IBP **פעמיים** למכפלות פולינום עם מעריכי/טריגונומטרי.\n- **מחזורי:** $I=...\\pm I$ — קיבצו ופתרו.\n- תמיד אמתו על-ידי גזירה."
+      "body_en_md": "- **IBP formula:** $\\int u\\,dv = uv - \\int v\\,du$ — the product rule reversed; the minus sign is essential.\n- **LIATE** picks $u$ in a product: Log > Inverse trig > Algebraic > Trig > Exponential.\n- **One IBP** handles poly $\\times$ exp/trig when the polynomial has degree 1; higher degrees need repeated IBP or tabular method.\n- **Cyclic integrals** ($\\int e^x\\sin x\\,dx$): IBP twice, name $I$, collect terms, divide, add $+C$.\n- **Lone logs and inverse trig:** $dv=dx$; the remainder often reduces by u-substitution.\n- **Always verify** by differentiating your answer — ten seconds that catch sign and constant errors.\n- **If $\\int v\\,du$ got harder**, swap $u$ and $dv$ using LIATE again.",
+      "body_he_md": "- **נוסחת IBP:** $\\int u\\,dv=uv-\\int v\\,du$ — כלל המכפלה הפוך; סימן המינוס חיוני.\n- **LIATE** בוחר $u$ במכפלה: לוג > טריג הפוך > אלגברי > טריג > מעריך.\n- **IBP אחד** לפולינום $\\times$ מעריך/טריג בדרגה 1; דרגות גבוהות — IBP חוזר או טבלה.\n- **אינטגרלs מחזוריים** ($\\int e^x\\sin x\\,dx$): IBP פעמיים, $I$, איסוף, חלוקה, $+C$.\n- **לוג וטריג הפוך לבד:** $dv=dx$; השארית לעתים u-sub.\n- **תמיד אמתו** בגזירה — עשר שניות שתופסות טעויות סימן וקבוע.\n- **אם $\\int v\\,du$ הקשה**, החליפו $u$ ו-$dv$ לפי LIATE."
     }
   ],
   "agent_hints": "When a learner applies IBP, always ask them to state their choice of u and dv explicitly before computing. For cyclic integrals, make sure they call the original integral 'I' and solve the equation.",
@@ -240,14 +240,13 @@
       "stem_he": "חשבו $\\displaystyle\\int xe^{2x}\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "$u=x$, $dv=e^{2x}\\,dx$. $v=e^{2x}/2$. $\\frac{xe^{2x}}{2}-\\frac{1}{2}\\int e^{2x}\\,dx=\\frac{xe^{2x}}{2}-\\frac{e^{2x}}{4}+C=\\frac{e^{2x}(2x-1)}{4}+C$",
-          "\\frac{e^{2x}(2x-1)}{4}+C$",
-          "4"
+          "\\frac{e^{2x}(2x-1)}{4}+C",
+          "e^{2x}(2x-1)/4+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$u=x$, $dv=e^{2x}\\,dx$. $v=e^{2x}/2$. $\\frac{xe^{2x}}{2}-\\frac{1}{2}\\int e^{2x}\\,dx=\\frac{xe^{2x}}{2}-\\frac{e^{2x}}{4}+C=\\frac{e^{2x}(2x-1)}{4}+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\frac{e^{2x}(2x-1)}{4}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\n$\\int xe^{2x}\\,dx$ is poly $\\times$ exp — IBP with LIATE: $u=x$, $dv=e^{2x}\\,dx$, $du=dx$, $v=e^{2x}/2$. Then $\\frac{xe^{2x}}{2}-\\frac{1}{2}\\int e^{2x}\\,dx=\\frac{e^{2x}(2x-1)}{4}+C$.\n\n**How to think about it:**\nThe inner exponent is $2x$, so $v=\\int e^{2x}\\,dx=e^{2x}/2$ — include the chain-rule factor $1/2$. u-sub on $e^{2x}$ alone would also work here, but IBP is the lesson method.\n\n**Common slip:**\nForgetting the $1/2$ when integrating $e^{2x}$, giving $\\frac{e^{2x}(2x-1)}{2}+C$ instead of $/4$.\n\n**Exam tip:**\nAfter IBP, factor $e^{2x}$ out of the final answer — graders expect compact form and it simplifies differentiation checks.",
+      "explanation_he": "**למה זה נכון:**\n$\\int xe^{2x}\\,dx$ הוא פולינום $\\times$ מעריך — IBP עם LIATE: $u=x$, $dv=e^{2x}\\,dx$, $du=dx$, $v=e^{2x}/2$. אז $\\frac{xe^{2x}}{2}-\\frac{1}{2}\\int e^{2x}\\,dx=\\frac{e^{2x}(2x-1)}{4}+C$.\n\n**איך לחשוב על זה:**\nהמעריך $2x$ — $v=\\int e^{2x}\\,dx=e^{2x}/2$ עם גורם שרשרת $1/2$. u-sub על $e^{2x}$ גם אפשרי, אך IBP הוא שיטת השיעור.\n\n**טעות נפוצה:**\nשכחת $1/2$ באינטגרציה של $e^{2x}$ → $\\frac{e^{2x}(2x-1)}{2}+C$ במקום $/4$.\n\n**טיפ לבחינה:**\nאחרי IBP, הוציאו $e^{2x}$ מהתשובה — צורה קומפקטית וקלה לאימות בגזירה.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -258,13 +257,13 @@
       "stem_he": "חשבו $\\displaystyle\\int x\\sin x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "$u=x$, $dv=\\sin x\\,dx$. $v=-\\cos x$. $-x\\cos x+\\int\\cos x\\,dx=-x\\cos x+\\sin x+C$",
-          "-x\\cos x+\\sin x+C$"
+          "-x\\cos x+\\sin x+C",
+          "sin x-x\\cos x+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$u=x$, $dv=\\sin x\\,dx$. $v=-\\cos x$. $-x\\cos x+\\int\\cos x\\,dx=-x\\cos x+\\sin x+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\sin x-x\\cos x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nIBP with LIATE: $u=x$, $dv=\\sin x\\,dx$, $du=dx$, $v=-\\cos x$. Then $-x\\cos x+\\int\\cos x\\,dx=-x\\cos x+\\sin x+C$.\n\n**How to think about it:**\nPolynomial times trig → differentiate the polynomial side via IBP. One application suffices when the polynomial has degree 1.\n\n**Common slip:**\nSign error on $v=\\int\\sin x\\,dx$ (writing $+\\cos x$) or on $\\int\\cos x\\,dx$ after IBP.\n\n**Exam tip:**\nDifferentiate $x\\sin x+\\cos x$ mentally: product rule gives $x\\cos x$ — matches the integrand in five seconds.\n\n**Exam follow-up:** State $u$ and $dv$ before computing — method marks matter even when arithmetic slips. Differentiate your final answer once to confirm sign and constant.",
+      "explanation_he": "**למה זה נכון:**\nIBP עם LIATE: $u=x$, $dv=\\sin x\\,dx$, $du=dx$, $v=-\\cos x$. אז $-x\\cos x+\\sin x+C$.\n\n**איך לחשוב על זה:**\nפולינום כפול טריג → גזרו את הפולינום ב-IBP. יישום אחד מספיק לדרגה 1.\n\n**טעות נפוצה:**\nטעות סימן ב-$v=\\int\\sin x\\,dx$ (כתיבת $+\\cos x$) או ב-$\\int\\cos x\\,dx$.\n\n**טיפ לבחינה:**\nגזרו $x\\sin x+\\cos x$ — כלל המכפלה נותן $x\\cos x$; אימות מהיר.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -275,13 +274,12 @@
       "stem_he": "חשבו $\\displaystyle\\int\\ln x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "$u=\\ln x$, $dv=dx$. $v=x$. $x\\ln x-\\int dx=x\\ln x-x+C$",
-          "x\\ln x-x+C$"
+          "x\\ln x-x+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$u=\\ln x$, $dv=dx$. $v=x$. $x\\ln x-\\int dx=x\\ln x-x+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$x\\ln x-x+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\n$\\int\\ln x\\,dx$ is a lone logarithm — set $u=\\ln x$, $dv=dx$, so $v=x$. IBP gives $x\\ln x-\\int x\\cdot\\frac{1}{x}\\,dx=x\\ln x-x+C$.\n\n**How to think about it:**\nThere is no product visible, but $\\ln x = 1\\cdot\\ln x$ — treat $\\ln x$ as $u$ and the hidden $1\\,dx$ as $dv$. The remainder $\\int 1\\,dx$ is trivial.\n\n**Common slip:**\nTrying u-sub (no inner derivative) or choosing $u=x$ in $\\int x\\ln x\\,dx$ style by mistake on $\\int\\ln x\\,dx$.\n\n**Exam tip:**\nMemorize $x\\ln x-x+C$ — it appears as a building block in harder problems like $\\int(\\ln x)^2\\,dx$.",
+      "explanation_he": "**למה זה נכון:**\n$\\int\\ln x\\,dx$ — לוג לבד: $u=\\ln x$, $dv=dx$, $v=x$. IBP: $x\\ln x-\\int 1\\,dx=x\\ln x-x+C$.\n\n**איך לחשוב על זה:**\nאין מכפלה גלויה, אך $\\ln x=1\\cdot\\ln x$ — $u=\\ln x$, $dv=dx$ נסתר. השארית $\\int 1\\,dx$ פשוטה.\n\n**טעות נפוצה:**\nu-sub (אין נגזרת פנימית) או $u=x$ בטעות במקום $u=\\ln x$.\n\n**טיפ לבחינה:**\nשננו $x\\ln x-x+C$ — בניין ל-$\\int(\\ln x)^2\\,dx$.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -292,14 +290,12 @@
       "stem_he": "חשבו $\\displaystyle\\int_0^1 xe^x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "IBP: $u=x$, $dv=e^x dx$. $[xe^x-e^x]_0^1=(e-e)-(0-1)=1$",
-          "1$",
           "1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nIBP: $u=x$, $dv=e^x dx$. $[xe^x-e^x]_0^1=(e-e)-(0-1)=1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$[xe^x-e^x]_0^1=1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nDefinite IBP: $u=x$, $dv=e^x\\,dx$, antiderivative $xe^x-e^x$. At bounds: $[xe^x-e^x]_0^1=(e-e)-(0-1)=1$.\n\n**How to think about it:**\nFind the indefinite antiderivative first, then evaluate — or apply $\\int_0^1 u\\,dv=[uv]_0^1-\\int_0^1 v\\,du$ directly. Both routes agree.\n\n**Common slip:**\nArithmetic at $x=0$: $0\\cdot e^0-e^0=-1$, not $0$. Many students drop the $-e^0$ term.\n\n**Exam tip:**\nFor definite IBP, write $[uv]_a^b$ as a separate line before integrating the remainder — partial credit for correct setup.\n\n**Exam follow-up:** State $u$ and $dv$ before computing — method marks matter even when arithmetic slips. Differentiate your final answer once to confirm sign and constant.",
+      "explanation_he": "**למה זה נכון:**\nIBP מסוים: $u=x$, $dv=e^x\\,dx$, אינטגרל $xe^x-e^x$. בגבולות: $[xe^x-e^x]_0^1=(e-e)-(0-1)=1$.\n\n**איך לחשוב על זה:**\nמצאו אינטגרל בלתי-מסוים ואז הציבו — או $\\int_0^1 u\\,dv=[uv]_0^1-\\int_0^1 v\\,du$. שני המסלולים זהים.\n\n**טעות נפוצה:**\nחשבון ב-$x=0$: $0-e^0=-1$, לא $0$. רבים מפספסים $-e^0$.\n\n**טיפ לבחינה:**\nב-IBP מסוים, כתבו $[uv]_a^b$ בשורה נפרדת — נקודות חלקיות להגדרה נכונה.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -310,14 +306,13 @@
       "stem_he": "חשבו $\\displaystyle\\int x^2 e^x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $u=x^2$, $dv=e^x dx$. $x^2e^x-2\\int xe^x dx=x^2e^x-2(xe^x-e^x)+C=e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+          "e^x(x^2-2x+2)+C",
+          "(x^2-2x+2)e^x+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $u=x^2$, $dv=e^x dx$. $x^2e^x-2\\int xe^x dx=x^2e^x-2(xe^x-e^x)+C=e^x(x^2-2x+2)+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$e^x(x^2-2x+2)+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nTwo IBP steps: $u=x^2$, $dv=e^x\\,dx$ gives $x^2e^x-2\\int xe^x\\,dx$. Second IBP on $\\int xe^x\\,dx$ with $u=x$ yields $(x-1)e^x$. Combine: $e^x(x^2-2x+2)+C$.\n\n**How to think about it:**\nDegree-2 polynomial needs two IBP rounds — each lowers the power by 1. Tabular IBP with alternating signs prevents coefficient errors.\n\n**Common slip:**\nStopping after one IBP at $x^2e^x-2xe^x$ without integrating the remainder, or losing the factor of 2.\n\n**Exam tip:**\nFactor $e^x$ out at the end — the polynomial part $(x^2-2x+2)$ is what you differentiate to verify.",
+      "explanation_he": "**למה זה נכון:**\nשני IBP: $u=x^2$, $dv=e^x\\,dx$ → $x^2e^x-2\\int xe^x\\,dx$. IBP שני $u=x$ → $(x-1)e^x$. צירוף: $e^x(x^2-2x+2)+C$.\n\n**איך לחשוב על זה:**\nפולינום דרגה 2 דורש שני IBP — כל אחד מוריד חזקה. IBP טבלאי עם סימנים מתחלפים מונע טעויות.\n\n**טעות נפוצה:**\nעצירה אחרי IBP אחד, או איבוד גורם 2.\n\n**טיפ לבחינה:**\nהוציאו $e^x$ — גזרו את $(x^2-2x+2)$ לאימות.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -328,14 +323,13 @@
       "stem_he": "חשבו $\\displaystyle\\int x^2\\ln x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=\\ln x$, $dv=x^2dx$. $v=x^3/3$. $\\frac{x^3\\ln x}{3}-\\frac{1}{3}\\int x^2 dx=\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "9"
+          "\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C",
+          "(x^3\\ln x)/3 - x^3/9 + C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$u=\\ln x$, $dv=x^2dx$. $v=x^3/3$. $\\frac{x^3\\ln x}{3}-\\frac{1}{3}\\int x^2 dx=\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nLIATE: $u=\\ln x$, $dv=x^2\\,dx$, $v=x^3/3$. IBP: $\\frac{x^3\\ln x}{3}-\\frac{1}{3}\\int x^2\\,dx=\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**How to think about it:**\nLog beats algebraic in LIATE — never take $u=x^2$ here (that traps $\\ln x$ inside $v$). The remainder is a simple power integral.\n\n**Common slip:**\nChoosing $u=x^2$ or forgetting the $1/3$ from $v=x^3/3$ when dividing the remainder integral.\n\n**Exam tip:**\nLog–polynomial products always follow the same template: $\\frac{x^{n+1}\\ln x}{n+1}-\\frac{x^{n+1}}{(n+1)^2}+C$ pattern for $x^n\\ln x$.\n\n**Exam follow-up:** State $u$ and $dv$ before computing — method marks matter even when arithmetic slips. Differentiate your final answer once to confirm sign and constant.",
+      "explanation_he": "**למה זה נכון:**\nLIATE: $u=\\ln x$, $dv=x^2\\,dx$, $v=x^3/3$. IBP: $\\frac{x^3\\ln x}{3}-\\frac{1}{3}\\int x^2\\,dx=\\frac{x^3\\ln x}{3}-\\frac{x^3}{9}+C$.\n\n**איך לחשוב על זה:**\nלוג לפני אלגבריה — אל $u=x^2$ (מלכודת $\\ln x$ ב-$v$). השארית $\\int x^2\\,dx$ היא אינטגרל חזקה פשוט. זהו אותו דפוס כמו $\\int x\\ln x\\,dx$, רק עם חזקה גבוהה יותר.\n\n**טעות נפוצה:**\nבחירת $u=x^2$ או שכחת $1/3$ מ-$v=x^3/3$ בחלוקת האינטגרל.\n\n**טיפ לבחינה:**\nמכפלות לוג–פולינום: תבנית $\\frac{x^{n+1}\\ln x}{n+1}-\\frac{x^{n+1}}{(n+1)^2}+C$ ל-$\\int x^n\\ln x\\,dx$.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -346,14 +340,13 @@
       "stem_he": "חשבו $\\displaystyle\\int e^x\\cos x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "Let $I=\\int e^x\\cos x\\,dx$. IBP: $u=\\cos x$, $v=e^x$: $e^x\\cos x+\\int e^x\\sin x\\,dx$. IBP again: $e^x\\cos x+e^x\\sin x-I$. $2I=e^x(\\cos x+\\sin x)$. $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$",
-          "\\frac{e^x(\\sin x+\\cos x)}{2}+C$",
-          "2"
+          "\\frac{e^x(\\sin x+\\cos x)}{2}+C",
+          "e^x(sin x+cos x)/2+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nLet $I=\\int e^x\\cos x\\,dx$. IBP: $u=\\cos x$, $v=e^x$: $e^x\\cos x+\\int e^x\\sin x\\,dx$. IBP again: $e^x\\cos x+e^x\\sin x-I$. $2I=e^x(\\cos x+\\sin x)$. $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nLet $I=\\int e^x\\cos x\\,dx$. First IBP: $u=\\cos x$, $dv=e^x\\,dx$ → $e^x\\cos x+\\int e^x\\sin x\\,dx$. Second IBP on the sine integral returns $+I$. Collect: $2I=e^x(\\cos x+\\sin x)$, so $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**How to think about it:**\nExp–trig products loop. Plan to solve for $I$ algebraically after the second IBP — do not stop at $\\int e^x\\sin x\\,dx$.\n\n**Common slip:**\nSign error on the second IBP, or dividing by 2 before collecting both $I$ terms on one side.\n\n**Exam tip:**\nWrite $I=$ in the margin at the start — loop problems are graded on the algebraic finish, not just the first IBP step.",
+      "explanation_he": "**למה זה נכון:**\nנסמן $I=\\int e^x\\cos x\\,dx$. IBP ראשון: $u=\\cos x$, $dv=e^x\\,dx$ → $e^x\\cos x+\\int e^x\\sin x\\,dx$. IBP שני מחזיר $+I$. $2I=e^x(\\cos x+\\sin x)$, $I=\\frac{e^x(\\sin x+\\cos x)}{2}+C$.\n\n**איך לחשוב על זה:**\nמכפלה מעריך–טריג לולאת. תכננו פתרון עבור $I$ אחרי IBP שני.\n\n**טעות נפוצה:**\nטעות סימן ב-IBP שני, או חלוקה ב-2 לפני איסוף $I$.\n\n**טיפ לבחינה:**\nכתבו $I=$ בשוליים — מעריכים סיום אלגברהי.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     },
     {
@@ -364,14 +357,13 @@
       "stem_he": "חשבו $\\displaystyle\\int_1^e x\\ln x\\,dx$.",
       "answer_payload": {
         "acceptable_answers": [
-          "From earlier: antiderivative $=\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}$. At $x=e$: $\\frac{e^2}{2}-\\frac{e^2}{4}=\\frac{e^2}{4}$. At $x=1$: $0-\\frac{1}{4}=-\\frac{1}{4}$. Answer: $\\frac{e^2}{4}+\\frac{1}{4}=\\frac{e^2+1}{4}$",
-          "\\frac{e^2+1}{4}$",
-          "4"
+          "\\frac{e^2+1}{4}",
+          "(e^2+1)/4"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nFrom earlier: antiderivative $=\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}$. At $x=e$: $\\frac{e^2}{2}-\\frac{e^2}{4}=\\frac{e^2}{4}$. At $x=1$: $0-\\frac{1}{4}=-\\frac{1}{4}$. Answer: $\\frac{e^2}{4}+\\frac{1}{4}=\\frac{e^2+1}{4}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\frac{e^2+1}{4}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nAntiderivative from IBP: $\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}$. At $x=e$: $\\frac{e^2}{2}-\\frac{e^2}{4}=\\frac{e^2}{4}$. At $x=1$: $0-\\frac{1}{4}=-\\frac{1}{4}$. Difference: $\\frac{e^2+1}{4}$.\n\n**How to think about it:**\nCompute the indefinite integral first (medium exercise from this lesson), then evaluate at bounds — cleaner than definite IBP with $\\ln e=1$.\n\n**Common slip:**\nEvaluating $\\ln 1$ as $1$ instead of $0$, or sign error when subtracting the lower bound.\n\n**Exam tip:**\nWhen bounds include $e$ or $1$, write $\\ln e=1$ and $\\ln 1=0$ explicitly — one line prevents log arithmetic mistakes.",
+      "explanation_he": "**למה זה נכון:**\nאינטגרל מ-IBP: $\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}$. ב-$x=e$: $\\frac{e^2}{4}$. ב-$x=1$: $-\\frac{1}{4}$. הפרש: $\\frac{e^2+1}{4}$.\n\n**איך לחשוב על זה:**\nחשבו אינטגרל בלתי-מסוימים תחילה, ואז הציבו — נקי יותר מ-IBP מסוים עם $\\ln e=1$.\n\n**טעות נפוצה:**\n$\\ln 1=1$ במקום $0$, או טעות סימן בהפרש גבולות.\n\n**טיפ לבחינה:**\nכשהגבולות כוללים $e$ או $1$, כתבו $\\ln e=1$, $\\ln 1=0$ — שורה אחת מונעת טעויות.\n\n**טיפ נוסף לבחינה:** כתבו את בחירת $u$ ו-$dv$ בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית. בסוף, גזרו את התשובה פעם אחת לאימות מהיר של סימן וקבוע.",
       "skill_atoms": []
     }
   ],
