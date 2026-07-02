@@ -8,29 +8,29 @@
   ],
   "title_en": "Combinatorics",
   "title_he": "קומבינטוריקה",
-  "summary_en": "Counting principles: permutations, combinations, Pascal's triangle, binomial coefficient properties, and the binomial theorem.",
-  "summary_he": "עקרונות ספירה: תמורות, צירופים, משולש פסקל, תכונות מקדם הבינום ומשפט הבינום.",
+  "summary_en": "Counting principles: permutations, combinations, Pascal's triangle, binomial coefficient properties, and the binomial theorem — with decision-first strategy.",
+  "summary_he": "עקרונות ספירה: תמורות, צירופים, משולש פסקל, תכונות מקדם הבינום ומשפט הבינום — עם אסטרטגיית החלטה קודם.",
   "sections": [
     {
       "kind": "intro",
       "title_en": "Counting Without Listing",
       "title_he": "ספירה ללא רשימה",
-      "body_en_md": "How many ways can 3 students be chosen from a class of 30? How many 4-digit PIN codes are possible? Listing all options is impractical — we need formulas.\n\nCombinatorics gives us:\n- **Permutations** — ordered arrangements.\n- **Combinations** — unordered selections.\n- **The binomial theorem** — expansion of $(a+b)^n$.\n\nThis topic appears on Bagrut 4pt and 5pt exams.",
-      "body_he_md": "כמה דרכים לבחור 3 תלמידים מ-30? כמה קודי PIN של 4 ספרות? רשימה אינה מעשית — נדרשות נוסחאות.\n\nקומבינטוריקה נותנת:\n- **תמורות** — סידורים מסודרים.\n- **צירופים** — בחירות לא מסודרות.\n- **משפט הבינום.**"
+      "body_en_md": "How many ways can 3 students be chosen from a class of 30? How many distinct 4-digit PIN codes are possible if digits may repeat? Listing every option is impractical — we need **systematic counting formulas**.\n\n**Combinatorics** answers \"how many?\" without enumerating every case. It underpins probability (counting favorable outcomes), algebra (binomial expansion), and computer science (password strength, network routing). On the Israeli Bagrut 4–5 unit track you will use:\n\n- **Permutations** — ordered arrangements where position matters (lines, rankings, codes without repetition).\n- **Combinations** — unordered selections where only membership matters (committees, hands of cards, subsets).\n- **Pascal's triangle and the binomial theorem** — connect counting to polynomial expansion and row-sum identities.\n\nThe single most important exam skill is the **decision question**: does order matter? A committee of three is a combination; assigning president, secretary, and treasurer from the same three people is a permutation. Master that distinction first, then the formulas become straightforward applications of the multiplication principle and factorial cancellation.",
+      "body_he_md": "כמה דרכים לבחור 3 תלמידים מכיתה של 30? כמה קודי PIN בני 4 ספרות שונים אפשריים אם ספרות יכולות לחזור? רשימת כל האפשרויות אינה מעשית — נדרשות **נוסחאות ספירה שיטתיות**.\n\n**קומבינטוריקה** עונה על \"כמה?\" בלי לפרט כל מקרה. היא תומכת בהסתברות (ספירת תוצאות רצויות), באלגברה (פתיחת בינום) ובמדעי המחשב (חוזק סיסמאות, ניתוב). במסלול בגרות 4–5 יחידות תשתמשו ב:\n\n- **תמורות** — סידורים מסודרים שבהם המיקום חשוב (שורות, דירוגים, קודים ללא חזרות).\n- **צירופים** — בחירות לא מסודרות שבהן רק החברות בקבוצה חשובה (ועדות, ידות קלפים, תת-קבוצות).\n- **משולש פסקל ומשפט הבינום** — מקשרים ספירה לפתיחת פולינומים ולזהויות סכום-שורה.\n\nהמיומנות החשובה ביותר לבחינה היא **שאלת ההחלטה**: האם סדר חשוב? ועדה של שלושה — צירוף; מינוי יו\"ר, מזכיר וגזבר מאותם שלושה — תמורה. שלטו בהבחנה זו קודם, ואז הנוסחאות הופכות ליישום ישיר של עקרון הכפל וביטול עצרות."
     },
     {
       "kind": "definition",
       "title_en": "Fundamental Counting Principle, Permutations, Combinations",
       "title_he": "עקרון הכפל, תמורות וצירופים",
-      "body_en_md": "**Fundamental Counting Principle:** If task 1 can be done in $m$ ways and task 2 in $n$ ways, together there are $m\\times n$ ways.\n\n**Factorial:** $n! = n(n-1)(n-2)\\cdots2\\cdot1$. By convention $0!=1$.\n\n**Permutation (ordered):** Arrange $r$ items from $n$:\n$$P(n,r) = \\frac{n!}{(n-r)!}.$$\n\n**Combination (unordered):** Choose $r$ items from $n$:\n$$\\binom{n}{r} = C(n,r) = \\frac{n!}{r!(n-r)!}.$$\n\n**Key properties:**\n- $\\binom{n}{0}=\\binom{n}{n}=1$.\n- $\\binom{n}{r}=\\binom{n}{n-r}$ (symmetry).\n- $\\binom{n}{r}+\\binom{n}{r+1}=\\binom{n+1}{r+1}$ (Pascal's identity).",
-      "body_he_md": "**עקרון הכפל:** $m$ × $n$ דרכים.\n\n**עצרת:** $n!=n(n-1)\\cdots1$. $0!=1$.\n\n**תמורה (מסודר):** $P(n,r)=n!/(n-r)!$.\n\n**צירוף (לא מסודר):** $\\binom{n}{r}=n!/[r!(n-r)!]$.\n\n**תכונות:** $\\binom{n}{r}=\\binom{n}{n-r}$. $\\binom{n}{r}+\\binom{n}{r+1}=\\binom{n+1}{r+1}$."
+      "body_en_md": "**Fundamental Counting Principle (multiplication):** If task 1 can be done in $m$ ways and task 2 independently in $n$ ways, the combined process has $m\\times n$ ways. Extend to $k$ stages: multiply the choices at each stage.\n\n**Factorial:** $n! = n(n-1)(n-2)\\cdots 2\\cdot 1$. By convention $0!=1$ (one way to arrange nothing). Factorials count **permutations of all $n$ distinct objects**: $n!=P(n,n)$.\n\n**Permutation (ordered, no repetition):** Arrange $r$ items chosen from $n$ distinct objects where order matters:\n$$P(n,r)=\\frac{n!}{(n-r)!}=n(n-1)\\cdots(n-r+1).$$\n\n**Combination (unordered, no repetition):** Choose $r$ items from $n$ where order does not matter:\n$$\\binom{n}{r}=C(n,r)=\\frac{n!}{r!(n-r)!}.$$\n\n**Key properties of binomial coefficients:**\n- $\\binom{n}{0}=\\binom{n}{n}=1$ (empty set or full set).\n- $\\binom{n}{r}=\\binom{n}{n-r}$ (symmetry — choosing $r$ to keep equals choosing $n-r$ to leave out).\n- $\\binom{n}{r}+\\binom{n}{r+1}=\\binom{n+1}{r+1}$ (Pascal's identity — builds the triangle).\n- Row sum: $\\sum_{k=0}^n\\binom{n}{k}=2^n$ (every subset of an $n$-element set).\n\n**Relationship:** $P(n,r)=r!\\cdot\\binom{n}{r}$ — permuting the $r$ chosen items gives all ordered arrangements.",
+      "body_he_md": "**עקרון הספירה (כפל):** אם משימה 1 ניתנת ב-$m$ דרכים ומשימה 2 ב-$n$ דרכים (בלתי תלויות), יש $m\\times n$ דרכים לשתיהן. מרחיבים ל-$k$ שלבים: מכפילים את מספר האפשרויות בכל שלב.\n\n**עצרת:** $n!=n(n-1)\\cdots 2\\cdot 1$. לפי מוסכמה $0!=1$ (דרך אחת לסדר כלום). עצרת סופרת **תמורות של כל $n$ אובייקטים שונים**: $n!=P(n,n)$.\n\n**תמורה (מסודר, ללא חזרות):** סידור $r$ פריטים מתוך $n$ שונים כשסדר חשוב:\n$$P(n,r)=\\frac{n!}{(n-r)!}=n(n-1)\\cdots(n-r+1).$$\n\n**צירוף (לא מסודר, ללא חזרות):** בחירת $r$ פריטים מתוך $n$ כשסדר לא חשוב:\n$$\\binom{n}{r}=C(n,r)=\\frac{n!}{r!(n-r)!}.$$\n\n**תכונות מקדמי הבינום:**\n- $\\binom{n}{0}=\\binom{n}{n}=1$ (קבוצה ריקה או מלאה).\n- $\\binom{n}{r}=\\binom{n}{n-r}$ (סימטריה — בחירת $r$ לשמירה שווה לבחירת $n-r$ להוצאה).\n- $\\binom{n}{r}+\\binom{n}{r+1}=\\binom{n+1}{r+1}$ (זהות פסקל — בונה את המשולש).\n- סכום שורה: $\\sum_{k=0}^n\\binom{n}{k}=2^n$ (כל תת-קבוצה של קבוצה בגודל $n$).\n\n**קשר:** $P(n,r)=r!\\cdot\\binom{n}{r}$ — תמורות של $r$ הנבחרים נותנות את כל הסידורים המסודרים."
     },
     {
       "kind": "theory",
       "title_en": "Pascal's Triangle and the Binomial Theorem",
       "title_he": "משולש פסקל ומשפט הבינום",
-      "body_en_md": "**Pascal's triangle:** Each entry is $\\binom{n}{k}$.\n\n```\nRow 0:    1\nRow 1:   1 1\nRow 2:  1 2 1\nRow 3: 1 3 3 1\nRow 4:1 4 6 4 1\n```\n\nProperty: each entry = sum of two above it.\n\n**Binomial theorem:**\n$$(a+b)^n = \\sum_{k=0}^n \\binom{n}{k}a^{n-k}b^k.$$\n\n**Sum of row $n$:** $\\sum_{k=0}^n\\binom{n}{k}=2^n$.\n\n**Alternating sum:** $\\sum_{k=0}^n(-1)^k\\binom{n}{k}=0$.",
-      "body_he_md": "**משולש פסקל:** כל ערך = $\\binom{n}{k}$.\n\n**משפט הבינום:**\n$(a+b)^n=\\sum_{k=0}^n\\binom{n}{k}a^{n-k}b^k$.\n\n**סכום שורה:** $\\sum\\binom{n}{k}=2^n$.\n\n**סכום אלטרנטיבי:** $\\sum(-1)^k\\binom{n}{k}=0$."
+      "body_en_md": "**Pascal's triangle:** Row $n$ (starting from row $0$) lists $\\binom{n}{0},\\binom{n}{1},\\ldots,\\binom{n}{n}$.\n\n```\nRow 0:      1\nRow 1:     1 1\nRow 2:    1 2 1\nRow 3:   1 3 3 1\nRow 4:  1 4 6 4 1\n```\n\nEach interior entry equals the sum of the two entries directly above it — this is Pascal's identity in table form. Symmetry is visible: row $n$ reads the same left-to-right and right-to-left.\n\n**Binomial theorem:** For any real $a,b$ and non-negative integer $n$,\n$$(a+b)^n=\\sum_{k=0}^n\\binom{n}{k}a^{n-k}b^k.$$\nTerm $k$ (counting from $k=0$) has binomial coefficient $\\binom{n}{k}$, power $n-k$ on $a$, and power $k$ on $b$. To find a specific power of $x$ in $(c+dx)^n$, set $k$ so the $x$-exponent matches.\n\n**Row-sum identities (Bagrut favorites):**\n- **All positive:** $\\sum_{k=0}^n\\binom{n}{k}=2^n$ — substitute $a=b=1$ in the binomial theorem (count all subsets).\n- **Alternating:** $\\sum_{k=0}^n(-1)^k\\binom{n}{k}=0$ for $n\\ge1$ — substitute $a=1$, $b=-1$.\n- **Even vs odd:** $\\sum_{k\\text{ even}}\\binom{n}{k}=\\sum_{k\\text{ odd}}\\binom{n}{k}=2^{n-1}$ for $n\\ge1$.\n\n**Counting with repetition:** If order matters and each of $r$ positions can be any of $n$ symbols (repetition allowed), there are $n^r$ codes. If order does not matter with repetition, use **stars and bars** (5-unit extension) — not on the 4-unit core, but good to know exists.\n\n**Strategy for restricted counting:** Split into disjoint cases (\"exactly $k$ women\") or use the **complement** (total minus unwanted). Both paths should agree — use the shorter one on exams.",
+      "body_he_md": "**משולש פסקל:** שורה $n$ (מ-$0$) מציגה $\\binom{n}{0},\\binom{n}{1},\\ldots,\\binom{n}{n}$.\n\n```\nשורה 0:      1\nשורה 1:     1 1\nשורה 2:    1 2 1\nשורה 3:   1 3 3 1\nשורה 4:  1 4 6 4 1\n```\n\nכל ערך פנימי שווה לסכום שני הערכים מעליו — זו זהות פסקל בטבלה. סימטריה נראית: שורה $n$ זהה משמאל לימין ומימין לשמאל.\n\n**משפט הבינום:** לכל $a,b$ ממשיים ו-$n$ שלם לא-שלילי,\n$$(a+b)^n=\\sum_{k=0}^n\\binom{n}{k}a^{n-k}b^k.$$\nאיבר $k$ (מ-$0$) נושא מקדם $\\binom{n}{k}$, חזקה $n-k$ על $a$ וחזקה $k$ על $b$. למציאת חזקה מסוימת של $x$ ב-$(c+dx)^n$, בוחרים $k$ כך שמעריך $x$ מתאים.\n\n**זהויות סכום-שורה (מועדפות בבגרות):**\n- **כולם חיוביים:** $\\sum_{k=0}^n\\binom{n}{k}=2^n$ — הצבה $a=b=1$ (ספירת כל תת-הקבוצות).\n- **סימנים מתחלפים:** $\\sum_{k=0}^n(-1)^k\\binom{n}{k}=0$ ל-$n\\ge1$ — הצבה $a=1$, $b=-1$.\n- **זוגי מול אי-זוגי:** $\\sum_{k\\text{ זוגי}}\\binom{n}{k}=\\sum_{k\\text{ אי-זוגי}}\\binom{n}{k}=2^{n-1}$ ל-$n\\ge1$.\n\n**ספירה עם חזרות:** אם סדר חשוב וכל אחת מ-$r$ המקומות יכולה להיות כל אחד מ-$n$ סמלים, יש $n^r$ קודים. אם סדר לא חשוב עם חזרות — **כוכבים ופסים** (הרחבה ל-5 יחידות).\n\n**אסטרטגיה לספירה עם אילוצים:** פיצול למקרים זרים (\"בדיוק $k$ נשים\") או **משלים** (סך הכל פחות לא רצוי). שני המסלולים צריכים להסכים — בבחינה בחרו את הקצר."
     },
     {
       "kind": "worked_example",
@@ -38,8 +38,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Permutations and Combinations",
       "title_he": "דוגמה פתורה 1 — תמורות וצירופים",
-      "body_en_md": "### Move 1 — Understand the problem\n\n**Problem:** A committee of 3 must be chosen from 8 people.\n(a) How many ways if order doesn't matter?\n(b) How many ways if the first person chosen is president, second is secretary, third is treasurer?\n\n**(a) Combination (unordered):**\n$$\\binom{8}{3} = \\frac{8!}{3!\\cdot5!} = \\frac{8\\times7\\times6}{3\\times2\\times1} = 56.$$\n\n**(b) Permutation (ordered):**\n$$P(8,3) = \\frac{8!}{5!} = 8\\times7\\times6 = 336.$$\n\n**Relationship:** $P(8,3)=3!\\times\\binom{8}{3}=6\\times56=336$. ✓",
-      "body_he_md": "### צעד 1 — Understand the problem\n\n**בעיה:** A committee of 3 must be chosen from 8 people.\n(a) How many ways if order doesn't matter?\n(b) How many ways if the first person chosen is president, second is secretary, third is treasurer?"
+      "body_en_md": "**Problem:** A committee of 3 must be chosen from 8 people.\n(a) How many ways if order doesn't matter?\n(b) How many ways if the first chosen is president, second is secretary, third is treasurer?\n\nThis single setup illustrates the permutation–combination fork: same people, different counting rules.\n\n### Move 1 — Read the wording carefully\n\"Committee\" with no roles → **combination**. Named sequential roles → **permutation** (each assignment is a distinct outcome).\n\n### Move 2 — Part (a): combination\n$$\\binom{8}{3}=\\frac{8!}{3!\\cdot5!}=\\frac{8\\times7\\times6}{3\\times2\\times1}=56.$$\nCancel before multiplying fully: $8\\times7\\times6/6=56$.\n\n### Move 3 — Part (b): permutation\n$$P(8,3)=\\frac{8!}{5!}=8\\times7\\times6=336.$$\nThree distinct slots → multiply three descending factors.\n\n### Move 4 — Verify the relationship\n$P(8,3)=3!\\cdot\\binom{8}{3}=6\\times56=336$ ✓. Every unordered trio generates $3!=6$ orderings.\n\n**Bagrut link:** Mixed items often ask (a) then (b) on the same stem — write \"C\" or \"P\" before calculating to avoid automatic $P(n,r)$ on committee problems.",
+      "body_he_md": "**בעיה:** יש לבחור ועדה של 3 מתוך 8 אנשים.\n(א) כמה דרכים אם סדר לא חשוב?\n(ב) כמה דרכים אם הראשון שנבחר הוא יו\"ר, השני מזכיר והשלישי גזבר?\n\nאותה תרחיש מדגים את מזלג תמורה–צירוף: אותם אנשים, כללי ספירה שונים.\n\n### צעד 1 — קריאה מדויקת של הניסוח\n\"ועדה\" ללא תפקידים → **צירוף**. תפקידים רציפים → **תמורה** (כל שיבוץ הוא תוצאה שונה).\n\n### צעד 2 — סעיף (א): צירוף\n$$\\binom{8}{3}=\\frac{8!}{3!\\cdot5!}=\\frac{8\\times7\\times6}{3\\times2\\times1}=56.$$\nמצמצמים לפני כפל מלא: $8\\times7\\times6/6=56$.\n\n### צעד 3 — סעיף (ב): תמורה\n$$P(8,3)=\\frac{8!}{5!}=8\\times7\\times6=336.$$\nשלושה תפקידים שונים → מכפילים שלושה גורמים יורדים.\n\n### צעד 4 — אימות הקשר\n$P(8,3)=3!\\cdot\\binom{8}{3}=6\\times56=336$ ✓. כל שלישייה לא מסודרת יוצרת $3!=6$ סידורים.\n\n**קשר לבגרות:** פריטים משולבים שואלים (א) ואז (ב) על אותו גזע — כתבו \"C\" או \"P\" לפני החישוב כדי לא להשתמש אוטומטית ב-$P(n,r)$ בבעיות ועדה."
     },
     {
       "kind": "checkpoint",
@@ -47,8 +47,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "How many 3-digit numbers can be formed from $\\{1,2,3,4,5\\}$ if:\n(a) digits can repeat, (b) digits cannot repeat?",
       "body_he_md": "כמה מספרים בני 3 ספרות מ-$\\{1,...,5\\}$:\n(א) עם חזרות, (ב) ללא חזרות?",
-      "checkpoint_solution_en": "(a) $5\\times5\\times5=125$.\n(b) $P(5,3)=5\\times4\\times3=60$.",
-      "checkpoint_solution_he": "(א) $125$. (ב) $60$."
+      "checkpoint_solution_en": "How many 3-digit numbers from digits $\\{1,2,3,4,5\\}$?\n\n**Part (a) — digits can repeat:** Each of 3 positions has 5 choices independently.\n$$5\\times5\\times5=5^3=125.$$\n\n**Part (b) — no repetition:** First digit 5 ways, second 4, third 3 — order matters.\n$$P(5,3)=5\\times4\\times3=60.$$\n\n**Check:** With repetition allowed, count exceeds without repetition ($125>60$) ✓. **Answers:** (a) $125$; (b) $60$.",
+      "checkpoint_solution_he": "כמה מספרים בני 3 ספרות מהספרות $\\{1,2,3,4,5\\}$?\n\n**סעיף (א) — עם חזרות:** לכל אחת מ-3 הספרות 5 אפשרויות.\n$$5\\times5\\times5=5^3=125.$$\n\n**סעיף (ב) — ללא חזרות:** ספרה ראשונה 5, שנייה 4, שלישית 3 — סדר חשוב.\n$$P(5,3)=5\\times4\\times3=60.$$\n\n**בדיקה:** עם חזרות הספירה גדולה יותר ($125>60$) ✓. **תשובות:** (א) $125$; (ב) $60$."
     },
     {
       "kind": "worked_example",
@@ -56,8 +56,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Binomial Theorem",
       "title_he": "דוגמה פתורה 2 — משפט הבינום",
-      "body_en_md": "**Expand** $(2x-3)^4$ using the binomial theorem.\n\n$$\\sum_{k=0}^4\\binom{4}{k}(2x)^{4-k}(-3)^k.$$\n\n| $k$ | $\\binom{4}{k}$ | $(2x)^{4-k}$ | $(-3)^k$ | Term |\n|---|---|---|---|---|\n| $0$ | $1$ | $16x^4$ | $1$ | $16x^4$ |\n| $1$ | $4$ | $8x^3$ | $-3$ | $-96x^3$ |\n| $2$ | $6$ | $4x^2$ | $9$ | $216x^2$ |\n| $3$ | $4$ | $2x$ | $-27$ | $-216x$ |\n| $4$ | $1$ | $1$ | $81$ | $81$ |\n\nResult: $16x^4-96x^3+216x^2-216x+81$.",
-      "body_he_md": "Result: $16x^4-96x^3+216x^2-216x+81$."
+      "body_en_md": "**Expand** $(2x-3)^4$ using the binomial theorem.\n\nBinomial expansion is bookkeeping: identify $a=2x$, $b=-3$, $n=4$, then sum terms for $k=0,1,2,3,4$.\n\n### Move 1 — Set up the general term\n$$(2x-3)^4=\\sum_{k=0}^{4}\\binom{4}{k}(2x)^{4-k}(-3)^k.$$\n\n### Move 2 — Build a table (reduces sign errors)\n\n| $k$ | $\\binom{4}{k}$ | $(2x)^{4-k}$ | $(-3)^k$ | Term |\n|---|---|---|---|---|\n| $0$ | $1$ | $16x^4$ | $1$ | $16x^4$ |\n| $1$ | $4$ | $8x^3$ | $-3$ | $-96x^3$ |\n| $2$ | $6$ | $4x^2$ | $9$ | $216x^2$ |\n| $3$ | $4$ | $2x$ | $-27$ | $-216x$ |\n| $4$ | $1$ | $1$ | $81$ | $81$ |\n\n### Move 3 — Combine\n**Result:** $16x^4-96x^3+216x^2-216x+81$.\n\n### Move 4 — Spot-check\nSigns alternate when $b<0$ and $n$ is even → first and last terms positive ✓. Row 4 of Pascal: $1,4,6,4,1$ matches coefficients before powers.\n\n**Exam note:** For \"coefficient of $x^r$\" only, compute the single $k$ where the $x$-power matches — no need for the full expansion.",
+      "body_he_md": "**פתחו** $(2x-3)^4$ באמצעות משפט הבינום.\n\nפתיחת בינום היא ניהול רישום: מזהים $a=2x$, $b=-3$, $n=4$, ומסכמים איברים ל-$k=0,1,2,3,4$.\n\n### צעד 1 — הגדרת האיבר הכללי\n$$(2x-3)^4=\\sum_{k=0}^{4}\\binom{4}{k}(2x)^{4-k}(-3)^k.$$\n\n### צעד 2 — בניית טבלה (מפחיתה טעויות סימן)\n\n| $k$ | $\\binom{4}{k}$ | $(2x)^{4-k}$ | $(-3)^k$ | איבר |\n|---|---|---|---|---|\n| $0$ | $1$ | $16x^4$ | $1$ | $16x^4$ |\n| $1$ | $4$ | $8x^3$ | $-3$ | $-96x^3$ |\n| $2$ | $6$ | $4x^2$ | $9$ | $216x^2$ |\n| $3$ | $4$ | $2x$ | $-27$ | $-216x$ |\n| $4$ | $1$ | $1$ | $81$ | $81$ |\n\n### צעד 3 — צירוף\n**תוצאה:** $16x^4-96x^3+216x^2-216x+81$.\n\n### צעד 4 — בדיקה מהירה\nסימנים מתחלפים כש-$b<0$ ו-$n$ זוגי → איבר ראשון ואחרון חיוביים ✓. שורה 4 בפסקל: $1,4,6,4,1$ תואמת מקדמים לפני חזקות.\n\n**הערת בחינה:** ל\"מקדם $x^r$\" בלבד, מחשבים את $k$ היחיד שבו חזקת $x$ מתאימה — אין צורך בפתיחה מלאה."
     },
     {
       "kind": "checkpoint",
@@ -65,8 +65,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Find the coefficient of $x^2$ in the expansion of $(1+2x)^5$.",
       "body_he_md": "מצאו מקדם $x^2$ בפיתוח $(1+2x)^5$.",
-      "checkpoint_solution_en": "$k=2$: $\\binom{5}{2}(1)^3(2x)^2=10\\times4x^2=40x^2$. Coefficient: $40$.",
-      "checkpoint_solution_he": "$\\binom{5}{2}\\times4=40$."
+      "checkpoint_solution_en": "Find the coefficient of $x^2$ in $(1+2x)^5$.\n\n**Step 1:** General term $\\binom{5}{k}(1)^{5-k}(2x)^k$. Need $x^2$ → $k=2$.\n\n**Step 2:** $\\binom{5}{2}(1)^3(2x)^2=10\\times1\\times4x^2=40x^2$.\n\n**Step 3:** Coefficient is $40$ (not $40x^2$ — read the question).\n\n**Verify:** Middle terms of row 5 are $10,10$; power $(2x)^2$ contributes factor $4$ → $10\\times4=40$ ✓.",
+      "checkpoint_solution_he": "מצאו את המקדם של $x^2$ בפיתוח $(1+2x)^5$.\n\n**שלב 1:** איבר כללי $\\binom{5}{k}(1)^{5-k}(2x)^k$. צריך $x^2$ → $k=2$.\n\n**שלב 2:** $\\binom{5}{2}(1)^3(2x)^2=10\\times1\\times4x^2=40x^2$.\n\n**שלב 3:** המקדם הוא $40$ (לא $40x^2$ — קראו את השאלה).\n\n**אימות:** איברי אמצע בשורה 5 הם $10,10$; $(2x)^2$ תורם גורם $4$ → $10\\times4=40$ ✓."
     },
     {
       "kind": "worked_example",
@@ -74,15 +74,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Counting with Restrictions (Exam Level)",
       "title_he": "דוגמה פתורה 3 — ספירה עם אילוצים (רמת בחינה)",
-      "body_en_md": "**Problem:** A group of 4 men and 5 women. How many committees of 4 can be formed with at least 2 women?\n\n### Move 1 Complement approach vs direct.\n\n**Directly:** exactly 2 women + exactly 3 women + exactly 4 women.\n\nExactly 2 women: $\\binom{5}{2}\\binom{4}{2}=10\\times6=60$.\nExactly 3 women: $\\binom{5}{3}\\binom{4}{1}=10\\times4=40$.\nExactly 4 women: $\\binom{5}{4}\\binom{4}{0}=5\\times1=5$.\n\nTotal: $60+40+5=105$.\n\n**Check (complement):** Total committees: $\\binom{9}{4}=126$.\n0 women: $\\binom{4}{4}=1$. 1 woman: $\\binom{5}{1}\\binom{4}{3}=20$.\nCompllement: $126-1-20=105$. ✓",
-      "body_he_md": "4 גברים, 5 נשים. ועדות של 4 עם לפחות 2 נשים.\n\nישירות: $60+40+5=105$.\n\nמשלים: $126-1-20=105$. ✓\n\nTotal: $60+40+5=105$.\n\n**בעיה:** A group of 4 men and 5 women. How many committees of 4 can be formed with at least 2 women?\n\n### צעד 1 Complement approach vs direct.\n\nTotal: $60+40+5=105$."
+      "body_en_md": "**Problem:** From 4 men and 5 women, how many committees of 4 can be formed with **at least 2 women**?\n\n\"At least 2\" invites two standard approaches: **direct case split** or **complement**. Pick the one with fewer cases.\n\n### Move 1 — Direct: exactly 2, 3, or 4 women\nCases are disjoint and cover \"at least 2\":\n\n- Exactly 2 women: $\\binom{5}{2}\\binom{4}{2}=10\\times6=60$.\n- Exactly 3 women: $\\binom{5}{3}\\binom{4}{1}=10\\times4=40$.\n- Exactly 4 women: $\\binom{5}{4}\\binom{4}{0}=5\\times1=5$.\n\n**Total (direct):** $60+40+5=105$.\n\n### Move 2 — Complement check\nTotal committees from 9 people: $\\binom{9}{4}=126$.\n\nUnwanted (fewer than 2 women = 0 or 1 woman):\n- 0 women: $\\binom{5}{0}\\binom{4}{4}=1$.\n- 1 woman: $\\binom{5}{1}\\binom{4}{3}=5\\times4=20$.\n\n**Complement:** $126-1-20=105$ ✓.\n\n### Move 3 — Why both methods agree\nDirect and complement partition the same sample space — agreement confirms no missing or double-counted case.\n\n**Exam strategy:** For \"at least $k$\", compare counting unwanted cases vs listing wanted cases. Here complement uses two subtractions; direct uses three additions — similar effort, but complement is safer when \"at least\" means many cases.",
+      "body_he_md": "**בעיה:** מ-4 גברים ו-5 נשים, כמה ועדות של 4 ניתן להרכיב עם **לפחות 2 נשים**?\n\n\"לפחות 2\" מזמין שתי גישות: **פיצול ישיר** או **משלים**. בחרו את זו עם פחות מקרים.\n\n### צעד 1 — ישיר: בדיוק 2, 3 או 4 נשים\nהמקרים זרים ומכסים \"לפחות 2\":\n\n- בדיוק 2 נשים: $\\binom{5}{2}\\binom{4}{2}=10\\times6=60$.\n- בדיוק 3 נשים: $\\binom{5}{3}\\binom{4}{1}=10\\times4=40$.\n- בדיוק 4 נשים: $\\binom{5}{4}\\binom{4}{0}=5\\times1=5$.\n\n**סה\"כ (ישיר):** $60+40+5=105$.\n\n### צעד 2 — בדיקת משלים\nכל הוועדות מ-9 אנשים: $\\binom{9}{4}=126$.\n\nלא רצוי (פחות מ-2 נשים = 0 או 1):\n- 0 נשים: $\\binom{5}{0}\\binom{4}{4}=1$.\n- 1 אישה: $\\binom{5}{1}\\binom{4}{3}=5\\times4=20$.\n\n**משלים:** $126-1-20=105$ ✓.\n\n### צעד 3 — למה שתי השיטות מסכימות\nישיר ומשלים מחלקים את אותו מרחב מדגם — הסכמה מאשרת שאין מקרה חסר או ספירה כפולה.\n\n**אסטרטגיית בחינה:** ב\"לפחות $k$\", השוו ספירת לא-רצוי מול רשימת רצוי. כאן משלים — שתי חיסורים; ישיר — שלוש חיבורים — מאמץ דומה, אך משלים בטוח יותר כש\"לפחות\" פירושו הרבה מקרים."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Combinatorics",
       "title_he": "מדריך שיטה — קומבינטוריקה",
-      "body_en_md": "| Situation | Formula |\n|---|---|\n| Order matters, no repetition | $P(n,r)=n!/(n-r)!$ |\n| Order doesn't matter, no repetition | $\\binom{n}{r}=n!/[r!(n-r)!]$ |\n| With repetition, order matters | $n^r$ |\n| 'At least' problems | Use complement: Total $-$ unwanted |\n| Binomial expansion term $k$ | $\\binom{n}{k}a^{n-k}b^k$ |\n\n**Decision:** Does order matter? Permutation. Doesn't matter? Combination.\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
-      "body_he_md": "| מצב | נוסחה |\n|---|---|\n| סדר חשוב, ללא חזרה | $P(n,r)$ |\n| סדר לא חשוב | $\\binom{n}{r}$ |\n| עם חזרה | $n^r$ |\n| לפחות... | משלים |\n| איבר $k$ בבינום | $\\binom{n}{k}a^{n-k}b^k$ |\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
+      "body_en_md": "| Situation | Formula | Decision cue |\n|---|---|---|\n| Order matters, no repetition | $P(n,r)=n!/(n-r)!$ | Line, ranking, distinct roles |\n| Order irrelevant, no repetition | $\\binom{n}{r}=n!/[r!(n-r)!]$ | Committee, subset, hand |\n| With repetition, order matters | $n^r$ | PIN, multi-digit with repeats |\n| With repetition, order irrelevant | Stars and bars (5-unit) | Identical items into bins |\n| \"At least $k$\" | Complement or case split | Compare # of unwanted cases |\n| Binomial term $k$ | $\\binom{n}{k}a^{n-k}b^k$ | Match power of $x$ to find $k$ |\n\n**Workflow:** (1) Does order matter? → P vs C. (2) Can items repeat? → multiply principle vs $n^r$. (3) Any restriction? → split or complement. (4) Write formula before plugging numbers.\n\n**When to use:** On Bagrut items, underline keywords (\"committee\", \"president\", \"with repetition\") before touching the calculator — wrong formula with correct arithmetic still scores zero.",
+      "body_he_md": "| מצב | נוסחה | רמז להחלטה |\n|---|---|---|\n| סדר חשוב, ללא חזרה | $P(n,r)=n!/(n-r)!$ | שורה, דירוג, תפקידים |\n| סדר לא חשוב, ללא חזרה | $\\binom{n}{r}=n!/[r!(n-r)!]$ | ועדה, תת-קבוצה, יד |\n| עם חזרה, סדר חשוב | $n^r$ | PIN, ספרות עם חזרות |\n| עם חזרה, סדר לא חשוב | כוכבים ופסים (5 יח') | פריטים זהים לתאים |\n| \"לפחות $k$\" | משלים או פיצול | השוו מספר מקרים לא רצויים |\n| איבר $k$ בבינום | $\\binom{n}{k}a^{n-k}b^k$ | התאמת חזקת $x$ ל-$k$ |\n\n**תהליך:** (1) האם סדר חשוב? → P מול C. (2) האם יש חזרות? → כפל מול $n^r$. (3) אילוץ? → פיצול או משלים. (4) כתבו נוסחה לפני מספרים.\n\n**מתי להשתמש:** בבגרות, סמנו מילות מפתח (\"ועדה\", \"יו\"ר\", \"עם חזרות\") לפני מחשבון — נוסחה שגויה עם חשבון נכון = אפס נקודות."
     },
     {
       "kind": "exercise_set",
@@ -96,104 +96,104 @@
           "difficulty": "easy",
           "body_en": "How many ways can 5 people stand in a line?",
           "body_he": "כמה דרכים ל-5 אנשים לעמוד בשורה?",
-          "solution_en": "**Solution:**\n\n$5!=120$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$120$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** \"Stand in a line\" — all 5 distinct people, order matters, no one left out.\n\n**Step 2:** Full permutation: $5!=5\\times4\\times3\\times2\\times1=120$.\n\n**Check:** $P(5,5)=5!$ — not $\\binom{5}{5}=1$, which would ignore order.",
+          "solution_he": "**שלב 1:** \"לעמוד בשורה\" — 5 אנשים שונים, סדר חשוב, כולם בשימוש.\n\n**שלב 2:** תמורה מלאה: $5!=5\\times4\\times3\\times2\\times1=120$.\n\n**בדיקה:** $P(5,5)=5!$ — לא $\\binom{5}{5}=1$ שמתעלם מסדר."
         },
         {
           "id": "e2",
           "difficulty": "easy",
           "body_en": "Calculate $\\binom{7}{2}$.",
           "body_he": "חשבו $\\binom{7}{2}$.",
-          "solution_en": "**Solution:**\n\n$21$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$21$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Combination — order of the two books does not matter.\n\n**Step 2:** $\\binom{7}{2}=\\frac{7\\times6}{2\\times1}=21$.\n\n**Check:** Symmetry $\\binom{7}{5}=21$ confirms the count.",
+          "solution_he": "**שלב 1:** צירוף — סדר שני הספרים לא חשוב.\n\n**שלב 2:** $\\binom{7}{2}=\\frac{7\\times6}{2\\times1}=21$.\n\n**בדיקה:** סימטריה $\\binom{7}{5}=21$ מאשרת."
         },
         {
           "id": "e3",
           "difficulty": "easy",
           "body_en": "How many 2-letter codes from $\\{A,B,C,D\\}$ with no repetition?",
           "body_he": "כמה קודים דו-אותיים מ-$\\{A,B,C,D\\}$ ללא חזרות?",
-          "solution_en": "**Solution:**\n\n$P(4,2)=12$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$12$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Two-letter code — order matters (AB $\\ne$ BA), no repetition.\n\n**Step 2:** $P(4,2)=4\\times3=12$.\n\n**Check:** Not $\\binom{4}{2}=6$ (unordered) or $4^2=16$ (repetition allowed).",
+          "solution_he": "**שלב 1:** קוד דו-אותי — סדר חשוב (AB $\\ne$ BA), ללא חזרות.\n\n**שלב 2:** $P(4,2)=4\\times3=12$.\n\n**בדיקה:** לא $\\binom{4}{2}=6$ (לא מסודר) ולא $4^2=16$ (עם חזרות)."
         },
         {
           "id": "e4",
           "difficulty": "easy",
           "body_en": "Expand $(1+x)^3$ using Pascal's triangle.",
           "body_he": "פתחו $(1+x)^3$.",
-          "solution_en": "**Solution:**\n\n$1+3x+3x^2+x^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$1+3x+3x^2+x^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Row 3 of Pascal's triangle: $1,3,3,1$.\n\n**Step 2:** $(1+x)^3=1+3x+3x^2+x^3$.\n\n**Check:** Coefficients symmetric; constant term $1=\\binom{3}{0}$.",
+          "solution_he": "**שלב 1:** שורה 3 בפסקל: $1,3,3,1$.\n\n**שלב 2:** $(1+x)^3=1+3x+3x^2+x^3$.\n\n**בדיקה:** מקדמים סימטריים; איבר קבוע $1=\\binom{3}{0}$."
         },
         {
           "id": "e5",
           "difficulty": "medium",
           "body_en": "From 10 students, 4 are to be seated in a row of 4 chairs. How many arrangements?",
           "body_he": "מ-10 תלמידים, 4 מושבים בשורה. כמה סידורים?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(10,4)=5040$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$5040$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** \"Seated in a row\" — four distinct chairs, order matters.\n\n**Step 2:** Choose and arrange 4 of 10: $P(10,4)=10\\times9\\times8\\times7=5040$.\n\n**Check:** Not $\\binom{10}{4}=210$ — that ignores seating order.",
+          "solution_he": "**שלב 1:** \"מושבים בשורה\" — ארבעה כיסאות נבדלים, סדר חשוב.\n\n**שלב 2:** בוחרים ומסדרים 4 מ-10: $P(10,4)=10\\times9\\times8\\times7=5040$.\n\n**בדיקה:** לא $\\binom{10}{4}=210$ — מתעלם מסדר הישיבה."
         },
         {
           "id": "e6",
           "difficulty": "medium",
           "body_en": "A pizza can have any subset of 8 toppings. How many different pizzas?",
           "body_he": "פיצה מתוך 8 תוספות — כל תת-קבוצה אפשרית. כמה פיצות?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$2^8=256$ (including no toppings).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$2^8=256$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Each of 8 toppings is in or out — independent binary choices.\n\n**Step 2:** All subsets: $2^8=256$, including the plain pizza with no toppings.\n\n**Check:** Row-sum identity $\\sum_{k=0}^8\\binom{8}{k}=2^8$.",
+          "solution_he": "**שלב 1:** כל אחת מ-8 התוספות בפנים או לא — בחירות בינאריות עצמאיות.\n\n**שלב 2:** כל תת-קבוצות: $2^8=256$, כולל פיצה ריקה ללא תוספות.\n\n**בדיקה:** זהות סכום שורה $\\sum_{k=0}^8\\binom{8}{k}=2^8$."
         },
         {
           "id": "e7",
           "difficulty": "medium",
           "body_en": "Find the middle term in the expansion of $(x+y)^6$.",
           "body_he": "מצאו את האיבר האמצעי בפיתוח $(x+y)^6$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$n=6$, middle term is $k=3$: $\\binom{6}{3}x^3y^3=20x^3y^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$20x^3y^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** $n=6$ is even — unique middle term at $k=n/2=3$.\n\n**Step 2:** $\\binom{6}{3}x^3y^3=20x^3y^3$.\n\n**Check:** $\\binom{6}{3}=\\frac{6\\times5\\times4}{6}=20$ — largest coefficient in row 6.",
+          "solution_he": "**שלב 1:** $n=6$ זוגי — איבר אמצעי יחיד ב-$k=n/2=3$.\n\n**שלב 2:** $\\binom{6}{3}x^3y^3=20x^3y^3$.\n\n**בדיקה:** $\\binom{6}{3}=\\frac{6\\times5\\times4}{6}=20$ — המקדם הגדול ביותר בשורה 6."
         },
         {
           "id": "e8",
           "difficulty": "medium",
           "body_en": "Prove $\\binom{n}{r}=\\binom{n}{n-r}$ using the formula.",
           "body_he": "הוכיחו $\\binom{n}{r}=\\binom{n}{n-r}$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\binom{n}{n-r}=n!/[(n-r)!(n-(n-r))!]=n!/[(n-r)!r!]=\\binom{n}{r}$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$n!/[(n-r)!r!]=\\binom{n}{r}$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Write $\\binom{n}{n-r}$ using the formula.\n\n**Step 2:** $\\binom{n}{n-r}=\\frac{n!}{(n-r)!(n-(n-r))!}=\\frac{n!}{(n-r)!\\,r!}=\\binom{n}{r}$. ✓\n\n**Check:** Choosing $r$ to keep equals choosing $n-r$ to leave out.",
+          "solution_he": "**שלב 1:** כתבו $\\binom{n}{n-r}$ לפי הנוסחה.\n\n**שלב 2:** $\\binom{n}{n-r}=\\frac{n!}{(n-r)!(n-(n-r))!}=\\frac{n!}{(n-r)!\\,r!}=\\binom{n}{r}$. ✓\n\n**בדיקה:** בחירת $r$ לשמירה שווה להשארת $n-r$."
         },
         {
           "id": "e9",
           "difficulty": "medium",
           "body_en": "How many committees of 3 from 6 people include a specific person $A$?",
           "body_he": "כמה ועדות של 3 מ-6 אנשים כוללות את $A$?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nFix $A$; choose 2 from remaining 5: $\\binom{5}{2}=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\binom{5}{2}=10$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Fix person $A$ in the committee — one slot taken.\n\n**Step 2:** Choose 2 more from the remaining 5: $\\binom{5}{2}=10$.\n\n**Check:** Total committees $\\binom{6}{3}=20$; half include $A$ when no restriction on $A$.",
+          "solution_he": "**שלב 1:** קבעו את $A$ בוועדה — מקום אחד תפוס.\n\n**שלב 2:** בחרו עוד 2 מ-5 הנותרים: $\\binom{5}{2}=10$.\n\n**בדיקה:** סה\"כ ועדות $\\binom{6}{3}=20$; מחצית כוללות את $A$."
         },
         {
           "id": "e10",
           "difficulty": "hard",
           "body_en": "Find the term containing $x^3$ in the expansion of $(2+3x)^7$.",
           "body_he": "מצאו את האיבר המכיל $x^3$ בפיתוח $(2+3x)^7$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$k=3$: $\\binom{7}{3}2^4(3x)^3=35\\times16\\times27x^3=15120x^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$15120x^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** General term $\\binom{7}{k}2^{7-k}(3x)^k$. Need $x^3$ → $k=3$.\n\n**Step 2:** $\\binom{7}{3}2^4(3x)^3=35\\times16\\times27x^3=15120x^3$.\n\n**Check:** Coefficient $35\\times16\\times27=15120$; verify $k$ by matching $x$-power.",
+          "solution_he": "**שלב 1:** איבר כללי $\\binom{7}{k}2^{7-k}(3x)^k$. צריך $x^3$ → $k=3$.\n\n**שלב 2:** $\\binom{7}{3}2^4(3x)^3=35\\times16\\times27x^3=15120x^3$.\n\n**בדיקה:** מקדם $35\\times16\\times27=15120$; אמתו $k$ לפי חזקת $x$."
         },
         {
           "id": "e11",
           "difficulty": "hard",
           "body_en": "Show that $\\sum_{k=0}^n\\binom{n}{k}=2^n$.",
           "body_he": "הראו ש-$\\sum_{k=0}^n\\binom{n}{k}=2^n$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nApply binomial theorem with $a=b=1$: $(1+1)^n=\\sum\\binom{n}{k}1^{n-k}1^k=\\sum\\binom{n}{k}=2^n$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$(1+1)^n=2^n=\\sum\\binom{n}{k}$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Apply binomial theorem with $a=1$, $b=1$.\n\n**Step 2:** $(1+1)^n=\\sum_{k=0}^n\\binom{n}{k}1^{n-k}1^k=\\sum_{k=0}^n\\binom{n}{k}=2^n$. ✓\n\n**Check:** Counts all subsets of an $n$-element set — each element in or out.",
+          "solution_he": "**שלב 1:** הציבו $a=1$, $b=1$ במשפט הבינום.\n\n**שלב 2:** $(1+1)^n=\\sum_{k=0}^n\\binom{n}{k}=2^n$. ✓\n\n**בדיקה:** סופר כל תת-קבוצות של $n$ איברים — כל איבר בפנים או בחוץ."
         },
         {
           "id": "e12",
           "difficulty": "hard",
           "body_en": "How many 5-card hands from a standard 52-card deck contain exactly 2 aces?",
           "body_he": "כמה ידות של 5 קלפים מ-52 מכילות בדיוק 2 אסים?",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nChoose 2 aces from 4: $\\binom{4}{2}=6$. Choose 3 non-aces from 48: $\\binom{48}{3}=17296$. Total: $6\\times17296=103776$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\binom{4}{2}\\times\\binom{48}{3}=103776$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Split into two independent choices: aces and non-aces.\n\n**Step 2:** $\\binom{4}{2}\\times\\binom{48}{3}=6\\times17296=103776$.\n\n**Check:** Multiplication principle — choose 2 of 4 aces AND 3 of 48 others.",
+          "solution_he": "**שלב 1:** פיצול לשתי בחירות עצמאיות: אסים ולא-אסים.\n\n**שלב 2:** $\\binom{4}{2}\\times\\binom{48}{3}=6\\times17296=103776$.\n\n**בדיקה:** עקרון כפל — 2 מ-4 אסים וגם 3 מ-48 אחרים."
         },
         {
           "id": "e13",
           "difficulty": "hard",
           "body_en": "Prove Pascal's identity: $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$.",
           "body_he": "הוכיחו $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\binom{n}{k}+\\binom{n}{k+1}=\\frac{n!}{k!(n-k)!}+\\frac{n!}{(k+1)!(n-k-1)!}=\\frac{n!(k+1)}{(k+1)!(n-k)!}+\\frac{n!(n-k)}{(k+1)!(n-k)!}=\\frac{n!(k+1+n-k)}{(k+1)!(n-k)!}=\\frac{(n+1)!}{(k+1)!(n-k)!}=\\binom{n+1}{k+1}$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\frac{n!(k+1)+n!(n-k)}{(k+1)!(n-k)!}=\\frac{(n+1)!}{(k+1)!(n-k)!}=\\binom{n+1}{k+1}$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "**Step 1:** Write both binomial coefficients with factorials.\n\n**Step 2:** $\\binom{n}{k}+\\binom{n}{k+1}=\\frac{n!}{k!(n-k)!}+\\frac{n!}{(k+1)!(n-k-1)!}$\n\n**Step 3:** Common denominator $(k+1)!(n-k)!$:\n$\\frac{n!(k+1)+n!(n-k)}{(k+1)!(n-k)!}=\\frac{(n+1)!}{(k+1)!(n-k)!}=\\binom{n+1}{k+1}$. ✓",
+          "solution_he": "**שלב 1:** כתבו שני מקדמי הבינום עם עצרות.\n\n**שלב 2:** $\\binom{n}{k}+\\binom{n}{k+1}=\\frac{n!}{k!(n-k)!}+\\frac{n!}{(k+1)!(n-k-1)!}$\n\n**שלב 3:** מכנה משותף $(k+1)!(n-k)!$:\n$\\frac{n!(k+1)+n!(n-k)}{(k+1)!(n-k)!}=\\binom{n+1}{k+1}$. ✓"
         }
       ]
     },
@@ -201,30 +201,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Permutation vs. Combination.** \"In a line\" → order matters → permutation. \"A committee\" → order doesn't matter → combination.\n2. **$0!=1$** — not $0$!\n3. **Overcounting with repeated items.** If items are identical, divide by the factorial of the repeated count.\n4. **'At least' problems:** Use complement (total minus 'at most' complement).\n\n**Example misconception:** Using permutation when order does not matter\n\n**Fix:** For committees, teams, sets: use combination. For ordered lines, codes, rankings: use permutation.",
-      "body_he_md": "1. **תמורה לעומת צירוף.** \"בשורה\" → תמורה. \"ועדה\" → צירוף.\n2. **$0!=1$** — לא אפס!\n3. **ספירה כפולה עם איברים זהים.** חלק בעצרת המספר החוזר.\n4. **\"לפחות\":*** משלים.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+      "body_en_md": "1. **Permutation vs. combination.** \"Stand in a line\", \"rank 1st–3rd\", \"president/secretary\" → order matters → $P(n,r)$. \"Committee\", \"choose a team\", \"select books\" → order irrelevant → $\\binom{n}{r}$. When unsure, ask: \"Does swapping two chosen people create a new outcome?\"\n\n2. **$0!=1$, not $0$.** Empty product convention; appears in $\\binom{n}{0}=n!/(0!\\cdot n!)=1$.\n\n3. **Double counting with identical items.** Arranging the letters in \"BANANA\" is not $6!$ — divide by $3!$ (three A's) and $2!$ (two N's): $6!/(3!\\cdot2!)=60$.\n\n4. **\"At least\" without a plan.** Do not guess cases. Either list all valid counts (2, 3, 4 women…) or subtract unwanted from total. Verify both routes when time allows.\n\n5. **Binomial sign errors.** When $b$ is negative, $(-3)^k$ alternates. Track $k$ in a table — do not expand mentally under exam pressure.\n\n**Example misconception:** Using $P(8,3)=336$ for an unordered committee of 3 from 8.\n\n**Fix:** Committee → $\\binom{8}{3}=56$. Only multiply by $3!$ when roles distinguish the same people.",
+      "body_he_md": "1. **תמורה מול צירוף.** \"לעמוד בשורה\", \"דירוג 1–3\", \"יו\"ר/מזכיר\" → סדר חשוב → $P(n,r)$. \"ועדה\", \"לבחור קבוצה\", \"לבחור ספרים\" → סדר לא חשוב → $\\binom{n}{r}$. כשלא בטוחים: \"האם החלפת שני נבחרים יוצרת תוצאה חדשה?\"\n\n2. **$0!=1$, לא $0$.** מוסכמת מכפלה ריקה; מופיע ב-$\\binom{n}{0}=1$.\n\n3. **ספירה כפולה עם איברים זהים.** סידור אותיות ב-\"BANANA\" אינו $6!$ — מחלקים ב-$3!$ (שלוש A) ו-$2!$ (שתי N): $6!/(3!\\cdot2!)=60$.\n\n4. **\"לפחות\" בלי תוכנית.** אל תנחשו מקרים. רשימת כל הספירות התקפות או חיסור לא-רצוי מהסך. אמתו שני מסלולים כשיש זמן.\n\n5. **טעויות סימן בבינום.** כש-$b$ שלילי, $(-3)^k$ מתחלף. עקבו אחר $k$ בטבלה — אל תפתחו בראש תחת לחץ.\n\n**דוגמת טעות:** שימוש ב-$P(8,3)=336$ לועדה לא מסודרת של 3 מ-8.\n\n**תיקון:** ועדה → $\\binom{8}{3}=56$. מכפילים ב-$3!$ רק כשתפקידים מבדילים בין אותם אנשים."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**You will use this to unlock:**\n- `concept:probability_basic` **Basic Probability** (prereq)\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:probability_basic` **הסתברות בסיסית** (prereq)\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "Combinatorics is the counting engine behind **probability** — every \"favorable over total\" fraction starts with accurate counting of equally likely outcomes. It also feeds **algebra** through the binomial theorem and connects to **sequences** via Pascal's triangle patterns.\n\n**You will use this to unlock:**\n- `concept:probability_basic` **Basic Probability** (prereq) — sample spaces, classical probability, conditional events.\n- `concept:probability_conditional_bayes` — counting compound events efficiently.\n\n**Builds on:** arithmetic, factorial notation, and basic algebra manipulation from earlier units.\n\n**Why it matters for exams:** Bagrut 4–5 unit papers mix standalone counting items with probability and binomial-expansion questions. Transfer skill — recognizing \"committee vs line\" or \"coefficient of $x^k$\" — separates full credit from partial. When studying, always ask: \"Which counting template fits this wording?\" ",
+      "body_he_md": "קומבינטוריקה היא מנוע הספירה מאחורי **הסתברות** — כל שבר \"רצוי על סך הכל\" מתחיל בספירה מדויקת של תוצאות שווי-סיכוי. היא גם מזינה **אלגברה** דרך משפט הבינום ומתחברת ל**סדרות** דרך דפוסי משולש פסקל.\n\n**תשתמשו בזה כדי להתקדם ל:**\n- `concept:probability_basic` **הסתברות בסיסית** (prereq) — מרחבי מדגם, הסתברות קלאסית, מאורעות מורכבים.\n- `concept:probability_conditional_bayes` — ספירה יעילה של מאורעות מורכבים.\n\n**מבוסס על:** חשבון, סימון עצרת ומניפולציה אלגברית בסיסית מיחידות קודמות.\n\n**למה זה חשוב לבחינות:** שאלות בגרות 4–5 יחידות משלבות ספירה עצמאית עם הסתברות ופתיחת בינום. מיומנות העברה — זיהוי \"ועדה מול שורה\" או \"מקדם $x^k$\" — מפרידה בין ניקוד מלא לחלקי. בלימוד, שאלו תמיד: \"איזה תבנית ספירה מתאימה לניסוח?\" "
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- $P(n,r)=n!/(n-r)!$ (order matters, no repetition).\n- $\\binom{n}{r}=n!/[r!(n-r)!]$ (order irrelevant).\n- With repetition: $n^r$.\n- 'At least 1': Total $-$ none.\n- Binomial expansion: $\\binom{n}{k}a^{n-k}b^k$ for term $k$.\n- Sum of row $n$: $2^n$.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
-      "body_he_md": "- $P(n,r)$ (מסודר). $\\binom{n}{r}$ (לא מסודר). $n^r$ (עם חזרות).\n- לפחות 1: כולל $-$ אפס.\n- בינום: $\\binom{n}{k}a^{n-k}b^k$.\n- סכום שורה: $2^n$."
+      "body_en_md": "**Core formulas (say each once aloud before entering the exam room):**\n- $P(n,r)=\\dfrac{n!}{(n-r)!}$ — ordered arrangements, no repetition.\n- $\\binom{n}{r}=\\dfrac{n!}{r!(n-r)!}$ — unordered selections, no repetition.\n- With repetition when order matters: $n^r$ (each of $r$ slots has $n$ choices).\n- Binomial general term: $\\binom{n}{k}a^{n-k}b^k$ — match $k$ to the required power of $x$.\n- Row sum identity: $\\sum_{k=0}^n\\binom{n}{k}=2^n$ (count all subsets).\n- Pascal's identity: $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$.\n\n**Decision checklist (write on scrap paper):** Does order matter? Can items repeat? Any \"at least/at most\" restriction → complement or case split?\n\n**Last review:** Solve one checkpoint (3-digit counting with and without repetition + one binomial coefficient) without notes. Time target: 4 minutes total. If both are correct, you are ready.",
+      "body_he_md": "**נוסחאות ליבה (אמרו כל אחת פעם לפני כניסה לחדר הבחינה):**\n- $P(n,r)=\\dfrac{n!}{(n-r)!}$ — סידורים מסודרים, ללא חזרה.\n- $\\binom{n}{r}=\\dfrac{n!}{r!(n-r)!}$ — בחירות לא מסודרות, ללא חזרה.\n- עם חזרה כשסדר חשוב: $n^r$ (לכל אחד מ-$r$ המקומות $n$ אפשרויות).\n- איבר כללי בבינום: $\\binom{n}{k}a^{n-k}b^k$ — התאימו $k$ לחזקת $x$ הנדרשת.\n- זהות סכום שורה: $\\sum_{k=0}^n\\binom{n}{k}=2^n$ (ספירת כל תת-הקבוצות).\n- זהות פסקל: $\\binom{n}{k}+\\binom{n}{k+1}=\\binom{n+1}{k+1}$.\n\n**צ'ק-ליסט (כתבו על טיוטה):** האם סדר חשוב? האם יש חזרות? אילוץ \"לפחות/לכל היותר\" → משלים או פיצול?\n\n**חזרה אחרונה:** פתרו checkpoint אחד (ספרות תלת-ספרתיות עם ובלי חזרות + מקדם בינום) בלי notes. יעד: 4 דקות. אם שניהם נכונים — אתם מוכנים."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- Counting: Multiplication principle, permutations, combinations.\n- Order matters → permutation; order irrelevant → combination.\n- Pascal's triangle: row $n$ gives $\\binom{n}{k}$.\n- Binomial theorem: $(a+b)^n=\\sum\\binom{n}{k}a^{n-k}b^k$.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
-      "body_he_md": "- ספירה: כפל, תמורות, צירופים.\n- סדר חשוב → תמורה; לא → צירוף.\n- משולש פסקל, משפט הבינום."
+      "body_en_md": "- **Multiplication principle** chains independent choices; **factorials** count full permutations.\n- **Order matters** → $P(n,r)$; **order irrelevant** → $\\binom{n}{r}$; **repetition allowed** → $n^r$.\n- **Pascal's triangle** encodes $\\binom{n}{k}$; each entry sums the two above.\n- **Binomial theorem:** $(a+b)^n=\\sum\\binom{n}{k}a^{n-k}b^k$; row sums give $2^n$.\n- **Restricted counting:** case-split or complement — verify both when possible.\n\n**Takeaway:** Read the problem words before the formula. \"Committee\" and \"president\" look similar but live on opposite sides of the counting fork.",
+      "body_he_md": "- **עקרון הכפל** משרשר בחירות בלתי תלויות; **עצרות** סופרות תמורות מלאות.\n- **סדר חשוב** → $P(n,r)$; **סדר לא** → $\\binom{n}{r}$; **חזרה מותרת** → $n^r$.\n- **משולש פסקל** מקודד $\\binom{n}{k}$; כל ערך = סכום שני מעליו.\n- **משפט הבינום:** $(a+b)^n=\\sum\\binom{n}{k}a^{n-k}b^k$; סכומי שורה נותנים $2^n$.\n- **ספירה עם אילוצים:** פיצול או משלים — אמתו שניהם כשאפשר.\n\n**מסקנה:** קראו את הניסוח לפני הנוסחה. \"ועדה\" ו-\"יו\"ר\" נראים דומים אך נמצאים בצדדים מנוגדים של מזלג הספירה."
     }
   ],
   "agent_hints": {
@@ -274,8 +274,8 @@
         "$7$"
       ],
       "correct_index": 0,
-      "explanation_en": "**Why this is correct:**\n$\\binom{7}{2}=7\\times6/2=21$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
-      "explanation_he": "**למה זה נכון:**\n$21$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nChoosing 2 books from 7 without regard to order is a combination: $\\binom{7}{2}=\\frac{7\\times6}{2}=21$. Option $42$ is $P(7,2)$ — ordered selection on a shelf. $14=2\\times7$ doubles one factor incorrectly; $7$ counts single books, not pairs.\n\n**How to think about it:**\nUnderline \"choose\" — no ranking, no shelf order. Compute $\\binom{n}{r}$ with cancellation: $7\\times6/2$ before touching a calculator. Ask: would swapping the two books change the outcome? No → combination.\n\n**Common slip:**\nUsing $P(7,2)=42$ because \"2 books\" sounds like arranging. Or computing $7+7+7=21$ by flawed repeated addition instead of $\\binom{7}{2}$. Both confuse ordered and unordered counting.\n\n**Exam tip:**\nOn MCQ combinatorics, list the four options and identify which formula produced each wrong answer — that catches permutation/combination swaps instantly and saves rework on later parts.",
+      "explanation_he": "**למה זה נכון:**\nבחירת 2 ספרים מ-7 ללא התחשבות בסדר היא צירוף: $\\binom{7}{2}=\\frac{7\\times6}{2}=21$. $42$ הוא $P(7,2)$ — בחירה מסודרת על מדף. $14$ מכפיל גורם אחד בטעות; $7$ סופר ספרים בודדים, לא זוגות.\n\n**איך לחשוב על זה:**\nסמנו \"לבחור\" — אין דירוג, אין סדר על מדף. חשבו $\\binom{n}{r}$ עם צמצום: $7\\times6/2$ לפני מחשבון. שאלו: האם החלפת שני הספרים משנה את התוצאה? לא → צירוף.\n\n**טעות נפוצה:**\nשימוש ב-$P(7,2)=42$ כי \"2 ספרים\" נשמע כמו סידור. או $7+7+7=21$ במקום $\\binom{7}{2}$ — שני אלה מערבבים ספירה מסודרת ולא מסודרת.\n\n**טיפ לבחינה:**\nב-MCQ קומבינטוריקה, רשמו את ארבע התשובות וזהו איזו נוסחה ייצרה כל שגיאה — תופס החלפות P/C מיד וחוסך זמן בסעיפים הבאים.",
       "skill_atoms": [
         "combinations"
       ]
@@ -288,17 +288,15 @@
       "stem_he": "כמה דרכים ל-5 אנשים לעמוד בשורה?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$5!=120$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120"
+          "120",
+          "$120$"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$5!=120$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$120$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nFive distinct people in a line — every ordering is different. All 5 are used, order matters: $5!=5\\times4\\times3\\times2\\times1=120$. No one is left out; each position is a distinct slot in the row.\n\n**How to think about it:**\n\"Stand in a line\" = full permutation of 5. This is $P(5,5)=5!$, not $\\binom{5}{5}=1$ (which would ignore order entirely). The factorial counts all bijections from positions to people.\n\n**Common slip:**\nAnswering $1$ by treating it as one unordered group, or $5$ by counting people instead of arrangements. Another slip: using $P(5,1)=5$ and stopping — that picks only one person for one spot.\n\n**Exam tip:**\nFull-line problems are the fastest points on the exam — recognize $n!$ immediately when all $n$ distinct objects are arranged in a sequence with no restrictions.",
+      "explanation_he": "**למה זה נכון:**\nחמישה אנשים שונים בשורה — כל סידור שונה. כולם בשימוש, סדר חשוב: $5!=5\\times4\\times3\\times2\\times1=120$. אף אחד לא נשאר בחוץ; כל מקום הוא תפקיד נפרד בשורה.\n\n**איך לחשוב על זה:**\n\"לעמוד בשורה\" = תמורה מלאה של 5. זה $P(5,5)=5!$, לא $\\binom{5}{5}=1$ (מתעלם מסדר). העצרת סופרת את כל ההתאמות בין מקומות לאנשים.\n\n**טעות נפוצה:**\nתשובה $1$ כקבוצה לא מסודרת, או $5$ כספירת אנשים במקום סידורים. טעות נוספת: $P(5,1)=5$ — בוחרים רק אדם אחד למקום אחד.\n\n**טיפ לבחינה:**\nבעיות שורה מלאה — נקודות מהירות בבחינה; זיהו $n!$ מיד כשכל $n$ אובייקטים שונים מסודרים ברצף ללא אילוצים.",
       "skill_atoms": [
-        "permutations",
-        "combinations"
+        "permutations"
       ]
     },
     {
@@ -309,15 +307,14 @@
       "stem_he": "חשבו $\\binom{7}{2}$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$21$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "21"
+          "21",
+          "$21$"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$21$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$21$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$\\binom{7}{2}=\\frac{7!}{2!\\cdot5!}=\\frac{7\\times6}{2\\times1}=21$. Symmetry check: $\\binom{7}{5}=21$ too — choosing 2 to keep equals leaving 5 out. Both routes confirm the same count.\n\n**How to think about it:**\nApply the combination formula directly. Cancel $5!$ from numerator and denominator before multiplying to keep numbers small. Write the shortcut $\\binom{n}{r}=\\frac{n(n-1)\\cdots(n-r+1)}{r!}$ on your formula sheet.\n\n**Common slip:**\nGetting $42$ from $7\\times6$ without dividing by $2!$ — that is $P(7,2)$, not $\\binom{7}{2}$. Or $7+7+7=21$ by incorrect reasoning that happens to match but will fail on other numbers.\n\n**Exam tip:**\nAlways write $\\binom{n}{r}=\\frac{n(n-1)\\cdots(n-r+1)}{r!}$ as a shortcut — faster and less error-prone than full factorials on Bagrut. Verify with symmetry $\\binom{n}{r}=\\binom{n}{n-r}$ when $r$ is large.",
+      "explanation_he": "**למה זה נכון:**\n$\\binom{7}{2}=\\frac{7!}{2!\\cdot5!}=\\frac{7\\times6}{2\\times1}=21$. בדיקת סימטריה: $\\binom{7}{5}=21$ — בחירת 2 לשמירה שווה להשארת 5. שני המסלולים מאשרים אותה ספירה.\n\n**איך לחשוב על זה:**\nיישמו נוסחת צירוף ישירות. צמצמו $5!$ לפני כפל — מספרים קטנים יותר. כתבו קיצור $\\binom{n}{r}=\\frac{n(n-1)\\cdots(n-r+1)}{r!}$ על דף הנוסחאות.\n\n**טעות נפוצה:**\n$42$ מ-$7\\times6$ בלי חלוקה ב-$2!$ — זה $P(7,2)$, לא $\\binom{7}{2}$. או $7+7+7=21$ בטעות שמקרית נכונה אך תיכשל במספרים אחרים.\n\n**טיפ לבחינה:**\nכתבו $\\binom{n}{r}=\\frac{n(n-1)\\cdots}{r!}$ — מהיר ובטוח יותר מעצרות מלאות בבגרות. אמתו עם סימטריה $\\binom{n}{r}=\\binom{n}{n-r}$ כש-$r$ גדול.",
       "skill_atoms": [
-        "permutations",
         "combinations"
       ]
     },
@@ -329,17 +326,16 @@
       "stem_he": "כמה קודים דו-אותיים מ-$\\{A,B,C,D\\}$ ללא חזרות?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$P(4,2)=12$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "12$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "12"
+          "12",
+          "$12$",
+          "P(4,2)=12"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(4,2)=12$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$12$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nTwo-letter codes from 4 letters without repetition — order matters (AB $\\ne$ BA) and no letter repeats: $P(4,2)=4\\times3=12$. Each code is a sequence of distinct letters from $\\{A,B,C,D\\}$.\n\n**How to think about it:**\nFirst position: 4 choices. Second: 3 remaining. Multiplication principle gives $4\\times3$, equivalent to $P(4,2)$. If order did not matter, identical letters would collapse to one outcome — but codes differ by position.\n\n**Common slip:**\nUsing $\\binom{4}{2}=6$ which ignores order (treats AB and BA as one pair), or $4^2=16$ which allows repeated letters like AA. Both misread the \"no repetition\" and \"code\" constraints.\n\n**Exam tip:**\nCode and password stems almost always mean order matters — ask about repetition separately; here \"no repetition\" closes the $n^r$ path. On Bagrut, circle \"code\" and \"without repetition\" before calculating.",
+      "explanation_he": "**למה זה נכון:**\nקודים דו-אותיים מ-4 אותיות ללא חזרות — סדר חשוב (AB $\\ne$ BA) ואין אות חוזרת: $P(4,2)=4\\times3=12$. כל קוד הוא רצף של אותיות שונות מ-$\\{A,B,C,D\\}$.\n\n**איך לחשוב על זה:**\nמקום ראשון: 4 אפשרויות. שני: 3 שנותרו. עקרון כפל → $4\\times3$, שווה ל-$P(4,2)$. אם סדר לא היה חשוב, AB ו-BA היו נספרים פעם אחת — אך קודים נבדלים במיקום.\n\n**טעות נפוצה:**\n$\\binom{4}{2}=6$ מתעלם מסדר (AB ו-BA זוג אחד), או $4^2=16$ עם חזרות כמו AA. שניהם מפרשים שגוי את \"ללא חזרות\" ו\"קוד\".\n\n**טיפ לבחינה:**\nקודים וסיסמאות — סדר כמעט תמיד חשוב; \"ללא חזרות\" סוגר את מסלול $n^r$. בבגרות, הקיפו \"קוד\" ו\"ללא חזרות\" לפני החישוב.",
       "skill_atoms": [
-        "permutations",
-        "combinations"
+        "permutations"
       ]
     },
     {
@@ -350,16 +346,16 @@
       "stem_he": "פתחו $(1+x)^3$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$1+3x+3x^2+x^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+          "$1+3x+3x^2+x^3$",
+          "1+3x+3x^2+x^3"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$1+3x+3x^2+x^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$1+3x+3x^2+x^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$(1+x)^3$ has row 3 of Pascal: coefficients $1,3,3,1$. Expansion: $1+3x+3x^2+x^3$. Alternatively apply $\\sum_{k=0}^3\\binom{3}{k}(1)^{3-k}x^k$ term by term for $k=0,1,2,3$.\n\n**How to think about it:**\nSmall $n$ — read coefficients straight from Pascal's triangle row 3. For $(a+b)^n$ with $a=1$, each term is $\\binom{n}{k}x^k$. Powers of $x$ ascend from $0$ to $3$; coefficients are symmetric.\n\n**Common slip:**\nWriting $1-3x+3x^2-x^3$ with wrong signs (confusing $(1+x)^3$ with $(1-x)^3$), or stopping at $1+3x$ (missing higher powers). Another slip: omitting the constant term $1$.\n\n**Exam tip:**\nMemorize rows 0–4 of Pascal ($1;1,1;1,2,1;1,3,3,1;1,4,6,4,1$) — they cover most 4-unit binomial items without full expansion. Substitute $a=1,b=x$ mentally to read off coefficients.",
+      "explanation_he": "**למה זה נכון:**\n$(1+x)^3$ — שורה 3 בפסקל: מקדמים $1,3,3,1$. פיתוח: $1+3x+3x^2+x^3$. לחלופין $\\sum_{k=0}^3\\binom{3}{k}(1)^{3-k}x^k$ לכל $k=0,1,2,3$.\n\n**איך לחשוב על זה:**\n$n$ קטן — קראו מקדמים ישירות משורה 3. עם $a=1$, כל איבר $\\binom{n}{k}x^k$. חזקות $x$ עולות מ-0 ל-3; מקדמים סימטריים.\n\n**טעות נפוצה:**\nכתיבת $1-3x+3x^2-x^3$ (בלבול עם $(1-x)^3$), או עצירה ב-$1+3x$. טעות נוספת: השמטת האיבר הקבוע $1$.\n\n**טיפ לבחינה:**\nשננו שורות 0–4 בפסקל — מכסות רוב פריטי הבינום ב-4 יחידות. הציבו $a=1,b=x$ בראש כדי לקרוא מקדמים.",
       "skill_atoms": [
-        "permutations",
-        "combinations"
+        "binomial_theorem",
+        "pascals_triangle"
       ]
     },
     {
@@ -370,17 +366,16 @@
       "stem_he": "מ-10 תלמידים, 4 מושבים בשורה. כמה סידורים?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(10,4)=5040$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5040$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5040"
+          "5040",
+          "$5040$",
+          "P(10,4)=5040"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(10,4)=5040$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$5040$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nSeat 4 of 10 in a row — order matters, no one sits twice: $P(10,4)=10\\times9\\times8\\times7=5040$. The first chair, second chair, third, and fourth are distinguishable positions.\n\n**How to think about it:**\nFour distinct chairs in sequence → multiply four descending factors starting at 10. Not $\\binom{10}{4}=210$ (that would be an unordered group of 4). The phrase \"seated in a row\" is the decisive cue for permutation.\n\n**Common slip:**\nUsing $\\binom{10}{4}$ because \"choose 4 students\" appears in the stem — ignore \"seated in a row\" at your peril. Or computing $10/4$ or $10-4=6$ by arithmetic guesswork without a counting model.\n\n**Exam tip:**\nHighlight positional words (row, line, first chair) in the margin — they override generic \"choose\" language every time. Write $P(10,4)$ before multiplying to lock in the correct template.",
+      "explanation_he": "**למה זה נכון:**\n4 מ-10 בשורה — סדר חשוב, אף אחד לא יושב פעמיים: $P(10,4)=10\\times9\\times8\\times7=5040$. כיסא ראשון, שני, שלישי ורביעי הם מקומות נבדלים.\n\n**איך לחשוב על זה:**\nארבעה כיסאות ברצף → מכפילים ארבעה גורמים יורדים מ-10. לא $\\binom{10}{4}=210$ (קבוצה לא מסודרת). \"מושבים בשורה\" הוא הרמז המכריע לתמורה.\n\n**טעות נפוצה:**\n$\\binom{10}{4}$ כי \"לבחור 4\" — התעלמות מ\"בשורה\". או $10/4$ או $10-4=6$ בניחוש חשבוני בלי מודל ספירה.\n\n**טיפ לבחינה:**\nסמנו מילים מיקומיות (שורה, כיסא ראשון) — הן גוברות על \"לבחור\". כתבו $P(10,4)$ לפני הכפל כדי לנעול את התבנית הנכונה.",
       "skill_atoms": [
-        "permutations",
-        "combinations"
+        "permutations"
       ]
     },
     {
@@ -391,17 +386,17 @@
       "stem_he": "פיצה מתוך 8 תוספות — כל תת-קבוצה אפשרית. כמה פיצות?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$2^8=256$ (including no toppings).\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "256$ (including no toppings).\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "256"
+          "256",
+          "$256$",
+          "2^8=256"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$2^8=256$ (including no toppings).\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$2^8=256$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nEach topping is in or out — 8 independent yes/no choices: $2^8=256$ pizzas, including the plain pizza with no toppings ($\\binom{8}{0}=1$). Every subset of the 8 toppings corresponds to exactly one pizza.\n\n**How to think about it:**\nSubsets of an 8-element set: $\\sum_{k=0}^8\\binom{8}{k}=2^8$ by the binomial theorem with $a=b=1$. The question says \"any subset\", so count all $2^8$, not just non-empty ($2^8-1=255$).\n\n**Common slip:**\nUsing $8!=40320$ (ordering toppings on a list) or $\\binom{8}{4}=70$ (exactly half the toppings). Or forgetting the empty subset when the problem allows \"no toppings\" — that costs one valid pizza.\n\n**Exam tip:**\nPizza/subset problems map directly to row-sum identity — write $2^n$ first, then check whether empty set is allowed. If the menu says \"choose any combination including none\", answer is $2^n$, not $2^n-1$.",
+      "explanation_he": "**למה זה נכון:**\nכל תוספת בפנים או לא — 8 בחירות בינאריות עצמאיות: $2^8=256$ פיצות, כולל פיצה ריקה ללא תוספות ($\\binom{8}{0}=1$). כל תת-קבוצה של 8 התוספות = פיצה אחת.\n\n**איך לחשוב על זה:**\nתת-קבוצות של 8: $\\sum_{k=0}^8\\binom{8}{k}=2^8$ לפי משפט הבינום עם $a=b=1$. \"כל תת-קבוצה\" = כל $2^8$, לא רק לא-ריקות ($2^8-1=255$).\n\n**טעות נפוצה:**\n$8!$ (סדר תוספות) או $\\binom{8}{4}=70$ (בדיוק חצי). שכחת תת-קבוצה ריקה כש\"ללא תוספות\" מותר — מפסידים פיצה אחת.\n\n**טיפ לבחינה:**\nבעיות תוספות/תת-קבוצות → $2^n$; בדקו אם ריקה מותרת. אם \"כל שילוב כולל ללא תוספות\" — $2^n$, לא $2^n-1$.",
       "skill_atoms": [
-        "permutations",
-        "combinations"
+        "combinations",
+        "pascals_triangle"
       ]
     },
     {
@@ -412,17 +407,17 @@
       "stem_he": "מצאו את האיבר האמצעי בפיתוח $(x+y)^6$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$n=6$, middle term is $k=3$: $\\binom{6}{3}x^3y^3=20x^3y^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "20x^3y^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+          "$20x^3y^3$",
+          "20x^3y^3",
+          "20"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$n=6$, middle term is $k=3$: $\\binom{6}{3}x^3y^3=20x^3y^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$20x^3y^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "explanation_en": "**Why this is correct:**\n$n=6$ (even) → the unique middle term is at $k=3$: $\\binom{6}{3}x^3y^3=20x^3y^3$. For even $n$, $\\binom{n}{n/2}$ is the central coefficient; here $\\binom{6}{3}=20$.\n\n**How to think about it:**\nFor $(x+y)^n$ with even $n$, the unique middle term has $k=n/2=3$. Compute $\\binom{6}{3}=\\frac{6\\times5\\times4}{3\\times2\\times1}=20$ — do not assume $k=3$ without checking $n$ first.\n\n**Common slip:**\nUsing $\\binom{6}{2}=15$ or $\\binom{6}{4}=15$ (one position off from center). Or reporting $15x^3y^3$ from misreading \"middle\" as \"second term\" ($k=1$). Odd $n$ would give two middle terms — not the case here.\n\n**Exam tip:**\nBinomial middle-term questions: write $k=n/2$ for even $n$, then one line of arithmetic. Odd $n$ has two distinct middle terms at $k=(n-1)/2$ and $k=(n+1)/2$ — read $n$ parity before starting.",
+      "explanation_he": "**למה זה נכון:**\n$n=6$ (זוגי) → איבר אמצעי יחיד ב-$k=3$: $\\binom{6}{3}x^3y^3=20x^3y^3$. ל-$n$ זוגי, $\\binom{n}{n/2}$ הוא מקדם האמצע; כאן $\\binom{6}{3}=20$.\n\n**איך לחשוב על זה:**\nב-$(x+y)^n$ עם $n$ זוגי, $k=n/2=3$. חשבו $\\binom{6}{3}=\\frac{6\\times5\\times4}{3\\times2\\times1}=20$ — אל תניחו $k=3$ בלי לבדוק $n$ קודם.\n\n**טעות נפוצה:**\n$\\binom{6}{2}=15$ או $\\binom{6}{4}=15$ — מיקום אחד מהמרכז. או $15x^3y^3$ מ\"איבר שני\" ($k=1$). ל-$n$ אי-זוגי יש שני איברי אמצע — לא כאן.\n\n**טיפ לבחינה:**\nשאלות איבר אמצעי: $k=n/2$ ל-$n$ זוגי, ואז שורת חישוב. ל-$n$ אי-זוגי — שני איברים ב-$k=(n-1)/2$ ו-$k=(n+1)/2$; בדקו זוגיות לפני התחלה.",
       "skill_atoms": [
-        "permutations",
-        "combinations"
+        "binomial_theorem",
+        "pascals_triangle"
       ]
     }
   ],
