@@ -14,23 +14,22 @@
       "kind": "intro",
       "title_en": "From Outcomes to Numbers",
       "title_he": "מתוצאות למספרים",
-      "body_en_md": "A random experiment produces outcomes in $\\Omega$, but we usually care about some numerical characteristic — the number of heads, the waiting time, the temperature. A **random variable** is the function that maps each outcome to a number.\n\nThe distribution of a random variable summarises all the probability information about that number. **Expectation** (the long-run average) and **variance** (the spread) are the two most important summary statistics.\n\n**Connection to previous material:** Random variables formalise the notion of probability into a numerically computable framework.",
-      "body_he_md": "ניסוי אקראי מייצר תוצאות ב-$\\Omega$, אך בדרך כלל אכפת לנו ממאפיין מספרי כלשהו — מספר הראשים, זמן ההמתנה, הטמפרטורה. **משתנה אקראי** הוא הפונקציה שממפה כל תוצאה למספר.\n\nהתפלגות המשתנה האקראי מסכמת את כל מידע ההסתברות על אותו מספר. **תוחלת** (ממוצע ארוך-טווח) ו**שונות** (פיזור) הם שני סטטיסטיקות הסיכום החשובות ביותר.",
-      "body_he_md2": "קשר לחומר קודם: משתנים אקראיים ממסדים את מושג ההסתברות למסגרת ניתנת לחישוב מספרי."
+      "body_en_md": "A random experiment produces outcomes in the sample space $\\Omega$, but we rarely care about every detail of each outcome. We care about a **numerical summary** — how many heads appeared, how long we waited, what temperature was measured. A **random variable** $X$ is the function that maps each outcome $\\omega \\in \\Omega$ to a real number $X(\\omega)$.\n\nOnce outcomes become numbers, probability becomes calculus-friendly. The **distribution** of $X$ — through a PMF (discrete) or PDF (continuous) and the CDF $F(x)=P(X\\leq x)$ — encodes all probabilistic information about that number. **Expectation** $E[X]$ is the probability-weighted long-run average; **variance** $\\text{Var}(X)$ measures how far values typically spread from that average.\n\nUniversity statistics courses treat random variables as the bridge between elementary probability (events and counting) and inference (sampling distributions, confidence intervals). Israeli exams reward students who can move fluently between a story, a PMF table, and the formulas $E[X]=\\sum xp(x)$ and $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n\n**Builds on:** `concept:probability_basic`. **Unlocks:** `concept:distributions`, hypothesis testing, and regression diagnostics.",
+      "body_he_md": "ניסוי אקראי מייצר תוצאות במרחב המדגם $\\Omega$, אך לרוב לא מעניין אותנו כל פרט בכל תוצאה. מעניין **סיכום מספרי** — כמה ראשים, כמה זמן המתינו, מה נמדד. **משתנה אקראי** $X$ הוא הפונקציה שממפה כל $\\omega\\in\\Omega$ למספר ממשי $X(\\omega)$.\n\nכשתוצאות הופכות למספרים, ההסתברות נהיית נוחה לחישוב. **התפלגות** $X$ — דרך PMF (בדיד) או PDF (רציף) ו-CDF $F(x)=P(X\\leq x)$ — מקודדת את כל המידע ההסתברותי על אותו מספר. **תוחלת** $E[X]$ היא ממוצע משוקלל בהסתברות לאורך זמן; **שונות** $\\text{Var}(X)$ מודדת כמה הערכים מתפזרים סביב הממוצע.\n\nקורסי סטטיסטיקה באוניברסיטה רואים במשתנים אקראיים גשר בין הסתברות בסיסית (אירועים וספירה) לבין הסקה (התפלגויות דגימה, רווחי סמך). בבחינות ישראליות מעריכים מעבר חלק בין סיפור, טבלת PMF, והנוסחאות $E[X]=\\sum xp(x)$ ו-$\\text{Var}(X)=E[X^2]-(E[X])^2$.\n\n**מבוסס על:** `concept:probability_basic`. **פותח:** `concept:distributions`, בדיקת השערות ואבחון רגרסיה."
     },
     {
       "kind": "definition",
       "title_en": "Random Variables, PMF, PDF, CDF",
       "title_he": "משתנים אקראיים, PMF, PDF, CDF",
-      "body_en_md": "**Definition.** A **random variable** (r.v.) $X$ is a function $X:\\Omega\\to\\mathbb{R}$.\n\n**Discrete r.v.:** Takes countably many values. Described by the **probability mass function (PMF)**:\n$$p(x) = P(X=x), \\quad \\sum_{x} p(x)=1.$$\n\n**Continuous r.v.:** Takes values in an interval. Described by the **probability density function (PDF)** $f(x)\\geq0$ with:\n$$P(a\\leq X\\leq b)=\\int_a^b f(x)\\,dx, \\quad \\int_{-\\infty}^{\\infty}f(x)\\,dx=1.$$\n\n**CDF:** $F(x)=P(X\\leq x)$. For continuous: $F(x)=\\int_{-\\infty}^x f(t)\\,dt$.\n\n**Expected value:**\n- Discrete: $E[X]=\\sum_x x\\,p(x)$.\n- Continuous: $E[X]=\\int_{-\\infty}^{\\infty} x\\,f(x)\\,dx$.\n\n**Variance:**\n$$\\text{Var}(X) = E[(X-\\mu)^2] = \\sum_x(x-\\mu)^2p(x) \\quad (\\text{discrete})$$\n\n**Standard deviation:** $\\sigma=\\sqrt{\\text{Var}(X)}$.\n\n**Linearity of expectation:** $E[aX+b]=aE[X]+b$.\n\n**Variance formula:** $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
-      "body_he_md": "**הגדרה.** **משתנה אקראי** $X:\\Omega\\to\\mathbb{R}$.\n\n**בדיד:** $p(x)=P(X=x)$, $\\sum p(x)=1$.\n\n**רציף:** $f(x)\\geq0$, $P(a\\leq X\\leq b)=\\int_a^b f(x)dx$, $\\int_{-\\infty}^\\infty f=1$.\n\n**CDF:** $F(x)=P(X\\leq x)$.\n\n**תוחלת:** $E[X]=\\sum x\\,p(x)$ (בדיד); $E[X]=\\int x f(x)dx$ (רציף).\n\n**שונות:** $\\text{Var}(X)=E[(X-\\mu)^2]$.\n\n**לינאריות:** $E[aX+b]=aE[X]+b$.\n\n**נוסחת שונות:** $\\text{Var}(X)=E[X^2]-(E[X])^2$."
+      "body_en_md": "**Random variable.** A random variable (r.v.) $X$ is a measurable function $X:\\Omega\\to\\mathbb{R}$ assigning a number to each outcome. We classify $X$ as **discrete** (countably many values) or **continuous** (values in an interval).\n\n**PMF (discrete).** The probability mass function is $p(x)=P(X=x)$ for each possible $x$, with $p(x)\\geq0$ and $\\sum_x p(x)=1$. Probabilities of events like $\\{X\\geq k\\}$ are sums of masses.\n\n**PDF (continuous).** The probability density $f(x)\\geq0$ satisfies $\\int_{-\\infty}^{\\infty}f(x)\\,dx=1$. Interval probabilities are **areas**: $P(a\\leq X\\leq b)=\\int_a^b f(x)\\,dx$. A single point has probability zero: $P(X=x_0)=0$.\n\n**CDF.** $F(x)=P(X\\leq x)$ is non-decreasing with limits $0$ and $1$. For continuous $X$, $F(x)=\\int_{-\\infty}^x f(t)\\,dt$ and $f(x)=F'(x)$ where differentiable.\n\n**Expectation.** Discrete: $E[X]=\\sum_x x\\,p(x)$. Continuous: $E[X]=\\int_{-\\infty}^{\\infty}x f(x)\\,dx$. This is the \"balance point\" of the distribution.\n\n**Variance and standard deviation.**\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2]-(E[X])^2, \\quad \\sigma=\\sqrt{\\text{Var}(X)}.$$\n\n**Key properties.** Linearity: $E[aX+b]=aE[X]+b$. Scaling variance: $\\text{Var}(aX+b)=a^2\\text{Var}(X)$. For independent $X,Y$: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$.\n\n**Exam note:** When a problem gives $f(x)$ with an unknown constant, integrate over the support, set the result equal to 1, then compute $E[X]$ or probabilities.",
+      "body_he_md": "**משתנה אקראי.** משתנה אקראי $X$ הוא פונקציה מדידה $X:\\Omega\\to\\mathbb{R}$. מסווגים **בדיד** (ערכים ספירים) או **רציף** (ערכים בקטע). שני הסוגים משתמשים באותה שפה — PMF/PDF, CDF, תוחלת, שונות — אך הכלים החישוביים שונים (סכום מול אינטגרל).\n\n**PMF (בדיד).** פונקציית המסה: $p(x)=P(X=x)$, עם $p(x)\\geq0$ ו-$\\sum_x p(x)=1$. אירועים כמו $\\{X\\geq k\\}$ הם סכומי מסות.\n\n**PDF (רציף).** צפיפות $f(x)\\geq0$ עם $\\int_{-\\infty}^{\\infty}f(x)\\,dx=1$. הסתברויות על קטעים הן **שטחים**: $P(a\\leq X\\leq b)=\\int_a^b f(x)\\,dx$. לנקודה בודדת: $P(X=x_0)=0$.\n\n**CDF.** $F(x)=P(X\\leq x)$ לא-יורדת, גבולות $0$ ו-$1$. לרציף: $F(x)=\\int_{-\\infty}^x f(t)\\,dt$ ו-$f(x)=F'(x)$.\n\n**תוחלת.** בדיד: $E[X]=\\sum_x x\\,p(x)$. רציף: $E[X]=\\int x f(x)\\,dx$. \"נקודת האיזון\" של ההתפלגות.\n\n**שונות וסטיית תקן.**\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2]-(E[X])^2, \\quad \\sigma=\\sqrt{\\text{Var}(X)}.$$\nסטיית התקן $\\sigma$ באותן יחידות כמו $X$ — שימושית להשוואת פיזור.\n\n**תכונות מפתח.** לינאריות: $E[aX+b]=aE[X]+b$. קנה-מידה: $\\text{Var}(aX+b)=a^2\\text{Var}(X)$. ל-$X,Y$ בלתי-תלויים: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$.\n\n**הערה לבחינה:** כשנותנים $f(x)$ עם קבוע לא ידוע — אינטגרל על התמיכה, שווים ל-1, ואז מחשבים $E[X]$ או הסתברויות."
     },
     {
       "kind": "theory",
       "title_en": "Key Theorems",
       "title_he": "משפטים מרכזיים",
-      "body_en_md": "**Theorem 1 (LOTUS — Law of the Unconscious Statistician).** For a function $g$:\n$$E[g(X)] = \\sum_x g(x)p(x) \\quad (\\text{discrete}).$$\n\n**Theorem 2.** $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n*Proof:*\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2-2\\mu X+\\mu^2]=E[X^2]-2\\mu E[X]+\\mu^2=E[X^2]-2\\mu^2+\\mu^2=E[X^2]-\\mu^2.$$\n\n**Theorem 3.** $\\text{Var}(aX+b)=a^2\\text{Var}(X)$.\n\n**Theorem 4.** For independent r.v.'s: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$.\n\n**Theorem 5.** $\\text{Var}(X)\\geq0$ with equality iff $X$ is a constant a.s.",
-      "body_he_md": "**משפט 1 (LOTUS).** $E[g(X)]=\\sum g(x)p(x)$.\n\n**משפט 2.** $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n*הוכחה:* $E[(X-\\mu)^2]=E[X^2]-2\\mu E[X]+\\mu^2=E[X^2]-\\mu^2$.\n\n**משפט 3.** $\\text{Var}(aX+b)=a^2\\text{Var}(X)$.\n\n**משפט 4.** ל-r.v. בלתי-תלויים: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$.\n\n**משפט 5.** $\\text{Var}(X)\\geq0$; שוויון אם ורק אם $X$ קבוע."
+      "body_en_md": "### Theorem 1 — LOTUS (Law of the Unconscious Statistician)\n\nTo compute the expectation of a transformed variable, plug $g(x)$ into the same sum or integral — no need to find the distribution of $g(X)$ first.\n$$E[g(X)] = \\sum_x g(x)p(x) \\quad \\text{(discrete)}, \\qquad E[g(X)] = \\int g(x)f(x)\\,dx \\quad \\text{(continuous)}.$$\nThis is how we compute $E[X^2]$ efficiently when finding variance.\n\n### Theorem 2 — Computational variance formula\n\nLet $\\mu=E[X]$. Expanding the square and using linearity of expectation:\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2-2\\mu X+\\mu^2]=E[X^2]-2\\mu E[X]+\\mu^2=E[X^2]-\\mu^2.$$\nOn exams, compute $E[X]$ and $E[X^2]$ separately, then subtract.\n\n### Theorem 3 — Affine scaling of variance\n\n$\\text{Var}(aX+b)=a^2\\text{Var}(X)$. Adding a constant shifts all outcomes equally and does **not** change spread; multiplying by $|a|$ scales spread by $|a|$.\n\n### Theorem 4 — Sum of independent variances\n\nIf $X$ and $Y$ are independent, $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$. Without independence this fails — covariances appear.\n\n### Theorem 5 — Non-negativity\n\n$\\text{Var}(X)\\geq0$, with equality if and only if $X$ is constant almost surely. Zero variance means no randomness remains.\n\n**Practical takeaway:** These five results cover most first-year exam manipulations — LOTUS for $E[X^2]$, the computational variance formula for PMF tables, affine rules for transformed variables, and independence for sums.",
+      "body_he_md": "### משפט 1 — LOTUS (חוק הסטטיסטיקאי החסר-מודע)\n\nלחישוב תוחלת של $g(X)$, מציבים $g(x)$ באותו סכום או אינטגרל — אין צורך למצוא תחילה את התפלגות $g(X)$.\n$$E[g(X)]=\\sum_x g(x)p(x) \\quad \\text{(בדיד)}, \\qquad E[g(X)]=\\int g(x)f(x)\\,dx \\quad \\text{(רציף)}.$$\nכך מחשבים $E[X^2]$ לשונות. דוגמה: $E[X^2]=\\sum x^2 p(x)$ בלי לבנות PMF חדש.\n\n### משפט 2 — נוסחת שונות חישובית\n\nיהי $\\mu=E[X]$. פיתוח הריבוע ולינאריות התוחלת:\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2]-2\\mu E[X]+\\mu^2=E[X^2]-\\mu^2.$$\nבבחינה: חשבו $E[X]$ ו-$E[X^2]$ בנפרד, ואז חסרו. זו השיטה המועדפת כש-$\\mu$ לא שלם.\n\n### משפט 3 — קנה-מידה אפיני של שונות\n\n$\\text{Var}(aX+b)=a^2\\text{Var}(X)$. הוספת קבוע $b$ לא משנה פיזור; כפל ב-$a$ משנה פיזור ב-$a^2$. דוגמה: $\\text{Var}(2X-1)=4\\text{Var}(X)$.\n\n### משפט 4 — סכום שונויות בלתי-תלויות\n\nאם $X,Y$ בלתי-תלויים: $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$. בלי אי-תלות — מופיעים מקדמי קו-וריאנס ואי-שוויון. בבחינה: ודאו אי-תלות לפני חיבור שונויות.\n\n### משפט 5 — אי-שליליות\n\n$\\text{Var}(X)\\geq0$, שוויון אם ורק אם $X$ קבוע כמעט-בוודאות. שונות אפס = אין אקראיות.\n\n**מסקנה מעשית:** חמשת המשפטים מכסים רוב מניפולציות הבחינה — LOTUS, נוסחה חישובית, כללי אפיני, וסכום בלתי-תלוי."
     },
     {
       "kind": "worked_example",
@@ -38,18 +37,17 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Binomial: Heads in 3 Coin Flips",
       "title_he": "דוגמה פתורה 1 — בינומי: ראשים ב-3 הטלות מטבע",
-      "body_en_md": "$X$ = number of heads in 3 fair coin flips. $X\\sim\\text{Bin}(3,1/2)$.\n\n**PMF:** $P(X=k)=\\binom{3}{k}(1/2)^3$ for $k=0,1,2,3$.\n\n| $x$ | 0 | 1 | 2 | 3 |\n|---|---|---|---|---|\n| $p(x)$ | 1/8 | 3/8 | 3/8 | 1/8 |\n\n**Expected value:**\n$$E[X] = 0\\cdot\\frac{1}{8}+1\\cdot\\frac{3}{8}+2\\cdot\\frac{3}{8}+3\\cdot\\frac{1}{8} = \\frac{0+3+6+3}{8} = \\frac{12}{8} = \\frac{3}{2}.$$\n\n**$E[X^2]$:**\n$$E[X^2]=0+\\frac{3}{8}+\\frac{12}{8}+\\frac{9}{8}=\\frac{24}{8}=3.$$\n\n**Variance:**\n$$\\text{Var}(X)=E[X^2]-(E[X])^2=3-(3/2)^2=3-9/4=3/4.$$\n\n**Check with $\\text{Bin}(n,p)$ formula:** $\\text{Var}=np(1-p)=3\\cdot(1/2)\\cdot(1/2)=3/4$. ✓",
-      "body_he_md": "$X$ = מספר ראשים ב-3 הטלות הוגנות. $X\\sim\\text{Bin}(3,1/2)$.\n\n**PMF:** $P(X=k)=\\binom{3}{k}/8$.\n\n**תוחלת:** $E[X]=12/8=3/2$.\n\n**$E[X^2]$:** $=24/8=3$.\n\n**שונות:** $\\text{Var}(X)=3-9/4=3/4$.\n\n**בדיקה:** $np(1-p)=3/4$. ✓"
+      "body_en_md": "**Given:** $X$ = number of heads in 3 fair coin flips. Model: $X\\sim\\text{Bin}(3,1/2)$.\n\nThis is the standard entry point for discrete r.v. calculations — a small PMF table, then expectation and variance via the computational formula.\n\n**PMF:** $P(X=k)=\\binom{3}{k}(1/2)^3$ for $k=0,1,2,3$.\n\n| $x$ | 0 | 1 | 2 | 3 |\n|---|---|---|---|---|\n| $p(x)$ | 1/8 | 3/8 | 3/8 | 1/8 |\n\n### Move 1: Expected value\n$$E[X] = 0\\cdot\\frac{1}{8}+1\\cdot\\frac{3}{8}+2\\cdot\\frac{3}{8}+3\\cdot\\frac{1}{8} = \\frac{12}{8} = \\frac{3}{2}.$$\n\n### Move 2: Second moment\n$$E[X^2]=0+\\frac{3}{8}+\\frac{12}{8}+\\frac{9}{8}=\\frac{24}{8}=3.$$\n\n### Move 3: Variance\n$$\\text{Var}(X)=E[X^2]-(E[X])^2=3-\\left(\\frac{3}{2}\\right)^2=3-\\frac{9}{4}=\\frac{3}{4}.$$\n\n**Check:** Binomial formula $\\text{Var}=np(1-p)=3\\cdot(1/2)\\cdot(1/2)=3/4$. ✓\n\n**Interpretation:** On average we expect 1.5 heads in 3 flips; variance 3/4 reflects moderate spread around that mean. The PMF is symmetric about 1.5, which is consistent with $E[X]=3/2$.\n\n**Exam note:** For small $n$, build the PMF table; for large $n$, use $np$ and $np(1-p)$ directly.",
+      "body_he_md": "**נתון:** $X$ = מספר ראשים ב-3 הטלות הוגנות. מודל: $X\\sim\\text{Bin}(3,1/2)$.\n\nזו נקודת כניסה קלאסית לחישובי משתנה בדיד — טבלת PMF קטנה, ואז תוחלת ושונות בנוסחה החישובית. כל שלב נשען על הקודם: בלי PMF נכון אי אפשר לחשב $E[X]$ בצורה נכונה.\n\n**PMF:** $P(X=k)=\\binom{3}{k}/8$ לכל $k=0,1,2,3$.\n\n| $x$ | 0 | 1 | 2 | 3 |\n|---|---|---|---|---|\n| $p(x)$ | 1/8 | 3/8 | 3/8 | 1/8 |\n\n### צעד 1: תוחלת\n$$E[X]=0\\cdot\\frac{1}{8}+1\\cdot\\frac{3}{8}+2\\cdot\\frac{3}{8}+3\\cdot\\frac{1}{8}=\\frac{12}{8}=\\frac{3}{2}.$$\n\n### צעד 2: רגע שני\n$$E[X^2]=0+\\frac{3}{8}+\\frac{12}{8}+\\frac{9}{8}=\\frac{24}{8}=3.$$\n\n### צעד 3: שונות\n$$\\text{Var}(X)=E[X^2]-(E[X])^2=3-\\left(\\frac{3}{2}\\right)^2=3-\\frac{9}{4}=\\frac{3}{4}.$$\n\n**בדיקה:** $\\text{Var}=np(1-p)=3/4$. ✓ **פרשנות:** בממוצע 1.5 ראשים; שונות 3/4 = פיזור בינוני סביב הממוצע. ה-PMF סימטרי סביב 1.5 — עקבי עם $E[X]=3/2$. **הערה לבחינה:** ל-$n$ קטן — בנו טבלת PMF; ל-$n$ גדול — $np$ ו-$np(1-p)$ ישירות."
     },
     {
       "kind": "checkpoint",
       "title_en": "Stop & Practice",
       "title_he": "עצור ותרגל",
       "body_en_md": "Let $X$ have PMF: $P(X=1)=0.2$, $P(X=2)=0.5$, $P(X=3)=0.3$. Compute $E[X]$.",
-      "body_he": "יהי $X$ עם PMF: $P(X=1)=0.2$, $P(X=2)=0.5$, $P(X=3)=0.3$. חשב $E[X]$.",
-      "checkpoint_solution_en": "$E[X]=1(0.2)+2(0.5)+3(0.3)=0.2+1.0+0.9=2.1$.",
-      "checkpoint_solution_he": "$E[X]=0.2+1.0+0.9=2.1$.",
-      "body_he_md": "יהי $X$ עם PMF: $P(X=1)=0.2$, $P(X=2)=0.5$, $P(X=3)=0.3$. חשב $E[X]$."
+      "body_he_md": "יהי $X$ עם PMF: $P(X=1)=0.2$, $P(X=2)=0.5$, $P(X=3)=0.3$. חשב $E[X]$.",
+      "checkpoint_solution_en": "**Given:** Discrete $X$ with three support points.\n\n**Step 1:** Verify probabilities sum to 1: $0.2+0.5+0.3=1.0$. ✓\n\n**Step 2:** Apply the definition $E[X]=\\sum x\\,p(x)$:\n$$E[X]=1(0.2)+2(0.5)+3(0.3)=0.2+1.0+0.9=2.1.$$\n\n**Check:** The mean 2.1 lies between the smallest value 1 and largest 3, and is pulled toward 2 because $P(X=2)=0.5$ is largest — sensible for a weighted average.",
+      "checkpoint_solution_he": "**נתון:** $X$ בדיד עם שלוש נקודות תמיכה.\n\n**שלב 1:** אימות סכום הסתברויות: $0.2+0.5+0.3=1.0$. ✓\n\n**שלב 2:** הגדרה $E[X]=\\sum x\\,p(x)$:\n$$E[X]=1(0.2)+2(0.5)+3(0.3)=0.2+1.0+0.9=2.1.$$\n\n**בדיקה:** הממוצע 2.1 בין 1 ל-3, נמשך ל-2 כי $P(X=2)=0.5$ הגדולה ביותר — הגיוני לממוצע משוקלל."
     },
     {
       "kind": "worked_example",
@@ -57,18 +55,17 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — PMF Table: E[X], Var(X), P(X≥2)",
       "title_he": "דוגמה פתורה 2 — טבלת PMF: E[X], Var(X), P(X≥2)",
-      "body_en_md": "**Given PMF:**\n\n| $x$ | 0 | 1 | 2 | 3 | 4 |\n|---|---|---|---|---|---|\n| $p(x)$ | 0.1 | 0.2 | 0.4 | 0.2 | 0.1 |\n\n### Move 1 $0.1+0.2+0.4+0.2+0.1=1.0$. ✓\n\n### Move 2\n$$E[X]=0(0.1)+1(0.2)+2(0.4)+3(0.2)+4(0.1)=0+0.2+0.8+0.6+0.4=2.0.$$\n\n### Move 3\n$$E[X^2]=0+1(0.2)+4(0.4)+9(0.2)+16(0.1)=0.2+1.6+1.8+1.6=5.2.$$\n\n### Move 4\n$$\\text{Var}(X)=5.2-(2.0)^2=5.2-4.0=1.2.$$\n\n### Move 5\n$$P(X\\geq2)=P(X=2)+P(X=3)+P(X=4)=0.4+0.2+0.1=0.7.$$\n(Or: $1-P(X\\leq1)=1-0.3=0.7$.)",
-      "body_he_md": "**PMF נתון:** $P(0)=0.1$, $P(1)=0.2$, $P(2)=0.4$, $P(3)=0.2$, $P(4)=0.1$.\n\n**$E[X]=2.0$. $E[X^2]=5.2$. $\\text{Var}(X)=1.2$. $P(X\\geq2)=0.7$.**\n\n### צעד 1 $0.1+0.2+0.4+0.2+0.1=1.0$. ✓\n\n### צעד 2\n$$E[X]=0(0.1)+1(0.2)+2(0.4)+3(0.2)+4(0.1)=0+0.2+0.8+0.6+0.4=2.0.$$\n\n### צעד 3\n$$E[X^2]=0+1(0.2)+4(0.4)+9(0.2)+16(0.1)=0.2+1.6+1.8+1.6=5.2.$$\n\n### צעד 4\n$$\\text{Var}(X)=5.2-(2.0)^2=5.2-4.0=1.2.$$\n\n### צעד 5\n$$P(X\\geq2)=P(X=2)+P(X=3)+P(X=4)=0.4+0.2+0.1=0.7.$$\n(Or: $1-P(X\\leq1)=1-0.3=0.7$.)"
+      "body_en_md": "**Given PMF:**\n\n| $x$ | 0 | 1 | 2 | 3 | 4 |\n|---|---|---|---|---|---|\n| $p(x)$ | 0.1 | 0.2 | 0.4 | 0.2 | 0.1 |\n\nPMF-table problems are the bread and butter of Israeli university probability exams. The workflow is always: verify normalization, compute $E[X]$, compute $E[X^2]$, subtract for variance, then answer tail or interval probabilities by summing masses.\n\n### Move 1: Normalization check\n$0.1+0.2+0.4+0.2+0.1=1.0$. ✓\n\n### Move 2: Expected value\n$$E[X]=0(0.1)+1(0.2)+2(0.4)+3(0.2)+4(0.1)=0+0.2+0.8+0.6+0.4=2.0.$$\n\n### Move 3: Second moment\n$$E[X^2]=0+1(0.2)+4(0.4)+9(0.2)+16(0.1)=0.2+1.6+1.8+1.6=5.2.$$\n\n### Move 4: Variance\n$$\\text{Var}(X)=5.2-(2.0)^2=5.2-4.0=1.2.$$\n\n### Move 5: Tail probability\n$$P(X\\geq2)=P(X=2)+P(X=3)+P(X=4)=0.4+0.2+0.1=0.7.$$\nComplement check: $1-P(X\\leq1)=1-0.3=0.7$. ✓\n\n**Exam link:** Israeli probability finals often give a five-row PMF and ask for all four quantities in one problem — practice building the $xp(x)$ and $x^2p(x)$ columns before substituting. Partial credit goes to correct table setup even when arithmetic slips.",
+      "body_he_md": "**PMF נתון:**\n\n| $x$ | 0 | 1 | 2 | 3 | 4 |\n|---|---|---|---|---|---|\n| $p(x)$ | 0.1 | 0.2 | 0.4 | 0.2 | 0.1 |\n\nבעיות טבלת PMF הן ליבת בחינות הסתברות באוניברסיטה בישראל. תמיד: אימות נרמול, $E[X]$, $E[X^2]$, חיסור לשונות, ואז הסתברויות זנב בסכום מסות. המשקל הגדול ביותר ($p(2)=0.4$) מושך את הממוצע ל-2.\n\n### צעד 1: בדיקת נרמול\n$0.1+0.2+0.4+0.2+0.1=1.0$. ✓\n\n### צעד 2: תוחלת\n$$E[X]=0(0.1)+1(0.2)+2(0.4)+3(0.2)+4(0.1)=2.0.$$\n\n### צעד 3: רגע שני\n$$E[X^2]=0+1(0.2)+4(0.4)+9(0.2)+16(0.1)=5.2.$$\n\n### צעד 4: שונות\n$$\\text{Var}(X)=5.2-4.0=1.2.$$\n\n### צעד 5: הסתברות זנב\n$$P(X\\geq2)=0.4+0.2+0.1=0.7.$$\nבדיקת משלים: $1-0.3=0.7$. ✓ **קישור לבחינה:** בנו עמודות $xp(x)$ ו-$x^2p(x)$ לפני הצבה — ניקוד חלקי על הכנה. המשקל $p(2)=0.4$ מושך את $E[X]$ ל-2."
     },
     {
       "kind": "checkpoint",
       "title_en": "Stop & Practice",
       "title_he": "עצור ותרגל",
-      "body_en_md": "For the PMF above, find Var$(X)$ using the direct formula $E[(X-\\mu)^2]$ and verify it equals 1.2.",
-      "body_he": "עבור ה-PMF לעיל, מצא Var$(X)$ ישירות עם $E[(X-\\mu)^2]$ ואמת שמתקבל 1.2.",
-      "checkpoint_solution_en": "$\\mu=2$. $(0-2)^2(0.1)+(1-2)^2(0.2)+(2-2)^2(0.4)+(3-2)^2(0.2)+(4-2)^2(0.1)=0.4+0.2+0+0.2+0.4=1.2$. ✓",
-      "checkpoint_solution_he": "$(4)(0.1)+(1)(0.2)+0+(1)(0.2)+(4)(0.1)=0.4+0.2+0.2+0.4=1.2$. ✓",
-      "body_he_md": "עבור ה-PMF לעיל, מצא Var$(X)$ ישירות עם $E[(X-\\mu)^2]$ ואמת שמתקבל 1.2."
+      "body_en_md": "For the PMF above, find $\\text{Var}(X)$ using the direct formula $E[(X-\\mu)^2]$ and verify it equals 1.2.",
+      "body_he_md": "עבור ה-PMF לעיל, מצא $\\text{Var}(X)$ ישירות עם $E[(X-\\mu)^2]$ ואמת שמתקבל 1.2.",
+      "checkpoint_solution_en": "**Given:** Same PMF with $\\mu=E[X]=2.0$ from the previous example.\n\n**Step 1:** Write the direct variance sum:\n$$\\text{Var}(X)=\\sum_x (x-\\mu)^2 p(x).$$\n\n**Step 2:** Substitute each term:\n$$(0-2)^2(0.1)+(1-2)^2(0.2)+(2-2)^2(0.4)+(3-2)^2(0.2)+(4-2)^2(0.1)$$\n$$=4(0.1)+1(0.2)+0+1(0.2)+4(0.1)=0.4+0.2+0+0.2+0.4=1.2.$$\n\n**Check:** Matches $E[X^2]-\\mu^2=5.2-4=1.2$. Both methods must agree — if not, recheck $E[X^2]$.",
+      "checkpoint_solution_he": "**נתון:** אותו PMF עם $\\mu=E[X]=2.0$.\n\n**שלב 1:** נוסחת שונות ישירה:\n$$\\text{Var}(X)=\\sum_x (x-\\mu)^2 p(x).$$\n\n**שלב 2:** הצבה:\n$$(0-2)^2(0.1)+(1-2)^2(0.2)+(2-2)^2(0.4)+(3-2)^2(0.2)+(4-2)^2(0.1)$$\n$$=0.4+0.2+0+0.2+0.4=1.2.$$\n\n**בדיקה:** תואם $E[X^2]-\\mu^2=5.2-4=1.2$. שתי השיטות חייבות להסכים."
     },
     {
       "kind": "worked_example",
@@ -76,15 +73,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Proof: Var(X) = E[X²] − (E[X])²",
       "title_he": "דוגמה פתורה 3 — הוכחה: Var(X) = E[X²] − (E[X])²",
-      "body_en_md": "**Claim:** $\\text{Var}(X) = E[X^2] - (E[X])^2$.\n\n**Proof (discrete case; identical for continuous):**\n\nLet $\\mu = E[X]$.\n\n### Move 1\n$$\\text{Var}(X) = E[(X-\\mu)^2] = E[X^2-2\\mu X+\\mu^2].$$\n\n### Move 2\n$$= E[X^2] - 2\\mu E[X] + \\mu^2.$$\n\n### Move 3\n$$= E[X^2] - 2\\mu\\cdot\\mu + \\mu^2 = E[X^2] - 2\\mu^2 + \\mu^2 = E[X^2] - \\mu^2.$$\n\n### Move 4\n$$\\text{Var}(X) = E[X^2] - (E[X])^2. \\quad \\blacksquare$$\n\n**Why it's useful:** Computing $E[X^2]$ and $(E[X])^2$ separately is often easier than computing $\\sum(x-\\mu)^2p(x)$ directly, especially when $\\mu$ is not an integer.",
-      "body_he_md": "**טענה:** $\\text{Var}(X) = E[X^2] - (E[X])^2$.\n\n**הוכחה:**\n\nיהי $\\mu=E[X]$.\n\n**שלב 1 — פיתוח:**\n$$\\text{Var}(X) = E[(X-\\mu)^2] = E[X^2-2\\mu X+\\mu^2].$$\n\n**שלב 2 — לינאריות התוחלת:**\n$$= E[X^2] - 2\\mu E[X] + \\mu^2.$$\n\n**שלב 3 — הצבה $E[X]=\\mu$:**\n$$= E[X^2] - 2\\mu^2 + \\mu^2 = E[X^2] - \\mu^2.\\ \\blacksquare$$\n\n**למה זה שימושי:** חישוב $E[X^2]$ ו-$(E[X])^2$ בנפרד לרוב קל יותר."
+      "body_en_md": "**Claim:** $\\text{Var}(X) = E[X^2] - (E[X])^2$.\n\nThis identity is tested both as a proof and as a computational shortcut. The proof uses only linearity of expectation — no independence required.\n\nLet $\\mu = E[X]$.\n\n### Move 1: Expand the squared deviation\n$$\\text{Var}(X) = E[(X-\\mu)^2] = E[X^2 - 2\\mu X + \\mu^2].$$\n\n### Move 2: Apply linearity\n$$= E[X^2] - 2\\mu E[X] + \\mu^2.$$\nNote $\\mu$ is a constant, so $E[\\mu^2]=\\mu^2$.\n\n### Move 3: Substitute $E[X]=\\mu$\n$$= E[X^2] - 2\\mu^2 + \\mu^2 = E[X^2] - \\mu^2 = E[X^2] - (E[X])^2. \\quad \\blacksquare$$\n\n**Why it matters on exams:** When $\\mu=E[X]$ is not a \"nice\" number (e.g., 2.1), computing $\\sum(x-\\mu)^2p(x)$ is tedious and error-prone. Computing $E[X^2]$ via LOTUS and subtracting $\\mu^2$ is faster and earns full credit when shown step-by-step.\n\n**Continuous case:** The identical proof works with integrals replacing sums — linearity of expectation holds in both settings.\n\n**Exam strategy:** Write \"Let $\\mu=E[X]$\" first, expand $(X-\\mu)^2$, apply linearity line-by-line, then substitute $\\mu$ — graders look for these four explicit steps.",
+      "body_he_md": "**טענה:** $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n\nזהות זו נבחנת כהוכחה וכקיצור חישוב. ההוכחה משתמשת רק בלינאריות התוחלת — בלי אי-תלות. אותה הוכחה עובדת גם ברציף עם אינטגרלים במקום סכומים, בשינוי סימן בלבד.\n\nיהי $\\mu=E[X]$.\n\n### צעד 1: פיתוח הריבוע\n$$\\text{Var}(X)=E[(X-\\mu)^2]=E[X^2-2\\mu X+\\mu^2].$$\n\n### צעד 2: לינאריות\n$$=E[X^2]-2\\mu E[X]+\\mu^2.$$\n$\\mu$ קבוע, ולכן $E[\\mu^2]=\\mu^2$.\n\n### צעד 3: הצבה $E[X]=\\mu$\n$$=E[X^2]-2\\mu^2+\\mu^2=E[X^2]-\\mu^2=E[X^2]-(E[X])^2.\\ \\blacksquare$$\n\n**למה זה חשוב בבחינה:** כש-$\\mu$ לא \"נחמד\" (למשל 2.1), $\\sum(x-\\mu)^2p(x)$ מייגע ומועד לטעויות חישוב. $E[X^2]$ דרך LOTUS וחיסור $\\mu^2$ — מהיר יותר ונותן ניקוד מלא כשמוצג שלב-שלב.\n\n**אסטרטגיה לבחינה:** כתבו \"יהי $\\mu=E[X]$\", פתחו $(X-\\mu)^2$, יישמו לינאריות שורה-שורה, והציבו $\\mu$ — המבדקים מחפשים ארבעה שלבים מפורשים. הוכחה זו שווה ניקוד מלא גם בבדיד וגם ברציף בבחינות ישראליות."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Expectation and Variance Toolkit",
       "title_he": "מדריך שיטה — ארגז כלים לתוחלת ושונות",
-      "body_en_md": "| Goal | Discrete formula | Key note |\n|---|---|---|\n| $E[X]$ | $\\sum_x x\\,p(x)$ | Sum over all values |\n| $E[g(X)]$ | $\\sum_x g(x)p(x)$ | LOTUS |\n| $E[aX+b]$ | $aE[X]+b$ | Linearity |\n| $\\text{Var}(X)$ | $E[X^2]-(E[X])^2$ | Compute $E[X^2]$ first |\n| $\\text{Var}(aX+b)$ | $a^2\\text{Var}(X)$ | Constants vanish |\n| $\\text{SD}(X)$ | $\\sqrt{\\text{Var}(X)}$ | Same units as $X$ |\n| $P(X\\geq k)$ | $1-P(X\\leq k-1)=1-F(k-1)$ | Use complement |\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
-      "body_he_md": "| מטרה | נוסחה בדידה | הערה |\n|---|---|---|\n| $E[X]$ | $\\sum x\\,p(x)$ | סכום על כל הערכים |\n| $E[g(X)]$ | $\\sum g(x)p(x)$ | LOTUS |\n| $E[aX+b]$ | $aE[X]+b$ | לינאריות |\n| $\\text{Var}(X)$ | $E[X^2]-(E[X])^2$ | חשב $E[X^2]$ קודם |\n| $\\text{Var}(aX+b)$ | $a^2\\text{Var}(X)$ | קבועים נעלמים |\n| $P(X\\geq k)$ | $1-F(k-1)$ | השתמש במשלים |\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
+      "body_en_md": "| Goal | Discrete formula | Key note |\n|---|---|---|\n| $E[X]$ | $\\sum_x x\\,p(x)$ | Sum over all support values |\n| $E[g(X)]$ | $\\sum_x g(x)p(x)$ | LOTUS — no need for distribution of $g(X)$ |\n| $E[aX+b]$ | $aE[X]+b$ | Linearity always holds |\n| $\\text{Var}(X)$ | $E[X^2]-(E[X])^2$ | Compute $E[X^2]$ via LOTUS first |\n| $\\text{Var}(aX+b)$ | $a^2\\text{Var}(X)$ | Shift $b$ vanishes; scale $a$ squares |\n| $\\text{SD}(X)$ | $\\sqrt{\\text{Var}(X)}$ | Same units as $X$ |\n| $P(X\\geq k)$ | $1-F(k-1)$ or sum masses | Complement often faster |\n\n**5-step workflow for PMF tables:**\n1. Verify $\\sum p(x)=1$.\n2. Compute $E[X]$.\n3. Compute $E[X^2]$ (square each $x$ before weighting).\n4. Subtract: $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n5. Answer probability questions by summing relevant masses or complements.\n\n**When to use which variance method:** Use the computational formula unless $\\mu$ is an integer and the PMF is tiny. Use $\\text{Var}(aX+b)=a^2\\text{Var}(X)$ when only moments are given.",
+      "body_he_md": "| מטרה | נוסחה בדידה | הערה |\n|---|---|---|\n| $E[X]$ | $\\sum x\\,p(x)$ | סכום על כל ערכי התמיכה |\n| $E[g(X)]$ | $\\sum g(x)p(x)$ | LOTUS — בלי למצוא התפלגות $g(X)$ |\n| $E[aX+b]$ | $aE[X]+b$ | לינאריות תמיד |\n| $\\text{Var}(X)$ | $E[X^2]-(E[X])^2$ | חשב $E[X^2]$ קודם |\n| $\\text{Var}(aX+b)$ | $a^2\\text{Var}(X)$ | הזזה $b$ נעלמת; $a$ בריבוע |\n| $\\text{SD}(X)$ | $\\sqrt{\\text{Var}(X)}$ | יחידות כמו $X$ |\n| $P(X\\geq k)$ | $1-F(k-1)$ או סכום מסות | משלים לעיתים מהיר |\n\n**5 שלבי עבודה לטבלת PMF:**\n1. אימות $\\sum p(x)=1$.\n2. חישוב $E[X]$.\n3. חישוב $E[X^2]$ (ריבוע $x$ לפני משקל).\n4. חיסור: $\\text{Var}(X)=E[X^2]-(E[X])^2$.\n5. הסתברויות — סכום מסות או משלים.\n\n**מתי איזו שיטת שונות:** נוסחה חישובית אלא אם $\\mu$ שלם וה-PMF קטן. $\\text{Var}(aX+b)=a^2\\text{Var}(X)$ כשנותנים רק רגעים."
     },
     {
       "kind": "exercise_set",
@@ -98,7 +95,7 @@
           "difficulty": "easy",
           "body_en": "A fair die is rolled. Let $X$ = the outcome. Find $E[X]$ and Var$(X)$.",
           "body_he": "קובייה הוגנת מוטלת. יהי $X$ = התוצאה. מצא $E[X]$ ו-Var$(X)$.",
-          "solution_en": "$E[X]=(1+2+3+4+5+6)/6=3.5$. $E[X^2]=(1+4+9+16+25+36)/6=91/6$. Var$=(91/6)-(3.5)^2=91/6-49/4=(182-147)/12=35/12\\approx2.917$.",
+          "solution_en": "$E[X]=(1+2+3+4+5+6)/6=3.5$. $E[X^2]=(1+4+9+16+25+36)/6=91/6$. Var$=(91/6)-(3.5)^2=35/12\\approx2.917$.",
           "solution_he": "$E[X]=3.5$. Var$(X)=35/12\\approx2.917$.",
           "points": 6
         },
@@ -116,7 +113,7 @@
           "difficulty": "easy",
           "body_en": "If $E[X]=3$ and Var$(X)=4$, find $E[2X-1]$ and Var$(2X-1)$.",
           "body_he": "אם $E[X]=3$ ו-Var$(X)=4$, מצא $E[2X-1]$ ו-Var$(2X-1)$.",
-          "solution_en": "**Solution:**\n\n$E[2X-1]=2(3)-1=5$. Var$(2X-1)=4\\cdot4=16$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_en": "$E[2X-1]=2(3)-1=5$. Var$(2X-1)=4\\cdot4=16$.",
           "solution_he": "$E[2X-1]=5$. Var$(2X-1)=16$.",
           "points": 6
         },
@@ -125,8 +122,8 @@
           "difficulty": "easy",
           "body_en": "An exponential r.v. $X$ with rate $\\lambda$ has PDF $f(x)=\\lambda e^{-\\lambda x}$ for $x\\geq0$. Verify $\\int_0^\\infty f(x)dx=1$.",
           "body_he": "משתנה אקספוננציאלי $X$ עם קצב $\\lambda$ בעל $f(x)=\\lambda e^{-\\lambda x}$ ל-$x\\geq0$. אמת $\\int_0^\\infty f=1$.",
-          "solution_en": "**Solution:**\n\n$\\int_0^\\infty\\lambda e^{-\\lambda x}dx=[-e^{-\\lambda x}]_0^\\infty=0-(-1)=1$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$[-e^{-\\lambda x}]_0^\\infty=1$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$\\int_0^\\infty\\lambda e^{-\\lambda x}dx=[-e^{-\\lambda x}]_0^\\infty=1$. ✓",
+          "solution_he": "$[-e^{-\\lambda x}]_0^\\infty=1$. ✓",
           "points": 6
         },
         {
@@ -134,8 +131,8 @@
           "difficulty": "medium",
           "body_en": "Let $X$ have PMF: $P(X=0)=0.3$, $P(X=1)=0.4$, $P(X=2)=0.2$, $P(X=3)=0.1$. Find $E[X]$, $E[X^2]$, Var$(X)$, $P(X\\geq1)$.",
           "body_he": "יהי $X$ עם PMF: $P(X=0)=0.3$, $P(X=1)=0.4$, $P(X=2)=0.2$, $P(X=3)=0.1$. מצא $E[X]$, $E[X^2]$, Var$(X)$, $P(X\\geq1)$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=0+0.4+0.4+0.3=1.1$. $E[X^2]=0+0.4+0.8+0.9=2.1$. Var$=2.1-1.21=0.89$. $P(X\\geq1)=0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X]=1.1$. Var$(X)=0.89$. $P(X\\geq1)=0.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$E[X]=1.1$. $E[X^2]=2.1$. Var$=0.89$. $P(X\\geq1)=0.7$.",
+          "solution_he": "$E[X]=1.1$. Var$(X)=0.89$. $P(X\\geq1)=0.7$.",
           "points": 8
         },
         {
@@ -143,8 +140,8 @@
           "difficulty": "medium",
           "body_en": "For $X\\sim\\text{Bin}(n,p)$, use the formula $E[X]=np$ and Var$(X)=np(1-p)$ to find the mean and variance of the number of 6's in 60 die rolls.",
           "body_he": "ל-$X\\sim\\text{Bin}(n,p)$, השתמש ב-$E[X]=np$ ו-Var$(X)=np(1-p)$ למציאת תוחלת ושונות מספר ה-6 ב-60 הטלות קובייה.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$n=60$, $p=1/6$. $E[X]=10$. Var$(X)=60\\cdot(1/6)\\cdot(5/6)=50/6\\approx8.33$. $\\sigma\\approx2.89$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X]=10$. Var$(X)=50/6\\approx8.33$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$n=60$, $p=1/6$. $E[X]=10$. Var$(X)=50/6\\approx8.33$.",
+          "solution_he": "$E[X]=10$. Var$(X)=50/6\\approx8.33$.",
           "points": 8
         },
         {
@@ -152,8 +149,8 @@
           "difficulty": "medium",
           "body_en": "Let $X\\sim\\text{Uniform}[0,1]$ with $f(x)=1$ on $[0,1]$. Compute $E[X]$ and Var$(X)$.",
           "body_he": "יהי $X\\sim\\text{Uniform}[0,1]$ עם $f(x)=1$ ב-$[0,1]$. חשב $E[X]$ ו-Var$(X)$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=\\int_0^1 x\\,dx=1/2$. $E[X^2]=\\int_0^1 x^2\\,dx=1/3$. Var$=1/3-1/4=1/12$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X]=1/2$. Var$(X)=1/3-1/4=1/12$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$E[X]=1/2$. $E[X^2]=1/3$. Var$=1/12$.",
+          "solution_he": "$E[X]=1/2$. Var$(X)=1/12$.",
           "points": 8
         },
         {
@@ -161,8 +158,8 @@
           "difficulty": "medium",
           "body_en": "Show that Var$(X)=0$ implies $X=c$ (constant) almost surely, using the fact that $E[(X-c)^2]=0$ implies $P(X=c)=1$.",
           "body_he": "הראה ש-Var$(X)=0$ גורר $X=c$ (קבוע) כמעט-בוודאות.",
-          "solution_en": "Var$(X)=E[(X-\\mu)^2]=0$. Since $(X-\\mu)^2\\geq0$ and its expectation is 0, we must have $P((X-\\mu)^2=0)=1$, i.e., $P(X=\\mu)=1$. $\\blacksquare$",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(X-\\mu)^2\\geq0$ ו-$E[(X-\\mu)^2]=0$ $\\Rightarrow$ $P(X=\\mu)=1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "Var$(X)=E[(X-\\mu)^2]=0$. Since $(X-\\mu)^2\\geq0$ and its expectation is 0, $P(X=\\mu)=1$. $\\blacksquare$",
+          "solution_he": "$(X-\\mu)^2\\geq0$ ו-$E[(X-\\mu)^2]=0$ $\\Rightarrow$ $P(X=\\mu)=1$. $\\blacksquare$",
           "points": 8
         },
         {
@@ -170,8 +167,8 @@
           "difficulty": "hard",
           "body_en": "Prove $E[aX+bY]=aE[X]+bE[Y]$ (linearity of expectation) for discrete r.v.'s.",
           "body_he": "הוכח $E[aX+bY]=aE[X]+bE[Y]$ (לינאריות התוחלת) עבור משתנים אקראיים בדידים.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$E[aX+bY]=\\sum_{x,y}(ax+by)P(X=x,Y=y)=a\\sum_{x,y}xP(X=x,Y=y)+b\\sum_{x,y}yP(X=x,Y=y)=a\\sum_x xP(X=x)+b\\sum_y yP(Y=y)=aE[X]+bE[Y]$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nפיתוח הסכום הכפול ופירוק נותן $aE[X]+bE[Y]$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$E[aX+bY]=\\sum_{x,y}(ax+by)P(X=x,Y=y)=aE[X]+bE[Y]$. $\\blacksquare$",
+          "solution_he": "פיתוח הסכום הכפול נותן $aE[X]+bE[Y]$. $\\blacksquare$",
           "points": 12
         },
         {
@@ -179,8 +176,8 @@
           "difficulty": "hard",
           "body_en": "Prove Var$(aX+b)=a^2$Var$(X)$.",
           "body_he": "הוכח Var$(aX+b)=a^2$Var$(X)$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$E[aX+b]=a\\mu+b$. Var$(aX+b)=E[(aX+b-(a\\mu+b))^2]=E[(aX-a\\mu)^2]=E[a^2(X-\\mu)^2]=a^2E[(X-\\mu)^2]=a^2$Var$(X)$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$E[(aX+b-a\\mu-b)^2]=a^2E[(X-\\mu)^2]=a^2$Var$(X)$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "Var$(aX+b)=E[(aX+b-a\\mu-b)^2]=a^2E[(X-\\mu)^2]=a^2$Var$(X)$. $\\blacksquare$",
+          "solution_he": "$E[(aX+b-a\\mu-b)^2]=a^2$Var$(X)$. $\\blacksquare$",
           "points": 12
         },
         {
@@ -188,8 +185,8 @@
           "difficulty": "hard",
           "body_en": "For independent $X,Y$, prove Var$(X+Y)=$Var$(X)+$Var$(Y)$.",
           "body_he": "עבור $X,Y$ בלתי-תלויים, הוכח Var$(X+Y)=$Var$(X)+$Var$(Y)$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nVar$(X+Y)=E[(X+Y)^2]-(E[X+Y])^2=E[X^2]+2E[XY]+E[Y^2]-(E[X])^2-2E[X]E[Y]-(E[Y])^2$. By independence $E[XY]=E[X]E[Y]$. So Var$(X+Y)=(E[X^2]-(E[X])^2)+(E[Y^2]-(E[Y])^2)=$Var$(X)+$Var$(Y)$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nבאי-תלות $E[XY]=E[X]E[Y]$. הפיתוח נותן Var$(X)+$Var$(Y)$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "Expand $E[(X+Y)^2]-(E[X+Y])^2$; independence gives $E[XY]=E[X]E[Y]$. $\\blacksquare$",
+          "solution_he": "באי-תלות $E[XY]=E[X]E[Y]$. הפיתוח נותן Var$(X)+$Var$(Y)$. $\\blacksquare$",
           "points": 12
         },
         {
@@ -197,8 +194,8 @@
           "difficulty": "hard",
           "body_en": "Let $X\\sim\\text{Poisson}(\\lambda)$ with $P(X=k)=e^{-\\lambda}\\lambda^k/k!$. Show $E[X]=\\lambda$ using the power series $\\sum_{k=0}^\\infty\\lambda^k/k!=e^\\lambda$.",
           "body_he": "יהי $X\\sim\\text{Poisson}(\\lambda)$ עם $P(X=k)=e^{-\\lambda}\\lambda^k/k!$. הראה $E[X]=\\lambda$ תוך שימוש בטור $\\sum_{k=0}^\\infty\\lambda^k/k!=e^\\lambda$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$E[X]=\\sum_{k=0}^\\infty k\\cdot e^{-\\lambda}\\lambda^k/k! = e^{-\\lambda}\\sum_{k=1}^\\infty\\lambda^k/(k-1)!=e^{-\\lambda}\\lambda\\sum_{j=0}^\\infty\\lambda^j/j!=e^{-\\lambda}\\lambda e^\\lambda=\\lambda$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\sum k e^{-\\lambda}\\lambda^k/k!=e^{-\\lambda}\\lambda\\sum\\lambda^j/j!=\\lambda$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$E[X]=e^{-\\lambda}\\lambda\\sum_{j=0}^\\infty\\lambda^j/j!=\\lambda$. $\\blacksquare$",
+          "solution_he": "$\\sum k e^{-\\lambda}\\lambda^k/k!=\\lambda$. $\\blacksquare$",
           "points": 12
         }
       ]
@@ -207,30 +204,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **$E[g(X)]\\neq g(E[X])$ in general (Jensen's inequality).** For example, $E[X^2]\\neq(E[X])^2$ — this difference IS the variance.\n\n2. **Variance is not linear.** $\\text{Var}(X+Y)\\neq\\text{Var}(X)+\\text{Var}(Y)$ unless $X$ and $Y$ are independent (or uncorrelated).\n\n3. **PDF is not a probability.** $f(x)$ can be greater than 1! Probability comes from the integral $\\int_a^b f$.\n\n4. **$P(X=x)=0$ for continuous r.v.** For continuous r.v.'s, the probability of any single point is 0. Use intervals.\n\n5. **Forgetting that $\\text{Var}(X+c)=\\text{Var}(X)$ but $\\text{Var}(cX)=c^2\\text{Var}(X)$.** Shifting doesn't change spread; scaling does.",
-      "body_he_md": "1. **$E[g(X)]\\neq g(E[X])$ בכלל.** $E[X^2]\\neq(E[X])^2$ — ההפרש הוא בדיוק השונות.\n\n2. **שונות אינה לינארית.** Var$(X+Y)\\neq$Var$(X)+$Var$(Y)$ אלא אם כן בלתי-תלויים.\n\n3. **PDF אינו הסתברות.** $f(x)>1$ אפשרי! הסתברות מגיעה מאינטגרל $\\int_a^b f$.\n\n4. **$P(X=x)=0$ למשתנה רציף.** הסתברות של נקודה בודדת = 0.\n\n5. **Var$(X+c)=$Var$(X)$ אבל Var$(cX)=c^2$Var$(X)$.** הזזה לא משנה פיזור; קנה-מידה משנה."
+      "body_en_md": "1. **$E[g(X)]\\neq g(E[X])$ in general (Jensen's inequality).** The classic example: $E[X^2]\\neq(E[X])^2$ unless $X$ is constant. The difference $E[X^2]-(E[X])^2$ **is** the variance — do not confuse \"expectation of a function\" with \"function of expectation.\"\n\n2. **Variance is not linear.** $\\text{Var}(X+Y)\\neq\\text{Var}(X)+\\text{Var}(Y)$ unless $X$ and $Y$ are independent (or at least uncorrelated). Exam traps add correlated variables and expect you to notice.\n\n3. **PDF values are not probabilities.** $f(x)$ can exceed 1 on a short interval! Only integrals over intervals yield probabilities. Students who write $P(X=3)=f(3)$ on continuous problems lose marks immediately.\n\n4. **$P(X=x)=0$ for continuous r.v.'s.** Always integrate over intervals. \"Exactly 5.000...\" has probability zero; \"between 4.9 and 5.1\" does not.\n\n5. **Affine confusion.** $\\text{Var}(X+c)=\\text{Var}(X)$ (shift does not change spread) but $\\text{Var}(cX)=c^2\\text{Var}(X)$. A common exam error: Var$(2X-1)=2\\cdot$Var$(X)$ instead of $4\\cdot$Var$(X)$.",
+      "body_he_md": "1. **$E[g(X)]\\neq g(E[X])$ בכלל (אי-שוויון ג'נסן).** דוגמה: $E[X^2]\\neq(E[X])^2$ אלא אם $X$ קבוע. ההפרש $E[X^2]-(E[X])^2$ **הוא** השונות — אל תבלבלו \"תוחלת של פונקציה\" עם \"פונקציה של תוחלת\".\n\n2. **שונות אינה לינארית.** $\\text{Var}(X+Y)\\neq\\text{Var}(X)+\\text{Var}(Y)$ אלא אם $X,Y$ בלתי-תלויים (או לא-מתואמים). מלכודות בחינה מוסיפות משתנים מתואמים.\n\n3. **ערכי PDF אינם הסתברויות.** $f(x)$ יכול לעלות על 1! רק אינטגרלים על קטעים נותנים הסתברות. $P(X=3)=f(3)$ ברציף — טעות מיידית.\n\n4. **$P(X=x)=0$ לרציף.** תמיד אינטגרל על קטעים. \"בדיוק 5.000...\" = 0; \"בין 4.9 ל-5.1\" — לא.\n\n5. **בלבול אפיני.** $\\text{Var}(X+c)=\\text{Var}(X)$ אך $\\text{Var}(cX)=c^2\\text{Var}(X)$. טעות: Var$(2X-1)=2\\cdot$Var$(X)$ במקום $4\\cdot$Var$(X)$."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "Random variables are the language of every downstream statistics topic on A Step Forward and in Israeli university curricula.\n\n**Sampling and inference:** Sample means $\\bar{X}$ and test statistics are themselves random variables. Understanding $E[X]$ and $\\text{Var}(X)$ is prerequisite for the Central Limit Theorem and confidence intervals.\n\n**Cross-subject links:** In physics, measured quantities with noise are modeled as r.v.'s; in computer science, queue waiting times use exponential r.v.'s; in economics, portfolio returns combine linear expectations.\n\n**Exam transfer:** Bagrut and first-year university exams rarely ask \"define a random variable\" in isolation. They embed r.v.'s inside word problems — die rolls, defect counts, waiting times — and reward students who identify PMF vs PDF, compute $E[X^2]$, and apply $\\text{Var}(aX+b)=a^2\\text{Var}(X)$ without hesitation.",
+      "body_he_md": "משתנים אקראיים הם שפת כל נושא הסטטיסטיקה שאחריהם ב-A Step Forward ובאוניברסיטה.\n\n**דגימה והסקה:** ממוצעי דגימה $\\bar{X}$ וסטטיסטיקות מבחן הם עצמם משתנים אקראיים. הבנת $E[X]$ ו-$\\text{Var}(X)$ תנאי למשפט הגבול המרכזי ורווחי סמך.\n\n**קשרים בין-מקצועיים:** בפיזיקה — מדידות עם רעש; במדעי המחשב — זמני המתנה מעריכיים; בכלכלה — תשואות בתוחלת לינארית.\n\n**העברה בבחינה:** בבגרות ובשנה א' לא שואלים \"הגדר משתנה אקראי\" בבידוד. מטמיעים בבעיות מילים — קובייה, פגמים, המתנה — ומעריכים זיהוי PMF מול PDF, חישוב $E[X^2]$, ו-$\\text{Var}(aX+b)=a^2\\text{Var}(X)$."
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Formula sheet:**\n- $E[X]=\\sum xp(x)$ or $\\int xf(x)dx$\n- $\\text{Var}(X)=E[X^2]-(E[X])^2$\n- $E[aX+b]=aE[X]+b$; Var$(aX+b)=a^2$Var$(X)$\n- Var$(X+Y)=$Var$(X)+$Var$(Y)$ (independent)\n- Bin$(n,p)$: $E=np$, Var$=np(1-p)$\n- Poisson$(\\lambda)$: $E=$Var$=\\lambda$\n- Uniform$[a,b]$: $E=(a+b)/2$, Var$=(b-a)^2/12$\n\n**What Israeli university exams emphasise:**\n- Computing $E[X]$ and Var$(X)$ from a PMF table.\n- Proving Var$(X)=E[X^2]-(E[X])^2$.\n- Applying linearity properties.\n- Working with standard distributions (Binomial, Poisson, Exponential, Normal).\n\n**Exam tip:** Always compute $E[X]$ first, then $E[X^2]$, then subtract. Never try to compute $E[(X-\\mu)^2]$ directly unless $\\mu$ is a nice integer.",
-      "body_he_md": "**גיליון נוסחאות:**\n- $E[X]=\\sum xp(x)$ או $\\int xf(x)dx$\n- Var$(X)=E[X^2]-(E[X])^2$\n- $E[aX+b]=aE[X]+b$; Var$(aX+b)=a^2$Var$(X)$\n- Bin: $E=np$, Var$=np(1-p)$\n- Poisson: $E=$Var$=\\lambda$\n\n**מה בחינות ישראליות מדגישות:**\n- חישוב $E[X]$ ו-Var$(X)$ מטבלת PMF.\n- הוכחת Var$(X)=E[X^2]-(E[X])^2$.\n- תכונות לינאריות.\n\n**טיפ:** תמיד חשב $E[X]$ קודם, אחר-כך $E[X^2]$, ואז חסר."
+      "body_en_md": "**Formula sheet essentials:**\n- $E[X]=\\sum xp(x)$ or $\\int xf(x)dx$\n- $\\text{Var}(X)=E[X^2]-(E[X])^2$\n- $E[aX+b]=aE[X]+b$; $\\text{Var}(aX+b)=a^2\\text{Var}(X)$\n- $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$ (independent only)\n- Bin$(n,p)$: $E=np$, $\\text{Var}=np(1-p)$\n- Poisson$(\\lambda)$: $E=\\text{Var}=\\lambda$\n- Uniform$[a,b]$: $E=(a+b)/2$, $\\text{Var}=(b-a)^2/12$\n\n**What Israeli university exams emphasise:**\n- Computing $E[X]$ and $\\text{Var}(X)$ from a PMF table (show all three steps).\n- Proving $\\text{Var}(X)=E[X^2]-(E[X])^2$ with explicit linearity steps.\n- Applying affine rules when only moments are given.\n- Distinguishing discrete sums from continuous integrals.\n\n**Exam tip:** Always compute $E[X]$ first, then $E[X^2]$, then subtract. Write LOTUS explicitly when squaring. Never compute $E[(X-\\mu)^2]$ directly unless $\\mu$ is a convenient integer.",
+      "body_he_md": "**נוסחאות חיוניות:**\n- $E[X]=\\sum xp(x)$ או $\\int xf(x)dx$\n- $\\text{Var}(X)=E[X^2]-(E[X])^2$\n- $E[aX+b]=aE[X]+b$; $\\text{Var}(aX+b)=a^2\\text{Var}(X)$\n- $\\text{Var}(X+Y)=\\text{Var}(X)+\\text{Var}(Y)$ (רק בלתי-תלויים)\n- Bin: $E=np$, $\\text{Var}=np(1-p)$\n- Poisson: $E=\\text{Var}=\\lambda$\n- Uniform$[a,b]$: $E=(a+b)/2$, $\\text{Var}=(b-a)^2/12$\n\n**מה בחינות ישראליות מדגישות:**\n- חישוב $E[X]$ ו-$\\text{Var}(X)$ מטבלת PMF (שלושה שלבים).\n- הוכחת $\\text{Var}(X)=E[X^2]-(E[X])^2$ עם לינאריות מפורשת.\n- כללי אפיני כשנותנים רק רגעים.\n- הבחנה בין סכומים בדידים לאינטגרלים רציפים.\n\n**טיפ:** תמיד $E[X]$, אחר-כך $E[X^2]$, ואז חיסור. כתבו LOTUS במפורש. אל תחשבו $E[(X-\\mu)^2]$ ישירות אלא אם $\\mu$ שלם נוח."
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- A **random variable** maps outcomes to numbers; described by PMF (discrete) or PDF (continuous).\n- **Expectation:** $E[X]=\\sum xp(x)$ — the probability-weighted average.\n- **Variance:** $\\text{Var}(X)=E[X^2]-(E[X])^2$ — measures spread.\n- **Key properties:** $E[aX+b]=aE[X]+b$; Var$(aX+b)=a^2$Var$(X)$; Var$(X+Y)=$Var$(X)+$Var$(Y)$ for independent.\n- **$E[g(X)]\\neq g(E[X])$** in general (Jensen's inequality).",
-      "body_he_md": "- **משתנה אקראי** ממפה תוצאות למספרים; מתואר ע\"י PMF (בדיד) או PDF (רציף).\n- **תוחלת:** $E[X]=\\sum xp(x)$ — ממוצע משוקלל בהסתברות.\n- **שונות:** $\\text{Var}(X)=E[X^2]-(E[X])^2$ — מודד פיזור.\n- **תכונות:** לינאריות תוחלת; שונות מושפעת ממשפחת קנה-מידה אך לא הזזה.\n- **$E[g(X)]\\neq g(E[X])$** בכלל."
+      "body_en_md": "- A **random variable** maps outcomes to numbers; fully described by PMF (discrete) or PDF (continuous) plus CDF $F(x)=P(X\\leq x)$.\n- **Expectation** $E[X]$ is the probability-weighted average; **variance** $\\text{Var}(X)=E[X^2]-(E[X])^2$ measures spread around that average.\n- **LOTUS:** $E[g(X)]=\\sum g(x)p(x)$ or $\\int g(x)f(x)\\,dx$ — compute transformed expectations without finding a new distribution.\n- **Linearity:** $E[aX+b]=aE[X]+b$ always. **Variance scaling:** $\\text{Var}(aX+b)=a^2\\text{Var}(X)$; sums add variances only when independent.\n- **Pitfall reminder:** $E[g(X)]\\neq g(E[X])$ in general; PDF values are not probabilities; $P(X=x)=0$ for continuous $X$.",
+      "body_he_md": "- **משתנה אקראי** ממפה תוצאות למספרים; מתואר ע\"י PMF (בדיד) או PDF (רציף) ו-CDF $F(x)=P(X\\leq x)$.\n- **תוחלת** $E[X]$ — ממוצע משוקלל; **שונות** $\\text{Var}(X)=E[X^2]-(E[X])^2$ — פיזור סביב הממוצע.\n- **LOTUS:** $E[g(X)]=\\sum g(x)p(x)$ או $\\int g(x)f(x)\\,dx$ — בלי למצוא התפלגות חדשה.\n- **לינאריות:** $E[aX+b]=aE[X]+b$ תמיד. **קנה-מידה:** $\\text{Var}(aX+b)=a^2\\text{Var}(X)$; סכום שונויות רק בלתי-תלויים.\n- **זכרו:** $E[g(X)]\\neq g(E[X])$; PDF אינו הסתברות; $P(X=x)=0$ לרציף.\n- **לפני בחינה:** תרגלו טבלת PMF מלאה — $E[X]$, $E[X^2]$, $\\text{Var}(X)$, וזנב — בשלוש דקות."
     }
   ],
   "agent_hints": {},
@@ -249,8 +246,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$E[X]=(1+2+3+4+5+6)/6=3.5$. $E[X^2]=(1+4+9+16+25+36)/6=91/6$. Var$=(91/6)-(3.5)^2=91/6-49/4=(182-147)/12=35/12\\approx2.917$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$E[X]=3.5$. Var$(X)=35/12\\approx2.917$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nFor a fair die, each outcome $1,\\ldots,6$ has probability $1/6$. By symmetry, $E[X]=(1+2+3+4+5+6)/6=3.5$. For variance, first compute $E[X^2]=(1+4+9+16+25+36)/6=91/6$, then $\\text{Var}(X)=E[X^2]-(E[X])^2=91/6-(3.5)^2=35/12\\approx2.917$.\n\n**How to think about it:**\nA uniform discrete PMF on six equally likely values. Use LOTUS for $E[X^2]$ — square each outcome before averaging. Do not use $\\text{Var}=E[X^2]-E[X]$ (missing the square on the second term).\n\n**Common slip:**\nComputing $E[X]=3.5$ correctly but forgetting to square outcomes for $E[X^2]$. Using population formula on the wrong support.\n\n**Exam tip:**\nFair die problems appear in every Israeli probability course. Memorize $E[X]=3.5$ and $\\text{Var}(X)=35/12$ as sanity-check values when verifying harder calculations.",
+      "explanation_he": "**למה זה נכון:**\nלקובייה הוגנת, כל תוצאה $1,\\ldots,6$ בהסתברות $1/6$. מסימטריה: $E[X]=(1+2+3+4+5+6)/6=3.5$. לשונות: $E[X^2]=(1+4+9+16+25+36)/6=91/6$, ואז $\\text{Var}(X)=91/6-(3.5)^2=35/12\\approx2.917$.\n\n**איך לחשוב על זה:**\nPMF בדיד אחיד על שש ערכים שווי-סיכוי. LOTUS ל-$E[X^2]$ — ריבוע כל תוצאה לפני ממוצע משוקלל. אל תכתבו $\\text{Var}=E[X^2]-E[X]$ (חסר ריבוע במונח השני).\n\n**טעות נפוצה:**\n$E[X]=3.5$ נכון אך שכחת ריבוע ל-$E[X^2]$. שימוש בנוסחה על תמיכה שגויה או חישוב $(3.5)^2$ במקום $(E[X])^2$.\n\n**טיפ לבחינה:**\nבעיות קובייה בכל קורס הסתברות בישראל. $E[X]=3.5$ ו-$\\text{Var}(X)=35/12$ — ערכי בדיקה לחישובים מורכבים. הציגו טבלה עם עמודות $x$, $p(x)$, $x^2p(x)$ לניקוד חלקי.",
       "skill_atoms": []
     },
     {
@@ -267,8 +264,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$E[X]=(-1)(1/2)+(1)(1/2)=0$. $E[X^2]=1$. Var$=1-0=1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$E[X]=0$. Var$(X)=1$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\n$E[X]=(-1)(1/2)+(1)(1/2)=0$ — the positive and negative values cancel. For $E[X^2]$: $(-1)^2(1/2)+1^2(1/2)=1/2+1/2=1$. Variance: $\\text{Var}(X)=E[X^2]-(E[X])^2=1-0=1$.\n\n**How to think about it:**\nSymmetric PMF around zero gives $E[X]=0$ immediately — check sign before calculating. $E[X^2]$ is always non-negative and here equals 1 because $|X|=1$ always.\n\n**Common slip:**\nConfusing $E[X^2]$ with $(E[X])^2$. Setting $\\text{Var}(X)=E[X^2]$ when $E[X]\\neq0$ (here $E[X]=0$ so the error is hidden — a dangerous coincidence).\n\n**Exam tip:**\nWhen $E[X]=0$, variance equals $E[X^2]$. State this shortcut only after verifying the mean is exactly zero; otherwise always subtract $(E[X])^2$.",
+      "explanation_he": "**למה זה נכון:**\n$E[X]=(-1)(1/2)+(1)(1/2)=0$ — ערכים חיוביים ושליליים מתקזזים. ל-$E[X^2]$: $(-1)^2(1/2)+1^2(1/2)=1/2+1/2=1$. שונות: $\\text{Var}(X)=E[X^2]-(E[X])^2=1-0=1$.\n\n**איך לחשוב על זה:**\nPMF סימטרי סביב אפס → $E[X]=0$ מיד, בלי חישוב ארוך. $E[X^2]$ תמיד לא-שלילי; כאן 1 כי $|X|=1$ תמיד — אין ערכים ביניים.\n\n**טעות נפוצה:**\nבלבול $E[X^2]$ עם $(E[X])^2$. $\\text{Var}(X)=E[X^2]$ כש-$E[X]\\neq0$ — כאן $E[X]=0$ והטעות מוסתרת, מה שמסוכן בבחינה.\n\n**טיפ לבחינה:**\nכש-$E[X]=0$, שונות = $E[X^2]$ — קיצור רק אחרי אימות שהממוצע בדיוק אפס. אחרת חסרו $(E[X])^2$ תמיד. בדקו סימטריה לפני חישוב.",
       "skill_atoms": []
     },
     {
@@ -279,14 +276,14 @@
       "stem_he": "אם $E[X]=3$ ו-Var$(X)=4$, מצא $E[2X-1]$ ו-Var$(2X-1)$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$E[2X-1]=2(3)-1=5$. Var$(2X-1)=4\\cdot4=16$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "16$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$E[2X-1]=2(3)-1=5$. Var$(2X-1)=4\\cdot4=16$",
+          "16$",
           "16"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$E[2X-1]=2(3)-1=5$. Var$(2X-1)=4\\cdot4=16$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$E[2X-1]=5$. Var$(2X-1)=16$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nBy linearity of expectation: $E[2X-1]=2E[X]-1=2(3)-1=5$. For variance: $\\text{Var}(2X-1)=2^2\\text{Var}(X)=4\\cdot4=16$. The constant $-1$ shifts but does not change spread.\n\n**How to think about it:**\nTwo separate rules — expectation is linear (coefficients and constants handled separately); variance scales by the square of the coefficient and ignores additive constants. Never apply linearity to variance.\n\n**Common slip:**\nWriting $\\text{Var}(2X-1)=2\\text{Var}(X)-1=7$ (treating variance like expectation). Forgetting to square the coefficient: $\\text{Var}(2X)=2\\cdot4=8$ instead of $16$.\n\n**Exam tip:**\nIsraeli exams love \"given $E[X]$ and $\\text{Var}(X)$, find moments of $aX+b$\" items. Write the two formulas on separate lines — $E[aX+b]=aE[X]+b$ and $\\text{Var}(aX+b)=a^2\\text{Var}(X)$ — before substituting.",
+      "explanation_he": "**למה זה נכון:**\nלינאריות תוחלת: $E[2X-1]=2E[X]-1=2(3)-1=5$. שונות: $\\text{Var}(2X-1)=2^2\\text{Var}(X)=4\\cdot4=16$. הקבוע $-1$ מזיז את כל הערכים אך לא משנה את הפיזור סביב הממוצע.\n\n**איך לחשוב על זה:**\nשני כללים נפרדים — תוחלת לינארית (מקדמים וקבועים בנפרד); שונות בריבוע המקדם בלבד, קבועים נעלמים. אל תיישמו לינאריות על שונות — זו מלכודת בחינה נפוצה.\n\n**טעות נפוצה:**\n$\\text{Var}(2X-1)=2\\text{Var}(X)-1=7$ (מטפלים בשונות כמו בתוחלת). שכחת ריבוע: $\\text{Var}(2X)=8$ במקום 16.\n\n**טיפ לבחינה:**\nשאלות \"נתון $E[X]$ ו-$\\text{Var}(X)$, מצא $aX+b$\" נפוצות בבגרות ואוניברסיטה. כתבו שני שורות: $E[aX+b]=aE[X]+b$ ו-$\\text{Var}(aX+b)=a^2\\text{Var}(X)$ — ואז הצבה.",
       "skill_atoms": []
     },
     {
@@ -297,14 +294,14 @@
       "stem_he": "משתנה אקספוננציאלי $X$ עם קצב $\\lambda$ בעל $f(x)=\\lambda e^{-\\lambda x}$ ל-$x\\geq0$. אמת $\\int_0^\\infty f=1$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$\\int_0^\\infty\\lambda e^{-\\lambda x}dx=[-e^{-\\lambda x}]_0^\\infty=0-(-1)=1$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$\\int_0^\\infty\\lambda e^{-\\lambda x}dx=[-e^{-\\lambda x}]_0^\\infty=0-(-1)=1$. ✓",
+          "1$. ✓",
           "1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\int_0^\\infty\\lambda e^{-\\lambda x}dx=[-e^{-\\lambda x}]_0^\\infty=0-(-1)=1$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$[-e^{-\\lambda x}]_0^\\infty=1$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$$\\int_0^\\infty \\lambda e^{-\\lambda x}\\,dx = \\big[-e^{-\\lambda x}\\big]_0^\\infty = 0 - (-1) = 1.$$\nThe antiderivative of $\\lambda e^{-\\lambda x}$ is $-e^{-\\lambda x}$. At $x=0$ we get $-1$; at $\\infty$ the exponential vanishes.\n\n**How to think about it:**\nEvery valid PDF must integrate to 1 over its support. This is the normalization check before computing $E[X]=1/\\lambda$ or any probability. The exponential family is defined precisely so this integral equals 1.\n\n**Common slip:**\nForgetting the $\\lambda$ factor and getting $1/\\lambda$ instead of 1. Evaluating $[-e^{-\\lambda x}]_0^\\infty$ with wrong sign at $x=0$.\n\n**Exam tip:**\nWhen a problem gives $f(x)=ce^{-x}$ on $[0,\\infty)$, first find $c$ by setting the integral to 1, then proceed. Israeli calculus-probability crossover items always start with normalization.",
+      "explanation_he": "**למה זה נכון:**\n$$\\int_0^\\infty \\lambda e^{-\\lambda x}\\,dx = \\big[-e^{-\\lambda x}\\big]_0^\\infty = 0-(-1)=1.$$\nנגזרת של $\\lambda e^{-\\lambda x}$ היא $-e^{-\\lambda x}$. ב-$x=0$ מקבלים $-1$; ב-$\\infty$ האקספוננט נעלם ל-0.\n\n**איך לחשוב על זה:**\nכל PDF תקף חייב להתאינטגרל ל-1 על התמיכה — זו בדיקת נרמול לפני $E[X]=1/\\lambda$ או כל הסתברות. משפחת המעריכית מוגדרת כך שהאינטגרל שווה 1.\n\n**טעות נפוצה:**\nשכחת $\\lambda$ → $1/\\lambda$ במקום 1. סימן שגוי ב-$[-e^{-\\lambda x}]_0^\\infty$ — טעות נפוצה בחיבור חדו\"א-הסתברות.\n\n**טיפ לבחינה:**\nכשנותנים $f(x)=ce^{-x}$ על $[0,\\infty)$ — קודם מצאו $c$ מאינטגרל = 1, ואז המשיכו. פריטי חדו\"א-הסתברות בישראל מתחילים תמיד בנרמול.",
       "skill_atoms": []
     },
     {
@@ -315,14 +312,14 @@
       "stem_he": "יהי $X$ עם PMF: $P(X=0)=0.3$, $P(X=1)=0.4$, $P(X=2)=0.2$, $P(X=3)=0.1$. מצא $E[X]$, $E[X^2]$, Var$(X)$, $P(X\\geq1)$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=0+0.4+0.4+0.3=1.1$. $E[X^2]=0+0.4+0.8+0.9=2.1$. Var$=2.1-1.21=0.89$. $P(X\\geq1)=0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$E[X]=0+0.4+0.4+0.3=1.1$. $E[X^2]=0+0.4+0.8+0.9=2.1$. Var$=2.1-1.21=0.89$. $P(X\\geq1)=0.7$.",
+          "0.7$",
           "0.7"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=0+0.4+0.4+0.3=1.1$. $E[X^2]=0+0.4+0.8+0.9=2.1$. Var$=2.1-1.21=0.89$. $P(X\\geq1)=0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X]=1.1$. Var$(X)=0.89$. $P(X\\geq1)=0.7$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "explanation_en": "**Why this is correct:**\n$E[X]=0(0.3)+1(0.4)+2(0.2)+3(0.1)=1.1$. For $E[X^2]$: square each value first: $0+1(0.4)+4(0.2)+9(0.1)=2.1$. Variance: $2.1-(1.1)^2=2.1-1.21=0.89$. Tail: $P(X\\geq1)=0.4+0.2+0.1=0.7$ (or complement $1-0.3=0.7$).\n\n**How to think about it:**\nClassic four-part PMF table exam item. Follow the fixed workflow: mean, second moment, subtract, then probability by summing masses. Verify $0.3+0.4+0.2+0.1=1$ first.\n\n**Common slip:**\nUsing $E[X^2]=(E[X])^2=1.21$ instead of computing 2.1. Forgetting $P(X=0)$ when computing $P(X\\geq1)$ but including it in the sum.\n\n**Exam tip:**\nShow all three columns ($x$, $p(x)$, $xp(x)$, $x^2p(x)$) in a table on your exam paper — Israeli graders award partial credit for correct setup even if arithmetic slips.",
+      "explanation_he": "**למה זה נכון:**\n$E[X]=0(0.3)+1(0.4)+2(0.2)+3(0.1)=1.1$. ל-$E[X^2]$: ריבוע כל $x$ קודם: $0+0.4+0.8+0.9=2.1$. שונות: $2.1-(1.1)^2=2.1-1.21=0.89$. זנב: $P(X\\geq1)=0.4+0.2+0.1=0.7$ (משלים $1-0.3$).\n\n**איך לחשוב על זה:**\nפריט בחינה קלאסי בן ארבעה חלקים. תמיד: ממוצע, רגע שני, חיסור, הסתברות בסכום מסות. אימות $0.3+0.4+0.2+0.1=1$ קודם — בלי זה כל החישוב שגוי.\n\n**טעות נפוצה:**\n$E[X^2]=(E[X])^2=1.21$ במקום 2.1 — בלבול תוחלת ריבוע עם ריבוע תוחלת. שכחת $P(X=0)$ ב-$P(X\\geq1)$.\n\n**טיפ לבחינה:**\nהציגו טבלה ($x$, $p(x)$, $xp(x)$, $x^2p(x)$) — ניקוד חלקי על הכנה נכונה גם עם טעות חישוב. בחינות ישראליות מעריכות שלושה שלבים מפורשים.",
       "skill_atoms": []
     },
     {
@@ -333,14 +330,14 @@
       "stem_he": "ל-$X\\sim\\text{Bin}(n,p)$, השתמש ב-$E[X]=np$ ו-Var$(X)=np(1-p)$ למציאת תוחלת ושונות מספר ה-6 ב-60 הטלות קובייה.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$n=60$, $p=1/6$. $E[X]=10$. Var$(X)=60\\cdot(1/6)\\cdot(5/6)=50/6\\approx8.33$. $\\sigma\\approx2.89$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "50/6\\approx8.33$. $\\sigma\\approx2.89$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2.89"
+          "$n=60$, $p=1/6$. $E[X]=10$. Var$(X)=60\\cdot(1/6)\\cdot(5/6)=50/6\\approx8.33$. $\\sigma\\approx2.89$.",
+          "50/6\\approx8.33$",
+          "8.33"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$n=60$, $p=1/6$. $E[X]=10$. Var$(X)=60\\cdot(1/6)\\cdot(5/6)=50/6\\approx8.33$. $\\sigma\\approx2.89$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X]=10$. Var$(X)=50/6\\approx8.33$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "explanation_en": "**Why this is correct:**\nCounting sixes in 60 independent fair die rolls: $X\\sim B(60,1/6)$. Mean $E[X]=np=60\\times(1/6)=10$. Variance $\\text{Var}(X)=np(1-p)=60\\times(1/6)\\times(5/6)=50/6\\approx8.33$. Standard deviation $\\sigma=\\sqrt{50/6}\\approx2.89$.\n\n**How to think about it:**\nRecognise binomial structure: fixed $n$ trials, two outcomes (six vs not-six), constant $p$, independence. Once identified, use closed-form formulas instead of building a 61-row PMF.\n\n**Common slip:**\nUsing $p=1/6$ for \"not six\" instead of for six. Computing $E[X]=60/6=10$ correctly but $\\text{Var}(X)=10$ (confusing mean with variance). Forgetting the $(1-p)$ factor.\n\n**Exam tip:**\nState $X\\sim B(n,p)$ with $n=60$, $p=1/6$ explicitly for partial credit. Word problems hide the binomial in \"number of successes in $n$ attempts\" — count trials and identify success probability first.",
+      "explanation_he": "**למה זה נכון:**\nספירת שישיות ב-60 הטלות: $X\\sim B(60,1/6)$. $E[X]=np=60\\times(1/6)=10$. $\\text{Var}(X)=np(1-p)=60\\times(1/6)\\times(5/6)=50/6\\approx8.33$. $\\sigma=\\sqrt{50/6}\\approx2.89$.\n\n**איך לחשוב על זה:**\nמבנה בינומי: $n$ ניסויים קבוע, שני תוצאות (שיש/לא-שיש), $p$ קבוע, בלתי-תלות. אחרי זיהוי — נוסחאות סגורות, לא PMF של 61 שורות.\n\n**טעות נפוצה:**\n$p=1/6$ ל\"לא שיש\" במקום לשיש. $\\text{Var}(X)=10$ (בלבול ממוצע ושונות). שכחת $(1-p)=5/6$ בנוסחת השונות.\n\n**טיפ לבחינה:**\nכתבו $X\\sim B(n,p)$ עם $n=60$, $p=1/6$ לניקוד חלקי. הבינומית מוסתרת ב\"מספר הצלחות ב-$n$ ניסויים\" — ספרו ניסויים וזהו $p$ מההקשר.",
       "skill_atoms": []
     },
     {
@@ -351,14 +348,14 @@
       "stem_he": "יהי $X\\sim\\text{Uniform}[0,1]$ עם $f(x)=1$ ב-$[0,1]$. חשב $E[X]$ ו-Var$(X)$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=\\int_0^1 x\\,dx=1/2$. $E[X^2]=\\int_0^1 x^2\\,dx=1/3$. Var$=1/3-1/4=1/12$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/12$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$E[X]=\\int_0^1 x\\,dx=1/2$. $E[X^2]=\\int_0^1 x^2\\,dx=1/3$. Var$=1/3-1/4=1/12$.",
+          "1/12$",
           "12"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E[X]=\\int_0^1 x\\,dx=1/2$. $E[X^2]=\\int_0^1 x^2\\,dx=1/3$. Var$=1/3-1/4=1/12$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$E[X]=1/2$. Var$(X)=1/3-1/4=1/12$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$E[X]=\\int_0^1 x\\cdot1\\,dx=[x^2/2]_0^1=1/2$. For $E[X^2]$: $\\int_0^1 x^2\\,dx=[x^3/3]_0^1=1/3$. Variance: $\\text{Var}(X)=1/3-(1/2)^2=1/3-1/4=1/12$.\n\n**How to think about it:**\nContinuous uniform on $[0,1]$: flat PDF equals 1 on the unit interval. Expectation is the integral of $x$; second moment integrates $x^2$. Alternatively, use known formulas $E=(a+b)/2$ and $\\text{Var}=(b-a)^2/12$ with $a=0,b=1$.\n\n**Common slip:**\nComputing $E[X]=1/2$ but $\\text{Var}(X)=1/2$ (forgetting to subtract $(E[X])^2$). Integrating $x$ instead of $x^2$ for the second moment.\n\n**Exam tip:**\nUniform$[0,1]$ gives $\\text{Var}=1/12\\approx0.083$ — a small spread. If your variance exceeds 1/4 on this support, recheck the subtraction step.",
+      "explanation_he": "**למה זה נכון:**\n$E[X]=\\int_0^1 x\\,dx=[x^2/2]_0^1=1/2$. $E[X^2]=\\int_0^1 x^2\\,dx=[x^3/3]_0^1=1/3$. $\\text{Var}(X)=1/3-(1/2)^2=1/3-1/4=1/12$.\n\n**איך לחשוב על זה:**\nאחיד רציף על $[0,1]$: PDF שטוח = 1. תוחלת = אינטגרל $x$; רגע שני = אינטגרל $x^2$. לחלופין: $E=(a+b)/2=1/2$, $\\text{Var}=(b-a)^2/12=1/12$ עם $a=0,b=1$.\n\n**טעות נפוצה:**\n$E[X]=1/2$ נכון אך $\\text{Var}(X)=1/2$ (שכחת חיסור $(E[X])^2$). אינטגרל $x$ במקום $x^2$ לרגע שני — טעות נפוצה ברציף.\n\n**טיפ לבחינה:**\nUniform$[0,1]$ → $\\text{Var}=1/12\\approx0.083$. אם השונות עולה על $1/4$ — בדקו את שלב החיסור. בחינות ישראליות מערבבות בדיד ורציף — זהו סוג המשתנה לפני הנוסחה.",
       "skill_atoms": []
     },
     {
@@ -375,8 +372,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nVar$(X)=E[(X-\\mu)^2]=0$. Since $(X-\\mu)^2\\geq0$ and its expectation is 0, we must have $P((X-\\mu)^2=0)=1$, i.e., $P(X=\\mu)=1$. $\\blacksquare$\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(X-\\mu)^2\\geq0$ ו-$E[(X-\\mu)^2]=0$ $\\Rightarrow$ $P(X=\\mu)=1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nLet $\\mu=E[X]$. Then $\\text{Var}(X)=E[(X-\\mu)^2]=0$. The integrand $(X-\\mu)^2\\geq0$ everywhere, yet its expectation is zero. The only way a non-negative random quantity has zero mean is if it equals zero with probability 1: $P(X=\\mu)=1$. So $X$ is constant a.s.\n\n**How to think about it:**\nVariance measures spread. Zero spread means no deviation from the mean is possible. This is a proof by non-negativity — no independence or distribution name needed.\n\n**Common slip:**\nStopping at $\\text{Var}(X)=0$ without concluding $P(X=\\mu)=1$. Confusing \"expected squared deviation is zero\" with \"deviation is always zero\" without citing non-negativity.\n\n**Exam tip:**\nThis one-line proof appears in Israeli probability finals as a \"show that\" question. Write the chain: define $\\mu$, expand variance, invoke non-negativity, conclude $P(X=\\mu)=1$.",
+      "explanation_he": "**למה זה נכון:**\nיהי $\\mu=E[X]$. אז $\\text{Var}(X)=E[(X-\\mu)^2]=0$. $(X-\\mu)^2\\geq0$ בכל מקום, ועדיין התוחלת אפס. הדרך היחידה: $(X-\\mu)^2=0$ בהסתברות 1, כלומר $P(X=\\mu)=1$. $X$ קבוע כמעט-בוודאות.\n\n**איך לחשוב על זה:**\nשונות = פיזור. שונות אפס = אין סטייה מהממוצע. הוכחה באי-שליליות — בלי אי-תלות או שם התפלגות.\n\n**טעות נפוצה:**\nעצירה ב-$\\text{Var}(X)=0$ בלי $P(X=\\mu)=1$. בלבול \"תוחלת ריבוע סטייה = 0\" עם \"סטייה תמיד 0\" בלי אי-שליליות.\n\n**טיפ לבחינה:**\nהוכחה קצרה בבחינות גמר. שרשרת: הגדר $\\mu$, פתח שונות, אי-שליליות, מסקנה $P(X=\\mu)=1$.",
       "skill_atoms": []
     }
   ],

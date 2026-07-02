@@ -14,22 +14,22 @@
       "kind": "intro",
       "title_en": "Comparing More Than Two Groups",
       "title_he": "השוואה בין יותר משתי קבוצות",
-      "body_en_md": "A researcher wants to compare the effectiveness of three teaching methods. Can she simply run multiple t-tests? **No** — running many t-tests inflates the Type I error rate (false positives). Instead, she uses **One-Way ANOVA (Analysis of Variance)**, which tests whether all group means are equal in a single test.\n\nANOVA asks: is the variation **between groups** (explained by the grouping variable) large compared to the variation **within groups** (random noise)? If yes, at least one group mean differs significantly.",
-      "body_he_md": "חוקרת רוצה להשוות יעילות שלוש שיטות הוראה. האם היא יכולה פשוט לבצע מבחני t מרובים? **לא** — בדיקות t רבות מנפחות את שגיאת סוג I. במקום זאת, היא משתמשת ב-**ANOVA חד-כיווני (ניתוח שונות)**, שבודק אם כל הממוצעים של הקבוצות שווים במבחן אחד.\n\nANOVA שואל: האם השונות **בין הקבוצות** (מוסברת על ידי משתנה הקיבוץ) גדולה בהשוואה לשונות **בתוך הקבוצות** (רעש אקראי)? אם כן, לפחות ממוצע קבוצה אחת שונה מהאחרות."
+      "body_en_md": "A researcher wants to compare the effectiveness of three teaching methods on exam scores. Can she simply run three separate two-sample t-tests? **No** — running many pairwise t-tests inflates the **family-wise Type I error rate** (false positives). With three groups there are three comparisons; each at $\\alpha=0.05$ gives an overall error near 14%, not 5%.\n\nInstead, she uses **One-Way ANOVA (Analysis of Variance)**, which tests whether all $k$ group means are equal in a **single** omnibus test. ANOVA partitions total variability into **between-group** variation (explained by the grouping factor) and **within-group** variation (random noise around each group mean). The F-statistic compares these two sources.\n\nThis lesson builds on `concept:hypothesis_testing` and complements `concept:chi_square_tests`: ANOVA handles **continuous outcomes** across $k \\geq 2$ groups, while chi-square handles categorical counts. After a significant ANOVA, post-hoc tests identify which specific pairs differ.",
+      "body_he_md": "חוקרת רוצה להשוות יעילות שלוש שיטות הוראה על ציוני מבחן. האם היא יכולה להריץ שלושה מבחני t לזוגות נפרדים? **לא** — מבחני t מרובים מנפחים את **שגיאת סוג I המשפחתית** (חיוביים שגויים). לשלוש קבוצות יש שלוש השוואות; כל אחת ב-$\\alpha=0.05$ נותנת שגיאה כוללת של כ-14%, לא 5%.\n\nבמקום זאת, היא משתמשת ב-**ANOVA חד-כיווני (ניתוח שונות)**, שבודק אם כל $k$ ממוצעי הקבוצות שווים ב**מבחן אחד** אומניבוס. ANOVA מפרק את השונות הכוללת ל**שונות בין-קבוצתית** (מוסברת על ידי גורם הקיבוץ) ו**שונות תוך-קבוצתית** (רעש אקראי סביב ממוצע כל קבוצה). סטטיסטיקת F משווה בין שני מקורות אלה.\n\nהשיעור נשען על `concept:hypothesis_testing` ומשלים את `concept:chi_square_tests`: ANOVA מטפל ב**תוצאות רציפות** על פני $k \\geq 2$ קבוצות, בעוד כי-בריבוע מטפל בספירות קטגוריות. לאחר ANOVA מובהק, מבחני post-hoc מזהים אילו זוגות ספציפיים שונים."
     },
     {
       "kind": "definition",
       "title_en": "ANOVA Definitions and Formulas",
       "title_he": "הגדרות ונוסחאות ANOVA",
-      "body_en_md": "**Setting:** $k$ groups, group $i$ has $n_i$ observations, total $N = \\sum n_i$. Grand mean: $\\bar{x}_{..} = \\dfrac{\\sum_{i,j} x_{ij}}{N}$.\n\n**SS Between (SSB):** Variation explained by groups.\n$$\\text{SSB} = \\sum_{i=1}^k n_i(\\bar{x}_i - \\bar{x}_{..})^2$$\n\n**SS Within (SSW):** Variation within groups (residual/error).\n$$\\text{SSW} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_i)^2$$\n\n**Degrees of freedom:** $df_B = k-1$, $df_W = N-k$.\n\n**Mean squares:**\n$$\\text{MSB} = \\frac{\\text{SSB}}{k-1}, \\qquad \\text{MSW} = \\frac{\\text{SSW}}{N-k}$$\n\n**F-statistic:**\n$$F = \\frac{\\text{MSB}}{\\text{MSW}}$$\n\n**Hypotheses:** $H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$ (all means equal) vs. $H_1$: at least two means differ.\n\n**Decision:** Reject $H_0$ if $F > F_{\\alpha, k-1, N-k}$ (critical value from F-distribution table).",
-      "body_he_md": "**הגדרה:** $k$ קבוצות, קבוצה $i$ בגודל $n_i$, סה\"כ $N = \\sum n_i$. ממוצע כולל: $\\bar{x}_{..} = \\dfrac{\\sum x_{ij}}{N}$.\n\n**SSB — שונות בין-קבוצתית:**\n$$\\text{SSB} = \\sum_{i=1}^k n_i(\\bar{x}_i - \\bar{x}_{..})^2$$\n\n**SSW — שונות תוך-קבוצתית:**\n$$\\text{SSW} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_i)^2$$\n\n**דרגות חופש:** $df_B = k-1$, $df_W = N-k$.\n\n**ממוצעי ריבועים:**\n$$\\text{MSB} = \\frac{\\text{SSB}}{k-1}, \\qquad \\text{MSW} = \\frac{\\text{SSW}}{N-k}$$\n\n**סטטיסטיקת F:**\n$$F = \\frac{\\text{MSB}}{\\text{MSW}}$$\n\n**השערות:** $H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$ (כל הממוצעים שווים) vs. $H_1$: לפחות שני ממוצעים שונים.\n\n**החלטה:** דחה $H_0$ אם $F > F_{\\alpha, k-1, N-k}$."
+      "body_en_md": "**Setting:** $k$ groups, group $i$ has $n_i$ observations, total $N = \\sum_{i=1}^k n_i$. Grand mean: $\\bar{x}_{..} = \\dfrac{\\sum_{i,j} x_{ij}}{N}$. Group mean: $\\bar{x}_i = \\dfrac{1}{n_i}\\sum_j x_{ij}$.\n\n**SS Between (SSB):** Variation explained by group membership.\n$$\\text{SSB} = \\sum_{i=1}^k n_i(\\bar{x}_i - \\bar{x}_{..})^2$$\n\n**SS Within (SSW):** Residual variation within groups (error).\n$$\\text{SSW} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_i)^2$$\n\n**Total SS:** $\\text{SST} = \\text{SSB} + \\text{SSW} = \\sum_{i,j}(x_{ij}-\\bar{x}_{..})^2$.\n\n**Degrees of freedom:** $df_B = k-1$, $df_W = N-k$, $df_T = N-1$.\n\n**Mean squares:** $\\text{MSB} = \\text{SSB}/(k-1)$, $\\text{MSW} = \\text{SSW}/(N-k)$.\n\n**F-statistic:** $F = \\text{MSB}/\\text{MSW}$.\n\n**Hypotheses:** $H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$ vs. $H_1$: at least two means differ.\n\n**Decision:** Reject $H_0$ if $F > F_{\\alpha,\\,k-1,\\,N-k}$ or if $p\\text{-value} < \\alpha$.\n\n**Effect size:** $\\eta^2 = \\text{SSB}/\\text{SST}$ — proportion of total variance explained by groups.\n\n**ANOVA table layout:** Each row reports SS, df, MS, and F for the between and within sources. The total row sums SS and df but has no MS or F entry. Software (R, SPSS) prints this table automatically once you specify the grouping factor.",
+      "body_he_md": "**הגדרה:** $k$ קבוצות, קבוצה $i$ בגודל $n_i$, סה\"כ $N = \\sum_{i=1}^k n_i$. ממוצע כולל: $\\bar{x}_{..} = \\dfrac{\\sum_{i,j} x_{ij}}{N}$. ממוצע קבוצה: $\\bar{x}_i = \\dfrac{1}{n_i}\\sum_j x_{ij}$.\n\n**SSB — שונות בין-קבוצתית:** שונות המוסברת על ידי שיוך לקבוצה.\n$$\\text{SSB} = \\sum_{i=1}^k n_i(\\bar{x}_i - \\bar{x}_{..})^2$$\n\n**SSW — שונות תוך-קבוצתית:** שונית שארית בתוך קבוצות (שגיאה).\n$$\\text{SSW} = \\sum_{i=1}^k \\sum_{j=1}^{n_i} (x_{ij} - \\bar{x}_i)^2$$\n\n**SST כולל:** $\\text{SST} = \\text{SSB} + \\text{SSW} = \\sum_{i,j}(x_{ij}-\\bar{x}_{..})^2$.\n\n**דרגות חופש:** $df_B = k-1$, $df_W = N-k$, $df_T = N-1$.\n\n**ממוצעי ריבועים:** $\\text{MSB} = \\text{SSB}/(k-1)$, $\\text{MSW} = \\text{SSW}/(N-k)$.\n\n**סטטיסטיקת F:** $F = \\text{MSB}/\\text{MSW}$.\n\n**השערות:** $H_0: \\mu_1 = \\mu_2 = \\cdots = \\mu_k$ לעומת $H_1$: לפחות שני ממוצעים שונים.\n\n**החלטה:** דחה $H_0$ אם $F > F_{\\alpha,\\,k-1,\\,N-k}$ או $p\\text{-value} < \\alpha$.\n\n**גודל אפקט:** $\\eta^2 = \\text{SSB}/\\text{SST}$ — חלק השונות הכוללת שמוסבר על ידי הקבוצות.\n\n**מבנה טבלת ANOVA:** כל שורה מדווחת SS, df, MS ו-F למקורות בין-קבוצתי ותוך-קבוצתי. שורת הסה\"כ מסכמת SS ו-df ללא MS או F. תוכנות (R, SPSS) מדפיסות טבלה זו אוטומטית לאחר הגדרת גורם הקיבוץ."
     },
     {
       "kind": "theory",
       "title_en": "Intuition: Why F = MSB / MSW?",
       "title_he": "אינטואיציה: למה F = MSB / MSW?",
-      "body_en_md": "When $H_0$ is true (all means equal), both MSB and MSW estimate the same population variance $\\sigma^2$, so $F \\approx 1$.\n\nWhen $H_1$ is true (means differ), MSB is inflated by the between-group differences, while MSW still estimates $\\sigma^2$. So $F \\gg 1$.\n\n**ANOVA assumptions:**\n1. Observations within each group are independent.\n2. Each group comes from a normal population (or $n_i$ is large enough).\n3. Population variances are equal across groups (homoscedasticity).\n\n**Total variance decomposition:** $\\text{SST} = \\text{SSB} + \\text{SSW}$, where $\\text{SST} = \\sum_{i,j}(x_{ij}-\\bar{x}_{..})^2$.",
-      "body_he_md": "כאשר $H_0$ נכון (כל הממוצעים שווים), גם MSB וגם MSW מעריכים את אותה שונות $\\sigma^2$, ולכן $F \\approx 1$.\n\nכאשר $H_1$ נכון (ממוצעים שונים), MSB מנופח על ידי ההבדלים הבין-קבוצתיים, בעוד MSW עדיין מעריך $\\sigma^2$. לכן $F \\gg 1$.\n\n**הנחות ANOVA:**\n1. תצפיות בתוך כל קבוצה בלתי-תלויות.\n2. כל קבוצה מאוכלוסייה נורמלית (או $n_i$ גדול מספיק).\n3. שוויון שונויות בין הקבוצות (הומוסקדסטיות).\n\n**פירוק שונות כוללת:** $\\text{SST} = \\text{SSB} + \\text{SSW}$."
+      "body_en_md": "**Why F = MSB / MSW?** When $H_0$ is true (all population means equal), both MSB and MSW are unbiased estimators of the same population variance $\\sigma^2$, so $F \\approx 1$. When $H_1$ is true (means differ), MSB is inflated by systematic between-group differences while MSW still estimates $\\sigma^2$, so $F \\gg 1$.\n\n**Sampling distribution.** Under $H_0$, $F \\sim F(k-1,\\,N-k)$. MSB/$\\sigma^2$ and MSW/$\\sigma^2$ are independent chi-square ratios; their quotient follows the F-distribution with numerator df $k-1$ and denominator df $N-k$.\n\n**ANOVA assumptions (check before testing):**\n1. **Independence:** observations within and across groups are independent.\n2. **Normality:** each group is drawn from a normal population (robust for moderate $n_i$).\n3. **Homoscedasticity:** equal population variances across groups (Levene's test if unsure).\n\n**Variance decomposition identity:** $\\text{SST} = \\text{SSB} + \\text{SSW}$ always holds — every deviation from the grand mean splits into a between-group component and a within-group residual.\n\n**Relationship to t-test.** With $k=2$ groups, one-way ANOVA is equivalent to a two-sample t-test; $F = t^2$ with the same p-value (for equal variances).\n\n**After rejection.** ANOVA is **omnibus** — it does not say which groups differ. Follow with Tukey HSD, Bonferroni, or Fisher LSD while controlling family-wise error.",
+      "body_he_md": "**למה F = MSB / MSW?** כאשר $H_0$ נכון (כל ממוצעי האוכלוסייה שווים), גם MSB וגם MSW הם מעריכים לא מוטים של אותה שונות $\\sigma^2$, ולכן $F \\approx 1$. כאשר $H_1$ נכון (ממוצעים שונים), MSB מנופח על ידי הבדלים שיטתיים בין-קבוצתיים בעוד MSW עדיין מעריך $\\sigma^2$, ולכן $F \\gg 1$.\n\n**התפלגות דגימה.** תחת $H_0$, $F \\sim F(k-1,\\,N-k)$. MSB/$\\sigma^2$ ו-MSW/$\\sigma^2$ הם יחסי chi-square בלתי-תלויים; מנהם עוקב אחרי פילוג F עם df מונה $k-1$ ו-df מכנה $N-k$.\n\n**הנחות ANOVA (בדקו לפני המבחן):**\n1. **בלתי-תלות:** תצפיות בתוך ובין קבוצות בלתי-תלויות.\n2. **נורמליות:** כל קבוצה נדגמת מאוכלוסייה נורמלית (עמיד ל-$n_i$ בינוני).\n3. **הומוסקדסטיות:** שוויון שונויות אוכלוסייה בין קבוצות (מבחן Levene אם לא בטוחים).\n\n**זהות פירוק שונות:** $\\text{SST} = \\text{SSB} + \\text{SSW}$ תמיד — כל סטייה מהממוצע הכולל מתפצלת לרכיב בין-קבוצתי ולשארית תוך-קבוצתית.\n\n**קשר למבחן t.** עם $k=2$ קבוצות, ANOVA חד-כיווני שקול למבחן t לשתי אוכלוסיות; $F = t^2$ עם אותו p-value (לשוויון שונויות).\n\n**לאחר דחייה.** ANOVA הוא **אומניבוס** — לא אומר אילו קבוצות שונות. המשיכו ב-Tukey HSD, Bonferroni או Fisher LSD תוך שליטה בשגיאה משפחתית."
     },
     {
       "kind": "worked_example",
@@ -37,8 +37,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Two Groups, Simple ANOVA",
       "title_he": "דוגמה פתורה 1 — שתי קבוצות, ANOVA פשוט",
-      "body_en_md": "**Two teaching methods.** Group A scores: 70, 80, 90. Group B scores: 60, 70, 80. Test $H_0: \\mu_A = \\mu_B$ at $\\alpha=0.05$.\n\n### Move 1\n$$\\bar{x}_A = 80, \\quad \\bar{x}_B = 70, \\quad \\bar{x}_{..} = \\frac{70+80+90+60+70+80}{6} = 75.$$\n\n### Move 2 ($k=2$, $n_A=n_B=3$):\n$$\\text{SSB} = 3(80-75)^2 + 3(70-75)^2 = 3(25) + 3(25) = 150.$$\n\n### Move 3\n$$\\text{SSW}_A = (70-80)^2+(80-80)^2+(90-80)^2 = 100+0+100=200.$$\n$$\\text{SSW}_B = (60-70)^2+(70-70)^2+(80-70)^2 = 200.$$\n$$\\text{SSW} = 200+200=400.$$\n\n### Move 4 $df_B = 1$, $df_W = 4$.\n$$\\text{MSB} = 150/1 = 150, \\quad \\text{MSW} = 400/4 = 100, \\quad F = 150/100 = 1.5.$$\n\n### Move 5 $F_{0.05,1,4} = 7.71$. Since $1.5 < 7.71$, **fail to reject $H_0$**. No significant difference between groups.",
-      "body_he_md": "**שתי שיטות הוראה.** קבוצה A: 70, 80, 90. קבוצה B: 60, 70, 80. בדוק $H_0: \\mu_A = \\mu_B$ ב-$\\alpha=0.05$.\n\n**שלב 1 — ממוצעי קבוצות וממוצע כולל:**\n$$\\bar{x}_A = 80, \\quad \\bar{x}_B = 70, \\quad \\bar{x}_{..} = 75.$$\n\n**שלב 2 — SSB:**\n$$\\text{SSB} = 3(80-75)^2 + 3(70-75)^2 = 150.$$\n\n**שלב 3 — SSW:**\n$$\\text{SSW} = 200+200=400.$$\n\n**שלב 4 — F:** $\\text{MSB}=150$, $\\text{MSW}=100$, $F=1.5$.\n\n**שלב 5 — החלטה:** $F_{0.05,1,4}=7.71$. מאחר ש-$1.5<7.71$: **לא דוחים $H_0$**. אין הבדל מובהק."
+      "body_en_md": "**Two teaching methods.** Group A scores: 70, 80, 90. Group B scores: 60, 70, 80. Test $H_0: \\mu_A = \\mu_B$ at $\\alpha=0.05$.\n\n### Move 1: Group and grand means\n$$\\bar{x}_A = 80, \\quad \\bar{x}_B = 70, \\quad \\bar{x}_{..} = \\frac{70+80+90+60+70+80}{6} = 75.$$\n\n### Move 2: SSB ($k=2$, $n_A=n_B=3$)\n$$\\text{SSB} = 3(80-75)^2 + 3(70-75)^2 = 3(25) + 3(25) = 150.$$\n\n### Move 3: SSW\n$$\\text{SSW}_A = (70-80)^2+(80-80)^2+(90-80)^2 = 100+0+100=200.$$\n$$\\text{SSW}_B = (60-70)^2+(70-70)^2+(80-70)^2 = 100+0+100=200.$$\n$$\\text{SSW} = 400.$$\n\n### Move 4: F-statistic\n$df_B = 1$, $df_W = 4$. $\\text{MSB} = 150/1 = 150$, $\\text{MSW} = 400/4 = 100$, $F = 150/100 = 1.5$.\n\n### Move 5: Decision\n$F_{0.05,1,4} = 7.71$. Since $1.5 < 7.71$, **fail to reject $H_0$**. The 10-point gap in sample means is not statistically significant with only $n=3$ per group — within-group spread dominates.\n\n**Note:** With $k=2$, this ANOVA is equivalent to a pooled-variance t-test; here $t = \\sqrt{1.5} \\approx 1.22$, which also fails to reject at 5%. The small sample size ($n=3$ per group) limits statistical power — larger samples might detect the 10-point mean gap despite high within-group variance.",
+      "body_he_md": "**שתי שיטות הוראה.** קבוצה A: 70, 80, 90. קבוצה B: 60, 70, 80. בדוק $H_0: \\mu_A = \\mu_B$ ב-$\\alpha=0.05$.\n\n### צעד 1: ממוצעי קבוצות וממוצע כולל\n$$\\bar{x}_A = 80, \\quad \\bar{x}_B = 70, \\quad \\bar{x}_{..} = \\frac{70+80+90+60+70+80}{6} = 75.$$\n\n### צעד 2: SSB ($k=2$, $n_A=n_B=3$)\n$$\\text{SSB} = 3(80-75)^2 + 3(70-75)^2 = 3(25) + 3(25) = 150.$$\n\n### צעד 3: SSW\n$$\\text{SSW}_A = (70-80)^2+(80-80)^2+(90-80)^2 = 100+0+100=200.$$\n$$\\text{SSW}_B = (60-70)^2+(70-70)^2+(80-70)^2 = 100+0+100=200.$$\n$$\\text{SSW} = 400.$$\n\n### צעד 4: סטטיסטיקת F\n$df_B = 1$, $df_W = 4$. $\\text{MSB} = 150$, $\\text{MSW} = 100$, $F = 1.5$.\n\n### צעד 5: החלטה\n$F_{0.05,1,4} = 7.71$. מאחר ש-$1.5 < 7.71$: **לא דוחים $H_0$**. הפער של 10 נקודות בממוצעי המדגם אינו מובהק עם $n=3$ בלבד — השונות התוך-קבוצתית שולטת.\n\n**הערה:** עם $k=2$, ANOVA זה שקול למבחן t לשתי אוכלוסיות; כאן $t = \\sqrt{1.5} \\approx 1.22$, גם הוא לא דוחה ב-5%. גודל המדגם הקטן ($n=3$ לקבוצה) מגביל עוצמה — מדגמים גדולים יותר עשויים לגלות את הפער של 10 נקודות למרות השונות הגבוהה בתוך הקבוצות."
     },
     {
       "kind": "checkpoint",
@@ -46,8 +46,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Three groups have means $\\bar{x}_1=10$, $\\bar{x}_2=12$, $\\bar{x}_3=14$, each of size $n=4$. Grand mean $= 12$. Compute SSB.",
       "body_he_md": "לשלוש קבוצות יש ממוצעים $\\bar{x}_1=10$, $\\bar{x}_2=12$, $\\bar{x}_3=14$, כל אחת בגודל $n=4$. ממוצע כולל $= 12$. חשב SSB.",
-      "checkpoint_solution_en": "$\\text{SSB} = 4(10-12)^2 + 4(12-12)^2 + 4(14-12)^2 = 4(4)+0+4(4) = 32$.",
-      "checkpoint_solution_he": "$\\text{SSB} = 4(4)+0+4(4) = 32$."
+      "checkpoint_solution_en": "### Move 1: Write the SSB formula\n$$\\text{SSB} = \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$$\nHere $n_i = 4$ for all three groups and $\\bar{x}_{..} = 12$.\n\n### Move 2: Substitute each group mean\n$$\\text{SSB} = 4(10-12)^2 + 4(12-12)^2 + 4(14-12)^2 = 4(4)+0+4(4) = 32.$$\n\n**Check:** Group 2 sits exactly on the grand mean, so it contributes zero. Groups 1 and 3 are symmetric — each 2 units from 12 — and contribute equally (16 each).\n\n**Common slip:** Forgetting the factor $n_i=4$ on each squared deviation.\n\n**Exam tip:** When all $n_i$ are equal, you can factor $n$ out before summing the squared deviations.",
+      "checkpoint_solution_he": "### צעד 1: כתיבת נוסחת SSB\n$$\\text{SSB} = \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$$\nכאן $n_i = 4$ לכל שלוש הקבוצות ו-$\\bar{x}_{..} = 12$.\n\n### צעד 2: הצבת ממוצעי הקבוצות\n$$\\text{SSB} = 4(10-12)^2 + 4(12-12)^2 + 4(14-12)^2 = 4(4)+0+4(4) = 32.$$\n\n**בדיקה:** קבוצה 2 בדיוק על הממוצע הכולל, תורמת אפס. קבוצות 1 ו-3 סימטריות — כל אחת 2 יחידות מ-12 — ותורמות שווה (16 כל אחת).\n\n**טעות נפוצה:** שכחת גורם $n_i=4$ על כל סטייה בריבוע.\n\n**טיפ לבחינה:** כשכל $n_i$ שווים, אפשר להוציא $n$ לפני סיכום הסטיות בריבוע."
     },
     {
       "kind": "worked_example",
@@ -55,8 +55,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Three Groups Full ANOVA",
       "title_he": "דוגמה פתורה 2 — ANOVA מלא לשלוש קבוצות",
-      "body_en_md": "**Three diets.** Weight loss (kg): Diet 1: 3, 5, 4. Diet 2: 6, 7, 8. Diet 3: 2, 3, 4. Test at $\\alpha=0.05$.\n\n### Move 1 $\\bar{x}_1=4$, $\\bar{x}_2=7$, $\\bar{x}_3=3$, $\\bar{x}_{..}=(12+21+9)/9=42/9\\approx4.67$.\n\n### Move 2 ($n_i=3$ each):\n$$\\text{SSB}=3(4-4.67)^2+3(7-4.67)^2+3(3-4.67)^2 = 3(0.449)+3(5.429)+3(2.789)=1.347+16.287+8.367=26.$$\n\n### Move 3\n$$\\text{SSW}_1=(3-4)^2+(5-4)^2+(4-4)^2=2.$$\n$$\\text{SSW}_2=(6-7)^2+(7-7)^2+(8-7)^2=2.$$\n$$\\text{SSW}_3=(2-3)^2+(3-3)^2+(4-3)^2=2.$$\n$$\\text{SSW}=6.$$\n\n### Move 4 $df_B=2$, $df_W=6$.\n$$\\text{MSB}=26/2=13, \\quad \\text{MSW}=6/6=1, \\quad F=13.$$\n\n### Move 5 $F_{0.05,2,6}\\approx5.14$. Since $13>5.14$: **reject $H_0$**. At least one diet is significantly different.",
-      "body_he_md": "**שלוש דיאטות.** ירידה במשקל (ק\"ג): דיאטה 1: 3,5,4. דיאטה 2: 6,7,8. דיאטה 3: 2,3,4. בדוק ב-$\\alpha=0.05$.\n\n**שלב 1:** $\\bar{x}_1=4$, $\\bar{x}_2=7$, $\\bar{x}_3=3$, $\\bar{x}_{..}\\approx4.67$.\n\n**שלב 2 — SSB:** $\\approx 26$.\n\n**שלב 3 — SSW:** $= 2+2+2 = 6$.\n\n**שלב 4 — F:** $\\text{MSB}=13$, $\\text{MSW}=1$, $F=13$.\n\n**שלב 5 — החלטה:** $F_{0.05,2,6}\\approx5.14$. מאחר ש-$13>5.14$: **דוחים $H_0$**. לפחות דיאטה אחת שונה מובהקת."
+      "body_en_md": "**Three diets.** Weight loss (kg): Diet 1: 3, 5, 4. Diet 2: 6, 7, 8. Diet 3: 2, 3, 4. Test at $\\alpha=0.05$.\n\n### Move 1: Means\n$\\bar{x}_1=4$, $\\bar{x}_2=7$, $\\bar{x}_3=3$, $\\bar{x}_{..}=(12+21+9)/9=42/9\\approx4.67$.\n\n### Move 2: SSB ($n_i=3$ each)\n$$\\text{SSB}=3(4-4.67)^2+3(7-4.67)^2+3(3-4.67)^2 = 1.347+16.287+8.367=26.$$\n\n### Move 3: SSW\n$$\\text{SSW}_1=(3-4)^2+(5-4)^2+(4-4)^2=2, \\quad \\text{SSW}_2=2, \\quad \\text{SSW}_3=2, \\quad \\text{SSW}=6.$$\n\n### Move 4: ANOVA table\n$df_B=2$, $df_W=6$. $\\text{MSB}=26/2=13$, $\\text{MSW}=6/6=1$, $F=13$.\n\n### Move 5: Decision\n$F_{0.05,2,6}\\approx5.14$. Since $13>5.14$: **reject $H_0$**. At least one diet produces significantly different weight loss. Post-hoc tests would show Diet 2 (mean 7) differs from Diets 1 and 3.\n\n**Effect size:** $\\eta^2 = 26/32 = 0.8125$ — most of the variance in weight loss is explained by diet choice. This large effect aligns with the very high F-statistic ($F=13$). Always report both statistical significance and $\\eta^2$ in practice.",
+      "body_he_md": "**שלוש דיאטות.** ירידה במשקל (ק\"ג): דיאטה 1: 3,5,4. דיאטה 2: 6,7,8. דיאטה 3: 2,3,4. בדוק ב-$\\alpha=0.05$.\n\n### צעד 1: ממוצעים\n$\\bar{x}_1=4$, $\\bar{x}_2=7$, $\\bar{x}_3=3$, $\\bar{x}_{..}=(12+21+9)/9\\approx4.67$.\n\n### צעד 2: SSB ($n_i=3$ לכל קבוצה)\n$$\\text{SSB}=3(4-4.67)^2+3(7-4.67)^2+3(3-4.67)^2 = 1.347+16.287+8.367=26.$$\n\n### צעד 3: SSW\n$$\\text{SSW}_1=2, \\quad \\text{SSW}_2=2, \\quad \\text{SSW}_3=2, \\quad \\text{SSW}=6.$$\n\n### צעד 4: טבלת ANOVA\n$df_B=2$, $df_W=6$. $\\text{MSB}=13$, $\\text{MSW}=1$, $F=13$.\n\n### צעד 5: החלטה\n$F_{0.05,2,6}\\approx5.14$. מאחר ש-$13>5.14$: **דוחים $H_0$**. לפחות דיאטה אחת שונה מובהקת. מבחני post-hoc יראו שדיאטה 2 (ממוצע 7) שונה מ-1 ו-3.\n\n**גודל אפקט:** $\\eta^2 = 26/32 = 0.8125$ — רוב השונות בירידת המשקל מוסבר על ידי בחירת הדיאטה. אפקט גדול זה תואם את סטטיסטיקת F הגבוהה מאוד ($F=13$). בפועל, דווחו תמיד גם מובהקות סטטיסטית וגם $\\eta^2$."
     },
     {
       "kind": "checkpoint",
@@ -64,8 +64,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "An ANOVA table shows SSB = 40, SSW = 60, $k=3$ groups, $N=18$ total. Compute $F$.",
       "body_he_md": "טבלת ANOVA מראה SSB = 40, SSW = 60, $k=3$ קבוצות, $N=18$ כולל. חשב $F$.",
-      "checkpoint_solution_en": "$df_B = 2$, $df_W = 15$. $\\text{MSB} = 40/2 = 20$. $\\text{MSW} = 60/15 = 4$. $F = 20/4 = 5$.",
-      "checkpoint_solution_he": "$\\text{MSB} = 20$, $\\text{MSW} = 4$, $F = 5$."
+      "checkpoint_solution_en": "### Move 1: Degrees of freedom\n$df_B = k-1 = 3-1 = 2$. $df_W = N-k = 18-3 = 15$.\n\n### Move 2: Mean squares\n$\\text{MSB} = 40/2 = 20$. $\\text{MSW} = 60/15 = 4$.\n\n### Move 3: F-statistic\n$$F = \\frac{\\text{MSB}}{\\text{MSW}} = \\frac{20}{4} = 5.$$\n\n**Verify:** $\\text{SST} = 40+60 = 100$ and $df_T = 17 = df_B + df_W = 2+15$ — the partition identity holds.\n\n**Common slip:** Dividing SSB by SSW directly ($40/60$) instead of using MS.\n\n**Exam tip:** Build the mini-table (SS → df → MS → F) even when only $F$ is asked — it catches df errors early.",
+      "checkpoint_solution_he": "### צעד 1: דרגות חופש\n$df_B = k-1 = 2$. $df_W = N-k = 18-3 = 15$.\n\n### צעד 2: ממוצעי ריבועים\n$\\text{MSB} = 40/2 = 20$. $\\text{MSW} = 60/15 = 4$.\n\n### צעד 3: סטטיסטיקת F\n$$F = \\frac{\\text{MSB}}{\\text{MSW}} = \\frac{20}{4} = 5.$$\n\n**אימות:** $\\text{SST} = 100$ ו-$df_T = 17 = 2+15$ — זהות הפירוק מתקיימת.\n\n**טעות נפוצה:** חלוקת SSB ב-SSW ישירות ($40/60$) במקום MS.\n\n**טיפ לבחינה:** בנו טבלה מינימלית (SS → df → MS → F) גם כשמבקשים רק $F$ — זה תופס שגיאות df מוקדם."
     },
     {
       "kind": "worked_example",
@@ -73,15 +73,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Interpreting F and Effect Size",
       "title_he": "דוגמה פתורה 3 — פרשנות F וגודל אפקט",
-      "body_en_md": "**Exam scores for 4 study groups** ($n_i = 5$ each, $N=20$, $k=4$): SSB = 300, SSW = 200.\n\n### Move 1\n\n| Source | SS | df | MS | F |\n|---|---|---|---|---|\n| Between | 300 | 3 | 100 | 7.5 |\n| Within | 200 | 16 | 12.5 | |\n| Total | 500 | 19 | | |\n\n### Move 2 $F_{0.05,3,16} = 3.24$. Since $F=7.5 > 3.24$: **reject $H_0$** at 5% level.\n\n### Move 3\n$$\\eta^2 = \\frac{\\text{SSB}}{\\text{SST}} = \\frac{300}{500} = 0.60.$$\n60% of the total variance in scores is explained by the group membership. This is a **large** effect (Cohen's convention: $\\eta^2 \\geq 0.14$ is large).\n\n### Move 4 There is a statistically significant difference among the 4 groups ($F(3,16)=7.5$, $p<0.05$), with a large effect size ($\\eta^2=0.60$). Post-hoc tests (Tukey, Bonferroni) would be needed to identify which specific groups differ.",
-      "body_he_md": "**ציוני מבחן ל-4 קבוצות לימוד** ($n_i=5$ לכל אחת, $N=20$, $k=4$): SSB = 300, SSW = 200.\n\n**שלב 1 — טבלת ANOVA:**\n\n| מקור | SS | df | MS | F |\n|---|---|---|---|---|\n| בין-קבוצות | 300 | 3 | 100 | 7.5 |\n| תוך-קבוצות | 200 | 16 | 12.5 | |\n| כולל | 500 | 19 | | |\n\n**שלב 2 — החלטה:** $F_{0.05,3,16}=3.24$. $7.5>3.24$: **דוחים $H_0$**.\n\n**שלב 3 — גודל אפקט ($\\eta^2$):**\n$$\\eta^2 = \\frac{300}{500} = 0.60$$\n60% מהשונות הכוללת מוסברת על ידי הקבוצה — אפקט **גדול**.\n\n**שלב 4 — מסקנה:** הבדל מובהק בין 4 הקבוצות ($F(3,16)=7.5$, $p<0.05$), עם אפקט גדול ($\\eta^2=0.60$). יש צורך בבדיקות post-hoc לזיהוי הקבוצות השונות."
+      "body_en_md": "**Exam scores for 4 study groups** ($n_i = 5$ each, $N=20$, $k=4$): SSB = 300, SSW = 200.\n\n### Move 1: Complete ANOVA table\n\n| Source | SS | df | MS | F |\n|---|---|---|---|---|\n| Between | 300 | 3 | 100 | 7.5 |\n| Within | 200 | 16 | 12.5 | |\n| Total | 500 | 19 | | |\n\n### Move 2: Hypothesis test\n$F_{0.05,3,16} = 3.24$. Since $F=7.5 > 3.24$: **reject $H_0$** at 5% level.\n\n### Move 3: Effect size\n$$\\eta^2 = \\frac{\\text{SSB}}{\\text{SST}} = \\frac{300}{500} = 0.60.$$\n60% of score variance is explained by group membership — a **large** effect (Cohen: $\\eta^2 \\geq 0.14$ is large).\n\n### Move 4: Full conclusion\nThere is a statistically significant difference among the 4 groups ($F(3,16)=7.5$, $p<0.05$) with large effect ($\\eta^2=0.60$). Tukey or Bonferroni post-hoc tests are needed to identify which specific pairs differ — ANOVA alone cannot rank groups.",
+      "body_he_md": "**ציוני מבחן ל-4 קבוצות לימוד** ($n_i=5$ לכל אחת, $N=20$, $k=4$): SSB = 300, SSW = 200.\n\n### צעד 1: טבלת ANOVA מלאה\n\n| מקור | SS | df | MS | F |\n|---|---|---|---|---|\n| בין-קבוצות | 300 | 3 | 100 | 7.5 |\n| תוך-קבוצות | 200 | 16 | 12.5 | |\n| כולל | 500 | 19 | | |\n\n### צעד 2: מבחן השערות\n$F_{0.05,3,16}=3.24$. מאחר ש-$F=7.5>3.24$: **דוחים $H_0$** ברמה 5%.\n\n### צעד 3: גודל אפקט\n$$\\eta^2 = \\frac{300}{500} = 0.60$$\n60% משונות הציונים מוסברת על ידי הקבוצה — אפקט **גדול** (Cohen: $\\eta^2 \\geq 0.14$ נחשב גדול).\n\n### צעד 4: מסקנה מלאה\nקיים הבדל מובהק בין 4 הקבוצות ($F(3,16)=7.5$, $p<0.05$) עם אפקט גדול ($\\eta^2=0.60$). נדרשים מבחני post-hoc של Tukey או Bonferroni לזיהוי אילו זוגות שונים — ANOVA לבדו לא מדרג קבוצות."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — ANOVA Step-by-Step",
       "title_he": "מדריך שיטה — ANOVA שלב אחר שלב",
-      "body_en_md": "1. **State hypotheses:** $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: at least two differ.\n2. **Compute group means** $\\bar{x}_i$ and **grand mean** $\\bar{x}_{..}$.\n3. **SSB** $= \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n4. **SSW** $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$.\n5. **df:** $df_B = k-1$, $df_W = N-k$.\n6. **MSB** $=$ SSB/$df_B$; **MSW** $=$ SSW/$df_W$.\n7. **F** $=$ MSB/MSW.\n8. **Compare** $F$ to $F_{\\alpha, df_B, df_W}$ from table; reject $H_0$ if $F$ exceeds the critical value.\n\n| $F$ large | $F \\approx 1$ |\n|---|---|\n| Groups differ significantly | No evidence groups differ |",
-      "body_he_md": "1. **ניסוח השערות:** $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: לפחות שניים שונים.\n2. **חשב ממוצעי קבוצות** $\\bar{x}_i$ **וממוצע כולל** $\\bar{x}_{..}$.\n3. **SSB** $= \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n4. **SSW** $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$.\n5. **df:** $df_B=k-1$, $df_W=N-k$.\n6. **MSB** $=$ SSB/$df_B$; **MSW** $=$ SSW/$df_W$.\n7. **F** $=$ MSB/MSW.\n8. **השווה** $F$ ל-$F_{\\alpha,df_B,df_W}$; דחה $H_0$ אם $F$ גדול מהערך הקריטי."
+      "body_en_md": "**One-way ANOVA — 8 steps:**\n1. **State hypotheses:** $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: at least two differ.\n2. **Compute** group means $\\bar{x}_i$ and grand mean $\\bar{x}_{..}$.\n3. **SSB** $= \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n4. **SSW** $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$; verify $\\text{SST}=\\text{SSB}+\\text{SSW}$.\n5. **df:** $df_B = k-1$, $df_W = N-k$.\n6. **MSB** $=$ SSB/$df_B$; **MSW** $=$ SSW/$df_W$.\n7. **F** $=$ MSB/MSW; compare to $F_{\\alpha, df_B, df_W}$ or use p-value.\n8. **Conclude in context**; if reject, plan post-hoc pairwise comparisons.\n\n| $F$ large | $F \\approx 1$ |\n|---|---|\n| Reject $H_0$ — groups differ | Fail to reject — no evidence |\n\n**Quick check:** MS values must be positive; $F$ is always $\\geq 0$. If you get $F<1$, you will almost always fail to reject.",
+      "body_he_md": "**ANOVA חד-כיווני — 8 שלבים:**\n1. **נסח השערות:** $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: לפחות שניים שונים.\n2. **חשב** ממוצעי קבוצות $\\bar{x}_i$ וממוצע כולל $\\bar{x}_{..}$.\n3. **SSB** $= \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n4. **SSW** $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$; ודא $\\text{SST}=\\text{SSB}+\\text{SSW}$.\n5. **df:** $df_B = k-1$, $df_W = N-k$.\n6. **MSB** $=$ SSB/$df_B$; **MSW** $=$ SSW/$df_W$.\n7. **F** $=$ MSB/MSW; השווה ל-$F_{\\alpha, df_B, df_W}$ או השתמש ב-p-value.\n8. **הסק מסקנה בהקשר**; אם דוחים, תכנן השוואות post-hoc זוגיות.\n\n| $F$ גדול | $F \\approx 1$ |\n|---|---|\n| דחה $H_0$ — קבוצות שונות | לא דוחה — אין עדות |\n\n**בדיקה מהירה:** ערכי MS חייבים להיות חיוביים; $F$ תמיד $\\geq 0$. אם $F<1$, כמעט תמיד לא תדחו."
     },
     {
       "kind": "exercise_set",
@@ -104,8 +104,8 @@
           "difficulty": "easy",
           "body_en": "An ANOVA has $k=3$ and $N=30$. Find $df_B$ and $df_W$.",
           "body_he": "ANOVA עם $k=3$ ו-$N=30$. מצא $df_B$ ו-$df_W$.",
-          "solution_en": "**Solution:**\n\n$df_B = 3-1 = 2$. $df_W = 30-3 = 27$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$df_B = 2$, $df_W = 27$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$df_B = k-1 = 3-1 = 2$. $df_W = N-k = 30-3 = 27$. Check: $df_B + df_W = 29 = N-1$.",
+          "solution_he": "$df_B = 2$, $df_W = 27$. בדיקה: $df_B + df_W = 29 = N-1$.",
           "points": 5
         },
         {
@@ -131,8 +131,8 @@
           "difficulty": "medium",
           "body_en": "Three groups (each $n=4$): Group 1 mean = 5, Group 2 mean = 8, Group 3 mean = 6. Grand mean = 6.33. Compute SSB.",
           "body_he": "שלוש קבוצות ($n=4$ כל אחת): ממוצעים 5, 8, 6. ממוצע כולל = 6.33. חשב SSB.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\text{SSB}=4(5-6.33)^2+4(8-6.33)^2+4(6-6.33)^2 = 4(1.77)+4(2.79)+4(0.11) = 7.08+11.16+0.44 = 18.68$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\text{SSB} = 4(1.77)+4(2.79)+4(0.11) \\approx 18.68$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$\\text{SSB}=4(5-6.33)^2+4(8-6.33)^2+4(6-6.33)^2 = 4(1.77)+4(2.79)+4(0.11) = 7.08+11.16+0.44 = 18.68$.",
+          "solution_he": "$\\text{SSB} = 4(1.77)+4(2.79)+4(0.11) \\approx 18.68$.",
           "points": 7
         },
         {
@@ -140,7 +140,7 @@
           "difficulty": "medium",
           "body_en": "Group A: 2, 4, 6. Group B: 5, 5, 5. Both have mean 4 and 5. Grand mean = 4.5. Compute SSW for each group.",
           "body_he": "קבוצה A: 2,4,6. קבוצה B: 5,5,5. ממוצעים 4 ו-5. ממוצע כולל = 4.5. חשב SSW לכל קבוצה.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSSW_A $= (2-4)^2+(4-4)^2+(6-4)^2 = 4+0+4=8$. SSW_B $= (5-5)^2\\times3 = 0$. SSW $= 8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
+          "solution_en": "SSW_A $= (2-4)^2+(4-4)^2+(6-4)^2 = 4+0+4=8$. SSW_B $= (5-5)^2\\times3 = 0$. Total SSW $= 8$.",
           "solution_he": "SSW_A $= 8$, SSW_B $= 0$, SSW $= 8$.",
           "points": 7
         },
@@ -167,8 +167,8 @@
           "difficulty": "medium",
           "body_en": "SST = 200, SSB = 80. Find SSW and $\\eta^2$.",
           "body_he": "SST = 200, SSB = 80. מצא SSW ו-$\\eta^2$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSSW $= 200-80=120$. $\\eta^2 = 80/200 = 0.40$ (medium-to-large effect).\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nSSW $= 120$. $\\eta^2 = 0.40$ (אפקט בינוני-גדול).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "SSW $= \\text{SST}-\\text{SSB} = 200-80=120$. $\\eta^2 = \\text{SSB}/\\text{SST} = 80/200 = 0.40$ (medium-to-large effect).",
+          "solution_he": "SSW $= 120$. $\\eta^2 = 0.40$ (אפקט בינוני-גדול).",
           "points": 7
         },
         {
@@ -185,8 +185,8 @@
           "difficulty": "hard",
           "body_en": "Four groups each of size 5. Means: 10, 14, 12, 16. Grand mean = 13. SSW = 80. Compute $F$ and decide at $\\alpha=0.05$ ($F_{0.05,3,16}=3.24$).",
           "body_he": "ארבע קבוצות בגודל 5 כל אחת. ממוצעים: 10, 14, 12, 16. ממוצע כולל = 13. SSW = 80. חשב $F$ והכרע ב-$\\alpha=0.05$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nSSB $= 5[(10-13)^2+(14-13)^2+(12-13)^2+(16-13)^2] = 5[9+1+1+9]=100$. MSB $= 100/3\\approx33.3$. MSW $= 80/16=5$. $F=33.3/5=6.67$. Since $6.67>3.24$: **reject $H_0$**.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nSSB $= 5(9+1+1+9)=100$. MSB $\\approx 33.3$, MSW $=5$, $F=6.67>3.24$: **דוחים $H_0$**.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "SSB $= 5[(10-13)^2+(14-13)^2+(12-13)^2+(16-13)^2] = 5[9+1+1+9]=100$. MSB $= 100/3\\approx33.3$. MSW $= 80/16=5$. $F=33.3/5=6.67$. Since $6.67>3.24$: **reject $H_0$**.",
+          "solution_he": "SSB $= 100$. MSB $\\approx 33.3$, MSW $=5$, $F=6.67>3.24$: **דוחים $H_0$**.",
           "points": 10
         },
         {
@@ -213,30 +213,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Using multiple t-tests instead of ANOVA.** This inflates the Type I error. Always use ANOVA when comparing 3+ groups.\n\n2. **Wrong degrees of freedom.** $df_B = k-1$ (number of groups minus 1), $df_W = N-k$ (total minus number of groups).\n\n3. **Confusing MSB with SSB.** $F$ uses the *mean* squares, not the sum of squares directly.\n\n4. **Concluding which groups differ from ANOVA alone.** ANOVA only says *at least one* differs. Post-hoc tests identify *which* pairs.\n\n5. **Ignoring ANOVA assumptions.** If group sizes are very small and data is non-normal, consider Kruskal-Wallis (non-parametric alternative).",
-      "body_he_md": "1. **שימוש במבחני t מרובים במקום ANOVA.** מנפח שגיאת סוג I. תמיד השתמש ב-ANOVA ל-3+ קבוצות.\n\n2. **דרגות חופש שגויות.** $df_B=k-1$, $df_W=N-k$.\n\n3. **בלבול MSB עם SSB.** $F$ משתמש ב*ממוצעי* ריבועים, לא בסכומים ישירות.\n\n4. **הסקת מסקנות על קבוצות ספציפיות מ-ANOVA לבד.** ANOVA אומר רק ש*לפחות אחד* שונה. מבחני post-hoc מזהים *אילו* זוגות.\n\n5. **התעלמות מהנחות ANOVA.** אם הנתונים לא נורמליים — שקול Kruskal-Wallis."
+      "body_en_md": "1. **Multiple t-tests instead of ANOVA.** With $k$ groups there are $\\binom{k}{2}$ pairwise comparisons; each at level $\\alpha$ inflates family-wise error. Always use ANOVA first for $k \\geq 3$.\n\n2. **Wrong degrees of freedom.** $df_B = k-1$ (groups minus one), $df_W = N-k$ (total minus number of groups). Do not use $N-1$ for the F denominator.\n\n3. **Using SSB instead of MSB in F.** $F = \\text{MSB}/\\text{MSW}$, not SSB/SSW. Forgetting to divide by df is the most common arithmetic error.\n\n4. **Identifying specific groups from ANOVA alone.** Rejection means *at least one* mean differs — not which pair. Post-hoc tests (Tukey, Bonferroni) are required.\n\n5. **Ignoring assumptions.** Severe non-normality or unequal variances with small $n_i$ invalidate F-tests. Consider Welch ANOVA or Kruskal-Wallis as alternatives.",
+      "body_he_md": "1. **מבחני t מרובים במקום ANOVA.** עם $k$ קבוצות יש $\\binom{k}{2}$ השוואות זוגיות; כל אחת ברמה $\\alpha$ מנפחת שגיאה משפחתית. תמיד השתמשו ב-ANOVA קודם ל-$k \\geq 3$.\n\n2. **דרגות חופש שגויות.** $df_B = k-1$ (קבוצות פחות אחת), $df_W = N-k$ (סה\"כ פחות מספר קבוצות). אל תשתמשו ב-$N-1$ למכנה של F.\n\n3. **שימוש ב-SSB במקום MSB ב-F.** $F = \\text{MSB}/\\text{MSW}$, לא SSB/SSW. שכחת חלוקה ב-df היא שגיאת חשבון נפוצה ביותר.\n\n4. **זיהוי קבוצות ספציפיות מ-ANOVA בלבד.** דחייה משמעה *לפחות* ממוצע אחד שונה — לא איזה זוג. נדרשים מבחני post-hoc (Tukey, Bonferroni).\n\n5. **התעלמות מהנחות.** חוסר נורמליות חמור או שונויות לא שוות עם $n_i$ קטן מבטלים את מבחן F. שקלו Welch ANOVA או Kruskal-Wallis כחלופות."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "One-way ANOVA is the workhorse of experimental design: clinical trials comparing treatments, education studies comparing teaching methods, and industrial quality control all rely on comparing means across multiple groups in one controlled test.\n\nIn university statistics, ANOVA connects the t-test (two groups) to more advanced models — two-way ANOVA, regression, and mixed models all extend the same variance-partitioning logic. SPSS, R (`aov`), and Excel ANOVA tools implement identical formulas.\n\nFor research and data science careers, knowing when ANOVA applies (continuous outcome, categorical factor with $k \\geq 2$ groups) prevents both inflated Type I error from multiple t-tests and invalid conclusions from ignoring effect size ($\\eta^2$). On exams, partial credit is common for a correct ANOVA table even if the final decision is wrong — master SSB, SSW, and df first.",
+      "body_he_md": "ANOVA חד-כיווני הוא עמוד השדרה של תכנון ניסויים: ניסויים קליניים המשווים טיפולים, מחקרי חינוך על שיטות הוראה, ובקרת איכות תעשייתית — כולם מסתמכים על השוואת ממוצעים בין קבוצות במבחן אחד מבוקר.\n\nבסטטיסטיקה אוניברסיטאית, ANOVA מחבר את מבחן t (שתי קבוצות) למודלים מתקדמים — ANOVA דו-כיווני, רגרסיה ומודלים מעורבים מרחיבים את אותה לוגיקת פירוק שונות. SPSS, R (`aov`) ו-Excel מיישמים נוסחאות זהות.\n\nלקריירות במחקר ומדע נתונים, ידיעה מתי ANOVA מתאים (תוצאה רציפה, גורם קטגורי עם $k \\geq 2$ קבוצות) מונעת גם שגיאת סוג I מנפוחה ממבחני t מרובים וגם מסקנות לא תקפות מהתעלמות מגודל אפקט ($\\eta^2$). בבחינות, נקודות חלקיות נפוצות על טבלת ANOVA נכונה גם אם ההחלטה הסופית שגויה — שלטו קודם ב-SSB, SSW ו-df."
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Formula card:**\n- SSB $= \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$\n- SSW $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$\n- SST $=$ SSB $+$ SSW\n- $df_B = k-1$, $df_W = N-k$\n- $F = \\text{MSB}/\\text{MSW}$\n- $\\eta^2 = \\text{SSB}/\\text{SST}$\n\n**University exam patterns:**\n- Build full ANOVA table from raw data.\n- Compute $F$ and compare to critical value.\n- Interpret $\\eta^2$ as effect size.\n- Explain assumptions and what to do after rejection.\n\n**Tip:** Always build the ANOVA table in order: SS → df → MS → F.",
-      "body_he_md": "**גיליון נוסחאות:**\n- SSB $= \\sum_i n_i(\\bar{x}_i-\\bar{x}_{..})^2$\n- SSW $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$\n- SST = SSB + SSW\n- $df_B=k-1$, $df_W=N-k$\n- $F=\\text{MSB}/\\text{MSW}$\n- $\\eta^2=\\text{SSB}/\\text{SST}$\n\n**דגשי בחינות:**\n- בנה טבלת ANOVA מלאה מנתונים גולמיים.\n- חשב $F$ והשווה לערך קריטי.\n- פרש $\\eta^2$ כגודל אפקט.\n- הסבר הנחות ומה לעשות לאחר דחייה.\n\n**טיפ:** תמיד בנה טבלת ANOVA בסדר: SS → df → MS → F."
+      "body_en_md": "**Formula card:**\n- SSB $= \\sum_i n_i(\\bar{x}_i - \\bar{x}_{..})^2$\n- SSW $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$; SST $=$ SSB $+$ SSW\n- $df_B = k-1$, $df_W = N-k$\n- $F = \\text{MSB}/\\text{MSW}$\n- $\\eta^2 = \\text{SSB}/\\text{SST}$\n\n**Exam patterns:**\n- Build full ANOVA table from raw data or partial sums.\n- Compute $F$ and compare to given critical value.\n- Interpret $\\eta^2$ as effect size.\n- Explain why multiple t-tests are invalid; state post-hoc next step after rejection.\n\n**Tip:** Build the table in order: SS → df → MS → F. Verify $\\text{SST}=\\text{SSB}+\\text{SSW}$ before computing $F$ — mismatched totals catch most arithmetic errors early on exams.",
+      "body_he_md": "**גיליון נוסחאות:**\n- SSB $= \\sum_i n_i(\\bar{x}_i-\\bar{x}_{..})^2$\n- SSW $= \\sum_{i,j}(x_{ij}-\\bar{x}_i)^2$; SST = SSB + SSW\n- $df_B=k-1$, $df_W=N-k$\n- $F=\\text{MSB}/\\text{MSW}$\n- $\\eta^2=\\text{SSB}/\\text{SST}$\n\n**דגשי בחינות:**\n- בנה טבלת ANOVA מלאה מנתונים גולמיים או סכומי ריבועים חלקיים.\n- חשב $F$ והשווה לערך קריטי נתון.\n- פרש $\\eta^2$ כגודל אפקט.\n- הסבר מדוע מבחני t מרובים לא תקפים; ציין post-hoc לאחר דחייה.\n\n**טיפ:** בנה טבלה בסדר: SS → df → MS → F. ודא $\\text{SST}=\\text{SSB}+\\text{SSW}$ לפני $F$ — אי-התאמה תופסת רוב השגיאות."
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **ANOVA** tests $H_0: \\mu_1=\\cdots=\\mu_k$ in one test, avoiding the multiple comparisons problem.\n- **F = MSB/MSW**: large $F$ means between-group variance dominates within-group variance.\n- **ANOVA table:** SST = SSB + SSW; $df_B=k-1$, $df_W=N-k$.\n- **Reject $H_0$** if $F > F_{\\alpha, k-1, N-k}$; use post-hoc tests to find which groups differ.\n- **$\\eta^2 = \\text{SSB/SST}$** measures effect size (proportion of variance explained by groups).",
-      "body_he_md": "- **ANOVA** בודק $H_0: \\mu_1=\\cdots=\\mu_k$ במבחן אחד, ומונע בעיית השוואות מרובות.\n- **$F=\\text{MSB/MSW}$**: $F$ גדול משמעותו שהשונות הבין-קבוצתית גדולה מהתוך-קבוצתית.\n- **טבלת ANOVA:** SST=SSB+SSW; $df_B=k-1$, $df_W=N-k$.\n- **דחה $H_0$** אם $F > F_{\\alpha,k-1,N-k}$; השתמש ב-post-hoc לזיהוי הקבוצות.\n- **$\\eta^2=\\text{SSB/SST}$** מודד גודל אפקט."
+      "body_en_md": "- **One-way ANOVA** tests $H_0: \\mu_1=\\cdots=\\mu_k$ in one test, avoiding the multiple-comparisons problem when $k \\geq 3$.\n- **F = MSB/MSW**: large $F$ means between-group variance dominates within-group variance; $F \\approx 1$ supports equal means.\n- **ANOVA table:** SST = SSB + SSW; $df_B=k-1$, $df_W=N-k$; always compute MS before F.\n- **Reject $H_0$** if $F > F_{\\alpha, k-1, N-k}$; use post-hoc tests (Tukey, Bonferroni) to find which groups differ.\n- **$\\eta^2 = \\text{SSB/SST}$** measures effect size — proportion of total variance explained by group membership.",
+      "body_he_md": "- **ANOVA חד-כיווני** בודק $H_0: \\mu_1=\\cdots=\\mu_k$ במבחן אחד, ומונע בעיית השוואות מרובות כש-$k \\geq 3$.\n- **$F=\\text{MSB/MSW}$**: $F$ גדול משמעותו שהשונות הבין-קבוצתית גדולה מהתוך-קבוצתית; $F \\approx 1$ תומך בממוצעים שווים.\n- **טבלת ANOVA:** SST=SSB+SSW; $df_B=k-1$, $df_W=N-k$; תמיד חשבו MS לפני F.\n- **דחה $H_0$** אם $F > F_{\\alpha,k-1,N-k}$; השתמשו ב-post-hoc (Tukey, Bonferroni) לזיהוי הקבוצות השונות.\n- **$\\eta^2=\\text{SSB/SST}$** מודד גודל אפקט — חלק השונות הכוללת שמוסבר על ידי שיוך לקבוצה."
     }
   ],
   "agent_hints": {},
@@ -249,14 +249,14 @@
       "stem_he": "מה ANOVA בודק? נסח את $H_0$ עבור $k=4$ קבוצות.",
       "answer_payload": {
         "acceptable_answers": [
-          "ANOVA tests equality of group means. $H_0: \\mu_1=\\mu_2=\\mu_3=\\mu_4$",
-          "\\mu_4$",
-          "4"
+          "ANOVA tests equality of group means",
+          "H_0: \\mu_1=\\mu_2=\\mu_3=\\mu_4",
+          "\\mu_1=\\mu_2=\\mu_3=\\mu_4"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nANOVA tests equality of group means. $H_0: \\mu_1=\\mu_2=\\mu_3=\\mu_4$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\nANOVA בודק שוויון ממוצעי קבוצות. $H_0: \\mu_1=\\mu_2=\\mu_3=\\mu_4$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nOne-way ANOVA tests whether the population means of $k$ groups are all equal. For $k=4$ groups, the null hypothesis is $H_0: \\mu_1 = \\mu_2 = \\mu_3 = \\mu_4$. The alternative is that at least two means differ — ANOVA does not specify which pair.\n\n**How to think about it:**\nIdentify the test purpose first: equality of means across groups. Write all $k$ means in $H_0$ with equals signs. The alternative is always \"at least two differ\" for one-way ANOVA.\n\n**Common slip:**\nWriting $H_1: \\mu_1 \\neq \\mu_2$ (pairwise) instead of the omnibus alternative. Stating $H_0: \\mu_1 = \\mu_2$ when there are four groups — omitting groups 3 and 4.\n\n**Exam tip:**\nHypothesis-statement items are quick points. Template: $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: at least two means differ. Always match $k$ from the problem.",
+      "explanation_he": "**למה זה נכון:**\nANOVA חד-כיווני בודק אם ממוצעי האוכלוסייה של $k$ קבוצות שווים. ל-$k=4$ קבוצות, $H_0: \\mu_1 = \\mu_2 = \\mu_3 = \\mu_4$. החלופית: לפחות שני ממוצעים שונים — ANOVA לא מציין איזה זוג.\n\n**איך לחשוב על זה:**\nזהו קודם את מטרת המבחן: שוויון ממוצעים בין קבוצות. כתבו את כל $k$ הממוצעים ב-$H_0$ עם סימני שוויון. החלופית תמיד \"לפחות שניים שונים\" ב-ANOVA חד-כיווני.\n\n**טעות נפוצה:**\nכתיבת $H_1: \\mu_1 \\neq \\mu_2$ (זוגי) במקום חלופית אומניבוס. $H_0: \\mu_1 = \\mu_2$ כשיש ארבע קבוצות — השמטת קבוצות 3 ו-4.\n\n**טיפ לבחינה:**\nשאלות ניסוח השערות הן נקודות מהירות. תבנית: $H_0: \\mu_1=\\cdots=\\mu_k$; $H_1$: לפחות שני ממוצעים שונים. תמיד התאימו $k$ מהשאלה.",
       "skill_atoms": []
     },
     {
@@ -267,14 +267,14 @@
       "stem_he": "ANOVA עם $k=3$ ו-$N=30$. מצא $df_B$ ו-$df_W$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$df_B = 3-1 = 2$. $df_W = 30-3 = 27$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "27$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "27"
+          "df_B = 2",
+          "df_W = 27",
+          "2 and 27"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$df_B = 3-1 = 2$. $df_W = 30-3 = 27$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$df_B = 2$, $df_W = 27$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nWith $k=3$ groups, $df_B = k-1 = 3-1 = 2$. With $N=30$ total observations, $df_W = N-k = 30-3 = 27$. These df values locate the critical F value and the sampling distribution of the test statistic.\n\n**How to think about it:**\nMemorize the pair: $df_B = k-1$ (between groups), $df_W = N-k$ (within/error). $k$ is the number of groups; $N$ is total sample size across all groups.\n\n**Common slip:**\nUsing $df_B = N-1$ or $df_W = k-1$ (swapping the formulas). Computing $df_W = 30-1 = 29$ by forgetting to subtract $k$.\n\n**Exam tip:**\ndf items appear before every F computation. Write both formulas on your formula card: $df_B=k-1$, $df_W=N-k$. Quick sanity: $df_B + df_W = N-1 = df_T$.",
+      "explanation_he": "**למה זה נכון:**\nעם $k=3$ קבוצות, $df_B = k-1 = 2$. עם $N=30$ תצפיות, $df_W = N-k = 27$. ערכי df אלה קובעים את ערך F הקריטי ואת התפלגות הסטטיסטיקה.\n\n**איך לחשוב על זה:**\nשיננו את הזוג: $df_B = k-1$ (בין קבוצות), $df_W = N-k$ (תוך/שגיאה). $k$ מספר הקבוצות; $N$ גודל המדגם הכולל בכל הקבוצות.\n\n**טעות נפוצה:**\nשימוש ב-$df_B = N-1$ או $df_W = k-1$ (החלפת נוסחאות). $df_W = 30-1 = 29$ בשכחת חיסור $k$.\n\n**טיפ לבחינה:**\nשאלות df מופיעות לפני כל חישוב F. רשמו: $df_B=k-1$, $df_W=N-k$. בדיקה: $df_B + df_W = N-1 = df_T$ — זהו תמיד.",
       "skill_atoms": []
     },
     {
@@ -285,14 +285,14 @@
       "stem_he": "SSB = 50, $k=3$, SSW = 120, $N=15$. חשב $F$.",
       "answer_payload": {
         "acceptable_answers": [
-          "MSB $= 50/2 = 25$. MSW $= 120/12 = 10$. $F = 2.5$",
-          "2.5$",
-          "2.5"
+          "F = 2.5",
+          "2.5",
+          "MSB=25, MSW=10, F=2.5"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nMSB $= 50/2 = 25$. MSW $= 120/12 = 10$. $F = 2.5$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\nMSB $= 25$, MSW $= 10$, $F = 2.5$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nFirst find df: $df_B = k-1 = 2$, $df_W = N-k = 15-3 = 12$. Then $\\text{MSB} = 50/2 = 25$ and $\\text{MSW} = 120/12 = 10$. Finally $F = 25/10 = 2.5$.\n\n**How to think about it:**\nWork in order: identify $k$ and $N$ → compute df → divide SS by df to get MS → divide MSB by MSW. Never skip the df step — dividing SSB by SSW directly gives the wrong answer.\n\n**Common slip:**\nComputing $F = 50/120 \\approx 0.42$ using raw sums of squares. Using $df_W = N-1 = 14$ instead of $N-k = 12$.\n\n**Exam tip:**\nWhen given SSB and SSW directly, the exam still expects df and MS columns. Write the mini-table: MSB=25, MSW=10, F=2.5. If $F$ is between 1 and 5, it is plausible — always compare to the critical value next.",
+      "explanation_he": "**למה זה נכון:**\nקודם מצאו df: $df_B = 2$, $df_W = 15-3 = 12$. אז $\\text{MSB} = 50/2 = 25$ ו-$\\text{MSW} = 120/12 = 10$. לבסוף $F = 25/10 = 2.5$.\n\n**איך לחשוב על זה:**\nעבדו בסדר: זהו $k$ ו-$N$ → חשבו df → חלקו SS ב-df ל-MS → חלקו MSB ב-MSW. אל תדלגו על df — חלוקת SSB ב-SSW ישירות נותנת תשובה שגויה.\n\n**טעות נפוצה:**\n$F = 50/120 \\approx 0.42$ מסכומי ריבועים גולמיים. $df_W = N-1 = 14$ במקום $N-k = 12$.\n\n**טיפ לבחינה:**\nכשניתנים SSB ו-SSW, הבחינה עדיין מצפה ל-df ו-MS. כתבו: MSB=25, MSW=10, F=2.5. אם $F$ בין 1 ל-5, סביר — תמיד השוו לערך קריטי.",
       "skill_atoms": []
     },
     {
@@ -303,13 +303,14 @@
       "stem_he": "אם $F=1.1$ ו-$F_{\\text{crit}}=4.26$, מה המסקנה?",
       "answer_payload": {
         "acceptable_answers": [
-          "$F < F_{\\text{crit}}$: **fail to reject $H_0$**. No significant difference between group means",
-          "0"
+          "fail to reject H_0",
+          "fail to reject",
+          "no significant difference between group means"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$F < F_{\\text{crit}}$: **fail to reject $H_0$**. No significant difference between group means.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$F < F_{\\text{crit}}$: **לא דוחים $H_0$**. אין הבדל מובהק בין ממוצעי הקבוצות.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nSince $F = 1.1 < F_{\\text{crit}} = 4.26$, we **fail to reject $H_0$**. The observed between-group variation is not large enough relative to within-group variation to conclude that group means differ at this significance level.\n\n**How to think about it:**\nDecision rule: reject if $F > F_{\\text{crit}}$; otherwise fail to reject. $F \\approx 1$ means MSB and MSW are similar — consistent with equal means. Never say \"accept $H_0$\" — use \"fail to reject.\"\n\n**Common slip:**\nRejecting because \"1.1 is close to 4.26\" without the inequality direction. Saying \"accept $H_0$\" instead of the proper frequentist language. Confusing $F < F_{\\text{crit}}$ with rejection.\n\n**Exam tip:**\nInterpretation questions give both statistics — no computation needed. Template: compare, state reject/fail to reject, add one context sentence. If $F$ is near 1, the answer is almost always fail to reject.",
+      "explanation_he": "**למה זה נכון:**\nמאחר ש-$F = 1.1 < F_{\\text{crit}} = 4.26$, **לא דוחים $H_0$**. השונות הבין-קבוצתית אינה גדולה מספיק ביחס לתוך-קבוצתית כדי להסיק שהממוצעים שונים.\n\n**איך לחשוב על זה:**\nכלל החלטה: דחו אם $F > F_{\\text{crit}}$; אחרת לא דוחים. $F \\approx 1$ משמע MSB ו-MSW דומים — עקבי עם ממוצעים שווים. לעולם אל תגידו \"מקבלים $H_0$\" — \"לא דוחים\".\n\n**טעות נפוצה:**\nדחייה כי \"1.1 קרוב ל-4.26\" בלי כיוון אי-השוויון. \"מקבלים $H_0$\" במקום הניסוח הנכון. בלבול $F < F_{\\text{crit}}$ עם דחייה.\n\n**טיפ לבחינה:**\nשאלות פרשנות נותנות שתי סטטיסטיקות — ללא חישוב. תבנית: השוו, ציינו דחייה/אי-דחייה, משפט הקשר. אם $F$ קרוב ל-1, התשובה כמעט תמיד אי-דחייה.",
       "skill_atoms": []
     },
     {
@@ -320,14 +321,13 @@
       "stem_he": "שלוש קבוצות ($n=4$ כל אחת): ממוצעים 5, 8, 6. ממוצע כולל = 6.33. חשב SSB.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\text{SSB}=4(5-6.33)^2+4(8-6.33)^2+4(6-6.33)^2 = 4(1.77)+4(2.79)+4(0.11) = 7.08+11.16+0.44 = 18.68$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "18.68$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "SSB = 18.68",
           "18.68"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\text{SSB}=4(5-6.33)^2+4(8-6.33)^2+4(6-6.33)^2 = 4(1.77)+4(2.79)+4(0.11) = 7.08+11.16+0.44 = 18.68$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\text{SSB} = 4(1.77)+4(2.79)+4(0.11) \\approx 18.68$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nSSB measures weighted squared deviations of group means from the grand mean: $\\text{SSB} = 4(5-6.33)^2 + 4(8-6.33)^2 + 4(6-6.33)^2 = 4(1.77) + 4(2.79) + 4(0.11) = 7.08 + 11.16 + 0.44 = 18.68$. Each group contributes $n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n\n**How to think about it:**\nWhen group sizes are equal ($n=4$), factor $n$ out: $\\text{SSB} = 4\\sum(\\bar{x}_i - \\bar{x}_{..})^2$. Compute each squared deviation first, then multiply by 4.\n\n**Common slip:**\nForgetting to multiply by $n_i$ — using $(\\bar{x}_i - \\bar{x}_{..})^2$ alone. Using the grand mean incorrectly (e.g., averaging the three group means without weighting by $n$).\n\n**Exam tip:**\nSSB from means-only problems are common exam items. Write the formula, substitute each group mean and the given grand mean, show one squared term before summing. Partial credit for correct setup.",
+      "explanation_he": "**למה זה נכון:**\nSSB מודד סטיות בריבוע משוקללות של ממוצעי קבוצות מהממוצע הכולל: $\\text{SSB} = 4(1.77) + 4(2.79) + 4(0.11) = 18.68$. כל קבוצה תורמת $n_i(\\bar{x}_i - \\bar{x}_{..})^2$.\n\n**איך לחשוב על זה:**\nכשגדלי קבוצות שווים ($n=4$), הוציאו $n$: $\\text{SSB} = 4\\sum(\\bar{x}_i - \\bar{x}_{..})^2$. חשבו כל סטייה בריבוע, ואז הכפילו ב-4.\n\n**טעות נפוצה:**\nשכחת הכפלה ב-$n_i$ — שימוש ב-$(\\bar{x}_i - \\bar{x}_{..})^2$ בלבד. ממוצע כולל שגוי (ממוצע פשוט של שלושה ממוצעי קבוצות בלי משקל $n$).\n\n**טיפ לבחינה:**\nשאלות SSB מממוצעים נפוצות בבחינה. כתבו נוסחה, הציבו ממוצעי קבוצות וממוצע כולל, הראו מונח אחד לפני סיכום. נקודות חלקיות על הכנה נכונה.",
       "skill_atoms": []
     },
     {
@@ -338,14 +338,14 @@
       "stem_he": "קבוצה A: 2,4,6. קבוצה B: 5,5,5. ממוצעים 4 ו-5. ממוצע כולל = 4.5. חשב SSW לכל קבוצה.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSSW_A $= (2-4)^2+(4-4)^2+(6-4)^2 = 4+0+4=8$. SSW_B $= (5-5)^2\\times3 = 0$. SSW $= 8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8"
+          "SSW = 8",
+          "SSW_A = 8",
+          "SSW_B = 0"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\nSSW_A $= (2-4)^2+(4-4)^2+(6-4)^2 = 4+0+4=8$. SSW_B $= (5-5)^2\\times3 = 0$. SSW $= 8$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-      "explanation_he": "SSW_A $= 8$, SSW_B $= 0$, SSW $= 8$.",
+      "explanation_en": "**Why this is correct:**\nSSW sums squared deviations within each group: $\\text{SSW}_A = (2-4)^2+(4-4)^2+(6-4)^2 = 4+0+4 = 8$. Group B has zero spread (all values equal 5), so $\\text{SSW}_B = 0$. Total $\\text{SSW} = 8$.\n\n**How to think about it:**\nSSW uses **group means**, not the grand mean. For each observation, subtract its own group mean before squaring. Constant groups contribute zero to SSW — a key insight for understanding F.\n\n**Common slip:**\nUsing the grand mean 4.5 instead of group means 4 and 5. Computing SSB instead of SSW. Missing that identical values within a group give zero within-group variance.\n\n**Exam tip:**\nThis problem tests whether you distinguish SSB (between) from SSW (within). Group B's zero SSW is intentional — it shows within-group spread can differ across groups while ANOVA still pools SSW.",
+      "explanation_he": "**למה זה נכון:**\nSSW מסכם סטיות בריבוע בתוך כל קבוצה: $\\text{SSW}_A = 4+0+4 = 8$. קבוצה B ללא פיזור (כל הערכים 5), $\\text{SSW}_B = 0$. סה\"כ $\\text{SSW} = 8$.\n\n**איך לחשוב על זה:**\nSSW משתמש ב**ממוצעי קבוצות**, לא בממוצע הכולל. לכל תצפית, חסרו ממוצע הקבוצה שלה לפני ריבוע. קבוצות קבועות תורמות אפס — תובנה מפתח להבנת F.\n\n**טעות נפוצה:**\nשימוש בממוצע כולל 4.5 במקום ממוצעי קבוצות 4 ו-5. חישוב SSB במקום SSW. החמצה שערכים זהים בקבוצה נותנים שונות תוך-קבוצתית אפס.\n\n**טיפ לבחינה:**\nתרגיל זה בודק הבחנה בין SSB (בין) ל-SSW (תוך). SSW=0 של קבוצה B מכוון — מראה שפיזור תוך-קבוצתי יכול להשתנות בין קבוצות.",
       "skill_atoms": []
     },
     {
@@ -356,13 +356,14 @@
       "stem_he": "נתון $F(2,18)=4.5$ ו-$F_{0.05,2,18}=3.55$. ציין מסקנה ברמת מובהקות 5%.",
       "answer_payload": {
         "acceptable_answers": [
-          "$4.5 > 3.55$: **reject $H_0$** at 5%. There is significant evidence that at least one group mean differs",
-          "5"
+          "reject H_0",
+          "4.5 > 3.55",
+          "at least one group mean differs"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$4.5 > 3.55$: **reject $H_0$** at 5%. There is significant evidence that at least one group mean differs.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$4.5 > 3.55$: **דוחים $H_0$** ב-5%. יש עדות מובהקת שלפחות ממוצע אחד שונה.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nThe observed $F(2,18) = 4.5$ exceeds the critical value $F_{0.05,2,18} = 3.55$, so we **reject $H_0$** at the 5% significance level. There is statistically significant evidence that at least one group mean differs.\n\n**How to think about it:**\nCompare the computed F to the critical F at the stated $\\alpha$ and df. The notation $F(2,18)$ means numerator df=2, denominator df=18. Reject when observed exceeds critical.\n\n**Common slip:**\nFailing to reject because 4.5 \"does not seem very large.\" Using the wrong df row in the F table. Concluding which specific groups differ — ANOVA only gives omnibus significance.\n\n**Exam tip:**\nWhen the exam gives $F(df_1, df_2)$ and $F_{\\alpha, df_1, df_2}$, it is pure comparison. Write: \"4.5 > 3.55, reject $H_0$.\" Add \"at least one mean differs\" — never name specific pairs without post-hoc.",
+      "explanation_he": "**למה זה נכון:**\n$F(2,18) = 4.5$ גדול מהקריטי $F_{0.05,2,18} = 3.55$, לכן **דוחים $H_0$** ברמת 5%. יש עדות מובהקת שלפחות ממוצע קבוצה אחד שונה.\n\n**איך לחשוב על זה:**\nהשוו F מחושב ל-F קריטי ב-$\\alpha$ ו-df נתונים. $F(2,18)$ משמע df מונה=2, מכנה=18. דחו כשהמחושב עולה על הקריטי.\n\n**טעות נפוצה:**\nאי-דחייה כי 4.5 \"לא נראה גדול\". שורה שגויה בטבלת F. מסקנה על קבוצות ספציפיות — ANOVA נותן רק מובהקות אומניבוס.\n\n**טיפ לבחינה:**\nכשהבחינה נותנת $F$ ו-$F_{\\alpha}$, זו השוואה טהורה. כתבו: \"4.5 > 3.55, דוחים $H_0$\". הוסיפו \"לפחות ממוצע אחד שונה\" — לעולם לא ציינו זוגות בלי post-hoc.",
       "skill_atoms": []
     },
     {
@@ -373,14 +374,15 @@
       "stem_he": "הסבר מדוע ביצוע מבחני t מרובים במקום ANOVA מנפח את שגיאת סוג I.",
       "answer_payload": {
         "acceptable_answers": [
-          "For $c$ comparisons each at level $\\alpha$, the family-wise error rate $\\approx 1-(1-\\alpha)^c$. For 3 groups, 3 t-tests at $\\alpha=0.05$ give error $\\approx 14\\%$ instead of 5%. ANOVA controls the overall Type I error at $\\alpha$",
-          "0.05$ give error $\\approx 14\\%$ instead of 5%. ANOVA controls the overall Type I error at $\\alpha$",
-          "5"
+          "family-wise Type I error",
+          "14%",
+          "1-(1-alpha)^c",
+          "ANOVA controls overall Type I error at alpha"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "For $c$ comparisons each at level $\\alpha$, the family-wise error rate $\\approx 1-(1-\\alpha)^c$. For 3 groups, 3 t-tests at $\\alpha=0.05$ give error $\\approx 14\\%$ instead of 5%. ANOVA controls the overall Type I error at $\\alpha$.",
-      "explanation_he": "עבור $c$ השוואות ברמה $\\alpha$, שגיאת המשפחה $\\approx 1-(1-\\alpha)^c$. ל-3 קבוצות: 3 מבחני t ב-$\\alpha=0.05$ נותנים שגיאה $\\approx 14\\%$ במקום 5%. ANOVA שולט על שגיאת סוג I הכוללת ב-$\\alpha$.",
+      "explanation_en": "**Why this is correct:**\nFor $c$ independent tests each at significance $\\alpha$, the family-wise Type I error rate is approximately $1-(1-\\alpha)^c$. With 3 groups, there are 3 pairwise t-tests; at $\\alpha=0.05$: $1-(0.95)^3 \\approx 14.3\\%$, far above 5%. One-way ANOVA controls the overall error at $\\alpha$.\n\n**How to think about it:**\nCount comparisons: $\\binom{k}{2}$ pairs for $k$ groups. Each t-test has a 5% false-positive chance; the probability of **at least one** false positive grows with more tests. ANOVA replaces many tests with one.\n\n**Common slip:**\nSaying \"more tests means more power\" without mentioning inflated false positives. Computing $c\\alpha = 15\\%$ instead of $1-(1-\\alpha)^c$. Claiming ANOVA eliminates Type I error entirely.\n\n**Exam tip:**\nConceptual ANOVA questions often ask why not t-tests. Memorize: 3 groups → 3 tests → ~14% family-wise error. Mention ANOVA as the single-test solution controlling error at $\\alpha$.",
+      "explanation_he": "**למה זה נכון:**\nל-$c$ מבחנים בלתי-תלויים ברמת $\\alpha$, שגיאת סוג I המשפחתית $\\approx 1-(1-\\alpha)^c$. ל-3 קבוצות, 3 מבחני t; ב-$\\alpha=0.05$: $1-(0.95)^3 \\approx 14.3\\%$, הרבה מעל 5%. ANOVA שולט בשגיאה הכוללת ב-$\\alpha$.\n\n**איך לחשוב על זה:**\nספרו השוואות: $\\binom{k}{2}$ זוגות ל-$k$ קבוצות. כל t-test יש 5% סיכוי לחיובי שגוי; הסתברות **לפחות אחד** גדלה עם יותר מבחנים. ANOVA מחליף רבים במבחן אחד.\n\n**טעות נפוצה:**\n\"יותר מבחנים = יותר עוצמה\" בלי להזכיר חיוביים שגויים מנופחים. $c\\alpha = 15\\%$ במקום $1-(1-\\alpha)^c$. טענה ש-ANOVA מבטל לגמרי שגיאת סוג I.\n\n**טיפ לבחינה:**\nשאלות מושגיות ANOVA שואלות למה לא t-tests. שיננו: 3 קבוצות → 3 מבחנים → ~14% שגיאה משפחתית. ANOVA כפתרון מבחן יחיד בשליטה ב-$\\alpha$.",
       "skill_atoms": []
     }
   ],
