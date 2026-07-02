@@ -39,9 +39,15 @@ git commit -m "feat(curriculum): Cursor expansion batch (N lessons)"
 
 # 5. Seed when a milestone is done
 gh workflow run "Seed DB (one-shot)" -f target=lessons-from-json
+
+# 6. Refresh Obsidian vault dashboards
+node scripts/sync-obsidian-expansion.mjs
+node scripts/sync-obsidian-concepts.mjs
 ```
 
 Progress file: `scripts/.cursor-expansion-progress.json` (`completed[]`, `updated_at`).
+Vault dashboards: `obsidian-vault/curriculum/expansion-queue.md`, `obsidian-vault/concepts/`.
+See `skills/use-obsidian-vault/SKILL.md`.
 
 ## Depth gates (per section)
 
@@ -75,6 +81,7 @@ Expand `checkpoint_solution_en` / `checkpoint_solution_he` to show full reasonin
 - ❌ Google-translate EN → HE.
 - ❌ Cross-fallback languages in lesson JSON (UI is strict per toggle).
 - ❌ Partial-merge sections — always write the full `sections[]` array validly.
+- ❌ **Trailing commas** in JSON (invalid JSON — breaks queue + seed). After editing, run `node -e "JSON.parse(require('fs').readFileSync('scripts/seed_data/lessons/<id>.json'))"`.
 
 ## Suggested Cursor prompt
 

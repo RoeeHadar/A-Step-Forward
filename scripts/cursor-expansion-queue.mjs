@@ -72,7 +72,20 @@ const progress = loadProgress();
 const completed = new Set(progress.completed ?? []);
 
 if (args.mark?.length) {
-  for (const id of args.mark) completed.add(id);
+  for (const id of args.mark) {
+    const fp = path.join(LESSONS_DIR, `${id}.json`);
+    if (!fs.existsSync(fp)) {
+      console.error(`Missing ${fp}`);
+      process.exit(1);
+    }
+    try {
+      JSON.parse(fs.readFileSync(fp, 'utf8'));
+    } catch (err) {
+      console.error(`Invalid JSON in ${id}.json: ${err.message}`);
+      process.exit(1);
+    }
+    completed.add(id);
+  }
   progress.completed = [...completed];
   saveProgress(progress);
   console.log(`Marked ${args.mark.length} complete (${completed.size} total)`);
