@@ -14,22 +14,22 @@
       "kind": "intro",
       "title_en": "Bernoulli Trials: Success or Failure",
       "title_he": "ניסויי ברנולי: הצלחה או כישלון",
-      "body_en_md": "Many experiments have exactly two outcomes: a product is **defective or not**, a patient **recovers or not**, a free throw **goes in or not**. Such experiments are called **Bernoulli trials**.\n\nWhen we repeat a Bernoulli trial $n$ times independently, and ask *how many successes*?, the answer follows the **Binomial distribution**. The binomial formula is one of the most used tools in statistics, quality control, and medicine.",
-      "body_he_md": "ניסויים רבים מביאים בדיוק שני תוצאות: מוצר **פגום או לא**, חולה **מחלים או לא**, זריקה חופשית **נכנסת או לא**. ניסויים כאלה נקראים **ניסויי ברנולי**.\n\nכאשר אנו חוזרים על ניסוי ברנולי $n$ פעמים באופן בלתי-תלוי ושואלים *כמה הצלחות?*, התשובה מקיימת **פילוג בינומי**. הנוסחה הבינומית היא אחד הכלים הנפוצים ביותר בסטטיסטיקה, בקרת איכות ורפואה."
+      "body_en_md": "Many real experiments produce exactly **two outcomes**: a manufactured part is **defective or not**, a medical treatment **works or does not**, a free throw **goes in or misses**, a survey answer is **yes or no**. Each single trial of this type — one attempt with success probability $p$ and failure probability $1-p$ — is called a **Bernoulli trial**, named after the Swiss mathematician Jacob Bernoulli.\n\nWhen the same Bernoulli trial is repeated $n$ times **independently**, with the **same** $p$ each time, we no longer ask \"did it succeed?\" but **\"how many successes occurred?\"** That count $X$ follows the **binomial distribution** $X \\sim B(n,p)$, one of the central models in introductory probability and statistics.\n\nThe binomial formula $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$ answers questions like: How many defective items appear in a sample of 20? What is the chance a student guesses exactly 3 of 10 true/false questions? How likely is it that at least one component fails in a system of 6 independent parts?\n\n**Why this lesson matters:** Quality control, clinical trials, sports analytics, and exam-style word problems all reduce to verifying the **BINS conditions** (Binary, Independent, fixed Number, Same $p$), then applying the PMF or a complement shortcut. Mastering Bernoulli trials and the binomial PMF is prerequisite work for normal approximation, hypothesis tests on proportions, and the Poisson limit — topics linked to `lesson:discrete_distributions_binomial_poisson` and `lesson:statistics_inference`.",
+      "body_he_md": "ניסויים רבים מייצרים בדיוק **שני תוצאות**: חלק מיוצר **פגום או לא**, טיפול רפואי **מצליח או לא**, זריקה חופשית **נכנסת או לא**, תשובה בסקר **כן או לא**. כל ניסיון בודד מסוג זה — עם הסתברות הצלחה $p$ וכישלון $1-p$ — נקרא **ניסוי ברנולי**, על שם המתמטיקאי השוויצרי יעקב ברנולי.\n\nכאשר חוזרים על אותו ניסוי ברנולי $n$ פעמים **בלתי-תלוי**, עם **אותו** $p$ בכל פעם, כבר לא שואלים \"הצליח?\" אלא **\"כמה הצלחות התרחשו?\"** הספירה $X$ מקיימת **פילוג בינומי** $X\\sim B(n,p)$ — אחד המודלים המרכזיים בהסתברות ובסטטיסטיקה.\n\nהנוסחה $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$ עונה על שאלות כמו: כמה פריטים פגומים בדגימה של 20? מה הסיכוי לנחש בדיוק 3 מתוך 10 שאלות נכון/לא-נכון? מה ההסתברות שלפחות רכיב אחד ייכשל במערכת של 6 חלקים בלתי-תלויים?\n\n**למה השיעור חשוב:** בקרת איכות, ניסויים קליניים, ניתוח ספורט ובעיות מילוליות בבחינות כולן מתמצות לאימות **תנאי BINS** (Binary, Independent, Number קבוע, Same $p$), ואז יישום PMF או קיצור משלים. שליטה בניסויי ברנולי וב-PMF הבינומי היא תשתית לקירוב נורמלי, בדיקות השערות על פרופורציות וגבול פואסון — נושאים ב-`lesson:discrete_distributions_binomial_poisson` וב-`lesson:statistics_inference`.\n\n**הקשר אקדמי:** בקורסי הסתברות וסטטיסטיקה, הבינומי הוא הגשר בין ניסויי ברנולי בודדים לבין קירוב נורמלי, בדיקות השערות על פרופורציות וגבול פואסון. בבעיות מילוליות — סמנו תחילה מה נחשב \"הצלחה\" ואז בדקו BINS לפני כל חישוב."
     },
     {
       "kind": "definition",
       "title_en": "Bernoulli Trials and the Binomial Formula",
       "title_he": "ניסויי ברנולי והנוסחה הבינומית",
-      "body_en_md": "**Bernoulli trial:** A single experiment with exactly two outcomes: success (probability $p$) and failure (probability $1-p$). Trials are independent.\n\n**Binomial random variable $X \\sim B(n,p)$:** $X$ counts the number of successes in $n$ independent Bernoulli trials.\n\n**Conditions (BINS):**\n- **B**inary outcomes (success/failure)\n- **I**ndependent trials\n- **N**umber of trials $n$ is fixed\n- **S**ame probability $p$ for each trial\n\n**PMF (Binomial formula):**\n$$P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}, \\quad k = 0, 1, \\ldots, n$$\nwhere $\\binom{n}{k} = \\dfrac{n!}{k!(n-k)!}$ is the number of ways to choose $k$ successes from $n$ trials.\n\n**Mean:** $\\mu = np$. **Variance:** $\\sigma^2 = np(1-p)$. **SD:** $\\sigma = \\sqrt{np(1-p)}$.",
-      "body_he_md": "**ניסוי ברנולי:** ניסוי בודד עם בדיוק שני תוצאות: הצלחה (הסתברות $p$) וכישלון ($1-p$). ניסויים בלתי-תלויים.\n\n**משתנה אקראי בינומי $X\\sim B(n,p)$:** $X$ סופר מספר הצלחות ב-$n$ ניסויי ברנולי בלתי-תלויים.\n\n**תנאים (BINS):**\n- **B**inary — שני תוצאות\n- **I**ndependent — בלתי-תלויים\n- **N**umber — $n$ קבוע\n- **S**ame — $p$ זהה לכל ניסוי\n\n**PMF (נוסחה בינומית):**\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}, \\quad k=0,1,\\ldots,n$$\n\n**ממוצע:** $\\mu=np$. **שונות:** $\\sigma^2=np(1-p)$."
+      "body_en_md": "**Bernoulli trial:** A single random experiment with exactly two outcomes. Label one outcome \"success\" with probability $p$ and the other \"failure\" with $q=1-p$. Examples: flip heads ($p=0.5$), pass an exam ($p=0.7$), item defective ($p=0.05$).\n\n**Binomial random variable $X \\sim B(n,p)$:** Let $X$ count the number of successes in $n$ independent Bernoulli trials, each with the same success probability $p$. The support is $k=0,1,\\ldots,n$.\n\n**BINS conditions** — all four must hold:\n- **B**inary: exactly two outcomes per trial.\n- **I**ndependent: one trial does not change probabilities for others.\n- **N**umber: trial count $n$ is fixed before observing results.\n- **S**ame: every trial uses the same $p$.\n\n**PMF:**\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}, \\quad k=0,1,\\ldots,n$$\nwhere $\\binom{n}{k}=\\dfrac{n!}{k!(n-k)!}$ counts orderings with exactly $k$ successes.\n\n**Mean and spread:**\n$$\\mu=E[X]=np, \\qquad \\sigma^2=\\text{Var}(X)=np(1-p), \\qquad \\sigma=\\sqrt{np(1-p)}.$$\n\n**Interpretation:** The binomial coefficient counts unordered selections of which $k$ trials succeed; multiplying by $p^k(1-p)^{n-k}$ assigns probability to each specific success/failure pattern.",
+      "body_he_md": "**ניסוי ברנולי:** ניסוי מקרי בודד עם בדיוק שני תוצאות. מסמנים \"הצלחה\" בהסתברות $p$ ו\"כישלון\" ב-$q=1-p$. דוגמאות: עץ במטבע ($p=0.5$), מעבר מבחן ($p=0.7$), פריט פגום ($p=0.05$).\n\n**משתנה בינומי $X\\sim B(n,p)$:** $X$ סופר הצלחות ב-$n$ ניסויי ברנולי בלתי-תלויים עם אותו $p$. תחום: $k=0,1,\\ldots,n$.\n\n**תנאי BINS** — כל ארבעתם חייבים להתקיים:\n- **B**inary — שני תוצאות בניסוי.\n- **I**ndependent — ניסוי אחד לא משנה הסתברויות באחרים.\n- **N**umber — $n$ קבוע לפני צפייה בתוצאות.\n- **S**ame — אותו $p$ בכל ניסוי.\n\n**PMF:**\n$$P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}, \\quad k=0,1,\\ldots,n$$\nכאשר $\\binom{n}{k}$ סופר סידורים עם בדיוק $k$ הצלחות.\n\n**ממוצע ופיזור:**\n$$\\mu=E[X]=np, \\qquad \\sigma^2=np(1-p), \\qquad \\sigma=\\sqrt{np(1-p)}.$$\n\n**פרשנות:** המקדם הבינומי סופר בחירות לא-מסודרות של אילו $k$ ניסויים מצליחים; הכפלה ב-$p^k(1-p)^{n-k}$ מקצה הסתברות לכל דפוס הצלחה/כישלון ספציפי.\n\n**הערה:** המודל מניח שכל ניסוי זהה למשנהו ושההסתברות $p$ אינה משתנה לאורך הרצף — אחרת יש לבחור מודל אחר (היפרגיאומטרי, גיאומטרי או פואסון)."
     },
     {
       "kind": "theory",
       "title_en": "Shape and Cumulative Probabilities",
       "title_he": "צורת הפילוג והסתברויות מצטברות",
-      "body_en_md": "**Shape of the distribution:**\n- If $p = 0.5$: symmetric around $n/2$.\n- If $p < 0.5$: right-skewed (most successes are few).\n- If $p > 0.5$: left-skewed.\n- As $n$ grows, it approaches a normal shape (Central Limit Theorem).\n\n**Cumulative probabilities:**\n$$P(X \\leq k) = \\sum_{j=0}^k \\binom{n}{j}p^j(1-p)^{n-j}$$\n$$P(X \\geq k) = 1 - P(X \\leq k-1)$$\n\n**Complement rule:** Often easier to compute $P(X \\geq 1) = 1 - P(X=0) = 1-(1-p)^n$.",
-      "body_he_md": "**צורת הפילוג:**\n- $p=0.5$: סימטרי סביב $n/2$.\n- $p<0.5$: מוטה ימינה.\n- $p>0.5$: מוטה שמאלה.\n- ככל ש-$n$ גדל — מתקרב לצורה נורמלית.\n\n**הסתברויות מצטברות:**\n$$P(X\\leq k)=\\sum_{j=0}^k\\binom{n}{j}p^j(1-p)^{n-j}$$\n$$P(X\\geq k)=1-P(X\\leq k-1)$$\n\n**כלל המשלים:** לעיתים קל יותר לחשב $P(X\\geq1)=1-(1-p)^n$."
+      "body_en_md": "**Shape of the binomial distribution:**\n- $p=0.5$: symmetric about $n/2$; $\\binom{n}{k}=\\binom{n}{n-k}$.\n- $p<0.5$: right-skewed — most probability mass at small $k$.\n- $p>0.5$: left-skewed — mass concentrates near $n$.\n- As $n$ increases, the PMF approaches a bell curve (normal limit / CLT).\n\n**Mode:** For integer $np$, the mode is $\\lfloor np\\rfloor$ or $\\lceil np\\rceil$; for $p=0.5$ and even $n$, the peak is at $k=n/2$.\n\n**Cumulative probabilities:**\n$$P(X\\leq k)=\\sum_{j=0}^{k}\\binom{n}{j}p^j(1-p)^{n-j}$$\n$$P(X\\geq k)=1-P(X\\leq k-1)$$\n$$P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$$\n\n**Complement shortcuts (exam speed):**\n- $P(X\\geq1)=1-(1-p)^n$ (at least one success)\n- $P(X=0)=(1-p)^n$ (all fail)\n- $P(X=n)=p^n$ (all succeed)\n\n**Symmetry trick:** If $X\\sim B(n,p)$, then $n-X\\sim B(n,1-p)$. Compute the smaller tail when $p$ is far from $0.5$.\n\n**Normal approximation preview:** When $np\\geq5$ and $n(1-p)\\geq5$, $X\\approx N(np,np(1-p))$ with continuity correction for cumulative probabilities — covered fully in `lesson:discrete_distributions_binomial_poisson`.\n\n**Worked strategy for tails:** If $p$ is small, compute $P(X\\leq k)$ directly. If $p$ is near $0.5$ and $n$ is moderate, symmetry reduces work. For \"at least one,\" always try the complement first before summing.",
+      "body_he_md": "**צורת הפילוג הבינומי:**\n- $p=0.5$: סימטרי סביב $n/2$; $\\binom{n}{k}=\\binom{n}{n-k}$.\n- $p<0.5$: מוטה ימינה — רוב המסה ב-$k$ קטנים.\n- $p>0.5$: מוטה שמאלה — מסה מתרכזת ליד $n$.\n- ככל ש-$n$ גדל, ה-PMF מתקרב לעקומת פעמון (גבול נורמלי / CLT).\n\n**שכיח:** כש-$np$ שלם, השכיח הוא $\\lfloor np\\rfloor$ או $\\lceil np\\rceil$; ל-$p=0.5$ ו-$n$ זוגי, השיא ב-$k=n/2$.\n\n**הסתברויות מצטברות:**\n$$P(X\\leq k)=\\sum_{j=0}^{k}\\binom{n}{j}p^j(1-p)^{n-j}$$\n$$P(X\\geq k)=1-P(X\\leq k-1)$$\n$$P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$$\n\n**קיצורי משלים (מהירות בבחינה):**\n- $P(X\\geq1)=1-(1-p)^n$\n- $P(X=0)=(1-p)^n$\n- $P(X=n)=p^n$\n\n**טריק סימטריה:** אם $X\\sim B(n,p)$, אז $n-X\\sim B(n,1-p)$. חשבו את הזנב הקטן יותר כש-$p$ רחוק מ-$0.5$.\n\n**תצוגה מקדימה של קירוב נורמלי:** כש-$np\\geq5$ ו-$n(1-p)\\geq5$, $X\\approx N(np,np(1-p))$ עם תיקון רציפות — ב-`lesson:discrete_distributions_binomial_poisson`.\n\n**אסטרטגיה לזנבות:** $p$ קטן — חשבו $P(X\\leq k)$ ישירות. $p$ קרוב ל-$0.5$ — סימטריה חוסכת. ב\"לפחות אחד\" — נסו משלים לפני סכימה.\n\n**טיפ לבחינה:** זיהוי מהיר של סימטריה ($p=0.5$) או של משלים (\"לפחות אחד\") חוסך דקות יקרות מתחת ללחץ זמן — אל תסכמו PMF ידנית כשיש קיצור ברור."
     },
     {
       "kind": "worked_example",
@@ -37,8 +37,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Direct Binomial Probability",
       "title_he": "דוגמה פתורה 1 — הסתברות בינומית ישירה",
-      "body_en_md": "A multiple-choice quiz has 5 questions, each with 4 options (one correct). A student guesses randomly. What is the probability of getting exactly 2 correct?\n\n### Move 1 $X \\sim B(5, 0.25)$ ($p = 1/4$, $n = 5$, $k = 2$).\n\n### Move 2\n$$P(X=2) = \\binom{5}{2}(0.25)^2(0.75)^3.$$\n\n### Move 3\n$$\\binom{5}{2} = 10, \\quad (0.25)^2 = 0.0625, \\quad (0.75)^3 = 0.421875.$$\n$$P(X=2) = 10 \\times 0.0625 \\times 0.421875 = 0.2637.$$\n\n**Mean:** $\\mu = 5 \\times 0.25 = 1.25$ correct answers expected by guessing.",
-      "body_he_md": "חידון בחירה מרובה: 5 שאלות, כל אחת עם 4 אפשרויות. תלמיד מנחש אקראית. מה ההסתברות לקבל בדיוק 2 נכונות?\n\n**שלב 1 — זיהוי:** $X\\sim B(5,0.25)$.\n\n**שלב 2 — נוסחה:**\n$$P(X=2)=\\binom{5}{2}(0.25)^2(0.75)^3.$$\n\n**שלב 3 — חישוב:**\n$$P(X=2)=10\\times0.0625\\times0.421875=0.2637.$$\n\n**ממוצע:** $\\mu=1.25$ תשובות נכונות מצפויות בניחוש."
+      "body_en_md": "A multiple-choice quiz has 5 questions, each with 4 options (one correct). A student guesses randomly. What is the probability of getting exactly 2 correct?\n\n### Move 1: Verify BINS and identify parameters.\nEach question: success = correct guess, $p=1/4$. Fixed $n=5$, independent guesses. So $X\\sim B(5,0.25)$ and we want $P(X=2)$.\n\n### Move 2: Write the PMF.\n$$P(X=2)=\\binom{5}{2}(0.25)^2(0.75)^3.$$\n\n### Move 3: Evaluate.\n$$\\binom{5}{2}=10, \\quad (0.25)^2=0.0625, \\quad (0.75)^3=0.421875.$$\n$$P(X=2)=10\\times0.0625\\times0.421875=0.2637.$$\n\n**Mean check:** $\\mu=np=5\\times0.25=1.25$ correct answers expected by guessing — $k=2$ is above average but plausible.\n\n**Exam habit:** State what counts as success before substituting into the PMF.\n\n**Why $\\binom{5}{2}=10$?** Choose which 2 of the 5 questions are answered correctly; each such pattern has probability $(0.25)^2(0.75)^3$. **Wrong path:** Using $p=0.75$ — that is the failure rate, not success.\n\n**BINS check:** Fixed $n=5$ questions, independent guesses, same $p=1/4$ each. Reporting $0.2637$ to four decimals is standard. If questions were linked, independence would fail and the binomial model would not apply.\n\n**Extra note:** $\\binom{5}{2}=10$ counts which two of five questions are correct; each pattern has weight $(0.25)^2(0.75)^3$.",
+      "body_he_md": "חידון בחירה מרובה: 5 שאלות, 4 אפשרויות בכל אחת. תלמיד מנחש. מה ההסתברות לקבל בדיוק 2 נכונות?\n\n### צעד 1: אימות BINS וזיהוי פרמטרים.\nבכל שאלה: הצלחה = ניחוש נכון, $p=1/4$. $n=5$ קבוע, ניחושים בלתי-תלויים. לכן $X\\sim B(5,0.25)$ ורוצים $P(X=2)$.\n\n### צעד 2: כתיבת PMF.\n$$P(X=2)=\\binom{5}{2}(0.25)^2(0.75)^3.$$\n\n### צעד 3: חישוב.\n$$\\binom{5}{2}=10, \\quad P(X=2)=10\\times0.0625\\times0.421875=0.2637.$$\n\n**בדיקת ממוצע:** $\\mu=1.25$ — $k=2$ מעל הממוצע אך סביר.\n\n**הרגל לבחינה:** הגדירו מה נחשב הצלחה לפני הצבה ב-PMF.\n\n**למה $\\binom{5}{2}=10$?** בוחרים אילו 2 מתוך 5 שאלות נענות נכון; לכל דפוס כזה הסתברות $(0.25)^2(0.75)^3$. **מסלול שגוי:** שימוש ב-$p=0.75$ — זו הסתברות כישלון, לא הצלחה.\n\n**בדיקת BINS:** $n=5$ קבוע, ניחושים בלתי-תלויים, אותו $p=1/4$. דיווח $0.2637$ ל-ארבע ספרות עשרוניות הוא סטנדרט. אם השאלות היו קשורות, בלתי-תלות נכשלת והמודל הבינומי לא חל.\n\n**הערה נוספת:** $\\binom{5}{2}=10$ סופר כמה דרכים לבחור שתי שאלות נכונות מתוך חמש. כל דפוס כזה מקבל משקל $(0.25)^2(0.75)^3$. בדקו שהגדרתם הצלחה כ\"ניחוש נכון\".\n\n**הערה:** $\\binom{5}{2}=10$ סופר כמה דרכים לבחור שתי שאלות נכונות מתוך חמש; כל דפוס כזה מקבל משקל $(0.25)^2(0.75)^3$."
     },
     {
       "kind": "checkpoint",
@@ -46,8 +46,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "A basketball player hits 70% of free throws. She shoots 4. Find $P(X=4)$ (all four in).",
       "body_he_md": "שחקנית כדורסל מכניסה 70% מהזריקות החופשיות. היא זורקת 4 פעמים. מצא $P(X=4)$.",
-      "checkpoint_solution_en": "$P(X=4) = \\binom{4}{4}(0.7)^4(0.3)^0 = 0.7^4 = 0.2401$.",
-      "checkpoint_solution_he": "$P(X=4) = 0.7^4 = 0.2401$."
+      "checkpoint_solution_en": "**Step 1 — Model:** Each free throw is a Bernoulli trial with $p=0.7$. Four independent throws: $X\\sim B(4,0.7)$.\n\n**Step 2 — All four in means $k=4$:**\n$$P(X=4)=\\binom{4}{4}(0.7)^4(0.3)^0=(0.7)^4=0.2401.$$\n\n**Check:** $\\binom{4}{4}=1$ and $(0.3)^0=1$, so only $p^4$ remains. Mean $\\mu=2.8$ — getting all four is above average but not extreme.",
+      "checkpoint_solution_he": "**שלב 1 — מודל:** כל זריקה = ניסוי ברנולי עם $p=0.7$. 4 זריקות בלתי-תלויות: $X\\sim B(4,0.7)$.\n\n**שלב 2 — כולן נכנסות = $k=4$:**\n$$P(X=4)=(0.7)^4=0.2401.$$\n\n**בדיקה:** $\\binom{4}{4}=1$ ו-$(0.3)^0=1$, נשאר רק $p^4$. ממוצע $\\mu=2.8$ — כולן נכנסות מעל הממוצע אך לא קיצוני."
     },
     {
       "kind": "worked_example",
@@ -55,8 +55,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Cumulative Binomial Probability",
       "title_he": "דוגמה פתורה 2 — הסתברות בינומית מצטברת",
-      "body_en_md": "A quality inspector checks 8 items. Each item has a 20% chance of being defective. Find the probability that **at most 2** are defective.\n\n**Set up:** $X \\sim B(8, 0.2)$. Want $P(X \\leq 2) = P(X=0) + P(X=1) + P(X=2)$.\n\n**Compute each term:**\n$$P(X=0) = (0.8)^8 = 0.1678.$$\n$$P(X=1) = \\binom{8}{1}(0.2)^1(0.8)^7 = 8 \\times 0.2 \\times 0.2097 = 0.3355.$$\n$$P(X=2) = \\binom{8}{2}(0.2)^2(0.8)^6 = 28 \\times 0.04 \\times 0.2621 = 0.2936.$$\n\n**Total:**\n$$P(X \\leq 2) = 0.1678 + 0.3355 + 0.2936 = 0.7969.$$\n\n**Conclusion:** There is approximately a 79.7% chance that at most 2 of the 8 items are defective.",
-      "body_he_md": "מפקח איכות בודק 8 פריטים. כל פריט בהסתברות 20% פגום. מצא הסתברות ש**לכל היותר 2** פגומים.\n\n**הגדרה:** $X\\sim B(8,0.2)$. רוצים $P(X\\leq2)=P(X=0)+P(X=1)+P(X=2)$.\n\n**חישוב:**\n$$P(X=0)=0.8^8=0.1678.$$\n$$P(X=1)=8\\times0.2\\times0.8^7=0.3355.$$\n$$P(X=2)=28\\times0.04\\times0.8^6=0.2936.$$\n\n**סכום:** $P(X\\leq2)\\approx0.7969$.\n\n**מסקנה:** כ-79.7% שלכל היותר 2 פגומים."
+      "body_en_md": "A quality inspector checks 8 items. Each item has a 20% chance of being defective. Find the probability that **at most 2** are defective.\n\n### Move 1: Model.\n$X\\sim B(8,0.2)$ with success = defective. Want $P(X\\leq2)=P(X=0)+P(X=1)+P(X=2)$.\n\n### Move 2: Compute each PMF term.\n$$P(X=0)=(0.8)^8=0.1678.$$\n$$P(X=1)=\\binom{8}{1}(0.2)^1(0.8)^7=8\\times0.2\\times0.2097=0.3355.$$\n$$P(X=2)=\\binom{8}{2}(0.2)^2(0.8)^6=28\\times0.04\\times0.2621=0.2936.$$\n\n### Move 3: Sum.\n$$P(X\\leq2)=0.1678+0.3355+0.2936=0.7969.$$\n\n**Conclusion:** About 79.7% chance at most 2 defective. **Sanity check:** With $p=0.2$, mean $\\mu=1.6$ — most mass at 0, 1, 2.\n\n**Alternative:** $P(X\\geq3)=1-P(X\\leq2)\\approx0.203$ — the complement of what we computed. **Exam tip:** \"At most 2\" always means add $P(X=0)$ through $P(X=2)$; do not stop after one term.\n\n**Context:** Expected defects $\\mu=1.6$. Summing three terms is manageable; for larger $n$ use tables or normal approximation. Write $P(X=0)+P(X=1)+P(X=2)$ explicitly before adding — method marks require the setup.\n\n**Extra note:** \"At most 2\" includes 0, 1, and 2 — not \"exactly 2.\" With $p=0.2$, most mass is at low counts, consistent with $\\mu=1.6$.",
+      "body_he_md": "מפקח בודק 8 פריטים. כל פריט בהסתברות 20% פגום. מצא הסתברות ש**לכל היותר 2** פגומים.\n\n### צעד 1: מודל.\n$X\\sim B(8,0.2)$, הצלחה = פגום. $P(X\\leq2)=P(X=0)+P(X=1)+P(X=2)$.\n\n### צעד 2: חישוב כל איבר.\n$$P(X=0)=0.8^8=0.1678.$$\n$$P(X=1)=8\\times0.2\\times0.8^7=0.3355.$$\n$$P(X=2)=28\\times0.04\\times0.8^6=0.2936.$$\n\n### צעד 3: סכום.\n$$P(X\\leq2)=0.7969.$$\n\n**מסקנה:** כ-79.7% לכל היותר 2 פגומים. **בדיקה:** $\\mu=1.6$ — רוב המסה ב-0,1,2.\n\n**חלופה:** $P(X\\geq3)=1-P(X\\leq2)\\approx0.203$ — משלים למה שחישבנו. **טיפ לבחינה:** \"לכל היותר 2\" = סכום $P(X=0)$ עד $P(X=2)$; אל תעצרו אחרי איבר אחד.\n\n**הקשר:** $\\mu=1.6$. סכימת שלושה איברים סבירה; ל-$n$ גדול השתמשו בטבלאות. כתבו $P(X=0)+P(X=1)+P(X=2)$ לפני חיבור — נקודות שיטה תלויות בהצגת הסכום.\n\n**הערה נוספת:** \"לכל היותר 2\" אינו \"בדיוק 2\" — חובה לכלול גם $P(X=0)$ ו-$P(X=1)$. עם $p=0.2$ רוב ההסתברות בשלושת הערכים הנמוכים; זה תואם $\\mu=1.6$.\n\n**הקשר:** עם $p=0.2$ ו-$\\mu=1.6$, רוב ההסתברות מרוכזת ב-$k=0,1,2$ — לכן סכימת שלושה איברים מספיקה; ל-$n$ גדול יותר השתמשו בטבלאות או בקירוב נורמלי."
     },
     {
       "kind": "checkpoint",
@@ -64,8 +64,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "$X \\sim B(6, 0.3)$. Find $P(X \\geq 1)$ using the complement rule.",
       "body_he_md": "$X\\sim B(6,0.3)$. מצא $P(X\\geq1)$ בעזרת כלל המשלים.",
-      "checkpoint_solution_en": "$P(X \\geq 1) = 1 - P(X=0) = 1 - (0.7)^6 = 1 - 0.1176 = 0.8824$.",
-      "checkpoint_solution_he": "$P(X\\geq1)=1-(0.7)^6=1-0.1176=0.8824$."
+      "checkpoint_solution_en": "**Step 1 — Model:** $X\\sim B(6,0.3)$ counts successes in 6 trials.\n\n**Step 2 — Complement for \"at least one\":**\n$$P(X\\geq1)=1-P(X=0)=1-(0.7)^6=1-0.1176=0.8824.$$\n\n**Check:** $P(X=0)$ is the probability all six fail — much faster than summing five terms.",
+      "checkpoint_solution_he": "**שלב 1 — מודל:** $X\\sim B(6,0.3)$ סופר הצלחות ב-6 ניסויים.\n\n**שלב 2 — משלים ל\"לפחות אחת\":**\n$$P(X\\geq1)=1-(0.7)^6=0.8824.$$\n\n**בדיקה:** $P(X=0)$ = כולם נכשלים — מהיר הרבה יותר מסכימת חמישה איברים."
     },
     {
       "kind": "worked_example",
@@ -73,15 +73,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Finding p from Given Probabilities",
       "title_he": "דוגמה פתורה 3 — מציאת p מהסתברויות נתונות",
-      "body_en_md": "A coin is flipped 4 times. The probability of getting **exactly 3 heads** equals the probability of getting **exactly 2 heads**. What is $p$ (probability of heads)?\n\n### Move 1\n$$P(X=3) = \\binom{4}{3}p^3(1-p)^1 = 4p^3(1-p).$$\n$$P(X=2) = \\binom{4}{2}p^2(1-p)^2 = 6p^2(1-p)^2.$$\n\n### Move 2\n$$4p^3(1-p) = 6p^2(1-p)^2.$$\n\n### Move 3 (assuming $p \\neq 0$ and $p \\neq 1$, divide by $2p^2(1-p)$):\n$$2p = 3(1-p).$$\n$$2p = 3 - 3p \\Rightarrow 5p = 3 \\Rightarrow p = \\frac{3}{5} = 0.6.$$\n\n**Check:** $P(X=3) = 4(0.6)^3(0.4) = 4 \\times 0.216 \\times 0.4 = 0.3456$. $P(X=2) = 6(0.6)^2(0.4)^2 = 6 \\times 0.36 \\times 0.16 = 0.3456$. ✓",
-      "body_he_md": "מטבע מוטל 4 פעמים. הסתברות לקבל **בדיוק 3 עצות** שווה להסתברות לקבל **בדיוק 2 עצות**. מהו $p$?\n\n**שלב 1 — כתוב משוואות:**\n$$P(X=3)=4p^3(1-p).$$\n$$P(X=2)=6p^2(1-p)^2.$$\n\n**שלב 2 — שווה:**\n$$4p^3(1-p)=6p^2(1-p)^2.$$\n\n**שלב 3 — פשט** ($p\\neq0,1$, חלק ב-$2p^2(1-p)$):\n$$2p=3(1-p)\\Rightarrow 5p=3\\Rightarrow p=0.6.$$\n\n**בדיקה:** $P(X=3)=P(X=2)=0.3456$. ✓"
+      "body_en_md": "A coin is flipped 4 times. The probability of **exactly 3 heads** equals the probability of **exactly 2 heads**. Find $p$.\n\n### Move 1: Write PMF expressions.\n$$P(X=3)=\\binom{4}{3}p^3(1-p)=4p^3(1-p).$$\n$$P(X=2)=\\binom{4}{2}p^2(1-p)^2=6p^2(1-p)^2.$$\n\n### Move 2: Set equal and simplify.\n$$4p^3(1-p)=6p^2(1-p)^2.$$\nFor $0<p<1$, divide by $2p^2(1-p)$: $2p=3(1-p)$.\n\n### Move 3: Solve.\n$$5p=3 \\Rightarrow p=0.6.$$\n\n**Check:** $P(X=3)=P(X=2)=0.3456$. ✓\n\n**Exam note:** When equating PMFs, cancel common factors carefully — exclude $p=0$ and $p=1$ as non-physical solutions.\n\n**Verify both sides:** $P(X=3)=4(0.6)^3(0.4)=0.3456$ and $P(X=2)=6(0.6)^2(0.4)^2=0.3456$. This inverse problem type appears when calibrating a biased coin from observed symmetry of two counts.\n\n**General pattern:** Cancel common factors of $p$ and $(1-p)$ after equating PMFs. Verify $p\\in(0,1)$ and substitute back. The same idea finds $n$ when $\\binom{n}{2}=\\binom{n}{3}$ at $p=0.5$ — another exam favourite.\n\n**Extra note:** After finding $p=0.6$, substitute back into both PMFs to verify equality — standard exam check.",
+      "body_he_md": "מטבע מוטל 4 פעמים. $P(X=3)=P(X=2)$. מצא $p$.\n\n### צעד 1: כתיבת PMF.\n$$P(X=3)=4p^3(1-p), \\quad P(X=2)=6p^2(1-p)^2.$$\n\n### צעד 2: השוואה ופישוט.\n$$4p^3(1-p)=6p^2(1-p)^2.$$\nל-$0<p<1$, חלוקה ב-$2p^2(1-p)$: $2p=3(1-p)$.\n\n### צעד 3: פתרון.\n$$p=0.6.$$\n\n**בדיקה:** $P(X=3)=P(X=2)=0.3456$. ✓\n\n**הערת בחינה:** בטלו גורמים משותפים בזהירות — דחו $p=0,1$.\n\n**אימות שני הצדדים:** $P(X=3)=4(0.6)^3(0.4)=0.3456$ ו-$P(X=2)=6(0.6)^2(0.4)^2=0.3456$. סוג בעיה זה מופיע בכיול מטבע מוטה מסימטריה של שני ספירים.\n\n**תבנית כללית:** לאחר השוואת PMF צמצמו גורמים משותפים של $p$ ו-$(1-p)$. אמתו $p\\in(0,1)$ והציבו חזרה. אותה רעיון מוצאת $n$ כש-$\\binom{n}{2}=\\binom{n}{3}$ ב-$p=0.5$.\n\n**הערה נוספת:** לאחר $p=0.6$, הציבו חזרה ל-$P(X=3)$ ו-$P(X=2)$ — שוויון מלא מאשר נכונות. בעיות כיול מטבע מופיעות לעיתים קרובות בבחינות.\n\n**תבנית כללית:** לאחר השוואת PMF צמצמו גורמים משותפים של $p$ ו-$(1-p)$, אמתו $p\\in(0,1)$ והציבו חזרה — בעיות כיול מטבע מופיעות לעיתים קרובות בבחינות."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Binomial Calculations",
       "title_he": "מדריך שיטה — חישובים בינומיים",
-      "body_en_md": "**Step-by-step:**\n1. Verify BINS conditions.\n2. Identify $n$, $p$, and the required $k$ value(s).\n3. Apply $P(X=k) = \\binom{n}{k}p^k(1-p)^{n-k}$.\n4. For cumulative probabilities, sum terms or use complement.\n\n**Complement shortcuts:**\n- $P(X \\geq 1) = 1 - (1-p)^n$\n- $P(X < k) = P(X \\leq k-1)$\n- $P(a \\leq X \\leq b) = P(X \\leq b) - P(X \\leq a-1)$\n\n**$\\binom{n}{k}$ facts:** $\\binom{n}{0}=\\binom{n}{n}=1$; $\\binom{n}{1}=n$; $\\binom{n}{2}=n(n-1)/2$.\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.\n\n**Tip:** If two rows seem to fit, list the givens and match them to the table columns before calculating.",
-      "body_he_md": "**שלב אחר שלב:**\n1. אמת תנאי BINS.\n2. זהה $n$, $p$ וערך/ערכי $k$ הנדרשים.\n3. הפעל $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$.\n4. להסתברויות מצטברות — סכם מאמרים או השתמש במשלים.\n\n**קיצורי המשלים:**\n- $P(X\\geq1)=1-(1-p)^n$\n- $P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$\n\n**עובדות $\\binom{n}{k}$:** $\\binom{n}{0}=1$; $\\binom{n}{1}=n$; $\\binom{n}{2}=n(n-1)/2$.\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
+      "body_en_md": "**Binomial problem protocol:**\n1. **Verify BINS** — write one line per letter; stop if any fails.\n2. **Identify** $n$, $p$, and what counts as success.\n3. **Classify** the question: exact $P(X=k)$, cumulative $P(X\\leq k)$, tail $P(X\\geq k)$, or interval $P(a\\leq X\\leq b)$.\n4. **Choose method:** direct PMF, sum terms, complement, or symmetry $n-X$.\n5. **Compute** and sanity-check against $\\mu=np$.\n\n| Problem type | Method |\n|---|---|\n| Exactly $k$ | PMF formula |\n| At most $k$ | Sum $P(X=0)+\\cdots+P(X=k)$ |\n| At least 1 | $1-(1-p)^n$ |\n| Between $a$ and $b$ | Sum or $P(X\\leq b)-P(X\\leq a-1)$ |\n\n**Useful identities:** $\\binom{n}{0}=\\binom{n}{n}=1$; $\\binom{n}{1}=n$; $\\binom{n}{2}=n(n-1)/2$; $\\binom{n}{k}=\\binom{n}{n-k}$.",
+      "body_he_md": "**פרוטוקול בעיות בינומיות:**\n1. **אמת BINS** — שורה לכל אות; עצרו אם אחד נכשל.\n2. **זהו** $n$, $p$ ומה נחשב הצלחה.\n3. **סווגו:** מדויק $P(X=k)$, מצטבר $P(X\\leq k)$, זנב $P(X\\geq k)$, או טווח $P(a\\leq X\\leq b)$.\n4. **בחרו שיטה:** PMF ישיר, סכימה, משלים, או סימטריה $n-X$.\n5. **חשבו** ובדקו מול $\\mu=np$.\n\n| סוג בעיה | שיטה |\n|---|---|\n| בדיוק $k$ | נוסחת PMF |\n| לכל היותר $k$ | סכום $P(X=0)+\\cdots+P(X=k)$ |\n| לפחות 1 | $1-(1-p)^n$ |\n| בין $a$ ל-$b$ | סכום או $P(X\\leq b)-P(X\\leq a-1)$ |\n\n**זהויות שימושיות:** $\\binom{n}{0}=1$; $\\binom{n}{1}=n$; $\\binom{n}{2}=n(n-1)/2$; $\\binom{n}{k}=\\binom{n}{n-k}$."
     },
     {
       "kind": "exercise_set",
@@ -95,8 +95,8 @@
           "difficulty": "easy",
           "body_en": "$X \\sim B(6, 0.5)$. Find $P(X=3)$.",
           "body_he": "$X\\sim B(6,0.5)$. מצא $P(X=3)$.",
-          "solution_en": "**Solution:**\n\n$P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$P(X=3)=20/64=0.3125$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nModel: $X\\sim B(6,0.5)$ with $k=3$ successes.\n$$P(X=3)=\\binom{6}{3}(0.5)^6=20\\times\\frac{1}{64}=\\frac{20}{64}=0.3125.$$\n\n**Check:** With $p=0.5$, the distribution is symmetric; $P(X=3)=P(X=3)$ and $\\mu=3$ sits at the centre.",
+          "solution_he": "**פתרון:**\n\nמודל: $X\\sim B(6,0.5)$ עם $k=3$ הצלחות.\n$$P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125.$$\n\n**בדיקה:** עם $p=0.5$ הפילוג סימטרי; $\\mu=3$ במרכז — $20/64$ הגיוני.",
           "points": 4
         },
         {
@@ -104,8 +104,8 @@
           "difficulty": "easy",
           "body_en": "A test has 10 true/false questions. A student guesses all. Find the expected number correct.",
           "body_he": "מבחן עם 10 שאלות נכון/לא-נכון. תלמיד מנחש הכל. מצא את מספר הנכונות הצפוי.",
-          "solution_en": "**Solution:**\n\n$\\mu = np = 10 \\times 0.5 = 5$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$\\mu = 5$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nEach true/false question is a Bernoulli trial with $p=0.5$. With $n=10$ independent guesses, $X\\sim B(10,0.5)$.\n$$E[X]=\\mu=np=10\\times0.5=5.$$\n\n**Check:** The question asks for expected count, not $P(X=5)$. On average, half the guesses succeed.",
+          "solution_he": "**פתרון:**\n\nכל שאלת נכון/לא-נכון = ניסוי ברנולי עם $p=0.5$. עם $n=10$ ניחושים בלתי-תלויים, $X\\sim B(10,0.5)$.\n$$E[X]=\\mu=np=10\\times0.5=5.$$\n\n**בדיקה:** השאלה מבקשת תוחלת, לא $P(X=5)$ — בממוצע חצי מהניחושים מצליחים.",
           "points": 4
         },
         {
@@ -113,8 +113,8 @@
           "difficulty": "easy",
           "body_en": "$X \\sim B(3, 0.4)$. Find $P(X=0)$.",
           "body_he": "$X\\sim B(3,0.4)$. מצא $P(X=0)$.",
-          "solution_en": "**Solution:**\n\n$P(X=0) = (0.6)^3 = 0.216$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$P(X=0)=0.6^3=0.216$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nFor $X\\sim B(3,0.4)$, zero successes means all three trials fail.\n$$P(X=0)=(1-p)^3=(0.6)^3=0.216.$$\n\n**Check:** When $k=0$, $\\binom{3}{0}=1$ and only the failure probability remains. Do not use $0.4^3$.",
+          "solution_he": "**פתרון:**\n\nעבור $X\\sim B(3,0.4)$, אפס הצלחות = שלושה כישלונות.\n$$P(X=0)=(1-p)^3=(0.6)^3=0.216.$$\n\n**בדיקה:** כש-$k=0$, $\\binom{3}{0}=1$ — נשאר רק $(1-p)^n$. אל תשתמשו ב-$0.4^3$.",
           "points": 4
         },
         {
@@ -122,8 +122,8 @@
           "difficulty": "easy",
           "body_en": "$X \\sim B(5, 0.6)$. State the variance.",
           "body_he": "$X\\sim B(5,0.6)$. ציין את השונות.",
-          "solution_en": "**Solution:**\n\n$\\sigma^2 = 5 \\times 0.6 \\times 0.4 = 1.2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$\\sigma^2=1.2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nFor $X\\sim B(5,0.6)$, use the variance formula directly:\n$$\\sigma^2=\\text{Var}(X)=np(1-p)=5\\times0.6\\times0.4=1.2.$$\n\n**Check:** Mean is $\\mu=3$; variance $1.2$ gives $\\sigma\\approx1.1$. Report $\\sigma^2$, not $\\sigma$, when variance is asked.",
+          "solution_he": "**פתרון:**\n\nעבור $X\\sim B(5,0.6)$, נוסחת השונות:\n$$\\sigma^2=np(1-p)=5\\times0.6\\times0.4=1.2.$$\n\n**בדיקה:** ממוצע $\\mu=3$; שונות $1.2$ נותנת $\\sigma\\approx1.1$. כשמבקשים שונות — דווחו $\\sigma^2$, לא $\\sigma$.",
           "points": 4
         },
         {
@@ -131,8 +131,8 @@
           "difficulty": "medium",
           "body_en": "A factory produces items with 10% defect rate. In 7 items, find $P(X \\leq 1)$.",
           "body_he": "מפעל עם שיעור פגמים 10%. ב-7 פריטים, מצא $P(X\\leq1)$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=0)=0.9^7\\approx0.4783$. $P(X=1)=7\\times0.1\\times0.9^6=7\\times0.1\\times0.5314=0.3720$. $P(X\\leq1)\\approx0.8503$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(X\\leq1)\\approx0.4783+0.3720=0.8503$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nDefective = success: $X\\sim B(7,0.1)$. \"At most one defective\" means $P(X\\leq1)=P(X=0)+P(X=1)$.\n$$P(X=0)=0.9^7\\approx0.4783,\\quad P(X=1)=7\\times0.1\\times0.9^6\\approx0.3720.$$\n$$P(X\\leq1)\\approx0.4783+0.3720=0.8503.$$\n\n**Check:** With $\\mu=0.7$, most mass is at $k=0$ and $k=1$ — include both terms.",
+          "solution_he": "**פתרון:**\n\nפגום = הצלחה: $X\\sim B(7,0.1)$. \"לכל היותר אחד\" = $P(X\\leq1)=P(X=0)+P(X=1)$.\n$$P(X=0)=0.9^7\\approx0.4783,\\quad P(X=1)=7\\times0.1\\times0.9^6\\approx0.3720.$$\n$$P(X\\leq1)\\approx0.8503.$$\n\n**בדיקה:** עם $\\mu=0.7$, רוב המסה ב-$0$ ו-$1$ — חובה לכלול שני איברים.",
           "points": 6
         },
         {
@@ -140,8 +140,8 @@
           "difficulty": "medium",
           "body_en": "$X \\sim B(10, 0.3)$. Find $P(X \\geq 1)$.",
           "body_he": "$X\\sim B(10,0.3)$. מצא $P(X\\geq1)$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X\\geq1)=1-P(X=0)=1-0.7^{10}=1-0.0282=0.9718$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(X\\geq1)=1-0.7^{10}=0.9718$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\n$X\\sim B(10,0.3)$. Use the complement for \"at least one success\":\n$$P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=1-0.0282=0.9718.$$\n\n**Check:** Summing nine PMF terms gives the same answer but is slower. $(0.7)^{10}\\approx2.8\\%$ — all failures is rare.",
+          "solution_he": "**פתרון:**\n\n$X\\sim B(10,0.3)$. משלים ל\"לפחות אחת\":\n$$P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=0.9718.$$\n\n**בדיקה:** סכימת תשעה איברי PMF נותנת אותה תשובה אך איטית. $(0.7)^{10}\\approx2.8\\%$ — כולם נכשלים נדיר.",
           "points": 6
         },
         {
@@ -149,8 +149,8 @@
           "difficulty": "medium",
           "body_en": "$X \\sim B(8, 0.5)$. Find $P(3 \\leq X \\leq 5)$.",
           "body_he": "$X\\sim B(8,0.5)$. מצא $P(3\\leq X\\leq5)$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=3)=\\binom{8}{3}/256=56/256$. $P(X=4)=70/256$. $P(X=5)=56/256$. Sum $=182/256=0.711$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(3\\leq X\\leq5)=(56+70+56)/256=182/256\\approx0.711$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\n$X\\sim B(8,0.5)$. Inclusive interval $3\\leq X\\leq5$:\n$$P(X=3)=\\binom{8}{3}/256=56/256,\\quad P(X=4)=70/256,\\quad P(X=5)=56/256.$$\n$$P(3\\leq X\\leq5)=(56+70+56)/256=182/256\\approx0.711.$$\n\n**Check:** Symmetry gives $P(X=3)=P(X=5)$. Most mass sits near $k=4=n/2$.",
+          "solution_he": "**פתרון:**\n\n$X\\sim B(8,0.5)$. טווח כולל $3\\leq X\\leq5$:\n$$P(X=3)=56/256,\\quad P(X=4)=70/256,\\quad P(X=5)=56/256.$$\n$$P(3\\leq X\\leq5)=182/256\\approx0.711.$$\n\n**בדיקה:** סימטריה: $P(X=3)=P(X=5)$. רוב המסה ליד $k=4=n/2$.",
           "points": 6
         },
         {
@@ -158,8 +158,8 @@
           "difficulty": "medium",
           "body_en": "List all BINS conditions for the binomial model. Which ones are most commonly violated?",
           "body_he": "רשום את כל תנאי BINS. אילו מהם מופרים בתדירות הגבוהה ביותר?",
-          "solution_en": "**B**inary outcomes, **I**ndependent trials, **N**umber fixed, **S**ame $p$. Most commonly violated: Independence (sampling without replacement) and same $p$ (changing conditions).",
-          "solution_he": "**B**inary, **I**ndependent, **N**umber fixed, **S**ame $p$. המופרים בתדירות: בלתי-תלות (דגימה ללא החזרה) וקביעות $p$ (תנאים משתנים).",
+          "solution_en": "**B**inary outcomes, **I**ndependent trials, fixed **N**umber $n$, **S**ame $p$ each trial.\n\nMost commonly violated: **Independence** (sampling without replacement from a finite population → hypergeometric) and **Same $p$** (conditions change mid-experiment).\n\n**Check:** One failed letter disqualifies the binomial model — write BINS before calculating.",
+          "solution_he": "**B**inary — שני תוצאות, **I**ndependent — בלתי-תלות, **N**umber — $n$ קבוע, **S**ame — אותו $p$.\n\nמופרים בתדירות: **בלתי-תלות** (דגימה ללא החזרה → היפרגיאומטרי) ו-**Same $p$** (תנאים משתנים).\n\n**בדיקה:** אות אחת מופרת — פסלו את המודל הבינומי לפני חישוב.",
           "points": 6
         },
         {
@@ -167,8 +167,8 @@
           "difficulty": "medium",
           "body_en": "If $X \\sim B(n, 0.5)$ and $P(X=2) = P(X=3)$, find $n$.",
           "body_he": "אם $X\\sim B(n,0.5)$ ו-$P(X=2)=P(X=3)$, מצא $n$.",
-          "solution_en": "$\\binom{n}{2}=\\binom{n}{3}$ (since $p=0.5$ cancels). $n(n-1)/2 = n(n-1)(n-2)/6$. Divide: $1=（n-2)/3$. So $n=5$.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\binom{n}{2}=\\binom{n}{3}$. $(n-1)/2=(n-1)(n-2)/6$. $3=n-2$. $n=5$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nWith $p=0.5$, powers of $p$ cancel in both PMFs. Set $\\binom{n}{2}=\\binom{n}{3}$:\n$$\\frac{n(n-1)}{2}=\\frac{n(n-1)(n-2)}{6}.$$\nFor $n>1$, divide by $n(n-1)$: $1/2=(n-2)/6$, so $n-2=3$ and $n=5$.\n\n**Check:** Verify $\\binom{5}{2}=\\binom{5}{3}=10$ at $p=0.5$.",
+          "solution_he": "**פתרון:**\n\nעם $p=0.5$, חזקות $p$ מתבטלות. השוו $\\binom{n}{2}=\\binom{n}{3}$:\n$$\\frac{n(n-1)}{2}=\\frac{n(n-1)(n-2)}{6}.$$\nל-$n>1$, חלוקה ב-$n(n-1)$: $1/2=(n-2)/6$, ולכן $n=5$.\n\n**בדיקה:** $\\binom{5}{2}=\\binom{5}{3}=10$ ב-$p=0.5$ — מאשר נכונות.",
           "points": 6
         },
         {
@@ -176,8 +176,8 @@
           "difficulty": "hard",
           "body_en": "Show that $\\sum_{k=0}^n \\binom{n}{k}p^k(1-p)^{n-k} = 1$ (the binomial PMF sums to 1).",
           "body_he": "הראה ש-$\\sum_{k=0}^n\\binom{n}{k}p^k(1-p)^{n-k}=1$ (PMF הבינומי מסתכם ל-1).",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nBy the Binomial Theorem: $(p+(1-p))^n = \\sum_{k=0}^n \\binom{n}{k}p^k(1-p)^{n-k}$. But $p+(1-p)=1$, so $1^n=1$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nממשפט הבינום: $(p+(1-p))^n=\\sum_{k=0}^n\\binom{n}{k}p^k(1-p)^{n-k}=1^n=1$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Proof:**\n\nBy the Binomial Theorem, expand $(a+b)^n$ with $a=p$ and $b=1-p$:\n$$(p+(1-p))^n=\\sum_{k=0}^{n}\\binom{n}{k}p^k(1-p)^{n-k}.$$\nBut $p+(1-p)=1$, so the left side equals $1^n=1$. Hence the PMF sums to 1. $\\blacksquare$\n\n**Check:** This identity is why $(p+q)^n$ appears in combinatorics and probability.",
+          "solution_he": "**הוכחה:**\n\nממשפט הבינום, פתחו $(a+b)^n$ עם $a=p$ ו-$b=1-p$:\n$$(p+(1-p))^n=\\sum_{k=0}^{n}\\binom{n}{k}p^k(1-p)^{n-k}.$$\nאבל $p+(1-p)=1$, ולכן הצד השמאלי $=1^n=1$. ה-PMF מסתכם ל-1. $\\blacksquare$\n\n**בדיקה:** זהות זו מקשרת בין $(p+q)^n$ לבין הסתברות בינומית.",
           "points": 8
         },
         {
@@ -185,8 +185,8 @@
           "difficulty": "hard",
           "body_en": "A player succeeds each attempt with probability 0.8. She needs at least 3 successes in 5 tries. Find the probability.",
           "body_he": "שחקן מצליח בכל ניסיון בהסתברות 0.8. הוא צריך לפחות 3 הצלחות ב-5 ניסיונות. מצא את ההסתברות.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$P(X\\geq3)=P(X=3)+P(X=4)+P(X=5)$. $=\\binom{5}{3}0.8^3\\cdot0.2^2+\\binom{5}{4}0.8^4\\cdot0.2+0.8^5=10(0.512)(0.04)+5(0.4096)(0.2)+0.32768=0.2048+0.4096+0.3277=0.9421$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$P(X\\geq3)=0.2048+0.4096+0.3277=0.9421$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\n$X\\sim B(5,0.8)$. \"At least 3 successes\" means $P(X\\geq3)=P(X=3)+P(X=4)+P(X=5)$.\n$$P(X=3)=\\binom{5}{3}(0.8)^3(0.2)^2=10\\times0.512\\times0.04=0.2048.$$\n$$P(X=4)=5\\times(0.8)^4(0.2)=0.4096,\\quad P(X=5)=(0.8)^5=0.3277.$$\n$$P(X\\geq3)=0.2048+0.4096+0.3277=0.9421.$$\n\n**Check:** With $p=0.8$, high success rate makes $\\geq3$ very likely — $94\\%$ passes sanity.",
+          "solution_he": "**פתרון:**\n\n$X\\sim B(5,0.8)$. \"לפחות 3\" = $P(X\\geq3)=P(X=3)+P(X=4)+P(X=5)$.\n$$P(X=3)=10\\times(0.8)^3(0.2)^2=0.2048,\\quad P(X=4)=0.4096,\\quad P(X=5)=0.3277.$$\n$$P(X\\geq3)=0.9421.$$\n\n**בדיקה:** עם $p=0.8$, $\\geq3$ סביר מאוד — $94\\%$ עובר בדיקת הגיון.",
           "points": 8
         },
         {
@@ -194,8 +194,8 @@
           "difficulty": "hard",
           "body_en": "Prove that $\\text{Var}(X) = np(1-p)$ for $X \\sim B(n,p)$ using the identity $\\text{Var}(X) = E[X^2] - (E[X])^2$.",
           "body_he": "הוכח ש-$\\text{Var}(X)=np(1-p)$ עבור $X\\sim B(n,p)$ באמצעות $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$E[X]=np$ (known). $E[X(X-1)]=\\sum_{k=2}^n k(k-1)\\binom{n}{k}p^k q^{n-k}$. For $k\\geq2$: $k(k-1)\\binom{n}{k}=n(n-1)\\binom{n-2}{k-2}$. So $E[X(X-1)]=n(n-1)p^2\\sum_{j=0}^{n-2}\\binom{n-2}{j}p^jq^{n-2-j}=n(n-1)p^2$. Then $E[X^2]=E[X(X-1)]+E[X]=n(n-1)p^2+np$. $\\text{Var}(X)=n(n-1)p^2+np-(np)^2=np[(n-1)p+1-np]=np[1-p]=npq$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$E[X(X-1)]=n(n-1)p^2$ (בדומה לחישוב $E[X]$). $E[X^2]=n(n-1)p^2+np$. $\\text{Var}=E[X^2]-(np)^2=np(1-p)$. $\\blacksquare$\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Proof:**\n\nKnown: $E[X]=np$. Compute $E[X(X-1)]=\\sum_{k=2}^{n}k(k-1)\\binom{n}{k}p^k q^{n-k}$.\nFor $k\\geq2$: $k(k-1)\\binom{n}{k}=n(n-1)\\binom{n-2}{k-2}$, so $E[X(X-1)]=n(n-1)p^2$.\nThen $E[X^2]=E[X(X-1)]+E[X]=n(n-1)p^2+np$.\n$$\\text{Var}(X)=n(n-1)p^2+np-(np)^2=np[(n-1)p+1-np]=np(1-p).\\ \\blacksquare$$\n\n**Check:** Variance is zero when $p=0$ or $p=1$ — all trials identical.",
+          "solution_he": "**הוכחה:**\n\nידוע: $E[X]=np$. מחשבים $E[X(X-1)]=n(n-1)p^2$ (בדומה לחישוב $E[X]$).\nאז $E[X^2]=n(n-1)p^2+np$.\n$$\\text{Var}(X)=E[X^2]-(np)^2=np(1-p).\\ \\blacksquare$$\n\n**בדיקה:** שונות אפס כש-$p=0$ או $p=1$ — כל הניסויים זהים.",
           "points": 8
         },
         {
@@ -203,8 +203,8 @@
           "difficulty": "hard",
           "body_en": "The probability of passing an exam is $p=0.7$. A student retakes it until passing. What is the probability of needing more than 3 attempts?",
           "body_he": "הסתברות לעבור מבחן $p=0.7$. תלמיד ניגש שוב ושוב עד שעובר. מה ההסתברות שיצטרך יותר מ-3 ניסיונות?",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nThis is a geometric distribution. $P(\\text{more than 3}) = P(\\text{fail first 3}) = (1-0.7)^3 = 0.3^3 = 0.027$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\nפילוג גיאומטרי. $P(>3)=(0.3)^3=0.027$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "**Solution:**\n\nRetaking until pass is a **geometric** model, not binomial — $n$ is not fixed. \"More than 3 attempts\" means failing the first 3 tries:\n$$P(\\text{more than 3})=P(\\text{fail 3 times})=(1-0.7)^3=(0.3)^3=0.027.$$\n\n**Check:** BINS fails here because trial count is random. Recognise geometric vs binomial before choosing a formula.",
+          "solution_he": "**פתרון:**\n\nהגשה חוזרת עד מעבר = מודל **גיאומטרי**, לא בינומי — $n$ אינו קבוע. \"יותר מ-3 ניסיונות\" = כישלון בשלושה הראשונים:\n$$P(>3)=(1-0.7)^3=(0.3)^3=0.027.$$\n\n**בדיקה:** BINS נכשל כי מספר הניסויים אקראי. הבחינו גיאומטרי מול בינומי לפני בחירת נוסחה.",
           "points": 8
         }
       ]
@@ -213,30 +213,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Forgetting the combination $\\binom{n}{k}$.** $P(X=k)$ needs the count of arrangements, not just $p^k(1-p)^{n-k}$.\n\n2. **Sampling without replacement.** If items are drawn without replacement from a small population, trials are NOT independent → use Hypergeometric, not Binomial.\n\n3. **Confusing $P(X=k)$ with $P(X\\leq k)$.** Always check whether the question asks for exact, at most, at least, or between.\n\n4. **Forgetting the complement when computing $P(X\\geq1)$.** It's much faster: $1-(1-p)^n$.\n\n5. **Wrong exponents.** $P(X=k) = p^k \\cdot (1-p)^{n-k}$: $k$ successes and $n-k$ failures. Don't reverse the exponents.",
-      "body_he_md": "1. **שכחת $\\binom{n}{k}$.** $P(X=k)$ דורש ספירת סידורים.\n\n2. **דגימה ללא החזרה.** אם פריטים נשלפים ללא החזרה מאוכלוסייה קטנה — הניסויים לא בלתי-תלויים — השתמש בפילוג היפרגיאומטרי.\n\n3. **בלבול $P(X=k)$ עם $P(X\\leq k)$.** תמיד בדוק: האם השאלה מבקשת מדויק, לכל היותר, לפחות, או בין שניים.\n\n4. **שכחת המשלים ל-$P(X\\geq1)$.** הרבה מהיר: $1-(1-p)^n$.\n\n5. **חזקות שגויות.** $P(X=k)=p^k(1-p)^{n-k}$: $k$ הצלחות ו-$n-k$ כישלונות."
+      "body_en_md": "1. **Forgetting $\\binom{n}{k}$.** The PMF is not just $p^k(1-p)^{n-k}$ — you must count how many arrangements produce exactly $k$ successes.\n\n2. **Sampling without replacement.** Drawing from a small finite population without replacement violates independence → use the **hypergeometric** distribution, not binomial.\n\n3. **Confusing $P(X=k)$ with $P(X\\leq k)$.** Underline \"exactly,\" \"at most,\" \"at least,\" or \"between\" before calculating.\n\n4. **Skipping the complement.** $P(X\\geq1)=1-(1-p)^n$ saves time; summing $P(X=1)+\\cdots+P(X=n)$ invites arithmetic errors.\n\n5. **Reversed exponents.** $P(X=k)=p^k(1-p)^{n-k}$: $k$ successes, $n-k$ failures — not the other way.\n\n6. **Using binomial when $n$ is not fixed.** If trials continue until a success (geometric) or events arrive in time (Poisson), BINS fails.",
+      "body_he_md": "1. **שכחת $\\binom{n}{k}$.** ה-PMF הוא לא רק $p^k(1-p)^{n-k}$ — חובה לספור כמה סידורים נותנים בדיוק $k$ הצלחות.\n\n2. **דגימה ללא החזרה.** שליפה מאוכלוסייה סופית קטנה ללא החזרה מפרה בלתי-תלות → **פילוג היפרגיאומטרי**, לא בינומי.\n\n3. **בלבול $P(X=k)$ עם $P(X\\leq k)$.** סמנו \"בדיוק\", \"לכל היותר\", \"לפחות\" או \"בין\" לפני החישוב.\n\n4. **דילוג על המשלים.** $P(X\\geq1)=1-(1-p)^n$ חוסך זמן; סכימת $P(X=1)+\\cdots$ מזמינה טעויות חשבון.\n\n5. **חזקות הפוכות.** $P(X=k)=p^k(1-p)^{n-k}$: $k$ הצלחות, $n-k$ כישלונות.\n\n6. **בינומי כש-$n$ לא קבוע.** אם הניסויים ממשיכים עד הצלחה (גיאומטרי) או אירועים בזמן (פואסון), BINS נכשל.\n\n**זכרו:** BINS הוא שער — אות אחת מופרת פוסלת את המודל הבינומי לחלוטין."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "The binomial model is the workhorse of **count data** across science and industry. Quality engineers use $B(n,p)$ to set acceptance sampling rules; clinical researchers model treatment success rates across fixed cohorts; pollsters estimate vote shares from yes/no survey responses.\n\n**Connections in the KG:**\n- `lesson:probability_basics_3pt` — sample spaces and independence underpin BINS.\n- `lesson:discrete_distributions_binomial_poisson` — Poisson limit and normal approximation.\n- `lesson:statistics_inference` — confidence intervals and tests for proportions use $\\hat p$ and $B(n,p)$ logic.\n\n**Exam transfer:** Every word problem starts by asking \"Is this a fixed-$n$ count of successes?\" If yes, write $X\\sim B(n,p)$ before any arithmetic.",
+      "body_he_md": "המודל הבינומי הוא כלי העבודה של **נתוני ספירה** במדע ובתעשייה. מהנדסי איכות משתמשים ב-$B(n,p)$ לכללי דגימת קבלה; חוקרים קליניים מדגמים שיעורי הצלחת טיפול בקבוצות קבועות; סוקרים מעריכים נתחי הצבעה מתשובות כן/לא.\n\n**קשרים ב-KG:**\n- `lesson:probability_basics_3pt` — מרחבי מדגם ובלתי-תלות תומכים ב-BINS.\n- `lesson:discrete_distributions_binomial_poisson` — גבול פואסון וקירוב נורמלי.\n- `lesson:statistics_inference` — רווחי סמך ובדיקות לפרופורציות.\n\n**העברה בבחינה:** כל בעיה מילולית מתחילה ב\"האם זו ספירת הצלחות ב-$n$ קבוע?\" אם כן — כתבו $X\\sim B(n,p)$ לפני כל חישוב.\n\n**במילים פשוטות:** כל פעם שסופרים הצלחות ב-$n$ קבוע — מטבעות, בדיקות איכות, סקרים — הבינומי הוא המודל הראשון לבדיקה."
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Formula card:**\n- $P(X=k) = \\binom{n}{k}p^k(1-p)^{n-k}$\n- $\\mu = np$, $\\sigma^2 = np(1-p)$\n- $P(X\\geq1)=1-(1-p)^n$\n- $\\binom{n}{k}=n!/(k!(n-k)!)$\n\n**Exam patterns:**\n- Compute exact probability for a given $k$.\n- Compute $P(X\\leq k)$ or $P(X\\geq k)$ by summing or complement.\n- Find $p$ or $n$ from given conditions.\n- Verify BINS conditions.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
-      "body_he_md": "**גיליון נוסחאות:**\n- $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$\n- $\\mu=np$, $\\sigma^2=np(1-p)$\n- $P(X\\geq1)=1-(1-p)^n$\n\n**דגשי מבחן:**\n- חשב הסתברות מדויקת עבור $k$ נתון.\n- חשב $P(X\\leq k)$ או $P(X\\geq k)$ בסיכום או משלים.\n- מצא $p$ או $n$ מתנאים נתונים.\n- אמת תנאי BINS."
+      "body_en_md": "**Formula card:**\n- $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$\n- $\\mu=np$, $\\sigma^2=np(1-p)$, $\\sigma=\\sqrt{np(1-p)}$\n- $P(X\\geq1)=1-(1-p)^n$; $P(X=0)=(1-p)^n$; $P(X=n)=p^n$\n- $P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$\n\n**Exam patterns:**\n- Direct PMF for given $k$.\n- Cumulative $P(X\\leq k)$ or tail $P(X\\geq k)$ — sum or complement.\n- Find unknown $p$ or $n$ from equal probabilities.\n- Verify BINS; identify when hypergeometric or Poisson applies instead.\n\n**Last review:** Recite formulas once, then solve both checkpoints without notes.\n\n**Time savers:** Memorize $P(X=0)$ and $P(X\\geq1)$ complements. For symmetric $p=0.5$, keep probabilities as fractions over $2^n$. Always label success explicitly on your scratch paper before plugging into the PMF.",
+      "body_he_md": "**גיליון נוסחאות:**\n- $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$\n- $\\mu=np$, $\\sigma^2=np(1-p)$\n- $P(X\\geq1)=1-(1-p)^n$; $P(X=0)=(1-p)^n$; $P(X=n)=p^n$\n- $P(a\\leq X\\leq b)=P(X\\leq b)-P(X\\leq a-1)$\n\n**דגשי מבחן:**\n- PMF ישיר ל-$k$ נתון.\n- מצטבר $P(X\\leq k)$ או זנב $P(X\\geq k)$ — סכום או משלים.\n- מציאת $p$ או $n$ מהשוואת הסתברויות.\n- אימות BINS; מתי היפרגיאומטרי או פואסון.\n\n**חזרה אחרונה:** אמרו נוסחאות פעם אחת, ואז פתרו את שני ה-checkpoints בלי רשימות.\n\n**חיסכון בזמן:** שיננו משלמי $P(X=0)$ ו-$P(X\\geq1)$. ל-$p=0.5$ סימטרי — שמרו הסתברויות כשברים מ-$2^n$. סמנו הצלחה במפורש על הנייר לפני הצבה ב-PMF."
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **Bernoulli trial:** one experiment, success probability $p$.\n- **Binomial $B(n,p)$:** counts successes in $n$ independent Bernoulli trials.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; mean $np$; variance $np(1-p)$.\n- **Cumulative:** sum terms, or use complement $P(X\\geq1)=1-(1-p)^n$.\n- **BINS conditions** must hold: Binary, Independent, Number fixed, Same $p$.",
-      "body_he_md": "- **ניסוי ברנולי:** ניסוי בודד, הסתברות הצלחה $p$.\n- **בינומי $B(n,p)$:** ספירת הצלחות ב-$n$ ניסויי ברנולי בלתי-תלויים.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; ממוצע $np$; שונות $np(1-p)$.\n- **מצטברת:** סכום מאמרים, או משלים $P(X\\geq1)=1-(1-p)^n$.\n- **תנאי BINS** חייבים להתקיים."
+      "body_en_md": "- **Bernoulli trial:** one experiment, success probability $p$, failure $1-p$.\n- **Binomial $B(n,p)$:** counts successes in $n$ independent identical trials.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; mean $np$; variance $np(1-p)$.\n- **Cumulative:** sum PMF terms, use complement, or interval formula $P(X\\leq b)-P(X\\leq a-1)$.\n- **BINS** must hold; otherwise consider hypergeometric, geometric, or Poisson models.\n- **Shape:** symmetric at $p=0.5$; skewed otherwise; approaches normal as $n$ grows.\n\n**Next step:** When $n$ is large, graduate to normal approximation and Poisson limits rather than summing many PMF terms by hand.",
+      "body_he_md": "- **ניסוי ברנולי:** ניסוי בודד, הצלחה $p$, כישלון $1-p$.\n- **בינומי $B(n,p)$:** ספירת הצלחות ב-$n$ ניסויים בלתי-תלויים זהים.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; ממוצע $np$; שונות $np(1-p)$.\n- **מצטבר:** סכום איברי PMF, משלים, או $P(X\\leq b)-P(X\\leq a-1)$.\n- **BINS** חייבים להתקיים; אחרת — היפרגיאומטרי, גיאומטרי או פואסון.\n- **צורה:** סימטרי ב-$p=0.5$; מוטה אחרת; מתקרב לנורמלי כש-$n$ גדל.\n\n**צעד הבא:** כש-$n$ גדול — עברו לקירוב נורמלי וגבול פואסון במקום סכימת PMF ידנית."
     }
   ],
   "agent_hints": {},
@@ -255,8 +255,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(X=3)=20/64=0.3125$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nWe have $n=6$ independent trials with $p=0.5$, so $X\\sim B(6,0.5)$. Exactly three successes means $k=3$. The binomial PMF gives $P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**How to think about it:**\nWith a fair coin ($p=0.5$), the distribution is symmetric and $\\binom{6}{3}=\\binom{6}{3}$ — a quick sanity check before calculating.\n\n**Common slip:**\nOmitting $\\binom{6}{3}$ and writing only $(0.5)^6$, which counts one arrangement instead of all $20$ ways to place three successes among six trials.\n\n**Exam tip:**\nWhen $p=0.5$, rewrite $(0.5)^n$ as $1/2^n$ and keep answers as exact fractions when possible.",
+      "explanation_he": "**למה זה נכון:**\nיש $n=6$ ניסויים בלתי-תלויים עם $p=0.5$, ולכן $X\\sim B(6,0.5)$. בדיוק שלוש הצלחות פירושו $k=3$. מ-PMF הבינומי מתקבל $P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**איך לחשוב על זה:**\nבמטבע הוגן ($p=0.5$) הפילוג סימטרי — בדיקת הגיון מהירה לפני החישוב.\n\n**טעות נפוצה:**\nהשמטת $\\binom{6}{3}$ וכתיבת $(0.5)^6$ בלבד, שסופרת סידור אחד במקום $20$ דרכים לשלוש הצלחות.\n\n**טיפ לבחינה:**\nכש-$p=0.5$, כתבו $(0.5)^n=1/2^n$ והשאירו תשובות כשברים מדויקים כשאפשר.\n\n**בדיקה עצמית:** $\\mu=3$ במרכז; $20/64$ הגיוני. אל תשכחו את $\\binom{6}{3}$ — בלי המקדם מקבלים $(0.5)^6$ בלבד, שזו הסתברות של סידור אחד ספציפי ולא של כל $20$ הסידורים.",
       "skill_atoms": []
     },
     {
@@ -273,8 +273,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\mu = np = 10 \\times 0.5 = 5$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\mu = 5$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nEach true/false question is a Bernoulli trial with $p=0.5$ (guess). With $n=10$ independent questions, the count of correct answers $X\\sim B(10,0.5)$. The expected value is $E[X]=\\mu=np=10\\times0.5=5$.\n\n**How to think about it:**\nExpectation is linear: on average half the guesses succeed. You do not need the full PMF — the question asks for the mean, not a probability.\n\n**Common slip:**\nComputing $P(X=5)$ instead of $E[X]$, or using the variance formula when only the mean is requested.\n\n**Exam tip:**\nUnderline whether the stem says \"expected number,\" \"average,\" or \"most likely value\" — only the first two equal $np$.",
+      "explanation_he": "**למה זה נכון:**\nכל שאלת נכון/לא-נכון היא ניסוי ברנולי עם $p=0.5$. עם $n=10$ שאלות בלתי-תלויות, $X\\sim B(10,0.5)$ ו-$E[X]=\\mu=np=5$.\n\n**איך לחשוב על זה:**\nהתוחלת לינארית: בממוצע חצי מהניחושים מצליחים. אין צורך ב-PMF — השאלה מבקשת ממוצע, לא הסתברות.\n\n**טעות נפוצה:**\nחישוב $P(X=5)$ במקום $E[X]$, או שימוש בנוסחת השונות כשמבקשים רק ממוצע.\n\n**טיפ לבחינה:**\nסמנו אם הניסוח אומר \"מספר צפוי\", \"ממוצע\" או \"הערך הסביר ביותר\" — רק השניים הראשונים שווים ל-$np$.\n\n**בדיקה עצמית:** $P(X=5)\\approx0.25$ הוא הערך הסביר ביותר, לא התוחלת $E[X]=5$. השכיח ו-$\\mu$ שונים — קראו את הניסוח בקפידה.",
       "skill_atoms": []
     },
     {
@@ -291,8 +291,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$P(X=0) = (0.6)^3 = 0.216$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$P(X=0)=0.6^3=0.216$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nFor $X\\sim B(3,0.4)$, zero successes means all three trials fail. Each failure has probability $1-p=0.6$, so $P(X=0)=(0.6)^3=0.216$.\n\n**How to think about it:**\nWhen $k=0$, the binomial coefficient is $1$ and the PMF collapses to $(1-p)^n$ — the complement shortcut for \"none succeed.\"\n\n**Common slip:**\nUsing $0.4^3$ instead of $0.6^3$ — the exponent on $p$ is the number of successes, not failures.\n\n**Exam tip:**\nMemorize $P(X=0)=(1-p)^n$ and $P(X=n)=p^n$; they appear constantly in complement problems.",
+      "explanation_he": "**למה זה נכון:**\nעבור $X\\sim B(3,0.4)$, אפס הצלחות פירושו שלושה כישלונות. $P(X=0)=(0.6)^3=0.216$.\n\n**איך לחשוב על זה:**\nכש-$k=0$, המקדם $\\binom{3}{0}=1$ ו-PMF מתכווץ ל-$(1-p)^n$.\n\n**טעות נפוצה:**\nשימוש ב-$0.4^3$ במקום $0.6^3$ — החזקה על $p$ היא מספר ההצלחות.\n\n**טיפ לבחינה:**\nשיננו $P(X=0)=(1-p)^n$ ו-$P(X=n)=p^n$ — הם מופיעים בכל בעיות המשלים.\n\n**בדיקה עצמית:** $(0.6)^3=0.216$. שלושה כישלונות ברצף — אל תשתמשו ב-$0.4$ בחזקה 3.\n\n**הרחבה:** כש-$k=0$, $\\binom{n}{0}=1$ — נשאר $(1-p)^n$. קיצור חשוב בבחינות. זכרו: החזקה על $p$ היא מספר ההצלחות, לא הכישלונות.",
       "skill_atoms": []
     },
     {
@@ -309,8 +309,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\sigma^2 = 5 \\times 0.6 \\times 0.4 = 1.2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\sigma^2=1.2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nFor $X\\sim B(5,0.6)$, variance is $\\sigma^2=np(1-p)=5\\times0.6\\times0.4=1.2$. No PMF calculation is needed.\n\n**How to think about it:**\nVariance is largest near $p=0.5$ and shrinks when $p$ is near $0$ or $1$. Here $p=0.6$ gives moderate spread around mean $\\mu=3$.\n\n**Common slip:**\nReporting standard deviation $\\sqrt{1.2}$ when variance is asked, or using $np$ instead of $np(1-p)$.\n\n**Exam tip:**\nWrite $\\sigma^2=npq$ with $q=1-p$ on your formula card — graders distinguish variance from SD explicitly.\n\n**Self-check:** $\\sigma=\\sqrt{1.2}\\approx1.1$ — SD differs from variance. State $\\sigma^2=npq$ explicitly on your paper.",
+      "explanation_he": "**למה זה נכון:**\nעבור $X\\sim B(5,0.6)$, השונות היא $\\sigma^2=np(1-p)=5\\times0.6\\times0.4=1.2$.\n\n**איך לחשוב על זה:**\nהשונות מקסימלית ליד $p=0.5$ וקטנה כש-$p$ קרוב ל-$0$ או $1$. כאן $\\mu=3$.\n\n**טעות נפוצה:**\nדיווח על סטיית תקן $\\sqrt{1.2}$ כשמבקשים שונות, או שימוש ב-$np$ במקום $np(1-p)$.\n\n**טיפ לבחינה:**\nכתבו $\\sigma^2=npq$ עם $q=1-p$ על גיליון הנוסחאות.\n\n**בדיקה עצמית:** $\\sigma=\\sqrt{1.2}\\approx1.1$ — SD שונה משונות. כתבו $\\sigma^2=npq$ במפורש.\n\n**הרחבה:** השונות מודדת פיזור סביב $\\mu=3$. SD היה $\\sqrt{1.2}$ — אל תערבבו בין השניים.",
       "skill_atoms": []
     },
     {
@@ -327,8 +327,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=0)=0.9^7\\approx0.4783$. $P(X=1)=7\\times0.1\\times0.9^6=7\\times0.1\\times0.5314=0.3720$. $P(X\\leq1)\\approx0.8503$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(X\\leq1)\\approx0.4783+0.3720=0.8503$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nDefective items: $n=7$, $p=0.1$, so $X\\sim B(7,0.1)$. \"At most one defective\" means $P(X\\leq1)=P(X=0)+P(X=1)$. $P(X=0)=0.9^7\\approx0.4783$ and $P(X=1)\\approx0.3720$, summing to $0.8503$.\n\n**How to think about it:**\nCumulative \"at most $k$\" requires adding PMF terms from $0$ through $k$. With small $p$, most mass sits at $0$ and $1$.\n\n**Common slip:**\nStopping at $P(X=0)$ only, or using complement without finishing the tail sum.\n\n**Exam tip:**\nFor \"at most 1,\" always write two terms explicitly — partial sums lose method marks even if the final number is close.",
+      "explanation_he": "**למה זה נכון:**\n$n=7$, $p=0.1$, $X\\sim B(7,0.1)$. \"לכל היותר אחד פגום\" = $P(X\\leq1)=P(X=0)+P(X=1)\\approx0.8503$.\n\n**איך לחשוב על זה:**\n\"לכל היותר $k$\" דורש סכימת איברי PMF מ-$0$ עד $k$. עם $p$ קטן, רוב המסה ב-$0$ ו-$1$.\n\n**טעות נפוצה:**\nעצירה ב-$P(X=0)$ בלבד, או שימוש במשלים בלי לסיים את סכימת הזנב.\n\n**טיפ לבחינה:**\nב\"לכל היותר 1\" — כתבו שני איברים במפורש.\n\n**בדיקה עצמית:** $\\mu=0.7$ — רוב המסה ב-$0$ ו-$1$. כתבו $P(X=1)$ במפורש לניקוד שיטה.\n\n**הרחבה:** כתבו $P(X=0)+P(X=1)$ במפורש לפני חיבור — נקודות שיטה תלויות בהצגת הסכום. אל תשתמשו במשלים כאן: $P(X\\geq2)$ דורש סכימת חמישה איברים.",
       "skill_atoms": []
     },
     {
@@ -345,8 +345,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X\\geq1)=1-P(X=0)=1-0.7^{10}=1-0.0282=0.9718$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(X\\geq1)=1-0.7^{10}=0.9718$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$P(X\\geq1)$ means \"at least one success.\" The complement is easier: $P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=0.9718$.\n\n**How to think about it:**\nSumming $P(X=1)+\\cdots+P(X=10)$ is correct but slow. One failure probability $(1-p)^n$ captures \"all fail.\"\n\n**Common slip:**\nUsing $1-p^{10}$ instead of $1-(1-p)^{10}$ — exponents apply to failure probability, not success.\n\n**Exam tip:**\nWhenever you see \"at least one,\" sketch the complement before reaching for the calculator.\n\n**Self-check:** With $p=0.3$, failing all ten trials has probability only $(0.7)^{10}\\approx2.8\\%$, so at least one success is very likely — $0.9718$ passes the sanity test.",
+      "explanation_he": "**למה זה נכון:**\n$P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=0.9718$. המשלים תופס את המקרה היחיד שבו כל עשרת הניסויים נכשלים.\n\n**איך לחשוב על זה:**\n\"לפחות אחת\" פירושו \"לא כולן נכשלות\". סכימת $P(X=1)+\\cdots+P(X=10)$ נכונה אך איטית ומסוכנת לטעויות חישוב.\n\n**טעות נפוצה:**\nשימוש ב-$1-p^{10}$ במקום $1-(1-p)^{10}$ — החזקה חלה על הסתברות הכישלון $(1-p)$, לא על $p$.\n\n**טיפ לבחינה:**\nשרטטו משלים לפני המחשבון: $P(X\\geq1)=1-P(X=0)$. עם $p=0.3$, $(0.7)^{10}\\approx0.028$ — כולם נכשלים נדיר, ולכן $0.9718$ הגיוני. בבחינה, כתבו תמיד את נוסחת המשלים לפני שאתם מחשבים.\n\n**הרחבה:** עם $p=0.3$, $(0.7)^{10}\\approx0.028$ — כולם נכשלים נדיר, ולכן $0.9718$ הגיוני. בבחינה, כתבו תמיד את נוסחת המשלים לפני שאתם מחשבים.",
       "skill_atoms": []
     },
     {
@@ -363,8 +363,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=3)=\\binom{8}{3}/256=56/256$. $P(X=4)=70/256$. $P(X=5)=56/256$. Sum $=182/256=0.711$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$P(3\\leq X\\leq5)=(56+70+56)/256=182/256\\approx0.711$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "explanation_en": "**Why this is correct:**\nFor $X\\sim B(8,0.5)$, an inclusive interval $3\\leq X\\leq5$ means $P(X=3)+P(X=4)+P(X=5)$. With $p=0.5$, $P(X=k)=\\binom{8}{k}/256$, giving $(56+70+56)/256=182/256\\approx0.711$.\n\n**How to think about it:**\nSymmetric binomial: $P(X=3)=P(X=5)$ because $\\binom{8}{3}=\\binom{8}{5}$. The middle term $P(X=4)$ is the mode near $n/2$.\n\n**Common slip:**\nUsing $P(X\\leq5)-P(X\\leq3)$ without the $-1$ adjustment — for inclusive bounds use $P(X\\leq b)-P(X\\leq a-1)$.\n\n**Exam tip:**\nList each $k$ in the interval before calculating — off-by-one errors are the top binomial exam mistake on timed tests.\n\n**Self-check:** $182/256\\approx0.71$ — most probability mass in the middle of the symmetric distribution.",
+      "explanation_he": "**למה זה נכון:**\n$P(3\\leq X\\leq5)=P(X=3)+P(X=4)+P(X=5)=(56+70+56)/256\\approx0.711$ עבור $X\\sim B(8,0.5)$.\n\n**איך לחשוב על זה:**\nטווח כולל דורש סכימת כל ערכי $k$ בפנים. בינומי סימטרי: $P(X=3)=P(X=5)$ — בדיקה מהירה לפני חיבור. האיבר $P(X=4)=70/256$ הוא הגדול ביותר — זה תואם ש-$k=4$ קרוב ל-$n/2$.\n\n**טעות נפוצה:**\n$P(X\\leq5)-P(X\\leq3)$ בלי התאמת $-1$ באינדקס התחתון — לגבולות כוללים: $P(X\\leq b)-P(X\\leq a-1)$.\n\n**טיפ לבחינה:**\nרשמו $k=3,4,5$ לפני חישוב. ניתן גם $P(X\\leq5)-P(X\\leq2)$ — אל תערבבו בין \"מדויק\" ל\"מצטבר\". עם $p=0.5$, כדאי לכתוב הסתברויות כשברים מ-$256$ לפני סכימה — זה מקטין טעויות עיגול.\n\n**הרחבה:** ניתן גם $P(X\\leq5)-P(X\\leq2)$ — אל תערבבו בין \"מדויק\" ל\"מצטבר\". עם $p=0.5$, כדאי לכתוב הסתברויות כשברים מ-$256$ לפני סכימה.",
       "skill_atoms": []
     },
     {
@@ -379,8 +379,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**B**inary outcomes, **I**ndependent trials, **N**umber fixed, **S**ame $p$. Most commonly violated: Independence (sampling without replacement) and same $p$ (changing conditions).\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**B**inary, **I**ndependent, **N**umber fixed, **S**ame $p$. המופרים בתדירות: בלתי-תלות (דגימה ללא החזרה) וקביעות $p$ (תנאים משתנים).\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\nBINS: **B**inary outcomes, **I**ndependent trials, fixed **N**umber $n$, **S**ame probability $p$ each trial. Most often violated: **Independence** (sampling without replacement — use hypergeometric) and **Same $p$** (conditions change mid-experiment).\n\n**How to think about it:**\nBefore any formula, translate the story into trials. If trials are not identical or not independent, the binomial model is wrong regardless of arithmetic.\n\n**Common slip:**\nApplying $B(n,p)$ to \"draw 5 cards without replacement\" — outcomes are dependent.\n\n**Exam tip:**\nWrite BINS as a checklist on word problems; one violated letter disqualifies the binomial model.",
+      "explanation_he": "**למה זה נכון:**\nBINS: **B**inary, **I**ndependent, **N**umber קבוע, **S**ame $p$. מופרים: בלתי-תלות (דגימה ללא החזרה) וקביעות $p$.\n\n**איך לחשוב על זה:**\nלפני נוסחה — תרגמו את הסיפור לניסויים. אם הניסויים לא זהים או לא בלתי-תלויים, המודל הבינומי שגוי.\n\n**טעות נפוצה:**\nיישום $B(n,p)$ על \"שליפת 5 קלפים ללא החזרה\".\n\n**טיפ לבחינה:**\nכתבו BINS כרשימת בדיקה; אות אחת מופרת — פסלו את המודל הבינומי.\n\n**בדיקה עצמית:** BINS הוא שער — דגימה ללא החזרה = היפרגיאומטרי, לא בינומי.\n\n**הרחבה:** דוגמה קלאסית: שליפת 5 קלפים ללא החזרה — תלות בין שליפות → פילוג היפרגיאומטרי. BINS הוא שער, לא רק רשימת מילים.",
       "skill_atoms": []
     }
   ],
