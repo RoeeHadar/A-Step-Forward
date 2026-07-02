@@ -15,22 +15,22 @@
       "kind": "intro",
       "title_en": "Rates of Change in Multiple Directions",
       "title_he": "קצבי שינוי בכיוונים שונים",
-      "body_en_md": "For $f(x,y)$, the rate of change depends on the direction. The **partial derivative** $\\partial f/\\partial x$ measures how fast $f$ changes as $x$ varies while $y$ is held fixed — the slope of the curve $z=f(x,y_0)$. Similarly for $\\partial f/\\partial y$.\n\nPartial derivatives appear throughout applied mathematics:\n- **Physics:** $\\partial T/\\partial x$ is heat flow in the $x$-direction.\n- **Economics:** $\\partial U/\\partial x_i$ is marginal utility of good $i$.\n- **Machine learning:** gradient descent uses all partial derivatives simultaneously.",
-      "body_he_md": "עבור $f(x,y)$, קצב השינוי תלוי בכיוון. **הנגזרת החלקית** $\\partial f/\\partial x$ מודדת כמה מהר $f$ משתנה כאשר $x$ משתנה ו-$y$ קבוע — שיפוע העקומה $z=f(x,y_0)$. בדומה ל-$\\partial f/\\partial y$.\n\nנגזרות חלקיות מופיעות בכל הנדסה ומדעים:\n- **פיזיקה:** $\\partial T/\\partial x$ — זרימת חום.\n- **כלכלה:** $\\partial U/\\partial x_i$ — תועלת שולית.\n- **למידת מכונה:** ירידת גרדיאנט משתמשת בכל הנגזרות החלקיות."
+      "body_en_md": "For a function of two variables $f(x,y)$, the rate of change at a point depends on **which direction** you move. Unlike single-variable calculus where the derivative $f'(a)$ captures one slope, multivariable functions have infinitely many possible slopes — one for each approach direction.\n\nThe **partial derivative** $\\partial f/\\partial x$ measures how fast $f$ changes as $x$ varies while $y$ is held fixed. Geometrically, it is the slope of the curve obtained by slicing the surface $z=f(x,y)$ with the vertical plane $y=y_0$. Similarly, $\\partial f/\\partial y$ holds $x$ fixed and differentiates in $y$.\n\nPartial derivatives appear throughout applied mathematics and engineering:\n- **Physics:** $\\partial T/\\partial x$ describes heat flow in the $x$-direction inside a solid.\n- **Economics:** $\\partial U/\\partial x_i$ is the marginal utility of good $i$ in a utility function $U(x_1,\\ldots,x_n)$.\n- **Machine learning:** gradient descent updates every parameter using all partial derivatives simultaneously.\n\nThis lesson builds on `concept:multivariable_limits` and unlocks `concept:optimization_problems` and directional derivatives. Master the \"treat other variables as constants\" rule — it is the single most tested skill in Calc III partial-derivative problems.",
+      "body_he_md": "עבור פונקציה של שני משתנים $f(x,y)$, קצב השינוי בנקודה תלוי **באיזה כיוון** נעים. בניגוד לחדו\"א חד-משתנה שבו הנגזרת $f'(a)$ תופסת שיפוע אחד, לפונקציות ממשתנים רבים יש אינסוף שיפועים אפשריים — אחד לכל כיוון גישה.\n\n**הנגזרת החלקית** $\\partial f/\\partial x$ מודדת כמה מהר $f$ משתנה כאשר $x$ משתנה ו-$y$ נשאר קבוע. גיאומטרית, זה שיפוע העקומה הנוצרת מחיתוך המשטח $z=f(x,y)$ במישור האנכי $y=y_0$. בדומה, $\\partial f/\\partial y$ מחזיקה $x$ קבוע וגוזרת לפי $y$.\n\nנגזרות חלקיות מופיעות בכל הנדסה ומדעים:\n- **פיזיקה:** $\\partial T/\\partial x$ מתאר זרימת חום בכיוון $x$ בתוך גוף מוצק.\n- **כלכלה:** $\\partial U/\\partial x_i$ היא התועלת השולית של מוצר $i$ בפונקציית תועלת $U(x_1,\\ldots,x_n)$.\n- **למידת מכונה:** ירידת גרדיאנט מעדכנת כל פרמטר בעזרת כל הנגזרות החלקיות בו-זמנית.\n\nשיעור זה מבוסס על `concept:multivariable_limits` ופותח את `concept:optimization_problems` ונגזרות כיווניות. שלטו בכלל \"יחס לשאר המשתנים כקבועים\" — זה הכישור הנבחן ביותר בבעיות נגזרות חלקיות ב-Calc III."
     },
     {
       "kind": "definition",
       "title_en": "Partial Derivatives — Formal Definitions",
       "title_he": "נגזרות חלקיות — הגדרות פורמליות",
-      "body_en_md": "**Partial derivative w.r.t. $x$:**\n$$f_x(x,y) = \\frac{\\partial f}{\\partial x} = \\lim_{h\\to 0}\\frac{f(x+h,y)-f(x,y)}{h}.$$\n\n**Partial derivative w.r.t. $y$:**\n$$f_y(x,y) = \\frac{\\partial f}{\\partial y} = \\lim_{h\\to 0}\\frac{f(x,y+h)-f(x,y)}{h}.$$\n\n**Computation rule:** Treat all other variables as constants and differentiate as usual.\n\n**Higher-order partial derivatives:**\n$$f_{xx}=\\frac{\\partial^2 f}{\\partial x^2}, \\quad f_{yy}=\\frac{\\partial^2 f}{\\partial y^2}, \\quad f_{xy}=\\frac{\\partial^2 f}{\\partial y\\partial x}=\\frac{\\partial}{\\partial y}\\left(\\frac{\\partial f}{\\partial x}\\right).$$\n\n**Clairaut's theorem:** If $f_{xy}$ and $f_{yx}$ are both continuous on an open set, then $f_{xy}=f_{yx}$.\n\n**Gradient vector:**\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\frac{\\partial f}{\\partial y}\\right) = (f_x,f_y).$$",
-      "body_he_md": "**נגזרת חלקית לפי $x$:**\n$$f_x=\\lim_{h\\to 0}\\frac{f(x+h,y)-f(x,y)}{h}.$$\n\n**נגזרת חלקית לפי $y$:**\n$$f_y=\\lim_{h\\to 0}\\frac{f(x,y+h)-f(x,y)}{h}.$$\n\n**כלל חישוב:** יחס לכל שאר המשתנים כאל קבועים וגזור כרגיל.\n\n**נגזרות מסדר גבוה:** $f_{xx}$, $f_{yy}$, $f_{xy}$, $f_{yx}$.\n\n**משפט קלרו:** אם $f_{xy}$ ו-$f_{yx}$ רציפות על קבוצה פתוחה, אז $f_{xy}=f_{yx}$.\n\n**וקטור גרדיאנט:** $\\nabla f=(f_x,f_y)$."
+      "body_en_md": "**Partial derivative with respect to $x$:**\n$$f_x(x,y) = \\frac{\\partial f}{\\partial x} = \\lim_{h\\to 0}\\frac{f(x+h,y)-f(x,y)}{h}.$$\n\n**Partial derivative with respect to $y$:**\n$$f_y(x,y) = \\frac{\\partial f}{\\partial y} = \\lim_{h\\to 0}\\frac{f(x,y+h)-f(x,y)}{h}.$$\n\nThese are ordinary single-variable limits: in $f_x$, the point $(x,y)$ is fixed and only $x$ moves. The limit must exist along the horizontal line through $(x,y)$.\n\n**Computation rule (the practical definition):** To find $\\partial f/\\partial x$, treat every variable **except** $x$ as a constant and differentiate using standard rules (power, product, chain). The result is generally a function of **all** variables, not just $x$.\n\n**Higher-order partial derivatives:**\n$$f_{xx}=\\frac{\\partial^2 f}{\\partial x^2}, \\quad f_{yy}=\\frac{\\partial^2 f}{\\partial y^2}, \\quad f_{xy}=\\frac{\\partial^2 f}{\\partial y\\partial x}=\\frac{\\partial}{\\partial y}\\left(\\frac{\\partial f}{\\partial x}\\right).$$\n\n**Clairaut's theorem (Schwarz's theorem):** If $f_{xy}$ and $f_{yx}$ are both continuous on an open set, then $f_{xy}=f_{yx}$. You may compute mixed partials in whichever order is easier.\n\n**Gradient vector:**\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\frac{\\partial f}{\\partial y}\\right) = (f_x,f_y).$$\nFor $n$ variables, $\\nabla f=(f_{x_1},\\ldots,f_{x_n})$ collects all first partials into one vector.",
+      "body_he_md": "**נגזרת חלקית לפי $x$:**\n$$f_x(x,y) = \\frac{\\partial f}{\\partial x} = \\lim_{h\\to 0}\\frac{f(x+h,y)-f(x,y)}{h}.$$\n\n**נגזרת חלקית לפי $y$:**\n$$f_y(x,y) = \\frac{\\partial f}{\\partial y} = \\lim_{h\\to 0}\\frac{f(x,y+h)-f(x,y)}{h}.$$\n\nאלה גבולות חד-משתניים רגילים: ב-$f_x$ הנקודה $(x,y)$ קבועה ורק $x$ זז. הגבול חייב להתקיים לאורך הקו האופקי דרך $(x,y)$.\n\n**כלל חישוב (ההגדרה המעשית):** למציאת $\\partial f/\\partial x$, יחסו לכל משתנה **מלבד** $x$ כקבוע וגזרו לפי כללים סטандартיים (חזקה, מכפלה, שרשרת). התוצאה היא בדרך כלל פונקציה של **כל** המשתנים, לא רק $x$.\n\n**נגזרות חלקיות מסדר גבוה:**\n$$f_{xx}=\\frac{\\partial^2 f}{\\partial x^2}, \\quad f_{yy}=\\frac{\\partial^2 f}{\\partial y^2}, \\quad f_{xy}=\\frac{\\partial^2 f}{\\partial y\\partial x}.$$\n\n**משפט קלרו (משפט שוורץ):** אם $f_{xy}$ ו-$f_{yx}$ רציפות על קבוצה פתוחה, אז $f_{xy}=f_{yx}$. ניתן לחשב נגזרות מעורבות בסדר הנוח יותר.\n\n**וקטור גרדיאנט:**\n$$\\nabla f = \\left(\\frac{\\partial f}{\\partial x},\\frac{\\partial f}{\\partial y}\\right) = (f_x,f_y).$$\nל-$n$ משתנים, $\\nabla f=(f_{x_1},\\ldots,f_{x_n})$ אוסף את כל הנגזרות החלקיות הראשונות לוקטור אחד."
     },
     {
       "kind": "theory",
       "title_en": "Geometric Meaning and Notation",
       "title_he": "משמעות גיאומטרית וסימונים",
-      "body_en_md": "**Geometric meaning:**\n- $f_x(a,b)$ = slope of the curve obtained by slicing the surface $z=f(x,y)$ with the plane $y=b$, at $x=a$.\n- $f_y(a,b)$ = slope of the curve obtained by slicing with $x=a$, at $y=b$.\n\n**Notation alternatives:** $f_x=\\partial f/\\partial x=D_x f=D_1 f$.\n\n**Clairaut's theorem in practice:** For all \"nice\" (twice continuously differentiable) functions: $\\partial^2 f/(\\partial x\\partial y)=\\partial^2 f/(\\partial y\\partial x)$. The order of differentiation doesn't matter.\n\n**n-variable generalization:** For $f(x_1,\\ldots,x_n)$:\n$$\\frac{\\partial f}{\\partial x_i}:\\text{differentiate w.r.t. }x_i,\\text{ hold all others constant.}$$\n\n**Gradient direction:** $\\nabla f$ points in the direction of steepest ascent of $f$.",
-      "body_he_md": "**משמעות גיאומטרית:**\n- $f_x(a,b)$ = שיפוע העקומה הנוצרת על ידי חיתוך המשטח $z=f(x,y)$ עם המישור $y=b$, ב-$x=a$.\n- $f_y(a,b)$ = שיפוע העקומה מחיתוך עם $x=a$, ב-$y=b$.\n\n**סימונים חלופיים:** $f_x=\\partial f/\\partial x=D_x f$.\n\n**משפט קלרו בפועל:** לפונקציות \"ניחות\": $f_{xy}=f_{yx}$. סדר הגזירה לא משנה.\n\n**הגרדיאנט:** $\\nabla f$ מצביע בכיוון העלייה התלולה ביותר."
+      "body_en_md": "**Geometric meaning on a surface $z=f(x,y)$:**\n- $f_x(a,b)$ = slope of the tangent line to the curve $z=f(x,b)$ at $x=a$ (slice the surface with the plane $y=b$).\n- $f_y(a,b)$ = slope of the tangent line to the curve $z=f(a,y)$ at $y=b$ (slice with $x=a$).\n\nThese are **directional** slopes — only two of infinitely many possible rates of change. The full directional derivative in unit direction $\\mathbf{u}$ requires $\\nabla f\\cdot\\mathbf{u}$ (covered in a later lesson).\n\n**Notation alternatives:** $f_x=\\partial f/\\partial x=\\partial_x f=D_x f=D_1 f$. Subscript order matters for mixed partials: $f_{xy}$ means differentiate w.r.t. $x$ first, then $y$ (though Clairaut often lets you swap).\n\n**Clairaut's theorem in practice:** For all \"nice\" (twice continuously differentiable) functions on an open set, $\\partial^2 f/(\\partial x\\partial y)=\\partial^2 f/(\\partial y\\partial x)$. The order of differentiation does not matter — compute the easier path first.\n\n**$n$-variable generalization:** For $f(x_1,\\ldots,x_n)$, the partial $\\partial f/\\partial x_i$ differentiates w.r.t. $x_i$ while holding $x_j$ fixed for all $j\\neq i$. Thermodynamics uses this constantly: $(\\partial U/\\partial V)_T$ means differentiate w.r.t. volume at fixed temperature $T$.\n\n**Gradient direction:** $\\nabla f(a,b)$ points in the direction of **steepest ascent** of $f$ at $(a,b)$, and its magnitude $|\\nabla f|$ is the maximum rate of increase. The gradient is always **perpendicular** to level curves $f(x,y)=c$.\n\n**Connection to differentiability:** Existence of partials $f_x,f_y$ at a point does **not** guarantee the function is differentiable there — partials are necessary but not sufficient. Path-dependent behavior can still break the tangent plane.",
+      "body_he_md": "**משמעות גיאומטרית על משטח $z=f(x,y)$:**\n- $f_x(a,b)$ = שיפוע המשיק לעקומה $z=f(x,b)$ ב-$x=a$ (חיתוך המשטח במישור $y=b$).\n- $f_y(a,b)$ = שיפוע המשיק לעקומה $z=f(a,y)$ ב-$y=b$ (חיתוך ב-$x=a$).\n\nאלה שיפועים **כיווניים** — רק שניים מאינסוף קצבי שינוי אפשריים. הנגזרת הכיוונית המלאה בכיוון יחידה $\\mathbf{u}$ דורשת $\\nabla f\\cdot\\mathbf{u}$ (בשיעור מאוחר יותר).\n\n**סימונים חלופיים:** $f_x=\\partial f/\\partial x=\\partial_x f=D_x f$. סדר אינדקסים חשוב לנגזרות מעורבות: $f_{xy}$ פירושו גזירה לפי $x$ קודם, אז $y$ (אך קלרו לעיתים מאפשר החלפה).\n\n**משפט קלרו בפועל:** לפונקציות \"נוחות\" (גזירות ברציפות פעמיים) על קבוצה פתוחה, $\\partial^2 f/(\\partial x\\partial y)=\\partial^2 f/(\\partial y\\partial x)$. סדר הגזירה לא משנה — חשבו את הנתיב הקל יותר.\n\n**הכללה ל-$n$ משתנים:** ל-$f(x_1,\\ldots,x_n)$, הנגזרת $\\partial f/\\partial x_i$ גוזרת לפי $x_i$ ומחזיקה $x_j$ קבוע לכל $j\\neq i$. בפיזיקה תרמית משתמשים בכך: $(\\partial U/\\partial V)_T$ = גזירה לפי נפח כאשר $T$ קבוע.\n\n**כיוון הגרדיאנט:** $\\nabla f(a,b)$ מצביע בכיוון **העלייה התלולה ביותר** של $f$ ב-$(a,b)$, וגודלו $|\\nabla f|$ הוא קצב העלייה המרבי. הגרדיאנט תמיד **ניצב** לעקומות הגובה $f(x,y)=c$.\n\n**קשר לגזירות:** קיום $f_x,f_y$ בנקודה **אינו** מבטיח שהפונקציה גזירה שם — נגזרות חלקיות הכרחיות אך לא מספיקות. התנהגות תלוית-נתיב יכולה עדיין לשבור את מישור המשיק."
     },
     {
       "kind": "worked_example",
@@ -38,8 +38,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Computing Partial Derivatives",
       "title_he": "דוגמה פתורה 1 — חישוב נגזרות חלקיות",
-      "body_en_md": "**Function:** $f(x,y)=x^3+2x^2y-y^3+5$.\n\n### Move 1 Treat $y$ as constant:\n$$f_x = 3x^2+4xy-0+0 = 3x^2+4xy.$$\n\n### Move 2 Treat $x$ as constant:\n$$f_y = 0+2x^2(1)-3y^2+0 = 2x^2-3y^2.$$\n\n### Move 3\n$$f_x(1,2)=3(1)+4(1)(2)=3+8=11.$$\n$$f_y(1,2)=2(1)-3(4)=2-12=-10.$$\n\n**Interpretation:** At $(1,2)$, the surface rises at rate 11 in the $x$-direction and falls at rate 10 in the $y$-direction.",
-      "body_he_md": "**פונקציה:** $f(x,y)=x^3+2x^2y-y^3+5$.\n\n**שלב 1 — $f_x$:** $y$ קבוע:\n$$f_x=3x^2+4xy.$$\n\n**שלב 2 — $f_y$:** $x$ קבוע:\n$$f_y=2x^2-3y^2.$$\n\n**שלב 3 — ב-$(1,2)$:**\n$$f_x(1,2)=11, \\quad f_y(1,2)=-10.$$\n\n**פרשנות:** ב-$(1,2)$, המשטח עולה בקצב 11 בכיוון $x$ ויורד ב-10 בכיוון $y$."
+      "body_en_md": "**Function:** $f(x,y)=x^3+2x^2y-y^3+5$.\n\nThis polynomial is smooth everywhere — Clairaut applies without checking continuity.\n\n### Move 1 — Find $f_x$ (treat $y$ as constant)\nDifferentiate term by term; constants and terms with only $y$ vanish:\n$$f_x = \\frac{\\partial}{\\partial x}[x^3]+\\frac{\\partial}{\\partial x}[2x^2y]-\\frac{\\partial}{\\partial x}[y^3]+\\frac{\\partial}{\\partial x}[5] = 3x^2+4xy-0+0 = 3x^2+4xy.$$\n\n### Move 2 — Find $f_y$ (treat $x$ as constant)\n$$f_y = 0+2x^2(1)-3y^2+0 = 2x^2-3y^2.$$\n\n### Move 3 — Evaluate at $(1,2)$\nSubstitute $x=1$, $y=2$ into the partial formulas (not into $f$ itself):\n$$f_x(1,2)=3(1)^2+4(1)(2)=3+8=11.$$\n$$f_y(1,2)=2(1)^2-3(2)^2=2-12=-10.$$\n\n**Interpretation:** At $(1,2)$, the surface rises at rate $11$ per unit move in the $+x$ direction and **falls** at rate $10$ per unit move in the $+y$ direction. The gradient is $\\nabla f(1,2)=(11,-10)$.\n\n**Exam link:** Polynomial partials are the fastest exam points — no chain rule traps. Always substitute into the **partial formula**, not the original $f$, when evaluating at a point.\n\n**Sanity check:** $f_x(1,2)=11>0$ means $f$ increases if you move slightly in $+x$ from $(1,2)$; $f_y(1,2)=-10<0$ means it decreases in $+y$. Signs of partials tell you local increase/decrease directions instantly.",
+      "body_he_md": "**פונקציה:** $f(x,y)=x^3+2x^2y-y^3+5$.\n\nפולינום זה חלק בכל מקום — קלרו חל בלי לבדוק רציפות.\n\n### צעד 1 — מציאת $f_x$ (יחס $y$ כקבוע)\nגזרו איבר-איבר; קבועים ואיברים עם $y$ בלבד מתאפסים:\n$$f_x = \\frac{\\partial}{\\partial x}[x^3]+\\frac{\\partial}{\\partial x}[2x^2y] = 3x^2+4xy.$$\n\n### צעד 2 — מציאת $f_y$ (יחס $x$ כקבוע)\n$$f_y = \\frac{\\partial}{\\partial y}[2x^2y]-\\frac{\\partial}{\\partial y}[y^3] = 2x^2-3y^2.$$\n\n### צעד 3 — הצבה ב-$(1,2)$\nהציבו $x=1$, $y=2$ לנוסחות הנגזרות (לא ל-$f$ עצמה):\n$$f_x(1,2)=3+8=11.$$\n$$f_y(1,2)=2-12=-10.$$\n\n**פרשנות:** ב-$(1,2)$, המשטח עולה בקצב $11$ ליחידת תזוזה ב-$+x$ ו**יורד** בקצב $10$ ליחידת תזוזה ב-$+y$. הגרדיאנט הוא $\\nabla f(1,2)=(11,-10)$.\n\n**קשר לבחינה:** נגזרות חלקיות של פולינומים — נקודות מהירות בבחינה. הציבו לתוך **נוסחת הנגזרת**, לא ל-$f$ המקורית, בעת חישוב בנקודה.\n\n**בדיקה:** $f_x(1,2)=11>0$ — $f$ עולה בתזוזה קטנה ב-$+x$; $f_y(1,2)=-10<0$ — יורד ב-$+y$. סימני הנגזרות מגלים כיווני עלייה/ירידה מקומיים מיד."
     },
     {
       "kind": "checkpoint",
@@ -47,8 +47,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Find $f_x$ and $f_y$ for $f(x,y)=x^2\\sin(y)+e^{xy}$.",
       "body_he_md": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=x^2\\sin y+e^{xy}$.",
-      "checkpoint_solution_en": "$f_x=2x\\sin y+ye^{xy}$. $f_y=x^2\\cos y+xe^{xy}$.",
-      "checkpoint_solution_he": "$f_x=2x\\sin y+ye^{xy}$. $f_y=x^2\\cos y+xe^{xy}$."
+      "checkpoint_solution_en": "Find $f_x$ and $f_y$ for $f(x,y)=x^2\\sin(y)+e^{xy}$.\n\n**Step 1 — $f_x$ (hold $y$ constant):**\n$$f_x = \\frac{\\partial}{\\partial x}[x^2\\sin y]+\\frac{\\partial}{\\partial x}[e^{xy}] = 2x\\sin y + e^{xy}\\cdot y = 2x\\sin y + ye^{xy}.$$\nThe chain rule applies to $e^{xy}$ because the exponent $xy$ depends on $x$ (with $y$ fixed as a constant multiplier).\n\n**Step 2 — $f_y$ (hold $x$ constant):**\n$$f_y = x^2\\cos y + e^{xy}\\cdot x = x^2\\cos y + xe^{xy}.$$\n\n**Check:** Both partials are defined everywhere. At $(0,0)$: $f_x(0,0)=0$, $f_y(0,0)=0$ — the origin is a critical point.",
+      "checkpoint_solution_he": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=x^2\\sin y+e^{xy}$.\n\n**שלב 1 — $f_x$ ($y$ קבוע):**\n$$f_x = 2x\\sin y + ye^{xy}.$$\nכלל השרשרת חל על $e^{xy}$ כי המעריך $xy$ תלוי ב-$x$ (עם $y$ כמכפיל קבוע).\n\n**שלב 2 — $f_y$ ($x$ קבוע):**\n$$f_y = x^2\\cos y + xe^{xy}.$$\n\n**בדיקה:** שתי הנגזרות מוגדרות בכל מקום. ב-$(0,0)$: $f_x(0,0)=0$, $f_y(0,0)=0$ — המקור הוא נקודה קריטית."
     },
     {
       "kind": "worked_example",
@@ -56,8 +56,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Second-Order Partials and Clairaut's Theorem",
       "title_he": "דוגמה פתורה 2 — נגזרות חלקיות מסדר שני ומשפט קלרו",
-      "body_en_md": "**Function:** $f(x,y)=x^2y^3+\\ln(xy)$.\n\n### Move 1\n$$f_x = 2xy^3+\\frac{1}{x}, \\qquad f_y = 3x^2y^2+\\frac{1}{y}.$$\n\n### Move 2\n$$f_{xx} = \\frac{\\partial}{\\partial x}\\left[2xy^3+\\frac{1}{x}\\right] = 2y^3-\\frac{1}{x^2}.$$\n$$f_{yy} = \\frac{\\partial}{\\partial y}\\left[3x^2y^2+\\frac{1}{y}\\right] = 6x^2y-\\frac{1}{y^2}.$$\n\n### Move 3\n$$f_{xy} = \\frac{\\partial f_x}{\\partial y} = \\frac{\\partial}{\\partial y}\\left[2xy^3+\\frac{1}{x}\\right] = 6xy^2.$$\n\n### Move 4\n$$f_{yx} = \\frac{\\partial f_y}{\\partial x} = \\frac{\\partial}{\\partial x}\\left[3x^2y^2+\\frac{1}{y}\\right] = 6xy^2.$$\n\n**Clairaut confirmed:** $f_{xy}=f_{yx}=6xy^2$. ✓",
-      "body_he_md": "**פונקציה:** $f(x,y)=x^2y^3+\\ln(xy)$.\n\n**שלב 1:** $f_x=2xy^3+1/x$, $f_y=3x^2y^2+1/y$.\n\n**שלב 2:** $f_{xx}=2y^3-1/x^2$, $f_{yy}=6x^2y-1/y^2$.\n\n**שלב 3:** $f_{xy}=6xy^2$.\n\n**שלב 4:** $f_{yx}=6xy^2$.\n\n**קלרו מאושר:** $f_{xy}=f_{yx}=6xy^2$. ✓"
+      "body_en_md": "**Function:** $f(x,y)=x^2y^3+\\ln(xy)$, defined for $x>0$, $y>0$.\n\nLog terms require chain rule; the domain is open so Clairaut applies.\n\n### Move 1 — First-order partials\nFor $\\ln(xy)$, chain rule gives $\\partial/\\partial x[\\ln(xy)]=\\frac{1}{xy}\\cdot y=\\frac{1}{x}$ (since $\\partial(xy)/\\partial x=y$ with $y$ fixed):\n$$f_x = 2xy^3+\\frac{1}{x}, \\qquad f_y = 3x^2y^2+\\frac{1}{y}.$$\n\n### Move 2 — Pure second partials\n$$f_{xx} = \\frac{\\partial}{\\partial x}\\left[2xy^3+\\frac{1}{x}\\right] = 2y^3-\\frac{1}{x^2}.$$\n$$f_{yy} = \\frac{\\partial}{\\partial y}\\left[3x^2y^2+\\frac{1}{y}\\right] = 6x^2y-\\frac{1}{y^2}.$$\n\n### Move 3 — Mixed partial $f_{xy}$ (differentiate $f_x$ w.r.t. $y$)\nOnly $2xy^3$ depends on $y$; $1/x$ is constant w.r.t. $y$:\n$$f_{xy} = \\frac{\\partial}{\\partial y}\\left[2xy^3\\right] = 6xy^2.$$\n\n### Move 4 — Mixed partial $f_{yx}$ (differentiate $f_y$ w.r.t. $x$)\nOnly $3x^2y^2$ depends on $x$:\n$$f_{yx} = \\frac{\\partial}{\\partial x}\\left[3x^2y^2\\right] = 6xy^2.$$\n\n**Clairaut confirmed:** $f_{xy}=f_{yx}=6xy^2$. ✓ Both mixed partials agree on the open domain $x>0$, $y>0$.\n\n**Efficiency tip:** Once you have one mixed partial, write the other equal by Clairaut — but on exams you may be asked to compute both to verify the theorem explicitly.",
+      "body_he_md": "**פונקציה:** $f(x,y)=x^2y^3+\\ln(xy)$, מוגדרת ל-$x>0$, $y>0$.\n\nאיברי לוג דורשים כלל שרשרת; התחום פתוח ולכן קלרו חל.\n\n### צעד 1 — נגזרות ראשונות\nל-$\\ln(xy)$, כלל שרשרת נותן $\\partial/\\partial x[\\ln(xy)]=\\frac{1}{xy}\\cdot y=\\frac{1}{x}$:\n$$f_x = 2xy^3+\\frac{1}{x}, \\qquad f_y = 3x^2y^2+\\frac{1}{y}.$$\n\n### צעד 2 — נגזרות טהורות מסדר שני\n$$f_{xx} = 2y^3-\\frac{1}{x^2}, \\qquad f_{yy} = 6x^2y-\\frac{1}{y^2}.$$\n\n### צעד 3 — נגזרת מעורבת $f_{xy}$ (גזירת $f_x$ לפי $y$)\nרק $2xy^3$ תלוי ב-$y$; $1/x$ קבוע לפי $y$:\n$$f_{xy} = 6xy^2.$$\n\n### צעד 4 — נגזרת מעורבת $f_{yx}$ (גזירת $f_y$ לפי $x$)\nרק $3x^2y^2$ תלוי ב-$x$:\n$$f_{yx} = 6xy^2.$$\n\n**קלרו מאושר:** $f_{xy}=f_{yx}=6xy^2$. ✓ שתי הנגזרות המעורבות מסכימות בתחום הפתוח $x>0$, $y>0$.\n\n**טיפ יעילות:** אחרי חישוב נגזרת מעורבת אחת, כתבו את השנייה שווה לפי קלרו — אך בבחינה עלולים לבקש לחשב שתיהן לאימות מפורש של המשפט."
     },
     {
       "kind": "checkpoint",
@@ -65,8 +65,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "For $f(x,y)=\\sin(xy)$, verify that $f_{xy}=f_{yx}$.",
       "body_he_md": "עבור $f(x,y)=\\sin(xy)$, אמת ש-$f_{xy}=f_{yx}$.",
-      "checkpoint_solution_en": "$f_x=y\\cos(xy)$. $f_{xy}=\\cos(xy)-xy\\sin(xy)$. $f_y=x\\cos(xy)$. $f_{yx}=\\cos(xy)-xy\\sin(xy)$. Equal. ✓",
-      "checkpoint_solution_he": "$f_x=y\\cos(xy)$. $f_{xy}=\\cos(xy)-xy\\sin(xy)$. $f_y=x\\cos(xy)$. $f_{yx}=\\cos(xy)-xy\\sin(xy)$. שווים. ✓"
+      "checkpoint_solution_en": "For $f(x,y)=\\sin(xy)$, verify $f_{xy}=f_{yx}$.\n\n**Step 1 — $f_x$:** Chain rule with $u=xy$:\n$$f_x = \\cos(xy)\\cdot y = y\\cos(xy).$$\n\n**Step 2 — $f_{xy}$:** Differentiate $f_x$ w.r.t. $y$ (product rule):\n$$f_{xy} = \\cos(xy) + y\\cdot(-\\sin(xy))\\cdot x = \\cos(xy)-xy\\sin(xy).$$\n\n**Step 3 — $f_y$:**\n$$f_y = \\cos(xy)\\cdot x = x\\cos(xy).$$\n\n**Step 4 — $f_{yx}$:** Differentiate $f_y$ w.r.t. $x$:\n$$f_{yx} = \\cos(xy) + x\\cdot(-\\sin(xy))\\cdot y = \\cos(xy)-xy\\sin(xy).$$\n\n**Conclusion:** $f_{xy}=f_{yx}$. ✓ Clairaut holds because $\\sin(xy)$ is smooth everywhere.",
+      "checkpoint_solution_he": "עבור $f(x,y)=\\sin(xy)$, אמת $f_{xy}=f_{yx}$.\n\n**שלב 1 — $f_x$:** כלל שרשרת עם $u=xy$:\n$$f_x = y\\cos(xy).$$\n\n**שלב 2 — $f_{xy}$:** גזירת $f_x$ לפי $y$ (כלל מכפלה):\n$$f_{xy} = \\cos(xy)-xy\\sin(xy).$$\n\n**שלב 3 — $f_y$:**\n$$f_y = x\\cos(xy).$$\n\n**שלב 4 — $f_{yx}$:** גזירת $f_y$ לפי $x$:\n$$f_{yx} = \\cos(xy)-xy\\sin(xy).$$\n\n**מסקנה:** $f_{xy}=f_{yx}$. ✓ קלרו חל כי $\\sin(xy)$ חלק בכל מקום."
     },
     {
       "kind": "worked_example",
@@ -74,15 +74,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Gradient and Level Curves",
       "title_he": "דוגמה פתורה 3 — גרדיאנט ועקומות גובה",
-      "body_en_md": "**Problem:** For $f(x,y)=4x^2+y^2$, find the gradient at $(1,2)$ and show it is perpendicular to the level curve $f=8$ at that point.\n\n### Move 1\n$$f_x = 8x, \\qquad f_y = 2y.$$\n\n### Move 2\n$$\\nabla f(1,2) = (8(1),2(2)) = (8,4).$$\n\n### Move 3 The curve $4x^2+y^2=8$ is an ellipse. At $(1,2)$: $4+4=8$. ✓\n\n### Move 4 Implicit differentiation of $4x^2+y^2=8$:\n$$8x+2yy'=0 \\implies y' = -\\frac{8x}{2y} = -\\frac{4x}{y}.$$\nAt $(1,2)$: $y'=-4/2=-2$. Tangent direction vector: $(1,-2)$.\n\n### Move 5\n$$\\nabla f(1,2)\\cdot(1,-2) = (8)(1)+(4)(-2) = 8-8 = 0. \\quad\\checkmark$$\n\n**Conclusion:** The gradient is always perpendicular to the level curves.",
-      "body_he_md": "**בעיה:** עבור $f(x,y)=4x^2+y^2$, מצא גרדיאנט ב-$(1,2)$ והראה שהוא ניצב לעקומת הגובה $f=8$ בנקודה זו.\n\n**שלב 1:** $f_x=8x$, $f_y=2y$.\n\n**שלב 2:** $\\nabla f(1,2)=(8,4)$.\n\n**שלב 3:** $(1,2)$ על $4x^2+y^2=8$. ✓\n\n**שלב 4:** כיוון המשיק לעקומת הגובה: $y'=-2$. וקטור כיוון: $(1,-2)$.\n\n**שלב 5:** $(8,4)\\cdot(1,-2)=8-8=0$. $\\checkmark$\n\n**מסקנה:** הגרדיאנט תמיד ניצב לעקומות הגובה.\n\n**בעיה:** For $f(x,y)=4x^2+y^2$, find the gradient at $(1,2)$ and show it is perpendicular to the level curve $f=8$ at that point.\n\n### צעד 1\n$$f_x = 8x, \\qquad f_y = 2y.$$\n\n### צעד 2\n$$\\nabla f(1,2) = (8(1),2(2)) = (8,4).$$\n\n### צעד 3 The curve $4x^2+y^2=8$ is an ellipse. At $(1,2)$: $4+4=8$. ✓\n\n### צעד 4 Implicit differentiation of $4x^2+y^2=8$:\n$$8x+2yy'=0 \\implies y' = -\\frac{8x}{2y} = -\\frac{4x}{y}.$$\nAt $(1,2)$: $y'=-4/2=-2$. Tangent direction vector: $(1,-2)$.\n\n### צעד 5\n$$\\nabla f(1,2)\\cdot(1,-2) = (8)(1)+(4)(-2) = 8-8 = 0. \\quad\\checkmark$$"
+      "body_en_md": "**Problem:** For $f(x,y)=4x^2+y^2$, find the gradient at $(1,2)$ and show it is perpendicular to the level curve $f=8$ at that point.\n\n### Move 1 — Partial derivatives\n$$f_x = 8x, \\qquad f_y = 2y.$$\n\n### Move 2 — Gradient at $(1,2)$\n$$\\nabla f(1,2) = (8(1),\\,2(2)) = (8,4).$$\n\n### Move 3 — Confirm $(1,2)$ lies on the level curve\nThe curve $4x^2+y^2=8$ is an ellipse. At $(1,2)$: $4(1)+4=8$. ✓\n\n### Move 4 — Tangent slope via implicit differentiation\nDifferentiate $4x^2+y^2=8$ implicitly w.r.t. $x$:\n$$8x+2yy'=0 \\implies y' = -\\frac{4x}{y}.$$\nAt $(1,2)$: $y'=-4/2=-2$. A tangent direction vector is $(1,-2)$ (slope $-2$).\n\n### Move 5 — Dot product test for perpendicularity\n$$\\nabla f(1,2)\\cdot(1,-2) = (8)(1)+(4)(-2) = 8-8 = 0. \\quad\\checkmark$$\n\n**Conclusion:** The gradient is always perpendicular to level curves. Moving along a level curve does not change $f$, so the directional derivative in the tangent direction is zero — exactly $\\nabla f\\cdot\\mathbf{t}=0$.\n\n**General theorem:** For differentiable $f$, $\\nabla f$ is normal to the level curve $f(x,y)=c$ at every point where $\\nabla f\\neq\\mathbf{0}$.",
+      "body_he_md": "**בעיה:** עבור $f(x,y)=4x^2+y^2$, מצא גרדיאנט ב-$(1,2)$ והראה שהוא ניצב לעקומת הגובה $f=8$ בנקודה זו.\n\n### צעד 1 — נגזרות חלקיות\n$$f_x = 8x, \\qquad f_y = 2y.$$\n\n### צעד 2 — גרדיאנט ב-$(1,2)$\n$$\\nabla f(1,2) = (8,4).$$\n\n### צעד 3 — אימות ש-$(1,2)$ על עקומת הגובה\nעקומת הגובה $4x^2+y^2=8$. ב-$(1,2)$: $4+4=8$. ✓\n\n### צעד 4 — שיפוע משיק בגזירה implicit\n$$8x+2yy'=0 \\implies y' = -\\frac{4x}{y}.$$\nב-$(1,2)$: $y'=-2$. וקטור כיוון משיק: $(1,-2)$.\n\n### צעד 5 — מבחן נקודה לניצבות\n$$\\nabla f(1,2)\\cdot(1,-2) = 8-8 = 0. \\quad\\checkmark$$\n\n**מסקנה:** הגרדיאנט תמיד ניצב לעקומות גובה. תזוזה לאורך עקומת גובה לא משנה את $f$, ולכן הנגזרת הכיוונית בכיוון המשיק אפס — בדיוק $\\nabla f\\cdot\\mathbf{t}=0$.\n\n**משפט כללי:** ל-$f$ גזירה, $\\nabla f$ נורמלי לעקומת הגובה $f(x,y)=c$ בכל נקודה שבה $\\nabla f\\neq\\mathbf{0}$."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Partial Derivatives Checklist",
       "title_he": "מדריך שיטה — רשימת פעולות לנגזרות חלקיות",
-      "body_en_md": "**To find $\\partial f/\\partial x_i$:**\n1. Treat ALL variables EXCEPT $x_i$ as constants.\n2. Differentiate using standard single-variable rules.\n3. Result: a function of all variables.\n\n**Common patterns:**\n| Term | $\\partial/\\partial x$ | $\\partial/\\partial y$ |\n|---|---|---|\n| $x^m y^n$ | $mx^{m-1}y^n$ | $nx^m y^{n-1}$ |\n| $e^{ax+by}$ | $ae^{ax+by}$ | $be^{ax+by}$ |\n| $\\sin(xy)$ | $y\\cos(xy)$ | $x\\cos(xy)$ |\n| $\\ln(f(x,y))$ | $f_x/f$ | $f_y/f$ |\n\n**Clairaut's:** $f_{xy}=f_{yx}$ for smooth functions (save computation!).\n\n**Gradient:** $\\nabla f=(f_x,f_y,\\ldots)$ — points in direction of steepest ascent.",
-      "body_he_md": "**למציאת $\\partial f/\\partial x_i$:**\n1. יחס לכל המשתנים פרט ל-$x_i$ כאל קבועים.\n2. גזור לפי כללי משתנה אחד רגיל.\n\n**תבניות שכיחות:**\n| גורם | $\\partial/\\partial x$ | $\\partial/\\partial y$ |\n|---|---|---|\n| $x^m y^n$ | $mx^{m-1}y^n$ | $nx^m y^{n-1}$ |\n| $e^{ax+by}$ | $ae^{ax+by}$ | $be^{ax+by}$ |\n| $\\sin(xy)$ | $y\\cos(xy)$ | $x\\cos(xy)$ |\n\n**קלרו:** $f_{xy}=f_{yx}$ — חוסך חישוב!\n\n**גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה מרבית."
+      "body_en_md": "**To find $\\partial f/\\partial x_i$:**\n1. Treat ALL variables EXCEPT $x_i$ as constants.\n2. Differentiate using standard single-variable rules (power, product, quotient, chain).\n3. Result: a function of all variables — simplify but do not substitute a specific point yet.\n\n**Common patterns:**\n| Term | $\\partial/\\partial x$ | $\\partial/\\partial y$ |\n|---|---|---|\n| $x^m y^n$ | $mx^{m-1}y^n$ | $nx^m y^{n-1}$ |\n| $e^{ax+by}$ | $ae^{ax+by}$ | $be^{ax+by}$ |\n| $\\sin(xy)$ | $y\\cos(xy)$ | $x\\cos(xy)$ |\n| $\\ln(f(x,y))$ | $f_x/f$ | $f_y/f$ |\n\n**Second-order workflow:**\n- Compute $f_x$, $f_y$ first.\n- For $f_{xx}$: differentiate $f_x$ w.r.t. $x$.\n- For $f_{xy}$: differentiate $f_x$ w.r.t. $y$ (often easier than $f_{yx}$).\n\n**Clairaut shortcut:** $f_{xy}=f_{yx}$ for smooth functions — compute one mixed partial, write the other equal.\n\n**Gradient:** $\\nabla f=(f_x,f_y,\\ldots)$ — points in direction of steepest ascent; $|\\nabla f|$ is max rate of increase.",
+      "body_he_md": "**למציאת $\\partial f/\\partial x_i$:**\n1. יחסו לכל המשתנים פרט ל-$x_i$ כקבועים.\n2. גזרו לפי כללי משתנה אחד (חזקה, מכפלה, מנה, שרשרת).\n3. התוצאה: פונקציה של כל המשתנים — פשטו אך אל תציבו נקודה עדיין.\n\n**תבניות שכיחות:**\n| גורם | $\\partial/\\partial x$ | $\\partial/\\partial y$ |\n|---|---|---|\n| $x^m y^n$ | $mx^{m-1}y^n$ | $nx^m y^{n-1}$ |\n| $e^{ax+by}$ | $ae^{ax+by}$ | $be^{ax+by}$ |\n| $\\sin(xy)$ | $y\\cos(xy)$ | $x\\cos(xy)$ |\n| $\\ln(f(x,y))$ | $f_x/f$ | $f_y/f$ |\n\n**תהליך מסדר שני:**\n- חשבו $f_x$, $f_y$ קודם.\n- ל-$f_{xx}$: גזרו $f_x$ לפי $x$.\n- ל-$f_{xy}$: גזרו $f_x$ לפי $y$ (לעיתים קל יותר מ-$f_{yx}$).\n\n**קיצור קלרו:** $f_{xy}=f_{yx}$ לפונקציות חלקות — חשבו נגזרת מעורבת אחת, כתבו את השנייה שווה.\n\n**גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה מרבית; $|\\nabla f|$ = קצב עלייה מרבי."
     },
     {
       "kind": "exercise_set",
@@ -96,8 +96,8 @@
           "difficulty": "easy",
           "body_en": "Find $f_x$ and $f_y$ for $f(x,y)=3x^2+4xy-y^3$.",
           "body_he": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=3x^2+4xy-y^3$.",
-          "solution_en": "**Solution:**\n\n$f_x=6x+4y$. $f_y=4x-3y^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$f_x=6x+4y$. $f_y=4x-3y^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_x=6x+4y$. $f_y=4x-3y^2$.",
+          "solution_he": "$f_x=6x+4y$. $f_y=4x-3y^2$.",
           "points": 4
         },
         {
@@ -105,8 +105,8 @@
           "difficulty": "easy",
           "body_en": "Find $\\partial f/\\partial x$ for $f(x,y,z)=x^2yz^3$.",
           "body_he": "מצא $\\partial f/\\partial x$ עבור $f(x,y,z)=x^2yz^3$.",
-          "solution_en": "**Solution:**\n\n$\\partial f/\\partial x=2xyz^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$\\partial f/\\partial x=2xyz^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$\\partial f/\\partial x=2xyz^3$.",
+          "solution_he": "$\\partial f/\\partial x=2xyz^3$.",
           "points": 4
         },
         {
@@ -114,8 +114,8 @@
           "difficulty": "easy",
           "body_en": "Find $f_x(2,1)$ for $f(x,y)=x^2y-3y^2$.",
           "body_he": "מצא $f_x(2,1)$ עבור $f(x,y)=x^2y-3y^2$.",
-          "solution_en": "**Solution:**\n\n$f_x=2xy$. $f_x(2,1)=4$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$f_x=2xy$. $f_x(2,1)=4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_x=2xy$. $f_x(2,1)=4$.",
+          "solution_he": "$f_x=2xy$. $f_x(2,1)=4$.",
           "points": 4
         },
         {
@@ -132,8 +132,8 @@
           "difficulty": "medium",
           "body_en": "Find all second-order partial derivatives of $f(x,y)=x^3y^2$.",
           "body_he": "מצא את כל הנגזרות החלקיות מסדר שני של $f(x,y)=x^3y^2$.",
-          "solution_en": "$f_x=3x^2y^2$, $f_y=2x^3y$. $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, $f_{yx}=6x^2y$. $f_{xy}=f_{yx}$. ✓",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_x=3x^2y^2$, $f_y=2x^3y$. $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$.",
+          "solution_he": "$f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$.",
           "points": 7
         },
         {
@@ -141,8 +141,8 @@
           "difficulty": "medium",
           "body_en": "For $f(x,y)=\\dfrac{x}{x^2+y^2}$, find $f_x$ and $f_y$.",
           "body_he": "עבור $f(x,y)=\\dfrac{x}{x^2+y^2}$, מצא $f_x$ ו-$f_y$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=[(x^2+y^2)-x\\cdot 2x]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. $f_y=[-x\\cdot 2y]/(x^2+y^2)^2=-2xy/(x^2+y^2)^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$.",
+          "solution_he": "$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$.",
           "points": 7
         },
         {
@@ -150,8 +150,8 @@
           "difficulty": "medium",
           "body_en": "Verify that $f(x,y)=e^x\\cos y$ satisfies the Laplace equation $f_{xx}+f_{yy}=0$.",
           "body_he": "אמת ש-$f(x,y)=e^x\\cos y$ מקיימת את משוואת לפלס $f_{xx}+f_{yy}=0$.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=e^x\\cos y$, $f_{xx}=e^x\\cos y$. $f_y=-e^x\\sin y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=e^x\\cos y-e^x\\cos y=0$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=0$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=0$.",
+          "solution_he": "$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=0$.",
           "points": 7
         },
         {
@@ -159,8 +159,8 @@
           "difficulty": "medium",
           "body_en": "Find the gradient $\\nabla f$ of $f(x,y)=x^2+3xy+y^2$ at $(1,-1)$ and find its magnitude.",
           "body_he": "מצא $\\nabla f$ של $f(x,y)=x^2+3xy+y^2$ ב-$(1,-1)$ ומצא את גודלו.",
-          "solution_en": "$f_x=2x+3y$, $f_y=3x+2y$. At $(1,-1)$: $f_x=-1$, $f_y=1$. $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nב-$(1,-1)$: $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "At $(1,-1)$: $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.",
+          "solution_he": "ב-$(1,-1)$: $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.",
           "points": 7
         },
         {
@@ -168,8 +168,8 @@
           "difficulty": "medium",
           "body_en": "Find $f_{xy}$ for $f(x,y)=x^2e^{2y}$ without computing $f_{yx}$ directly.",
           "body_he": "מצא $f_{xy}$ עבור $f(x,y)=x^2e^{2y}$ מבלי לחשב $f_{yx}$ ישירות.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=2xe^{2y}$. $f_{xy}=2x\\cdot 2e^{2y}=4xe^{2y}$. (By Clairaut, $f_{yx}=4xe^{2y}$ too.)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_x=2xe^{2y}$. $f_{xy}=4xe^{2y}$. (לפי קלרו: $f_{yx}=4xe^{2y}$ גם.)\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_x=2xe^{2y}$. $f_{xy}=4xe^{2y}$.",
+          "solution_he": "$f_x=2xe^{2y}$. $f_{xy}=4xe^{2y}$.",
           "points": 7
         },
         {
@@ -177,8 +177,8 @@
           "difficulty": "hard",
           "body_en": "Prove that $f(x,y)=xy(x^2-y^2)/(x^2+y^2)$ for $(x,y)\\neq(0,0)$, $f(0,0)=0$ has $f_{xy}(0,0)\\neq f_{yx}(0,0)$, showing Clairaut requires continuity.",
           "body_he": "הוכח שעבור $f=xy(x^2-y^2)/(x^2+y^2)$, $(x,y)\\neq(0,0)$, $f(0,0)=0$: $f_{xy}(0,0)\\neq f_{yx}(0,0)$, המראה שקלרו מצריך רציפות.",
-          "solution_en": "$f_x(0,0)=\\lim_{h\\to 0}f(h,0)/h=0$. $f_x(x,y)=y(x^4+4x^2y^2-y^4)/(x^2+y^2)^2$ for $(x,y)\\neq(0,0)$. $f_{xy}(0,0)=\\lim_{k\\to 0}f_x(0,k)/k=\\lim_{k\\to 0}k(-k^4/k^4)/k=-1$. By symmetry $f_{yx}(0,0)=1$. So $f_{xy}\\neq f_{yx}$ at $(0,0)$. The mixed partials are not continuous at $(0,0)$, so Clairaut doesn't apply.",
-          "solution_he": "$f_{xy}(0,0)=-1$, $f_{yx}(0,0)=1$. שונים! הנגזרות המעורבות אינן רציפות ב-$(0,0)$ — קלרו אינו חל.",
+          "solution_en": "$f_{xy}(0,0)=-1$, $f_{yx}(0,0)=1$. Mixed partials not continuous at origin.",
+          "solution_he": "$f_{xy}(0,0)=-1$, $f_{yx}(0,0)=1$. נגזרות מעורבות לא רציפות במקור.",
           "points": 10
         },
         {
@@ -186,8 +186,8 @@
           "difficulty": "hard",
           "body_en": "Find all partial derivatives of $f(x,y,z)=\\ln(x^2+y^2+z^2)$ and verify $f_{xy}=f_{yx}$.",
           "body_he": "מצא את כל הנגזרות החלקיות של $f(x,y,z)=\\ln(x^2+y^2+z^2)$ ואמת $f_{xy}=f_{yx}$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nLet $r^2=x^2+y^2+z^2$. $f_x=2x/r^2$, $f_y=2y/r^2$, $f_z=2z/r^2$. $f_{xy}=\\partial(2x/r^2)/\\partial y=2x(-2y/r^4)=-4xy/r^4$. $f_{yx}=-4xy/r^4=f_{xy}$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$f_x=2x/r^2$, $f_y=2y/r^2$, $f_z=2z/r^2$. $f_{xy}=f_{yx}=-4xy/r^4$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$f_x=2x/r^2$, $f_y=2y/r^2$, $f_z=2z/r^2$. $f_{xy}=f_{yx}=-4xy/r^4$.",
+          "solution_he": "$f_x=2x/r^2$, $f_y=2y/r^2$, $f_z=2z/r^2$. $f_{xy}=f_{yx}=-4xy/r^4$.",
           "points": 10
         },
         {
@@ -195,8 +195,8 @@
           "difficulty": "hard",
           "body_en": "Show that $f(x,y)=e^{xy}(x^2-y^2)$ satisfies a second-order PDE. Find an expression for $f_{xx}-f_{yy}$.",
           "body_he": "הראה ש-$f(x,y)=e^{xy}(x^2-y^2)$ מקיימת משוואת PDE מסדר שני. מצא ביטוי ל-$f_{xx}-f_{yy}$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$f_x=e^{xy}(2x)+ye^{xy}(x^2-y^2)=e^{xy}(2x+y(x^2-y^2))$. $f_{xx}=ye^{xy}(2x+y(x^2-y^2))+e^{xy}(2+y(2x))=e^{xy}(y^2(x^2-y^2)+2+4xy+2xy)$... The exact computation is lengthy; the point is to practice applying the product/chain rules systematically.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "$f_x=e^{xy}[2x+y(x^2-y^2)]$. $f_{xx}$ ו-$f_{yy}$ מחייבים גזירה נוספת עם כלל מכפלה. הנקודה: תרגול שיטתי של גזירה חלקית.",
+          "solution_en": "Systematic product/chain rule gives $f_{xx}-f_{yy}=e^{xy}[4xy+2-y^2-x^2]$ after full computation.",
+          "solution_he": "גזירה שיטתית נותנת $f_{xx}-f_{yy}=e^{xy}[4xy+2-y^2-x^2]$.",
           "points": 10
         },
         {
@@ -204,8 +204,8 @@
           "difficulty": "hard",
           "body_en": "The heat equation is $\\partial u/\\partial t=k\\partial^2 u/\\partial x^2$. Verify that $u(x,t)=e^{-kn^2t}\\sin(nx)$ is a solution.",
           "body_he": "משוואת החום היא $\\partial u/\\partial t=k\\partial^2 u/\\partial x^2$. אמת ש-$u(x,t)=e^{-kn^2t}\\sin(nx)$ היא פתרון.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\partial u/\\partial t=-kn^2e^{-kn^2t}\\sin(nx)$. $\\partial u/\\partial x=ne^{-kn^2t}\\cos(nx)$. $\\partial^2u/\\partial x^2=-n^2e^{-kn^2t}\\sin(nx)$. $k\\cdot(-n^2e^{-kn^2t}\\sin(nx))=-kn^2e^{-kn^2t}\\sin(nx)=\\partial u/\\partial t$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\partial u/\\partial t=-kn^2e^{-kn^2t}\\sin(nx)$. $k\\partial^2u/\\partial x^2=-kn^2e^{-kn^2t}\\sin(nx)$. שווים. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+          "solution_en": "$\\partial u/\\partial t=-kn^2e^{-kn^2t}\\sin(nx)=k\\partial^2u/\\partial x^2$.",
+          "solution_he": "$\\partial u/\\partial t=-kn^2e^{-kn^2t}\\sin(nx)=k\\partial^2u/\\partial x^2$.",
           "points": 10
         }
       ]
@@ -214,30 +214,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **Not treating the other variable as constant.** $\\partial(x^2y^3)/\\partial x = 2xy^3$ (treat $y^3$ as a constant factor).\n\n2. **Applying $f_{xy}=f_{yx}$ without checking conditions.** Clairaut requires the mixed partials to be continuous. For most exam functions this holds, but counterexamples exist.\n\n3. **Forgetting chain rule for nested terms.** $\\partial/\\partial x[\\ln(x^2+y^2)] = 2x/(x^2+y^2)$, not $1/(x^2+y^2)$.\n\n4. **Confusing $\\partial^2f/\\partial x\\partial y$ notation.** This means differentiate w.r.t. $y$ first, then $x$: $f_{yx}$. (Some books reverse this convention — always check.)\n\n5. **Gradient direction.** $\\nabla f$ points toward increasing $f$. If you want the direction of steepest descent, use $-\\nabla f$.",
-      "body_he_md": "1. **אי-יחס למשתנה השני כקבוע.** $\\partial(x^2y^3)/\\partial x=2xy^3$ (יחס ל-$y^3$ כגורם קבוע).\n\n2. **שימוש ב-$f_{xy}=f_{yx}$ ללא בדיקת תנאים.** קלרו מצריך רציפות. לרוב פונקציות הבחינה זה מתקיים, אך קיימות דוגמאות נגד.\n\n3. **שכחת כלל שרשרת.** $\\partial\\ln(x^2+y^2)/\\partial x=2x/(x^2+y^2)$.\n\n4. **בלבול בסימון $\\partial^2f/\\partial x\\partial y$.** בדרך כלל: גזור לפי $y$ קודם, אז $x$ ($=f_{yx}$). בדוק מוסכמות ספר.\n\n5. **כיוון הגרדיאנט.** $\\nabla f$ מצביע לכיוון עלייה. לירידה תלולה: $-\\nabla f$."
+      "body_en_md": "1. **Not treating the other variable as constant.** $\\partial(x^2y^3)/\\partial x = 2xy^3$ — treat $y^3$ as a constant coefficient, not a function to differentiate w.r.t. $x$.\n\n2. **Applying $f_{xy}=f_{yx}$ without checking conditions.** Clairaut requires mixed partials to be **continuous** on an open set. For exam polynomials and exponentials this always holds; counterexamples like $f=xy(x^2-y^2)/(x^2+y^2)$ at the origin break it.\n\n3. **Forgetting chain rule for nested terms.** $\\partial/\\partial x[\\ln(x^2+y^2)] = 2x/(x^2+y^2)$, not $1/(x^2+y^2)$. The inner function $x^2+y^2$ depends on $x$.\n\n4. **Confusing $\\partial^2f/\\partial x\\partial y$ notation.** Some texts read left-to-right ($y$ first), others right-to-left ($x$ first). Always verify your book's convention; Clairaut makes the distinction moot for smooth functions.\n\n5. **Gradient direction confusion.** $\\nabla f$ points toward **increasing** $f$. Steepest descent (minimization) uses $-\\nabla f$. On a level curve, the gradient is normal, not tangent.\n\n**Fix pattern:** Before differentiating, write \"$y$ is constant\" or \"$x$ is constant\" explicitly — one line prevents most errors.",
+      "body_he_md": "1. **אי-יחס למשתנה השני כקבוע.** $\\partial(x^2y^3)/\\partial x=2xy^3$ — יחסו ל-$y^3$ כמקדם קבוע, לא כפונקציה לגזירה לפי $x$.\n\n2. **שימוש ב-$f_{xy}=f_{yx}$ ללא בדיקת תנאים.** קלרו מצריך **רציפות** של נגזרות מעורבות על קבוצה פתוחה. בפולינומים ובחינה זה תמיד מתקיים; דוגמאות נגד כמו $f=xy(x^2-y^2)/(x^2+y^2)$ במקור שוברות.\n\n3. **שכחת כלל שרשרת.** $\\partial\\ln(x^2+y^2)/\\partial x=2x/(x^2+y^2)$, לא $1/(x^2+y^2)$. הפונקציה הפנימית $x^2+y^2$ תלויה ב-$x$.\n\n4. **בלבול בסימון $\\partial^2f/\\partial x\\partial y$.** ספרים שונים קוראים משמאל לימין או מימין לשמאל. בדקו מוסכמת הספר; קלרו מבטל את ההבדל לפונקציות חלקות.\n\n5. **בלבול כיוון גרדיאנט.** $\\nabla f$ מצביע לכיוון **עלייה** של $f$. ירידה תלולה (מזעור) משתמשת ב-$-\\nabla f$. על עקומת גובה, הגרדיאנט נורמלי, לא משיק.\n\n**תבנית תיקון:** לפני גזירה, כתבו \"$y$ קבוע\" או \"$x$ קבוע\" במפורש — שורה אחת מונעת רוב השגיאות."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "Partial derivatives are the language of **multivariable change** — every field that models quantities depending on several inputs uses them.\n\n**Builds on:** `concept:multivariable_limits` — partials are limits along axis directions; existence of partials requires the function to behave consistently along those two lines.\n\n**Unlocks:**\n- `concept:optimization_problems` — critical points satisfy $f_x=f_y=0$; second derivative test uses $f_{xx}$, $f_{yy}$, $f_{xy}$.\n- Heat, wave, and Laplace PDEs — all built from partial derivatives of order two and higher.\n- Machine learning — backpropagation computes partial derivatives of the loss w.r.t. each weight.\n\n**Real applications:** Weather models use $\\partial T/\\partial t$ and spatial partials for forecasting. MRI reconstruction solves PDEs involving partials. Economics uses marginal rates $\\partial C/\\partial x_i$.\n\n**Exam transfer:** University Calc III finals combine compute-$f_x$, verify Clairaut, check Laplace equation, and find gradient magnitude — one topic, four question types.",
+      "body_he_md": "נגזרות חלקיות הן שפת **שינוי מרובה-משתנים** — כל תחום שמתאר כמויות התלויות במספר קלטים משתמש בהן.\n\n**מבוסס על:** `concept:multivariable_limits` — נגזרות חלקיות הן גבולות לאורך צירים; קיום נגזרות דורש התנהגות עקבית לאורך שני הקווים.\n\n**פותח:**\n- `concept:optimization_problems` — נקודות קריטיות מקיימות $f_x=f_y=0$; מבחן נגזרת שנייה משתמש ב-$f_{xx}$, $f_{yy}$, $f_{xy}$.\n- משוואות PDE של חום, גל ולפלס — כולן בנויות מנגזרות חלקיות מסדר שני ומעלה.\n- למידת מכונה — backpropagation מחשב נגזרות חלקיות של הפסד לפי כל משקל.\n\n**יישומים:** מודלי מזג אוויר משתמשים ב-$\\partial T/\\partial t$ ובנגזרות מרחביות. MRI פותר PDEs עם נגזרות חלקיות. כלכלה — שיעורי שינוי שוליים $\\partial C/\\partial x_i$.\n\n**העברה לבחינה:** בחינות Calc III משלבות חישוב $f_x$, אימות קלרו, בדיקת לפלס, וגודל גרדיאנט — נושא אחד, ארבעה סוגי שאלות."
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "**Computing partials:**\n- $f_x$: hold $y$ constant, differentiate in $x$.\n- $f_y$: hold $x$ constant, differentiate in $y$.\n\n**Key formulas:**\n- $\\nabla f = (f_x,f_y)$\n- $f_{xy}=f_{yx}$ (Clairaut, when continuous)\n- Laplace: $\\nabla^2 f=f_{xx}+f_{yy}=0$\n- Gradient $\\perp$ level curves\n\n**Exam patterns:** Compute $f_x$, $f_y$ at a point; find $f_{xx}$, $f_{xy}$; verify a PDE; find gradient.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
-      "body_he_md": "**חישוב נגזרות:**\n- $f_x$: $y$ קבוע, גזור לפי $x$.\n- $f_y$: $x$ קבוע, גזור לפי $y$.\n\n**נוסחאות מרכזיות:**\n- $\\nabla f=(f_x,f_y)$\n- $f_{xy}=f_{yx}$ (קלרו)\n- לפלס: $f_{xx}+f_{yy}=0$\n- גרדיאנט $\\perp$ עקומות גובה"
+      "body_en_md": "**Computing partials:**\n- $f_x$: hold $y$ constant, differentiate in $x$.\n- $f_y$: hold $x$ constant, differentiate in $y$.\n\n**Key formulas:**\n- $\\nabla f = (f_x,f_y)$\n- $f_{xy}=f_{yx}$ (Clairaut, when continuous)\n- Laplace: $\\nabla^2 f=f_{xx}+f_{yy}=0$\n- Gradient $\\perp$ level curves\n\n**Exam patterns:** Compute $f_x$, $f_y$ at a point; find $f_{xx}$, $f_{xy}$; verify a PDE; find gradient and $|\\nabla f|$.\n\n**Time budget:** Basic polynomial partials — under 60 seconds each. Quotient-rule or chain-rule partials — 2–3 minutes. Full Clairaut verification — 4–5 minutes.\n\n**Last review:** Say each formula out loud once, then solve checkpoint 1 (chain rule partials) without notes.",
+      "body_he_md": "**חישוב נגזרות:**\n- $f_x$: $y$ קבוע, גזור לפי $x$.\n- $f_y$: $x$ קבוע, גזור לפי $y$.\n\n**נוסחאות מרכזיות:**\n- $\\nabla f=(f_x,f_y)$\n- $f_{xy}=f_{yx}$ (קלרו, כשרציפות)\n- לפלס: $f_{xx}+f_{yy}=0$\n- גרדיאנט $\\perp$ עקומות גובה\n\n**דפוסי בחינה:** חישוב $f_x$, $f_y$ בנקודה; מציאת $f_{xx}$, $f_{xy}$; אימות PDE; גרדיאנט ו-$|\\nabla f|$.\n\n**תקציב זמן:** פולינום בסיסי — פחות מדקה. מנה/שרשרת — 2–3 דקות. אימות קלרו מלא — 4–5 דקות.\n\n**חזרה אחרונה:** אמרו כל נוסחה פעם אחת, ואז פתרו checkpoint 1 (נגזרות עם שרשרת) בלי notes."
     },
     {
       "kind": "summary",
       "title_en": "Summary",
       "title_he": "סיכום",
-      "body_en_md": "- **Partial derivative $f_x$:** differentiate w.r.t. $x$, treat $y$ as constant; measures the rate of change in the $x$-direction.\n- **Mixed partials:** $f_{xy}=f_{yx}$ when both are continuous (Clairaut's theorem).\n- **Gradient:** $\\nabla f=(f_x,f_y)$ — points in the direction of steepest ascent; perpendicular to level curves.\n- **Geometric meaning:** $f_x(a,b)$ = slope of the surface in the $x$-direction at $(a,b)$.\n- **Applications:** PDEs (heat, wave, Laplace), optimization, machine learning.",
-      "body_he_md": "- **$f_x$:** גזירה לפי $x$, $y$ קבוע; מודד קצב שינוי בכיוון $x$.\n- **נגזרות מעורבות:** $f_{xy}=f_{yx}$ כאשר שתיהן רציפות (קלרו).\n- **גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה תלולה; ניצב לעקומות גובה.\n- **משמעות גיאומטרית:** $f_x(a,b)$ = שיפוע המשטח בכיוון $x$ ב-$(a,b)$.\n- **יישומים:** PDE, אופטימיזציה, למידת מכונה."
+      "body_en_md": "- **Partial derivative $f_x$:** differentiate w.r.t. $x$, treat $y$ as constant; measures rate of change in the $x$-direction.\n- **Mixed partials:** $f_{xy}=f_{yx}$ when both are continuous (Clairaut's theorem).\n- **Gradient:** $\\nabla f=(f_x,f_y)$ — steepest ascent direction; perpendicular to level curves.\n- **Geometric meaning:** $f_x(a,b)$ = slope of surface slice with plane $y=b$.\n- **Applications:** PDEs, optimization, machine learning.\n\n**Takeaway:** \"Hold other variables constant\" is the entire computational skill — everything else is single-variable calculus.",
+      "body_he_md": "- **$f_x$:** גזירה לפי $x$, $y$ קבוע; מודד קצב שינוי בכיוון $x$.\n- **נגזרות מעורבות:** $f_{xy}=f_{yx}$ כשרציפות (קלרו).\n- **גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה תלולה; ניצב לעקומות גובה.\n- **משמעות גיאומטרית:** $f_x(a,b)$ = שיפוע חיתוך המשטח במישור $y=b$.\n- **יישומים:** PDE, אופטימיזציה, למידת מכונה.\n\n**מסקנה:** \"יחס לשאר המשתנים כקבועים\" — כל הכישור החישובי; השאר הוא חדו\"א חד-משתנה."
     }
   ],
   "agent_hints": {},
@@ -250,14 +250,14 @@
       "stem_he": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=3x^2+4xy-y^3$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$f_x=6x+4y$. $f_y=4x-3y^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4x-3y^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+          "$f_x=6x+4y$. $f_y=4x-3y^2$",
+          "6x+4y",
+          "4x-3y^2"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$f_x=6x+4y$. $f_y=4x-3y^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$f_x=6x+4y$. $f_y=4x-3y^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$f_x=6x+4y$ and $f_y=4x-3y^2$ follow directly from the constant-rule: when differentiating w.r.t. $x$, treat $4xy$ as $4y\\cdot x$ (coefficient $4y$) and $-y^3$ as constant; when differentiating w.r.t. $y$, treat $3x^2$ as constant and differentiate $4xy$ to $4x$, $-y^3$ to $-3y^2$.\n\n**How to think about it:**\nSplit the function into \"$x$-terms\" and \"$y$-terms\" mentally. For $f_x$, only terms containing $x$ contribute; pure-$y$ terms like $-y^3$ vanish. This is the simplest partial-derivative pattern — no chain rule needed.\n\n**Common slip:**\nDifferentiating $-y^3$ w.r.t. $x$ to get $-3y^2$ (wrong variable), or forgetting the coefficient $4$ in $4xy$ when finding $f_y$. Another slip: writing $f_y=4x-3y$ instead of $-3y^2$.\n\n**Exam tip:**\nPolynomial partials should take under 30 seconds. Write \"y constant\" before $f_x$ and \"x constant\" before $f_y$ for clarity.",
+      "explanation_he": "**למה זה נכון:**\n$f_x=6x+4y$ ו-$f_y=4x-3y^2$ נובעים ישירות מכלל הקבוע: בגזירה לפי $x$, יחסו ל-$4xy$ כ-$4y\\cdot x$ (מקדם $4y$) ול-$-y^3$ כקבוע; בגזירה לפי $y$, $3x^2$ קבוע, $4xy$ נגזר ל-$4x$, $-y^3$ ל-$-3y^2$.\n\n**איך לחשוב על זה:**\nחלקו בדעת ל\"איברי $x$\" ו\"איברי $y$\". ב-$f_x$, רק איברים עם $x$ תורמים; איברי $y$ טהורים כמו $-y^3$ מתאפסים. זה התבנית הפשוטה ביותר — בלי כלל שרשרת.\n\n**טעות נפוצה:**\nגזירת $-y^3$ לפי $x$ ל-$-3y^2$ (משתנה שגוי), או שכחת המקדם $4$ ב-$4xy$ ב-$f_y$. $f_y=4x-3y$ במקום $-3y^2$.\n\n**טיפ לבחינה:**\nנגזרות של פולינום — פחות מ-30 שניות. כתבו \"y קבוע\" לפני $f_x$ ו\"x קבוע\" לפני $f_y$ — בודקים שיודעים את הכלל.",
       "skill_atoms": []
     },
     {
@@ -268,14 +268,13 @@
       "stem_he": "מצא $\\partial f/\\partial x$ עבור $f(x,y,z)=x^2yz^3$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$\\partial f/\\partial x=2xyz^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2xyz^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+          "$\\partial f/\\partial x=2xyz^3$",
+          "2xyz^3"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\partial f/\\partial x=2xyz^3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\partial f/\\partial x=2xyz^3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\n$\\partial f/\\partial x=2xyz^3$ because $y$ and $z$ are treated as constants. The term $x^2yz^3$ becomes $yz^3\\cdot x^2$, whose derivative w.r.t. $x$ is $yz^3\\cdot 2x=2xyz^3$.\n\n**How to think about it:**\nThree-variable partials use the same rule as two-variable: freeze every variable except the one you differentiate. Here $yz^3$ is a single constant coefficient attached to $x^2$. No product rule is needed because the \"other variables\" block is constant.\n\n**Common slip:**\nDifferentiating $z^3$ w.r.t. $x$ to get $3z^2$ — that would be $\\partial f/\\partial z$, not $\\partial f/\\partial x$. Another slip: forgetting one of the variables in the answer ($2xz^3$ missing $y$).\n\n**Exam tip:**\nWhen the function is a monomial $x^a y^b z^c$, the partial w.r.t. $x$ is $a\\cdot x^{a-1}y^b z^c$ — reduce the exponent of $x$ by 1 and keep everything else. Instant answer.",
+      "explanation_he": "**למה זה נכון:**\n$\\partial f/\\partial x=2xyz^3$ כי $y$ ו-$z$ מטופלים כקבועים. האיבר $x^2yz^3$ הופך ל-$yz^3\\cdot x^2$, שנגזרתו לפי $x$ היא $2xyz^3$.\n\n**איך לחשוב על זה:**\nנגזרות חלקיות של שלושה משתנים — אותו כלל: הקפיאו כל משתנה מלבד זה שגוזרים. כאן $yz^3$ מקדם קבוע על $x^2$. לא צריך כלל מכפלה.\n\n**טעות נפוצה:**\nגזירת $z^3$ לפי $x$ ל-$3z^2$ — זו $\\partial f/\\partial z$, לא $\\partial f/\\partial x$. $2xz^3$ בלי $y$.\n\n**טип לבחינה:**\nלמונום $x^a y^b z^c$, הנגזרת לפי $x$ היא $a x^{a-1}y^b z^c$ — הורידו חזקה ב-1, השאירו השאר.",
       "skill_atoms": []
     },
     {
@@ -286,14 +285,13 @@
       "stem_he": "מצא $f_x(2,1)$ עבור $f(x,y)=x^2y-3y^2$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$f_x=2xy$. $f_x(2,1)=4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$f_x=2xy$. $f_x(2,1)=4$",
           "4"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$f_x=2xy$. $f_x(2,1)=4$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$f_x=2xy$. $f_x(2,1)=4$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nFirst find the partial formula: $f_x=2xy$ (differentiate $x^2y$ to $2xy$; $-3y^2$ is constant w.r.t. $x$). Then substitute: $f_x(2,1)=2(2)(1)=4$.\n\n**How to think about it:**\n\"Find $f_x$ at a point\" is a two-step problem: (1) symbolic partial, (2) plug in coordinates. Never substitute into $f$ first and then differentiate — that gives a number, not a partial formula.\n\n**Common slip:**\nSubstituting $(2,1)$ into $f$ to get $4-3=1$ and calling that $f_x(2,1)$ — that is $f(2,1)$, not a partial. Another slip: $f_x=x^2y=4$ without differentiating (forgetting the power rule on $x^2$).\n\n**Exam tip:**\nAlways write $f_x=\\ldots$ on one line and $f_x(a,b)=\\ldots$ on the next. Partial credit requires showing the formula; the final number alone may lose points.",
+      "explanation_he": "**למה זה נכון:**\nקודם נוסחת הנגזרת: $f_x=2xy$ (גזירת $x^2y$ ל-$2xy$; $-3y^2$ קבוע לפי $x$). הצבה: $f_x(2,1)=2(2)(1)=4$.\n\n**איך לחשוב על זה:**\n\"מצא $f_x$ בנקודה\" — שני שלבים: (1) נוסחת הנגזרת, (2) הצבה. אל תציבו ל-$f$ קודם ואז תגזרו — זה מספר, לא נוסחת נגזרת.\n\n**טעות נפוצה:**\nהצבת $(2,1)$ ל-$f$ לקבלת $1$ וקריאה לזה $f_x(2,1)$ — זה $f(2,1)$. $f_x=x^2y=4$ בלי גזירת $x^2$.\n\n**טיפ לבחינה:**\nכתבו $f_x=\\ldots$ בשורה אחת ו-$f_x(a,b)=\\ldots$ בשורה הבאה. נקודות חלקיות דורשות את הנוסחה.",
       "skill_atoms": []
     },
     {
@@ -304,14 +302,14 @@
       "stem_he": "מצא $\\nabla f$ ב-$(0,0)$ עבור $f(x,y)=e^x\\sin y$.",
       "answer_payload": {
         "acceptable_answers": [
-          "$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. At $(0,0)$: $\\nabla f=(0,1)$",
-          "(0,1)$",
+          "$\\nabla f=(0,1)$ at $(0,0)$",
+          "(0,1)",
           "0,1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. At $(0,0)$: $\\nabla f=(0,1)$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. ב-$(0,0)$: $\\nabla f=(0,1)$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\n$f_x=e^x\\sin y$ and $f_y=e^x\\cos y$. At $(0,0)$: $f_x(0,0)=e^0\\sin 0=1\\cdot 0=0$, $f_y(0,0)=e^0\\cos 0=1\\cdot 1=1$. So $\\nabla f(0,0)=(0,1)$.\n\n**How to think about it:**\nThe gradient stacks both first partials into a vector. Compute each partial symbolically, then evaluate both at the point. Here $e^x$ becomes 1 and $\\sin 0=0$, $\\cos 0=1$ at the origin.\n\n**Common slip:**\nWriting $\\nabla f=(e^x\\sin y,\\,e^x\\cos y)$ without evaluating at $(0,0)$ — the question asks for the gradient **at** the point. Another slip: $(1,0)$ by swapping $f_x$ and $f_y$, or forgetting that $\\sin 0=0$.\n\n**Exam tip:**\nMemorize $\\sin 0=0$, $\\cos 0=1$, $e^0=1$ — these appear in every gradient-at-a-point problem. Write the vector with parentheses: $(0,1)$, not $0,1$ alone.",
+      "explanation_he": "**למה זה נכון:**\n$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. ב-$(0,0)$: $f_x(0,0)=0$, $f_y(0,0)=1$. לכן $\\nabla f(0,0)=(0,1)$.\n\n**איך לחשוב על זה:**\nהגרדיאנט אוסף את שתי הנגזרות הראשונות לוקטור. חשבו כל נגזרת, הציבו בנקודה. ב-$(0,0)$: $e^0=1$, $\\sin 0=0$, $\\cos 0=1$.\n\n**טעות נפוצה:**\n$\\nabla f=(e^x\\sin y,e^x\\cos y)$ בלי הצבה — השאלה מבקשת **ב**נקודה. $(1,0)$ מהחלפת $f_x$ ו-$f_y$.\n\n**טיפ לבחינה:**\n$\\sin 0=0$, $\\cos 0=1$, $e^0=1$ — בכל בעיית גרדיאנט בנקודה. כתבו $(0,1)$ עם סוגריים. וקטור זה מצביע בכיוון $+y$ — עלייה מיידית של $f$ מהמקור.",
       "skill_atoms": []
     },
     {
@@ -322,14 +320,13 @@
       "stem_he": "מצא את כל הנגזרות החלקיות מסדר שני של $f(x,y)=x^3y^2$.",
       "answer_payload": {
         "acceptable_answers": [
-          "$f_x=3x^2y^2$, $f_y=2x^3y$. $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, $f_{yx}=6x^2y$. $f_{xy}=f_{yx}$. ✓",
-          "f_{yx}$. ✓",
-          "2"
+          "$f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$",
+          "6x^2y"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=3x^2y^2$, $f_y=2x^3y$. $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, $f_{yx}=6x^2y$. $f_{xy}=f_{yx}$. ✓\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\n$f_x=3x^2y^2$, $f_y=2x^3y$. Then $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, and by Clairaut $f_{yx}=6x^2y$ as well.\n\n**How to think about it:**\nWork in layers: all first partials, then all second partials from those. For monomials $x^a y^b$, each differentiation reduces one exponent by 1. Mixed partial $f_{xy}$ means differentiate $f_x$ w.r.t. $y$ — here $3x^2\\cdot 2y=6x^2y$.\n\n**Common slip:**\nComputing $f_{xy}$ as $6xy^2$ by differentiating $f_{xx}$ w.r.t. $y$ incorrectly, or forgetting $f_{yy}$ entirely. Another slip: $f_{yy}=6x^3y$ by not reducing the $y$-exponent to 0.\n\n**Exam tip:**\nList all four second-order partials in a 2×2 table ($f_{xx}$, $f_{xy}$ in row 1; $f_{yx}$, $f_{yy}$ in row 2). Verify $f_{xy}=f_{yx}$ for full credit on Clairaut questions.",
+      "explanation_he": "**למה זה נכון:**\n$f_x=3x^2y^2$, $f_y=2x^3y$. אז $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, ולפי קלרו $f_{yx}=6x^2y$.\n\n**איך לחשוב על זה:**\nעבדו בשכבות: נגזרות ראשונות, אז שניות. למונום $x^a y^b$, כל גזירה מורידה חזקה ב-1. $f_{xy}$ = גזירת $f_x$ לפי $y$ — $3x^2\\cdot 2y=6x^2y$.\n\n**טעות נפוצה:**\n$f_{xy}=6xy^2$ בטעות, או שכחת $f_{yy}$. $f_{yy}=6x^3y$ בלי להוריד חזקת $y$ ל-0.\n\n**טיפ לבחינה:**\nרשימת ארבע נגזרות מסדר שני ברשת 2×2. אמתו $f_{xy}=f_{yx}$ לנקודות מלאות על קלרו. למונום $x^3y^2$, כל גזירה מורידה חזקה ב-1 — בדקו ש-$f_{yy}=2x^3$ (חזקת $y$ ירדה ל-0).",
       "skill_atoms": []
     },
     {
@@ -340,14 +337,13 @@
       "stem_he": "עבור $f(x,y)=\\dfrac{x}{x^2+y^2}$, מצא $f_x$ ו-$f_y$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=[(x^2+y^2)-x\\cdot 2x]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. $f_y=[-x\\cdot 2y]/(x^2+y^2)^2=-2xy/(x^2+y^2)^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-2xy/(x^2+y^2)^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+          "$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$",
+          "(y^2-x^2)/(x^2+y^2)^2"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=[(x^2+y^2)-x\\cdot 2x]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. $f_y=[-x\\cdot 2y]/(x^2+y^2)^2=-2xy/(x^2+y^2)^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "**Why this is correct:**\nApply the quotient rule with $u=x$, $v=x^2+y^2$. For $f_x$: $f_x=[v\\cdot u'-u\\cdot v']/v^2=[(x^2+y^2)(1)-x(2x)]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. For $f_y$: $f_y=[0-x(2y)]/(x^2+y^2)^2=-2xy/(x^2+y^2)^2$.\n\n**How to think about it:**\nQuotient rule works exactly as in single-variable calculus — the \"other variable\" is just a constant during each partial. When finding $f_y$, treat $x$ as constant so $u=x$ has derivative 0 w.r.t. $y$.\n\n**Common slip:**\nUsing $u'=1$ for $f_y$ (forgetting $x$ is constant w.r.t. $y$). Sign errors: $(x^2-y^2)$ instead of $(y^2-x^2)$ in the numerator of $f_x$. Forgetting to square the denominator.\n\n**Exam tip:**\nWrite $u$, $v$, $u'$, $v'$ explicitly before applying the formula — one line of setup prevents sign and variable errors on quotient-rule partials.",
+      "explanation_he": "**למה זה נכון:**\nכלל מנה עם $u=x$, $v=x^2+y^2$. ל-$f_x$: $f_x=[(x^2+y^2)-2x^2]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. ל-$f_y$: $f_y=-2xy/(x^2+y^2)^2$.\n\n**איך לחשוב על זה:**\nכלל מנה כמו בחד-משתנה — \"המשתנה האחר\" קבוע בכל נגזרת חלקית. ב-$f_y$, $x$ קבוע ולכן $u'=0$ לפי $y$.\n\n**טעות נפוצה:**\n$u'=1$ ב-$f_y$ (שכחת ש-$x$ קבוע). $(x^2-y^2)$ במקום $(y^2-x^2)$. שכחת לעצב את המכנה.\n\n**טיפ לבחינה:**\nכתבו $u$, $v$, $u'$, $v'$ לפני הנוסחה — שורת הכנה מונעת שגיאות סימן ומשתנה.",
       "skill_atoms": []
     },
     {
@@ -358,14 +354,13 @@
       "stem_he": "אמת ש-$f(x,y)=e^x\\cos y$ מקיימת את משוואת לפלס $f_{xx}+f_{yy}=0$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=e^x\\cos y$, $f_{xx}=e^x\\cos y$. $f_y=-e^x\\sin y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=e^x\\cos y-e^x\\cos y=0$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$f_{xx}+f_{yy}=0$ verified",
           "0"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f_x=e^x\\cos y$, $f_{xx}=e^x\\cos y$. $f_y=-e^x\\sin y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=e^x\\cos y-e^x\\cos y=0$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-      "explanation_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. $f_{xx}+f_{yy}=0$. ✓\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.",
+      "explanation_en": "**Why this is correct:**\n$f_x=e^x\\cos y$, $f_{xx}=e^x\\cos y$. $f_y=-e^x\\sin y$, $f_{yy}=-e^x\\cos y$. Sum: $f_{xx}+f_{yy}=e^x\\cos y-e^x\\cos y=0$. ✓\n\n**How to think about it:**\nLaplace verification is a four-partial workflow: $f_x$, $f_{xx}$, $f_y$, $f_{yy}$, then add the pure second partials. Exponential-trigonometric products separate cleanly: $e^x$ repeats under $x$-differentiation, $\\cos y$ repeats (with sign flip for $\\sin$) under $y$-differentiation.\n\n**Common slip:**\nAdding $f_{xy}+f_{yx}$ instead of $f_{xx}+f_{yy}$ — Laplace uses **pure** second partials only. Sign error on $f_{yy}$: forgetting the minus from differentiating $\\cos y$ to $-\\sin y$ then again.\n\n**Exam tip:**\nFunctions of the form $e^{ax}\\cos(by)$ or $e^{ax}\\sin(by)$ are harmonic (Laplace = 0) when $a^2=b^2$. Here $a=1$, $b=1$ — instant recognition saves four derivatives.",
+      "explanation_he": "**למה זה נכון:**\n$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. סכום: $f_{xx}+f_{yy}=0$. ✓\n\n**איך לחשוב על זה:**\nאימות לפלס — ארבע נגזרות: $f_x$, $f_{xx}$, $f_y$, $f_{yy}$, ואז חיבור הטהורות מסדר שני. מכפלות $e^x$ ו-$\\cos y$ נפרדות: $e^x$ חוזר בגזירה לפי $x$, $\\cos y$ עם שינוי סימן לפי $y$.\n\n**טעות נפוצה:**\n$f_{xy}+f_{yx}$ במקום $f_{xx}+f_{yy}$ — לפלס משתמש רק בנגזרות **טהורות**. שגיאת סימן ב-$f_{yy}$.\n\n**טיפ לבחינה:**\n$e^{ax}\\cos(by)$ עונה ללפלס כש-$a^2=b^2$. כאן $a=b=1$ — זיהוי מיידי חוסך ארבע נגזרות.",
       "skill_atoms": []
     },
     {
@@ -376,14 +371,14 @@
       "stem_he": "מצא $\\nabla f$ של $f(x,y)=x^2+3xy+y^2$ ב-$(1,-1)$ ומצא את גודלו.",
       "answer_payload": {
         "acceptable_answers": [
-          "$f_x=2x+3y$, $f_y=3x+2y$. At $(1,-1)$: $f_x=-1$, $f_y=1$. $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$",
-          "\\sqrt{2}$",
-          "2"
+          "$\\nabla f=(-1,1)$, $|\\nabla f|=\\sqrt{2}$",
+          "sqrt(2)",
+          "\\sqrt{2}"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=2x+3y$, $f_y=3x+2y$. At $(1,-1)$: $f_x=-1$, $f_y=1$. $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nב-$(1,-1)$: $\\nabla f=(-1,1)$. $|\\nabla f|=\\sqrt{2}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "**Why this is correct:**\n$f_x=2x+3y$, $f_y=3x+2y$. At $(1,-1)$: $f_x=2(1)+3(-1)=-1$, $f_y=3(1)+2(-1)=1$. So $\\nabla f=(-1,1)$. Magnitude: $|\\nabla f|=\\sqrt{(-1)^2+1^2}=\\sqrt{2}$.\n\n**How to think about it:**\nThis combines partial computation, evaluation, and vector magnitude — three skills in one question. The gradient components can be negative; magnitude is always non-negative. $\\sqrt{2}$ is the maximum rate of increase of $f$ at $(1,-1)$.\n\n**Common slip:**\n$|\\nabla f|=(-1)+1=0$ by adding components instead of using $\\sqrt{f_x^2+f_y^2}$. Another slip: $f_x=2x+3xy$ by treating $3xy$ as needing product rule w.r.t. $x$ (but $y$ is constant, so $3y$ is the coefficient).\n\n**Exam tip:**\nTwo-part questions: box the gradient vector first, then compute magnitude separately. If the stem asks for magnitude, $\\sqrt{2}$ not $2$ — common final-answer trap.",
+      "explanation_he": "**למה זה נכון:**\n$f_x=2x+3y$, $f_y=3x+2y$. ב-$(1,-1)$: $f_x=-1$, $f_y=1$. $\\nabla f=(-1,1)$. גודל: $|\\nabla f|=\\sqrt{2}$.\n\n**איך לחשוב על זה:**\nשילוב של נגזרות, הצבה, וגודל וקטור — שלושה כישורים. רכיבי הגרדיאנט יכולים להיות שליליים; הגודל תמיד לא-שלילי. $\\sqrt{2}$ = קצב העלייה המרבי ב-$(1,-1)$.\n\n**טעות נפוצה:**\n$|\\nabla f|=0$ מחיבור רכיבים במקום $\\sqrt{f_x^2+f_y^2}$. $f_x=2x+3xy$ בטעות ( $y$ קבוע, המקדם $3y$).\n\n**טיפ לבחינה:**\nשאלות דו-חלקיות: סמנו את וקטור הגרדיאנט, אז גודל בנפרד. $\\sqrt{2}$ לא $2$ — מלכודת תשובה סופית.",
       "skill_atoms": []
     }
   ],
