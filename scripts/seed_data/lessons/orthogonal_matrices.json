@@ -5,29 +5,29 @@
   "math_track": [],
   "title_en": "Orthogonal Matrices",
   "title_he": "מטריצות אורתוגונליות",
-  "summary_en": "Definition and properties of orthogonal matrices. QᵀQ = I, rotations, reflections, preservation of norms and angles, determinant ±1.",
+  "summary_en": "Definition and properties of orthogonal matrices. Q^T Q = I, rotations, reflections, preservation of norms and angles, determinant ±1.",
   "summary_he": "הגדרה ותכונות של מטריצות אורתוגונליות. $Q^TQ=I$, סיבובים, שיקופים, שימור נורמות וזוויות, דטרמיננט $\\pm1$.",
   "sections": [
     {
       "kind": "intro",
       "title_en": "Transformations That Preserve Geometry",
       "title_he": "טרנספורמציות ששומרות על הגיאומטריה",
-      "body_en_md": "Some linear transformations preserve the shape of objects — they don't stretch or shear, just **rotate** or **reflect**. These are represented by **orthogonal matrices**.\n\nOrthogonal matrices are the matrices of isometries — distance-preserving transformations.\n\nApplications: computer graphics (rotations), signal processing (FFT), quantum mechanics (unitary operators).",
-      "body_he_md": "כמה טרנספורמציות שומרות על צורות — לא מתיחה, רק **סיבוב** או **שיקוף**. אלה **מטריצות אורתוגונליות** — מטריצות של איזומטריות.\n\nיישומים: גרפיקה (סיבובים), עיבוד אותות, מכניקת הקוונטים."
+      "body_en_md": "Some linear transformations preserve the **shape** of objects — they do not stretch, compress, or shear. They only **rotate** or **reflect**. In linear algebra, these distance-preserving maps are represented by **orthogonal matrices** $Q$ satisfying $Q^TQ=I$.\n\nThink of rotating a rigid body in $\\mathbb{R}^2$ or $\\mathbb{R}^3$: every vector keeps its length, and the angle between any two vectors stays the same. Orthogonal matrices are exactly the matrices of **isometries** that fix the origin. In computer graphics, a camera orbit is a product of orthogonal matrices; in quantum mechanics, unitary operators generalize this idea to complex inner products.\n\nThis lesson connects directly to `concept:inner_product_gram_schmidt` (orthonormal bases) and `concept:la_orthogonality` (least squares). On university linear-algebra exams you will verify $Q^TQ=I$, classify rotations versus reflections via $\\det(Q)=\\pm1$, and compose rotations — skills that appear in mechanics, graphics, and data science (PCA uses orthogonal eigenvector bases).",
+      "body_he_md": "חלק מהטרנספורמציות הלינאריות **שומרות על צורה** — הן לא מותחות, לא דוחסות ולא גורמות לגזיר (shear). הן רק **מסובבות** או **משקפות**. באלגברה לינארית, מיפויים ששומרים על מרחק מיוצגים על ידי **מטריצות אורתוגונליות** $Q$ שמקיימות $Q^TQ=I$.\n\nדמיינו סיבוב גוף קשיח ב-$\\mathbb{R}^2$ או $\\mathbb{R}^3$: כל וקטור שומר על אורכו, והזווית בין כל שני וקטורים נשמרת. מטריצות אורתוגונליות הן בדיוק מטריצות **האיזומטריות** שמקבעות את ראשית הצירים. בגרפיקה ממוחשבת, סיבוב מצלמה הוא מכפלה של מטריצות אורתוגונליות; במכניקת הקוונטים, אופרטורים יוניטריים מכלילים רעיון זה למכפלות פנימיות מרוכבות.\n\nשיעור זה קשור ישירות ל-`concept:inner_product_gram_schmidt` (בסיסים אורתונורמליים) ול-`concept:la_orthogonality` (ריבועים פחותים). בבחינות אלגברה לינארית באוניברסיטה תאמתו $Q^TQ=I$, תסווגו סיבובים מול שיקופים דרך $\\det(Q)=\\pm1$, ותרכיבו סיבובים — מיומנויות שמופיעות במכניקה, בגרפיקה ובמדעי הנתונים (PCA משתמש בבסיסים אורתוגונליים של וקטורים עצמיים)."
     },
     {
       "kind": "definition",
       "title_en": "Orthogonal Matrix — Definition and Properties",
       "title_he": "מטריצה אורתוגונלית — הגדרה ותכונות",
-      "body_en_md": "A square matrix $Q$ is **orthogonal** if:\n$$Q^TQ = QQ^T = I \\quad \\Leftrightarrow \\quad Q^{-1}=Q^T.$$\n\n**Equivalent conditions:**\n- The columns of $Q$ form an orthonormal basis: $\\langle q_i,q_j\\rangle=\\delta_{ij}$.\n- The rows of $Q$ form an orthonormal basis.\n- $Q$ preserves inner products: $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$.\n- $Q$ preserves norms: $\\|Qv\\|=\\|v\\|$.\n\n**Determinant:** $\\det(Q)=\\pm1$.\n- $\\det(Q)=+1$: rotation (orientation preserved).\n- $\\det(Q)=-1$: reflection (orientation reversed).",
-      "body_he_md": "**מטריצה אורתוגונלית:** $Q^TQ=I$, כלומר $Q^{-1}=Q^T$.\n\nתנאים שקולים:\n- עמודות = בסיס אורתונורמלי.\n- שורות = בסיס אורתונורמלי.\n- שומרת מכפלות פנימיות ונורמות.\n\n$\\det(Q)=\\pm1$. $+1$: סיבוב. $-1$: שיקוף."
+      "body_en_md": "A square matrix $Q\\in\\mathbb{R}^{n\\times n}$ is **orthogonal** if any of these equivalent conditions hold:\n$$Q^TQ = QQ^T = I \\quad \\Leftrightarrow \\quad Q^{-1}=Q^T.$$\n\n**Equivalent characterizations:**\n- The **columns** $q_1,\\ldots,q_n$ form an **orthonormal basis**: $\\langle q_i,q_j\\rangle=\\delta_{ij}$ (unit length and pairwise orthogonal).\n- The **rows** also form an orthonormal basis (because $QQ^T=I$).\n- $Q$ preserves the standard inner product: $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$ for all $u,v$.\n- $Q$ preserves Euclidean norms: $\\|Qv\\|=\\|v\\|$ for all $v$.\n\n**Determinant constraint:** $\\det(Q)=\\pm1$. Proof: $\\det(Q^TQ)=\\det(I)=1$, so $(\\det Q)^2=1$.\n- $\\det(Q)=+1$: **proper orthogonal** — a rotation in $\\mathbb{R}^2$ or $\\mathbb{R}^3$ (orientation preserved).\n- $\\det(Q)=-1$: **improper orthogonal** — a reflection or rotation followed by reflection (orientation reversed).\n\n**Important:** Orthogonal $\\ne$ symmetric. A matrix can satisfy $Q^TQ=I$ without $Q=Q^T$ — e.g. a $90°$ rotation matrix.\n\n**Quick test on exams:** Multiply $Q^TQ$ first; if it equals $I$, you are done. Otherwise check column norms and dot products.",
+      "body_he_md": "מטריצה ריבועית $Q\\in\\mathbb{R}^{n\\times n}$ היא **אורתוגונלית** אם מתקיים אחד מהתנאים השקולים:\n$$Q^TQ = QQ^T = I \\quad \\Leftrightarrow \\quad Q^{-1}=Q^T.$$\n\n**אפיונים שקולים:**\n- **העמודות** $q_1,\\ldots,q_n$ יוצרות **בסיס אורתונורמלי**: $\\langle q_i,q_j\\rangle=\\delta_{ij}$ (אורך יחידה וניצבות זו לזו).\n- **השורות** גם יוצרות בסיס אורתונורמלי (כי $QQ^T=I$).\n- $Q$ שומרת על המכפלה הפנימית הסטנדרטית: $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$ לכל $u,v$.\n- $Q$ שומרת על נורמות אוקלידיות: $\\|Qv\\|=\\|v\\|$ לכל $v$.\n\n**אילוץ דטרמיננטה:** $\\det(Q)=\\pm1$. הוכחה: $\\det(Q^TQ)=\\det(I)=1$, ולכן $(\\det Q)^2=1$.\n- $\\det(Q)=+1$: **אורתוגונלית תקינה** — סיבוב ב-$\\mathbb{R}^2$ או $\\mathbb{R}^3$ (הכיוון נשמר).\n- $\\det(Q)=-1$: **אורתוגונלית לא-תקינה** — שיקוף או סיבוב ואחריו שיקוף (הכיוון מתהפך).\n\n**חשוב:** אורתוגונלית $\\ne$ סימטרית. מטריצה יכולה לקיים $Q^TQ=I$ בלי $Q=Q^T$ — למשל מטריצת סיבוב $90°$."
     },
     {
       "kind": "theory",
       "title_en": "Rotation and Reflection Matrices",
       "title_he": "מטריצות סיבוב ושיקוף",
-      "body_en_md": "**2D rotation by angle $\\theta$:**\n$$R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\sin\\theta&\\cos\\theta\\end{pmatrix}, \\quad \\det=1.$$\n\n**2D reflection over line at angle $\\theta/2$:**\n$$H=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}, \\quad \\det=-1.$$\n\n**Reflection over $x$-axis:** $H_x=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$.\n\n**Key properties:**\n- $R_{\\alpha}R_{\\beta}=R_{\\alpha+\\beta}$.\n- $R_\\theta^{-1}=R_{-\\theta}=R_\\theta^T$.\n- Eigenvalues of orthogonal matrix: $|\\lambda|=1$ (complex: $e^{\\pm i\\theta}$; real: $\\pm1$).",
-      "body_he_md": "**אינטואיציה:** Q is orthogonal iff Q^TQ = I (equivalently, Q^{-1} = Q^T)."
+      "body_en_md": "**2D rotation** (counter-clockwise by angle $\\theta$):\n$$R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\ \\sin\\theta&\\cos\\theta\\end{pmatrix}, \\quad \\det(R_\\theta)=1.$$\n\n**2D reflection** over a line through the origin at angle $\\theta/2$ from the $x$-axis:\n$$H=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}, \\quad \\det(H)=-1.$$\n\n**Reflection over the $x$-axis:** $H_x=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$, with $\\det=-1$.\n\n**Composition rules:**\n- Rotations compose by adding angles: $R_{\\alpha}R_{\\beta}=R_{\\alpha+\\beta}$.\n- Inverses are transposes: $R_\\theta^{-1}=R_{-\\theta}=R_\\theta^T$.\n- The product of two orthogonal matrices is orthogonal: $(Q_1Q_2)^T(Q_1Q_2)=I$.\n- The set $O(n)$ of $n\\times n$ orthogonal matrices forms a **group** under multiplication.\n\n**Eigenvalues:** For real orthogonal $Q$, every eigenvalue satisfies $|\\lambda|=1$. Pure rotations in $\\mathbb{R}^2$ often have complex eigenvalues $e^{\\pm i\\theta}$; reflections have real eigenvalues $+1$ (mirror axis) and $-1$ (perpendicular direction).\n\n**Special orthogonal groups:** $O(n)$ is the set of all $n\\times n$ orthogonal matrices; $SO(n)$ is the subgroup with $\\det=+1$ (rotations only). In $\\mathbb{R}^3$, every element of $SO(3)$ is a rotation about some axis through the origin — a fact you use in mechanics and robotics.\n\n**Exam strategy:** After computing $Q^TQ$, read $\\det(Q)$ to classify rotation ($+1$) versus reflection ($-1$). When applying $R_\\theta$ to a vector, verify $\\|Rv\\|=\\|v\\|$ as a quick sanity check. If a problem asks for $Q^{-1}v$, use $Q^Tv$ — never row-reduce an orthogonal matrix on a timed exam.",
+      "body_he_md": "**סיבוב דו-ממדי** (נגד כיוון השעון בזווית $\\theta$):\n$$R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\ \\sin\\theta&\\cos\\theta\\end{pmatrix}, \\quad \\det(R_\\theta)=1.$$\n\n**שיקוף דו-ממדי** מעל קו שעובר בראשית בזווית $\\theta/2$ מציר $x$:\n$$H=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}, \\quad \\det(H)=-1.$$\n\n**שיקוף מעל ציר $x$:** $H_x=\\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix}$, עם $\\det=-1$.\n\n**כללי הרכבה:**\n- סיבובים מתחברים בחיבור זוויות: $R_{\\alpha}R_{\\beta}=R_{\\alpha+\\beta}$.\n- ההופכיות הן טרנספוז: $R_\\theta^{-1}=R_{-\\theta}=R_\\theta^T$.\n- מכפלה של שתי מטריצות אורתוגונליות היא אורתוגונלית: $(Q_1Q_2)^T(Q_1Q_2)=I$.\n- קבוצת $O(n)$ של מטריצות $n\\times n$ אורתוגונליות יוצרת **חבורה** תחת כפל.\n\n**ערכים עצמיים:** עבור $Q$ אורתוגונלית ממשית, כל ערך עצמי מקיים $|\\lambda|=1$. סיבובים טהורים ב-$\\mathbb{R}^2$ לעיתים קרובות בעלי ערכים עצמיים מרוכבים $e^{\\pm i\\theta}$; שיקופים בעלי ערכים עצמיים ממשיים $+1$ (ציר השיקוף) ו-$-1$ (כיוון ניצב).\n\n**חבורות אורתוגונליות מיוחדות:** $O(n)$ היא קבוצת כל המטריצות $n\\times n$ האורתוגונליות; $SO(n)$ היא תת-הקבוצה עם $\\det=+1$ (סיבובים בלבד). ב-$\\mathbb{R}^3$, כל איבר ב-$SO(3)$ הוא סיבוב סביב ציר כלשהו — עובדה שימושית במכניקה וברובוטיקה.\n\n**אסטרטגיית בחינה:** אחרי חישוב $Q^TQ$, קראו $\\det(Q)$ כדי לסווג סיבוב ($+1$) מול שיקוף ($-1$). בהחלת $R_\\theta$ על וקטור, אמתו $\\|Rv\\|=\\|v\\|$ כבדיקת sanity מהירה. אם נדרש $Q^{-1}v$, השתמשו ב-$Q^Tv$ — אל תפחיתו שורות במטריצה אורתוגונלית בבחינה עם זמן מוגבל."
     },
     {
       "kind": "worked_example",
@@ -35,8 +35,8 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — Verifying Orthogonality",
       "title_he": "דוגמה פתורה 1 — בדיקת אורתוגונליות",
-      "body_en_md": "**Is $Q=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$ orthogonal?**\n\n$Q^T=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}$.\n\n$Q^TQ=\\frac{1}{2}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}=\\frac{1}{2}\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}=I$. ✓\n\nYes, $Q$ is orthogonal. $\\det(Q)=(1\\cdot1-(-1)\\cdot1)/2=(1+1)/2\\cdot\\frac{1}{\\sqrt{2}^2}=2/2=1$. It's a rotation by $45°$.",
-      "body_he_md": "**Is $Q=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$ orthogonal?**\n\n$Q^T=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}$.\n\n$Q^TQ=\\frac{1}{2}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}=\\frac{1}{2}\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}=I$. ✓\n\nYes, $Q$ is orthogonal. $\\det(Q)=(1\\cdot1-(-1)\\cdot1)/2=(1+1)/2\\cdot\\frac{1}{\\sqrt{2}^2}=2/2=1$. It's a rotation by $45°$."
+      "body_en_md": "**Is $Q=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$ orthogonal?**\n\n### Move 1: Transpose\n$Q^T=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}$.\n\n### Move 2: Multiply $Q^TQ$\n$Q^TQ=\\frac{1}{2}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}=\\frac{1}{2}\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}=I$. ✓\n\n### Move 3: Classify\n$\\det(Q)=\\frac{1}{2}(1\\cdot1-(-1)\\cdot1)=\\frac{2}{2}=1$. Since $\\det=+1$, $Q$ is a **rotation** by $45°$ counter-clockwise.\n\n### Move 4: Column check (alternative)\nColumn 1: $\\frac{1}{\\sqrt{2}}(1,1)^T$, norm $=1$. Column 2: $\\frac{1}{\\sqrt{2}}(-1,1)^T$, norm $=1$. Dot product: $\\frac{1}{2}(1\\cdot(-1)+1\\cdot1)=0$. Columns are orthonormal — confirms orthogonality.\n\n### Move 5: Interpret geometrically\nThe first column points at $45°$ and the second at $135°$ — perpendicular directions of unit length. Multiplying by $Q$ rotates any vector by $45°$ while preserving its norm.\n\n**Exam tip:** You can verify either $Q^TQ=I$ or orthonormal columns. For $2\\times2$ matrices, both methods take about the same time; column norms are faster when entries are already normalized. On partial-credit exams, showing either $Q^TQ=I$ or unit orthogonal columns earns most points. Always state $\\det(Q)$ to classify the transformation as rotation or reflection.",
+      "body_he_md": "**האם $Q=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$ אורתוגונלית?**\n\n### צעד 1: טרנספוז\n$Q^T=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}$.\n\n### צעד 2: כפל $Q^TQ$\n$Q^TQ=\\frac{1}{2}\\begin{pmatrix}1&1\\\\-1&1\\end{pmatrix}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}=\\frac{1}{2}\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}=I$. ✓\n\n### צעד 3: סיווג\n$\\det(Q)=\\frac{1}{2}(1\\cdot1-(-1)\\cdot1)=\\frac{2}{2}=1$. מכיוון $\\det=+1$, $Q$ היא **סיבוב** ב-$45°$ נגד כיוון השעון.\n\n### צעד 4: בדיקת עמודות (חלופה)\nעמודה 1: $\\frac{1}{\\sqrt{2}}(1,1)^T$, נורמה $=1$. עמודה 2: $\\frac{1}{\\sqrt{2}}(-1,1)^T$, נורמה $=1$. מכפלה פנימית: $\\frac{1}{2}(1\\cdot(-1)+1\\cdot1)=0$. העמודות אורתונורמליות — מאשר אורתוגונליות.\n\n### צעד 5: פרשנות גאומטרית\nעמודה 1 מצביעה ב-$45°$ ועמודה 2 ב-$135°$ — כיוונים ניצבים באורך יחידה. כפל ב-$Q$ מסובב כל וקטור ב-$45°$ תוך שימור הנורמה.\n\n**טיפ לבחינה:** אפשר לאמת $Q^TQ=I$ או עמודות אורתונורמליות. במטריצות $2\\times2$, שתי השיטות לוקחות זמן דומה; נורמות עמודות מהירות יותר כשהאיברים כבר מנורמלים. בבחינות עם נקודות חלקיות, הצגת $Q^TQ=I$ או עמודות אורתונורמליות מרוויחה את רוב הנקודות. ציינו תמיד $\\det(Q)$ כדי לסווג סיבוב או שיקוף."
     },
     {
       "kind": "checkpoint",
@@ -44,8 +44,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Check if the columns of $Q$ in example 1 are orthonormal.",
       "body_he_md": "בדוק שהעמודות של $Q$ בדוגמה 1 הן אורתונורמליות.",
-      "checkpoint_solution_en": "Column 1: $\\frac{1}{\\sqrt{2}}(1,1)^T$, norm $=1$ ✓. Column 2: $\\frac{1}{\\sqrt{2}}(-1,1)^T$, norm $=1$ ✓. Dot product: $\\frac{1}{2}(1\\cdot(-1)+1\\cdot1)=0$ ✓. Orthonormal.",
-      "checkpoint_solution_he": "נורמה 1 ✓. מכפלה פנימית 0 ✓. אורתונורמלי."
+      "checkpoint_solution_en": "### Move 1: Norm of column 1\n$q_1=\\frac{1}{\\sqrt{2}}(1,1)^T$. $\\|q_1\\|^2=\\frac{1}{2}(1+1)=1$, so $\\|q_1\\|=1$. ✓\n\n### Move 2: Norm of column 2\n$q_2=\\frac{1}{\\sqrt{2}}(-1,1)^T$. $\\|q_2\\|^2=\\frac{1}{2}(1+1)=1$, so $\\|q_2\\|=1$. ✓\n\n### Move 3: Orthogonality\n$\\langle q_1,q_2\\rangle=\\frac{1}{2}(1\\cdot(-1)+1\\cdot1)=\\frac{-1+1}{2}=0$. ✓\n\nBoth columns have unit length and are mutually orthogonal — they form an orthonormal basis.",
+      "checkpoint_solution_he": "### צעד 1: נורמת עמודה 1\n$q_1=\\frac{1}{\\sqrt{2}}(1,1)^T$. $\\|q_1\\|^2=\\frac{1}{2}(1+1)=1$, ולכן $\\|q_1\\|=1$. ✓\n\n### צעד 2: נורמת עמודה 2\n$q_2=\\frac{1}{\\sqrt{2}}(-1,1)^T$. $\\|q_2\\|^2=\\frac{1}{2}(1+1)=1$, ולכן $\\|q_2\\|=1$. ✓\n\n### צעד 3: ניצבות\n$\\langle q_1,q_2\\rangle=\\frac{1}{2}(1\\cdot(-1)+1\\cdot1)=0$. ✓\n\nשתי העמודות באורך יחידה וניצבות זו לזו — הן יוצרות בסיס אורתונורמלי."
     },
     {
       "kind": "worked_example",
@@ -53,8 +53,8 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Rotation Matrix",
       "title_he": "דוגמה פתורה 2 — מטריצת סיבוב",
-      "body_en_md": "**Rotate the vector $v=(3,0)^T$ by $60°$.**\n\n$R_{60°}=\\begin{pmatrix}\\cos60°&-\\sin60°\\sin60°&\\cos60°\\end{pmatrix}=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\sqrt{3}/2&1/2\\end{pmatrix}$.\n\n$Rv=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\sqrt{3}/2&1/2\\end{pmatrix}\\begin{pmatrix}3\\\\0\\end{pmatrix}=\\begin{pmatrix}3/2\\\\3\\sqrt{3}/2\\end{pmatrix}$.\n\n**Verify norm preserved:** $\\|v\\|=3$. $\\|Rv\\|=\\sqrt{9/4+27/4}=\\sqrt{36/4}=3$. ✓",
-      "body_he_md": "**Rotate the vector $v=(3,0)^T$ by $60°$.**\n\n$R_{60°}=\\begin{pmatrix}\\cos60°&-\\sin60°\\sin60°&\\cos60°\\end{pmatrix}=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\sqrt{3}/2&1/2\\end{pmatrix}$.\n\n$Rv=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\sqrt{3}/2&1/2\\end{pmatrix}\\begin{pmatrix}3\\\\0\\end{pmatrix}=\\begin{pmatrix}3/2\\\\3\\sqrt{3}/2\\end{pmatrix}$.\n\n**Verify norm preserved:** $\\|v\\|=3$. $\\|Rv\\|=\\sqrt{9/4+27/4}=\\sqrt{36/4}=3$. ✓"
+      "body_en_md": "**Rotate the vector $v=(3,0)^T$ by $60°$ counter-clockwise.**\n\n### Move 1: Build $R_{60°}$\n$R_{60°}=\\begin{pmatrix}\\cos60°&-\\sin60°\\\\ \\sin60°&\\cos60°\\end{pmatrix}=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\\\ \\sqrt{3}/2&1/2\\end{pmatrix}$.\n\n### Move 2: Apply to $v$\n$Rv=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\\\ \\sqrt{3}/2&1/2\\end{pmatrix}\\begin{pmatrix}3\\\\0\\end{pmatrix}=\\begin{pmatrix}3/2\\\\ 3\\sqrt{3}/2\\end{pmatrix}$.\n\n### Move 3: Verify norm preserved\n$\\|v\\|=3$. $\\|Rv\\|=\\sqrt{(3/2)^2+(3\\sqrt{3}/2)^2}=\\sqrt{9/4+27/4}=\\sqrt{36/4}=3$. ✓\n\n### Move 4: Geometric check\nStarting on the positive $x$-axis with length $3$, a $60°$ rotation lands at angle $60°$ with coordinates $(3\\cos60°,3\\sin60°)=(3/2,3\\sqrt{3}/2)$ — matches.\n\n### Move 5: Matrix verification\nCheck $R_{60°}^T R_{60°}=I$ quickly: diagonal entries are $\\cos^2 60°+\\sin^2 60°=1$, off-diagonal sum to zero. Confirms $R_{60°}$ is orthogonal before we even computed $Rv$.\n\n**Exam tip:** Always verify $\\|Rv\\|=\\|v\\|$ after rotation problems. If norms differ, you likely used the wrong sign on $\\sin\\theta$ or confused rotation with reflection. Write the rotation matrix from the cos/sin template before substituting the angle — many errors come from swapping the $\\sin\\theta$ entries between upper-right and lower-left positions.",
+      "body_he_md": "**סובבו את הוקטור $v=(3,0)^T$ ב-$60°$ נגד כיוון השעון.**\n\n### צעד 1: בניית $R_{60°}$\n$R_{60°}=\\begin{pmatrix}\\cos60°&-\\sin60°\\\\ \\sin60°&\\cos60°\\end{pmatrix}=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\\\ \\sqrt{3}/2&1/2\\end{pmatrix}$.\n\n### צעד 2: החלה על $v$\n$Rv=\\begin{pmatrix}1/2&-\\sqrt{3}/2\\\\ \\sqrt{3}/2&1/2\\end{pmatrix}\\begin{pmatrix}3\\\\0\\end{pmatrix}=\\begin{pmatrix}3/2\\\\ 3\\sqrt{3}/2\\end{pmatrix}$.\n\n### צעד 3: אימות שימור נורמה\n$\\|v\\|=3$. $\\|Rv\\|=\\sqrt{(3/2)^2+(3\\sqrt{3}/2)^2}=\\sqrt{9/4+27/4}=3$. ✓\n\n### צעד 4: בדיקה גאומטרית\nהתחלה על ציר $x$ החיובי באורך $3$, סיבוב $60°$ מניח בזווית $60°$ עם קואורדינטות $(3\\cos60°,3\\sin60°)=(3/2,3\\sqrt{3}/2)$ — תואם.\n\n### צעד 5: אימות מטריצה\nבדקו $R_{60°}^T R_{60°}=I$ במהירות: איברי האלכון $\\cos^2 60°+\\sin^2 60°=1$, מחוץ לאלכון מתאפסים. מאשר $R_{60°}$ אורתוגונלית לפני שחישבנו $Rv$.\n\n**טיפ לבחינה:** תמיד אמתו $\\|Rv\\|=\\|v\\|$ אחרי בעיות סיבוב. אם הנורמות שונות, כנראה השתמשתם בסימן שגוי על $\\sin\\theta$ או בלבלתם סיבוב עם שיקוף. כתבו את מטריצת הסיבוב מתבנית cos/sin לפני הצבת הזווית — טעויות רבות נובעות מהחלפת מקומות $\\sin\\theta$ בין למעלה-ימין ללמטה-שמאל."
     },
     {
       "kind": "checkpoint",
@@ -62,8 +62,8 @@
       "title_he": "עצור ותרגל",
       "body_en_md": "Find $R_{90°}$ and compute $R_{90°}(1,0)^T$.",
       "body_he_md": "מצא $R_{90°}$ וחשב $R_{90°}(1,0)^T$.",
-      "checkpoint_solution_en": "$R_{90°}=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$. $R_{90°}(1,0)^T=(0,1)^T$.",
-      "checkpoint_solution_he": "$R_{90°}(1,0)^T=(0,1)^T$."
+      "checkpoint_solution_en": "### Move 1: Build the matrix\n$R_{90°}=\\begin{pmatrix}\\cos90°&-\\sin90°\\\\ \\sin90°&\\cos90°\\end{pmatrix}=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$.\n\n### Move 2: Apply to $(1,0)^T$\n$R_{90°}\\begin{pmatrix}1\\\\0\\end{pmatrix}=\\begin{pmatrix}0\\\\1\\end{pmatrix}$.\n\n### Move 3: Verify\n$\\|(1,0)^T\\|=1$, $\\|(0,1)^T\\|=1$. $\\det(R_{90°})=0\\cdot0-(-1)\\cdot1=1$ — proper rotation. ✓",
+      "checkpoint_solution_he": "### צעד 1: בניית המטריצה\n$R_{90°}=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$.\n\n### צעד 2: החלה על $(1,0)^T$\n$R_{90°}\\begin{pmatrix}1\\\\0\\end{pmatrix}=\\begin{pmatrix}0\\\\1\\end{pmatrix}$.\n\n### צעד 3: אימות\n$\\|(1,0)^T\\|=1$, $\\|(0,1)^T\\|=1$. $\\det(R_{90°})=1$ — סיבוב תקין. ✓"
     },
     {
       "kind": "worked_example",
@@ -71,15 +71,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Constructing an Orthogonal Matrix",
       "title_he": "דוגמה פתורה 3 — בניית מטריצה אורתוגונלית",
-      "body_en_md": "**Build a $3\\times3$ orthogonal matrix** with first column $q_1=\\frac{1}{3}(1,2,2)^T$.\n\n### Move 1 Verify $\\|q_1\\|=\\frac{1}{9}(1+4+4)=1$. ✓\n\n### Move 2 Find $q_2$ orthogonal to $q_1$. Choose $q_2=\\frac{1}{\\sqrt{2}}(1,-1,0)^T$:\n$\\langle q_1,q_2\\rangle=\\frac{1}{3\\sqrt{2}}(1-2+0)=\\frac{-1}{3\\sqrt{2}}\\ne0$. Adjust: $q_2=(a,b,c)$ with $a+2b+2c=0$, $a^2+b^2+c^2=1$. Try $q_2=\\frac{1}{\\sqrt{5}}(2,-1,0)^T$: $2-2=0$ ✓, norm $=\\sqrt{5/5}=1$. ✓\n\n### Move 3 $q_3=q_1\\times q_2$ (cross product gives orthogonal unit vector):\n$q_3=\\frac{1}{3\\sqrt{5}}(1,2,2)\\times(2,-1,0)=\\frac{1}{3\\sqrt{5}}((2\\cdot0-2\\cdot(-1)),-(1\\cdot0-2\\cdot2),(1\\cdot(-1)-2\\cdot2))=\\frac{1}{3\\sqrt{5}}(2,4,-5)$.\nNorm: $\\sqrt{4+16+25}/(3\\sqrt{5})=\\sqrt{45}/(3\\sqrt{5})=\\sqrt{45/45}=1$. ✓\n\n$$Q=\\begin{pmatrix}1/3&2/\\sqrt{5}&2/(3\\sqrt{5})\\\\2/3&-1/\\sqrt{5}&4/(3\\sqrt{5})\\\\2/3&0&-5/(3\\sqrt{5})\\end{pmatrix}$$",
-      "body_he_md": "### צעד 1 Verify $\\|q_1\\|=\\frac{1}{9}(1+4+4)=1$. ✓\n\n### צעד 2 Find $q_2$ orthogonal to $q_1$. Choose $q_2=\\frac{1}{\\sqrt{2}}(1,-1,0)^T$:\n$\\langle q_1,q_2\\rangle=\\frac{1}{3\\sqrt{2}}(1-2+0)=\\frac{-1}{3\\sqrt{2}}\\ne0$. Adjust: $q_2=(a,b,c)$ with $a+2b+2c=0$, $a^2+b^2+c^2=1$. Try $q_2=\\frac{1}{\\sqrt{5}}(2,-1,0)^T$: $2-2=0$ ✓, norm $=\\sqrt{5/5}=1$. ✓\n\n### צעד 3 $q_3=q_1\\times q_2$ (cross product gives orthogonal unit vector):\n$q_3=\\frac{1}{3\\sqrt{5}}(1,2,2)\\times(2,-1,0)=\\frac{1}{3\\sqrt{5}}((2\\cdot0-2\\cdot(-1)),-(1\\cdot0-2\\cdot2),(1\\cdot(-1)-2\\cdot2))=\\frac{1}{3\\sqrt{5}}(2,4,-5)$.\nNorm: $\\sqrt{4+16+25}/(3\\sqrt{5})=\\sqrt{45}/(3\\sqrt{5})=\\sqrt{45/45}=1$. ✓"
+      "body_en_md": "**Build a $3\\times3$ orthogonal matrix** with first column $q_1=\\frac{1}{3}(1,2,2)^T$.\n\n### Move 1: Verify $\\|q_1\\|=1$\n$\\|q_1\\|^2=\\frac{1}{9}(1+4+4)=1$. ✓\n\n### Move 2: Find $q_2\\perp q_1$ with unit norm\nNeed $a+2b+2c=0$ and $a^2+b^2+c^2=1$. Try $q_2=\\frac{1}{\\sqrt{5}}(2,-1,0)^T$: dot with $q_1$ gives $\\frac{1}{3\\sqrt{5}}(2-2+0)=0$ ✓, norm $=\\sqrt{4+1}/\\sqrt{5}=1$ ✓.\n\n### Move 3: Complete with cross product\n$q_3=q_1\\times q_2=\\frac{1}{3\\sqrt{5}}\\begin{vmatrix}\\mathbf{i}&\\mathbf{j}&\\mathbf{k}\\\\1&2&2\\\\2&-1&0\\end{vmatrix}$=\\frac{1}{3\\sqrt{5}}(2,4,-5)^T$. Norm: $\\sqrt{4+16+25}/(3\\sqrt{5})=\\sqrt{45}/(3\\sqrt{5})=1$ ✓.\n\n### Move 4: Assemble $Q$\n$$Q=\\begin{pmatrix}1/3&2/\\sqrt{5}&2/(3\\sqrt{5})\\\\2/3&-1/\\sqrt{5}&4/(3\\sqrt{5})\\\\2/3&0&-5/(3\\sqrt{5})\\end{pmatrix}$$\n\n### Move 5: Spot-check $Q^TQ$\nThe $(1,1)$ entry of $Q^TQ$ is $(1/3)^2+(2/3)^2+(2/3)^2=1/9+4/9+4/9=1$. The $(1,2)$ entry is $(1/3)(2/\\sqrt{5})+(2/3)(-1/\\sqrt{5})+(2/3)(0)=0$. One diagonal and one off-diagonal check often suffice for exam partial credit.\n\n**Exam tip:** Gram–Schmidt or cross product (in $\\mathbb{R}^3$) both produce orthonormal columns. Verify $Q^TQ=I$ on the exam if time permits — partial credit for correct $q_1,q_2$ even if $q_3$ has an arithmetic slip. The cross product $q_3=q_1\\times q_2$ works only in $\\mathbb{R}^3$; in higher dimensions use Gram–Schmidt. Label each column vector before assembling $Q$ so the grader can follow your construction.",
+      "body_he_md": "**בנו מטריצה אורתוגונלית $3\\times3$** עם עמודה ראשונה $q_1=\\frac{1}{3}(1,2,2)^T$.\n\n### צעד 1: אימות $\\|q_1\\|=1$\n$\\|q_1\\|^2=\\frac{1}{9}(1+4+4)=1$. ✓\n\n### צעד 2: מציאת $q_2\\perp q_1$ בנורמה 1\nנדרש $a+2b+2c=0$ ו-$a^2+b^2+c^2=1$. ננסה $q_2=\\frac{1}{\\sqrt{5}}(2,-1,0)^T$: מכפלה עם $q_1$ נותנת $0$ ✓, נורמה $=1$ ✓.\n\n### צעד 3: השלמה עם מכפלה וקטורית\n$q_3=q_1\\times q_2=\\frac{1}{3\\sqrt{5}}(2,4,-5)^T$. נורמה: $\\sqrt{45}/(3\\sqrt{5})=1$ ✓.\n\n### צעד 4: הרכבת $Q$\n$$Q=\\begin{pmatrix}1/3&2/\\sqrt{5}&2/(3\\sqrt{5})\\\\2/3&-1/\\sqrt{5}&4/(3\\sqrt{5})\\\\2/3&0&-5/(3\\sqrt{5})\\end{pmatrix}$$\n\n### צעד 5: בדיקת $Q^TQ$ נקודתית\nאיבר $(1,1)$ של $Q^TQ$ הוא $(1/3)^2+(2/3)^2+(2/3)^2=1$. איבר $(1,2)$ הוא $(1/3)(2/\\sqrt{5})+(2/3)(-1/\\sqrt{5})=0$. בדיקת אלכון ואיבר אחד מחוץ לאלכון לעיתים מספיקה לנקודות חלקיות בבחינה.\n\n**טיפ לבחינה:** גרם-שמידט או מכפלה וקטורית (ב-$\\mathbb{R}^3$) שניהם יוצרים עמודות אורתונורמליות. אמתו $Q^TQ=I$ בבחינה אם יש זמן — נקודות חלקיות על $q_1,q_2$ נכונים גם אם $q_3$ עם טעות חשבון. מכפלה וקטורית $q_3=q_1\\times q_2$ עובדת רק ב-$\\mathbb{R}^3$; בממדים גבוהים יותר השתמשו בגרם-שמידט. סמנו כל וקטור עמודה לפני הרכבת $Q$ כדי שהבוחן יוכל לעקוב אחר הבנייה."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Orthogonal Matrices",
       "title_he": "מדריך שיטה — מטריצות אורתוגונליות",
-      "body_en_md": "**Check if $Q$ is orthogonal:**\n1. Compute $Q^TQ$. If $=I$: orthogonal.\n2. OR: check each column is unit-length and columns are mutually orthogonal.\n\n**Inverse of orthogonal:** $Q^{-1}=Q^T$.\n\n**Determinant:**\n- $\\det(Q)=+1$: rotation (in SO(n)).\n- $\\det(Q)=-1$: reflection/improper rotation.\n\n**2D rotation:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n\n**Applying $Q$:** $\\|Qv\\|=\\|v\\|$ (norms preserved), $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$ (angles preserved).\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.",
-      "body_he_md": "**בדיקה:** $Q^TQ=I$, או עמודות אורתונורמליות.\n\n**הופכית:** $Q^{-1}=Q^T$.\n\n**$\\det=+1$:** סיבוב. **$\\det=-1$:** שיקוף.\n\n**$R_\\theta$:** $\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n\n**שימור:** נורמות וזוויות.\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
+      "body_en_md": "| Goal | Method | Key check |\n|---|---|---|\n| Verify orthogonality | Compute $Q^TQ$; expect $I$ | Or check columns are orthonormal |\n| Find inverse | $Q^{-1}=Q^T$ | Much faster than row reduction |\n| Classify transform | Compute $\\det(Q)$ | $+1$ rotation, $-1$ reflection |\n| 2D rotation | $R_\\theta$ with cos/sin pattern | $\\|Rv\\|=\\|v\\|$ sanity check |\n| Compose rotations | Add angles: $R_\\alpha R_\\beta=R_{\\alpha+\\beta}$ | Product stays orthogonal |\n| Build $3\\times3$ $Q$ | Gram–Schmidt or cross product | All columns unit and pairwise orthogonal |\n\n**Decision tree:**\n1. Given $Q$ — multiply $Q^TQ$. If $=I$, orthogonal.\n2. Need inverse — transpose, do not row-reduce.\n3. Need classification — compute $\\det$.\n4. Need to rotate a vector — build $R_\\theta$, multiply, verify norm.\n5. Product of two orthogonal matrices — still orthogonal; use $(Q_1Q_2)^T(Q_1Q_2)=I$.",
+      "body_he_md": "| מטרה | שיטה | בדיקה |\n|---|---|---|\n| אימות אורתוגונליות | חשב $Q^TQ$; צפה $I$ | או בדוק עמודות אורתונורמליות |\n| מציאת הופכית | $Q^{-1}=Q^T$ | הרבה יותר מהיר מהפחתת שורות |\n| סיווג טרנספורמציה | חשב $\\det(Q)$ | $+1$ סיבוב, $-1$ שיקוף |\n| סיבוב דו-ממדי | $R_\\theta$ עם cos/sin | בדיקת $\\|Rv\\|=\\|v\\|$ |\n| הרכבת סיבובים | חיבור זוויות | המכפלה נשארת אורתוגונלית |\n| בניית $Q$ בגודל $3\\times3$ | גרם-שמידט או מכפלה וקטורית | כל העמודות בנורמה 1 וניצבות |\n\n**עץ החלטות:**\n1. נתונה $Q$ — כפל $Q^TQ$. אם $=I$, אורתוגונלית.\n2. צריך הופכית — טרנספוז, לא הפחתת שורות.\n3. צריך סיווג — חשב $\\det$.\n4. צריך לסובב וקטור — בנה $R_\\theta$, הכפל, אמת נורמה.\n5. מכפלה של שתי אורתוגונליות — עדיין אורתוגונלית; השתמש ב-$(Q_1Q_2)^T(Q_1Q_2)=I$."
     },
     {
       "kind": "exercise_set",
@@ -109,88 +109,88 @@
           "difficulty": "easy",
           "body_en": "If $Q$ is orthogonal, what is $Q^{-1}$?",
           "body_he": "אם $Q$ אורתוגונלית, מה $Q^{-1}$?",
-          "solution_en": "**Solution:**\n\n$Q^{-1}=Q^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$Q^{-1}=Q^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$Q^{-1}=Q^T$.",
+          "solution_he": "$Q^{-1}=Q^T$."
         },
         {
           "id": "e4",
           "difficulty": "easy",
           "body_en": "$v=(1,0)^T$. $R_{45°}v=?$",
           "body_he": "$R_{45°}(1,0)^T=?$",
-          "solution_en": "**Solution:**\n\n$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$(1/\\sqrt{2},1/\\sqrt{2})^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$.",
+          "solution_he": "$(1/\\sqrt{2},1/\\sqrt{2})^T$."
         },
         {
           "id": "e5",
           "difficulty": "medium",
           "body_en": "Verify $Q=\\frac{1}{5}\\begin{pmatrix}3&4\\\\-4&3\\end{pmatrix}$ is orthogonal. Find $\\det$ and identify.",
           "body_he": "בדוק ש-$Q=\\frac{1}{5}\\begin{pmatrix}3&4\\\\-4&3\\end{pmatrix}$ אורתוגונלית. $\\det$?",
-          "solution_en": "Columns: $(3/5,−4/5)$, $(4/5,3/5)$. Norms: $\\sqrt{9+16}/5=1$. Dot: $(3\\cdot4+(-4)\\cdot3)/25=0$ ✓. $\\det=(9+16)/25=1$. Rotation by $\\theta=\\arctan(-4/3)$.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאורתוגונלית ✓. $\\det=1$ → סיבוב.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "Columns orthonormal ✓. $\\det=(9+16)/25=1$. Rotation by $\\theta=\\arctan(-4/3)$.",
+          "solution_he": "אורתוגונלית ✓. $\\det=1$ → סיבוב."
         },
         {
           "id": "e6",
           "difficulty": "medium",
           "body_en": "If $Q_1$ and $Q_2$ are orthogonal, is $Q_1Q_2$ orthogonal?",
           "body_he": "אם $Q_1,Q_2$ אורתוגונליות, האם $Q_1Q_2$ אורתוגונלית?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=Q_2^TQ_2=I$. Yes.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(Q_1Q_2)^T(Q_1Q_2)=I$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=I$. Yes.",
+          "solution_he": "$(Q_1Q_2)^T(Q_1Q_2)=I$ ✓."
         },
         {
           "id": "e7",
           "difficulty": "medium",
-          "body_en": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det(Q)$?",
-          "body_he": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det$?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\det=-1$ → שיקוף.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_en": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det(Q)$?",
+          "body_he": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det$?",
+          "solution_en": "$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.",
+          "solution_he": "$\\det=-1$ → שיקוף."
         },
         {
           "id": "e8",
           "difficulty": "medium",
           "body_en": "Eigenvalues of $R_{90°}$?",
           "body_he": "ערכים עצמיים של $R_{90°}$?",
-          "solution_en": "$\\det(R_{90°}-\\lambda I)=\\lambda^2+1=0\\Rightarrow\\lambda=\\pm i$. Complex eigenvalues — no real eigenvalues (no invariant lines for $90°$ rotation).",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\lambda=\\pm i$ — אין ערכים עצמיים ממשיים.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$\\lambda^2+1=0\\Rightarrow\\lambda=\\pm i$. No real eigenvalues.",
+          "solution_he": "$\\lambda=\\pm i$ — אין ערכים עצמיים ממשיים."
         },
         {
           "id": "e9",
           "difficulty": "medium",
-          "body_en": "For an orthogonal $Q$: $|\\det(Q)|=1$. Prove this.",
+          "body_en": "For orthogonal $Q$: $|\\det(Q)|=1$. Prove.",
           "body_he": "$Q$ אורתוגונלית → $|\\det(Q)|=1$. הוכח.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$Q^TQ=I\\Rightarrow\\det(Q^T)\\det(Q)=1\\Rightarrow(\\det Q)^2=1\\Rightarrow|\\det Q|=1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(\\det Q)^2=\\det(Q^TQ)=\\det(I)=1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$Q^TQ=I\\Rightarrow(\\det Q)^2=1\\Rightarrow|\\det Q|=1$.",
+          "solution_he": "$(\\det Q)^2=\\det(Q^TQ)=1$."
         },
         {
           "id": "e10",
           "difficulty": "hard",
-          "body_en": "Find all $2\\times2$ orthogonal matrices with $\\det=-1$ (reflections).",
+          "body_en": "Find all $2\\times2$ orthogonal matrices with $\\det=-1$.",
           "body_he": "מצא את כל המטריצות האורתוגונליות $2\\times2$ עם $\\det=-1$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\nGeneral form: $\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}$ for any $\\theta$. These are reflections over lines at angle $\\theta/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}$ לכל $\\theta$ (שיקופים על קו בזווית $\\theta/2$).\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "General form: $\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$ for any $\\theta$ (reflections).",
+          "solution_he": "$\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$ לכל $\\theta$ (שיקופים)."
         },
         {
           "id": "e11",
           "difficulty": "hard",
           "body_en": "$Q$ orthogonal. Show: if $\\lambda$ is eigenvalue, $|\\lambda|=1$.",
           "body_he": "$Q$ אורתוגונלית, $\\lambda$ ערך עצמי. הוכח $|\\lambda|=1$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$Qv=\\lambda v\\Rightarrow\\|Qv\\|=|\\lambda|\\|v\\|$. Since $Q$ preserves norms: $\\|Qv\\|=\\|v\\|$. So $|\\lambda|\\|v\\|=\\|v\\|\\Rightarrow|\\lambda|=1$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\|Qv\\|=\\|v\\|$ → $|\\lambda|\\|v\\|=\\|v\\|$ → $|\\lambda|=1$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$Qv=\\lambda v\\Rightarrow\\|Qv\\|=|\\lambda|\\|v\\|=\\|v\\|\\Rightarrow|\\lambda|=1$.",
+          "solution_he": "$\\|Qv\\|=\\|v\\|$ → $|\\lambda|=1$."
         },
         {
           "id": "e12",
           "difficulty": "hard",
           "body_en": "$Q_1=R_{30°}$, $Q_2=R_{60°}$. Compute $Q_1^T Q_2$.",
           "body_he": "$Q_1=R_{30°}$, $Q_2=R_{60°}$. חשב $Q_1^TQ_2$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$Q_1^T=R_{30°}^T=R_{-30°}=R_{330°}$. $Q_1^TQ_2=R_{-30°}R_{60°}=R_{30°}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$Q_1^TQ_2=R_{-30°+60°}=R_{30°}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$Q_1^TQ_2=R_{-30°+60°}=R_{30°}$.",
+          "solution_he": "$Q_1^TQ_2=R_{30°}$."
         },
         {
           "id": "e13",
           "difficulty": "hard",
-          "body_en": "Prove that $\\|Qv\\|=\\|v\\|$ for any orthogonal $Q$ and any vector $v$.",
-          "body_he": "הוכח $\\|Qv\\|=\\|v\\|$ לכל $Q$ אורתוגונלית ו-$v$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\|Qv\\|^2=\\langle Qv,Qv\\rangle=(Qv)^T(Qv)=v^TQ^TQv=v^TIv=v^Tv=\\|v\\|^2$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$\\|Qv\\|^2=v^TQ^TQv=v^Tv=\\|v\\|^2$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_en": "Prove $\\|Qv\\|=\\|v\\|$ for orthogonal $Q$.",
+          "body_he": "הוכח $\\|Qv\\|=\\|v\\|$ לכל $Q$ אורתוגונלית.",
+          "solution_en": "$\\|Qv\\|^2=v^TQ^TQv=v^Tv=\\|v\\|^2$.",
+          "solution_he": "$\\|Qv\\|^2=v^TQ^TQv=\\|v\\|^2$ ✓."
         }
       ]
     },
@@ -198,30 +198,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **$Q^{-1}=Q^T$, not $Q^{-1}=Q$** (unless $Q=Q^T$, i.e., symmetric).\n2. **Rotation matrix**: counter-clockwise by $\\theta$ — don't mix up row/column conventions.\n3. **$\\det=\\pm1$, not just $\\det=1$** — reflections also give orthogonal matrices.\n4. **Complex eigenvalues**: real orthogonal matrices can have complex eigenvalues ($\\pm i$ for $90°$ rotation).\n\n**Example misconception:** Orthogonal means Q = Q^T\n\n**Fix:** Orthogonal means Q^TQ = I (not necessarily symmetric).",
-      "body_he_md": "1. **$Q^{-1}=Q^T$** (לא $Q^{-1}=Q$ בכלל).\n2. **כיוון סיבוב**: נגד כיוון שעון — אל תבלבל שורות/עמודות.\n3. **$\\det=\\pm1$** — שיקופים גם אורתוגונליות.\n4. **ערכים עצמיים מרוכבים**: אפשרי למטריצות אורתוגונליות ממשיות.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+      "body_en_md": "1. **$Q^{-1}=Q^T$, not $Q^{-1}=Q$** — orthogonal does not mean the matrix equals its transpose. Only symmetric orthogonal matrices satisfy $Q=Q^T$ (these are sign matrices with $\\pm1$ on the diagonal).\n\n2. **Rotation direction:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\ \\sin\\theta&\\cos\\theta\\end{pmatrix}$ rotates counter-clockwise. Swapping the sin signs gives a clockwise rotation or a reflection.\n\n3. **$\\det=\\pm1$, not just $\\det=1$** — reflections are orthogonal too. A student who only checks $\\det=1$ will misclassify reflections as non-orthogonal.\n\n4. **Complex eigenvalues are normal** — a $90°$ rotation has eigenvalues $\\pm i$, not real numbers. Do not conclude a matrix is non-orthogonal just because its eigenvalues are complex.\n\n**Example misconception:** \"Orthogonal means $Q=Q^T$.\"\n\n**Fix:** Orthogonal means $Q^TQ=I$. Symmetry is a separate property.",
+      "body_he_md": "1. **$Q^{-1}=Q^T$, לא $Q^{-1}=Q$** — אורתוגונלית לא אומרת שהמטריצה שווה לטרנספוז שלה. רק מטריצות אורתוגונליות סימטריות מקיימות $Q=Q^T$ (מטריצות סימן עם $\\pm1$ על האלכסון).\n\n2. **כיוון סיבוב:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\ \\sin\\theta&\\cos\\theta\\end{pmatrix}$ מסובב נגד כיוון השעון. החלפת סימני ה-sin נותנת סיבוב עם כיוון השעון או שיקוף.\n\n3. **$\\det=\\pm1$, לא רק $\\det=1$** — גם שיקופים אורתוגונליים. תלמיד שבודק רק $\\det=1$ יסווג שיקופים בטעות כלא-אורתוגונליים.\n\n4. **ערכים עצמיים מרוכבים תקינים** — סיבוב $90°$ בעל ערכים עצמיים $\\pm i$, לא ממשיים. אל תסיקו שמטריצה לא אורתוגונלית רק כי הערכים העצמיים מרוכבים.\n\n**דוגמת טעות:** \"אורתוגונלית פירושה $Q=Q^T$.\"\n\n**תיקון:** אורתוגונלית פירושה $Q^TQ=I$. סימטריה היא תכונה נפרדת."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Recommended next topics:**\n- `concept:la_orthogonality` **Orthogonality & Least Squares**\n- `concept:inner_product_gram_schmidt` **inner product gram schmidt**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**נושאים מומלצים להמשך:**\n- `concept:la_orthogonality` **ישרות וריבועים פחותים**\n- `concept:inner_product_gram_schmidt` **inner product gram schmidt**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "Orthogonal matrices are the backbone of geometry in linear algebra — every rigid motion in $\\mathbb{R}^n$ is an orthogonal transformation (possibly composed with a translation).\n\n**Recommended next topics:**\n- `concept:la_orthogonality` **Orthogonality & Least Squares**\n- `concept:inner_product_gram_schmidt` **Inner Product & Gram–Schmidt**\n\n**Why it matters for exams:** University linear-algebra finals routinely ask you to verify $Q^TQ=I$, classify rotations versus reflections, and prove norm preservation. In applied courses, PCA eigenvector matrices and QR decomposition both rely on orthogonality. When studying, ask: \"Where else did I see a matrix whose inverse is its transpose?\"",
+      "body_he_md": "מטריצות אורתוגונליות הן עמוד השדרה של הגיאומטריה באלגברה לינארית — כל תנועה קשיחה ב-$\\mathbb{R}^n$ היא טרנספורמציה אורתוגונלית (אולי עם הזזה).\n\n**נושאים מומלצים להמשך:**\n- `concept:la_orthogonality` **ישרות וריבועים פחותים**\n- `concept:inner_product_gram_schmidt` **מכפלה פנימית וגרם-שמידט**\n\n**למה זה חשוב לבחינות:** בבחינות גמר באלגברה לינארית באוניברסיטה מבקשים לעיתים קרובות לאמת $Q^TQ=I$, לסווג סיבובים מול שיקופים, ולהוכיח שימור נורמה. בקורסים יישומיים, מטריצות וקטורים עצמיים ב-PCA ופירוק QR שניהם מסתמכים על אורתוגונליות. בזמן לימוד, שאלו: \"איפה עוד ראיתי מטריצה שההופכית שלה היא הטרנספוז?\""
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- Orthogonal: $Q^TQ=I$, $Q^{-1}=Q^T$.\n- Columns (and rows) are orthonormal.\n- $\\det(Q)=\\pm1$: $+1$ rotation, $-1$ reflection.\n- $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n- Norms and inner products preserved.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
-      "body_he_md": "- $Q^TQ=I$, $Q^{-1}=Q^T$.\n- עמודות/שורות — בסיס אורתונורמלי.\n- $\\det=+1$: סיבוב; $-1$: שיקוף.\n- $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\sin\\theta&\\cos\\theta\\end{pmatrix}$."
+      "body_en_md": "- **Definition:** $Q^TQ=I$, equivalently $Q^{-1}=Q^T$.\n- **Columns and rows** form orthonormal bases.\n- **Determinant:** $\\det(Q)=\\pm1$ — $+1$ rotation, $-1$ reflection.\n- **2D rotation:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\ \\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n- **Preservation:** $\\|Qv\\|=\\|v\\|$, $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$.\n- **Product:** $Q_1Q_2$ is orthogonal when $Q_1,Q_2$ are.\n- **Eigenvalues:** $|\\lambda|=1$ for every eigenvalue of orthogonal $Q$.\n- **Complex eigenvalues:** $90°$ rotation has $\\lambda=\\pm i$ — still orthogonal.\n\n**Last review:** Write $R_{45°}$ from memory, verify $Q^TQ=I$ for it, and state its $\\det$. Then apply $R_{45°}$ to $(1,0)^T$ and confirm the result has unit length. Practice one reflection matrix and one $3\\times3$ column-orthogonality check.",
+      "body_he_md": "- **הגדרה:** $Q^TQ=I$, כלומר $Q^{-1}=Q^T$.\n- **עמודות ושורות** — בסיס אורתונורמלי.\n- **דטרמיננטה:** $\\det(Q)=\\pm1$ — $+1$ סיבוב, $-1$ שיקוף.\n- **סיבוב דו-ממדי:** $R_\\theta=\\begin{pmatrix}\\cos\\theta&-\\sin\\theta\\\\ \\sin\\theta&\\cos\\theta\\end{pmatrix}$.\n- **שימור:** $\\|Qv\\|=\\|v\\|$, $\\langle Qu,Qv\\rangle=\\langle u,v\\rangle$.\n- **מכפלה:** $Q_1Q_2$ אורתוגונלית כש-$Q_1,Q_2$ אורתוגונליות.\n- **ערכים עצמיים:** $|\\lambda|=1$ לכל ערך עצמי של $Q$ אורתוגונלית.\n- **ערכים מרוכבים:** סיבוב $90°$ בעל $\\lambda=\\pm i$ — עדיין אורתוגונלי.\n\n**חזרה אחרונה:** כתבו $R_{45°}$ מהזיכרון, אמתו $Q^TQ=I$, וציינו את $\\det$. ואז החילו $R_{45°}$ על $(1,0)^T$ ואשרו שלתוצאה אורך יחידה."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- Orthogonal matrix: $Q^TQ=I$, $Q^{-1}=Q^T$.\n- $\\det=\\pm1$.\n- Preserves lengths and angles.\n- $+1$: rotation; $-1$: reflection.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
-      "body_he_md": "- $Q^TQ=I$, $Q^{-1}=Q^T$.\n- $\\det=\\pm1$.\n- שימור אורכים וזוויות.\n- $+1$: סיבוב; $-1$: שיקוף."
+      "body_en_md": "- An **orthogonal matrix** satisfies $Q^TQ=I$, so $Q^{-1}=Q^T$.\n- Columns (and rows) form an **orthonormal basis**.\n- $\\det(Q)=\\pm1$: $+1$ means rotation, $-1$ means reflection.\n- Orthogonal matrices **preserve lengths and angles**.\n- Products and inverses of orthogonal matrices remain orthogonal.\n\n**Takeaway:** From the problem wording alone — \"rotation,\" \"reflection,\" \"preserve norm,\" \"$Q^TQ=I$\" — you should now know which method to apply without hesitation.",
+      "body_he_md": "- **מטריצה אורתוגונלית** מקיימת $Q^TQ=I$, ולכן $Q^{-1}=Q^T$.\n- העמודות (והשורות) יוצרות **בסיס אורתונורמלי**.\n- $\\det(Q)=\\pm1$: $+1$ פירושו סיבוב, $-1$ פירושו שיקוף.\n- מטריצות אורתוגונליות **שומרות על אורכים וזוויות**.\n- מכפלות והופכיות של מטריצות אורתוגונליות נשארות אורתוגונליות.\n\n**מסקנה:** מניסוח הבעיה בלבד — \"סיבוב\", \"שיקוף\", \"שימור נורמה\", \"$Q^TQ=I$\" — עליכם לדעת עכשיו איזו שיטה ליישם בלי היסוס."
     }
   ],
   "agent_hints": {
@@ -272,8 +272,8 @@
         "$Q=I$"
       ],
       "correct_index": 1,
-      "explanation_en": "**Why this is correct:**\nDefinition of orthogonal matrix.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
-      "explanation_he": "**למה זה נכון:**\nהגדרת מטריצה אורתוגונלית.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "The condition $Q^TQ=I$ is the **definition** of an orthogonal matrix: multiplying $Q$ by its transpose (on either side) yields the identity. This is equivalent to $Q^{-1}=Q^T$, meaning the inverse is free — just transpose.\n\n**Why option 2 is correct:** \"Orthogonal\" is the standard name for matrices satisfying $Q^TQ=I$. The columns then form an orthonormal basis.\n\n**Common wrong paths:** Choosing \"$Q=Q^T$\" confuses orthogonal with symmetric — a $90°$ rotation is orthogonal but not symmetric. Choosing \"$Q=I$\" is far too restrictive (only the identity matrix). Choosing \"diagonal\" ignores that most orthogonal matrices are not diagonal.\n\n**Exam tip:** When you see $Q^TQ=I$ in a problem statement, immediately write $Q^{-1}=Q^T$ and check whether $\\det(Q)=\\pm1$ to classify the transformation.",
+      "explanation_he": "התנאי $Q^TQ=I$ הוא **ההגדרה** של מטריצה אורתוגונלית: כפל $Q$ בטרנספוז שלה (מכל צד) נותן את מטריצת היחידה. זה שקול ל-$Q^{-1}=Q^T$, כלומר ההופכית מיידית — רק טרנספוז.\n\n**למה אפשרות 2 נכונה:** \"אורתוגונלית\" הוא השם הסטנדרטי למטריצות שמקיימות $Q^TQ=I$. העמודות אז יוצרות בסיס אורתונורמלי.\n\n**דרכים שגויות נפוצות:** בחירה ב-\"$Q=Q^T$\" מבלבלת אורתוגונלית עם סימטרית — סיבוב $90°$ אורתוגונלי אך לא סימטרי. בחירה ב-\"$Q=I$\" מגבילה מדי (רק מטריצת היחידה). בחירה ב\"אלכסונית\" מתעלמת מכך שרוב המטריצות האורתוגונליות אינן אלכסוניות.\n\n**טיפ לבחינה:** כשאתם רואים $Q^TQ=I$ בניסוח, כתבו מיד $Q^{-1}=Q^T$ ובדקו $\\det(Q)=\\pm1$ כדי לסווג את הטרנספורמציה.",
       "skill_atoms": [
         "orthogonal_matrix",
         "definition"
@@ -293,8 +293,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$ ✓. $\\det=1$: rotation by $90°$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$Q^TQ=I$ ✓. $\\det=1$ → סיבוב $90°$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "Compute $Q^T=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}$, then $Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$. So $Q$ is orthogonal. $\\det(Q)=0\\cdot0-(-1)\\cdot1=1$, confirming a **rotation** (not reflection).\n\n**Why $90°$:** Applying $Q$ to $(1,0)^T$ gives $(0,1)^T$ — the standard basis vector on the $x$-axis rotates to the $y$-axis, which is exactly $90°$ counter-clockwise.\n\n**Common wrong path:** Answering \"reflection\" because the matrix looks like it swaps coordinates. Reflections have $\\det=-1$; here $\\det=+1$.\n\n**Exam tip:** For $2\\times2$ orthogonal matrices, compute $\\det$ first: $+1$ rotation, $-1$ reflection. Then verify $Q^TQ=I$ if the question asks explicitly.",
+      "explanation_he": "חשבו $Q^T=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}$, ואז $Q^TQ=\\begin{pmatrix}0&1\\\\-1&0\\end{pmatrix}\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}=I$. לכן $Q$ אורתוגונלית. $\\det(Q)=1$, מאשר **סיבוב** (לא שיקוף).\n\n**למה $90°$:** החלת $Q$ על $(1,0)^T$ נותנת $(0,1)^T$ — וקטור הבסיס על ציר $x$ מסתובב לציר $y$, כלומר $90°$ נגד כיוון השעון.\n\n**דרך שגויה נפוצה:** תשובה \"שיקוף\" כי המטריצה נראית כמו החלפת קואורדינטות. לשיקופים $\\det=-1$; כאן $\\det=+1$.\n\n**טיפ לבחינה:** במטריצות $2\\times2$ אורתוגונליות, חשבו $\\det$ תחילה: $+1$ סיבוב, $-1$ שיקוף. ואז אמתו $Q^TQ=I$ אם השאלה דורשת במפורש. זכרו: מטריצה עם $\\det=+1$ שומרת על כיוון, ואילו $\\det=-1$ הופכת אותו — זה הבדל המרכזי בין סיבוב לשיקוף בבחינות.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
@@ -314,8 +314,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$\\det=-1$: reflection over $x$-axis.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n$\\det=-1$ → שיקוף מעל ציר $x$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "$\\det(Q)=1\\cdot(-1)-0\\cdot0=-1$. Since $\\det=-1$, this is an **improper orthogonal** matrix — a reflection, not a rotation. It maps $(x,y)\\mapsto(x,-y)$, flipping the $y$-coordinate.\n\n**Why reflection over $x$-axis:** The matrix leaves $x$ unchanged and negates $y$. Geometrically, every point reflects across the horizontal axis. You can verify $Q^TQ=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}=I$, so $Q$ is indeed orthogonal.\n\n**Common wrong path:** Answering \"rotation by $180°$\" — a $180°$ rotation has $\\det=+1$, not $-1$. Another trap: saying \"not orthogonal\" because $\\det\\ne1$.\n\n**Exam tip:** $\\det=-1$ always means orientation is reversed. Name the axis of reflection by checking which coordinate stays fixed and which is negated.",
+      "explanation_he": "$\\det(Q)=1\\cdot(-1)-0\\cdot0=-1$. מכיוון $\\det=-1$, זו מטריצה **אורתוגונלית לא-תקינה** — שיקוף, לא סיבוב. היא ממפה $(x,y)\\mapsto(x,-y)$, הופכת את קואורדינטת $y$.\n\n**למה שיקוף מעל ציר $x$:** המטריצה משאירה $x$ ללא שינוי ומנגטיבת $y$. מבחינה גאומטרית, כל נקודה משתקפת מעל הציר האופקי. אפשר לאמת $Q^TQ=I$, ולכן $Q$ אכן אורתוגונלית.\n\n**דרך שגויה נפוצה:** תשובה \"סיבוב $180°$\" — סיבוב $180°$ בעל $\\det=+1$, לא $-1$. מלכודת נוספת: \"לא אורתוגונלית\" כי $\\det\\ne1$.\n\n**טיפ לבחינה:** $\\det=-1$ תמיד אומר שהכיוון מתהפך. זהו את ציר השיקוף על ידי בדיקה איזו קואורדינטה נשארת קבועה ואיזו מתהפכת.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
@@ -329,14 +329,14 @@
       "stem_he": "אם $Q$ אורתוגונלית, מה $Q^{-1}$?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$Q^{-1}=Q^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "Q^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$Q^{-1}=Q^T$",
+          "Q^T",
           "-1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$Q^{-1}=Q^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$Q^{-1}=Q^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "From the definition $Q^TQ=I$, multiply both sides on the left by $Q^{-1}$: $Q^{-1}Q^TQ=Q^{-1}I$, giving $Q^T=Q^{-1}$. This is the most useful property of orthogonal matrices — inverting is free (just transpose).\n\n**Why $Q^T$ is correct:** The defining equation $Q^TQ=I$ literally says $Q^T$ is the left inverse, and since $Q$ is square, left and right inverses coincide.\n\n**Common wrong path:** Answering $Q^{-1}=Q$ (confusing with involutory matrices) or $Q^{-1}=I$ (confusing with the identity). Some students try row reduction — unnecessary here.\n\n**Exam tip:** Whenever a problem gives an orthogonal $Q$ and asks for $Q^{-1}v$, compute $Q^Tv$ instead. This saves significant time on $3\\times3$ or larger matrices.",
+      "explanation_he": "מההגדרה $Q^TQ=I$, הכפילו ב-$Q^{-1}$ משמאל: $Q^{-1}Q^TQ=Q^{-1}I$, ומקבלים $Q^T=Q^{-1}$. זו התכונה השימושית ביותר של מטריצות אורתוגונליות — היפוך הוא חינם (רק טרנספוז).\n\n**למה $Q^T$ נכון:** המשוואה המגדירה $Q^TQ=I$ אומרת ממש ש-$Q^T$ היא ההופכית השמאלית, ומכיוון $Q$ ריבועית, הופכיות שמאלית וימנית מתלכדות.\n\n**דרך שגויה נפוצה:** תשובה $Q^{-1}=Q$ (בלבול עם מטריצות involutory) או $Q^{-1}=I$ (בלבול עם היחידה). חלק מהתלמידים מנסים הפחתת שורות — מיותר כאן.\n\n**טיפ לבחינה:** בכל בעיה שנותנת $Q$ אורתוגונלית ושואלת $Q^{-1}v$, חשבו $Q^Tv$ במקום. זה חוסך זמן משמעותי במטריצות $3\\times3$ ומעלה.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
@@ -350,14 +350,14 @@
       "stem_he": "$R_{45°}(1,0)^T=?$",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "(1/\\sqrt{2},1/\\sqrt{2})^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$",
+          "(1/\\sqrt{2},1/\\sqrt{2})^T",
           "2"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. $R_{45°}v=(1/\\sqrt{2},1/\\sqrt{2})^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$(1/\\sqrt{2},1/\\sqrt{2})^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Build $R_{45°}=\\begin{pmatrix}\\cos45°&-\\sin45°\\\\ \\sin45°&\\cos45°\\end{pmatrix}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. Then $R_{45°}v=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}\\begin{pmatrix}1\\\\0\\end{pmatrix}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1\\\\1\\end{pmatrix}$.\n\n**Why $(1/\\sqrt{2},1/\\sqrt{2})^T$ is correct:** Both coordinates are equal and positive, placing the result at $45°$ from the $x$-axis with unit length $\\sqrt{1/2+1/2}=1$.\n\n**Common wrong path:** Forgetting the $1/\\sqrt{2}$ normalization, giving $(1,1)^T$ with length $\\sqrt{2}$ instead of $1$. Another trap: using $\\sin$ with the wrong sign.\n\n**Exam tip:** After rotating, verify $\\|Rv\\|=\\|v\\|$. Here $\\|v\\|=1$ and $\\|R_{45°}v\\|=\\sqrt{1/2+1/2}=1$ ✓. Norm preservation catches sign errors instantly. The vector $(1/\\sqrt{2},1/\\sqrt{2})^T$ lies at exactly $45°$ in the first quadrant — a quick sketch confirms you rotated counter-clockwise from the $x$-axis, not clockwise.",
+      "explanation_he": "בנו $R_{45°}=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1&-1\\\\1&1\\end{pmatrix}$. אז $R_{45°}v=\\frac{1}{\\sqrt{2}}\\begin{pmatrix}1\\\\1\\end{pmatrix}$.\n\n**למה $(1/\\sqrt{2},1/\\sqrt{2})^T$ נכון:** שתי הקואורדינטות שוות וחיוביות, מה שמניח את התוצאה בזווית $45°$ מציר $x$ באורך יחידה $\\sqrt{1/2+1/2}=1$.\n\n**דרך שגויה נפוצה:** שכחת הנרמול $1/\\sqrt{2}$, וקבלת $(1,1)^T$ באורך $\\sqrt{2}$ במקום $1$. מלכודת נוספת: $\\sin$ עם סימן שגוי.\n\n**טיפ לבחינה:** אחרי סיבוב, אמתו $\\|Rv\\|=\\|v\\|$. כאן $\\|v\\|=1$ ו-$\\|R_{45°}v\\|=1$ ✓. שימור נורמה תופס טעויות סימן מיד. הוקטור $(1/\\sqrt{2},1/\\sqrt{2})^T$ נמצא בדיוק בזווית $45°$ ברביע הראשון — סקיצה מהירה מאשרת שסובבתם נגד כיוון השעון מציר $x$, לא עם כיוון השעון.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
@@ -377,8 +377,8 @@
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nColumns: $(3/5,−4/5)$, $(4/5,3/5)$. Norms: $\\sqrt{9+16}/5=1$. Dot: $(3\\cdot4+(-4)\\cdot3)/25=0$ ✓. $\\det=(9+16)/25=1$. Rotation by $\\theta=\\arctan(-4/3)$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\nאורתוגונלית ✓. $\\det=1$ → סיבוב.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "Columns are $(3/5,-4/5)^T$ and $(4/5,3/5)^T$. Each has norm $\\sqrt{9+16}/5=1$. Dot product: $(3\\cdot4+(-4)\\cdot3)/25=0$. Columns are orthonormal, so $Q$ is orthogonal. $\\det(Q)=(9+16)/25=1$ — a proper rotation.\n\n**Why rotation:** $\\det=+1$ means orientation is preserved. The angle satisfies $\\cos\\theta=3/5$, $\\sin\\theta=-4/5$, so $\\theta=\\arctan(-4/3)$ (fourth quadrant).\n\n**Common wrong path:** Checking $Q^TQ$ with arithmetic errors in the $1/25$ scaling. Alternatively, computing $\\det=-1$ by using $ad-bc=9-16=-7$ without the $1/25$ factor squared.\n\n**Exam tip:** For normalized $2\\times2$ matrices, column-norm + dot-product check is faster than full matrix multiplication. Always compute $\\det$ to classify rotation versus reflection.",
+      "explanation_he": "העמודות הן $(3/5,-4/5)^T$ ו-$(4/5,3/5)^T$. לכל אחת נורמה $\\sqrt{9+16}/5=1$. מכפלה פנימית: $(3\\cdot4+(-4)\\cdot3)/25=0$. העמודות אורתונורמליות, ולכן $Q$ אורתוגונלית. $\\det(Q)=(9+16)/25=1$ — סיבוב תקין.\n\n**למה סיבוב:** $\\det=+1$ אומר שהכיוון נשמר. הזווית מקיימת $\\cos\\theta=3/5$, $\\sin\\theta=-4/5$, כלומר $\\theta=\\arctan(-4/3)$ (רביע ראשון).\n\n**דרך שגויה נפוצה:** בדיקת $Q^TQ$ עם טעויות חשבון בגורם $1/25$. לחלופין, חישוב $\\det=-1$ עם $ad-bc=9-16$ בלי לרבע את $1/25$.\n\n**טיפ לבחינה:** במטריצות $2\\times2$ מנורמלות, בדיקת נורמת עמודות + מכפלה פנימית מהירה מכפל מטריצות מלא. תמיד חשבו $\\det$ לסיווג סיבוב מול שיקוף.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
@@ -392,14 +392,14 @@
       "stem_he": "אם $Q_1,Q_2$ אורתוגונליות, האם $Q_1Q_2$ אורתוגונלית?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=Q_2^TQ_2=I$. Yes.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "I$. Yes.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=Q_2^TQ_2=I$. Yes.",
+          "I$. Yes.",
           "2"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2=Q_2^TIQ_2=Q_2^TQ_2=I$. Yes.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$(Q_1Q_2)^T(Q_1Q_2)=I$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Yes. Compute $(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2$. Since $Q_1^TQ_1=I$ and $Q_2^TQ_2=I$, this equals $Q_2^TIQ_2=Q_2^TQ_2=I$. Therefore $Q_1Q_2$ is orthogonal.\n\n**Why this proof works:** The transpose of a product reverses order: $(AB)^T=B^TA^T$. Each factor contributes its own $Q^TQ=I$.\n\n**Common wrong path:** Claiming the product is not orthogonal because \"multiplying changes things.\" Another error: writing $(Q_1Q_2)^T=Q_1^TQ_2^T$ but then multiplying in the wrong order.\n\n**Exam tip:** This closure property means rotations compose as rotations (when both have $\\det=+1$) and the group $SO(n)$ is closed under multiplication. Use this to simplify $Q_1^TQ_2$ as a single rotation when both are rotation matrices.",
+      "explanation_he": "כן. חשבו $(Q_1Q_2)^T(Q_1Q_2)=Q_2^TQ_1^TQ_1Q_2$. מכיוון $Q_1^TQ_1=I$ ו-$Q_2^TQ_2=I$, זה שווה ל-$Q_2^TIQ_2=Q_2^TQ_2=I$. לכן $Q_1Q_2$ אורתוגונלית.\n\n**למה ההוכחה עובדת:** טרנספוז של מכפלה הופך סדר: $(AB)^T=B^TA^T$. כל גורם תורם את $Q^TQ=I$ שלו.\n\n**דרך שגויה נפוצה:** טענה שהמכפלה לא אורתוגונלית כי \"כפל משנה דברים\". טעות נוספת: כתיבת $(Q_1Q_2)^T=Q_1^TQ_2^T$ אך כפל בסדר שגוי.\n\n**טיפ לבחינה:** תכונת סגירה זו אומרת שסיבובים מתחברים לסיבובים (כשלשניהם $\\det=+1$) והחבורה $SO(n)$ סגורה תחת כפל. השתמשו בזה לפישוט $Q_1^TQ_2$ כסיבוב יחיד כששניהם מטריצות סיבוב. הוכחה זו מופיעה לעיתים קרובות כשאלה קצרה בבחינות — שיננו את שלוש השורות.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
@@ -409,18 +409,18 @@
       "ord": 8,
       "kind": "short_answer",
       "difficulty": "medium",
-      "stem_en": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det(Q)$?",
-      "stem_he": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det$?",
+      "stem_en": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det(Q)$?",
+      "stem_he": "$Q=\\begin{pmatrix}\\cos\\theta&\\sin\\theta\\\\ \\sin\\theta&-\\cos\\theta\\end{pmatrix}$. $\\det$?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1$. Reflection.\n\n**Check:** Re-substitute or verify units and signs before moving on",
+          "$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.",
+          "-1$. Reflection.",
           "-1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=-\\cos^2\\theta-\\sin^2\\theta=-1$. Reflection.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$\\det=-1$ → שיקוף.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Using the $2\\times2$ formula: $\\det(Q)=\\cos\\theta\\cdot(-\\cos\\theta)-\\sin\\theta\\cdot\\sin\\theta=-\\cos^2\\theta-\\sin^2\\theta=-1$.\n\n**Why $-1$ means reflection:** The matrix has the form of a reflection over a line through the origin. One eigenvalue is $+1$ (the mirror axis direction) and the other is $-1$ (perpendicular direction). The product of eigenvalues equals the determinant: $(+1)(-1)=-1$.\n\n**Common wrong path:** Getting $\\det=+1$ by computing $\\cos^2\\theta+\\sin^2\\theta=1$ with the wrong sign on the anti-diagonal. Confusing this matrix with the rotation $R_\\theta$.\n\n**Exam tip:** Rotation has $\\cos\\theta$ on both diagonal entries with $-\\sin\\theta$ upper-right; reflection has $-\\cos\\theta$ lower-right and $+\\sin\\theta$ upper-right. Memorize the sign pattern.",
+      "explanation_he": "בנוסחת $2\\times2$: $\\det(Q)=\\cos\\theta\\cdot(-\\cos\\theta)-\\sin\\theta\\cdot\\sin\\theta=-\\cos^2\\theta-\\sin^2\\theta=-1$.\n\n**למה $-1$ פירושו שיקוף:** למטריצה צורת שיקוף מעל קו שעובר בראשית. ערך עצמי אחד הוא $+1$ (כיוון ציר השיקוף) והשני $-1$ (כיוון ניצב). מכפלת הערכים העצמיים שווה לדטרמיננטה: $(+1)(-1)=-1$.\n\n**דרך שגויה נפוצה:** קבלת $\\det=+1$ עם $\\cos^2\\theta+\\sin^2\\theta=1$ בסימן שגוי על האלכסון המשני. בלבול עם מטריצת הסיבוב $R_\\theta$.\n\n**טיפ לבחינה:** לסיבוב $\\cos\\theta$ בשני איברי האלכון עם $-\\sin\\theta$ למעלה-ימין; לשיקוף $-\\cos\\theta$ למטה-ימין ו-$+\\sin\\theta$ למעלה-ימין. שיננו את דפוס הסימנים. אם $\\det=-1$ ו-$Q^TQ=I$, הטרנספורמציה היא שיקוף — אל תנסו לכתוב אותה כסיבוב.",
       "skill_atoms": [
         "orthogonal_matrix",
         "rotation_matrix"
