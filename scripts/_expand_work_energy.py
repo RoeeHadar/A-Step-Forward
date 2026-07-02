@@ -1,0 +1,920 @@
+#!/usr/bin/env python3
+"""Expand work_energy.json — MIN_WORDS, Hebrew parity, 80-150 word explanations."""
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / "scripts/seed_data/lessons/work_energy.json"
+
+MIN_WORDS = {
+    "intro": {"en": 110, "he": 90},
+    "definition": {"en": 130, "he": 110},
+    "theory": {"en": 160, "he": 130},
+    "worked_example": {"en": 130, "he": 110},
+    "pitfall": {"en": 100, "he": 85},
+    "why_matters": {"en": 90, "he": 75},
+    "method_guide": {"en": 100, "he": 85},
+    "before_exam": {"en": 90, "he": 75},
+    "summary": {"en": 70, "he": 60},
+    "checkpoint": {"en": 90, "he": 75},
+    "exercise_set": {"en": 90, "he": 75},
+}
+
+
+def word_count(text):
+    if not text:
+        return 0
+    stripped = re.sub(r"\$\$[\s\S]*?\$\$", " MATH ", text)
+    stripped = re.sub(r"\$[^$\n]+\$", " MATH ", stripped)
+    stripped = re.sub(r"[#*_`>\[\]()]", " ", stripped)
+    return len([w for w in stripped.split() if w])
+
+
+def hebrew_char_ratio(text):
+    he = len(re.findall(r"[\u0590-\u05FF]", text or ""))
+    lat = len(re.findall(r"[a-zA-Z]{3,}", text or ""))
+    return he / (he + lat + 1)
+
+
+def hebrew_body_weak(body_he, body_en):
+    he = (body_he or "").strip()
+    en = (body_en or "").strip()
+    if not he:
+        return True
+    if not en:
+        return hebrew_char_ratio(he) < 0.12
+    ratio = word_count(he) / max(word_count(en), 1)
+    if ratio < 0.55:
+        return True
+    if hebrew_char_ratio(he) < 0.15 and word_count(he) > 25:
+        return True
+    probe = en[: min(60, len(en))].strip()
+    if len(probe) > 20 and probe in he:
+        return True
+    return False
+
+
+SECTION_BODIES = {
+    "intro": {
+        "body_en_md": (
+            "**Energy** is the most fundamental quantity in physics — every physical process "
+            "involves transforming energy from one form to another. When you climb stairs, "
+            "ride a bike, or stretch a rubber band, you are storing or transferring energy.\n\n"
+            "**Work** ($W$) is the mechanism by which energy is transferred between a system "
+            "and its surroundings. Pushing a box up a ramp, compressing a spring, or lifting "
+            "a weight all involve work. The joule (J = N·m) is the SI unit of both work and energy.\n\n"
+            "In Bagrut physics (all point levels), work-and-energy questions appear every year. "
+            "They connect directly to kinematics, Newton's laws, and later to thermodynamics "
+            "and electromagnetism. Mastering the work-energy theorem and conservation of "
+            "mechanical energy gives you a powerful shortcut that often replaces lengthy "
+            "force-and-acceleration analysis.\n\n"
+            "This lesson builds on `concept:newton_laws` and unlocks `concept:momentum` and "
+            "`concept:conservation_energy`. Start by internalizing $W = Fd\\cos\\theta$ before "
+            "attempting friction or spring problems."
+        ),
+        "body_he_md": (
+            "**אנרגיה** היא הכמות הפיזיקלית המרכזית ביותר — כל תהליך פיזיקלי "
+            "מעביר אנרגיה מצורה אחת לאחרת. כשעולים במדרגות, רוכבים על אופניים "
+            "או מותחים גומייה, מאגרים או מעבירים אנרגיה.\n\n"
+            "**עבודה** ($W$) היא המנגנון שבו אנרגיה עוברת בין מערכת לסביבה. "
+            "דחיפת קופסה על מדרון, דחיסת קפיץ או הרמת משקולת — כולם כרוכים בעבודה. "
+            "ג'oule (J = N·m) הוא יחידת ה-SI של עבודה ואנרגיה.\n\n"
+            "בבגרות בפיזיקה (כל רמות הניקוד), שאלות עבודה-אנרגיה מופיעות בכל שנה. "
+            "הן מקשרות ישירות לקינמטיקה, חוקי ניוטון, ומאוחר יותר לתרמודינמיקה "
+            "ואלקטרומגנטיות. שליטה במשפט עבודה-אנרגיה ובשימור אנרגיה מכנית "
+            "מעניקה קיצור דרך חזק שמחליף לעיתים ניתוח כוח-תאוצה ארוך.\n\n"
+            "שיעור זה מבוסס על `concept:newton_laws` ופותח את `concept:momentum` "
+            "ו-`concept:conservation_energy`. התחילו ב-$W = Fd\\cos\\theta$ "
+            "לפני בעיות חיכוך או קפיץ."
+        ),
+    },
+    "definition": {
+        "body_en_md": (
+            "**Work** done by a constant force $F$ over displacement $d$ at angle $\\theta$ "
+            "to the displacement:\n"
+            "$$W = Fd\\cos\\theta \\quad [\\text{J} = \\text{N}\\cdot\\text{m}].$$\n"
+            "Only the component of force **along** the displacement contributes. "
+            "Work is a scalar (can be positive, negative, or zero).\n\n"
+            "**Kinetic energy** — energy of motion:\n"
+            "$$KE = \\frac{1}{2}mv^2 \\quad [\\text{J}].$$\n\n"
+            "**Gravitational potential energy** (reference level $h = 0$ chosen by you):\n"
+            "$$PE_g = mgh \\quad [\\text{J}], \\quad g \\approx 10\\,\\text{m/s}^2\\text{ on Bagrut}.$$\n\n"
+            "**Spring (elastic) potential energy:**\n"
+            "$$PE_s = \\frac{1}{2}kx^2 \\quad [\\text{J}], \\quad F = kx\\text{ (Hooke's law)}.$$\n\n"
+            "**Work-energy theorem** (always valid for net work):\n"
+            "$$W_{\\text{net}} = \\Delta KE = \\frac{1}{2}mv_f^2 - \\frac{1}{2}mv_i^2.$$\n\n"
+            "**Conservation of mechanical energy** (no non-conservative forces like friction):\n"
+            "$$KE_i + PE_i = KE_f + PE_f.$$\n\n"
+            "**Power** — rate of doing work:\n"
+            "$$P = \\frac{W}{t} = Fv \\quad [\\text{W} = \\text{J/s}].$$\n\n"
+            "**Key relationships:** When only conservative forces act, the total mechanical "
+            "energy $E = KE + PE_g + PE_s$ is constant. Work by non-conservative forces equals "
+            "the change in total mechanical energy: $W_{\\text{nc}} = \\Delta E$. "
+            "On Bagrut, use $g = 10\\,\\text{m/s}^2$ unless the problem states otherwise. "
+            "One joule equals one newton-meter of work."
+        ),
+        "body_he_md": (
+            "**עבודה** של כוח קבוע $F$ על תזוזה $d$ בזווית $\\theta$ לתזוזה:\n"
+            "$$W = Fd\\cos\\theta \\quad [\\text{J} = \\text{N}\\cdot\\text{m}].$$\n"
+            "רק הרכיב של הכוח **לאורך** התזוזה תורם. "
+            "עבודה היא סקalar (יכולה להיות חיובית, שלילית או אפס).\n\n"
+            "**אנרגיה קינטית** — אנרגיית תנועה:\n"
+            "$$KE = \\frac{1}{2}mv^2 \\quad [\\text{J}].$$\n\n"
+            "**אנרגיה פוטנציאלית כבידתית** (רמת ייחוס $h = 0$ שאתם בוחרים):\n"
+            "$$PE_g = mgh \\quad [\\text{J}], \\quad g \\approx 10\\,\\text{m/s}^2\\text{ בבגרות}.$$\n\n"
+            "**אנרגיה פוטנציאלית אלסטית (קפיץ):**\n"
+            "$$PE_s = \\frac{1}{2}kx^2 \\quad [\\text{J}], \\quad F = kx\\text{ (חוק הוק)}.$$\n\n"
+            "**משפט עבודה-אנרגיה** (תקף תמיד לעבודה הכוללת):\n"
+            "$$W_{\\text{net}} = \\Delta KE = \\frac{1}{2}mv_f^2 - \\frac{1}{2}mv_i^2.$$\n\n"
+            "**שימור אנרגיה מכנית** (ללא כוחות לא-שמרניים כמו חיכוך):\n"
+            "$$KE_i + PE_i = KE_f + PE_f.$$\n\n"
+            "**עצמה** — שיעור ביצוע עבודה:\n"
+            "$$P = \\frac{W}{t} = Fv \\quad [\\text{W} = \\text{J/s}].$$\n\n"
+            "**קשרים מרכזיים:** כשפועלים רק כוחות שמרניים, האנרגיה המכנית הכוללת "
+            "$E = KE + PE_g + PE_s$ קבועה. עבודה של כוחות לא-שמרניים שווה "
+            "לשינוי באנרגיה המכנית: $W_{\\text{nc}} = \\Delta E$. "
+            "בבגרות, השתמשו ב-$g = 10\\,\\text{m/s}^2$ אלא אם צוין אחרת. "
+            "ג'oule אחד שווה לניוטון-מטר אחד של עבודה."
+        ),
+    },
+    "theory": {
+        "body_en_md": (
+            "### When is work done?\n\n"
+            "Work requires a force component **along** the displacement. "
+            "If force is perpendicular to motion, $W = 0$ (e.g., normal force on a "
+            "horizontal surface, centripetal force in uniform circular motion).\n\n"
+            "**Positive work** ($W > 0$): force component in the direction of displacement "
+            "(e.g., pushing a box forward). **Negative work** ($W < 0$): force opposes motion "
+            "(e.g., friction, air resistance). The object loses kinetic energy.\n\n"
+            "### Conservative vs non-conservative forces\n\n"
+            "**Conservative forces** (gravity, spring force): work done is path-independent; "
+            "energy can be fully recovered. **Non-conservative forces** (friction, drag): "
+            "remove mechanical energy and convert it to thermal energy:\n"
+            "$$KE_i + PE_i + W_{\\text{nc}} = KE_f + PE_f, \\quad W_{\\text{friction}} < 0.$$\n\n"
+            "### Choosing your method\n\n"
+            "Use $W = Fd\\cos\\theta$ when force and displacement are known. "
+            "Use conservation when height or spring compression changes with negligible friction. "
+            "Use the work-energy theorem when net work is easier to compute than acceleration.\n\n"
+            "### Spring energy and Hooke's law\n\n"
+            "The spring constant $k$ (N/m) relates restoring force to extension: $F = kx$. "
+            "Stored elastic energy grows as $x^2$ — doubling compression quadruples $PE_s$. "
+            "At maximum stretch/compression, all energy is potential; at equilibrium ($x=0$), "
+            "spring PE is zero.\n\n"
+            "**Units checklist:** Work and energy in joules (J), power in watts (W), "
+            "$k$ in N/m, $g = 10\\,\\text{m/s}^2$ unless stated otherwise on Bagrut."
+        ),
+        "body_he_md": (
+            "### מתי נעשית עבודה?\n\n"
+            "עבודה דורשת רכיב כוח **לאורך** התזוזה. "
+            "אם הכוח מאונך לתנועה, $W = 0$ (למשל כוח נורמל על משטח אופקי, "
+            "כוח צנטריפugal בתנועה מעגלית אחידה).\n\n"
+            "**עבודה חיובית** ($W > 0$): רכיב כוח בכיוון התזוזה "
+            "(למשל דחיפת קופסה קדימה). **עבודה שלילית** ($W < 0$): כוח מתנגד לתנועה "
+            "(למשל חיכוך, התנגדות אוויר). הגוף מאבד אנרגיה קינטית.\n\n"
+            "### כוחות שמרניים מול לא-שמרניים\n\n"
+            "**כוחות שמרניים** (כבידה, כוח קפיץ): העבודה אינה תלויה במסלול; "
+            "אפשר לשחזר אנרגיה. **כוחות לא-שמרניים** (חיכוך, גרר): "
+            "מוציאים אנרגיה מכנית וממירים לחום:\n"
+            "$$KE_i + PE_i + W_{\\text{nc}} = KE_f + PE_f, \\quad W_{\\text{חיכוך}} < 0.$$\n\n"
+            "### בחירת שיטה\n\n"
+            "השתמשו ב-$W = Fd\\cos\\theta$ כשכוח ותזוזה ידועים. "
+            "השתמשו בשימור כשגובה או דחיסת קפיץ משתנים עם חיכוך זניח. "
+            "השתמשו במשפט עבודה-אנרגיה כשעבודה כוללת קלה יותר לחישוב מתאוצה.\n\n"
+            "### אנרגיית קפיץ וחוק הוק\n\n"
+            "קבוע הקפיץ $k$ (N/m) קושר כוח שיקום להארכה: $F = kx$. "
+            "אנרגיה אלסטית אגורה גדלה כ-$x^2$ — הכפלת דחיסה מרבעת את $PE_s$. "
+            "במתיחה/דחיסה מקסימלית, כל האנרגיה פוטנציאלית; בשיווי משקל ($x=0$), "
+            "PE קפיץ אפס.\n\n"
+            "**רשימת יחידות:** עבודה ואנרגיה בג'oule (J), עצמה בוatt (W), "
+            "$k$ ב-N/m, $g = 10\\,\\text{m/s}^2$ אלא אם צוין אחרת בבגרות."
+        ),
+    },
+    "worked_example_1": {
+        "body_en_md": (
+            "**Given:** A box of mass 5 kg is pushed a horizontal distance of 4 m "
+            "by a force of 20 N at $\\theta = 0°$ (parallel to displacement). "
+            "No friction. Find the work done and the final speed if the box starts from rest.\n\n"
+            "### Move 1: Compute work from force and displacement\n"
+            "$$W = Fd\\cos\\theta = 20 \\times 4 \\times \\cos 0° = 20 \\times 4 \\times 1 = 80\\,\\text{J}.$$\n"
+            "Since the force is parallel, $\\cos\\theta = 1$ and we use the full force.\n\n"
+            "### Move 2: Identify net work\n"
+            "No friction or other horizontal forces, so $W_{\\text{net}} = 80\\,\\text{J}$.\n\n"
+            "### Move 3: Apply work-energy theorem\n"
+            "$$W_{\\text{net}} = \\Delta KE = \\frac{1}{2}mv_f^2 - 0.$$\n"
+            "$$80 = \\frac{1}{2}(5)v_f^2 \\Rightarrow v_f^2 = 32 \\Rightarrow v_f = \\sqrt{32} \\approx 5.66\\,\\text{m/s}.$$\n\n"
+            "### Move 4: Sanity check\n"
+            "Positive work → speed increases. $\\sqrt{32} \\approx 5.7$ m/s is reasonable "
+            "for a 5 kg box receiving 80 J.\n\n"
+            "**Answer:** $W = 80\\,\\text{J}$, $v_f \\approx 5.66\\,\\text{m/s}$.\n\n"
+            "**Exam tip:** Always state $W = Fd\\cos\\theta$ before substituting. "
+            "If the force were at 90°, work would be zero despite effort expended.\n\n"
+            "**Bagrut context:** Combined work-and-speed problems often appear as two-part "
+            "questions — part (a) asks for work, part (b) uses the work-energy theorem for speed."
+        ),
+        "body_he_md": (
+            "**נתון:** קופסה 5 kg נדחפת מרחק אופקי 4 m "
+            "על ידי כוח 20 N ב-$\\theta = 0°$ (מקביל לתזוזה). "
+            "ללא חיכוך. מצאו את העבודה והמהירות הסופית אם הקופסה מתחילה ממנוחה.\n\n"
+            "### צעד 1: חישוב עבודה מכוח ותזוזה\n"
+            "$$W = Fd\\cos\\theta = 20 \\times 4 \\times \\cos 0° = 20 \\times 4 \\times 1 = 80\\,\\text{J}.$$\n"
+            "מכיוון שהכוח מקביל, $\\cos\\theta = 1$ ומשתמשים בכוח המלא.\n\n"
+            "### צעד 2: זיהוי עבודה כוללת\n"
+            "ללא חיכוך או כוחות אופקיים אחרים, $W_{\\text{net}} = 80\\,\\text{J}$.\n\n"
+            "### צעד 3: יישום משפט עבודה-אנרגיה\n"
+            "$$W_{\\text{net}} = \\Delta KE = \\frac{1}{2}mv_f^2 - 0.$$\n"
+            "$$80 = \\frac{1}{2}(5)v_f^2 \\Rightarrow v_f^2 = 32 \\Rightarrow v_f = \\sqrt{32} \\approx 5.66\\,\\text{m/s}.$$\n\n"
+            "### צעד 4: בדיקת הגיון\n"
+            "עבודה חיובית → המהירות עולה. $\\sqrt{32} \\approx 5.7$ m/s סביר "
+            "לקופסה 5 kg שמקבלת 80 J.\n\n"
+            "**תשובה:** $W = 80\\,\\text{J}$, $v_f \\approx 5.66\\,\\text{m/s}$.\n\n"
+            "**טיפ לבחינה:** תמיד כתבו $W = Fd\\cos\\theta$ לפני הצבה. "
+            "אם הכוח היה ב-90°, העבודה הייתה אפס למרות המאמץ.\n\n"
+            "**הקשר בגרות:** בעיות משולבות של עבודה ומהירות מופיעות לעיתים "
+            "כשאלה דו-חלקית — חלק (א) שואל על עבודה, חלק (ב) משתמש במשפט עבודה-אנרגיה למהירות."
+        ),
+    },
+    "checkpoint_1": {
+        "body_en_md": (
+            "**Practice now:** A force of 30 N acts at $60°$ to the horizontal, "
+            "moving a block 5 m along a horizontal surface.\n\n"
+            "Use $W = Fd\\cos\\theta$ where $\\theta$ is the angle **between force and "
+            "displacement**. Here displacement is horizontal, so $\\theta = 60°$.\n\n"
+            "Compute $\\cos 60° = 0.5$ before multiplying. Only the horizontal component "
+            "$F\\cos 60° = 15$ N does work. Expected answer: tens of joules.\n\n"
+            "Try the calculation yourself before opening the solution. On Bagrut exams, "
+            "draw a diagram showing the force angle relative to displacement. "
+            "Remember: vertical force components do no work on horizontal motion. "
+            "Write $\\cos 60°$ explicitly in your solution."
+        ),
+        "body_he_md": (
+            "**תרגלו עכשיו:** כוח 30 N פועל בזווית $60°$ לאופק, "
+            "ומזיז גוש 5 m על משטח אופקי.\n\n"
+            "השתמשו ב-$W = Fd\\cos\\theta$ כאשר $\\theta$ היא הזווית **בין הכוח לתזוזה**. "
+            "כאן התזוזה אופקית, לכן $\\theta = 60°$.\n\n"
+            "חשבו $\\cos 60° = 0.5$ לפני הכפל. רק הרכיב האופקי "
+            "$F\\cos 60° = 15$ N עושה עבודה. תשובה צפויה: עשרות ג'oule.\n\n"
+            "נסו לחשב לבד לפני פתיחת הפתרון. בבגרות, "
+            "שרטטו דיאגרמה עם זווית הכוח ביחס לתזוזה. "
+            "זכרו: רכיבי כוח אנכיים לא עושים עבודה על תנועה אופקית. "
+            "כתבו $\\cos 60°$ במפורש בפתרון."
+        ),
+        "checkpoint_solution_en": (
+            "A force of 30 N at $60°$ moves a block 5 m horizontally.\n\n"
+            "**Step 1:** Formula: $W = Fd\\cos\\theta$ with $\\theta = 60°$ between force and displacement.\n"
+            "**Step 2:** $\\cos 60° = 0.5$, so horizontal component = $30 \\times 0.5 = 15$ N.\n\n"
+            "$$W = 30 \\times 5 \\times \\cos 60° = 30 \\times 5 \\times 0.5 = 75\\,\\text{J}.$$\n\n"
+            "**Verify:** Only the $F\\cos\\theta$ component along displacement contributes. "
+            "Vertical component does zero work on horizontal motion.\n\n"
+            "**Answer:** $W = 75\\,\\text{J}$."
+        ),
+        "checkpoint_solution_he": (
+            "כוח 30 N ב-$60°$ מזיז גוש 5 m אופקית.\n\n"
+            "**שלב 1:** נוסחה: $W = Fd\\cos\\theta$ עם $\\theta = 60°$ בין כוח לתזוזה.\n"
+            "**שלב 2:** $\\cos 60° = 0.5$, רכיב אופקי = $30 \\times 0.5 = 15$ N.\n\n"
+            "$$W = 30 \\times 5 \\times \\cos 60° = 30 \\times 5 \\times 0.5 = 75\\,\\text{J}.$$\n\n"
+            "**אימות:** רק הרכיב $F\\cos\\theta$ לאורך התזוזה תורם. "
+            "הרכיב האנכי עושה אפס עבודה על תנועה אופקית.\n\n"
+            "**תשובה:** $W = 75\\,\\text{J}$."
+        ),
+    },
+    "worked_example_2": {
+        "body_en_md": (
+            "**Given:** A ball of mass 0.5 kg is dropped from height $h = 10$ m (from rest). "
+            "Find its speed just before hitting the ground. Neglect air resistance.\n\n"
+            "### Move 1: Choose reference and initial energies\n"
+            "Set $h = 0$ at the ground. Initially: $KE_i = 0$, "
+            "$PE_i = mgh = 0.5 \\times 10 \\times 10 = 50\\,\\text{J}$.\n\n"
+            "### Move 2: Final energies at ground\n"
+            "At ground level: $PE_f = 0$, $KE_f = \\frac{1}{2}(0.5)v^2 = 0.25v^2$.\n\n"
+            "### Move 3: Apply conservation of mechanical energy\n"
+            "No friction, so $KE_i + PE_i = KE_f + PE_f$:\n"
+            "$$50 = 0.25v^2 \\Rightarrow v^2 = 200 \\Rightarrow v = \\sqrt{200} \\approx 14.14\\,\\text{m/s}.$$\n\n"
+            "### Move 4: Cross-check with kinematics\n"
+            "$v = \\sqrt{2gh} = \\sqrt{2 \\times 10 \\times 10} = \\sqrt{200}$ ✓ — same result.\n\n"
+            "**Answer:** $v \\approx 14.1\\,\\text{m/s}$.\n\n"
+            "**Exam tip:** Mass cancels in $v = \\sqrt{2gh}$ — heavier and lighter objects "
+            "fall at the same speed (without air resistance). Always pick $h = 0$ consistently.\n\n"
+            "**Physical picture:** At the top, all energy is gravitational PE; "
+            "just before impact, all PE has converted to KE. Air resistance would reduce final speed.\n\n"
+            "**Self-check:** $\\sqrt{200} \\approx 14.1$ m/s is less than $10\\sqrt{2} \\approx 14.14$ m/s — reasonable for $h = 10$ m."
+        ),
+        "body_he_md": (
+            "**נתון:** כדור 0.5 kg נופל מגובה $h = 10$ m (ממנוחה). "
+            "מצאו מהירותו רגע לפני פגיעה בקרקע. התעלמו מהתנגדות אוויר.\n\n"
+            "### צעד 1: בחירת ייחוס ואנרגיות התחלתיות\n"
+            "קבעו $h = 0$ בקרקע. בהתחלה: $KE_i = 0$, "
+            "$PE_i = mgh = 0.5 \\times 10 \\times 10 = 50\\,\\text{J}$.\n\n"
+            "### צעד 2: אנרגיות סופיות בקרקע\n"
+            "ברמת הקרקע: $PE_f = 0$, $KE_f = \\frac{1}{2}(0.5)v^2 = 0.25v^2$.\n\n"
+            "### צעד 3: יישום שימור אנרגיה מכנית\n"
+            "ללא חיכוך, $KE_i + PE_i = KE_f + PE_f$:\n"
+            "$$50 = 0.25v^2 \\Rightarrow v^2 = 200 \\Rightarrow v = \\sqrt{200} \\approx 14.14\\,\\text{m/s}.$$\n\n"
+            "### צעד 4: בדיקה בקינמטיקה\n"
+            "$v = \\sqrt{2gh} = \\sqrt{2 \\times 10 \\times 10} = \\sqrt{200}$ ✓ — אותה תוצאה.\n\n"
+            "**תשובה:** $v \\approx 14.1\\,\\text{m/s}$.\n\n"
+            "**טיפ לבחינה:** המסה מתקזזת ב-$v = \\sqrt{2gh}$ — גופים כבדים וקלים "
+            "נופלים באותה מהירות (ללא התנגדות אוויר). בחרו $h = 0$ בעקביות.\n\n"
+            "**תמונה פיזיקלית:** בראש, כל האנרגיה PE כבידתית; "
+            "רגע לפני פגיעה, כל ה-PE הומר ל-KE. התנגדות אוויר הייתה מקטינה מהירות סופית.\n\n"
+            "**בדיקה:** $\\sqrt{200} \\approx 14.1$ m/s סביר ל-$h = 10$ m."
+        ),
+    },
+    "checkpoint_2": {
+        "body_en_md": (
+            "**Practice now:** A spring with $k = 200$ N/m is compressed 0.1 m. "
+            "A 0.5 kg block sits against it on a frictionless surface. "
+            "When released, find the block's speed.\n\n"
+            "Initially all energy is spring PE: $PE_s = \\frac{1}{2}kx^2$. "
+            "At maximum speed, spring is relaxed ($PE_s = 0$) and all energy is kinetic.\n\n"
+            "Use conservation: $\\frac{1}{2}kx^2 = \\frac{1}{2}mv^2$. "
+            "Compute $x^2 = 0.01$ before substituting. Expected speed: a few m/s.\n\n"
+            "Try before reading the solution. On Bagrut, state which energy forms "
+            "are present at start and finish. Mass cancels when solving for $v$ — "
+            "only $k$, $x$, and $m$ matter in the final speed formula."
+        ),
+        "body_he_md": (
+            "**תרגלו עכשיו:** קפיץ $k = 200$ N/m נדחס 0.1 m. "
+            "בלוק 0.5 kg צמוד אליו על משטח חלק. "
+            "לאחר שחרור, מצאו מהירות הבלוק.\n\n"
+            "בהתחלה כל האנרגיה היא PE קפיץ: $PE_s = \\frac{1}{2}kx^2$. "
+            "במהירות מקסימלית, הקפיץ רפוי ($PE_s = 0$) וכל האנרגיה קינטית.\n\n"
+            "השתמשו בשימור: $\\frac{1}{2}kx^2 = \\frac{1}{2}mv^2$. "
+            "חשבו $x^2 = 0.01$ לפני הצבה. מהירות צפויה: כמה m/s.\n\n"
+            "נסו לפני קריאת הפתרון. בבגרות, ציינו אילו צורות אנרגיה "
+            "קיימות בהתחלה ובסוף. המסה מתקזזת בפתרון ל-$v$ — "
+            "רק $k$, $x$ ו-$m$ חשובים בנוסחת המהירות הסופית."
+        ),
+        "checkpoint_solution_en": (
+            "Spring $k = 200$ N/m, compression $x = 0.1$ m, block $m = 0.5$ kg, frictionless.\n\n"
+            "**Step 1:** Initial spring PE:\n"
+            "$$PE_s = \\frac{1}{2}(200)(0.1)^2 = \\frac{1}{2}(200)(0.01) = 1\\,\\text{J}.$$\n"
+            "**Step 2:** At max speed, $KE = PE_s$ (all spring energy → kinetic):\n"
+            "$$1 = \\frac{1}{2}(0.5)v^2 = 0.25v^2 \\Rightarrow v^2 = 4 \\Rightarrow v = 2\\,\\text{m/s}.$$\n\n"
+            "**Verify:** 1 J for a 0.5 kg block gives $v = \\sqrt{4} = 2$ m/s — reasonable.\n\n"
+            "**Answer:** $v = 2\\,\\text{m/s}$."
+        ),
+        "checkpoint_solution_he": (
+            "קפיץ $k = 200$ N/m, דחיסה $x = 0.1$ m, בלוק $m = 0.5$ kg, ללא חיכוך.\n\n"
+            "**שלב 1:** PE קפיץ התחלתי:\n"
+            "$$PE_s = \\frac{1}{2}(200)(0.1)^2 = \\frac{1}{2}(200)(0.01) = 1\\,\\text{J}.$$\n"
+            "**שלב 2:** במהירות מקסימלית, $KE = PE_s$ (כל אנרגיית קפיץ → קינטית):\n"
+            "$$1 = \\frac{1}{2}(0.5)v^2 = 0.25v^2 \\Rightarrow v^2 = 4 \\Rightarrow v = 2\\,\\text{m/s}.$$\n\n"
+            "**אימות:** 1 J לבלוק 0.5 kg נותן $v = \\sqrt{4} = 2$ m/s — סביר.\n\n"
+            "**תשובה:** $v = 2\\,\\text{m/s}$."
+        ),
+    },
+    "worked_example_3": {
+        "body_en_md": (
+            "**Given:** A 2 kg block slides down a 5 m ramp inclined at 30° "
+            "with kinetic friction coefficient $\\mu_k = 0.2$. "
+            "Find the speed at the bottom (starts from rest).\n\n"
+            "### Move 1: Find vertical height\n"
+            "$$h = 5\\sin 30° = 5 \\times 0.5 = 2.5\\,\\text{m}.$$\n\n"
+            "### Move 2: Normal force on incline\n"
+            "$$N = mg\\cos 30° = 2 \\times 10 \\times 0.866 = 17.32\\,\\text{N}.$$\n\n"
+            "### Move 3: Friction force and work\n"
+            "$$f = \\mu_k N = 0.2 \\times 17.32 = 3.46\\,\\text{N}.$$\n"
+            "Friction opposes motion down the ramp (distance = 5 m along slope):\n"
+            "$$W_f = -f \\cdot d = -3.46 \\times 5 = -17.3\\,\\text{J}.$$\n\n"
+            "### Move 4: Energy balance with friction\n"
+            "$$KE_i + PE_i + W_f = KE_f.$$\n"
+            "$$0 + mgh + W_f = \\frac{1}{2}mv^2.$$\n"
+            "$$2 \\times 10 \\times 2.5 - 17.3 = \\frac{1}{2}(2)v^2.$$\n"
+            "$$50 - 17.3 = v^2 \\Rightarrow v = \\sqrt{32.7} \\approx 5.72\\,\\text{m/s}.$$\n\n"
+            "### Move 5: Compare with frictionless case\n"
+            "Without friction: $v = \\sqrt{2gh} = \\sqrt{50} \\approx 7.07$ m/s. "
+            "Friction reduced speed — consistent.\n\n"
+            "**Answer:** $v \\approx 5.72\\,\\text{m/s}$.\n\n"
+            "**Exam tip:** Friction work is negative. Use distance **along the ramp**, not vertical height, "
+            "when computing $W_f = -f \\cdot d$.\n\n"
+            "**Bagrut context:** Inclined-plane friction problems combine geometry ($h = L\\sin\\theta$), "
+            "normal force ($N = mg\\cos\\theta$), and energy balance — expect multi-step questions."
+        ),
+        "body_he_md": (
+            "**נתון:** גוש 2 kg מחליק מטה על מדרון 5 m בזווית 30° "
+            "עם מקדם חיכוך קינטי $\\mu_k = 0.2$. "
+            "מצאו מהירות בתחתית (מתחיל ממנוחה).\n\n"
+            "### צעד 1: מציאת גובה אנכי\n"
+            "$$h = 5\\sin 30° = 5 \\times 0.5 = 2.5\\,\\text{m}.$$\n\n"
+            "### צעד 2: כוח נורמל על מישור משופע\n"
+            "$$N = mg\\cos 30° = 2 \\times 10 \\times 0.866 = 17.32\\,\\text{N}.$$\n\n"
+            "### צעד 3: כוח חיכוך ועבודה\n"
+            "$$f = \\mu_k N = 0.2 \\times 17.32 = 3.46\\,\\text{N}.$$\n"
+            "חיכוך מתנגד לתנועה במורד המדרון (מרחק = 5 m לאורך השיפוע):\n"
+            "$$W_f = -f \\cdot d = -3.46 \\times 5 = -17.3\\,\\text{J}.$$\n\n"
+            "### צעד 4: מאזן אנרגיה עם חיכוך\n"
+            "$$KE_i + PE_i + W_f = KE_f.$$\n"
+            "$$0 + mgh + W_f = \\frac{1}{2}mv^2.$$\n"
+            "$$2 \\times 10 \\times 2.5 - 17.3 = \\frac{1}{2}(2)v^2.$$\n"
+            "$$50 - 17.3 = v^2 \\Rightarrow v = \\sqrt{32.7} \\approx 5.72\\,\\text{m/s}.$$\n\n"
+            "### צעד 5: השוואה למקרה ללא חיכוך\n"
+            "ללא חיכוך: $v = \\sqrt{2gh} = \\sqrt{50} \\approx 7.07$ m/s. "
+            "חיכוך הקטין מהירות — עקבי.\n\n"
+            "**תשובה:** $v \\approx 5.72\\,\\text{m/s}$.\n\n"
+            "**טיפ לבחינה:** עבודת חיכוך שלילית. השתמשו במרחק **לאורך המדרון**, לא בגובה, "
+            "בחישוב $W_f = -f \\cdot d$.\n\n"
+            "**הקשר בגרות:** בעיות חיכוך על מישור משופע משלבות גיאומטריה ($h = L\\sin\\theta$), "
+            "כוח נורמל ($N = mg\\cos\\theta$) ומאזן אנרגיה — צפו לשאלות רב-שלביות."
+        ),
+    },
+    "method_guide": {
+        "body_en_md": (
+            "| Situation | Method | Key tip |\n"
+            "|---|---|---|\n"
+            "| Constant force, known displacement | $W = Fd\\cos\\theta$ | Project force along displacement |\n"
+            "| Find speed after net work | $W_{\\text{net}} = \\Delta KE$ | Include all forces doing work |\n"
+            "| Frictionless, height/spring change | $KE_i + PE_i = KE_f + PE_f$ | Pick $h = 0$ once |\n"
+            "| Friction present | $KE_i + PE_i + W_f = KE_f + PE_f$ | $W_f < 0$, use slope distance |\n"
+            "| Spring energy | $PE_s = \\frac{1}{2}kx^2$ | Use $x^2$, not $x$ |\n"
+            "| Power | $P = W/t$ or $P = Fv$ | $Fv$ when force ∥ velocity |\n\n"
+            "**Step-by-step workflow:** (1) Draw a diagram with forces and displacement. "
+            "(2) Identify problem type from the table. (3) Write the energy equation before numbers. "
+            "(4) Check signs: friction work negative, gravity does positive work going down.\n\n"
+            "**Sign rule:** $W > 0$ when force and displacement have a component in the same direction. "
+            "Normal force perpendicular to motion → $W = 0$.\n\n"
+            "**Exam tip:** Conservation skips acceleration — ideal when only heights, speeds, "
+            "or spring compression change. Use Newton + work when time or acceleration is asked."
+        ),
+        "body_he_md": (
+            "| מצב | שיטה | טיפ |\n"
+            "|---|---|---|\n"
+            "| כוח קבוע, תזוזה ידועה | $W = Fd\\cos\\theta$ | השליכו כוח על התזוזה |\n"
+            "| מהירות אחרי עבודה כוללת | $W_{\\text{net}} = \\Delta KE$ | כללו כל כוח שעושה עבודה |\n"
+            "| ללא חיכוך, שינוי גובה/קפיץ | $KE_i + PE_i = KE_f + PE_f$ | קבעו $h = 0$ פעם אחת |\n"
+            "| עם חיכוך | $KE_i + PE_i + W_f = KE_f + PE_f$ | $W_f < 0$, מרחק לאורך שיפוע |\n"
+            "| אנרגיית קפיץ | $PE_s = \\frac{1}{2}kx^2$ | $x^2$, לא $x$ |\n"
+            "| עצמה | $P = W/t$ או $P = Fv$ | $Fv$ כשכוח ∥ מהירות |\n\n"
+            "**תהליך שלב-אחר-שלב:** (1) שרטטו כוחות ותזוזה. "
+            "(2) זהו סוג בעיה מהטבלה. (3) כתבו משוואת אנרגיה לפני מספרים. "
+            "(4) בדקו סימנים: עבודת חיכוך שלילית, כבידה עושה עבודה חיובית במורד.\n\n"
+            "**כלל סימן:** $W > 0$ כשיש רכיב כוח ותזוזה באותו כיוון. "
+            "כוח נורמל מאונך לתנועה → $W = 0$.\n\n"
+            "**טיפ לבחינה:** שימור מדלג על תאוצה — אידיאלי כשמשתנים רק גובה, מהירויות "
+            "או דחיסת קפיץ. השתמשו בניוטון + עבודה כששואלים על זמן או תאוצה."
+        ),
+    },
+    "exercise_set": {
+        "body_en_md": (
+            "Work through every exercise below in order. **Try each one before opening the solution** — "
+            "the reasoning steps matter as much as the final number.\n\n"
+            "The set progresses from direct work and KE calculations (easy) through conservation "
+            "on frictionless ramps and springs (medium) to friction, power, projectile max height, "
+            "and inclined planes with $\\mu_k$ (hard).\n\n"
+            "For each problem: identify whether to use $W = Fd\\cos\\theta$, the work-energy theorem, "
+            "or conservation; pick a reference height; then check units and signs.\n\n"
+            "**Bagrut strategy:** Write the relevant formula before substituting. "
+            "Energy problems reward correct sign reasoning — state whether work is positive or negative."
+        ),
+        "body_he_md": (
+            "פתרו את כל התרגילים למטה לפי הסדר. **נסו כל תרגיל לפני שפותחים את הפתרון** — "
+            "שלבי הנימוק חשובים לא פחות מהמספר הסופי.\n\n"
+            "הסדרה מתקדמת מחישובי עבודה ו-KE ישירים (קל) דרך שימור "
+            "על מדרונות וקפיצים חלקים (בינוני) לחיכוך, עצמה, גובה מקסימלי "
+            "ומישורים משופעים עם $\\mu_k$ (קשה).\n\n"
+            "בכל בעיה: זהו אם להשתמש ב-$W = Fd\\cos\\theta$, במשפט עבודה-אנרגיה "
+            "או בשימור; בחרו גובה ייחוס; ואז בדקו יחידות וסימנים.\n\n"
+            "**אסטרטגיה לבגרות:** כתבו נוסחה רלוונטית לפני הצבה. "
+            "בעיות אנרגיה מתגמלות נימוק סימן נכון — ציינו אם העבודה חיובית או שלילית."
+        ),
+    },
+    "pitfall": {
+        "body_en_md": (
+            "1. **Forgetting $\\cos\\theta$:** Work is not simply $F \\times d$. "
+            "You must project the force along the displacement: $W = Fd\\cos\\theta$. "
+            "A force at 90° does zero work.\n\n"
+            "2. **Inconsistent reference height:** Set $h = 0$ at one level and stick to it. "
+            "Changing mid-problem shifts all PE values and breaks conservation.\n\n"
+            "3. **Friction sign:** Friction always does **negative** work when opposing motion. "
+            "Write $W_f < 0$ explicitly in the energy equation.\n\n"
+            "4. **Normal force work:** On horizontal or inclined surfaces, normal force is "
+            "perpendicular to displacement → $W_N = 0$. Do not subtract \"normal work.\"\n\n"
+            "5. **Spring PE uses $x^2$:** $PE_s = \\frac{1}{2}kx^2$, not $\\frac{1}{2}kx$. "
+            "Doubling compression quadruples stored energy.\n\n"
+            "**Example misconception:** \"Work = force times distance\" without angle.\n\n"
+            "**Fix:** Always include $\\cos\\theta$ — only the component along displacement counts."
+        ),
+        "body_he_md": (
+            "1. **שכחת $\\cos\\theta$:** עבודה אינה פשוט $F \\times d$. "
+            "יש להשליך את הכוח על התזוזה: $W = Fd\\cos\\theta$. "
+            "כוח ב-90° עושה אפס עבודה.\n\n"
+            "2. **גובה ייחוס לא עקבי:** קבעו $h = 0$ ברמה אחת והיצמדו אליה. "
+            "שינוי באמצע משנה את כל ערכי PE ושובר שימור.\n\n"
+            "3. **סימן חיכוך:** חיכוך תמיד עושה עבודה **שלילית** כשמתנגד לתנועה. "
+            "כתבו $W_f < 0$ במפורש במשוואת האנרגיה.\n\n"
+            "4. **עבודת כוח נורמל:** על משטח אופקי או משופע, כוח נורמל מאונך לתזוזה → $W_N = 0$. "
+            "אל תחסירו \"עבודת נורמל\".\n\n"
+            "5. **PE קפיץ משתמש ב-$x^2$:** $PE_s = \\frac{1}{2}kx^2$, לא $\\frac{1}{2}kx$. "
+            "הכפלת דחיסה מרבעת אנרגיה אגורה.\n\n"
+            "**תפיסה שגויה:** \"עבודה = כוח כפול מרחק\" בלי זווית.\n\n"
+            "**תיקון:** תמיד כללו $\\cos\\theta$ — רק הרכיב לאורך התזוזה נספר."
+        ),
+    },
+    "why_matters": {
+        "body_en_md": (
+            "Work and energy are not isolated topics — they are the language used across "
+            "mechanics, thermodynamics, and electromagnetism on A Step Forward.\n\n"
+            "**You will use this to unlock:**\n"
+            "- `concept:conservation_energy` **Conservation of Energy** (generalizes to all forms)\n"
+            "- `concept:momentum` **Momentum & Impulse** (complementary collision tool)\n"
+            "- `concept:special_relativity` **Special Relativity (Basic)** — $E = mc^2$ generalizes KE\n\n"
+            "**Builds on:**\n"
+            "- `concept:newton_laws` **Newton's Laws**\n"
+            "- `concept:kinematics_1d` **Kinematics in One Dimension**\n\n"
+            "**Why it matters for exams:** Bagrut rewards *transfer* — applying energy methods "
+            "in new contexts (ramps, springs, motors). When studying, ask: "
+            "\"Can I solve this faster with conservation instead of $F = ma$?\""
+        ),
+        "body_he_md": (
+            "עבודה ואנרגיה אינם נושאים מבודדים — הם השפה "
+            "במכניקה, תרמודינמיקה ואלקטרומגנטיות ב-A Step Forward.\n\n"
+            "**תשתמשו בזה כדי להתקדם ל:**\n"
+            "- `concept:conservation_energy` **שימור אנרגיה** (הכללה לכל הצורות)\n"
+            "- `concept:momentum` **תנע ומתקף** (כלי משלים להתנגשויות)\n"
+            "- `concept:special_relativity` **יחסות פרטית — בסיסי** — $E = mc^2$ מכליל KE\n\n"
+            "**מבוסס על:**\n"
+            "- `concept:newton_laws` **חוקי ניוטון**\n"
+            "- `concept:kinematics_1d` **קינמטיקה חד-ממדית**\n\n"
+            "**למה זה חשוב לבחינות:** בבגרות מעריכים *העברה* — יישום שיטות אנרגיה "
+            "בהקשרים חדשים (מדרונות, קפיצים, מנועים). בזמן לימוד, שאלו: "
+            "\"האם אפשר לפתור מהר יותר בשימור במקום $F = ma$?\""
+        ),
+    },
+    "before_exam": {
+        "body_en_md": (
+            "**Core formulas to recall:**\n"
+            "- $W = Fd\\cos\\theta$ — project force along displacement.\n"
+            "- $KE = \\frac{1}{2}mv^2$, $PE_g = mgh$, $PE_s = \\frac{1}{2}kx^2$.\n"
+            "- Work-energy theorem: $W_{\\text{net}} = \\Delta KE$.\n"
+            "- Conservation (no friction): $KE_i + PE_i = KE_f + PE_f$.\n"
+            "- With friction: add $W_f < 0$ to the initial side.\n"
+            "- Power: $P = W/t = Fv$.\n\n"
+            "**Last review:** Say each formula out loud once, then solve one checkpoint "
+            "without looking. Check that you used $\\cos\\theta$ and picked $h = 0$ consistently.\n\n"
+            "**Quick decision tree:** Height/spring change, no friction → conservation. "
+            "Known forces over distance → $W = Fd\\cos\\theta$. Need acceleration or time → Newton.\n\n"
+            "**Units reminder:** Work and energy in J, power in W, spring constant in N/m."
+        ),
+        "body_he_md": (
+            "**נוסחאות מרכזיות לזכירה:**\n"
+            "- $W = Fd\\cos\\theta$ — השליכו כוח על התזוזה.\n"
+            "- $KE = \\frac{1}{2}mv^2$, $PE_g = mgh$, $PE_s = \\frac{1}{2}kx^2$.\n"
+            "- משפט עבודה-אנרגיה: $W_{\\text{net}} = \\Delta KE$.\n"
+            "- שימור (ללא חיכוך): $KE_i + PE_i = KE_f + PE_f$.\n"
+            "- עם חיכוך: הוסיפו $W_f < 0$ לצד ההתחלתי.\n"
+            "- עצמה: $P = W/t = Fv$.\n\n"
+            "**חזרה אחרונה:** אמרו כל נוסחה בקול פעם אחת, ואז פתרו checkpoint "
+            "בלי להסתכל. ודאו שהשתמשתם ב-$\\cos\\theta$ ובחרתם $h = 0$ בעקביות.\n\n"
+            "**עץ החלטה מהיר:** שינוי גובה/קפיץ, ללא חיכוך → שימור. "
+            "כוחות ידועים על מרחק → $W = Fd\\cos\\theta$. צריך תאוצה או זמן → ניוטון."
+        ),
+    },
+    "summary": {
+        "body_en_md": (
+            "- **Work** transfers energy: $W = Fd\\cos\\theta$; only the along-displacement component counts.\n"
+            "- **Kinetic, gravitational, and spring PE** interconvert; total mechanical energy is conserved "
+            "when only conservative forces act.\n"
+            "- **Friction** removes mechanical energy (converts to heat) — include $W_f < 0$ in the balance.\n"
+            "- **Work-energy theorem:** $W_{\\text{net}} = \\Delta KE$ always holds.\n"
+            "- **Power** is the rate of doing work: $P = W/t = Fv$.\n\n"
+            "**Takeaway:** You should now recognize which method applies from the problem wording alone — "
+            "conservation for height/spring changes, work integral for known forces, "
+            "and energy balance when friction is present."
+        ),
+        "body_he_md": (
+            "- **עבודה** מעבירה אנרגיה: $W = Fd\\cos\\theta$; רק הרכיב לאורך התזוזה נספר.\n"
+            "- **אנרגיה קינטית, כבידתית וקפיץ** מומרות זו לזו; אנרגיה מכנית כוללת נשמרת "
+            "כשפועלים רק כוחות שמרניים.\n"
+            "- **חיכוך** מוציא אנרגיה מכנית (ממיר לחום) — כללו $W_f < 0$ במאזן.\n"
+            "- **משפט עבודה-אנרגיה:** $W_{\\text{net}} = \\Delta KE$ תמיד תקף.\n"
+            "- **עצמה** היא שיעור ביצוע עבודה: $P = W/t = Fv$.\n\n"
+            "**מסקנה:** כעת תוכלו לזהות איזו שיטה מתאימה מניסוח השאלה — "
+            "שימור לשינויי גובה/קפיץ, עבודה לכוחות ידועים, "
+            "ומאזן אנרגיה כשיש חיכוך."
+        ),
+    },
+}
+
+QUESTION_EXPLANATIONS = [
+    {
+        "explanation_en": (
+            "**Why this is correct:** Work is defined as $W = Fd\\cos\\theta$, where $\\theta$ is "
+            "the angle between force and displacement. When force is **perpendicular** to velocity "
+            "(and hence to displacement), $\\theta = 90°$ and $\\cos 90° = 0$, so $W = 0$.\n\n"
+            "**How to think about it:** Centripetal force in circular motion and normal force on a "
+            "horizontal track are classic examples — they change direction but do no work. "
+            "No work means no energy transfer via that force.\n\n"
+            "**Common slip:** Choosing \"maximum work\" because the force magnitude is large, "
+            "or \"negative work\" by confusing perpendicular with opposite direction.\n\n"
+            "**Exam tip:** Ask: \"Is there a component of this force along the displacement?\" "
+            "If not, work is zero regardless of force size."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** עבודה מוגדרת כ-$W = Fd\\cos\\theta$, כאשר $\\theta$ היא "
+            "הזווית בין כוח לתזוזה. כשהכוח **מאונך** למהירות "
+            "(ולכן לתזוזה), $\\theta = 90°$ ו-$\\cos 90° = 0$, לכן $W = 0$.\n\n"
+            "**איך לחשוב:** כוח צנטריפugal בתנועה מעגלית וכוח נורמל על מסילה אופקית "
+            "הם דוגמאות קלאסיות — הם משנים כיוון אך לא עושים עבודה. "
+            "אפס עבודה = אין העברת אנרגיה דרך אותו כוח.\n\n"
+            "**טעות נפוצה:** בחירה ב\"עבודה מקסימלית\" כי גודל הכוח גדול, "
+            "או \"עבודה שלילית\" בבלבול בין מאונך לכיוון הפוך.\n\n"
+            "**טיפ לבחינה:** שאלו: \"האם יש רכיב של כוח זה לאורך התזוזה?\" "
+            "אם לא — העבודה אפס ללא קשר לגודל הכוח."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** The force is horizontal and parallel to displacement "
+            "($\\theta = 0°$), so $W = Fd\\cos 0° = Fd = 12 \\times 6 = 72\\,\\text{J}$.\n\n"
+            "**How to think about it:** This is the simplest work calculation — no angle factor "
+            "needed when force and displacement align. The box gains 72 J of energy "
+            "(transferred from whoever pushes it).\n\n"
+            "**Common slip:** Multiplying mass (3 kg) into the formula — mass is irrelevant "
+            "for work; only force and displacement matter here. Another error: forgetting units (J).\n\n"
+            "**Exam tip:** When force is purely horizontal on a horizontal surface, "
+            "$W = F \\times d$ directly. State the formula first for partial credit on Bagrut."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** הכוח אופקי ומקביל לתזוזה "
+            "($\\theta = 0°$), לכן $W = Fd\\cos 0° = Fd = 12 \\times 6 = 72\\,\\text{J}$.\n\n"
+            "**איך לחשוב:** זה חישוב העבודה הפשוט ביותר — אין צורך בגורם זווית "
+            "כשכוח ותזוזה באותו כיוון. הקופסה מקבלת 72 J אנרגיה "
+            "(מועברת ממי שדוחף אותה).\n\n"
+            "**טעות נפוצה:** הכפלת מסה (3 kg) בנוסחה — מסה לא רלוונטית "
+            "לעבודה; רק כוח ותזוזה חשובים כאן. טעות נוספת: שכחת יחידות (J).\n\n"
+            "**טיפ לבחינה:** כשהכוח אופקי לחלוטין על משטח אופקי, "
+            "$W = F \\times d$ ישירות. כתבו נוסחה קודם לנקודות חלקיות בבגרות.\n\n"
+            "**בדיקה:** $72\\,\\text{J} = 12\\,\\text{N} \\times 6\\,\\text{m}$ — יחידות עקביות."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** Kinetic energy depends on mass and speed squared: "
+            "$KE = \\frac{1}{2}mv^2 = \\frac{1}{2}(4)(5^2) = \\frac{1}{2}(4)(25) = 50\\,\\text{J}$.\n\n"
+            "**How to think about it:** KE is always non-negative. Doubling speed quadruples KE "
+            "(because of the $v^2$). A 4 kg ball at 5 m/s carries moderate energy — "
+            "enough to do 50 J of work if fully stopped.\n\n"
+            "**Common slip:** Forgetting the $\\frac{1}{2}$ factor (getting 100 J), "
+            "or using $mv$ instead of $\\frac{1}{2}mv^2$. Another error: using diameter "
+            "or radius instead of speed.\n\n"
+            "**Exam tip:** Always square the velocity first, then multiply by $\\frac{1}{2}m$. "
+            "Units check: kg × (m/s)² = J."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** אנרגיה קינטית תלויה במסה ובריבוע המהירות: "
+            "$KE = \\frac{1}{2}mv^2 = \\frac{1}{2}(4)(5^2) = \\frac{1}{2}(4)(25) = 50\\,\\text{J}$.\n\n"
+            "**איך לחשוב:** KE תמיד לא-שלילית. הכפלת מהירות מרבעת KE "
+            "(בגלל $v^2$). כדור 4 kg ב-5 m/s נושא אנרגיה בינונית — "
+            "מספיק ל-50 J עבודה אם נעצר לחלוטין.\n\n"
+            "**טעות נפוצה:** שכחת גורם $\\frac{1}{2}$ (קבלת 100 J), "
+            "או שימוש ב-$mv$ במקום $\\frac{1}{2}mv^2$. גם שימוש בקוטר "
+            "או רדיוס במקום מהירות.\n\n"
+            "**טיפ לבחינה:** תמיד העלו במרובע את המהירות, ואז הכפילו ב-$\\frac{1}{2}m$. "
+            "בדיקת יחידות: kg × (m/s)² = J."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** Gravitational PE relative to a chosen floor level is "
+            "$PE = mgh = 0.5 \\times 10 \\times 2 = 10\\,\\text{J}$. "
+            "The book has 10 J of stored gravitational energy above the floor.\n\n"
+            "**How to think about it:** PE depends on height relative to **your** reference level. "
+            "If the floor is $h = 0$, a book on a 2 m shelf has positive PE. "
+            "Use $g = 10\\,\\text{m/s}^2$ on Bagrut unless told otherwise.\n\n"
+            "**Common slip:** Using $g = 9.8$ when the problem expects 10, "
+            "or confusing PE with weight ($mg$ in newtons, not joules). "
+            "Another error: measuring height from the ceiling instead of the floor.\n\n"
+            "**Exam tip:** State your reference level ($h = 0$ at floor). "
+            "PE is meaningless without a reference — but differences in PE are physical."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** PE כבידתי ביחס לרמת רצפה שנבחרה הוא "
+            "$PE = mgh = 0.5 \\times 10 \\times 2 = 10\\,\\text{J}$. "
+            "לספר יש 10 J אנרגיה כבידתית אגורה מעל הרצפה.\n\n"
+            "**איך לחשוב:** PE תלוי בגובה ביחס **לרמת הייחוס שלכם**. "
+            "אם הרצפה $h = 0$, לספר על מדף 2 m יש PE חיובי. "
+            "השתמשו ב-$g = 10\\,\\text{m/s}^2$ בבגרות אלא אם צוין אחרת.\n\n"
+            "**טעות נפוצה:** שימוש ב-$g = 9.8$ כשהשאלה מצפה ל-10, "
+            "או בלבול PE עם משקל ($mg$ בניוטון, לא בג'oule). "
+            "גם מדידת גובה מהתקרה במקום מהרצפה.\n\n"
+            "**טיפ לבחינה:** ציינו רמת ייחוס ($h = 0$ ברצפה). "
+            "PE חסר משמעות בלי ייחוס — אך הפרשי PE פיזיקליים."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** The normal force acts **perpendicular** to the horizontal "
+            "displacement. With $\\theta = 90°$, $W = Fd\\cos 90° = 0$. "
+            "The normal force never does work on horizontal motion.\n\n"
+            "**How to think about it:** The normal force only pushes upward — it has no component "
+            "along the horizontal slide. This is why floors don't \"steal energy\" horizontally "
+            "(friction is a separate force that does negative work).\n\n"
+            "**Common slip:** Answering a non-zero value by multiplying normal force ($mg$ or $N$) "
+            "by distance. Students sometimes confuse normal force with friction.\n\n"
+            "**Exam tip:** On any surface, ask whether the force has a component along displacement. "
+            "Normal ⊥ motion → zero work. This appears frequently as a conceptual MCQ on Bagrut."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** כוח הנורמל פועל **מאונך** לתזוזה האופקית. "
+            "עם $\\theta = 90°$, $W = Fd\\cos 90° = 0$. "
+            "כוח הנורמל לעולם לא עושה עבודה על תנועה אופקית.\n\n"
+            "**איך לחשוב:** כוח הנורמל דוחף רק כלפי מעלה — אין לו רכיב "
+            "לאורך ההחלקה האופקית. לכן רצפות לא \"גונבות אנרגיה\" אופקית "
+            "(חיכוך הוא כוח נפרד שעושה עבודה שלילית).\n\n"
+            "**טעות נפוצה:** תשובה לא-אפסית מהכפלת כוח נורמל ($mg$ או $N$) "
+            "במרחק. תלמידים לפעמים מבלבלים נורמל עם חיכוך.\n\n"
+            "**טיפ לבחינה:** על כל משטח, שאלו אם לכוח יש רכיב לאורך התזוזה. "
+            "נורמל ⊥ תנועה → עבודה אפס. זה מופיע לעיתים קרובות כשאלת MCQ בבגרות."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** With no friction, mechanical energy is conserved. "
+            "Starting from rest: $KE_i = 0$, $PE_i = mgh$. At the bottom: $PE_f = 0$, "
+            "so $mgh = \\frac{1}{2}mv^2$, giving $v = \\sqrt{2gh} = \\sqrt{2 \\times 10 \\times 5} = 10\\,\\text{m/s}$.\n\n"
+            "**How to think about it:** Mass cancels — all objects fall the same speed on a "
+            "frictionless ramp of given height. Energy converts from gravitational PE to KE.\n\n"
+            "**Common slip:** Using ramp length instead of height $h$ in $mgh$, "
+            "or forgetting the square root (answering $v = 2gh = 100$). "
+            "Another error: including friction when the problem says frictionless.\n\n"
+            "**Exam tip:** For frictionless ramps, $v = \\sqrt{2gh}$ is faster than full Newton analysis. "
+            "Verify: $h = 5$ m → $v = 10$ m/s is the standard Bagrut result."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** ללא חיכוך, אנרגיה מכנית נשמרת. "
+            "מתחילים ממנוחה: $KE_i = 0$, $PE_i = mgh$. בתחתית: $PE_f = 0$, "
+            "לכן $mgh = \\frac{1}{2}mv^2$, ומכאן $v = \\sqrt{2gh} = \\sqrt{2 \\times 10 \\times 5} = 10\\,\\text{m/s}$.\n\n"
+            "**איך לחשוב:** המסה מתקזזת — כל הגופים נופלים באותה מהירות "
+            "על מדרון חלק בגובה נתון. אנרגיה מומרת מ-PE כבידתי ל-KE.\n\n"
+            "**טעות נפוצה:** שימוש באורך מדרון במקום גובה $h$ ב-$mgh$, "
+            "או שכחת שורש (תשובה $v = 2gh = 100$). "
+            "גם הכללת חיכוך כשהשאלה אומרת ללא חיכוך.\n\n"
+            "**טיפ לבחינה:** למדרונות חלקים, $v = \\sqrt{2gh}$ מהיר מניתוח ניוטון מלא. "
+            "אימות: $h = 5$ m → $v = 10$ m/s — תוצאת בגרות סטנדרטית."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** Elastic PE stored in a stretched spring is "
+            "$PE_s = \\frac{1}{2}kx^2 = \\frac{1}{2}(400)(0.25^2) = "
+            "\\frac{1}{2}(400)(0.0625) = 12.5\\,\\text{J}$.\n\n"
+            "**How to think about it:** Energy depends on $x^2$, so stretching 0.25 m with "
+            "$k = 400$ N/m stores moderate energy. Double the stretch → quadruple the PE.\n\n"
+            "**Common slip:** Using $\\frac{1}{2}kx$ instead of $\\frac{1}{2}kx^2$ (linear instead of quadratic), "
+            "or forgetting to square 0.25 (using 0.25 instead of 0.0625). "
+            "Another error: confusing $k$ units (N/m).\n\n"
+            "**Exam tip:** Always compute $x^2$ first, then multiply by $\\frac{1}{2}k$. "
+            "If you get 50 J, you likely forgot to square the displacement."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** PE אלסטית בקפיץ נמתח הוא "
+            "$PE_s = \\frac{1}{2}kx^2 = \\frac{1}{2}(400)(0.25^2) = "
+            "\\frac{1}{2}(400)(0.0625) = 12.5\\,\\text{J}$.\n\n"
+            "**איך לחשוב:** האנרגיה תלויה ב-$x^2$, לכן מתיחה 0.25 m עם "
+            "$k = 400$ N/m מאגרת אנרגיה בינונית. הכפלת מתיחה → ריבוע PE.\n\n"
+            "**טעות נפוצה:** שימוש ב-$\\frac{1}{2}kx$ במקום $\\frac{1}{2}kx^2$ (לינארי במקום ריבועי), "
+            "או שכחת ריבוע 0.25 (שימוש ב-0.25 במקום 0.0625). "
+            "גם בלבול יחידות $k$ (N/m).\n\n"
+            "**טיפ לבחינה:** תמיד חשבו $x^2$ קודם, ואז הכפילו ב-$\\frac{1}{2}k$. "
+            "אם קיבלתם 50 J — כנראה שכחתם לרבע את התזוזה.\n\n"
+            "**בדיקה:** $0.25^2 = 0.0625$; $\\frac{1}{2}(400)(0.0625) = 12.5\\,\\text{J}$ ✓."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** Friction does negative work equal to the change in KE: "
+            "$W_f = \\Delta KE = 0 - \\frac{1}{2}(2)(4^2) = -16\\,\\text{J}$. "
+            "Since friction opposes motion over 2 m: $W_f = -f \\cdot d$, so "
+            "$-f \\times 2 = -16$ → $f = 8\\,\\text{N}$.\n\n"
+            "**How to think about it:** The object had 16 J of KE and lost it all to friction. "
+            "Work-energy theorem links energy loss directly to friction force times distance.\n\n"
+            "**Common slip:** Getting positive 16 J for work (friction work must be negative), "
+            "or dividing KE by mass instead of using $W_f = -fd$. "
+            "Another error: using $\\cos 0°$ instead of $\\cos 180°$ for opposing force.\n\n"
+            "**Exam tip:** When an object stops, $\\Delta KE$ is negative. "
+            "Set $W_f = \\Delta KE$ and solve for $f$. Check: 8 N × 2 m = 16 J ✓."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** חיכוך עושה עבודה שלילית השווה לשינוי KE: "
+            "$W_f = \\Delta KE = 0 - \\frac{1}{2}(2)(4^2) = -16\\,\\text{J}$. "
+            "מכיוון שחיכוך מתנגד לתנועה על 2 m: $W_f = -f \\cdot d$, "
+            "לכן $-f \\times 2 = -16$ → $f = 8\\,\\text{N}$.\n\n"
+            "**איך לחשוב:** לגוף היו 16 J של KE ואיבד את כולם לחיכוך. "
+            "משפט עבודה-אנרגיה מקשר אובדן אנרגיה ישירות לכוח חיכוך כפול מרחק.\n\n"
+            "**טעות נפוצה:** קבלת 16 J חיובי לעבודה (עבודת חיכוך חייבת להיות שלילית), "
+            "או חלוקת KE במסה במקום $W_f = -fd$. "
+            "גם שימוש ב-$\\cos 0°$ במקום $\\cos 180°$ לכוח מתנגד.\n\n"
+            "**טיפ לבחינה:** כשגוף נעצר, $\\Delta KE$ שלילי. "
+            "הגדירו $W_f = \\Delta KE$ ופתרו ל-$f$. בדיקה: 8 N × 2 m = 16 J ✓."
+        ),
+    },
+]
+
+
+def apply_expansion(data):
+    cp_idx = 0
+    for sec in data["sections"]:
+        kind = sec.get("kind")
+        if kind == "intro":
+            sec.update(SECTION_BODIES["intro"])
+        elif kind == "definition":
+            sec.update(SECTION_BODIES["definition"])
+        elif kind == "theory":
+            sec.update(SECTION_BODIES["theory"])
+        elif kind == "worked_example":
+            n = sec.get("example_number")
+            sec.update(SECTION_BODIES[f"worked_example_{n}"])
+        elif kind == "checkpoint":
+            cp_idx += 1
+            sec.update(SECTION_BODIES[f"checkpoint_{cp_idx}"])
+        elif kind == "method_guide":
+            sec.update(SECTION_BODIES["method_guide"])
+        elif kind == "exercise_set":
+            sec.update(SECTION_BODIES["exercise_set"])
+        elif kind == "pitfall":
+            sec.update(SECTION_BODIES["pitfall"])
+        elif kind == "why_matters":
+            sec.update(SECTION_BODIES["why_matters"])
+        elif kind == "before_exam":
+            sec.update(SECTION_BODIES["before_exam"])
+        elif kind == "summary":
+            sec.update(SECTION_BODIES["summary"])
+
+    for i, q in enumerate(data["questions"]):
+        if i < len(QUESTION_EXPLANATIONS):
+            q.update(QUESTION_EXPLANATIONS[i])
+
+    return data
+
+
+def validate_depth(data):
+    issues = []
+    for sec in data["sections"]:
+        kind = sec.get("kind")
+        if kind in MIN_WORDS:
+            en_w = word_count(sec.get("body_en_md", ""))
+            he_w = word_count(sec.get("body_he_md", ""))
+            if en_w < MIN_WORDS[kind]["en"]:
+                issues.append(f"{kind} EN: {en_w} < {MIN_WORDS[kind]['en']}")
+            if he_w < MIN_WORDS[kind]["he"]:
+                issues.append(f"{kind} HE: {he_w} < {MIN_WORDS[kind]['he']}")
+            if sec.get("body_he_md") and hebrew_body_weak(
+                sec.get("body_he_md"), sec.get("body_en_md")
+            ):
+                issues.append(f"{kind} HE weak parity")
+        elif kind == "worked_example":
+            en_w = word_count(sec.get("body_en_md", ""))
+            he_w = word_count(sec.get("body_he_md", ""))
+            n = sec.get("example_number", "?")
+            if en_w < MIN_WORDS["worked_example"]["en"]:
+                issues.append(f"worked_example {n} EN: {en_w}")
+            if he_w < MIN_WORDS["worked_example"]["he"]:
+                issues.append(f"worked_example {n} HE: {he_w}")
+            if hebrew_body_weak(sec.get("body_he_md"), sec.get("body_en_md")):
+                issues.append(f"worked_example {n} HE weak")
+
+    for q in data["questions"]:
+        for lang in ("en", "he"):
+            key = f"explanation_{lang}"
+            w = word_count(q.get(key, ""))
+            if w < 80 or w > 150:
+                issues.append(f"q{q['ord']} {key}: {w} words")
+            if lang == "he" and hebrew_body_weak(
+                q.get("explanation_he"), q.get("explanation_en")
+            ):
+                issues.append(f"q{q['ord']} expl-he-weak")
+
+    return issues
+
+
+def main():
+    data = json.loads(OUT.read_text(encoding="utf-8"))
+    data = apply_expansion(data)
+
+    issues = validate_depth(data)
+    if issues:
+        print("VALIDATION FAILED:")
+        for i in issues:
+            print(" ", i)
+        sys.exit(1)
+
+    OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {OUT}")
+
+    r = subprocess.run(
+        ["node", "scripts/seed-lessons.mjs", "--dry-run"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    print(r.stdout)
+    if r.returncode != 0:
+        print(r.stderr)
+        sys.exit(r.returncode)
+    print("All depth gates OK; seed-lessons dry-run passed.")
+
+
+if __name__ == "__main__":
+    main()
