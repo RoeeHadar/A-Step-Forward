@@ -16,11 +16,17 @@ description: How to author a new AI-authored bilingual lesson (JSON shape, all 1
 
 ```
 scripts/seed_data/lessons/<concept_id>.json       # one file per authored lesson
+scripts/cursor-expansion-queue.mjs                # priority queue for bulk depth work
+scripts/.cursor-expansion-progress.json           # Cursor expansion progress tracker
 scripts/seed-lessons.mjs                          # validator + idempotent upserter
 apps/web/src/lib/lesson-types.ts                  # TS types the UI reads
 apps/web/src/components/lesson-reader.tsx         # body renderer
 apps/web/src/components/lesson-quiz-panel.tsx     # question renderer (per kind)
 ```
+
+**Bulk substantive expansion** (depth + Hebrew parity across all 207 lessons) uses
+**Cursor Composer 2.5** locally — see `skills/expand-lessons-cursor/SKILL.md`.
+Do not use the deprecated Groq CI workflow `Expand Lessons (substantive)`.
 
 The seeder runs on every push via the GitHub workflow `Seed DB (one-shot)` with
 `target: lessons` and is idempotent on `(concept_id)`. Re-seeding REPLACES the

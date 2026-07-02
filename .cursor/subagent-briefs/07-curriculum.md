@@ -27,6 +27,17 @@ Define the curriculum content model (courses, units, lessons, objectives, assess
 1. `PLAN.md` §4, §6, §14.
 2. `.cursor/rules/20-python-style.mdc`.
 3. `skills/seed-curriculum/SKILL.md`.
+4. **`skills/expand-lessons-cursor/SKILL.md`** — bulk substantive expansion of the 207 JSON lessons (Cursor Composer, not Groq CI).
+
+## Bulk lesson expansion (207 JSON corpus)
+
+Substantive depth + Hebrew parity for `scripts/seed_data/lessons/*.json` is authored in **Cursor with Composer 2.5**, tracked via `scripts/cursor-expansion-queue.mjs` and `scripts/.cursor-expansion-progress.json`. The Groq workflow `Expand Lessons (substantive)` is **deprecated**.
+
+```bash
+node scripts/cursor-expansion-queue.mjs --next 10
+# expand in Cursor → validate → mark → commit → seed
+gh workflow run "Seed DB (one-shot)" -f target=lessons-from-json
+```
 
 ## Seed library (Phase 1)
 - One full course (recommended: "Foundations of Math" or "Intro to Programming") with 3 units × 3 lessons × 1 assessment each, plus 5 resources.

@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 /**
- * Substantive Groq expansion — rewrite lesson sections + explanations to be
+ * Substantive lesson expansion — DEPRECATED for bulk use (2026-07-02).
+ * Use Cursor Composer + skills/expand-lessons-cursor/SKILL.md instead.
+ * Groq free-tier TPM/TPD caused multi-hour stalls with zero commits.
+ *
+ * Legacy usage (single-lesson debug only):
  * pedagogically deep AND fully bilingual (authentic Hebrew, not English paste).
  *
  * Usage:

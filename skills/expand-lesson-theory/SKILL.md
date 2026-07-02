@@ -5,6 +5,9 @@ description: How any agent (Tutor, Curriculum Designer, Content Curator, Researc
 
 # Expand Lesson Theory
 
+> **Bulk corpus expansion:** use `skills/expand-lessons-cursor/SKILL.md` (Cursor Composer 2.5).
+> Do **not** use `scripts/expand-lessons-substantive.mjs` / Groq GitHub Actions — deprecated 2026-07-02.
+
 ## When to use
 
 - A lesson's `sections` are skeletal — only one worked example, no pitfall discussion, no cross-subject link.

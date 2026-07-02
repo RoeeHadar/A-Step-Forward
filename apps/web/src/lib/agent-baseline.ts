@@ -52,13 +52,15 @@ const crossEdgesList = (crossEdges as { edges: KgCrossEdge[] }).edges;
  * context block injects the actual live signals (mastery, agent_hints,
  * learning_plan) that drive concrete decisions.
  *
- * Last refreshed: 2026-06-26.
+ * Last refreshed: 2026-07-02.
  */
 const CORPUS_SUMMARY = {
-  authoredLessons: 74,
+  authoredLessons: 207,
   lessonsPerConceptAvg: 1,
   questionsPerLessonAvg: 8,
   skillAtomsApprox: 500,
+  authoringPolicy:
+    'Bulk substantive expansion is authored in Cursor with Composer 2.5 (skills/expand-lessons-cursor/SKILL.md). Groq CI batch expansion was deprecated 2026-07-02 due to rate-limit stalls. Runtime learner chat may still use Groq.',
 };
 
 export function buildAgentBaseline(): string {
@@ -72,7 +74,8 @@ export function buildAgentBaseline(): string {
     '### The shared knowledge base',
     `- **${conceptCount} canonical concepts** in the knowledge graph (\`apps/web/src/lib/kg-data.json\`): ${subjectsList}, each tagged with subject + level + within-subject \`prerequisites[]\`.`,
     `- **${crossEdgeCount} curated cross-subject edges** (\`kg-cross-edges.json\`) link the two subjects — e.g. \`vectors → newton_laws\`, \`trig_identities → ac_circuits\`, \`derivatives_intro → kinematics_1d\`. They are loaded into Postgres \`kg_edges\` on seed and used by the learning-plan walk.`,
-    `- **~${CORPUS_SUMMARY.authoredLessons} AI-authored bilingual lessons** (table \`lessons\`), each with structured sections (intro / definitions / worked examples / pitfalls / why-it-matters) and ~${CORPUS_SUMMARY.questionsPerLessonAvg} questions across 10 kinds: \`mcq\`, \`mcq_multi\`, \`true_false\`, \`short_answer\`, \`numeric\`, \`open\`, \`match\`, \`ordering\`, \`derivation\`, \`free_response\`. Every objective question is server-side gradeable.`,
+    `- **~${CORPUS_SUMMARY.authoredLessons} AI-authored bilingual lessons** (table \`lessons\`), each with structured sections (intro / definitions / worked examples / pitfalls / why-it-matters) and ~${CORPUS_SUMMARY.questionsPerLessonAvg} questions across 10 kinds: \`mcq\`, \`mcq_multi\`, \`true_false\`, \`short_answer\`, \`numeric\`, \`open\`, \`match\`, \`ordering\`, \`derivation\`, \`free_response\`. Every objective question is server-side gradeable. Sections are **strictly monolingual per UI toggle** (HE mode shows only \`body_he_md\`; EN mode only \`body_en_md\`) — never cross-fallback.`,
+    `- **Corpus authoring policy:** ${CORPUS_SUMMARY.authoringPolicy}`,
     `- **~${CORPUS_SUMMARY.skillAtomsApprox} canonical skill atoms** (table \`skill_atoms\`) — fine-grained, testable abilities like \`area_scale_factor\`, \`free_body_diagram_force_sum\`, \`product_rule_apply\`. Each lesson \`teaches\` a set; each question \`exercises\` a set. Per-learner mastery is tracked in \`skill_practice\`.`,
     `- **\`agent_hints\` block on every authored lesson**: \`key_insights\`, \`common_misconceptions\` (with detect phrases EN/HE), \`tutor_pacing_hint\`, \`diagnostic_signals\`, \`skill_atoms_unlocked\`. The runtime mines this into your context when the learner's message references a covered concept.`,
     '',

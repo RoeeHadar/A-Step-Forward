@@ -12,22 +12,22 @@
       "kind": "intro",
       "title_en": "Inverse: Undoing a Linear Transformation",
       "title_he": "הופכית: ביטול טרנספורמציה לינארית",
-      "body_en_md": "The **inverse** of a square matrix $A$ is the matrix $A^{-1}$ such that $AA^{-1}=A^{-1}A=I$.\n\nInvertible matrices represent linear transformations that can be undone — they are one-to-one and onto.\n\n**When does $A^{-1}$ exist?**\n- Iff $\\det(A)\\ne0$.\n- Iff the rows (columns) are linearly independent.\n- Iff $Ax=0$ has only the trivial solution.",
-      "body_he_md": "**הופכית** $A^{-1}$: $AA^{-1}=A^{-1}A=I$.\n\nמתי קיימת?\n- אמ\"מ $\\det(A)\\ne0$.\n- אמ\"מ השורות/עמודות בלתי-תלויות לינארית.\n- אמ\"מ $Ax=0$ מוסבר רק על ידי $x=0$."
+      "body_en_md": "The **inverse** of a square matrix $A$ is the matrix $A^{-1}$ such that $AA^{-1}=A^{-1}A=I$, where $I$ is the identity matrix of the same size. Geometrically, if $A$ represents a linear transformation of $\\mathbb{R}^n$, then $A^{-1}$ represents the transformation that **undoes** it — provided such an undo operation exists at all.\n\nInvertible matrices correspond to transformations that are both **one-to-one** (no information is lost) and **onto** (every vector in the target space is reached). In applications from computer graphics to economics, knowing whether a transformation can be reversed is often as important as performing the transformation itself.\n\n**When does $A^{-1}$ exist?** For square $A$, all of the following are equivalent:\n- $\\det(A)\\ne0$.\n- The rows (equivalently, the columns) are linearly independent.\n- The homogeneous system $Ax=0$ has only the trivial solution $x=0$.\n- Gauss-Jordan elimination on $[A|I]$ produces $[I|A^{-1}]$.\n\nThese criteria connect directly to `concept:la_determinants` and prepare you for Cramer's rule in `concept:determinants_cramer`.",
+      "body_he_md": "**הופכית** של מטריצה ריבועית $A$ היא המטריצה $A^{-1}$ המקיימת $AA^{-1}=A^{-1}A=I$, כאשר $I$ היא מטריצת היחידה באותו גודל. מבחינה גאומטרית, אם $A$ מייצגת טרנספורמציה לינארית של $\\mathbb{R}^n$, אז $A^{-1}$ מייצגת את הטרנספורמציה ש**מבטלת** אותה — בתנאי שכזו פעולה קיימת.\n\nמטריצות הפיכות מתאימות לטרנספורמציות שהן **חד-חד-ערכיות** (אין אובדן מידע) וגם **על** (כל וקטור במרחב היעד מושג). ביישומים מגרפיקה ממוחשבת ועד כלכלת מתמטית, לדעת האם טרנספורמציה ניתנת לביטול חשוב לעיתים לא פחות מביצועה.\n\n**מתי קיימת $A^{-1}$?** עבור $A$ ריבועית, כל התנאים הבאים שקולים:\n- $\\det(A)\\ne0$.\n- השורות (ובהכרח גם העמודות) בלתי-תלויות לינארית.\n- המערכת ההומוגנית $Ax=0$ מוסברת רק על ידי $x=0$.\n- גאוס-ג'ורדן על $[A|I]$ מניב $[I|A^{-1}]$.\n\nקריטריונים אלה קשורים ישירות ל-`concept:la_determinants` ומכינים אתכם לכלל קרמר ב-`concept:determinants_cramer`."
     },
     {
       "kind": "definition",
       "title_en": "Inverse Formulas and Gauss-Jordan",
       "title_he": "נוסחאות ושיטת גאוס-ג'ורדן",
-      "body_en_md": "**$2\\times2$ inverse formula:**\n$$A=\\begin{pmatrix}a&b\\c&d\\end{pmatrix},\\quad A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$$\n\nOnly works when $\\det(A)=ad-bc\\ne0$.\n\n**$n\\times n$ inverse via Gauss-Jordan:**\n1. Form augmented matrix $[A|I]$.\n2. Apply row operations to reduce $A$ to $I$.\n3. The right side transforms into $A^{-1}$: $[I|A^{-1}]$.\n\n**Properties:**\n- $(A^{-1})^{-1}=A$.\n- $(AB)^{-1}=B^{-1}A^{-1}$.\n- $(A^T)^{-1}=(A^{-1})^T$.\n- $\\det(A^{-1})=1/\\det(A)$.",
-      "body_he_md": "Only works when $\\det(A)=ad-bc\\ne0$."
+      "body_en_md": "**Definition.** A square matrix $A$ is **invertible** (non-singular) if there exists a matrix $B$ such that $AB=BA=I$. This $B$ is unique and denoted $A^{-1}$.\n\n**$2\\times2$ inverse formula:**\n$$A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix},\\quad A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$$\nThe formula applies **only** when $\\det(A)=ad-bc\\ne0$. Mnemonic: swap the diagonal entries, negate the off-diagonal entries, then divide by the determinant.\n\n**$n\\times n$ inverse via Gauss-Jordan:**\n1. Form the augmented matrix $[A|I]$.\n2. Apply **elementary row operations** until the left block becomes $I$.\n3. The right block is then $A^{-1}$: $[I|A^{-1}]$.\n\n**Key properties of inverses:**\n- $(A^{-1})^{-1}=A$.\n- $(AB)^{-1}=B^{-1}A^{-1}$ (order reverses — like undoing two actions in reverse order).\n- $(A^T)^{-1}=(A^{-1})^T$.\n- $\\det(A^{-1})=1/\\det(A)$ when $A$ is invertible.\n- If $A$ is diagonal with nonzero entries, $A^{-1}$ is diagonal with reciprocals on the diagonal.\n\n**Existence note:** If $A^{-1}$ exists, it is **unique** — there is never more than one matrix satisfying $AA^{-1}=I$.",
+      "body_he_md": "**הגדרה.** מטריצה ריבועית $A$ **הפיכה** (לא סינגולרית) אם קיימת מטריצה $B$ כך ש-$AB=BA=I$. מטריצה זו יחידה ומסומנת $A^{-1}$.\n\n**נוסחת הופכית $2\\times2$:**\n$$A=\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix},\\quad A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$$\nהנוסחה תקפה **רק** כאשר $\\det(A)=ad-bc\\ne0$. כלל זכרון: החליפו את האלכסון, שללו את מחוץ לאלכסון, וחלקו בדטרמיננטה.\n\n**הופכית $n\\times n$ בשיטת גאוס-ג'ורדן:**\n1. בנו את המטריצה המורחבת $[A|I]$.\n2. בצעו **פעולות שורה אלמנטריות** עד שהבלוק השמאלי הופך ל-$I$.\n3. הבלוק הימני הוא אז $A^{-1}$: $[I|A^{-1}]$.\n\n**תכונות מרכזיות של הופכיות:**\n- $(A^{-1})^{-1}=A$.\n- $(AB)^{-1}=B^{-1}A^{-1}$ (הסדר מתהפך — כמו ביטול שתי פעולות בסדר הפוך).\n- $(A^T)^{-1}=(A^{-1})^T$.\n- $\\det(A^{-1})=1/\\det(A)$ כאשר $A$ הפיכה.\n- אם $A$ אלכסונית עם איברים שונים מאפס, $A^{-1}$ אלכסונית עם הופכים על האלכסון.\n\n**הערת קיום:** אם $A^{-1}$ קיימת, היא **יחידה** — אין יותר ממטריצה אחת המקיימת $AA^{-1}=I$."
     },
     {
       "kind": "theory",
       "title_en": "Solving $Ax=b$ with the Inverse",
       "title_he": "פתרון $Ax=b$ עם ההופכית",
-      "body_en_md": "If $A$ is invertible:\n$$Ax=b \\Rightarrow x=A^{-1}b.$$\n\nThis gives a unique solution.\n\n**Applications:**\n- Cryptography (invertible matrix encoding/decoding).\n- Circuit analysis.\n- Computer graphics (inverse transformations).\n\n**Note:** Computing $A^{-1}$ is usually more work than Gaussian elimination for a single system. Use Gauss-Jordan for $A^{-1}$ only when you need to solve multiple right-hand sides.",
-      "body_he_md": "$Ax=b$ → $x=A^{-1}b$ (פתרון יחיד).\n\n**יישומים:** קריפטוגרפיה, ניתוח מעגלים, גרפיקה.\n\n**הערה:** לשיטת גאוס עדיפה לשיטת $b$ בודד. $A^{-1}$ כדאי כש-$b$ מרובים."
+      "body_en_md": "If $A$ is an invertible $n\\times n$ matrix and $b\\in\\mathbb{R}^n$, the linear system $Ax=b$ has a **unique** solution given by\n$$Ax=b \\Rightarrow x=A^{-1}b.$$\n\n**Proof sketch of uniqueness:** Suppose $x$ and $y$ both satisfy $Ax=b$. Then $A(x-y)=0$, so $x-y=A^{-1}\\cdot 0=0$, hence $x=y$.\n\n**When is the inverse approach practical?**\n- If you already computed $A^{-1}$ (e.g., for several right-hand sides $b_1,b_2,\\ldots$), each new solve is just one matrix–vector multiply: $x_i=A^{-1}b_i$.\n- For a **single** system, Gaussian elimination on $[A|b]$ is usually faster than computing $A^{-1}$ first.\n\n**Applications:**\n- **Cryptography:** Hill ciphers encode with an invertible matrix; decoding uses $A^{-1}$.\n- **Circuit analysis:** Nodal equations $Ax=b$; invertibility means the network is well-posed.\n- **Computer graphics:** Rotation/scaling matrices; the inverse undoes the transformation for animation or camera control.\n\n**Connection to `concept:la_matrices`:** Row reduction, rank, and linear independence all determine whether $A^{-1}$ exists. The inverse is the algebraic certificate that $A$ represents an isomorphism of $\\mathbb{R}^n$ — a perfect, reversible change of coordinates.",
+      "body_he_md": "אם $A$ מטריצה $n\\times n$ הפיכה ו-$b\\in\\mathbb{R}^n$, למערכת הלינארית $Ax=b$ יש **פתרון יחיד** הנתון ב-\n$$Ax=b \\Rightarrow x=A^{-1}b.$$\n\n**סקיצת הוכחת יחידאות:** נניח ש-$x$ ו-$y$ שניהם מקיימים $Ax=b$. אז $A(x-y)=0$, ולכן $x-y=A^{-1}\\cdot 0=0$, כלומר $x=y$.\n\n**מתי גישת ההופכית מעשית?**\n- אם כבר חישבתם $A^{-1}$ (למשל עבור מספר וקטורי $b$), כל פתרון חדש הוא רק כפל מטריצה–וקטור: $x_i=A^{-1}b_i$.\n- עבור **מערכת בודדת**, גאוס על $[A|b]$ בדרך כלל מהיר יותר מחישוב $A^{-1}$ תחילה.\n\n**יישומים:**\n- **קריפטוגרפיה:** צופן היל מקודד במטריצה הפיכה; פענוח משתמש ב-$A^{-1}$.\n- **ניתוח מעגלים:** משוואות קשר $Ax=b$; הפיכות פירושה שהרשת מוגדרת היטב.\n- **גרפיקה ממוחשבת:** מטריצות סיבוב/הגדלה; ההופכית מבטלת את הטרנספורמציה.\n\n**קשר ל-`concept:la_matrices`:** דירוג, הפחתת שורות ובלתי-תלות לינארית קובעים האם $A^{-1}$ קיימת. ההופכית היא האישור האלגברי ש-$A$ מייצגת איזומורפיזם של $\\mathbb{R}^n$ — שינוי קואורדינטות מושלם ובר-היפוך."
     },
     {
       "kind": "worked_example",
@@ -35,17 +35,17 @@
       "example_number": 1,
       "title_en": "Worked Example 1 — 2×2 Inverse",
       "title_he": "דוגמה פתורה 1 — הופכית 2×2",
-      "body_en_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$.\n\n$\\det(A)=6-5=1$.\n$$A^{-1}=\\frac{1}{1}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}.$$\n\nVerify: $AA^{-1}=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$. ✓",
-      "body_he_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$.\n\n$\\det(A)=6-5=1$.\n$$A^{-1}=\\frac{1}{1}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}.$$\n\nVerify: $AA^{-1}=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$. ✓"
+      "body_en_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$.\n\n### Move 1: Check invertibility\n$\\det(A)=3\\cdot2-1\\cdot5=6-5=1\\ne0$, so $A^{-1}$ exists.\n\n### Move 2: Apply the $2\\times2$ formula\nSwap diagonal ($3\\leftrightarrow2$), negate off-diagonal ($1\\to-1$, $5\\to-5$), divide by $\\det=1$:\n$$A^{-1}=\\frac{1}{1}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}.$$\n\n### Move 3: Verify $AA^{-1}=I$\n$$\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}6-5&-3+3\\\\10-10&-5+6\\end{pmatrix}=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}.\\quad\\checkmark$$\n\nYou can also verify the second column: $(3)(-1)+(1)(3)=0$ and $(5)(-1)+(2)(3)=1$.\n\n**Why this matrix?** The determinant equals $1$, so no fractions appear in $A^{-1}$ — ideal for a first example. On exams, a $\\det$ of $\\pm1$ often signals integer arithmetic. If $\\det$ were $-1$ instead, every entry of $A^{-1}$ would flip sign.\n\n**Exam tip:** Always compute $\\det$ first. If $\\det=0$, stop — there is no inverse. Label your three moves clearly so partial credit is possible even if arithmetic slips. Writing $\\det$ on the page costs five seconds and prevents a wasted five-minute calculation.",
+      "body_he_md": "**מצאו $A^{-1}$** עבור $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$.\n\n### צעד 1: בדיקת הפיכות\n$\\det(A)=3\\cdot2-1\\cdot5=6-5=1\\ne0$, ולכן $A^{-1}$ קיימת.\n\n### צעד 2: יישום נוסחת $2\\times2$\nהחלפת אלכסון ($3\\leftrightarrow2$), שלילת מחוץ לאלכסון ($1\\to-1$, $5\\to-5$), חלוקה ב-$\\det=1$:\n$$A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}.$$\n\n### צעד 3: אימות $AA^{-1}=I$\n$$\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}.\\quad\\checkmark$$\n\nאפשר גם לאמת את העמודה השנייה: $(3)(-1)+(1)(3)=0$ ו-$(5)(-1)+(2)(3)=1$.\n\n**למה דוגמה זו?** הדטרמיננטה שווה ל-$1$, ולכן אין שברים ב-$A^{-1}$ — מתאימה לדוגמה ראשונה. בבחינות, $\\det$ של $\\pm1$ לעיתים קרובות מרמז על חשבון שלם. אם $\\det$ היה $-1$, כל איבר ב-$A^{-1}$ היה מתהפך.\n\n**טיפ לבחינה:** תמיד חשבו $\\det$ תחילה. אם $\\det=0$, עצרו — אין הופכית. סמנו את שלושת הצעדים בבירור לקבלת נקודות חלקיות. כתיבת $\\det$ בעמוד עולה חמש שניות ומונעת חישוב מיותר של חמש דקות."
     },
     {
       "kind": "checkpoint",
       "title_en": "Stop & Practice",
       "title_he": "עצור ותרגל",
       "body_en_md": "Find $A^{-1}$ for $A=\\begin{pmatrix}4&3\\\\3&2\\end{pmatrix}$.",
-      "body_he_md": "מצא $A^{-1}$ ל-$A=\\begin{pmatrix}4&3\\\\3&2\\end{pmatrix}$.",
-      "checkpoint_solution_en": "$\\det=8-9=-1$. $A^{-1}=\\frac{1}{-1}\\begin{pmatrix}2&-3\\\\-3&4\\end{pmatrix}=\\begin{pmatrix}-2&3\\\\3&-4\\end{pmatrix}$.",
-      "checkpoint_solution_he": "$A^{-1}=\\begin{pmatrix}-2&3\\\\3&-4\\end{pmatrix}$."
+      "body_he_md": "מצאו $A^{-1}$ עבור $A=\\begin{pmatrix}4&3\\\\3&2\\end{pmatrix}$.",
+      "checkpoint_solution_en": "### Move 1: Determinant\n$\\det(A)=4\\cdot2-3\\cdot3=8-9=-1\\ne0$, so $A$ is invertible.\n\n### Move 2: Apply formula\nSwap diagonal ($4\\leftrightarrow2$), negate off-diagonal ($3\\to-3$):\n$$A^{-1}=\\frac{1}{-1}\\begin{pmatrix}2&-3\\\\-3&4\\end{pmatrix}=\\begin{pmatrix}-2&3\\\\3&-4\\end{pmatrix}.$$\n\n### Move 3: Quick check\nTop-left entry of $AA^{-1}$: $4(-2)+3(3)=-8+9=1$. $\\checkmark$",
+      "checkpoint_solution_he": "### צעד 1: דטרמיננטה\n$\\det(A)=4\\cdot2-3\\cdot3=8-9=-1\\ne0$, ולכן $A$ הפיכה.\n\n### צעד 2: יישום הנוסחה\nהחלפת אלכסון, שלילת מחוץ לאלכסון:\n$$A^{-1}=\\frac{1}{-1}\\begin{pmatrix}2&-3\\\\-3&4\\end{pmatrix}=\\begin{pmatrix}-2&3\\\\3&-4\\end{pmatrix}.$$\n\n### צעד 3: בדיקה מהירה\nאיבר שמאל-עליון של $AA^{-1}$: $4(-2)+3(3)=1$. $\\checkmark$"
     },
     {
       "kind": "worked_example",
@@ -53,17 +53,17 @@
       "example_number": 2,
       "title_en": "Worked Example 2 — Gauss-Jordan for 3×3",
       "title_he": "דוגמה פתורה 2 — גאוס-ג'ורדן ל-3×3",
-      "body_en_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}1&0&0\\\\1&1&0\\\\1&1&1\\end{pmatrix}$ (lower triangular).\n\nForm $[A|I]$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\1&1&0&|&0&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n$R_2\\to R_2-R_1$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n$R_3\\to R_3-R_1-R_2$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&0&1&|&0&-1&1\\end{pmatrix}$$\n\n$$A^{-1}=\\begin{pmatrix}1&0&0\\\\-1&1&0\\\\0&-1&1\\end{pmatrix}.$$",
-      "body_he_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}1&0&0\\\\1&1&0\\\\1&1&1\\end{pmatrix}$ (lower triangular).\n\nForm $[A|I]$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\1&1&0&|&0&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n$R_2\\to R_2-R_1$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n$R_3\\to R_3-R_1-R_2$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&0&1&|&0&-1&1\\end{pmatrix}$$\n\n$$A^{-1}=\\begin{pmatrix}1&0&0\\\\-1&1&0\\\\0&-1&1\\end{pmatrix}.$$"
+      "body_en_md": "**Find $A^{-1}$** for $A=\\begin{pmatrix}1&0&0\\\\1&1&0\\\\1&1&1\\end{pmatrix}$ (lower triangular).\n\n### Move 1: Form $[A|I]$\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\1&1&0&|&0&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n### Move 2: Eliminate below the first pivot\n$R_2\\leftarrow R_2-R_1$, $R_3\\leftarrow R_3-R_1$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&1&1&|&-1&0&1\\end{pmatrix}$$\n\n### Move 3: Clear column 2 below pivot\n$R_3\\leftarrow R_3-R_2$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&0&1&|&0&-1&1\\end{pmatrix}$$\n\nLeft block is $I$, so\n$$A^{-1}=\\begin{pmatrix}1&0&0\\\\-1&1&0\\\\0&-1&1\\end{pmatrix}.$$\n\n### Move 4: Spot-check one entry\nThe $(2,1)$ entry of $AA^{-1}$ should be zero: row 2 of $A$ dotted with column 1 of $A^{-1}$ gives $1\\cdot1+1\\cdot(-1)+0=0$. $\\checkmark$\n\nWe used only row operations — never column operations — because column ops do not preserve the inverse-on-the-right-side algorithm.\n\n**Note:** Triangular structure often makes row operations especially clean. The inverse of a lower triangular matrix is again lower triangular — watch the pattern of $-1$ entries below the diagonal. Compare with the $2\\times2$ formula: you would get the same answer, but Gauss-Jordan scales to any size.\n\n**Sanity check:** Multiply the first row of $A$ by the first column of $A^{-1}$: $1\\cdot1+0+0=1$. Repeat for one off-diagonal entry to catch sign errors early. On timed exams, one spot-check is enough if you are confident in your row ops.\n\n**Takeaway:** Gauss-Jordan is the universal method — the $2\\times2$ shortcut is a special case you can use to verify your work at the end. When you move to $4\\times4$ or larger systems, this same row-reduction pattern scales directly with no new theory required.",
+      "body_he_md": "**מצאו $A^{-1}$** עבור $A=\\begin{pmatrix}1&0&0\\\\1&1&0\\\\1&1&1\\end{pmatrix}$ (משולשית תחתונה).\n\n### צעד 1: בניית $[A|I]$\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\1&1&0&|&0&1&0\\\\1&1&1&|&0&0&1\\end{pmatrix}$$\n\n### צעד 2: ביטול מתחת לעמודה 1\n$R_2\\leftarrow R_2-R_1$, $R_3\\leftarrow R_3-R_1$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&1&1&|&-1&0&1\\end{pmatrix}$$\n\n### צעד 3: ביטול מתחת לעמודה 2\n$R_3\\leftarrow R_3-R_2$:\n$$\\begin{pmatrix}1&0&0&|&1&0&0\\\\0&1&0&|&-1&1&0\\\\0&0&1&|&0&-1&1\\end{pmatrix}$$\n\nהבלוק השמאלי הוא $I$, ולכן\n$$A^{-1}=\\begin{pmatrix}1&0&0\\\\-1&1&0\\\\0&-1&1\\end{pmatrix}.$$\n\n### צעד 4: בדיקת איבר\nאיבר $(2,1)$ של $AA^{-1}$ צריך להיות אפס: שורה 2 של $A$ כפול עמודה 1 של $A^{-1}$ נותן $1\\cdot1+1\\cdot(-1)=0$. $\\checkmark$\n\nהשתמשנו רק בפעולות שורה — לעולם לא בפעולות עמודה — כי פעולות עמודה לא שומרות על אלגוריתם ההופכית בצד ימין.\n\n**הערה:** מבנה משולשי מקל על פעולות השורה. ההופכית של משולשית תחתונה היא שוב משולשית תחתונה — שימו לב לדפוס של $-1$ מתחת לאלכסון. השוו לנוסחת $2\\times2$: אותה תשובה, אך גאוס-ג'ורדן מתרחב לכל גודל.\n\n**בדיקת sanity:** כפלו שורה 1 של $A$ בעמודה 1 של $A^{-1}$: $1\\cdot1=1$. חזרו על איבר אחד מחוץ לאלכסון לתפיסת טעויות סימן. בבחינה עם זמן מוגבל, בדיקה נקודתית אחת מספיקה אם אתם בטוחים בפעולות השורה.\n\n**מסקנה:** גאוס-ג'ורדן הוא השיטה האוניברסלית — קיצור הדרך $2\\times2$ הוא מקרה מיוחד לאימות בסוף. כשעוברים ל-$4\\times4$ או יותר, אותו דפוס הפחתת שורות מתרחב ישירות בלי תיאוריה חדשה."
     },
     {
       "kind": "checkpoint",
       "title_en": "Stop & Practice",
       "title_he": "עצור ותרגל",
       "body_en_md": "For what value of $k$ is $A=\\begin{pmatrix}k&2\\\\3&6\\end{pmatrix}$ not invertible?",
-      "body_he_md": "עבור איזה $k$ המטריצה $\\begin{pmatrix}k&2\\\\3&6\\end{pmatrix}$ לא הפיכה?",
-      "checkpoint_solution_en": "$\\det=6k-6=0\\Rightarrow k=1$.",
-      "checkpoint_solution_he": "$k=1$."
+      "body_he_md": "עבור איזה ערך של $k$ המטריצה $\\begin{pmatrix}k&2\\\\3&6\\end{pmatrix}$ אינה הפיכה?",
+      "checkpoint_solution_en": "A matrix is **not invertible** exactly when $\\det(A)=0$.\n\n### Move 1: Compute determinant\n$\\det(A)=k\\cdot6-2\\cdot3=6k-6$.\n\n### Move 2: Set equal to zero\n$6k-6=0 \\Rightarrow 6k=6 \\Rightarrow k=1$.\n\n### Move 3: Interpret\nWhen $k=1$, row 1 is $\\frac{1}{3}$ of row 2, so the rows are linearly dependent and $A^{-1}$ does not exist.",
+      "checkpoint_solution_he": "מטריצה **אינה הפיכה** בדיוק כאשר $\\det(A)=0$.\n\n### צעד 1: חישוב דטרמיננטה\n$\\det(A)=k\\cdot6-2\\cdot3=6k-6$.\n\n### צעד 2: השוואה לאפס\n$6k-6=0 \\Rightarrow k=1$.\n\n### צעד 3: פרשנות\nכאשר $k=1$, שורה 1 היא $\\frac{1}{3}$ משורה 2, ולכן השורות תלויות לינארית ו-$A^{-1}$ לא קיימת."
     },
     {
       "kind": "worked_example",
@@ -71,15 +71,15 @@
       "example_number": 3,
       "title_en": "Worked Example 3 — Using Inverse to Solve $Ax=b$",
       "title_he": "דוגמה פתורה 3 — שימוש בהופכית לפתרון $Ax=b$",
-      "body_en_md": "**Given** $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$, solve $Ax=\\begin{pmatrix}8\\\\13\\end{pmatrix}$.\n\n### Move 1 $\\det(A)=6-5=1$. $A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$.\n\n### Move 2 $x=A^{-1}b=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}\\begin{pmatrix}8\\\\13\\end{pmatrix}=\\begin{pmatrix}24-13\\\\-40+26\\end{pmatrix}=\\begin{pmatrix}11\\\\-14\\end{pmatrix}$.\n\n**Verify:** $\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}\\begin{pmatrix}11\\\\-14\\end{pmatrix}=\\begin{pmatrix}22-14\\\\55-42\\end{pmatrix}=\\begin{pmatrix}8\\\\13\\end{pmatrix}$. ✓",
-      "body_he_md": "### צעד 1 $\\det(A)=6-5=1$. $A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$.\n\n### צעד 2 $x=A^{-1}b=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}\\begin{pmatrix}8\\\\13\\end{pmatrix}=\\begin{pmatrix}24-13\\\\-40+26\\end{pmatrix}=\\begin{pmatrix}11\\\\-14\\end{pmatrix}$."
+      "body_en_md": "**Given** $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$, solve $Ax=\\begin{pmatrix}8\\\\13\\end{pmatrix}$.\n\n### Move 1: Find $A^{-1}$\n$\\det(A)=6-5=1$. By the formula:\n$$A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}.$$\n\n### Move 2: Multiply $x=A^{-1}b$\n$$x=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}\\begin{pmatrix}8\\\\13\\end{pmatrix}=\\begin{pmatrix}24-13\\\\-40+26\\end{pmatrix}=\\begin{pmatrix}11\\\\-14\\end{pmatrix}.$$\n\n### Move 3: Verify\n$$\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}\\begin{pmatrix}11\\\\-14\\end{pmatrix}=\\begin{pmatrix}22-14\\\\55-42\\end{pmatrix}=\\begin{pmatrix}8\\\\13\\end{pmatrix}.\\quad\\checkmark$$\n\nThe solution $x=\\begin{pmatrix}11\\\\-14\\end{pmatrix}$ has a negative second component — that is fine. Many students incorrectly flip signs when $\\det=1$ makes the inverse look \"too clean.\"\n\n**Alternative:** You could row-reduce $[A|b]$ directly; use $A^{-1}$ when you need the same $A$ with many different $b$ vectors.\n\n**Exam connection:** This is the standard template for \"solve the system\" questions: invert (or eliminate), multiply, verify. Negative entries in $x$ are perfectly valid — do not \"fix\" them unless verification fails. If the exam gives $Ax=b$ and asks only for $x$, row reduction on $[A|b]$ avoids computing the full inverse matrix and is often faster on timed papers.",
+      "body_he_md": "**נתון** $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$, פתרו $Ax=\\begin{pmatrix}8\\\\13\\end{pmatrix}$.\n\n### צעד 1: מציאת $A^{-1}$\n$\\det(A)=6-5=1$. לפי הנוסחה:\n$$A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}.$$\n\n### צעד 2: כפל $x=A^{-1}b$\n$$x=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}\\begin{pmatrix}8\\\\13\\end{pmatrix}=\\begin{pmatrix}11\\\\-14\\end{pmatrix}.$$\n\n### צעד 3: אימות\n$$\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}\\begin{pmatrix}11\\\\-14\\end{pmatrix}=\\begin{pmatrix}8\\\\13\\end{pmatrix}.\\quad\\checkmark$$\n\nהפתרון $x=\\begin{pmatrix}11\\\\-14\\end{pmatrix}$ כולל רכיב שלילי — וזה תקין. תלמידים רבים מתקנים סימנים בטעות כש-$\\det=1$ גורם להופכית להיראות \"פשוטה מדי.\"\n\n**חלופה:** אפשר להפחית שורות על $[A|b]$ ישירות; השתמשו ב-$A^{-1}$ כשצריך את אותה $A$ עם וקטורי $b$ רבים.\n\n**קשר לבחינה:** זהו תבנית סטנדרטית לשאלות \"פתרו את המערכת\": הפכו (או היעלימו), כפלו, אמתו. איברים שליליים ב-$x$ תקינים — אל ת\"תקנו\" אלא אם האימות נכשל. הפחתה על $[A|b]$ חוסכת חישוב מטריצה הופכית מלאה ולעיתים מהירה יותר בבחינה עם זמן מוגבל. שמרו את $A^{-1}$ רק כשיש מספר וקטורי $b$ שונים."
     },
     {
       "kind": "method_guide",
       "title_en": "Method Guide — Matrix Inverse",
       "title_he": "מדריך שיטה — הופכית",
-      "body_en_md": "**Check invertibility:** $\\det(A)\\ne0$.\n\n**$2\\times2$:**\n$$\\begin{pmatrix}a&b\\c&d\\end{pmatrix}^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$$\n(Swap diagonal, negate off-diagonal, divide by det.)\n\n**$3\\times3$ (or larger):** Gauss-Jordan on $[A|I]$.\n\n**Solve $Ax=b$:** $x=A^{-1}b$ (only if $A$ invertible).\n\n**When to use:** Pick the row that matches your problem type first; only then substitute numbers.\n\n**Tip:** If two rows seem to fit, list the givens and match them to the table columns before calculating.",
-      "body_he_md": "**בדיקה:** $\\det(A)\\ne0$.\n\n**$2\\times2$:** החלף אלכסון, שלל את מחוץ לאלכסון, חלק ב-$\\det$.\n\n**$3\\times3$:** גאוס-ג'ורדן על $[A|I]$.\n\n**$Ax=b$:** $x=A^{-1}b$.\n\n**מתי להשתמש:** Pick the row that matches your problem type first; only then substitute numbers."
+      "body_en_md": "| Goal | Method | Key check |\n|---|---|---|\n| Is $A$ invertible? | Compute $\\det(A)$ | $\\det\\ne0$ required |\n| $2\\times2$ inverse | Swap diagonal, negate off-diagonal, divide by $\\det$ | Verify $AA^{-1}=I$ |\n| $3\\times3$ or larger | Gauss-Jordan on $[A|I]\\to[I|A^{-1}]$ | Row ops only — no column ops |\n| Solve $Ax=b$ | $x=A^{-1}b$ if $A$ invertible | Faster: row reduce $[A|b]$ for one $b$ |\n| Inverse of product | $(AB)^{-1}=B^{-1}A^{-1}$ | Order reverses |\n| $\\det(A^{-1})$ | $1/\\det(A)$ | Requires $\\det(A)\\ne0$ |\n\n**Decision tree:**\n1. Square matrix? If not, inverse is undefined.\n2. $\\det=0$? Stop — singular.\n3. Size $2\\times2$? Use formula unless exam asks for Gauss-Jordan.\n4. Need inverse for many $b$? Compute $A^{-1}$ once.",
+      "body_he_md": "| מטרה | שיטה | בדיקה |\n|---|---|---|\n| האם $A$ הפיכה? | חשבו $\\det(A)$ | נדרש $\\det\\ne0$ |\n| הופכית $2\\times2$ | החלפת אלכסון, שלילה, חלוקה ב-$\\det$ | אימות $AA^{-1}=I$ |\n| $3\\times3$ ומעלה | גאוס-ג'ורדן על $[A|I]$ | פעולות שורה בלבד |\n| פתרון $Ax=b$ | $x=A^{-1}b$ אם $A$ הפיכה | מהיר יותר: הפחתה על $[A|b]$ ל-$b$ בודד |\n| הופכית מכפלה | $(AB)^{-1}=B^{-1}A^{-1}$ | הסדר מתהפך |\n| $\\det(A^{-1})$ | $1/\\det(A)$ | דורש $\\det(A)\\ne0$ |\n\n**עץ החלטות:**\n1. מטריצה ריבועית? אם לא — אין הופכית.\n2. $\\det=0$? עצרו — סינגולרית.\n3. גודל $2\\times2$? השתמשו בנוסחה אלא אם נדרש גאוס-ג'ורדן.\n4. צריך הופכית ל-$b$ רבים? חשבו $A^{-1}$ פעם אחת."
     },
     {
       "kind": "exercise_set",
@@ -92,105 +92,105 @@
           "id": "e1",
           "difficulty": "easy",
           "body_en": "$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. Find $A^{-1}$.",
-          "body_he": "$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. $A^{-1}$?",
-          "solution_en": "**Solution:**\n\n$A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. מצאו $A^{-1}$.",
+          "solution_en": "Diagonal matrix: invert by taking reciprocals on the diagonal.\n\n$\\det=6\\ne0$. $A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**Check:** $2\\cdot\\frac{1}{2}=1$ and $3\\cdot\\frac{1}{3}=1$ on the diagonal.",
+          "solution_he": "מטריצה אלכסונית: הופכית על ידי הופכים על האלכסון.\n\n$\\det=6\\ne0$. $A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**בדיקה:** $2\\cdot\\frac{1}{2}=1$ ו-$3\\cdot\\frac{1}{3}=1$ על האלכסון."
         },
         {
           "id": "e2",
           "difficulty": "easy",
           "body_en": "Is $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ invertible?",
           "body_he": "האם $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ הפיכה?",
-          "solution_en": "**Solution:**\n\n$\\det=4-4=0$. Not invertible.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$\\det=0$ → לא הפיכה.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "$\\det=1\\cdot4-2\\cdot2=4-4=0$. Since $\\det=0$, the rows are dependent (row 2 = 2× row 1). **Not invertible.**",
+          "solution_he": "$\\det=4-4=0$. מכיוון ש-$\\det=0$, השורות תלויות (שורה 2 = פעמיים שורה 1). **אינה הפיכה.**"
         },
         {
           "id": "e3",
           "difficulty": "easy",
           "body_en": "$A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$. Solve $Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$.",
-          "body_he": "$Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$. פתרון?",
-          "solution_en": "**Solution:**\n\n$x_1=3$, $x_2=2$. ($A^{-1}b$)\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$x=(3,2)^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ עם $A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$. פתרון?",
+          "solution_en": "Diagonal $A$: $x_1=b_1$, $x_2=b_2/2$. So $x_1=3$, $x_2=4/2=2$. Equivalently $x=A^{-1}b=\\begin{pmatrix}1&0\\\\0&1/2\\end{pmatrix}\\begin{pmatrix}3\\\\4\\end{pmatrix}$.",
+          "solution_he": "$A$ אלכסונית: $x_1=b_1$, $x_2=b_2/2$. לכן $x_1=3$, $x_2=2$. שקול ל-$x=A^{-1}b$."
         },
         {
           "id": "e4",
           "difficulty": "easy",
           "body_en": "$(AB)^{-1}=?$",
           "body_he": "$(AB)^{-1}=?$",
-          "solution_en": "**Solution:**\n\n$(AB)^{-1}=B^{-1}A^{-1}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**פתרון:**\n\n$B^{-1}A^{-1}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "Property: $(AB)^{-1}=B^{-1}A^{-1}$. Think: undo $B$ first, then undo $A$ — reverse order of the original product.",
+          "solution_he": "תכונה: $(AB)^{-1}=B^{-1}A^{-1}$. מחשבה: מבטלים תחילה את $B$, אחר כך את $A$ — סדר הפוך מהמכפלה המקורית."
         },
         {
           "id": "e5",
           "difficulty": "medium",
           "body_en": "$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. Find $A^{-1}$ and verify.",
-          "body_he": "$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. $A^{-1}$ ובדיקה.",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=1$. $A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$. $AA^{-1}=I$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. מצאו $A^{-1}$ ואמתו.",
+          "solution_en": "$\\det=8-7=1$. $A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$. Verify: $(2)(4)+(1)(-7)=1$, off-diagonal entries sum to 0. $AA^{-1}=I$. ✓",
+          "solution_he": "$\\det=1$. $A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$. אימות: $(2)(4)+(1)(-7)=1$, $AA^{-1}=I$. ✓"
         },
         {
           "id": "e6",
           "difficulty": "medium",
           "body_en": "Gauss-Jordan: find $A^{-1}$ for $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$.",
-          "body_he": "גאוס-ג'ורדן: $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$. $A^{-1}$?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$[A|I]\\to\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}\\to\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "גאוס-ג'ורדן: $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$. מצאו $A^{-1}$.",
+          "solution_en": "$[A|I]\\xrightarrow{R_2-3R_1}\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}\\xrightarrow{R_1-2R_2}\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. So $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.",
+          "solution_he": "הפחתה: $R_2-3R_1$, אחר כך $R_1-2R_2$ מניבה $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$."
         },
         {
           "id": "e7",
           "difficulty": "medium",
           "body_en": "$\\det(A)=3$, $A$ is $3\\times3$. Find $\\det(A^{-1})$.",
-          "body_he": "$\\det(A)=3$. $\\det(A^{-1})$?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(A^{-1})=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$\\det(A)=3$, $A$ בגודל $3\\times3$. מצאו $\\det(A^{-1})$.",
+          "solution_en": "Property: $\\det(A^{-1})=1/\\det(A)=1/3$. No need to know entries of $A$ — only that it is invertible.",
+          "solution_he": "תכונה: $\\det(A^{-1})=1/\\det(A)=1/3$. אין צורך לדעת את איברי $A$ — רק שהיא הפיכה."
         },
         {
           "id": "e8",
           "difficulty": "medium",
           "body_en": "$A=\\begin{pmatrix}1&1\\\\1&2\\end{pmatrix}$. Solve $Ax=\\begin{pmatrix}5\\\\9\\end{pmatrix}$.",
-          "body_he": "$Ax=\\begin{pmatrix}5\\\\9\\end{pmatrix}$. פתרון?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=1$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-1&1\\end{pmatrix}$. $x=\\begin{pmatrix}10-9\\\\-5+9\\end{pmatrix}=\\begin{pmatrix}1\\\\4\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$x=(1,4)^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$Ax=\\begin{pmatrix}5\\\\9\\end{pmatrix}$ עם $A=\\begin{pmatrix}1&1\\\\1&2\\end{pmatrix}$. פתרון?",
+          "solution_en": "$\\det=1$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-1&1\\end{pmatrix}$. $x=\\begin{pmatrix}2&-1\\\\-1&1\\end{pmatrix}\\begin{pmatrix}5\\\\9\\end{pmatrix}=\\begin{pmatrix}1\\\\4\\end{pmatrix}$.",
+          "solution_he": "$\\det=1$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-1&1\\end{pmatrix}$. $x=\\begin{pmatrix}1\\\\4\\end{pmatrix}$."
         },
         {
           "id": "e9",
           "difficulty": "medium",
           "body_en": "If $A^2=I$, what is $A^{-1}$?",
           "body_he": "אם $A^2=I$, מהי $A^{-1}$?",
-          "solution_en": "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A\\cdot A=I\\Rightarrow A^{-1}=A$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^{-1}=A$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "solution_en": "Multiply $A^2=I$ on the left by $A^{-1}$: $A=A^{-1}$. So $A$ is **self-inverse**. Example: reflection matrices satisfy $A^2=I$.",
+          "solution_he": "כופלים $A^2=I$ משמאל ב-$A^{-1}$: $A=A^{-1}$. כלומר $A$ **הופכית לעצמה**. דוגמה: מטריצות השתקפות."
         },
         {
           "id": "e10",
           "difficulty": "hard",
           "body_en": "Find $A^{-1}$ for $A=\\begin{pmatrix}1&2&0\\\\0&1&3\\\\0&0&1\\end{pmatrix}$.",
-          "body_he": "$A=\\begin{pmatrix}1&2&0\\\\0&1&3\\\\0&0&1\\end{pmatrix}$. $A^{-1}$?",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$[A|I]$, reduce: back-substitute. $A^{-1}=\\begin{pmatrix}1&-2&6\\\\0&1&-3\\\\0&0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$A^{-1}=\\begin{pmatrix}1&-2&6\\\\0&1&-3\\\\0&0&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$A=\\begin{pmatrix}1&2&0\\\\0&1&3\\\\0&0&1\\end{pmatrix}$. מצאו $A^{-1}$.",
+          "solution_en": "Upper triangular: Gauss-Jordan on $[A|I]$. Back-substitution steps yield $A^{-1}=\\begin{pmatrix}1&-2&6\\\\0&1&-3\\\\0&0&1\\end{pmatrix}$. Check: upper triangular inverse stays upper triangular.",
+          "solution_he": "משולשית עליונה: גאוס-ג'ורדן על $[A|I]$. $A^{-1}=\\begin{pmatrix}1&-2&6\\\\0&1&-3\\\\0&0&1\\end{pmatrix}$."
         },
         {
           "id": "e11",
           "difficulty": "hard",
           "body_en": "Prove: if $A$ is invertible, then $Ax=b$ has a unique solution.",
-          "body_he": "הוכח: אם $A$ הפיכה, $Ax=b$ מוסבר יחידאית.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$x=A^{-1}b$: this is a solution (verify $A(A^{-1}b)=Ib=b$). Unique: if $Ax=b$ and $Ay=b$, then $A(x-y)=0\\Rightarrow x-y=A^{-1}\\cdot0=0\\Rightarrow x=y$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$x=A^{-1}b$ פתרון. יחידאי: $A(x-y)=0\\Rightarrow x=y$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "הוכיחו: אם $A$ הפיכה, אז ל-$Ax=b$ יש פתרון יחיד.",
+          "solution_en": "Existence: $x=A^{-1}b$ works since $A(A^{-1}b)=b$. Uniqueness: if $Ax=Ay=b$, then $A(x-y)=0$, so $x-y=A^{-1}0=0$.",
+          "solution_he": "קיום: $x=A^{-1}b$ עובד כי $A(A^{-1}b)=b$. יחידאות: אם $Ax=Ay$, אז $A(x-y)=0$, ולכן $x=y$."
         },
         {
           "id": "e12",
           "difficulty": "hard",
           "body_en": "$A$ and $B$ are invertible $n\\times n$. Show $(AB)^{-1}=B^{-1}A^{-1}$.",
-          "body_he": "הוכח $(AB)^{-1}=B^{-1}A^{-1}$.",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AIA^{-1}=AA^{-1}=I$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=I$ ✓.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "$A$ ו-$B$ הפיכות $n\\times n$. הראו $(AB)^{-1}=B^{-1}A^{-1}$.",
+          "solution_en": "Compute $(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AIA^{-1}=AA^{-1}=I$. Similarly $(B^{-1}A^{-1})(AB)=I$. So $B^{-1}A^{-1}$ is the inverse of $AB$.",
+          "solution_he": "$(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=I$. באופן דומה $(B^{-1}A^{-1})(AB)=I$. לכן $B^{-1}A^{-1}$ היא ההופכית של $AB$."
         },
         {
           "id": "e13",
           "difficulty": "hard",
           "body_en": "For what values of $k$ does $A=\\begin{pmatrix}k&1&0\\\\1&k&1\\\\0&1&k\\end{pmatrix}$ have no inverse?",
-          "body_he": "עבור אילו $k$ המטריצה $\\begin{pmatrix}k&1&0\\\\1&k&1\\\\0&1&k\\end{pmatrix}$ אינה הפיכה?",
-          "solution_en": "**Solution path:** Work step by step — do not skip the setup.\n\n$\\det(A)=k(k^2-1)-1(k-0)=k^3-k-k=k^3-2k=k(k^2-2)=0$. $k=0$, $k=\\pm\\sqrt{2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.",
-          "solution_he": "**דרך פתרון:** עבדו שלב-שלב — אל תדלגו על ההכנה.\n\n$k=0$, $k=\\pm\\sqrt{2}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן."
+          "body_he": "עבור אילו ערכי $k$ המטריצה $\\begin{pmatrix}k&1&0\\\\1&k&1\\\\0&1&k\\end{pmatrix}$ אינה הפיכה?",
+          "solution_en": "Expand $\\det(A)=k(k^2-1)-1(k)=k^3-k-k=k^3-2k=k(k^2-2)$. Zero when $k=0$ or $k=\\pm\\sqrt{2}$.",
+          "solution_he": "$\\det(A)=k^3-2k=k(k^2-2)$. אפס כאשר $k=0$ או $k=\\pm\\sqrt{2}$."
         }
       ]
     },
@@ -198,30 +198,30 @@
       "kind": "pitfall",
       "title_en": "Common Pitfalls",
       "title_he": "מלכודות נפוצות",
-      "body_en_md": "1. **$2\\times2$ inverse**: swap the diagonal entries (not the off-diagonal).\n2. **$(AB)^{-1}\\ne A^{-1}B^{-1}$**: order reverses.\n3. **Non-invertible**: if $\\det=0$, stop — no inverse exists.\n4. **Gauss-Jordan**: row reduce only — no column operations.\n\n**Example misconception:** (AB)^{-1} = A^{-1}B^{-1}\n\n**Fix:** (AB)^{-1} = B^{-1}A^{-1}.",
-      "body_he_md": "1. **$2\\times2$**: החלף אלכסון, שלל מחוץ לאלכסון.\n2. **$(AB)^{-1}=B^{-1}A^{-1}$** — לא $A^{-1}B^{-1}$.\n3. **$\\det=0$**: אין הופכית.\n4. **גאוס-ג'ורדן**: פעולות שורה בלבד.\n\n**Fix:** (AB)^{-1} = B^{-1}A^{-1}.\n\n**טיפ לבחינה:** When reviewing mistakes, ask \"which pitfall did I hit?\" — not just \"what is the right number?\""
+      "body_en_md": "1. **$2\\times2$ sign errors:** Swap the **diagonal** entries ($a\\leftrightarrow d$), negate the **off-diagonal** ($b\\to -b$, $c\\to -c$). A common mistake is swapping off-diagonal entries instead.\n\n2. **$(AB)^{-1}\\ne A^{-1}B^{-1}$:** The order **reverses**: $(AB)^{-1}=B^{-1}A^{-1}$. Think of putting on shoes then socks — undo socks first, then shoes.\n\n3. **Computing inverse when $\\det=0$:** If $\\det(A)=0$, stop immediately. No formula or Gauss-Jordan procedure will produce a valid inverse.\n\n4. **Gauss-Jordan column operations:** Only **row** operations are allowed when finding $A^{-1}$. Column operations change the matrix in a way that does not preserve the inverse relationship on $[A|I]$.\n\n5. **Forgetting to verify:** After finding $A^{-1}$, multiply $AA^{-1}$ and check you get $I$. One arithmetic slip in a $3\\times3$ can propagate through an entire exam problem.",
+      "body_he_md": "1. **טעויות סימן ב-$2\\times2$:** מחליפים את איברי **האלכסון** ($a\\leftrightarrow d$), ושוללים את **מחוץ לאלכסון** ($b\\to -b$, $c\\to -c$). טעות נפוצה: החלפת מחוץ לאלכסון במקום אלכסון.\n\n2. **$(AB)^{-1}\\ne A^{-1}B^{-1}$:** הסדר **מתהפך**: $(AB)^{-1}=B^{-1}A^{-1}$. חשבו על לבישת נעליים ואז גרביים — מבטלים קודם גרביים, אחר כך נעליים.\n\n3. **חישוב הופכית כש-$\\det=0$:** אם $\\det(A)=0$, עצרו מיד. שום נוסחה או גאוס-ג'ורדן לא יניבו הופכית תקפה.\n\n4. **פעולות עמודה בגאוס-ג'ורדן:** רק **פעולות שורה** מותרות בחיפוש $A^{-1}$. פעולות עמודה משנות את המטריצה בצורה שלא שומרת על הקשר ההופכי ב-$[A|I]$.\n\n5. **שכחת אימות:** אחרי מציאת $A^{-1}$, כפלו $AA^{-1}$ ובדקו שמתקבל $I$. טעות חישוב אחת ב-$3\\times3$ יכולה להתפשט לכל הבעיה."
     },
     {
       "id": "why_matters",
       "kind": "why_matters",
       "title_en": "Why it matters",
       "title_he": "למה זה חשוב",
-      "body_en_md": "This topic is not isolated — it connects to the rest of your learning path on A Step Forward.\n\n**Recommended next topics:**\n- `concept:determinants_cramer` **determinants cramer**\n- `concept:la_matrices` **Matrices & Linear Systems**\n\n**Why it matters for exams:** Bagrut and university courses reward *transfer* — applying this idea in a new context. When you study, always ask: \"Where else did I see this pattern?\"",
-      "body_he_md": "נושא זה אינו מבודד — הוא מחובר לשאר מסלול הלימוד שלך ב-A Step Forward.\n\n**נושאים מומלצים להמשך:**\n- `concept:determinants_cramer` **determinants cramer**\n- `concept:la_matrices` **מטריצות ומערכות לינאריות**\n\n**למה זה חשוב לבחינות:** בבגרות ובאוניברסיטה מעריכים *העברה* — יישום הרעיון בהקשר חדש. בזמן לימוד, שאלו תמיד: \"איפה עוד ראיתי את הדפוס הזה?\""
+      "body_en_md": "The matrix inverse is the bridge between **abstract linear algebra** and **concrete computation**. Every time you ask \"can I solve this system?\" or \"can I undo this transformation?\", you are asking an invertibility question.\n\n**Recommended next topics:**\n- `concept:determinants_cramer` — Cramer's rule gives each component of $x=A^{-1}b$ as a ratio of determinants.\n- `concept:la_matrices` — row reduction, rank, and the full toolkit for linear systems.\n\n**Why it matters for exams:** University linear-algebra finals routinely combine inverse properties ($(AB)^{-1}$, $\\det(A^{-1})$) with $3\\times3$ Gauss-Jordan. Bagrut 5-point tracks use $2\\times2$ inverses in coordinate geometry and transformations. Always state **why** a matrix is singular before attempting to invert it.",
+      "body_he_md": "הופכית מטריצה היא הגשר בין **אלגברה לינארית מופשטת** ל**חישוב קונקרטי**. בכל פעם ששואלים \"האם אפשר לפתור את המערכת?\" או \"האם אפשר לבטל את הטרנספורמציה?\", שואלים שאלת הפיכות.\n\n**נושאים מומלצים להמשך:**\n- `concept:determinants_cramer` — כלל קרמר נותן כל רכיב של $x=A^{-1}b$ כיחס דטרמיננטות.\n- `concept:la_matrices` — הפחתת שורות, דירוג וארגז כלים מלא למערכות לינאריות.\n\n**למה זה חשוב לבחינות:** בבחינות סופיות באוניברסיטה משלבים לעיתים קרובות תכונות הופכיות ($(AB)^{-1}$, $\\det(A^{-1})$) עם גאוס-ג'ורדן $3\\times3$. במסלולי בגרות 5 יחידות משתמשים בהופכיות $2\\times2$ בגאומטריה אנalytית. תמיד נמקו **מדוע** מטריצה סינגולרית לפני ניסיון להפוך אותה."
     },
     {
       "kind": "before_exam",
       "title_en": "Before the Exam",
       "title_he": "לפני הבחינה",
-      "body_en_md": "- $2\\times2$: $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.\n- $3\\times3$: Gauss-Jordan $[A|I]\\to[I|A^{-1}]$.\n- $(AB)^{-1}=B^{-1}A^{-1}$.\n- $\\det(A^{-1})=1/\\det(A)$.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking.",
-      "body_he_md": "- $2\\times2$: נוסחה ישירה.\n- $3\\times3$: גאוס-ג'ורדן.\n- $(AB)^{-1}=B^{-1}A^{-1}$.\n- $\\det(A^{-1})=1/\\det(A)$."
+      "body_en_md": "**Formulas to know cold:**\n- $2\\times2$: $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.\n- $3\\times3+$: Gauss-Jordan on $[A|I]\\to[I|A^{-1}]$.\n- $(AB)^{-1}=B^{-1}A^{-1}$ (order reverses).\n- $\\det(A^{-1})=1/\\det(A)$.\n\n**Procedure checklist:**\n1. Compute $\\det$ — if zero, declare singular.\n2. Pick method: formula ($2\\times2$) or Gauss-Jordan ($3\\times3+$).\n3. Verify $AA^{-1}=I$ or spot-check one entry.\n\n**Timing tip:** A $2\\times2$ inverse plus verification should take under three minutes. A $3\\times3$ Gauss-Jordan typically needs eight to twelve minutes — practice row-operation notation to save time.\n\n**Last review:** Say each formula out loud once, then solve one checkpoint without looking at notes.",
+      "body_he_md": "**נוסחאות לדעת בעל פה:**\n- $2\\times2$: $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$.\n- $3\\times3$ ומעלה: גאוס-ג'ורדן על $[A|I]\\to[I|A^{-1}]$.\n- $(AB)^{-1}=B^{-1}A^{-1}$ (הסדר מתהפך).\n- $\\det(A^{-1})=1/\\det(A)$.\n\n**רשימת בדיקה:**\n1. חשבו $\\det$ — אם אפס, הצהירו סינגולריות.\n2. בחרו שיטה: נוסחה ($2\\times2$) או גאוס-ג'ורדן ($3\\times3+$).\n3. אמתו $AA^{-1}=I$ או בדקו איבר אחד.\n\n**טיפ תזמון:** הופכית $2\\times2$ עם אימות — פחות משלוש דקות. גאוס-ג'ורדן $3\\times3$ — שמונה עד שתים-עשרה דקות; תרגלו סימון פעולות שורה.\n\n**חזרה אחרונה:** אמרו כל נוסחה בקול פעם אחת, ואז פתרו checkpoint אחד בלי להסתכל."
     },
     {
       "kind": "summary",
       "title_en": "Take-away",
       "title_he": "סיכום",
-      "body_en_md": "- $A^{-1}$ exists iff $\\det(A)\\ne0$.\n- $2\\times2$: swap/negate/divide formula.\n- $3\\times3$: Gauss-Jordan.\n- Solve $Ax=b$: $x=A^{-1}b$.\n\n**Takeaway:** You should now recognize which method applies from the problem wording alone.",
-      "body_he_md": "- הופכית קיימת אמ\"מ $\\det\\ne0$.\n- $2\\times2$: נוסחה. $3\\times3$: גאוס-ג'ורדן.\n- $x=A^{-1}b$."
+      "body_en_md": "- $A^{-1}$ exists **iff** $\\det(A)\\ne0$ (equivalently: rows/columns independent, $Ax=0$ only trivial).\n- **$2\\times2$:** swap diagonal, negate off-diagonal, divide by $\\det$.\n- **$3\\times3$+:** Gauss-Jordan on $[A|I]$.\n- **Solve $Ax=b$:** $x=A^{-1}b$ gives the unique solution when $A$ is invertible.\n- **Properties:** $(AB)^{-1}=B^{-1}A^{-1}$, $\\det(A^{-1})=1/\\det(A)$, $(A^{-1})^{-1}=A$.\n\n**Takeaway:** From the problem wording alone — size, det, number of right-hand sides — you should now know which method to reach for before doing any arithmetic.",
+      "body_he_md": "- $A^{-1}$ קיימת **אמ\"מ** $\\det(A)\\ne0$ (שקול: שורות/עמודות בלתי-תלויות, $Ax=0$ רק טrivיálי).\n- **$2\\times2$:** החלפת אלכסון, שלילת מחוץ לאלכסון, חלוקה ב-$\\det$.\n- **$3\\times3$+:** גאוס-ג'ורדן על $[A|I]$.\n- **פתרון $Ax=b$:** $x=A^{-1}b$ נותן את הפתרון היחיד כש-$A$ הפיכה.\n- **תכונות:** $(AB)^{-1}=B^{-1}A^{-1}$, $\\det(A^{-1})=1/\\det(A)$, $(A^{-1})^{-1}=A$.\n\n**מסקנה:** מהניסוח בלבד — גודל, $\\det$, מספר וקטורי $b$ — אתם אמורים לדעת איזו שיטה לבחור לפני כל חישוב."
     }
   ],
   "agent_hints": {
@@ -271,8 +271,8 @@
         "-1"
       ],
       "correct_index": 0,
-      "explanation_en": "**Why this is correct:**\n$2\\times2-3\\times1=4-3=1$.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.",
-      "explanation_he": "**למה זה נכון:**\n$4-3=1$.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.",
+      "explanation_en": "The determinant of a $2\\times2$ matrix $\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$ is $ad-bc$. Here $a=2$, $b=3$, $c=1$, $d=2$, so $\\det(A)=2\\cdot2-3\\cdot1=4-3=1$. Since $\\det(A)\\ne0$, this matrix is invertible — you will need that fact before applying the swap-negate-divide formula for $A^{-1}$.\n\n**Common wrong path:** Adding the products ($4+3=7$, option B) or reversing the subtraction ($3-4=-1$, option D). The exam mnemonic is \"main diagonal minus anti-diagonal.\"\n\n**Exam tip:** Always compute $\\det$ first on inverse problems. If it were zero, the question would ask about singularity, not about finding $A^{-1}$. Here $\\det=1$ confirms the rows are independent because row 2 is not a scalar multiple of row 1.",
+      "explanation_he": "הדטרמיננטה של מטריצה $2\\times2$ $\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$ היא $ad-bc$. כאן $a=2$, $b=3$, $c=1$, $d=2$, ולכן $\\det(A)=2\\cdot2-3\\cdot1=4-3=1$. מכיוון ש-$\\det(A)\\ne0$, המטריצה הפיכה — עובדה זו נדרשת לפני יישום נוסחת ההחלפה-שלילה-חלוקה.\n\n**דרך שגויה נפוצה:** חיבור המכפלות ($4+3=7$, תשובה ב') או הפחתה בסדר הפוך ($3-4=-1$, תשובה ד'). כלל הזכרון: אלכסון ראשי פחות אלכסון משני.\n\n**טיפ לבחינה:** תמיד חשבו $\\det$ תחילה. אם היה אפס, השאלה הייתה עוסקת בסינגולריות. כאן $\\det=1$ מאשר ששורה 2 אינה כפולה של שורה 1.",
       "skill_atoms": [
         "matrix_inverse",
         "determinant_2x2"
@@ -283,17 +283,17 @@
       "kind": "short_answer",
       "difficulty": "easy",
       "stem_en": "$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. Find $A^{-1}$.",
-      "stem_he": "$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. $A^{-1}$?",
+      "stem_he": "$A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. מצאו $A^{-1}$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+          "\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}",
+          "1/2,0,0,1/3",
+          "[[1/2,0],[0,1/3]]"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "For a diagonal matrix $A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$, the inverse is found by inverting each diagonal entry: $A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$. You can verify with the general formula: $\\det=6$, swap gives $\\begin{pmatrix}3&0\\\\0&2\\end{pmatrix}$, off-diagonal negation changes nothing, divide by 6 — same result.\n\n**Common wrong path:** Inverting off-diagonal zeros incorrectly or writing $\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$ again (confusing $A$ with $A^{-1}$).\n\n**Exam tip:** Diagonal and triangular matrices have structured inverses. Always check $\\det=6\\ne0$ first. Multiply: $2\\cdot\\frac{1}{2}=1$ and $3\\cdot\\frac{1}{3}=1$ on the diagonal confirms $AA^{-1}=I$. This special case previews the general swap-negate-divide rule when off-diagonal entries are zero.",
+      "explanation_he": "עבור מטריצה אלכסונית $A=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$, ההופכית מתקבלת על ידי הופכים של כל איבר אלכסוני: $A^{-1}=\\begin{pmatrix}1/2&0\\\\0&1/3\\end{pmatrix}$. אפשר לאמת בנוסחה הכללית: $\\det=6$, החלפת אלכסון נותנת $\\begin{pmatrix}3&0\\\\0&2\\end{pmatrix}$, שלילת מחוץ לאלכסון לא משנה דבר, וחלוקה ב-6 מביאה לאותה תוצאה בדיוק.\n\n**דרך שגויה נפוצה:** טיפול שגוי באפסים מחוץ לאלכסון, כתיבת $A$ במקום $A^{-1}$, או שכחת לקחת הופכי של 2 ו-3.\n\n**טיפ לבחינה:** למטריצות אלכסוניות יש מבנה הופכי ברור. בדקו $\\det=6\\ne0$ תחילה. כפל: $2\\cdot\\frac{1}{2}=1$ ו-$3\\cdot\\frac{1}{3}=1$ מאשר $AA^{-1}=I$. מקרה זה מקדים את כלל ההחלפה-שלילה-חלוקה כשמחוץ לאלכסון אפסי.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -307,14 +307,17 @@
       "stem_he": "האם $A=\\begin{pmatrix}1&2\\\\2&4\\end{pmatrix}$ הפיכה?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$\\det=4-4=0$. Not invertible.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0$. Not invertible.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
+          "no",
+          "not invertible",
+          "לא",
+          "אינה הפיכה",
+          "singular",
+          "det=0"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$\\det=4-4=0$. Not invertible.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$\\det=0$ → לא הפיכה.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Compute $\\det(A)=1\\cdot4-2\\cdot2=4-4=0$. A square matrix is invertible if and only if its determinant is nonzero, so **$A$ is not invertible** (singular). You can also see directly that row 2 equals $2\\times$ row 1, meaning the rows are linearly dependent and the transformation collapses a whole direction to zero — it cannot be undone.\n\n**Common wrong path:** Attempting to apply the $2\\times2$ inverse formula anyway and dividing by zero, or answering \"yes\" because all entries are nonzero.\n\n**Exam tip:** Invertibility is a structural question, not about whether entries look \"nice.\" Always compute $\\det$ or check row dependence before writing any inverse formula. Singular matrices still appear in application problems — recognize them before wasting time on Gauss-Jordan.",
+      "explanation_he": "חשבו $\\det(A)=1\\cdot4-2\\cdot2=4-4=0$. מטריצה ריבועית הפיכה אם ורק אם הדטרמיננטה שונה מאפס, ולכן **$A$ אינה הפיכה** (סינגולרית). אפשר גם לראות ישירות ששורה 2 שווה ל-$2\\times$ שורה 1, כלומר השורות תלויות לינארית והטרנספורמציה \"מכווצת\" כיוון שלם — לא ניתן לבטל אותה.\n\n**דרך שגויה נפוצה:** יישום נוסחת $2\\times2$ בכל זאת וחלוקה באפס, או תשובה \"כן\" כי כל האיברים שונים מאפס. גם בדיקת \"האם יש אפסים?\" אינה מספיקה — כאן אין אפסים כלל.\n\n**טיפ לבחינה:** הפיכות היא שאלה מבנית. תמיד חשבו $\\det$ או בדקו תלות שורות לפני כתיבת נוסחת הופכית. מטריצות סינגולריות מופיעות גם בבעיות יישומיות — זהו אותם לפני שמבזבזים זמן על גאוס-ג'ורדן.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -325,17 +328,18 @@
       "kind": "short_answer",
       "difficulty": "easy",
       "stem_en": "$A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$. Solve $Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$.",
-      "stem_he": "$Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$. פתרון?",
+      "stem_he": "$Ax=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ עם $A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$. פתרון?",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$x_1=3$, $x_2=2$. ($A^{-1}b$)\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2$. ($A^{-1}b$)\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1"
+          "(3,2)",
+          "3,2",
+          "x1=3 x2=2",
+          "\\begin{pmatrix}3\\\\2\\end{pmatrix}"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$x_1=3$, $x_2=2$. ($A^{-1}b$)\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$x=(3,2)^T$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Since $A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$ is diagonal, the system decouples: $x_1=3$ from the first equation and $2x_2=4$ so $x_2=2$. Equivalently, $A^{-1}=\\begin{pmatrix}1&0\\\\0&1/2\\end{pmatrix}$ and $x=A^{-1}b=\\begin{pmatrix}3\\\\2\\end{pmatrix}$.\n\n**Common wrong path:** Writing $x_2=4$ (forgetting to divide by 2) or swapping components to $(2,3)$.\n\n**Exam tip:** For diagonal $A$, you do not need the full inverse machinery — read off each variable. Still verify: $\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}\\begin{pmatrix}3\\\\2\\end{pmatrix}=\\begin{pmatrix}3\\\\4\\end{pmatrix}$. This pattern appears often as a warm-up before harder $2\\times2$ systems where $\\det\\ne1$ and fractions appear in $A^{-1}$.",
+      "explanation_he": "מכיוון ש-$A=\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}$ אלכסונית, המערכת מתפרקת למשוואות בלתי-תלויות: $x_1=3$ מהמשוואה הראשונה ו-$2x_2=4$ ולכן $x_2=2$. שקול לחלוטין: $A^{-1}=\\begin{pmatrix}1&0\\\\0&1/2\\end{pmatrix}$ ו-$x=A^{-1}b=\\begin{pmatrix}3\\\\2\\end{pmatrix}$.\n\n**דרך שגויה נפוצה:** כתיבת $x_2=4$ (שכחת חלוקה ב-2), החלפת רכיבים ל-$(2,3)$, או שימוש בנוסחה המלאה עם טעות סימן. גם כתיבת $(3,4)$ — בלבול בין $x$ ל-$b$.\n\n**טיפ לבחינה:** עבור $A$ אלכסונית אין צורך בכל מכונת ההופכית — קראו כל משתנה ישירות מהמשוואות. עדיין אמתו: $\\begin{pmatrix}1&0\\\\0&2\\end{pmatrix}\\begin{pmatrix}3\\\\2\\end{pmatrix}=\\begin{pmatrix}3\\\\4\\end{pmatrix}$. דפוס זה מופיע כחימום לפני מערכות $2\\times2$ קשות יותר שבהן $\\det\\ne1$ ומופיעים שברים ב-$A^{-1}$.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -349,14 +353,14 @@
       "stem_he": "$(AB)^{-1}=?$",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$(AB)^{-1}=B^{-1}A^{-1}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "B^{-1}A^{-1}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1"
+          "B^{-1}A^{-1}",
+          "B inverse A inverse",
+          "B^-1 A^-1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution:**\n\n$(AB)^{-1}=B^{-1}A^{-1}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**פתרון:**\n\n$B^{-1}A^{-1}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "The inverse of a product reverses order: $(AB)^{-1}=B^{-1}A^{-1}$. Think of applying transformation $B$ then $A$; to undo, first undo $A$ (multiply by $A^{-1}$ on the left), then undo $B$ — but written right-to-left for the inverse product, that is $B^{-1}A^{-1}$.\n\n**Common wrong path:** Writing $A^{-1}B^{-1}$ — the most frequent inverse-property error on exams. Test with $1\\times1$ matrices: if $A=2$, $B=3$, then $(AB)^{-1}=1/6$ but $A^{-1}B^{-1}=(1/2)(1/3)=1/6$ only because multiplication commutes in $1\\times1$; for $2\\times2$ non-commuting matrices the orders differ.\n\n**Exam tip:** Memorize \"socks and shoes\": $(AB)^{-1}=B^{-1}A^{-1}$. Same reversal applies to $(ABC)^{-1}=C^{-1}B^{-1}A^{-1}$. This property is often tested standalone before a longer computation problem involving matrix products.",
+      "explanation_he": "הופכית של מכפלה מהפכת סדר: $(AB)^{-1}=B^{-1}A^{-1}$. חשבו על יישום $B$ ואז $A$; לביטול, מבטלים קודם את $A$ (כפל שמאלי ב-$A^{-1}$) ואז את $B$ — בכתיבת המכפלה ההופכית זה $B^{-1}A^{-1}$.\n\n**דרך שגויה נפוצה:** כתיבת $A^{-1}B^{-1}$ — הטעות הנפוצה ביותר בתכונות הופכיות. בדיקה: עבור $A=2$, $B=3$ מתקבל $(AB)^{-1}=1/6$; ב-$2\\times2$ שאינן מתחלפות הסדרים שונים לחלוטין.\n\n**טיפ לבחינה:** \"גרביים ונעליים\": $(AB)^{-1}=B^{-1}A^{-1}$. אותה היפוך ל-$(ABC)^{-1}=C^{-1}B^{-1}A^{-1}$. תכונה זו נבחנת לעיתים קרובות לפני בעיה ארוכה יותר עם מכפלות מטריצות.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -367,17 +371,16 @@
       "kind": "short_answer",
       "difficulty": "medium",
       "stem_en": "$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. Find $A^{-1}$ and verify.",
-      "stem_he": "$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. $A^{-1}$ ובדיקה.",
+      "stem_he": "$A=\\begin{pmatrix}2&1\\\\7&4\\end{pmatrix}$. מצאו $A^{-1}$ ואמתו.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=1$. $A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$. $AA^{-1}=I$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "I$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1"
+          "\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}",
+          "4,-1,-7,2"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det=1$. $A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$. $AA^{-1}=I$. ✓\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Step 1: $\\det(A)=2\\cdot4-1\\cdot7=8-7=1\\ne0$. Step 2: Apply the formula — swap diagonal ($2\\leftrightarrow4$), negate off-diagonal ($1\\to-1$, $7\\to-7$), divide by $\\det=1$:\n$$A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}.$$\nStep 3: Verify top-left: $(2)(4)+(1)(-7)=8-7=1$. Bottom-right: $(7)(-1)+(4)(2)=-7+8=1$. Off-diagonals sum to zero.\n\n**Common wrong path:** Sign error on $-7$ (writing $+7$) or forgetting to swap diagonal before negating.\n\n**Exam tip:** When $\\det=1$, the inverse has integer entries — a quick sanity check. Always multiply $AA^{-1}$ for at least one row on medium problems. If verification fails, re-check whether you swapped diagonal before negating off-diagonal entries.",
+      "explanation_he": "שלב 1: $\\det(A)=2\\cdot4-1\\cdot7=8-7=1\\ne0$, ולכן ההופכית קיימת. שלב 2: נוסחה — החלפת אלכסון ($2\\leftrightarrow4$), שלילת מחוץ לאלכסון ($1\\to-1$, $7\\to-7$), חלוקה ב-$\\det=1$:\n$$A^{-1}=\\begin{pmatrix}4&-1\\\\-7&2\\end{pmatrix}.$$\nשלב 3: אימות — איבר שמאל-עליון: $(2)(4)+(1)(-7)=1$; איבר ימין-תחתון: $(7)(-1)+(4)(2)=1$; מחוץ לאלכסון מתאפסים.\n\n**דרך שגויה נפוצה:** טעות סימן ב-$-7$ (כתיבת $+7$), שכחת החלפת אלכסון לפני השלילה, או חלוקה ב-$\\det$ למרות שהוא 1.\n\n**טיפ לבחינה:** כש-$\\det=1$, ההופכית שלמה — בדיקת sanity מהירה. תמיד כפלו $AA^{-1}$ לפחות שורה אחת. אם האימות נכשל, בדקו שוב את סדר ההחלפה והשלילה.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -388,17 +391,16 @@
       "kind": "short_answer",
       "difficulty": "medium",
       "stem_en": "Gauss-Jordan: find $A^{-1}$ for $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$.",
-      "stem_he": "גאוס-ג'ורדן: $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$. $A^{-1}$?",
+      "stem_he": "גאוס-ג'ורדן: $A=\\begin{pmatrix}1&2\\\\3&7\\end{pmatrix}$. מצאו $A^{-1}$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$[A|I]\\to\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}\\to\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
+          "\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}",
+          "7,-2,-3,1"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$[A|I]\\to\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}\\to\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "Form the augmented matrix $[A|I]=\\begin{pmatrix}1&2&|&1&0\\\\3&7&|&0&1\\end{pmatrix}$. Step one eliminates below the pivot in column 1: $R_2\\leftarrow R_2-3R_1$ gives $\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}$. Step two back-clears above the pivot in column 2: $R_1\\leftarrow R_1-2R_2$ gives $\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. Read off $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$ from the right block.\n\nCross-check with the $2\\times2$ formula: $\\det=7-6=1$, swap and negate yields the same matrix — excellent way to catch row-operation slips.\n\n**Common wrong path:** Arithmetic error on $R_2-3R_1$ (writing $-3$ in the wrong column of the identity side) or reading the left block instead of the right.\n\n**Exam tip:** Label each row operation in the margin. For $2\\times2$, Gauss-Jordan must match the formula — if they disagree, find the first row op that diverged.",
+      "explanation_he": "בנו את המטריצה המורחבת $[A|I]=\\begin{pmatrix}1&2&|&1&0\\\\3&7&|&0&1\\end{pmatrix}$. שלב ראשון — ביטול מתחת לעמודה 1: $R_2\\leftarrow R_2-3R_1$ נותן $\\begin{pmatrix}1&2&|&1&0\\\\0&1&|&-3&1\\end{pmatrix}$. שלב שני — ניקוי מעל העמודה 2: $R_1\\leftarrow R_1-2R_2$ נותן $\\begin{pmatrix}1&0&|&7&-2\\\\0&1&|&-3&1\\end{pmatrix}$. קראו $A^{-1}=\\begin{pmatrix}7&-2\\\\-3&1\\end{pmatrix}$ מהבלוק הימני.\n\nבדיקה בנוסחת $2\\times2$: $\\det=1$, החלפה ושלילה נותנות אותה מטריצה — דרך מצוינת לתפוס טעויות בפעולות שורה.\n\n**דרך שגויה נפוצה:** טעות חישוב ב-$R_2-3R_1$, כתיבת $-3$ בעמודה הלא נכונה, או קריאת הבלוק השמאלי במקום הימני.\n\n**טיפ לבחינה:** סמנו כל פעולת שורה בשוליים. ב-$2\\times2$ גאוס-ג'ורדן חייב להתאים לנוסחה — אם לא, מצאו את פעולת השורה הראשונה שבה התפצלתם.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -409,17 +411,18 @@
       "kind": "short_answer",
       "difficulty": "medium",
       "stem_en": "$\\det(A)=3$, $A$ is $3\\times3$. Find $\\det(A^{-1})$.",
-      "stem_he": "$\\det(A)=3$. $\\det(A^{-1})$?",
+      "stem_he": "$\\det(A)=3$, $A$ בגודל $3\\times3$. מצאו $\\det(A^{-1})$.",
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(A^{-1})=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+          "1/3",
+          "0.333",
+          "0.3333",
+          "one third"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\det(A^{-1})=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on.\n\n**How to think about it:** Name the rule or pattern from this lesson, apply it to the stem, then sanity-check the result (units, sign, edge cases).\n**Common slip:** Stopping after the first arithmetic step without verifying it matches the question.\n**Self-check:** Could a different method give the same answer? If yes, that increases confidence; if no, re-read the stem.",
-      "explanation_he": "**למה זה נכון:**\n**דרך פתרון:** זהו את הכלל מהשיעור, ואז יישמו.\n\n$1/3$.\n\n**בדיקה:** החליפו בחזרה או וודאו יחידות וסימן.\n\n**איך לחשוב:** זהו את הכלל מהשיעור, יישמו על הנתון, ובדקו יחידות/סימן.\n**טעות נפוצה:** לעצור אחרי חישוב ראשון בלי לוודא שהוא עונה על השאלה.\n\n**בדיקה:** Re-substitute or verify units and signs before moving on.",
+      "explanation_en": "For any invertible square matrix, $\\det(A^{-1})=1/\\det(A)$. Here $\\det(A)=3$, so $\\det(A^{-1})=1/3$. This follows from $\\det(A)\\det(A^{-1})=\\det(AA^{-1})=\\det(I)=1$.\n\nYou do **not** need the entries of $A$ — only invertibility (given implicitly by the question asking for $\\det(A^{-1})$).\n\n**Common wrong path:** Answering $3$ (confusing inverse determinant with determinant) or $-3$ (sign error).\n\n**Exam tip:** This property holds for any size $n\\times n$. Pair it with $\\det(AB)=\\det(A)\\det(B)$ on the same exam. If $\\det(A)=3$ and $\\det(B)=2$, then $\\det(A^{-1}B)=\\frac{1}{3}\\cdot2=\\frac{2}{3}$. Remember: inverse scales volume by the reciprocal factor.",
+      "explanation_he": "לכל מטריצה ריבועית הפיכה, $\\det(A^{-1})=1/\\det(A)$. כאן $\\det(A)=3$, ולכן $\\det(A^{-1})=1/3$. זה נובע ישירות מ-$\\det(A)\\det(A^{-1})=\\det(AA^{-1})=\\det(I)=1$, ולכן $\\det(A^{-1})=1/\\det(A)$.\n\n**אין צורך** לדעת את איברי $A$ — רק שהיא הפיכה (משתמעת מהשאלה). גודל $3\\times3$ לא משנה: התכונה תקפה לכל $n\\times n$.\n\n**דרך שגויה נפוצה:** תשובה $3$ (בלבול עם דטרמיננטה עצמה) או $-3$ (טעות סימן), או $1/9$ (בלבול עם $\\det(A^2)$).\n\n**טיפ לבחינה:** שלבו עם $\\det(AB)=\\det(A)\\det(B)$ באותה בחינה. אם $\\det(A)=3$ ו-$\\det(B)=2$, אז $\\det(A^{-1}B)=\\frac{2}{3}$. ההופכית מקטינה נפח בגורם ההופכי.",
       "skill_atoms": [
         "matrix_inverse",
         "gauss_jordan"
@@ -428,7 +431,7 @@
   ],
   "est_minutes": 40,
   "author": "cursor-claude-2026",
-  "version": 1,
+  "version": 2,
   "level_focus": null,
   "skill_atom_bank": null
 }
