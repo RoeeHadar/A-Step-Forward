@@ -1,0 +1,882 @@
+#!/usr/bin/env python3
+"""Expand electrostatics.json — MIN_WORDS, Hebrew parity, 80-150 word explanations."""
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / "scripts/seed_data/lessons/electrostatics.json"
+
+MIN_WORDS = {
+    "intro": {"en": 110, "he": 90},
+    "definition": {"en": 130, "he": 110},
+    "theory": {"en": 160, "he": 130},
+    "worked_example": {"en": 130, "he": 110},
+    "pitfall": {"en": 100, "he": 85},
+    "why_matters": {"en": 90, "he": 75},
+    "method_guide": {"en": 100, "he": 85},
+    "before_exam": {"en": 90, "he": 75},
+    "summary": {"en": 70, "he": 60},
+    "checkpoint": {"en": 90, "he": 75},
+    "exercise_set": {"en": 90, "he": 75},
+}
+
+
+def word_count(text):
+    if not text:
+        return 0
+    stripped = re.sub(r"\$\$[\s\S]*?\$\$", " MATH ", text)
+    stripped = re.sub(r"\$[^$\n]+\$", " MATH ", stripped)
+    stripped = re.sub(r"[#*_`>\[\]()]", " ", stripped)
+    return len([w for w in stripped.split() if w])
+
+
+def hebrew_char_ratio(text):
+    he = len(re.findall(r"[\u0590-\u05FF]", text or ""))
+    lat = len(re.findall(r"[a-zA-Z]{3,}", text or ""))
+    return he / (he + lat + 1)
+
+
+def hebrew_body_weak(body_he, body_en):
+    he = (body_he or "").strip()
+    en = (body_en or "").strip()
+    if not he:
+        return True
+    if not en:
+        return hebrew_char_ratio(he) < 0.12
+    ratio = word_count(he) / max(word_count(en), 1)
+    if ratio < 0.55:
+        return True
+    if hebrew_char_ratio(he) < 0.15 and word_count(he) > 25:
+        return True
+    probe = en[: min(60, len(en))].strip()
+    if len(probe) > 20 and probe in he:
+        return True
+    return False
+
+
+SECTION_BODIES = {
+    "intro": {
+        "body_en_md": (
+            "Why does a balloon rubbed on hair attract small pieces of paper? **Electric charge** "
+            "and the forces between charges explain this everyday effect — and also lightning, "
+            "static shocks, the structure of atoms, and the operation of every circuit.\n\n"
+            "Electrostatics deals with **stationary** charges and the forces and fields they "
+            "create. In Bagrut physics (5 units), exam questions typically require you to:\n"
+            "- Apply **Coulomb's law** with correct unit conversion ($\\mu\\text{C} \\to \\text{C}$, cm $\\to$ m).\n"
+            "- Find the **net electric force or field** from multiple charges using superposition.\n"
+            "- Locate **equilibrium positions** where net force on a test charge is zero.\n"
+            "- Calculate **electric potential energy** $U = kq_1 q_2/r$ (with signs!).\n\n"
+            "This lesson connects to `concept:electric_field` and builds on vector addition "
+            "from `concept:vectors_basics`. Master unit conversion and vector direction before "
+            "attempting multi-charge problems — those two habits prevent most Bagrut errors."
+        ),
+        "body_he_md": (
+            "למה בלון ששפשפנו על שיער מושך פיסות נייר? **מטען חשמלי** ו**כוחות בין מטענים** "
+            "מסבירים את האפקט היומיומי — וגם ברק, מכות סטטיות, מבנה האטום ופעולת כל מעגל.\n\n"
+            "אלקטרוסטטיקה עוסקת במטענים **סטטיים** ובכוחות ובשדות שהם יוצרים. "
+            "בבגרות בפיזיקה (5 יחידות), שאלות בבחינה דורשות בדרך כלל:\n"
+            "- יישום **חוק קולון** עם המרת יחידות נכונה ($\\mu\\text{C} \\to \\text{C}$, ס\"מ $\\to$ מ').\n"
+            "- מציאת **כוח או שדה חשמלי כולל** ממספר מטענים באמצעות סופרפוזיציה.\n"
+            "- איתור **נקודות שיווי משקל** שבהן הכוח הנטו על מטען בדיקה שווה לאפס.\n"
+            "- חישוב **אנרגיה פוטנציאלית חשמלית** $U = kq_1 q_2/r$ (עם סימנים!).\n\n"
+            "שיעור זה מתחבר ל-`concept:electric_field` ומבוסס על חיבור וקטורים "
+            "מ-`concept:vectors_basics`. שלטו בהמרת יחידות ובכיוון וקטור לפני "
+            "בעיות ריבוי מטענים — שני הרגלים אלה מונעים את רוב הטעויות בבגרות."
+        ),
+    },
+    "definition": {
+        "body_en_md": (
+            "**Coulomb's law** — force between two point charges $q_1$, $q_2$ separated by distance $r$:\n"
+            "$$F = k\\frac{|q_1||q_2|}{r^2} \\quad k=9\\times10^9\\text{ N·m}^2/\\text{C}^2$$\n\n"
+            "- **Like charges** (same sign): repel along the line joining them.\n"
+            "- **Opposite charges**: attract along the same line.\n"
+            "- Force is a **vector** — magnitude from the formula, direction from attract/repel.\n\n"
+            "**Electric field** $\\vec{E}$ at a point due to source charge $Q$:\n"
+            "$$E = \\frac{k|Q|}{r^2}, \\quad \\vec{F}=q\\vec{E}$$\n"
+            "Field direction: **away** from $+Q$, **toward** $-Q$. The field is the force "
+            "per unit positive test charge — it exists even when no test charge is present.\n\n"
+            "**Superposition principle:** The net force or field from several charges equals "
+            "the **vector sum** of individual contributions. Never add magnitudes unless "
+            "forces are collinear and you have assigned signs.\n\n"
+            "**Electric potential energy** (two point charges):\n"
+            "$$U = k\\frac{q_1 q_2}{r}$$\n"
+            "Sign matters: $U < 0$ for opposite charges (bound/attractive pair); "
+            "$U > 0$ for like charges (repulsive). Units: joules (J)."
+        ),
+        "body_he_md": (
+            "**חוק קולון** — כוח בין שני מטענים נקודתיים $q_1$, $q_2$ במרחק $r$:\n"
+            "$$F = k\\frac{|q_1||q_2|}{r^2} \\quad k=9\\times10^9\\text{ N·m}^2/\\text{C}^2$$\n\n"
+            "- **מטענים דומים** (אותו סימן): דוחים לאורך קו החיבור.\n"
+            "- **מטענים מנוגדים**: מושכים לאורך אותו קו.\n"
+            "- הכוח הוא **וקטור** — גודל מהנוסחה, כיוון ממשיכה/דחייה.\n\n"
+            "**שדה חשמלי** $\\vec{E}$ בנקודה בגלל מטען מקור $Q$:\n"
+            "$$E = \\frac{k|Q|}{r^2}, \\quad \\vec{F}=q\\vec{E}$$\n"
+            "כיוון שדה: **הרחק** מ-$+Q$, **לכיוון** $-Q$. השדה הוא הכוח ליחידת "
+            "מטען בדיקה חיובי — קיים גם כשאין מטען בדיקה.\n\n"
+            "**עקרון סופרפוזיציה:** הכוח או השדה הכולל ממספר מטענים שווה ל**סכום וקטורי** "
+            "של תרומות בודדות. אל תחברו גדלים אלא אם הכוחות קולינאריים ויש סימנים.\n\n"
+            "**אנרגיה פוטנציאלית חשמלית** (שני מטענים נקודתיים):\n"
+            "$$U = k\\frac{q_1 q_2}{r}$$\n"
+            "הסימן חשוב: $U < 0$ למטענים מנוגדים (זוג כבול/מושך); "
+            "$U > 0$ למטענים דומים (דוחים). יחידות: ג'oule (J)."
+        ),
+    },
+    "theory": {
+        "body_en_md": (
+            "### Strategy for multiple charges\n\n"
+            "1. **Identify** each force acting on the target charge — draw a diagram.\n"
+            "2. **Calculate magnitudes** using $F = k|q_1||q_2|/r^2$; convert $\\mu\\text{C}$ to C first.\n"
+            "3. **Assign directions** — attract (toward opposite charge) or repel (away from like charge).\n"
+            "4. **Add as vectors** — use components ($x$, $y$) if forces are not collinear.\n\n"
+            "### Equilibrium of a third charge between two fixed charges\n\n"
+            "A charge $q_C$ is in equilibrium when the net force on it is zero: $\\vec{F}_{\\text{net}} = 0$.\n"
+            "Between two **like** positive charges, equilibrium lies closer to the **smaller** charge "
+            "(weaker source compensated by shorter distance). Set magnitudes equal:\n"
+            "$$\\frac{|q_A|}{x^2} = \\frac{|q_B|}{(L-x)^2}$$\n"
+            "Take the positive square root after cross-multiplying.\n\n"
+            "### Electric field zero vs force zero\n\n"
+            "These are different questions. Field zero means $\\vec{E}_{\\text{net}} = 0$; "
+            "force zero on charge $q$ means $q\\vec{E}_{\\text{net}} = 0$. "
+            "For two equal like charges, $E = 0$ at the midpoint by symmetry.\n\n"
+            "**Units checklist:** Charge in coulombs (C), distance in meters (m), "
+            "force in newtons (N), field in N/C, energy in joules (J)."
+        ),
+        "body_he_md": (
+            "### אסטרטגיה לריבוי מטענים\n\n"
+            "1. **זיהוי** כל כוח הפועל על המטען המטרה — שרטטו דיאגרמה.\n"
+            "2. **חישוב גדלים** ב-$F = k|q_1||q_2|/r^2$; המירו $\\mu\\text{C}$ ל-C קודם.\n"
+            "3. **קביעת כיוונים** — משיכה (לכיוון מטען מנוגד) או דחייה (הרחק ממטען דומה).\n"
+            "4. **חיבור וקטורי** — השתמשו ברכיבים ($x$, $y$) אם הכוחות לא קולינאריים.\n\n"
+            "### שיווי משקל של מטען שלישי בין שני מטענים קבועים\n\n"
+            "מטען $q_C$ בשיווי משקל כשהכוח הנטו עליו אפס: $\\vec{F}_{\\text{net}} = 0$.\n"
+            "בין שני מטענים **חיוביים** דומים, שיווי משקל קרוב יותר למטען **הקטן** "
+            "(מקור חלש מפוצה על ידי מרחק קצר). השוו גדלים:\n"
+            "$$\\frac{|q_A|}{x^2} = \\frac{|q_B|}{(L-x)^2}$$\n"
+            "קחו שורש חיובי אחרי הצלבה.\n\n"
+            "### אפס שדה לעומת אפס כוח\n\n"
+            "אלה שאלות שונות. אפס שדה = $\\vec{E}_{\\text{net}} = 0$; "
+            "אפס כוח על $q$ = $q\\vec{E}_{\\text{net}} = 0$. "
+            "לשני מטענים חיוביים שווים, $E = 0$ בנקודת האמצע בגלל סימטריה.\n\n"
+            "**רשימת יחידות:** מטען בקולומים (C), מרחק במטרים (m), "
+            "כוח בניוטון (N), שדה ב-N/C, אנרגיה בג'oule (J)."
+        ),
+    },
+    "worked_example_1": {
+        "body_en_md": (
+            "**Two charges** $q_1=+3\\mu$C and $q_2=-4\\mu$C are 0.30 m apart. "
+            "Find the force magnitude and state whether the interaction is attractive or repulsive.\n\n"
+            "### Move 1: Convert units\n"
+            "$3\\mu\\text{C} = 3\\times10^{-6}$ C, $4\\mu\\text{C} = 4\\times10^{-6}$ C, $r = 0.30$ m.\n\n"
+            "### Move 2: Apply Coulomb's law\n"
+            "$$F=k\\frac{|q_1||q_2|}{r^2}=9\\times10^9\\cdot\\frac{3\\times10^{-6}\\cdot4\\times10^{-6}}{(0.30)^2}$$\n"
+            "$$=9\\times10^9\\cdot\\frac{12\\times10^{-12}}{0.09}=9\\times10^9\\cdot1.33\\times10^{-10}=1.2\\text{ N}.$$\n\n"
+            "### Move 3: Determine attract/repel from signs\n"
+            "Opposite signs ($+$ and $-$) → **attraction**. Each charge is pulled toward the other "
+            "along the line joining them. By Newton's third law, both experience 1.2 N magnitude.\n\n"
+            "**Answer:** $F = 1.2$ N, attractive.\n\n"
+            "**Self-check:** If you got 120 N, you likely forgot to convert $\\mu$C. "
+            "If you wrote \"repulsion,\" re-check the sign rule.\n\n"
+            "**Bagrut context:** Single-pair Coulomb problems often appear as the first "
+            "part of a longer electrostatics question. Always report both magnitude and "
+            "whether the force is attractive or repulsive — examiners deduct marks for "
+            "missing the direction statement even when the number is correct."
+        ),
+        "body_he_md": (
+            "**שני מטענים** $q_1=+3\\mu$C ו-$q_2=-4\\mu$C במרחק 0.30 m. "
+            "מצאו את גודל הכוח וציינו אם האינטראקציה מושכת או דוחה.\n\n"
+            "### צעד 1: המרת יחידות\n"
+            "$3\\mu\\text{C} = 3\\times10^{-6}$ C, $4\\mu\\text{C} = 4\\times10^{-6}$ C, $r = 0.30$ m.\n\n"
+            "### צעד 2: יישום חוק קולון\n"
+            "$$F=k\\frac{|q_1||q_2|}{r^2}=9\\times10^9\\cdot\\frac{3\\times10^{-6}\\cdot4\\times10^{-6}}{(0.30)^2}$$\n"
+            "$$=9\\times10^9\\cdot\\frac{12\\times10^{-12}}{0.09}=1.2\\text{ N}.$$\n\n"
+            "### צעד 3: משיכה/דחייה לפי סימנים\n"
+            "סימנים מנוגדים ($+$ ו-$) → **משיכה**. כל מטען נמשך לכיוון השני "
+            "לאורך קו החיבור. לפי החוק השלישי של ניוטון, שניהם חווים גודל 1.2 N.\n\n"
+            "**תשובה:** $F = 1.2$ N, משיכה.\n\n"
+            "**בדיקה:** אם קיבלתם 120 N — שכחתם להמיר $\\mu$C. "
+            "אם כתבתם \"דחייה\" — בדקו שוב את כלל הסימן.\n\n"
+            "**הקשר בגרות:** בעיות קולון של זוג בודד מופיעות לעיתים כחלק א' "
+            "בשאלה ארוכה יותר. דווחו תמיד גם על גודל וגם על משיכה/דחייה — "
+            "מורידים נקודות על היעדר כיוון גם כשהמספר נכון."
+        ),
+    },
+    "worked_example_2": {
+        "body_en_md": (
+            "**Three charges on a line:** $q_1=+1\\mu$C at $x=0$, $q_2=+1\\mu$C at $x=0.6$ m, "
+            "$q_3=+2\\mu$C at $x=0.3$ m. Find the net force on $q_3$.\n\n"
+            "### Move 1: Force from $q_1$ on $q_3$\n"
+            "Distance $r = 0.3$ m. Same sign → repel. $q_3$ is to the right of $q_1$, "
+            "so force on $q_3$ is in $+x$ direction:\n"
+            "$$F_1=9\\times10^9\\cdot\\frac{1\\times10^{-6}\\cdot2\\times10^{-6}}{0.09}=0.2\\text{ N (rightward)}.$$\n\n"
+            "### Move 2: Force from $q_2$ on $q_3$\n"
+            "Distance $r = 0.3$ m. Same sign → repel. $q_3$ is to the left of $q_2$, "
+            "so force on $q_3$ is in $-x$ direction:\n"
+            "$$F_2=9\\times10^9\\cdot\\frac{1\\times10^{-6}\\cdot2\\times10^{-6}}{0.09}=0.2\\text{ N (leftward)}.$$\n\n"
+            "### Move 3: Vector sum\n"
+            "Equal magnitudes, opposite directions → $F_{\\text{net}} = 0.2 - 0.2 = 0$ N.\n"
+            "This is no accident: $q_3$ sits at the **midpoint** between two equal charges.\n\n"
+            "**Answer:** $F_{\\text{net}} = 0$ N. **Exam tip:** Check symmetry before calculating — "
+            "it saves time on Bagrut superposition problems."
+        ),
+        "body_he_md": (
+            "**שלושה מטענים על קו:** $q_1=+1\\mu$C ב-$x=0$, $q_2=+1\\mu$C ב-$x=0.6$ m, "
+            "$q_3=+2\\mu$C ב-$x=0.3$ m. מצאו את הכוח הנטו על $q_3$.\n\n"
+            "### צעד 1: כוח מ-$q_1$ על $q_3$\n"
+            "מרחק $r = 0.3$ m. סימנים דומים → דחייה. $q_3$ מימין ל-$q_1$, "
+            "לכן הכוח על $q_3$ בכיוון $+x$:\n"
+            "$$F_1=9\\times10^9\\cdot\\frac{1\\times10^{-6}\\cdot2\\times10^{-6}}{0.09}=0.2\\text{ N (ימינה)}.$$\n\n"
+            "### צעד 2: כוח מ-$q_2$ על $q_3$\n"
+            "מרחק $r = 0.3$ m. סימנים דומים → דחייה. $q_3$ משמאל ל-$q_2$, "
+            "לכן הכוח על $q_3$ בכיוון $-x$:\n"
+            "$$F_2=0.2\\text{ N (שמאלה)}.$$\n\n"
+            "### צעד 3: סכום וקטורי\n"
+            "גדלים שווים, כיוונים מנוגדים → $F_{\\text{net}} = 0.2 - 0.2 = 0$ N.\n"
+            "זה לא מקרי: $q_3$ ב**נקודת האמצע** בין שני מטענים שווים.\n\n"
+            "**תשובה:** $F_{\\text{net}} = 0$ N. **טיפ לבחינה:** בדקו סימטריה לפני חישוב — "
+            "חוסך זמן בבעיות סופרפוזיציה בבגרות."
+        ),
+    },
+    "worked_example_3": {
+        "body_en_md": (
+            "**Charges:** $q_A=+9\\mu$C at $x=0$, $q_B=+4\\mu$C at $x=1$ m. "
+            "A third charge $q_C$ is placed on the segment $[0,1]$. "
+            "Where must $q_C$ be for the net force on it to be zero?\n\n"
+            "### Move 1: Set up force balance\n"
+            "Let $x$ = position of $q_C$ from $A$. Force from $A$ (rightward): "
+            "$F_A=k|q_A||q_C|/x^2$. Force from $B$ (leftward): "
+            "$F_B=k|q_B||q_C|/(1-x)^2$.\n\n"
+            "### Move 2: Equate magnitudes ($F_A = F_B$)\n"
+            "Cancel $k$ and $|q_C|$:\n"
+            "$$\\frac{9}{x^2}=\\frac{4}{(1-x)^2} \\Rightarrow \\frac{3}{x}=\\frac{2}{1-x}$$\n"
+            "$$3(1-x)=2x \\Rightarrow 3=5x \\Rightarrow x=0.6\\text{ m}.$$\n\n"
+            "### Move 3: Verify location makes sense\n"
+            "Equilibrium is closer to the **smaller** charge ($+4\\mu$C at $x=1$), "
+            "at $x=0.6$ m — correct. The sign of $q_C$ does not affect the position "
+            "(only whether equilibrium is stable).\n\n"
+            "**Answer:** $q_C$ must be at $x=0.6$ m. **Exam tip:** After solving, "
+            "confirm $0 < x < L$ and that $x$ is nearer the weaker source."
+        ),
+        "body_he_md": (
+            "**מטענים:** $q_A=+9\\mu$C ב-$x=0$, $q_B=+4\\mu$C ב-$x=1$ m. "
+            "מטען שלישי $q_C$ מונח על הקטע $[0,1]$. "
+            "איפה $q_C$ חייב להיות כדי שהכוח הנטו עליו יהיה אפס?\n\n"
+            "### צעד 1: הגדרת שיווי משקל\n"
+            "יהי $x$ = מיקום $q_C$ מ-$A$. כוח מ-$A$ (ימינה): "
+            "$F_A=k|q_A||q_C|/x^2$. כוח מ-$B$ (שמאלה): "
+            "$F_B=k|q_B||q_C|/(1-x)^2$.\n\n"
+            "### צעד 2: השוואת גדלים ($F_A = F_B$)\n"
+            "בטלו $k$ ו-$|q_C|$:\n"
+            "$$\\frac{9}{x^2}=\\frac{4}{(1-x)^2} \\Rightarrow \\frac{3}{x}=\\frac{2}{1-x}$$\n"
+            "$$3(1-x)=2x \\Rightarrow x=0.6\\text{ m}.$$\n\n"
+            "### צעד 3: אימות שהמיקום הגיוני\n"
+            "שיווי משקל קרוב יותר למטען **הקטן** ($+4\\mu$C ב-$x=1$), "
+            "ב-$x=0.6$ m — נכון. סימן $q_C$ לא משפיע על המיקום "
+            "(רק על יציבות השיווי משקל).\n\n"
+            "**תשובה:** $q_C$ ב-$x=0.6$ m. **טיפ לבחינה:** אחרי הפתרון, "
+            "אשרו $0 < x < L$ וש-$x$ קרוב יותר למקור החלש."
+        ),
+    },
+    "checkpoint_1": {
+        "body_en_md": (
+            "**Practice now:** Two identical charges of $+2\\mu$C are separated by "
+            "$r = 0.4$ m. Find the magnitude of the repulsion force between them.\n\n"
+            "Both charges are positive, so the interaction is **repulsive** — each charge "
+            "pushes the other away along the line joining them. Use $F = kq^2/r^2$ because "
+            "the charges are equal. Convert $2\\mu\\text{C} = 2\\times10^{-6}$ C before "
+            "substituting, and remember $r^2 = (0.4)^2 = 0.16$ m².\n\n"
+            "Try the calculation yourself before opening the solution below. "
+            "Expected answer is a fraction of a newton — repulsive. "
+            "On Bagrut exams, always write the formula $F = kq^2/r^2$ before "
+            "substituting numbers to earn partial credit even if arithmetic slips. "
+            "After finding $F$, confirm the answer is repulsive because both charges are positive."
+        ),
+        "body_he_md": (
+            "**תרגלו עכשיו:** שני מטענים זהים $+2\\mu$C במרחק $r = 0.4$ m. "
+            "מצאו את גודל כוח הדחייה ביניהם.\n\n"
+            "שני המטענים חיוביים, לכן האינטראקציה **דוחה** — כל מטען דוחה את השני "
+            "לאורך קו החיבור. השתמשו ב-$F = kq^2/r^2$ כי המטענים שווים. "
+            "המירו $2\\mu\\text{C} = 2\\times10^{-6}$ C לפני הצבה, "
+            "וזכרו $r^2 = (0.4)^2 = 0.16$ m².\n\n"
+            "נסו לחשב לבד לפני שפותחים את הפתרון. "
+            "התשובה הצפויה: שבר של ניוטון — דחייה. "
+            "בבגרות, כתבו תמיד את הנוסחה לפני הצבת מספרים לנקודות חלקיות. "
+            "ודאו שהמרתם $\\mu$C לקולומים לפני שמעלים בריבוע. "
+            "אחרי מציאת $F$, אשרו שהתשובה דוחה כי שני המטענים חיוביים."
+        ),
+        "checkpoint_solution_en": (
+            "Two identical charges of $+2\\mu$C are 0.4 m apart. Find the repulsion force.\n\n"
+            "**Step 1:** Convert: $q = 2\\times10^{-6}$ C, $r = 0.4$ m.\n"
+            "**Step 2:** Same sign → repulsion. Formula: $F = kq^2/r^2$.\n\n"
+            "$$F=9\\times10^9\\cdot(2\\times10^{-6})^2/(0.4)^2"
+            "=9\\times10^9\\cdot4\\times10^{-12}/0.16=0.225\\text{ N}.$$\n\n"
+            "**Verify:** Both charges positive → repulsive. Magnitude ~0.2 N is reasonable "
+            "for microcoulomb charges at decimeter scale.\n\n"
+            "**Answer:** $F = 0.225$ N, repulsive."
+        ),
+        "checkpoint_solution_he": (
+            "שני מטענים זהים $+2\\mu$C במרחק 0.4 m. מצאו את כוח הדחייה.\n\n"
+            "**שלב 1:** המרה: $q = 2\\times10^{-6}$ C, $r = 0.4$ m.\n"
+            "**שלב 2:** סימנים דומים → דחייה. נוסחה: $F = kq^2/r^2$.\n\n"
+            "$$F=9\\times10^9\\cdot(2\\times10^{-6})^2/(0.4)^2=0.225\\text{ N}.$$\n\n"
+            "**אימות:** שני מטענים חיוביים → דחייה. גודל ~0.2 N סביר "
+            "למטענים במיקрокולום במרחק דצימטר.\n\n"
+            "**תשובה:** $F = 0.225$ N, דחייה."
+        ),
+    },
+    "checkpoint_2": {
+        "body_en_md": (
+            "**Practice now:** Charge $q_1=+4\\mu$C is at $x=0$, and $q_2=-4\\mu$C "
+            "is at $x=1.0$ m. Where on the $x$-axis is the electric field zero?\n\n"
+            "This is a **field-zero** problem, not force equilibrium. Sketch field "
+            "directions from each charge: $+q$ fields point away, $-q$ fields point "
+            "toward the negative charge. Between the charges, both fields point in "
+            "the same direction — they add, never cancel.\n\n"
+            "Think about whether cancellation is possible outside the pair before "
+            "setting up equations. Try reasoning through symmetry before reading "
+            "the full solution. This distinction between field zero and force "
+            "equilibrium appears frequently on the 5-unit Bagrut exam. "
+            "Write field directions as arrows before attempting any algebra."
+        ),
+        "body_he_md": (
+            "**תרגלו עכשיו:** מטען $q_1=+4\\mu$C ב-$x=0$, ו-$q_2=-4\\mu$C "
+            "ב-$x=1.0$ m. איפה על ציר $x$ השדה החשמלי שווה לאפס?\n\n"
+            "זו בעיית **אפס שדה**, לא שיווי משקל כוח. שרטטו כיווני שדה "
+            "מכל מטען: מ-$+q$ השדה מתפזר; מ-$-q$ השדה מצביע אל המטען השלילי. "
+            "בין המטענים, שני השדות באותו כיוון — מתחברים, לא מתקזזים.\n\n"
+            "חשבו האם ביטול אפשרי מחוץ לזוג לפני הגדרת משוואות. "
+            "נסו לנמק דרך סימטריה לפני קריאת הפתרון. "
+            "ההבחנה בין אפס שדה לשיווי משקל כוח מופיעה לעיתים קרובות בבגרות. "
+            "זכרו: בין מטענים מנוגדים השדות תמיד באותו כיוון ולא מתקזזים. "
+            "כתבו כיווני שדה כחיצים לפני כל אלגebra."
+        ),
+        "checkpoint_solution_en": (
+            "Charge $q_1=+4\\mu$C at $x=0$, $q_2=-4\\mu$C at $x=1.0$ m. "
+            "Where on the $x$-axis is the electric field zero?\n\n"
+            "**Step 1:** Field from $+q$ points away; from $-q$ points toward $-q$.\n"
+            "**Step 2:** Between the charges, both fields point in the **same** direction "
+            "(from $+$ toward $-$) — they **add**, never cancel.\n"
+            "**Step 3:** Outside the pair, fields oppose but $|q_1|=|q_2|$ at equal "
+            "distances gives equal magnitudes — still no zero on the axis for this symmetric dipole.\n\n"
+            "**Answer:** There is **no finite point** on the axis where $E=0$ for equal "
+            "and opposite charges. Do not confuse with force equilibrium of a third charge."
+        ),
+        "checkpoint_solution_he": (
+            "מטען $+4\\mu$C ב-$x=0$, $-4\\mu$C ב-$x=1.0$ m. "
+            "איפה על ציר $x$ השדה החשמלי שווה לאפס?\n\n"
+            "**שלב 1:** שדה מ-$+q$ מתפזר; מ-$-q$ מצביע לכיוון $-q$.\n"
+            "**שלב 2:** **בין** המטענים, שני השדות באותו כיוון (מ-$+$ ל-$-$) — "
+            "הם **מתחברים**, לא מתקזזים.\n"
+            "**שלב 3:** מחוץ לזוג השדות מנוגדים, אך $|q_1|=|q_2|$ — "
+            "אין נקודת אפס על הציר לדיפול סימטרי זה.\n\n"
+            "**תשובה:** **אין נקודה סופית** על הציר שבה $E=0$ למטענים שווים והפוכים. "
+            "אל תבלבלו עם שיווי משקל כוח של מטען שלישי."
+        ),
+    },
+    "method_guide": {
+        "body_en_md": (
+            "| Task | Method | Key tip |\n|---|---|---|\n"
+            "| Force between two charges | $F=k|q_1||q_2|/r^2$ | Repel if same sign; attract if opposite |\n"
+            "| Net force on $q$ from many | Superposition: sum $\\vec{F}_i$ as vectors | Draw arrows before adding |\n"
+            "| Electric field at point | $E=k|Q|/r^2$ | Away from $+Q$, toward $-Q$ |\n"
+            "| Net field from many charges | Vector sum of field contributions | Field exists without test charge |\n"
+            "| Equilibrium position | Set $F_{\\text{net}}=0$; $|q_A|/x^2 = |q_B|/(L-x)^2$ | Closer to smaller charge |\n"
+            "| Potential energy | $U=kq_1q_2/r$ (signed) | Negative = bound/attractive pair |\n\n"
+            "**Step-by-step workflow:** (1) Convert all units to SI. (2) Draw diagram with "
+            "charge positions. (3) Compute each force/field with direction. (4) Add vectors. "
+            "(5) State attract/repel or field direction in the answer.\n\n"
+            "**Exam tip:** Write the formula before substituting numbers — partial credit "
+            "on Bagrut rewards correct setup even when arithmetic slips."
+        ),
+        "body_he_md": (
+            "| משימה | שיטה | טיפ |\n|---|---|---|\n"
+            "| כוח בין שניים | $F=k|q_1||q_2|/r^2$ | דחייה בסימנים דומים; משיכה במנוגדים |\n"
+            "| כוח כולל על $q$ | סופרפוזיציה: סכום $\\vec{F}_i$ | שרטטו חיצים לפני חיבור |\n"
+            "| שדה בנקודה | $E=k|Q|/r^2$ | הרחק מ-$+Q$, לכיוון $-Q$ |\n"
+            "| שדה כולל | סכום וקטורי של תרומות | שדה קיים גם בלי מטען בדיקה |\n"
+            "| שיווי משקל | $F_{\\text{net}}=0$; $|q_A|/x^2 = |q_B|/(L-x)^2$ | קרוב למטען הקטן |\n"
+            "| אנרגיה פוטנציאלית | $U=kq_1q_2/r$ (עם סימן) | שלילי = זוג כבול/מושך |\n\n"
+            "**תהליך שלב-אחר-שלב:** (1) המירו ל-SI. (2) שרטטו דיאגרמה. "
+            "(3) חשבו כל כוח/שדה עם כיוון. (4) חברו וקטורים. "
+            "(5) ציינו משיכה/דחייה או כיוון שדה בתשובה.\n\n"
+            "**טיפ לבחינה:** כתבו נוסחה לפני הצבה — נקודות חלקיות בבגרות על הגדרה נכונה."
+        ),
+    },
+    "exercise_set": {
+        "body_en_md": (
+            "Work through every exercise below in order. **Try each one before opening the "
+            "solution** — the reasoning steps matter as much as the final number.\n\n"
+            "The set progresses from direct Coulomb calculations (easy) through superposition "
+            "on a line and field-zero problems (medium) to equilibrium, scaling, and 2D "
+            "arrangements (hard). For each problem: convert units, draw a diagram, assign "
+            "force directions, then add vectors.\n\n"
+            "**Bagrut strategy:** Show your formula before plugging in numbers. "
+            "State attract/repel or field direction even when only magnitude is asked. "
+            "Partial credit on the 5-unit exam rewards correct vector setup even when "
+            "arithmetic has minor slips — never skip the diagram or the unit conversion step."
+        ),
+        "body_he_md": (
+            "פתרו את כל התרגילים למטה לפי הסדר. **נסו כל תרגיל לפני שפותחים את הפתרון** — "
+            "שלבי הנימוק חשובים לא פחות מהמספר הסופי.\n\n"
+            "הסדרה מתקדמת מחישובי קולון ישירים (קל) דרך סופרפוזיציה על קו "
+            "ובעיות אפס שדה (בינוני) לשיווי משקל, קנה מידה ופריסות דו-ממדיות (קשה). "
+            "בכל בעיה: המירו יחידות, שרטטו דיאגרמה, קבעו כיווני כוח, ואז חברו וקטורים.\n\n"
+            "**אסטרטגיה לבגרות:** הציגו נוסחה לפני הצבת מספרים. "
+            "ציינו משיכה/דחייה או כיוון שדה גם כשנשאל רק על גודל. "
+            "נקודות חלקיות בבחינת 5 יחידות על הגדרה נכונה — "
+            "אל תדלגו על דיאגרמה או על המרת יחידות."
+        ),
+    },
+    "pitfall": {
+        "body_en_md": (
+            "1. **Forgetting to convert $\\mu$C to C**: $1\\mu\\text{C}=10^{-6}$ C. "
+            "Skipping this causes errors of $10^{12}$ in $q_1 q_2$ — the most common "
+            "Bagrut electrostatics mistake.\n\n"
+            "2. **Treating force as scalar in superposition**: Forces are vectors. "
+            "You must assign $+x$ / $-x$ (or components) before adding. "
+            "Adding magnitudes when forces oppose gives wrong answers.\n\n"
+            "3. **Using $|q_1||q_2|$ in potential energy**: $U = kq_1 q_2/r$ keeps "
+            "signs. $U < 0$ for opposite charges (bound system); using absolute values "
+            "loses this physical meaning.\n\n"
+            "4. **Confusing force and field**: $\\vec{E}$ is force per unit **positive** "
+            "charge; $\\vec{F}=q\\vec{E}$. Field direction does not depend on test charge sign.\n\n"
+            "**Example misconception:** Adding forces as scalars: $F_{\\text{net}} = F_1 + F_2$ "
+            "always.\n\n"
+            "**Fix:** Draw arrows, assign axis directions, then add with signs."
+        ),
+        "body_he_md": (
+            "1. **שכחת המרת $\\mu$C ל-C**: $1\\mu\\text{C}=10^{-6}$ C. "
+            "דילוג גורם לטעויות של $10^{12}$ ב-$q_1 q_2$ — "
+            "הטעות הנפוצה ביותר באלקטרוסטטיקה בבגרות.\n\n"
+            "2. **טיפול בכוח כסקalar בסופרפוזיציה**: כוחות הם וקטורים. "
+            "חובה לקבוע $+x$ / $-x$ (או רכיבים) לפני חיבור. "
+            "חיבור גדלים כשהכוחות מנוגדים נותן תשובה שגויה.\n\n"
+            "3. **שימוש ב-$|q_1||q_2|$ באנרגיה פוטנציאלית**: $U = kq_1 q_2/r$ שומר סימנים. "
+            "$U < 0$ למטענים מנוגדים; ערכים מוחלטים מאבדים משמעות פיזיקלית.\n\n"
+            "4. **בלבול כוח ושדה**: $\\vec{E}$ הוא כוח ליחידת מטען **חיובי**; "
+            "$\\vec{F}=q\\vec{E}$. כיוון שדה לא תלוי בסימן מטען הבדיקה.\n\n"
+            "**דוגמת טעות:** חיבור כוחות כסקalars: $F_{\\text{net}} = F_1 + F_2$ תמיד.\n\n"
+            "**תיקון:** שרטטו חיצים, קבעו כיווני ציר, ואז חברו עם סימנים."
+        ),
+    },
+    "why_matters": {
+        "body_en_md": (
+            "Electrostatics is the foundation of all electrical phenomena — every circuit, "
+            "battery, capacitor, and nerve impulse begins with understanding how charges "
+            "interact at rest.\n\n"
+            "**You will use this to unlock:**\n"
+            "- `concept:electric_field` **Electric Field & Potential** (direct prereq)\n"
+            "- `concept:electric_circuits` and `concept:kirchhoff_laws` (current flows because of fields in conductors)\n\n"
+            "**Why it matters for exams:** Bagrut electrostatics questions combine unit "
+            "conversion, vector superposition, and equilibrium in multi-step problems "
+            "worth 15–20 points. Mastery here transfers directly to field, potential, "
+            "and capacitance topics. Real-world applications include static discharge safety, "
+            "particle accelerator design, and the electrostatic basis of touch screens."
+        ),
+        "body_he_md": (
+            "אלקטרוסטטיקה היא הבסיס לכל התופעות החשמליות — כל מעגל, סוללה, "
+            "קבל ודופק עצבי מתחיל בהבנת אינטראקציות מטען במנוחה.\n\n"
+            "**תשתמשו בזה כדי להתקדם ל:**\n"
+            "- `concept:electric_field` **שדה חשמלי ופוטנציאל** (דרישה ישירה)\n"
+            "- `concept:electric_circuits` ו-`concept:kirchhoff_laws` (זרם זורם בגלל שדות במוליכים)\n\n"
+            "**למה זה חשוב לבחינות:** שאלות אלקטרוסטטיקה בבגרות משלבות המרת יחידות, "
+            "סופרפוזיציה וקטורית ושיווי משקל בבעיות רב-שלביות בשווי 15–20 נקודות. "
+            "שליטה כאן עוברת ישירות לשדה, פוטנציאל וקבלים. "
+            "יישומים בעולם האמיתי: בטיחות פריקה סטטית, מאיצי חלקיקים, "
+            "ובסיס אלקטרוסטטי של מסכי מגע."
+        ),
+    },
+    "before_exam": {
+        "body_en_md": (
+            "**Core formulas — say each aloud once:**\n"
+            "- $F=k|q_1||q_2|/r^2$, $k=9\\times10^9$ N·m²/C².\n"
+            "- $E=k|Q|/r^2$; direction away from $+Q$, toward $-Q$.\n"
+            "- Superposition: vector sum of forces/fields.\n"
+            "- Equilibrium: $|q_A|/x^2 = |q_B|/(L-x)^2$; closer to smaller charge.\n"
+            "- $U=kq_1q_2/r$ (signed!); negative = attractive pair.\n"
+            "- Scaling: double $r$ → $F/4$; halve $r$ → $4F$.\n\n"
+            "**Quick checks before submitting:** Did you convert $\\mu$C to C? "
+            "Is $r$ in meters? Did you add forces as vectors with correct signs? "
+            "Did you state attract/repel in the final answer?\n\n"
+            "**Last review:** Convert $\\mu$C and cm before every calculation, "
+            "then solve one checkpoint without looking."
+        ),
+        "body_he_md": (
+            "**נוסחאות מרכזיות — אמרו כל אחת בקול פעם אחת:**\n"
+            "- $F=k|q_1||q_2|/r^2$, $k=9\\times10^9$ N·m²/C².\n"
+            "- $E=k|Q|/r^2$; כיוון הרחק מ-$+Q$, לכיוון $-Q$.\n"
+            "- סופרפוזיציה: סכום וקטורי של כוחות/שדות.\n"
+            "- שיווי משקל: $|q_A|/x^2 = |q_B|/(L-x)^2$; קרוב למטען הקטן.\n"
+            "- $U=kq_1q_2/r$ (עם סימן!); שלילי = זוג מושך.\n"
+            "- קנה מידה: $r$ כפול → $F/4$; $r$ חצי → $4F$.\n\n"
+            "**בדיקות מהירות לפני הגשה:** המירתם $\\mu$C ל-C? "
+            "$r$ במטרים? חיברתם כוחות כוקטורים עם סימנים נכונים? "
+            "ציינתם משיכה/דחייה בתשובה?\n\n"
+            "**חזרה אחרונה:** המירו $\\mu$C וס\"מ לפני כל חישוב, "
+            "ואז פתרו checkpoint אחד בלי להסתכל."
+        ),
+    },
+    "summary": {
+        "body_en_md": (
+            "- **Coulomb's law:** $F=k|q_1||q_2|/r^2$; inverse-square, central force.\n"
+            "- **Electric field:** force per unit positive charge; $E=k|Q|/r^2$.\n"
+            "- **Superposition:** add force and field **vectors**, not magnitudes blindly.\n"
+            "- **Equilibrium:** net force zero; ratio of charge magnitudes ↔ ratio of $r^2$.\n"
+            "- **Potential energy:** $U=kq_1q_2/r$ with signs; negative means binding.\n\n"
+            "**Takeaway:** From the problem wording alone — two charges, many charges, "
+            "field zero, or equilibrium — you should know which method row to use "
+            "before substituting numbers."
+        ),
+        "body_he_md": (
+            "- **חוק קולון:** $F=k|q_1||q_2|/r^2$; ריבוע הפוך, כוח מרכזי.\n"
+            "- **שדה חשמלי:** כוח ליחידת מטען חיובי; $E=k|Q|/r^2$.\n"
+            "- **סופרפוזיציה:** חברו כוחות ושדות **וקטורית**, לא גדלים בעיוורון.\n"
+            "- **שיווי משקל:** כוח נטו אפס; יחס גדלי מטענים ↔ יחס $r^2$.\n"
+            "- **אנרגיה פוטנציאלית:** $U=kq_1q_2/r$ עם סימנים; שלילי = כריכה.\n\n"
+            "**מסקנה:** מניסוח השאלה בלבד — שני מטענים, ריבוי מטענים, "
+            "אפס שדה או שיווי משקל — תדעו איזו שורה במדריך השיטה לפני ההצבה."
+        ),
+    },
+}
+
+QUESTION_EXPLANATIONS = [
+    {
+        "explanation_en": (
+            "**Why this is correct:** Coulomb's law gives $F \\propto 1/r^2$. "
+            "If distance doubles ($r \\to 2r$), then $F \\propto 1/(2r)^2 = 1/(4r^2)$ — "
+            "the force **decreases by a factor of 4**.\n\n"
+            "**How to think about it:** This is a pure inverse-square scaling question. "
+            "No charge values needed — only the distance ratio. Write "
+            "$F'/F = (r/r')^2 = (1/2)^2 = 1/4$.\n\n"
+            "**Common slip:** Answering \"halves\" (confusing with $1/r$ laws) or "
+            "\"quadruples\" (inverting the relationship). Another error: picking "
+            "\"Doubles\" by thinking force scales linearly with distance.\n\n"
+            "**Exam tip:** Inverse-square means double distance → quarter force. "
+            "Triple distance → ninth of the force. Memorize these ratios."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** חוק קולון נותן $F \\propto 1/r^2$. "
+            "אם המרחק מוכפל ($r \\to 2r$), אז $F \\propto 1/(2r)^2 = 1/(4r^2)$ — "
+            "הכוח **קטן פי 4**.\n\n"
+            "**איך לחשוב:** שאלת קנה מידה של ריבוע הפוך טהורה. "
+            "אין צורך בערכי מטען — רק יחס מרחקים. כתבו "
+            "$F'/F = (r/r')^2 = (1/2)^2 = 1/4$.\n\n"
+            "**טעות נפוצה:** \"מוכפל ב-½\" (בלבול עם חוקי $1/r$) או "
+            "\"מוכפל ב-4\" (היפוך הקשר). גם \"מוכפל\" — חשיבה שכוח פרופורצionali למרחק.\n\n"
+            "**טיפ לבחינה:** ריבוע הפוך = מרחק כפול → רבע כוח. "
+            "מרחק משולש → תשעית הכוח. שמרו יחסים אלה."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** $F = k|q_1||q_2|/r^2$ with "
+            "$q_1 = q_2 = 5\\times10^{-6}$ C and $r = 0.5$ m:\n"
+            "$$F = 9\\times10^9 \\cdot (5\\times10^{-6})^2 / 0.25 "
+            "= 9\\times10^9 \\cdot 25\\times10^{-12} / 0.25 = 0.9\\text{ N}$$\n"
+            "Both positive → **repulsion**.\n\n"
+            "**How to think about it:** Convert $\\mu$C first, square the charge "
+            "(common error: forget squaring $10^{-6}$), then divide by $r^2 = 0.25$.\n\n"
+            "**Common slip:** Getting 9 N by using $10^{-6}$ once instead of $10^{-12}$, "
+            "or reporting magnitude without repulsion.\n\n"
+            "**Exam tip:** Always state attract/repel after calculating $F$. "
+            "Write the formula before numbers for partial credit. "
+            "Re-substitute your answer into $F = kq^2/r^2$ as a quick sanity check — "
+            "if you do not recover 0.9 N, trace whether the error is in $q^2$ or $r^2$."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** $F = k|q_1||q_2|/r^2$ עם "
+            "$q_1 = q_2 = 5\\times10^{-6}$ C ו-$r = 0.5$ m:\n"
+            "$$F = 9\\times10^9 \\cdot (5\\times10^{-6})^2 / 0.25 = 0.9\\text{ N}$$\n"
+            "שניהם חיוביים → **דחייה**.\n\n"
+            "**איך לחשוב:** המירו $\\mu$C קודם, העלו בריבוע (טעות נפוצה: שכחת "
+            "$10^{-12}$), ואז חלקו ב-$r^2 = 0.25$.\n\n"
+            "**טעות נפוצה:** 9 N בשימוש ב-$10^{-6}$ פעם אחת במקום $10^{-12}$, "
+            "או דיווח גודל בלי דחייה.\n\n"
+            "**טיפ לבחינה:** ציינו תמיד משיכה/דחייה אחרי חישוב $F$. "
+            "כתבו נוסחה לפני מספרים לנקודות חלקיות. "
+            "הציבו חזרה ל-$F = kq^2/r^2$ — אם לא מתקבל 0.9 N, "
+            "בדקו אם הטעות ב-$q^2$ או ב-$r^2$."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** Opposite signs → attraction. "
+            "$F = 9\\times10^9 \\cdot 6\\times10^{-6} \\cdot 2\\times10^{-6} / (0.3)^2 "
+            "= 9\\times10^9 \\cdot 12\\times10^{-12} / 0.09 = 1.2$ N.\n\n"
+            "**How to think about it:** Use absolute values in the numerator for magnitude; "
+            "determine direction separately from the sign rule. Distance $r = 0.3$ m "
+            "so $r^2 = 0.09$. The product $|q_1||q_2| = 12\\times10^{-12}$ C².\n\n"
+            "**Common slip:** Using $r = 0.3$ instead of $0.09$ in the denominator, "
+            "or writing \"repulsion\" despite opposite signs.\n\n"
+            "**Exam tip:** Product $q_1 q_2$ with opposite signs is negative — "
+            "that signals attraction. Magnitude uses $|q_1||q_2|$. "
+            "Always convert $\\mu$C before squaring — a single prefix error "
+            "propagates through the entire calculation."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** סימנים מנוגדים → משיכה. "
+            "$F = 9\\times10^9 \\cdot 6\\times10^{-6} \\cdot 2\\times10^{-6} / (0.3)^2 "
+            "= 1.2$ N.\n\n"
+            "**איך לחשוב:** השתמשו בערכים מוחלטים במונה לגודל; "
+            "קבעו כיוון בנפרד מכלל הסימן. מרחק $r = 0.3$ m "
+            "לכן $r^2 = 0.09$. מכפלה $|q_1||q_2| = 12\\times10^{-12}$ C².\n\n"
+            "**טעות נפוצה:** שימוש ב-$r = 0.3$ במקום $0.09$ במכנה, "
+            "או כתיבת \"דחייה\" למרות סימנים מנוגדים. גם שכחת המרת $\\mu$C "
+            "נותנת כוח גדול פי מיליון מהנכון.\n\n"
+            "**טיפ לבחינה:** מכפלה $q_1 q_2$ עם סימנים מנוגדים שלילית — "
+            "סימן למשיכה. גודל משתמש ב-$|q_1||q_2|$. "
+            "המירו $\\mu$C לפני ריבוע — טעות קידומת אחת משפיעה על כל החישוב. "
+            "כתבו נוסחה לפני מספרים לנקודות חלקיות. "
+            "אימות: $9\\times10^9 \\cdot 12\\times10^{-12} / 0.09 = 1.2$ N."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** The relationship between field and force is "
+            "$F = qE$. With $q = 3\\times10^{-6}$ C and $E = 200$ N/C:\n"
+            "$$F = 3\\times10^{-6} \\cdot 200 = 6\\times10^{-4}\\text{ N}$$\n\n"
+            "**How to think about it:** Electric field tells you force per coulomb. "
+            "Multiply by the actual charge to get force. Convert $\\mu$C to C first. "
+            "This is simpler than Coulomb's law because the field already "
+            "encodes the effect of all source charges.\n\n"
+            "**Common slip:** Forgetting the $10^{-6}$ conversion (getting 600 N), "
+            "or confusing $F = qE$ with Coulomb's law $F = kq_1 q_2/r^2$.\n\n"
+            "**Exam tip:** When a field value is given directly, use $F = qE$ — "
+            "no need for $k$ or distance. Check units: C · N/C = N."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** הקשר בין שדה לכוח הוא "
+            "$F = qE$. עם $q = 3\\times10^{-6}$ C ו-$E = 200$ N/C:\n"
+            "$$F = 3\\times10^{-6} \\cdot 200 = 6\\times10^{-4}\\text{ N}$$\n\n"
+            "**איך לחשוב:** שדה חשמלי = כוח לקולום. "
+            "הכפילו במטען בפועל לקבלת כוח. המירו $\\mu$C ל-C קודם. "
+            "זה פשוט יותר מחוק קולון כי השדה כבר "
+            "מקודד את השפעת כל מטעני המקור.\n\n"
+            "**טעות נפוצה:** שכחת המרת $10^{-6}$ (600 N), "
+            "או בלבול $F = qE$ עם חוק קולון $F = kq_1 q_2/r^2$.\n\n"
+            "**טיפ לבחינה:** כשניתן שדה ישירות — השתמשו ב-$F = qE$, "
+            "בלי $k$ או מרחק. בדקו יחידות: C · N/C = N. "
+            "אם קיבלתם 600 N — שכחתם את $10^{-6}$."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** The SI unit of electric charge is the **coulomb (C)**. "
+            "One coulomb equals the charge of approximately $6.24\\times10^{18}$ protons. "
+            "In electrostatics problems, charges are often given in $\\mu$C ($10^{-6}$ C) "
+            "or nC ($10^{-9}$ C) — always convert to coulombs before using $k$.\n\n"
+            "**How to think about it:** This is a definition question. "
+            "Charge is a fundamental quantity like mass (kg) or time (s).\n\n"
+            "**Common slip:** Answering \"ampere\" (unit of current, not charge) or "
+            "\"volt\" (unit of potential). Another error: writing $\\mu$C as the SI base unit.\n\n"
+            "**Exam tip:** $1\\;\\text{C} = 1\\;\\text{A·s}$ — charge equals current times time."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** יחידת ה-SI למטען חשמלי היא **קולום (C)**. "
+            "קולום אחד שווה למטען של כ-$6.24\\times10^{18}$ פרוטונים. "
+            "בבעיות אלקטרוסטטיקה, מטענים ניתנים לעיתים ב-$\\mu$C ($10^{-6}$ C) "
+            "או nC — תמיד המירו לקולומים לפני שימוש ב-$k$.\n\n"
+            "**איך לחשוב:** שאלת הגדרה. "
+            "מטען הוא כמות יסודית כמו מסה (kg) או זמן (s).\n\n"
+            "**טעות נפוצה:** \"אמפר\" (יחידת זרם, לא מטען) או "
+            "\"וולט\" (יחידת פוטנציאל). גם כתיבת $\\mu$C כיחידת בסיס.\n\n"
+            "**טיפ לבחינה:** $1\\;\\text{C} = 1\\;\\text{A·s}$ — מטען = זרם כפול זמן."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** For two **like** positive charges, $E = 0$ only "
+            "where fields cancel. Between them, both fields point outward — they add, "
+            "never cancel. On the segment between $q_1=+8\\mu$C and $q_2=+2\\mu$C:\n"
+            "$$\\frac{8}{x^2} = \\frac{2}{(4-x)^2} \\Rightarrow \\frac{4}{x} = \\frac{\\sqrt{2}}{4-x}$$\n"
+            "Solving: $2(4-x) = x \\Rightarrow x = 8/3 \\approx 2.67$ m from the origin.\n\n"
+            "**How to think about it:** Zero-field point is closer to the **smaller** charge. "
+            "Set field magnitudes equal and take positive root.\n\n"
+            "**Common slip:** Placing the point outside the segment, or using force "
+            "equilibrium instead of field zero.\n\n"
+            "**Exam tip:** Verify $0 < x < 4$ m after solving."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** לשני מטענים **חיוביים** דומים, $E = 0$ רק "
+            "היכן שהשדות מתקזזים. ביניהם, שני השדות מצביעים החוצה — מתחברים, "
+            "לא מתקזזים. על הקטע בין $q_1=+8\\mu$C ל-$q_2=+2\\mu$C:\n"
+            "$$\\frac{8}{x^2} = \\frac{2}{(4-x)^2} \\Rightarrow \\frac{4}{x} = \\frac{\\sqrt{2}}{4-x}$$\n"
+            "פתרון: $2(4-x) = x \\Rightarrow x = 8/3 \\approx 2.67$ m מהראשית.\n\n"
+            "**איך לחשוב:** נקודת אפס שדה קרובה למטען **הקטן** (כאן $+2\\mu$C). "
+            "השוו גדלי שדות, הצלבו, וקחו שורש חיובי בלבד.\n\n"
+            "**טעות נפוצה:** מיקום מחוץ לקטע, או שימוש בשיווי משקל כוח "
+            "במקום אפס שדה. גם בלבול בין $E=0$ ל-$F=0$ על מטען בדיקה.\n\n"
+            "**טיפ לבחינה:** אמתו $0 < x < 4$ m אחרי הפתרון. "
+            "נקודת האפס חייבת להיות קרובה יותר למטען החלש. "
+            "השוו יחס $\\sqrt{|q_1|} : \\sqrt{|q_2|}$ ליחס מרחקים לפני פתרון."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** On the middle charge $-3\\mu$C at $x=0.5$ m:\n"
+            "From $+2\\mu$C at $x=0$ (distance 0.5 m): opposite signs → attract, "
+            "pull leftward: $F_1 = 0.216$ N.\n"
+            "From $+1\\mu$C at $x=1$ m (distance 0.5 m): attract, pull rightward: "
+            "$F_2 = 0.108$ N.\n"
+            "Net: $0.216 - 0.108 = 0.108$ N leftward.\n\n"
+            "**How to think about it:** Calculate each force separately with Coulomb's law, "
+            "assign directions on a diagram, then subtract along the axis.\n\n"
+            "**Common slip:** Adding magnitudes (getting 0.324 N) or reversing directions "
+            "because charges have mixed signs.\n\n"
+            "**Exam tip:** Sign of charge determines attract/repel, not axis direction. "
+            "Draw arrows before computing the net. "
+            "The larger force (0.216 N) comes from the closer, larger-magnitude "
+            "pair (+2 and −3); verify distances are both 0.5 m before subtracting."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** על המטען האמצעי $-3\\mu$C ב-$x=0.5$ m:\n"
+            "מ-$+2\\mu$C ב-$x=0$ (מרחק 0.5 m): סימנים מנוגדים → משיכה שמאלה: $F_1 = 0.216$ N.\n"
+            "מ-$+1\\mu$C ב-$x=1$ m: משיכה ימינה: $F_2 = 0.108$ N.\n"
+            "נטו: $0.216 - 0.108 = 0.108$ N שמאלה.\n\n"
+            "**איך לחשוב:** חשבו כל כוח בנפרד בחוק קולון, "
+            "קבעו כיוונים בדיאגרמה, ואז חסרו לאורך הציר.\n\n"
+            "**טעות נפוצה:** חיבור גדלים (0.324 N) או היפוך כיוונים "
+            "בגלל סימנים מעורבים.\n\n"
+            "**טיפ לבחינה:** סימן מטען קובע משיכה/דחייה, לא כיוון ציר. "
+            "שרטטו חיצים לפני חישוב הנטו. "
+            "הכוח הגדול (0.216 N) מהזוג הקרוב (+2 ו-−3); "
+            "אמתו ששני המרחקים 0.5 m לפני החיסור. "
+            "כתבו $F_1$ ו-$F_2$ בנפרד לפני חיבור — נקודות חלקיות בבגרות."
+        ),
+    },
+    {
+        "explanation_en": (
+            "**Why this is correct:** Two identical positive charges $+Q$ produce fields "
+            "that point **away** from each charge. At the midpoint, the distances are "
+            "equal and the field magnitudes are equal — but the fields point in "
+            "**opposite** directions, so they cancel: $E_{\\text{net}} = 0$.\n\n"
+            "**How to think about it:** This is a symmetry argument. No calculation "
+            "needed if you recognize equal sources at equal distances with opposing "
+            "field directions.\n\n"
+            "**Common slip:** Answering \"nowhere\" (confusing with unlike-charge pairs "
+            "where fields add between them) or \"at either charge\" (field is infinite there).\n\n"
+            "**Exam tip:** Like charges → $E = 0$ at midpoint. "
+            "Unlike charges → $E \\neq 0$ everywhere on the axis."
+        ),
+        "explanation_he": (
+            "**למה זה נכון:** שני מטענים חיוביים זהים $+Q$ יוצרים שדות "
+            "ש**מתפזרים** מכל מטען. בנקודת האמצע, המרחקים שווים וגדלי השדות שווים — "
+            "אך השדות בכיוונים **מנוגדים**, ולכן מתקזזים: $E_{\\text{net}} = 0$.\n\n"
+            "**איך לחשוב:** טיעון סימטריה. אין צורך בחישוב "
+            "אם מזהים מקורות שווים במרחקים שווים עם כיווני שדה מנוגדים.\n\n"
+            "**טעות נפוצה:** \"אין\" (בלבול עם מטענים מנוגדים "
+            "שביניהם השדות מתחברים) או \"ליד מטען\" (שדה אינסופי שם).\n\n"
+            "**טיפ לבחינה:** מטענים דומים → $E = 0$ באמצע. "
+            "מטענים מנוגדים → $E \\neq 0$ בכל מקום על הציר."
+        ),
+    },
+]
+
+
+def apply_expansion(data):
+    cp_idx = 0
+    for sec in data["sections"]:
+        kind = sec.get("kind")
+        if kind == "intro":
+            sec.update(SECTION_BODIES["intro"])
+        elif kind == "definition":
+            sec.update(SECTION_BODIES["definition"])
+        elif kind == "theory":
+            sec.update(SECTION_BODIES["theory"])
+        elif kind == "worked_example":
+            n = sec.get("example_number")
+            sec.update(SECTION_BODIES[f"worked_example_{n}"])
+        elif kind == "checkpoint":
+            cp_idx += 1
+            sec.update(SECTION_BODIES[f"checkpoint_{cp_idx}"])
+        elif kind == "method_guide":
+            sec.update(SECTION_BODIES["method_guide"])
+        elif kind == "exercise_set":
+            sec.update(SECTION_BODIES["exercise_set"])
+        elif kind == "pitfall":
+            sec.update(SECTION_BODIES["pitfall"])
+        elif kind == "why_matters":
+            sec.update(SECTION_BODIES["why_matters"])
+        elif kind == "before_exam":
+            sec.update(SECTION_BODIES["before_exam"])
+        elif kind == "summary":
+            sec.update(SECTION_BODIES["summary"])
+
+    for i, q in enumerate(data["questions"]):
+        if i < len(QUESTION_EXPLANATIONS):
+            q.update(QUESTION_EXPLANATIONS[i])
+
+    return data
+
+
+def validate_depth(data):
+    issues = []
+    for sec in data["sections"]:
+        kind = sec.get("kind")
+        if kind in MIN_WORDS:
+            en_w = word_count(sec.get("body_en_md", ""))
+            he_w = word_count(sec.get("body_he_md", ""))
+            if en_w < MIN_WORDS[kind]["en"]:
+                issues.append(f"{kind} EN: {en_w} < {MIN_WORDS[kind]['en']}")
+            if he_w < MIN_WORDS[kind]["he"]:
+                issues.append(f"{kind} HE: {he_w} < {MIN_WORDS[kind]['he']}")
+            if sec.get("body_he_md") and hebrew_body_weak(
+                sec.get("body_he_md"), sec.get("body_en_md")
+            ):
+                issues.append(f"{kind} HE weak parity")
+        elif kind == "worked_example":
+            en_w = word_count(sec.get("body_en_md", ""))
+            he_w = word_count(sec.get("body_he_md", ""))
+            n = sec.get("example_number", "?")
+            if en_w < MIN_WORDS["worked_example"]["en"]:
+                issues.append(f"worked_example {n} EN: {en_w}")
+            if he_w < MIN_WORDS["worked_example"]["he"]:
+                issues.append(f"worked_example {n} HE: {he_w}")
+            if hebrew_body_weak(sec.get("body_he_md"), sec.get("body_en_md")):
+                issues.append(f"worked_example {n} HE weak")
+
+    for q in data["questions"]:
+        for lang in ("en", "he"):
+            key = f"explanation_{lang}"
+            w = word_count(q.get(key, ""))
+            if w < 80 or w > 150:
+                issues.append(f"q{q['ord']} {key}: {w} words")
+            if lang == "he" and hebrew_body_weak(
+                q.get("explanation_he"), q.get("explanation_en")
+            ):
+                issues.append(f"q{q['ord']} expl-he-weak")
+
+    return issues
+
+
+def main():
+    data = json.loads(OUT.read_text(encoding="utf-8"))
+    data = apply_expansion(data)
+
+    issues = validate_depth(data)
+    if issues:
+        print("VALIDATION FAILED:")
+        for i in issues:
+            print(" ", i)
+        sys.exit(1)
+
+    OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {OUT}")
+
+    r = subprocess.run(
+        ["node", "scripts/seed-lessons.mjs", "--dry-run"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    print(r.stdout)
+    if r.returncode != 0:
+        print(r.stderr)
+        sys.exit(r.returncode)
+    print("All depth gates OK; seed-lessons dry-run passed.")
+
+
+if __name__ == "__main__":
+    main()
