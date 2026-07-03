@@ -1,45 +1,30 @@
 import { redirect } from 'next/navigation';
 import { ProgressPageContent } from '@/components/progress-page-content';
 import { getAuthContext } from '@/lib/auth';
-import { getProgressFromNeon, getLearnerProfile } from '@/lib/neon-db';
+import { dbConfigured, getProgressFromNeon, getLearnerProfile } from '@/lib/neon-db';
 import { learnerHasPhysicsEnrollment } from '@/lib/learner-enrollment';
 
+export const dynamic = 'force-dynamic';
+
 /**
- * Progress page — reads directly from Neon so the stats always match the
- * main /app dashboard (which also queries Neon via getDashboardSnapshot).
- *
- * Previously this called fetchProgress() → Render /v1/progress which often
- * fell back to MOCK_PROGRESS (zeros), causing a mismatch between the two
- * pages. Now both pages share the same data source.
+ * Progress page — reads directly from Neon on every request so stats reflect
+ * the learner's latest chat, lesson, and quiz activity.
  */
 export default async function ProgressPage() {
   const auth = await getAuthContext();
   if (!auth) redirect('/sign-in');
 
   const [snap, profile] = await Promise.all([
-    getProgressFromNeon(auth.learnerId),
+    dbConfigured
+      ? getProgressFromNeon(auth.learnerId).catch(() => null)
+      : Promise.resolve(null),
     getLearnerProfile(auth.learnerId).catch(() => null),
   ]);
 
-  // Map ProgressSnapshot → LearnerProgress shape the ProgressDashboard expects.
-  const progress = {
-    learner_id: auth.learnerId,
-    streak_days: snap.streak_days,
-    total_minutes: snap.total_minutes,
-    lessons_completed: snap.lessons_completed,
-    concepts: snap.concepts.map((c) => ({
-      concept_id: c.concept_id,
-      concept_name: c.concept_name,
-      concept_name_he: c.concept_name_he,
-      current_score: c.current_score,
-      history: c.history,
-    })),
-  };
-
   return (
     <ProgressPageContent
-      progress={progress}
-      userId={auth.learnerId}
+      snapshot={snap}
+      learnerId={auth.learnerId}
       hasPhysicsEnrollment={learnerHasPhysicsEnrollment(profile)}
     />
   );

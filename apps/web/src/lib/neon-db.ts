@@ -2435,12 +2435,48 @@ export interface ProgressConceptRow {
 }
 
 export interface ProgressSnapshot {
-  streak_days: number;
+  streak: LearnerStreak;
   /** Total estimated study time in minutes (chat_turns × 4 + completed_concepts × 20). */
   total_minutes: number;
-  /** Concepts where mastery score >= 0.7. */
+  /** Concepts where mastery score >= 0.7 (plan/subject scoped when possible). */
   lessons_completed: number;
+  /** Average mastery across scoped concepts (0–1). */
+  avg_mastery: number;
+  atoms_practiced: number;
   concepts: ProgressConceptRow[];
+  daily_activity: DailyActivity[];
+  weekly_recap: WeeklyRecap;
+  recent_activity: RecentActivityItem[];
+}
+
+const EMPTY_STREAK: LearnerStreak = {
+  current_days: 0,
+  longest_days: 0,
+  last_active: null,
+  active_today: false,
+  active_days_last_30: 0,
+};
+
+function emptyProgressSnapshot(): ProgressSnapshot {
+  return {
+    streak: { ...EMPTY_STREAK },
+    total_minutes: 0,
+    lessons_completed: 0,
+    avg_mastery: 0,
+    atoms_practiced: 0,
+    concepts: [],
+    daily_activity: [],
+    weekly_recap: {
+      week_start: '',
+      week_end: '',
+      chat_turns: 0,
+      concepts_touched: 0,
+      atoms_practiced: 0,
+      mastery_gain: 0,
+      best_day: null,
+    },
+    recent_activity: [],
+  };
 }
 
 /**
@@ -2448,76 +2484,113 @@ export interface ProgressSnapshot {
  * Eliminates the dependency on the optional Render `/v1/progress` endpoint
  * so the Progress page always shows the same numbers as the main dashboard.
  *
+ * Mastery rows are filtered to the learner's active plan when one exists,
+ * otherwise to enrolled subjects — same scope as the Memory tab.
+ *
  * `total_minutes` is estimated:
  *   (user chat turns × 4 min) + (mastered concepts × 20 min)
  * — rough but consistent across both pages. There is no explicit session-time
  * column yet.
- *
- * Concept history rows are synthesized from `concept_mastery.last_activity`
- * as a single data-point per concept (detailed practice history requires the
- * `quiz_responses` join, which has no `learner_id`). More granular history
- * can be added when that table is enriched.
  */
 export async function getProgressFromNeon(learnerId: string): Promise<ProgressSnapshot> {
-  const empty: ProgressSnapshot = {
-    streak_days: 0,
-    total_minutes: 0,
-    lessons_completed: 0,
-    concepts: [],
-  };
-  if (!sql) return empty;
+  if (!sql) return emptyProgressSnapshot();
   try {
-    const [streak, masteryRowsRaw, chatCountRowsRaw] = await Promise.all([
-      getLearnerStreak(learnerId).catch(() => ({
-        current_days: 0,
-        longest_days: 0,
-        last_active: null,
-        active_today: false,
-        active_days_last_30: 0,
-      })),
+    const [
+      streak,
+      masteryRowsRaw,
+      chatCountRowsRaw,
+      atomCountRowsRaw,
+      profile,
+      plan,
+      daily_activity,
+      weekly_recap,
+      recent_activity,
+    ] = await Promise.all([
+      getLearnerStreak(learnerId).catch(() => ({ ...EMPTY_STREAK })),
       sql`
         SELECT concept_id, score::float AS score, last_activity
         FROM concept_mastery
         WHERE learner_id = ${learnerId}
-        ORDER BY score DESC, last_activity DESC NULLS LAST
-        LIMIT 40
+        ORDER BY last_activity DESC NULLS LAST
       `,
       sql`
         SELECT COUNT(*)::int AS n
         FROM chat_turns
         WHERE learner_id = ${learnerId} AND role = 'user'
       `,
+      sql`
+        SELECT COUNT(*)::int AS n
+        FROM skill_practice
+        WHERE learner_id = ${learnerId} AND attempts > 0
+      `,
+      getLearnerProfile(learnerId).catch(() => null),
+      getCurrentPlan(learnerId).catch(() => null),
+      getDailyActivity(learnerId, 30),
+      getWeeklyRecap(learnerId),
+      getRecentActivity(learnerId, 8),
     ]);
 
-    const mastery = masteryRowsRaw as Array<{ concept_id: string; score: number; last_activity: string | null }>;
+    const subjects = profile?.subjects ?? [];
+    const planConceptIds = new Set(
+      plan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
+    );
+    const inScope = (conceptId: string) =>
+      masterySignalInScope(conceptId, { subjects, planConceptIds });
+
+    const allMastery = masteryRowsRaw as Array<{
+      concept_id: string;
+      score: number;
+      last_activity: string | null;
+    }>;
+    const mastery = allMastery.filter((r) => inScope(r.concept_id));
     const chatTurns = Number((chatCountRowsRaw as Array<{ n: number }>)[0]?.n ?? 0);
+    const atomsPracticed = Number((atomCountRowsRaw as Array<{ n: number }>)[0]?.n ?? 0);
     const completed = mastery.filter((r) => Number(r.score) >= 0.7).length;
     const totalMinutes = Math.round(chatTurns * 4 + completed * 20);
+    const avgMastery =
+      mastery.length > 0
+        ? mastery.reduce((sum, r) => sum + Number(r.score), 0) / mastery.length
+        : 0;
 
-    const concepts: ProgressConceptRow[] = mastery.map((r) => {
-      const titles = resolveConceptTitles(r.concept_id);
-      return {
-        concept_id: r.concept_id,
-        concept_name: titles.title_en,
-        concept_name_he: titles.title_he,
-        current_score: Number(r.score),
-        history: r.last_activity
-          ? [{ date: r.last_activity.slice(0, 10), score: Number(r.score) }]
-          : [],
-      };
-    });
+    const concepts: ProgressConceptRow[] = [...mastery]
+      .sort((a, b) => {
+        const d = Number(b.score) - Number(a.score);
+        if (d !== 0) return d;
+        return (
+          new Date(b.last_activity ?? 0).getTime() -
+          new Date(a.last_activity ?? 0).getTime()
+        );
+      })
+      .slice(0, 25)
+      .map((r) => {
+        const titles = resolveConceptTitles(r.concept_id);
+        return {
+          concept_id: r.concept_id,
+          concept_name: titles.title_en,
+          concept_name_he: titles.title_he,
+          current_score: Number(r.score),
+          history: r.last_activity
+            ? [{ date: r.last_activity.slice(0, 10), score: Number(r.score) }]
+            : [],
+        };
+      });
 
     return {
-      streak_days: streak.current_days,
+      streak,
       total_minutes: totalMinutes,
       lessons_completed: completed,
+      avg_mastery: avgMastery,
+      atoms_practiced: atomsPracticed,
       concepts,
+      daily_activity,
+      weekly_recap,
+      recent_activity,
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('[neon-db] getProgressFromNeon failed', err);
     }
-    return empty;
+    return emptyProgressSnapshot();
   }
 }
 

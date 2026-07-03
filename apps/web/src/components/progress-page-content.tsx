@@ -3,18 +3,62 @@
 import { PageHeader } from '@/components/page-header';
 import { ProgressDashboard } from '@/components/progress-dashboard';
 import { useI18n } from '@/providers/i18n-provider';
-import type { LearnerProgress } from '@asf/schemas/progress';
+import type { ProgressSnapshot } from '@/lib/neon-db';
+
+function snapshotToProgress(snapshot: ProgressSnapshot, learnerId: string) {
+  return {
+    learner_id: learnerId,
+    streak_days: snapshot.streak.current_days,
+    total_minutes: snapshot.total_minutes,
+    lessons_completed: snapshot.lessons_completed,
+    concepts: snapshot.concepts.map((c) => ({
+      concept_id: c.concept_id,
+      concept_name: c.concept_name,
+      concept_name_he: c.concept_name_he,
+      current_score: c.current_score,
+      history: c.history,
+    })),
+  };
+}
 
 export function ProgressPageContent({
-  progress,
-  userId,
+  snapshot,
+  learnerId,
   hasPhysicsEnrollment = false,
 }: {
-  progress: LearnerProgress;
-  userId?: string;
+  snapshot: ProgressSnapshot | null;
+  learnerId: string;
   hasPhysicsEnrollment?: boolean;
 }) {
   const { messages } = useI18n();
+
+  const resolved =
+    snapshot ??
+    ({
+      streak: {
+        current_days: 0,
+        longest_days: 0,
+        last_active: null,
+        active_today: false,
+        active_days_last_30: 0,
+      },
+      total_minutes: 0,
+      lessons_completed: 0,
+      avg_mastery: 0,
+      atoms_practiced: 0,
+      concepts: [],
+      daily_activity: [],
+      weekly_recap: {
+        week_start: '',
+        week_end: '',
+        chat_turns: 0,
+        concepts_touched: 0,
+        atoms_practiced: 0,
+        mastery_gain: 0,
+        best_day: null,
+      },
+      recent_activity: [],
+    } satisfies ProgressSnapshot);
 
   return (
     <div>
@@ -24,8 +68,9 @@ export function ProgressPageContent({
         gradientTitle
       />
       <ProgressDashboard
-        progress={progress}
-        userId={userId}
+        progress={snapshotToProgress(resolved, learnerId)}
+        snapshot={resolved}
+        userId={learnerId}
         hasPhysicsEnrollment={hasPhysicsEnrollment}
       />
     </div>

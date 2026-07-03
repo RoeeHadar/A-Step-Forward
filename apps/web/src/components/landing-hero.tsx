@@ -7,7 +7,7 @@ import {
   ArrowRight,
   Brain,
   BookOpen,
-  Github,
+  Route,
   Sparkles as SparklesIcon,
   UserPlus,
 } from 'lucide-react';
@@ -77,8 +77,8 @@ const agentAvatars = [
 const subjectEmojis = ['📐', '∫', '🧮', '⚛️'];
 
 const trustChips = [
-  { dotClass: 'bg-primary', key: 'trustOpenSource' as const },
-  { dotClass: 'bg-accent-cyan', key: 'trustGroq' as const },
+  { dotClass: 'bg-primary', key: 'trustPersonalized' as const },
+  { dotClass: 'bg-accent-cyan', key: 'trustAiPowered' as const },
   { dotClass: 'bg-accent-magenta', key: 'trustFree' as const },
 ];
 
@@ -249,13 +249,13 @@ export function LandingHero() {
                 href="/book"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
               >
-                Book a Lesson
+                {messages.nav.book}
               </Link>
               <Link
                 href="/learn"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
               >
-                Browse content
+                {t.browseContent}
               </Link>
               <Link
                 href="/sign-in"
@@ -400,19 +400,19 @@ export function LandingHero() {
               </div>
             </motion.div>
 
-            {/* Tile F — Open source trust */}
+            {/* Tile F — Adaptive learning path */}
             <motion.div
               className="iridescent-border col-span-6 flex flex-col gap-3 p-5 lg:col-span-5 lg:row-span-1"
               {...fadeUpInView(0.35)}
             >
               <span className="text-[10px] font-semibold tracking-widest text-muted-foreground">
-                {t.openSourceLabel}
+                {t.platformLabel}
               </span>
               <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <Github className="h-4 w-4" aria-hidden />
-                {t.openSourceStack}
+                <Route className="h-4 w-4 text-primary" aria-hidden />
+                {t.platformHighlight}
               </div>
-              <p className="text-sm text-muted-foreground">{t.openSourceDesc}</p>
+              <p className="text-sm text-muted-foreground">{t.platformDesc}</p>
             </motion.div>
           </div>
         </div>

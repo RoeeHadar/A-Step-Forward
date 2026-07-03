@@ -24,7 +24,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://astepforward.app';
 const title = 'A Step Forward \u2013 an AI learning center that remembers you';
 
 const description =
-  'A small team of AI agents \u2013 Tutor, Mentor, Coach, Reviewer \u2013 that teaches you, assesses you, remembers what you\u2019ve learned, and adapts. Open source, MIT, multi-language.';
+  'A small team of AI agents \u2013 Tutor, Mentor, Coach, Reviewer \u2013 that teaches you, assesses you, remembers what you\u2019ve learned, and adapts. Personalized weekly plans, bilingual Hebrew and English.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description,
   applicationName: 'A Step Forward',
   authors: [{ name: 'Roee Hadar' }],
-  keywords: ['AI tutor', 'AI learning', 'AI agents', 'GraphRAG', 'memory', 'education', 'open source'],
+  keywords: ['AI tutor', 'AI learning', 'AI agents', 'Bagrut prep', 'memory', 'education', 'Hebrew'],
   openGraph: {
     type: 'website',
     url: siteUrl,

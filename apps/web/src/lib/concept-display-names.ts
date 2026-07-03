@@ -6,7 +6,7 @@
  */
 import kg from './kg-data.json';
 import lessonsIndex from './lessons-index.generated.json';
-import { resolveConceptAlias } from './concept-aliases';
+import { resolveConceptAlias, resolveConceptAliasCanonical } from './concept-aliases';
 
 interface KgConcept {
   id: string;
@@ -52,6 +52,38 @@ const CHAPTER_ALIASES: Record<string, { en: string; he: string }> = {
   calculus: { en: 'Calculus', he: 'חשבון דифרנציאלי ואינטגרלי' },
 };
 
+/** Syllabus catalog slugs without a lesson row — bilingual Learn UI labels. */
+const CATALOG_CONCEPT_TITLES: Record<string, { en: string; he: string }> = {
+  extreme_value_theorem: {
+    en: 'Extreme Value Theorem',
+    he: 'משפט ערך הקיצון',
+  },
+  intermediate_value_theorem: {
+    en: 'Intermediate Value Theorem',
+    he: 'משפט ערך הביניים',
+  },
+  series_absolute_convergence: {
+    en: 'Absolute Convergence of Series',
+    he: 'התכנסות מוחלטת של טורים',
+  },
+  convergence_divergence_integrals: {
+    en: 'Convergence and Divergence of Improper Integrals',
+    he: 'התכנסות והתבדרות של אינטגרלים לא אמיתיים',
+  },
+  sequences_monotone_bounded: {
+    en: 'Monotone and Bounded Sequences',
+    he: 'סדרות מונוטוניות וחסומות',
+  },
+  limits_epsilon_delta: {
+    en: 'Limits (ε–δ Definition)',
+    he: 'גבולות — הגדרה פסילונ-דלתא',
+  },
+  riemann_sums: {
+    en: 'Riemann Sums',
+    he: 'סכומי רימן',
+  },
+};
+
 function humanizeId(id: string): string {
   return id
     .replace(/^uni_/, '')
@@ -73,12 +105,20 @@ export interface ConceptTitles {
 }
 
 function resolveCanonicalTitles(conceptId: string): ConceptTitles {
-  const canonical = resolveConceptAlias(conceptId);
-  const lesson =
-    lessonsById.get(conceptId) ??
-    lessonsById.get(canonical) ??
-    findPrefixMatch(conceptId, lessons) ??
-    findPrefixMatch(canonical, lessons);
+  const catalog = CATALOG_CONCEPT_TITLES[conceptId];
+  if (catalog) {
+    return { title_en: catalog.en, title_he: catalog.he };
+  }
+
+  const canonical = resolveConceptAliasCanonical(conceptId);
+  const aliasOne = resolveConceptAlias(conceptId);
+  const lookupIds = [...new Set([conceptId, aliasOne, canonical])];
+
+  let lesson: LessonIndexEntry | undefined;
+  for (const lid of lookupIds) {
+    lesson = lessonsById.get(lid) ?? findPrefixMatch(lid, lessons);
+    if (lesson) break;
+  }
   if (lesson) {
     return {
       title_en: lesson.title_en,
@@ -86,11 +126,11 @@ function resolveCanonicalTitles(conceptId: string): ConceptTitles {
     };
   }
 
-  const kgInfo =
-    kgById[conceptId] ??
-    kgById[canonical] ??
-    findPrefixMatch(conceptId, Object.values(kgById)) ??
-    findPrefixMatch(canonical, Object.values(kgById));
+  let kgInfo: KgConcept | undefined;
+  for (const kid of lookupIds) {
+    kgInfo = kgById[kid] ?? findPrefixMatch(kid, Object.values(kgById));
+    if (kgInfo) break;
+  }
   if (kgInfo) {
     const he = kgInfo.name_he;
     const enLooksHebrew = he && he !== kgInfo.name && /[\u0590-\u05FF]/.test(he);

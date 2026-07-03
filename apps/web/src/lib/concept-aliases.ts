@@ -60,9 +60,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   integrals_trigonometric: 'integrals_techniques',
   integration_by_parts: 'integrals_techniques',
   integration_partial_fractions: 'integrals_techniques',
-  riemann_integral_ftc: 'definite_integrals',
   riemann_sums: 'riemann_integral_ftc',
-  improper_integrals: 'definite_integrals',
   sequences_limits: 'sequences_arithmetic',
   lhopital_rule: 'derivatives_applications',
   mean_value_theorem: 'derivatives_applications',
@@ -161,7 +159,7 @@ export function isAliasConceptId(conceptId: string): boolean {
 export function dedupeConceptIdsForCatalog(ids: string[]): string[] {
   const keyToPick = new Map<string, string>();
   for (const id of ids) {
-    const key = resolveConceptAlias(id);
+    const key = resolveConceptAliasCanonical(id);
     const current = keyToPick.get(key);
     if (!current) {
       keyToPick.set(key, id);
@@ -180,7 +178,7 @@ export function dedupeConceptIdsForCatalog(ids: string[]): string[] {
   const out: string[] = [];
   for (const id of ids) {
     if (!picked.has(id)) continue;
-    const key = resolveConceptAlias(id);
+    const key = resolveConceptAliasCanonical(id);
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(id);
@@ -188,6 +186,22 @@ export function dedupeConceptIdsForCatalog(ids: string[]): string[] {
   return out;
 }
 
+/** True when two catalog ids resolve to the same authored lesson / canonical id. */
+export function catalogIdsCollide(a: string, b: string): boolean {
+  return resolveConceptAliasCanonical(a) === resolveConceptAliasCanonical(b);
+}
+
 export function resolveConceptAlias(conceptId: string): string {
   return CONCEPT_ID_ALIASES[conceptId] ?? conceptId;
+}
+
+/** Follow alias chain to the terminal lesson / KG id (cycle-safe). */
+export function resolveConceptAliasCanonical(conceptId: string): string {
+  let cur = conceptId;
+  const seen = new Set<string>();
+  while (CONCEPT_ID_ALIASES[cur] && !seen.has(cur)) {
+    seen.add(cur);
+    cur = CONCEPT_ID_ALIASES[cur]!;
+  }
+  return cur;
 }

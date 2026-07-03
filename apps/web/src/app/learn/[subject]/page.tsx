@@ -14,7 +14,7 @@ import {
 import { getLessonIndexEntry } from '@/lib/lesson-index';
 import kg from '@/lib/kg-data.json';
 import { getCategoryById, SUBJECT_TO_CATEGORY } from '@/lib/curriculum-categories';
-import { resolveConceptAlias, dedupeConceptIdsForCatalog } from '@/lib/concept-aliases';
+import { resolveConceptAlias, dedupeConceptIdsForCatalog, resolveConceptAliasCanonical } from '@/lib/concept-aliases';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
@@ -235,6 +235,16 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
 
   const conceptById = new Map(conceptsWithCoverage.map((c) => [c.id, c]));
 
+  const findTrackConcept = (id: string) => {
+    const direct = conceptById.get(id);
+    if (direct) return direct;
+    const canon = resolveConceptAliasCanonical(id);
+    for (const c of conceptsWithCoverage) {
+      if (c.id === id || resolveConceptAliasCanonical(c.id) === canon) return c;
+    }
+    return undefined;
+  };
+
   // Sections from the curriculum category (ordered), plus an "Other" bucket for anything not in a section
   const coveredBySection = new Set<string>();
   const sectionGroups: Array<{
@@ -248,14 +258,18 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
 
   if (category) {
     for (const section of category.sections) {
-      const sectionConcepts = (section.concept_ids ?? [])
-        .map((id) => conceptById.get(id))
+      const sectionConcepts = dedupeConceptIdsForCatalog(section.concept_ids ?? [])
+        .map((id) => findTrackConcept(id))
         .filter(Boolean)
-        .filter((c) => !shownInSection.has(c!.id)) as typeof conceptsWithCoverage;
+        .filter((c) => {
+          const canon = resolveConceptAliasCanonical(c!.id);
+          if (shownInSection.has(canon)) return false;
+          return true;
+        }) as typeof conceptsWithCoverage;
       if (sectionConcepts.length === 0) continue;
       for (const c of sectionConcepts) {
         coveredBySection.add(c.id);
-        shownInSection.add(c.id);
+        shownInSection.add(resolveConceptAliasCanonical(c.id));
       }
       sectionGroups.push({
         id: section.id,
@@ -371,10 +385,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                   {group.concepts.map((c) => {
                     const statusCfg = c.status ? STATUS_CONFIG[c.status] : null;
                     const StatusIcon = statusCfg?.icon ?? BookOpen;
-                    const titles = resolveConceptTitles(c.id, {
-                      title_en: c.name,
-                      title_he: c.name_he,
-                    });
+                    const titles = resolveConceptTitles(c.id);
                     const cardTitle = pickConceptTitle(titles, locale);
 
                     const contentBadge = c.hasLesson ? t.lessonBadge : null;

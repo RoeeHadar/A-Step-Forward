@@ -19,6 +19,9 @@ import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
 import { AnimatedCounter } from '@/components/animated-counter';
+import { ActivityHeatmap } from '@/components/activity-heatmap';
+import { LearnerStreakCard } from '@/components/learner-streak-card';
+import type { ProgressSnapshot } from '@/lib/neon-db';
 
 type GradeEstimate = {
   estimatedGrade: number;
@@ -58,10 +61,12 @@ function GradeEstimateRow({
 
 export function ProgressDashboard({
   progress,
+  snapshot,
   userId,
   hasPhysicsEnrollment = false,
 }: {
   progress: LearnerProgress;
+  snapshot: ProgressSnapshot;
   userId?: string;
   hasPhysicsEnrollment?: boolean;
 }) {
@@ -141,23 +146,13 @@ export function ProgressDashboard({
     };
   });
 
-  const historyData =
-    progress.concepts[0]?.history.map((h) => ({
-      date: h.date.slice(5),
-      score: Math.round(h.score * 100),
-    })) ?? [];
+  const activityTrend = snapshot.daily_activity.map((d) => ({
+    date: d.date.slice(5),
+    actions: d.count,
+  }));
+  const hasActivityTrend = activityTrend.some((d) => d.actions > 0);
 
-  const topConceptName =
-    progress.concepts[0] != null
-      ? isHe &&
-        (progress.concepts[0] as typeof progress.concepts[0] & {
-          concept_name_he?: string | null;
-        }).concept_name_he
-        ? (progress.concepts[0] as typeof progress.concepts[0] & {
-            concept_name_he?: string | null;
-          }).concept_name_he!
-        : progress.concepts[0].concept_name
-      : '';
+  const avgMasteryPct = Math.round(snapshot.avg_mastery * 100);
 
   const withTrackLabel = (track: string, grade: string) =>
     t.estimatedGradeWithTrack.replace('{track}', track).replace('{grade}', grade);
@@ -194,7 +189,11 @@ export function ProgressDashboard({
           title={t.streak}
           value={
             <>
-              <AnimatedCounter end={progress.streak_days} className="font-display text-3xl font-bold" />
+              <AnimatedCounter
+                key={`streak-${progress.streak_days}`}
+                end={progress.streak_days}
+                className="font-display text-3xl font-bold"
+              />
               <span className="ms-1 text-lg font-normal text-muted-foreground">{t.days}</span>
             </>
           }
@@ -204,7 +203,11 @@ export function ProgressDashboard({
           title={t.totalTime}
           value={
             <>
-              <AnimatedCounter end={progress.total_minutes} className="font-display text-3xl font-bold" />
+              <AnimatedCounter
+                key={`minutes-${progress.total_minutes}`}
+                end={progress.total_minutes}
+                className="font-display text-3xl font-bold"
+              />
               <span className="ms-1 text-lg font-normal text-muted-foreground">
                 {messages.dashboard.minutes}
               </span>
@@ -216,12 +219,18 @@ export function ProgressDashboard({
           title={t.lessonsDone}
           value={
             <AnimatedCounter
+              key={`lessons-${progress.lessons_completed}`}
               end={progress.lessons_completed}
               className="font-display text-3xl font-bold"
             />
           }
           gradient="from-accent-magenta to-accent-cyan"
         />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ActivityHeatmap daily={snapshot.daily_activity} weekly={snapshot.weekly_recap} />
+        <LearnerStreakCard streak={snapshot.streak} activity={snapshot.recent_activity} />
       </div>
 
       <div className="card-punch rounded-2xl p-6">
@@ -267,44 +276,57 @@ export function ProgressDashboard({
               {t.noMasteryYet}
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={masteryData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Bar
-                  dataKey="score"
-                  fill="hsl(var(--primary))"
-                  radius={[4, 4, 0, 0]}
-                  name="Mastery %"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            <>
+              {avgMasteryPct > 0 ? (
+                <p className="mb-3 text-sm text-muted-foreground">
+                  {isHe
+                    ? `ממוצע שליטה: ${avgMasteryPct}% · ${snapshot.atoms_practiced} מיומנויות שתורגלו`
+                    : `Average mastery: ${avgMasteryPct}% · ${snapshot.atoms_practiced} atoms practiced`}
+                </p>
+              ) : null}
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={masteryData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar
+                    dataKey="score"
+                    fill="hsl(var(--primary))"
+                    radius={[4, 4, 0, 0]}
+                    name={isHe ? 'שליטה %' : 'Mastery %'}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </>
           )}
         </div>
       </div>
 
-      {historyData.length > 0 ? (
+      {hasActivityTrend ? (
         <div className="card-punch rounded-2xl p-6">
-          <h2 className="font-display text-xl font-semibold">{t.masteryOverTime}</h2>
+          <h2 className="font-display text-xl font-semibold">
+            {isHe ? 'פעילות לאורך זמן' : 'Activity over time'}
+          </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {topConceptName} {t.progressTrend}
+            {isHe
+              ? 'מספר הפעולות (צ׳אט, שיעורים, תרגול) ב-30 הימים האחרונים'
+              : 'Learning actions (chat, lessons, practice) over the last 30 days'}
           </p>
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={historyData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+              <LineChart data={activityTrend} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
                 <Tooltip />
                 <Line
                   type="monotone"
-                  dataKey="score"
+                  dataKey="actions"
                   stroke="hsl(var(--accent-cyan))"
                   strokeWidth={2}
-                  dot={{ r: 4 }}
-                  name="Mastery %"
+                  dot={{ r: 3 }}
+                  name={isHe ? 'פעולות' : 'Actions'}
                 />
               </LineChart>
             </ResponsiveContainer>
