@@ -107,6 +107,7 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/author-question-bank/SKILL.md` | Adding MORE questions (volume + kind diversity) to an existing authored lesson, or generating drills live. Pair with `author-lesson`. |
 | `skills/build-custom-quiz/SKILL.md` | Spinning up an ephemeral, fit-to-purpose AI quiz for one learner via `POST /api/quiz/custom`. Used by the `/app/quiz` page and any agent that wants to drop a mini-assessment into chat. NOT for authoring durable lesson question banks. |
 | `skills/expand-lessons-cursor/SKILL.md` | **Bulk substantive lesson expansion** in Cursor Composer (replaces deprecated Groq CI batch). |
+| `skills/use-obsidian-vault/SKILL.md` | Using the `obsidian-vault/` dev knowledge base — concept notes, expansion dashboard, Goren/Geva staging, MCP sync. |
 | `skills/expand-lesson-theory/SKILL.md` | Adding MORE sections / worked examples / pitfalls / cross-subject `why_matters` to an authored lesson without breaking the schema. |
 | `skills/use-learning-plan/SKILL.md` | Adding any "what should I study next?" / "why am I stuck?" feature, or wiring a new agent / UI to the mastery-aware path planner. |
 | `skills/cross-subject-kg/SKILL.md` | Adding cross-subject edges to `kg-cross-edges.json`, within-subject prereqs in YAML, or new canonical skill atoms. |

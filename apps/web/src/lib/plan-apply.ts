@@ -17,6 +17,8 @@ import {
   extractPlanUpdate,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
+  learnerExplicitChangeRequest,
+  looksLikePlanApplyIntent,
   looksLikePlanProposal,
   planPayloadToOptions,
   proposalToUpdatePayload,
@@ -38,6 +40,7 @@ export interface PlanApplyResult {
   noticeHe?: string;
   noticeEn?: string;
   error?: string;
+  failureNotice?: string;
 }
 
 function weekSummariesFromPlan(plan: LearningPlan): PlanApplyResult['weekSummaries'] {
@@ -62,6 +65,36 @@ function formatGoalDate(iso: string, lang: 'he' | 'en'): string {
   } catch {
     return iso;
   }
+}
+
+export function buildPlanApplyingNotice(locale: 'he' | 'en'): string {
+  return locale === 'he'
+    ? '\n\n⏳ **מעדכן את המטרה והתוכנית השבועית…**'
+    : '\n\n⏳ **Updating your goal and weekly plan…**';
+}
+
+export function buildPlanApplyFailureNotice(
+  locale: 'he' | 'en',
+  error?: string,
+): string {
+  if (locale === 'he') {
+    return [
+      '---',
+      '⚠️ **לא הצלחתי לעדכן את התוכנית באתר**',
+      error ? `פרטים: ${error}` : '',
+      'נסה לנסח שוב את המטרה החדשה (למשל: "המטרה החדשה שלי היא…") ואשר עם "כן" / "עדכן".',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  }
+  return [
+    '---',
+    '⚠️ **I could not update your plan on the site**',
+    error ? `Details: ${error}` : '',
+    'Try stating your new goal again (e.g. "My new goal is…") and confirm with "yes" / "update".',
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
 
 export function buildPlanAppliedNotice(
@@ -199,15 +232,28 @@ function mergeProposal(
   const inferredIds = inferConceptIdsFromText(...texts);
   const reason =
     fromTag?.reason?.trim() ||
-    (texts.some((t) => /בדיד|discrete/i.test(t))
+    (texts.some((t) => /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(t))
+      ? 'הכנה למבחן בחדו״א 1'
+      : texts.some((t) => /בדיד|discrete/i.test(t))
       ? 'מעבר למטרת מתמטיקה בדידה (אוניברסיטה)'
       : texts.some((t) => /מטרה|goal/i.test(t))
         ? 'עדכון מטרת לימודים'
         : 'עדכון תוכנית לימודים לפי בקשת הלומד');
 
-  const prepend = fromTag?.prepend_concepts?.length
-    ? fromTag.prepend_concepts
-    : inferredIds;
+  const prependFromText = inferConceptIdsFromText(...texts);
+  const prepend =
+    fromTag?.prepend_concepts?.length
+      ? fromTag.prepend_concepts
+      : goalMeta.goal_key === 'calculus1' ||
+          /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(texts.join('\n'))
+        ? [
+            'limits',
+            'derivatives_intro',
+            'derivatives_applications',
+            'integrals_intro',
+            'integrals_techniques',
+          ]
+        : prependFromText;
 
   const hasGoalChange = Boolean(
     fromTag?.goal ||
@@ -251,7 +297,12 @@ export async function saveProposalFromAssistantTurn(
   const { proposal: tagProposal } = extractPlanProposal(assistantRaw);
   const merged = mergeProposal(tagProposal, userMessage, assistantRaw);
   if (!merged) return;
-  if (!tagProposal && !looksLikePlanProposal(assistantRaw)) return;
+  const shouldSave =
+    Boolean(tagProposal) ||
+    looksLikePlanProposal(assistantRaw) ||
+    looksLikePlanApplyIntent(assistantRaw) ||
+    learnerExplicitChangeRequest(userMessage);
+  if (!shouldSave) return;
   await setPendingPlanProposal(learnerId, { ...merged, agent });
 }
 
@@ -264,6 +315,9 @@ export async function resolvePayloadForApply(
 ): Promise<PlanUpdatePayload | null> {
   const { payload: tagPayload } = extractPlanUpdate(assistantRaw);
   if (tagPayload?.confirmed) return tagPayload;
+
+  const { proposal: tagProposal } = extractPlanProposal(assistantRaw);
+  if (tagProposal) return proposalToUpdatePayload(tagProposal);
 
   const pending = await getPendingPlanProposal(learnerId);
   if (pending) return proposalToUpdatePayload(pending);

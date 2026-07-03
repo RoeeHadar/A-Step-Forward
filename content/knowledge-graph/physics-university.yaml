@@ -1,103 +1,343 @@
 # University Physics (Physics 1 & 2) prerequisite graph
+#
+# Each concept carries:
+#   points_levels  – [physics1] | [physics2] (Israeli intro physics / makhina syllabi)
+#   skill_atoms    – granular skills (drives quiz question scoping)
+#   level_scope    – short note differentiating depth across levels
+#
 subject: physics
 level: university
 concepts:
   - id: uni_vectors
     name: Vector Calculus for Physics
     name_he: חשבון וקטורי לפיזיקה
+    points_levels: [physics1]
     prerequisites: []
+    skill_atoms:
+      - "Scalar vs vector quantities in physical contexts"
+      - "Vector component decomposition in 2D and 3D"
+      - "Magnitude from components (Pythagorean / 3D length)"
+      - "Unit vectors and direction angles with quadrant correction"
+      - "Vector addition and subtraction (component-wise)"
+      - "Dot product: magnitude, angle, and perpendicularity test"
+      - "Cross product via determinant and right-hand rule"
+      - "Choosing dot vs cross for physics (work, torque, magnetic force)"
+      - "Resolving forces and velocities into x-y (and z) components"
+      - "3D angle between vectors via dot product and arccos"
+    level_scope:
+      physics1: "Full 2D/3D vector algebra with dot and cross products, unit-vector normalization, and physics applications (F = qv × B, W = F·d). Expect component-first problem solving at university exam depth."
 
   - id: uni_kinematics
     name: Advanced Kinematics
     name_he: קינמטיקה מתקדמת
+    points_levels: [physics1]
     prerequisites: [uni_vectors]
+    skill_atoms:
+      - "Displacement vs distance; velocity vs speed"
+      - "Four constant-acceleration kinematic equations"
+      - "Sign conventions and free-fall near Earth's surface"
+      - "Selecting the appropriate kinematic equation for unknowns"
+      - "Stopping-distance and time-free problems (v² = v₀² + 2aΔx)"
+      - "Multi-stage motion (projectile from height, two-phase trajectories)"
+      - "Relative velocity and meeting/catch-up problems (1D)"
+      - "Interpreting x-t, v-t, and a-t graphs"
+      - "Average vs instantaneous velocity under constant acceleration"
+      - "Integrating v(t) and a(t) to recover position (calculus link)"
+    level_scope:
+      physics1: "Constant-acceleration 1D kinematics at university rigor — multi-step problems, sign discipline, and equation selection. Calculus-based derivations of v(t) and x(t) are fair game; free-fall and relative-motion word problems are core."
 
   - id: uni_newtonian_mechanics
     name: Newtonian Mechanics
     name_he: מכניקה ניוטונית
+    points_levels: [physics1]
     prerequisites: [uni_kinematics, uni_vectors]
+    skill_atoms:
+      - "Newton's three laws: inertia, F_net = ma, action-reaction pairs"
+      - "Free body diagrams for single and connected objects"
+      - "Weight, normal force, tension, and applied forces on FBDs"
+      - "Component-wise Newton's 2nd law (ΣF_x = ma_x, ΣF_y = ma_y)"
+      - "Elevator problems and apparent weight N = m(g ± a)"
+      - "Connected blocks and string tension on frictionless surfaces"
+      - "Atwood machine — derive and apply a and T formulas"
+      - "Inclined plane with friction (N = mg cos θ, f = μN)"
+      - "Multi-body systems — internal vs external forces"
+      - "Combining Newton's 2nd law with kinematics for distance/speed"
+    level_scope:
+      physics1: "Systematic FBD → ΣF = ma workflow for single bodies, connected masses, elevators, and Atwood machines. University exams expect derived formulas, limiting-case checks, and friction on inclines — not just plug-and-chug F = ma."
 
   - id: uni_work_energy
     name: Work, Energy & Conservation Laws
     name_he: עבודה, אנרגיה וחוקי שימור
+    points_levels: [physics1]
     prerequisites: [uni_newtonian_mechanics]
+    skill_atoms:
+      - "Work definition W = Fd cos θ and vector dot-product form"
+      - "Kinetic energy KE = ½mv²"
+      - "Gravitational PE and reference-level choice"
+      - "Spring elastic PE U = ½kx²"
+      - "Work-energy theorem (ΔKE = W_net)"
+      - "Conservation of mechanical energy (with and without friction)"
+      - "Power P = Fv and rate of energy transfer"
+      - "Perpendicular force does zero work"
+      - "Non-conservative work and energy dissipation to heat"
+      - "Choosing energy vs force methods for a given scenario"
+    level_scope:
+      physics1: "Work, KE/PE, work-energy theorem, and mechanical-energy conservation at university depth — including friction losses and spring systems. Energy methods should be preferred when path-dependent forces are absent; dot-product work is assumed."
 
   - id: uni_momentum
     name: Linear & Angular Momentum
     name_he: תנע לינארי וזוויתי
+    points_levels: [physics1]
     prerequisites: [uni_newtonian_mechanics, uni_work_energy]
+    skill_atoms:
+      - "Linear momentum p = mv (vector quantity)"
+      - "Impulse-momentum theorem J = FΔt = Δp"
+      - "Conservation of momentum in isolated systems"
+      - "Perfectly inelastic collisions (objects stick together)"
+      - "Elastic collisions in 1D (momentum and KE both conserved)"
+      - "1D elastic collision velocity formulas"
+      - "Impulse with sign reversal (wall bounce, F-t graph area)"
+      - "Recoil and explosion problems"
+      - "KE loss fraction in inelastic collisions"
+      - "Identifying collision type from problem wording"
+    level_scope:
+      physics1: "Linear momentum, impulse, and 1D collisions at university depth — elastic vs inelastic classification, sign conventions, and explicit KE-loss analysis. Angular momentum appears in uni_rigid_body; here the focus is translational p and J."
 
   - id: uni_rigid_body
     name: Rigid Body Dynamics
     name_he: דינמיקת גוף קשיח
+    points_levels: [physics1]
     prerequisites: [uni_momentum, uni_vectors]
+    skill_atoms:
+      - "Torque τ = r × F and direction via right-hand rule"
+      - "Moment of inertia I for standard shapes (disk, sphere, rod, hoop)"
+      - "Newton's 2nd law for rotation τ_net = Iα"
+      - "Parallel axis theorem I = I_cm + Md²"
+      - "Rolling without slipping condition v = Rω"
+      - "Total KE of rolling body (translational + rotational)"
+      - "I/(MR²) ratio and ramp-race comparisons"
+      - "Combined F = ma and τ = Iα for rolling systems"
+      - "Angular momentum L = Iω and conservation with no external torque"
+      - "Tabulated I values and when to apply parallel-axis shift"
+    level_scope:
+      physics1: "Rotational dynamics at Physics 1 depth — τ = Iα, standard I formulas, parallel-axis theorem, rolling energy splits, and ramp-race ranking via I/(MR²). Expect simultaneous translation + rotation analysis, not just memorized I tables."
 
   - id: uni_oscillations
     name: Oscillations & Waves
     name_he: תנודות וגלים
+    points_levels: [physics1]
     prerequisites: [uni_newtonian_mechanics, uni_work_energy]
+    skill_atoms:
+      - "SHM total energy E = ½kA² conserved"
+      - "KE/PE exchange and speed at position v = ω√(A² − x²)"
+      - "Maximum speed v_max = Aω and ω = √(k/m)"
+      - "Energy fractions K/E = 1 − x²/A²"
+      - "Simple pendulum small-angle SHM equation of motion"
+      - "Pendulum period T = 2π√(L/g) and mass independence"
+      - "Derivation of pendulum EOM via tangential Newton's 2nd law"
+      - "Where kinetic equals potential at x = ±A/√2"
+      - "Energy-method protocol for SHM without tracking time"
+      - "Distinguishing spring vs pendulum ω relationships"
+    level_scope:
+      physics1: "SHM via energy conservation and small-angle pendulum theory — derive T = 2π√(L/g), compute speeds/energy fractions at arbitrary x, and justify the small-angle approximation. Wave propagation is deferred to later EM/optics concepts."
 
   - id: uni_fluids
     name: Fluid Mechanics
     name_he: מכניקת זורמים
+    points_levels: [physics1]
     prerequisites: [uni_newtonian_mechanics, uni_work_energy]
+    skill_atoms:
+      - "Continuity equation A₁v₁ = A₂v₂ for incompressible flow"
+      - "Bernoulli's equation and energy per unit volume"
+      - "Fast flow → lower static pressure (Venturi / lift intuition)"
+      - "Torricelli's theorem v = √(2gH)"
+      - "Applying continuity first, then Bernoulli for pressures"
+      - "Horizontal-pipe Bernoulli simplification (P + ½ρv² = const)"
+      - "Pipe narrowing and flow-speed calculation from radii"
+      - "Venturi meter and real-world Bernoulli applications"
+      - "Unit and sign checks in fluid-energy problems"
+    level_scope:
+      physics1: "Ideal-fluid continuity + Bernoulli at intro-university depth — sequential continuity-then-Bernoulli workflow, Torricelli draining, and the counter-intuitive pressure–speed tradeoff. Viscosity and full hydrostatics are out of scope for this aliased lesson."
 
   - id: uni_thermodynamics
     name: Thermodynamics
     name_he: תרמודינמיקה
+    points_levels: [physics1]
     prerequisites: [uni_work_energy]
+    skill_atoms:
+      - "Sensible heat Q = mcΔT within a single phase"
+      - "Latent heat at phase change Q = mL (plateau regions)"
+      - "First law of thermodynamics ΔU = Q − W (sign conventions)"
+      - "Ideal gas law PV = nRT with Kelvin temperature"
+      - "Isothermal, adiabatic, isochoric, and isobaric process simplifications"
+      - "Multi-stage heating curves (heat, melt, heat, boil, …)"
+      - "Internal energy change from heat in minus work out"
+      - "Water-specific constants (c, L_f, L_v) and unit conversion (g ↔ kg)"
+      - "Identifying process type from problem wording"
+      - "Temperature-vs-heat graph interpretation (slope vs plateau)"
+    level_scope:
+      physics1: "Makhina-aligned thermodynamics — calorimetry, latent heat, first law, and ideal-gas processes at rigorous SI-unit depth. Multi-stage heating-curve problems and explicit ΔU = Q − W sign discipline are expected; statistical mechanics is out of scope."
 
   - id: uni_electric_fields
     name: Electric Fields & Gauss's Law
     name_he: שדות חשמליים וחוק גאוס
+    points_levels: [physics1]
     prerequisites: [uni_vectors, uni_work_energy]
+    skill_atoms:
+      - "Coulomb's law and superposition for point charges"
+      - "Electric field E = F/q as a vector field"
+      - "Field of dipole and continuous charge distributions"
+      - "Gauss's law ∮ E·dA = Q_enc/ε₀"
+      - "Symmetry choice for Gaussian surfaces (sphere, cylinder, plane)"
+      - "Field of infinite line/plane/shell from Gauss's law"
+      - "Flux through closed surfaces"
+    level_scope:
+      physics1: "Electrostatics at university depth — Coulomb superposition, field lines, and Gauss's law with symmetry arguments on finals."
 
   - id: uni_potential
     name: Electric Potential
     name_he: פוטנציאל חשמלי
+    points_levels: [physics1]
     prerequisites: [uni_electric_fields]
+    skill_atoms:
+      - "Potential difference V = −∫ E·dl"
+      - "Potential of point charge V = kq/r"
+      - "Equipotential surfaces perpendicular to field lines"
+      - "Potential energy U = qV for charge in field"
+      - "Work to assemble charge configuration"
+      - "Relation E = −∇V (field as negative gradient of potential)"
+    level_scope:
+      physics1: "Scalar potential methods for electrostatics; equipotentials and energy bookkeeping replace repeated vector superposition when possible."
 
   - id: uni_capacitance
     name: Capacitance & Dielectrics
     name_he: קיבול ודיאלקטריים
+    points_levels: [physics1]
     prerequisites: [uni_potential]
+    skill_atoms:
+      - "Capacitance C = Q/V definition"
+      - "Parallel-plate capacitor C = ε₀A/d"
+      - "Energy stored U = ½CV² = ½Q²/C"
+      - "Series and parallel capacitor combinations"
+      - "Dielectric constant κ and field reduction in matter"
+      - "Gauss's law with dielectrics (bound charges)"
+    level_scope:
+      physics1: "Capacitors at intro E&M depth — combination rules, stored energy, and dielectric modification of Gauss's-law problems."
 
   - id: uni_dc_circuits
     name: DC Circuits
     name_he: מעגלי זרם ישר
+    points_levels: [physics1]
     prerequisites: [uni_potential, uni_capacitance]
+    skill_atoms:
+      - "Ohm's law V = IR and power P = IV"
+      - "Resistors in series and parallel"
+      - "Kirchhoff's junction rule (current in = out)"
+      - "Kirchhoff's loop rule (ΣΔV = 0)"
+      - "Multi-loop circuit analysis with sign conventions"
+      - "RC charging/discharging qualitative behavior"
+    level_scope:
+      physics1: "DC circuit analysis via Kirchhoff rules; multi-loop sign discipline and equivalent resistance are standard exam skills."
 
   - id: uni_magnetic_fields
     name: Magnetic Fields & Forces
     name_he: שדות מגנטיים וכוחות
+    points_levels: [physics1]
     prerequisites: [uni_electric_fields, uni_vectors]
+    skill_atoms:
+      - "Lorentz force F = qv×B and right-hand rule"
+      - "Force on current-carrying wire I L×B"
+      - "Circular motion of charge in uniform B (r = mv/qB)"
+      - "Biot–Savart / Ampère's law for symmetric geometries"
+      - "Field of long straight wire and solenoid"
+      - "Torque on magnetic dipole τ = μ×B"
+    level_scope:
+      physics1: "Magnetism chapter — Lorentz force, wire forces, and symmetric B-field calculations using Ampère/Biot–Savart patterns."
 
   - id: uni_induction
     name: Faraday's Law & Induction
     name_he: חוק פאראדי והשראה
+    points_levels: [physics1]
     prerequisites: [uni_magnetic_fields, uni_dc_circuits]
+    skill_atoms:
+      - "Magnetic flux Φ_B = ∫ B·dA"
+      - "Faraday's law ε = −dΦ/dt (Lenz's law sign)"
+      - "Motional emf in moving conductors"
+      - "Induced electric field from changing flux"
+      - "Self-inductance L and energy ½LI²"
+      - "RL circuit qualitative time constants"
+    level_scope:
+      physics1: "Electromagnetic induction — flux change, Lenz sign rule, motional emf, and intro inductance on university E&M exams."
 
   - id: uni_ac_circuits
     name: AC Circuits
     name_he: מעגלי זרם חילופין
+    points_levels: [physics1]
     prerequisites: [uni_induction, uni_dc_circuits]
+    skill_atoms:
+      - "Sinusoidal AC voltage/current and angular frequency ω"
+      - "Phasor representation of AC quantities"
+      - "Capacitive and inductive reactance X_C, X_L"
+      - "Impedance Z in RLC series circuits"
+      - "Resonance when X_L = X_C"
+      - "Average power in AC circuits"
+    level_scope:
+      physics1: "Intro AC circuits with phasors and impedance; RLC resonance and power factor at university physics-2 bridge depth."
 
   - id: uni_maxwell
     name: Maxwell's Equations
     name_he: משוואות מקסוול
+    points_levels: [physics1]
     prerequisites: [uni_induction, uni_electric_fields]
+    skill_atoms:
+      - "Gauss's law for electricity and magnetism (no magnetic monopoles)"
+      - "Faraday's law and Ampère–Maxwell law with displacement current"
+      - "Integral vs differential form correspondence"
+      - "Consistency of wave solution from coupled E and B fields"
+      - "Symmetry between changing E and B fields"
+    level_scope:
+      physics1: "Maxwell's equations as capstone E&M — identify each law, displacement current role, and how EM waves emerge."
 
   - id: uni_em_waves
     name: Electromagnetic Waves
     name_he: גלים אלקטרומגנטיים
+    points_levels: [physics1]
     prerequisites: [uni_maxwell, uni_oscillations]
+    skill_atoms:
+      - "Transverse EM wave: E, B, and propagation direction mutually perpendicular"
+      - "Speed c = 1/√(μ₀ε₀) from Maxwell's equations"
+      - "Energy density and Poynting vector S = E×B/μ₀"
+      - "Intensity and radiation pressure"
+      - "Spectrum from radio to gamma (frequency–wavelength relation)"
+    level_scope:
+      physics1: "EM wave properties after Maxwell — polarization, intensity, spectrum, and Poynting-vector energy transport."
 
   - id: uni_optics
     name: Wave Optics
     name_he: אופטיקת גלים
+    points_levels: [physics1]
     prerequisites: [uni_em_waves, uni_oscillations]
+    skill_atoms:
+      - "Huygens' principle and wavefront propagation"
+      - "Young's double-slit interference pattern"
+      - "Path difference and constructive/destructive interference"
+      - "Thin-film interference and phase shifts on reflection"
+      - "Single-slit diffraction minima condition"
+      - "Diffraction grating d sin θ = mλ"
+    level_scope:
+      physics1: "Wave optics — interference and diffraction quantitative conditions; connects SHM/wave language to light experiments."
 
   - id: uni_quantum_intro
     name: Introduction to Quantum Mechanics
     name_he: מבוא למכניקת הקванטים
+    points_levels: [physics1]
     prerequisites: [uni_oscillations, uni_em_waves]
+    skill_atoms:
+      - "Photoelectric effect and photon energy E = hf"
+      - "Work function and stopping potential"
+      - "De Broglie wavelength λ = h/p"
+      - "Wave–particle duality for light and matter"
+      - "Bohr model energy levels and spectral lines"
+      - "Uncertainty principle qualitative statement"
+    level_scope:
+      physics1: "Intro quantum phenomena — photoelectric effect, de Broglie waves, and Bohr model at modern-physics survey depth."

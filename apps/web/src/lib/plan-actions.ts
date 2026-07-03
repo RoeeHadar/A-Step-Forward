@@ -42,6 +42,16 @@ const ALL_PLAN_TAGS_RE =
 
 /** Map free-text / Hebrew topic names → in-catalog concept_id values. */
 const TOPIC_KEYWORD_RULES: Array<{ pattern: RegExp; concepts: string[] }> = [
+  {
+    pattern: /חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i,
+    concepts: [
+      'limits',
+      'derivatives_intro',
+      'derivatives_applications',
+      'integrals_intro',
+      'integrals_techniques',
+    ],
+  },
   { pattern: /קומבינטוריק|combinatoric/i, concepts: ['combinatorics'] },
   { pattern: /תורת (ה)?קבוצ|set theory|\bsets\b/i, concepts: ['functions_intro'] },
   { pattern: /תורת (ה)?גרפ|graph theory|\bgraphs\b/i, concepts: ['combinatorics'] },
@@ -140,10 +150,17 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
     out.goal = /[\u0590-\u05FF]/.test(blob)
       ? 'מבחן במתמטיקה בדידה'
       : 'Discrete mathematics exam';
+  } else if (/חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i.test(blob)) {
+    out.goal = /[\u0590-\u05FF]/.test(blob) ? 'מבחן בחדו״א 1' : 'Calculus 1 exam';
+    out.goal_key = 'calculus1';
   }
 
   if (/בדיד|discrete|אוניברסיט|university|open university|מכינה|makhina/i.test(blob)) {
-    out.goal_key = 'university_prep';
+    out.goal_key = out.goal_key ?? 'university_prep';
+  }
+
+  if (/חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i.test(blob)) {
+    out.goal_key = 'calculus1';
   }
 
   if (/לא עושה בגרות|לא בגרות|not doing bagrut|no longer.*bagrut|ביטול.*בגרות/i.test(blob)) {
@@ -166,15 +183,29 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
       const d = new Date();
       d.setDate(d.getDate() + weeks * 7);
       out.final_goal_date = toIsoDate(d);
+      out.next_test_date = toIsoDate(d);
+    }
+  }
+
+  if (
+    !out.final_goal_date &&
+    /(?:עוד|בעוד)\s+שבוע(?:\s|$)|in\s+a\s+week\b/i.test(blob)
+  ) {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    out.final_goal_date = toIsoDate(d);
+    out.next_test_date = toIsoDate(d);
+  }
+
+  if (out.goal && /מבחן|exam|test/i.test(out.goal)) {
+    out.next_test_name = out.next_test_name ?? out.goal;
+    if (!out.next_test_date && out.final_goal_date) {
+      out.next_test_date = out.final_goal_date;
     }
   }
 
   const enGoal = blob.match(/new goal(?: is|:)\s*([^\n.]+)/i);
   if (enGoal?.[1] && !out.goal) out.goal = enGoal[1].trim();
-
-  if (out.goal && /מבחן|exam|test/i.test(out.goal) && !out.next_test_name) {
-    out.next_test_name = out.goal;
-  }
 
   return out;
 }
@@ -183,7 +214,10 @@ export function learnerExplicitChangeRequest(message: string): boolean {
   const t = message.trim();
   const lower = t.toLowerCase();
   return (
-    /^(שנה|עדכן|שינוי)\s+(את\s+)?(ה)?מטרה/i.test(t) ||
+    /^(שנה|עדכן|שינוי)\s+(את\s+)?(ה)?(מטרה|תוכנית)/i.test(t) ||
+    /(?:שנה|עדכן|שינוי).{0,24}תוכנית/i.test(t) ||
+    /(?:מבחן|exam).{0,48}(?:שנה|עדכן).{0,24}תוכנית/i.test(t) ||
+    /(?:שנה|עדכן).{0,24}תוכנית.{0,48}(?:מבחן|exam)/i.test(t) ||
     /המטרה החדשה שלי/i.test(t) ||
     /שנה את התוכנית|עדכן את התוכנית/i.test(t) ||
     /change my goal|update my goal|new goal is/i.test(lower) ||
@@ -193,8 +227,15 @@ export function learnerExplicitChangeRequest(message: string): boolean {
 
 /** Tutor/Mentor prose indicating they are applying a plan or goal change. */
 export function looksLikePlanApplyIntent(text: string): boolean {
-  return /אעדכן|אשנה|עודכן|מעדכן|אוודא שהתוכנית|will update|updating your|המטרה החדשה שלך|מותאם למטרה|I will change your goal/i.test(
+  return /אעדכן|אשנה|עודכן|מעדכן|הולך לשנות|אני הולך לשנות|אוודא שהתוכנית|התוכנית החדשה|will update|updating your|will change your|המטרה החדשה שלך|מותאם למטרה|I will change your goal/i.test(
     text,
+  );
+}
+
+export function looksLikePlanChangeAcknowledgment(text: string): boolean {
+  return (
+    looksLikePlanApplyIntent(text) ||
+    /התוכנית החדשה תכלול|התוכנית החדשה|אני מאמין שהתוכנית|new plan will/i.test(text)
   );
 }
 
@@ -204,13 +245,16 @@ export function shouldApplyPlanChange(
   priorUserMessage?: string,
 ): boolean {
   if (learnerConfirmedChange(userMessage)) return true;
-  if (learnerExplicitChangeRequest(userMessage) && looksLikePlanApplyIntent(assistantRaw)) {
+  if (
+    learnerExplicitChangeRequest(userMessage) &&
+    looksLikePlanChangeAcknowledgment(assistantRaw)
+  ) {
     return true;
   }
   if (
     priorUserMessage &&
     learnerExplicitChangeRequest(priorUserMessage) &&
-    looksLikePlanApplyIntent(assistantRaw)
+    looksLikePlanChangeAcknowledgment(assistantRaw)
   ) {
     return true;
   }

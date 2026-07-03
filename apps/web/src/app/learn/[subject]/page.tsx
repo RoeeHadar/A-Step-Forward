@@ -14,7 +14,7 @@ import {
 import { getLessonIndexEntry } from '@/lib/lesson-index';
 import kg from '@/lib/kg-data.json';
 import { getCategoryById, SUBJECT_TO_CATEGORY } from '@/lib/curriculum-categories';
-import { resolveConceptAlias } from '@/lib/concept-aliases';
+import { resolveConceptAlias, dedupeConceptIdsForCatalog } from '@/lib/concept-aliases';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
@@ -196,7 +196,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
   const filter = uiSubjectFilter(subject);
   const kgById = new Map(kgConcepts.map((c) => [c.id, c]));
 
-  const conceptsForSubject = filter.conceptAllowlist.map((id) =>
+  const conceptsForSubject = dedupeConceptIdsForCatalog(filter.conceptAllowlist).map((id) =>
     resolveConceptForCatalog(id, kgById, filter.kgSubject),
   );
 

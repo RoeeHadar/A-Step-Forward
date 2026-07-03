@@ -1,41 +1,39 @@
 {
-  "_comment": "MCP servers used by Cursor while developing this repo. Runtime (in-product) MCPs are configured by the orchestrator service. Replace ${VAR} via your local env or Cursor secret store.",
   "mcpServers": {
     "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
     },
     "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-github"],
       "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}" }
     },
     "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@upstash/context7-mcp"]
     },
     "shadcn": {
-      "command": "npx",
-      "args": ["-y", "@shadcn/ui-mcp"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@shadcn/ui-mcp"]
     },
     "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@playwright/mcp"]
     },
     "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "${env:DATABASE_URL_SYNC}"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-postgres", "${env:DATABASE_URL_SYNC}"]
     },
     "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
     "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+      "command": "cmd",
+      "args": ["/c", "npx.cmd", "-y", "@modelcontextprotocol/server-fetch"]
     },
     "memory-project": {
-      "_comment": "Project's own memory MCP, useful for dev/QA introspection. Implemented at mcp-servers/memory.",
       "command": "python",
       "args": ["-m", "memory_mcp.server"],
       "cwd": "${workspaceFolder}/mcp-servers/memory",
@@ -71,6 +69,10 @@
         "DATABASE_URL": "${env:DATABASE_URL}",
         "REDIS_URL": "${env:REDIS_URL}"
       }
+    },
+    "obsidian": {
+      "command": "cmd",
+      "args": ["/c", "\"${workspaceFolder}\\scripts\\mcp-obsidian-vault.cmd\""]
     }
   }
 }

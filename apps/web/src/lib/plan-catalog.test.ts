@@ -127,4 +127,16 @@ describe('plan-actions', () => {
     expect(payload.clear_next_test).toBe(true);
     expect(payload.prepend_concepts).toContain('combinatorics');
   });
+
+  it('applies calc1 exam plan when user asks to change plan for exam in one week', () => {
+    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+    const assistant =
+      'אני הולך לשנות את התוכנית שלך. התוכנית החדשה תכלול חזרה על נושאים חשובים למבחן.';
+    expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+    const meta = inferGoalMetaFromText(userMsg, assistant);
+    expect(meta.goal_key).toBe('calculus1');
+    expect(meta.final_goal_date).toBeTruthy();
+    expect(meta.next_test_date).toBeTruthy();
+  });
 });

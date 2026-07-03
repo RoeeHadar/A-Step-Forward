@@ -5,6 +5,12 @@ import Link from 'next/link';
 import { MarkdownMath } from '@/components/markdown-math';
 import { Check, X, HelpCircle, ChevronUp, ChevronDown, Pencil, Eye, EyeOff } from 'lucide-react';
 import { pickLessonText } from '@/lib/lesson-locale';
+import {
+  answersMatch,
+  displayCorrectAnswer,
+  getAcceptedAnswers,
+  numericClose,
+} from '@/lib/answer-normalize';
 import type {
   LessonQuestionKind,
   LessonPointsLevel,
@@ -76,19 +82,6 @@ function MarkdownInline({ content }: { content: string }) {
   return <MarkdownMath>{content}</MarkdownMath>;
 }
 
-function normalizeAnswer(s: string, caseSensitive = false): string {
-  const trimmed = s.trim().replace(/\s+/g, ' ');
-  return caseSensitive ? trimmed : trimmed.toLowerCase();
-}
-
-function numericClose(a: string, b: string): boolean {
-  const na = Number.parseFloat(a);
-  const nb = Number.parseFloat(b);
-  if (Number.isNaN(na) || Number.isNaN(nb)) return false;
-  const tol = Math.max(1e-3, Math.abs(nb) * 0.01);
-  return Math.abs(na - nb) <= tol;
-}
-
 function arraysEqual(a: number[], b: number[]): boolean {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; i += 1) if (a[i] !== b[i]) return false;
@@ -155,8 +148,8 @@ function QuestionCard({
   const rubric = pickLessonText(lang, question.rubric_he, question.rubric_en);
   const options =
     lang === 'he'
-      ? (question.options_he?.length ? question.options_he : [])
-      : (question.options_en?.length ? question.options_en : []);
+      ? (question.options_he?.length ? question.options_he : question.options_en ?? [])
+      : (question.options_en?.length ? question.options_en : question.options_he ?? []);
   const kindLabel = KIND_LABEL[question.kind][lang];
   const payload = question.answer_payload;
 
@@ -211,10 +204,13 @@ function QuestionCard({
   function handleNumericOrFill() {
     if (state.submitted) return;
     const expected = question.correct_answer ?? '';
-    const correct =
-      question.kind === 'numeric'
-        ? numericClose(openText, expected)
-        : normalizeAnswer(openText) === normalizeAnswer(expected);
+    let correct = false;
+    if (question.kind === 'numeric') {
+      correct = numericClose(openText, expected);
+    } else {
+      const accepted = getAcceptedAnswers([expected], expected);
+      correct = answersMatch(openText, accepted);
+    }
     setState({ submitted: true, correct, userAnswer: openText, selfAssessed: null });
     void reportAnswer(correct, openText);
   }
@@ -222,9 +218,8 @@ function QuestionCard({
   function handleShortAnswer() {
     if (state.submitted) return;
     const cs = payload?.case_sensitive ?? false;
-    const user = normalizeAnswer(openText, cs);
-    const accepted = (payload?.acceptable_answers ?? []).map((a) => normalizeAnswer(a, cs));
-    const correct = accepted.includes(user);
+    const accepted = getAcceptedAnswers(payload?.acceptable_answers, question.correct_answer);
+    const correct = answersMatch(openText, accepted, cs);
     setState({ submitted: true, correct, userAnswer: openText, selfAssessed: null });
     void reportAnswer(correct, openText);
   }
@@ -734,16 +729,28 @@ function QuestionCard({
             question.kind !== 'true_false' &&
             question.kind !== 'match' &&
             question.kind !== 'ordering' &&
-            question.correct_answer ? (
+            (question.correct_answer ||
+              (question.kind === 'short_answer' && payload?.acceptable_answers?.length)) ? (
               <span className="ms-2 text-xs font-normal text-muted-foreground">
                 {lang === 'he' ? 'תשובה: ' : 'Answer: '}
                 <code className="rounded bg-muted px-1 py-0.5 font-mono">
-                  {question.correct_answer}
+                  {displayCorrectAnswer(
+                    question.kind === 'short_answer' ? payload?.acceptable_answers : undefined,
+                    question.correct_answer,
+                  )}
                 </code>
               </span>
             ) : null}
           </div>
-          <MarkdownInline content={explanation} />
+          {explanation ? (
+            <MarkdownInline content={explanation} />
+          ) : !state.correct ? (
+            <p className="text-muted-foreground">
+              {lang === 'he'
+                ? 'התשובה שלך לא תואמת לאף אחת מהתשובות המקובלות. בדוק יחידות, סימון וכתיב.'
+                : 'Your answer did not match any accepted form. Check units, notation, and spelling.'}
+            </p>
+          ) : null}
         </div>
       ) : null}
     </div>

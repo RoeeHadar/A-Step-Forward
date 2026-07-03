@@ -15,6 +15,7 @@ import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
 import { canonicalConceptId, goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
+import { answersMatch, getAcceptedAnswers, numericClose } from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -1462,17 +1463,6 @@ export function gradeLessonAnswer(
   userAnswer: unknown,
   clientCorrect: boolean | undefined,
 ): { correct: boolean; graded_by: 'server' | 'self'; reason?: string } {
-  const norm = (s: string, cs = false) => {
-    const t = s.trim().replace(/\s+/g, ' ');
-    return cs ? t : t.toLowerCase();
-  };
-  const numericClose = (a: string, b: string): boolean => {
-    const na = Number.parseFloat(a);
-    const nb = Number.parseFloat(b);
-    if (Number.isNaN(na) || Number.isNaN(nb)) return false;
-    const tol = Math.max(1e-3, Math.abs(nb) * 0.01);
-    return Math.abs(na - nb) <= tol;
-  };
   const arraysEqual = (a: number[], b: number[]) =>
     a.length === b.length && a.every((v, i) => v === b[i]);
   const setEqual = (a: number[], b: number[]) =>
@@ -1508,15 +1498,22 @@ export function gradeLessonAnswer(
       if (typeof userAnswer !== 'string' || !q.correct_answer) {
         return { correct: false, graded_by: 'server', reason: 'invalid answer' };
       }
-      return { correct: norm(userAnswer) === norm(q.correct_answer), graded_by: 'server' };
+      const accepted = getAcceptedAnswers([q.correct_answer], q.correct_answer);
+      return {
+        correct: answersMatch(userAnswer, accepted),
+        graded_by: 'server',
+      };
     }
     case 'short_answer': {
       if (typeof userAnswer !== 'string') {
         return { correct: false, graded_by: 'server', reason: 'invalid answer' };
       }
       const cs = q.answer_payload?.case_sensitive ?? false;
-      const accepted = (q.answer_payload?.acceptable_answers ?? []).map((a) => norm(a, cs));
-      return { correct: accepted.includes(norm(userAnswer, cs)), graded_by: 'server' };
+      const accepted = getAcceptedAnswers(q.answer_payload?.acceptable_answers, q.correct_answer);
+      return {
+        correct: answersMatch(userAnswer, accepted, cs),
+        graded_by: 'server',
+      };
     }
     case 'match': {
       const expected = q.answer_payload?.correct_pairs ?? [];

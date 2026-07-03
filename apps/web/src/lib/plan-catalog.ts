@@ -114,12 +114,17 @@ export function goalKeyToPointsGroup(key: string | undefined | null): string | n
 export function sanitizePlanUpdatePayload(
   payload: PlanUpdatePayload,
 ): PlanUpdatePayload | null {
-  if (!payload.confirmed || !payload.reason?.trim()) return null;
+  if (!payload.confirmed) return null;
+
+  const reason =
+    payload.reason?.trim() ||
+    'עדכון תוכנית לימודים לפי בקשת הלומד / Plan update per learner request';
 
   const goal_key = isValidGoalKey(payload.goal_key) ? payload.goal_key : undefined;
 
   return {
     ...payload,
+    reason,
     goal_key,
     priority_concepts: sanitizeConceptIds(payload.priority_concepts),
     prepend_concepts: sanitizeConceptIds(payload.prepend_concepts),

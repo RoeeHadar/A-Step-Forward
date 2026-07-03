@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT licensed" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Proprietary-red.svg" alt="Proprietary — all rights reserved" /></a>
   <a href="SECURITY.md"><img src="https://img.shields.io/badge/security-disclosure-informational" alt="Security policy" /></a>
   <a href="https://github.com/RoeeHadar/A-Step-Forward/actions/workflows/lint-test.yml"><img src="https://github.com/RoeeHadar/A-Step-Forward/actions/workflows/lint-test.yml/badge.svg" alt="CI: lint &amp; test" /></a>
   <a href="https://a-step-forward-waij.vercel.app"><img src="https://img.shields.io/badge/deployed-Vercel-black?logo=vercel" alt="Deployed on Vercel" /></a>
@@ -35,11 +35,11 @@
 > remembers what you've learned across sessions, and adapts. Built with Next.js 15, FastAPI,
 > LangGraph, and a multi-layered memory system backed by Postgres + pgvector + Neo4j.
 > The default language is **Hebrew (עברית)** with full RTL layout; English is available via the
-> language switcher. MIT licensed, self-hostable, and eval-gated.
+> language switcher. **Private / proprietary** — not open source; do not redistribute.
 >
 > **א צעד קדימה** הוא מרכז למידה מבוסס-בינה מלאכותית בקוד פתוח. צוות של סוכנים מתמחים — מורה,
 > מנטור, מאמן, מבקר, חוקר — מלמד אתכם, מעריך אתכם, זוכר את מה שלמדתם לאורך שיחות, ומסתגל
-> אליכם. ממשק ברירת המחדל הוא עברית עם פריסה מימין לשמאל. רישיון MIT, ניתן לאחסון עצמי.
+> אליכם. ממשק ברירת המחדל הוא עברית עם פריסה מימין לשמאל. **פרויקט פרטי — כל הזכויות שמורות.**
 
 ---
 
@@ -57,7 +57,7 @@ knowledge graph that grounds every answer in a source.
 | **Citations from your own KG** | Lessons, notes, and uploads are chunked, embedded, and resolved into a per-learner knowledge graph. GraphRAG hybrid retrieval (BM25 + dense + graph traversal + rerank) cites every claim. |
 | **Eval-gated, not vibes-gated** | `promptfoo` + `DeepEval` matrices block any prompt or agent change in CI. New prompts ship in shadow mode for 24h before promotion. |
 | **Privacy-first** | PII redaction (Presidio + custom rules), AES-GCM at rest, COPPA-aware child mode, per-row policies enforced server-side, audit logs on every memory read/write. |
-| **Self-hostable** | `docker compose up` boots the whole stack. MIT licensed. |
+| **Private codebase** | Proprietary — hosted privately on GitHub; not licensed for redistribution. |
 
 ## How it fits together
 
@@ -186,8 +186,9 @@ threat model. Notable defaults:
 
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md). Every PR runs `review-bugbot`;
 PRs touching `auth`/`memory`/`graphrag`/RBAC/payments also run `review-security`.
-Conventional Commits, MIT license, no flaky tests merged.
+Conventional Commits, proprietary license, no flaky tests merged.
 
 ## License
 
-MIT © 2026 Roee Hadar — see [`LICENSE`](LICENSE).
+**Proprietary — All Rights Reserved** © 2026 Roee Hadar. See [`LICENSE`](LICENSE).
+This repository is private. No use, copying, or redistribution without written permission.

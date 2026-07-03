@@ -23,6 +23,8 @@ import {
   PLAN_AGENT_INSTRUCTIONS,
 } from '@/lib/plan-actions';
 import {
+  buildPlanApplyFailureNotice,
+  buildPlanApplyingNotice,
   executePlanUpdate,
   resolvePayloadForApply,
   saveProposalFromAssistantTurn,
@@ -138,6 +140,14 @@ export async function POST(req: Request) {
               assistantBuffer,
               sessionId,
               locale,
+              (status) => {
+                if (status === 'applying') {
+                  const applying = buildPlanApplyingNotice(locale);
+                  assistantBuffer += applying;
+                  controller.enqueue(encodeToken(applying));
+                  controller.enqueue(encodeData({ type: 'plan_applying' }));
+                }
+              },
             );
             if (planResult?.applied) {
               const notice =
@@ -149,6 +159,15 @@ export async function POST(req: Request) {
                   type: 'plan_updated',
                   planId: planResult.planId,
                   reason: planResult.reason,
+                }),
+              );
+            } else if (planResult?.failureNotice) {
+              assistantBuffer += planResult.failureNotice;
+              controller.enqueue(encodeToken(planResult.failureNotice));
+              controller.enqueue(
+                encodeData({
+                  type: 'plan_failed',
+                  error: planResult.error,
                 }),
               );
             }
@@ -210,6 +229,7 @@ async function finalizeAssistantTurn(
   assistantRaw: string,
   sessionId?: string,
   locale: 'he' | 'en' = 'he',
+  onStatus?: (status: 'applying') => void,
 ): Promise<PlanApplyResult | null> {
   const visible = stripPlanMachineTags(assistantRaw);
   const isPlanAgent = agent === 'mentor' || agent === 'tutor';
@@ -235,7 +255,14 @@ async function finalizeAssistantTurn(
 
   const applyNow = shouldApplyPlanChange(userMessage, assistantRaw, priorUser);
 
+  try {
+    await saveProposalFromAssistantTurn(userId, agent, userMessage, assistantRaw);
+  } catch (err) {
+    logger.warn('chat: save pending plan proposal failed', { err: String(err) });
+  }
+
   if (applyNow) {
+    onStatus?.('applying');
     const payload = await resolvePayloadForApply(
       userId,
       userMessage,
@@ -249,8 +276,15 @@ async function finalizeAssistantTurn(
         agent,
         userMessage: userMessage.slice(0, 80),
       });
-      await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
-      return null;
+      const failureNotice = buildPlanApplyFailureNotice(locale, 'missing_payload');
+      await recordChatTurn(
+        userId,
+        agent,
+        'assistant',
+        `${visible}\n\n${failureNotice}`,
+        sessionId,
+      );
+      return { applied: false, error: 'missing_payload', failureNotice };
     }
 
     try {
@@ -269,29 +303,36 @@ async function finalizeAssistantTurn(
           planId: result.planId,
           weeks: result.weekSummaries?.length,
         });
-      } else {
-        logger.warn('chat: plan update failed', { error: result.error });
+        return result;
       }
-      if (!result.applied) {
-        await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
-      }
-      return result;
+
+      logger.warn('chat: plan update failed', { error: result.error });
+      const failureNotice = buildPlanApplyFailureNotice(locale, result.error);
+      await recordChatTurn(
+        userId,
+        agent,
+        'assistant',
+        `${visible}\n\n${failureNotice}`,
+        sessionId,
+      );
+      return { ...result, failureNotice };
     } catch (err) {
       logger.warn('chat: plan update threw', { err: String(err) });
-      await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
-      return { applied: false, error: String(err) };
+      const failureNotice = buildPlanApplyFailureNotice(locale, String(err));
+      await recordChatTurn(
+        userId,
+        agent,
+        'assistant',
+        `${visible}\n\n${failureNotice}`,
+        sessionId,
+      );
+      return { applied: false, error: String(err), failureNotice };
     }
   }
 
   const { payload: prematureUpdate } = extractPlanUpdate(assistantRaw);
   if (prematureUpdate?.confirmed) {
     logger.warn('chat: ASF_PLAN_UPDATE ignored — learner did not confirm in this turn');
-  }
-
-  try {
-    await saveProposalFromAssistantTurn(userId, agent, userMessage, assistantRaw);
-  } catch (err) {
-    logger.warn('chat: save pending plan proposal failed', { err: String(err) });
   }
 
   await recordChatTurn(userId, agent, 'assistant', visible, sessionId);

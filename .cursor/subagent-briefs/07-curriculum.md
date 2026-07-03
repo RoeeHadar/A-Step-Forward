@@ -28,6 +28,7 @@ Define the curriculum content model (courses, units, lessons, objectives, assess
 2. `.cursor/rules/20-python-style.mdc`.
 3. `skills/seed-curriculum/SKILL.md`.
 4. **`skills/expand-lessons-cursor/SKILL.md`** — bulk substantive expansion of the 207 JSON lessons (Cursor Composer, not Groq CI).
+5. **`skills/use-obsidian-vault/SKILL.md`** — dev vault at `obsidian-vault/` (concept graph, expansion dashboard, staging).
 
 ## Bulk lesson expansion (207 JSON corpus)
 

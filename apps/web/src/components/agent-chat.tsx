@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
-import { extractPlanUpdate, stripPlanMachineTags } from '@/lib/plan-actions';
+import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, learnerExplicitChangeRequest } from '@/lib/plan-actions';
 import { useRouter } from 'next/navigation';
 import { Send, Loader2, X } from 'lucide-react';
 import { Button } from '@asf/ui/button';
@@ -88,6 +88,11 @@ export function AgentChat({
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [historyReady, setHistoryReady] = useState(false);
   const [chatKey, setChatKey] = useState(0);
+  const [planApplyState, setPlanApplyState] = useState<
+    'idle' | 'applying' | 'success' | 'failed'
+  >('idle');
+
+  const isPlanAgent = agentName === 'tutor' || agentName === 'mentor';
 
   useEffect(() => {
     if (!quickMode) return;
@@ -164,7 +169,7 @@ export function AgentChat({
   const topicFromUrl = searchParams.get('topic') ?? undefined;
   const studyTopic = topic ?? topicFromUrl;
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages, data } =
     useChat({
     api: '/api/chat',
     id: `${agentName}-${sessionId ?? 'pending'}-${chatKey}`,
@@ -181,16 +186,44 @@ export function AgentChat({
         hasAutoRetriedRef.current = true;
         window.setTimeout(() => reload(), 500);
       }
+      setPlanApplyState('failed');
     },
     onFinish: (message) => {
       if (
         message.content.includes('המטרה והתוכנית השבועית עודכנו') ||
         message.content.includes('Your goal and weekly plan were updated')
       ) {
+        setPlanApplyState('success');
         router.refresh();
+        window.setTimeout(() => setPlanApplyState('idle'), 6000);
+        return;
       }
+      if (
+        message.content.includes('לא הצלחתי לעדכן את התוכנית') ||
+        message.content.includes('I could not update your plan')
+      ) {
+        setPlanApplyState('failed');
+        window.setTimeout(() => setPlanApplyState('idle'), 8000);
+        return;
+      }
+      setPlanApplyState((s) => (s === 'applying' ? 'idle' : s));
     },
   });
+
+  useEffect(() => {
+    if (!data?.length) return;
+    const last = data[data.length - 1] as { type?: string } | undefined;
+    if (last?.type === 'plan_applying') {
+      setPlanApplyState('applying');
+    } else if (last?.type === 'plan_updated') {
+      setPlanApplyState('success');
+      router.refresh();
+      window.setTimeout(() => setPlanApplyState('idle'), 6000);
+    } else if (last?.type === 'plan_failed') {
+      setPlanApplyState('failed');
+      window.setTimeout(() => setPlanApplyState('idle'), 8000);
+    }
+  }, [data, router]);
 
   useEffect(() => {
     if (!historyReady || !sessionId) return;
@@ -392,6 +425,36 @@ export function AgentChat({
               {i18nMessages.chat?.warmup ?? '🔄 Waking the AI up… (first response takes up to 30s)'}
             </div>
           ) : null}
+          {isPlanAgent && planApplyState === 'applying' ? (
+            <div
+              className="rounded-lg border border-accent-amber/40 bg-accent-amber/10 px-4 py-2 text-sm text-accent-amber"
+              role="status"
+            >
+              {isHe
+                ? '⏳ מעדכן את המטרה והתוכנית השבועית — זה יכול לקחת כמה שניות…'
+                : '⏳ Updating your goal and weekly plan — this may take a few seconds…'}
+            </div>
+          ) : null}
+          {isPlanAgent && planApplyState === 'success' ? (
+            <div
+              className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-700 dark:text-emerald-400"
+              role="status"
+            >
+              {isHe
+                ? '✅ התוכנית עודכנה. רענון לוח הבקרה…'
+                : '✅ Plan updated. Refreshing your dashboard…'}
+            </div>
+          ) : null}
+          {isPlanAgent && planApplyState === 'failed' ? (
+            <div
+              className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-2 text-sm text-destructive"
+              role="alert"
+            >
+              {isHe
+                ? '⚠️ לא הצלחנו לעדכן את התוכנית. נסה לנסח את המטרה מחדש ולאשר עם "כן".'
+                : '⚠️ We could not update your plan. Try stating your new goal again and confirm with "yes".'}
+            </div>
+          ) : null}
           {isLoading ? (
             <div className="flex items-center gap-2 text-muted-foreground" role="status">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
@@ -407,7 +470,18 @@ export function AgentChat({
           </p>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="glass-surface flex gap-2 border-t border-border p-4">
+        <form
+          onSubmit={(e) => {
+            if (
+              isPlanAgent &&
+              (learnerConfirmedChange(input) || learnerExplicitChangeRequest(input))
+            ) {
+              setPlanApplyState('applying');
+            }
+            handleSubmit(e);
+          }}
+          className="glass-surface flex gap-2 border-t border-border p-4"
+        >
           <label htmlFor="chat-input" className="sr-only">
             {i18nMessages.chat.messageLabel}
           </label>
@@ -422,6 +496,12 @@ export function AgentChat({
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                if (
+                  isPlanAgent &&
+                  (learnerConfirmedChange(input) || learnerExplicitChangeRequest(input))
+                ) {
+                  setPlanApplyState('applying');
+                }
                 handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
               }
             }}

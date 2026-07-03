@@ -34,7 +34,7 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   linear_equations_one_variable: 'equations_linear',
   plane_trigonometry_right_triangle: 'trigonometry_ratios',
   hypothesis_testing_intro: 'hypothesis_testing',
-  linear_regression_correlation: 'descriptive_stats',
+  linear_regression_correlation: 'linear_regression_least_squares',
   normal_distribution_z_scores: 'descriptive_stats',
   normal_distribution_basics: 'descriptive_stats',
   newton_laws_general: 'newton_laws',
@@ -42,7 +42,6 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   harmonic_oscillation: 'simple_harmonic_motion',
   angular_momentum_particles: 'angular_momentum',
   rigid_body_torque_equilibrium: 'torque',
-  rigid_body_dynamics: 'uni_rigid_body',
   center_of_mass: 'newton_laws',
   fluids_hydrostatics: 'static_equilibrium',
   fluids_bernoulli: 'waves_basics',
@@ -114,7 +113,80 @@ export const CONCEPT_ID_ALIASES: Record<string, string> = {
   logarithmic_equations: 'logarithms',
   chi_square_goodness_of_fit: 'statistics_inference',
   central_limit_theorem: 'statistics_inference',
+  // University track (KG syllabus ids → existing authored lessons)
+  uni_functions_review: 'function_basics_uni',
+  uni_limits: 'limits',
+  uni_derivatives: 'derivatives_intro',
+  uni_derivative_applications: 'derivatives_applications',
+  uni_integrals: 'integrals_intro',
+  uni_integration_techniques: 'integrals_techniques',
+  uni_applications_integrals: 'integrals_applications',
+  uni_sequences_series: 'series_convergence_tests',
+  uni_vectors: 'vectors_basics',
+  uni_kinematics: 'kinematics_1d',
+  uni_newtonian_mechanics: 'newton_laws',
+  uni_work_energy: 'work_energy',
+  uni_momentum: 'momentum',
+  uni_rigid_body: 'rigid_body_dynamics',
+  uni_oscillations: 'simple_harmonic_motion',
+  uni_fluids: 'fluids_bernoulli',
+  uni_thermodynamics: 'thermodynamics_makhina',
+  uni_multivariable: 'multivariable_limits',
+  uni_partial_derivatives: 'partial_derivatives',
+  uni_multiple_integrals: 'double_integrals',
+  uni_vector_fields: 'partial_derivatives',
+  uni_line_integrals: 'double_integrals',
+  uni_electric_fields: 'electric_field_gauss',
+  uni_potential: 'electric_potential',
+  uni_capacitance: 'capacitors_dielectrics',
+  uni_dc_circuits: 'kirchhoff_laws',
+  uni_magnetic_fields: 'magnetism',
+  uni_induction: 'faraday_induction_uni',
+  uni_ac_circuits: 'ac_circuits',
+  uni_maxwell: 'maxwell_equations',
+  uni_em_waves: 'em_waves_propagation',
+  uni_optics: 'optics_physical',
+  uni_quantum_intro: 'modern_physics_intro',
 };
+
+/** True when this catalog id is an alias slug (not the canonical lesson/KG id). */
+export function isAliasConceptId(conceptId: string): boolean {
+  return conceptId in CONCEPT_ID_ALIASES;
+}
+
+/**
+ * Remove duplicate catalog entries that resolve to the same authored lesson.
+ * Prefers canonical KG ids over alias slugs when both appear in a track list.
+ */
+export function dedupeConceptIdsForCatalog(ids: string[]): string[] {
+  const keyToPick = new Map<string, string>();
+  for (const id of ids) {
+    const key = resolveConceptAlias(id);
+    const current = keyToPick.get(key);
+    if (!current) {
+      keyToPick.set(key, id);
+      continue;
+    }
+    const idIsAlias = isAliasConceptId(id);
+    const currentIsAlias = isAliasConceptId(current);
+    if (!idIsAlias && currentIsAlias) {
+      keyToPick.set(key, id);
+    } else if (id === key && current !== key) {
+      keyToPick.set(key, id);
+    }
+  }
+  const picked = new Set(keyToPick.values());
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const id of ids) {
+    if (!picked.has(id)) continue;
+    const key = resolveConceptAlias(id);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(id);
+  }
+  return out;
+}
 
 export function resolveConceptAlias(conceptId: string): string {
   return CONCEPT_ID_ALIASES[conceptId] ?? conceptId;
