@@ -9,7 +9,7 @@ This vault is the **curriculum intelligence and coordination layer** for the A S
 | Layer | Source of truth | This vault holds |
 |-------|-----------------|------------------|
 | Lessons | `scripts/seed_data/lessons/*.json` | Status, gaps, Goren/Geva drafts, wikilinks |
-| Knowledge graph | `apps/web/src/lib/kg-data.json` | Concept hub notes in `concepts/` |
+| Knowledge graph | `content/knowledge-graph/*.yaml` → `kg-data.json` | Concept hub notes in `concepts/` |
 | Agent prompts | `prompts/<agent>/vN.md` | Eval links, change rationale |
 | Learner memory | Neon Postgres | N/A (product runtime only) |
 | Sub-agent briefs | `.cursor/subagent-briefs/` | Dispatch status, round summaries |
@@ -18,7 +18,7 @@ This vault is the **curriculum intelligence and coordination layer** for the A S
 ## Session start protocol
 
 1. Read `_active-context.md` for current sprint focus.
-2. If doing curriculum work, read `curriculum/expansion-queue.md` (regenerate via `node scripts/sync-obsidian-expansion.mjs`).
+2. If doing curriculum work, read `curriculum/expansion-queue.md` and [[curriculum/kg-workflow|kg-workflow]] (regenerate via `pnpm vault:sync`).
 3. Read the relevant project skill under `skills/` in the **repo** (not this vault).
 4. For concept work, open `concepts/<concept_id>.md` before editing lesson JSON.
 
@@ -38,7 +38,7 @@ AGENTS.md                        # Runtime + Cursor agent index
 skills/use-obsidian-vault/       # Vault workflow skill
 scripts/cursor-expansion-queue.mjs
 scripts/seed_data/lessons/       # 207 lesson JSON files
-apps/web/src/lib/kg-data.json    # 140 concepts
+apps/web/src/lib/kg-data.json    # 156 concepts (built from content/knowledge-graph/*.yaml)
 research/                        # Bagrut/university research reports
 .cursor/subagent-briefs/         # Sub-agent tickets
 evals/agents/                    # Per-agent eval suites

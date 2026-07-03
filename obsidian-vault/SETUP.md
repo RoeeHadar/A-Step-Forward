@@ -115,8 +115,9 @@ obsidian-vault/
 ├── CLAUDE.md                 # Agent constitution
 ├── _active-context.md        # Working memory / sprint focus
 ├── SETUP.md                  # This file
-├── concepts/                 # 140 concept hub notes (generated)
+├── concepts/                 # 156 concept hub notes (generated from kg-data.json)
 ├── curriculum/
+│   ├── kg-workflow.md        # YAML → kg-data.json → vault pipeline
 │   ├── expansion-queue.md    # Generated queue dashboard
 │   ├── expansion-dashboard.md # Dataview queries (requires Dataview plugin)
 │   ├── goren-geva-checklist.md

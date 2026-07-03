@@ -7,11 +7,22 @@ tags:
 
 # Expansion Dashboard
 
-> Requires **Dataview** plugin. Regenerate queue: `node scripts/sync-obsidian-expansion.mjs`
+> Requires **Dataview** plugin. Regenerate: `pnpm vault:sync`
 
-## Summary
+## KG health (2026-07-03)
 
-See [[expansion-queue|Expansion queue]] for the full priority table and commands.
+All **156** concept notes should show `data_completeness: full`. Workflow: [[kg-workflow|KG → vault]].
+
+```dataview
+TABLE length(rows) AS Count
+FROM "concepts"
+GROUP BY data_completeness
+SORT data_completeness ASC
+```
+
+## Expansion status
+
+See [[expansion-queue|Expansion queue]] for commands. Corpus: **207/207** lessons marked done.
 
 ```dataview
 TABLE length(rows) AS Count
@@ -29,35 +40,34 @@ GROUP BY subject
 SORT subject ASC
 ```
 
-## Not done (todo / in-progress / qa-gap)
+## By level
 
 ```dataview
-TABLE expansion_status, data_completeness, name, subject
+TABLE length(rows) AS Concepts
+FROM "concepts"
+GROUP BY level
+SORT level ASC
+```
+
+## Not expanded (todo / in-progress)
+
+```dataview
+TABLE data_completeness, name, lesson_id
 FROM "concepts"
 WHERE expansion_status != "done"
 SORT expansion_status ASC, name ASC
 ```
 
-## Syllabus-only (no lesson JSON, even via alias)
+## University track (`uni_*`)
 
 ```dataview
-TABLE name, level, lesson_id
+TABLE expansion_status, lesson_id, lesson_aliased
 FROM "concepts"
-WHERE data_completeness = "syllabus-only"
-SORT level ASC, name ASC
+WHERE startswith(concept_id, "uni_")
+SORT concept_id ASC
 ```
 
-## KG sparse (lesson exists; enrich kg-data.json)
-
-```dataview
-TABLE lesson_id, name, subject
-FROM "concepts"
-WHERE data_completeness = "kg-sparse"
-SORT subject ASC, name ASC
-LIMIT 25
-```
-
-## Recently synced concept notes
+## Recently synced
 
 ```dataview
 TABLE expansion_status, subject, file.mtime AS modified
@@ -68,7 +78,7 @@ LIMIT 15
 
 ## Quick links
 
+- [[kg-workflow|KG → vault workflow]]
 - [[expansion-queue|Expansion queue (generated)]]
 - [[goren-geva-checklist|Goren/Geva checklist]]
-- [[../coordination/streams/07-curriculum|Curriculum stream brief]]
-- Repo skill: `skills/expand-lessons-cursor/SKILL.md`
+- [[../coordination/streams/07-curriculum|Curriculum brief]]

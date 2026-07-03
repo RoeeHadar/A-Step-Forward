@@ -19,8 +19,8 @@ description: How to use the obsidian-vault/ dev knowledge base for curriculum ex
 obsidian-vault/          # Open this folder as an Obsidian vault
 ├── CLAUDE.md            # Read every session
 ├── _active-context.md   # Working memory — update start/end of session
-├── concepts/            # 140 concept hub notes (generated)
-├── curriculum/          # Expansion queue, drafts, Goren/Geva checklist
+├── concepts/            # 156 concept hub notes (generated)
+├── curriculum/          # Expansion queue, kg-workflow, drafts, Goren/Geva checklist
 ├── coordination/        # Stream brief summaries
 ├── templates/           # concept-note, lesson-draft
 └── SETUP.md             # Full research + activation checklist
@@ -49,17 +49,22 @@ Enable steps: `obsidian-vault/MCP-ENABLE.md`. Optional secondary: `obsidian-rest
 ## Sync commands
 
 ```bash
+# After editing content/knowledge-graph/*.yaml
+node scripts/build-kg-json.mjs
+
 # Regenerate concept notes from kg-data.json (safe — preserves Expansion notes section)
 node scripts/sync-obsidian-concepts.mjs
 
 # Refresh expansion queue dashboard
 node scripts/sync-obsidian-expansion.mjs
 
-# Dry-run concept sync
-node scripts/sync-obsidian-concepts.mjs --dry-run
+# Shorthand (package.json)
+pnpm vault:build-kg
+pnpm vault:sync-concepts
+pnpm vault:sync
 ```
 
-Run concept sync after any `kg-data.json` change. Run expansion sync after `--mark` or queue shifts.
+Run `vault:build-kg` after any YAML KG change, then `vault:sync-concepts`. Run expansion sync after `--mark` or queue shifts.
 
 ## Concept note frontmatter
 
@@ -78,8 +83,8 @@ Update `expansion_status` when starting/finishing work. Mirror `--mark` in `curs
 | Value | Meaning |
 |-------|---------|
 | `full` | KG has skill_atoms + level_scope |
-| `kg-sparse` | Lesson JSON exists (often via `concept-aliases.ts`) but KG metadata is empty |
-| `syllabus-only` | No lesson file — KG scaffold only (common for `uni_*` track) |
+| `kg-sparse` | Lesson linked but KG metadata empty — run `pnpm vault:build-kg` + sync |
+| `syllabus-only` | No resolvable lesson — add alias in `concept-aliases.ts` or author lesson |
 
 ## Lesson authoring workflow
 

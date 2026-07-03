@@ -9,11 +9,13 @@ Canonical vs deprecated scripts for curriculum and vault maintenance. Update whe
 | `scripts/cursor-expansion-queue.mjs` | Priority queue for Cursor lesson expansion |
 | `scripts/seed-lessons.mjs` | Validate + upsert lessons to Neon |
 | `scripts/audit-lesson-depth.mjs` | Depth gate enforcement |
+| `scripts/build-kg-json.mjs` | Compile `content/knowledge-graph/*.yaml` → `kg-data.json` |
 | `scripts/sync-obsidian-concepts.mjs` | Regenerate vault concept notes from KG |
 | `scripts/sync-obsidian-expansion.mjs` | Mirror expansion queue to vault markdown |
 | `scripts/mcp-obsidian-vault.mjs` | Cursor MCP launcher (Windows-safe, no npx) |
 | `scripts/mcp-obsidian-vault.cmd` | Windows wrapper for MCP launcher |
 | `scripts/install-cursor-obsidian-mcp.ps1` | Write global `asf-obsidian` to `%USERPROFILE%\.cursor\mcp.json` |
+| `pnpm vault:build-kg` | Compile KG YAML → `kg-data.json` |
 | `pnpm vault:sync` | Run both obsidian sync scripts |
 | `pnpm mcp:install-obsidian` | Install/repair global Obsidian MCP config |
 | `scripts/update_index.py` | Regenerate lesson index bundles |

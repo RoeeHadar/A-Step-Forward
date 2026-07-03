@@ -1,28 +1,49 @@
-# Active Context — KG sparse enrichment (COMPLETE)
+---
+type: active-context
+updated: 2026-07-03
+coordinator_status: .cursor/coordinator/STATUS.md
+---
 
-**Date:** 2026-07-03  
-**Status:** ✅ Done — **0 kg-sparse** in vault sync (140 full / 16 syllabus-only)
+# Active Context
 
-## Workers (all complete)
-| Worker | File | Result |
-|--------|------|--------|
-| W1 | `math-university.yaml` | 15 concepts — la_* + uni_* calc |
-| W2 | `physics-university.yaml` | 9 uni_* physics (`physics1` level) |
-| W3 | `physics-high-school.yaml` | 35 HS physics — `level_scope.hs_physics` only |
-| W4 | `math-high-school.yaml` | 40 bagrut-split + stats concepts |
+> Update this note at the start/end of each focused work session.
 
-## Verification (coordinator)
-- `node scripts/build-kg-json.mjs` → **156 concepts**
-- `node scripts/sync-obsidian-concepts.mjs` → **full=140, kg-sparse=0, syllabus-only=16**
-- Original **99 mission IDs** → all resolve to full KG entries (direct or via alias)
+## Current focus
 
-## Out of scope (syllabus-only, no lesson)
-16 advanced uni concepts: `uni_multivariable` … `uni_quantum_intro` — no authored lesson; expect 0 new lessons.
+- **Stream**: Curriculum / Content (`07-curriculum`)
+- **Goal**: Obsidian vault aligned with enriched KG (156 concepts, 0 sparse)
+- **Policy**: KG metadata in YAML → `build-kg-json.mjs`; lessons in JSON; vault mirrors both
 
-## Not committed
-Awaiting user request.
+## Completed (2026-07-03)
 
-## Known follow-ups (non-blocking)
-- `la_matrices` atoms reflect matrix-arithmetic lesson, not full linear-systems coverage
-- `uni_sequences_series` lesson tagged calc2 vs KG calc1 placement
-- Lesson JSON `skill_atoms[]` still empty in many files — Postgres mastery wiring is separate
+- [x] KG sparse enrichment — **156/156** concepts with `skill_atoms` + `level_scope` (YAML source)
+- [x] **16** new university concepts (`uni_multivariable` … `uni_quantum_intro`) + aliases to existing lessons
+- [x] Vault sync — **156** concept notes, all `data_completeness: full`
+- [x] MCP **`asf-obsidian`** connected
+- [x] Expansion queue — 207/207 lessons marked done
+
+## KG pipeline (source of truth)
+
+```
+content/knowledge-graph/*.yaml
+        ↓  node scripts/build-kg-json.mjs
+apps/web/src/lib/kg-data.json
+        ↓  node scripts/sync-obsidian-concepts.mjs
+obsidian-vault/concepts/*.md
+```
+
+After YAML edits: run `pnpm vault:build-kg` then `pnpm vault:sync-concepts`.
+
+## Minor follow-ups (non-blocking)
+
+- 8 concepts have **3–4** skill atoms (target was 5–12): `integrals_applications`, `kinematics_2d`, `static_equilibrium`, `doppler`, `optics_physical`, `electric_potential`, `kirchhoff_laws`, `special_relativity`
+- `la_matrices` atoms reflect matrix-arithmetic lesson scope, not full linear-systems syllabus
+- Lesson JSON `skill_atoms[]` on questions still empty in many files — Postgres mastery wiring is separate
+
+## Links
+
+- [[curriculum/kg-workflow|KG → vault workflow]]
+- [[curriculum/expansion-dashboard|Expansion dashboard]]
+- [[curriculum/expansion-queue|Expansion queue]]
+- [[MCP-ENABLE|MCP enable guide]]
+- [[coordination/streams/07-curriculum|Curriculum brief]]
