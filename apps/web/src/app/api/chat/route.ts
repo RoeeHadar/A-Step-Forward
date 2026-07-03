@@ -37,6 +37,7 @@ import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
+import { normalizePlanChangeMessage } from '@/lib/plan-change-template';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -85,7 +86,8 @@ export async function POST(req: Request) {
     return Response.json({ error: 'bad_request' }, { status: 400 });
   }
 
-  const lastMessage = body.messages?.filter((m) => m.role === 'user').at(-1)?.content ?? '';
+  const rawLastMessage = body.messages?.filter((m) => m.role === 'user').at(-1)?.content ?? '';
+  const lastMessage = normalizePlanChangeMessage(rawLastMessage);
   const parsedAgent = agentNameSchema.safeParse(body.agent);
   const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
   const quickMode = body.quickMode === true;
@@ -129,7 +131,7 @@ export async function POST(req: Request) {
   const encodeFinish = () =>
     encoder.encode(`d:${JSON.stringify({ finishReason: 'stop', usage: { promptTokens: 0, completionTokens: 0 } })}\n`);
 
-  const isPlanAgent = agent === 'mentor' || agent === 'tutor';
+  const isPlanAgent = agent === 'tutor';
   let eagerPlanPromise: Promise<PlanApplyResult | null> | null = null;
 
   const appendPlanResult = (
@@ -267,7 +269,7 @@ async function finalizeAssistantTurn(
   planAlreadyApplied = false,
 ): Promise<PlanApplyResult | null> {
   const visible = stripPlanMachineTags(assistantRaw);
-  const isPlanAgent = agent === 'mentor' || agent === 'tutor';
+  const isPlanAgent = agent === 'tutor';
 
   let priorAssistant: string | undefined;
   let priorUser: string | undefined;

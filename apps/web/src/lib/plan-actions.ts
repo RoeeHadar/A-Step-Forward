@@ -46,16 +46,19 @@ const ALL_PLAN_TAGS_RE =
   /\[\[ASF_PLAN_(?:UPDATE|PROPOSAL):(\{[\s\S]*?\})\]\]/g;
 
 /** Map free-text / Hebrew topic names → in-catalog concept_id values. */
+/** Canonical calc1 exam review concepts (no generic HS foundations). */
+export const CALC1_EXAM_CONCEPTS = [
+  'limits',
+  'derivatives_intro',
+  'derivatives_applications',
+  'integrals_intro',
+  'integrals_techniques',
+] as const;
+
 const TOPIC_KEYWORD_RULES: Array<{ pattern: RegExp; concepts: string[] }> = [
   {
     pattern: /חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i,
-    concepts: [
-      'limits',
-      'derivatives_intro',
-      'derivatives_applications',
-      'integrals_intro',
-      'integrals_techniques',
-    ],
+    concepts: [...CALC1_EXAM_CONCEPTS],
   },
   { pattern: /קומבינטוריק|combinatoric/i, concepts: ['combinatorics'] },
   { pattern: /תורת (ה)?קבוצ|set theory|\bsets\b/i, concepts: ['functions_intro'] },
@@ -150,14 +153,14 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
   const out: InferredGoalMeta = {};
 
   const templateGoal = blob.match(
-    /(?:מטרה\s*\/?\s*מבחן|goal\s*\/?\s*exam)\s*:\s*([^\n]+)/i,
+    /(?:מטרה(?:\s*\/?\s*מבחן|\s*או\s*מבחן)?|goal(?:\s*\/?\s*exam)?)\s*:\s*([^\n]+)/i,
   );
   if (templateGoal?.[1]?.trim()) {
     out.goal = templateGoal[1].trim();
   }
 
   const templateDate = blob.match(
-    /(?:מועד(?:\s*\([^)]*\))?|target\s*date(?:\s*\([^)]*\))?)\s*:\s*([^\n]+)/i,
+    /(?:מועד|target\s*date)\s*:\s*([^\n]+)/i,
   );
   if (templateDate?.[1]?.trim()) {
     const dateText = templateDate[1].trim();
@@ -405,14 +408,18 @@ export function proposalToUpdatePayload(
 
 export function planPayloadToOptions(payload: PlanUpdatePayload): GeneratePlanOptions {
   let numWeeksOverride: number | undefined;
-  if (payload.final_goal_date) {
+  const targetDate = payload.next_test_date ?? payload.final_goal_date;
+  if (targetDate) {
     const days = Math.ceil(
-      (new Date(payload.final_goal_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+      (new Date(targetDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
     if (days > 0) {
-      numWeeksOverride = Math.max(2, Math.min(24, Math.ceil(days / 7)));
+      numWeeksOverride = Math.max(1, Math.min(24, Math.ceil(days / 7)));
     }
   }
+
+  const prepend = payload.prepend_concepts ?? [];
+  const isExamFocus = prepend.length > 0 || (payload.priority_concepts?.length ?? 0) > 0;
 
   return {
     goalOverride: payload.goal,
@@ -421,6 +428,7 @@ export function planPayloadToOptions(payload: PlanUpdatePayload): GeneratePlanOp
     excludeConcepts: payload.exclude_concepts,
     planChangeReason: payload.reason,
     numWeeksOverride,
+    focusConceptsOnly: isExamFocus,
   };
 }
 
@@ -443,25 +451,20 @@ export function learnerConfirmedChange(message: string): boolean {
 }
 
 export const PLAN_AGENT_INSTRUCTIONS = `
-## Learning-plan & goal modification protocol (Mentor + Tutor)
+## Learning-plan & goal modification protocol (Tutor only)
 
-The site applies plan changes **only** when the learner sends the official template (markers \`[[ASF-PLAN-UPDATE …]]\` … \`[[/ASF-PLAN-UPDATE]]\`). Casual phrasing like "שנה לי את התוכנית" does **not** update Neon — direct them to the copyable template in chat.
+The site applies plan changes when the learner sends the official plan-update template from the sidebar. Casual phrasing does **not** update Neon — direct them to the sidebar template.
 
 When you receive the template:
-1. **Read the filled fields** (goal/exam, date, topics, details) — ask at most one clarifying question only if a critical field is empty.
-2. **Summarize the diff** briefly — current goal vs new goal; week preview in the learner's language.
-3. **Apply in the same turn** when the template is complete enough. The server applies immediately on template submit; do NOT block with multi-turn Q&A. You may ask about weak topics **after** noting the plan was updated.
+1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery. Do NOT require them to list every topic.
+2. **Exam cram (≤2 weeks)**: focus ONLY on concepts directly on the exam (e.g. calc1 → limits, derivatives, integrals). Do NOT add arithmetic, combinatorics, or unrelated foundations.
+3. **Summarize briefly** and confirm the plan was updated. The server applies immediately — no multi-turn Q&A first.
 
-**Proposal turn** (optional, before confirmation): append at the **end**:
-\`[[ASF_PLAN_PROPOSAL:{"reason":"<why>","goal":"מבחן במתמטיקה בדידה","goal_key":"university_prep","final_goal_date":"2026-11-01","clear_next_test":true,"prepend_concepts":["combinatorics"],"priority_concepts":[],"exclude_concepts":[]}]]\`
-
-**Apply turn** (learner confirmed OR you stated you are updating): append at the **end**:
-\`[[ASF_PLAN_UPDATE:{"confirmed":true,"reason":"<why>","goal":"מבחן במתמטיקה בדידה","goal_key":"university_prep","final_goal_date":"2026-11-01","next_test_date":null,"priority_concepts":[],"prepend_concepts":["combinatorics","probability_basic"],"exclude_concepts":[]}]]\`
+**Apply turn**: append at the **end**:
+\`[[ASF_PLAN_UPDATE:{"confirmed":true,"reason":"<why>","goal":"מבחן בחדו״א 1","goal_key":"calculus1","final_goal_date":"2026-07-10","next_test_date":"2026-07-10","priority_concepts":[],"prepend_concepts":["limits","derivatives_intro","derivatives_applications","integrals_intro","integrals_techniques"],"exclude_concepts":[]}]]\`
 
 Rules:
-- **Goal fields**: \`goal\` (free text shown on dashboard), \`goal_key\` from onboarding tracks, \`final_goal_date\` (ISO YYYY-MM-DD), \`next_test_date:null\` when dropping a near-term Bagrut deadline.
 - Use ONLY \`concept_id\` values from the ALLOWLIST.
 - \`confirmed\` MUST be true on UPDATE tags.
-- If a topic is not in the catalog, pick the closest in-catalog prerequisite.
-- After the server applies a change it appends a ✅ block with week preview — do not claim the site updated unless you emitted the UPDATE tag.
+- For a test in ~1 week, the weekly plan should be **one week only** — intensive review of exam topics.
 `.trim();

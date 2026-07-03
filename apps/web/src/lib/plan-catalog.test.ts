@@ -19,6 +19,8 @@ import {
   shouldApplyPlanChange,
   shouldApplyPlanImmediately,
   learnerPlanChangeIntent,
+  planPayloadToOptions,
+  CALC1_EXAM_CONCEPTS,
 } from '@/lib/plan-actions';
 import { buildPlanChangeRequest } from '@/lib/plan-change-template';
 
@@ -150,6 +152,25 @@ describe('plan-actions', () => {
     expect(meta.goal_key).toBe('calculus1');
     expect(meta.final_goal_date).toBeTruthy();
     expect(meta.next_test_date).toBeTruthy();
+  });
+
+  it('builds one-week exam cram options for calc1 test in seven days', () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    const iso = d.toISOString().slice(0, 10);
+    const opts = planPayloadToOptions({
+      confirmed: true,
+      reason: 'calc1 cram',
+      goal: 'מבחן בחדוא 1',
+      goal_key: 'calculus1',
+      final_goal_date: iso,
+      next_test_date: iso,
+      prepend_concepts: [...CALC1_EXAM_CONCEPTS],
+      priority_concepts: [],
+    });
+    expect(opts.numWeeksOverride).toBe(1);
+    expect(opts.focusConceptsOnly).toBe(true);
+    expect(opts.prependConcepts).toEqual(expect.arrayContaining(['limits', 'integrals_intro']));
   });
 
   it('does not apply casual phrasing without the template', () => {

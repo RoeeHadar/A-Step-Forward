@@ -2,39 +2,54 @@ import { describe, expect, it } from 'vitest';
 import {
   buildPlanChangeRequest,
   extractPlanChangeTemplateBody,
-  getPlanChangeTemplate,
+  getPlanChangeDisplayTemplate,
+  isPlanChangeDisplayTemplate,
   isPlanChangeTemplate,
+  normalizePlanChangeMessage,
   planChangeTextForParsing,
+  wrapPlanChangeMessage,
 } from './plan-change-template';
 
 describe('plan-change-template', () => {
-  it('detects official markers', () => {
-    const msg = buildPlanChangeRequest(
-      { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
-      'he',
-    );
-    expect(isPlanChangeTemplate(msg)).toBe(true);
-    expect(extractPlanChangeTemplateBody(msg)).toContain('מבחן בחדוא 1');
+  it('shows locale-pure display template without machine markers', () => {
+    expect(getPlanChangeDisplayTemplate('he')).toContain('מטרה או מבחן');
+    expect(getPlanChangeDisplayTemplate('he')).not.toContain('[[ASF');
+    expect(getPlanChangeDisplayTemplate('en')).toContain('Goal or exam');
+    expect(getPlanChangeDisplayTemplate('en')).not.toContain('[[ASF');
   });
 
-  it('ignores casual plan-change phrasing without markers', () => {
+  it('detects display form and wraps for server', () => {
+    const display = getPlanChangeDisplayTemplate('he');
+    expect(isPlanChangeDisplayTemplate(display)).toBe(true);
+    expect(isPlanChangeTemplate(display)).toBe(true);
+    const wire = wrapPlanChangeMessage(display);
+    expect(wire).toContain('[[ASF-PLAN-UPDATE');
+    expect(extractPlanChangeTemplateBody(wire)).toContain('מטרה או מבחן');
+  });
+
+  it('ignores casual plan-change phrasing without template form', () => {
     expect(
       isPlanChangeTemplate('יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם'),
     ).toBe(false);
   });
 
-  it('strips markers for parsing pipeline', () => {
-    const msg = buildPlanChangeRequest(
-      { goal: 'Calculus 1 exam', date: 'in one week' },
-      'en',
+  it('normalizes display messages before parsing', () => {
+    const display = buildPlanChangeRequest(
+      { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
+      'he',
     );
-    const parsed = planChangeTextForParsing(msg);
-    expect(parsed[0]).not.toContain('[[ASF-PLAN-UPDATE');
-    expect(parsed[0]).toContain('Calculus 1 exam');
+    expect(isPlanChangeTemplate(display)).toBe(true);
+    const parsed = planChangeTextForParsing(display);
+    expect(parsed[0]).toContain('מבחן בחדוא 1');
+    expect(parsed[0]).not.toContain('[[ASF');
   });
 
-  it('provides locale-specific blank templates', () => {
-    expect(getPlanChangeTemplate('he')).toContain('מטרה / מבחן');
-    expect(getPlanChangeTemplate('en')).toContain('Goal / exam');
+  it('normalizePlanChangeMessage wraps display-only input', () => {
+    const raw = `אני מבקש/ת לעדכן את תוכנית הלימוד והמטרה שלי.
+
+מטרה או מבחן: חדוא 1
+מועד: עוד שבוע`;
+    const normalized = normalizePlanChangeMessage(raw);
+    expect(normalized).toContain('[[ASF-PLAN-UPDATE');
   });
 });

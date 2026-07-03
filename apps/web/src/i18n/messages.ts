@@ -187,19 +187,22 @@ const messages = {
       discussWithTutor: 'Discuss with Tutor',
       planChangeTemplate: {
         title: 'Update your learning plan',
-        badge: 'Official template only',
+        badge: 'Tutor only',
         whyBody:
-          'Your goal and weekly plan change on the site only when you send this exact template. Regular chat messages — even if they ask to change the plan — will not update your plan.',
+          'Only this form updates your goal and weekly plan on the site. Regular chat messages will not change your plan.',
         howTitle: 'How to use',
         howSteps: [
-          'Click “Use template” or copy the block below.',
-          'Fill in goal/exam, date, topics, and any extra details.',
-          'Send the message. The site updates your plan automatically.',
+          'Click "Use template" or copy the text.',
+          'Fill in your goal or exam and the target date.',
+          'Send the message — your plan updates automatically.',
         ],
-        note: 'Keep the [[ASF-PLAN-UPDATE …]] markers at the top and bottom — they tell the system this is an official plan-change request.',
-        copyLabel: 'Copy template',
+        memoryNote:
+          'Topics are optional. The tutor uses your learning history and memory to pick what to review. You can add notes if something specific matters to you.',
+        copyLabel: 'Copy',
         useLabel: 'Use template',
         copiedLabel: 'Copied',
+        collapseLabel: 'Hide plan form',
+        expandLabel: 'Update plan',
       },
     },
     learn: {
@@ -426,19 +429,22 @@ const messages = {
       discussWithTutor: 'שוחח עם המורה',
       planChangeTemplate: {
         title: 'עדכון תוכנית הלימוד',
-        badge: 'תבנית רשמית בלבד',
+        badge: 'מורה בלבד',
         whyBody:
-          'המטרה והתוכנית השבועית באתר משתנות רק כששולחים את התבנית הזו. הודעות רגילות בצ\'אט — גם אם מבקשות לשנות תוכנית — לא יעדכנו את התוכנית.',
+          'רק הטופס הזה מעדכן את המטרה והתוכנית השבועית באתר. הודעות רגילות בצ\'אט לא ישנו את התוכנית.',
         howTitle: 'איך משתמשים',
         howSteps: [
-          'לחץ על "השתמש בתבנית" או העתק את הקטע למטה.',
-          'מלא מטרה/מבחן, מועד, נושאים ופרטים נוספים.',
-          'שלח את ההודעה. האתר יעדכן את התוכנית אוטומטית.',
+          'לחץ על "השתמש בתבנית" או העתק את הטקסט.',
+          'מלא מטרה או מבחן ומועד.',
+          'שלח — התוכנית תתעדכן אוטומטית.',
         ],
-        note: 'השאר את הסימונים [[ASF-PLAN-UPDATE …]] בראש ובסוף — הם מסמנים לבקשת עדכון תוכנית רשמית.',
-        copyLabel: 'העתק תבנית',
+        memoryNote:
+          'נושאים הם אופציונלי. המורה משתמש בזיכרון ובהיסטוריית הלמידה שלך כדי לבחור מה לחזור עליו. אפשר להוסיף הערות אם יש משהו ספציפי.',
+        copyLabel: 'העתק',
         useLabel: 'השתמש בתבנית',
         copiedLabel: 'הועתק',
+        collapseLabel: 'הסתר טופס תוכנית',
+        expandLabel: 'עדכון תוכנית',
       },
     },
     learn: {

@@ -15,6 +15,7 @@ import {
 import {
   extractPlanProposal,
   extractPlanUpdate,
+  CALC1_EXAM_CONCEPTS,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
   looksLikePlanApplyIntent,
@@ -241,19 +242,15 @@ function mergeProposal(
         ? 'עדכון מטרת לימודים'
         : 'עדכון תוכנית לימודים לפי בקשת הלומד');
 
-  const prependFromText = inferConceptIdsFromText(...texts);
+  const prependFromText = inferConceptIdsFromText(...parsed);
+  const isCalc1 =
+    goalMeta.goal_key === 'calculus1' ||
+    /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(parsed.join('\n'));
   const prepend =
     fromTag?.prepend_concepts?.length
       ? fromTag.prepend_concepts
-      : goalMeta.goal_key === 'calculus1' ||
-          /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(texts.join('\n'))
-        ? [
-            'limits',
-            'derivatives_intro',
-            'derivatives_applications',
-            'integrals_intro',
-            'integrals_techniques',
-          ]
+      : isCalc1
+        ? [...CALC1_EXAM_CONCEPTS]
         : prependFromText;
 
   const hasGoalChange = Boolean(

@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
 import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, shouldApplyPlanImmediately } from '@/lib/plan-actions';
-import { isPlanChangeTemplate } from '@/lib/plan-change-template';
+import { isPlanChangeTemplate, normalizePlanChangeMessage } from '@/lib/plan-change-template';
 import { PlanChangeTemplatePanel } from '@/components/plan-change-template-panel';
 import { useRouter } from 'next/navigation';
 import { Send, Loader2, X } from 'lucide-react';
@@ -71,6 +71,7 @@ export function AgentChat({
   const parsed = agentNameSchema.safeParse(agent);
   const agentName: AgentName = parsed.success ? parsed.data : 'tutor';
   const bottomRef = useRef<HTMLDivElement>(null);
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
   const setLastAgent = useChatUiStore((s) => s.setLastAgent);
   const hasAutoRetriedRef = useRef(false);
   const hasReceivedTokensRef = useRef(false);
@@ -95,7 +96,15 @@ export function AgentChat({
     'idle' | 'applying' | 'success' | 'failed'
   >('idle');
 
-  const isPlanAgent = agentName === 'tutor' || agentName === 'mentor';
+  const showPlanTemplate = agentName === 'tutor' && !compact;
+
+  useEffect(() => {
+    const el = chatInputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    const next = Math.min(el.scrollHeight, 320);
+    el.style.height = `${Math.max(44, next)}px`;
+  }, [input]);
 
   useEffect(() => {
     if (!quickMode) return;
@@ -172,7 +181,7 @@ export function AgentChat({
   const topicFromUrl = searchParams.get('topic') ?? undefined;
   const studyTopic = topic ?? topicFromUrl;
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages, setInput, data } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages, setInput, append, data } =
     useChat({
     api: '/api/chat',
     id: `${agentName}-${sessionId ?? 'pending'}-${chatKey}`,
@@ -319,11 +328,29 @@ export function AgentChat({
   const statusMessage =
     showConnecting && isLoading ? i18nMessages.chat.connecting : i18nMessages.chat.thinking;
 
+  const isPlanAgent = showPlanTemplate;
+
   function shouldShowPlanApplying(nextInput: string): boolean {
     if (!isPlanAgent) return false;
     if (shouldApplyPlanImmediately(nextInput)) return true;
     if (!learnerConfirmedChange(nextInput)) return false;
     return messages.some((m) => m.role === 'user' && isPlanChangeTemplate(m.content));
+  }
+
+  function submitChat(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
+    const wireInput = normalizePlanChangeMessage(input);
+    if (shouldShowPlanApplying(wireInput)) {
+      pendingPlanApplyRef.current = true;
+      setPlanApplyState('applying');
+    }
+    setInput('');
+    if (wireInput === input.trim()) {
+      handleSubmit(e);
+      return;
+    }
+    void append({ role: 'user', content: wireInput });
   }
 
   const gradient = agentGradients[agentName] ?? 'from-primary to-accent-cyan';
@@ -334,6 +361,7 @@ export function AgentChat({
         'flex flex-col',
         compact ? 'h-full min-h-0' : 'h-[calc(100vh-8rem)]',
         showHistory && !compact ? 'lg:flex-row lg:gap-4' : '',
+        showPlanTemplate && !compact ? 'xl:flex-row' : '',
       )}
     >
       {showHistory && !compact ? (
@@ -354,6 +382,7 @@ export function AgentChat({
         />
       ) : null}
 
+      <div className={cn('flex min-h-0 flex-1 flex-col', showPlanTemplate && !compact && 'xl:flex-row xl:gap-4')}>
       <div className="flex min-h-0 flex-1 flex-col">
       <header className={cn('mb-4 flex flex-wrap items-center gap-3', compact && 'mb-2')}>
         <div
@@ -419,16 +448,7 @@ export function AgentChat({
           aria-label="Chat messages"
         >
           {messages.length === 0 ? (
-            <div className="space-y-4">
-              <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
-              {isPlanAgent ? (
-                <PlanChangeTemplatePanel
-                  locale={isHe ? 'he' : 'en'}
-                  copy={i18nMessages.chat.planChangeTemplate}
-                  onUseTemplate={(text) => setInput(text)}
-                />
-              ) : null}
-            </div>
+            <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
           ) : (
             messages.map((m) => (
               <div
@@ -475,14 +495,14 @@ export function AgentChat({
                 : '✅ Plan updated. Refreshing your dashboard…'}
             </div>
           ) : null}
-          {isPlanAgent && planApplyState === 'failed' ? (
+        {isPlanAgent && planApplyState === 'failed' ? (
             <div
               className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-2 text-sm text-destructive"
               role="alert"
             >
               {isHe
-                ? '⚠️ לא הצלחנו לעדכן את התוכנית. השתמש בתבנית "עדכון תוכנית הלימוד", מלא את השדות ושלח שוב.'
-                : '⚠️ We could not update your plan. Use the "Update your learning plan" template, fill in the fields, and send again.'}
+                ? '⚠️ לא הצלחנו לעדכן את התוכנית. השתמש בתבנית "עדכון תוכנית הלימוד" מהצד, מלא את השדות ושלח שוב.'
+                : '⚠️ We could not update your plan. Use the plan-update template in the sidebar, fill in the fields, and send again.'}
             </div>
           ) : null}
           {isLoading ? (
@@ -500,46 +520,26 @@ export function AgentChat({
           </p>
         ) : null}
 
-        {isPlanAgent && messages.length > 0 ? (
-          <div className="border-t border-border px-4 pt-3">
-            <PlanChangeTemplatePanel
-              locale={isHe ? 'he' : 'en'}
-              copy={i18nMessages.chat.planChangeTemplate}
-              onUseTemplate={(text) => setInput(text)}
-              className="mb-0"
-            />
-          </div>
-        ) : null}
-
         <form
-          onSubmit={(e) => {
-            if (shouldShowPlanApplying(input)) {
-              pendingPlanApplyRef.current = true;
-              setPlanApplyState('applying');
-            }
-            handleSubmit(e);
-          }}
+          onSubmit={submitChat}
           className="glass-surface flex gap-2 border-t border-border p-4"
         >
           <label htmlFor="chat-input" className="sr-only">
             {i18nMessages.chat.messageLabel}
           </label>
           <Textarea
+            ref={chatInputRef}
             id="chat-input"
             value={input}
             onChange={handleInputChange}
             placeholder={i18nMessages.chat.placeholder}
             rows={2}
-            className="min-h-[44px] resize-none border-border bg-surface-1/50"
+            className="min-h-[44px] max-h-80 resize-none overflow-y-auto border-border bg-surface-1/50"
             disabled={isLoading}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                if (shouldShowPlanApplying(input)) {
-                  pendingPlanApplyRef.current = true;
-                  setPlanApplyState('applying');
-                }
-                handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+                submitChat();
               }
             }}
           />
@@ -553,6 +553,16 @@ export function AgentChat({
           </Button>
         </form>
       </div>
+      </div>
+
+      {showPlanTemplate ? (
+        <PlanChangeTemplatePanel
+          locale={isHe ? 'he' : 'en'}
+          copy={i18nMessages.chat.planChangeTemplate}
+          onUseTemplate={(text) => setInput(text)}
+          variant="sidebar"
+        />
+      ) : null}
       </div>
     </div>
   );

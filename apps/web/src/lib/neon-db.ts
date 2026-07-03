@@ -505,6 +505,8 @@ export interface GeneratePlanOptions {
   prependConcepts?: string[];
   excludeConcepts?: string[];
   numWeeksOverride?: number;
+  /** When true, plan only includes prepend + priority concepts (exam cram), not weak-mastery mix. */
+  focusConceptsOnly?: boolean;
   planChangeReason?: string;
 }
 
@@ -525,14 +527,21 @@ export async function generateLearningPlan(
   const prependConcepts = sanitizeConceptIds(options.prependConcepts);
   const priorityConcepts = sanitizeConceptIds(options.priorityConcepts);
 
-  if (excludeConcepts.length) {
-    const exclude = new Set(excludeConcepts);
-    for (const c of exclude) worklist.delete(c);
-  }
-  for (const c of prependConcepts) worklist.add(c);
-  for (const c of priorityConcepts) worklist.add(c);
-  if (worklist.size === 0) {
-    worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
+  if (
+    options.focusConceptsOnly &&
+    (prependConcepts.length > 0 || priorityConcepts.length > 0)
+  ) {
+    worklist = new Set([...prependConcepts, ...priorityConcepts]);
+  } else {
+    if (excludeConcepts.length) {
+      const exclude = new Set(excludeConcepts);
+      for (const c of exclude) worklist.delete(c);
+    }
+    for (const c of prependConcepts) worklist.add(c);
+    for (const c of priorityConcepts) worklist.add(c);
+    if (worklist.size === 0) {
+      worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
+    }
   }
 
   const goalText = options.goalOverride?.trim() || profile.goal;
