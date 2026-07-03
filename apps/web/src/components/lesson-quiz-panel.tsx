@@ -174,11 +174,12 @@ function QuestionCard({
       });
       if (res.ok) {
         const data = (await res.json()) as { correct?: boolean };
-        if (typeof data.correct === 'boolean' && data.correct !== correct) {
+        const serverCorrect = data.correct;
+        if (typeof serverCorrect === 'boolean' && serverCorrect !== correct) {
           setState((prev) =>
-            prev.submitted ? { ...prev, correct: data.correct } : prev,
+            prev.submitted ? { ...prev, correct: serverCorrect } : prev,
           );
-          onAnswered(question, data.correct);
+          onAnswered(question, serverCorrect);
         }
       }
     } catch {
