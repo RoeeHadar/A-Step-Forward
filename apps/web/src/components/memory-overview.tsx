@@ -18,6 +18,7 @@ import { Input } from '@asf/ui/input';
 import { cn } from '@asf/ui';
 import { MarkdownReader } from '@/components/markdown-reader';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
+import { subjectLabel } from '@/lib/subject-labels';
 import type { LearnerMemorySnapshot, LearnerMemoryNote } from '@/lib/neon-db';
 import { useI18n } from '@/providers/i18n-provider';
 
@@ -274,7 +275,9 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
                   label={t.fieldSubjects}
                   value={
                     snapshot.profile.subjects.length > 0
-                      ? snapshot.profile.subjects.join(', ')
+                      ? snapshot.profile.subjects
+                          .map((s) => subjectLabel(s, lang))
+                          .join(', ')
                       : null
                   }
                 />

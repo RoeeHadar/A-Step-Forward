@@ -2695,14 +2695,18 @@ export async function getLearnerMemorySnapshot(
       notesByAgent[n.agent] = bucket;
     }
 
+    const subjects = profile?.subjects ?? [];
+    const masteryMatchesGoal = (conceptId: string) =>
+      conceptMatchesSubjects(conceptId, subjects);
+
     const weakConcepts = Object.entries(mastery)
-      .filter(([, score]) => score < 0.4)
+      .filter(([id, score]) => score < 0.4 && masteryMatchesGoal(id))
       .sort((a, b) => a[1] - b[1])
       .slice(0, 8)
       .map(([concept_id, score]) => ({ concept_id, score }));
 
     const strongConcepts = Object.entries(mastery)
-      .filter(([, score]) => score >= 0.7)
+      .filter(([id, score]) => score >= 0.7 && masteryMatchesGoal(id))
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8)
       .map(([concept_id, score]) => ({ concept_id, score }));
