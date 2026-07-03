@@ -7,6 +7,7 @@
 import type { GeneratePlanOptions } from '@/lib/neon-db';
 import {
   isPlanChangeTemplate,
+  parsePlanChangeTemplateFields,
   planChangeTextForParsing,
   recentMessagesIncludePlanTemplate,
 } from '@/lib/plan-change-template';
@@ -55,18 +56,26 @@ export const CALC1_EXAM_CONCEPTS = [
   'integrals_techniques',
 ] as const;
 
+/** Canonical discrete-math exam review concepts. */
+export const DISCRETE_EXAM_CONCEPTS = [
+  'combinatorics',
+  'probability_basic',
+  'mathematical_induction',
+  'functions_intro',
+] as const;
+
 const TOPIC_KEYWORD_RULES: Array<{ pattern: RegExp; concepts: string[] }> = [
   {
     pattern: /חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i,
     concepts: [...CALC1_EXAM_CONCEPTS],
   },
+  {
+    pattern: /מתמטיקה בדיד|discrete math|discrete mathematics/i,
+    concepts: [...DISCRETE_EXAM_CONCEPTS],
+  },
   { pattern: /קומבינטוריק|combinatoric/i, concepts: ['combinatorics'] },
   { pattern: /תורת (ה)?קבוצ|set theory|\bsets\b/i, concepts: ['functions_intro'] },
   { pattern: /תורת (ה)?גרפ|graph theory|\bgraphs\b/i, concepts: ['combinatorics'] },
-  {
-    pattern: /מתמטיקה בדיד|discrete math|discrete mathematics/i,
-    concepts: ['combinatorics', 'probability_basic'],
-  },
   { pattern: /הסתברות|probability/i, concepts: ['probability_basic'] },
   { pattern: /אינדוקצ|induction/i, concepts: ['combinatorics'] },
   { pattern: /גבולות|limits/i, concepts: ['limits'] },
@@ -146,27 +155,60 @@ function toIsoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
+function addWeeks(base: Date, weeks: number): Date {
+  const d = new Date(base);
+  d.setDate(d.getDate() + weeks * 7);
+  return d;
+}
+
+function inferRelativeWeeksFromText(blob: string): number | null {
+  if (/(?:עוד|בעוד)\s+שבועיים(?:\s|$|[^\u0590-\u05FF])/i.test(blob)) return 2;
+  if (/(?:עוד|בעוד)\s+שלוש(?:ה)?\s+שבועות/i.test(blob)) return 3;
+  if (/(?:עוד|בעוד)\s+ארבע(?:ה)?\s+שבועות/i.test(blob)) return 4;
+
+  const weeksMatch = blob.match(/(?:בעוד|עוד|in)\s*(\d+)\s*(?:שבוע|שבועות|weeks?)/i);
+  if (weeksMatch?.[1]) {
+    const weeks = Number.parseInt(weeksMatch[1], 10);
+    if (weeks > 0 && weeks <= 52) return weeks;
+  }
+  return null;
+}
+
 /** Parse goal text, track key, and target dates from Hebrew/English chat. */
 export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
   const parsedTexts = planChangeTextForParsing(...texts);
   const blob = parsedTexts.join('\n');
   const out: InferredGoalMeta = {};
 
-  const templateGoal = blob.match(
-    /(?:מטרה(?:\s*\/?\s*מבחן|\s*או\s*מבחן)?|goal(?:\s*\/?\s*exam)?)\s*:\s*([^\n]+)/i,
-  );
-  if (templateGoal?.[1]?.trim()) {
-    out.goal = templateGoal[1].trim();
+  const templateFields = texts
+    .map((t) => (isPlanChangeTemplate(t) ? parsePlanChangeTemplateFields(t) : null))
+    .find(Boolean);
+
+  if (templateFields?.goal?.trim()) {
+    out.goal = templateFields.goal.trim();
+  } else {
+    const templateGoal = blob.match(
+      /(?:מטרה(?:\s*\/?\s*מבחן|\s*או\s*מבחן)?|goal(?:\s*\/?\s*exam)?)\s*:\s*([^\n]+)/i,
+    );
+    if (templateGoal?.[1]?.trim()) {
+      out.goal = templateGoal[1].trim();
+    }
   }
 
-  const templateDate = blob.match(
-    /(?:מועד|target\s*date)\s*:\s*([^\n]+)/i,
-  );
-  if (templateDate?.[1]?.trim()) {
-    const dateText = templateDate[1].trim();
-    const dateMeta = inferGoalMetaFromText(dateText);
-    if (dateMeta.final_goal_date) out.final_goal_date = dateMeta.final_goal_date;
-    if (dateMeta.next_test_date) out.next_test_date = dateMeta.next_test_date;
+  const dateText = (
+    templateFields?.date?.trim() ??
+    blob.match(/(?:מועד|target\s*date)\s*:\s*([^\n]+)/i)?.[1]?.trim()
+  )?.replace(/\[\[\/ASF-PLAN-UPDATE\]\]/gi, '').trim();
+  if (dateText) {
+    const relativeFromDate = inferRelativeWeeksFromText(dateText);
+    if (relativeFromDate != null) {
+      out.final_goal_date = toIsoDate(addWeeks(new Date(), relativeFromDate));
+      out.next_test_date = out.final_goal_date;
+    } else {
+      const dateMeta = inferGoalMetaFromText(dateText);
+      if (dateMeta.final_goal_date) out.final_goal_date = dateMeta.final_goal_date;
+      if (dateMeta.next_test_date) out.next_test_date = dateMeta.next_test_date;
+    }
   }
 
   const heNewGoal = blob.match(/המטרה החדשה(?: שלי)?(?: היא|:)\s*([^\n.]+)/i);
@@ -183,6 +225,10 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
 
   if (/בדיד|discrete|אוניברסיט|university|open university|מכינה|makhina/i.test(blob)) {
     out.goal_key = out.goal_key ?? 'university_prep';
+  }
+
+  if (/מתמטיקה בדיד|discrete math/i.test(blob) || /בדיד/i.test(out.goal ?? '')) {
+    out.goal_key = 'university_prep';
   }
 
   if (/חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i.test(blob)) {
@@ -202,20 +248,15 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
     }
   }
 
-  const weeksMatch = blob.match(/(?:בעוד|in)\s*(\d+)\s*(שבוע|שבועות|weeks?)/i);
-  if (weeksMatch?.[1] && !out.final_goal_date) {
-    const weeks = Number.parseInt(weeksMatch[1], 10);
-    if (weeks > 0 && weeks <= 52) {
-      const d = new Date();
-      d.setDate(d.getDate() + weeks * 7);
-      out.final_goal_date = toIsoDate(d);
-      out.next_test_date = toIsoDate(d);
-    }
+  const relativeWeeks = inferRelativeWeeksFromText(blob);
+  if (relativeWeeks != null && !out.final_goal_date) {
+    out.final_goal_date = toIsoDate(addWeeks(new Date(), relativeWeeks));
+    out.next_test_date = out.final_goal_date;
   }
 
   if (
     !out.final_goal_date &&
-    /(?:עוד|בעוד)\s+שבוע(?:\s|$)|in\s+a\s+week\b/i.test(blob)
+    /(?:עוד|בעוד)\s+שבוע(?:\s|$|[^\u0590-\u05FF])|in\s+a\s+week\b/i.test(blob)
   ) {
     const d = new Date();
     d.setDate(d.getDate() + 7);

@@ -21,6 +21,7 @@ import {
   learnerPlanChangeIntent,
   planPayloadToOptions,
   CALC1_EXAM_CONCEPTS,
+  DISCRETE_EXAM_CONCEPTS,
 } from '@/lib/plan-actions';
 import { buildPlanChangeRequest } from '@/lib/plan-change-template';
 
@@ -188,6 +189,28 @@ describe('plan-actions', () => {
     const assistant =
       'לפני שאני אציג לך את התוכנית, האם תוכל לספר לי על הנושאים שקשים לך?';
     expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+  });
+
+  it('parses compact template with עוד שבועיים for discrete math', () => {
+    const userMsg = `[[ASF-PLAN-UPDATE | עדכון תוכנית לימוד]]
+אני מבקש/ת לעדכן את תוכנית הלימוד והמטרה שלי.
+מטרה או מבחן:מבחן במתמטיקה בדידה מועד:עוד שבועיים
+[[/ASF-PLAN-UPDATE]]`;
+    const meta = inferGoalMetaFromText(userMsg);
+    expect(meta.goal).toContain('מתמטיקה בדידה');
+    expect(meta.final_goal_date).toBeTruthy();
+    expect(meta.next_test_date).toBeTruthy();
+    const opts = planPayloadToOptions({
+      confirmed: true,
+      reason: 'discrete cram',
+      goal: meta.goal,
+      goal_key: 'university_prep',
+      final_goal_date: meta.final_goal_date,
+      next_test_date: meta.next_test_date,
+      prepend_concepts: [...DISCRETE_EXAM_CONCEPTS],
+    });
+    expect(opts.numWeeksOverride).toBe(2);
+    expect(opts.prependConcepts).toEqual(expect.arrayContaining(['combinatorics']));
   });
 
   it('does not treat casual plan phrasing as official template', () => {

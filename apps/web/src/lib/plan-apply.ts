@@ -16,6 +16,7 @@ import {
   extractPlanProposal,
   extractPlanUpdate,
   CALC1_EXAM_CONCEPTS,
+  DISCRETE_EXAM_CONCEPTS,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
   looksLikePlanApplyIntent,
@@ -232,26 +233,33 @@ function mergeProposal(
 ): PendingPlanProposal | null {
   const parsed = planChangeTextForParsing(...texts.filter(Boolean));
   const goalMeta = inferGoalMetaFromText(...parsed);
+  const blob = parsed.join('\n');
+  const isDiscrete =
+    /מתמטיקה בדיד|discrete math/i.test(blob) || /בדיד/i.test(goalMeta.goal ?? '');
+  const isCalc1 =
+    !isDiscrete &&
+    (goalMeta.goal_key === 'calculus1' ||
+      /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(blob));
+
   const reason =
     fromTag?.reason?.trim() ||
-    (texts.some((t) => /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(t))
+    (isCalc1
       ? 'הכנה למבחן בחדו״א 1'
-      : texts.some((t) => /בדיד|discrete/i.test(t))
-      ? 'מעבר למטרת מתמטיקה בדידה (אוניברסיטה)'
-      : texts.some((t) => /מטרה|goal/i.test(t))
-        ? 'עדכון מטרת לימודים'
-        : 'עדכון תוכנית לימודים לפי בקשת הלומד');
+      : isDiscrete
+        ? 'הכנה למבחן במתמטיקה בדידה'
+        : texts.some((t) => /מטרה|goal/i.test(t))
+          ? 'עדכון מטרת לימודים'
+          : 'עדכון תוכנית לימודים לפי בקשת הלומד');
 
   const prependFromText = inferConceptIdsFromText(...parsed);
-  const isCalc1 =
-    goalMeta.goal_key === 'calculus1' ||
-    /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(parsed.join('\n'));
   const prepend =
     fromTag?.prepend_concepts?.length
       ? fromTag.prepend_concepts
       : isCalc1
         ? [...CALC1_EXAM_CONCEPTS]
-        : prependFromText;
+        : isDiscrete
+          ? [...DISCRETE_EXAM_CONCEPTS]
+          : prependFromText;
 
   const hasGoalChange = Boolean(
     fromTag?.goal ||
@@ -332,6 +340,13 @@ export async function resolvePayloadForApply(
 ): Promise<PlanUpdatePayload | null> {
   const { payload: tagPayload } = extractPlanUpdate(assistantRaw);
   if (tagPayload?.confirmed) return tagPayload;
+
+  // Official template from the learner beats any stale pending proposal.
+  if (isPlanChangeTemplate(userMessage)) {
+    await clearPendingPlanProposal(learnerId);
+    const merged = mergeProposal(null, userMessage);
+    if (merged) return proposalToUpdatePayload(merged);
+  }
 
   const { proposal: tagProposal } = extractPlanProposal(assistantRaw);
   if (tagProposal) return proposalToUpdatePayload(tagProposal);

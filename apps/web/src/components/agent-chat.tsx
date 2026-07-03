@@ -223,6 +223,14 @@ export function AgentChat({
   });
 
   useEffect(() => {
+    const el = chatInputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    const next = Math.min(el.scrollHeight, 320);
+    el.style.height = `${Math.max(44, next)}px`;
+  }, [input]);
+
+  useEffect(() => {
     if (!data?.length) return;
     const last = data[data.length - 1] as { type?: string } | undefined;
     if (last?.type === 'plan_applying') {

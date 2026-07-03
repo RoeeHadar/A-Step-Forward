@@ -10,6 +10,8 @@ import {
   displayCorrectAnswer,
   getAcceptedAnswers,
   numericClose,
+  coerceOptionIndex,
+  coerceBooleanAnswer,
 } from '@/lib/answer-normalize';
 import type {
   LessonQuestionKind,
@@ -158,7 +160,7 @@ function QuestionCard({
     setBusy(true);
     onAnswered(question, correct);
     try {
-      await fetch('/api/lesson/answer', {
+      const res = await fetch('/api/lesson/answer', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -170,6 +172,15 @@ function QuestionCard({
           user_answer: userAnswer,
         }),
       });
+      if (res.ok) {
+        const data = (await res.json()) as { correct?: boolean };
+        if (typeof data.correct === 'boolean' && data.correct !== correct) {
+          setState((prev) =>
+            prev.submitted ? { ...prev, correct: data.correct } : prev,
+          );
+          onAnswered(question, data.correct);
+        }
+      }
     } catch {
       // Network is best-effort; UI feedback already shown.
     } finally {
@@ -177,10 +188,16 @@ function QuestionCard({
     }
   }
 
+  const correctOptionIndex = coerceOptionIndex(question.correct_index);
+  const correctBool = coerceBooleanAnswer(payload?.correct_bool);
+  const correctMultiIndices = (payload?.correct_indices ?? [])
+    .map((v) => coerceOptionIndex(v))
+    .filter((v): v is number => v != null);
+
   // -------- per-kind submit handlers ---------------------------------------
   function handleMcq(idx: number) {
     if (state.submitted) return;
-    const correct = idx === question.correct_index;
+    const correct = correctOptionIndex != null && idx === correctOptionIndex;
     setState({ submitted: true, correct, userAnswer: idx, selfAssessed: null });
     void reportAnswer(correct, idx);
   }
@@ -188,15 +205,14 @@ function QuestionCard({
   function handleMcqMultiSubmit() {
     if (state.submitted) return;
     const picked = [...multiSelected];
-    const expected = payload?.correct_indices ?? [];
-    const correct = setEqual(picked, expected);
+    const correct = setEqual(picked, correctMultiIndices);
     setState({ submitted: true, correct, userAnswer: picked, selfAssessed: null });
     void reportAnswer(correct, picked);
   }
 
   function handleTrueFalse(value: boolean) {
     if (state.submitted) return;
-    const correct = value === (payload?.correct_bool ?? false);
+    const correct = correctBool != null && value === correctBool;
     setState({ submitted: true, correct, userAnswer: value, selfAssessed: null });
     void reportAnswer(correct, value);
   }
@@ -301,7 +317,7 @@ function QuestionCard({
         <div className="space-y-2">
           {options.map((opt, i) => {
             const isUser = state.userAnswer === i;
-            const isCorrect = i === question.correct_index;
+            const isCorrect = correctOptionIndex != null && i === correctOptionIndex;
             let cls = 'border-border bg-surface-1/50 hover:border-primary/40';
             if (state.submitted) {
               if (isCorrect) cls = 'border-emerald-500/60 bg-emerald-500/10';
@@ -339,7 +355,7 @@ function QuestionCard({
         <div className="space-y-2">
           {options.map((opt, i) => {
             const isUser = multiSelected.has(i);
-            const isCorrect = (payload?.correct_indices ?? []).includes(i);
+            const isCorrect = correctMultiIndices.includes(i);
             let cls = 'border-border bg-surface-1/50 hover:border-primary/40';
             if (state.submitted) {
               if (isCorrect && isUser) cls = 'border-emerald-500/60 bg-emerald-500/10';
@@ -401,7 +417,7 @@ function QuestionCard({
             ] as const
           ).map((opt) => {
             const isUser = state.userAnswer === opt.v;
-            const isCorrect = opt.v === (payload?.correct_bool ?? false);
+            const isCorrect = opt.v === (correctBool ?? false);
             let cls = 'border-border bg-surface-1/50 hover:border-primary/40';
             if (state.submitted) {
               if (isCorrect) cls = 'border-emerald-500/60 bg-emerald-500/10';

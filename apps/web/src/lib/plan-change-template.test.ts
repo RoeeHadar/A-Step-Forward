@@ -6,6 +6,7 @@ import {
   isPlanChangeDisplayTemplate,
   isPlanChangeTemplate,
   normalizePlanChangeMessage,
+  parsePlanChangeTemplateFields,
   planChangeTextForParsing,
   wrapPlanChangeMessage,
 } from './plan-change-template';
@@ -51,5 +52,15 @@ describe('plan-change-template', () => {
 מועד: עוד שבוע`;
     const normalized = normalizePlanChangeMessage(raw);
     expect(normalized).toContain('[[ASF-PLAN-UPDATE');
+  });
+
+  it('extracts fields from compact single-line template paste', () => {
+    const msg = `[[ASF-PLAN-UPDATE | x]]
+אני מבקש/ת לעדכן את תוכנית הלימוד והמטרה שלי.
+מטרה או מבחן:מבחן במתמטיקה בדידה מועד:עוד שבועיים
+[[/ASF-PLAN-UPDATE]]`;
+    const fields = parsePlanChangeTemplateFields(msg);
+    expect(fields.goal).toContain('מתמטיקה בדידה');
+    expect(fields.date).toContain('שבועיים');
   });
 });

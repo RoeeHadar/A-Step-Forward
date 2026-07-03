@@ -77,6 +77,41 @@ export function extractPlanChangeTemplateBody(message: string): string {
   return withoutStart.replace(END_RE, '').trim();
 }
 
+export interface PlanChangeTemplateFields {
+  goal?: string;
+  date?: string;
+  notes?: string;
+}
+
+/** Parse labeled fields from template body (supports compact single-line paste). */
+export function parsePlanChangeTemplateFields(message: string): PlanChangeTemplateFields {
+  const body = extractPlanChangeTemplateBody(normalizePlanChangeMessage(message));
+  const out: PlanChangeTemplateFields = {};
+
+  const goalMatch = body.match(
+    /(?:מטרה(?:\s*\/?\s*מבחן|\s*או\s*מבחן)?|goal(?:\s*\/?\s*exam)?)\s*:\s*([\s\S]+?)(?=(?:\n\s*(?:מועד|target\s*date|notes|הערות)|(?:\s+מועד\s*:)|(?:\s+target\s*date\s*:)|$))/i,
+  );
+  if (goalMatch?.[1]?.trim()) {
+    out.goal = goalMatch[1].trim();
+  }
+
+  const dateMatch = body.match(
+    /(?:מועד|target\s*date)\s*:\s*([\s\S]+?)(?=(?:\n\s*(?:הערות|notes)|(?:\s+הערות\s*\()|$))/i,
+  );
+  if (dateMatch?.[1]?.trim()) {
+    out.date = dateMatch[1].replace(/\[\[\/ASF-PLAN-UPDATE\]\]/gi, '').trim();
+  }
+
+  const notesMatch = body.match(
+    /(?:הערות\s*\([^)]*\)|notes\s*\([^)]*\))\s*:\s*([\s\S]+)$/i,
+  );
+  if (notesMatch?.[1]?.trim()) {
+    out.notes = notesMatch[1].trim();
+  }
+
+  return out;
+}
+
 /** Text passed to inferGoalMetaFromText / mergeProposal when template is used. */
 export function planChangeTextForParsing(...messages: string[]): string[] {
   return messages

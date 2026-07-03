@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { Button } from '@asf/ui/button';
 import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { currentActiveWeek } from '@/lib/learning-path-types';
+import { examPrepContext } from '@/lib/exam-prep';
+import { ExamPrepQuizBanner } from '@/components/exam-prep-quiz-banner';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
@@ -199,6 +201,7 @@ export function LearningPlanDashboard({
   const isHe = lang === 'he';
   const week = currentActiveWeek(plan);
   const planEnd = plan.end_date ?? finalGoalDate ?? null;
+  const examPrep = examPrepContext(plan, nextTestDate, finalGoalDate);
 
   return (
     <div className="space-y-8" dir={isHe ? 'rtl' : 'ltr'}>
@@ -222,6 +225,8 @@ export function LearningPlanDashboard({
         ) : null}
         <p className="mt-3 text-xs text-muted-foreground">{t.projected_note}</p>
       </header>
+
+      {examPrep ? <ExamPrepQuizBanner ctx={examPrep} /> : null}
 
       {week ? (
         <section className="space-y-4">

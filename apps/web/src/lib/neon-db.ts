@@ -15,7 +15,7 @@ import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
 import { canonicalConceptId, goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
-import { answersMatch, getAcceptedAnswers, numericClose } from './answer-normalize';
+import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -1479,23 +1479,31 @@ export function gradeLessonAnswer(
 
   switch (q.kind) {
     case 'mcq': {
-      if (typeof userAnswer !== 'number' || q.correct_index == null) {
+      const expected = coerceOptionIndex(q.correct_index);
+      const picked = coerceOptionIndex(userAnswer);
+      if (picked == null || expected == null) {
         return { correct: false, graded_by: 'server', reason: 'invalid answer' };
       }
-      return { correct: userAnswer === q.correct_index, graded_by: 'server' };
+      return { correct: picked === expected, graded_by: 'server' };
     }
     case 'mcq_multi': {
-      const expected = q.answer_payload?.correct_indices ?? [];
+      const expected = (q.answer_payload?.correct_indices ?? [])
+        .map((v) => coerceOptionIndex(v))
+        .filter((v): v is number => v != null);
       const picked = Array.isArray(userAnswer)
-        ? (userAnswer as unknown[]).filter((v): v is number => typeof v === 'number')
+        ? userAnswer
+            .map((v) => coerceOptionIndex(v))
+            .filter((v): v is number => v != null)
         : [];
       return { correct: setEqual(picked, expected), graded_by: 'server' };
     }
     case 'true_false': {
-      if (typeof userAnswer !== 'boolean' || typeof q.answer_payload?.correct_bool !== 'boolean') {
+      const expected = coerceBooleanAnswer(q.answer_payload?.correct_bool);
+      const picked = coerceBooleanAnswer(userAnswer);
+      if (picked == null || expected == null) {
         return { correct: false, graded_by: 'server', reason: 'invalid answer' };
       }
-      return { correct: userAnswer === q.answer_payload.correct_bool, graded_by: 'server' };
+      return { correct: picked === expected, graded_by: 'server' };
     }
     case 'numeric': {
       if (typeof userAnswer !== 'string' || !q.correct_answer) {

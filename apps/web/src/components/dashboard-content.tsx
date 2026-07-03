@@ -11,6 +11,8 @@ import type { LearningPlan, PlanConcept } from '@asf/schemas/learning_path';
 import { useI18n } from '@/providers/i18n-provider';
 import { DueReviewsWidget } from '@/components/due-reviews-widget';
 import { currentActiveWeek } from '@/lib/learning-path-types';
+import { examPrepContext } from '@/lib/exam-prep';
+import { ExamPrepQuizBanner } from '@/components/exam-prep-quiz-banner';
 import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
@@ -374,6 +376,10 @@ export function DashboardContent({
 
   const week = plan ? currentActiveWeek(plan) : undefined;
   const planItems = (week?.concepts ?? []).slice(0, MAX_PLAN_ITEMS);
+  const examPrep = useMemo(
+    () => examPrepContext(plan, nextTestDate, finalGoalDate),
+    [plan, nextTestDate, finalGoalDate],
+  );
 
   const streakDays = streak?.current_days ?? 0;
   const showMakhinaCue = isMakhinaFocus(pointsGroup, subjects, goal);
@@ -424,6 +430,8 @@ export function DashboardContent({
           </div>
         </div>
       </header>
+
+      {examPrep ? <ExamPrepQuizBanner ctx={examPrep} /> : null}
 
       {/* Section 2 — Learning Plan */}
       <section className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
