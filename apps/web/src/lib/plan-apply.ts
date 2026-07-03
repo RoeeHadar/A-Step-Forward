@@ -39,6 +39,7 @@ export interface PlanApplyResult {
   noticeHe?: string;
   noticeEn?: string;
   error?: string;
+  clarificationReason?: PlanClarificationReason;
   failureNotice?: string;
 }
 
@@ -97,6 +98,11 @@ export function buildPlanApplyFailureNotice(
 }
 
 const PHYSICS_GOAL_RE = /פיזיק|physics/i;
+const MATH_GENERIC_RE = /מתמטיק|mathematics|\bmath\b/i;
+const MATH_SPECIFIC_RE =
+  /חדו|calculus|\bcalc\s*1|calculus\s*1|בדיד|discrete|5\s*יח|4\s*יח|3\s*יח|bagrut|בגרות|אלגבר|algebra|לינאר|linear|סטטיסט|statistic|הסתבר|probability|מכינה|makhina|שאלון\s*47|שאלון\s*57/i;
+
+export type PlanClarificationReason = 'physics' | 'math';
 
 function hasFocusConcepts(payload: PlanUpdatePayload): boolean {
   return (
@@ -105,20 +111,47 @@ function hasFocusConcepts(payload: PlanUpdatePayload): boolean {
   );
 }
 
-export function planPayloadNeedsClarification(payload: PlanUpdatePayload): boolean {
+export function planPayloadNeedsClarification(
+  payload: PlanUpdatePayload,
+): PlanClarificationReason | null {
   const text = [payload.goal, payload.next_test_name, payload.reason]
     .filter(Boolean)
     .join('\n');
-  return PHYSICS_GOAL_RE.test(text) && !hasFocusConcepts(payload);
+  if (!text.trim()) return null;
+  if (hasFocusConcepts(payload)) return null;
+
+  if (PHYSICS_GOAL_RE.test(text)) return 'physics';
+  if (MATH_GENERIC_RE.test(text) && !MATH_SPECIFIC_RE.test(text)) return 'math';
+  return null;
 }
 
-export function buildPlanClarificationNotice(locale: 'he' | 'en'): string {
+export function buildPlanClarificationNotice(
+  locale: 'he' | 'en',
+  reason: PlanClarificationReason = 'physics',
+): string {
   if (locale === 'he') {
+    if (reason === 'math') {
+      return [
+        '---',
+        '⚠️ **לא עדכנתי את התוכנית עדיין**',
+        'המטרה "מבחן במתמטיקה" רחבה מדי — צריך לדעת איזה מבחן (בגרות 3/4/5 יח"ל, חדו״א 1, מתמטיקה בדידה, אלגברה לינארית וכו׳).',
+        'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** בלבד (ללא טקסט נוסף לפני/אחרי), עם המטרה המדויקת והמועד.',
+      ].join('\n');
+    }
     return [
       '---',
       '⚠️ **לא עדכנתי את התוכנית עדיין**',
       'המטרה "מבחן בפיזיקה" רחבה מדי, ולכן אי אפשר לבנות תוכנית טובה בלי לדעת את היקף הבחינה.',
-      'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** עם אחד מאלה: מכניקה / 036-361, חשמל ומגנטיות / 036-371, קרינה וחומר / 036-282, פיזיקה 1 / פיזיקה 2, או רשימת הנושאים מהמבחן.',
+      'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** בלבד (ללא טקסט נוסף), עם אחד מאלה: מכניקה / 036-361, חשמל / 036-371, קרינה וחומר / 036-282, פיזיקה 1 / פיזיקה 2, או רשימת הנושאים מהמבחן.',
+    ].join('\n');
+  }
+
+  if (reason === 'math') {
+    return [
+      '---',
+      '⚠️ **I did not update the plan yet**',
+      '"Math test" is too broad — specify the exam (Bagrut 3/4/5 units, Calculus 1, Discrete math, Linear algebra, etc.).',
+      'Resend only the **Learning plan update** template (no extra chat text before/after) with the exact goal and date.',
     ].join('\n');
   }
 
@@ -126,7 +159,7 @@ export function buildPlanClarificationNotice(locale: 'he' | 'en'): string {
     '---',
     '⚠️ **I did not update the plan yet**',
     '"Physics test" is too broad to turn into a useful weekly plan without the exam scope.',
-    'Please resend the **Learning plan update** template with one of these: Mechanics / 036-361, Electricity & Magnetism / 036-371, Radiation & Matter / 036-282, Physics 1 / Physics 2, or the topic list from the test.',
+    'Resend only the **Learning plan update** template (no extra chat text) with: Mechanics / 036-361, Electricity / 036-371, Radiation & Matter / 036-282, Physics 1 / 2, or the topic list from the test.',
   ].join('\n');
 }
 
@@ -205,8 +238,9 @@ export async function executePlanUpdate(
   if (!sanitized) {
     return { applied: false, error: 'invalid_payload' };
   }
-  if (planPayloadNeedsClarification(sanitized)) {
-    return { applied: false, error: 'needs_physics_scope' };
+  const clarify = planPayloadNeedsClarification(sanitized);
+  if (clarify) {
+    return { applied: false, error: 'needs_exam_scope', clarificationReason: clarify };
   }
 
   try {
@@ -390,11 +424,13 @@ export async function applyPlanFromUserMessage(
       failureNotice: buildPlanApplyFailureNotice(locale, 'missing_payload'),
     };
   }
-  if (planPayloadNeedsClarification(payload)) {
+  const clarify = planPayloadNeedsClarification(payload);
+  if (clarify) {
     return {
       applied: false,
-      error: 'needs_physics_scope',
-      failureNotice: buildPlanClarificationNotice(locale),
+      error: 'needs_exam_scope',
+      clarificationReason: clarify,
+      failureNotice: buildPlanClarificationNotice(locale, clarify),
     };
   }
 

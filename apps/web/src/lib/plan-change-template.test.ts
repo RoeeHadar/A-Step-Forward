@@ -37,6 +37,16 @@ describe('plan-change-template', () => {
     ).toBe(false);
   });
 
+  it('rejects casual text prepended to an otherwise valid wire template', () => {
+    const template = buildPlanChangeRequest(
+      { goal: 'מבחן במתמטיקה', date: 'עוד חודש' },
+      'he',
+    );
+    const combined = `יש לי מבחן מתמטיקה עוד חודש שנה לי את תוכנית הלימוד\n${template}`;
+    expect(isPlanChangeTemplate(combined)).toBe(false);
+    expect(isPlanChangeTemplate(template)).toBe(true);
+  });
+
   it('normalizes display messages before parsing', () => {
     const display = buildPlanChangeRequest(
       { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },

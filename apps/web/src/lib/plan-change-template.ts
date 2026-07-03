@@ -59,17 +59,28 @@ export function wrapPlanChangeMessage(body: string): string {
   return `[[ASF-PLAN-UPDATE | ${label}]]\n${trimmed}\n${PLAN_CHANGE_TEMPLATE_MARKER_END}`;
 }
 
-export function normalizePlanChangeMessage(message: string): string {
-  const trimmed = message.trim();
-  if (START_RE.test(trimmed)) return trimmed;
-  if (isPlanChangeDisplayTemplate(trimmed)) return wrapPlanChangeMessage(trimmed);
-  return message;
-}
+const WIRE_TEMPLATE_ONLY_RE =
+  /^\[\[ASF-PLAN-UPDATE[\s\S]*\[\[\/ASF-PLAN-UPDATE\]\]\s*$/i;
 
+/** True when the message is exclusively the official template — no extra chat text. */
 export function isPlanChangeTemplate(message: string): boolean {
   const t = message.trim();
-  if (START_RE.test(t)) return true;
-  return isPlanChangeDisplayTemplate(t);
+  if (WIRE_TEMPLATE_ONLY_RE.test(t)) return true;
+  if (!isPlanChangeDisplayTemplate(t)) return false;
+  // Display form must start with the official intro — no casual prefix lines.
+  return (
+    /^(?:\s*)אני מבקש\/ת לעדכן את תוכנית הלימוד/i.test(t) ||
+    /^(?:\s*)I would like to update my learning plan/i.test(t)
+  );
+}
+
+export function normalizePlanChangeMessage(message: string): string {
+  const trimmed = message.trim();
+  if (WIRE_TEMPLATE_ONLY_RE.test(trimmed)) return trimmed;
+  if (isPlanChangeTemplate(trimmed) && isPlanChangeDisplayTemplate(trimmed)) {
+    return wrapPlanChangeMessage(trimmed);
+  }
+  return message;
 }
 
 /** Inner free-text body used for goal/topic inference (markers stripped). */

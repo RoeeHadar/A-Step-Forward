@@ -68,6 +68,16 @@ describe('template-only plan change detection', () => {
     expect(shouldApplyPlanChange(user, assistant)).toBe(false);
   });
 
+  it('does not apply when casual text is prepended to the template', () => {
+    const template = buildPlanChangeRequest(
+      { goal: 'מבחן במתמטיקה', date: 'עוד חודש' },
+      'he',
+    );
+    const combined = `יש לי מבחן מתמטיקה עוד חודש שנה לי את תוכנית הלימוד\n${template}`;
+    expect(shouldApplyPlanImmediately(combined)).toBe(false);
+    expect(shouldApplyPlanChange(combined)).toBe(false);
+  });
+
   it('does not apply confirmation without template on the same turn', () => {
     const priorTemplate = CALC1_TEMPLATE;
     expect(shouldApplyPlanChange('כן', 'מעולה.', priorTemplate)).toBe(false);

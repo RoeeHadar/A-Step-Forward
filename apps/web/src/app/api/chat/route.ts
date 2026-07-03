@@ -326,8 +326,11 @@ async function finalizeAssistantTurn(
 
       logger.warn('chat: plan update failed', { error: result.error });
       const failureNotice =
-        result.error === 'needs_physics_scope'
-          ? buildPlanClarificationNotice(locale)
+        result.error === 'needs_exam_scope' || result.error === 'needs_physics_scope'
+          ? buildPlanClarificationNotice(
+              locale,
+              result.clarificationReason ?? 'physics',
+            )
           : buildPlanApplyFailureNotice(locale, result.error);
       await recordChatTurn(
         userId,

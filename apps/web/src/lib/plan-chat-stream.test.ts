@@ -97,7 +97,22 @@ describe('chat stream finalize (calc1 plan change template)', () => {
     });
 
     expect(payload.prepend_concepts).toEqual([]);
-    expect(planPayloadNeedsClarification(payload)).toBe(true);
-    expect(buildPlanClarificationNotice('he')).toContain('מכניקה');
+    expect(planPayloadNeedsClarification(payload)).toBe('physics');
+    expect(buildPlanClarificationNotice('he', 'physics')).toContain('מכניקה');
+  });
+
+  it('requires clarification before applying a broad math exam template', () => {
+    const broadMath = buildPlanChangeRequest(
+      { goal: 'מבחן במתמטיקה', date: 'עוד חודש' },
+      'he',
+    );
+    const payload = proposalToUpdatePayload({
+      reason: 'הכנה למבחן במתמטיקה',
+      ...inferGoalMetaFromText(broadMath),
+      prepend_concepts: inferConceptIdsFromText(broadMath),
+    });
+
+    expect(planPayloadNeedsClarification(payload)).toBe('math');
+    expect(buildPlanClarificationNotice('he', 'math')).toContain('בגרות');
   });
 });

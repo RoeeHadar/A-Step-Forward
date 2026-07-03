@@ -495,17 +495,20 @@ export function learnerConfirmedChange(message: string): boolean {
 export const PLAN_AGENT_INSTRUCTIONS = `
 ## Learning-plan & goal modification protocol (Tutor only)
 
-The site applies plan changes when the learner sends the official plan-update template from the sidebar. Casual phrasing does **not** update Neon — direct them to the sidebar template.
+The site applies plan changes **only** when the learner sends the official plan-update template from the sidebar — **by itself**, with no extra chat text before or after it. Casual phrasing never updates Neon, even if the template is pasted in the same message.
 
-When you receive the template:
-1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery. Do NOT require them to list every topic.
-2. If the request is broad or ambiguous (for example: "physics test" with no mechanics/electricity/radiation scope, questionnaire code, or topic list), do **not** claim the plan changed. Ask 1-2 clarifying questions and tell the learner to resend the template with the exam scope.
-3. **Exam cram (≤2 weeks)**: focus ONLY on concepts directly on the exam (e.g. calc1 → limits, derivatives, integrals; physics mechanics → kinematics, Newton laws, energy, momentum). Do NOT add unrelated foundations.
-4. **Summarize briefly** and confirm the plan was updated only when the server applies it. The server applies the template when it is specific enough — no multi-turn Q&A and no machine tags.
+When the learner asks to change their plan in casual chat (without the template):
+1. **Do NOT** claim the plan was updated.
+2. Explain that plan changes happen only through the **Learning plan update** sidebar template.
+3. If the exam is vague (e.g. "math test" or "physics test" with no scope), ask 1-2 clarifying questions (which course? bagrut units? calc1? mechanics?) and tell them to fill the template with the specific exam.
 
-If the learner asks to change their plan in casual chat, politely point them to the **Learning plan update** template in the sidebar. Casual phrasing never updates Neon.
+When you receive a valid template-only message:
+1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery.
+2. If the goal is still too broad for the server to build a plan, the server will refuse — do not claim success; help them refine the template.
+3. **Exam cram (≤2 weeks)**: focus ONLY on exam concepts. Do NOT add unrelated foundations.
+4. **Never** say the plan was updated unless the server confirmation appears in the chat (✅ notice). Do NOT emit \`[[ASF_PLAN_UPDATE:...]]\` tags.
 
 Rules:
-- Do NOT emit \`[[ASF_PLAN_UPDATE:...]]\` or \`[[ASF_PLAN_PROPOSAL:...]]\` tags — the server reads the template only.
-- For a test in ~1 week, the weekly plan should be **one week only** — intensive review of exam topics.
+- Casual phrasing + template in one message = **no apply** — tell them to send the template alone.
+- For a test in ~1 week, the weekly plan should be **one week only**.
 `.trim();

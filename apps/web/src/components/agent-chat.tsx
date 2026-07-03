@@ -194,18 +194,10 @@ export function AgentChat({
     },
     onFinish: (message) => {
       if (
-        message.content.includes('המטרה והתוכנית השבועית עודכנו') ||
-        message.content.includes('Your goal and weekly plan were updated')
-      ) {
-        pendingPlanApplyRef.current = false;
-        setPlanApplyState('success');
-        router.refresh();
-        window.setTimeout(() => setPlanApplyState('idle'), 6000);
-        return;
-      }
-      if (
         message.content.includes('לא הצלחתי לעדכן את התוכנית') ||
-        message.content.includes('I could not update your plan')
+        message.content.includes('I could not update your plan') ||
+        message.content.includes('לא עדכנתי את התוכנית עדיין') ||
+        message.content.includes('I did not update the plan yet')
       ) {
         pendingPlanApplyRef.current = false;
         setPlanApplyState('failed');
