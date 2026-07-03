@@ -7,20 +7,16 @@ import {
   applyPlanProfileUpdates,
   clearPendingPlanProposal,
   generateLearningPlan,
-  getPendingPlanProposal,
   recordPlanChangeHistory,
   setPendingPlanProposal,
   type PendingPlanProposal,
 } from '@/lib/neon-db';
 import {
   extractPlanProposal,
-  extractPlanUpdate,
   CALC1_EXAM_CONCEPTS,
   DISCRETE_EXAM_CONCEPTS,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
-  looksLikePlanApplyIntent,
-  looksLikePlanProposal,
   planPayloadToOptions,
   proposalToUpdatePayload,
   shouldApplyPlanImmediately,
@@ -318,67 +314,26 @@ export async function saveProposalFromAssistantTurn(
   userMessage: string,
   assistantRaw: string,
 ): Promise<void> {
+  if (!isPlanChangeTemplate(userMessage)) return;
   const { proposal: tagProposal } = extractPlanProposal(assistantRaw);
-  const merged = mergeProposal(tagProposal, userMessage, assistantRaw);
+  const merged = mergeProposal(tagProposal, userMessage);
   if (!merged) return;
-  const shouldSave =
-    Boolean(tagProposal) ||
-    looksLikePlanProposal(assistantRaw) ||
-    looksLikePlanApplyIntent(assistantRaw) ||
-    isPlanChangeTemplate(userMessage);
-  if (!shouldSave) return;
   await setPendingPlanProposal(learnerId, { ...merged, agent });
 }
 
 export async function resolvePayloadForApply(
   learnerId: string,
   userMessage: string,
-  assistantRaw: string,
-  priorUserMessage?: string,
-  priorAssistantText?: string,
-  recentUserMessages?: string[],
+  _assistantRaw?: string,
+  _priorUserMessage?: string,
+  _priorAssistantText?: string,
+  _recentUserMessages?: string[],
 ): Promise<PlanUpdatePayload | null> {
-  const { payload: tagPayload } = extractPlanUpdate(assistantRaw);
-  if (tagPayload?.confirmed) return tagPayload;
+  if (!isPlanChangeTemplate(userMessage)) return null;
 
-  // Official template from the learner beats any stale pending proposal.
-  if (isPlanChangeTemplate(userMessage)) {
-    await clearPendingPlanProposal(learnerId);
-    const merged = mergeProposal(null, userMessage);
-    if (merged) return proposalToUpdatePayload(merged);
-  }
-
-  const { proposal: tagProposal } = extractPlanProposal(assistantRaw);
-  if (tagProposal) return proposalToUpdatePayload(tagProposal);
-
-  const pending = await getPendingPlanProposal(learnerId);
-  if (pending) return proposalToUpdatePayload(pending);
-
-  const userHistory =
-    recentUserMessages?.length
-      ? recentUserMessages
-      : [priorUserMessage, userMessage].filter(Boolean);
-  const contextTexts = [...userHistory, priorAssistantText, assistantRaw].filter(
-    Boolean,
-  ) as string[];
-
-  const merged = mergeProposal(null, ...contextTexts);
+  await clearPendingPlanProposal(learnerId);
+  const merged = mergeProposal(null, userMessage);
   if (!merged) return null;
-
-  const hasContent =
-    merged.goal ||
-    merged.final_goal_date ||
-    merged.goal_key ||
-    merged.clear_next_test ||
-    (merged.prepend_concepts?.length ?? 0) > 0 ||
-    (merged.priority_concepts?.length ?? 0) > 0;
-
-  if (!hasContent) {
-    if (contextTexts.some((t) => isPlanChangeTemplate(t))) {
-      return proposalToUpdatePayload(merged);
-    }
-    return null;
-  }
   return proposalToUpdatePayload(merged);
 }
 

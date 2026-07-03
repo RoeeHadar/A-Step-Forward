@@ -44,7 +44,10 @@ export function getPlanChangeTemplate(locale: 'he' | 'en'): string {
 
 export function isPlanChangeDisplayTemplate(message: string): boolean {
   const t = message.trim();
-  return DISPLAY_HE_RE.test(t) || DISPLAY_EN_RE.test(t);
+  const hasGoalField = /(?:מטרה(?:\s*\/?\s*מבחן|\s*או\s*מבחן)?|goal(?:\s*\/?\s*exam)?)\s*:/i.test(t);
+  if (DISPLAY_HE_RE.test(t) && hasGoalField) return true;
+  if (DISPLAY_EN_RE.test(t) && hasGoalField) return true;
+  return false;
 }
 
 export function wrapPlanChangeMessage(body: string): string {

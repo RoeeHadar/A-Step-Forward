@@ -56,8 +56,9 @@ describe('template-only plan change detection', () => {
     }
   });
 
-  it('applies after tutor reply when template was sent', () => {
+  it('applies only when the current message is the template', () => {
     const assistant = 'בטח, אעדכן את התוכנית בהתאם למבחן.';
+    expect(shouldApplyPlanChange(CALC1_TEMPLATE)).toBe(true);
     expect(shouldApplyPlanChange(CALC1_TEMPLATE, assistant)).toBe(true);
   });
 
@@ -67,9 +68,9 @@ describe('template-only plan change detection', () => {
     expect(shouldApplyPlanChange(user, assistant)).toBe(false);
   });
 
-  it('confirms only when prior turn used the template', () => {
+  it('does not apply confirmation without template on the same turn', () => {
     const priorTemplate = CALC1_TEMPLATE;
-    expect(shouldApplyPlanChange('כן', 'מעולה.', priorTemplate)).toBe(true);
+    expect(shouldApplyPlanChange('כן', 'מעולה.', priorTemplate)).toBe(false);
     expect(
       shouldApplyPlanChange('כן', 'מעולה.', 'שנה לי את התוכנית בבקשה'),
     ).toBe(false);

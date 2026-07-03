@@ -32,6 +32,9 @@ describe('plan-change-template', () => {
     expect(
       isPlanChangeTemplate('יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם'),
     ).toBe(false);
+    expect(
+      isPlanChangeDisplayTemplate('אני מבקש/ת לעדכן את תוכנית הלימוד — מה זה גבול?'),
+    ).toBe(false);
   });
 
   it('normalizes display messages before parsing', () => {

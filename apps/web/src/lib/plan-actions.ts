@@ -9,7 +9,6 @@ import {
   isPlanChangeTemplate,
   parsePlanChangeTemplateFields,
   planChangeTextForParsing,
-  recentMessagesIncludePlanTemplate,
 } from '@/lib/plan-change-template';
 import {
   sanitizeConceptIds,
@@ -376,37 +375,9 @@ export function looksLikePlanChangeAcknowledgment(text: string): boolean {
   );
 }
 
-export function shouldApplyPlanChange(
-  userMessage: string,
-  assistantRaw: string,
-  priorUserMessage?: string,
-  recentUserMessages?: string[],
-): boolean {
-  const userHistory = (
-    recentUserMessages?.length
-      ? recentUserMessages
-      : [priorUserMessage, userMessage]
-  ).filter(Boolean) as string[];
-
-  if (learnerConfirmedChange(userMessage)) {
-    return recentMessagesIncludePlanTemplate(userHistory);
-  }
-
-  if (!userHistory.some((m) => isPlanChangeTemplate(m))) return false;
-
-  const contextTexts = [...userHistory, assistantRaw];
-
-  if (
-    looksLikePlanChangeAcknowledgment(assistantRaw) ||
-    looksLikePlanApplyIntent(assistantRaw)
-  ) {
-    return true;
-  }
-
-  if (!hasActionablePlanChangeRequest(...contextTexts)) return false;
-  if (!assistantRaw.trim()) return false;
-
-  return true;
+/** Plan writes happen only on the turn the learner sends the official template. */
+export function shouldApplyPlanChange(userMessage: string): boolean {
+  return isPlanChangeTemplate(userMessage);
 }
 
 export function looksLikePlanProposal(text: string): boolean {
@@ -499,13 +470,11 @@ The site applies plan changes when the learner sends the official plan-update te
 When you receive the template:
 1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery. Do NOT require them to list every topic.
 2. **Exam cram (≤2 weeks)**: focus ONLY on concepts directly on the exam (e.g. calc1 → limits, derivatives, integrals). Do NOT add arithmetic, combinatorics, or unrelated foundations.
-3. **Summarize briefly** and confirm the plan was updated. The server applies immediately — no multi-turn Q&A first.
+3. **Summarize briefly** and confirm the plan was updated. The server applies immediately when the template is sent — no multi-turn Q&A and no machine tags.
 
-**Apply turn**: append at the **end**:
-\`[[ASF_PLAN_UPDATE:{"confirmed":true,"reason":"<why>","goal":"מבחן בחדו״א 1","goal_key":"calculus1","final_goal_date":"2026-07-10","next_test_date":"2026-07-10","priority_concepts":[],"prepend_concepts":["limits","derivatives_intro","derivatives_applications","integrals_intro","integrals_techniques"],"exclude_concepts":[]}]]\`
+If the learner asks to change their plan in casual chat, politely point them to the **Learning plan update** template in the sidebar. Casual phrasing never updates Neon.
 
 Rules:
-- Use ONLY \`concept_id\` values from the ALLOWLIST.
-- \`confirmed\` MUST be true on UPDATE tags.
+- Do NOT emit \`[[ASF_PLAN_UPDATE:...]]\` or \`[[ASF_PLAN_PROPOSAL:...]]\` tags — the server reads the template only.
 - For a test in ~1 week, the weekly plan should be **one week only** — intensive review of exam topics.
 `.trim();

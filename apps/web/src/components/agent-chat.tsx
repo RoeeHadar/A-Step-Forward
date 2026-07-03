@@ -6,8 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
-import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, shouldApplyPlanImmediately } from '@/lib/plan-actions';
-import { isPlanChangeTemplate, normalizePlanChangeMessage } from '@/lib/plan-change-template';
+import { extractPlanUpdate, stripPlanMachineTags, shouldApplyPlanImmediately } from '@/lib/plan-actions';
+import { normalizePlanChangeMessage } from '@/lib/plan-change-template';
 import { PlanChangeTemplatePanel } from '@/components/plan-change-template-panel';
 import { useRouter } from 'next/navigation';
 import { Send, Loader2, X } from 'lucide-react';
@@ -332,9 +332,7 @@ export function AgentChat({
 
   function shouldShowPlanApplying(nextInput: string): boolean {
     if (!isPlanAgent) return false;
-    if (shouldApplyPlanImmediately(nextInput)) return true;
-    if (!learnerConfirmedChange(nextInput)) return false;
-    return messages.some((m) => m.role === 'user' && isPlanChangeTemplate(m.content));
+    return shouldApplyPlanImmediately(normalizePlanChangeMessage(nextInput));
   }
 
   function submitChat(e?: React.FormEvent) {

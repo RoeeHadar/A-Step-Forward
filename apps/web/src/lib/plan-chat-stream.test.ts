@@ -29,8 +29,9 @@ describe('chat stream finalize (calc1 plan change template)', () => {
     expect(shouldApplyPlanImmediately(USER)).toBe(true);
   });
 
-  it('decides to apply after tutor acknowledgment', () => {
+  it('decides to apply only when the user message is the template', () => {
     expect(shouldApplyPlanChange(USER, ASSISTANT)).toBe(true);
+    expect(shouldApplyPlanChange('כן', ASSISTANT)).toBe(false);
   });
 
   it('does not apply casual phrasing without template', () => {

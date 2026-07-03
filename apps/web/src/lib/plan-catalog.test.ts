@@ -248,13 +248,13 @@ describe('plan-actions', () => {
     }
   });
 
-  it('applies on follow-up turn when prior user message used the template', () => {
+  it('does not apply on follow-up turn without resending the template', () => {
     const priorUser = buildPlanChangeRequest(
       { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
       'he',
     );
     const userMsg = 'כן';
     const assistant = 'אני הולך לשנות את התוכנית שלך.';
-    expect(shouldApplyPlanChange(userMsg, assistant, priorUser)).toBe(true);
+    expect(shouldApplyPlanChange(userMsg, assistant, priorUser)).toBe(false);
   });
 });
