@@ -139,4 +139,30 @@ describe('plan-actions', () => {
     expect(meta.final_goal_date).toBeTruthy();
     expect(meta.next_test_date).toBeTruthy();
   });
+
+  it('applies when user message includes both request and plan-change intent', () => {
+    const userMsg =
+      'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם\nאני הולך לשנות את התוכנית שלך.';
+    const assistant = 'מעולה, נתחיל מגבולות ונגזרות.';
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+  });
+
+  it('applies with minimal tutor ack when goal is inferable from user message', () => {
+    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+    const assistant = 'אני הולך לשנות את התוכנית שלך.';
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+  });
+
+  it('does not apply when tutor only asks a clarifying question', () => {
+    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+    const assistant = 'האם אתה רוצה להתמקד בגבולות או בנגזרות?';
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(false);
+  });
+
+  it('applies on follow-up turn when prior user message was explicit', () => {
+    const priorUser = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+    const userMsg = 'כן';
+    const assistant = 'אני הולך לשנות את התוכנית שלך.';
+    expect(shouldApplyPlanChange(userMsg, assistant, priorUser)).toBe(true);
+  });
 });

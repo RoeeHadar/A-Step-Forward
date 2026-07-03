@@ -1,5 +1,19 @@
 import { defineConfig } from 'vitest/config';
+import fs from 'node:fs';
 import path from 'node:path';
+
+const envLocal = path.resolve(__dirname, '.env.local');
+if (fs.existsSync(envLocal)) {
+  for (const line of fs.readFileSync(envLocal, 'utf8').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq <= 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const value = trimmed.slice(eq + 1).trim();
+    if (process.env[key] == null) process.env[key] = value;
+  }
+}
 
 export default defineConfig({
   test: {

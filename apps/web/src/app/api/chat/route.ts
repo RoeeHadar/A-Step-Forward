@@ -37,6 +37,7 @@ import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 
 export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 // Vercel functions have a 60s timeout on Pro, 10s on Hobby for non-streaming.
 // We stream, so the connection stays open as long as we keep yielding chunks.

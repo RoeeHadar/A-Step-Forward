@@ -73,6 +73,7 @@ export function AgentChat({
   const hasAutoRetriedRef = useRef(false);
   const hasReceivedTokensRef = useRef(false);
   const userMessageCountRef = useRef(0);
+  const pendingPlanApplyRef = useRef(false);
   const [showConnecting, setShowConnecting] = useState(false);
   const [showWarmupBanner, setShowWarmupBanner] = useState(false);
   const searchParams = useSearchParams();
@@ -193,6 +194,7 @@ export function AgentChat({
         message.content.includes('המטרה והתוכנית השבועית עודכנו') ||
         message.content.includes('Your goal and weekly plan were updated')
       ) {
+        pendingPlanApplyRef.current = false;
         setPlanApplyState('success');
         router.refresh();
         window.setTimeout(() => setPlanApplyState('idle'), 6000);
@@ -202,6 +204,13 @@ export function AgentChat({
         message.content.includes('לא הצלחתי לעדכן את התוכנית') ||
         message.content.includes('I could not update your plan')
       ) {
+        pendingPlanApplyRef.current = false;
+        setPlanApplyState('failed');
+        window.setTimeout(() => setPlanApplyState('idle'), 8000);
+        return;
+      }
+      if (pendingPlanApplyRef.current) {
+        pendingPlanApplyRef.current = false;
         setPlanApplyState('failed');
         window.setTimeout(() => setPlanApplyState('idle'), 8000);
         return;
@@ -214,12 +223,15 @@ export function AgentChat({
     if (!data?.length) return;
     const last = data[data.length - 1] as { type?: string } | undefined;
     if (last?.type === 'plan_applying') {
+      pendingPlanApplyRef.current = true;
       setPlanApplyState('applying');
     } else if (last?.type === 'plan_updated') {
+      pendingPlanApplyRef.current = false;
       setPlanApplyState('success');
       router.refresh();
       window.setTimeout(() => setPlanApplyState('idle'), 6000);
     } else if (last?.type === 'plan_failed') {
+      pendingPlanApplyRef.current = false;
       setPlanApplyState('failed');
       window.setTimeout(() => setPlanApplyState('idle'), 8000);
     }
@@ -476,6 +488,7 @@ export function AgentChat({
               isPlanAgent &&
               (learnerConfirmedChange(input) || learnerExplicitChangeRequest(input))
             ) {
+              pendingPlanApplyRef.current = true;
               setPlanApplyState('applying');
             }
             handleSubmit(e);
@@ -500,6 +513,7 @@ export function AgentChat({
                   isPlanAgent &&
                   (learnerConfirmedChange(input) || learnerExplicitChangeRequest(input))
                 ) {
+                  pendingPlanApplyRef.current = true;
                   setPlanApplyState('applying');
                 }
                 handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);

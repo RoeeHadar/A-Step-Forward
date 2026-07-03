@@ -227,8 +227,29 @@ export function learnerExplicitChangeRequest(message: string): boolean {
 
 /** Tutor/Mentor prose indicating they are applying a plan or goal change. */
 export function looksLikePlanApplyIntent(text: string): boolean {
-  return /אעדכן|אשנה|עודכן|מעדכן|הולך לשנות|אני הולך לשנות|אוודא שהתוכנית|התוכנית החדשה|will update|updating your|will change your|המטרה החדשה שלך|מותאם למטרה|I will change your goal/i.test(
+  return /אעדכן|אשנה|עודכן|מעדכן|הולך לשנות|אני הולך לשנות|אתאים את|מתאים את|מותאם ל|בהתאם ל|אוודא שהתוכנית|התוכנית החדשה|will update|updating your|will change your|המטרה החדשה שלך|מותאם למטרה|I will change your goal/i.test(
     text,
+  );
+}
+
+function hasActionablePlanChangeRequest(...texts: string[]): boolean {
+  const blob = texts.filter(Boolean).join('\n');
+  if (!blob.trim()) return false;
+  const meta = inferGoalMetaFromText(...texts);
+  const concepts = inferConceptIdsFromText(...texts);
+  return (
+    Boolean(meta.goal || meta.final_goal_date || meta.goal_key || meta.clear_next_test) ||
+    concepts.length > 0
+  );
+}
+
+function isOnlyClarifyingQuestion(assistantRaw: string): boolean {
+  const t = assistantRaw.trim();
+  if (!t) return false;
+  if (looksLikePlanApplyIntent(t)) return false;
+  return (
+    /^(האם|מה |מתי |איך |לפני |why |what |when |how |can you|could you|would you)/i.test(t) ||
+    (/[?؟]\s*$/.test(t) && !/תוכנית|plan|מטרה|goal/i.test(t))
   );
 }
 
@@ -245,20 +266,34 @@ export function shouldApplyPlanChange(
   priorUserMessage?: string,
 ): boolean {
   if (learnerConfirmedChange(userMessage)) return true;
+
+  const userTexts = [priorUserMessage, userMessage].filter(Boolean) as string[];
+  const hasExplicit = userTexts.some((m) => learnerExplicitChangeRequest(m));
+  if (!hasExplicit) return false;
+
+  const contextTexts = [...userTexts, assistantRaw];
+
   if (
-    learnerExplicitChangeRequest(userMessage) &&
-    looksLikePlanChangeAcknowledgment(assistantRaw)
+    looksLikePlanChangeAcknowledgment(assistantRaw) ||
+    looksLikePlanApplyIntent(assistantRaw)
   ) {
     return true;
   }
+
   if (
-    priorUserMessage &&
-    learnerExplicitChangeRequest(priorUserMessage) &&
-    looksLikePlanChangeAcknowledgment(assistantRaw)
+    userTexts.some(
+      (m) => learnerExplicitChangeRequest(m) && looksLikePlanApplyIntent(m),
+    )
   ) {
     return true;
   }
-  return false;
+
+  if (!hasActionablePlanChangeRequest(...contextTexts)) return false;
+  if (!assistantRaw.trim()) return false;
+  if (isOnlyClarifyingQuestion(assistantRaw)) return false;
+
+  // Direct imperative with inferable exam/goal data — apply after tutor replies.
+  return true;
 }
 
 export function looksLikePlanProposal(text: string): boolean {
