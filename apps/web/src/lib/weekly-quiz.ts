@@ -34,8 +34,8 @@ interface KgConcept {
   bagrut_chapter?: string | null;
   level_scope?: Record<string, string>;
 }
-const kgById: Record<string, KgConcept> = (kg as { byId: Record<string, KgConcept> }).byId;
-const kgConcepts: KgConcept[] = (kg as { concepts: KgConcept[] }).concepts;
+const kgById: Record<string, KgConcept> = (kg as unknown as { byId: Record<string, KgConcept> }).byId;
+const kgConcepts: KgConcept[] = (kg as unknown as { concepts: KgConcept[] }).concepts;
 
 // ── Stored shape (with correct answer, never sent to client) ─────────────────
 

@@ -40,9 +40,9 @@ interface KgConcept {
   prerequisites: string[];
 }
 
-const kgConcepts = (kg as { concepts: KgConcept[] }).concepts;
+const kgConcepts = (kg as unknown as { concepts: KgConcept[] }).concepts;
 const kgById: Record<string, KgConcept> =
-  (kg as { byId: Record<string, KgConcept> }).byId;
+  (kg as unknown as { byId: Record<string, KgConcept> }).byId;
 
 // Keep backward compatibility — the API accepts these as hints but we override
 // server-side based on the learner's profile.

@@ -24,7 +24,7 @@ function Wait-Workflows {
       return $runs
     }
 
-    Write-Host ("  waiting… " + ($runs | ForEach-Object { "$($_.name)=$($_.status)" }) -join ", ")
+    Write-Host ("  waiting... " + ($runs | ForEach-Object { "$($_.name)=$($_.status)" }) -join ", ")
     Start-Sleep -Seconds 20
   }
   throw "Timed out waiting for workflows on $resolvedSha"
@@ -61,7 +61,7 @@ foreach ($path in $urls) {
     $r = Invoke-WebRequest -Uri $url -UseBasicParsing -MaximumRedirection 5 -TimeoutSec 30
     Write-Host "  $($r.StatusCode) $path"
   } catch {
-    Write-Host "  FAIL $path — $($_.Exception.Message)"
+    Write-Host "  FAIL $path - $($_.Exception.Message)"
     exit 1
   }
 }
