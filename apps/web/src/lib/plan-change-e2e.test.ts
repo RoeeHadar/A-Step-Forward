@@ -90,11 +90,7 @@ describe.skipIf(!hasDb)('plan change e2e (live Neon write)', () => {
     const learnerId = rows[0]?.learner_id;
     if (!learnerId) return;
 
-    const payload = await resolvePayloadForApply(
-      learnerId,
-      CALC1_USER,
-      CALC1_ASSISTANT,
-    );
+    const payload = await resolvePayloadForApply(learnerId, CALC1_USER);
     expect(payload).not.toBeNull();
 
     const result = await executePlanUpdate(learnerId, payload!, {

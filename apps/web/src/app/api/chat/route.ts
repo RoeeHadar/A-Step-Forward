@@ -271,22 +271,6 @@ async function finalizeAssistantTurn(
   const visible = stripPlanMachineTags(assistantRaw);
   const isPlanAgent = agent === 'tutor';
 
-  let priorAssistant: string | undefined;
-  let priorUser: string | undefined;
-  let recentUserMessages: string[] = [];
-  if (isPlanAgent) {
-    const recent = await fetchRecentChatTurns(userId, agent, 12).catch(() => []);
-    const userTurns = recent
-      .filter((t) => t.role === 'user')
-      .map((t) => t.content);
-    recentUserMessages = userTurns.slice(-6);
-    priorUser = userTurns.length >= 2 ? userTurns.at(-2) : undefined;
-    priorAssistant = recent
-      .filter((t) => t.role === 'assistant')
-      .map((t) => t.content)
-      .at(-1);
-  }
-
   if (!isPlanAgent) {
     await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
     return null;
@@ -302,14 +286,7 @@ async function finalizeAssistantTurn(
 
   if (applyNow) {
     onStatus?.('applying');
-    const payload = await resolvePayloadForApply(
-      userId,
-      userMessage,
-      assistantRaw,
-      priorUser,
-      priorAssistant,
-      recentUserMessages,
-    );
+    const payload = await resolvePayloadForApply(userId, userMessage);
 
     if (!payload) {
       logger.warn('chat: learner confirmed plan change but no resolvable payload', {

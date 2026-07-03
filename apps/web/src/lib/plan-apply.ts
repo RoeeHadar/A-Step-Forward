@@ -324,10 +324,6 @@ export async function saveProposalFromAssistantTurn(
 export async function resolvePayloadForApply(
   learnerId: string,
   userMessage: string,
-  _assistantRaw?: string,
-  _priorUserMessage?: string,
-  _priorAssistantText?: string,
-  _recentUserMessages?: string[],
 ): Promise<PlanUpdatePayload | null> {
   if (!isPlanChangeTemplate(userMessage)) return null;
 
@@ -346,9 +342,7 @@ export async function applyPlanFromUserMessage(
 ): Promise<PlanApplyResult | null> {
   if (!shouldApplyPlanImmediately(userMessage)) return null;
 
-  const payload = await resolvePayloadForApply(learnerId, userMessage, '', undefined, undefined, [
-    userMessage,
-  ]);
+  const payload = await resolvePayloadForApply(learnerId, userMessage);
   if (!payload) {
     return {
       applied: false,

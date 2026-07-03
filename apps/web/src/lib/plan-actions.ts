@@ -348,31 +348,9 @@ export function looksLikePlanApplyIntent(text: string): boolean {
   );
 }
 
-function hasActionablePlanChangeRequest(...texts: string[]): boolean {
-  const parsed = planChangeTextForParsing(...texts.filter(Boolean));
-  const blob = parsed.join('\n');
-  if (!blob.trim()) return false;
-  const meta = inferGoalMetaFromText(...parsed);
-  const concepts = inferConceptIdsFromText(...parsed);
-  if (
-    Boolean(meta.goal || meta.final_goal_date || meta.goal_key || meta.clear_next_test) ||
-    concepts.length > 0
-  ) {
-    return true;
-  }
-  return texts.some((t) => isPlanChangeTemplate(t));
-}
-
 /** Direct plan-change request — apply without waiting for tutor Q&A. */
 export function shouldApplyPlanImmediately(userMessage: string): boolean {
   return isPlanChangeTemplate(userMessage);
-}
-
-export function looksLikePlanChangeAcknowledgment(text: string): boolean {
-  return (
-    looksLikePlanApplyIntent(text) ||
-    /התוכנית החדשה תכלול|התוכנית החדשה|אני מאמין שהתוכנית|new plan will/i.test(text)
-  );
 }
 
 /** Plan writes happen only on the turn the learner sends the official template. */
