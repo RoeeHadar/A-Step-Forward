@@ -17,7 +17,7 @@ import {
   extractPlanUpdate,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
-  learnerExplicitChangeRequest,
+  learnerPlanChangeIntent,
   looksLikePlanApplyIntent,
   looksLikePlanProposal,
   planPayloadToOptions,
@@ -271,7 +271,25 @@ function mergeProposal(
     (fromTag?.priority_concepts?.length ?? 0) > 0 ||
     (fromTag?.exclude_concepts?.length ?? 0) > 0;
 
-  if (!hasGoalChange && !hasConceptChange) return null;
+  if (!hasGoalChange && !hasConceptChange) {
+    if (texts.some((t) => learnerPlanChangeIntent(t))) {
+      return {
+        reason,
+        goal: fromTag?.goal ?? goalMeta.goal,
+        goal_key: fromTag?.goal_key ?? goalMeta.goal_key,
+        final_goal_date: fromTag?.final_goal_date ?? goalMeta.final_goal_date,
+        next_test_date: fromTag?.next_test_date ?? goalMeta.next_test_date,
+        next_test_name: fromTag?.next_test_name ?? goalMeta.next_test_name,
+        clear_next_test: fromTag?.clear_next_test ?? goalMeta.clear_next_test,
+        priority_concepts: fromTag?.priority_concepts ?? [],
+        prepend_concepts: prepend,
+        exclude_concepts: fromTag?.exclude_concepts ?? [],
+        proposed_at: new Date().toISOString(),
+        agent: 'tutor',
+      };
+    }
+    return null;
+  }
 
   return {
     reason,
@@ -302,7 +320,7 @@ export async function saveProposalFromAssistantTurn(
     Boolean(tagProposal) ||
     looksLikePlanProposal(assistantRaw) ||
     looksLikePlanApplyIntent(assistantRaw) ||
-    learnerExplicitChangeRequest(userMessage);
+    learnerPlanChangeIntent(userMessage);
   if (!shouldSave) return;
   await setPendingPlanProposal(learnerId, { ...merged, agent });
 }
@@ -343,7 +361,12 @@ export async function resolvePayloadForApply(
     (merged.prepend_concepts?.length ?? 0) > 0 ||
     (merged.priority_concepts?.length ?? 0) > 0;
 
-  if (!hasContent) return null;
+  if (!hasContent) {
+    if (contextTexts.some((t) => learnerPlanChangeIntent(t))) {
+      return proposalToUpdatePayload(merged);
+    }
+    return null;
+  }
   return proposalToUpdatePayload(merged);
 }
 

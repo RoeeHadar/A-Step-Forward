@@ -18,7 +18,8 @@ import {
   proposalToUpdatePayload,
   shouldApplyPlanChange,
   shouldApplyPlanImmediately,
-} from './plan-actions';
+  learnerPlanChangeIntent,
+} from '@/lib/plan-actions';
 
 describe('plan-catalog grounding', () => {
   it('recognizes KG concept ids', () => {
@@ -167,8 +168,31 @@ describe('plan-actions', () => {
     expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
   });
 
-  it('does not apply immediately when goal is not inferable', () => {
-    expect(shouldApplyPlanImmediately('שנה את התוכנית')).toBe(false);
+  it('applies immediately for any explicit plan-change phrase', () => {
+    const phrases = [
+      'שנה את התוכנית',
+      'תעדכן לי את תוכנית הלימוד',
+      'please adjust my study plan for the exam',
+      'reorganize my weekly plan — focus on probability',
+      'המטרה החדשה שלי היא מבחן בבגרות',
+    ];
+    for (const msg of phrases) {
+      expect(learnerPlanChangeIntent(msg)).toBe(true);
+      expect(shouldApplyPlanImmediately(msg)).toBe(true);
+    }
+  });
+
+  it('does not treat general tutoring as plan change', () => {
+    const phrases = [
+      'מה זה נגזרת?',
+      'explain the chain rule',
+      'תוכל לעזור לי עם תרגיל 3',
+      'how do I solve this integral',
+    ];
+    for (const msg of phrases) {
+      expect(learnerPlanChangeIntent(msg)).toBe(false);
+      expect(shouldApplyPlanImmediately(msg)).toBe(false);
+    }
   });
 
   it('applies on follow-up turn when prior user message was explicit', () => {

@@ -210,21 +210,64 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
   return out;
 }
 
-export function learnerExplicitChangeRequest(message: string): boolean {
+/**
+ * Broad detection: learner wants their goal and/or weekly plan changed.
+ * Used for UI feedback, pending proposals, and apply triggers.
+ */
+export function learnerPlanChangeIntent(message: string): boolean {
   const t = message.trim();
+  if (!t) return false;
   const lower = t.toLowerCase();
-  return (
+
+  const planWord =
+    /(?:תוכנית(?:\s+(?:לימוד|שבועית|הלימוד|השבועית))?|מסלול(?:\s+לימוד)?|לוח(?:\s+לימוד)?|study\s*plan|learning\s*plan|weekly\s*plan|study\s*schedule|learning\s*path|curriculum\s*path)/i;
+  const changeWord =
+    /(?:שנה|שינוי|עדכן|עדכון|תשנה|תעדכן|התאם|התאמה|תתאם|ארג(?:ן|מ)?\s*מחדש|re(?:prioriti|organiz|schedul)|adjust|update|change|shift|modify|tweak|התמקד|העדף|תעד(?:ף|וף)|הוסף|הורד|add|remove|drop|focus|prepare|התכונ|דח(?:ף|י(?:ף|פה))\s+(?:את\s+)?)/i;
+  const goalWord = /(?:המטרה|מטר(?:ה|ת)|goal|objective|target)/i;
+
+  if (
     /^(שנה|עדכן|שינוי)\s+(את\s+)?(ה)?(מטרה|תוכנית)/i.test(t) ||
-    /(?:שנה|עדכן|שינוי).{0,24}תוכנית/i.test(t) ||
-    /(?:מבחן|exam).{0,48}(?:שנה|עדכן).{0,24}תוכנית/i.test(t) ||
-    /(?:שנה|עדכן).{0,24}תוכנית.{0,48}(?:מבחן|exam)/i.test(t) ||
-    /(?:רוצה|בבקשה).{0,16}ש(?:ת)?(?:שנה|עדכן).{0,24}תוכנית/i.test(t) ||
-    /ש(?:ת)?שנה\s+לי.{0,20}תוכנית/i.test(t) ||
-    /המטרה החדשה שלי/i.test(t) ||
-    /שנה את התוכנית|עדכן את התוכנית/i.test(t) ||
+    /(?:שנה|עדכן|שינוי).{0,32}תוכנית/i.test(t) ||
+    /(?:מבחן|exam).{0,48}(?:שנה|עדכן).{0,32}תוכנית/i.test(t) ||
+    /(?:שנה|עדכן).{0,32}תוכנית.{0,48}(?:מבחן|exam)/i.test(t) ||
+    /(?:רוצה|בבקשה|אפשר).{0,20}ש(?:ת)?(?:שנה|עדכן).{0,32}תוכנית/i.test(t) ||
+    /ש(?:ת)?שנה\s+לי.{0,24}תוכנית/i.test(t) ||
+    /המטרה החדשה(?: שלי)?/i.test(t) ||
+    /שנה את התוכנית|עדכן את התוכנית|תעד(?:כ|)ן(?:\s+לי)?\s+את\s+התוכנית/i.test(t) ||
     /change my goal|update my goal|new goal is/i.test(lower) ||
-    /change my (weekly )?plan|update my (weekly )?plan/i.test(lower)
-  );
+    /change my (weekly )?plan|update my (weekly )?plan|adjust my (study )?plan/i.test(
+      lower,
+    ) ||
+    /re(?:prioriti|organiz)z?e my (plan|schedule|path)/i.test(lower) ||
+    /please (?:update|change|adjust) my (plan|goal|schedule)/i.test(lower) ||
+    /can you (?:update|change|adjust) my (plan|goal|schedule)/i.test(lower)
+  ) {
+    return true;
+  }
+
+  if (planWord.test(t) && changeWord.test(t)) return true;
+  if (goalWord.test(t) && changeWord.test(t)) return true;
+  if (/לא עושה בגרות|not doing bagrut|no longer.*bagrut|ביטול.*בגרות/i.test(t)) return true;
+  if (
+    /(?:מבחן|exam|test).{0,80}(?:תוכנית|plan|schedule|path)/i.test(t) ||
+    /(?:תוכנית|plan|schedule|path).{0,80}(?:מבחן|exam|test)/i.test(t)
+  ) {
+    return true;
+  }
+  if (
+    /(?:focus|התמקד|priority|עד(?:ף|וף)).{0,40}(?:on|ב|ב)?/i.test(t) &&
+    inferConceptIdsFromText(t).length > 0
+  ) {
+    return true;
+  }
+  if (changeWord.test(t) && inferConceptIdsFromText(t).length > 0) return true;
+
+  return false;
+}
+
+/** @deprecated alias — use learnerPlanChangeIntent */
+export function learnerExplicitChangeRequest(message: string): boolean {
+  return learnerPlanChangeIntent(message);
 }
 
 /** Tutor/Mentor prose indicating they are applying a plan or goal change. */
@@ -239,18 +282,19 @@ function hasActionablePlanChangeRequest(...texts: string[]): boolean {
   if (!blob.trim()) return false;
   const meta = inferGoalMetaFromText(...texts);
   const concepts = inferConceptIdsFromText(...texts);
-  return (
+  if (
     Boolean(meta.goal || meta.final_goal_date || meta.goal_key || meta.clear_next_test) ||
     concepts.length > 0
-  );
+  ) {
+    return true;
+  }
+  // Explicit plan-change request — regenerate even before goal/topic is fully parsed
+  return texts.some((t) => learnerPlanChangeIntent(t));
 }
 
-/** Direct imperative with inferable exam/goal — apply without waiting for tutor Q&A. */
+/** Direct plan-change request — apply without waiting for tutor Q&A. */
 export function shouldApplyPlanImmediately(userMessage: string): boolean {
-  return (
-    learnerExplicitChangeRequest(userMessage) &&
-    hasActionablePlanChangeRequest(userMessage)
-  );
+  return learnerPlanChangeIntent(userMessage) && hasActionablePlanChangeRequest(userMessage);
 }
 
 export function looksLikePlanChangeAcknowledgment(text: string): boolean {
@@ -268,7 +312,7 @@ export function shouldApplyPlanChange(
   if (learnerConfirmedChange(userMessage)) return true;
 
   const userTexts = [priorUserMessage, userMessage].filter(Boolean) as string[];
-  const hasExplicit = userTexts.some((m) => learnerExplicitChangeRequest(m));
+  const hasExplicit = userTexts.some((m) => learnerPlanChangeIntent(m));
   if (!hasExplicit) return false;
 
   const contextTexts = [...userTexts, assistantRaw];
@@ -282,7 +326,7 @@ export function shouldApplyPlanChange(
 
   if (
     userTexts.some(
-      (m) => learnerExplicitChangeRequest(m) && looksLikePlanApplyIntent(m),
+      (m) => learnerPlanChangeIntent(m) && looksLikePlanApplyIntent(m),
     )
   ) {
     return true;
