@@ -15,11 +15,10 @@ Write-Host "Verifying deploy for $resolvedSha (timeout ${TimeoutMinutes}m)..."
 
 function Wait-Workflows {
   while ((Get-Date) -lt $deadline) {
-    $runs = gh run list --branch main --limit 15 --json databaseId,name,headSha,status,conclusion |
-      ConvertFrom-Json |
-      Where-Object { $_.headSha -eq $resolvedSha -and $requiredWorkflows -contains $_.name }
+    $raw = gh run list --branch main --limit 20 --json databaseId,name,headSha,status,conclusion | ConvertFrom-Json
+    $runs = @($raw | Where-Object { $_.headSha -eq $resolvedSha -and ($requiredWorkflows -contains $_.name) })
 
-    $pending = $runs | Where-Object { $_.status -ne "completed" }
+    $pending = @($runs | Where-Object { $_.status -ne "completed" })
     if ($pending.Count -eq 0 -and $runs.Count -ge $requiredWorkflows.Count) {
       return $runs
     }

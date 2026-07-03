@@ -115,5 +115,6 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/agent-skill-notes/SKILL.md` | Reading or writing per-(learner, agent) private notes (`learner_agent_notes`); also see the dreaming endpoint. |
 | `skills/dreaming-and-consolidation/SKILL.md` | Any consolidation work — the lightweight web endpoint or the heavy Memory Steward nightly. |
 | `skills/memory-steward-consolidate/SKILL.md` | The heavy LLM-driven `POST /api/agent-memory/consolidate` endpoint, the weekly `POST /api/cron/consolidate-memory` sweep, and the `Rebuild from notes` button on `/settings/persona`. |
+| `skills/deploy/SKILL.md` | **Mandatory after every push to `main`**: run `scripts/verify-deploy.ps1`, poll `Deploy Web (Vercel)` + `Lint & Test`, confirm Vercel deployment `success`, smoke live URL. See `.cursor/rules/65-deploy-vercel.mdc`. |
 | `skills/coordinator-dispatch/SKILL.md` | Whenever you are operating as the Coordinator. |
 | `skills/assign-to-coordinator/SKILL.md` | Whenever you are operating as the Manager and need to hand off a new round of work. |
