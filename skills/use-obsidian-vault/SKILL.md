@@ -16,14 +16,19 @@ description: How to use the obsidian-vault/ dev knowledge base for curriculum ex
 ## Vault location
 
 ```
-obsidian-vault/          # Open this folder as an Obsidian vault
-├── CLAUDE.md            # Read every session
+obsidian-vault/          # Open this folder as an Obsidian vault — PRIMARY project KB
+├── CLAUDE.md            # Read every session — vault is main reliance
+├── Home.md              # Dashboard landing
 ├── _active-context.md   # Working memory — update start/end of session
+├── curriculum/
+│   ├── learning-path-architecture.md  # GraphRAG + golden path (read before planner work)
+│   ├── cross-subject-edges.md
+│   └── kg-workflow.md
+├── product/plan-and-memory.md
 ├── concepts/            # 156 concept hub notes (generated)
-├── curriculum/          # Expansion queue, kg-workflow, drafts, Goren/Geva checklist
-├── coordination/        # Stream brief summaries
-├── templates/           # concept-note, lesson-draft
-└── SETUP.md             # Full research + activation checklist
+├── coordination/streams/
+├── templates/
+└── SETUP.md
 ```
 
 ## MCP access (Cursor)

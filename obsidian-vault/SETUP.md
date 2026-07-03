@@ -6,6 +6,8 @@ Prepared: 2026-07-02. This document records evaluated tools and how to activate 
 
 ## 1. Architecture decision
 
+**This vault is the project's primary operational knowledge base** — agents read it before changing KG topology, learning paths, plan/memory UX, or expansion batches.
+
 **Primary MCP: MCPVault (`@bitbonsai/mcpvault`)** — filesystem-based, no Obsidian app required.
 
 | Criterion | MCPVault | obsidian-native-mcp | cyanheads/obsidian-mcp-server |
@@ -112,21 +114,26 @@ SORT expansion_status ASC
 
 ```
 obsidian-vault/
-├── CLAUDE.md                 # Agent constitution
+├── CLAUDE.md                 # Agent constitution — vault is primary reliance
+├── Home.md                   # Vault landing dashboard (Dataview)
 ├── _active-context.md        # Working memory / sprint focus
-├── SETUP.md                  # This file
+├── SETUP.md                  # Research + activation checklist
 ├── concepts/                 # 156 concept hub notes (generated from kg-data.json)
 ├── curriculum/
+│   ├── learning-path-architecture.md  # GraphRAG + golden path (READ FIRST for suggestions)
+│   ├── cross-subject-edges.md         # kg-cross-edges.json authoring
 │   ├── kg-workflow.md        # YAML → kg-data.json → vault pipeline
 │   ├── expansion-queue.md    # Generated queue dashboard
-│   ├── expansion-dashboard.md # Dataview queries (requires Dataview plugin)
+│   ├── expansion-dashboard.md
 │   ├── goren-geva-checklist.md
-│   └── drafts/               # Lesson staging markdown
-├── coordination/streams/       # Brief summaries + wikilinks
-├── research/README.md        # Index to repo research/
+│   └── drafts/
+├── product/
+│   └── plan-and-memory.md    # Shipped plan template + memory tab rules
+├── coordination/streams/     # 01-frontend, 07-curriculum, …
+├── research/README.md
 ├── runbooks/scripts-index.md
-├── templates/                # Templater-ready stubs
-└── qa/README.md              # Index to .cursor/qa-loop/
+├── templates/
+└── qa/README.md
 ```
 
 ---

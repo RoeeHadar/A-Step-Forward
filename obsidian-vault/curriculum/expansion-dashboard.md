@@ -11,7 +11,7 @@ tags:
 
 ## KG health (2026-07-03)
 
-All **156** concept notes should show `data_completeness: full`. Workflow: [[kg-workflow|KG → vault]].
+All **156** concepts: `data_completeness: full`, all ≥5 skill atoms. Workflow: [[kg-workflow|KG → vault]].
 
 ```dataview
 TABLE length(rows) AS Count
@@ -78,7 +78,10 @@ LIMIT 15
 
 ## Quick links
 
+- [[learning-path-architecture|Learning path & GraphRAG]]
+- [[cross-subject-edges|Cross-subject edges]]
 - [[kg-workflow|KG → vault workflow]]
 - [[expansion-queue|Expansion queue (generated)]]
 - [[goren-geva-checklist|Goren/Geva checklist]]
+- [[../product/plan-and-memory|Plan & memory]]
 - [[../coordination/streams/07-curriculum|Curriculum brief]]

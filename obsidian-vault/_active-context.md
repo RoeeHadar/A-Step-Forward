@@ -2,6 +2,7 @@
 type: active-context
 updated: 2026-07-03
 coordinator_status: .cursor/coordinator/STATUS.md
+production_web: e645aa1
 ---
 
 # Active Context
@@ -10,40 +11,59 @@ coordinator_status: .cursor/coordinator/STATUS.md
 
 ## Current focus
 
-- **Stream**: Curriculum / Content (`07-curriculum`)
-- **Goal**: Obsidian vault aligned with enriched KG (156 concepts, 0 sparse)
-- **Policy**: KG metadata in YAML → `build-kg-json.mjs`; lessons in JSON; vault mirrors both
+- **Stream**: Product alignment — learning paths, plan/memory UX, vault as primary KB
+- **Status**: Frontend plan/memory fixes **shipped** (`e645aa1`); golden-path unification **not started**
+- **Policy**: Obsidian vault documents architecture; repo code implements it
 
-## Completed (2026-07-03)
+## Shipped (2026-07-03)
 
-- [x] KG sparse enrichment — **156/156** concepts with `skill_atoms` + `level_scope` (YAML source)
-- [x] **16** new university concepts (`uni_multivariable` … `uni_quantum_intro`) + aliases to existing lessons
-- [x] Vault sync — **156** concept notes, all `data_completeness: full`
+### Frontend (`e645aa1`)
+
+- [x] Memory tab — read-only snapshot (profile, persona, plan focus, scoped mastery, agent notes)
+- [x] Template-only plan apply — sidebar **עדכון תוכנית לימוד** alone
+- [x] `concept-scope.ts` — plan-scoped weak/strong; lesson-index subject resolution
+- [x] Tutor redirect on casual plan-change requests (baseline + turn injection)
+- [x] Weekly quiz locale + plan-week concepts
+
+### Curriculum / KG (earlier 2026-07-03)
+
+- [x] KG enrichment — **156/156** concepts, all ≥5 skill atoms, all `level_scope` filled
+- [x] Vault — **156** notes, all `data_completeness: full`
+- [x] Lessons — **207/207** marked done in expansion queue
 - [x] MCP **`asf-obsidian`** connected
-- [x] Expansion queue — 207/207 lessons marked done
 
-## KG pipeline (source of truth)
+## Vault updates (this session)
+
+- [x] [[curriculum/learning-path-architecture|Learning path & GraphRAG architecture]]
+- [x] [[curriculum/cross-subject-edges|Cross-subject edge runbook]]
+- [x] [[product/plan-and-memory|Plan & memory product surface]]
+- [x] [[coordination/streams/01-frontend|01-frontend stream]]
+- [x] [[Home|Home]] + [[CLAUDE|CLAUDE]] — vault as primary reliance
+
+## Next (priority order)
+
+1. **Unify planners** — `generateLearningPlan()` should call `buildLearningPlan()` with goal + horizon
+2. **Time-to-goal depth** — exam ≤7 days skips distant basics unless mastery < 0.4
+3. **Golden path per `goal_key`** — curated default sequences in vault + code
+4. Commit vault docs with next repo push
+
+## KG pipeline
 
 ```
 content/knowledge-graph/*.yaml
-        ↓  node scripts/build-kg-json.mjs
+        ↓  pnpm vault:build-kg
 apps/web/src/lib/kg-data.json
-        ↓  node scripts/sync-obsidian-concepts.mjs
+        +
+apps/web/src/lib/kg-cross-edges.json  →  learning-plan.ts (backward walk)
+        ↓  pnpm vault:sync-concepts
 obsidian-vault/concepts/*.md
 ```
 
-After YAML edits: run `pnpm vault:build-kg` then `pnpm vault:sync-concepts`.
-
-## Minor follow-ups (non-blocking)
-
-- 8 concepts have **3–4** skill atoms (target was 5–12): `integrals_applications`, `kinematics_2d`, `static_equilibrium`, `doppler`, `optics_physical`, `electric_potential`, `kirchhoff_laws`, `special_relativity`
-- `la_matrices` atoms reflect matrix-arithmetic lesson scope, not full linear-systems syllabus
-- Lesson JSON `skill_atoms[]` on questions still empty in many files — Postgres mastery wiring is separate
-
 ## Links
 
+- [[Home|Vault home]]
+- [[curriculum/learning-path-architecture|Learning paths]]
+- [[product/plan-and-memory|Plan & memory]]
 - [[curriculum/kg-workflow|KG → vault workflow]]
 - [[curriculum/expansion-dashboard|Expansion dashboard]]
-- [[curriculum/expansion-queue|Expansion queue]]
-- [[MCP-ENABLE|MCP enable guide]]
-- [[coordination/streams/07-curriculum|Curriculum brief]]
+- [[coordination/streams/01-frontend|Frontend stream]]

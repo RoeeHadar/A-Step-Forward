@@ -20,6 +20,18 @@ Canonical vs deprecated scripts for curriculum and vault maintenance. Update whe
 | `pnpm mcp:install-obsidian` | Install/repair global Obsidian MCP config |
 | `scripts/update_index.py` | Regenerate lesson index bundles |
 
+## Product / planner (web)
+
+| File | Purpose |
+|------|---------|
+| `apps/web/src/lib/learning-plan.ts` | Mastery-aware backward path (`buildLearningPlan`) |
+| `apps/web/src/lib/neon-db.ts` | Weekly plan persistence (`generateLearningPlan`) |
+| `apps/web/src/lib/concept-scope.ts` | Plan/subject-scoped mastery for Memory + chat |
+| `apps/web/src/lib/kg-cross-edges.json` | Cross-subject edge source of truth |
+| `apps/web/src/lib/plan-change-template.ts` | Template-only plan updates |
+
+Vault docs: [[../curriculum/learning-path-architecture|learning-path-architecture]], [[../product/plan-and-memory|plan-and-memory]].
+
 ## Deprecated — do not use
 
 | Script | Replacement |

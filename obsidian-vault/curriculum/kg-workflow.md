@@ -11,7 +11,9 @@ tags:
 | Layer | Location | Edit when |
 |-------|----------|-----------|
 | **KG metadata** | `content/knowledge-graph/*.yaml` | Adding skill atoms, level scope, prerequisites, new concepts |
+| **Cross-subject edges** | `apps/web/src/lib/kg-cross-edges.json` | Math↔physics enablers — see [[cross-subject-edges|cross-subject runbook]] |
 | **Compiled KG** | `apps/web/src/lib/kg-data.json` | **Generated** — do not hand-edit (overwritten on build) |
+| **Path planner** | `apps/web/src/lib/learning-plan.ts` | Mastery-aware backward walk — see [[learning-path-architecture|architecture]] |
 | **Lesson corpus** | `scripts/seed_data/lessons/*.json` | Authoring bilingual lesson content |
 | **Concept ↔ lesson map** | `apps/web/src/lib/concept-aliases.ts` | Syllabus id differs from lesson filename |
 | **Vault notes** | `obsidian-vault/concepts/*.md` | **Generated** — user content only under `## Expansion notes` |
@@ -61,6 +63,8 @@ pnpm vault:sync-expansion
 
 ## Related
 
+- [[learning-path-architecture|Learning path architecture]]
+- [[cross-subject-edges|Cross-subject edges]]
 - Skill: `skills/use-obsidian-vault/SKILL.md`
 - Skill: `skills/cross-subject-kg/SKILL.md`
 - [[expansion-dashboard|Expansion dashboard]]
