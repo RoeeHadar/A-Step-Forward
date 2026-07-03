@@ -424,14 +424,6 @@ function inferSubject(conceptId: string, subjects: string[]): string {
   return subjects.includes('math') ? 'math' : subjects[0]!;
 }
 
-function subjectForPlan(subjects: string[]): string {
-  const set = subjectSetForPlan(subjects);
-  if (set.has('physics')) return 'physics';
-  if (set.has('math')) return 'math';
-  if (subjects.length === 0) return 'math';
-  return subjects.includes('math') ? 'math' : subjects[0]!;
-}
-
 function depthOf(concept: string, universe: Set<string>, memo: Map<string, number>): number {
   if (memo.has(concept)) return memo.get(concept)!;
   const prereqs = (kgPrereqMap[concept] ?? []).filter((p) => universe.has(p));
