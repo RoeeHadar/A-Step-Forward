@@ -63,6 +63,33 @@ export const DISCRETE_EXAM_CONCEPTS = [
   'functions_intro',
 ] as const;
 
+export const PHYSICS_MECHANICS_EXAM_CONCEPTS = [
+  'kinematics_1d',
+  'kinematics_2d',
+  'newton_laws',
+  'work_energy',
+  'momentum',
+  'circular_motion',
+] as const;
+
+export const PHYSICS_ELECTRICITY_EXAM_CONCEPTS = [
+  'coulomb_law',
+  'electrostatics',
+  'electric_field',
+  'electric_potential',
+  'electric_circuits',
+  'kirchhoff_laws',
+] as const;
+
+export const PHYSICS_RADIATION_MATTER_EXAM_CONCEPTS = [
+  'waves_basics',
+  'sound_waves',
+  'optics_geometric',
+  'optics_physical',
+  'modern_physics_intro',
+  'nuclear_physics',
+] as const;
+
 const TOPIC_KEYWORD_RULES: Array<{ pattern: RegExp; concepts: string[] }> = [
   {
     pattern: /חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i,
@@ -77,6 +104,26 @@ const TOPIC_KEYWORD_RULES: Array<{ pattern: RegExp; concepts: string[] }> = [
   { pattern: /תורת (ה)?גרפ|graph theory|\bgraphs\b/i, concepts: ['combinatorics'] },
   { pattern: /הסתברות|probability/i, concepts: ['probability_basic'] },
   { pattern: /אינדוקצ|induction/i, concepts: ['combinatorics'] },
+  {
+    pattern: /036-361|מכניק|קינמט|דינמיק|ניוטון|mechanics?|kinematics?|dynamics?|newton/i,
+    concepts: [...PHYSICS_MECHANICS_EXAM_CONCEPTS],
+  },
+  {
+    pattern: /036-371|חשמל|מגנט|מעגל|electric(?:ity|al)?|magnet|circuits?/i,
+    concepts: [...PHYSICS_ELECTRICITY_EXAM_CONCEPTS],
+  },
+  {
+    pattern: /036-282|קרינה|חומר|גלים|גלי|אופטיק|אור|מודרנ|גרעינ|radiation|matter|waves?|optics?|modern physics|nuclear/i,
+    concepts: [...PHYSICS_RADIATION_MATTER_EXAM_CONCEPTS],
+  },
+  {
+    pattern: /physics\s*1|פיזיקה\s*1/i,
+    concepts: [...PHYSICS_MECHANICS_EXAM_CONCEPTS],
+  },
+  {
+    pattern: /physics\s*2|פיזיקה\s*2/i,
+    concepts: [...PHYSICS_ELECTRICITY_EXAM_CONCEPTS],
+  },
   { pattern: /גבולות|limits/i, concepts: ['limits'] },
   { pattern: /סדרות|sequences/i, concepts: ['sequences'] },
   { pattern: /שדות וקטור|vector field/i, concepts: ['uni_vector_fields'] },
@@ -230,6 +277,10 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
     out.goal_key = 'university_prep';
   }
 
+  if (/פיזיק|physics/i.test(blob) || /פיזיק|physics/i.test(out.goal ?? '')) {
+    out.goal_key = out.goal_key ?? 'bagrut_physics';
+  }
+
   if (/חדו[\"']?א\s*1|חדוא\s*1|calculus\s*1\b|\bcalc1\b/i.test(blob)) {
     out.goal_key = 'calculus1';
   }
@@ -354,7 +405,8 @@ export function shouldApplyPlanImmediately(userMessage: string): boolean {
 }
 
 /** Plan writes happen only on the turn the learner sends the official template. */
-export function shouldApplyPlanChange(userMessage: string): boolean {
+export function shouldApplyPlanChange(userMessage: string, ...context: unknown[]): boolean {
+  void context;
   return isPlanChangeTemplate(userMessage);
 }
 
@@ -447,8 +499,9 @@ The site applies plan changes when the learner sends the official plan-update te
 
 When you receive the template:
 1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery. Do NOT require them to list every topic.
-2. **Exam cram (≤2 weeks)**: focus ONLY on concepts directly on the exam (e.g. calc1 → limits, derivatives, integrals). Do NOT add arithmetic, combinatorics, or unrelated foundations.
-3. **Summarize briefly** and confirm the plan was updated. The server applies immediately when the template is sent — no multi-turn Q&A and no machine tags.
+2. If the request is broad or ambiguous (for example: "physics test" with no mechanics/electricity/radiation scope, questionnaire code, or topic list), do **not** claim the plan changed. Ask 1-2 clarifying questions and tell the learner to resend the template with the exam scope.
+3. **Exam cram (≤2 weeks)**: focus ONLY on concepts directly on the exam (e.g. calc1 → limits, derivatives, integrals; physics mechanics → kinematics, Newton laws, energy, momentum). Do NOT add unrelated foundations.
+4. **Summarize briefly** and confirm the plan was updated only when the server applies it. The server applies the template when it is specific enough — no multi-turn Q&A and no machine tags.
 
 If the learner asks to change their plan in casual chat, politely point them to the **Learning plan update** template in the sidebar. Casual phrasing never updates Neon.
 

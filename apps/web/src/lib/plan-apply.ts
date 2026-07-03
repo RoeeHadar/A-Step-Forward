@@ -96,6 +96,40 @@ export function buildPlanApplyFailureNotice(
     .join('\n');
 }
 
+const PHYSICS_GOAL_RE = /פיזיק|physics/i;
+
+function hasFocusConcepts(payload: PlanUpdatePayload): boolean {
+  return (
+    (payload.prepend_concepts?.length ?? 0) > 0 ||
+    (payload.priority_concepts?.length ?? 0) > 0
+  );
+}
+
+export function planPayloadNeedsClarification(payload: PlanUpdatePayload): boolean {
+  const text = [payload.goal, payload.next_test_name, payload.reason]
+    .filter(Boolean)
+    .join('\n');
+  return PHYSICS_GOAL_RE.test(text) && !hasFocusConcepts(payload);
+}
+
+export function buildPlanClarificationNotice(locale: 'he' | 'en'): string {
+  if (locale === 'he') {
+    return [
+      '---',
+      '⚠️ **לא עדכנתי את התוכנית עדיין**',
+      'המטרה "מבחן בפיזיקה" רחבה מדי, ולכן אי אפשר לבנות תוכנית טובה בלי לדעת את היקף הבחינה.',
+      'שלח/י שוב את תבנית **עדכון תוכנית הלימוד** עם אחד מאלה: מכניקה / 036-361, חשמל ומגנטיות / 036-371, קרינה וחומר / 036-282, פיזיקה 1 / פיזיקה 2, או רשימת הנושאים מהמבחן.',
+    ].join('\n');
+  }
+
+  return [
+    '---',
+    '⚠️ **I did not update the plan yet**',
+    '"Physics test" is too broad to turn into a useful weekly plan without the exam scope.',
+    'Please resend the **Learning plan update** template with one of these: Mechanics / 036-361, Electricity & Magnetism / 036-371, Radiation & Matter / 036-282, Physics 1 / Physics 2, or the topic list from the test.',
+  ].join('\n');
+}
+
 export function buildPlanAppliedNotice(
   result: PlanApplyResult,
   locale: 'he' | 'en',
@@ -171,6 +205,9 @@ export async function executePlanUpdate(
   if (!sanitized) {
     return { applied: false, error: 'invalid_payload' };
   }
+  if (planPayloadNeedsClarification(sanitized)) {
+    return { applied: false, error: 'needs_physics_scope' };
+  }
 
   try {
     await applyPlanProfileUpdates(learnerId, {
@@ -232,6 +269,7 @@ function mergeProposal(
   const blob = parsed.join('\n');
   const isDiscrete =
     /מתמטיקה בדיד|discrete math/i.test(blob) || /בדיד/i.test(goalMeta.goal ?? '');
+  const isPhysics = /פיזיק|physics/i.test(blob) || /פיזיק|physics/i.test(goalMeta.goal ?? '');
   const isCalc1 =
     !isDiscrete &&
     (goalMeta.goal_key === 'calculus1' ||
@@ -243,9 +281,11 @@ function mergeProposal(
       ? 'הכנה למבחן בחדו״א 1'
       : isDiscrete
         ? 'הכנה למבחן במתמטיקה בדידה'
-        : texts.some((t) => /מטרה|goal/i.test(t))
-          ? 'עדכון מטרת לימודים'
-          : 'עדכון תוכנית לימודים לפי בקשת הלומד');
+        : isPhysics
+          ? 'הכנה למבחן בפיזיקה'
+          : texts.some((t) => /מטרה|goal/i.test(t))
+            ? 'עדכון מטרת לימודים'
+            : 'עדכון תוכנית לימודים לפי בקשת הלומד');
 
   const prependFromText = inferConceptIdsFromText(...parsed);
   const prepend =
@@ -348,6 +388,13 @@ export async function applyPlanFromUserMessage(
       applied: false,
       error: 'missing_payload',
       failureNotice: buildPlanApplyFailureNotice(locale, 'missing_payload'),
+    };
+  }
+  if (planPayloadNeedsClarification(payload)) {
+    return {
+      applied: false,
+      error: 'needs_physics_scope',
+      failureNotice: buildPlanClarificationNotice(locale),
     };
   }
 

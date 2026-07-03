@@ -13,8 +13,10 @@ import {
 import { buildPlanChangeRequest } from './plan-change-template';
 import {
   buildPlanAppliedNotice,
+  buildPlanClarificationNotice,
   buildPlanApplyingNotice,
   buildPlanApplyFailureNotice,
+  planPayloadNeedsClarification,
 } from './plan-apply';
 
 const USER = buildPlanChangeRequest(
@@ -81,5 +83,21 @@ describe('chat stream finalize (calc1 plan change template)', () => {
     const failure = buildPlanApplyFailureNotice('he', 'missing_payload');
     expect(failure).toContain('לא הצלחתי לעדכן את התוכנית');
     expect(failure).toContain('תבנית');
+  });
+
+  it('requires clarification before applying a broad physics exam template', () => {
+    const broadPhysics = buildPlanChangeRequest(
+      { goal: 'מבחן בפיזיקה', date: 'עוד שבוע' },
+      'he',
+    );
+    const payload = proposalToUpdatePayload({
+      reason: 'הכנה למבחן בפיזיקה',
+      ...inferGoalMetaFromText(broadPhysics),
+      prepend_concepts: inferConceptIdsFromText(broadPhysics),
+    });
+
+    expect(payload.prepend_concepts).toEqual([]);
+    expect(planPayloadNeedsClarification(payload)).toBe(true);
+    expect(buildPlanClarificationNotice('he')).toContain('מכניקה');
   });
 });

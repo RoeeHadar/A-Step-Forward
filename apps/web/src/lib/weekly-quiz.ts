@@ -2,10 +2,10 @@
  * Weekly quiz generator — Neon/Vercel path (no Render dependency).
  *
  * Given a learner, this module:
- *   1. Reads the learner's weakest concepts from `concept_mastery`.
- *   2. Calls Groq to generate 5–10 bilingual MCQ questions targeting those concepts.
- *   3. Caches the result in `weekly_quizzes_ai` (keyed by learner + ISO week start).
- *   4. On subsequent calls within the same week, returns the cached questions.
+ *   1. Reads the selected learning-plan week concepts.
+ *   2. Calls Groq to generate locale-specific MCQ questions targeting those concepts.
+ *   3. Caches the result in `weekly_quizzes_ai` (keyed by learner + week + plan + locale).
+ *   4. On subsequent calls for the same plan/week/locale, returns the cached questions.
  *
  * Returns a `QuizStartResponse`-compatible object that the existing WeekQuizClient
  * can render without modification.
@@ -17,6 +17,8 @@ import { getConceptMastery, getLearnerProfile } from './neon-db';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
 import type { QuizStartResponse, QuizQuestion } from '@asf/schemas/learning_path';
+import { sanitizeConceptIds } from '@/lib/plan-catalog';
+import { resolveConceptTitles } from '@/lib/concept-display-names';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -35,7 +37,6 @@ interface KgConcept {
   level_scope?: Record<string, string>;
 }
 const kgById: Record<string, KgConcept> = (kg as unknown as { byId: Record<string, KgConcept> }).byId;
-const kgConcepts: KgConcept[] = (kg as unknown as { concepts: KgConcept[] }).concepts;
 
 // ── Stored shape (with correct answer, never sent to client) ─────────────────
 
@@ -51,25 +52,35 @@ interface StoredWeeklyQuestion {
 
 // ── LLM call ─────────────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are a bilingual (Hebrew + English) math/physics exam author for Israeli high-school students preparing for Bagrut exams.
+function systemPrompt(locale: 'he' | 'en'): string {
+  const languageRule =
+    locale === 'he'
+      ? 'All learner-facing text in "stem" and option "text" MUST be natural Hebrew. Keep math expressions in $...$ LaTeX and left-to-right inside the math only.'
+      : 'All learner-facing text in "stem" and option "text" MUST be natural English. Keep math expressions in $...$ LaTeX.';
+
+  return `You are a bilingual (Hebrew + English) math/physics exam author for Israeli students.
 
 Generate multiple-choice (MCQ) questions. Output ONLY valid JSON — no commentary, no markdown fences.
 
 Shape:
-{ "questions": [ { "topic": "<concept_id>", "subject": "<subject>", "difficulty": <0.0–1.0>, "stem": "<English question>", "options": [{"key":"A","text":"..."},{"key":"B","text":"..."},{"key":"C","text":"..."},{"key":"D","text":"..."}], "correct": "<A|B|C|D>" } ] }
+{ "questions": [ { "topic": "<concept_id>", "subject": "<subject>", "difficulty": <0.0–1.0>, "stem": "<question>", "options": [{"key":"A","text":"..."},{"key":"B","text":"..."},{"key":"C","text":"..."},{"key":"D","text":"..."}], "correct": "<A|B|C|D>" } ] }
 
 Rules:
+- ${languageRule}
 - Each question must have EXACTLY 4 options keyed A, B, C, D.
 - "topic" must be one of the supplied concept IDs.
 - "difficulty" is a float from 0.0 (easy) to 1.0 (hard). Use 0.3 for easy, 0.6 for medium, 0.9 for hard.
 - "stem" ≤ 500 chars. Math in $...$ LaTeX.
+- Questions must match the supplied weekly plan concepts. Do not introduce prerequisite warmups or unrelated basics unless that exact concept is supplied.
 - NEVER include names, emails, phones, or addresses.
 - Spread questions across concepts; cover different skills per concept.`;
+}
 
 function buildUserPrompt(
-  concepts: Array<{ id: string; name: string; subject: string; mastery: number | null; atoms: string[] }>,
+  concepts: Array<{ id: string; name: string; name_he: string | null; subject: string; mastery: number | null; atoms: string[] }>,
   count: number,
   goal: string | null,
+  locale: 'he' | 'en',
 ): string {
   const GOAL_LABELS: Record<string, string> = {
     bagrut_math_3: '3-unit math (practical, no calculus)',
@@ -88,10 +99,11 @@ function buildUserPrompt(
       : c.mastery >= 0.4 ? 'medium (needs consolidation)'
       : 'weak (needs remediation)';
     const atomsStr = c.atoms.length > 0 ? c.atoms.slice(0, 10).join(', ') : '(generate from concept)';
-    return `concept_id: ${c.id}\nname: ${c.name}\nsubject: ${c.subject}\nmastery: ${masteryLabel}\nskill_atoms: ${atomsStr}`;
+    return `concept_id: ${c.id}\nname_en: ${c.name}\nname_he: ${c.name_he ?? '(none)'}\nsubject: ${c.subject}\nmastery: ${masteryLabel}\nskill_atoms: ${atomsStr}`;
   }).join('\n\n');
 
   return `Level: ${levelNote}
+Question language: ${locale === 'he' ? 'Hebrew' : 'English'}
 
 Generate exactly ${count} MCQ questions covering the following concepts (distribute evenly):
 
@@ -101,14 +113,15 @@ Return JSON only.`;
 }
 
 async function callLLMForWeeklyQuiz(
-  concepts: Array<{ id: string; name: string; subject: string; mastery: number | null; atoms: string[] }>,
+  concepts: Array<{ id: string; name: string; name_he: string | null; subject: string; mastery: number | null; atoms: string[] }>,
   count: number,
   goal: string | null,
+  locale: 'he' | 'en',
 ): Promise<StoredWeeklyQuestion[] | null> {
-  const userPrompt = buildUserPrompt(concepts, count, goal);
+  const userPrompt = buildUserPrompt(concepts, count, goal, locale);
 
   const parsed = await llmCompleteJson<{ questions?: unknown }>({
-    system: SYSTEM_PROMPT,
+    system: systemPrompt(locale),
     messages: [{ role: 'user', content: userPrompt }],
     maxTokens: 3000,
     temperature: 0.4,
@@ -149,6 +162,30 @@ async function callLLMForWeeklyQuiz(
   return validated.length > 0 ? validated : null;
 }
 
+async function fetchPlanWeekConceptIds(
+  learnerId: string,
+  planId: string,
+  weekNum: number,
+): Promise<string[]> {
+  if (!sql) return [];
+  try {
+    const rows = (await sql`
+      SELECT pw.concepts
+      FROM plan_weeks pw
+      JOIN learning_plans lp ON lp.id = pw.plan_id
+      WHERE lp.id = ${planId}::uuid
+        AND lp.learner_id = ${learnerId}
+        AND pw.week_number = ${weekNum}
+      LIMIT 1
+    `) as Array<{ concepts: unknown }>;
+    const concepts = rows[0]?.concepts;
+    if (!Array.isArray(concepts)) return [];
+    return sanitizeConceptIds(concepts.filter((c): c is string => typeof c === 'string'));
+  } catch {
+    return [];
+  }
+}
+
 // ── Main export ──────────────────────────────────────────────────────────────
 
 /**
@@ -161,6 +198,7 @@ export async function generateWeeklyQuizForUser(
   userId: string,
   planId: string,
   weekNum: number,
+  locale: 'he' | 'en' = 'he',
 ): Promise<QuizStartResponse | null> {
   if (!sql) return null;
 
@@ -181,21 +219,32 @@ export async function generateWeeklyQuizForUser(
         week_start  DATE NOT NULL,
         plan_id     TEXT,
         week_num    INT,
+        locale      TEXT NOT NULL DEFAULT 'he',
         questions   JSONB NOT NULL,
         created_at  TIMESTAMPTZ DEFAULT NOW(),
         UNIQUE (user_id, week_start)
       )
     `;
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS locale TEXT NOT NULL DEFAULT 'he'`;
+    await sql`ALTER TABLE weekly_quizzes_ai DROP CONSTRAINT IF EXISTS weekly_quizzes_ai_user_id_week_start_key`;
+    await sql`
+      CREATE UNIQUE INDEX IF NOT EXISTS weekly_quizzes_ai_user_week_plan_locale_idx
+      ON weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale)
+    `;
   } catch {
     // If DDL fails (e.g. concurrent creation), fall through — the select will work.
   }
 
-  // Return cached quiz for this week
+  // Return cached quiz for this selected plan week and locale.
   try {
     const cached = (await sql`
       SELECT id::text, questions
       FROM weekly_quizzes_ai
-      WHERE user_id = ${userId} AND week_start = ${weekStartStr}::date
+      WHERE user_id = ${userId}
+        AND week_start = ${weekStartStr}::date
+        AND plan_id = ${planId}
+        AND week_num = ${weekNum}
+        AND locale = ${locale}
       LIMIT 1
     `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
 
@@ -209,45 +258,41 @@ export async function generateWeeklyQuizForUser(
 
   // ── Generate new questions ─────────────────────────────────────────────────
 
-  const [mastery, profile] = await Promise.all([
+  const [mastery, profile, weekConceptIds] = await Promise.all([
     getConceptMastery(userId).catch(() => ({} as Record<string, number>)),
     getLearnerProfile(userId).catch(() => null),
+    fetchPlanWeekConceptIds(userId, planId, weekNum),
   ]);
 
-  // Pick the learner's weakest KG-known concepts (up to 6)
-  const weakEntries = Object.entries(mastery)
-    .filter(([id]) => Boolean(kgById[id]))
-    .sort((a, b) => a[1] - b[1])
-    .slice(0, 6);
+  // Weekly quizzes must assess the selected learning-plan week, not generic weak topics.
+  const selectedConcepts = weekConceptIds
+    .filter((id) => Boolean(kgById[id]))
+    .slice(0, 8)
+    .map((id) => [id, mastery[id] ?? null] as const);
+  if (selectedConcepts.length === 0) return null;
 
-  // Fall back to subject roots for brand-new learners
-  if (weakEntries.length === 0) {
-    const subjects = (profile?.subjects?.length ?? 0) > 0 ? profile!.subjects : ['math'];
-    const subjectSet = new Set(subjects.map((s) => s.toLowerCase()));
-    const roots = kgConcepts
-      .filter((c) => subjectSet.has(c.subject) && c.prerequisites.length === 0)
-      .slice(0, 6);
-    for (const r of roots) weakEntries.push([r.id, 0.5]);
-  }
-
-  if (weakEntries.length === 0) return null;
-
-  const conceptsCtx = weakEntries.map(([id, score]) => {
+  const conceptsCtx = selectedConcepts.map(([id, score]) => {
     const info = kgById[id]!;
+    const titles = resolveConceptTitles(id, {
+      title_en: info.name,
+      title_he: info.name_he,
+    });
     return {
       id,
-      name: info.name,
+      name: titles.title_en,
+      name_he: titles.title_he,
       subject: info.subject,
       mastery: score,
       atoms: info.skill_atoms ?? [],
     };
   });
 
-  const questionCount = Math.min(10, Math.max(5, weakEntries.length + 2));
+  const questionCount = Math.min(10, Math.max(5, selectedConcepts.length + 2));
   const generated = await callLLMForWeeklyQuiz(
     conceptsCtx,
     questionCount,
     profile?.goal ?? null,
+    locale,
   );
   if (!generated || generated.length === 0) return null;
 
@@ -255,18 +300,20 @@ export async function generateWeeklyQuizForUser(
   let quizId = randomUUID();
   try {
     const inserted = (await sql`
-      INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, questions)
+      INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, questions)
       VALUES (
         ${userId},
         ${weekStartStr}::date,
         ${planId},
         ${weekNum},
+        ${locale},
         ${JSON.stringify(generated)}::jsonb
       )
-      ON CONFLICT (user_id, week_start) DO UPDATE
+      ON CONFLICT (user_id, week_start, plan_id, week_num, locale) DO UPDATE
         SET questions   = EXCLUDED.questions,
             plan_id     = EXCLUDED.plan_id,
-            week_num    = EXCLUDED.week_num
+            week_num    = EXCLUDED.week_num,
+            locale      = EXCLUDED.locale
       RETURNING id::text
     `) as Array<{ id: string }>;
     if (inserted[0]?.id) quizId = inserted[0].id as ReturnType<typeof randomUUID>;

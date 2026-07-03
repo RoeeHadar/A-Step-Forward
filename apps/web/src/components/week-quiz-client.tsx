@@ -8,6 +8,8 @@ import { cn } from '@asf/ui';
 import { CheckCircle2, XCircle, Clock, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 import type { QuizQuestion, QuizStartResponse, QuizSubmitResponse } from '@asf/schemas/learning_path';
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
+import { MarkdownMath } from '@/components/markdown-math';
+import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 
 interface Props {
   quiz: QuizStartResponse;
@@ -81,20 +83,27 @@ function QuizQuestionCard({
   lang: Lang;
 }) {
   const t = STR[lang];
+  const titles = resolveConceptTitles(question.topic);
+  const topicLabel = pickConceptTitle(titles, lang);
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <span className="text-sm text-muted-foreground">
           {t.question_x_of_y(index + 1, total)}
         </span>
-        <Badge variant="outline" className="text-xs" dir="auto">
-          {question.topic.replace(/_/g, ' ')}
+        <Badge variant="outline" className="text-xs" dir={lang === 'he' ? 'rtl' : 'ltr'}>
+          {topicLabel}
         </Badge>
       </div>
 
-      <p className="text-lg font-medium leading-relaxed" dir="auto">
-        {question.stem}
-      </p>
+      <div className="rounded-xl bg-surface-1/40 p-4 text-lg font-medium leading-relaxed">
+        <MarkdownMath
+          className="prose-p:my-0 prose-p:leading-relaxed"
+          dir={lang === 'he' ? 'rtl' : 'ltr'}
+        >
+          {question.stem}
+        </MarkdownMath>
+      </div>
 
       <div className="space-y-2">
         {question.options.map((opt) => (
@@ -102,18 +111,27 @@ function QuizQuestionCard({
             key={opt.key}
             onClick={() => onChoose(opt.key)}
             className={cn(
-              'w-full rounded-xl border px-4 py-3 text-left transition-all',
+              'flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-start transition-all',
               chosen === opt.key
                 ? 'border-primary bg-primary/10 font-medium text-primary'
                 : 'border-border bg-surface-1/40 hover:border-primary/40 hover:bg-surface-2/60',
             )}
           >
-            {/* Option key (A/B/C/D) is always LTR; option text picks its own
-                direction. `me-3` keeps spacing correct in both RTL and LTR. */}
-            <span className="me-3 font-semibold" dir="ltr">
-              {opt.key}.
+            <span
+              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted font-mono text-xs font-semibold"
+              dir="ltr"
+              aria-hidden
+            >
+              {opt.key}
             </span>
-            <span dir="auto">{opt.text}</span>
+            <span className="min-w-0 flex-1">
+              <MarkdownMath
+                className="prose-p:my-0 prose-p:leading-relaxed"
+                dir={lang === 'he' ? 'rtl' : 'ltr'}
+              >
+                {opt.text}
+              </MarkdownMath>
+            </span>
           </button>
         ))}
       </div>

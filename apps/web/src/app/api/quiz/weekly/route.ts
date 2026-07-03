@@ -6,7 +6,9 @@
  * Target latency: <3 s (Groq p50 ≈ 1.5 s for quiz generation).
  */
 import { auth } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
 import { generateWeeklyQuizForUser } from '@/lib/weekly-quiz';
+import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,7 +29,9 @@ export async function GET(req: Request) {
     );
   }
 
-  const quiz = await generateWeeklyQuizForUser(userId, planId, weekNum);
+  const cookieStore = await cookies();
+  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+  const quiz = await generateWeeklyQuizForUser(userId, planId, weekNum, locale);
 
   if (!quiz) {
     return Response.json(

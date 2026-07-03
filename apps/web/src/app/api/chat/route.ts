@@ -25,6 +25,7 @@ import {
 } from '@/lib/plan-actions';
 import {
   applyPlanFromUserMessage,
+  buildPlanClarificationNotice,
   buildPlanApplyFailureNotice,
   buildPlanApplyingNotice,
   executePlanUpdate,
@@ -324,7 +325,10 @@ async function finalizeAssistantTurn(
       }
 
       logger.warn('chat: plan update failed', { error: result.error });
-      const failureNotice = buildPlanApplyFailureNotice(locale, result.error);
+      const failureNotice =
+        result.error === 'needs_physics_scope'
+          ? buildPlanClarificationNotice(locale)
+          : buildPlanApplyFailureNotice(locale, result.error);
       await recordChatTurn(
         userId,
         agent,

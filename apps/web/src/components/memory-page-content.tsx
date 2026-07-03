@@ -1,11 +1,11 @@
 'use client';
 
 import { PageHeader } from '@/components/page-header';
-import { MemoryInspector } from '@/components/memory-inspector';
+import { MemoryOverview } from '@/components/memory-overview';
 import { useI18n } from '@/providers/i18n-provider';
-import type { MemoryRecord } from '@asf/schemas/memory';
+import type { LearnerMemorySnapshot } from '@/lib/neon-db';
 
-export function MemoryPageContent({ memories }: { memories: MemoryRecord[] }) {
+export function MemoryPageContent({ snapshot }: { snapshot: LearnerMemorySnapshot }) {
   const { messages } = useI18n();
 
   return (
@@ -15,7 +15,7 @@ export function MemoryPageContent({ memories }: { memories: MemoryRecord[] }) {
         description={messages.memory.description}
         gradientTitle
       />
-      <MemoryInspector memories={memories} />
+      <MemoryOverview snapshot={snapshot} />
     </div>
   );
 }

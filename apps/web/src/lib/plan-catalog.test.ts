@@ -22,6 +22,7 @@ import {
   planPayloadToOptions,
   CALC1_EXAM_CONCEPTS,
   DISCRETE_EXAM_CONCEPTS,
+  PHYSICS_MECHANICS_EXAM_CONCEPTS,
 } from '@/lib/plan-actions';
 import { buildPlanChangeRequest } from '@/lib/plan-change-template';
 
@@ -89,6 +90,18 @@ describe('plan-actions', () => {
     );
     expect(ids).toContain('combinatorics');
     expect(ids).toContain('probability_basic');
+  });
+
+  it('infers physics concepts only when the exam scope is specific', () => {
+    expect(inferConceptIdsFromText('מבחן בפיזיקה עוד שבוע')).toEqual([]);
+
+    const mechanics = inferConceptIdsFromText('מבחן בפיזיקה במכניקה 036-361 עוד שבוע');
+    expect(mechanics).toEqual(expect.arrayContaining([...PHYSICS_MECHANICS_EXAM_CONCEPTS]));
+
+    const electricity = inferConceptIdsFromText('physics electricity test in a week');
+    expect(electricity).toEqual(
+      expect.arrayContaining(['electrostatics', 'electric_field', 'electric_circuits']),
+    );
   });
 
   it('detects plan proposal language', () => {

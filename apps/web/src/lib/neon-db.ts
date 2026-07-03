@@ -419,6 +419,34 @@ function inferSubject(conceptId: string, subjects: string[]): string {
   return subjects.includes('math') ? 'math' : subjects[0]!;
 }
 
+function subjectSetForPlan(subjects: string[]): Set<string> {
+  const out = new Set<string>();
+  for (const raw of subjects) {
+    const s = raw.toLowerCase();
+    if (s === 'physics' || s.includes('physics') || s === 'bagrut_physics' || s === 'hs_physics') {
+      out.add('physics');
+    }
+    if (
+      s === 'math' ||
+      s.includes('math') ||
+      s.includes('calculus') ||
+      s.includes('algebra') ||
+      s === 'makhina' ||
+      s === 'university_prep'
+    ) {
+      out.add('math');
+    }
+  }
+  return out;
+}
+
+function conceptMatchesSubjects(conceptId: string, subjects: string[]): boolean {
+  const allowed = subjectSetForPlan(subjects);
+  if (allowed.size === 0) return true;
+  const subject = kgById[conceptId]?.subject;
+  return subject ? allowed.has(subject) : true;
+}
+
 function depthOf(concept: string, universe: Set<string>, memo: Map<string, number>): number {
   if (memo.has(concept)) return memo.get(concept)!;
   const prereqs = (kgPrereqMap[concept] ?? []).filter((p) => universe.has(p));
@@ -440,13 +468,19 @@ function collectWorklist(
   const worklist = new Set<string>();
   for (const [c, score] of Object.entries(mastery)) {
     const canonical = canonicalConceptId(c);
-    if (canonical && score < WEAK_THRESHOLD) worklist.add(canonical);
+    if (canonical && conceptMatchesSubjects(canonical, subjects) && score < WEAK_THRESHOLD) {
+      worklist.add(canonical);
+    }
   }
   // expand with prerequisites of weak concepts
   for (const c of [...worklist]) {
     for (const prereq of kgPrereqMap[c] ?? []) {
       const canonical = canonicalConceptId(prereq);
-      if (canonical && (mastery[canonical] ?? mastery[prereq] ?? 0.5) < WEAK_THRESHOLD) {
+      if (
+        canonical &&
+        conceptMatchesSubjects(canonical, subjects) &&
+        (mastery[canonical] ?? mastery[prereq] ?? 0.5) < WEAK_THRESHOLD
+      ) {
         worklist.add(canonical);
       }
     }
@@ -456,11 +490,14 @@ function collectWorklist(
     if (selfScores) {
       for (const c of Object.keys(selfScores)) {
         const canonical = canonicalConceptId(c);
-        if (canonical) worklist.add(canonical);
+        if (canonical && conceptMatchesSubjects(canonical, subjects)) worklist.add(canonical);
       }
     } else if (subjects.length > 0) {
+      const subjectSet = subjectSetForPlan(subjects);
       const roots = kgConcepts.filter(
-        (c) => subjects.includes(c.subject) && c.prerequisites.length === 0,
+        (c) =>
+          (subjectSet.size === 0 || subjectSet.has(c.subject)) &&
+          c.prerequisites.length === 0,
       );
       for (const r of roots.slice(0, 5)) worklist.add(r.id);
     }
@@ -683,6 +720,12 @@ export async function applyPlanProfileUpdates(
   const personality = { ...(profile.personality_profile ?? {}) };
   const pointsGroup = goalKeyToPointsGroup(updates.goal_key);
   if (updates.goal_key) personality.goal_key = updates.goal_key;
+  const subjectsOverride =
+    updates.goal_key === 'bagrut_physics'
+      ? ['physics']
+      : updates.goal_key === 'calculus1' || updates.goal_key === 'linear_algebra'
+        ? ['math']
+        : null;
 
   const nextTestDate = updates.clear_next_test
     ? null
@@ -707,6 +750,10 @@ export async function applyPlanProfileUpdates(
       final_goal_date = ${finalGoalDate},
       hours_per_week = COALESCE(${updates.hours_per_week ?? null}, hours_per_week),
       points_group = COALESCE(${pointsGroup}, points_group),
+      subjects = CASE
+        WHEN ${subjectsOverride}::text[] IS NULL THEN subjects
+        ELSE ${subjectsOverride}::text[]
+      END,
       personality_profile = ${JSON.stringify(personality)}::jsonb,
       updated_at = NOW()
     WHERE learner_id = ${learnerId}
@@ -2546,7 +2593,158 @@ export async function fetchConceptMasteryBulk(
   return result;
 }
 
-// ── Memory tab (Neon-direct timeline) ─────────────────────────────────────────
+// ── Memory tab (Neon-direct) ──────────────────────────────────────────────────
+
+export interface LearnerMemoryNote {
+  id: string;
+  agent: string;
+  kind: string;
+  content: string;
+  importance: number;
+  related_concept_id: string | null;
+  created_at: string;
+}
+
+export interface LearnerMemoryConceptSignal {
+  concept_id: string;
+  score: number;
+}
+
+export interface LearnerMemorySnapshot {
+  profile: {
+    goal: string;
+    subjects: string[];
+    hours_per_week: number;
+    preferred_style: string | null;
+    background_notes: string | null;
+    next_test_name: string | null;
+    next_test_date: string | null;
+    final_goal_date: string | null;
+    grade_level: string | null;
+    points_group: string | null;
+  } | null;
+  persona: {
+    text: string | null;
+    updated_at: string | null;
+  };
+  notesByAgent: Record<string, LearnerMemoryNote[]>;
+  totalNoteCount: number;
+  weakConcepts: LearnerMemoryConceptSignal[];
+  strongConcepts: LearnerMemoryConceptSignal[];
+  activePlanGoal: string | null;
+  activeWeekConceptIds: string[];
+}
+
+const MEMORY_TAB_AGENTS = [
+  'tutor',
+  'mentor',
+  'coach',
+  'reviewer',
+  'qa_explainer',
+  'note_taker',
+] as const;
+
+function emptyMemorySnapshot(): LearnerMemorySnapshot {
+  const notesByAgent: Record<string, LearnerMemoryNote[]> = {};
+  for (const agent of MEMORY_TAB_AGENTS) notesByAgent[agent] = [];
+  return {
+    profile: null,
+    persona: { text: null, updated_at: null },
+    notesByAgent,
+    totalNoteCount: 0,
+    weakConcepts: [],
+    strongConcepts: [],
+    activePlanGoal: null,
+    activeWeekConceptIds: [],
+  };
+}
+
+/**
+ * Read-only aggregate for `/app/memory`: onboarding profile, shared persona,
+ * per-agent notes, mastery signals, and active plan context.
+ */
+export async function getLearnerMemorySnapshot(
+  learnerId: string,
+): Promise<LearnerMemorySnapshot> {
+  if (!sql) return emptyMemorySnapshot();
+
+  try {
+    const [profile, persona, noteRows, mastery, plan] = await Promise.all([
+      getLearnerProfile(learnerId).catch(() => null),
+      getLearnerPersona(learnerId).catch(() => null),
+      sql`
+        SELECT id::text, agent, kind, content, importance,
+               related_concept_id, created_at::text AS created_at
+        FROM learner_agent_notes
+        WHERE learner_id = ${learnerId}
+          AND archived_at IS NULL
+          AND superseded_by IS NULL
+        ORDER BY importance DESC, created_at DESC
+        LIMIT 200
+      `,
+      getConceptMastery(learnerId).catch(() => ({} as Record<string, number>)),
+      getCurrentPlan(learnerId).catch(() => null),
+    ]);
+
+    const notes = noteRows as LearnerMemoryNote[];
+    const notesByAgent: Record<string, LearnerMemoryNote[]> = {};
+    for (const agent of MEMORY_TAB_AGENTS) notesByAgent[agent] = [];
+    for (const n of notes) {
+      const bucket = notesByAgent[n.agent] ?? [];
+      bucket.push(n);
+      notesByAgent[n.agent] = bucket;
+    }
+
+    const weakConcepts = Object.entries(mastery)
+      .filter(([, score]) => score < 0.4)
+      .sort((a, b) => a[1] - b[1])
+      .slice(0, 8)
+      .map(([concept_id, score]) => ({ concept_id, score }));
+
+    const strongConcepts = Object.entries(mastery)
+      .filter(([, score]) => score >= 0.7)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([concept_id, score]) => ({ concept_id, score }));
+
+    const activeWeek =
+      plan?.weeks.find((w) => w.status === 'active') ?? plan?.weeks[0];
+    const activeWeekConceptIds =
+      activeWeek?.concepts.map((c) => c.concept_id) ?? [];
+
+    return {
+      profile: profile
+        ? {
+            goal: profile.goal,
+            subjects: profile.subjects ?? [],
+            hours_per_week: profile.hours_per_week,
+            preferred_style: profile.preferred_style,
+            background_notes: profile.background_notes,
+            next_test_name: profile.next_test_name,
+            next_test_date: profile.next_test_date,
+            final_goal_date: profile.final_goal_date,
+            grade_level: profile.grade_level,
+            points_group: profile.points_group,
+          }
+        : null,
+      persona: {
+        text: persona?.text ?? null,
+        updated_at: persona?.updated_at ?? null,
+      },
+      notesByAgent,
+      totalNoteCount: notes.length,
+      weakConcepts,
+      strongConcepts,
+      activePlanGoal: plan?.goal ?? null,
+      activeWeekConceptIds,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[neon-db] getLearnerMemorySnapshot failed', err);
+    }
+    return emptyMemorySnapshot();
+  }
+}
 
 /**
  * Returns learner-visible memories for `/app/memory` from Neon agent notes +

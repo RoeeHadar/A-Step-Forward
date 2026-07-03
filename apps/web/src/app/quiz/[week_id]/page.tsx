@@ -1,10 +1,12 @@
 import { auth } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { WeekQuizClient } from '@/components/week-quiz-client';
 import { QuizUnavailable } from '@/components/quiz-unavailable';
 import { SiteHeader } from '@/components/site-header';
 import { generateWeeklyQuizForUser } from '@/lib/weekly-quiz';
 import type { QuizStartResponse } from '@asf/schemas/learning_path';
+import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,11 +27,13 @@ export default async function QuizPage({ params, searchParams }: Props) {
   }
 
   const weekNum = Number(week_num);
+  const cookieStore = await cookies();
+  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
   // Primary path: generate/cache entirely within Neon + Vercel (no Render dependency).
   let quiz: QuizStartResponse | null = null;
   try {
-    quiz = await generateWeeklyQuizForUser(userId, plan_id, weekNum);
+    quiz = await generateWeeklyQuizForUser(userId, plan_id, weekNum, locale);
   } catch {
     quiz = null;
   }
