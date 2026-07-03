@@ -40,10 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- Volume of revolution around x-axis: V = π∫f(x)²dx
-- Volume of revolution around y-axis
-- Optimization problems involving integrals
-- Finding unknown parameters in integral equations
+- Area between curves: ∫[f(x)−g(x)]dx over intersection bounds
+- Finding curve intersections as integration limits
+- Identifying upper curve via test point between intersections
+- Volume by disk method around x-axis: V = π∫[f(x)]²dx
+- Volume by washer method: V = π∫(R_outer² − R_inner²)dx
+- Volume by shell method around y-axis: V = 2π∫x·h(x)dx
+- Choosing disk/washer vs shell from axis of rotation
+- Horizontal slices for area: ∫[right − left] dy
 
 ## Level scope
 

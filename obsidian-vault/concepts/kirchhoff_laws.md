@@ -40,10 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- KCL: sum of currents at node = 0
-- KVL: sum of voltages in loop = 0
-- Solving multi-loop circuits
-- Bridge circuits (Wheatstone)
+- KCL junction rule: sum currents in = sum currents out
+- KVL loop rule: sum voltage rises and drops = 0
+- Assigning branch current directions before writing equations
+- Battery − to +: voltage rise; resistor in I direction: drop
+- Single-loop KVL with resistors and EMF sources
+- Two-loop circuit: (n−1) KCL + mesh KVL equations
+- Node analysis: express branch currents at junctions
+- Wheatstone bridge balance condition
 
 ## Level scope
 

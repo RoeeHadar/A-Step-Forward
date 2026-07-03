@@ -40,10 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- Speed of light as universal speed limit
-- Time dilation: Δt = Δt₀/√(1-v²/c²)
-- Length contraction
-- Mass-energy: E = mc² (primarily for nuclear problems)
+- Einstein postulates: c constant; same physics in inertial frames
+- Lorentz factor γ = 1/√(1 − v²/c²)
+- Time dilation: moving-clock period Δt = γΔt₀
+- Length contraction: L = L₀/γ along motion direction
+- Rest energy E₀ = mc²
+- Relativistic kinetic energy KE = (γ − 1)mc²
+- Speed of light c as universal speed limit
+- Sanity check v ≪ c: classical limit recovers Newtonian formulas
 
 ## Level scope
 

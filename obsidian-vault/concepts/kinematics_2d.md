@@ -40,9 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- 2D position and velocity vectors
-- Superposition of independent motions
-- Relative velocity in 2D
+- Decompose v₀ into v₀x = v₀cosθ and v₀y = v₀sinθ
+- Independent x (constant v) and y (free fall) kinematics
+- Horizontal launch from height: time from vertical free fall
+- Maximum height H = v₀y²/(2g) at apex (v_y = 0)
+- Time of flight T = 2v₀y/g for symmetric ground launch
+- Range R = v₀²sin2θ/g from level ground
+- Landing speed v = √(v_x² + v_y²) from components
+- Relative velocity vector addition (e.g., boat in current)
 
 ## Level scope
 

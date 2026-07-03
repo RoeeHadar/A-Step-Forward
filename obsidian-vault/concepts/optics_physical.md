@@ -40,10 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- Young's double-slit experiment
-- Constructive and destructive interference
-- Diffraction
-- Polarization
+- Double-slit fringe spacing Δy = λL/d
+- Bright fringe position y_m = mλL/d
+- Path-difference condition for constructive/destructive interference
+- Thin film: optical path 2nt with reflection phase shifts
+- λ/2 phase shift at reflection from higher-n medium
+- Single-slit first minimum: a sin θ = λ
+- Polarization: filtering light by oscillation direction
+- Qualitative diffraction: spreading through narrow aperture
 
 ## Level scope
 

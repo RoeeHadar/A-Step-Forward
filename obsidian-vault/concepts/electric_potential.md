@@ -40,10 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- Capacitance: C = Q/V
-- Parallel plate capacitor: C = ε₀A/d
-- Energy stored: U = ½CV²
-- Capacitors in series and parallel
+- Point charge potential V = kQ/r
+- Work to move charge: W = qΔV
+- Field-potential relation E = −dV/dr
+- Superposition: total V = Σ kQᵢ/rᵢ
+- Finding point where net V = 0 between two charges
+- Energy to assemble a charge configuration
+- Equipotential surfaces perpendicular to E field
+- Potential difference ΔV between two field points
 
 ## Level scope
 

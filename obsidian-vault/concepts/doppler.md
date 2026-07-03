@@ -40,9 +40,14 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- Doppler formula for moving source/observer
-- Approaching vs. receding (blue-shift/red-shift)
-- Applications: radar, ultrasound, astronomy
+- General Doppler: f_obs = f₀(v ± v_obs)/(v ∓ v_src)
+- Sign rule: approaching raises observed frequency
+- Moving source only: f_obs = f₀·v/(v ∓ v_src)
+- Moving observer only: f_obs = f₀·(v ± v_obs)/v
+- Both moving: apply numerator and denominator signs together
+- Two-frequency method: solve v_src from approach/recession ratio
+- Qualitative: approaching source shortens observed wavelength
+- Light Doppler approximation: f_obs ≈ f₀(1 ± v/c)
 
 ## Level scope
 

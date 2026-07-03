@@ -40,9 +40,15 @@ _14 sections · 8 questions in authored JSON._
 
 ## Skill atoms
 
-- Multi-force equilibrium problems
-- Pivoting objects with distributed loads
-- Stability and center of mass position
+- Translational equilibrium: ΣF_x = 0 and ΣF_y = 0
+- Rotational equilibrium: Στ = 0 about chosen pivot
+- Torque τ = r⊥F with consistent CCW/CW sign convention
+- Pivot at unknown force to eliminate reaction from Στ
+- Hinged beam + cable: solve tension from Στ about hinge
+- Two-support beam: reactions from torque balance + ΣF_y = 0
+- Non-uniform beam: weight acts at given CM, not geometric center
+- Ladder on frictionless wall: minimum μs from Στ at base
+- Stability: CM must lie above support base to resist tipping
 
 ## Level scope
 
