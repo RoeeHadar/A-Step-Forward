@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
-import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, learnerExplicitChangeRequest } from '@/lib/plan-actions';
+import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, learnerExplicitChangeRequest, shouldApplyPlanImmediately } from '@/lib/plan-actions';
 import { useRouter } from 'next/navigation';
 import { Send, Loader2, X } from 'lucide-react';
 import { Button } from '@asf/ui/button';
@@ -486,7 +486,9 @@ export function AgentChat({
           onSubmit={(e) => {
             if (
               isPlanAgent &&
-              (learnerConfirmedChange(input) || learnerExplicitChangeRequest(input))
+              (learnerConfirmedChange(input) ||
+                learnerExplicitChangeRequest(input) ||
+                shouldApplyPlanImmediately(input))
             ) {
               pendingPlanApplyRef.current = true;
               setPlanApplyState('applying');
@@ -511,7 +513,9 @@ export function AgentChat({
                 e.preventDefault();
                 if (
                   isPlanAgent &&
-                  (learnerConfirmedChange(input) || learnerExplicitChangeRequest(input))
+                  (learnerConfirmedChange(input) ||
+                learnerExplicitChangeRequest(input) ||
+                shouldApplyPlanImmediately(input))
                 ) {
                   pendingPlanApplyRef.current = true;
                   setPlanApplyState('applying');

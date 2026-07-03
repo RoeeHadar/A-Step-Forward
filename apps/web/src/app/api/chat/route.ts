@@ -19,10 +19,12 @@ import { buildLessonCatalogSummary, buildPlanAllowlistBlock, PLAN_GROUNDING_RULE
 import {
   extractPlanUpdate,
   shouldApplyPlanChange,
+  shouldApplyPlanImmediately,
   stripPlanMachineTags,
   PLAN_AGENT_INSTRUCTIONS,
 } from '@/lib/plan-actions';
 import {
+  applyPlanFromUserMessage,
   buildPlanApplyFailureNotice,
   buildPlanApplyingNotice,
   executePlanUpdate,
@@ -127,14 +129,63 @@ export async function POST(req: Request) {
   const encodeFinish = () =>
     encoder.encode(`d:${JSON.stringify({ finishReason: 'stop', usage: { promptTokens: 0, completionTokens: 0 } })}\n`);
 
+  const isPlanAgent = agent === 'mentor' || agent === 'tutor';
+  let eagerPlanPromise: Promise<PlanApplyResult | null> | null = null;
+
+  const appendPlanResult = (
+    controller: ReadableStreamDefaultController<Uint8Array>,
+    planResult: PlanApplyResult | null,
+  ) => {
+    if (planResult?.applied) {
+      const notice = locale === 'en' ? planResult.noticeEn! : planResult.noticeHe!;
+      assistantBuffer += notice;
+      controller.enqueue(encodeToken(notice));
+      controller.enqueue(
+        encodeData({
+          type: 'plan_updated',
+          planId: planResult.planId,
+          reason: planResult.reason,
+        }),
+      );
+      return;
+    }
+    if (planResult?.failureNotice) {
+      assistantBuffer += planResult.failureNotice;
+      controller.enqueue(encodeToken(planResult.failureNotice));
+      controller.enqueue(
+        encodeData({
+          type: 'plan_failed',
+          error: planResult.error,
+        }),
+      );
+    }
+  };
+
   const readable = new ReadableStream({
+    start(controller) {
+      if (isPlanAgent && shouldApplyPlanImmediately(lastMessage)) {
+        controller.enqueue(encodeData({ type: 'plan_applying' }));
+        const applying = buildPlanApplyingNotice(locale);
+        assistantBuffer += applying;
+        controller.enqueue(encodeToken(applying));
+        eagerPlanPromise = applyPlanFromUserMessage(userId, agent, lastMessage, locale);
+      }
+    },
     async pull(controller) {
       try {
       const { value, done } = await gen.next();
         if (done) {
-          let planResult: PlanApplyResult | null = null;
+          let planResult: PlanApplyResult | null = eagerPlanPromise
+            ? await eagerPlanPromise
+            : null;
+          const planAlreadyApplied = planResult?.applied === true;
+
+          if (planResult) {
+            appendPlanResult(controller, planResult);
+          }
+
           if (assistantBuffer) {
-            planResult = await finalizeAssistantTurn(
+            const finalizeResult = await finalizeAssistantTurn(
               userId,
               agent,
               lastMessage,
@@ -149,28 +200,11 @@ export async function POST(req: Request) {
                   controller.enqueue(encodeData({ type: 'plan_applying' }));
                 }
               },
+              planAlreadyApplied,
             );
-            if (planResult?.applied) {
-              const notice =
-                locale === 'en' ? planResult.noticeEn! : planResult.noticeHe!;
-              assistantBuffer += notice;
-              controller.enqueue(encodeToken(notice));
-              controller.enqueue(
-                encodeData({
-                  type: 'plan_updated',
-                  planId: planResult.planId,
-                  reason: planResult.reason,
-                }),
-              );
-            } else if (planResult?.failureNotice) {
-              assistantBuffer += planResult.failureNotice;
-              controller.enqueue(encodeToken(planResult.failureNotice));
-              controller.enqueue(
-                encodeData({
-                  type: 'plan_failed',
-                  error: planResult.error,
-                }),
-              );
+            if (!planResult && finalizeResult) {
+              appendPlanResult(controller, finalizeResult);
+              planResult = finalizeResult;
             }
           }
           controller.enqueue(encodeFinish());
@@ -184,27 +218,26 @@ export async function POST(req: Request) {
         const fallback = friendlyFallback(lastMessage, agent);
         assistantBuffer += fallback;
         controller.enqueue(encodeToken(fallback));
-        let planResult: PlanApplyResult | null = null;
+        let planResult: PlanApplyResult | null = eagerPlanPromise
+          ? await eagerPlanPromise
+          : null;
+        const planAlreadyApplied = planResult?.applied === true;
+        if (planResult) {
+          appendPlanResult(controller, planResult);
+        }
         if (assistantBuffer) {
-          planResult = await finalizeAssistantTurn(
+          const finalizeResult = await finalizeAssistantTurn(
             userId,
             agent,
             lastMessage,
             assistantBuffer,
             sessionId,
             locale,
+            undefined,
+            planAlreadyApplied,
           );
-          if (planResult?.applied) {
-            const notice =
-              locale === 'en' ? planResult.noticeEn! : planResult.noticeHe!;
-            controller.enqueue(encodeToken(notice));
-            controller.enqueue(
-              encodeData({
-                type: 'plan_updated',
-                planId: planResult.planId,
-                reason: planResult.reason,
-              }),
-            );
+          if (!planResult && finalizeResult) {
+            appendPlanResult(controller, finalizeResult);
           }
         }
         controller.enqueue(encodeFinish());
@@ -231,20 +264,23 @@ async function finalizeAssistantTurn(
   sessionId?: string,
   locale: 'he' | 'en' = 'he',
   onStatus?: (status: 'applying') => void,
+  planAlreadyApplied = false,
 ): Promise<PlanApplyResult | null> {
   const visible = stripPlanMachineTags(assistantRaw);
   const isPlanAgent = agent === 'mentor' || agent === 'tutor';
 
   let priorAssistant: string | undefined;
   let priorUser: string | undefined;
+  let recentUserMessages: string[] = [];
   if (isPlanAgent) {
-    const recent = await fetchRecentChatTurns(userId, agent, 6).catch(() => []);
+    const recent = await fetchRecentChatTurns(userId, agent, 12).catch(() => []);
+    const userTurns = recent
+      .filter((t) => t.role === 'user')
+      .map((t) => t.content);
+    recentUserMessages = userTurns.slice(-6);
+    priorUser = userTurns.length >= 2 ? userTurns.at(-2) : undefined;
     priorAssistant = recent
       .filter((t) => t.role === 'assistant')
-      .map((t) => t.content)
-      .at(-1);
-    priorUser = recent
-      .filter((t) => t.role === 'user')
       .map((t) => t.content)
       .at(-1);
   }
@@ -254,7 +290,8 @@ async function finalizeAssistantTurn(
     return null;
   }
 
-  const applyNow = shouldApplyPlanChange(userMessage, assistantRaw, priorUser);
+  const applyNow =
+    !planAlreadyApplied && shouldApplyPlanChange(userMessage, assistantRaw, priorUser);
 
   try {
     await saveProposalFromAssistantTurn(userId, agent, userMessage, assistantRaw);
@@ -270,6 +307,7 @@ async function finalizeAssistantTurn(
       assistantRaw,
       priorUser,
       priorAssistant,
+      recentUserMessages,
     );
 
     if (!payload) {

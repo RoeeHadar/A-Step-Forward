@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   learnerExplicitChangeRequest,
   shouldApplyPlanChange,
+  shouldApplyPlanImmediately,
   inferGoalMetaFromText,
   inferConceptIdsFromText,
   proposalToUpdatePayload,
@@ -49,13 +50,14 @@ describe('plan change e2e (calc1 exam, Hebrew)', () => {
     expect(shouldApplyPlanChange(combined, 'מעולה, נתחיל מגבולות.')).toBe(true);
   });
 
-  it('does not apply when tutor only asks clarifying questions', () => {
+  it('still applies when tutor asks clarifying questions after explicit request', () => {
     expect(
       shouldApplyPlanChange(
         CALC1_USER,
         'האם אתה רוצה להתמקד בגבולות או בנגזרות?',
       ),
-    ).toBe(false);
+    ).toBe(true);
+    expect(shouldApplyPlanImmediately(CALC1_USER)).toBe(true);
   });
 });
 

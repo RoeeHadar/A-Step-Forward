@@ -4,6 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   shouldApplyPlanChange,
+  shouldApplyPlanImmediately,
   stripPlanMachineTags,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
@@ -21,6 +22,10 @@ const ASSISTANT =
   'אני הולך לשנות את התוכנית שלך. התוכנית החדשה תכלול חזרה על נושאים חשובים למבחן.';
 
 describe('chat stream finalize (calc1 plan change)', () => {
+  it('triggers immediate apply on first calc1 exam message', () => {
+    expect(shouldApplyPlanImmediately(USER)).toBe(true);
+  });
+
   it('decides to apply after tutor acknowledgment', () => {
     expect(shouldApplyPlanChange(USER, ASSISTANT)).toBe(true);
   });

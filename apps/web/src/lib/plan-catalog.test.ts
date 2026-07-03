@@ -17,6 +17,7 @@ import {
   looksLikePlanProposal,
   proposalToUpdatePayload,
   shouldApplyPlanChange,
+  shouldApplyPlanImmediately,
 } from './plan-actions';
 
 describe('plan-catalog grounding', () => {
@@ -153,10 +154,21 @@ describe('plan-actions', () => {
     expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
   });
 
-  it('does not apply when tutor only asks a clarifying question', () => {
+  it('applies immediately on first message without waiting for tutor Q&A', () => {
     const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
-    const assistant = 'האם אתה רוצה להתמקד בגבולות או בנגזרות?';
-    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(false);
+    expect(shouldApplyPlanImmediately(userMsg)).toBe(true);
+    const assistant =
+      'לפני שאני אציג לך את התוכנית, האם תוכל לספר לי על הנושאים שקשים לך?';
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+  });
+
+  it('detects "אני רוצה שתשנה לי את תוכנית הלימוד"', () => {
+    const userMsg = 'אני רוצה שתשנה לי את תוכנית הלימוד';
+    expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
+  });
+
+  it('does not apply immediately when goal is not inferable', () => {
+    expect(shouldApplyPlanImmediately('שנה את התוכנית')).toBe(false);
   });
 
   it('applies on follow-up turn when prior user message was explicit', () => {

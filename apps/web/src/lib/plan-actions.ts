@@ -218,6 +218,8 @@ export function learnerExplicitChangeRequest(message: string): boolean {
     /(?:שנה|עדכן|שינוי).{0,24}תוכנית/i.test(t) ||
     /(?:מבחן|exam).{0,48}(?:שנה|עדכן).{0,24}תוכנית/i.test(t) ||
     /(?:שנה|עדכן).{0,24}תוכנית.{0,48}(?:מבחן|exam)/i.test(t) ||
+    /(?:רוצה|בבקשה).{0,16}ש(?:ת)?(?:שנה|עדכן).{0,24}תוכנית/i.test(t) ||
+    /ש(?:ת)?שנה\s+לי.{0,20}תוכנית/i.test(t) ||
     /המטרה החדשה שלי/i.test(t) ||
     /שנה את התוכנית|עדכן את התוכנית/i.test(t) ||
     /change my goal|update my goal|new goal is/i.test(lower) ||
@@ -243,13 +245,11 @@ function hasActionablePlanChangeRequest(...texts: string[]): boolean {
   );
 }
 
-function isOnlyClarifyingQuestion(assistantRaw: string): boolean {
-  const t = assistantRaw.trim();
-  if (!t) return false;
-  if (looksLikePlanApplyIntent(t)) return false;
+/** Direct imperative with inferable exam/goal — apply without waiting for tutor Q&A. */
+export function shouldApplyPlanImmediately(userMessage: string): boolean {
   return (
-    /^(האם|מה |מתי |איך |לפני |why |what |when |how |can you|could you|would you)/i.test(t) ||
-    (/[?؟]\s*$/.test(t) && !/תוכנית|plan|מטרה|goal/i.test(t))
+    learnerExplicitChangeRequest(userMessage) &&
+    hasActionablePlanChangeRequest(userMessage)
   );
 }
 
@@ -290,9 +290,8 @@ export function shouldApplyPlanChange(
 
   if (!hasActionablePlanChangeRequest(...contextTexts)) return false;
   if (!assistantRaw.trim()) return false;
-  if (isOnlyClarifyingQuestion(assistantRaw)) return false;
 
-  // Direct imperative with inferable exam/goal data — apply after tutor replies.
+  // Direct imperative with inferable exam/goal data — apply after any tutor reply.
   return true;
 }
 
@@ -379,7 +378,7 @@ export const PLAN_AGENT_INSTRUCTIONS = `
 You CAN update the learner's **goal** (profile text, exam dates) and **weekly plan** in Neon. Before changing anything:
 1. **Understand why** — ask 1–2 clarifying questions if the request is vague.
 2. **Summarize the diff** — current goal vs new goal; current weeks vs projected weeks (concept names in the learner's language).
-3. **Confirmation** — if the learner gave a direct imperative ("שנה את המטרה", "המטרה החדשה שלי היא…"), you may apply after summarizing; otherwise ask for explicit agreement ("כן", "עדכן").
+3. **Confirmation** — if the learner gave a direct imperative ("שנה את המטרה", "המטרה החדשה שלי היא…", "יש לי מבחן … שנה לי את התוכנית"), **apply in the same turn** after a one-line summary. Do NOT block the update with multi-turn Q&A — the server applies immediately; you may ask about weak topics **after** noting the plan was updated.
 
 **Proposal turn** (optional, before confirmation): append at the **end**:
 \`[[ASF_PLAN_PROPOSAL:{"reason":"<why>","goal":"מבחן במתמטיקה בדידה","goal_key":"university_prep","final_goal_date":"2026-11-01","clear_next_test":true,"prepend_concepts":["combinatorics"],"priority_concepts":[],"exclude_concepts":[]}]]\`

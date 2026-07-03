@@ -22,6 +22,7 @@ import {
   looksLikePlanProposal,
   planPayloadToOptions,
   proposalToUpdatePayload,
+  shouldApplyPlanImmediately,
   stripPlanMachineTags,
   type PlanProposalPayload,
 } from '@/lib/plan-actions';
@@ -312,6 +313,7 @@ export async function resolvePayloadForApply(
   assistantRaw: string,
   priorUserMessage?: string,
   priorAssistantText?: string,
+  recentUserMessages?: string[],
 ): Promise<PlanUpdatePayload | null> {
   const { payload: tagPayload } = extractPlanUpdate(assistantRaw);
   if (tagPayload?.confirmed) return tagPayload;
@@ -322,7 +324,11 @@ export async function resolvePayloadForApply(
   const pending = await getPendingPlanProposal(learnerId);
   if (pending) return proposalToUpdatePayload(pending);
 
-  const contextTexts = [priorUserMessage, userMessage, priorAssistantText, assistantRaw].filter(
+  const userHistory =
+    recentUserMessages?.length
+      ? recentUserMessages
+      : [priorUserMessage, userMessage].filter(Boolean);
+  const contextTexts = [...userHistory, priorAssistantText, assistantRaw].filter(
     Boolean,
   ) as string[];
 
@@ -339,6 +345,40 @@ export async function resolvePayloadForApply(
 
   if (!hasContent) return null;
   return proposalToUpdatePayload(merged);
+}
+
+/** Apply plan as soon as the learner sends a direct imperative (before tutor Q&A). */
+export async function applyPlanFromUserMessage(
+  learnerId: string,
+  agent: string,
+  userMessage: string,
+  locale: 'he' | 'en' = 'he',
+): Promise<PlanApplyResult | null> {
+  if (!shouldApplyPlanImmediately(userMessage)) return null;
+
+  const payload = await resolvePayloadForApply(learnerId, userMessage, '', undefined, undefined, [
+    userMessage,
+  ]);
+  if (!payload) {
+    return {
+      applied: false,
+      error: 'missing_payload',
+      failureNotice: buildPlanApplyFailureNotice(locale, 'missing_payload'),
+    };
+  }
+
+  try {
+    return await executePlanUpdate(learnerId, payload, { agent, source: 'chat' });
+  } catch (err) {
+    return {
+      applied: false,
+      error: err instanceof Error ? err.message : String(err),
+      failureNotice: buildPlanApplyFailureNotice(
+        locale,
+        err instanceof Error ? err.message : String(err),
+      ),
+    };
+  }
 }
 
 export { stripPlanMachineTags };
