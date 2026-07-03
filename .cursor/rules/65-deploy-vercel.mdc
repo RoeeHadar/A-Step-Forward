@@ -1,0 +1,44 @@
+---
+description: Mandatory post-push Vercel / CI verification after every push to main.
+alwaysApply: true
+---
+
+# Post-push deploy verification (mandatory)
+
+After **every** `git push` to `main` that touches `apps/web/**`, you MUST verify production deploy before ending the task.
+
+## Steps (do not skip)
+
+1. **Run local gates first** (before push when possible):
+   ```powershell
+   pnpm --filter @asf/web lint
+   pnpm --filter @asf/web build
+   ```
+
+2. **Poll GitHub Actions** until these workflows for the pushed commit are `success`:
+   - `Deploy Web (Vercel)` — production build smoke (same checks Vercel runs)
+   - `Lint & Test` — ESLint + typecheck + vitest
+   ```powershell
+   gh run list --branch main --limit 8
+   gh run view <run_id> --log-failed   # if any failure
+   ```
+
+3. **Confirm Vercel deployment** for the commit SHA:
+   ```powershell
+   gh api repos/RoeeHadar/A-Step-Forward/deployments --jq '.[0] | {sha, statuses_url}'
+   gh api <statuses_url> --jq '.[0].state'   # must be "success"
+   ```
+   Or run: `powershell -File scripts/verify-deploy.ps1 -Sha HEAD`
+
+4. **Smoke the live site** once CI + Vercel are green:
+   - `https://a-step-forward-waij.vercel.app/` → 200
+   - `/sign-in`, `/learn` → 2xx/3xx
+
+## If anything fails
+
+- Fetch logs (`gh run view --log-failed` or Vercel deployment URL from step 3).
+- Fix root cause (usually ESLint in `apps/web`, unused imports, `prefer-const`).
+- Push fix and repeat from step 2.
+- **Never leave `main` with a red Deploy Web or failed Vercel deployment.**
+
+Read `skills/deploy/SKILL.md` for the full checklist and common failure table.

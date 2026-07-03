@@ -32,6 +32,9 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile || pnpm install
 
+      - name: ESLint (blocks Vercel build)
+        run: pnpm --filter @asf/web lint
+
       - name: Build smoke check
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}

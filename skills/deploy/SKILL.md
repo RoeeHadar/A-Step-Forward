@@ -49,11 +49,14 @@ description: How to deploy apps/web (Vercel), apps/api + services (Fly.io), work
 
 After **every** `git push` to `main`, you MUST:
 
+0. **Before push** (when you changed `apps/web/**`): run `pnpm --filter @asf/web lint` and `pnpm --filter @asf/web build` locally.
 1. **Wait for CI** — poll until the `Deploy Web (Vercel)` workflow completes:
    ```powershell
    gh run list --limit 3 --json status,conclusion,name | ConvertFrom-Json | Where-Object { $_.name -match "Deploy|Lint" }
    ```
    Wait up to 5 minutes, re-polling every 30 seconds.
+
+   Or run `powershell -File scripts/verify-deploy.ps1` from repo root (polls CI + Vercel + live smoke).
 
 2. **Check the result** — if `conclusion` is `failure`:
    - Fetch the error: `gh run view <run_id> --log-failed`

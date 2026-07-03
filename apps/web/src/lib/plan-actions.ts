@@ -6,7 +6,6 @@
  */
 import type { GeneratePlanOptions } from '@/lib/neon-db';
 import {
-  extractPlanChangeTemplateBody,
   isPlanChangeTemplate,
   planChangeTextForParsing,
   recentMessagesIncludePlanTemplate,

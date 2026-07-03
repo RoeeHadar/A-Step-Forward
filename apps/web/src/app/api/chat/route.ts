@@ -218,7 +218,7 @@ export async function POST(req: Request) {
         const fallback = friendlyFallback(lastMessage, agent);
         assistantBuffer += fallback;
         controller.enqueue(encodeToken(fallback));
-        let planResult: PlanApplyResult | null = eagerPlanPromise
+        const planResult: PlanApplyResult | null = eagerPlanPromise
           ? await eagerPlanPromise
           : null;
         const planAlreadyApplied = planResult?.applied === true;

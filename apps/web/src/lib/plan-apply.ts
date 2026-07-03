@@ -231,7 +231,6 @@ function mergeProposal(
 ): PendingPlanProposal | null {
   const parsed = planChangeTextForParsing(...texts.filter(Boolean));
   const goalMeta = inferGoalMetaFromText(...parsed);
-  const inferredIds = inferConceptIdsFromText(...parsed);
   const reason =
     fromTag?.reason?.trim() ||
     (texts.some((t) => /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(t))

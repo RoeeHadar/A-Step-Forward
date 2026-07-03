@@ -27,10 +27,10 @@ jobs:
           done
           if [ "$missing" -gt 0 ]; then exit 1; fi
 
-      - name: Verify LICENSE is MIT
+      - name: Verify LICENSE exists and is proprietary
         run: |
-          grep -q "MIT License" LICENSE || {
-            echo "::error::LICENSE must be MIT (per RESUME-README locked decisions)."
+          grep -q "All Rights Reserved" LICENSE || {
+            echo "::error::LICENSE must declare proprietary / all-rights-reserved terms."
             exit 1
           }
 
