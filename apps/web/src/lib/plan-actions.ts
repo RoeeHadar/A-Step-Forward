@@ -493,22 +493,34 @@ export function learnerConfirmedChange(message: string): boolean {
 }
 
 export const PLAN_AGENT_INSTRUCTIONS = `
-## Learning-plan & goal modification protocol (Tutor only)
+## Learning-plan & goal modification protocol (Tutor / Mentor)
 
-The site applies plan changes **only** when the learner sends the official plan-update template from the sidebar — **by itself**, with no extra chat text before or after it. Casual phrasing never updates Neon, even if the template is pasted in the same message.
+The site applies plan changes **only** when the learner sends the official plan-update template from the **Tutor chat sidebar** — **by itself**, with no extra chat text before or after it. Casual phrasing never updates Neon, even if the template is pasted in the same message.
 
 When the learner asks to change their plan in casual chat (without the template):
-1. **Do NOT** claim the plan was updated.
-2. Explain that plan changes happen only through the **Learning plan update** sidebar template.
-3. If the exam is vague (e.g. "math test" or "physics test" with no scope), ask 1-2 clarifying questions (which course? bagrut units? calc1? mechanics?) and tell them to fill the template with the specific exam.
+1. **Do NOT** claim the plan was or will be updated.
+2. **Do NOT** ask exam-scope or goal-clarification questions as a substitute for a plan update.
+3. Tell them clearly (in their language): open **Tutor** chat → use the sidebar template **עדכון תוכנית לימוד** / **Learning plan update** → fill goal/exam + target date → send that message **alone**.
+4. You may briefly explain how to fill the template or answer unrelated learning questions — keep plan updates separate.
 
 When you receive a valid template-only message:
 1. **Read goal/exam and date** — optional notes may mention topics; you already know the learner from memory and mastery.
-2. If the goal is still too broad for the server to build a plan, the server will refuse — do not claim success; help them refine the template.
+2. If the goal is still too broad for the server to build a plan, the server will refuse — do not claim success; help them refine the template fields.
 3. **Exam cram (≤2 weeks)**: focus ONLY on exam concepts. Do NOT add unrelated foundations.
 4. **Never** say the plan was updated unless the server confirmation appears in the chat (✅ notice). Do NOT emit \`[[ASF_PLAN_UPDATE:...]]\` tags.
 
 Rules:
 - Casual phrasing + template in one message = **no apply** — tell them to send the template alone.
 - For a test in ~1 week, the weekly plan should be **one week only**.
+`.trim();
+
+/** Injected on turns where the learner asked to change the plan without the official template. */
+export const CASUAL_PLAN_CHANGE_TURN_INSTRUCTION = `
+## THIS TURN — casual plan-change request (mandatory response)
+The learner asked to change their learning plan WITHOUT the official Tutor sidebar template.
+You MUST:
+1. NOT claim the plan was or will be updated from this chat message.
+2. NOT ask detailed exam-scope questions ([[אפשרויות]] lists, "general vs specific", etc.) as a substitute for a plan update.
+3. Tell them clearly: plan changes happen ONLY via **עדכון תוכנית לימוד** / **Learning plan update** in the Tutor chat sidebar (left). Fill goal + date, send that message alone.
+4. You may offer one sentence on how to fill the template; separate that from any teaching help.
 `.trim();

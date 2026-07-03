@@ -15,6 +15,11 @@ import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
 import { canonicalConceptId, goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
+import {
+  conceptMatchesSubjects,
+  masterySignalInScope,
+  subjectSetForPlan,
+} from './concept-scope';
 import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
@@ -419,32 +424,12 @@ function inferSubject(conceptId: string, subjects: string[]): string {
   return subjects.includes('math') ? 'math' : subjects[0]!;
 }
 
-function subjectSetForPlan(subjects: string[]): Set<string> {
-  const out = new Set<string>();
-  for (const raw of subjects) {
-    const s = raw.toLowerCase();
-    if (s === 'physics' || s.includes('physics') || s === 'bagrut_physics' || s === 'hs_physics') {
-      out.add('physics');
-    }
-    if (
-      s === 'math' ||
-      s.includes('math') ||
-      s.includes('calculus') ||
-      s.includes('algebra') ||
-      s === 'makhina' ||
-      s === 'university_prep'
-    ) {
-      out.add('math');
-    }
-  }
-  return out;
-}
-
-function conceptMatchesSubjects(conceptId: string, subjects: string[]): boolean {
-  const allowed = subjectSetForPlan(subjects);
-  if (allowed.size === 0) return true;
-  const subject = kgById[conceptId]?.subject;
-  return subject ? allowed.has(subject) : true;
+function subjectForPlan(subjects: string[]): string {
+  const set = subjectSetForPlan(subjects);
+  if (set.has('physics')) return 'physics';
+  if (set.has('math')) return 'math';
+  if (subjects.length === 0) return 'math';
+  return subjects.includes('math') ? 'math' : subjects[0]!;
 }
 
 function depthOf(concept: string, universe: Set<string>, memo: Map<string, number>): number {
@@ -2696,17 +2681,20 @@ export async function getLearnerMemorySnapshot(
     }
 
     const subjects = profile?.subjects ?? [];
-    const masteryMatchesGoal = (conceptId: string) =>
-      conceptMatchesSubjects(conceptId, subjects);
+    const planConceptIds = new Set(
+      plan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
+    );
+    const masteryInScope = (conceptId: string) =>
+      masterySignalInScope(conceptId, { subjects, planConceptIds });
 
     const weakConcepts = Object.entries(mastery)
-      .filter(([id, score]) => score < 0.4 && masteryMatchesGoal(id))
+      .filter(([id, score]) => score < 0.4 && masteryInScope(id))
       .sort((a, b) => a[1] - b[1])
       .slice(0, 8)
       .map(([concept_id, score]) => ({ concept_id, score }));
 
     const strongConcepts = Object.entries(mastery)
-      .filter(([id, score]) => score >= 0.7 && masteryMatchesGoal(id))
+      .filter(([id, score]) => score >= 0.7 && masteryInScope(id))
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8)
       .map(([concept_id, score]) => ({ concept_id, score }));

@@ -22,6 +22,8 @@ import {
   shouldApplyPlanImmediately,
   stripPlanMachineTags,
   PLAN_AGENT_INSTRUCTIONS,
+  CASUAL_PLAN_CHANGE_TURN_INSTRUCTION,
+  learnerPlanChangeIntentHeuristic,
 } from '@/lib/plan-actions';
 import {
   applyPlanFromUserMessage,
@@ -38,7 +40,8 @@ import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
-import { normalizePlanChangeMessage } from '@/lib/plan-change-template';
+import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-change-template';
+import { masterySignalInScope } from '@/lib/concept-scope';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -496,15 +499,25 @@ async function buildContextPrompt(
     }
   }
 
+  const currentPlan =
+    profile ? await getCurrentPlan(userId).catch(() => null) : null;
+  const planConceptIds = new Set(
+    currentPlan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
+  );
+  const profileSubjects = profile?.subjects ?? [];
+  const masteryInScope = (conceptId: string) =>
+    masterySignalInScope(conceptId, { subjects: profileSubjects, planConceptIds });
+
   const weakConcepts = Object.entries(mastery)
-    .filter(([, score]) => score < 0.4)
+    .filter(([id, score]) => score < 0.4 && masteryInScope(id))
     .sort((a, b) => a[1] - b[1])
     .slice(0, 5)
     .map(([id]) => id);
   const strongConcepts = Object.entries(mastery)
-    .filter(([, score]) => score > 0.7)
-    .map(([id]) => id)
-    .slice(0, 5);
+    .filter(([id, score]) => score > 0.7 && masteryInScope(id))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([id]) => id);
   if (weakConcepts.length || strongConcepts.length) {
     context += `\n\n## Mastery so far`;
     if (weakConcepts.length) context += `\n- Weak areas: ${weakConcepts.join(', ')}`;
@@ -512,7 +525,7 @@ async function buildContextPrompt(
   }
 
   if (profile && (agent === 'mentor' || agent === 'tutor')) {
-    const plan = await getCurrentPlan(userId).catch(() => null);
+    const plan = currentPlan;
     if (plan?.weeks?.length) {
       context += `\n\n## Current weekly learning plan (authoritative — from onboarding + diagnostic)`;
       context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
@@ -532,6 +545,14 @@ async function buildContextPrompt(
     context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
     context += `\n\n${PLAN_GROUNDING_RULES}`;
     context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
+
+    const normalizedMsg = normalizePlanChangeMessage(message);
+    if (
+      learnerPlanChangeIntentHeuristic(message) &&
+      !isPlanChangeTemplate(normalizedMsg)
+    ) {
+      context += `\n\n${CASUAL_PLAN_CHANGE_TURN_INSTRUCTION}`;
+    }
   }
 
   if (topic) {
