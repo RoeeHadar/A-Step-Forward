@@ -10,24 +10,32 @@ import {
   inferGoalMetaFromText,
   proposalToUpdatePayload,
 } from './plan-actions';
+import { buildPlanChangeRequest } from './plan-change-template';
 import {
   buildPlanAppliedNotice,
   buildPlanApplyingNotice,
   buildPlanApplyFailureNotice,
 } from './plan-apply';
 
-const USER =
-  'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+const USER = buildPlanChangeRequest(
+  { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
+  'he',
+);
 const ASSISTANT =
   'אני הולך לשנות את התוכנית שלך. התוכנית החדשה תכלול חזרה על נושאים חשובים למבחן.';
 
-describe('chat stream finalize (calc1 plan change)', () => {
-  it('triggers immediate apply on first calc1 exam message', () => {
+describe('chat stream finalize (calc1 plan change template)', () => {
+  it('triggers immediate apply on first template message', () => {
     expect(shouldApplyPlanImmediately(USER)).toBe(true);
   });
 
   it('decides to apply after tutor acknowledgment', () => {
     expect(shouldApplyPlanChange(USER, ASSISTANT)).toBe(true);
+  });
+
+  it('does not apply casual phrasing without template', () => {
+    const casual = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+    expect(shouldApplyPlanImmediately(casual)).toBe(false);
   });
 
   it('builds applying + success notices for Hebrew locale', () => {
@@ -71,5 +79,6 @@ describe('chat stream finalize (calc1 plan change)', () => {
   it('surfaces failure notice when payload is missing', () => {
     const failure = buildPlanApplyFailureNotice('he', 'missing_payload');
     expect(failure).toContain('לא הצלחתי לעדכן את התוכנית');
+    expect(failure).toContain('תבנית');
   });
 });

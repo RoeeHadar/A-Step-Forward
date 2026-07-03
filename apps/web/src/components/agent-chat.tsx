@@ -6,7 +6,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
 import { ChatHistoryPanel } from '@/components/chat-history-panel';
-import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, learnerPlanChangeIntent, shouldApplyPlanImmediately } from '@/lib/plan-actions';
+import { extractPlanUpdate, stripPlanMachineTags, learnerConfirmedChange, shouldApplyPlanImmediately } from '@/lib/plan-actions';
+import { isPlanChangeTemplate } from '@/lib/plan-change-template';
+import { PlanChangeTemplatePanel } from '@/components/plan-change-template-panel';
 import { useRouter } from 'next/navigation';
 import { Send, Loader2, X } from 'lucide-react';
 import { Button } from '@asf/ui/button';
@@ -170,7 +172,7 @@ export function AgentChat({
   const topicFromUrl = searchParams.get('topic') ?? undefined;
   const studyTopic = topic ?? topicFromUrl;
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages, data } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setMessages, setInput, data } =
     useChat({
     api: '/api/chat',
     id: `${agentName}-${sessionId ?? 'pending'}-${chatKey}`,
@@ -317,6 +319,13 @@ export function AgentChat({
   const statusMessage =
     showConnecting && isLoading ? i18nMessages.chat.connecting : i18nMessages.chat.thinking;
 
+  function shouldShowPlanApplying(nextInput: string): boolean {
+    if (!isPlanAgent) return false;
+    if (shouldApplyPlanImmediately(nextInput)) return true;
+    if (!learnerConfirmedChange(nextInput)) return false;
+    return messages.some((m) => m.role === 'user' && isPlanChangeTemplate(m.content));
+  }
+
   const gradient = agentGradients[agentName] ?? 'from-primary to-accent-cyan';
 
   return (
@@ -410,7 +419,16 @@ export function AgentChat({
           aria-label="Chat messages"
         >
           {messages.length === 0 ? (
-            <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
+            <div className="space-y-4">
+              <p className="text-center text-muted-foreground">{i18nMessages.chat.empty}</p>
+              {isPlanAgent ? (
+                <PlanChangeTemplatePanel
+                  locale={isHe ? 'he' : 'en'}
+                  copy={i18nMessages.chat.planChangeTemplate}
+                  onUseTemplate={(text) => setInput(text)}
+                />
+              ) : null}
+            </div>
           ) : (
             messages.map((m) => (
               <div
@@ -463,8 +481,8 @@ export function AgentChat({
               role="alert"
             >
               {isHe
-                ? '⚠️ לא הצלחנו לעדכן את התוכנית. נסה לנסח את המטרה מחדש ולאשר עם "כן".'
-                : '⚠️ We could not update your plan. Try stating your new goal again and confirm with "yes".'}
+                ? '⚠️ לא הצלחנו לעדכן את התוכנית. השתמש בתבנית "עדכון תוכנית הלימוד", מלא את השדות ושלח שוב.'
+                : '⚠️ We could not update your plan. Use the "Update your learning plan" template, fill in the fields, and send again.'}
             </div>
           ) : null}
           {isLoading ? (
@@ -482,14 +500,20 @@ export function AgentChat({
           </p>
         ) : null}
 
+        {isPlanAgent && messages.length > 0 ? (
+          <div className="border-t border-border px-4 pt-3">
+            <PlanChangeTemplatePanel
+              locale={isHe ? 'he' : 'en'}
+              copy={i18nMessages.chat.planChangeTemplate}
+              onUseTemplate={(text) => setInput(text)}
+              className="mb-0"
+            />
+          </div>
+        ) : null}
+
         <form
           onSubmit={(e) => {
-            if (
-              isPlanAgent &&
-              (learnerConfirmedChange(input) ||
-                learnerPlanChangeIntent(input) ||
-                shouldApplyPlanImmediately(input))
-            ) {
+            if (shouldShowPlanApplying(input)) {
               pendingPlanApplyRef.current = true;
               setPlanApplyState('applying');
             }
@@ -511,12 +535,7 @@ export function AgentChat({
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                if (
-                  isPlanAgent &&
-                  (learnerConfirmedChange(input) ||
-                learnerPlanChangeIntent(input) ||
-                shouldApplyPlanImmediately(input))
-                ) {
+                if (shouldShowPlanApplying(input)) {
                   pendingPlanApplyRef.current = true;
                   setPlanApplyState('applying');
                 }

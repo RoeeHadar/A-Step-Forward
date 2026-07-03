@@ -1,19 +1,25 @@
 /**
- * End-to-end plan-change path (no LLM): Hebrew calc1 exam request → payload → optional Neon write.
+ * End-to-end plan-change path (no LLM): Hebrew calc1 exam template → payload → optional Neon write.
  */
 import { describe, expect, it } from 'vitest';
 import {
-  learnerExplicitChangeRequest,
   shouldApplyPlanChange,
   shouldApplyPlanImmediately,
   inferGoalMetaFromText,
   inferConceptIdsFromText,
   proposalToUpdatePayload,
 } from './plan-actions';
+import { buildPlanChangeRequest } from './plan-change-template';
 import { resolvePayloadForApply, executePlanUpdate } from './plan-apply';
 
-const CALC1_USER =
-  'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+const CALC1_USER = buildPlanChangeRequest(
+  {
+    goal: 'מבחן בחדוא 1',
+    date: 'עוד שבוע',
+    topics: 'גבולות, נגזרות, אינטגרלים',
+  },
+  'he',
+);
 const CALC1_ASSISTANT =
   'אני הולך לשנות את התוכנית שלך. התוכנית החדשה תכלול חזרה על נושאים חשובים למבחן.';
 
@@ -22,9 +28,8 @@ const hasDb = (() => {
   return /^postgres(ql)?:\/\/.+@/.test(url);
 })();
 
-describe('plan change e2e (calc1 exam, Hebrew)', () => {
-  it('detects explicit learner request and tutor acknowledgment', () => {
-    expect(learnerExplicitChangeRequest(CALC1_USER)).toBe(true);
+describe('plan change e2e (calc1 exam, Hebrew template)', () => {
+  it('detects official template and tutor acknowledgment', () => {
     expect(shouldApplyPlanChange(CALC1_USER, CALC1_ASSISTANT)).toBe(true);
   });
 
@@ -45,12 +50,13 @@ describe('plan change e2e (calc1 exam, Hebrew)', () => {
     expect(inferConceptIdsFromText(CALC1_USER)).toContain('limits');
   });
 
-  it('handles combined user message with embedded plan-change line', () => {
-    const combined = `${CALC1_USER}\nאני הולך לשנות את התוכנית שלך.`;
-    expect(shouldApplyPlanChange(combined, 'מעולה, נתחיל מגבולות.')).toBe(true);
+  it('does not apply casual phrasing without template', () => {
+    const casual = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+    expect(shouldApplyPlanChange(casual, 'מעולה, נתחיל מגבולות.')).toBe(false);
+    expect(shouldApplyPlanImmediately(casual)).toBe(false);
   });
 
-  it('still applies when tutor asks clarifying questions after explicit request', () => {
+  it('applies immediately when template is sent', () => {
     expect(
       shouldApplyPlanChange(
         CALC1_USER,

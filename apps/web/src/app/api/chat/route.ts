@@ -291,7 +291,8 @@ async function finalizeAssistantTurn(
   }
 
   const applyNow =
-    !planAlreadyApplied && shouldApplyPlanChange(userMessage, assistantRaw, priorUser);
+    !planAlreadyApplied &&
+    shouldApplyPlanChange(userMessage, assistantRaw, priorUser, recentUserMessages);
 
   try {
     await saveProposalFromAssistantTurn(userId, agent, userMessage, assistantRaw);

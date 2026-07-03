@@ -6,6 +6,12 @@
  */
 import type { GeneratePlanOptions } from '@/lib/neon-db';
 import {
+  extractPlanChangeTemplateBody,
+  isPlanChangeTemplate,
+  planChangeTextForParsing,
+  recentMessagesIncludePlanTemplate,
+} from '@/lib/plan-change-template';
+import {
   sanitizeConceptIds,
   sanitizePlanUpdatePayload,
   type PlanUpdatePayload,
@@ -140,8 +146,26 @@ function toIsoDate(d: Date): string {
 
 /** Parse goal text, track key, and target dates from Hebrew/English chat. */
 export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
-  const blob = texts.join('\n');
+  const parsedTexts = planChangeTextForParsing(...texts);
+  const blob = parsedTexts.join('\n');
   const out: InferredGoalMeta = {};
+
+  const templateGoal = blob.match(
+    /(?:מטרה\s*\/?\s*מבחן|goal\s*\/?\s*exam)\s*:\s*([^\n]+)/i,
+  );
+  if (templateGoal?.[1]?.trim()) {
+    out.goal = templateGoal[1].trim();
+  }
+
+  const templateDate = blob.match(
+    /(?:מועד(?:\s*\([^)]*\))?|target\s*date(?:\s*\([^)]*\))?)\s*:\s*([^\n]+)/i,
+  );
+  if (templateDate?.[1]?.trim()) {
+    const dateText = templateDate[1].trim();
+    const dateMeta = inferGoalMetaFromText(dateText);
+    if (dateMeta.final_goal_date) out.final_goal_date = dateMeta.final_goal_date;
+    if (dateMeta.next_test_date) out.next_test_date = dateMeta.next_test_date;
+  }
 
   const heNewGoal = blob.match(/המטרה החדשה(?: שלי)?(?: היא|:)\s*([^\n.]+)/i);
   if (heNewGoal?.[1]) {
@@ -211,10 +235,15 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
 }
 
 /**
- * Broad detection: learner wants their goal and/or weekly plan changed.
- * Used for UI feedback, pending proposals, and apply triggers.
+ * Official plan-change signal: learner pasted the ASF plan-update template.
+ * Only this triggers plan apply on the server and in chat UI.
  */
 export function learnerPlanChangeIntent(message: string): boolean {
+  return isPlanChangeTemplate(message);
+}
+
+/** @deprecated broad heuristics — kept for reference; apply is template-only. */
+export function learnerPlanChangeIntentHeuristic(message: string): boolean {
   const t = message.trim();
   if (!t) return false;
   const lower = t.toLowerCase();
@@ -278,23 +307,23 @@ export function looksLikePlanApplyIntent(text: string): boolean {
 }
 
 function hasActionablePlanChangeRequest(...texts: string[]): boolean {
-  const blob = texts.filter(Boolean).join('\n');
+  const parsed = planChangeTextForParsing(...texts.filter(Boolean));
+  const blob = parsed.join('\n');
   if (!blob.trim()) return false;
-  const meta = inferGoalMetaFromText(...texts);
-  const concepts = inferConceptIdsFromText(...texts);
+  const meta = inferGoalMetaFromText(...parsed);
+  const concepts = inferConceptIdsFromText(...parsed);
   if (
     Boolean(meta.goal || meta.final_goal_date || meta.goal_key || meta.clear_next_test) ||
     concepts.length > 0
   ) {
     return true;
   }
-  // Explicit plan-change request — regenerate even before goal/topic is fully parsed
-  return texts.some((t) => learnerPlanChangeIntent(t));
+  return texts.some((t) => isPlanChangeTemplate(t));
 }
 
 /** Direct plan-change request — apply without waiting for tutor Q&A. */
 export function shouldApplyPlanImmediately(userMessage: string): boolean {
-  return learnerPlanChangeIntent(userMessage) && hasActionablePlanChangeRequest(userMessage);
+  return isPlanChangeTemplate(userMessage);
 }
 
 export function looksLikePlanChangeAcknowledgment(text: string): boolean {
@@ -308,14 +337,21 @@ export function shouldApplyPlanChange(
   userMessage: string,
   assistantRaw: string,
   priorUserMessage?: string,
+  recentUserMessages?: string[],
 ): boolean {
-  if (learnerConfirmedChange(userMessage)) return true;
+  const userHistory = (
+    recentUserMessages?.length
+      ? recentUserMessages
+      : [priorUserMessage, userMessage]
+  ).filter(Boolean) as string[];
 
-  const userTexts = [priorUserMessage, userMessage].filter(Boolean) as string[];
-  const hasExplicit = userTexts.some((m) => learnerPlanChangeIntent(m));
-  if (!hasExplicit) return false;
+  if (learnerConfirmedChange(userMessage)) {
+    return recentMessagesIncludePlanTemplate(userHistory);
+  }
 
-  const contextTexts = [...userTexts, assistantRaw];
+  if (!userHistory.some((m) => isPlanChangeTemplate(m))) return false;
+
+  const contextTexts = [...userHistory, assistantRaw];
 
   if (
     looksLikePlanChangeAcknowledgment(assistantRaw) ||
@@ -324,18 +360,9 @@ export function shouldApplyPlanChange(
     return true;
   }
 
-  if (
-    userTexts.some(
-      (m) => learnerPlanChangeIntent(m) && looksLikePlanApplyIntent(m),
-    )
-  ) {
-    return true;
-  }
-
   if (!hasActionablePlanChangeRequest(...contextTexts)) return false;
   if (!assistantRaw.trim()) return false;
 
-  // Direct imperative with inferable exam/goal data — apply after any tutor reply.
   return true;
 }
 
@@ -419,10 +446,12 @@ export function learnerConfirmedChange(message: string): boolean {
 export const PLAN_AGENT_INSTRUCTIONS = `
 ## Learning-plan & goal modification protocol (Mentor + Tutor)
 
-You CAN update the learner's **goal** (profile text, exam dates) and **weekly plan** in Neon. Before changing anything:
-1. **Understand why** — ask 1–2 clarifying questions if the request is vague.
-2. **Summarize the diff** — current goal vs new goal; current weeks vs projected weeks (concept names in the learner's language).
-3. **Confirmation** — if the learner gave a direct imperative ("שנה את המטרה", "המטרה החדשה שלי היא…", "יש לי מבחן … שנה לי את התוכנית"), **apply in the same turn** after a one-line summary. Do NOT block the update with multi-turn Q&A — the server applies immediately; you may ask about weak topics **after** noting the plan was updated.
+The site applies plan changes **only** when the learner sends the official template (markers \`[[ASF-PLAN-UPDATE …]]\` … \`[[/ASF-PLAN-UPDATE]]\`). Casual phrasing like "שנה לי את התוכנית" does **not** update Neon — direct them to the copyable template in chat.
+
+When you receive the template:
+1. **Read the filled fields** (goal/exam, date, topics, details) — ask at most one clarifying question only if a critical field is empty.
+2. **Summarize the diff** briefly — current goal vs new goal; week preview in the learner's language.
+3. **Apply in the same turn** when the template is complete enough. The server applies immediately on template submit; do NOT block with multi-turn Q&A. You may ask about weak topics **after** noting the plan was updated.
 
 **Proposal turn** (optional, before confirmation): append at the **end**:
 \`[[ASF_PLAN_PROPOSAL:{"reason":"<why>","goal":"מבחן במתמטיקה בדידה","goal_key":"university_prep","final_goal_date":"2026-11-01","clear_next_test":true,"prepend_concepts":["combinatorics"],"priority_concepts":[],"exclude_concepts":[]}]]\`

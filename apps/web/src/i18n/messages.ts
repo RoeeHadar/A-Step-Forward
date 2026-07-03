@@ -185,6 +185,22 @@ const messages = {
       genericError: 'Something went wrong. Please try again.',
       warmup: 'Waking the AI up… (first response takes up to 30s)',
       discussWithTutor: 'Discuss with Tutor',
+      planChangeTemplate: {
+        title: 'Update your learning plan',
+        badge: 'Official template only',
+        whyBody:
+          'Your goal and weekly plan change on the site only when you send this exact template. Regular chat messages — even if they ask to change the plan — will not update your plan.',
+        howTitle: 'How to use',
+        howSteps: [
+          'Click “Use template” or copy the block below.',
+          'Fill in goal/exam, date, topics, and any extra details.',
+          'Send the message. The site updates your plan automatically.',
+        ],
+        note: 'Keep the [[ASF-PLAN-UPDATE …]] markers at the top and bottom — they tell the system this is an official plan-change request.',
+        copyLabel: 'Copy template',
+        useLabel: 'Use template',
+        copiedLabel: 'Copied',
+      },
     },
     learn: {
       learn: 'Learn',
@@ -408,6 +424,22 @@ const messages = {
       genericError: 'משהו השתבש. נסה שוב.',
       warmup: '🔄 מעיר את ה-AI… (התגובה הראשונה עשויה לקחת עד 30 שניות)',
       discussWithTutor: 'שוחח עם המורה',
+      planChangeTemplate: {
+        title: 'עדכון תוכנית הלימוד',
+        badge: 'תבנית רשמית בלבד',
+        whyBody:
+          'המטרה והתוכנית השבועית באתר משתנות רק כששולחים את התבנית הזו. הודעות רגילות בצ\'אט — גם אם מבקשות לשנות תוכנית — לא יעדכנו את התוכנית.',
+        howTitle: 'איך משתמשים',
+        howSteps: [
+          'לחץ על "השתמש בתבנית" או העתק את הקטע למטה.',
+          'מלא מטרה/מבחן, מועד, נושאים ופרטים נוספים.',
+          'שלח את ההודעה. האתר יעדכן את התוכנית אוטומטית.',
+        ],
+        note: 'השאר את הסימונים [[ASF-PLAN-UPDATE …]] בראש ובסוף — הם מסמנים לבקשת עדכון תוכנית רשמית.',
+        copyLabel: 'העתק תבנית',
+        useLabel: 'השתמש בתבנית',
+        copiedLabel: 'הועתק',
+      },
     },
     learn: {
       learn: 'למידה',

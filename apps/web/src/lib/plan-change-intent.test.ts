@@ -1,50 +1,77 @@
 import { describe, expect, it } from 'vitest';
+import { buildPlanChangeRequest } from './plan-change-template';
 import {
   learnerPlanChangeIntent,
+  learnerPlanChangeIntentHeuristic,
   shouldApplyPlanImmediately,
   shouldApplyPlanChange,
 } from './plan-actions';
 
-const SHOULD_DETECT = [
+const CALC1_TEMPLATE = buildPlanChangeRequest(
+  {
+    goal: 'מבחן בחדוא 1',
+    date: 'עוד שבוע',
+    topics: 'גבולות, נגזרות, אינטגרלים',
+  },
+  'he',
+);
+
+const CASUAL_REQUESTS = [
   'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם',
   'אני רוצה שתשנה לי את תוכנית הלימוד',
-  'שנה את המטרה שלי — מבחן במתמטיקה בדידה בעוד 8 חודשים',
-  'תעדכן את תוכנית השבוע שלי',
-  'תתאם את המסלול למבחן בפיזיקה',
   'please update my weekly plan for calculus 1',
-  'change my goal — I am not doing bagrut anymore',
-  'reorganize my study schedule',
-  'adjust my learning path to focus on limits',
-  'הוסף קומבינטוריקה לתוכנית',
-  'דחף את ההסתברות לשבוע הקרוב',
 ];
 
-const SHOULD_NOT_DETECT = [
+const NON_PLAN_CHAT = [
   'מה זה אינטגרל?',
   'can you explain Newton\'s second law?',
-  'עזור לי עם שאלה 5',
   'thanks for the explanation',
-  'what topics are in the curriculum',
 ];
 
-describe('learnerPlanChangeIntent (broad detection)', () => {
-  it.each(SHOULD_DETECT)('detects plan change: %s', (msg) => {
-    expect(learnerPlanChangeIntent(msg)).toBe(true);
-  });
-
-  it.each(SHOULD_NOT_DETECT)('ignores non-plan chat: %s', (msg) => {
-    expect(learnerPlanChangeIntent(msg)).toBe(false);
-  });
-
-  it('triggers immediate apply for detected plan-change requests', () => {
-    for (const msg of SHOULD_DETECT) {
-      expect(shouldApplyPlanImmediately(msg)).toBe(true);
+describe('template-only plan change detection', () => {
+  it('detects only the official template', () => {
+    expect(learnerPlanChangeIntent(CALC1_TEMPLATE)).toBe(true);
+    for (const msg of CASUAL_REQUESTS) {
+      expect(learnerPlanChangeIntent(msg)).toBe(false);
     }
   });
 
-  it('applies after tutor reply for any detected request', () => {
-    const user = 'תעדכן את תוכנית הלימוד שלי לקראת הבחינה';
+  it('still recognizes casual phrasing via heuristic helper (not for apply)', () => {
+    for (const msg of CASUAL_REQUESTS) {
+      expect(learnerPlanChangeIntentHeuristic(msg)).toBe(true);
+    }
+  });
+
+  it('applies immediately only for template messages', () => {
+    expect(shouldApplyPlanImmediately(CALC1_TEMPLATE)).toBe(true);
+    for (const msg of CASUAL_REQUESTS) {
+      expect(shouldApplyPlanImmediately(msg)).toBe(false);
+    }
+  });
+
+  it('ignores general tutoring', () => {
+    for (const msg of NON_PLAN_CHAT) {
+      expect(learnerPlanChangeIntent(msg)).toBe(false);
+      expect(shouldApplyPlanImmediately(msg)).toBe(false);
+    }
+  });
+
+  it('applies after tutor reply when template was sent', () => {
+    const assistant = 'בטח, אעדכן את התוכנית בהתאם למבחן.';
+    expect(shouldApplyPlanChange(CALC1_TEMPLATE, assistant)).toBe(true);
+  });
+
+  it('does not apply casual request even after tutor reply', () => {
+    const user = CASUAL_REQUESTS[0]!;
     const assistant = 'בטח, ספר לי עוד על המטרה.';
-    expect(shouldApplyPlanChange(user, assistant)).toBe(true);
+    expect(shouldApplyPlanChange(user, assistant)).toBe(false);
+  });
+
+  it('confirms only when prior turn used the template', () => {
+    const priorTemplate = CALC1_TEMPLATE;
+    expect(shouldApplyPlanChange('כן', 'מעולה.', priorTemplate)).toBe(true);
+    expect(
+      shouldApplyPlanChange('כן', 'מעולה.', 'שנה לי את התוכנית בבקשה'),
+    ).toBe(false);
   });
 });

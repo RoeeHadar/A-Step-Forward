@@ -12,7 +12,7 @@ import {
   inferConceptIdsFromText,
   inferGoalMetaFromText,
   learnerConfirmedChange,
-  learnerExplicitChangeRequest,
+  learnerPlanChangeIntentHeuristic,
   looksLikePlanApplyIntent,
   looksLikePlanProposal,
   proposalToUpdatePayload,
@@ -20,6 +20,7 @@ import {
   shouldApplyPlanImmediately,
   learnerPlanChangeIntent,
 } from '@/lib/plan-actions';
+import { buildPlanChangeRequest } from '@/lib/plan-change-template';
 
 describe('plan-catalog grounding', () => {
   it('recognizes KG concept ids', () => {
@@ -110,12 +111,18 @@ describe('plan-actions', () => {
     expect(meta.goal_key).toBe('university_prep');
     expect(meta.clear_next_test).toBe(true);
     expect(meta.final_goal_date).toBeTruthy();
-    expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
+    expect(learnerPlanChangeIntentHeuristic(userMsg)).toBe(true);
   });
 
-  it('applies plan when user gives explicit goal change and tutor commits', () => {
-    const userMsg =
-      'שנה את המטרה שלי - המטרה החדשה שלי היא מבחן במתמטיקה בדידה בעוד 8 חודשים';
+  it('applies plan when user sends template and tutor commits', () => {
+    const userMsg = buildPlanChangeRequest(
+      {
+        goal: 'מבחן במתמטיקה בדידה',
+        date: 'בעוד 8 חודשים',
+        details: 'אני לא עושה בגרות יותר',
+      },
+      'he',
+    );
     const assistant =
       'המטרה החדשה שלך היא מבחן במתמטיקה בדידה. אני אעדכן את התוכנית השבועית שלך בהתאם.';
     expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
@@ -130,11 +137,14 @@ describe('plan-actions', () => {
     expect(payload.prepend_concepts).toContain('combinatorics');
   });
 
-  it('applies calc1 exam plan when user asks to change plan for exam in one week', () => {
-    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+  it('applies calc1 exam plan when user sends official template', () => {
+    const userMsg = buildPlanChangeRequest(
+      { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
+      'he',
+    );
     const assistant =
       'אני הולך לשנות את התוכנית שלך. התוכנית החדשה תכלול חזרה על נושאים חשובים למבחן.';
-    expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
+    expect(learnerPlanChangeIntent(userMsg)).toBe(true);
     expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
     const meta = inferGoalMetaFromText(userMsg, assistant);
     expect(meta.goal_key).toBe('calculus1');
@@ -142,43 +152,42 @@ describe('plan-actions', () => {
     expect(meta.next_test_date).toBeTruthy();
   });
 
-  it('applies when user message includes both request and plan-change intent', () => {
-    const userMsg =
-      'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם\nאני הולך לשנות את התוכנית שלך.';
+  it('does not apply casual phrasing without the template', () => {
+    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
     const assistant = 'מעולה, נתחיל מגבולות ונגזרות.';
-    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
+    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(false);
   });
 
-  it('applies with minimal tutor ack when goal is inferable from user message', () => {
-    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
-    const assistant = 'אני הולך לשנות את התוכנית שלך.';
-    expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
-  });
-
-  it('applies immediately on first message without waiting for tutor Q&A', () => {
-    const userMsg = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+  it('applies immediately on first template message', () => {
+    const userMsg = buildPlanChangeRequest(
+      { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
+      'he',
+    );
     expect(shouldApplyPlanImmediately(userMsg)).toBe(true);
     const assistant =
       'לפני שאני אציג לך את התוכנית, האם תוכל לספר לי על הנושאים שקשים לך?';
     expect(shouldApplyPlanChange(userMsg, assistant)).toBe(true);
   });
 
-  it('detects "אני רוצה שתשנה לי את תוכנית הלימוד"', () => {
+  it('does not treat casual plan phrasing as official template', () => {
     const userMsg = 'אני רוצה שתשנה לי את תוכנית הלימוד';
-    expect(learnerExplicitChangeRequest(userMsg)).toBe(true);
+    expect(learnerPlanChangeIntent(userMsg)).toBe(false);
+    expect(learnerPlanChangeIntentHeuristic(userMsg)).toBe(true);
   });
 
-  it('applies immediately for any explicit plan-change phrase', () => {
+  it('applies immediately only for official template messages', () => {
+    const template = buildPlanChangeRequest({ goal: 'מבחן בבגרות' }, 'he');
+    expect(learnerPlanChangeIntent(template)).toBe(true);
+    expect(shouldApplyPlanImmediately(template)).toBe(true);
+
     const phrases = [
       'שנה את התוכנית',
       'תעדכן לי את תוכנית הלימוד',
       'please adjust my study plan for the exam',
-      'reorganize my weekly plan — focus on probability',
-      'המטרה החדשה שלי היא מבחן בבגרות',
     ];
     for (const msg of phrases) {
-      expect(learnerPlanChangeIntent(msg)).toBe(true);
-      expect(shouldApplyPlanImmediately(msg)).toBe(true);
+      expect(learnerPlanChangeIntent(msg)).toBe(false);
+      expect(shouldApplyPlanImmediately(msg)).toBe(false);
     }
   });
 
@@ -195,8 +204,11 @@ describe('plan-actions', () => {
     }
   });
 
-  it('applies on follow-up turn when prior user message was explicit', () => {
-    const priorUser = 'יש לי מבחן בחדוא 1 עוד שבוע שנה לי את התוכנית בהתאם';
+  it('applies on follow-up turn when prior user message used the template', () => {
+    const priorUser = buildPlanChangeRequest(
+      { goal: 'מבחן בחדוא 1', date: 'עוד שבוע' },
+      'he',
+    );
     const userMsg = 'כן';
     const assistant = 'אני הולך לשנות את התוכנית שלך.';
     expect(shouldApplyPlanChange(userMsg, assistant, priorUser)).toBe(true);

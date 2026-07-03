@@ -17,7 +17,6 @@ import {
   extractPlanUpdate,
   inferConceptIdsFromText,
   inferGoalMetaFromText,
-  learnerPlanChangeIntent,
   looksLikePlanApplyIntent,
   looksLikePlanProposal,
   planPayloadToOptions,
@@ -26,6 +25,7 @@ import {
   stripPlanMachineTags,
   type PlanProposalPayload,
 } from '@/lib/plan-actions';
+import { isPlanChangeTemplate, planChangeTextForParsing } from '@/lib/plan-change-template';
 import {
   sanitizePlanUpdatePayload,
   type PlanUpdatePayload,
@@ -83,7 +83,7 @@ export function buildPlanApplyFailureNotice(
       '---',
       '⚠️ **לא הצלחתי לעדכן את התוכנית באתר**',
       error ? `פרטים: ${error}` : '',
-      'נסה לנסח שוב את המטרה החדשה (למשל: "המטרה החדשה שלי היא…") ואשר עם "כן" / "עדכן".',
+      'נסה שוב: העתק את תבנית **עדכון תוכנית הלימוד** מהצ\'אט, מלא את השדות ושלח.',
     ]
       .filter(Boolean)
       .join('\n');
@@ -92,7 +92,7 @@ export function buildPlanApplyFailureNotice(
     '---',
     '⚠️ **I could not update your plan on the site**',
     error ? `Details: ${error}` : '',
-    'Try stating your new goal again (e.g. "My new goal is…") and confirm with "yes" / "update".',
+    'Try again: copy the **Learning plan update** template from chat, fill in the fields, and send it.',
   ]
     .filter(Boolean)
     .join('\n');
@@ -229,8 +229,9 @@ function mergeProposal(
   fromTag: PlanProposalPayload | null,
   ...texts: string[]
 ): PendingPlanProposal | null {
-  const goalMeta = inferGoalMetaFromText(...texts);
-  const inferredIds = inferConceptIdsFromText(...texts);
+  const parsed = planChangeTextForParsing(...texts.filter(Boolean));
+  const goalMeta = inferGoalMetaFromText(...parsed);
+  const inferredIds = inferConceptIdsFromText(...parsed);
   const reason =
     fromTag?.reason?.trim() ||
     (texts.some((t) => /חדו[\"']?א|חדוא|calculus\s*1|\bcalc1\b/i.test(t))
@@ -272,7 +273,7 @@ function mergeProposal(
     (fromTag?.exclude_concepts?.length ?? 0) > 0;
 
   if (!hasGoalChange && !hasConceptChange) {
-    if (texts.some((t) => learnerPlanChangeIntent(t))) {
+    if (texts.some((t) => isPlanChangeTemplate(t))) {
       return {
         reason,
         goal: fromTag?.goal ?? goalMeta.goal,
@@ -320,7 +321,7 @@ export async function saveProposalFromAssistantTurn(
     Boolean(tagProposal) ||
     looksLikePlanProposal(assistantRaw) ||
     looksLikePlanApplyIntent(assistantRaw) ||
-    learnerPlanChangeIntent(userMessage);
+    isPlanChangeTemplate(userMessage);
   if (!shouldSave) return;
   await setPendingPlanProposal(learnerId, { ...merged, agent });
 }
@@ -362,7 +363,7 @@ export async function resolvePayloadForApply(
     (merged.priority_concepts?.length ?? 0) > 0;
 
   if (!hasContent) {
-    if (contextTexts.some((t) => learnerPlanChangeIntent(t))) {
+    if (contextTexts.some((t) => isPlanChangeTemplate(t))) {
       return proposalToUpdatePayload(merged);
     }
     return null;
