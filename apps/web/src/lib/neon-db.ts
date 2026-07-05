@@ -11,6 +11,7 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
+import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
@@ -35,6 +36,81 @@ function requireSql() {
     );
   }
   return sql;
+}
+
+/** Thrown when a Neon read helper fails (API routes should map to 503). */
+export class NeonQueryFailedError extends Error {
+  constructor(operation: string, cause?: unknown) {
+    super(`${operation} failed`);
+    this.name = 'NeonQueryFailedError';
+    this.cause = cause;
+  }
+}
+
+const PLAN_LOCK_BUSY = 'plan_update_in_progress';
+const CONSOLIDATE_LOCK_BUSY = 'consolidation_in_progress';
+
+type NeonSql = NonNullable<typeof sql>;
+
+/** Key for `pg_try_advisory_xact_lock(hashtext(...))` — scoped per learner + operation. */
+export function learnerAdvisoryLockKey(scope: string, learnerId: string): string {
+  return `${scope}:${learnerId}`;
+}
+
+/** Detect lock contention from a rolled-back Neon transaction batch. */
+export function isNeonLockContention(err: unknown, errCode: string): boolean {
+  if (!(err instanceof Error)) return false;
+  return err.message.includes(errCode);
+}
+
+/** First statement in a transaction batch — aborts the whole tx if lock not acquired. */
+function xactLockGuardQuery(txn: NeonSql, lockKey: string, errCode: string) {
+  return txn`
+    DO $asf$
+    BEGIN
+      IF NOT pg_try_advisory_xact_lock(hashtext(${lockKey})) THEN
+        RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = ${errCode};
+      END IF;
+    END;
+    $asf$
+  `;
+}
+
+/**
+ * Atomically write consolidated persona + archive promoted notes.
+ * Uses a transaction-level advisory lock (safe on Neon pooled HTTP connections).
+ */
+export async function persistConsolidationResult(
+  learnerId: string,
+  personaText: string,
+  archiveNoteIds: string[],
+): Promise<{ ok: true } | { ok: false; reason: 'consolidation_in_progress' }> {
+  const s = requireSql();
+  const lockKey = learnerAdvisoryLockKey('consolidate', learnerId);
+  const clamped = personaText.slice(0, 4000);
+  const queries = [
+    xactLockGuardQuery(s, lockKey, CONSOLIDATE_LOCK_BUSY),
+    s`
+      UPDATE learner_profiles
+      SET learner_persona = ${clamped},
+          learner_persona_updated_at = NOW(),
+          updated_at = NOW()
+      WHERE learner_id = ${learnerId}
+    `,
+    ...archiveNoteIds.map(
+      (id) =>
+        s`UPDATE learner_agent_notes SET archived_at = NOW() WHERE id = ${id}::uuid`,
+    ),
+  ];
+  try {
+    await s.transaction(queries);
+    return { ok: true };
+  } catch (err) {
+    if (isNeonLockContention(err, CONSOLIDATE_LOCK_BUSY)) {
+      return { ok: false, reason: 'consolidation_in_progress' };
+    }
+    throw err;
+  }
 }
 
 // ── Onboarding / learner profile ─────────────────────────────────────────────
@@ -617,24 +693,23 @@ export async function generateLearningPlan(
   const startStr = startDate.toISOString().slice(0, 10);
   const endStr = endDate.toISOString().slice(0, 10);
 
-  await s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`;
-  await s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`;
-  await s`
-    INSERT INTO learning_plans (id, learner_id, goal, start_date, end_date, status, created_at, updated_at)
-    VALUES (${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active', NOW(), NOW())
-  `;
-
   const weeks: PlanWeek[] = [];
+  const persistWeeks: Array<{
+    weekId: string;
+    weekNumber: number;
+    concepts: string[];
+    quizDue: string;
+    status: string;
+  }> = [];
+
   for (let i = 0; i < weekGroups.length; i++) {
     const concepts = weekGroups[i]!;
     const weekId = randomUUID();
     const quizDue = new Date(startDate);
     quizDue.setDate(quizDue.getDate() + 7 * (i + 1));
     const status = i === 0 ? 'active' : 'upcoming';
-    await s`
-      INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
-      VALUES (${weekId}, ${planId}, ${i + 1}, ${concepts}, ${quizDue.toISOString()}, ${status})
-    `;
+    const quizDueIso = quizDue.toISOString();
+
     const hydrated: PlanConcept[] = [];
     for (const cid of concepts) {
       const kgInfo = kgById[cid];
@@ -663,9 +738,43 @@ export async function generateLearningPlan(
       plan_id: planId,
       week_number: i + 1,
       concepts: hydrated,
-      quiz_due_at: quizDue.toISOString(),
+      quiz_due_at: quizDueIso,
       status,
     });
+    persistWeeks.push({
+      weekId,
+      weekNumber: i + 1,
+      concepts,
+      quizDue: quizDueIso,
+      status,
+    });
+  }
+
+  const lockKey = learnerAdvisoryLockKey('plan-gen', learnerId);
+  const persistQueries = [
+    xactLockGuardQuery(s, lockKey, PLAN_LOCK_BUSY),
+    s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`,
+    s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`,
+    s`
+      INSERT INTO learning_plans (id, learner_id, goal, start_date, end_date, status, created_at, updated_at)
+      VALUES (${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active', NOW(), NOW())
+    `,
+    ...persistWeeks.map(
+      (w) =>
+        s`
+          INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
+          VALUES (${w.weekId}, ${planId}, ${w.weekNumber}, ${w.concepts}, ${w.quizDue}, ${w.status})
+        `,
+    ),
+  ];
+
+  try {
+    await s.transaction(persistQueries);
+  } catch (err) {
+    if (isNeonLockContention(err, PLAN_LOCK_BUSY)) {
+      throw new Error('A plan update is already in progress for this learner');
+    }
+    throw err;
   }
 
   return {
@@ -2417,11 +2526,29 @@ export async function getDashboardSnapshot(
       mastery_summary,
     };
   } catch (err) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('[neon-db] getDashboardSnapshot failed', err);
-    }
-    return EMPTY_DASHBOARD;
+    console.warn('[neon-db] getDashboardSnapshot failed', err);
+    throw new NeonQueryFailedError('getDashboardSnapshot', err);
   }
+}
+
+/** Maps internal dashboard snapshot → legacy `/api/dashboard` JSON shape. */
+export function mapDashboardSnapshotToLearnerDashboard(
+  snap: DashboardSnapshot,
+): LearnerDashboard {
+  return {
+    recent_lessons: snap.recent_lessons.map((l) => ({
+      id: l.id ?? l.concept_id,
+      title: l.title,
+      progress: l.progress,
+      last_accessed_at: l.last_activity,
+      est_minutes: l.est_minutes ?? 20,
+    })),
+    mastery_summary: snap.mastery_summary.map((m) => ({
+      concept_id: m.concept_id,
+      concept_name: m.name,
+      score: m.score,
+    })),
+  };
 }
 
 // ── /app/progress real stats ──────────────────────────────────────────────────
@@ -2880,10 +3007,8 @@ export async function getMemoryTimelineFromNeon(
 
     return records;
   } catch (err) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('[neon-db] getMemoryTimelineFromNeon failed', err);
-    }
-    return [];
+    console.warn('[neon-db] getMemoryTimelineFromNeon failed', err);
+    throw new NeonQueryFailedError('getMemoryTimelineFromNeon', err);
   }
 }
 

@@ -14,6 +14,8 @@ ADRs in PRs.
 | [0003](0003-security-threat-model.md) | Security threat model | Accepted |
 | [0004](0004-llm-provider-groq.md) | Groq Cloud as primary LLM provider | Accepted |
 | [0005](0005-embeddings-sentence-transformers.md) | Sentence-Transformers for GraphRAG embeddings | Accepted |
+| [0006](0006-neon-direct-critical-path.md) | Neon-direct critical path (Vercel + Neon SSOT) | Proposed |
+| [0007](0007-learning-planner-authority.md) | Learning planner authority (`buildLearningPlan`) | Proposed |
 
 ## Authoring a new ADR
 

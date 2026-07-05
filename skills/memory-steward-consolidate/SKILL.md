@@ -55,10 +55,9 @@ Returns: `{ ran, reason?, persona_chars_before, persona_chars_after, notes_consi
 - **Settings page button** — `Rebuild from notes` in `/settings/persona`. Calls
   `POST /api/agent-memory/consolidate { force: false }`. Surfaces the
   result inline.
-- **Weekly cron** — `Sunday 03:00 UTC` via two paths (whichever is
-  available in your tier):
-  - Vercel cron: `apps/web/vercel.json` → `/api/cron/consolidate-memory?limit=25`
-  - GitHub Actions: `.github/workflows/cron-consolidate-memory.yml`
+- **Weekly cron** — `Sunday 03:00 UTC` via **Vercel cron only**:
+  - `apps/web/vercel.json` → `/api/cron/consolidate-memory?limit=25`
+  - GitHub Actions workflow is **manual backstop** (`workflow_dispatch` only) — see `.github/workflows/cron-consolidate-memory.yml`
 - **Educator/admin tooling** — POST to either endpoint with the right auth.
 - **Never** on the request path — this is a 20-second LLM round trip.
 

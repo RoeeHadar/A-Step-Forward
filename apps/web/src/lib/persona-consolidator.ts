@@ -30,8 +30,7 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import {
   getLearnerPersona,
-  setLearnerPersona,
-  supersedeAgentNote,
+  persistConsolidationResult,
   type LearnerPersona,
   type LearnerAgentNote,
 } from '@/lib/neon-db';
@@ -182,6 +181,7 @@ export async function consolidateLearnerMemory(
       notes_archived: 0,
     };
   }
+
   const result = await callLLMForConsolidation(SYSTEM_PROMPT, buildUserPrompt(currentPersona, notes));
   if (!result) {
     return {
@@ -193,23 +193,29 @@ export async function consolidateLearnerMemory(
       notes_archived: 0,
     };
   }
-  const nextPersona = result.json.persona.slice(0, PERSONA_CHAR_CAP);
-  await setLearnerPersona(learnerId, nextPersona);
 
-  // Archive only ids we explicitly recognise (defence against hallucinated ids).
+  const nextPersona = result.json.persona.slice(0, PERSONA_CHAR_CAP);
   const liveIds = new Set(notes.map((n) => n.id));
   const validPromoted = result.json.promoted_ids.filter((id) => liveIds.has(id));
-  let archived = 0;
-  for (const id of validPromoted) {
-    await supersedeAgentNote(id, null);
-    archived += 1;
+
+  const writeResult = await persistConsolidationResult(learnerId, nextPersona, validPromoted);
+  if (!writeResult.ok) {
+    return {
+      ran: false,
+      reason: writeResult.reason,
+      persona_chars_before: currentPersona.length,
+      persona_chars_after: currentPersona.length,
+      notes_considered: notes.length,
+      notes_archived: 0,
+    };
   }
+
   return {
     ran: true,
     persona_chars_before: currentPersona.length,
     persona_chars_after: nextPersona.length,
     notes_considered: notes.length,
-    notes_archived: archived,
+    notes_archived: validPromoted.length,
     model: result.model,
   };
 }

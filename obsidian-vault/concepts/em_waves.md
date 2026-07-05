@@ -1,17 +1,20 @@
 ---
-concept_id: "em_waves"
-name: "Electromagnetic Waves"
-name_he: "גלים אלקטרומגנטיים"
+concept_id: em_waves
+name: Electromagnetic Waves
+name_he: גלים אלקטרומגנטיים
 subject: physics
 level: high_school
 bagrut_chapter: radiation
-points_levels: ["hs_physics"]
+points_levels:
+  - hs_physics
 expansion_status: todo
 data_completeness: full
-lesson_id: "waves_basics"
-lesson_aliased: true
+lesson_id: waves_basics
+lesson_aliased: false
 lesson_json: scripts/seed_data/lessons/waves_basics.json
-prerequisites: ["waves_basics", "electromagnetic_induction"]
+prerequisites:
+  - waves_basics
+  - electromagnetic_induction
 tags:
   - concept/physics
   - status/todo

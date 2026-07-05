@@ -1,14 +1,9 @@
-name: Cron — Memory Steward consolidation
+name: Cron — Memory Steward consolidation (manual backstop)
 
-# Weekly heavy LLM-driven consolidation of per-(learner, agent) notes into
-# the shared learner persona. Mirror of the Vercel cron config in
-# apps/web/vercel.json — runs from GitHub Actions so the job still fires on
-# Vercel tiers that don't support project-managed crons.
+# Manual backstop only — production schedule lives in apps/web/vercel.json.
+# Run workflow_dispatch after verifying CRON_SECRET + WEB_BASE_URL secrets.
 
 on:
-  schedule:
-    # Sunday 03:00 UTC — same as the vercel.json entry.
-    - cron: "0 3 * * 0"
   workflow_dispatch:
     inputs:
       limit:
@@ -24,7 +19,7 @@ jobs:
     steps:
       - name: Trigger consolidation sweep
         env:
-          BASE_URL: ${{ secrets.WEB_BASE_URL }}        # e.g. https://a-step-forward-waij.vercel.app
+          BASE_URL: ${{ secrets.WEB_BASE_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           LIMIT: ${{ inputs.limit || '25' }}
         run: |

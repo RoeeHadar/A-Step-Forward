@@ -88,6 +88,8 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | Evals / QA            | `.cursor/subagent-briefs/08-evals-qa.md`       | "Read PLAN.md + 08-evals-qa.md + skills/run-evals."                |
 | Infra / DevOps        | `.cursor/subagent-briefs/09-infra.md`          | "Read PLAN.md + 09-infra.md + skills/deploy + skills/db-migrations."|
 | Security / Safety     | `.cursor/subagent-briefs/10-security-safety.md`| "Read PLAN.md + 10-security-safety.md."           |
+| Architecture Steward  | `.cursor/subagent-briefs/24-architecture-steward.md` | "Read PLAN.md + ARCHITECTURE.md + docs/architecture/current-state.md + skills/architecture-review/SKILL.md." |
+| Code Reviewer         | `.cursor/subagent-briefs/25-code-reviewer.md` | "Read skills/code-review/SKILL.md + REFERENCE.md + 25-code-reviewer.md; review diff or module." |
 
 **Model**: every Cursor sub-agent runs **Composer 2.5** or **Cursor Auto**, never Opus (Opus is reserved for planning/replanning).
 
@@ -118,3 +120,5 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/deploy/SKILL.md` | **Mandatory after every push to `main`**: run `scripts/verify-deploy.ps1`, poll `Deploy Web (Vercel)` + `Lint & Test`, confirm Vercel deployment `success`, smoke live URL. See `.cursor/rules/65-deploy-vercel.mdc`. |
 | `skills/coordinator-dispatch/SKILL.md` | Whenever you are operating as the Coordinator. |
 | `skills/assign-to-coordinator/SKILL.md` | Whenever you are operating as the Manager and need to hand off a new round of work. |
+| `skills/architecture-review/SKILL.md` | Platform architecture assessments, monolith vs services, coupling/scalability/race analysis, ADR drafts. Architecture Steward sub-agent (brief 24). |
+| `skills/code-review/SKILL.md` | Deep code integrity review: silent failures, edge cases, async races, clarity, over-engineering, test quality. Code Reviewer sub-agent (brief 25). Pair with `review-bugbot` on PRs. |

@@ -25,5 +25,7 @@ Briefs:
 | Evals & QA            | `08-evals-qa.md`                  |
 | Infra / DevOps        | `09-infra.md`                     |
 | Security / Safety     | `10-security-safety.md`           |
+| Architecture Steward  | `24-architecture-steward.md`      |
+| Code Reviewer         | `25-code-reviewer.md`             |
 
 **Dispatching a brief.** Open a new chat, switch model to **Composer 2.5** or **Cursor Auto**, and use the starter prompt at the bottom of the brief. Background long-running streams when sensible.
