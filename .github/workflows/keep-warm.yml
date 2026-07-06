@@ -6,17 +6,34 @@ on:
     - cron: '*/14 * * * *'
   workflow_dispatch:
 
+# Schedule-only ping: no repo write. Health check is best-effort (always exit 0).
+permissions:
+  contents: read
+
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
       - name: Ping API health
         run: |
-          status=$(curl -s -o /dev/null -w "%{http_code}" \
-            --max-time 30 \
-            "${{ vars.RENDER_API_URL || 'https://asf-api-q566.onrender.com' }}/health")
-          echo "Health check status: $status"
-          # Accept 200 or 503 (still waking up) — just keep the dyno alive
-          if [ "$status" = "000" ]; then
-            echo "WARNING: API unreachable (network or DNS issue)"
+          set +e
+          url="${{ vars.RENDER_API_URL || 'https://asf-api-q566.onrender.com' }}/health"
+          # Free-tier cold starts often exceed 30s; give headroom so curl does not
+          # abort mid-wake (exit 28 → red X on main). This job is best-effort only.
+          status=$(curl -sS -o /tmp/health_body -w "%{http_code}" \
+            --connect-timeout 20 \
+            --max-time 90 \
+            "$url")
+          exit_code=$?
+          echo "HTTP status: $status (curl exit: $exit_code)"
+          if [ -f /tmp/health_body ]; then
+            head -c 200 /tmp/health_body
+            echo
           fi
+          if [ "$status" = "200" ] || [ "$status" = "503" ]; then
+            echo "OK: API warm or waking"
+          else
+            echo "WARNING: unexpected health response — Render may still be spinning up"
+          fi
+          # Never fail the schedule; a red main distracts from real deploy/lint failures.
+          exit 0
