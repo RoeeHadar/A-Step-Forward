@@ -2,6 +2,8 @@
 
 Structured outputs from the **Code Reviewer** sub-agent (stream 25).
 
+**Session log:** start at [`LAST_DONE.md`](./LAST_DONE.md) for the latest completed fix checklist (also mirrored in `MEMORY_SNAPSHOT.md` under `<!-- LAST_SESSION -->`).
+
 ## Naming
 
 ```

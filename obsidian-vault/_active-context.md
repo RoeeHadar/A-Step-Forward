@@ -1,19 +1,29 @@
 ---
 type: active-context
-updated: 2026-07-03
+updated: 2026-07-07
 coordinator_status: .cursor/coordinator/STATUS.md
-production_web: e645aa1
+production_web: ff021ca9
 ---
 
 # Active Context
 
 > Update this note at the start/end of each focused work session.
+> Machine-readable session trail: `docs/reviews/LAST_DONE.md` + `MEMORY_SNAPSHOT.md` (`<!-- LAST_SESSION -->`).
+
+## Last done (2026-07-07)
+
+- [x] Architecture Steward + Code Reviewer agents (briefs **24** / **25**, skills)
+- [x] Neon-direct dashboard/memory, xact locks, 503 error paths (R1–R4)
+- [x] Mapper/lock unit tests (R5)
+- [x] Keep Render warm no longer paints main red (`ff021ca9`)
+- [x] Cron/warm workflows declare `permissions: contents: read`
 
 ## Current focus
 
 - **Stream**: Product alignment — learning paths, plan/memory UX, vault as primary KB
-- **Status**: Frontend plan/memory fixes **shipped** (`e645aa1`); golden-path unification **not started**
+- **Status**: Reviewer-flagged coordinator fixes **landed** (`362f813b` + `ff021ca9`); golden-path unification **not started**
 - **Policy**: Obsidian vault documents architecture; repo code implements it
+- **Trail file**: [[../docs/reviews/LAST_DONE|LAST_DONE]] (repo path `docs/reviews/LAST_DONE.md`)
 
 ## Shipped (2026-07-03)
 

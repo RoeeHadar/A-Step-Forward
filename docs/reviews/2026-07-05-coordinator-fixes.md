@@ -4,7 +4,8 @@
 - **Reviewer:** Code Reviewer (Cursor sub-agent)
 - **Scope:** Uncommitted coordinator fixes — `neon-db.ts` (locks + mapper), `/api/dashboard`, `/api/memory`, `persona-consolidator.ts`, GHA cron backstop, `memory-steward-consolidate` skill
 - **Intent:** Migrate legacy dashboard/memory API routes to Neon-direct; add per-learner advisory locks for plan generation and consolidation; dedupe weekly consolidation cron (Vercel-only schedule)
-- **Verdict:** **SHIP WITH WARNINGS**
+- **Verdict:** **SHIP WITH WARNINGS** (original review)
+- **Remediation (2026-07-07):** R1–R5 + keep-warm CI noise landed in `362f813b` / `ff021ca9` — see `docs/reviews/LAST_DONE.md`
 
 ---
 

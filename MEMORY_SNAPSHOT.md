@@ -31,10 +31,27 @@ locked decisions are project policy; sub-agents must not stop to ask the user.
 See `docs/sprint.md`.
 
 <!-- LAST_SESSION -->
-Round 4 (2026-06-25): PR #15 merged; Render deploy failed — `bookings.py` used
-`EmailStr` without `email-validator`; CI never imported `app.main`. PR #16 merged:
-validated `str` Field, Dockerfile `app.main:app`, CI **API import smoke** step.
-Lesson: Pydantic `EmailStr` needs `email-validator` in prod deps; Vercel green ≠
-Render green. Adaptive learning brief: `14-adaptive-learning-architecture.md`.
+## Last done (2026-07-07)
+
+Retrieve this block for “what we just finished” on architecture reviewer fixes + CI.
+
+| Item | Status | Where |
+|------|--------|--------|
+| Architecture Steward + Code Reviewer agents (skills, briefs 24/25) | Done | `skills/architecture-review/`, `skills/code-review/`, `.cursor/subagent-briefs/24|25-*.md` |
+| Architecture assessment L1–L4 | Done | `docs/architecture/assessments/2026-07-05-platform-overview.md` |
+| First Code Review (R1–R7) | Done | `docs/reviews/2026-07-05-coordinator-fixes.md` |
+| R1–R2 transactional xact locks (plan + consolidate) | Done | `apps/web/src/lib/neon-db.ts` (`pg_try_advisory_xact_lock` + `sql.transaction`) |
+| R3–R4 dashboard/memory 503 + `NeonQueryFailedError` | Done | `apps/web/src/app/api/dashboard/route.ts`, `…/memory/route.ts` |
+| R5 mapper/lock unit tests | Done | `apps/web/src/lib/neon-db-mapper.test.ts` |
+| Keep Render warm no longer fails main | Done | `ff021ca9` — `.github/workflows/keep-warm.yml` always `exit 0`, 90s timeout |
+| Cron/warm workflows `permissions: contents: read` | Done | `ff021ca9` — keep-warm + cron-dreaming/decay/consolidate |
+
+**Still open (not this slice):** planner unification (`buildLearningPlan` authority), concurrency integration tests in assessment checklist, full `permissions:` pass on deploy/lint workflows.
+
+**Commits:** `362f813b` (neon-direct + locks + agent groundwork), `ff021ca9` (CI keep-warm + read permissions).
+
+Prior (2026-06-25): PR #15/#16 Render `EmailStr` / API import smoke lessons remain valid.
+
+Adhoc note: chat/agent traffic about ProServAI / Gong / scorg.org is **out of scope** for this monorepo — no such code exists here.
 <!-- LAST_SESSION -->
 
