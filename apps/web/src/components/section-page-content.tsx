@@ -6,6 +6,7 @@ import { Button } from '@asf/ui/button';
 import { useI18n } from '@/providers/i18n-provider';
 import type { CurriculumCategory, CurriculumSection } from '@/lib/curriculum-categories';
 import type { LessonSummary } from '@/lib/lessons-by-section';
+import { pickLessonText } from '@/lib/lesson-locale';
 
 export function SectionPageContent({
   category,
@@ -40,7 +41,7 @@ export function SectionPageContent({
           {lessons.map((lesson) => (
             <div key={lesson.id} className="iridescent-border flex flex-col p-5">
               <h2 className="font-display text-base font-semibold" dir="auto">
-                {locale === 'he' && lesson.title_he ? lesson.title_he : lesson.title}
+                {pickLessonText(locale, lesson.title_he, lesson.title)}
               </h2>
               <p className="mt-2 flex items-center gap-1 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" aria-hidden />

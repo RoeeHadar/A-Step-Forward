@@ -1,4 +1,12 @@
-import { CURRICULUM_CATEGORIES, getCategoryById, SUBJECT_TO_CATEGORY } from '@/lib/curriculum-categories';
+import {
+  CURRICULUM_CATEGORIES,
+  findCategoryIdForConcept,
+  getCategoryById,
+  SUBJECT_TO_CATEGORY,
+} from '@/lib/curriculum-categories';
+import { resolveConceptAlias } from '@/lib/concept-aliases';
+import { getLessonIndexEntry } from '@/lib/lesson-index';
+import { isConceptInBundle } from '@/lib/lesson-bundle';
 
 /** Build a direct lesson URL for a concept page. */
 export function learnConceptHref(subject: string, conceptId: string): string {
@@ -14,6 +22,36 @@ const KNOWN_UI_SLUGS = new Set([
   'math',
   'physics',
 ]);
+
+/**
+ * Map legacy `/app/lessons/l/[lessonId]` to the unified `/learn/.../concept/...` path
+ * using the static lesson index / bundle / curriculum catalog (Neon-independent).
+ */
+export function resolveLegacyLessonLearnHref(lessonId: string): string | null {
+  const alias = resolveConceptAlias(lessonId);
+  const candidates = [lessonId, alias];
+  for (const id of candidates) {
+    const entry = getLessonIndexEntry(id);
+    if (entry) {
+      const subject =
+        entry.subject && KNOWN_UI_SLUGS.has(entry.subject)
+          ? entry.subject
+          : findCategoryIdForConcept(id) ?? entry.subject ?? 'math';
+      return learnConceptHref(subject, entry.concept_id ?? id);
+    }
+  }
+  for (const id of candidates) {
+    if (isConceptInBundle(id)) {
+      const subject = findCategoryIdForConcept(id) ?? 'math';
+      return learnConceptHref(subject, id);
+    }
+  }
+  for (const id of candidates) {
+    const categoryId = findCategoryIdForConcept(id);
+    if (categoryId) return learnConceptHref(categoryId, id);
+  }
+  return null;
+}
 
 /**
  * Map a KG subject + learner profile to the UI subject slug used in `/learn/[subject]`.

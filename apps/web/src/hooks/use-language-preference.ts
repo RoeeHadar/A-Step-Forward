@@ -1,14 +1,20 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { LOCALE_COOKIE, LOCALE_STORAGE_KEY } from '@/i18n/locale-storage';
+import {
+  LOCALE_CHANGED_EVENT,
+  LOCALE_COOKIE,
+  LOCALE_STORAGE_KEY,
+  dispatchLocaleChanged,
+} from '@/i18n/locale-storage';
+import { useOptionalI18n } from '@/providers/i18n-provider';
 
 /**
  * Persistent learner language preference (Hebrew by default).
  *
- * Shares storage keys with `I18nProvider` (`asf-locale-v2` / `asf-locale`) so
- * toggling EN/עב in the site header updates every component that reads this
- * hook — quiz builder, lesson pages, learning plan, etc.
+ * When rendered inside `I18nProvider`, delegates to `useI18n()` so the site
+ * header toggle and lesson inline controls share one locale source. Falls back
+ * to local state + storage when outside the provider (tests, Storybook).
  */
 export type Lang = 'en' | 'he';
 
@@ -41,36 +47,66 @@ function readInitial(): Lang {
   return 'he';
 }
 
+function persistLocaleLocal(next: Lang) {
+  try {
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
+  } catch {
+    // ignore
+  }
+  try {
+    document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+  } catch {
+    // ignore
+  }
+  document.documentElement.lang = next;
+  document.documentElement.dir = next === 'he' ? 'rtl' : 'ltr';
+}
+
 export function useLanguagePreference(defaultLang: Lang = 'he'): [Lang, (next: Lang) => void] {
-  const [lang, setLang] = useState<Lang>(defaultLang);
+  const i18n = useOptionalI18n();
+  const [localLang, setLocalLang] = useState<Lang>(defaultLang);
 
   useEffect(() => {
-    setLang(readInitial());
+    if (i18n) return;
+
+    setLocalLang(readInitial());
 
     const onStorage = (e: StorageEvent) => {
       if (e.key === LOCALE_STORAGE_KEY && (e.newValue === 'en' || e.newValue === 'he')) {
-        setLang(e.newValue);
+        setLocalLang(e.newValue);
       }
     };
+
+    const onLocaleChanged = (e: Event) => {
+      const next = (e as CustomEvent<{ locale: Lang }>).detail?.locale;
+      if (next === 'en' || next === 'he') setLocalLang(next);
+    };
+
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    window.addEventListener(LOCALE_CHANGED_EVENT, onLocaleChanged);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener(LOCALE_CHANGED_EVENT, onLocaleChanged);
+    };
+  }, [i18n]);
+
+  const updateLocal = useCallback((next: Lang) => {
+    setLocalLang(next);
+    persistLocaleLocal(next);
+    dispatchLocaleChanged(next);
   }, []);
 
-  const update = useCallback((next: Lang) => {
-    setLang(next);
-    try {
-      window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
-    } catch {
-      // ignore
-    }
-    try {
-      document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
-    } catch {
-      // ignore
-    }
-    document.documentElement.lang = next;
-    document.documentElement.dir = next === 'he' ? 'rtl' : 'ltr';
-  }, []);
+  const update = useCallback(
+    (next: Lang) => {
+      if (i18n) {
+        i18n.setLocale(next);
+      } else {
+        updateLocal(next);
+      }
+    },
+    [i18n, updateLocal],
+  );
 
+  const lang = i18n ? (i18n.locale as Lang) : localLang;
   return [lang, update];
 }

@@ -176,3 +176,8 @@ export function pickConceptTitle(titles: ConceptTitles, locale: 'en' | 'he'): st
   if (locale === 'he' && titles.title_he) return titles.title_he;
   return titles.title_en;
 }
+
+/** Syllabus-only slugs that have bilingual UI titles but no KG/lesson row yet. */
+export function isCatalogTitleConcept(conceptId: string): boolean {
+  return conceptId in CATALOG_CONCEPT_TITLES;
+}
