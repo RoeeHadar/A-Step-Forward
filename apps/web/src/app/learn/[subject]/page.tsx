@@ -12,6 +12,7 @@ import {
   fetchConceptMasteryBulk,
 } from '@/lib/neon-db';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
+import { isConceptInBundle } from '@/lib/lesson-bundle';
 import kg from '@/lib/kg-data.json';
 import { getCategoryById, SUBJECT_TO_CATEGORY } from '@/lib/curriculum-categories';
 import { resolveConceptAlias, dedupeConceptIdsForCatalog, resolveConceptAliasCanonical } from '@/lib/concept-aliases';
@@ -219,7 +220,11 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
       const aliasId = resolveConceptAlias(c.id);
       const meta = lessonMeta.get(c.id) ?? lessonMeta.get(aliasId);
       const indexEntry = getLessonIndexEntry(c.id) ?? getLessonIndexEntry(aliasId);
-      const hasLesson = Boolean(meta) || Boolean(indexEntry);
+      const hasLesson =
+        Boolean(meta) ||
+        Boolean(indexEntry) ||
+        isConceptInBundle(c.id) ||
+        isConceptInBundle(aliasId);
       const mastery = masteryMap.get(c.id) ?? masteryMap.get(aliasId);
       const status = masteryStatus(mastery?.score);
       return { ...c, langs: coverage.get(c.id) ?? coverage.get(aliasId) ?? [], hasLesson, inTrack: true, mastery, status };

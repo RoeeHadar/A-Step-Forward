@@ -11,6 +11,7 @@ import {
   InteractiveSeedQuestions,
   type InteractiveSeedQuestion,
 } from '@/components/interactive-seed-questions';
+import { lessonTextDir, pickLessonText } from '@/lib/lesson-locale';
 
 export type InteractiveSeedSection = {
   id: string;
@@ -41,8 +42,8 @@ export function InteractiveSeedLessonView({
   locale: 'he' | 'en';
 }) {
   const isHe = locale === 'he';
-  const dir = isHe ? 'rtl' : 'ltr';
-  const title = isHe ? lesson.title_he : lesson.title_en;
+  const dir = lessonTextDir(locale);
+  const title = pickLessonText(locale, lesson.title_he, lesson.title_en);
   const minutes = lesson.duration_min ?? lesson.est_minutes ?? 20;
   const sections = lesson.sections ?? [];
   const questions = lesson.questions ?? [];
@@ -60,11 +61,12 @@ export function InteractiveSeedLessonView({
       </div>
 
       {sections.map((section) => {
-        const secTitle = isHe ? section.title_he : section.title_en;
-        const body =
-          isHe
-            ? section.body_he_md ?? section.body_he ?? ''
-            : section.body_en_md ?? section.body_en ?? '';
+        const secTitle = pickLessonText(locale, section.title_he, section.title_en);
+        const body = pickLessonText(
+          locale,
+          section.body_he_md ?? section.body_he ?? '',
+          section.body_en_md ?? section.body_en ?? '',
+        );
         return (
           <Card key={section.id} className="mb-6">
             <CardHeader>

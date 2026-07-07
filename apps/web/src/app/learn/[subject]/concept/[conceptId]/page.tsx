@@ -16,7 +16,12 @@ import { getMessages } from '@/i18n/messages';
 import { getLessonIndexEntry } from '@/lib/lesson-index';
 import { isConceptInBundle } from '@/lib/lesson-bundle';
 import { MathGlossaryPanel } from '@/components/math-glossary-panel';
-import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
+import {
+  resolveConceptTitles,
+  pickConceptTitle,
+  isCatalogTitleConcept,
+} from '@/lib/concept-display-names';
+import { isConceptInCurriculumCatalog } from '@/lib/curriculum-categories';
 
 export const dynamic = 'force-dynamic';
 
@@ -133,17 +138,23 @@ export default async function ConceptPage({
     isConceptInBundle(conceptId) ||
     isConceptInBundle(canonicalLessonId);
 
-  if (!concept && !hasAuthoredLesson) {
+  // Catalog-listed syllabus topics (and title-only stubs) must render a coming-soon
+  // page instead of a hard 404 — they appear as clickable cards on /learn grids.
+  const inCatalog =
+    isConceptInCurriculumCatalog(conceptId) ||
+    isConceptInCurriculumCatalog(canonicalLessonId) ||
+    isCatalogTitleConcept(conceptId) ||
+    isCatalogTitleConcept(canonicalLessonId);
+
+  if (!concept && !hasAuthoredLesson && !inCatalog) {
     notFound();
   }
-  const conceptNameEn =
-    lessonData?.lesson.title_en ??
-    indexEntry?.title_en ??
-    concept?.name ??
-    conceptId.replace(/_/g, ' ');
-  const conceptNameHe =
-    lessonData?.lesson.title_he ?? indexEntry?.title_he ?? concept?.name_he ?? null;
-  const conceptName = isHe && conceptNameHe ? conceptNameHe : conceptNameEn;
+
+  const titles = resolveConceptTitles(conceptId, {
+    title_en: lessonData?.lesson.title_en ?? indexEntry?.title_en ?? null,
+    title_he: lessonData?.lesson.title_he ?? indexEntry?.title_he ?? concept?.name_he ?? null,
+  });
+  const conceptName = pickConceptTitle(titles, locale);
 
   const prerequisites = concept?.prerequisites ?? [];
 

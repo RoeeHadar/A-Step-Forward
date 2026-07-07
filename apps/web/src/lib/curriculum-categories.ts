@@ -1471,6 +1471,28 @@ export const CURRICULUM_CATEGORIES: CurriculumCategory[] = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Look up a category by id (supports legacy aliases) */
+/** True when `conceptId` appears in any category or section allowlist (syllabus catalog). */
+export function isConceptInCurriculumCatalog(conceptId: string): boolean {
+  for (const category of CURRICULUM_CATEGORIES) {
+    if (category.concept_ids.includes(conceptId)) return true;
+    for (const section of category.sections) {
+      if (section.concept_ids?.includes(conceptId)) return true;
+    }
+  }
+  return false;
+}
+
+/** Prefer the first category whose section/allowlist contains the concept. */
+export function findCategoryIdForConcept(conceptId: string): string | null {
+  for (const category of CURRICULUM_CATEGORIES) {
+    if (category.concept_ids.includes(conceptId)) return category.id;
+    for (const section of category.sections) {
+      if (section.concept_ids?.includes(conceptId)) return category.id;
+    }
+  }
+  return null;
+}
+
 export function getCategoryById(id: string): CurriculumCategory | undefined {
   const canonical = CATEGORY_ID_ALIASES[id] ?? id;
   return CURRICULUM_CATEGORIES.find((c) => c.id === canonical);

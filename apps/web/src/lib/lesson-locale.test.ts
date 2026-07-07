@@ -19,4 +19,16 @@ describe('lesson-locale', () => {
     expect(looksHebrew(heReal)).toBe(true);
     expect(pickLessonText('he', heWrong, heReal)).toBe(heReal);
   });
+
+  it('prefers English script in English mode', () => {
+    const he = 'זהו טקסט בעברית עם מספיק אותיות עבריות';
+    const en = 'This is English text with enough letters';
+    expect(pickLessonText('en', he, en)).toBe(en);
+  });
+
+  it('detects Hebrew pasted into English title field', () => {
+    const enWrong = 'כותרת שגויה באנגלית אבל בעברית';
+    const enReal = 'Correct English lesson title here';
+    expect(pickLessonText('en', enWrong, enReal)).toBe(enReal);
+  });
 });
