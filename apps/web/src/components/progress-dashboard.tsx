@@ -347,9 +347,13 @@ function StatCard({
   gradient: string;
 }) {
   return (
-    <div className="card-punch rounded-2xl p-5">
+    <div className="card-punch relative overflow-hidden rounded-2xl p-5">
+      <span
+        className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r opacity-80 ${gradient}`}
+        aria-hidden
+      />
       <p className="text-sm text-muted-foreground">{title}</p>
-      <div className={`mt-1 bg-gradient-to-r bg-clip-text text-transparent ${gradient}`}>{value}</div>
+      <div className="mt-1 text-foreground">{value}</div>
     </div>
   );
 }

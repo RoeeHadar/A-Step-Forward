@@ -47,7 +47,7 @@ export function AppSidebar() {
             >
               {active ? (
                 <span
-                  className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-gradient-to-b from-primary via-accent-magenta to-accent-cyan"
+                  className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-primary"
                   aria-hidden
                 />
               ) : null}

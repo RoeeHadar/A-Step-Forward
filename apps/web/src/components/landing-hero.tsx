@@ -7,8 +7,9 @@ import {
   ArrowRight,
   Brain,
   BookOpen,
-  Route,
-  Sparkles as SparklesIcon,
+  Compass,
+  GraduationCap,
+  Sprout,
   UserPlus,
 } from 'lucide-react';
 import { cn } from '@asf/ui';
@@ -16,7 +17,6 @@ import { useI18n } from '@/providers/i18n-provider';
 import { CURRICULUM_CATEGORIES } from '@/lib/curriculum-categories';
 import { AnimatedCounter } from '@/components/animated-counter';
 import { Marquee } from '@/components/marquee';
-import { Sparkles } from '@/components/sparkles';
 
 type FeatureKey = keyof ReturnType<typeof useI18n>['messages']['landing']['features'];
 
@@ -25,8 +25,9 @@ const agentFeatures: Array<{
   titleKey: FeatureKey;
   descKey: FeatureKey;
   specialtyKey: FeatureKey;
-  gradientClass: string;
-  specialtyClass: string;
+  accentText: string;
+  accentChip: string;
+  accentRule: string;
   chatPath: string;
 }> = [
   {
@@ -34,8 +35,9 @@ const agentFeatures: Array<{
     titleKey: 'tutor',
     descKey: 'tutorDesc',
     specialtyKey: 'tutorSpecialty',
-    gradientClass: 'from-primary to-accent-magenta',
-    specialtyClass: 'border-primary/30 bg-primary/10 text-primary',
+    accentText: 'text-primary',
+    accentChip: 'border-primary/25 bg-primary/10 text-primary',
+    accentRule: 'bg-primary',
     chatPath: '/app/chat/tutor',
   },
   {
@@ -43,8 +45,9 @@ const agentFeatures: Array<{
     titleKey: 'mentor',
     descKey: 'mentorDesc',
     specialtyKey: 'mentorSpecialty',
-    gradientClass: 'from-accent-amber to-accent-magenta',
-    specialtyClass: 'border-accent-amber/30 bg-accent-amber/10 text-accent-amber',
+    accentText: 'text-accent-amber',
+    accentChip: 'border-accent-amber/25 bg-accent-amber/10 text-accent-amber',
+    accentRule: 'bg-accent-amber',
     chatPath: '/app/chat/mentor',
   },
   {
@@ -52,8 +55,9 @@ const agentFeatures: Array<{
     titleKey: 'coach',
     descKey: 'coachDesc',
     specialtyKey: 'coachSpecialty',
-    gradientClass: 'from-accent-cyan to-primary',
-    specialtyClass: 'border-accent-cyan/30 bg-accent-cyan/10 text-accent-cyan',
+    accentText: 'text-accent-cyan',
+    accentChip: 'border-accent-cyan/25 bg-accent-cyan/10 text-accent-cyan',
+    accentRule: 'bg-accent-cyan',
     chatPath: '/app/chat/coach',
   },
   {
@@ -61,17 +65,11 @@ const agentFeatures: Array<{
     titleKey: 'reviewer',
     descKey: 'reviewerDesc',
     specialtyKey: 'reviewerSpecialty',
-    gradientClass: 'from-accent-magenta to-accent-cyan',
-    specialtyClass: 'border-accent-magenta/30 bg-accent-magenta/10 text-accent-magenta',
+    accentText: 'text-accent-magenta',
+    accentChip: 'border-accent-magenta/25 bg-accent-magenta/10 text-accent-magenta',
+    accentRule: 'bg-accent-magenta',
     chatPath: '/app/chat/reviewer',
   },
-];
-
-const agentAvatars = [
-  { emoji: '📚', gradient: 'from-primary to-accent-magenta' },
-  { emoji: '🌟', gradient: 'from-accent-amber to-accent-magenta' },
-  { emoji: '💪', gradient: 'from-accent-cyan to-primary' },
-  { emoji: '✍️', gradient: 'from-accent-magenta to-accent-cyan' },
 ];
 
 const subjectEmojis = ['📐', '∫', '🧮', '⚛️'];
@@ -79,7 +77,7 @@ const subjectEmojis = ['📐', '∫', '🧮', '⚛️'];
 const trustChips = [
   { dotClass: 'bg-primary', key: 'trustPersonalized' as const },
   { dotClass: 'bg-accent-cyan', key: 'trustAiPowered' as const },
-  { dotClass: 'bg-accent-magenta', key: 'trustFree' as const },
+  { dotClass: 'bg-accent-amber', key: 'trustFree' as const },
 ];
 
 const howItWorksSteps = [
@@ -88,21 +86,18 @@ const howItWorksSteps = [
     titleKey: 'howItWorksStep1Title' as const,
     descKey: 'howItWorksStep1Desc' as const,
     icon: UserPlus,
-    gradient: 'from-primary to-accent-magenta',
   },
   {
     step: 2,
     titleKey: 'howItWorksStep2Title' as const,
     descKey: 'howItWorksStep2Desc' as const,
     icon: BookOpen,
-    gradient: 'from-accent-magenta to-accent-cyan',
   },
   {
     step: 3,
     titleKey: 'howItWorksStep3Title' as const,
     descKey: 'howItWorksStep3Desc' as const,
-    icon: SparklesIcon,
-    gradient: 'from-accent-cyan to-primary',
+    icon: GraduationCap,
   },
 ];
 
@@ -154,314 +149,220 @@ export function LandingHero() {
     reduceMotion
       ? {}
       : {
-          initial: { opacity: 0, y: 20 },
+          initial: { opacity: 0, y: 18 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] },
+          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
         };
 
   const fadeUpInView = (delay = 0) =>
     reduceMotion
       ? {}
       : {
-          initial: { opacity: 0, y: 24 },
+          initial: { opacity: 0, y: 22 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: '-60px' },
-          transition: { duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] },
+          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
         };
 
-  const categoryPreview = CURRICULUM_CATEGORIES.slice(0, 6);
+  const categoryPreview = CURRICULUM_CATEGORIES.slice(0, 8);
 
   return (
     <>
-      {/* Section 1: Hero + Bento */}
-      <section className="relative min-h-[85vh] overflow-hidden">
-        {/* Floating colored orbs — one bright color each so the blur produces
-            a vibrant glow instead of a washed-out three-color mush. */}
+      {/* ── Hero ────────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden">
+        {/* Soft natural light wash — warm, blurred, anchored to one corner
+            instead of floating neon orbs. */}
         <div
-          className="orb-float orb-violet pointer-events-none absolute -start-32 -top-40 h-[420px] w-[420px] rounded-full sm:h-[560px] sm:w-[560px] lg:h-[680px] lg:w-[680px]"
-          style={{ animationDelay: '0s' }}
+          className="mesh-gradient pointer-events-none absolute inset-x-0 -top-24 h-[520px] opacity-70"
           aria-hidden
         />
         <div
-          className="orb-float orb-cyan pointer-events-none absolute -end-24 top-20 h-[340px] w-[340px] rounded-full sm:h-[460px] sm:w-[460px] lg:h-[560px] lg:w-[560px]"
-          style={{ animationDelay: '-7s' }}
-          aria-hidden
-        />
-        <div
-          className="orb-float orb-magenta pointer-events-none absolute bottom-[-120px] start-1/2 h-[300px] w-[480px] -translate-x-1/2 rounded-full sm:h-[380px] sm:w-[620px] lg:h-[460px] lg:w-[820px]"
-          style={{ animationDelay: '-14s' }}
-          aria-hidden
-        />
-        <div
-          className="orb-float orb-amber pointer-events-none absolute top-1/3 end-1/4 h-[220px] w-[220px] rounded-full sm:h-[300px] sm:w-[300px]"
-          style={{ animationDelay: '-10s' }}
+          className="bg-dot-grid pointer-events-none absolute inset-0 opacity-40"
           aria-hidden
         />
 
-        {/* Dot grid overlay */}
-        <Sparkles count={30} className="z-[1]" />
-        <div
-          className="bg-dot-grid pointer-events-none absolute inset-0 z-[2] opacity-30 dark:opacity-50"
-          aria-hidden
-        />
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 lg:py-28">
-          {/* Hero text block */}
-          <div className="mx-auto max-w-4xl text-center">
-            <motion.div
-              className="mb-6 inline-flex items-center gap-2 rounded-full glass-surface px-4 py-1.5 text-xs font-medium text-muted-foreground"
-              {...fadeUp(0)}
-            >
-              <span className="h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden />
-              {t.heroBadge}
-            </motion.div>
-
-            <motion.h1
-              className="font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl xl:text-8xl"
-              {...fadeUp(0.08)}
-            >
-              <span className="text-foreground">{t.heroLine1}</span>
-              <br />
-              <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
-                {t.heroLine2}
-              </span>
-            </motion.h1>
-
-            <motion.p
-              className="mx-auto mt-6 max-w-2xl text-center text-lg text-muted-foreground lg:text-xl"
-              {...fadeUp(0.16)}
-            >
-              {t.subtitle}
-            </motion.p>
-
-            <motion.div
-              className="mt-8 flex flex-wrap items-center justify-center gap-3"
-              {...fadeUp(0.24)}
-            >
-              <Link
-                href="/sign-up"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 lg:pb-24 lg:pt-24">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+            {/* Copy */}
+            <div className="max-w-xl">
+              <motion.div
+                className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface-1/70 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm"
+                {...fadeUp(0)}
               >
-                {t.cta}
-                <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
-              </Link>
-              <Link
-                href="/book"
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
-              >
-                {messages.nav.book}
-              </Link>
-              <Link
-                href="/learn"
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
-              >
-                {t.browseContent}
-              </Link>
-              <Link
-                href="/sign-in"
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface-1/50 px-6 py-3 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-border-bright"
-              >
-                {messages.nav.signIn}
-              </Link>
-            </motion.div>
+                <Sprout className="h-3.5 w-3.5 text-primary" aria-hidden />
+                {t.heroBadge}
+              </motion.div>
 
-            <motion.div
-              className="mt-8 flex flex-wrap items-center justify-center gap-5"
-              {...fadeUp(0.32)}
-            >
-              {trustChips.map(({ dotClass, key }) => (
-                <div key={key} className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <span className={cn('h-2 w-2 rounded-full', dotClass)} aria-hidden />
-                  {t[key]}
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Bento grid */}
-          <div className="mt-16 grid grid-cols-12 gap-4">
-            {/* Tile A — Live Tutor Preview */}
-            <motion.div
-              className="iridescent-border col-span-12 flex min-h-[320px] flex-col p-5 lg:col-span-7 lg:row-span-2 lg:min-h-[420px] lg:p-6"
-              {...fadeUpInView(0.1)}
-            >
-              <div className="mb-4 flex items-center justify-between gap-2">
-                <span className="text-[10px] font-semibold tracking-widest text-muted-foreground">
-                  {t.demoLabel}
+              <motion.h1
+                className="font-display text-[2.75rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-6xl xl:text-[4.25rem]"
+                {...fadeUp(0.08)}
+              >
+                {t.heroLine1}
+                <br />
+                <span className="relative text-primary">
+                  {t.heroLine2}
+                  <span
+                    className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full bg-accent-amber/60"
+                    aria-hidden
+                  />
                 </span>
-                <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary">
+              </motion.h1>
+
+              <motion.p
+                className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground"
+                {...fadeUp(0.16)}
+              >
+                {t.subtitle}
+              </motion.p>
+
+              <motion.div className="mt-9 flex flex-wrap items-center gap-3" {...fadeUp(0.24)}>
+                <Link
+                  href="/sign-up"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-md transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  {t.cta}
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
+                </Link>
+                <Link
+                  href="/learn"
+                  className="inline-flex items-center gap-2 rounded-xl border border-border-bright bg-surface-1 px-6 py-3 text-base font-medium text-foreground transition-colors hover:bg-surface-2"
+                >
+                  {t.browseContent}
+                </Link>
+              </motion.div>
+
+              <motion.div
+                className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2"
+                {...fadeUp(0.32)}
+              >
+                {trustChips.map(({ dotClass, key }) => (
+                  <div key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span className={cn('h-1.5 w-1.5 rounded-full', dotClass)} aria-hidden />
+                    {t[key]}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Tutor conversation preview — matte paper card, warm elevation */}
+            <motion.div
+              className="iridescent-border relative flex min-h-[360px] flex-col p-6 lg:min-h-[440px]"
+              {...(reduceMotion
+                ? {}
+                : {
+                    initial: { opacity: 0, y: 28, rotate: -0.6 },
+                    animate: { opacity: 1, y: 0, rotate: 0 },
+                    transition: { duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] },
+                  })}
+            >
+              <div className="mb-5 flex items-center justify-between gap-2 border-b border-border pb-4">
+                <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <span className="text-lg" aria-hidden>
+                    📚
+                  </span>
                   {t.features.tutor}
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  {t.demoLabel}
                 </span>
               </div>
 
-              <div className="flex flex-1 flex-col gap-3">
+              <div className="flex flex-1 flex-col justify-end gap-3">
                 <div className="flex justify-end">
-                  <div className="max-w-[85%] rounded-2xl rounded-ee-sm bg-primary px-4 py-3 text-sm text-primary-foreground">
+                  <div className="max-w-[85%] rounded-2xl rounded-ee-sm bg-primary px-4 py-3 text-sm text-primary-foreground shadow-sm">
                     {t.demoUserMsg}
                   </div>
                 </div>
                 <div className="flex justify-start">
-                  <div className="max-w-[90%] rounded-2xl rounded-es-sm bg-surface-2 px-4 py-3 text-sm leading-relaxed text-foreground">
+                  <div className="max-w-[90%] rounded-2xl rounded-es-sm border border-border bg-surface-2 px-4 py-3 text-sm leading-relaxed text-foreground">
                     <TypedMessage text={t.demoTutorMsg} />
                   </div>
                 </div>
                 <TypingIndicator />
               </div>
             </motion.div>
+          </div>
 
-            {/* Tile B — 13 Subjects */}
-            <motion.div
-              className="glass-surface col-span-6 flex flex-col justify-between rounded-2xl p-5 lg:col-span-5 lg:row-span-1"
-              {...fadeUpInView(0.15)}
-            >
-              <div>
-                <AnimatedCounter
-                  end={13}
-                  className="font-display text-6xl font-bold tabular-nums bg-gradient-to-br from-primary to-accent-magenta bg-clip-text text-transparent"
-                />
-                <p className="mt-1 text-sm text-muted-foreground">{t.statsCoursesLabel}</p>
-              </div>
-              <div className="mt-4 flex gap-2">
+          {/* Stats strip */}
+          <motion.div
+            className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4"
+            {...fadeUpInView(0.1)}
+          >
+            <div className="flex flex-col gap-1 bg-surface-1 p-5">
+              <AnimatedCounter
+                end={13}
+                className="font-display text-3xl font-semibold text-foreground tabular-nums"
+              />
+              <p className="text-sm text-muted-foreground">{t.statsCoursesLabel}</p>
+            </div>
+            <div className="flex flex-col gap-1 bg-surface-1 p-5">
+              <AnimatedCounter
+                end={4}
+                className="font-display text-3xl font-semibold text-foreground tabular-nums"
+              />
+              <p className="text-sm text-muted-foreground">{t.statsAgentsLabel}</p>
+            </div>
+            <div className="flex flex-col justify-center gap-1 bg-surface-1 p-5">
+              <div className="flex gap-1.5">
                 {subjectEmojis.map((emoji) => (
                   <span
                     key={emoji}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-base"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2 text-sm"
                     aria-hidden
                   >
                     {emoji}
                   </span>
                 ))}
               </div>
-            </motion.div>
-
-            {/* Tile C — 4 AI Agents */}
-            <motion.div
-              className="glass-surface col-span-6 flex flex-col justify-between rounded-2xl p-5 lg:col-span-3 lg:row-span-1"
-              {...fadeUpInView(0.2)}
-            >
-              <div>
-                <AnimatedCounter
-                  end={4}
-                  className="font-display text-6xl font-bold tabular-nums bg-gradient-to-br from-accent-cyan to-primary bg-clip-text text-transparent"
-                />
-                <p className="mt-1 text-sm text-muted-foreground">{t.statsAgentsLabel}</p>
-              </div>
-              <div className="mt-4 flex -space-x-2 rtl:space-x-reverse">
-                {agentAvatars.map(({ emoji, gradient }, i) => (
-                  <span
-                    key={i}
-                    className={cn(
-                      'flex h-9 w-9 items-center justify-center rounded-full border-2 border-surface-1 bg-gradient-to-br text-sm',
-                      gradient,
-                    )}
-                    aria-hidden
-                  >
-                    {emoji}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Tile D — Memory feature */}
-            <motion.div
-              className="glass-surface group col-span-12 flex flex-col gap-3 rounded-2xl p-5 transition-shadow hover:shadow-lg hover:shadow-primary/10 lg:col-span-2 lg:row-span-1"
-              {...fadeUpInView(0.25)}
-            >
-              <Brain className="h-8 w-8 text-primary" aria-hidden />
-              <h3 className="font-display text-lg font-semibold text-foreground">
-                {t.features.memory}
-              </h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">{t.features.memoryDesc}</p>
-            </motion.div>
-
-            {/* Tile E — Subject categories */}
-            <motion.div
-              className="glass-surface col-span-12 flex flex-col gap-4 rounded-2xl p-5 lg:col-span-7 lg:row-span-1"
-              {...fadeUpInView(0.3)}
-            >
-              <Marquee speed={35} className="py-1">
-                {categoryPreview.map((cat) => (
-                  <span
-                    key={cat.id}
-                    className="inline-flex shrink-0 items-center gap-2 rounded-full glass-surface px-4 py-2 text-sm text-foreground"
-                  >
-                    <span aria-hidden>{cat.emoji}</span>
-                    {locale === 'he' ? cat.heLabel : cat.enLabel}
-                  </span>
-                ))}
-              </Marquee>
-              <div className="flex justify-end">
-                <Link
-                  href="/app/lessons"
-                  className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
-                >
-                  {t.viewAll}
-                </Link>
-              </div>
-            </motion.div>
-
-            {/* Tile F — Adaptive learning path */}
-            <motion.div
-              className="iridescent-border col-span-6 flex flex-col gap-3 p-5 lg:col-span-5 lg:row-span-1"
-              {...fadeUpInView(0.35)}
-            >
-              <span className="text-[10px] font-semibold tracking-widest text-muted-foreground">
-                {t.platformLabel}
-              </span>
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <Route className="h-4 w-4 text-primary" aria-hidden />
-                {t.platformHighlight}
-              </div>
-              <p className="text-sm text-muted-foreground">{t.platformDesc}</p>
-            </motion.div>
-          </div>
+              <p className="text-sm text-muted-foreground">{t.platformHighlight}</p>
+            </div>
+            <div className="flex flex-col justify-center gap-1 bg-surface-1 p-5">
+              <Brain className="h-6 w-6 text-primary" aria-hidden />
+              <p className="text-sm text-muted-foreground">{t.features.memory}</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Section 3: Agent showcase */}
-      <section className="border-y border-border bg-surface-1/50 py-20">
-        <div className="mx-auto max-w-7xl px-4">
-          <motion.h2
-            className="font-display text-center text-4xl font-bold lg:text-5xl"
-            {...fadeUpInView(0)}
-          >
-            {t.featuresHeading}
-          </motion.h2>
-          <motion.p
-            className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground"
-            {...fadeUpInView(0.08)}
-          >
-            {t.featuresSubheading}
-          </motion.p>
+      {/* ── Agents ──────────────────────────────────────────────────────── */}
+      <section className="relative border-t border-border bg-surface-1/60 py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <motion.div className="mx-auto max-w-2xl text-center" {...fadeUpInView(0)}>
+            <span className="text-xs font-semibold uppercase tracking-widest text-accent-amber">
+              {t.platformLabel}
+            </span>
+            <h2 className="mt-3 font-display text-4xl font-medium tracking-tight text-foreground lg:text-5xl">
+              {t.featuresHeading}
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              {t.featuresSubheading}
+            </p>
+          </motion.div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {agentFeatures.map(
-              ({ emoji, titleKey, descKey, specialtyKey, gradientClass, specialtyClass, chatPath }, i) => (
+              ({ emoji, titleKey, descKey, specialtyKey, accentText, accentChip, accentRule, chatPath }, i) => (
                 <motion.article
                   key={titleKey}
-                  className="iridescent-border flex flex-col p-6"
+                  className="card-punch group relative flex flex-col overflow-hidden rounded-2xl p-6"
                   {...fadeUpInView(i * 0.08)}
                 >
+                  <span className={cn('absolute inset-x-0 top-0 h-1', accentRule)} aria-hidden />
                   <div className="mb-4 flex items-start justify-between gap-2">
-                    <span className="text-4xl leading-none" role="img" aria-hidden>
+                    <span className="text-3xl leading-none" role="img" aria-hidden>
                       {emoji}
                     </span>
                     <span
                       className={cn(
                         'rounded-full border px-2.5 py-0.5 text-xs font-medium',
-                        specialtyClass,
+                        accentChip,
                       )}
                     >
                       {t.features[specialtyKey]}
                     </span>
                   </div>
 
-                  <h3
-                    className={cn(
-                      'font-display mb-2 text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent',
-                      gradientClass,
-                    )}
-                  >
+                  <h3 className={cn('font-display mb-2 text-2xl font-medium', accentText)}>
                     {t.features[titleKey]}
                   </h3>
 
@@ -471,9 +372,13 @@ export function LandingHero() {
 
                   <Link
                     href={chatPath}
-                    className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                    className={cn(
+                      'mt-5 inline-flex items-center gap-1 text-sm font-medium transition-opacity hover:opacity-70',
+                      accentText,
+                    )}
                   >
                     {t.openChat}
+                    <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180" aria-hidden />
                   </Link>
                 </motion.article>
               ),
@@ -482,59 +387,88 @@ export function LandingHero() {
         </div>
       </section>
 
-      {/* Section 4: How it works */}
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-4">
+      {/* ── How it works ────────────────────────────────────────────────── */}
+      <section className="py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <motion.h2
-            className="font-display text-center text-4xl font-bold lg:text-5xl"
+            className="text-center font-display text-4xl font-medium tracking-tight text-foreground lg:text-5xl"
             {...fadeUpInView(0)}
           >
             {t.howItWorksHeading}
           </motion.h2>
 
-          <div className="relative mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
+          <div className="relative mt-16 grid gap-12 md:grid-cols-3 md:gap-8">
             <div
-              className="pointer-events-none absolute top-8 hidden h-px w-full bg-gradient-to-r from-transparent via-border-bright to-transparent md:block"
+              className="pointer-events-none absolute top-7 hidden h-px w-full bg-gradient-to-r from-transparent via-border-bright to-transparent md:block"
               aria-hidden
             />
 
-            {howItWorksSteps.map(({ step, titleKey, descKey, icon: Icon, gradient }, i) => (
+            {howItWorksSteps.map(({ step, titleKey, descKey, icon: Icon }, i) => (
               <motion.div
                 key={step}
                 className="relative flex flex-col items-center text-center"
                 {...fadeUpInView(i * 0.1)}
               >
-                <div
-                  className={cn(
-                    'relative z-10 mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-primary-foreground shadow-lg',
-                    gradient,
-                  )}
-                >
-                  {step}
+                <div className="relative z-10 mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-border bg-surface-1 shadow-sm">
+                  <Icon className="h-6 w-6 text-primary" aria-hidden />
+                  <span className="absolute -end-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                    {step}
+                  </span>
                 </div>
-                <Icon className="mb-3 h-6 w-6 text-muted-foreground" aria-hidden />
-                <h3 className="font-display mb-2 text-xl font-semibold">{t[titleKey]}</h3>
+                <h3 className="font-display mb-2 text-xl font-medium text-foreground">
+                  {t[titleKey]}
+                </h3>
                 <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">{t[descKey]}</p>
               </motion.div>
             ))}
           </div>
+
+          {/* Subject marquee */}
+          <motion.div className="mt-20" {...fadeUpInView(0)}>
+            <Marquee speed={35} className="py-1">
+              {categoryPreview.map((cat) => (
+                <span
+                  key={cat.id}
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-surface-1 px-4 py-2 text-sm text-foreground shadow-sm"
+                >
+                  <span aria-hidden>{cat.emoji}</span>
+                  {locale === 'he' ? cat.heLabel : cat.enLabel}
+                </span>
+              ))}
+            </Marquee>
+            <div className="mt-6 text-center">
+              <Link
+                href="/learn"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-opacity hover:opacity-70"
+              >
+                <Compass className="h-4 w-4" aria-hidden />
+                {t.viewAll}
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Section 5: Final CTA */}
-      <section className="relative overflow-hidden py-24 lg:py-32">
-        <div className="mesh-gradient pointer-events-none absolute inset-0 opacity-60" aria-hidden />
-        <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-20" aria-hidden />
-
-        <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
+      {/* ── Closing CTA — deep evergreen band ───────────────────────────── */}
+      <section className="relative overflow-hidden bg-primary py-24 lg:py-32">
+        <div className="bg-grain pointer-events-none absolute inset-0" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage:
+              'radial-gradient(at 20% 20%, hsl(32 68% 55% / 0.35), transparent 55%), radial-gradient(at 80% 80%, hsl(12 55% 55% / 0.3), transparent 55%)',
+          }}
+          aria-hidden
+        />
+        <div className="relative z-10 mx-auto max-w-3xl px-4 text-center text-primary-foreground">
           <motion.h2
-            className="font-display text-4xl font-bold lg:text-6xl"
+            className="font-display text-4xl font-medium tracking-tight lg:text-6xl"
             {...fadeUpInView(0)}
           >
             {t.closingHeading}
           </motion.h2>
           <motion.p
-            className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground"
+            className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-primary-foreground/80"
             {...fadeUpInView(0.08)}
           >
             {t.closingSubtitle}
@@ -542,7 +476,7 @@ export function LandingHero() {
           <motion.div className="mt-10" {...fadeUpInView(0.16)}>
             <Link
               href="/sign-up"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex items-center gap-2 rounded-xl bg-surface-1 px-8 py-4 text-base font-semibold text-primary shadow-lg transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-1 focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
             >
               {t.cta}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />

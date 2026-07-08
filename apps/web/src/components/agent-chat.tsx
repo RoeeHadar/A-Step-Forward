@@ -379,12 +379,7 @@ export function AgentChat({
           className={cn('h-3 w-3 rounded-full bg-gradient-to-br', gradient)}
           aria-hidden
         />
-        <h1
-          className={cn(
-            'font-display text-2xl font-semibold bg-gradient-to-r bg-clip-text text-transparent',
-            gradient,
-          )}
-        >
+        <h1 className="font-display text-2xl font-semibold text-foreground">
           {(i18nMessages.dashboard?.agentNames as Record<string, string>)?.[agentName] ?? agentDisplayNames[agentName]}
         </h1>
         {quickMode ? (

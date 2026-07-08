@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Sprout } from 'lucide-react';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
 import { useTheme } from '@/providers/theme-provider';
@@ -46,11 +46,13 @@ export function SiteHeader() {
             href="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            <div
-              className="h-2 w-2 rounded-full bg-gradient-to-br from-primary via-accent-magenta to-accent-cyan shadow-lg shadow-primary/50"
+            <span
+              className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm"
               aria-hidden
-            />
-            <span className="font-display text-base font-bold tracking-tight text-foreground">
+            >
+              <Sprout className="h-3.5 w-3.5" />
+            </span>
+            <span className="font-display text-lg font-semibold tracking-tight text-foreground">
               A Step Forward
             </span>
           </Link>
@@ -142,7 +144,7 @@ export function SiteHeader() {
             </SignInButton>
             <Link
               href="/sign-up"
-              className="inline-flex items-center rounded-lg bg-gradient-to-r from-primary to-accent-magenta px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:shadow-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {messages.nav.signUp}
             </Link>

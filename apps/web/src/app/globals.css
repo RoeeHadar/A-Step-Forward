@@ -1,54 +1,72 @@
 @import 'tailwindcss';
 
+/*
+  A Step Forward — "Warm editorial, grown not generated".
+  Natural palette: evergreen primary, warm sand/stone paper neutrals,
+  clay + ochre accents. Depth comes from paper grain + soft warm shadows
+  + layered matte surfaces (not glassmorphism or neon orbs).
+
+  Legacy utility class names (mesh-gradient, orb-*, glass-surface,
+  card-punch, iridescent-border, bg-dot-grid) are preserved but redefined
+  to the new aesthetic so existing pages inherit the redesign automatically.
+*/
+
 @layer base {
   :root {
-    --background: 250 30% 98%;
-    --surface-1: 0 0% 100%;
-    --surface-2: 250 25% 95%;
-    --foreground: 240 30% 8%;
-    --muted: 250 25% 96%;
-    --muted-foreground: 240 8% 40%;
-    --border: 250 20% 85%;
-    --border-bright: 250 25% 70%;
-    --primary: 264 80% 58%;
-    --primary-foreground: 0 0% 100%;
-    --accent-cyan: 188 95% 38%;
-    --accent-magenta: 322 75% 50%;
-    --accent-amber: 38 95% 50%;
-    --ring: 264 80% 58%;
+    /* Warm paper canvas */
+    --background: 40 38% 96%;
+    --surface-1: 42 44% 99%;
+    --surface-2: 38 30% 93%;
+    --foreground: 165 22% 13%;
+    --muted: 39 28% 92%;
+    --muted-foreground: 155 8% 40%;
+    --border: 38 22% 84%;
+    --border-bright: 36 20% 71%;
+    /* Evergreen brand */
+    --primary: 158 40% 27%;
+    --primary-foreground: 42 44% 98%;
+    /* Repurposed accents → natural earth tones */
+    --accent-cyan: 172 30% 34%; /* sage / pine-teal */
+    --accent-magenta: 12 55% 50%; /* clay / terracotta */
+    --accent-amber: 32 68% 46%; /* ochre */
+    --ring: 158 40% 27%;
     --card: var(--surface-1);
     --card-foreground: var(--foreground);
-    --accent: var(--accent-cyan);
+    --accent: var(--accent-amber);
     --accent-foreground: var(--foreground);
     --secondary: var(--surface-2);
     --secondary-foreground: var(--foreground);
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 4 62% 47%;
+    --destructive-foreground: 42 44% 98%;
+    /* Warm-tinted shadow color (brown, not black) for natural depth */
+    --shadow-color: 30 30% 22%;
   }
 
   .dark {
-    --background: 240 8% 4%;
-    --surface-1: 240 10% 9%;
-    --surface-2: 240 12% 13%;
-    --foreground: 0 0% 99%;
-    --muted: 240 10% 11%;
-    --muted-foreground: 220 10% 65%;
-    --border: 240 8% 18%;
-    --border-bright: 240 10% 30%;
-    --primary: 264 89% 66%;
-    --primary-foreground: 0 0% 100%;
-    --accent-cyan: 188 95% 50%;
-    --accent-magenta: 322 81% 60%;
-    --accent-amber: 38 95% 58%;
-    --ring: 264 89% 66%;
+    /* Deep warm charcoal (green-black), never pure black */
+    --background: 162 14% 8%;
+    --surface-1: 160 12% 11%;
+    --surface-2: 158 10% 15%;
+    --foreground: 40 30% 93%;
+    --muted: 160 10% 14%;
+    --muted-foreground: 150 8% 62%;
+    --border: 158 9% 21%;
+    --border-bright: 156 9% 33%;
+    --primary: 150 40% 52%; /* sage-emerald, moderate saturation */
+    --primary-foreground: 162 20% 8%;
+    --accent-cyan: 168 30% 52%;
+    --accent-magenta: 14 58% 60%;
+    --accent-amber: 36 70% 58%;
+    --ring: 150 40% 52%;
     --card: var(--surface-1);
     --card-foreground: var(--foreground);
-    --accent: var(--accent-cyan);
+    --accent: var(--accent-amber);
     --accent-foreground: var(--foreground);
     --secondary: var(--surface-2);
     --secondary-foreground: var(--foreground);
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 6 58% 54%;
+    --destructive-foreground: 40 30% 93%;
+    --shadow-color: 160 40% 3%;
   }
 
   html,
@@ -56,6 +74,24 @@
     background: hsl(var(--background));
     color: hsl(var(--foreground));
     overflow-x: hidden;
+  }
+
+  /* Organic paper grain over the whole canvas — the core of the "natural,
+     in-depth, not flat" feel. Very low opacity so it reads as texture. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+  }
+
+  .dark body::before {
+    opacity: 0.06;
+    mix-blend-mode: screen;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -70,81 +106,99 @@
   }
 }
 
+/* Editorial serif for display headings — instantly less "AI", more
+   established / human. Frank Ruhl Libre covers Hebrew + Latin; Newsreader
+   is the Latin fallback; system serif keeps the look even offline. */
 .font-display {
-  font-family: var(--font-space-grotesk), var(--font-heebo), sans-serif;
+  font-family: var(--font-frank-ruhl), var(--font-newsreader), 'Iowan Old Style',
+    Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.01em;
 }
 
+/* Standalone grain utility for sections that want extra texture. */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* Soft, natural gradient wash (warm evergreen → ochre → clay), heavily
+   blurred and low-opacity. Replaces the old neon mesh. */
 .mesh-gradient {
   background-image:
-    radial-gradient(at 20% 20%, hsl(264 89% 66% / 0.28), transparent 50%),
-    radial-gradient(at 80% 25%, hsl(188 95% 50% / 0.22), transparent 50%),
-    radial-gradient(at 50% 80%, hsl(322 81% 60% / 0.2), transparent 50%);
-  filter: blur(40px);
+    radial-gradient(at 15% 20%, hsl(158 40% 40% / 0.22), transparent 55%),
+    radial-gradient(at 85% 15%, hsl(32 68% 55% / 0.18), transparent 55%),
+    radial-gradient(at 55% 90%, hsl(12 55% 55% / 0.16), transparent 55%);
+  filter: blur(48px);
 }
 
 .dark .mesh-gradient {
   background-image:
-    radial-gradient(at 20% 20%, hsl(264 89% 66% / 0.55), transparent 60%),
-    radial-gradient(at 80% 25%, hsl(188 95% 50% / 0.42), transparent 60%),
-    radial-gradient(at 50% 80%, hsl(322 81% 60% / 0.38), transparent 60%);
-  filter: blur(40px);
+    radial-gradient(at 15% 20%, hsl(150 40% 45% / 0.28), transparent 60%),
+    radial-gradient(at 85% 15%, hsl(36 70% 55% / 0.2), transparent 60%),
+    radial-gradient(at 55% 90%, hsl(14 58% 55% / 0.2), transparent 60%);
+  filter: blur(48px);
 }
 
-/* Solid-color orbs — used for visible hero blobs. Each orb is one color so the
-   blur produces a vibrant glow instead of a washed-out three-color mush. */
+/* Orbs → soft, warm "light leaks". Larger, lower-saturation, gentler than
+   the old neon blobs so they read as natural ambient light. */
 .orb-violet {
-  background: radial-gradient(circle at center, hsl(264 89% 66% / 0.8), hsl(264 89% 50% / 0.35) 50%, transparent 75%);
-  filter: blur(50px);
+  background: radial-gradient(circle at center, hsl(158 40% 42% / 0.5), hsl(158 40% 30% / 0.18) 55%, transparent 75%);
+  filter: blur(64px);
 }
 .orb-cyan {
-  background: radial-gradient(circle at center, hsl(188 95% 55% / 0.75), hsl(188 95% 45% / 0.3) 50%, transparent 75%);
-  filter: blur(50px);
+  background: radial-gradient(circle at center, hsl(172 34% 45% / 0.42), hsl(172 34% 35% / 0.16) 55%, transparent 75%);
+  filter: blur(64px);
 }
 .orb-magenta {
-  background: radial-gradient(circle at center, hsl(322 81% 65% / 0.7), hsl(322 81% 50% / 0.3) 50%, transparent 75%);
-  filter: blur(50px);
+  background: radial-gradient(circle at center, hsl(12 55% 52% / 0.38), hsl(12 55% 42% / 0.15) 55%, transparent 75%);
+  filter: blur(64px);
 }
 .orb-amber {
-  background: radial-gradient(circle at center, hsl(38 95% 60% / 0.6), hsl(38 95% 50% / 0.25) 50%, transparent 75%);
-  filter: blur(50px);
+  background: radial-gradient(circle at center, hsl(32 68% 52% / 0.4), hsl(32 68% 45% / 0.16) 55%, transparent 75%);
+  filter: blur(64px);
 }
-/* Lighter in light mode for AA contrast on text */
-:root:not(.dark) .orb-violet { opacity: 0.45; }
-:root:not(.dark) .orb-cyan { opacity: 0.4; }
-:root:not(.dark) .orb-magenta { opacity: 0.4; }
-:root:not(.dark) .orb-amber { opacity: 0.35; }
+:root:not(.dark) .orb-violet { opacity: 0.4; }
+:root:not(.dark) .orb-cyan { opacity: 0.34; }
+:root:not(.dark) .orb-magenta { opacity: 0.32; }
+:root:not(.dark) .orb-amber { opacity: 0.34; }
 
+/* Fine, warm dot grid — subtle structure rather than a glowing tech mesh. */
 .bg-dot-grid {
-  background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: radial-gradient(hsl(var(--border-bright) / 0.5) 1px, transparent 1px);
+  background-size: 22px 22px;
   background-position: center;
-  mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, black 0%, transparent 72%);
 }
 
+/* Matte "paper card" — a warm hairline gradient border instead of a rainbow
+   iridescent one. */
 .iridescent-border {
   position: relative;
-  border-radius: 16px;
+  border-radius: 18px;
   background: hsl(var(--surface-1));
+  box-shadow:
+    0 1px 2px hsl(var(--shadow-color) / 0.08),
+    0 12px 30px -18px hsl(var(--shadow-color) / 0.28);
 }
 
 .iridescent-border::before {
   content: '';
   position: absolute;
-  inset: -1px;
+  inset: 0;
   border-radius: inherit;
   padding: 1px;
   background: linear-gradient(
-    135deg,
-    hsl(264 89% 66% / 0.4),
-    hsl(188 95% 50% / 0.3),
-    hsl(322 81% 60% / 0.4)
+    140deg,
+    hsl(158 40% 40% / 0.5),
+    hsl(32 68% 52% / 0.3),
+    hsl(12 55% 52% / 0.35)
   );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  opacity: 0.4;
+  opacity: 0.55;
   transition: opacity 0.3s;
   pointer-events: none;
 }
@@ -153,30 +207,39 @@
   opacity: 1;
 }
 
+/* Warm matte surface — softened, less "glass", more frosted paper. */
 .glass-surface {
-  background: hsl(var(--surface-1) / 0.6);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: hsl(var(--surface-1) / 0.78);
+  backdrop-filter: blur(12px) saturate(115%);
+  -webkit-backdrop-filter: blur(12px) saturate(115%);
   border: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 2px hsl(var(--shadow-color) / 0.06);
 }
 
+/* Layered card with soft, warm-tinted elevation (natural depth) that lifts
+   on hover — no colored neon glow. */
 .card-punch {
   border: 1px solid hsl(var(--border));
   background: hsl(var(--surface-1));
-  transition: border-color 200ms, box-shadow 200ms;
+  box-shadow:
+    0 1px 2px hsl(var(--shadow-color) / 0.06),
+    0 10px 24px -16px hsl(var(--shadow-color) / 0.22);
+  transition: transform 250ms ease, border-color 250ms, box-shadow 250ms;
 }
 
 .card-punch:hover {
-  border-color: hsl(var(--primary) / 0.4);
+  border-color: hsl(var(--border-bright));
+  transform: translateY(-2px);
   box-shadow:
-    0 0 0 1px hsl(var(--primary) / 0.1),
-    0 8px 32px -8px hsl(var(--primary) / 0.2);
+    0 2px 4px hsl(var(--shadow-color) / 0.08),
+    0 18px 40px -18px hsl(var(--shadow-color) / 0.32);
 }
 
 .dark .card-punch:hover {
+  border-color: hsl(var(--primary) / 0.4);
   box-shadow:
-    0 0 0 1px hsl(var(--primary) / 0.3),
-    0 8px 32px -8px hsl(var(--primary) / 0.4);
+    0 2px 4px hsl(var(--shadow-color) / 0.5),
+    0 18px 42px -18px hsl(var(--shadow-color) / 0.7);
 }
 
 @keyframes orb-float {
@@ -185,15 +248,15 @@
     transform: translate(0, 0) scale(1);
   }
   33% {
-    transform: translate(30px, -50px) scale(1.1);
+    transform: translate(24px, -36px) scale(1.06);
   }
   66% {
-    transform: translate(-20px, 30px) scale(0.95);
+    transform: translate(-18px, 24px) scale(0.97);
   }
 }
 
 .orb-float {
-  animation: orb-float 20s ease-in-out infinite;
+  animation: orb-float 26s ease-in-out infinite;
 }
 
 @keyframes typing-dot {
@@ -256,6 +319,7 @@ span.katex *,
 
 @theme inline {
   --font-sans: var(--font-heebo), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-frank-ruhl), var(--font-newsreader), Georgia, serif;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-surface-1: hsl(var(--surface-1));

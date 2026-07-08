@@ -18,12 +18,14 @@ export const tokens = {
   },
 } as const;
 
+// Natural, earthy agent identities — each a distinct botanical/mineral hue
+// that sits within the "warm editorial" palette rather than neon primaries.
 export const agentColors: Record<string, string> = {
-  tutor: 'hsl(221 83% 53%)',
-  mentor: 'hsl(262 83% 58%)',
-  coach: 'hsl(142 71% 45%)',
-  qa_explainer: 'hsl(199 89% 48%)',
-  reviewer: 'hsl(24 95% 53%)',
-  note_taker: 'hsl(330 81% 60%)',
-  accessibility: 'hsl(173 80% 40%)',
+  tutor: 'hsl(158 40% 32%)', // evergreen
+  mentor: 'hsl(28 55% 45%)', // ochre / bronze
+  coach: 'hsl(122 34% 34%)', // moss
+  qa_explainer: 'hsl(192 38% 36%)', // slate-teal
+  reviewer: 'hsl(12 55% 48%)', // clay / terracotta
+  note_taker: 'hsl(340 32% 48%)', // dusty rose
+  accessibility: 'hsl(174 34% 34%)', // pine-teal
 };

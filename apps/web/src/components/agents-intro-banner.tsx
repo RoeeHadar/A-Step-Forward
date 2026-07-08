@@ -77,11 +77,7 @@ export function AgentsIntroBanner() {
         className={cn('card-punch w-full max-w-lg rounded-2xl p-6')}
         dir={dir}
       >
-        <h2 className="font-display mb-1 text-2xl font-bold">
-          <span className="bg-gradient-to-r from-primary via-accent-magenta to-accent-cyan bg-clip-text text-transparent">
-            {title}
-          </span>
-        </h2>
+        <h2 className="font-display mb-1 text-2xl font-semibold text-primary">{title}</h2>
         <p className="mb-5 text-sm text-muted-foreground">
           {isHe
             ? '\u05DB\u05DC \u05E1\u05D5\u05DB\u05DF \u05DE\u05D9\u05D5\u05E2\u05D3 \u05DC\u05E6\u05D5\u05E8\u05DA \u05E9\u05D5\u05E0\u05D4 \u2014 \u05D1\u05D7\u05E8 \u05D0\u05EA \u05D4\u05E0\u05DB\u05D5\u05DF \u05DC\u05DA.'

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 
-import { Heebo, Inter, Space_Grotesk } from 'next/font/google';
+import { Heebo, Inter, Frank_Ruhl_Libre, Newsreader } from 'next/font/google';
 
 import { AppProviders } from '@/providers/app-providers';
 import { getServerLocale } from '@/i18n/locale-server';
@@ -10,10 +10,19 @@ import './globals.css';
 
 const heebo = Heebo({ subsets: ['hebrew', 'latin'], variable: '--font-heebo', display: 'swap' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const spaceGrotesk = Space_Grotesk({
+// Editorial serif display face — covers Hebrew + Latin for the "grown, not
+// generated" headline voice.
+const frankRuhl = Frank_Ruhl_Libre({
+  subsets: ['hebrew', 'latin'],
+  weight: ['500', '700', '900'],
+  variable: '--font-frank-ruhl',
+  display: 'swap',
+});
+const newsreader = Newsreader({
   subsets: ['latin'],
-  weight: ['600', '700'],
-  variable: '--font-space-grotesk',
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-newsreader',
   display: 'swap',
 });
 
@@ -48,8 +57,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f1113' },
+    { media: '(prefers-color-scheme: light)', color: '#f6f1e7' },
+    { media: '(prefers-color-scheme: dark)', color: '#141a17' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -64,7 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang={locale}
       dir={dir}
       suppressHydrationWarning
-      className={`${heebo.variable} ${inter.variable} ${spaceGrotesk.variable} h-full dark`}
+      className={`${heebo.variable} ${inter.variable} ${frankRuhl.variable} ${newsreader.variable} h-full dark`}
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <AppProviders initialLocale={locale}>{children}</AppProviders>

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Clock, Sparkles } from 'lucide-react';
+import { ChevronRight, Clock } from 'lucide-react';
 import { Badge } from '@asf/ui/badge';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
@@ -99,7 +99,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Tutor',
     desc_he: 'מדריך עם שאלות — ללמידה עמוקה',
     desc_en: 'Guides with questions — deep understanding',
-    hoverRing: 'hover:ring-blue-500/40',
+    hoverRing: 'hover:ring-primary/40',
   },
   {
     agent: 'qa_explainer',
@@ -108,7 +108,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Q&A',
     desc_he: 'עונה ישירות מתוך החומר',
     desc_en: 'Direct answers from the curriculum',
-    hoverRing: 'hover:ring-green-500/40',
+    hoverRing: 'hover:ring-accent-cyan/40',
   },
   {
     agent: 'coach',
@@ -117,7 +117,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Coach',
     desc_he: 'תרגול יומי ועיוון בחולשות',
     desc_en: 'Daily drills targeting your weak spots',
-    hoverRing: 'hover:ring-orange-500/40',
+    hoverRing: 'hover:ring-accent-amber/40',
   },
   {
     agent: 'mentor',
@@ -126,7 +126,7 @@ const AGENT_CARDS: Array<{
     name_en: 'Mentor',
     desc_he: 'מוטיבציה, הרגלים ותכנון',
     desc_en: 'Motivation, habits, and planning',
-    hoverRing: 'hover:ring-purple-500/40',
+    hoverRing: 'hover:ring-accent-magenta/40',
   },
 ];
 
@@ -293,19 +293,15 @@ function SectionHeading({
   accent?: 'primary' | 'cyan';
 }) {
   return (
-    <h2 className="font-display mb-4 flex items-center gap-2 text-xl font-semibold">
-      <Sparkles
-        className={cn('h-5 w-5', accent === 'cyan' ? 'text-accent-cyan' : 'text-primary')}
-        aria-hidden
-      />
+    <h2 className="font-display mb-4 flex items-center gap-2.5 text-xl font-semibold text-foreground">
       <span
         className={cn(
-          'bg-gradient-to-r bg-clip-text text-transparent',
-          accent === 'cyan' ? 'from-primary to-accent-cyan' : 'from-primary to-accent-magenta',
+          'h-5 w-1 rounded-full',
+          accent === 'cyan' ? 'bg-accent-cyan' : 'bg-primary',
         )}
-      >
-        {children}
-      </span>
+        aria-hidden
+      />
+      {children}
     </h2>
   );
 }
@@ -387,13 +383,14 @@ export function DashboardContent({
   return (
     <div dir={isHe ? 'rtl' : 'ltr'} className="space-y-8">
       {/* Section 1 — Welcome hero */}
-      <header className="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-accent-magenta p-6 shadow-md md:p-8">
+      <header className="relative mb-6 overflow-hidden rounded-2xl bg-primary p-6 shadow-md md:p-8">
+        <div className="bg-grain pointer-events-none absolute inset-0" aria-hidden />
         <div
-          className="absolute -top-12 end-0 h-40 w-40 rounded-full bg-white/10 blur-3xl"
-          aria-hidden
-        />
-        <div
-          className="absolute -bottom-8 start-0 h-32 w-32 rounded-full bg-accent-cyan/20 blur-2xl"
+          className="pointer-events-none absolute inset-0 opacity-50"
+          style={{
+            backgroundImage:
+              'radial-gradient(at 15% 20%, hsl(32 68% 55% / 0.35), transparent 55%), radial-gradient(at 85% 90%, hsl(12 55% 55% / 0.3), transparent 55%)',
+          }}
           aria-hidden
         />
         <div className="relative space-y-4 text-primary-foreground">
