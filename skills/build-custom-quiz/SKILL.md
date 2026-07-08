@@ -1,3 +1,13 @@
+---
+name: build-custom-quiz
+description: >-
+  Generate ephemeral, fit-to-purpose AI practice quizzes for a single learner
+  from natural-language requirements (kind-mix, time budget, optional topics) via
+  POST /api/quiz/custom and buildCustomQuiz. Use when building the /app/quiz page
+  or when a runtime agent wants to drop a tailored mini-assessment into chat. Do
+  NOT use to author durable lesson question banks — use author-question-bank for that.
+---
+
 # Build a Custom AI Quiz
 
 Generate **fit-to-purpose** practice quizzes for one learner from natural-language requirements (kind-mix, time budget, optional topics).

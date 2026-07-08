@@ -1,3 +1,12 @@
+---
+name: pnpm-lockfile-ci
+description: >-
+  Diagnose and fix recurring Vercel build failures caused by a stale
+  pnpm-lock.yaml, covering both main-branch commits and Dependabot PRs. Use when
+  a build fails with ERR_PNPM_OUTDATED_LOCKFILE or a "pnpm install
+  --frozen-lockfile" / "pnpm --filter @asf/web build" step exits with 1.
+---
+
 # Skill: pnpm-lockfile-ci
 
 **Purpose**: Diagnose and fix recurring Vercel build failures caused by a stale

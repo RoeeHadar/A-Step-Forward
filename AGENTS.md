@@ -122,3 +122,5 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/assign-to-coordinator/SKILL.md` | Whenever you are operating as the Manager and need to hand off a new round of work. |
 | `skills/architecture-review/SKILL.md` | Platform architecture assessments, monolith vs services, coupling/scalability/race analysis, ADR drafts. Architecture Steward sub-agent (brief 24). |
 | `skills/code-review/SKILL.md` | Deep code integrity review: silent failures, edge cases, async races, clarity, over-engineering, test quality. Code Reviewer sub-agent (brief 25). Pair with `review-bugbot` on PRs. |
+| `skills/taste/SKILL.md` | Any visual/design work in `apps/web` — new pages/components, "make it look better" passes, or UI design review. Enforces hierarchy, spacing rhythm, type scale, restrained color, depth, motion on top of the design tokens. Pair with `add-a-frontend-page`. |
+| `skills/skill-creation/SKILL.md` | Authoring, editing, or auditing any skill under `skills/`. Encodes Anthropic's skill-building guide (frontmatter, discoverable descriptions, progressive disclosure) + a conformance audit checklist. |

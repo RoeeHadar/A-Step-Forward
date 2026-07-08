@@ -1,3 +1,13 @@
+---
+name: in-house-concept-content
+description: >-
+  Scrape, adapt, attribute, and render bilingual (EN + HE) concept explanations
+  from CC-licensed sources (Wikipedia, CC BY-SA 4.0) so the /learn section hosts
+  content natively instead of linking out. Use when the Learn section needs new
+  per-concept explanations, when a concept shows the wrong Wikipedia match, or
+  when adding a new CC content source (OpenStax, Wikibooks, etc.).
+---
+
 # Skill: In-house concept content (scraped + attributed)
 
 **When to use**: any time the Learn section needs new explanatory content per
