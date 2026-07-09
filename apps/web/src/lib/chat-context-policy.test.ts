@@ -4,6 +4,9 @@ import {
   compactMemoryTurns,
   compactStoredTurnContent,
   formatPlanWeeksCompact,
+  isReadinessFollowUp,
+  wantsConversationAdvance,
+  wantsExamReadinessAnswer,
   wantsLearningPlanSnapshot,
 } from './chat-context-policy';
 
@@ -57,5 +60,28 @@ describe('chat-context-policy', () => {
   it('detects study-next questions', () => {
     expect(wantsLearningPlanSnapshot('מה ללמוד הלאה?')).toBe(true);
     expect(wantsLearningPlanSnapshot('הבגרות שלי עוד שבוע')).toBe(false);
+  });
+
+  it('detects exam readiness questions', () => {
+    expect(
+      wantsExamReadinessAnswer(
+        'הבגרות שלי עוד שבוע, האם התוכנית אכן תכין אותי בזמן למבחן?',
+      ),
+    ).toBe(true);
+    expect(wantsExamReadinessAnswer('מה ללמוד הלאה?')).toBe(false);
+  });
+
+  it('detects conversation advance frustration', () => {
+    expect(wantsConversationAdvance('כתבת את זה כבר, תמשיך')).toBe(true);
+    expect(wantsConversationAdvance('כן אני יודע את הנושאים')).toBe(false);
+  });
+
+  it('detects readiness follow-up affirmations', () => {
+    const recent = [
+      { role: 'user', content: 'הבגרות שלי עוד שבוע, האם התוכנית תכין אותי?' },
+      { role: 'assistant', content: 'התוכנית כוללת 5 שעות...' },
+    ];
+    expect(isReadinessFollowUp('כן אני יודע את הנושאים האלו', recent)).toBe(true);
+    expect(isReadinessFollowUp('כן אני יודע את הנושאים האלו', [])).toBe(false);
   });
 });

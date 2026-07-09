@@ -24,10 +24,39 @@ export const CHAT_BREVITY_RULE = `## Response style (mandatory)
 - Be concise and relevant: answer the learner's question first.
 - Default length: 2–4 short paragraphs (or ≤6 bullets) unless they ask for depth.
 - Do not repeat injected profile/plan/persona back to them.
+- Never open with meta-phrases like "אני חושב שאני יודע מה קרה" or repeat the same checklist from your prior turn.
 - End with one clear next step or one focused question — not both unless needed.`;
+
+export const EXAM_READINESS_TURN_INSTRUCTION = `## THIS TURN — exam readiness / timeline (mandatory)
+The learner asked whether their plan will prepare them in time for an exam.
+You MUST:
+1. Answer DIRECTLY first — honest verdict using: days until exam, hours/week, active plan topics, and known mastery gaps.
+2. Practical tone. No topic-by-topic diagnostic checklist unless they explicitly ask for one.
+3. If they already said they know the topics, accept it — recommend focused practice (timed problems, weak spots, Coach drills).
+4. End with ONE concrete action for the remaining days before the exam.
+5. Plan edits only via the Tutor sidebar template — do not offer to recalculate or "נסער את התוכנית" from chat.`;
+
+export const CONVERSATION_ADVANCE_INSTRUCTION = `## THIS TURN — stop repeating (mandatory)
+The learner said you already covered this or asked you to continue.
+You MUST:
+1. Do NOT repeat prior questions, topic bullet lists, or openings from your last reply.
+2. Advance: give the next actionable step, a short readiness summary, or offer a drill / mini quiz.
+3. Acknowledge in one short clause, then move forward.`;
 
 const STUDY_NEXT_RE =
   /what should i study|what.?s next|study next|root cause|why am i stuck|what to learn|מה ללמוד|מה הלאה|למה אני תקוע|מה כדאי|הבא בתור|עוד נושא/i;
+
+const EXAM_READINESS_RE =
+  /(?:האם|האם\s+התוכנית).{0,50}(?:תכין|מספיק|מוכן|בזמן)/i;
+
+const EXAM_READINESS_EN_RE =
+  /(?:will the plan|is the plan|am i ready).{0,40}(?:prepare|ready|enough|in time)/i;
+
+const CONVERSATION_ADVANCE_RE =
+  /(?:כתבת את זה כבר|אמרת את זה|חזרת על|תמשיך|המשך|די עם|stop repeating|you already (?:said|wrote|asked)|move on|continue\b)/i;
+
+const READINESS_AFFIRM_RE =
+  /^(?:כן(?:\s|,|$)|נכון|בטח|ברור|יודע|אני יודע|כן,? אני יודע|yes\b|i know|i do\b)/i;
 
 const ERROR_MARKERS = ['**מה קרה:**', '**What happened:**', '[שירות המודל לא זמין', '[Model service temporarily'];
 
@@ -42,6 +71,36 @@ export function trimPersonaForChat(text: string): string {
 
 export function wantsLearningPlanSnapshot(message: string): boolean {
   return STUDY_NEXT_RE.test(message);
+}
+
+export function wantsExamReadinessAnswer(message: string): boolean {
+  const t = message.trim();
+  if (!t) return false;
+  const lower = t.toLowerCase();
+  return (
+    EXAM_READINESS_RE.test(t) ||
+    EXAM_READINESS_EN_RE.test(lower) ||
+    /(?:התוכנית|the plan).{0,40}(?:תכין|מספיק|prepare|ready|enough).{0,40}(?:מבחן|בגרות|exam|test)/i.test(
+      t,
+    ) ||
+    /(?:מבחן|בגרות|exam).{0,30}(?:עוד|in)\s+(?:שבוע|יום|week|day)/i.test(t)
+  );
+}
+
+export function wantsConversationAdvance(message: string): boolean {
+  return CONVERSATION_ADVANCE_RE.test(message.trim());
+}
+
+export function isReadinessFollowUp(
+  message: string,
+  recent: Array<{ role: string; content: string }>,
+): boolean {
+  const t = message.trim();
+  if (!t || t.length > 120) return false;
+  if (!READINESS_AFFIRM_RE.test(t)) return false;
+  return recent.some((turn) =>
+    /(?:בגרות|מבחן|exam|תוכנית|תכין|prepare|readiness|שבוע|week)/i.test(turn.content),
+  );
 }
 
 export function isLearnerVisibleErrorContent(content: string): boolean {

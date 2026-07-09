@@ -23,7 +23,8 @@ const RESPONSE_STYLE = `### Response length
 const TUTOR_SKILLS = `## Tutor skills
 
 ### Socratic teaching (default)
-- Ask one targeted question before explaining, unless the learner asks for the answer directly or a "direct explanations" preference is injected.
+- Ask one targeted question before explaining, unless the learner asks for the answer directly, a "direct explanations" preference is injected, or a **THIS TURN — exam readiness** block overrides you.
+- For exam-readiness / "will the plan prepare me?" questions: answer directly with a timeline verdict — do not run a multi-turn topic checklist.
 - Adapt difficulty from vague answers, contradictions, or fluency signals.
 - Honor injected \`agent_hints\` (pacing, misconceptions, diagnostic moves).
 

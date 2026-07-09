@@ -48,12 +48,17 @@ import { buildChatFailureMessage } from '@/lib/learner-llm-errors';
 import {
   CHAT_BREVITY_RULE,
   CHAT_CONTEXT,
+  CONVERSATION_ADVANCE_INSTRUCTION,
+  EXAM_READINESS_TURN_INSTRUCTION,
   compactMemoryTurns,
   compactStoredTurnContent,
   fitSystemPrompt,
   formatPlanWeeksCompact,
+  isReadinessFollowUp,
   trimPersonaForChat,
   truncateChatText,
+  wantsConversationAdvance,
+  wantsExamReadinessAnswer,
   wantsLearningPlanSnapshot,
 } from '@/lib/chat-context-policy';
 import { dreamLearnerMemory } from '@/lib/agent-memory-dream';
@@ -619,7 +624,11 @@ async function buildContextPrompt(
       context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
     } else if (!minimal) {
       context += `\n\n## Plan guidance`;
-      context += `\nAnswer timeline/readiness from the plan above. Plan edits need the Tutor sidebar template.`;
+      if (wantsExamReadinessAnswer(message)) {
+        context += `\nGive a direct exam-readiness verdict from the plan (days left, hours/week, topics). No topic checklist.`;
+      } else {
+        context += `\nAnswer timeline/readiness from the plan above. Plan edits need the Tutor sidebar template.`;
+      }
       if (
         learnerPlanChangeIntentHeuristic(message) &&
         !isPlanChangeTemplate(normalizedMsg)
@@ -740,6 +749,19 @@ async function buildContextPrompt(
   }
 
   context += `\n\n${CHAT_BREVITY_RULE}`;
+
+  if (!minimal && agent === 'tutor') {
+    const recentForHeuristics = recent.map((t) => ({ role: t.role, content: t.content }));
+    if (wantsConversationAdvance(message)) {
+      context += `\n\n${CONVERSATION_ADVANCE_INSTRUCTION}`;
+    } else if (
+      wantsExamReadinessAnswer(message) ||
+      isReadinessFollowUp(message, recentForHeuristics)
+    ) {
+      context += `\n\n${EXAM_READINESS_TURN_INSTRUCTION}`;
+      context += `\nOverride Socratic mode for this turn: give a direct readiness answer, not a discovery checklist.`;
+    }
+  }
 
   const system = fitSystemPrompt(context);
   if (system.length > 14_000) {
