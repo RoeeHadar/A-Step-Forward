@@ -23,6 +23,8 @@ import {
   fetchAgentNotes,
   dbConfigured,
 } from '@/lib/neon-db';
+import { dreamLearnerMemory, MAX_LIVE_NOTES_PER_AGENT } from '@/lib/agent-memory-dream';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -80,5 +82,20 @@ export async function POST(req: Request) {
     source_turn_id: body.source_turn_id ?? null,
   });
   if (!id) return Response.json({ error: 'write_failed' }, { status: 500 });
+
+  void (async () => {
+    try {
+      const notes = await fetchAgentNotes(userId, parsed.data, MAX_LIVE_NOTES_PER_AGENT + 1);
+      if (notes.length >= MAX_LIVE_NOTES_PER_AGENT - 4) {
+        await dreamLearnerMemory(userId, { agents: [parsed.data], scope: 'live' });
+      }
+    } catch (err) {
+      logger.warn('agent-memory notes: dream after append failed', {
+        agent: parsed.data,
+        err: String(err),
+      });
+    }
+  })();
+
   return Response.json({ id });
 }

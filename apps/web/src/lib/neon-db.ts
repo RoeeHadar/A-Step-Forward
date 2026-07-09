@@ -1063,17 +1063,20 @@ export async function fetchRecentChatTurns(
   learnerId: string,
   agent: string,
   limit = 10,
+  sessionId?: string | null,
 ): Promise<ChatTurn[]> {
   if (!sql) return [];
+  if (!sessionId?.trim()) return [];
   try {
     const rows = (await sql`
       SELECT role, content, agent, created_at
       FROM chat_turns
       WHERE learner_id = ${learnerId} AND agent = ${agent}
+        AND session_id = ${sessionId}
       ORDER BY created_at DESC
       LIMIT ${limit}
     `) as ChatTurn[];
-    return rows.reverse(); // oldest first for chat context
+    return rows.reverse();
   } catch (err) {
     console.warn('[neon-db] fetchRecentChatTurns failed', err);
     return [];

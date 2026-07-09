@@ -28,14 +28,13 @@ describe('buildChatFailureMessage', () => {
     const msg = buildChatFailureMessage({
       agent: 'tutor',
       locale: 'he',
-      failure: { kind: 'rate_limited', status: 429, provider: 'groq' },
+      failure: { kind: 'context_too_large', status: 413, provider: 'groq' },
       messagePreview: 'מה הסטטוס שלי',
     });
     expect(msg).toContain('אני המורה שלך');
-    expect(msg).toContain('מגבלת בקשות');
     expect(msg).toContain('מה קרה');
     expect(msg).toContain('מה לעשות');
-    expect(msg).toContain('קוד שגיאה: 429');
+    expect(msg).not.toContain('קוד שגיאה');
     expect(msg).toContain('מה הסטטוס שלי');
   });
 

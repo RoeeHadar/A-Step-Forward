@@ -119,3 +119,20 @@ export function buildAgentBaseline(): string {
     '- **`learning_plan.next(goal)`** — mastery-aware path planner. HTTP: `GET /api/learning-plan/next?goal=<concept_id>&max=8`. Returns `{ goal, path: [{concept_id, name, name_he, urgency, hasLesson, weak_atoms[], why_en, why_he, relation}], blocking_atoms: [{atom, mastery}] }`. This is the single source of truth for "what should I study next?" and "why am I stuck?".',
   ].join('\n');
 }
+
+/**
+ * Short baseline for learner chat — keeps Groq requests under payload limits.
+ * Full `buildAgentBaseline()` is still used where size is less critical.
+ */
+export function buildCompactAgentBaseline(): string {
+  const conceptCount = concepts.length;
+  return [
+    '## A Step Forward — compact baseline',
+    'AI-native learning center for Israeli students. Hebrew default; match the learner message language.',
+    'Math always LTR in `$...$` / `$$...$$`. No external links. Cite `lesson:<id>` / `concept:<id>`.',
+    `Corpus: ~${conceptCount} KG concepts, ~${CORPUS_SUMMARY.authoredLessons} authored lessons, cross-subject edges in kg-cross-edges.json.`,
+    'Live agents: tutor (teach + Q&A), mentor (goals), coach (drills), reviewer (feedback).',
+    'Plan changes only via Tutor sidebar template + explicit confirmation — never from casual chat.',
+    'Per-turn blocks below (profile, plan, mastery, persona) are authoritative for this learner.',
+  ].join('\n');
+}

@@ -78,11 +78,17 @@ describe('template-only plan change detection', () => {
     expect(shouldApplyPlanChange(combined)).toBe(false);
   });
 
-  it('does not apply confirmation without template on the same turn', () => {
-    const priorTemplate = CALC1_TEMPLATE;
-    expect(shouldApplyPlanChange('כן', 'מעולה.', priorTemplate)).toBe(false);
+  it('does not treat Bagrut readiness questions as plan-change intent', () => {
     expect(
-      shouldApplyPlanChange('כן', 'מעולה.', 'שנה לי את התוכנית בבקשה'),
+      learnerPlanChangeIntentHeuristic(
+        'הבגרות שלי עוד שבוע, האם התוכנית אכן תכין אותי בזמן למבחן?',
+      ),
+    ).toBe(false);
+    expect(learnerPlanChangeIntentHeuristic('מה הסטטוס שלי כרגע')).toBe(false);
+    expect(
+      learnerPlanChangeIntentHeuristic(
+        'Will the plan prepare me in time for my Bagrut exam next week?',
+      ),
     ).toBe(false);
   });
 });

@@ -347,6 +347,20 @@ export function learnerPlanChangeIntentHeuristic(message: string): boolean {
     /(?:שנה|שינוי|עדכן|עדכון|תשנה|תעדכן|התאם|התאמה|תתאם|ארג(?:ן|מ)?\s*מחדש|re(?:prioriti|organiz|schedul)|adjust|update|change|shift|modify|tweak|התמקד|העדף|תעד(?:ף|וף)|הוסף|הורד|add|remove|drop|focus|prepare|התכונ|דח(?:ף|י(?:ף|פה))\s+(?:את\s+)?)/i;
   const goalWord = /(?:המטרה|מטר(?:ה|ת)|goal|objective|target)/i;
 
+  const readinessQuestion =
+    /(?:האם|האם\s+התוכנית).{0,50}(?:תכין|מספיק|מוכן|בזמן)/i.test(t) ||
+    /(?:התוכנית|the plan).{0,40}(?:תכין|מספיק|prepare|ready|enough).{0,40}(?:מבחן|בגרות|exam|test)/i.test(
+      t,
+    ) ||
+    /(?:will the plan|is the plan).{0,40}(?:prepare|ready|enough|in time)/i.test(lower) ||
+    /מה הסטטוס|what(?:'s| is) my (?:status|progress)/i.test(t);
+  const explicitPlanChangeVerb =
+    /(?:שנה|עדכן|שינוי|change|update|adjust|modify|re(?:prioriti|organiz))/i.test(t);
+
+  if (readinessQuestion && !explicitPlanChangeVerb) {
+    return false;
+  }
+
   if (
     /^(שנה|עדכן|שינוי)\s+(את\s+)?(ה)?(מטרה|תוכנית)/i.test(t) ||
     /(?:שנה|עדכן|שינוי).{0,32}תוכנית/i.test(t) ||
@@ -371,10 +385,10 @@ export function learnerPlanChangeIntentHeuristic(message: string): boolean {
   if (goalWord.test(t) && changeWord.test(t)) return true;
   if (/לא עושה בגרות|not doing bagrut|no longer.*bagrut|ביטול.*בגרות/i.test(t)) return true;
   if (
-    /(?:מבחן|exam|test).{0,80}(?:תוכנית|plan|schedule|path)/i.test(t) ||
-    /(?:תוכנית|plan|schedule|path).{0,80}(?:מבחן|exam|test)/i.test(t)
+    /(?:מבחן|exam|test|בגרות).{0,80}(?:תוכנית|plan|schedule|path)/i.test(t) ||
+    /(?:תוכנית|plan|schedule|path).{0,80}(?:מבחן|exam|test|בגרות)/i.test(t)
   ) {
-    return true;
+    return changeWord.test(t);
   }
   if (
     /(?:focus|התמקד|priority|עד(?:ף|וף)).{0,40}(?:on|ב|ב)?/i.test(t) &&

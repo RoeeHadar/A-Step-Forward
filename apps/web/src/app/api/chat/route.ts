@@ -45,8 +45,20 @@ import {
   type LLMFailureInfo,
 } from '@/lib/llm-provider';
 import { buildChatFailureMessage } from '@/lib/learner-llm-errors';
+import {
+  CHAT_BREVITY_RULE,
+  CHAT_CONTEXT,
+  compactMemoryTurns,
+  compactStoredTurnContent,
+  fitSystemPrompt,
+  formatPlanWeeksCompact,
+  trimPersonaForChat,
+  truncateChatText,
+  wantsLearningPlanSnapshot,
+} from '@/lib/chat-context-policy';
+import { dreamLearnerMemory } from '@/lib/agent-memory-dream';
 import kg from '@/lib/kg-data.json';
-import { buildAgentBaseline } from '@/lib/agent-baseline';
+import { buildCompactAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-change-template';
@@ -58,12 +70,33 @@ export const maxDuration = 60;
 
 // Keep upstream LLM timeout under Vercel maxDuration (60s on Pro).
 const CHAT_LLM_TIMEOUT_MS = 45_000;
-const MAX_MEMORY_TURNS = 10;
-const MAX_MEMORY_TURN_CHARS = 2_500;
 
-function truncateTurnContent(content: string, maxChars = MAX_MEMORY_TURN_CHARS): string {
-  if (content.length <= maxChars) return content;
-  return `${content.slice(0, maxChars)}…[truncated]`;
+async function saveAssistantTurn(
+  userId: string,
+  agent: string,
+  content: string,
+  sessionId: string | undefined,
+  locale: 'he' | 'en',
+): Promise<void> {
+  await recordChatTurn(
+    userId,
+    agent,
+    'assistant',
+    compactStoredTurnContent(content, 'assistant', locale),
+    sessionId,
+  );
+  void maybeDreamLearnerNotes(userId, agent);
+}
+
+async function maybeDreamLearnerNotes(userId: string, agent: string): Promise<void> {
+  try {
+    const notes = await fetchAgentNotes(userId, agent, CHAT_CONTEXT.dreamNoteThreshold + 4);
+    if (notes.length >= CHAT_CONTEXT.dreamNoteThreshold) {
+      await dreamLearnerMemory(userId, { agents: [agent], scope: 'live' });
+    }
+  } catch (err) {
+    logger.warn('chat: post-turn dream failed', { err: String(err) });
+  }
 }
 
 interface KgConcept {
@@ -113,9 +146,17 @@ export async function POST(req: Request) {
   const quickDuration = body.quickDuration ?? '15';
   const sessionId = body.sessionId?.trim() || undefined;
   const topic = body.topic?.trim() || undefined;
+  const cookieStore = await cookies();
+  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
-  // Record user turn (fire-and-forget — does not block streaming).
-  void recordChatTurn(userId, agent, 'user', lastMessage, sessionId);
+  // Record user turn before streaming so memory is durable for retries.
+  await recordChatTurn(
+    userId,
+    agent,
+    'user',
+    compactStoredTurnContent(lastMessage, 'user', locale),
+    sessionId,
+  );
 
   // Coach drill: mark top due FSRS atoms as practiced on substantive replies.
   if (agent === 'coach' && lastMessage.trim().length > 10) {
@@ -131,14 +172,12 @@ export async function POST(req: Request) {
     })();
   }
 
-  const cookieStore = await cookies();
-  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
-
   const gen = streamAgentResponse(userId, lastMessage, agent, {
     quickMode,
     quickDuration,
     topic,
     locale,
+    sessionId,
   });
   const encoder = new TextEncoder();
   let assistantBuffer = '';
@@ -303,7 +342,7 @@ async function finalizeAssistantTurn(
   const isPlanAgent = agent === 'tutor';
 
   if (!isPlanAgent) {
-    await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+    await saveAssistantTurn(userId, agent, visible, sessionId, locale);
     return null;
   }
 
@@ -325,13 +364,7 @@ async function finalizeAssistantTurn(
         userMessage: userMessage.slice(0, 80),
       });
       const failureNotice = buildPlanApplyFailureNotice(locale, 'missing_payload');
-      await recordChatTurn(
-        userId,
-        agent,
-        'assistant',
-        `${visible}\n\n${failureNotice}`,
-        sessionId,
-      );
+      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale);
       return { applied: false, error: 'missing_payload', failureNotice };
     }
 
@@ -344,7 +377,7 @@ async function finalizeAssistantTurn(
         const notice =
           locale === 'en' ? result.noticeEn ?? '' : result.noticeHe ?? '';
         const full = notice ? `${visible}\n\n${notice}` : visible;
-        await recordChatTurn(userId, agent, 'assistant', full, sessionId);
+        await saveAssistantTurn(userId, agent, full, sessionId, locale);
         logger.info('chat: plan updated', {
           agent,
           reason: payload.reason,
@@ -362,24 +395,12 @@ async function finalizeAssistantTurn(
               result.clarificationReason ?? 'physics',
             )
           : buildPlanApplyFailureNotice(locale, result.error);
-      await recordChatTurn(
-        userId,
-        agent,
-        'assistant',
-        `${visible}\n\n${failureNotice}`,
-        sessionId,
-      );
+      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale);
       return { ...result, failureNotice };
     } catch (err) {
       logger.warn('chat: plan update threw', { err: String(err) });
       const failureNotice = buildPlanApplyFailureNotice(locale, String(err));
-      await recordChatTurn(
-        userId,
-        agent,
-        'assistant',
-        `${visible}\n\n${failureNotice}`,
-        sessionId,
-      );
+      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale);
       return { applied: false, error: String(err), failureNotice };
     }
   }
@@ -389,7 +410,7 @@ async function finalizeAssistantTurn(
     logger.warn('chat: ASF_PLAN_UPDATE ignored — learner did not confirm in this turn');
   }
 
-  await recordChatTurn(userId, agent, 'assistant', visible, sessionId);
+  await saveAssistantTurn(userId, agent, visible, sessionId, locale);
   return null;
 }
 
@@ -402,6 +423,7 @@ async function* streamAgentResponse(
     quickDuration?: string;
     topic?: string;
     locale?: 'he' | 'en';
+    sessionId?: string;
   } = {},
 ): AsyncGenerator<string> {
   const locale = opts.locale ?? 'he';
@@ -458,27 +480,33 @@ async function buildContextPrompt(
   userId: string,
   agent: string,
   message: string,
-  opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
+  opts: {
+    quickMode?: boolean;
+    quickDuration?: string;
+    topic?: string;
+    sessionId?: string;
+    minimal?: boolean;
+  } = {},
 ): Promise<{ system: string; memory: Array<{ role: 'user' | 'assistant'; content: string }> }> {
-  const { quickMode = false, quickDuration = '15', topic } = opts;
+  const { quickMode = false, quickDuration = '15', topic, sessionId, minimal = false } = opts;
   // Each helper catches its own errors so a single DB issue cannot break chat.
   const [profile, mastery, recent, persona, agentNotes, cookieStore] = await Promise.all([
     getLearnerProfile(userId).catch(() => null),
     getConceptMastery(userId).catch(() => ({})),
-    fetchRecentChatTurns(userId, agent, MAX_MEMORY_TURNS).catch(() => []),
-    getLearnerPersona(userId).catch(() => null),
-    fetchAgentNotes(userId, agent, 6).catch(() => []),
+    fetchRecentChatTurns(
+      userId,
+      agent,
+      CHAT_CONTEXT.maxMemoryTurns,
+      sessionId,
+    ).catch(() => []),
+    minimal ? Promise.resolve(null) : getLearnerPersona(userId).catch(() => null),
+    minimal ? Promise.resolve([]) : fetchAgentNotes(userId, agent, CHAT_CONTEXT.maxAgentNotes).catch(() => []),
     cookies(),
   ]);
 
   const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
-  // Every agent gets the same platform baseline first (corpus stats, KG
-  // dimensions, agent network roster, math-LTR + bilingual rules). Then
-  // its long-form persona from agent-prompts.ts. Per-turn learner data
-  // (profile, mastery, relevant context, agent_hints, learning-plan) is
-  // appended below.
-  let context = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
+  let context = `${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`;
 
   if (agent === 'tutor') {
     const tutorMode =
@@ -504,22 +532,17 @@ async function buildContextPrompt(
   // CLAUDE.md-style learner persona — shared across every agent, written by
   // the Memory Steward (and any agent allowed to). Tells you HOW this
   // learner thinks/talks/learns, NOT what they know (that's mastery).
-  if (persona?.text && persona.text.trim().length > 0) {
+  if (!minimal && persona?.text && persona.text.trim().length > 0) {
     context += `\n\n## What I know about this learner (shared persona)`;
-    context += `\n${persona.text.trim()}`;
-    context += `\n_(Last updated: ${persona.updated_at ?? 'unknown'}. Refine this view by appending notes via the agent-memory API.)_`;
+    context += `\n${trimPersonaForChat(persona.text)}`;
   }
 
-  // Per-(learner, agent) cumulative scratchpad — your OWN private notes on
-  // this learner that no other agent reads. Top N by importance.
-  if (agentNotes.length > 0) {
+  if (!minimal && agentNotes.length > 0) {
     context += `\n\n## My private notes on this learner (agent: ${agent})`;
-    context += `\nThese are your past observations, preferences you've recorded, and strategies that worked. Build on them; don't repeat them verbatim.`;
     for (const n of agentNotes) {
-      const tag = n.related_concept_id ? ` [concept:${n.related_concept_id}]` : '';
-      context += `\n- (${n.kind}, importance ${n.importance})${tag} ${n.content}`;
+      const tag = n.related_concept_id ? ` [${n.related_concept_id}]` : '';
+      context += `\n- (${n.kind})${tag} ${truncateChatText(n.content, CHAT_CONTEXT.maxAgentNoteChars)}`;
     }
-    context += `\n_To save a new observation about this learner, POST \`/api/agent-memory/notes\` with { agent: "${agent}", content, importance: 1-5 }._`;
   }
   if (profile) {
     context += `\n\n## Learner profile`;
@@ -559,12 +582,12 @@ async function buildContextPrompt(
   const weakConcepts = Object.entries(mastery)
     .filter(([id, score]) => score < 0.4 && masteryInScope(id))
     .sort((a, b) => a[1] - b[1])
-    .slice(0, 5)
+    .slice(0, CHAT_CONTEXT.maxWeakStrongConcepts)
     .map(([id]) => id);
   const strongConcepts = Object.entries(mastery)
     .filter(([id, score]) => score > 0.7 && masteryInScope(id))
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
+    .slice(0, CHAT_CONTEXT.maxWeakStrongConcepts)
     .map(([id]) => id);
   if (weakConcepts.length || strongConcepts.length) {
     context += `\n\n## Mastery so far`;
@@ -575,36 +598,34 @@ async function buildContextPrompt(
   if (profile && (agent === 'mentor' || agent === 'tutor')) {
     const plan = currentPlan;
     const normalizedMsg = normalizePlanChangeMessage(message);
-    const wantsPlanMutation =
-      learnerPlanChangeIntentHeuristic(message) || isPlanChangeTemplate(normalizedMsg);
+    const needsPlanCatalog =
+      isPlanChangeTemplate(normalizedMsg) || shouldApplyPlanImmediately(message);
 
     if (plan?.weeks?.length) {
-      context += `\n\n## Current weekly learning plan (authoritative — from onboarding + diagnostic)`;
-      context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
-      for (const w of plan.weeks) {
-        const names = w.concepts
-          .map((c) => `${c.concept_id} (${c.name}${c.name_he ? ` / ${c.name_he}` : ''})`)
-          .join(', ');
-        context += `\n- Week ${w.week_number} [${w.status}]: ${names || '(empty)'}`;
-      }
-    } else {
       context += `\n\n## Current weekly learning plan`;
-      context += `\nNo active plan in the database yet. If the learner asks to change their plan, explain they should complete onboarding + diagnostic first, or offer to help set goals then call POST /api/plans/generate after confirmation.`;
+      context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
+      context += `\n${formatPlanWeeksCompact(plan.weeks, minimal ? 'minimal' : 'full')}`;
+    } else if (!minimal) {
+      context += `\n\n## Current weekly learning plan`;
+      context += `\nNo active plan yet — invite onboarding at /onboarding if the learner asks.`;
     }
 
-    if (wantsPlanMutation) {
-      context += `\n\n## Platform catalog (what we can assign — in-house only)`;
+    if (needsPlanCatalog && !minimal) {
+      context += `\n\n## Platform catalog (in-house only)`;
       context += `\n${buildLessonCatalogSummary(profile.subjects ?? [])}`;
       context += `\n\n## Plan mutation allowlist`;
       context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
       context += `\n\n${PLAN_GROUNDING_RULES}`;
       context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
-      if (learnerPlanChangeIntentHeuristic(message) && !isPlanChangeTemplate(normalizedMsg)) {
+    } else if (!minimal) {
+      context += `\n\n## Plan guidance`;
+      context += `\nAnswer timeline/readiness from the plan above. Plan edits need the Tutor sidebar template.`;
+      if (
+        learnerPlanChangeIntentHeuristic(message) &&
+        !isPlanChangeTemplate(normalizedMsg)
+      ) {
         context += `\n\n${CASUAL_PLAN_CHANGE_TURN_INSTRUCTION}`;
       }
-    } else {
-      context += `\n\n## Plan guidance`;
-      context += `\nAnswer progress, timeline, and readiness questions from the current weekly plan and mastery data above. Plan mutations require explicit learner confirmation and ASF_PLAN_UPDATE; the full catalog and allowlist load when they ask to change goals or weekly topics.`;
     }
   }
 
@@ -621,7 +642,7 @@ async function buildContextPrompt(
   }
 
   const searchMessage = topic && !message.trim() ? topic.replace(/_/g, ' ') : message;
-  const related = findRelevantConcepts(searchMessage, profile?.subjects ?? []);
+  const related = minimal ? [] : findRelevantConcepts(searchMessage, profile?.subjects ?? []);
   if (related.length) {
     context += `\n\n## Relevant curriculum context`;
     for (const c of related) {
@@ -639,15 +660,13 @@ async function buildContextPrompt(
       if (hintsRows.length) {
         context += `\n\n## Lesson-level guidance for the AI-authored corpus`;
         const lowerMsg = message.toLowerCase();
-        for (const row of hintsRows) {
+        for (const row of hintsRows.slice(0, 2)) {
           const h = row.agent_hints ?? {};
-          context += `\n\n### ${row.title_en} (${row.concept_id})`;
+          context += `\n\n### ${row.concept_id}`;
           if (h.key_insights?.length) {
-            context += `\n- Key insights:`;
-            for (const k of h.key_insights.slice(0, 4)) context += `\n  - ${k}`;
-          }
-          if (h.tutor_pacing_hint) {
-            context += `\n- Pacing hint: ${h.tutor_pacing_hint}`;
+            for (const k of h.key_insights.slice(0, CHAT_CONTEXT.maxHintInsights)) {
+              context += `\n- ${k}`;
+            }
           }
           if (h.common_misconceptions?.length) {
             const triggered = h.common_misconceptions.filter((m) => {
@@ -658,69 +677,52 @@ async function buildContextPrompt(
                 (he && message.includes(he))
               );
             });
-            const toShow = triggered.length > 0 ? triggered : h.common_misconceptions.slice(0, 2);
-            context += `\n- Misconception watch:`;
-            for (const m of toShow) {
-              context += `\n  - "${m.wrong}" → ${m.correction}`;
-            }
             if (triggered.length > 0) {
-              context += `\n- IMPORTANT: the learner's last message appears to express a known misconception above. Open your reply with a gentle, targeted correction before answering the rest.`;
+              context += `\n- Misconception:`;
+              for (const m of triggered.slice(0, 1)) {
+                context += ` "${m.wrong}" → ${m.correction}`;
+              }
             }
-          }
-          if (h.diagnostic_signals && Object.keys(h.diagnostic_signals).length) {
-            const entries = Object.entries(h.diagnostic_signals).slice(0, 3);
-            context += `\n- Diagnostic moves:`;
-            for (const [signal, move] of entries) {
-              context += `\n  - If "${signal}": ${move}`;
-            }
-          }
-          if (h.skill_atoms_unlocked?.length) {
-            context += `\n- Skills this lesson develops: ${h.skill_atoms_unlocked.slice(0, 6).join(', ')}`;
           }
         }
       }
     }
 
-    // Inject a learning-plan snapshot for the most-relevant concept so the
-    // tutoring / curriculum / coach agents can answer "what should I study
-    // next?" with a concrete, mastery-aware path rather than improvising.
-    // This is the runtime surface of the cross-subject KG + skill_practice
-    // walk implemented in lib/learning-plan.ts.
-    if (
-      agent === 'tutor' ||
+    const needsPlanner =
+      wantsLearningPlanSnapshot(message) ||
+      Boolean(topic) ||
       agent === 'coach' ||
-      agent === 'curriculum_designer' ||
-      agent === 'progress_analyzer'
+      agent === 'progress_analyzer';
+    if (
+      needsPlanner &&
+      (agent === 'tutor' ||
+        agent === 'coach' ||
+        agent === 'curriculum_designer' ||
+        agent === 'progress_analyzer')
     ) {
-      const goalConcept =
-        related[0]?.id ?? (topic && kgByName[topic] ? topic : weakConcepts[0] ?? null);
+      const goalConcept = related[0]?.id ?? (topic && kgByName[topic] ? topic : null);
       if (goalConcept) {
       const plan = await buildLearningPlan({
         learnerId: userId,
         goalConceptId: goalConcept,
-        maxNodes: 6,
+        maxNodes: 4,
       }).catch(() => null);
       if (plan && plan.path.length > 0) {
         context += `\n\n## Learning-plan snapshot (goal: ${plan.goal.name})`;
-        context += `\nOrdered next steps the planner computed from the cross-subject KG + this learner's skill_practice. Use these to ground "what should I study next?" or root-cause questions.`;
-        for (const node of plan.path.slice(0, 5)) {
+        for (const node of plan.path.slice(0, 4)) {
           const pct = Math.round((1 - node.urgency) * 100);
-          context += `\n- [${node.concept_id}] ${node.name}${node.name_he ? ` / ${node.name_he}` : ''} — mastery ~${pct}%${node.hasLesson ? ' (lesson available)' : ''}; ${node.why_en}`;
-          if (node.weak_atoms.length > 0) {
-            const tops = node.weak_atoms.slice(0, 3).map((a) => `${a.atom} ${Math.round(a.mastery * 100)}%`).join(', ');
-            context += ` · weak atoms: ${tops}`;
-          }
+          context += `\n- [${node.concept_id}] ${node.name_he || node.name} ~${pct}%`;
         }
         if (plan.blocking_atoms.length > 0) {
-          const tops = plan.blocking_atoms.slice(0, 4).map((a) => `${a.atom} (${Math.round(a.mastery * 100)}%)`).join(', ');
-          context += `\n- Most-blocking atoms across the path: ${tops}`;
+          const tops = plan.blocking_atoms.slice(0, 3).map((a) => a.atom).join(', ');
+          context += `\n- Blocking: ${tops}`;
         }
       }
       }
     }
   }
 
-  if (agent === 'coach') {
+  if (!minimal && agent === 'coach') {
     const due = await getDueReviews(userId).catch(() => [] as Awaited<ReturnType<typeof getDueReviews>>);
     context += `\n\n## Spaced-repetition queue (FSRS)`;
     if (due.length > 0) {
@@ -737,14 +739,27 @@ async function buildContextPrompt(
     }
   }
 
-  context += `\n\nKeep responses focused on this learner. Reference their goal and timeline when relevant.`;
+  context += `\n\n${CHAT_BREVITY_RULE}`;
+
+  const system = fitSystemPrompt(context);
+  if (system.length > 14_000) {
+    logger.warn('chat: large system prompt', {
+      chars: system.length,
+      agent,
+      memoryTurns: recent.length,
+      sessionId: sessionId ?? null,
+      minimal,
+    });
+  }
 
   return {
-    system: context,
-    memory: recent.map((t) => ({
-      role: t.role,
-      content: truncateTurnContent(t.content),
-    })),
+    system,
+    memory: compactMemoryTurns(
+      recent.map((t) => ({
+        role: t.role,
+        content: t.content,
+      })),
+    ),
   };
 }
 
@@ -752,7 +767,12 @@ async function* streamFromLLM(
   userId: string,
   message: string,
   agent: string,
-  opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
+  opts: {
+    quickMode?: boolean;
+    quickDuration?: string;
+    topic?: string;
+    sessionId?: string;
+  } = {},
 ): AsyncGenerator<string, LLMFailureInfo | undefined> {
   const cfg = getLLMConfig();
   if (!llmConfigured()) {
@@ -760,47 +780,84 @@ async function* streamFromLLM(
     return { kind: 'not_configured', provider: cfg.providerLabel };
   }
 
-  let context: Awaited<ReturnType<typeof buildContextPrompt>>;
+  const attempts: Array<{ label: string; context: Awaited<ReturnType<typeof buildContextPrompt>> }> = [];
+
   try {
-    context = await buildContextPrompt(userId, agent, message, opts);
+    attempts.push({
+      label: 'full',
+      context: await buildContextPrompt(userId, agent, message, opts),
+    });
   } catch (err) {
     logger.warn('buildContextPrompt failed, using bare persona', { err: String(err) });
-    const bareSystem = `${buildAgentBaseline()}\n\n${getAgentPersona(agent)}`;
-    context = { system: bareSystem, memory: [] };
+    attempts.push({
+      label: 'bare',
+      context: {
+        system: fitSystemPrompt(`${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`),
+        memory: [],
+      },
+    });
   }
 
-  const messages = [
-    ...context.memory,
-    { role: 'user' as const, content: message },
-  ];
+  for (let i = 0; i < attempts.length; i++) {
+    const { label, context } = attempts[i]!;
+    const failureSink = { current: null as LLMFailureInfo | null };
+    const llmOpts = {
+      system: context.system,
+      messages: [...context.memory, { role: 'user' as const, content: message }],
+      maxTokens: CHAT_CONTEXT.maxOutputTokens,
+      temperature: 0.4,
+      timeoutMs: CHAT_LLM_TIMEOUT_MS,
+      models: resolveChatModelChain(),
+      failureSink,
+    };
 
-  const failureSink = { current: null as LLMFailureInfo | null };
-  const llmOpts = {
-    system: context.system,
-    messages,
-    maxTokens: 1024,
-    temperature: 0.4,
-    timeoutMs: CHAT_LLM_TIMEOUT_MS,
-    models: resolveChatModelChain(),
-    failureSink,
-  };
+    let emitted = false;
+    for await (const chunk of llmStream(llmOpts)) {
+      emitted = true;
+      yield chunk;
+    }
 
-  let emitted = false;
-  for await (const chunk of llmStream(llmOpts)) {
-    emitted = true;
-    yield chunk;
-  }
-
-  if (!emitted) {
-    logger.warn('chat: stream empty — trying non-stream completion', { agent, userId });
-    const backup = await llmComplete(llmOpts);
-    if (backup?.content) {
-      logger.info('chat: non-stream backup succeeded', { model: backup.model, agent });
-      yield backup.content;
+    if (!emitted) {
+      logger.warn('chat: stream empty — trying non-stream completion', { agent, userId, label });
+      const backup = await llmComplete(llmOpts);
+      if (backup?.content) {
+        logger.info('chat: non-stream backup succeeded', { model: backup.model, agent, label });
+        yield backup.content;
+        return undefined;
+      }
+    } else {
       return undefined;
     }
+
+    const failure = failureSink.current;
+    const shouldRetryMinimal =
+      i === 0 &&
+      attempts.length === 1 &&
+      (failure?.kind === 'context_too_large' ||
+        (failure?.kind === 'provider_error' &&
+          context.system.length > CHAT_CONTEXT.maxSystemChars * 0.85) ||
+        (failure?.kind === 'unknown' &&
+          context.system.length > CHAT_CONTEXT.maxSystemChars * 0.9));
+    if (shouldRetryMinimal) {
+      logger.warn('chat: payload too large — retrying with minimal context', {
+        agent,
+        userId,
+        systemChars: context.system.length,
+        memoryTurns: context.memory.length,
+      });
+      try {
+        attempts.push({
+          label: 'minimal',
+          context: await buildContextPrompt(userId, agent, message, { ...opts, minimal: true }),
+        });
+      } catch (err) {
+        logger.warn('chat: minimal context build failed', { err: String(err) });
+      }
+      continue;
+    }
+
+    return failure ?? { kind: 'unknown', provider: cfg.providerLabel };
   }
 
-  if (emitted) return undefined;
-  return failureSink.current ?? { kind: 'unknown', provider: cfg.providerLabel };
+  return { kind: 'unknown', provider: cfg.providerLabel };
 }

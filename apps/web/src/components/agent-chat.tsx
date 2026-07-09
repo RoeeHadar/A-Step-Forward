@@ -133,7 +133,7 @@ export function AgentChat({
       try {
         const params = new URLSearchParams({
           agent: agentName,
-          limit: '40',
+          limit: '12',
           session_id: sessionId,
         });
         const res = await fetch(`/api/chat/history?${params}`);
@@ -320,7 +320,7 @@ export function AgentChat({
 
   function submitChat(e?: React.FormEvent) {
     e?.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !sessionId) return;
     const wireInput = normalizePlanChangeMessage(input);
     if (shouldShowPlanApplying(wireInput)) {
       pendingPlanApplyRef.current = true;
@@ -524,7 +524,7 @@ export function AgentChat({
           <Button
             type="submit"
             size="icon"
-            disabled={isLoading || !input.trim()}
+            disabled={isLoading || !input.trim() || !sessionId}
             aria-label={i18nMessages.chat.sendAriaLabel}
           >
             <Send className="h-4 w-4 rtl:rotate-180" />
@@ -548,16 +548,22 @@ export function AgentChat({
 
 function friendlyChatError(
   error: unknown,
-  chat: { signInRequired: string; networkError: string; genericError: string },
+  chat: {
+    signInRequired: string;
+    networkError: string;
+    genericError: string;
+    rateLimited: string;
+    timeout: string;
+    contextTooLarge: string;
+  },
 ): string {
   if (error instanceof Error && error.message) {
-    if (/401|unauthor/i.test(error.message)) {
-      return chat.signInRequired;
-    }
-    if (/network|fetch|failed/i.test(error.message)) {
-      return chat.networkError;
-    }
-    return error.message;
+    const msg = error.message;
+    if (/401|unauthor/i.test(msg)) return chat.signInRequired;
+    if (/429|rate.?limit/i.test(msg)) return chat.rateLimited;
+    if (/413|too large|context/i.test(msg)) return chat.contextTooLarge;
+    if (/timeout|abort|timed out/i.test(msg)) return chat.timeout;
+    if (/network|fetch|failed/i.test(msg)) return chat.networkError;
   }
   return chat.genericError;
 }
