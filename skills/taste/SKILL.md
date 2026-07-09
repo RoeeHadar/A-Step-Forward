@@ -37,6 +37,10 @@ Colors, radii, spacing, and motion are **tokens**, never hardcoded hexes.
 - **Signature surfaces** (already in `globals.css`, prefer these over ad-hoc effects):
   `mesh-gradient`, `orb-*` + `orb-float`, `bg-dot-grid`, `glass-surface`,
   `iridescent-border`, `card-punch`, `.font-display`.
+- **Integrated dynamism** (unique + dynamic without pasted stickers): read
+  `skills/taste/references/integrated-dynamism.md` before any motion/motif pass.
+  Extend existing utilities and shared primitives — never corner SVGs, orbit widgets,
+  or duplicate marketing sections on top of the slick baseline.
 
 ## The taste principles
 
