@@ -18,6 +18,7 @@ import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas
 import { PremiumBadge } from '@/components/premium-badge';
 import { useI18n } from '@/providers/i18n-provider';
 import { useChatUiStore } from '@/stores/ui-store';
+import { agentAccentVars, agentColors } from '@/lib/design-tokens';
 
 const CONNECTING_DELAY_MS = 800;
 const WARMUP_BANNER_DELAY_MS = 3000;
@@ -35,16 +36,6 @@ function timerBadgeClass(remaining: number, total: number): string {
   if (ratio <= 0.4) return 'bg-accent-amber/15 text-accent-amber border-accent-amber/30';
   return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30';
 }
-
-const agentGradients: Partial<Record<AgentName, string>> = {
-  tutor: 'from-primary to-accent-magenta',
-  mentor: 'from-accent-amber to-accent-magenta',
-  coach: 'from-accent-cyan to-primary',
-  reviewer: 'from-accent-magenta to-accent-cyan',
-  qa_explainer: 'from-accent-cyan to-primary',
-  note_taker: 'from-accent-magenta to-accent-cyan',
-  accessibility: 'from-primary to-accent-cyan',
-};
 
 function chatSessionKey(agent: AgentName): string {
   return `asf-chat-session-${agent}`;
@@ -343,16 +334,17 @@ export function AgentChat({
     void append({ role: 'user', content: wireInput });
   }
 
-  const gradient = agentGradients[agentName] ?? 'from-primary to-accent-cyan';
+  const agentAccent = agentColors[agentName] ?? agentColors.tutor;
 
   return (
     <div
       className={cn(
-        'flex flex-col',
+        'agent-accent-context flex flex-col',
         compact ? 'h-full min-h-0' : 'h-[calc(100vh-8rem)]',
         showHistory && !compact ? 'lg:flex-row lg:gap-4' : '',
         showPlanTemplate && !compact ? 'xl:flex-row' : '',
       )}
+      style={agentAccentVars(agentName)}
     >
       {showHistory && !compact ? (
         <ChatHistoryPanel
@@ -376,7 +368,8 @@ export function AgentChat({
       <div className="flex min-h-0 flex-1 flex-col">
       <header className={cn('mb-4 flex flex-wrap items-center gap-3', compact && 'mb-2')}>
         <div
-          className={cn('h-3 w-3 rounded-full bg-gradient-to-br', gradient)}
+          className="h-3 w-3 rounded-full"
+          style={{ backgroundColor: agentAccent }}
           aria-hidden
         />
         <h1 className="font-display text-2xl font-semibold text-foreground">
@@ -399,7 +392,7 @@ export function AgentChat({
         <PremiumBadge />
       </header>
 
-      <div className="glass-surface flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl">
+      <div className="glass-surface agent-chat-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl">
         {quickMode && timeUp && !timeUpDismissed ? (
           <div
             className="flex flex-wrap items-center justify-between gap-3 border-b border-accent-amber/30 bg-accent-amber/10 px-4 py-3 text-sm"

@@ -44,7 +44,7 @@ export function CategoryPageContent({ category }: { category: CurriculumCategory
             <Link
               key={section.id}
               href={`/app/lessons/${category.id}/${section.id}`}
-              className="card-punch block rounded-2xl p-5 transition-transform hover:scale-[1.02]"
+              className="card-punch block rounded-2xl p-5"
             >
               <div className="flex items-start justify-between gap-2">
                 <h2 className="font-display text-base font-semibold">{sectionLabel}</h2>

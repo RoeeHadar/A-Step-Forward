@@ -115,7 +115,7 @@ function SubjectCard({
   return (
     <Link
       href={`/learn/${s.subject}`}
-      className="glass-surface group rounded-2xl p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
+      className="card-punch group block rounded-2xl p-5"
     >
       <div className="flex items-start justify-between gap-3">
         <span className="text-3xl" aria-hidden>

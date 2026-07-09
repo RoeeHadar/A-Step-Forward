@@ -8,6 +8,7 @@ import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
 import { useTheme } from '@/providers/theme-provider';
 import { useI18n } from '@/providers/i18n-provider';
+import { useScrollY } from '@/hooks/use-scroll-y';
 import type { Locale } from '@/i18n/config';
 
 const publicNavLinks = [
@@ -37,8 +38,17 @@ export function SiteHeader() {
   const isActive = (href: string) =>
     pathname === href || (href !== '/' && pathname.startsWith(href + '/'));
 
+  const scrolled = useScrollY(8);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl backdrop-saturate-150">
+    <header
+      className={cn(
+        'sticky top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300',
+        scrolled
+          ? 'border-border-bright bg-background/88 shadow-sm'
+          : 'border-border/80 bg-background/70',
+      )}
+    >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* Brand */}
         <div className="flex items-center gap-6">

@@ -18,6 +18,12 @@ export const tokens = {
   },
 } as const;
 
+/** Inline style for agent-scoped surfaces (`--agent-accent` CSS variable). */
+export function agentAccentVars(agent: string): { '--agent-accent': string } {
+  const fallback = agentColors.tutor as string;
+  return { '--agent-accent': agentColors[agent] ?? fallback };
+}
+
 // Natural, earthy agent identities — each a distinct botanical/mineral hue
 // that sits within the "warm editorial" palette rather than neon primaries.
 export const agentColors: Record<string, string> = {

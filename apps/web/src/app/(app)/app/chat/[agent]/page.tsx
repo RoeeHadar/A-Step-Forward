@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { AgentChat } from '@/components/agent-chat';
 import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas/agents';
 import { cn } from '@asf/ui';
+import { agentAccentVars } from '@/lib/design-tokens';
 
 const LEARNER_AGENTS: AgentName[] = [
   'tutor',
@@ -31,17 +32,21 @@ export default async function ChatPage({ params }: { params: Promise<{ agent: st
   const isHe = (cookieStore.get('asf-locale')?.value ?? 'he') !== 'en';
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="agent-accent-context flex flex-col gap-4"
+      style={agentAccentVars(activeAgent)}
+    >
       {/* Agent switcher */}
       <nav className="flex flex-wrap gap-2" aria-label={isHe ? 'בחר סוכן AI' : 'Switch AI agent'}>
         {LEARNER_AGENTS.map((name) => (
           <Link
             key={name}
             href={`/app/chat/${name}`}
+            style={name === activeAgent ? agentAccentVars(name) : undefined}
             className={cn(
               'rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
               name === activeAgent
-                ? 'border-primary bg-primary/10 text-primary'
+                ? 'agent-pill-active'
                 : 'border-border bg-surface-1/40 text-muted-foreground hover:border-primary/40 hover:text-foreground',
             )}
             aria-current={name === activeAgent ? 'page' : undefined}

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@asf/ui';
 import { useI18n } from '@/providers/i18n-provider';
+import { agentAccentVars } from '@/lib/design-tokens';
 
 const items = [
   { href: '/app', icon: LayoutDashboard, labelKey: 'dashboard' as const },
@@ -27,6 +28,10 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { messages } = useI18n();
 
+  const chatAgentSlug = pathname.startsWith('/app/chat/')
+    ? (pathname.split('/')[3] ?? 'tutor')
+    : null;
+
   return (
     <aside className="hidden w-56 shrink-0 border-e border-border bg-surface-1/40 backdrop-blur-md md:block">
       <nav className="flex flex-col gap-1 p-4" aria-label={messages.common.appNavigation}>
@@ -34,6 +39,9 @@ export function AppSidebar() {
           const matchPath = item.match ?? item.href;
           const active = pathname === item.href || pathname.startsWith(matchPath);
           const Icon = item.icon;
+          const isChat = item.labelKey === 'chat';
+          const accentStyle =
+            isChat && active && chatAgentSlug ? agentAccentVars(chatAgentSlug) : undefined;
           return (
             <Link
               key={item.href}
@@ -47,7 +55,14 @@ export function AppSidebar() {
             >
               {active ? (
                 <span
-                  className="absolute inset-y-2 start-0 w-0.5 rounded-full bg-primary"
+                  className="absolute inset-y-2 start-0 w-0.5 rounded-full"
+                  style={{
+                    ...accentStyle,
+                    backgroundColor:
+                      isChat && chatAgentSlug
+                        ? 'var(--agent-accent)'
+                        : 'hsl(var(--primary))',
+                  }}
                   aria-hidden
                 />
               ) : null}
@@ -55,9 +70,16 @@ export function AppSidebar() {
                 className={cn(
                   'h-4 w-4 shrink-0',
                   active
-                    ? 'text-primary'
-                    : 'text-muted-foreground group-hover:text-foreground',
+                    ? isChat && chatAgentSlug
+                      ? undefined
+                      : 'text-primary'
+                    : 'text-muted-foreground',
                 )}
+                style={
+                  active && isChat && chatAgentSlug
+                    ? { color: 'var(--agent-accent)' }
+                    : undefined
+                }
                 aria-hidden
               />
               {messages.nav[item.labelKey]}

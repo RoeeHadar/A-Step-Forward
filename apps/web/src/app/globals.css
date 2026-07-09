@@ -76,6 +76,16 @@
     overflow-x: hidden;
   }
 
+  html {
+    transition:
+      background-color 250ms ease,
+      color 250ms ease;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
   /* Organic paper grain over the whole canvas — the core of the "natural,
      in-depth, not flat" feel. Very low opacity so it reads as texture. */
   body::before {
@@ -240,6 +250,29 @@
   box-shadow:
     0 2px 4px hsl(var(--shadow-color) / 0.5),
     0 18px 42px -18px hsl(var(--shadow-color) / 0.7);
+}
+
+/* Agent identity — parent sets `--agent-accent` via agentAccentVars() */
+.agent-accent-card {
+  border-inline-start-width: 3px;
+  border-inline-start-style: solid;
+  border-inline-start-color: var(--agent-accent, hsl(var(--primary)));
+}
+
+.agent-accent-card:hover {
+  border-inline-start-color: var(--agent-accent, hsl(var(--primary)));
+}
+
+.agent-chat-panel {
+  border-inline-start-width: 3px;
+  border-inline-start-style: solid;
+  border-inline-start-color: var(--agent-accent, hsl(var(--primary)));
+}
+
+.agent-pill-active {
+  border-color: color-mix(in srgb, var(--agent-accent) 45%, hsl(var(--border)));
+  background: color-mix(in srgb, var(--agent-accent) 12%, hsl(var(--surface-1)));
+  color: var(--agent-accent);
 }
 
 @keyframes orb-float {

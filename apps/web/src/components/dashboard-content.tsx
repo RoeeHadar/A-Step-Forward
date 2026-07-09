@@ -17,6 +17,7 @@ import { learnConceptHrefFromProfile } from '@/lib/learn-routes';
 import { getSubjectLabel, subjectIcon } from '@/lib/subject-labels';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
 import type { LearnerStreak } from '@/lib/neon-db';
+import { agentAccentVars } from '@/lib/design-tokens';
 import lessonsIndex from '@/lib/lessons-index.generated.json';
 
 interface LessonIndexEntry {
@@ -90,7 +91,6 @@ const AGENT_CARDS: Array<{
   name_en: string;
   desc_he: string;
   desc_en: string;
-  hoverRing: string;
 }> = [
   {
     agent: 'tutor',
@@ -99,7 +99,6 @@ const AGENT_CARDS: Array<{
     name_en: 'Tutor',
     desc_he: 'מדריך עם שאלות — ללמידה עמוקה',
     desc_en: 'Guides with questions — deep understanding',
-    hoverRing: 'hover:ring-primary/40',
   },
   {
     agent: 'qa_explainer',
@@ -108,7 +107,6 @@ const AGENT_CARDS: Array<{
     name_en: 'Q&A',
     desc_he: 'עונה ישירות מתוך החומר',
     desc_en: 'Direct answers from the curriculum',
-    hoverRing: 'hover:ring-accent-cyan/40',
   },
   {
     agent: 'coach',
@@ -117,7 +115,6 @@ const AGENT_CARDS: Array<{
     name_en: 'Coach',
     desc_he: 'תרגול יומי ועיוון בחולשות',
     desc_en: 'Daily drills targeting your weak spots',
-    hoverRing: 'hover:ring-accent-amber/40',
   },
   {
     agent: 'mentor',
@@ -126,7 +123,6 @@ const AGENT_CARDS: Array<{
     name_en: 'Mentor',
     desc_he: 'מוטיבציה, הרגלים ותכנון',
     desc_en: 'Motivation, habits, and planning',
-    hoverRing: 'hover:ring-accent-magenta/40',
   },
 ];
 
@@ -480,15 +476,12 @@ export function DashboardContent({
       <section className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
         <SectionHeading>{t.agents}</SectionHeading>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {AGENT_CARDS.map(({ agent, emoji, name_he, name_en, desc_he, desc_en, hoverRing }) => (
+          {AGENT_CARDS.map(({ agent, emoji, name_he, name_en, desc_he, desc_en }) => (
             <Link
               key={agent}
               href={`/app/chat/${agent}`}
-              className={cn(
-                'card-punch group flex flex-col gap-2 rounded-xl p-4 shadow-sm transition-all duration-200',
-                'hover:scale-[1.01] hover:ring-2',
-                hoverRing,
-              )}
+              style={agentAccentVars(agent)}
+              className="card-punch agent-accent-card group flex flex-col gap-2 rounded-xl p-4"
             >
               <span className="text-2xl" aria-hidden>
                 {emoji}
