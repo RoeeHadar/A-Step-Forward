@@ -4,6 +4,7 @@ import {
   llmConfigured,
   resetLLMConfigCache,
   resolveModelChain,
+  resolveChatModelChain,
 } from './llm-provider';
 
 describe('llm-provider config', () => {
@@ -56,5 +57,13 @@ describe('llm-provider config', () => {
     const cfg = getLLMConfig();
     expect(cfg.apiKey).toBe('unified-key');
     expect(cfg.baseUrl).toBe('https://api.together.xyz/v1');
+  });
+
+  it('resolveChatModelChain returns a single volume-first model', () => {
+    process.env.LLM_API_KEY = 'k';
+    process.env.LLM_CHEAP_MODEL = 'llama3.1:8b';
+    process.env.LLM_PRIMARY_MODEL = 'qwen2.5:32b,llama3.3:70b';
+    resetLLMConfigCache();
+    expect(resolveChatModelChain()).toEqual(['llama3.1:8b']);
   });
 });

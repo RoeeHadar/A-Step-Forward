@@ -9,6 +9,25 @@
 import 'server-only';
 import { logger } from '@/lib/logger';
 
+export type LLMFailureKind =
+  | 'not_configured'
+  | 'auth_failure'
+  | 'rate_limited'
+  | 'timeout'
+  | 'context_too_large'
+  | 'provider_error'
+  | 'empty_response'
+  | 'network_error'
+  | 'stream_interrupted'
+  | 'unknown';
+
+export interface LLMFailureInfo {
+  kind: LLMFailureKind;
+  status?: number;
+  provider?: string;
+  model?: string;
+}
+
 export type LLMModelTier = 'primary' | 'cheap' | 'all';
 
 export interface LLMProviderConfig {
@@ -36,6 +55,8 @@ export interface LLMCompletionOptions {
   modelTier?: LLMModelTier;
   /** Override the model chain entirely. */
   models?: string[];
+  /** Updated when an attempt fails (keeps the most specific failure). */
+  failureSink?: { current: LLMFailureInfo | null };
 }
 
 export interface LLMCompletionResult {
@@ -128,6 +149,131 @@ export function resolveModelChain(tier: LLMModelTier = 'primary'): string[] {
   return [...cfg.primaryModels, ...cfg.cheapModels];
 }
 
+/** Volume-first single model for learner chat (latency + Groq quota). */
+export function resolveChatModelChain(): string[] {
+  const cfg = getLLMConfig();
+  const model = cfg.cheapModels[0] ?? cfg.primaryModels[0] ?? DEFAULT_PRIMARY;
+  return [model];
+}
+
+const MAX_FETCH_RETRIES = 2;
+
+const FAILURE_PRIORITY: Record<LLMFailureKind, number> = {
+  auth_failure: 100,
+  not_configured: 90,
+  context_too_large: 80,
+  rate_limited: 70,
+  timeout: 60,
+  network_error: 50,
+  provider_error: 40,
+  stream_interrupted: 35,
+  empty_response: 30,
+  unknown: 0,
+};
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function classifyHttpStatus(status: number, provider?: string, model?: string): LLMFailureInfo {
+  if (status === 401 || status === 403) {
+    return { kind: 'auth_failure', status, provider, model };
+  }
+  if (status === 429) {
+    return { kind: 'rate_limited', status, provider, model };
+  }
+  if (status === 413) {
+    return { kind: 'context_too_large', status, provider, model };
+  }
+  if (status >= 500 || status >= 400) {
+    return { kind: 'provider_error', status, provider, model };
+  }
+  return { kind: 'unknown', status, provider, model };
+}
+
+export function classifyFetchError(err: unknown, provider?: string, model?: string): LLMFailureInfo {
+  const msg = String(err);
+  if (/abort/i.test(msg) || (err instanceof Error && err.name === 'AbortError')) {
+    return { kind: 'timeout', provider, model };
+  }
+  if (/ENOTFOUND|ECONNREFUSED|ECONNRESET|ETIMEDOUT|network|fetch failed/i.test(msg)) {
+    return { kind: 'network_error', provider, model };
+  }
+  return { kind: 'unknown', provider, model };
+}
+
+function recordFailure(
+  sink: LLMCompletionOptions['failureSink'],
+  next: LLMFailureInfo,
+): void {
+  if (!sink) return;
+  const prev = sink.current;
+  if (!prev || FAILURE_PRIORITY[next.kind] >= FAILURE_PRIORITY[prev.kind]) {
+    sink.current = next;
+  }
+}
+
+async function fetchCompletions(
+  cfg: LLMProviderConfig,
+  body: Record<string, unknown>,
+  timeoutMs: number,
+): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= MAX_FETCH_RETRIES; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const resp = await fetch(completionsUrl(cfg.baseUrl), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${cfg.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      if (resp.status === 429 && attempt < MAX_FETCH_RETRIES) {
+        const retryAfterSec = Number(resp.headers.get('retry-after') ?? 1);
+        const waitMs = Math.min(Math.max(retryAfterSec, 1), 8) * 1000;
+        logger.warn('llm: rate limited, retrying', {
+          attempt: attempt + 1,
+          waitMs,
+          model: body.model,
+          provider: cfg.providerLabel,
+        });
+        await sleep(waitMs);
+        continue;
+      }
+
+      if (!resp.ok) {
+        const errBody = await resp.text().catch(() => '');
+        logger.warn('llm: request non-ok', {
+          status: resp.status,
+          model: body.model,
+          provider: cfg.providerLabel,
+          body: errBody.slice(0, 300),
+        });
+      }
+      return resp;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      lastError = err;
+      if (attempt < MAX_FETCH_RETRIES) {
+        await sleep(500 * (attempt + 1));
+        continue;
+      }
+      logger.warn('llm: fetch failed after retries', {
+        model: body.model,
+        err: String(err),
+      });
+      throw err;
+    }
+  }
+  throw lastError ?? new Error('llm: fetch exhausted retries');
+}
+
 function buildMessages(opts: LLMCompletionOptions): LLMChatMessage[] {
   const out: LLMChatMessage[] = [];
   if (opts.system?.trim()) {
@@ -164,8 +310,6 @@ export async function llmComplete(
   const timeoutMs = opts.timeoutMs ?? 45_000;
 
   for (const model of models) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const body: Record<string, unknown> = {
         model,
@@ -177,23 +321,13 @@ export async function llmComplete(
         body.response_format = { type: 'json_object' };
       }
 
-      const resp = await fetch(completionsUrl(cfg.baseUrl), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${cfg.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
+      const resp = await fetchCompletions(cfg, body, timeoutMs);
 
       if (!resp.ok) {
-        logger.warn('llm: completion non-ok', {
-          status: resp.status,
-          model,
-          provider: cfg.providerLabel,
-        });
+        recordFailure(
+          opts.failureSink,
+          classifyHttpStatus(resp.status, cfg.providerLabel, model),
+        );
         if (isAuthFailure(resp.status)) return null;
         continue;
       }
@@ -205,8 +339,16 @@ export async function llmComplete(
       if (content?.trim()) {
         return { content, model };
       }
+      recordFailure(opts.failureSink, {
+        kind: 'empty_response',
+        provider: cfg.providerLabel,
+        model,
+      });
     } catch (err) {
-      clearTimeout(timeoutId);
+      recordFailure(
+        opts.failureSink,
+        classifyFetchError(err, cfg.providerLabel, model),
+      );
       logger.warn('llm: completion attempt failed', { model, err: String(err) });
     }
   }
@@ -227,36 +369,28 @@ export async function* llmStream(
 
   const models = opts.models ?? resolveModelChain(opts.modelTier ?? 'primary');
   const messages = buildMessages(opts);
-  const timeoutMs = opts.timeoutMs ?? 25_000;
+  const timeoutMs = opts.timeoutMs ?? 45_000;
 
   for (const model of models) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
     let emitted = false;
     try {
-      const resp = await fetch(completionsUrl(cfg.baseUrl), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${cfg.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const resp = await fetchCompletions(
+        cfg,
+        {
           model,
           messages,
           max_tokens: opts.maxTokens ?? 1024,
           temperature: opts.temperature ?? 0.4,
           stream: true,
-        }),
-        signal: controller.signal,
-      });
+        },
+        timeoutMs,
+      );
 
       if (!resp.ok || !resp.body) {
-        clearTimeout(timeoutId);
-        logger.warn('llm: stream non-ok', {
-          status: resp.status,
-          model,
-          provider: cfg.providerLabel,
-        });
+        recordFailure(
+          opts.failureSink,
+          classifyHttpStatus(resp.status, cfg.providerLabel, model),
+        );
         if (isAuthFailure(resp.status)) return;
         continue;
       }
@@ -290,10 +424,17 @@ export async function* llmStream(
           }
         }
       }
-      clearTimeout(timeoutId);
       if (emitted) return;
+      recordFailure(opts.failureSink, {
+        kind: 'empty_response',
+        provider: cfg.providerLabel,
+        model,
+      });
     } catch (err) {
-      clearTimeout(timeoutId);
+      recordFailure(
+        opts.failureSink,
+        classifyFetchError(err, cfg.providerLabel, model),
+      );
       logger.warn('llm: stream attempt failed', { model, err: String(err) });
     }
   }

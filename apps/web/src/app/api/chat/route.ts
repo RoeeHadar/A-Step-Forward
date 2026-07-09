@@ -35,7 +35,16 @@ import {
   saveProposalFromAssistantTurn,
   type PlanApplyResult,
 } from '@/lib/plan-apply';
-import { llmStream, llmConfigured } from '@/lib/llm-provider';
+import {
+  llmStream,
+  llmComplete,
+  llmConfigured,
+  resolveChatModelChain,
+  getLLMConfig,
+  classifyFetchError,
+  type LLMFailureInfo,
+} from '@/lib/llm-provider';
+import { buildChatFailureMessage } from '@/lib/learner-llm-errors';
 import kg from '@/lib/kg-data.json';
 import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
@@ -47,10 +56,15 @@ import { masterySignalInScope } from '@/lib/concept-scope';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-// Vercel functions have a 60s timeout on Pro, 10s on Hobby for non-streaming.
-// We stream, so the connection stays open as long as we keep yielding chunks.
-// Keep the upstream LLM timeout well under that.
+// Keep upstream LLM timeout under Vercel maxDuration (60s on Pro).
+const CHAT_LLM_TIMEOUT_MS = 45_000;
 const MAX_MEMORY_TURNS = 10;
+const MAX_MEMORY_TURN_CHARS = 2_500;
+
+function truncateTurnContent(content: string, maxChars = MAX_MEMORY_TURN_CHARS): string {
+  if (content.length <= maxChars) return content;
+  return `${content.slice(0, maxChars)}…[truncated]`;
+}
 
 interface KgConcept {
   id: string;
@@ -117,15 +131,17 @@ export async function POST(req: Request) {
     })();
   }
 
+  const cookieStore = await cookies();
+  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+
   const gen = streamAgentResponse(userId, lastMessage, agent, {
     quickMode,
     quickDuration,
     topic,
+    locale,
   });
   const encoder = new TextEncoder();
   let assistantBuffer = '';
-  const cookieStore = await cookies();
-  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
   // Vercel AI SDK "data stream" protocol: every text token is emitted on its
   // own line, prefixed by `0:` and JSON-stringified, terminated with `\n`.
@@ -222,7 +238,17 @@ export async function POST(req: Request) {
         }
       } catch (err) {
         logger.error('chat stream pull failed', { err: String(err) });
-        const fallback = friendlyFallback(lastMessage, agent);
+        const classified = classifyFetchError(err, getLLMConfig().providerLabel);
+        const failure: LLMFailureInfo =
+          classified.kind !== 'unknown'
+            ? classified
+            : { kind: 'stream_interrupted', provider: getLLMConfig().providerLabel };
+        const fallback = buildChatFailureMessage({
+          agent,
+          locale,
+          failure,
+          messagePreview: lastMessage,
+        });
         assistantBuffer += fallback;
         controller.enqueue(encodeToken(fallback));
         const planResult: PlanApplyResult | null = eagerPlanPromise
@@ -371,21 +397,42 @@ async function* streamAgentResponse(
   userId: string,
   message: string,
   agent: string,
-  opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
+  opts: {
+    quickMode?: boolean;
+    quickDuration?: string;
+    topic?: string;
+    locale?: 'he' | 'en';
+  } = {},
 ): AsyncGenerator<string> {
-  // Direct Groq path — no Render dependency. Designed to fit comfortably
-  // inside Vercel function timeouts.
+  const locale = opts.locale ?? 'he';
   let emitted = false;
+  let failure: LLMFailureInfo | undefined;
   try {
-    for await (const chunk of streamFromLLM(userId, message, agent, opts)) {
+    const gen = streamFromLLM(userId, message, agent, opts);
+    let result = await gen.next();
+    while (!result.done) {
       emitted = true;
-      yield chunk;
+      yield result.value;
+      result = await gen.next();
     }
+    failure = result.value;
   } catch (err) {
+    failure = classifyFetchError(err, getLLMConfig().providerLabel);
     logger.warn('llm stream raised', { err: String(err) });
   }
   if (!emitted) {
-    yield friendlyFallback(message, agent);
+    logger.warn('chat: all LLM attempts failed — learner fallback', {
+      agent,
+      userId,
+      kind: failure?.kind ?? 'unknown',
+      preview: message.slice(0, 80),
+    });
+    yield buildChatFailureMessage({
+      agent,
+      locale,
+      failure: failure ?? { kind: 'unknown', provider: getLLMConfig().providerLabel },
+      messagePreview: message,
+    });
   }
 }
 
@@ -527,6 +574,10 @@ async function buildContextPrompt(
 
   if (profile && (agent === 'mentor' || agent === 'tutor')) {
     const plan = currentPlan;
+    const normalizedMsg = normalizePlanChangeMessage(message);
+    const wantsPlanMutation =
+      learnerPlanChangeIntentHeuristic(message) || isPlanChangeTemplate(normalizedMsg);
+
     if (plan?.weeks?.length) {
       context += `\n\n## Current weekly learning plan (authoritative — from onboarding + diagnostic)`;
       context += `\nGoal: ${plan.goal} · ${plan.start_date} → ${plan.end_date ?? 'open'}`;
@@ -536,23 +587,24 @@ async function buildContextPrompt(
           .join(', ');
         context += `\n- Week ${w.week_number} [${w.status}]: ${names || '(empty)'}`;
       }
-        } else {
+    } else {
       context += `\n\n## Current weekly learning plan`;
       context += `\nNo active plan in the database yet. If the learner asks to change their plan, explain they should complete onboarding + diagnostic first, or offer to help set goals then call POST /api/plans/generate after confirmation.`;
     }
-    context += `\n\n## Platform catalog (what we can assign — in-house only)`;
-    context += `\n${buildLessonCatalogSummary(profile.subjects ?? [])}`;
-    context += `\n\n## Plan mutation allowlist`;
-    context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
-    context += `\n\n${PLAN_GROUNDING_RULES}`;
-    context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
 
-    const normalizedMsg = normalizePlanChangeMessage(message);
-    if (
-      learnerPlanChangeIntentHeuristic(message) &&
-      !isPlanChangeTemplate(normalizedMsg)
-    ) {
-      context += `\n\n${CASUAL_PLAN_CHANGE_TURN_INSTRUCTION}`;
+    if (wantsPlanMutation) {
+      context += `\n\n## Platform catalog (what we can assign — in-house only)`;
+      context += `\n${buildLessonCatalogSummary(profile.subjects ?? [])}`;
+      context += `\n\n## Plan mutation allowlist`;
+      context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
+      context += `\n\n${PLAN_GROUNDING_RULES}`;
+      context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
+      if (learnerPlanChangeIntentHeuristic(message) && !isPlanChangeTemplate(normalizedMsg)) {
+        context += `\n\n${CASUAL_PLAN_CHANGE_TURN_INSTRUCTION}`;
+      }
+    } else {
+      context += `\n\n## Plan guidance`;
+      context += `\nAnswer progress, timeline, and readiness questions from the current weekly plan and mastery data above. Plan mutations require explicit learner confirmation and ASF_PLAN_UPDATE; the full catalog and allowlist load when they ask to change goals or weekly topics.`;
     }
   }
 
@@ -689,7 +741,10 @@ async function buildContextPrompt(
 
   return {
     system: context,
-    memory: recent.map((t) => ({ role: t.role, content: t.content })),
+    memory: recent.map((t) => ({
+      role: t.role,
+      content: truncateTurnContent(t.content),
+    })),
   };
 }
 
@@ -698,10 +753,11 @@ async function* streamFromLLM(
   message: string,
   agent: string,
   opts: { quickMode?: boolean; quickDuration?: string; topic?: string } = {},
-): AsyncGenerator<string> {
+): AsyncGenerator<string, LLMFailureInfo | undefined> {
+  const cfg = getLLMConfig();
   if (!llmConfigured()) {
     logger.warn('LLM not configured — set LLM_API_KEY + LLM_BASE_URL (or GROQ_API_KEY)');
-    return;
+    return { kind: 'not_configured', provider: cfg.providerLabel };
   }
 
   let context: Awaited<ReturnType<typeof buildContextPrompt>>;
@@ -718,40 +774,33 @@ async function* streamFromLLM(
     { role: 'user' as const, content: message },
   ];
 
-  yield* llmStream({
+  const failureSink = { current: null as LLMFailureInfo | null };
+  const llmOpts = {
     system: context.system,
     messages,
     maxTokens: 1024,
     temperature: 0.4,
-    timeoutMs: 25_000,
-    modelTier: 'primary',
-  });
-}
-
-/**
- * Friendly response when no LLM can be reached. We still personalize the
- * preview of the user message so it doesn't feel robotic.
- */
-function friendlyFallback(message: string, agent: string): string {
-  const preview = message.slice(0, 120);
-  const heads: Record<string, string> = {
-    tutor: "I'm your Tutor.",
-    mentor: "I'm your Mentor.",
-    coach: "I'm your Coach.",
-    reviewer: "I'm your Reviewer.",
+    timeoutMs: CHAT_LLM_TIMEOUT_MS,
+    models: resolveChatModelChain(),
+    failureSink,
   };
-  const head = heads[agent] ?? "I'm your assistant.";
-  return [
-    `${head} Our language model is temporarily unreachable, so I cannot answer in real time right now.`,
-    '',
-    preview ? `You asked: *"${preview}"*` : '',
-    '',
-    'Two things you can do right now:',
-    '- Refresh in a moment — the model usually returns within a minute.',
-    '- Browse the **/learn** section for curated explanations on this topic.',
-    '',
-    'Your message is saved in your chat history, so I will see it next turn.',
-  ]
-    .filter(Boolean)
-    .join('\n');
+
+  let emitted = false;
+  for await (const chunk of llmStream(llmOpts)) {
+    emitted = true;
+    yield chunk;
+  }
+
+  if (!emitted) {
+    logger.warn('chat: stream empty — trying non-stream completion', { agent, userId });
+    const backup = await llmComplete(llmOpts);
+    if (backup?.content) {
+      logger.info('chat: non-stream backup succeeded', { model: backup.model, agent });
+      yield backup.content;
+      return undefined;
+    }
+  }
+
+  if (emitted) return undefined;
+  return failureSink.current ?? { kind: 'unknown', provider: cfg.providerLabel };
 }
