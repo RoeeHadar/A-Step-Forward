@@ -30,6 +30,7 @@ const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? '';
 const sql = url ? neon(url) : null;
 
 const ADAPT_WEAK_THRESHOLD = 0.4;
+const MCQ_LETTERS = ['A', 'B', 'C', 'D'] as const;
 
 export interface WeeklyQuizAnswer {
   item_id: string;
@@ -86,6 +87,50 @@ Rules:
 - Questions must match the supplied weekly plan concepts. Do not introduce prerequisite warmups or unrelated basics unless that exact concept is supplied.
 - NEVER include names, emails, phones, or addresses.
 - Spread questions across concepts; cover different skills per concept.`;
+}
+
+/** Force option keys to A–D and map correct answer to a letter the client can send back. */
+export function normalizeWeeklyMcqOptions(
+  options: unknown[],
+  correctRaw: string,
+): { options: { key: string; text: string }[]; correct: string } | null {
+  const texts: string[] = [];
+  const origKeys: string[] = [];
+  for (const opt of options.slice(0, 4)) {
+    if (!opt || typeof opt !== 'object') return null;
+    const o = opt as Record<string, unknown>;
+    const text =
+      typeof o.text === 'string'
+        ? o.text
+        : typeof o.label === 'string'
+          ? o.label
+          : null;
+    if (!text?.trim()) return null;
+    texts.push(text.trim());
+    origKeys.push(
+      typeof o.key === 'string' ? o.key.trim().toUpperCase() : String(texts.length),
+    );
+  }
+  if (texts.length !== 4) return null;
+
+  const normalizedOptions = MCQ_LETTERS.map((key, i) => ({
+    key,
+    text: texts[i]!,
+  }));
+
+  let correct = correctRaw.trim().toUpperCase();
+  if (!MCQ_LETTERS.includes(correct as (typeof MCQ_LETTERS)[number])) {
+    const idxByKey = origKeys.findIndex((k) => k === correct);
+    if (idxByKey >= 0) {
+      correct = MCQ_LETTERS[idxByKey]!;
+    } else if (/^[1-4]$/.test(correctRaw.trim())) {
+      correct = MCQ_LETTERS[parseInt(correctRaw.trim(), 10) - 1]!;
+    } else {
+      return null;
+    }
+  }
+
+  return { options: normalizedOptions, correct };
 }
 
 function buildUserPrompt(
@@ -152,23 +197,17 @@ async function callLLMForWeeklyQuiz(
     if (typeof subject !== 'string') continue;
     if (typeof stem !== 'string' || stem.trim().length === 0) continue;
     if (!Array.isArray(options) || options.length < 4) continue;
-    if (typeof correct !== 'string' || !['A', 'B', 'C', 'D'].includes(correct.toUpperCase())) continue;
-    const mappedOptions: { key: string; text: string }[] = [];
-    for (const opt of options.slice(0, 4)) {
-      if (!opt || typeof opt !== 'object') break;
-      const o = opt as Record<string, unknown>;
-      if (typeof o.key !== 'string' || typeof o.text !== 'string') break;
-      mappedOptions.push({ key: o.key, text: o.text });
-    }
-    if (mappedOptions.length !== 4) continue;
+    if (typeof correct !== 'string') continue;
+    const normalized = normalizeWeeklyMcqOptions(options, correct);
+    if (!normalized) continue;
     validated.push({
       id: randomUUID(),
       topic,
       subject,
       difficulty: typeof difficulty === 'number' ? Math.max(0, Math.min(1, difficulty)) : 0.5,
       stem: stem.trim().slice(0, 600),
-      options: mappedOptions,
-      correct: (correct as string).toUpperCase(),
+      options: normalized.options,
+      correct: normalized.correct,
     });
   }
   return validated.length > 0 ? validated : null;
@@ -277,8 +316,13 @@ export async function generateWeeklyQuizForUser(
   ]);
 
   // Weekly quizzes must assess the selected learning-plan week, not generic weak topics.
+  const profileSubjects = new Set(profile?.subjects ?? []);
   const selectedConcepts = weekConceptIds
     .filter((id) => Boolean(kgById[id]))
+    .filter((id) => {
+      if (profileSubjects.size === 0) return true;
+      return profileSubjects.has(kgById[id]!.subject);
+    })
     .slice(0, 8)
     .map((id) => [id, mastery[id] ?? null] as const);
   if (selectedConcepts.length === 0) return null;
@@ -309,7 +353,7 @@ export async function generateWeeklyQuizForUser(
   if (!generated || generated.length === 0) return null;
 
   // Cache the result (with correct answers stored server-side)
-  let quizId = randomUUID();
+  let quizId: string = randomUUID();
   try {
     const inserted = (await sql`
       INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, questions)
@@ -321,14 +365,33 @@ export async function generateWeeklyQuizForUser(
         ${locale},
         ${JSON.stringify(generated)}::jsonb
       )
-      ON CONFLICT (user_id, week_start, plan_id, week_num, locale) DO UPDATE
-        SET questions   = EXCLUDED.questions,
-            plan_id     = EXCLUDED.plan_id,
-            week_num    = EXCLUDED.week_num,
-            locale      = EXCLUDED.locale
-      RETURNING id::text
-    `) as Array<{ id: string }>;
-    if (inserted[0]?.id) quizId = inserted[0].id as ReturnType<typeof randomUUID>;
+      ON CONFLICT (user_id, week_start, plan_id, week_num, locale) DO NOTHING
+      RETURNING id::text, questions
+    `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
+    if (inserted[0]?.id) {
+      quizId = inserted[0].id;
+      return buildClientResponse(quizId, planId, weekNum, inserted[0].questions, weekStartStr);
+    }
+    const existing = (await sql`
+      SELECT id::text, questions
+      FROM weekly_quizzes_ai
+      WHERE user_id = ${userId}
+        AND week_start = ${weekStartStr}::date
+        AND plan_id = ${planId}
+        AND week_num = ${weekNum}
+        AND locale = ${locale}
+      LIMIT 1
+    `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
+    if (existing[0]?.id) {
+      quizId = existing[0].id;
+      return buildClientResponse(
+        quizId,
+        planId,
+        weekNum,
+        existing[0].questions,
+        weekStartStr,
+      );
+    }
   } catch {
     // Cache write failed — still return the freshly-generated questions.
   }
@@ -440,20 +503,6 @@ export async function submitWeeklyQuizForUser(
   }
 
   if (!row) return null;
-
-  if (row.submitted_at != null && row.score != null) {
-    const perTopic = row.per_topic ?? {};
-    return {
-      quiz_id: quizId,
-      score: row.score,
-      per_topic: perTopic,
-      weak_concepts: Object.entries(perTopic)
-        .filter(([, s]) => s < ADAPT_WEAK_THRESHOLD)
-        .map(([topic]) => topic),
-      plan_adapted: false,
-      next_week_concepts: null,
-    };
-  }
 
   const stored = Array.isArray(row.questions) ? row.questions : [];
   if (stored.length === 0) return null;

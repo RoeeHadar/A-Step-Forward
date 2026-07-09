@@ -8,7 +8,7 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { LessonReader } from './lesson-reader';
 import { LessonQuizPanel } from './lesson-quiz-panel';
 import { LessonCompleteButton } from './lesson-complete-button';
-import { LessonChatSidebar } from './lesson-chat-sidebar';
+import { AgentSidePanel } from './agent-side-panel';
 import {
   ThreePtCompletionMessage,
   ThreePtProgressBar,
@@ -173,7 +173,7 @@ export function LessonPageClient({
         ) : null}
       </div>
 
-      <LessonChatSidebar conceptId={conceptId} />
+      <AgentSidePanel topic={conceptId} />
     </div>
   );
 }

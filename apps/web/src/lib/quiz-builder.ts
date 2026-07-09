@@ -21,11 +21,17 @@ import {
   getConceptMastery,
   getLearnerProfile,
   fetchLessonAgentHintsByConceptIds,
+  getCurrentPlan,
   type LearnerProfileRow,
 } from '@/lib/neon-db';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from '@/lib/kg-data.json';
 import { effectiveGradeLevel } from '@/lib/grade-level';
+import { currentActiveWeek } from '@/lib/exam-prep';
+import {
+  bootstrapConceptIdsForProfile,
+  filterConceptIdsForProfile,
+} from '@/lib/quiz-concept-filter';
 
 interface KgConcept {
   id: string;
@@ -40,7 +46,6 @@ interface KgConcept {
   prerequisites: string[];
 }
 
-const kgConcepts = (kg as unknown as { concepts: KgConcept[] }).concepts;
 const kgById: Record<string, KgConcept> =
   (kg as unknown as { byId: Record<string, KgConcept> }).byId;
 
@@ -99,7 +104,7 @@ export interface CustomQuizEnvelope {
   time_limit_s: number;
   concepts: Array<{ id: string; name: string; name_he: string | null; subject: string }>;
   questions: CustomQuizQuestion[];
-  picked_reason: 'user_topics' | 'weakest_mastery' | 'subject_bootstrap';
+  picked_reason: 'user_topics' | 'plan_week' | 'weakest_mastery' | 'subject_bootstrap';
   model?: string;
 }
 
@@ -127,32 +132,42 @@ function questionCountFromBudget(
   return Math.max(1, Math.min(4, raw));
 }
 
-function pickConcepts(
+async function pickConcepts(
+  learnerId: string,
   req: CustomQuizRequest,
   mastery: Record<string, number>,
   profile: LearnerProfileRow | null,
-): { ids: string[]; reason: CustomQuizEnvelope['picked_reason'] } {
+): Promise<{ ids: string[]; reason: CustomQuizEnvelope['picked_reason'] }> {
   if (req.topics && req.topics.length > 0) {
-    const ids = req.topics.filter((c) => Boolean(kgById[c]));
+    const ids = filterConceptIdsForProfile(
+      req.topics.filter((c) => Boolean(kgById[c])),
+      profile,
+    );
     if (ids.length > 0) return { ids, reason: 'user_topics' };
   }
-  const touched = Object.entries(mastery)
-    .sort((a, b) => a[1] - b[1])
-    .map(([c]) => c)
-    .filter((c) => Boolean(kgById[c]));
+
+  const plan = await getCurrentPlan(learnerId).catch(() => null);
+  const activeWeek = plan ? currentActiveWeek(plan) : undefined;
+  const planWeekIds = filterConceptIdsForProfile(
+    activeWeek?.concepts.map((c) => c.concept_id) ?? [],
+    profile,
+  );
+  if (planWeekIds.length > 0) {
+    return { ids: planWeekIds.slice(0, 6), reason: 'plan_week' };
+  }
+
+  const touched = filterConceptIdsForProfile(
+    Object.entries(mastery)
+      .sort((a, b) => a[1] - b[1])
+      .map(([c]) => c)
+      .filter((c) => Boolean(kgById[c])),
+    profile,
+  );
   if (touched.length >= 3) {
     return { ids: touched.slice(0, 6), reason: 'weakest_mastery' };
   }
-  const subjects = (profile?.subjects && profile.subjects.length > 0)
-    ? profile.subjects
-    : ['math'];
-  const subjectSet = new Set(subjects.map((s) => s.toLowerCase()));
-  const roots = kgConcepts
-    .filter((c) => subjectSet.has(c.subject) && c.prerequisites.length === 0)
-    .map((c) => c.id);
-  const fallback = roots.length > 0
-    ? roots.slice(0, 6)
-    : kgConcepts.slice(0, 6).map((c) => c.id);
+
+  const fallback = bootstrapConceptIdsForProfile(profile, 6);
   return { ids: fallback, reason: 'subject_bootstrap' };
 }
 
@@ -476,7 +491,7 @@ export async function buildCustomQuiz(
   ]);
 
   const mode = getQuizMode(profile);
-  const picked = pickConcepts(req, mastery, profile);
+  const picked = await pickConcepts(learnerId, req, mastery, profile);
   const hintsRows = await fetchLessonAgentHintsByConceptIds(picked.ids).catch(() => []);
   const hintsByConcept = new Map(hintsRows.map((r) => [r.concept_id, r.agent_hints]));
 

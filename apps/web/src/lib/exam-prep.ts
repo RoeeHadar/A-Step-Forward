@@ -3,7 +3,7 @@ import type { LearningPlan } from '@asf/schemas/learning_path';
 /** Days before goal/test when we surface exam-prep quiz prompts. */
 export const EXAM_PREP_WINDOW_DAYS = 14;
 
-function currentActiveWeek(plan: LearningPlan) {
+export function currentActiveWeek(plan: LearningPlan) {
   const active = plan.weeks.find((w) => w.status === 'active');
   if (active) return active;
   return plan.weeks.find((w) => w.status === 'upcoming') ?? plan.weeks[0];

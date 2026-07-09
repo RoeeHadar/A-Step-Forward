@@ -24,6 +24,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { MarkdownMath } from '@/components/markdown-math';
+import { AgentSidePanel } from '@/components/agent-side-panel';
 import {
   ChevronLeft,
   ChevronRight,
@@ -93,7 +94,7 @@ interface CustomQuizEnvelope {
   time_limit_s: number;
   concepts: Array<{ id: string; name: string; name_he: string | null; subject: string }>;
   questions: CustomQuizQuestion[];
-  picked_reason: 'user_topics' | 'weakest_mastery' | 'subject_bootstrap';
+  picked_reason: 'user_topics' | 'plan_week' | 'weakest_mastery' | 'subject_bootstrap';
   model?: string;
 }
 
@@ -141,6 +142,7 @@ const STR = {
     newQuiz: 'תרגול חדש',
     backToDashboard: 'חזרה ללוח הבקרה',
     pickedFromTopics: 'מבוסס על הנושאים שבחרת',
+    pickedFromPlanWeek: 'מבוסס על נושאי השבוע בתכנית הלימוד שלך',
     pickedFromWeak: 'מבוסס על הנושאים שאתה/את הכי חלש/ה בהם',
     pickedFromBootstrap: 'היכרות ראשונית — מבוסס על המקצועות שלך',
     minute: 'דקה',
@@ -148,6 +150,9 @@ const STR = {
     part: 'חלק',
     points: 'נקודות',
     partHint: 'הראה/י את כל שלבי הפתרון לחלק זה',
+    selfAssessTitle: 'הערכה עצמית לפני ציון',
+    selfAssessHint: 'דרג/י כל שאלה פתוחה — כך נחשב את הניקוד.',
+    selfAssessConfirm: 'הצג תוצאות',
   },
   en: {
     title: 'Exam Practice',
@@ -191,7 +196,11 @@ const STR = {
     buildAnother: 'Practice more',
     newQuiz: 'New practice',
     backToDashboard: 'Back to dashboard',
+    selfAssessTitle: 'Self-assess before scoring',
+    selfAssessHint: 'Rate each open question so we can calculate your score.',
+    selfAssessConfirm: 'Show results',
     pickedFromTopics: 'Based on the topics you chose',
+    pickedFromPlanWeek: 'Based on your current weekly plan topics',
     pickedFromWeak: 'Based on the topics you struggle with most',
     pickedFromBootstrap: 'Starter session — based on your subjects',
     minute: 'minute',
@@ -234,7 +243,7 @@ interface AnswerState {
   solutionRevealed?: boolean;
 }
 
-type Phase = 'builder' | 'generating' | 'running' | 'results';
+type Phase = 'builder' | 'generating' | 'running' | 'self_assess' | 'results';
 
 const QUIZ_SESSION_KEY = 'asf-quiz-session';
 
@@ -415,35 +424,74 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     }
   }
 
-  function gradeOne(q: CustomQuizQuestion, a: AnswerState): boolean | null {
-    // MCQ (university_mixed mode only)
+  function isOpenQuestion(q: CustomQuizQuestion): boolean {
+    return q.kind !== 'mcq';
+  }
+
+  function hasWrittenAnswer(q: CustomQuizQuestion, a: AnswerState): boolean {
+    if (q.parts && q.parts.length > 0) {
+      return q.parts.some((p) => Boolean(a.parts?.[p.label]?.trim()));
+    }
+    return Boolean(a.text?.trim());
+  }
+
+  function questionPoints(q: CustomQuizQuestion, a: AnswerState): number | null {
     if (q.kind === 'mcq') {
       if (a.mcq == null || q.correct_index == null) return null;
-      return a.mcq === q.correct_index;
+      return a.mcq === q.correct_index ? 1 : 0;
     }
-    // Open questions (Bagrut / university style) — self-assessed
-    if (q.kind === 'open' || q.kind === 'short_answer' || q.kind === 'numeric' || q.kind === 'true_false') {
+    if (
+      q.kind === 'open' ||
+      q.kind === 'short_answer' ||
+      q.kind === 'numeric' ||
+      q.kind === 'true_false'
+    ) {
       if (!a.self) return null;
-      return a.self === 'correct';
+      if (a.self === 'correct') return 1;
+      if (a.self === 'partial') return 0.5;
+      return 0;
     }
     return null;
   }
 
+  function openQuestionsNeedingSelfAssess(): number[] {
+    if (!envelope) return [];
+    const pending: number[] = [];
+    for (let i = 0; i < envelope.questions.length; i += 1) {
+      const q = envelope.questions[i];
+      if (!q) continue;
+      const a = answers[i] ?? {};
+      if (isOpenQuestion(q) && hasWrittenAnswer(q, a) && !a.self) {
+        pending.push(i);
+      }
+    }
+    return pending;
+  }
+
+  function handleAttemptSubmit() {
+    if (!envelope) return;
+    if (openQuestionsNeedingSelfAssess().length > 0) {
+      setPhase('self_assess');
+      return;
+    }
+    void submitQuiz();
+  }
+
   const displayResults = useMemo(() => {
     if (!envelope || !results) return results;
-    let correctCount = 0;
+    let earnedPoints = 0;
     const perConcept: Record<string, { correct: number; total: number }> = {};
     for (let i = 0; i < envelope.questions.length; i += 1) {
       const q = envelope.questions[i];
       if (!q) continue;
       const a = answers[i] ?? {};
-      const graded = gradeOne(q, a);
-      if (graded === true) correctCount += 1;
+      const points = questionPoints(q, a);
+      if (points != null) earnedPoints += points;
       const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
       bucket.total += 1;
-      if (graded === true) bucket.correct += 1;
+      if (points != null) bucket.correct += points;
     }
-    return { ...results, correctCount, perConcept };
+    return { ...results, correctCount: earnedPoints, perConcept };
   }, [envelope, answers, results]);
 
   async function submitQuiz() {
@@ -451,7 +499,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     setSubmitting(true);
     try {
       const perConcept: Record<string, { correct: number; total: number }> = {};
-      let correctCount = 0;
+      let earnedPoints = 0;
       const syncPayloads: Array<{
         concept_id: string;
         correct: boolean;
@@ -464,22 +512,21 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
         const q = envelope.questions[i];
         if (!q) continue;
         const a = answers[i] ?? {};
-        const graded = gradeOne(q, a);
-        const isCorrect = graded === true;
-        if (isCorrect) correctCount += 1;
+        const points = questionPoints(q, a);
+        if (points != null) earnedPoints += points;
         const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
         bucket.total += 1;
-        if (isCorrect) bucket.correct += 1;
+        if (points != null) bucket.correct += points;
 
         const writtenAnswer =
           q.parts && q.parts.length > 0 && a.parts
             ? q.parts.map((p) => `${p.label}: ${a.parts?.[p.label] ?? ''}`).join('\n')
             : (a.text ?? '');
 
-        if (graded != null || writtenAnswer.trim()) {
+        if (points != null || writtenAnswer.trim()) {
           syncPayloads.push({
             concept_id: q.concept_id,
-            correct: isCorrect,
+            correct: (points ?? 0) >= 0.5,
             skill_atoms: q.skill_atoms ?? [],
             user_answer: writtenAnswer,
             kind: q.kind,
@@ -489,7 +536,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
 
       const secondsUsed = startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0;
       setResults({
-        correctCount,
+        correctCount: earnedPoints,
         total: envelope.questions.length,
         perConcept,
         secondsUsed,
@@ -694,9 +741,11 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     const reasonStr =
       envelope.picked_reason === 'user_topics'
         ? t.pickedFromTopics
-        : envelope.picked_reason === 'weakest_mastery'
-          ? t.pickedFromWeak
-          : t.pickedFromBootstrap;
+        : envelope.picked_reason === 'plan_week'
+          ? t.pickedFromPlanWeek
+          : envelope.picked_reason === 'weakest_mastery'
+            ? t.pickedFromWeak
+            : t.pickedFromBootstrap;
 
     function setAnswer(patch: AnswerState) {
       setAnswers((prev) => {
@@ -885,12 +934,80 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
               {isHe ? <ChevronLeft className="h-4 w-4" aria-hidden /> : <ChevronRight className="h-4 w-4" aria-hidden />}
             </Button>
           ) : (
-            <Button onClick={submitQuiz} disabled={submitting || (!allPartsAnswered && !a.self)} className="gap-2">
+            <Button onClick={handleAttemptSubmit} disabled={submitting || !allPartsAnswered} className="gap-2">
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
               {submitting ? t.submitting : t.submit}
             </Button>
           )}
         </div>
+      </div>
+    );
+  }
+
+  // ---------- self-assess (open questions before scoring) ----------------
+  if (phase === 'self_assess' && envelope) {
+    const toRate = envelope.questions
+      .map((q, i) => ({ q, i }))
+      .filter(({ q, i }) => isOpenQuestion(q) && hasWrittenAnswer(q, answers[i] ?? {}));
+    const allRated = toRate.every(({ i }) => answers[i]?.self);
+
+    return (
+      <div className="mx-auto max-w-3xl" dir={dir}>
+        <header className="mb-6">
+          <h1 className="font-display text-3xl font-bold">{t.selfAssessTitle}</h1>
+          <p className="mt-2 text-muted-foreground">{t.selfAssessHint}</p>
+        </header>
+        <ul className="card-punch mb-6 space-y-4 rounded-2xl p-6">
+          {toRate.map(({ q, i }) => {
+            const stem = isHe ? q.stem_he : q.stem_en;
+            return (
+              <li key={i} className="border-b border-border pb-4 last:border-b-0">
+                <p className="mb-2 text-xs font-semibold text-muted-foreground">
+                  {t.questionOf.replace('{i}', String(i + 1)).replace('{n}', String(envelope.questions.length))}
+                </p>
+                <div className="mb-3 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm">
+                  <MarkdownInline content={stem} dir={dir} />
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs text-muted-foreground">{t.selfAssess}</span>
+                  {(['correct', 'partial', 'wrong'] as const).map((s) => {
+                    const label =
+                      s === 'correct' ? t.selfCorrect : s === 'partial' ? t.selfPartial : t.selfWrong;
+                    const active = answers[i]?.self === s;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => {
+                          setAnswers((prev) => {
+                            const copy = [...prev];
+                            copy[i] = { ...(copy[i] ?? {}), self: s };
+                            return copy;
+                          });
+                        }}
+                        className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+                          active
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'border-border bg-background text-muted-foreground hover:bg-muted'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        <Button
+          onClick={() => void submitQuiz()}
+          disabled={!allRated || submitting}
+          className="gap-2"
+        >
+          {submitting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+          {submitting ? t.submitting : t.selfAssessConfirm}
+        </Button>
       </div>
     );
   }
@@ -905,7 +1022,10 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
 
         <section className="card-punch mb-6 rounded-2xl p-6">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            <Stat label={t.resultsScore} value={`${displayResults.correctCount}/${displayResults.total}`} />
+            <Stat
+              label={t.resultsScore}
+              value={`${displayResults.correctCount.toFixed(1)}/${displayResults.total}`}
+            />
             <Stat label={t.resultsTime} value={fmtT(displayResults.secondsUsed)} />
           </div>
         </section>
@@ -946,7 +1066,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           <ul className="space-y-6">
             {envelope.questions.map((q, i) => {
               const a = answers[i] ?? {};
-              const graded = gradeOne(q, a);
+              const points = questionPoints(q, a);
               const stem = isHe ? q.stem_he : q.stem_en;
               const sampleSolution = isHe ? q.sample_solution_he : q.sample_solution_en;
               const rubric = isHe ? q.rubric_he : q.rubric_en;
@@ -968,17 +1088,17 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
                     {q.total_points > 0 && (
                       <Badge variant="outline" className="text-xs">{q.total_points} {t.points}</Badge>
                     )}
-                    {graded === true ? (
+                    {points === 1 ? (
                       <Badge variant="success" className="gap-1">
                         <Check className="h-3 w-3" aria-hidden />
                         {t.selfCorrect}
                       </Badge>
-                    ) : graded === false ? (
+                    ) : points === 0 ? (
                       <Badge variant="secondary" className="gap-1 bg-destructive/15 text-destructive">
                         <X className="h-3 w-3" aria-hidden />
                         {t.selfWrong}
                       </Badge>
-                    ) : a.self === 'partial' ? (
+                    ) : points === 0.5 ? (
                       <Badge variant="secondary" className="gap-1">{t.selfPartial}</Badge>
                     ) : (
                       <Badge variant="secondary">—</Badge>
@@ -1091,6 +1211,15 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
             <a href="/app?completed=1">{t.backToDashboard}</a>
           </Button>
         </div>
+        <AgentSidePanel
+          topic={
+            envelope.concepts.find((c) => {
+              const bucket = displayResults.perConcept[c.id];
+              return bucket && bucket.total > 0 && bucket.correct / bucket.total < 0.7;
+            })?.id ?? envelope.concepts[0]?.id
+          }
+          fabLabel={{ he: 'שאל את הסוכן על התוצאות', en: 'Ask an agent about results' }}
+        />
       </div>
     );
   }

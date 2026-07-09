@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scoreWeeklyQuizAnswers } from './weekly-quiz';
+import { scoreWeeklyQuizAnswers, normalizeWeeklyMcqOptions } from './weekly-quiz';
 
 describe('scoreWeeklyQuizAnswers', () => {
   const questions = [
@@ -72,5 +72,21 @@ describe('scoreWeeklyQuizAnswers', () => {
     const result = scoreWeeklyQuizAnswers(questions, []);
     expect(result.score).toBe(0);
     expect(Object.values(result.per_topic).every((s) => s === 0)).toBe(true);
+  });
+});
+
+describe('normalizeWeeklyMcqOptions', () => {
+  it('maps numeric option keys to A–D letters', () => {
+    const normalized = normalizeWeeklyMcqOptions(
+      [
+        { key: '1', text: 'one' },
+        { key: '2', text: 'two' },
+        { key: '3', text: 'three' },
+        { key: '4', text: 'four' },
+      ],
+      '2',
+    );
+    expect(normalized?.correct).toBe('B');
+    expect(normalized?.options.map((o) => o.key)).toEqual(['A', 'B', 'C', 'D']);
   });
 });

@@ -10,6 +10,7 @@ import type { QuizQuestion, QuizStartResponse, QuizSubmitResponse } from '@asf/s
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
 import { MarkdownMath } from '@/components/markdown-math';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
+import { AgentSidePanel } from '@/components/agent-side-panel';
 
 interface Props {
   quiz: QuizStartResponse;
@@ -238,6 +239,10 @@ function ResultView({
       <Button className="w-full" onClick={onGoToDashboard}>
         {t.back_to_dashboard}
       </Button>
+      <AgentSidePanel
+        topic={result.weak_concepts[0]}
+        fabLabel={{ he: 'שאל את הסוכן על המבחן', en: 'Ask an agent about this test' }}
+      />
     </div>
   );
 }
@@ -274,7 +279,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
           return;
         }
 
-        const res = await fetch(`/api/quiz/${quiz.week_id}/submit`, {
+        const res = await fetch(`/api/quiz/${quiz.quiz_id}/submit`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
