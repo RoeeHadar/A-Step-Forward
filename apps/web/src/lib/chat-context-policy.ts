@@ -43,6 +43,22 @@ You MUST:
 2. Advance: give the next actionable step, a short readiness summary, or offer a drill / mini quiz.
 3. Acknowledge in one short clause, then move forward.`;
 
+export const EXAM_ANXIETY_TURN_INSTRUCTION = `## THIS TURN — exam anxiety / missing topics (mandatory)
+The learner worries they are not ready or that the plan misses Bagrut/exam topics.
+You MUST:
+1. Validate the concern briefly — do not dismiss it.
+2. Name 2–3 highest-priority gaps from the plan + mastery (if known), not an open-ended "pick topics" quiz.
+3. Give a realistic cram strategy for the days left (review vs new material).
+4. For plan changes (more hours, different topics): point to the Tutor sidebar template **עדכון תוכנית לימוד** with a concrete example goal line (e.g. "בגרות פיזיקה מכניקה 036-361") — do NOT tell them to ask parents/teachers for permission to study.`;
+
+export const STUDY_HOURS_INCREASE_INSTRUCTION = `## THIS TURN — learner wants more study hours (mandatory)
+They want to increase weekly/daily study time for exam cram.
+You MUST:
+1. Acknowledge their commitment positively.
+2. Explain that hours + topics are updated via the sidebar template **עדכון תוכנית לימוד** (goal + date + notes like "5 שעות ביום").
+3. Offer to spell out the exact template fields they should paste — do NOT defer to parents/teachers.
+4. You may suggest a daily hour target (e.g. 3–5h/day in the last week) while they fill the template.`;
+
 const STUDY_NEXT_RE =
   /what should i study|what.?s next|study next|root cause|why am i stuck|what to learn|מה ללמוד|מה הלאה|למה אני תקוע|מה כדאי|הבא בתור|עוד נושא/i;
 
@@ -89,6 +105,20 @@ export function wantsExamReadinessAnswer(message: string): boolean {
 
 export function wantsConversationAdvance(message: string): boolean {
   return CONVERSATION_ADVANCE_RE.test(message.trim());
+}
+
+export function wantsExamAnxietySupport(message: string): boolean {
+  const t = message.trim();
+  return /(?:לא מוכן|לא אהיה מוכן|לא מספיק|עוד נושאים|נושאים נוספים|חסר|לא נגענו|missing topics|not ready|won't be ready)/i.test(
+    t,
+  );
+}
+
+export function wantsStudyHoursIncrease(message: string): boolean {
+  const t = message.trim();
+  return /(?:יותר שעות|הגדיל|להגדיל|להוסיף שעות|more hours|increase.*hours|study more|ללמוד יותר|כמה שצריך)/i.test(
+    t,
+  );
 }
 
 export function isReadinessFollowUp(

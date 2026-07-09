@@ -101,14 +101,24 @@ const PHYSICS_GOAL_RE = /פיזיק|physics/i;
 const MATH_GENERIC_RE = /מתמטיק|mathematics|\bmath\b/i;
 const MATH_SPECIFIC_RE =
   /חדו|calculus|\bcalc\s*1|calculus\s*1|בדיד|discrete|5\s*יח|4\s*יח|3\s*יח|bagrut|בגרות|אלגבר|algebra|לינאר|linear|סטטיסט|statistic|הסתבר|probability|מכינה|makhina|שאלון\s*47|שאלון\s*57/i;
+const PHYSICS_SPECIFIC_RE =
+  /036-361|036-371|036-282|036-382|מכניק|קינמט|דינמיק|ניוטון|חשמל|מעגל|קרינה|חומר|mechanics?|kinematics?|dynamics?|newton|electric(?:ity|al)?|circuits?|radiation|matter/i;
 
 export type PlanClarificationReason = 'physics' | 'math';
 
 function hasFocusConcepts(payload: PlanUpdatePayload): boolean {
-  return (
+  if (
     (payload.prepend_concepts?.length ?? 0) > 0 ||
     (payload.priority_concepts?.length ?? 0) > 0
+  ) {
+    return true;
+  }
+  const inferred = inferConceptIdsFromText(
+    payload.goal ?? '',
+    payload.next_test_name ?? '',
+    payload.reason ?? '',
   );
+  return inferred.length > 0;
 }
 
 export function planPayloadNeedsClarification(
@@ -120,7 +130,7 @@ export function planPayloadNeedsClarification(
   if (!text.trim()) return null;
   if (hasFocusConcepts(payload)) return null;
 
-  if (PHYSICS_GOAL_RE.test(text)) return 'physics';
+  if (PHYSICS_GOAL_RE.test(text) && !PHYSICS_SPECIFIC_RE.test(text)) return 'physics';
   if (MATH_GENERIC_RE.test(text) && !MATH_SPECIFIC_RE.test(text)) return 'math';
   return null;
 }
@@ -339,7 +349,9 @@ function mergeProposal(
       fromTag?.goal_key ||
       goalMeta.goal_key ||
       fromTag?.clear_next_test ||
-      goalMeta.clear_next_test,
+      goalMeta.clear_next_test ||
+      fromTag?.hours_per_week ||
+      goalMeta.hours_per_week,
   );
   const hasConceptChange =
     prepend.length > 0 ||
@@ -356,6 +368,7 @@ function mergeProposal(
         next_test_date: fromTag?.next_test_date ?? goalMeta.next_test_date,
         next_test_name: fromTag?.next_test_name ?? goalMeta.next_test_name,
         clear_next_test: fromTag?.clear_next_test ?? goalMeta.clear_next_test,
+        hours_per_week: fromTag?.hours_per_week ?? goalMeta.hours_per_week,
         priority_concepts: fromTag?.priority_concepts ?? [],
         prepend_concepts: prepend,
         exclude_concepts: fromTag?.exclude_concepts ?? [],
@@ -374,6 +387,7 @@ function mergeProposal(
     next_test_date: fromTag?.next_test_date ?? goalMeta.next_test_date,
     next_test_name: fromTag?.next_test_name ?? goalMeta.next_test_name,
     clear_next_test: fromTag?.clear_next_test ?? goalMeta.clear_next_test,
+    hours_per_week: fromTag?.hours_per_week ?? goalMeta.hours_per_week,
     priority_concepts: fromTag?.priority_concepts ?? [],
     prepend_concepts: prepend,
     exclude_concepts: fromTag?.exclude_concepts ?? [],
@@ -435,7 +449,17 @@ export async function applyPlanFromUserMessage(
   }
 
   try {
-    return await executePlanUpdate(learnerId, payload, { agent, source: 'chat' });
+    const result = await executePlanUpdate(learnerId, payload, { agent, source: 'chat' });
+    if (!result.applied) {
+      return {
+        ...result,
+        failureNotice:
+          result.error === 'needs_exam_scope' && result.clarificationReason
+            ? buildPlanClarificationNotice(locale, result.clarificationReason)
+            : buildPlanApplyFailureNotice(locale, result.error),
+      };
+    }
+    return result;
   } catch (err) {
     return {
       applied: false,

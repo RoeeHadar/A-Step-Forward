@@ -60,19 +60,15 @@ export function learnerAdvisoryLockKey(scope: string, learnerId: string): string
 /** Detect lock contention from a rolled-back Neon transaction batch. */
 export function isNeonLockContention(err: unknown, errCode: string): boolean {
   if (!(err instanceof Error)) return false;
-  return err.message.includes(errCode);
+  const msg = err.message;
+  return msg.includes(errCode) || /division by zero/i.test(msg);
 }
 
 /** First statement in a transaction batch — aborts the whole tx if lock not acquired. */
-function xactLockGuardQuery(txn: NeonSql, lockKey: string, errCode: string) {
+function xactLockGuardQuery(txn: NeonSql, lockKey: string) {
+  // Neon HTTP driver mishandles parameterized DO blocks — use a zero-division guard.
   return txn`
-    DO $asf$
-    BEGIN
-      IF NOT pg_try_advisory_xact_lock(hashtext(${lockKey})) THEN
-        RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = ${errCode};
-      END IF;
-    END;
-    $asf$
+    SELECT CASE WHEN pg_try_advisory_xact_lock(hashtext(${lockKey})) THEN 1 ELSE 1 / 0 END AS ok
   `;
 }
 
@@ -89,7 +85,7 @@ export async function persistConsolidationResult(
   const lockKey = learnerAdvisoryLockKey('consolidate', learnerId);
   const clamped = personaText.slice(0, 4000);
   const queries = [
-    xactLockGuardQuery(s, lockKey, CONSOLIDATE_LOCK_BUSY),
+    xactLockGuardQuery(s, lockKey),
     s`
       UPDATE learner_profiles
       SET learner_persona = ${clamped},
@@ -752,7 +748,7 @@ export async function generateLearningPlan(
 
   const lockKey = learnerAdvisoryLockKey('plan-gen', learnerId);
   const persistQueries = [
-    xactLockGuardQuery(s, lockKey, PLAN_LOCK_BUSY),
+    xactLockGuardQuery(s, lockKey),
     s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`,
     s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`,
     s`
@@ -828,6 +824,23 @@ export async function applyPlanProfileUpdates(
       ? (updates.final_goal_date ?? null)
       : profile.final_goal_date;
 
+  if (subjectsOverride) {
+    await s`
+      UPDATE learner_profiles SET
+        goal = COALESCE(${updates.goal ?? null}, goal),
+        next_test_date = ${nextTestDate},
+        next_test_name = ${nextTestName},
+        final_goal_date = ${finalGoalDate},
+        hours_per_week = COALESCE(${updates.hours_per_week ?? null}, hours_per_week),
+        points_group = COALESCE(${pointsGroup}, points_group),
+        subjects = ${subjectsOverride},
+        personality_profile = ${JSON.stringify(personality)}::jsonb,
+        updated_at = NOW()
+      WHERE learner_id = ${learnerId}
+    `;
+    return;
+  }
+
   await s`
     UPDATE learner_profiles SET
       goal = COALESCE(${updates.goal ?? null}, goal),
@@ -836,10 +849,6 @@ export async function applyPlanProfileUpdates(
       final_goal_date = ${finalGoalDate},
       hours_per_week = COALESCE(${updates.hours_per_week ?? null}, hours_per_week),
       points_group = COALESCE(${pointsGroup}, points_group),
-      subjects = CASE
-        WHEN ${subjectsOverride}::text[] IS NULL THEN subjects
-        ELSE ${subjectsOverride}::text[]
-      END,
       personality_profile = ${JSON.stringify(personality)}::jsonb,
       updated_at = NOW()
     WHERE learner_id = ${learnerId}

@@ -115,4 +115,25 @@ describe('chat stream finalize (calc1 plan change template)', () => {
     expect(planPayloadNeedsClarification(payload)).toBe('math');
     expect(buildPlanClarificationNotice('he', 'math')).toContain('בגרות');
   });
+
+  it('accepts physics mechanics scope without extra clarification', () => {
+    const mechanics = buildPlanChangeRequest(
+      {
+        goal: 'פיזיקה בגרות מכניקה',
+        date: 'עוד שבוע',
+        notes: 'מוכן ללמוד כמה שצריך',
+      },
+      'he',
+    );
+    const meta = inferGoalMetaFromText(mechanics);
+    const payload = proposalToUpdatePayload({
+      reason: 'הכנה למבחן בפיזיקה מכניקה',
+      ...meta,
+      prepend_concepts: inferConceptIdsFromText(mechanics),
+    });
+
+    expect(payload.prepend_concepts?.length).toBeGreaterThan(0);
+    expect(planPayloadNeedsClarification(payload)).toBeNull();
+    expect(meta.hours_per_week).toBe(35);
+  });
 });

@@ -49,7 +49,9 @@ import {
   CHAT_BREVITY_RULE,
   CHAT_CONTEXT,
   CONVERSATION_ADVANCE_INSTRUCTION,
+  EXAM_ANXIETY_TURN_INSTRUCTION,
   EXAM_READINESS_TURN_INSTRUCTION,
+  STUDY_HOURS_INCREASE_INSTRUCTION,
   compactMemoryTurns,
   compactStoredTurnContent,
   fitSystemPrompt,
@@ -58,8 +60,10 @@ import {
   trimPersonaForChat,
   truncateChatText,
   wantsConversationAdvance,
+  wantsExamAnxietySupport,
   wantsExamReadinessAnswer,
   wantsLearningPlanSnapshot,
+  wantsStudyHoursIncrease,
 } from '@/lib/chat-context-policy';
 import { dreamLearnerMemory } from '@/lib/agent-memory-dream';
 import kg from '@/lib/kg-data.json';
@@ -177,27 +181,48 @@ export async function POST(req: Request) {
     })();
   }
 
-  const gen = streamAgentResponse(userId, lastMessage, agent, {
-    quickMode,
-    quickDuration,
-    topic,
-    locale,
-    sessionId,
-  });
+  const isPlanAgent = agent === 'tutor';
+  const templateOnlyPlan = isPlanAgent && shouldApplyPlanImmediately(lastMessage);
+  let eagerPlanPromise: Promise<PlanApplyResult | null> | null = null;
+  let planEagerResolved = false;
+  let streamDone = false;
+  let gen: ReturnType<typeof streamAgentResponse> | null = null;
+
+  const getGen = () => {
+    if (!gen) {
+      gen = streamAgentResponse(userId, lastMessage, agent, {
+        quickMode,
+        quickDuration,
+        topic,
+        locale,
+        sessionId,
+      });
+    }
+    return gen;
+  };
+
   const encoder = new TextEncoder();
   let assistantBuffer = '';
 
-  // Vercel AI SDK "data stream" protocol: every text token is emitted on its
-  // own line, prefixed by `0:` and JSON-stringified, terminated with `\n`.
-  // The final line is `d:{...}` for the finish message. This is the format
-  // useChat expects by default.
   const encodeToken = (text: string) => encoder.encode(`0:${JSON.stringify(text)}\n`);
   const encodeData = (data: unknown) => encoder.encode(`2:${JSON.stringify([data])}\n`);
   const encodeFinish = () =>
     encoder.encode(`d:${JSON.stringify({ finishReason: 'stop', usage: { promptTokens: 0, completionTokens: 0 } })}\n`);
 
-  const isPlanAgent = agent === 'tutor';
-  let eagerPlanPromise: Promise<PlanApplyResult | null> | null = null;
+  const finishTemplatePlanTurn = async (
+    controller: ReadableStreamDefaultController<Uint8Array>,
+    planResult: PlanApplyResult | null,
+  ) => {
+    if (planResult) appendPlanResult(controller, planResult);
+    const visible = stripPlanMachineTags(assistantBuffer).trim();
+    if (visible) {
+      await saveAssistantTurn(userId, agent, visible, sessionId, locale);
+      void maybeDreamLearnerNotes(userId, agent);
+    }
+    controller.enqueue(encodeFinish());
+    controller.close();
+    streamDone = true;
+  };
 
   const appendPlanResult = (
     controller: ReadableStreamDefaultController<Uint8Array>,
@@ -240,14 +265,25 @@ export async function POST(req: Request) {
     },
     async pull(controller) {
       try {
-      const { value, done } = await gen.next();
+        if (templateOnlyPlan && !planEagerResolved) {
+          planEagerResolved = true;
+          const planResult = eagerPlanPromise
+            ? await eagerPlanPromise
+            : await applyPlanFromUserMessage(userId, agent, lastMessage, locale);
+          await finishTemplatePlanTurn(controller, planResult);
+          return;
+        }
+        if (streamDone) return;
+
+        const { value, done } = await getGen().next();
         if (done) {
-          let planResult: PlanApplyResult | null = eagerPlanPromise
+          const planResult: PlanApplyResult | null = eagerPlanPromise
             ? await eagerPlanPromise
             : null;
+          const planEagerAttempted = eagerPlanPromise != null;
           const planAlreadyApplied = planResult?.applied === true;
 
-          if (planResult) {
+          if (planResult && planEagerAttempted) {
             appendPlanResult(controller, planResult);
           }
 
@@ -268,10 +304,10 @@ export async function POST(req: Request) {
                 }
               },
               planAlreadyApplied,
+              planEagerAttempted,
             );
-            if (!planResult && finalizeResult) {
+            if (!planEagerAttempted && finalizeResult) {
               appendPlanResult(controller, finalizeResult);
-              planResult = finalizeResult;
             }
           }
           controller.enqueue(encodeFinish());
@@ -298,8 +334,9 @@ export async function POST(req: Request) {
         const planResult: PlanApplyResult | null = eagerPlanPromise
           ? await eagerPlanPromise
           : null;
+        const planEagerAttempted = eagerPlanPromise != null;
         const planAlreadyApplied = planResult?.applied === true;
-        if (planResult) {
+        if (planResult && planEagerAttempted) {
           appendPlanResult(controller, planResult);
         }
         if (assistantBuffer) {
@@ -312,8 +349,9 @@ export async function POST(req: Request) {
             locale,
             undefined,
             planAlreadyApplied,
+            planEagerAttempted,
           );
-          if (!planResult && finalizeResult) {
+          if (!planEagerAttempted && finalizeResult) {
             appendPlanResult(controller, finalizeResult);
           }
         }
@@ -342,6 +380,7 @@ async function finalizeAssistantTurn(
   locale: 'he' | 'en' = 'he',
   onStatus?: (status: 'applying') => void,
   planAlreadyApplied = false,
+  planEagerAttempted = false,
 ): Promise<PlanApplyResult | null> {
   const visible = stripPlanMachineTags(assistantRaw);
   const isPlanAgent = agent === 'tutor';
@@ -351,7 +390,8 @@ async function finalizeAssistantTurn(
     return null;
   }
 
-  const applyNow = !planAlreadyApplied && shouldApplyPlanChange(userMessage);
+  const applyNow =
+    !planAlreadyApplied && !planEagerAttempted && shouldApplyPlanChange(userMessage);
 
   try {
     await saveProposalFromAssistantTurn(userId, agent, userMessage, assistantRaw);
@@ -400,7 +440,10 @@ async function finalizeAssistantTurn(
               result.clarificationReason ?? 'physics',
             )
           : buildPlanApplyFailureNotice(locale, result.error);
-      await saveAssistantTurn(userId, agent, `${visible}\n\n${failureNotice}`, sessionId, locale);
+      const saved = planEagerAttempted
+        ? visible
+        : `${visible}\n\n${failureNotice}`;
+      await saveAssistantTurn(userId, agent, saved, sessionId, locale);
       return { ...result, failureNotice };
     } catch (err) {
       logger.warn('chat: plan update threw', { err: String(err) });
@@ -754,6 +797,10 @@ async function buildContextPrompt(
     const recentForHeuristics = recent.map((t) => ({ role: t.role, content: t.content }));
     if (wantsConversationAdvance(message)) {
       context += `\n\n${CONVERSATION_ADVANCE_INSTRUCTION}`;
+    } else if (wantsStudyHoursIncrease(message)) {
+      context += `\n\n${STUDY_HOURS_INCREASE_INSTRUCTION}`;
+    } else if (wantsExamAnxietySupport(message)) {
+      context += `\n\n${EXAM_ANXIETY_TURN_INSTRUCTION}`;
     } else if (
       wantsExamReadinessAnswer(message) ||
       isReadinessFollowUp(message, recentForHeuristics)

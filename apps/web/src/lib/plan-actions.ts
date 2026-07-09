@@ -26,6 +26,7 @@ export interface PlanProposalPayload {
   next_test_name?: string | null;
   final_goal_date?: string | null;
   clear_next_test?: boolean;
+  hours_per_week?: number;
   priority_concepts?: string[];
   prepend_concepts?: string[];
   exclude_concepts?: string[];
@@ -38,6 +39,7 @@ export interface InferredGoalMeta {
   next_test_date?: string | null;
   next_test_name?: string | null;
   clear_next_test?: boolean;
+  hours_per_week?: number;
 }
 
 const PLAN_UPDATE_RE = /\[\[ASF_PLAN_UPDATE:(\{[\s\S]*?\})\]\]/g;
@@ -321,6 +323,20 @@ export function inferGoalMetaFromText(...texts: string[]): InferredGoalMeta {
     }
   }
 
+  const notesBlob = [templateFields?.notes, blob].filter(Boolean).join('\n');
+  const hoursPerDay = notesBlob.match(/(\d+)\s*שעות?\s*(?:ביום|לימוד\s*ביום|בכל\s*יום)/i);
+  if (hoursPerDay?.[1]) {
+    const daily = Number.parseInt(hoursPerDay[1], 10);
+    if (daily > 0 && daily <= 12) out.hours_per_week = daily * 7;
+  } else if (
+    /(?:יותר\s*מ[-\s]*\d+|כמה\s*שצריך|כול\s*מה\s*שצריך|מוכן\s*ללמוד\s*כמה|as\s*much\s*as)/i.test(
+      notesBlob,
+    ) &&
+    (/(?:עוד|בעוד)\s+שבוע/i.test(notesBlob) || out.final_goal_date)
+  ) {
+    out.hours_per_week = 35;
+  }
+
   const enGoal = blob.match(/new goal(?: is|:)\s*([^\n.]+)/i);
   if (enGoal?.[1] && !out.goal) out.goal = enGoal[1].trim();
 
@@ -456,6 +472,7 @@ export function proposalToUpdatePayload(
     next_test_name: proposal.clear_next_test ? null : proposal.next_test_name,
     final_goal_date: proposal.final_goal_date,
     clear_next_test: proposal.clear_next_test,
+    hours_per_week: proposal.hours_per_week,
     priority_concepts: proposal.priority_concepts,
     prepend_concepts: proposal.prepend_concepts,
     exclude_concepts: proposal.exclude_concepts,
@@ -534,7 +551,11 @@ export const CASUAL_PLAN_CHANGE_TURN_INSTRUCTION = `
 The learner asked to change their learning plan WITHOUT the official Tutor sidebar template.
 You MUST:
 1. NOT claim the plan was or will be updated from this chat message.
-2. NOT ask detailed exam-scope questions ([[אפשרויות]] lists, "general vs specific", etc.) as a substitute for a plan update.
-3. Tell them clearly: plan changes happen ONLY via **עדכון תוכנית לימוד** / **Learning plan update** in the Tutor chat sidebar (left). Fill goal + date, send that message alone.
-4. You may offer one sentence on how to fill the template; separate that from any teaching help.
+2. NOT ask exam-scope or goal-clarification questions as a substitute for a plan update.
+3. Tell them clearly: plan changes happen ONLY via **עדכון תוכנית לימוד** / **Learning plan update** in the Tutor chat sidebar (left). Fill goal + date + optional notes, send that message alone.
+4. Give a **copy-paste example** for their case when possible, e.g.:
+   - מטרה או מבחן: בגרות פיזיקה מכניקה (036-361)
+   - מועד: עוד שבוע
+   - הערות: מוכן ללמוד 5 שעות ביום — תכין תוכנית מלאה
+5. You may answer unrelated learning questions in the same reply — keep plan update steps separate and short.
 `.trim();
