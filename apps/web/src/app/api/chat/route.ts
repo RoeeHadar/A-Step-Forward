@@ -42,6 +42,7 @@ import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-change-template';
 import { resolveWebChatAgent } from '@/lib/web-agents';
+import { masterySignalInScope } from '@/lib/concept-scope';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
