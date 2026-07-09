@@ -22,8 +22,6 @@ import {
   shouldApplyPlanImmediately,
   stripPlanMachineTags,
   PLAN_AGENT_INSTRUCTIONS,
-  CASUAL_PLAN_CHANGE_TURN_INSTRUCTION,
-  learnerPlanChangeIntentHeuristic,
 } from '@/lib/plan-actions';
 import {
   applyPlanFromUserMessage,
@@ -48,23 +46,19 @@ import { buildChatFailureMessage } from '@/lib/learner-llm-errors';
 import {
   CHAT_BREVITY_RULE,
   CHAT_CONTEXT,
-  CONVERSATION_ADVANCE_INSTRUCTION,
-  EXAM_ANXIETY_TURN_INSTRUCTION,
-  EXAM_READINESS_TURN_INSTRUCTION,
-  STUDY_HOURS_INCREASE_INSTRUCTION,
   compactMemoryTurns,
   compactStoredTurnContent,
   fitSystemPrompt,
   formatPlanWeeksCompact,
-  isReadinessFollowUp,
   trimPersonaForChat,
   truncateChatText,
-  wantsConversationAdvance,
-  wantsExamAnxietySupport,
-  wantsExamReadinessAnswer,
-  wantsLearningPlanSnapshot,
-  wantsStudyHoursIncrease,
 } from '@/lib/chat-context-policy';
+import {
+  appendTutorContractToContext,
+  buildTutorInteractionContract,
+  classifyTutorChatIntent,
+  type TutorIntentContext,
+} from '@/lib/learner-chat-intent';
 import { dreamLearnerMemory } from '@/lib/agent-memory-dream';
 import kg from '@/lib/kg-data.json';
 import { buildCompactAgentBaseline } from '@/lib/agent-baseline';
@@ -553,10 +547,29 @@ async function buildContextPrompt(
   ]);
 
   const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+  const recentForIntent = recent.map((t) => ({ role: t.role, content: t.content }));
+
+  let tutorContract: ReturnType<typeof buildTutorInteractionContract> | null = null;
+  if (agent === 'tutor' && !minimal) {
+    const tutorMode =
+      (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
+    const intentCtx: TutorIntentContext = {
+      recentTurns: recentForIntent,
+      tutorModePreference: tutorMode === 'direct' ? 'direct' : 'socratic',
+      subjects: profile?.subjects,
+      goalKey:
+        (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ?? null,
+      hoursPerWeek: profile?.hours_per_week ?? null,
+    };
+    const intent = classifyTutorChatIntent(message, intentCtx);
+    tutorContract = buildTutorInteractionContract(intent, locale, intentCtx);
+  }
 
   let context = `${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`;
 
-  if (agent === 'tutor') {
+  if (agent === 'tutor' && tutorContract?.learnerPreferenceOverride) {
+    context = `${tutorContract.learnerPreferenceOverride}\n\n${context}`;
+  } else if (agent === 'tutor') {
     const tutorMode =
       (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
     const learnerPref =
@@ -647,7 +660,9 @@ async function buildContextPrompt(
     const plan = currentPlan;
     const normalizedMsg = normalizePlanChangeMessage(message);
     const needsPlanCatalog =
-      isPlanChangeTemplate(normalizedMsg) || shouldApplyPlanImmediately(message);
+      tutorContract?.injectPlanCatalog ||
+      isPlanChangeTemplate(normalizedMsg) ||
+      shouldApplyPlanImmediately(message);
 
     if (plan?.weeks?.length) {
       context += `\n\n## Current weekly learning plan`;
@@ -665,19 +680,11 @@ async function buildContextPrompt(
       context += `\n${buildPlanAllowlistBlock(profile.subjects ?? [])}`;
       context += `\n\n${PLAN_GROUNDING_RULES}`;
       context += `\n\n${PLAN_AGENT_INSTRUCTIONS}`;
-    } else if (!minimal) {
+    } else if (!minimal && agent === 'tutor' && tutorContract) {
+      context = appendTutorContractToContext(context, tutorContract);
+    } else if (!minimal && agent === 'mentor') {
       context += `\n\n## Plan guidance`;
-      if (wantsExamReadinessAnswer(message)) {
-        context += `\nGive a direct exam-readiness verdict from the plan (days left, hours/week, topics). No topic checklist.`;
-      } else {
-        context += `\nAnswer timeline/readiness from the plan above. Plan edits need the Tutor sidebar template.`;
-      }
-      if (
-        learnerPlanChangeIntentHeuristic(message) &&
-        !isPlanChangeTemplate(normalizedMsg)
-      ) {
-        context += `\n\n${CASUAL_PLAN_CHANGE_TURN_INSTRUCTION}`;
-      }
+      context += `\nAnswer timeline/readiness from the plan above. Plan edits need the Tutor sidebar template.`;
     }
   }
 
@@ -741,7 +748,7 @@ async function buildContextPrompt(
     }
 
     const needsPlanner =
-      wantsLearningPlanSnapshot(message) ||
+      tutorContract?.injectLearningPlanSnapshot ||
       Boolean(topic) ||
       agent === 'coach' ||
       agent === 'progress_analyzer';
@@ -792,23 +799,6 @@ async function buildContextPrompt(
   }
 
   context += `\n\n${CHAT_BREVITY_RULE}`;
-
-  if (!minimal && agent === 'tutor') {
-    const recentForHeuristics = recent.map((t) => ({ role: t.role, content: t.content }));
-    if (wantsConversationAdvance(message)) {
-      context += `\n\n${CONVERSATION_ADVANCE_INSTRUCTION}`;
-    } else if (wantsStudyHoursIncrease(message)) {
-      context += `\n\n${STUDY_HOURS_INCREASE_INSTRUCTION}`;
-    } else if (wantsExamAnxietySupport(message)) {
-      context += `\n\n${EXAM_ANXIETY_TURN_INSTRUCTION}`;
-    } else if (
-      wantsExamReadinessAnswer(message) ||
-      isReadinessFollowUp(message, recentForHeuristics)
-    ) {
-      context += `\n\n${EXAM_READINESS_TURN_INSTRUCTION}`;
-      context += `\nOverride Socratic mode for this turn: give a direct readiness answer, not a discovery checklist.`;
-    }
-  }
 
   const system = fitSystemPrompt(context);
   if (system.length > 14_000) {

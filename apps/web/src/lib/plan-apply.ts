@@ -25,6 +25,12 @@ import {
 } from '@/lib/plan-actions';
 import { isPlanChangeTemplate, planChangeTextForParsing } from '@/lib/plan-change-template';
 import {
+  enrichPlanPayloadFromLearnerContext,
+  planPayloadHasExamScope,
+  type LearnerPlanContext,
+} from '@/lib/plan-scope-enrichment';
+import { getLearnerProfile, getCurrentPlan } from '@/lib/neon-db';
+import {
   sanitizePlanUpdatePayload,
   type PlanUpdatePayload,
 } from '@/lib/plan-catalog';
@@ -106,29 +112,16 @@ const PHYSICS_SPECIFIC_RE =
 
 export type PlanClarificationReason = 'physics' | 'math';
 
-function hasFocusConcepts(payload: PlanUpdatePayload): boolean {
-  if (
-    (payload.prepend_concepts?.length ?? 0) > 0 ||
-    (payload.priority_concepts?.length ?? 0) > 0
-  ) {
-    return true;
-  }
-  const inferred = inferConceptIdsFromText(
-    payload.goal ?? '',
-    payload.next_test_name ?? '',
-    payload.reason ?? '',
-  );
-  return inferred.length > 0;
-}
-
 export function planPayloadNeedsClarification(
   payload: PlanUpdatePayload,
+  learnerCtx: LearnerPlanContext = {},
 ): PlanClarificationReason | null {
+  if (planPayloadHasExamScope(payload, learnerCtx)) return null;
+
   const text = [payload.goal, payload.next_test_name, payload.reason]
     .filter(Boolean)
     .join('\n');
   if (!text.trim()) return null;
-  if (hasFocusConcepts(payload)) return null;
 
   if (PHYSICS_GOAL_RE.test(text) && !PHYSICS_SPECIFIC_RE.test(text)) return 'physics';
   if (MATH_GENERIC_RE.test(text) && !MATH_SPECIFIC_RE.test(text)) return 'math';
@@ -418,7 +411,25 @@ export async function resolvePayloadForApply(
   await clearPendingPlanProposal(learnerId);
   const merged = mergeProposal(null, userMessage);
   if (!merged) return null;
-  return proposalToUpdatePayload(merged);
+  const raw = proposalToUpdatePayload(merged);
+
+  const [profile, currentPlan] = await Promise.all([
+    getLearnerProfile(learnerId).catch(() => null),
+    getCurrentPlan(learnerId).catch(() => null),
+  ]);
+  const learnerCtx: LearnerPlanContext = {
+    subjects: profile?.subjects,
+    goal_key:
+      (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ??
+      undefined,
+    points_group: profile?.points_group ?? null,
+    goal: profile?.goal ?? null,
+    planConceptIds:
+      currentPlan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
+    planGoal: currentPlan?.goal ?? null,
+  };
+
+  return enrichPlanPayloadFromLearnerContext(raw, learnerCtx);
 }
 
 /** Apply plan as soon as the learner sends a direct imperative (before tutor Q&A). */
@@ -438,7 +449,17 @@ export async function applyPlanFromUserMessage(
       failureNotice: buildPlanApplyFailureNotice(locale, 'missing_payload'),
     };
   }
-  const clarify = planPayloadNeedsClarification(payload);
+
+  const profile = await getLearnerProfile(learnerId).catch(() => null);
+  const learnerCtx: LearnerPlanContext = {
+    subjects: profile?.subjects,
+    goal_key:
+      (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ??
+      undefined,
+    points_group: profile?.points_group ?? null,
+    goal: profile?.goal ?? null,
+  };
+  const clarify = planPayloadNeedsClarification(payload, learnerCtx);
   if (clarify) {
     return {
       applied: false,
