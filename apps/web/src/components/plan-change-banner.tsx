@@ -1,11 +1,17 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, X } from 'lucide-react';
 import { Card, CardContent } from '@asf/ui/card';
+import { Button } from '@asf/ui/button';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
 import type { PlanChangeHistoryEntry } from '@/lib/neon-db';
 import { useLanguagePreference, type Lang } from '@/hooks/use-language-preference';
+
+function dismissedPlanChangeStorageKey(learnerId: string): string {
+  return `asf-plan-change-dismissed-${learnerId}`;
+}
 
 const STR = {
   he: {
@@ -17,6 +23,7 @@ const STR = {
     viewPlan: 'צפה בכל השבועות',
     futureNote:
       'שבועות עתידיים עשויים להשתנות בהתאם להתקדמות שלך במבחנים ובתרגילים.',
+    close: 'סגור הודעה',
   },
   en: {
     title: 'Your goal and plan were updated',
@@ -26,6 +33,7 @@ const STR = {
     weekLine: (n: number, names: string) => `Week ${n}: ${names}`,
     viewPlan: 'View full plan',
     futureNote: 'Future weeks may shift based on your quiz and practice performance.',
+    close: 'Dismiss plan update notice',
   },
 } as const;
 
@@ -38,23 +46,55 @@ function conceptNames(ids: string[], lang: Lang): string {
     .join(', ');
 }
 
-export function PlanChangeBanner({ change }: { change: PlanChangeHistoryEntry }) {
+export function PlanChangeBanner({
+  change,
+  learnerId,
+}: {
+  change: PlanChangeHistoryEntry;
+  learnerId: string;
+}) {
   const [lang] = useLanguagePreference('he');
   const t = STR[lang];
   const isHe = lang === 'he';
+  const [visible, setVisible] = useState(false);
   const changedAt = new Date(change.at);
   const isRecent =
     Number.isFinite(changedAt.getTime()) &&
     Date.now() - changedAt.getTime() < 7 * 24 * 60 * 60 * 1000;
 
-  if (!isRecent) return null;
+  useEffect(() => {
+    if (!isRecent) {
+      setVisible(false);
+      return;
+    }
+    const dismissedId = localStorage.getItem(dismissedPlanChangeStorageKey(learnerId));
+    setVisible(dismissedId !== change.id);
+  }, [change.id, isRecent, learnerId]);
+
+  function dismiss() {
+    localStorage.setItem(dismissedPlanChangeStorageKey(learnerId), change.id);
+    setVisible(false);
+  }
+
+  if (!visible) return null;
 
   return (
     <Card
-      className="mb-6 border-emerald-500/40 bg-emerald-500/5"
+      className="relative mb-6 border-emerald-500/40 bg-emerald-500/5"
       dir={isHe ? 'rtl' : 'ltr'}
+      role="status"
     >
-      <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="absolute end-2 top-2 h-8 w-8 text-muted-foreground hover:text-foreground"
+        onClick={dismiss}
+        aria-label={t.close}
+      >
+        <X className="h-4 w-4" aria-hidden />
+      </Button>
+      <CardContent className="flex flex-col gap-3 p-4 pe-12 sm:flex-row sm:items-start sm:justify-between sm:pe-4">
         <div className="flex gap-3">
           <CheckCircle2
             className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"

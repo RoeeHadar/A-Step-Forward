@@ -33,7 +33,9 @@ export default async function LearningPlanPage() {
 
   return (
     <div className="container max-w-5xl py-8">
-      {latestChange ? <PlanChangeBanner change={latestChange} /> : null}
+      {latestChange ? (
+        <PlanChangeBanner change={latestChange} learnerId={auth.learnerId} />
+      ) : null}
       <LearningPlanDashboard
         plan={plan}
         finalGoalDate={profile?.final_goal_date ?? null}

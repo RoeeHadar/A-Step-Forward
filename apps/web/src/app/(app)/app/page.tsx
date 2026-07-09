@@ -55,7 +55,9 @@ export default async function DashboardPage() {
   return (
     <>
       {goalStatus ? <GoalCompletionBanner status={goalStatus} /> : null}
-      {latestPlanChange ? <PlanChangeBanner change={latestPlanChange} /> : null}
+      {latestPlanChange ? (
+        <PlanChangeBanner change={latestPlanChange} learnerId={auth.learnerId} />
+      ) : null}
       <AgentsIntroBanner />
       <Suspense fallback={null}>
         <MicroWinToast />
