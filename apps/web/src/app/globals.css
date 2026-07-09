@@ -284,6 +284,102 @@
   animation-delay: 0.4s;
 }
 
+/* ── Signature brand motion: growth path + memory constellation + orbit ── */
+
+@keyframes path-draw {
+  from {
+    stroke-dashoffset: 320;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.growth-path-stroke {
+  stroke-dasharray: 320;
+  animation: path-draw 4s ease-out forwards;
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.growth-path-node {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: node-pulse 3s ease-in-out infinite;
+}
+
+.growth-path-node-ring {
+  fill: none;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: node-pulse 3s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes memory-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    r: inherit;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.memory-node {
+  animation: memory-pulse 4s ease-in-out infinite;
+}
+
+.memory-edge {
+  animation: memory-pulse 4s ease-in-out infinite;
+  opacity: 0.35;
+}
+
+@keyframes orbit-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, -6px);
+  }
+}
+
+.orbit-drift-a {
+  animation: orbit-drift 5s ease-in-out infinite;
+}
+.orbit-drift-b {
+  animation: orbit-drift 5.5s ease-in-out infinite;
+  animation-delay: -1.2s;
+}
+.orbit-drift-c {
+  animation: orbit-drift 6s ease-in-out infinite;
+  animation-delay: -2.4s;
+}
+.orbit-drift-d {
+  animation: orbit-drift 5.2s ease-in-out infinite;
+  animation-delay: -3.6s;
+}
+
+/* Bento card with agent-tinted hover glow — unique to agent surfaces */
+.agent-card {
+  transition: transform 300ms ease, border-color 300ms, box-shadow 300ms;
+}
+.agent-card:hover {
+  transform: translateY(-3px) scale(1.01);
+}
+
 /* KaTeX math must ALWAYS render left-to-right, even when the surrounding
    paragraph / lesson body is in Hebrew (dir="rtl"). Without these overrides
    the rtl context flips operands and breaks readability:

@@ -46,6 +46,18 @@ const messages = {
       demoUserMsg: 'What is a derivative?',
       demoTutorMsg:
         'Great question! Before I explain — what do you already know about rates of change? Can you think of a real-world example where something changes over time?',
+      demoMentorUserMsg: 'I keep procrastinating on math.',
+      demoMentorMsg:
+        'I remember you said mornings work best. Let us try a 15-minute block tomorrow before school — small enough that procrastination has no room to argue.',
+      demoCoachUserMsg: 'Drill me on quadratic factoring.',
+      demoCoachMsg:
+        'You mixed up signs on the last three — let us slow down. Try $x^2 - 5x + 6$. What two numbers multiply to 6 and add to −5?',
+      demoReviewerUserMsg: 'Can you review my proof?',
+      demoReviewerMsg:
+        'Your logic in step 2 is solid. The gap is you assumed continuity without citing it — one sentence there would make this airtight.',
+      uniqueHeading: 'What makes us different',
+      uniqueSubheading:
+        'Not another chatbot — a learning center with memory, paths, and a team that grows with you.',
       platformLabel: 'YOUR LEARNING PATH',
       platformHighlight: 'Diagnostic · Weekly plan · Mastery tracking',
       platformDesc:
@@ -318,6 +330,18 @@ const messages = {
       demoUserMsg: 'מה זה נגזרת?',
       demoTutorMsg:
         'שאלה מצוינת! לפני שאסביר — מה אתה כבר יודע על קצב שינוי? האם אתה יכול לחשוב על דוגמה מהחיים שבה משהו משתנה עם הזמן?',
+      demoMentorUserMsg: 'אני דוחה מתמטיקה שוב ושוב.',
+      demoMentorMsg:
+        'אני זוכר שאמרת שבוקר עובד לך הכי טוב. בוא ננסה מחר 15 דקות לפני בית הספר — קטן מספיק כדי שדחיינות לא תתנגד.',
+      demoCoachUserMsg: 'תרגל אותי על פירוק לגורמים.',
+      demoCoachMsg:
+        'ערבבת סימנים בשלוש האחרונות — בוא נאט. נסה $x^2 - 5x + 6$. אילו שני מספרים מכפלתם 6 וסכומם −5?',
+      demoReviewerUserMsg: 'תוכל לבדוק את ההוכחה שלי?',
+      demoReviewerMsg:
+        'ההיגיון בשלב 2 מוצק. החסר הוא שהנחת רציפות בלי לצטט — משפט אחד שם יהפוך את זה לחסין.',
+      uniqueHeading: 'מה מייחד אותנו',
+      uniqueSubheading:
+        'לא עוד צ׳אטבוט — מרכז למידה עם זיכרון, מסלולים וצוות שגדל איתך.',
       platformLabel: 'מסלול הלמידה שלך',
       platformHighlight: 'אבחון · תוכנית שבועית · מעקב שליטה',
       platformDesc:

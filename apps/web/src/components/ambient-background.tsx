@@ -1,10 +1,12 @@
 import { cn } from '@asf/ui';
+import { GrowthPathMotif } from '@/components/growth-path-motif';
+import { MemoryConstellation } from '@/components/memory-constellation';
 
 /**
- * Subtle ambient canvas — soft, warm natural light washes + a faint masked
- * dot grid — that gives inner pages gentle depth without competing with
- * content. Purely decorative; sits behind content via a negative z-index. The
- * parent must be `relative` (and ideally `isolate`) for the layering to work.
+ * Subtle ambient canvas — soft, warm natural light washes + signature brand
+ * motifs (growth path + memory constellation) + a faint masked dot grid.
+ * Purely decorative; sits behind content via a negative z-index. The parent
+ * must be `relative` (and ideally `isolate`) for the layering to work.
  *
  * Use `variant="hero"` for focal, above-the-fold moments and the default
  * `"subtle"` for everyday app/content pages.
@@ -46,6 +48,20 @@ export function AmbientBackground({
           style={{ animationDelay: '-14s' }}
         />
       ) : null}
+      <GrowthPathMotif
+        variant="subtle"
+        className={cn(
+          'absolute opacity-60',
+          hero ? '-bottom-6 end-8 h-20 w-36' : '-bottom-4 end-4 h-14 w-28',
+        )}
+      />
+      <MemoryConstellation
+        variant="subtle"
+        className={cn(
+          'absolute opacity-50',
+          hero ? 'start-6 top-16 h-16 w-28' : 'start-4 top-12 h-12 w-24',
+        )}
+      />
       <div className="bg-dot-grid absolute inset-0 opacity-30 dark:opacity-40" />
     </div>
   );
