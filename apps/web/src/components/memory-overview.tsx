@@ -22,14 +22,7 @@ import { subjectLabel } from '@/lib/subject-labels';
 import type { LearnerMemorySnapshot, LearnerMemoryNote } from '@/lib/neon-db';
 import { useI18n } from '@/providers/i18n-provider';
 
-const AGENT_ORDER = [
-  'tutor',
-  'mentor',
-  'coach',
-  'reviewer',
-  'qa_explainer',
-  'note_taker',
-] as const;
+const AGENT_ORDER = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
 
 function formatDate(iso: string | null, locale: 'he' | 'en'): string {
   if (!iso) return '';

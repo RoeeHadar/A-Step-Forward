@@ -20,14 +20,7 @@ import { PersonaEditor } from '@/components/persona-editor';
 
 export const dynamic = 'force-dynamic';
 
-const AGENT_NAMES = [
-  'tutor',
-  'mentor',
-  'coach',
-  'reviewer',
-  'qa_explainer',
-  'note_taker',
-] as const;
+const AGENT_NAMES = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
 
 export default async function PersonaSettingsPage() {
   const { userId } = await auth();

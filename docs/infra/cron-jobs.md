@@ -1,52 +1,48 @@
-# Cron jobs (GitHub Actions)
+# Cron jobs
 
-Background memory hygiene jobs run on GitHub Actions schedules instead of Render/Fly Celery beat (workers on paid plans only). Each workflow can also be triggered manually.
+Background memory hygiene runs on **Vercel** (primary for the web app) with **GitHub Actions** backstops for manual triggers.
 
-## Workflows
+## Vercel schedules (`apps/web/vercel.json`)
 
-| Workflow | File | Schedule (UTC) | Command |
-| --- | --- | --- | --- |
-| Dreaming (Memory Steward) | `.github/workflows/cron-dreaming.yml` | Daily **03:00** | `python -m workers.jobs.dreaming` |
-| Decay sweep | `.github/workflows/cron-decay.yml` | Weekly **Sun 04:00** | `python -m workers.jobs.decay` |
+| Endpoint | Schedule (UTC) | Purpose |
+| --- | --- | --- |
+| `GET /api/cron/dream-memory?limit=50` | Monday **00:00** | Lightweight note dedupe/cap per learner (no LLM) |
+| `GET /api/cron/consolidate-memory?limit=25` | Monday **02:00** | Heavy LLM persona consolidation sweep |
 
-Both workflows expose **`workflow_dispatch`** for on-demand runs from the GitHub Actions UI.
+Both routes require `CRON_SECRET` via `Authorization: Bearer` (Vercel cron) or `x-cron-secret`.
 
-## Required GitHub secrets
+## GitHub Actions backstops
 
-Configure these in the repository (or sync from Doppler):
+| Workflow | File | Trigger |
+| --- | --- | --- |
+| Dream sweep (manual) | `.github/workflows/cron-dream-memory.yml` | `workflow_dispatch` → calls live `WEB_BASE_URL` |
+| Consolidate (manual) | `.github/workflows/cron-consolidate-memory.yml` | `workflow_dispatch` (if present) |
+| Dreaming (Python worker) | `.github/workflows/cron-dreaming.yml` | Daily 03:00 UTC — Render/worker path |
+| Decay sweep | `.github/workflows/cron-decay.yml` | Weekly Sun 04:00 UTC |
 
-| Secret | Purpose |
-| --- | --- |
-| `DATABASE_URL` | Postgres connection string (`postgresql+asyncpg://…`) |
-| `REDIS_URL` | Redis for caching / broker (future Celery parity) |
-| `NEO4J_URI` | AuraDB / Neo4j bolt URI for KG projection |
-| `NEO4J_PASSWORD` | Neo4j credentials |
-| `GROQ_API_KEY` | LLM calls during dreaming (when Phase-2 pipeline is wired) |
+## Required secrets
 
-Never commit secret values. Workflows reference `${{ secrets.* }}` only.
+| Secret | Where | Purpose |
+| --- | --- | --- |
+| `CRON_SECRET` | Vercel + GitHub | Auth for `/api/cron/*` on the Next.js app |
+| `DATABASE_URL` | Vercel + GitHub | Neon Postgres |
+| `GROQ_API_KEY` | Vercel | LLM for consolidation + chat |
+| `WEB_BASE_URL` | GitHub | Production URL for manual cron backstop (`https://a-step-forward-waij.vercel.app`) |
 
-## Manual trigger
+Wire Vercel env (including `CRON_SECRET`) via:
 
-1. Open **Actions** in GitHub.
-2. Select **Cron — Dreaming (nightly)** or **Cron — Decay sweep (weekly)**.
-3. Click **Run workflow** → choose branch (`main`) → **Run workflow**.
+```pwsh
+gh workflow run wire-vercel-env.yml
+```
+
+Never commit secret values.
 
 ## Local dry-run
 
-Jobs default to **dry-run** when `DATABASE_URL` is unset, or when `--dry-run` is passed. No database writes occur in dry-run mode.
+Dream/consolidate cron handlers return `401` without `CRON_SECRET`. Set it in `apps/web/.env.local` and call:
 
 ```bash
-# From repo root after editable installs:
-pip install -e packages/schemas -e services/memory -e services/graphrag -e services/workers
-
-python -m workers.jobs.dreaming --dry-run
-python -m workers.jobs.decay --dry-run
+curl -H "x-cron-secret: $CRON_SECRET" "http://localhost:3000/api/cron/dream-memory?limit=5"
 ```
 
-With `DATABASE_URL` set, omit `--dry-run` to execute against the configured database.
-
-## Operational notes
-
-- Dreaming fans out `dream_now` per active learner (Phase-0 stub returns 0 learners until the learners table query is implemented).
-- Decay runs `decay_sweep(learner_id=None)` across all stored memories.
-- Celery beat schedule in `services/workers/workers/celery_app.py` remains the reference schedule for Fly worker deployments; GitHub cron is the production path until workers are on a paid Fly plan.
+Python worker jobs (`workers.jobs.dreaming`, `workers.jobs.decay`) still support `--dry-run` when `DATABASE_URL` is unset — see legacy notes in repo `services/workers/`.

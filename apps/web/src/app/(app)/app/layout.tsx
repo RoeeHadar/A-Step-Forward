@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getAuthContext } from '@/lib/auth';
+import { ensureOnboarded } from '@/lib/onboarding-gate';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { AmbientBackground } from '@/components/ambient-background';
@@ -12,6 +13,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect('/sign-in');
   }
   if (!auth) redirect('/sign-in');
+
+  await ensureOnboarded(auth.learnerId, '/app');
 
   return (
     <div className="flex min-h-screen flex-col">

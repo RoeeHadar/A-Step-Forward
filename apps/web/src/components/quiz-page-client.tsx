@@ -429,56 +429,95 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
     return null;
   }
 
-  async function submitQuiz() {
-    if (!envelope) return;
-    setSubmitting(true);
-    const perConcept: Record<string, { correct: number; total: number }> = {};
+  const displayResults = useMemo(() => {
+    if (!envelope || !results) return results;
     let correctCount = 0;
+    const perConcept: Record<string, { correct: number; total: number }> = {};
     for (let i = 0; i < envelope.questions.length; i += 1) {
       const q = envelope.questions[i];
       if (!q) continue;
       const a = answers[i] ?? {};
       const graded = gradeOne(q, a);
-      const isCorrect = graded === true;
-      if (isCorrect) correctCount += 1;
+      if (graded === true) correctCount += 1;
       const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
       bucket.total += 1;
-      if (isCorrect) bucket.correct += 1;
-      // Build the combined written answer for mastery tracking
-      const writtenAnswer =
-        q.parts && q.parts.length > 0 && a.parts
-          ? q.parts.map((p) => `${p.label}: ${a.parts?.[p.label] ?? ''}`).join('\n')
-          : (a.text ?? '');
-      try {
+      if (graded === true) bucket.correct += 1;
+    }
+    return { ...results, correctCount, perConcept };
+  }, [envelope, answers, results]);
+
+  async function submitQuiz() {
+    if (!envelope) return;
+    setSubmitting(true);
+    try {
+      const perConcept: Record<string, { correct: number; total: number }> = {};
+      let correctCount = 0;
+      const syncPayloads: Array<{
+        concept_id: string;
+        correct: boolean;
+        skill_atoms: string[];
+        user_answer: string;
+        kind: string;
+      }> = [];
+
+      for (let i = 0; i < envelope.questions.length; i += 1) {
+        const q = envelope.questions[i];
+        if (!q) continue;
+        const a = answers[i] ?? {};
+        const graded = gradeOne(q, a);
+        const isCorrect = graded === true;
+        if (isCorrect) correctCount += 1;
+        const bucket = (perConcept[q.concept_id] ??= { correct: 0, total: 0 });
+        bucket.total += 1;
+        if (isCorrect) bucket.correct += 1;
+
+        const writtenAnswer =
+          q.parts && q.parts.length > 0 && a.parts
+            ? q.parts.map((p) => `${p.label}: ${a.parts?.[p.label] ?? ''}`).join('\n')
+            : (a.text ?? '');
+
         if (graded != null || writtenAnswer.trim()) {
-          await fetch('/api/lesson/answer', {
+          syncPayloads.push({
+            concept_id: q.concept_id,
+            correct: isCorrect,
+            skill_atoms: q.skill_atoms ?? [],
+            user_answer: writtenAnswer,
+            kind: q.kind,
+          });
+        }
+      }
+
+      const secondsUsed = startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0;
+      setResults({
+        correctCount,
+        total: envelope.questions.length,
+        perConcept,
+        secondsUsed,
+      });
+      setPhase('results');
+
+      // Mastery sync is best-effort and must not block the results screen.
+      void Promise.allSettled(
+        syncPayloads.map((item) =>
+          fetch('/api/lesson/answer', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
               lesson_id: envelope.quiz_id,
-              question_id: `${envelope.quiz_id}:${q.ord}`,
-              concept_id: q.concept_id,
-              correct: isCorrect,
-              skill_atoms: q.skill_atoms ?? [],
-              user_answer: writtenAnswer,
-              kind: q.kind,
+              question_id: `${envelope.quiz_id}:${item.concept_id}`,
+              concept_id: item.concept_id,
+              correct: item.correct,
+              skill_atoms: item.skill_atoms,
+              user_answer: item.user_answer,
+              kind: item.kind,
               ephemeral: true,
             }),
-          });
-        }
-      } catch {
-        // ignore — UI still shows results
-      }
+          }),
+        ),
+      );
+    } finally {
+      setSubmitting(false);
     }
-    const secondsUsed = startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0;
-    setResults({
-      correctCount,
-      total: envelope.questions.length,
-      perConcept,
-      secondsUsed,
-    });
-    setPhase('results');
-    setSubmitting(false);
   }
 
   function resetToBuilder() {
@@ -857,7 +896,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
   }
 
   // ---------- results ------------------------------------------------------
-  if (phase === 'results' && envelope && results) {
+  if (phase === 'results' && envelope && displayResults) {
     return (
       <div className="mx-auto max-w-3xl" dir={dir}>
         <header className="mb-6">
@@ -866,8 +905,8 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
 
         <section className="card-punch mb-6 rounded-2xl p-6">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            <Stat label={t.resultsScore} value={`${results.correctCount}/${results.total}`} />
-            <Stat label={t.resultsTime} value={fmtT(results.secondsUsed)} />
+            <Stat label={t.resultsScore} value={`${displayResults.correctCount}/${displayResults.total}`} />
+            <Stat label={t.resultsTime} value={fmtT(displayResults.secondsUsed)} />
           </div>
         </section>
 
@@ -877,7 +916,7 @@ export function QuizPageClient({ topics }: { topics: TopicOption[] }) {
           </h2>
           <ul className="mt-3 space-y-2">
             {envelope.concepts.map((c) => {
-              const bucket = results.perConcept[c.id];
+              const bucket = displayResults.perConcept[c.id];
               if (!bucket) return null;
               const pct = bucket.total > 0 ? Math.round((bucket.correct / bucket.total) * 100) : 0;
               const name = isHe && c.name_he ? c.name_he : c.name;

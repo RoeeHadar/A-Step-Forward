@@ -41,7 +41,7 @@ import { buildAgentBaseline } from '@/lib/agent-baseline';
 import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-change-template';
-import { masterySignalInScope } from '@/lib/concept-scope';
+import { resolveWebChatAgent } from '@/lib/web-agents';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
   const rawLastMessage = body.messages?.filter((m) => m.role === 'user').at(-1)?.content ?? '';
   const lastMessage = normalizePlanChangeMessage(rawLastMessage);
   const parsedAgent = agentNameSchema.safeParse(body.agent);
-  const agent = parsedAgent.success ? parsedAgent.data : 'tutor';
+  const agent = resolveWebChatAgent(parsedAgent.success ? parsedAgent.data : 'tutor');
   const quickMode = body.quickMode === true;
   const quickDuration = body.quickDuration ?? '15';
   const sessionId = body.sessionId?.trim() || undefined;
@@ -579,7 +579,7 @@ async function buildContextPrompt(
     // Inject agent_hints from the matching AI-authored lessons so the Tutor
     // can ground its reply in the canonical key insights, pacing hints, and
     // common-misconception triggers we authored per concept.
-    if (agent === 'tutor' || agent === 'coach' || agent === 'qa_explainer') {
+    if (agent === 'tutor' || agent === 'coach') {
       const hintsRows = await fetchLessonAgentHintsByConceptIds(related.map((c) => c.id)).catch(
         () => [] as Awaited<ReturnType<typeof fetchLessonAgentHintsByConceptIds>>,
       );
@@ -636,7 +636,6 @@ async function buildContextPrompt(
     if (
       agent === 'tutor' ||
       agent === 'coach' ||
-      agent === 'qa_explainer' ||
       agent === 'curriculum_designer' ||
       agent === 'progress_analyzer'
     ) {
@@ -739,8 +738,6 @@ function friendlyFallback(message: string, agent: string): string {
     mentor: "I'm your Mentor.",
     coach: "I'm your Coach.",
     reviewer: "I'm your Reviewer.",
-    qa_explainer: "I'm your Q&A explainer.",
-    note_taker: "I'm your Note-taker.",
   };
   const head = heads[agent] ?? "I'm your assistant.";
   return [

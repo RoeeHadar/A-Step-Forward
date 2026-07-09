@@ -1,32 +1,28 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { AgentChat } from '@/components/agent-chat';
-import { agentDisplayNames, agentNameSchema, type AgentName } from '@asf/schemas/agents';
+import { agentNameSchema, type AgentName } from '@asf/schemas/agents';
 import { cn } from '@asf/ui';
 import { agentAccentVars } from '@/lib/design-tokens';
-
-const LEARNER_AGENTS: AgentName[] = [
-  'tutor',
-  'mentor',
-  'coach',
-  'reviewer',
-  'qa_explainer',
-  'note_taker',
-];
-
-const AGENT_NAMES_HE: Partial<Record<AgentName, string>> = {
-  tutor: 'מורה',
-  mentor: 'מנטור',
-  coach: 'מאמן',
-  reviewer: 'מבקר',
-  qa_explainer: 'שאלות ותשובות',
-  note_taker: 'רושם הערות',
-};
+import {
+  WEB_LIVE_AGENTS,
+  WEB_LIVE_AGENT_NAMES,
+  isDeprecatedChatAgent,
+  resolveWebChatAgent,
+  type WebLiveAgent,
+} from '@/lib/web-agents';
 
 export default async function ChatPage({ params }: { params: Promise<{ agent: string }> }) {
   const { agent } = await params;
   const parsed = agentNameSchema.safeParse(agent);
-  const activeAgent: AgentName = parsed.success ? parsed.data : 'tutor';
+  const slug: AgentName = parsed.success ? parsed.data : 'tutor';
+
+  if (isDeprecatedChatAgent(slug)) {
+    redirect('/app/chat/tutor');
+  }
+
+  const activeAgent: WebLiveAgent = resolveWebChatAgent(slug);
 
   const cookieStore = await cookies();
   const isHe = (cookieStore.get('asf-locale')?.value ?? 'he') !== 'en';
@@ -36,9 +32,8 @@ export default async function ChatPage({ params }: { params: Promise<{ agent: st
       className="agent-accent-context flex flex-col gap-4"
       style={agentAccentVars(activeAgent)}
     >
-      {/* Agent switcher */}
       <nav className="flex flex-wrap gap-2" aria-label={isHe ? 'בחר סוכן AI' : 'Switch AI agent'}>
-        {LEARNER_AGENTS.map((name) => (
+        {WEB_LIVE_AGENTS.map((name) => (
           <Link
             key={name}
             href={`/app/chat/${name}`}
@@ -51,7 +46,7 @@ export default async function ChatPage({ params }: { params: Promise<{ agent: st
             )}
             aria-current={name === activeAgent ? 'page' : undefined}
           >
-            {isHe ? (AGENT_NAMES_HE[name] ?? agentDisplayNames[name]) : agentDisplayNames[name]}
+            {WEB_LIVE_AGENT_NAMES[name][isHe ? 'he' : 'en']}
           </Link>
         ))}
       </nav>

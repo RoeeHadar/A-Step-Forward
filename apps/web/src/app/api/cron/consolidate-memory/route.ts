@@ -14,7 +14,8 @@
  *              endpoint is safe to call multiple times back-to-back since
  *              it's a "needs consolidation" workqueue.
  *
- * Schedule (see apps/web/vercel.json `crons[]`): weekly, Sunday 03:00 UTC.
+ * Schedule (see apps/web/vercel.json `crons[]`): weekly, Monday 02:00 UTC
+ * (after the lightweight dream pass at Monday 00:00 UTC).
  */
 import {
   consolidateLearnerMemory,

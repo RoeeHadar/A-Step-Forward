@@ -49,11 +49,11 @@ export const learnerFacingAgents: AgentName[] = [
   'tutor',
   'mentor',
   'coach',
-  'qa_explainer',
   'reviewer',
-  'note_taker',
-  'accessibility',
 ];
+
+/** The four agents with live chat on the public website. */
+export const webLiveAgents: AgentName[] = [...learnerFacingAgents];
 
 export const agentDisplayNames: Record<AgentName, string> = {
   tutor: 'Tutor',

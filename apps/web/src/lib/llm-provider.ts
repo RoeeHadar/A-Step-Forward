@@ -44,9 +44,14 @@ export interface LLMCompletionResult {
 }
 
 const DEFAULT_GROQ_BASE = 'https://api.groq.com/openai/v1';
-const DEFAULT_PRIMARY = 'llama-3.3-70b-versatile';
+/** Volume-first primary (14.4K RPD on Groq free tier). */
+const DEFAULT_PRIMARY = 'llama-3.1-8b-instant';
 const DEFAULT_CHEAP = 'llama-3.1-8b-instant';
-const DEFAULT_EXTRA_PRIMARY = ['gemma2-9b-it'];
+/** Quality uplift when primary struggles or for fallback chain. */
+const DEFAULT_EXTRA_PRIMARY = [
+  'meta-llama/llama-4-scout-17b-16e-instruct',
+  'llama-3.3-70b-versatile',
+];
 
 function trimSlash(url: string): string {
   return url.replace(/\/+$/, '');
