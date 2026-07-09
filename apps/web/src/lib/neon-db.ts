@@ -1773,6 +1773,30 @@ export async function recordLessonAnswer(args: {
     VALUES (gen_random_uuid(), ${lessonId}::uuid, 'lesson', ${questionId}::uuid, '', ${correct}, NOW())
   `;
 
+  await applyPracticeMasteryUpdate(learnerId, conceptId, correct, skillAtoms);
+}
+
+/**
+ * Record mastery + skill_practice from an ephemeral custom quiz item.
+ * Skips lesson_questions lookup and quiz_responses (no durable question row).
+ */
+export async function recordCustomQuizPractice(args: {
+  learnerId: string;
+  conceptId: string;
+  correct: boolean;
+  skillAtoms: string[];
+}): Promise<void> {
+  const { learnerId, conceptId, correct, skillAtoms } = args;
+  await applyPracticeMasteryUpdate(learnerId, conceptId, correct, skillAtoms);
+}
+
+async function applyPracticeMasteryUpdate(
+  learnerId: string,
+  conceptId: string,
+  correct: boolean,
+  skillAtoms: string[],
+): Promise<void> {
+  const s = requireSql();
   const newScore = correct ? 0.75 : 0.35;
   await s`
     INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
@@ -2812,14 +2836,7 @@ export interface LearnerMemorySnapshot {
   activeWeekConceptIds: string[];
 }
 
-const MEMORY_TAB_AGENTS = [
-  'tutor',
-  'mentor',
-  'coach',
-  'reviewer',
-  'qa_explainer',
-  'note_taker',
-] as const;
+const MEMORY_TAB_AGENTS = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
 
 function emptyMemorySnapshot(): LearnerMemorySnapshot {
   const notesByAgent: Record<string, LearnerMemoryNote[]> = {};

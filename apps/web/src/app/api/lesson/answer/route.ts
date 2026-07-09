@@ -4,6 +4,7 @@ import {
   dbConfigured,
   fetchLessonQuestionForGrading,
   gradeLessonAnswer,
+  recordCustomQuizPractice,
   recordLessonAnswer,
 } from '@/lib/neon-db';
 
@@ -20,6 +21,8 @@ interface Body {
   time_spent_s?: number;
   /** Structured payload of what the learner submitted (per-kind shape). */
   user_answer?: unknown;
+  /** Ephemeral custom-quiz item — skip lesson_questions lookup; update mastery only. */
+  ephemeral?: boolean;
 }
 
 export async function POST(req: Request) {
@@ -36,21 +39,41 @@ export async function POST(req: Request) {
     return Response.json({ error: 'invalid json' }, { status: 400 });
   }
 
-  const { lesson_id, question_id, concept_id } = body;
-  if (
-    typeof lesson_id !== 'string' ||
-    typeof question_id !== 'string' ||
-    typeof concept_id !== 'string'
-  ) {
-    return Response.json(
-      { error: 'lesson_id, question_id, concept_id required' },
-      { status: 400 },
-    );
+  const conceptId = body.concept_id;
+  if (typeof conceptId !== 'string' || !conceptId.trim()) {
+    return Response.json({ error: 'concept_id required' }, { status: 400 });
   }
 
   const skillAtoms = Array.isArray(body.skill_atoms)
     ? body.skill_atoms.filter((s): s is string => typeof s === 'string')
     : [];
+
+  // Ephemeral custom-quiz path: client grades locally; server updates mastery only.
+  if (body.ephemeral === true) {
+    const correct = body.correct === true;
+    try {
+      await recordCustomQuizPractice({
+        learnerId: userId,
+        conceptId,
+        correct,
+        skillAtoms,
+      });
+      return Response.json({ ok: true, correct, graded_by: 'client' });
+    } catch (err) {
+      return Response.json(
+        { error: 'failed to record', detail: err instanceof Error ? err.message : String(err) },
+        { status: 500 },
+      );
+    }
+  }
+
+  const { lesson_id, question_id } = body;
+  if (typeof lesson_id !== 'string' || typeof question_id !== 'string') {
+    return Response.json(
+      { error: 'lesson_id, question_id, concept_id required' },
+      { status: 400 },
+    );
+  }
 
   // Server-side grading. Load the question, recompute correctness from the
   // user's structured answer; never trust the client's `correct` flag for
@@ -66,7 +89,7 @@ export async function POST(req: Request) {
       learnerId: userId,
       lessonId: lesson_id,
       questionId: question_id,
-      conceptId: concept_id,
+      conceptId,
       correct: graded.correct,
       skillAtoms,
       timeSpentS: typeof body.time_spent_s === 'number' ? body.time_spent_s : null,

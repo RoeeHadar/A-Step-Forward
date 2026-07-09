@@ -16,7 +16,11 @@ import { randomUUID } from 'node:crypto';
 import { getConceptMastery, getLearnerProfile } from './neon-db';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
-import type { QuizStartResponse, QuizQuestion } from '@asf/schemas/learning_path';
+import type {
+  QuizStartResponse,
+  QuizQuestion,
+  QuizSubmitResponse,
+} from '@asf/schemas/learning_path';
 import { sanitizeConceptIds } from '@/lib/plan-catalog';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
 
@@ -24,6 +28,14 @@ neonConfig.fetchConnectionCache = true;
 
 const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? '';
 const sql = url ? neon(url) : null;
+
+const ADAPT_WEAK_THRESHOLD = 0.4;
+
+export interface WeeklyQuizAnswer {
+  item_id: string;
+  chosen: string;
+  time_spent_s?: number | null;
+}
 
 interface KgConcept {
   id: string;
@@ -322,6 +334,161 @@ export async function generateWeeklyQuizForUser(
   }
 
   return buildClientResponse(quizId, planId, weekNum, generated, weekStartStr);
+}
+
+// ── Grading (pure — unit-tested) ─────────────────────────────────────────────
+
+export function scoreWeeklyQuizAnswers(
+  storedQuestions: StoredWeeklyQuestion[],
+  answers: WeeklyQuizAnswer[],
+): { score: number; per_topic: Record<string, number>; weak_concepts: string[] } {
+  const answerMap = new Map(
+    answers.map((a) => [a.item_id, a.chosen.trim().toUpperCase()]),
+  );
+  const topicCorrect: Record<string, number> = {};
+  const topicTotal: Record<string, number> = {};
+
+  for (const item of storedQuestions) {
+    topicTotal[item.topic] = (topicTotal[item.topic] ?? 0) + 1;
+    const chosen = answerMap.get(item.id) ?? '';
+    if (chosen && chosen === item.correct.toUpperCase()) {
+      topicCorrect[item.topic] = (topicCorrect[item.topic] ?? 0) + 1;
+    }
+  }
+
+  const per_topic: Record<string, number> = {};
+  for (const [topic, total] of Object.entries(topicTotal)) {
+    const correct = topicCorrect[topic] ?? 0;
+    per_topic[topic] = total > 0 ? Math.round((correct / total) * 10_000) / 10_000 : 0;
+  }
+
+  const correctTotal = Object.values(topicCorrect).reduce((sum, n) => sum + n, 0);
+  const score =
+    storedQuestions.length > 0
+      ? Math.round((correctTotal / storedQuestions.length) * 10_000) / 10_000
+      : 0;
+  const weak_concepts = Object.entries(per_topic)
+    .filter(([, s]) => s < ADAPT_WEAK_THRESHOLD)
+    .map(([topic]) => topic);
+
+  return { score, per_topic, weak_concepts };
+}
+
+async function ensureWeeklyQuizSubmitColumns(): Promise<void> {
+  if (!sql) return;
+  try {
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS submitted_at TIMESTAMPTZ`;
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS score DOUBLE PRECISION`;
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS per_topic JSONB`;
+  } catch {
+    // Concurrent DDL — reads/writes may still work.
+  }
+}
+
+async function updateTopicMasteryFromQuiz(
+  learnerId: string,
+  conceptId: string,
+  topicScore: number,
+): Promise<void> {
+  if (!sql) return;
+  await sql`
+    INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
+    VALUES (${learnerId}, ${conceptId}, ${topicScore}, 1, NOW(), NOW())
+    ON CONFLICT (learner_id, concept_id) DO UPDATE SET
+      score = EXCLUDED.score,
+      last_activity = NOW()
+  `;
+}
+
+/**
+ * Grades a cached weekly quiz on Neon (no Render). Idempotent when already submitted.
+ */
+export async function submitWeeklyQuizForUser(
+  userId: string,
+  quizId: string,
+  args: {
+    planId: string;
+    weekNum: number;
+    answers: WeeklyQuizAnswer[];
+  },
+): Promise<QuizSubmitResponse | null> {
+  if (!sql) return null;
+  await ensureWeeklyQuizSubmitColumns();
+
+  type QuizRow = {
+    id: string;
+    questions: StoredWeeklyQuestion[];
+    submitted_at: string | null;
+    score: number | null;
+    per_topic: Record<string, number> | null;
+    plan_id: string | null;
+    week_num: number | null;
+  };
+
+  let row: QuizRow | null = null;
+  try {
+    const rows = (await sql`
+      SELECT id::text, questions, submitted_at, score, per_topic, plan_id, week_num
+      FROM weekly_quizzes_ai
+      WHERE id = ${quizId}::uuid
+        AND user_id = ${userId}
+      LIMIT 1
+    `) as QuizRow[];
+    row = rows[0] ?? null;
+  } catch {
+    return null;
+  }
+
+  if (!row) return null;
+
+  if (row.submitted_at != null && row.score != null) {
+    const perTopic = row.per_topic ?? {};
+    return {
+      quiz_id: quizId,
+      score: row.score,
+      per_topic: perTopic,
+      weak_concepts: Object.entries(perTopic)
+        .filter(([, s]) => s < ADAPT_WEAK_THRESHOLD)
+        .map(([topic]) => topic),
+      plan_adapted: false,
+      next_week_concepts: null,
+    };
+  }
+
+  const stored = Array.isArray(row.questions) ? row.questions : [];
+  if (stored.length === 0) return null;
+
+  const { score, per_topic, weak_concepts } = scoreWeeklyQuizAnswers(stored, args.answers);
+
+  try {
+    await sql`
+      UPDATE weekly_quizzes_ai
+      SET submitted_at = NOW(),
+          score = ${score},
+          per_topic = ${JSON.stringify(per_topic)}::jsonb
+      WHERE id = ${quizId}::uuid
+        AND user_id = ${userId}
+    `;
+  } catch {
+    // Still return graded result even if persistence fails.
+  }
+
+  for (const [topic, topicScore] of Object.entries(per_topic)) {
+    try {
+      await updateTopicMasteryFromQuiz(userId, topic, topicScore);
+    } catch {
+      // Best-effort mastery sync per topic.
+    }
+  }
+
+  return {
+    quiz_id: quizId,
+    score,
+    per_topic,
+    weak_concepts,
+    plan_adapted: false,
+    next_week_concepts: null,
+  };
 }
 
 // ── Helper: strip `correct` before returning to client ───────────────────────

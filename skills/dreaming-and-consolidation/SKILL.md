@@ -13,8 +13,9 @@ Keep learner memory **healthy at scale** by simulating the cognitive processes t
 - **On-demand**: `POST /v1/memory/dream` (educator/admin) and `memory.dream_now` MCP (internal).
 - **After session**: lightweight "micro-dream" pass after a long session (>30 min).
 - **Web runtime**, lightweight: `POST /api/agent-memory/dream { agent? }`
-  (Vercel-friendly, deterministic — no LLM call). Safe for a settings-page
-  button, Vercel cron, or as a precursor to the heavy Memory Steward pass.
+  (Vercel-friendly, deterministic — no LLM call). Also swept weekly by
+  Vercel cron `GET /api/cron/dream-memory` (Monday 00:00 UTC) for all
+  learners with live notes on the four website agents.
 - **Web runtime**, heavy: `POST /api/agent-memory/consolidate { force? }`
   (authed) and `POST /api/cron/consolidate-memory` (CRON_SECRET-gated,
   Vercel + GitHub Actions cron). One Groq call per learner; promotes

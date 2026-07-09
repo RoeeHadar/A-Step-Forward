@@ -33,7 +33,7 @@ class LLMSettings(BaseSettings):
     groq_api_key: str | None = None
     groq_base_url: str = "https://api.groq.com/openai/v1"
 
-    llm_default_model: str = "llama-3.3-70b-versatile"
+    llm_default_model: str = "llama-3.1-8b-instant"
     llm_cheap_model: str = "llama-3.1-8b-instant"
 
     llm_timeout_seconds: float = 30.0

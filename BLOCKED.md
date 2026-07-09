@@ -36,17 +36,21 @@ Complete in a browser (~10 min). No dashboard wiring left for launch.
    account → confirm redirect into the app (Clerk dev keys on Vercel).
 
 2. **Chat with Tutor** — open a lesson → send a message → confirm a real Groq
-   (Llama-3.3-70B) response streams back (not the Socratic stub).
+   (Llama-3.1-8B primary, Scout/70B fallback) response streams back (not the Socratic stub).
 
 3. **Rotate keys after launch** — Groq + Clerk test keys were shared in chat during
    setup. Re-issue in Groq console, Clerk dashboard, Render env, Vercel env, and
    GitHub Actions secrets. See §4.
 
-4. **Optional:** register `astepforward.app` and wire DNS → Vercel.
+4. **Set `CRON_SECRET`** — generate a random string (32+ chars), add to **GitHub**
+   secrets and **Vercel** (or run `gh workflow run wire-vercel-env.yml` after adding
+   `secrets.CRON_SECRET`). Required for weekly dream + consolidate crons on Vercel.
 
-5. **Optional:** post launch using copy in `docs/marketing/` (HN, Product Hunt, LinkedIn).
+5. **Optional:** register `astepforward.app` and wire DNS → Vercel.
 
-6. **Resend API key (booking emails)** — sign up at [resend.com](https://resend.com) (free tier),
+6. **Optional:** post launch using copy in `docs/marketing/` (HN, Product Hunt, LinkedIn).
+
+7. **Resend API key (booking emails)** — sign up at [resend.com](https://resend.com) (free tier),
    create an API key, and set in **Render** and **Vercel** environment variables:
    - `RESEND_API_KEY=<key>`
    - `TUTOR_EMAIL=<your email>`

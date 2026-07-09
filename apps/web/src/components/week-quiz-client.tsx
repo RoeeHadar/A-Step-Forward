@@ -33,6 +33,8 @@ const STR = {
     question_x_of_y: (i: number, total: number) => `שאלה ${i} מתוך ${total}`,
     submit: 'שלח מבחן',
     submitting: 'שולח…',
+    submitError: 'לא הצלחנו לשלוח את המבחן. נסה שוב.',
+    needAnswer: 'ענה לפחות על שאלה אחת לפני שליחה.',
     next: 'הבא',
     previous: 'הקודם',
     back_to_dashboard: 'חזרה ללוח',
@@ -49,6 +51,8 @@ const STR = {
     question_x_of_y: (i: number, total: number) => `Question ${i} of ${total}`,
     submit: 'Submit quiz',
     submitting: 'Submitting…',
+    submitError: 'Could not submit the quiz. Please try again.',
+    needAnswer: 'Answer at least one question before submitting.',
     next: 'Next',
     previous: 'Previous',
     back_to_dashboard: 'Back to dashboard',
@@ -248,39 +252,54 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [timeLeft, setTimeLeft] = useState(quiz.time_limit_s);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [result, setResult] = useState<QuizSubmitResponse | null>(null);
 
-  const handleSubmit = useCallback(async () => {
-    if (submitting) return;
-    setSubmitting(true);
-    try {
-      const answerList = quiz.questions.map((q) => ({
-        item_id: q.id,
-        chosen: answers[q.id] ?? 'A',
-        time_spent_s: null,
-      }));
+  const handleSubmit = useCallback(
+    async (opts?: { allowEmpty?: boolean }) => {
+      if (submitting) return;
+      setSubmitting(true);
+      setSubmitError(null);
+      try {
+        const answerList = quiz.questions
+          .filter((q) => answers[q.id]?.trim())
+          .map((q) => ({
+            item_id: q.id,
+            chosen: answers[q.id]!,
+            time_spent_s: null,
+          }));
 
-      const res = await fetch(`/api/quiz/${quiz.week_id}/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          plan_id: planId,
-          week_num: weekNum,
-          answers: answerList,
-          token,
-        }),
-      });
+        if (answerList.length === 0 && !opts?.allowEmpty) {
+          setSubmitError(t.needAnswer);
+          return;
+        }
 
-      if (res.ok) {
+        const res = await fetch(`/api/quiz/${quiz.week_id}/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            plan_id: planId,
+            week_num: weekNum,
+            answers: answerList,
+            token,
+          }),
+        });
+
+        if (!res.ok) {
+          setSubmitError(t.submitError);
+          return;
+        }
+
         const data = (await res.json()) as QuizSubmitResponse;
         setResult(data);
+      } catch {
+        setSubmitError(t.submitError);
+      } finally {
+        setSubmitting(false);
       }
-    } catch {
-      // silently fail — let user retry
-    } finally {
-      setSubmitting(false);
-    }
-  }, [answers, quiz, planId, weekNum, token, submitting]);
+    },
+    [answers, quiz, planId, weekNum, token, submitting, t],
+  );
 
   // Countdown timer
   useEffect(() => {
@@ -289,7 +308,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
       setTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(id);
-          handleSubmit();
+          void handleSubmit({ allowEmpty: true });
           return 0;
         }
         return t - 1;
@@ -361,6 +380,12 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
         />
       </div>
 
+      {submitError ? (
+        <p className="text-sm text-destructive" role="alert">
+          {submitError}
+        </p>
+      ) : null}
+
       <div className="flex items-center justify-between gap-3">
         <Button
           variant="outline"
@@ -371,7 +396,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
         </Button>
 
         {isLast ? (
-          <Button onClick={handleSubmit} disabled={submitting} className="gap-2">
+          <Button onClick={() => void handleSubmit()} disabled={submitting} className="gap-2">
             {submitting ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />

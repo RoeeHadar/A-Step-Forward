@@ -1,0 +1,37 @@
+name: Cron — Lightweight dream pass (manual backstop)
+
+# Manual backstop — production schedule lives in apps/web/vercel.json.
+# Runs deterministic note dedupe/cap for live website agents (no LLM).
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max learners to process per invocation"
+        required: false
+        default: "50"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  call-endpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Trigger dream sweep
+        env:
+          BASE_URL: ${{ secrets.WEB_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          LIMIT: ${{ inputs.limit || '50' }}
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "BASE_URL or CRON_SECRET secret missing; skipping."
+            exit 0
+          fi
+          set -euo pipefail
+          curl -sS -X GET \
+            -H "x-cron-secret: $CRON_SECRET" \
+            -w '\nHTTP %{http_code}\n' \
+            "$BASE_URL/api/cron/dream-memory?limit=$LIMIT"

@@ -18,11 +18,13 @@ describe('llm-provider config', () => {
     process.env.GROQ_API_KEY = 'test-key';
     delete process.env.LLM_API_KEY;
     delete process.env.LLM_BASE_URL;
+    delete process.env.LLM_PRIMARY_MODEL;
+    delete process.env.LLM_FALLBACK_MODELS;
     resetLLMConfigCache();
     const cfg = getLLMConfig();
     expect(cfg.configured).toBe(true);
     expect(cfg.baseUrl).toContain('groq.com');
-    expect(cfg.primaryModels[0]).toBe('llama-3.3-70b-versatile');
+    expect(cfg.primaryModels[0]).toBe('llama-3.1-8b-instant');
     expect(llmConfigured()).toBe(true);
   });
 
