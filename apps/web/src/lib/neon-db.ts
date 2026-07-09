@@ -865,6 +865,7 @@ export interface PendingPlanProposal {
   next_test_name?: string | null;
   final_goal_date?: string | null;
   clear_next_test?: boolean;
+  hours_per_week?: number;
   priority_concepts?: string[];
   prepend_concepts?: string[];
   exclude_concepts?: string[];
