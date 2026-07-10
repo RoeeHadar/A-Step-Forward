@@ -20,6 +20,17 @@ import {
   buildUnifiedPlanConceptOrder,
   PLAN_SCHEMA_VERSION,
 } from './plan-worklist';
+import {
+  applyWellbeingOverlay,
+  canPersistWellbeingRewrite,
+  evaluateWellbeingSignals,
+  mergeBiasIntoProfile,
+  pickPrimaryWellbeingTrigger,
+  recordWellbeingPersistedRewrite,
+  selectMoraleConcepts,
+  wellbeingPlanBiasFromProfile,
+  type WellbeingPlanBiasStored,
+} from './wellbeing-plan-bias';
 import { masterySignalInScope } from './concept-scope';
 import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
 
@@ -149,6 +160,7 @@ export interface LearnerProfileRow {
   personality_profile: Record<string, unknown> | null;
   weak_concepts: string[] | null;
   strong_concepts: string[] | null;
+  wellbeing_plan_bias: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 }
@@ -221,6 +233,33 @@ export async function getLearnerProfile(
   `) as LearnerProfileRow[];
   return rows[0] ?? null;
 }
+
+export async function saveWellbeingPlanBias(
+  learnerId: string,
+  bias: WellbeingPlanBiasStored,
+): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  const personality = mergeBiasIntoProfile(profile?.personality_profile ?? null, bias);
+  await s`
+    UPDATE learner_profiles
+    SET wellbeing_plan_bias = ${JSON.stringify(bias)}::jsonb,
+        personality_profile = ${JSON.stringify(personality)}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
+export {
+  applyWellbeingOverlay,
+  canPersistWellbeingRewrite,
+  evaluateWellbeingSignals,
+  mergeBiasIntoProfile,
+  selectMoraleConcepts,
+  wellbeingPlanBiasFromProfile,
+  type WellbeingPlanBias,
+  type WellbeingPlanBiasStored,
+} from './wellbeing-plan-bias';
 
 export async function getConceptMastery(
   learnerId: string,
@@ -593,6 +632,47 @@ export async function generateLearningPlan(
     numWeeks,
   });
 
+  const now = new Date();
+  const previousBias = wellbeingPlanBiasFromProfile(
+    {
+      subjects: profile.subjects,
+      mental_state: profile.mental_state,
+      next_test_date: profile.next_test_date,
+      personality_profile: profile.personality_profile,
+      points_group: profile.points_group,
+      wellbeing_plan_bias: profile.wellbeing_plan_bias,
+    },
+    now,
+  );
+  const { bias: evaluatedBias, triggers } = evaluateWellbeingSignals(
+    profile,
+    mastery,
+    previousBias,
+    now,
+  );
+  let wellbeingBias = evaluatedBias;
+  let planAdjustmentKind: string | null = null;
+  let planLastAdjustedAt: string | null = null;
+
+  const primaryTrigger = pickPrimaryWellbeingTrigger(triggers);
+  const persistWellbeing =
+    wellbeingBias.active &&
+    primaryTrigger != null &&
+    canPersistWellbeingRewrite(wellbeingBias, primaryTrigger, profile, now);
+
+  if (wellbeingBias.active) {
+    const moraleConcepts = await selectMoraleConcepts({
+      learnerId,
+      profile,
+      mastery,
+      strengthAnchors: wellbeingBias.strength_anchors,
+    });
+    wellbeingBias = {
+      ...wellbeingBias,
+      morale_concepts: moraleConcepts,
+    };
+  }
+
   // Chunk into weeks (round-robin so each week has roughly equal load)
   const weekGroups: string[][] = Array.from({ length: numWeeks }, () => []);
   const maxPerWeek = Math.max(3, Math.ceil(sorted.length / numWeeks));
@@ -604,6 +684,29 @@ export async function generateLearningPlan(
     weekGroups[weekIdx]!.push(concept);
     weekIdx = (weekIdx + 1) % numWeeks;
   }
+
+  if (wellbeingBias.active && persistWellbeing && wellbeingBias.morale_concepts.length > 0) {
+    const ratio = wellbeingBias.goal_critical_ratio;
+    if (weekGroups[0]?.length) {
+      weekGroups[0] = applyWellbeingOverlay(
+        weekGroups[0]!,
+        wellbeingBias.morale_concepts,
+        ratio,
+      );
+    }
+    if (weekGroups[1]?.length) {
+      weekGroups[1] = applyWellbeingOverlay(
+        weekGroups[1]!,
+        wellbeingBias.morale_concepts,
+        ratio,
+      );
+    }
+    wellbeingBias = recordWellbeingPersistedRewrite(wellbeingBias, primaryTrigger!, now);
+    planAdjustmentKind = 'wellbeing';
+    planLastAdjustedAt = now.toISOString();
+  }
+
+  await saveWellbeingPlanBias(learnerId, wellbeingBias);
 
   // Persist plan + weeks
   const planId = randomUUID();
@@ -678,11 +781,13 @@ export async function generateLearningPlan(
     s`
       INSERT INTO learning_plans (
         id, learner_id, goal, start_date, end_date, status,
-        plan_schema_version, created_at, updated_at
+        plan_schema_version, plan_adjustment_kind, plan_last_adjusted_at,
+        created_at, updated_at
       )
       VALUES (
         ${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active',
-        ${PLAN_SCHEMA_VERSION}, NOW(), NOW()
+        ${PLAN_SCHEMA_VERSION}, ${planAdjustmentKind}, ${planLastAdjustedAt},
+        NOW(), NOW()
       )
     `,
     ...persistWeeks.map(
