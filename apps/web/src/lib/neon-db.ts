@@ -1465,7 +1465,7 @@ export interface LessonRow {
   est_minutes: number;
   author: string;
   version: number;
-  /** Per-level focus: what depth is expected at 3pt / 4pt / 5pt / hs_physics */
+  /** @deprecated Separate-file-per-track is the standard; `level_focus` on lessons is not populated in v1. */
   level_focus?: Partial<Record<LessonPointsLevel, LevelFocusBlock>>;
   /** Pre-generated question bank per (skill_atom, level) pair */
   skill_atom_bank?: Record<string, Partial<Record<LessonPointsLevel, LessonQuestionRow[]>>>;

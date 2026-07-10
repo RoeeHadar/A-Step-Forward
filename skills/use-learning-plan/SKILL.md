@@ -11,6 +11,22 @@ description: How to consume the mastery-aware learning-plan endpoint (/api/learn
 - Any UI that surfaces a learning path, a recommended next lesson, or a root-cause diagnosis.
 - The Curriculum Designer's `milestones[]` — always drawn from `path[]`, never hand-walked.
 - The Progress Analyzer's `gaps[]` + `interventions[]` — always drawn from `blocking_atoms[]`.
+- Weekly dashboard plans — `generateLearningPlan()` in `neon-db.ts` (persistence layer).
+
+## Unified planner (ADR-0007 / ADR-0008)
+
+**Single engine:** `buildLearningPlan()` in `learning-plan.ts` is authoritative for
+concept sequencing, urgency, `blocking_atoms`, and cross-subject backward BFS.
+
+**Persistence layer:** `generateLearningPlan()` delegates ordering to
+`buildUnifiedPlanConceptOrder()` in `plan-worklist.ts`, then chunks concepts into
+`learning_plans` / `plan_weeks` for dashboard and quiz UX. Chat snapshot,
+`GET /api/learning-plan/next`, and the active dashboard week **must not contradict**.
+
+**Wellbeing overlay:** When `wellbeing_plan_bias` is active (anxiety ≥ 7, exam window,
+chat `exam_anxiety` intent, or mastery shock), `wellbeing-plan-bias.ts` blends
+~60% goal-critical / ~40% morale-adjacent concepts into the persisted week. See
+`docs/adr/0008-adaptive-wellbeing-planning.md` and `skills/web-agent-mentor/SKILL.md`.
 
 ## What the planner does
 
@@ -132,10 +148,13 @@ chat route awaits it inline, so keep `maxNodes` ≤ 8 in production.
 ## Pitfalls
 
 - ❌ Don't call `buildLearningPlan` for every chat turn — the chat route already
-  caches the relevant concepts and only invokes it when a concept is mentioned.
+  caches the relevant concepts and only invokes it when a concept is mentioned or
+  wellbeing/anxiety intent requires a snapshot.
 - ❌ Don't hand-walk `kg-data.json` prerequisites in agent prompts — you'll
   miss the cross-subject edges and won't weigh by mastery. Always use
-  `learning_plan.next(goal)`.
+  `buildLearningPlan()` or `GET /api/learning-plan/next`.
+- ❌ Don't bypass `generateLearningPlan()` for dashboard week writes — the
+  wellbeing overlay and `plan_schema_version` migration live in that path.
 - ❌ Don't tell a learner "your urgency for X is 0.82" — that's an internal
   signal. Translate to a sentence like "your `area_scale_factor` mastery is
   ~28%, which blocks volumes, ratios, and similar triangles."
