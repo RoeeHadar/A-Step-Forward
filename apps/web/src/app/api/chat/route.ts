@@ -74,6 +74,16 @@ import { resolveWebChatAgent } from '@/lib/web-agents';
 import { daysUntilExam, ANXIETY_THRESHOLD } from '@/lib/wellbeing-plan-bias';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
 import { masterySignalInScope } from '@/lib/concept-scope';
+import {
+  buildCoachDifficultyInstruction,
+  buildCoachExamPrepBlock,
+  buildCoachFsrsInstruction,
+  coachDaysUntilExam,
+  detectCoachDifficultySignal,
+  filterDueReviewsForProfile,
+  pickCoachPlannerGoal,
+} from '@/lib/coach-session-context';
+import { isWithinExamPrepWindow } from '@/lib/exam-prep';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -168,18 +178,29 @@ export async function POST(req: Request) {
     sessionId,
   );
 
-  // Coach drill: mark top due FSRS atoms as practiced on substantive replies.
+  // Coach: when learner says drills are too easy, mark due atoms mastered so FSRS stops repeating basics.
   if (agent === 'coach' && lastMessage.trim().length > 10) {
-    void (async () => {
-      try {
-        const due = await getDueReviews(userId);
-        for (const item of due.slice(0, 2)) {
-          await markAtomPracticed(userId, item.atom_id, 0.7);
+    const difficultySignal = detectCoachDifficultySignal(lastMessage);
+    if (difficultySignal === 'too_easy' || difficultySignal === 'harder') {
+      void (async () => {
+        try {
+          const profile = await getLearnerProfile(userId);
+          const plan = await getCurrentPlan(userId).catch(() => null);
+          const planConceptIds = new Set(
+            plan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
+          );
+          const due = filterDueReviewsForProfile(await getDueReviews(userId), {
+            subjects: profile?.subjects ?? [],
+            planConceptIds: planConceptIds.size > 0 ? planConceptIds : undefined,
+          });
+          for (const item of due.slice(0, 2)) {
+            await markAtomPracticed(userId, item.atom_id, 0.92);
+          }
+        } catch (err) {
+          logger.warn('coach markAtomPracticed failed', { err: String(err) });
         }
-      } catch (err) {
-        logger.warn('coach markAtomPracticed failed', { err: String(err) });
-      }
-    })();
+      })();
+    }
   }
 
   const isPlanAgent = agent === 'tutor';
@@ -878,7 +899,24 @@ async function buildContextPrompt(
       agent === 'curriculum_designer' ||
       agent === 'progress_analyzer')
   ) {
-    const goalConcept = pickPlannerGoalConcept(related, topic, currentPlan, weakConcepts);
+    const goalKey =
+      (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ?? null;
+    const coachExamDays =
+      agent === 'coach' && profile
+        ? coachDaysUntilExam(profile.next_test_date, profile.final_goal_date)
+        : null;
+    const goalConcept =
+      agent === 'coach'
+        ? pickCoachPlannerGoal({
+            relatedConceptId: related[0]?.id ?? null,
+            topic,
+            topicInKg: Boolean(topic && kgByName[topic]),
+            currentPlan,
+            weakConcepts,
+            goalKey,
+            daysUntilExam: coachExamDays,
+          })
+        : pickPlannerGoalConcept(related, topic, currentPlan, weakConcepts);
     if (goalConcept) {
       const plan = await buildLearningPlan({
         learnerId: userId,
@@ -890,6 +928,13 @@ async function buildContextPrompt(
         for (const node of plan.path.slice(0, 4)) {
           const pct = Math.round((1 - node.urgency) * 100);
           context += `\n- [${node.concept_id}] ${node.name_he || node.name} ~${pct}%`;
+          if (agent === 'coach' && node.weak_atoms.length > 0) {
+            const atoms = node.weak_atoms
+              .slice(0, 3)
+              .map((a) => `${a.atom} (${Math.round(a.mastery * 100)}%)`)
+              .join(', ');
+            context += ` — weak atoms: ${atoms}`;
+          }
         }
         if (plan.blocking_atoms.length > 0) {
           const tops = plan.blocking_atoms.slice(0, 3).map((a) => a.atom).join(', ');
@@ -900,19 +945,35 @@ async function buildContextPrompt(
   }
 
   if (!minimal && agent === 'coach') {
-    const due = await getDueReviews(userId).catch(() => [] as Awaited<ReturnType<typeof getDueReviews>>);
-    context += `\n\n## Spaced-repetition queue (FSRS)`;
-    if (due.length > 0) {
-      const list = due
-        .map((d) => `${d.concept_name} (atom: ${d.atom_id}, last score ${Math.round(d.last_score * 100)}%)`)
-        .join('; ');
-      context += `\nDUE FOR REVIEW TODAY: ${list}. Start by drilling these before introducing new material. For each, generate a fresh question and evaluate the answer.`;
-    } else {
-      context += `\nNo items due for review. Focus on the learner's weakest concepts from their mastery data.`;
+    const coachExamDays = profile
+      ? coachDaysUntilExam(profile.next_test_date, profile.final_goal_date)
+      : null;
+    if (coachExamDays != null && isWithinExamPrepWindow(coachExamDays)) {
+      context += buildCoachExamPrepBlock({
+        daysLeft: coachExamDays,
+        testName: profile?.next_test_name,
+        quickMode,
+        quickDuration,
+        locale,
+      });
     }
-    if (quickMode) {
-      context += `\n\n## Quick session mode`;
-      context += `\nThis is a ${quickDuration}-minute focused session. Keep ALL responses concise (≤3 sentences + question). Open immediately with one targeted drill question on the highest-priority weak concept or due item. No preamble. After ${quickDuration} minutes of interaction, summarise what was covered and suggest the next session topic.`;
+    const dueRaw = await getDueReviews(userId).catch(() => [] as Awaited<ReturnType<typeof getDueReviews>>);
+    const due = filterDueReviewsForProfile(dueRaw, {
+      subjects: profileSubjects,
+      planConceptIds: planConceptIds.size > 0 ? planConceptIds : undefined,
+    });
+    context += buildCoachFsrsInstruction({
+      due,
+      strongConcepts,
+      daysUntilExam: coachExamDays,
+      inQuickMode: quickMode,
+    });
+    const difficultyInstruction = buildCoachDifficultyInstruction(
+      detectCoachDifficultySignal(message, recentForIntent),
+      locale,
+    );
+    if (difficultyInstruction) {
+      context += difficultyInstruction;
     }
   }
 
