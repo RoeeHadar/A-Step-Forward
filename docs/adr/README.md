@@ -15,7 +15,8 @@ ADRs in PRs.
 | [0004](0004-llm-provider-groq.md) | Groq Cloud as primary LLM provider | Accepted |
 | [0005](0005-embeddings-sentence-transformers.md) | Sentence-Transformers for GraphRAG embeddings | Accepted |
 | [0006](0006-neon-direct-critical-path.md) | Neon-direct critical path (Vercel + Neon SSOT) | Proposed |
-| [0007](0007-learning-planner-authority.md) | Learning planner authority (`buildLearningPlan`) | Proposed |
+| [0007](0007-learning-planner-authority.md) | Learning planner authority (`buildLearningPlan`) | Accepted (via 0008) |
+| [0008](0008-adaptive-wellbeing-planning.md) | Adaptive wellbeing planning + unified path (pilot) | Accepted |
 
 ## Authoring a new ADR
 

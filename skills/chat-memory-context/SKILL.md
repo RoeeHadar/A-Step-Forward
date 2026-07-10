@@ -11,10 +11,11 @@ description: >
 ## Architecture in one paragraph
 
 `/api/chat` (apps/web) is the single entry point for all learner chat. Every
-turn it (a) records the user message to `chat_turns`, (b) tries the Render
-backend with a 90-second timeout, (c) on failure falls back to a direct Groq
-call enriched with the learner's profile + recent memory + relevant KG concepts,
-and (d) records the assistant message to `chat_turns` after the stream closes.
+turn it (a) records the user message to `chat_turns`, (b) calls **Groq directly**
+via `llmStream()` / `llmComplete()` in `llm-provider.ts` (no Render round-trip
+on the hot path), (c) builds a **compact baseline** (`buildCompactAgentBaseline()`)
+plus per-agent persona and learner context, and (d) records the assistant message
+to `chat_turns` after the stream closes.
 
 ## chat_turns schema
 ```
@@ -29,21 +30,27 @@ created_at  TIMESTAMPTZ
 Indexed on `(learner_id, created_at DESC)` and `(session_id, created_at)`.
 
 ## How memory is loaded
-`fetchRecentChatTurns(learnerId, agent, limit=10)` returns the last 10 turns
-**for that agent only**, oldest first. The chat route appends them to the
-system message and feeds them straight to Groq as `messages`.
+`fetchRecentChatTurns(learnerId, agent, limit=4, sessionId)` returns the last
+**4 turns for that agent in the current session only**, oldest first. If
+`sessionId` is missing, memory is empty — chat is **session-gated** so a fresh
+tab or agent switch does not replay stale threads. Turns are further trimmed by
+`compactMemoryTurns()` in `chat-context-policy.ts` (per-turn and total char caps).
+The chat route appends them to the Groq `messages` array after the system prompt.
 
 Memory is **per-agent** on purpose — switching from Tutor to Mentor gives the
-learner a fresh start with that personality.
+learner a fresh start with that personality. Durable cross-session context lives
+in **shared persona** + **agent private notes** (dreaming/consolidation), not in
+verbatim `chat_turns` replay.
 
 ## How profile / mastery / KG context gets injected
 `buildContextPrompt(userId, agent, message)` builds the system message in this
 exact order — each layer can be absent independently:
 
-1. **Shared agent baseline** (`apps/web/src/lib/agent-baseline.ts` →
-   `buildAgentBaseline()`). Corpus stats, KG dimensions, agent network
+1. **Compact agent baseline** (`apps/web/src/lib/agent-baseline.ts` →
+   `buildCompactAgentBaseline()`). Corpus stats, KG dimensions, agent network
    roster, universal rules (bilingual HE-default, math LTR, no external
-   links, brand-new-learner protocol). Same for every agent.
+   links, brand-new-learner protocol). Trimmed variant of the full baseline;
+   same for every agent.
 2. **Long-form agent persona** (`apps/web/src/lib/agent-prompts.ts` →
    `getAgentPersona(agent)`). Per-agent tools allowlist, style, hand-off
    rules, refusal/safety. Versioned in-file.
@@ -85,7 +92,7 @@ if a helper throws.
 | ------------------------- | --------------------- | --------------------------- | ----------------- | ------------------------------------------- | ------------------------------- |
 | Shared learner persona    | per-learner           | `learner_profiles.learner_persona` | Any agent (sparingly) + Memory Steward | Every agent on every turn | `skills/learner-persona/SKILL.md` |
 | Agent private notes       | per-(learner, agent)  | `learner_agent_notes`       | Owning agent      | Owning agent (top-K, importance-sorted)     | `skills/agent-skill-notes/SKILL.md` |
-| Streamed chat turns       | per-(learner, agent)  | `chat_turns`                | Chat route        | Owning agent (last N)                       | This skill                      |
+| Streamed chat turns       | per-(learner, agent, session) | `chat_turns`                | Chat route        | Owning agent (last 4, session-gated)        | This skill                      |
 | Mastery                   | per-(learner, concept)| `concept_mastery`           | Grader + lesson/answer routes | Everyone via context              | `skills/use-learning-plan/SKILL.md` |
 | Atom mastery              | per-(learner, atom)   | `skill_practice`            | Lesson/answer route | Learning planner                          | `skills/cross-subject-kg/SKILL.md` |
 
@@ -112,8 +119,9 @@ No schema changes needed — `chat_turns.agent` is just `TEXT`.
 ## Adding a new context source
 If you want, e.g., recent dashboard activity or recent quiz scores in the
 system prompt, add a helper to `neon-db.ts`, call it from `buildContextPrompt`,
-and append a new section to the `context` string. Keep the prompt under
-~2k tokens — trim aggressively.
+and append a new section to the `context` string. Budgets live in
+`chat-context-policy.ts` (`CHAT_CONTEXT`) — keep the system prompt under
+`maxSystemChars` (~18k); trim aggressively.
 
 ## Things to avoid
 - **Do not** store assistant tokens before the stream completes — you will

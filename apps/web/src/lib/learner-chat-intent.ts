@@ -154,8 +154,9 @@ Learner asked you to stop repeating. Do NOT repeat prior questions or bullet lis
 Acknowledge briefly, then advance with the next step or a short summary.`;
 
 const EXAM_ANXIETY_INSTRUCTION = `## Interaction mode: EXAM ANXIETY (mandatory)
-Validate concern briefly. Name 2–3 concrete gaps from plan/mastery — NOT "pick topics".
-Give realistic cram strategy. For plan changes, show sidebar template example — never defer to parents/teachers.`;
+Validate concern briefly. Use the **learning-plan snapshot** (server-selected concepts) — do NOT improvise gap names or ask the learner to pick topics.
+Frame priorities softly and rationally (e.g. "נחזק את הבסיס השבוע…" / "let's solidify foundations this week…"). Some snapshot topics may support confidence and pacing — do NOT reveal selection mechanism unless the learner asks directly.
+Give a realistic cram strategy from the snapshot. For plan/hour changes, show the sidebar template example — never defer to parents/teachers.`;
 
 const STUDY_HOURS_INSTRUCTION = `## Interaction mode: STUDY HOURS INCREASE (mandatory)
 Acknowledge commitment. Hours change via sidebar template **עדכון תוכנית לימוד** with notes (e.g. "5 שעות ביום").
@@ -337,6 +338,7 @@ export function buildTutorInteractionContract(
         allowSocraticOpening: false,
         allowTopicChecklist: false,
         injectCasualPlanChangeGuide: true,
+        injectLearningPlanSnapshot: true,
         planGuidanceLine:
           locale === 'he'
             ? 'לשינוי תוכנית/שעות — תבנית בצד שמאל. עכשיו: עזרה ללמידה ולחרדה, לא רשימת נושאים פתוחה.'

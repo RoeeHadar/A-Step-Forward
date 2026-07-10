@@ -45,6 +45,11 @@ export const learningPlanSchema = z.object({
   end_date: z.string().nullable().optional(),
   status: z.string(),
   weeks: z.array(planWeekSchema).default([]),
+  plan_adjustment_kind: z
+    .enum(['wellbeing', 'learner_template', 'mastery', 'exam_window'])
+    .nullable()
+    .optional(),
+  plan_last_adjusted_at: z.string().nullable().optional(),
 });
 
 export const quizOptionSchema = z.object({

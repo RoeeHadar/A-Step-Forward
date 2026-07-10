@@ -13,6 +13,11 @@ import {
   getDueReviews,
   markAtomPracticed,
   getCurrentPlan,
+  saveWellbeingPlanBias,
+  setWellbeingChatTrigger,
+  evaluateWellbeingSignals,
+  selectMoraleConcepts,
+  wellbeingPlanBiasFromProfile,
 } from '@/lib/neon-db';
 import { buildLearningPlan } from '@/lib/learning-plan';
 import { buildLessonCatalogSummary, buildPlanAllowlistBlock, PLAN_GROUNDING_RULES } from '@/lib/plan-catalog';
@@ -66,6 +71,8 @@ import { getAgentPersona } from '@/lib/agent-prompts';
 import { LOCALE_COOKIE, resolveLocale } from '@/i18n/locale-storage';
 import { normalizePlanChangeMessage, isPlanChangeTemplate } from '@/lib/plan-change-template';
 import { resolveWebChatAgent } from '@/lib/web-agents';
+import { daysUntilExam, ANXIETY_THRESHOLD } from '@/lib/wellbeing-plan-bias';
+import { resolveConceptTitles } from '@/lib/concept-display-names';
 import { masterySignalInScope } from '@/lib/concept-scope';
 
 export const runtime = 'nodejs';
@@ -518,6 +525,28 @@ function findRelevantConcepts(message: string, subjects: string[]): KgConcept[] 
   return matches.slice(0, 3);
 }
 
+function pickPlannerGoalConcept(
+  related: KgConcept[],
+  topic: string | undefined,
+  currentPlan: Awaited<ReturnType<typeof getCurrentPlan>>,
+  weakConcepts: string[],
+): string | null {
+  if (related[0]?.id) return related[0].id;
+  if (topic && kgByName[topic]) return topic;
+  const activeWeek =
+    currentPlan?.weeks.find((w) => w.status === 'active') ?? currentPlan?.weeks[0];
+  if (activeWeek?.concepts[0]?.concept_id) return activeWeek.concepts[0].concept_id;
+  if (weakConcepts[0]) return weakConcepts[0];
+  return null;
+}
+
+function formatConceptLine(conceptId: string): string {
+  const titles = resolveConceptTitles(conceptId);
+  const kgInfo = kgByName[conceptId];
+  const label = titles.title_he || titles.title_en || kgInfo?.name || conceptId;
+  return `[${conceptId}] ${label}`;
+}
+
 async function buildContextPrompt(
   userId: string,
   agent: string,
@@ -550,9 +579,20 @@ async function buildContextPrompt(
   const recentForIntent = recent.map((t) => ({ role: t.role, content: t.content }));
 
   let tutorContract: ReturnType<typeof buildTutorInteractionContract> | null = null;
+  let tutorIntent: ReturnType<typeof classifyTutorChatIntent> | null = null;
   if (agent === 'tutor' && !minimal) {
     const tutorMode =
       (profile?.personality_profile as { tutor_mode?: string } | null)?.tutor_mode ?? null;
+    const wellbeingProfileInput = profile
+      ? {
+          subjects: profile.subjects,
+          mental_state: profile.mental_state,
+          next_test_date: profile.next_test_date,
+          personality_profile: profile.personality_profile,
+          points_group: profile.points_group,
+          wellbeing_plan_bias: profile.wellbeing_plan_bias,
+        }
+      : null;
     const intentCtx: TutorIntentContext = {
       recentTurns: recentForIntent,
       tutorModePreference: tutorMode === 'direct' ? 'direct' : 'socratic',
@@ -560,9 +600,18 @@ async function buildContextPrompt(
       goalKey:
         (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ?? null,
       hoursPerWeek: profile?.hours_per_week ?? null,
+      daysUntilExam: wellbeingProfileInput
+        ? daysUntilExam(wellbeingProfileInput, new Date())
+        : null,
     };
-    const intent = classifyTutorChatIntent(message, intentCtx);
-    tutorContract = buildTutorInteractionContract(intent, locale, intentCtx);
+    tutorIntent = classifyTutorChatIntent(message, intentCtx);
+    tutorContract = buildTutorInteractionContract(tutorIntent, locale, intentCtx);
+
+    if (tutorIntent === 'exam_anxiety') {
+      void setWellbeingChatTrigger(userId, 'exam_anxiety').catch((err) =>
+        logger.warn('chat: wellbeing chat trigger persist failed', { err: String(err) }),
+      );
+    }
   }
 
   let context = `${buildCompactAgentBaseline()}\n\n${getAgentPersona(agent)}`;
@@ -746,21 +795,91 @@ async function buildContextPrompt(
         }
       }
     }
+  }
 
-    const needsPlanner =
-      tutorContract?.injectLearningPlanSnapshot ||
-      Boolean(topic) ||
+  const profileAnxiety =
+    typeof (profile?.mental_state as { anxiety?: number } | null)?.anxiety === 'number'
+      ? (profile!.mental_state as { anxiety: number }).anxiety
+      : null;
+  const injectWellbeingSnapshot =
+    !minimal &&
+    profile &&
+    (agent === 'tutor' || agent === 'mentor') &&
+    (tutorIntent === 'exam_anxiety' ||
+      (profileAnxiety != null && profileAnxiety >= ANXIETY_THRESHOLD));
+
+  let wellbeingBiasForChat: Awaited<ReturnType<typeof evaluateWellbeingSignals>>['bias'] | null =
+    null;
+  if (profile && (agent === 'tutor' || agent === 'mentor') && !minimal) {
+    const wellbeingInput = {
+      subjects: profile.subjects,
+      mental_state: profile.mental_state,
+      next_test_date: profile.next_test_date,
+      personality_profile: {
+        ...(profile.personality_profile ?? {}),
+        ...(tutorIntent === 'exam_anxiety' ? { wellbeing_chat_trigger: 'exam_anxiety' } : {}),
+      },
+      points_group: profile.points_group,
+      wellbeing_plan_bias: profile.wellbeing_plan_bias,
+    };
+    const previousBias = wellbeingPlanBiasFromProfile(wellbeingInput, new Date());
+    const evaluated = evaluateWellbeingSignals(
+      wellbeingInput,
+      mastery,
+      previousBias,
+      new Date(),
+    );
+    wellbeingBiasForChat = evaluated.bias;
+    if (wellbeingBiasForChat.active) {
+      const morale =
+        wellbeingBiasForChat.morale_concepts.length > 0
+          ? wellbeingBiasForChat.morale_concepts
+          : await selectMoraleConcepts({
+              learnerId: userId,
+              profile: wellbeingInput,
+              mastery,
+              strengthAnchors: wellbeingBiasForChat.strength_anchors,
+            }).catch(() => [] as string[]);
+      wellbeingBiasForChat = { ...wellbeingBiasForChat, morale_concepts: morale };
+      void saveWellbeingPlanBias(userId, wellbeingBiasForChat).catch((err) =>
+        logger.warn('chat: wellbeing bias persist failed', { err: String(err) }),
+      );
+    }
+  }
+
+  const showWellbeingBlock =
+    injectWellbeingSnapshot || (wellbeingBiasForChat?.active ?? false);
+  if (showWellbeingBlock && wellbeingBiasForChat && (agent === 'tutor' || agent === 'mentor')) {
+    context += `\n\n## Wellbeing-aware plan snapshot (internal — soft framing only)`;
+    context += `\nUse server-selected concepts below with reassuring, rational copy. Do NOT reveal selection mechanism or strength-based logic unless the learner asks directly.`;
+    if (wellbeingBiasForChat.morale_concepts.length) {
+      context += `\n- Topics that may support confidence/pacing:`;
+      for (const cid of wellbeingBiasForChat.morale_concepts.slice(0, 4)) {
+        context += `\n  - ${formatConceptLine(cid)}`;
+      }
+    }
+    if (wellbeingBiasForChat.strength_anchors.length && agent === 'tutor') {
+      context += `\n- (Internal only — do not cite to learner) strength anchors: ${wellbeingBiasForChat.strength_anchors.slice(0, 3).join(', ')}`;
+    }
+    if (agent === 'mentor') {
+      context += `\n- Mentor owns wellbeing bias policy; document rationale in private notes when relevant.`;
+    }
+  }
+
+  const needsPlanner =
+    tutorContract?.injectLearningPlanSnapshot ||
+    Boolean(topic) ||
+    agent === 'coach' ||
+    agent === 'progress_analyzer';
+  if (
+    needsPlanner &&
+    (agent === 'tutor' ||
       agent === 'coach' ||
-      agent === 'progress_analyzer';
-    if (
-      needsPlanner &&
-      (agent === 'tutor' ||
-        agent === 'coach' ||
-        agent === 'curriculum_designer' ||
-        agent === 'progress_analyzer')
-    ) {
-      const goalConcept = related[0]?.id ?? (topic && kgByName[topic] ? topic : null);
-      if (goalConcept) {
+      agent === 'curriculum_designer' ||
+      agent === 'progress_analyzer')
+  ) {
+    const goalConcept = pickPlannerGoalConcept(related, topic, currentPlan, weakConcepts);
+    if (goalConcept) {
       const plan = await buildLearningPlan({
         learnerId: userId,
         goalConceptId: goalConcept,
@@ -776,7 +895,6 @@ async function buildContextPrompt(
           const tops = plan.blocking_atoms.slice(0, 3).map((a) => a.atom).join(', ');
           context += `\n- Blocking: ${tops}`;
         }
-      }
       }
     }
   }

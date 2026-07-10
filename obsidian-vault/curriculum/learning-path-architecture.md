@@ -4,7 +4,7 @@ tags:
   - curriculum/kg
   - product/learning-plan
   - graphrag
-updated: 2026-07-03
+updated: 2026-07-11
 ---
 
 # Learning Path & GraphRAG Architecture
@@ -89,14 +89,14 @@ The path planner scores **urgency** = 1 − mean mastery of atoms a concept teac
 flowchart LR
   KG[kg-data.json + kg-cross-edges.json]
   SP[skill_practice]
-  KG --> A[buildLearningPlan]
-  SP --> A
-  KG --> B[generateLearningPlan]
-  SP --> B
+  WB[wellbeing-plan-bias.ts]
+  KG --> Engine[buildLearningPlan + plan-worklist]
+  SP --> Engine
+  WB --> Engine
+  Engine --> Chat[Tutor / Coach chat snapshot]
+  Engine --> API["GET /api/learning-plan/next"]
+  Engine --> Plan["/app/plan + plan_weeks"]
   KG --> C[GraphRAG MCP]
-  A --> Chat[Tutor / Coach chat snapshot]
-  A --> API["GET /api/learning-plan/next"]
-  B --> Plan["/app/plan + plan_weeks"]
   C --> PyAgents[Python agents kg.*]
 ```
 
@@ -108,13 +108,13 @@ flowchart LR
 - Sorts by urgency; returns `path[]` + `blocking_atoms[]`
 - Used: chat `## Learning-plan snapshot`, `GET /api/learning-plan/next`
 
-### B. `generateLearningPlan()` — **stored weekly plan**
+### B. `generateLearningPlan()` — **persistence + calendar layer** *(unified, 2026-07-11)*
 
-- File: `apps/web/src/lib/neon-db.ts`
-- Builds worklist from weak `concept_mastery` + within-subject prereqs
+- File: `apps/web/src/lib/neon-db.ts` → `plan-worklist.ts` (`buildUnifiedPlanConceptOrder`)
+- Calls `buildLearningPlan()` for concept ordering, then chunks into `plan_weeks`
 - `numWeeks` from `next_test_date` / `final_goal_date`
 - `focusConceptsOnly` when template supplies exam concepts (cram mode)
-- **Gap:** does not yet call `buildLearningPlan()`; cross-subject edges not in worklist expansion
+- **Wellbeing overlay** applied before week write (see below)
 
 ### C. GraphRAG MCP (Python / optional Neo4j)
 
@@ -175,13 +175,35 @@ See [[../product/plan-and-memory|Plan & memory (product)]].
 
 ---
 
-## Known gaps (2026-07-03)
+## Wellbeing module (ADR-0008, shipped 2026-07-11)
 
-- [ ] Unify `generateLearningPlan` with `buildLearningPlan` (single golden-path engine)
-- [ ] Pass `targetDate` into path planner for depth trimming
+File: `apps/web/src/lib/wellbeing-plan-bias.ts`
+
+| Responsibility | Detail |
+| --- | --- |
+| Signal ingestion | Profile `mental_state.anxiety`, exam dates, mastery deltas, chat `exam_anxiety` intent |
+| Internal state | `wellbeing_plan_bias` JSON on learner profile |
+| Morale selection | `selectMoraleConcepts()` — strength-anchored 1-hop neighbors on combined graph |
+| Persisted overlay | ~60% goal-critical / ~40% morale-adjacent when bias active |
+| Cooldown gates | 72h min between wellbeing-class rewrites; mastery-shock exempt from weekly cap |
+| Chat behavior | Anxiety intent injects learning-plan snapshot (`injectLearningPlanSnapshot: true`) |
+| Dashboard UX | Neutral notice via `plan-adjustment-notice` — no mechanism reveal |
+
+**Authority split:** learner-initiated goal/hours/exam changes remain **template-only** (Tutor sidebar). Server-driven wellbeing and mastery-shock adaptations do not require learner initiation.
+
+Repo ADR: `docs/adr/0008-adaptive-wellbeing-planning.md`
+
+---
+
+## Known gaps (2026-07-11)
+
+- ~~[ ] Unify `generateLearningPlan` with `buildLearningPlan` (single golden-path engine)~~ **Done (PR1)**
+- [ ] Pass `targetDate` into path planner for depth trimming (partial)
 - [ ] Curated default path sequences per `goal_key` (onboarding tracks)
-- [ ] Cross-subject edges in weekly plan worklist expansion
+- ~~[ ] Cross-subject edges in weekly plan worklist expansion~~ **Done via unified engine (PR1)**
+- [ ] Content gaps — `hasLesson: false` on golden-path concepts (Bagrut 372/471/572)
 - [ ] GraphRAG Neo4j `next_topics` mastery filter wired on web path
+- [ ] Integration tests — `plan-neon.integration.test.ts`, wellbeing cooldown matrix
 
 ---
 

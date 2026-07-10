@@ -1,8 +1,8 @@
 # ADR 0007: Learning planner authority
 
-- **Status:** Proposed
+- **Status:** Accepted (implemented via [ADR-0008](0008-adaptive-wellbeing-planning.md))
 - **Date:** 2026-07-05
-- **Deciders:** Architecture Steward + Curriculum stream (pending Opus acceptance)
+- **Deciders:** Architecture Steward + Curriculum stream
 
 ## Context
 
@@ -54,4 +54,4 @@ and agents can see different “next steps” for the same goal (assessment F1).
 
 ## Implementation status
 
-**Not yet implemented** — advisory locks on plan writes landed 2026-07-05; unification tracked for stream 07 dispatch.
+**Implemented via ADR-0008** (branch `feat/frontend/unify-planners-pr1`, PR1–PR3). `generateLearningPlan()` now delegates concept ordering to `buildUnifiedPlanConceptOrder()` → `buildLearningPlan()` in `plan-worklist.ts`; dashboard weeks and chat snapshot share one engine. See ADR-0008 for wellbeing overlay and rate limits layered on top.

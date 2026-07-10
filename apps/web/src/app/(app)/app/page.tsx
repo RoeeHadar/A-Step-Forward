@@ -14,6 +14,7 @@ import {
   dbConfigured,
 } from '@/lib/neon-db';
 import { PlanChangeBanner } from '@/components/plan-change-banner';
+import { PlanAdjustmentNotice } from '@/components/plan-adjustment-notice';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,6 +59,7 @@ export default async function DashboardPage() {
       {latestPlanChange ? (
         <PlanChangeBanner change={latestPlanChange} learnerId={auth.learnerId} />
       ) : null}
+      {plan ? <PlanAdjustmentNotice plan={plan} learnerId={auth.learnerId} /> : null}
       <AgentsIntroBanner />
       <Suspense fallback={null}>
         <MicroWinToast />
