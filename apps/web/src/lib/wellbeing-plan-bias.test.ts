@@ -32,6 +32,7 @@ const baseProfile: LearnerProfileRow = {
   personality_profile: { goal_key: 'bagrut_math_5' },
   weak_concepts: null,
   strong_concepts: null,
+  wellbeing_plan_bias: null,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
 };
