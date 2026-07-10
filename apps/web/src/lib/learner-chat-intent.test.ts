@@ -105,6 +105,9 @@ describe('buildTutorInteractionContract — mode contracts', () => {
     });
     expect(c.templateSuggestion).toContain('036-361');
     expect(c.allowTopicChecklist).toBe(false);
+    expect(c.injectLearningPlanSnapshot).toBe(true);
+    expect(c.turnInstruction).toContain('learning-plan snapshot');
+    expect(c.turnInstruction).not.toMatch(/Name 2–3|improvise gaps/i);
   });
 
   it('casual_plan_change includes copy-paste template example', () => {

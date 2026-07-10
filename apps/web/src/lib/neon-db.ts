@@ -561,6 +561,8 @@ export interface LearningPlan {
   end_date: string | null;
   status: string;
   weeks: PlanWeek[];
+  plan_adjustment_kind?: 'wellbeing' | 'learner_template' | 'mastery' | 'exam_window' | null;
+  plan_last_adjusted_at?: string | null;
 }
 
 export interface GeneratePlanOptions {
@@ -997,6 +999,24 @@ export async function recordPlanChangeHistory(
   `;
 }
 
+export async function setWellbeingChatTrigger(
+  learnerId: string,
+  trigger: string | null,
+): Promise<void> {
+  const s = requireSql();
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return;
+  const existing = { ...(profile.personality_profile ?? {}) } as Record<string, unknown>;
+  if (trigger) existing.wellbeing_chat_trigger = trigger;
+  else delete existing.wellbeing_chat_trigger;
+  await s`
+    UPDATE learner_profiles
+    SET personality_profile = ${JSON.stringify(existing)}::jsonb,
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
+}
+
 export async function getLatestPlanChange(
   learnerId: string,
 ): Promise<PlanChangeHistoryEntry | null> {
@@ -1011,7 +1031,8 @@ export async function getLatestPlanChange(
 export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | null> {
   const s = requireSql();
   const planRows = (await s`
-    SELECT id::text, learner_id, goal, start_date::text, end_date::text, status
+    SELECT id::text, learner_id, goal, start_date::text, end_date::text, status,
+           plan_adjustment_kind, plan_last_adjusted_at::text
     FROM learning_plans WHERE learner_id = ${learnerId} AND status = 'active' LIMIT 1
   `) as Array<{
     id: string;
@@ -1020,6 +1041,8 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     start_date: string;
     end_date: string | null;
     status: string;
+    plan_adjustment_kind: string | null;
+    plan_last_adjusted_at: string | null;
   }>;
   const plan = planRows[0];
   if (!plan) return null;
@@ -1074,7 +1097,12 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     });
   }
 
-  return { ...plan, weeks };
+  return {
+    ...plan,
+    plan_adjustment_kind: plan.plan_adjustment_kind as LearningPlan['plan_adjustment_kind'],
+    plan_last_adjusted_at: plan.plan_last_adjusted_at,
+    weeks,
+  };
 }
 
 // ── Chat memory ──────────────────────────────────────────────────────────────

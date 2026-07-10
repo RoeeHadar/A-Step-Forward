@@ -3,6 +3,7 @@ import { getAuthContext } from '@/lib/auth';
 import { dbConfigured, getCurrentPlan, getLearnerProfile, getLatestPlanChange } from '@/lib/neon-db';
 import { LearningPlanDashboard } from '@/components/learning-plan-dashboard';
 import { PlanChangeBanner } from '@/components/plan-change-banner';
+import { PlanAdjustmentNotice } from '@/components/plan-adjustment-notice';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,6 +37,7 @@ export default async function LearningPlanPage() {
       {latestChange ? (
         <PlanChangeBanner change={latestChange} learnerId={auth.learnerId} />
       ) : null}
+      <PlanAdjustmentNotice plan={plan} learnerId={auth.learnerId} />
       <LearningPlanDashboard
         plan={plan}
         finalGoalDate={profile?.final_goal_date ?? null}

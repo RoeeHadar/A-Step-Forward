@@ -131,6 +131,8 @@ const STR = {
     s2_anxiety: 'How much test anxiety do you usually feel?',
     s2_anxietyHint:
       '1 = none, 10 = a lot. Affects how the AI talks to you about quizzes.',
+    s2_anxietyConsent:
+      'Self-reported stress helps us adjust study pacing and topic order — not a diagnosis, and not shared with third parties.',
     s2_confidence:
       'How confident do you feel in your ability to reach your goal?',
     s2_when: 'When do you study best?',
@@ -210,6 +212,8 @@ const STR = {
     s2_anxiety: 'כמה חרדת מבחנים את/ה בדרך כלל מרגיש/ה?',
     s2_anxietyHint:
       '1 = בכלל לא, 10 = מאוד. משפיע על איך ה-AI מדבר איתך על מבחנים.',
+    s2_anxietyConsent:
+      'רמת הלחץ שתדווח/י עוזרת לנו להתאים קצב וסדר נושאים — לא אבחון, ולא משותף עם צד שלישי.',
     s2_confidence: 'עד כמה את/ה מאמין/ה ביכולת שלך להגיע ליעד?',
     s2_when: 'מתי את/ה הכי טוב/ה ללמוד?',
     s2_when_morning: 'בוקר',
@@ -1211,6 +1215,7 @@ export default function OnboardingPage() {
               displayValue={`${s3.anxiety}/10`}
               hint={t.s2_anxietyHint}
             />
+            <p className="-mt-4 text-xs text-muted-foreground">{t.s2_anxietyConsent}</p>
 
             <SliderField
               label={t.s2_confidence}
