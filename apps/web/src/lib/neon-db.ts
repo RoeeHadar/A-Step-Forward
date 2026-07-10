@@ -209,6 +209,10 @@ export async function upsertLearnerProfile(
       updated_at = NOW()
   `;
 
+  void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
+    scheduleAdaptivePlanRefresh(learnerId, 'profile_mental_state');
+  });
+
   // Seed concept_mastery from self_scores (1-10 → 0.1-0.9)
   const entries = Object.entries(p.self_scores ?? {});
   for (const [conceptId, score] of entries) {
@@ -502,6 +506,11 @@ export async function completeDiagnostic(
         results = ${JSON.stringify({ mastery_by_topic: mastery })}::jsonb
     WHERE id = ${sessionId}
   `;
+
+  void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
+    scheduleAdaptivePlanRefresh(learnerId, 'mastery_update');
+  });
+
   return mastery;
 }
 
@@ -861,6 +870,18 @@ export async function applyPlanProfileUpdates(
       ? (updates.final_goal_date ?? null)
       : profile.final_goal_date;
 
+  const examDatesTouched =
+    'next_test_date' in updates ||
+    'final_goal_date' in updates ||
+    updates.clear_next_test === true;
+
+  const scheduleExamRefresh = () => {
+    if (!examDatesTouched) return;
+    void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
+      scheduleAdaptivePlanRefresh(learnerId, 'profile_exam_date');
+    });
+  };
+
   if (subjectsOverride) {
     await s`
       UPDATE learner_profiles SET
@@ -875,6 +896,7 @@ export async function applyPlanProfileUpdates(
         updated_at = NOW()
       WHERE learner_id = ${learnerId}
     `;
+    scheduleExamRefresh();
     return;
   }
 
@@ -890,6 +912,8 @@ export async function applyPlanProfileUpdates(
       updated_at = NOW()
     WHERE learner_id = ${learnerId}
   `;
+
+  scheduleExamRefresh();
 }
 
 export interface PendingPlanProposal {
@@ -1895,6 +1919,10 @@ async function applyPracticeMasteryUpdate(
         last_practiced = NOW()
     `;
   }
+
+  void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
+    scheduleAdaptivePlanRefresh(learnerId, 'mastery_update');
+  });
 }
 
 // ── Learner persona (CLAUDE.md-style, shared across every agent) ─────────────

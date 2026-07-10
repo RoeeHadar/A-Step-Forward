@@ -16,11 +16,13 @@ production_web: ff021ca9
 - [x] **Wellbeing module (ADR-0008 / PR2–PR3)** — `wellbeing-plan-bias.ts`, morale blending, cooldown gates, anxiety intent snapshot injection, dashboard plan-adjustment notice
 - [x] **Chat context compaction (PR3)** — compact baseline, 4-turn session-gated memory, direct Groq hot path
 - [x] **ADR-0008 accepted** — doc reconciliation (PR4) updates ADRs, skills, vault
+- [x] **PR5 372 audit** — `docs/plans/pr5-372-coverage-audit.md`; alias-complete; `math_track: ["3pt"]` on 372-only lessons
+- [x] **Wellbeing hooks** — `adaptive-plan-refresh.ts` wired on profile save, exam dates, lesson mastery, diagnostic complete
 
 ## Current focus
 
-- **Stream**: Content gaps — authored lesson coverage, golden-path depth per `goal_key`
-- **Status**: Planner unification + wellbeing overlay **shipped** on `feat/frontend/unify-planners-pr1`; pilot has no active learners yet
+- **Stream**: Pilot prep — run Neon migrations 0015–0017, smoke test wellbeing flow
+- **Status**: Planner + wellbeing **shipped** on `feat/frontend/unify-planners-pr1`; no push/PR until requested
 - **Policy**: Obsidian vault documents architecture; repo code implements it
 - **Trail file**: [[../docs/reviews/LAST_DONE|LAST_DONE]] (repo path `docs/reviews/LAST_DONE.md`)
 
@@ -49,11 +51,11 @@ production_web: ff021ca9
 
 ## Next (priority order)
 
-1. **Content gaps** — `hasLesson: false` concepts on golden paths; expand authored lessons for Bagrut 372/471/572 tracks
-2. **Time-to-goal depth** — exam ≤7 days skips distant basics unless mastery < 0.4 (partial; verify integration tests)
-3. **Golden path per `goal_key`** — curated default sequences in vault + code
-4. **Integration tests** — `plan-neon.integration.test.ts`, wellbeing cooldown matrix
-5. Commit vault docs with next repo push
+1. **Neon migrations** — 0015 `plan_schema_version`, 0016 wellbeing columns, 0017 merge heads
+2. **Pilot smoke** — onboarding anxiety ≥7 → plan notice → Tutor anxiety phrase → snapshot (not improvised gaps)
+3. **Time-to-goal depth** — exam ≤7 days BFS cap (Phase 2)
+4. **Golden path per `goal_key`** — curated defaults in vault + code
+5. Push branch + open PR when ready
 
 ## KG pipeline
 
