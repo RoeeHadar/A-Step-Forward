@@ -15,12 +15,12 @@ import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
-import { canonicalConceptId, goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
+import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
-  conceptMatchesSubjects,
-  masterySignalInScope,
-  subjectSetForPlan,
-} from './concept-scope';
+  buildUnifiedPlanConceptOrder,
+  PLAN_SCHEMA_VERSION,
+} from './plan-worklist';
+import { masterySignalInScope } from './concept-scope';
 import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
@@ -476,11 +476,8 @@ interface KgConcept {
   level: string;
   prerequisites: string[];
 }
-const kgConcepts: KgConcept[] = (kg as { concepts: KgConcept[] }).concepts;
-const kgPrereqMap: Record<string, string[]> = (kg as { prereqMap: Record<string, string[]> }).prereqMap;
 const kgById: Record<string, KgConcept> = (kg as { byId: Record<string, KgConcept> }).byId;
 
-const WEAK_THRESHOLD = 0.4;
 const PHYSICS_HINTS = new Set([
   'kinematics', 'dynamics', 'electricity', 'magnetism', 'waves', 'optics',
   'nuclear', 'momentum', 'energy', 'newton', 'rotation',
@@ -494,64 +491,6 @@ function inferSubject(conceptId: string, subjects: string[]): string {
     if (lower.includes(h)) return subjects.includes('physics') ? 'physics' : subjects[0]!;
   }
   return subjects.includes('math') ? 'math' : subjects[0]!;
-}
-
-function depthOf(concept: string, universe: Set<string>, memo: Map<string, number>): number {
-  if (memo.has(concept)) return memo.get(concept)!;
-  const prereqs = (kgPrereqMap[concept] ?? []).filter((p) => universe.has(p));
-  if (prereqs.length === 0) {
-    memo.set(concept, 0);
-    return 0;
-  }
-  memo.set(concept, 0); // breaks cycles
-  const d = Math.max(...prereqs.map((p) => depthOf(p, universe, memo))) + 1;
-  memo.set(concept, d);
-  return d;
-}
-
-function collectWorklist(
-  mastery: Record<string, number>,
-  selfScores: Record<string, number> | null,
-  subjects: string[],
-): Set<string> {
-  const worklist = new Set<string>();
-  for (const [c, score] of Object.entries(mastery)) {
-    const canonical = canonicalConceptId(c);
-    if (canonical && conceptMatchesSubjects(canonical, subjects) && score < WEAK_THRESHOLD) {
-      worklist.add(canonical);
-    }
-  }
-  // expand with prerequisites of weak concepts
-  for (const c of [...worklist]) {
-    for (const prereq of kgPrereqMap[c] ?? []) {
-      const canonical = canonicalConceptId(prereq);
-      if (
-        canonical &&
-        conceptMatchesSubjects(canonical, subjects) &&
-        (mastery[canonical] ?? mastery[prereq] ?? 0.5) < WEAK_THRESHOLD
-      ) {
-        worklist.add(canonical);
-      }
-    }
-  }
-  // if nothing weak yet, seed from self-scores or subject roots
-  if (worklist.size === 0) {
-    if (selfScores) {
-      for (const c of Object.keys(selfScores)) {
-        const canonical = canonicalConceptId(c);
-        if (canonical && conceptMatchesSubjects(canonical, subjects)) worklist.add(canonical);
-      }
-    } else if (subjects.length > 0) {
-      const subjectSet = subjectSetForPlan(subjects);
-      const roots = kgConcepts.filter(
-        (c) =>
-          (subjectSet.size === 0 || subjectSet.has(c.subject)) &&
-          c.prerequisites.length === 0,
-      );
-      for (const r of roots.slice(0, 5)) worklist.add(r.id);
-    }
-  }
-  return worklist;
 }
 
 export interface PlanWeek {
@@ -607,28 +546,10 @@ export async function generateLearningPlan(
   }
 
   const mastery = await getConceptMastery(learnerId);
-  let worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
 
   const excludeConcepts = sanitizeConceptIds(options.excludeConcepts);
   const prependConcepts = sanitizeConceptIds(options.prependConcepts);
   const priorityConcepts = sanitizeConceptIds(options.priorityConcepts);
-
-  if (
-    options.focusConceptsOnly &&
-    (prependConcepts.length > 0 || priorityConcepts.length > 0)
-  ) {
-    worklist = new Set([...prependConcepts, ...priorityConcepts]);
-  } else {
-    if (excludeConcepts.length) {
-      const exclude = new Set(excludeConcepts);
-      for (const c of exclude) worklist.delete(c);
-    }
-    for (const c of prependConcepts) worklist.add(c);
-    for (const c of priorityConcepts) worklist.add(c);
-    if (worklist.size === 0) {
-      worklist = collectWorklist(mastery, profile.self_scores, profile.subjects);
-    }
-  }
 
   const goalText = options.goalOverride?.trim() || profile.goal;
 
@@ -659,14 +580,17 @@ export async function generateLearningPlan(
     numWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
   }
 
-  // Sort by prerequisite depth (roots first); priority concepts first
-  const memo = new Map<string, number>();
-  const priority = new Set(priorityConcepts);
-  const sorted = [...worklist].sort((a, b) => {
-    const pa = priority.has(a) ? 0 : 1;
-    const pb = priority.has(b) ? 0 : 1;
-    if (pa !== pb) return pa - pb;
-    return depthOf(a, worklist, memo) - depthOf(b, worklist, memo);
+  const sorted = await buildUnifiedPlanConceptOrder({
+    learnerId,
+    profile,
+    mastery,
+    options: {
+      priorityConcepts,
+      prependConcepts,
+      excludeConcepts,
+      focusConceptsOnly: options.focusConceptsOnly,
+    },
+    numWeeks,
   });
 
   // Chunk into weeks (round-robin so each week has roughly equal load)
@@ -752,8 +676,14 @@ export async function generateLearningPlan(
     s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`,
     s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`,
     s`
-      INSERT INTO learning_plans (id, learner_id, goal, start_date, end_date, status, created_at, updated_at)
-      VALUES (${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active', NOW(), NOW())
+      INSERT INTO learning_plans (
+        id, learner_id, goal, start_date, end_date, status,
+        plan_schema_version, created_at, updated_at
+      )
+      VALUES (
+        ${planId}, ${learnerId}, ${goalText}, ${startStr}, ${endStr}, 'active',
+        ${PLAN_SCHEMA_VERSION}, NOW(), NOW()
+      )
     `,
     ...persistWeeks.map(
       (w) =>

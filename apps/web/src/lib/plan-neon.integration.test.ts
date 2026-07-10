@@ -90,4 +90,59 @@ describe.skipIf(!hasDb)('plan persistence (live Neon)', () => {
     const profile = await getLearnerProfile(learnerId);
     expect(profile?.points_group).toBe('5pt');
   }, 60_000);
+
+  it('week 1 top concept matches buildLearningPlan path[0] for same goal', async () => {
+    const { generateLearningPlan, getLearnerProfile } = await import('./neon-db');
+    const { buildLearningPlan } = await import('./learning-plan');
+    const { resolveGoalConceptId } = await import('./plan-worklist');
+
+    const { neon } = await import('@neondatabase/serverless');
+    const sql = neon(process.env.DATABASE_URL ?? process.env.POSTGRES_URL!);
+
+    let learnerId: string | undefined;
+    try {
+      const rows = (await sql`
+        SELECT learner_id FROM learner_profiles ORDER BY updated_at DESC LIMIT 1
+      `) as Array<{ learner_id: string }>;
+      learnerId = rows[0]?.learner_id;
+    } catch (err) {
+      console.warn('[plan-neon] Neon unreachable — skipping unify assertion:', String(err));
+      return;
+    }
+    if (!learnerId) {
+      console.warn('[plan-neon] no learner_profiles row — skipping unify assertion');
+      return;
+    }
+
+    const profile = await getLearnerProfile(learnerId);
+    if (!profile) return;
+
+    const { getConceptMastery } = await import('./neon-db');
+    const mastery = await getConceptMastery(learnerId);
+    const goalConceptId = resolveGoalConceptId(profile, mastery, {});
+    if (!goalConceptId) {
+      console.warn('[plan-neon] no resolvable goal concept — skipping unify assertion');
+      return;
+    }
+
+    const plan = await generateLearningPlan(learnerId);
+    const week1Concepts = plan.weeks[0]?.concepts.map((c) => c.concept_id) ?? [];
+    if (week1Concepts.length === 0) {
+      console.warn('[plan-neon] empty week 1 worklist — skipping unify assertion');
+      return;
+    }
+
+    const learningPlan = await buildLearningPlan({
+      learnerId,
+      goalConceptId,
+      maxNodes: Math.max(24, plan.weeks.length * 4),
+    });
+    const nextStep = learningPlan?.path.find((n) => n.relation !== 'self');
+    if (!nextStep) {
+      console.warn('[plan-neon] buildLearningPlan returned no non-self step — skipping');
+      return;
+    }
+
+    expect(week1Concepts[0]).toBe(nextStep.concept_id);
+  }, 60_000);
 });
