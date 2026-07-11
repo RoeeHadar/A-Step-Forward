@@ -38,6 +38,16 @@ import {
   saveOnboardingDraft,
 } from '@/lib/onboarding-draft';
 import { resolveSelfScoreConceptIds } from '@/lib/onboarding-self-score';
+import {
+  filterAdultGoals,
+  filterGoalsForLearner,
+  HS_BAGRUT_GRADES,
+  needsUniversityPicker,
+  subjectLabel,
+  yearsGapLabelForSubject,
+  type OnboardingGoal,
+  type OnboardingSubject,
+} from '@/lib/onboarding-options';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -52,8 +62,8 @@ type Goal =
   | 'other';
 
 
-type Subject = 'math' | 'physics';
-type Style = 'theory_first' | 'practice_first' | 'mixed';
+type Subject = OnboardingSubject;
+type Style = 'theory_first' | 'practice_first' | 'mixed' | 'unknown';
 type TutorMode = 'direct' | 'socratic';
 
 interface Step1 {
@@ -63,21 +73,33 @@ interface Step1 {
   pointsGroup: string;
   targetUniversity: string;
   adultGoal: string;
-  yearsGap: string;
+  yearsGapBySubject: Partial<Record<Subject, string>>;
   subjects: Subject[];
   nextTestName: string;
   nextTestDate: string;
   finalGoalDate: string;
 }
 
-type TeacherOverall = 'mostly_good' | 'mixed' | 'mostly_bad' | 'unknown';
+type TeacherOverall =
+  | 'mostly_good'
+  | 'mixed'
+  | 'mostly_bad'
+  | 'unknown'
+  | 'no_teacher';
+
+type SubjectExperienceMode = 'share' | 'no_prior' | 'prefer_skip';
+
+interface SubjectPastExperience {
+  mode: SubjectExperienceMode;
+  selfRating: number;
+  teacherOverall: TeacherOverall;
+  teacherNotes: string;
+}
 
 interface Step2 {
   hoursAuto: boolean;
   hoursPerWeek: number;
-  pastExperience: number;
-  teacherOverall: TeacherOverall;
-  teacherNotes: string;
+  subjectExperience: Partial<Record<Subject, SubjectPastExperience>>;
   style: Style;
   attentionSpan: number | null;
 }
@@ -133,23 +155,27 @@ const STR = {
       'If you skip this, we estimate hours from your goal and deadline so the plan stays reachable.',
     s1_hoursAuto: 'Let the system estimate from my goal',
     s1_hoursUnit: 'hrs/week',
-    s1_pastExperience:
-      'How has your overall learning experience been in these subjects so far?',
+    s1_pastExperience: 'How has your learning experience been in {subject}?',
     s1_pastExperienceHint:
-      'Think across classes, tutors, and self-study — not just your last lesson.',
-    s1_teacherOverall: 'How were your teachers in these subjects overall?',
+      'Rate classes, tutors, and self-study for this subject — skip if you prefer not to say.',
+    s1_exp_share: 'I have prior experience',
+    s1_exp_none: 'No prior experience',
+    s1_exp_skip: 'Prefer not to answer',
+    s1_teacherOverall: 'How were your {subject} teachers overall?',
     s1_teacher_good: 'Mostly helpful',
     s1_teacher_mixed: 'Mixed',
     s1_teacher_bad: 'Mostly unhelpful',
     s1_teacher_unknown: 'Hard to say',
+    s1_teacher_none: 'No regular teacher',
     s1_teacherNotes:
-      'What worked or did not work with past teachers? (optional — helps the Tutor adapt)',
+      'What worked or did not work with past {subject} teachers? (optional)',
     s1_teacherNotesPh:
       'e.g. moved too fast, great at examples, never explained the why…',
     s1_style: 'Preferred learning style',
     s1_style_theory: 'Theory first',
     s1_style_practice: 'Practice first',
     s1_style_mixed: 'Mixed',
+    s1_style_unknown: "I don't know yet",
     s1_attention: 'How long can you focus in one sitting?',
     s1_attention_unknown: "I don't know yet",
     s1_attention_20: '20 min',
@@ -236,22 +262,26 @@ const STR = {
       'אם תדלג/י, נעריך שעות לפי המטרה והדד-ליין כדי שהתוכנית תישאר ברת-השגה.',
     s1_hoursAuto: 'תנו למערכת להעריך לפי המטרה שלי',
     s1_hoursUnit: 'שעות בשבוע',
-    s1_pastExperience: 'איך הייתה חוויית הלמידה הכללית שלך במקצועות האלה?',
+    s1_pastExperience: 'איך הייתה חוויית הלמידה שלך ב{subject}?',
     s1_pastExperienceHint:
-      'חשב/י על שיעורים, מורים פרטיים ולמידה עצמית — לא רק על השיעור האחרון.',
-    s1_teacherOverall: 'איך היו המורים שלך במקצועות האלה בכלל?',
+      'דרג/י שיעורים, מורים פרטיים ולמידה עצמית במקצוע הזה — אפשר לדלג אם לא רוצים לענות.',
+    s1_exp_share: 'יש לי ניסיון קודם',
+    s1_exp_none: 'אין לי ניסיון קודם',
+    s1_exp_skip: 'מעדיף/ה לא לענות',
+    s1_teacherOverall: 'איך היו המורים שלך ב{subject} בכלל?',
     s1_teacher_good: 'בעיקר עזרו',
     s1_teacher_mixed: 'מעורב',
     s1_teacher_bad: 'בעיקר לא עזרו',
     s1_teacher_unknown: 'קשה לומר',
-    s1_teacherNotes:
-      'מה עבד או לא עבד עם מורים בעבר? (לא חובה — עוזר למורה להתאים)',
+    s1_teacher_none: 'לא היה מורה קבוע',
+    s1_teacherNotes: 'מה עבד או לא עבד עם מורים ב{subject}? (לא חובה)',
     s1_teacherNotesPh:
       'למשל: התקדמו מהר מדי, דוגמאות מצוינות, לא הסבירו את ה״למה״…',
     s1_style: 'סגנון למידה מועדף',
     s1_style_theory: 'קודם תיאוריה',
     s1_style_practice: 'קודם תרגול',
     s1_style_mixed: 'מעורב',
+    s1_style_unknown: 'עדיין לא יודע/ת',
     s1_attention: 'כמה זמן את/ה מצליח/ה להתרכז ברצף?',
     s1_attention_unknown: 'עדיין לא יודע/ת',
     s1_attention_20: '20 דק׳',
@@ -398,11 +428,30 @@ const UNIVERSITIES: { value: string; label_en: string; label_he: string }[] = [
   { value: 'other', label_en: 'Other / not sure yet', label_he: 'אחר / עדיין לא יודע/ת' },
 ];
 
-const HS_BAGRUT_GRADES = new Set(['10', '11', '12', 'adult_bagrut']);
+const DEFAULT_SUBJECT_EXPERIENCE = (): SubjectPastExperience => ({
+  mode: 'share',
+  selfRating: 5,
+  teacherOverall: 'mixed',
+  teacherNotes: '',
+});
+
+function emptySubjectExperience(): Partial<Record<Subject, SubjectPastExperience>> {
+  return {};
+}
 
 const ADULT_GOALS: { value: string; label_en: string; label_he: string }[] = [
   { value: 'bagrut_math', label_en: 'Bagrut in Mathematics', label_he: 'בגרות במתמטיקה' },
-  { value: 'university_course', label_en: 'University course', label_he: 'קורס אוניברסיטאי' },
+  { value: 'bagrut_physics', label_en: 'Bagrut in Physics', label_he: 'בגרות בפיזיקה' },
+  {
+    value: 'university_math',
+    label_en: 'University math course',
+    label_he: 'קורס מתמטיקה באוניברסיטה',
+  },
+  {
+    value: 'university_physics',
+    label_en: 'University physics course',
+    label_he: 'קורס פיזיקה באוניברסיטה',
+  },
   { value: 'general_improvement', label_en: 'General improvement', label_he: 'שיפור כללי' },
 ];
 
@@ -650,7 +699,7 @@ export default function OnboardingPage() {
     pointsGroup: '',
     targetUniversity: '',
     adultGoal: '',
-    yearsGap: '',
+    yearsGapBySubject: {},
     subjects: ['math'],
     nextTestName: '',
     nextTestDate: '',
@@ -660,9 +709,7 @@ export default function OnboardingPage() {
   const [s2, setS2] = useState<Step2>({
     hoursAuto: true,
     hoursPerWeek: 5,
-    pastExperience: 5,
-    teacherOverall: 'mixed',
-    teacherNotes: '',
+    subjectExperience: emptySubjectExperience(),
     style: 'mixed',
     attentionSpan: 45,
   });
@@ -707,14 +754,89 @@ export default function OnboardingPage() {
     });
   }, [step, s1, s2, s3, s4, tutorMode, draftLoaded]);
 
+  useEffect(() => {
+    if (!draftLoaded) return;
+    setS2((prev) => {
+      const subjectExperience = { ...prev.subjectExperience };
+      let changed = false;
+      for (const sub of s1.subjects) {
+        if (!subjectExperience[sub]) {
+          subjectExperience[sub] = DEFAULT_SUBJECT_EXPERIENCE();
+          changed = true;
+        }
+      }
+      for (const sub of Object.keys(subjectExperience) as Subject[]) {
+        if (!s1.subjects.includes(sub)) {
+          delete subjectExperience[sub];
+          changed = true;
+        }
+      }
+      return changed ? { ...prev, subjectExperience } : prev;
+    });
+  }, [s1.subjects, draftLoaded]);
+
   function toggleSubject(sub: Subject) {
-    setS1((prev) => ({
-      ...prev,
-      subjects: prev.subjects.includes(sub)
-        ? prev.subjects.filter((s) => s !== sub)
-        : [...prev.subjects, sub],
-    }));
+    const isRemoving = s1.subjects.includes(sub);
+    const nextSubjects = isRemoving
+      ? s1.subjects.filter((s) => s !== sub)
+      : [...s1.subjects, sub];
+
+    setS1((prev) => {
+      const yearsGapBySubject = { ...prev.yearsGapBySubject };
+      if (isRemoving) delete yearsGapBySubject[sub];
+      const allowedGoals = filterGoalsForLearner({
+        gradeLevel: prev.gradeLevel,
+        subjects: nextSubjects,
+      });
+      const goal = allowedGoals.includes(prev.goal as OnboardingGoal) ? prev.goal : '';
+      const allowedAdult = filterAdultGoals(nextSubjects);
+      const adultGoal = allowedAdult.includes(prev.adultGoal as ReturnType<typeof filterAdultGoals>[number])
+        ? prev.adultGoal
+        : '';
+      return {
+        ...prev,
+        subjects: nextSubjects,
+        yearsGapBySubject,
+        goal,
+        adultGoal,
+      };
+    });
+
+    setS2((prev) => {
+      const subjectExperience = { ...prev.subjectExperience };
+      if (isRemoving) delete subjectExperience[sub];
+      else subjectExperience[sub] = DEFAULT_SUBJECT_EXPERIENCE();
+      return { ...prev, subjectExperience };
+    });
   }
+
+  function patchSubjectExperience(
+    sub: Subject,
+    patch: Partial<SubjectPastExperience>,
+  ) {
+    setS2((prev) => {
+      const current = prev.subjectExperience[sub] ?? DEFAULT_SUBJECT_EXPERIENCE();
+      return {
+        ...prev,
+        subjectExperience: {
+          ...prev.subjectExperience,
+          [sub]: { ...current, ...patch },
+        },
+      };
+    });
+  }
+
+  const visibleGoalKeys = filterGoalsForLearner({
+    gradeLevel: s1.gradeLevel,
+    subjects: s1.subjects,
+  });
+  const visibleGoals = GOALS.filter((g) =>
+    visibleGoalKeys.includes(g.value as OnboardingGoal),
+  );
+  const visibleAdultGoalKeys = filterAdultGoals(s1.subjects);
+  const visibleAdultGoals = ADULT_GOALS.filter((g) =>
+    visibleAdultGoalKeys.includes(g.value as (typeof visibleAdultGoalKeys)[number]),
+  );
 
   function setScore(conceptId: string, val: number) {
     setS4((prev) => ({
@@ -739,14 +861,11 @@ export default function OnboardingPage() {
   const needsPointsGroup =
     HS_BAGRUT_GRADES.has(s1.gradeLevel) && s1.subjects.includes('math');
 
-  const needsUniversity =
-    s1.gradeLevel === 'pre_university' ||
-    s1.gradeLevel === 'university_1' ||
-    s1.gradeLevel === 'university_2plus' ||
-    (isAdultLearner && s1.adultGoal === 'university_course') ||
-    s1.goal === 'calculus1' ||
-    s1.goal === 'linear_algebra' ||
-    s1.goal === 'university_prep';
+  const needsUniversity = needsUniversityPicker({
+    gradeLevel: s1.gradeLevel,
+    isAdultLearner,
+    adultGoal: s1.adultGoal,
+  });
 
   const isPhysicsOnly =
     s1.subjects.includes('physics') && !s1.subjects.includes('math');
@@ -764,6 +883,37 @@ export default function OnboardingPage() {
     return null;
   }
 
+  function formatSubjectExperienceSummary(): string {
+    return s1.subjects
+      .map((sub) => {
+        const exp = s2.subjectExperience[sub];
+        const name = subjectLabel(sub, 'en');
+        if (!exp || exp.mode === 'prefer_skip') {
+          return `${name}: learner prefers not to answer.`;
+        }
+        if (exp.mode === 'no_prior') {
+          return `${name}: no prior experience.`;
+        }
+        const teacher = exp.teacherOverall.replace(/_/g, ' ');
+        const notes = exp.teacherNotes.trim()
+          ? ` Teacher notes: ${exp.teacherNotes.trim()}`
+          : '';
+        return `${name}: experience ${exp.selfRating}/10; teachers ${teacher}.${notes}`;
+      })
+      .join(' ');
+  }
+
+  function formatYearsGapSummary(): string {
+    return s1.subjects
+      .map((sub) => {
+        const gap = s1.yearsGapBySubject[sub];
+        if (!gap) return null;
+        return `${subjectLabel(sub, 'en')}: ${gap.replace(/_/g, ' ')}`;
+      })
+      .filter(Boolean)
+      .join('; ');
+  }
+
   async function handleSubmit() {
     setSubmitting(true);
     setError('');
@@ -774,12 +924,8 @@ export default function OnboardingPage() {
         : s1.goal === 'other'
           ? s1.goalOther
           : (GOALS.find((g) => g.value === s1.goal)?.label_en ?? s1.goal);
-      const teacherSummary = isAdultLearner
-        ? ''
-        : `Teacher experience: ${s2.teacherOverall}.`;
-      const teacherDetail = s2.teacherNotes.trim()
-        ? ` Teacher notes: ${s2.teacherNotes.trim()}`
-        : '';
+      const experienceSummary = formatSubjectExperienceSummary();
+      const yearsGapSummary = formatYearsGapSummary();
       const res = await fetch('/api/onboarding/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -789,17 +935,17 @@ export default function OnboardingPage() {
           points_group: resolvePointsGroupForSubmit(),
           subjects: s1.subjects,
           hours_per_week: s2.hoursAuto ? 6 : s2.hoursPerWeek,
-          preferred_style: s2.style,
+          preferred_style: s2.style === 'unknown' ? null : s2.style,
           attention_span: s2.attentionSpan,
           self_scores: s4.selfScores,
           background_notes: isAdultLearner
-            ? `Past learning experience: ${s2.pastExperience}/10. Years since last math study: ${s1.yearsGap}.${teacherDetail}`
-            : `Past learning experience: ${s2.pastExperience}/10. ${teacherSummary}${teacherDetail}`,
+            ? `${experienceSummary}${yearsGapSummary ? ` Years since last study: ${yearsGapSummary}.` : ''}`
+            : experienceSummary,
           next_test_name: s1.nextTestName || null,
           next_test_date: s1.nextTestDate || null,
           final_goal_date: s1.finalGoalDate || null,
           adult_learner: isAdultLearner,
-          years_gap: isAdultLearner ? s1.yearsGap : null,
+          years_gap: isAdultLearner ? yearsGapSummary || null : null,
           mental_state: {
             motivation: s3.motivation,
             anxiety: s3.anxiety,
@@ -808,21 +954,24 @@ export default function OnboardingPage() {
             has_quiet_space: s3.hasQuietSpace,
             support_system: s3.supportSystem,
             why_this_goal: s3.whyThisGoal,
-            target_university: s1.targetUniversity || null,
+            target_university: needsUniversity ? s1.targetUniversity || null : null,
           },
           personality_profile: {
-            past_teacher_experience: isAdultLearner ? null : s2.teacherOverall,
-            past_teacher_notes: s2.teacherNotes.trim() || null,
-            self_rating: s2.pastExperience,
-            learning_style: s2.style,
+            subject_experience: s2.subjectExperience,
+            learning_style_unknown: s2.style === 'unknown',
             attention_span_min: s2.attentionSpan,
             attention_span_unknown: s2.attentionSpan == null,
             hours_per_week: s2.hoursAuto ? null : s2.hoursPerWeek,
             hours_per_week_auto: s2.hoursAuto,
             goal_key: isAdultLearner ? s1.adultGoal : s1.goal || null,
-            target_university: s1.targetUniversity || null,
+            target_university: needsUniversity ? s1.targetUniversity || null : null,
+            years_gap_by_subject: isAdultLearner ? s1.yearsGapBySubject : null,
             ...(isAdultLearner
-              ? { adult_learner: true, years_gap: s1.yearsGap, adult_goal: s1.adultGoal }
+              ? {
+                  adult_learner: true,
+                  years_gap: yearsGapSummary || null,
+                  adult_goal: s1.adultGoal,
+                }
               : {}),
           },
           tutor_mode: tutorMode,
@@ -850,34 +999,6 @@ export default function OnboardingPage() {
               <h1 className="mb-1 text-2xl font-bold">{t.s0_title}</h1>
               <p className="text-sm text-muted-foreground">{t.s0_sub}</p>
             </div>
-
-            {!isAdultLearner ? (
-              <div className="space-y-2">
-                <p className="mb-1 block text-sm text-muted-foreground">{t.s0_goal}</p>
-                {GOALS.map((g) => (
-                  <button
-                    key={g.value}
-                    type="button"
-                    onClick={() => setS1((p) => ({ ...p, goal: g.value }))}
-                    className={optionBtnCls(s1.goal === g.value)}
-                  >
-                    {goalLabel(g)}
-                  </button>
-                ))}
-                {s1.goal === 'other' && (
-                  <input
-                    type="text"
-                    placeholder={t.s0_goalOtherPh}
-                    value={s1.goalOther}
-                    onChange={(e) =>
-                      setS1((p) => ({ ...p, goalOther: e.target.value }))
-                    }
-                    className={inputCls}
-                    dir="auto"
-                  />
-                )}
-              </div>
-            ) : null}
 
             <div className="space-y-2">
               <p className="mb-1 block text-sm text-muted-foreground">
@@ -913,9 +1034,36 @@ export default function OnboardingPage() {
                 <select
                   id="grade-level"
                   value={s1.gradeLevel}
-                  onChange={(e) =>
-                    setS1((p) => ({ ...p, gradeLevel: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    const gradeLevel = e.target.value;
+                    setS1((p) => {
+                      const allowedGoals = filterGoalsForLearner({
+                        gradeLevel,
+                        subjects: p.subjects,
+                      });
+                      const goal = allowedGoals.includes(p.goal as OnboardingGoal)
+                        ? p.goal
+                        : '';
+                      const allowedAdult = filterAdultGoals(p.subjects);
+                      const adultGoal = allowedAdult.includes(
+                        p.adultGoal as (typeof allowedAdult)[number],
+                      )
+                        ? p.adultGoal
+                        : '';
+                      const showUniversity = needsUniversityPicker({
+                        gradeLevel,
+                        isAdultLearner: gradeLevel === 'adult_learner',
+                        adultGoal,
+                      });
+                      return {
+                        ...p,
+                        gradeLevel,
+                        goal,
+                        adultGoal,
+                        targetUniversity: showUniversity ? p.targetUniversity : '',
+                      };
+                    });
+                  }}
                   className={inputCls}
                   required
                 >
@@ -956,6 +1104,34 @@ export default function OnboardingPage() {
               )}
             </div>
 
+            {!isAdultLearner && s1.gradeLevel ? (
+              <div className="space-y-2">
+                <p className="mb-1 block text-sm text-muted-foreground">{t.s0_goal}</p>
+                {visibleGoals.map((g) => (
+                  <button
+                    key={g.value}
+                    type="button"
+                    onClick={() => setS1((p) => ({ ...p, goal: g.value }))}
+                    className={optionBtnCls(s1.goal === g.value)}
+                  >
+                    {goalLabel(g)}
+                  </button>
+                ))}
+                {s1.goal === 'other' && (
+                  <input
+                    type="text"
+                    placeholder={t.s0_goalOtherPh}
+                    value={s1.goalOther}
+                    onChange={(e) =>
+                      setS1((p) => ({ ...p, goalOther: e.target.value }))
+                    }
+                    className={inputCls}
+                    dir="auto"
+                  />
+                )}
+              </div>
+            ) : null}
+
             {needsUniversity ? (
               <div>
                 <FieldLabel hint={t.s0_universityHint} className="mb-1.5 block text-xs">
@@ -986,30 +1162,55 @@ export default function OnboardingPage() {
               <>
                 <div className="space-y-2">
                   <p className="mb-1 block text-sm text-muted-foreground">{t.s0_adultGoal}</p>
-                  {ADULT_GOALS.map((g) => (
+                  {visibleAdultGoals.map((g) => (
                     <button
                       key={g.value}
                       type="button"
-                      onClick={() => setS1((p) => ({ ...p, adultGoal: g.value }))}
+                      onClick={() =>
+                        setS1((p) => {
+                          const showUniversity = needsUniversityPicker({
+                            gradeLevel: p.gradeLevel,
+                            isAdultLearner: true,
+                            adultGoal: g.value,
+                          });
+                          return {
+                            ...p,
+                            adultGoal: g.value,
+                            targetUniversity: showUniversity ? p.targetUniversity : '',
+                          };
+                        })
+                      }
                       className={optionBtnCls(s1.adultGoal === g.value)}
                     >
                       {lang === 'he' ? g.label_he : g.label_en}
                     </button>
                   ))}
                 </div>
-                <div className="space-y-2">
-                  <p className="mb-1 block text-sm text-muted-foreground">{t.s0_yearsGap}</p>
-                  {YEARS_GAP_OPTIONS.map((g) => (
-                    <button
-                      key={g.value}
-                      type="button"
-                      onClick={() => setS1((p) => ({ ...p, yearsGap: g.value }))}
-                      className={optionBtnCls(s1.yearsGap === g.value)}
-                    >
-                      {lang === 'he' ? g.label_he : g.label_en}
-                    </button>
-                  ))}
-                </div>
+                {s1.subjects.map((sub) => (
+                  <div key={sub} className="space-y-2">
+                    <p className="mb-1 block text-sm text-muted-foreground">
+                      {yearsGapLabelForSubject(sub, lang)}
+                    </p>
+                    {YEARS_GAP_OPTIONS.map((g) => (
+                      <button
+                        key={g.value}
+                        type="button"
+                        onClick={() =>
+                          setS1((p) => ({
+                            ...p,
+                            yearsGapBySubject: {
+                              ...p.yearsGapBySubject,
+                              [sub]: g.value,
+                            },
+                          }))
+                        }
+                        className={optionBtnCls(s1.yearsGapBySubject[sub] === g.value)}
+                      >
+                        {lang === 'he' ? g.label_he : g.label_en}
+                      </button>
+                    ))}
+                  </div>
+                ))}
               </>
             ) : null}
 
@@ -1084,7 +1285,8 @@ export default function OnboardingPage() {
                 !s1.gradeLevel ||
                 (needsUniversity && !s1.targetUniversity) ||
                 (isAdultLearner
-                  ? !s1.adultGoal || !s1.yearsGap
+                  ? !s1.adultGoal ||
+                    !s1.subjects.every((sub) => Boolean(s1.yearsGapBySubject[sub]))
                   : !s1.goal || (needsPointsGroup && !s1.pointsGroup))
               }
               onClick={() => setStep(1)}
@@ -1130,75 +1332,116 @@ export default function OnboardingPage() {
               ) : null}
             </div>
 
-            <SliderField
-              label={t.s1_pastExperience}
-              min={1}
-              max={10}
-              value={s2.pastExperience}
-              onChange={(v) => setS2((p) => ({ ...p, pastExperience: v }))}
-              displayValue={`${s2.pastExperience}/10`}
-              hint={t.s1_pastExperienceHint}
-            />
-
-            {!isAdultLearner ? (
-              <>
-                <div>
-                  <FieldLabel className="mb-2 block">{t.s1_teacherOverall}</FieldLabel>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {s1.subjects.map((sub) => {
+              const exp = s2.subjectExperience[sub] ?? DEFAULT_SUBJECT_EXPERIENCE();
+              const subName = subjectLabel(sub, lang);
+              return (
+                <div
+                  key={sub}
+                  className="space-y-4 rounded-xl border border-border bg-card p-4"
+                >
+                  <p className="text-sm font-medium text-foreground">{subName}</p>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                     {(
                       [
-                        { v: 'mostly_good', label: t.s1_teacher_good },
-                        { v: 'mixed', label: t.s1_teacher_mixed },
-                        { v: 'mostly_bad', label: t.s1_teacher_bad },
-                        { v: 'unknown', label: t.s1_teacher_unknown },
+                        { v: 'share', label: t.s1_exp_share },
+                        { v: 'no_prior', label: t.s1_exp_none },
+                        { v: 'prefer_skip', label: t.s1_exp_skip },
                       ] as const
                     ).map(({ v, label }) => (
                       <button
                         key={v}
                         type="button"
-                        onClick={() => setS2((p) => ({ ...p, teacherOverall: v }))}
+                        onClick={() => patchSubjectExperience(sub, { mode: v })}
                         className={cn(
                           'rounded-lg border py-2.5 text-xs font-medium transition-colors',
-                          s2.teacherOverall === v
+                          exp.mode === v
                             ? 'border-accent-cyan bg-accent-cyan/10 text-foreground'
-                            : 'border-border bg-card text-muted-foreground hover:border-border-bright hover:text-foreground',
+                            : 'border-border bg-background text-muted-foreground hover:border-border-bright hover:text-foreground',
                         )}
                       >
                         {label}
                       </button>
                     ))}
                   </div>
+
+                  {exp.mode === 'share' ? (
+                    <>
+                      <SliderField
+                        label={tx(t.s1_pastExperience, { subject: subName })}
+                        min={1}
+                        max={10}
+                        value={exp.selfRating}
+                        onChange={(v) => patchSubjectExperience(sub, { selfRating: v })}
+                        displayValue={`${exp.selfRating}/10`}
+                        hint={t.s1_pastExperienceHint}
+                      />
+                      <div>
+                        <FieldLabel className="mb-2 block">
+                          {tx(t.s1_teacherOverall, { subject: subName })}
+                        </FieldLabel>
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+                          {(
+                            [
+                              { v: 'mostly_good', label: t.s1_teacher_good },
+                              { v: 'mixed', label: t.s1_teacher_mixed },
+                              { v: 'mostly_bad', label: t.s1_teacher_bad },
+                              { v: 'unknown', label: t.s1_teacher_unknown },
+                              { v: 'no_teacher', label: t.s1_teacher_none },
+                            ] as const
+                          ).map(({ v, label }) => (
+                            <button
+                              key={v}
+                              type="button"
+                              onClick={() =>
+                                patchSubjectExperience(sub, { teacherOverall: v })
+                              }
+                              className={cn(
+                                'rounded-lg border py-2.5 text-xs font-medium transition-colors',
+                                exp.teacherOverall === v
+                                  ? 'border-accent-cyan bg-accent-cyan/10 text-foreground'
+                                  : 'border-border bg-background text-muted-foreground hover:border-border-bright hover:text-foreground',
+                              )}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`teacher-notes-${sub}`}
+                          className="mb-1.5 block text-xs text-muted-foreground"
+                        >
+                          {tx(t.s1_teacherNotes, { subject: subName })}
+                        </label>
+                        <textarea
+                          id={`teacher-notes-${sub}`}
+                          rows={2}
+                          placeholder={t.s1_teacherNotesPh}
+                          value={exp.teacherNotes}
+                          onChange={(e) =>
+                            patchSubjectExperience(sub, { teacherNotes: e.target.value })
+                          }
+                          className={cn(inputCls, 'resize-none')}
+                          dir="auto"
+                        />
+                      </div>
+                    </>
+                  ) : null}
                 </div>
-                <div>
-                  <label
-                    htmlFor="teacher-notes"
-                    className="mb-1.5 block text-xs text-muted-foreground"
-                  >
-                    {t.s1_teacherNotes}
-                  </label>
-                  <textarea
-                    id="teacher-notes"
-                    rows={2}
-                    placeholder={t.s1_teacherNotesPh}
-                    value={s2.teacherNotes}
-                    onChange={(e) =>
-                      setS2((p) => ({ ...p, teacherNotes: e.target.value }))
-                    }
-                    className={cn(inputCls, 'resize-none')}
-                    dir="auto"
-                  />
-                </div>
-              </>
-            ) : null}
+              );
+            })}
 
             <div>
               <p className="mb-2 block text-sm text-muted-foreground">{t.s1_style}</p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {(
                   [
                     { v: 'theory_first', label: t.s1_style_theory },
                     { v: 'practice_first', label: t.s1_style_practice },
                     { v: 'mixed', label: t.s1_style_mixed },
+                    { v: 'unknown', label: t.s1_style_unknown },
                   ] as const
                 ).map(({ v, label }) => (
                   <button

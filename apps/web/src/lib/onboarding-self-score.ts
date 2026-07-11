@@ -83,12 +83,28 @@ const ADULT_BY_GOAL: Record<string, string[]> = {
     'geometry_basics',
     'trigonometry_ratios',
   ],
-  university_course: [
+  bagrut_physics: [
+    'units_measurement',
+    'kinematics_1d',
+    'newton_laws',
+    'work_energy',
+    'electrostatics',
+    'waves_basics',
+  ],
+  university_math: [
     'algebra_basics',
     'functions_quadratic',
     'trigonometry_ratios',
     'limits',
     'derivatives_intro',
+  ],
+  university_physics: [
+    'units_measurement',
+    'kinematics_1d',
+    'newton_laws',
+    'work_energy',
+    'electrostatics',
+    'electric_circuits',
   ],
   general_improvement: [
     'arithmetic',
