@@ -1048,6 +1048,25 @@ async function cachedBagrutExams(
   return rows;
 }
 
+function litePlanConcept(
+  cid: string,
+  learnerSubjects: string[],
+  mastery: Record<string, number>,
+): PlanConcept {
+  const kgInfo = kgById[cid];
+  const subject = kgInfo?.subject ?? inferSubject(cid, learnerSubjects);
+  const titles = resolveConceptTitles(cid);
+  return {
+    concept_id: cid,
+    name: titles.title_en,
+    name_he: titles.title_he,
+    subject,
+    mastery: mastery[cid] ?? null,
+    suggested_sections: [],
+    recommended_bagrut: [],
+  };
+}
+
 async function hydratePlanConcept(
   cid: string,
   learnerSubjects: string[],
@@ -1232,7 +1251,6 @@ export async function generateLearningPlan(
     quizDue: string;
     status: string;
   }> = [];
-  const contentCache = emptySubjectContentCache();
 
   for (let i = 0; i < weekGroups.length; i++) {
     const concepts = weekGroups[i]!;
@@ -1242,20 +1260,6 @@ export async function generateLearningPlan(
     const status = i === 0 ? 'active' : 'upcoming';
     const quizDueIso = quizDue.toISOString();
 
-    const hydrated: PlanConcept[] = [];
-    for (const cid of concepts) {
-      hydrated.push(
-        await hydratePlanConcept(cid, profile.subjects, mastery, contentCache),
-      );
-    }
-    weeks.push({
-      id: weekId,
-      plan_id: planId,
-      week_number: i + 1,
-      concepts: hydrated,
-      quiz_due_at: quizDueIso,
-      status,
-    });
     persistWeeks.push({
       weekId,
       weekNumber: i + 1,
@@ -1298,6 +1302,19 @@ export async function generateLearningPlan(
       throw new Error('A plan update is already in progress for this learner');
     }
     throw err;
+  }
+
+  for (const w of persistWeeks) {
+    weeks.push({
+      id: w.weekId,
+      plan_id: planId,
+      week_number: w.weekNumber,
+      concepts: w.concepts.map((cid) =>
+        litePlanConcept(cid, profile.subjects, mastery),
+      ),
+      quiz_due_at: w.quizDue,
+      status: w.status,
+    });
   }
 
   return {

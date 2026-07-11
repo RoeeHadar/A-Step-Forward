@@ -13,6 +13,7 @@ import {
   answeredStemKeys,
   buildDiagnosticSummary,
   currentValidationSlot,
+  diagnosticAnsweredCount,
   emptyDiagnosticSession,
   isDiagnosticSessionComplete,
   MIN_DIAGNOSTIC_ANSWERS,
@@ -36,7 +37,6 @@ import {
   findActiveDiagnosticSession,
   getConceptMastery,
   getLearnerProfile,
-  updateDiagnosticSessionResults,
 } from '@/lib/neon-db';
 import {
   bootstrapConceptIdsForProfile,
@@ -190,22 +190,6 @@ export async function buildAvailableValidationQueue(
   return slots;
 }
 
-async function resolveResumeOutcome(
-  state: DiagnosticSessionPayload,
-  profile: LearnerProfileRow,
-): Promise<'complete' | 'question' | 'abandon'> {
-  const answered = state.responses.length;
-  if (answered < MIN_DIAGNOSTIC_ANSWERS) return 'abandon';
-
-  if (answered >= state.validation_queue.length) return 'complete';
-
-  if (!isDiagnosticSessionComplete(state)) return 'question';
-
-  const picked = await pickNextDiagnosticItem(state, profile);
-  if (picked.item) return 'question';
-  return answered >= MIN_DIAGNOSTIC_ANSWERS ? 'complete' : 'abandon';
-}
-
 async function tryPickForSlot(
   state: DiagnosticSessionPayload,
   slot: ValidationSlot,
@@ -303,28 +287,17 @@ export async function initializeDiagnosticSession(
 }
 
 function canFinalizeDiagnostic(state: DiagnosticSessionPayload): boolean {
-  return state.responses.length >= 1;
+  return diagnosticAnsweredCount(state) >= MIN_DIAGNOSTIC_ANSWERS;
 }
 
-export async function resumeOrFinalizeDiagnosticSession(
+/** Resume only when the learner has an unanswered question open (page refresh). */
+export async function resumePendingDiagnosticQuestion(
   learnerId: string,
-): Promise<
-  | {
-      mode: 'question';
-      sessionId: string;
-      state: DiagnosticSessionPayload;
-      item: DiagnosticItem;
-      questionNumber: number;
-    }
-  | {
-      mode: 'complete';
-      sessionId: string;
-      state: DiagnosticSessionPayload;
-      summary: DiagnosticSummary;
-      questionsAnswered: number;
-    }
-  | null
-> {
+): Promise<{
+  sessionId: string;
+  state: DiagnosticSessionPayload;
+  item: DiagnosticItem;
+} | null> {
   const active = await findActiveDiagnosticSession(learnerId);
   if (!active) return null;
 
@@ -335,86 +308,19 @@ export async function resumeOrFinalizeDiagnosticSession(
   }
 
   const pending = resolveCurrentDiagnosticItem(state);
-  if (pending) {
-    const item = servedToDiagnosticItem(pending);
-    await ensureDiagnosticItemRow(item);
-    return {
-      mode: 'question',
-      sessionId: active.id,
-      state,
-      item,
-      questionNumber: state.responses.length + 1,
-    };
-  }
-
-  const profile = await getLearnerProfile(learnerId);
-  if (!profile) {
+  if (!pending) {
     await abandonActiveDiagnosticSessions(learnerId);
     return null;
   }
 
-  if (isDiagnosticSessionComplete(state) && canFinalizeDiagnostic(state)) {
-    const outcome = await resolveResumeOutcome(state, profile);
-    if (outcome === 'abandon') {
-      await abandonActiveDiagnosticSessions(learnerId);
-      return null;
-    }
-    if (outcome === 'question') {
-      const picked = await pickNextDiagnosticItem(state, profile);
-      if (!picked.item) {
-        await abandonActiveDiagnosticSessions(learnerId);
-        return null;
-      }
-      await updateDiagnosticSessionResults(
-        active.id,
-        diagnosticStateToResults(picked.state),
-      );
-      return {
-        mode: 'question',
-        sessionId: active.id,
-        state: picked.state,
-        item: picked.item,
-        questionNumber: state.responses.length + 1,
-      };
-    }
-    const summary = buildDiagnosticSummary(state);
-    return {
-      mode: 'complete',
-      sessionId: active.id,
-      state,
-      summary,
-      questionsAnswered: state.responses.length,
-    };
+  if (diagnosticAnsweredCount(state) >= state.validation_queue.length) {
+    await abandonActiveDiagnosticSessions(learnerId);
+    return null;
   }
 
-  const picked = await pickNextDiagnosticItem(state, profile);
-  if (!picked.item) {
-    if (!canFinalizeDiagnostic(picked.state)) {
-      await abandonActiveDiagnosticSessions(learnerId);
-      return null;
-    }
-    const summary = buildDiagnosticSummary(picked.state);
-    return {
-      mode: 'complete',
-      sessionId: active.id,
-      state: picked.state,
-      summary,
-      questionsAnswered: picked.state.responses.length,
-    };
-  }
-
-  await updateDiagnosticSessionResults(
-    active.id,
-    diagnosticStateToResults(picked.state),
-  );
-
-  return {
-    mode: 'question',
-    sessionId: active.id,
-    state: picked.state,
-    item: picked.item,
-    questionNumber: state.responses.length + 1,
-  };
+  const item = servedToDiagnosticItem(pending);
+  await ensureDiagnosticItemRow(item);
+  return { sessionId: active.id, state, item };
 }
 
 export async function advanceDiagnosticSession(

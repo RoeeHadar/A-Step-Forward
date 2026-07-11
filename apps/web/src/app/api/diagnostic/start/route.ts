@@ -3,15 +3,14 @@ import {
   startDiagnosticSession,
   itemToQuestion,
   dbConfigured,
-  completeDiagnostic,
-  persistDiagnosticSummary,
   abandonActiveDiagnosticSessions,
 } from '@/lib/neon-db';
 import {
   diagnosticStateToResults,
   initializeDiagnosticSession,
-  resumeOrFinalizeDiagnosticSession,
+  resumePendingDiagnosticQuestion,
 } from '@/lib/diagnostic-service';
+import { diagnosticAnsweredCount } from '@/lib/diagnostic-plan';
 import { normalizeLearnerSubjects } from '@/lib/diagnostic-start';
 
 export const runtime = 'nodejs';
@@ -46,6 +45,7 @@ async function startFreshDiagnostic(userId: string) {
     goal_concept_id: state.goal_concept_id,
     probe_concepts: state.probe_concepts,
     status: 'question',
+    fresh: true,
   });
 }
 
@@ -62,38 +62,18 @@ export async function POST() {
   }
 
   try {
-    const resumed = await resumeOrFinalizeDiagnosticSession(userId);
-    if (resumed?.mode === 'question') {
+    const pending = await resumePendingDiagnosticQuestion(userId);
+    if (pending) {
+      const answered = diagnosticAnsweredCount(pending.state);
       return Response.json({
-        session_id: resumed.sessionId,
-        question: itemToQuestion(resumed.item),
-        question_number: resumed.questionNumber,
-        total: resumed.state.validation_queue.length,
-        goal_concept_id: resumed.state.goal_concept_id,
-        probe_concepts: resumed.state.probe_concepts,
+        session_id: pending.sessionId,
+        question: itemToQuestion(pending.item),
+        question_number: answered + 1,
+        total: pending.state.validation_queue.length,
+        goal_concept_id: pending.state.goal_concept_id,
+        probe_concepts: pending.state.probe_concepts,
         status: 'question',
         resumed: true,
-      });
-    }
-
-    if (resumed?.mode === 'complete' && resumed.questionsAnswered >= 1) {
-      await persistDiagnosticSummary(userId, resumed.summary);
-      const mastery = await completeDiagnostic(
-        resumed.sessionId,
-        userId,
-        diagnosticStateToResults(resumed.state, resumed.summary),
-      );
-      return Response.json({
-        session_id: resumed.sessionId,
-        complete: true,
-        status: 'calibration_complete',
-        resumed: true,
-        results: {
-          mastery_by_topic: mastery,
-          summary: resumed.summary,
-        },
-        questions_answered: resumed.questionsAnswered,
-        total: resumed.state.validation_queue.length,
       });
     }
 

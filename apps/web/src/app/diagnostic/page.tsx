@@ -140,7 +140,7 @@ export default function DiagnosticPage() {
   const [error, setError] = useState('');
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [question, setQuestion] = useState<DiagnosticQuestion | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
+  const [stepIndex, setStepIndex] = useState(1);
   const [answeredCount, setAnsweredCount] = useState(0);
   const [sessionTotal, setSessionTotal] = useState(DIAGNOSTIC_QUESTIONS_PER_SESSION);
   const [chosen, setChosen] = useState('');
@@ -184,6 +184,7 @@ export default function DiagnosticPage() {
         complete?: boolean;
         results?: { mastery_by_topic?: Record<string, number> };
         questions_answered?: number;
+        fresh?: boolean;
         resumed?: boolean;
       };
       if (data.complete) {
@@ -209,10 +210,15 @@ export default function DiagnosticPage() {
       clearDiagnosticSubjectsSession();
       setSessionId(data.session_id);
       setQuestion(data.question);
-      const qNum = data.question_number ?? 1;
-      setCurrentQuestionIndex(qNum);
-      setAnsweredCount(Math.max(0, qNum - 1));
       setSessionTotal(data.total ?? DIAGNOSTIC_QUESTIONS_PER_SESSION);
+      if (data.resumed && !data.fresh) {
+        const qNum = data.question_number ?? 1;
+        setStepIndex(qNum);
+        setAnsweredCount(Math.max(0, qNum - 1));
+      } else {
+        setStepIndex(1);
+        setAnsweredCount(0);
+      }
       setPhase('question');
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t.loadFailed);
@@ -305,16 +311,17 @@ export default function DiagnosticPage() {
         setComplete(true);
         setMastery(data.results?.mastery_by_topic ?? {});
         setQuestion(null);
-        setAnsweredCount(data.questions_answered ?? answeredCount + 1);
+        const finalCount = data.questions_answered ?? answeredCount + 1;
+        setAnsweredCount(finalCount);
         if (data.total) setSessionTotal(data.total);
       } else {
         if (!data.question?.stem?.trim() || !data.question.options?.length) {
           throw new Error(t.loadFailed);
         }
-        const qNum = data.question_number ?? currentQuestionIndex + 1;
+        const nextAnswered = answeredCount + 1;
+        setAnsweredCount(nextAnswered);
+        setStepIndex(nextAnswered + 1);
         setQuestion(data.question);
-        setCurrentQuestionIndex(qNum);
-        setAnsweredCount(Math.max(0, qNum - 1));
         if (data.total) setSessionTotal(data.total);
         setChosen('');
         setPhase('question');
@@ -335,7 +342,7 @@ export default function DiagnosticPage() {
   const progressPct = complete
     ? 100
     : sessionTotal > 0
-      ? Math.min(100, Math.round((answeredCount / sessionTotal) * 100))
+      ? Math.min(100, Math.round(((stepIndex - 1) / sessionTotal) * 100))
       : 0;
 
   const statusMessage = (() => {
@@ -364,7 +371,7 @@ export default function DiagnosticPage() {
         {!complete && (
           <div className="mb-8">
             <div className="flex justify-between text-xs text-white/50 mb-2">
-              <span>{t.question_label(currentQuestionIndex)}</span>
+              <span>{t.question_label(stepIndex)}</span>
               <div className="flex items-center gap-3">
                 <span>{progressPct}%</span>
                 <button

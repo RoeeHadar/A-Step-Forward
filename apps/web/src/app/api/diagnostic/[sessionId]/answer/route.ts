@@ -15,6 +15,11 @@ import {
   loadDiagnosticStateFromSession,
   resolveDiagnosticItemFromSession,
 } from '@/lib/diagnostic-service';
+import {
+  diagnosticAnsweredCount,
+  isDiagnosticSessionComplete,
+  resolveCurrentDiagnosticItem,
+} from '@/lib/diagnostic-plan';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -71,6 +76,23 @@ export async function POST(
     return Response.json({ error: 'item not found' }, { status: 404 });
   }
 
+  const alreadyAnswered = priorState.responses.some((r) => r.item_id === body.item_id);
+  if (alreadyAnswered) {
+    const answeredCount = diagnosticAnsweredCount(priorState);
+    const pending = resolveCurrentDiagnosticItem(priorState);
+    if (pending && !isDiagnosticSessionComplete(priorState)) {
+      return Response.json({
+        complete: false,
+        status: 'question',
+        question: itemToQuestion(
+          resolveDiagnosticItemFromSession(pending.id, priorState)!,
+        ),
+        question_number: answeredCount + 1,
+        total: priorState.validation_queue.length,
+      });
+    }
+  }
+
   const raw = item.options as { choices?: string[]; correct?: string };
   const correctLetter = resolveCorrectLetter({
     choices: raw?.choices ?? [],
@@ -114,7 +136,7 @@ export async function POST(
     diagnosticStateToResults(advanced.state, advanced.summary),
   );
 
-  const answeredCount = advanced.state.responses.length;
+  const answeredCount = diagnosticAnsweredCount(advanced.state);
 
   if (advanced.complete && advanced.summary) {
     await persistDiagnosticSummary(userId, advanced.summary);

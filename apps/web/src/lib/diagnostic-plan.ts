@@ -296,10 +296,17 @@ export function targetDifficultyForSlot(
   return slot.target_difficulty;
 }
 
+export function diagnosticAnsweredCount(state: DiagnosticSessionPayload): number {
+  return new Set(state.responses.map((r) => r.item_id)).size;
+}
+
 export function applyDiagnosticResponse(
   state: DiagnosticSessionPayload,
   response: DiagnosticResponse,
 ): DiagnosticSessionPayload {
+  if (state.responses.some((r) => r.item_id === response.item_id)) {
+    return state;
+  }
   const topic = response.topic;
   const prevDiff = state.difficulty_by_topic[topic] ?? response.difficulty;
   const nextDiff = nextCatDifficulty(prevDiff, response.correct);
