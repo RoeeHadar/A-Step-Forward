@@ -441,6 +441,17 @@ async function fetchRecommendedBagrutExams(
   }
 }
 
+export async function hasActiveLearningPlan(learnerId: string): Promise<boolean> {
+  const s = requireSql();
+  const rows = (await s`
+    SELECT 1 AS ok
+    FROM learning_plans
+    WHERE learner_id = ${learnerId} AND status = 'active'
+    LIMIT 1
+  `) as Array<{ ok: number }>;
+  return rows.length > 0;
+}
+
 export function isTemplateDiagnosticStem(stem: string): boolean {
   return (
     /Which statement best describes|A statement that does not apply to|generic unrelated fact|עובדה כללית ולא קשורה|משפט שלא מתאים ל-|איזה משפט מתאר|\[Difficulty \d+\/10\]/i.test(
@@ -1006,6 +1017,61 @@ export interface GeneratePlanOptions {
   planChangeReason?: string;
 }
 
+type SubjectContentCache = {
+  sections: Map<string, Awaited<ReturnType<typeof fetchSuggestedContentSections>>>;
+  bagrut: Map<string, Awaited<ReturnType<typeof fetchRecommendedBagrutExams>>>;
+};
+
+function emptySubjectContentCache(): SubjectContentCache {
+  return { sections: new Map(), bagrut: new Map() };
+}
+
+async function cachedSuggestedSections(
+  cache: SubjectContentCache,
+  subject: string,
+): Promise<Awaited<ReturnType<typeof fetchSuggestedContentSections>>> {
+  const hit = cache.sections.get(subject);
+  if (hit) return hit;
+  const rows = await fetchSuggestedContentSections(subject);
+  cache.sections.set(subject, rows);
+  return rows;
+}
+
+async function cachedBagrutExams(
+  cache: SubjectContentCache,
+  subject: string,
+): Promise<Awaited<ReturnType<typeof fetchRecommendedBagrutExams>>> {
+  const hit = cache.bagrut.get(subject);
+  if (hit) return hit;
+  const rows = await fetchRecommendedBagrutExams(subject);
+  cache.bagrut.set(subject, rows);
+  return rows;
+}
+
+async function hydratePlanConcept(
+  cid: string,
+  learnerSubjects: string[],
+  mastery: Record<string, number>,
+  cache: SubjectContentCache,
+): Promise<PlanConcept> {
+  const kgInfo = kgById[cid];
+  const subject = kgInfo?.subject ?? inferSubject(cid, learnerSubjects);
+  const [sections, bagrut] = await Promise.all([
+    cachedSuggestedSections(cache, subject),
+    cachedBagrutExams(cache, subject),
+  ]);
+  const titles = resolveConceptTitles(cid);
+  return {
+    concept_id: cid,
+    name: titles.title_en,
+    name_he: titles.title_he,
+    subject,
+    mastery: mastery[cid] ?? null,
+    suggested_sections: sections,
+    recommended_bagrut: bagrut,
+  };
+}
+
 export async function generateLearningPlan(
   learnerId: string,
   options: GeneratePlanOptions = {},
@@ -1166,6 +1232,7 @@ export async function generateLearningPlan(
     quizDue: string;
     status: string;
   }> = [];
+  const contentCache = emptySubjectContentCache();
 
   for (let i = 0; i < weekGroups.length; i++) {
     const concepts = weekGroups[i]!;
@@ -1177,20 +1244,9 @@ export async function generateLearningPlan(
 
     const hydrated: PlanConcept[] = [];
     for (const cid of concepts) {
-      const kgInfo = kgById[cid];
-      const subject = kgInfo?.subject ?? inferSubject(cid, profile.subjects);
-      const sections = await fetchSuggestedContentSections(subject);
-      const bagrut = await fetchRecommendedBagrutExams(subject);
-      const titles = resolveConceptTitles(cid);
-      hydrated.push({
-        concept_id: cid,
-        name: titles.title_en,
-        name_he: titles.title_he,
-        subject,
-        mastery: mastery[cid] ?? null,
-        suggested_sections: sections,
-        recommended_bagrut: bagrut,
-      });
+      hydrated.push(
+        await hydratePlanConcept(cid, profile.subjects, mastery, contentCache),
+      );
     }
     weeks.push({
       id: weekId,
@@ -1271,11 +1327,12 @@ export async function waitForCurrentPlan(
   learnerId: string,
   opts: { attempts?: number; delayMs?: number } = {},
 ): Promise<LearningPlan | null> {
-  const attempts = opts.attempts ?? 90;
+  const attempts = opts.attempts ?? 45;
   const delayMs = opts.delayMs ?? 1000;
   for (let i = 0; i < attempts; i += 1) {
-    const plan = await getCurrentPlan(learnerId);
-    if (plan?.weeks?.length) return plan;
+    if (await hasActiveLearningPlan(learnerId)) {
+      return getCurrentPlan(learnerId);
+    }
     if (i < attempts - 1) await planGenSleep(delayMs);
   }
   return null;
@@ -1288,7 +1345,7 @@ export async function ensureLearningPlan(
   learnerId: string,
   options: GeneratePlanOptions & { forceRegenerate?: boolean } = {},
 ): Promise<LearningPlan> {
-  if (!options.forceRegenerate) {
+  if (!options.forceRegenerate && (await hasActiveLearningPlan(learnerId))) {
     const existing = await getCurrentPlan(learnerId);
     if (existing?.weeks?.length) return existing;
   }
@@ -1568,25 +1625,13 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
   const mastery = await getConceptMastery(learnerId);
   const profile = await getLearnerProfile(learnerId);
   const subjects = profile?.subjects ?? [];
+  const contentCache = emptySubjectContentCache();
 
   const weeks: PlanWeek[] = [];
   for (const w of weekRows) {
     const hydrated: PlanConcept[] = [];
     for (const cid of w.concepts) {
-      const kgInfo = kgById[cid];
-      const subject = kgInfo?.subject ?? inferSubject(cid, subjects);
-      const sections = await fetchSuggestedContentSections(subject);
-      const bagrut = await fetchRecommendedBagrutExams(subject);
-      const titles = resolveConceptTitles(cid);
-      hydrated.push({
-        concept_id: cid,
-        name: titles.title_en,
-        name_he: titles.title_he,
-        subject,
-        mastery: mastery[cid] ?? null,
-        suggested_sections: sections,
-        recommended_bagrut: bagrut,
-      });
+      hydrated.push(await hydratePlanConcept(cid, subjects, mastery, contentCache));
     }
     weeks.push({
       id: w.id,

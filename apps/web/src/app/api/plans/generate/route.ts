@@ -3,6 +3,7 @@ import { ensureLearningPlan, dbConfigured } from '@/lib/neon-db';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 export async function POST() {
   const { userId } = await auth();
@@ -13,7 +14,7 @@ export async function POST() {
 
   try {
     const plan = await ensureLearningPlan(userId);
-    return Response.json(plan, { status: 200 });
+    return Response.json({ ok: true, plan_id: plan.id }, { status: 200 });
   } catch (err) {
     console.error('[plans/generate]', err);
     return Response.json(

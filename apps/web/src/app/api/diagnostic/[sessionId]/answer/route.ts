@@ -2,7 +2,6 @@ import { auth } from '@clerk/nextjs/server';
 import {
   getDiagnosticSession,
   recordDiagnosticAnswer,
-  bumpDiagnosticIdx,
   completeDiagnostic,
   getDiagnosticItemById,
   updateDiagnosticSessionResults,
@@ -114,7 +113,8 @@ export async function POST(
     sessionId,
     diagnosticStateToResults(advanced.state, advanced.summary),
   );
-  const newIdx = await bumpDiagnosticIdx(sessionId);
+
+  const answeredCount = advanced.state.responses.length;
 
   if (advanced.complete && advanced.summary) {
     await persistDiagnosticSummary(userId, advanced.summary);
@@ -130,7 +130,7 @@ export async function POST(
         mastery_by_topic: mastery,
         summary: advanced.summary,
       },
-      questions_answered: newIdx,
+      questions_answered: answeredCount,
       total: advanced.state.validation_queue.length,
     });
   }
@@ -139,7 +139,7 @@ export async function POST(
     complete: false,
     status: 'question',
     question: itemToQuestion(advanced.nextItem!),
-    question_number: newIdx + 1,
+    question_number: answeredCount + 1,
     total: advanced.state.validation_queue.length,
   });
 }

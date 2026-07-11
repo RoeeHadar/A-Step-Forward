@@ -51,7 +51,7 @@ interface DiagnosticQuestion {
  */
 const STR = {
   he: {
-    question_n_of: (n: number, total: number) => `שאלה ${n} מתוך ${total}`,
+    question_label: (n: number) => `שאלה ${n}`,
     loading: 'טוען את האבחון שלך…',
     loadFailed: 'לא הצלחנו לטעון את האבחון.',
     retry: 'נסה שוב',
@@ -66,7 +66,13 @@ const STR = {
     status_label: 'מה קורה עכשיו',
     your_mastery: 'סיימנו את האבחון',
     based_on: (n: number) =>
-      `כיול ראשוני מ-${n} שאלות אימות — כל נושא נבדק ברמת קושי שמתאימה לדירוג העצמי שלך. התוכנית תיבנה על בסיס זה.`,
+      n === 1
+        ? 'כיול ראשוני משאלת אימות אחת — התוכנית תיבנה על בסיס התשובות שלך.'
+        : `כיול ראשוני מ-${n} שאלות אימות — התוכנית תיבנה על בסיס התשובות שלך.`,
+    generating_plan_elapsed: (sec: number) =>
+      sec > 0
+        ? `יוצר את תוכנית הלמידה האישית שלך… (${sec} שניות)`
+        : 'יוצר את תוכנית הלמידה האישית שלך…',
     generate_plan: 'יצירת תוכנית הלמידה שלי ←',
     generating: 'יוצר…',
     retry_plan: 'נסה שוב ליצור תוכנית',
@@ -76,7 +82,7 @@ const STR = {
     lang_toggle: 'EN',
   },
   en: {
-    question_n_of: (n: number, total: number) => `Question ${n} of ${total}`,
+    question_label: (n: number) => `Question ${n}`,
     loading: 'Loading your diagnostic…',
     loadFailed: 'We could not load your diagnostic.',
     retry: 'Try again',
@@ -91,7 +97,13 @@ const STR = {
     status_label: 'What’s happening now',
     your_mastery: 'Diagnostic complete',
     based_on: (n: number) =>
-      `Initial calibration from ${n} validation questions — each topic was tested at the difficulty matching your self-rating. Your plan will build on this.`,
+      n === 1
+        ? 'Initial calibration from 1 validation question — your plan will build on your answers.'
+        : `Initial calibration from ${n} validation questions — your plan will build on your answers.`,
+    generating_plan_elapsed: (sec: number) =>
+      sec > 0
+        ? `Building your personal learning plan… (${sec}s)`
+        : 'Building your personal learning plan…',
     generate_plan: 'Generate my learning plan →',
     generating: 'Generating…',
     retry_plan: 'Retry plan generation',
@@ -128,8 +140,9 @@ export default function DiagnosticPage() {
   const [error, setError] = useState('');
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [question, setQuestion] = useState<DiagnosticQuestion | null>(null);
-  const [questionNumber, setQuestionNumber] = useState(1);
-  const [totalQuestions, setTotalQuestions] = useState(DIAGNOSTIC_QUESTIONS_PER_SESSION);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [sessionTotal, setSessionTotal] = useState(DIAGNOSTIC_QUESTIONS_PER_SESSION);
   const [chosen, setChosen] = useState('');
   const [complete, setComplete] = useState(false);
   const [mastery, setMastery] = useState<Record<string, number>>({});
@@ -182,8 +195,8 @@ export default function DiagnosticPage() {
         setComplete(true);
         setMastery(data.results?.mastery_by_topic ?? {});
         setQuestion(null);
-        setQuestionNumber(data.questions_answered ?? 0);
-        if (data.total) setTotalQuestions(data.total);
+        setAnsweredCount(data.questions_answered ?? 0);
+        if (data.total) setSessionTotal(data.total);
         setPhase('calibrating');
         return;
       }
@@ -196,8 +209,10 @@ export default function DiagnosticPage() {
       clearDiagnosticSubjectsSession();
       setSessionId(data.session_id);
       setQuestion(data.question);
-      setQuestionNumber(data.question_number ?? 1);
-      setTotalQuestions(data.total ?? DIAGNOSTIC_QUESTIONS_PER_SESSION);
+      const qNum = data.question_number ?? 1;
+      setCurrentQuestionIndex(qNum);
+      setAnsweredCount(Math.max(0, qNum - 1));
+      setSessionTotal(data.total ?? DIAGNOSTIC_QUESTIONS_PER_SESSION);
       setPhase('question');
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t.loadFailed);
@@ -290,16 +305,17 @@ export default function DiagnosticPage() {
         setComplete(true);
         setMastery(data.results?.mastery_by_topic ?? {});
         setQuestion(null);
-        if (data.questions_answered) {
-          setQuestionNumber(data.questions_answered);
-        }
+        setAnsweredCount(data.questions_answered ?? answeredCount + 1);
+        if (data.total) setSessionTotal(data.total);
       } else {
         if (!data.question?.stem?.trim() || !data.question.options?.length) {
           throw new Error(t.loadFailed);
         }
+        const qNum = data.question_number ?? currentQuestionIndex + 1;
         setQuestion(data.question);
-        setQuestionNumber(data.question_number ?? questionNumber + 1);
-        if (data.total) setTotalQuestions(data.total);
+        setCurrentQuestionIndex(qNum);
+        setAnsweredCount(Math.max(0, qNum - 1));
+        if (data.total) setSessionTotal(data.total);
         setChosen('');
         setPhase('question');
       }
@@ -318,7 +334,9 @@ export default function DiagnosticPage() {
 
   const progressPct = complete
     ? 100
-    : Math.min(100, Math.round((questionNumber / totalQuestions) * 100));
+    : sessionTotal > 0
+      ? Math.min(100, Math.round((answeredCount / sessionTotal) * 100))
+      : 0;
 
   const statusMessage = (() => {
     switch (phase) {
@@ -329,7 +347,7 @@ export default function DiagnosticPage() {
       case 'calibrating':
         return t.calibrating;
       case 'generating_plan':
-        return t.generating_plan;
+        return t.generating_plan_elapsed(Number(phaseDetail) || 0);
       case 'rate_limited':
         return t.rate_limited(Number(phaseDetail) || answerRetrySec || 15);
       case 'redirecting':
@@ -346,7 +364,7 @@ export default function DiagnosticPage() {
         {!complete && (
           <div className="mb-8">
             <div className="flex justify-between text-xs text-white/50 mb-2">
-              <span>{t.question_n_of(questionNumber, totalQuestions)}</span>
+              <span>{t.question_label(currentQuestionIndex)}</span>
               <div className="flex items-center gap-3">
                 <span>{progressPct}%</span>
                 <button
@@ -467,7 +485,7 @@ export default function DiagnosticPage() {
           <div className="space-y-8">
             <div className="text-center">
               <h1 className="text-2xl font-bold mb-2">{t.your_mastery}</h1>
-              <p className="text-sm text-white/50">{t.based_on(questionNumber)}</p>
+              <p className="text-sm text-white/50">{t.based_on(answeredCount)}</p>
             </div>
 
             {radarData.length > 0 ? (

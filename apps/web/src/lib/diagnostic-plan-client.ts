@@ -8,6 +8,10 @@ export type DiagnosticFlowPhase =
   | 'redirecting'
   | 'error';
 
+const PLAN_FETCH_TIMEOUT_MS = 55_000;
+const PLAN_POLL_INTERVAL_MS = 2000;
+const PLAN_MAX_WAIT_MS = 120_000;
+
 export function isRateLimitResponse(status: number, message: string): boolean {
   return status === 429 || /rate.?limit|too many requests/i.test(message);
 }
@@ -39,19 +43,22 @@ function sleep(ms: number): Promise<void> {
 }
 
 export async function learnerHasActivePlan(): Promise<boolean> {
-  const res = await fetch('/api/plans/current', { cache: 'no-store' });
+  const res = await fetch('/api/plans/current?exists=1', { cache: 'no-store' });
   if (!res.ok) return false;
-  const data = (await res.json()) as { plan?: { weeks?: unknown[] } | null };
-  return Boolean(data.plan?.weeks?.length);
+  const data = (await res.json()) as { has_plan?: boolean };
+  return Boolean(data.has_plan);
 }
 
 export async function pollForActivePlan(
-  maxAttempts = 90,
-  delayMs = 1000,
+  onTick?: (elapsedSec: number) => void,
+  maxWaitMs = PLAN_MAX_WAIT_MS,
 ): Promise<boolean> {
-  for (let i = 0; i < maxAttempts; i += 1) {
+  const started = Date.now();
+  while (Date.now() - started < maxWaitMs) {
+    const elapsedSec = Math.floor((Date.now() - started) / 1000);
+    onTick?.(elapsedSec);
     if (await learnerHasActivePlan()) return true;
-    if (i < maxAttempts - 1) await sleep(delayMs);
+    await sleep(PLAN_POLL_INTERVAL_MS);
   }
   return false;
 }
@@ -65,11 +72,56 @@ export async function generatePlanWithRetry(options: {
     return;
   }
 
-  const maxAttempts = options.maxAttempts ?? 3;
+  const maxAttempts = options.maxAttempts ?? 2;
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+  const startPollTicker = () => {
+    const started = Date.now();
+    pollTimer = setInterval(() => {
+      const elapsedSec = Math.floor((Date.now() - started) / 1000);
+      options.onPhase('generating_plan', String(elapsedSec));
+    }, PLAN_POLL_INTERVAL_MS);
+  };
+
+  const stopPollTicker = () => {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  };
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-    options.onPhase('generating_plan');
-    const res = await fetch('/api/plans/generate', { method: 'POST' });
+    options.onPhase('generating_plan', '0');
+    startPollTicker();
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), PLAN_FETCH_TIMEOUT_MS);
+
+    let res: Response;
+    try {
+      res = await fetch('/api/plans/generate', {
+        method: 'POST',
+        signal: controller.signal,
+      });
+    } catch (err) {
+      stopPollTicker();
+      clearTimeout(timeout);
+      if (await pollForActivePlan((sec) => options.onPhase('generating_plan', String(sec)))) {
+        options.onPhase('redirecting');
+        return;
+      }
+      if (attempt < maxAttempts - 1) continue;
+      throw new Error(
+        err instanceof Error && err.name === 'AbortError'
+          ? 'Plan generation timed out. Please try again.'
+          : err instanceof Error
+            ? err.message
+            : 'Plan generation failed',
+      );
+    }
+
+    stopPollTicker();
+    clearTimeout(timeout);
 
     if (res.ok) {
       options.onPhase('redirecting');
@@ -91,12 +143,12 @@ export async function generatePlanWithRetry(options: {
       /* plain text error */
     }
 
-    if (isPlanLockError(message)) {
-      options.onPhase('generating_plan', 'waiting');
-      if (await pollForActivePlan()) {
-        options.onPhase('redirecting');
-        return;
-      }
+    if (
+      (isPlanLockError(message) || res.status === 504) &&
+      (await pollForActivePlan((sec) => options.onPhase('generating_plan', String(sec))))
+    ) {
+      options.onPhase('redirecting');
+      return;
     }
 
     if (isRetryablePlanError(res.status, message) && attempt < maxAttempts - 1) {
@@ -110,7 +162,7 @@ export async function generatePlanWithRetry(options: {
     throw new Error(message);
   }
 
-  if (await pollForActivePlan(10, 400)) {
+  if (await pollForActivePlan((sec) => options.onPhase('generating_plan', String(sec)), 20_000)) {
     options.onPhase('redirecting');
     return;
   }

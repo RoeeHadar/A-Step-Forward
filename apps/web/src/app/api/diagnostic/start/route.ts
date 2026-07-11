@@ -93,6 +93,7 @@ export async function POST() {
           summary: resumed.summary,
         },
         questions_answered: resumed.questionsAnswered,
+        total: resumed.state.validation_queue.length,
       });
     }
 
