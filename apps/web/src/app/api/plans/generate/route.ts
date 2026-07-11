@@ -5,15 +5,17 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
-export async function POST() {
+export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return new Response('Unauthorized', { status: 401 });
   if (!dbConfigured) {
     return Response.json({ error: 'DATABASE_URL not configured' }, { status: 503 });
   }
 
+  const fastPath = new URL(req.url).searchParams.get('fast') === '1';
+
   try {
-    const plan = await ensureLearningPlan(userId);
+    const plan = await ensureLearningPlan(userId, { fastPath });
     return Response.json({ ok: true, plan_id: plan.id }, { status: 200 });
   } catch (err) {
     console.error('[plans/generate]', err);

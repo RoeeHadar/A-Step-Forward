@@ -17,6 +17,7 @@ import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
+  buildFastPlanConceptOrder,
   buildUnifiedPlanConceptOrder,
   PLAN_SCHEMA_VERSION,
 } from './plan-worklist';
@@ -1015,6 +1016,8 @@ export interface GeneratePlanOptions {
   /** When true, plan only includes prepend + priority concepts (exam cram), not weak-mastery mix. */
   focusConceptsOnly?: boolean;
   planChangeReason?: string;
+  /** Skip BFS plan builder — use in-memory worklist only (onboarding / diagnostic). */
+  fastPath?: boolean;
 }
 
 type SubjectContentCache = {
@@ -1146,18 +1149,22 @@ export async function generateLearningPlan(
     numWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
   }
 
-  const sorted = await buildUnifiedPlanConceptOrder({
-    learnerId,
-    profile,
-    mastery,
-    options: {
-      priorityConcepts,
-      prependConcepts,
-      excludeConcepts,
-      focusConceptsOnly: options.focusConceptsOnly,
-    },
-    numWeeks,
-  });
+  const worklistOptions = {
+    priorityConcepts,
+    prependConcepts,
+    excludeConcepts,
+    focusConceptsOnly: options.focusConceptsOnly,
+  };
+
+  const sorted = options.fastPath
+    ? buildFastPlanConceptOrder({ profile, mastery, options: worklistOptions })
+    : await buildUnifiedPlanConceptOrder({
+        learnerId,
+        profile,
+        mastery,
+        options: worklistOptions,
+        numWeeks,
+      });
 
   const now = new Date();
   const previousBias = wellbeingPlanBiasFromProfile(
@@ -1187,7 +1194,7 @@ export async function generateLearningPlan(
     primaryTrigger != null &&
     canPersistWellbeingRewrite(wellbeingBias, primaryTrigger, profile, now);
 
-  if (wellbeingBias.active) {
+  if (wellbeingBias.active && !options.fastPath) {
     const moraleConcepts = await selectMoraleConcepts({
       learnerId,
       profile,
@@ -1233,9 +1240,7 @@ export async function generateLearningPlan(
     planLastAdjustedAt = now.toISOString();
   }
 
-  await saveWellbeingPlanBias(learnerId, wellbeingBias);
-
-  // Persist plan + weeks
+  // Persist plan + weeks (before wellbeing profile write so exists=1 polls succeed quickly)
   const planId = randomUUID();
   const startDate = new Date();
   const endDate = new Date(startDate);
@@ -1303,6 +1308,8 @@ export async function generateLearningPlan(
     }
     throw err;
   }
+
+  await saveWellbeingPlanBias(learnerId, wellbeingBias);
 
   for (const w of persistWeeks) {
     weeks.push({

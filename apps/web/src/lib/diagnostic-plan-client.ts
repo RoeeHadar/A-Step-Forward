@@ -8,9 +8,9 @@ export type DiagnosticFlowPhase =
   | 'redirecting'
   | 'error';
 
-const PLAN_FETCH_TIMEOUT_MS = 55_000;
+const PLAN_GENERATE_TIMEOUT_MS = 90_000;
 const PLAN_POLL_INTERVAL_MS = 2000;
-const PLAN_MAX_WAIT_MS = 120_000;
+const PLAN_MAX_WAIT_MS = 90_000;
 
 export function isRateLimitResponse(status: number, message: string): boolean {
   return status === 429 || /rate.?limit|too many requests/i.test(message);
@@ -27,6 +27,7 @@ export function isRetryablePlanError(status: number, message: string): boolean {
     isRateLimitResponse(status, message) ||
     status === 503 ||
     status === 502 ||
+    status === 504 ||
     /temporarily unavailable/i.test(message)
   );
 }
@@ -63,70 +64,21 @@ export async function pollForActivePlan(
   return false;
 }
 
-export async function generatePlanWithRetry(options: {
-  onPhase: (phase: DiagnosticFlowPhase, detail?: string) => void;
-  maxAttempts?: number;
-}): Promise<void> {
-  if (await learnerHasActivePlan()) {
-    options.onPhase('redirecting');
-    return;
-  }
+type GenerateAttemptResult =
+  | { kind: 'ok' }
+  | { kind: 'timeout' }
+  | { kind: 'error'; status: number; message: string; retryAfterSec?: number };
 
-  const maxAttempts = options.maxAttempts ?? 2;
-  let pollTimer: ReturnType<typeof setInterval> | null = null;
-
-  const startPollTicker = () => {
-    const started = Date.now();
-    pollTimer = setInterval(() => {
-      const elapsedSec = Math.floor((Date.now() - started) / 1000);
-      options.onPhase('generating_plan', String(elapsedSec));
-    }, PLAN_POLL_INTERVAL_MS);
-  };
-
-  const stopPollTicker = () => {
-    if (pollTimer) {
-      clearInterval(pollTimer);
-      pollTimer = null;
-    }
-  };
-
-  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-    options.onPhase('generating_plan', '0');
-    startPollTicker();
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), PLAN_FETCH_TIMEOUT_MS);
-
-    let res: Response;
-    try {
-      res = await fetch('/api/plans/generate', {
-        method: 'POST',
-        signal: controller.signal,
-      });
-    } catch (err) {
-      stopPollTicker();
-      clearTimeout(timeout);
-      if (await pollForActivePlan((sec) => options.onPhase('generating_plan', String(sec)))) {
-        options.onPhase('redirecting');
-        return;
-      }
-      if (attempt < maxAttempts - 1) continue;
-      throw new Error(
-        err instanceof Error && err.name === 'AbortError'
-          ? 'Plan generation timed out. Please try again.'
-          : err instanceof Error
-            ? err.message
-            : 'Plan generation failed',
-      );
-    }
-
-    stopPollTicker();
-    clearTimeout(timeout);
-
-    if (res.ok) {
-      options.onPhase('redirecting');
-      return;
-    }
+async function postPlanGenerate(): Promise<GenerateAttemptResult> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), PLAN_GENERATE_TIMEOUT_MS);
+  try {
+    const res = await fetch('/api/plans/generate?fast=1', {
+      method: 'POST',
+      signal: controller.signal,
+      cache: 'no-store',
+    });
+    if (res.ok) return { kind: 'ok' };
 
     const text = await res.text();
     let message = text.trim() || `Request failed (${res.status})`;
@@ -142,30 +94,106 @@ export async function generatePlanWithRetry(options: {
     } catch {
       /* plain text error */
     }
-
-    if (
-      (isPlanLockError(message) || res.status === 504) &&
-      (await pollForActivePlan((sec) => options.onPhase('generating_plan', String(sec))))
-    ) {
-      options.onPhase('redirecting');
-      return;
+    return { kind: 'error', status: res.status, message, retryAfterSec };
+  } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') {
+      return { kind: 'timeout' };
     }
-
-    if (isRetryablePlanError(res.status, message) && attempt < maxAttempts - 1) {
-      const waitMs = retryDelayMs(attempt, retryAfterSec);
-      const waitSec = Math.ceil(waitMs / 1000);
-      options.onPhase('rate_limited', String(waitSec));
-      await sleep(waitMs);
-      continue;
-    }
-
-    throw new Error(message);
+    return {
+      kind: 'error',
+      status: 0,
+      message: err instanceof Error ? err.message : 'Plan generation failed',
+    };
+  } finally {
+    clearTimeout(timeout);
   }
+}
 
-  if (await pollForActivePlan((sec) => options.onPhase('generating_plan', String(sec)), 20_000)) {
+/**
+ * Kick off plan generation and poll `exists=1` in parallel until the plan row
+ * is visible or we hit the wait budget.
+ */
+export async function generatePlanWithRetry(options: {
+  onPhase: (phase: DiagnosticFlowPhase, detail?: string) => void;
+  maxAttempts?: number;
+}): Promise<void> {
+  if (await learnerHasActivePlan()) {
     options.onPhase('redirecting');
     return;
   }
 
-  throw new Error('Plan generation failed');
+  const maxAttempts = options.maxAttempts ?? 2;
+  const started = Date.now();
+  let retriesUsed = 0;
+  let pendingGenerate: Promise<GenerateAttemptResult> | null = postPlanGenerate();
+  let fatalError: string | null = null;
+
+  const tick = () => {
+    const elapsedSec = Math.floor((Date.now() - started) / 1000);
+    options.onPhase('generating_plan', String(elapsedSec));
+  };
+
+  while (Date.now() - started < PLAN_MAX_WAIT_MS) {
+    tick();
+
+    if (await learnerHasActivePlan()) {
+      options.onPhase('redirecting');
+      return;
+    }
+
+    if (!pendingGenerate) {
+      await sleep(PLAN_POLL_INTERVAL_MS);
+      continue;
+    }
+
+    const race = await Promise.race([
+      pendingGenerate.then((result) => ({ source: 'generate' as const, result })),
+      sleep(PLAN_POLL_INTERVAL_MS).then(() => ({ source: 'poll' as const, result: null })),
+    ]);
+
+    if (race.source === 'poll') continue;
+
+    const result = race.result;
+    pendingGenerate = null;
+
+    if (result.kind === 'ok') {
+      if (await learnerHasActivePlan()) {
+        options.onPhase('redirecting');
+        return;
+      }
+      continue;
+    }
+
+    if (result.kind === 'timeout' || isPlanLockError(result.message)) {
+      continue;
+    }
+
+    if (
+      isRetryablePlanError(result.status, result.message) &&
+      retriesUsed < maxAttempts - 1
+    ) {
+      retriesUsed += 1;
+      const waitMs = retryDelayMs(retriesUsed - 1, result.retryAfterSec);
+      options.onPhase('rate_limited', String(Math.ceil(waitMs / 1000)));
+      await sleep(waitMs);
+      pendingGenerate = postPlanGenerate();
+      continue;
+    }
+
+    fatalError = result.message;
+    break;
+  }
+
+  if (await learnerHasActivePlan()) {
+    options.onPhase('redirecting');
+    return;
+  }
+
+  if (fatalError) {
+    throw new Error(fatalError);
+  }
+
+  throw new Error(
+    'Plan generation timed out. Please refresh the page or open the dashboard to retry.',
+  );
 }

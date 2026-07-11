@@ -249,6 +249,59 @@ function mergeConceptOrder(args: {
 }
 
 /**
+ * In-memory concept ordering for onboarding / first plan — skips BFS + Neon
+ * hydration (`buildLearningPlan`) so the plan row can persist in seconds.
+ */
+export function buildFastPlanConceptOrder(args: {
+  profile: PlanWorklistProfile;
+  mastery: Record<string, number>;
+  options?: PlanWorklistOptions;
+}): string[] {
+  const options = args.options ?? {};
+  const prependConcepts = options.prependConcepts ?? [];
+  const priorityConcepts = options.priorityConcepts ?? [];
+  const excludeConcepts = options.excludeConcepts ?? [];
+  const focusConceptsOnly = options.focusConceptsOnly === true;
+
+  const worklist = collectWorklistFallback(
+    args.mastery,
+    args.profile.self_scores,
+    args.profile.subjects,
+  );
+  for (const c of prependConcepts) worklist.add(c);
+  for (const c of priorityConcepts) worklist.add(c);
+  for (const c of excludeConcepts) worklist.delete(c);
+
+  if (worklist.size === 0) {
+    const retry = collectWorklistFallback(
+      args.mastery,
+      args.profile.self_scores,
+      args.profile.subjects,
+    );
+    for (const c of retry) worklist.add(c);
+  }
+
+  const pathIds = sortFallbackWorklist(worklist, priorityConcepts);
+
+  const ordered = mergeConceptOrder({
+    prependConcepts,
+    priorityConcepts,
+    pathIds,
+    excludeConcepts,
+    focusConceptsOnly,
+  });
+
+  if (ordered.length === 0 && args.profile.self_scores) {
+    for (const raw of Object.keys(args.profile.self_scores)) {
+      const id = canonicalConceptId(raw);
+      if (id && conceptMatchesSubjects(id, args.profile.subjects)) ordered.push(id);
+    }
+  }
+
+  return ordered;
+}
+
+/**
  * Ordered concept ids for weekly plan chunking — same BFS engine as chat/API.
  */
 export async function buildUnifiedPlanConceptOrder(args: {

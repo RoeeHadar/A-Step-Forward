@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  buildFastPlanConceptOrder,
   buildUnifiedPlanConceptOrder,
   DEFAULT_GOAL_CONCEPT_BY_GOAL_KEY,
   resolveGoalConceptId,
@@ -84,5 +85,44 @@ describe('buildUnifiedPlanConceptOrder', () => {
 
     expect(ordered).toEqual(['limits', 'algebra_basics']);
     expect(ordered).not.toContain('derivatives_intro');
+  });
+});
+
+describe('buildFastPlanConceptOrder', () => {
+  beforeEach(() => {
+    mockBuildLearningPlan.mockReset();
+  });
+
+  it('orders from weak mastery and diagnostic priority without BFS', () => {
+    const ordered = buildFastPlanConceptOrder({
+      profile: {
+        ...baseProfile,
+        self_scores: { limits: 0.3, algebra_basics: 0.4 },
+      },
+      mastery: { limits: 0.25, algebra_basics: 0.35 },
+      options: {
+        prependConcepts: ['functions_quadratic'],
+        priorityConcepts: ['limits'],
+        excludeConcepts: [],
+      },
+    });
+
+    expect(ordered[0]).toBe('functions_quadratic');
+    expect(ordered).toContain('limits');
+    expect(mockBuildLearningPlan).not.toHaveBeenCalled();
+  });
+
+  it('falls back to self_scores keys when mastery worklist is empty', () => {
+    const ordered = buildFastPlanConceptOrder({
+      profile: {
+        subjects: ['math'],
+        self_scores: { limits: 0.5, algebra_basics: 0.6 },
+        personality_profile: null,
+      },
+      mastery: {},
+    });
+
+    expect(ordered.length).toBeGreaterThan(0);
+    expect(ordered).toContain('limits');
   });
 });

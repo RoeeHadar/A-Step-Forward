@@ -27,10 +27,10 @@ Sign-up (Clerk)            apps/web/src/app/sign-up/.../page.tsx
        router.push('/diagnostic')
 
 /diagnostic                apps/web/src/app/diagnostic/page.tsx
-  ├─ POST /api/diagnostic/start → 12 questions sampled from diagnostic_items
+  ├─ POST /api/diagnostic/start → 6 validation MCQs (concepts with available items)
   ├─ POST /api/diagnostic/[id]/answer per question → updates concept_mastery
   └─ On complete:
-       POST /api/plans/generate → generateLearningPlan()
+       generatePlanWithRetry() → POST /api/plans/generate?fast=1 + poll exists=1
        router.push('/dashboard')
 
 /dashboard                 apps/web/src/app/dashboard/page.tsx
@@ -70,9 +70,10 @@ Sign-up (Clerk)            apps/web/src/app/sign-up/.../page.tsx
 
 ## Diagnostic behavior
 
-`/api/diagnostic/start` samples 12 random items from `diagnostic_items` filtered
-to the learner's subjects. **Not** an adaptive CAT — that lives on Render. The
-Vercel path is intentionally simpler so it always works.
+`/api/diagnostic/start` builds a **6-question** validation queue from concepts that
+have renderable MCQs in `diagnostic_items` (see `skills/diagnostic-plan-golden-path/SKILL.md`).
+Fresh sessions start on each visit unless one pending unanswered question exists
+(page refresh mid-question). **Not** an adaptive CAT — that lives on Render.
 
 `/api/diagnostic/[id]/answer` looks up the chosen letter's correctness via
 `options.correct` on the item row, updates `concept_mastery` for the topic, and
@@ -92,10 +93,13 @@ Always prefer JSONB columns for soft/qualitative attributes; reserve real
 columns for values plan generation needs to query on (dates, numerics).
 
 ## Plan length tuning
-The 4-week default and 12-week cap live in `generateLearningPlan()`. If you
-need longer plans (e.g. year-long goals), bump the upper bounds there.
+The 4-week default and 12-week cap live in `generateLearningPlan()`. First plan
+after diagnostic uses `fastPath: true` (`buildFastPlanConceptOrder`) — see
+`skills/diagnostic-plan-golden-path/SKILL.md`. If you need longer plans (e.g.
+year-long goals), bump the upper bounds there.
 
 ## Re-running onboarding
 A learner can edit their profile by visiting `/onboarding` again — the upsert
 respects `learner_id` as a UNIQUE key and clobbers in place. To force a plan
 rebuild, call `POST /api/plans/generate` (idempotent: replaces the active plan).
+For onboarding-speed rebuild after diagnostic, use `POST /api/plans/generate?fast=1`.
