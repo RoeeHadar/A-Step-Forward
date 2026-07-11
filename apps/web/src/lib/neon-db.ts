@@ -1255,6 +1255,64 @@ export async function generateLearningPlan(
   };
 }
 
+function planGenSleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function isPlanGenerationLockError(err: unknown): boolean {
+  return (
+    err instanceof Error &&
+    /plan update is already in progress/i.test(err.message)
+  );
+}
+
+/** Poll until another in-flight plan generation finishes persisting. */
+export async function waitForCurrentPlan(
+  learnerId: string,
+  opts: { attempts?: number; delayMs?: number } = {},
+): Promise<LearningPlan | null> {
+  const attempts = opts.attempts ?? 90;
+  const delayMs = opts.delayMs ?? 1000;
+  for (let i = 0; i < attempts; i += 1) {
+    const plan = await getCurrentPlan(learnerId);
+    if (plan?.weeks?.length) return plan;
+    if (i < attempts - 1) await planGenSleep(delayMs);
+  }
+  return null;
+}
+
+const planGenerationInflight = new Map<string, Promise<LearningPlan>>();
+
+/** Return an active plan or generate one — waits on lock contention instead of failing. */
+export async function ensureLearningPlan(
+  learnerId: string,
+  options: GeneratePlanOptions & { forceRegenerate?: boolean } = {},
+): Promise<LearningPlan> {
+  if (!options.forceRegenerate) {
+    const existing = await getCurrentPlan(learnerId);
+    if (existing?.weeks?.length) return existing;
+  }
+
+  const inflight = planGenerationInflight.get(learnerId);
+  if (inflight) return inflight;
+
+  const work = (async () => {
+    try {
+      return await generateLearningPlan(learnerId, options);
+    } catch (err) {
+      if (!isPlanGenerationLockError(err)) throw err;
+      const plan = await waitForCurrentPlan(learnerId);
+      if (plan) return plan;
+      throw err;
+    } finally {
+      planGenerationInflight.delete(learnerId);
+    }
+  })();
+
+  planGenerationInflight.set(learnerId, work);
+  return work;
+}
+
 export async function applyPlanProfileUpdates(
   learnerId: string,
   updates: {

@@ -5,6 +5,7 @@ import {
   dbConfigured,
   completeDiagnostic,
   persistDiagnosticSummary,
+  abandonActiveDiagnosticSessions,
 } from '@/lib/neon-db';
 import {
   diagnosticStateToResults,
@@ -17,6 +18,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 async function startFreshDiagnostic(userId: string) {
+  await abandonActiveDiagnosticSessions(userId);
   const init = await initializeDiagnosticSession(userId);
   if (!init) {
     return Response.json(

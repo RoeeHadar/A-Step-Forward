@@ -12,13 +12,14 @@ import {
   answeredItemIds,
   answeredStemKeys,
   buildDiagnosticSummary,
-  buildValidationQueue,
   currentValidationSlot,
   emptyDiagnosticSession,
   isDiagnosticSessionComplete,
+  MIN_DIAGNOSTIC_ANSWERS,
   orderProbeConcepts,
   parseDiagnosticSessionPayload,
   resolveCurrentDiagnosticItem,
+  selfScoreTier,
   setCurrentDiagnosticItem,
   targetDifficultyForSlot,
   type DiagnosticServedItem,
@@ -151,6 +152,60 @@ export async function buildPersonalizedProbeConcepts(
   return { goalConceptId, probeConcepts };
 }
 
+function slotForSelfScore(conceptId: string, score: number): ValidationSlot {
+  const tier = selfScoreTier(score);
+  if (tier === 'weak') {
+    return { concept_id: conceptId, target_difficulty: 3, slot_kind: 'basic' };
+  }
+  if (tier === 'ok') {
+    return { concept_id: conceptId, target_difficulty: 5, slot_kind: 'medium' };
+  }
+  return { concept_id: conceptId, target_difficulty: 8, slot_kind: 'hard' };
+}
+
+/** Only queue concepts that have at least one servable MCQ (Neon or lesson bank). */
+export async function buildAvailableValidationQueue(
+  probeConcepts: string[],
+  selfScores: Record<string, number> | null,
+  profile: LearnerProfileRow,
+  total = DIAGNOSTIC_QUESTIONS_PER_SESSION,
+): Promise<ValidationSlot[]> {
+  const candidates = orderProbeConcepts(
+    probeConcepts,
+    selfScores,
+    Math.max(total * 3, 12),
+  );
+  const scratch = emptyDiagnosticSession(null, candidates, []);
+  const slots: ValidationSlot[] = [];
+
+  for (const conceptId of candidates) {
+    if (slots.length >= total) break;
+    if (!conceptAllowedForProfile(conceptId, profile)) continue;
+    const score = selfScores?.[conceptId] ?? 5;
+    const slot = slotForSelfScore(conceptId, score);
+    const item = await tryPickForSlot(scratch, slot, profile);
+    if (item) slots.push(slot);
+  }
+
+  return slots;
+}
+
+async function resolveResumeOutcome(
+  state: DiagnosticSessionPayload,
+  profile: LearnerProfileRow,
+): Promise<'complete' | 'question' | 'abandon'> {
+  const answered = state.responses.length;
+  if (answered < MIN_DIAGNOSTIC_ANSWERS) return 'abandon';
+
+  if (answered >= state.validation_queue.length) return 'complete';
+
+  if (!isDiagnosticSessionComplete(state)) return 'question';
+
+  const picked = await pickNextDiagnosticItem(state, profile);
+  if (picked.item) return 'question';
+  return answered >= MIN_DIAGNOSTIC_ANSWERS ? 'complete' : 'abandon';
+}
+
 async function tryPickForSlot(
   state: DiagnosticSessionPayload,
   slot: ValidationSlot,
@@ -232,11 +287,14 @@ export async function initializeDiagnosticSession(
   );
   if (probeConcepts.length === 0) return null;
 
-  const validationQueue = buildValidationQueue(
+  const validationQueue = await buildAvailableValidationQueue(
     probeConcepts,
     profile.self_scores,
+    profile,
     DIAGNOSTIC_QUESTIONS_PER_SESSION,
   );
+  if (validationQueue.length === 0) return null;
+
   const state = emptyDiagnosticSession(goalConceptId, probeConcepts, validationQueue);
   const picked = await pickNextDiagnosticItem(state, profile);
   if (!picked.item) return null;
@@ -289,7 +347,36 @@ export async function resumeOrFinalizeDiagnosticSession(
     };
   }
 
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) {
+    await abandonActiveDiagnosticSessions(learnerId);
+    return null;
+  }
+
   if (isDiagnosticSessionComplete(state) && canFinalizeDiagnostic(state)) {
+    const outcome = await resolveResumeOutcome(state, profile);
+    if (outcome === 'abandon') {
+      await abandonActiveDiagnosticSessions(learnerId);
+      return null;
+    }
+    if (outcome === 'question') {
+      const picked = await pickNextDiagnosticItem(state, profile);
+      if (!picked.item) {
+        await abandonActiveDiagnosticSessions(learnerId);
+        return null;
+      }
+      await updateDiagnosticSessionResults(
+        active.id,
+        diagnosticStateToResults(picked.state),
+      );
+      return {
+        mode: 'question',
+        sessionId: active.id,
+        state: picked.state,
+        item: picked.item,
+        questionNumber: state.responses.length + 1,
+      };
+    }
     const summary = buildDiagnosticSummary(state);
     return {
       mode: 'complete',
@@ -298,12 +385,6 @@ export async function resumeOrFinalizeDiagnosticSession(
       summary,
       questionsAnswered: state.responses.length,
     };
-  }
-
-  const profile = await getLearnerProfile(learnerId);
-  if (!profile) {
-    await abandonActiveDiagnosticSessions(learnerId);
-    return null;
   }
 
   const picked = await pickNextDiagnosticItem(state, profile);

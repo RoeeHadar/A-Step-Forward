@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   isRateLimitResponse,
   isRetryablePlanError,
+  isPlanLockError,
   retryDelayMs,
 } from './diagnostic-plan-client';
 
@@ -16,10 +17,13 @@ describe('diagnostic-plan-client', () => {
     expect(isRetryablePlanError(503, 'temporarily unavailable')).toBe(true);
   });
 
-  it('treats plan lock contention as retryable', () => {
-    expect(isRetryablePlanError(500, 'A plan update is already in progress for this learner')).toBe(
+  it('detects plan lock errors separately from generic retry', () => {
+    expect(isPlanLockError('A plan update is already in progress for this learner')).toBe(
       true,
     );
+    expect(
+      isRetryablePlanError(500, 'A plan update is already in progress for this learner'),
+    ).toBe(false);
   });
 
   it('does not retry exhausted diagnostic responses', () => {
