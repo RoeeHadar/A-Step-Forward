@@ -14,10 +14,10 @@ import {
   currentValidationSlot,
   emptyDiagnosticSession,
   isDiagnosticSessionComplete,
-  MIN_DIAGNOSTIC_ANSWERS,
   orderProbeConcepts,
   parseDiagnosticSessionPayload,
   rememberServedItem,
+  reserveAskedItem,
   targetDifficultyForSlot,
   type DiagnosticServedItem,
 } from '@/lib/diagnostic-plan';
@@ -29,8 +29,10 @@ import {
   type LearnerProfileRow,
   ensureDiagnosticItemRow,
   fetchDiagnosticItemForConcept,
+  findActiveDiagnosticSession,
   getConceptMastery,
   getLearnerProfile,
+  updateDiagnosticSessionResults,
 } from '@/lib/neon-db';
 import {
   bootstrapConceptIdsForProfile,
@@ -69,7 +71,7 @@ function attachServedItem(
   state: DiagnosticSessionPayload,
   item: DiagnosticItem,
 ): DiagnosticSessionPayload {
-  return rememberServedItem(state, toServedItem(item));
+  return reserveAskedItem(rememberServedItem(state, toServedItem(item)), item);
 }
 
 function pathConceptIdsPrereqsFirst(path: Array<{ concept_id: string; relation: string }>): string[] {
@@ -153,6 +155,7 @@ async function tryPickForSlot(
   const selfScores = profile.self_scores ?? {};
   const targetDifficulty = targetDifficultyForSlot(state, slot, selfScores);
   const kindsToTry = [slot.slot_kind, ...SLOT_KINDS.filter((k) => k !== slot.slot_kind)];
+  const excludeStems = state.asked_stem_keys ?? [];
 
   for (const kind of kindsToTry) {
     const item = await fetchDiagnosticItemForConcept(
@@ -161,6 +164,7 @@ async function tryPickForSlot(
       state.asked_item_ids,
       targetDifficulty,
       kind,
+      excludeStems,
     );
     if (item) return item;
 
@@ -170,6 +174,7 @@ async function tryPickForSlot(
       state.asked_item_ids,
       targetDifficulty,
       kind,
+      excludeStems,
     );
     if (fromBank) return fromBank;
   }
@@ -231,6 +236,71 @@ export async function initializeDiagnosticSession(
   return { state: picked.state, firstItem: picked.item, profile };
 }
 
+export async function resumeOrFinalizeDiagnosticSession(
+  learnerId: string,
+): Promise<
+  | {
+      mode: 'question';
+      sessionId: string;
+      state: DiagnosticSessionPayload;
+      item: DiagnosticItem;
+      questionNumber: number;
+    }
+  | {
+      mode: 'complete';
+      sessionId: string;
+      state: DiagnosticSessionPayload;
+      summary: DiagnosticSummary;
+      questionsAnswered: number;
+    }
+  | null
+> {
+  const active = await findActiveDiagnosticSession(learnerId);
+  if (!active) return null;
+
+  const state = parseDiagnosticSessionPayload(active.results);
+  if (!state) return null;
+
+  if (isDiagnosticSessionComplete(state)) {
+    const summary = buildDiagnosticSummary(state);
+    return {
+      mode: 'complete',
+      sessionId: active.id,
+      state,
+      summary,
+      questionsAnswered: state.responses.length,
+    };
+  }
+
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return null;
+
+  const picked = await pickNextDiagnosticItem(state, profile);
+  if (!picked.item) {
+    const summary = buildDiagnosticSummary(picked.state);
+    return {
+      mode: 'complete',
+      sessionId: active.id,
+      state: picked.state,
+      summary,
+      questionsAnswered: picked.state.responses.length,
+    };
+  }
+
+  await updateDiagnosticSessionResults(
+    active.id,
+    diagnosticStateToResults(picked.state),
+  );
+
+  return {
+    mode: 'question',
+    sessionId: active.id,
+    state: picked.state,
+    item: picked.item,
+    questionNumber: active.question_idx + 1,
+  };
+}
+
 export async function advanceDiagnosticSession(
   learnerId: string,
   priorState: DiagnosticSessionPayload,
@@ -262,11 +332,8 @@ export async function advanceDiagnosticSession(
   const picked = await pickNextDiagnosticItem(state, profile);
 
   if (!picked.item) {
-    if (state.responses.length >= MIN_DIAGNOSTIC_ANSWERS) {
-      const summary = buildDiagnosticSummary(picked.state);
-      return { state: picked.state, nextItem: null, complete: true, summary };
-    }
-    return { state: picked.state, nextItem: null, complete: false, summary: null };
+    const summary = buildDiagnosticSummary(picked.state);
+    return { state: picked.state, nextItem: null, complete: true, summary };
   }
 
   return { state: picked.state, nextItem: picked.item, complete: false, summary: null };

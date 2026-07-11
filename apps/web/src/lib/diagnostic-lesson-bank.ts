@@ -14,6 +14,7 @@ import {
   stemMatchesSlotKind,
   type DiagnosticSlotKind,
 } from '@/lib/diagnostic-stem-filter';
+import { stemAlreadyAsked } from '@/lib/diagnostic-stem-dedupe';
 
 const KEY_ORDER = ['A', 'B', 'C', 'D'];
 
@@ -97,6 +98,7 @@ export function pickDiagnosticItemFromLessonBank(
   excludeItemIds: string[],
   targetDifficulty: number,
   slotKind: DiagnosticSlotKind,
+  excludeStemKeys: string[] = [],
 ): DiagnosticItem | null {
   const exclude = new Set(excludeItemIds);
   const subjects = profile.subjects?.length ? profile.subjects : ['math'];
@@ -112,7 +114,7 @@ export function pickDiagnosticItemFromLessonBank(
 
     for (const q of lesson.questions) {
       const item = questionToItem(cid, subject, q);
-      if (!item || exclude.has(item.id)) continue;
+      if (!item || exclude.has(item.id) || stemAlreadyAsked(item.stem, excludeStemKeys)) continue;
       if (!stemAllowedForProfile(item.stem, profile)) continue;
       candidates.push(item);
     }

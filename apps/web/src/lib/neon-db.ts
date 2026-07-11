@@ -531,6 +531,7 @@ export async function fetchDiagnosticItemForConcept(
   excludeItemIds: string[],
   targetDifficulty: number,
   slotKind: 'basic' | 'medium' | 'hard' | 'verbal' | 'edge' = 'medium',
+  excludeStemKeys: string[] = [],
 ): Promise<DiagnosticItem | null> {
   const { allowedLevelsForProfile, conceptAllowedForProfile } = await import(
     './quiz-concept-filter'
@@ -538,6 +539,7 @@ export async function fetchDiagnosticItemForConcept(
   const { stemAllowedForProfile, stemMatchesSlotKind } = await import('./diagnostic-stem-filter');
   const { resolveConceptAliasCanonical } = await import('./concept-aliases');
   const { pickDiagnosticItemFromLessonBank } = await import('./diagnostic-lesson-bank');
+  const { stemAlreadyAsked } = await import('./diagnostic-stem-dedupe');
 
   const topicId = resolveConceptAliasCanonical(conceptId);
   if (!conceptAllowedForProfile(topicId, profile)) return null;
@@ -553,10 +555,19 @@ export async function fetchDiagnosticItemForConcept(
     const filtered = rows.filter(
       (row) =>
         !isTemplateDiagnosticStem(row.stem) &&
+        !stemAlreadyAsked(row.stem, excludeStemKeys) &&
         stemAllowedForProfile(row.stem, profile) &&
         stemMatchesSlotKind(row.stem, slotKind),
     );
-    const pool = filtered.length > 0 ? filtered : rows.filter((row) => stemAllowedForProfile(row.stem, profile));
+    const pool =
+      filtered.length > 0
+        ? filtered
+        : rows.filter(
+            (row) =>
+              !isTemplateDiagnosticStem(row.stem) &&
+              !stemAlreadyAsked(row.stem, excludeStemKeys) &&
+              stemAllowedForProfile(row.stem, profile),
+          );
     const row = pool[0];
     if (!row || isTemplateDiagnosticStem(row.stem)) return null;
     return row;
@@ -605,7 +616,10 @@ export async function fetchDiagnosticItemForConcept(
     if (slotKind === 'verbal' || slotKind === 'edge') {
       rows = await runQuery(false, 24);
       const relaxed = rows.find(
-        (row) => stemAllowedForProfile(row.stem, profile) && !isTemplateDiagnosticStem(row.stem),
+        (row) =>
+          stemAllowedForProfile(row.stem, profile) &&
+          !isTemplateDiagnosticStem(row.stem) &&
+          !stemAlreadyAsked(row.stem, excludeStemKeys),
       );
       if (relaxed) return relaxed;
     }
@@ -616,6 +630,7 @@ export async function fetchDiagnosticItemForConcept(
       excludeItemIds,
       target,
       slotKind,
+      excludeStemKeys,
     );
     if (fromBank) return fromBank;
 
@@ -647,6 +662,7 @@ export async function fetchDiagnosticItemForConcept(
       excludeItemIds,
       target,
       slotKind,
+      excludeStemKeys,
     );
   }
 }
@@ -785,6 +801,28 @@ export async function getDiagnosticSession(
     learner_id: string;
     status: string;
     topics: string[];
+    question_idx: number;
+    results: Record<string, unknown> | null;
+  }>;
+  return rows[0] ?? null;
+}
+
+export async function findActiveDiagnosticSession(
+  learnerId: string,
+): Promise<{
+  id: string;
+  question_idx: number;
+  results: Record<string, unknown> | null;
+} | null> {
+  const s = requireSql();
+  const rows = (await s`
+    SELECT id::text, question_idx, results
+    FROM diagnostic_sessions
+    WHERE learner_id = ${learnerId} AND status = 'active'
+    ORDER BY created_at DESC
+    LIMIT 1
+  `) as Array<{
+    id: string;
     question_idx: number;
     results: Record<string, unknown> | null;
   }>;

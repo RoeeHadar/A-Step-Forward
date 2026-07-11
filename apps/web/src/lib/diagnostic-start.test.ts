@@ -7,8 +7,8 @@ import {
 import { isTemplateDiagnosticStem } from './neon-db';
 
 describe('DIAGNOSTIC_QUESTIONS_PER_SESSION', () => {
-  it('is twelve questions per run', () => {
-    expect(DIAGNOSTIC_QUESTIONS_PER_SESSION).toBe(12);
+  it('is six focused validation questions per run', () => {
+    expect(DIAGNOSTIC_QUESTIONS_PER_SESSION).toBe(6);
   });
 });
 

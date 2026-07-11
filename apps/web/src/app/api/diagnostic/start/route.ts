@@ -3,12 +3,15 @@ import {
   startDiagnosticSession,
   itemToQuestion,
   dbConfigured,
+  completeDiagnostic,
+  persistDiagnosticSummary,
 } from '@/lib/neon-db';
 import {
   diagnosticStateToResults,
   initializeDiagnosticSession,
+  resumeOrFinalizeDiagnosticSession,
 } from '@/lib/diagnostic-service';
-import { DIAGNOSTIC_QUESTIONS_PER_SESSION, normalizeLearnerSubjects } from '@/lib/diagnostic-start';
+import { normalizeLearnerSubjects } from '@/lib/diagnostic-start';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -26,6 +29,40 @@ export async function POST() {
   }
 
   try {
+    const resumed = await resumeOrFinalizeDiagnosticSession(userId);
+    if (resumed?.mode === 'question') {
+      return Response.json({
+        session_id: resumed.sessionId,
+        question: itemToQuestion(resumed.item),
+        question_number: resumed.questionNumber,
+        total: resumed.state.validation_queue.length,
+        goal_concept_id: resumed.state.goal_concept_id,
+        probe_concepts: resumed.state.probe_concepts,
+        status: 'question',
+        resumed: true,
+      });
+    }
+
+    if (resumed?.mode === 'complete') {
+      await persistDiagnosticSummary(userId, resumed.summary);
+      const mastery = await completeDiagnostic(
+        resumed.sessionId,
+        userId,
+        diagnosticStateToResults(resumed.state, resumed.summary),
+      );
+      return Response.json({
+        session_id: resumed.sessionId,
+        complete: true,
+        status: 'calibration_complete',
+        resumed: true,
+        results: {
+          mastery_by_topic: mastery,
+          summary: resumed.summary,
+        },
+        questions_answered: resumed.questionsAnswered,
+      });
+    }
+
     const init = await initializeDiagnosticSession(userId);
     if (!init) {
       return Response.json(
@@ -50,7 +87,7 @@ export async function POST() {
       session_id: sessionId,
       question,
       question_number: 1,
-      total: DIAGNOSTIC_QUESTIONS_PER_SESSION,
+      total: state.validation_queue.length,
       goal_concept_id: state.goal_concept_id,
       probe_concepts: state.probe_concepts,
       status: 'question',

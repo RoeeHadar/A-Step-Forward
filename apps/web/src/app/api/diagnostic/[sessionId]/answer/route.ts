@@ -10,7 +10,6 @@ import {
   itemToQuestion,
   dbConfigured,
 } from '@/lib/neon-db';
-import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 import {
   advanceDiagnosticSession,
   diagnosticStateToResults,
@@ -132,18 +131,8 @@ export async function POST(
         summary: advanced.summary,
       },
       questions_answered: newIdx,
+      total: advanced.state.validation_queue.length,
     });
-  }
-
-  if (!advanced.nextItem && !advanced.complete) {
-    return Response.json(
-      {
-        error: 'No further questions available for your profile yet.',
-        status: 'exhausted',
-        questions_answered: advanced.state.responses.length,
-      },
-      { status: 409 },
-    );
   }
 
   return Response.json({
@@ -151,6 +140,6 @@ export async function POST(
     status: 'question',
     question: itemToQuestion(advanced.nextItem!),
     question_number: newIdx + 1,
-    total: DIAGNOSTIC_QUESTIONS_PER_SESSION,
+    total: advanced.state.validation_queue.length,
   });
 }

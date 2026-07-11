@@ -1,14 +1,15 @@
 /**
  * Pure diagnostic planning logic (no I/O) — profile-goal-path probes + agent summary.
  */
+import { diagnosticStemKey } from '@/lib/diagnostic-stem-dedupe';
 import kg from '@/lib/kg-data.json';
 import { canonicalConceptId } from '@/lib/plan-catalog';
 import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 
 export const DIAGNOSTIC_SESSION_VERSION = 3;
 
-/** Minimum answered questions before we allow early completion when the bank runs dry. */
-export const MIN_DIAGNOSTIC_ANSWERS = 8;
+/** Minimum answers before early completion when the question bank runs dry. */
+export const MIN_DIAGNOSTIC_ANSWERS = 3;
 
 export type ValidationSlotKind = 'basic' | 'medium' | 'hard' | 'verbal' | 'edge';
 
@@ -35,6 +36,8 @@ export interface DiagnosticSessionPayload {
   queue_index: number;
   responses: DiagnosticResponse[];
   asked_item_ids: string[];
+  /** Stem fingerprints — dedupes Neon UUID vs lesson-bank hash for the same MCQ. */
+  asked_stem_keys: string[];
   /** Items served from the lesson bank (not in Neon) keyed by stable id. */
   served_items?: Record<string, DiagnosticServedItem>;
   /** Per-topic difficulty for CAT-style adjustment within a concept. */
@@ -111,12 +114,11 @@ export function buildValidationQueue(
   selfScores: Record<string, number> | null,
   total = DIAGNOSTIC_QUESTIONS_PER_SESSION,
 ): ValidationSlot[] {
-  const ratedFirst = orderProbeConcepts(
+  const conceptIds = orderProbeConcepts(
     [...Object.keys(selfScores ?? {}), ...probeConcepts],
     selfScores,
-    Math.ceil(total / 2),
+    total,
   );
-  const conceptIds = ratedFirst;
   const slots: ValidationSlot[] = [];
 
   for (const conceptId of conceptIds) {
@@ -126,34 +128,22 @@ export function buildValidationQueue(
 
     if (tier === 'weak') {
       slots.push({ concept_id: conceptId, target_difficulty: 3, slot_kind: 'basic' });
-      slots.push({ concept_id: conceptId, target_difficulty: 4, slot_kind: 'basic' });
     } else if (tier === 'ok') {
       slots.push({ concept_id: conceptId, target_difficulty: 5, slot_kind: 'medium' });
-      slots.push({ concept_id: conceptId, target_difficulty: 6, slot_kind: 'medium' });
     } else {
       slots.push({ concept_id: conceptId, target_difficulty: 8, slot_kind: 'hard' });
-      slots.push({ concept_id: conceptId, target_difficulty: 9, slot_kind: 'edge' });
     }
   }
 
-  for (let i = 3; i < slots.length; i += 4) {
-    const prev = slots[i]!;
-    slots[i] = {
+  let verbalIdx = 2;
+  while (verbalIdx < slots.length && slots.length <= total) {
+    const prev = slots[verbalIdx]!;
+    slots[verbalIdx] = {
       concept_id: prev.concept_id,
       target_difficulty: Math.min(prev.target_difficulty, 5),
       slot_kind: 'verbal',
     };
-  }
-
-  while (slots.length < total && conceptIds.length > 0) {
-    const conceptId = conceptIds[slots.length % conceptIds.length]!;
-    const score = selfScores?.[conceptId] ?? 5;
-    const tier = selfScoreTier(score);
-    slots.push({
-      concept_id: conceptId,
-      target_difficulty: validationDifficultyForSelfScore(score, 1),
-      slot_kind: tier === 'strong' ? 'edge' : tier === 'weak' ? 'basic' : 'medium',
-    });
+    verbalIdx += 3;
   }
 
   return slots.slice(0, total);
@@ -172,9 +162,24 @@ export function emptyDiagnosticSession(
     queue_index: 0,
     responses: [],
     asked_item_ids: [],
+    asked_stem_keys: [],
     served_items: {},
     difficulty_by_topic: {},
   };
+}
+
+export function reserveAskedItem(
+  state: DiagnosticSessionPayload,
+  item: { id: string; stem: string },
+): DiagnosticSessionPayload {
+  const stemKey = diagnosticStemKey(item.stem);
+  const ids = state.asked_item_ids.includes(item.id)
+    ? state.asked_item_ids
+    : [...state.asked_item_ids, item.id];
+  const stems = (state.asked_stem_keys ?? []).includes(stemKey)
+    ? state.asked_stem_keys ?? []
+    : [...(state.asked_stem_keys ?? []), stemKey];
+  return { ...state, asked_item_ids: ids, asked_stem_keys: stems };
 }
 
 export function rememberServedItem(
@@ -266,10 +271,18 @@ export function applyDiagnosticResponse(
   const prevDiff = state.difficulty_by_topic[topic] ?? response.difficulty;
   const nextDiff = nextCatDifficulty(prevDiff, response.correct);
 
+  const servedStem = state.served_items?.[response.item_id]?.stem;
+  const stemKeys = [...(state.asked_stem_keys ?? [])];
+  if (servedStem) {
+    const key = diagnosticStemKey(servedStem);
+    if (!stemKeys.includes(key)) stemKeys.push(key);
+  }
+
   return {
     ...state,
     responses: [...state.responses, response],
     asked_item_ids: [...state.asked_item_ids, response.item_id],
+    asked_stem_keys: stemKeys,
     difficulty_by_topic: { ...state.difficulty_by_topic, [topic]: nextDiff },
     queue_index: Math.min(state.validation_queue.length, state.queue_index + 1),
   };
@@ -408,6 +421,9 @@ export function parseDiagnosticSessionPayload(
       : [],
     asked_item_ids: Array.isArray(raw.asked_item_ids)
       ? raw.asked_item_ids.filter((c): c is string => typeof c === 'string')
+      : [],
+    asked_stem_keys: Array.isArray(raw.asked_stem_keys)
+      ? raw.asked_stem_keys.filter((c): c is string => typeof c === 'string')
       : [],
     served_items:
       raw.served_items && typeof raw.served_items === 'object'

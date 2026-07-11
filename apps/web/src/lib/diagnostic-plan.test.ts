@@ -31,25 +31,36 @@ describe('selfScoreTier', () => {
 });
 
 describe('buildValidationQueue', () => {
-  it('always produces 12 slots with two probes per concept tier', () => {
+  it('produces one slot per concept up to six questions', () => {
     const queue = buildValidationQueue(
-      ['linear_functions', 'quadratic_equations', 'derivatives_intro'],
-      { linear_functions: 3, quadratic_equations: 6, derivatives_intro: 9 },
+      [
+        'linear_functions',
+        'quadratic_equations',
+        'derivatives_intro',
+        'logarithms',
+        'trigonometry_ratios',
+        'limits',
+      ],
+      {
+        linear_functions: 3,
+        quadratic_equations: 6,
+        derivatives_intro: 9,
+        logarithms: 5,
+        trigonometry_ratios: 4,
+        limits: 8,
+      },
       DIAGNOSTIC_QUESTIONS_PER_SESSION,
     );
-    expect(queue).toHaveLength(12);
-    expect(queue.filter((s) => s.concept_id === 'linear_functions').length).toBeGreaterThanOrEqual(2);
+    expect(queue).toHaveLength(6);
+    expect(queue.filter((s) => s.concept_id === 'linear_functions').length).toBe(1);
     expect(queue.find((s) => s.concept_id === 'linear_functions')?.slot_kind).toBe('basic');
     expect(queue.find((s) => s.concept_id === 'derivatives_intro')?.slot_kind).toBe('hard');
-    expect(
-      queue.some((s) => s.concept_id === 'derivatives_intro' && s.slot_kind === 'edge'),
-    ).toBe(true);
   });
 });
 
 describe('isDiagnosticSessionComplete', () => {
   it('requires all validation slots before completion', () => {
-    const queue = buildValidationQueue(['linear_functions'], { linear_functions: 5 }, 12);
+    const queue = buildValidationQueue(['linear_functions', 'quadratic_equations'], { linear_functions: 5 }, 2);
     let state = emptyDiagnosticSession('function_analysis_4pt', ['linear_functions'], queue);
     expect(isDiagnosticSessionComplete(state)).toBe(false);
     state = applyDiagnosticResponse(state, {

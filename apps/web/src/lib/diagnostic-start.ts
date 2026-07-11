@@ -1,4 +1,4 @@
-export const DIAGNOSTIC_QUESTIONS_PER_SESSION = 12;
+export const DIAGNOSTIC_QUESTIONS_PER_SESSION = 6;
 
 /** Normalize learner subjects for diagnostic sampling. */
 export function normalizeLearnerSubjects(subjects?: string[] | null): string[] {

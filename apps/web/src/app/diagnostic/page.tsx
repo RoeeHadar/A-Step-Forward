@@ -168,7 +168,22 @@ export default function DiagnosticPage() {
         question?: DiagnosticQuestion;
         question_number?: number;
         total?: number;
+        complete?: boolean;
+        results?: { mastery_by_topic?: Record<string, number> };
+        questions_answered?: number;
+        resumed?: boolean;
       };
+      if (data.complete) {
+        clearDiagnosticSubjectsSession();
+        setSessionId(data.session_id ?? null);
+        setComplete(true);
+        setMastery(data.results?.mastery_by_topic ?? {});
+        setQuestion(null);
+        setQuestionNumber(data.questions_answered ?? 0);
+        if (data.total) setTotalQuestions(data.total);
+        setPhase('calibrating');
+        return;
+      }
       if (!data.session_id || !data.question?.stem?.trim()) {
         throw new Error(t.loadFailed);
       }
@@ -372,7 +387,15 @@ export default function DiagnosticPage() {
             <p className="text-xs text-white/50">{t.contactSupport}</p>
             <button
               type="button"
-              onClick={() => void startSession()}
+              onClick={() => {
+                if (complete) {
+                  void runPlanGeneration();
+                } else if (sessionId && question && chosen) {
+                  void submitAnswer();
+                } else {
+                  void startSession();
+                }
+              }}
               className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white hover:border-white/40"
             >
               {t.retry}
