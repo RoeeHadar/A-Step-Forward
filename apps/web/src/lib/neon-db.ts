@@ -3645,28 +3645,90 @@ export async function resetLearnerData(
   options: ResetLearnerOptions = {},
 ): Promise<void> {
   const s = requireSql();
-  await s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`;
-  await s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`;
-  await s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`;
-  await s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`;
-  await s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`;
-  await s`DELETE FROM mastery_snapshots WHERE learner_id = ${learnerId}`;
-  await s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`;
-  await s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`;
+
+  const deletes = [
+    s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM mastery_snapshots WHERE learner_id = ${learnerId}`,
+    s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`,
+    s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`,
+  ];
 
   if (options.deleteProfile) {
-    await s`DELETE FROM learner_profiles WHERE learner_id = ${learnerId}`;
-    return;
+    deletes.push(s`DELETE FROM learner_profiles WHERE learner_id = ${learnerId}`);
+  } else {
+    deletes.push(s`
+      UPDATE learner_profiles
+      SET learner_persona = NULL,
+          learner_persona_updated_at = NULL,
+          wellbeing_plan_bias = NULL,
+          weak_concepts = NULL,
+          strong_concepts = NULL,
+          lessons_completed_count = 0
+      WHERE learner_id = ${learnerId}
+    `);
   }
 
-  await s`
-    UPDATE learner_profiles
-    SET learner_persona = NULL,
-        learner_persona_updated_at = NULL,
-        wellbeing_plan_bias = NULL,
-        weak_concepts = NULL,
-        strong_concepts = NULL,
-        lessons_completed_count = 0
-    WHERE learner_id = ${learnerId}
-  `;
+  try {
+    await s.transaction(deletes);
+  } catch (err) {
+    if (isUndefinedTable(err)) {
+      await resetLearnerDataLegacy(learnerId, options);
+      return;
+    }
+    throw err;
+  }
+}
+
+function isUndefinedTable(err: unknown): boolean {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    'code' in err &&
+    (err as { code?: string }).code === '42P01'
+  );
+}
+
+/** Fallback when optional tables (e.g. mastery_snapshots) are missing on older Neon schemas. */
+async function resetLearnerDataLegacy(
+  learnerId: string,
+  options: ResetLearnerOptions,
+): Promise<void> {
+  const s = requireSql();
+  const optional = async (fn: () => Promise<unknown>) => {
+    try {
+      await fn();
+    } catch (err) {
+      if (!isUndefinedTable(err)) throw err;
+    }
+  };
+
+  await optional(() => s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`);
+  await optional(() => s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`);
+  await optional(() => s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`);
+  await optional(() => s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`);
+  await optional(() => s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`);
+  await optional(() => s`DELETE FROM mastery_snapshots WHERE learner_id = ${learnerId}`);
+  await optional(() =>
+    s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`,
+  );
+  await optional(() => s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`);
+
+  if (options.deleteProfile) {
+    await optional(() => s`DELETE FROM learner_profiles WHERE learner_id = ${learnerId}`);
+  } else {
+    await optional(() => s`
+      UPDATE learner_profiles
+      SET learner_persona = NULL,
+          learner_persona_updated_at = NULL,
+          wellbeing_plan_bias = NULL,
+          weak_concepts = NULL,
+          strong_concepts = NULL,
+          lessons_completed_count = 0
+      WHERE learner_id = ${learnerId}
+    `);
+  }
 }

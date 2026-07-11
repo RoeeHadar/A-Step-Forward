@@ -64,6 +64,14 @@ const statements = [
     completed_at TIMESTAMPTZ
   )`,
   `CREATE INDEX IF NOT EXISTS ix_diagnostic_sessions_learner ON diagnostic_sessions (learner_id)`,
+  `CREATE TABLE IF NOT EXISTS mastery_snapshots (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    learner_id TEXT NOT NULL,
+    week_start DATE NOT NULL,
+    scores JSONB NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (learner_id, week_start)
+  )`,
   `CREATE TABLE IF NOT EXISTS diagnostic_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     topic TEXT NOT NULL,
