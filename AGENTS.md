@@ -104,6 +104,7 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/neon-direct-route/SKILL.md` | Adding/modifying any `apps/web/src/app/api/**` route that touches Neon. The free-tier critical path (onboarding, diagnostic, plans, chat memory, /learn) is Vercel + Neon direct; Render is optional. |
 | `skills/chat-memory-context/SKILL.md` | Touching `apps/web/src/app/api/chat/route.ts`, adding a new agent persona, or changing what gets persisted in `chat_turns`. |
 | `skills/onboarding-flow/SKILL.md` | Adding an onboarding question, changing plan generation inputs, or adjusting the diagnostic length. |
+| `skills/reset-learner-prod/SKILL.md` | Full/partial production learner reset for pilot testing (plans, memory, onboarding); ops scripts + `/settings/persona` UI. |
 | `skills/in-house-concept-content/SKILL.md` | Adding bilingual concept explanations to `/learn`, fixing wrong Wikipedia matches, or adding new CC content sources (OpenStax, Wikibooks, etc.). |
 | `skills/author-lesson/SKILL.md` | Authoring or modifying an AI-authored lesson under `scripts/seed_data/lessons/` (sections, all 10 question kinds, `agent_hints`, skill atoms). |
 | `skills/author-question-bank/SKILL.md` | Adding MORE questions (volume + kind diversity) to an existing authored lesson, or generating drills live. Pair with `author-lesson`. |

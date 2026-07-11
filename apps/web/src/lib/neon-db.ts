@@ -3634,15 +3634,31 @@ async function ensureMockExamTablesForGrade(): Promise<void> {
   `;
 }
 
-/** Wipe learner-bound progress, memory, chat, and plans (keeps profile row). */
-export async function resetLearnerData(learnerId: string): Promise<void> {
+export type ResetLearnerOptions = {
+  /** Remove onboarding profile so learner re-enters /onboarding. */
+  deleteProfile?: boolean;
+};
+
+/** Wipe learner-bound progress, memory, chat, and plans. */
+export async function resetLearnerData(
+  learnerId: string,
+  options: ResetLearnerOptions = {},
+): Promise<void> {
   const s = requireSql();
   await s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`;
   await s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`;
   await s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`;
   await s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`;
+  await s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`;
+  await s`DELETE FROM mastery_snapshots WHERE learner_id = ${learnerId}`;
   await s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`;
   await s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`;
+
+  if (options.deleteProfile) {
+    await s`DELETE FROM learner_profiles WHERE learner_id = ${learnerId}`;
+    return;
+  }
+
   await s`
     UPDATE learner_profiles
     SET learner_persona = NULL,
