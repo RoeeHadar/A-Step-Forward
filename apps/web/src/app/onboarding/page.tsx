@@ -731,7 +731,26 @@ export default function OnboardingPage() {
     const draft = loadOnboardingDraft();
     if (draft) {
       setStep(draft.step);
-      setS1((prev) => ({ ...prev, ...(draft.s1 as Partial<Step1>) }));
+      setS1((prev) => {
+        const merged = { ...prev, ...(draft.s1 as Partial<Step1>) };
+        const subjects = merged.subjects ?? prev.subjects;
+        const allowedGoals = filterGoalsForLearner({
+          gradeLevel: merged.gradeLevel,
+          subjects,
+        });
+        const allowedAdult = filterAdultGoals(subjects);
+        return {
+          ...merged,
+          goal: allowedGoals.includes(merged.goal as OnboardingGoal)
+            ? merged.goal
+            : '',
+          adultGoal: allowedAdult.includes(
+            merged.adultGoal as ReturnType<typeof filterAdultGoals>[number],
+          )
+            ? merged.adultGoal
+            : '',
+        };
+      });
       setS2((prev) => ({ ...prev, ...(draft.s2 as Partial<Step2>) }));
       setS3((prev) => ({ ...prev, ...(draft.s3 as Partial<Step3>) }));
       setS4((prev) => ({ ...prev, ...(draft.s4 as Partial<Step4>) }));
@@ -886,9 +905,9 @@ export default function OnboardingPage() {
   function formatSubjectExperienceSummary(): string {
     return s1.subjects
       .map((sub) => {
-        const exp = s2.subjectExperience[sub];
+        const exp = s2.subjectExperience[sub] ?? DEFAULT_SUBJECT_EXPERIENCE();
         const name = subjectLabel(sub, 'en');
-        if (!exp || exp.mode === 'prefer_skip') {
+        if (exp.mode === 'prefer_skip') {
           return `${name}: learner prefers not to answer.`;
         }
         if (exp.mode === 'no_prior') {
