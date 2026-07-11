@@ -43,11 +43,20 @@ jobs:
         if: ${{ inputs.target == 'all' || inputs.target == 'content-json' }}
         run: uv pip install psycopg[binary]
 
-      - name: Seed diagnostic_items
+      - name: Bootstrap web Neon schema (tables + diagnostic columns)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save @neondatabase/serverless@0.10.4
+          node scripts/bootstrap-web-neon.mjs
+
+      - name: Seed diagnostic_items from lesson MCQs
         if: ${{ inputs.target == 'all' || inputs.target == 'diagnostic' }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: uv run python scripts/seed_diagnostic_items.py
+        run: |
+          npm install --no-save @neondatabase/serverless@0.10.4 js-yaml
+          node scripts/seed-diagnostic-from-lessons.mjs
 
       - name: Seed knowledge graph (Neo4j)
         if: ${{ inputs.target == 'all' || inputs.target == 'knowledge-graph' }}

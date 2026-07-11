@@ -1,23 +1,22 @@
 import { auth } from '@clerk/nextjs/server';
-import 'server-only';
-import { neon, neonConfig } from '@neondatabase/serverless';
 import {
   getDiagnosticSession,
   recordDiagnosticAnswer,
   bumpDiagnosticIdx,
   completeDiagnostic,
-  fetchDiagnosticItems,
+  getDiagnosticItemById,
+  fetchDiagnosticItemsWithFallback,
   itemToQuestion,
   dbConfigured,
 } from '@/lib/neon-db';
+import {
+  DIAGNOSTIC_QUESTIONS_PER_SESSION,
+  normalizeLearnerSubjects,
+} from '@/lib/diagnostic-start';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-neonConfig.fetchConnectionCache = true;
-const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
-
-const TOTAL_QUESTIONS = 12;
 const KEY_ORDER = ['A', 'B', 'C', 'D'];
 
 interface ItemRow {
@@ -27,12 +26,62 @@ interface ItemRow {
 }
 
 async function getItem(itemId: string): Promise<ItemRow | null> {
-  if (!sql) return null;
-  const rows = (await sql`
-    SELECT topic, subject, options
-    FROM diagnostic_items WHERE id = ${itemId}::uuid LIMIT 1
-  `) as ItemRow[];
-  return rows[0] ?? null;
+  const item = await getDiagnosticItemById(itemId);
+  if (!item) return null;
+  const raw = item.options as { choices?: string[]; correct?: string };
+  return {
+    topic: item.topic,
+    subject: item.subject,
+    options: {
+      choices: raw?.choices ?? [],
+      correct: raw?.correct ?? 'A',
+    },
+  };
+}
+
+function resolveCorrectLetter(options: { choices: string[]; correct: string }): string {
+  const key = (options.correct ?? '').trim().toUpperCase();
+  if (/^[A-D]$/.test(key)) return key;
+  const idx = options.choices.findIndex((c) => c.trim() === key);
+  return idx >= 0 ? (KEY_ORDER[idx] ?? 'A') : 'A';
+}
+
+function sessionItemIds(session: { results: Record<string, unknown> | null }): string[] {
+  const raw = session.results?.item_ids;
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((id): id is string => typeof id === 'string');
+}
+
+function sessionSubjects(session: {
+  topics: string[];
+  results: Record<string, unknown> | null;
+}): string[] {
+  const fromResults = session.results?.subjects;
+  if (Array.isArray(fromResults)) {
+    const subjects = fromResults.filter((s): s is string => typeof s === 'string');
+    if (subjects.length > 0) return normalizeLearnerSubjects(subjects);
+  }
+  return normalizeLearnerSubjects(session.topics);
+}
+
+async function resolveNextQuestion(
+  session: {
+    topics: string[];
+    results: Record<string, unknown> | null;
+  },
+  nextIdx: number,
+) {
+  const itemIds = sessionItemIds(session);
+  const queuedId = itemIds[nextIdx];
+  if (queuedId) {
+    const queued = await getDiagnosticItemById(queuedId);
+    if (queued) return queued;
+  }
+
+  // Legacy sessions (pre-queue deploy) or stale IDs after a bank reseed.
+  const subjects = sessionSubjects(session);
+  const fallback = await fetchDiagnosticItemsWithFallback(subjects, 1);
+  return fallback[0] ?? null;
 }
 
 export async function POST(
@@ -58,43 +107,67 @@ export async function POST(
   if (session.learner_id !== userId) {
     return Response.json({ error: 'forbidden' }, { status: 403 });
   }
+  if (session.status === 'completed') {
+    return Response.json({ error: 'session already completed' }, { status: 409 });
+  }
 
   const item = await getItem(body.item_id);
   if (!item) {
     return Response.json({ error: 'item not found' }, { status: 404 });
   }
 
-  const correctKey = item.options.correct;
-  const correctIdx = item.options.choices.findIndex(
-    (c) => c.trim() === correctKey?.trim(),
-  );
-  const correctLetter =
-    correctIdx >= 0 ? KEY_ORDER[correctIdx] : (correctKey ?? '').toUpperCase().trim()[0];
-  const isCorrect = body.chosen.trim().toUpperCase() === correctLetter;
+  const correctLetter = resolveCorrectLetter(item.options);
+  const chosenLetter = body.chosen.trim().toUpperCase();
+  const isCorrect = chosenLetter === correctLetter;
 
-  await recordDiagnosticAnswer(sessionId, body.item_id, isCorrect, item.topic, userId);
+  try {
+    await recordDiagnosticAnswer(
+      sessionId,
+      body.item_id,
+      chosenLetter,
+      isCorrect,
+      item.topic,
+      userId,
+    );
+  } catch (err) {
+    console.error('[diagnostic/answer] record failed', err);
+    return Response.json(
+      {
+        error:
+          err instanceof Error
+            ? err.message
+            : 'Could not save your answer. Please try again.',
+      },
+      { status: 500 },
+    );
+  }
+
   const newIdx = await bumpDiagnosticIdx(sessionId);
 
-  if (newIdx >= TOTAL_QUESTIONS) {
+  if (newIdx >= DIAGNOSTIC_QUESTIONS_PER_SESSION) {
     const mastery = await completeDiagnostic(sessionId, userId);
     return Response.json({
       complete: true,
       results: { mastery_by_topic: mastery },
+      questions_answered: newIdx,
     });
   }
 
-  // Fetch next random item (avoid the one we just answered would be nice but acceptable to repeat across sessions)
-  const next = await fetchDiagnosticItems(session.topics, 1);
-  if (next.length === 0) {
+  const nextItem = await resolveNextQuestion(session, newIdx);
+  if (!nextItem) {
     const mastery = await completeDiagnostic(sessionId, userId);
     return Response.json({
       complete: true,
       results: { mastery_by_topic: mastery },
+      questions_answered: newIdx,
     });
   }
+
+  const itemIds = sessionItemIds(session);
   return Response.json({
     complete: false,
-    question: itemToQuestion(next[0]!),
+    question: itemToQuestion(nextItem),
     question_number: newIdx + 1,
+    total: itemIds.length || DIAGNOSTIC_QUESTIONS_PER_SESSION,
   });
 }

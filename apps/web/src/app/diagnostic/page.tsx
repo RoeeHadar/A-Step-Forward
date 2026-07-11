@@ -15,6 +15,7 @@ import { SiteHeader } from '@/components/site-header';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
 import {
   clearDiagnosticSubjectsSession,
+  DIAGNOSTIC_QUESTIONS_PER_SESSION,
   readApiErrorMessage,
   readDiagnosticSubjectsFromSession,
 } from '@/lib/diagnostic-start';
@@ -106,7 +107,7 @@ export default function DiagnosticPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [question, setQuestion] = useState<DiagnosticQuestion | null>(null);
   const [questionNumber, setQuestionNumber] = useState(1);
-  const [totalEstimate] = useState(18);
+  const [totalQuestions, setTotalQuestions] = useState(DIAGNOSTIC_QUESTIONS_PER_SESSION);
   const [chosen, setChosen] = useState('');
   const [complete, setComplete] = useState(false);
   const [mastery, setMastery] = useState<Record<string, number>>({});
@@ -140,6 +141,7 @@ export default function DiagnosticPage() {
         session_id?: string;
         question?: DiagnosticQuestion;
         question_number?: number;
+        total?: number;
       };
       if (!data.session_id || !data.question?.stem?.trim()) {
         throw new Error(t.loadFailed);
@@ -151,6 +153,7 @@ export default function DiagnosticPage() {
       setSessionId(data.session_id);
       setQuestion(data.question);
       setQuestionNumber(data.question_number ?? 1);
+      setTotalQuestions(data.total ?? DIAGNOSTIC_QUESTIONS_PER_SESSION);
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t.loadFailed);
       setQuestion(null);
@@ -174,31 +177,29 @@ export default function DiagnosticPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item_id: question.id, chosen }),
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!res.ok) throw new Error(await readApiErrorMessage(res));
+      const data = (await res.json()) as {
+        complete?: boolean;
+        question?: DiagnosticQuestion;
+        question_number?: number;
+        total?: number;
+        results?: { mastery_by_topic?: Record<string, number> };
+        questions_answered?: number;
+      };
       if (data.complete) {
         setComplete(true);
         setMastery(data.results?.mastery_by_topic ?? {});
         setQuestion(null);
-        setPlanLoading(true);
-        try {
-          const planRes = await fetch('/api/plans/generate', { method: 'POST' });
-          if (planRes.ok) {
-            router.push('/app');
-            return;
-          }
-          const errText = await planRes.text();
-          setError(errText || t.fallback_plan_error);
-        } catch (planErr) {
-          setError(
-            planErr instanceof Error ? planErr.message : 'Could not generate your learning plan.',
-          );
-        } finally {
-          setPlanLoading(false);
+        if (data.questions_answered) {
+          setQuestionNumber(data.questions_answered);
         }
       } else {
+        if (!data.question?.stem?.trim() || !data.question.options?.length) {
+          throw new Error(t.loadFailed);
+        }
         setQuestion(data.question);
         setQuestionNumber(data.question_number ?? questionNumber + 1);
+        if (data.total) setTotalQuestions(data.total);
         setChosen('');
       }
     } catch (err) {
@@ -227,7 +228,9 @@ export default function DiagnosticPage() {
     mastery: Math.round(score * 100),
   }));
 
-  const progressPct = complete ? 100 : Math.min(100, Math.round((questionNumber / totalEstimate) * 100));
+  const progressPct = complete
+    ? 100
+    : Math.min(100, Math.round((questionNumber / totalQuestions) * 100));
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white" dir={isHe ? 'rtl' : 'ltr'} lang={lang}>
@@ -236,7 +239,7 @@ export default function DiagnosticPage() {
         {!complete && (
           <div className="mb-8">
             <div className="flex justify-between text-xs text-white/50 mb-2">
-              <span>{t.question_n_of(questionNumber, totalEstimate)}</span>
+              <span>{t.question_n_of(questionNumber, totalQuestions)}</span>
               <div className="flex items-center gap-3">
                 <span>{progressPct}%</span>
                 <button

@@ -1,8 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import {
+  DIAGNOSTIC_QUESTIONS_PER_SESSION,
   normalizeLearnerSubjects,
   resolveDiagnosticPointsLevel,
 } from './diagnostic-start';
+import { isTemplateDiagnosticStem } from './neon-db';
+
+describe('DIAGNOSTIC_QUESTIONS_PER_SESSION', () => {
+  it('is twelve questions per run', () => {
+    expect(DIAGNOSTIC_QUESTIONS_PER_SESSION).toBe(12);
+  });
+});
+
+describe('isTemplateDiagnosticStem', () => {
+  it('flags KG bootstrap placeholder stems', () => {
+    expect(isTemplateDiagnosticStem('Which statement best describes **Foo**?')).toBe(true);
+    expect(isTemplateDiagnosticStem('איזה משפט מתאר בצורה הטובה ביותר **בעיות קיצון**?')).toBe(
+      true,
+    );
+    expect(isTemplateDiagnosticStem('Find the derivative of $x^2$.')).toBe(false);
+  });
+});
 
 describe('normalizeLearnerSubjects', () => {
   it('returns math when subjects missing or empty', () => {
