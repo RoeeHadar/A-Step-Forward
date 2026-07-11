@@ -45,9 +45,9 @@ const STR = {
     notes_for: (n: number) => `${n} הערות`,
     delete_section: 'מחק',
     reset_title: 'איפוס נתוני למידה',
-    reset_blurb: 'מוחק התקדמות, זיכרון, צ׳אט ותוכניות — שומר פרופיל אונבורדינג.',
-    reset_btn: 'אפס נתונים',
-    reset_confirm: 'לאפס את כל ההתקדמות, הזיכרון והצ׳אט? לא ניתן לבטל.',
+    reset_blurb: 'מוחק התקדמות, זיכרון, צ׳אט, תוכניות ופרופיל אונבורדינג — תועבר/י לשאלון פתיחה מחדש.',
+    reset_btn: 'אפס הכל והתחל מחדש',
+    reset_confirm: 'לאפס הכל כולל אונבורדינג ותוכנית? לא ניתן לבטל.',
     reset_done: 'הנתונים אופסו. אפשר להתחיל מחדש.',
     reset_error: 'האיפוס נכשל.',
   },
@@ -74,9 +74,9 @@ const STR = {
     notes_for: (n: number) => `${n} notes`,
     delete_section: 'Delete',
     reset_title: 'Reset learning data',
-    reset_blurb: 'Clears progress, memory, chat, and plans — keeps your onboarding profile.',
-    reset_btn: 'Reset my data',
-    reset_confirm: 'Reset all progress, memory, and chat? This cannot be undone.',
+    reset_blurb: 'Clears progress, memory, chat, plans, and onboarding — sends you back to setup.',
+    reset_btn: 'Reset everything',
+    reset_confirm: 'Reset everything including onboarding and your plan? This cannot be undone.',
     reset_done: 'Data reset. You can start fresh.',
     reset_error: 'Reset failed.',
   },
@@ -134,11 +134,16 @@ export function PersonaEditor({
     startReset(async () => {
       setStatus({ kind: 'idle' });
       try {
-        const res = await fetch('/api/learner/reset-data', { method: 'POST' });
+        const res = await fetch('/api/learner/reset-data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full: true }),
+        });
         if (!res.ok) throw new Error(await res.text());
         setText('');
         setUpdated(null);
         setStatus({ kind: 'reset_done' });
+        window.location.href = '/onboarding';
         router.refresh();
       } catch (err) {
         setStatus({

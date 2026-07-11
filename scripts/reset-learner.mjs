@@ -69,6 +69,14 @@ console.log(`Resetting learner ${learnerId} …`);
 const s = neon(dbUrl);
 
 for (const [name, fn] of [
+  [
+    'diagnostic_sessions',
+    () => s`DELETE FROM diagnostic_sessions WHERE learner_id = ${learnerId}`,
+  ],
+  [
+    'mastery_snapshots',
+    () => s`DELETE FROM mastery_snapshots WHERE learner_id = ${learnerId}`,
+  ],
   ['chat_turns', () => s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`],
   ['learner_agent_notes', () => s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`],
   ['concept_mastery', () => s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`],
@@ -89,18 +97,26 @@ for (const [name, fn] of [
 }
 
 if (args.deleteProfile) {
-  await s`DELETE FROM learner_profiles WHERE learner_id = ${learnerId}`;
-  console.log('  deleted learner_profiles');
+  try {
+    await s`DELETE FROM learner_profiles WHERE learner_id = ${learnerId}`;
+    console.log('  deleted learner_profiles');
+  } catch (err) {
+    console.warn('  skip learner_profiles delete:', err instanceof Error ? err.message : err);
+  }
 } else {
-  await s`
-    UPDATE learner_profiles
-    SET learner_persona = NULL,
-        learner_persona_updated_at = NULL,
-        wellbeing_plan_bias = NULL,
-        weak_concepts = NULL,
-        strong_concepts = NULL
-    WHERE learner_id = ${learnerId}
-  `;
-  console.log('  reset persona/wellbeing on profile (profile row kept)');
+  try {
+    await s`
+      UPDATE learner_profiles
+      SET learner_persona = NULL,
+          learner_persona_updated_at = NULL,
+          wellbeing_plan_bias = NULL,
+          weak_concepts = NULL,
+          strong_concepts = NULL
+      WHERE learner_id = ${learnerId}
+    `;
+    console.log('  reset persona/wellbeing on profile (profile row kept)');
+  } catch (err) {
+    console.warn('  skip learner_profiles reset:', err instanceof Error ? err.message : err);
+  }
 }
 console.log('Done.');
