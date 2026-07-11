@@ -37,6 +37,7 @@ import {
   loadOnboardingDraft,
   saveOnboardingDraft,
 } from '@/lib/onboarding-draft';
+import { DIAGNOSTIC_SUBJECTS_SESSION_KEY } from '@/lib/diagnostic-start';
 import { resolveSelfScoreConceptIds } from '@/lib/onboarding-self-score';
 import {
   filterAdultGoals,
@@ -998,6 +999,10 @@ export default function OnboardingPage() {
       });
       if (!res.ok) throw new Error(await res.text());
       clearOnboardingDraft();
+      sessionStorage.setItem(
+        DIAGNOSTIC_SUBJECTS_SESSION_KEY,
+        JSON.stringify(s1.subjects),
+      );
       router.push('/diagnostic');
     } catch (err) {
       setError(err instanceof Error ? err.message : t.errorGeneric);

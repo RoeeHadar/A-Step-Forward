@@ -13,6 +13,11 @@ import {
 } from 'recharts';
 import { SiteHeader } from '@/components/site-header';
 import { useLanguagePreference } from '@/hooks/use-language-preference';
+import {
+  clearDiagnosticSubjectsSession,
+  readApiErrorMessage,
+  readDiagnosticSubjectsFromSession,
+} from '@/lib/diagnostic-start';
 import 'katex/dist/katex.min.css';
 
 interface DiagnosticOption {
@@ -41,6 +46,9 @@ const STR = {
   he: {
     question_n_of: (n: number, total: number) => `שאלה ${n} מתוך ~${total}`,
     loading: 'טוען את האבחון שלך…',
+    loadFailed: 'לא הצלחנו לטעון את האבחון.',
+    retry: 'נסה שוב',
+    contactSupport: 'אם זה חוזר, התנתק/י והתחבר/י מחדש, או פנה/י לתמיכה.',
     submit: 'שלח תשובה',
     checking: 'בודק…',
     your_mastery: 'פרופיל השליטה שלך',
@@ -55,6 +63,9 @@ const STR = {
   en: {
     question_n_of: (n: number, total: number) => `Question ${n} of ~${total}`,
     loading: 'Loading your diagnostic…',
+    loadFailed: 'We could not load your diagnostic.',
+    retry: 'Try again',
+    contactSupport: 'If this keeps happening, sign out and back in, or contact support.',
     submit: 'Submit answer',
     checking: 'Checking…',
     your_mastery: 'Your mastery profile',
@@ -115,22 +126,39 @@ export default function DiagnosticPage() {
     setLoading(true);
     setError('');
     try {
+      const sessionSubjects = readDiagnosticSubjectsFromSession();
       const res = await fetch('/api/diagnostic/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topics: [] }),
+        body: JSON.stringify({
+          topics: [],
+          ...(sessionSubjects ? { subjects: sessionSubjects } : {}),
+        }),
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!res.ok) throw new Error(await readApiErrorMessage(res));
+      const data = (await res.json()) as {
+        session_id?: string;
+        question?: DiagnosticQuestion;
+        question_number?: number;
+      };
+      if (!data.session_id || !data.question?.stem?.trim()) {
+        throw new Error(t.loadFailed);
+      }
+      if (!data.question.options?.length) {
+        throw new Error(t.loadFailed);
+      }
+      clearDiagnosticSubjectsSession();
       setSessionId(data.session_id);
       setQuestion(data.question);
       setQuestionNumber(data.question_number ?? 1);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to start diagnostic');
+      setError(err instanceof Error && err.message ? err.message : t.loadFailed);
+      setQuestion(null);
+      setSessionId(null);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t.loadFailed]);
 
   useEffect(() => {
     void startSession();
@@ -235,7 +263,30 @@ export default function DiagnosticPage() {
         )}
 
         {error && (
-          <p className="text-sm text-red-400 bg-red-400/10 px-4 py-3 rounded-lg mb-6">{error}</p>
+          <div className="mb-6 space-y-3 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3">
+            <p className="text-sm text-red-400">{error}</p>
+            <p className="text-xs text-white/50">{t.contactSupport}</p>
+            <button
+              type="button"
+              onClick={() => void startSession()}
+              className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white hover:border-white/40"
+            >
+              {t.retry}
+            </button>
+          </div>
+        )}
+
+        {!loading && !complete && !question && !error && (
+          <div className="space-y-4 py-20 text-center">
+            <p className="text-white/50">{t.loadFailed}</p>
+            <button
+              type="button"
+              onClick={() => void startSession()}
+              className="rounded-xl bg-accent-cyan px-5 py-2.5 text-sm font-semibold text-neutral-950 hover:bg-cyan-300"
+            >
+              {t.retry}
+            </button>
+          </div>
         )}
 
         {!loading && !complete && question && display && (

@@ -425,6 +425,31 @@ export async function fetchDiagnosticItems(
   return pool.slice(0, limit);
 }
 
+export async function fetchDiagnosticItemsWithFallback(
+  subjects: string[],
+  limit: number,
+  pointsLevel?: string | null,
+): Promise<DiagnosticItem[]> {
+  let items = await fetchDiagnosticItems(subjects, limit, pointsLevel);
+  if (items.length > 0) return items;
+
+  if (pointsLevel) {
+    items = await fetchDiagnosticItems(subjects, limit, null);
+    if (items.length > 0) return items;
+  }
+
+  if (subjects.length === 1 && subjects[0] === 'physics') {
+    items = await fetchDiagnosticItems(['math', 'physics'], limit, null);
+    if (items.length > 0) return items;
+  }
+
+  if (subjects.length === 1 && subjects[0] === 'math') {
+    items = await fetchDiagnosticItems(['math', 'physics'], limit, null);
+  }
+
+  return items;
+}
+
 export function itemToQuestion(item: DiagnosticItem): DiagnosticQuestion {
   const keys = ['A', 'B', 'C', 'D'];
   const toOptions = (opts: { choices: string[] } | null | undefined) =>
