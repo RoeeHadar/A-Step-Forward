@@ -146,9 +146,10 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
   const hasSignals =
     snapshot.weakConcepts.length > 0 || snapshot.strongConcepts.length > 0;
   const hasNotes = snapshot.totalNoteCount > 0;
+  const hasChat = snapshot.recentChatTurns.length > 0;
 
   const showAnything =
-    hasProfileContent || hasPersona || hasPlanFocus || hasSignals || hasNotes;
+    hasProfileContent || hasPersona || hasPlanFocus || hasSignals || hasNotes || hasChat;
 
   const filteredNotesByAgent: Record<string, LearnerMemoryNote[]> = {};
   for (const agent of AGENT_ORDER) {
@@ -499,6 +500,48 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
               </SectionCard>
             );
           })()}
+
+          {hasChat &&
+          (!q ||
+            snapshot.recentChatTurns.some(
+              (turn) => matchesSearch(turn.content) || matchesSearch(turn.agent),
+            )) ? (
+            <SectionCard
+              icon={MessageSquare}
+              title={isHe ? 'שיחות אחרונות' : 'Recent conversations'}
+              description={
+                isHe
+                  ? 'תמליל מקוצר מהצ׳אט — מתעדכן אחרי כל שיחה'
+                  : 'Short chat transcript — updates after each conversation'
+              }
+            >
+              <ul className="max-h-80 space-y-2 overflow-y-auto text-sm">
+                {snapshot.recentChatTurns
+                  .filter(
+                    (turn) =>
+                      !q ||
+                      matchesSearch(turn.content) ||
+                      matchesSearch(turn.agent),
+                  )
+                  .slice(-16)
+                  .map((turn, idx) => (
+                    <li
+                      key={`${turn.created_at}-${idx}`}
+                      className="rounded-lg bg-surface-1/40 px-3 py-2"
+                    >
+                      <div className="mb-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                        <Badge variant="outline">{turn.agent}</Badge>
+                        <span>{turn.role === 'user' ? (isHe ? 'את/ה' : 'You') : turn.agent}</span>
+                        {turn.created_at ? (
+                          <span>{formatDate(turn.created_at, lang)}</span>
+                        ) : null}
+                      </div>
+                      <p className="whitespace-pre-wrap leading-relaxed">{turn.content}</p>
+                    </li>
+                  ))}
+              </ul>
+            </SectionCard>
+          ) : null}
         </div>
       )}
     </div>

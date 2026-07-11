@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@asf/ui/card';
 import { Button } from '@asf/ui/button';
 import { Badge } from '@asf/ui/badge';
@@ -43,6 +44,12 @@ const STR = {
     no_notes: 'אין הערות',
     notes_for: (n: number) => `${n} הערות`,
     delete_section: 'מחק',
+    reset_title: 'איפוס נתוני למידה',
+    reset_blurb: 'מוחק התקדמות, זיכרון, צ׳אט ותוכניות — שומר פרופיל אונבורדינג.',
+    reset_btn: 'אפס נתונים',
+    reset_confirm: 'לאפס את כל ההתקדמות, הזיכרון והצ׳אט? לא ניתן לבטל.',
+    reset_done: 'הנתונים אופסו. אפשר להתחיל מחדש.',
+    reset_error: 'האיפוס נכשל.',
   },
   en: {
     title: 'Your persona',
@@ -66,6 +73,12 @@ const STR = {
     no_notes: 'No notes',
     notes_for: (n: number) => `${n} notes`,
     delete_section: 'Delete',
+    reset_title: 'Reset learning data',
+    reset_blurb: 'Clears progress, memory, chat, and plans — keeps your onboarding profile.',
+    reset_btn: 'Reset my data',
+    reset_confirm: 'Reset all progress, memory, and chat? This cannot be undone.',
+    reset_done: 'Data reset. You can start fresh.',
+    reset_error: 'Reset failed.',
   },
 } as const;
 
@@ -101,6 +114,7 @@ export function PersonaEditor({
   const [lang] = useLanguagePreference('he');
   const t = STR[lang];
   const isHe = lang === 'he';
+  const router = useRouter();
 
   const [text, setText] = useState(initialText ?? '');
   const [updated, setUpdated] = useState(updatedAt);
@@ -108,10 +122,32 @@ export function PersonaEditor({
     | { kind: 'idle' }
     | { kind: 'saved' }
     | { kind: 'rebuilt'; result: RebuildResult }
+    | { kind: 'reset_done' }
     | { kind: 'error'; msg: string }
   >({ kind: 'idle' });
   const [savePending, startSave] = useTransition();
   const [rebuildPending, startRebuild] = useTransition();
+  const [resetPending, startReset] = useTransition();
+
+  function resetLearningData() {
+    if (!window.confirm(t.reset_confirm)) return;
+    startReset(async () => {
+      setStatus({ kind: 'idle' });
+      try {
+        const res = await fetch('/api/learner/reset-data', { method: 'POST' });
+        if (!res.ok) throw new Error(await res.text());
+        setText('');
+        setUpdated(null);
+        setStatus({ kind: 'reset_done' });
+        router.refresh();
+      } catch (err) {
+        setStatus({
+          kind: 'error',
+          msg: err instanceof Error ? err.message : t.reset_error,
+        });
+      }
+    });
+  }
 
   function save() {
     startSave(async () => {
@@ -221,6 +257,9 @@ export function PersonaEditor({
                 : t.rebuild_skipped(status.result.reason ?? 'unknown')}
             </p>
           )}
+          {status.kind === 'reset_done' && (
+            <p className="text-sm text-green-500">{t.reset_done}</p>
+          )}
           {status.kind === 'error' && (
             <p className="text-sm text-red-400">{status.msg}</p>
           )}
@@ -246,6 +285,23 @@ export function PersonaEditor({
               </li>
             ))}
           </ul>
+        </CardContent>
+      </Card>
+
+      <Card className="glass-surface border-destructive/30">
+        <CardHeader>
+          <CardTitle className="text-base text-destructive">{t.reset_title}</CardTitle>
+          <p className="text-sm text-muted-foreground">{t.reset_blurb}</p>
+        </CardHeader>
+        <CardContent>
+          <Button
+            type="button"
+            variant="destructive"
+            disabled={resetPending}
+            onClick={resetLearningData}
+          >
+            {resetPending ? '…' : t.reset_btn}
+          </Button>
         </CardContent>
       </Card>
     </div>

@@ -83,6 +83,11 @@ import {
   filterDueReviewsForProfile,
   pickCoachPlannerGoal,
 } from '@/lib/coach-session-context';
+import {
+  applyMemoryTagsFromAssistant,
+  persistThrottledChatObservation,
+  stripMemoryMachineTags,
+} from '@/lib/chat-memory-persist';
 import { isWithinExamPrepWindow } from '@/lib/exam-prep';
 
 export const runtime = 'nodejs';
@@ -98,11 +103,13 @@ async function saveAssistantTurn(
   sessionId: string | undefined,
   locale: 'he' | 'en',
 ): Promise<void> {
+  const cleaned = stripMemoryMachineTags(content);
+  await applyMemoryTagsFromAssistant(userId, agent, content);
   await recordChatTurn(
     userId,
     agent,
     'assistant',
-    compactStoredTurnContent(content, 'assistant', locale),
+    compactStoredTurnContent(cleaned, 'assistant', locale),
     sessionId,
   );
   void maybeDreamLearnerNotes(userId, agent);
@@ -176,6 +183,10 @@ export async function POST(req: Request) {
     'user',
     compactStoredTurnContent(lastMessage, 'user', locale),
     sessionId,
+  );
+
+  void persistThrottledChatObservation(userId, agent, lastMessage, topic).catch((err) =>
+    logger.warn('chat: persistChatObservation failed', { err: String(err) }),
   );
 
   // Coach: when learner says drills are too easy, mark due atoms mastered so FSRS stops repeating basics.

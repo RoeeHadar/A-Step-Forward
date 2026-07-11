@@ -1,7 +1,10 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { RefreshCw } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
 import { ProgressDashboard } from '@/components/progress-dashboard';
+import { Button } from '@asf/ui/button';
 import { useI18n } from '@/providers/i18n-provider';
 import type { ProgressSnapshot } from '@/lib/neon-db';
 
@@ -30,7 +33,9 @@ export function ProgressPageContent({
   learnerId: string;
   hasPhysicsEnrollment?: boolean;
 }) {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
+  const router = useRouter();
+  const refreshLabel = locale === 'he' ? 'רענון' : 'Refresh';
 
   const resolved =
     snapshot ??
@@ -66,6 +71,12 @@ export function ProgressPageContent({
         title={messages.progress.title}
         description={messages.progress.description}
         gradientTitle
+        actions={
+          <Button type="button" variant="outline" size="sm" onClick={() => router.refresh()}>
+            <RefreshCw className="me-2 h-4 w-4" aria-hidden />
+            {refreshLabel}
+          </Button>
+        }
       />
       <ProgressDashboard
         progress={snapshotToProgress(resolved, learnerId)}

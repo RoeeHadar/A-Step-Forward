@@ -23,6 +23,7 @@ export default async function MemoryPage() {
           strongConcepts: [],
           activePlanGoal: null,
           activeWeekConceptIds: [],
+          recentChatTurns: [],
         }
       }
     />

@@ -31,7 +31,8 @@ import {
   wellbeingPlanBiasFromProfile,
   type WellbeingPlanBiasStored,
 } from './wellbeing-plan-bias';
-import { masterySignalInScope } from './concept-scope';
+import { conceptMatchesSubjects } from './concept-scope';
+import { resolveConceptAlias } from './concept-aliases';
 import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
@@ -277,7 +278,7 @@ export async function getConceptMastery(
   return result;
 }
 
-const LESSON_READ_BASELINE = 0.6;
+const LESSON_READ_BASELINE = 0.7;
 
 async function ensureConceptMasteryTable(): Promise<void> {
   const s = requireSql();
@@ -303,18 +304,29 @@ async function ensureLearnerProfileCompletionColumn(): Promise<void> {
 
 /** Baseline mastery when a learner marks a lesson as read/complete (before quiz). */
 export async function markLessonComplete(learnerId: string, conceptId: string): Promise<number> {
+  const canonicalId = resolveConceptAlias(conceptId.trim());
   const s = requireSql();
   await ensureConceptMasteryTable();
   await ensureLearnerProfileCompletionColumn();
 
   await s`
     INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
-    VALUES (${learnerId}, ${conceptId}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
+    VALUES (${learnerId}, ${canonicalId}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
     ON CONFLICT (learner_id, concept_id) DO UPDATE SET
       score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
       last_activity = NOW(),
       updated_at = NOW()
   `;
+  if (canonicalId !== conceptId.trim()) {
+    await s`
+      INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
+      VALUES (${learnerId}, ${conceptId.trim()}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
+      ON CONFLICT (learner_id, concept_id) DO UPDATE SET
+        score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
+        last_activity = NOW(),
+        updated_at = NOW()
+    `;
+  }
 
   await s`
     UPDATE learner_profiles
@@ -2756,7 +2768,6 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
       chatCountRowsRaw,
       atomCountRowsRaw,
       profile,
-      plan,
       daily_activity,
       weekly_recap,
       recent_activity,
@@ -2779,18 +2790,14 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
         WHERE learner_id = ${learnerId} AND attempts > 0
       `,
       getLearnerProfile(learnerId).catch(() => null),
-      getCurrentPlan(learnerId).catch(() => null),
       getDailyActivity(learnerId, 30),
       getWeeklyRecap(learnerId),
       getRecentActivity(learnerId, 8),
     ]);
 
     const subjects = profile?.subjects ?? [];
-    const planConceptIds = new Set(
-      plan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
-    );
     const inScope = (conceptId: string) =>
-      masterySignalInScope(conceptId, { subjects, planConceptIds });
+      subjects.length === 0 || conceptMatchesSubjects(conceptId, subjects);
 
     const allMastery = masteryRowsRaw as Array<{
       concept_id: string;
@@ -2869,6 +2876,17 @@ export async function fetchConceptMasteryBulk(
 ): Promise<Map<string, ConceptMasteryEntry>> {
   const result = new Map<string, ConceptMasteryEntry>();
   if (!sql || conceptIds.length === 0) return result;
+
+  const queryToCatalog = new Map<string, string>();
+  const queryIds = new Set<string>();
+  for (const id of conceptIds) {
+    queryIds.add(id);
+    queryToCatalog.set(id, id);
+    const alias = resolveConceptAlias(id);
+    queryIds.add(alias);
+    queryToCatalog.set(alias, id);
+  }
+
   try {
     const rows = (await sql`
       SELECT concept_id,
@@ -2877,7 +2895,7 @@ export async function fetchConceptMasteryBulk(
              last_activity::text AS last_activity
       FROM concept_mastery
       WHERE learner_id = ${learnerId}
-        AND concept_id = ANY(${conceptIds}::text[])
+        AND concept_id = ANY(${[...queryIds]}::text[])
     `) as Array<{
       concept_id: string;
       score: number;
@@ -2885,12 +2903,16 @@ export async function fetchConceptMasteryBulk(
       last_activity: string | null;
     }>;
     for (const r of rows) {
-      result.set(r.concept_id, {
-        concept_id: r.concept_id,
-        score: r.score,
-        data_points: r.data_points,
-        last_activity: r.last_activity,
-      });
+      const catalogId = queryToCatalog.get(r.concept_id) ?? r.concept_id;
+      const existing = result.get(catalogId);
+      if (!existing || r.score > existing.score) {
+        result.set(catalogId, {
+          concept_id: catalogId,
+          score: r.score,
+          data_points: r.data_points,
+          last_activity: r.last_activity,
+        });
+      }
     }
   } catch (err) {
     console.warn('[neon-db] fetchConceptMasteryBulk failed', err);
@@ -2913,6 +2935,13 @@ export interface LearnerMemoryNote {
 export interface LearnerMemoryConceptSignal {
   concept_id: string;
   score: number;
+}
+
+export interface LearnerMemoryChatTurn {
+  agent: string;
+  role: string;
+  content: string;
+  created_at: string;
 }
 
 export interface LearnerMemorySnapshot {
@@ -2938,6 +2967,7 @@ export interface LearnerMemorySnapshot {
   strongConcepts: LearnerMemoryConceptSignal[];
   activePlanGoal: string | null;
   activeWeekConceptIds: string[];
+  recentChatTurns: LearnerMemoryChatTurn[];
 }
 
 const MEMORY_TAB_AGENTS = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
@@ -2954,6 +2984,7 @@ function emptyMemorySnapshot(): LearnerMemorySnapshot {
     strongConcepts: [],
     activePlanGoal: null,
     activeWeekConceptIds: [],
+    recentChatTurns: [],
   };
 }
 
@@ -2967,7 +2998,7 @@ export async function getLearnerMemorySnapshot(
   if (!sql) return emptyMemorySnapshot();
 
   try {
-    const [profile, persona, noteRows, mastery, plan] = await Promise.all([
+    const [profile, persona, noteRows, mastery, plan, chatTurnRows] = await Promise.all([
       getLearnerProfile(learnerId).catch(() => null),
       getLearnerPersona(learnerId).catch(() => null),
       sql`
@@ -2982,6 +3013,13 @@ export async function getLearnerMemorySnapshot(
       `,
       getConceptMastery(learnerId).catch(() => ({} as Record<string, number>)),
       getCurrentPlan(learnerId).catch(() => null),
+      sql`
+        SELECT agent, role, content, created_at::text AS created_at
+        FROM chat_turns
+        WHERE learner_id = ${learnerId}
+        ORDER BY created_at DESC
+        LIMIT 24
+      `,
     ]);
 
     const notes = noteRows as LearnerMemoryNote[];
@@ -2994,11 +3032,8 @@ export async function getLearnerMemorySnapshot(
     }
 
     const subjects = profile?.subjects ?? [];
-    const planConceptIds = new Set(
-      plan?.weeks.flatMap((w) => w.concepts.map((c) => c.concept_id)) ?? [],
-    );
     const masteryInScope = (conceptId: string) =>
-      masterySignalInScope(conceptId, { subjects, planConceptIds });
+      subjects.length === 0 || conceptMatchesSubjects(conceptId, subjects);
 
     const weakConcepts = Object.entries(mastery)
       .filter(([id, score]) => score < 0.4 && masteryInScope(id))
@@ -3042,6 +3077,7 @@ export async function getLearnerMemorySnapshot(
       strongConcepts,
       activePlanGoal: plan?.goal ?? null,
       activeWeekConceptIds,
+      recentChatTurns: (chatTurnRows as LearnerMemoryChatTurn[]).reverse(),
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {
@@ -3595,5 +3631,26 @@ async function ensureMockExamTablesForGrade(): Promise<void> {
       feedback JSONB,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
+  `;
+}
+
+/** Wipe learner-bound progress, memory, chat, and plans (keeps profile row). */
+export async function resetLearnerData(learnerId: string): Promise<void> {
+  const s = requireSql();
+  await s`DELETE FROM chat_turns WHERE learner_id = ${learnerId}`;
+  await s`DELETE FROM learner_agent_notes WHERE learner_id = ${learnerId}`;
+  await s`DELETE FROM concept_mastery WHERE learner_id = ${learnerId}`;
+  await s`DELETE FROM skill_practice WHERE learner_id = ${learnerId}`;
+  await s`DELETE FROM plan_weeks WHERE plan_id IN (SELECT id FROM learning_plans WHERE learner_id = ${learnerId})`;
+  await s`DELETE FROM learning_plans WHERE learner_id = ${learnerId}`;
+  await s`
+    UPDATE learner_profiles
+    SET learner_persona = NULL,
+        learner_persona_updated_at = NULL,
+        wellbeing_plan_bias = NULL,
+        weak_concepts = NULL,
+        strong_concepts = NULL,
+        lessons_completed_count = 0
+    WHERE learner_id = ${learnerId}
   `;
 }

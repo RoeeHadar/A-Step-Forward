@@ -219,12 +219,12 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
     .map((c) => {
       const aliasId = resolveConceptAlias(c.id);
       const meta = lessonMeta.get(c.id) ?? lessonMeta.get(aliasId);
-      const indexEntry = getLessonIndexEntry(c.id) ?? getLessonIndexEntry(aliasId);
-      const hasLesson =
-        Boolean(meta) ||
-        Boolean(indexEntry) ||
-        isConceptInBundle(c.id) ||
-        isConceptInBundle(aliasId);
+      const ownIndex = getLessonIndexEntry(c.id);
+      const hasDirectLesson =
+        Boolean(ownIndex) ||
+        Boolean(meta && meta.concept_id === c.id) ||
+        isConceptInBundle(c.id);
+      const hasLesson = hasDirectLesson;
       const mastery = masteryMap.get(c.id) ?? masteryMap.get(aliasId);
       const status = masteryStatus(mastery?.score);
       return { ...c, langs: coverage.get(c.id) ?? coverage.get(aliasId) ?? [], hasLesson, inTrack: true, mastery, status };
@@ -402,23 +402,21 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                           : t.statusReview
                       : null;
 
-                    return (
-                      <Link
-                        key={c.id}
-                        href={`/learn/${subject}/concept/${c.id}`}
-                        className={`glass-surface group rounded-xl p-4 transition-all ${
-                          statusCfg
-                            ? `${statusCfg.cardBorder} hover:border-primary/60`
-                            : c.hasLesson
-                              ? 'border-primary/30 hover:border-primary/60'
-                              : 'border-border/60 hover:border-primary/40'
-                        }`}
-                      >
+                    const cardClass = `glass-surface rounded-xl p-4 transition-all ${
+                      statusCfg
+                        ? `${statusCfg.cardBorder} hover:border-primary/60`
+                        : c.hasLesson
+                          ? 'border-primary/30 hover:border-primary/60'
+                          : 'border-border/60 opacity-90'
+                    }`;
+                    const cardBody = (
+                      <>
                         <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-medium text-foreground group-hover:text-primary">
+                          <h3
+                            className={`font-medium text-foreground ${c.hasLesson ? 'group-hover:text-primary' : ''}`}
+                          >
                             {cardTitle}
                           </h3>
-                          {/* Completion badge takes precedence over content badge */}
                           {statusCfg ? (
                             <span
                               className={`flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${statusCfg.classes}`}
@@ -436,7 +434,6 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                             </span>
                           ) : null}
                         </div>
-                        {/* Score bar if in-progress or needs review */}
                         {c.mastery && c.status && c.status !== 'done' ? (
                           <div className="mt-2">
                             <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
@@ -450,6 +447,24 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                             </p>
                           </div>
                         ) : null}
+                      </>
+                    );
+
+                    if (!c.hasLesson) {
+                      return (
+                        <div key={c.id} className={cardClass} aria-disabled>
+                          {cardBody}
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={c.id}
+                        href={`/learn/${subject}/concept/${c.id}`}
+                        className={`${cardClass} group`}
+                      >
+                        {cardBody}
                       </Link>
                     );
                   })}

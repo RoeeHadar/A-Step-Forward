@@ -132,11 +132,11 @@ export default async function ConceptPage({
   ]);
 
   const indexEntry = getLessonIndexEntry(conceptId) ?? getLessonIndexEntry(canonicalLessonId);
-  const hasAuthoredLesson =
-    Boolean(lessonData) ||
+  const hasDirectLesson =
     Boolean(indexEntry) ||
     isConceptInBundle(conceptId) ||
-    isConceptInBundle(canonicalLessonId);
+    Boolean(lessonData && lessonData.lesson.concept_id === conceptId);
+  const hasAuthoredLesson = hasDirectLesson;
 
   // Catalog-listed syllabus topics (and title-only stubs) must render a coming-soon
   // page instead of a hard 404 — they appear as clickable cards on /learn grids.
@@ -197,7 +197,7 @@ export default async function ConceptPage({
           ) : null}
         </header>
 
-        {lessonData ? (
+        {lessonData && hasDirectLesson ? (
           <LessonPageClient data={lessonData} conceptId={conceptId} learnerLevel={learnerLevel} />
         ) : hasAuthoredLesson ? (
           <div
