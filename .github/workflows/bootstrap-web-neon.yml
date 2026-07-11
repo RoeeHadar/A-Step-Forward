@@ -1,0 +1,31 @@
+name: Bootstrap Web Neon
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: bootstrap-web-neon
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Neon client
+        run: npm install @neondatabase/serverless@0.10.4
+
+      - name: Bootstrap web-app tables (idempotent)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::DATABASE_URL secret is not set"
+            exit 1
+          fi
+          node scripts/bootstrap-web-neon.mjs
