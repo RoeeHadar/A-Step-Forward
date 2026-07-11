@@ -31,7 +31,7 @@ export interface DiagnosticSessionPayload {
   version: typeof DIAGNOSTIC_SESSION_VERSION;
   goal_concept_id: string | null;
   probe_concepts: string[];
-  /** Fixed 12-slot validation plan — two probes per self-scored concept tier. */
+  /** Fixed validation plan — one probe per priority concept (see DIAGNOSTIC_QUESTIONS_PER_SESSION). */
   validation_queue: ValidationSlot[];
   queue_index: number;
   responses: DiagnosticResponse[];
