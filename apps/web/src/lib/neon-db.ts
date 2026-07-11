@@ -371,13 +371,20 @@ export interface DiagnosticQuestion {
 
 export async function startDiagnosticSession(
   learnerId: string,
-  topics: string[],
+  subjects: string[],
+  itemIds: string[],
 ): Promise<string> {
   const s = requireSql();
   const id = randomUUID();
   await s`
-    INSERT INTO diagnostic_sessions (id, learner_id, status, topics, question_idx, created_at)
-    VALUES (${id}, ${learnerId}, 'active', ${topics}, 0, NOW())
+    INSERT INTO diagnostic_sessions (
+      id, learner_id, status, topics, question_idx, results, created_at
+    )
+    VALUES (
+      ${id}, ${learnerId}, 'active', ${subjects}, 0,
+      ${JSON.stringify({ item_ids: itemIds, subjects })}::jsonb,
+      NOW()
+    )
   `;
   return id;
 }
@@ -387,13 +394,45 @@ function isMissingDiagnosticColumnError(err: unknown): boolean {
   return /column .* does not exist/i.test(msg);
 }
 
-function filterDiagnosticPool(rows: DiagnosticItem[], limit: number): DiagnosticItem[] {
-  const isTemplatePlaceholder = (stem: string) =>
-    /generic unrelated fact|עובדה כללית ולא קשורה|\[Difficulty \d+\/10\]/i.test(stem);
+export function isTemplateDiagnosticStem(stem: string): boolean {
+  return (
+    /Which statement best describes|A statement that does not apply to|generic unrelated fact|עובדה כללית ולא קשורה|משפט שלא מתאים ל-|איזה משפט מתאר|\[Difficulty \d+\/10\]/i.test(
+      stem,
+    )
+  );
+}
 
-  const quality = rows.filter((r) => !isTemplatePlaceholder(r.stem));
+function filterDiagnosticPool(rows: DiagnosticItem[], limit: number): DiagnosticItem[] {
+  const quality = rows.filter((r) => !isTemplateDiagnosticStem(r.stem));
   const pool = quality.length >= Math.min(limit, 3) ? quality : rows;
   return pool.slice(0, limit);
+}
+
+export async function getDiagnosticItemById(itemId: string): Promise<DiagnosticItem | null> {
+  const s = requireSql();
+  try {
+    const rows = (await s`
+      SELECT id::text, topic, subject, difficulty::float AS difficulty,
+             stem, options, source_concept,
+             stem_he, options_he, explanation_he
+      FROM diagnostic_items
+      WHERE id = ${itemId}::uuid
+      LIMIT 1
+    `) as DiagnosticItem[];
+    return rows[0] ?? null;
+  } catch (err) {
+    if (!isMissingDiagnosticColumnError(err)) throw err;
+    const rows = (await s`
+      SELECT id::text, topic, subject, difficulty::float AS difficulty,
+             stem, options, source_concept
+      FROM diagnostic_items
+      WHERE id = ${itemId}::uuid
+      LIMIT 1
+    `) as Array<Omit<DiagnosticItem, 'stem_he' | 'options_he' | 'explanation_he'>>;
+    const row = rows[0];
+    if (!row) return null;
+    return { ...row, stem_he: null, options_he: null, explanation_he: null };
+  }
 }
 
 async function fetchDiagnosticItemsLegacy(
@@ -539,6 +578,7 @@ export async function getDiagnosticSession(
 export async function recordDiagnosticAnswer(
   sessionId: string,
   itemId: string,
+  chosen: string,
   correct: boolean,
   topic: string,
   learnerId: string,
@@ -546,7 +586,10 @@ export async function recordDiagnosticAnswer(
   const s = requireSql();
   await s`
     INSERT INTO quiz_responses (id, quiz_id, quiz_type, item_id, chosen, correct, created_at)
-    VALUES (gen_random_uuid(), ${sessionId}::uuid, 'diagnostic', ${itemId}::uuid, '', ${correct}, NOW())
+    VALUES (
+      gen_random_uuid(), ${sessionId}::uuid, 'diagnostic', ${itemId}::uuid,
+      ${chosen}, ${correct}, NOW()
+    )
   `;
 
   // Update running mastery for this topic

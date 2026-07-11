@@ -29,3 +29,10 @@ jobs:
             exit 1
           fi
           node scripts/bootstrap-web-neon.mjs
+
+      - name: Seed diagnostic_items from lesson MCQs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm install --no-save js-yaml
+          node scripts/seed-diagnostic-from-lessons.mjs

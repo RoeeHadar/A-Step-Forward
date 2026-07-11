@@ -7,14 +7,13 @@ import {
   dbConfigured,
 } from '@/lib/neon-db';
 import {
+  DIAGNOSTIC_QUESTIONS_PER_SESSION,
   normalizeLearnerSubjects,
   resolveDiagnosticPointsLevel,
 } from '@/lib/diagnostic-start';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-
-const QUESTIONS_PER_SESSION = 12;
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -56,7 +55,7 @@ export async function POST(req: Request) {
 
     const items = await fetchDiagnosticItemsWithFallback(
       subjects,
-      QUESTIONS_PER_SESSION,
+      DIAGNOSTIC_QUESTIONS_PER_SESSION,
       pointsLevel,
     );
     if (items.length === 0) {
@@ -69,7 +68,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const sessionId = await startDiagnosticSession(userId, body.topics ?? subjects);
+    const sessionId = await startDiagnosticSession(
+      userId,
+      subjects,
+      items.map((item) => item.id),
+    );
     const question = itemToQuestion(items[0]!);
     if (!question.options.length || !question.stem.trim()) {
       return Response.json(
