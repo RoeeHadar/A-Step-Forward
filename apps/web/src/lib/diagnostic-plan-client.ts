@@ -9,8 +9,8 @@ export type DiagnosticFlowPhase =
   | 'error';
 
 const PLAN_GENERATE_TIMEOUT_MS = 90_000;
-const PLAN_POLL_INTERVAL_MS = 2000;
-const PLAN_MAX_WAIT_MS = 90_000;
+const PLAN_POLL_INTERVAL_MS = 1500;
+const PLAN_MAX_WAIT_MS = 120_000;
 
 export function isRateLimitResponse(status: number, message: string): boolean {
   return status === 429 || /rate.?limit|too many requests/i.test(message);

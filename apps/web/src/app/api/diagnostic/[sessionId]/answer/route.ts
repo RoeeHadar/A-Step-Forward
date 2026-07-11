@@ -6,6 +6,7 @@ import {
   getDiagnosticItemById,
   updateDiagnosticSessionResults,
   persistDiagnosticSummary,
+  kickoffOnboardingPlan,
   itemToQuestion,
   dbConfigured,
 } from '@/lib/neon-db';
@@ -140,6 +141,7 @@ export async function POST(
 
   if (advanced.complete && advanced.summary) {
     await persistDiagnosticSummary(userId, advanced.summary);
+    kickoffOnboardingPlan(userId);
     const mastery = await completeDiagnostic(
       sessionId,
       userId,

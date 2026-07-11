@@ -14,10 +14,11 @@ description: >
 /onboarding → POST /api/onboarding/submit → /diagnostic
 /diagnostic → POST /api/diagnostic/start (fresh or pending-only resume)
             → POST /api/diagnostic/[id]/answer × 6
+                 └─ on last answer: kickoffOnboardingPlan() server-side
             → generatePlanWithRetry() (client)
-                 ├─ POST /api/plans/generate?fast=1  (background)
-                 └─ poll GET /api/plans/current?exists=1 every 2s
-            → redirect /dashboard when has_plan=true
+                 ├─ poll GET /api/plans/current?exists=1 every 1.5s
+                 └─ POST /api/plans/generate (backup; server auto fast when no plan)
+            → redirect /app when has_plan=true
 ```
 
 **Target SLO:** `hasActiveLearningPlan()` true within **~10–15s** after the last diagnostic answer.
@@ -47,12 +48,10 @@ description: >
 
 | Practice | File / API |
 |----------|------------|
-| **`fastPath: true`** via `POST /api/plans/generate?fast=1` | Skips `buildLearningPlan()` BFS + Neon atom hydration |
-| **`buildFastPlanConceptOrder()`** | In-memory worklist from weak mastery + self_scores + diagnostic focus |
-| **Persist `learning_plans` + `plan_weeks` before `saveWellbeingPlanBias`** | `exists=1` poll succeeds as soon as transaction commits |
-| **`litePlanConcept()`** in return object only | No textbook/Bagrut fetch before persist |
-| **Client polls `exists=1` in parallel with POST** | POST may take 90s or abort; poll detects commit |
-| **`ensureLearningPlan` single-flight + lock wait** | One generator per learner; others poll `waitForCurrentPlan` |
+| **Server kickoff on last diagnostic answer** | `kickoffOnboardingPlan()` in answer route — plan starts before client POST |
+| **Auto fast path when learner has no plan** | Works even if client bundle omits `?fast=1` |
+| **`loadActivePlanStub` in ensure/wait** | No textbook hydration blocking exists poll |
+| **Block adaptive full regen for 15 min** | `isFreshOnboardingPlan()` prevents mastery_shock clobber |
 
 ## Plan generation — what failed
 

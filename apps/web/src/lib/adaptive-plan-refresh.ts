@@ -8,6 +8,7 @@ import {
   getConceptMastery,
   getCurrentPlan,
   getLearnerProfile,
+  isFreshOnboardingPlan,
   saveWellbeingPlanBias,
 } from '@/lib/neon-db';
 import {
@@ -130,6 +131,10 @@ export async function maybeRefreshLearningPlanForSignals(
   }
 
   if (!canPersistWellbeingRewrite(bias, primaryTrigger, profileInput, now)) {
+    return { refreshed: false, biasSaved: true, trigger: primaryTrigger };
+  }
+
+  if (await isFreshOnboardingPlan(learnerId)) {
     return { refreshed: false, biasSaved: true, trigger: primaryTrigger };
   }
 

@@ -30,6 +30,7 @@ import {
   recordWellbeingPersistedRewrite,
   selectMoraleConcepts,
   wellbeingPlanBiasFromProfile,
+  type WellbeingPlanBias,
   type WellbeingPlanBiasStored,
 } from './wellbeing-plan-bias';
 import { conceptMatchesSubjects } from './concept-scope';
@@ -451,6 +452,84 @@ export async function hasActiveLearningPlan(learnerId: string): Promise<boolean>
     LIMIT 1
   `) as Array<{ ok: number }>;
   return rows.length > 0;
+}
+
+/** Lightweight plan read for onboarding — no textbook/Bagrut hydration. */
+async function loadActivePlanStub(learnerId: string): Promise<LearningPlan | null> {
+  const s = requireSql();
+  const planRows = (await s`
+    SELECT id::text, learner_id, goal, start_date::text, end_date::text, status,
+           plan_adjustment_kind, plan_last_adjusted_at::text
+    FROM learning_plans
+    WHERE learner_id = ${learnerId} AND status = 'active'
+    LIMIT 1
+  `) as Array<{
+    id: string;
+    learner_id: string;
+    goal: string;
+    start_date: string;
+    end_date: string | null;
+    status: string;
+    plan_adjustment_kind: string | null;
+    plan_last_adjusted_at: string | null;
+  }>;
+  const plan = planRows[0];
+  if (!plan) return null;
+
+  const weekRows = (await s`
+    SELECT id::text, week_number, concepts, quiz_due_at, status
+    FROM plan_weeks
+    WHERE plan_id = ${plan.id}::uuid
+    ORDER BY week_number
+  `) as Array<{
+    id: string;
+    week_number: number;
+    concepts: string[];
+    quiz_due_at: string | null;
+    status: string;
+  }>;
+
+  const profile = await getLearnerProfile(learnerId);
+  const mastery = await getConceptMastery(learnerId);
+  const subjects = profile?.subjects ?? [];
+
+  return {
+    ...plan,
+    plan_adjustment_kind: plan.plan_adjustment_kind as LearningPlan['plan_adjustment_kind'],
+    plan_last_adjusted_at: plan.plan_last_adjusted_at,
+    weeks: weekRows.map((w) => ({
+      id: w.id,
+      plan_id: plan.id,
+      week_number: w.week_number,
+      concepts: w.concepts.map((cid) => litePlanConcept(cid, subjects, mastery)),
+      quiz_due_at: w.quiz_due_at,
+      status: w.status,
+    })),
+  };
+}
+
+async function activePlanCreatedAt(learnerId: string): Promise<Date | null> {
+  const s = requireSql();
+  const rows = (await s`
+    SELECT created_at
+    FROM learning_plans
+    WHERE learner_id = ${learnerId} AND status = 'active'
+    ORDER BY created_at DESC
+    LIMIT 1
+  `) as Array<{ created_at: Date | string }>;
+  const raw = rows[0]?.created_at;
+  if (!raw) return null;
+  return raw instanceof Date ? raw : new Date(raw);
+}
+
+/** Guard against adaptive refresh clobbering a plan created during onboarding. */
+export async function isFreshOnboardingPlan(
+  learnerId: string,
+  maxAgeMs = 15 * 60 * 1000,
+): Promise<boolean> {
+  const createdAt = await activePlanCreatedAt(learnerId);
+  if (!createdAt) return false;
+  return Date.now() - createdAt.getTime() < maxAgeMs;
 }
 
 export function isTemplateDiagnosticStem(stem: string): boolean {
@@ -1098,7 +1177,6 @@ export async function generateLearningPlan(
   learnerId: string,
   options: GeneratePlanOptions = {},
 ): Promise<LearningPlan> {
-  const s = requireSql();
   const profile = await getLearnerProfile(learnerId);
   if (!profile) {
     throw new Error('Complete onboarding before generating a learning plan');
@@ -1156,7 +1234,11 @@ export async function generateLearningPlan(
     focusConceptsOnly: options.focusConceptsOnly,
   };
 
-  const sorted = options.fastPath
+  const useFastPath =
+    options.fastPath === true ||
+    (options.fastPath !== false && !(await hasActiveLearningPlan(learnerId)));
+
+  let sorted = useFastPath
     ? buildFastPlanConceptOrder({ profile, mastery, options: worklistOptions })
     : await buildUnifiedPlanConceptOrder({
         learnerId,
@@ -1166,8 +1248,12 @@ export async function generateLearningPlan(
         numWeeks,
       });
 
+  if (sorted.length === 0) {
+    sorted = buildFastPlanConceptOrder({ profile, mastery, options: worklistOptions });
+  }
+
   const now = new Date();
-  const previousBias = wellbeingPlanBiasFromProfile(
+  let wellbeingBias = wellbeingPlanBiasFromProfile(
     {
       subjects: profile.subjects,
       mental_state: profile.mental_state,
@@ -1178,38 +1264,87 @@ export async function generateLearningPlan(
     },
     now,
   );
-  const { bias: evaluatedBias, triggers } = evaluateWellbeingSignals(
-    profile,
-    mastery,
-    previousBias,
-    now,
-  );
-  let wellbeingBias = evaluatedBias;
   let planAdjustmentKind: string | null = null;
   let planLastAdjustedAt: string | null = null;
 
-  const primaryTrigger = pickPrimaryWellbeingTrigger(triggers);
-  const persistWellbeing =
-    wellbeingBias.active &&
-    primaryTrigger != null &&
-    canPersistWellbeingRewrite(wellbeingBias, primaryTrigger, profile, now);
-
-  if (wellbeingBias.active && !options.fastPath) {
-    const moraleConcepts = await selectMoraleConcepts({
-      learnerId,
+  if (!useFastPath) {
+    const previousBias = wellbeingBias;
+    const { bias: evaluatedBias, triggers } = evaluateWellbeingSignals(
       profile,
       mastery,
-      strengthAnchors: wellbeingBias.strength_anchors,
+      previousBias,
+      now,
+    );
+    wellbeingBias = evaluatedBias;
+
+    const primaryTrigger = pickPrimaryWellbeingTrigger(triggers);
+    const persistWellbeing =
+      wellbeingBias.active &&
+      primaryTrigger != null &&
+      canPersistWellbeingRewrite(wellbeingBias, primaryTrigger, profile, now);
+
+    if (wellbeingBias.active) {
+      const moraleConcepts = await selectMoraleConcepts({
+        learnerId,
+        profile,
+        mastery,
+        strengthAnchors: wellbeingBias.strength_anchors,
+      });
+      wellbeingBias = {
+        ...wellbeingBias,
+        morale_concepts: moraleConcepts,
+      };
+    }
+
+    // Chunk into weeks (round-robin so each week has roughly equal load)
+    const weekGroups: string[][] = Array.from({ length: numWeeks }, () => []);
+    const maxPerWeek = Math.max(3, Math.ceil(sorted.length / numWeeks));
+    let weekIdx = 0;
+    for (const concept of sorted) {
+      while (weekGroups[weekIdx]!.length >= maxPerWeek) {
+        weekIdx = (weekIdx + 1) % numWeeks;
+      }
+      weekGroups[weekIdx]!.push(concept);
+      weekIdx = (weekIdx + 1) % numWeeks;
+    }
+
+    if (wellbeingBias.active && persistWellbeing && wellbeingBias.morale_concepts.length > 0) {
+      const ratio = wellbeingBias.goal_critical_ratio;
+      if (weekGroups[0]?.length) {
+        weekGroups[0] = applyWellbeingOverlay(
+          weekGroups[0]!,
+          wellbeingBias.morale_concepts,
+          ratio,
+        );
+      }
+      if (weekGroups[1]?.length) {
+        weekGroups[1] = applyWellbeingOverlay(
+          weekGroups[1]!,
+          wellbeingBias.morale_concepts,
+          ratio,
+        );
+      }
+      wellbeingBias = recordWellbeingPersistedRewrite(wellbeingBias, primaryTrigger!, now);
+      planAdjustmentKind = 'wellbeing';
+      planLastAdjustedAt = now.toISOString();
+    }
+
+    return await persistLearningPlanTransaction({
+      learnerId,
+      goalText,
+      numWeeks,
+      weekGroups,
+      wellbeingBias,
+      planAdjustmentKind,
+      planLastAdjustedAt,
+      profile,
+      mastery,
     });
-    wellbeingBias = {
-      ...wellbeingBias,
-      morale_concepts: moraleConcepts,
-    };
   }
 
-  // Chunk into weeks (round-robin so each week has roughly equal load)
+  // Fast onboarding path — skip wellbeing overlay; persist immediately.
   const weekGroups: string[][] = Array.from({ length: numWeeks }, () => []);
-  const maxPerWeek = Math.max(3, Math.ceil(sorted.length / numWeeks));
+  const maxPerWeek = Math.max(3, Math.ceil(Math.max(sorted.length, 1) / numWeeks));
   let weekIdx = 0;
   for (const concept of sorted) {
     while (weekGroups[weekIdx]!.length >= maxPerWeek) {
@@ -1219,28 +1354,52 @@ export async function generateLearningPlan(
     weekIdx = (weekIdx + 1) % numWeeks;
   }
 
-  if (wellbeingBias.active && persistWellbeing && wellbeingBias.morale_concepts.length > 0) {
-    const ratio = wellbeingBias.goal_critical_ratio;
-    if (weekGroups[0]?.length) {
-      weekGroups[0] = applyWellbeingOverlay(
-        weekGroups[0]!,
-        wellbeingBias.morale_concepts,
-        ratio,
-      );
-    }
-    if (weekGroups[1]?.length) {
-      weekGroups[1] = applyWellbeingOverlay(
-        weekGroups[1]!,
-        wellbeingBias.morale_concepts,
-        ratio,
-      );
-    }
-    wellbeingBias = recordWellbeingPersistedRewrite(wellbeingBias, primaryTrigger!, now);
-    planAdjustmentKind = 'wellbeing';
-    planLastAdjustedAt = now.toISOString();
-  }
+  const plan = await persistLearningPlanTransaction({
+    learnerId,
+    goalText,
+    numWeeks,
+    weekGroups,
+    wellbeingBias,
+    planAdjustmentKind,
+    planLastAdjustedAt,
+    profile,
+    mastery,
+    skipWellbeingSave: true,
+  });
 
-  // Persist plan + weeks (before wellbeing profile write so exists=1 polls succeed quickly)
+  void saveWellbeingPlanBias(learnerId, wellbeingBias).catch((err) => {
+    console.warn('[generateLearningPlan] deferred wellbeing save failed', err);
+  });
+
+  return plan;
+}
+
+async function persistLearningPlanTransaction(args: {
+  learnerId: string;
+  goalText: string;
+  numWeeks: number;
+  weekGroups: string[][];
+  wellbeingBias: WellbeingPlanBias;
+  planAdjustmentKind: string | null;
+  planLastAdjustedAt: string | null;
+  profile: NonNullable<Awaited<ReturnType<typeof getLearnerProfile>>>;
+  mastery: Record<string, number>;
+  skipWellbeingSave?: boolean;
+}): Promise<LearningPlan> {
+  const s = requireSql();
+  const {
+    learnerId,
+    goalText,
+    numWeeks,
+    weekGroups,
+    wellbeingBias,
+    planAdjustmentKind,
+    planLastAdjustedAt,
+    profile,
+    mastery,
+    skipWellbeingSave = false,
+  } = args;
+
   const planId = randomUUID();
   const startDate = new Date();
   const endDate = new Date(startDate);
@@ -1309,7 +1468,9 @@ export async function generateLearningPlan(
     throw err;
   }
 
-  await saveWellbeingPlanBias(learnerId, wellbeingBias);
+  if (!skipWellbeingSave) {
+    await saveWellbeingPlanBias(learnerId, wellbeingBias);
+  }
 
   for (const w of persistWeeks) {
     weeks.push({
@@ -1355,7 +1516,7 @@ export async function waitForCurrentPlan(
   const delayMs = opts.delayMs ?? 1000;
   for (let i = 0; i < attempts; i += 1) {
     if (await hasActiveLearningPlan(learnerId)) {
-      return getCurrentPlan(learnerId);
+      return loadActivePlanStub(learnerId);
     }
     if (i < attempts - 1) await planGenSleep(delayMs);
   }
@@ -1370,8 +1531,8 @@ export async function ensureLearningPlan(
   options: GeneratePlanOptions & { forceRegenerate?: boolean } = {},
 ): Promise<LearningPlan> {
   if (!options.forceRegenerate && (await hasActiveLearningPlan(learnerId))) {
-    const existing = await getCurrentPlan(learnerId);
-    if (existing?.weeks?.length) return existing;
+    const stub = await loadActivePlanStub(learnerId);
+    if (stub?.weeks?.length) return stub;
   }
 
   const inflight = planGenerationInflight.get(learnerId);
@@ -1392,6 +1553,13 @@ export async function ensureLearningPlan(
 
   planGenerationInflight.set(learnerId, work);
   return work;
+}
+
+/** Fire-and-forget first plan after diagnostic — server starts before client POST. */
+export function kickoffOnboardingPlan(learnerId: string): void {
+  void ensureLearningPlan(learnerId, { fastPath: true }).catch((err) => {
+    console.error('[kickoffOnboardingPlan]', err);
+  });
 }
 
 export async function applyPlanProfileUpdates(
