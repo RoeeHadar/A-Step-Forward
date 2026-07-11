@@ -43,9 +43,9 @@ const STR = {
     estGrade: (g: number) => `ציון משוער: ~${g}`,
     planTitle: 'התוכנית שלי לשבוע זה',
     noPlanTitle: 'נראה שאין לך תוכנית עדיין — בוא נתחיל!',
-    noPlanBlurb: 'השלם את האבחון כדי לקבל תכנית שבועית מותאמת אישית.',
-    startNow: 'התחל עכשיו',
-    startDiagnostic: 'התחל אבחון',
+    noPlanBlurb: 'השלם/י את שאלון ההיכרות כדי לקבל תכנית שבועית — או צור/י תוכנית מהמטרות שכבר מילאת.',
+    startNow: 'התחל/י עכשיו',
+    createPlan: 'צור/י תוכנית',
     browseLearn: 'עבור ללימוד',
     dueReviews: 'חזרה להיום',
     agents: 'הסוכנים שלך',
@@ -69,9 +69,9 @@ const STR = {
     estGrade: (g: number) => `Est. grade: ~${g}`,
     planTitle: 'My Plan for This Week',
     noPlanTitle: "Looks like you don't have a plan yet — let's get started!",
-    noPlanBlurb: 'Complete the diagnostic to get a personalized weekly plan.',
+    noPlanBlurb: 'Complete onboarding to get a weekly plan — or create one from the goals you already shared.',
     startNow: 'Start now',
-    startDiagnostic: 'Start diagnostic',
+    createPlan: 'Create my plan',
     browseLearn: 'Go to Learn',
     dueReviews: 'Due for Review Today',
     agents: 'Your agents',
@@ -460,6 +460,9 @@ export function DashboardContent({
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <Button asChild size="sm">
                 <Link href="/onboarding">{t.startNow}</Link>
+              </Button>
+              <Button asChild variant="secondary" size="sm">
+                <Link href="/plan-setup">{t.createPlan}</Link>
               </Button>
               <Button asChild variant="outline" size="sm">
                 <Link href="/learn">{t.browseLearn}</Link>

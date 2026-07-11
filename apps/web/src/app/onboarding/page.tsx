@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 /**
  * Onboarding questionnaire — fully bilingual + theme-aware.
@@ -31,14 +31,11 @@ import { SiteHeader } from '@/components/site-header';
 import { FieldLabel } from '@/components/field-hint';
 import { useI18n } from '@/providers/i18n-provider';
 import { cn } from '@asf/ui';
-import { resolveConceptTitles } from '@/lib/concept-display-names';
 import {
   clearOnboardingDraft,
   loadOnboardingDraft,
   saveOnboardingDraft,
 } from '@/lib/onboarding-draft';
-import { DIAGNOSTIC_SUBJECTS_SESSION_KEY } from '@/lib/diagnostic-start';
-import { resolveSelfScoreConceptIds } from '@/lib/onboarding-self-score';
 import {
   filterAdultGoals,
   filterGoalsForLearner,
@@ -224,9 +221,10 @@ const STR = {
     s4_socratic: 'Guide me with questions (Socratic)',
     next: 'Next',
     back: 'Back',
-    saving: 'Saving…',
-    startDiagnostic: 'Start my diagnostic',
+    saving: 'Creating your plan…',
+    createPlan: 'Create my learning plan',
     errorGeneric: 'Something went wrong',
+    errorNoPlan: 'Your profile was saved but the plan could not be created. Try again.',
   },
   he: {
     stepOf: 'שלב {i} מתוך {n}',
@@ -328,9 +326,10 @@ const STR = {
     s4_socratic: 'הנחה אותי עם שאלות (סוקרטי)',
     next: 'הבא',
     back: 'חזרה',
-    saving: 'שומר…',
-    startDiagnostic: 'התחל אבחון',
+    saving: 'יוצרים את התוכנית…',
+    createPlan: 'צור/י את תוכנית הלמידה',
     errorGeneric: 'משהו השתבש',
+    errorNoPlan: 'הפרופיל נשמר אבל לא הצלחנו ליצור תוכנית. נסה/י שוב.',
   },
 } as const;
 
@@ -468,104 +467,6 @@ const POINTS_GROUPS: { value: string; label_en: string; label_he: string }[] = [
   { value: '5', label_en: '5 units', label_he: '5 יחידות' },
 ];
 
-// ── Concept registry (bilingual labels) ─────────────────────────────────────
-// Each entry maps concept KG id → display labels.
-// The list an individual student sees is filtered by their goal (see
-// CONCEPTS_BY_GOAL below) so that 3-unit students never see derivatives,
-// 4-unit students never see vectors, etc.
-
-const ALL_CONCEPTS: Record<string, { label_en: string; label_he: string }> = {
-  // ── Math – 3pt+ ─────────────────────────────────────────────────────────
-  arithmetic:              { label_en: 'Arithmetic & Number Sense',       label_he: 'חשבון ותחושת מספר' },
-  algebra_basics:          { label_en: 'Algebra Basics',                  label_he: 'יסודות האלגברה' },
-  equations_linear:        { label_en: 'Linear Equations & Systems',      label_he: 'משוואות מדרגה ראשונה ומערכות' },
-  equations_quadratic:     { label_en: 'Quadratic Equations',             label_he: 'משוואות ריבועיות' },
-  inequalities:            { label_en: 'Inequalities',                    label_he: 'אי-שוויונים' },
-  exponents:               { label_en: 'Exponents & Roots',               label_he: 'חזקות ושורשים' },
-  word_problems:           { label_en: 'Word Problems (Applied Algebra)',  label_he: 'בעיות מילוליות' },
-  functions_intro:         { label_en: 'Introduction to Functions',       label_he: 'מבוא לפונקציות' },
-  functions_linear:        { label_en: 'Linear Functions',                label_he: 'פונקציה לינארית' },
-  functions_quadratic:     { label_en: 'Quadratic Functions (Parabola)',  label_he: 'פונקציה ריבועית (פרבולה)' },
-  geometry_basics:         { label_en: 'Basic Geometry',                  label_he: 'גיאומטריה בסיסית' },
-  sequences_arithmetic:    { label_en: 'Arithmetic Sequences',            label_he: 'סדרות חשבוניות' },
-  analytic_geometry_basic: { label_en: 'Analytic Geometry (Basics)',      label_he: 'גיאומטריה אנליטית — בסיסי' },
-  trigonometry_ratios:     { label_en: 'Trigonometry (Right Triangle)',   label_he: 'טריגונומטריה במשולש ישר זווית' },
-  statistics_descriptive:  { label_en: 'Descriptive Statistics',          label_he: 'סטטיסטיקה תיאורית' },
-  descriptive_stats:       { label_en: 'Statistics — Normal Distribution',label_he: 'סטטיסטיקה — התפלגות נורמלית' },
-  probability_basic:       { label_en: 'Basic Probability',               label_he: 'הסתברות בסיסית' },
-  // ── Math – 4pt+ ─────────────────────────────────────────────────────────
-  fractions_algebraic:     { label_en: 'Algebraic Fractions',             label_he: 'שברים אלגבריים' },
-  factoring:               { label_en: 'Factoring Polynomials',           label_he: 'פירוק לגורמים' },
-  functions_exponential:   { label_en: 'Exponential Functions & Growth',  label_he: 'פונקציה אקספוננציאלית וגדילה' },
-  quadrilaterals:          { label_en: 'Quadrilaterals',                  label_he: 'מרובעים' },
-  triangles_congruence:    { label_en: 'Triangle Congruence & Similarity',label_he: 'חפיפה ודמיון משולשים' },
-  circles:                 { label_en: 'Circles',                         label_he: 'מעגלים' },
-  sequences_geometric:     { label_en: 'Geometric Sequences & Series',    label_he: 'סדרות הנדסיות' },
-  combinatorics:           { label_en: 'Combinatorics',                   label_he: 'קומבינטוריקה' },
-  // ── Math – 5pt only ─────────────────────────────────────────────────────
-  logarithms:              { label_en: 'Logarithms',                      label_he: 'לוגריתמים' },
-  function_transformations:{ label_en: 'Function Transformations',        label_he: 'הזזות ומתיחות של פונקציות' },
-  trigonometry_identities: { label_en: 'Trigonometric Identities',        label_he: 'זהויות טריגונומטריות' },
-  trigonometry_equations:  { label_en: 'Trigonometric Equations',         label_he: 'משוואות טריגונומטריות' },
-  analytic_geometry:       { label_en: 'Analytic Geometry (Conic Sections)',label_he: 'גיאומטריה אנליטית — חתכי חרוט' },
-  vectors_2d:              { label_en: 'Vectors & 3D Trigonometry',       label_he: 'וקטורים וטריגונומטריה במרחב' },
-  distributions:           { label_en: 'Probability Distributions (Binomial)',label_he: 'התפלגויות (בינומית)' },
-  limits:                  { label_en: 'Limits',                          label_he: 'גבולות' },
-  derivatives_intro:       { label_en: 'Derivatives & Tangent Lines',     label_he: 'נגזרות וקו משיק' },
-  derivatives_rules:       { label_en: 'Derivative Rules (Chain, Product, Quotient)',label_he: 'כללי גזירה (שרשרת, מכפלה, מנה)' },
-  derivatives_applications:{ label_en: 'Function Analysis (Derivatives)', label_he: 'חקירת פונקציה בעזרת נגזרות' },
-  optimization_problems:   { label_en: 'Optimization Problems',           label_he: 'בעיות קיצון' },
-  integrals_intro:         { label_en: 'Indefinite Integrals',            label_he: 'אינטגרל כללי' },
-  definite_integrals:      { label_en: 'Definite Integrals & Areas',      label_he: 'אינטגרל מסוים וחישובי שטחים' },
-  integrals_techniques:    { label_en: 'Integration Techniques',          label_he: 'שיטות אינטגרציה' },
-  integrals_applications:  { label_en: 'Integral Applications (Volumes)', label_he: 'יישומי אינטגרלים (נפחים)' },
-  // ── University Calculus 1 ───────────────────────────────────────────────
-  continuity:              { label_en: 'Continuity',                      label_he: 'רציפות' },
-  uni_sequences_series:    { label_en: 'Sequences & Series (University)', label_he: 'סדרות וטורים (אוניברסיטה)' },
-  // ── University Linear Algebra ───────────────────────────────────────────
-  la_vectors:              { label_en: 'Vectors in Rⁿ',                  label_he: 'וקטורים ב-Rⁿ' },
-  la_matrices:             { label_en: 'Matrices & Linear Systems',       label_he: 'מטריצות ומערכות לינאריות' },
-  la_determinants:         { label_en: 'Determinants',                    label_he: 'דטרמיננטות' },
-  la_eigenvalues:          { label_en: 'Eigenvalues & Eigenvectors',      label_he: 'ערכים עצמיים' },
-  // ── Physics – High School (Bagrut 5 units) ─────────────────────────────
-  units_measurement:       { label_en: 'Units & Measurement',             label_he: 'יחידות ומדידות' },
-  kinematics_1d:           { label_en: 'Kinematics (1D)',                 label_he: 'קינמטיקה (ממד אחד)' },
-  kinematics_2d:           { label_en: 'Kinematics (2D) & Projectiles',  label_he: 'קינמטיקה (דו-ממד) וזריקה' },
-  newton_laws:             { label_en: "Newton's Laws of Motion",         label_he: 'חוקי ניוטון' },
-  friction:                { label_en: 'Friction',                        label_he: 'חיכוך' },
-  circular_motion:         { label_en: 'Circular Motion',                 label_he: 'תנועה מעגלית' },
-  gravitation:             { label_en: 'Gravitation',                     label_he: 'כבידה' },
-  work_energy:             { label_en: 'Work & Energy',                   label_he: 'עבודה ואנרגיה' },
-  conservation_energy:     { label_en: 'Conservation of Energy',          label_he: 'שימור אנרגיה' },
-  momentum:                { label_en: 'Momentum & Impulse',              label_he: 'תנע ומתקף' },
-  collisions:              { label_en: 'Collisions',                      label_he: 'התנגשויות' },
-  simple_harmonic_motion:  { label_en: 'Simple Harmonic Motion (SHM)',    label_he: 'תנועה הרמונית פשוטה' },
-  torque:                  { label_en: 'Torque & Static Equilibrium',     label_he: 'מומנט ושיווי משקל' },
-  waves_basics:            { label_en: 'Mechanical Waves & Sound',        label_he: 'גלים מכניים וקול' },
-  optics_geometric:        { label_en: 'Geometric Optics',                label_he: 'אופטיקה גיאומטרית' },
-  electrostatics:          { label_en: 'Electrostatics',                  label_he: 'אלקטרוסטטיקה' },
-  electric_field:          { label_en: 'Electric Field & Potential',      label_he: 'שדה חשמלי ופוטנציאל' },
-  electric_circuits:       { label_en: 'DC Electric Circuits',            label_he: 'מעגלי חשמל ישר' },
-  kirchhoff_laws:          { label_en: "Kirchhoff's Laws",                label_he: 'חוקי קירכהוף' },
-  magnetism:               { label_en: 'Magnetism & Magnetic Forces',     label_he: 'מגנטיות וכוחות מגנטיים' },
-  electromagnetic_induction:{ label_en: 'Electromagnetic Induction',      label_he: 'השראה אלקטרומגנטית' },
-  modern_physics_intro:    { label_en: 'Photoelectric Effect & Quanta',   label_he: 'אפקט פוטואלקטרי וקוונטים' },
-  atomic_models:           { label_en: 'Atomic Models & Hydrogen Spectrum',label_he: 'מודלים אטומיים וספקטרום המימן' },
-  nuclear_physics:         { label_en: 'Nuclear Physics & Radioactivity', label_he: 'פיזיקה גרעינית ורדיואקטיביות' },
-};
-
-type ConceptEntry = { id: string; label_en: string; label_he: string };
-
-function conceptEntry(id: string): ConceptEntry {
-  const meta = ALL_CONCEPTS[id];
-  const resolved = resolveConceptTitles(id);
-  return {
-    id,
-    label_en: meta?.label_en ?? resolved.title_en,
-    label_he: meta?.label_he ?? resolved.title_he ?? resolved.title_en,
-  };
-}
-
 // ── Step components ──────────────────────────────────────────────────────────
 
 function StepIndicator({
@@ -685,8 +586,6 @@ export default function OnboardingPage() {
     lang === 'he' ? g.label_he : g.label_en;
   const gradeLabel = (g: (typeof GRADE_LEVELS)[number]) =>
     lang === 'he' ? g.label_he : g.label_en;
-  const conceptLabel = (c: { label_en: string; label_he: string }) =>
-    lang === 'he' ? c.label_he : c.label_en;
 
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -858,26 +757,7 @@ export default function OnboardingPage() {
     visibleAdultGoalKeys.includes(g.value as (typeof visibleAdultGoalKeys)[number]),
   );
 
-  function setScore(conceptId: string, val: number) {
-    setS4((prev) => ({
-      ...prev,
-      selfScores: { ...prev.selfScores, [conceptId]: val },
-    }));
-  }
-
-  // Foundational self-assessment topics — see onboarding-self-score.ts
-  const MAX_SELF_SCORE = 8;
   const isAdultLearner = s1.gradeLevel === 'adult_learner';
-  const conceptsForStep4: ConceptEntry[] = resolveSelfScoreConceptIds({
-    goal: s1.goal,
-    adultGoal: s1.adultGoal,
-    isAdultLearner,
-    subjects: s1.subjects,
-    gradeLevel: s1.gradeLevel,
-    pointsGroup: s1.pointsGroup,
-    max: MAX_SELF_SCORE,
-  }).map(conceptEntry);
-
   const needsPointsGroup =
     HS_BAGRUT_GRADES.has(s1.gradeLevel) && s1.subjects.includes('math');
 
@@ -957,7 +837,7 @@ export default function OnboardingPage() {
           hours_per_week: s2.hoursAuto ? 6 : s2.hoursPerWeek,
           preferred_style: s2.style === 'unknown' ? null : s2.style,
           attention_span: s2.attentionSpan,
-          self_scores: s4.selfScores,
+          self_scores: {},
           background_notes: isAdultLearner
             ? `${experienceSummary}${yearsGapSummary ? ` Years since last study: ${yearsGapSummary}.` : ''}`
             : experienceSummary,
@@ -997,13 +877,23 @@ export default function OnboardingPage() {
           tutor_mode: tutorMode,
         }),
       });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        const errText = await res.text();
+        let message = errText.trim() || `Request failed (${res.status})`;
+        try {
+          const body = JSON.parse(errText) as { error?: string };
+          message = body.error ?? message;
+        } catch {
+          /* plain text */
+        }
+        throw new Error(message);
+      }
+      const data = (await res.json()) as { has_plan?: boolean; plan_id?: string };
+      if (!data.has_plan) {
+        throw new Error(t.errorNoPlan);
+      }
       clearOnboardingDraft();
-      sessionStorage.setItem(
-        DIAGNOSTIC_SUBJECTS_SESSION_KEY,
-        JSON.stringify(s1.subjects),
-      );
-      router.push('/diagnostic');
+      router.push('/app');
     } catch (err) {
       setError(err instanceof Error ? err.message : t.errorGeneric);
       setSubmitting(false);
@@ -1014,7 +904,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <main className="mx-auto max-w-xl px-4 py-12" dir={dir}>
-        <StepIndicator current={step} total={5} lang={lang} t={t} dir={dir} />
+        <StepIndicator current={step} total={4} lang={lang} t={t} dir={dir} />
 
         {/* ── Step 0: Goals + timeline ── */}
         {step === 0 && (
@@ -1714,45 +1604,13 @@ export default function OnboardingPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setStep(4)}
-                className="flex-1 rounded-xl bg-accent-cyan py-3 text-sm font-semibold text-neutral-950 transition-colors hover:bg-cyan-300"
+                disabled={submitting}
+                onClick={() => void handleSubmit()}
+                className="flex-1 rounded-xl bg-accent-cyan py-3 text-sm font-semibold text-neutral-950 transition-colors hover:bg-cyan-300 disabled:opacity-50"
               >
-                {t.next}
+                {submitting ? t.saving : t.createPlan}
               </button>
             </div>
-          </div>
-        )}
-
-        {/* ── Step 4: Self-assessment ── */}
-        {step === 4 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="mb-1 text-2xl font-bold">{t.s3_title}</h1>
-              <p className="text-sm text-muted-foreground">{t.s3_sub}</p>
-              {s1.goal && s1.goal !== 'other' && (
-                <p className="mt-2 inline-block rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-3 py-0.5 text-xs font-medium text-accent-cyan">
-                  {goalLabel(GOALS.find((g) => g.value === s1.goal)!)}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-5">
-              <p className="text-xs text-muted-foreground">
-                {t.s3_scale_low} ··· {t.s3_scale_high}
-              </p>
-              {conceptsForStep4.map((c) => (
-                <SliderField
-                  key={c.id}
-                  label={conceptLabel(c)}
-                  min={1}
-                  max={10}
-                  value={s4.selfScores[c.id] ?? 5}
-                  onChange={(v) => setScore(c.id, v)}
-                  displayValue={`${s4.selfScores[c.id] ?? 5}/10`}
-                />
-              ))}
-            </div>
-
             {error && (
               <p
                 className="rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive"
@@ -1761,20 +1619,6 @@ export default function OnboardingPage() {
                 {error}
               </p>
             )}
-
-            <div className="flex gap-3">
-              <button type="button" onClick={() => setStep(3)} className={secondaryBtnCls}>
-                {t.back}
-              </button>
-              <button
-                type="button"
-                disabled={submitting}
-                onClick={handleSubmit}
-                className="flex-1 rounded-xl bg-accent-cyan py-3 text-sm font-semibold text-neutral-950 transition-colors hover:bg-cyan-300 disabled:opacity-50"
-              >
-                {submitting ? t.saving : t.startDiagnostic}
-              </button>
-            </div>
           </div>
         )}
       </main>

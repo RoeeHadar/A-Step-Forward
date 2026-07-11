@@ -178,3 +178,35 @@ export function resolveSelfScoreConceptIds(input: {
 
   return [...new Set(ids)].slice(0, max);
 }
+
+/** Default self-score map from goal/subjects when the learner skips topic sliders. */
+export function deriveOnboardingSeedScores(payload: {
+  goal?: string;
+  subjects: string[];
+  grade_level?: string | null;
+  points_group?: string | null;
+  self_scores?: Record<string, number> | null;
+  personality_profile?: Record<string, unknown> | null;
+  adult_learner?: boolean;
+}): Record<string, number> {
+  if (payload.self_scores && Object.keys(payload.self_scores).length > 0) {
+    return payload.self_scores;
+  }
+  const goalKey = (payload.personality_profile?.goal_key as GoalKey | undefined) ??
+    (payload.goal as GoalKey | undefined) ??
+    '';
+  const ids = resolveSelfScoreConceptIds({
+    goal: goalKey,
+    adultGoal: payload.personality_profile?.adult_goal as string | undefined,
+    isAdultLearner: Boolean(
+      payload.personality_profile?.adult_learner ?? payload.adult_learner,
+    ),
+    subjects: payload.subjects,
+    gradeLevel: payload.grade_level ?? '',
+    pointsGroup: payload.points_group ?? '',
+    max: 10,
+  });
+  const scores: Record<string, number> = {};
+  for (const id of ids) scores[id] = 5;
+  return scores;
+}

@@ -15,23 +15,14 @@ Sign-up (Clerk)            apps/web/src/app/sign-up/.../page.tsx
   └─ forceRedirectUrl='/onboarding'
 
 /onboarding                apps/web/src/app/onboarding/page.tsx
-  ├─ Step 0: Goals + timeline (subjects, grade, next_test_date, final_goal_date)
-  ├─ Step 1: Technical background (hours/week, self_rating, teacher_rating, style)
-  ├─ Step 2: Mental / motivation (motivation, anxiety, confidence, study time, etc.)
-  └─ Step 3: Self-assessment (1-10 per concept)
-       POST /api/onboarding/submit
-       ↓
-       upsertLearnerProfile() writes learner_profiles
-       + seeds concept_mastery from self_scores
-       ↓
-       router.push('/diagnostic')
+  ├─ Steps 0–3: goals, background, motivation, tutor mode
+  └─ POST /api/onboarding/submit
+       upsertLearnerProfile + createOnboardingPlan (sync, verified)
+       router.push('/app')
 
-/diagnostic                apps/web/src/app/diagnostic/page.tsx
-  ├─ POST /api/diagnostic/start → 6 validation MCQs (concepts with available items)
-  ├─ POST /api/diagnostic/[id]/answer per question → updates concept_mastery
-  └─ On complete:
-       generatePlanWithRetry() → POST /api/plans/generate?fast=1 + poll exists=1
-       router.push('/dashboard')
+/plan-setup                fallback if plan missing — polls until exists=1
+
+/diagnostic                redirects to /plan-setup (legacy)
 
 /dashboard                 apps/web/src/app/dashboard/page.tsx
   └─ getCurrentPlan(userId) → renders LearningPlanDashboard

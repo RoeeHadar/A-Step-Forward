@@ -6,21 +6,20 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 
 /**
  * Empty state shown on /dashboard when the learner has no learning plan yet.
- * Pulled out of the server page so we can use the language-preference hook
- * for full bilingual rendering (HE default, RTL when HE).
  */
 const STR = {
   he: {
     title: 'אין עדיין תכנית לימוד',
-    blurb: 'השלם את שאלון האבחון כדי לקבל תכנית שבועית מותאמת אישית.',
-    cta: 'התחל אבחון',
+    blurb: 'השלם/י את שאלון ההיכרות או צור/י תוכנית מהמטרות שכבר מילאת.',
+    ctaOnboarding: 'השלם/י שאלון',
+    ctaPlan: 'צור/י תוכנית עכשיו',
     back: 'חזרה לאפליקציה',
   },
   en: {
     title: 'No learning plan yet',
-    blurb:
-      'Complete the diagnostic assessment to generate your personalized weekly plan.',
-    cta: 'Start diagnostic',
+    blurb: 'Finish the onboarding questionnaire or generate a plan from the goals you already shared.',
+    ctaOnboarding: 'Complete onboarding',
+    ctaPlan: 'Create my plan',
     back: 'Back to app',
   },
 } as const;
@@ -38,7 +37,10 @@ export function NoPlanEmptyState() {
       <p className="mt-2 text-muted-foreground">{t.blurb}</p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Button asChild>
-          <Link href="/diagnostic">{t.cta}</Link>
+          <Link href="/onboarding">{t.ctaOnboarding}</Link>
+        </Button>
+        <Button variant="secondary" asChild>
+          <Link href="/plan-setup">{t.ctaPlan}</Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/app">{t.back}</Link>

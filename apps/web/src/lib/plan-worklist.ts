@@ -298,7 +298,43 @@ export function buildFastPlanConceptOrder(args: {
     }
   }
 
+  if (ordered.length === 0) {
+    ordered.push(...bootstrapConceptsForProfile(args.profile, args.mastery));
+  }
+
   return ordered;
+}
+
+/** Guaranteed non-empty concept list from goal + syllabus roots + self_scores keys. */
+export function bootstrapConceptsForProfile(
+  profile: PlanWorklistProfile,
+  mastery: Record<string, number>,
+): string[] {
+  const out: string[] = [];
+  const goalId = resolveGoalConceptId(profile, mastery, {});
+  if (goalId) out.push(goalId);
+
+  if (profile.self_scores) {
+    for (const raw of Object.keys(profile.self_scores)) {
+      const id = canonicalConceptId(raw);
+      if (id && conceptMatchesSubjects(id, profile.subjects)) out.push(id);
+    }
+  }
+
+  const subjectSet = subjectSetForPlan(profile.subjects);
+  const roots = kgConcepts.filter(
+    (c) =>
+      (subjectSet.size === 0 || subjectSet.has(c.subject)) &&
+      c.prerequisites.length === 0,
+  );
+  for (const r of roots.slice(0, 8)) out.push(r.id);
+
+  const seen = new Set<string>();
+  return out.filter((id) => {
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
 }
 
 /**

@@ -18,8 +18,10 @@ import { resolveConceptTitles } from './concept-display-names';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
   buildFastPlanConceptOrder,
+  bootstrapConceptsForProfile,
   buildUnifiedPlanConceptOrder,
   PLAN_SCHEMA_VERSION,
+  resolveGoalConceptId,
 } from './plan-worklist';
 import {
   applyWellbeingOverlay,
@@ -172,6 +174,7 @@ export interface LearnerProfileRow {
 export async function upsertLearnerProfile(
   learnerId: string,
   p: OnboardingPayload,
+  opts: { skipAdaptiveRefresh?: boolean } = {},
 ): Promise<void> {
   const s = requireSql();
   const personalityProfile = {
@@ -213,9 +216,11 @@ export async function upsertLearnerProfile(
       updated_at = NOW()
   `;
 
-  void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
-    scheduleAdaptivePlanRefresh(learnerId, 'profile_mental_state');
-  });
+  if (!opts.skipAdaptiveRefresh) {
+    void import('./adaptive-plan-refresh').then(({ scheduleAdaptivePlanRefresh }) => {
+      scheduleAdaptivePlanRefresh(learnerId, 'profile_mental_state');
+    });
+  }
 
   // Seed concept_mastery from self_scores (1-10 → 0.1-0.9)
   const entries = Object.entries(p.self_scores ?? {});
@@ -1198,6 +1203,15 @@ export async function generateLearningPlan(
     ...diagnosticFocus,
   ]);
 
+  const goalConceptId = resolveGoalConceptId(profile, mastery, {
+    priorityConcepts,
+    prependConcepts,
+  });
+  const effectivePrepend = sanitizeConceptIds([
+    ...(goalConceptId ? [goalConceptId] : []),
+    ...prependConcepts,
+  ]);
+
   const goalText = options.goalOverride?.trim() || profile.goal;
 
   // Determine number of weeks from next_test_date / final_goal_date
@@ -1229,7 +1243,7 @@ export async function generateLearningPlan(
 
   const worklistOptions = {
     priorityConcepts,
-    prependConcepts,
+    prependConcepts: effectivePrepend,
     excludeConcepts,
     focusConceptsOnly: options.focusConceptsOnly,
   };
@@ -1249,7 +1263,11 @@ export async function generateLearningPlan(
       });
 
   if (sorted.length === 0) {
-    sorted = buildFastPlanConceptOrder({ profile, mastery, options: worklistOptions });
+    sorted = bootstrapConceptsForProfile(profile, mastery);
+  }
+
+  if (sorted.length === 0) {
+    throw new Error('Could not derive any concepts for your learning plan');
   }
 
   const now = new Date();
@@ -1525,6 +1543,10 @@ export async function waitForCurrentPlan(
 
 const planGenerationInflight = new Map<string, Promise<LearningPlan>>();
 
+function planHasConceptContent(plan: LearningPlan | null): plan is LearningPlan {
+  return Boolean(plan?.weeks?.some((w) => w.concepts.length > 0));
+}
+
 /** Return an active plan or generate one — waits on lock contention instead of failing. */
 export async function ensureLearningPlan(
   learnerId: string,
@@ -1532,7 +1554,7 @@ export async function ensureLearningPlan(
 ): Promise<LearningPlan> {
   if (!options.forceRegenerate && (await hasActiveLearningPlan(learnerId))) {
     const stub = await loadActivePlanStub(learnerId);
-    if (stub?.weeks?.length) return stub;
+    if (planHasConceptContent(stub)) return stub;
   }
 
   const inflight = planGenerationInflight.get(learnerId);
@@ -1560,6 +1582,43 @@ export function kickoffOnboardingPlan(learnerId: string): void {
   void ensureLearningPlan(learnerId, { fastPath: true }).catch((err) => {
     console.error('[kickoffOnboardingPlan]', err);
   });
+}
+
+/**
+ * Synchronous onboarding plan — retries locks, verifies DB row + week concepts.
+ */
+export async function createOnboardingPlan(learnerId: string): Promise<LearningPlan> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try {
+      const plan = await ensureLearningPlan(learnerId, {
+        fastPath: true,
+        forceRegenerate: true,
+      });
+      if (!(await hasActiveLearningPlan(learnerId))) {
+        throw new Error('Plan row missing after generation');
+      }
+      const stub = await loadActivePlanStub(learnerId);
+      if (!planHasConceptContent(stub)) {
+        throw new Error('Plan persisted without concepts');
+      }
+      return plan;
+    } catch (err) {
+      lastErr = err;
+      if (isPlanGenerationLockError(err) && attempt < 3) {
+        const waited = await waitForCurrentPlan(learnerId, { attempts: 20, delayMs: 500 });
+        if (planHasConceptContent(waited)) return waited!;
+        await planGenSleep(1000 * (attempt + 1));
+        continue;
+      }
+      if (attempt < 3) {
+        await planGenSleep(750);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error('Plan creation failed');
 }
 
 export async function applyPlanProfileUpdates(
