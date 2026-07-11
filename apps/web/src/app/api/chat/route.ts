@@ -704,10 +704,35 @@ async function buildContextPrompt(
     if (mental && Object.keys(mental).length > 0) {
       const anxiety = typeof mental.anxiety === 'number' ? mental.anxiety : null;
       const motivation = typeof mental.motivation === 'number' ? mental.motivation : null;
+      const preferredTime =
+        typeof mental.preferred_study_time === 'string' ? mental.preferred_study_time : null;
+      const targetUniversity =
+        typeof mental.target_university === 'string' ? mental.target_university : null;
       if (anxiety != null) context += `\n- Test anxiety: ${anxiety}/10`;
       if (motivation != null) context += `\n- Motivation: ${motivation}/10`;
+      if (preferredTime) {
+        context += `\n- Preferred study window: ${preferredTime}`;
+        if (agent === 'tutor') {
+          context += `\n- Pacing hint: suggest a brief review or overview during their ${preferredTime} window when appropriate; schedule heavier drills or new material for later in the day if they seem tired.`;
+        }
+      }
+      if (targetUniversity) context += `\n- Target university/program: ${targetUniversity}`;
       if (anxiety != null && anxiety >= 7) {
         context += `\n- IMPORTANT: This learner has high test anxiety. Be extra reassuring; avoid time pressure cues; celebrate small wins.`;
+      }
+    }
+    const personality = profile.personality_profile as Record<string, unknown> | null;
+    if (personality && agent === 'tutor') {
+      const teacherExp = personality.past_teacher_experience;
+      const teacherNotes = personality.past_teacher_notes;
+      if (typeof teacherExp === 'string' && teacherExp !== 'unknown') {
+        context += `\n- Past teacher experience (learner view): ${teacherExp.replace(/_/g, ' ')}`;
+      }
+      if (typeof teacherNotes === 'string' && teacherNotes.trim()) {
+        context += `\n- What worked / did not work with past teachers: ${teacherNotes.trim()}`;
+      }
+      if (personality.attention_span_unknown === true) {
+        context += `\n- Focus duration: learner is unsure — start with short blocks (~20 min) and adjust from session feedback.`;
       }
     }
   }

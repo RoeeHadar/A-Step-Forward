@@ -71,51 +71,62 @@ export function SiteHeader() {
             className="hidden items-center gap-1 md:flex"
             aria-label={messages.common.mainNavigation}
           >
-            <SignedOut>
-              {publicNavLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                    isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
-                  )}
-                >
-                  {messages.nav[link.labelKey]}
-                  {isActive(link.href) && (
-                    <span
-                      className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
-                      aria-hidden
-                    />
-                  )}
-                </Link>
-              ))}
-            </SignedOut>
+            {publicNavLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                  isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
+                )}
+              >
+                {messages.nav[link.labelKey]}
+                {isActive(link.href) && (
+                  <span
+                    className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                    aria-hidden
+                  />
+                )}
+              </Link>
+            ))}
             <SignedIn>
-              {appNavLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
-                    isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
-                  )}
-                >
-                  {messages.nav[link.labelKey]}
-                  {isActive(link.href) && (
-                    <span
-                      className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
-                      aria-hidden
-                    />
-                  )}
-                </Link>
-              ))}
+              {appNavLinks
+                .filter((link) => !publicNavLinks.some((p) => p.href === link.href))
+                .map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      'relative px-3 py-2 text-sm transition-colors hover:text-foreground',
+                      isActive(link.href) ? 'font-medium text-foreground' : 'text-muted-foreground',
+                    )}
+                  >
+                    {messages.nav[link.labelKey]}
+                    {isActive(link.href) && (
+                      <span
+                        className="absolute inset-x-3 -bottom-[13px] h-0.5 rounded-full bg-primary"
+                        aria-hidden
+                      />
+                    )}
+                  </Link>
+                ))}
             </SignedIn>
           </nav>
         </div>
 
         {/* Right-side controls */}
         <div className="flex items-center gap-2">
+          <Link
+            href="/learn"
+            className={cn(
+              'inline-flex rounded-lg px-2.5 py-1.5 text-sm font-medium md:hidden',
+              isActive('/learn')
+                ? 'bg-primary/15 text-primary'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {messages.nav.learn}
+          </Link>
           <Button
             variant="ghost"
             size="sm"
