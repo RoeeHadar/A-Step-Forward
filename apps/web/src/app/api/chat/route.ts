@@ -727,11 +727,14 @@ async function buildContextPrompt(
     }
     if (personality && agent === 'tutor') {
       const subjectExperience = personality.subject_experience;
-      if (subjectExperience && typeof subjectExperience === 'object') {
-        for (const [sub, raw] of Object.entries(
-          subjectExperience as Record<string, unknown>,
-        )) {
-          if (!raw || typeof raw !== 'object') continue;
+      const subjectExperienceEntries =
+        subjectExperience && typeof subjectExperience === 'object'
+          ? Object.entries(subjectExperience as Record<string, unknown>).filter(
+              ([, raw]) => raw && typeof raw === 'object',
+            )
+          : [];
+      if (subjectExperienceEntries.length > 0) {
+        for (const [sub, raw] of subjectExperienceEntries) {
           const exp = raw as Record<string, unknown>;
           const mode = typeof exp.mode === 'string' ? exp.mode : 'share';
           const label = sub === 'physics' ? 'Physics' : 'Math';
