@@ -174,6 +174,9 @@ export default function DiagnosticPage() {
         resumed?: boolean;
       };
       if (data.complete) {
+        if ((data.questions_answered ?? 0) < 1) {
+          throw new Error(t.loadFailed);
+        }
         clearDiagnosticSubjectsSession();
         setSessionId(data.session_id ?? null);
         setComplete(true);

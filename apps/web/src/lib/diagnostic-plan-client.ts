@@ -14,6 +14,7 @@ export function isRateLimitResponse(status: number, message: string): boolean {
 
 export function isRetryablePlanError(status: number, message: string): boolean {
   if (/exhausted|no further questions/i.test(message)) return false;
+  if (/plan update is already in progress/i.test(message)) return true;
   return (
     isRateLimitResponse(status, message) ||
     status === 503 ||

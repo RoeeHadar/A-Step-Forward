@@ -16,6 +16,12 @@ describe('diagnostic-plan-client', () => {
     expect(isRetryablePlanError(503, 'temporarily unavailable')).toBe(true);
   });
 
+  it('treats plan lock contention as retryable', () => {
+    expect(isRetryablePlanError(500, 'A plan update is already in progress for this learner')).toBe(
+      true,
+    );
+  });
+
   it('does not retry exhausted diagnostic responses', () => {
     expect(isRetryablePlanError(409, 'No further questions available for your profile yet.')).toBe(
       false,

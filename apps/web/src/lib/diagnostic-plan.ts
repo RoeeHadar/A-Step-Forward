@@ -6,10 +6,10 @@ import kg from '@/lib/kg-data.json';
 import { canonicalConceptId } from '@/lib/plan-catalog';
 import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 
-export const DIAGNOSTIC_SESSION_VERSION = 3;
+export const DIAGNOSTIC_SESSION_VERSION = 4;
 
 /** Minimum answers before early completion when the question bank runs dry. */
-export const MIN_DIAGNOSTIC_ANSWERS = 3;
+export const MIN_DIAGNOSTIC_ANSWERS = 1;
 
 export type ValidationSlotKind = 'basic' | 'medium' | 'hard' | 'verbal' | 'edge';
 
@@ -40,6 +40,8 @@ export interface DiagnosticSessionPayload {
   asked_stem_keys: string[];
   /** Items served from the lesson bank (not in Neon) keyed by stable id. */
   served_items?: Record<string, DiagnosticServedItem>;
+  /** Item shown to the learner awaiting an answer (not yet in responses). */
+  current_item_id: string | null;
   /** Per-topic difficulty for CAT-style adjustment within a concept. */
   difficulty_by_topic: Record<string, number>;
 }
@@ -164,8 +166,39 @@ export function emptyDiagnosticSession(
     asked_item_ids: [],
     asked_stem_keys: [],
     served_items: {},
+    current_item_id: null,
     difficulty_by_topic: {},
   };
+}
+
+/** Item + stem keys from submitted answers only (not the pending question). */
+export function answeredItemIds(state: DiagnosticSessionPayload): string[] {
+  return state.responses.map((r) => r.item_id);
+}
+
+export function answeredStemKeys(state: DiagnosticSessionPayload): string[] {
+  return state.responses
+    .map((r) => state.served_items?.[r.item_id]?.stem)
+    .filter((s): s is string => Boolean(s?.trim()))
+    .map((s) => diagnosticStemKey(s));
+}
+
+export function setCurrentDiagnosticItem(
+  state: DiagnosticSessionPayload,
+  item: DiagnosticServedItem,
+): DiagnosticSessionPayload {
+  return {
+    ...rememberServedItem(state, item),
+    current_item_id: item.id,
+  };
+}
+
+export function resolveCurrentDiagnosticItem(
+  state: DiagnosticSessionPayload,
+): DiagnosticServedItem | null {
+  const id = state.current_item_id;
+  if (!id || state.responses.some((r) => r.item_id === id)) return null;
+  return state.served_items?.[id] ?? null;
 }
 
 export function reserveAskedItem(
@@ -272,17 +305,15 @@ export function applyDiagnosticResponse(
   const nextDiff = nextCatDifficulty(prevDiff, response.correct);
 
   const servedStem = state.served_items?.[response.item_id]?.stem;
-  const stemKeys = [...(state.asked_stem_keys ?? [])];
-  if (servedStem) {
-    const key = diagnosticStemKey(servedStem);
-    if (!stemKeys.includes(key)) stemKeys.push(key);
-  }
 
   return {
     ...state,
     responses: [...state.responses, response],
     asked_item_ids: [...state.asked_item_ids, response.item_id],
-    asked_stem_keys: stemKeys,
+    asked_stem_keys: servedStem
+      ? [...new Set([...(state.asked_stem_keys ?? []), diagnosticStemKey(servedStem)])]
+      : (state.asked_stem_keys ?? []),
+    current_item_id: null,
     difficulty_by_topic: { ...state.difficulty_by_topic, [topic]: nextDiff },
     queue_index: Math.min(state.validation_queue.length, state.queue_index + 1),
   };
@@ -401,9 +432,11 @@ export function buildDiagnosticSummary(
 export function parseDiagnosticSessionPayload(
   raw: Record<string, unknown> | null,
 ): DiagnosticSessionPayload | null {
-  if (!raw || raw.version !== DIAGNOSTIC_SESSION_VERSION) return null;
-  if (!Array.isArray(raw.probe_concepts)) return null;
+  if (!raw || !Array.isArray(raw.probe_concepts)) return null;
   if (!Array.isArray(raw.validation_queue) || raw.validation_queue.length === 0) return null;
+
+  const version = raw.version;
+  if (version !== DIAGNOSTIC_SESSION_VERSION && version !== 3) return null;
 
   const validation_queue = (raw.validation_queue as ValidationSlot[]).filter(
     (s) => s && typeof s.concept_id === 'string' && typeof s.target_difficulty === 'number',
@@ -425,6 +458,8 @@ export function parseDiagnosticSessionPayload(
     asked_stem_keys: Array.isArray(raw.asked_stem_keys)
       ? raw.asked_stem_keys.filter((c): c is string => typeof c === 'string')
       : [],
+    current_item_id:
+      typeof raw.current_item_id === 'string' ? raw.current_item_id : null,
     served_items:
       raw.served_items && typeof raw.served_items === 'object'
         ? (raw.served_items as Record<string, DiagnosticServedItem>)

@@ -16,6 +16,37 @@ import { normalizeLearnerSubjects } from '@/lib/diagnostic-start';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+async function startFreshDiagnostic(userId: string) {
+  const init = await initializeDiagnosticSession(userId);
+  if (!init) {
+    return Response.json(
+      {
+        error:
+          'No diagnostic questions are available yet for your profile and goal. Please try again in a few minutes or contact support.',
+      },
+      { status: 404 },
+    );
+  }
+
+  const { state, firstItem, profile } = init;
+  const subjects = normalizeLearnerSubjects(profile.subjects);
+  const sessionId = await startDiagnosticSession(
+    userId,
+    subjects,
+    diagnosticStateToResults(state),
+  );
+
+  return Response.json({
+    session_id: sessionId,
+    question: itemToQuestion(firstItem),
+    question_number: 1,
+    total: state.validation_queue.length,
+    goal_concept_id: state.goal_concept_id,
+    probe_concepts: state.probe_concepts,
+    status: 'question',
+  });
+}
+
 export async function POST() {
   const { userId } = await auth();
   if (!userId) {
@@ -43,7 +74,7 @@ export async function POST() {
       });
     }
 
-    if (resumed?.mode === 'complete') {
+    if (resumed?.mode === 'complete' && resumed.questionsAnswered >= 1) {
       await persistDiagnosticSummary(userId, resumed.summary);
       const mastery = await completeDiagnostic(
         resumed.sessionId,
@@ -63,35 +94,7 @@ export async function POST() {
       });
     }
 
-    const init = await initializeDiagnosticSession(userId);
-    if (!init) {
-      return Response.json(
-        {
-          error:
-            'No diagnostic questions are available yet for your profile and goal. Please try again in a few minutes or contact support.',
-        },
-        { status: 404 },
-      );
-    }
-
-    const { state, firstItem, profile } = init;
-    const subjects = normalizeLearnerSubjects(profile.subjects);
-    const sessionId = await startDiagnosticSession(
-      userId,
-      subjects,
-      diagnosticStateToResults(state),
-    );
-    const question = itemToQuestion(firstItem);
-
-    return Response.json({
-      session_id: sessionId,
-      question,
-      question_number: 1,
-      total: state.validation_queue.length,
-      goal_concept_id: state.goal_concept_id,
-      probe_concepts: state.probe_concepts,
-      status: 'question',
-    });
+    return await startFreshDiagnostic(userId);
   } catch (err) {
     console.error('[diagnostic/start]', err);
     return Response.json(

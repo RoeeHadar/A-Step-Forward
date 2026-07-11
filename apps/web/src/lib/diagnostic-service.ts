@@ -9,6 +9,8 @@ import {
   type DiagnosticSummary,
   type ValidationSlot,
   applyDiagnosticResponse,
+  answeredItemIds,
+  answeredStemKeys,
   buildDiagnosticSummary,
   buildValidationQueue,
   currentValidationSlot,
@@ -16,8 +18,8 @@ import {
   isDiagnosticSessionComplete,
   orderProbeConcepts,
   parseDiagnosticSessionPayload,
-  rememberServedItem,
-  reserveAskedItem,
+  resolveCurrentDiagnosticItem,
+  setCurrentDiagnosticItem,
   targetDifficultyForSlot,
   type DiagnosticServedItem,
 } from '@/lib/diagnostic-plan';
@@ -27,6 +29,7 @@ import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 import {
   type DiagnosticItem,
   type LearnerProfileRow,
+  abandonActiveDiagnosticSessions,
   ensureDiagnosticItemRow,
   fetchDiagnosticItemForConcept,
   findActiveDiagnosticSession,
@@ -67,11 +70,12 @@ function toServedItem(item: DiagnosticItem): DiagnosticServedItem {
   };
 }
 
-function attachServedItem(
-  state: DiagnosticSessionPayload,
-  item: DiagnosticItem,
-): DiagnosticSessionPayload {
-  return reserveAskedItem(rememberServedItem(state, toServedItem(item)), item);
+function servedToDiagnosticItem(served: DiagnosticServedItem): DiagnosticItem {
+  return {
+    ...served,
+    source_concept: served.topic,
+    explanation_he: null,
+  };
 }
 
 function pathConceptIdsPrereqsFirst(path: Array<{ concept_id: string; relation: string }>): string[] {
@@ -155,13 +159,14 @@ async function tryPickForSlot(
   const selfScores = profile.self_scores ?? {};
   const targetDifficulty = targetDifficultyForSlot(state, slot, selfScores);
   const kindsToTry = [slot.slot_kind, ...SLOT_KINDS.filter((k) => k !== slot.slot_kind)];
-  const excludeStems = state.asked_stem_keys ?? [];
+  const excludeIds = answeredItemIds(state);
+  const excludeStems = answeredStemKeys(state);
 
   for (const kind of kindsToTry) {
     const item = await fetchDiagnosticItemForConcept(
       slot.concept_id,
       profile,
-      state.asked_item_ids,
+      excludeIds,
       targetDifficulty,
       kind,
       excludeStems,
@@ -171,7 +176,7 @@ async function tryPickForSlot(
     const fromBank = pickDiagnosticItemFromLessonBank(
       slot.concept_id,
       profile,
-      state.asked_item_ids,
+      excludeIds,
       targetDifficulty,
       kind,
       excludeStems,
@@ -199,7 +204,10 @@ export async function pickNextDiagnosticItem(
     const item = await tryPickForSlot(current, slot, profile);
     if (item) {
       await ensureDiagnosticItemRow(item);
-      return { item, state: attachServedItem(current, item) };
+      return {
+        item,
+        state: setCurrentDiagnosticItem(current, toServedItem(item)),
+      };
     }
 
     current = { ...current, queue_index: current.queue_index + 1 };
@@ -236,6 +244,10 @@ export async function initializeDiagnosticSession(
   return { state: picked.state, firstItem: picked.item, profile };
 }
 
+function canFinalizeDiagnostic(state: DiagnosticSessionPayload): boolean {
+  return state.responses.length >= 1;
+}
+
 export async function resumeOrFinalizeDiagnosticSession(
   learnerId: string,
 ): Promise<
@@ -259,9 +271,25 @@ export async function resumeOrFinalizeDiagnosticSession(
   if (!active) return null;
 
   const state = parseDiagnosticSessionPayload(active.results);
-  if (!state) return null;
+  if (!state) {
+    await abandonActiveDiagnosticSessions(learnerId);
+    return null;
+  }
 
-  if (isDiagnosticSessionComplete(state)) {
+  const pending = resolveCurrentDiagnosticItem(state);
+  if (pending) {
+    const item = servedToDiagnosticItem(pending);
+    await ensureDiagnosticItemRow(item);
+    return {
+      mode: 'question',
+      sessionId: active.id,
+      state,
+      item,
+      questionNumber: state.responses.length + 1,
+    };
+  }
+
+  if (isDiagnosticSessionComplete(state) && canFinalizeDiagnostic(state)) {
     const summary = buildDiagnosticSummary(state);
     return {
       mode: 'complete',
@@ -273,10 +301,17 @@ export async function resumeOrFinalizeDiagnosticSession(
   }
 
   const profile = await getLearnerProfile(learnerId);
-  if (!profile) return null;
+  if (!profile) {
+    await abandonActiveDiagnosticSessions(learnerId);
+    return null;
+  }
 
   const picked = await pickNextDiagnosticItem(state, profile);
   if (!picked.item) {
+    if (!canFinalizeDiagnostic(picked.state)) {
+      await abandonActiveDiagnosticSessions(learnerId);
+      return null;
+    }
     const summary = buildDiagnosticSummary(picked.state);
     return {
       mode: 'complete',
@@ -297,7 +332,7 @@ export async function resumeOrFinalizeDiagnosticSession(
     sessionId: active.id,
     state: picked.state,
     item: picked.item,
-    questionNumber: active.question_idx + 1,
+    questionNumber: state.responses.length + 1,
   };
 }
 
@@ -332,6 +367,9 @@ export async function advanceDiagnosticSession(
   const picked = await pickNextDiagnosticItem(state, profile);
 
   if (!picked.item) {
+    if (!canFinalizeDiagnostic(picked.state)) {
+      return { state: picked.state, nextItem: null, complete: false, summary: null };
+    }
     const summary = buildDiagnosticSummary(picked.state);
     return { state: picked.state, nextItem: null, complete: true, summary };
   }
@@ -377,11 +415,7 @@ export function resolveDiagnosticItemFromSession(
 ): DiagnosticItem | null {
   const served = state?.served_items?.[itemId];
   if (!served) return null;
-  return {
-    ...served,
-    source_concept: served.topic,
-    explanation_he: null,
-  };
+  return servedToDiagnosticItem(served);
 }
 
 /** @internal test hook */

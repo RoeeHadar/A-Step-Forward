@@ -829,6 +829,15 @@ export async function findActiveDiagnosticSession(
   return rows[0] ?? null;
 }
 
+export async function abandonActiveDiagnosticSessions(learnerId: string): Promise<void> {
+  const s = requireSql();
+  await s`
+    UPDATE diagnostic_sessions
+    SET status = 'abandoned', completed_at = NOW()
+    WHERE learner_id = ${learnerId} AND status = 'active'
+  `;
+}
+
 export async function recordDiagnosticAnswer(
   sessionId: string,
   itemId: string,
