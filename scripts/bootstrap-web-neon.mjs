@@ -85,6 +85,11 @@ const statements = [
     created_at TIMESTAMPTZ DEFAULT NOW()
   )`,
   `CREATE INDEX IF NOT EXISTS ix_diagnostic_items_topic ON diagnostic_items (topic, subject)`,
+  `ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS stem_he TEXT`,
+  `ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS options_he JSONB`,
+  `ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS explanation_he TEXT`,
+  `ALTER TABLE diagnostic_items ADD COLUMN IF NOT EXISTS points_levels TEXT[]`,
+  `CREATE INDEX IF NOT EXISTS ix_diag_points_levels ON diagnostic_items USING GIN (points_levels)`,
   `ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS next_test_date DATE`,
   `ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS next_test_name TEXT`,
   `ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS final_goal_date DATE`,
