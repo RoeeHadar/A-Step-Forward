@@ -5,83 +5,28 @@ import {
   bumpDiagnosticIdx,
   completeDiagnostic,
   getDiagnosticItemById,
-  fetchDiagnosticItemsWithFallback,
+  updateDiagnosticSessionResults,
+  persistDiagnosticSummary,
   itemToQuestion,
   dbConfigured,
 } from '@/lib/neon-db';
+import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 import {
-  DIAGNOSTIC_QUESTIONS_PER_SESSION,
-  normalizeLearnerSubjects,
-} from '@/lib/diagnostic-start';
+  advanceDiagnosticSession,
+  diagnosticStateToResults,
+  loadDiagnosticStateFromSession,
+} from '@/lib/diagnostic-service';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const KEY_ORDER = ['A', 'B', 'C', 'D'];
 
-interface ItemRow {
-  topic: string;
-  subject: string;
-  options: { choices: string[]; correct: string };
-}
-
-async function getItem(itemId: string): Promise<ItemRow | null> {
-  const item = await getDiagnosticItemById(itemId);
-  if (!item) return null;
-  const raw = item.options as { choices?: string[]; correct?: string };
-  return {
-    topic: item.topic,
-    subject: item.subject,
-    options: {
-      choices: raw?.choices ?? [],
-      correct: raw?.correct ?? 'A',
-    },
-  };
-}
-
 function resolveCorrectLetter(options: { choices: string[]; correct: string }): string {
   const key = (options.correct ?? '').trim().toUpperCase();
   if (/^[A-D]$/.test(key)) return key;
   const idx = options.choices.findIndex((c) => c.trim() === key);
   return idx >= 0 ? (KEY_ORDER[idx] ?? 'A') : 'A';
-}
-
-function sessionItemIds(session: { results: Record<string, unknown> | null }): string[] {
-  const raw = session.results?.item_ids;
-  if (!Array.isArray(raw)) return [];
-  return raw.filter((id): id is string => typeof id === 'string');
-}
-
-function sessionSubjects(session: {
-  topics: string[];
-  results: Record<string, unknown> | null;
-}): string[] {
-  const fromResults = session.results?.subjects;
-  if (Array.isArray(fromResults)) {
-    const subjects = fromResults.filter((s): s is string => typeof s === 'string');
-    if (subjects.length > 0) return normalizeLearnerSubjects(subjects);
-  }
-  return normalizeLearnerSubjects(session.topics);
-}
-
-async function resolveNextQuestion(
-  session: {
-    topics: string[];
-    results: Record<string, unknown> | null;
-  },
-  nextIdx: number,
-) {
-  const itemIds = sessionItemIds(session);
-  const queuedId = itemIds[nextIdx];
-  if (queuedId) {
-    const queued = await getDiagnosticItemById(queuedId);
-    if (queued) return queued;
-  }
-
-  // Legacy sessions (pre-queue deploy) or stale IDs after a bank reseed.
-  const subjects = sessionSubjects(session);
-  const fallback = await fetchDiagnosticItemsWithFallback(subjects, 1);
-  return fallback[0] ?? null;
 }
 
 export async function POST(
@@ -111,12 +56,16 @@ export async function POST(
     return Response.json({ error: 'session already completed' }, { status: 409 });
   }
 
-  const item = await getItem(body.item_id);
+  const item = await getDiagnosticItemById(body.item_id);
   if (!item) {
     return Response.json({ error: 'item not found' }, { status: 404 });
   }
 
-  const correctLetter = resolveCorrectLetter(item.options);
+  const raw = item.options as { choices?: string[]; correct?: string };
+  const correctLetter = resolveCorrectLetter({
+    choices: raw?.choices ?? [],
+    correct: raw?.correct ?? 'A',
+  });
   const chosenLetter = body.chosen.trim().toUpperCase();
   const isCorrect = chosenLetter === correctLetter;
 
@@ -142,32 +91,53 @@ export async function POST(
     );
   }
 
+  const priorState = loadDiagnosticStateFromSession(session.results);
+  if (!priorState) {
+    return Response.json(
+      { error: 'Diagnostic session state is invalid. Please start a new diagnostic.' },
+      { status: 409 },
+    );
+  }
+
+  const advanced = await advanceDiagnosticSession(userId, priorState, {
+    item_id: body.item_id,
+    topic: item.topic,
+    difficulty: item.difficulty,
+    correct: isCorrect,
+    chosen: chosenLetter,
+  });
+
+  await updateDiagnosticSessionResults(
+    sessionId,
+    diagnosticStateToResults(advanced.state, advanced.summary),
+  );
   const newIdx = await bumpDiagnosticIdx(sessionId);
 
-  if (newIdx >= DIAGNOSTIC_QUESTIONS_PER_SESSION) {
-    const mastery = await completeDiagnostic(sessionId, userId);
+  if (advanced.complete && advanced.summary) {
+    await persistDiagnosticSummary(userId, advanced.summary);
+    const mastery = await completeDiagnostic(
+      sessionId,
+      userId,
+      diagnosticStateToResults(advanced.state, advanced.summary),
+    );
     return Response.json({
       complete: true,
-      results: { mastery_by_topic: mastery },
+      results: {
+        mastery_by_topic: mastery,
+        summary: advanced.summary,
+      },
       questions_answered: newIdx,
     });
   }
 
-  const nextItem = await resolveNextQuestion(session, newIdx);
-  if (!nextItem) {
-    const mastery = await completeDiagnostic(sessionId, userId);
-    return Response.json({
-      complete: true,
-      results: { mastery_by_topic: mastery },
-      questions_answered: newIdx,
-    });
+  if (!advanced.nextItem) {
+    return Response.json({ error: 'No further questions available.' }, { status: 500 });
   }
 
-  const itemIds = sessionItemIds(session);
   return Response.json({
     complete: false,
-    question: itemToQuestion(nextItem),
+    question: itemToQuestion(advanced.nextItem),
     question_number: newIdx + 1,
-    total: itemIds.length || DIAGNOSTIC_QUESTIONS_PER_SESSION,
+    total: DIAGNOSTIC_QUESTIONS_PER_SESSION,
   });
 }

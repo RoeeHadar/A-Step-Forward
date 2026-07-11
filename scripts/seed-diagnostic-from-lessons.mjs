@@ -86,6 +86,9 @@ function buildTrueFalseOptions(correctBool) {
 }
 
 function extractQuestionsFromLesson(lesson) {
+  if (String(lesson.level ?? '').toLowerCase() === 'university') {
+    return [];
+  }
   const conceptId = lesson.concept_id;
   const subject = mapLessonSubject(lesson.subject);
   const rows = [];

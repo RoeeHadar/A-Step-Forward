@@ -1,21 +1,19 @@
 import { auth } from '@clerk/nextjs/server';
 import {
   startDiagnosticSession,
-  fetchDiagnosticItemsWithFallback,
   itemToQuestion,
-  getLearnerProfile,
   dbConfigured,
 } from '@/lib/neon-db';
 import {
-  DIAGNOSTIC_QUESTIONS_PER_SESSION,
-  normalizeLearnerSubjects,
-  resolveDiagnosticPointsLevel,
-} from '@/lib/diagnostic-start';
+  diagnosticStateToResults,
+  initializeDiagnosticSession,
+} from '@/lib/diagnostic-service';
+import { DIAGNOSTIC_QUESTIONS_PER_SESSION, normalizeLearnerSubjects } from '@/lib/diagnostic-start';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function POST(req: Request) {
+export async function POST() {
   const { userId } = await auth();
   if (!userId) {
     return Response.json(
@@ -28,65 +26,33 @@ export async function POST(req: Request) {
   }
 
   try {
-    let body: { topics?: string[]; subjects?: string[]; points_level?: string } = {};
-    try {
-      body = await req.json();
-    } catch {
-      body = {};
-    }
-
-    let subjects = normalizeLearnerSubjects(body.subjects);
-    let pointsLevel: string | null = body.points_level ?? null;
-
-    if ((body.subjects ?? []).length === 0) {
-      const profile = await getLearnerProfile(userId);
-      subjects = normalizeLearnerSubjects(profile?.subjects);
-      const personality = (profile?.personality_profile ?? {}) as Record<string, unknown>;
-      pointsLevel =
-        pointsLevel ??
-        resolveDiagnosticPointsLevel({
-          pointsGroup: profile?.points_group,
-          goalKey:
-            typeof personality.goal_key === 'string' ? personality.goal_key : null,
-          adultGoal:
-            typeof personality.adult_goal === 'string' ? personality.adult_goal : null,
-        });
-    }
-
-    const items = await fetchDiagnosticItemsWithFallback(
-      subjects,
-      DIAGNOSTIC_QUESTIONS_PER_SESSION,
-      pointsLevel,
-    );
-    if (items.length === 0) {
+    const init = await initializeDiagnosticSession(userId);
+    if (!init) {
       return Response.json(
         {
           error:
-            'No diagnostic questions are available yet for your subjects. Please try again in a few minutes or contact support.',
+            'No diagnostic questions are available yet for your profile and goal. Please try again in a few minutes or contact support.',
         },
         { status: 404 },
       );
     }
 
+    const { state, firstItem, profile } = init;
+    const subjects = normalizeLearnerSubjects(profile.subjects);
     const sessionId = await startDiagnosticSession(
       userId,
       subjects,
-      items.map((item) => item.id),
+      diagnosticStateToResults(state),
     );
-    const question = itemToQuestion(items[0]!);
-    if (!question.options.length || !question.stem.trim()) {
-      return Response.json(
-        { error: 'Diagnostic question bank returned an invalid item.' },
-        { status: 500 },
-      );
-    }
+    const question = itemToQuestion(firstItem);
 
     return Response.json({
       session_id: sessionId,
       question,
       question_number: 1,
-      total: items.length,
-      queue: items.map(itemToQuestion),
+      total: DIAGNOSTIC_QUESTIONS_PER_SESSION,
+      goal_concept_id: state.goal_concept_id,
+      probe_concepts: state.probe_concepts,
     });
   } catch (err) {
     console.error('[diagnostic/start]', err);
