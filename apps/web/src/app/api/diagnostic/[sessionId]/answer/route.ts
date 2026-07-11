@@ -15,6 +15,7 @@ import {
   advanceDiagnosticSession,
   diagnosticStateToResults,
   loadDiagnosticStateFromSession,
+  resolveDiagnosticItemFromSession,
 } from '@/lib/diagnostic-service';
 
 export const runtime = 'nodejs';
@@ -56,7 +57,18 @@ export async function POST(
     return Response.json({ error: 'session already completed' }, { status: 409 });
   }
 
-  const item = await getDiagnosticItemById(body.item_id);
+  const priorState = loadDiagnosticStateFromSession(session.results);
+  if (!priorState) {
+    return Response.json(
+      { error: 'Diagnostic session state is invalid. Please start a new diagnostic.' },
+      { status: 409 },
+    );
+  }
+
+  let item = await getDiagnosticItemById(body.item_id);
+  if (!item) {
+    item = resolveDiagnosticItemFromSession(body.item_id, priorState);
+  }
   if (!item) {
     return Response.json({ error: 'item not found' }, { status: 404 });
   }
@@ -91,14 +103,6 @@ export async function POST(
     );
   }
 
-  const priorState = loadDiagnosticStateFromSession(session.results);
-  if (!priorState) {
-    return Response.json(
-      { error: 'Diagnostic session state is invalid. Please start a new diagnostic.' },
-      { status: 409 },
-    );
-  }
-
   const advanced = await advanceDiagnosticSession(userId, priorState, {
     item_id: body.item_id,
     topic: item.topic,
@@ -122,6 +126,7 @@ export async function POST(
     );
     return Response.json({
       complete: true,
+      status: 'calibration_complete',
       results: {
         mastery_by_topic: mastery,
         summary: advanced.summary,
@@ -130,13 +135,21 @@ export async function POST(
     });
   }
 
-  if (!advanced.nextItem) {
-    return Response.json({ error: 'No further questions available.' }, { status: 500 });
+  if (!advanced.nextItem && !advanced.complete) {
+    return Response.json(
+      {
+        error: 'No further questions available for your profile yet.',
+        status: 'exhausted',
+        questions_answered: advanced.state.responses.length,
+      },
+      { status: 409 },
+    );
   }
 
   return Response.json({
     complete: false,
-    question: itemToQuestion(advanced.nextItem),
+    status: 'question',
+    question: itemToQuestion(advanced.nextItem!),
     question_number: newIdx + 1,
     total: DIAGNOSTIC_QUESTIONS_PER_SESSION,
   });

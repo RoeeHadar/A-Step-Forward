@@ -7,6 +7,17 @@ const ADVANCED_MATH_NOTATION =
 const HEAVY_SYMBOLIC =
   /\\forall|\\exists|\\subseteq|\\cap|\\cup|\\lim_\{|\\int_\{|\\partial/i;
 
+export type DiagnosticSlotKind = 'basic' | 'medium' | 'hard' | 'verbal' | 'edge';
+
+/** Stems that probe edge cases / exceptions (strong-learner validation). */
+export function isEdgeCaseStem(stem: string): boolean {
+  const s = (stem ?? '').trim();
+  if (s.length < 20) return false;
+  return /except|always|never|counterexample|not (always|necessarily)|only if|edge case|לא תמיד|תמיד|דוגמה נגדית|חוץ מ|רק אם/i.test(
+    s,
+  );
+}
+
 /** Prefer stems that read like comprehension / concept understanding. */
 export function isVerbalUnderstandingStem(stem: string): boolean {
   const s = (stem ?? '').trim();
@@ -34,10 +45,8 @@ export function stemAllowedForProfile(stem: string, profile: LearnerProfileRow |
   return true;
 }
 
-export function stemMatchesSlotKind(
-  stem: string,
-  slotKind: 'basic' | 'medium' | 'hard' | 'verbal',
-): boolean {
-  if (slotKind !== 'verbal') return true;
-  return isVerbalUnderstandingStem(stem);
+export function stemMatchesSlotKind(stem: string, slotKind: DiagnosticSlotKind): boolean {
+  if (slotKind === 'verbal') return isVerbalUnderstandingStem(stem);
+  if (slotKind === 'edge') return isEdgeCaseStem(stem) || stem.length >= 70;
+  return true;
 }

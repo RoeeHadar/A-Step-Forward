@@ -53,6 +53,7 @@ export async function POST() {
       total: DIAGNOSTIC_QUESTIONS_PER_SESSION,
       goal_concept_id: state.goal_concept_id,
       probe_concepts: state.probe_concepts,
+      status: 'question',
     });
   } catch (err) {
     console.error('[diagnostic/start]', err);

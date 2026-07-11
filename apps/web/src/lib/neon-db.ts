@@ -455,6 +455,48 @@ function filterDiagnosticPool(rows: DiagnosticItem[], limit: number): Diagnostic
   return pool.slice(0, limit);
 }
 
+export async function ensureDiagnosticItemRow(item: DiagnosticItem): Promise<void> {
+  const s = requireSql();
+  const bloom =
+    item.difficulty <= 3
+      ? 'remember'
+      : item.difficulty <= 5
+        ? 'understand'
+        : item.difficulty <= 7
+          ? 'apply'
+          : 'analyze';
+  try {
+    await s`
+      INSERT INTO diagnostic_items (
+        id, topic, subject, difficulty, bloom_level, stem, options,
+        explanation, source_concept, stem_he, options_he, explanation_he
+      )
+      VALUES (
+        ${item.id}::uuid, ${item.topic}, ${item.subject}, ${item.difficulty},
+        ${bloom}, ${item.stem}, ${JSON.stringify(item.options)}::jsonb,
+        NULL, ${item.source_concept},
+        ${item.stem_he}, ${item.options_he ? JSON.stringify(item.options_he) : null}::jsonb,
+        ${item.explanation_he}
+      )
+      ON CONFLICT (id) DO NOTHING
+    `;
+  } catch (err) {
+    if (!isMissingDiagnosticColumnError(err)) throw err;
+    await s`
+      INSERT INTO diagnostic_items (
+        id, topic, subject, difficulty, bloom_level, stem, options,
+        explanation, source_concept
+      )
+      VALUES (
+        ${item.id}::uuid, ${item.topic}, ${item.subject}, ${item.difficulty},
+        ${bloom}, ${item.stem}, ${JSON.stringify(item.options)}::jsonb,
+        NULL, ${item.source_concept}
+      )
+      ON CONFLICT (id) DO NOTHING
+    `;
+  }
+}
+
 export async function getDiagnosticItemById(itemId: string): Promise<DiagnosticItem | null> {
   const s = requireSql();
   try {
@@ -488,13 +530,17 @@ export async function fetchDiagnosticItemForConcept(
   profile: LearnerProfileRow,
   excludeItemIds: string[],
   targetDifficulty: number,
-  slotKind: 'basic' | 'medium' | 'hard' | 'verbal' = 'medium',
+  slotKind: 'basic' | 'medium' | 'hard' | 'verbal' | 'edge' = 'medium',
 ): Promise<DiagnosticItem | null> {
   const { allowedLevelsForProfile, conceptAllowedForProfile } = await import(
     './quiz-concept-filter'
   );
   const { stemAllowedForProfile, stemMatchesSlotKind } = await import('./diagnostic-stem-filter');
-  if (!conceptAllowedForProfile(conceptId, profile)) return null;
+  const { resolveConceptAliasCanonical } = await import('./concept-aliases');
+  const { pickDiagnosticItemFromLessonBank } = await import('./diagnostic-lesson-bank');
+
+  const topicId = resolveConceptAliasCanonical(conceptId);
+  if (!conceptAllowedForProfile(topicId, profile)) return null;
 
   const s = requireSql();
   const subjects = (profile.subjects ?? []).filter((x) => x === 'math' || x === 'physics');
@@ -524,7 +570,7 @@ export async function fetchDiagnosticItemForConcept(
                stem, options, source_concept,
                stem_he, options_he, explanation_he
         FROM diagnostic_items
-        WHERE topic = ${conceptId}
+        WHERE topic = ${topicId}
           AND subject = ANY(${subjectFilter})
           AND id <> ALL(${exclude}::uuid[])
           AND NOT (stem LIKE 'Which statement best describes%')
@@ -539,7 +585,7 @@ export async function fetchDiagnosticItemForConcept(
              stem, options, source_concept,
              stem_he, options_he, explanation_he
       FROM diagnostic_items
-      WHERE topic = ${conceptId}
+      WHERE topic = ${topicId}
         AND subject = ANY(${subjectFilter})
         AND id <> ALL(${exclude}::uuid[])
         AND NOT (stem LIKE 'Which statement best describes%')
@@ -556,13 +602,23 @@ export async function fetchDiagnosticItemForConcept(
     const picked = pickFromRows(rows);
     if (picked) return picked;
 
-    if (slotKind === 'verbal') {
-      rows = await runQuery(true, 24);
-      const verbalFallback = rows.find(
+    if (slotKind === 'verbal' || slotKind === 'edge') {
+      rows = await runQuery(false, 24);
+      const relaxed = rows.find(
         (row) => stemAllowedForProfile(row.stem, profile) && !isTemplateDiagnosticStem(row.stem),
       );
-      if (verbalFallback) return verbalFallback;
+      if (relaxed) return relaxed;
     }
+
+    const fromBank = pickDiagnosticItemFromLessonBank(
+      topicId,
+      profile,
+      excludeItemIds,
+      target,
+      slotKind,
+    );
+    if (fromBank) return fromBank;
+
     return null;
   } catch (err) {
     if (!isMissingDiagnosticColumnError(err)) throw err;
@@ -570,7 +626,7 @@ export async function fetchDiagnosticItemForConcept(
       SELECT id::text, topic, subject, difficulty::float AS difficulty,
              stem, options, source_concept
       FROM diagnostic_items
-      WHERE topic = ${conceptId}
+      WHERE topic = ${topicId}
         AND subject = ANY(${subjectFilter})
         AND id <> ALL(${exclude}::uuid[])
       ORDER BY ABS(difficulty - ${target}), random()
@@ -583,8 +639,15 @@ export async function fetchDiagnosticItemForConcept(
       explanation_he: null,
     }));
     const picked = pickFromRows(mapped);
-    if (!picked) return null;
-    return picked;
+    if (picked) return picked;
+
+    return pickDiagnosticItemFromLessonBank(
+      topicId,
+      profile,
+      excludeItemIds,
+      target,
+      slotKind,
+    );
   }
 }
 
@@ -817,6 +880,12 @@ export async function persistDiagnosticSummary(
         updated_at = NOW()
     WHERE learner_id = ${learnerId}
   `;
+
+  const personaLine =
+    `${summary.agent_brief_en.slice(0, 600)} ` +
+    `(Weak: ${summary.weak_concepts.slice(0, 4).join(', ') || 'none'}; ` +
+    `Strong: ${summary.strong_concepts.slice(0, 3).join(', ') || 'none'})`;
+  await appendLearnerPersonaLine(learnerId, 'Diagnostic calibration', personaLine);
 }
 
 // ── Plan generation ──────────────────────────────────────────────────────────

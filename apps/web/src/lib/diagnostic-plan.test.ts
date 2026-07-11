@@ -41,6 +41,9 @@ describe('buildValidationQueue', () => {
     expect(queue.filter((s) => s.concept_id === 'linear_functions').length).toBeGreaterThanOrEqual(2);
     expect(queue.find((s) => s.concept_id === 'linear_functions')?.slot_kind).toBe('basic');
     expect(queue.find((s) => s.concept_id === 'derivatives_intro')?.slot_kind).toBe('hard');
+    expect(
+      queue.some((s) => s.concept_id === 'derivatives_intro' && s.slot_kind === 'edge'),
+    ).toBe(true);
   });
 });
 

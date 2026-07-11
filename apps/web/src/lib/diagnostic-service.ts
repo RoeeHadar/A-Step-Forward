@@ -7,20 +7,27 @@ import { buildLearningPlan } from '@/lib/learning-plan';
 import {
   type DiagnosticSessionPayload,
   type DiagnosticSummary,
+  type ValidationSlot,
   applyDiagnosticResponse,
   buildDiagnosticSummary,
   buildValidationQueue,
   currentValidationSlot,
   emptyDiagnosticSession,
   isDiagnosticSessionComplete,
+  MIN_DIAGNOSTIC_ANSWERS,
   orderProbeConcepts,
   parseDiagnosticSessionPayload,
+  rememberServedItem,
   targetDifficultyForSlot,
+  type DiagnosticServedItem,
 } from '@/lib/diagnostic-plan';
+import { pickDiagnosticItemFromLessonBank } from '@/lib/diagnostic-lesson-bank';
+import type { DiagnosticSlotKind } from '@/lib/diagnostic-stem-filter';
 import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 import {
   type DiagnosticItem,
   type LearnerProfileRow,
+  ensureDiagnosticItemRow,
   fetchDiagnosticItemForConcept,
   getConceptMastery,
   getLearnerProfile,
@@ -42,6 +49,28 @@ interface KgConceptRow {
 
 const kgConcepts: KgConceptRow[] = (kg as { concepts: KgConceptRow[] }).concepts;
 const kgPrereqMap: Record<string, string[]> = (kg as { prereqMap: Record<string, string[]> }).prereqMap;
+
+const SLOT_KINDS: DiagnosticSlotKind[] = ['basic', 'medium', 'hard', 'verbal', 'edge'];
+
+function toServedItem(item: DiagnosticItem): DiagnosticServedItem {
+  return {
+    id: item.id,
+    topic: item.topic,
+    subject: item.subject,
+    difficulty: item.difficulty,
+    stem: item.stem,
+    options: item.options,
+    stem_he: item.stem_he,
+    options_he: item.options_he,
+  };
+}
+
+function attachServedItem(
+  state: DiagnosticSessionPayload,
+  item: DiagnosticItem,
+): DiagnosticSessionPayload {
+  return rememberServedItem(state, toServedItem(item));
+}
 
 function pathConceptIdsPrereqsFirst(path: Array<{ concept_id: string; relation: string }>): string[] {
   const ids = path.filter((n) => n.relation !== 'self').map((n) => n.concept_id);
@@ -78,6 +107,10 @@ export async function buildPersonalizedProbeConcepts(
     mastery,
   );
 
+  const selfRated = Object.keys(profile.self_scores ?? {})
+    .map((id) => canonicalConceptId(id) ?? id)
+    .filter((id) => id.length > 0 && conceptAllowedForProfile(id, profile));
+
   let pathIds: string[] = [];
   if (goalConceptId) {
     const plan = await buildLearningPlan({
@@ -98,7 +131,7 @@ export async function buildPersonalizedProbeConcepts(
       .map((c) => c.id);
   }
 
-  let probeConcepts = orderProbeConcepts(pathIds, profile.self_scores, 12);
+  let probeConcepts = orderProbeConcepts([...selfRated, ...pathIds], profile.self_scores, 12);
   probeConcepts = filterConceptIdsForProfile(probeConcepts, profile);
 
   if (probeConcepts.length < 4) {
@@ -112,36 +145,62 @@ export async function buildPersonalizedProbeConcepts(
   return { goalConceptId, probeConcepts };
 }
 
-async function pickItemForState(
+async function tryPickForSlot(
   state: DiagnosticSessionPayload,
+  slot: ValidationSlot,
   profile: LearnerProfileRow,
 ): Promise<DiagnosticItem | null> {
   const selfScores = profile.self_scores ?? {};
-  const startIdx = state.queue_index;
-  const slotKinds = ['basic', 'medium', 'hard', 'verbal'] as const;
+  const targetDifficulty = targetDifficultyForSlot(state, slot, selfScores);
+  const kindsToTry = [slot.slot_kind, ...SLOT_KINDS.filter((k) => k !== slot.slot_kind)];
 
-  for (let offset = 0; offset < state.validation_queue.length; offset++) {
-    const idx = startIdx + offset;
-    if (idx >= state.validation_queue.length) break;
-    const slot = state.validation_queue[idx];
-    if (!slot?.concept_id || !conceptAllowedForProfile(slot.concept_id, profile)) continue;
+  for (const kind of kindsToTry) {
+    const item = await fetchDiagnosticItemForConcept(
+      slot.concept_id,
+      profile,
+      state.asked_item_ids,
+      targetDifficulty,
+      kind,
+    );
+    if (item) return item;
 
-    const targetDifficulty = targetDifficultyForSlot(state, slot, selfScores);
-    const kindsToTry = [slot.slot_kind, ...slotKinds.filter((k) => k !== slot.slot_kind)];
-
-    for (const kind of kindsToTry) {
-      const item = await fetchDiagnosticItemForConcept(
-        slot.concept_id,
-        profile,
-        state.asked_item_ids,
-        targetDifficulty,
-        kind,
-      );
-      if (item) return item;
-    }
+    const fromBank = pickDiagnosticItemFromLessonBank(
+      slot.concept_id,
+      profile,
+      state.asked_item_ids,
+      targetDifficulty,
+      kind,
+    );
+    if (fromBank) return fromBank;
   }
 
   return null;
+}
+
+/** Skip slots with no available items; return the next servable question if any. */
+export async function pickNextDiagnosticItem(
+  state: DiagnosticSessionPayload,
+  profile: LearnerProfileRow,
+): Promise<{ item: DiagnosticItem | null; state: DiagnosticSessionPayload }> {
+  let current = state;
+
+  while (current.queue_index < current.validation_queue.length) {
+    const slot = current.validation_queue[current.queue_index];
+    if (!slot?.concept_id || !conceptAllowedForProfile(slot.concept_id, profile)) {
+      current = { ...current, queue_index: current.queue_index + 1 };
+      continue;
+    }
+
+    const item = await tryPickForSlot(current, slot, profile);
+    if (item) {
+      await ensureDiagnosticItemRow(item);
+      return { item, state: attachServedItem(current, item) };
+    }
+
+    current = { ...current, queue_index: current.queue_index + 1 };
+  }
+
+  return { item: null, state: current };
 }
 
 export async function initializeDiagnosticSession(
@@ -166,10 +225,10 @@ export async function initializeDiagnosticSession(
     DIAGNOSTIC_QUESTIONS_PER_SESSION,
   );
   const state = emptyDiagnosticSession(goalConceptId, probeConcepts, validationQueue);
-  const firstItem = await pickItemForState(state, profile);
-  if (!firstItem) return null;
+  const picked = await pickNextDiagnosticItem(state, profile);
+  if (!picked.item) return null;
 
-  return { state, firstItem, profile };
+  return { state: picked.state, firstItem: picked.item, profile };
 }
 
 export async function advanceDiagnosticSession(
@@ -194,23 +253,23 @@ export async function advanceDiagnosticSession(
   }
 
   const state = applyDiagnosticResponse(priorState, response);
-  const complete = isDiagnosticSessionComplete(state);
 
-  if (complete) {
+  if (isDiagnosticSessionComplete(state)) {
     const summary = buildDiagnosticSummary(state);
     return { state, nextItem: null, complete: true, summary };
   }
 
-  const nextItem = await pickItemForState(state, profile);
-  if (!nextItem) {
-    if (isDiagnosticSessionComplete(state)) {
-      const summary = buildDiagnosticSummary(state);
-      return { state, nextItem: null, complete: true, summary };
+  const picked = await pickNextDiagnosticItem(state, profile);
+
+  if (!picked.item) {
+    if (state.responses.length >= MIN_DIAGNOSTIC_ANSWERS) {
+      const summary = buildDiagnosticSummary(picked.state);
+      return { state: picked.state, nextItem: null, complete: true, summary };
     }
-    return { state, nextItem: null, complete: false, summary: null };
+    return { state: picked.state, nextItem: null, complete: false, summary: null };
   }
 
-  return { state, nextItem, complete: false, summary: null };
+  return { state: picked.state, nextItem: picked.item, complete: false, summary: null };
 }
 
 export function loadDiagnosticStateFromSession(
@@ -245,5 +304,18 @@ export function formatDiagnosticSummaryForAgents(
   );
 }
 
+export function resolveDiagnosticItemFromSession(
+  itemId: string,
+  state: DiagnosticSessionPayload | null,
+): DiagnosticItem | null {
+  const served = state?.served_items?.[itemId];
+  if (!served) return null;
+  return {
+    ...served,
+    source_concept: served.topic,
+    explanation_he: null,
+  };
+}
+
 /** @internal test hook */
-export { currentValidationSlot, pickItemForState as _pickItemForState };
+export { currentValidationSlot, tryPickForSlot as _tryPickForSlot };

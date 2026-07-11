@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import katex from 'katex';
 import {
@@ -19,6 +19,12 @@ import {
   readApiErrorMessage,
   readDiagnosticSubjectsFromSession,
 } from '@/lib/diagnostic-start';
+import {
+  generatePlanWithRetry,
+  isRetryablePlanError,
+  retryDelayMs,
+  type DiagnosticFlowPhase,
+} from '@/lib/diagnostic-plan-client';
 import 'katex/dist/katex.min.css';
 
 interface DiagnosticOption {
@@ -52,11 +58,18 @@ const STR = {
     contactSupport: 'אם זה חוזר, התנתק/י והתחבר/י מחדש, או פנה/י לתמיכה.',
     submit: 'שלח תשובה',
     checking: 'בודק…',
+    calibrating: 'מנתח את התשובות שלך…',
+    generating_plan: 'יוצר את תוכנית הלמידה האישית שלך…',
+    rate_limited: (sec: number) =>
+      `המערכת עמוסה זמנית — ממתין ${sec} שניות לפני ניסיון נוסף…`,
+    redirecting: 'התוכנית מוכנה — מעביר אותך ללוח הבקרה…',
+    status_label: 'מה קורה עכשיו',
     your_mastery: 'סיימנו את האבחון',
     based_on: (n: number) =>
       `כיול ראשוני מ-${n} שאלות אימות — כל נושא נבדק ברמת קושי שמתאימה לדירוג העצמי שלך. התוכנית תיבנה על בסיס זה.`,
     generate_plan: 'יצירת תוכנית הלמידה שלי ←',
     generating: 'יוצר…',
+    retry_plan: 'נסה שוב ליצור תוכנית',
     no_mastery: 'אין עדיין נתוני שליטה.',
     option_label: (k: string, text: string) => `אפשרות ${k}: ${text.replace(/\$/g, '')}`,
     fallback_plan_error: 'לא הצלחתי לייצר תוכנית למידה. נסה שוב מהכפתור למטה.',
@@ -70,11 +83,18 @@ const STR = {
     contactSupport: 'If this keeps happening, sign out and back in, or contact support.',
     submit: 'Submit answer',
     checking: 'Checking…',
+    calibrating: 'Analyzing your answers…',
+    generating_plan: 'Building your personal learning plan…',
+    rate_limited: (sec: number) =>
+      `The system is busy — waiting ${sec}s before trying again…`,
+    redirecting: 'Your plan is ready — taking you to your dashboard…',
+    status_label: 'What’s happening now',
     your_mastery: 'Diagnostic complete',
     based_on: (n: number) =>
       `Initial calibration from ${n} validation questions — each topic was tested at the difficulty matching your self-rating. Your plan will build on this.`,
     generate_plan: 'Generate my learning plan →',
     generating: 'Generating…',
+    retry_plan: 'Retry plan generation',
     no_mastery: 'No mastery data yet.',
     option_label: (k: string, text: string) => `Option ${k}: ${text.replace(/\$/g, '')}`,
     fallback_plan_error: 'Could not generate your learning plan. Try the button below.',
@@ -113,7 +133,10 @@ export default function DiagnosticPage() {
   const [chosen, setChosen] = useState('');
   const [complete, setComplete] = useState(false);
   const [mastery, setMastery] = useState<Record<string, number>>({});
-  const [planLoading, setPlanLoading] = useState(false);
+  const [phase, setPhase] = useState<DiagnosticFlowPhase>('loading');
+  const [phaseDetail, setPhaseDetail] = useState('');
+  const [planReady, setPlanReady] = useState(false);
+  const [answerRetrySec, setAnswerRetrySec] = useState(0);
 
   // Resolve which language to show for the current question. Falls back to
   // English if the HE columns aren't populated yet for this item.
@@ -127,6 +150,7 @@ export default function DiagnosticPage() {
 
   const startSession = useCallback(async () => {
     setLoading(true);
+    setPhase('loading');
     setError('');
     try {
       const sessionSubjects = readDiagnosticSubjectsFromSession();
@@ -156,10 +180,12 @@ export default function DiagnosticPage() {
       setQuestion(data.question);
       setQuestionNumber(data.question_number ?? 1);
       setTotalQuestions(data.total ?? DIAGNOSTIC_QUESTIONS_PER_SESSION);
+      setPhase('question');
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t.loadFailed);
       setQuestion(null);
       setSessionId(null);
+      setPhase('error');
     } finally {
       setLoading(false);
     }
@@ -169,9 +195,38 @@ export default function DiagnosticPage() {
     void startSession();
   }, [startSession]);
 
+  const planRunRef = useRef(false);
+
+  const runPlanGeneration = useCallback(async () => {
+    if (planRunRef.current) return;
+    planRunRef.current = true;
+    setError('');
+    try {
+      await generatePlanWithRetry({
+        onPhase: (nextPhase, detail) => {
+          setPhase(nextPhase);
+          setPhaseDetail(detail ?? '');
+        },
+      });
+      setPlanReady(true);
+      router.push('/app');
+    } catch (err) {
+      planRunRef.current = false;
+      setPhase('error');
+      setError(err instanceof Error ? err.message : t.fallback_plan_error);
+    }
+  }, [router, t.fallback_plan_error]);
+
+  useEffect(() => {
+    if (complete && !planReady && phase !== 'error') {
+      void runPlanGeneration();
+    }
+  }, [complete, planReady, phase, runPlanGeneration]);
+
   async function submitAnswer() {
     if (!sessionId || !question || !chosen) return;
     setSubmitting(true);
+    setPhase('checking');
     setError('');
     try {
       const res = await fetch(`/api/diagnostic/${sessionId}/answer`, {
@@ -179,8 +234,32 @@ export default function DiagnosticPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item_id: question.id, chosen }),
       });
-      if (!res.ok) throw new Error(await readApiErrorMessage(res));
-      const data = (await res.json()) as {
+      const text = await res.text();
+      if (!res.ok) {
+        let message = text.trim() || `Request failed (${res.status})`;
+        let retryAfterSec = 15;
+        try {
+          const body = JSON.parse(text) as {
+            error?: string;
+            message?: string;
+            retry_after_sec?: number;
+          };
+          message = body.error ?? body.message ?? message;
+          if (body.retry_after_sec) retryAfterSec = body.retry_after_sec;
+        } catch {
+          /* plain text */
+        }
+        if (isRetryablePlanError(res.status, message)) {
+          setPhase('rate_limited');
+          setAnswerRetrySec(retryAfterSec);
+          await new Promise((r) => setTimeout(r, retryDelayMs(0, retryAfterSec)));
+          setPhase('question');
+          setSubmitting(false);
+          return;
+        }
+        throw new Error(message);
+      }
+      const data = JSON.parse(text) as {
         complete?: boolean;
         question?: DiagnosticQuestion;
         question_number?: number;
@@ -189,6 +268,7 @@ export default function DiagnosticPage() {
         questions_answered?: number;
       };
       if (data.complete) {
+        setPhase('calibrating');
         setComplete(true);
         setMastery(data.results?.mastery_by_topic ?? {});
         setQuestion(null);
@@ -203,25 +283,13 @@ export default function DiagnosticPage() {
         setQuestionNumber(data.question_number ?? questionNumber + 1);
         if (data.total) setTotalQuestions(data.total);
         setChosen('');
+        setPhase('question');
       }
     } catch (err) {
+      setPhase('error');
       setError(err instanceof Error ? err.message : 'Failed to submit answer');
     } finally {
       setSubmitting(false);
-    }
-  }
-
-  async function generatePlan() {
-    setPlanLoading(true);
-    setError('');
-    try {
-      const res = await fetch('/api/plans/generate', { method: 'POST' });
-      if (!res.ok) throw new Error(await readApiErrorMessage(res));
-      router.push('/app');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Plan generation failed');
-    } finally {
-      setPlanLoading(false);
     }
   }
 
@@ -233,6 +301,25 @@ export default function DiagnosticPage() {
   const progressPct = complete
     ? 100
     : Math.min(100, Math.round((questionNumber / totalQuestions) * 100));
+
+  const statusMessage = (() => {
+    switch (phase) {
+      case 'loading':
+        return t.loading;
+      case 'checking':
+        return t.checking;
+      case 'calibrating':
+        return t.calibrating;
+      case 'generating_plan':
+        return t.generating_plan;
+      case 'rate_limited':
+        return t.rate_limited(Number(phaseDetail) || answerRetrySec || 15);
+      case 'redirecting':
+        return t.redirecting;
+      default:
+        return '';
+    }
+  })();
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white" dir={isHe ? 'rtl' : 'ltr'} lang={lang}>
@@ -260,6 +347,18 @@ export default function DiagnosticPage() {
                 style={{ width: `${progressPct}%` }}
               />
             </div>
+            {statusMessage && phase !== 'question' && (
+              <p className="mt-3 text-xs text-accent-cyan/90">{statusMessage}</p>
+            )}
+          </div>
+        )}
+
+        {complete && statusMessage && (
+          <div className="mb-6 rounded-xl border border-accent-cyan/30 bg-accent-cyan/10 px-4 py-3">
+            <p className="text-xs uppercase tracking-wider text-accent-cyan/70 mb-1">
+              {t.status_label}
+            </p>
+            <p className="text-sm text-white/90">{statusMessage}</p>
           </div>
         )}
 
@@ -367,11 +466,15 @@ export default function DiagnosticPage() {
             )}
 
             <button
-              disabled={planLoading}
-              onClick={() => void generatePlan()}
+              disabled={phase === 'generating_plan' || phase === 'redirecting' || phase === 'rate_limited'}
+              onClick={() => void runPlanGeneration()}
               className="w-full py-3 rounded-xl bg-accent-cyan text-neutral-950 font-semibold text-sm disabled:opacity-50 hover:bg-cyan-300 transition-colors"
             >
-              {planLoading ? t.generating : t.generate_plan}
+              {phase === 'generating_plan' || phase === 'redirecting' || phase === 'rate_limited'
+                ? t.generating
+                : error
+                  ? t.retry_plan
+                  : t.generating}
             </button>
           </div>
         )}

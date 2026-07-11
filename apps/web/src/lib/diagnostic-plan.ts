@@ -7,7 +7,10 @@ import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 
 export const DIAGNOSTIC_SESSION_VERSION = 3;
 
-export type ValidationSlotKind = 'basic' | 'medium' | 'hard' | 'verbal';
+/** Minimum answered questions before we allow early completion when the bank runs dry. */
+export const MIN_DIAGNOSTIC_ANSWERS = 8;
+
+export type ValidationSlotKind = 'basic' | 'medium' | 'hard' | 'verbal' | 'edge';
 
 export interface ValidationSlot {
   concept_id: string;
@@ -32,8 +35,22 @@ export interface DiagnosticSessionPayload {
   queue_index: number;
   responses: DiagnosticResponse[];
   asked_item_ids: string[];
+  /** Items served from the lesson bank (not in Neon) keyed by stable id. */
+  served_items?: Record<string, DiagnosticServedItem>;
   /** Per-topic difficulty for CAT-style adjustment within a concept. */
   difficulty_by_topic: Record<string, number>;
+}
+
+/** Serializable subset of DiagnosticItem stored on the session for bank-served MCQs. */
+export interface DiagnosticServedItem {
+  id: string;
+  topic: string;
+  subject: string;
+  difficulty: number;
+  stem: string;
+  options: { choices: string[]; correct: string };
+  stem_he: string | null;
+  options_he: { choices: string[]; correct: string } | null;
 }
 
 export interface DiagnosticConceptProbe {
@@ -94,7 +111,12 @@ export function buildValidationQueue(
   selfScores: Record<string, number> | null,
   total = DIAGNOSTIC_QUESTIONS_PER_SESSION,
 ): ValidationSlot[] {
-  const conceptIds = orderProbeConcepts(probeConcepts, selfScores, Math.ceil(total / 2));
+  const ratedFirst = orderProbeConcepts(
+    [...Object.keys(selfScores ?? {}), ...probeConcepts],
+    selfScores,
+    Math.ceil(total / 2),
+  );
+  const conceptIds = ratedFirst;
   const slots: ValidationSlot[] = [];
 
   for (const conceptId of conceptIds) {
@@ -110,7 +132,7 @@ export function buildValidationQueue(
       slots.push({ concept_id: conceptId, target_difficulty: 6, slot_kind: 'medium' });
     } else {
       slots.push({ concept_id: conceptId, target_difficulty: 8, slot_kind: 'hard' });
-      slots.push({ concept_id: conceptId, target_difficulty: 9, slot_kind: 'hard' });
+      slots.push({ concept_id: conceptId, target_difficulty: 9, slot_kind: 'edge' });
     }
   }
 
@@ -126,10 +148,11 @@ export function buildValidationQueue(
   while (slots.length < total && conceptIds.length > 0) {
     const conceptId = conceptIds[slots.length % conceptIds.length]!;
     const score = selfScores?.[conceptId] ?? 5;
+    const tier = selfScoreTier(score);
     slots.push({
       concept_id: conceptId,
       target_difficulty: validationDifficultyForSelfScore(score, 1),
-      slot_kind: selfScoreTier(score) === 'strong' ? 'hard' : 'medium',
+      slot_kind: tier === 'strong' ? 'edge' : tier === 'weak' ? 'basic' : 'medium',
     });
   }
 
@@ -149,7 +172,18 @@ export function emptyDiagnosticSession(
     queue_index: 0,
     responses: [],
     asked_item_ids: [],
+    served_items: {},
     difficulty_by_topic: {},
+  };
+}
+
+export function rememberServedItem(
+  state: DiagnosticSessionPayload,
+  item: DiagnosticServedItem,
+): DiagnosticSessionPayload {
+  return {
+    ...state,
+    served_items: { ...(state.served_items ?? {}), [item.id]: item },
   };
 }
 
@@ -242,7 +276,14 @@ export function applyDiagnosticResponse(
 }
 
 export function isDiagnosticSessionComplete(state: DiagnosticSessionPayload): boolean {
-  return state.responses.length >= state.validation_queue.length;
+  if (state.responses.length >= state.validation_queue.length) return true;
+  if (
+    state.queue_index >= state.validation_queue.length &&
+    state.responses.length >= MIN_DIAGNOSTIC_ANSWERS
+  ) {
+    return true;
+  }
+  return false;
 }
 
 export function estimateTopicMastery(responses: DiagnosticResponse[], topic: string): number {
@@ -368,6 +409,10 @@ export function parseDiagnosticSessionPayload(
     asked_item_ids: Array.isArray(raw.asked_item_ids)
       ? raw.asked_item_ids.filter((c): c is string => typeof c === 'string')
       : [],
+    served_items:
+      raw.served_items && typeof raw.served_items === 'object'
+        ? (raw.served_items as Record<string, DiagnosticServedItem>)
+        : {},
     difficulty_by_topic:
       raw.difficulty_by_topic && typeof raw.difficulty_by_topic === 'object'
         ? (raw.difficulty_by_topic as Record<string, number>)
