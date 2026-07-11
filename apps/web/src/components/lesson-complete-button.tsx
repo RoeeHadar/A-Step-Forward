@@ -34,7 +34,7 @@ export function LessonCompleteButton({
     if (saving) return;
     setSaving(true);
     try {
-      await fetch('/api/lessons/complete', {
+      const res = await fetch('/api/lessons/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -42,8 +42,11 @@ export function LessonCompleteButton({
           ...(lessonId ? { lesson_id: lessonId } : {}),
         }),
       });
+      if (!res.ok) {
+        console.warn('[LessonCompleteButton] save failed', res.status);
+      }
     } catch {
-      // Best-effort — still navigate so the learner is not blocked.
+      console.warn('[LessonCompleteButton] network error');
     } finally {
       onComplete?.();
       if (navigateOnComplete) {

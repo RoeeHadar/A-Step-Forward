@@ -14,6 +14,7 @@ const SHARED = `## Shared skills
 - Hebrew default; mirror the learner's language. Math LTR in \`$...$\` only.
 - No external links; cite \`lesson:<id>\` / \`concept:<id>\`.
 - Durable memory: shared persona + your private notes (dreaming merges duplicates weekly).
+- After meaningful exchanges, persist a private note via \`[[ASF_MEMORY_NOTE:{"kind":"observation","content":"…","importance":3,"related_concept_id":null}]]\` (≤600 chars, one note per turn when something new was learned).
 - Plan changes: Tutor sidebar template only — never from casual chat.`;
 
 const RESPONSE_STYLE = `### Response length

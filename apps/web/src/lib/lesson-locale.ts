@@ -20,10 +20,8 @@ export function looksEnglish(text: string): boolean {
 
 /**
  * Pick lesson text for the active UI language.
- * - Prefer the field for the requested language when it matches that script.
- * - If the primary field looks like the wrong language (common content bug),
- *   use the alternate field when it matches the requested language.
- * - If primary is empty, fall back to alternate so learners see content.
+ * Prefer the requested locale field; swap only when fields are clearly mis-tagged;
+ * fall back to the other language only when the preferred field is empty.
  */
 export function pickLessonText(
   lang: LessonLang,
@@ -35,13 +33,15 @@ export function pickLessonText(
 
   if (lang === 'he') {
     if (heT && looksHebrew(heT)) return heT;
-    if (heT && !looksHebrew(heT) && enT && looksHebrew(enT)) return enT;
+    if (heT && looksEnglish(heT) && enT && looksHebrew(enT)) return enT;
+    if (enT && looksHebrew(enT)) return enT;
     if (heT) return heT;
     return enT;
   }
 
   if (enT && looksEnglish(enT)) return enT;
-  if (enT && !looksEnglish(enT) && heT && looksEnglish(heT)) return heT;
+  if (enT && looksHebrew(enT) && heT && looksEnglish(heT)) return heT;
+  if (heT && looksEnglish(heT)) return heT;
   if (enT) return enT;
   return heT;
 }
