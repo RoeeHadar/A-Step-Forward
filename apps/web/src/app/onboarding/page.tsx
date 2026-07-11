@@ -25,12 +25,19 @@
  * labels are localised.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
+import { FieldLabel } from '@/components/field-hint';
 import { useI18n } from '@/providers/i18n-provider';
 import { cn } from '@asf/ui';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
+import {
+  clearOnboardingDraft,
+  loadOnboardingDraft,
+  saveOnboardingDraft,
+} from '@/lib/onboarding-draft';
+import { resolveSelfScoreConceptIds } from '@/lib/onboarding-self-score';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -54,6 +61,7 @@ interface Step1 {
   goalOther: string;
   gradeLevel: string;
   pointsGroup: string;
+  targetUniversity: string;
   adultGoal: string;
   yearsGap: string;
   subjects: Subject[];
@@ -62,12 +70,16 @@ interface Step1 {
   finalGoalDate: string;
 }
 
+type TeacherOverall = 'mostly_good' | 'mixed' | 'mostly_bad' | 'unknown';
+
 interface Step2 {
+  hoursAuto: boolean;
   hoursPerWeek: number;
-  selfRating: number;
-  teacherRating: number;
+  pastExperience: number;
+  teacherOverall: TeacherOverall;
+  teacherNotes: string;
   style: Style;
-  attentionSpan: number;
+  attentionSpan: number | null;
 }
 
 interface Step3 {
@@ -103,7 +115,11 @@ const STR = {
     s0_yearsGap_lt1: 'Less than a year',
     s0_yearsGap_1_3: '1–3 years',
     s0_yearsGap_gt3: 'More than 3 years',
-    s0_units: 'Math units',
+    s0_units: 'Math units (Bagrut)',
+    s0_unitsHint: 'Only for high-school students taking Bagrut math.',
+    s0_university: 'Target university / program',
+    s0_universityHint:
+      'Different universities use different syllabi and prerequisites. We tailor your path accordingly.',
     s0_timeline: 'Timeline',
     s0_nextTestName: 'Next big event / test',
     s0_nextTestNamePh: 'e.g. school midterm, mock Bagrut, semester final',
@@ -112,15 +128,30 @@ const STR = {
     s0_timelineHint: 'Optional — leave blank if you do not have a specific deadline yet.',
     s1_title: 'Tell us about yourself',
     s1_sub: 'This calibrates your plan difficulty and pacing.',
-    s1_hours: 'Hours available to study per week',
+    s1_hours: 'Weekly study time (optional)',
+    s1_hoursHint:
+      'If you skip this, we estimate hours from your goal and deadline so the plan stays reachable.',
+    s1_hoursAuto: 'Let the system estimate from my goal',
     s1_hoursUnit: 'hrs/week',
-    s1_selfRating: 'How did you do in your last math/physics class?',
-    s1_teacherRating: 'How good was your teacher? (affects pacing expectations)',
+    s1_pastExperience:
+      'How has your overall learning experience been in these subjects so far?',
+    s1_pastExperienceHint:
+      'Think across classes, tutors, and self-study — not just your last lesson.',
+    s1_teacherOverall: 'How were your teachers in these subjects overall?',
+    s1_teacher_good: 'Mostly helpful',
+    s1_teacher_mixed: 'Mixed',
+    s1_teacher_bad: 'Mostly unhelpful',
+    s1_teacher_unknown: 'Hard to say',
+    s1_teacherNotes:
+      'What worked or did not work with past teachers? (optional — helps the Tutor adapt)',
+    s1_teacherNotesPh:
+      'e.g. moved too fast, great at examples, never explained the why…',
     s1_style: 'Preferred learning style',
     s1_style_theory: 'Theory first',
     s1_style_practice: 'Practice first',
     s1_style_mixed: 'Mixed',
     s1_attention: 'How long can you focus in one sitting?',
+    s1_attention_unknown: "I don't know yet",
     s1_attention_20: '20 min',
     s1_attention_45: '45 min',
     s1_attention_90: '90 min',
@@ -136,6 +167,8 @@ const STR = {
     s2_confidence:
       'How confident do you feel in your ability to reach your goal?',
     s2_when: 'When do you study best?',
+    s2_whenHint:
+      'The Tutor may suggest light review in your peak window and heavier practice later in the day.',
     s2_when_morning: 'Morning',
     s2_when_afternoon: 'Afternoon',
     s2_when_evening: 'Evening',
@@ -144,6 +177,8 @@ const STR = {
     s2_yes: 'Yes',
     s2_no: 'No',
     s2_support: 'Support system',
+    s2_supportHint:
+      'Family, friends, or mentors who help you stay on track with school — not technical IT support.',
     s2_support_strong: 'Strong',
     s2_support_some: 'Some',
     s2_support_none: 'None',
@@ -152,7 +187,7 @@ const STR = {
       'e.g. I want to qualify for engineering, prove to myself I can, get into a specific program…',
     s3_title: 'Rate your understanding',
     s3_sub:
-      'Be honest — this is just the starting point. The diagnostic will verify and adapt.',
+      'Rate building-block topics from your path — be honest; the diagnostic will refine this.',
     s3_scale_low: '1 — never studied',
     s3_scale_high: '10 — exam-ready',
     s4_title: 'How do you prefer to learn with the Tutor?',
@@ -182,7 +217,11 @@ const STR = {
     s0_yearsGap_lt1: 'פחות משנה',
     s0_yearsGap_1_3: '1–3 שנים',
     s0_yearsGap_gt3: 'יותר מ-3 שנים',
-    s0_units: 'יחידות במתמטיקה',
+    s0_units: 'יחידות במתמטיקה (בגרות)',
+    s0_unitsHint: 'רק לתלמידי תיכון שנבחנים בבגרות במתמטיקה.',
+    s0_university: 'אוניברסיטה / מסלול יעד',
+    s0_universityHint:
+      'לכל מוסד לימודים סילabus ודרישות קדם שונים — נתאים את המסלול בהתאם.',
     s0_timeline: 'לוח זמנים',
     s0_nextTestName: 'אירוע או מבחן קרוב',
     s0_nextTestNamePh: 'למשל: מבחן בית-ספרי, בגרות מתכונת, בוחן סוף סמסטר',
@@ -192,16 +231,29 @@ const STR = {
       'לא חובה — אפשר להשאיר ריק אם אין תאריך יעד ספציפי כרגע.',
     s1_title: 'ספר/י לנו על עצמך',
     s1_sub: 'זה מכייל את רמת הקושי והקצב של התוכנית שלך.',
-    s1_hours: 'שעות פנויות ללימוד בשבוע',
+    s1_hours: 'זמן לימוד שבועי (לא חובה)',
+    s1_hoursHint:
+      'אם תדלג/י, נעריך שעות לפי המטרה והדד-ליין כדי שהתוכנית תישאר ברת-השגה.',
+    s1_hoursAuto: 'תנו למערכת להעריך לפי המטרה שלי',
     s1_hoursUnit: 'שעות בשבוע',
-    s1_selfRating: 'איך הסתדרת בשיעור האחרון במתמטיקה/פיזיקה?',
-    s1_teacherRating:
-      'עד כמה המורה שלך היה/הייתה טוב/ה? (משפיע על ציפיות הקצב)',
+    s1_pastExperience: 'איך הייתה חוויית הלמידה הכללית שלך במקצועות האלה?',
+    s1_pastExperienceHint:
+      'חשב/י על שיעורים, מורים פרטיים ולמידה עצמית — לא רק על השיעור האחרון.',
+    s1_teacherOverall: 'איך היו המורים שלך במקצועות האלה בכלל?',
+    s1_teacher_good: 'בעיקר עזרו',
+    s1_teacher_mixed: 'מעורב',
+    s1_teacher_bad: 'בעיקר לא עזרו',
+    s1_teacher_unknown: 'קשה לומר',
+    s1_teacherNotes:
+      'מה עבד או לא עבד עם מורים בעבר? (לא חובה — עוזר למורה להתאים)',
+    s1_teacherNotesPh:
+      'למשל: התקדמו מהר מדי, דוגמאות מצוינות, לא הסבירו את ה״למה״…',
     s1_style: 'סגנון למידה מועדף',
     s1_style_theory: 'קודם תיאוריה',
     s1_style_practice: 'קודם תרגול',
     s1_style_mixed: 'מעורב',
     s1_attention: 'כמה זמן את/ה מצליח/ה להתרכז ברצף?',
+    s1_attention_unknown: 'עדיין לא יודע/ת',
     s1_attention_20: '20 דק׳',
     s1_attention_45: '45 דק׳',
     s1_attention_90: '90 דק׳',
@@ -216,6 +268,8 @@ const STR = {
       'רמת הלחץ שתדווח/י עוזרת לנו להתאים קצב וסדר נושאים — לא אבחון, ולא משותף עם צד שלישי.',
     s2_confidence: 'עד כמה את/ה מאמין/ה ביכולת שלך להגיע ליעד?',
     s2_when: 'מתי את/ה הכי טוב/ה ללמוד?',
+    s2_whenHint:
+      'המורה יכול להציע סקירה קלה בשעות השיא שלך ותרגול ממוקד יותר מאוחר ביום.',
     s2_when_morning: 'בוקר',
     s2_when_afternoon: 'צהריים',
     s2_when_evening: 'ערב',
@@ -224,6 +278,8 @@ const STR = {
     s2_yes: 'כן',
     s2_no: 'לא',
     s2_support: 'מערכת תמיכה',
+    s2_supportHint:
+      'משפחה, חברים או מנטורים שעוזרים לך להתמיד — לא תמיכה טכנית של המערכת.',
     s2_support_strong: 'חזקה',
     s2_support_some: 'בינונית',
     s2_support_none: 'אין',
@@ -232,7 +288,7 @@ const STR = {
       'למשל: אני רוצה להתקבל להנדסה, להוכיח לעצמי שאני יכול/ה, להיכנס לתוכנית מסוימת…',
     s3_title: 'דרג/י את ההבנה שלך',
     s3_sub:
-      'בכנות — זו רק נקודת ההתחלה. האבחון יאמת ויתאים את עצמו.',
+      'דרג/י נושאי יסוד מהמסלול שלך — בכנות; האבחון ידייק את זה.',
     s3_scale_low: '1 — לא למדתי',
     s3_scale_high: '10 — מוכן/ה לבחינה',
     s4_title: 'כיצד אתה מעדיף ללמוד עם המורה?',
@@ -307,9 +363,6 @@ const GRADE_LEVELS: { value: string; label_en: string; label_he: string }[] = [
     label_en: 'College student or adult learner',
     label_he: 'סטודנט/י או בוגר/ת תיכון',
   },
-  { value: '7', label_en: '7th grade', label_he: 'כיתה ז׳' },
-  { value: '8', label_en: '8th grade', label_he: 'כיתה ח׳' },
-  { value: '9', label_en: '9th grade', label_he: 'כיתה ט׳' },
   { value: '10', label_en: '10th grade', label_he: 'כיתה י׳' },
   { value: '11', label_en: '11th grade', label_he: 'כיתה י״א' },
   { value: '12', label_en: '12th grade', label_he: 'כיתה י״ב' },
@@ -317,6 +370,11 @@ const GRADE_LEVELS: { value: string; label_en: string; label_he: string }[] = [
     value: 'adult_bagrut',
     label_en: 'External Bagrut / Adult Learner',
     label_he: 'בגרות חיצונית / בוגרים',
+  },
+  {
+    value: 'pre_university',
+    label_en: 'Pre-university (Mechina / prep year)',
+    label_he: 'מכינה / הכנה לאוניברסיטה',
   },
   {
     value: 'university_1',
@@ -329,6 +387,18 @@ const GRADE_LEVELS: { value: string; label_en: string; label_he: string }[] = [
     label_he: 'אוניברסיטה — שנה ב׳+',
   },
 ];
+
+const UNIVERSITIES: { value: string; label_en: string; label_he: string }[] = [
+  { value: 'technion', label_en: 'Technion (IIT)', label_he: 'הטכניון' },
+  { value: 'huji', label_en: 'Hebrew University', label_he: 'האוניברסיטה העברית' },
+  { value: 'tau', label_en: 'Tel Aviv University', label_he: 'אוניברסיטת תל אביב' },
+  { value: 'biu', label_en: 'Bar-Ilan University', label_he: 'בר-אילן' },
+  { value: 'bgu', label_en: 'Ben-Gurion University', label_he: 'בן-גוריון' },
+  { value: 'haifa', label_en: 'University of Haifa', label_he: 'אוניברסיטת חיפה' },
+  { value: 'other', label_en: 'Other / not sure yet', label_he: 'אחר / עדיין לא יודע/ת' },
+];
+
+const HS_BAGRUT_GRADES = new Set(['10', '11', '12', 'adult_bagrut']);
 
 const ADULT_GOALS: { value: string; label_en: string; label_he: string }[] = [
   { value: 'bagrut_math', label_en: 'Bagrut in Mathematics', label_he: 'בגרות במתמטיקה' },
@@ -445,123 +515,6 @@ function conceptEntry(id: string): ConceptEntry {
     label_he: meta?.label_he ?? resolved.title_he ?? resolved.title_en,
   };
 }
-
-// ── Goal → concept list mapping ──────────────────────────────────────────────
-// Carefully scoped to Israeli Bagrut curriculum per unit level.
-// 4pt INCLUDES everything in 3pt; 5pt INCLUDES everything in 4pt.
-
-// Bagrut Math 3 units — core shared by BOTH legacy (801/802/803) and new program (172/371/372)
-const MATH_3PT_CONCEPTS = [
-  'arithmetic', 'algebra_basics', 'equations_linear', 'equations_quadratic',
-  'inequalities', 'exponents', 'word_problems',
-  'functions_intro', 'functions_linear', 'functions_quadratic',
-  'analytic_geometry_basic', 'geometry_basics',
-  'trigonometry_ratios',
-  'statistics_descriptive', 'descriptive_stats', 'probability_basic',
-];
-
-// Legacy 3pt only (801/802/803) — removed from new program (172/371/372)
-// New program students entered HS from September 2023 onwards.
-const MATH_3PT_LEGACY_EXTRA = [
-  'sequences_arithmetic',  // Removed from new 372
-  'analytic_geometry',     // Circle geometry removed from new 372
-];
-
-// Bagrut Math 4 units — adds to 3pt
-const MATH_4PT_EXTRA = [
-  'fractions_algebraic', 'factoring', 'functions_exponential',
-  'quadrilaterals', 'triangles_congruence', 'circles',
-  'sequences_geometric', 'combinatorics',
-];
-
-// Bagrut Math 5 units — adds to 4pt
-const MATH_5PT_EXTRA = [
-  'logarithms', 'function_transformations',
-  'trigonometry_identities', 'trigonometry_equations',
-  'analytic_geometry', 'vectors_2d', 'distributions',
-  'limits', 'derivatives_intro', 'derivatives_rules',
-  'derivatives_applications', 'optimization_problems',
-  'integrals_intro', 'definite_integrals', 'integrals_techniques', 'integrals_applications',
-];
-
-// Bagrut Physics 5 units
-const PHYSICS_HS_CONCEPTS = [
-  'units_measurement', 'kinematics_1d', 'kinematics_2d', 'newton_laws',
-  'friction', 'circular_motion', 'gravitation',
-  'work_energy', 'conservation_energy', 'momentum', 'collisions',
-  'simple_harmonic_motion', 'torque',
-  'waves_basics', 'optics_geometric',
-  'electrostatics', 'electric_field', 'electric_circuits', 'kirchhoff_laws',
-  'magnetism', 'electromagnetic_induction',
-  'modern_physics_intro', 'atomic_models', 'nuclear_physics',
-];
-
-const CONCEPTS_BY_GOAL: Record<Goal, string[]> = {
-  // For 3pt we include legacy extras since we can't know which program at onboarding.
-  // The AI tutor later refines based on grade year via learner profile.
-  bagrut_math_3:   [...MATH_3PT_CONCEPTS, ...MATH_3PT_LEGACY_EXTRA],
-  bagrut_math_4:   [...MATH_3PT_CONCEPTS, ...MATH_3PT_LEGACY_EXTRA, ...MATH_4PT_EXTRA],
-  bagrut_math_5:   [...MATH_3PT_CONCEPTS, ...MATH_3PT_LEGACY_EXTRA, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA],
-  bagrut_physics:  PHYSICS_HS_CONCEPTS,
-  calculus1:       [
-    'limits', 'continuity', 'derivatives_intro', 'derivatives_rules',
-    'derivatives_applications', 'optimization_problems',
-    'integrals_intro', 'integrals_techniques',
-    'definite_integrals', 'integrals_applications', 'uni_sequences_series',
-  ],
-  linear_algebra:  ['la_vectors', 'la_matrices', 'la_determinants', 'la_eigenvalues'],
-  university_prep: [
-    ...MATH_5PT_EXTRA, 'continuity', 'uni_sequences_series',
-    'la_vectors', 'la_matrices',
-  ],
-  other: [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA, ...MATH_5PT_EXTRA, ...PHYSICS_HS_CONCEPTS],
-};
-
-/**
- * Key concepts for the self-assessment slider screen.
- * Capped to ≤10 items per goal so the screen stays approachable for a
- * stressed 17-year-old. These are the diagnostically most valuable concepts
- * for the AI to build the learner model from.
- */
-const SELF_SCORE_CONCEPTS_BY_GOAL: Partial<Record<Goal, string[]>> = {
-  bagrut_math_3: [
-    'arithmetic', 'algebra_basics', 'equations_quadratic',
-    'inequalities', 'functions_quadratic', 'trigonometry_ratios',
-    'sequences_arithmetic', 'geometry_basics',
-  ],
-  bagrut_math_4: [
-    'algebra_basics', 'equations_quadratic', 'inequalities',
-    'functions_quadratic', 'factoring', 'trigonometry_ratios',
-    'sequences_geometric', 'circles',
-  ],
-  bagrut_math_5: [
-    'equations_quadratic', 'functions_quadratic', 'factoring',
-    'logarithms', 'trigonometry_identities', 'analytic_geometry',
-    'derivatives_intro', 'integrals_intro',
-  ],
-  bagrut_physics: [
-    'kinematics_1d', 'newton_laws', 'work_energy', 'momentum',
-    'electrostatics', 'electric_circuits', 'waves_basics', 'optics_geometric',
-  ],
-  calculus1: [
-    'limits', 'derivatives_intro', 'derivatives_rules',
-    'derivatives_applications', 'integrals_intro', 'definite_integrals',
-  ],
-  linear_algebra: ['la_vectors', 'la_matrices', 'la_eigenvalues'],
-  university_prep: [
-    'limits', 'derivatives_intro', 'integrals_intro', 'la_vectors', 'la_matrices',
-  ],
-  other: [],
-};
-
-const ADULT_SELF_SCORE_BY_GOAL: Record<string, string[]> = {
-  bagrut_math: [
-    'algebra_basics', 'equations_quadratic', 'functions_quadratic',
-    'trigonometry_ratios', 'geometry_basics', 'probability_basic',
-  ],
-  university_course: ['limits', 'derivatives_intro', 'integrals_intro', 'la_vectors'],
-  general_improvement: ['arithmetic', 'algebra_basics', 'equations_linear', 'functions_intro'],
-};
 
 // ── Step components ──────────────────────────────────────────────────────────
 
@@ -688,12 +641,14 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [draftLoaded, setDraftLoaded] = useState(false);
 
   const [s1, setS1] = useState<Step1>({
     goal: '',
     goalOther: '',
     gradeLevel: '',
     pointsGroup: '',
+    targetUniversity: '',
     adultGoal: '',
     yearsGap: '',
     subjects: ['math'],
@@ -703,9 +658,11 @@ export default function OnboardingPage() {
   });
 
   const [s2, setS2] = useState<Step2>({
+    hoursAuto: true,
     hoursPerWeek: 5,
-    selfRating: 5,
-    teacherRating: 5,
+    pastExperience: 5,
+    teacherOverall: 'mixed',
+    teacherNotes: '',
     style: 'mixed',
     attentionSpan: 45,
   });
@@ -723,6 +680,33 @@ export default function OnboardingPage() {
   const [s4, setS4] = useState<Step4>({ selfScores: {} });
   const [tutorMode, setTutorMode] = useState<TutorMode>('direct');
 
+  useEffect(() => {
+    const draft = loadOnboardingDraft();
+    if (draft) {
+      setStep(draft.step);
+      setS1((prev) => ({ ...prev, ...(draft.s1 as Partial<Step1>) }));
+      setS2((prev) => ({ ...prev, ...(draft.s2 as Partial<Step2>) }));
+      setS3((prev) => ({ ...prev, ...(draft.s3 as Partial<Step3>) }));
+      setS4((prev) => ({ ...prev, ...(draft.s4 as Partial<Step4>) }));
+      if (draft.tutorMode === 'direct' || draft.tutorMode === 'socratic') {
+        setTutorMode(draft.tutorMode);
+      }
+    }
+    setDraftLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!draftLoaded) return;
+    saveOnboardingDraft({
+      step,
+      s1: s1 as unknown as Record<string, unknown>,
+      s2: s2 as unknown as Record<string, unknown>,
+      s3: s3 as unknown as Record<string, unknown>,
+      s4: s4 as unknown as Record<string, unknown>,
+      tutorMode,
+    });
+  }, [step, s1, s2, s3, s4, tutorMode, draftLoaded]);
+
   function toggleSubject(sub: Subject) {
     setS1((prev) => ({
       ...prev,
@@ -739,38 +723,30 @@ export default function OnboardingPage() {
     }));
   }
 
-  // Build the self-assessment concept list.
-  // Uses curated short-lists (≤10 items) from SELF_SCORE_CONCEPTS_BY_GOAL
-  // for known goals. Falls back to the full goal list for "other".
-  // Capped to MAX_SELF_SCORE = 10 regardless to prevent overwhelm.
-  const MAX_SELF_SCORE = 10;
+  // Foundational self-assessment topics — see onboarding-self-score.ts
+  const MAX_SELF_SCORE = 8;
   const isAdultLearner = s1.gradeLevel === 'adult_learner';
-  const conceptsForStep4: ConceptEntry[] = (() => {
-    if (isAdultLearner && s1.adultGoal) {
-      const curated = ADULT_SELF_SCORE_BY_GOAL[s1.adultGoal];
-      if (curated) return curated.slice(0, MAX_SELF_SCORE).map(conceptEntry);
-    }
-    if (s1.goal && s1.goal !== 'other') {
-      const curated = SELF_SCORE_CONCEPTS_BY_GOAL[s1.goal];
-      if (curated) return curated.slice(0, MAX_SELF_SCORE).map(conceptEntry);
-      // Fallback to full list capped to MAX_SELF_SCORE
-      return (CONCEPTS_BY_GOAL[s1.goal] ?? []).slice(0, MAX_SELF_SCORE).map(conceptEntry);
-    }
-    // Fallback when goal is unset or 'other'
-    const mathIds = s1.subjects.includes('math')
-      ? [...MATH_3PT_CONCEPTS, ...MATH_4PT_EXTRA]
-      : [];
-    const physicsIds = s1.subjects.includes('physics')
-      ? PHYSICS_HS_CONCEPTS.slice(0, 6)
-      : [];
-    return [...new Set([...mathIds, ...physicsIds])].slice(0, MAX_SELF_SCORE).map(conceptEntry);
-  })();
+  const conceptsForStep4: ConceptEntry[] = resolveSelfScoreConceptIds({
+    goal: s1.goal,
+    adultGoal: s1.adultGoal,
+    isAdultLearner,
+    subjects: s1.subjects,
+    gradeLevel: s1.gradeLevel,
+    pointsGroup: s1.pointsGroup,
+    max: MAX_SELF_SCORE,
+  }).map(conceptEntry);
 
   const needsPointsGroup =
-    s1.subjects.includes('math') &&
-    !isAdultLearner &&
-    s1.gradeLevel !== 'university_1' &&
-    s1.gradeLevel !== 'university_2plus';
+    HS_BAGRUT_GRADES.has(s1.gradeLevel) && s1.subjects.includes('math');
+
+  const needsUniversity =
+    s1.gradeLevel === 'pre_university' ||
+    s1.gradeLevel === 'university_1' ||
+    s1.gradeLevel === 'university_2plus' ||
+    (isAdultLearner && s1.adultGoal === 'university_course') ||
+    s1.goal === 'calculus1' ||
+    s1.goal === 'linear_algebra' ||
+    s1.goal === 'university_prep';
 
   const isPhysicsOnly =
     s1.subjects.includes('physics') && !s1.subjects.includes('math');
@@ -798,6 +774,12 @@ export default function OnboardingPage() {
         : s1.goal === 'other'
           ? s1.goalOther
           : (GOALS.find((g) => g.value === s1.goal)?.label_en ?? s1.goal);
+      const teacherSummary = isAdultLearner
+        ? ''
+        : `Teacher experience: ${s2.teacherOverall}.`;
+      const teacherDetail = s2.teacherNotes.trim()
+        ? ` Teacher notes: ${s2.teacherNotes.trim()}`
+        : '';
       const res = await fetch('/api/onboarding/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -806,13 +788,13 @@ export default function OnboardingPage() {
           grade_level: s1.gradeLevel,
           points_group: resolvePointsGroupForSubmit(),
           subjects: s1.subjects,
-          hours_per_week: s2.hoursPerWeek,
+          hours_per_week: s2.hoursAuto ? 6 : s2.hoursPerWeek,
           preferred_style: s2.style,
           attention_span: s2.attentionSpan,
           self_scores: s4.selfScores,
           background_notes: isAdultLearner
-            ? `Self-rating: ${s2.selfRating}/10. Years since last math study: ${s1.yearsGap}.`
-            : `Self-rating: ${s2.selfRating}/10. Teacher rating: ${s2.teacherRating}/10.`,
+            ? `Past learning experience: ${s2.pastExperience}/10. Years since last math study: ${s1.yearsGap}.${teacherDetail}`
+            : `Past learning experience: ${s2.pastExperience}/10. ${teacherSummary}${teacherDetail}`,
           next_test_name: s1.nextTestName || null,
           next_test_date: s1.nextTestDate || null,
           final_goal_date: s1.finalGoalDate || null,
@@ -826,14 +808,19 @@ export default function OnboardingPage() {
             has_quiet_space: s3.hasQuietSpace,
             support_system: s3.supportSystem,
             why_this_goal: s3.whyThisGoal,
+            target_university: s1.targetUniversity || null,
           },
           personality_profile: {
-            ...(isAdultLearner ? {} : { past_teacher_rating: s2.teacherRating }),
-            self_rating: s2.selfRating,
+            past_teacher_experience: isAdultLearner ? null : s2.teacherOverall,
+            past_teacher_notes: s2.teacherNotes.trim() || null,
+            self_rating: s2.pastExperience,
             learning_style: s2.style,
             attention_span_min: s2.attentionSpan,
-            hours_per_week: s2.hoursPerWeek,
+            attention_span_unknown: s2.attentionSpan == null,
+            hours_per_week: s2.hoursAuto ? null : s2.hoursPerWeek,
+            hours_per_week_auto: s2.hoursAuto,
             goal_key: isAdultLearner ? s1.adultGoal : s1.goal || null,
+            target_university: s1.targetUniversity || null,
             ...(isAdultLearner
               ? { adult_learner: true, years_gap: s1.yearsGap, adult_goal: s1.adultGoal }
               : {}),
@@ -842,6 +829,7 @@ export default function OnboardingPage() {
         }),
       });
       if (!res.ok) throw new Error(await res.text());
+      clearOnboardingDraft();
       router.push('/diagnostic');
     } catch (err) {
       setError(err instanceof Error ? err.message : t.errorGeneric);
@@ -943,12 +931,9 @@ export default function OnboardingPage() {
               </div>
               {needsPointsGroup && (
                 <div>
-                  <label
-                    htmlFor="points-group"
-                    className="mb-1.5 block text-xs text-muted-foreground"
-                  >
+                  <FieldLabel hint={t.s0_unitsHint} className="mb-1.5 block text-xs">
                     {t.s0_units}
-                  </label>
+                  </FieldLabel>
                   <select
                     id="points-group"
                     value={s1.pointsGroup}
@@ -970,6 +955,32 @@ export default function OnboardingPage() {
                 </div>
               )}
             </div>
+
+            {needsUniversity ? (
+              <div>
+                <FieldLabel hint={t.s0_universityHint} className="mb-1.5 block text-xs">
+                  {t.s0_university}
+                </FieldLabel>
+                <select
+                  id="target-university"
+                  value={s1.targetUniversity}
+                  onChange={(e) =>
+                    setS1((p) => ({ ...p, targetUniversity: e.target.value }))
+                  }
+                  className={inputCls}
+                  required
+                >
+                  <option value="" disabled>
+                    {lang === 'he' ? 'בחר/י מוסד…' : 'Select institution…'}
+                  </option>
+                  {UNIVERSITIES.map((u) => (
+                    <option key={u.value} value={u.value}>
+                      {lang === 'he' ? u.label_he : u.label_en}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
 
             {isAdultLearner ? (
               <>
@@ -1071,6 +1082,7 @@ export default function OnboardingPage() {
               disabled={
                 s1.subjects.length === 0 ||
                 !s1.gradeLevel ||
+                (needsUniversity && !s1.targetUniversity) ||
                 (isAdultLearner
                   ? !s1.adultGoal || !s1.yearsGap
                   : !s1.goal || (needsPointsGroup && !s1.pointsGroup))
@@ -1091,33 +1103,92 @@ export default function OnboardingPage() {
               <p className="text-sm text-muted-foreground">{t.s1_sub}</p>
             </div>
 
-            <SliderField
-              label={t.s1_hours}
-              min={1}
-              max={20}
-              value={s2.hoursPerWeek}
-              onChange={(v) => setS2((p) => ({ ...p, hoursPerWeek: v }))}
-              displayValue={`${s2.hoursPerWeek} ${t.s1_hoursUnit}`}
-            />
+            <div className="space-y-3">
+              <FieldLabel hint={t.s1_hoursHint} className="block">
+                {t.s1_hours}
+              </FieldLabel>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={s2.hoursAuto}
+                  onChange={(e) =>
+                    setS2((p) => ({ ...p, hoursAuto: e.target.checked }))
+                  }
+                  className="accent-cyan-400"
+                />
+                {t.s1_hoursAuto}
+              </label>
+              {!s2.hoursAuto ? (
+                <SliderField
+                  label={t.s1_hours}
+                  min={2}
+                  max={25}
+                  value={s2.hoursPerWeek}
+                  onChange={(v) => setS2((p) => ({ ...p, hoursPerWeek: v }))}
+                  displayValue={`${s2.hoursPerWeek} ${t.s1_hoursUnit}`}
+                />
+              ) : null}
+            </div>
 
             <SliderField
-              label={t.s1_selfRating}
+              label={t.s1_pastExperience}
               min={1}
               max={10}
-              value={s2.selfRating}
-              onChange={(v) => setS2((p) => ({ ...p, selfRating: v }))}
-              displayValue={`${s2.selfRating}/10`}
+              value={s2.pastExperience}
+              onChange={(v) => setS2((p) => ({ ...p, pastExperience: v }))}
+              displayValue={`${s2.pastExperience}/10`}
+              hint={t.s1_pastExperienceHint}
             />
 
             {!isAdultLearner ? (
-              <SliderField
-                label={t.s1_teacherRating}
-                min={1}
-                max={10}
-                value={s2.teacherRating}
-                onChange={(v) => setS2((p) => ({ ...p, teacherRating: v }))}
-                displayValue={`${s2.teacherRating}/10`}
-              />
+              <>
+                <div>
+                  <FieldLabel className="mb-2 block">{t.s1_teacherOverall}</FieldLabel>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {(
+                      [
+                        { v: 'mostly_good', label: t.s1_teacher_good },
+                        { v: 'mixed', label: t.s1_teacher_mixed },
+                        { v: 'mostly_bad', label: t.s1_teacher_bad },
+                        { v: 'unknown', label: t.s1_teacher_unknown },
+                      ] as const
+                    ).map(({ v, label }) => (
+                      <button
+                        key={v}
+                        type="button"
+                        onClick={() => setS2((p) => ({ ...p, teacherOverall: v }))}
+                        className={cn(
+                          'rounded-lg border py-2.5 text-xs font-medium transition-colors',
+                          s2.teacherOverall === v
+                            ? 'border-accent-cyan bg-accent-cyan/10 text-foreground'
+                            : 'border-border bg-card text-muted-foreground hover:border-border-bright hover:text-foreground',
+                        )}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor="teacher-notes"
+                    className="mb-1.5 block text-xs text-muted-foreground"
+                  >
+                    {t.s1_teacherNotes}
+                  </label>
+                  <textarea
+                    id="teacher-notes"
+                    rows={2}
+                    placeholder={t.s1_teacherNotesPh}
+                    value={s2.teacherNotes}
+                    onChange={(e) =>
+                      setS2((p) => ({ ...p, teacherNotes: e.target.value }))
+                    }
+                    className={cn(inputCls, 'resize-none')}
+                    dir="auto"
+                  />
+                </div>
+              </>
             ) : null}
 
             <div>
@@ -1148,17 +1219,16 @@ export default function OnboardingPage() {
             </div>
 
             <div>
-              <p className="mb-2 block text-sm text-muted-foreground">
-                {t.s1_attention}
-              </p>
-              <div className="grid grid-cols-3 gap-2">
+              <FieldLabel className="mb-2 block">{t.s1_attention}</FieldLabel>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {[
                   { v: 20, label: t.s1_attention_20 },
                   { v: 45, label: t.s1_attention_45 },
                   { v: 90, label: t.s1_attention_90 },
+                  { v: null, label: t.s1_attention_unknown },
                 ].map(({ v, label }) => (
                   <button
-                    key={v}
+                    key={String(v)}
                     type="button"
                     onClick={() => setS2((p) => ({ ...p, attentionSpan: v }))}
                     className={cn(
@@ -1227,7 +1297,9 @@ export default function OnboardingPage() {
             />
 
             <div>
-              <p className="mb-2 block text-sm text-muted-foreground">{t.s2_when}</p>
+              <FieldLabel hint={t.s2_whenHint} className="mb-2 block">
+                {t.s2_when}
+              </FieldLabel>
               <div className="grid grid-cols-4 gap-2">
                 {(
                   [
@@ -1279,7 +1351,9 @@ export default function OnboardingPage() {
                 </div>
               </div>
               <div>
-                <p className="mb-2 block text-sm text-muted-foreground">{t.s2_support}</p>
+                <FieldLabel hint={t.s2_supportHint} className="mb-2 block">
+                  {t.s2_support}
+                </FieldLabel>
                 <div className="flex gap-2">
                   {(
                     [

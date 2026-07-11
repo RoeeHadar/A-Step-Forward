@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { Locale } from '@/i18n/config';
 import { defaultLocale } from '@/i18n/config';
 import {
@@ -35,6 +35,7 @@ function syncDocumentLocale(locale: Locale) {
 /** Re-fetch server components after cookie locale changes (learn catalog, etc.). */
 function LocaleRouterRefresh({ locale }: { locale: Locale }) {
   const router = useRouter();
+  const pathname = usePathname();
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -42,8 +43,10 @@ function LocaleRouterRefresh({ locale }: { locale: Locale }) {
       isFirstRender.current = false;
       return;
     }
+    // Keep in-progress onboarding answers when toggling EN/עב.
+    if (pathname?.startsWith('/onboarding')) return;
     router.refresh();
-  }, [locale, router]);
+  }, [locale, router, pathname]);
 
   return null;
 }
