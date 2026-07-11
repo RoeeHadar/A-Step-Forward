@@ -372,7 +372,7 @@ export interface DiagnosticQuestion {
 export async function startDiagnosticSession(
   learnerId: string,
   subjects: string[],
-  itemIds: string[],
+  sessionResults: Record<string, unknown>,
 ): Promise<string> {
   const s = requireSql();
   const id = randomUUID();
@@ -382,11 +382,23 @@ export async function startDiagnosticSession(
     )
     VALUES (
       ${id}, ${learnerId}, 'active', ${subjects}, 0,
-      ${JSON.stringify({ item_ids: itemIds, subjects })}::jsonb,
+      ${JSON.stringify({ ...sessionResults, subjects })}::jsonb,
       NOW()
     )
   `;
   return id;
+}
+
+export async function updateDiagnosticSessionResults(
+  sessionId: string,
+  sessionResults: Record<string, unknown>,
+): Promise<void> {
+  const s = requireSql();
+  await s`
+    UPDATE diagnostic_sessions
+    SET results = ${JSON.stringify(sessionResults)}::jsonb
+    WHERE id = ${sessionId}
+  `;
 }
 
 function isMissingDiagnosticColumnError(err: unknown): boolean {
@@ -427,6 +439,83 @@ export async function getDiagnosticItemById(itemId: string): Promise<DiagnosticI
              stem, options, source_concept
       FROM diagnostic_items
       WHERE id = ${itemId}::uuid
+      LIMIT 1
+    `) as Array<Omit<DiagnosticItem, 'stem_he' | 'options_he' | 'explanation_he'>>;
+    const row = rows[0];
+    if (!row) return null;
+    return { ...row, stem_he: null, options_he: null, explanation_he: null };
+  }
+}
+
+/** Pick one syllabus-scoped MCQ for a concept at ~target difficulty (profile-driven diagnostic). */
+export async function fetchDiagnosticItemForConcept(
+  conceptId: string,
+  profile: LearnerProfileRow,
+  excludeItemIds: string[],
+  targetDifficulty: number,
+): Promise<DiagnosticItem | null> {
+  const { allowedLevelsForProfile, conceptAllowedForProfile } = await import(
+    './quiz-concept-filter'
+  );
+  if (!conceptAllowedForProfile(conceptId, profile)) return null;
+
+  const s = requireSql();
+  const subjects = (profile.subjects ?? []).filter((x) => x === 'math' || x === 'physics');
+  const subjectFilter = subjects.length > 0 ? subjects : ['math'];
+  const allowed = allowedLevelsForProfile(profile.points_group, profile.subjects);
+  const exclude = excludeItemIds.length > 0 ? excludeItemIds : ['00000000-0000-0000-0000-000000000000'];
+  const target = Math.max(1, Math.min(10, targetDifficulty));
+
+  const runQuery = async (strictLevels: boolean) => {
+    if (strictLevels && allowed.size > 0) {
+      const levels = [...allowed];
+      return (await s`
+        SELECT id::text, topic, subject, difficulty::float AS difficulty,
+               stem, options, source_concept,
+               stem_he, options_he, explanation_he
+        FROM diagnostic_items
+        WHERE topic = ${conceptId}
+          AND subject = ANY(${subjectFilter})
+          AND id <> ALL(${exclude}::uuid[])
+          AND NOT (stem LIKE 'Which statement best describes%')
+          AND points_levels IS NOT NULL
+          AND points_levels && ${levels}::text[]
+        ORDER BY ABS(difficulty - ${target}), random()
+        LIMIT 1
+      `) as DiagnosticItem[];
+    }
+    return (await s`
+      SELECT id::text, topic, subject, difficulty::float AS difficulty,
+             stem, options, source_concept,
+             stem_he, options_he, explanation_he
+      FROM diagnostic_items
+      WHERE topic = ${conceptId}
+        AND subject = ANY(${subjectFilter})
+        AND id <> ALL(${exclude}::uuid[])
+        AND NOT (stem LIKE 'Which statement best describes%')
+      ORDER BY ABS(difficulty - ${target}), random()
+      LIMIT 1
+    `) as DiagnosticItem[];
+  };
+
+  try {
+    let rows = await runQuery(true);
+    if (rows.length === 0 && allowed.size > 0) {
+      rows = await runQuery(false);
+    }
+    const row = rows[0];
+    if (!row || isTemplateDiagnosticStem(row.stem)) return null;
+    return row;
+  } catch (err) {
+    if (!isMissingDiagnosticColumnError(err)) throw err;
+    const rows = (await s`
+      SELECT id::text, topic, subject, difficulty::float AS difficulty,
+             stem, options, source_concept
+      FROM diagnostic_items
+      WHERE topic = ${conceptId}
+        AND subject = ANY(${subjectFilter})
+        AND id <> ALL(${exclude}::uuid[])
+      ORDER BY ABS(difficulty - ${target}), random()
       LIMIT 1
     `) as Array<Omit<DiagnosticItem, 'stem_he' | 'options_he' | 'explanation_he'>>;
     const row = rows[0];
@@ -617,14 +706,19 @@ export async function bumpDiagnosticIdx(sessionId: string): Promise<number> {
 export async function completeDiagnostic(
   sessionId: string,
   learnerId: string,
+  sessionResults?: Record<string, unknown>,
 ): Promise<Record<string, number>> {
   const s = requireSql();
   const mastery = await getConceptMastery(learnerId);
+  const resultsPayload = {
+    ...(sessionResults ?? {}),
+    mastery_by_topic: mastery,
+  };
   await s`
     UPDATE diagnostic_sessions
     SET status = 'completed',
         completed_at = NOW(),
-        results = ${JSON.stringify({ mastery_by_topic: mastery })}::jsonb
+        results = ${JSON.stringify(resultsPayload)}::jsonb
     WHERE id = ${sessionId}
   `;
 
@@ -633,6 +727,32 @@ export async function completeDiagnostic(
   });
 
   return mastery;
+}
+
+/** Persist diagnostic summary + weak/strong lists for agents and plan generation. */
+export async function persistDiagnosticSummary(
+  learnerId: string,
+  summary: import('./diagnostic-plan').DiagnosticSummary,
+): Promise<void> {
+  const s = requireSql();
+  const rows = (await s`
+    SELECT mental_state FROM learner_profiles WHERE learner_id = ${learnerId} LIMIT 1
+  `) as Array<{ mental_state: Record<string, unknown> | null }>;
+  const prior = rows[0]?.mental_state ?? {};
+  const mental_state = {
+    ...prior,
+    diagnostic_summary: summary,
+    diagnostic_completed_at: summary.completed_at,
+  };
+
+  await s`
+    UPDATE learner_profiles
+    SET mental_state = ${JSON.stringify(mental_state)}::jsonb,
+        weak_concepts = ${summary.weak_concepts},
+        strong_concepts = ${summary.strong_concepts},
+        updated_at = NOW()
+    WHERE learner_id = ${learnerId}
+  `;
 }
 
 // ── Plan generation ──────────────────────────────────────────────────────────
@@ -720,7 +840,17 @@ export async function generateLearningPlan(
 
   const excludeConcepts = sanitizeConceptIds(options.excludeConcepts);
   const prependConcepts = sanitizeConceptIds(options.prependConcepts);
-  const priorityConcepts = sanitizeConceptIds(options.priorityConcepts);
+  const diagnosticFocus = sanitizeConceptIds([
+    ...(profile.weak_concepts ?? []),
+    ...(
+      (profile.mental_state as { diagnostic_summary?: { plan_focus_concepts?: string[] } } | null)
+        ?.diagnostic_summary?.plan_focus_concepts ?? []
+    ),
+  ]);
+  const priorityConcepts = sanitizeConceptIds([
+    ...(options.priorityConcepts ?? []),
+    ...diagnosticFocus,
+  ]);
 
   const goalText = options.goalOverride?.trim() || profile.goal;
 

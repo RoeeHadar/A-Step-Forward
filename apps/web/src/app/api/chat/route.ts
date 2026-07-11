@@ -74,6 +74,8 @@ import { resolveWebChatAgent } from '@/lib/web-agents';
 import { daysUntilExam, ANXIETY_THRESHOLD } from '@/lib/wellbeing-plan-bias';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
 import { masterySignalInScope } from '@/lib/concept-scope';
+import { formatDiagnosticSummaryForAgents } from '@/lib/diagnostic-service';
+import type { DiagnosticSummary } from '@/lib/diagnostic-plan';
 import {
   buildCoachDifficultyInstruction,
   buildCoachExamPrepBlock,
@@ -800,6 +802,17 @@ async function buildContextPrompt(
     context += `\n\n## Mastery so far`;
     if (weakConcepts.length) context += `\n- Weak areas: ${weakConcepts.join(', ')}`;
     if (strongConcepts.length) context += `\n- Strong areas: ${strongConcepts.join(', ')}`;
+  }
+
+  const diagnosticSummary = (
+    profile?.mental_state as { diagnostic_summary?: { agent_brief_en?: string; agent_brief_he?: string } } | null
+  )?.diagnostic_summary;
+  if (profile && diagnosticSummary?.agent_brief_en) {
+    const lang =
+      (profile.personality_profile as { ui_lang?: string } | null)?.ui_lang === 'he'
+        ? 'he'
+        : 'en';
+    context += `\n\n${formatDiagnosticSummaryForAgents(diagnosticSummary as DiagnosticSummary, lang)}`;
   }
 
   if (profile && (agent === 'mentor' || agent === 'tutor')) {
