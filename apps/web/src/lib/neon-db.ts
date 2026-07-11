@@ -406,6 +406,41 @@ function isMissingDiagnosticColumnError(err: unknown): boolean {
   return /column .* does not exist/i.test(msg);
 }
 
+function isMissingRelationError(err: unknown, relation: string): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return new RegExp(`relation "${relation}" does not exist`, 'i').test(msg);
+}
+
+async function fetchSuggestedContentSections(
+  subject: string,
+): Promise<Array<{ id: string; title: string; chunk_index: number | null; page_start: number | null }>> {
+  const s = requireSql();
+  try {
+    return (await s`
+      SELECT id::text, title, chunk_index, page_start
+      FROM content_sections WHERE subject = ${subject} ORDER BY chunk_index LIMIT 3
+    `) as Array<{ id: string; title: string; chunk_index: number | null; page_start: number | null }>;
+  } catch (err) {
+    if (isMissingRelationError(err, 'content_sections')) return [];
+    throw err;
+  }
+}
+
+async function fetchRecommendedBagrutExams(
+  subject: string,
+): Promise<Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>> {
+  const s = requireSql();
+  try {
+    return (await s`
+      SELECT display_name, file_url, year, exam_type
+      FROM bagrut_exams WHERE subject = ${subject} ORDER BY year DESC NULLS LAST LIMIT 2
+    `) as Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
+  } catch (err) {
+    if (isMissingRelationError(err, 'bagrut_exams')) return [];
+    throw err;
+  }
+}
+
 export function isTemplateDiagnosticStem(stem: string): boolean {
   return (
     /Which statement best describes|A statement that does not apply to|generic unrelated fact|עובדה כללית ולא קשורה|משפט שלא מתאים ל-|איזה משפט מתאר|\[Difficulty \d+\/10\]/i.test(
@@ -453,10 +488,12 @@ export async function fetchDiagnosticItemForConcept(
   profile: LearnerProfileRow,
   excludeItemIds: string[],
   targetDifficulty: number,
+  slotKind: 'basic' | 'medium' | 'hard' | 'verbal' = 'medium',
 ): Promise<DiagnosticItem | null> {
   const { allowedLevelsForProfile, conceptAllowedForProfile } = await import(
     './quiz-concept-filter'
   );
+  const { stemAllowedForProfile, stemMatchesSlotKind } = await import('./diagnostic-stem-filter');
   if (!conceptAllowedForProfile(conceptId, profile)) return null;
 
   const s = requireSql();
@@ -466,7 +503,20 @@ export async function fetchDiagnosticItemForConcept(
   const exclude = excludeItemIds.length > 0 ? excludeItemIds : ['00000000-0000-0000-0000-000000000000'];
   const target = Math.max(1, Math.min(10, targetDifficulty));
 
-  const runQuery = async (strictLevels: boolean) => {
+  const pickFromRows = (rows: DiagnosticItem[]): DiagnosticItem | null => {
+    const filtered = rows.filter(
+      (row) =>
+        !isTemplateDiagnosticStem(row.stem) &&
+        stemAllowedForProfile(row.stem, profile) &&
+        stemMatchesSlotKind(row.stem, slotKind),
+    );
+    const pool = filtered.length > 0 ? filtered : rows.filter((row) => stemAllowedForProfile(row.stem, profile));
+    const row = pool[0];
+    if (!row || isTemplateDiagnosticStem(row.stem)) return null;
+    return row;
+  };
+
+  const runQuery = async (strictLevels: boolean, candidateLimit: number) => {
     if (strictLevels && allowed.size > 0) {
       const levels = [...allowed];
       return (await s`
@@ -481,7 +531,7 @@ export async function fetchDiagnosticItemForConcept(
           AND points_levels IS NOT NULL
           AND points_levels && ${levels}::text[]
         ORDER BY ABS(difficulty - ${target}), random()
-        LIMIT 1
+        LIMIT ${candidateLimit}
       `) as DiagnosticItem[];
     }
     return (await s`
@@ -494,18 +544,26 @@ export async function fetchDiagnosticItemForConcept(
         AND id <> ALL(${exclude}::uuid[])
         AND NOT (stem LIKE 'Which statement best describes%')
       ORDER BY ABS(difficulty - ${target}), random()
-      LIMIT 1
+      LIMIT ${candidateLimit}
     `) as DiagnosticItem[];
   };
 
   try {
-    let rows = await runQuery(true);
+    let rows = await runQuery(true, 16);
     if (rows.length === 0 && allowed.size > 0) {
-      rows = await runQuery(false);
+      rows = await runQuery(false, 16);
     }
-    const row = rows[0];
-    if (!row || isTemplateDiagnosticStem(row.stem)) return null;
-    return row;
+    const picked = pickFromRows(rows);
+    if (picked) return picked;
+
+    if (slotKind === 'verbal') {
+      rows = await runQuery(true, 24);
+      const verbalFallback = rows.find(
+        (row) => stemAllowedForProfile(row.stem, profile) && !isTemplateDiagnosticStem(row.stem),
+      );
+      if (verbalFallback) return verbalFallback;
+    }
+    return null;
   } catch (err) {
     if (!isMissingDiagnosticColumnError(err)) throw err;
     const rows = (await s`
@@ -516,11 +574,17 @@ export async function fetchDiagnosticItemForConcept(
         AND subject = ANY(${subjectFilter})
         AND id <> ALL(${exclude}::uuid[])
       ORDER BY ABS(difficulty - ${target}), random()
-      LIMIT 1
+      LIMIT 16
     `) as Array<Omit<DiagnosticItem, 'stem_he' | 'options_he' | 'explanation_he'>>;
-    const row = rows[0];
-    if (!row) return null;
-    return { ...row, stem_he: null, options_he: null, explanation_he: null };
+    const mapped = rows.map((row) => ({
+      ...row,
+      stem_he: null,
+      options_he: null,
+      explanation_he: null,
+    }));
+    const picked = pickFromRows(mapped);
+    if (!picked) return null;
+    return picked;
   }
 }
 
@@ -999,14 +1063,8 @@ export async function generateLearningPlan(
     for (const cid of concepts) {
       const kgInfo = kgById[cid];
       const subject = kgInfo?.subject ?? inferSubject(cid, profile.subjects);
-      const sections = (await s`
-        SELECT id::text, title, chunk_index, page_start
-        FROM content_sections WHERE subject = ${subject} ORDER BY chunk_index LIMIT 3
-      `) as Array<{ id: string; title: string; chunk_index: number | null; page_start: number | null }>;
-      const bagrut = (await s`
-        SELECT display_name, file_url, year, exam_type
-        FROM bagrut_exams WHERE subject = ${subject} ORDER BY year DESC NULLS LAST LIMIT 2
-      `) as Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
+      const sections = await fetchSuggestedContentSections(subject);
+      const bagrut = await fetchRecommendedBagrutExams(subject);
       const titles = resolveConceptTitles(cid);
       hydrated.push({
         concept_id: cid,
@@ -1343,14 +1401,8 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     for (const cid of w.concepts) {
       const kgInfo = kgById[cid];
       const subject = kgInfo?.subject ?? inferSubject(cid, subjects);
-      const sections = (await s`
-        SELECT id::text, title, chunk_index, page_start
-        FROM content_sections WHERE subject = ${subject} ORDER BY chunk_index LIMIT 3
-      `) as Array<{ id: string; title: string; chunk_index: number | null; page_start: number | null }>;
-      const bagrut = (await s`
-        SELECT display_name, file_url, year, exam_type
-        FROM bagrut_exams WHERE subject = ${subject} ORDER BY year DESC NULLS LAST LIMIT 2
-      `) as Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
+      const sections = await fetchSuggestedContentSections(subject);
+      const bagrut = await fetchRecommendedBagrutExams(subject);
       const titles = resolveConceptTitles(cid);
       hydrated.push({
         concept_id: cid,

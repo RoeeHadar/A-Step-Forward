@@ -45,15 +45,16 @@ interface DiagnosticQuestion {
  */
 const STR = {
   he: {
-    question_n_of: (n: number, total: number) => `שאלה ${n} מתוך ~${total}`,
+    question_n_of: (n: number, total: number) => `שאלה ${n} מתוך ${total}`,
     loading: 'טוען את האבחון שלך…',
     loadFailed: 'לא הצלחנו לטעון את האבחון.',
     retry: 'נסה שוב',
     contactSupport: 'אם זה חוזר, התנתק/י והתחבר/י מחדש, או פנה/י לתמיכה.',
     submit: 'שלח תשובה',
     checking: 'בודק…',
-    your_mastery: 'פרופיל השליטה שלך',
-    based_on: (n: number) => `מבוסס על ${n} שאלות מותאמות לפי תחומי הלימוד שלך.`,
+    your_mastery: 'סיימנו את האבחון',
+    based_on: (n: number) =>
+      `כיול ראשוני מ-${n} שאלות אימות — כל נושא נבדק ברמת קושי שמתאימה לדירוג העצמי שלך. התוכנית תיבנה על בסיס זה.`,
     generate_plan: 'יצירת תוכנית הלמידה שלי ←',
     generating: 'יוצר…',
     no_mastery: 'אין עדיין נתוני שליטה.',
@@ -62,15 +63,16 @@ const STR = {
     lang_toggle: 'EN',
   },
   en: {
-    question_n_of: (n: number, total: number) => `Question ${n} of ~${total}`,
+    question_n_of: (n: number, total: number) => `Question ${n} of ${total}`,
     loading: 'Loading your diagnostic…',
     loadFailed: 'We could not load your diagnostic.',
     retry: 'Try again',
     contactSupport: 'If this keeps happening, sign out and back in, or contact support.',
     submit: 'Submit answer',
     checking: 'Checking…',
-    your_mastery: 'Your mastery profile',
-    based_on: (n: number) => `Based on ${n} adaptive questions across your topics.`,
+    your_mastery: 'Diagnostic complete',
+    based_on: (n: number) =>
+      `Initial calibration from ${n} validation questions — each topic was tested at the difficulty matching your self-rating. Your plan will build on this.`,
     generate_plan: 'Generate my learning plan →',
     generating: 'Generating…',
     no_mastery: 'No mastery data yet.',
@@ -214,7 +216,7 @@ export default function DiagnosticPage() {
     setError('');
     try {
       const res = await fetch('/api/plans/generate', { method: 'POST' });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) throw new Error(await readApiErrorMessage(res));
       router.push('/app');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Plan generation failed');

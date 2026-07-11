@@ -3,8 +3,17 @@
  */
 import kg from '@/lib/kg-data.json';
 import { canonicalConceptId } from '@/lib/plan-catalog';
+import { DIAGNOSTIC_QUESTIONS_PER_SESSION } from '@/lib/diagnostic-start';
 
-export const DIAGNOSTIC_SESSION_VERSION = 2;
+export const DIAGNOSTIC_SESSION_VERSION = 3;
+
+export type ValidationSlotKind = 'basic' | 'medium' | 'hard' | 'verbal';
+
+export interface ValidationSlot {
+  concept_id: string;
+  target_difficulty: number;
+  slot_kind: ValidationSlotKind;
+}
 
 export interface DiagnosticResponse {
   item_id: string;
@@ -18,11 +27,12 @@ export interface DiagnosticSessionPayload {
   version: typeof DIAGNOSTIC_SESSION_VERSION;
   goal_concept_id: string | null;
   probe_concepts: string[];
+  /** Fixed 12-slot validation plan — two probes per self-scored concept tier. */
+  validation_queue: ValidationSlot[];
+  queue_index: number;
   responses: DiagnosticResponse[];
   asked_item_ids: string[];
-  /** Next concept slot in probe_concepts (adaptive advance on success). */
-  concept_index: number;
-  /** Per-topic difficulty for CAT-style adjustment. */
+  /** Per-topic difficulty for CAT-style adjustment within a concept. */
   difficulty_by_topic: Record<string, number>;
 }
 
@@ -56,26 +66,91 @@ interface KgConceptLite {
 
 const kgById: Record<string, KgConceptLite> = (kg as { byId: Record<string, KgConceptLite> }).byId;
 
+export function selfScoreTier(score: number): 'weak' | 'ok' | 'strong' {
+  if (score <= 4) return 'weak';
+  if (score <= 7) return 'ok';
+  return 'strong';
+}
+
+/** Validation difficulty from claimed self-score: weak→basic, ok→medium, strong→hard. */
+export function validationDifficultyForSelfScore(
+  selfScore: number | undefined,
+  slotOffset = 0,
+): number {
+  const score = selfScore ?? 5;
+  const tier = selfScoreTier(score);
+  if (tier === 'weak') return slotOffset === 0 ? 3 : 4;
+  if (tier === 'ok') return slotOffset === 0 ? 5 : 6;
+  return slotOffset === 0 ? 8 : 9;
+}
+
+/** @deprecated use validationDifficultyForSelfScore */
+export function selfScoreToDifficulty(selfScore: number | undefined): number {
+  return validationDifficultyForSelfScore(selfScore, 0);
+}
+
+export function buildValidationQueue(
+  probeConcepts: string[],
+  selfScores: Record<string, number> | null,
+  total = DIAGNOSTIC_QUESTIONS_PER_SESSION,
+): ValidationSlot[] {
+  const conceptIds = orderProbeConcepts(probeConcepts, selfScores, Math.ceil(total / 2));
+  const slots: ValidationSlot[] = [];
+
+  for (const conceptId of conceptIds) {
+    if (slots.length >= total) break;
+    const score = selfScores?.[conceptId] ?? 5;
+    const tier = selfScoreTier(score);
+
+    if (tier === 'weak') {
+      slots.push({ concept_id: conceptId, target_difficulty: 3, slot_kind: 'basic' });
+      slots.push({ concept_id: conceptId, target_difficulty: 4, slot_kind: 'basic' });
+    } else if (tier === 'ok') {
+      slots.push({ concept_id: conceptId, target_difficulty: 5, slot_kind: 'medium' });
+      slots.push({ concept_id: conceptId, target_difficulty: 6, slot_kind: 'medium' });
+    } else {
+      slots.push({ concept_id: conceptId, target_difficulty: 8, slot_kind: 'hard' });
+      slots.push({ concept_id: conceptId, target_difficulty: 9, slot_kind: 'hard' });
+    }
+  }
+
+  for (let i = 3; i < slots.length; i += 4) {
+    const prev = slots[i]!;
+    slots[i] = {
+      concept_id: prev.concept_id,
+      target_difficulty: Math.min(prev.target_difficulty, 5),
+      slot_kind: 'verbal',
+    };
+  }
+
+  while (slots.length < total && conceptIds.length > 0) {
+    const conceptId = conceptIds[slots.length % conceptIds.length]!;
+    const score = selfScores?.[conceptId] ?? 5;
+    slots.push({
+      concept_id: conceptId,
+      target_difficulty: validationDifficultyForSelfScore(score, 1),
+      slot_kind: selfScoreTier(score) === 'strong' ? 'hard' : 'medium',
+    });
+  }
+
+  return slots.slice(0, total);
+}
+
 export function emptyDiagnosticSession(
   goalConceptId: string | null,
   probeConcepts: string[],
+  validationQueue: ValidationSlot[],
 ): DiagnosticSessionPayload {
   return {
     version: DIAGNOSTIC_SESSION_VERSION,
     goal_concept_id: goalConceptId,
     probe_concepts: probeConcepts,
+    validation_queue: validationQueue,
+    queue_index: 0,
     responses: [],
     asked_item_ids: [],
-    concept_index: 0,
     difficulty_by_topic: {},
   };
-}
-
-/** Map onboarding self-score (1–10) to initial item difficulty (2–8). Lower self → easier start. */
-export function selfScoreToDifficulty(selfScore: number | undefined): number {
-  if (selfScore == null || !Number.isFinite(selfScore)) return 5;
-  const clamped = Math.min(10, Math.max(1, selfScore));
-  return Math.round(2 + ((clamped - 1) / 9) * 6);
 }
 
 export function nextCatDifficulty(current: number, correct: boolean): number {
@@ -101,6 +176,13 @@ export function orderProbeConcepts(
 
   const selfWeak = Object.entries(selfScores ?? {})
     .filter(([, score]) => score <= 5)
+    .sort((a, b) => a[1] - b[1])
+    .map(([id]) => canonicalConceptId(id) ?? id)
+    .filter((id) => id.length > 0);
+
+  const selfStrong = Object.entries(selfScores ?? {})
+    .filter(([, score]) => score >= 8)
+    .sort((a, b) => b[1] - a[1])
     .map(([id]) => canonicalConceptId(id) ?? id)
     .filter((id) => id.length > 0);
 
@@ -115,26 +197,31 @@ export function orderProbeConcepts(
 
   for (const id of selfWeak) add(id);
   for (const id of pathConceptIds) add(id);
+  for (const id of selfStrong) add(id);
 
   return merged.slice(0, maxConcepts);
 }
 
-export function currentProbeConcept(state: DiagnosticSessionPayload): string | null {
-  if (state.probe_concepts.length === 0) return null;
-  const idx = Math.min(state.concept_index, state.probe_concepts.length - 1);
-  return state.probe_concepts[idx] ?? null;
+export function currentValidationSlot(state: DiagnosticSessionPayload): ValidationSlot | null {
+  if (state.queue_index >= state.validation_queue.length) return null;
+  return state.validation_queue[state.queue_index] ?? null;
 }
 
-export function targetDifficultyForConcept(
+/** @deprecated use currentValidationSlot */
+export function currentProbeConcept(state: DiagnosticSessionPayload): string | null {
+  return currentValidationSlot(state)?.concept_id ?? null;
+}
+
+export function targetDifficultyForSlot(
   state: DiagnosticSessionPayload,
-  conceptId: string,
+  slot: ValidationSlot,
   selfScores: Record<string, number> | null,
 ): number {
-  if (state.difficulty_by_topic[conceptId] != null) {
-    return state.difficulty_by_topic[conceptId]!;
-  }
-  const raw = selfScores?.[conceptId];
-  return selfScoreToDifficulty(typeof raw === 'number' ? raw : undefined);
+  const adapted = state.difficulty_by_topic[slot.concept_id];
+  if (adapted != null) return adapted;
+  const raw = selfScores?.[slot.concept_id];
+  if (raw != null) return validationDifficultyForSelfScore(raw, slot.target_difficulty >= 8 ? 1 : 0);
+  return slot.target_difficulty;
 }
 
 export function applyDiagnosticResponse(
@@ -145,22 +232,17 @@ export function applyDiagnosticResponse(
   const prevDiff = state.difficulty_by_topic[topic] ?? response.difficulty;
   const nextDiff = nextCatDifficulty(prevDiff, response.correct);
 
-  const responses = [...state.responses, response];
-  const asked_item_ids = [...state.asked_item_ids, response.item_id];
-  const difficulty_by_topic = { ...state.difficulty_by_topic, [topic]: nextDiff };
-
-  let concept_index = state.concept_index;
-  if (response.correct) {
-    concept_index = Math.min(state.probe_concepts.length, state.concept_index + 1);
-  }
-
   return {
     ...state,
-    responses,
-    asked_item_ids,
-    difficulty_by_topic,
-    concept_index,
+    responses: [...state.responses, response],
+    asked_item_ids: [...state.asked_item_ids, response.item_id],
+    difficulty_by_topic: { ...state.difficulty_by_topic, [topic]: nextDiff },
+    queue_index: Math.min(state.validation_queue.length, state.queue_index + 1),
   };
+}
+
+export function isDiagnosticSessionComplete(state: DiagnosticSessionPayload): boolean {
+  return state.responses.length >= state.validation_queue.length;
 }
 
 export function estimateTopicMastery(responses: DiagnosticResponse[], topic: string): number {
@@ -221,14 +303,16 @@ export function buildDiagnosticSummary(
 
   const goalLabel = goal?.name ?? 'your learning goal';
   const goalLabelHe = goal?.name_he ?? 'יעד הלמידה שלך';
+  const qCount = state.responses.length;
 
   const agent_brief_en =
-    `Diagnostic (${state.responses.length} Q) toward **${goalLabel}**. ` +
+    `Diagnostic calibration (${qCount} validation questions) toward **${goalLabel}**. ` +
+    `Each topic was tested at the difficulty matching your onboarding self-rating. ` +
     (weakLabels.length
-      ? `Prioritize remediation: ${weakLabels.join(', ')}. `
+      ? `Confirmed gaps — prioritize: ${weakLabels.join(', ')}. `
       : 'No major gaps surfaced — start at the next path step. ') +
-    (strongLabels.length ? `Strengths: ${strongLabels.join(', ')}. ` : '') +
-    `Week-1 focus concepts: ${plan_focus_concepts.join(', ') || 'path default'}.`;
+    (strongLabels.length ? `Validated strengths: ${strongLabels.join(', ')}. ` : '') +
+    `Week-1 focus: ${plan_focus_concepts.join(', ') || 'path default'}.`;
 
   const weakHe = probed
     .filter((p) => weak_concepts.includes(p.concept_id))
@@ -240,9 +324,10 @@ export function buildDiagnosticSummary(
     .slice(0, 3);
 
   const agent_brief_he =
-    `אבחון (${state.responses.length} שאלות) לכיוון **${goalLabelHe}**. ` +
-    (weakHe.length ? `להתמקד ב: ${weakHe.join(', ')}. ` : 'לא עלו פערים גדולים — אפשר להתקדם בנתיב. ') +
-    (strongHe.length ? `חוזקות: ${strongHe.join(', ')}. ` : '') +
+    `כיול אבחון (${qCount} שאלות אימות) לכיוון **${goalLabelHe}**. ` +
+    `כל נושא נבדק ברמת קושי שמתאימה לדירוג העצמי שלך. ` +
+    (weakHe.length ? `פערים לאימות — להתמקד ב: ${weakHe.join(', ')}. ` : 'לא עלו פערים גדולים — אפשר להתקדם בנתיב. ') +
+    (strongHe.length ? `חוזקות מאומתות: ${strongHe.join(', ')}. ` : '') +
     `מיקוד שבוע 1: ${plan_focus_concepts.join(', ') || 'ברירת מחדל מהנתיב'}.`;
 
   return {
@@ -264,17 +349,25 @@ export function parseDiagnosticSessionPayload(
 ): DiagnosticSessionPayload | null {
   if (!raw || raw.version !== DIAGNOSTIC_SESSION_VERSION) return null;
   if (!Array.isArray(raw.probe_concepts)) return null;
+  if (!Array.isArray(raw.validation_queue) || raw.validation_queue.length === 0) return null;
+
+  const validation_queue = (raw.validation_queue as ValidationSlot[]).filter(
+    (s) => s && typeof s.concept_id === 'string' && typeof s.target_difficulty === 'number',
+  );
+  if (validation_queue.length === 0) return null;
+
   return {
     version: DIAGNOSTIC_SESSION_VERSION,
     goal_concept_id: typeof raw.goal_concept_id === 'string' ? raw.goal_concept_id : null,
     probe_concepts: raw.probe_concepts.filter((c): c is string => typeof c === 'string'),
+    validation_queue,
+    queue_index: typeof raw.queue_index === 'number' ? raw.queue_index : 0,
     responses: Array.isArray(raw.responses)
       ? (raw.responses as DiagnosticResponse[])
       : [],
     asked_item_ids: Array.isArray(raw.asked_item_ids)
       ? raw.asked_item_ids.filter((c): c is string => typeof c === 'string')
       : [],
-    concept_index: typeof raw.concept_index === 'number' ? raw.concept_index : 0,
     difficulty_by_topic:
       raw.difficulty_by_topic && typeof raw.difficulty_by_topic === 'object'
         ? (raw.difficulty_by_topic as Record<string, number>)
