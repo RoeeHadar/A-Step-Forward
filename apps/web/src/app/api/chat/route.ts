@@ -693,6 +693,10 @@ async function buildContextPrompt(
     if (profile.points_group) context += `\n- Math units: ${profile.points_group}`;
     if (profile.subjects?.length) context += `\n- Subjects: ${profile.subjects.join(', ')}`;
     if (profile.preferred_style) context += `\n- Preferred style: ${profile.preferred_style}`;
+    const personality = profile.personality_profile as Record<string, unknown> | null;
+    if (personality?.learning_style_unknown === true && agent === 'tutor') {
+      context += `\n- Preferred learning style: learner is unsure — observe how they respond in early sessions and adapt (theory vs practice vs mixed) from their feedback.`;
+    }
     if (profile.hours_per_week) context += `\n- Available study time: ${profile.hours_per_week} hours/week`;
     if (profile.next_test_name && profile.next_test_date) {
       context += `\n- Next big event: ${profile.next_test_name} on ${profile.next_test_date}`;
@@ -721,15 +725,48 @@ async function buildContextPrompt(
         context += `\n- IMPORTANT: This learner has high test anxiety. Be extra reassuring; avoid time pressure cues; celebrate small wins.`;
       }
     }
-    const personality = profile.personality_profile as Record<string, unknown> | null;
     if (personality && agent === 'tutor') {
-      const teacherExp = personality.past_teacher_experience;
-      const teacherNotes = personality.past_teacher_notes;
-      if (typeof teacherExp === 'string' && teacherExp !== 'unknown') {
-        context += `\n- Past teacher experience (learner view): ${teacherExp.replace(/_/g, ' ')}`;
-      }
-      if (typeof teacherNotes === 'string' && teacherNotes.trim()) {
-        context += `\n- What worked / did not work with past teachers: ${teacherNotes.trim()}`;
+      const subjectExperience = personality.subject_experience;
+      if (subjectExperience && typeof subjectExperience === 'object') {
+        for (const [sub, raw] of Object.entries(
+          subjectExperience as Record<string, unknown>,
+        )) {
+          if (!raw || typeof raw !== 'object') continue;
+          const exp = raw as Record<string, unknown>;
+          const mode = typeof exp.mode === 'string' ? exp.mode : 'share';
+          const label = sub === 'physics' ? 'Physics' : 'Math';
+          if (mode === 'prefer_skip') {
+            context += `\n- ${label} background: learner prefers not to discuss prior experience.`;
+            continue;
+          }
+          if (mode === 'no_prior') {
+            context += `\n- ${label} background: no prior formal experience — start from foundations.`;
+            continue;
+          }
+          const rating = typeof exp.selfRating === 'number' ? exp.selfRating : null;
+          const teacher =
+            typeof exp.teacherOverall === 'string' ? exp.teacherOverall : null;
+          if (rating != null) {
+            context += `\n- ${label} past learning experience (self-rated): ${rating}/10`;
+          }
+          if (teacher && teacher !== 'unknown') {
+            context += `\n- ${label} teachers (learner view): ${teacher.replace(/_/g, ' ')}`;
+          }
+          const notes =
+            typeof exp.teacherNotes === 'string' ? exp.teacherNotes.trim() : '';
+          if (notes) {
+            context += `\n- ${label} teacher notes: ${notes}`;
+          }
+        }
+      } else {
+        const teacherExp = personality.past_teacher_experience;
+        const teacherNotes = personality.past_teacher_notes;
+        if (typeof teacherExp === 'string' && teacherExp !== 'unknown') {
+          context += `\n- Past teacher experience (learner view): ${teacherExp.replace(/_/g, ' ')}`;
+        }
+        if (typeof teacherNotes === 'string' && teacherNotes.trim()) {
+          context += `\n- What worked / did not work with past teachers: ${teacherNotes.trim()}`;
+        }
       }
       if (personality.attention_span_unknown === true) {
         context += `\n- Focus duration: learner is unsure — start with short blocks (~20 min) and adjust from session feedback.`;

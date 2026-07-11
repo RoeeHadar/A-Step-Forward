@@ -73,7 +73,8 @@ const messages = {
         coach: 'Coach',
         coachDesc: 'Drills and spaced repetition to lock in mastery.',
         reviewer: 'Reviewer',
-        reviewerDesc: 'Thoughtful feedback on code, essays, and solutions.',
+        reviewerDesc:
+          'Detailed feedback on your question solutions — what you did, your score, why, and how to improve next time.',
         tutorSpecialty: 'Socratic',
         mentorSpecialty: 'Motivation',
         coachSpecialty: 'Practice',
@@ -348,7 +349,8 @@ const messages = {
         coach: 'מאמן',
         coachDesc: 'תרגילים וחזרה מרווחת לשליטה אמיתית.',
         reviewer: 'מבקר',
-        reviewerDesc: 'משוב מעמיק על קוד, חיבורים ופתרונות.',
+        reviewerDesc:
+          'משוב מפורט על פתרונות לשאלות — מה עשית, מה הציון, למה, ואיך להשתפר בפעם הבאה.',
         tutorSpecialty: 'סוקרטי',
         mentorSpecialty: 'מוטיבציה',
         coachSpecialty: 'תרגול',
