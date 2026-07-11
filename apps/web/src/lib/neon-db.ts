@@ -33,6 +33,7 @@ import {
 } from './wellbeing-plan-bias';
 import { conceptMatchesSubjects } from './concept-scope';
 import { resolveConceptAlias } from './concept-aliases';
+import { resolveLessonConceptId } from './lesson-concept-resolve';
 import { answersMatch, coerceBooleanAnswer, coerceOptionIndex, getAcceptedAnswers, numericClose } from './answer-normalize';
 
 neonConfig.fetchConnectionCache = true;
@@ -304,7 +305,7 @@ async function ensureLearnerProfileCompletionColumn(): Promise<void> {
 
 /** Baseline mastery when a learner marks a lesson as read/complete (before quiz). */
 export async function markLessonComplete(learnerId: string, conceptId: string): Promise<number> {
-  const canonicalId = resolveConceptAlias(conceptId.trim());
+  const canonicalId = resolveLessonConceptId(conceptId.trim());
   const s = requireSql();
   await ensureConceptMasteryTable();
   await ensureLearnerProfileCompletionColumn();
@@ -2885,6 +2886,9 @@ export async function fetchConceptMasteryBulk(
     const alias = resolveConceptAlias(id);
     queryIds.add(alias);
     queryToCatalog.set(alias, id);
+    const lessonId = resolveLessonConceptId(id);
+    queryIds.add(lessonId);
+    queryToCatalog.set(lessonId, id);
   }
 
   try {

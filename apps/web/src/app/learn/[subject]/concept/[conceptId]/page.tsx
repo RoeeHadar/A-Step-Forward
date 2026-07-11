@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 import { SiteHeader } from '@/components/site-header';
 import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
@@ -39,11 +39,10 @@ const kgById: Record<string, KgConcept> = Object.fromEntries(
 );
 
 /** Legacy / catalog slugs that differ from the canonical lesson concept_id. */
-import { CONCEPT_ID_ALIASES, resolveConceptAlias } from '@/lib/concept-aliases';
-
-const LEGACY_CONCEPT_REDIRECTS: Record<string, string> = {
-  ...CONCEPT_ID_ALIASES,
-};
+import {
+  aliasRedirectTarget,
+  resolveLessonConceptId,
+} from '@/lib/lesson-concept-resolve';
 
 /** Level values the user can explicitly select via the ?level= toggle. */
 const LEVEL_QUERY_OVERRIDES = new Set<LessonPointsLevel>(['3pt', '4pt', '5pt']);
@@ -67,14 +66,22 @@ export default async function ConceptPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { subject, conceptId: rawConceptId } = await params;
-  const levelOverride = parseLevelQueryParam((await searchParams).level);
+  const resolvedSearchParams = await searchParams;
+  const levelOverride = parseLevelQueryParam(resolvedSearchParams.level);
 
-  if (LEGACY_CONCEPT_REDIRECTS[rawConceptId] && LEGACY_CONCEPT_REDIRECTS[rawConceptId] !== rawConceptId) {
-    // Keep syllabus URL; load content via alias below — no redirect.
+  const redirectTarget = aliasRedirectTarget(rawConceptId);
+  if (redirectTarget) {
+    const qs = new URLSearchParams();
+    for (const [key, value] of Object.entries(resolvedSearchParams)) {
+      const raw = Array.isArray(value) ? value[0] : value;
+      if (raw) qs.set(key, raw);
+    }
+    const suffix = qs.toString() ? `?${qs.toString()}` : '';
+    redirect(`/learn/${subject}/concept/${redirectTarget}${suffix}`);
   }
 
   const conceptId = rawConceptId;
-  const canonicalLessonId = resolveConceptAlias(conceptId);
+  const canonicalLessonId = resolveLessonConceptId(conceptId);
   const locale = await getServerLocale();
   const t = getMessages(locale).learn;
   const isHe = locale === 'he';

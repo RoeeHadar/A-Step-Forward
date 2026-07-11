@@ -6,7 +6,8 @@
  */
 import kg from './kg-data.json';
 import lessonsIndex from './lessons-index.generated.json';
-import { resolveConceptAlias, resolveConceptAliasCanonical } from './concept-aliases';
+import { resolveConceptAlias, resolveConceptAliasCanonical, isAliasConceptId } from './concept-aliases';
+import { isConceptInLessonIndex } from './lesson-index';
 
 interface KgConcept {
   id: string;
@@ -82,6 +83,10 @@ const CATALOG_CONCEPT_TITLES: Record<string, { en: string; he: string }> = {
     en: 'Riemann Sums',
     he: 'סכומי רימן',
   },
+  em_waves: {
+    en: 'Electromagnetic Waves',
+    he: 'גלים אלקטרומגנטיים',
+  },
 };
 
 function humanizeId(id: string): string {
@@ -108,6 +113,19 @@ function resolveCanonicalTitles(conceptId: string): ConceptTitles {
   const catalog = CATALOG_CONCEPT_TITLES[conceptId];
   if (catalog) {
     return { title_en: catalog.en, title_he: catalog.he };
+  }
+
+  // Alias-only syllabus slugs: prefer KG syllabus title over the redirect target lesson.
+  if (isAliasConceptId(conceptId) && !isConceptInLessonIndex(conceptId)) {
+    const kgInfo = kgById[conceptId];
+    if (kgInfo) {
+      const he = kgInfo.name_he;
+      const enLooksHebrew = he && he !== kgInfo.name && /[\u0590-\u05FF]/.test(he);
+      return {
+        title_en: kgInfo.name,
+        title_he: enLooksHebrew ? he : null,
+      };
+    }
   }
 
   const canonical = resolveConceptAliasCanonical(conceptId);

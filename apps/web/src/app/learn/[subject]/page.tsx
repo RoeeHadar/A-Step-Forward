@@ -16,6 +16,7 @@ import { isConceptInBundle } from '@/lib/lesson-bundle';
 import kg from '@/lib/kg-data.json';
 import { getCategoryById, SUBJECT_TO_CATEGORY } from '@/lib/curriculum-categories';
 import { resolveConceptAlias, dedupeConceptIdsForCatalog, resolveConceptAliasCanonical } from '@/lib/concept-aliases';
+import { resolveLessonConceptId } from '@/lib/lesson-concept-resolve';
 import { getServerLocale } from '@/i18n/locale-server';
 import { getMessages } from '@/i18n/messages';
 import { resolveConceptTitles, pickConceptTitle } from '@/lib/concept-display-names';
@@ -217,17 +218,17 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
 
   const conceptsWithCoverage = conceptsForSubject
     .map((c) => {
-      const aliasId = resolveConceptAlias(c.id);
-      const meta = lessonMeta.get(c.id) ?? lessonMeta.get(aliasId);
+      const lessonId = resolveLessonConceptId(c.id);
+      const meta = lessonMeta.get(c.id) ?? lessonMeta.get(lessonId);
       const ownIndex = getLessonIndexEntry(c.id);
       const hasDirectLesson =
         Boolean(ownIndex) ||
         Boolean(meta && meta.concept_id === c.id) ||
         isConceptInBundle(c.id);
       const hasLesson = hasDirectLesson;
-      const mastery = masteryMap.get(c.id) ?? masteryMap.get(aliasId);
+      const mastery = masteryMap.get(c.id) ?? masteryMap.get(lessonId);
       const status = masteryStatus(mastery?.score);
-      return { ...c, langs: coverage.get(c.id) ?? coverage.get(aliasId) ?? [], hasLesson, inTrack: true, mastery, status };
+      return { ...c, langs: coverage.get(c.id) ?? coverage.get(lessonId) ?? [], hasLesson, inTrack: true, mastery, status };
     })
     .filter((c) => c.inTrack);
 
