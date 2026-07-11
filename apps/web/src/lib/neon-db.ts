@@ -382,11 +382,50 @@ export async function startDiagnosticSession(
   return id;
 }
 
+function isMissingDiagnosticColumnError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /column .* does not exist/i.test(msg);
+}
+
+function filterDiagnosticPool(rows: DiagnosticItem[], limit: number): DiagnosticItem[] {
+  const isTemplatePlaceholder = (stem: string) =>
+    /generic unrelated fact|עובדה כללית ולא קשורה|\[Difficulty \d+\/10\]/i.test(stem);
+
+  const quality = rows.filter((r) => !isTemplatePlaceholder(r.stem));
+  const pool = quality.length >= Math.min(limit, 3) ? quality : rows;
+  return pool.slice(0, limit);
+}
+
+async function fetchDiagnosticItemsLegacy(
+  subjects: string[],
+  limit: number,
+): Promise<DiagnosticItem[]> {
+  const s = requireSql();
+  const rows = (await s`
+    SELECT id::text, topic, subject, difficulty::float AS difficulty,
+           stem, options, source_concept
+    FROM diagnostic_items
+    WHERE subject = ANY(${subjects})
+    ORDER BY random()
+    LIMIT ${Math.max(limit * 6, 24)}
+  `) as Array<Omit<DiagnosticItem, 'stem_he' | 'options_he' | 'explanation_he'>>;
+
+  return rows.map((row) => ({
+    ...row,
+    stem_he: null,
+    options_he: null,
+    explanation_he: null,
+  }));
+}
+
 /**
  * Fetch diagnostic items filtered by subjects and optionally by points_level.
  * When `pointsLevel` is provided (e.g. '3pt', '4pt', '5pt'), we prefer items
  * whose `points_levels` column includes that level. Items without a
  * points_levels column value are included as fallback (NULL means all levels).
+ *
+ * Falls back to a legacy SELECT when production Neon has not yet applied
+ * migrations 0015 (stem_he) / 0016 (points_levels).
  */
 export async function fetchDiagnosticItems(
   subjects: string[],
@@ -394,35 +433,36 @@ export async function fetchDiagnosticItems(
   pointsLevel?: string | null,
 ): Promise<DiagnosticItem[]> {
   const s = requireSql();
-
-  // Map learner goal/points to the level strings stored in KG / diagnostic_items
   const levelFilter = pointsLevel ?? null;
 
-  const rows = (await s`
-    SELECT id::text, topic, subject, difficulty::float AS difficulty,
-           stem, options, source_concept,
-           stem_he, options_he, explanation_he
-    FROM diagnostic_items
-    WHERE subject = ANY(${subjects})
-      AND (
-        ${levelFilter}::text IS NULL
-        OR points_levels IS NULL
-        OR ${levelFilter}::text = ANY(points_levels)
-      )
-    ORDER BY
-      -- prioritise items that exactly match the learner level
-      CASE WHEN ${levelFilter}::text IS NOT NULL AND ${levelFilter}::text = ANY(COALESCE(points_levels, ARRAY[]::text[]))
-           THEN 0 ELSE 1 END,
-      random()
-    LIMIT ${Math.max(limit * 6, 24)}
-  `) as DiagnosticItem[];
+  try {
+    const rows = (await s`
+      SELECT id::text, topic, subject, difficulty::float AS difficulty,
+             stem, options, source_concept,
+             stem_he, options_he, explanation_he
+      FROM diagnostic_items
+      WHERE subject = ANY(${subjects})
+        AND (
+          ${levelFilter}::text IS NULL
+          OR points_levels IS NULL
+          OR ${levelFilter}::text = ANY(points_levels)
+        )
+      ORDER BY
+        CASE WHEN ${levelFilter}::text IS NOT NULL AND ${levelFilter}::text = ANY(COALESCE(points_levels, ARRAY[]::text[]))
+             THEN 0 ELSE 1 END,
+        random()
+      LIMIT ${Math.max(limit * 6, 24)}
+    `) as DiagnosticItem[];
 
-  const isTemplatePlaceholder = (stem: string) =>
-    /generic unrelated fact|עובדה כללית ולא קשורה|\[Difficulty \d+\/10\]/i.test(stem);
-
-  const quality = rows.filter((r) => !isTemplatePlaceholder(r.stem));
-  const pool = quality.length >= Math.min(limit, 3) ? quality : rows;
-  return pool.slice(0, limit);
+    return filterDiagnosticPool(rows, limit);
+  } catch (err) {
+    if (!isMissingDiagnosticColumnError(err)) throw err;
+    console.warn(
+      '[fetchDiagnosticItems] legacy schema detected — retrying without stem_he/points_levels columns',
+    );
+    const rows = await fetchDiagnosticItemsLegacy(subjects, limit);
+    return filterDiagnosticPool(rows, limit);
+  }
 }
 
 export async function fetchDiagnosticItemsWithFallback(
