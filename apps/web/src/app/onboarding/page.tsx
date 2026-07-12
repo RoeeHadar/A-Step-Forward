@@ -826,57 +826,74 @@ export default function OnboardingPage() {
           : (GOALS.find((g) => g.value === s1.goal)?.label_en ?? s1.goal);
       const experienceSummary = formatSubjectExperienceSummary();
       const yearsGapSummary = formatYearsGapSummary();
-      const res = await fetch('/api/onboarding/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          goal: goalText,
-          grade_level: s1.gradeLevel,
-          points_group: resolvePointsGroupForSubmit(),
-          subjects: s1.subjects,
-          hours_per_week: s2.hoursAuto ? 6 : s2.hoursPerWeek,
-          preferred_style: s2.style === 'unknown' ? null : s2.style,
-          attention_span: s2.attentionSpan,
-          self_scores: {},
-          background_notes: isAdultLearner
-            ? `${experienceSummary}${yearsGapSummary ? ` Years since last study: ${yearsGapSummary}.` : ''}`
-            : experienceSummary,
-          next_test_name: s1.nextTestName || null,
-          next_test_date: s1.nextTestDate || null,
-          final_goal_date: s1.finalGoalDate || null,
-          adult_learner: isAdultLearner,
-          years_gap: isAdultLearner ? yearsGapSummary || null : null,
-          mental_state: {
-            motivation: s3.motivation,
-            anxiety: s3.anxiety,
-            confidence: s3.confidence,
-            preferred_study_time: s3.preferredTime,
-            has_quiet_space: s3.hasQuietSpace,
-            support_system: s3.supportSystem,
-            why_this_goal: s3.whyThisGoal,
-            target_university: needsUniversity ? s1.targetUniversity || null : null,
-          },
-          personality_profile: {
-            subject_experience: s2.subjectExperience,
-            learning_style_unknown: s2.style === 'unknown',
-            attention_span_min: s2.attentionSpan,
-            attention_span_unknown: s2.attentionSpan == null,
-            hours_per_week: s2.hoursAuto ? null : s2.hoursPerWeek,
-            hours_per_week_auto: s2.hoursAuto,
-            goal_key: isAdultLearner ? s1.adultGoal : s1.goal || null,
-            target_university: needsUniversity ? s1.targetUniversity || null : null,
-            years_gap_by_subject: isAdultLearner ? s1.yearsGapBySubject : null,
-            ...(isAdultLearner
-              ? {
-                  adult_learner: true,
-                  years_gap: yearsGapSummary || null,
-                  adult_goal: s1.adultGoal,
-                }
-              : {}),
-          },
-          tutor_mode: tutorMode,
-        }),
-      });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 25_000);
+      let res: Response;
+      try {
+        res = await fetch('/api/onboarding/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            goal: goalText,
+            grade_level: s1.gradeLevel,
+            points_group: resolvePointsGroupForSubmit(),
+            subjects: s1.subjects,
+            hours_per_week: s2.hoursAuto ? 6 : s2.hoursPerWeek,
+            preferred_style: s2.style === 'unknown' ? null : s2.style,
+            attention_span: s2.attentionSpan,
+            self_scores: {},
+            background_notes: isAdultLearner
+              ? `${experienceSummary}${yearsGapSummary ? ` Years since last study: ${yearsGapSummary}.` : ''}`
+              : experienceSummary,
+            next_test_name: s1.nextTestName || null,
+            next_test_date: s1.nextTestDate || null,
+            final_goal_date: s1.finalGoalDate || null,
+            adult_learner: isAdultLearner,
+            years_gap: isAdultLearner ? yearsGapSummary || null : null,
+            mental_state: {
+              motivation: s3.motivation,
+              anxiety: s3.anxiety,
+              confidence: s3.confidence,
+              preferred_study_time: s3.preferredTime,
+              has_quiet_space: s3.hasQuietSpace,
+              support_system: s3.supportSystem,
+              why_this_goal: s3.whyThisGoal,
+              target_university: needsUniversity ? s1.targetUniversity || null : null,
+            },
+            personality_profile: {
+              subject_experience: s2.subjectExperience,
+              learning_style_unknown: s2.style === 'unknown',
+              attention_span_min: s2.attentionSpan,
+              attention_span_unknown: s2.attentionSpan == null,
+              hours_per_week: s2.hoursAuto ? null : s2.hoursPerWeek,
+              hours_per_week_auto: s2.hoursAuto,
+              goal_key: isAdultLearner ? s1.adultGoal : s1.goal || null,
+              target_university: needsUniversity ? s1.targetUniversity || null : null,
+              years_gap_by_subject: isAdultLearner ? s1.yearsGapBySubject : null,
+              ...(isAdultLearner
+                ? {
+                    adult_learner: true,
+                    years_gap: yearsGapSummary || null,
+                    adult_goal: s1.adultGoal,
+                  }
+                : {}),
+            },
+            tutor_mode: tutorMode,
+          }),
+        });
+      } catch (err) {
+        clearTimeout(timeout);
+        // Client abort / network — profile may already be saved; finish plan on plan-setup.
+        if (err instanceof Error && err.name === 'AbortError') {
+          clearOnboardingDraft();
+          router.push('/plan-setup');
+          return;
+        }
+        throw err;
+      } finally {
+        clearTimeout(timeout);
+      }
       if (!res.ok) {
         const errText = await res.text();
         let message = errText.trim() || `Request failed (${res.status})`;
@@ -890,7 +907,9 @@ export default function OnboardingPage() {
       }
       const data = (await res.json()) as { has_plan?: boolean; plan_id?: string };
       if (!data.has_plan) {
-        throw new Error(t.errorNoPlan);
+        clearOnboardingDraft();
+        router.push('/plan-setup');
+        return;
       }
       clearOnboardingDraft();
       router.push('/app');

@@ -13,18 +13,21 @@ description: >
 ```
 /onboarding (4 steps: goals → background → motivation → tutor style)
   └─ POST /api/onboarding/submit
-       ├─ deriveOnboardingSeedScores(goal/subjects)
-       ├─ upsertLearnerProfile (skip adaptive refresh)
-       └─ createOnboardingPlan()  ← SYNC, verified
-            ├─ fastPath + rollingWindow
-            ├─ exactly ROLLING_VISIBLE_WEEKS (2) materialized
-            ├─ ≤ CONCEPTS_PER_ROLLING_WEEK (4) concepts/week
-            └─ returns only when has_plan + week concepts exist
-  └─ client redirects to /app when { has_plan: true }
+       └─ bootstrapOnboardingPlan()  ← thin module, NOT neon-db
+            ├─ profile upsert
+            ├─ ≤8 mastery seeds
+            ├─ DELETE old plans (no advisory lock)
+            └─ INSERT plan + 2 weeks (≤4 concepts each)
+  └─ client → /app if has_plan; on abort → /plan-setup
 
-/plan-setup                fallback if plan missing
-/diagnostic                redirects to /plan-setup (legacy)
-GET /api/plans/current     advances rolling window when active week past due
+/plan-setup → POST /api/plans/bootstrap (same thin path)
+GET /api/plans/current → advanceRollingPlanWindow when week past due
+
+**Never import `neon-db.ts` from onboarding/submit or plans/bootstrap** — it pulls
+`kg-data.json` (~325KB) and caused `FUNCTION_INVOCATION_TIMEOUT`.
+
+**Never use advisory-lock + `1/0` transactions on the onboarding path** — Neon HTTP
+driver hung on contention.
 ```
 
 **Target SLO:** onboarding submit completes with plan in **< 10s** (avoid Vercel `FUNCTION_INVOCATION_TIMEOUT`).

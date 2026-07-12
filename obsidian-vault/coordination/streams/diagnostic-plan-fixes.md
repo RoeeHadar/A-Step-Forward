@@ -1,21 +1,26 @@
 # Diagnostic + plan fixes (Jul 2026)
 
-Status: **diagnostic removed**; **rolling 2-week plan** (timeout root cause fixed).
+Status: **bare SQL bootstrap** (no neon-db monolith) — root cause of FUNCTION_INVOCATION_TIMEOUT.
 
-## Works
+## Root cause (confirmed)
 
-- Onboarding steps 0–3 only → sync `createOnboardingPlan`
-- Materialize **only 2 weeks** × ≤4 concepts (not full exam horizon)
-- Sequential week chunks; horizon `end_date` separate from materialized weeks
-- `advanceRollingPlanWindow` on plan fetch when active week past due
-- Redirect to `/app` only when `{ has_plan: true }`
+Onboarding/submit imported `neon-db.ts` → `kg-data.json` (~325KB) + plan-worklist +
+advisory-lock Neon transactions. Cold start + lock hack hung until Vercel killed the function.
 
-## Failed approaches (avoid)
+## Works now
 
-- Building 12–24 weeks on first create → `FUNCTION_INVOCATION_TIMEOUT`
-- Full BFS / textbook hydration before INSERT
-- Long retry sleeps inside onboarding submit
-- Client poll-only plan generation after diagnostic
+- `onboarding-plan-bootstrap.ts` — thin Neon client, no kg-data, no advisory locks
+- `POST /api/onboarding/submit` → bootstrap only (profile + 2 weeks)
+- `POST /api/plans/bootstrap` → same path for `/plan-setup` fallback
+- Client 25s abort → `/plan-setup` if submit times out
+- Rolling 2×4 concepts; advance window later via plans/current
+
+## Failed
+
+- Full exam-horizon plans
+- neon-db createOnboardingPlan on submit
+- pg_try_advisory_xact_lock + 1/0 in Neon HTTP transactions
+- Long retry sleeps inside submit
 
 ## Skill
 
