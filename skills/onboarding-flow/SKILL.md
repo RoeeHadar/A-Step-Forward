@@ -17,10 +17,10 @@ Sign-up (Clerk)            apps/web/src/app/sign-up/.../page.tsx
 /onboarding                apps/web/src/app/onboarding/page.tsx
   ├─ Steps 0–3: goals, background, motivation, tutor mode
   └─ POST /api/onboarding/submit
-       upsertLearnerProfile + createOnboardingPlan (sync, verified)
-       router.push('/app')
+       bootstrapOnboardingPlan() — thin module (NOT neon-db)
+       router.push('/app') when has_plan; abort → /plan-setup
 
-/plan-setup                fallback if plan missing — polls until exists=1
+/plan-setup                POST /api/plans/bootstrap fallback
 
 /diagnostic                redirects to /plan-setup (legacy)
 
@@ -44,13 +44,12 @@ Sign-up (Clerk)            apps/web/src/app/sign-up/.../page.tsx
 
 ## How plan generation uses the profile
 
-`generateLearningPlan()` in `apps/web/src/lib/neon-db.ts`:
+**First plan (onboarding):** `bootstrapOnboardingPlan()` in
+`apps/web/src/lib/onboarding-plan-bootstrap.ts` — do **not** call neon-db here
+(see `skills/diagnostic-plan-golden-path/SKILL.md` trial-and-error log).
 
-1. Pulls mastery from `concept_mastery` (seeded from goal-derived scores on first submit).
-2. Builds a **rolling 2-week** worklist (not the full exam horizon) via `buildFastPlanConceptOrder`.
-3. Chunks ≤4 concepts/week sequentially (`chunkConceptsIntoWeeks`).
-4. Persists `learning_plans` + `plan_weeks` (2 weeks). `end_date` may still reflect the exam horizon.
-5. Later: `advanceRollingPlanWindow()` on plan fetch completes past-due weeks and appends the next week.
+**Mid-journey:** `generateLearningPlan()` in `neon-db.ts` may use the full planner;
+rolling window still prefers 2 visible weeks unless explicitly expanded.
 
 ## Diagnostic behavior
 
