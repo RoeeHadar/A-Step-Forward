@@ -13,6 +13,7 @@ const mockEvaluate = vi.fn();
 const mockCanPersist = vi.fn();
 const mockDetectShock = vi.fn();
 const mockPickTrigger = vi.fn();
+const mockIsFreshOnboardingPlan = vi.fn();
 
 vi.mock('./neon-db', () => ({
   getLearnerProfile: (...args: unknown[]) => mockGetProfile(...args),
@@ -20,6 +21,7 @@ vi.mock('./neon-db', () => ({
   getCurrentPlan: (...args: unknown[]) => mockGetPlan(...args),
   generateLearningPlan: (...args: unknown[]) => mockGenerate(...args),
   saveWellbeingPlanBias: (...args: unknown[]) => mockSaveBias(...args),
+  isFreshOnboardingPlan: (...args: unknown[]) => mockIsFreshOnboardingPlan(...args),
 }));
 
 vi.mock('./wellbeing-plan-bias', async (importOriginal) => {
@@ -79,6 +81,7 @@ describe('maybeRefreshLearningPlanForSignals', () => {
     mockGetProfile.mockResolvedValue(profile);
     mockGetMastery.mockResolvedValue({ limits: 0.2 });
     mockGetPlan.mockResolvedValue({ id: 'plan-1', weeks: [] });
+    mockIsFreshOnboardingPlan.mockResolvedValue(false);
     mockEvaluate.mockReturnValue({
       bias: { active: true, trigger: 'mastery_shock', mastery_snapshot: { limits: 0.5 } },
       triggers: ['mastery_shock', 'profile_anxiety'],
