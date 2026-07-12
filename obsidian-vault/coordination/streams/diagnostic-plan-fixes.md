@@ -1,27 +1,40 @@
 # Diagnostic + plan fixes (Jul 2026)
 
-Status: **bare SQL bootstrap** (no neon-db monolith) — root cause of FUNCTION_INVOCATION_TIMEOUT.
+Status: **WORKING** — bare SQL bootstrap (`1d44e8cc`+). Plan creates after onboarding.
 
-## Root cause (confirmed)
+Full trial-and-error log lives in the skill (authoritative for agents):
 
-Onboarding/submit imported `neon-db.ts` → `kg-data.json` (~325KB) + plan-worklist +
-advisory-lock Neon transactions. Cold start + lock hack hung until Vercel killed the function.
+→ [[../../skills/diagnostic-plan-golden-path/SKILL|skills/diagnostic-plan-golden-path/SKILL.md]]
 
-## Works now
+(Repo path: `skills/diagnostic-plan-golden-path/SKILL.md`)
 
-- `onboarding-plan-bootstrap.ts` — thin Neon client, no kg-data, no advisory locks
-- `POST /api/onboarding/submit` → bootstrap only (profile + 2 weeks)
-- `POST /api/plans/bootstrap` → same path for `/plan-setup` fallback
-- Client 25s abort → `/plan-setup` if submit times out
-- Rolling 2×4 concepts; advance window later via plans/current
+## TL;DR for future agents
 
-## Failed
+1. First plan = **`onboarding-plan-bootstrap.ts` only** — never `neon-db` on submit.
+2. **2 weeks × ≤4 concepts**; roll forward later with `advanceRollingPlanWindow`.
+3. No post-onboarding diagnostic gate; calibrate while learning.
+4. Symptom `FUNCTION_INVOCATION_TIMEOUT` on plan create → you reintroduced the monolith, locks, or a huge calendar. Undo that; do not add more retries.
 
-- Full exam-horizon plans
-- neon-db createOnboardingPlan on submit
-- pg_try_advisory_xact_lock + 1/0 in Neon HTTP transactions
-- Long retry sleeps inside submit
+## Chronology (compressed)
 
-## Skill
+| Phase | What happened |
+|-------|----------------|
+| A | Diagnostic broken (serve-time stems, stale resume, `question_idx`) → fixed with 6 Q + answer-time dedupe |
+| B | Plan timer 60s+ / never redirects → fast path, poll, kickoff, 2-week cap — **still timed out** |
+| C | Removed diagnostic; sync create via neon-db — **still `FUNCTION_INVOCATION_TIMEOUT`** |
+| D | Thin bootstrap (no kg-data, no advisory locks) — **worked in production** |
 
-`skills/diagnostic-plan-golden-path/SKILL.md`
+## Failed approaches (do not retry)
+
+- neon-db / kg-data on onboarding critical path  
+- Advisory lock + `1/0` Neon HTTP transactions for first plan  
+- Full exam-horizon week materialization  
+- Client poll while server never commits  
+- Long sleep-retries inside submit  
+- Pre-serve stem reservation / resume-as-complete  
+
+## Works
+
+- `bootstrapOnboardingPlan` + `/api/plans/bootstrap`  
+- Client abort → `/plan-setup` fallback  
+- Verify `has_plan` before `/app`  

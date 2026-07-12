@@ -1,8 +1,8 @@
 ---
 type: active-context
-updated: 2026-07-11
+updated: 2026-07-12
 coordinator_status: .cursor/coordinator/STATUS.md
-production_web: ff021ca9
+production_web: 1d44e8cc
 ---
 
 # Active Context
@@ -10,21 +10,27 @@ production_web: ff021ca9
 > Update this note at the start/end of each focused work session.
 > Machine-readable session trail: `docs/reviews/LAST_DONE.md` + `MEMORY_SNAPSHOT.md` (`<!-- LAST_SESSION -->`).
 
-## Last done (2026-07-11)
+## Last done (2026-07-12)
 
-- [x] **Unified planner (ADR-0007 / PR1)** — `generateLearningPlan()` delegates to `buildUnifiedPlanConceptOrder()` → `buildLearningPlan()` via `plan-worklist.ts`
-- [x] **Wellbeing module (ADR-0008 / PR2–PR3)** — `wellbeing-plan-bias.ts`, morale blending, cooldown gates, anxiety intent snapshot injection, dashboard plan-adjustment notice
-- [x] **Chat context compaction (PR3)** — compact baseline, 4-turn session-gated memory, direct Groq hot path
-- [x] **ADR-0008 accepted** — doc reconciliation (PR4) updates ADRs, skills, vault
-- [x] **PR5 372 audit** — `docs/plans/pr5-372-coverage-audit.md`; alias-complete; `math_track: ["3pt"]` on 372-only lessons
-- [x] **Wellbeing hooks** — `adaptive-plan-refresh.ts` wired on profile save, exam dates, lesson mastery, diagnostic complete
+- [x] **Onboarding plan WORKS** — thin `onboarding-plan-bootstrap.ts` (no neon-db on submit); 2 weeks × ≤4 concepts; `/api/plans/bootstrap` fallback
+- [x] **Diagnostic gate removed** — goals/features → create plan; calibrate while learning
+- [x] **Trial-and-error logged** — `skills/diagnostic-plan-golden-path/SKILL.md` + `obsidian-vault/coordination/streams/diagnostic-plan-fixes.md`
+- [x] Root cause of `FUNCTION_INVOCATION_TIMEOUT`: importing neon-db/kg-data + advisory-lock transactions on critical path — **do not reintroduce**
 
 ## Current focus
 
-- **Stream**: Pilot prep — run Neon migrations 0015–0017, smoke test wellbeing flow
-- **Status**: Planner + wellbeing **shipped** on `feat/frontend/unify-planners-pr1`; no push/PR until requested
+- **Stream**: Pilot — verify rolling `advanceRollingPlanWindow` over real week boundaries; smoke onboarding → `/app` plan
+- **Status**: First-plan create **shipped** on `main` (`1d44e8cc`)
 - **Policy**: Obsidian vault documents architecture; repo code implements it
-- **Trail file**: [[../docs/reviews/LAST_DONE|LAST_DONE]] (repo path `docs/reviews/LAST_DONE.md`)
+- **Must-read before touching plan/onboarding**: `skills/diagnostic-plan-golden-path/SKILL.md`
+
+## Prior (2026-07-11)
+
+- [x] **Unified planner (ADR-0007 / PR1)** — `generateLearningPlan()` delegates to `buildUnifiedPlanConceptOrder()` → `buildLearningPlan()` via `plan-worklist.ts`
+- [x] **Wellbeing module (ADR-0008 / PR2–PR3)** — `wellbeing-plan-bias.ts`, morale blending, cooldown gates
+- [x] **Chat context compaction (PR3)** — compact baseline, 4-turn session-gated memory
+- [x] **ADR-0008 accepted** — doc reconciliation
+- [x] **Wellbeing hooks** — `adaptive-plan-refresh.ts` (must not clobber fresh onboarding plans)
 
 ## Shipped (2026-07-03)
 
