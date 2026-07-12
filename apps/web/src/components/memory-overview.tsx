@@ -43,6 +43,36 @@ function importanceLabel(importance: number, t: ReturnType<typeof useI18n>['mess
   return t.importanceNormal;
 }
 
+function preferredStyleLabel(
+  style: string | null | undefined,
+  t: ReturnType<typeof useI18n>['messages']['memory'],
+): string | null {
+  if (!style?.trim()) return null;
+  const key = style.trim().toLowerCase();
+  if (key === 'theory_first') return t.styleTheoryFirst;
+  if (key === 'practice_first') return t.stylePracticeFirst;
+  if (key === 'mixed') return t.styleMixed;
+  return style.replace(/_/g, ' ');
+}
+
+/** Swap English persona H2 headers for Hebrew when the UI locale is HE. */
+function localizePersonaMarkdown(text: string, locale: 'he' | 'en'): string {
+  if (locale !== 'he' || !text.trim()) return text;
+  const map: Array<[RegExp, string]> = [
+    [/^##\s*How they talk\s*$/gim, '## איך הם מדברים'],
+    [/^##\s*How I talk\s*$/gim, '## איך אני מדבר/ת'],
+    [/^##\s*How they like explanations\s*$/gim, '## איך הם אוהבים הסברים'],
+    [/^##\s*How I like explanations\s*$/gim, '## איך אני אוהב/ת הסברים'],
+    [/^##\s*Triggers(?:\s*\/\s*|\s+and\s+)preferences\s*$/gim, '## טריגרים והעדפות'],
+    [/^##\s*Recent durable observations.*$/gim, '## תצפיות יציבות אחרונות'],
+    [/^##\s*Recent observations.*$/gim, '## תצפיות אחרונות'],
+    [/^##\s*About me\s*$/gim, '## עליי'],
+  ];
+  let out = text;
+  for (const [re, he] of map) out = out.replace(re, he);
+  return out;
+}
+
 function SectionCard({
   icon: Icon,
   title,
@@ -285,7 +315,7 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
                 />
                 <ProfileField
                   label={t.fieldStyle}
-                  value={snapshot.profile.preferred_style}
+                  value={preferredStyleLabel(snapshot.profile.preferred_style, t)}
                 />
                 <ProfileField
                   label={t.fieldNextTest}
@@ -326,8 +356,8 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
           {personaVisible ? (
             <SectionCard
               icon={Sparkles}
-              title={t.personaSectionTitle}
-              description={t.personaSectionDesc}
+              title={t.aboutMeTitle}
+              description={t.aboutMeDesc}
             >
               {snapshot.persona.updated_at ? (
                 <p className="mb-3 text-xs text-muted-foreground">
@@ -335,14 +365,16 @@ export function MemoryOverview({ snapshot }: { snapshot: LearnerMemorySnapshot }
                 </p>
               ) : null}
               <div className="prose prose-sm max-w-none dark:prose-invert">
-                <MarkdownReader content={snapshot.persona.text ?? ''} />
+                <MarkdownReader
+                  content={localizePersonaMarkdown(snapshot.persona.text ?? '', lang)}
+                />
               </div>
             </SectionCard>
           ) : !hasPersona && !q ? (
             <SectionCard
               icon={Sparkles}
-              title={t.personaSectionTitle}
-              description={t.personaSectionDesc}
+              title={t.aboutMeTitle}
+              description={t.aboutMeDesc}
             >
               <p className="text-sm text-muted-foreground">{t.personaEmpty}</p>
             </SectionCard>

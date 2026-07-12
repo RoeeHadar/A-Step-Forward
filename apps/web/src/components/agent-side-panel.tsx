@@ -9,6 +9,7 @@ import { useLanguagePreference } from '@/hooks/use-language-preference';
 import { useChatUiStore } from '@/stores/ui-store';
 import {
   WEB_LIVE_AGENTS,
+  WEB_LIVE_AGENT_BLURBS,
   WEB_LIVE_AGENT_NAMES,
   resolveWebChatAgent,
   type WebLiveAgent,
@@ -98,6 +99,9 @@ export function AgentSidePanel({
               <div className="min-w-0">
                 <p className="text-sm font-semibold">
                   {WEB_LIVE_AGENT_NAMES[agent][isHe ? 'he' : 'en']}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {WEB_LIVE_AGENT_BLURBS[agent][isHe ? 'he' : 'en']}
                 </p>
                 <p className="truncate text-xs text-muted-foreground" dir="auto">
                   {resolvedTopicLabel}

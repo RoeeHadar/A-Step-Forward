@@ -3,56 +3,49 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@asf/ui/button';
 import { cn } from '@asf/ui';
+import { useI18n } from '@/providers/i18n-provider';
 
 const STORAGE_KEY = 'asf-agents-intro-seen';
 
 const AGENTS = [
   {
-    emoji: '\uD83C\uDF93',
-    name_he: '\u05DE\u05D5\u05E8\u05D4',
+    emoji: '🎓',
+    name_he: 'מורה',
     name_en: 'Tutor',
-    desc_he: '\u05DE\u05D3\u05E8\u05D9\u05DA \u05E2\u05DD \u05E9\u05D0\u05DC\u05D5\u05EA \u05D5\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05DE\u05D4\u05D7\u05D5\u05DE\u05E8',
+    desc_he: 'מדריך עם שאלות ותשובות מהחומר',
     desc_en: 'Socratic guidance and cited answers from the corpus',
   },
   {
-    emoji: '\uD83E\uDDED',
-    name_he: '\u05DE\u05E0\u05D8\u05D5\u05E8',
+    emoji: '🧭',
+    name_he: 'מנטור',
     name_en: 'Mentor',
-    desc_he: '\u05DE\u05D5\u05D8\u05D9\u05D1\u05E6\u05D9\u05D4, \u05D4\u05E8\u05D2\u05DC\u05D9\u05DD \u05D5\u05EA\u05DB\u05E0\u05D5\u05DF',
+    desc_he: 'מוטיבציה, הרגלים ותכנון',
     desc_en: 'Motivation, habits, and planning',
   },
   {
-    emoji: '\uD83C\uDFCB\uFE0F',
-    name_he: '\u05DE\u05D0\u05DE\u05DF',
+    emoji: '🏋️',
+    name_he: 'מאמן',
     name_en: 'Coach',
-    desc_he: '\u05EA\u05E8\u05D2\u05D5\u05DC \u05D9\u05D5\u05DE\u05D9 \u05D5\u05E2\u05D9\u05D5\u05DF \u05D1\u05D7\u05D5\u05DC\u05E9\u05D5\u05EA',
+    desc_he: 'תרגול יומי וחיזוק בחולשות',
     desc_en: 'Daily drills targeting your weak spots',
   },
   {
-    emoji: '\uD83D\uDCDD',
-    name_he: '\u05DE\u05D1\u05E7\u05E8',
+    emoji: '📝',
+    name_he: 'מבקר',
     name_en: 'Reviewer',
-    desc_he: '\u05DE\u05E9\u05D5\u05D1 \u05DE\u05E4\u05D5\u05E8\u05D8 \u05E2\u05DC \u05E2\u05D1\u05D5\u05D3\u05D5\u05EA',
+    desc_he: 'משוב מפורט על עבודות',
     desc_en: 'Rubric-first feedback on your work',
   },
 ] as const;
 
-function detectLocale(): 'he' | 'en' {
-  if (typeof document === 'undefined') return 'he';
-  const match = document.cookie.match(/(?:^|;\s*)asf-locale=([^;]+)/);
-  return match?.[1] === 'en' ? 'en' : 'he';
-}
-
 export function AgentsIntroBanner() {
+  const { locale } = useI18n();
+  const isHe = locale === 'he';
   const [visible, setVisible] = useState(false);
-  const [isHe, setIsHe] = useState(true);
 
   useEffect(() => {
     const seen = localStorage.getItem(STORAGE_KEY);
-    if (!seen) {
-      setIsHe(detectLocale() === 'he');
-      setVisible(true);
-    }
+    if (!seen) setVisible(true);
   }, []);
 
   function dismiss() {
@@ -63,8 +56,8 @@ export function AgentsIntroBanner() {
   if (!visible) return null;
 
   const dir = isHe ? 'rtl' : 'ltr';
-  const title = isHe ? '\u05D4\u05DB\u05D9\u05E8\u05D5 \u05D0\u05EA \u05D4\u05E6\u05D5\u05D5\u05EA \u05E9\u05DC\u05DB\u05DD' : 'Meet Your Learning Team';
-  const gotIt = isHe ? '\u05D4\u05D1\u05E0\u05EA\u05D9' : 'Got it';
+  const title = isHe ? 'הכירו את הצוות שלכם' : 'Meet Your Learning Team';
+  const gotIt = isHe ? 'הבנתי' : 'Got it';
 
   return (
     <div
@@ -73,15 +66,12 @@ export function AgentsIntroBanner() {
       aria-modal="true"
       aria-label={title}
     >
-      <div
-        className={cn('card-punch w-full max-w-lg rounded-2xl p-6')}
-        dir={dir}
-      >
+      <div className={cn('card-punch w-full max-w-lg rounded-2xl p-6')} dir={dir}>
         <h2 className="font-display mb-1 text-2xl font-semibold text-primary">{title}</h2>
         <p className="mb-5 text-sm text-muted-foreground">
           {isHe
-            ? '\u05DB\u05DC \u05E1\u05D5\u05DB\u05DF \u05DE\u05D9\u05D5\u05E2\u05D3 \u05DC\u05E6\u05D5\u05E8\u05DA \u05E9\u05D5\u05E0\u05D4 \u2014 \u05D1\u05D7\u05E8 \u05D0\u05EA \u05D4\u05E0\u05DB\u05D5\u05DF \u05DC\u05DA.'
-            : 'Each agent serves a different purpose \u2014 pick the right one for your goal.'}
+            ? 'כל סוכן מיועד לצורך שונה — בחר את הנכון לך.'
+            : 'Each agent serves a different purpose — pick the right one for your goal.'}
         </p>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

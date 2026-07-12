@@ -32,6 +32,26 @@ export const WEB_LIVE_AGENT_NAMES: Record<WebLiveAgent, { he: string; en: string
   reviewer: { he: 'מבקר', en: 'Reviewer' },
 };
 
+/** Short bilingual blurbs for agent switchers / side panels. */
+export const WEB_LIVE_AGENT_BLURBS: Record<WebLiveAgent, { he: string; en: string }> = {
+  tutor: {
+    he: 'מדריך עם שאלות — ללמידה עמוקה ותשובות ישירות',
+    en: 'Socratic guidance and cited Q&A from the corpus',
+  },
+  mentor: {
+    he: 'מוטיבציה, הרגלים ותכנון',
+    en: 'Motivation, habits, and planning',
+  },
+  coach: {
+    he: 'תרגול יומי וחיזוק נקודות חולשה',
+    en: 'Daily drills targeting your weak spots',
+  },
+  reviewer: {
+    he: 'משוב מפורט על עבודות ופתרונות',
+    en: 'Rubric-first feedback on your work',
+  },
+};
+
 export function webLiveAgentLabel(agent: WebLiveAgent, locale: 'he' | 'en'): string {
   return WEB_LIVE_AGENT_NAMES[agent][locale];
 }

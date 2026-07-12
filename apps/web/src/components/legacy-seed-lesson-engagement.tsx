@@ -83,19 +83,22 @@ export function LegacySeedCompleteArea({
     if (saving || completed) return;
     setSaving(true);
     try {
-      await fetch('/api/lessons/complete', {
+      const res = await fetch('/api/lessons/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ concept_id: conceptId }),
       });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
     } catch {
-      // Best-effort — mark done in UI regardless.
-    } finally {
       setSaving(false);
-      setCompleted(true);
-      // Navigate after a brief pause so the learner sees the message.
-      setTimeout(() => router.push('/app?completed=1'), 3000);
+      return;
     }
+    setSaving(false);
+    setCompleted(true);
+    // Navigate after a brief pause so the learner sees the message.
+    setTimeout(() => router.push('/app?completed=1'), 3000);
   }
 
   const buttonLabel = saving

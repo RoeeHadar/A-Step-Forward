@@ -289,64 +289,11 @@ export async function getConceptMastery(
   return result;
 }
 
-const LESSON_READ_BASELINE = 0.7;
-
-async function ensureConceptMasteryTable(): Promise<void> {
-  const s = requireSql();
-  await s`
-    CREATE TABLE IF NOT EXISTS concept_mastery (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      learner_id TEXT NOT NULL,
-      concept_id TEXT NOT NULL,
-      score NUMERIC(4,3) NOT NULL DEFAULT 0,
-      data_points INT NOT NULL DEFAULT 0,
-      last_activity TIMESTAMPTZ,
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      updated_at TIMESTAMPTZ DEFAULT NOW(),
-      UNIQUE (learner_id, concept_id)
-    )
-  `;
-}
-
-async function ensureLearnerProfileCompletionColumn(): Promise<void> {
-  const s = requireSql();
-  await s`ALTER TABLE learner_profiles ADD COLUMN IF NOT EXISTS lessons_completed_count INT NOT NULL DEFAULT 0`;
-}
-
 /** Baseline mastery when a learner marks a lesson as read/complete (before quiz). */
 export async function markLessonComplete(learnerId: string, conceptId: string): Promise<number> {
-  const canonicalId = resolveLessonConceptId(conceptId.trim());
-  const s = requireSql();
-  await ensureConceptMasteryTable();
-  await ensureLearnerProfileCompletionColumn();
-
-  await s`
-    INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
-    VALUES (${learnerId}, ${canonicalId}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
-    ON CONFLICT (learner_id, concept_id) DO UPDATE SET
-      score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
-      last_activity = NOW(),
-      updated_at = NOW()
-  `;
-  if (canonicalId !== conceptId.trim()) {
-    await s`
-      INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
-      VALUES (${learnerId}, ${conceptId.trim()}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
-      ON CONFLICT (learner_id, concept_id) DO UPDATE SET
-        score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
-        last_activity = NOW(),
-        updated_at = NOW()
-    `;
-  }
-
-  await s`
-    UPDATE learner_profiles
-    SET lessons_completed_count = COALESCE(lessons_completed_count, 0) + 1,
-        updated_at = NOW()
-    WHERE learner_id = ${learnerId}
-  `;
-
-  return LESSON_READ_BASELINE;
+  const { markLessonCompleteThin } = await import('./lesson-complete');
+  const result = await markLessonCompleteThin(learnerId, conceptId);
+  return result.new_mastery;
 }
 
 // ── Diagnostic ───────────────────────────────────────────────────────────────

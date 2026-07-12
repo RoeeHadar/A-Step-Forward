@@ -2,12 +2,14 @@
  * POST /api/lessons/complete
  *
  * Records baseline mastery when a learner marks a lesson as read/complete.
+ * Uses the thin lesson-complete module (no neon-db / kg-data import).
  */
 import { auth } from '@clerk/nextjs/server';
-import { markLessonComplete } from '@/lib/neon-db';
+import { markLessonCompleteThin } from '@/lib/lesson-complete';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 15;
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -28,8 +30,12 @@ export async function POST(req: Request) {
   }
 
   try {
-    const newMastery = await markLessonComplete(userId, conceptId);
-    return Response.json({ success: true, new_mastery: newMastery });
+    const result = await markLessonCompleteThin(userId, conceptId);
+    return Response.json({
+      success: true,
+      new_mastery: result.new_mastery,
+      week_completed: result.week_completed,
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal error';
     return Response.json({ error: message }, { status: 500 });

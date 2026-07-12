@@ -118,6 +118,9 @@ export function PersonaEditor({
 
   const [text, setText] = useState(initialText ?? '');
   const [updated, setUpdated] = useState(updatedAt);
+  const placeholder = isHe
+    ? '## איך אני מדבר/ת\n- ...\n\n## איך אני אוהב/ת הסברים\n- ...'
+    : '## How I talk\n- ...\n\n## How I like explanations\n- ...';
   const [status, setStatus] = useState<
     | { kind: 'idle' }
     | { kind: 'saved' }
@@ -226,7 +229,7 @@ export function PersonaEditor({
             value={text}
             onChange={(e) => setText(e.target.value.slice(0, 4000))}
             className="w-full min-h-[260px] rounded-lg border border-border/60 bg-card/50 p-3 font-mono text-sm leading-relaxed focus:border-primary focus:outline-none"
-            placeholder={'## How I talk\n- ...\n\n## How I like explanations\n- ...'}
+            placeholder={placeholder}
             spellCheck={false}
             dir="ltr" // markdown source is always LTR even when UI is RTL
             aria-label={t.title}
