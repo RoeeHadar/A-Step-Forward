@@ -1,30 +1,22 @@
 # Diagnostic + plan fixes (Jul 2026)
 
-Status: **questions OK**, plan persist fixed with fast path + parallel poll.
+Status: **diagnostic removed**; **rolling 2-week plan** (timeout root cause fixed).
 
 ## Works
 
-- 6-question diagnostic validation queue (available MCQs only)
-- Fresh diagnostic session; pending-only resume on refresh
-- Answer-time stem dedupe (not serve-time)
-- Client progress from `responses.length` / `diagnosticAnsweredCount`
-- Plan: `POST /api/plans/generate?fast=1` + `buildFastPlanConceptOrder`
-- Persist plan rows before wellbeing bias write
-- Client polls `exists=1` while POST runs
+- Onboarding steps 0–3 only → sync `createOnboardingPlan`
+- Materialize **only 2 weeks** × ≤4 concepts (not full exam horizon)
+- Sequential week chunks; horizon `end_date` separate from materialized weeks
+- `advanceRollingPlanWindow` on plan fetch when active week past due
+- Redirect to `/app` only when `{ has_plan: true }`
 
 ## Failed approaches (avoid)
 
-- 12-question sessions on thin bank
-- Resume stale/partial sessions as complete
-- Pre-mark stems on serve
-- Full `buildLearningPlan` BFS on first plan (60s+ timeout)
-- Hydrate textbook/Bagrut before INSERT
-- Client-only POST wait with 55s abort
+- Building 12–24 weeks on first create → `FUNCTION_INVOCATION_TIMEOUT`
+- Full BFS / textbook hydration before INSERT
+- Long retry sleeps inside onboarding submit
+- Client poll-only plan generation after diagnostic
 
 ## Skill
 
-Repo: `skills/diagnostic-plan-golden-path/SKILL.md`
-
-## Production verify
-
-After deploy: onboarding → 6 Q → plan redirect < 15s → dashboard week 1.
+`skills/diagnostic-plan-golden-path/SKILL.md`

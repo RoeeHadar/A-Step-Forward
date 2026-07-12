@@ -14,6 +14,35 @@ import {
 
 export const PLAN_SCHEMA_VERSION = 2;
 
+/** Only this many weeks are materialized for the learner at a time. */
+export const ROLLING_VISIBLE_WEEKS = 2;
+/** Cap concepts per visible week so onboarding/plan create stays under Vercel timeouts. */
+export const CONCEPTS_PER_ROLLING_WEEK = 4;
+
+/**
+ * Sequential week chunks (week 1 = first N concepts) — not round-robin.
+ * Round-robin spreads prerequisites across weeks and hurts pedagogy + latency.
+ */
+export function chunkConceptsIntoWeeks(
+  concepts: string[],
+  numWeeks: number,
+  perWeek = CONCEPTS_PER_ROLLING_WEEK,
+): string[][] {
+  const weeks = Math.max(1, numWeeks);
+  const cap = Math.max(1, perWeek);
+  const limited = concepts.slice(0, weeks * cap);
+  const groups: string[][] = Array.from({ length: weeks }, () => []);
+  for (let i = 0; i < limited.length; i += 1) {
+    const weekIdx = Math.min(weeks - 1, Math.floor(i / cap));
+    groups[weekIdx]!.push(limited[i]!);
+  }
+  // Ensure week 1 always has at least one concept when any exist.
+  if (groups[0]!.length === 0 && limited.length > 0) {
+    groups[0]!.push(limited[0]!);
+  }
+  return groups;
+}
+
 /** Syllabus / lesson goal ids → KG node for backward BFS when absent from kg-data. */
 const PLANNER_GOAL_KG_FALLBACK: Record<string, string> = {
   function_analysis_4pt: 'function_analysis_extrema',

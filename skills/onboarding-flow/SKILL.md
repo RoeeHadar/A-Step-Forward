@@ -46,18 +46,11 @@ Sign-up (Clerk)            apps/web/src/app/sign-up/.../page.tsx
 
 `generateLearningPlan()` in `apps/web/src/lib/neon-db.ts`:
 
-1. Pulls mastery from `concept_mastery`.
-2. Builds a worklist of weak concepts (mastery < 0.4) and their unmet prerequisites.
-3. Picks `numWeeks`:
-   - 1–12 weeks based on `next_test_date` (≈ days/7).
-   - 2–16 weeks based on `final_goal_date` if no test.
-   - Default 4 weeks.
-4. Sorts concepts by **prerequisite depth** in the KG (roots first) so the plan
-   teaches dependencies before dependents.
-5. Round-robins concepts into weeks.
-6. Persists `learning_plans` + `plan_weeks` in Neon, replacing any active plan.
-7. Hydrates each concept with up to 3 textbook sections + 2 Bagrut exams from
-   the matching subject for surface in `LearningPlanDashboard`.
+1. Pulls mastery from `concept_mastery` (seeded from goal-derived scores on first submit).
+2. Builds a **rolling 2-week** worklist (not the full exam horizon) via `buildFastPlanConceptOrder`.
+3. Chunks ≤4 concepts/week sequentially (`chunkConceptsIntoWeeks`).
+4. Persists `learning_plans` + `plan_weeks` (2 weeks). `end_date` may still reflect the exam horizon.
+5. Later: `advanceRollingPlanWindow()` on plan fetch completes past-due weeks and appends the next week.
 
 ## Diagnostic behavior
 

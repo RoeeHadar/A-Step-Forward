@@ -1,5 +1,10 @@
 import { auth } from '@clerk/nextjs/server';
-import { getCurrentPlan, hasActiveLearningPlan, dbConfigured } from '@/lib/neon-db';
+import {
+  getCurrentPlan,
+  hasActiveLearningPlan,
+  advanceRollingPlanWindow,
+  dbConfigured,
+} from '@/lib/neon-db';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -17,6 +22,9 @@ export async function GET(req: Request) {
     if (existsOnly) {
       return Response.json({ has_plan: await hasActiveLearningPlan(userId) });
     }
+
+    // Advance rolling window when active week is past due (cheap no-op otherwise).
+    await advanceRollingPlanWindow(userId).catch(() => null);
 
     const plan = await getCurrentPlan(userId);
     if (!plan) {

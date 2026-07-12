@@ -2,8 +2,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   buildFastPlanConceptOrder,
   buildUnifiedPlanConceptOrder,
+  chunkConceptsIntoWeeks,
   DEFAULT_GOAL_CONCEPT_BY_GOAL_KEY,
   resolveGoalConceptId,
+  ROLLING_VISIBLE_WEEKS,
 } from './plan-worklist';
 
 const mockBuildLearningPlan = vi.fn();
@@ -124,5 +126,24 @@ describe('buildFastPlanConceptOrder', () => {
 
     expect(ordered.length).toBeGreaterThan(0);
     expect(ordered).toContain('limits');
+  });
+});
+
+describe('chunkConceptsIntoWeeks', () => {
+  it('fills week 1 then week 2 sequentially (not round-robin)', () => {
+    const groups = chunkConceptsIntoWeeks(
+      ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'],
+      ROLLING_VISIBLE_WEEKS,
+      4,
+    );
+    expect(groups).toHaveLength(2);
+    expect(groups[0]).toEqual(['a', 'b', 'c', 'd']);
+    expect(groups[1]).toEqual(['e', 'f', 'g', 'h']);
+  });
+
+  it('caps to visible weeks × per-week', () => {
+    const groups = chunkConceptsIntoWeeks(['a', 'b'], 2, 4);
+    expect(groups[0]).toEqual(['a', 'b']);
+    expect(groups[1]).toEqual([]);
   });
 });

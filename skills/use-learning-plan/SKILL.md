@@ -19,9 +19,11 @@ description: How to consume the mastery-aware learning-plan endpoint (/api/learn
 concept sequencing, urgency, `blocking_atoms`, and cross-subject backward BFS.
 
 **Persistence layer:** `generateLearningPlan()` delegates ordering to
-`buildUnifiedPlanConceptOrder()` in `plan-worklist.ts`, then chunks concepts into
-`learning_plans` / `plan_weeks` for dashboard and quiz UX. Chat snapshot,
-`GET /api/learning-plan/next`, and the active dashboard week **must not contradict**.
+`buildUnifiedPlanConceptOrder()` / `buildFastPlanConceptOrder()` in `plan-worklist.ts`,
+then materializes a **rolling 2-week window** (`ROLLING_VISIBLE_WEEKS`) into
+`learning_plans` / `plan_weeks`. Do not persist the full exam-horizon calendar on
+first create — that caused Vercel `FUNCTION_INVOCATION_TIMEOUT`. Advance with
+`advanceRollingPlanWindow()` when the active week is past due.
 
 **Wellbeing overlay:** When `wellbeing_plan_bias` is active (anxiety ≥ 7, exam window,
 chat `exam_anxiety` intent, or mastery shock), `wellbeing-plan-bias.ts` blends

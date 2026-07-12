@@ -20,8 +20,11 @@ import {
   buildFastPlanConceptOrder,
   bootstrapConceptsForProfile,
   buildUnifiedPlanConceptOrder,
+  chunkConceptsIntoWeeks,
+  CONCEPTS_PER_ROLLING_WEEK,
   PLAN_SCHEMA_VERSION,
   resolveGoalConceptId,
+  ROLLING_VISIBLE_WEEKS,
 } from './plan-worklist';
 import {
   applyWellbeingOverlay,
@@ -1102,6 +1105,11 @@ export interface GeneratePlanOptions {
   planChangeReason?: string;
   /** Skip BFS plan builder — use in-memory worklist only (onboarding / diagnostic). */
   fastPath?: boolean;
+  /**
+   * Materialize only ROLLING_VISIBLE_WEEKS (default on fastPath / first plan).
+   * Full multi-week calendars are built incrementally via advanceRollingPlanWindow.
+   */
+  rollingWindow?: boolean;
 }
 
 type SubjectContentCache = {
@@ -1214,31 +1222,47 @@ export async function generateLearningPlan(
 
   const goalText = options.goalOverride?.trim() || profile.goal;
 
-  // Determine number of weeks from next_test_date / final_goal_date
-  let numWeeks = 4;
+  // Horizon = aspirational length from exam/goal dates (for end_date UX only).
+  // Materialized weeks = rolling window (2) unless explicitly overridden for mid-journey regen.
+  let horizonWeeks = 4;
   const nextTestDate = profile.next_test_date ? new Date(profile.next_test_date) : null;
   const finalGoalDate = profile.final_goal_date ? new Date(profile.final_goal_date) : null;
   const useFinalGoal =
     finalGoalDate &&
     (!nextTestDate || finalGoalDate.getTime() > nextTestDate.getTime());
 
-  if (options.numWeeksOverride != null) {
-    numWeeks = options.numWeeksOverride;
-  } else if (useFinalGoal && finalGoalDate) {
+  if (useFinalGoal && finalGoalDate) {
     const days = Math.ceil(
       (finalGoalDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
-    numWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
+    horizonWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
   } else if (nextTestDate) {
     const days = Math.ceil(
       (nextTestDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
-    numWeeks = Math.max(1, Math.min(12, Math.ceil(days / 7)));
+    horizonWeeks = Math.max(1, Math.min(12, Math.ceil(days / 7)));
   } else if (finalGoalDate) {
     const days = Math.ceil(
       (finalGoalDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
     );
-    numWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
+    horizonWeeks = Math.max(2, Math.min(24, Math.ceil(days / 7)));
+  }
+
+  const useFastPath =
+    options.fastPath === true ||
+    (options.fastPath !== false && !(await hasActiveLearningPlan(learnerId)));
+
+  const useRolling =
+    options.rollingWindow === true ||
+    (options.rollingWindow !== false && (useFastPath || options.numWeeksOverride == null));
+
+  let numWeeks: number;
+  if (options.numWeeksOverride != null) {
+    numWeeks = options.numWeeksOverride;
+  } else if (useRolling) {
+    numWeeks = ROLLING_VISIBLE_WEEKS;
+  } else {
+    numWeeks = horizonWeeks;
   }
 
   const worklistOptions = {
@@ -1247,10 +1271,6 @@ export async function generateLearningPlan(
     excludeConcepts,
     focusConceptsOnly: options.focusConceptsOnly,
   };
-
-  const useFastPath =
-    options.fastPath === true ||
-    (options.fastPath !== false && !(await hasActiveLearningPlan(learnerId)));
 
   let sorted = useFastPath
     ? buildFastPlanConceptOrder({ profile, mastery, options: worklistOptions })
@@ -1269,6 +1289,9 @@ export async function generateLearningPlan(
   if (sorted.length === 0) {
     throw new Error('Could not derive any concepts for your learning plan');
   }
+
+  // Keep the DB write tiny — only what the student can see in the rolling window.
+  sorted = sorted.slice(0, numWeeks * CONCEPTS_PER_ROLLING_WEEK);
 
   const now = new Date();
   let wellbeingBias = wellbeingPlanBiasFromProfile(
@@ -1314,17 +1337,8 @@ export async function generateLearningPlan(
       };
     }
 
-    // Chunk into weeks (round-robin so each week has roughly equal load)
-    const weekGroups: string[][] = Array.from({ length: numWeeks }, () => []);
-    const maxPerWeek = Math.max(3, Math.ceil(sorted.length / numWeeks));
-    let weekIdx = 0;
-    for (const concept of sorted) {
-      while (weekGroups[weekIdx]!.length >= maxPerWeek) {
-        weekIdx = (weekIdx + 1) % numWeeks;
-      }
-      weekGroups[weekIdx]!.push(concept);
-      weekIdx = (weekIdx + 1) % numWeeks;
-    }
+    // Chunk into weeks (sequential — week 1 first concepts)
+    const weekGroups = chunkConceptsIntoWeeks(sorted, numWeeks);
 
     if (wellbeingBias.active && persistWellbeing && wellbeingBias.morale_concepts.length > 0) {
       const ratio = wellbeingBias.goal_critical_ratio;
@@ -1357,20 +1371,12 @@ export async function generateLearningPlan(
       planLastAdjustedAt,
       profile,
       mastery,
+      horizonWeeks,
     });
   }
 
   // Fast onboarding path — skip wellbeing overlay; persist immediately.
-  const weekGroups: string[][] = Array.from({ length: numWeeks }, () => []);
-  const maxPerWeek = Math.max(3, Math.ceil(Math.max(sorted.length, 1) / numWeeks));
-  let weekIdx = 0;
-  for (const concept of sorted) {
-    while (weekGroups[weekIdx]!.length >= maxPerWeek) {
-      weekIdx = (weekIdx + 1) % numWeeks;
-    }
-    weekGroups[weekIdx]!.push(concept);
-    weekIdx = (weekIdx + 1) % numWeeks;
-  }
+  const weekGroups = chunkConceptsIntoWeeks(sorted, numWeeks);
 
   const plan = await persistLearningPlanTransaction({
     learnerId,
@@ -1383,6 +1389,7 @@ export async function generateLearningPlan(
     profile,
     mastery,
     skipWellbeingSave: true,
+    horizonWeeks,
   });
 
   void saveWellbeingPlanBias(learnerId, wellbeingBias).catch((err) => {
@@ -1403,6 +1410,8 @@ async function persistLearningPlanTransaction(args: {
   profile: NonNullable<Awaited<ReturnType<typeof getLearnerProfile>>>;
   mastery: Record<string, number>;
   skipWellbeingSave?: boolean;
+  /** Aspirational calendar length (exam horizon); defaults to materialized weeks. */
+  horizonWeeks?: number;
 }): Promise<LearningPlan> {
   const s = requireSql();
   const {
@@ -1416,12 +1425,13 @@ async function persistLearningPlanTransaction(args: {
     profile,
     mastery,
     skipWellbeingSave = false,
+    horizonWeeks,
   } = args;
 
   const planId = randomUUID();
   const startDate = new Date();
   const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 7 * numWeeks);
+  endDate.setDate(endDate.getDate() + 7 * Math.max(numWeeks, horizonWeeks ?? numWeeks));
   const startStr = startDate.toISOString().slice(0, 10);
   const endStr = endDate.toISOString().slice(0, 10);
 
@@ -1585,14 +1595,22 @@ export function kickoffOnboardingPlan(learnerId: string): void {
 }
 
 /**
- * Synchronous onboarding plan — retries locks, verifies DB row + week concepts.
+ * Synchronous onboarding plan — only 2 visible weeks, verified in DB.
+ * Kept short (no long retry sleeps) so Vercel FUNCTION_INVOCATION_TIMEOUT cannot trip.
  */
 export async function createOnboardingPlan(learnerId: string): Promise<LearningPlan> {
+  if (await hasActiveLearningPlan(learnerId)) {
+    const existing = await loadActivePlanStub(learnerId);
+    if (planHasConceptContent(existing)) return existing!;
+  }
+
   let lastErr: unknown;
-  for (let attempt = 0; attempt < 4; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       const plan = await ensureLearningPlan(learnerId, {
         fastPath: true,
+        rollingWindow: true,
+        numWeeksOverride: ROLLING_VISIBLE_WEEKS,
         forceRegenerate: true,
       });
       if (!(await hasActiveLearningPlan(learnerId))) {
@@ -1605,20 +1623,117 @@ export async function createOnboardingPlan(learnerId: string): Promise<LearningP
       return plan;
     } catch (err) {
       lastErr = err;
-      if (isPlanGenerationLockError(err) && attempt < 3) {
-        const waited = await waitForCurrentPlan(learnerId, { attempts: 20, delayMs: 500 });
+      if (isPlanGenerationLockError(err)) {
+        const waited = await waitForCurrentPlan(learnerId, { attempts: 8, delayMs: 400 });
         if (planHasConceptContent(waited)) return waited!;
-        await planGenSleep(1000 * (attempt + 1));
-        continue;
       }
-      if (attempt < 3) {
-        await planGenSleep(750);
-        continue;
-      }
-      throw err;
+      if (attempt === 0) await planGenSleep(300);
     }
   }
   throw lastErr instanceof Error ? lastErr : new Error('Plan creation failed');
+}
+
+/**
+ * When the active week is past due / completed, promote week+1 and append a fresh week+2
+ * from current mastery (minor re-eval). No-op if the rolling window is already full.
+ */
+export async function advanceRollingPlanWindow(
+  learnerId: string,
+): Promise<{ advanced: boolean; plan: LearningPlan | null }> {
+  const stub = await loadActivePlanStub(learnerId);
+  if (!stub?.weeks?.length) return { advanced: false, plan: stub };
+
+  const now = Date.now();
+  const active = stub.weeks.find((w) => w.status === 'active') ?? stub.weeks[0];
+  if (!active) return { advanced: false, plan: stub };
+
+  const dueMs = active.quiz_due_at ? new Date(active.quiz_due_at).getTime() : NaN;
+  const weekPastDue = Number.isFinite(dueMs) && dueMs < now;
+  if (active.status !== 'completed' && !weekPastDue) {
+    return { advanced: false, plan: stub };
+  }
+
+  const profile = await getLearnerProfile(learnerId);
+  if (!profile) return { advanced: false, plan: stub };
+  const mastery = await getConceptMastery(learnerId);
+
+  const usedConcepts = new Set<string>();
+  for (const w of stub.weeks) {
+    for (const c of w.concepts) usedConcepts.add(c.concept_id);
+  }
+
+  const ordered = buildFastPlanConceptOrder({
+    profile,
+    mastery,
+    options: {
+      excludeConcepts: [...usedConcepts],
+      prependConcepts: [],
+      priorityConcepts: sanitizeConceptIds(profile.weak_concepts ?? []),
+    },
+  });
+  let nextConcepts = ordered
+    .filter((id) => !usedConcepts.has(id))
+    .slice(0, CONCEPTS_PER_ROLLING_WEEK);
+  if (nextConcepts.length === 0) {
+    nextConcepts = bootstrapConceptsForProfile(profile, mastery)
+      .filter((id) => !usedConcepts.has(id))
+      .slice(0, CONCEPTS_PER_ROLLING_WEEK);
+  }
+  if (nextConcepts.length === 0) {
+    return { advanced: false, plan: stub };
+  }
+
+  const s = requireSql();
+  const nextWeekNumber = Math.max(...stub.weeks.map((w) => w.week_number)) + 1;
+  const upcoming = stub.weeks.find((w) => w.status === 'upcoming');
+  const weekId = randomUUID();
+  const quizDue = new Date();
+  quizDue.setDate(quizDue.getDate() + 7);
+  const quizDueIso = quizDue.toISOString();
+
+  const queries = [
+    ...(weekPastDue || active.status === 'completed'
+      ? [
+          s`
+            UPDATE plan_weeks
+            SET status = 'completed'
+            WHERE id = ${active.id}::uuid
+          `,
+        ]
+      : []),
+    ...(upcoming
+      ? [
+          s`
+            UPDATE plan_weeks
+            SET status = 'active'
+            WHERE id = ${upcoming.id}::uuid
+          `,
+        ]
+      : []),
+    s`
+      INSERT INTO plan_weeks (id, plan_id, week_number, concepts, quiz_due_at, status)
+      VALUES (
+        ${weekId}, ${stub.id}::uuid, ${nextWeekNumber}, ${nextConcepts},
+        ${quizDueIso}, 'upcoming'
+      )
+    `,
+    s`
+      UPDATE learning_plans
+      SET updated_at = NOW(),
+          plan_last_adjusted_at = NOW(),
+          plan_adjustment_kind = 'mastery'
+      WHERE id = ${stub.id}::uuid
+    `,
+  ];
+
+  try {
+    await s.transaction(queries);
+  } catch (err) {
+    console.warn('[advanceRollingPlanWindow]', err);
+    return { advanced: false, plan: stub };
+  }
+
+  return { advanced: true, plan: await loadActivePlanStub(learnerId) };
 }
 
 export async function applyPlanProfileUpdates(
