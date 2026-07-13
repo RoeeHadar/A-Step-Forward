@@ -127,6 +127,7 @@ The Clerk `userId` is the single key. There is no separate "storage bucket" for 
 | `skills/taste/SKILL.md` | Any visual/design work in `apps/web` — new pages/components, "make it look better" passes, or UI design review. Enforces hierarchy, spacing rhythm, type scale, restrained color, depth, motion on top of the design tokens. Pair with `add-a-frontend-page`. |
 | `skills/skill-creation/SKILL.md` | Authoring, editing, or auditing any skill under `skills/`. Encodes Anthropic's skill-building guide (frontmatter, discoverable descriptions, progressive disclosure) + a conformance audit checklist. |
 | `skills/grill-me/SKILL.md` | Stress-test a plan or design with a relentless one-question interview before building. User says "grill me" / "/grill-me" / "stress-test this plan". |
+| `skills/find-skills/SKILL.md` | Discover/install skills from skills.sh (`npx skills find`) after checking local `skills/` + AGENTS.md. User asks "find a skill for X" / "is there a skill that…". |
 | `skills/web-agent-shared/SKILL.md` | Shared runtime skills for all four live website agents (memory, bilingual, safety, plan protocol). Injected via `apps/web/src/lib/agent-skills.ts`. |
 | `skills/web-agent-tutor/SKILL.md` | Tutor runtime skills: Socratic + Q&A explainer mode. Pair with `web-agent-shared`. |
 | `skills/web-agent-mentor/SKILL.md` | Mentor runtime skills: goals, habits, wellbeing, plan updates. |
