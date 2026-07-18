@@ -80,6 +80,7 @@ function normalizeForStore(item) {
     level: item.level,
     math_track: item.math_track ?? [],
     points_level: item.points_level ?? null,
+    points_level_min: item.points_level_min ?? null,
     kind: item.kind,
     difficulty: item.difficulty,
     stem_en: item.stem_en ?? '',

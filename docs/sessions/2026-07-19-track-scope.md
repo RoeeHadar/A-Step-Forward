@@ -71,6 +71,16 @@ trigonometric_equations, limits_5pt, definite_integrals.
 NOT the authority these are expected; spot-verify a few (e.g. `sequences_geometric`
 kg=`["4pt","5pt"]` vs `["3pt","4pt"]`; `triangles_congruence`).
 
+## Batch B — shipped
+
+Volume + diversity for the six highest-traffic 3pt/4pt foundational lessons
+(`algebra_basics`, `factoring`, `equations_quadratic`, `functions_quadratic`,
+`logarithms`, `exponents`): each expanded from 10 → **15-16 CAS-verified items**,
+spanning 5 kinds with an easy/med/hard spread and multi-step bilingual solutions.
+New items target distinct sub-skills (sign traps, factor theorem, factor-by-
+grouping, Vieta, completing the square, change of base, negative/fractional
+exponents, consecutive-integer word problem). 0 CAS rejections; all gates green.
+
 ## Pending (not yet done this window)
 
 - **Volume:** expand generators to 15+ items each (currently 10-11).

@@ -742,7 +742,7 @@ def gen_integrals_applications(meta):
              r"**תשובה:** $\tfrac{4}{3}$."],
             ["area_between_curves"],
             {"check": "value", "value": "integrate(2*x-x**2,(x,0,2))", "claimed": "4/3"}),
-        mcq(c, meta, "hard",
+        _pl(mcq(c, meta, "hard",
             r"The region under $y = \sqrt{x}$ for $0 \le x \le 4$ is rotated about the $x$-axis. Its volume $\pi\int_0^4 x\,dx$ equals:",
             r"התחום שמתחת ל-$y = \sqrt{x}$ עבור $0 \le x \le 4$ מסובב סביב ציר ה-$x$. הנפח $\pi\int_0^4 x\,dx$ שווה ל:",
             [r"8\pi", r"16\pi", r"4\pi", r"2\pi"], 0,
@@ -753,7 +753,7 @@ def gen_integrals_applications(meta):
              r"**Answer:** $8\pi$."],
             [r"**שיטת הדיסקים.** $V = \pi\int_0^4 \left(\sqrt{x}\right)^2\,dx = \pi\int_0^4 x\,dx$.",
              r"**הצבה.** $\pi\left[\tfrac{x^2}{2}\right]_0^4 = 8\pi$.",
-             r"**תשובה:** $8\pi$."]),
+             r"**תשובה:** $8\pi$."]), "5pt"),  # volume of revolution is 5pt-only
         tf(c, meta, "medium",
            r"True or False: $\int_0^{2\pi} \sin x\,dx = 0$.",
            r"נכון או לא נכון: $\int_0^{2\pi} \sin x\,dx = 0$.",
