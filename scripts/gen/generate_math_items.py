@@ -103,6 +103,7 @@ def _item(concept, meta, *, kind, difficulty, stem_en, stem_he, answer_payload,
         "level": meta["level"],
         "math_track": meta.get("math_track", []),
         "points_level": meta.get("points_level"),
+        "points_level_min": meta.get("points_level_min"),
         "kind": kind,
         "difficulty": difficulty,
         "stem_en": "",
@@ -115,6 +116,21 @@ def _item(concept, meta, *, kind, difficulty, stem_en, stem_he, answer_payload,
         "provenance": {"generator": "generate_math_items.py", "method": "sympy"},
         "verification_status": "unverified",
     }
+
+
+# Ascending points-level order for track-scoped gating.
+_LEVEL_ORDER = {"3pt": 0, "4pt": 1, "5pt": 2}
+
+
+def _pl(item, level):
+    """Tag an item with the *minimum* points-level that should see it.
+
+    A learner viewing a track only sees questions whose ``points_level_min`` is
+    at or below their track (see the quiz-panel filter). Tag conceptual / harder
+    / track-specific items so 3pt learners are not shown 5pt-only material.
+    """
+    item["points_level_min"] = level
+    return item
 
 
 # --------------------------------------------------------------------------- #
@@ -2340,6 +2356,14 @@ def main() -> None:
             "math_track": lesson.get("math_track", meta["math_track"]),
             "points_level": lesson.get("points_level") or meta["points_level"],
         }
+
+    # The DEFAULT minimum points-level for an item is the LOWEST track the lesson
+    # serves — otherwise a 3pt/4pt lesson's questions would be gated to 5pt and
+    # hidden from the very learners it is for. Individual items may still be
+    # raised with _pl(item, "5pt") for genuinely track-specific / advanced work.
+    pt_tracks = [t for t in (meta.get("math_track") or []) if t in _LEVEL_ORDER]
+    if pt_tracks:
+        meta["points_level"] = min(pt_tracks, key=lambda t: _LEVEL_ORDER[t])
 
     items = GENERATORS[args.concept](meta)
     payload = json.dumps(items, ensure_ascii=False, indent=2)

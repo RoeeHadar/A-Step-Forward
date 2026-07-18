@@ -112,7 +112,8 @@ export function itemToLessonQuestions(item) {
     };
     if (part.rubric_en) q.rubric_en = part.rubric_en;
     if (part.rubric_he) q.rubric_he = part.rubric_he;
-    if (item.points_level) q.points_level_min = item.points_level;
+    const plmin = item.points_level_min ?? part.points_level_min ?? item.points_level;
+    if (plmin) q.points_level_min = plmin;
     applyAnswerFields(q, ap);
     return q;
   });
