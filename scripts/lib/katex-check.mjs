@@ -39,6 +39,25 @@ export function extractMathSpans(text) {
   return spans;
 }
 
+/**
+ * Detect the remark-math display-fence gotcha: text on the SAME line as the
+ * opening `$$` of a MULTI-LINE block is treated as fence metadata and silently
+ * dropped (so `$$\begin{array}...` loses the `\begin{array}` and KaTeX then
+ * chokes on the bare `&`/`\\`). Returns the offending block previews.
+ */
+export function findFenceMetaGotchas(text) {
+  if (typeof text !== 'string' || !text.includes('$$')) return [];
+  const parts = text.split('$$');
+  if (parts.length % 2 === 0) return []; // unbalanced $$ handled elsewhere
+  const bad = [];
+  for (let i = 1; i < parts.length; i += 2) {
+    const seg = parts[i];
+    if (!seg.includes('\n')) continue; // single-line display block is fine
+    if (!seg.startsWith('\n')) bad.push(seg.split('\n')[0].slice(0, 50));
+  }
+  return bad;
+}
+
 /** Count unescaped, non-`$$` dollar signs — an odd count means broken delimiters. */
 export function hasUnbalancedDollars(text) {
   if (typeof text !== 'string') return false;
@@ -57,6 +76,11 @@ export function findMathErrors(text, label = '') {
   if (typeof text !== 'string' || !text.includes('$')) return errors;
   if (hasUnbalancedDollars(text)) {
     errors.push(`${label}: unbalanced '$' delimiters (math will render as raw text)`);
+  }
+  for (const preview of findFenceMetaGotchas(text)) {
+    errors.push(
+      `${label}: content on the opening $$ line ("${preview}…") — remark-math drops it; put $$ on its own line`,
+    );
   }
   if (!katex) return errors; // can't deep-check without katex; delimiter check still ran
   for (const { tex, display } of extractMathSpans(text)) {
