@@ -73,9 +73,7 @@ def upgrade() -> None:
     op.execute(
         "CREATE INDEX IF NOT EXISTS ix_qi_concept_diff ON question_items (concept_id, difficulty)"
     )
-    op.execute(
-        "CREATE INDEX IF NOT EXISTS ix_qi_subject_level ON question_items (subject, level)"
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_qi_subject_level ON question_items (subject, level)")
     op.execute(
         "CREATE INDEX IF NOT EXISTS ix_qi_verification ON question_items (verification_status)"
     )
