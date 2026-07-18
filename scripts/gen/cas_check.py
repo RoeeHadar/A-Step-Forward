@@ -27,7 +27,7 @@ from sympy.parsing.sympy_parser import (
     standard_transformations,
 )
 
-TRANSFORMS = standard_transformations + (implicit_multiplication_application,)
+TRANSFORMS = (*standard_transformations, implicit_multiplication_application)
 
 
 def _parse(text: str):

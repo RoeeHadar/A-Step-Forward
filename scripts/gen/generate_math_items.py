@@ -150,7 +150,7 @@ def _diff_true_false(concept, meta, f, stated_rhs, difficulty, atoms):
 def _to_num(expr):
     """Convert a sympy value to a JSON-friendly int/float."""
     val = float(sp.N(expr))
-    return int(round(val)) if abs(val - round(val)) < 1e-9 else round(val, 6)
+    return round(val) if abs(val - round(val)) < 1e-9 else round(val, 6)
 
 
 def _mk(concept, meta, *, kind, difficulty, stem_en, stem_he, answer_payload, atoms, verify,
