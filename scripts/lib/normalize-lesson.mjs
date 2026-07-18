@@ -169,6 +169,85 @@ export function validateLesson(file, l) {
   return errors;
 }
 
+/**
+ * Known auto-generation filler that signals a broken/templated answer payload.
+ * These strings leaked into acceptable_answers during an earlier batch job.
+ */
+const ANSWER_ARTIFACT_MARKERS = [
+  're-substitute or verify units',
+  'identify the rule from this lesson',
+  'name the rule from this lesson',
+];
+
+/** True when a short_answer acceptable-answers list looks broken/garbage. */
+export function acceptableAnswersLookBroken(list) {
+  if (!Array.isArray(list) || list.length === 0) return true;
+  let hasUsable = false;
+  for (const raw of list) {
+    if (typeof raw !== 'string') return true;
+    const s = raw.trim();
+    if (s.length === 0) return true;
+    const lower = s.toLowerCase();
+    if (ANSWER_ARTIFACT_MARKERS.some((m) => lower.includes(m))) return true;
+    // A bare 1-char token (e.g. "6", "2", "-") can never be a safe fuzzy key.
+    if (s.length >= 2) hasUsable = true;
+  }
+  return !hasUsable;
+}
+
+/** True when agent_hints is the structured object the runtime expects. */
+export function agentHintsIsStructured(hints) {
+  if (!hints || typeof hints !== 'object' || Array.isArray(hints)) return false;
+  return (
+    Array.isArray(hints.skill_atoms_unlocked) ||
+    Array.isArray(hints.key_insights) ||
+    Array.isArray(hints.common_misconceptions)
+  );
+}
+
+/**
+ * Strict validation for NEW / pilot-quality lessons. Intentionally separate from
+ * `validateLesson` so the 207 grandfathered lessons keep seeding while pilot
+ * content is held to the higher bar. Wire this into CI over touched/pilot files.
+ */
+export function validateLessonStrict(file, l) {
+  const errors = validateLesson(file, l);
+
+  if (!agentHintsIsStructured(l.agent_hints)) {
+    errors.push('agent_hints must be a structured object (skill_atoms_unlocked / key_insights / common_misconceptions), not a string');
+  }
+
+  const questions = Array.isArray(l.questions) ? l.questions : [];
+  for (const [i, q] of questions.entries()) {
+    if (!Array.isArray(q.skill_atoms) || q.skill_atoms.length === 0) {
+      errors.push(`q[${i}] must exercise >=1 skill_atom (planner sees mastery 0 otherwise)`);
+    }
+    if (q.kind === 'short_answer') {
+      const list = q.answer_payload?.acceptable_answers;
+      if (acceptableAnswersLookBroken(list)) {
+        errors.push(`q[${i}] short_answer acceptable_answers look broken/templated`);
+      }
+    }
+  }
+
+  const kinds = new Set(questions.map((q) => q.kind));
+  if (questions.length > 0 && kinds.size < 3) {
+    errors.push(`question-kind diversity too low: ${kinds.size} distinct kinds (need >=3)`);
+  }
+
+  // Every atom taught should be exercised by >=1 question, else it is unobservable.
+  const taught = new Set(l.agent_hints?.skill_atoms_unlocked ?? []);
+  const exercised = new Set();
+  for (const q of questions) for (const a of q.skill_atoms ?? []) exercised.add(a);
+  for (const atom of taught) {
+    if (!exercised.has(atom)) {
+      errors.push(`taught atom '${atom}' is never exercised by a question`);
+    }
+  }
+
+  return errors;
+}
+
 export function sectionContentScore(sections) {
   if (!Array.isArray(sections) || sections.length === 0) return 0;
   let score = sections.length;

@@ -2,6 +2,8 @@
  * Depth metrics for authored lessons (sections + questions + exercises).
  */
 
+import { acceptableAnswersLookBroken, agentHintsIsStructured } from './normalize-lesson.mjs';
+
 export function wordCount(text) {
   if (!text || typeof text !== 'string') return 0;
   const stripped = text
@@ -91,6 +93,16 @@ export function lessonMetrics(raw) {
 
   const hasWhyMatters = sections.some((s) => s.kind === 'why_matters');
 
+  // Question-bank health (question-store readiness).
+  const distinctKinds = new Set(questions.map((q) => q.kind)).size;
+  const questionsWithAtoms = questions.filter(
+    (q) => Array.isArray(q.skill_atoms) && q.skill_atoms.length > 0,
+  ).length;
+  const brokenPayloads = questions.filter(
+    (q) => q.kind === 'short_answer' && acceptableAnswersLookBroken(q.answer_payload?.acceptable_answers),
+  ).length;
+  const agentHintsStructured = agentHintsIsStructured(raw.agent_hints);
+
   return {
     concept_id: raw.concept_id ?? raw.id,
     totalSectionWords,
@@ -102,6 +114,10 @@ export function lessonMetrics(raw) {
     exerciseCount: exerciseTotal,
     shortExerciseSolutions,
     hasWhyMatters,
+    distinctKinds,
+    questionsWithAtoms,
+    brokenPayloads,
+    agentHintsStructured,
   };
 }
 
@@ -164,5 +180,29 @@ export function phase4Gates(metricsList) {
     whyMattersPct: pct,
     withWhyMatters: withWhy,
     total: metricsList.length,
+  };
+}
+
+/**
+ * Phase 5 — question-bank readiness (the lesson-corpus-rewrite pilot bar).
+ * Applied to pilot / touched lessons, not the grandfathered corpus.
+ */
+export function phase5Gates(metricsList) {
+  const n = metricsList.length || 1;
+  const brokenTotal = metricsList.reduce((s, m) => s + (m.brokenPayloads ?? 0), 0);
+  const unstructuredHints = metricsList.filter((m) => !m.agentHintsStructured).length;
+  const lowVariety = metricsList.filter((m) => (m.distinctKinds ?? 0) < 3).length;
+  const atomCoverage =
+    metricsList.reduce(
+      (s, m) => s + (m.questionCount > 0 ? (m.questionsWithAtoms ?? 0) / m.questionCount : 0),
+      0,
+    ) / n;
+
+  return {
+    pass: brokenTotal === 0 && unstructuredHints === 0 && lowVariety === 0 && atomCoverage >= 0.9,
+    brokenPayloadTotal: brokenTotal,
+    lessonsWithUnstructuredHints: unstructuredHints,
+    lessonsWithLowKindVariety: lowVariety,
+    avgQuestionAtomCoverage: atomCoverage,
   };
 }

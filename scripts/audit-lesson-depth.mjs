@@ -15,6 +15,7 @@ import {
   phase2Gates,
   phase3Gates,
   phase4Gates,
+  phase5Gates,
 } from './lib/lesson-depth.mjs';
 
 const args = new Map();
@@ -61,7 +62,9 @@ const gates =
       ? phase2Gates(metrics)
       : phaseNum === 3
         ? phase3Gates(metrics)
-        : phase4Gates(metrics);
+        : phaseNum === 4
+          ? phase4Gates(metrics)
+          : phase5Gates(metrics);
 
 console.log(`\nPhase ${phaseNum} gates:`, JSON.stringify(gates, null, 2));
 

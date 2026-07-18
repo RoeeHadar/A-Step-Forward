@@ -230,149 +230,255 @@
       "body_he_md": "- **ארבעה כללים מרכזיים** מכסים כל פונקציה אלמנטרית: סכום/הפרש, מכפלה, מנה, שרשרת.\n- **כלל שרשרת** הוא הנשכח ביותר: תמיד גזרו את הפונקציה הפנימית וכפלו.\n- **כלל מכפלה**: $f'g+fg'$, לא $f'g'$.\n- **כלל מנה**: הסדר חשוב — $f'g-fg'$.\n- **בעיות משולבות** דורשות פירוק עץ הפונקציה לפני יישום כללים.\n- תמיד פשטו את $f'(x)$ למציאת נקודות קריטיות."
     }
   ],
-  "agent_hints": "When a learner applies a differentiation rule, always ask them to name which rule they are using. Require them to write intermediate steps for product, quotient, and chain rules.",
+  "agent_hints": {
+    "key_insights": [
+      "The skill is recognizing WHICH rule (or combination) applies, not memorizing formulas.",
+      "Chain rule is the most frequently forgotten step: always differentiate the inner function and multiply.",
+      "Product rule is f'g + fg', never f'g'; quotient-rule numerator order is f'g - fg'.",
+      "Always simplify/factor f'(x) — examiners follow up by asking for critical points."
+    ],
+    "common_misconceptions": [
+      "Applying the power rule to e^x (writing x·e^(x-1) instead of e^x).",
+      "Dropping the inner-derivative factor in the chain rule.",
+      "Leaving a constant term in the derivative instead of 0."
+    ],
+    "socratic_prompt": "When a learner applies a differentiation rule, ask them to name which rule they are using and to write the intermediate steps for product, quotient, and chain rules.",
+    "pacing": "Polynomial/basic-trig derivatives should take under 30 seconds; spend the time on combined-rule decomposition.",
+    "skill_atoms_unlocked": [
+      "sum_rule",
+      "power_rule",
+      "product_rule",
+      "quotient_rule",
+      "chain_rule"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Differentiate $f(x) = 7x^4 - 3x^2 + 5$.",
-      "stem_he": "גזרו את $f(x) = 7x^4 - 3x^2 + 5$.",
+      "stem_en": "Which of the following is the derivative of $f(x) = x^{3} + 2 x$?",
+      "stem_he": "איזו מהאפשרויות הבאות היא הנגזרת של $f(x) = x^{3} + 2 x$?",
+      "explanation_en": "By the differentiation rules, $f'(x) = 3 x^{2} + 2$.",
+      "explanation_he": "לפי כללי הגזירה, $f'(x) = 3 x^{2} + 2$.",
+      "skill_atoms": [
+        "power_rule"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$f'(x) = 28x^3 - 6x$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "28x^3 - 6x$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "6"
+        "options_en": [
+          "$3 x^{2} + 2$",
+          "$3 x^{2}$",
+          "$x^{2} + 2$",
+          "$3 x^{3} + 2$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$3 x^{2} + 2$",
+          "$3 x^{2}$",
+          "$x^{2} + 2$",
+          "$3 x^{3} + 2$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nThis is a polynomial, so apply the sum rule term by term. $(7x^4)' = 28x^3$, $(-3x^2)' = -6x$, and $(5)' = 0$. The constant vanishes — a classic trap is leaving $5$ in the derivative. The final answer $f'(x) = 28x^3 - 6x$ uses only the power rule and sum rule.\n\n**How to think about it:**\nIdentify the function type first. Polynomials never need product, quotient, or chain rules. Write each term's derivative on its own line.\n\n**Common slip:**\nForgetting that $(x^2)' = 2x$ gives a coefficient of $-6x$, not $-3x$. Also confusing $(5)' = 0$ with leaving the constant.\n\n**Exam tip:**\nPolynomial differentiation is the fastest marks on Calc 1. Even if the problem looks trivial, write the rule name (\"sum rule + power rule\") for partial credit.",
-      "explanation_he": "**למה זה נכון:**\nזה פולינום, ולכן כלל סכום איבר-איבר. $(7x^4)' = 28x^3$, $(-3x^2)' = -6x$, $(5)' = 0$. הקבוע נעלם — מלכודת קלאסית היא להשאיר $5$ בנגזרת. התשובה $f'(x) = 28x^3 - 6x$ משתמשת רק בכלל חזקה וסכום.\n\n**איך לחשוב על זה:**\nזהו קודם את סוג הפונקציה. פולינומים לא דורשים מכפלה, מנה או שרשרת. כתבו נגזרת כל איבר בשורה נפרדת.\n\n**טעות נפוצה:**\nשכחה ש-$(x^2)' = 2x$ נותן מקדם $-6x$, לא $-3x$. גם בלבול בין $(5)' = 0$ להשארת הקבוע.\n\n**טיפ לבחינה:**\nגזירת פולינומים היא הנקודות המהירות ביותר בחדו״א. גם אם הבעיה נראית פשוטה, כתבו את שם הכלל לנקודות חלקיות.",
-      "skill_atoms": []
+      "source_item_id": "24fbcf01-b53c-5e95-ba85-c59ec29b052d",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$3 x^{2} + 2$",
+        "$3 x^{2}$",
+        "$x^{2} + 2$",
+        "$3 x^{3} + 2$"
+      ],
+      "options_he": [
+        "$3 x^{2} + 2$",
+        "$3 x^{2}$",
+        "$x^{2} + 2$",
+        "$3 x^{3} + 2$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find $(\\sqrt{x} + x^{-2})'$.",
-      "stem_he": "מצאו $(\\sqrt{x} + x^{-2})'$.",
+      "stem_en": "Given $f(x) = x^{3} + 2 x$, find $f'(2)$.",
+      "stem_he": "בהינתן $f(x) = x^{3} + 2 x$, מצאו את $f'(2)$.",
+      "explanation_en": "$f'(x) = 3 x^{2} + 2$, so $f'(2) = 14$.",
+      "explanation_he": "$f'(x) = 3 x^{2} + 2$, ולכן $f'(2) = 14$.",
+      "skill_atoms": [
+        "power_rule",
+        "sum_rule"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\frac{1}{2\\sqrt{x}} - 2x^{-3}$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-3"
-        ],
-        "case_sensitive": false
+        "value": 14
       },
-      "explanation_en": "**Why this is correct:**\nRewrite $\\sqrt{x}$ as $x^{1/2}$ before applying the power rule. $(x^{1/2})' = \\frac{1}{2}x^{-1/2} = \\frac{1}{2\\sqrt{x}}$. For $x^{-2}$: $(x^{-2})' = -2x^{-3}$. Sum rule gives $\\frac{1}{2\\sqrt{x}} - 2x^{-3}$.\n\n**How to think about it:**\nAny root or reciprocal should be converted to $x^n$ form first. The power rule works for any real exponent, including negative and fractional ones.\n\n**Common slip:**\nGetting $\\frac{1}{2\\sqrt{x}}$ wrong as $\\frac{1}{\\sqrt{x}}$ (missing the factor $\\frac{1}{2}$), or forgetting the negative sign on $-2x^{-3}$.\n\n**Exam tip:**\nBagrut and Calc 1 frequently mix roots and negative powers in one expression. Always rewrite before differentiating — examiners deduct marks for applying the power rule to $\\sqrt{x}$ directly without conversion.",
-      "explanation_he": "**למה זה נכון:**\nכתבו $\\sqrt{x}$ כ-$x^{1/2}$ לפני כלל החזקה. $(x^{1/2})' = \\frac{1}{2\\sqrt{x}}$. עבור $x^{-2}$: $(x^{-2})' = -2x^{-3}$. כלל סכום נותן $\\frac{1}{2\\sqrt{x}} - 2x^{-3}$.\n\n**איך לחשוב על זה:**\nכל שורש או הופכי צריך המרה לצורת $x^n$ קודם. כלל החזקה עובד על כל מעריך ממשי, כולל שלילי ושברי.\n\n**טעות נפוצה:**\nקבלת $\\frac{1}{2\\sqrt{x}}$ שגוי כ-$\\frac{1}{\\sqrt{x}}$ (חסר $\\frac{1}{2}$), או שכחת הסימן על $-2x^{-3}$.\n\n**טיפ לבחינה:**\nבגרות וחדו״א מערבבים לעיתים שורשים וחזקות שליליות. תמיד המירו לפני גזירה — מורידים נקודות על יישום ישיר של כלל החזקה על $\\sqrt{x}$.",
-      "skill_atoms": []
+      "source_item_id": "28db436b-c3d6-50f6-9f5e-40ffc66de93d",
+      "points_level_min": "5pt"
     },
     {
       "ord": 3,
       "kind": "short_answer",
       "difficulty": "easy",
-      "stem_en": "Differentiate $g(x) = 3e^x - 2\\sin x + \\cos x$.",
-      "stem_he": "גזרו $g(x) = 3e^x - 2\\sin x + \\cos x$.",
+      "stem_en": "Differentiate $f(x) = 7 x^{4} - 3 x^{2} + 5$.",
+      "stem_he": "גזרו את $f(x) = 7 x^{4} - 3 x^{2} + 5$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = 28 x^{3} - 6 x$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = 28 x^{3} - 6 x$.",
+      "skill_atoms": [
+        "power_rule",
+        "sum_rule"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution:**\n\n$g'(x) = 3e^x - 2\\cos x - \\sin x$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3e^x - 2\\cos x - \\sin x$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+          "28*x**3 - 6*x",
+          "28 x^{3} - 6 x"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nApply sum rule term by term with memorized derivatives: $(e^x)' = e^x$, $(\\sin x)' = \\cos x$, $(\\cos x)' = -\\sin x$. Constant multiples: $(3e^x)' = 3e^x$, $(-2\\sin x)' = -2\\cos x$, $(\\cos x)' = -\\sin x$. Result: $g'(x) = 3e^x - 2\\cos x - \\sin x$.\n\n**How to think about it:**\nWhen every term is a basic function ($e^x$, $\\sin$, $\\cos$), no product or chain rule is needed. Just recall the table of standard derivatives and apply constant multiple rule.\n\n**Common slip:**\nSign error on $(\\cos x)' = -\\sin x$ — writing $+\\sin x$ instead. Also applying power rule to $e^x$ to get $xe^{x-1}$.\n\n**Exam tip:**\nMemorize the six core derivatives cold. On timed exams, these should take under 10 seconds. Write $(\\cos x)' = -\\sin x$ explicitly once to avoid sign slips.",
-      "explanation_he": "**למה זה נכון:**\nכלל סכום איבר-איבר עם נגזרות שינון: $(e^x)' = e^x$, $(\\sin x)' = \\cos x$, $(\\cos x)' = -\\sin x$. כפל בקבוע: $(3e^x)' = 3e^x$, $(-2\\sin x)' = -2\\cos x$, $(\\cos x)' = -\\sin x$. תוצאה: $g'(x) = 3e^x - 2\\cos x - \\sin x$.\n\n**איך לחשוב על זה:**\nכשכל איבר הוא פונקציה בסיסית, לא צריך מכפלה או שרשרת. רק זכרו את טבלת הנגזרות ויישמו כפל בקבוע.\n\n**טעות נפוצה:**\nשגיאת סימן ב-$(\\cos x)' = -\\sin x$ — כתיבת $+\\sin x$. גם יישום כלל חזקה על $e^x$.\n\n**טיפ לבחינה:**\nשננו את שש הנגזרות הבסיסיות. בבחינה עם זמן, אלה צריכים לקחת פחות מ-10 שניות. כתבו $(\\cos x)' = -\\sin x$ במפורש פעם אחת.",
-      "skill_atoms": []
+      "source_item_id": "ca0692ec-6322-59ce-80f3-7cc293833152",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Find the derivative of $h(x) = \\ln x + e^x + x^3$.",
-      "stem_he": "מצאו את הנגזרת של $h(x) = \\ln x + e^x + x^3$.",
+      "stem_en": "True or False: $\\left(x^{5}\\right)' = 5 x^{4}$.",
+      "stem_he": "נכון או לא נכון: $\\left(x^{5}\\right)' = 5 x^{4}$.",
+      "explanation_en": "The true derivative is $ 5 x^{4} $, so the statement is true.",
+      "explanation_he": "הנגזרת הנכונה היא $ 5 x^{4} $, ולכן ההיגד נכון.",
+      "skill_atoms": [
+        "power_rule"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$h'(x) = \\frac{1}{x} + e^x + 3x^2$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{1}{x} + e^x + 3x^2$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nThree terms, three rules: $(\\ln x)' = \\frac{1}{x}$, $(e^x)' = e^x$, $(x^3)' = 3x^2$. Sum rule combines them: $h'(x) = \\frac{1}{x} + e^x + 3x^2$. Each term uses a different memorized derivative plus power rule.\n\n**How to think about it:**\nMixed basic functions are a test of your derivative table, not of advanced rules. Identify each term's type before computing.\n\n**Common slip:**\nWriting $(\\ln x)' = x$ or $\\ln x$ instead of $\\frac{1}{x}$. Forgetting domain restriction: $\\ln x$ requires $x > 0$.\n\n**Exam tip:**\nWhen a problem mixes $\\ln$, $e^x$, and polynomials, examiners often follow up with \"for what $x$ is $h'(x) = 0$?\" — so note the domain $x > 0$ when setting up the equation.",
-      "explanation_he": "**למה זה נכון:**\nשלושה איברים, שלוש נגזרות: $(\\ln x)' = \\frac{1}{x}$, $(e^x)' = e^x$, $(x^3)' = 3x^2$. כלל סכום: $h'(x) = \\frac{1}{x} + e^x + 3x^2$. כל איבר משתמש בנגזרת שינון אחרת — אין צורך במכפלה או שרשרת.\n\n**איך לחשוב על זה:**\nערבוב פונקציות בסיסיות בודק את טבלת הנגזרות, לא כללים מתקדמים. זהו סוג כל איבר לפני החישוב — פולינום, מעריכי, לוגריתם.\n\n**טעות נפוצה:**\nכתיבת $(\\ln x)' = x$ במקום $\\frac{1}{x}$. שכחת הגבלת תחום: $\\ln x$ דורש $x > 0$.\n\n**טיפ לבחינה:**\nכשמערבבים $\\ln$, $e^x$ ופולינומים, לעיתים שואלים \"מתי $h'(x) = 0$?\" — ציינו $x > 0$ בהצבת המשוואה. זה מונע פתרונות לא חוקיים.",
-      "skill_atoms": []
+      "source_item_id": "6dc86812-390a-5564-aa34-ad8827a748a8",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
       "kind": "short_answer",
       "difficulty": "medium",
-      "stem_en": "Differentiate $f(x) = (x^2+1)\\sin x$ using the product rule.",
-      "stem_he": "גזרו $f(x) = (x^2+1)\\sin x$ בכלל המכפלה.",
+      "stem_en": "Differentiate $f(x) = \\left(x^{2} + 1\\right) \\sin{\\left(x \\right)}$.",
+      "stem_he": "גזרו את $f(x) = \\left(x^{2} + 1\\right) \\sin{\\left(x \\right)}$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = 2 x \\sin{\\left(x \\right)} + \\left(x^{2} + 1\\right) \\cos{\\left(x \\right)}$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = 2 x \\sin{\\left(x \\right)} + \\left(x^{2} + 1\\right) \\cos{\\left(x \\right)}$.",
+      "skill_atoms": [
+        "product_rule"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f'(x) = 2x\\sin x + (x^2+1)\\cos x$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2x\\sin x + (x^2+1)\\cos x$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
+          "2*x*sin(x) + (x**2 + 1)*cos(x)",
+          "2 x \\sin{\\left(x \\right)} + \\left(x^{2} + 1\\right) \\cos{\\left(x \\right)}"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nProduct rule with $u = x^2+1$, $v = \\sin x$. Derivatives: $u' = 2x$, $v' = \\cos x$. Formula $(uv)' = u'v + uv'$ gives $f'(x) = 2x\\sin x + (x^2+1)\\cos x$. Both cross terms are present — neither can be dropped.\n\n**How to think about it:**\nWhen you see two differentiable factors multiplied, product rule is mandatory. Label $u$ and $v$ before computing. Neither factor is a composition here, so chain rule is not needed.\n\n**Common slip:**\nComputing $(x^2+1\\sin x)' = (2x)(\\cos x) = 2x\\cos x$, which uses $f'g'$ instead of $f'g + fg'$. Also forgetting to differentiate $\\sin x$ to $\\cos x$.\n\n**Exam tip:**\nWrite \"product rule: $u = \\ldots$, $v = \\ldots$\" at the top. Examiners give partial credit for correct setup even if the final algebra has a sign error.",
-      "explanation_he": "**למה זה נכון:**\nכלל מכפלה עם $u = x^2+1$, $v = \\sin x$. נגזרות: $u' = 2x$, $v' = \\cos x$. $(uv)' = u'v + uv'$ נותן $f'(x) = 2x\\sin x + (x^2+1)\\cos x$. שני האיברים חייבים להופיע — אי אפשר להשמיט.\n\n**איך לחשוב על זה:**\nכשיש שני גורמים גזירים מוכפלים, כלל מכפלה חובה. סמנו $u$ ו-$v$ לפני החישוב. כאן אין הרכבה, ולכן לא צריך שרשרת.\n\n**טעות נפוצה:**\nחישוב $(x^2+1)(\\sin x)' = 2x\\cos x$ — זה $f'g'$ במקום $f'g+fg'$. גם שכחת $(\\sin x)' = \\cos x$.\n\n**טיפ לבחינה:**\nכתבו \"כלל מכפלה: $u = \\ldots$, $v = \\ldots$\" בראש. בוחנים נותנים נקודות חלקיות על הצבה נכונה גם אם יש שגיאת סימן.",
-      "skill_atoms": []
+      "source_item_id": "ce1b4194-ee47-55dc-b6c3-b7a9a5552269",
+      "points_level_min": "5pt"
     },
     {
       "ord": 6,
       "kind": "short_answer",
       "difficulty": "medium",
-      "stem_en": "Find $\\left(\\dfrac{x^2}{\\sin x}\\right)'$ using the quotient rule.",
-      "stem_he": "מצאו $\\left(\\dfrac{x^2}{\\sin x}\\right)'$ בכלל המנה.",
+      "stem_en": "Differentiate $f(x) = x^{2} e^{x}$.",
+      "stem_he": "גזרו את $f(x) = x^{2} e^{x}$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = x^{2} e^{x} + 2 x e^{x}$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = x^{2} e^{x} + 2 x e^{x}$.",
+      "skill_atoms": [
+        "product_rule"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\frac{2x\\sin x - x^2\\cos x}{\\sin^2 x}$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+          "x**2*exp(x) + 2*x*exp(x)",
+          "x^{2} e^{x} + 2 x e^{x}"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nQuotient rule with $H = x^2$, $L = \\sin x$. Derivatives: $H' = 2x$, $L' = \\cos x$. Formula $\\frac{H'L - HL'}{L^2}$ gives $\\frac{2x\\sin x - x^2\\cos x}{\\sin^2 x}$. The minus sign in the numerator is essential.\n\n**How to think about it:**\nA fraction of two differentiable functions calls for quotient rule. Identify numerator ($H$) and denominator ($L$) before differentiating. Check whether either needs chain rule — here both are simple.\n\n**Common slip:**\nReversing the numerator to $x^2\\cos x - 2x\\sin x$ (swapping the order). Also writing $\\sin x$ instead of $\\sin^2 x$ in the denominator.\n\n**Exam tip:**\nUse the mnemonic \"low d-high minus high d-low, over low squared.\" Write $H$, $L$, $H'$, $L'$ in a small table before substituting — this prevents sign and order errors under time pressure.",
-      "explanation_he": "**למה זה נכון:**\nכלל מנה עם $H = x^2$, $L = \\sin x$. נגזרות: $H' = 2x$, $L' = \\cos x$. $\\frac{H'L - HL'}{L^2}$ נותן $\\frac{2x\\sin x - x^2\\cos x}{\\sin^2 x}$. הסימן מינוס במונה חיוני.\n\n**איך לחשוב על זה:**\nשבר של שתי פונקציות גזירות מחייב כלל מנה. זהו מונה ($H$) ומכנה ($L$) לפני גזירה. בדקו אם צריך שרשרת — כאן שניהם פשוטים.\n\n**טעות נפוצה:**\nהיפוך המונה ל-$x^2\\cos x - 2x\\sin x$. גם כתיבת $\\sin x$ במקום $\\sin^2 x$ במכנה.\n\n**טיפ לבחינה:**\nהשתמשו במנמוניק \"מכנה כפול נגזרת מונה פחות מונה כפול נגזרת מכנה, חלקי מכנה בריבוע.\" כתבו $H$, $L$, $H'$, $L'$ בטבלה קטנה לפני ההצבה.",
-      "skill_atoms": []
+      "source_item_id": "3f41dc2e-e156-5fb8-a067-6e61134a6e0b",
+      "points_level_min": "5pt"
     },
     {
       "ord": 7,
       "kind": "short_answer",
       "difficulty": "medium",
-      "stem_en": "Differentiate $g(x) = \\cos(3x^2 - 1)$ using the chain rule.",
-      "stem_he": "גזרו $g(x) = \\cos(3x^2-1)$ בכלל השרשרת.",
+      "stem_en": "Differentiate $f(x) = \\frac{x^{2}}{\\sin{\\left(x \\right)}}$.",
+      "stem_he": "גזרו את $f(x) = \\frac{x^{2}}{\\sin{\\left(x \\right)}}$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = - \\frac{x^{2} \\cos{\\left(x \\right)}}{\\sin^{2}{\\left(x \\right)}} + \\frac{2 x}{\\sin{\\left(x \\right)}}$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = - \\frac{x^{2} \\cos{\\left(x \\right)}}{\\sin^{2}{\\left(x \\right)}} + \\frac{2 x}{\\sin{\\left(x \\right)}}$.",
+      "skill_atoms": [
+        "quotient_rule"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$g'(x) = -\\sin(3x^2-1) \\cdot 6x = -6x\\sin(3x^2-1)$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-6x\\sin(3x^2-1)$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1"
+          "-x**2*cos(x)/sin(x)**2 + 2*x/sin(x)",
+          "- \\frac{x^{2} \\cos{\\left(x \\right)}}{\\sin^{2}{\\left(x \\right)}} + \\frac{2 x}{\\sin{\\left(x \\right)}}"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nChain rule: outer $\\cos(u)$, inner $u = 3x^2 - 1$. Outer derivative: $-\\sin(u)$. Inner derivative: $(3x^2-1)' = 6x$. Multiply: $g'(x) = -\\sin(3x^2-1) \\cdot 6x = -6x\\sin(3x^2-1)$.\n\n**How to think about it:**\nWhen a function wraps another (\"function of a function\"), chain rule applies. Label outer and inner. Differentiate outer while keeping inner unchanged, then multiply by inner derivative.\n\n**Common slip:**\nStopping at $-\\sin(3x^2-1)$ without multiplying by $6x$ — the most frequent chain rule error. Also forgetting the negative sign from $(\\cos u)' = -\\sin u$.\n\n**Exam tip:**\nDraw a box around the inner function before differentiating. On Bagrut and Calc 1, chain rule problems often have a coefficient inside (here $3$ in $3x^2$) — track it through the inner derivative.",
-      "explanation_he": "**למה זה נכון:**\nכלל שרשרת: חיצוני $\\cos(u)$, פנימי $u = 3x^2 - 1$. נגזרת חיצונית: $-\\sin(u)$. נגזרת פנימית: $6x$. כפל: $g'(x) = -6x\\sin(3x^2-1)$.\n\n**איך לחשוב על זה:**\nכשפונקציה עוטפת אחרת, חל כלל שרשרת. סמנו חיצוני ופנימי. גזרו חיצוני בלי לשנות פנימי, וכפלו בנגזרת הפנימית.\n\n**טעות נפוצה:**\nעצירה ב-$-\\sin(3x^2-1)$ בלי כפל ב-$6x$ — הטעות הנפוצה ביותר. גם שכחת הסימן מ-$(\\cos u)' = -\\sin u$.\n\n**טיפ לבחינה:**\nסמנו מסגרת סביב הפונקציה הפנימית לפני הגזירה. בבגרות וחדו״א, לעיתים יש מקדם בפנים ($3$ ב-$3x^2$) — עקבו אחריו בנגזרת הפנימית.",
-      "skill_atoms": []
+      "source_item_id": "473ba7b7-6488-5eff-ae11-f7186897a6b1",
+      "points_level_min": "5pt"
     },
     {
       "ord": 8,
       "kind": "short_answer",
       "difficulty": "medium",
-      "stem_en": "Find $\\left(\\dfrac{e^x}{x^2+1}\\right)'$.",
-      "stem_he": "מצאו $\\left(\\dfrac{e^x}{x^2+1}\\right)'$.",
+      "stem_en": "Differentiate $f(x) = \\cos{\\left(3 x^{2} - 1 \\right)}$.",
+      "stem_he": "גזרו את $f(x) = \\cos{\\left(3 x^{2} - 1 \\right)}$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = - 6 x \\sin{\\left(3 x^{2} - 1 \\right)}$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = - 6 x \\sin{\\left(3 x^{2} - 1 \\right)}$.",
+      "skill_atoms": [
+        "chain_rule"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\frac{e^x(x^2+1) - e^x\\cdot 2x}{(x^2+1)^2} = \\frac{e^x(x^2-2x+1)}{(x^2+1)^2} = \\frac{e^x(x-1)^2}{(x^2+1)^2}$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{e^x(x-1)^2}{(x^2+1)^2}$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+          "-6*x*sin(3*x**2 - 1)",
+          "- 6 x \\sin{\\left(3 x^{2} - 1 \\right)}"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nQuotient rule: $H = e^x$, $L = x^2+1$. $H' = e^x$, $L' = 2x$. Numerator: $e^x(x^2+1) - e^x \\cdot 2x = e^x(x^2 - 2x + 1) = e^x(x-1)^2$. Denominator: $(x^2+1)^2$. Factoring reveals $e^x(x-1)^2$ in the numerator.\n\n**How to think about it:**\nAfter quotient rule, always look for common factors — here $e^x$ factors out of the numerator. Simplification to $(x-1)^2$ makes finding zeros of $f'$ easy: $x = 1$.\n\n**Common slip:**\nSign error in the numerator ($+2xe^x$ instead of $-2xe^x$). Also stopping at the unfactored form and missing that $f'(x) = 0$ when $x = 1$.\n\n**Exam tip:**\nWhen $e^x$ appears in a quotient, factor it out immediately — it is never zero, so critical points come only from the remaining polynomial factor. This shortcut saves time on function analysis follow-ups.",
-      "explanation_he": "**למה זה נכון:**\nכלל מנה: $H = e^x$, $L = x^2+1$. $H' = e^x$, $L' = 2x$. מונה: $e^x(x^2+1) - 2xe^x = e^x(x-1)^2$. מכנה: $(x^2+1)^2$. פירוק חושף $e^x(x-1)^2$.\n\n**איך לחשוב על זה:**\nאחרי כלל מנה, חפשו גורמים משותפים — כאן $e^x$ יוצא מהמונה. פישוט ל-$(x-1)^2$ מקל על מציאת אפסים: $x = 1$.\n\n**טעות נפוצה:**\nשגיאת סימן במונה ($+2xe^x$ במקום $-2xe^x$). גם עצירה בצורה לא מפורקת והחמצת $f'(x) = 0$ ב-$x = 1$.\n\n**טיפ לבחינה:**\nכש-$e^x$ במנה, פצלו אותו מיד — הוא לעולם לא אפס, ולכן נקודות קריטיות באות רק מהפולינום. קיצור דרך זה חוסך זמן בשאלות המשך על חקירת פונקציה.",
-      "skill_atoms": []
+      "source_item_id": "6f85d08f-8596-52f4-8db2-960f5ca8084b",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 9,
+      "kind": "short_answer",
+      "difficulty": "hard",
+      "stem_en": "Differentiate $f(x) = \\left(x^{3} + 1\\right)^{10}$.",
+      "stem_he": "גזרו את $f(x) = \\left(x^{3} + 1\\right)^{10}$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = 30 x^{2} \\left(x^{3} + 1\\right)^{9}$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = 30 x^{2} \\left(x^{3} + 1\\right)^{9}$.",
+      "skill_atoms": [
+        "chain_rule",
+        "power_rule"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "30*x**2*(x**3 + 1)**9",
+          "30 x^{2} \\left(x^{3} + 1\\right)^{9}"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "27a05f84-fd4f-529a-b167-d403af3ae230",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 10,
+      "kind": "short_answer",
+      "difficulty": "hard",
+      "stem_en": "Differentiate $f(x) = x^{2} e^{\\sin{\\left(x \\right)}}$.",
+      "stem_he": "גזרו את $f(x) = x^{2} e^{\\sin{\\left(x \\right)}}$.",
+      "explanation_en": "Apply the differentiation rules: $f'(x) = x^{2} e^{\\sin{\\left(x \\right)}} \\cos{\\left(x \\right)} + 2 x e^{\\sin{\\left(x \\right)}}$.",
+      "explanation_he": "מיישמים את כללי הגזירה: $f'(x) = x^{2} e^{\\sin{\\left(x \\right)}} \\cos{\\left(x \\right)} + 2 x e^{\\sin{\\left(x \\right)}}$.",
+      "skill_atoms": [
+        "product_rule",
+        "chain_rule"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "x**2*exp(sin(x))*cos(x) + 2*x*exp(sin(x))",
+          "x^{2} e^{\\sin{\\left(x \\right)}} \\cos{\\left(x \\right)} + 2 x e^{\\sin{\\left(x \\right)}}"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "399c67ee-46ec-531a-81f0-4c7836305806",
+      "points_level_min": "5pt"
     }
   ],
   "est_minutes": 60,

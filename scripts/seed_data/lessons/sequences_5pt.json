@@ -250,12 +250,9 @@
     ],
     "tutor_pacing_hint": "Start with explicit sequences like $2-1/n$ to illustrate the MCT. Then move to recursive sequences — the 'set L=f(L)' trick is the payoff.",
     "skill_atoms_unlocked": [
-      "sequence_limit",
-      "sequence_monotonicity",
-      "sequence_boundedness",
-      "monotone_convergence_theorem",
-      "sequence_convergence",
-      "sandwich_theorem"
+      "arithmetic_sequence",
+      "geometric_sequence",
+      "sequence_sum"
     ],
     "prerequisites_to_check_before_teaching": [
       "limits_4pt",
@@ -269,167 +266,96 @@
   "questions": [
     {
       "ord": 1,
-      "kind": "mcq",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Which of the following sequences is bounded above by $1$?",
-      "stem_he": "איזו מהסדרות הבאות חסומה מלמעלה ב-$1$?",
-      "options_en": [
-        "$a_n = n$",
-        "$a_n = n/(n+1)$",
-        "$a_n = 1+1/n$",
-        "$a_n = 2-1/n$"
-      ],
-      "options_he": [
-        "$a_n = n$",
-        "$a_n = n/(n+1)$",
-        "$a_n = 1+1/n$",
-        "$a_n = 2-1/n$"
-      ],
-      "correct_index": 1,
-      "explanation_en": "**Why this is correct:**\nRewrite $n/(n+1)=1-1/(n+1)<1$ for all $n\\geq 1$. Option B is strictly below $1$. Option C ($1+1/n$) exceeds $1$ for every $n$. Option D ($2-1/n$) exceeds $1$ and approaches $2$. Option A ($n$) is unbounded.\n\n**How to think about it:**\nFor 'bounded above by $1$' questions, rewrite each candidate as $1\\pm\\text{something}/n$ or compare to $1$ directly. A sequence bounded above by $1$ must satisfy $a_n\\leq 1$ for *all* $n$, not just eventually.\n\n**Common slip:**\nChoosing $2-1/n$ because it 'approaches $1$' — it is bounded above by $2$, not by $1$. Approaching a number is not the same as being bounded by it.\n\n**Exam tip:**\nOn MCQ boundedness questions, test $n=1$ first — it often eliminates options quickly. Here $a_1=1/2<1$ for B but $a_1=2>1$ for D.",
-      "explanation_he": "**למה זה נכון:**\nכתיבה $n/(n+1)=1-1/(n+1)<1$ לכל $n\\geq 1$. תשובה ב' נמצאת ממש מתחת ל-$1$. תשובה ג' ($1+1/n$) עולה על $1$. תשובה ד' ($2-1/n$) עולה על $1$ ומתקרבת ל-$2$. תשובה א' ($n$) לא חסומה.\n\n**איך לחשוב על זה:**\nבשאלות 'חסומה מלמעלה ב-$1$', כתבו כל מועמד כ-$1\\pm\\text{משהו}/n$ או השוו ל-$1$ ישירות. חסימה מלמעלה ב-$1$ דורשת $a_n\\leq 1$ ל*כל* $n$, לא רק בסופו.\n\n**טעות נפוצה:**\nבחירת $2-1/n$ כי 'מתקרב ל-$1$' — חסומה מלמעלה ב-$2$, לא ב-$1$. התקרבות אינה זהה לחסימה.\n\n**טיפ לבחינה:**\nב-MCQ חסימות, בדקו $n=1$ תחילה — לעיתים זה מסיר אפשרויות מהר. כאן $a_1=1/2<1$ ל-ב' אך $a_1=2>1$ ל-ד'.",
+      "stem_en": "An arithmetic sequence has $a_1 = 4$ and common difference $d = 3$. Find $a_{10}$.",
+      "stem_he": "בסדרה חשבונית $a_1 = 4$ וההפרש $d = 3$. מצאו את $a_{10}$.",
+      "explanation_en": "$a_{10} = a_1 + 9d = 4 + 27 = 31$.",
+      "explanation_he": "$a_{10} = a_1 + 9d = 4 + 27 = 31$.",
       "skill_atoms": [
-        "sequence_boundedness"
+        "arithmetic_sequence"
       ],
+      "answer_payload": {
+        "value": 31
+      },
+      "source_item_id": "a36e3384-7a6c-595b-8bdf-a9f97649b9f9",
       "points_level_min": "5pt"
     },
     {
       "ord": 2,
-      "kind": "mcq",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "For $a_n = 3 - 2/n$, what is $\\lim_{n\\to\\infty}a_n$?",
-      "stem_he": "עבור $a_n = 3 - 2/n$, מהו $\\lim_{n\\to\\infty}a_n$?",
-      "options_en": [
-        "$0$",
-        "$2$",
-        "$3$",
-        "$\\infty$"
-      ],
-      "options_he": [
-        "$0$",
-        "$2$",
-        "$3$",
-        "$\\infty$"
-      ],
-      "correct_index": 2,
-      "explanation_en": "**Why this is correct:**\n$\\lim_{n\\to\\infty}(3-2/n)=3-0=3$. As $n\\to\\infty$, the term $2/n\\to 0$, so the constant $3$ dominates. Option C is correct.\n\n**How to think about it:**\nFor limits of the form $c\\pm k/n^p$, the limit is always $c$ when $p>0$. Identify the constant part and the vanishing part separately — no need for MCT on explicit rational sequences.\n\n**Common slip:**\nAnswering $2$ by confusing the coefficient $2$ in $2/n$ with the limit. Or answering $0$ because 'something divided by $n$ goes to zero' without tracking the constant $3$.\n\n**Exam tip:**\nThis is a warm-up limit — examiners use it to check you can handle $k/n\\to 0$ before the harder MCT proofs. Write $\\lim(3-2/n)=\\lim 3 - \\lim(2/n)=3-0$ explicitly.",
-      "explanation_he": "**למה זה נכון:**\n$\\lim_{n\\to\\infty}(3-2/n)=3-0=3$. כש-$n\\to\\infty$, האיבר $2/n\\to 0$, הקבוע $3$ שולט. תשובה ג' נכונה.\n\n**איך לחשוב על זה:**\nלגבולות מהצורה $c\\pm k/n^p$, הגבול תמיד $c$ כש-$p>0$. זהו את החלק הקבוע ואת החלק השואף ל-$0$ — אין צורך ב-MCT לסדרות רציונליות מפורשות.\n\n**טעות נפוצה:**\nתשובה $2$ בלבול מקדם $2$ ב-$2/n$ עם הגבול. או $0$ כי 'משהו חלקי $n$ הולך לאפס' בלי לעקוב אחרי הקבוע $3$.\n\n**טיפ לבחינה:**\nזה גבול חימום — בוחנים בודקים $k/n\\to 0$ לפני הוכחות MCT הקשות. כתבו $\\lim(3-2/n)=\\lim 3 - \\lim(2/n)=3-0$ במפורש.",
+      "stem_en": "True or False: the 5th term of an arithmetic sequence with $a_1 = 2$, $d = 5$ is $22$.",
+      "stem_he": "נכון או לא נכון: האיבר החמישי בסדרה חשבונית עם $a_1 = 2$, $d = 5$ הוא $22$.",
+      "explanation_en": "CAS check confirms the statement is true.",
+      "explanation_he": "בדיקת CAS מאשרת שההיגד נכון.",
       "skill_atoms": [
-        "sequence_limit"
+        "arithmetic_sequence"
       ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "a86f0ed6-603c-5508-950b-5b0754c5b001",
       "points_level_min": "5pt"
     },
     {
       "ord": 3,
-      "kind": "true_false",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "True or False: Every bounded sequence converges.",
-      "stem_he": "נכון או לא: כל סדרה חסומה מתכנסת.",
-      "correct_answer": false,
-      "explanation_en": "**Why this is correct:**\nFalse. $(-1)^n$ is bounded ($|a_n|=1$ for all $n$) but alternates between $+1$ and $-1$, so no single limit exists. Boundedness alone does not imply convergence.\n\n**How to think about it:**\nThe converse of 'convergent $\\Rightarrow$ bounded' is false. Ask: is the sequence also monotone? If not, boundedness tells you nothing about convergence. Counterexamples: $(-1)^n$, $\\sin n$, $a_n=(-1)^n/n$ (this one *does* converge to $0$ via sandwich).\n\n**Common slip:**\nAnswering True because 'bounded sequences can't go to infinity.' That confuses two different failure modes — oscillation vs. unbounded growth. $(-1)^n$ is bounded but oscillates.\n\n**Exam tip:**\nTrue/False on MCT hypotheses is common on Bagrut. Memorize: bounded + monotone $\\Rightarrow$ converges. Bounded alone $\\not\\Rightarrow$ converges. Converges $\\Rightarrow$ bounded always.",
-      "explanation_he": "**למה זה נכון:**\nלא נכון. $(-1)^n$ חסומה ($|a_n|=1$) אך מתחלפת בין $+1$ ל-$-1$, אין גבול יחיד. חסימה לבדה לא מרמזת על התכנסות.\n\n**איך לחשוב על זה:**\nההפך של 'מתכנס $\\Rightarrow$ חסום' שגוי. שאלו: האם הסדרה גם מונוטונית? אם לא, חסימות לא אומרת דבר. דוגמאות: $(-1)^n$, $\\sin n$.\n\n**טעות נפוצה:**\nתשובה 'נכון' כי 'סדרה חסומה לא יכולה ללכת לאינסוף' — מבלבלים התנדנדות עם גדילה לא חסומה. $(-1)^n$ חסומה אך מתנדדת.\n\n**טיפ לבחינה:**\nשאלות נכון/לא נכון על MCT נפוצות בבגרות. שלטו: חסום + מונוטוני $\\Rightarrow$ מתכנס. חסום לבד $\\not\\Rightarrow$ מתכנס. מתכנס $\\Rightarrow$ חסום תמיד.",
+      "stem_en": "A geometric sequence has $a_1 = 3$ and ratio $r = 2$. What is $a_4$?",
+      "stem_he": "בסדרה הנדסית $a_1 = 3$ והמנה $r = 2$. מהו $a_4$?",
+      "explanation_en": "The correct option is $24$ (CAS-verified).",
+      "explanation_he": "התשובה הנכונה היא $24$ (מאומת ב-CAS).",
       "skill_atoms": [
-        "sequence_convergence",
-        "sequence_boundedness"
+        "geometric_sequence"
       ],
-      "points_level_min": "5pt"
+      "answer_payload": {
+        "options_en": [
+          "$24$",
+          "$48$",
+          "$16$",
+          "$12$"
+        ],
+        "options_he": [
+          "$24$",
+          "$48$",
+          "$16$",
+          "$12$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "125966e3-1c50-5b7e-9146-bf4e69095c07",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$24$",
+        "$48$",
+        "$16$",
+        "$12$"
+      ],
+      "options_he": [
+        "$24$",
+        "$48$",
+        "$16$",
+        "$12$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 4,
-      "kind": "open",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Prove that $a_n = 2 - 1/n$ is strictly increasing and find its limit.",
-      "stem_he": "הוכיחו ש-$a_n = 2 - 1/n$ עולה חד-חד ומצאו גבולה.",
-      "rubric_en": "Full (3/3): computes $a_{n+1}-a_n=1/(n(n+1))>0$, applies MCT, states limit $=2$. Partial (2/3): correct difference but skips MCT reference.",
-      "rubric_he": "מלא (3/3): $a_{n+1}-a_n>0$, MCT, גבול $=2$.",
-      "explanation_en": "**Why this is correct:**\n$a_{n+1}-a_n=1/(n(n+1))>0$, so strictly increasing. Upper bound: $a_n=2-1/n<2$. By MCT, converges. $\\lim(2-1/n)=2$.\n\n**How to think about it:**\nOpen MCT proofs follow a fixed template: (1) difference for monotonicity, (2) explicit bounds, (3) cite MCT, (4) compute limit. Write each step on its own line — graders award partial credit for correct monotonicity even if the limit computation slips.\n\n**Common slip:**\nProving monotonicity but forgetting to state the upper bound $2$ before citing MCT. Or computing the limit without showing $a_{n+1}-a_n>0$ — you lose the monotonicity marks.\n\n**Exam tip:**\nFor 'prove increasing and find limit' questions, always end with $\\lim a_n=\\ldots$ after citing MCT. State 'By the Monotone Convergence Theorem, the sequence converges' explicitly — it is worth 1 point on its own.",
-      "explanation_he": "**למה זה נכון:**\n$a_{n+1}-a_n=1/(n(n+1))>0$, עולה חד-חד. חסם עליון: $a_n=2-1/n<2$. לפי MCT, מתכנסת. $\\lim(2-1/n)=2$.\n\n**איך לחשוב על זה:**\nהוכחות MCT פתוחות עוקבות אחר תבנית: (1) הפרש למונוטוניות, (2) חסמים, (3) ציטוט MCT, (4) חישוב גבול. כל שלב בשורה נפרדת — נקודות חלקיות למונוטוניות נכונה.\n\n**טעות נפוצה:**\nהוכחת מונוטוניות בלי לציין חסם עליון $2$ לפני MCT. או חישוב גבול בלי $a_{n+1}-a_n>0$ — אובדן נקודות מונוטוניות.\n\n**טיפ לבחינה:**\nבשאלות 'הוכיחו עלייה ומצאו גבול', תמיד סיימו ב-$\\lim a_n=\\ldots$ אחרי MCT. כתבו 'לפי משפט הסדרה המונוטונית, הסדרה מתכנסת' — שווה נקודה.",
+      "stem_en": "Find the sum of the first 5 terms of an arithmetic sequence with $a_1 = 2$, $d = 5$.",
+      "stem_he": "מצאו את סכום 5 האיברים הראשונים בסדרה חשבונית עם $a_1 = 2$, $d = 5$.",
+      "explanation_en": "$S_5 = \\frac{5}{2}(2a_1 + 4d) = \\frac{5}{2}(4+20) = 60$.",
+      "explanation_he": "$S_5 = \\frac{5}{2}(2a_1 + 4d) = \\frac{5}{2}(4+20) = 60$.",
       "skill_atoms": [
-        "sequence_monotonicity",
-        "monotone_convergence_theorem"
+        "sequence_sum"
       ],
+      "answer_payload": {
+        "value": 60
+      },
+      "source_item_id": "ce12cb20-f06e-5e29-b421-09f514a36b6f",
       "points_level_min": "5pt"
-    },
-    {
-      "ord": 5,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Let $a_1=1$, $a_{n+1}=\\sqrt{a_n+2}$. Prove by induction that $a_n < 2$ for all $n$, show the sequence is increasing, and find the limit.",
-      "stem_he": "יהי $a_1=1$, $a_{n+1}=\\sqrt{a_n+2}$. הוכיחו באינדוקציה ש-$a_n<2$ לכל $n$, הראו שהסדרה עולה, ומצאו גבולה.",
-      "rubric_en": "Full (5/5): induction $a_n<2$; shows $a_{n+1}>a_n$ from $a_n<2$; MCT; $L=\\sqrt{L+2}$ gives $L=2$.",
-      "rubric_he": "מלא (5/5): אינדוקציה לחסם; עולה; MCT; $L=2$.",
-      "explanation_en": "**Why this is correct:**\nInduction: $a_1=1<2$; if $a_n<2$ then $a_{n+1}=\\sqrt{a_n+2}<\\sqrt{4}=2$. Increasing: $a_{n+1}^2-a_n^2=(a_n+2)-a_n^2=2+a_n(1-a_n)>0$ for $0<a_n<2$. MCT gives convergence; $L=\\sqrt{L+2}$ yields $L=2$ (positive root).\n\n**How to think about it:**\nRecursive sequence proofs require three blocks: (1) induction for bound, (2) monotonicity (often from the recurrence + bound), (3) MCT + fixed point. Do not skip the induction — 'assuming convergence' alone is not a full proof.\n\n**Common slip:**\nSolving $L=\\sqrt{L+2}$ and taking $L=-1$ without discarding the negative root. Or proving $a_n<2$ but not proving the sequence is increasing — MCT needs both.\n\n**Exam tip:**\nHard 5-pt sequence questions almost always follow $a_{n+1}=\\sqrt{\\cdots}$ or rational recurrence patterns. Practice writing the induction base ($n=1$) and step ($a_k<2\\Rightarrow a_{k+1}<2$) on separate lines.",
-      "explanation_he": "**למה זה נכון:**\nאינדוקציה: $a_1=1<2$; אם $a_n<2$ אז $a_{n+1}=\\sqrt{a_n+2}<2$. עלייה: $a_{n+1}^2-a_n^2=2+a_n(1-a_n)>0$ ל-$0<a_n<2$. MCT → $L=2$ (שורש חיובי).\n\n**איך לחשוב על זה:**\nהוכחות נסיגה דורשות שלושה בלוקים: (1) אינדוקציה לחסם, (2) מונוטוניות, (3) MCT + נקודה קבועה. אל תדלגו על אינדוקציה — 'בהנחת התכנסות' לבד אינה הוכחה מלאה.\n\n**טעות נפוצה:**\nפתרון $L=\\sqrt{L+2}$ ולקיחת $L=-1$ בלי להסיר שורש שלילי. או $a_n<2$ בלי עלייה — MCT דורש שניהם.\n\n**טיפ לבחינה:**\nשאלות 5 יחידות קשות כמעט תמיד $a_{n+1}=\\sqrt{\\cdots}$ או נסיגה רציונלית. תרגלו כתיבת בסיס ($n=1$) ושלב ($a_k<2\\Rightarrow a_{k+1}<2$) בשורות נפרדות.",
-      "skill_atoms": [
-        "sequence_monotonicity",
-        "sequence_boundedness",
-        "monotone_convergence_theorem",
-        "mathematical_induction"
-      ],
-      "points_level_min": "5pt"
-    },
-    {
-      "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Is $a_n = n^2$ monotone? Is it bounded?",
-      "stem_he": "האם $a_n = n^2$ מונוטונית? חסומה?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Strictly increasing: $a_{n+1}-a_n=(n+1)^2-n^2=2n+1>0$. Not bounded above: $a_n \\to \\infty$",
-          "2n+1>0$. Not bounded above: $a_n \\to \\infty$",
-          "0"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nStrictly increasing: $a_{n+1}-a_n=(n+1)^2-n^2=2n+1>0$ for all $n\\geq 1$. Not bounded above: as $n\\to\\infty$, $a_n=n^2\\to\\infty$.\n\n**How to think about it:**\nMonotonicity and boundedness are independent properties. A sequence can be monotone but unbounded ($n^2$), bounded but non-monotone ($(−1)^n$), or both (then MCT applies). Always answer both parts of the question.\n\n**Common slip:**\nSaying 'not bounded because it is increasing' — monotonicity does not prevent unbounded growth. $n^2$ increases without bound.\n\n**Exam tip:**\nShort-answer sequence questions often test whether you check *both* properties. Write two sentences: one for monotonicity (difference sign), one for boundedness (does $a_n$ stay below some $M$?).",
-      "explanation_he": "**למה זה נכון:**\nעולה חד-חד: $a_{n+1}-a_n=2n+1>0$. לא חסומה מלמעלה: $a_n=n^2\\to\\infty$.\n\n**איך לחשוב על זה:**\nמונוטוניות וחסימות בלתי תלויות. סדרה יכולה להיות מונוטונית אך לא חסומה ($n^2$), חסומה אך לא מונוטונית ($(−1)^n$), או שניהם (אז MCT). ענו על שני חלקי השאלה.\n\n**טעות נפוצה:**\nאמרה 'לא חסומה כי עולה' — מונוטוניות לא מונעת גדילה לא חסומה. $n^2$ עולה ללא חסם.\n\n**טיפ לבחינה:**\nשאלות תשובה קצרה בודקות אם בודקים *שני* מאפיינים. שני משפטים: מונוטוניות (סימן הפרש), חסימות (האם $a_n$ נשארת מתחת ל-$M$?).",
-      "skill_atoms": [
-        "sequence_limit",
-        "sequence_monotonicity"
-      ]
-    },
-    {
-      "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find $\\lim_{n\\to\\infty}\\dfrac{3n^2+1}{n^2+2}$.",
-      "stem_he": "מצאו $\\lim_{n\\to\\infty}\\dfrac{3n^2+1}{n^2+2}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Divide by $n^2$: $\\frac{3+1/n^2}{1+2/n^2} \\to \\frac{3+0}{1+0} = 3$",
-          "3$",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nDivide numerator and denominator by $n^2$: $\\dfrac{3n^2+1}{n^2+2}=\\dfrac{3+1/n^2}{1+2/n^2}\\to\\dfrac{3+0}{1+0}=3$ as $n\\to\\infty$.\n\n**How to think about it:**\nFor rational sequences $\\dfrac{P(n)}{Q(n)}$ with equal degree, divide by the highest power of $n$. The limit equals the ratio of leading coefficients. Here: $3/1=3$.\n\n**Common slip:**\nDividing by $n$ instead of $n^2$ — when degrees match, you must divide by the highest power. Or answering $\\infty$ because 'numerator has larger leading term' when degrees are equal.\n\n**Exam tip:**\nRational sequence limits appear on every 5-pt exam. Quick rule: equal degrees $\\Rightarrow$ ratio of leading coefficients; numerator degree higher $\\Rightarrow$ $\\pm\\infty$; lower $\\Rightarrow$ $0$.",
-      "explanation_he": "**למה זה נכון:**\nחלוקה ב-$n^2$: $\\dfrac{3+1/n^2}{1+2/n^2}\\to 3$.\n\n**איך לחשוב על זה:**\nלסדרות רציונליות $\\dfrac{P(n)}{Q(n)}$ באותו מעלה, חלקו בחזקה הגבוהה. הגבול = יחס מקדמים מובילים: $3/1=3$.\n\n**טעות נפוצה:**\nחלוקה ב-$n$ במקום $n^2$ — כשהמעלות שווה, חובה לחלק בחזקה הגבוהה. או $\\infty$ כי 'מונה גדול יותר' כשהמעלות שווה.\n\n**טיפ לבחינה:**\nגבולות סדרות רציונליות בכל בחינת 5 יחידות. כלל מהיר: מעלות שווה $\\Rightarrow$ יחס מקדמים; מונה גבוה יותר $\\Rightarrow$ $\\pm\\infty$; נמוך $\\Rightarrow$ $0$.\n\n**טיפ נוסף לבחינה:** כתבו את המשפט או התבנית בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית קטנה בסוף.",
-      "skill_atoms": [
-        "sequence_limit",
-        "sequence_monotonicity"
-      ]
-    },
-    {
-      "ord": 8,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Prove $a_n = 1 - 1/n^2$ is increasing and bounded.",
-      "stem_he": "הוכיחו ש-$a_n = 1 - 1/n^2$ עולה וחסומה.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$a_{n+1}-a_n=-\\frac{1}{(n+1)^2}+\\frac{1}{n^2}=\\frac{(n+1)^2-n^2}{n^2(n+1)^2}>0$. Bounded: $0<a_n<1$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{(n+1)^2-n^2}{n^2(n+1)^2}>0$. Bounded: $0<a_n<1$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$a_{n+1}-a_n=-\\dfrac{1}{(n+1)^2}+\\dfrac{1}{n^2}=\\dfrac{(n+1)^2-n^2}{n^2(n+1)^2}=\\dfrac{2n+1}{n^2(n+1)^2}>0$. Bounded: $0<a_n=1-1/n^2<1$ for all $n\\geq 1$.\n\n**How to think about it:**\nFor $a_n=c-1/n^p$ with $p>0$: difference is positive (increasing toward $c$), and $a_n$ is bounded between $a_1$ and $c$. Same template as $2-1/n$ but with $n^2$ in the denominator.\n\n**Common slip:**\nGetting the difference sign wrong by computing $1/n^2-1/(n+1)^2$ in the wrong order. Or claiming unbounded because 'it approaches $1$' — approaching a bound means bounded above by that bound.\n\n**Exam tip:**\nWhen the denominator is $n^2$ instead of $n$, the difference formula gives $2n+1$ in the numerator — still positive. Practice both $1/n$ and $1/n^2$ variants before the exam.",
-      "explanation_he": "**למה זה נכון:**\n$a_{n+1}-a_n=\\dfrac{2n+1}{n^2(n+1)^2}>0$. חסומה: $0<a_n=1-1/n^2<1$.\n\n**איך לחשוב על זה:**\nל-$a_n=c-1/n^p$ עם $p>0$: הפרש חיובי (עולה ל-$c$), ו-$a_n$ חסומה בין $a_1$ ל-$c$. אותה תבנית כמו $2-1/n$ עם $n^2$ במכנה.\n\n**טעות נפוצה:**\nסימן הפרש שגוי — $1/n^2-1/(n+1)^2$ בסדר הפוך. או 'לא חסומה כי מתקרב ל-$1$' — התקרבות לחסם = חסימה מלמעלה.\n\n**טיפ לבחינה:**\nכשהמכנה $n^2$ במקום $n$, המונה $2n+1$ — עדיין חיובי. תרגלו $1/n$ ו-$1/n^2$ לפני הבחינה.\n\n**טיפ נוסף לבחינה:** כתבו את המשפט או התבנית בשוליים לפני החישוב — מקבלים נקודות שיטה גם כשיש טעות חשבונית קטנה בסוף.",
-      "skill_atoms": [
-        "sequence_limit",
-        "sequence_monotonicity"
-      ]
     }
   ],
   "est_minutes": 45,

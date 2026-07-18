@@ -103,7 +103,13 @@ jobs:
         working-directory: apps/web
         run: pnpm exec vitest run --exclude 'src/lib/schemas.test.ts'
 
+      - name: Question-store pipeline unit tests
+        run: node --test scripts/lib/normalize-lesson.test.mjs scripts/lib/question-pipeline.test.mjs
+
       - name: Validate lesson corpus (schema + depth)
         run: |
           node scripts/seed-lessons.mjs --dry-run
           node scripts/audit-lesson-depth.mjs --strict --phase=4
+
+      - name: Strict validation (rewritten lessons)
+        run: node scripts/audit-lesson-strict.mjs --pilot=scripts/seed_data/pilot-strict-allowlist.json --strict
