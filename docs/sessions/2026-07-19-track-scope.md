@@ -81,9 +81,36 @@ New items target distinct sub-skills (sign traps, factor theorem, factor-by-
 grouping, Vieta, completing the square, change of base, negative/fractional
 exponents, consecutive-integer word problem). 0 CAS rejections; all gates green.
 
+## Batch C — shipped
+
+Per-item `points_level_min` was being dropped by `normalizeForStore`
+(`scripts/lib/question-store-io.mjs`), so `_pl(..., "5pt")` tags never reached
+the baked lesson. Fixed the normalizer, then gated the `volume_of_revolution`
+MCQ in `integrals_applications` to 5pt so 4pt learners (who reach it via the
+`areas_between_curves` alias) no longer see 5pt-only solid-of-revolution work.
+Regenerated + rebaked: 10 items stay 4pt, 1 raised to 5pt. All gates green.
+
+## Batch D — shipped
+
+Two new **verified generators** for high-traffic 3pt/4pt concepts that had no
+generator and only ~8 hand-authored questions:
+
+- `sequences_arithmetic` → **15 CAS-verified items** (nth term, common
+  difference, finite sums, Gauss pairing, symmetry, term-index solve, two-
+  equation system, sum-target word problem). All 3pt-visible.
+- `sequences_geometric` → **15 CAS-verified items** (nth term, ratio, finite
+  sum, doubling growth word problem, infinite series). The **4 infinite-series
+  items** (S∞ convergence, `|q|<1` reasoning, bouncing-ball) are gated to `4pt`
+  with `_pl(..., "4pt")` — 3pt learners see the 11 finite-sequence items only,
+  keeping the lesson track-appropriate.
+
+0 CAS rejections across all 30 items; strict + math + track-scope audits and the
+seed dry-run (207/207) all green.
+
 ## Pending (not yet done this window)
 
-- **Volume:** expand generators to 15+ items each (currently 10-11).
+- **Volume:** expand remaining generators to 15+ items each (5pt calculus core
+  still 10-11).
 - **Within-lesson 5pt tags:** in mixed 4pt/5pt lessons (integrals_applications
   volumes/shells, derivatives_applications related-rates) raise 5pt-only items
   with `_pl(..., "5pt")` so 4pt learners don't see 5pt-only work.
