@@ -1,139 +1,77 @@
 #!/usr/bin/env node
 /**
- * Audit learner-facing lesson fields for math/LaTeX issues.
- * Run: node scripts/audit-lesson-math.mjs
+ * Audit math notation (KaTeX + remark-math) across lessons so nothing renders
+ * unreadable on the site. Scans questions AND section bodies.
+ *
+ * Usage:
+ *   node scripts/audit-lesson-math.mjs --pilot=scripts/seed_data/pilot-strict-allowlist.json --strict
+ *   node scripts/audit-lesson-math.mjs --only=derivatives_rules
+ *   node scripts/audit-lesson-math.mjs            # all lessons (report only)
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import katex from 'katex';
+import fs from 'node:fs';
+import path from 'node:path';
+import { findMathErrors, questionMathFields } from './lib/katex-check.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const DIR = join(ROOT, 'scripts/seed_data/lessons');
+const args = new Map();
+for (const a of process.argv.slice(2)) {
+  if (!a.startsWith('--')) continue;
+  const [k, v] = a.slice(2).split('=');
+  args.set(k, v ?? 'true');
+}
+const dir = args.get('dir') ?? 'scripts/seed_data/lessons';
+const strict = args.get('strict') === 'true';
 
-const LEARNER_KEYS = new Set([
-  'body_en_md',
-  'body_he_md',
-  'checkpoint_solution_en',
-  'checkpoint_solution_he',
-  'stem_en',
-  'stem_he',
-  'explanation_en',
-  'explanation_he',
-  'title_en',
-  'title_he',
-  'summary_en',
-  'summary_he',
-]);
-
-function stripDisplayMath(md) {
-  return md.replace(/\$\$[\s\S]*?\$\$/g, ' ');
+function resolveTargets() {
+  const only = args.get('only');
+  if (only && only !== 'true') return new Set(only.split(',').filter(Boolean));
+  const pilot = args.get('pilot');
+  if (pilot && pilot !== 'true') {
+    const parsed = JSON.parse(fs.readFileSync(pilot, 'utf8'));
+    return new Set(Array.isArray(parsed) ? parsed : parsed.concept_ids ?? []);
+  }
+  return null;
 }
 
-function extractMathSegments(md) {
-  const segments = [];
-  const display = md.matchAll(/\$\$([\s\S]*?)\$\$/g);
-  for (const m of display) segments.push({ expr: m[1], display: true });
-  const inline = stripDisplayMath(md).matchAll(/\$([^$\n]+)\$/g);
-  for (const m of inline) segments.push({ expr: m[1], display: false });
-  return segments;
-}
+const targets = resolveTargets();
+const files = fs
+  .readdirSync(dir)
+  .filter((f) => f.endsWith('.json'))
+  .filter((f) => !targets || targets.has(f.replace(/\.json$/, '')))
+  .sort();
 
-function checkText(text, path) {
-  if (!text || typeof text !== 'string') return [];
-  const found = [];
+const SECTION_FIELDS = [
+  'body_en_md', 'body_he_md', 'checkpoint_solution_en', 'checkpoint_solution_he',
+];
 
-  if (/\\\\[a-zA-Z]{2,}/.test(text)) {
-    found.push({ path, kind: 'double-escaped-latex', detail: text.match(/\\\\[a-zA-Z]{2,}/)?.[0] });
-  }
-  if (/\\\(|\\\[/.test(text)) {
-    found.push({ path, kind: 'wrong-delimiter', detail: text.match(/\\[\(\[]/)?.[0] });
-  }
-
-  const naked = text.replace(/\$\$[\s\S]*?\$\$/g, '').replace(/\$[^$\n]+\$/g, '');
-  if (/\\(?:frac|sqrt|lim|sum|int|text|mathrm|left|right|dfrac|tfrac)\b/.test(naked)) {
-    found.push({
-      path,
-      kind: 'latex-outside-delimiters',
-      detail: naked.match(/.{0,25}\\(?:frac|sqrt|lim|sum|int|text).{0,25}/)?.[0],
+let total = 0;
+let filesWith = 0;
+for (const file of files) {
+  const raw = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+  const errs = [];
+  (raw.sections ?? []).forEach((s, i) => {
+    for (const f of SECTION_FIELDS) errs.push(...findMathErrors(s[f], `section[${i}].${f}`));
+    (s.exercises ?? []).forEach((ex, j) => {
+      errs.push(...findMathErrors(ex.body_en, `section[${i}].exercises[${j}].body_en`));
+      errs.push(...findMathErrors(ex.body_he, `section[${i}].exercises[${j}].body_he`));
     });
-  }
-
-  for (const { expr, display } of extractMathSegments(text)) {
-    const trimmed = expr.trim();
-    if (!trimmed) {
-      found.push({ path, kind: 'empty-math', detail: display ? '$$' : '$' });
-      continue;
-    }
-    try {
-      katex.renderToString(trimmed, {
-        throwOnError: true,
-        displayMode: display,
-        strict: 'warn',
-      });
-    } catch (err) {
-      found.push({
-        path,
-        kind: 'katex-error',
-        detail: `${trimmed.slice(0, 60)} → ${err.message}`,
-      });
-    }
-  }
-
-  return found;
-}
-
-function walk(obj, base, out) {
-  if (typeof obj === 'string') {
-    out.push(...checkText(obj, base));
-    return;
-  }
-  if (Array.isArray(obj)) {
-    if (base.endsWith('options_en') || base.endsWith('options_he')) {
-      obj.forEach((v, i) => checkText(v, `${base}[${i}]`).forEach((x) => out.push(x)));
-      return;
-    }
-    obj.forEach((v, i) => walk(v, `${base}[${i}]`, out));
-    return;
-  }
-  if (!obj || typeof obj !== 'object') return;
-  for (const [k, v] of Object.entries(obj)) {
-    if (LEARNER_KEYS.has(k)) {
-      checkText(v, `${base}.${k}`).forEach((x) => out.push(x));
-    } else if (k === 'options_en' || k === 'options_he') {
-      (v ?? []).forEach((opt, i) =>
-        checkText(opt, `${base}.${k}[${i}]`).forEach((x) => out.push(x)),
-      );
-    } else {
-      walk(v, `${base}.${k}`, out);
-    }
+  });
+  (raw.questions ?? []).forEach((q, i) => {
+    for (const [text, label] of questionMathFields(q, i)) errs.push(...findMathErrors(text, label));
+  });
+  if (errs.length) {
+    filesWith += 1;
+    total += errs.length;
+    console.log(`\n[${file}] ${errs.length} math issue(s):`);
+    for (const e of errs.slice(0, 40)) console.log(`  - ${e}`);
+    if (errs.length > 40) console.log(`  ... and ${errs.length - 40} more`);
   }
 }
 
-const all = [];
-for (const file of readdirSync(DIR).filter((f) => f.endsWith('.json')).sort()) {
-  const lesson = JSON.parse(readFileSync(join(DIR, file), 'utf8'));
-  walk(lesson, file, all);
+console.log('\n' + '='.repeat(60));
+console.log(`Files with math issues: ${filesWith}/${files.length}`);
+console.log(`Total issues: ${total}`);
+if (strict && total > 0) {
+  console.error('\n[audit-lesson-math] STRICT: math issues present');
+  process.exit(1);
 }
-
-const byKind = {};
-for (const i of all) byKind[i.kind] = (byKind[i.kind] ?? 0) + 1;
-
-console.log(`Math audit — ${DIR}`);
-console.log('='.repeat(72));
-console.log(`Total issues: ${all.length}`);
-console.log('By kind:', byKind);
-
-const priority = ['katex-error', 'double-escaped-latex', 'latex-outside-delimiters', 'wrong-delimiter', 'empty-math'];
-for (const kind of priority) {
-  const items = all.filter((i) => i.kind === kind);
-  if (!items.length) continue;
-  console.log(`\n## ${kind} (${items.length})`);
-  for (const i of items.slice(0, 40)) {
-    console.log(`  ${i.path}`);
-    console.log(`    ${i.detail}`);
-  }
-  if (items.length > 40) console.log(`  … (+${items.length - 40} more)`);
-}
-
-process.exit(all.some((i) => ['katex-error', 'double-escaped-latex', 'latex-outside-delimiters'].includes(i.kind)) ? 1 : 0);
+console.log('\n[audit-lesson-math] OK');

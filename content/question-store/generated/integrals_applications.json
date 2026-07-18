@@ -17,23 +17,20 @@
         "ord": 1,
         "kind": "numeric",
         "difficulty": "easy",
-        "stem_en": "Compute $\\int_0^3 2x\\,dx$.",
-        "stem_he": "חשבו את $\\int_0^3 2x\\,dx$.",
+        "stem_en": "Compute $\\int_0^2 (3x^2 + 1)\\,dx$.",
+        "stem_he": "חשבו את $\\int_0^2 (3x^2 + 1)\\,dx$.",
         "answer_payload": {
-          "value": 9
+          "value": 10
         },
-        "explanation_en": "$\\int_0^3 2x\\,dx = [x^2]_0^3 = 9$.",
-        "explanation_he": "$\\int_0^3 2x\\,dx = [x^2]_0^3 = 9$.",
+        "explanation_en": "**Step 1 — Antiderivative.** $\\int (3x^2 + 1)\\,dx = x^3 + x$.\n\n**Step 2 — Evaluate $[x^3 + x]_0^2$.** $(8 + 2) - 0 = 10$.\n\n**Answer:** $10$.",
+        "explanation_he": "**שלב 1 — פונקציה קדומה.** $\\int (3x^2 + 1)\\,dx = x^3 + x$.\n\n**שלב 2 — הצבה $[x^3 + x]_0^2$.** $(8 + 2) - 0 = 10$.\n\n**תשובה:** $10$.",
         "skill_atoms": [
           "definite_integral"
         ],
         "verify": {
-          "check": "integral_definite",
-          "of": "2*x",
-          "var": "x",
-          "lower": "0",
-          "upper": "3",
-          "claimed": "9"
+          "check": "value",
+          "value": "integrate(3*x**2+1,(x,0,2))",
+          "claimed": "10"
         }
       }
     ],
@@ -41,7 +38,7 @@
       "definite_integral"
     ],
     "answer_payload": {
-      "value": 9
+      "value": 10
     },
     "source": "generated",
     "license": "generated-original",
@@ -69,25 +66,26 @@
         "ord": 1,
         "kind": "short_answer",
         "difficulty": "easy",
-        "stem_en": "Find an antiderivative of $f(x) = 2x$.",
-        "stem_he": "מצאו פונקציה קדומה של $f(x) = 2x$.",
+        "stem_en": "Find an antiderivative of $f(x) = 4x^3$.",
+        "stem_he": "מצאו פונקציה קדומה של $f(x) = 4x^3$.",
         "answer_payload": {
           "acceptable_answers": [
-            "x**2",
-            "x^2"
+            "x**4",
+            "x^4",
+            "x**4+C"
           ],
           "case_sensitive": false
         },
-        "explanation_en": "$\\frac{d}{dx}(x^2) = 2x$.",
-        "explanation_he": "$\\frac{d}{dx}(x^2) = 2x$.",
+        "explanation_en": "**Rule — reverse the power rule:** $\\int x^n\\,dx = \\frac{x^{n+1}}{n+1}$.\n\n**Apply.** $\\int 4x^3\\,dx = x^4 + C$.\n\n**Check.** $\\frac{d}{dx}(x^4) = 4x^3$. ✓",
+        "explanation_he": "**כלל — היפוך כלל החזקה:** $\\int x^n\\,dx = \\frac{x^{n+1}}{n+1}$.\n\n**יישום.** $\\int 4x^3\\,dx = x^4 + C$.\n\n**בדיקה.** $\\frac{d}{dx}(x^4) = 4x^3$. ✓",
         "skill_atoms": [
           "antiderivative"
         ],
         "verify": {
           "check": "derivative",
-          "of": "x**2",
+          "of": "x**4",
           "var": "x",
-          "claimed": "2*x"
+          "claimed": "4*x**3"
         }
       }
     ],
@@ -96,8 +94,9 @@
     ],
     "answer_payload": {
       "acceptable_answers": [
-        "x**2",
-        "x^2"
+        "x**4",
+        "x^4",
+        "x**4+C"
       ],
       "case_sensitive": false
     },
@@ -118,44 +117,306 @@
       "5pt"
     ],
     "points_level": "5pt",
-    "kind": "mcq",
+    "kind": "numeric",
     "difficulty": "medium",
     "stem_en": "",
     "stem_he": "",
     "parts": [
       {
         "ord": 1,
-        "kind": "mcq",
+        "kind": "numeric",
         "difficulty": "medium",
-        "stem_en": "What is the area under $f(x) = x$ from $x=0$ to $x=2$?",
-        "stem_he": "מהו השטח מתחת ל-$f(x) = x$ בתחום $x=0$ עד $x=2$?",
+        "stem_en": "Find the area between $f(x) = x^2$ and $g(x) = x$ from $x = 0$ to $x = 1$.",
+        "stem_he": "מצאו את השטח בין $f(x) = x^2$ ל-$g(x) = x$ בתחום $x = 0$ עד $x = 1$.",
+        "answer_payload": {
+          "value": 0.166667
+        },
+        "explanation_en": "**Step 1 — Which is on top?** On $(0,1)$, $x \\ge x^2$, so integrate $g - f = x - x^2$.\n\n**Step 2 — Integrate.** $\\int_0^1 (x - x^2)\\,dx = \\left[\\tfrac{x^2}{2} - \\tfrac{x^3}{3}\\right]_0^1 = \\tfrac12 - \\tfrac13 = \\tfrac16$.\n\n**Answer:** $\\tfrac{1}{6}$.",
+        "explanation_he": "**שלב 1 — מי למעלה?** בקטע $(0,1)$ מתקיים $x \\ge x^2$, ולכן אינטגרל על $g - f = x - x^2$.\n\n**שלב 2 — אינטגרציה.** $\\int_0^1 (x - x^2)\\,dx = \\left[\\tfrac{x^2}{2} - \\tfrac{x^3}{3}\\right]_0^1 = \\tfrac16$.\n\n**תשובה:** $\\tfrac{1}{6}$.",
+        "skill_atoms": [
+          "area_between_curves"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "integrate(x-x**2,(x,0,1))",
+          "claimed": "0.166667"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "area_between_curves"
+    ],
+    "answer_payload": {
+      "value": 0.166667
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "numeric",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "numeric",
+        "difficulty": "medium",
+        "stem_en": "Compute $\\int_1^4 \\dfrac{1}{\\sqrt{x}}\\,dx$.",
+        "stem_he": "חשבו את $\\int_1^4 \\dfrac{1}{\\sqrt{x}}\\,dx$.",
+        "answer_payload": {
+          "value": 2
+        },
+        "explanation_en": "**Step 1 — Rewrite.** $\\frac{1}{\\sqrt{x}} = x^{-1/2}$.\n\n**Step 2 — Antiderivative.** $\\int x^{-1/2}\\,dx = 2\\sqrt{x}$.\n\n**Step 3 — Evaluate.** $[2\\sqrt{x}]_1^4 = 2(2) - 2(1) = 2$.\n\n**Answer:** $2$.",
+        "explanation_he": "**שלב 1 — כתיבה מחדש.** $\\frac{1}{\\sqrt{x}} = x^{-1/2}$.\n\n**שלב 2 — פונקציה קדומה.** $\\int x^{-1/2}\\,dx = 2\\sqrt{x}$.\n\n**שלב 3 — הצבה.** $[2\\sqrt{x}]_1^4 = 4 - 2 = 2$.\n\n**תשובה:** $2$.",
+        "skill_atoms": [
+          "definite_integral"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "integrate(1/sqrt(x),(x,1,4))",
+          "claimed": "2"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "definite_integral"
+    ],
+    "answer_payload": {
+      "value": 2
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "true_false",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "true_false",
+        "difficulty": "medium",
+        "stem_en": "True or False: $\\int_{-1}^{1} x^3\\,dx = 0$.",
+        "stem_he": "נכון או לא נכון: $\\int_{-1}^{1} x^3\\,dx = 0$.",
+        "answer_payload": {
+          "value": true
+        },
+        "explanation_en": "**Step 1 — Odd function symmetry.** $x^3$ is odd, and the interval $[-1,1]$ is symmetric.\n\n**Step 2 — Cancellation.** The area below the axis cancels the area above.\n\n**Conclusion:** the integral is $0$ — **true**.",
+        "explanation_he": "**שלב 1 — סימטריית פונקציה אי-זוגית.** $x^3$ אי-זוגית והקטע $[-1,1]$ סימטרי.\n\n**שלב 2 — ביטול.** השטח מתחת לציר מבטל את השטח מעליו.\n\n**מסקנה:** האינטגרל הוא $0$ — **נכון**.",
+        "skill_atoms": [
+          "definite_integral"
+        ],
+        "verify": {
+          "check": "integral_definite",
+          "of": "x**3",
+          "var": "x",
+          "lower": "-1",
+          "upper": "1",
+          "claimed": "0"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "definite_integral"
+    ],
+    "answer_payload": {
+      "value": true
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "mcq",
+    "difficulty": "hard",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "mcq",
+        "difficulty": "hard",
+        "stem_en": "The area under $f(x) = \\sin x$ from $0$ to $\\pi$ is:",
+        "stem_he": "השטח מתחת ל-$f(x) = \\sin x$ מ-$0$ עד $\\pi$ הוא:",
         "answer_payload": {
           "options_en": [
             "$2$",
-            "$4$",
+            "$0$",
             "$1$",
-            "$8$"
+            "$\\pi$"
           ],
           "options_he": [
             "$2$",
-            "$4$",
+            "$0$",
             "$1$",
-            "$8$"
+            "$\\pi$"
           ],
           "correct_index": 0
         },
-        "explanation_en": "The correct option is $2$ (CAS-verified).",
-        "explanation_he": "התשובה הנכונה היא $2$ (מאומת ב-CAS).",
+        "explanation_en": "**Step 1 — Antiderivative.** $\\int \\sin x\\,dx = -\\cos x$.\n\n**Step 2 — Evaluate.** $[-\\cos x]_0^{\\pi} = -\\cos\\pi + \\cos 0 = 1 + 1 = 2$.\n\n**Answer:** $2$.",
+        "explanation_he": "**שלב 1 — פונקציה קדומה.** $\\int \\sin x\\,dx = -\\cos x$.\n\n**שלב 2 — הצבה.** $[-\\cos x]_0^{\\pi} = 1 + 1 = 2$.\n\n**תשובה:** $2$.",
         "skill_atoms": [
+          "definite_integral",
           "area_under_curve"
         ],
         "verify": {
           "check": "integral_definite",
-          "of": "x",
+          "of": "sin(x)",
           "var": "x",
           "lower": "0",
-          "upper": "2",
+          "upper": "pi",
           "claimed": "2"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "definite_integral",
+      "area_under_curve"
+    ],
+    "answer_payload": {
+      "options_en": [
+        "$2$",
+        "$0$",
+        "$1$",
+        "$\\pi$"
+      ],
+      "options_he": [
+        "$2$",
+        "$0$",
+        "$1$",
+        "$\\pi$"
+      ],
+      "correct_index": 0
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "numeric",
+    "difficulty": "easy",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "numeric",
+        "difficulty": "easy",
+        "stem_en": "Compute $\\int_0^3 (2x + 1)\\,dx$.",
+        "stem_he": "חשבו את $\\int_0^3 (2x + 1)\\,dx$.",
+        "answer_payload": {
+          "value": 12
+        },
+        "explanation_en": "**Step 1 — Antiderivative.** $\\int (2x + 1)\\,dx = x^2 + x$.\n\n**Step 2 — Evaluate $[x^2 + x]_0^3$.** $(9 + 3) - 0 = 12$.\n\n**Answer:** $12$.",
+        "explanation_he": "**שלב 1 — פונקציה קדומה.** $\\int (2x + 1)\\,dx = x^2 + x$.\n\n**שלב 2 — הצבה $[x^2 + x]_0^3$.** $12 - 0 = 12$.\n\n**תשובה:** $12$.",
+        "skill_atoms": [
+          "definite_integral"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "integrate(2*x+1,(x,0,3))",
+          "claimed": "12"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "definite_integral"
+    ],
+    "answer_payload": {
+      "value": 12
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "numeric",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "numeric",
+        "difficulty": "medium",
+        "stem_en": "Find the area enclosed between $y = 4 - x^2$ and the $x$-axis.",
+        "stem_he": "מצאו את השטח הכלוא בין $y = 4 - x^2$ לציר ה-$x$.",
+        "answer_payload": {
+          "value": 10.666667
+        },
+        "explanation_en": "**Step 1 — Find the roots.** $4 - x^2 = 0 \\Rightarrow x = \\pm 2$ are the limits.\n\n**Step 2 — Integrate.** $\\int_{-2}^{2} (4 - x^2)\\,dx = \\left[4x - \\tfrac{x^3}{3}\\right]_{-2}^{2}$.\n\n**Step 3 — Evaluate.** $\\left(8 - \\tfrac83\\right) - \\left(-8 + \\tfrac83\\right) = 16 - \\tfrac{16}{3} = \\tfrac{32}{3}$.\n\n**Answer:** $\\tfrac{32}{3}$.",
+        "explanation_he": "**שלב 1 — מציאת השורשים.** $4 - x^2 = 0 \\Rightarrow x = \\pm 2$ הם הגבולות.\n\n**שלב 2 — אינטגרציה.** $\\int_{-2}^{2} (4 - x^2)\\,dx = \\left[4x - \\tfrac{x^3}{3}\\right]_{-2}^{2}$.\n\n**שלב 3 — הצבה.** $16 - \\tfrac{16}{3} = \\tfrac{32}{3}$.\n\n**תשובה:** $\\tfrac{32}{3}$.",
+        "skill_atoms": [
+          "area_under_curve"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "integrate(4-x**2,(x,-2,2))",
+          "claimed": "10.666667"
         }
       }
     ],
@@ -163,17 +424,153 @@
       "area_under_curve"
     ],
     "answer_payload": {
+      "value": 10.666667
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "open",
+    "difficulty": "hard",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "open",
+        "difficulty": "hard",
+        "stem_en": "Find the area of the region enclosed between $y = x^2$ and $y = 2x$.",
+        "stem_he": "מצאו את שטח התחום הכלוא בין $y = x^2$ ל-$y = 2x$.",
+        "answer_payload": {
+          "steps_en": [
+            "**Step 1 — Intersections.** $x^2 = 2x \\Rightarrow x^2 - 2x = 0 \\Rightarrow x = 0, 2$.",
+            "**Step 2 — Which is on top?** On $(0, 2)$, $2x \\ge x^2$, so integrate $2x - x^2$.",
+            "**Step 3 — Integrate.** $\\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\tfrac{x^3}{3}\\right]_0^2 = 4 - \\tfrac83 = \\tfrac{4}{3}$.",
+            "**Answer:** $\\tfrac{4}{3}$."
+          ],
+          "steps_he": [
+            "**שלב 1 — נקודות חיתוך.** $x^2 = 2x \\Rightarrow x = 0, 2$.",
+            "**שלב 2 — מי למעלה?** בקטע $(0, 2)$ מתקיים $2x \\ge x^2$, ולכן אינטגרל על $2x - x^2$.",
+            "**שלב 3 — אינטגרציה.** $\\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\tfrac{x^3}{3}\\right]_0^2 = \\tfrac{4}{3}$.",
+            "**תשובה:** $\\tfrac{4}{3}$."
+          ]
+        },
+        "explanation_en": "**Step 1 — Intersections.** $x^2 = 2x \\Rightarrow x^2 - 2x = 0 \\Rightarrow x = 0, 2$.\n\n**Step 2 — Which is on top?** On $(0, 2)$, $2x \\ge x^2$, so integrate $2x - x^2$.\n\n**Step 3 — Integrate.** $\\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\tfrac{x^3}{3}\\right]_0^2 = 4 - \\tfrac83 = \\tfrac{4}{3}$.\n\n**Answer:** $\\tfrac{4}{3}$.",
+        "explanation_he": "**שלב 1 — נקודות חיתוך.** $x^2 = 2x \\Rightarrow x = 0, 2$.\n\n**שלב 2 — מי למעלה?** בקטע $(0, 2)$ מתקיים $2x \\ge x^2$, ולכן אינטגרל על $2x - x^2$.\n\n**שלב 3 — אינטגרציה.** $\\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\tfrac{x^3}{3}\\right]_0^2 = \\tfrac{4}{3}$.\n\n**תשובה:** $\\tfrac{4}{3}$.",
+        "skill_atoms": [
+          "area_between_curves"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "integrate(2*x-x**2,(x,0,2))",
+          "claimed": "4/3"
+        },
+        "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+        "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי."
+      }
+    ],
+    "skill_atoms": [
+      "area_between_curves"
+    ],
+    "answer_payload": {
+      "steps_en": [
+        "**Step 1 — Intersections.** $x^2 = 2x \\Rightarrow x^2 - 2x = 0 \\Rightarrow x = 0, 2$.",
+        "**Step 2 — Which is on top?** On $(0, 2)$, $2x \\ge x^2$, so integrate $2x - x^2$.",
+        "**Step 3 — Integrate.** $\\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\tfrac{x^3}{3}\\right]_0^2 = 4 - \\tfrac83 = \\tfrac{4}{3}$.",
+        "**Answer:** $\\tfrac{4}{3}$."
+      ],
+      "steps_he": [
+        "**שלב 1 — נקודות חיתוך.** $x^2 = 2x \\Rightarrow x = 0, 2$.",
+        "**שלב 2 — מי למעלה?** בקטע $(0, 2)$ מתקיים $2x \\ge x^2$, ולכן אינטגרל על $2x - x^2$.",
+        "**שלב 3 — אינטגרציה.** $\\int_0^2 (2x - x^2)\\,dx = \\left[x^2 - \\tfrac{x^3}{3}\\right]_0^2 = \\tfrac{4}{3}$.",
+        "**תשובה:** $\\tfrac{4}{3}$."
+      ]
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "integrals_applications",
+    "subject": "calculus_1",
+    "level": "university",
+    "math_track": [
+      "calc1",
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "mcq",
+    "difficulty": "hard",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "mcq",
+        "difficulty": "hard",
+        "stem_en": "The region under $y = \\sqrt{x}$ for $0 \\le x \\le 4$ is rotated about the $x$-axis. Its volume $\\pi\\int_0^4 x\\,dx$ equals:",
+        "stem_he": "התחום שמתחת ל-$y = \\sqrt{x}$ עבור $0 \\le x \\le 4$ מסובב סביב ציר ה-$x$. הנפח $\\pi\\int_0^4 x\\,dx$ שווה ל:",
+        "answer_payload": {
+          "options_en": [
+            "$8\\pi$",
+            "$16\\pi$",
+            "$4\\pi$",
+            "$2\\pi$"
+          ],
+          "options_he": [
+            "$8\\pi$",
+            "$16\\pi$",
+            "$4\\pi$",
+            "$2\\pi$"
+          ],
+          "correct_index": 0
+        },
+        "explanation_en": "**Disk method.** $V = \\pi\\int_0^4 \\left(\\sqrt{x}\\right)^2\\,dx = \\pi\\int_0^4 x\\,dx$.\n\n**Evaluate.** $\\pi\\left[\\tfrac{x^2}{2}\\right]_0^4 = \\pi\\cdot 8 = 8\\pi$.\n\n**Answer:** $8\\pi$.",
+        "explanation_he": "**שיטת הדיסקים.** $V = \\pi\\int_0^4 \\left(\\sqrt{x}\\right)^2\\,dx = \\pi\\int_0^4 x\\,dx$.\n\n**הצבה.** $\\pi\\left[\\tfrac{x^2}{2}\\right]_0^4 = 8\\pi$.\n\n**תשובה:** $8\\pi$.",
+        "skill_atoms": [
+          "volume_of_revolution",
+          "definite_integral"
+        ],
+        "verify": {
+          "check": "truth",
+          "predicate": "Eq(pi*integrate(x,(x,0,4)), 8*pi)",
+          "claimed": "true"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "volume_of_revolution",
+      "definite_integral"
+    ],
+    "answer_payload": {
       "options_en": [
-        "$2$",
-        "$4$",
-        "$1$",
-        "$8$"
+        "$8\\pi$",
+        "$16\\pi$",
+        "$4\\pi$",
+        "$2\\pi$"
       ],
       "options_he": [
-        "$2$",
-        "$4$",
-        "$1$",
-        "$8$"
+        "$8\\pi$",
+        "$16\\pi$",
+        "$4\\pi$",
+        "$2\\pi$"
       ],
       "correct_index": 0
     },
@@ -203,23 +600,23 @@
         "ord": 1,
         "kind": "true_false",
         "difficulty": "medium",
-        "stem_en": "True or False: $\\int_0^1 3x^2\\,dx = 1$.",
-        "stem_he": "נכון או לא נכון: $\\int_0^1 3x^2\\,dx = 1$.",
+        "stem_en": "True or False: $\\int_0^{2\\pi} \\sin x\\,dx = 0$.",
+        "stem_he": "נכון או לא נכון: $\\int_0^{2\\pi} \\sin x\\,dx = 0$.",
         "answer_payload": {
           "value": true
         },
-        "explanation_en": "CAS check confirms the statement is true.",
-        "explanation_he": "בדיקת CAS מאשרת שההיגד נכון.",
+        "explanation_en": "**Antiderivative.** $[-\\cos x]_0^{2\\pi} = -\\cos 2\\pi + \\cos 0 = -1 + 1 = 0$.\n\n**Interpretation.** The positive area on $(0,\\pi)$ cancels the negative area on $(\\pi,2\\pi)$.\n\n**Conclusion:** **true** — but note the *total* area is $4$, not $0$.",
+        "explanation_he": "**פונקציה קדומה.** $[-\\cos x]_0^{2\\pi} = -1 + 1 = 0$.\n\n**פרשנות.** השטח החיובי ב-$(0,\\pi)$ מבטל את השטח השלילי ב-$(\\pi,2\\pi)$.\n\n**מסקנה:** **נכון** — אך שימו לב שהשטח ה*כולל* הוא $4$, לא $0$.",
         "skill_atoms": [
           "definite_integral"
         ],
         "verify": {
           "check": "integral_definite",
-          "of": "3*x**2",
+          "of": "sin(x)",
           "var": "x",
           "lower": "0",
-          "upper": "1",
-          "claimed": "1"
+          "upper": "2*pi",
+          "claimed": "0"
         }
       }
     ],

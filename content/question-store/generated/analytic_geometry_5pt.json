@@ -16,20 +16,20 @@
         "ord": 1,
         "kind": "numeric",
         "difficulty": "easy",
-        "stem_en": "Find the distance between $(0,0)$ and $(3,4)$.",
-        "stem_he": "מצאו את המרחק בין $(0,0)$ ל-$(3,4)$.",
+        "stem_en": "Find the distance between $(1, 2)$ and $(7, 10)$.",
+        "stem_he": "מצאו את המרחק בין $(1, 2)$ ל-$(7, 10)$.",
         "answer_payload": {
-          "value": 5
+          "value": 10
         },
-        "explanation_en": "$d = \\sqrt{9+16} = 5$.",
-        "explanation_he": "$d = \\sqrt{9+16} = 5$.",
+        "explanation_en": "**Formula.** $d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$.\n\n**Compute.** $\\sqrt{6^2 + 8^2} = \\sqrt{100} = 10$.\n\n**Answer:** $10$.",
+        "explanation_he": "**נוסחה.** $d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$.\n\n**חישוב.** $\\sqrt{36 + 64} = \\sqrt{100} = 10$.\n\n**תשובה:** $10$.",
         "skill_atoms": [
           "distance_formula"
         ],
         "verify": {
           "check": "value",
-          "value": "sqrt(3**2+4**2)",
-          "claimed": "5"
+          "value": "sqrt((7-1)**2+(10-2)**2)",
+          "claimed": "10"
         }
       }
     ],
@@ -37,7 +37,7 @@
       "distance_formula"
     ],
     "answer_payload": {
-      "value": 5
+      "value": 10
     },
     "source": "generated",
     "license": "generated-original",
@@ -64,19 +64,19 @@
         "ord": 1,
         "kind": "numeric",
         "difficulty": "easy",
-        "stem_en": "Find the slope of the line through $(1,2)$ and $(3,8)$.",
-        "stem_he": "מצאו את השיפוע של הישר העובר דרך $(1,2)$ ו-$(3,8)$.",
+        "stem_en": "Find the slope of the line through $(2, 1)$ and $(6, 13)$.",
+        "stem_he": "מצאו את שיפוע הישר העובר דרך $(2, 1)$ ו-$(6, 13)$.",
         "answer_payload": {
           "value": 3
         },
-        "explanation_en": "$m = \\frac{8-2}{3-1} = 3$.",
-        "explanation_he": "$m = \\frac{8-2}{3-1} = 3$.",
+        "explanation_en": "**Formula.** $m = \\dfrac{y_2 - y_1}{x_2 - x_1}$.\n\n**Compute.** $\\dfrac{12}{4} = 3$.\n\n**Answer:** $m = 3$.",
+        "explanation_he": "**נוסחה.** $m = \\dfrac{y_2 - y_1}{x_2 - x_1}$.\n\n**חישוב.** $\\dfrac{12}{4} = 3$.\n\n**תשובה:** $m = 3$.",
         "skill_atoms": [
           "line_slope"
         ],
         "verify": {
           "check": "value",
-          "value": "(8-2)/(3-1)",
+          "value": "(13-1)/(6-2)",
           "claimed": "3"
         }
       }
@@ -112,32 +112,94 @@
         "ord": 1,
         "kind": "mcq",
         "difficulty": "medium",
-        "stem_en": "What is the radius of the circle $x^2 + y^2 = 25$?",
-        "stem_he": "מהו הרדיוס של המעגל $x^2 + y^2 = 25$?",
+        "stem_en": "The line perpendicular to $y = 2x + 1$ has slope:",
+        "stem_he": "לישר המאונך ל-$y = 2x + 1$ יש שיפוע:",
         "answer_payload": {
           "options_en": [
-            "$5$",
-            "$25$",
-            "$10$",
-            "$2.5$"
+            "$-\\frac{1}{2}$",
+            "$2$",
+            "$\\frac{1}{2}$",
+            "$-2$"
           ],
           "options_he": [
-            "$5$",
-            "$25$",
-            "$10$",
-            "$2.5$"
+            "$-\\frac{1}{2}$",
+            "$2$",
+            "$\\frac{1}{2}$",
+            "$-2$"
           ],
           "correct_index": 0
         },
-        "explanation_en": "The correct option is $5$ (CAS-verified).",
-        "explanation_he": "התשובה הנכונה היא $5$ (מאומת ב-CAS).",
+        "explanation_en": "**Rule.** Perpendicular slopes multiply to $-1$.\n\n**Compute.** If $m_1 = 2$ then $m_2 = -\\tfrac{1}{2}$ (since $2\\cdot(-\\tfrac12) = -1$).\n\n**Answer:** $-\\tfrac{1}{2}$.",
+        "explanation_he": "**כלל.** מכפלת שיפועים מאונכים היא $-1$.\n\n**חישוב.** אם $m_1 = 2$ אז $m_2 = -\\tfrac{1}{2}$ (כי $2\\cdot(-\\tfrac12) = -1$).\n\n**תשובה:** $-\\tfrac{1}{2}$.",
+        "skill_atoms": [
+          "perpendicular_slope",
+          "line_slope"
+        ],
+        "verify": {
+          "check": "truth",
+          "predicate": "Eq(-1/2*2, -1)",
+          "claimed": "true"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "perpendicular_slope",
+      "line_slope"
+    ],
+    "answer_payload": {
+      "options_en": [
+        "$-\\frac{1}{2}$",
+        "$2$",
+        "$\\frac{1}{2}$",
+        "$-2$"
+      ],
+      "options_he": [
+        "$-\\frac{1}{2}$",
+        "$2$",
+        "$\\frac{1}{2}$",
+        "$-2$"
+      ],
+      "correct_index": 0
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "numeric",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "numeric",
+        "difficulty": "medium",
+        "stem_en": "The circle $(x-2)^2 + (y+1)^2 = 49$ has what radius?",
+        "stem_he": "מהו הרדיוס של המעגל $(x-2)^2 + (y+1)^2 = 49$?",
+        "answer_payload": {
+          "value": 7
+        },
+        "explanation_en": "**Standard form.** $(x-h)^2 + (y-k)^2 = r^2$.\n\n**Read off.** $r^2 = 49 \\Rightarrow r = 7$.\n\n**Answer:** $7$ (centre $(2, -1)$).",
+        "explanation_he": "**צורה תקנית.** $(x-h)^2 + (y-k)^2 = r^2$.\n\n**קריאה.** $r^2 = 49 \\Rightarrow r = 7$.\n\n**תשובה:** $7$ (מרכז $(2, -1)$).",
         "skill_atoms": [
           "circle_equation"
         ],
         "verify": {
           "check": "value",
-          "value": "sqrt(25)",
-          "claimed": "5"
+          "value": "sqrt(49)",
+          "claimed": "7"
         }
       }
     ],
@@ -145,19 +207,81 @@
       "circle_equation"
     ],
     "answer_payload": {
-      "options_en": [
-        "$5$",
-        "$25$",
-        "$10$",
-        "$2.5$"
+      "value": 7
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "open",
+    "difficulty": "hard",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "open",
+        "difficulty": "hard",
+        "stem_en": "Find the equation of the circle whose diameter has endpoints $(-1, 2)$ and $(5, 10)$.",
+        "stem_he": "מצאו את משוואת המעגל שקוטרו בין הנקודות $(-1, 2)$ ל-$(5, 10)$.",
+        "answer_payload": {
+          "steps_en": [
+            "**Step 1 — Centre = midpoint.** $\\left(\\tfrac{-1+5}{2}, \\tfrac{2+10}{2}\\right) = (2, 6)$.",
+            "**Step 2 — Radius = half the diameter.** Diameter $= \\sqrt{6^2 + 8^2} = 10$, so $r = 5$.",
+            "**Step 3 — Write the equation.** $(x-2)^2 + (y-6)^2 = 25$.",
+            "**Answer:** $(x-2)^2 + (y-6)^2 = 25$."
+          ],
+          "steps_he": [
+            "**שלב 1 — מרכז = אמצע הקוטר.** $\\left(\\tfrac{-1+5}{2}, \\tfrac{2+10}{2}\\right) = (2, 6)$.",
+            "**שלב 2 — רדיוס = חצי הקוטר.** קוטר $= \\sqrt{36 + 64} = 10$, ולכן $r = 5$.",
+            "**שלב 3 — כתיבת המשוואה.** $(x-2)^2 + (y-6)^2 = 25$.",
+            "**תשובה:** $(x-2)^2 + (y-6)^2 = 25$."
+          ]
+        },
+        "explanation_en": "**Step 1 — Centre = midpoint.** $\\left(\\tfrac{-1+5}{2}, \\tfrac{2+10}{2}\\right) = (2, 6)$.\n\n**Step 2 — Radius = half the diameter.** Diameter $= \\sqrt{6^2 + 8^2} = 10$, so $r = 5$.\n\n**Step 3 — Write the equation.** $(x-2)^2 + (y-6)^2 = 25$.\n\n**Answer:** $(x-2)^2 + (y-6)^2 = 25$.",
+        "explanation_he": "**שלב 1 — מרכז = אמצע הקוטר.** $\\left(\\tfrac{-1+5}{2}, \\tfrac{2+10}{2}\\right) = (2, 6)$.\n\n**שלב 2 — רדיוס = חצי הקוטר.** קוטר $= \\sqrt{36 + 64} = 10$, ולכן $r = 5$.\n\n**שלב 3 — כתיבת המשוואה.** $(x-2)^2 + (y-6)^2 = 25$.\n\n**תשובה:** $(x-2)^2 + (y-6)^2 = 25$.",
+        "skill_atoms": [
+          "circle_equation",
+          "distance_formula"
+        ],
+        "verify": {
+          "check": "truth",
+          "predicate": "Eq(sqrt((5-(-1))**2+(10-2)**2)/2, 5)",
+          "claimed": "true"
+        },
+        "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+        "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי."
+      }
+    ],
+    "skill_atoms": [
+      "circle_equation",
+      "distance_formula"
+    ],
+    "answer_payload": {
+      "steps_en": [
+        "**Step 1 — Centre = midpoint.** $\\left(\\tfrac{-1+5}{2}, \\tfrac{2+10}{2}\\right) = (2, 6)$.",
+        "**Step 2 — Radius = half the diameter.** Diameter $= \\sqrt{6^2 + 8^2} = 10$, so $r = 5$.",
+        "**Step 3 — Write the equation.** $(x-2)^2 + (y-6)^2 = 25$.",
+        "**Answer:** $(x-2)^2 + (y-6)^2 = 25$."
       ],
-      "options_he": [
-        "$5$",
-        "$25$",
-        "$10$",
-        "$2.5$"
-      ],
-      "correct_index": 0
+      "steps_he": [
+        "**שלב 1 — מרכז = אמצע הקוטר.** $\\left(\\tfrac{-1+5}{2}, \\tfrac{2+10}{2}\\right) = (2, 6)$.",
+        "**שלב 2 — רדיוס = חצי הקוטר.** קוטר $= \\sqrt{36 + 64} = 10$, ולכן $r = 5$.",
+        "**שלב 3 — כתיבת המשוואה.** $(x-2)^2 + (y-6)^2 = 25$.",
+        "**תשובה:** $(x-2)^2 + (y-6)^2 = 25$."
+      ]
     },
     "source": "generated",
     "license": "generated-original",
@@ -184,20 +308,310 @@
         "ord": 1,
         "kind": "true_false",
         "difficulty": "medium",
-        "stem_en": "True or False: the distance from the origin to $(5,12)$ is $13$.",
-        "stem_he": "נכון או לא נכון: המרחק מהראשית אל $(5,12)$ הוא $13$.",
+        "stem_en": "True or False: the points $(0,0)$, $(3,4)$ and $(6,8)$ are collinear.",
+        "stem_he": "נכון או לא נכון: הנקודות $(0,0)$, $(3,4)$ ו-$(6,8)$ נמצאות על ישר אחד.",
         "answer_payload": {
           "value": true
         },
-        "explanation_en": "CAS check confirms the statement is true.",
-        "explanation_he": "בדיקת CAS מאשרת שההיגד נכון.",
+        "explanation_en": "**Test.** Slope from $(0,0)$ to $(3,4)$ is $\\tfrac43$; from $(0,0)$ to $(6,8)$ is $\\tfrac{8}{6} = \\tfrac43$.\n\n**Conclusion:** equal slopes $\\Rightarrow$ collinear — **true**.",
+        "explanation_he": "**בדיקה.** שיפוע מ-$(0,0)$ ל-$(3,4)$ הוא $\\tfrac43$; מ-$(0,0)$ ל-$(6,8)$ הוא $\\tfrac{8}{6} = \\tfrac43$.\n\n**מסקנה:** שיפועים שווים $\\Rightarrow$ על ישר אחד — **נכון**.",
+        "skill_atoms": [
+          "line_slope"
+        ],
+        "verify": {
+          "check": "truth",
+          "predicate": "Eq((4-0)/(3-0), (8-0)/(6-0))",
+          "claimed": "true"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "line_slope"
+    ],
+    "answer_payload": {
+      "value": true
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "numeric",
+    "difficulty": "easy",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "numeric",
+        "difficulty": "easy",
+        "stem_en": "Find the $x$-coordinate of the midpoint of $(2, 3)$ and $(8, 11)$.",
+        "stem_he": "מצאו את שיעור ה-$x$ של אמצע הקטע בין $(2, 3)$ ל-$(8, 11)$.",
+        "answer_payload": {
+          "value": 5
+        },
+        "explanation_en": "**Formula.** midpoint $= \\left(\\tfrac{x_1+x_2}{2}, \\tfrac{y_1+y_2}{2}\\right)$.\n\n**Compute the $x$-coordinate.** $\\tfrac{2+8}{2} = 5$.\n\n**Answer:** $5$.",
+        "explanation_he": "**נוסחה.** אמצע $= \\left(\\tfrac{x_1+x_2}{2}, \\tfrac{y_1+y_2}{2}\\right)$.\n\n**חישוב שיעור ה-$x$.** $\\tfrac{2+8}{2} = 5$.\n\n**תשובה:** $5$.",
+        "skill_atoms": [
+          "midpoint"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "(2+8)/2",
+          "claimed": "5"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "midpoint"
+    ],
+    "answer_payload": {
+      "value": 5
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "mcq",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "mcq",
+        "difficulty": "medium",
+        "stem_en": "Which point lies on the circle $x^2 + y^2 = 25$?",
+        "stem_he": "איזו נקודה נמצאת על המעגל $x^2 + y^2 = 25$?",
+        "answer_payload": {
+          "options_en": [
+            "$(3,4)$",
+            "$(2,5)$",
+            "$(1,1)$",
+            "$(5,5)$"
+          ],
+          "options_he": [
+            "$(3,4)$",
+            "$(2,5)$",
+            "$(1,1)$",
+            "$(5,5)$"
+          ],
+          "correct_index": 0
+        },
+        "explanation_en": "**Test each point in $x^2 + y^2$.** $(3,4)$: $9 + 16 = 25$. ✓\n\n**Others.** $(2,5)\\to 29$, $(1,1)\\to 2$, $(5,5)\\to 50$ — none equal $25$.\n\n**Answer:** $(3, 4)$.",
+        "explanation_he": "**מציבים כל נקודה ב-$x^2 + y^2$.** $(3,4)$: $9 + 16 = 25$. ✓\n\n**האחרות.** $(2,5)\\to 29$, $(1,1)\\to 2$, $(5,5)\\to 50$ — אף אחת אינה $25$.\n\n**תשובה:** $(3, 4)$.",
+        "skill_atoms": [
+          "circle_equation"
+        ],
+        "verify": {
+          "check": "truth",
+          "predicate": "Eq(3**2+4**2, 25)",
+          "claimed": "true"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "circle_equation"
+    ],
+    "answer_payload": {
+      "options_en": [
+        "$(3,4)$",
+        "$(2,5)$",
+        "$(1,1)$",
+        "$(5,5)$"
+      ],
+      "options_he": [
+        "$(3,4)$",
+        "$(2,5)$",
+        "$(1,1)$",
+        "$(5,5)$"
+      ],
+      "correct_index": 0
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "numeric",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "numeric",
+        "difficulty": "medium",
+        "stem_en": "The circle $x^2 + y^2 - 6x + 4y - 12 = 0$ has what radius?",
+        "stem_he": "מהו הרדיוס של המעגל $x^2 + y^2 - 6x + 4y - 12 = 0$?",
+        "answer_payload": {
+          "value": 5
+        },
+        "explanation_en": "**Step 1 — Complete the square.** $(x^2 - 6x) + (y^2 + 4y) = 12$.\n\n**Step 2 — Add the squares.** $(x-3)^2 - 9 + (y+2)^2 - 4 = 12 \\Rightarrow (x-3)^2 + (y+2)^2 = 25$.\n\n**Step 3 — Read off.** $r^2 = 25 \\Rightarrow r = 5$ (centre $(3, -2)$).\n\n**Answer:** $5$.",
+        "explanation_he": "**שלב 1 — השלמה לריבוע.** $(x^2 - 6x) + (y^2 + 4y) = 12$.\n\n**שלב 2 — מוסיפים את הריבועים.** $(x-3)^2 + (y+2)^2 = 25$.\n\n**שלב 3 — קריאה.** $r^2 = 25 \\Rightarrow r = 5$ (מרכז $(3, -2)$).\n\n**תשובה:** $5$.",
+        "skill_atoms": [
+          "circle_equation"
+        ],
+        "verify": {
+          "check": "value",
+          "value": "sqrt(25)",
+          "claimed": "5"
+        }
+      }
+    ],
+    "skill_atoms": [
+      "circle_equation"
+    ],
+    "answer_payload": {
+      "value": 5
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "open",
+    "difficulty": "hard",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "open",
+        "difficulty": "hard",
+        "stem_en": "Find the equation of the line through $(1, 2)$ that is perpendicular to $y = 3x - 1$.",
+        "stem_he": "מצאו את משוואת הישר העובר דרך $(1, 2)$ המאונך ל-$y = 3x - 1$.",
+        "answer_payload": {
+          "steps_en": [
+            "**Step 1 — Perpendicular slope.** The given slope is $3$, so the perpendicular slope is $-\\tfrac13$.",
+            "**Step 2 — Point-slope form.** $y - 2 = -\\tfrac13 (x - 1)$.",
+            "**Step 3 — Simplify.** $y = -\\tfrac13 x + \\tfrac13 + 2 = -\\tfrac13 x + \\tfrac73$.",
+            "**Answer:** $y = -\\tfrac13 x + \\tfrac73$."
+          ],
+          "steps_he": [
+            "**שלב 1 — שיפוע מאונך.** השיפוע הנתון הוא $3$, ולכן השיפוע המאונך הוא $-\\tfrac13$.",
+            "**שלב 2 — צורת נקודה-שיפוע.** $y - 2 = -\\tfrac13 (x - 1)$.",
+            "**שלב 3 — פישוט.** $y = -\\tfrac13 x + \\tfrac73$.",
+            "**תשובה:** $y = -\\tfrac13 x + \\tfrac73$."
+          ]
+        },
+        "explanation_en": "**Step 1 — Perpendicular slope.** The given slope is $3$, so the perpendicular slope is $-\\tfrac13$.\n\n**Step 2 — Point-slope form.** $y - 2 = -\\tfrac13 (x - 1)$.\n\n**Step 3 — Simplify.** $y = -\\tfrac13 x + \\tfrac13 + 2 = -\\tfrac13 x + \\tfrac73$.\n\n**Answer:** $y = -\\tfrac13 x + \\tfrac73$.",
+        "explanation_he": "**שלב 1 — שיפוע מאונך.** השיפוע הנתון הוא $3$, ולכן השיפוע המאונך הוא $-\\tfrac13$.\n\n**שלב 2 — צורת נקודה-שיפוע.** $y - 2 = -\\tfrac13 (x - 1)$.\n\n**שלב 3 — פישוט.** $y = -\\tfrac13 x + \\tfrac73$.\n\n**תשובה:** $y = -\\tfrac13 x + \\tfrac73$.",
+        "skill_atoms": [
+          "perpendicular_slope",
+          "line_slope"
+        ],
+        "verify": {
+          "check": "truth",
+          "predicate": "Eq(-1/3*3, -1)",
+          "claimed": "true"
+        },
+        "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+        "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי."
+      }
+    ],
+    "skill_atoms": [
+      "perpendicular_slope",
+      "line_slope"
+    ],
+    "answer_payload": {
+      "steps_en": [
+        "**Step 1 — Perpendicular slope.** The given slope is $3$, so the perpendicular slope is $-\\tfrac13$.",
+        "**Step 2 — Point-slope form.** $y - 2 = -\\tfrac13 (x - 1)$.",
+        "**Step 3 — Simplify.** $y = -\\tfrac13 x + \\tfrac13 + 2 = -\\tfrac13 x + \\tfrac73$.",
+        "**Answer:** $y = -\\tfrac13 x + \\tfrac73$."
+      ],
+      "steps_he": [
+        "**שלב 1 — שיפוע מאונך.** השיפוע הנתון הוא $3$, ולכן השיפוע המאונך הוא $-\\tfrac13$.",
+        "**שלב 2 — צורת נקודה-שיפוע.** $y - 2 = -\\tfrac13 (x - 1)$.",
+        "**שלב 3 — פישוט.** $y = -\\tfrac13 x + \\tfrac73$.",
+        "**תשובה:** $y = -\\tfrac13 x + \\tfrac73$."
+      ]
+    },
+    "source": "generated",
+    "license": "generated-original",
+    "provenance": {
+      "generator": "generate_math_items.py",
+      "method": "sympy"
+    },
+    "verification_status": "unverified"
+  },
+  {
+    "concept_id": "analytic_geometry_5pt",
+    "subject": "math",
+    "level": "high_school",
+    "math_track": [
+      "5pt"
+    ],
+    "points_level": "5pt",
+    "kind": "true_false",
+    "difficulty": "medium",
+    "stem_en": "",
+    "stem_he": "",
+    "parts": [
+      {
+        "ord": 1,
+        "kind": "true_false",
+        "difficulty": "medium",
+        "stem_en": "True or False: the distance between $(0, 0)$ and $(5, 12)$ is $13$.",
+        "stem_he": "נכון או לא נכון: המרחק בין $(0, 0)$ ל-$(5, 12)$ הוא $13$.",
+        "answer_payload": {
+          "value": true
+        },
+        "explanation_en": "**Compute.** $d = \\sqrt{5^2 + 12^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13$.\n\n**Conclusion:** **true** ($5$-$12$-$13$ is a Pythagorean triple).",
+        "explanation_he": "**חישוב.** $d = \\sqrt{5^2 + 12^2} = \\sqrt{169} = 13$.\n\n**מסקנה:** **נכון** ($5$-$12$-$13$ שלשה פיתגורית).",
         "skill_atoms": [
           "distance_formula"
         ],
         "verify": {
-          "check": "value",
-          "value": "sqrt(5**2+12**2)",
-          "claimed": "13"
+          "check": "truth",
+          "predicate": "Eq(sqrt(5**2+12**2), 13)",
+          "claimed": "true"
         }
       }
     ],

@@ -65,12 +65,32 @@ function normalizeQuestion(q, index) {
   const diff = DIFFICULTY_MAP[out.difficulty] ?? 'medium';
   out.difficulty = diff;
 
+  // Migrate answers stored only inside answer_payload onto the canonical
+  // top-level fields the seed pipeline + grader read. Without this, every kind
+  // except mcq seeds with a null answer key and grades correct answers as wrong.
   if (out.answer_payload && typeof out.answer_payload === 'object') {
     const p = out.answer_payload;
     if (out.kind === 'mcq' && p.options_en && p.correct_index !== undefined) {
       out.options_en = out.options_en ?? p.options_en;
       out.options_he = out.options_he ?? p.options_he ?? p.options_en;
       out.correct_index = out.correct_index ?? p.correct_index;
+    }
+    if (out.kind === 'mcq_multi' && Array.isArray(p.correct_indices) && out.correct_indices === undefined) {
+      out.correct_indices = p.correct_indices;
+      out.options_en = out.options_en ?? p.options_en;
+      out.options_he = out.options_he ?? p.options_he ?? p.options_en;
+    }
+    if (out.kind === 'true_false' && out.correct_bool === undefined) {
+      if (typeof p.value === 'boolean') out.correct_bool = p.value;
+      else if (typeof p.correct_bool === 'boolean') out.correct_bool = p.correct_bool;
+    }
+    if ((out.kind === 'numeric' || out.kind === 'fill_blank') && (out.correct_answer === undefined || out.correct_answer === null)) {
+      const v = p.value ?? p.answer ?? (Array.isArray(p.acceptable_answers) ? p.acceptable_answers[0] : undefined);
+      if (v !== undefined && v !== null) out.correct_answer = String(v);
+    }
+    if (out.kind === 'short_answer' && out.acceptable_answers === undefined && Array.isArray(p.acceptable_answers)) {
+      out.acceptable_answers = p.acceptable_answers;
+      out.case_sensitive = out.case_sensitive ?? Boolean(p.case_sensitive);
     }
   }
 

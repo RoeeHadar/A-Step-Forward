@@ -28,6 +28,70 @@ function combineStem(sharedStem, partStem, partOrd, totalParts) {
   return `${shared}\n\n(${label}) ${part}`;
 }
 
+/** Stringify a numeric/rational answer for the `correct_answer` column. */
+function answerToString(v) {
+  if (v === null || v === undefined) return null;
+  return String(v);
+}
+
+/**
+ * Map a store item's `answer_payload` onto the CANONICAL top-level fields the
+ * seed pipeline (`seed-lessons.mjs` -> `buildAnswerPayload`) and the grader UI
+ * (`lesson-quiz-panel.tsx`) read per kind. Leaving answers only in
+ * `answer_payload` silently breaks grading for every kind except mcq.
+ */
+function applyAnswerFields(q, ap) {
+  if (!ap || typeof ap !== 'object') return;
+  switch (q.kind) {
+    case 'mcq':
+      if (ap.options_en) q.options_en = ap.options_en;
+      if (ap.options_he) q.options_he = ap.options_he ?? ap.options_en;
+      if (ap.correct_index !== undefined) q.correct_index = ap.correct_index;
+      break;
+    case 'mcq_multi':
+      if (Array.isArray(ap.correct_indices)) q.correct_indices = ap.correct_indices;
+      if (ap.options_en) q.options_en = ap.options_en;
+      if (ap.options_he) q.options_he = ap.options_he ?? ap.options_en;
+      break;
+    case 'true_false': {
+      const b = typeof ap.value === 'boolean' ? ap.value : ap.correct_bool;
+      if (typeof b === 'boolean') q.correct_bool = b;
+      break;
+    }
+    case 'numeric':
+    case 'fill_blank': {
+      const val = ap.value ?? ap.answer ?? (Array.isArray(ap.acceptable_answers) ? ap.acceptable_answers[0] : undefined);
+      const s = answerToString(val);
+      if (s !== null) q.correct_answer = s;
+      break;
+    }
+    case 'short_answer':
+      if (Array.isArray(ap.acceptable_answers)) q.acceptable_answers = ap.acceptable_answers;
+      q.case_sensitive = Boolean(ap.case_sensitive);
+      if (!q.correct_answer && Array.isArray(ap.acceptable_answers)) {
+        q.correct_answer = answerToString(ap.acceptable_answers[0]);
+      }
+      break;
+    case 'match':
+      if (ap.left_en) q.left_en = ap.left_en;
+      if (ap.left_he) q.left_he = ap.left_he;
+      if (ap.right_en) q.right_en = ap.right_en;
+      if (ap.right_he) q.right_he = ap.right_he;
+      if (ap.correct_pairs) q.correct_pairs = ap.correct_pairs;
+      break;
+    case 'ordering':
+      if (ap.steps_en) q.steps_en = ap.steps_en;
+      if (ap.steps_he) q.steps_he = ap.steps_he;
+      if (ap.correct_order) q.correct_order = ap.correct_order;
+      break;
+    case 'derivation':
+      if (Array.isArray(ap.expected_steps)) q.expected_steps = ap.expected_steps;
+      break;
+    default:
+      break;
+  }
+}
+
 /** Flatten one composite store item into >=1 lesson-question objects. */
 export function itemToLessonQuestions(item) {
   const parts = Array.isArray(item.parts) ? item.parts : [];
@@ -49,11 +113,7 @@ export function itemToLessonQuestions(item) {
     if (part.rubric_en) q.rubric_en = part.rubric_en;
     if (part.rubric_he) q.rubric_he = part.rubric_he;
     if (item.points_level) q.points_level_min = item.points_level;
-    if (ap && q.kind === 'mcq') {
-      if (ap.options_en) q.options_en = ap.options_en;
-      if (ap.options_he) q.options_he = ap.options_he;
-      if (ap.correct_index !== undefined) q.correct_index = ap.correct_index;
-    }
+    applyAnswerFields(q, ap);
     return q;
   });
 }

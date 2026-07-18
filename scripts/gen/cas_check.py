@@ -20,7 +20,8 @@ from __future__ import annotations
 import json
 import sys
 
-from sympy import Eq, diff, integrate, simplify, symbols, sympify
+from sympy import Abs, Eq, N, S, diff, integrate, simplify, symbols, sympify
+from sympy.core.relational import Relational
 from sympy.parsing.sympy_parser import (
     implicit_multiplication_application,
     parse_expr,
@@ -88,14 +89,66 @@ def check(req: dict) -> dict:
             claimed = _parse(req["claimed"])
             return _ok(_num_equal(computed, claimed), computed)
 
+        if kind == "sign":
+            # Sign of an expression (optionally at a point): claimed in {-1,0,1,+,-,0}.
+            var = symbols(req.get("var", "x"))
+            expr = _parse(req["of"])
+            if req.get("at") is not None:
+                expr = expr.subs(var, sympify(req["at"]))
+            val = N(expr)
+            computed_sign = 0 if abs(float(val)) < 1e-12 else (1 if float(val) > 0 else -1)
+            claim_raw = str(req["claimed"]).strip()
+            claim_map = {"+": 1, "positive": 1, "1": 1, "-": -1, "negative": -1, "0": 0, "zero": 0}
+            claimed_sign = claim_map.get(claim_raw.lower(), None)
+            if claimed_sign is None:
+                claimed_sign = int(float(sympify(claim_raw)))
+            return _ok(computed_sign == claimed_sign, computed_sign)
+
+        if kind == "truth":
+            # Evaluate a predicate ("3*2**2-3 > 0", "Eq(log(6)+log(5), log(30))")
+            # to a bool and compare to the claimed truth value. Powers conceptual
+            # true/false + mcq items. Symbolic relationals fall back to numeric.
+            predicate = str(req["predicate"]).replace("^", "**")
+            expr = parse_expr(predicate, transformations=TRANSFORMS)
+            computed = _truth_value(expr)
+            claim_raw = str(req["claimed"]).strip().lower()
+            claimed = claim_raw in ("true", "1", "yes")
+            return _ok(computed == claimed, computed)
+
         return {"supported": False, "matches": False, "computed": "", "details": f"unknown check '{kind}'"}
     except Exception as exc:  # noqa: BLE001 - report, never crash the pipeline
         return {"supported": False, "matches": False, "computed": "", "details": f"{type(exc).__name__}: {exc}"}
 
 
+def _truth_value(expr) -> bool:
+    """Decide the truth of a boolean/relational expr, numerically if needed."""
+    if expr is S.true:
+        return True
+    if expr is S.false:
+        return False
+    if isinstance(expr, Relational):
+        op = expr.rel_op
+        if op in ("==", "!="):
+            d = float(Abs(N(expr.lhs - expr.rhs)))
+            eq = d < 1e-9
+            return eq if op == "==" else (not eq)
+        d = float(N(expr.lhs - expr.rhs))
+        if op == "<":
+            return d < 0
+        if op == "<=":
+            return d <= 1e-12
+        if op == ">":
+            return d > 0
+        if op == ">=":
+            return d >= -1e-12
+    return bool(expr)
+
+
 def _num_equal(a, b) -> bool:
+    # Tolerance 1e-6 matches the generator's 6-decimal display rounding
+    # (e.g. 1/9 -> 0.111111) while staying far below any distractor gap.
     try:
-        return simplify(a - b) == 0 or abs(float(a) - float(b)) < 1e-9
+        return simplify(a - b) == 0 or abs(float(a) - float(b)) < 1e-6
     except Exception:
         return _sym_equal(a, b)
 
