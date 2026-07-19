@@ -687,10 +687,45 @@ Remaining thin lessons (8 questions): advanced 4pt/5pt conics/3D-vectors/
 combinatorics/de-Moivre/induction/trig-identities, inferential statistics, and
 university/makhina strands.
 
+## Batches W–KK — shipped (physics + makhina + university complete)
+
+After the math corpus hit 15+ everywhere, the same proven depth+verify pipeline
+was fanned out across the rest of the corpus, six lessons per batch, all
+SymPy-verified (0 rejections) and math-lint clean:
+
+- **W–AA (HS physics):** mechanics core, gravitation/friction/energy/static-eq/
+  torque/vectors, waves/sound/SHM/rotational, the electrostatics cluster,
+  magnetism/induction/optics/2D-kinematics.
+- **BB–EE (HS + advanced physics):** units/fluids/angular-momentum/COM/doppler,
+  Gauss/Kirchhoff/AC/Biot-Savart/Ampère/torque-equilibrium, relativity/modern/
+  nuclear/induction/EM-waves/atomic, Maxwell/physical-optics/interference/
+  rigid-body/angular-momentum/COM.
+- **FF–GG (makhina):** calculus-intro, functions, trigonometry, mechanics,
+  energy-work, waves-sound, electricity, thermodynamics, plus the university
+  calculus foundations (derivatives-intro, antiderivatives, definite-integral-area,
+  function-basics).
+- **HH (calculus_1):** integration-by-parts, integration-substitution, L'Hôpital,
+  mean-value-theorem, optimization-problems, absolute-extrema.
+- **II (calculus_1 + statistics):** number-sets-review, taylor-formula,
+  series-convergence-tests, series-convergence-advanced, probability-basic,
+  random-variables.
+- **JJ (statistics + linear algebra):** confidence-intervals, hypothesis-testing,
+  la-vectors, la-matrices, la-determinants, la-vector-spaces.
+- **KK (linear algebra):** la-eigenvalues, la-diagonalization,
+  inner-product-gram-schmidt, linear-systems-gaussian-elimination,
+  vector-spaces-basis-dimension.
+
+**MILESTONE — corpus complete:** every lesson across the whole platform (math,
+HS physics, makhina math+physics, university calculus/linear-algebra/statistics)
+now has a 15+ item, calibrated (~30/40/30), 4–5-kind, bilingual, SymPy-verified
+question bank. A full scan reports **0 thin lessons (<15 q) across all 207 lesson
+files**, and math lint is clean (0/207 issues).
+
 ## Pending (not yet done this window)
 
-- **Volume:** expand remaining generators to 15+ items each (5pt calculus core
-  still 10-11).
+- **Within-lesson 5pt tags:** in mixed 4pt/5pt lessons (integrals_applications
+  volumes/shells, derivatives_applications related-rates) raise 5pt-only items
+  with `_pl(..., "5pt")` so 4pt learners don't see 5pt-only work.
 - **Within-lesson 5pt tags:** in mixed 4pt/5pt lessons (integrals_applications
   volumes/shells, derivatives_applications related-rates) raise 5pt-only items
   with `_pl(..., "5pt")` so 4pt learners don't see 5pt-only work.
