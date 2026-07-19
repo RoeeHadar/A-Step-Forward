@@ -243,10 +243,9 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "improper_integral_type1",
-      "improper_integral_type2",
-      "p_integral",
-      "comparison_test_integrals"
+      "convergence",
+      "improper_integral",
+      "p_test"
     ],
     "tutor_pacing_hint": "Start with Type I, clear $p$-integral cases. Then Type II. Then comparison for 'harder' functions.",
     "next_recommended": [
@@ -259,168 +258,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$\\int_1^\\infty x^{-3}\\,dx =$",
-      "stem_he": "$\\int_1^\\infty x^{-3}\\,dx=$",
+      "stem_en": "The integral $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x}\\,dx$:",
+      "stem_he": "האינטגרל $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x}\\,dx$:",
+      "explanation_en": "**$\\int_1^{\\infty}\\tfrac1x=\\lim \\ln b=\\infty$ — it diverges.**\n\n**Answer:** diverges.",
+      "explanation_he": "**$\\int_1^{\\infty}\\tfrac1x$ מתבדר.**\n\n**תשובה:** מתבדר.",
+      "skill_atoms": [
+        "convergence"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{diverges}$",
+          "$=1$",
+          "$=0$",
+          "$=\\ln 2$"
+        ],
+        "options_he": [
+          "$\\text{diverges}$",
+          "$=1$",
+          "$=0$",
+          "$=\\ln 2$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "05225dc2-edb2-5f75-892e-0fbafc684989",
+      "points_level_min": "5pt",
       "options_en": [
-        "$1/2$",
-        "$1/3$",
-        "$2$",
-        "Diverges"
+        "$\\text{diverges}$",
+        "$=1$",
+        "$=0$",
+        "$=\\ln 2$"
       ],
       "options_he": [
-        "$1/2$",
-        "$1/3$",
-        "$2$",
-        "מתבדר"
+        "$\\text{diverges}$",
+        "$=1$",
+        "$=0$",
+        "$=\\ln 2$"
       ],
-      "correct_index": 0,
-      "explanation_en": "This is a Type I $p$-integral with $p=3>1$, so it converges. Write $\\int_1^\\infty x^{-3}\\,dx = \\lim_{b\\to\\infty}\\int_1^b x^{-3}\\,dx$. Antiderivative: $x^{-2}/(-2)$. Evaluate: $[x^{-2}/(-2)]_1^\\infty = 0 - (-1/2) = 1/2$.\n\nOption $1/3$ would come from $p=2$, not $p=3$. Option $2$ confuses the convergent value with the exponent. \"Diverges\" applies only when $p\\le1$ on $[1,\\infty)$.\n\n**Common slip:** forgetting that $[F(x)]_1^\\infty$ means $\\lim_{b\\to\\infty}F(b)-F(1)$, not plugging $\\infty$ into $F$ directly. **Exam tip:** for $\\int_1^\\infty x^{-p}$, convergence requires $p>1$ — check this before computing. On exams, always write the limit parameter before integrating — this is the single most common lost-mark error on improper integral problems. After computing, verify convergence with the $p$-test or a quick comparison to confirm your limit calculation matches the expected behavior.",
-      "explanation_he": "זהו $p$-אינtegral מטיפוס I עם $p=3>1$, לכן מתכנס. כתbו $\\int_1^\\infty x^{-3}\\,dx = \\lim_{b\\to\\infty}\\int_1^b x^{-3}\\,dx$. אינtegral: $x^{-2}/(-2)$. חישוב: $[x^{-2}/(-2)]_1^\\infty = 0 - (-1/2) = 1/2$.\n\nאפשרות $1/3$ מתאימה ל-$p=2$, לא $p=3$. אפשרות $2$ מבלבלת ערך מתכנס עם המעריך. \"מתbדר\" חל רק כאשר $p\\le1$ על $[1,\\infty)$.\n\n**טעות נפוצה:** שכחה ש-$[F(x)]_1^\\infty$ פירושו $\\lim_{b\\to\\infty}F(b)-F(1)$, לא הצבת $\\infty$ ישירות. **טיפ לבחינה:** עבור $\\int_1^\\infty x^{-p}$, התכנסות דורשת $p>1$ — בדקu זאת לפני החישוב. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
-      "skill_atoms": [
-        "improper_integral_type1",
-        "p_integral"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Evaluate $\\int_0^\\infty xe^{-2x}\\,dx$.",
-      "stem_he": "חשבו $\\int_0^\\infty xe^{-2x}\\,dx$.",
-      "rubric_en": "IBP: $u=x$, $dv=e^{-2x}\\,dx$. Result: $1/4$.",
-      "rubric_he": "אינטגרציה בחלקים. תוצאה: $1/4$.",
-      "explanation_en": "Type I integral on $[0,\\infty)$ with exponential decay. Use integration by parts: $u=x$, $dv=e^{-2x}\\,dx$, so $du=dx$, $v=-e^{-2x}/2$.\n\n$\\int_0^b xe^{-2x}\\,dx = [-xe^{-2x}/2]_0^b + \\int_0^b e^{-2x}/2\\,dx = -be^{-2b}/2 + [-e^{-2x}/4]_0^b$. As $b\\to\\infty$: $be^{-2b}\\to0$ and $e^{-2b}\\to0$, leaving $1/4$.\n\nThis equals $\\Gamma(2)/2^2 = 1/4$ under the scaling $x\\mapsto 2x$. **Common slip:** dropping the boundary term $[-xe^{-2x}/2]_0^b$ during IBP. **Exam tip:** exponential factors always win over polynomial growth in the limit — verify each boundary term vanishes before concluding. On exams, always write the limit parameter before integrating — this is the single most common lost-mark error on improper integral problems. After computing, verify convergence with the $p$-test or a quick comparison to confirm your limit calculation matches the expected behavior.",
-      "explanation_he": "אינtegral מטיפוס I על $[0,\\infty)$ עם דעיכה מעריכית. אינtegrציה בחלקים: $u=x$, $dv=e^{-2x}\\,dx$, כלומר $du=dx$, $v=-e^{-2x}/2$.\n\n$\\int_0^b xe^{-2x}\\,dx = [-xe^{-2x}/2]_0^b + \\int_0^b e^{-2x}/2\\,dx = -be^{-2b}/2 + [-e^{-2x}/4]_0^b$. כאשר $b\\to\\infty$: $be^{-2b}\\to0$ ו-$e^{-2b}\\to0$, נשאר $1/4$.\n\nזה שווה ל-$\\Gamma(2)/2^2 = 1/4$ תחת scaling $x\\mapsto 2x$. **טעות נפוצה:** השמטת איבר הגbול $[-xe^{-2x}/2]_0^b$ ב-IBP. **טип לבחינה:** גורמים מעריכיים תמיד גוברים על צמיחת פולינום בגbול — ודאu שכל איבר גbול מתאפס לפני המסקנה. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{x}\\right]_1^{\\infty}=0-(-1)=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\left[-\\dfrac{1}{x}\\right]_1^{\\infty}=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "integration_by_parts"
-      ]
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "c278e2f1-d9d4-551b-bd5b-7728ee81bc61",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Evaluate $\\int_2^\\infty \\frac{1}{x^3}\\,dx$.",
-      "stem_he": "חשבו $\\int_2^\\infty x^{-3}\\,dx$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$[x^{-2}/(-2)]_2^\\infty=0-(-1/8)=1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Type I with lower limit $2$ instead of $1$ — the method is identical. Write $\\int_2^\\infty x^{-3}\\,dx = \\lim_{b\\to\\infty}\\int_2^b x^{-3}\\,dx$.\n\nEvaluate: $[x^{-2}/(-2)]_2^b = -1/(2b^2) + 1/8$. Limit as $b\\to\\infty$: $0 + 1/8 = 1/8$.\n\nSince $p=3>1$, the $p$-test guarantees convergence regardless of the finite lower limit. **Common slip:** computing $1/2$ by evaluating from $1$ instead of $2$. **Exam tip:** changing the lower bound from $1$ to $a>1$ changes the value but not convergence. **Self-check:** $1/8$ is smaller than the $\\int_1^\\infty$ value $1/2$, which makes sense — you removed area on $[1,2]$.",
-      "explanation_he": "טיפוס I עם גbול תחתון $2$ במקום $1$ — השיטה זהה. כתbו $\\int_2^\\infty x^{-3}\\,dx = \\lim_{b\\to\\infty}\\int_2^b x^{-3}\\,dx$.\n\nחישוב: $[x^{-2}/(-2)]_2^b = -1/(2b^2) + 1/8$. גbול כאשר $b\\to\\infty$: $0 + 1/8 = 1/8$.\n\nמכיוון ש-$p=3>1$, $p$-מבחן מבטיח התכנסות ללא קשר לגbול התחתון הסופי. **טעות נפוצה:** חישוב $1/2$ מהערכה מ-$1$ במקום $2$. **טיפ לבחינה:** שינוי גbול תחתון מ-$1$ ל-$a>1$ משנה ערך אך לא התכנסות. **בדיקה:** $1/8$ קטן מערך $\\int_1^\\infty$ שהוא $1/2$ — הגיוני כי הסרנו שטח על $[1,2]$. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$ using a limit.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^2}\\,dx$ בעזרת גבול.",
+      "explanation_en": "**Step 1 — Rewrite as a limit.** $\\displaystyle\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.\n\n**Step 2 — Antiderivative.** $\\left[-\\dfrac{1}{x}\\right]_1^{b}=-\\dfrac{1}{b}+1$.\n\n**Step 3 — Take the limit.** $\\lim_{b\\to\\infty}\\left(1-\\dfrac{1}{b}\\right)=1$.\n\n**Answer:** $1$.",
+      "explanation_he": "**שלב 1 — כתיבה כגבול.** $\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.\n\n**שלב 2 — פונקציה קדומה.** $1-\\dfrac1b$.\n\n**שלב 3 — גבול.** $=1$.\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "improper_integral_type2"
-      ]
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Rewrite as a limit.** $\\displaystyle\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.",
+          "**Step 2 — Antiderivative.** $\\left[-\\dfrac{1}{x}\\right]_1^{b}=-\\dfrac{1}{b}+1$.",
+          "**Step 3 — Take the limit.** $\\lim_{b\\to\\infty}\\left(1-\\dfrac{1}{b}\\right)=1$.",
+          "**Answer:** $1$."
+        ],
+        "steps_he": [
+          "**שלב 1 — כתיבה כגבול.** $\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx$.",
+          "**שלב 2 — פונקציה קדומה.** $1-\\dfrac1b$.",
+          "**שלב 3 — גבול.** $=1$.",
+          "**תשובה:** $1$."
+        ]
+      },
+      "source_item_id": "12eca33e-5221-5fdb-8ec0-0e675a9ee5bc",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Does $\\int_1^\\infty \\frac{1}{x}\\,dx$ converge?",
-      "stem_he": "האם $\\int_1^\\infty x^{-1}\\,dx$ מתכנס?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$[\\ln x]_1^\\infty = \\infty$. **Diverges.** ($p=1$)\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1$)\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "This is the borderline $p$-integral with $p=1$. Write $\\int_1^\\infty x^{-1}\\,dx = \\lim_{b\\to\\infty}[\\ln x]_1^b = \\lim_{b\\to\\infty}(\\ln b - 0) = \\infty$.\n\nThe logarithm grows without bound, so the integral **diverges**. For Type I on $[1,\\infty)$, convergence requires $p>1$ strictly — $p=1$ is the threshold case.\n\n**Common slip:** answering \"converges\" because $1/x$ decays to zero — decay rate matters, not just decay. $1/x$ decays too slowly. **Exam tip:** memorize that $\\int_1^\\infty 1/x\\,dx$ is the canonical divergent benchmark for comparison tests. **Self-check:** compare to $\\int_1^\\infty 1/x^2\\,dx=1$ which converges. On exams, always write the limit parameter before integrating — this is the single most common lost-mark error on improper integral problems. After computing, verify convergence with the $p$-test or a quick comparison to confirm your limit calculation matches the expected behavior.",
-      "explanation_he": "זהו $p$-אינtegral גbולי עם $p=1$. כתbו $\\int_1^\\infty x^{-1}\\,dx = \\lim_{b\\to\\infty}[\\ln x]_1^b = \\lim_{b\\to\\infty}(\\ln b - 0) = \\infty$.\n\nהלוגaritם גדל ללא חb, לכן האינtegral **מתbדר**. לטיפוס I על $[1,\\infty)$, התכנסות דורשת $p>1$ בstrict — $p=1$ הוא מקרה הסף.\n\n**טעות נפוצה:** תשובה \"מתכנס\" כי $1/x$ דועך לאפס — קצב הדעיכה חשוב, לא רק הדעיכה. $1/x$ דועך לאט מדי. **טיפ לבחינה:** שינu ש-$\\int_1^\\infty 1/x\\,dx$ הוא benchmark קלאסי מתbדר למבחני השוואה. **בדיקה:** השוו ל-$\\int_1^\\infty 1/x^2\\,dx=1$ שמתכנס. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: an improper integral can converge to a finite value.",
+      "stem_he": "נכון או לא נכון: אינטגרל לא אמיתי יכול להתכנס לערך סופי.",
+      "explanation_en": "**Yes — e.g. $\\int_1^{\\infty}x^{-2}=1$** — **true**.",
+      "explanation_he": "**כן — למשל $\\int_1^{\\infty}x^{-2}=1$** — **נכון**.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "improper_integral_type2"
-      ]
+        "convergence"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "fcd0d1e9-8789-5031-8489-6a9bb16c52b7",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Evaluate $\\int_0^\\infty e^{-3x}\\,dx$.",
-      "stem_he": "חשבו $\\int_0^\\infty e^{-3x}\\,dx$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\lim_{b\\to\\infty}[-e^{-3x}/3]_0^b=0+1/3=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Type I exponential integral with $a=3>0$. Write $\\int_0^\\infty e^{-3x}\\,dx = \\lim_{b\\to\\infty}\\int_0^b e^{-3x}\\,dx$.\n\nAntiderivative: $-e^{-3x}/3$. Evaluate: $[-e^{-3x}/3]_0^b = -e^{-3b}/3 + 1/3$. As $b\\to\\infty$, $e^{-3b}\\to0$, giving $1/3$.\n\nGeneral rule: $\\int_0^\\infty e^{-ax}\\,dx = 1/a$ for $a>0$. **Common slip:** forgetting the $1/3$ factor from the chain rule when integrating $e^{-3x}$ — students often write $-e^{-3x}$ instead of $-e^{-3x}/3$. **Exam tip:** exponential improper integrals always converge for positive decay rate. **Self-check:** $1/3$ is positive and less than $1$, as expected for a probability density tail. On exams, always write the limit parameter before integrating — this is the single most common lost-mark error on improper integral problems. After computing, verify convergence with the $p$-test or a quick comparison to confirm your limit calculation matches the expected behavior.",
-      "explanation_he": "אינtegral מעריכי מטיפוס I עם $a=3>0$. כתbו $\\int_0^\\infty e^{-3x}\\,dx = \\lim_{b\\to\\infty}\\int_0^b e^{-3x}\\,dx$.\n\nאינtegral: $-e^{-3x}/3$. חישוב: $[-e^{-3x}/3]_0^b = -e^{-3b}/3 + 1/3$. כאשר $b\\to\\infty$, $e^{-3b}\\to0$, נשאר $1/3$.\n\nכלל כללי: $\\int_0^\\infty e^{-ax}\\,dx = 1/a$ עבור $a>0$. **טעות נפוצה:** שכחת גורם $1/3$ מכלל השרשרת באינtegrציה של $e^{-3x}$ — לעתים כותbים $-e^{-3x}$ במקום $-e^{-3x}/3$. **טיפ לבחינה:** אינtegralים מעריכיים לא אמיתיים תמיד מתכנסים לקצב דעיכה חיובי. **בדיקה:** $1/3$ חיובי וקטן מ-$1$, כצפוי לזnב צפיפות. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^3}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^3}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{2x^2}\\right]_1^{\\infty}=0-(-\\tfrac12)=\\tfrac12$.**\n\n**Answer:** $0.5$.",
+      "explanation_he": "**$=\\tfrac12$.**\n\n**תשובה:** $0.5$.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "improper_integral_type2"
-      ]
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "a872d782-3f8b-56dc-81d4-38aeec187189",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Evaluate $\\int_0^4 \\frac{1}{\\sqrt{4-x}}\\,dx$.",
-      "stem_he": "חשבו $\\int_0^4 (4-x)^{-1/2}\\,dx$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Singularity at $x=4$. $\\lim_{t\\to4^-}[-2\\sqrt{4-x}]_0^t=0-(-4)=4$",
-          "4$",
-          "4"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Type II: the integrand $(4-x)^{-1/2}$ is unbounded at the right endpoint $x=4$. Write $\\int_0^4 (4-x)^{-1/2}\\,dx = \\lim_{t\\to4^-}\\int_0^t (4-x)^{-1/2}\\,dx$.\n\nAntiderivative: $-2\\sqrt{4-x}$. Evaluate: $[-2\\sqrt{4-x}]_0^t = -2\\sqrt{4-t} + 4$. As $t\\to4^-$: $-2\\sqrt{4-t}\\to0$, giving $4$.\n\nSubstitution $u=4-x$ converts this to $\\int_0^4 u^{-1/2}\\,du$ with $p=1/2<1$, confirming convergence. **Common slip:** treating $x=4$ as an interior singularity and splitting unnecessarily. **Exam tip:** check which endpoint causes the blow-up before choosing the limit direction ($t\\to4^-$ here, not $t\\to0^+$). On exams, always write the limit parameter before integrating — this is the single most common lost-mark error on improper integral problems. After computing, verify convergence with the $p$-test or a quick comparison to confirm your limit calculation matches the expected behavior.",
-      "explanation_he": "טיפוס II: האינtegrand $(4-x)^{-1/2}$ לא חסום בקצה הימני $x=4$. כתbו $\\int_0^4 (4-x)^{-1/2}\\,dx = \\lim_{t\\to4^-}\\int_0^t (4-x)^{-1/2}\\,dx$.\n\nאינtegral: $-2\\sqrt{4-x}$. חישוב: $[-2\\sqrt{4-x}]_0^t = -2\\sqrt{4-t} + 4$. כאשר $t\\to4^-$: $-2\\sqrt{4-t}\\to0$, נשאר $4$.\n\nהצבה $u=4-x$ ממירה ל-$\\int_0^4 u^{-1/2}\\,du$ עם $p=1/2<1$, מאשרת התכנסות. **טעות נפוצה:** התייחסות ל-$x=4$ כ-singularity פnימי ופיצול מיותר. **טיפ לבחינה:** בדקu איזה קצה גורם לפיצוץ לפני בחירת כיוון הגbול ($t\\to4^-$ כאן, לא $t\\to0^+$). בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} e^{-x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} e^{-x}\\,dx$.",
+      "explanation_en": "**$\\left[-e^{-x}\\right]_0^{\\infty}=0-(-1)=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "improper_integral_type2"
-      ]
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "e5f566a8-02d0-57cb-a68d-226b0ebe3c39",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Use the comparison test: does $\\int_1^\\infty \\frac{\\sin^2x}{x^2}\\,dx$ converge?",
-      "stem_he": "מבחן השוואה: האם $\\int_1^\\infty \\sin^2x/x^2\\,dx$ מתכנס?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$0\\le\\sin^2x\\le1$, so $\\sin^2x/x^2\\le1/x^2$. Since $\\int_1^\\infty 1/x^2\\,dx=1<\\infty$, by comparison **converges**",
-          "1<\\infty$, by comparison **converges**",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Use the direct comparison test. First bound the integrand: $0 \\le \\sin^2 x \\le 1$ for all $x$, so $0 \\le \\frac{\\sin^2 x}{x^2} \\le \\frac{1}{x^2}$ on $[1,\\infty)$.\n\nWe know $\\int_1^\\infty \\frac{1}{x^2}\\,dx = 1$ converges ($p=2>1$). Since our integrand is non-negative and bounded above by a convergent integral, $\\int_1^\\infty \\frac{\\sin^2 x}{x^2}\\,dx$ also **converges**.\n\n**Common slip:** trying to evaluate the integral exactly using trigonometric identities — unnecessary for a convergence question. **Exam tip:** when oscillation is bounded (like $\\sin^2 x$), sandwich between $0$ and a decaying power. **Self-check:** the integrand is always non-negative, so absolute convergence follows from the comparison.",
-      "explanation_he": "השתמשu במבחן השוואה ישיר. כbסu תחילה: $0 \\le \\sin^2 x \\le 1$ לכל $x$, לכן $0 \\le \\frac{\\sin^2 x}{x^2} \\le \\frac{1}{x^2}$ על $[1,\\infty)$.\n\nידוע ש-$\\int_1^\\infty \\frac{1}{x^2}\\,dx = 1$ מתכנס ($p=2>1$). מכיוון שהאינtegrand שלנו לא שלילי וחסום מלמעלה על ידי אינtegral מתכנס, גם $\\int_1^\\infty \\frac{\\sin^2 x}{x^2}\\,dx$ **מתכנס**.\n\n**טעות נפוצה:** ניסיון לחשb exact עם זהויות trigonometric — מיותר לשאלת התכנסות. **טיפ לbחינה:** כשתנודה חסומה (כמו $\\sin^2 x$), כbסu בין $0$ לחזקה דועכת. **בדיקה:** האינtegrand תמיד לא שלילי, לכן התכנסות מוחלטת עוקbת מההשוואה. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_2^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_2^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{x}\\right]_2^{\\infty}=0-(-\\tfrac12)=\\tfrac12$.**\n\n**Answer:** $0.5$.",
+      "explanation_he": "**$=\\tfrac12$.**\n\n**תשובה:** $0.5$.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "improper_integral_type2"
-      ]
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "e0b72ed6-95e8-5b9b-b43f-346d08ad271d",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Evaluate $\\int_0^\\infty x^2 e^{-x}\\,dx$ (= $\\Gamma(3) = 2!$).",
-      "stem_he": "חשבו $\\int_0^\\infty x^2 e^{-x}\\,dx$ ($=\\Gamma(3)=2!$).",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nIBP twice: $\\int_0^\\infty x^2e^{-x}\\,dx=2\\int_0^\\infty xe^{-x}\\,dx=2\\cdot1=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "This is a gamma-function integral: $\\Gamma(n)=\\int_0^\\infty x^{n-1}e^{-x}\\,dx = (n-1)!$. Here $n=3$, so the answer is $2!=2$.\n\nUse integration by parts twice. First IBP: $u=x^2$, $dv=e^{-x}\\,dx$ gives $\\int_0^\\infty x^2 e^{-x}\\,dx = 2\\int_0^\\infty x e^{-x}\\,dx$. Second IBP on the remaining integral yields $\\int_0^\\infty x e^{-x}\\,dx = 1$, so the total is $2\\cdot1=2$.\n\nEach boundary term vanishes as $b\\to\\infty$ because exponential decay dominates polynomial growth. **Common slip:** stopping after one IBP and leaving $\\int xe^{-x}\\,dx$ unevaluated. **Exam tip:** the pattern $\\int_0^\\infty x^n e^{-x}\\,dx = n!$ is worth memorizing for multiple-choice speed. On exams, always write the limit parameter before integrating — this is the single most common lost-mark error on improper integral problems. After computing, verify convergence with the $p$-test or a quick comparison to confirm your limit calculation matches the expected behavior.",
-      "explanation_he": "זהו אינtegral פונקציית גמא: $\\Gamma(n)=\\int_0^\\infty x^{n-1}e^{-x}\\,dx = (n-1)!$. כאן $n=3$, לכן התשובה $2!=2$.\n\nאינtegrציה בחלקים פעמיים. IBP ראשון: $u=x^2$, $dv=e^{-x}\\,dx$ נותן $\\int_0^\\infty x^2 e^{-x}\\,dx = 2\\int_0^\\infty x e^{-x}\\,dx$. IBP שני על האינtegral הנותר מניב $\\int_0^\\infty x e^{-x}\\,dx = 1$, סה\"כ $2\\cdot1=2$.\n\nכל איבר גbול מתאפס כאשר $b\\to\\infty$ כי דעיכה מעריכית גוברת על צמיחת פולינום. **טעות נפוצה:** עצירה אחרי IBP אחד והשארת $\\int xe^{-x}\\,dx$ בלי הערכה. **טיפ לbחינה:** הדpוס $\\int_0^\\infty x^n e^{-x}\\,dx = n!$ שווה לשינון לשאלות בחירה מהירות. בבחינות, תמיד כתbו פרמטר גbול לפני האינtegrציה — זו טעות איבוד הנקודות הנפוצה ביותר בשאלות אינtegral לא אמיתי. לאחר החישוב, אמתu התכנסות ב-$p$-מבחן או השוואה מהירה כדי לוודא שחישוב הגbול תואם את ההתנהגות הצפויה.",
+      "stem_en": "$\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^p}\\,dx$ converges when:",
+      "stem_he": "$\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^p}\\,dx$ מתכנס כאשר:",
+      "explanation_en": "**The $p$-test: converges iff $p>1$.**\n\n**Answer:** $p>1$.",
+      "explanation_he": "**מבחן ה-$p$: מתכנס אם ורק אם $p>1$.**\n\n**תשובה:** $p>1$.",
       "skill_atoms": [
-        "improper_integral_type1",
-        "improper_integral_type2"
-      ]
+        "p_test"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$p>1$",
+          "$p<1$",
+          "$p=1$",
+          "$p=0$"
+        ],
+        "options_he": [
+          "$p>1$",
+          "$p<1$",
+          "$p=1$",
+          "$p=0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "7ca43613-26ac-519d-ab05-b37c9315dbff",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$p>1$",
+        "$p<1$",
+        "$p=1$",
+        "$p=0$"
+      ],
+      "options_he": [
+        "$p>1$",
+        "$p<1$",
+        "$p=1$",
+        "$p=0$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} 2e^{-x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} 2e^{-x}\\,dx$.",
+      "explanation_en": "**$2\\left[-e^{-x}\\right]_0^{\\infty}=2\\cdot 1=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "a75002b4-276e-53ea-9b65-b1bd8be78e4e",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^4}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^4}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{3x^3}\\right]_1^{\\infty}=\\tfrac13$.**\n\n**Answer:** $\\tfrac13\\approx 0.3333$.",
+      "explanation_he": "**$=\\tfrac13$.**\n\n**תשובה:** $\\approx 0.3333$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.333333
+      },
+      "source_item_id": "8f0a8452-bdf0-53a5-adf7-9d79a475954d",
+      "points_level_min": "5pt",
+      "correct_answer": "0.333333"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} e^{-2x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} e^{-2x}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{e^{-2x}}{2}\\right]_0^{\\infty}=\\tfrac12$.**\n\n**Answer:** $0.5$.",
+      "explanation_he": "**$=\\tfrac12$.**\n\n**תשובה:** $0.5$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "f68d8b3b-d930-5f6f-b4e9-7f49f2da161c",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_3^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_3^{\\infty}\\dfrac{1}{x^2}\\,dx$.",
+      "explanation_en": "**$\\left[-\\dfrac{1}{x}\\right]_3^{\\infty}=\\tfrac13$.**\n\n**Answer:** $\\tfrac13\\approx 0.3333$.",
+      "explanation_he": "**$=\\tfrac13$.**\n\n**תשובה:** $\\approx 0.3333$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.333333
+      },
+      "source_item_id": "20f361ed-ad0f-510c-bd73-2093ffb425cc",
+      "points_level_min": "5pt",
+      "correct_answer": "0.333333"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty}\\dfrac{1}{x^2+1}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty}\\dfrac{1}{x^2+1}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$[\\arctan x]_0^{\\infty}=\\dfrac{\\pi}{2}\\approx 1.5708$.**\n\n**Answer:** $\\approx 1.5708$.",
+      "explanation_he": "**$[\\arctan x]_0^{\\infty}=\\dfrac{\\pi}{2}\\approx 1.5708$.**\n\n**תשובה:** $\\approx 1.5708$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1.570796
+      },
+      "source_item_id": "9ea4e39d-e738-5fee-956e-15e7a090e080",
+      "points_level_min": "5pt",
+      "correct_answer": "1.570796"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\infty} x e^{-x}\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\infty} x e^{-x}\\,dx$.",
+      "explanation_en": "**By parts (this is $\\Gamma(2)=1!$):** $=1$.\n\n**Answer:** $1$.",
+      "explanation_he": "**בחלקים (זהו $\\Gamma(2)=1!$):** $=1$.\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "a3b0a7ef-23e4-5bfa-a3ec-abd5bb2170f9",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{\\infty} e^{-x}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{\\infty} e^{-x}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$\\left[-e^{-x}\\right]_1^{\\infty}=e^{-1}\\approx 0.3679$.**\n\n**Answer:** $\\approx 0.3679$.",
+      "explanation_he": "**$=e^{-1}\\approx 0.3679$.**\n\n**תשובה:** $\\approx 0.3679$.",
+      "skill_atoms": [
+        "improper_integral"
+      ],
+      "answer_payload": {
+        "value": 0.367879
+      },
+      "source_item_id": "d0197581-30e2-508f-9092-6adb4385395f",
+      "points_level_min": "5pt",
+      "correct_answer": "0.367879"
     }
   ],
   "est_minutes": 45,

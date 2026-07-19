@@ -240,146 +240,391 @@
       "body_he_md": "- **$f_x$:** גזירה לפי $x$, $y$ קבוע; מודד קצב שינוי בכיוון $x$.\n- **נגזרות מעורבות:** $f_{xy}=f_{yx}$ כשרציפות (קלרו).\n- **גרדיאנט:** $\\nabla f=(f_x,f_y)$ — כיוון עלייה תלולה; ניצב לעקומות גובה.\n- **משמעות גיאומטרית:** $f_x(a,b)$ = שיפוע חיתוך המשטח במישור $y=b$.\n- **יישומים:** PDE, אופטימיזציה, למידת מכונה.\n\n**מסקנה:** \"יחס לשאר המשתנים כקבועים\" — כל הכישור החישובי; השאר הוא חדו\"א חד-משתנה."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "chain_rule",
+      "gradient",
+      "mixed_partials",
+      "partial_derivative"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Find $f_x$ and $f_y$ for $f(x,y)=3x^2+4xy-y^3$.",
-      "stem_he": "מצא $f_x$ ו-$f_y$ עבור $f(x,y)=3x^2+4xy-y^3$.",
+      "stem_en": "When taking $\\partial f/\\partial x$, the other variables are treated as:",
+      "stem_he": "בגזירה חלקית $\\partial f/\\partial x$, שאר המשתנים נחשבים:",
+      "explanation_en": "**All variables except $x$ are held constant.**\n\n**Answer:** constants.",
+      "explanation_he": "**כל המשתנים חוץ מ-$x$ קבועים.**\n\n**תשובה:** קבועים.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f_x=6x+4y$. $f_y=4x-3y^2$",
-          "6x+4y",
-          "4x-3y^2"
+        "options_en": [
+          "$\\text{constants}$",
+          "$\\text{zero}$",
+          "$\\text{variables}$",
+          "$\\text{infinite}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{constants}$",
+          "$\\text{zero}$",
+          "$\\text{variables}$",
+          "$\\text{infinite}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=6x+4y$ and $f_y=4x-3y^2$ follow directly from the constant-rule: when differentiating w.r.t. $x$, treat $4xy$ as $4y\\cdot x$ (coefficient $4y$) and $-y^3$ as constant; when differentiating w.r.t. $y$, treat $3x^2$ as constant and differentiate $4xy$ to $4x$, $-y^3$ to $-3y^2$.\n\n**How to think about it:**\nSplit the function into \"$x$-terms\" and \"$y$-terms\" mentally. For $f_x$, only terms containing $x$ contribute; pure-$y$ terms like $-y^3$ vanish. This is the simplest partial-derivative pattern — no chain rule needed.\n\n**Common slip:**\nDifferentiating $-y^3$ w.r.t. $x$ to get $-3y^2$ (wrong variable), or forgetting the coefficient $4$ in $4xy$ when finding $f_y$. Another slip: writing $f_y=4x-3y$ instead of $-3y^2$.\n\n**Exam tip:**\nPolynomial partials should take under 30 seconds. Write \"y constant\" before $f_x$ and \"x constant\" before $f_y$ for clarity.",
-      "explanation_he": "**למה זה נכון:**\n$f_x=6x+4y$ ו-$f_y=4x-3y^2$ נובעים ישירות מכלל הקבוע: בגזירה לפי $x$, יחסו ל-$4xy$ כ-$4y\\cdot x$ (מקדם $4y$) ול-$-y^3$ כקבוע; בגזירה לפי $y$, $3x^2$ קבוע, $4xy$ נגזר ל-$4x$, $-y^3$ ל-$-3y^2$.\n\n**איך לחשוב על זה:**\nחלקו בדעת ל\"איברי $x$\" ו\"איברי $y$\". ב-$f_x$, רק איברים עם $x$ תורמים; איברי $y$ טהורים כמו $-y^3$ מתאפסים. זה התבנית הפשוטה ביותר — בלי כלל שרשרת.\n\n**טעות נפוצה:**\nגזירת $-y^3$ לפי $x$ ל-$-3y^2$ (משתנה שגוי), או שכחת המקדם $4$ ב-$4xy$ ב-$f_y$. $f_y=4x-3y$ במקום $-3y^2$.\n\n**טיפ לבחינה:**\nנגזרות של פולינום — פחות מ-30 שניות. כתבו \"y קבוע\" לפני $f_x$ ו\"x קבוע\" לפני $f_y$ — בודקים שיודעים את הכלל.",
-      "skill_atoms": []
+      "source_item_id": "2059b6a1-3d71-513f-b04a-4ec79acfcfae",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{constants}$",
+        "$\\text{zero}$",
+        "$\\text{variables}$",
+        "$\\text{infinite}$"
+      ],
+      "options_he": [
+        "$\\text{constants}$",
+        "$\\text{zero}$",
+        "$\\text{variables}$",
+        "$\\text{infinite}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find $\\partial f/\\partial x$ for $f(x,y,z)=x^2yz^3$.",
-      "stem_he": "מצא $\\partial f/\\partial x$ עבור $f(x,y,z)=x^2yz^3$.",
+      "stem_en": "For $f(x,y)=x^2y$, evaluate $f_x$ at $(2,3)$.",
+      "stem_he": "עבור $f(x,y)=x^2y$, חשבו את $f_x$ בנקודה $(2,3)$.",
+      "explanation_en": "**$f_x=2xy=2\\cdot 2\\cdot 3=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$f_x=2xy=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\partial f/\\partial x=2xyz^3$",
-          "2xyz^3"
-        ],
-        "case_sensitive": false
+        "value": 12
       },
-      "explanation_en": "**Why this is correct:**\n$\\partial f/\\partial x=2xyz^3$ because $y$ and $z$ are treated as constants. The term $x^2yz^3$ becomes $yz^3\\cdot x^2$, whose derivative w.r.t. $x$ is $yz^3\\cdot 2x=2xyz^3$.\n\n**How to think about it:**\nThree-variable partials use the same rule as two-variable: freeze every variable except the one you differentiate. Here $yz^3$ is a single constant coefficient attached to $x^2$. No product rule is needed because the \"other variables\" block is constant.\n\n**Common slip:**\nDifferentiating $z^3$ w.r.t. $x$ to get $3z^2$ — that would be $\\partial f/\\partial z$, not $\\partial f/\\partial x$. Another slip: forgetting one of the variables in the answer ($2xz^3$ missing $y$).\n\n**Exam tip:**\nWhen the function is a monomial $x^a y^b z^c$, the partial w.r.t. $x$ is $a\\cdot x^{a-1}y^b z^c$ — reduce the exponent of $x$ by 1 and keep everything else. Instant answer.",
-      "explanation_he": "**למה זה נכון:**\n$\\partial f/\\partial x=2xyz^3$ כי $y$ ו-$z$ מטופלים כקבועים. האיבר $x^2yz^3$ הופך ל-$yz^3\\cdot x^2$, שנגזרתו לפי $x$ היא $2xyz^3$.\n\n**איך לחשוב על זה:**\nנגזרות חלקיות של שלושה משתנים — אותו כלל: הקפיאו כל משתנה מלבד זה שגוזרים. כאן $yz^3$ מקדם קבוע על $x^2$. לא צריך כלל מכפלה.\n\n**טעות נפוצה:**\nגזירת $z^3$ לפי $x$ ל-$3z^2$ — זו $\\partial f/\\partial z$, לא $\\partial f/\\partial x$. $2xz^3$ בלי $y$.\n\n**טип לבחינה:**\nלמונום $x^a y^b z^c$, הנגזרת לפי $x$ היא $a x^{a-1}y^b z^c$ — הורידו חזקה ב-1, השאירו השאר.",
-      "skill_atoms": []
+      "source_item_id": "0a85bce0-cf97-5cf9-a141-ba89ab6f592d",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
     },
     {
       "ord": 3,
       "kind": "short_answer",
       "difficulty": "easy",
-      "stem_en": "Find $f_x(2,1)$ for $f(x,y)=x^2y-3y^2$.",
-      "stem_he": "מצא $f_x(2,1)$ עבור $f(x,y)=x^2y-3y^2$.",
+      "stem_en": "Find $f_x$ for $f(x,y)=x^2+y^2$.",
+      "stem_he": "מצאו את $f_x$ עבור $f(x,y)=x^2+y^2$.",
+      "explanation_en": "**Treat $y$ as a constant.** $f_x=2x$.\n\n**Answer:** $2x$.",
+      "explanation_he": "**מתייחסים ל-$y$ כקבוע.** $f_x=2x$.\n\n**תשובה:** $2x$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "$f_x=2xy$. $f_x(2,1)=4$",
-          "4"
+          "2x",
+          "2*x"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nFirst find the partial formula: $f_x=2xy$ (differentiate $x^2y$ to $2xy$; $-3y^2$ is constant w.r.t. $x$). Then substitute: $f_x(2,1)=2(2)(1)=4$.\n\n**How to think about it:**\n\"Find $f_x$ at a point\" is a two-step problem: (1) symbolic partial, (2) plug in coordinates. Never substitute into $f$ first and then differentiate — that gives a number, not a partial formula.\n\n**Common slip:**\nSubstituting $(2,1)$ into $f$ to get $4-3=1$ and calling that $f_x(2,1)$ — that is $f(2,1)$, not a partial. Another slip: $f_x=x^2y=4$ without differentiating (forgetting the power rule on $x^2$).\n\n**Exam tip:**\nAlways write $f_x=\\ldots$ on one line and $f_x(a,b)=\\ldots$ on the next. Partial credit requires showing the formula; the final number alone may lose points.",
-      "explanation_he": "**למה זה נכון:**\nקודם נוסחת הנגזרת: $f_x=2xy$ (גזירת $x^2y$ ל-$2xy$; $-3y^2$ קבוע לפי $x$). הצבה: $f_x(2,1)=2(2)(1)=4$.\n\n**איך לחשוב על זה:**\n\"מצא $f_x$ בנקודה\" — שני שלבים: (1) נוסחת הנגזרת, (2) הצבה. אל תציבו ל-$f$ קודם ואז תגזרו — זה מספר, לא נוסחת נגזרת.\n\n**טעות נפוצה:**\nהצבת $(2,1)$ ל-$f$ לקבלת $1$ וקריאה לזה $f_x(2,1)$ — זה $f(2,1)$. $f_x=x^2y=4$ בלי גזירת $x^2$.\n\n**טיפ לבחינה:**\nכתבו $f_x=\\ldots$ בשורה אחת ו-$f_x(a,b)=\\ldots$ בשורה הבאה. נקודות חלקיות דורשות את הנוסחה.",
-      "skill_atoms": []
+      "source_item_id": "bc1dd9f8-7455-58cb-99ca-92f34330f5f5",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "2x",
+        "2*x"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "2x"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find the gradient $\\nabla f$ at $(0,0)$ for $f(x,y)=e^x\\sin y$.",
-      "stem_he": "מצא $\\nabla f$ ב-$(0,0)$ עבור $f(x,y)=e^x\\sin y$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $f(x,y)=x^2y+y$, evaluate $f_x$ at $(1,2)$.",
+      "stem_he": "עבור $f(x,y)=x^2y+y$, חשבו את $f_x$ בנקודה $(1,2)$.",
+      "explanation_en": "**Step 1 — Partial in $x$.** $f_x=2xy$ (the $+y$ term has no $x$).\n\n**Step 2 — Substitute.** $f_x(1,2)=2\\cdot 1\\cdot 2=4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**שלב 1 — גזירה חלקית ב-$x$.** $f_x=2xy$.\n\n**שלב 2 — הצבה.** $2\\cdot 1\\cdot 2=4$.\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\nabla f=(0,1)$ at $(0,0)$",
-          "(0,1)",
-          "0,1"
+        "steps_en": [
+          "**Step 1 — Partial in $x$.** $f_x=2xy$ (the $+y$ term has no $x$).",
+          "**Step 2 — Substitute.** $f_x(1,2)=2\\cdot 1\\cdot 2=4$.",
+          "**Answer:** $4$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — גזירה חלקית ב-$x$.** $f_x=2xy$.",
+          "**שלב 2 — הצבה.** $2\\cdot 1\\cdot 2=4$.",
+          "**תשובה:** $4$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=e^x\\sin y$ and $f_y=e^x\\cos y$. At $(0,0)$: $f_x(0,0)=e^0\\sin 0=1\\cdot 0=0$, $f_y(0,0)=e^0\\cos 0=1\\cdot 1=1$. So $\\nabla f(0,0)=(0,1)$.\n\n**How to think about it:**\nThe gradient stacks both first partials into a vector. Compute each partial symbolically, then evaluate both at the point. Here $e^x$ becomes 1 and $\\sin 0=0$, $\\cos 0=1$ at the origin.\n\n**Common slip:**\nWriting $\\nabla f=(e^x\\sin y,\\,e^x\\cos y)$ without evaluating at $(0,0)$ — the question asks for the gradient **at** the point. Another slip: $(1,0)$ by swapping $f_x$ and $f_y$, or forgetting that $\\sin 0=0$.\n\n**Exam tip:**\nMemorize $\\sin 0=0$, $\\cos 0=1$, $e^0=1$ — these appear in every gradient-at-a-point problem. Write the vector with parentheses: $(0,1)$, not $0,1$ alone.",
-      "explanation_he": "**למה זה נכון:**\n$f_x=e^x\\sin y$, $f_y=e^x\\cos y$. ב-$(0,0)$: $f_x(0,0)=0$, $f_y(0,0)=1$. לכן $\\nabla f(0,0)=(0,1)$.\n\n**איך לחשוב על זה:**\nהגרדיאנט אוסף את שתי הנגזרות הראשונות לוקטור. חשבו כל נגזרת, הציבו בנקודה. ב-$(0,0)$: $e^0=1$, $\\sin 0=0$, $\\cos 0=1$.\n\n**טעות נפוצה:**\n$\\nabla f=(e^x\\sin y,e^x\\cos y)$ בלי הצבה — השאלה מבקשת **ב**נקודה. $(1,0)$ מהחלפת $f_x$ ו-$f_y$.\n\n**טיפ לבחינה:**\n$\\sin 0=0$, $\\cos 0=1$, $e^0=1$ — בכל בעיית גרדיאנט בנקודה. כתבו $(0,1)$ עם סוגריים. וקטור זה מצביע בכיוון $+y$ — עלייה מיידית של $f$ מהמקור.",
-      "skill_atoms": []
+      "source_item_id": "9bb4e24c-fa52-5f57-8b11-ba7fe55bb55f",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "medium",
-      "stem_en": "Find all second-order partial derivatives of $f(x,y)=x^3y^2$.",
-      "stem_he": "מצא את כל הנגזרות החלקיות מסדר שני של $f(x,y)=x^3y^2$.",
+      "stem_en": "True or False: for smooth functions the mixed partials satisfy $f_{xy}=f_{yx}$ (Clairaut).",
+      "stem_he": "נכון או לא נכון: לפונקציות חלקות הנגזרות המעורבות מקיימות $f_{xy}=f_{yx}$ (קלרו).",
+      "explanation_en": "**Clairaut's theorem:** mixed partials are equal for $C^2$ functions — **true**.",
+      "explanation_he": "**משפט קלרו:** הנגזרות המעורבות שוות — **נכון**.",
+      "skill_atoms": [
+        "mixed_partials"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=f_{yx}=6x^2y$",
-          "6x^2y"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=3x^2y^2$, $f_y=2x^3y$. Then $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, and by Clairaut $f_{yx}=6x^2y$ as well.\n\n**How to think about it:**\nWork in layers: all first partials, then all second partials from those. For monomials $x^a y^b$, each differentiation reduces one exponent by 1. Mixed partial $f_{xy}$ means differentiate $f_x$ w.r.t. $y$ — here $3x^2\\cdot 2y=6x^2y$.\n\n**Common slip:**\nComputing $f_{xy}$ as $6xy^2$ by differentiating $f_{xx}$ w.r.t. $y$ incorrectly, or forgetting $f_{yy}$ entirely. Another slip: $f_{yy}=6x^3y$ by not reducing the $y$-exponent to 0.\n\n**Exam tip:**\nList all four second-order partials in a 2×2 table ($f_{xx}$, $f_{xy}$ in row 1; $f_{yx}$, $f_{yy}$ in row 2). Verify $f_{xy}=f_{yx}$ for full credit on Clairaut questions.",
-      "explanation_he": "**למה זה נכון:**\n$f_x=3x^2y^2$, $f_y=2x^3y$. אז $f_{xx}=6xy^2$, $f_{yy}=2x^3$, $f_{xy}=6x^2y$, ולפי קלרו $f_{yx}=6x^2y$.\n\n**איך לחשוב על זה:**\nעבדו בשכבות: נגזרות ראשונות, אז שניות. למונום $x^a y^b$, כל גזירה מורידה חזקה ב-1. $f_{xy}$ = גזירת $f_x$ לפי $y$ — $3x^2\\cdot 2y=6x^2y$.\n\n**טעות נפוצה:**\n$f_{xy}=6xy^2$ בטעות, או שכחת $f_{yy}$. $f_{yy}=6x^3y$ בלי להוריד חזקת $y$ ל-0.\n\n**טיפ לבחינה:**\nרשימת ארבע נגזרות מסדר שני ברשת 2×2. אמתו $f_{xy}=f_{yx}$ לנקודות מלאות על קלרו. למונום $x^3y^2$, כל גזירה מורידה חזקה ב-1 — בדקו ש-$f_{yy}=2x^3$ (חזקת $y$ ירדה ל-0).",
-      "skill_atoms": []
+      "source_item_id": "623edcaa-4b49-53e6-ae98-9ede6bd45deb",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 6,
       "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "For $f(x,y)=\\dfrac{x}{x^2+y^2}$, find $f_x$ and $f_y$.",
-      "stem_he": "עבור $f(x,y)=\\dfrac{x}{x^2+y^2}$, מצא $f_x$ ו-$f_y$.",
+      "difficulty": "easy",
+      "stem_en": "Find $f_y$ for $f(x,y)=x^2+y^2$.",
+      "stem_he": "מצאו את $f_y$ עבור $f(x,y)=x^2+y^2$.",
+      "explanation_en": "**Treat $x$ as a constant.** $f_y=2y$.\n\n**Answer:** $2y$.",
+      "explanation_he": "**מתייחסים ל-$x$ כקבוע.** $f_y=2y$.\n\n**תשובה:** $2y$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "$f_x=(y^2-x^2)/(x^2+y^2)^2$. $f_y=-2xy/(x^2+y^2)^2$",
-          "(y^2-x^2)/(x^2+y^2)^2"
+          "2y",
+          "2*y"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nApply the quotient rule with $u=x$, $v=x^2+y^2$. For $f_x$: $f_x=[v\\cdot u'-u\\cdot v']/v^2=[(x^2+y^2)(1)-x(2x)]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. For $f_y$: $f_y=[0-x(2y)]/(x^2+y^2)^2=-2xy/(x^2+y^2)^2$.\n\n**How to think about it:**\nQuotient rule works exactly as in single-variable calculus — the \"other variable\" is just a constant during each partial. When finding $f_y$, treat $x$ as constant so $u=x$ has derivative 0 w.r.t. $y$.\n\n**Common slip:**\nUsing $u'=1$ for $f_y$ (forgetting $x$ is constant w.r.t. $y$). Sign errors: $(x^2-y^2)$ instead of $(y^2-x^2)$ in the numerator of $f_x$. Forgetting to square the denominator.\n\n**Exam tip:**\nWrite $u$, $v$, $u'$, $v'$ explicitly before applying the formula — one line of setup prevents sign and variable errors on quotient-rule partials.",
-      "explanation_he": "**למה זה נכון:**\nכלל מנה עם $u=x$, $v=x^2+y^2$. ל-$f_x$: $f_x=[(x^2+y^2)-2x^2]/(x^2+y^2)^2=(y^2-x^2)/(x^2+y^2)^2$. ל-$f_y$: $f_y=-2xy/(x^2+y^2)^2$.\n\n**איך לחשוב על זה:**\nכלל מנה כמו בחד-משתנה — \"המשתנה האחר\" קבוע בכל נגזרת חלקית. ב-$f_y$, $x$ קבוע ולכן $u'=0$ לפי $y$.\n\n**טעות נפוצה:**\n$u'=1$ ב-$f_y$ (שכחת ש-$x$ קבוע). $(x^2-y^2)$ במקום $(y^2-x^2)$. שכחת לעצב את המכנה.\n\n**טיפ לבחינה:**\nכתבו $u$, $v$, $u'$, $v'$ לפני הנוסחה — שורת הכנה מונעת שגיאות סימן ומשתנה.",
-      "skill_atoms": []
+      "source_item_id": "13307edf-6067-5814-920d-bfb7ae805925",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "2y",
+        "2*y"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "2y"
     },
     {
       "ord": 7,
       "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Verify that $f(x,y)=e^x\\cos y$ satisfies the Laplace equation $f_{xx}+f_{yy}=0$.",
-      "stem_he": "אמת ש-$f(x,y)=e^x\\cos y$ מקיימת את משוואת לפלס $f_{xx}+f_{yy}=0$.",
+      "difficulty": "easy",
+      "stem_en": "Find $f_x$ for $f(x,y)=3xy$.",
+      "stem_he": "מצאו את $f_x$ עבור $f(x,y)=3xy$.",
+      "explanation_en": "**$f_x=3y$.**\n\n**Answer:** $3y$.",
+      "explanation_he": "**$f_x=3y$.**\n\n**תשובה:** $3y$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "$f_{xx}+f_{yy}=0$ verified",
-          "0"
+          "3y",
+          "3*y"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=e^x\\cos y$, $f_{xx}=e^x\\cos y$. $f_y=-e^x\\sin y$, $f_{yy}=-e^x\\cos y$. Sum: $f_{xx}+f_{yy}=e^x\\cos y-e^x\\cos y=0$. ✓\n\n**How to think about it:**\nLaplace verification is a four-partial workflow: $f_x$, $f_{xx}$, $f_y$, $f_{yy}$, then add the pure second partials. Exponential-trigonometric products separate cleanly: $e^x$ repeats under $x$-differentiation, $\\cos y$ repeats (with sign flip for $\\sin$) under $y$-differentiation.\n\n**Common slip:**\nAdding $f_{xy}+f_{yx}$ instead of $f_{xx}+f_{yy}$ — Laplace uses **pure** second partials only. Sign error on $f_{yy}$: forgetting the minus from differentiating $\\cos y$ to $-\\sin y$ then again.\n\n**Exam tip:**\nFunctions of the form $e^{ax}\\cos(by)$ or $e^{ax}\\sin(by)$ are harmonic (Laplace = 0) when $a^2=b^2$. Here $a=1$, $b=1$ — instant recognition saves four derivatives.",
-      "explanation_he": "**למה זה נכון:**\n$f_{xx}=e^x\\cos y$, $f_{yy}=-e^x\\cos y$. סכום: $f_{xx}+f_{yy}=0$. ✓\n\n**איך לחשוב על זה:**\nאימות לפלס — ארבע נגזרות: $f_x$, $f_{xx}$, $f_y$, $f_{yy}$, ואז חיבור הטהורות מסדר שני. מכפלות $e^x$ ו-$\\cos y$ נפרדות: $e^x$ חוזר בגזירה לפי $x$, $\\cos y$ עם שינוי סימן לפי $y$.\n\n**טעות נפוצה:**\n$f_{xy}+f_{yx}$ במקום $f_{xx}+f_{yy}$ — לפלס משתמש רק בנגזרות **טהורות**. שגיאת סימן ב-$f_{yy}$.\n\n**טיפ לבחינה:**\n$e^{ax}\\cos(by)$ עונה ללפלס כש-$a^2=b^2$. כאן $a=b=1$ — זיהוי מיידי חוסך ארבע נגזרות.",
-      "skill_atoms": []
+      "source_item_id": "67a53223-bbda-5c0d-b6e0-64d84a191247",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "3y",
+        "3*y"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "3y"
     },
     {
       "ord": 8,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x,y)=xy^2$, evaluate $f_y$ at $(3,2)$.",
+      "stem_he": "עבור $f(x,y)=xy^2$, חשבו את $f_y$ בנקודה $(3,2)$.",
+      "explanation_en": "**$f_y=2xy=2\\cdot 3\\cdot 2=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$f_y=2xy=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "c66241d8-0745-5295-a008-2ae7e8ee8b1b",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x,y)=x^2+xy$, evaluate $f_x$ at $(1,4)$.",
+      "stem_he": "עבור $f(x,y)=x^2+xy$, חשבו את $f_x$ בנקודה $(1,4)$.",
+      "explanation_en": "**$f_x=2x+y=2+4=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$f_x=2x+y=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "88efb280-8a44-572c-b0f3-8e63030aa86a",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 10,
       "kind": "short_answer",
       "difficulty": "medium",
-      "stem_en": "Find the gradient $\\nabla f$ of $f(x,y)=x^2+3xy+y^2$ at $(1,-1)$ and find its magnitude.",
-      "stem_he": "מצא $\\nabla f$ של $f(x,y)=x^2+3xy+y^2$ ב-$(1,-1)$ ומצא את גודלו.",
+      "stem_en": "Find $f_x$ for $f(x,y)=x^2y+y^3$.",
+      "stem_he": "מצאו את $f_x$ עבור $f(x,y)=x^2y+y^3$.",
+      "explanation_en": "**$y^3$ is constant in $x$.** $f_x=2xy$.\n\n**Answer:** $2xy$.",
+      "explanation_he": "**$y^3$ קבוע ב-$x$.** $f_x=2xy$.\n\n**תשובה:** $2xy$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "$\\nabla f=(-1,1)$, $|\\nabla f|=\\sqrt{2}$",
-          "sqrt(2)",
-          "\\sqrt{2}"
+          "2xy",
+          "2*x*y"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$f_x=2x+3y$, $f_y=3x+2y$. At $(1,-1)$: $f_x=2(1)+3(-1)=-1$, $f_y=3(1)+2(-1)=1$. So $\\nabla f=(-1,1)$. Magnitude: $|\\nabla f|=\\sqrt{(-1)^2+1^2}=\\sqrt{2}$.\n\n**How to think about it:**\nThis combines partial computation, evaluation, and vector magnitude — three skills in one question. The gradient components can be negative; magnitude is always non-negative. $\\sqrt{2}$ is the maximum rate of increase of $f$ at $(1,-1)$.\n\n**Common slip:**\n$|\\nabla f|=(-1)+1=0$ by adding components instead of using $\\sqrt{f_x^2+f_y^2}$. Another slip: $f_x=2x+3xy$ by treating $3xy$ as needing product rule w.r.t. $x$ (but $y$ is constant, so $3y$ is the coefficient).\n\n**Exam tip:**\nTwo-part questions: box the gradient vector first, then compute magnitude separately. If the stem asks for magnitude, $\\sqrt{2}$ not $2$ — common final-answer trap.",
-      "explanation_he": "**למה זה נכון:**\n$f_x=2x+3y$, $f_y=3x+2y$. ב-$(1,-1)$: $f_x=-1$, $f_y=1$. $\\nabla f=(-1,1)$. גודל: $|\\nabla f|=\\sqrt{2}$.\n\n**איך לחשוב על זה:**\nשילוב של נגזרות, הצבה, וגודל וקטור — שלושה כישורים. רכיבי הגרדיאנט יכולים להיות שליליים; הגודל תמיד לא-שלילי. $\\sqrt{2}$ = קצב העלייה המרבי ב-$(1,-1)$.\n\n**טעות נפוצה:**\n$|\\nabla f|=0$ מחיבור רכיבים במקום $\\sqrt{f_x^2+f_y^2}$. $f_x=2x+3xy$ בטעות ( $y$ קבוע, המקדם $3y$).\n\n**טיפ לבחינה:**\nשאלות דו-חלקיות: סמנו את וקטור הגרדיאנט, אז גודל בנפרד. $\\sqrt{2}$ לא $2$ — מלכודת תשובה סופית.",
-      "skill_atoms": []
+      "source_item_id": "110c65bc-1cab-569e-bac9-bfb57953807b",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "2xy",
+        "2*x*y"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "2xy"
+    },
+    {
+      "ord": 11,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find $f_y$ for $f(x,y)=x^2y+y^3$.",
+      "stem_he": "מצאו את $f_y$ עבור $f(x,y)=x^2y+y^3$.",
+      "explanation_en": "**$f_y=x^2+3y^2$.**\n\n**Answer:** $x^2+3y^2$.",
+      "explanation_he": "**$f_y=x^2+3y^2$.**\n\n**תשובה:** $x^2+3y^2$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "x^2+3y^2",
+          "x**2+3*y**2"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "ce177cdd-719a-5385-adcd-e7cdc4a3201e",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "x^2+3y^2",
+        "x**2+3*y**2"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "x^2+3y^2"
+    },
+    {
+      "ord": 12,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Find $f_x$ for $f(x,y)=x^3y^2$.",
+      "stem_he": "מצאו את $f_x$ עבור $f(x,y)=x^3y^2$.",
+      "explanation_en": "**$f_x=3x^2y^2$.**\n\n**Answer:** $3x^2y^2$.",
+      "explanation_he": "**$f_x=3x^2y^2$.**\n\n**תשובה:** $3x^2y^2$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "3x^2y^2",
+          "3*x**2*y**2"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "960e7c53-5cd6-54de-b625-43b5d2995acd",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "3x^2y^2",
+        "3*x**2*y**2"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "3x^2y^2"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x,y)=x^2+y^2$, find the magnitude of the gradient at $(3,4)$.",
+      "stem_he": "עבור $f(x,y)=x^2+y^2$, מצאו את גודל הגרדיאנט בנקודה $(3,4)$.",
+      "explanation_en": "**$\\nabla f=(2x,2y)=(6,8)$; $|\\nabla f|=\\sqrt{36+64}=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$\\nabla f=(6,8)$; $|\\nabla f|=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "gradient"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "231628cc-1d43-5958-93aa-9c0bbc74ecb1",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 14,
+      "kind": "short_answer",
+      "difficulty": "hard",
+      "stem_en": "Find $f_x$ for $f(x,y)=\\sin(xy)$.",
+      "stem_he": "מצאו את $f_x$ עבור $f(x,y)=\\sin(xy)$.",
+      "explanation_en": "**Chain rule:** $f_x=y\\cos(xy)$.\n\n**Answer:** $y\\cos(xy)$.",
+      "explanation_he": "**כלל השרשרת:** $f_x=y\\cos(xy)$.\n\n**תשובה:** $y\\cos(xy)$.",
+      "skill_atoms": [
+        "partial_derivative",
+        "chain_rule"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "y*cos(x*y)",
+          "ycos(xy)"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "4a7fc037-7706-5d9f-9e07-9ec8c8504674",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "y*cos(x*y)",
+        "ycos(xy)"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "y*cos(x*y)"
+    },
+    {
+      "ord": 15,
+      "kind": "short_answer",
+      "difficulty": "hard",
+      "stem_en": "Find $f_y$ for $f(x,y)=xe^{y}$.",
+      "stem_he": "מצאו את $f_y$ עבור $f(x,y)=xe^{y}$.",
+      "explanation_en": "**$f_y=xe^{y}$.**\n\n**Answer:** $xe^{y}$.",
+      "explanation_he": "**$f_y=xe^{y}$.**\n\n**תשובה:** $xe^{y}$.",
+      "skill_atoms": [
+        "partial_derivative"
+      ],
+      "answer_payload": {
+        "acceptable_answers": [
+          "x*e^y",
+          "x*exp(y)"
+        ],
+        "case_sensitive": false
+      },
+      "source_item_id": "85ef5336-c5ed-50cf-b19e-a8b0316c57c5",
+      "points_level_min": "5pt",
+      "acceptable_answers": [
+        "x*e^y",
+        "x*exp(y)"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "x*e^y"
     }
   ],
   "est_minutes": 55,

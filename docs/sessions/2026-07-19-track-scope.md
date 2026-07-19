@@ -420,10 +420,35 @@ to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
 more mean item. Spread 5/6/4, 4 kinds per lesson. Math + strict + track-scope
 audits green; zero rejections on the first pipeline pass for all six.
 
+## Batch Q — shipped
+
+The **multivariable-calculus + linear-algebra + advanced-integration strand**
+expanded to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
+
+- `partial_derivatives` (calc2/multivariable) — $f_x$, $f_y$ via the CAS
+  `derivative` check *with the correct variable*, evaluation at points, chain
+  rule $\partial_x\sin(xy)$, gradient magnitude, Clairaut. First strand to hit
+  **5 question kinds** (short-answer symbolic derivatives added).
+- `determinants_cramer` (linear algebra) — 2×2 & 3×3 determinants (cofactor
+  expansion), singular test, Cramer's rule for 2×2 systems.
+- `improper_integrals` (calc1/5pt) — $\int_1^\infty x^{-p}$, $\int_0^\infty
+  e^{-x}$, $\int_0^\infty (x^2+1)^{-1}=\pi/2$, $\int_0^\infty xe^{-x}=1$ — CAS
+  `integral_definite` with `oo` bounds, plus the $p$-test.
+- `integration_partial_fractions` (calc1/5pt) — log integrals and true partial-
+  fraction decompositions $\tfrac{1}{x(x+1)}=\tfrac1x-\tfrac1{x+1}$, all CAS
+  `integral_definite`-verified.
+- `riemann_integral_ftc` (5pt/university) — FTC parts 1 & 2, area-as-integral,
+  polynomial definite integrals.
+- `combinatorics_5pt` (5pt) — $\binom{n}{k}$, permutations, inclusion-exclusion
+  for 2 & 3 sets, divisibility counting, Pascal's identity.
+
+Spread 5/6/4, 4–5 kinds per lesson. Math + strict + track-scope audits green;
+zero rejections on the first pipeline pass for all six.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **84 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O, P + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **90 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P, Q + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines

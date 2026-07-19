@@ -250,13 +250,10 @@
     ],
     "tutor_pacing_hint": "Begin with basic permutations and combinations. Introduce circular permutations with a clear example. Then teach non-adjacent by complement. Inclusion-exclusion is its own session. Combinatorial identity proofs are the climax — emphasize the 'double-counting' philosophy.",
     "skill_atoms_unlocked": [
-      "permutations_without_repetition",
-      "circular_permutation",
-      "non_adjacent_placement",
+      "combination",
       "inclusion_exclusion",
-      "binomial_theorem",
-      "combinatorial_proof",
-      "combinations_symmetry"
+      "pascal",
+      "permutation"
     ],
     "prerequisites_to_check_before_teaching": [
       "basic_combinatorics",
@@ -271,162 +268,332 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "How many 4-digit numbers have no repeated digits?",
-      "stem_he": "כמה מספרים בני 4 ספרות ללא ספרה חוזרת?",
+      "stem_en": "The inclusion-exclusion principle for two sets gives $|A\\cup B|=$",
+      "stem_he": "עקרון ההכלה וההפרדה לשתי קבוצות נותן $|A\\cup B|=$",
+      "explanation_en": "**$|A\\cup B|=|A|+|B|-|A\\cap B|$ avoids double counting.**\n\n**Answer:** $|A|+|B|-|A\\cap B|$.",
+      "explanation_he": "**$|A\\cup B|=|A|+|B|-|A\\cap B|$.**\n\n**תשובה:** $|A|+|B|-|A\\cap B|$.",
+      "skill_atoms": [
+        "inclusion_exclusion"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$|A|+|B|-|A\\cap B|$",
+          "$|A|+|B|$",
+          "$|A|\\cdot|B|$",
+          "$|A|-|B|$"
+        ],
+        "options_he": [
+          "$|A|+|B|-|A\\cap B|$",
+          "$|A|+|B|$",
+          "$|A|\\cdot|B|$",
+          "$|A|-|B|$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "e3f35d23-0987-5d80-ae29-6e626002a52e",
+      "points_level_min": "5pt",
       "options_en": [
-        "3024",
-        "5040",
-        "4536",
-        "3628"
+        "$|A|+|B|-|A\\cap B|$",
+        "$|A|+|B|$",
+        "$|A|\\cdot|B|$",
+        "$|A|-|B|$"
       ],
       "options_he": [
-        "3024",
-        "5040",
-        "4536",
-        "3628"
+        "$|A|+|B|-|A\\cap B|$",
+        "$|A|+|B|$",
+        "$|A|\\cdot|B|$",
+        "$|A|-|B|$"
       ],
-      "correct_index": 2,
-      "explanation_en": "**Why this is correct:**\nThousands digit: 9 choices (1–9). Hundreds: 9 (0 available). Tens: 8. Units: 7. Product $9\\times9\\times8\\times7=4536$. Option 3024 is $P(9,4)$ without the leading-zero rule.\n\n**How to think about it:**\nWork position by position. Thousands cannot be 0; later positions may include 0. Multiply descending counts after the first digit.\n\n**Common slip:**\nUsing $10\\times9\\times8\\times7=5040$ (0 in thousands) or $9\\times8\\times7\\times6=3024$ as $P(9,4)$ without allowing 0 in positions 2–4.\n\n**Exam tip:**\nOn digit MCQs, compute the thousands digit separately — write '9 choices, no 0' before continuing.",
-      "explanation_he": "**למה זה נכון:**\nאלפים: 9 (1–9). מאות: 9 (0 זמין). עשרות: 8. אחדות: 7. $9\\times9\\times8\\times7=4536$. 3024 הוא $P(9,4)$ בלי אפס מוביל.\n\n**איך לחשוב על זה:**\nעבדו מיקום-אחר-מיקום. אלפים לא 0; אחר כך 0 מותר במקומות 2–4. הכפילו ספירות יורדות — אל $\\binom{10}{4}$.\n\n**טעות נפוצה:**\n$10\\times9\\times8\\times7=5040$ (0 באלפים) או $9\\times8\\times7\\times6=3024$ — שתיהן מפספסות את מבנה אפס מוביל.\n\n**טיפ לבחינה:**\nב-MCQ ספרות, חשבו אלפים בנפרד על טיוטה — '9, ללא 0' לפני המשך. שורה אחת מונעת 5040 ו-3024.",
-      "skill_atoms": [
-        "permutations_without_repetition"
-      ],
-      "points_level_min": "5pt"
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "8 people at a round table — in how many ways can they sit so that persons A and B are NOT adjacent?",
-      "stem_he": "8 אנשים בשולחן עגול — כמה סידורים כך ש-A ו-B לא ישכנו?",
-      "rubric_en": "Full (3/3): total $(7!)=5040$, adjacent $6!\\times2=1440$, answer $3600$.",
-      "rubric_he": "מלא: $7!-6!\\times2=3600$.",
-      "explanation_en": "**Why this is correct:**\nCircular seating of 8: total $(8-1)!=7!=5040$. A and B adjacent — block method: 7 units at round table $\\to (7-1)!=6!=720$, times 2 for AB/BA $=1440$. Complement: $5040-1440=3600$.\n\n**How to think about it:**\nLabel 'circular' and 'NOT adjacent' first. Circular $\\to (n-1)!$. NOT adjacent $\\to$ complement (total minus adjacent). Adjacent count uses block: treat pair as one unit, multiply internal order by 2. Never use $8!$ for a round table.\n\n**Common slip:**\nUsing $8!=40320$ (linear, not circular). Or counting non-adjacent directly without block/complement — leads to overcounting. Another slip: block count $6!$ without $\\times 2$ gives 720, then $5040-720=4320$.\n\n**Exam tip:**\nFor round-table NOT-adjacent problems, write three lines on scrap: (1) total $(n-1)!$, (2) adjacent $(n-2)!\\times 2$, (3) subtract. This template works for every such Bagrut item.",
-      "explanation_he": "**למה זה נכון:**\nישיבה מעגלית של 8: סה\"כ $(8-1)!=7!=5040$. A ו-B שכנים — בלוק: 7 יחידות $\\to 6!=720$, $\\times 2$ ל-AB/BA $=1440$. משלים: $5040-1440=3600$.\n\n**איך לחשוב על זה:**\nסמנו 'מעגלי' ו'לא שכנים'. מעגלי $\\to (n-1)!$. לא שכנים $\\to$ משלים. שכנים — בלוק, $\\times 2$. אל $8!$ לשולחן עגול.\n\n**טעות נפוצה:**\n$8!=40320$ (ליניארי). או ספירה ישירה של לא-שכנים — ספירה כפולה. טעות: בלוק $6!$ בלי $\\times 2$ → $5040-720=4320$.\n\n**טיפ לבחינה:**\nבבעיות מעגלי לא-שכנים, כתבו: (1) סה\"כ $(n-1)!$, (2) שכנים $(n-2)!\\times 2$, (3) חיסור. תבנית לכל שאלת בגרות כזו.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\binom{6}{3}$.",
+      "stem_he": "חשבו $\\binom{6}{3}$.",
+      "explanation_en": "**$\\dfrac{6!}{3!\\,3!}=20$.**\n\n**Answer:** $20$.",
+      "explanation_he": "**$\\binom{6}{3}=20$.**\n\n**תשובה:** $20$.",
       "skill_atoms": [
-        "circular_permutation",
-        "non_adjacent_placement"
+        "combination"
       ],
-      "points_level_min": "5pt"
+      "answer_payload": {
+        "value": 20
+      },
+      "source_item_id": "4ce46088-6bc5-5fce-a704-66766c0bd0a9",
+      "points_level_min": "5pt",
+      "correct_answer": "20"
     },
     {
       "ord": 3,
       "kind": "open",
       "difficulty": "hard",
-      "stem_en": "Prove combinatorially that $\\sum_{k=0}^{n}\\binom{n}{k}=2^n$.",
-      "stem_he": "הוכיחו קומבינטורית ש-$\\sum_{k=0}^n\\binom{n}{k}=2^n$.",
-      "rubric_en": "Full (4/4): LHS = all subsets of $n$-element set; RHS = $2^n$ binary choices per element; bijectivity argument.",
-      "rubric_he": "מלא: LHS = כל תת-קבוצות; RHS = $2^n$ בחירות בינאריות.",
-      "explanation_en": "**Why this is correct:**\nLHS sums $\\binom{n}{k}$ over all subset sizes — all subsets of an $n$-element set. RHS: each element independently in or out gives $2^n$ binary choices. Same set, two counts.\n\n**How to think about it:**\nStructure: (1) define the set, (2) count by size (LHS), (3) count by binary choices (RHS), (4) conclude equality.\n\n**Common slip:**\nAlgebraic proof via $x=1$ when combinatorial proof is requested — partial credit only. Or omit the binary-choice argument.\n\n**Exam tip:**\nWrite both interpretations even if short on time — method marks are most of proof questions.",
-      "explanation_he": "**למה זה נכון:**\nשמאל מסכם $\\binom{n}{k}$ לפי גודל — כל תת-קבוצות של $n$ איברים. ימין: לכל איבר החלטה בפנים/בחוץ → $2^n$ אפשרויות. אותה קבוצה, שתי ספירות.\n\n**איך לחשוב על זה:**\nמבנה: (1) הגדרת קבוצה $S$, (2) ספירה לפי גודל (שמאל), (3) בחירות בינאריות לכל איבר (ימין), (4) מסקנה על שוויון.\n\n**טעות נפוצה:**\nהוכחה אלגברית ב-$x=1$ כשמבקשים קומבינטורית — נקודות חלקיות בלבד. גם תיאור ללא $2^n$.\n\n**טיפ לבחינה:**\nכתבו שתי פרשנויות במילים — נקודות שיטה רוב שאלות ההוכחה ב-5 יחידות.",
+      "stem_en": "How many integers in $1..100$ are divisible by $2$ or $5$?",
+      "stem_he": "כמה מספרים שלמים ב-$1..100$ מתחלקים ב-$2$ או ב-$5$?",
+      "explanation_en": "**Step 1 — Count multiples.** $|2|=50$, $|5|=20$.\n\n**Step 2 — Overlap.** $|10|=10$.\n\n**Step 3 — Inclusion-exclusion.** $50+20-10=60$.\n\n**Answer:** $60$.",
+      "explanation_he": "**שלב 1 — ספירה.** $|2|=50$, $|5|=20$.\n\n**שלב 2 — חפיפה.** $|10|=10$.\n\n**שלב 3 — הכלה-הפרדה.** $60$.\n\n**תשובה:** $60$.",
       "skill_atoms": [
-        "binomial_theorem",
-        "combinatorial_proof"
+        "inclusion_exclusion"
       ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Count multiples.** $|2|=50$, $|5|=20$.",
+          "**Step 2 — Overlap.** $|10|=10$.",
+          "**Step 3 — Inclusion-exclusion.** $50+20-10=60$.",
+          "**Answer:** $60$."
+        ],
+        "steps_he": [
+          "**שלב 1 — ספירה.** $|2|=50$, $|5|=20$.",
+          "**שלב 2 — חפיפה.** $|10|=10$.",
+          "**שלב 3 — הכלה-הפרדה.** $60$.",
+          "**תשובה:** $60$."
+        ]
+      },
+      "source_item_id": "821e764c-f860-5c70-850c-154abb5bd08c",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
       "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "mcq",
-      "difficulty": "easy",
-      "stem_en": "6 people sit around a circular table. How many arrangements are there?",
-      "stem_he": "6 אנשים בשולחן עגול. כמה סידורים?",
-      "options_en": [
-        "720",
-        "120",
-        "360",
-        "240"
-      ],
-      "options_he": [
-        "720",
-        "120",
-        "360",
-        "240"
-      ],
-      "correct_index": 1,
-      "explanation_en": "**Why this is correct:**\n6 people at a round table: fix one person to break rotational symmetry. Remaining 5 can be arranged in $5!=120$ ways. Option 720 is $6!$ — that counts linear arrangements or treats every rotation as distinct.\n\n**How to think about it:**\nCircular permutation formula: $(n-1)!$. Ask: 'If everyone shifts one seat clockwise, is that a new arrangement?' At a round table, no — so divide by $n$. Fixing one person is equivalent to dividing $n!$ by $n$.\n\n**Common slip:**\nAnswering 720 ($6!$) by applying linear permutation formula. Or 360 ($6!/2$) by incorrect symmetry argument. Or 24 ($4!$) from arithmetic error.\n\n**Exam tip:**\nCircle the word 'round' or 'circular' in the stem — it triggers $(n-1)!$ immediately. Write $6-1=5$, then $5!=120$ before looking at answer choices.",
-      "explanation_he": "**למה זה נכון:**\n6 אנשים בשולחן עגול: קבעו אחד לשבירת סימטריה. 5 הנותרים — $5!=120$. 720 הוא $6!$ — סידורים ליניאריים או כל סיבוב נפרד.\n\n**איך לחשוב על זה:**\nתמורה מעגלית: $(n-1)!$. שאלו: 'הזזה במקום אחד — סידור חדש?' בשולחן עגול, לא — לכן $(n-1)!$.\n\n**טעות נפוצה:**\n720 ($6!$) — נוסחת ליניארי. או 360 ($6!/2$) — טיעון סימטריה שגוי. או 24 ($4!$) — טעות חשבונית.\n\n**טיפ לבחינה:**\nהקיפו 'עגול' — מפעיל $(n-1)!$. כתבו $6-1=5$, $5!=120$ לפני התשובות.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: for three sets, inclusion-exclusion adds back $|A\\cap B\\cap C|$.",
+      "stem_he": "נכון או לא נכון: לשלוש קבוצות, ההכלה וההפרדה מוסיפה בחזרה $|A\\cap B\\cap C|$.",
+      "explanation_en": "**$|A\\cup B\\cup C|=\\sum|A|-\\sum|A\\cap B|+|A\\cap B\\cap C|$** — **true**.",
+      "explanation_he": "**המונח $+|A\\cap B\\cap C|$ אכן מתווסף** — **נכון**.",
       "skill_atoms": [
-        "circular_permutation"
+        "inclusion_exclusion"
       ],
-      "points_level_min": "5pt"
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "dfa7bdfd-99c7-5d41-bdab-020f4fa87a3c",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "true_false",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "True or False: The number of ways to choose 3 people from 10 is the same as choosing 7 from 10.",
-      "stem_he": "נכון או לא: מספר הדרכים לבחור 3 מ-10 שווה לבחירת 7 מ-10.",
-      "correct_answer": true,
-      "explanation_en": "**Why this is correct:**\nTrue. $\\binom{10}{3}=\\frac{10\\times9\\times8}{3\\times2\\times1}=120$ and $\\binom{10}{7}=\\frac{10\\times9\\times8\\times7\\times6\\times5\\times4}{7\\times6\\times5\\times4\\times3\\times2\\times1}=120$. By symmetry $\\binom{n}{r}=\\binom{n}{n-r}$: choosing 3 to include equals choosing 7 to exclude.\n\n**How to think about it:**\nSymmetry identity: every $r$-element subset pairs with its $(n-r)$-element complement. For $n=10$, $r=3$ and $n-r=7$ — same count. Verify by computing both or citing symmetry directly.\n\n**Common slip:**\nComputing only one side and guessing, or believing the statement is false because 3 and 7 look different. Some students compute $\\binom{10}{7}$ incorrectly as 720 by using $P(10,7)$.\n\n**Exam tip:**\nSymmetry $\\binom{n}{r}=\\binom{n}{n-r}$ saves work on Bagrut: if one coefficient is hard, compute the smaller $r$. For committees, 'choose 3 from 10' and 'choose 7 from 10' are identical questions.",
-      "explanation_he": "**למה זה נכון:**\nנכון. $\\binom{10}{3}=120$ ו-$\\binom{10}{7}=120$. לפי סימטריה $\\binom{n}{r}=\\binom{n}{n-r}$: בחירת 3 לכלול = בחירת 7 להוציא.\n\n**איך לחשוב על זה:**\nזהות סימטריה: כל תת-קבוצה בגודל $r$ מתאימה למשלימה בגודל $n-r$. ל-$n=10$, $r=3$ ו-$7$ — אותה ספירה.\n\n**טעות נפוצה:**\nחישוב צד אחד וניחוש, או אמונה שהטענה שגויה כי 3 ו-7 נראים שונים. חישוב $\\binom{10}{7}$ כ-720 ב-$P(10,7)$.\n\n**טיפ לבחינה:**\nסימטריה $\\binom{n}{r}=\\binom{n}{n-r}$ חוסכת עבודה: אם $r$ גדול, חשבו $n-r$. 'בחר 3 מ-10' = 'בחר 7 מ-10'.",
+      "stem_en": "Compute the number of arrangements $P(5,2)=5\\cdot 4$.",
+      "stem_he": "חשבו את מספר הסידורים $P(5,2)=5\\cdot 4$.",
+      "explanation_en": "**$P(5,2)=5\\cdot 4=20$.**\n\n**Answer:** $20$.",
+      "explanation_he": "**$P(5,2)=20$.**\n\n**תשובה:** $20$.",
       "skill_atoms": [
-        "combinations_symmetry"
+        "permutation"
       ],
-      "points_level_min": "5pt"
+      "answer_payload": {
+        "value": 20
+      },
+      "source_item_id": "86a37eb9-de45-5b82-a920-c887fd621745",
+      "points_level_min": "5pt",
+      "correct_answer": "20"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "How many ways can 5 people sit in a row?",
-      "stem_he": "בכמה דרכים ישבו 5 אנשים בשורה?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$5! = 120$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nFive distinct people in a row — every ordering is different. All 5 are used, order matters: $5!=5\\times4\\times3\\times2\\times1=120$. This is a full linear permutation with no restrictions.\n\n**How to think about it:**\nFull line of $n$ distinct people $\\to n!$. No one is left out; each position is a distinct slot. This is $P(5,5)=5!$, not $\\binom{5}{5}=1$ which would ignore order entirely.\n\n**Common slip:**\nAnswering 1 by treating it as one unordered group, or 5 by counting people instead of arrangements. Using $P(5,1)=5$ picks only one person for one spot.\n\n**Exam tip:**\nFull-line problems are the fastest points — recognize $n!$ immediately when all $n$ distinct objects are arranged in a sequence with no restrictions. No formula sheet lookup needed.",
-      "explanation_he": "**למה זה נכון:**\nחמישה אנשים שונים בשורה — כל סידור שונה. כולם בשימוש, סדר חשוב: $5!=5\\times4\\times3\\times2\\times1=120$. תמורה ליניארית מלאה ללא אילוצים — כל מקום תפקיד נפרד.\n\n**איך לחשוב על זה:**\nשורה של $n$ אנשים שונים $\\to n!$. זה $P(5,5)=5!$, לא $\\binom{5}{5}=1$ שמתעלם מסדר לגמרי.\n\n**טעות נפוצה:**\nתשובה 1 כקבוצה לא מסודרת, או 5 כספירת אנשים במקום סידורים. $P(5,1)=5$ — רק מקום אחד.\n\n**טיפ לבחינה:**\nבעיות שורה מלאה — נקודות מהירות; זיהו $n!$ מיד כשכל $n$ מסודרים ברצף ללא אילוצים.",
+      "stem_en": "Compute $\\binom{7}{2}$.",
+      "stem_he": "חשבו $\\binom{7}{2}$.",
+      "explanation_en": "**$\\dfrac{7\\cdot 6}{2}=21$.**\n\n**Answer:** $21$.",
+      "explanation_he": "**$=21$.**\n\n**תשובה:** $21$.",
       "skill_atoms": [
-        "permutations_without_repetition",
-        "circular_permutation"
-      ]
+        "combination"
+      ],
+      "answer_payload": {
+        "value": 21
+      },
+      "source_item_id": "e9f42041-507e-51cd-8b64-2920c15bc8b5",
+      "points_level_min": "5pt",
+      "correct_answer": "21"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "From a group of 10 students, how many ways can a committee of 3 be chosen?",
-      "stem_he": "מקבוצה של 10 תלמידים, בכמה דרכים ניתן לבחור ועדה של 3?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\binom{10}{3}=120$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nChoosing 3 from 10 without regard to order: $\\binom{10}{3}=\\frac{10\\times9\\times8}{3\\times2\\times1}=120$. Committee members have no distinct roles — swapping two members does not create a new committee.\n\n**How to think about it:**\nKeyword 'committee' with no president/secretary $\\to$ combination. Cancel before multiplying: $10\\times9\\times8/6=120$. Symmetry check: $\\binom{10}{7}=120$ too.\n\n**Common slip:**\nUsing $P(10,3)=720$ because 'choose 3' sounds like arranging. Or $10\\times9\\times8=720$ without dividing by $3!$. Both count ordered selections.\n\n**Exam tip:**\nWrite $\\binom{n}{r}$ before computing whenever the stem says committee, team, or group without roles. One letter 'C' on scrap paper prevents the permutation trap.",
-      "explanation_he": "**למה זה נכון:**\nבחירת 3 מ-10 ללא סדר: $\\binom{10}{3}=\\frac{10\\times9\\times8}{3\\times2\\times1}=120$. אין תפקידים — החלפת שני חברים לא יוצרת ועדה חדשה.\n\n**איך לחשוב על זה:**\nמילת מפתח 'ועדה' ללא יו\"ר/מזכיר $\\to$ צירוף. צמצום: $10\\times9\\times8/6=120$. בדיקת סימטריה: $\\binom{10}{7}=120$ גם כן.\n\n**טעות נפוצה:**\n$P(10,3)=720$ כי 'בחר 3' נשמע כמו סידור. או $10\\times9\\times8$ בלי חלוקה ב-$3!$ — שניהם ספירה מסודרת.\n\n**טיפ לבחינה:**\nכתבו $\\binom{n}{r}$ כש'ועדה' או 'קבוצה' ללא תפקידים. 'C' על טיוטה מונע מלכודת תמורה — שווה נקודות שיטה בבגרות 5 יחידות.",
+      "stem_en": "If $|A|=5,|B|=4,|A\\cap B|=2$, find $|A\\cup B|$.",
+      "stem_he": "אם $|A|=5,|B|=4,|A\\cap B|=2$, מצאו $|A\\cup B|$.",
+      "explanation_en": "**$5+4-2=7$.**\n\n**Answer:** $7$.",
+      "explanation_he": "**$5+4-2=7$.**\n\n**תשובה:** $7$.",
       "skill_atoms": [
-        "permutations_without_repetition",
-        "circular_permutation"
-      ]
+        "inclusion_exclusion"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "b419532e-e4b6-5ea1-8bce-d4feb67c4281",
+      "points_level_min": "5pt",
+      "correct_answer": "7"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "How many arrangements of the letters AABBB exist?",
-      "stem_he": "כמה סידורים של האותיות AABBB קיימים?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$5!/(2!\\cdot3!)=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "10$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "10"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nArranging letters AABBB (5 letters: 2 A's identical, 3 B's identical): $\\frac{5!}{2!\\cdot3!}=\\frac{120}{12}=10$. Divide by factorials of identical letter counts to avoid overcounting swaps of indistinguishable letters.\n\n**How to think about it:**\nMultiset formula: total permutations $n!$ divided by $n_1!\\cdots n_k!$ for each group of identical items. Here $n=5$, $n_A=2$, $n_B=3$. If all letters were distinct, answer would be $5!=120$.\n\n**Common slip:**\nAnswering 120 ($5!$) by ignoring identical letters, or 20 ($5!/3!$) by dividing only for the three B's but not the two A's. Or $\\binom{5}{2}=10$ by choosing positions for A's — that works too but must be justified.\n\n**Exam tip:**\nFor multiset arrangements, list letter counts first: '2A, 3B $\\to 5!/(2!\\cdot3!)$.' This template covers all anagram problems on the 5-unit exam.",
-      "explanation_he": "**למה זה נכון:**\nסידור AABBB (5 אותיות: 2 A זהות, 3 B זהות): $\\frac{5!}{2!\\cdot3!}=\\frac{120}{12}=10$. חלקו בעצרות של אותיות זהות.\n\n**איך לחשוב על זה:**\nנוסחת מולטיסט: $n!$ חלקי $n_1!\\cdots n_k!$. כאן $n=5$, $n_A=2$, $n_B=3$. אם כולן שונות — $5!=120$.\n\n**טעות נפוצה:**\n120 ($5!$) — התעלמות מזהות. או 20 ($5!/3!$) — חלוקה רק ל-B. $\\binom{5}{2}=10$ — בחירת מקומות ל-A — גם תקף.\n\n**טיפ לבחינה:**\nבסידורי מולטיסט, רשמו: '2A, 3B $\\to 5!/(2!\\cdot3!)$.' תבנית לכל בעיות אנגרמה ב-5 יחידות.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "When order matters we count with:",
+      "stem_he": "כאשר הסדר חשוב, סופרים באמצעות:",
+      "explanation_en": "**Order matters $\\Rightarrow$ permutations; otherwise combinations.**\n\n**Answer:** permutations.",
+      "explanation_he": "**סדר חשוב $\\Rightarrow$ תמורות.**\n\n**תשובה:** תמורות.",
       "skill_atoms": [
-        "permutations_without_repetition",
-        "circular_permutation"
-      ]
+        "permutation"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{permutations}$",
+          "$\\text{combinations}$",
+          "$\\text{subsets}$",
+          "$\\text{ratios}$"
+        ],
+        "options_he": [
+          "$\\text{permutations}$",
+          "$\\text{combinations}$",
+          "$\\text{subsets}$",
+          "$\\text{ratios}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "f9a91909-6a8d-5880-9bad-d48b45203fac",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{permutations}$",
+        "$\\text{combinations}$",
+        "$\\text{subsets}$",
+        "$\\text{ratios}$"
+      ],
+      "options_he": [
+        "$\\text{permutations}$",
+        "$\\text{combinations}$",
+        "$\\text{subsets}$",
+        "$\\text{ratios}$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "If $|A|=10,|B|=8,|A\\cap B|=3$, find $|A\\cup B|$.",
+      "stem_he": "אם $|A|=10,|B|=8,|A\\cap B|=3$, מצאו $|A\\cup B|$.",
+      "explanation_en": "**$10+8-3=15$.**\n\n**Answer:** $15$.",
+      "explanation_he": "**$=15$.**\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "inclusion_exclusion"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "d060d776-1a2b-540c-b63c-88f4698db1bc",
+      "points_level_min": "5pt",
+      "correct_answer": "15"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\binom{8}{4}$.",
+      "stem_he": "חשבו $\\binom{8}{4}$.",
+      "explanation_en": "**$\\binom{8}{4}=70$.**\n\n**Answer:** $70$.",
+      "explanation_he": "**$=70$.**\n\n**תשובה:** $70$.",
+      "skill_atoms": [
+        "combination"
+      ],
+      "answer_payload": {
+        "value": 70
+      },
+      "source_item_id": "1a6db5a1-4d6b-540d-831d-3222a4427ab0",
+      "points_level_min": "5pt",
+      "correct_answer": "70"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many ways to arrange 4 distinct books in a row? ($4!$)",
+      "stem_he": "בכמה דרכים ניתן לסדר 4 ספרים שונים בשורה? ($4!$)",
+      "explanation_en": "**$4!=24$.**\n\n**Answer:** $24$.",
+      "explanation_he": "**$4!=24$.**\n\n**תשובה:** $24$.",
+      "skill_atoms": [
+        "permutation"
+      ],
+      "answer_payload": {
+        "value": 24
+      },
+      "source_item_id": "17639c44-f049-5aa5-92cd-9c633a9ff34c",
+      "points_level_min": "5pt",
+      "correct_answer": "24"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\binom{10}{3}$.",
+      "stem_he": "חשבו $\\binom{10}{3}$.",
+      "explanation_en": "**$\\dfrac{10\\cdot 9\\cdot 8}{6}=120$.**\n\n**Answer:** $120$.",
+      "explanation_he": "**$=120$.**\n\n**תשובה:** $120$.",
+      "skill_atoms": [
+        "combination"
+      ],
+      "answer_payload": {
+        "value": 120
+      },
+      "source_item_id": "9de55bf9-3102-5498-9f70-bd1a6b407f28",
+      "points_level_min": "5pt",
+      "correct_answer": "120"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Three sets each of size $10$ have pairwise intersections $3$ and triple intersection $1$. Find $|A\\cup B\\cup C|$.",
+      "stem_he": "שלוש קבוצות בגודל $10$ עם חיתוכים זוגיים $3$ וחיתוך משולש $1$. מצאו $|A\\cup B\\cup C|$.",
+      "explanation_en": "**$30-9+1=22$.**\n\n**Answer:** $22$.",
+      "explanation_he": "**$30-9+1=22$.**\n\n**תשובה:** $22$.",
+      "skill_atoms": [
+        "inclusion_exclusion"
+      ],
+      "answer_payload": {
+        "value": 22
+      },
+      "source_item_id": "c16bf2be-a34c-517a-a777-a146bd129d1d",
+      "points_level_min": "5pt",
+      "correct_answer": "22"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "How many integers in $1..100$ are divisible by $2$ or $3$?",
+      "stem_he": "כמה מספרים שלמים ב-$1..100$ מתחלקים ב-$2$ או ב-$3$?",
+      "explanation_en": "**$|2|=50,|3|=33,|6|=16$; $50+33-16=67$.**\n\n**Answer:** $67$.",
+      "explanation_he": "**$50+33-16=67$.**\n\n**תשובה:** $67$.",
+      "skill_atoms": [
+        "inclusion_exclusion"
+      ],
+      "answer_payload": {
+        "value": 67
+      },
+      "source_item_id": "2ea42306-b127-5441-9512-14f27c031e3c",
+      "points_level_min": "5pt",
+      "correct_answer": "67"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Verify Pascal's identity: compute $\\binom{9}{2}+\\binom{9}{3}$.",
+      "stem_he": "אמתו את זהות פסקל: חשבו $\\binom{9}{2}+\\binom{9}{3}$.",
+      "explanation_en": "**$36+84=120=\\binom{10}{3}$.**\n\n**Answer:** $120$.",
+      "explanation_he": "**$36+84=120=\\binom{10}{3}$.**\n\n**תשובה:** $120$.",
+      "skill_atoms": [
+        "combination",
+        "pascal"
+      ],
+      "answer_payload": {
+        "value": 120
+      },
+      "source_item_id": "4e723955-44d3-5253-9292-be5c3a79ed4f",
+      "points_level_min": "5pt",
+      "correct_answer": "120"
     }
   ],
   "est_minutes": 40,

@@ -243,10 +243,8 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "partial_fractions_distinct",
-      "partial_fractions_repeated",
-      "partial_fractions_irreducible",
-      "completing_the_square"
+      "log_integral",
+      "partial_fractions"
     ],
     "tutor_pacing_hint": "Start with distinct linear (easiest). Then repeated. Then irreducible quadratic (hardest).",
     "next_recommended": [
@@ -259,167 +257,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$\\int \\frac{1}{(x-1)(x-3)}\\,dx =$",
-      "stem_he": "$\\int \\frac{1}{(x-1)(x-3)}\\,dx=$",
+      "stem_en": "Partial fraction decomposition rewrites a rational function as:",
+      "stem_he": "פירוק לשברים חלקיים כותב פונקציה רציונלית כ:",
+      "explanation_en": "**It splits one fraction into a sum of simpler ones.**\n\n**Answer:** a sum of simpler fractions.",
+      "explanation_he": "**מפרק שבר אחד לסכום שברים פשוטים.**\n\n**תשובה:** סכום שברים פשוטים.",
+      "skill_atoms": [
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{a sum of simpler fractions}$",
+          "$\\text{a product}$",
+          "$\\text{a polynomial only}$",
+          "$\\text{a square root}$"
+        ],
+        "options_he": [
+          "$\\text{a sum of simpler fractions}$",
+          "$\\text{a product}$",
+          "$\\text{a polynomial only}$",
+          "$\\text{a square root}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "33d608de-1c3f-5653-82f4-b3debfd292ab",
+      "points_level_min": "5pt",
       "options_en": [
-        "$\\frac{1}{2}\\ln|\\frac{x-3}{x-1}|+C$",
-        "$\\ln|(x-1)(x-3)|+C$",
-        "$\\frac{1}{2}\\ln|\\frac{x-1}{x-3}|+C$",
-        "$\\ln|x-2|+C$"
+        "$\\text{a sum of simpler fractions}$",
+        "$\\text{a product}$",
+        "$\\text{a polynomial only}$",
+        "$\\text{a square root}$"
       ],
       "options_he": [
-        "$\\frac{1}{2}\\ln|\\frac{x-3}{x-1}|+C$",
-        "$\\ln|(x-1)(x-3)|+C$",
-        "$\\frac{1}{2}\\ln|\\frac{x-1}{x-3}|+C$",
-        "$\\ln|x-2|+C$"
+        "$\\text{a sum of simpler fractions}$",
+        "$\\text{a product}$",
+        "$\\text{a polynomial only}$",
+        "$\\text{a square root}$"
       ],
-      "correct_index": 0,
-      "explanation_en": "Start with Case 1: $\\frac{1}{(x-1)(x-3)} = \\frac{A}{x-1}+\\frac{B}{x-3}$. Clear denominators to get $1=A(x-3)+B(x-1)$. Cover-up at $x=1$ gives $1=-2A$, so $A=-1/2$. Cover-up at $x=3$ gives $1=2B$, so $B=1/2$. Integrating each term: $\\frac{1}{2}(\\ln|x-3|-\\ln|x-1|)=\\frac{1}{2}\\ln\\left|\\frac{x-3}{x-1}\\right|+C$, which matches option 0.\n\nOption 2 reverses the quotient inside the log — a classic sign or order slip after combining logarithms. Option 1 incorrectly logs the product $(x-1)(x-3)$ without decomposing first. Option 3 invents a midpoint root $x=2$ that does not appear in the factorization.\n\n**Exam tip:** after cover-up, combine log differences into one quotient log to match multiple-choice form. **Self-check:** differentiate your answer — you must recover the original integrand on the domain.",
-      "explanation_he": "התחילu במקרה 1: $\\frac{1}{(x-1)(x-3)} = \\frac{A}{x-1}+\\frac{B}{x-3}$. ניקוי מכנים: $1=A(x-3)+B(x-1)$. cover-up ב-$x=1$ נותן $A=-1/2$; cover-up ב-$x=3$ נותן $B=1/2$. אינטegrציה: $\\frac{1}{2}\\ln\\left|\\frac{x-3}{x-1}\\right|+C$ — תואם אפשרות 0.\n\nאפשרות 2 מהפכת סדר במונה הלוג — טעות סימן נפוצה אחרי שילוב לוגריתמים. אפשרות 1 מתייחסת למכפלה $(x-1)(x-3)$ כלוג יחיד בלי פירוק. אפשרות 3 ממציאה שורש $x=2$ שלא מופיע בפירוק.\n\n**טיפ לבחינה:** לאחר cover-up, שלבu הפרשי לוג ללוג מנה אחד. **בדיקה:** גזרu את התשובה — חייבים לשחזר את האינטegrand המקורי בתחום ההגדרה. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
-      "skill_atoms": [
-        "partial_fractions_distinct"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "Evaluate $\\int \\frac{x^2+2x-1}{(x-1)(x^2+1)}\\,dx$.",
-      "stem_he": "חשבו $\\int (x^2+2x-1)/[(x-1)(x^2+1)]\\,dx$.",
-      "rubric_en": "Decompose to $A/(x-1)+(Bx+C)/(x^2+1)$. $A=1$, $B=0$, $C=2$. $\\int = \\ln|x-1|+2\\arctan x+C$.",
-      "rubric_he": "$A=1$, $B=0$, $C=2$. $\\ln|x-1|+2\\arctan x+C$.",
-      "explanation_en": "The denominator mixes a linear factor $(x-1)$ with irreducible $x^2+1$, so the template is $\\frac{A}{x-1}+\\frac{Bx+C}{x^2+1}$ — never two linear fractions over the quadratic. At $x=1$, the numerator equals $1+2-1=2$, giving $2=2A$ and $A=1$.\n\nSubtract $A(x^2+1)$ from the cleared identity: $(Bx+C)(x-1)=2x-2=2(x-1)$, hence $Bx+C=2$, so $B=0$, $C=2$. Integrate: $\\ln|x-1|+\\int\\frac{2}{x^2+1}\\,dx=\\ln|x-1|+2\\arctan x+C$.\n\n**Common slip:** writing $C=1$ by mis-expanding $(Bx+C)(x-1)$. **Exam tip:** after finding $A$ by cover-up, compare remaining polynomial coefficients for the quadratic factor only — do not re-cover roots that belong to the irreducible piece.",
-      "explanation_he": "המכנה מערב גורם לינארי $(x-1)$ עם $x^2+1$ בלתי ניתן, לכן התבנית $\\frac{A}{x-1}+\\frac{Bx+C}{x^2+1}$ — לא שני שברים לינאריים מעל הריבועי. ב-$x=1$ המונה שווה $2$, כלומר $A=1$.\n\nלאחר חיסור $A(x^2+1)$: $(Bx+C)(x-1)=2(x-1)$, כלומר $Bx+C=2$, $B=0$, $C=2$. אינטegrציה: $\\ln|x-1|+2\\arctan x+C$.\n\n**טעות נפוצה:** כתיבת $C=1$ בגלל הרחבה שגויה של $(Bx+C)(x-1)$. **טיפ לבחינה:** לאחר $A$ ב-cover-up, השוו מקדמים רק עבור הגורם הריבועי שנותר — אל תחזרu על cover-up על שורשים של הריבועי הבלתי ניתן. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{1}{x+1}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{1}{x+1}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$[\\ln(x+1)]_0^1=\\ln 2\\approx 0.6931$.**\n\n**Answer:** $\\approx 0.6931$.",
+      "explanation_he": "**$=\\ln 2\\approx 0.6931$.**\n\n**תשובה:** $\\approx 0.6931$.",
       "skill_atoms": [
-        "partial_fractions_irreducible",
-        "partial_fractions_distinct"
-      ]
+        "log_integral"
+      ],
+      "answer_payload": {
+        "value": 0.693147
+      },
+      "source_item_id": "95756873-9ef4-5645-bdc6-0119e980d841",
+      "points_level_min": "5pt",
+      "correct_answer": "0.693147"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\int \\frac{1}{(x-1)(x+1)}\\,dx$",
-      "stem_he": "$\\int \\frac{1}{(x-1)(x+1)}\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\frac{1}{(x-1)(x+1)}=\\frac{1/2}{x-1}-\\frac{1/2}{x+1}$. $\\int=\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "This is the classic distinct-linear-factors template. Set $\\frac{1}{(x-1)(x+1)}=\\frac{A}{x-1}+\\frac{B}{x+1}$ and multiply: $1=A(x+1)+B(x-1)$. Cover-up gives $A=1/2$ at $x=1$ and $B=-1/2$ at $x=-1$.\n\nIntegrate term by term: $\\frac{1}{2}\\ln|x-1|-\\frac{1}{2}\\ln|x+1|+C = \\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C$.\n\n**Common slip:** forgetting the $1/2$ coefficients — they come from cover-up, not from the log rules. **Exam tip:** when both roots are symmetric ($\\pm1$), expect equal-magnitude coefficients with opposite signs. **Self-check:** recombine your partial fractions over a common denominator before integrating to catch algebra errors early. On exams, write the partial-fraction template before solving for constants — this prevents the most costly template errors. After finding your answer, substitute one convenient value of $x$ to verify the decomposition reproduces the original integrand before you integrate.",
-      "explanation_he": "זוהi תבנית קלאסית של גורמים לינאריים שונים. הגדירu $\\frac{1}{(x-1)(x+1)}=\\frac{A}{x-1}+\\frac{B}{x+1}$ וכפlu: $1=A(x+1)+B(x-1)$. cover-up: $A=1/2$ ב-$x=1$, $B=-1/2$ ב-$x=-1$.\n\nאינטegrציה: $\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C$.\n\n**טעות נפוצה:** שכחת מקדמי $1/2$ — הם מגיעים מ-cover-up, לא מכללי הלוג. **טיפ לבחינה:** כשהשורשים סימטריים ($\\pm1$), צפu למקדמים שווי-גודל עם סימנים הפוכים. **בדיקה:** חברu שברים חלקיים על מכנה משותף לפני האינטegrציה כדי לתפוס טעויות אלגebra מוקדם. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{2}\\dfrac{1}{x(x+1)}\\,dx$ via partial fractions.",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{2}\\dfrac{1}{x(x+1)}\\,dx$ בעזרת שברים חלקיים.",
+      "explanation_en": "**Step 1 — Decompose.** $\\dfrac{1}{x(x+1)}=\\dfrac{1}{x}-\\dfrac{1}{x+1}$.\n\n**Step 2 — Integrate.** $\\ln x-\\ln(x+1)$.\n\n**Step 3 — Evaluate.** $(\\ln 2-\\ln 3)-(\\ln 1-\\ln 2)=2\\ln 2-\\ln 3=\\ln\\tfrac43$.\n\n**Answer:** $\\approx 0.2877$.",
+      "explanation_he": "**שלב 1 — פירוק.** $\\dfrac{1}{x}-\\dfrac{1}{x+1}$.\n\n**שלב 2 — אינטגרציה.** $\\ln x-\\ln(x+1)$.\n\n**שלב 3 — הצבה.** $\\ln\\tfrac43$.\n\n**תשובה:** $\\approx 0.2877$.",
       "skill_atoms": [
-        "partial_fractions_distinct",
-        "partial_fractions_repeated"
-      ]
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Decompose.** $\\dfrac{1}{x(x+1)}=\\dfrac{1}{x}-\\dfrac{1}{x+1}$.",
+          "**Step 2 — Integrate.** $\\ln x-\\ln(x+1)$.",
+          "**Step 3 — Evaluate.** $(\\ln 2-\\ln 3)-(\\ln 1-\\ln 2)=2\\ln 2-\\ln 3=\\ln\\tfrac43$.",
+          "**Answer:** $\\approx 0.2877$."
+        ],
+        "steps_he": [
+          "**שלב 1 — פירוק.** $\\dfrac{1}{x}-\\dfrac{1}{x+1}$.",
+          "**שלב 2 — אינטגרציה.** $\\ln x-\\ln(x+1)$.",
+          "**שלב 3 — הצבה.** $\\ln\\tfrac43$.",
+          "**תשובה:** $\\approx 0.2877$."
+        ]
+      },
+      "source_item_id": "b8adc845-e848-5285-839d-6409d4a600c3",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\int \\frac{4}{x^2-4}\\,dx$",
-      "stem_he": "$\\int \\frac{4}{x^2-4}\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$x^2-4=(x-2)(x+2)$. $\\frac{4}{(x-2)(x+2)}=\\frac{1}{x-2}-\\frac{1}{x+2}$. $\\int=\\ln|x-2|-\\ln|x+2|+C=\\ln\\left|\\frac{x-2}{x+2}\\right|+C$",
-          "\\ln\\left|\\frac{x-2}{x+2}\\right|+C$",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Factor the denominator first: $x^2-4=(x-2)(x+2)$ — a difference of squares. Decompose $\\frac{4}{(x-2)(x+2)}=\\frac{A}{x-2}+\\frac{B}{x+2}$. Multiply: $4=A(x+2)+B(x-2)$. At $x=2$: $4=4A$, so $A=1$. At $x=-2$: $4=-4B$, so $B=-1$.\n\nIntegrate: $\\ln|x-2|-\\ln|x+2|+C=\\ln\\left|\\frac{x-2}{x+2}\\right|+C$.\n\n**Common slip:** leaving $x^2-4$ unfactored and attempting a wrong template. **Exam tip:** difference of squares always splits into two distinct linear factors — perfect for Case 1. **Self-check:** at $x=0$, the integrand is $4/(-4)=-1$; differentiate your antiderivative at $x=0$ and confirm you get $-1$.",
-      "explanation_he": "פרקu תחילה: $x^2-4=(x-2)(x+2)$ — הפרש ריבועים. פירוק: $\\frac{4}{(x-2)(x+2)}=\\frac{A}{x-2}+\\frac{B}{x+2}$. כפל: $4=A(x+2)+B(x-2)$. $x=2$: $A=1$. $x=-2$: $B=-1$.\n\nאינטegrציה: $\\ln\\left|\\frac{x-2}{x+2}\\right|+C$.\n\n**טעות נפוצה:** השארת $x^2-4$ בלי פירוק ושימוש בתבנית שגויה. **טיפ לבחינה:** הפרש ריבועים תמיד מתפרק לשני גורמים לינאריים — מקרה 1 אידיאלי. **בדיקה:** ב-$x=0$ האינטegrand הוא $-1$; גזרu את האינטegral שלכם ב-$x=0$ וודאu שמתקבל $-1$. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\dfrac{1}{x(x+1)}=\\dfrac{1}{x}-\\dfrac{1}{x+1}$.",
+      "stem_he": "נכון או לא נכון: $\\dfrac{1}{x(x+1)}=\\dfrac{1}{x}-\\dfrac{1}{x+1}$.",
+      "explanation_en": "**Check at $x=1$: $\\tfrac12=1-\\tfrac12$** — the decomposition holds — **true**.",
+      "explanation_he": "**בדיקה ב-$x=1$: $\\tfrac12=1-\\tfrac12$** — **נכון**.",
       "skill_atoms": [
-        "partial_fractions_distinct",
-        "partial_fractions_repeated"
-      ]
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "804c6dd7-2f4e-578f-9f9e-526558847466",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Decompose only (do not integrate): $\\frac{2x+1}{(x+3)(x-2)}$.",
-      "stem_he": "פרקו בלבד (אל תאינטגרלו): $\\frac{2x+1}{(x+3)(x-2)}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$\\frac{A}{x+3}+\\frac{B}{x-2}$. $x=2$: $B=1$. $x=-3$: $A=1$. Result: $\\frac{1}{x+3}+\\frac{1}{x-2}$",
-          "1$. Result: $\\frac{1}{x+3}+\\frac{1}{x-2}$",
-          "-2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The instruction says **decompose only** — do not integrate. Set $\\frac{2x+1}{(x+3)(x-2)}=\\frac{A}{x+3}+\\frac{B}{x-2}$ and clear denominators: $2x+1=A(x-2)+B(x+3)$.\n\nCover-up: $x=2$ gives $5=5B$, so $B=1$. $x=-3$ gives $-5=-5A$, so $A=1$. Result: $\\frac{1}{x+3}+\\frac{1}{x-2}$.\n\n**Common slip:** integrating anyway and losing marks on \"decompose only\" questions — read the stem carefully. **Exam tip:** recombine your partial fractions over a common denominator to verify the numerator is exactly $2x+1$. **Self-check:** both coefficients are positive here because cover-up at each root isolates one constant directly.",
-      "explanation_he": "ההוראה: **פרקו בלבד** — אל תאינטegralו. הגדירu $\\frac{2x+1}{(x+3)(x-2)}=\\frac{A}{x+3}+\\frac{B}{x-2}$ וכפlu: $2x+1=A(x-2)+B(x+3)$.\n\ncover-up: $x=2$ נותן $B=1$; $x=-3$ נותן $A=1$. תוצאה: $\\frac{1}{x+3}+\\frac{1}{x-2}$.\n\n**טעות נפוצה:** אינטegrציה למרות \"פרקו בלבד\" — קראu את הנתון בעיון. **טип לבחינה:** חברu מחדש על מכנה משותף לוודא שהמונה הוא בדיוק $2x+1$. **בדיקה:** שני המקדמים חיוביים כי cover-up בכל שורש מבודד קבוע אחד ישירות. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{1}{2x+1}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{1}{2x+1}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$\\left[\\tfrac12\\ln(2x+1)\\right]_0^1=\\tfrac12\\ln 3\\approx 0.5493$.**\n\n**Answer:** $\\approx 0.5493$.",
+      "explanation_he": "**$=\\tfrac12\\ln 3\\approx 0.5493$.**\n\n**תשובה:** $\\approx 0.5493$.",
       "skill_atoms": [
-        "partial_fractions_distinct",
-        "partial_fractions_repeated"
-      ]
+        "log_integral"
+      ],
+      "answer_payload": {
+        "value": 0.549306
+      },
+      "source_item_id": "8ede0efb-3b01-5332-a188-56bfcc151c01",
+      "points_level_min": "5pt",
+      "correct_answer": "0.549306"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$\\int \\frac{3}{x(x+3)}\\,dx$",
-      "stem_he": "$\\int \\frac{3}{x(x+3)}\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\frac{3}{x(x+3)}=\\frac{1}{x}-\\frac{1}{x+3}$. $\\int=\\ln|x|-\\ln|x+3|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\ln|x|-\\ln|x+3|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Decompose $\\frac{3}{x(x+3)}=\\frac{A}{x}+\\frac{B}{x+3}$. Multiply both sides: $3=A(x+3)+Bx$. Cover-up at $x=0$ gives $3=3A$, so $A=1$. Cover-up at $x=-3$ gives $3=-3B$, so $B=-1$. Verify: $\\frac{1}{x}-\\frac{1}{x+3}=\\frac{(x+3)-x}{x(x+3)}=\\frac{3}{x(x+3)}$ ✓\n\nIntegrate: $\\ln|x|-\\ln|x+3|+C$, or equivalently $\\ln\\left|\\frac{x}{x+3}\\right|+C$.\n\n**Common slip:** setting $A=3$ by misreading the cover-up equation — remember you already cleared the denominator. **Exam tip:** plug $x=1$ into both the original fraction and your decomposition; both should give $3/4$. **Self-check:** combine logs into a single quotient if the answer format requires it.",
-      "explanation_he": "פירוק: $\\frac{3}{x(x+3)}=\\frac{A}{x}+\\frac{B}{x+3}$. כפל: $3=A(x+3)+Bx$. cover-up ב-$x=0$: $A=1$. cover-up ב-$x=-3$: $B=-1$. אימות: $\\frac{1}{x}-\\frac{1}{x+3}=\\frac{3}{x(x+3)}$ ✓\n\nאינטegrציה: $\\ln|x|-\\ln|x+3|+C$, או $\\ln\\left|\\frac{x}{x+3}\\right|+C$.\n\n**טעות נפוצה:** $A=3$ מקריאה שגויה של משוואת cover-up — זכרu שכבר ניקיתם את המכנה. **טיפ לבחינה:** הציבu $x=1$ בשבר המקורי ובפירוק — שניהם חייבים לתת $3/4$. **בדיקה:** שלבu לוגריתמים למנה אחת אם פורmat התשובה דורש זאת. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{2}{x+1}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{2}{x+1}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$2\\ln 2\\approx 1.3863$.**\n\n**Answer:** $\\approx 1.3863$.",
+      "explanation_he": "**$=2\\ln 2\\approx 1.3863$.**\n\n**תשובה:** $\\approx 1.3863$.",
       "skill_atoms": [
-        "partial_fractions_distinct",
-        "partial_fractions_repeated"
-      ]
+        "log_integral"
+      ],
+      "answer_payload": {
+        "value": 1.386294
+      },
+      "source_item_id": "2b481a16-aa08-5def-afa2-70556de21b9e",
+      "points_level_min": "5pt",
+      "correct_answer": "1.386294"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$\\int \\frac{x^2+1}{x^2-1}\\,dx$ (improper fraction).",
-      "stem_he": "$\\int \\frac{x^2+1}{x^2-1}\\,dx$ (שבר לא ראוי).",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nLong division: $x^2+1=1\\cdot(x^2-1)+2$, so $\\frac{x^2+1}{x^2-1}=1+\\frac{2}{(x-1)(x+1)}=1+\\frac{1}{x-1}-\\frac{1}{x+1}$. $\\int=x+\\ln|x-1|-\\ln|x+1|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "x+\\ln|x-1|-\\ln|x+1|+C$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The fraction is **improper** because $\\deg(x^2+1)=\\deg(x^2-1)=2$. You must long-divide before partial fractions:\n$$\\frac{x^2+1}{x^2-1} = 1 + \\frac{2}{x^2-1} = 1 + \\frac{2}{(x-1)(x+1)}.$$\nDecompose the remainder: $\\frac{2}{(x-1)(x+1)}=\\frac{1}{x-1}-\\frac{1}{x+1}$.\n\nFull integrand: $1+\\frac{1}{x-1}-\\frac{1}{x+1}$. Integrate: $x+\\ln|x-1|-\\ln|x+1|+C$.\n\n**Common slip:** applying partial fractions directly to the improper fraction — you will get wrong constants and miss the $x$ term. **Exam tip:** when degrees match, always look for a constant polynomial term plus a proper remainder before setting up any template. On exams, write the partial-fraction template before solving for constants — this prevents the most costly template errors. After finding your answer, substitute one convenient value of $x$ to verify the decomposition reproduces the original integrand before you integrate.",
-      "explanation_he": "השבר **לא ראוי** כי $\\deg(x^2+1)=\\deg(x^2-1)=2$. חובה חלוקה ארוכה לפני שברים חלקיים:\n$$\\frac{x^2+1}{x^2-1} = 1 + \\frac{2}{(x-1)(x+1)}.$$\nפירוק השארית: $\\frac{1}{x-1}-\\frac{1}{x+1}$.\n\nאינטegrand מלא: $1+\\frac{1}{x-1}-\\frac{1}{x+1}$. אינטegrציה: $x+\\ln|x-1|-\\ln|x+1|+C$.\n\n**טעות נפוצה:** פירוק ישיר על השבר הלא ראוי — קבועים שגויים ותפספוס איבר $x$. **טיפ לבחינה:** כשהמעלות שוות, חפשu איבר פולינום קבוע ושארית ראויה לפני כתיבת תבנית. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{1}{x+3}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{1}{x+3}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$[\\ln(x+3)]_0^1=\\ln\\tfrac43\\approx 0.2877$.**\n\n**Answer:** $\\approx 0.2877$.",
+      "explanation_he": "**$=\\ln\\tfrac43\\approx 0.2877$.**\n\n**תשובה:** $\\approx 0.2877$.",
       "skill_atoms": [
-        "partial_fractions_distinct",
-        "partial_fractions_repeated"
-      ]
+        "log_integral"
+      ],
+      "answer_payload": {
+        "value": 0.287682
+      },
+      "source_item_id": "5767bb22-46d9-5385-bdf6-ad800b318289",
+      "points_level_min": "5pt",
+      "correct_answer": "0.287682"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "$\\int \\frac{1}{x^2(x+1)}\\,dx$",
-      "stem_he": "$\\int \\frac{1}{x^2(x+1)}\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$\\frac{1}{x^2(x+1)}=\\frac{A}{x}+\\frac{B}{x^2}+\\frac{C}{x+1}$. $B=1$ (cover $x^2$, set $x=0$); $C=1$ (cover $x+1$, $x=-1$); $A$: compare $x^2$: $0=A+C\\Rightarrow A=-1$. $\\int=-\\ln|x|-1/x+\\ln|x+1|+C$",
-          "-\\ln|x|-1/x+\\ln|x+1|+C$",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The denominator $x^2(x+1)$ has a **repeated linear factor at $x=0$** (since $x^2$ means power 2). The correct template is:\n$$\\frac{1}{x^2(x+1)}=\\frac{A}{x}+\\frac{B}{x^2}+\\frac{C}{x+1}.$$\nCover $x^2$ (set $x=0$): $B=1$. Cover $x+1$ ($x=-1$): $C=1$. Compare $x^2$ coefficients: $0=A+C$, so $A=-1$.\n\nIntegrate: $-\\ln|x|-\\frac{1}{x}+\\ln|x+1|+C$.\n\n**Common slip:** using only $A/x+B/(x+1)$ and missing the $B/x^2$ term required by $(x-0)^2$. **Exam tip:** count the power of each factor — $x^2$ demands two terms with denominators $x$ and $x^2$. **Self-check:** the $-1/x$ term comes from integrating $1/x^2$, not from a logarithm.",
-      "explanation_he": "המכנה $x^2(x+1)$ מכיל **גורם לינארי חוזר ב-$x=0$** (חזקה 2). התבנית הנכונה:\n$$\\frac{1}{x^2(x+1)}=\\frac{A}{x}+\\frac{B}{x^2}+\\frac{C}{x+1}.$$\ncover $x^2$ ($x=0$): $B=1$. cover $x+1$ ($x=-1$): $C=1$. מקדם $x^2$: $A=-1$.\n\nאינטegrציה: $-\\ln|x|-\\frac{1}{x}+\\ln|x+1|+C$.\n\n**טעות נפוצה:** שימוש רק ב-$A/x+B/(x+1)$ בלי $B/x^2$. **טיפ לבחינה:** ספרu חזקות — $x^2$ דורש שני איברים עם מכנים $x$ ו-$x^2$. **בדיקה:** האיבר $-1/x$ מגיע מאינטegrציה של $1/x^2$, לא מלוגריתם. בבחינות, כתbו תחילה את תבנית השברים החלקיים לפני חישוב קbועים — זה מונע טעויות תבנית יקרות. לאחר מציאת התשובה, הציבu ערך $x$ נוח אחד כדי לוודא שהפירוק מחזיר את האינטegrand המקורי לפני האינטegrציה.",
+      "stem_en": "$\\displaystyle\\int\\dfrac{1}{x-a}\\,dx$ equals:",
+      "stem_he": "$\\displaystyle\\int\\dfrac{1}{x-a}\\,dx$ שווה ל:",
+      "explanation_en": "**$\\int\\dfrac{1}{x-a}dx=\\ln|x-a|+C$.**\n\n**Answer:** $\\ln|x-a|+C$.",
+      "explanation_he": "**$\\int\\dfrac{1}{x-a}dx=\\ln|x-a|+C$.**\n\n**תשובה:** $\\ln|x-a|+C$.",
       "skill_atoms": [
-        "partial_fractions_distinct",
-        "partial_fractions_repeated"
-      ]
+        "log_integral"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\ln|x-a|+C$",
+          "$\\dfrac{1}{(x-a)^2}+C$",
+          "$(x-a)\\ln(x-a)+C$",
+          "$-\\dfrac{1}{x-a}+C$"
+        ],
+        "options_he": [
+          "$\\ln|x-a|+C$",
+          "$\\dfrac{1}{(x-a)^2}+C$",
+          "$(x-a)\\ln(x-a)+C$",
+          "$-\\dfrac{1}{x-a}+C$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "4eddc57a-fbd9-54b1-b6b4-e7d5d3b85886",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\ln|x-a|+C$",
+        "$\\dfrac{1}{(x-a)^2}+C$",
+        "$(x-a)\\ln(x-a)+C$",
+        "$-\\dfrac{1}{x-a}+C$"
+      ],
+      "options_he": [
+        "$\\ln|x-a|+C$",
+        "$\\dfrac{1}{(x-a)^2}+C$",
+        "$(x-a)\\ln(x-a)+C$",
+        "$-\\dfrac{1}{x-a}+C$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_1^{2}\\dfrac{1}{x(x+1)}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{2}\\dfrac{1}{x(x+1)}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**Decompose:** $\\dfrac{1}{x}-\\dfrac{1}{x+1}$.\n\n**$[\\ln x-\\ln(x+1)]_1^2=\\ln\\tfrac43\\approx 0.2877$.**\n\n**Answer:** $\\approx 0.2877$.",
+      "explanation_he": "**פירוק:** $\\dfrac{1}{x}-\\dfrac{1}{x+1}$.\n\n**$=\\ln\\tfrac43\\approx 0.2877$.**\n\n**תשובה:** $\\approx 0.2877$.",
+      "skill_atoms": [
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "value": 0.287682
+      },
+      "source_item_id": "e765aa4a-accf-5639-93ef-dbf993c5f6b1",
+      "points_level_min": "5pt",
+      "correct_answer": "0.287682"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{2}\\dfrac{1}{(x+1)(x+2)}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{2}\\dfrac{1}{(x+1)(x+2)}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**Decompose:** $\\dfrac{1}{x+1}-\\dfrac{1}{x+2}$.\n\n**$\\left[\\ln\\dfrac{x+1}{x+2}\\right]_0^2=\\ln\\tfrac32\\approx 0.4055$.**\n\n**Answer:** $\\approx 0.4055$.",
+      "explanation_he": "**פירוק:** $\\dfrac{1}{x+1}-\\dfrac{1}{x+2}$.\n\n**$=\\ln\\tfrac32\\approx 0.4055$.**\n\n**תשובה:** $\\approx 0.4055$.",
+      "skill_atoms": [
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "value": 0.405465
+      },
+      "source_item_id": "2dd799c2-5ec3-5da8-8727-4a39f5de5970",
+      "points_level_min": "5pt",
+      "correct_answer": "0.405465"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_2^{3}\\dfrac{1}{x^2-1}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_2^{3}\\dfrac{1}{x^2-1}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**Decompose:** $\\dfrac12\\left(\\dfrac{1}{x-1}-\\dfrac{1}{x+1}\\right)$.\n\n**Evaluates to $\\tfrac12\\ln\\tfrac32\\approx 0.2027$.**\n\n**Answer:** $\\approx 0.2027$.",
+      "explanation_he": "**פירוק:** $\\dfrac12\\left(\\dfrac{1}{x-1}-\\dfrac{1}{x+1}\\right)$.\n\n**$\\approx 0.2027$.**\n\n**תשובה:** $\\approx 0.2027$.",
+      "skill_atoms": [
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "value": 0.202733
+      },
+      "source_item_id": "89afe965-9dab-5516-a15f-248727fe871c",
+      "points_level_min": "5pt",
+      "correct_answer": "0.202733"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{3}{x+2}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{3}{x+2}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$3[\\ln(x+2)]_0^1=3\\ln\\tfrac32\\approx 1.2164$.**\n\n**Answer:** $\\approx 1.2164$.",
+      "explanation_he": "**$=3\\ln\\tfrac32\\approx 1.2164$.**\n\n**תשובה:** $\\approx 1.2164$.",
+      "skill_atoms": [
+        "log_integral"
+      ],
+      "answer_payload": {
+        "value": 1.216395
+      },
+      "source_item_id": "8431ee9d-00c6-5f7a-82a7-830b34496ba1",
+      "points_level_min": "5pt",
+      "correct_answer": "1.216395"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_1^{2}\\dfrac{x+3}{x(x+1)}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{2}\\dfrac{x+3}{x(x+1)}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**Decompose:** $\\dfrac{3}{x}-\\dfrac{2}{x+1}$.\n\n**$[3\\ln x-2\\ln(x+1)]_1^2=5\\ln 2-2\\ln 3\\approx 1.2685$.**\n\n**Answer:** $\\approx 1.2685$.",
+      "explanation_he": "**פירוק:** $\\dfrac{3}{x}-\\dfrac{2}{x+1}$.\n\n**$\\approx 1.2685$.**\n\n**תשובה:** $\\approx 1.2685$.",
+      "skill_atoms": [
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "value": 1.268511
+      },
+      "source_item_id": "4b5cf5ce-6a00-5816-8e46-b4c584039f85",
+      "points_level_min": "5pt",
+      "correct_answer": "1.268511"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{1}{x^2+3x+2}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{1}{x^2+3x+2}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**Factor:** $x^2+3x+2=(x+1)(x+2)$, then decompose.\n\n**Result:** $\\ln\\tfrac43\\approx 0.2877$.**\n\n**Answer:** $\\approx 0.2877$.",
+      "explanation_he": "**פירוק:** $(x+1)(x+2)$.\n\n**$\\approx 0.2877$.**\n\n**תשובה:** $\\approx 0.2877$.",
+      "skill_atoms": [
+        "partial_fractions"
+      ],
+      "answer_payload": {
+        "value": 0.287682
+      },
+      "source_item_id": "903bde1e-0a7c-501a-979b-7126708a5e82",
+      "points_level_min": "5pt",
+      "correct_answer": "0.287682"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1}\\dfrac{5}{x+4}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1}\\dfrac{5}{x+4}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$5[\\ln(x+4)]_0^1=5\\ln\\tfrac54\\approx 1.1157$.**\n\n**Answer:** $\\approx 1.1157$.",
+      "explanation_he": "**$=5\\ln\\tfrac54\\approx 1.1157$.**\n\n**תשובה:** $\\approx 1.1157$.",
+      "skill_atoms": [
+        "log_integral"
+      ],
+      "answer_payload": {
+        "value": 1.115718
+      },
+      "source_item_id": "28025f35-efa8-5bcf-99ff-db7ac004e65e",
+      "points_level_min": "5pt",
+      "correct_answer": "1.115718"
     }
   ],
   "est_minutes": 45,
