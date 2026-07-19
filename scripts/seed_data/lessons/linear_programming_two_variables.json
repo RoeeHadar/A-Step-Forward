@@ -259,9 +259,9 @@
       "Infinite optimal solutions occur when the objective line is parallel to an edge."
     ],
     "skill_atoms_unlocked": [
-      "lp_feasible_region",
-      "lp_corner_point",
-      "lp_objective_function"
+      "evaluate_objective",
+      "lp_optimize",
+      "lp_theory"
     ],
     "tutor_pacing_hint": "Always draw the feasible region carefully before evaluating the objective. Label every vertex."
   },
@@ -270,186 +270,307 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Max $Z=x+y$ on $x+y\\le5$, $x,y\\ge0$. Maximum?",
-      "stem_he": "מקסם $Z=x+y$ על $x+y\\le5$.",
-      "explanation_en": "**Why this is correct:**\nVertices of $x+y\\le5$ with $x,y\\ge0$ are $(0,0)$, $(5,0)$, $(0,5)$. For $Z=x+y$, values are $0$, $5$, and $5$ respectively. The maximum value $5$ is attained at every point on the edge from $(5,0)$ to $(0,5)$, including the boundary segment where $x+y=5$.\n\n**How to think about it:**\nWhen the objective has equal coefficients ($1$ and $1$), it matches the slope of the constraint $x+y=5$. The objective line is parallel to the binding edge, so all boundary points tie.\n\n**Common slip:**\nPicking $10$ by doubling coordinates, or $0$ by stopping at the origin without checking the upper boundary. Option $3$ ignores the constraint entirely.\n\n**Exam tip:**\nWhen $Z=x+y$ and the resource is $x+y\\le k$, the maximum is always $k$ — memorise this pattern for quick MCQ elimination on Bagrut.",
-      "explanation_he": "**למה זה נכון:**\nקודקודי $x+y\\le5$ עם $x,y\\ge0$ הם $(0,0)$, $(5,0)$, $(0,5)$. עבור $Z=x+y$, הערכים $0$, $5$, $5$. המקסימום $5$ מושג בכל נקודה על הצלע מ-$(5,0)$ ל-$(0,5)$, כולל קטע הגבול $x+y=5$.\n\n**איך לחשוב על זה:**\nכשמקדמי המטרה שווים ($1$ ו-$1$), השיפוע תואם לאילוץ $x+y=5$. קו המטרה מקביל לצלע הקשה — כל נקודות הגבול מתאימות.\n\n**טעות נפוצה:**\nבחירת $10$ מהכפלת קואורדינטות, או $0$ מהפסקה בראשית בלי לבדוק גבול עליון. אפשרות $3$ מתעלמת מהאילוץ.\n\n**טיפ לבחינה:**\nכש-$Z=x+y$ והמשאב $x+y\\le k$, המקסימום תמיד $k$ — שיננו לסינון מהיר בשאלות בגרות.",
-      "skill_atoms": [],
-      "id": "q1",
+      "stem_en": "In a linear program, the optimum of the objective occurs at:",
+      "stem_he": "בבעיית תכנון לינארי, הערך האופטימלי של פונקציית המטרה מתקבל ב:",
+      "explanation_en": "**The optimum of a linear objective on a convex polygon is at a vertex.**\n\n**Answer:** a vertex of the feasible region.",
+      "explanation_he": "**האופטימום מתקבל בקודקוד של התחום.**\n\n**תשובה:** קודקוד של התחום האפשרי.",
+      "skill_atoms": [
+        "lp_theory"
+      ],
       "answer_payload": {
         "options_en": [
-          "$3$",
-          "$5$",
-          "$10$",
-          "$0$"
+          "$\\text{a vertex of the feasible region}$",
+          "$\\text{the center}$",
+          "$\\text{the origin only}$",
+          "$\\text{outside the region}$"
         ],
         "options_he": [
-          "$3$",
-          "$5$",
-          "$10$",
-          "$0$"
+          "$\\text{a vertex of the feasible region}$",
+          "$\\text{the center}$",
+          "$\\text{the origin only}$",
+          "$\\text{outside the region}$"
         ],
-        "correct_index": 1
+        "correct_index": 0
       },
+      "source_item_id": "265d63fd-ede7-5d5b-a50c-4925aa173064",
+      "points_level_min": "3pt",
       "options_en": [
-        "$3$",
-        "$5$",
-        "$10$",
-        "$0$"
+        "$\\text{a vertex of the feasible region}$",
+        "$\\text{the center}$",
+        "$\\text{the origin only}$",
+        "$\\text{outside the region}$"
       ],
       "options_he": [
-        "$3$",
-        "$5$",
-        "$10$",
-        "$0$"
+        "$\\text{a vertex of the feasible region}$",
+        "$\\text{the center}$",
+        "$\\text{the origin only}$",
+        "$\\text{outside the region}$"
       ],
-      "correct_index": 1
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Maximise $Z=2x+y$ on $x+y\\le4$, $x,y\\ge0$.",
-      "stem_he": "מקסם $Z=2x+y$: $x+y\\le4$, $x,y\\ge0$.",
-      "explanation_en": "**Why this is correct:**\nFeasible triangle: $(0,0)$, $(4,0)$, $(0,4)$ from $x+y\\le4$. Evaluate $Z=2x+y$: $0$, $8$, $4$. Maximum $Z=8$ at $(4,0)$ because coefficient $2$ on $x$ exceeds $1$ on $y$, pushing the optimum to the $x$-intercept.\n\n**How to think about it:**\nList vertices systematically — origin, $x$-intercept, $y$-intercept, then any interior intersections. Build a small table before claiming the max.\n\n**Common slip:**\nChoosing $(0,4)$ with $Z=4$ by favouring $y$, or evaluating at $(2,2)$ which is feasible but not a vertex. Only corners can be optimal on a bounded region.\n\n**Exam tip:**\nWhen $a>b$ in maximise $Z=ax+by$ with a single $x+y\\le k$ constraint, expect the optimum at $(k,0)$ — verify with the vertex table anyway.",
-      "explanation_he": "**למה זה נכון:**\nמשולש פיזיבלי: $(0,0)$, $(4,0)$, $(0,4)$ מ-$x+y\\le4$. חישוב $Z=2x+y$: $0$, $8$, $4$. מקסימום $Z=8$ ב-$(4,0)$ כי מקדם $x$ ($2$) גדול מ-$y$ ($1$), ודוחף לחיתוך ציר $x$.\n\n**איך לחשוב על זה:**\nרשימת קודקודים שיטתית — ראשית, חיתוך $x$, חיתוך $y$, ואז חיתוכים פנימיים. בנו טבלה קטנה לפני קביעת המקסימום.\n\n**טעות נפוצה:**\nבחירת $(0,4)$ עם $Z=4$ מהעדפת $y$, או חישוב ב-$(2,2)$ — פיזיבלי אך לא קודקוד. רק קודקודים אופטימליים באזור חסום.\n\n**טיפ לבחינה:**\nכש-$a>b$ במקסום $Z=ax+by$ עם $x+y\\le k$, צפו לאופטימום ב-$(k,0)$ — אך אמתו בטבלת קודקודים.",
+      "stem_en": "Evaluate the objective $P=3x+2y$ at $(2,4)$.",
+      "stem_he": "חשבו את פונקציית המטרה $P=3x+2y$ בנקודה $(2,4)$.",
+      "explanation_en": "**$3(2)+2(4)=6+8=14$.**\n\n**Answer:** $14$.",
+      "explanation_he": "**$6+8=14$.**\n\n**תשובה:** $14$.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "evaluate_objective"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Vertices: $(0,0),(4,0),(0,4)$. $Z$: $0,8,4$. Max $Z=8$ at $(4,0)$",
-          "8$ at $(4,0)$",
-          "4,0"
-        ],
-        "case_sensitive": false
-      }
+        "value": 14
+      },
+      "source_item_id": "7ef1d510-c39a-551f-88b6-94c25d9ea302",
+      "points_level_min": "3pt",
+      "correct_answer": "14"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Minimise $Z=3x+2y$ on $x+y\\ge5$, $x,y\\ge0$ at $(5,0)$ and $(0,5)$.",
-      "stem_he": "מזעור $Z=3x+2y$: $x+y\\ge5$.",
-      "explanation_en": "**Why this is correct:**\nConstraint $x+y\\ge5$ with $x,y\\ge0$ forces the feasible set into the first quadrant above the line $x+y=5$. Corner candidates on that boundary are $(5,0)$ giving $Z=3(5)+2(0)=15$ and $(0,5)$ giving $Z=3(0)+2(5)=10$. Minimum is $10$ at $(0,5)$.\n\n**How to think about it:**\nFor $\\ge$ constraints, shade away from the origin unless the test point fails. Minimisation with positive coefficients prefers smaller $x$ and larger $y$ here because $3>2$.\n\n**Common slip:**\nUsing $\\le$ shading and getting the wrong region, or picking $(5,0)$ because it is closer to the origin along the $x$-axis. Always substitute into $Z$, do not guess by geometry alone.\n\n**Exam tip:**\nOn minimisation items, circle the word \"minimise\" before graphing — students often solve for max by reflex.",
-      "explanation_he": "**למה זה נכון:**\nאילוץ $x+y\\ge5$ עם $x,y\\ge0$ דוחף את האזור הפיזיבלי מעל הקו $x+y=5$. מועמדים על הגבול: $(5,0)$ נותן $Z=15$, $(0,5)$ נותן $Z=10$. מינימום $10$ ב-$(0,5)$.\n\n**איך לחשוב על זה:**\nב-$\\ge$ מצלילים הרחק מהראשית (אם נקודת הבדיקה נכשלת). במזעור עם מקדמים חיוביים — כאן $3>2$ ולכן $y$ \"זול\" יותר ליחידה.\n\n**טעות נפוצה:**\nהצללה כ-$\\le$ ואזור שגוי, או בחירת $(5,0)$ כי קרוב לראשית על ציר $x$. תמיד הציבו ב-$Z$, לא רק ניחוש גיאומטרי.\n\n**טיפ לבחינה:**\nבשאלות מזעור — הקיפו \"מזער\" לפני הגרף; תלמידים פותרים מקסימום ברפלקס.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Maximize $P=3x+2y$ over the vertices $(0,0),(0,4),(3,3),(5,0)$.",
+      "stem_he": "מצאו את המקסימום של $P=3x+2y$ על הקודקודים $(0,0),(0,4),(3,3),(5,0)$.",
+      "explanation_en": "**Step 1 — Evaluate at each vertex.**\n\n$(0,0)\\to 0$; $(0,4)\\to 8$; $(3,3)\\to 15$; $(5,0)\\to 15$.\n\n**Step 2 — Take the largest.** $15$.\n\n**Answer:** $15$ (attained at $(3,3)$ and $(5,0)$).",
+      "explanation_he": "**שלב 1 — הצבה בכל קודקוד.**\n\n$0, 8, 15, 15$.\n\n**שלב 2 — הגדול ביותר.** $15$.\n\n**תשובה:** $15$.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "lp_optimize"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$(5,0)$: $Z=15$. $(0,5)$: $Z=10$. Min at $(0,5)$",
-          "10$. Min at $(0,5)$",
-          "0,5"
+        "steps_en": [
+          "**Step 1 — Evaluate at each vertex.**",
+          "$(0,0)\\to 0$; $(0,4)\\to 8$; $(3,3)\\to 15$; $(5,0)\\to 15$.",
+          "**Step 2 — Take the largest.** $15$.",
+          "**Answer:** $15$ (attained at $(3,3)$ and $(5,0)$)."
         ],
-        "case_sensitive": false
-      }
+        "steps_he": [
+          "**שלב 1 — הצבה בכל קודקוד.**",
+          "$0, 8, 15, 15$.",
+          "**שלב 2 — הגדול ביותר.** $15$.",
+          "**תשובה:** $15$."
+        ]
+      },
+      "source_item_id": "32bd4bc6-c2f5-5b75-99b1-99ecc1ab8b43",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Is $(2,3)$ feasible for $x+y\\le6$, $2x-y\\le4$, $x,y\\ge0$?",
-      "stem_he": "האם $(2,3)$ פיזיבלי?",
-      "explanation_en": "**Why this is correct:**\nSubstitute $(2,3)$ into each constraint: $2+3=5\\le6$ ✓; $2(2)-3=1\\le4$ ✓; both $x,y\\ge0$ ✓. All inequalities hold, so the point is **feasible**.\n\n**How to think about it:**\nFeasibility is a yes/no check — no objective function needed. Test every constraint; one failure disqualifies the point.\n\n**Common slip:**\nChecking only $x+y\\le6$ and ignoring $2x-y\\le4$, or arithmetic error on $4-3$. Another error: confusing feasible with optimal — feasible only means inside the region.\n\n**Exam tip:**\nWrite a mini checklist on scratch paper: one line per constraint with ✓/✗. Bagrut feasibility sub-questions are quick marks if organised.",
-      "explanation_he": "**למה זה נכון:**\nהצבת $(2,3)$ בכל אילוץ: $2+3=5\\le6$ ✓; $2(2)-3=1\\le4$ ✓; $x,y\\ge0$ ✓. כל האי-שוויונות מתקיימים — הנקודה **פיזיבלית**.\n\n**איך לחשוב על זה:**\nפיזיביליות היא בדיקת כן/לא — בלי פונקציית מטרה. בדקו כל אילוץ; כישלון אחד פוסל.\n\n**טעות נפוצה:**\nבדיקה רק של $x+y\\le6$ והתעלמות מ-$2x-y\\le4$, או טעות ב-$4-3$. בלבול פיזיבלי עם אופטימלי — פיזיבלי רק \"בתוך\" האזור.\n\n**טיפ לבחינה:**\nרשימת בדיקה על טיוטה: שורה לכל אילוץ עם ✓/✗. שאלות פיזיביליות בבגרות — נקודות מהירות אם מסודר.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the feasible region defined by linear inequalities is convex.",
+      "stem_he": "נכון או לא נכון: התחום האפשרי המוגדר על-ידי אי-שוויונים לינאריים הוא קמור.",
+      "explanation_en": "**Intersection of half-planes is convex** — **true**.",
+      "explanation_he": "**חיתוך של חצאי מישורים הוא קמור** — **נכון**.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "lp_theory"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$2+3=5\\le6$; $4-3=1\\le4$. Feasible.",
-          "Feasible",
-          "4"
-        ],
-        "case_sensitive": false
-      }
+        "value": true
+      },
+      "source_item_id": "5871bbdc-4943-5a6e-aa5c-6252a94a2393",
+      "points_level_min": "3pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Vertices of $x\\ge0$, $y\\ge0$, $x+y\\le3$.",
-      "stem_he": "קודקודי $x\\ge0,y\\ge0,x+y\\le3$.",
-      "explanation_en": "**Why this is correct:**\nConstraints $x\\ge0$, $y\\ge0$, $x+y\\le3$ form a right triangle. Vertices occur where boundary lines meet: origin $(0,0)$, $x$-intercept $(3,0)$ from $y=0$ in $x+y=3$, and $y$-intercept $(0,3)$.\n\n**How to think about it:**\nWith only two non-axis constraints in the first quadrant, vertices are usually $(0,0)$ and the two axis intercepts of the slanted constraint. Confirm no extra lines cut off a corner.\n\n**Common slip:**\nListing $(3,3)$ by setting $x=y=3$, which violates $x+y\\le3$. Or forgetting $(0,0)$ when both non-negativity constraints bind there.\n\n**Exam tip:**\nLabel intercepts on your graph as you draw — vertex lists then copy directly from the sketch, reducing transcription errors.",
-      "explanation_he": "**למה זה נכון:**\nאילוצים $x\\ge0$, $y\\ge0$, $x+y\\le3$ יוצרים משולש. קודקודים בחיתוכי גבולות: ראשית $(0,0)$, חיתוך $x$ ב-$(3,0)$, חיתוך $y$ ב-$(0,3)$.\n\n**איך לחשוב על זה:**\nעם שני אילוצי גבול ברביע הראשון, הקודקודים בדרך כלל $(0,0)$ ושני חיתוכי הצירים. ודאו שאין קו נוסף שחותך פינה.\n\n**טעות נפוצה:**\nרישום $(3,3)$ עם $x=y=3$ — מפר $x+y\\le3$. או שכחת $(0,0)$ כשאי-שליליות נוגעות שם.\n\n**טיפ לבחינה:**\nסמנו חיתוכים על הגרף תוך כדי שרטוט — רשימת קודקודים מועתקת מהסקיצה ומפחיתה טעויות.",
+      "stem_en": "Evaluate $P=x+y$ at $(5,3)$.",
+      "stem_he": "חשבו $P=x+y$ בנקודה $(5,3)$.",
+      "explanation_en": "**$5+3=8$.**\n\n**Answer:** $8$.",
+      "explanation_he": "**$5+3=8$.**\n\n**תשובה:** $8$.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "evaluate_objective"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$(0,0),(3,0),(0,3)$",
-          "0,3"
-        ],
-        "case_sensitive": false
-      }
+        "value": 8
+      },
+      "source_item_id": "44366719-1020-5495-9cef-1e3e0d0baba0",
+      "points_level_min": "3pt",
+      "correct_answer": "8"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Max $Z=4x+3y$: $x+y\\le6$, $2x+y\\le10$, $x,y\\ge0$.",
-      "stem_he": "מקסם $Z=4x+3y$: $x+y\\le6$, $2x+y\\le10$.",
-      "explanation_en": "**Why this is correct:**\nVertices: $(0,0)$, $(5,0)$ from $2x+y=10$ with $y=0$, $(0,6)$ from $x+y=6$, and intersection $(4,2)$ solving $x+y=6$ and $2x+y=10$. $Z=4x+3y$ values: $0$, $20$, $22$, $18$. Maximum $Z=22$ at $(4,2)$.\n\n**How to think about it:**\nWith two resource constraints, you must find the interior vertex where both lines bind — skipping it often misses the true max. Subtract equations to eliminate $y$: $(2x+y)-(x+y)=10-6 \\Rightarrow x=4$.\n\n**Common slip:**\nUsing $(5,0)$ with $Z=20$ and stopping, or taking $(0,6)$ with $Z=18$. Arithmetic errors when solving the $2\\times2$ system are common — substitute back into both constraints.\n\n**Exam tip:**\nBagrut LP items with two constraints almost always have a binding interior vertex — if your list has only axis points, recheck.",
-      "explanation_he": "**למה זה נכון:**\nקודקודים: $(0,0)$, $(5,0)$ מ-$2x+y=10$, $(0,6)$ מ-$x+y=6$, חיתוך $(4,2)$. ערכי $Z=4x+3y$: $0$, $20$, $22$, $18$. מקסימום $Z=22$ ב-$(4,2)$.\n\n**איך לחשוב על זה:**\nעם שני אילוצי משאב, חובה למצוא קודקוד פנימי שבו שני הקווים קשים — דילוג מפספס מקסימום. חיסור משוואות: $(2x+y)-(x+y)=4 \\Rightarrow x=4$.\n\n**טעות נפוצה:**\nעצירה ב-$(5,0)$ עם $Z=20$, או $(0,6)$ עם $18$. טעויות בפתרון מערכת $2\\times2$ — תמיד הציבו חזרה בשני האילוצים.\n\n**טיפ לבחינה:**\nשאלות LP בבגרות עם שני אילוצים כמעט תמיד כוללות קודקוד פנימי — אם יש רק נקודות ציר, בדקו שוב.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Evaluate $C=2x+5y$ at $(0,4)$.",
+      "stem_he": "חשבו $C=2x+5y$ בנקודה $(0,4)$.",
+      "explanation_en": "**$0+20=20$.**\n\n**Answer:** $20$.",
+      "explanation_he": "**$0+20=20$.**\n\n**תשובה:** $20$.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "evaluate_objective"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Vertices: $(0,0),(5,0),(4,2),(0,6)$. $Z$: $0,20,22,18$. Max $Z=22$ at $(4,2)$",
-          "22$ at $(4,2)$",
-          "4,2"
-        ],
-        "case_sensitive": false
-      }
+        "value": 20
+      },
+      "source_item_id": "2862ecb4-f42f-5b48-b776-d91b3ca6d717",
+      "points_level_min": "3pt",
+      "correct_answer": "20"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A bakery makes cakes ($x$) and pies ($y$). Each cake: 2h labour, profit $30$. Each pie: 1h, profit $20$. Max 8h labour, max 6 pies. Maximise profit.",
-      "stem_he": "מאפייה: עוגות $x$, פשטידות $y$. פרופיט $30x+20y$. $2x+y\\le8$, $y\\le6$, $x,y\\ge0$.",
-      "explanation_en": "**Why this is correct:**\nConstraints: $2x+y\\le8$, $y\\le6$, $x,y\\ge0$. Vertices: $(0,0)$, $(4,0)$, $(1,6)$ from $2x+y=8$ with $y=6$, $(0,6)$. Profits: $0$, $120$, $90$, $120$. Maximum $Z=120$ at both $(4,0)$ and $(0,6)$ — infinitely many optima on the connecting edge if it were fully feasible (here two isolated corners tie).\n\n**How to think about it:**\nTranslate the word problem first: labour gives $2x+y\\le8$, pie cap gives $y\\le6$, profit $Z=30x+20y$. The pie limit creates vertex $(1,6)$ where labour binds.\n\n**Common slip:**\nIgnoring $y\\le6$ and using $(0,8)$ which violates the pie cap, or choosing $(1,6)$ with $Z=90$ without comparing all vertices.\n\n**Exam tip:**\nWhen two vertices tie, report **both** and state that either production mix achieves maximum profit — partial credit requires the full comparison table.",
-      "explanation_he": "**למה זה נכון:**\nאילוצים: $2x+y\\le8$, $y\\le6$, $x,y\\ge0$. קודקודים: $(0,0)$, $(4,0)$, $(1,6)$, $(0,6)$. רווחים: $0$, $120$, $90$, $120$. מקסימום $Z=120$ ב-$(4,0)$ וב-$(0,6)$ — שני קודקודים שווים.\n\n**איך לחשוב על זה:**\nתרגום קודם: עבודה $2x+y\\le8$, תקרת פשטידות $y\\le6$, רווח $Z=30x+20y$. תקרת $y$ יוצרת קודקוד $(1,6)$.\n\n**טעות נפוצה:**\nהתעלמות מ-$y\\le6$ ושימוש ב-$(0,8)$ — מפר אילוץ. או בחירת $(1,6)$ עם $90$ בלי להשוות כל הקודקודים.\n\n**טיפ לבחינה:**\nכששני קודקודים שווים — דווחו **שניהם** עם טבלת השוואה מלאה לקבלת נקודות מבנה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the maximum of $P=x+y$ over the vertices $(0,0),(4,0),(0,3)$.",
+      "stem_he": "מצאו את המקסימום של $P=x+y$ על הקודקודים $(0,0),(4,0),(0,3)$.",
+      "explanation_en": "**Values: $0, 4, 3$.** Maximum $=4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**ערכים: $0, 4, 3$.** מקסימום $=4$.\n\n**תשובה:** $4$.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "lp_optimize"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Vertices: $(0,0),(4,0),(1,6),(0,6)$. $Z$: $0,120,90,120$. Max $Z=120$ at $(4,0)$ or $(0,6)$",
-          "120$ at $(4,0)$ or $(0,6)$",
-          "0,6"
-        ],
-        "case_sensitive": false
-      }
+        "value": 4
+      },
+      "source_item_id": "71284ffb-7b1f-5a33-a75c-70d740203138",
+      "points_level_min": "3pt",
+      "correct_answer": "4"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Min $Z=x+y$: $x+2y\\ge8$, $2x+y\\ge8$, $x,y\\ge0$.",
-      "stem_he": "מזעור $Z=x+y$: $x+2y\\ge8$, $2x+y\\ge8$.",
-      "explanation_en": "**Why this is correct:**\nMinimise $Z=x+y$ subject to $x+2y\\ge8$ and $2x+y\\ge8$. Intersection of boundaries: solve $x+2y=8$ and $2x+y=8$ to get $(8/3, 8/3)$ with $Z=16/3\\approx5.33$. Boundary points $(0,8)$ and $(8,0)$ give $Z=8$, larger than $16/3$. Minimum at $(8/3, 8/3)$.\n\n**How to think about it:**\nDual $\\ge$ constraints in the first quadrant create an unbounded feasible region opening upward/rightward; the minimum often sits at the intersection of the two binding lines, not on an axis.\n\n**Common slip:**\nAssuming the minimum is at $(0,8)$ because it lies on an axis, or rounding $16/3$ to $5$ without comparing to exact fractions. Another error: shading the wrong side of $\\ge$ lines.\n\n**Exam tip:**\nLeave answers as exact fractions unless the question requests decimals — $16/3$ is preferred over $5.33$ on Bagrut.",
-      "explanation_he": "**למה זה נכון:**\nמזעור $Z=x+y$ בכפוף ל-$x+2y\\ge8$ ו-$2x+y\\ge8$. חיתוך: $(8/3, 8/3)$ עם $Z=16/3$. ב-$(0,8)$ ו-$(8,0)$ מתקבל $Z=8$, גדול מ-$16/3$. מינימום ב-$(8/3, 8/3)$.\n\n**איך לחשוב על זה:**\nשני אילוצי $\\ge$ ברביע הראשון יוצרים אזור בלתי-חסום; המינימום לעיתים בחיתוך שני הקווים, לא על ציר.\n\n**טעות נפוצה:**\nהנחה שהמינימום ב-$(0,8)$ כי על ציר, או עיגול $16/3$ ל-$5$ בלי השוואה. הצללה שגויה של $\\ge$.\n\n**טיפ לבחינה:**\nהשאירו תשובות כשברים מדויקים אלא אם נדרש עשרוני — $16/3$ עדיף על $5.33$ בבגרות.",
+      "stem_en": "Evaluate $P=4x+3y$ at $(3,2)$.",
+      "stem_he": "חשבו $P=4x+3y$ בנקודה $(3,2)$.",
+      "explanation_en": "**$12+6=18$.**\n\n**Answer:** $18$.",
+      "explanation_he": "**$12+6=18$.**\n\n**תשובה:** $18$.",
       "skill_atoms": [
-        "lp_feasible_region",
-        "lp_corner_point"
+        "evaluate_objective"
       ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Intersection: $(8/3,8/3)$. $Z=16/3\\approx5.33$. Check corners $(0,8)$: $Z=8$; $(8,0)$: $Z=8$. Min at $(8/3,8/3)$",
-          "8$. Min at $(8/3,8/3)$",
-          "3"
-        ],
-        "case_sensitive": false
-      }
+        "value": 18
+      },
+      "source_item_id": "1c8d246e-b08f-55ce-adfc-485083904e60",
+      "points_level_min": "3pt",
+      "correct_answer": "18"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the maximum of $P=2x+y$ over vertices $(1,5),(4,2),(0,6)$.",
+      "stem_he": "מצאו את המקסימום של $P=2x+y$ על הקודקודים $(1,5),(4,2),(0,6)$.",
+      "explanation_en": "**Values: $7, 10, 6$.** Maximum $=10$ at $(4,2)$.\n\n**Answer:** $10$.",
+      "explanation_he": "**ערכים: $7, 10, 6$.** מקסימום $=10$.\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "lp_optimize"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "d91d47a7-85a8-5abb-8c7e-7efe6b408f39",
+      "points_level_min": "3pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the minimum of $C=x+2y$ over vertices $(2,3),(5,1),(1,4)$.",
+      "stem_he": "מצאו את המינימום של $C=x+2y$ על הקודקודים $(2,3),(5,1),(1,4)$.",
+      "explanation_en": "**Values: $8, 7, 9$.** Minimum $=7$ at $(5,1)$.\n\n**Answer:** $7$.",
+      "explanation_he": "**ערכים: $8, 7, 9$.** מינימום $=7$.\n\n**תשובה:** $7$.",
+      "skill_atoms": [
+        "lp_optimize"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "7153aad9-8375-5020-ac18-5b8db9cdd472",
+      "points_level_min": "3pt",
+      "correct_answer": "7"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Evaluate $P=5x-2y$ at $(4,3)$.",
+      "stem_he": "חשבו $P=5x-2y$ בנקודה $(4,3)$.",
+      "explanation_en": "**$20-6=14$.**\n\n**Answer:** $14$.",
+      "explanation_he": "**$20-6=14$.**\n\n**תשובה:** $14$.",
+      "skill_atoms": [
+        "evaluate_objective"
+      ],
+      "answer_payload": {
+        "value": 14
+      },
+      "source_item_id": "c514617a-5408-5701-8c8c-0fe3e16c4baa",
+      "points_level_min": "3pt",
+      "correct_answer": "14"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Evaluate revenue $R=8x+12y$ at $(10,5)$.",
+      "stem_he": "חשבו את ההכנסה $R=8x+12y$ בנקודה $(10,5)$.",
+      "explanation_en": "**$80+60=140$.**\n\n**Answer:** $140$.",
+      "explanation_he": "**$80+60=140$.**\n\n**תשובה:** $140$.",
+      "skill_atoms": [
+        "evaluate_objective"
+      ],
+      "answer_payload": {
+        "value": 140
+      },
+      "source_item_id": "d330bbda-7367-5496-ad6f-63650cda0bf9",
+      "points_level_min": "3pt",
+      "correct_answer": "140"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the maximum of $P=x+3y$ over vertices $(0,5),(2,4),(6,0)$.",
+      "stem_he": "מצאו את המקסימום של $P=x+3y$ על הקודקודים $(0,5),(2,4),(6,0)$.",
+      "explanation_en": "**Values: $15, 14, 6$.** Maximum $=15$.\n\n**Answer:** $15$.",
+      "explanation_he": "**ערכים: $15, 14, 6$.** מקסימום $=15$.\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "lp_optimize"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "63f74193-1d4e-5ba2-a18a-04f76274c5af",
+      "points_level_min": "3pt",
+      "correct_answer": "15"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the minimum cost $C=4x+6y$ over vertices $(1,2),(3,1),(0,4)$.",
+      "stem_he": "מצאו את העלות המינימלית $C=4x+6y$ על הקודקודים $(1,2),(3,1),(0,4)$.",
+      "explanation_en": "**Values: $16, 18, 24$.** Minimum $=16$ at $(1,2)$.\n\n**Answer:** $16$.",
+      "explanation_he": "**ערכים: $16, 18, 24$.** מינימום $=16$.\n\n**תשובה:** $16$.",
+      "skill_atoms": [
+        "lp_optimize"
+      ],
+      "answer_payload": {
+        "value": 16
+      },
+      "source_item_id": "be04c6e1-46e4-58ea-bc60-1654dc15420a",
+      "points_level_min": "3pt",
+      "correct_answer": "16"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A factory earns $P=10x+15y$. Find the profit at $(6,4)$.",
+      "stem_he": "מפעל מרוויח $P=10x+15y$. מצאו את הרווח בנקודה $(6,4)$.",
+      "explanation_en": "**$60+60=120$.**\n\n**Answer:** $120$.",
+      "explanation_he": "**$60+60=120$.**\n\n**תשובה:** $120$.",
+      "skill_atoms": [
+        "evaluate_objective"
+      ],
+      "answer_payload": {
+        "value": 120
+      },
+      "source_item_id": "59522a72-2f33-5150-91a7-8bb629bdc186",
+      "points_level_min": "3pt",
+      "correct_answer": "120"
     }
   ],
   "est_minutes": 22,

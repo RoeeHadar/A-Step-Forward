@@ -325,18 +325,43 @@ strict + track-scope audits and the 207/207 seed dry-run all green; total strict
 warnings across the corpus dropped from 1537 to 1458 as baking now exercises every
 taught atom in these lessons.
 
+## Batch M — shipped
+
+The **algebra-review / advanced-topic strand** expanded to **15 CAS-verified
+items each** (6 lessons, 90 items, 0 rejections):
+
+- `algebra_review` (3pt/4pt/5pt) — expand/factor (incl. difference of squares,
+  cubes), simplify, evaluate, rational cancellation. Uses `symbolic_equal`
+  verification for the expand/factor items.
+- `complex_numbers` (5pt) — real/imaginary parts, add/subtract/multiply/divide,
+  modulus, conjugate, $i^2=-1$.
+- `quadratic_model_fitting` (3pt) — evaluate, vertex/axis, y-intercept, fit
+  $a/b/c$ from points, roots↔coefficients, vertex form.
+- `linear_programming_two_variables` (3pt) — evaluate the objective at vertices,
+  maximize/minimize over a vertex set, convexity/vertex-optimum theory.
+- `trigonometry_equations` (4pt/5pt) — solve $\sin/\cos/\tan x=k$, double-angle,
+  quadrant reasoning, cofunction identity.
+- `data_representation` (3pt) — frequency totals, mode/mean/median from a table,
+  relative frequency & percentage.
+
+Difficulty spread ≈ 33% easy / 40% medium / 27% hard, 4 kinds per lesson (one
+`algebra_review` item was converted from short-answer to true/false to reach 4
+kinds). Math + strict + track-scope audits and the 207/207 seed dry-run all green.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **60 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L + exponents): the entire 3pt/4pt algebra & functions foundation (incl.
-alternate syllabus IDs), sequences, the core + coordinate geometry foundation
-(distance/midpoint/slope, circle equations, vectors, solids/mensuration, plane-
-angle geometry, Law of Sines/Cosines & Heron), the 3pt probability & statistics
-foundation plus descriptive statistics (variance/SD/IQR), fractions/ratios/
-percentages/word problems, the full 5pt calculus + advanced-topic core, and the
-HS calculus track-variant + intro core. Remaining thin lessons (8 questions):
-advanced 4pt/5pt conics/3D-vectors/combinatorics/complex/induction/trig-identities,
-inferential statistics, and university/makhina strands.
+Verified 15+ item banks now cover **66 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M + exponents): the entire 3pt/4pt algebra & functions foundation
+(incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
+the core + coordinate geometry foundation (distance/midpoint/slope, circle
+equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines
+& Heron), the 3pt probability & statistics foundation plus descriptive statistics
+(variance/SD/IQR) and data representation, fractions/ratios/percentages/word
+problems, linear programming, complex numbers, trig equations, and the full 5pt
+calculus + advanced-topic core plus the HS calculus track-variant + intro core.
+Remaining thin lessons (8 questions): advanced 4pt/5pt conics/3D-vectors/
+combinatorics/de-Moivre/induction/trig-identities, inferential statistics, and
+university/makhina strands.
 
 ## Pending (not yet done this window)
 
