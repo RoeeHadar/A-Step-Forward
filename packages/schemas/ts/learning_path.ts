@@ -84,13 +84,25 @@ export const quizOptionSchema = z.object({
   text: z.string(),
 });
 
+export const quizQuestionKindSchema = z.enum([
+  'mcq',
+  'true_false',
+  'numeric',
+  'short_answer',
+  'open',
+  'derivation',
+]);
+
 export const quizQuestionSchema = z.object({
   id: z.string(),
   topic: z.string(),
   subject: z.string(),
   difficulty: z.number(),
   stem: z.string(),
+  /** Empty for open / numeric / short_answer. */
   options: z.array(quizOptionSchema),
+  /** ADR-0010 gate kinds; omit/undefined treated as mcq for legacy payloads. */
+  kind: quizQuestionKindSchema.optional(),
 });
 
 export const quizStartResponseSchema = z.object({

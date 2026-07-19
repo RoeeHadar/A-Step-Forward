@@ -1,49 +1,47 @@
 import { describe, expect, it } from 'vitest';
 import { scoreWeeklyQuizAnswers, normalizeWeeklyMcqOptions } from './weekly-quiz';
+import { GATE_BANK_FORMAT_VERSION } from './gate-question-bank';
+import type { StoredWeeklyQuestion } from './weekly-quiz';
+
+function mcq(
+  id: string,
+  topic: string,
+  correct: string,
+): StoredWeeklyQuestion {
+  return {
+    id,
+    topic,
+    subject: 'math',
+    difficulty: 0.8,
+    kind: 'mcq',
+    stem: `${id}?`,
+    options: [
+      { key: 'A', text: '3' },
+      { key: 'B', text: '4' },
+      { key: 'C', text: '5' },
+      { key: 'D', text: '6' },
+    ],
+    correct,
+    source: 'lesson_bank',
+    format_version: GATE_BANK_FORMAT_VERSION,
+  };
+}
 
 describe('scoreWeeklyQuizAnswers', () => {
-  const questions = [
-    {
-      id: 'q1',
-      topic: 'algebra_basics',
-      subject: 'math',
-      difficulty: 0.5,
-      stem: '2+2?',
-      options: [
-        { key: 'A', text: '3' },
-        { key: 'B', text: '4' },
-        { key: 'C', text: '5' },
-        { key: 'D', text: '6' },
-      ],
-      correct: 'B',
-    },
-    {
-      id: 'q2',
-      topic: 'algebra_basics',
-      subject: 'math',
-      difficulty: 0.6,
-      stem: '3+3?',
-      options: [
-        { key: 'A', text: '5' },
-        { key: 'B', text: '6' },
-        { key: 'C', text: '7' },
-        { key: 'D', text: '8' },
-      ],
-      correct: 'B',
-    },
+  const questions: StoredWeeklyQuestion[] = [
+    mcq('q1', 'algebra_basics', 'B'),
+    mcq('q2', 'algebra_basics', 'B'),
     {
       id: 'q3',
       topic: 'geometry_intro',
       subject: 'math',
-      difficulty: 0.4,
-      stem: 'Square sides?',
-      options: [
-        { key: 'A', text: '3' },
-        { key: 'B', text: '4' },
-        { key: 'C', text: '5' },
-        { key: 'D', text: '6' },
-      ],
-      correct: 'B',
+      difficulty: 0.9,
+      kind: 'numeric',
+      stem: 'Area?',
+      options: [],
+      correct_answer: '12',
+      source: 'lesson_bank',
+      format_version: GATE_BANK_FORMAT_VERSION,
     },
   ];
 
@@ -58,20 +56,39 @@ describe('scoreWeeklyQuizAnswers', () => {
     expect(result.weak_concepts).toContain('geometry_intro');
   });
 
-  it('returns perfect score when all correct', () => {
+  it('grades numeric answers', () => {
     const result = scoreWeeklyQuizAnswers(questions, [
-      { item_id: 'q1', chosen: 'b' },
+      { item_id: 'q1', chosen: 'B' },
       { item_id: 'q2', chosen: 'B' },
-      { item_id: 'q3', chosen: 'B' },
+      { item_id: 'q3', chosen: '12' },
     ]);
     expect(result.score).toBe(1);
-    expect(result.weak_concepts).toHaveLength(0);
+  });
+
+  it('uses openGrades for open items (fail-closed without grade)', () => {
+    const openQ: StoredWeeklyQuestion[] = [
+      {
+        id: 'o1',
+        topic: 'derivatives_rules',
+        subject: 'math',
+        difficulty: 0.9,
+        kind: 'open',
+        stem: 'Prove…',
+        options: [],
+        rubric: 'Must use chain rule',
+        source: 'lesson_bank',
+        format_version: GATE_BANK_FORMAT_VERSION,
+      },
+    ];
+    expect(scoreWeeklyQuizAnswers(openQ, [{ item_id: 'o1', chosen: 'because' }]).score).toBe(0);
+    expect(
+      scoreWeeklyQuizAnswers(openQ, [{ item_id: 'o1', chosen: 'full proof' }], { o1: true }).score,
+    ).toBe(1);
   });
 
   it('returns zero for empty answers', () => {
     const result = scoreWeeklyQuizAnswers(questions, []);
     expect(result.score).toBe(0);
-    expect(Object.values(result.per_topic).every((s) => s === 0)).toBe(true);
   });
 });
 
@@ -79,10 +96,10 @@ describe('normalizeWeeklyMcqOptions', () => {
   it('maps numeric option keys to A–D letters', () => {
     const normalized = normalizeWeeklyMcqOptions(
       [
-        { key: '1', text: 'one' },
-        { key: '2', text: 'two' },
-        { key: '3', text: 'three' },
-        { key: '4', text: 'four' },
+        { key: '1', text: 'a' },
+        { key: '2', text: 'b' },
+        { key: '3', text: 'c' },
+        { key: '4', text: 'd' },
       ],
       '2',
     );

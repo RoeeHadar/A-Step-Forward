@@ -1,14 +1,10 @@
 ﻿/**
- * Weekly quiz generator — Neon/Vercel path (no Render dependency).
+ * Weekly quiz / competency gate — Neon/Vercel path (no Render dependency).
  *
- * Given a learner, this module:
- *   1. Reads the selected learning-plan week concepts.
- *   2. Calls Groq to generate locale-specific MCQ questions targeting those concepts.
- *   3. Caches the result in `weekly_quizzes_ai` (keyed by learner + week + plan + locale).
- *   4. On subsequent calls for the same plan/week/locale, returns the cached questions.
- *
- * Returns a `QuizStartResponse`-compatible object that the existing WeekQuizClient
- * can render without modification.
+ * ADR-0010: items are drawn from the authored lesson question bank (hard /
+ * open / numeric / short_answer). LLM free-invention of easy MCQs is retired
+ * as the primary path — it only fills gaps when a concept has no bank items,
+ * and then only as open/numeric grounded in bank exemplars.
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
@@ -16,6 +12,14 @@ import { randomUUID } from 'node:crypto';
 import { getConceptMastery, getLearnerProfile } from './neon-db';
 import { evaluateGatePass, hasFrontier } from './plan-pacing';
 import { countGateAttempts, GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
+import {
+  GATE_BANK_FORMAT_VERSION,
+  isBankSourcedGateQuiz,
+  pickGateQuestionsFromBank,
+  type GateBankPick,
+  type GateQuestionKind,
+} from './gate-question-bank';
+import { answersMatch, getAcceptedAnswers, numericClose } from './answer-normalize';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
 import type {
@@ -53,42 +57,78 @@ interface KgConcept {
 }
 const kgById: Record<string, KgConcept> = (kg as unknown as { byId: Record<string, KgConcept> }).byId;
 
-// ── Stored shape (with correct answer, never sent to client) ─────────────────
+// ── Stored shape (with answers, never sent to client) ─────────────────────────
 
-interface StoredWeeklyQuestion {
+export interface StoredWeeklyQuestion {
   id: string;
-  topic: string;     // concept_id
+  topic: string;
   subject: string;
-  difficulty: number; // 0–1 float
+  difficulty: number;
+  kind: GateQuestionKind;
   stem: string;
   options: { key: string; text: string }[];
-  correct: string;   // "A" | "B" | "C" | "D"
+  correct?: string;
+  correct_answer?: string | null;
+  acceptable_answers?: string[];
+  rubric?: string | null;
+  model_answer?: string | null;
+  source_question_id?: string;
+  source: 'lesson_bank' | 'llm_fallback';
+  format_version: typeof GATE_BANK_FORMAT_VERSION;
 }
 
-// ── LLM call ─────────────────────────────────────────────────────────────────
+function fromBankPick(p: GateBankPick): StoredWeeklyQuestion {
+  return {
+    id: p.id,
+    topic: p.topic,
+    subject: p.subject,
+    difficulty: p.difficulty,
+    kind: p.kind,
+    stem: p.stem,
+    options: p.options,
+    correct: p.correct,
+    correct_answer: p.correct_answer,
+    acceptable_answers: p.acceptable_answers,
+    rubric: p.rubric,
+    model_answer: p.model_answer,
+    source_question_id: p.source_question_id,
+    source: 'lesson_bank',
+    format_version: GATE_BANK_FORMAT_VERSION,
+  };
+}
 
-function systemPrompt(locale: 'he' | 'en'): string {
-  const languageRule =
-    locale === 'he'
-      ? 'All learner-facing text in "stem" and option "text" MUST be natural Hebrew. Keep math expressions in $...$ LaTeX and left-to-right inside the math only.'
-      : 'All learner-facing text in "stem" and option "text" MUST be natural English. Keep math expressions in $...$ LaTeX.';
-
-  return `You are a bilingual (Hebrew + English) math/physics exam author for Israeli students.
-
-Generate multiple-choice (MCQ) questions. Output ONLY valid JSON — no commentary, no markdown fences.
-
-Shape:
-{ "questions": [ { "topic": "<concept_id>", "subject": "<subject>", "difficulty": <0.0–1.0>, "stem": "<question>", "options": [{"key":"A","text":"..."},{"key":"B","text":"..."},{"key":"C","text":"..."},{"key":"D","text":"..."}], "correct": "<A|B|C|D>" } ] }
-
-Rules:
-- ${languageRule}
-- Each question must have EXACTLY 4 options keyed A, B, C, D.
-- "topic" must be one of the supplied concept IDs.
-- "difficulty" is a float from 0.0 (easy) to 1.0 (hard). Use 0.3 for easy, 0.6 for medium, 0.9 for hard.
-- "stem" ≤ 500 chars. Math in $...$ LaTeX.
-- Questions must match the supplied weekly plan concepts. Do not introduce prerequisite warmups or unrelated basics unless that exact concept is supplied.
-- NEVER include names, emails, phones, or addresses.
-- Spread questions across concepts; cover different skills per concept.`;
+function normalizeStored(raw: unknown): StoredWeeklyQuestion | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const q = raw as Record<string, unknown>;
+  if (typeof q.id !== 'string' || typeof q.stem !== 'string' || typeof q.topic !== 'string') {
+    return null;
+  }
+  const kind = (typeof q.kind === 'string' ? q.kind : 'mcq') as GateQuestionKind;
+  const options = Array.isArray(q.options)
+    ? (q.options as { key: string; text: string }[])
+    : [];
+  return {
+    id: q.id,
+    topic: q.topic,
+    subject: typeof q.subject === 'string' ? q.subject : 'math',
+    difficulty: typeof q.difficulty === 'number' ? q.difficulty : 0.6,
+    kind,
+    stem: q.stem,
+    options,
+    correct: typeof q.correct === 'string' ? q.correct : undefined,
+    correct_answer: typeof q.correct_answer === 'string' ? q.correct_answer : null,
+    acceptable_answers: Array.isArray(q.acceptable_answers)
+      ? q.acceptable_answers.filter((a): a is string => typeof a === 'string')
+      : undefined,
+    rubric: typeof q.rubric === 'string' ? q.rubric : null,
+    model_answer: typeof q.model_answer === 'string' ? q.model_answer : null,
+    source_question_id: typeof q.source_question_id === 'string' ? q.source_question_id : undefined,
+    source: q.source === 'lesson_bank' || q.source === 'llm_fallback' ? q.source : 'llm_fallback',
+    format_version:
+      q.format_version === GATE_BANK_FORMAT_VERSION
+        ? GATE_BANK_FORMAT_VERSION
+        : GATE_BANK_FORMAT_VERSION,
+  };
 }
 
 /** Force option keys to A–D and map correct answer to a letter the client can send back. */
@@ -135,94 +175,96 @@ export function normalizeWeeklyMcqOptions(
   return { options: normalizedOptions, correct };
 }
 
-function buildUserPrompt(
-  concepts: Array<{ id: string; name: string; name_he: string | null; subject: string; mastery: number | null; atoms: string[] }>,
+/**
+ * Last-resort fill when a concept has no authored bank items. Demands
+ * open/numeric at exam level — never invents easy 4-option recognition MCQs.
+ */
+async function callLLMFallbackForGaps(
+  missingConcepts: Array<{ id: string; name: string; name_he: string | null; subject: string }>,
+  exemplars: GateBankPick[],
   count: number,
   goal: string | null,
   locale: 'he' | 'en',
-  rotation: number = 0,
-): string {
-  const GOAL_LABELS: Record<string, string> = {
-    bagrut_math_3: '3-unit math (practical, no calculus)',
-    bagrut_math_4: '4-unit math (some calculus, intermediate)',
-    bagrut_math_5: '5-unit math (full calculus, proofs)',
-    bagrut_physics: 'High-school physics (formula-based, multi-step)',
-    calculus1: 'University Calculus 1 (rigorous limits/derivatives/integrals)',
-    linear_algebra: 'Linear Algebra',
-  };
-  const levelNote = goal ? (GOAL_LABELS[goal] ?? goal) : 'general secondary-school level';
+): Promise<StoredWeeklyQuestion[]> {
+  if (missingConcepts.length === 0 || count <= 0) return [];
 
-  const conceptBlocks = concepts.map((c) => {
-    const masteryLabel =
-      c.mastery == null ? 'unmeasured'
-      : c.mastery >= 0.7 ? 'strong (needs challenge)'
-      : c.mastery >= 0.4 ? 'medium (needs consolidation)'
-      : 'weak (needs remediation)';
-    const atomsStr = c.atoms.length > 0 ? c.atoms.slice(0, 10).join(', ') : '(generate from concept)';
-    return `concept_id: ${c.id}\nname_en: ${c.name}\nname_he: ${c.name_he ?? '(none)'}\nsubject: ${c.subject}\nmastery: ${masteryLabel}\nskill_atoms: ${atomsStr}`;
-  }).join('\n\n');
+  const languageRule =
+    locale === 'he'
+      ? 'All learner-facing text MUST be natural Hebrew. Math in $...$ LaTeX LTR.'
+      : 'All learner-facing text MUST be natural English. Math in $...$ LaTeX.';
 
-  // Anti-gaming (ADR-0010 Stream B): on a retake (rotation > 0), demand fresh items
-  // so a learner cannot memorize answer positions from the previous attempt.
-  const rotationNote =
-    rotation > 0
-      ? `\n\nThis is RETAKE #${rotation} of this gate. Generate DIFFERENT questions than a typical first attempt: change the numbers/scenarios, vary which option is correct, and rephrase stems. Same concepts and difficulty, brand-new items.`
-      : '';
+  const exemplarBlock = exemplars.slice(0, 4).map((e) =>
+    `- [${e.kind}/${e.difficulty}] ${e.stem.slice(0, 220)}`,
+  ).join('\n');
 
-  return `Level: ${levelNote}
-Question language: ${locale === 'he' ? 'Hebrew' : 'English'}
+  const system = `You author Israeli Bagrut / university exam questions for a competency GATE.
+${languageRule}
+Output ONLY valid JSON: { "questions": [ ... ] }
+Each question shape:
+{ "topic": "<concept_id>", "subject": "<subject>", "kind": "numeric"|"short_answer"|"open", "difficulty": 0.75-1.0, "stem": "...", "correct_answer": "<for numeric>", "acceptable_answers": ["..."], "rubric": "...", "model_answer": "..." }
+Rules:
+- NEVER generate multiple-choice. Recognition MCQs are forbidden on gates.
+- difficulty MUST be ≥ 0.75 (hard). Multi-step reasoning required.
+- Match the STYLE and DEPTH of the exemplar stems when provided.
+- "topic" must be one of the supplied concept IDs.
+- stem ≤ 800 chars.`;
 
-Generate exactly ${count} MCQ questions covering the following concepts (distribute evenly):
+  const user = `Goal: ${goal ?? 'secondary exam'}
+Language: ${locale}
+Generate exactly ${count} HARD open/numeric/short_answer questions for:
+${missingConcepts.map((c) => `- ${c.id} (${c.name_he ?? c.name})`).join('\n')}
 
-${conceptBlocks}${rotationNote}
+Exemplars from the authored bank (match this level):
+${exemplarBlock || '(none — still produce exam-hard items)'}
 
 Return JSON only.`;
-}
-
-async function callLLMForWeeklyQuiz(
-  concepts: Array<{ id: string; name: string; name_he: string | null; subject: string; mastery: number | null; atoms: string[] }>,
-  count: number,
-  goal: string | null,
-  locale: 'he' | 'en',
-  rotation: number = 0,
-): Promise<StoredWeeklyQuestion[] | null> {
-  const userPrompt = buildUserPrompt(concepts, count, goal, locale, rotation);
 
   const parsed = await llmCompleteJson<{ questions?: unknown }>({
-    system: systemPrompt(locale),
-    messages: [{ role: 'user', content: userPrompt }],
-    maxTokens: 3000,
-    // Nudge temperature up on retakes for more item variety.
-    temperature: rotation > 0 ? 0.7 : 0.4,
+    system,
+    messages: [{ role: 'user', content: user }],
+    maxTokens: 3500,
+    temperature: 0.45,
     timeoutMs: 28_000,
     modelTier: 'primary',
     jsonMode: true,
   });
-  if (!parsed || !Array.isArray(parsed.json.questions)) return null;
+  if (!parsed || !Array.isArray(parsed.json.questions)) return [];
 
-  const validConcepts = new Set(concepts.map((c) => c.id));
-  const validated: StoredWeeklyQuestion[] = [];
-  for (const q of parsed.json.questions) {
-    if (!q || typeof q !== 'object') continue;
-    const { topic, subject, difficulty, stem, options, correct } = q as Record<string, unknown>;
-    if (typeof topic !== 'string' || !validConcepts.has(topic)) continue;
-    if (typeof subject !== 'string') continue;
-    if (typeof stem !== 'string' || stem.trim().length === 0) continue;
-    if (!Array.isArray(options) || options.length < 4) continue;
-    if (typeof correct !== 'string') continue;
-    const normalized = normalizeWeeklyMcqOptions(options, correct);
-    if (!normalized) continue;
-    validated.push({
+  const valid = new Set(missingConcepts.map((c) => c.id));
+  const out: StoredWeeklyQuestion[] = [];
+  for (const raw of parsed.json.questions) {
+    if (!raw || typeof raw !== 'object') continue;
+    const q = raw as Record<string, unknown>;
+    const topic = typeof q.topic === 'string' ? q.topic : '';
+    if (!valid.has(topic)) continue;
+    const kindRaw = typeof q.kind === 'string' ? q.kind : 'open';
+    if (kindRaw !== 'numeric' && kindRaw !== 'short_answer' && kindRaw !== 'open') continue;
+    const stem = typeof q.stem === 'string' ? q.stem.trim() : '';
+    if (stem.length < 12) continue;
+    const subject =
+      typeof q.subject === 'string'
+        ? q.subject
+        : (missingConcepts.find((c) => c.id === topic)?.subject ?? 'math');
+    out.push({
       id: randomUUID(),
       topic,
       subject,
-      difficulty: typeof difficulty === 'number' ? Math.max(0, Math.min(1, difficulty)) : 0.5,
-      stem: stem.trim().slice(0, 600),
-      options: normalized.options,
-      correct: normalized.correct,
+      difficulty: typeof q.difficulty === 'number' ? Math.max(0.75, Math.min(1, q.difficulty)) : 0.85,
+      kind: kindRaw,
+      stem: stem.slice(0, 1200),
+      options: [],
+      correct_answer: typeof q.correct_answer === 'string' ? q.correct_answer : null,
+      acceptable_answers: Array.isArray(q.acceptable_answers)
+        ? q.acceptable_answers.filter((a): a is string => typeof a === 'string')
+        : undefined,
+      rubric: typeof q.rubric === 'string' ? q.rubric : null,
+      model_answer: typeof q.model_answer === 'string' ? q.model_answer : null,
+      source: 'llm_fallback',
+      format_version: GATE_BANK_FORMAT_VERSION,
     });
+    if (out.length >= count) break;
   }
-  return validated.length > 0 ? validated : null;
+  return out;
 }
 
 async function fetchPlanWeekConceptIds(
@@ -249,199 +291,116 @@ async function fetchPlanWeekConceptIds(
   }
 }
 
-// ── Main export ──────────────────────────────────────────────────────────────
-
-/**
- * Generates (or returns cached) a weekly quiz for the given learner.
- *
- * Designed to be called from a server component or API route — no Render
- * dependency, targets <3s (Groq p50 ≈ 1.5s).
- */
-export async function generateWeeklyQuizForUser(
-  userId: string,
-  planId: string,
-  weekNum: number,
-  locale: 'he' | 'en' = 'he',
-): Promise<QuizStartResponse | null> {
-  if (!sql) return null;
-
-  // Determine the Monday of the current ISO week (UTC)
-  const now = new Date();
-  const dow = now.getUTCDay(); // 0 = Sun
-  const daysToMonday = dow === 0 ? 6 : dow - 1;
-  const weekStart = new Date(now);
-  weekStart.setUTCDate(weekStart.getUTCDate() - daysToMonday);
-  const weekStartStr = weekStart.toISOString().slice(0, 10);
-
-  // Ensure the cache table exists (idempotent DDL)
-  try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS weekly_quizzes_ai (
-        id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        user_id     TEXT NOT NULL,
-        week_start  DATE NOT NULL,
-        plan_id     TEXT,
-        week_num    INT,
-        locale      TEXT NOT NULL DEFAULT 'he',
-        questions   JSONB NOT NULL,
-        created_at  TIMESTAMPTZ DEFAULT NOW(),
-        UNIQUE (user_id, week_start)
-      )
-    `;
-    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS locale TEXT NOT NULL DEFAULT 'he'`;
-    // Rotation dimension (ADR-0010 Stream B): each gate retake gets its own cached
-    // quiz so retakes present fresh items. Existing rows default to rotation 0.
-    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS rotation INT NOT NULL DEFAULT 0`;
-    await sql`ALTER TABLE weekly_quizzes_ai DROP CONSTRAINT IF EXISTS weekly_quizzes_ai_user_id_week_start_key`;
-    await sql`DROP INDEX IF EXISTS weekly_quizzes_ai_user_week_plan_locale_idx`;
-    await sql`
-      CREATE UNIQUE INDEX IF NOT EXISTS weekly_quizzes_ai_user_week_plan_locale_rot_idx
-      ON weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, rotation)
-    `;
-  } catch {
-    // If DDL fails (e.g. concurrent creation), fall through — the select will work.
-  }
-
-  // Rotation = number of gate attempts already recorded for this plan week. First
-  // visit → 0; after each submit the count rises, so the learner's next visit lands
-  // on a fresh rotation (new items), while reloads within a rotation stay cached.
-  const rotation = await countGateAttempts(userId, planId, weekNum).catch(() => 0);
-
-  // Return cached quiz for this selected plan week, locale and rotation.
-  try {
-    const cached = (await sql`
-      SELECT id::text, questions
-      FROM weekly_quizzes_ai
-      WHERE user_id = ${userId}
-        AND week_start = ${weekStartStr}::date
-        AND plan_id = ${planId}
-        AND week_num = ${weekNum}
-        AND locale = ${locale}
-        AND rotation = ${rotation}
-      LIMIT 1
-    `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
-
-    if (cached.length > 0 && cached[0]) {
-      const row = cached[0];
-      return buildClientResponse(row.id, planId, weekNum, row.questions, weekStartStr);
-    }
-  } catch {
-    // Cache read failed — proceed to generate.
-  }
-
-  // ── Generate new questions ─────────────────────────────────────────────────
-
-  const [mastery, profile, weekConceptIds] = await Promise.all([
-    getConceptMastery(userId).catch(() => ({} as Record<string, number>)),
-    getLearnerProfile(userId).catch(() => null),
-    fetchPlanWeekConceptIds(userId, planId, weekNum),
-  ]);
-
-  // Weekly quizzes must assess the selected learning-plan week, not generic weak topics.
-  const profileSubjects = new Set(profile?.subjects ?? []);
-  const selectedConcepts = weekConceptIds
-    .filter((id) => Boolean(kgById[id]))
-    .filter((id) => {
-      if (profileSubjects.size === 0) return true;
-      return profileSubjects.has(kgById[id]!.subject);
-    })
-    .slice(0, 8)
-    .map((id) => [id, mastery[id] ?? null] as const);
-  if (selectedConcepts.length === 0) return null;
-
-  const conceptsCtx = selectedConcepts.map(([id, score]) => {
-    const info = kgById[id]!;
-    const titles = resolveConceptTitles(id, {
-      title_en: info.name,
-      title_he: info.name_he,
-    });
-    return {
-      id,
-      name: titles.title_en,
-      name_he: titles.title_he,
-      subject: info.subject,
-      mastery: score,
-      atoms: info.skill_atoms ?? [],
-    };
-  });
-
-  const questionCount = Math.min(10, Math.max(5, selectedConcepts.length + 2));
-  const generated = await callLLMForWeeklyQuiz(
-    conceptsCtx,
-    questionCount,
-    profile?.goal ?? null,
-    locale,
-    rotation,
-  );
-  if (!generated || generated.length === 0) return null;
-
-  // Cache the result (with correct answers stored server-side)
-  let quizId: string = randomUUID();
-  try {
-    const inserted = (await sql`
-      INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, rotation, questions)
-      VALUES (
-        ${userId},
-        ${weekStartStr}::date,
-        ${planId},
-        ${weekNum},
-        ${locale},
-        ${rotation},
-        ${JSON.stringify(generated)}::jsonb
-      )
-      ON CONFLICT (user_id, week_start, plan_id, week_num, locale, rotation) DO NOTHING
-      RETURNING id::text, questions
-    `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
-    if (inserted[0]?.id) {
-      quizId = inserted[0].id;
-      return buildClientResponse(quizId, planId, weekNum, inserted[0].questions, weekStartStr);
-    }
-    const existing = (await sql`
-      SELECT id::text, questions
-      FROM weekly_quizzes_ai
-      WHERE user_id = ${userId}
-        AND week_start = ${weekStartStr}::date
-        AND plan_id = ${planId}
-        AND week_num = ${weekNum}
-        AND locale = ${locale}
-        AND rotation = ${rotation}
-      LIMIT 1
-    `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
-    if (existing[0]?.id) {
-      quizId = existing[0].id;
-      return buildClientResponse(
-        quizId,
-        planId,
-        weekNum,
-        existing[0].questions,
-        weekStartStr,
-      );
-    }
-  } catch {
-    // Cache write failed — still return the freshly-generated questions.
-  }
-
-  return buildClientResponse(quizId, planId, weekNum, generated, weekStartStr);
+function goalToPointsMin(
+  goal: string | null | undefined,
+): '3pt' | '4pt' | '5pt' | 'hs_physics' | 'calc1' | 'la' | null {
+  if (!goal) return null;
+  if (goal.includes('math_3')) return '3pt';
+  if (goal.includes('math_4')) return '4pt';
+  if (goal.includes('math_5')) return '5pt';
+  if (goal === 'linear_algebra') return 'la';
+  if (goal.startsWith('calculus')) return 'calc1';
+  if (goal.includes('physics')) return 'hs_physics';
+  return null;
 }
 
-// ── Grading (pure — unit-tested) ─────────────────────────────────────────────
+// ── Grading ──────────────────────────────────────────────────────────────────
+
+function gradeClosedItem(q: StoredWeeklyQuestion, chosenRaw: string): boolean {
+  const chosen = chosenRaw.trim();
+  if (!chosen) return false;
+  switch (q.kind) {
+    case 'mcq':
+    case 'true_false':
+      return Boolean(q.correct) && chosen.toUpperCase() === q.correct!.toUpperCase();
+    case 'numeric':
+      return Boolean(q.correct_answer) && numericClose(chosen, q.correct_answer!);
+    case 'short_answer': {
+      const accepted = getAcceptedAnswers(q.acceptable_answers, q.correct_answer ?? undefined);
+      return answersMatch(chosen, accepted);
+    }
+    default:
+      return false;
+  }
+}
+
+/**
+ * LLM rubric judge for open/derivation gate items. Fail-closed: ungraded → incorrect
+ * so a flaky judge cannot advance the plan.
+ */
+export async function gradeOpenGateItems(
+  items: Array<{ id: string; stem: string; rubric?: string | null; model_answer?: string | null; response: string }>,
+  locale: 'he' | 'en',
+): Promise<Record<string, boolean>> {
+  const result: Record<string, boolean> = {};
+  if (items.length === 0) return result;
+
+  const system = `You are a strict exam grader for Israeli high-school / university math & physics.
+Grade each learner response against the rubric / model answer.
+Return ONLY JSON: { "grades": [ { "id": "...", "correct": true|false, "brief": "..." } ] }
+Rules:
+- correct=true only if the response shows genuine understanding of the required steps/concepts.
+- Partial credit does NOT count as correct for a competency gate — require a substantially complete answer.
+- Empty, off-topic, or single-word guesses → correct=false.
+- Language: learner may answer in Hebrew or English.`;
+
+  const payload = items.map((it) => ({
+    id: it.id,
+    stem: it.stem.slice(0, 600),
+    rubric: (it.rubric ?? '').slice(0, 500),
+    model_answer: (it.model_answer ?? '').slice(0, 500),
+    response: it.response.slice(0, 2000),
+  }));
+
+  const parsed = await llmCompleteJson<{ grades?: unknown }>({
+    system,
+    messages: [
+      {
+        role: 'user',
+        content: `Locale hint: ${locale}\nGrade these ${payload.length} items:\n${JSON.stringify(payload)}`,
+      },
+    ],
+    maxTokens: 2000,
+    temperature: 0.1,
+    timeoutMs: 25_000,
+    modelTier: 'primary',
+    jsonMode: true,
+  });
+
+  if (!parsed || !Array.isArray(parsed.json.grades)) {
+    for (const it of items) result[it.id] = false;
+    return result;
+  }
+  for (const g of parsed.json.grades) {
+    if (!g || typeof g !== 'object') continue;
+    const row = g as { id?: unknown; correct?: unknown };
+    if (typeof row.id === 'string') result[row.id] = row.correct === true;
+  }
+  for (const it of items) {
+    if (result[it.id] === undefined) result[it.id] = false;
+  }
+  return result;
+}
 
 export function scoreWeeklyQuizAnswers(
   storedQuestions: StoredWeeklyQuestion[],
   answers: WeeklyQuizAnswer[],
+  openGrades: Record<string, boolean> = {},
 ): { score: number; per_topic: Record<string, number>; weak_concepts: string[] } {
-  const answerMap = new Map(
-    answers.map((a) => [a.item_id, a.chosen.trim().toUpperCase()]),
-  );
+  const answerMap = new Map(answers.map((a) => [a.item_id, a.chosen]));
   const topicCorrect: Record<string, number> = {};
   const topicTotal: Record<string, number> = {};
 
   for (const item of storedQuestions) {
     topicTotal[item.topic] = (topicTotal[item.topic] ?? 0) + 1;
     const chosen = answerMap.get(item.id) ?? '';
-    if (chosen && chosen === item.correct.toUpperCase()) {
-      topicCorrect[item.topic] = (topicCorrect[item.topic] ?? 0) + 1;
+    let ok = false;
+    if (item.kind === 'open' || item.kind === 'derivation') {
+      ok = openGrades[item.id] === true;
+    } else {
+      ok = gradeClosedItem(item, chosen);
     }
+    if (ok) topicCorrect[item.topic] = (topicCorrect[item.topic] ?? 0) + 1;
   }
 
   const per_topic: Record<string, number> = {};
@@ -488,6 +447,207 @@ async function updateTopicMasteryFromQuiz(
   `;
 }
 
+function buildClientResponse(
+  quizId: string,
+  planId: string,
+  weekNum: number,
+  storedQuestions: StoredWeeklyQuestion[],
+  weekStartStr: string,
+): QuizStartResponse {
+  const clientQuestions: QuizQuestion[] = storedQuestions.map((q) => ({
+    id: q.id,
+    topic: q.topic,
+    subject: q.subject,
+    difficulty: q.difficulty,
+    stem: q.stem,
+    options: q.options ?? [],
+    kind: q.kind,
+  }));
+
+  // Harder items need more time: ~4 min each, floor 25 min, cap 50.
+  const time_limit_s = Math.min(3000, Math.max(1500, storedQuestions.length * 240));
+
+  return {
+    quiz_id: quizId,
+    week_id: quizId,
+    plan_id: planId,
+    week_number: weekNum,
+    time_limit_s,
+    questions: clientQuestions,
+    started_at: `${weekStartStr}T00:00:00Z`,
+  };
+}
+
+// ── Main export ──────────────────────────────────────────────────────────────
+
+/**
+ * Generates (or returns cached) a weekly quiz for the given learner.
+ * Bank-sourced hard items preferred; legacy easy-MCQ caches are ignored.
+ */
+export async function generateWeeklyQuizForUser(
+  userId: string,
+  planId: string,
+  weekNum: number,
+  locale: 'he' | 'en' = 'he',
+): Promise<QuizStartResponse | null> {
+  if (!sql) return null;
+
+  const now = new Date();
+  const dow = now.getUTCDay();
+  const daysToMonday = dow === 0 ? 6 : dow - 1;
+  const weekStart = new Date(now);
+  weekStart.setUTCDate(weekStart.getUTCDate() - daysToMonday);
+  const weekStartStr = weekStart.toISOString().slice(0, 10);
+
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS weekly_quizzes_ai (
+        id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id     TEXT NOT NULL,
+        week_start  DATE NOT NULL,
+        plan_id     TEXT,
+        week_num    INT,
+        locale      TEXT NOT NULL DEFAULT 'he',
+        questions   JSONB NOT NULL,
+        created_at  TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE (user_id, week_start)
+      )
+    `;
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS locale TEXT NOT NULL DEFAULT 'he'`;
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS rotation INT NOT NULL DEFAULT 0`;
+    await sql`ALTER TABLE weekly_quizzes_ai DROP CONSTRAINT IF EXISTS weekly_quizzes_ai_user_id_week_start_key`;
+    await sql`DROP INDEX IF EXISTS weekly_quizzes_ai_user_week_plan_locale_idx`;
+    await sql`
+      CREATE UNIQUE INDEX IF NOT EXISTS weekly_quizzes_ai_user_week_plan_locale_rot_idx
+      ON weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, rotation)
+    `;
+  } catch {
+    // If DDL fails (e.g. concurrent creation), fall through — the select will work.
+  }
+
+  const rotation = await countGateAttempts(userId, planId, weekNum).catch(() => 0);
+
+  try {
+    const cached = (await sql`
+      SELECT id::text, questions
+      FROM weekly_quizzes_ai
+      WHERE user_id = ${userId}
+        AND week_start = ${weekStartStr}::date
+        AND plan_id = ${planId}
+        AND week_num = ${weekNum}
+        AND locale = ${locale}
+        AND rotation = ${rotation}
+      LIMIT 1
+    `) as Array<{ id: string; questions: unknown }>;
+
+    if (cached.length > 0 && cached[0]) {
+      const rawList = Array.isArray(cached[0].questions) ? cached[0].questions : [];
+      const normalized = rawList.map(normalizeStored).filter((q): q is StoredWeeklyQuestion => q != null);
+      // Ignore pre-bank easy-MCQ caches so learners are not stuck on trivial gates.
+      if (normalized.length > 0 && isBankSourcedGateQuiz(normalized)) {
+        return buildClientResponse(cached[0].id, planId, weekNum, normalized, weekStartStr);
+      }
+    }
+  } catch {
+    // Cache read failed — proceed to generate.
+  }
+
+  const [mastery, profile, weekConceptIds] = await Promise.all([
+    getConceptMastery(userId).catch(() => ({} as Record<string, number>)),
+    getLearnerProfile(userId).catch(() => null),
+    fetchPlanWeekConceptIds(userId, planId, weekNum),
+  ]);
+
+  const profileSubjects = new Set(profile?.subjects ?? []);
+  const selectedConcepts = weekConceptIds
+    .filter((id) => Boolean(kgById[id]))
+    .filter((id) => {
+      if (profileSubjects.size === 0) return true;
+      return profileSubjects.has(kgById[id]!.subject);
+    })
+    .slice(0, 8);
+  if (selectedConcepts.length === 0) return null;
+
+  void mastery; // reserved for future weak-atom steering within the bank
+
+  const questionCount = Math.min(8, Math.max(5, selectedConcepts.length + 1));
+  const pointsMin = goalToPointsMin(profile?.goal ?? null);
+
+  const bankPicks = pickGateQuestionsFromBank({
+    conceptIds: selectedConcepts,
+    locale,
+    count: questionCount,
+    rotation,
+    pointsLevelMin: pointsMin,
+    preferHard: true,
+  });
+
+  let generated: StoredWeeklyQuestion[] = bankPicks.map(fromBankPick);
+
+  // Fill gaps for concepts with no bank coverage.
+  if (generated.length < questionCount) {
+    const covered = new Set(generated.map((q) => q.topic));
+    const missing = selectedConcepts
+      .filter((id) => !covered.has(id))
+      .map((id) => {
+        const info = kgById[id]!;
+        const titles = resolveConceptTitles(id, {
+          title_en: info.name,
+          title_he: info.name_he,
+        });
+        return {
+          id,
+          name: titles.title_en,
+          name_he: titles.title_he,
+          subject: info.subject,
+        };
+      });
+    const need = questionCount - generated.length;
+    if (missing.length > 0 && need > 0) {
+      const fill = await callLLMFallbackForGaps(
+        missing,
+        bankPicks,
+        need,
+        profile?.goal ?? null,
+        locale,
+      );
+      generated = [...generated, ...fill];
+    }
+  }
+
+  if (generated.length === 0) return null;
+
+  let quizId: string = randomUUID();
+  try {
+    const inserted = (await sql`
+      INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, rotation, questions)
+      VALUES (
+        ${userId},
+        ${weekStartStr}::date,
+        ${planId},
+        ${weekNum},
+        ${locale},
+        ${rotation},
+        ${JSON.stringify(generated)}::jsonb
+      )
+      ON CONFLICT (user_id, week_start, plan_id, week_num, locale, rotation) DO UPDATE
+        SET questions = EXCLUDED.questions
+      RETURNING id::text, questions
+    `) as Array<{ id: string; questions: unknown }>;
+    if (inserted[0]?.id) {
+      quizId = inserted[0].id;
+      const stored = (Array.isArray(inserted[0].questions) ? inserted[0].questions : generated)
+        .map(normalizeStored)
+        .filter((q): q is StoredWeeklyQuestion => q != null);
+      return buildClientResponse(quizId, planId, weekNum, stored.length ? stored : generated, weekStartStr);
+    }
+  } catch {
+    // Cache write failed — still return the freshly-generated questions.
+  }
+
+  return buildClientResponse(quizId, planId, weekNum, generated, weekStartStr);
+}
+
 /**
  * Grades a cached weekly quiz on Neon (no Render). Idempotent when already submitted.
  */
@@ -498,6 +658,7 @@ export async function submitWeeklyQuizForUser(
     planId: string;
     weekNum: number;
     answers: WeeklyQuizAnswer[];
+    locale?: 'he' | 'en';
   },
 ): Promise<QuizSubmitResponse | null> {
   if (!sql) return null;
@@ -505,18 +666,19 @@ export async function submitWeeklyQuizForUser(
 
   type QuizRow = {
     id: string;
-    questions: StoredWeeklyQuestion[];
+    questions: unknown;
     submitted_at: string | null;
     score: number | null;
     per_topic: Record<string, number> | null;
     plan_id: string | null;
     week_num: number | null;
+    locale: string | null;
   };
 
   let row: QuizRow | null = null;
   try {
     const rows = (await sql`
-      SELECT id::text, questions, submitted_at, score, per_topic, plan_id, week_num
+      SELECT id::text, questions, submitted_at, score, per_topic, plan_id, week_num, locale
       FROM weekly_quizzes_ai
       WHERE id = ${quizId}::uuid
         AND user_id = ${userId}
@@ -529,13 +691,39 @@ export async function submitWeeklyQuizForUser(
 
   if (!row) return null;
 
-  const stored = Array.isArray(row.questions) ? row.questions : [];
+  const stored = (Array.isArray(row.questions) ? row.questions : [])
+    .map(normalizeStored)
+    .filter((q): q is StoredWeeklyQuestion => q != null);
   if (stored.length === 0) return null;
 
-  const { score, per_topic, weak_concepts } = scoreWeeklyQuizAnswers(stored, args.answers);
+  const answerMap = new Map(args.answers.map((a) => [a.item_id, a.chosen]));
+  const openItems = stored
+    .filter((q) => q.kind === 'open' || q.kind === 'derivation')
+    .map((q) => ({
+      id: q.id,
+      stem: q.stem,
+      rubric: q.rubric,
+      model_answer: q.model_answer,
+      response: (answerMap.get(q.id) ?? '').trim(),
+    }))
+    .filter((it) => it.response.length > 0);
 
-  // Gate pass (ADR-0010): aggregate ≥ threshold AND every frontier-CRITICAL concept
-  // assessed here ≥ the critical floor. Resolve the goal frontier from the profile.
+  const locale = (args.locale ?? row.locale ?? 'he') === 'en' ? 'en' : 'he';
+  const openGrades = await gradeOpenGateItems(openItems, locale);
+
+  // Unanswered open items are incorrect (fail closed).
+  for (const q of stored) {
+    if ((q.kind === 'open' || q.kind === 'derivation') && openGrades[q.id] === undefined) {
+      openGrades[q.id] = false;
+    }
+  }
+
+  const { score, per_topic, weak_concepts } = scoreWeeklyQuizAnswers(
+    stored,
+    args.answers,
+    openGrades,
+  );
+
   const profile = await getLearnerProfile(userId).catch(() => null);
   const goalKeyRaw =
     (profile?.personality_profile as { goal_key?: unknown } | null | undefined)?.goal_key;
@@ -551,7 +739,6 @@ export async function submitWeeklyQuizForUser(
     goalKey,
     passThreshold: GATE_PASS_THRESHOLD,
   });
-  // Critical concepts that fell below the floor are remediation carry-forward.
   const weakForRemediation = Array.from(new Set([...weak_concepts, ...gate.failed_critical]));
 
   try {
@@ -575,12 +762,8 @@ export async function submitWeeklyQuizForUser(
     }
   }
 
-  // Week-gate signal + Tests-archive record (ADR-0009/0010). Best-effort; a missing
-  // test_attempts table degrades to a no-op and never blocks grading.
   const passed = gate.passed;
-  const answerByItem = new Map(
-    args.answers.map((a) => [a.item_id, a.chosen.trim().toUpperCase()]),
-  );
+  const answerByItem = new Map(args.answers.map((a) => [a.item_id, a.chosen]));
   const attemptId = await recordTestAttempt({
     learnerId: userId,
     kind: 'weekly_gate',
@@ -597,7 +780,7 @@ export async function submitWeeklyQuizForUser(
       subject: q.subject,
       stem: q.stem,
       options: q.options,
-      correct: q.correct,
+      correct: q.correct ?? q.correct_answer ?? '',
     })),
     answers: stored.map((q) => ({
       item_id: q.id,
@@ -605,11 +788,6 @@ export async function submitWeeklyQuizForUser(
     })),
   }).catch(() => null);
 
-  // Gate → advance (ADR-0009, soft gate). Passing the weekly gate completes the
-  // ACTIVE plan week so the rolling window re-paces forward toward the goal terminal
-  // on the next `/api/plans/current` load (which calls advanceRollingPlanWindow).
-  // A fail is recorded (for remediation) but never strands the learner — the
-  // time-based advance remains the backstop.
   let planAdvanced = false;
   if (passed) {
     try {
@@ -623,7 +801,7 @@ export async function submitWeeklyQuizForUser(
       `) as Array<{ id: string }>;
       planAdvanced = updated.length > 0;
     } catch {
-      // Best-effort; time-based advance remains the backstop.
+      // Best-effort; soft-override remains the backstop.
     }
   }
 
@@ -637,37 +815,5 @@ export async function submitWeeklyQuizForUser(
     passed,
     pass_threshold: GATE_PASS_THRESHOLD,
     attempt_id: attemptId,
-  };
-}
-
-// ── Helper: strip `correct` before returning to client ───────────────────────
-
-function buildClientResponse(
-  quizId: string,
-  planId: string,
-  weekNum: number,
-  storedQuestions: StoredWeeklyQuestion[],
-  weekStartStr: string,
-): QuizStartResponse {
-  const clientQuestions: QuizQuestion[] = storedQuestions.map((q) => ({
-    id: q.id,
-    topic: q.topic,
-    subject: q.subject,
-    difficulty: q.difficulty,
-    stem: q.stem,
-    options: q.options,
-    // `correct` is intentionally omitted — grading is server-side.
-  }));
-
-  return {
-    quiz_id: quizId,
-    // week_id is used only as the URL path segment in /api/quiz/[week_id]/submit,
-    // where the param is actually unused — so we reuse the quiz_id.
-    week_id: quizId,
-    plan_id: planId,
-    week_number: weekNum,
-    time_limit_s: 1800, // 30 minutes
-    questions: clientQuestions,
-    started_at: `${weekStartStr}T00:00:00Z`,
   };
 }

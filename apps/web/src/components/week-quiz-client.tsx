@@ -47,6 +47,13 @@ const STR = {
     next_up: (cs: string) => ` הבא בתור: ${cs}.`,
     review_concepts: 'מושגים לחזרה:',
     view_in_tests: 'צפייה במבחן בארכיון',
+    write_answer: 'כתבו את הפתרון המלא — שלבים, נימוקים ותשובה סופית.',
+    write_short: 'כתבו את התשובה הקצרה',
+    write_numeric: 'הזינו את התשובה המספרית',
+    kind_open: 'שאלה פתוחה',
+    kind_numeric: 'חישוב',
+    kind_short: 'תשובה קצרה',
+    kind_mcq: 'רב-ברירה',
   },
   en: {
     title: (n: number) => `Week ${n} Quiz`,
@@ -66,6 +73,13 @@ const STR = {
     next_up: (cs: string) => ` Next up: ${cs}.`,
     review_concepts: 'Concepts to review:',
     view_in_tests: 'View this test in your archive',
+    write_answer: 'Write a full solution — steps, reasoning, and final answer.',
+    write_short: 'Enter a short answer',
+    write_numeric: 'Enter the numeric answer',
+    kind_open: 'Open response',
+    kind_numeric: 'Calculation',
+    kind_short: 'Short answer',
+    kind_mcq: 'Multiple choice',
   },
 } as const;
 
@@ -73,6 +87,23 @@ function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function kindLabel(
+  kind: QuizQuestion['kind'] | undefined,
+  t: { kind_open: string; kind_numeric: string; kind_short: string; kind_mcq: string },
+): string {
+  switch (kind) {
+    case 'open':
+    case 'derivation':
+      return t.kind_open;
+    case 'numeric':
+      return t.kind_numeric;
+    case 'short_answer':
+      return t.kind_short;
+    default:
+      return t.kind_mcq;
+  }
 }
 
 function QuizQuestionCard({
@@ -93,15 +124,28 @@ function QuizQuestionCard({
   const t = STR[lang];
   const titles = resolveConceptTitles(question.topic);
   const topicLabel = pickConceptTitle(titles, lang);
+  const kind = question.kind ?? 'mcq';
+  const isClosed =
+    (kind === 'mcq' || kind === 'true_false') &&
+    Array.isArray(question.options) &&
+    question.options.filter((o) => o.text && o.text !== '—').length >= 2;
+  const placeholder =
+    kind === 'numeric' ? t.write_numeric : kind === 'short_answer' ? t.write_short : t.write_answer;
+
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <span className="text-sm text-muted-foreground">
           {t.question_x_of_y(index + 1, total)}
         </span>
-        <Badge variant="outline" className="text-xs" dir={lang === 'he' ? 'rtl' : 'ltr'}>
-          {topicLabel}
-        </Badge>
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <Badge variant="secondary" className="text-xs">
+            {kindLabel(kind, t)}
+          </Badge>
+          <Badge variant="outline" className="text-xs" dir={lang === 'he' ? 'rtl' : 'ltr'}>
+            {topicLabel}
+          </Badge>
+        </div>
       </div>
 
       <div className="rounded-xl bg-surface-1/40 p-4 text-lg font-medium leading-relaxed">
@@ -113,36 +157,56 @@ function QuizQuestionCard({
         </MarkdownMath>
       </div>
 
-      <div className="space-y-2">
-        {question.options.map((opt) => (
-          <button
-            key={opt.key}
-            onClick={() => onChoose(opt.key)}
-            className={cn(
-              'flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-start transition-all',
-              chosen === opt.key
-                ? 'border-primary bg-primary/10 font-medium text-primary'
-                : 'border-border bg-surface-1/40 hover:border-primary/40 hover:bg-surface-2/60',
-            )}
-          >
-            <span
-              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted font-mono text-xs font-semibold"
-              dir="ltr"
-              aria-hidden
-            >
-              {opt.key}
-            </span>
-            <span className="min-w-0 flex-1">
-              <MarkdownMath
-                className="prose-p:my-0 prose-p:leading-relaxed"
-                dir={lang === 'he' ? 'rtl' : 'ltr'}
+      {isClosed ? (
+        <div className="space-y-2">
+          {question.options
+            .filter((opt) => opt.text && opt.text !== '—')
+            .map((opt) => (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => onChoose(opt.key)}
+                className={cn(
+                  'flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-start transition-all',
+                  chosen === opt.key
+                    ? 'border-primary bg-primary/10 font-medium text-primary'
+                    : 'border-border bg-surface-1/40 hover:border-primary/40 hover:bg-surface-2/60',
+                )}
               >
-                {opt.text}
-              </MarkdownMath>
-            </span>
-          </button>
-        ))}
-      </div>
+                <span
+                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted font-mono text-xs font-semibold"
+                  dir="ltr"
+                  aria-hidden
+                >
+                  {opt.key}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <MarkdownMath
+                    className="prose-p:my-0 prose-p:leading-relaxed"
+                    dir={lang === 'he' ? 'rtl' : 'ltr'}
+                  >
+                    {opt.text}
+                  </MarkdownMath>
+                </span>
+              </button>
+            ))}
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <label className="text-sm text-muted-foreground" htmlFor={`gate-ans-${question.id}`}>
+            {placeholder}
+          </label>
+          <textarea
+            id={`gate-ans-${question.id}`}
+            value={chosen ?? ''}
+            onChange={(e) => onChoose(e.target.value)}
+            rows={kind === 'numeric' || kind === 'short_answer' ? 2 : 8}
+            dir={lang === 'he' ? 'rtl' : 'ltr'}
+            className="w-full resize-y rounded-xl border border-border bg-surface-1/40 px-4 py-3 text-base leading-relaxed outline-none focus:border-primary"
+            placeholder={placeholder}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -299,6 +363,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
             plan_id: planId,
             week_num: weekNum,
             answers: answerList,
+            locale: lang,
             token,
           }),
         });
@@ -316,7 +381,7 @@ export function WeekQuizClient({ quiz, planId, weekNum, token }: Props) {
         setSubmitting(false);
       }
     },
-    [answers, quiz, planId, weekNum, token, submitting, t],
+    [answers, quiz, planId, weekNum, token, submitting, t, lang],
   );
 
   // Countdown timer

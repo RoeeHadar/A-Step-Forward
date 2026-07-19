@@ -15,6 +15,7 @@ export async function POST(
     plan_id: string;
     week_num: number;
     answers: { item_id: string; chosen: string; time_spent_s: number | null }[];
+    locale?: 'he' | 'en';
     token?: string;
   };
 
@@ -26,6 +27,7 @@ export async function POST(
     planId: body.plan_id,
     weekNum: body.week_num,
     answers: body.answers ?? [],
+    locale: body.locale === 'en' ? 'en' : 'he',
   });
 
   if (!result) {
