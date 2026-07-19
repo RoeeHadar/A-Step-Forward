@@ -631,6 +631,23 @@ $k=9\times10^9$ with charges as exact `10**-6` rationals (no float drift):
 - `capacitors_dielectrics` — $Q=CV$, $C=Q/V$, $E=\tfrac12CV^2$, parallel/series
   combination, dielectric effect.
 
+## Batch AA — shipped (physics magnetism/optics/2D motion)
+
+Fifth physics cluster to 15 verified items each (spread 5/6/4, 4 kinds), all
+CAS-verified, 0 rejections, lint 0/207:
+
+- `magnetism` — $F=BIL$, $F=qvB$, $B=F/(IL)$, tesla unit, stationary-charge case.
+- `electromagnetic_induction` — $\varepsilon=BLv$, $\varepsilon=\Delta\Phi/\Delta t$,
+  $\varepsilon=N\Delta\Phi/\Delta t$, $\Phi=BA$, Faraday/Lenz, weber unit.
+- `optics_geometric` — thin lens/mirror $\tfrac1f=\tfrac1{d_o}+\tfrac1{d_i}$,
+  magnification $m=-d_i/d_o$, plane-mirror symmetry.
+- `kinematics_2d` — independent H/V motion, $x=v_xt$, $t=\sqrt{2h/g}$, resultant
+  speed, $H=v_y^2/2g$, component $v\cos\theta$.
+- `vectors_kinematics_2d_3d` — 2D/3D magnitude, dot product, components,
+  scalar vs vector, perpendicular resultant.
+- `collisions` — $p=mv$, momentum conservation, perfectly-inelastic common
+  velocity, impulse $J=m\Delta v$, elastic-KE fact.
+
 ## Batch V — shipped (math corpus complete)
 
 The final six thin math lessons expanded to 15 verified items each (spread 5/6/4,
