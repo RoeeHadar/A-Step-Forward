@@ -4078,9 +4078,26 @@ export interface LearnerMemorySnapshot {
   activePlanGoal: string | null;
   activeWeekConceptIds: string[];
   recentChatTurns: LearnerMemoryChatTurn[];
+  /** Most recent memory write (note, persona rebuild, or chat turn). Null when empty. */
+  lastUpdated: string | null;
 }
 
 const MEMORY_TAB_AGENTS = ['tutor', 'mentor', 'coach', 'reviewer'] as const;
+
+/** Latest of a set of ISO timestamps, ignoring null/invalid. */
+function latestTimestamp(values: Array<string | null | undefined>): string | null {
+  let bestMs = -Infinity;
+  let best: string | null = null;
+  for (const v of values) {
+    if (!v) continue;
+    const ms = new Date(v).getTime();
+    if (Number.isFinite(ms) && ms > bestMs) {
+      bestMs = ms;
+      best = v;
+    }
+  }
+  return best;
+}
 
 function emptyMemorySnapshot(): LearnerMemorySnapshot {
   const notesByAgent: Record<string, LearnerMemoryNote[]> = {};
@@ -4095,6 +4112,7 @@ function emptyMemorySnapshot(): LearnerMemorySnapshot {
     activePlanGoal: null,
     activeWeekConceptIds: [],
     recentChatTurns: [],
+    lastUpdated: null,
   };
 }
 
@@ -4162,6 +4180,13 @@ export async function getLearnerMemorySnapshot(
     const activeWeekConceptIds =
       activeWeek?.concepts.map((c) => c.concept_id) ?? [];
 
+    const chatTurns = chatTurnRows as LearnerMemoryChatTurn[];
+    const lastUpdated = latestTimestamp([
+      persona?.updated_at ?? null,
+      chatTurns[0]?.created_at ?? null,
+      ...notes.map((n) => n.created_at),
+    ]);
+
     return {
       profile: profile
         ? {
@@ -4187,7 +4212,8 @@ export async function getLearnerMemorySnapshot(
       strongConcepts,
       activePlanGoal: plan?.goal ?? null,
       activeWeekConceptIds,
-      recentChatTurns: (chatTurnRows as LearnerMemoryChatTurn[]).reverse(),
+      recentChatTurns: chatTurns.reverse(),
+      lastUpdated,
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

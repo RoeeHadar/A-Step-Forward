@@ -13,6 +13,15 @@ export function MemoryPageContent({ snapshot }: { snapshot: LearnerMemorySnapsho
   const router = useRouter();
   const refreshLabel = locale === 'he' ? 'רענון' : 'Refresh';
 
+  const lastUpdatedText = snapshot.lastUpdated
+    ? new Date(snapshot.lastUpdated).toLocaleString(locale === 'he' ? 'he-IL' : 'en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      })
+    : null;
+  const lastUpdatedLabel = locale === 'he' ? 'עודכן לאחרונה' : 'Last updated';
+  const noMemoryYet = locale === 'he' ? 'עדיין אין זיכרונות שמורות' : 'No memories saved yet';
+
   return (
     <div>
       <PageHeader
@@ -26,6 +35,9 @@ export function MemoryPageContent({ snapshot }: { snapshot: LearnerMemorySnapsho
           </Button>
         }
       />
+      <p className="mb-4 text-sm text-muted-foreground" aria-live="polite">
+        {lastUpdatedText ? `${lastUpdatedLabel}: ${lastUpdatedText}` : noMemoryYet}
+      </p>
       <MemoryOverview snapshot={snapshot} />
     </div>
   );

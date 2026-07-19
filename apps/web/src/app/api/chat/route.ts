@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
+import { after } from 'next/server';
 import { cookies } from 'next/headers';
 import { agentNameSchema } from '@asf/schemas/agents';
 import { logger } from '@/lib/logger';
@@ -188,15 +189,20 @@ export async function POST(req: Request) {
     sessionId,
   );
 
-  void persistThrottledChatObservation(userId, agent, lastMessage, topic).catch((err) =>
-    logger.warn('chat: persistChatObservation failed', { err: String(err) }),
+  // Memory durability: run the note write via `after()` so Vercel keeps the
+  // function alive until it lands. A bare `void` here can be killed when the
+  // streamed response closes — a prime cause of "Memory isn't updating".
+  after(() =>
+    persistThrottledChatObservation(userId, agent, lastMessage, topic).catch((err) =>
+      logger.warn('chat: persistChatObservation failed', { err: String(err) }),
+    ),
   );
 
   // Coach: when learner says drills are too easy, mark due atoms mastered so FSRS stops repeating basics.
   if (agent === 'coach' && lastMessage.trim().length > 10) {
     const difficultySignal = detectCoachDifficultySignal(lastMessage);
     if (difficultySignal === 'too_easy' || difficultySignal === 'harder') {
-      void (async () => {
+      after(async () => {
         try {
           const profile = await getLearnerProfile(userId);
           const plan = await getCurrentPlan(userId).catch(() => null);
@@ -213,7 +219,7 @@ export async function POST(req: Request) {
         } catch (err) {
           logger.warn('coach markAtomPracticed failed', { err: String(err) });
         }
-      })();
+      });
     }
   }
 

@@ -3,6 +3,8 @@ import { MemoryPageContent } from '@/components/memory-page-content';
 import { getAuthContext } from '@/lib/auth';
 import { dbConfigured, getLearnerMemorySnapshot } from '@/lib/neon-db';
 
+export const dynamic = 'force-dynamic';
+
 export default async function MemoryPage() {
   const auth = await getAuthContext();
   if (!auth) redirect('/sign-in');
@@ -24,6 +26,7 @@ export default async function MemoryPage() {
           activePlanGoal: null,
           activeWeekConceptIds: [],
           recentChatTurns: [],
+          lastUpdated: null,
         }
       }
     />
