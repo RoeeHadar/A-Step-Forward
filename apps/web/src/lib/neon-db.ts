@@ -20,6 +20,7 @@ import {
   getFrontier,
   hasFrontier,
   MASTERY_THRESHOLD,
+  selectNextConcepts,
   type PaceStatus,
   type PacingResult,
 } from './plan-pacing';
@@ -1660,9 +1661,16 @@ export async function advanceRollingPlanWindow(
   let nextConcepts: string[];
   if (pacing) {
     const weeklyLoad = Math.max(1, pacing.weekly_load);
-    nextConcepts = pacing.remaining_ordered
-      .filter((id) => !usedConcepts.has(id))
-      .slice(0, weeklyLoad);
+    // Anchored to the learner's current level (deepest used/mastered concept) so we
+    // progress forward toward the terminal instead of regressing to foundations.
+    nextConcepts = selectNextConcepts({
+      goalKey: pacing.goal_key,
+      masteryScores: mastery,
+      engagedConceptIds: usedConcepts,
+      excludeConceptIds: usedConcepts,
+      weakConceptIds: sanitizeConceptIds(profile.weak_concepts ?? []),
+      limit: weeklyLoad,
+    });
     if (nextConcepts.length === 0) {
       // Core frontier cleared → pull the stretch frontier (deepen / go one level up).
       const frontier = getFrontier(pacing.goal_key);

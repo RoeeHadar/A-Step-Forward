@@ -10,6 +10,9 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { deriveOnboardingSeedScores } from '@/lib/onboarding-self-score';
+// plan-pacing imports ONLY the generated frontier manifest (no kg-data / neon-db /
+// buildLearningPlan), so it is safe on the onboarding critical path.
+import { hasFrontier, selectNextConcepts } from '@/lib/plan-pacing';
 
 neonConfig.fetchConnectionCache = true;
 
@@ -61,6 +64,20 @@ function chunkWeeks(concepts: string[]): string[][] {
   return weeks;
 }
 
+/** Self-rating (1–10) → mastery (0.1–0.9). Mirrors the concept_mastery seeding below. */
+function seedScoreToMastery(score: number): number {
+  const clamped = Math.max(1, Math.min(10, score));
+  return 0.1 + ((clamped - 1) * 0.8) / 9;
+}
+
+function resolveGoalKey(payload: OnboardingBootstrapPayload): string | null {
+  const fromProfile = (payload.personality_profile as { goal_key?: unknown } | null | undefined)
+    ?.goal_key;
+  if (typeof fromProfile === 'string' && hasFrontier(fromProfile)) return fromProfile;
+  if (typeof payload.goal === 'string' && hasFrontier(payload.goal)) return payload.goal;
+  return null;
+}
+
 function pickConceptIds(payload: OnboardingBootstrapPayload): string[] {
   const scores = deriveOnboardingSeedScores({
     goal: payload.goal,
@@ -71,6 +88,32 @@ function pickConceptIds(payload: OnboardingBootstrapPayload): string[] {
     personality_profile: payload.personality_profile,
     adult_learner: payload.adult_learner,
   });
+
+  // Frontier-driven first plan (ADR-0009): start the learner on their goal frontier,
+  // ANCHORED to their self-rated level so an advanced-goal learner is not dragged
+  // back through elementary foundations. Self-rated concepts form the engaged set
+  // (their entry level); low-rated ones are remediation-eligible; already-strong ones
+  // are skipped. This makes the plan end-to-end from day one and consistent with the
+  // living rolling-window re-pace.
+  const goalKey = resolveGoalKey(payload);
+  if (goalKey && hasFrontier(goalKey)) {
+    const masteryScores: Record<string, number> = {};
+    const weak: string[] = [];
+    for (const [id, raw] of Object.entries(scores)) {
+      const m = seedScoreToMastery(raw);
+      masteryScores[id] = m;
+      if (m < 0.4) weak.push(id);
+    }
+    const picked = selectNextConcepts({
+      goalKey,
+      masteryScores,
+      engagedConceptIds: Object.keys(scores),
+      weakConceptIds: weak,
+      limit: ROLLING_WEEKS * CONCEPTS_PER_WEEK,
+    });
+    if (picked.length > 0) return picked;
+  }
+
   const ids = Object.keys(scores);
   if (ids.length > 0) return ids.slice(0, ROLLING_WEEKS * CONCEPTS_PER_WEEK);
   // Absolute last resort — never return empty.

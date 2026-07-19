@@ -228,3 +228,78 @@ export function computePacing(inputs: PacingInputs): PacingResult | null {
     remaining_ordered,
   };
 }
+
+export interface SelectNextConceptsInput {
+  goalKey: string;
+  /** concept_id → mastery score (0..1). */
+  masteryScores?: Record<string, number> | null;
+  /** Explicit mastered set (takes precedence over masteryScores). */
+  masteredConceptIds?: Iterable<string> | null;
+  /**
+   * Concepts the learner has already engaged (scheduled / self-rated / seen).
+   * Their max frontier depth sets the "anchor" so selection progresses forward
+   * from the learner's level instead of regressing to far-below foundations.
+   */
+  engagedConceptIds?: Iterable<string> | null;
+  /** Concepts to never (re)schedule (e.g. already in the plan). */
+  excludeConceptIds?: Iterable<string> | null;
+  /** Weak concepts allowed BELOW the anchor for remediation. */
+  weakConceptIds?: Iterable<string> | null;
+  /** How many to return. */
+  limit: number;
+  /** Depth slack allowed below the anchor (default 1). */
+  anchorLookback?: number;
+  threshold?: number;
+}
+
+/**
+ * Anchored next-slice selector over the goal frontier (ADR-0009).
+ *
+ * The frontier core spans every prerequisite down to `arithmetic`, so naive
+ * "unmastered, foundations-first" selection would drag an advanced-goal learner
+ * back through elementary material. This selector ANCHORS to the deepest concept
+ * the learner has already engaged (self-rated / scheduled / mastered) and only
+ * pulls concepts at or beyond that depth (minus a small lookback), so the plan
+ * progresses forward toward the goal terminal from the learner's actual level.
+ * Explicitly weak concepts are still allowed below the anchor for remediation.
+ *
+ * Beginners (no engagement signal) anchor at depth 0 → start at foundations, which
+ * is the safe default. Pure + dependency-light (manifest only).
+ */
+export function selectNextConcepts(input: SelectNextConceptsInput): string[] {
+  const frontier = getFrontier(input.goalKey);
+  if (!frontier) return [];
+  const threshold = input.threshold ?? MASTERY_THRESHOLD;
+
+  const mastered = input.masteredConceptIds
+    ? new Set(input.masteredConceptIds)
+    : masteredSetFromScores(input.masteryScores, threshold);
+  const excluded = new Set(input.excludeConceptIds ?? []);
+  const weak = new Set(input.weakConceptIds ?? []);
+
+  // Engaged = concepts the learner has a signal for (self-rated / scheduled / mastered).
+  // Its max frontier depth is the "anchor": the learner's working level.
+  const engaged = new Set<string>(input.engagedConceptIds ?? []);
+  for (const id of mastered) engaged.add(id);
+  let anchorDepth = 0;
+  for (const entry of frontier.core) {
+    if (engaged.has(entry.id) && entry.depth > anchorDepth) anchorDepth = entry.depth;
+  }
+  const lookback = input.anchorLookback ?? 0;
+  const minDepth = Math.max(0, anchorDepth - lookback);
+
+  // Schedule a concept when it is FORWARD of the anchor (progress toward the
+  // terminal), OR is in the learner's own engaged set (their entry concepts), OR
+  // is explicitly weak (remediation). Never-engaged concepts far BELOW the anchor
+  // are presumed known and skipped — this prevents dragging an advanced-goal
+  // learner back through elementary foundations.
+  const out: string[] = [];
+  for (const entry of frontier.core) {
+    if (out.length >= input.limit) break;
+    if (excluded.has(entry.id) || mastered.has(entry.id)) continue;
+    if (entry.depth >= minDepth || engaged.has(entry.id) || weak.has(entry.id)) {
+      out.push(entry.id);
+    }
+  }
+  return out;
+}

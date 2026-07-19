@@ -7,11 +7,18 @@ import {
   hasFrontier,
   listGoalKeys,
   masteredSetFromScores,
+  selectNextConcepts,
   sessionMinutes,
   weeksUntil,
 } from './plan-pacing';
 
 const GOAL = 'bagrut_math_5';
+
+function depthOf(goalKey: string): Map<string, number> {
+  const m = new Map<string, number>();
+  for (const c of getFrontier(goalKey)!.core) m.set(c.id, c.depth);
+  return m;
+}
 
 describe('plan-pacing: frontier access', () => {
   it('exposes every derived goal frontier', () => {
@@ -166,5 +173,86 @@ describe('plan-pacing: computePacing', () => {
       hoursPerWeek: 6,
     })!;
     expect(p.mastered_in_frontier).toBe(3);
+  });
+});
+
+describe('plan-pacing: selectNextConcepts (anchored)', () => {
+  it('beginner (no engagement) starts foundations-first from depth 0', () => {
+    const picked = selectNextConcepts({ goalKey: GOAL, limit: 4 });
+    const core = getFrontier(GOAL)!.core;
+    expect(picked).toEqual(core.slice(0, 4).map((c) => c.id));
+  });
+
+  it('returns [] for an unknown goal', () => {
+    expect(selectNextConcepts({ goalKey: 'nope', limit: 4 })).toEqual([]);
+  });
+
+  it('excludes mastered and already-used concepts', () => {
+    const core = getFrontier(GOAL)!.core;
+    const mastered = core[0]!.id;
+    const used = core[1]!.id;
+    const picked = selectNextConcepts({
+      goalKey: GOAL,
+      masteryScores: { [mastered]: 0.95 },
+      excludeConceptIds: [used],
+      limit: 6,
+    });
+    expect(picked).not.toContain(mastered);
+    expect(picked).not.toContain(used);
+  });
+
+  it('anchors to the learner level — does NOT regress to far-below foundations', () => {
+    const depth = depthOf(GOAL);
+    const core = getFrontier(GOAL)!.core;
+    // Anchor at a mid-depth concept; exclude it so we test forward-only selection.
+    const anchor = core.find((c) => c.depth >= 2);
+    expect(anchor, 'frontier should have a depth>=2 concept').toBeTruthy();
+    const shallow = core.filter((c) => c.depth === 0).map((c) => c.id);
+    expect(shallow.length).toBeGreaterThan(0);
+
+    const picked = selectNextConcepts({
+      goalKey: GOAL,
+      engagedConceptIds: [anchor!.id],
+      excludeConceptIds: [anchor!.id],
+      limit: 8,
+    });
+    // Nothing below the anchor depth (the presumed-known foundations) is scheduled.
+    for (const id of picked) {
+      expect(depth.get(id)!).toBeGreaterThanOrEqual(anchor!.depth);
+    }
+    // Concretely, a depth-0 foundation is NOT dragged in.
+    for (const s of shallow) expect(picked).not.toContain(s);
+  });
+
+  it('still surfaces an explicitly weak below-anchor concept (remediation)', () => {
+    const core = getFrontier(GOAL)!.core;
+    const anchor = core.find((c) => c.depth >= 3)!;
+    const weakLow = core.find((c) => c.depth === 0)!.id;
+    const picked = selectNextConcepts({
+      goalKey: GOAL,
+      engagedConceptIds: [anchor.id],
+      excludeConceptIds: [anchor.id],
+      weakConceptIds: [weakLow],
+      limit: 8,
+    });
+    expect(picked).toContain(weakLow);
+  });
+
+  it('progresses forward: engaged early concepts yield deeper next concepts', () => {
+    const core = getFrontier(GOAL)!.core;
+    const depth = depthOf(GOAL);
+    const firstTwo = core.slice(0, 2).map((c) => c.id);
+    const picked = selectNextConcepts({
+      goalKey: GOAL,
+      engagedConceptIds: firstTwo,
+      excludeConceptIds: firstTwo,
+      limit: 3,
+    });
+    expect(picked.length).toBeGreaterThan(0);
+    // None of the returned concepts are the already-used ones.
+    for (const id of firstTwo) expect(picked).not.toContain(id);
+    // All returned concepts are at/after the anchor depth.
+    const anchorDepth = Math.max(...firstTwo.map((id) => depth.get(id)!));
+    for (const id of picked) expect(depth.get(id)!).toBeGreaterThanOrEqual(anchorDepth);
   });
 });
