@@ -179,13 +179,47 @@ Four new **verified generators** for the 3pt probability & statistics foundation
 
 All audits + seed dry-run (207/207) green.
 
+## Batch H — shipped
+
+The **entire 5pt calculus + advanced-topic core** expanded from 10-11 items to
+**15 CAS-verified items each** (11 lessons, 165 items, 0 rejections):
+
+- `limits_5pt` — substitution, indeterminate factoring, special limits
+  (`sin(3x)/x`, `(1-cos x)/x²`, `tan x/x`), limits at infinity, removable
+  discontinuity, one-sided non-existence.
+- `derivatives_trig_exp` — power/product/chain on `sin`, `cos`, `tan`, `eˣ`,
+  `x·eˣ`, `eˣ·sin x`, derivative-at-a-point.
+- `derivatives_applications` — tangent lines, monotonicity, concavity, critical
+  points, kinematics (v, a from s).
+- `definite_integrals` — polynomial/linear/exponential/log integrals over
+  `[a,b]`, mean value of a function.
+- `function_analysis_5pt` — full investigation (extrema classification via
+  `f''`, inflection points, increase/decrease intervals).
+- `integrals_applications` — area under a curve, area between curves, volume of
+  revolution (disk method, `_pl(..., "5pt")`-gated).
+- `sequences_5pt` — arithmetic/geometric nth term & sums, infinite convergent
+  series, term-index solving.
+- `exponential_logarithmic` — log evaluation, product/quotient rules, exp
+  equations (common base + `y = aˣ` substitution), domain checks.
+- `complex_numbers_5pt` — modulus, conjugate, arithmetic, powers of `i`, roots
+  of negatives.
+- `analytic_geometry_5pt` — distance, slope, perpendicular slope, circle
+  equation (standard + complete-the-square), midpoint, diameter→radius.
+- `trigonometric_equations` — special-angle values, `sin/cos/tan` equation
+  solving, solution counting on `[0, 2π)`, Pythagorean/supplementary identities.
+
+All new items are pure SymPy-CAS-verifiable (numeric, MCQ-with-predicate, or
+`open_worked` with a CAS check). Purged the 11 concepts' stale content-addressed
+store rows before rebaking. Strict + math + depth + track-scope audits and the
+207/207 seed dry-run all green; difficulty spread 4-5 kinds per lesson.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **24 math lessons** (Batches B, D, E, F, G +
+Verified 15+ item banks now cover **35 math lessons** (Batches B, D, E, F, G, H +
 exponents): the entire 3pt/4pt algebra & functions foundation, sequences, the core
-geometry/trig foundation, and the 3pt probability & statistics foundation.
-Remaining thin lessons (8 questions): the 5pt calculus core (11 each), advanced
-4pt/5pt geometry/trig/probability, and university/makhina strands.
+geometry/trig foundation, the 3pt probability & statistics foundation, **and the
+full 5pt calculus + advanced-topic core**. Remaining thin lessons (8 questions):
+advanced 4pt/5pt geometry/trig/probability, and university/makhina strands.
 
 ## Pending (not yet done this window)
 
