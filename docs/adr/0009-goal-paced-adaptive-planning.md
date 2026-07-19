@@ -246,7 +246,20 @@ Consolidated defaults so nothing is left hand-wavy. All are reversible engineeri
     frontier slice would start advanced-goal learners at `arithmetic`. Requires
     goal-level baseline mastery seeding (curriculum decision) before wiring —
     tracked for a later stream.
-- Streams 3b–8: pending.
+- **Stream 3c (agent trajectory-awareness) — done (2026-07-19):**
+  - Chat route injects a "Goal pacing" block into the internal context for
+    tutor / coach / curriculum_designer / progress_analyzer: goal readiness %,
+    time-to-goal, pace status, and a status-specific framing hint (behind →
+    protect core + morale; ahead → offer stretch). Reuses the mastery already
+    loaded on the chat path (no extra DB call). Read-only framing.
+  - Verified: typecheck + lint + production build green.
+- Deferred / owner-gated (asked, user delegated to judgment):
+  - **First-plan SELECTION** left on current goal-keyed entry points (no
+    onboarding regression); frontier drives the agent + overlay layers instead.
+  - **Week-gates + Tests archive + planning-state persistence** need a
+    production Neon migration — not run autonomously. Migration scripts + code
+    to be authored for owner execution when prioritized.
+- Streams 3b (gates), 4 (tests archive), 5 (schema), 6 (evals): pending.
 
 ## Related
 

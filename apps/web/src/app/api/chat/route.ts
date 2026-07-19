@@ -13,6 +13,7 @@ import {
   getDueReviews,
   markAtomPracticed,
   getCurrentPlan,
+  computePlanPacing,
   saveWellbeingPlanBias,
   setWellbeingChatTrigger,
   evaluateWellbeingSignals,
@@ -990,6 +991,26 @@ async function buildContextPrompt(
   ) {
     const goalKey =
       (profile?.personality_profile as { goal_key?: string } | null)?.goal_key ?? null;
+
+    // Goal-pacing signal (ADR-0009): makes the agent trajectory-aware — how ready
+    // the learner is for the goal, how much time is left, and whether they are on
+    // pace. Read-only; framing only. Null when the goal has no derived frontier.
+    const pacing = computePlanPacing(profile, mastery);
+    if (pacing) {
+      const readinessPct = Math.round(pacing.goal_readiness * 100);
+      const mastered = pacing.frontier_size - pacing.remaining_scope;
+      const paceHint =
+        pacing.status === 'at_risk'
+          ? 'behind pace — prioritize goal-critical concepts, keep scope tight, protect morale'
+          : pacing.status === 'ahead'
+            ? 'ahead of pace — you may offer a stretch concept or a deeper challenge'
+            : 'on track — maintain a steady, sustainable pace';
+      context += `\n\n## Goal pacing (internal — adaptive framing only, do not read out verbatim)`;
+      context += `\n- Goal readiness: ${readinessPct}% (${mastered}/${pacing.frontier_size} goal concepts)`;
+      context += `\n- Time to goal: ~${pacing.weeks_left} week(s); pace: ${pacing.status} (need ${pacing.required_velocity.toFixed(1)} vs capacity ${pacing.capacity}/wk)`;
+      context += `\n- Guidance: ${paceHint}`;
+    }
+
     const coachExamDays =
       agent === 'coach' && profile
         ? coachDaysUntilExam(profile.next_test_date, profile.final_goal_date)
