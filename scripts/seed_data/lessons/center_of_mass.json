@@ -268,217 +268,339 @@
     ],
     "tutor_pacing_hint": "Start with two-particle formula, build to three particles and composite bodies. Then do conservation for explosions.",
     "skill_atoms_unlocked": [
-      "center_of_mass_compute",
-      "cm_conservation",
-      "center_of_mass_symmetry",
-      "cutout_method"
+      "center_of_mass"
     ]
   },
   "questions": [
     {
-      "id": "q1",
-      "kind": "numeric",
-      "difficulty": "medium",
-      "skill_atoms": [
-        "center_of_mass_compute"
-      ],
-      "stem_en": "$m_1 = 2\\;\\text{kg}$ at $x = 0$ and $m_2 = 8\\;\\text{kg}$ at $x = 10\\;\\text{m}$. Find $x_{\\text{cm}}$ in meters.",
-      "stem_he": "$m_1 = 2\\;\\text{kg}$ ב-$x = 0$, $m_2 = 8\\;\\text{kg}$ ב-$x = 10$. מצא $x_{\\text{cm}}$ במטרים.",
-      "answer_payload": {
-        "value": 8,
-        "tolerance": 0.1,
-        "unit_en": "m",
-        "unit_he": "m"
-      },
-      "explanation_en": "**Why this is correct:** Apply the discrete CM formula with two masses on the x-axis:\n$$x_{\\text{cm}} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2} = \\frac{2(0) + 8(10)}{10} = \\frac{80}{10} = 8\\;\\text{m}$$\n\n**How to think about it:** The CM is a mass-weighted average. With $m_2 = 8\\;\\text{kg}$ four times heavier than $m_1 = 2\\;\\text{kg}$, the CM sits much closer to $x = 10$ than to $x = 0$.\n\n**Common slip:** Averaging positions without weights ($(0+10)/2 = 5$ m) instead of using masses. Another error: forgetting to divide by total mass $M = 10\\;\\text{kg}$.\n\n**Exam tip:** Sanity-check: CM must lie between 0 and 10 m, pulled toward the 8 kg mass. Answer $8$ m satisfies both conditions.",
-      "explanation_he": "**למה זה נכון:** יישמו נוסחת CM בדידה עם שתי מסות על ציר x:\n$$x_{\\text{cm}} = \\frac{2(0) + 8(10)}{10} = \\frac{80}{10} = 8\\;\\text{m}$$\n\n**איך לחשוב:** CM הוא ממוצע משוקלל. עם $m_2 = 8\\;\\text{kg}$ כפול 4 מ-$m_1 = 2\\;\\text{kg}$, CM קרוב הרבה יותר ל-$x = 10$ מאשר ל-$x = 0$.\n\n**טעות נפוצה:** ממוצע מיקומים בלי משקלות ($(0+10)/2 = 5$ m). גם שכחת חלוקה במסה כוללת $M = 10\\;\\text{kg}$.\n\n**טיפ לבחינה:** בדיקת הגיון: CM בין 0 ל-10 m, נמשך לכיוון 8 kg. תשובה $8$ m מתאימה.\n\n**בדיקה נוספת:** אם $m_1 = m_2$, CM היה ב-5 m; כאן $m_2$ כבד פי 4, ולכן CM קרוב הרבה יותר ל-10 m — 8 m הגיוני.",
-      "ord": 1
-    },
-    {
-      "id": "q2",
+      "ord": 1,
       "kind": "mcq",
-      "difficulty": "medium",
+      "difficulty": "easy",
+      "stem_en": "The centre of mass of point masses is:",
+      "stem_he": "מרכז המסה של מסות נקודתיות הוא:",
+      "explanation_en": "**Mass-weighted average position.**\n\n**Answer:** $\\dfrac{\\sum m_ix_i}{\\sum m_i}$.",
+      "explanation_he": "**מיקום ממוצע משוקלל במסה.**\n\n**תשובה:** $\\dfrac{\\sum m_ix_i}{\\sum m_i}$.",
       "skill_atoms": [
-        "center_of_mass_symmetry"
+        "center_of_mass"
       ],
-      "stem_en": "For a uniform equilateral triangle, where is the CM?",
-      "stem_he": "עבור משולש שווה-צלעות אחיד, היכן מרכז המסה?",
       "answer_payload": {
         "options_en": [
-          "At a vertex",
-          "At the midpoint of one side",
-          "At the intersection of the medians (centroid)",
-          "At a distance $R$ from the center"
+          "$x_{cm}=\\dfrac{\\sum m_ix_i}{\\sum m_i}$",
+          "$x_{cm}=\\sum m_ix_i$",
+          "$x_{cm}=\\dfrac{\\sum x_i}{n}$",
+          "$x_{cm}=\\sum x_i$"
         ],
         "options_he": [
-          "בקודקוד",
-          "באמצע צלע",
-          "בנקודת חיתוך התיכונים (צנטרואיד)",
-          "במרחק $R$ מהמרכז"
+          "$x_{cm}=\\dfrac{\\sum m_ix_i}{\\sum m_i}$",
+          "$x_{cm}=\\sum m_ix_i$",
+          "$x_{cm}=\\dfrac{\\sum x_i}{n}$",
+          "$x_{cm}=\\sum x_i$"
         ],
-        "correct_index": 2
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:** For a uniform equilateral triangle, mass is distributed symmetrically. The CM lies at the **centroid** — the intersection of medians, which is also the geometric center.\n\n**How to think about it:** Uniform + symmetric → CM at geometric center. Vertices and edge midpoints are not symmetric reference points; the centroid balances all three sides equally.\n\n**Common slip:** Choosing a vertex (mass is not concentrated there) or an edge midpoint (only one axis of symmetry). Confusing CM with circumcenter on non-equilateral triangles.\n\n**Exam tip:** For any uniform regular polygon or triangle, CM is at the center of symmetry. This is a conceptual MCQ — no calculation needed if you know the symmetry rule.",
-      "explanation_he": "**למה זה נכון:** במשולש שווה-צלעות אחיד, המסה מפוזרת בסימטריה. CM נמצא ב**צנטרואיד** — נקודת חיתוך התיכונים, שהיא גם המרכז הגיאומטרי.\n\n**איך לחשוב:** אחיד + סימטרי → CM במרכז הגיאומטרי. קודקודים ואמצעי צלעות אינם נקודות סימטריה; הצנטרואיד מאזן את שלוש הצלעות.\n\n**טעות נפוצה:** בחירת קודקוד (המסה לא שם) או אמצע צלע (סימטריה חלקית). בלבול CM עם מרכז המעגל במשולשים לא שווה-צלעות.\n\n**טיפ לבחינה:** לכל מצולע או משולש אחיד וסימטרי, CM במרכז הסימטריה. שאלה מושגית — ללא חישוב אם מכירים את כלל הסימטריה.",
+      "source_item_id": "c33de59a-23ac-56cf-970f-085b43d58036",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$x_{cm}=\\dfrac{\\sum m_ix_i}{\\sum m_i}$",
+        "$x_{cm}=\\sum m_ix_i$",
+        "$x_{cm}=\\dfrac{\\sum x_i}{n}$",
+        "$x_{cm}=\\sum x_i$"
+      ],
+      "options_he": [
+        "$x_{cm}=\\dfrac{\\sum m_ix_i}{\\sum m_i}$",
+        "$x_{cm}=\\sum m_ix_i$",
+        "$x_{cm}=\\dfrac{\\sum x_i}{n}$",
+        "$x_{cm}=\\sum x_i$"
+      ],
+      "correct_index": 0
+    },
+    {
       "ord": 2,
-      "options_en": [
-        "At a vertex",
-        "At the midpoint of one side",
-        "At the intersection of the medians (centroid)",
-        "At a distance $R$ from the center"
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Two equal masses sit at $x=0$ and $x=4$. Find the centre of mass.",
+      "stem_he": "שתי מסות שוות ממוקמות ב-$x=0$ וב-$x=4$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+4}{2}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$x_{cm}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "center_of_mass"
       ],
-      "options_he": [
-        "בקודקוד",
-        "באמצע צלע",
-        "בנקודת חיתוך התיכונים (צנטרואיד)",
-        "במרחק $R$ מהמרכז"
-      ],
-      "correct_index": 2
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "5f3760b3-f68e-52af-bffd-3e12bb7a13c6",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
-      "id": "q3",
+      "ord": 3,
       "kind": "true_false",
-      "difficulty": "hard",
+      "difficulty": "easy",
+      "stem_en": "True or False: the centre of mass of a uniform rod is at its geometric centre.",
+      "stem_he": "נכון או לא נכון: מרכז המסה של מוט אחיד נמצא במרכזו הגאומטרי.",
+      "explanation_en": "**Uniform density $\\Rightarrow$ CM at the middle** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**צפיפות אחידה $\\Rightarrow$ מרכז המסה באמצע** — **נכון**.\n\n**תשובה:** נכון.",
       "skill_atoms": [
-        "cm_conservation"
+        "center_of_mass"
       ],
-      "stem_en": "True or False: If two objects explode apart from rest, the CM of the system remains at rest.",
-      "stem_he": "נכון או לא נכון: אם שני עצמים מתפוצצים ממצב מנוחה, מרכז המסה של המערכת נשאר בשקט.",
       "answer_payload": {
-        "correct": true
+        "value": true
       },
-      "explanation_en": "**Why this is correct:** With no external forces, Newton's 2nd law for the system gives $M\\vec{a}_{\\text{cm}} = 0$, so $\\vec{v}_{\\text{cm}} = \\text{const}$. Starting from rest, $\\vec{v}_{\\text{cm}} = 0$ forever — the CM never moves.\n\n**How to think about it:** Internal explosion forces push fragments apart in equal-and-opposite pairs. They change each fragment's velocity but cannot shift the CM. This is momentum conservation: $m_1\\vec{v}_1 + m_2\\vec{v}_2 = 0$ when initial momentum is zero.\n\n**Common slip:** Thinking the CM moves because the pieces fly apart. Students confuse fragment motion with CM motion.\n\n**Exam tip:** True/False on CM conservation is common on Bagrut. Key phrase: \"no external forces\" → CM velocity unchanged.",
-      "explanation_he": "**למה זה נכון:** ללא כוחות חיצוניים, חוק ניוטון השני למערכת נותן $M\\vec{a}_{\\text{cm}} = 0$, ולכן $\\vec{v}_{\\text{cm}} = \\text{const}$. מתחילים ממנוחה — $\\vec{v}_{\\text{cm}} = 0$ לנצח; CM לא זז.\n\n**איך לחשוב:** כוחות פיצוץ פנימיים דוחפים שברים בזוגות שווים ונוגדים. הם משנים מהירות כל שבר אך לא מזיזים את CM. זה שימור תנע: $m_1\\vec{v}_1 + m_2\\vec{v}_2 = 0$ כשתנע התחלתי אפס.\n\n**טעות נפוצה:** חשיבה ש-CM זז כי החלקים מתפזרים. בלבול בין תנועת שברים לתנועת CM.\n\n**טיפ לבחינה:** נכון/לא נכון על שימור CM נפוץ בבגרות. מפתח: \"ללא כוחות חיצוניים\" → מהירות CM ללא שינוי.",
-      "ord": 3
+      "source_item_id": "78412e48-3808-533e-9666-d84ad1c041e9",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
-      "id": "q4",
-      "kind": "mcq",
-      "difficulty": "hard",
-      "skill_atoms": [
-        "center_of_mass_compute",
-        "cm_conservation"
-      ],
-      "stem_en": "A 70 kg man and 50 kg woman stand at opposite ends of a 6 m long boat (mass 80 kg) on frictionless water. The woman walks to the center. How far does the boat move?",
-      "stem_he": "גבר 70 kg ואישה 50 kg עומדים בקצוות הנגדיים של סירה 6 מ' (80 kg) על מים ללא חיכוך. האישה הולכת למרכז. כמה הסירה זזה?",
-      "answer_payload": {
-        "options_en": [
-          "0.5 m",
-          "0.75 m",
-          "1.0 m",
-          "1.5 m"
-        ],
-        "options_he": [
-          "0.5 מ'",
-          "0.75 מ'",
-          "1.0 מ'",
-          "1.5 מ'"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "**Why this is correct:** With no external horizontal force on frictionless water, $x_{\\text{cm}}$ is fixed. Set up coordinates: man at $x=0$, woman at $x=6$, boat CM at $x=3$. Initial $x_{\\text{cm}} = (70\\cdot0 + 50\\cdot6 + 80\\cdot3)/200 = 390/200 = 1.95\\;\\text{m}$.\n\nAfter the woman walks to the boat center (relative position $x=3$), let the boat shift by $d$. New positions: woman at $3+d$, boat CM at $3+d$. Setting $x_{\\text{cm}}$ equal gives $d = -0.75\\;\\text{m}$ — boat moves 0.75 m left.\n\n**Common slip:** Forgetting the boat moves when the woman walks, or using woman's displacement relative to ground without adding boat shift.\n\n**Exam tip:** Write $x_{\\text{cm, before}} = x_{\\text{cm, after}}$ with all positions in the same frame.",
-      "explanation_he": "**למה זה נכון:** ללא כוח אופקי חיצוני על מים ללא חיכוך, $x_{\\text{cm}}$ קבוע. הגדרת קואורדינטות: גבר ב-$x=0$, אישה ב-$x=6$, CM סירה ב-$x=3$. ראשוני $x_{\\text{cm}} = (70\\cdot0 + 50\\cdot6 + 80\\cdot3)/200 = 1.95\\;\\text{m}$.\n\nאחרי שהאישה הולכת למרכז הסירה (מיקום יחסי $x=3$), נניח שהסירה זזה ב-$d$. מיקומים חדשים: אישה ב-$3+d$, CM סירה ב-$3+d$. השוואת $x_{\\text{cm}}$ נותנת $d = -0.75\\;\\text{m}$ — הסירה זזה 0.75 m שמאלה.\n\n**טעות נפוצה:** שכחת תזוזת הסירה, או שימוש בתזוזת האישה בלי הוספת $d$.\n\n**טיפ לבחינה:** כתבו $x_{\\text{cm, before}} = x_{\\text{cm, after}}$ באותו מערכת ייחוס.",
       "ord": 4,
-      "options_en": [
-        "0.5 m",
-        "0.75 m",
-        "1.0 m",
-        "1.5 m"
-      ],
-      "options_he": [
-        "0.5 מ'",
-        "0.75 מ'",
-        "1.0 מ'",
-        "1.5 מ'"
-      ],
-      "correct_index": 1
-    },
-    {
-      "id": "q5",
-      "kind": "short_answer",
+      "kind": "open",
       "difficulty": "hard",
+      "stem_en": "Masses $4\\,\\text{kg}$ at $x=0$ and $6\\,\\text{kg}$ at $x=10$. Find the centre of mass.",
+      "stem_he": "מסות $4\\,\\text{kg}$ ב-$x=0$ ו-$6\\,\\text{kg}$ ב-$x=10$. מצאו את מרכז המסה.",
+      "explanation_en": "**Step 1 — Formula.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.\n\n**Step 2 — Substitute.** $x_{cm}=\\dfrac{4\\cdot 0+6\\cdot 10}{4+6}$.\n\n**Step 3 — Evaluate.** $=\\dfrac{60}{10}=6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.\n\n**שלב 2 — הצבה.** $\\dfrac{6\\cdot 10}{10}$.\n\n**שלב 3 — חישוב.** $6$.\n\n**תשובה:** $6$.",
       "skill_atoms": [
-        "center_of_mass_compute"
+        "center_of_mass"
       ],
-      "stem_en": "A uniform rod of length $L$ has a piece of length $L/4$ removed from one end. What fraction of $L$ from the remaining end is the new CM?",
-      "stem_he": "ממוט אחיד באורך $L$ מוסרת חתיכה ¼ מקצה אחד. בשבר כמה מ-$L$ מהקצה הנותר נמצא מרכז המסה החדש?",
       "answer_payload": {
-        "accept_en": [
-          "5/8 L",
-          "5L/8",
-          "0.625 L"
+        "steps_en": [
+          "**Step 1 — Formula.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.",
+          "**Step 2 — Substitute.** $x_{cm}=\\dfrac{4\\cdot 0+6\\cdot 10}{4+6}$.",
+          "**Step 3 — Evaluate.** $=\\dfrac{60}{10}=6$.",
+          "**Answer:** $6$."
         ],
-        "accept_he": [
-          "5L/8",
-          "5/8 L"
+        "steps_he": [
+          "**שלב 1 — נוסחה.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.",
+          "**שלב 2 — הצבה.** $\\dfrac{6\\cdot 10}{10}$.",
+          "**שלב 3 — חישוב.** $6$.",
+          "**תשובה:** $6$."
         ]
       },
-      "explanation_en": "**Why this is correct:** Treat the removed piece as negative mass. Full rod: length $L$, CM at $L/2$, mass $M$. Removed piece: length $L/4$, CM at $L/8$ from the removed end, mass $M/4$.\n\nRemaining rod: length $3L/4$, mass $3M/4$. From the untouched end: $x_{\\text{cm}} = \\frac{(3M/4)(L/4 + 3L/8)}{3M/4} = L/4 + 3L/8 = 5L/8$.\n\n**How to think about it:** CM shifts toward the heavier remaining portion, away from where material was removed.\n\n**Common slip:** Using the midpoint of the remaining rod ($3L/8$) instead of the weighted average, or measuring from the wrong end.\n\n**Exam tip:** Draw a diagram marking each piece's CM before combining.",
-      "explanation_he": "**למה זה נכון:** התייחסו לחתיכה שהוסרה כמסה שלילית. מוט מלא: אורך $L$, CM ב-$L/2$, מסה $M$. חתיכה שהוסרה: אורך $L/4$, CM ב-$L/8$ מהקצה שהוסר, מסה $M/4$.\n\nמוט נותר: אורך $3L/4$, מסה $3M/4$. מהקצה שלא הוסר: $x_{\\text{cm}} = L/4 + 3L/8 = 5L/8$.\n\n**איך לחשוב:** CM נמשך לכיוון החלק הכבד שנשאר, הרחק ממקום שהוסר חומר.\n\n**טעות נפוצה:** שימוש באמצע המוט הנותר ($3L/8$) במקום ממוצע משוקלל, או מדידה מהקצה הלא נכון.\n\n**טיפ לבחינה:** שרטטו סכימה עם CM של כל חלק לפני השילוב.",
-      "ord": 5
+      "source_item_id": "29894cc1-d9a9-5fff-b1f9-3b5df69cd426",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Masses $2\\,\\text{kg}$ at $x=0$ and $2\\,\\text{kg}$ at $x=6$. Find the centre of mass.",
+      "stem_he": "מסות $2\\,\\text{kg}$ ב-$x=0$ ו-$2\\,\\text{kg}$ ב-$x=6$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+12}{4}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$x_{cm}=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "dbf75e02-d390-5d6e-ac3c-3df286d4c9b7",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Two masses: $m_1 = 4\\;\\text{kg}$ at $x = 0$, $m_2 = 6\\;\\text{kg}$ at $x = 5\\;\\text{m}$. Find $x_{\\text{cm}}$.",
-      "stem_he": "שתי מסות: $m_1 = 4\\;\\text{kg}$ ב-$x = 0$, $m_2 = 6\\;\\text{kg}$ ב-$x = 5$. מצא $x_{\\text{cm}}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$x_{\\text{cm}} = (0 + 30)/10 = 3\\;\\text{m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3\\;\\text{m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** Two masses on the x-axis:\n$$x_{\\text{cm}} = \\frac{m_1 x_1 + m_2 x_2}{m_1 + m_2} = \\frac{4(0) + 6(5)}{10} = \\frac{30}{10} = 3\\;\\text{m}$$\n\n**How to think about it:** This is the simplest CM problem — a weighted average along one axis. The 6 kg mass at $x = 5$ pulls the CM rightward from the midpoint.\n\n**Common slip:** Dividing by 5 (one mass) instead of 10 (total), or averaging positions to get 2.5 m. Another error: using $m_2 - m_1$ in the numerator.\n\n**Exam tip:** Quick check: CM at 3 m is between 0 and 5, closer to 5 (heavier side). If you get 2.5 m, you forgot the mass weights.",
-      "explanation_he": "**למה זה נכון:** שתי מסות על ציר x:\n$$x_{\\text{cm}} = \\frac{4(0) + 6(5)}{10} = \\frac{30}{10} = 3\\;\\text{m}$$\n\n**איך לחשוב:** זו בעיית CM הפשוטה ביותר — ממוצע משוקלל על ציר אחד. המסה 6 kg ב-$x = 5$ מושכת את CM ימינה מאמצע הקטע.\n\n**טעות נפוצה:** חלוקה ב-5 (מסה אחת) במקום 10 (סה\"כ), או ממוצע מיקומים ל-2.5 m. גם שימוש ב-$m_2 - m_1$ במונה.\n\n**טיפ לבחינה:** בדיקה מהירה: CM ב-3 m בין 0 ל-5, קרוב ל-5 (צד כבד). אם קיבלתם 2.5 m — שכחתם משקלות.\n\n**זכרו:** הנוסחה $x_{\\text{cm}} = \\sum m_i x_i / M$ היא ממוצע משוקלל — לא ממוצע פשוט של מיקומים.",
+      "stem_en": "Masses $1\\,\\text{kg}$ at $x=0$ and $3\\,\\text{kg}$ at $x=4$. Find the centre of mass.",
+      "stem_he": "מסות $1\\,\\text{kg}$ ב-$x=0$ ו-$3\\,\\text{kg}$ ב-$x=4$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{12}{4}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$x_{cm}=3$.**\n\n**תשובה:** $3$.",
       "skill_atoms": [
-        "center_of_mass_compute",
-        "cm_conservation"
-      ]
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "4387dd8a-8970-5254-8b82-63570dc12bc3",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A uniform rod of length $L = 3\\;\\text{m}$ and mass $m = 5\\;\\text{kg}$ lies along the x-axis from $x = 1$ to $x = 4$. Find $x_{\\text{cm}}$.",
-      "stem_he": "מוט אחיד באורך $L = 3\\;\\text{m}$ ומסה $m = 5\\;\\text{kg}$ מונח על ציר x מ-$x=1$ עד $x=4$. מצא $x_{\\text{cm}}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nCM at midpoint: $x_{\\text{cm}} = (1+4)/2 = 2.5\\;\\text{m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2.5\\;\\text{m}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2.5"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** A uniform rod has CM at its geometric midpoint. The rod spans $x = 1$ to $x = 4$, so:\n$$x_{\\text{cm}} = \\frac{1 + 4}{2} = 2.5\\;\\text{m}$$\n\n**How to think about it:** Uniform + symmetric → CM at center. The mass $m = 5\\;\\text{kg}$ cancels out — only position matters for a single uniform body.\n\n**Common slip:** Using length $L = 3$ m from the origin ($x_{\\text{cm}} = 1.5$) instead of the actual endpoints. Confusing $x = 0$ with the left end at $x = 1$.\n\n**Exam tip:** For uniform rods not centered at the origin, always use the actual endpoint coordinates. Midpoint = average of endpoints, not $L/2$ from zero.",
-      "explanation_he": "**למה זה נכון:** למוט אחיד CM בנקודת האמצע הגיאומטרי. המוט נפרש מ-$x = 1$ עד $x = 4$, ולכן:\n$$x_{\\text{cm}} = \\frac{1 + 4}{2} = 2.5\\;\\text{m}$$\n\n**איך לחשוב:** אחיד + סימטרי → CM במרכז. המסה $m = 5\\;\\text{kg}$ מתבטלת — רק מיקום חשוב לגוף אחיד יחיד.\n\n**טעות נפוצה:** שימוש באורך $L = 3$ m מהראשית ($x_{\\text{cm}} = 1.5$) במקום הקצוות האמיתיים. בלבול $x = 0$ עם הקצה השמאלי ב-$x = 1$.\n\n**טיפ לבחינה:** למוטות אחידים שלא במרכז הראשית, השתמשו בקואורדינטות הקצוות. אמצע = ממוצע קצוות, לא $L/2$ מאפס.\n\n**בדיקה:** אורך המוט $4 - 1 = 3$ m; אמצע = $1 + 1.5 = 2.5$ m ✓.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "The location of the centre of mass depends on:",
+      "stem_he": "מיקום מרכז המסה תלוי ב:",
+      "explanation_en": "**CM is the mass-weighted mean position.**\n\n**Answer:** the mass distribution.",
+      "explanation_he": "**מרכז המסה הוא מיקום ממוצע משוקלל במסה.**\n\n**תשובה:** פיזור המסה.",
       "skill_atoms": [
-        "center_of_mass_compute",
-        "cm_conservation"
-      ]
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{the mass distribution}$",
+          "$\\text{color}$",
+          "$\\text{temperature}$",
+          "$\\text{time only}$"
+        ],
+        "options_he": [
+          "$\\text{the mass distribution}$",
+          "$\\text{color}$",
+          "$\\text{temperature}$",
+          "$\\text{time only}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "52006891-5785-5299-b8ce-410e8ece5a28",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{the mass distribution}$",
+        "$\\text{color}$",
+        "$\\text{temperature}$",
+        "$\\text{time only}$"
+      ],
+      "options_he": [
+        "$\\text{the mass distribution}$",
+        "$\\text{color}$",
+        "$\\text{temperature}$",
+        "$\\text{time only}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Four equal masses $m = 1\\;\\text{kg}$ placed at $(0,0)$, $(4,0)$, $(0,4)$, $(4,4)$. Find CM.",
-      "stem_he": "ארבע מסות שוות $m = 1\\;\\text{kg}$ ב-$(0,0)$, $(4,0)$, $(0,4)$, $(4,4)$. מצא CM.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$x_{\\text{cm}} = (0+4+0+4)/4 = 2$, $y_{\\text{cm}} = (0+0+4+4)/4 = 2$. CM at $(2, 2)$",
-          "2$. CM at $(2, 2)$",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** Four equal masses at square corners — use discrete CM formula:\n$$x_{\\text{cm}} = \\frac{0+4+0+4}{4} = 2, \\quad y_{\\text{cm}} = \\frac{0+0+4+4}{4} = 2$$\nCM at $(2, 2)$ — the center of the square.\n\n**How to think about it:** Equal masses at symmetric corners → CM at geometric center. You could also pair opposite corners: each pair averages to $(2, 2)$.\n\n**Common slip:** Dividing by 3 instead of 4, or averaging only two corners. Another error: reporting $x_{\\text{cm}} = 2$ without the y-coordinate.\n\n**Exam tip:** For symmetric arrangements, the CM often lies at the obvious center. Verify by symmetry before doing full calculation.",
-      "explanation_he": "**למה זה נכון:** ארבע מסות שוות בפינות ריבוע — נוסחת CM בדידה:\n$$x_{\\text{cm}} = \\frac{0+4+0+4}{4} = 2, \\quad y_{\\text{cm}} = \\frac{0+0+4+4}{4} = 2$$\nCM ב-$(2, 2)$ — מרכז הריבוע.\n\n**איך לחשוב:** מסות שוות בפינות סימטריות → CM במרכז הגיאומטרי. אפשר גם לזוג פינות מנוגדות: כל זוג ממוצע ל-$(2, 2)$.\n\n**טעות נפוצה:** חלוקה ב-3 במקום 4, או ממוצע של שתי פינות בלבד. גם דיווח $x_{\\text{cm}} = 2$ בלי קואורדינטת y.\n\n**טיפ לבחינה:** במערכים סימטריים, CM לרוב במרכז הברור. אמתו בסימטריה לפני חישוב מלא.\n\n**קשר:** ארבע פינות בריבוע $(0,0)$, $(4,0)$, $(0,4)$, $(4,4)$ — סימטריה כפולה מבטיחה CM ב-$(2,2)$, מרכז הריבוע.",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $2\\,\\text{kg}$ at $x=1$ and $4\\,\\text{kg}$ at $x=4$. Find the centre of mass.",
+      "stem_he": "מסות $2\\,\\text{kg}$ ב-$x=1$ ו-$4\\,\\text{kg}$ ב-$x=4$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{2+16}{6}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$x_{cm}=3$.**\n\n**תשובה:** $3$.",
       "skill_atoms": [
-        "center_of_mass_compute",
-        "cm_conservation"
-      ]
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "d3a63b57-8bf3-5965-9fe6-d7629e79ac80",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $3\\,\\text{kg}$ at $x=0$ and $1\\,\\text{kg}$ at $x=8$. Find the centre of mass.",
+      "stem_he": "מסות $3\\,\\text{kg}$ ב-$x=0$ ו-$1\\,\\text{kg}$ ב-$x=8$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{8}{4}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$x_{cm}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "7412eecb-ce81-51a0-9afb-b9bd5f397391",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $5\\,\\text{kg}$ at $x=2$ and $5\\,\\text{kg}$ at $x=6$. Find the centre of mass.",
+      "stem_he": "מסות $5\\,\\text{kg}$ ב-$x=2$ ו-$5\\,\\text{kg}$ ב-$x=6$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{10+30}{10}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$x_{cm}=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "225ffdd5-c099-5997-97de-2307a917999f",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $1\\,\\text{kg}$ at $x=0$ and $1\\,\\text{kg}$ at $x=10$. Find the centre of mass.",
+      "stem_he": "מסות $1\\,\\text{kg}$ ב-$x=0$ ו-$1\\,\\text{kg}$ ב-$x=10$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{10}{2}=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$x_{cm}=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "b14f9ea8-af4f-5bc0-91c7-c338b09b0075",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the centre of mass can lie outside the body (e.g. a ring).",
+      "stem_he": "נכון או לא נכון: מרכז המסה יכול להימצא מחוץ לגוף (למשל טבעת).",
+      "explanation_en": "**For a ring the CM is at the empty centre** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**עבור טבעת מרכז המסה נמצא במרכז הריק** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "78546178-488e-5352-99d2-3f4580906538",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Masses $2\\,\\text{kg}$ at $x=0$ and $3\\,\\text{kg}$ at $x=5$. Find the centre of mass.",
+      "stem_he": "מסות $2\\,\\text{kg}$ ב-$x=0$ ו-$3\\,\\text{kg}$ ב-$x=5$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{15}{5}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$x_{cm}=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "2a218c6f-151b-560f-825f-b9253d1b18e9",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Masses $1\\,\\text{kg}$ at $x=2$, $2\\,\\text{kg}$ at $x=5$, $3\\,\\text{kg}$ at $x=8$. Find the centre of mass.",
+      "stem_he": "מסות $1\\,\\text{kg}$ ב-$x=2$, $2\\,\\text{kg}$ ב-$x=5$, $3\\,\\text{kg}$ ב-$x=8$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{2+10+24}{6}=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$x_{cm}=\\dfrac{36}{6}=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "6b898e05-b8d7-5170-84e7-810d11553d6a",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Masses $3\\,\\text{kg}$ at $x=0$ and $2\\,\\text{kg}$ at $x=10$. Find the centre of mass.",
+      "stem_he": "מסות $3\\,\\text{kg}$ ב-$x=0$ ו-$2\\,\\text{kg}$ ב-$x=10$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{20}{5}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$x_{cm}=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "2fa7fb62-bd16-5bd1-8169-248ffbb42221",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     }
   ],
   "est_minutes": 40,
