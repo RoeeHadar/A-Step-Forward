@@ -555,6 +555,31 @@ duplicated the medium $2\times3\times4$ item → deduped to 14; changed the work
 example to a $3\times4\times5$ box ($V=60$) and re-baked to 15/15. Corpus math
 lint 0/207.
 
+## Batch W — shipped (physics begins)
+
+With the math corpus complete, work moved to **HS physics** (55 thin lessons, all
+at 8q). Batch W expanded the HS mechanics core to 15 verified items each (spread
+5/6/4, 4 kinds), all CAS-verified (SymPy arithmetic) with 0 rejections and 15/15
+on first pass. All use $g=10\,\text{m/s}^2$ stated in-stem for clean answers:
+
+- `kinematics_1d` — $v=u+at$, $s=ut+\tfrac12at^2$, $v^2=u^2+2as$, free fall,
+  average speed, v-t graph slope, stopping distance/time.
+- `newton_laws` — $F=ma$, weight $W=mg$, net force, perpendicular resultant,
+  elevator normal force, friction $f=\mu N$, the newton unit, 3rd law.
+- `work_energy` — $W=Fd\cos\theta$, $KE=\tfrac12mv^2$, $PE=mgh$, power $P=W/t=Fv$,
+  work-energy theorem, energy conservation $v=\sqrt{2gh}$.
+- `momentum` — $p=mv$, impulse $J=Ft=\Delta p$, elastic vs inelastic, perfectly
+  inelastic common velocity, recoil, units.
+- `projectile_motion` — independent H/V motion, $x=v_xt$, $t=\sqrt{2h/g}$,
+  max height $v_y^2/2g$, horizontal-launch range, component $v\sin\theta$, parabola.
+- `circular_motion` — $a=v^2/r$, $F=mv^2/r$, $\omega=v/r$, $v=\omega r$, period
+  $T=2\pi r/v$, circumference, center-directed net force.
+
+**Note on gating:** physics lessons carry `math_track: []` and render with
+`learnerLevel=null`, so the quiz-panel filter (which only hides items whose
+`points_level_min` exceeds the learner track) shows every physics item to all
+learners — verified against `lesson-quiz-panel.tsx`.
+
 ## Batch V — shipped (math corpus complete)
 
 The final six thin math lessons expanded to 15 verified items each (spread 5/6/4,
