@@ -136,6 +136,12 @@ export interface PacingInputs {
   deadlineISO?: string | null;
   /** Measured trailing concepts/week; when provided, enables the 'ahead' status. */
   trailingVelocity?: number | null;
+  /**
+   * Wellbeing "how, not whether" load ease (ADR-0010 #15). Multiplies the weekly
+   * NEW-material load (never below 1); does NOT touch the gate/pass bar. e.g. 0.6 for
+   * an anxious / mastery-shocked learner → lighter weeks, same standards.
+   */
+  loadMultiplier?: number | null;
   now?: Date;
 }
 
@@ -204,11 +210,13 @@ export function computePacing(inputs: PacingInputs): PacingResult | null {
     status = 'on_track';
   }
 
-  const weekly_load = clamp(
-    Math.round(Math.min(capacity, Math.max(required_velocity, 1))),
-    1,
-    CONCEPTS_PER_ROLLING_WEEK,
-  );
+  const baseLoad = Math.min(capacity, Math.max(required_velocity, 1));
+  // Wellbeing eases HOW MUCH new material (never below 1); the gate is untouched.
+  const easedLoad =
+    typeof inputs.loadMultiplier === 'number' && Number.isFinite(inputs.loadMultiplier)
+      ? baseLoad * clamp(inputs.loadMultiplier, 0.1, 1)
+      : baseLoad;
+  const weekly_load = clamp(Math.round(easedLoad), 1, CONCEPTS_PER_ROLLING_WEEK);
 
   const next_concepts = remaining_ordered.slice(0, weekly_load);
 

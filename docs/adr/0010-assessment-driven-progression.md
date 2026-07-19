@@ -1,6 +1,6 @@
 # ADR 0010: Assessment-driven progression & gating
 
-- **Status:** Accepted — Stream A shipped 2026-07-19
+- **Status:** Accepted — Streams A, B, E shipped; C/D/F cores shipped (2026-07-19)
 - **Date:** 2026-07-19
 - **Deciders:** Product owner + Opus (planning)
 - **Extends:** [ADR-0009](0009-goal-paced-adaptive-planning.md) (living goal-paced planner). Constrained by [ADR-0006](0006-neon-direct-critical-path.md) (Vercel + Neon hot path), [ADR-0007](0007-learning-planner-authority.md) (planner authority), [ADR-0008](0008-adaptive-wellbeing-planning.md) (wellbeing overlay).
@@ -101,13 +101,28 @@ Ordered by leverage/risk. Each ships behind graceful degradation and is verified
   - Tests: 7 new pacing tests (gate decision + critical set + remediation bypass); full web suite green except a pre-existing local `schemas.test.ts` module-resolution failure (unrelated; fails with Stream A changes stashed too).
 
   **Deferred within Stream A (follow-ups):** an explicit `remediation_week` flag + retake counter surfaced in UI, and a learner-facing "you must pass the gate to continue" affordance. Current behavior relies on `plan_weeks.status` + attempt counts; the soft override guarantees no learner is ever hard-stranded.
-- **Stream B — Assessment tiers & anti-gaming.**
+- **Stream B — Assessment tiers & anti-gaming.** ✅ **Core shipped 2026-07-19.**
   Add milestone/unit tests + final mock generation (#5), mixed question formats with Reviewer-graded open-response for milestone/final (#6), item rotation, and between-assessment difficulty calibration (#7). Extend the Tests archive to the new kinds.
-- **Stream C — Evaluation integrity.**
+
+  **Shipped:** gate **retake item rotation** (anti-gaming #6/#7 within-fixed): `weekly_quizzes_ai` gains a `rotation` dimension = prior gate-attempt count, so retakes regenerate fresh LLM items (varied numbers/scenarios/correct-option, higher temperature) while reloads within a rotation stay cached. Full **mock exams are now archived** into `test_attempts` (`kind='mock_exam'`, `MOCK_PASS_THRESHOLD=0.6` on auto-graded MCQ) — unifying "all assessments archived" and feeding the readiness mock-gate. Tests archive UI is now **kind-aware** (weekly gate / mock / milestone labels) and renders open (non-MCQ) items gracefully.
+  **Deferred:** a dedicated milestone/unit-test generator + placement, Reviewer-graded open-response scoring pipeline (needs Grader budget), and between-assessment difficulty auto-calibration beyond the existing per-concept mastery steer.
+- **Stream C — Evaluation integrity.** ⚙️ **Decay shipped 2026-07-19; probes deferred.**
   Diagnostic-seeded anchor + below-anchor prerequisite probes with anchor-lowering (#8); FSRS-style decay + due-queue resurfacing + failed-recheck refresh injection (#9).
-- **Stream D — Re-planning, wellbeing, returning learner.**
+
+  **Shipped:** FSRS-style **mastery decay** (`decayMastery`, 45-day half-life) applied in the readiness computation so stale mastery counts for less (Stream E). The existing `skill_practice` due-review scheduler already resurfaces low-score atoms.
+  **Deferred:** below-anchor **prerequisite probes** inside milestone tests + automatic **anchor-lowering** on a failed probe (depends on the deferred milestone generator); failed-recheck refresh injection into the plan.
+- **Stream D — Re-planning, wellbeing, returning learner.** ⚙️ **Wellbeing load-ease shipped 2026-07-19.**
   At-risk criticality triage + Mentor routing (#13); returning-learner recalibration (#14); wellbeing load/tone/pace modulation wired to the gate/pacing without touching the pass bar (#15); suggested (learner-confirmed) goal/deadline elevation (#10–#12).
-- **Stream E — Readiness & final phase.**
+
+  **Shipped (#15):** an active wellbeing bias now **lightens `weekly_load`** via a pure `loadMultiplier` (`WELLBEING_LOAD_EASE=0.6`, floored at 1 concept) in `computePacing`/`computeFullPacing` — modulating HOW MUCH new material, **never** the gate/pass bar. (Tone/ordering modulation already existed from ADR-0008.)
+  **Deferred:** at-risk criticality triage with proactive Mentor routing (#13); explicit returning-learner warm-up recalibration flow (#14) — note decay already discounts stale mastery on return; learner-confirmed goal/deadline elevation prompts (#10–#12).
+- **Stream E — Readiness & final phase.** ✅ **Core shipped 2026-07-19.**
   Coverage + mock readiness definition, concave readiness transform, final-phase mode (mocks + gap review), day-before theory + Mentor mode, and the "never guaranteed" framing across the UI (#16).
-- **Stream F — Evals & calibration (cross-cutting).**
+
+  **Shipped:** `readiness.ts` — readiness = decay-applied **critical-concept coverage** mapped through a **concave** transform (`ceiling*(1-(1-c)^2)`, gains near the top cost more coverage: 80→85 harder than 50→55), **mock-gated** (≤0.70 without a passed mock), hard-capped below 1.0 (`READINESS_CEILING=0.95` — never "guaranteed"). `exam_ready` needs ≥90% critical coverage AND a passed mock. Phase derivation: `day_before` (≤1d: theory + Mentor only), `final_phase` (≤14d: mocks + gap review), `building` otherwise. Surfaced on the plan dashboard banner (honest number + humble/phase note, bilingual) via optional `planPacingSchema` fields.
+  **Deferred:** a dedicated final-phase plan MODE that mechanically swaps new-material weeks for mock+gap-review weeks (currently guidance + readiness signal); day-before UI lockout of new lessons.
+- **Stream F — Evals & calibration (cross-cutting).** ⚙️ **Unit calibration shipped 2026-07-19.**
   Pair with `.cursor/skills/run-evals`: calibrate thresholds/params, add gate/remediation/trajectory/readiness eval suites, and validate that gating decisions match graded ground truth before trusting them in production.
+
+  **Shipped:** `assessment-calibration.test.ts` pins the gate ground-truth matrix, decay half-life, and readiness monotonicity/concavity/mock-gate/exam-ready invariants so parameter tweaks can't silently change semantics. Plus 20 new unit tests across readiness + pacing.
+  **Deferred:** the full promptfoo/DeepEval online harness and threshold sweep against graded learner data (no live learners yet).

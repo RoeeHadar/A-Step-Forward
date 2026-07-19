@@ -21,9 +21,19 @@ production_web: f234a816
   `lesson-complete.ts`: mastery bump 0.7 → 0.35 exposure (below floors), `maybeCompleteActiveWeek()`
   removed → lessons never advance the plan. `evaluateGatePass()` (aggregate ≥ 0.75 AND every
   frontier-CRITICAL concept ≥ 0.6). `advanceRollingPlanWindow` hard gate (only gate-completed
-  advances) + soft override (>14d overdue OR ≥3 retakes) + remediation carry-forward. tsc/lint/tests green.
-- Next: Stream B (assessment tiers: milestone/unit + final mock, mixed formats, item rotation) or
-  Stream A UI follow-up (remediation-week flag + "pass the gate to continue" affordance).
+  advances) + soft override (>14d overdue OR ≥3 retakes) + remediation carry-forward.
+- [x] **ADR-0010 Streams B–F cores SHIPPED** (`942dd4d0` E+decay, `c6c89fed` B, + D/F this ship):
+  - **E (readiness):** `readiness.ts` — decay-applied critical coverage → concave (80→85 harder than
+    50→55), mock-gated (≤0.70 w/o mock), capped <1.0 (never "guaranteed"); phases day_before/final/building;
+    surfaced on plan banner (HE/EN humble copy).
+  - **C (decay):** FSRS `decayMastery` (45d half-life) feeds readiness.
+  - **B (anti-gaming):** gate retake rotation (fresh items) + mock exams archived into `test_attempts`
+    (feeds mock-gate) + kind-aware Tests archive.
+  - **D (#15):** active wellbeing bias lightens `weekly_load` (never the pass bar).
+  - **F:** `assessment-calibration.test.ts` ground-truth guardrails.
+- **Deferred (in ADR):** milestone generator + open-response grading, prereq probes/anchor-lowering,
+  at-risk Mentor routing, returning-learner warm-up, elevation prompts, mechanical final-phase mode,
+  full promptfoo/DeepEval harness (no live learners yet).
 
 ## Last done (2026-07-12)
 

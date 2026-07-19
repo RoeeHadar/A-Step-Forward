@@ -2093,6 +2093,9 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
  * `trailingVelocity` (measured concepts/week from history) enables the 'ahead'
  * status so a fast learner's plan raises ambition / overflows.
  */
+/** Wellbeing load-ease factor: an active bias lightens new-material load to 60%. */
+export const WELLBEING_LOAD_EASE = 0.6;
+
 export function computeFullPacing(
   profile: LearnerProfileRow | null,
   mastery: Record<string, number>,
@@ -2110,6 +2113,24 @@ export function computeFullPacing(
       ? ((profile!.personality_profile as { attention_span_min: number }).attention_span_min)
       : (profile?.attention_span ?? null);
 
+  // Wellbeing "how, not whether" (ADR-0010 #15): when a persisted wellbeing bias is
+  // active (anxiety / mastery-shock / exam window), lighten the weekly NEW-material
+  // load. The gate/pass bar is never touched — only the pace of new concepts.
+  let loadMultiplier: number | null = null;
+  try {
+    const bias = wellbeingPlanBiasFromProfile({
+      subjects: profile?.subjects ?? [],
+      mental_state: profile?.mental_state ?? null,
+      next_test_date: profile?.next_test_date ?? null,
+      personality_profile: profile?.personality_profile ?? null,
+      points_group: profile?.points_group ?? null,
+      wellbeing_plan_bias: profile?.wellbeing_plan_bias ?? null,
+    });
+    if (bias.active) loadMultiplier = WELLBEING_LOAD_EASE;
+  } catch {
+    // No bias / parse failure → full load (never blocks pacing).
+  }
+
   return computePacing({
     goalKey: goalKey!,
     masteryScores: mastery,
@@ -2117,6 +2138,7 @@ export function computeFullPacing(
     attentionSpanMin,
     deadlineISO: profile?.next_test_date ?? profile?.final_goal_date ?? null,
     trailingVelocity: opts?.trailingVelocity ?? null,
+    loadMultiplier,
   });
 }
 

@@ -106,6 +106,23 @@ describe('plan-pacing: computePacing', () => {
     expect(p.remaining_ordered[0]).toBe(getFrontier(GOAL)!.core[0]!.id);
   });
 
+  it('wellbeing loadMultiplier lightens weekly_load without touching scope/pace', () => {
+    const args = { goalKey: GOAL, hoursPerWeek: 20, deadlineISO: '2026-08-02', now: new Date('2026-07-19T00:00:00Z') };
+    const base = computePacing(args)!;
+    const eased = computePacing({ ...args, loadMultiplier: 0.5 })!;
+    expect(base.weekly_load).toBeGreaterThan(1); // tight deadline + high capacity → load > 1
+    expect(eased.weekly_load).toBeLessThan(base.weekly_load);
+    expect(eased.weekly_load).toBeGreaterThanOrEqual(1);
+    // The pass bar / scope / required pace are untouched by wellbeing easing.
+    expect(eased.remaining_scope).toBe(base.remaining_scope);
+    expect(eased.required_velocity).toBe(base.required_velocity);
+  });
+
+  it('loadMultiplier never drops weekly_load below 1', () => {
+    const eased = computePacing({ goalKey: GOAL, hoursPerWeek: 20, deadlineISO: '2026-08-02', now: new Date('2026-07-19T00:00:00Z'), loadMultiplier: 0.01 })!;
+    expect(eased.weekly_load).toBeGreaterThanOrEqual(1);
+  });
+
   it('flags at_risk when required velocity exceeds capacity (tight deadline)', () => {
     const now = new Date('2026-07-19T00:00:00Z');
     const p = computePacing({
