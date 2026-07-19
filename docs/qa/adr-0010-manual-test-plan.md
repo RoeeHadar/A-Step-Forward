@@ -34,8 +34,9 @@ Pilot account: `roeehadar@gmail.com` (`user_3Fakzy…`), goal `bagrut_math_5`.
 | 8 | Pacing: ahead / maintenance | `goal-complete` | Read pacing badge | **"Ahead"**; remaining scope ~0; review/maintenance week |
 | 9 | Earned advancement (lessons ≠ advance) | `building` | Mark all week-1 lessons complete, reload `/app` | Week does **not** advance; still on week 1 (lessons give exposure only) |
 | 10 | Weekly gate: pass criteria (critical floor) | `building` | Take week-1 quiz; score high overall but miss a critical topic | **Fails** the gate even with a good average (critical concept below 0.6 floor) |
+| 10b | Gate items from authored bank (hard) | `building` | Open week-1 quiz **before** studying | Majority **open / numeric / short_answer** from lesson bank (not trivial MCQ); beginners should **not** breeze through |
 | 11 | Gate pass → advance + re-pace | `building` | Take week-1 quiz and pass (aggregate ≥ 0.75, all critical ≥ 0.6), reload `/app` | Week 1 marked completed; plan advances to week 2; concepts re-paced |
-| 12 | Retake rotation (anti-gaming) | `building` | Fail week-1 quiz, immediately retake | Retake shows **fresh questions**, not the identical set |
+| 12 | Retake rotation (anti-gaming) | `building` | Fail week-1 quiz, immediately retake | Retake shows **fresh bank items**, not the identical set |
 | 13 | Fail → remediation carry-forward | `building` | Fail with a weak critical topic, then advance via override | Weak concept(s) re-scheduled into the next week |
 | 14 | Soft override (never stranded) | `building` | Attempt the weekly gate 3× without passing | Plan advances anyway (retakes exhausted); weak topics carried forward |
 | 15 | Tests archive (history + review) | `near-exam` | Open **My Tests** → open the mock | List shows kind-aware label + pass/fail + date; detail shows per-topic bars + question review (MCQ colored, open items show free text) |
