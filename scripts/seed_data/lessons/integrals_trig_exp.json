@@ -269,224 +269,317 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "integral_sin_cos",
-      "integral_exp",
-      "integral_ln",
-      "chain_reversal",
-      "ibp_technique"
+      "exp_integral",
+      "trig_integral"
     ],
     "tutor_pacing_hint": "Drill the four base rules first; then chain reversal as a small multiplier adjustment. IBP is its own session."
   },
   "questions": [
     {
-      "id": "q1",
+      "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$\\int \\cos x\\,dx = ?$",
-      "stem_he": "$\\int \\cos x\\,dx = ?$",
+      "stem_en": "$\\displaystyle\\int e^x\\,dx$ equals:",
+      "stem_he": "$\\displaystyle\\int e^x\\,dx$ שווה ל:",
+      "explanation_en": "**$e^x$ is its own antiderivative:** $\\int e^x dx=e^x+C$.\n\n**Answer:** $e^x+C$.",
+      "explanation_he": "**$e^x$ היא הפונקציה הקדומה של עצמה.**\n\n**תשובה:** $e^x+C$.",
+      "skill_atoms": [
+        "exp_integral"
+      ],
       "answer_payload": {
         "options_en": [
-          "$-\\sin x+C$",
-          "$\\sin x+C$",
-          "$\\cos x+C$",
-          "$-\\cos x+C$"
+          "$e^x+C$",
+          "$xe^{x-1}+C$",
+          "$\\frac{e^x}{x}+C$",
+          "$\\ln x+C$"
         ],
         "options_he": [
-          "$-\\sin x+C$",
-          "$\\sin x+C$",
-          "$\\cos x+C$",
-          "$-\\cos x+C$"
+          "$e^x+C$",
+          "$xe^{x-1}+C$",
+          "$\\frac{e^x}{x}+C$",
+          "$\\ln x+C$"
         ],
-        "correct_index": 1
+        "correct_index": 0
       },
-      "explanation_en": "The anti-derivative of $\\cos x$ is $\\sin x + C$ because $\\dfrac{d}{dx}(\\sin x) = \\cos x$. Option $-\\sin x + C$ is the anti-derivative of $-\\cos x$, a sign slip from confusing sin and cos rows. $\\cos x + C$ differentiates back to $-\\sin x$, not $\\cos x$. $-\\cos x + C$ is the sin integral, not cos. **Exam tip:** verify by one derivative — if you get the integrand, the constant is correct. On Bagrut, base-table items are quick points; missing the sin/cos sign flip is the most common loss. **Check:** $\\dfrac{d}{dx}(\\sin x + C) = \\cos x$ ✓.\n\nMemorize the sin/cos pair as a signed cycle: sin integrates to negative cos, cos integrates to positive sin. Link this to the derivative mnemonic $\\sin\\to\\cos\\to-\\sin$. On multiple-choice, eliminate answers whose derivative you can compute mentally in two seconds.",
-      "explanation_he": "הנגזרת ההפוכה של $\\cos x$ היא $\\sin x + C$ כי $\\dfrac{d}{dx}(\\sin x) = \\cos x$. האפשרות $-\\sin x + C$ מתאימה ל-$-\\cos x$ — טעות סימן בין sin ל-cos. $\\cos x + C$ נגזרת ל-$-\\sin x$, לא $\\cos x$. $-\\cos x + C$ שייך לאינטגרל של sin, לא cos. **טיפ לבחינה:** אמתו בגזירה אחת — אם מתקבל האינטגרנד, הקבוע נכון. בבגרות, פריטי טבלת בסיס הם נקודות מהירות; היפוך סימן sin/cos הוא הטעות הנפוצה ביותר. **בדיקה:** $\\dfrac{d}{dx}(\\sin x + C) = \\cos x$ ✓.\n\nשננו את זוג sin/cos כמחזור עם סימן: sin לאינטגרל של cos שלילי, cos ל-sin חיובי. קשרו לזיכרון הנגזרות $\\sin\\to\\cos\\to-\\sin$. ברב-ברירה, שללו תשובות שאת הנגזרת שלהן אפשר לחשב בראש בשתי שניות.",
-      "ord": 1,
+      "source_item_id": "9a9d9819-01b8-5e4a-bae3-1f6ebd4c814d",
+      "points_level_min": "5pt",
       "options_en": [
-        "$-\\sin x+C$",
-        "$\\sin x+C$",
-        "$\\cos x+C$",
-        "$-\\cos x+C$"
+        "$e^x+C$",
+        "$xe^{x-1}+C$",
+        "$\\frac{e^x}{x}+C$",
+        "$\\ln x+C$"
       ],
       "options_he": [
-        "$-\\sin x+C$",
-        "$\\sin x+C$",
-        "$\\cos x+C$",
-        "$-\\cos x+C$"
+        "$e^x+C$",
+        "$xe^{x-1}+C$",
+        "$\\frac{e^x}{x}+C$",
+        "$\\ln x+C$"
       ],
-      "correct_index": 1,
-      "skill_atoms": []
+      "correct_index": 0
     },
     {
-      "id": "q2",
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\int e^{3x}\\,dx = ?$",
-      "stem_he": "$\\int e^{3x}\\,dx = ?$",
-      "answer_payload": {
-        "options_en": [
-          "$3e^{3x}+C$",
-          "$e^{3x}+C$",
-          "$\\frac{1}{3}e^{3x}+C$",
-          "$\\frac{1}{3}e^x+C$"
-        ],
-        "options_he": [
-          "$3e^{3x}+C$",
-          "$e^{3x}+C$",
-          "$\\frac{1}{3}e^{3x}+C$",
-          "$\\frac{1}{3}e^x+C$"
-        ],
-        "correct_index": 2
-      },
-      "explanation_en": "This is chain-rule reversal with inner function $3x$, so $a=3$. Since $\\int e^u\\,du = e^u + C$, we get $\\int e^{3x}\\,dx = \\dfrac{1}{3}e^{3x}+C$. Option $3e^{3x}+C$ forgets to divide — it would differentiate to $9e^{3x}$. Plain $e^{3x}+C$ misses the $\\dfrac{1}{3}$ factor entirely. $\\dfrac{1}{3}e^x+C$ changes the exponent, a common distraction on multiple-choice items. **Verify:** $\\dfrac{d}{dx}\\left(\\dfrac{1}{3}e^{3x}\\right)=\\dfrac{1}{3}\\cdot 3e^{3x}=e^{3x}$ ✓. **Bagrut tip:** whenever the exponent is linear $ax+b$, ask immediately for $a$ and divide.\n\nExponential inner functions always produce a $\\dfrac{1}{a}$ factor — no exceptions. Compare with $\\int e^x\\,dx=e^x+C$ as the $a=1$ baseline. If the stem had $e^{-2x}$, the answer would carry $\\dfrac{1}{-2}$. Write the chain step explicitly on the exam for partial credit.",
-      "explanation_he": "זהו היפוך כלל שרשרת עם פונקציה פנימית $3x$, כלומר $a=3$. מכיוון ש-$\\int e^u\\,du = e^u + C$, מתקבל $\\int e^{3x}\\,dx = \\dfrac{1}{3}e^{3x}+C$. $3e^{3x}+C$ שוכח לחלק — הנגזרת תהיה $9e^{3x}$. $e^{3x}+C$ בלבד חסר גורם $\\dfrac{1}{3}$. $\\dfrac{1}{3}e^x+C$ משנה את המעריך — מסיח נפוץ. **אימות:** $\\dfrac{d}{dx}\\left(\\dfrac{1}{3}e^{3x}\\right)=e^{3x}$ ✓. **טיפ בגרות:** כשהמעריך לינארי $ax+b$, שאלו מיד מהו $a$ וחלקו.\n\nפונקציה פנימית מעריכית תמיד נותנת $\\dfrac{1}{a}$ — בלי יוצא מן הכלל. השוו ל-$\\int e^x\\,dx=e^x+C$ כבסיס $a=1$. ב-$e^{-2x}$ התשובה תכלול $\\dfrac{1}{-2}$. כתבו את צעד השרשרת במפורש לניקוד חלקי.",
       "ord": 2,
-      "options_en": [
-        "$3e^{3x}+C$",
-        "$e^{3x}+C$",
-        "$\\frac{1}{3}e^{3x}+C$",
-        "$\\frac{1}{3}e^x+C$"
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi}\\sin x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi}\\sin x\\,dx$.",
+      "explanation_en": "**Antiderivative** $-\\cos x$.\n\n**$[-\\cos x]_0^{\\pi}=-(-1)-(-1)=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**פונקציה קדומה** $-\\cos x$.\n\n**$[-\\cos x]_0^{\\pi}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "trig_integral"
       ],
-      "options_he": [
-        "$3e^{3x}+C$",
-        "$e^{3x}+C$",
-        "$\\frac{1}{3}e^{3x}+C$",
-        "$\\frac{1}{3}e^x+C$"
-      ],
-      "correct_index": 2,
-      "skill_atoms": []
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "31c8ca6c-97b7-5134-9641-ad3ad1968280",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\int 4\\sin(3x)\\,dx$",
-      "stem_he": "$\\int 4\\sin(3x)\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "-\\frac{4}{3}\\cos(3x)+C",
-          "-(4/3)cos(3x)+C",
-          "-4/3 cos(3x)+C",
-          "$-\\frac{4}{3}\\cos(3x)+C$"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Apply chain reversal to $\\sin(3x)$ first: $\\int \\sin(3x)\\,dx = -\\dfrac{1}{3}\\cos(3x)+C$ because differentiating $-\\cos(3x)$ produces $3\\sin(3x)$. Multiply by the outer constant 4: $\\int 4\\sin(3x)\\,dx = -\\dfrac{4}{3}\\cos(3x)+C$. Students often forget the minus on sin integrals or omit $\\dfrac{1}{3}$. **Wrong path:** treating $4\\sin(3x)$ as $4\\sin x$ gives $-4\\cos x$, which fails the chain rule. **Verify:** $\\dfrac{d}{dx}\\left[-\\dfrac{4}{3}\\cos(3x)\\right]=\\dfrac{4}{3}\\cdot 3\\sin(3x)=4\\sin(3x)$ ✓. Include $+C$ for indefinite integrals.\n\nThis problem combines two skills: sin anti-derivative (minus sign) and chain reversal (divide by 3). Order of operations: integrate $\\sin(3x)$ first, then multiply by 4. Do not divide by 4 — it is not part of the inner linear coefficient.",
-      "explanation_he": "יישמו היפוך שרשרת על $\\sin(3x)$: $\\int \\sin(3x)\\,dx = -\\dfrac{1}{3}\\cos(3x)+C$ כי גזירת $-\\cos(3x)$ נותנת $3\\sin(3x)$. כפלו ב-4: $\\int 4\\sin(3x)\\,dx = -\\dfrac{4}{3}\\cos(3x)+C$. לעיתים שוכחים מינוס ב-sin או את $\\dfrac{1}{3}$. **דרך שגויה:** $4\\sin x$ נותן $-4\\cos x$ — מפר כלל שרשרת. **אימות:** $\\dfrac{d}{dx}\\left[-\\dfrac{4}{3}\\cos(3x)\\right]=4\\sin(3x)$ ✓. כללו $+C$ באינטגרל לא מסוים.\n\nהבעיה משלבת שני מיומנויות: אינטגרל sin (מינוס) והיפוך שרשרת (חלק ב-3). סדר: אינטגרציה של $\\sin(3x)$, אחר כך כפל ב-4. אל תחלקו ב-4 — זה לא מקדם הפנימית הלינארי. **טיפ בגרות:** כתבו במפורש $a=3$ לפני החילוק — מורה שרואה את הצעד מעניק ניקוד חלקי. **בדיקה:** גזרו — חייבים $4\\sin(3x)$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi}\\sin x\\,dx$ showing each step.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi}\\sin x\\,dx$ תוך הצגת כל שלב.",
+      "explanation_en": "**Step 1 — Antiderivative.** $F(x)=-\\cos x$.\n\n**Step 2 — Evaluate.** $F(\\pi)=-\\cos\\pi=1$, $F(0)=-\\cos 0=-1$.\n\n**Step 3 — Subtract.** $1-(-1)=2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**שלב 1 — פונקציה קדומה.** $-\\cos x$.\n\n**שלב 2 — הצבה.** $1$ ו-$-1$.\n\n**שלב 3 — חיסור.** $2$.\n\n**תשובה:** $2$.",
       "skill_atoms": [
-        "integral_sin_cos",
-        "integral_exp"
-      ]
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Antiderivative.** $F(x)=-\\cos x$.",
+          "**Step 2 — Evaluate.** $F(\\pi)=-\\cos\\pi=1$, $F(0)=-\\cos 0=-1$.",
+          "**Step 3 — Subtract.** $1-(-1)=2$.",
+          "**Answer:** $2$."
+        ],
+        "steps_he": [
+          "**שלב 1 — פונקציה קדומה.** $-\\cos x$.",
+          "**שלב 2 — הצבה.** $1$ ו-$-1$.",
+          "**שלב 3 — חיסור.** $2$.",
+          "**תשובה:** $2$."
+        ]
+      },
+      "source_item_id": "212cbf6d-abc8-5da2-b6fe-5952f4116830",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\int 2e^{5x}\\,dx$",
-      "stem_he": "$\\int 2e^{5x}\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{2}{5}e^{5x}+C",
-          "(2/5)e^{5x}+C",
-          "2/5 e^{5x}+C",
-          "$\\frac{2}{5}e^{5x}+C$"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Inner exponent $5x$ means $a=5$. Base rule: $\\int e^{5x}\\,dx = \\dfrac{1}{5}e^{5x}+C$. Scale by 2: $\\int 2e^{5x}\\,dx = \\dfrac{2}{5}e^{5x}+C$. A frequent error is writing $\\dfrac{1}{5}\\cdot 2e^{5x}$ correctly but then simplifying to $2e^{5x}$ on the exam sheet. Another slip: multiplying by 5 instead of dividing, yielding $10e^{5x}$. **Verify:** $\\dfrac{d}{dx}\\left(\\dfrac{2}{5}e^{5x}\\right)=\\dfrac{2}{5}\\cdot 5e^{5x}=2e^{5x}$ ✓. Exponential chain reversal mirrors trig — identify $a$ before integrating.\n\nMirror structure of $\\int 4\\sin(3x)\\,dx$ but with exponential base. The coefficient 2 scales the final answer; $a=5$ scales via division. **Self-check:** if your answer grows faster than $e^{5x}$ when differentiated, you multiplied instead of dividing by 5.",
-      "explanation_he": "מעריך פנימי $5x$ — $a=5$. כלל בסיס: $\\int e^{5x}\\,dx = \\dfrac{1}{5}e^{5x}+C$. כפלו ב-2: $\\int 2e^{5x}\\,dx = \\dfrac{2}{5}e^{5x}+C$. טעות נפוצה: כתיבה נכונה ואז \"פישוט\" ל-$2e^{5x}$. טעות נוספת: כפל ב-5 במקום חילוק. **אימות:** $\\dfrac{d}{dx}\\left(\\dfrac{2}{5}e^{5x}\\right)=2e^{5x}$ ✓. היפוך שרשרת מעריכי דומה לטריג — זהו $a$ לפני אינטגרציה.\n\nמבנה דומה ל-$\\int 4\\sin(3x)\\,dx$ אך עם בסיס מעריכי. מקדם 2 מכפיל; $a=5$ מחלק. **בדיקה:** אם הנגזרת גדלה מהר מ-$e^{5x}$, כפלתם במקום לחלק ב-5. **טיפ:** $e^{5x}$ הוא $f(5x)$ — זהו $a$ מיד. **בדיקה:** ב-$x=0$ הנגזרת ההפוכה שווה 2.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\displaystyle\\int_{-\\pi}^{\\pi}\\sin x\\,dx = 0$.",
+      "stem_he": "נכון או לא נכון: $\\displaystyle\\int_{-\\pi}^{\\pi}\\sin x\\,dx = 0$.",
+      "explanation_en": "**$\\sin x$ is odd, so the symmetric integral is $0$** — **true**.",
+      "explanation_he": "**$\\sin x$ אי-זוגית, ולכן האינטגרל הסימטרי $0$** — **נכון**.",
       "skill_atoms": [
-        "integral_sin_cos",
-        "integral_exp"
-      ]
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "c49ad376-f33c-5646-9155-c27f74b3b7ff",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$\\int \\frac{3}{x}\\,dx$ for $x>0$",
-      "stem_he": "$\\int \\frac{3}{x}\\,dx$ עבור $x>0$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "3\\ln x+C",
-          "3 ln x + C",
-          "3\\ln|x|+C",
-          "$3\\ln x+C$"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Pull the constant: $\\int \\dfrac{3}{x}\\,dx = 3\\int \\dfrac{1}{x}\\,dx = 3\\ln|x|+C$. For $x>0$, write $3\\ln x + C$. This is pure table lookup — no IBP needed. Students confuse $\\int \\dfrac{1}{x}\\,dx$ with power rule ($\\int x^n\\,dx$), attempting $\\dfrac{3x^0}{0}$ which is invalid. Another error: forgetting the coefficient 3 and answering $\\ln x + C$. **Verify:** $\\dfrac{d}{dx}(3\\ln x)=\\dfrac{3}{x}$ ✓. Log integrals appear whenever rates are proportional to $\\dfrac{1}{x}$.\n\nThe restriction $x>0$ lets you drop absolute value bars for cleaner answers. In physics contexts where $x$ represents mass or length, this is natural. If $x<0$ were allowed, $3\\ln|x|+C$ is mandatory — losing the absolute value loses marks on rigorous grading.",
-      "explanation_he": "הוציאו קבוע: $\\int \\dfrac{3}{x}\\,dx = 3\\int \\dfrac{1}{x}\\,dx = 3\\ln|x|+C$. עבור $x>0$: $3\\ln x + C$. זו טבלה בלבד — בלי IBP. מבלבלים עם כלל החזקות ומנסים $\\dfrac{3x^0}{0}$ — לא תקף. טעות נוספת: $\\ln x + C$ בלי 3. **אימות:** $\\dfrac{d}{dx}(3\\ln x)=\\dfrac{3}{x}$ ✓. אינטגרלים לוגריתמיים מופיעים כשקצב פרופורציונלי ל-$\\dfrac{1}{x}$.\n\nההגבלה $x>0$ מאפשרת להסיר ערך מוחלט. בפיזיקה (מסה, אורך) זה טבעי. אם $x<0$ מותר, חובה $3\\ln|x|+C$ — ויתור על ערך מוחלט מוריד ניקוד. **זכרו:** $\\int \\frac{1}{x}\\,dx$ אינו כלל חזקות. **בדיקה:** גזרו $3\\ln x$ — מתקבל $\\frac{3}{x}$. **הקשר:** אינטגרלים לוגריתמיים מופיעים בדעיכה אקספוננציאלית ובמודלים של קצב פרופורציונלי ל-1/x.",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi/2}\\cos x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi/2}\\cos x\\,dx$.",
+      "explanation_en": "**Antiderivative** $\\sin x$.\n\n**$[\\sin x]_0^{\\pi/2}=1-0=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**פונקציה קדומה** $\\sin x$.\n\n**$[\\sin x]_0^{\\pi/2}=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "integral_sin_cos",
-        "integral_exp"
-      ]
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "a837a038-973e-50da-84a2-b4e4f32274a6",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$\\int \\cos(\\pi x)\\,dx$",
-      "stem_he": "$\\int \\cos(\\pi x)\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "\\frac{1}{\\pi}\\sin(\\pi x)+C",
-          "(1/pi)sin(pi x)+C",
-          "1/pi sin(pi x)+C",
-          "$\\frac{1}{\\pi}\\sin(\\pi x)+C$"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Here $a=\\pi$. Chain reversal on cos: $\\int \\cos(\\pi x)\\,dx = \\dfrac{1}{\\pi}\\sin(\\pi x)+C$. Students sometimes use $\\dfrac{1}{2}$ from habit when the inner coefficient is numeric but not $\\pi$. Others integrate $\\cos(\\pi x)$ as $\\sin(\\pi x)$ without dividing by $\\pi$. **Verify:** $\\dfrac{d}{dx}\\left(\\dfrac{1}{\\pi}\\sin(\\pi x)\\right)=\\dfrac{1}{\\pi}\\cdot\\pi\\cos(\\pi x)=\\cos(\\pi x)$ ✓. Treat $\\pi$ exactly like any other constant $a$ in $f(ax)$.\n\nProblems with $\\pi$ as the inner coefficient test whether you treat symbolic constants like numbers. $\\dfrac{d}{dx}\\sin(\\pi x)=\\pi\\cos(\\pi x)$ — the $\\pi$ must cancel after integration. Do not approximate $\\pi\\approx 3.14$ unless the question asks for decimals.",
-      "explanation_he": "כאן $a=\\pi$. היפוך שרשרת על cos: $\\int \\cos(\\pi x)\\,dx = \\dfrac{1}{\\pi}\\sin(\\pi x)+C$. לפעמים משתמשים ב-$\\dfrac{1}{2}$ מהרגל. אחרים מחזירים $\\sin(\\pi x)$ בלי חילוק ב-$\\pi$. **אימות:** $\\dfrac{d}{dx}\\left(\\dfrac{1}{\\pi}\\sin(\\pi x)\\right)=\\cos(\\pi x)$ ✓. התייחסו ל-$\\pi$ כמו לכל קבוע $a$ ב-$f(ax)$.\n\nבעיות עם $\\pi$ כמקדם פנימי בודקות התייחסות לקבועים סימבוליים כמספרים. $\\dfrac{d}{dx}\\sin(\\pi x)=\\pi\\cos(\\pi x)$ — ה-$\\pi$ חייב להתבטל. אל תקרבו $\\pi\\approx 3.14$ אלא אם נדרש. **טיפ:** כתבו $\\frac{1}{\\pi}\\sin(\\pi x)+C$ בצורה מדויקת. **אימות:** גזירה נותנת $\\cos(\\pi x)$. **שימו לב:** pi הוא קבוע כמו 2 או 5 — אל תתייחסו אליו אחרת. **טיפ נוסף:** בדקו יחידות זווית — x ברדיאנים.",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1} e^x\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1} e^x\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$[e^x]_0^1=e-1\\approx 1.7183$.**\n\n**Answer:** $\\approx 1.7183$.",
+      "explanation_he": "**$[e^x]_0^1=e-1\\approx 1.7183$.**\n\n**תשובה:** $\\approx 1.7183$.",
       "skill_atoms": [
-        "integral_sin_cos",
-        "integral_exp"
-      ]
+        "exp_integral"
+      ],
+      "answer_payload": {
+        "value": 1.718282
+      },
+      "source_item_id": "6ea952c2-f100-5f16-b98d-35863634defb",
+      "points_level_min": "5pt",
+      "correct_answer": "1.718282"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$\\int x\\sin x\\,dx$",
-      "stem_he": "$\\int x\\sin x\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "-x\\cos x+\\sin x+C",
-          "-x cos x + sin x + C",
-          "$-x\\cos x+\\sin x+C$",
-          "sin x - x cos x + C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "LIATE: Algebraic $x$ before Trig $\\sin x$, so $u=x$, $dv=\\sin x\\,dx$, hence $du=dx$, $v=-\\cos x$. IBP: $\\int x\\sin x\\,dx = -x\\cos x + \\int \\cos x\\,dx = -x\\cos x + \\sin x + C$. Swapping $u$ and $dv$ often creates a harder integral. **Verify:** $\\dfrac{d}{dx}(-x\\cos x+\\sin x)=-\\cos x+x\\sin x+\\cos x=x\\sin x$ ✓. On Bagrut, show $u$, $dv$, $du$, $v$ clearly for partial credit even if the final algebra slips.\n\nAfter IBP, the remaining $\\int\\cos x\\,dx$ is table lookup — do not overcomplicate. **Alternative check:** integrate by parts again with different $u$ choice and confirm same form up to $+C$. Sign errors on $v=-\\cos x$ propagate to the final answer; write $v$ carefully.",
-      "explanation_he": "LIATE: אלגברי $x$ לפני טריג $\\sin x$, ולכן $u=x$, $dv=\\sin x\\,dx$, $du=dx$, $v=-\\cos x$. IBP: $\\int x\\sin x\\,dx = -x\\cos x + \\sin x + C$. החלפת $u$ ו-$dv$ מסבכת. **אימות:** $\\dfrac{d}{dx}(-x\\cos x+\\sin x)=x\\sin x$ ✓. בבגרות, הציגו $u$, $dv$, $du$, $v$ לניקוד חלקי גם אם האלגברה מעדיפה.\n\nאחרי IBP, $\\int\\cos x\\,dx$ הוא טבלה — אל תסבכו. **בדיקה חלופית:** IBP עם בחירת $u$ אחרת — אותה צורה עד $+C$. טעויות סימן ב-$v=-\\cos x$ משתקפות בתשובה; כתבו $v$ בזהירות. **LIATE:** $u=x$ תמיד כאן. **ניקוד:** הציגו שלב $\\int x\\sin x\\,dx = -x\\cos x + \\int\\cos x\\,dx$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi}\\cos x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi}\\cos x\\,dx$.",
+      "explanation_en": "**$[\\sin x]_0^{\\pi}=0-0=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$[\\sin x]_0^{\\pi}=0$.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "integral_sin_cos",
-        "integral_exp"
-      ]
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "4b42e09e-6eb8-5d4e-838e-51d896d866fd",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$\\int x^2 e^x\\,dx$",
-      "stem_he": "$\\int x^2 e^x\\,dx$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "e^x(x^2-2x+2)+C",
-          "e^x (x^2 - 2x + 2) + C",
-          "$e^x(x^2-2x+2)+C$",
-          "(x^2-2x+2)e^x+C"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Apply IBP twice. First: $u=x^2$, $dv=e^x\\,dx$ gives $x^2 e^x - 2\\int x e^x\\,dx$. Second on $\\int x e^x\\,dx$: $u=x$, $dv=e^x\\,dx$ yields $\\int x e^x\\,dx = e^x(x-1)+C$. Combine: $\\int x^2 e^x\\,dx = e^x(x^2-2x+2)+C$. Stopping after one IBP leaves $\\int x e^x\\,dx$ unfinished. **Verify:** differentiate $e^x(x^2-2x+2)$ using product rule — you recover $x^2 e^x$. Polynomial-times-exponential always reduces degree by one per IBP until zero.\n\nTwo IBP passes reduce $x^2$ to $x^0$ — pattern for $\\int x^n e^x\\,dx$ in general. Factor $e^x$ at the end for elegance; expanded polynomial form is also acceptable. **Bagrut tip:** tabular IBP is optional but speeds $n\\ge 2$ cases if your teacher allows it.",
-      "explanation_he": "IBP פעמיים. ראשון: $u=x^2$, $dv=e^x\\,dx$ נותן $x^2 e^x - 2\\int x e^x\\,dx$. שני על $\\int x e^x\\,dx$: $u=x$ מוביל ל-$e^x(x-1)+C$. סיכום: $\\int x^2 e^x\\,dx = e^x(x^2-2x+2)+C$. עצירה אחרי IBP אחד משאירה $\\int x e^x\\,dx$ פתוח. **אימות:** גזרו $e^x(x^2-2x+2)$ — מתקבל $x^2 e^x$. פולינום כפול מעריכי מוריד דרגה ב-IBP עד אפס.\n\nשני IBP מורידים $x^2$ ל-$x^0$ — דפוס ל-$\\int x^n e^x\\,dx$ בכלל. הוציאו $e^x$ בסוף; צורה מפורקת גם מתקבלת. **טיפ בגרות:** IBP טבלאי אופציונלי ומזרז $n\\ge 2$ אם המורה מאשר. **ביניים:** $\\int x e^x\\,dx=e^x(x-1)+C$. **אימות:** גזרו $e^x(x^2-2x+2)$ בכלל מכפלה. **טיפ:** כתבו את הביטוי המקדם לפני $e^x$ — קריא יותר למורה.",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi/2}\\sin x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi/2}\\sin x\\,dx$.",
+      "explanation_en": "**$[-\\cos x]_0^{\\pi/2}=0-(-1)=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$[-\\cos x]_0^{\\pi/2}=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "integral_sin_cos",
-        "integral_exp"
-      ]
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "406d4a31-450d-53c9-b6da-4c98ed4c14ad",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1} 2e^x\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1} 2e^x\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$2[e^x]_0^1=2(e-1)\\approx 3.4366$.**\n\n**Answer:** $\\approx 3.4366$.",
+      "explanation_he": "**$2(e-1)\\approx 3.4366$.**\n\n**תשובה:** $\\approx 3.4366$.",
+      "skill_atoms": [
+        "exp_integral"
+      ],
+      "answer_payload": {
+        "value": 3.436564
+      },
+      "source_item_id": "0ae3a737-b244-5b5c-92ae-6024687139c1",
+      "points_level_min": "5pt",
+      "correct_answer": "3.436564"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^{2\\pi}\\sin x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{2\\pi}\\sin x\\,dx$.",
+      "explanation_en": "**$[-\\cos x]_0^{2\\pi}=-1-(-1)=0$** (full period).\n\n**Answer:** $0$.",
+      "explanation_he": "**$[-\\cos x]_0^{2\\pi}=0$** (מחזור שלם).\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "12e51960-9a73-5a4e-887a-0a976bc49ab6",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_1^{2} e^x\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_1^{2} e^x\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$[e^x]_1^2=e^2-e\\approx 4.6708$.**\n\n**Answer:** $\\approx 4.6708$.",
+      "explanation_he": "**$e^2-e\\approx 4.6708$.**\n\n**תשובה:** $\\approx 4.6708$.",
+      "skill_atoms": [
+        "exp_integral"
+      ],
+      "answer_payload": {
+        "value": 4.670774
+      },
+      "source_item_id": "bad08e73-31f8-5795-83bc-191751972da7",
+      "points_level_min": "5pt",
+      "correct_answer": "4.670774"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_{-\\pi/2}^{\\pi/2}\\cos x\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_{-\\pi/2}^{\\pi/2}\\cos x\\,dx$.",
+      "explanation_en": "**$[\\sin x]_{-\\pi/2}^{\\pi/2}=1-(-1)=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$[\\sin x]_{-\\pi/2}^{\\pi/2}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "81611536-5c20-57fc-8744-294f8a383ea6",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi/2}(\\sin x+\\cos x)\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi/2}(\\sin x+\\cos x)\\,dx$.",
+      "explanation_en": "**Antiderivative** $-\\cos x+\\sin x$.\n\n**$[-\\cos x+\\sin x]_0^{\\pi/2}=(0+1)-(-1+0)=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**פונקציה קדומה** $-\\cos x+\\sin x$.\n\n**$=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "trig_integral"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "6db0bd2c-cc46-53a5-800f-d2e3bc8350ed",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1} e^{2x}\\,dx$ (round to 4).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1} e^{2x}\\,dx$ (עגלו ל-4).",
+      "explanation_en": "**$\\left[\\dfrac{e^{2x}}{2}\\right]_0^1=\\dfrac{e^2-1}{2}\\approx 3.1945$.**\n\n**Answer:** $\\approx 3.1945$.",
+      "explanation_he": "**$\\dfrac{e^2-1}{2}\\approx 3.1945$.**\n\n**תשובה:** $\\approx 3.1945$.",
+      "skill_atoms": [
+        "exp_integral"
+      ],
+      "answer_payload": {
+        "value": 3.194528
+      },
+      "source_item_id": "64636e1e-f282-5022-9fb2-98e757aefa85",
+      "points_level_min": "5pt",
+      "correct_answer": "3.194528"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^{1} x e^{x}\\,dx$ (integration by parts).",
+      "stem_he": "חשבו $\\displaystyle\\int_0^{1} x e^{x}\\,dx$ (אינטגרציה בחלקים).",
+      "explanation_en": "**By parts:** $\\int x e^x dx=(x-1)e^x$.\n\n**$[(x-1)e^x]_0^1=0-(-1)=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**בחלקים:** $(x-1)e^x$.\n\n**$[(x-1)e^x]_0^1=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "exp_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "4e625069-1612-510b-a49a-36fcc9c488af",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 25,

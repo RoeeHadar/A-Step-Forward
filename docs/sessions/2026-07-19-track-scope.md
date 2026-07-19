@@ -396,10 +396,34 @@ expanded to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
 Difficulty spread 5/6/4 (≈33/40/27), 4 kinds per lesson. Math + strict +
 track-scope audits all green. Zero rejections on the first pipeline pass.
 
+## Batch P — shipped
+
+The **applied-statistics + advanced-conics + integral-calculus strand** expanded
+to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
+
+- `quadratic_equations_makhina` (Makhina) — discriminant, Vieta sum/product,
+  vertex & minimum, quadratic formula, root verification via CAS `expr_value`.
+- `linear_regression_3pt` (3pt) — means, least-squares slope $b=S_{xy}/S_{xx}$,
+  intercept $a=\bar y-b\bar x$, prediction, residual — all real datasets computed
+  and CAS-verified.
+- `binomial_distribution_bernoulli` (statistics) — $\binom{n}{k}$, PMF
+  $\binom{n}{k}p^k q^{n-k}$, mean $np$, variance $np(1-p)$, complement.
+- `analytic_geometry_conics` (5pt) — ellipse $a,b,c$, eccentricity $c/a$,
+  parabola $y^2=4px$ focus & vertex form.
+- `integrals_trig_exp` (5pt) — definite integrals of $\sin,\cos,e^x,e^{2x}$,
+  odd-symmetry, a by-parts $\int xe^x$ — every item run through CAS
+  `integral_definite`.
+- `scatter_plot_correlation_intro` (statistics) — means, covariation sign,
+  Pearson $r=S_{xy}/\sqrt{S_{xx}S_{yy}}$, "correlation ≠ causation".
+
+`linear_regression_3pt` was initially 14 (a dropped medium item) and got one
+more mean item. Spread 5/6/4, 4 kinds per lesson. Math + strict + track-scope
+audits green; zero rejections on the first pipeline pass for all six.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **78 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **84 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines

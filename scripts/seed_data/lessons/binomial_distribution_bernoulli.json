@@ -239,149 +239,321 @@
       "body_he_md": "- **ניסוי ברנולי:** ניסוי בודד, הצלחה $p$, כישלון $1-p$.\n- **בינומי $B(n,p)$:** ספירת הצלחות ב-$n$ ניסויים בלתי-תלויים זהים.\n- **PMF:** $P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}$; ממוצע $np$; שונות $np(1-p)$.\n- **מצטבר:** סכום איברי PMF, משלים, או $P(X\\leq b)-P(X\\leq a-1)$.\n- **BINS** חייבים להתקיים; אחרת — היפרגיאומטרי, גיאומטרי או פואסון.\n- **צורה:** סימטרי ב-$p=0.5$; מוטה אחרת; מתקרב לנורמלי כש-$n$ גדל.\n\n**צעד הבא:** כש-$n$ גדול — עברו לקירוב נורמלי וגבול פואסון במקום סכימת PMF ידנית."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "bernoulli",
+      "binomial_coefficient",
+      "binomial_mean",
+      "binomial_pmf",
+      "binomial_variance"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$X \\sim B(6, 0.5)$. Find $P(X=3)$.",
-      "stem_he": "$X\\sim B(6,0.5)$. מצא $P(X=3)$.",
+      "stem_en": "A single Bernoulli trial has how many possible outcomes?",
+      "stem_he": "לניסוי ברנולי בודד כמה תוצאות אפשריות?",
+      "explanation_en": "**Success or failure — exactly $2$ outcomes.**\n\n**Answer:** $2$.",
+      "explanation_he": "**הצלחה או כישלון — $2$ תוצאות.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "bernoulli"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.3125$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.3125"
+        "options_en": [
+          "$2$",
+          "$1$",
+          "$3$",
+          "$n$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$2$",
+          "$1$",
+          "$3$",
+          "$n$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nWe have $n=6$ independent trials with $p=0.5$, so $X\\sim B(6,0.5)$. Exactly three successes means $k=3$. The binomial PMF gives $P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**How to think about it:**\nWith a fair coin ($p=0.5$), the distribution is symmetric and $\\binom{6}{3}=\\binom{6}{3}$ — a quick sanity check before calculating.\n\n**Common slip:**\nOmitting $\\binom{6}{3}$ and writing only $(0.5)^6$, which counts one arrangement instead of all $20$ ways to place three successes among six trials.\n\n**Exam tip:**\nWhen $p=0.5$, rewrite $(0.5)^n$ as $1/2^n$ and keep answers as exact fractions when possible.",
-      "explanation_he": "**למה זה נכון:**\nיש $n=6$ ניסויים בלתי-תלויים עם $p=0.5$, ולכן $X\\sim B(6,0.5)$. בדיוק שלוש הצלחות פירושו $k=3$. מ-PMF הבינומי מתקבל $P(X=3)=\\binom{6}{3}(0.5)^6=20/64=0.3125$.\n\n**איך לחשוב על זה:**\nבמטבע הוגן ($p=0.5$) הפילוג סימטרי — בדיקת הגיון מהירה לפני החישוב.\n\n**טעות נפוצה:**\nהשמטת $\\binom{6}{3}$ וכתיבת $(0.5)^6$ בלבד, שסופרת סידור אחד במקום $20$ דרכים לשלוש הצלחות.\n\n**טיפ לבחינה:**\nכש-$p=0.5$, כתבו $(0.5)^n=1/2^n$ והשאירו תשובות כשברים מדויקים כשאפשר.\n\n**בדיקה עצמית:** $\\mu=3$ במרכז; $20/64$ הגיוני. אל תשכחו את $\\binom{6}{3}$ — בלי המקדם מקבלים $(0.5)^6$ בלבד, שזו הסתברות של סידור אחד ספציפי ולא של כל $20$ הסידורים.",
-      "skill_atoms": []
+      "source_item_id": "50d6f7eb-5f13-581d-8013-9f68345b375a",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$2$",
+        "$1$",
+        "$3$",
+        "$n$"
+      ],
+      "options_he": [
+        "$2$",
+        "$1$",
+        "$3$",
+        "$n$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "A test has 10 true/false questions. A student guesses all. Find the expected number correct.",
-      "stem_he": "מבחן עם 10 שאלות נכון/לא-נכון. תלמיד מנחש הכל. מצא את מספר הנכונות הצפוי.",
+      "stem_en": "Compute $\\binom{5}{2}$.",
+      "stem_he": "חשבו $\\binom{5}{2}$.",
+      "explanation_en": "**$\\dfrac{5!}{2!\\,3!}=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$\\binom{5}{2}=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "binomial_coefficient"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\mu = np = 10 \\times 0.5 = 5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5"
-        ],
-        "case_sensitive": false
+        "value": 10
       },
-      "explanation_en": "**Why this is correct:**\nEach true/false question is a Bernoulli trial with $p=0.5$ (guess). With $n=10$ independent questions, the count of correct answers $X\\sim B(10,0.5)$. The expected value is $E[X]=\\mu=np=10\\times0.5=5$.\n\n**How to think about it:**\nExpectation is linear: on average half the guesses succeed. You do not need the full PMF — the question asks for the mean, not a probability.\n\n**Common slip:**\nComputing $P(X=5)$ instead of $E[X]$, or using the variance formula when only the mean is requested.\n\n**Exam tip:**\nUnderline whether the stem says \"expected number,\" \"average,\" or \"most likely value\" — only the first two equal $np$.",
-      "explanation_he": "**למה זה נכון:**\nכל שאלת נכון/לא-נכון היא ניסוי ברנולי עם $p=0.5$. עם $n=10$ שאלות בלתי-תלויות, $X\\sim B(10,0.5)$ ו-$E[X]=\\mu=np=5$.\n\n**איך לחשוב על זה:**\nהתוחלת לינארית: בממוצע חצי מהניחושים מצליחים. אין צורך ב-PMF — השאלה מבקשת ממוצע, לא הסתברות.\n\n**טעות נפוצה:**\nחישוב $P(X=5)$ במקום $E[X]$, או שימוש בנוסחת השונות כשמבקשים רק ממוצע.\n\n**טיפ לבחינה:**\nסמנו אם הניסוח אומר \"מספר צפוי\", \"ממוצע\" או \"הערך הסביר ביותר\" — רק השניים הראשונים שווים ל-$np$.\n\n**בדיקה עצמית:** $P(X=5)\\approx0.25$ הוא הערך הסביר ביותר, לא התוחלת $E[X]=5$. השכיח ו-$\\mu$ שונים — קראו את הניסוח בקפידה.",
-      "skill_atoms": []
+      "source_item_id": "099f538e-5d0c-506b-9884-695a0e447c6b",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$X \\sim B(3, 0.4)$. Find $P(X=0)$.",
-      "stem_he": "$X\\sim B(3,0.4)$. מצא $P(X=0)$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $n=5,p=0.4$, find $P(X=2)$.",
+      "stem_he": "עבור $n=5,p=0.4$, מצאו את $P(X=2)$.",
+      "explanation_en": "**Step 1 — Coefficient.** $\\binom{5}{2}=10$.\n\n**Step 2 — Powers.** $(0.4)^2=0.16$, $(0.6)^3=0.216$.\n\n**Step 3 — Multiply.** $10\\cdot 0.16\\cdot 0.216=0.3456$.\n\n**Answer:** $0.3456$.",
+      "explanation_he": "**שלב 1 — מקדם.** $\\binom{5}{2}=10$.\n\n**שלב 2 — חזקות.** $0.16$ ו-$0.216$.\n\n**שלב 3 — כפל.** $0.3456$.\n\n**תשובה:** $0.3456$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(X=0) = (0.6)^3 = 0.216$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.216$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.216"
+        "steps_en": [
+          "**Step 1 — Coefficient.** $\\binom{5}{2}=10$.",
+          "**Step 2 — Powers.** $(0.4)^2=0.16$, $(0.6)^3=0.216$.",
+          "**Step 3 — Multiply.** $10\\cdot 0.16\\cdot 0.216=0.3456$.",
+          "**Answer:** $0.3456$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — מקדם.** $\\binom{5}{2}=10$.",
+          "**שלב 2 — חזקות.** $0.16$ ו-$0.216$.",
+          "**שלב 3 — כפל.** $0.3456$.",
+          "**תשובה:** $0.3456$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nFor $X\\sim B(3,0.4)$, zero successes means all three trials fail. Each failure has probability $1-p=0.6$, so $P(X=0)=(0.6)^3=0.216$.\n\n**How to think about it:**\nWhen $k=0$, the binomial coefficient is $1$ and the PMF collapses to $(1-p)^n$ — the complement shortcut for \"none succeed.\"\n\n**Common slip:**\nUsing $0.4^3$ instead of $0.6^3$ — the exponent on $p$ is the number of successes, not failures.\n\n**Exam tip:**\nMemorize $P(X=0)=(1-p)^n$ and $P(X=n)=p^n$; they appear constantly in complement problems.",
-      "explanation_he": "**למה זה נכון:**\nעבור $X\\sim B(3,0.4)$, אפס הצלחות פירושו שלושה כישלונות. $P(X=0)=(0.6)^3=0.216$.\n\n**איך לחשוב על זה:**\nכש-$k=0$, המקדם $\\binom{3}{0}=1$ ו-PMF מתכווץ ל-$(1-p)^n$.\n\n**טעות נפוצה:**\nשימוש ב-$0.4^3$ במקום $0.6^3$ — החזקה על $p$ היא מספר ההצלחות.\n\n**טיפ לבחינה:**\nשיננו $P(X=0)=(1-p)^n$ ו-$P(X=n)=p^n$ — הם מופיעים בכל בעיות המשלים.\n\n**בדיקה עצמית:** $(0.6)^3=0.216$. שלושה כישלונות ברצף — אל תשתמשו ב-$0.4$ בחזקה 3.\n\n**הרחבה:** כש-$k=0$, $\\binom{n}{0}=1$ — נשאר $(1-p)^n$. קיצור חשוב בבחינות. זכרו: החזקה על $p$ היא מספר ההצלחות, לא הכישלונות.",
-      "skill_atoms": []
+      "source_item_id": "f196f984-b34a-5e43-954d-67dc205bb440",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$X \\sim B(5, 0.6)$. State the variance.",
-      "stem_he": "$X\\sim B(5,0.6)$. ציין את השונות.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the variance of a binomial variable is $np(1-p)$.",
+      "stem_he": "נכון או לא נכון: השונות של משתנה בינומי היא $np(1-p)$.",
+      "explanation_en": "**Yes — $\\text{Var}(X)=np(1-p)$** — **true**.",
+      "explanation_he": "**כן — $\\text{Var}(X)=np(1-p)$** — **נכון**.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\sigma^2 = 5 \\times 0.6 \\times 0.4 = 1.2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.2"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nFor $X\\sim B(5,0.6)$, variance is $\\sigma^2=np(1-p)=5\\times0.6\\times0.4=1.2$. No PMF calculation is needed.\n\n**How to think about it:**\nVariance is largest near $p=0.5$ and shrinks when $p$ is near $0$ or $1$. Here $p=0.6$ gives moderate spread around mean $\\mu=3$.\n\n**Common slip:**\nReporting standard deviation $\\sqrt{1.2}$ when variance is asked, or using $np$ instead of $np(1-p)$.\n\n**Exam tip:**\nWrite $\\sigma^2=npq$ with $q=1-p$ on your formula card — graders distinguish variance from SD explicitly.\n\n**Self-check:** $\\sigma=\\sqrt{1.2}\\approx1.1$ — SD differs from variance. State $\\sigma^2=npq$ explicitly on your paper.",
-      "explanation_he": "**למה זה נכון:**\nעבור $X\\sim B(5,0.6)$, השונות היא $\\sigma^2=np(1-p)=5\\times0.6\\times0.4=1.2$.\n\n**איך לחשוב על זה:**\nהשונות מקסימלית ליד $p=0.5$ וקטנה כש-$p$ קרוב ל-$0$ או $1$. כאן $\\mu=3$.\n\n**טעות נפוצה:**\nדיווח על סטיית תקן $\\sqrt{1.2}$ כשמבקשים שונות, או שימוש ב-$np$ במקום $np(1-p)$.\n\n**טיפ לבחינה:**\nכתבו $\\sigma^2=npq$ עם $q=1-p$ על גיליון הנוסחאות.\n\n**בדיקה עצמית:** $\\sigma=\\sqrt{1.2}\\approx1.1$ — SD שונה משונות. כתבו $\\sigma^2=npq$ במפורש.\n\n**הרחבה:** השונות מודדת פיזור סביב $\\mu=3$. SD היה $\\sqrt{1.2}$ — אל תערבבו בין השניים.",
-      "skill_atoms": []
+      "source_item_id": "3ce668db-46e7-5a0a-8ae0-3d683e4e0a18",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A factory produces items with 10% defect rate. In 7 items, find $P(X \\leq 1)$.",
-      "stem_he": "מפעל עם שיעור פגמים 10%. ב-7 פריטים, מצא $P(X\\leq1)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the mean of a $\\text{Binomial}(n=10,p=0.5)$ variable.",
+      "stem_he": "מצאו את התוחלת של משתנה $\\text{Binomial}(n=10,p=0.5)$.",
+      "explanation_en": "**$E[X]=np=10\\cdot 0.5=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$E[X]=np=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "binomial_mean"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=0)=0.9^7\\approx0.4783$. $P(X=1)=7\\times0.1\\times0.9^6=7\\times0.1\\times0.5314=0.3720$. $P(X\\leq1)\\approx0.8503$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.3720$. $P(X\\leq1)\\approx0.8503$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.8503"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nDefective items: $n=7$, $p=0.1$, so $X\\sim B(7,0.1)$. \"At most one defective\" means $P(X\\leq1)=P(X=0)+P(X=1)$. $P(X=0)=0.9^7\\approx0.4783$ and $P(X=1)\\approx0.3720$, summing to $0.8503$.\n\n**How to think about it:**\nCumulative \"at most $k$\" requires adding PMF terms from $0$ through $k$. With small $p$, most mass sits at $0$ and $1$.\n\n**Common slip:**\nStopping at $P(X=0)$ only, or using complement without finishing the tail sum.\n\n**Exam tip:**\nFor \"at most 1,\" always write two terms explicitly — partial sums lose method marks even if the final number is close.",
-      "explanation_he": "**למה זה נכון:**\n$n=7$, $p=0.1$, $X\\sim B(7,0.1)$. \"לכל היותר אחד פגום\" = $P(X\\leq1)=P(X=0)+P(X=1)\\approx0.8503$.\n\n**איך לחשוב על זה:**\n\"לכל היותר $k$\" דורש סכימת איברי PMF מ-$0$ עד $k$. עם $p$ קטן, רוב המסה ב-$0$ ו-$1$.\n\n**טעות נפוצה:**\nעצירה ב-$P(X=0)$ בלבד, או שימוש במשלים בלי לסיים את סכימת הזנב.\n\n**טיפ לבחינה:**\nב\"לכל היותר 1\" — כתבו שני איברים במפורש.\n\n**בדיקה עצמית:** $\\mu=0.7$ — רוב המסה ב-$0$ ו-$1$. כתבו $P(X=1)$ במפורש לניקוד שיטה.\n\n**הרחבה:** כתבו $P(X=0)+P(X=1)$ במפורש לפני חיבור — נקודות שיטה תלויות בהצגת הסכום. אל תשתמשו במשלים כאן: $P(X\\geq2)$ דורש סכימת חמישה איברים.",
-      "skill_atoms": []
+      "source_item_id": "689be26e-1662-54c1-ab65-50879ee49ae3",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$X \\sim B(10, 0.3)$. Find $P(X \\geq 1)$.",
-      "stem_he": "$X\\sim B(10,0.3)$. מצא $P(X\\geq1)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the variance of $\\text{Binomial}(n=10,p=0.5)$.",
+      "stem_he": "מצאו את השונות של $\\text{Binomial}(n=10,p=0.5)$.",
+      "explanation_en": "**$\\text{Var}=np(1-p)=10\\cdot 0.5\\cdot 0.5=2.5$.**\n\n**Answer:** $2.5$.",
+      "explanation_he": "**$\\text{Var}=2.5$.**\n\n**תשובה:** $2.5$.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X\\geq1)=1-P(X=0)=1-0.7^{10}=1-0.0282=0.9718$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.9718$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.9718"
-        ],
-        "case_sensitive": false
+        "value": 2.5
       },
-      "explanation_en": "**Why this is correct:**\n$P(X\\geq1)$ means \"at least one success.\" The complement is easier: $P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=0.9718$.\n\n**How to think about it:**\nSumming $P(X=1)+\\cdots+P(X=10)$ is correct but slow. One failure probability $(1-p)^n$ captures \"all fail.\"\n\n**Common slip:**\nUsing $1-p^{10}$ instead of $1-(1-p)^{10}$ — exponents apply to failure probability, not success.\n\n**Exam tip:**\nWhenever you see \"at least one,\" sketch the complement before reaching for the calculator.\n\n**Self-check:** With $p=0.3$, failing all ten trials has probability only $(0.7)^{10}\\approx2.8\\%$, so at least one success is very likely — $0.9718$ passes the sanity test.",
-      "explanation_he": "**למה זה נכון:**\n$P(X\\geq1)=1-P(X=0)=1-(0.7)^{10}=0.9718$. המשלים תופס את המקרה היחיד שבו כל עשרת הניסויים נכשלים.\n\n**איך לחשוב על זה:**\n\"לפחות אחת\" פירושו \"לא כולן נכשלות\". סכימת $P(X=1)+\\cdots+P(X=10)$ נכונה אך איטית ומסוכנת לטעויות חישוב.\n\n**טעות נפוצה:**\nשימוש ב-$1-p^{10}$ במקום $1-(1-p)^{10}$ — החזקה חלה על הסתברות הכישלון $(1-p)$, לא על $p$.\n\n**טיפ לבחינה:**\nשרטטו משלים לפני המחשבון: $P(X\\geq1)=1-P(X=0)$. עם $p=0.3$, $(0.7)^{10}\\approx0.028$ — כולם נכשלים נדיר, ולכן $0.9718$ הגיוני. בבחינה, כתבו תמיד את נוסחת המשלים לפני שאתם מחשבים.\n\n**הרחבה:** עם $p=0.3$, $(0.7)^{10}\\approx0.028$ — כולם נכשלים נדיר, ולכן $0.9718$ הגיוני. בבחינה, כתבו תמיד את נוסחת המשלים לפני שאתם מחשבים.",
-      "skill_atoms": []
+      "source_item_id": "f93d1b00-9838-514a-9a48-ab2b21725e68",
+      "points_level_min": "5pt",
+      "correct_answer": "2.5"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$X \\sim B(8, 0.5)$. Find $P(3 \\leq X \\leq 5)$.",
-      "stem_he": "$X\\sim B(8,0.5)$. מצא $P(3\\leq X\\leq5)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\binom{4}{0}$.",
+      "stem_he": "חשבו $\\binom{4}{0}$.",
+      "explanation_en": "**$\\binom{4}{0}=1$ (one way to choose nothing).**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\binom{4}{0}=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "binomial_coefficient"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=3)=\\binom{8}{3}/256=56/256$. $P(X=4)=70/256$. $P(X=5)=56/256$. Sum $=182/256=0.711$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.711$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.711"
-        ],
-        "case_sensitive": false
+        "value": 1
       },
-      "explanation_en": "**Why this is correct:**\nFor $X\\sim B(8,0.5)$, an inclusive interval $3\\leq X\\leq5$ means $P(X=3)+P(X=4)+P(X=5)$. With $p=0.5$, $P(X=k)=\\binom{8}{k}/256$, giving $(56+70+56)/256=182/256\\approx0.711$.\n\n**How to think about it:**\nSymmetric binomial: $P(X=3)=P(X=5)$ because $\\binom{8}{3}=\\binom{8}{5}$. The middle term $P(X=4)$ is the mode near $n/2$.\n\n**Common slip:**\nUsing $P(X\\leq5)-P(X\\leq3)$ without the $-1$ adjustment — for inclusive bounds use $P(X\\leq b)-P(X\\leq a-1)$.\n\n**Exam tip:**\nList each $k$ in the interval before calculating — off-by-one errors are the top binomial exam mistake on timed tests.\n\n**Self-check:** $182/256\\approx0.71$ — most probability mass in the middle of the symmetric distribution.",
-      "explanation_he": "**למה זה נכון:**\n$P(3\\leq X\\leq5)=P(X=3)+P(X=4)+P(X=5)=(56+70+56)/256\\approx0.711$ עבור $X\\sim B(8,0.5)$.\n\n**איך לחשוב על זה:**\nטווח כולל דורש סכימת כל ערכי $k$ בפנים. בינומי סימטרי: $P(X=3)=P(X=5)$ — בדיקה מהירה לפני חיבור. האיבר $P(X=4)=70/256$ הוא הגדול ביותר — זה תואם ש-$k=4$ קרוב ל-$n/2$.\n\n**טעות נפוצה:**\n$P(X\\leq5)-P(X\\leq3)$ בלי התאמת $-1$ באינדקס התחתון — לגבולות כוללים: $P(X\\leq b)-P(X\\leq a-1)$.\n\n**טיפ לבחינה:**\nרשמו $k=3,4,5$ לפני חישוב. ניתן גם $P(X\\leq5)-P(X\\leq2)$ — אל תערבבו בין \"מדויק\" ל\"מצטבר\". עם $p=0.5$, כדאי לכתוב הסתברויות כשברים מ-$256$ לפני סכימה — זה מקטין טעויות עיגול.\n\n**הרחבה:** ניתן גם $P(X\\leq5)-P(X\\leq2)$ — אל תערבבו בין \"מדויק\" ל\"מצטבר\". עם $p=0.5$, כדאי לכתוב הסתברויות כשברים מ-$256$ לפני סכימה.",
-      "skill_atoms": []
+      "source_item_id": "a2f68fa4-1f83-5ac1-bcef-2831ad00fb35",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "List all BINS conditions for the binomial model. Which ones are most commonly violated?",
-      "stem_he": "רשום את כל תנאי BINS. אילו מהם מופרים בתדירות הגבוהה ביותר?",
+      "stem_en": "For $n=3,p=0.5$, find $P(X=2)$.",
+      "stem_he": "עבור $n=3,p=0.5$, מצאו את $P(X=2)$.",
+      "explanation_en": "**$\\binom{3}{2}(0.5)^2(0.5)^1=3\\cdot 0.125=0.375$.**\n\n**Answer:** $0.375$.",
+      "explanation_he": "**$=3\\cdot 0.125=0.375$.**\n\n**תשובה:** $0.375$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**B**inary outcomes, **I**ndependent trials, **N**umber fixed, **S**ame $p$. Most commonly violated: Independence (sampling without replacement) and same $p$ (changing conditions)"
-        ],
-        "case_sensitive": false
+        "value": 0.375
       },
-      "explanation_en": "**Why this is correct:**\nBINS: **B**inary outcomes, **I**ndependent trials, fixed **N**umber $n$, **S**ame probability $p$ each trial. Most often violated: **Independence** (sampling without replacement — use hypergeometric) and **Same $p$** (conditions change mid-experiment).\n\n**How to think about it:**\nBefore any formula, translate the story into trials. If trials are not identical or not independent, the binomial model is wrong regardless of arithmetic.\n\n**Common slip:**\nApplying $B(n,p)$ to \"draw 5 cards without replacement\" — outcomes are dependent.\n\n**Exam tip:**\nWrite BINS as a checklist on word problems; one violated letter disqualifies the binomial model.",
-      "explanation_he": "**למה זה נכון:**\nBINS: **B**inary, **I**ndependent, **N**umber קבוע, **S**ame $p$. מופרים: בלתי-תלות (דגימה ללא החזרה) וקביעות $p$.\n\n**איך לחשוב על זה:**\nלפני נוסחה — תרגמו את הסיפור לניסויים. אם הניסויים לא זהים או לא בלתי-תלויים, המודל הבינומי שגוי.\n\n**טעות נפוצה:**\nיישום $B(n,p)$ על \"שליפת 5 קלפים ללא החזרה\".\n\n**טיפ לבחינה:**\nכתבו BINS כרשימת בדיקה; אות אחת מופרת — פסלו את המודל הבינומי.\n\n**בדיקה עצמית:** BINS הוא שער — דגימה ללא החזרה = היפרגיאומטרי, לא בינומי.\n\n**הרחבה:** דוגמה קלאסית: שליפת 5 קלפים ללא החזרה — תלות בין שליפות → פילוג היפרגיאומטרי. BINS הוא שער, לא רק רשימת מילים.",
-      "skill_atoms": []
+      "source_item_id": "325d2974-c232-5efc-ae4d-1c4813ed9621",
+      "points_level_min": "5pt",
+      "correct_answer": "0.375"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $n=4,p=0.5$, find $P(X=0)$.",
+      "stem_he": "עבור $n=4,p=0.5$, מצאו את $P(X=0)$.",
+      "explanation_en": "**$(0.5)^4=0.0625$.**\n\n**Answer:** $0.0625$.",
+      "explanation_he": "**$(0.5)^4=0.0625$.**\n\n**תשובה:** $0.0625$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.0625
+      },
+      "source_item_id": "f50d32a8-7305-55f8-8430-6f860ac59db4",
+      "points_level_min": "5pt",
+      "correct_answer": "0.0625"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the mean of $\\text{Binomial}(n=20,p=0.3)$.",
+      "stem_he": "מצאו את התוחלת של $\\text{Binomial}(n=20,p=0.3)$.",
+      "explanation_en": "**$E[X]=20\\cdot 0.3=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$E[X]=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "binomial_mean"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "2b446a9e-d296-5e02-bfff-49fa01c3ac73",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $n=3,p=0.5$, find $P(X=3)$ (all successes).",
+      "stem_he": "עבור $n=3,p=0.5$, מצאו את $P(X=3)$ (כל ההצלחות).",
+      "explanation_en": "**$(0.5)^3=0.125$.**\n\n**Answer:** $0.125$.",
+      "explanation_he": "**$(0.5)^3=0.125$.**\n\n**תשובה:** $0.125$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.125
+      },
+      "source_item_id": "f98036b9-71e2-5406-8a3a-fbb310fb0aac",
+      "points_level_min": "5pt",
+      "correct_answer": "0.125"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\binom{6}{2}$.",
+      "stem_he": "חשבו $\\binom{6}{2}$.",
+      "explanation_en": "**$\\dfrac{6\\cdot 5}{2}=15$.**\n\n**Answer:** $15$.",
+      "explanation_he": "**$=15$.**\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "binomial_coefficient"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "ac232494-c4a5-5880-8fc1-bfc05b4638f6",
+      "points_level_min": "5pt",
+      "correct_answer": "15"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $n=4,p=0.25$, find $P(X=1)$.",
+      "stem_he": "עבור $n=4,p=0.25$, מצאו את $P(X=1)$.",
+      "explanation_en": "**$4\\cdot 0.25\\cdot (0.75)^3=0.421875$.**\n\n**Answer:** $0.421875$.",
+      "explanation_he": "**$=0.421875$.**\n\n**תשובה:** $0.421875$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.421875
+      },
+      "source_item_id": "e446ec72-ed7a-5175-b181-46dbeefd1e96",
+      "points_level_min": "5pt",
+      "correct_answer": "0.421875"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the variance of $\\text{Binomial}(n=100,p=0.2)$.",
+      "stem_he": "מצאו את השונות של $\\text{Binomial}(n=100,p=0.2)$.",
+      "explanation_en": "**$\\text{Var}=100\\cdot 0.2\\cdot 0.8=16$.**\n\n**Answer:** $16$.",
+      "explanation_he": "**$\\text{Var}=16$.**\n\n**תשובה:** $16$.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
+      "answer_payload": {
+        "value": 16
+      },
+      "source_item_id": "c8d57420-a96c-54e6-82ab-ad4ce7d21e4a",
+      "points_level_min": "5pt",
+      "correct_answer": "16"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $n=3,p=0.5$, find $P(X\\ge 1)=1-P(X=0)$.",
+      "stem_he": "עבור $n=3,p=0.5$, מצאו את $P(X\\ge 1)=1-P(X=0)$.",
+      "explanation_en": "**$1-(0.5)^3=1-0.125=0.875$.**\n\n**Answer:** $0.875$.",
+      "explanation_he": "**$1-0.125=0.875$.**\n\n**תשובה:** $0.875$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.875
+      },
+      "source_item_id": "1149de62-b360-5829-a596-1ceb18eeae1b",
+      "points_level_min": "5pt",
+      "correct_answer": "0.875"
     }
   ],
   "est_minutes": 40,
