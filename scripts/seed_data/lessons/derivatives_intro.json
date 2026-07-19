@@ -230,150 +230,345 @@
       "body_he_md": "- הנגזרת $f'(a)=\\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}$ היא קצב השינוי הרגעי ושיפוע המשיק ב-$a$.\n- גזירות גוררת רציפות; ההפך אינו נכון ($|x|$ ב-$0$ היא דוגמת הנגד הסטנדרטית).\n- חישוב מהגדרה דורש כלי אלגברה: פיתוח פולינומים, רציונליזציה, איחוד שברים, או גבולות טריגונומטריים.\n- משוואת משיק: $y = f(a) + f'(a)(x-a)$ — תמיד דרך הנקודה על העקומה.\n- השתמשו בהגדרת הגבול כשבבחינה כתוב \"מהגדרה\"; אחרת כללי הגזירה (השיעור הבא) מהירים הרבה יותר."
     }
   ],
-  "agent_hints": "When a learner asks about derivatives, start with geometric intuition (slope of tangent), then state the limit definition. Require the learner to compute at least one derivative from definition before applying rules.",
+  "agent_hints": {
+    "socratic_prompt": "When a learner asks about derivatives, start with geometric intuition (slope of tangent), then state the limit definition. Require the learner to compute at least one derivative from definition before applying rules.",
+    "key_insights": [],
+    "common_misconceptions": [],
+    "skill_atoms_unlocked": [
+      "continuity",
+      "derivatives"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Use the limit definition to find $f'(x)$ for $f(x) = 5x + 3$.",
-      "stem_he": "השתמשו בהגדרת הגבול למצוא $f'(x)$ עבור $f(x) = 5x + 3$.",
+      "stem_en": "The derivative measures:",
+      "stem_he": "הנגזרת מודדת:",
+      "explanation_en": "**It is the instantaneous rate of change (slope).**\n\n**Answer:** the instantaneous rate of change.",
+      "explanation_he": "**זהו קצב השינוי הרגעי (שיפוע).**\n\n**תשובה:** קצב השינוי הרגעי.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Difference quotient: $\\frac{5(x+h)+3-(5x+3)}{h} = \\frac{5h}{h} = 5$. Limit: $f'(x) = 5$",
-          "5$",
-          "5"
+        "options_en": [
+          "$\\text{the instantaneous rate of change}$",
+          "$\\text{the total area}$",
+          "$\\text{the average}$",
+          "$\\text{the maximum}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{the instantaneous rate of change}$",
+          "$\\text{the total area}$",
+          "$\\text{the average}$",
+          "$\\text{the maximum}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nFor a linear function $f(x)=5x+3$, the difference quotient simplifies immediately: $\\frac{5(x+h)+3-(5x+3)}{h}=\\frac{5h}{h}=5$. No $h$ remains, so the limit as $h\\to 0$ is still $5$. This shows that lines have constant slope — the derivative of a linear function is its slope coefficient.\n\n**How to think about it:**\nStart from the definition every time, even when the answer seems obvious. Expand $f(x+h)$, subtract $f(x)$, and cancel $h$ before taking the limit.\n\n**Common slip:**\nStopping at $\\frac{5h}{h}$ without stating $\\lim_{h\\to 0}5=5$, or claiming the derivative depends on $x$ when the function is linear.\n\n**Exam tip:**\nBagrut 5-unit \"from definition\" questions on lines are quick marks — write the full difference quotient setup even for easy functions to show the examiner you know the process.",
-      "explanation_he": "**למה זה נכון:**\nעבור $f(x)=5x+3$, מנת ההפרש מתפשטת מיד: $\\frac{5h}{h}=5$. לא נשאר $h$, ולכן הגבול הוא $5$. זה מראה שלקווים ישרים יש שיפוע קבוע — נגזרת של פונקציה לינארית היא מקדם השיפוע.\n\n**איך לחשוב על זה:**\nהתחילו מההגדרה בכל פעם, גם כשהתשובה נראית ברורה. פתחו $f(x+h)$, חסרו $f(x)$, וצמצמו $h$ לפני הגבול.\n\n**טעות נפוצה:**\nעצירה ב-$\\frac{5h}{h}$ בלי לכתוב $\\lim_{h\\to 0}5=5$, או טענה שהנגזרת תלויה ב-$x$ כשהפונקציה לינארית.\n\n**טיפ לבחינה:**\nשאלות \"מהגדרה\" על קווים בבגרות 5 יחידות — נקודות מהירות. כתבו את מנת ההפרש המלאה גם בפונקציות קלות.",
-      "skill_atoms": []
+      "source_item_id": "6092fe47-72df-55bc-9133-9b88f2eac450",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{the instantaneous rate of change}$",
+        "$\\text{the total area}$",
+        "$\\text{the average}$",
+        "$\\text{the maximum}$"
+      ],
+      "options_he": [
+        "$\\text{the instantaneous rate of change}$",
+        "$\\text{the total area}$",
+        "$\\text{the average}$",
+        "$\\text{the maximum}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find $f'(x)$ from definition for $f(x) = x^2 - 3x$.",
-      "stem_he": "מצאו $f'(x)$ מהגדרה עבור $f(x) = x^2 - 3x$.",
+      "stem_en": "For $f(x)=x^2$, $f'(x)=2x$. Find $f'(3)$.",
+      "stem_he": "עבור $f(x)=x^2$, $f'(x)=2x$. מצאו את $f'(3)$.",
+      "explanation_en": "**$f'(3)=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$f'(3)=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Numerator: $(x+h)^2-3(x+h)-(x^2-3x)=2xh+h^2-3h$. Divide by $h$: $2x+h-3$. Limit: $f'(x)=2x-3$",
-          "2x-3$",
-          "-3"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\nExpand $(x+h)^2-3(x+h)$ and subtract $x^2-3x$. The $x^2$ terms cancel, leaving $2xh+h^2-3h$. Dividing by $h$ gives $2x+h-3$, and the limit as $h\\to 0$ yields $f'(x)=2x-3$. This is the power rule plus the constant multiple rule, verified from scratch.\n\n**How to think about it:**\nTreat each term separately: differentiate $x^2$ to get $2x$ and $-3x$ to get $-3$. The definition should produce the same result — use that as a self-check.\n\n**Common slip:**\nForgetting the $-3h$ term when expanding $-3(x+h)$, or leaving $h$ in the final answer instead of taking the limit.\n\n**Exam tip:**\nPolynomial derivatives from definition always follow the same pattern: expand, cancel $x^2$ (or highest power), factor $h$, limit. Practice until the four steps are automatic.",
-      "explanation_he": "**למה זה נכון:**\nפתיחת $(x+h)^2-3(x+h)$ וחיסור $x^2-3x$ מבטלת את $x^2$ ומשאירה $2xh+h^2-3h$. חלוקה ב-$h$ נותנת $2x+h-3$, והגבול $f'(x)=2x-3$.\n\n**איך לחשוב על זה:**\nטפלו בכל איבר בנפרד: נגזרת $x^2$ היא $2x$ ושל $-3x$ היא $-3$. ההגדרה צריכה לתת אותה תוצאה — השתמשו בזה לבדיקה.\n\n**טעות נפוצה:**\nשכחת איבר $-3h$ בפתיחת $-3(x+h)$, או השארת $h$ בתשובה הסופית.\n\n**טיפ לבחינה:**\nנגזרות פולינומים מהגדרה תמיד באותו דפוס: פיתוח, ביטול חזקה עליונה, פיצול $h$, גבול. תרגלו עד שהארבעה צעדים אוטומטיים.",
-      "skill_atoms": []
+      "source_item_id": "256432cd-bdc0-5c4d-94d8-c1de04ba5c3f",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Find the equation of the tangent line to $y = x^2$ at $x = 1$.",
-      "stem_he": "מצאו את משוואת המשיק ל-$y = x^2$ ב-$x = 1$.",
+      "stem_en": "True or False: the derivative of a constant function is zero.",
+      "stem_he": "נכון או לא נכון: הנגזרת של פונקציה קבועה היא אפס.",
+      "explanation_en": "**No change means zero slope** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**אין שינוי פירושו שיפוע אפס** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'(x)=2x$, so $f'(1)=2$. Point: $(1,1)$. Tangent: $y - 1 = 2(x-1)$, i.e., $y = 2x-1$",
-          "2x-1$",
-          "-1"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nFirst find $f'(x)=2x$ from the definition (or recall from this lesson). At $x=1$: $f(1)=1^2=1$ and $f'(1)=2(1)=2$. The tangent line through $(1,1)$ with slope $2$ is $y-1=2(x-1)$, which simplifies to $y=2x-1$.\n\n**How to think about it:**\nTangent line problems require two ingredients: the point $(a,f(a))$ on the curve and the slope $f'(a)$. Never use only the derivative value without the point.\n\n**Common slip:**\nWriting $y=2x$ (passes through origin, not through $(1,1)$) or using $f'(x)=2x$ as the tangent equation instead of point-slope form.\n\n**Exam tip:**\nOn exams, always write $y-f(a)=f'(a)(x-a)$ first, then simplify. Examiners often give partial credit for correct setup even if algebra slips later.",
-      "explanation_he": "**למה זה נכון:**\nקודם $f'(x)=2x$. ב-$x=1$: $f(1)=1$ ו-$f'(1)=2$. המשיק דרך $(1,1)$ בשיפוע $2$ הוא $y-1=2(x-1)$, כלומר $y=2x-1$.\n\n**איך לחשוב על זה:**\nבעיות משיק דורשות שני מרכיבים: הנקודה $(a,f(a))$ על העקומה והשיפוע $f'(a)$. לעולם אל תשתמשו רק בערך הנגזרת בלי הנקודה.\n\n**טעות נפוצה:**\nכתיבת $y=2x$ (עובר במקור, לא ב-$(1,1)$) או שימוש ב-$f'(x)=2x$ כמשוואת המשיק.\n\n**טיפ לבחינה:**\nבבחינות, כתבו תמיד $y-f(a)=f'(a)(x-a)$ קודם, ואז פשטו. בוחנים נותנים לעיתים נקודות חלקיות על הצבה נכונה.",
-      "skill_atoms": []
+      "source_item_id": "3b061fe9-5628-5014-90f8-6e93e3e307a9",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "At which points is $f(x) = |x|$ not differentiable? Explain using the limit definition.",
-      "stem_he": "באילו נקודות $f(x) = |x|$ אינה גזירה? הסבירו באמצעות הגדרת הגבול.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=x^3$, find $f'(2)$ using the power rule.",
+      "stem_he": "עבור $f(x)=x^3$, מצאו את $f'(2)$ בעזרת כלל החזקה.",
+      "explanation_en": "**Step 1 — Power rule.** $f'(x)=3x^2$.\n\n**Step 2 — Substitute.** $f'(2)=3\\cdot 2^2$.\n\n**Step 3 — Evaluate.** $=12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**שלב 1 — כלל החזקה.** $f'(x)=3x^2$.\n\n**שלב 2 — הצבה.** $3\\cdot 2^2$.\n\n**שלב 3 — חישוב.** $12$.\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "At $x=0$: left-hand limit is $-1$, right-hand limit is $+1$. They differ, so the limit does not exist and $f$ is not differentiable at $0$. Everywhere else $f'(x)=\\pm 1$",
-          "\\pm 1$",
-          "1"
+        "steps_en": [
+          "**Step 1 — Power rule.** $f'(x)=3x^2$.",
+          "**Step 2 — Substitute.** $f'(2)=3\\cdot 2^2$.",
+          "**Step 3 — Evaluate.** $=12$.",
+          "**Answer:** $12$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — כלל החזקה.** $f'(x)=3x^2$.",
+          "**שלב 2 — הצבה.** $3\\cdot 2^2$.",
+          "**שלב 3 — חישוב.** $12$.",
+          "**תשובה:** $12$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=0$, the left-hand difference quotient approaches $-1$ (slope of $-x$ for $x<0$) and the right-hand approaches $+1$ (slope of $+x$ for $x>0$). Since these one-sided limits differ, the two-sided limit does not exist, so $f'(0)$ is undefined. For $x\\ne 0$, $|x|$ is smooth and $f'(x)=\\pm 1$ depending on sign.\n\n**How to think about it:**\nFor piecewise or absolute-value functions, compute left-hand and right-hand limits of the difference quotient separately. Different values mean no derivative at that point.\n\n**Common slip:**\nSaying $|x|$ is not differentiable \"because of the corner\" without computing the one-sided limits, or claiming non-differentiability everywhere instead of only at $x=0$.\n\n**Exam tip:**\nBagrut questions on $|x|$ often ask you to sketch $f$ and $f'$ on the same axes — remember $f'$ is undefined at $0$ but equals $+1$ for $x>0$ and $-1$ for $x<0$.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=0$, גבול שמאלי של מנת ההפרש שואג ל-$-1$ וימני ל-$+1$. כיוון שהם שונים, הגבול הדו-צדדי אינו קיים ו-$f'(0)$ לא מוגדר. ל-$x\\ne 0$, $|x|$ חלקה ו-$f'(x)=\\pm 1$.\n\n**איך לחשוב על זה:**\nבפונקציות חלקיות או עם ערך מוחלט, חשבו גבולות חד-צדדיים של מנת ההפרש בנפרד. ערכים שונים = אין נגזרת.\n\n**טעות נפוצה:**\nאמירה ש-$|x|$ לא גזירה \"בגלל הפינה\" בלי חישוב גבולות חד-צדדיים, או טענה על אי-גזירות בכל מקום במקום רק ב-$0$.\n\n**טיפ לבחינה:**\nשאלות בגרות על $|x|$ מבקשות לעיתים לשרטט $f$ ו-$f'$ — זכרו: $f'$ לא מוגדר ב-$0$, שווה $+1$ ל-$x>0$ ו-$-1$ ל-$x<0$.",
-      "skill_atoms": []
+      "source_item_id": "c86dda93-c746-5f7e-96ce-0d81134bceb4",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Prove from the definition that $(c \\cdot f)'(x) = c \\cdot f'(x)$ for any constant $c$.",
-      "stem_he": "הוכיחו מהגדרה ש-$(c \\cdot f)'(x) = c \\cdot f'(x)$ לכל קבוע $c$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $f(x)=x^3$, $f'(x)=3x^2$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=x^3$, $f'(x)=3x^2$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=3\\cdot 4=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$f'(2)=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nDifference quotient of $g=cf$: $\\frac{c f(x+h)-cf(x)}{h}=c\\cdot\\frac{f(x+h)-f(x)}{h}$. Limit: $c\\cdot f'(x)$. ∎\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "c\\cdot\\frac{f(x+h)-f(x)}{h}$. Limit: $c\\cdot f'(x)$. ∎\n\n**Check:** Re-substitute or verify units and signs before moving on"
-        ],
-        "case_sensitive": false
+        "value": 12
       },
-      "explanation_en": "**Why this is correct:**\nLet $g(x)=cf(x)$. The difference quotient is $\\frac{c f(x+h)-cf(x)}{h}=c\\cdot\\frac{f(x+h)-f(x)}{h}$. Since the limit of a constant times a function equals the constant times the limit, $\\lim_{h\\to 0}c\\cdot\\frac{f(x+h)-f(x)}{h}=c\\cdot f'(x)$. This is the constant multiple rule, proved rigorously from the definition.\n\n**How to think about it:**\nFactor the constant $c$ outside the limit. The definition applies to $f$; multiplying by $c$ just scales every difference quotient by $c$.\n\n**Common slip:**\nDropping the constant $c$ during simplification, or trying to use the product rule (which is not yet proven) instead of factoring.\n\n**Exam tip:**\nProof questions on exams expect you to cite $\\lim(cf)=c\\lim f$. Write that limit law explicitly — one line of justification earns full marks.",
-      "explanation_he": "**למה זה נכון:**\nעבור $g(x)=cf(x)$, מנת ההפרש היא $c\\cdot\\frac{f(x+h)-f(x)}{h}$. מחוק הגבול: $\\lim c\\cdot(\\cdots)=c\\cdot f'(x)$. זה כלל כפל בקבוע, מוכח מההגדרה. ההוכחה לא דורשת שום כלל גזירה נוסף — רק פירוק גורם וחוק גבול בסיסי.\n\n**איך לחשוב על זה:**\nהוציאו את הקבוע $c$ מחוץ לגבול. ההגדרה חלה על $f$; הכפלה ב-$c$ מכפילה כל מנת הפרש באותו מספר.\n\n**טעות נפוצה:**\nהשמטת $c$ בפישוט, או ניסיון להשתמש בכלל המכפלה (עדיין לא מוכח) במקום פירוק.\n\n**טיפ לבחינה:**\nשאלות הוכחה מצפות לציטוט $\\lim(cf)=c\\lim f$. כתבו את חוק הגבול במפורש — שורה אחת מצדיקה את כל הנקודות. זהו אחד משלושת כללי הליניאריות שתוכיחו מהגדרה.",
-      "skill_atoms": []
+      "source_item_id": "a2187aca-6f6f-5800-93af-b14c0349b0b2",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Find $f'(2)$ from the definition for $f(x) = x^3 - 2x$.",
-      "stem_he": "מצאו $f'(2)$ מהגדרה עבור $f(x) = x^3 - 2x$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $f(x)=4x$, find $f'(x)$.",
+      "stem_he": "עבור $f(x)=4x$, מצאו את $f'(x)$.",
+      "explanation_en": "**$f'(x)=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$f'(x)=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nUsing $f'(a)=\\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}$: $f(2)=4$. $\\frac{x^3-2x-4}{x-2} = \\frac{(x-2)(x^2+2x+2)}{x-2}=x^2+2x+2\\to 10$. So $f'(2)=10$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "10$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "10"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nUsing the $x\\to a$ form: $f(2)=2^3-2(2)=8-4=4$. The difference quotient $\\frac{x^3-2x-4}{x-2}$ factors as $\\frac{(x-2)(x^2+2x+2)}{x-2}=x^2+2x+2$ for $x\\ne 2$. As $x\\to 2$, this gives $4+4+2=10$, so $f'(2)=10$.\n\n**How to think about it:**\nWhen finding $f'(a)$ at a specific point, the $x\\to a$ form often avoids expanding $(x+h)^3$. Factor the numerator — if $(x-a)$ is a factor, cancel it before the limit.\n\n**Common slip:**\nSubstituting $x=2$ into the unfactored fraction (gives $0/0$), or forgetting to compute $f(a)$ first when using the $x\\to a$ form.\n\n**Exam tip:**\nFor $f'(a)$ at a specific number, try polynomial division or factoring before expanding the full cube — it saves time under exam pressure.",
-      "explanation_he": "**למה זה נכון:**\nבצורת $x\\to a$: $f(2)=4$. מנת ההפרש $\\frac{x^3-2x-4}{x-2}$ מתפרקת ל-$x^2+2x+2$, וכאשר $x\\to 2$ מתקבל $10$, כלומר $f'(2)=10$.\n\n**איך לחשוב על זה:**\nכשמחפשים $f'(a)$ בנקודה ספציפית, צורת $x\\to a$ לעיתים חוסכת פיתוח $(x+h)^3$. פצלו את המונה — אם $(x-a)$ גורם, צמצמו לפני הגבול.\n\n**טעות נפוצה:**\nהצבה $x=2$ בשבר לפני פירוק ($0/0$), או שכחת חישוב $f(a)$ בצורת $x\\to a$.\n\n**טיפ לבחינה:**\nעבור $f'(a)$ במספר ספציפי, נסו חלוקת פולינומים או פירוק לפני פיתוח מלא — חוסך זמן בלחץ בחינה.",
-      "skill_atoms": []
+      "source_item_id": "c8c851fd-b22f-55bb-842c-efd404f561a5",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Use the definition to find the derivative of $f(x) = \\dfrac{1}{x+1}$.",
-      "stem_he": "השתמשו בהגדרה לגזור $f(x) = \\dfrac{1}{x+1}$.",
+      "stem_en": "The power rule for derivatives is:",
+      "stem_he": "כלל החזקה לנגזרות הוא:",
+      "explanation_en": "**$\\dfrac{d}{dx}x^n=nx^{n-1}$.**\n\n**Answer:** $nx^{n-1}$.",
+      "explanation_he": "**$\\dfrac{d}{dx}x^n=nx^{n-1}$.**\n\n**תשובה:** $nx^{n-1}$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nDifference quotient: $\\frac{\\frac{1}{x+h+1}-\\frac{1}{x+1}}{h}=\\frac{-h}{h(x+h+1)(x+1)}=\\frac{-1}{(x+h+1)(x+1)}$. Limit: $-\\frac{1}{(x+1)^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{-1}{(x+h+1)(x+1)}$. Limit: $-\\frac{1}{(x+1)^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+        "options_en": [
+          "$\\dfrac{d}{dx}x^n=nx^{n-1}$",
+          "$\\dfrac{d}{dx}x^n=nx^{n+1}$",
+          "$\\dfrac{d}{dx}x^n=x^{n-1}$",
+          "$\\dfrac{d}{dx}x^n=n^2x$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\dfrac{d}{dx}x^n=nx^{n-1}$",
+          "$\\dfrac{d}{dx}x^n=nx^{n+1}$",
+          "$\\dfrac{d}{dx}x^n=x^{n-1}$",
+          "$\\dfrac{d}{dx}x^n=n^2x$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nCombine the fractions: $\\frac{\\frac{1}{x+h+1}-\\frac{1}{x+1}}{h}=\\frac{(x+1)-(x+h+1)}{h(x+h+1)(x+1)}=\\frac{-h}{h(x+h+1)(x+1)}$. Cancel $h$ to get $\\frac{-1}{(x+h+1)(x+1)}$, and as $h\\to 0$ the limit is $-\\frac{1}{(x+1)^2}$.\n\n**How to think about it:**\nFor rational functions, always combine into a single fraction before canceling $h$. The numerator should become a polynomial times $h$ — if it does not, recheck your algebra.\n\n**Common slip:**\nSign errors when subtracting fractions (getting $+h$ instead of $-h$ in the numerator), or forgetting to square the denominator in the final answer.\n\n**Exam tip:**\nThe pattern $\\frac{1}{g(x+h)}-\\frac{1}{g(x)}$ always produces a factor of $h$ in the numerator after combining — look for it before taking the limit.",
-      "explanation_he": "**למה זה נכון:**\nאיחוד שברים: $\\frac{\\frac{1}{x+h+1}-\\frac{1}{x+1}}{h}=\\frac{-h}{h(x+h+1)(x+1)}$. צמצום $h$ נותן $\\frac{-1}{(x+h+1)(x+1)}$, והגבול $-\\frac{1}{(x+1)^2}$. זה אותו דפוס כמו $\\frac{1}{x}$ בדוגמת התרגול — רק עם $x+1$ במקום $x$.\n\n**איך לחשוב על זה:**\nבפונקציות רציונליות, אחדו לשבר אחד לפני צמצום $h$. המונה צריך להפוך לפולינום כפול $h$ — אם לא, בדקו שוב את סימן המונה.\n\n**טעות נפוצה:**\nשגיאות סימן בחיסור שברים, או שכחת בריבוע המכנה בתשובה הסופית.\n\n**טיפ לבחינה:**\nהדפוס $\\frac{1}{g(x+h)}-\\frac{1}{g(x)}$ תמיד מייצר גורם $h$ במונה — חפשו אותו לפני הגבול. בבחינה, כתבו את שלב איחוד השברים במפורש.",
-      "skill_atoms": []
+      "source_item_id": "d57918f3-9fca-501c-9fcb-aa441dd35302",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\dfrac{d}{dx}x^n=nx^{n-1}$",
+        "$\\dfrac{d}{dx}x^n=nx^{n+1}$",
+        "$\\dfrac{d}{dx}x^n=x^{n-1}$",
+        "$\\dfrac{d}{dx}x^n=n^2x$"
+      ],
+      "options_he": [
+        "$\\dfrac{d}{dx}x^n=nx^{n-1}$",
+        "$\\dfrac{d}{dx}x^n=nx^{n+1}$",
+        "$\\dfrac{d}{dx}x^n=x^{n-1}$",
+        "$\\dfrac{d}{dx}x^n=n^2x$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "For $f(x) = \\sqrt{2x+1}$, find $f'(x)$ from the limit definition.",
-      "stem_he": "עבור $f(x) = \\sqrt{2x+1}$, מצאו $f'(x)$ מהגדרת הגבול.",
+      "stem_en": "For $f(x)=x^2+2x$, $f'(x)=2x+2$. Find $f'(1)$.",
+      "stem_he": "עבור $f(x)=x^2+2x$, $f'(x)=2x+2$. מצאו את $f'(1)$.",
+      "explanation_en": "**$f'(1)=2+2=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$f'(1)=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nRationalize: $\\frac{\\sqrt{2(x+h)+1}-\\sqrt{2x+1}}{h}\\cdot\\frac{\\sqrt{2(x+h)+1}+\\sqrt{2x+1}}{\\cdot}=\\frac{2h}{h(\\sqrt{2x+2h+1}+\\sqrt{2x+1})}$. Limit: $\\frac{2}{2\\sqrt{2x+1}}=\\frac{1}{\\sqrt{2x+1}}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{1}{\\sqrt{2x+1}}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nRationalize the numerator: multiply by $\\frac{\\sqrt{2(x+h)+1}+\\sqrt{2x+1}}{\\sqrt{2(x+h)+1}+\\sqrt{2x+1}}$ to get $\\frac{2(x+h+1)-2x-1}{h(\\sqrt{2x+2h+1}+\\sqrt{2x+1})}=\\frac{2h}{h(\\sqrt{2x+2h+1}+\\sqrt{2x+1})}$. Cancel $h$ and take the limit: $\\frac{2}{2\\sqrt{2x+1}}=\\frac{1}{\\sqrt{2x+1}}$.\n\n**How to think about it:**\nWhen the function is $\\sqrt{ax+b}$, rationalize using the conjugate — the $a$ in front of $x$ becomes a factor in the numerator after simplification. Track that factor carefully.\n\n**Common slip:**\nForgetting the chain-rule effect: the inner coefficient $2$ from $\\sqrt{2x+1}$ must appear in the numerator before canceling $h$, or the final answer will be off by a factor of 2.\n\n**Exam tip:**\nCompare with $\\sqrt{x}$ from Worked Example 2: the extra factor of 2 from the inner function $2x+1$ is exactly what the chain rule will formalize in the next lesson.",
-      "explanation_he": "**למה זה נכון:**\nרציונליזציה: הכפלה בצמוד נותנת $\\frac{2h}{h(\\sqrt{2x+2h+1}+\\sqrt{2x+1})}$. צמצום $h$ וגבול: $\\frac{2}{2\\sqrt{2x+1}}=\\frac{1}{\\sqrt{2x+1}}$. המקדם $2$ במונה מגיע מפיתוח $(2x+2h+1)-(2x+1)=2h$.\n\n**איך לחשוב על זה:**\nכשהפונקציה $\\sqrt{ax+b}$, רציונליזציה בצמוד — המקדם $a$ לפני $x$ הופך לגורם במונה. עקבו אחריו בקפידה לפני צמצום $h$.\n\n**טעות נפוצה:**\nשכחת השפעת כלל השרשרת: המקדם $2$ מ-$\\sqrt{2x+1}$ חייב להופיע במונה לפני צמצום $h$, אחרת התשובה תהיה שגויה בגורם $2$.\n\n**טיפ לבחינה:**\nהשוו ל-$\\sqrt{x}$ מדוגמה 2: הגורם $2$ הנוסף מ-$2x+1$ הוא בדיוק מה שכלל השרשרת ינסח בשיעור הבא. בבחינה, רשמו את שלב הרציונליזציה במלואו.",
-      "skill_atoms": []
+      "source_item_id": "41a4e8a2-6a33-5f1f-934c-58031541bac9",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x)=x^5$, $f'(x)=5x^4$. Find $f'(1)$.",
+      "stem_he": "עבור $f(x)=x^5$, $f'(x)=5x^4$. מצאו את $f'(1)$.",
+      "explanation_en": "**$f'(1)=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$f'(1)=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "d7775831-b4f6-5143-afbf-9d871e441b6b",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x)=3x^2+2x$, $f'(x)=6x+2$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=3x^2+2x$, $f'(x)=6x+2$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=12+2=14$.**\n\n**Answer:** $14$.",
+      "explanation_he": "**$f'(2)=14$.**\n\n**תשובה:** $14$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 14
+      },
+      "source_item_id": "4c02c91c-a05d-5982-9782-32949a590e4a",
+      "points_level_min": "5pt",
+      "correct_answer": "14"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the slope of $f(x)=x^2$ at $x=5$.",
+      "stem_he": "מצאו את השיפוע של $f(x)=x^2$ ב-$x=5$.",
+      "explanation_en": "**$f'(5)=2\\cdot 5=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$f'(5)=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "d9ce48a5-df0e-55e6-9892-54361641e1dc",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: if $f$ is differentiable at $x=a$ then $f$ is continuous at $x=a$.",
+      "stem_he": "נכון או לא נכון: אם $f$ גזירה ב-$x=a$ אז $f$ רציפה ב-$x=a$.",
+      "explanation_en": "**Differentiability implies continuity** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**גזירות גוררת רציפות** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "continuity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "6f83503c-8548-51a7-b2bc-aaadcc5b9908",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=x^3-x$, $f'(x)=3x^2-1$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=x^3-x$, $f'(x)=3x^2-1$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=12-1=11$.**\n\n**Answer:** $11$.",
+      "explanation_he": "**$f'(2)=11$.**\n\n**תשובה:** $11$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 11
+      },
+      "source_item_id": "7e18f49a-ae8c-5276-b296-8b9afa6af933",
+      "points_level_min": "5pt",
+      "correct_answer": "11"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=2x^3$, $f'(x)=6x^2$. Find $f'(1)$.",
+      "stem_he": "עבור $f(x)=2x^3$, $f'(x)=6x^2$. מצאו את $f'(1)$.",
+      "explanation_en": "**$f'(1)=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$f'(1)=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "c9a895c7-11d1-519a-ace4-d2fd3b747b8e",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=x^2+3x+1$, $f'(x)=2x+3$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=x^2+3x+1$, $f'(x)=2x+3$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=4+3=7$.**\n\n**Answer:** $7$.",
+      "explanation_he": "**$f'(2)=7$.**\n\n**תשובה:** $7$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "227f67a8-1058-5526-b5c8-c4c4dd54723d",
+      "points_level_min": "5pt",
+      "correct_answer": "7"
     }
   ],
   "est_minutes": 55,
