@@ -32,6 +32,13 @@
       "body_he_md": "**הנחות OLS קלאסיות (גאוס–מרקוב):**\n1. **לינאריות:** $y_i = \\beta_0 + \\beta_1 x_i + \\varepsilon_i$.\n2. **אקסוגניות:** $x_i$ קבוע או בלתי-תלוי ב-$\\varepsilon_i$.\n3. **שגיאות בממוצע אפס:** $E[\\varepsilon_i] = 0$.\n4. **הומוסקדסטיות:** $\\text{Var}(\\varepsilon_i) = \\sigma^2$ (שונות קבועה).\n5. **ללא אוטוקורלציה:** $\\text{Cov}(\\varepsilon_i, \\varepsilon_j) = 0$ ל-$i \\neq j$.\n\n**משפט גאוס–מרקוב:** תחת הנחות 1–5, האומדים $\\hat{\\beta}_0$ ו-$\\hat{\\beta}_1$ הם **BLUE** — Linear Unbiased Estimators עם שונות מינימלית. שום צירוף לינארי חסר-הטיה אחר של $y_i$ לא מנצח את OLS בשונות.\n\n**למה הקו עובר דרך $(\\bar{x}, \\bar{y})$:** מ-$\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$, הצבת $x = \\bar{x}$ נותנת $\\hat{y} = \\bar{y}$. קו ההתאמה תמיד מסתובב סביב מרכז הכובל של הנתונים.\n\n**הסקה (עם נורמליות):** אם $\\varepsilon_i \\sim N(0, \\sigma^2)$ i.i.d., אז\n$$\\frac{\\hat{\\beta}_1 - \\beta_1}{s/\\sqrt{S_{xx}}} \\sim t(n-2), \\qquad \\text{Var}(\\hat{\\beta}_1) = \\frac{\\sigma^2}{S_{xx}}.$$\nבדקו $H_0: \\beta_1 = 0$ בהשוואת $|t|$ ל-$t_{\\alpha/2,\\, n-2}$. פיזור רחב יותר ב-$x$ ($S_{xx}$ גדול) מקטין $\\text{SE}(\\hat{\\beta}_1)$ ומגדיל עוצמה.\n\n**אינטואיציה גאומטרית:** OLS בוחרת את הקו שממזער סכום **ריבועי** המרחקים האנכיים. ריבוע מעניש משקל לערכים קיצוניים ונותן מטרה גזירה עם מינימום יחיד (כש-$S_{xx} > 0$). מינימיזציה של סטיות מוחלטות נותנת LAD — עמיד יותר אך בלי נוסחת שיפוע סגורה."
     },
     {
+      "kind": "theory",
+      "title_en": "Normal Equations and Residual Geometry",
+      "title_he": "משוואות נורמליות וגיאומטריית שאריות",
+      "body_en_md": "**Least squares as projection.** Fitting $y\\approx \\beta_0+\\beta_1 x$ minimizes the residual sum of squares $\\mathrm{RSS}=\\sum(y_i-\\hat y_i)^2$. Geometrically, $\\hat{\\mathbf y}$ is the orthogonal projection of $\\mathbf y$ onto the column space of the design matrix $X=[\\mathbf 1\\mid \\mathbf x]$.\n\n**Normal equations.** The critical-point condition $X^\\top X\\hat{\\beta}=X^\\top\\mathbf y$ is equivalent to residuals being orthogonal to each column of $X$: $\\sum e_i=0$ and $\\sum x_i e_i=0$ for simple linear regression.\n\n**Closed forms.** With means $\\bar x,\\bar y$:\n$$\\hat\\beta_1=\\frac{\\sum(x_i-\\bar x)(y_i-\\bar y)}{\\sum(x_i-\\bar x)^2},\\qquad \\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x.$$\nThe fitted line always passes through $(\\bar x,\\bar y)$.\n\n**Diagnostics.** Large $|e_i|$ or curved residual plots suggest nonlinearity or outliers. $R^2=1-\\mathrm{RSS}/\\mathrm{SST}$ measures linear fit quality but does not prove causation.",
+      "body_he_md": "**ריבועים פחותים כהטלה.** התאמת $y\\approx \\beta_0+\\beta_1 x$ ממזערת $\\mathrm{RSS}=\\sum(y_i-\\hat y_i)^2$. גיאומטרית, $\\hat{\\mathbf y}$ הוא ההטלה האורתוגונלית של $\\mathbf y$ על מרחב העמודות של $X=[\\mathbf 1\\mid \\mathbf x]$.\n\n**משוואות נורמליות.** תנאי הקריטי $X^\\top X\\hat{\\beta}=X^\\top\\mathbf y$ שקול לכך שהשאריות אורתוגונליות לעמודות $X$: $\\sum e_i=0$ ו-$\\sum x_i e_i=0$.\n\n**נוסחאות סגורות.** עם ממוצעים $\\bar x,\\bar y$:\n$$\\hat\\beta_1=\\frac{\\sum(x_i-\\bar x)(y_i-\\bar y)}{\\sum(x_i-\\bar x)^2},\\qquad \\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x.$$\nהקו המותאם תמיד עובר ב-$(\\bar x,\\bar y)$.\n\n**אבחון.** $|e_i|$ גדול או שאריות מעוקלות מרמזים על אי-ליניאריות או חריגים. $R^2$ מודד איכות התאמה ליניארית אך אינו מוכיח סיבתיות."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -75,6 +82,15 @@
       "title_he": "דוגמה פתורה 3 — גזירת נוסחאות OLS",
       "body_en_md": "**Derive the OLS formulas for $\\hat{\\beta}_0$ and $\\hat{\\beta}_1$ that minimize SSR.**\n\nThis derivation is a standard proof on Israeli university exams. The key idea: differentiate the sum of squared residuals with respect to each parameter and set derivatives to zero (normal equations).\n\n### Move 1: Write the objective\n$$Q(\\beta_0, \\beta_1) = \\sum_{i=1}^n (y_i - \\beta_0 - \\beta_1 x_i)^2.$$\n\n### Move 2: First-order conditions\n$$\\frac{\\partial Q}{\\partial \\beta_0} = -2\\sum(y_i - \\beta_0 - \\beta_1 x_i) = 0 \\Rightarrow \\sum y_i = n\\beta_0 + \\beta_1\\sum x_i. \\quad (1)$$\n$$\\frac{\\partial Q}{\\partial \\beta_1} = -2\\sum x_i(y_i - \\beta_0 - \\beta_1 x_i) = 0 \\Rightarrow \\sum x_i y_i = \\beta_0\\sum x_i + \\beta_1\\sum x_i^2. \\quad (2)$$\n\n### Move 3: Solve for intercept\nDivide (1) by $n$: $\\bar{y} = \\beta_0 + \\beta_1 \\bar{x}$, so $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$.\n\n### Move 4: Solve for slope\nSubstitute into (2) and simplify using $S_{xy} = \\sum x_i y_i - n\\bar{x}\\bar{y}$ and $S_{xx} = \\sum x_i^2 - n\\bar{x}^2$:\n$$\\hat{\\beta}_1 = \\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$\n\n**Second-order check:** $\\partial^2 Q / \\partial \\beta_1^2 = 2 S_{xx} > 0$ confirms a minimum when $x$ is not constant. **Exam strategy:** write the objective $Q$, the two partial derivatives, substitute $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$, then simplify to $S_{xy}/S_{xx}$ — graders award marks for each visible step. This three-page proof is worth 10–15 points on Technion probability exams.",
       "body_he_md": "**גזרו את נוסחאות OLS ל-$\\hat{\\beta}_0$ ו-$\\hat{\\beta}_1$ שממזערות SSR.**\n\nגזירה זו הוכחה סטנדרטית בבחינות אוניברסיטאיות ישראליות. הרעיון המרכזי: גזרו את סכום ריבועי השאריות לפי כל פרמטר והשווו לאפס (משוואות נורמל).\n\n### צעד 1: כתיבת פונקציית המטרה\n$$Q(\\beta_0, \\beta_1) = \\sum_{i=1}^n (y_i - \\beta_0 - \\beta_1 x_i)^2.$$\n\n### צעד 2: תנאי ראשון\n$$\\frac{\\partial Q}{\\partial \\beta_0} = 0 \\Rightarrow \\sum y_i = n\\beta_0 + \\beta_1\\sum x_i. \\quad (1)$$\n$$\\frac{\\partial Q}{\\partial \\beta_1} = 0 \\Rightarrow \\sum x_i y_i = \\beta_0\\sum x_i + \\beta_1\\sum x_i^2. \\quad (2)$$\n\n### צעד 3: פתרון לנקודת חיתוך\nחלוקת (1) ב-$n$: $\\bar{y} = \\beta_0 + \\beta_1 \\bar{x}$, ולכן $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$.\n\n### צעד 4: פתרון לשיפוע\nהצבה ב-(2) ופישוט עם $S_{xy}$ ו-$S_{xx}$:\n$$\\hat{\\beta}_1 = \\frac{S_{xy}}{S_{xx}}. \\quad \\blacksquare$$\n\n**בדיקת סדר שני:** $\\partial^2 Q / \\partial \\beta_1^2 = 2 S_{xx} > 0$ מאשרת מינימום כש-$x$ לא קבוע. **אסטרטגיית בחינה:** כתבו $Q$, שתי הנגזרות החלקיות, הציבו $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$, ופשטו ל-$S_{xy}/S_{xx}$ — בודקים נותנים ניקוד לכל שלב גלוי. הוכחה זו שווה 10–15 נקודות בבחינות הסתברות בטכניון."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Slope from Centered Sums",
+      "title_he": "דוגמה פתורה 4 — שיפוע מסכומים ממורכזים",
+      "body_en_md": "**Data:** $(x,y)\\in\\{(1,2),(2,3),(3,5)\\}$. Find $\\hat\\beta_1$ and $\\hat\\beta_0$.\n\n### Move 1 — Means\n$\\bar x=2$, $\\bar y=\\tfrac{10}{3}$.\n\n### Move 2 — Centered products\n$$\\sum(x-\\bar x)(y-\\bar y)=(-1)(-\\tfrac43)+(0)(-\\tfrac13)+(1)(\\tfrac53)=\\tfrac43+\\tfrac53=3.$$\n$$\\sum(x-\\bar x)^2=1+0+1=2.$$\n\n### Move 3 — Slope and intercept\n$\\hat\\beta_1=3/2=1.5$, $\\hat\\beta_0=\\tfrac{10}{3}-1.5\\cdot 2=\\tfrac{10}{3}-3=\\tfrac13$.\n\n### Move 4 — Check through the mean point\n$\\hat y(2)=\\tfrac13+1.5\\cdot 2=\\tfrac{10}{3}=\\bar y$ — passes through $(\\bar x,\\bar y)$.",
+      "body_he_md": "**נתונים:** $(x,y)\\in\\{(1,2),(2,3),(3,5)\\}$. מצאו $\\hat\\beta_1$ ו-$\\hat\\beta_0$.\n\n### צעד 1 — ממוצעים\n$\\bar x=2$, $\\bar y=\\tfrac{10}{3}$.\n\n### צעד 2 — מכפלות ממורכזות\n$$\\sum(x-\\bar x)(y-\\bar y)=3,\\qquad \\sum(x-\\bar x)^2=2.$$\n\n### צעד 3 — שיפוע וחותך\n$\\hat\\beta_1=1.5$, $\\hat\\beta_0=\\tfrac13$.\n\n### צעד 4 — בדיקה\n$\\hat y(2)=\\bar y$ — הקו עובר בנקודת הממוצע."
     },
     {
       "kind": "method_guide",
@@ -256,8 +272,8 @@
       "difficulty": "easy",
       "stem_en": "The least-squares line minimizes the sum of:",
       "stem_he": "ישר הריבועים הפחותים ממזער את סכום:",
-      "explanation_en": "**It minimizes $\\sum(y_i-\\hat y_i)^2$, the squared residuals.**\n\n**Answer:** squared residuals.",
-      "explanation_he": "**ממזער את $\\sum(y_i-\\hat y_i)^2$.**\n\n**תשובה:** ריבועי השאריות.",
+      "explanation_en": "**It minimizes $\\sum(y_i-\\hat y_i)^2$, the squared residuals.**\n\n**Answer:** squared residuals.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**ממזער את $\\sum(y_i-\\hat y_i)^2$.**\n\n**תשובה:** ריבועי השאריות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "least_squares"
       ],
@@ -290,7 +306,10 @@
         "$\\text{absolute }x$",
         "$\\text{slopes}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -298,8 +317,8 @@
       "difficulty": "easy",
       "stem_en": "Find the mean of the $x$-values $\\{1,3,5\\}$.",
       "stem_he": "מצאו את הממוצע של ערכי ה-$x$: $\\{1,3,5\\}$.",
-      "explanation_en": "**$\\bar x=\\dfrac{9}{3}=3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**$\\bar x=3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**$\\bar x=\\dfrac{9}{3}=3$.**\n\n**Answer:** $3$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\bar x=3$.**\n\n**תשובה:** $3$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "mean"
       ],
@@ -308,7 +327,15 @@
       },
       "source_item_id": "df3c19ec-20ac-5a0d-a482-c565ffd91f31",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -316,8 +343,8 @@
       "difficulty": "hard",
       "stem_en": "Fit a least-squares line to $(1,2),(3,6),(5,10)$ and predict $y$ at $x=7$.",
       "stem_he": "התאימו ישר ריבועים פחותים ל-$(1,2),(3,6),(5,10)$ וחזו את $y$ עבור $x=7$.",
-      "explanation_en": "**Step 1 — Slope.** $b=\\dfrac{16}{8}=2$.\n\n**Step 2 — Intercept.** $a=6-2\\cdot 3=0$.\n\n**Step 3 — Predict.** $y=2\\cdot 7+0=14$.\n\n**Answer:** $14$.",
-      "explanation_he": "**שלב 1 — שיפוע.** $b=2$.\n\n**שלב 2 — חותך.** $a=0$.\n\n**שלב 3 — חיזוי.** $14$.\n\n**תשובה:** $14$.",
+      "explanation_en": "**Step 1 — Slope.** $b=\\dfrac{16}{8}=2$.\n\n**Step 2 — Intercept.** $a=6-2\\cdot 3=0$.\n\n**Step 3 — Predict.** $y=2\\cdot 7+0=14$.\n\n**Answer:** $14$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — שיפוע.** $b=2$.\n\n**שלב 2 — חותך.** $a=0$.\n\n**שלב 3 — חיזוי.** $14$.\n\n**תשובה:** $14$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "prediction"
       ],
@@ -338,7 +365,11 @@
       "source_item_id": "ade96612-ac95-573d-a52f-5c2caa365a83",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 4,
@@ -346,8 +377,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: the least-squares line always passes through $(\\bar x,\\bar y)$.",
       "stem_he": "נכון או לא נכון: ישר הריבועים הפחותים תמיד עובר דרך $(\\bar x,\\bar y)$.",
-      "explanation_en": "**The regression line passes through the centroid $(\\bar x,\\bar y)$** — **true**.",
-      "explanation_he": "**הישר עובר דרך המרכז $(\\bar x,\\bar y)$** — **נכון**.",
+      "explanation_en": "**The regression line passes through the centroid $(\\bar x,\\bar y)$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הישר עובר דרך המרכז $(\\bar x,\\bar y)$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "least_squares"
       ],
@@ -356,7 +387,10 @@
       },
       "source_item_id": "9e836811-81cc-51b7-a095-b3bb3fb5421b",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 5,
@@ -364,8 +398,8 @@
       "difficulty": "easy",
       "stem_en": "Find the mean of the $y$-values $\\{2,6,10\\}$.",
       "stem_he": "מצאו את הממוצע של ערכי ה-$y$: $\\{2,6,10\\}$.",
-      "explanation_en": "**$\\bar y=\\dfrac{18}{3}=6$.**\n\n**Answer:** $6$.",
-      "explanation_he": "**$\\bar y=6$.**\n\n**תשובה:** $6$.",
+      "explanation_en": "**$\\bar y=\\dfrac{18}{3}=6$.**\n\n**Answer:** $6$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\bar y=6$.**\n\n**תשובה:** $6$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "mean"
       ],
@@ -374,7 +408,15 @@
       },
       "source_item_id": "51c4ecca-3aa5-512e-89bf-c4da50c5e1bf",
       "points_level_min": "5pt",
-      "correct_answer": "6"
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 6,
@@ -382,8 +424,8 @@
       "difficulty": "easy",
       "stem_en": "Find the least-squares slope for $(1,2),(3,6),(5,10)$.",
       "stem_he": "מצאו את שיפוע הריבועים הפחותים עבור $(1,2),(3,6),(5,10)$.",
-      "explanation_en": "**$b=\\dfrac{16}{8}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$b=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$b=\\dfrac{16}{8}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$b=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "regression_slope"
       ],
@@ -392,7 +434,15 @@
       },
       "source_item_id": "bdef5e86-0ecd-5e85-885e-b5307dc31b0e",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -400,8 +450,8 @@
       "difficulty": "easy",
       "stem_en": "Using $y=2x$, predict $y$ when $x=6$.",
       "stem_he": "בעזרת $y=2x$, חזו את $y$ עבור $x=6$.",
-      "explanation_en": "**$y=12$.**\n\n**Answer:** $12$.",
-      "explanation_he": "**$y=12$.**\n\n**תשובה:** $12$.",
+      "explanation_en": "**$y=12$.**\n\n**Answer:** $12$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y=12$.**\n\n**תשובה:** $12$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "prediction"
       ],
@@ -410,7 +460,15 @@
       },
       "source_item_id": "1eb35b34-748d-5adf-ad52-88bf451f911c",
       "points_level_min": "5pt",
-      "correct_answer": "12"
+      "correct_answer": "12",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "12",
+        "expected": 12,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 8,
@@ -418,8 +476,8 @@
       "difficulty": "medium",
       "stem_en": "For $(1,2),(3,6),(5,10)$ with slope $b=2$, find the intercept $a=\\bar y-b\\bar x$.",
       "stem_he": "עבור $(1,2),(3,6),(5,10)$ עם שיפוע $b=2$, מצאו את החותך.",
-      "explanation_en": "**$a=6-2\\cdot 3=0$.**\n\n**Answer:** $0$.",
-      "explanation_he": "**$a=0$.**\n\n**תשובה:** $0$.",
+      "explanation_en": "**$a=6-2\\cdot 3=0$.**\n\n**Answer:** $0$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$a=0$.**\n\n**תשובה:** $0$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "regression_intercept"
       ],
@@ -428,7 +486,15 @@
       },
       "source_item_id": "73bdd508-010b-582e-9e75-6e6c63728de2",
       "points_level_min": "5pt",
-      "correct_answer": "0"
+      "correct_answer": "0",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0",
+        "expected": 0,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -436,8 +502,8 @@
       "difficulty": "medium",
       "stem_en": "Find the least-squares slope for $(2,5),(4,9),(6,13)$.",
       "stem_he": "מצאו את שיפוע הריבועים הפחותים עבור $(2,5),(4,9),(6,13)$.",
-      "explanation_en": "**$b=\\dfrac{16}{8}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$b=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$b=\\dfrac{16}{8}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$b=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "regression_slope"
       ],
@@ -446,7 +512,15 @@
       },
       "source_item_id": "31df4709-2cbd-50ae-a32d-5a84003d3f4b",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -454,8 +528,8 @@
       "difficulty": "medium",
       "stem_en": "For $(2,5),(4,9),(6,13)$ with slope $b=2$, find the intercept.",
       "stem_he": "עבור $(2,5),(4,9),(6,13)$ עם שיפוע $b=2$, מצאו את החותך.",
-      "explanation_en": "**$a=\\bar y-b\\bar x=9-8=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$a=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$a=\\bar y-b\\bar x=9-8=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$a=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "regression_intercept"
       ],
@@ -464,7 +538,15 @@
       },
       "source_item_id": "9864d4d3-1a1c-5aa1-8fd7-e48830358164",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -472,8 +554,8 @@
       "difficulty": "medium",
       "stem_en": "Using $y=2x+1$, predict $y$ when $x=10$.",
       "stem_he": "בעזרת $y=2x+1$, חזו את $y$ עבור $x=10$.",
-      "explanation_en": "**$y=21$.**\n\n**Answer:** $21$.",
-      "explanation_he": "**$y=21$.**\n\n**תשובה:** $21$.",
+      "explanation_en": "**$y=21$.**\n\n**Answer:** $21$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$y=21$.**\n\n**תשובה:** $21$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "prediction"
       ],
@@ -482,7 +564,15 @@
       },
       "source_item_id": "10b73893-53fd-5224-8255-40a86eac4400",
       "points_level_min": "5pt",
-      "correct_answer": "21"
+      "correct_answer": "21",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "21",
+        "expected": 21,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -490,8 +580,8 @@
       "difficulty": "medium",
       "stem_en": "Find the mean of $\\{4,8,12,16\\}$.",
       "stem_he": "מצאו את הממוצע של $\\{4,8,12,16\\}$.",
-      "explanation_en": "**$\\dfrac{40}{4}=10$.**\n\n**Answer:** $10$.",
-      "explanation_he": "**$=10$.**\n\n**תשובה:** $10$.",
+      "explanation_en": "**$\\dfrac{40}{4}=10$.**\n\n**Answer:** $10$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=10$.**\n\n**תשובה:** $10$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "mean"
       ],
@@ -500,7 +590,15 @@
       },
       "source_item_id": "a387a601-0b71-5792-93f7-d6476558aa2a",
       "points_level_min": "5pt",
-      "correct_answer": "10"
+      "correct_answer": "10",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "10",
+        "expected": 10,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 13,
@@ -508,8 +606,8 @@
       "difficulty": "hard",
       "stem_en": "Find the least-squares slope for $(1,1),(2,2),(3,3),(4,4)$.",
       "stem_he": "מצאו את שיפוע הריבועים הפחותים עבור $(1,1),(2,2),(3,3),(4,4)$.",
-      "explanation_en": "**Perfect line $y=x$, so $b=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$b=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**Perfect line $y=x$, so $b=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$b=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "regression_slope"
       ],
@@ -518,7 +616,15 @@
       },
       "source_item_id": "bc4f0b25-e4f7-5a04-be32-1d21b44daf33",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -526,8 +632,8 @@
       "difficulty": "hard",
       "stem_en": "For the line $y=2x$, the point $(3,7)$ is observed. Find the residual.",
       "stem_he": "עבור הישר $y=2x$, נצפתה הנקודה $(3,7)$. מצאו את השארית.",
-      "explanation_en": "**Predicted $=6$; residual $=7-6=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**חזוי $=6$; שארית $=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**Predicted $=6$; residual $=7-6=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**חזוי $=6$; שארית $=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "residual"
       ],
@@ -536,7 +642,15 @@
       },
       "source_item_id": "d327daad-41e7-5d4c-87a9-87354e7ab20a",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -544,8 +658,8 @@
       "difficulty": "hard",
       "stem_en": "For the line $y=2x+1$, find the predicted $y$ at $x=0$ (the intercept).",
       "stem_he": "עבור הישר $y=2x+1$, מצאו את $y$ החזוי ב-$x=0$ (החותך).",
-      "explanation_en": "**At $x=0$, $y=1$ — the intercept.**\n\n**Answer:** $1$.",
-      "explanation_he": "**ב-$x=0$, $y=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**At $x=0$, $y=1$ — the intercept.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**ב-$x=0$, $y=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "prediction"
       ],
@@ -554,7 +668,426 @@
       },
       "source_item_id": "4f84d420-3bf7-53a1-a8aa-a0c9485ac70d",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "The fitted line always passes through (x̄, ____).",
+      "stem_he": "הקו המותאם תמיד עובר דרך (x̄, ____).",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: ȳ.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: ȳ.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "ȳ",
+          "ybar",
+          "mean y",
+          "ȳ"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Does correlation imply causation? (yes/no)",
+      "stem_he": "האם מתאם גורר סיבתיות? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: no.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: no.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "Slope β̂₁",
+            "right": "cov/var form"
+          },
+          {
+            "left": "Intercept β̂₀",
+            "right": "ȳ−β̂₁x̄"
+          },
+          {
+            "left": "Residual",
+            "right": "y−ŷ"
+          },
+          {
+            "left": "RSS",
+            "right": "Σ residual²"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "שיפוע",
+            "right": "צורה cov/var"
+          },
+          {
+            "left": "חותך",
+            "right": "ȳ−β̂₁x̄"
+          },
+          {
+            "left": "שארית",
+            "right": "y−ŷ"
+          },
+          {
+            "left": "RSS",
+            "right": "Σ שארית²"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Compute means",
+          "Compute slope via centered sums",
+          "Compute intercept",
+          "Interpret residuals"
+        ],
+        "order_he": [
+          "חשבו ממוצעים",
+          "חשבו שיפוע מסכומים ממורכזים",
+          "חשבו חותך",
+          "פרשו שאריות"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "Least squares minimizes Σ(y_i−ŷ_i)²",
+        "Residuals sum to zero in simple linear regression with intercept",
+        "A large R² proves x causes y",
+        "The fit passes through the mean point (x̄,ȳ)"
+      ],
+      "options_he": [
+        "ריבועים פחותים ממזערים Σ(y−ŷ)²",
+        "סכום השאריות אפס ברגרסיה פשוטה עם חותך",
+        "R² גדול מוכיח ש-x גורם ל-y",
+        "ההתאמה עוברת בנקודת הממוצע"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Least squares minimizes Σ(y_i−ŷ_i)²",
+          "Residuals sum to zero in simple linear regression with intercept",
+          "A large R² proves x causes y",
+          "The fit passes through the mean point (x̄,ȳ)"
+        ],
+        "options_he": [
+          "ריבועים פחותים ממזערים Σ(y−ŷ)²",
+          "סכום השאריות אפס ברגרסיה פשוטה עם חותך",
+          "R² גדול מוכיח ש-x גורם ל-y",
+          "ההתאמה עוברת בנקודת הממוצע"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Derive β̂₀=ȳ−β̂₁x̄ from the normal equation that residuals sum to 0.",
+      "stem_he": "גזרו β̂₀=ȳ−β̂₁x̄ ממשוואה נורמלית שסכום השאריות 0.",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "If β̂₁=2, x̄=3, ȳ=10, find β̂₀.",
+      "stem_he": "אם β̂₁=2, x̄=3, ȳ=10, מצאו β̂₀.",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: 4.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: 4.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain 4.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו 4.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "RSS stands for:",
+      "stem_he": "RSS הוא:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "residual sum of squares",
+        "random sample size",
+        "regression slope score",
+        "root second statistic"
+      ],
+      "options_he": [
+        "סכום ריבועי שאריות",
+        "גודל מדגם מקרי",
+        "ציון שיפוע",
+        "סטטיסטי שורש"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "residual sum of squares",
+          "random sample size",
+          "regression slope score",
+          "root second statistic"
+        ],
+        "options_he": [
+          "סכום ריבועי שאריות",
+          "גודל מדגם מקרי",
+          "ציון שיפוע",
+          "סטטיסטי שורש"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "β̂₀ if ȳ=10, β̂₁=2, x̄=3?",
+      "stem_he": "β̂₀ אם ȳ=10, β̂₁=2, x̄=3?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 4.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 4.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "4",
+      "answer_payload": {
+        "value": 4
+      },
+      "verify": {
+        "expr": "10-2*3",
+        "expected": 4,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Outliers can strongly influence the least-squares slope.",
+      "stem_he": "חריגים יכולים להשפיע חזק על שיפוע הריבועים הפחותים.",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Prediction ŷ=1+2x at x=4?",
+      "stem_he": "ניבוי ŷ=1+2x ב-x=4?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 9.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 9.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "9",
+      "answer_payload": {
+        "value": 9
+      },
+      "verify": {
+        "expr": "1+2*4",
+        "expected": 9,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A residual plot with clear curvature suggests:",
+      "stem_he": "תרשים שאריות עם עקמומיות ברורה מרמז על:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university least squares regression, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** ברגרסיה בריבועים פחותים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "possible nonlinearity",
+        "perfect linear fit",
+        "zero variance",
+        "β̂₁ undefined"
+      ],
+      "options_he": [
+        "אי-ליניאריות אפשרית",
+        "התאמה ליניארית מושלמת",
+        "שונות אפס",
+        "β̂₁ לא מוגדר"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "possible nonlinearity",
+          "perfect linear fit",
+          "zero variance",
+          "β̂₁ undefined"
+        ],
+        "options_he": [
+          "אי-ליניאריות אפשרית",
+          "התאמה ליניארית מושלמת",
+          "שונות אפס",
+          "β̂₁ לא מוגדר"
+        ],
+        "correct_index": 0
+      }
     }
   ],
   "est_minutes": 55,

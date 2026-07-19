@@ -32,6 +32,13 @@
       "body_he_md": "**מתאם אינו מעיד על סיבתיות** — אחת האזהרות החוזרות ביותר בסטטיסטיקה, כי היא נעקפת שוב ושוב בתקשורת ובטיעונים יומיומיים. שני משתנים עשויים להראות $r$ גבוה מסיבות שונות:\n\n1. **סיבתיות ישירה:** $X$ באמת מניע $Y$ (למשל מינון וריכוז בדם).\n2. **סיבתיות הפוכה:** $Y$ מניע $X$ (יותר משטרה → יותר פשיעה מדווחת, או להיפך?).\n3. **משתנה מסתיר / מערבב:** גורם שלישי $Z$ משפיע על שניהם (עושר מניע גם צפיפות רופאים וגם תוחלת חיים).\n4. **צירוף מקרים:** אין קשר משמעותי (\"מתאמים\" היסטוריים בין סדרות זמן לא קשורות).\n\n**דוגמה קלאסית:** מכירות גלידה ומקרי טביעה מתואמים חיובית בקיץ — לא כי גלידה גורמת לטביעה, אלא כי **מזג אוויר חם** מגביר שחייה וצריכת גלידה.\n\n**$r$ מודד רק קשר לינארי.** נקודות על מעגל מושלם במרכז המקור נותנות $r=0$, ובכל זאת $y$ נקבע לחלוטין על ידי $x$. תמיד בדקו גרף פיזור לעקומות לפני שסומכים על $r$.\n\n**ערכים קיצוניים ומנוף:** $r$ של פירסון אינו עמיד. נקודה קיצונית אחת רחוקה מהמסה יכולה לנפח או לכווץ $r$ דרמטית, במיוחד במדגמים קטנים. רביעיית אנסקומב מראה ארבעה מערכי נתונים עם $r$ כמעט זהה אך צורות גרף פיזור שונות לחלוטין — הוכחה שמספר בודד לעולם לא מחליף את התמונה."
     },
     {
+      "kind": "theory",
+      "title_en": "Correlation vs Causation and Outlier Sensitivity",
+      "title_he": "מתאם מול סיבתיות ורגישות לחריגים",
+      "body_en_md": "**What $r$ measures.** Pearson's $r$ measures the strength of a *linear* association: $r\\in[-1,1]$, with $|r|$ near 1 indicating tight linear clustering and $r=0$ indicating no linear trend (nonlinear dependence may still exist).\n\n**Invariance.** $r$ is unchanged by shifting or positive rescaling of either variable — it is dimensionless. Swapping $x$ and $y$ leaves $r$ unchanged.\n\n**Causation warning.** A large $|r|$ never proves that $x$ causes $y$. Confounders, reverse causation, and selection bias can all produce strong correlations.\n\n**Outliers.** A single extreme point can inflate or deflate $r$ dramatically. Always look at the scatter plot before trusting a reported correlation.",
+      "body_he_md": "**מה $r$ מודד.** מקדם פירסון מודד עוצמת קשר *ליניארי*: $r\\in[-1,1]$. $|r|$ קרוב ל-1 מסמן מקבץ ליניארי הדוק; $r=0$ אומר שאין מגמה ליניארית (עדיין יכולה להיות תלות לא-ליניארית).\n\n**אינוריאנטיות.** $r$ לא משתנה בהזזה או בשינוי סקאלה חיובי — הוא חסר יחידות. החלפת $x$ ו-$y$ לא משנה את $r$.\n\n**אזהרת סיבתיות.** $|r|$ גדול אינו מוכיח ש-$x$ גורם ל-$y$. משתנים מתערבים, סיבתיות הפוכה והטיית בחירה יכולים לייצר מתאם חזק.\n\n**חריגים.** נקודה קיצונית אחת יכולה לנפח או להקטין את $r$ דרמטית. תמיד הביטו בתרשים פיזור לפני שסומכים על המתאם."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -75,6 +82,15 @@
       "title_he": "דוגמה פתורה 3 — $r^2$ והשפעת ערכים קיצוניים",
       "body_en_md": "**Problem:** Interpret $r^2$ and see how one outlier can destroy a strong correlation.\n\n**Dataset A** (5 points, no outlier): $r = 0.95$, so $r^2 = 0.9025 \\approx 0.90$.\n\n### Move 1: Interpret $r^2$\nAbout **90%** of the variability in $y$ is explained by the linear relationship with $x$. The remaining 10% is unexplained scatter around the best-fit line.\n\n**Dataset B:** Add one outlier at $(10, 1)$ far below the upward trend established by the other points.\n\n### Move 2: Observe the collapse\nThe new $r$ drops to about **0.45** — from \"very strong\" to \"moderate\" with a single point.\n\n### Move 3: Explain the mechanism\nThe outlier sits far from where the line would predict $y$ for $x=10$. Its deviation products $(x_i-\\bar{x})(y_i-\\bar{y})$ are large and can dominate $S_{xy}$, while also inflating $S_{xx}$ and $S_{yy}$. The point has high **leverage** because it is far from the centroid in $x$.\n\n### Move 4: Practical lesson\nAlways plot the data. Report $r$ together with the scatter plot and note any influential points. In small samples, one typo can masquerade as an outlier — verify data entry first.\n\n**Link forward:** $r^2$ equals $R^2$ in simple linear regression — the same \"variance explained\" language carries through.",
       "body_he_md": "**בעיה:** פרשנות $r^2$ והדגמה כיצד ערך קיצוני אחד יכול להרוס מתאם חזק.\n\n**קבוצת נתונים A** (5 נקודות, ללא קיצון): $r = 0.95$, לכן $r^2 = 0.9025 \\approx 0.90$.\n\n### צעד 1: פרשנות $r^2$\nכ-**90%** מהשונות ב-$y$ מוסברת על ידי הקשר הלינארי עם $x$. 10% הנותרים הם פיזור לא מוסבר סביב קו ההתאמה.\n\n**קבוצת נתונים B:** הוסיפו ערך קיצוני ב-$(10, 1)$ רחוק מתחת למגמה העולה של שאר הנקודות.\n\n### צעד 2: צפו בקריסה\n$r$ החדש יורד לכ-**0.45** — מ\"חזק מאוד\" ל\"בינוני\" בנקודה אחת.\n\n### צעד 3: הסבר המנגנון\nהערך הקיצוני רחוק ממקום שבו הקו היה חוזה $y$ עבור $x=10$. מכפלות הסטיות שלו גדולות ויכולות לשלוט ב-$S_{xy}$, תוך ניפוח $S_{xx}$ ו-$S_{yy}$. לנקודה **מנוף** גבוה כי היא רחוקה מהמרכז ב-$x$.\n\n### צעד 4: לקח מעשי\nתמיד גרפו את הנתונים. דווחו $r$ יחד עם גרף הפיזור וציינו נקודות משפיעות. במדגמים קטנים, שגיאת הקלדה אחת יכולה להתחזות לערך קיצוני — אמתו קודם את הנתונים.\n\n**קשר קדימה:** $r^2$ שווה ל-$R^2$ ברגרסיה לינארית פשוטה — אותה שפת \"שונות מוסברת\" ממשיכה הלאה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Sign of $r$ from a Sketch",
+      "title_he": "דוגמה פתורה 4 — סימן $r$ מסקיצה",
+      "body_en_md": "**Scenario.** Points trend downward from left to right, roughly along a line, with moderate scatter.\n\n### Move 1 — Direction\nDownward trend means negative association → $r<0$.\n\n### Move 2 — Strength\nModerate scatter (not a perfect line, not a cloud) → $|r|$ is moderate, say around $0.5$–$0.8$, not near $0$ or $1$.\n\n### Move 3 — Conclusion\nReport: moderately strong negative linear correlation.\n\n### Move 4 — Caveat\nIf one outlier sits far above the trend on the right, it could pull $r$ toward zero — always check the plot.",
+      "body_he_md": "**תרחיש.** הנקודות יורדות משמאל לימין לאורך קו משוער, עם פיזור בינוני.\n\n### צעד 1 — כיוון\nמגמה יורדת → $r<0$.\n\n### צעד 2 — עוצמה\nפיזור בינוני → $|r|$ בינוני, לא קרוב ל-$0$ או ל-$1$.\n\n### צעד 3 — מסקנה\nמתאם ליניארי שלילי בעוצמה בינונית–חזקה.\n\n### צעד 4 — הסתייגות\nחריג אחד יכול למשוך את $r$ לכיוון אפס — בדקו את הגרף."
     },
     {
       "kind": "method_guide",
@@ -253,8 +269,8 @@
       "difficulty": "easy",
       "stem_en": "A positive correlation means that as $x$ increases, $y$ tends to:",
       "stem_he": "מתאם חיובי פירושו שכש-$x$ עולה, $y$ נוטה:",
-      "explanation_en": "**Positive correlation: $x$ and $y$ move together.**\n\n**Answer:** increase.",
-      "explanation_he": "**מתאם חיובי: $x$ ו-$y$ עולים יחד.**\n\n**תשובה:** עולה.",
+      "explanation_en": "**Positive correlation: $x$ and $y$ move together.**\n\n**Answer:** increase.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**מתאם חיובי: $x$ ו-$y$ עולים יחד.**\n\n**תשובה:** עולה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -287,7 +303,10 @@
         "$\\text{stay constant}$",
         "$\\text{oscillate}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -295,8 +314,8 @@
       "difficulty": "easy",
       "stem_en": "Find the mean of the $x$-values $\\{2,4,6\\}$.",
       "stem_he": "מצאו את הממוצע של ערכי ה-$x$: $\\{2,4,6\\}$.",
-      "explanation_en": "**$\\bar x=\\dfrac{12}{3}=4$.**\n\n**Answer:** $4$.",
-      "explanation_he": "**$\\bar x=4$.**\n\n**תשובה:** $4$.",
+      "explanation_en": "**$\\bar x=\\dfrac{12}{3}=4$.**\n\n**Answer:** $4$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\bar x=4$.**\n\n**תשובה:** $4$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "mean"
       ],
@@ -305,7 +324,15 @@
       },
       "source_item_id": "4778f588-9bdd-5e86-811f-157ada3ab92a",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^2",
+        "expected": 4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -313,8 +340,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: $r=0$ indicates no linear relationship.",
       "stem_he": "נכון או לא נכון: $r=0$ מעיד על היעדר קשר לינארי.",
-      "explanation_en": "**$r=0$ means no *linear* association** — **true**.",
-      "explanation_he": "**$r=0$ פירושו אין קשר לינארי** — **נכון**.",
+      "explanation_en": "**$r=0$ means no *linear* association** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$r=0$ פירושו אין קשר לינארי** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -323,7 +350,10 @@
       },
       "source_item_id": "c4a1f2c5-c47f-54ef-a68e-0d20b1b27e61",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -331,8 +361,8 @@
       "difficulty": "hard",
       "stem_en": "Compute Pearson's $r$ for $(1,2),(2,4),(3,6)$.",
       "stem_he": "חשבו את $r$ של פירסון עבור $(1,2),(2,4),(3,6)$.",
-      "explanation_en": "**Step 1 — Deviations product.** $S_{xy}=4$.\n\n**Step 2 — Spreads.** $S_{xx}=2$, $S_{yy}=8$.\n\n**Step 3 — Combine.** $r=\\dfrac{4}{\\sqrt{2\\cdot 8}}=1$.\n\n**Answer:** $1$.",
-      "explanation_he": "**שלב 1 — מכפלת סטיות.** $S_{xy}=4$.\n\n**שלב 2 — פיזורים.** $S_{xx}=2$, $S_{yy}=8$.\n\n**שלב 3 — שילוב.** $r=1$.\n\n**תשובה:** $1$.",
+      "explanation_en": "**Step 1 — Deviations product.** $S_{xy}=4$.\n\n**Step 2 — Spreads.** $S_{xx}=2$, $S_{yy}=8$.\n\n**Step 3 — Combine.** $r=\\dfrac{4}{\\sqrt{2\\cdot 8}}=1$.\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — מכפלת סטיות.** $S_{xy}=4$.\n\n**שלב 2 — פיזורים.** $S_{xx}=2$, $S_{yy}=8$.\n\n**שלב 3 — שילוב.** $r=1$.\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -353,7 +383,11 @@
       "source_item_id": "18897792-b075-59f6-8597-fdb0d81ca0c7",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -361,8 +395,8 @@
       "difficulty": "easy",
       "stem_en": "The correlation coefficient $r$ always lies between:",
       "stem_he": "מקדם המתאם $r$ תמיד נמצא בין:",
-      "explanation_en": "**$-1\\le r\\le 1$ by definition.**\n\n**Answer:** $-1$ and $1$.",
-      "explanation_he": "**$-1\\le r\\le 1$ לפי ההגדרה.**\n\n**תשובה:** בין $-1$ ל-$1$.",
+      "explanation_en": "**$-1\\le r\\le 1$ by definition.**\n\n**Answer:** $-1$ and $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$-1\\le r\\le 1$ לפי ההגדרה.**\n\n**תשובה:** בין $-1$ ל-$1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -395,7 +429,10 @@
         "$0 \\text{ and } 100$",
         "$-\\infty \\text{ and } \\infty$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 6,
@@ -403,8 +440,8 @@
       "difficulty": "easy",
       "stem_en": "Find the mean of the $y$-values $\\{1,2,3\\}$.",
       "stem_he": "מצאו את הממוצע של ערכי ה-$y$: $\\{1,2,3\\}$.",
-      "explanation_en": "**$\\bar y=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$\\bar y=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$\\bar y=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\bar y=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "mean"
       ],
@@ -413,7 +450,15 @@
       },
       "source_item_id": "ccf840bd-4768-57eb-b485-dd432858fa60",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -421,8 +466,8 @@
       "difficulty": "medium",
       "stem_en": "Which value of $r$ indicates the strongest linear relationship?",
       "stem_he": "איזה ערך של $r$ מעיד על הקשר הלינארי החזק ביותר?",
-      "explanation_en": "**Strength is $|r|$; $|-0.9|=0.9$ is the largest.**\n\n**Answer:** $-0.9$.",
-      "explanation_he": "**העוצמה היא $|r|$; $0.9$ הגדול ביותר.**\n\n**תשובה:** $-0.9$.",
+      "explanation_en": "**Strength is $|r|$; $|-0.9|=0.9$ is the largest.**\n\n**Answer:** $-0.9$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**העוצמה היא $|r|$; $0.9$ הגדול ביותר.**\n\n**תשובה:** $-0.9$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -455,7 +500,10 @@
         "$0.2$",
         "$0$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -463,8 +511,8 @@
       "difficulty": "medium",
       "stem_en": "For $(1,2),(2,4),(3,6)$, compute $\\sum(x-\\bar x)(y-\\bar y)$.",
       "stem_he": "עבור $(1,2),(2,4),(3,6)$, חשבו $\\sum(x-\\bar x)(y-\\bar y)$.",
-      "explanation_en": "**$(-1)(-2)+0+(1)(2)=4$** (positive $\\Rightarrow$ positive correlation).\n\n**Answer:** $4$.",
-      "explanation_he": "**$2+0+2=4$** (חיובי).\n\n**תשובה:** $4$.",
+      "explanation_en": "**$(-1)(-2)+0+(1)(2)=4$** (positive $\\Rightarrow$ positive correlation).\n\n**Answer:** $4$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$2+0+2=4$** (חיובי).\n\n**תשובה:** $4$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "covariation"
       ],
@@ -473,7 +521,15 @@
       },
       "source_item_id": "37b3b58b-764f-530f-ad22-d0f41ecd6523",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^2",
+        "expected": 4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -481,8 +537,8 @@
       "difficulty": "medium",
       "stem_en": "For $(1,6),(2,4),(3,2)$, compute $\\sum(x-\\bar x)(y-\\bar y)$.",
       "stem_he": "עבור $(1,6),(2,4),(3,2)$, חשבו $\\sum(x-\\bar x)(y-\\bar y)$.",
-      "explanation_en": "**$(-1)(2)+0+(1)(-2)=-4$** (negative $\\Rightarrow$ negative correlation).\n\n**Answer:** $-4$.",
-      "explanation_he": "**$-2+0-2=-4$** (שלילי).\n\n**תשובה:** $-4$.",
+      "explanation_en": "**$(-1)(2)+0+(1)(-2)=-4$** (negative $\\Rightarrow$ negative correlation).\n\n**Answer:** $-4$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$-2+0-2=-4$** (שלילי).\n\n**תשובה:** $-4$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "covariation"
       ],
@@ -491,7 +547,15 @@
       },
       "source_item_id": "b1193162-bdef-5e99-872f-05e8ab1a29be",
       "points_level_min": "5pt",
-      "correct_answer": "-4"
+      "correct_answer": "-4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-4",
+        "expected": -4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -499,8 +563,8 @@
       "difficulty": "medium",
       "stem_en": "Find the mean of $\\{10,20,30,40\\}$.",
       "stem_he": "מצאו את הממוצע של $\\{10,20,30,40\\}$.",
-      "explanation_en": "**$\\dfrac{100}{4}=25$.**\n\n**Answer:** $25$.",
-      "explanation_he": "**$=25$.**\n\n**תשובה:** $25$.",
+      "explanation_en": "**$\\dfrac{100}{4}=25$.**\n\n**Answer:** $25$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=25$.**\n\n**תשובה:** $25$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "mean"
       ],
@@ -509,7 +573,15 @@
       },
       "source_item_id": "efa2d3f1-2b50-5ef7-8397-0b69f60417bc",
       "points_level_min": "5pt",
-      "correct_answer": "25"
+      "correct_answer": "25",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "5^2",
+        "expected": 25,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -517,8 +589,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: a perfect straight rising line has $r=1$.",
       "stem_he": "נכון או לא נכון: ישר עולה מושלם מקיים $r=1$.",
-      "explanation_en": "**Perfect increasing linear fit $\\Rightarrow r=1$** — **true**.",
-      "explanation_he": "**התאמה לינארית עולה מושלמת $\\Rightarrow r=1$** — **נכון**.",
+      "explanation_en": "**Perfect increasing linear fit $\\Rightarrow r=1$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**התאמה לינארית עולה מושלמת $\\Rightarrow r=1$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -527,7 +599,10 @@
       },
       "source_item_id": "d1708f2d-d60d-5c09-bda2-f28ceedbf9e3",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 12,
@@ -535,8 +610,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: correlation always implies causation.",
       "stem_he": "נכון או לא נכון: מתאם תמיד מעיד על סיבתיות.",
-      "explanation_en": "**Correlation does NOT imply causation** — **false**.",
-      "explanation_he": "**מתאם אינו מעיד על סיבתיות** — **לא נכון**.",
+      "explanation_en": "**Correlation does NOT imply causation** — **false**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**מתאם אינו מעיד על סיבתיות** — **לא נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -545,7 +620,10 @@
       },
       "source_item_id": "0d438e2a-6b2f-55f0-9ffb-469dc7ce77f3",
       "points_level_min": "5pt",
-      "correct_bool": false
+      "correct_bool": false,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -553,8 +631,8 @@
       "difficulty": "hard",
       "stem_en": "For $(1,2),(2,4),(3,6)$, compute Pearson's $r$.",
       "stem_he": "עבור $(1,2),(2,4),(3,6)$, חשבו את $r$ של פירסון.",
-      "explanation_en": "**$r=\\dfrac{S_{xy}}{\\sqrt{S_{xx}S_{yy}}}=\\dfrac{4}{\\sqrt{16}}=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$r=\\dfrac{4}{4}=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$r=\\dfrac{S_{xy}}{\\sqrt{S_{xx}S_{yy}}}=\\dfrac{4}{\\sqrt{16}}=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$r=\\dfrac{4}{4}=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -563,7 +641,15 @@
       },
       "source_item_id": "a979628f-d229-5550-96d2-1f584371ee0f",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -571,8 +657,8 @@
       "difficulty": "hard",
       "stem_en": "For $(1,6),(2,4),(3,2)$, compute Pearson's $r$.",
       "stem_he": "עבור $(1,6),(2,4),(3,2)$, חשבו את $r$ של פירסון.",
-      "explanation_en": "**$r=\\dfrac{-4}{\\sqrt{16}}=-1$.**\n\n**Answer:** $-1$.",
-      "explanation_he": "**$r=-1$.**\n\n**תשובה:** $-1$.",
+      "explanation_en": "**$r=\\dfrac{-4}{\\sqrt{16}}=-1$.**\n\n**Answer:** $-1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$r=-1$.**\n\n**תשובה:** $-1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -581,7 +667,15 @@
       },
       "source_item_id": "461c06ff-e511-5f07-99c5-a48a25e479a2",
       "points_level_min": "5pt",
-      "correct_answer": "-1"
+      "correct_answer": "-1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-1",
+        "expected": -1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -589,8 +683,8 @@
       "difficulty": "hard",
       "stem_en": "For $(1,1),(2,3),(3,2)$, compute Pearson's $r$ (round to 4).",
       "stem_he": "עבור $(1,1),(2,3),(3,2)$, חשבו את $r$ של פירסון (עגלו ל-4).",
-      "explanation_en": "**$S_{xy}=1$, $S_{xx}=2$, $S_{yy}=2$, so $r=\\dfrac{1}{2}=0.5$.**\n\n**Answer:** $0.5$.",
-      "explanation_he": "**$r=\\dfrac{1}{2}=0.5$.**\n\n**תשובה:** $0.5$.",
+      "explanation_en": "**$S_{xy}=1$, $S_{xx}=2$, $S_{yy}=2$, so $r=\\dfrac{1}{2}=0.5$.**\n\n**Answer:** $0.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$r=\\dfrac{1}{2}=0.5$.**\n\n**תשובה:** $0.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "correlation"
       ],
@@ -599,7 +693,424 @@
       },
       "source_item_id": "bdf288df-1b10-530c-9b99-ef4a2db64652",
       "points_level_min": "5pt",
-      "correct_answer": "0.5"
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Pearson r lies in the interval [____, 1].",
+      "stem_he": "מקדם פירסון r נמצא בקטע [____, 1].",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: -1.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: -1.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "-1",
+          "−1"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Does r=0 prove the variables are independent? (yes/no)",
+      "stem_he": "האם r=0 מוכיח אי-תלות? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: no.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: no.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "r≈1",
+            "right": "strong positive linear"
+          },
+          {
+            "left": "r≈−1",
+            "right": "strong negative linear"
+          },
+          {
+            "left": "r≈0",
+            "right": "weak linear association"
+          },
+          {
+            "left": "Scatter plot",
+            "right": "visual association check"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "r≈1",
+            "right": "ליניארי חיובי חזק"
+          },
+          {
+            "left": "r≈−1",
+            "right": "ליניארי שלילי חזק"
+          },
+          {
+            "left": "r≈0",
+            "right": "קשר ליניארי חלש"
+          },
+          {
+            "left": "תרשים פיזור",
+            "right": "בדיקה חזותית"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Plot the scatter",
+          "Assess direction/strength",
+          "Compute r if linear",
+          "Avoid causal claims"
+        ],
+        "order_he": [
+          "ציירו פיזור",
+          "העריכו כיוון/עוצמה",
+          "חשבו r אם ליניארי",
+          "הימנעו מטענות סיבתיות"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "r measures linear association strength",
+        "r proves causation when |r|>0.9",
+        "Outliers can distort r",
+        "Always look at the scatter plot"
+      ],
+      "options_he": [
+        "r מודד עוצמת קשר ליניארי",
+        "r מוכיח סיבתיות כאשר |r|>0.9",
+        "חריגים יכולים לעוות את r",
+        "תמיד הביטו בתרשים הפיזור"
+      ],
+      "correct_indices": [
+        0,
+        2,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "r measures linear association strength",
+          "r proves causation when |r|>0.9",
+          "Outliers can distort r",
+          "Always look at the scatter plot"
+        ],
+        "options_he": [
+          "r מודד עוצמת קשר ליניארי",
+          "r מוכיח סיבתיות כאשר |r|>0.9",
+          "חריגים יכולים לעוות את r",
+          "תמיד הביטו בתרשים הפיזור"
+        ],
+        "correct_indices": [
+          0,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Explain why r is invariant under positive rescaling of x or y.",
+      "stem_he": "הסבירו מדוע r אינו משתנה תחת שינוי סקאלה חיובי של x או y.",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "If points fall perfectly on a downward line, what is r?",
+      "stem_he": "אם הנקודות על קו יורד מושלם, מהו r?",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: -1.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: -1.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain -1.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו -1.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A circular cloud with no linear trend has r near:",
+      "stem_he": "ענן מעגלי בלי מגמה ליניארית יש לו r קרוב ל:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "0",
+        "1",
+        "-1",
+        "2"
+      ],
+      "options_he": [
+        "0",
+        "1",
+        "-1",
+        "2"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "0",
+          "1",
+          "-1",
+          "2"
+        ],
+        "options_he": [
+          "0",
+          "1",
+          "-1",
+          "2"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Upper bound of |r| is?",
+      "stem_he": "החסם העליון של |r| הוא?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 1.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 1.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "1",
+      "answer_payload": {
+        "value": 1
+      },
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Nonlinear dependence can exist even when r≈0.",
+      "stem_he": "תלות לא-ליניארית יכולה להתקיים גם כש-r≈0.",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Lower bound of r is?",
+      "stem_he": "החסם התחתון של r הוא?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result -1.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה -1.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "-1",
+      "answer_payload": {
+        "value": -1
+      },
+      "verify": {
+        "expr": "-1",
+        "expected": -1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "correlation"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Swapping x and y leaves r:",
+      "stem_he": "החלפת x ו-y משאירה את r:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university correlation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** במתאם באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "unchanged",
+        "sign-flipped always",
+        "zero",
+        "undefined"
+      ],
+      "options_he": [
+        "ללא שינוי",
+        "היפוך סימן תמיד",
+        "אפס",
+        "לא מוגדר"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "unchanged",
+          "sign-flipped always",
+          "zero",
+          "undefined"
+        ],
+        "options_he": [
+          "ללא שינוי",
+          "היפוך סימן תמיד",
+          "אפס",
+          "לא מוגדר"
+        ],
+        "correct_index": 0
+      }
     }
   ],
   "est_minutes": 40,

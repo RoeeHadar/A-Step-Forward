@@ -33,6 +33,13 @@
       "body_he_md": "### רווח סמך לממוצע ($\\sigma$ ידוע)\n\n**רווח סמך (CI)** נותן טווח ערכים סביר ל-$\\mu$ הלא-ידוע על בסיס נתוני מדגם. כש-$\\sigma$ ידוע ו-$n$ גדול מספיק:\n$$\\bar{x} \\pm z_{\\alpha/2} \\cdot \\frac{\\sigma}{\\sqrt{n}} = \\bar{x} \\pm z_{\\alpha/2} \\cdot SE.$$\n\nערכים קריטיים נפוצים:\n- **CI 95%:** $z_{0.025} = 1.96$ (2.5% בכל זנב)\n- **CI 99%:** $z_{0.005} = 2.576$\n- **CI 90%:** $z_{0.05} = 1.645$\n\n**פירוש נכון:** אם נחזור על הדגימה פעמים רבות, כ-95% מהרווחים יכילו את $\\mu$ האמיתי. זה **לא** אומר של-$\\mu$ יש 95% הסתברות להיות ברווח ספציפי אחד — $\\mu$ הוא קבוע לא ידוע.\n\n### רווח סמך ($\\sigma$ לא ידוע — $t$)\n\nכש-$\\sigma$ מוערך על ידי סטיית תקן המדגם $s$ (במיוחד ל-$n$ קטן):\n$$\\bar{x} \\pm t_{\\alpha/2,\\, n-1} \\cdot \\frac{s}{\\sqrt{n}}.$$\nהתפלגות $t$ בעלת זנבות כבדים יותר, ולכן רווחים רחבים יותר לאותה רמת ביטחון.\n\n### מסגרת מבחן השערות\n\n1. **הצהרת השערות:** $H_0$ (אפס, ברירת מחדל) מול $H_1$ (חלופית)\n2. **בחירת $\\alpha$** (רמת מובהקות, לרוב 0.05)\n3. **חישוב סטטיסטיקת מבחן:** למשל $z = (\\bar{x} - \\mu_0)/(\\sigma/\\sqrt{n})$\n4. **מציאת ערך $p$** או השוואה לערך קריטי\n5. **החלטה:** דחה $H_0$ אם $p < \\alpha$ (או $|z| > z_{\\alpha/2}$ בדו-צדדי)\n6. **מסקנה בהקשר** — לא רק \"דוחים\" אלא מה זה אומר על הבעיה האמיתית\n\n### שגיאות מסוג I ו-II\n\n- **שגיאה מסוג I ($\\alpha$):** דחיית $H_0$ כשהיא נכונה (חיובי שגוי)\n- **שגיאה מסוג II ($\\beta$):** אי-דחיית $H_0$ כש-$H_1$ נכונה (שלילי שגוי)\n- **עצמת מבחן = $1 - \\beta$:** הסתברות לגלות אפקט אמיתי\n\nגדילת $n$ מצמצמת רווחים, מקטינה $SE$ ומגדילה עצמה בלי לשנות את $\\alpha$."
     },
     {
+      "kind": "theory",
+      "title_en": "From $z$-Scores to Decisions under Uncertainty",
+      "title_he": "מציוני $z$ להחלטות תחת אי-ודאות",
+      "body_en_md": "**Unifying pipeline.** Many classical inference procedures share one skeleton: (1) choose a parameter and estimator, (2) standardize to a pivotal quantity ($z$ or $t$), (3) use the sampling distribution under $H_0$ or for a CI, (4) decide or report an interval.\n\n**Empirical rule link.** For approximately normal data, about 68%/95%/99.7% of mass lies within $1/2/3$ standard deviations — a quick sanity check for $z$-scores and CI widths.\n\n**Two dual views.** A two-sided CI at level $1-\\alpha$ and a two-sided test at level $\\alpha$ are dual: the null value is rejected iff it lies outside the CI.\n\n**Assumptions matter.** Normality (or large $n$ via CLT), independence, and known vs unknown $\\sigma$ determine whether you use $z$ or $t$.",
+      "body_he_md": "**צינור מאוחד.** רבות משיטות ההסקה חולקות שלד: (1) בחירת פרמטר ואומד, (2) סטנדרטיזציה לכמות צירית ($z$ או $t$), (3) שימוש בהתפלגות הדגימה, (4) החלטה או דיווח רווח.\n\n**כלל אמפירי.** בנתונים בקירוב נורמליים, כ-68%/95%/99.7% בתוך $1/2/3$ סטיות תקן — בדיקת שפיות ל-$z$ ולרוחבי CI.\n\n**דואליות.** רווח סמך דו-צדדי ברמה $1-\\alpha$ ומבחן דו-צדדי ברמה $\\alpha$ דואליים: דוחים את ערך האפסiff הוא מחוץ לרווח.\n\n**הנחות חשובות.** נורמליות (או $n$ גדול), אי-תלות, ו-$\\sigma$ ידוע/לא ידוע קובעים $z$ או $t$."
+    },
+    {
       "id": "worked_example_1",
       "kind": "worked_example",
       "difficulty": "easy",
@@ -81,6 +88,15 @@
       "title_he": "דוגמה פתורה 3 — מבחן $z$ חד-מדגמי",
       "body_en_md": "**Problem:** A company claims average battery life is 500 hours. A random sample of $n=64$ gives $\\bar{x}=490$ hours with known $\\sigma=40$. Test at $\\alpha=0.05$ whether the mean differs from 500.\n\nThis is a **two-tailed one-sample $z$-test** because we ask whether the mean is different (not just lower or higher).\n\n### Move 1: State hypotheses\n$H_0: \\mu = 500$ (company claim) vs $H_1: \\mu \\neq 500$ (two-tailed).\n\n### Move 2: Compute the test statistic\n$$SE = \\frac{\\sigma}{\\sqrt{n}} = \\frac{40}{8} = 5.$$\n$$z = \\frac{\\bar{x} - \\mu_0}{SE} = \\frac{490 - 500}{5} = \\frac{-10}{5} = -2.$$\n\n### Move 3: Determine the critical region\nFor $\\alpha = 0.05$ two-tailed, reject $H_0$ if $|z| > z_{0.025} = 1.96$.\n\n### Move 4: Compare and decide\n$|-2| = 2 > 1.96$ → **Reject $H_0$**.\n\n**$p$-value check:** $p = 2P(Z < -2) = 2(0.0228) = 0.0456 < 0.05$, confirming rejection.\n\n**Conclusion:** At the 5% significance level, there is sufficient evidence that the mean battery life differs from 500 hours. The sample mean of 490 is statistically significant — the company's claim is not supported by this data.",
       "body_he_md": "**בעיה:** חברה טוענת שאורך חיי סוללה ממוצע הוא 500 שעות. מדגם אקראי $n=64$ נותן $\\bar{x}=490$ שעות עם $\\sigma=40$ ידוע. בדקו ב-$\\alpha=0.05$ האם הממוצע שונה מ-500.\n\nזהו **מבחן $z$ חד-מדגמי דו-צדדי** — שואלים האם הממוצע שונה (לא רק נמוך או גבוה).\n\n### צעד 1: הצהרת השערות\n$H_0: \\mu = 500$ (טענת החברה) מול $H_1: \\mu \\neq 500$ (דו-צדדי).\n\n### צעד 2: חישוב סטטיסטיקת המבחן\n$$SE = \\frac{\\sigma}{\\sqrt{n}} = \\frac{40}{8} = 5.$$\n$$z = \\frac{\\bar{x} - \\mu_0}{SE} = \\frac{490 - 500}{5} = \\frac{-10}{5} = -2.$$\n\n### צעד 3: אזור דחייה\nל-$\\alpha = 0.05$ דו-צדדי, דוחים $H_0$ אם $|z| > z_{0.025} = 1.96$.\n\n### צעד 4: השוואה והחלטה\n$|-2| = 2 > 1.96$ → **דוחים $H_0$**.\n\n**בדיקת $p$:** $p = 2P(Z < -2) = 2(0.0228) = 0.0456 < 0.05$, מאשר דחייה.\n\n**מסקנה:** ברמת מובהקות 5%, יש ראיות מספיקות שהממוצע שונה מ-500 שעות. ממוצע המדגם 490 מובהק סטטיסטית — טענת החברה לא נתמכת בנתונים.\n\n**הערת אסטרטגיה:** דווחו $H_0$, $H_1$, $z$, ערך $p$ והחלטה — הסדר חשוב לניקוד חלקי בבחינה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Duality of CI and Test",
+      "title_he": "דוגמה פתורה 4 — דואליות רווח סמך ומבחן",
+      "body_en_md": "**Setup.** A 95% CI for $\\mu$ is $(10.2,\\,12.8)$. Test $H_0:\\mu=10$ vs $H_1:\\mu\\neq 10$ at $\\alpha=0.05$.\n\n### Move 1 — Duality\nReject $H_0$ at level $0.05$ iff $10$ is outside the 95% CI.\n\n### Move 2 — Locate the null\n$10<10.2$, so $10\\notin(10.2,12.8)$.\n\n### Move 3 — Decision\nReject $H_0$ at $\\alpha=0.05$.\n\n### Move 4 — Interpretation\nThe data are incompatible with $\\mu=10$ at the 5% level; the entire CI lies above 10.",
+      "body_he_md": "**הגדרה.** רווח סמך 95% ל-$\\mu$ הוא $(10.2,\\,12.8)$. בדקו $H_0:\\mu=10$ מול $H_1:\\mu\\neq 10$ ב-$\\alpha=0.05$.\n\n### צעד 1 — דואליות\nדוחים $H_0$ ברמה $0.05$ אם ורק אם $10$ מחוץ לרווח 95%.\n\n### צעד 2 — מיקום\n$10\\notin(10.2,12.8)$.\n\n### צעד 3 — החלטה\nדוחים את $H_0$.\n\n### צעד 4 — פרשנות\nהנתונים אינם מתיישבים עם $\\mu=10$ ברמת 5%."
     },
     {
       "id": "method_guide",
@@ -279,8 +295,8 @@
       "difficulty": "easy",
       "stem_en": "The standard normal distribution has:",
       "stem_he": "ההתפלגות הנורמלית הסטנדרטית בעלת:",
-      "explanation_en": "**$Z\\sim N(0,1)$.**\n\n**Answer:** mean $0$, sd $1$.",
-      "explanation_he": "**$Z\\sim N(0,1)$.**\n\n**תשובה:** תוחלת $0$, סטיית תקן $1$.",
+      "explanation_en": "**$Z\\sim N(0,1)$.**\n\n**Answer:** mean $0$, sd $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$Z\\sim N(0,1)$.**\n\n**תשובה:** תוחלת $0$, סטיית תקן $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_normal"
       ],
@@ -313,7 +329,10 @@
         "$\\text{mean }0,\\ \\text{sd }0$",
         "$\\text{mean }1,\\ \\text{sd }1$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -321,8 +340,8 @@
       "difficulty": "easy",
       "stem_en": "Find the $z$-score for $x=70$ with mean $60$ and standard deviation $5$.",
       "stem_he": "מצאו את ציון ה-$z$ עבור $x=70$ עם תוחלת $60$ וסטיית תקן $5$.",
-      "explanation_en": "**$z=\\dfrac{70-60}{5}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$z=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$z=\\dfrac{70-60}{5}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$z=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -331,7 +350,15 @@
       },
       "source_item_id": "13cac0b1-0b65-5f65-a424-efb1a84796de",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -339,8 +366,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: about $68\\%$ of data lies within one standard deviation of the mean.",
       "stem_he": "נכון או לא נכון: כ-$68\\%$ מהנתונים נמצאים במרחק סטיית תקן אחת מהתוחלת.",
-      "explanation_en": "**The $68$–$95$–$99.7$ rule gives $\\approx 68\\%$ within $1\\sigma$** — **true**.",
-      "explanation_he": "**כלל $68$–$95$–$99.7$** — **נכון**.",
+      "explanation_en": "**The $68$–$95$–$99.7$ rule gives $\\approx 68\\%$ within $1\\sigma$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כלל $68$–$95$–$99.7$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "empirical_rule"
       ],
@@ -349,7 +376,10 @@
       },
       "source_item_id": "049bcec5-e22a-55f5-abfd-13514976c7e9",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -357,8 +387,8 @@
       "difficulty": "hard",
       "stem_en": "Find the $z$-score for $x=85$ with mean $75$ and standard deviation $5$.",
       "stem_he": "מצאו את ציון ה-$z$ עבור $x=85$ עם תוחלת $75$ וסטיית תקן $5$.",
-      "explanation_en": "**Step 1 — Formula.** $z=\\dfrac{x-\\mu}{\\sigma}$.\n\n**Step 2 — Substitute.** $\\dfrac{85-75}{5}$.\n\n**Step 3 — Evaluate.** $=2$.\n\n**Answer:** $2$.",
-      "explanation_he": "**שלב 1 — נוסחה.** $z=\\dfrac{x-\\mu}{\\sigma}$.\n\n**שלב 2 — הצבה.** $\\dfrac{85-75}{5}$.\n\n**שלב 3 — חישוב.** $2$.\n\n**תשובה:** $2$.",
+      "explanation_en": "**Step 1 — Formula.** $z=\\dfrac{x-\\mu}{\\sigma}$.\n\n**Step 2 — Substitute.** $\\dfrac{85-75}{5}$.\n\n**Step 3 — Evaluate.** $=2$.\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — נוסחה.** $z=\\dfrac{x-\\mu}{\\sigma}$.\n\n**שלב 2 — הצבה.** $\\dfrac{85-75}{5}$.\n\n**שלב 3 — חישוב.** $2$.\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -379,7 +409,11 @@
       "source_item_id": "a59ba8a2-c53c-5ddf-a710-eaa3d3f9bc5a",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -387,8 +421,8 @@
       "difficulty": "easy",
       "stem_en": "Find the $z$-score for $x=50$ with mean $60$ and standard deviation $5$.",
       "stem_he": "מצאו את ציון ה-$z$ עבור $x=50$ עם תוחלת $60$ וסטיית תקן $5$.",
-      "explanation_en": "**$z=\\dfrac{50-60}{5}=-2$.**\n\n**Answer:** $-2$.",
-      "explanation_he": "**$z=-2$.**\n\n**תשובה:** $-2$.",
+      "explanation_en": "**$z=\\dfrac{50-60}{5}=-2$.**\n\n**Answer:** $-2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$z=-2$.**\n\n**תשובה:** $-2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -397,7 +431,15 @@
       },
       "source_item_id": "4f2a99c6-8c0a-5ea0-b827-8a24bd2fe18c",
       "points_level_min": "5pt",
-      "correct_answer": "-2"
+      "correct_answer": "-2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-2",
+        "expected": -2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 6,
@@ -405,8 +447,8 @@
       "difficulty": "easy",
       "stem_en": "Find the $z$-score for $x=65$ with mean $60$ and standard deviation $5$.",
       "stem_he": "מצאו את ציון ה-$z$ עבור $x=65$ עם תוחלת $60$ וסטיית תקן $5$.",
-      "explanation_en": "**$z=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$z=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$z=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$z=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -415,7 +457,15 @@
       },
       "source_item_id": "6a9d98f3-4142-5376-a7c7-b6fa85bee615",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -423,8 +473,8 @@
       "difficulty": "medium",
       "stem_en": "A larger absolute $z$-score means the value is:",
       "stem_he": "ציון $z$ גדול יותר בערכו המוחלט משמעו שהערך:",
-      "explanation_en": "**$|z|$ measures distance from the mean in sd units.**\n\n**Answer:** farther from the mean.",
-      "explanation_he": "**$|z|$ מודד מרחק מהתוחלת ביחידות סטיית תקן.**\n\n**תשובה:** רחוק יותר מהתוחלת.",
+      "explanation_en": "**$|z|$ measures distance from the mean in sd units.**\n\n**Answer:** farther from the mean.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$|z|$ מודד מרחק מהתוחלת ביחידות סטיית תקן.**\n\n**תשובה:** רחוק יותר מהתוחלת.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -457,7 +507,10 @@
         "$\\text{equal to the mean}$",
         "$\\text{negative}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -465,8 +518,8 @@
       "difficulty": "medium",
       "stem_en": "With mean $100$ and sd $10$, find the value $x$ at $z=1.5$.",
       "stem_he": "עם תוחלת $100$ וסטיית תקן $10$, מצאו את הערך $x$ עבור $z=1.5$.",
-      "explanation_en": "**$x=\\mu+z\\sigma=100+15=115$.**\n\n**Answer:** $115$.",
-      "explanation_he": "**$x=115$.**\n\n**תשובה:** $115$.",
+      "explanation_en": "**$x=\\mu+z\\sigma=100+15=115$.**\n\n**Answer:** $115$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$x=115$.**\n\n**תשובה:** $115$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -475,7 +528,15 @@
       },
       "source_item_id": "48f888bc-6605-5d7e-95d8-a89c42551163",
       "points_level_min": "5pt",
-      "correct_answer": "115"
+      "correct_answer": "115",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "115",
+        "expected": 115,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -483,8 +544,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $z$-score for $x=80$ with mean $70$ and standard deviation $4$.",
       "stem_he": "מצאו את ציון ה-$z$ עבור $x=80$ עם תוחלת $70$ וסטיית תקן $4$.",
-      "explanation_en": "**$z=\\dfrac{10}{4}=2.5$.**\n\n**Answer:** $2.5$.",
-      "explanation_he": "**$z=2.5$.**\n\n**תשובה:** $2.5$.",
+      "explanation_en": "**$z=\\dfrac{10}{4}=2.5$.**\n\n**Answer:** $2.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$z=2.5$.**\n\n**תשובה:** $2.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -493,7 +554,15 @@
       },
       "source_item_id": "b91fa73c-27d1-5f2b-a251-b91528332e4d",
       "points_level_min": "5pt",
-      "correct_answer": "2.5"
+      "correct_answer": "2.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2.5",
+        "expected": 2.5,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -501,8 +570,8 @@
       "difficulty": "medium",
       "stem_en": "With mean $50$ and sd $3$, find the value at $z=-2$.",
       "stem_he": "עם תוחלת $50$ וסטיית תקן $3$, מצאו את הערך עבור $z=-2$.",
-      "explanation_en": "**$x=50-6=44$.**\n\n**Answer:** $44$.",
-      "explanation_he": "**$x=44$.**\n\n**תשובה:** $44$.",
+      "explanation_en": "**$x=50-6=44$.**\n\n**Answer:** $44$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$x=44$.**\n\n**תשובה:** $44$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -511,7 +580,15 @@
       },
       "source_item_id": "6e0686b2-41bc-5f13-9f19-800ce1954797",
       "points_level_min": "5pt",
-      "correct_answer": "44"
+      "correct_answer": "44",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "44",
+        "expected": 44,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -519,8 +596,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $z$-score for $x=68$ with mean $68$ and standard deviation $4$.",
       "stem_he": "מצאו את ציון ה-$z$ עבור $x=68$ עם תוחלת $68$ וסטיית תקן $4$.",
-      "explanation_en": "**$z=0$ (at the mean).**\n\n**Answer:** $0$.",
-      "explanation_he": "**$z=0$.**\n\n**תשובה:** $0$.",
+      "explanation_en": "**$z=0$ (at the mean).**\n\n**Answer:** $0$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$z=0$.**\n\n**תשובה:** $0$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -529,7 +606,15 @@
       },
       "source_item_id": "b17e6d38-71d6-532f-9905-3f508b64a74d",
       "points_level_min": "5pt",
-      "correct_answer": "0"
+      "correct_answer": "0",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0",
+        "expected": 0,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -537,8 +622,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: about $95\\%$ of data lies within two standard deviations of the mean.",
       "stem_he": "נכון או לא נכון: כ-$95\\%$ מהנתונים נמצאים במרחק שתי סטיות תקן מהתוחלת.",
-      "explanation_en": "**The empirical rule gives $\\approx 95\\%$ within $2\\sigma$** — **true**.",
-      "explanation_he": "**כלל $68$–$95$–$99.7$** — **נכון**.",
+      "explanation_en": "**The empirical rule gives $\\approx 95\\%$ within $2\\sigma$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כלל $68$–$95$–$99.7$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "empirical_rule"
       ],
@@ -547,7 +632,10 @@
       },
       "source_item_id": "8a36185c-0be2-5735-bada-eeeecaf52521",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -555,8 +643,8 @@
       "difficulty": "hard",
       "stem_en": "With mean $500$ and sd $100$, find the $z$-score for $x=650$.",
       "stem_he": "עם תוחלת $500$ וסטיית תקן $100$, מצאו את ציון ה-$z$ עבור $x=650$.",
-      "explanation_en": "**$z=\\dfrac{150}{100}=1.5$.**\n\n**Answer:** $1.5$.",
-      "explanation_he": "**$z=1.5$.**\n\n**תשובה:** $1.5$.",
+      "explanation_en": "**$z=\\dfrac{150}{100}=1.5$.**\n\n**Answer:** $1.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$z=1.5$.**\n\n**תשובה:** $1.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -565,7 +653,15 @@
       },
       "source_item_id": "24e29c86-e46f-5351-ba06-bc0ec290d9d7",
       "points_level_min": "5pt",
-      "correct_answer": "1.5"
+      "correct_answer": "1.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.5",
+        "expected": 1.5,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -573,8 +669,8 @@
       "difficulty": "hard",
       "stem_en": "With mean $20$ and sd $2$, find the value at $z=3$.",
       "stem_he": "עם תוחלת $20$ וסטיית תקן $2$, מצאו את הערך עבור $z=3$.",
-      "explanation_en": "**$x=20+6=26$.**\n\n**Answer:** $26$.",
-      "explanation_he": "**$x=26$.**\n\n**תשובה:** $26$.",
+      "explanation_en": "**$x=20+6=26$.**\n\n**Answer:** $26$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$x=26$.**\n\n**תשובה:** $26$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -583,7 +679,15 @@
       },
       "source_item_id": "4b8709ea-dfc7-5fcc-8ea2-a69b33357b79",
       "points_level_min": "5pt",
-      "correct_answer": "26"
+      "correct_answer": "26",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "26",
+        "expected": 26,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -591,8 +695,8 @@
       "difficulty": "hard",
       "stem_en": "With mean $200$ and sd $20$, find the value at $z=-1.5$.",
       "stem_he": "עם תוחלת $200$ וסטיית תקן $20$, מצאו את הערך עבור $z=-1.5$.",
-      "explanation_en": "**$x=200-30=170$.**\n\n**Answer:** $170$.",
-      "explanation_he": "**$x=170$.**\n\n**תשובה:** $170$.",
+      "explanation_en": "**$x=200-30=170$.**\n\n**Answer:** $170$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$x=170$.**\n\n**תשובה:** $170$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "z_score"
       ],
@@ -601,7 +705,426 @@
       },
       "source_item_id": "ff08f6c8-d0bb-5422-a7eb-79f9f8770e3a",
       "points_level_min": "5pt",
-      "correct_answer": "170"
+      "correct_answer": "170",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "170",
+        "expected": 170,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A z-score is (x−μ) / ____.",
+      "stem_he": "ציון z הוא (x−μ) / ____.",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: σ.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: σ.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "σ",
+          "sigma",
+          "SD",
+          "sd"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Is a 95% CI dual to a two-sided test at α=0.05? (yes/no)",
+      "stem_he": "האם רווח 95% דואלי למבחן דו-צדדי ב-α=0.05? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: yes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: yes.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "yes",
+          "Yes"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "z-score",
+            "right": "standardized value"
+          },
+          {
+            "left": "Empirical rule",
+            "right": "68-95-99.7"
+          },
+          {
+            "left": "CI",
+            "right": "interval estimate"
+          },
+          {
+            "left": "Test",
+            "right": "decision about H0"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "ציון z",
+            "right": "ערך מתוקנן"
+          },
+          {
+            "left": "כלל אמפירי",
+            "right": "68-95-99.7"
+          },
+          {
+            "left": "רווח סמך",
+            "right": "אומדן קטע"
+          },
+          {
+            "left": "מבחן",
+            "right": "החלטה על H0"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Standardize to z/t",
+          "Use normal/t table or software",
+          "Form CI or p-value",
+          "Interpret in context"
+        ],
+        "order_he": [
+          "תקננו ל-z/t",
+          "השתמשו בטבלה/תוכנה",
+          "בנו CI או ערך-p",
+          "פרשו בהקשר"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "About 95% of normal mass lies within ~2 SD of the mean",
+        "CI–test duality links intervals and two-sided tests",
+        "A single realized CI contains μ with probability 95% after seeing data (frequentist caveat)",
+        "z=(x−μ)/σ standardizes a normal value"
+      ],
+      "options_he": [
+        "כ-95% מהמסה הנורמלית בתוך ~2 סטיות תקן",
+        "דואליות CI–מבחן מקשרת רווחים ומבחנים דו-צדדיים",
+        "רווח בודד מכיל את μ בהסתברות 95% אחרי הנתונים (זהירות תדירותית)",
+        "z=(x−μ)/σ מתקנן ערך נורמלי"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "About 95% of normal mass lies within ~2 SD of the mean",
+          "CI–test duality links intervals and two-sided tests",
+          "A single realized CI contains μ with probability 95% after seeing data (frequentist caveat)",
+          "z=(x−μ)/σ standardizes a normal value"
+        ],
+        "options_he": [
+          "כ-95% מהמסה הנורמלית בתוך ~2 סטיות תקן",
+          "דואליות CI–מבחן מקשרת רווחים ומבחנים דו-צדדיים",
+          "רווח בודד מכיל את μ בהסתברות 95% אחרי הנתונים (זהירות תדירותית)",
+          "z=(x−μ)/σ מתקנן ערך נורמלי"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Explain CI–test duality for H0:μ=μ0 at level α versus a (1−α) two-sided CI.",
+      "stem_he": "הסבירו דואליות CI–מבחן ל-H0:μ=μ0 ברמה α מול רווח (1−α).",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "z for x=110, μ=100, σ=5?",
+      "stem_he": "z ל-x=110, μ=100, σ=5?",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: 2.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: 2.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain 2.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו 2.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Empirical rule middle interval uses about how many SDs for ~95%?",
+      "stem_he": "הכלל האמפירי ל-~95% משתמש בכמה סטיות תקן?",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "2",
+        "1",
+        "0.5",
+        "10"
+      ],
+      "options_he": [
+        "2",
+        "1",
+        "0.5",
+        "10"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "2",
+          "1",
+          "0.5",
+          "10"
+        ],
+        "options_he": [
+          "2",
+          "1",
+          "0.5",
+          "10"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "z=(110-100)/5 equals?",
+      "stem_he": "z=(110-100)/5 שווה?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 2.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 2.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "2",
+      "answer_payload": {
+        "value": 2
+      },
+      "verify": {
+        "expr": "(110-100)/5",
+        "expected": 2,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Standard normal has mean 0 and SD 1.",
+      "stem_he": "נורמלי תקני יש לו תוחלת 0 וסטיית תקן 1.",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "If z=−1, x=μ−____·σ (enter the coefficient).",
+      "stem_he": "אם z=−1, x=μ−____·σ (הזינו את המקדם).",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 1.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 1.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "1",
+      "answer_payload": {
+        "value": 1
+      },
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "z_score"
+      ],
+      "points_level_min": "university",
+      "stem_en": "If μ0 lies outside a 95% CI, a two-sided test at 5% would:",
+      "stem_he": "אם μ0 מחוץ לרווח 95%, מבחן דו-צדדי ב-5%:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university statistical inference, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בהסקה סטטיסטית באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "reject H0:μ=μ0",
+        "always accept H0",
+        "be undefined",
+        "force σ=0"
+      ],
+      "options_he": [
+        "דוחה H0:μ=μ0",
+        "תמיד מקבל H0",
+        "לא מוגדר",
+        "כופה σ=0"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "reject H0:μ=μ0",
+          "always accept H0",
+          "be undefined",
+          "force σ=0"
+        ],
+        "options_he": [
+          "דוחה H0:μ=μ0",
+          "תמיד מקבל H0",
+          "לא מוגדר",
+          "כופה σ=0"
+        ],
+        "correct_index": 0
+      }
     }
   ],
   "est_minutes": 60,

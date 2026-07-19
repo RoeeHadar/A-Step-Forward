@@ -78,6 +78,22 @@
       "body_he_md": "**טענה:** פונקציית דיריכלה $D(x)=\\begin{cases}1 & x\\in\\mathbb{Q}\\\\0 & x\\notin\\mathbb{Q}\\end{cases}$ אי-רציפה בכל מספר ממשי.\n\n### צעד 1: קביעת $x_0\\in\\mathbb{R}$ כלשהו\n\nנראה ש-$\\lim_{x\\to x_0}D(x)$ לא קיים. מספיק למצוא שתי סדרות המתכנסות ל-$x_0$ עם ערכי פונקציה שונים — קריטריון הסדרות לגבול.\n\n### צעד 2: שימוש בצפיפות $\\mathbb{Q}$ ו-$\\mathbb{R}\\setminus\\mathbb{Q}$\n\nמצפיפות, לכל $\\delta>0$ הקטע $(x_0-\\delta,x_0+\\delta)$ מכיל:\n- רציונל $r_n\\to x_0$ עם $D(r_n)=1$;\n- אי-רציונל $s_n\\to x_0$ עם $D(s_n)=0$.\n\nשתי הסדרות מתכנסות ל-$x_0$, אך ערכי הפונקציה שואפים לגבולות שונים לאורך כל אחת.\n\n### צעד 3: הוכחת סתירה\n\nאם $\\lim_{x\\to x_0}D(x)=L$ היה קיים, שתי הסדרות היו מכריחות $L=1$ (מרציונלים) וגם $L=0$ (מאי-רציונלים). מכיוון ש-$1\\neq 0$, אין גבול. $\\blacksquare$\n\n**סיווג:** כל נקודה ממשית היא **אי-רציפות מהותית** — הגבול נכשל בלי להיות אינסופי. זו הפתולוגיה הקיצונית: קבוצת אי-רציפויות צפופה על כל $\\mathbb{R}$, ועדיין $D$ חסומה. אין כאן קפיצה ואין אינסוף — רק אוסצילציה בין $0$ ל-$1$."
     },
     {
+      "kind": "theory",
+      "title_en": "Continuity Checklist and One-Sided Limits",
+      "title_he": "רשימת בדיקה לרציפות וגבולות חד-צדדיים",
+      "body_en_md": "A function $f$ is **continuous at** $a$ precisely when three facts hold simultaneously:\n\n1. $f(a)$ is defined (the point is in the domain),\n2. $\\lim_{x\\to a} f(x)$ exists as a real number (so left and right limits agree),\n3. $\\lim_{x\\to a} f(x) = f(a)$.\n\nIf (2) fails because the one-sided limits exist but disagree, the discontinuity is a **jump**. If the two-sided limit exists but differs from $f(a)$ (or $f(a)$ is undefined), it is **removable** — redefine $f(a)$ to the limit value to repair it. If $|f(x)|\\to\\infty$ as $x\\to a$, the discontinuity is **infinite** (a vertical asymptote). When one-sided limits fail to exist even as extended reals (wild oscillation), call it **essential**.\n\n**One-sided continuity** matters on closed intervals: $f$ is continuous on $[a,b]$ when it is continuous on $(a,b)$, right-continuous at $a$, and left-continuous at $b$. The Intermediate Value Theorem and Extreme Value Theorem both require this full package.\n\n**Algebra of continuity.** Sums, products, quotients (where the denominator is nonzero), and compositions of continuous functions remain continuous. Rational functions are continuous wherever the denominator is nonzero; that is why holes and asymptotes appear exactly at those zeros.",
+      "body_he_md": "פונקציה $f$ **רציפה ב**-$a$ בדיוק כאשר שלושה תנאים מתקיימים יחד:\n\n1. $f(a)$ מוגדרת (הנקודה בתחום),\n2. $\\lim_{x\\to a} f(x)$ קיים כמספר ממשי (כלומר הגבולות החד-צדדיים מסכימים),\n3. $\\lim_{x\\to a} f(x) = f(a)$.\n\nאם (2) נכשל כי הגבולות החד-צדדיים קיימים אבל שונים — זו אי-רציפות **קפיצה**. אם הגבול הדו-צדדי קיים אבל שונה מ-$f(a)$ (או ש-$f(a)$ לא מוגדר) — זו אי-רציפות **סליקה**; מגדירים מחדש $f(a)$ לערך הגבול כדי לתקן. אם $|f(x)|\\to\\infty$ כאשר $x\\to a$ — זו אי-רציפות **אינסופית** (אסימפטוטה אנכית). כאשר גבולות חד-צדדיים אינם קיימים גם כממשיים מורחבים (תנודה פראית) — קוראים לזה **מהותית**.\n\n**רציפות חד-צדדית** חשובה בקטעים סגורים: $f$ רציפה ב-$[a,b]$ כשהיא רציפה ב-$(a,b)$, רציפה מימין ב-$a$ ומשמאל ב-$b$. משפט ערך הביניים ומשפט ערך הקיצון דורשים את החבילה המלאה.\n\n**אלגברת הרציפות.** סכומים, מכפלות, מנות (כשהמכנה אינו אפס) והרכבות של פונקציות רציפות נשארות רציפות. פונקציות רציונליות רציפות בכל מקום שבו המכנה אינו אפס — לכן חורים ואסימפטוטות מופיעים בדיוק באפסים האלה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Piecewise Continuity Parameter",
+      "title_he": "דוגמה פתורה 4 — פרמטר לרציפות בפונקציה מקוטעת",
+      "body_en_md": "**Find all real $k$** so that\n$$\nf(x)=\\begin{cases} x^2-1 & x<1 \\\\ k x & x\\ge 1 \\end{cases}\n$$\nis continuous at $x=1$.\n\n### Move 1: Check the function value.\nFor $x\\ge 1$, $f(1)=k\\cdot 1=k$. So $f(1)$ exists for every $k$.\n\n### Move 2: One-sided limits.\n$$\n\\lim_{x\\to 1^-} f(x)=\\lim_{x\\to 1^-}(x^2-1)=0,\\qquad\n\\lim_{x\\to 1^+} f(x)=\\lim_{x\\to 1^+} k x = k.\n$$\n\n### Move 3: Force agreement and equality with $f(1)$.\nNeed $0=k$ and $k=f(1)$. Both hold exactly when $k=0$.\n\n### Move 4: Classify if $k\\neq 0$.\nIf $k\\neq 0$, left and right limits disagree → **jump discontinuity** at $x=1$.\n\n**Answer:** continuous at $x=1$ iff $k=0$.\n\n**Check:** with $k=0$, both sides approach $0$ and $f(1)=0$.",
+      "body_he_md": "**מצאו את כל $k$ הממשיים** כך ש-\n$$\nf(x)=\\begin{cases} x^2-1 & x<1 \\\\ k x & x\\ge 1 \\end{cases}\n$$\nתהיה רציפה ב-$x=1$.\n\n### צעד 1: ערך הפונקציה.\nעבור $x\\ge 1$, $f(1)=k$. לכן $f(1)$ קיים לכל $k$.\n\n### צעד 2: גבולות חד-צדדיים.\n$$\n\\lim_{x\\to 1^-} f(x)=0,\\qquad \\lim_{x\\to 1^+} f(x)=k.\n$$\n\n### צעד 3: כפיית הסכמה ושוויון ל-$f(1)$.\nצריך $0=k$ וגם $k=f(1)$. שניהם מתקיימים בדיוק כאשר $k=0$.\n\n### צעד 4: סיווג אם $k\\neq 0$.\nאם $k\\neq 0$, הגבולות החד-צדדיים חולקים — **אי-רציפות קפיצה** ב-$x=1$.\n\n**תשובה:** רציפה ב-$x=1$ אם ורק אם $k=0$.\n\n**בדיקה:** עם $k=0$, שני הצדדים שואפים ל-$0$ ו-$f(1)=0$."
+    },
+    {
       "kind": "method_guide",
       "title_en": "Method Guide — How to Classify a Discontinuity",
       "title_he": "מדריך שיטה — כיצד לסווג אי-רציפות",
@@ -256,8 +272,8 @@
       "difficulty": "easy",
       "stem_en": "A removable discontinuity appears on the graph as a:",
       "stem_he": "אי-רציפות סליקה מופיעה בגרף כ:",
-      "explanation_en": "**A removable discontinuity is a single missing point — a hole.**\n\n**Answer:** hole.",
-      "explanation_he": "**אי-רציפות סליקה היא נקודה חסרה בודדת — חור.**\n\n**תשובה:** חור.",
+      "explanation_en": "**A removable discontinuity is a single missing point — a hole.**\n\n**Answer:** hole.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**אי-רציפות סליקה היא נקודה חסרה בודדת — חור.**\n\n**תשובה:** חור.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -290,7 +306,10 @@
         "$\\text{jump}$",
         "$\\text{corner}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -298,8 +317,8 @@
       "difficulty": "easy",
       "stem_en": "Evaluate $\\lim_{x\\to 2} x^2$.",
       "stem_he": "חשבו $\\lim_{x\\to 2} x^2$.",
-      "explanation_en": "**$x^2$ is continuous, so the limit is $2^2=4$.**\n\n**Answer:** $4$.",
-      "explanation_he": "**$x^2$ רציפה, ולכן הגבול הוא $4$.**\n\n**תשובה:** $4$.",
+      "explanation_en": "**$x^2$ is continuous, so the limit is $2^2=4$.**\n\n**Answer:** $4$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x^2$ רציפה, ולכן הגבול הוא $4$.**\n\n**תשובה:** $4$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "limit_continuous"
       ],
@@ -308,7 +327,15 @@
       },
       "source_item_id": "25baf34d-5042-5296-afd7-cdbc47f16201",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -316,8 +343,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: a jump discontinuity has different left- and right-hand limits.",
       "stem_he": "נכון או לא נכון: באי-רציפות קפיצה, הגבולות מימין ומשמאל שונים.",
-      "explanation_en": "**A jump occurs exactly when $\\lim_{x\\to a^-}\\ne\\lim_{x\\to a^+}$** — **true**.",
-      "explanation_he": "**קפיצה מתרחשת כאשר הגבולות החד-צדדיים שונים** — **נכון**.",
+      "explanation_en": "**A jump occurs exactly when $\\lim_{x\\to a^-}\\ne\\lim_{x\\to a^+}$** — **true**.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**קפיצה מתרחשת כאשר הגבולות החד-צדדיים שונים** — **נכון**.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "jump_discontinuity"
       ],
@@ -326,7 +353,10 @@
       },
       "source_item_id": "a6122264-a250-51c2-94a6-38e69b9d4c29",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -334,8 +364,8 @@
       "difficulty": "hard",
       "stem_en": "Find $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
       "stem_he": "מצאו $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
-      "explanation_en": "**Step 1 — Factor.** $x^2-9=(x-3)(x+3)$.\n\n**Step 2 — Cancel.** $\\dfrac{(x-3)(x+3)}{x-3}=x+3$.\n\n**Step 3 — Substitute.** $3+3=6$.\n\n**Answer:** $6$.",
-      "explanation_he": "**שלב 1 — פירוק.** $(x-3)(x+3)$.\n\n**שלב 2 — צמצום.** $x+3$.\n\n**שלב 3 — הצבה.** $6$.\n\n**תשובה:** $6$.",
+      "explanation_en": "**Step 1 — Factor.** $x^2-9=(x-3)(x+3)$.\n\n**Step 2 — Cancel.** $\\dfrac{(x-3)(x+3)}{x-3}=x+3$.\n\n**Step 3 — Substitute.** $3+3=6$.\n\n**Answer:** $6$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — פירוק.** $(x-3)(x+3)$.\n\n**שלב 2 — צמצום.** $x+3$.\n\n**שלב 3 — הצבה.** $6$.\n\n**תשובה:** $6$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -356,7 +386,11 @@
       "source_item_id": "44c36e38-6ed0-5cf2-a6de-7a578fdfa3cd",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -364,8 +398,8 @@
       "difficulty": "easy",
       "stem_en": "For $f(x)=x+1$, find $f(3)$.",
       "stem_he": "עבור $f(x)=x+1$, מצאו $f(3)$.",
-      "explanation_en": "**$f(3)=4$.**\n\n**Answer:** $4$.",
-      "explanation_he": "**$f(3)=4$.**\n\n**תשובה:** $4$.",
+      "explanation_en": "**$f(3)=4$.**\n\n**Answer:** $4$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$f(3)=4$.**\n\n**תשובה:** $4$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "function_value"
       ],
@@ -374,7 +408,15 @@
       },
       "source_item_id": "546522bd-943d-59f7-9c90-7a35a699f283",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 6,
@@ -382,8 +424,8 @@
       "difficulty": "easy",
       "stem_en": "Evaluate $\\lim_{x\\to 0} (x^2+1)$.",
       "stem_he": "חשבו $\\lim_{x\\to 0} (x^2+1)$.",
-      "explanation_en": "**$=0+1=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$=0+1=1$.**\n\n**Answer:** $1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$=1$.**\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "limit_continuous"
       ],
@@ -392,7 +434,15 @@
       },
       "source_item_id": "aa1df5fc-2d08-5af1-95b4-af274837fc75",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -400,8 +450,8 @@
       "difficulty": "medium",
       "stem_en": "At which value of $x$ is $f(x)=\\dfrac{1}{x-3}$ discontinuous?",
       "stem_he": "באיזה ערך של $x$ הפונקציה $f(x)=\\dfrac{1}{x-3}$ אינה רציפה?",
-      "explanation_en": "**The denominator is $0$ at $x=3$.**\n\n**Answer:** $x=3$.",
-      "explanation_he": "**המכנה מתאפס ב-$x=3$.**\n\n**תשובה:** $x=3$.",
+      "explanation_en": "**The denominator is $0$ at $x=3$.**\n\n**Answer:** $x=3$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**המכנה מתאפס ב-$x=3$.**\n\n**תשובה:** $x=3$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "infinite_discontinuity"
       ],
@@ -434,7 +484,10 @@
         "$-3$",
         "$1$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -442,8 +495,8 @@
       "difficulty": "medium",
       "stem_en": "Evaluate $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
       "stem_he": "חשבו $\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}$.",
-      "explanation_en": "**Factor: $\\dfrac{(x-3)(x+3)}{x-3}=x+3\\to 6$.**\n\n**Answer:** $6$.",
-      "explanation_he": "**פירוק: $x+3\\to 6$.**\n\n**תשובה:** $6$.",
+      "explanation_en": "**Factor: $\\dfrac{(x-3)(x+3)}{x-3}=x+3\\to 6$.**\n\n**Answer:** $6$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**פירוק: $x+3\\to 6$.**\n\n**תשובה:** $6$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -452,7 +505,15 @@
       },
       "source_item_id": "aa8a2f7e-c48b-5dff-99c7-4b8994604cbb",
       "points_level_min": "5pt",
-      "correct_answer": "6"
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -460,8 +521,8 @@
       "difficulty": "medium",
       "stem_en": "For $f(x)=\\dfrac{x^2-1}{x-1}$, find the value that removes the discontinuity at $x=1$.",
       "stem_he": "עבור $f(x)=\\dfrac{x^2-1}{x-1}$, מצאו את הערך שמסלק את אי-הרציפות ב-$x=1$.",
-      "explanation_en": "**$\\dfrac{(x-1)(x+1)}{x-1}=x+1\\to 2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$x+1\\to 2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$\\dfrac{(x-1)(x+1)}{x-1}=x+1\\to 2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x+1\\to 2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -470,7 +531,15 @@
       },
       "source_item_id": "538c3f93-36e6-5798-b552-65792b83489e",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -478,8 +547,8 @@
       "difficulty": "medium",
       "stem_en": "Evaluate $\\lim_{x\\to 2}\\dfrac{x^2-4}{x-2}$.",
       "stem_he": "חשבו $\\lim_{x\\to 2}\\dfrac{x^2-4}{x-2}$.",
-      "explanation_en": "**$\\dfrac{(x-2)(x+2)}{x-2}=x+2\\to 4$.**\n\n**Answer:** $4$.",
-      "explanation_he": "**$x+2\\to 4$.**\n\n**תשובה:** $4$.",
+      "explanation_en": "**$\\dfrac{(x-2)(x+2)}{x-2}=x+2\\to 4$.**\n\n**Answer:** $4$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x+2\\to 4$.**\n\n**תשובה:** $4$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -488,7 +557,15 @@
       },
       "source_item_id": "51a21e38-71da-5bf6-81a6-5f8bb45d7f5c",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -496,8 +573,8 @@
       "difficulty": "medium",
       "stem_en": "Evaluate $\\lim_{x\\to 1}\\dfrac{x^3-1}{x-1}$.",
       "stem_he": "חשבו $\\lim_{x\\to 1}\\dfrac{x^3-1}{x-1}$.",
-      "explanation_en": "**$\\dfrac{(x-1)(x^2+x+1)}{x-1}=x^2+x+1\\to 3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**$x^2+x+1\\to 3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**$\\dfrac{(x-1)(x^2+x+1)}{x-1}=x^2+x+1\\to 3$.**\n\n**Answer:** $3$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x^2+x+1\\to 3$.**\n\n**תשובה:** $3$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -506,7 +583,15 @@
       },
       "source_item_id": "63a11379-b501-5de1-b508-df0f66164980",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -514,8 +599,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: $f(x)=\\dfrac{1}{x}$ has an infinite discontinuity at $x=0$.",
       "stem_he": "נכון או לא נכון: לפונקציה $f(x)=\\dfrac{1}{x}$ יש אי-רציפות אינסופית ב-$x=0$.",
-      "explanation_en": "**$1/x\\to\\pm\\infty$ near $0$ — an infinite discontinuity** — **true**.",
-      "explanation_he": "**$1/x\\to\\pm\\infty$ ליד $0$** — **נכון**.",
+      "explanation_en": "**$1/x\\to\\pm\\infty$ near $0$ — an infinite discontinuity** — **true**.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$1/x\\to\\pm\\infty$ ליד $0$** — **נכון**.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "infinite_discontinuity"
       ],
@@ -524,7 +609,10 @@
       },
       "source_item_id": "869a3aeb-ea63-53a8-a4b4-43d47221fadd",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -532,8 +620,8 @@
       "difficulty": "hard",
       "stem_en": "Evaluate $\\lim_{x\\to 2}\\dfrac{x^2-4}{x^2-2x}$.",
       "stem_he": "חשבו $\\lim_{x\\to 2}\\dfrac{x^2-4}{x^2-2x}$.",
-      "explanation_en": "**$\\dfrac{(x-2)(x+2)}{x(x-2)}=\\dfrac{x+2}{x}\\to\\dfrac{4}{2}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$\\dfrac{x+2}{x}\\to 2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$\\dfrac{(x-2)(x+2)}{x(x-2)}=\\dfrac{x+2}{x}\\to\\dfrac{4}{2}=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$\\dfrac{x+2}{x}\\to 2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -542,7 +630,15 @@
       },
       "source_item_id": "8aa4bbef-d64a-5081-b0ce-62d6b5dd230d",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -550,8 +646,8 @@
       "difficulty": "hard",
       "stem_en": "Find the removable value of $\\dfrac{x^2-5x+6}{x-2}$ at $x=2$.",
       "stem_he": "מצאו את הערך הסליק של $\\dfrac{x^2-5x+6}{x-2}$ ב-$x=2$.",
-      "explanation_en": "**$\\dfrac{(x-2)(x-3)}{x-2}=x-3\\to -1$.**\n\n**Answer:** $-1$.",
-      "explanation_he": "**$x-3\\to -1$.**\n\n**תשובה:** $-1$.",
+      "explanation_en": "**$\\dfrac{(x-2)(x-3)}{x-2}=x-3\\to -1$.**\n\n**Answer:** $-1$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x-3\\to -1$.**\n\n**תשובה:** $-1$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -560,7 +656,15 @@
       },
       "source_item_id": "5b85655c-24e6-5667-8231-3bea888ad26a",
       "points_level_min": "5pt",
-      "correct_answer": "-1"
+      "correct_answer": "-1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-1",
+        "expected": -1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -568,8 +672,8 @@
       "difficulty": "hard",
       "stem_en": "Find the removable value of $\\dfrac{x^2-16}{x-4}$ at $x=4$.",
       "stem_he": "מצאו את הערך הסליק של $\\dfrac{x^2-16}{x-4}$ ב-$x=4$.",
-      "explanation_en": "**$\\dfrac{(x-4)(x+4)}{x-4}=x+4\\to 8$.**\n\n**Answer:** $8$.",
-      "explanation_he": "**$x+4\\to 8$.**\n\n**תשובה:** $8$.",
+      "explanation_en": "**$\\dfrac{(x-4)(x+4)}{x-4}=x+4\\to 8$.**\n\n**Answer:** $8$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x+4\\to 8$.**\n\n**תשובה:** $8$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "removable_discontinuity"
       ],
@@ -578,7 +682,372 @@
       },
       "source_item_id": "e6f71126-be8d-5061-ae68-375663219bf3",
       "points_level_min": "5pt",
-      "correct_answer": "8"
+      "correct_answer": "8",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "8",
+        "expected": 8,
+        "tol": 0.000001
+      }
+    },
+    {
+      "points_level_min": "university",
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "If $\\lim_{x\\to a}f(x)$ exists but $f(a)$ is missing or different, the discontinuity at $a$ is called ____ (one word: removable).",
+      "stem_he": "אם $\\lim_{x\\to a}f(x)$ קיים אך $f(a)$ חסר או שונה, אי-הרציפות ב-$a$ נקראת ____ (באנגלית: removable).",
+      "explanation_en": "**Step 1.** Limit exists finite.\n\n**Step 2.** Function value wrong/missing ⇒ hole.\n\n**Step 3.** Redefining $f(a)$ to the limit removes it — removable.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הגבול קיים וסופי.\n\n**שלב 2.** ערך הפונקציה שגוי/חסר ⇒ חור.\n\n**שלב 3.** הגדרה מחדש מסירה אותו — סליקה.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": "removable"
+      },
+      "correct_answer": "removable",
+      "ord": 16
+    },
+    {
+      "points_level_min": "university",
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "Does $f(x)=1/x$ have a jump discontinuity at $0$? Answer 'yes' or 'no'.",
+      "stem_he": "האם ל-$f(x)=1/x$ יש אי-רציפות קפיצה ב-$0$? ענו 'yes' או 'no'.",
+      "explanation_en": "**Step 1.** Left limit $-\\infty$, right $+\\infty$ — not finite unequal limits.\n\n**Step 2.** This is an infinite discontinuity / vertical asymptote.\n\n**Step 3.** Jump requires two finite different one-sided limits. Answer: no.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** גבול שמאלי $-\\infty$, ימני $+\\infty$ — לא שני גבולות סופיים שונים.\n\n**שלב 2.** זו אי-רציפות אינסופית.\n\n**שלב 3.** קפיצה דורשת שני גבולות סופיים שונים. תשובה: no.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No",
+          "לא"
+        ]
+      },
+      "acceptable_answers": [
+        "no",
+        "No",
+        "לא"
+      ],
+      "ord": 17
+    },
+    {
+      "points_level_min": "university",
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Classification is a checklist on one-sided limits and $f(a)$. Dirichlet’s function is the classic essential example.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "הסיווג הוא רשימת בדיקה על גבולות חד-צדדיים ו-$f(a)$. פונקציית דיריכלה היא הדוגמה המהותית הקלאסית.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "left_en": [
+          "Removable",
+          "Jump",
+          "Infinite",
+          "Essential"
+        ],
+        "left_he": [
+          "סליקה",
+          "קפיצה",
+          "אינסופית",
+          "מהותית"
+        ],
+        "right_en": [
+          "Hole; limit exists",
+          "Left≠right finite limits",
+          "Vertical asymptote",
+          "Wild oscillation"
+        ],
+        "right_he": [
+          "חור; גבול קיים",
+          "שמאל≠ימין סופיים",
+          "אסימפטוטה אנכית",
+          "תנודה פראית"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 18
+    },
+    {
+      "points_level_min": "university",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "Skipping the one-sided limits and staring at the formula is how removable holes get mislabeled as jumps.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "דילוג על גבולות חד-צדדיים והסתכלות על הנוסחה בלבד גורמים לסיווג שגוי של חורים כקפיצות.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Check whether $f(a)$ is defined.",
+          "Compute left and right limits at $a$.",
+          "Compare limits to each other and to $f(a)$.",
+          "Name the discontinuity type (or conclude continuity)."
+        ],
+        "steps_he": [
+          "בדקו אם $f(a)$ מוגדרת.",
+          "חשבו גבולות שמאלי וימני ב-$a$.",
+          "השוו גבולות זה לזה ול-$f(a)$.",
+          "תנו שם לסוג אי-הרציפות (או הסיקו רציפות)."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 19
+    },
+    {
+      "points_level_min": "university",
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Jumps require unequal finite one-sided limits. Continuity packages the limit-equals-value statement.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "קפיצות דורשות גבולות חד-צדדיים סופיים שונים. רציפות כוללת את שוויון הגבול לערך.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "Polynomials are continuous on $\\mathbb{R}$.",
+          "A jump discontinuity has equal one-sided limits.",
+          "Rational functions are continuous where the denominator is nonzero.",
+          "If $f$ is continuous at $a$, then $\\lim_{x\\to a}f(x)=f(a)$."
+        ],
+        "options_he": [
+          "פולינומים רציפים ב-$\\mathbb{R}$.",
+          "לאי-רציפות קפיצה יש גבולות חד-צדדיים שווים.",
+          "רציונליות רציפות היכן שהמכנה אינו אפס.",
+          "אם $f$ רציפה ב-$a$, אז $\\lim_{x\\to a}f(x)=f(a)$."
+        ],
+        "correct_indices": [
+          0,
+          2,
+          3
+        ]
+      },
+      "options_en": [
+        "Polynomials are continuous on $\\mathbb{R}$.",
+        "A jump discontinuity has equal one-sided limits.",
+        "Rational functions are continuous where the denominator is nonzero.",
+        "If $f$ is continuous at $a$, then $\\lim_{x\\to a}f(x)=f(a)$."
+      ],
+      "options_he": [
+        "פולינומים רציפים ב-$\\mathbb{R}$.",
+        "לאי-רציפות קפיצה יש גבולות חד-צדדיים שווים.",
+        "רציונליות רציפות היכן שהמכנה אינו אפס.",
+        "אם $f$ רציפה ב-$a$, אז $\\lim_{x\\to a}f(x)=f(a)$."
+      ],
+      "correct_indices": [
+        0,
+        2,
+        3
+      ],
+      "ord": 20
+    },
+    {
+      "points_level_min": "university",
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "needs_review": true,
+      "stem_en": "Classify the discontinuity of $f(x)=\\dfrac{x^2-1}{x-1}$ at $x=1$, and redefine $f(1)$ to make $f$ continuous there. Sketch the hole.",
+      "stem_he": "סווגו את אי-הרציפות של $f(x)=\\dfrac{x^2-1}{x-1}$ ב-$x=1$, והגדירו מחדש את $f(1)$ כדי שתהיה רציפה. שרטטו את החור.",
+      "explanation_en": "**Step 1.** For $x\\neq 1$, $f(x)=x+1$.\n\n**Step 2.** $\\lim_{x\\to 1}f(x)=2$, but $f(1)$ is undefined.\n\n**Step 3.** Removable; set $f(1)=2$ to repair. Graph: line $y=x+1$ with a hole until filled.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** ל-$x\\neq 1$, $f(x)=x+1$.\n\n**שלב 2.** הגבול $2$, $f(1)$ לא מוגדר.\n\n**שלב 3.** סליקה; מגדירים $f(1)=2$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Simplify to x+1 for x≠1",
+          "Limit=2",
+          "Set f(1)=2 removable"
+        ],
+        "steps_he": [
+          "פישוט ל-x+1 ל-x≠1",
+          "גבול=2",
+          "הגדירו f(1)=2 סליקה"
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון.",
+      "ord": 21
+    },
+    {
+      "points_level_min": "university",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "needs_review": true,
+      "stem_en": "Using $\\varepsilon$-$\\delta$ language at the level of your course, outline why polynomials are continuous at every real $a$.",
+      "stem_he": "בשפת $\\varepsilon$-$\\delta$ ברמת הקורס שלכם, מתוו מדוע פולינומים רציפים בכל $a$ ממשי.",
+      "explanation_en": "**Step 1.** Identity $x$ is continuous; products preserve continuity ⇒ $x^n$ continuous.\n\n**Step 2.** Scalar multiples and sums preserve continuity.\n\n**Step 3.** A polynomial is a finite sum of such terms, hence continuous on $\\mathbb{R}$.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הזהות $x$ רציפה; מכפלות משמרות רציפות ⇒ $x^n$ רציפה.\n\n**שלב 2.** כפל בסקלר וסכומים משמרים רציפות.\n\n**שלב 3.** פולינום הוא סכום סופי כזה, ולכן רציף ב-$\\mathbb{R}$.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Algebra of limits",
+          "x→a ⇒ x^n→a^n",
+          "Finite sum of continuous ⇒ continuous"
+        ],
+        "steps_he": [
+          "אלגברת גבולות",
+          "x→a ⇒ x^n→a^n",
+          "סכום סופי של רציפות ⇒ רציפה"
+        ]
+      },
+      "ord": 22
+    },
+    {
+      "points_level_min": "university",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "Evaluate $\\lim_{x\\to 2} x^2$.",
+      "stem_he": "חשבו $\\lim_{x\\to 2} x^2$.",
+      "explanation_en": "**Step 1.** Polynomials are continuous, so limit equals value.\n\n**Step 2.** $2^2=4$.\n\n**Step 3.** No discontinuity here.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** פולינומים רציפים, ולכן הגבול שווה לערך.\n\n**שלב 2.** $2^2=4$.\n\n**שלב 3.** אין כאן אי-רציפות.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": 4
+      },
+      "correct_answer": "4",
+      "verify": {
+        "expr": "2^2",
+        "expected": 4,
+        "tol": 0.0001
+      },
+      "ord": 23
+    },
+    {
+      "points_level_min": "university",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "At $x=0$, $f(x)=|x|/x$ (for $x\\neq 0$) has:",
+      "stem_he": "ב-$x=0$, ל-$f(x)=|x|/x$ (ל-$x\\neq 0$) יש:",
+      "explanation_en": "Right limit is $1$, left limit is $-1$. Finite unequal one-sided limits ⇒ jump (sign function discontinuity).\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "גבול ימני $1$, שמאלי $-1$. גבולות סופיים שונים ⇒ קפיצה (אי-רציפות של סימן).\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "A jump discontinuity",
+          "A removable hole with limit 0",
+          "Continuity",
+          "A removable hole with limit 1"
+        ],
+        "options_he": [
+          "אי-רציפות קפיצה",
+          "חור סליק עם גבול 0",
+          "רציפות",
+          "חור סליק עם גבול 1"
+        ],
+        "correct_index": 0
+      },
+      "options_en": [
+        "A jump discontinuity",
+        "A removable hole with limit 0",
+        "Continuity",
+        "A removable hole with limit 1"
+      ],
+      "options_he": [
+        "אי-רציפות קפיצה",
+        "חור סליק עם גבול 0",
+        "רציפות",
+        "חור סליק עם גבול 1"
+      ],
+      "correct_index": 0,
+      "ord": 24
+    },
+    {
+      "points_level_min": "university",
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "function_value",
+        "infinite_discontinuity",
+        "jump_discontinuity"
+      ],
+      "stem_en": "True or False: if $f$ is continuous at $a$, then $\\lim_{x\\to a}f(x)$ exists.",
+      "stem_he": "נכון או לא נכון: אם $f$ רציפה ב-$a$, אז $\\lim_{x\\to a}f(x)$ קיים.",
+      "explanation_en": "Continuity at $a$ includes existence of the two-sided limit and equality with $f(a)$. The converse needs the value-matching condition too.\n\n**Exam tip.** In university calculus, name the theorem or technique first (FTC, partial fractions, ratio/root test, Taylor remainder), keep algebraic steps readable, and state hypotheses before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "רציפות ב-$a$ כוללת קיום הגבול הדו-צדדי ושוויון ל-$f(a)$. ההפך דורש גם את תנאי ההתאמה לערך.\n\n**טיפ לבחינה.** בחשבון אינפיניטסימלי באוניברסיטה ציינו קודם את המשפט או הטכניקה (FTC, שברים חלקיים, מבחן יחס/שורש, שארית טיילור), שמרו על שלבים קריאים, וציינו הנחות לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_bool": true,
+      "ord": 25
     }
   ],
   "est_minutes": 45,

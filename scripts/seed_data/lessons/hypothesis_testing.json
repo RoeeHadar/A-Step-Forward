@@ -32,6 +32,13 @@
       "body_he_md": "**בסיס CLT.** לפי משפט הגבול המרכזי, ל-$n$ גדול ממוצע המדגם מקיים $\\bar{X} \\approx N(\\mu, \\sigma^2/n)$ ללא תלות בצורת האוכלוסייה. זה מצדיק מבחני z כש-$\\sigma$ ידוע ו-$n$ בינוני-גדול.\n\n**כלל החלטה (דו-זנבי).** דחה $H_0$ אמ\"מ $|Z| > z_{\\alpha/2}$, או שקיל: $p\\text{-value} < \\alpha$. שתי הגישות תמיד מסכימות — השתמשו במה שיש טבלאות לו בבחינה.\n\n**מבחן t כש-$\\sigma$ לא ידוע.** החליפו $\\sigma$ באוכלוסייה ב-$s$ מדגמי:\n$$T = \\frac{\\bar{X} - \\mu_0}{s/\\sqrt{n}} \\sim t_{n-1} \\quad \\text{under } H_0.$$\nהשתמשו בערכים קריטיים של t: $t_{\\alpha/2,\\, n-1}$, עם זנבות כבדים יותר מהנורמל.\n\n**עוצמה וגודל מדגם.** לגילוי הפרש $\\delta = |\\mu_1 - \\mu_0|$ בעוצמה $1-\\beta$ ברמת $\\alpha$ (דו-זנבי, $\\sigma$ ידוע):\n$$n = \\left(\\frac{(z_{\\alpha/2} + z_\\beta)\\,\\sigma}{\\delta}\\right)^2.$$\nעגלו **למעלה** למספר שלם. $\\delta$ גדול יותר, $\\sigma$ קטן יותר, או עוצמה רצויה גבוהה יותר — כולם מגדילים $n$ נדרש.\n\n**פשרה $\\alpha$ מול $\\beta$.** ל-$n$ ואפקט אמיתי קבועים, הקטנת $\\alpha$ (סף מחמיר יותר) מגדילה $\\beta$ (פחות עוצמה). אי אפשר למזער את שניהם בלי לאסוף יותר נתונים.\n\n**דואליות CI–מבחן.** דחיית $H_0: \\mu = \\mu_0$ ברמה $\\alpha$ שקילה ל-$\\mu_0$ מחוץ לרווח הסמך $(1-\\alpha)$: $\\bar{x} \\pm z_{\\alpha/2}\\,\\sigma/\\sqrt{n}$. דואליות זו שאלת הוכחה מועדפת בבחינות ישראליות."
     },
     {
+      "kind": "theory",
+      "title_en": "Errors, Power, and $p$-Value Logic",
+      "title_he": "שגיאות, עוצמה ולוגיקת ערך-$p$",
+      "body_en_md": "**Two error types.** Type I: reject a true $H_0$ (false alarm), controlled by $\\alpha=P(\\text{reject}\\mid H_0)$. Type II: fail to reject a false $H_0$, with $\\beta=P(\\text{fail}\\mid H_1)$; power is $1-\\beta$.\n\n**$p$-value meaning.** The $p$-value is the probability, under $H_0$, of a result at least as extreme as observed. It is *not* $P(H_0\\mid\\text{data})$.\n\n**Decision rule.** Reject $H_0$ when $p\\le\\alpha$. Equivalently, when the test statistic falls in the critical region.\n\n**Power grows with** larger $|\\text{effect}|$, larger $n$, larger $\\alpha$, and smaller noise $\\sigma$. Always state $H_0/H_1$ before looking at data.",
+      "body_he_md": "**שני סוגי שגיאה.** סוג I: דחיית $H_0$ אמיתית (אזעקת שווא), נשלטת ע״י $\\alpha$. סוג II: אי-דחייה כש-$H_0$ שגויה; עוצמה היא $1-\\beta$.\n\n**משמעות ערך-$p$.** זו ההסתברות תחת $H_0$ לתוצאה קיצונית לפחות כמו שנצפתה. זו *לא* $P(H_0\\mid\\text{data})$.\n\n**כלל החלטה.** דוחים כאשר $p\\le\\alpha$, או כאשר הסטטיסטי נופל לאזור הקריטי.\n\n**העוצמה גדלה עם** אפקט גדול יותר, $n$ גדול יותר, $\\alpha$ גדול יותר, ורעש קטן יותר. תמיד הגדירו $H_0/H_1$ לפני הנתונים."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -77,6 +84,15 @@
       "title_he": "דוגמה פתורה 3 — גודל מדגם לעוצמה רצויה",
       "body_en_md": "**Problem:** Test $H_0:\\mu=\\mu_0$ vs $H_1:\\mu=\\mu_0+2$ (detect shift $\\delta=2$) with $\\sigma=10$, desired power $1-\\beta=0.80$, significance $\\alpha=0.05$ (two-tailed). How large must $n$ be?\n\nSample-size formulas answer: \"How many observations do I need to have an 80% chance of detecting a real effect of size 2?\"\n\n### Move 1: Look up critical z-values\n- $z_{\\alpha/2} = z_{0.025} = 1.96$ (significance constraint).\n- $z_\\beta = z_{0.20} = 0.842$ (power constraint, since $\\beta = 0.20$).\n\n### Move 2: Apply the power formula\n$$n = \\left(\\frac{(z_{\\alpha/2} + z_\\beta)\\,\\sigma}{\\delta}\\right)^2 = \\left(\\frac{(1.96 + 0.842) \\cdot 10}{2}\\right)^2.$$\n\n### Move 3: Evaluate\n$$n = \\left(\\frac{2.802 \\cdot 10}{2}\\right)^2 = (14.01)^2 = 196.3.$$\n\n### Move 4: Round up\n$n = 197$ (always round up — fractional samples are impossible).\n\n**Interpretation:** With 197 observations, a two-tailed z-test at $\\alpha=0.05$ has at least 80% power to detect a true mean shift of 2 units from $\\mu_0$.\n\n**Sanity check:** If we used only $z_{\\alpha/2}$ (ignoring power), we would get $n=(1.96\\cdot10/2)^2=96$ — far too small to reliably detect the effect. The $z_\\beta$ term accounts for the need to reject when the alternative is true.",
       "body_he_md": "**בעיה:** בדיקת $H_0:\\mu=\\mu_0$ מול $H_1:\\mu=\\mu_0+2$ (גילוי הפרש $\\delta=2$) עם $\\sigma=10$, עוצמה רצויה $1-\\beta=0.80$, מובהקות $\\alpha=0.05$ (דו-זנבי). כמה גדול חייב להיות $n$?\n\nנוסחאות גודל מדגם עונות: \"כמה תצפיות נדרשות כדי שיהיה 80% סיכוי לגלות אפקט אמיתי בגודל 2?\"\n\n### צעד 1: חיפוש ערכי z קריטיים\n- $z_{\\alpha/2} = z_{0.025} = 1.96$ (אילוץ מובהקות).\n- $z_\\beta = z_{0.20} = 0.842$ (אילוץ עוצמה, כי $\\beta = 0.20$).\n\n### צעד 2: יישום נוסחת העוצמה\n$$n = \\left(\\frac{(z_{\\alpha/2} + z_\\beta)\\,\\sigma}{\\delta}\\right)^2 = \\left(\\frac{(1.96 + 0.842) \\cdot 10}{2}\\right)^2.$$\n\n### צעד 3: חישוב\n$$n = \\left(\\frac{2.802 \\cdot 10}{2}\\right)^2 = (14.01)^2 = 196.3.$$\n\n### צעד 4: עיגול למעלה\n$n = 197$ (תמיד עיגול למעלה — אי אפשר חלק תצפיות).\n\n**פירוש:** עם 197 תצפיות, מבחן z דו-זנבי ב-$\\alpha=0.05$ יש לו לפחות 80% עוצמה לגלות הפרש ממוצע אמיתי של 2 יחידות מ-$\\mu_0$.\n\n**בדיקת הגיון:** אם היינו משתמשים רק ב-$z_{\\alpha/2}$ (מתעלמים מעוצמה), היינו מקבלים $n=(1.96\\cdot10/2)^2=96$ — קטן מדי לגילוי אמין. איבר $z_\\beta$ מחשב את הצורך לדחות כשהאלטרנטיבה נכונה."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — One-Sided $z$-Test Decision",
+      "title_he": "דוגמה פתורה 4 — החלטת מבחן $z$ חד-צדדי",
+      "body_en_md": "**Setup.** $H_0:\\mu=50$ vs $H_1:\\mu>50$, $\\sigma=10$, $n=25$, $\\bar x=53$, $\\alpha=0.05$.\n\n### Move 1 — Test statistic\n$$z=\\frac{53-50}{10/\\sqrt{25}}=\\frac{3}{2}=1.5.$$\n\n### Move 2 — Critical value\nFor upper-tail $\\alpha=0.05$, $z_{0.05}\\approx 1.645$.\n\n### Move 3 — Decision\n$1.5<1.645$ → fail to reject $H_0$ at 5%.\n\n### Move 4 — Comment\nThe estimate $53$ is above 50, but not far enough for this sample size and $\\alpha$.",
+      "body_he_md": "**הגדרה.** $H_0:\\mu=50$ מול $H_1:\\mu>50$, $\\sigma=10$, $n=25$, $\\bar x=53$, $\\alpha=0.05$.\n\n### צעד 1 — סטטיסטי\n$$z=\\frac{53-50}{10/5}=1.5.$$\n\n### צעד 2 — ערך קריטי\n$z_{0.05}\\approx 1.645$.\n\n### צעד 3 — החלטה\n$1.5<1.645$ → לא דוחים את $H_0$.\n\n### צעד 4 — הערה\nהאמדן מעל 50, אך לא מספיק רחוק למדגם ול-$\\alpha$ אלה."
     },
     {
       "kind": "method_guide",
@@ -244,8 +260,8 @@
       "difficulty": "easy",
       "stem_en": "The null hypothesis is denoted:",
       "stem_he": "השערת האפס מסומנת:",
-      "explanation_en": "**The null hypothesis is $H_0$.**\n\n**Answer:** $H_0$.",
-      "explanation_he": "**השערת האפס היא $H_0$.**\n\n**תשובה:** $H_0$.",
+      "explanation_en": "**The null hypothesis is $H_0$.**\n\n**Answer:** $H_0$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**השערת האפס היא $H_0$.**\n\n**תשובה:** $H_0$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -278,7 +294,10 @@
         "$H_a$",
         "$\\alpha$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -286,8 +305,8 @@
       "difficulty": "easy",
       "stem_en": "Find the $z$-statistic for $\\bar x=52$, $\\mu=50$, $\\sigma=10$, $n=25$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=52$, $\\mu=50$, $\\sigma=10$, $n=25$.",
-      "explanation_en": "**$\\tfrac{2}{10/5}=\\tfrac{2}{2}=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$\\tfrac{2}{2}=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$\\tfrac{2}{10/5}=\\tfrac{2}{2}=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{2}{2}=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -296,7 +315,15 @@
       },
       "source_item_id": "f9c75a05-29c9-52e2-8ce5-f9da86b2a7dd",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -304,8 +331,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: if the $p$-value is less than $\\alpha$, we reject $H_0$.",
       "stem_he": "נכון או לא נכון: אם ה-$p$ קטן מ-$\\alpha$, דוחים את $H_0$.",
-      "explanation_en": "**$p<\\alpha$ means reject $H_0$** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**$p<\\alpha$ פירושו דחיית $H_0$** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**$p<\\alpha$ means reject $H_0$** — **true**.\n\n**Answer:** true.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$p<\\alpha$ פירושו דחיית $H_0$** — **נכון**.\n\n**תשובה:** נכון.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -314,7 +341,10 @@
       },
       "source_item_id": "0660bff1-ea07-579b-9522-e5b4c0e426e9",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -322,8 +352,8 @@
       "difficulty": "hard",
       "stem_en": "Test $H_0:\\mu=100$ with $\\bar x=110$, $\\sigma=20$, $n=16$. Find the $z$-statistic.",
       "stem_he": "בדקו $H_0:\\mu=100$ עם $\\bar x=110$, $\\sigma=20$, $n=16$. מצאו את סטטיסטי ה-$z$.",
-      "explanation_en": "**Step 1 — Standard error.** $\\tfrac{20}{\\sqrt{16}}=\\tfrac{20}{4}=5$.\n\n**Step 2 — Compute $z$.** $\\tfrac{110-100}{5}$.\n\n**Step 3 — Evaluate.** $=2$.\n\n**Answer:** $z=2$.",
-      "explanation_he": "**שלב 1 — שגיאת תקן.** $\\tfrac{20}{4}=5$.\n\n**שלב 2 — חישוב $z$.** $\\tfrac{110-100}{5}$.\n\n**שלב 3 — חישוב.** $2$.\n\n**תשובה:** $z=2$.",
+      "explanation_en": "**Step 1 — Standard error.** $\\tfrac{20}{\\sqrt{16}}=\\tfrac{20}{4}=5$.\n\n**Step 2 — Compute $z$.** $\\tfrac{110-100}{5}$.\n\n**Step 3 — Evaluate.** $=2$.\n\n**Answer:** $z=2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — שגיאת תקן.** $\\tfrac{20}{4}=5$.\n\n**שלב 2 — חישוב $z$.** $\\tfrac{110-100}{5}$.\n\n**שלב 3 — חישוב.** $2$.\n\n**תשובה:** $z=2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -344,7 +374,11 @@
       "source_item_id": "18e9afff-2654-5579-a36a-92e324ee1096",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -352,8 +386,8 @@
       "difficulty": "easy",
       "stem_en": "The significance level of a test is denoted:",
       "stem_he": "רמת המובהקות של מבחן מסומנת:",
-      "explanation_en": "**$\\alpha$ is the significance level.**\n\n**Answer:** $\\alpha$.",
-      "explanation_he": "**$\\alpha$ היא רמת המובהקות.**\n\n**תשובה:** $\\alpha$.",
+      "explanation_en": "**$\\alpha$ is the significance level.**\n\n**Answer:** $\\alpha$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\alpha$ היא רמת המובהקות.**\n\n**תשובה:** $\\alpha$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -386,7 +420,10 @@
         "$\\mu$",
         "$\\sigma$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 6,
@@ -394,8 +431,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: a Type I error is rejecting a true null hypothesis.",
       "stem_he": "נכון או לא נכון: טעות מסוג I היא דחיית השערת אפס נכונה.",
-      "explanation_en": "**Type I = false rejection** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**טעות מסוג I = דחייה שגויה** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Type I = false rejection** — **true**.\n\n**Answer:** true.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**טעות מסוג I = דחייה שגויה** — **נכון**.\n\n**תשובה:** נכון.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -404,7 +441,10 @@
       },
       "source_item_id": "d7082aed-ea4a-5285-b481-475564e956ee",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 7,
@@ -412,8 +452,8 @@
       "difficulty": "medium",
       "stem_en": "A Type II error is:",
       "stem_he": "טעות מסוג II היא:",
-      "explanation_en": "**Type II = missing a real effect.**\n\n**Answer:** failing to reject a false $H_0$.",
-      "explanation_he": "**טעות מסוג II = החמצת אפקט אמיתי.**\n\n**תשובה:** אי-דחיית $H_0$ שגויה.",
+      "explanation_en": "**Type II = missing a real effect.**\n\n**Answer:** failing to reject a false $H_0$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**טעות מסוג II = החמצת אפקט אמיתי.**\n\n**תשובה:** אי-דחיית $H_0$ שגויה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -446,7 +486,10 @@
         "$\\text{accepting }H_1$",
         "$\\text{a computation error}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -454,8 +497,8 @@
       "difficulty": "medium",
       "stem_en": "For a two-tailed test at $\\alpha=0.05$, the critical $z$-values are approximately:",
       "stem_he": "עבור מבחן דו-זנבי ב-$\\alpha=0.05$, ערכי $z$ הקריטיים הם בערך:",
-      "explanation_en": "**Two-tailed $0.05$ gives $\\pm1.96$.**\n\n**Answer:** $\\pm1.96$.",
-      "explanation_he": "**דו-זנבי $0.05$ נותן $\\pm1.96$.**\n\n**תשובה:** $\\pm1.96$.",
+      "explanation_en": "**Two-tailed $0.05$ gives $\\pm1.96$.**\n\n**Answer:** $\\pm1.96$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דו-זנבי $0.05$ נותן $\\pm1.96$.**\n\n**תשובה:** $\\pm1.96$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -488,7 +531,10 @@
         "$\\pm2.576$",
         "$\\pm1.00$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 9,
@@ -496,8 +542,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $z$-statistic for $\\bar x=55$, $\\mu=50$, $\\sigma=10$, $n=4$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=55$, $\\mu=50$, $\\sigma=10$, $n=4$.",
-      "explanation_en": "**$\\tfrac{5}{10/2}=\\tfrac{5}{5}=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$\\tfrac{5}{5}=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$\\tfrac{5}{10/2}=\\tfrac{5}{5}=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{5}{5}=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -506,7 +552,15 @@
       },
       "source_item_id": "a8cee0b3-aca7-5a87-b082-989b97ff1542",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -514,8 +568,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $z$-statistic for $\\bar x=105$, $\\mu=100$, $\\sigma=15$, $n=9$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=105$, $\\mu=100$, $\\sigma=15$, $n=9$.",
-      "explanation_en": "**$\\tfrac{5}{15/3}=\\tfrac{5}{5}=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$\\tfrac{5}{5}=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$\\tfrac{5}{15/3}=\\tfrac{5}{5}=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{5}{5}=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -524,7 +578,15 @@
       },
       "source_item_id": "4223e9ba-a9ec-53a5-b642-b47e78ad45cf",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -532,8 +594,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $z$-statistic for $\\bar x=48$, $\\mu=50$, $\\sigma=8$, $n=16$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=48$, $\\mu=50$, $\\sigma=8$, $n=16$.",
-      "explanation_en": "**$\\tfrac{-2}{8/4}=\\tfrac{-2}{2}=-1$.**\n\n**Answer:** $-1$.",
-      "explanation_he": "**$\\tfrac{-2}{2}=-1$.**\n\n**תשובה:** $-1$.",
+      "explanation_en": "**$\\tfrac{-2}{8/4}=\\tfrac{-2}{2}=-1$.**\n\n**Answer:** $-1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{-2}{2}=-1$.**\n\n**תשובה:** $-1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -542,7 +604,15 @@
       },
       "source_item_id": "5064b64e-338a-5c2d-972d-b70503d7a3ba",
       "points_level_min": "5pt",
-      "correct_answer": "-1"
+      "correct_answer": "-1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-1",
+        "expected": -1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -550,8 +620,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: a smaller $\\alpha$ makes it harder to reject $H_0$.",
       "stem_he": "נכון או לא נכון: $\\alpha$ קטן יותר מקשה על דחיית $H_0$.",
-      "explanation_en": "**Stricter threshold means harder to reject** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**סף מחמיר יותר מקשה על דחייה** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Stricter threshold means harder to reject** — **true**.\n\n**Answer:** true.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**סף מחמיר יותר מקשה על דחייה** — **נכון**.\n\n**תשובה:** נכון.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -560,7 +630,10 @@
       },
       "source_item_id": "e1863c1e-f09c-5577-9e51-60412a8e24d0",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -568,8 +641,8 @@
       "difficulty": "hard",
       "stem_en": "Find the $z$-statistic for $\\bar x=53$, $\\mu=50$, $\\sigma=6$, $n=36$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=53$, $\\mu=50$, $\\sigma=6$, $n=36$.",
-      "explanation_en": "**$\\tfrac{3}{6/6}=\\tfrac{3}{1}=3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**$\\tfrac{3}{1}=3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**$\\tfrac{3}{6/6}=\\tfrac{3}{1}=3$.**\n\n**Answer:** $3$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{3}{1}=3$.**\n\n**תשובה:** $3$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -578,7 +651,15 @@
       },
       "source_item_id": "4782faa9-e857-536c-af9a-bc5b10b2bd87",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -586,8 +667,8 @@
       "difficulty": "hard",
       "stem_en": "Find the $z$-statistic for $\\bar x=98$, $\\mu=100$, $\\sigma=4$, $n=16$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=98$, $\\mu=100$, $\\sigma=4$, $n=16$.",
-      "explanation_en": "**$\\tfrac{-2}{4/4}=\\tfrac{-2}{1}=-2$.**\n\n**Answer:** $-2$.",
-      "explanation_he": "**$\\tfrac{-2}{1}=-2$.**\n\n**תשובה:** $-2$.",
+      "explanation_en": "**$\\tfrac{-2}{4/4}=\\tfrac{-2}{1}=-2$.**\n\n**Answer:** $-2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{-2}{1}=-2$.**\n\n**תשובה:** $-2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -596,7 +677,15 @@
       },
       "source_item_id": "695e5961-c826-57a9-b601-8762a16d028b",
       "points_level_min": "5pt",
-      "correct_answer": "-2"
+      "correct_answer": "-2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "-2",
+        "expected": -2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -604,8 +693,8 @@
       "difficulty": "hard",
       "stem_en": "Find the $z$-statistic for $\\bar x=51$, $\\mu=50$, $\\sigma=2$, $n=64$.",
       "stem_he": "מצאו את סטטיסטי ה-$z$ עבור $\\bar x=51$, $\\mu=50$, $\\sigma=2$, $n=64$.",
-      "explanation_en": "**$\\tfrac{1}{2/8}=\\tfrac{1}{0.25}=4$.**\n\n**Answer:** $4$.",
-      "explanation_he": "**$\\tfrac{1}{0.25}=4$.**\n\n**תשובה:** $4$.",
+      "explanation_en": "**$\\tfrac{1}{2/8}=\\tfrac{1}{0.25}=4$.**\n\n**Answer:** $4$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac{1}{0.25}=4$.**\n\n**תשובה:** $4$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "hypothesis_testing"
       ],
@@ -614,7 +703,425 @@
       },
       "source_item_id": "79cd916a-4062-5317-835e-20d4ab692bc0",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^2",
+        "expected": 4,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Type I error rate is denoted by ____.",
+      "stem_he": "שיעור שגיאת סוג I מסומן ב-____.",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: α.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: α.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "α",
+          "alpha",
+          "Alpha"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Is the p-value equal to P(H0|data)? (yes/no)",
+      "stem_he": "האם ערך-p שווה ל-P(H0|data)? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: no.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: no.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "H0",
+            "right": "null hypothesis"
+          },
+          {
+            "left": "α",
+            "right": "Type I rate"
+          },
+          {
+            "left": "Power",
+            "right": "1−β"
+          },
+          {
+            "left": "p-value",
+            "right": "tail probability under H0"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "H0",
+            "right": "השערת האפס"
+          },
+          {
+            "left": "α",
+            "right": "שיעור סוג I"
+          },
+          {
+            "left": "עוצמה",
+            "right": "1−β"
+          },
+          {
+            "left": "ערך-p",
+            "right": "הסתברות זנב תחת H0"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "State H0/H1",
+          "Choose α and test statistic",
+          "Compute p or critical region",
+          "Decide and interpret"
+        ],
+        "order_he": [
+          "נסחו H0/H1",
+          "בחרו α וסטטיסטי",
+          "חשבו p או אזור קריטי",
+          "החליטו ופרשו"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "Type I: reject true H0",
+        "Type II: fail to reject false H0",
+        "p-value is P(H0 true | data)",
+        "Smaller α makes rejection harder"
+      ],
+      "options_he": [
+        "סוג I: דחיית H0 אמיתית",
+        "סוג II: אי-דחייה כש-H0 שגויה",
+        "ערך-p הוא P(H0|נתונים)",
+        "α קטן יותר מקשה על דחייה"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Type I: reject true H0",
+          "Type II: fail to reject false H0",
+          "p-value is P(H0 true | data)",
+          "Smaller α makes rejection harder"
+        ],
+        "options_he": [
+          "סוג I: דחיית H0 אמיתית",
+          "סוג II: אי-דחייה כש-H0 שגויה",
+          "ערך-p הוא P(H0|נתונים)",
+          "α קטן יותר מקשה על דחייה"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Define Type I and Type II errors and the relationship power = 1−β.",
+      "stem_he": "הגדירו שגיאות סוג I ו-II ואת הקשר עוצמה=1−β.",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "z=1.5 vs critical 1.645 (upper tail α=0.05): reject or not?",
+      "stem_he": "z=1.5 מול קריטי 1.645 (זנב עליון α=0.05): דוחים או לא?",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: do not reject.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: do not reject.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain do not reject.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו do not reject.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Power increases when (other things equal):",
+      "stem_he": "העוצמה גדלה כאשר (אם השאר קבוע):",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "sample size increases",
+        "effect size shrinks to 0",
+        "noise σ increases a lot",
+        "α → 0 always"
+      ],
+      "options_he": [
+        "גודל המדגם גדל",
+        "גודל האפקט שואף ל-0",
+        "הרעש σ גדל מאוד",
+        "α→0 תמיד"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "sample size increases",
+          "effect size shrinks to 0",
+          "noise σ increases a lot",
+          "α → 0 always"
+        ],
+        "options_he": [
+          "גודל המדגם גדל",
+          "גודל האפקט שואף ל-0",
+          "הרעש σ גדל מאוד",
+          "α→0 תמיד"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "If β=0.2, power equals?",
+      "stem_he": "אם β=0.2, העוצמה שווה?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 0.8.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 0.8.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "0.8",
+      "answer_payload": {
+        "value": 0.8
+      },
+      "verify": {
+        "expr": "1-0.2",
+        "expected": 0.8,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Failing to reject H0 is not the same as proving H0 true.",
+      "stem_he": "אי-דחיית H0 אינה הוכחה ש-H0 נכונה.",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Critical z for upper-tail 0.025 is about? (enter 1.96)",
+      "stem_he": "z קריטי לזנב עליון 0.025 הוא בערך? (הזינו 1.96)",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 1.96.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 1.96.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "1.96",
+      "answer_payload": {
+        "value": 1.96
+      },
+      "verify": {
+        "expr": "1.96",
+        "expected": 1.96,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "hypothesis_testing"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A very small p-value indicates:",
+      "stem_he": "ערך-p קטן מאוד מצביע על:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university hypothesis testing, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בבדיקת השערות באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "data unusual under H0",
+        "H0 is certainly true",
+        "β must be 1",
+        "α is negative"
+      ],
+      "options_he": [
+        "נתונים חריגים תחת H0",
+        "H0 בוודאי נכונה",
+        "β חייב להיות 1",
+        "α שלילי"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "data unusual under H0",
+          "H0 is certainly true",
+          "β must be 1",
+          "α is negative"
+        ],
+        "options_he": [
+          "נתונים חריגים תחת H0",
+          "H0 בוודאי נכונה",
+          "β חייב להיות 1",
+          "α שלילי"
+        ],
+        "correct_index": 0
+      }
     }
   ],
   "est_minutes": 55,

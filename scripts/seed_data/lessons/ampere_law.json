@@ -33,6 +33,14 @@
       "body_he_md": "### מתי ניתן לפתור אלגברית?\n\nחוק אמפר **תמיד נכון**, אך **ניתן לפתרון** רק כאשר אפשר לטעון:\n1. $|\\vec{B}|$ **קבוע** לאורך הלולאה הנבחרת, וגם\n2. $\\vec{B}$ עושה **זווית קבועה** עם $d\\vec{l}$ בכל מקום על הלולאה (מקביל או מאונך)\n\nזה מאפשר להוציא $B$ מחוץ לאינטגרל: $\\oint \\vec{B} \\cdot d\\vec{l} = B \\cdot L$ כאשר $L$ הוא היקף הלולאה (למעגל) או האורך הרלוונטי. אם אחת התנאים נכשלת, האינטגרל לא מתכווץ — השתמשו בביו-סבר.\n\n### שלוש הגיאומטריות הסטנדרטיות\n\n| גיאומטריה | צורת הלולאה | תוצאה |\n|---|---|---|\n| חוט ישר אינסופי | מעגל ברדיוס $r$ | $B = \\frac{\\mu_0 I}{2\\pi r}$ |\n| סולנואיד אינסופי ($n$ כריכות/מ') | מלבן (צד אחד פנים, אחד חוץ) | $B = \\mu_0 n I$ (פנים); $B = 0$ (חוץ) |\n| טורואיד ($N$ כריכות כולל) | מעגל בתוך הטורואיד | $B = \\frac{\\mu_0 N I}{2\\pi r}$ |\n\n### בתוך מוליך גלילי מוצק\n\nלמוליך מוצק ברדיוס $R$ עם זרם $I$ אחיד, הזרם הכלוא ברדיוס $r < R$ פרופורציונלי לשטח הכלוא:\n$$I_{\\text{enc}} = I \\cdot \\frac{r^2}{R^2}$$\n$$B(2\\pi r) = \\mu_0 I \\frac{r^2}{R^2} \\implies B = \\frac{\\mu_0 I r}{2\\pi R^2} \\quad (r < R)$$\nעבור $r > R$, כל הזרם כלוא: $B = \\mu_0 I/(2\\pi r)$. השדה גדל ליניארית בפנים, מגיע למקסימום ב-$r = R$, ואז יורד כ-$1/r$ מחוץ — פרופיל פיצולי נפוץ בבחינות אוניברסיטה."
     },
     {
+      "id": "ampere_law_theory_2",
+      "kind": "theory",
+      "title_en": "Displacement current and Ampère–Maxwell",
+      "title_he": "זרם היסט וחוק אמפר–מקסוול",
+      "body_en_md": "The incomplete steady-state form $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ fails between capacitor plates, where conduction current is zero but $\\vec E$ is changing. Maxwell added the displacement current $I_d=\\varepsilon_0\\dfrac{d\\Phi_E}{dt}$, so\n$$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0\\left(I_{\\text{enc}}+\\varepsilon_0\\frac{d\\Phi_E}{dt}\\right).$$\nFor a long solenoid, Ampère's law with a rectangular Amperian loop parallel to the axis yields the uniform interior field $B=\\mu_0 n I$ and $B\\approx 0$ outside. For a toroid of mean radius $R$ with $N$ turns, a circular Amperian loop gives $B=\\mu_0 N I/(2\\pi R)$. Symmetry is essential: choose a loop where $|\\vec B|$ is constant and parallel to $d\\vec\\ell$ on the useful segments, otherwise the line integral does not factor cleanly.",
+      "body_he_md": "הצורה החסרה של מצב יציב $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ נכשלת בין לוחות קבל, שם זרם ההולכה אפסי אך $\\vec E$ משתנה. מקסוול הוסיף את זרם ההיסטרזיס $I_d=\\varepsilon_0\\dfrac{d\\Phi_E}{dt}$, ולכן\n$$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0\\left(I_{\\text{enc}}+\\varepsilon_0\\frac{d\\Phi_E}{dt}\\right).$$\nבסולנואיד ארוך, חוק אמפר עם לולאה מלבנית מקבילה לציר נותן שדה פנימי אחיד $B=\\mu_0 n I$ ו-$B\\approx 0$ בחוץ. בטורואיד ברדיוס ממוצע $R$ עם $N$ ליפופים, לולאה מעגלית נותנת $B=\\mu_0 N I/(2\\pi R)$. הסימטריה קריטית: בחרו לולאה שבה $|\\vec B|$ קבוע ומקביל ל-$d\\vec\\ell$ בקטעים השימושיים, אחרת אינטגרל הקו לא מתפרק בצורה נוחה."
+    },
+    {
       "id": "worked_example_1",
       "kind": "worked_example",
       "difficulty": "easy",
@@ -81,6 +89,14 @@
       "title_he": "דוגמה פתורה 3 — טורואיד ומוליך גלילי חלול",
       "body_en_md": "**Given:** A toroid has $N = 800$ turns, inner radius $a = 4\\;\\text{cm}$, outer radius $b = 8\\;\\text{cm}$, and carries $I = 1.5\\;\\text{A}$.\n(a) Find $B$ at $r = 6\\;\\text{cm}$ (inside the toroid).\n(b) Find $B$ at $r = 10\\;\\text{cm}$ (outside the toroid).\n\nThe toroid beautifully demonstrates current cancellation: all turns thread through an interior loop, but an exterior loop captures equal and opposite currents.\n\n**Part (a):**\n### Move 1: Choose a circular loop at $r = 0.06\\;\\text{m}$ inside the toroid\nBy symmetry, $|\\vec{B}|$ is constant and $\\vec{B} \\parallel d\\vec{l}$.\n\n### Move 2: Enclosed current\nAll $N$ turns thread through this loop: $I_{\\text{enc}} = NI = 800 \\times 1.5 = 1200\\;\\text{A}$\n\n### Move 3: Apply Ampère\n$$B(2\\pi r) = \\mu_0 NI \\implies B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi \\times 10^{-7})(1200)}{2\\pi (0.06)} = 4.0\\;\\text{mT}$$\n\n**Part (b):**\nA circular loop at $r = 0.10\\;\\text{m}$ encloses all $N$ turns going UP and all $N$ turns going DOWN. Net: $I_{\\text{enc}} = NI - NI = 0$, so $B = 0$.\n\n**Key insight:** The toroid confines the magnetic field entirely inside its core — why toroidal inductors minimize external interference in electronics.",
       "body_he_md": "**נתון:** טורואיד בעל $N = 800$ כריכות, רדיוס פנימי $a = 4\\;\\text{cm}$, רדיוס חיצוני $b = 8\\;\\text{cm}$, נושא $I = 1.5\\;\\text{A}$.\n(א) מצאו $B$ ב-$r = 6\\;\\text{cm}$ (בתוך הטורואיד).\n(ב) מצאו $B$ ב-$r = 10\\;\\text{cm}$ (מחוץ לטורואיד).\n\nהטורואיד מדגים יפה ביטול זרמים: כל הכריכות חוצות לולאה פנימית, אך לולאה חיצונית לוכדת זרמים שווים ומנוגדים.\n\n**חלק (א):**\n### צעד 1: מעגל ברדיוס $r = 0.06\\;\\text{m}$ בתוך הטורואיד\nמסימטריה, $|\\vec{B}|$ קבוע ו-$\\vec{B} \\parallel d\\vec{l}$.\n\n### צעד 2: זרם כלוא\nכל $N$ הכריכות חוצות לולאה זו: $I_{\\text{enc}} = NI = 1200\\;\\text{A}$\n\n### צעד 3: יישום אמפר\n$$B = \\frac{\\mu_0 NI}{2\\pi r} = \\frac{(4\\pi \\times 10^{-7})(1200)}{2\\pi (0.06)} = 4.0\\;\\text{mT}$$\n\n**חלק (ב):**\nלולאה ב-$r = 0.10\\;\\text{m}$ כוללת $N$ כריכות עולות ו-$N$ יורדות. נטו: $I_{\\text{enc}} = 0$, ולכן $B = 0$.\n\n**תובנה מרכזית:** הטורואיד כולא את השדה המגנטי בתוך ליבתו — לכן משרנים טורואידיים ממזערים הפרעות חיצוניות באלקטרוניקה."
+    },
+    {
+      "id": "ampere_law_worked_example_4",
+      "kind": "worked_example",
+      "title_en": "Toroid field from Ampère",
+      "title_he": "שדה בטורואיד מחוק אמפר",
+      "body_en_md": "### Move 1: Choose the Amperian loop\nA toroid has $N=400$ turns, $I=2.0\\,\\text{A}$, mean radius $R=0.12\\,\\text{m}$. Take a circle of radius $R$ concentric with the toroid.\n\n### Move 2: Apply Ampère\n$\\oint B\\,d\\ell=B\\cdot 2\\pi R=\\mu_0 N I$.\n\n### Move 3: Solve\n$B=\\mu_0 N I/(2\\pi R)=(4\\pi\\times10^{-7})(400)(2)/(2\\pi\\cdot 0.12)=1.33\\times10^{-3}\\,\\text{T}$.\n\n### Move 4: Check\nIf $R$ doubles at fixed $N,I$, $B$ halves — as expected for $1/R$ dependence.",
+      "body_he_md": "### צעד 1: בחירת לולאת אמפר\nטורואיד עם $N=400$ ליפופים, $I=2.0\\,\\text{A}$, רדיוס ממוצע $R=0.12\\,\\text{m}$. בוחרים מעגל ברדיוס $R$ קונצנטרי לטורואיד.\n\n### צעד 2: החלת אמפר\n$\\oint B\\,d\\ell=B\\cdot 2\\pi R=\\mu_0 N I$.\n\n### צעד 3: פתרון\n$B=\\mu_0 N I/(2\\pi R)=(4\\pi\\times10^{-7})(400)(2)/(2\\pi\\cdot 0.12)=1.33\\times10^{-3}\\,\\text{T}$.\n\n### צעד 4: בדיקה\nאם $R$ מוכפל ב-$N,I$ קבועים, $B$ נחתך בחצי — כצפוי מתלות $1/R$."
     },
     {
       "id": "method_guide",
@@ -289,8 +305,8 @@
       "difficulty": "easy",
       "stem_en": "Ampère's law relates the line integral of $B$ around a closed loop to:",
       "stem_he": "חוק אמפר מקשר את אינטגרל הקו של $B$ סביב לולאה סגורה ל:",
-      "explanation_en": "**$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$.**\n\n**Answer:** $\\mu_0 I_{\\text{enc}}$.",
-      "explanation_he": "**$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$.**\n\n**תשובה:** $\\mu_0 I_{\\text{enc}}$.",
+      "explanation_en": "**$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$.**\n\n**Answer:** $\\mu_0 I_{\\text{enc}}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$.**\n\n**תשובה:** $\\mu_0 I_{\\text{enc}}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -323,7 +339,10 @@
         "$\\varepsilon_0 I$",
         "$I/\\mu_0$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -331,8 +350,8 @@
       "difficulty": "easy",
       "stem_en": "A long wire carries $I=8\\,\\text{A}$. Find $B$ at $r=0.2\\,\\text{m}$ ($B=\\tfrac{\\mu_0 I}{2\\pi r}$, $\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
       "stem_he": "חוט ארוך נושא $I=8\\,\\text{A}$. מצאו את $B$ ב-$r=0.2\\,\\text{m}$ ($B=\\tfrac{\\mu_0 I}{2\\pi r}$, $\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
-      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{8}{0.2}=8\\times10^{-6}\\,\\text{T}$.**\n\n**Answer:** $8\\times10^{-6}\\,\\text{T}$.",
-      "explanation_he": "**$B=8\\times10^{-6}\\,\\text{T}$.**\n\n**תשובה:** $8\\times10^{-6}\\,\\text{T}$.",
+      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{8}{0.2}=8\\times10^{-6}\\,\\text{T}$.**\n\n**Answer:** $8\\times10^{-6}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=8\\times10^{-6}\\,\\text{T}$.**\n\n**תשובה:** $8\\times10^{-6}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -341,7 +360,10 @@
       },
       "source_item_id": "f5926cc8-2483-5e05-aca2-009ee73d371e",
       "points_level_min": "5pt",
-      "correct_answer": "0.000008"
+      "correct_answer": "0.000008",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 3,
@@ -349,8 +371,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: the magnetic field inside a long ideal solenoid is uniform.",
       "stem_he": "נכון או לא נכון: השדה המגנטי בתוך סליל אידאלי ארוך הוא אחיד.",
-      "explanation_en": "**Field is uniform and axial inside** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**השדה אחיד וצירי בפנים** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Field is uniform and axial inside** — **true**.\n\n**Answer:** true.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**השדה אחיד וצירי בפנים** — **נכון**.\n\n**תשובה:** נכון.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "solenoid"
       ],
@@ -359,7 +381,10 @@
       },
       "source_item_id": "bc77b88c-bd6b-5157-a88a-3cb0ca79dae9",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -367,8 +392,8 @@
       "difficulty": "hard",
       "stem_en": "Find $B$ inside a solenoid with $n=800\\,\\text{turns/m}$ carrying $I=2.5\\,\\text{A}$ ($\\mu_0=4\\pi\\times10^{-7}$).",
       "stem_he": "מצאו את $B$ בתוך סליל עם $n=800\\,\\text{turns/m}$ הנושא $I=2.5\\,\\text{A}$ ($\\mu_0=4\\pi\\times10^{-7}$).",
-      "explanation_en": "**Step 1 — Formula.** $B=\\mu_0 n I$.\n\n**Step 2 — Substitute.** $B=4\\pi\\times10^{-7}\\cdot 800\\cdot 2.5$.\n\n**Step 3 — Evaluate.** $=4\\pi\\times10^{-7}\\cdot 2000=8\\pi\\times10^{-4}\\,\\text{T}$.\n\n**Answer:** $8\\pi\\times10^{-4}\\,\\text{T}$.",
-      "explanation_he": "**שלב 1 — נוסחה.** $B=\\mu_0 n I$.\n\n**שלב 2 — הצבה.** $4\\pi\\times10^{-7}\\cdot 800\\cdot 2.5$.\n\n**שלב 3 — חישוב.** $8\\pi\\times10^{-4}\\,\\text{T}$.\n\n**תשובה:** $8\\pi\\times10^{-4}\\,\\text{T}$.",
+      "explanation_en": "**Step 1 — Formula.** $B=\\mu_0 n I$.\n\n**Step 2 — Substitute.** $B=4\\pi\\times10^{-7}\\cdot 800\\cdot 2.5$.\n\n**Step 3 — Evaluate.** $=4\\pi\\times10^{-7}\\cdot 2000=8\\pi\\times10^{-4}\\,\\text{T}$.\n\n**Answer:** $8\\pi\\times10^{-4}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**שלב 1 — נוסחה.** $B=\\mu_0 n I$.\n\n**שלב 2 — הצבה.** $4\\pi\\times10^{-7}\\cdot 800\\cdot 2.5$.\n\n**שלב 3 — חישוב.** $8\\pi\\times10^{-4}\\,\\text{T}$.\n\n**תשובה:** $8\\pi\\times10^{-4}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "solenoid"
       ],
@@ -389,7 +414,12 @@
       "source_item_id": "ab1a9478-14ec-536f-978d-cc01df385808",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -397,8 +427,8 @@
       "difficulty": "easy",
       "stem_en": "A solenoid has $n=1000\\,\\text{turns/m}$ carrying $I=2\\,\\text{A}$. Find $B$ inside ($B=\\mu_0 n I$, $\\mu_0=4\\pi\\times10^{-7}$).",
       "stem_he": "סליל בעל $n=1000\\,\\text{turns/m}$ נושא $I=2\\,\\text{A}$. מצאו את $B$ בפנים ($B=\\mu_0 n I$, $\\mu_0=4\\pi\\times10^{-7}$).",
-      "explanation_en": "**$B=4\\pi\\times10^{-7}\\cdot 1000\\cdot 2=8\\pi\\times10^{-4}\\,\\text{T}$.**\n\n**Answer:** $8\\pi\\times10^{-4}\\,\\text{T}$.",
-      "explanation_he": "**$B=8\\pi\\times10^{-4}\\,\\text{T}$.**\n\n**תשובה:** $8\\pi\\times10^{-4}\\,\\text{T}$.",
+      "explanation_en": "**$B=4\\pi\\times10^{-7}\\cdot 1000\\cdot 2=8\\pi\\times10^{-4}\\,\\text{T}$.**\n\n**Answer:** $8\\pi\\times10^{-4}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=8\\pi\\times10^{-4}\\,\\text{T}$.**\n\n**תשובה:** $8\\pi\\times10^{-4}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "solenoid"
       ],
@@ -407,7 +437,10 @@
       },
       "source_item_id": "3e24e318-e4ac-5ebd-a2d0-79d75cb7603b",
       "points_level_min": "5pt",
-      "correct_answer": "0.002513"
+      "correct_answer": "0.002513",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 6,
@@ -415,8 +448,8 @@
       "difficulty": "easy",
       "stem_en": "A wire carries $I=4\\,\\text{A}$. Find $B$ at $r=0.1\\,\\text{m}$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
       "stem_he": "חוט נושא $I=4\\,\\text{A}$. מצאו את $B$ ב-$r=0.1\\,\\text{m}$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
-      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{4}{0.1}=8\\times10^{-6}\\,\\text{T}$.**\n\n**Answer:** $8\\times10^{-6}\\,\\text{T}$.",
-      "explanation_he": "**$B=8\\times10^{-6}\\,\\text{T}$.**\n\n**תשובה:** $8\\times10^{-6}\\,\\text{T}$.",
+      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{4}{0.1}=8\\times10^{-6}\\,\\text{T}$.**\n\n**Answer:** $8\\times10^{-6}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=8\\times10^{-6}\\,\\text{T}$.**\n\n**תשובה:** $8\\times10^{-6}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -425,7 +458,10 @@
       },
       "source_item_id": "51eb8758-b955-5461-aaae-afe35db3f741",
       "points_level_min": "5pt",
-      "correct_answer": "0.000008"
+      "correct_answer": "0.000008",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 7,
@@ -433,8 +469,8 @@
       "difficulty": "medium",
       "stem_en": "The permeability of free space $\\mu_0$ has units:",
       "stem_he": "מקדם החדירות של הריק $\\mu_0$ ביחידות:",
-      "explanation_en": "**From $B=\\mu_0 nI$, $\\mu_0$ is in T·m/A.**\n\n**Answer:** T·m/A.",
-      "explanation_he": "**מ-$B=\\mu_0 nI$, $\\mu_0$ ביחידות T·m/A.**\n\n**תשובה:** T·m/A.",
+      "explanation_en": "**From $B=\\mu_0 nI$, $\\mu_0$ is in T·m/A.**\n\n**Answer:** T·m/A.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**מ-$B=\\mu_0 nI$, $\\mu_0$ ביחידות T·m/A.**\n\n**תשובה:** T·m/A.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -467,7 +503,10 @@
         "$\\text{A/m}$",
         "$\\text{T·A/m}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -475,8 +514,8 @@
       "difficulty": "medium",
       "stem_en": "A wire carries $I=15\\,\\text{A}$. Find $B$ at $r=0.3\\,\\text{m}$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
       "stem_he": "חוט נושא $I=15\\,\\text{A}$. מצאו את $B$ ב-$r=0.3\\,\\text{m}$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
-      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{15}{0.3}=10^{-5}\\,\\text{T}$.**\n\n**Answer:** $10^{-5}\\,\\text{T}$.",
-      "explanation_he": "**$B=10^{-5}\\,\\text{T}$.**\n\n**תשובה:** $10^{-5}\\,\\text{T}$.",
+      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{15}{0.3}=10^{-5}\\,\\text{T}$.**\n\n**Answer:** $10^{-5}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=10^{-5}\\,\\text{T}$.**\n\n**תשובה:** $10^{-5}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -485,7 +524,10 @@
       },
       "source_item_id": "87b173f9-f6f0-5aff-b58e-e847df30aeee",
       "points_level_min": "5pt",
-      "correct_answer": "0.00001"
+      "correct_answer": "0.00001",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 9,
@@ -493,8 +535,8 @@
       "difficulty": "medium",
       "stem_en": "A solenoid has $N=500$ turns over length $L=0.5\\,\\text{m}$. Find the turn density $n=N/L$.",
       "stem_he": "סליל בעל $N=500$ ליפופים לאורך $L=0.5\\,\\text{m}$. מצאו את צפיפות הליפופים $n=N/L$.",
-      "explanation_en": "**$n=\\dfrac{500}{0.5}=1000\\,\\text{turns/m}$.**\n\n**Answer:** $1000\\,\\text{turns/m}$.",
-      "explanation_he": "**$n=1000\\,\\text{turns/m}$.**\n\n**תשובה:** $1000\\,\\text{turns/m}$.",
+      "explanation_en": "**$n=\\dfrac{500}{0.5}=1000\\,\\text{turns/m}$.**\n\n**Answer:** $1000\\,\\text{turns/m}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$n=1000\\,\\text{turns/m}$.**\n\n**תשובה:** $1000\\,\\text{turns/m}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "solenoid"
       ],
@@ -503,7 +545,10 @@
       },
       "source_item_id": "21484edf-7304-531b-bf4c-9e50492829af",
       "points_level_min": "5pt",
-      "correct_answer": "1000"
+      "correct_answer": "1000",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 10,
@@ -511,8 +556,8 @@
       "difficulty": "medium",
       "stem_en": "A solenoid with $n=2000\\,\\text{turns/m}$ carries $I=1.5\\,\\text{A}$. Find $B$ inside ($\\mu_0=4\\pi\\times10^{-7}$).",
       "stem_he": "סליל עם $n=2000\\,\\text{turns/m}$ נושא $I=1.5\\,\\text{A}$. מצאו את $B$ בפנים ($\\mu_0=4\\pi\\times10^{-7}$).",
-      "explanation_en": "**$B=4\\pi\\times10^{-7}\\cdot 2000\\cdot 1.5=1.2\\pi\\times10^{-3}\\,\\text{T}$.**\n\n**Answer:** $1.2\\pi\\times10^{-3}\\,\\text{T}$.",
-      "explanation_he": "**$B=1.2\\pi\\times10^{-3}\\,\\text{T}$.**\n\n**תשובה:** $1.2\\pi\\times10^{-3}\\,\\text{T}$.",
+      "explanation_en": "**$B=4\\pi\\times10^{-7}\\cdot 2000\\cdot 1.5=1.2\\pi\\times10^{-3}\\,\\text{T}$.**\n\n**Answer:** $1.2\\pi\\times10^{-3}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=1.2\\pi\\times10^{-3}\\,\\text{T}$.**\n\n**תשובה:** $1.2\\pi\\times10^{-3}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "solenoid"
       ],
@@ -521,7 +566,10 @@
       },
       "source_item_id": "1940a1f3-0844-564c-b51a-1ccd66157ff0",
       "points_level_min": "5pt",
-      "correct_answer": "0.00377"
+      "correct_answer": "0.00377",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 11,
@@ -529,8 +577,8 @@
       "difficulty": "medium",
       "stem_en": "Measured $B=10^{-5}\\,\\text{T}$ at $r=0.2\\,\\text{m}$ from a wire. Find the current ($I=\\tfrac{B r}{2\\times10^{-7}}$).",
       "stem_he": "נמדד $B=10^{-5}\\,\\text{T}$ ב-$r=0.2\\,\\text{m}$ מחוט. מצאו את הזרם ($I=\\tfrac{B r}{2\\times10^{-7}}$).",
-      "explanation_en": "**$I=\\dfrac{10^{-5}\\cdot 0.2}{2\\times10^{-7}}=10\\,\\text{A}$.**\n\n**Answer:** $10\\,\\text{A}$.",
-      "explanation_he": "**$I=10\\,\\text{A}$.**\n\n**תשובה:** $10\\,\\text{A}$.",
+      "explanation_en": "**$I=\\dfrac{10^{-5}\\cdot 0.2}{2\\times10^{-7}}=10\\,\\text{A}$.**\n\n**Answer:** $10\\,\\text{A}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$I=10\\,\\text{A}$.**\n\n**תשובה:** $10\\,\\text{A}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -539,7 +587,10 @@
       },
       "source_item_id": "18000245-20ba-5eaf-8ba4-19e53bf33872",
       "points_level_min": "5pt",
-      "correct_answer": "10"
+      "correct_answer": "10",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 12,
@@ -547,8 +598,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: the magnetic field outside an ideal solenoid is approximately zero.",
       "stem_he": "נכון או לא נכון: השדה המגנטי מחוץ לסליל אידאלי הוא בקירוב אפס.",
-      "explanation_en": "**Field is confined inside an ideal solenoid** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**השדה כלוא בתוך סליל אידאלי** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Field is confined inside an ideal solenoid** — **true**.\n\n**Answer:** true.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**השדה כלוא בתוך סליל אידאלי** — **נכון**.\n\n**תשובה:** נכון.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "solenoid"
       ],
@@ -557,7 +608,10 @@
       },
       "source_item_id": "89a13f4a-e025-53f1-893d-e140222ae559",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -565,8 +619,8 @@
       "difficulty": "hard",
       "stem_en": "A toroid has $N=200$ turns and carries $I=3\\,\\text{A}$ at mean radius $r=0.1\\,\\text{m}$. Find $B$ ($B=\\tfrac{\\mu_0 N I}{2\\pi r}$, $\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
       "stem_he": "טורואיד בעל $N=200$ ליפופים נושא $I=3\\,\\text{A}$ ברדיוס ממוצע $r=0.1\\,\\text{m}$. מצאו את $B$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
-      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{600}{0.1}=1.2\\times10^{-3}\\,\\text{T}$.**\n\n**Answer:** $1.2\\times10^{-3}\\,\\text{T}$.",
-      "explanation_he": "**$B=1.2\\times10^{-3}\\,\\text{T}$.**\n\n**תשובה:** $1.2\\times10^{-3}\\,\\text{T}$.",
+      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{600}{0.1}=1.2\\times10^{-3}\\,\\text{T}$.**\n\n**Answer:** $1.2\\times10^{-3}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=1.2\\times10^{-3}\\,\\text{T}$.**\n\n**תשובה:** $1.2\\times10^{-3}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -575,7 +629,10 @@
       },
       "source_item_id": "47a6a7ed-ccd7-55c4-8e25-2e3c3fd17f58",
       "points_level_min": "5pt",
-      "correct_answer": "0.0012"
+      "correct_answer": "0.0012",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 14,
@@ -583,8 +640,8 @@
       "difficulty": "hard",
       "stem_en": "A wire carries $I=25\\,\\text{A}$. Find $B$ at $r=0.5\\,\\text{m}$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
       "stem_he": "חוט נושא $I=25\\,\\text{A}$. מצאו את $B$ ב-$r=0.5\\,\\text{m}$ ($\\tfrac{\\mu_0}{2\\pi}=2\\times10^{-7}$).",
-      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{25}{0.5}=10^{-5}\\,\\text{T}$.**\n\n**Answer:** $10^{-5}\\,\\text{T}$.",
-      "explanation_he": "**$B=10^{-5}\\,\\text{T}$.**\n\n**תשובה:** $10^{-5}\\,\\text{T}$.",
+      "explanation_en": "**$B=2\\times10^{-7}\\cdot\\dfrac{25}{0.5}=10^{-5}\\,\\text{T}$.**\n\n**Answer:** $10^{-5}\\,\\text{T}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=10^{-5}\\,\\text{T}$.**\n\n**תשובה:** $10^{-5}\\,\\text{T}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -593,7 +650,10 @@
       },
       "source_item_id": "c1e38e22-67d4-58a9-80ac-e2e5af19b5fe",
       "points_level_min": "5pt",
-      "correct_answer": "0.00001"
+      "correct_answer": "0.00001",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 15,
@@ -601,8 +661,8 @@
       "difficulty": "hard",
       "stem_en": "Measured $B=4\\times10^{-5}\\,\\text{T}$ at $r=0.1\\,\\text{m}$ from a wire. Find the enclosed current ($I=\\tfrac{B r}{2\\times10^{-7}}$).",
       "stem_he": "נמדד $B=4\\times10^{-5}\\,\\text{T}$ ב-$r=0.1\\,\\text{m}$ מחוט. מצאו את הזרם הכלוא ($I=\\tfrac{B r}{2\\times10^{-7}}$).",
-      "explanation_en": "**$I=\\dfrac{4\\times10^{-5}\\cdot 0.1}{2\\times10^{-7}}=20\\,\\text{A}$.**\n\n**Answer:** $20\\,\\text{A}$.",
-      "explanation_he": "**$I=20\\,\\text{A}$.**\n\n**תשובה:** $20\\,\\text{A}$.",
+      "explanation_en": "**$I=\\dfrac{4\\times10^{-5}\\cdot 0.1}{2\\times10^{-7}}=20\\,\\text{A}$.**\n\n**Answer:** $20\\,\\text{A}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$I=20\\,\\text{A}$.**\n\n**תשובה:** $20\\,\\text{A}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "ampere_law"
       ],
@@ -611,12 +671,405 @@
       },
       "source_item_id": "b0a0689b-5639-5cea-9d84-2660e359c7e9",
       "points_level_min": "5pt",
-      "correct_answer": "20"
+      "correct_answer": "20",
+      "archetypes": [
+        "procedural"
+      ]
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Inside a long ideal solenoid, $B=\\mu_0\\,\\square\\,I$.",
+      "stem_he": "בתוך סולנואיד אידיאלי ארוך, $B=\\mu_0\\,\\square\\,I$.",
+      "explanation_en": "**$B=\\mu_0 n I$** with $n=N/L$ the turn density.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=\\mu_0 n I$** עם $n=N/L$ צפיפות הליפופים.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "n",
+      "answer_payload": {
+        "acceptable_answers": [
+          "n",
+          "N/L",
+          "turns per meter",
+          "n (turns/m)"
+        ],
+        "case_sensitive": false
+      },
+      "ord": 16
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "reverse"
+      ],
+      "stem_en": "Name the Maxwell correction term added to Ampère’s law between capacitor plates.",
+      "stem_he": "מהו איבר התיקון של מקסוול שנוסף לחוק אמפר בין לוחות קבל?",
+      "explanation_en": "**Displacement current** $I_d=\\varepsilon_0 d\\Phi_E/dt$ restores continuity of total current.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**זרם היסט** $I_d=\\varepsilon_0 d\\Phi_E/dt$ משחזר רציפות של הזרם הכולל.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "displacement current",
+      "answer_payload": {
+        "acceptable_answers": [
+          "displacement current",
+          "I_d",
+          "ε0 dΦE/dt",
+          "זרם היסט",
+          "זרם ההיסט"
+        ],
+        "case_sensitive": false
+      },
+      "ord": 17
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "stem_en": "For a long straight wire, $B$ at distance $r$ is proportional to:",
+      "stem_he": "עבור חוט ישר ארוך, $B$ במרחק $r$ פרופורציוני ל:",
+      "explanation_en": "**$B=\\mu_0 I/(2\\pi r)\\propto I/r$.**\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=\\mu_0 I/(2\\pi r)\\propto I/r$.**\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "options_en": [
+        "$I/r$",
+        "$I r$",
+        "$I/r^2$",
+        "$I^2/r$"
+      ],
+      "options_he": [
+        "$I/r$",
+        "$I r$",
+        "$I/r^2$",
+        "$I^2/r$"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "$I/r$",
+          "$I r$",
+          "$I/r^2$",
+          "$I^2/r$"
+        ],
+        "options_he": [
+          "$I/r$",
+          "$I r$",
+          "$I/r^2$",
+          "$I^2/r$"
+        ],
+        "correct_index": 0
+      },
+      "ord": 18
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "True or False: Ampère’s law can give $|\\vec B|$ for any current distribution without symmetry.",
+      "stem_he": "נכון או לא: חוק אמפר יכול לתת $|\\vec B|$ לכל התפלגות זרם בלי סימטריה.",
+      "explanation_en": "**False.** The integral is always true, but factoring $|B|$ needs symmetry.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**לא נכון.** האינטגרל תמיד תקף, אך הוצאת $|B|$ דורשת סימטריה.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "value": false
+      },
+      "ord": 19
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Solenoid $n=500\\,\\text{m}^{-1}$, $I=4\\,\\text{A}$. Find $B=\\mu_0 n I$ in T ($\\mu_0=4\\pi\\times10^{-7}$).",
+      "stem_he": "סולנואיד $n=500\\,\\text{m}^{-1}$, $I=4\\,\\text{A}$. מצאו $B=\\mu_0 n I$ ב-T.",
+      "explanation_en": "**$B=\\mu_0 n I=4\\pi\\times10^{-7}\\cdot500\\cdot4\\approx2.51\\times10^{-3}\\,\\text{T}$.**\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$B=\\mu_0 n I\\approx2.51\\times10^{-3}\\,\\text{T}$.**\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "0.002513",
+      "answer_payload": {
+        "value": 0.002513
+      },
+      "verify": {
+        "expr": "4*pi*1e-7*500*4",
+        "expected": 0.002513274122871834
+      },
+      "ord": 20
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Wire $I=10\\,\\text{A}$, $r=0.05\\,\\text{m}$. Find $B=\\mu_0 I/(2\\pi r)$ in T.",
+      "stem_he": "חוט $I=10\\,\\text{A}$, $r=0.05\\,\\text{m}$. מצאו $B=\\mu_0 I/(2\\pi r)$ ב-T.",
+      "explanation_en": "**Use $\\mu_0/(2\\pi)=2\\times10^{-7}$: $B=2\\times10^{-7}\\cdot10/0.05=4\\times10^{-5}\\,\\text{T}$.**\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**עם $\\mu_0/(2\\pi)=2\\times10^{-7}$: $B=4\\times10^{-5}\\,\\text{T}$.**\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "0.00004",
+      "answer_payload": {
+        "value": 0.00004
+      },
+      "verify": {
+        "expr": "2e-7*10/0.05",
+        "expected": 0.00004
+      },
+      "ord": 21
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "needs_review": true,
+      "stem_en": "A long solenoid has $n=1200\\,\\text{turns/m}$ and $I=1.8\\,\\text{A}$. Find $B$ inside and state the idealizations.",
+      "stem_he": "סולנואיד ארוך עם $n=1200\\,\\text{turns/m}$ ו-$I=1.8\\,\\text{A}$. מצאו $B$ בפנים וציינו אידיאליזציות.",
+      "explanation_en": "**Worked solution.**\n\n**Step 1.** Ideal long solenoid: $B=\\mu_0 n I$ inside, $\\approx0$ outside.\n\n**Step 2.** $B=4\\pi\\times10^{-7}\\cdot1200\\cdot1.8=2.71\\times10^{-3}\\,\\text{T}$.\n\n**Step 3.** Idealizations: infinite length, tightly wound, neglect end effects.\n\n**Answer:** $B\\approx2.71\\times10^{-3}\\,\\text{T}$ inside.\n\n\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**פתרון מלא.**\n\n**שלב 1.** סולנואיד ארוך אידיאלי: $B=\\mu_0 n I$ בפנים, $\\approx0$ בחוץ.\n\n**שלב 2.** $B=4\\pi\\times10^{-7}\\cdot1200\\cdot1.8=2.71\\times10^{-3}\\,\\text{T}$.\n\n**שלב 3.** אידיאליזציות: אורך אינסופי, ליפוף צפוף, הזנחת קצוות.\n\n**תשובה:** $B\\approx2.71\\times10^{-3}\\,\\text{T}$ בפנים.\n\n\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1.** Ideal long solenoid: $B=\\mu_0 n I$ inside, $\\approx0$ outside.",
+          "**Step 2.** $B=4\\pi\\times10^{-7}\\cdot1200\\cdot1.8=2.71\\times10^{-3}\\,\\text{T}$.",
+          "**Step 3.** Idealizations: infinite length, tightly wound, neglect end effects.",
+          "**Answer:** $B\\approx2.71\\times10^{-3}\\,\\text{T}$ inside."
+        ],
+        "steps_he": [
+          "**שלב 1.** סולנואיד ארוך אידיאלי: $B=\\mu_0 n I$ בפנים, $\\approx0$ בחוץ.",
+          "**שלב 2.** $B=4\\pi\\times10^{-7}\\cdot1200\\cdot1.8=2.71\\times10^{-3}\\,\\text{T}$.",
+          "**שלב 3.** אידיאליזציות: אורך אינסופי, ליפוף צפוף, הזנחת קצוות.",
+          "**תשובה:** $B\\approx2.71\\times10^{-3}\\,\\text{T}$ בפנים."
+        ]
+      },
+      "ord": 22
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "error_analysis",
+        "conceptual"
+      ],
+      "stem_en": "Select ALL correct exam habits for Ampère’s law.",
+      "stem_he": "סמנו את כל הרגלי המבחן הנכונים עבור חוק אמפר.",
+      "explanation_en": "**Good habits:** symbols first, units, and a sanity check. Skipping sketches and mixing origins lose method marks in Ampère’s law.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**הרגלים טובים:** סימנים קודם, יחידות ובדיקת סבירות. דילוג על שרטוט וערבוב ראשיות מאבדים נקודות שיטה בחוק אמפר.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "options_en": [
+        "Write the governing law in symbols before numbers",
+        "Convert units before substituting",
+        "Check a limiting case or dimensions",
+        "Skip the free-body / field sketch to save time",
+        "Mix inconsistent origins for torque and angular momentum"
+      ],
+      "options_he": [
+        "לכתוב את החוק השולט בסימנים לפני מספרים",
+        "להמיר יחידות לפני הצבה",
+        "לבדוק מקרה גבול או ממדים",
+        "לדלג על שרטוט כדי לחסוך זמן",
+        "לערבב ראשיות לא עקביות למומנט ותנע זוויתי"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Write the governing law in symbols before numbers",
+          "Convert units before substituting",
+          "Check a limiting case or dimensions",
+          "Skip the free-body / field sketch to save time",
+          "Mix inconsistent origins for torque and angular momentum"
+        ],
+        "options_he": [
+          "לכתוב את החוק השולט בסימנים לפני מספרים",
+          "להמיר יחידות לפני הצבה",
+          "לבדוק מקרה גבול או ממדים",
+          "לדלג על שרטוט כדי לחסוך זמן",
+          "לערבב ראשיות לא עקביות למומנט ותנע זוויתי"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ord": 23
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "stem_en": "Match each Ampère’s law idea to its role.",
+      "stem_he": "התאימו כל רעיון בחוק אמפר לתפקידו.",
+      "explanation_en": "**Matching:** connect $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (extend with $I_d$ when needed) to the law slot, then symmetry, target, and check — the standard university workflow.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**התאמה:** חברו את $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (עם $I_d$ בעת הצורך) למשבצת החוק, ואז סימטריה, יעד ובדיקה — זרימת עבודה אוניברסיטאית.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "left_en": [
+          "Governing law",
+          "Symmetry / idealization",
+          "Unknown target",
+          "Sanity check"
+        ],
+        "left_he": [
+          "חוק שולט",
+          "סימטריה / אידיאליזציה",
+          "נעלם יעד",
+          "בדיקת סבירות"
+        ],
+        "right_en": [
+          "$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (extend with $I_d$ when needed)",
+          "Lets integrals / free-body diagrams close",
+          "Quantity asked by the stem",
+          "Limits, units, or direction consistency"
+        ],
+        "right_he": [
+          "$\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (עם $I_d$ בעת הצורך)",
+          "מאפשר סגירת אינטגרלים / דיאגרמות",
+          "הגודל שמבקשים בשאלה",
+          "גבולות, יחידות או עקביות כיוון"
+        ],
+        "correct_pairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "ord": 24
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "proof"
+      ],
+      "stem_en": "Order the solution steps for a typical Ampère’s law problem.",
+      "stem_he": "סדרו את שלבי הפתרון לבעיית חוק אמפר טיפוסית.",
+      "explanation_en": "**Order matters:** sketch → law → numbers → check. Jumping to numbers first is the most common Ampère’s law failure mode.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**הסדר חשוב:** שרטוט → חוק → מספרים → בדיקה. קפיצה למספרים היא כשל נפוץ בחוק אמפר.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "steps_en": [
+          "Sketch the situation and choose coordinates / Amperian or Gaussian surface",
+          "Write the governing law for this lesson in symbols",
+          "Convert units and substitute numbers",
+          "Interpret sign/direction and check a limiting case"
+        ],
+        "steps_he": [
+          "שרטוט המצב ובחירת קואורדינטות / משטח אמפר או גאוס",
+          "כתיבת החוק השולט של השיעור בסימנים",
+          "המרת יחידות והצבת מספרים",
+          "פרשנות סימן/כיוון ובדיקת מקרה גבול"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 25
+    },
+    {
+      "skill_atoms": [
+        "ampere_law"
+      ],
+      "points_level_min": "uni",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "stem_en": "Starting from $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (extend with $I_d$ when needed), outline a 4-step derivation a university grader would accept for a standard Ampère’s law unknown.",
+      "stem_he": "מתוך $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (עם $I_d$ בעת הצורך), תארו מסלול גזירה בן 4 שלבים שבודק אוניברסיטאי יקבל לנעלם סטנדרטי בחוק אמפר.",
+      "explanation_en": "**Derivation path.**\n\nState $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (extend with $I_d$ when needed) with assumptions (vacuum, symmetry, rigid body, ideal fluid, etc.).\n\nIdentify the target unknown and list given / fixed quantities.\n\nRearrange symbolically; convert units; substitute only after the symbolic line.\n\nCheck limiting case, sign/direction, and dimensions.\n\n\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**מסלול גזירה.**\n\nכתבו את $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (עם $I_d$ בעת הצורך) עם הנחות (ריק, סימטריה, גוף קשיח, נוזל אידיאלי וכו').\n\nזהו את הנעלם ורשמו מה נתון/קבוע.\n\nסדרו סימבולית; המירו יחידות; הציבו רק אחרי השורה הסימבולית.\n\nבדקו מקרה גבול, סימן/כיוון וממדים.\n\n\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "steps_en": [
+          "State $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (extend with $I_d$ when needed) with assumptions (vacuum, symmetry, rigid body, ideal fluid, etc.).",
+          "Identify the target unknown and list given / fixed quantities.",
+          "Rearrange symbolically; convert units; substitute only after the symbolic line.",
+          "Check limiting case, sign/direction, and dimensions."
+        ],
+        "steps_he": [
+          "כתבו את $\\oint\\vec B\\cdot d\\vec\\ell=\\mu_0 I_{\\text{enc}}$ (עם $I_d$ בעת הצורך) עם הנחות (ריק, סימטריה, גוף קשיח, נוזל אידיאלי וכו').",
+          "זהו את הנעלם ורשמו מה נתון/קבוע.",
+          "סדרו סימבולית; המירו יחידות; הציבו רק אחרי השורה הסימבולית.",
+          "בדקו מקרה גבול, סימן/כיוון וממדים."
+        ]
+      },
+      "ord": 26
     }
   ],
   "est_minutes": 50,
   "author": "cursor-claude-2026",
   "version": 1,
   "level_focus": null,
-  "skill_atom_bank": null
+  "skill_atom_bank": [
+    {
+      "id": "ampere_law",
+      "label_en": "ampere_law",
+      "label_he": "ampere_law"
+    },
+    {
+      "id": "solenoid",
+      "label_en": "solenoid",
+      "label_he": "solenoid"
+    }
+  ]
 }

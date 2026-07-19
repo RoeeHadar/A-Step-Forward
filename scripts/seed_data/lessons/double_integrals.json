@@ -33,6 +33,13 @@
       "body_he_md": "**אינטגרל מאוחד (תהליך סטנדרטי):** מחשבים קודם את האינטגרל **הפנימי**, תוך התייחסות לגורם החיצוני כקבוע. אחר כך את האינטגרל **החיצוני**. על מלבן, כל סדר עובד לפי פוביני; על אזורים כלליים, בוחרים סוג I או II לפי איזה תיאור נותן גבולות פשוטים.\n\n**החלפת סדר אינטגרציה:** לפעמים סדר אחד מייצר אינטגרל פנימי ללא אינטגרל ראשוני (דוגמה קלאסית: $\\int e^{y^2}\\,dy$). ציירו את $D$, זהו את עקומות הגבול, ובטאו גבולות לסדר ההפוך. הגיאומטריה לא משתנה — רק כיוון הפריסה.\n\n**מתי קואורדינטות קוטביות:**\n- האזור הוא דיסק, טבעת, מגזר, או חלק מעיגול.\n- האינטגרנד מכיל $x^2+y^2$, $\\sqrt{x^2+y^2}$, או $e^{x^2+y^2}$.\n- גבולות Cartesian מסורבלים אך גבולות קוטביים קבועים ($0\\leq r\\leq R$, $0\\leq\\theta\\leq 2\\pi$).\n\n**פרשנות גיאומטרית:** אם $f(x,y)=1$, אז $\\iint_D 1\\,dA = \\text{area}(D)$. אם $f\\geq 0$, האינטגרל נותן נפח תחת $z=f$. אם $f$ שלילי, האינטגרל נותן נפח **חתום** — אזורים עם $f<0$ מחסירים.\n\n**בחירה בין סוג I לסוג II:** ציירו $D$. אם קווים אנכיים חוצים לכל היותר פעמיים — סוג I. אם אופקיים — סוג II. חלק מהאזורים הם שניהם; בחרו את הפשוט. כששניהם קשים — נסו קוטביות."
     },
     {
+      "kind": "theory",
+      "title_en": "Polar Regions and the Jacobian Factor $r$",
+      "title_he": "אזורים קוטביים וגורם היעקוביאן $r$",
+      "body_en_md": "**Why polar helps.** When $D$ is a disk, annulus, or sector, Cartesian bounds often involve square roots, while polar bounds are constants: $0\\leq r\\leq R$ and $\\alpha\\leq\\theta\\leq\\beta$. Integrands built from $x^2+y^2$ become $r^2$, and $\\sqrt{x^2+y^2}$ becomes $r$.\n\n**Jacobian reminder.** The area element transforms as $dA=dx\\,dy=r\\,dr\\,d\\theta$. Forgetting the factor $r$ is the most common exam error: $\\iint_D e^{-(x^2+y^2)}\\,dA$ is elementary in polar only because of that $r$.\n\n**Fubini still applies.** After switching to $(r,\\theta)$, you still evaluate an iterated integral — just with different variables and the extra $r$. Sketch the region in the $r\\theta$-plane when limits look confusing.\n\n**Strategy checklist.** (1) Sketch $D$. (2) Decide Type I / Type II / polar. (3) Write limits before integrating. (4) Evaluate inner then outer. (5) Sanity-check: $\\iint_D 1\\,dA$ must recover $\\mathrm{Area}(D)$.",
+      "body_he_md": "**למה קוטבי עוזר.** כאשר $D$ דיסק, טבעת או מגזר, גבולות קרטזיים כוללים שורשים, בעוד גבולות קוטביים קבועים: $0\\leq r\\leq R$ ו-$\\alpha\\leq\\theta\\leq\\beta$. אינטגרנדים מ-$x^2+y^2$ הופכים ל-$r^2$, ו-$\\sqrt{x^2+y^2}$ ל-$r$.\n\n**תזכורת יעקוביאן.** אלמנט השטח הופך ל-$dA=dx\\,dy=r\\,dr\\,d\\theta$. שכחת הגורם $r$ היא הטעות הנפוצה ביותר: $\\iint_D e^{-(x^2+y^2)}\\,dA$ אלמנטרי בקוטביות רק בגלל $r$.\n\n**פוביני עדיין חל.** אחרי מעבר ל-$(r,\\theta)$ עדיין מחשבים אינטגרל מאוחד — עם משתנים אחרים ועם $r$ נוסף. ציירו את האזור במישור $r\\theta$ כשהגבולות מבלבלים.\n\n**רשימת אסטרטגיה.** (1) ציירו $D$. (2) בחרו סוג I / II / קוטבי. (3) כתבו גבולות לפני אינטגרציה. (4) פנימי ואז חיצוני. (5) בדיקה: $\\iint_D 1\\,dA$ חייב להחזיר את שטח $D$."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -76,6 +83,15 @@
       "title_he": "דוגמה פתורה 3 — אינטגרל כפול בקואורדינטות קוטביות",
       "body_en_md": "**Problem:** Compute $\\iint_D e^{x^2+y^2}\\,dA$ where $D$ is the disk $x^2+y^2\\leq 4$.\n\nBoth the integrand and the region scream polar coordinates.\n\n### Move 1 — Recognize polar form\n$e^{x^2+y^2}=e^{r^2}$ and the disk $x^2+y^2\\leq 4$ becomes $0\\leq r\\leq 2$, $0\\leq\\theta\\leq 2\\pi$.\n\n### Move 2 — Set up the polar integral (include $r$!)\n$$\\iint_D e^{x^2+y^2}\\,dA = \\int_0^{2\\pi}\\int_0^2 e^{r^2}\\cdot r\\,dr\\,d\\theta.$$\n\n### Move 3 — Inner integral; substitute $u=r^2$\n$$\\int_0^2 re^{r^2}\\,dr = \\left[\\frac{e^{r^2}}{2}\\right]_0^2 = \\frac{e^4-1}{2}.$$\n\n### Move 4 — Outer integral in $\\theta$\n$$\\int_0^{2\\pi}\\frac{e^4-1}{2}\\,d\\theta = \\frac{e^4-1}{2}\\cdot 2\\pi = \\pi(e^4-1).$$\n\n**Why the extra $r$?** The Jacobian $dA=r\\,dr\\,d\\theta$ accounts for the expanding area of polar rectangles. Forgetting $r$ gives a wrong answer by a factor involving $r$.\n\n**Template:** $e^{x^2+y^2}$, $e^{-r^2}$, or any radial function on a disk → polar with $u=r^2$ substitution. Always sketch the region and label outer versus inner limits before integrating — setup errors dominate exam mistakes. Always sketch the region and label outer versus inner limits before integrating — setup errors dominate exam mistakes.",
       "body_he_md": "**בעיה:** חשבו $\\iint_D e^{x^2+y^2}\\,dA$ כאשר $D$ הוא הדיסק $x^2+y^2\\leq 4$.\n\nגם האינטגרנד וגם האזור מצביעים על קואורדינטות קוטביות.\n\n### צעד 1 — זיהוי צורה קוטבית\n$e^{x^2+y^2}=e^{r^2}$ והדיסק $x^2+y^2\\leq 4$ הופך ל-$0\\leq r\\leq 2$, $0\\leq\\theta\\leq 2\\pi$.\n\n### צעד 2 — הצבת האינטגרל הקוטבי (כולל $r$!)\n$$\\iint_D e^{x^2+y^2}\\,dA = \\int_0^{2\\pi}\\int_0^2 e^{r^2}\\cdot r\\,dr\\,d\\theta.$$\n\n### צעד 3 — אינטגרל פנימי; הצבה $u=r^2$\n$$\\int_0^2 re^{r^2}\\,dr = \\left[\\frac{e^{r^2}}{2}\\right]_0^2 = \\frac{e^4-1}{2}.$$\n\n### צעד 4 — אינטגרל חיצוני ב-$\\theta$\n$$\\int_0^{2\\pi}\\frac{e^4-1}{2}\\,d\\theta = \\pi(e^4-1).$$\n\n**למה $r$ נוסף?** יעקוביאן $dA=r\\,dr\\,d\\theta$ מתחשב בהתרחבות שטח המלבנים הקוטביים. שכחת $r$ = תשובה שגויה.\n\n**תבנית:** $e^{x^2+y^2}$ או פונקציה רדיאלית על דיסק → קוטביות עם $u=r^2$. בדקו שהגבולות החיצוניים קבועים והפנימיים תלויים בגורם הנכון לפני חישוב. בדקו שהגבולות החיצוניים קבועים והפנימיים תלויים בגורם הנכון לפני חישוב. בדקו שהגבולות החיצוניים קבועים והפנימיים תלויים בגורם הנכון לפני חישוב."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Area via $\\iint 1\\,dA$ in Polar",
+      "title_he": "דוגמה פתורה 4 — שטח באמצעות $\\iint 1\\,dA$ בקוטביות",
+      "body_en_md": "**Compute the area of the unit disk** $D:x^2+y^2\\leq 1$ using a double integral.\n\n### Move 1 — Polar setup\n$x=r\\cos\\theta$, $y=r\\sin\\theta$, $0\\leq r\\leq 1$, $0\\leq\\theta\\leq 2\\pi$, and $dA=r\\,dr\\,d\\theta$.\n\n### Move 2 — Write the integral\n$$\\mathrm{Area}(D)=\\iint_D 1\\,dA=\\int_0^{2\\pi}\\int_0^1 r\\,dr\\,d\\theta.$$\n\n### Move 3 — Inner integral\n$$\\int_0^1 r\\,dr=\\left[\\tfrac{r^2}{2}\\right]_0^1=\\tfrac12.$$\n\n### Move 4 — Outer integral\n$$\\int_0^{2\\pi}\\tfrac12\\,d\\theta=\\pi.$$\n\n**Check.** The geometric area of the unit disk is $\\pi$, so the Jacobian factor was handled correctly.\n\n**Exam link.** If your polar area computation misses the $r$, you get $2\\pi$ instead of $\\pi$ — an immediate red flag.",
+      "body_he_md": "**חשבו את שטח דיסק היחידה** $D:x^2+y^2\\leq 1$ באינטגרל כפול.\n\n### צעד 1 — הצבה קוטבית\n$x=r\\cos\\theta$, $y=r\\sin\\theta$, $0\\leq r\\leq 1$, $0\\leq\\theta\\leq 2\\pi$, ו-$dA=r\\,dr\\,d\\theta$.\n\n### צעד 2 — כתיבת האינטגרל\n$$\\mathrm{Area}(D)=\\iint_D 1\\,dA=\\int_0^{2\\pi}\\int_0^1 r\\,dr\\,d\\theta.$$\n\n### צעד 3 — אינטגרל פנימי\n$$\\int_0^1 r\\,dr=\\tfrac12.$$\n\n### צעד 4 — אינטגרל חיצוני\n$$\\int_0^{2\\pi}\\tfrac12\\,d\\theta=\\pi.$$\n\n**בדיקה.** שטח דיסק היחידה הוא $\\pi$, ולכן גורם היעקוביאן טופל נכון.\n\n**קשר לבחינה.** אם מפספסים את $r$ מקבלים $2\\pi$ במקום $\\pi$ — דגל אדום מיידי."
     },
     {
       "kind": "method_guide",
@@ -252,8 +268,8 @@
       "difficulty": "easy",
       "stem_en": "A double integral of $f(x,y)\\ge 0$ over a region gives the:",
       "stem_he": "אינטגרל כפול של $f(x,y)\\ge 0$ מעל תחום נותן את:",
-      "explanation_en": "**It measures the volume between the surface and the region.**\n\n**Answer:** volume under the surface.",
-      "explanation_he": "**מודד את הנפח בין המשטח לתחום.**\n\n**תשובה:** נפח מתחת למשטח.",
+      "explanation_en": "**It measures the volume between the surface and the region.**\n\n**Answer:** volume under the surface.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**מודד את הנפח בין המשטח לתחום.**\n\n**תשובה:** נפח מתחת למשטח.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -286,7 +302,10 @@
         "$\\text{perimeter}$",
         "$\\text{arc length}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -294,8 +313,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^1 1\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^1 1\\,dy\\,dx$.",
-      "explanation_en": "**The integral of $1$ over a $1\\times 1$ square is its area $=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**שטח ריבוע $1\\times 1$ הוא $1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**The integral of $1$ over a $1\\times 1$ square is its area $=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שטח ריבוע $1\\times 1$ הוא $1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -304,7 +323,15 @@
       },
       "source_item_id": "caec79b6-21f5-59d7-ab46-dcdfe8700fee",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -312,8 +339,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$ step by step.",
       "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$ שלב אחר שלב.",
-      "explanation_en": "**Step 1 — Inner integral.** $\\int_0^3 xy\\,dy=x\\left[\\dfrac{y^2}{2}\\right]_0^3=\\dfrac{9x}{2}$.\n\n**Step 2 — Outer integral.** $\\int_0^2 \\dfrac{9x}{2}\\,dx=\\dfrac{9}{2}\\cdot 2=9$.\n\n**Answer:** $9$.",
-      "explanation_he": "**שלב 1 — אינטגרל פנימי.** $\\dfrac{9x}{2}$.\n\n**שלב 2 — אינטגרל חיצוני.** $9$.\n\n**תשובה:** $9$.",
+      "explanation_en": "**Step 1 — Inner integral.** $\\int_0^3 xy\\,dy=x\\left[\\dfrac{y^2}{2}\\right]_0^3=\\dfrac{9x}{2}$.\n\n**Step 2 — Outer integral.** $\\int_0^2 \\dfrac{9x}{2}\\,dx=\\dfrac{9}{2}\\cdot 2=9$.\n\n**Answer:** $9$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — אינטגרל פנימי.** $\\dfrac{9x}{2}$.\n\n**שלב 2 — אינטגרל חיצוני.** $9$.\n\n**תשובה:** $9$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -332,7 +359,11 @@
       "source_item_id": "6bee0a2d-0065-52c4-83b9-700fc65da495",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 4,
@@ -340,8 +371,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: for a separable integrand $f(x)g(y)$ over a rectangle, the double integral factors into a product of single integrals.",
       "stem_he": "נכון או לא נכון: עבור אינטגרנד פריק $f(x)g(y)$ מעל מלבן, האינטגרל הכפול מתפרק למכפלת אינטגרלים בודדים.",
-      "explanation_en": "**Yes — $\\iint f(x)g(y)=\\left(\\int f\\right)\\left(\\int g\\right)$** — **true**.",
-      "explanation_he": "**כן — מתפרק למכפלה** — **נכון**.",
+      "explanation_en": "**Yes — $\\iint f(x)g(y)=\\left(\\int f\\right)\\left(\\int g\\right)$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**כן — מתפרק למכפלה** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -350,7 +381,10 @@
       },
       "source_item_id": "8ac636fd-3763-5599-ab24-27518d9ecabf",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 5,
@@ -358,8 +392,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^3 1\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^3 1\\,dy\\,dx$.",
-      "explanation_en": "**Area of a $2\\times 3$ rectangle $=6$.**\n\n**Answer:** $6$.",
-      "explanation_he": "**שטח מלבן $2\\times 3$ הוא $6$.**\n\n**תשובה:** $6$.",
+      "explanation_en": "**Area of a $2\\times 3$ rectangle $=6$.**\n\n**Answer:** $6$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שטח מלבן $2\\times 3$ הוא $6$.**\n\n**תשובה:** $6$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -368,7 +402,15 @@
       },
       "source_item_id": "7c3b4993-6a16-5f03-b98f-5d5b5df24ec3",
       "points_level_min": "5pt",
-      "correct_answer": "6"
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 6,
@@ -376,8 +418,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x\\,dy\\,dx$.",
-      "explanation_en": "**Separable:** $\\left(\\int_0^2 x\\,dx\\right)\\left(\\int_0^1 dy\\right)=2\\cdot 1=2$.\n\n**Answer:** $2$.",
-      "explanation_he": "**$\\left(\\int_0^2 x\\right)\\left(\\int_0^1 1\\right)=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**Separable:** $\\left(\\int_0^2 x\\,dx\\right)\\left(\\int_0^1 dy\\right)=2\\cdot 1=2$.\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\left(\\int_0^2 x\\right)\\left(\\int_0^1 1\\right)=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -386,7 +428,15 @@
       },
       "source_item_id": "e81dde04-2788-5e5b-b9f7-631ee2db318a",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -394,8 +444,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^2 y\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^2 y\\,dy\\,dx$.",
-      "explanation_en": "**$\\left(\\int_0^1 dx\\right)\\left(\\int_0^2 y\\,dy\\right)=1\\cdot 2=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$1\\cdot 2=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$\\left(\\int_0^1 dx\\right)\\left(\\int_0^2 y\\,dy\\right)=1\\cdot 2=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$1\\cdot 2=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -404,7 +454,15 @@
       },
       "source_item_id": "06c8f65c-9fc0-5d70-886b-4d1fc8c1929e",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 8,
@@ -412,8 +470,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$.",
-      "explanation_en": "**$\\left(\\int_0^2 x\\,dx\\right)\\left(\\int_0^3 y\\,dy\\right)=2\\cdot 4.5=9$.**\n\n**Answer:** $9$.",
-      "explanation_he": "**$2\\cdot 4.5=9$.**\n\n**תשובה:** $9$.",
+      "explanation_en": "**$\\left(\\int_0^2 x\\,dx\\right)\\left(\\int_0^3 y\\,dy\\right)=2\\cdot 4.5=9$.**\n\n**Answer:** $9$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$2\\cdot 4.5=9$.**\n\n**תשובה:** $9$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -422,7 +480,15 @@
       },
       "source_item_id": "7a389d35-f4c1-58d7-8d1d-9d2d3fdeda56",
       "points_level_min": "5pt",
-      "correct_answer": "9"
+      "correct_answer": "9",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3^2",
+        "expected": 9,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -430,8 +496,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^1 xy\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^1 xy\\,dy\\,dx$.",
-      "explanation_en": "**$\\left(\\tfrac12\\right)\\left(\\tfrac12\\right)=\\tfrac14$.**\n\n**Answer:** $0.25$.",
-      "explanation_he": "**$\\tfrac12\\cdot\\tfrac12=\\tfrac14$.**\n\n**תשובה:** $0.25$.",
+      "explanation_en": "**$\\left(\\tfrac12\\right)\\left(\\tfrac12\\right)=\\tfrac14$.**\n\n**Answer:** $0.25$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac12\\cdot\\tfrac12=\\tfrac14$.**\n\n**תשובה:** $0.25$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -440,7 +506,15 @@
       },
       "source_item_id": "938bfd7a-1106-51e1-9eeb-c13c10a3ebd2",
       "points_level_min": "5pt",
-      "correct_answer": "0.25"
+      "correct_answer": "0.25",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.25",
+        "expected": 0.25,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -448,8 +522,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^2 (x+y)\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^2 (x+y)\\,dy\\,dx$.",
-      "explanation_en": "**Inner: $\\int_0^2 (x+y)\\,dy=2x+2$. Outer: $\\int_0^2 (2x+2)\\,dx=4+4=8$.**\n\n**Answer:** $8$.",
-      "explanation_he": "**פנימי $2x+2$; חיצוני $=8$.**\n\n**תשובה:** $8$.",
+      "explanation_en": "**Inner: $\\int_0^2 (x+y)\\,dy=2x+2$. Outer: $\\int_0^2 (2x+2)\\,dx=4+4=8$.**\n\n**Answer:** $8$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**פנימי $2x+2$; חיצוני $=8$.**\n\n**תשובה:** $8$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -458,7 +532,15 @@
       },
       "source_item_id": "5b135b46-7dd4-5b5a-aad0-68504684897a",
       "points_level_min": "5pt",
-      "correct_answer": "8"
+      "correct_answer": "8",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2^3",
+        "expected": 8,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -466,8 +548,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\displaystyle\\int_0^3\\!\\!\\int_0^1 x\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^3\\!\\!\\int_0^1 x\\,dy\\,dx$.",
-      "explanation_en": "**$\\left(\\int_0^3 x\\,dx\\right)(1)=4.5$.**\n\n**Answer:** $4.5$.",
-      "explanation_he": "**$=4.5$.**\n\n**תשובה:** $4.5$.",
+      "explanation_en": "**$\\left(\\int_0^3 x\\,dx\\right)(1)=4.5$.**\n\n**Answer:** $4.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$=4.5$.**\n\n**תשובה:** $4.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -476,7 +558,15 @@
       },
       "source_item_id": "8e83bcc3-789c-507b-939f-ab045ab3ca15",
       "points_level_min": "5pt",
-      "correct_answer": "4.5"
+      "correct_answer": "4.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4.5",
+        "expected": 4.5,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -484,8 +574,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^3 2\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^3 2\\,dy\\,dx$.",
-      "explanation_en": "**$2\\times(\\text{area }1\\times 3)=6$.**\n\n**Answer:** $6$.",
-      "explanation_he": "**$2\\cdot 3=6$.**\n\n**תשובה:** $6$.",
+      "explanation_en": "**$2\\times(\\text{area }1\\times 3)=6$.**\n\n**Answer:** $6$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$2\\cdot 3=6$.**\n\n**תשובה:** $6$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -494,7 +584,15 @@
       },
       "source_item_id": "8b284b29-310c-5ad8-8442-6201b0afe827",
       "points_level_min": "5pt",
-      "correct_answer": "6"
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "6",
+        "expected": 6,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 13,
@@ -502,8 +600,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x^2 y\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x^2 y\\,dy\\,dx$.",
-      "explanation_en": "**$\\left(\\int_0^2 x^2\\,dx\\right)\\left(\\int_0^1 y\\,dy\\right)=\\dfrac{8}{3}\\cdot\\dfrac12=\\dfrac43$.**\n\n**Answer:** $\\approx 1.3333$.",
-      "explanation_he": "**$\\dfrac83\\cdot\\dfrac12=\\dfrac43$.**\n\n**תשובה:** $\\approx 1.3333$.",
+      "explanation_en": "**$\\left(\\int_0^2 x^2\\,dx\\right)\\left(\\int_0^1 y\\,dy\\right)=\\dfrac{8}{3}\\cdot\\dfrac12=\\dfrac43$.**\n\n**Answer:** $\\approx 1.3333$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\dfrac83\\cdot\\dfrac12=\\dfrac43$.**\n\n**תשובה:** $\\approx 1.3333$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -512,7 +610,15 @@
       },
       "source_item_id": "c8f7ee48-15e8-5588-9bc1-4c7b55a5553d",
       "points_level_min": "5pt",
-      "correct_answer": "1.333333"
+      "correct_answer": "1.333333",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.333333",
+        "expected": 1.333333,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -520,8 +626,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^2 x^2\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^2 x^2\\,dy\\,dx$.",
-      "explanation_en": "**$\\left(\\int_0^1 x^2\\,dx\\right)(2)=\\dfrac13\\cdot 2=\\dfrac23$.**\n\n**Answer:** $\\approx 0.6667$.",
-      "explanation_he": "**$\\dfrac13\\cdot 2=\\dfrac23$.**\n\n**תשובה:** $\\approx 0.6667$.",
+      "explanation_en": "**$\\left(\\int_0^1 x^2\\,dx\\right)(2)=\\dfrac13\\cdot 2=\\dfrac23$.**\n\n**Answer:** $\\approx 0.6667$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\dfrac13\\cdot 2=\\dfrac23$.**\n\n**תשובה:** $\\approx 0.6667$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -530,7 +636,15 @@
       },
       "source_item_id": "5acb6f9e-a017-5c09-af91-d9b6a366c0bc",
       "points_level_min": "5pt",
-      "correct_answer": "0.666667"
+      "correct_answer": "0.666667",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.666667",
+        "expected": 0.666667,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -538,8 +652,8 @@
       "difficulty": "hard",
       "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^1 (x+y)\\,dy\\,dx$.",
       "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^1 (x+y)\\,dy\\,dx$.",
-      "explanation_en": "**Inner: $\\int_0^1(x+y)dy=x+\\tfrac12$. Outer: $\\int_0^1(x+\\tfrac12)dx=\\tfrac12+\\tfrac12=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$\\tfrac12+\\tfrac12=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**Inner: $\\int_0^1(x+y)dy=x+\\tfrac12$. Outer: $\\int_0^1(x+\\tfrac12)dx=\\tfrac12+\\tfrac12=1$.**\n\n**Answer:** $1$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$\\tfrac12+\\tfrac12=1$.**\n\n**תשובה:** $1$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "double_integral"
       ],
@@ -548,7 +662,424 @@
       },
       "source_item_id": "10562a58-398f-51ce-8877-82af9f4aa144",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "In polar coordinates, dA = ____ dr dθ.",
+      "stem_he": "בקואורדינטות קוטביות, dA = ____ dr dθ.",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: r.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: r.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "r",
+          "R"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Does Fubini allow switching order on a continuous rectangle? (yes/no)",
+      "stem_he": "האם פוביני מאפשר החלפת סדר על מלבן רציף? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: yes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: yes.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "yes",
+          "Yes"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "Type I",
+            "right": "vertical slices"
+          },
+          {
+            "left": "Type II",
+            "right": "horizontal slices"
+          },
+          {
+            "left": "Fubini",
+            "right": "iterated equals double"
+          },
+          {
+            "left": "Polar Jacobian",
+            "right": "factor r"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "סוג I",
+            "right": "פרוסות אנכיות"
+          },
+          {
+            "left": "סוג II",
+            "right": "פרוסות אופקיות"
+          },
+          {
+            "left": "פוביני",
+            "right": "מאוחד שווה לכפול"
+          },
+          {
+            "left": "יעקוביאן קוטבי",
+            "right": "גורם r"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Sketch region D",
+          "Choose order or polar",
+          "Write limits",
+          "Integrate inner then outer"
+        ],
+        "order_he": [
+          "ציירו את D",
+          "בחרו סדר או קוטבי",
+          "כתבו גבולות",
+          "פנימי ואז חיצוני"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "∬_D 1 dA equals Area(D)",
+        "Polar is natural for disks and x²+y²",
+        "You may omit r in polar because it cancels always",
+        "Changing order can simplify non-elementary inner integrals"
+      ],
+      "options_he": [
+        "∬_D 1 dA שווה לשטח(D)",
+        "קוטבי טבעי לדיסקים ו-x²+y²",
+        "אפשר להשמיט r בקוטבי כי הוא תמיד מתבטל",
+        "החלפת סדר יכולה לפשט אינטגרלים פנימיים"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "∬_D 1 dA equals Area(D)",
+          "Polar is natural for disks and x²+y²",
+          "You may omit r in polar because it cancels always",
+          "Changing order can simplify non-elementary inner integrals"
+        ],
+        "options_he": [
+          "∬_D 1 dA שווה לשטח(D)",
+          "קוטבי טבעי לדיסקים ו-x²+y²",
+          "אפשר להשמיט r בקוטבי כי הוא תמיד מתבטל",
+          "החלפת סדר יכולה לפשט אינטגרלים פנימיים"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Explain why dA = r dr dθ using the Jacobian of T(r,θ)=(r cosθ, r sinθ).",
+      "stem_he": "הסבירו מדוע dA=r dr dθ באמצעות יעקוביאן T(r,θ)=(r cosθ, r sinθ).",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Compute ∬_R 1 dA for R=[0,2]×[0,3].",
+      "stem_he": "חשבו ∬_R 1 dA ל-R=[0,2]×[0,3].",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: 6.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: 6.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain 6.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו 6.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Inner integral treats the outer variable as:",
+      "stem_he": "האינטגרל הפנימי מתייחס למשתנה החיצוני כ:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "a constant",
+        "zero",
+        "infinity",
+        "a differential"
+      ],
+      "options_he": [
+        "קבוע",
+        "אפס",
+        "אינסוף",
+        "דיפרנציאל"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "a constant",
+          "zero",
+          "infinity",
+          "a differential"
+        ],
+        "options_he": [
+          "קבוע",
+          "אפס",
+          "אינסוף",
+          "דיפרנציאל"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Area of [0,2]×[0,3] via ∬1 dA?",
+      "stem_he": "שטח [0,2]×[0,3] דרך ∬1?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 6.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 6.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "6",
+      "answer_payload": {
+        "value": 6
+      },
+      "verify": {
+        "expr": "2*3",
+        "expected": 6,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Forgetting the polar factor r is a common error.",
+      "stem_he": "שכחת הגורם הקוטבי r היא טעות נפוצה.",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "$\\int_0^1\\int_0^1 2xy\\,dy\\,dx$ equals?",
+      "stem_he": "$\\int_0^1\\int_0^1 2xy\\,dy\\,dx$ שווה?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 0.5.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 0.5.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "0.5",
+      "answer_payload": {
+        "value": 0.5
+      },
+      "verify": {
+        "expr": "1/2",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "points_level_min": "university",
+      "stem_en": "A disk region suggests using:",
+      "stem_he": "אזור דיסק מרמז על שימוש ב:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university double integrals, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** באינטגרלים כפולים באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "polar coordinates",
+        "only Type II forever",
+        "series tests",
+        "ANOVA"
+      ],
+      "options_he": [
+        "קואורדינטות קוטביות",
+        "רק סוג II לתמיד",
+        "מבחני טורים",
+        "ANOVA"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "polar coordinates",
+          "only Type II forever",
+          "series tests",
+          "ANOVA"
+        ],
+        "options_he": [
+          "קואורדינטות קוטביות",
+          "רק סוג II לתמיד",
+          "מבחני טורים",
+          "ANOVA"
+        ],
+        "correct_index": 0
+      }
     }
   ],
   "est_minutes": 60,

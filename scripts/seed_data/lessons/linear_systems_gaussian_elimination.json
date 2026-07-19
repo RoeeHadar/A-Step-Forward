@@ -32,6 +32,13 @@
       "body_he_md": "**משפט (רושה-קפלי / קרונקר).** יהי $[A|\\vec{b}]$ המטריצה המוגדלת של מערכת עם $m$ משוואות ו-$n$ נעלמים. לאחר דירוג ל-REF:\n\n| תנאי | סוג פתרון |\n|---|---|\n| מופיעה שורה $[0\\;0\\;\\cdots\\;0\\;|\\;c]$ עם $c\\neq0$ | **אי-עקבי** (אין פתרון) |\n| עקבי, $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) = n$ | **פתרון יחיד** (אין משתנים חופשיים) |\n| עקבי, $\\text{rank}(A) = \\text{rank}([A|\\vec{b}]) < n$ | **אינסוף פתרונות** ($n-\\text{rank}(A)$ משתנים חופשיים) |\n\n**שרטוט הוכחה:** פעולות שורה שומרות על קבוצת הפתרון. שורת סתירה $[0\\cdots0|c]$ עם $c\\neq0$ אומרת $0=c$ — בלתי-אפשרי. אם עקבי, כל ציר קובע משתנה ציר; עמודות חופשיות יוצרות משפחה פרמטרית. כשדרגה$=n$, לכל עמודה יש ציר $\\Rightarrow$ אין פרמטרים $\\Rightarrow$ פתרון יחיד. $\\blacksquare$\n\n**מערכות הומוגניות** ($\\vec{b}=\\vec{0}$): תמיד עקביות ($\\vec{x}=\\vec{0}$ עובד). פתרון יחיד אם ורק אם $\\text{rank}(A)=n$. אחרת אינסוף — **מרחב האפס** $\\ker A$.\n\n**קשר דרגה-גרעין:** למערכת עקבית, הפתרון הכללי הוא $\\vec{x} = \\vec{x}_p + \\vec{x}_h$ כאשר $\\vec{x}_p$ פתרון פרטי ו-$\\vec{x}_h\\in\\ker A$ בממד $n-\\text{rank}(A)$.\n\n**פרשנות גיאומטרית:** ב-$\\mathbb{R}^3$, כל משוואה היא מישור. שלושה מישורים יכולים להיחתך בנקודה (יחיד), ישר (אינסוף), להיות על אותו מישור (אינסוף), או ללא נקודה משותפת (אי-עקבי — מישורים מקבילים עם היסטים שונים)."
     },
     {
+      "kind": "theory",
+      "title_en": "Parametric Families and Homogeneous Structure",
+      "title_he": "משפחות פרמטריות ומבנה הומוגני",
+      "body_en_md": "When a consistent system has free variables, the solution set is an **affine subspace**: one particular solution plus the null space of $A$.\n\n**General solution form.** If $\\mathrm{rank}(A)=r<n$ and the system is consistent, choose free variables $t_1,\\ldots,t_{n-r}$. Back-substitution expresses each pivot variable as an affine function of the free ones:\n$$\n\\mathbf{x}=\\mathbf{x}_p + t_1\\mathbf{v}_1+\\cdots+t_{n-r}\\mathbf{v}_{n-r},\n$$\nwhere $A\\mathbf{x}_p=\\mathbf{b}$ and $\\{\\mathbf{v}_i\\}$ is a basis of $\\ker A$.\n\n**Homogeneous vs nonhomogeneous.** The associated homogeneous system $A\\mathbf{x}=\\mathbf{0}$ always admits $\\mathbf{x}=\\mathbf{0}$. Its solution set is exactly $\\ker A$. For $A\\mathbf{x}=\\mathbf{b}$, either there is no particular solution (inconsistent) or every solution differs from a fixed particular solution by a homogeneous solution.\n\n**Why this matters later.** The same decomposition $\\mathbf{x}_p+\\ker A$ reappears as the general preimage of a vector under a linear map, and as the solution structure of least-squares normal equations. Master reading free columns from RREF now — it is the computational engine behind null-space bases in `concept:la_vector_spaces` and `concept:linear_transformations_kernel_image`.\n\n**Parameter-dependent systems.** If entries of $A$ or $\\mathbf{b}$ depend on a parameter $k$, the rank may jump at critical values. Always reduce symbolically, then split cases on whether a contradiction row appears or whether the number of pivots drops.",
+      "body_he_md": "כאשר מערכת עקבית כוללת משתנים חופשיים, קבוצת הפתרון היא **תת-מרחב אפיני**: פתרון פרטי אחד ועוד מרחב האפס של $A$.\n\n**צורת הפתרון הכללי.** אם $\\mathrm{rank}(A)=r<n$ והמערכת עקבית, בוחרים משתנים חופשיים $t_1,\\ldots,t_{n-r}$. הצבה חוזרת מבטאת כל משתנה ציר כפונקציה אפינית של החופשיים:\n$$\n\\mathbf{x}=\\mathbf{x}_p + t_1\\mathbf{v}_1+\\cdots+t_{n-r}\\mathbf{v}_{n-r},\n$$\nכאשר $A\\mathbf{x}_p=\\mathbf{b}$ ו-$\\{\\mathbf{v}_i\\}$ בסיס של $\\ker A$.\n\n**הומוגני מול לא-הומוגני.** המערכת ההומוגנית $A\\mathbf{x}=\\mathbf{0}$ תמיד מתירה $\\mathbf{x}=\\mathbf{0}$. קבוצת הפתרון שלה היא בדיוק $\\ker A$. עבור $A\\mathbf{x}=\\mathbf{b}$, או שאין פתרון פרטי (אי-עקבי) או שכל פתרון נבדל מפתרון פרטי קבוע בפתרון הומוגני.\n\n**למה זה חשוב בהמשך.** אותו פירוק $\\mathbf{x}_p+\\ker A$ חוזר כתמונה קדומה כללית תחת העתקה לינארית, וכמבנה הפתרון של משוואות נורמליות בריבועים פחותים. שליטה בקריאת עמודות חופשיות מ-RREF היא המנוע החישובי מאחורי בסיסי מרחב האפס ב-`concept:la_vector_spaces` וב-`concept:linear_transformations_kernel_image`.\n\n**מערכות תלויות פרמטר.** אם כניסות $A$ או $\\mathbf{b}$ תלויות בפרמטר $k$, הדרגה עלולה לקפוץ בערכים קריטיים. תמיד דרגו סימבולית, ואז פצלו מקרים לפי הופעת שורת סתירה או ירידת מספר הצירים."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -75,6 +82,15 @@
       "title_he": "דוגמה פתורה 3 — מערכת עם פרמטר $k$",
       "body_en_md": "**System:**\n$$x + y + z = 1, \\quad x + 2y + kz = 3, \\quad x + ky + k^2 z = 5$$\n\nParameter-dependent systems require symbolic row reduction, then case-splitting when pivots vanish.\n\n### Move 1 — Eliminate column 1\n$$\\begin{pmatrix}1&1&1&|&1\\\\1&2&k&|&3\\\\1&k&k^2&|&5\\end{pmatrix} \\xrightarrow{R_2-R_1,\\;R_3-R_1} \\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&k-1&k^2-1&|&4\\end{pmatrix}$$\n\n### Move 2 — Eliminate column 2\n$\\xrightarrow{R_3-(k-1)R_2} \\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&0&2(k-1)&|&6-2k\\end{pmatrix}$\n\n(Simplify $(3,3)$ entry: $(k^2-1)-(k-1)^2 = 2k-2 = 2(k-1)$; RHS: $4-2(k-1)=6-2k$.)\n\n### Move 3 — Case split on the third pivot\n**Case $k\\neq 1$:** Row 3 gives $2(k-1)z = 6-2k = -2(k-3)$, so $z = \\frac{3-k}{k-1}$. Back-substitute for unique $(x,y,z)$. **Unique solution.**\n\n**Case $k = 1$:** Row 3 becomes $[0\\;0\\;0\\;|\\;4]$. Since $4\\neq0$, this is a contradiction row → **Inconsistent** (no solution).\n\n**Summary:** $k=1$ → no solution; $k\\neq1$ → unique solution. Never infinitely many here because rank jumps to 3 whenever consistent.\n\n**Exam tip:** After symbolic reduction, set each pivot entry equal to zero and check whether the RHS also vanishes — that determines inconsistency vs. infinite family.\n\n**Key pattern:** Parameter problems on Israeli exams almost always produce exactly two cases — one inconsistent value and one region of unique solutions.",
       "body_he_md": "**מערכת:**\n$$x + y + z = 1, \\quad x + 2y + kz = 3, \\quad x + ky + k^2 z = 5$$\n\nמערכות תלויות פרמטר דורשות דירוג סימבולי, ואז פיצול מקרים כשצירים מתאפסים.\n\n### צעד 1 — אלימינציה בעמודה 1\n$$\\begin{pmatrix}1&1&1&|&1\\\\1&2&k&|&3\\\\1&k&k^2&|&5\\end{pmatrix} \\xrightarrow{R_2-R_1,\\;R_3-R_1} \\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&k-1&k^2-1&|&4\\end{pmatrix}$$\n\n### צעד 2 — אלימינציה בעמודה 2\n$\\xrightarrow{R_3-(k-1)R_2} \\begin{pmatrix}1&1&1&|&1\\\\0&1&k-1&|&2\\\\0&0&2(k-1)&|&6-2k\\end{pmatrix}$\n\n(פישוט: $(k^2-1)-(k-1)^2 = 2(k-1)$; צד ימני: $6-2k$.)\n\n### צעד 3 — פיצול מקרים על הציר השלישי\n**מקרה $k\\neq 1$:** שורה 3: $z = \\frac{3-k}{k-1}$. הצבה חוזרת → **פתרון יחיד.**\n\n**מקרה $k = 1$:** שורה 3: $[0\\;0\\;0\\;|\\;4]$. $4\\neq0$ → **אי-עקבי** (אין פתרון).\n\n**סיכום:** $k=1$ → אין פתרון; $k\\neq1$ → פתרון יחיד. לעולם לא אינסוף כאן כי הדרגה קופצת ל-3 כשעקבי.\n\n**טיפ לבחינה:** אחרי דירוג סימבולי, השוו כל כניסת ציר לאפס ובדקו אם גם הצד הימני מתאפס — זה קובע אי-עקביות מול משפחה אינסופית.\n\n**דפוס מפתח:** בעיות פרמטר בבחינות ישראליות כמעט תמיד נותנות שני מקרים — ערך אי-עקבי אחד ואזור של פתרונות יחידים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "hard",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Infinite Family from RREF",
+      "title_he": "דוגמה פתורה 4 — משפחה אינסופית מ-RREF",
+      "body_en_md": "**System:**\n$$\nx+2y+z=3,\\qquad 2x+4y+2z=6,\\qquad y-z=1.\n$$\n\n### Move 1 — Augmented matrix\n$$\n\\begin{pmatrix}1&2&1&|&3\\\\2&4&2&|&6\\\\0&1&-1&|&1\\end{pmatrix}\n$$\n\n### Move 2 — Eliminate and notice dependence\n$R_2-2R_1$ produces a zero row — the second equation is twice the first. After swapping/reordering to clear pivots we reach an RREF with pivots in columns $1$ and $2$, and column $3$ free.\n\n### Move 3 — Parametrize\nSet $z=t$. From the $y$-pivot row (after reduction) $y-z=1\\Rightarrow y=1+t$. From the first pivot row $x+2y+z=3\\Rightarrow x+2(1+t)+t=3\\Rightarrow x=1-3t$.\n\n### Move 4 — Vector form\n$$\n\\mathbf{x}=\\begin{pmatrix}1\\\\1\\\\0\\end{pmatrix}+t\\begin{pmatrix}-3\\\\1\\\\1\\end{pmatrix}.\n$$\nParticular solution $(1,1,0)$; null-space direction $(-3,1,1)$. Rank $=2$, one free variable, infinitely many solutions on a line in $\\mathbb{R}^3$.\n\n**Takeaway:** Dependent equations do not automatically make a system inconsistent — they reduce rank. Always separate the consistency check from the free-variable count.",
+      "body_he_md": "**מערכת:**\n$$\nx+2y+z=3,\\quad 2x+4y+2z=6,\\quad y-z=1.\n$$\n\n### צעד 1 — מטריצה מוגדלת\n$$\n\\begin{pmatrix}1&2&1&|&3\\\\2&4&2&|&6\\\\0&1&-1&|&1\\end{pmatrix}\n$$\n\n### צעד 2 — אלימינציה ותלות\n$R_2-2R_1$ יוצרת שורת אפס — המשוואה השנייה כפולה מהראשונה. אחרי דירוג מגיעים ל-RREF עם צירים בעמודות $1$ ו-$2$, ועמודה $3$ חופשית.\n\n### צעד 3 — פרמטריזציה\nקבעו $z=t$. משורת הציר של $y$: $y=1+t$. משורת הציר של $x$: $x=1-3t$.\n\n### צעד 4 — צורה וקטורית\n$$\n\\mathbf{x}=\\begin{pmatrix}1\\\\1\\\\0\\end{pmatrix}+t\\begin{pmatrix}-3\\\\1\\\\1\\end{pmatrix}.\n$$\nפתרון פרטי $(1,1,0)$; כיוון גרעין $(-3,1,1)$. דרגה $=2$, משתנה חופשי אחד, אינסוף פתרונות על ישר ב-$\\mathbb{R}^3$.\n\n**מסקנה:** משוואות תלויות אינן הופכות אוטומטית את המערכת לאי-עקבית — הן מורידות דרגה. תמיד הפרידו בין בדיקת עקביות לספירת משתנים חופשיים."
     },
     {
       "kind": "method_guide",
@@ -233,7 +249,18 @@
   "agent_hints": {
     "skill_atoms_unlocked": [
       "linear_systems"
-    ]
+    ],
+    "key_insights": [
+      "State definitions before computing: rank, kernel, span, and orthonormality are not optional labels.",
+      "Row operations preserve the solution set; determinants and eigenvalues encode invertibility and scaling.",
+      "Always check dimensions: matrix products and linear maps fail silently when sizes disagree."
+    ],
+    "common_misconceptions": [
+      "Confusing row reduction of $A$ alone with reduction of the augmented matrix $[A|b]$.",
+      "Thinking orthogonality means “parallel” rather than zero inner product.",
+      "Assuming every square matrix is diagonalizable without checking independent eigenvectors."
+    ],
+    "tutor_pacing_hint": "Start with $2\\times2$ computations, then lift to abstract vector-space language. Keep Hebrew default with LTR math."
   },
   "questions": [
     {
@@ -242,8 +269,8 @@
       "difficulty": "easy",
       "stem_en": "A linear system has a unique solution when the coefficient determinant is:",
       "stem_he": "למערכת לינארית פתרון יחיד כאשר דטרמיננטת המקדמים היא:",
-      "explanation_en": "**Nonzero determinant $\\Rightarrow$ unique solution.**\n\n**Answer:** nonzero.",
-      "explanation_he": "**דטרמיננטה שונה מאפס $\\Rightarrow$ פתרון יחיד.**\n\n**תשובה:** שונה מאפס.",
+      "explanation_en": "**Nonzero determinant $\\Rightarrow$ unique solution.**\n\n**Answer:** nonzero.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**דטרמיננטה שונה מאפס $\\Rightarrow$ פתרון יחיד.**\n\n**תשובה:** שונה מאפס.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -276,7 +303,10 @@
         "$\\text{negative}$",
         "$\\text{one}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -284,8 +314,8 @@
       "difficulty": "easy",
       "stem_en": "Solve $2x=6$ for $x$.",
       "stem_he": "פתרו $2x=6$ עבור $x$.",
-      "explanation_en": "**$x=\\tfrac{6}{2}=3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**$x=3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**$x=\\tfrac{6}{2}=3$.**\n\n**Answer:** $3$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x=3$.**\n\n**תשובה:** $3$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -294,7 +324,15 @@
       },
       "source_item_id": "349c9a1d-9b78-5586-a12f-177e72d869f4",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -302,8 +340,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: Gaussian elimination uses elementary row operations.",
       "stem_he": "נכון או לא נכון: חילוץ גאוס משתמש בפעולות שורה אלמנטריות.",
-      "explanation_en": "**Row operations reduce the system** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**פעולות שורה מפשטות את המערכת** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Row operations reduce the system** — **true**.\n\n**Answer:** true.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**פעולות שורה מפשטות את המערכת** — **נכון**.\n\n**תשובה:** נכון.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -312,7 +350,10 @@
       },
       "source_item_id": "271cfe7e-f786-58f6-9875-69607b94a77e",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -320,8 +361,8 @@
       "difficulty": "hard",
       "stem_en": "Solve $\\begin{cases}x+y=10\\\\x-y=4\\end{cases}$ for $x$.",
       "stem_he": "פתרו $\\begin{cases}x+y=10\\\\x-y=4\\end{cases}$ עבור $x$.",
-      "explanation_en": "**Step 1 — Add the equations.** $2x=14$.\n\n**Step 2 — Solve for $x$.** $x=7$.\n\n**Step 3 — (Check).** Then $y=3$.\n\n**Answer:** $x=7$.",
-      "explanation_he": "**שלב 1 — חיבור המשוואות.** $2x=14$.\n\n**שלב 2 — פתרון $x$.** $x=7$.\n\n**שלב 3 — (בדיקה).** אז $y=3$.\n\n**תשובה:** $x=7$.",
+      "explanation_en": "**Step 1 — Setup.** Restate the given data and the target quantity in university linear-algebra language.\n\n**Step 2 — Compute.** $2x=14$.\n\n**Step 2 — Solve for $x$.** $x=7$.\n\n**Step 3 — (Check).** Then $y=3$.\n\n**Answer:** $x=7$.\n\n**Step 3 — Conclude.** Box the final answer and note which theorem or definition justified each move.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — חיבור המשוואות.** $2x=14$.\n\n**שלב 2 — פתרון $x$.** $x=7$.\n\n**שלב 3 — (בדיקה).** אז $y=3$.\n\n**תשובה:** $x=7$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -342,7 +383,11 @@
       "source_item_id": "7caff382-b8c5-5b33-9a75-db4e7f5ebf1b",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -350,8 +395,8 @@
       "difficulty": "easy",
       "stem_en": "Solve $\\begin{cases}x+y=5\\\\x-y=1\\end{cases}$ for $x$.",
       "stem_he": "פתרו $\\begin{cases}x+y=5\\\\x-y=1\\end{cases}$ עבור $x$.",
-      "explanation_en": "**Add equations: $2x=6\\Rightarrow x=3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**חיבור המשוואות: $2x=6\\Rightarrow x=3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**Add equations: $2x=6\\Rightarrow x=3$.**\n\n**Answer:** $3$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**חיבור המשוואות: $2x=6\\Rightarrow x=3$.**\n\n**תשובה:** $3$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -360,7 +405,15 @@
       },
       "source_item_id": "a2a493a7-cfb1-5f55-8999-4702292d3b99",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 6,
@@ -368,8 +421,8 @@
       "difficulty": "easy",
       "stem_en": "Solve $\\begin{cases}x+y=5\\\\x-y=1\\end{cases}$ for $y$.",
       "stem_he": "פתרו $\\begin{cases}x+y=5\\\\x-y=1\\end{cases}$ עבור $y$.",
-      "explanation_en": "**Subtract equations: $2y=4\\Rightarrow y=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**חיסור המשוואות: $2y=4\\Rightarrow y=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**Subtract equations: $2y=4\\Rightarrow y=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**חיסור המשוואות: $2y=4\\Rightarrow y=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -378,7 +431,15 @@
       },
       "source_item_id": "2485ca04-3322-57f1-bc86-a6bfca5e0ed2",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -386,8 +447,8 @@
       "difficulty": "medium",
       "stem_en": "A linear system with no solution is called:",
       "stem_he": "מערכת לינארית ללא פתרון נקראת:",
-      "explanation_en": "**No solution $=$ inconsistent.**\n\n**Answer:** inconsistent.",
-      "explanation_he": "**אין פתרון $=$ לא עקבית.**\n\n**תשובה:** לא עקבית.",
+      "explanation_en": "**No solution $=$ inconsistent.**\n\n**Answer:** inconsistent.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**אין פתרון $=$ לא עקבית.**\n\n**תשובה:** לא עקבית.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -420,7 +481,10 @@
         "$\\text{homogeneous}$",
         "$\\text{diagonal}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -428,8 +492,8 @@
       "difficulty": "medium",
       "stem_en": "Given $2x+y=7$ and $y=3$, find $x$.",
       "stem_he": "בהינתן $2x+y=7$ ו-$y=3$, מצאו את $x$.",
-      "explanation_en": "**$2x=4\\Rightarrow x=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$2x=4\\Rightarrow x=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$2x=4\\Rightarrow x=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$2x=4\\Rightarrow x=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -438,7 +502,15 @@
       },
       "source_item_id": "d3848885-232c-5f44-bccd-8da62a74dce4",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -446,8 +518,8 @@
       "difficulty": "medium",
       "stem_en": "Solve $3x=9$ for $x$.",
       "stem_he": "פתרו $3x=9$ עבור $x$.",
-      "explanation_en": "**$x=3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**$x=3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**$x=3$.**\n\n**Answer:** $3$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x=3$.**\n\n**תשובה:** $3$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -456,7 +528,15 @@
       },
       "source_item_id": "3df8003b-736a-5458-ad73-4003e5b7a35a",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -464,8 +544,8 @@
       "difficulty": "medium",
       "stem_en": "Given $x+2y=8$ and $y=2$, find $x$.",
       "stem_he": "בהינתן $x+2y=8$ ו-$y=2$, מצאו את $x$.",
-      "explanation_en": "**$x=8-4=4$.**\n\n**Answer:** $4$.",
-      "explanation_he": "**$x=8-4=4$.**\n\n**תשובה:** $4$.",
+      "explanation_en": "**$x=8-4=4$.**\n\n**Answer:** $4$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x=8-4=4$.**\n\n**תשובה:** $4$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -474,7 +554,15 @@
       },
       "source_item_id": "89883930-bca7-534b-8404-b247b47863b1",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "4",
+        "expected": 4,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -482,8 +570,8 @@
       "difficulty": "medium",
       "stem_en": "Given $2x=10$ and $x+y=7$, find $y$.",
       "stem_he": "בהינתן $2x=10$ ו-$x+y=7$, מצאו את $y$.",
-      "explanation_en": "**$x=5$; $y=7-5=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$x=5$; $y=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$x=5$; $y=7-5=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x=5$; $y=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -492,7 +580,15 @@
       },
       "source_item_id": "dbea8235-5879-5acc-8894-f0bca52d905d",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -500,8 +596,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: swapping two equations of a system does not change its solution.",
       "stem_he": "נכון או לא נכון: החלפת שתי משוואות במערכת אינה משנה את פתרונה.",
-      "explanation_en": "**Order of equations is irrelevant** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**סדר המשוואות אינו רלוונטי** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Order of equations is irrelevant** — **true**.\n\n**Answer:** true.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**סדר המשוואות אינו רלוונטי** — **נכון**.\n\n**תשובה:** נכון.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -510,7 +606,10 @@
       },
       "source_item_id": "b98fa0d8-bca6-5851-bf47-7db8a1f05508",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -518,8 +617,8 @@
       "difficulty": "hard",
       "stem_en": "Use Cramer's rule to find $x$ in $\\begin{cases}2x+y=5\\\\x+y=3\\end{cases}$.",
       "stem_he": "השתמשו בכלל קרמר למציאת $x$ ב-$\\begin{cases}2x+y=5\\\\x+y=3\\end{cases}$.",
-      "explanation_en": "**$x=\\tfrac{5-3}{2-1}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$x=\\tfrac{2}{1}=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$x=\\tfrac{5-3}{2-1}=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$x=\\tfrac{2}{1}=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -528,7 +627,15 @@
       },
       "source_item_id": "d1545ec3-db82-5f4a-b15b-85ca050d2631",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -536,8 +643,8 @@
       "difficulty": "hard",
       "stem_en": "Use Cramer's rule to find $y$ in $\\begin{cases}2x+y=5\\\\x+y=3\\end{cases}$.",
       "stem_he": "השתמשו בכלל קרמר למציאת $y$ ב-$\\begin{cases}2x+y=5\\\\x+y=3\\end{cases}$.",
-      "explanation_en": "**$y=\\tfrac{6-5}{1}=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$y=\\tfrac{1}{1}=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**$y=\\tfrac{6-5}{1}=1$.**\n\n**Answer:** $1$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$y=\\tfrac{1}{1}=1$.**\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -546,7 +653,15 @@
       },
       "source_item_id": "0584135e-326f-581d-a5c0-93d7a21fc423",
       "points_level_min": "5pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -554,8 +669,8 @@
       "difficulty": "hard",
       "stem_en": "Given $3x+2y=12$ and $y=3$, find $x$.",
       "stem_he": "בהינתן $3x+2y=12$ ו-$y=3$, מצאו את $x$.",
-      "explanation_en": "**$3x=6\\Rightarrow x=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$3x=6\\Rightarrow x=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$3x=6\\Rightarrow x=2$.**\n\n**Answer:** $2$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**$3x=6\\Rightarrow x=2$.**\n\n**תשובה:** $2$.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
       "skill_atoms": [
         "linear_systems"
       ],
@@ -564,7 +679,362 @@
       },
       "source_item_id": "a98e8cb6-5a39-5cdd-89a8-5317f4af4412",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "procedural"
+      ],
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "stem_en": "Fill in: a system is inconsistent when a row $[0\\ \\cdots\\ 0\\ |\\ c]$ with $c\\neq\\,$____ appears.",
+      "stem_he": "השלימו: מערכת אי-עקבית כשמופיעה שורה $[0\\ \\cdots\\ 0\\ |\\ c]$ עם $c\\neq\\,$____.",
+      "explanation_en": "A contradiction row says $0=c\\neq0$. Consistency requires $\\mathrm{rank}(A)=\\mathrm{rank}([A|b])$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "שורת סתירה אומרת $0=c\\neq0$. עקביות דורשת שוויון דרגות.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": "0"
+      },
+      "correct_answer": "0",
+      "ord": 16
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "error_analysis"
+      ],
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "stem_en": "Does swapping two equations change the solution set? (yes/no)",
+      "stem_he": "האם החלפת שתי משוואות משנה את קבוצת הפתרון? (כן/לא)",
+      "explanation_en": "Elementary row operations — including swaps — preserve the solution set. They may change intermediate matrices but not the solutions.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "פעולות שורה אלמנטריות — כולל החלפות — שומרות על קבוצת הפתרון.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No",
+          "לא"
+        ]
+      },
+      "acceptable_answers": [
+        "no",
+        "No",
+        "לא"
+      ],
+      "ord": 17
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "conceptual"
+      ],
+      "kind": "match",
+      "difficulty": "medium",
+      "stem_en": "Match solution-type language.",
+      "stem_he": "התאימו שפת סוגי פתרון.",
+      "explanation_en": "Rouché–Capelli classification is the exam checklist after row reduction.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "סיווג רושה–קפלי הוא רשימת הבדיקה אחרי דירוג.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "left_en": [
+          "Unique solution",
+          "Infinitely many",
+          "Inconsistent",
+          "Free variable"
+        ],
+        "left_he": [
+          "פתרון יחיד",
+          "אינסוף",
+          "אי-עקבי",
+          "משתנה חופשי"
+        ],
+        "right_en": [
+          "rank $=n$, consistent",
+          "rank $<n$, consistent",
+          "rank$[A|b]$ > rank$A$",
+          "Non-pivot column"
+        ],
+        "right_he": [
+          "דרגה $=n$, עקבי",
+          "דרגה $<n$, עקבי",
+          "דרגת מוגדלת גדולה יותר",
+          "עמודת לא-ציר"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 18
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "procedural"
+      ],
+      "kind": "ordering",
+      "difficulty": "medium",
+      "stem_en": "Order Gaussian elimination on an augmented matrix.",
+      "stem_he": "סדרו אלימינציית גאוס על מטריצה מוגדלת.",
+      "explanation_en": "Never drop the augmented column — reducing $A$ alone loses the right-hand side.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "לעולם אל תשאירו את עמודת האגף הימני מאחור.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Write the augmented matrix $[A|b]$.",
+          "Create zeros below each pivot (forward elimination).",
+          "Optionally reduce to RREF (zeros above pivots, unit pivots).",
+          "Read the solution / parameters / inconsistency."
+        ],
+        "steps_he": [
+          "כתבו $[A|b]$.",
+          "צרו אפסים מתחת לכל ציר.",
+          "אופציונלי: RREF.",
+          "קראו פתרון / פרמטרים / סתירה."
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 19
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "stem_en": "Which statements are true?",
+      "stem_he": "אילו טענות נכונות?",
+      "explanation_en": "Overdetermined systems may still be consistent (dependent equations). Homogeneous always has at least $\\mathbf{0}$.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "מערכות עודפות עשויות עדיין להיות עקביות. הומוגנית תמיד עם לפחות האפס.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "Homogeneous systems are always consistent.",
+          "If $A$ is invertible then $A\\mathbf{x}=\\mathbf{b}$ has a unique solution.",
+          "More equations than unknowns always means no solution.",
+          "Free variables parametrize the null space directions in the general solution."
+        ],
+        "options_he": [
+          "מערכות הומוגניות תמיד עקביות.",
+          "אם $A$ הפיכה יש פתרון יחיד ל-$A\\mathbf{x}=\\mathbf{b}$.",
+          "יותר משוואות מנעלמים תמיד אומר אין פתרון.",
+          "משתנים חופשיים מפרמטרים כיווני גרעין בפתרון הכללי."
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      },
+      "options_en": [
+        "Homogeneous systems are always consistent.",
+        "If $A$ is invertible then $A\\mathbf{x}=\\mathbf{b}$ has a unique solution.",
+        "More equations than unknowns always means no solution.",
+        "Free variables parametrize the null space directions in the general solution."
+      ],
+      "options_he": [
+        "מערכות הומוגניות תמיד עקביות.",
+        "אם $A$ הפיכה יש פתרון יחיד ל-$A\\mathbf{x}=\\mathbf{b}$.",
+        "יותר משוואות מנעלמים תמיד אומר אין פתרון.",
+        "משתנים חופשיים מפרמטרים כיווני גרעין בפתרון הכללי."
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "ord": 20
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two distinct lines in $\\mathbb{R}^2$ that are not parallel intersect in how many points?",
+      "stem_he": "שני ישרים שונים ב-$\\mathbb{R}^2$ שאינם מקבילים נחתכים בכמה נקודות?",
+      "explanation_en": "Unique intersection point $\\Leftrightarrow$ unique solution of the $2\\times2$ system — the geometric picture of full rank.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "נקודת חיתוך יחידה $\\Leftrightarrow$ פתרון יחיד — תמונה של דרגה מלאה.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": 1
+      },
+      "correct_answer": "1",
+      "verify": {
+        "expr": "1",
+        "expected": 1,
+        "tol": 0.000001
+      },
+      "ord": 21
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "application",
+        "parametric"
+      ],
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $\\begin{cases}x+y=1\\\\2x+2y=k\\end{cases}$, find all $k$ giving infinitely many solutions.",
+      "stem_he": "עבור $\\begin{cases}x+y=1\\\\2x+2y=k\\end{cases}$, מצאו את כל $k$ שנותנים אינסוף פתרונות.",
+      "explanation_en": "**Step 1 — Setup.** Form the augmented matrix and eliminate.\n\n**Step 2 — Compute.** Consistency forces $k=2$.\n\n**Step 3 — Conclude.** Only then do we get a line of solutions.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — הכנה.** מטריצה מוגדלת ואלימינציה.\n\n**שלב 2 — חישוב.** עקביות כופה $k=2$.\n\n**שלב 3 — מסקנה.** רק אז קו של פתרונות.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "needs_review": true,
+      "answer_payload": {
+        "steps_en": [
+          "Row2 $-$ 2·Row1 gives $0=k-2$.",
+          "Consistent iff $k=2$.",
+          "When $k=2$, rank $=1<2$ ⇒ free variable ⇒ infinitely many.",
+          "If $k\\neq2$, inconsistent."
+        ],
+        "steps_he": [
+          "שורה2−2·שורה1 נותנת $0=k-2$.",
+          "עקבי אמ״מ $k=2$.",
+          "אז דרגה $1$ ⇒ אינסוף.",
+          "אחרת אי-עקבי."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון.",
+      "ord": 22
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "kind": "derivation",
+      "difficulty": "hard",
+      "stem_en": "Prove that elementary row operations do not change the solution set of $A\\mathbf{x}=\\mathbf{b}$.",
+      "stem_he": "הוכיחו שפעולות שורה אלמנטריות אינן משנות את קבוצת הפתרון של $A\\mathbf{x}=\\mathbf{b}$.",
+      "explanation_en": "**Step 1 — Setup.** Encode row ops as invertible $E$.\n\n**Step 2 — Compute.** Equivalence both ways.\n\n**Step 3 — Conclude.** Gaussian elimination is valid.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — הכנה.** פעולות כ-$E$ הפיכה.\n\n**שלב 2 — חישוב.** שקילות לשני הכיוונים.\n\n**שלב 3 — מסקנה.** אלימינציית גאוס תקפה.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "needs_review": true,
+      "answer_payload": {
+        "steps_en": [
+          "Each operation corresponds to left-multiplication by an elementary (invertible) matrix $E$.",
+          "If $A\\mathbf{x}=\\mathbf{b}$ then $EA\\mathbf{x}=E\\mathbf{b}$.",
+          "Conversely multiply by $E^{-1}$ to recover the original equation.",
+          "Hence solution sets coincide."
+        ],
+        "steps_he": [
+          "כל פעולה = כפל משמאל במטריצה אלמנטרית הפיכה.",
+          "מ-$A\\mathbf{x}=\\mathbf{b}$ נובע $EA\\mathbf{x}=E\\mathbf{b}$.",
+          "הכפלה ב-$E^{-1}$ מחזירה.",
+          "קבוצות הפתרון זהות."
+        ]
+      },
+      "ord": 23
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "graphical",
+        "conceptual"
+      ],
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Three planes in $\\mathbb{R}^3$ with no common intersection correspond to a linear system that is:",
+      "stem_he": "שלושה מישורים ב-$\\mathbb{R}^3$ בלי חיתוך משותף מתאימים למערכת שהיא:",
+      "explanation_en": "No common point means no solution vector — inconsistency in the algebraic system.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "אין נקודה משותפת = אין וקטור פתרון — אי-עקביות.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "options_en": [
+          "Inconsistent",
+          "Homogeneous with unique solution",
+          "Always underdetermined",
+          "Always diagonal"
+        ],
+        "options_he": [
+          "אי-עקבית",
+          "הומוגנית עם פתרון יחיד",
+          "תמיד חסרת דירוג",
+          "תמיד אלכסונית"
+        ],
+        "correct_index": 0
+      },
+      "options_en": [
+        "Inconsistent",
+        "Homogeneous with unique solution",
+        "Always underdetermined",
+        "Always diagonal"
+      ],
+      "options_he": [
+        "אי-עקבית",
+        "הומוגנית עם פתרון יחיד",
+        "תמיד חסרת דירוג",
+        "תמיד אלכסונית"
+      ],
+      "correct_index": 0,
+      "ord": 24
+    },
+    {
+      "points_level_min": "university",
+      "skill_atoms": [
+        "linear_systems"
+      ],
+      "archetypes": [
+        "application"
+      ],
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Number of free variables for consistent $A_{3\\times5}$ of rank $3$ is ____.",
+      "stem_he": "מספר משתנים חופשיים למערכת עקבית עם $A_{3\\times5}$ מדרגה $3$ הוא ____.",
+      "explanation_en": "Free variables $= n-\\mathrm{rank}=5-3=2$. Solution set is a $2$-parameter affine family.\n\n**Exam tip.** In university linear algebra, name the theorem or technique first (row reduction, rank–nullity, spectral theorem, Gram–Schmidt, Cramer), keep matrix arithmetic readable, and state hypotheses (invertible, orthonormal, diagonalizable) before concluding. A bare final number without method usually loses credit.",
+      "explanation_he": "משתנים חופשיים $=5-3=2$. משפחה אפינית דו-פרמטרית.\n\n**טיפ לבחינה.** באלגברה לינארית באוניברסיטה ציינו קודם את המשפט או הטכניקה (דירוג שורות, דרגה–גרעין, משפט ספקטרלי, גראם–שמידט, קרמר), שמרו על חישובי מטריצות קריאים, וציינו הנחות (הפיכה, אורתונורמלית, לכסינה) לפני המסקנה. מספר סופי בלי שיטה בדרך כלל מאבד נקודות.",
+      "answer_payload": {
+        "value": 2
+      },
+      "correct_answer": "2",
+      "verify": {
+        "expr": "5-3",
+        "expected": 2,
+        "tol": 0.000001
+      },
+      "ord": 25
     }
   ],
   "est_minutes": 45,

@@ -32,6 +32,13 @@
       "body_he_md": "**תכונות MLE במדגמים גדולים:** בתנאי סדירות, MLE הם (א) **עקביים**, (ב) **אסימפטוטית חסרי הטיה**, (ג) **אסימפטוטית יעילים** (מגיעים לגבול קרמר-רao), (ד) **נשמרים** תחת שינוי פרמטריזציה (אם $\\hat{\\theta}$ הוא MLE של $\\theta$, אז $g(\\hat{\\theta})$ הוא MLE של $g(\\theta)$).\n\n**מתכון MLE בארבעה שלבים:**\n1. כתבו PMF/PDF $f(x_i;\\theta)$ לכל תצפית.\n2. בנו נראות $L(\\theta)=\\prod_i f(x_i;\\theta)$ ולוג-נראות $\\ell(\\theta)=\\sum_i \\ln f(x_i;\\theta)$.\n3. גזרו: $\\ell'(\\theta)=0$ ופתרו ל-$\\hat{\\theta}$.\n4. אמתו מקסימום: $\\ell''(\\hat{\\theta})<0$ (או בדקו התנהגות בגבול לפרמטרים מוגבלים).\n\n**אומדים סטנדרטיים (שיננו):**\n| פרמטר | מודל | MLE | חסר הטיה? |\n|---|---|---|---|\n| $\\mu$ | נורמלי | $\\bar{X}$ | כן |\n| $\\sigma^2$ | נורמלי | $\\frac{1}{n}\\sum(X_i-\\bar{X})^2$ | לא (מוטה למטה) |\n| $p$ | בינומי | $k/n$ | כן |\n| $\\lambda$ | פואסון | $\\bar{X}$ | כן |\n\n**הערה על שונות מדגם:** האומד **חסר ההטיה** $S^2=\\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$ משתמש במחלק $n-1$ (תיקון בסל) כי $\\bar{X}$ מוערך מאותם נתונים, וצורך דרגת חופש אחת. ה-MLE מחלק ב-$n$ ומוטה למטה.\n\n**השוואת אומדים:** כששני אומדים מתחרים, חשבו MSE $=\\text{Var}+\\text{Bias}^2$. אומד מוטה יכול לנצח אומד חסר הטיה אם השונות שלו קטנה בהרבה — מאזן הטיה–שונות מרכזי בסטטיסטיקה מודרנית ולמידת מכונה."
     },
     {
+      "kind": "theory",
+      "title_en": "Standard Error, Bias, and the CLT Bridge",
+      "title_he": "שגיאת תקן, הטייה וגשר משפט הגבול המרכזי",
+      "body_en_md": "**Estimator vs estimate.** An estimator $\\hat\\theta$ is a random variable (a function of the sample); an estimate is a realized number. Quality is judged by bias $\\mathbb E[\\hat\\theta]-\\theta$ and variance $\\mathrm{Var}(\\hat\\theta)$.\n\n**Standard error.** For a sample mean, $\\mathrm{SE}(\\bar X)=\\sigma/\\sqrt n$ (or $s/\\sqrt n$ when $\\sigma$ is unknown). Halving the SE requires quadrupling $n$ because of the square-root law.\n\n**CLT bridge.** For large $n$, $\\bar X$ is approximately normal even if the population is not. This justifies $z$-based confidence intervals $\\bar x\\pm z_{\\alpha/2}\\,\\mathrm{SE}$.\n\n**Bias–variance tradeoff.** An unbiased estimator can still be useless if its variance is huge; a slightly biased estimator with smaller MSE may be preferred in practice.",
+      "body_he_md": "**אמדן מול אומד.** אומד $\\hat\\theta$ הוא משתנה מקרי; אמדן הוא מספר ממומש. איכות נמדדת בהטייה $\\mathbb E[\\hat\\theta]-\\theta$ ובשונות.\n\n**שגיאת תקן.** לממוצע מדגם, $\\mathrm{SE}(\\bar X)=\\sigma/\\sqrt n$ (או $s/\\sqrt n$). חציית ה-SE דורשת הכפלת $n$ פי ארבע בגלל חוק השורש.\n\n**גשר CLT.** ל-$n$ גדול, $\\bar X$ בקירוב נורמלי גם אם האוכלוסייה אינה. זה מצדיק רווחי סמך מסוג $z$.\n\n**פשרת הטייה–שונות.** אומד חסר הטייה יכול להיות חסר תועלת אם שונותו עצומה; לעיתים מעדיפים אומד מעט מוטה עם MSE קטן יותר."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -75,6 +82,15 @@
       "title_he": "דוגמה פתורה 3 — MLE לקצב λ בפואסון",
       "body_en_md": "**Problem:** We observe $n$ independent Poisson observations $x_1,\\ldots,x_n$ with PMF $P(X=x)=e^{-\\lambda}\\lambda^x/x!$. Find the MLE of $\\lambda$.\n\nPoisson MLE is a second exam favourite after binomial. The log-likelihood is linear in $\\sum x_i$ plus a log term; differentiation gives a closed form. Notice the structural pattern: for many exponential-family models, the MLE of the mean parameter is $\\bar{X}$.\n\n### Move 1: Likelihood\n$$L(\\lambda) = \\prod_{i=1}^n \\frac{e^{-\\lambda}\\lambda^{x_i}}{x_i!} = e^{-n\\lambda}\\lambda^{\\sum x_i}\\cdot\\prod_{i=1}^n\\frac{1}{x_i!}.$$\n\n### Move 2: Log-likelihood (drop $\\sum\\ln(x_i!)$)\n$$\\ell(\\lambda) = -n\\lambda + \\left(\\sum_{i=1}^n x_i\\right)\\ln\\lambda + \\text{const}.$$\n\n### Move 3: Score equation\n$$\\frac{d\\ell}{d\\lambda} = -n + \\frac{\\sum x_i}{\\lambda} = 0.$$\n\n### Move 4: Solve\n$$\\hat{\\lambda} = \\frac{1}{n}\\sum_{i=1}^n x_i = \\bar{x}.$$\n\n### Move 5: Verify and interpret\n$\\ell''(\\lambda)=-\\sum x_i/\\lambda^2<0$ at $\\hat{\\lambda}$. The MLE equals the **sample mean**, which is unbiased ($E[\\bar{X}]=\\lambda$), consistent, and efficient for Poisson data.\n\n**Numeric check:** If observations are 2, 3, 1, 4, 0, then $\\hat{\\lambda}=(2+3+1+4+0)/5=2$. Always verify $\\hat{\\lambda}>0$; Poisson rate must be positive. On exams, state both the formula $\\hat{\\lambda}=\\bar{x}$ and the numeric value.",
       "body_he_md": "**בעיה:** נצפו $n$ תצפיות פואסון בלתי-תלויות $x_1,\\ldots,x_n$ עם PMF $P(X=x)=e^{-\\lambda}\\lambda^x/x!$. מצאו את MLE של $\\lambda$.\n\nMLE פואסון הוא מועדף שני בבחינה אחרי בינומי. הלוג-נראות לינארי ב-$\\sum x_i$ בתוספת ln; גזירה נותנת צורה סגורה. שימו לב לדפוס: במודלים רבים של exponential family, MLE של פרמטר הממוצע הוא $\\bar{X}$.\n\n### צעד 1: נראות\n$$L(\\lambda) = e^{-n\\lambda}\\lambda^{\\sum x_i}\\cdot\\prod_{i=1}^n\\frac{1}{x_i!}.$$\n\n### צעד 2: לוג-נראות (השמיטו $\\sum\\ln(x_i!)$)\n$$\\ell(\\lambda) = -n\\lambda + \\left(\\sum_{i=1}^n x_i\\right)\\ln\\lambda + \\text{const}.$$\n\n### צעד 3: משוואת score\n$$\\frac{d\\ell}{d\\lambda} = -n + \\frac{\\sum x_i}{\\lambda} = 0.$$\n\n### צעד 4: פתרון\n$$\\hat{\\lambda} = \\frac{1}{n}\\sum_{i=1}^n x_i = \\bar{x}.$$\n\n### צעד 5: אימות ופרשנות\n$\\ell''(\\lambda)=-\\sum x_i/\\lambda^2<0$ ב-$\\hat{\\lambda}$. ה-MLE שווה **ממוצע המדגם**, חסר הטיה ($E[\\bar{X}]=\\lambda$), עקבי ויעיל לנתוני פואסון.\n\n**בדיקה מספרית:** אם התצפיות 2, 3, 1, 4, 0, אז $\\hat{\\lambda}=10/5=2$. תמיד ודאו $\\hat{\\lambda}>0$; קצב פואסון חייב להיות חיובי."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — SE Shrinkage with Sample Size",
+      "title_he": "דוגמה פתורה 4 — הצטמקות SE עם גודל מדגם",
+      "body_en_md": "**Setup.** Population $\\sigma=12$. Compare $\\mathrm{SE}(\\bar X)$ for $n=36$ and $n=144$.\n\n### Move 1 — Formula\n$\\mathrm{SE}=\\sigma/\\sqrt n$.\n\n### Move 2 — Compute\n$n=36$: $\\mathrm{SE}=12/6=2$.\n$n=144$: $\\mathrm{SE}=12/12=1$.\n\n### Move 3 — Interpret\nQuadrupling $n$ halved the SE — the square-root law in action.\n\n### Move 4 — CI width\nA 95% CI half-width is about $1.96\\,\\mathrm{SE}$, so it also halves when $n$ grows by $4$.",
+      "body_he_md": "**הגדרה.** $\\sigma=12$. השוו $\\mathrm{SE}(\\bar X)$ ל-$n=36$ ול-$n=144$.\n\n### צעד 1 — נוסחה\n$\\mathrm{SE}=\\sigma/\\sqrt n$.\n\n### צעד 2 — חישוב\n$n=36$: $\\mathrm{SE}=2$. $n=144$: $\\mathrm{SE}=1$.\n\n### צעד 3 — פרשנות\nהכפלת $n$ פי ארבע חתכה את ה-SE בחצי.\n\n### צעד 4 — רוחב רווח סמך\nחצי-רוחב של רווח 95% הוא כ-$1.96\\,\\mathrm{SE}$, ולכן גם הוא נחתך בחצי."
     },
     {
       "kind": "method_guide",
@@ -275,8 +291,8 @@
       "difficulty": "easy",
       "stem_en": "Increasing the sample size $n$ makes the standard error:",
       "stem_he": "הגדלת גודל המדגם $n$ גורמת לשגיאת התקן:",
-      "explanation_en": "**$SE=\\sigma/\\sqrt n$ shrinks as $n$ grows.**\n\n**Answer:** smaller.",
-      "explanation_he": "**$SE=\\sigma/\\sqrt n$ קטן ככל ש-$n$ גדל.**\n\n**תשובה:** קטנה.",
+      "explanation_en": "**$SE=\\sigma/\\sqrt n$ shrinks as $n$ grows.**\n\n**Answer:** smaller.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=\\sigma/\\sqrt n$ קטן ככל ש-$n$ גדל.**\n\n**תשובה:** קטנה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -309,7 +325,10 @@
         "$\\text{unchanged}$",
         "$\\text{negative}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -317,8 +336,8 @@
       "difficulty": "easy",
       "stem_en": "Find the standard error for $\\sigma=10,\\ n=25$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=10,\\ n=25$.",
-      "explanation_en": "**$SE=\\dfrac{\\sigma}{\\sqrt n}=\\dfrac{10}{5}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$SE=\\dfrac{10}{5}=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$SE=\\dfrac{\\sigma}{\\sqrt n}=\\dfrac{10}{5}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=\\dfrac{10}{5}=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -327,7 +346,15 @@
       },
       "source_item_id": "962a9599-d9dc-5c79-88ed-1dda27a1c0bd",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 3,
@@ -335,8 +362,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: the sample mean is an unbiased estimator of the population mean.",
       "stem_he": "נכון או לא נכון: ממוצע המדגם הוא אומד חסר-הטיה לתוחלת האוכלוסייה.",
-      "explanation_en": "**$E[\\bar X]=\\mu$** — **true**.",
-      "explanation_he": "**$E[\\bar X]=\\mu$** — **נכון**.",
+      "explanation_en": "**$E[\\bar X]=\\mu$** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$E[\\bar X]=\\mu$** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "estimation"
       ],
@@ -345,7 +372,10 @@
       },
       "source_item_id": "46a0eaba-64dd-517b-b831-98bbe7d98a9f",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -353,8 +383,8 @@
       "difficulty": "hard",
       "stem_en": "For $\\sigma=20,\\ n=25$, find the $95\\%$ margin of error.",
       "stem_he": "עבור $\\sigma=20,\\ n=25$, מצאו את שולי הטעות ב-$95\\%$.",
-      "explanation_en": "**Step 1 — Standard error.** $SE=\\dfrac{20}{\\sqrt{25}}=4$.\n\n**Step 2 — Multiply by $1.96$.** $1.96\\cdot 4=7.84$.\n\n**Answer:** $7.84$.",
-      "explanation_he": "**שלב 1 — שגיאת תקן.** $SE=4$.\n\n**שלב 2 — כפל ב-$1.96$.** $7.84$.\n\n**תשובה:** $7.84$.",
+      "explanation_en": "**Step 1 — Standard error.** $SE=\\dfrac{20}{\\sqrt{25}}=4$.\n\n**Step 2 — Multiply by $1.96$.** $1.96\\cdot 4=7.84$.\n\n**Answer:** $7.84$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1 — שגיאת תקן.** $SE=4$.\n\n**שלב 2 — כפל ב-$1.96$.** $7.84$.\n\n**תשובה:** $7.84$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "margin_of_error"
       ],
@@ -373,7 +403,11 @@
       "source_item_id": "aea912c2-153e-5bbe-bcaf-284ff2a4de12",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -381,8 +415,8 @@
       "difficulty": "easy",
       "stem_en": "Find the standard error for $\\sigma=20,\\ n=100$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=20,\\ n=100$.",
-      "explanation_en": "**$SE=\\dfrac{20}{10}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$SE=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$SE=\\dfrac{20}{10}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -391,7 +425,15 @@
       },
       "source_item_id": "788fa648-c6ba-5ad4-80dd-4becf51e583b",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 6,
@@ -399,8 +441,8 @@
       "difficulty": "easy",
       "stem_en": "Find the standard error for $\\sigma=15,\\ n=9$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=15,\\ n=9$.",
-      "explanation_en": "**$SE=\\dfrac{15}{3}=5$.**\n\n**Answer:** $5$.",
-      "explanation_he": "**$SE=5$.**\n\n**תשובה:** $5$.",
+      "explanation_en": "**$SE=\\dfrac{15}{3}=5$.**\n\n**Answer:** $5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=5$.**\n\n**תשובה:** $5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -409,7 +451,15 @@
       },
       "source_item_id": "2f0f2fb2-e81e-576e-9e9d-38d62cbb2da8",
       "points_level_min": "5pt",
-      "correct_answer": "5"
+      "correct_answer": "5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "5",
+        "expected": 5,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 7,
@@ -417,8 +467,8 @@
       "difficulty": "medium",
       "stem_en": "The Central Limit Theorem says the distribution of sample means is approximately:",
       "stem_he": "משפט הגבול המרכזי קובע שהתפלגות ממוצעי המדגם היא בקירוב:",
-      "explanation_en": "**By the CLT, $\\bar X$ is approximately normal for large $n$.**\n\n**Answer:** normal.",
-      "explanation_he": "**לפי משפט הגבול המרכזי, $\\bar X$ מתפלג נורמלית בקירוב.**\n\n**תשובה:** נורמלית.",
+      "explanation_en": "**By the CLT, $\\bar X$ is approximately normal for large $n$.**\n\n**Answer:** normal.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**לפי משפט הגבול המרכזי, $\\bar X$ מתפלג נורמלית בקירוב.**\n\n**תשובה:** נורמלית.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "clt"
       ],
@@ -451,7 +501,10 @@
         "$\\text{exponential}$",
         "$\\text{binomial}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -459,8 +512,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $95\\%$ margin of error ($1.96\\,SE$) for $\\sigma=10,\\ n=100$.",
       "stem_he": "מצאו את שולי הטעות ב-$95\\%$ ($1.96\\,SE$) עבור $\\sigma=10,\\ n=100$.",
-      "explanation_en": "**$SE=1$; margin $=1.96$.**\n\n**Answer:** $1.96$.",
-      "explanation_he": "**$SE=1$; שוליים $=1.96$.**\n\n**תשובה:** $1.96$.",
+      "explanation_en": "**$SE=1$; margin $=1.96$.**\n\n**Answer:** $1.96$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=1$; שוליים $=1.96$.**\n\n**תשובה:** $1.96$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "margin_of_error"
       ],
@@ -469,7 +522,15 @@
       },
       "source_item_id": "ca9e8b9a-88dd-5246-a0a2-c0d2db330b9c",
       "points_level_min": "5pt",
-      "correct_answer": "1.96"
+      "correct_answer": "1.96",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.96",
+        "expected": 1.96,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 9,
@@ -477,8 +538,8 @@
       "difficulty": "medium",
       "stem_en": "Find the standard error for $\\sigma=8,\\ n=16$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=8,\\ n=16$.",
-      "explanation_en": "**$SE=\\dfrac{8}{4}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$SE=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$SE=\\dfrac{8}{4}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -487,7 +548,15 @@
       },
       "source_item_id": "88ed0200-af1c-51e0-a790-c9127e0bd505",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 10,
@@ -495,8 +564,8 @@
       "difficulty": "medium",
       "stem_en": "Find the $95\\%$ CI half-width for $\\sigma=5,\\ n=25$.",
       "stem_he": "מצאו את חצי-רוחב רווח הסמך $95\\%$ עבור $\\sigma=5,\\ n=25$.",
-      "explanation_en": "**$SE=1$; half-width $=1.96\\cdot 1=1.96$.**\n\n**Answer:** $1.96$.",
-      "explanation_he": "**חצי-רוחב $=1.96$.**\n\n**תשובה:** $1.96$.",
+      "explanation_en": "**$SE=1$; half-width $=1.96\\cdot 1=1.96$.**\n\n**Answer:** $1.96$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**חצי-רוחב $=1.96$.**\n\n**תשובה:** $1.96$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "confidence_interval"
       ],
@@ -505,7 +574,15 @@
       },
       "source_item_id": "e9c5aa36-9f9a-58e7-920e-e9f3b785264d",
       "points_level_min": "5pt",
-      "correct_answer": "1.96"
+      "correct_answer": "1.96",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1.96",
+        "expected": 1.96,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 11,
@@ -513,8 +590,8 @@
       "difficulty": "medium",
       "stem_en": "Find the standard error for $\\sigma=12,\\ n=36$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=12,\\ n=36$.",
-      "explanation_en": "**$SE=\\dfrac{12}{6}=2$.**\n\n**Answer:** $2$.",
-      "explanation_he": "**$SE=2$.**\n\n**תשובה:** $2$.",
+      "explanation_en": "**$SE=\\dfrac{12}{6}=2$.**\n\n**Answer:** $2$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=2$.**\n\n**תשובה:** $2$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -523,7 +600,15 @@
       },
       "source_item_id": "6708ac75-0a5c-52b8-bfe5-d3176a5a9822",
       "points_level_min": "5pt",
-      "correct_answer": "2"
+      "correct_answer": "2",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2",
+        "expected": 2,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 12,
@@ -531,8 +616,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: a larger sample yields a narrower confidence interval.",
       "stem_he": "נכון או לא נכון: מדגם גדול יותר מניב רווח סמך צר יותר.",
-      "explanation_en": "**Smaller $SE$ $\\Rightarrow$ narrower interval** — **true**.",
-      "explanation_he": "**$SE$ קטן יותר $\\Rightarrow$ רווח צר יותר** — **נכון**.",
+      "explanation_en": "**Smaller $SE$ $\\Rightarrow$ narrower interval** — **true**.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE$ קטן יותר $\\Rightarrow$ רווח צר יותר** — **נכון**.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "confidence_interval"
       ],
@@ -541,7 +626,10 @@
       },
       "source_item_id": "03c01c08-bd13-5aed-8839-40ecf1687680",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -549,8 +637,8 @@
       "difficulty": "hard",
       "stem_en": "Find the standard error for $\\sigma=30,\\ n=100$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=30,\\ n=100$.",
-      "explanation_en": "**$SE=\\dfrac{30}{10}=3$.**\n\n**Answer:** $3$.",
-      "explanation_he": "**$SE=3$.**\n\n**תשובה:** $3$.",
+      "explanation_en": "**$SE=\\dfrac{30}{10}=3$.**\n\n**Answer:** $3$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=3$.**\n\n**תשובה:** $3$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -559,7 +647,15 @@
       },
       "source_item_id": "36450e79-9cd9-5e68-bf12-e3340b8bc0f6",
       "points_level_min": "5pt",
-      "correct_answer": "3"
+      "correct_answer": "3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "3",
+        "expected": 3,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 14,
@@ -567,8 +663,8 @@
       "difficulty": "hard",
       "stem_en": "Find the $99\\%$ margin of error ($2.576\\,SE$) for $\\sigma=10,\\ n=100$.",
       "stem_he": "מצאו את שולי הטעות ב-$99\\%$ ($2.576\\,SE$) עבור $\\sigma=10,\\ n=100$.",
-      "explanation_en": "**$SE=1$; margin $=2.576$.**\n\n**Answer:** $2.576$.",
-      "explanation_he": "**שוליים $=2.576$.**\n\n**תשובה:** $2.576$.",
+      "explanation_en": "**$SE=1$; margin $=2.576$.**\n\n**Answer:** $2.576$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שוליים $=2.576$.**\n\n**תשובה:** $2.576$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "margin_of_error"
       ],
@@ -577,7 +673,15 @@
       },
       "source_item_id": "d5428643-78fe-57a8-b02f-95ebc3e1b6bd",
       "points_level_min": "5pt",
-      "correct_answer": "2.576"
+      "correct_answer": "2.576",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "2.576",
+        "expected": 2.576,
+        "tol": 0.000001
+      }
     },
     {
       "ord": 15,
@@ -585,8 +689,8 @@
       "difficulty": "hard",
       "stem_en": "Find the standard error for $\\sigma=10,\\ n=400$.",
       "stem_he": "מצאו את שגיאת התקן עבור $\\sigma=10,\\ n=400$.",
-      "explanation_en": "**$SE=\\dfrac{10}{20}=0.5$** (quadrupling $n$ halves $SE$).\n\n**Answer:** $0.5$.",
-      "explanation_he": "**$SE=0.5$.**\n\n**תשובה:** $0.5$.",
+      "explanation_en": "**$SE=\\dfrac{10}{20}=0.5$** (quadrupling $n$ halves $SE$).\n\n**Answer:** $0.5$.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**$SE=0.5$.**\n\n**תשובה:** $0.5$.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
       "skill_atoms": [
         "standard_error"
       ],
@@ -595,7 +699,425 @@
       },
       "source_item_id": "8fe28326-31ea-5e50-95a2-085e6100abeb",
       "points_level_min": "5pt",
-      "correct_answer": "0.5"
+      "correct_answer": "0.5",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.5",
+        "expected": 0.5,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 16,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "SE of the sample mean is σ / ____.",
+      "stem_he": "SE של ממוצע המדגם הוא σ / ____.",
+      "explanation_en": "**Step 1.** Recall the definition from this lesson.\n\n**Step 2.** The missing token completes the standard formula.\n\n**Step 3.** Answer: sqrt(n).\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** נזכרים בהגדרה מהשיעור.\n\n**שלב 2.** המילה החסרה משלימה את הנוסחה.\n\n**שלב 3.** תשובה: sqrt(n).\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "sqrt(n)",
+          "√n",
+          "n^{1/2}"
+        ]
+      }
+    },
+    {
+      "ord": 17,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Does quadrupling n roughly halve SE( X̄ )? (yes/no)",
+      "stem_he": "האם הכפלת n פי ארבע מקרבת לחציית SE(X̄)? (yes/no)",
+      "explanation_en": "**Step 1.** Apply the core definition carefully.\n\n**Step 2.** Avoid the common misconception named in the stem.\n\n**Step 3.** Answer: yes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** מפעילים את ההגדרה בזהירות.\n\n**שלב 2.** נמנעים מהטעות הנפוצה.\n\n**שלב 3.** תשובה: yes.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "yes",
+          "Yes"
+        ]
+      }
+    },
+    {
+      "ord": 18,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Match each concept to the correct description.",
+      "stem_he": "התאימו כל מושג לתיאור הנכון.",
+      "explanation_en": "Matching separates definitions that students often conflate on exams.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "ההתאמה מפרידה הגדרות שסטודנטים מערבבים לעיתים בבחינה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "pairs_en": [
+          {
+            "left": "Estimator",
+            "right": "random function of data"
+          },
+          {
+            "left": "SE",
+            "right": "SD of an estimator"
+          },
+          {
+            "left": "CLT",
+            "right": " X̄ approx normal"
+          },
+          {
+            "left": "Bias",
+            "right": "E[θ̂]−θ"
+          }
+        ],
+        "pairs_he": [
+          {
+            "left": "אומד",
+            "right": "פונקציה מקרית של נתונים"
+          },
+          {
+            "left": "SE",
+            "right": "סטיית תקן של אומד"
+          },
+          {
+            "left": "CLT",
+            "right": "X̄ בקירוב נורמלי"
+          },
+          {
+            "left": "הטייה",
+            "right": "E[θ̂]−θ"
+          }
+        ]
+      }
+    },
+    {
+      "ord": 19,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Order the steps of the standard solution method for this topic.",
+      "stem_he": "סדרו את שלבי שיטת הפתרון הסטנדרטית לנושא זה.",
+      "explanation_en": "A stable step order prevents algebra-before-setup mistakes.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "סדר שלבים יציב מונע טעויות אלגברה-לפני-הצבה.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "order_en": [
+          "Identify parameter",
+          "Choose estimator",
+          "Compute/approximate SE",
+          "Build CI or report precision"
+        ],
+        "order_he": [
+          "זהו פרמטר",
+          "בחרו אומד",
+          "חשבו/קרבו SE",
+          "בנו CI או דיווח דיוק"
+        ]
+      }
+    },
+    {
+      "ord": 20,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "Select **all** correct statements.",
+      "stem_he": "סמנו את **כל** ההיגדים הנכונים.",
+      "explanation_en": "Each false option encodes a standard exam misconception for this topic.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "כל אפשרות שגויה מקודדת טעות בחינה אופיינית לנושא.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "SE(X̄)=σ/√n when sampling from SD σ",
+        "CLT justifies normal approximations for large n",
+        "Bias is the same as variance",
+        "Larger n shrinks SE like 1/√n"
+      ],
+      "options_he": [
+        "SE(X̄)=σ/√n",
+        "CLT מצדיק קירוב נורמלי ל-n גדול",
+        "הטייה זהה לשונות",
+        "n גדול מקטין SE כמו 1/√n"
+      ],
+      "correct_indices": [
+        0,
+        1,
+        3
+      ],
+      "answer_payload": {
+        "options_en": [
+          "SE(X̄)=σ/√n when sampling from SD σ",
+          "CLT justifies normal approximations for large n",
+          "Bias is the same as variance",
+          "Larger n shrinks SE like 1/√n"
+        ],
+        "options_he": [
+          "SE(X̄)=σ/√n",
+          "CLT מצדיק קירוב נורמלי ל-n גדול",
+          "הטייה זהה לשונות",
+          "n גדול מקטין SE כמו 1/√n"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof",
+        "parametric"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "Derive Var(X̄)=σ²/n for i.i.d. samples with variance σ².",
+      "stem_he": "גזרו Var(X̄)=σ²/n למדגם i.i.d. עם שונות σ².",
+      "explanation_en": "**Step 1.** Write hypotheses.\n\n**Step 2.** Apply the lesson’s main theorem.\n\n**Step 3.** Finish the derivation to the claimed identity.\n\n**Step 4.** Box the final statement and note any hypotheses used.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** כתבו הנחות.\n\n**שלב 2.** הפעילו את משפט השיעור.\n\n**שלב 3.** סיימו את הגזירה.\n\n**שלב 4.** סמנו את הטענה הסופית וציינו הנחות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "State hypotheses / setup.",
+          "Apply the key theorem or identity.",
+          "Carry out the algebraic derivation.",
+          "Conclude with the boxed result."
+        ],
+        "steps_he": [
+          "ציינו הנחות / הצבה.",
+          "הפעילו את המשפט או הזהות.",
+          "בצעו את הגזירה האלגברית.",
+          "סיימו עם התוצאה המסומנת."
+        ]
+      },
+      "rubric_en": "Full marks: clear derivation with hypotheses stated and a justified conclusion.",
+      "rubric_he": "ניקוד מלא: גזירה ברורה עם הנחות ומסקנה מנומקת."
+    },
+    {
+      "ord": 22,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "needs_review": true,
+      "stem_en": "σ=10, n=25. Find SE(X̄).",
+      "stem_he": "σ=10, n=25. מצאו SE(X̄).",
+      "explanation_en": "**Step 1.** Set up from definitions.\n\n**Step 2.** Compute carefully.\n\n**Step 3.** Final answer: 2.\n\n**Step 4.** State what the number means in the model.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** הציבו מההגדרות.\n\n**שלב 2.** חשבו בזהירות.\n\n**שלב 3.** תשובה: 2.\n\n**שלב 4.** פרשו את המספר במודל.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "answer_payload": {
+        "steps_en": [
+          "Set up using the lesson definition.",
+          "Compute intermediate quantities.",
+          "Obtain 2.",
+          "Interpret briefly in context."
+        ],
+        "steps_he": [
+          "הציבו לפי הגדרת השיעור.",
+          "חשבו כמויות ביניים.",
+          "קבלו 2.",
+          "פרשו בקצרה בהקשר."
+        ]
+      },
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה שלב-אחר-שלב ותשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון."
+    },
+    {
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "An unbiased estimator has:",
+      "stem_he": "לאומד חסר הטייה יש:",
+      "explanation_en": "**Reasoning.** The correct option matches the definition used throughout the lesson.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**נימוק.** האפשרות הנכונה תואמת את ההגדרה בשיעור.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "E[θ̂]=θ",
+        "Var=0 always",
+        "SE=θ",
+        "n=1 only"
+      ],
+      "options_he": [
+        "E[θ̂]=θ",
+        "Var=0 תמיד",
+        "SE=θ",
+        "רק n=1"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "E[θ̂]=θ",
+          "Var=0 always",
+          "SE=θ",
+          "n=1 only"
+        ],
+        "options_he": [
+          "E[θ̂]=θ",
+          "Var=0 תמיד",
+          "SE=θ",
+          "רק n=1"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "ord": 24,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "SE if σ=12 and n=36?",
+      "stem_he": "SE אם σ=12 ו-n=36?",
+      "explanation_en": "**Step 1.** Identify the formula.\n\n**Step 2.** Substitute values.\n\n**Step 3.** Result 2.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** זהו את הנוסחה.\n\n**שלב 2.** הציבו ערכים.\n\n**שלב 3.** התוצאה 2.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "2",
+      "answer_payload": {
+        "value": 2
+      },
+      "verify": {
+        "expr": "12/sqrt(36)",
+        "expected": 2,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 25,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "The CLT can apply even when the population is not normal (large n).",
+      "stem_he": "CLT יכול לחול גם כשהאוכלוסייה אינה נורמלית (n גדול).",
+      "explanation_en": "**Evaluation.** The statement is true by the lesson’s definitions.\n\n**Key point.** Check hypotheses before accepting slogans.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**הערכה.** ההיגד נכון לפי הגדרות השיעור.\n\n**נקודה.** בדקו הנחות לפני שמקבלים סיסמאות.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": true,
+      "answer_payload": {
+        "correct": true
+      }
+    },
+    {
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "reverse"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "SE if σ=12 and n=144?",
+      "stem_he": "SE אם σ=12 ו-n=144?",
+      "explanation_en": "**Step 1.** Rearrange or evaluate the defining expression.\n\n**Step 2.** Use powers carefully (e.g. a^b in verify).\n\n**Step 3.** Result 1.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**שלב 1.** סדרו מחדש או העריכו את הביטוי.\n\n**שלב 2.** זהירות בחזקות.\n\n**שלב 3.** התוצאה 1.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "correct_answer": "1",
+      "answer_payload": {
+        "value": 1
+      },
+      "verify": {
+        "expr": "12/sqrt(144)",
+        "expected": 1,
+        "tol": 0.000001
+      }
+    },
+    {
+      "ord": 27,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "points_level_min": "university",
+      "stem_en": "To cut SE in half you should multiply n by about:",
+      "stem_he": "כדי לחתוך SE בחצי יש להכפיל n בערך ב:",
+      "explanation_en": "**Picture the situation.** The best choice aligns with the geometric/statistical intuition from the worked examples.\n\n**Answer index:** 0.\n\n**Why this works.** Each step follows the definitions and theorems from this lesson; equalities hold under the stated hypotheses, so the final value is forced once the setup is correct.\n\n**Common mistake.** Mixing numerator/denominator roles, forgetting a hypothesis (independence, continuity, equal variance), or dropping a Jacobian/df factor produces a plausible but wrong answer.\n\n**Exam tip.** In university sampling and estimation, name the theorem or definition first, keep algebraic steps readable, state hypotheses before concluding, and box a simplified final answer. A bare number without method usually loses credit.",
+      "explanation_he": "**דמיינו את המצב.** הבחירה הטובה תואמת את האינטואיציה מהדוגמאות.\n\n**אינדקס:** 0.\n\n**למה זה עובד.** כל שלב נובע מההגדרות והמשפטים בשיעור; השוויונות תקפים תחת ההנחות, ולכן הערך הסופי נקבע ברגע שההצבה נכונה.\n\n**טעות נפוצה.** ערבוב מונה/מכנה, שכחת הנחה (אי-תלות, רציפות, שונויות שוות), או השמטת יעקוביאן/דרגות חופש מייצרים תשובה סבירה אך שגויה.\n\n**טיפ לבחינה.** בדגימה ואמידה באוניברסיטה ציינו קודם את המשפט או ההגדרה, שמרו על שלבים קריאים, ציינו הנחות לפני המסקנה, וסמנו תשובה סופית מפושטת. מספר בלי שיטה בדרך כלל מוריד נקודות.",
+      "options_en": [
+        "4",
+        "2",
+        "1/2",
+        "10"
+      ],
+      "options_he": [
+        "4",
+        "2",
+        "1/2",
+        "10"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "4",
+          "2",
+          "1/2",
+          "10"
+        ],
+        "options_he": [
+          "4",
+          "2",
+          "1/2",
+          "10"
+        ],
+        "correct_index": 0
+      }
     }
   ],
   "est_minutes": 50,

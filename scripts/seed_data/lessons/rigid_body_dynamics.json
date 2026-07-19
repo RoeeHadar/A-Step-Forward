@@ -33,6 +33,14 @@
       "body_he_md": "### מה פירוש \"גלגול ללא החלקה\"?\n\nכשגלגל גולל על משטח בלי החלקה, נקודת המגע **נמצאת ברגע מנוחה** ביחס לקרקע. האילוץ הגאומטרי מקשר תנועה לינארית לזוויתית:\n$$v_{\\text{cm}} = R\\omega \\quad \\Rightarrow \\quad a_{\\text{cm}} = R\\alpha$$\n\nאם הגוף מחליק, הקשר נשבר — יש להשתמש בחוקי ניוטון ובניתוח חיכוך, לא רק בשימור אנרגיה.\n\n### אנרגיה קינטית של גוף גולל\n\nה-KE הכולל מתחלק לתנועה של מרכז המסה ולסיבוב סביב ה-CM:\n$$K = \\frac{1}{2}Mv^2 + \\frac{1}{2}I\\omega^2$$\n\nהצבת $\\omega = v/R$ בגלגול ללא החלקה:\n$$K = \\frac{1}{2}Mv^2\\left(1 + \\frac{I}{MR^2}\\right)$$\n\nהגדרת **שבר אינרציה חסר מימד** $I_{\\text{rel}} = I/(MR^2)$. $I_{\\text{rel}}$ קטן יותר → חלק גדול יותר מהאנרגיה הולך לתנועה.\n\n| גוף | $I_{\\text{rel}}$ | $K$ ב-$Mv^2$ |\n|---|---|---|\n| כדור מלא | 0.40 | $\\frac{7}{10}Mv^2$ |\n| גליל מלא | 0.50 | $\\frac{3}{4}Mv^2$ |\n| כדור חלול | 0.67 | $\\frac{5}{6}Mv^2$ |\n| טבעת דקה | 1.00 | $Mv^2$ |\n\n### מי מגלגל מהר יותר במדרון?\n\nשימור אנרגיה מגובה $h$ (ממנוחה):\n$$Mgh = \\frac{1}{2}Mv^2\\left(1 + \\frac{I}{MR^2}\\right) \\quad \\Rightarrow \\quad v = \\sqrt{\\frac{2gh}{1 + I/(MR^2)}}$$\n\n$I/(MR^2)$ קטן יותר → מהירות סופית גדולה יותר. כדור מלא מנצח גליל מלא, שמנצח כדור חלול, שמנצח טבעת — **גם עם אותה מסה ורדיוס**.\n\n### גישת חוקי ניוטון (חלופה)\n\nלגליל על מישור משופע: תנועה $Mg\\sin\\theta - f = Ma$ וסיבוב (סביב CM) $fR = I\\alpha$. עם $a = R\\alpha$ ו-$I = \\frac{1}{2}MR^2$ מקבלים $a = \\frac{2}{3}g\\sin\\theta$ — אותה תוצאה כמו אנרגיה."
     },
     {
+      "id": "rigid_body_dynamics_theory_2",
+      "kind": "theory",
+      "title_en": "Euler / Newton for rotation and translation",
+      "title_he": "אוילר/ניוטון לסיבוב ותנועה קווית",
+      "body_en_md": "A rigid body has six degrees of freedom: three translational (CM motion $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$) and three rotational. About a principal axis fixed in the body (or a fixed axis in the lab), $\\tau_z=I_z\\alpha$. More generally $\\vec\\tau_{\\text{cm}}=d\\vec L_{\\text{cm}}/dt$ with $\\vec L=\\mathbf I\\boldsymbol\\omega$. Kinetic energy splits as $K=\\tfrac12 M V_{\\text{cm}}^2+\\tfrac12\\boldsymbol\\omega\\cdot\\vec L$. Rolling without slipping links $a=\\alpha R$ and $v=\\omega R$; static friction may do no work if the contact point is instantaneously at rest. Always draw free-body and torque diagrams about a consistent point (CM or contact).",
+      "body_he_md": "לגוף קשיח יש שש דרגות חופש: שלוש תנועה קווית (תנועת מרכז מסה $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$) ושלוש סיבוב. סביב ציר ראשי קבוע בגוף (או ציר קבוע במעבדה), $\\tau_z=I_z\\alpha$. באופן כללי $\\vec\\tau_{\\text{cm}}=d\\vec L_{\\text{cm}}/dt$ עם $\\vec L=\\mathbf I\\boldsymbol\\omega$. האנרגיה הקינטית מתפרקת $K=\\tfrac12 M V_{\\text{cm}}^2+\\tfrac12\\boldsymbol\\omega\\cdot\\vec L$. גלגול בלי החלקה קושר $a=\\alpha R$ ו-$v=\\omega R$; חיכוך סטטי עשוי לא לבצע עבודה אם נקודת המגע במנוחה רגעית. תמיד שרטטו דיאגרמת כוחות ומומנטים סביב נקודה עקבית (מרכז מסה או מגע)."
+    },
+    {
       "id": "worked_example_1",
       "kind": "worked_example",
       "difficulty": "easy",
@@ -81,6 +89,14 @@
       "title_he": "דוגמה פתורה 3 — מכונת אטווד עם גלגלת",
       "body_en_md": "**Given:** Two masses ($m_1 = 3\\;\\text{kg}$, $m_2 = 5\\;\\text{kg}$) hang over a pulley modeled as a solid disk ($M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$). The string does not slip on the pulley. Find the acceleration of the system.\n\nWhen the pulley has mass, tensions on the two sides differ — the pulley rotates.\n\n### Move 1 — Newton's laws for each mass\nTaking down as positive for $m_2$, up as positive for $m_1$:\n$$m_2 g - T_2 = m_2 a$$\n$$T_1 - m_1 g = m_1 a$$\n\n### Move 2 — Torque on the pulley\nThe net torque about the pulley centre (CCW positive):\n$$\\tau_{\\text{net}} = (T_2 - T_1)R = I\\alpha$$\nWith $I = \\frac{1}{2}MR^2$ and no slipping $\\alpha = a/R$:\n$$(T_2 - T_1)R = \\frac{1}{2}MR^2 \\cdot \\frac{a}{R} \\quad \\Rightarrow \\quad T_2 - T_1 = \\frac{1}{2}Ma$$\n\n### Move 3 — Combine equations\nSubtract the mass equations: $(m_2 - m_1)g - (T_2 - T_1) = (m_1 + m_2)a$.\nSubstitute $T_2 - T_1 = \\frac{1}{2}Ma$:\n$$(m_2 - m_1)g - \\frac{1}{2}Ma = (m_1 + m_2)a$$\n$$a = \\frac{(m_2 - m_1)g}{m_1 + m_2 + M/2} = \\frac{(5-3)(10)}{3+5+1} = \\frac{20}{9} \\approx 2.22\\;\\text{m/s}^2$$\n\n**Compare:** Massless pulley would give $a = 2.5$ m/s². The massive pulley slows the system.\n\n### Move 4 — Find tensions (optional check)\n$T_1 = m_1(g+a) = 3(12.22) \\approx 36.7$ N. $T_2 = m_2(g-a) = 5(7.78) \\approx 38.9$ N. Note $T_2 > T_1$ as required for CCW pulley rotation.\n\n**Answer:** $a \\approx 2.22$ m/s².",
       "body_he_md": "**נתון:** שתי מסות ($m_1 = 3\\;\\text{kg}$, $m_2 = 5\\;\\text{kg}$) על גלגלת-דיסק ($M = 2\\;\\text{kg}$, $R = 0.1\\;\\text{m}$). החבל לא מחליק. מצאו תאוצת המערכת.\n\nכשלגלגלת יש מסה, המתיחויות בשני הצדדים שונות — הגלגלת מסתובבת.\n\n### צעד 1 — חוקי ניוטון לכל מסה\nמטה חיובי ל-$m_2$, מעלה חיובי ל-$m_1$:\n$$m_2 g - T_2 = m_2 a$$\n$$T_1 - m_1 g = m_1 a$$\n\n### צעד 2 — מומנט על הגלגלת\nמומנט נטו סביב מרכז הגלגלת (נגד השעון = חיובי):\n$$\\tau_{\\text{net}} = (T_2 - T_1)R = I\\alpha$$\nעם $I = \\frac{1}{2}MR^2$ וללא החלקה $\\alpha = a/R$:\n$$T_2 - T_1 = \\frac{1}{2}Ma$$\n\n### צעד 3 — שילוב משוואות\nחיסור משוואות המסות: $(m_2 - m_1)g - (T_2 - T_1) = (m_1 + m_2)a$.\nהצבת $T_2 - T_1 = \\frac{1}{2}Ma$:\n$$a = \\frac{(m_2 - m_1)g}{m_1 + m_2 + M/2} = \\frac{20}{9} \\approx 2.22\\;\\text{m/s}^2$$\n\n**השוואה:** גלגלת חסרת מסה הייתה נותנת $a = 2.5$ m/s². גלגלת עם מסה מאטה את המערכת.\n\n### צעד 4 — מציאת מתיחויות (בדיקה)\n$T_1 = m_1(g+a) \\approx 36.7$ N. $T_2 = m_2(g-a) \\approx 38.9$ N. שימו לב $T_2 > T_1$ כנדרש לסיבוב נגד כיוון השעון.\n\n**תשובה:** $a \\approx 2.22$ m/s²."
+    },
+    {
+      "id": "rigid_body_dynamics_worked_example_4",
+      "kind": "worked_example",
+      "title_en": "Yo-yo / spool: acceleration from $\\tau=I\\alpha$",
+      "title_he": "יו-יו/סליל: תאוצה מ-$\\tau=I\\alpha$",
+      "body_en_md": "### Move 1: Model\nDisk mass $M$, radius $R$, $I=\\tfrac12 MR^2$, string unwinds without slip, tension $T$, gravity $Mg$.\n\n### Move 2: Equations\nTranslation: $Mg-T=Ma$. Rotation about CM: $TR=I\\alpha=I a/R$.\n\n### Move 3: Solve\n$T=\\tfrac12 Ma$, so $Mg-\\tfrac12 Ma=Ma\\Rightarrow a=\\tfrac23 g$.\n\n### Move 4: Check\n$a<g$ as expected when rotation stores kinetic energy.",
+      "body_he_md": "### צעד 1: מודל\nדיסקת מסה $M$, רדיוס $R$, $I=\\tfrac12 MR^2$, חוט נפרם בלי החלקה, מתיחות $T$, כבידה $Mg$.\n\n### צעד 2: משוואות\nתנועה קווית: $Mg-T=Ma$. סיבוב סביב מרכז מסה: $TR=I\\alpha=I a/R$.\n\n### צעד 3: פתרון\n$T=\\tfrac12 Ma$, ולכן $Mg-\\tfrac12 Ma=Ma\\Rightarrow a=\\tfrac23 g$.\n\n### צעד 4: בדיקה\n$a<g$ כצפוי כשהסיבוב אוגר אנרגיה קינטית."
     },
     {
       "id": "method_guide",
@@ -276,7 +292,28 @@
   "author": "cursor-claude-2026",
   "version": 1,
   "level_focus": null,
-  "skill_atom_bank": null,
+  "skill_atom_bank": [
+    {
+      "id": "angular_momentum",
+      "label_en": "angular_momentum",
+      "label_he": "angular_momentum"
+    },
+    {
+      "id": "moment_of_inertia",
+      "label_en": "moment_of_inertia",
+      "label_he": "moment_of_inertia"
+    },
+    {
+      "id": "rotational_dynamics",
+      "label_en": "rotational_dynamics",
+      "label_he": "rotational_dynamics"
+    },
+    {
+      "id": "rotational_energy",
+      "label_en": "rotational_energy",
+      "label_he": "rotational_energy"
+    }
+  ],
   "questions": [
     {
       "ord": 1,
@@ -284,8 +321,8 @@
       "difficulty": "easy",
       "stem_en": "The rotational analog of Newton's second law $F=ma$ is:",
       "stem_he": "האנלוג הסיבובי של החוק השני של ניוטון $F=ma$ הוא:",
-      "explanation_en": "**Torque $=$ moment of inertia $\\times$ angular acceleration.**\n\n**Answer:** $\\tau=I\\alpha$.",
-      "explanation_he": "**מומנט $=$ מומנט התמד $\\times$ תאוצה זוויתית.**\n\n**תשובה:** $\\tau=I\\alpha$.",
+      "explanation_en": "**Torque $=$ moment of inertia $\\times$ angular acceleration.**\n\n**Answer:** $\\tau=I\\alpha$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**מומנט $=$ מומנט התמד $\\times$ תאוצה זוויתית.**\n\n**תשובה:** $\\tau=I\\alpha$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_dynamics"
       ],
@@ -318,7 +355,10 @@
         "$\\tau=mr$",
         "$\\tau=I/\\alpha$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 2,
@@ -326,8 +366,8 @@
       "difficulty": "easy",
       "stem_en": "Find the torque needed to give a body of moment of inertia $I=2\\,\\text{kg·m}^2$ an angular acceleration $\\alpha=3\\,\\text{rad/s}^2$ ($\\tau=I\\alpha$).",
       "stem_he": "מצאו את המומנט הדרוש כדי לתת לגוף בעל מומנט התמד $I=2\\,\\text{kg·m}^2$ תאוצה זוויתית $\\alpha=3\\,\\text{rad/s}^2$ ($\\tau=I\\alpha$).",
-      "explanation_en": "**$\\tau=I\\alpha=2\\cdot 3=6\\,\\text{N·m}$.**\n\n**Answer:** $6\\,\\text{N·m}$.",
-      "explanation_he": "**$\\tau=6\\,\\text{N·m}$.**\n\n**תשובה:** $6\\,\\text{N·m}$.",
+      "explanation_en": "**$\\tau=I\\alpha=2\\cdot 3=6\\,\\text{N·m}$.**\n\n**Answer:** $6\\,\\text{N·m}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$\\tau=6\\,\\text{N·m}$.**\n\n**תשובה:** $6\\,\\text{N·m}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_dynamics"
       ],
@@ -336,7 +376,10 @@
       },
       "source_item_id": "c83bd5cc-dd26-5822-a5a7-a82aafe2d6ad",
       "points_level_min": "5pt",
-      "correct_answer": "6"
+      "correct_answer": "6",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 3,
@@ -344,8 +387,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: the moment of inertia depends on how the mass is distributed about the axis.",
       "stem_he": "נכון או לא נכון: מומנט ההתמד תלוי באופן שבו המסה מתפלגת סביב הציר.",
-      "explanation_en": "**Mass farther from the axis contributes more** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**מסה רחוקה יותר מהציר תורמת יותר** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Mass farther from the axis contributes more** — **true**.\n\n**Answer:** true.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**מסה רחוקה יותר מהציר תורמת יותר** — **נכון**.\n\n**תשובה:** נכון.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "moment_of_inertia"
       ],
@@ -354,7 +397,10 @@
       },
       "source_item_id": "d35f8ebf-24ff-5ecb-b6f3-3140c179babf",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 4,
@@ -362,8 +408,8 @@
       "difficulty": "hard",
       "stem_en": "A solid disk with $m=4\\,\\text{kg}$, $r=1\\,\\text{m}$ gets angular acceleration $\\alpha=5\\,\\text{rad/s}^2$. Find the torque ($I=\\tfrac12 mr^2$, $\\tau=I\\alpha$).",
       "stem_he": "דיסק מלא עם $m=4\\,\\text{kg}$, $r=1\\,\\text{m}$ מקבל תאוצה זוויתית $\\alpha=5\\,\\text{rad/s}^2$. מצאו את המומנט ($I=\\tfrac12 mr^2$, $\\tau=I\\alpha$).",
-      "explanation_en": "**Step 1 — Inertia.** $I=\\tfrac12\\cdot 4\\cdot 1^2=2\\,\\text{kg·m}^2$.\n\n**Step 2 — Torque.** $\\tau=I\\alpha=2\\cdot 5$.\n\n**Step 3 — Evaluate.** $=10\\,\\text{N·m}$.\n\n**Answer:** $10\\,\\text{N·m}$.",
-      "explanation_he": "**שלב 1 — התמד.** $I=2\\,\\text{kg·m}^2$.\n\n**שלב 2 — מומנט.** $\\tau=I\\alpha=2\\cdot 5$.\n\n**שלב 3 — חישוב.** $10\\,\\text{N·m}$.\n\n**תשובה:** $10\\,\\text{N·m}$.",
+      "explanation_en": "**Step 1 — Inertia.** $I=\\tfrac12\\cdot 4\\cdot 1^2=2\\,\\text{kg·m}^2$.\n\n**Step 2 — Torque.** $\\tau=I\\alpha=2\\cdot 5$.\n\n**Step 3 — Evaluate.** $=10\\,\\text{N·m}$.\n\n**Answer:** $10\\,\\text{N·m}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**שלב 1 — התמד.** $I=2\\,\\text{kg·m}^2$.\n\n**שלב 2 — מומנט.** $\\tau=I\\alpha=2\\cdot 5$.\n\n**שלב 3 — חישוב.** $10\\,\\text{N·m}$.\n\n**תשובה:** $10\\,\\text{N·m}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_dynamics"
       ],
@@ -384,7 +430,12 @@
       "source_item_id": "c7165661-af14-54f1-bf45-45d9b3c8b2ce",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "5pt"
+      "points_level_min": "5pt",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "needs_review": true
     },
     {
       "ord": 5,
@@ -392,8 +443,8 @@
       "difficulty": "easy",
       "stem_en": "Find the moment of inertia of a point mass $m=2\\,\\text{kg}$ at radius $r=3\\,\\text{m}$ ($I=mr^2$).",
       "stem_he": "מצאו את מומנט ההתמד של מסה נקודתית $m=2\\,\\text{kg}$ ברדיוס $r=3\\,\\text{m}$ ($I=mr^2$).",
-      "explanation_en": "**$I=mr^2=2\\cdot 9=18\\,\\text{kg·m}^2$.**\n\n**Answer:** $18\\,\\text{kg·m}^2$.",
-      "explanation_he": "**$I=18\\,\\text{kg·m}^2$.**\n\n**תשובה:** $18\\,\\text{kg·m}^2$.",
+      "explanation_en": "**$I=mr^2=2\\cdot 9=18\\,\\text{kg·m}^2$.**\n\n**Answer:** $18\\,\\text{kg·m}^2$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$I=18\\,\\text{kg·m}^2$.**\n\n**תשובה:** $18\\,\\text{kg·m}^2$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "moment_of_inertia"
       ],
@@ -402,7 +453,10 @@
       },
       "source_item_id": "820e3533-97ee-5954-983a-f97be9372551",
       "points_level_min": "5pt",
-      "correct_answer": "18"
+      "correct_answer": "18",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 6,
@@ -410,8 +464,8 @@
       "difficulty": "easy",
       "stem_en": "Find the rotational kinetic energy $KE=\\tfrac12 I\\omega^2$ for $I=4\\,\\text{kg·m}^2$, $\\omega=2\\,\\text{rad/s}$.",
       "stem_he": "מצאו את האנרגיה הקינטית הסיבובית $KE=\\tfrac12 I\\omega^2$ עבור $I=4\\,\\text{kg·m}^2$, $\\omega=2\\,\\text{rad/s}$.",
-      "explanation_en": "**$KE=\\tfrac12\\cdot 4\\cdot 4=8\\,\\text{J}$.**\n\n**Answer:** $8\\,\\text{J}$.",
-      "explanation_he": "**$KE=8\\,\\text{J}$.**\n\n**תשובה:** $8\\,\\text{J}$.",
+      "explanation_en": "**$KE=\\tfrac12\\cdot 4\\cdot 4=8\\,\\text{J}$.**\n\n**Answer:** $8\\,\\text{J}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$KE=8\\,\\text{J}$.**\n\n**תשובה:** $8\\,\\text{J}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_energy"
       ],
@@ -420,7 +474,10 @@
       },
       "source_item_id": "dd1ecae8-4370-59b6-9442-9c5a61bddd19",
       "points_level_min": "5pt",
-      "correct_answer": "8"
+      "correct_answer": "8",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 7,
@@ -428,8 +485,8 @@
       "difficulty": "medium",
       "stem_en": "The SI unit of moment of inertia is:",
       "stem_he": "יחידת ה-SI של מומנט התמד היא:",
-      "explanation_en": "**$I$ has units kg·m$^2$.**\n\n**Answer:** kg·m$^2$.",
-      "explanation_he": "**ל-$I$ יחידות kg·m$^2$.**\n\n**תשובה:** kg·m$^2$.",
+      "explanation_en": "**$I$ has units kg·m$^2$.**\n\n**Answer:** kg·m$^2$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**ל-$I$ יחידות kg·m$^2$.**\n\n**תשובה:** kg·m$^2$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "moment_of_inertia"
       ],
@@ -462,7 +519,10 @@
         "$\\text{N·m}$",
         "$\\text{kg/m}^2$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 8,
@@ -470,8 +530,8 @@
       "difficulty": "medium",
       "stem_en": "Find the torque for $I=5\\,\\text{kg·m}^2$ and $\\alpha=4\\,\\text{rad/s}^2$.",
       "stem_he": "מצאו את המומנט עבור $I=5\\,\\text{kg·m}^2$ ו-$\\alpha=4\\,\\text{rad/s}^2$.",
-      "explanation_en": "**$\\tau=5\\cdot 4=20\\,\\text{N·m}$.**\n\n**Answer:** $20\\,\\text{N·m}$.",
-      "explanation_he": "**$\\tau=20\\,\\text{N·m}$.**\n\n**תשובה:** $20\\,\\text{N·m}$.",
+      "explanation_en": "**$\\tau=5\\cdot 4=20\\,\\text{N·m}$.**\n\n**Answer:** $20\\,\\text{N·m}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$\\tau=20\\,\\text{N·m}$.**\n\n**תשובה:** $20\\,\\text{N·m}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_dynamics"
       ],
@@ -480,7 +540,10 @@
       },
       "source_item_id": "ecee4d51-b33b-5ff3-a246-91d6f27d242c",
       "points_level_min": "5pt",
-      "correct_answer": "20"
+      "correct_answer": "20",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 9,
@@ -488,8 +551,8 @@
       "difficulty": "medium",
       "stem_en": "Find the angular acceleration for a net torque $\\tau=12\\,\\text{N·m}$ on $I=3\\,\\text{kg·m}^2$ ($\\alpha=\\tau/I$).",
       "stem_he": "מצאו את התאוצה הזוויתית עבור מומנט כולל $\\tau=12\\,\\text{N·m}$ על $I=3\\,\\text{kg·m}^2$ ($\\alpha=\\tau/I$).",
-      "explanation_en": "**$\\alpha=\\dfrac{12}{3}=4\\,\\text{rad/s}^2$.**\n\n**Answer:** $4\\,\\text{rad/s}^2$.",
-      "explanation_he": "**$\\alpha=4\\,\\text{rad/s}^2$.**\n\n**תשובה:** $4\\,\\text{rad/s}^2$.",
+      "explanation_en": "**$\\alpha=\\dfrac{12}{3}=4\\,\\text{rad/s}^2$.**\n\n**Answer:** $4\\,\\text{rad/s}^2$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$\\alpha=4\\,\\text{rad/s}^2$.**\n\n**תשובה:** $4\\,\\text{rad/s}^2$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_dynamics"
       ],
@@ -498,7 +561,10 @@
       },
       "source_item_id": "f6bd8bcf-85d0-5153-a24b-6be66684fe24",
       "points_level_min": "5pt",
-      "correct_answer": "4"
+      "correct_answer": "4",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 10,
@@ -506,8 +572,8 @@
       "difficulty": "medium",
       "stem_en": "Find the moment of inertia of a solid disk $I=\\tfrac12 mr^2$ for $m=4\\,\\text{kg}$, $r=2\\,\\text{m}$.",
       "stem_he": "מצאו את מומנט ההתמד של דיסק מלא $I=\\tfrac12 mr^2$ עבור $m=4\\,\\text{kg}$, $r=2\\,\\text{m}$.",
-      "explanation_en": "**$I=\\tfrac12\\cdot 4\\cdot 4=8\\,\\text{kg·m}^2$.**\n\n**Answer:** $8\\,\\text{kg·m}^2$.",
-      "explanation_he": "**$I=8\\,\\text{kg·m}^2$.**\n\n**תשובה:** $8\\,\\text{kg·m}^2$.",
+      "explanation_en": "**$I=\\tfrac12\\cdot 4\\cdot 4=8\\,\\text{kg·m}^2$.**\n\n**Answer:** $8\\,\\text{kg·m}^2$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$I=8\\,\\text{kg·m}^2$.**\n\n**תשובה:** $8\\,\\text{kg·m}^2$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "moment_of_inertia"
       ],
@@ -516,7 +582,10 @@
       },
       "source_item_id": "bd480ff9-ca1b-52f4-882e-d12f990a2daa",
       "points_level_min": "5pt",
-      "correct_answer": "8"
+      "correct_answer": "8",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 11,
@@ -524,8 +593,8 @@
       "difficulty": "medium",
       "stem_en": "Find the rotational KE for $I=2\\,\\text{kg·m}^2$, $\\omega=3\\,\\text{rad/s}$.",
       "stem_he": "מצאו את האנרגיה הקינטית הסיבובית עבור $I=2\\,\\text{kg·m}^2$, $\\omega=3\\,\\text{rad/s}$.",
-      "explanation_en": "**$KE=\\tfrac12\\cdot 2\\cdot 9=9\\,\\text{J}$.**\n\n**Answer:** $9\\,\\text{J}$.",
-      "explanation_he": "**$KE=9\\,\\text{J}$.**\n\n**תשובה:** $9\\,\\text{J}$.",
+      "explanation_en": "**$KE=\\tfrac12\\cdot 2\\cdot 9=9\\,\\text{J}$.**\n\n**Answer:** $9\\,\\text{J}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$KE=9\\,\\text{J}$.**\n\n**תשובה:** $9\\,\\text{J}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_energy"
       ],
@@ -534,7 +603,10 @@
       },
       "source_item_id": "3e43a6df-6c08-5756-bdf2-068c8b9bf346",
       "points_level_min": "5pt",
-      "correct_answer": "9"
+      "correct_answer": "9",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 12,
@@ -542,8 +614,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: the moment of inertia of a uniform solid disk about its center is $\\tfrac12 mr^2$.",
       "stem_he": "נכון או לא נכון: מומנט ההתמד של דיסק אחיד מלא סביב מרכזו הוא $\\tfrac12 mr^2$.",
-      "explanation_en": "**Solid disk: $I=\\tfrac12 mr^2$** — **true**.\n\n**Answer:** true.",
-      "explanation_he": "**דיסק מלא: $I=\\tfrac12 mr^2$** — **נכון**.\n\n**תשובה:** נכון.",
+      "explanation_en": "**Solid disk: $I=\\tfrac12 mr^2$** — **true**.\n\n**Answer:** true.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**דיסק מלא: $I=\\tfrac12 mr^2$** — **נכון**.\n\n**תשובה:** נכון.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "moment_of_inertia"
       ],
@@ -552,7 +624,10 @@
       },
       "source_item_id": "f4f30fa4-8c01-5a44-9b7d-ed199ca86fb0",
       "points_level_min": "5pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 13,
@@ -560,8 +635,8 @@
       "difficulty": "hard",
       "stem_en": "Find the moment of inertia of a solid disk with $m=10\\,\\text{kg}$, $r=0.5\\,\\text{m}$ ($I=\\tfrac12 mr^2$).",
       "stem_he": "מצאו את מומנט ההתמד של דיסק מלא עם $m=10\\,\\text{kg}$, $r=0.5\\,\\text{m}$ ($I=\\tfrac12 mr^2$).",
-      "explanation_en": "**$I=\\tfrac12\\cdot 10\\cdot 0.25=1.25\\,\\text{kg·m}^2$.**\n\n**Answer:** $1.25\\,\\text{kg·m}^2$.",
-      "explanation_he": "**$I=1.25\\,\\text{kg·m}^2$.**\n\n**תשובה:** $1.25\\,\\text{kg·m}^2$.",
+      "explanation_en": "**$I=\\tfrac12\\cdot 10\\cdot 0.25=1.25\\,\\text{kg·m}^2$.**\n\n**Answer:** $1.25\\,\\text{kg·m}^2$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$I=1.25\\,\\text{kg·m}^2$.**\n\n**תשובה:** $1.25\\,\\text{kg·m}^2$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "moment_of_inertia"
       ],
@@ -570,7 +645,10 @@
       },
       "source_item_id": "e9e81ebe-f8a4-52ff-8595-e05a977754a5",
       "points_level_min": "5pt",
-      "correct_answer": "1.25"
+      "correct_answer": "1.25",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 14,
@@ -578,8 +656,8 @@
       "difficulty": "hard",
       "stem_en": "Find the angular momentum $L=I\\omega$ for $I=3\\,\\text{kg·m}^2$, $\\omega=4\\,\\text{rad/s}$.",
       "stem_he": "מצאו את התנע הזוויתי $L=I\\omega$ עבור $I=3\\,\\text{kg·m}^2$, $\\omega=4\\,\\text{rad/s}$.",
-      "explanation_en": "**$L=I\\omega=3\\cdot 4=12\\,\\text{kg·m}^2/\\text{s}$.**\n\n**Answer:** $12$.",
-      "explanation_he": "**$L=12\\,\\text{kg·m}^2/\\text{s}$.**\n\n**תשובה:** $12$.",
+      "explanation_en": "**$L=I\\omega=3\\cdot 4=12\\,\\text{kg·m}^2/\\text{s}$.**\n\n**Answer:** $12$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$L=12\\,\\text{kg·m}^2/\\text{s}$.**\n\n**תשובה:** $12$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "angular_momentum"
       ],
@@ -588,7 +666,10 @@
       },
       "source_item_id": "558e9ff4-90fd-592d-b654-be381d38506c",
       "points_level_min": "5pt",
-      "correct_answer": "12"
+      "correct_answer": "12",
+      "archetypes": [
+        "procedural"
+      ]
     },
     {
       "ord": 15,
@@ -596,8 +677,8 @@
       "difficulty": "hard",
       "stem_en": "Find the rotational KE for $I=0.5\\,\\text{kg·m}^2$, $\\omega=10\\,\\text{rad/s}$.",
       "stem_he": "מצאו את האנרגיה הקינטית הסיבובית עבור $I=0.5\\,\\text{kg·m}^2$, $\\omega=10\\,\\text{rad/s}$.",
-      "explanation_en": "**$KE=\\tfrac12\\cdot 0.5\\cdot 100=25\\,\\text{J}$.**\n\n**Answer:** $25\\,\\text{J}$.",
-      "explanation_he": "**$KE=25\\,\\text{J}$.**\n\n**תשובה:** $25\\,\\text{J}$.",
+      "explanation_en": "**$KE=\\tfrac12\\cdot 0.5\\cdot 100=25\\,\\text{J}$.**\n\n**Answer:** $25\\,\\text{J}$.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$KE=25\\,\\text{J}$.**\n\n**תשובה:** $25\\,\\text{J}$.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
       "skill_atoms": [
         "rotational_energy"
       ],
@@ -606,7 +687,387 @@
       },
       "source_item_id": "547ba9ae-8843-5c81-b980-c15683ad18b2",
       "points_level_min": "5pt",
-      "correct_answer": "25"
+      "correct_answer": "25",
+      "archetypes": [
+        "procedural"
+      ]
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Rolling without slip links $a=\\square\\,\\alpha$ for a wheel of radius $R$.",
+      "stem_he": "גלגול בלי החלקה קושר $a=\\square\\,\\alpha$ לגלגל ברדיוס $R$.",
+      "explanation_en": "**$a=R\\alpha$** (and $v=R\\omega$) for no slip.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$a=R\\alpha$** לגלגול בלי החלקה.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "R",
+      "answer_payload": {
+        "acceptable_answers": [
+          "R",
+          "r",
+          "radius"
+        ],
+        "case_sensitive": false
+      },
+      "ord": 16
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "reverse"
+      ],
+      "stem_en": "Write the split of kinetic energy for a rigid body (CM + rotation).",
+      "stem_he": "כתבו את פירוק האנרגיה הקינטית לגוף קשיח (מרכז מסה + סיבוב).",
+      "explanation_en": "**$K=\\tfrac12 MV_{\\text{cm}}^2+\\tfrac12 I\\omega^2$.**\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$K=\\tfrac12 MV_{\\text{cm}}^2+\\tfrac12 I\\omega^2$.**\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "1/2 MV^2 + 1/2 I omega^2",
+      "answer_payload": {
+        "acceptable_answers": [
+          "1/2 MV^2 + 1/2 I omega^2",
+          "½MV²+½Iω²",
+          "K_cm + K_rot",
+          "Kcm+Krot"
+        ],
+        "case_sensitive": false
+      },
+      "ord": 17
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "stem_en": "For a disk rolling without slipping down an incline, friction:",
+      "stem_he": "לדיסקה המתגלגלת בלי החלקה במדרון, החיכוך:",
+      "explanation_en": "**Static friction torques the disk**; work can be zero if contact point is instantaneously at rest.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**חיכוך סטטי נותן מומנט**; העבודה עשויה להיות אפס.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "options_en": [
+        "provides the torque for $\\alpha$",
+        "must be kinetic only",
+        "does positive work always",
+        "is zero"
+      ],
+      "options_he": [
+        "מספק את המומנט ל-$\\alpha$",
+        "חייב להיות קינטי בלבד",
+        "תמיד מבצע עבודה חיובית",
+        "אפס"
+      ],
+      "correct_index": 0,
+      "answer_payload": {
+        "options_en": [
+          "provides the torque for $\\alpha$",
+          "must be kinetic only",
+          "does positive work always",
+          "is zero"
+        ],
+        "options_he": [
+          "מספק את המומנט ל-$\\alpha$",
+          "חייב להיות קינטי בלבד",
+          "תמיד מבצע עבודה חיובית",
+          "אפס"
+        ],
+        "correct_index": 0
+      },
+      "ord": 18
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "True or False: every rigid body has at most three translational degrees of freedom.",
+      "stem_he": "נכון או לא: לכל גוף קשיח יש לכל היותר שלוש דרגות חופש תנועתיות קוויות.",
+      "explanation_en": "**True** — plus up to three rotational DOF.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**נכון** — ועוד עד שלוש סיבוביות.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "value": true
+      },
+      "ord": 19
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Disk $I=\\tfrac12 MR^2$, $M=2$, $R=0.1$, $\\omega=10$. Find $K_{\\text{rot}}=\\tfrac12 I\\omega^2$.",
+      "stem_he": "דיסקה $I=\\tfrac12 MR^2$, $M=2$, $R=0.1$, $\\omega=10$. מצאו $K_{\\text{rot}}$.",
+      "explanation_en": "**$I=0.01$, $K=0.5\\,\\text{J}$.**\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$K=0.5\\,\\text{J}$.**\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "0.5",
+      "answer_payload": {
+        "value": 0.5
+      },
+      "verify": {
+        "expr": "0.5*(0.5*2*0.1*0.1)*100",
+        "expected": 0.5
+      },
+      "ord": 20
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Yo-yo / falling disk result $a=\\tfrac23 g$ with $g=9.8$. Find $a$.",
+      "stem_he": "תוצאת יו-יו $a=\\tfrac23 g$ עם $g=9.8$. מצאו $a$.",
+      "explanation_en": "**$a=\\tfrac23\\cdot9.8\\approx6.53\\,\\text{m/s}^2$.**\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**$a\\approx6.53\\,\\text{m/s}^2$.**\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "correct_answer": "6.533333333333333",
+      "answer_payload": {
+        "value": 6.533333333333333
+      },
+      "verify": {
+        "expr": "(2/3)*9.8",
+        "expected": 6.533333333333333
+      },
+      "ord": 21
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "needs_review": true,
+      "stem_en": "Derive $a=\\tfrac23 g$ for a disk ($I=\\tfrac12 MR^2$) falling as a yo-yo with string unwinding without slip.",
+      "stem_he": "גזרו $a=\\tfrac23 g$ לדיסקה כיו-יו עם חוט נפרם בלי החלקה.",
+      "explanation_en": "**Worked solution.**\n\n**Step 1.** $Mg-T=Ma$, $TR=I a/R$.\n\n**Step 2.** $T=\\tfrac12 Ma$.\n\n**Step 3.** $Mg-\\tfrac12 Ma=Ma\\Rightarrow a=\\tfrac23 g$.\n\n**Answer:** $a=\\tfrac23 g$.\n\n\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**פתרון מלא.**\n\n**שלב 1.** משוואות כוח ומומנט.\n\n**שלב 2.** $T=\\tfrac12 Ma$.\n\n**שלב 3.** $a=\\tfrac23 g$.\n\n**תשובה:** $a=\\tfrac23 g$.\n\n\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1.** $Mg-T=Ma$, $TR=I a/R$.",
+          "**Step 2.** $T=\\tfrac12 Ma$.",
+          "**Step 3.** $Mg-\\tfrac12 Ma=Ma\\Rightarrow a=\\tfrac23 g$.",
+          "**Answer:** $a=\\tfrac23 g$."
+        ],
+        "steps_he": [
+          "**שלב 1.** משוואות כוח ומומנט.",
+          "**שלב 2.** $T=\\tfrac12 Ma$.",
+          "**שלב 3.** $a=\\tfrac23 g$.",
+          "**תשובה:** $a=\\tfrac23 g$."
+        ]
+      },
+      "ord": 22
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "error_analysis",
+        "conceptual"
+      ],
+      "stem_en": "Select ALL correct exam habits for Rigid-body dynamics.",
+      "stem_he": "סמנו את כל הרגלי המבחן הנכונים עבור דינמיקה של גוף קשיח.",
+      "explanation_en": "**Good habits:** symbols first, units, and a sanity check. Skipping sketches and mixing origins lose method marks in Rigid-body dynamics.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**הרגלים טובים:** סימנים קודם, יחידות ובדיקת סבירות. דילוג על שרטוט וערבוב ראשיות מאבדים נקודות שיטה בדינמיקה של גוף קשיח.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "options_en": [
+        "Write the governing law in symbols before numbers",
+        "Convert units before substituting",
+        "Check a limiting case or dimensions",
+        "Skip the free-body / field sketch to save time",
+        "Mix inconsistent origins for torque and angular momentum"
+      ],
+      "options_he": [
+        "לכתוב את החוק השולט בסימנים לפני מספרים",
+        "להמיר יחידות לפני הצבה",
+        "לבדוק מקרה גבול או ממדים",
+        "לדלג על שרטוט כדי לחסוך זמן",
+        "לערבב ראשיות לא עקביות למומנט ותנע זוויתי"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "Write the governing law in symbols before numbers",
+          "Convert units before substituting",
+          "Check a limiting case or dimensions",
+          "Skip the free-body / field sketch to save time",
+          "Mix inconsistent origins for torque and angular momentum"
+        ],
+        "options_he": [
+          "לכתוב את החוק השולט בסימנים לפני מספרים",
+          "להמיר יחידות לפני הצבה",
+          "לבדוק מקרה גבול או ממדים",
+          "לדלג על שרטוט כדי לחסוך זמן",
+          "לערבב ראשיות לא עקביות למומנט ותנע זוויתי"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ord": 23
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "stem_en": "Match each Rigid-body dynamics idea to its role.",
+      "stem_he": "התאימו כל רעיון בדינמיקה של גוף קשיח לתפקידו.",
+      "explanation_en": "**Matching:** connect $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ and $\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$ to the law slot, then symmetry, target, and check — the standard university workflow.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**התאמה:** חברו את $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ ו-$\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$ למשבצת החוק, ואז סימטריה, יעד ובדיקה — זרימת עבודה אוניברסיטאית.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "left_en": [
+          "Governing law",
+          "Symmetry / idealization",
+          "Unknown target",
+          "Sanity check"
+        ],
+        "left_he": [
+          "חוק שולט",
+          "סימטריה / אידיאליזציה",
+          "נעלם יעד",
+          "בדיקת סבירות"
+        ],
+        "right_en": [
+          "$M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ and $\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$",
+          "Lets integrals / free-body diagrams close",
+          "Quantity asked by the stem",
+          "Limits, units, or direction consistency"
+        ],
+        "right_he": [
+          "$M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ ו-$\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$",
+          "מאפשר סגירת אינטגרלים / דיאגרמות",
+          "הגודל שמבקשים בשאלה",
+          "גבולות, יחידות או עקביות כיוון"
+        ],
+        "correct_pairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "ord": 24
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural",
+        "proof"
+      ],
+      "stem_en": "Order the solution steps for a typical Rigid-body dynamics problem.",
+      "stem_he": "סדרו את שלבי הפתרון לבעיית דינמיקה של גוף קשיח טיפוסית.",
+      "explanation_en": "**Order matters:** sketch → law → numbers → check. Jumping to numbers first is the most common Rigid-body dynamics failure mode.\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**הסדר חשוב:** שרטוט → חוק → מספרים → בדיקה. קפיצה למספרים היא כשל נפוץ בדינמיקה של גוף קשיח.\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "steps_en": [
+          "Sketch the situation and choose coordinates / Amperian or Gaussian surface",
+          "Write the governing law for this lesson in symbols",
+          "Convert units and substitute numbers",
+          "Interpret sign/direction and check a limiting case"
+        ],
+        "steps_he": [
+          "שרטוט המצב ובחירת קואורדינטות / משטח אמפר או גאוס",
+          "כתיבת החוק השולט של השיעור בסימנים",
+          "המרת יחידות והצבת מספרים",
+          "פרשנות סימן/כיוון ובדיקת מקרה גבול"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 25
+    },
+    {
+      "skill_atoms": [
+        "rigid_body"
+      ],
+      "points_level_min": "uni",
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "stem_en": "Starting from $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ and $\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$, outline a 4-step derivation a university grader would accept for a standard Rigid-body dynamics unknown.",
+      "stem_he": "מתוך $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ ו-$\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$, תארו מסלול גזירה בן 4 שלבים שבודק אוניברסיטאי יקבל לנעלם סטנדרטי בדינמיקה של גוף קשיח.",
+      "explanation_en": "**Derivation path.**\n\nState $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ and $\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$ with assumptions (vacuum, symmetry, rigid body, ideal fluid, etc.).\n\nIdentify the target unknown and list given / fixed quantities.\n\nRearrange symbolically; convert units; substitute only after the symbolic line.\n\nCheck limiting case, sign/direction, and dimensions.\n\n\n\nWrite the governing law in symbols first, convert every unit before substituting, and keep method marks even if arithmetic slips. Check a limiting case or dimensional consistency before boxing the final answer on a university physics exam.",
+      "explanation_he": "**מסלול גזירה.**\n\nכתבו את $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ ו-$\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$ עם הנחות (ריק, סימטריה, גוף קשיח, נוזל אידיאלי וכו').\n\nזהו את הנעלם ורשמו מה נתון/קבוע.\n\nסדרו סימבולית; המירו יחידות; הציבו רק אחרי השורה הסימבולית.\n\nבדקו מקרה גבול, סימן/כיוון וממדים.\n\n\n\nכתבו את החוק השולט בסימנים קודם, המירו כל יחידה לפני הצבה, ושמרו על נקודות שיטה גם אם יש טעות חשבון. בדקו מקרה גבול או עקביות ממדים לפני סימון התשובה במבחן פיזיקה אוניברסיטאי.",
+      "answer_payload": {
+        "steps_en": [
+          "State $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ and $\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$ with assumptions (vacuum, symmetry, rigid body, ideal fluid, etc.).",
+          "Identify the target unknown and list given / fixed quantities.",
+          "Rearrange symbolically; convert units; substitute only after the symbolic line.",
+          "Check limiting case, sign/direction, and dimensions."
+        ],
+        "steps_he": [
+          "כתבו את $M\\vec A_{\\text{cm}}=\\vec F_{\\text{ext}}$ ו-$\\vec\\tau_{\\text{cm}}=I\\boldsymbol\\alpha$ עם הנחות (ריק, סימטריה, גוף קשיח, נוזל אידיאלי וכו').",
+          "זהו את הנעלם ורשמו מה נתון/קבוע.",
+          "סדרו סימבולית; המירו יחידות; הציבו רק אחרי השורה הסימבולית.",
+          "בדקו מקרה גבול, סימן/כיוון וממדים."
+        ]
+      },
+      "ord": 26
     }
   ]
 }
