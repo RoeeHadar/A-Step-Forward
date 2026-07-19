@@ -4,11 +4,19 @@
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
+import { recordTestAttempt } from './test-attempts';
 
 neonConfig.fetchConnectionCache = true;
 
 const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? '';
 const sql = url ? neon(url) : null;
+
+/**
+ * Full-mock pass bar (ADR-0010 Stream E readiness gate). Based on the auto-graded
+ * MCQ fraction — open items still need Reviewer grading (deferred). A passed mock
+ * is what lets readiness exceed the mock-gated ceiling.
+ */
+export const MOCK_PASS_THRESHOLD = 0.6;
 
 import type {
   ClientMockExamQuestion,
@@ -367,6 +375,30 @@ export async function submitMockExam(
       ${JSON.stringify(feedback)}::jsonb
     )
   `;
+
+  // Unify into the Tests archive (ADR-0010 Stream B: all assessments archived; also
+  // feeds the readiness mock-gate). Best-effort — never blocks the exam result.
+  const mockScore = maxMcq > 0 ? scoreMcq / maxMcq : 0;
+  await recordTestAttempt({
+    learnerId: userId,
+    kind: 'mock_exam',
+    score: mockScore,
+    passThreshold: MOCK_PASS_THRESHOLD,
+    perTopic: {},
+    weakConcepts: [],
+    questions: questions.map((q) => ({
+      id: q.id,
+      topic: q.id,
+      subject: '',
+      stem: q.stem_he || q.stem_en || '',
+      options: (q.options ?? []).map((o) => ({ key: o.key, text: o.text_he || o.text_en || '' })),
+      correct: (q.correct ?? '').toUpperCase(),
+    })),
+    answers: Object.entries(answers).map(([item_id, chosen]) => ({
+      item_id,
+      chosen: String(chosen ?? ''),
+    })),
+  }).catch(() => null);
 
   return { score_mcq: scoreMcq, max_mcq: maxMcq, feedback_by_question: feedback };
 }

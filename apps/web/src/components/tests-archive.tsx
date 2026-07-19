@@ -14,6 +14,10 @@ const STR = {
     subtitle: 'מבחנים קודמים, התשובות שלך והמשוב — כדי ללמוד מהם.',
     empty: 'עדיין אין מבחנים. השלם מבחן שבועי כדי לראות אותו כאן.',
     week: (n: number | null) => (n == null ? 'מבחן' : `שבוע ${n}`),
+    kind_mock: 'סימולציה מלאה',
+    kind_milestone: 'מבחן ביניים',
+    kind_generic: 'מבחן',
+    open_item: 'שאלה פתוחה — נבדקת ידנית',
     passed: 'עברת',
     failed: 'לא עברת',
     score: 'ציון',
@@ -33,6 +37,10 @@ const STR = {
     subtitle: 'Past tests, your answers and feedback — so you can learn from them.',
     empty: 'No tests yet. Complete a weekly quiz to see it here.',
     week: (n: number | null) => (n == null ? 'Test' : `Week ${n}`),
+    kind_mock: 'Full mock exam',
+    kind_milestone: 'Milestone test',
+    kind_generic: 'Test',
+    open_item: 'Open question — graded manually',
     passed: 'Passed',
     failed: 'Not passed',
     score: 'Score',
@@ -65,6 +73,18 @@ function topicName(conceptId: string, lang: Lang): string {
   return pickConceptTitle(resolveConceptTitles(conceptId), lang);
 }
 
+/** Human label for an attempt by kind (falls back to the weekly "Week N" label). */
+function attemptLabel(
+  kind: string,
+  weekNum: number | null,
+  t: (typeof STR)[Lang],
+): string {
+  if (kind === 'mock_exam') return t.kind_mock;
+  if (kind === 'milestone' || kind === 'milestone_test' || kind === 'unit_test') return t.kind_milestone;
+  if (kind === 'weekly_gate') return t.week(weekNum);
+  return weekNum == null ? t.kind_generic : t.week(weekNum);
+}
+
 export function TestsArchiveList({ items }: { items: TestAttemptListItem[] }) {
   const [lang] = useLanguagePreference('he');
   const t = STR[lang];
@@ -86,7 +106,7 @@ export function TestsArchiveList({ items }: { items: TestAttemptListItem[] }) {
               <Card className="glass-surface border-border/60 transition-opacity hover:opacity-90">
                 <CardContent className="flex flex-wrap items-center justify-between gap-3 py-4">
                   <div className="min-w-0">
-                    <p className="font-medium">{t.week(a.week_num)}</p>
+                    <p className="font-medium">{attemptLabel(a.kind, a.week_num, t)}</p>
                     <p className="text-xs text-muted-foreground">
                       {fmtDate(a.created_at, lang)} · {t.questions(a.question_count)}
                     </p>
@@ -123,7 +143,9 @@ export function TestAttemptView({ attempt }: { attempt: TestAttemptDetail }) {
 
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold">{t.week(attempt.week_num)}</h1>
+          <h1 className="font-display text-2xl font-bold">
+            {attemptLabel(attempt.kind, attempt.week_num, t)}
+          </h1>
           <p className="text-xs text-muted-foreground">{fmtDate(attempt.created_at, lang)}</p>
         </div>
         <div className="flex items-center gap-3">
@@ -165,22 +187,33 @@ export function TestAttemptView({ attempt }: { attempt: TestAttemptDetail }) {
       <section className="space-y-4">
         <h2 className="text-sm font-semibold text-muted-foreground">{t.review}</h2>
         {attempt.questions.map((q, idx) => {
-          const chosen = (answerByItem.get(q.id) ?? '').toUpperCase();
-          const correct = q.correct.toUpperCase();
-          const gotIt = chosen === correct;
+          // Open / non-MCQ items have no options and no auto-graded correct letter.
+          const isOpen = !q.options || q.options.length === 0 || !q.correct;
+          const rawChosen = answerByItem.get(q.id) ?? '';
+          const chosen = rawChosen.toUpperCase();
+          const correct = (q.correct ?? '').toUpperCase();
+          const gotIt = !isOpen && chosen === correct;
           return (
             <Card key={q.id} className="border-border/60">
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-xs font-medium text-muted-foreground">#{idx + 1}</span>
-                  <Badge variant={gotIt ? 'success' : chosen ? 'warning' : 'secondary'}>
-                    {gotIt ? t.correct : chosen ? t.incorrect : t.no_answer}
+                  <Badge
+                    variant={isOpen ? 'secondary' : gotIt ? 'success' : chosen ? 'warning' : 'secondary'}
+                  >
+                    {isOpen ? t.open_item : gotIt ? t.correct : chosen ? t.incorrect : t.no_answer}
                   </Badge>
                 </div>
                 <MarkdownMath dir={isHe ? 'rtl' : 'ltr'}>{q.stem}</MarkdownMath>
               </CardHeader>
               <CardContent className="space-y-1.5">
-                {q.options.map((opt) => {
+                {isOpen && rawChosen ? (
+                  <div className="rounded-md border border-border/50 px-3 py-2 text-sm" dir="auto">
+                    <span className="mb-1 block text-xs text-muted-foreground">{t.your_answer}</span>
+                    <MarkdownMath dir={isHe ? 'rtl' : 'ltr'}>{rawChosen}</MarkdownMath>
+                  </div>
+                ) : null}
+                {(q.options ?? []).map((opt) => {
                   const key = opt.key.toUpperCase();
                   const isCorrect = key === correct;
                   const isChosen = key === chosen;

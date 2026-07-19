@@ -15,7 +15,7 @@ import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { getConceptMastery, getLearnerProfile } from './neon-db';
 import { evaluateGatePass, hasFrontier } from './plan-pacing';
-import { GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
+import { countGateAttempts, GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
 import type {
@@ -140,6 +140,7 @@ function buildUserPrompt(
   count: number,
   goal: string | null,
   locale: 'he' | 'en',
+  rotation: number = 0,
 ): string {
   const GOAL_LABELS: Record<string, string> = {
     bagrut_math_3: '3-unit math (practical, no calculus)',
@@ -161,12 +162,19 @@ function buildUserPrompt(
     return `concept_id: ${c.id}\nname_en: ${c.name}\nname_he: ${c.name_he ?? '(none)'}\nsubject: ${c.subject}\nmastery: ${masteryLabel}\nskill_atoms: ${atomsStr}`;
   }).join('\n\n');
 
+  // Anti-gaming (ADR-0010 Stream B): on a retake (rotation > 0), demand fresh items
+  // so a learner cannot memorize answer positions from the previous attempt.
+  const rotationNote =
+    rotation > 0
+      ? `\n\nThis is RETAKE #${rotation} of this gate. Generate DIFFERENT questions than a typical first attempt: change the numbers/scenarios, vary which option is correct, and rephrase stems. Same concepts and difficulty, brand-new items.`
+      : '';
+
   return `Level: ${levelNote}
 Question language: ${locale === 'he' ? 'Hebrew' : 'English'}
 
 Generate exactly ${count} MCQ questions covering the following concepts (distribute evenly):
 
-${conceptBlocks}
+${conceptBlocks}${rotationNote}
 
 Return JSON only.`;
 }
@@ -176,14 +184,16 @@ async function callLLMForWeeklyQuiz(
   count: number,
   goal: string | null,
   locale: 'he' | 'en',
+  rotation: number = 0,
 ): Promise<StoredWeeklyQuestion[] | null> {
-  const userPrompt = buildUserPrompt(concepts, count, goal, locale);
+  const userPrompt = buildUserPrompt(concepts, count, goal, locale, rotation);
 
   const parsed = await llmCompleteJson<{ questions?: unknown }>({
     system: systemPrompt(locale),
     messages: [{ role: 'user', content: userPrompt }],
     maxTokens: 3000,
-    temperature: 0.4,
+    // Nudge temperature up on retakes for more item variety.
+    temperature: rotation > 0 ? 0.7 : 0.4,
     timeoutMs: 28_000,
     modelTier: 'primary',
     jsonMode: true,
@@ -279,16 +289,25 @@ export async function generateWeeklyQuizForUser(
       )
     `;
     await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS locale TEXT NOT NULL DEFAULT 'he'`;
+    // Rotation dimension (ADR-0010 Stream B): each gate retake gets its own cached
+    // quiz so retakes present fresh items. Existing rows default to rotation 0.
+    await sql`ALTER TABLE weekly_quizzes_ai ADD COLUMN IF NOT EXISTS rotation INT NOT NULL DEFAULT 0`;
     await sql`ALTER TABLE weekly_quizzes_ai DROP CONSTRAINT IF EXISTS weekly_quizzes_ai_user_id_week_start_key`;
+    await sql`DROP INDEX IF EXISTS weekly_quizzes_ai_user_week_plan_locale_idx`;
     await sql`
-      CREATE UNIQUE INDEX IF NOT EXISTS weekly_quizzes_ai_user_week_plan_locale_idx
-      ON weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale)
+      CREATE UNIQUE INDEX IF NOT EXISTS weekly_quizzes_ai_user_week_plan_locale_rot_idx
+      ON weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, rotation)
     `;
   } catch {
     // If DDL fails (e.g. concurrent creation), fall through — the select will work.
   }
 
-  // Return cached quiz for this selected plan week and locale.
+  // Rotation = number of gate attempts already recorded for this plan week. First
+  // visit → 0; after each submit the count rises, so the learner's next visit lands
+  // on a fresh rotation (new items), while reloads within a rotation stay cached.
+  const rotation = await countGateAttempts(userId, planId, weekNum).catch(() => 0);
+
+  // Return cached quiz for this selected plan week, locale and rotation.
   try {
     const cached = (await sql`
       SELECT id::text, questions
@@ -298,6 +317,7 @@ export async function generateWeeklyQuizForUser(
         AND plan_id = ${planId}
         AND week_num = ${weekNum}
         AND locale = ${locale}
+        AND rotation = ${rotation}
       LIMIT 1
     `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
 
@@ -351,6 +371,7 @@ export async function generateWeeklyQuizForUser(
     questionCount,
     profile?.goal ?? null,
     locale,
+    rotation,
   );
   if (!generated || generated.length === 0) return null;
 
@@ -358,16 +379,17 @@ export async function generateWeeklyQuizForUser(
   let quizId: string = randomUUID();
   try {
     const inserted = (await sql`
-      INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, questions)
+      INSERT INTO weekly_quizzes_ai (user_id, week_start, plan_id, week_num, locale, rotation, questions)
       VALUES (
         ${userId},
         ${weekStartStr}::date,
         ${planId},
         ${weekNum},
         ${locale},
+        ${rotation},
         ${JSON.stringify(generated)}::jsonb
       )
-      ON CONFLICT (user_id, week_start, plan_id, week_num, locale) DO NOTHING
+      ON CONFLICT (user_id, week_start, plan_id, week_num, locale, rotation) DO NOTHING
       RETURNING id::text, questions
     `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
     if (inserted[0]?.id) {
@@ -382,6 +404,7 @@ export async function generateWeeklyQuizForUser(
         AND plan_id = ${planId}
         AND week_num = ${weekNum}
         AND locale = ${locale}
+        AND rotation = ${rotation}
       LIMIT 1
     `) as Array<{ id: string; questions: StoredWeeklyQuestion[] }>;
     if (existing[0]?.id) {
