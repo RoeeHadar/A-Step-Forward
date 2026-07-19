@@ -243,11 +243,11 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "limits_direct",
-      "limits_factoring",
-      "limits_infinity",
-      "lhopital",
-      "one_sided_limits"
+      "factoring",
+      "limit_at_infinity",
+      "limit_indeterminate",
+      "limit_substitution",
+      "one_sided_limit"
     ],
     "tutor_pacing_hint": "Direct substitution → factoring → infinity → L'Hopital.",
     "next_recommended": [
@@ -258,172 +258,339 @@
   "questions": [
     {
       "ord": 1,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "$\\lim_{x\\to0}\\frac{\\sin 3x}{x}=$",
-      "stem_he": "$\\lim_{x\\to0}\\frac{\\sin 3x}{x}=$",
-      "options_en": [
-        "0",
-        "1",
-        "3",
-        "Does not exist"
-      ],
-      "options_he": [
-        "0",
-        "1",
-        "3",
-        "לא קיים"
-      ],
-      "correct_index": 2,
-      "explanation_en": "Rewrite the expression to match the standard limit $\\lim_{t\\to0}\\frac{\\sin t}{t}=1$. Multiply and divide by $3$ inside the fraction: $\\frac{\\sin 3x}{x}=3\\cdot\\frac{\\sin 3x}{3x}$. As $x\\to0$, the inner angle $3x\\to0$, so $\\frac{\\sin 3x}{3x}\\to1$ and the whole expression tends to $3\\cdot1=3$. Students who pick $1$ forget the extra factor of $3$ from the argument; those who pick $0$ may incorrectly think $\\sin$ vanishes faster than $x$. **Alternative:** L'Hôpital gives $\\frac{3\\cos 3x}{1}\\to3$. **Exam tip:** whenever you see $\\sin(kx)/x$, immediately rewrite as $k\\cdot\\sin(kx)/(kx)$. **Answer:** $3$.",
-      "explanation_he": "כתבו מחדש את הביטוי כדי להתאים לגבול הסטנדרטי $\\lim_{t\\to0}\\frac{\\sin t}{t}=1$. הכפילו וחלקו ב-$3$ בתוך השבר: $\\frac{\\sin 3x}{x}=3\\cdot\\frac{\\sin 3x}{3x}$. כש-$x\\to0$, הזווית הפנימית $3x\\to0$, ולכן $\\frac{\\sin 3x}{3x}\\to1$ והכל מתכנס ל-$3$. תלמידים שבוחרים $1$ שוכחים את גורם ה-$3$ מהארגומנט; מי שבוחר $0$ עלול לחשוב ש-$\\sin$ נעלם מהר מ-$x$ — אך $\\sin(3x)$ קטן בקצב של $3x$, לא של $x$ בלבד. **חלופה:** לופיטal נותן $\\frac{3\\cos 3x}{1}\\to3$. **טיפ לבחינה:** בכל $\\sin(kx)/x$, כתבו מיד $k\\cdot\\sin(kx)/(kx)$ לפני שמחשבים. **בדיקה:** $\\sin(0.01)/0.01\\approx1$, ולכן $\\sin(0.03)/0.01\\approx3$. **תשובה:** $3$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\lim_{x \\to 2} (x^2 + 3x - 1)$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 2} (x^2 + 3x - 1)$.",
+      "explanation_en": "**Continuity.** Polynomials are continuous, so substitute directly.\n\n**Compute.** $4 + 6 - 1 = 9$.\n\n**Answer:** $9$.",
+      "explanation_he": "**רציפות.** פולינום רציף, ולכן מציבים ישירות.\n\n**חישוב.** $4 + 6 - 1 = 9$.\n\n**תשובה:** $9$.",
       "skill_atoms": [
-        "limits_trig",
-        "standard_limits"
-      ]
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "value": 9
+      },
+      "source_item_id": "1d71fbec-764b-57c9-b421-dea65afba84c",
+      "points_level_min": "4pt",
+      "correct_answer": "9"
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "$\\displaystyle\\lim_{x\\to4}(x^2-2x+1)$",
-      "stem_he": "$\\displaystyle\\lim_{x\\to4}(x^2-2x+1)$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nDirect substitution: $16-8+1=9$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "9$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "9"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The expression $x^2-2x+1$ is a polynomial, and polynomials are continuous everywhere. That means the limit as $x\\to4$ equals simply plugging in $x=4$: $4^2-2(4)+1=16-8+1=9$. You can also recognize $x^2-2x+1=(x-1)^2$, which confirms the value at $x=4$ is $(4-1)^2=9$. There is no indeterminate form here — direct substitution is the complete solution. A common slip is to overthink the problem and try factoring or L'Hôpital unnecessarily, wasting exam time. **Self-check:** the simplified form $(x-1)^2$ is defined and smooth at $x=4$. **Exam tip:** always try substitution first; if you get a number (not $0/0$), you are done. **Answer:** $9$.",
-      "explanation_he": "הביטוי $x^2-2x+1$ הוא פולינום, ופולינומים רציפים בכל מקום — אין נקודות שבהן המכנה מתאפס או שיש חור. לכן הגבול ב-$x\\to4$ שווה פשוט להצבה: $4^2-2\\cdot4+1=16-8+1=9$. אפשר גם לזהות $x^2-2x+1=(x-1)^2$, ולאשר $(4-1)^2=9$. אין כאן צורה לא-קצובה — הצבה ישירה היא הפתרון המלא. טעות נפוצה: לחשוב יותר מדי ולנסות פירוק או לופיטal מיותר, ובזבוז זמן יקר בבחינה. **בדיקה:** הצורה $(x-1)^2$ מוגדרת וחלקה ב-$x=4$. **טיפ לבחינה:** תמיד נסו הצבה קודם; אם מקבלים מספר סופי (לא $0/0$), סיימתם. **תשובה:** $9$.",
+      "stem_en": "True or False: $\\lim_{x \\to 5} 2x = 10$.",
+      "stem_he": "נכון או לא נכון: $\\lim_{x \\to 5} 2x = 10$.",
+      "explanation_en": "**Substitute.** $2\\cdot 5 = 10$. — **true**.",
+      "explanation_he": "**הצבה.** $2\\cdot 5 = 10$. — **נכון**.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "daa5b60e-f42c-5d31-8320-ade4e6c3b3ca",
+      "points_level_min": "4pt",
+      "correct_bool": true
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\displaystyle\\lim_{x\\to0}\\frac{3x^2+2x}{x}$",
-      "stem_he": "$\\displaystyle\\lim_{x\\to0}\\frac{3x^2+2x}{x}$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nFactor: $(3x+2)\\to2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Direct substitution gives $\\frac{0}{0}$, an indeterminate form. Factor an $x$ from the numerator: $3x^2+2x=x(3x+2)$. For $x\\neq0$, the fraction simplifies to $\\frac{x(3x+2)}{x}=3x+2$. Now substitute $x=0$ into the simplified expression: $3(0)+2=2$. Alternatively, split the original fraction: $\\frac{3x^2}{x}+\\frac{2x}{x}=3x+2\\to2$. Students who answer $0$ cancel only one power of $x$ incorrectly; those who say \"undefined\" forget that the simplified function $3x+2$ has a removable discontinuity at $0$ but a well-defined limit. **Exam tip:** after canceling, always re-substitute into the simplified form. **Answer:** $2$.",
-      "explanation_he": "הצבה ישירה נותנת $\\frac{0}{0}$ — צורה לא-קצובה שמסמנת גורם משותף. מפרקים $x$ מהמונה: $3x^2+2x=x(3x+2)$. עבור $x\\neq0$, השבר מתפשט ל-$\\frac{x(3x+2)}{x}=3x+2$. מציבים $x=0$ בביטוי המפושט: $3\\cdot0+2=2$. לחלופין, מפצלים את השבר המקורי: $\\frac{3x^2}{x}+\\frac{2x}{x}=3x+2\\to2$. מי שעונה $0$ מבטל רק חזקה אחת של $x$ בצורה שגויה; מי שאומר \"לא מוגדר\" שוכח שלפונקציה $3x+2$ יש אי-רציפות ניתנת להסרה ב-$0$ אך גבול מוגדר היטב. **טיפ לבחינה:** אחרי ביטול גורם, הציבו שוב בצורה המפושטת — לא בביטוי המקורי. **תשובה:** $2$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 2} \\dfrac{x^3 - 8}{x - 2}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 2} \\dfrac{x^3 - 8}{x - 2}$.",
+      "explanation_en": "**Step 1 — Difference of cubes.** $x^3 - 8 = (x-2)(x^2 + 2x + 4)$.\n\n**Step 2 — Cancel.** $\\dfrac{(x-2)(x^2+2x+4)}{x-2} = x^2 + 2x + 4$.\n\n**Step 3 — Substitute.** $4 + 4 + 4 = 12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**שלב 1 — הפרש חזקות שלישיות.** $x^3 - 8 = (x-2)(x^2 + 2x + 4)$.\n\n**שלב 2 — צמצום.** נשאר $x^2 + 2x + 4$.\n\n**שלב 3 — הצבה.** $4 + 4 + 4 = 12$.\n\n**תשובה:** $12$.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Difference of cubes.** $x^3 - 8 = (x-2)(x^2 + 2x + 4)$.",
+          "**Step 2 — Cancel.** $\\dfrac{(x-2)(x^2+2x+4)}{x-2} = x^2 + 2x + 4$.",
+          "**Step 3 — Substitute.** $4 + 4 + 4 = 12$.",
+          "**Answer:** $12$."
+        ],
+        "steps_he": [
+          "**שלב 1 — הפרש חזקות שלישיות.** $x^3 - 8 = (x-2)(x^2 + 2x + 4)$.",
+          "**שלב 2 — צמצום.** נשאר $x^2 + 2x + 4$.",
+          "**שלב 3 — הצבה.** $4 + 4 + 4 = 12$.",
+          "**תשובה:** $12$."
+        ]
+      },
+      "source_item_id": "e265a2a8-01e5-51a2-9f58-6e7245ad1060",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$\\displaystyle\\lim_{x\\to\\infty}\\frac{5}{x^2}$",
-      "stem_he": "$\\displaystyle\\lim_{x\\to\\infty}\\frac{5}{x^2}$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$5/\\infty=0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "As $x\\to\\infty$, the denominator $x^2$ grows without bound while the numerator stays fixed at $5$. A constant divided by an ever-larger quantity tends to zero: $\\lim_{x\\to\\infty}\\frac{5}{x^2}=0$. You can also rewrite as $5\\cdot\\frac{1}{x^2}$ and use the limit law $\\lim\\frac{1}{x^2}=0$. This is the simplest \"degree comparison\" case: numerator degree $0$, denominator degree $2$, so the limit is $0$. A common mistake is to treat $\\frac{5}{\\infty}$ as undefined rather than zero, or to confuse $\\frac{5}{x^2}\\to0$ with $\\frac{x^2}{5}\\to\\infty$. **Exam tip:** for $\\frac{\\text{constant}}{x^n}$ as $x\\to\\infty$, the answer is always $0$ when $n>0$. **Answer:** $0$.",
-      "explanation_he": "כש-$x\\to\\infty$, המכנה $x^2$ גדל ללא גבול והמונה נשאר $5$. קבוע חלקי כמות שגדלה ללא גבול שואף לאפס: $\\lim_{x\\to\\infty}\\frac{5}{x^2}=0$. אפשר גם לכתוב $5\\cdot\\frac{1}{x^2}$ ולהשתמש ב-$\\lim\\frac{1}{x^2}=0$. זה מקרה הפשוט ביותר של השוואת מעלות: מונה מעלה $0$, מכנה מעלה $2$, ולכן הגבול $0$. טעות נפוצה: לחשוב ש-$\\frac{5}{\\infty}$ לא מוגדר במקום אפס, או לבלבל בין $\\frac{5}{x^2}\\to0$ ל-$\\frac{x^2}{5}\\to\\infty$. **טיפ לבחינה:** עבור $\\frac{\\text{const}}{x^n}$ ב-$\\infty$, התשובה תמיד $0$ כש-$n>0$. **תשובה:** $0$.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "What is $\\lim_{x \\to \\infty} \\dfrac{3x + 1}{x - 2}$?",
+      "stem_he": "מהו $\\lim_{x \\to \\infty} \\dfrac{3x + 1}{x - 2}$?",
+      "explanation_en": "**Equal degrees.** Ratio of leading coefficients: $\\tfrac{3}{1} = 3$.\n\n**Answer:** $3$.",
+      "explanation_he": "**מעלות שוות.** יחס המקדמים המובילים: $\\tfrac{3}{1} = 3$.\n\n**תשובה:** $3$.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_at_infinity"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$3$",
+          "$1$",
+          "$0$",
+          "$\\infty$"
+        ],
+        "options_he": [
+          "$3$",
+          "$1$",
+          "$0$",
+          "$\\infty$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "19f72bc8-e3e6-5888-9352-75bafa0d543a",
+      "points_level_min": "4pt",
+      "options_en": [
+        "$3$",
+        "$1$",
+        "$0$",
+        "$\\infty$"
+      ],
+      "options_he": [
+        "$3$",
+        "$1$",
+        "$0$",
+        "$\\infty$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Does $\\displaystyle\\lim_{x\\to0}\\frac{|x|}{x}$ exist? Why?",
-      "stem_he": "האם $\\lim_{x\\to0}|x|/x$ קיים?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Right limit: $+1$. Left limit: $-1$. They differ, so limit DNE",
-          "-1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The absolute value forces different behavior from the left and right of $0$. For $x>0$, $|x|=x$, so $\\frac{|x|}{x}=\\frac{x}{x}=1$. Thus $\\lim_{x\\to0^+}\\frac{|x|}{x}=+1$. For $x<0$, $|x|=-x$, so $\\frac{|x|}{x}=\\frac{-x}{x}=-1$. Thus $\\lim_{x\\to0^-}\\frac{|x|}{x}=-1$. Since $+1\\neq-1$, the two-sided limit **does not exist**. Students often substitute $x=0$ directly and declare the expression undefined, which is true at the point but misses the exam question about the limit. **Exam tip:** whenever you see $|x|$ near $0$, compute one-sided limits separately. **Answer:** the limit does not exist because the one-sided limits differ.",
-      "explanation_he": "ערך מוחלט גורם להתנהגות שונה משני צידי $0$, ולכן חובה לבדוק גבולות חד-צדדיים. עבור $x>0$, $|x|=x$, ולכן $\\frac{|x|}{x}=\\frac{x}{x}=1$ — הגבול מימין $\\lim_{x\\to0^+}=+1$. עבור $x<0$, $|x|=-x$, ולכן $\\frac{|x|}{x}=\\frac{-x}{x}=-1$ — הגבול משמאל $\\lim_{x\\to0^-}=-1$. מכיוון ש-$+1\\neq-1$, **הגבול הדו-צדדי לא קיים**. תלמידים לפעמים מציבים $x=0$ ישירות ומכריזים \"לא מוגדר\", מה שנכון בנקודה עצמה אך מפספס את שאלת הגבול בבחינה. **טיפ לבחינה:** בכל ביטוי עם $|x|$ ליד $0$, חשבו $\\lim_{x\\to0^+}$ ו-$\\lim_{x\\to0^-}$ בנפרד לפני מסקנה. **תשובה:** הגבול לא קיים.",
+      "stem_en": "Compute $\\lim_{x \\to 0} (5x + 3)$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} (5x + 3)$.",
+      "explanation_en": "**Substitute.** $5\\cdot 0 + 3 = 3$.\n\n**Answer:** $3$.",
+      "explanation_he": "**הצבה.** $5\\cdot 0 + 3 = 3$.\n\n**תשובה:** $3$.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "db686534-5d27-5c7b-9057-8628c6953037",
+      "points_level_min": "4pt",
+      "correct_answer": "3"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$\\displaystyle\\lim_{x\\to2}\\frac{x^2-4}{x^2-3x+2}$",
-      "stem_he": "$\\displaystyle\\lim_{x\\to2}\\frac{x^2-4}{x^2-3x+2}$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nFactor: $\\frac{(x-2)(x+2)}{(x-2)(x-1)}=\\frac{x+2}{x-1}\\to\\frac{4}{1}=4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Substitution at $x=2$ yields $\\frac{0}{0}$, so factor both numerator and denominator. The numerator is a difference of squares: $x^2-4=(x-2)(x+2)$. The denominator factors as $x^2-3x+2=(x-2)(x-1)$ — verify by expanding. Cancel the common factor $(x-2)$ (valid for $x\\neq2$): $\\frac{x+2}{x-1}$. Now substitute $x=2$: $\\frac{2+2}{2-1}=\\frac{4}{1}=4$. A frequent error is to factor the denominator incorrectly as $(x-2)(x+1)$; always expand your factors to check. Another slip is canceling $(x-2)$ from only one side. **Exam tip:** when both top and bottom vanish, factor completely before canceling. **Answer:** $4$.",
-      "explanation_he": "הצבה ב-$x=2$ נותנת $\\frac{0}{0}$, ולכן מפרקים מונה ומכנה לפני ביטול. המונה הוא הפרש ריבועים: $x^2-4=(x-2)(x+2)$. המכנה מתפרק ל-$(x-2)(x-1)$ — אימות: $(x-2)(x-1)=x^2-3x+2$. מבטלים $(x-2)$ (תקף רק ל-$x\\neq2$) ומקבלים $\\frac{x+2}{x-1}$. מציבים $x=2$: $\\frac{2+2}{2-1}=\\frac{4}{1}=4$. טעות נפוצה: פירוק שגוי של המכנה, למשל $(x-2)(x+1)$ — תמיד פתחו את הגורמים לבדיקה. טעות נוספת: ביטול $(x-2)$ רק מהמונה. **טיפ לבחינה:** כשגם מונה וגם מכנה מתאפסים, פרקו לגמרי לפני ביטול — ורשמו \"הפרש ריבועים\" במונה לקבלת נקודות שיטה. **תשובה:** $4$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\lim_{x \\to -1} (x^3 + 1)$.",
+      "stem_he": "חשבו את $\\lim_{x \\to -1} (x^3 + 1)$.",
+      "explanation_en": "**Substitute.** $(-1)^3 + 1 = -1 + 1 = 0$.\n\n**Answer:** $0$.",
+      "explanation_he": "**הצבה.** $(-1)^3 + 1 = 0$.\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_substitution"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "c2de7d6e-132e-56ce-897b-62cbd63108e0",
+      "points_level_min": "4pt",
+      "correct_answer": "0"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "$\\displaystyle\\lim_{x\\to\\infty}\\frac{3x^2+x}{5x^2-2}$",
-      "stem_he": "$\\displaystyle\\lim_{x\\to\\infty}\\frac{3x^2+x}{5x^2-2}$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nDivide by $x^2$: $3/5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Both numerator and denominator are degree-$2$ polynomials, so as $x\\to\\infty$ the limit equals the ratio of leading coefficients: $3/5$. The full method: divide every term by $x^2$:\n$$\\lim_{x\\to\\infty}\\frac{3+\\frac{1}{x}}{5-\\frac{2}{x^2}}=\\frac{3+0}{5-0}=\\frac{3}{5}.$$\nThe lower-degree terms $\\frac{x}{x^2}=\\frac{1}{x}$ and the constant $-2$ divided by $x^2$ both vanish. Students who answer $3$ or $5$ may be reading only the leading coefficient of one part. Those who get $\\infty$ may have compared degrees incorrectly. **Exam tip:** for equal degrees, the limit is always (leading coeff of top)/(leading coeff of bottom). **Answer:** $\\frac{3}{5}$.",
-      "explanation_he": "גם המונה וגם המכנה הם פולינומים ממעלה $2$, ולכן ב-$x\\to\\infty$ הגבול שווה יחס המקדמים המובילים: $\\frac{3}{5}$. השיטה המלאה: חלוקת כל איבר ב-$x^2$:\n$$\\lim_{x\\to\\infty}\\frac{3+\\frac{1}{x}}{5-\\frac{2}{x^2}}=\\frac{3}{5}.$$\nאיברים ממעלה נמוכה — $\\frac{x}{x^2}=\\frac{1}{x}$ והקבוע $-2$ חלקי $x^2$ — נעלמים. מי שעונה $3$ או $5$ קורא רק מקדם מוביל של חלק אחד; מי שמקבל $\\infty$ השווה מעלות לא נכון. **קיצור דרך:** במעלות שוות, הגבול = (מקדם מוביל מונה)/(מקדם מוביל מכנה). **טיפ לבחינה:** חלקו בחזקה הגבוהה במכנה לפני שאתם מחשבים. **תשובה:** $\\frac{3}{5}$.",
+      "stem_en": "What is $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x^2 - x - 2}$?",
+      "stem_he": "מהו $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x^2 - x - 2}$?",
+      "explanation_en": "**Factor both.** $\\dfrac{(x-2)(x+2)}{(x-2)(x+1)} = \\dfrac{x+2}{x+1}$.\n\n**Substitute.** $\\dfrac{4}{3}$.\n\n**Answer:** $\\tfrac{4}{3}$.",
+      "explanation_he": "**פירוק כפול.** $\\dfrac{(x-2)(x+2)}{(x-2)(x+1)} = \\dfrac{x+2}{x+1}$.\n\n**הצבה.** $\\dfrac{4}{3}$.\n\n**תשובה:** $\\tfrac{4}{3}$.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\frac{4}{3}$",
+          "$1$",
+          "$4$",
+          "$0$"
+        ],
+        "options_he": [
+          "$\\frac{4}{3}$",
+          "$1$",
+          "$4$",
+          "$0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "bfab7cac-1e17-510b-aa90-b5dd9760d1f4",
+      "points_level_min": "4pt",
+      "options_en": [
+        "$\\frac{4}{3}$",
+        "$1$",
+        "$4$",
+        "$0$"
+      ],
+      "options_he": [
+        "$\\frac{4}{3}$",
+        "$1$",
+        "$4$",
+        "$0$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$\\displaystyle\\lim_{x\\to0}\\frac{\\tan x}{x}$ (use L'Hôpital)",
-      "stem_he": "$\\displaystyle\\lim_{x\\to0}\\frac{\\tan x}{x}$",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nL'Hôpital: $\\sec^2x/1\\to1$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Direct substitution gives $\\frac{\\tan 0}{0}=\\frac{0}{0}$, confirming an indeterminate form suitable for L'Hôpital's rule. Differentiate numerator and denominator separately (not with the quotient rule): $\\frac{d}{dx}[\\tan x]=\\sec^2 x$ and $\\frac{d}{dx}[x]=1$. So\n$$\\lim_{x\\to0}\\frac{\\tan x}{x}=\\lim_{x\\to0}\\frac{\\sec^2 x}{1}=\\sec^2 0=\\frac{1}{\\cos^2 0}=1.$$\nAlternatively, rewrite $\\tan x=\\frac{\\sin x}{\\cos x}$ and use $\\lim\\frac{\\sin x}{x}=1$ with $\\cos 0=1$. A common error is applying the quotient rule inside L'Hôpital, producing a messier expression. Another slip is using L'Hôpital without checking $0/0$ first. **Exam tip:** when the question says \"use L'Hôpital,\" write the indeterminate form explicitly, then differentiate top and bottom once. **Answer:** $1$.",
-      "explanation_he": "הצבה ישירה נותנת $\\frac{\\tan 0}{0}=\\frac{0}{0}$ — צורה לא-קצובה המתאימה לכלל לופיטal. גוזרים מונה ומכנה **בנפרד** (לא בכלל המנה): $\\frac{d}{dx}[\\tan x]=\\sec^2 x$ ו-$\\frac{d}{dx}[x]=1$. לכן\n$$\\lim_{x\\to0}\\frac{\\tan x}{x}=\\lim_{x\\to0}\\frac{\\sec^2 x}{1}=\\sec^2 0=\\frac{1}{\\cos^2 0}=1.$$\nלחלופין, כותבים $\\tan x=\\frac{\\sin x}{\\cos x}$ ומשתמשים ב-$\\lim\\frac{\\sin x}{x}=1$ עם $\\cos 0=1$. טעות נפוצה: שימוש בכלל המנה בתוך לופיטal — זה יוצר ביטוי מסובך מיותר. טעות נוספת: לופיטal בלי לבדוק $0/0$ קודם, או גזירה בכלל המנה במקום בנפרד. **טיפ לבחינה:** כשכתוב \"בלופיטal\", כתבו $0/0$ במפורש, גזרו מונה ומכנה בנפרד (לא בכלל המנה), והציבו $x=0$ לקבלת התשובה. **תשובה:** $1$.",
+      "stem_en": "Compute $\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.",
+      "explanation_en": "**Step 1 — $\\tfrac{0}{0}$ form.** Factor the numerator.\n\n**Step 2 — Cancel.** $\\dfrac{(x-3)(x+3)}{x-3} = x + 3$.\n\n**Step 3 — Substitute.** $3 + 3 = 6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**שלב 1 — צורת $\\tfrac{0}{0}$.** מפרקים את המונה.\n\n**שלב 2 — צמצום.** $\\dfrac{(x-3)(x+3)}{x-3} = x + 3$.\n\n**שלב 3 — הצבה.** $3 + 3 = 6$.\n\n**תשובה:** $6$.",
       "skill_atoms": [
-        "limits_direct",
-        "limits_factoring"
-      ]
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "d8d624e7-a144-5063-8461-9ff6f9a2fa4d",
+      "points_level_min": "4pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 1} \\dfrac{x^2 - 1}{x - 1}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 1} \\dfrac{x^2 - 1}{x - 1}$.",
+      "explanation_en": "**Factor and cancel.** $\\dfrac{(x-1)(x+1)}{x-1} = x + 1$.\n\n**Substitute.** $1 + 1 = 2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**פירוק וצמצום.** $\\dfrac{(x-1)(x+1)}{x-1} = x + 1$.\n\n**הצבה.** $1 + 1 = 2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "58c5b488-e508-56e2-97d2-52aed2d82b9b",
+      "points_level_min": "4pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 2} \\dfrac{x^2 - x - 2}{x - 2}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 2} \\dfrac{x^2 - x - 2}{x - 2}$.",
+      "explanation_en": "**Factor.** $x^2 - x - 2 = (x-2)(x+1)$.\n\n**Cancel and substitute.** $x + 1 \\to 3$.\n\n**Answer:** $3$.",
+      "explanation_he": "**פירוק.** $x^2 - x - 2 = (x-2)(x+1)$.\n\n**צמצום והצבה.** $x + 1 \\to 3$.\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "221595f6-9311-5adb-ad0b-2e6b078af222",
+      "points_level_min": "4pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{x^2 - 4x}{x}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{x^2 - 4x}{x}$.",
+      "explanation_en": "**Factor $x$.** $\\dfrac{x(x-4)}{x} = x - 4$.\n\n**Substitute.** $0 - 4 = -4$.\n\n**Answer:** $-4$.",
+      "explanation_he": "**מוציאים $x$.** $\\dfrac{x(x-4)}{x} = x - 4$.\n\n**הצבה.** $0 - 4 = -4$.\n\n**תשובה:** $-4$.",
+      "skill_atoms": [
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "value": -4
+      },
+      "source_item_id": "e4c7d98f-e2a0-5139-97fb-ef97caf97a97",
+      "points_level_min": "4pt",
+      "correct_answer": "-4"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 3} \\dfrac{x^2 - 2x - 3}{x - 3}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 3} \\dfrac{x^2 - 2x - 3}{x - 3}$.",
+      "explanation_en": "**Factor.** $(x-3)(x+1)$; cancel to $x + 1$.\n\n**Substitute.** $3 + 1 = 4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**פירוק.** $(x-3)(x+1)$; מצמצמים ל-$x + 1$.\n\n**הצבה.** $3 + 1 = 4$.\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "13cc6ac4-a898-5308-94a3-cc939dffb67b",
+      "points_level_min": "4pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 13,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\lim_{x \\to 0} \\dfrac{1}{x}$ does not exist.",
+      "stem_he": "נכון או לא נכון: $\\lim_{x \\to 0} \\dfrac{1}{x}$ אינו קיים.",
+      "explanation_en": "**Left vs right.** $\\tfrac1x \\to +\\infty$ from the right, $-\\infty$ from the left.\n\n**Conclusion:** limit does not exist — **true**.",
+      "explanation_he": "**שמאל מול ימין.** $\\tfrac1x \\to +\\infty$ מימין, $-\\infty$ משמאל.\n\n**מסקנה:** הגבול אינו קיים — **נכון**.",
+      "skill_atoms": [
+        "one_sided_limit"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "8a9639ba-ed45-5b84-9813-82953a51777c",
+      "points_level_min": "4pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 4} \\dfrac{\\sqrt{x} - 2}{x - 4}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 4} \\dfrac{\\sqrt{x} - 2}{x - 4}$.",
+      "explanation_en": "**Step 1 — Rationalize.** Multiply by $\\dfrac{\\sqrt{x}+2}{\\sqrt{x}+2}$: $\\dfrac{x-4}{(x-4)(\\sqrt{x}+2)}$.\n\n**Step 2 — Cancel.** $\\dfrac{1}{\\sqrt{x}+2}$.\n\n**Step 3 — Substitute.** $\\dfrac{1}{2+2} = \\tfrac14$.\n\n**Answer:** $\\tfrac14$.",
+      "explanation_he": "**שלב 1 — הכפלה בצמוד.** $\\dfrac{\\sqrt{x}+2}{\\sqrt{x}+2}$ נותן $\\dfrac{x-4}{(x-4)(\\sqrt{x}+2)}$.\n\n**שלב 2 — צמצום.** $\\dfrac{1}{\\sqrt{x}+2}$.\n\n**שלב 3 — הצבה.** $\\dfrac{1}{4} $.\n\n**תשובה:** $\\tfrac14$.",
+      "skill_atoms": [
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "4a918731-1fdc-5491-b409-c9997df6865f",
+      "points_level_min": "4pt",
+      "correct_answer": "0.25"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 9} \\dfrac{\\sqrt{x} - 3}{x - 9}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 9} \\dfrac{\\sqrt{x} - 3}{x - 9}$.",
+      "explanation_en": "**Rationalize.** $\\dfrac{1}{\\sqrt{x}+3}$ after multiplying by the conjugate.\n\n**Substitute.** $\\dfrac{1}{3+3} = \\tfrac16$.\n\n**Answer:** $\\tfrac16$.",
+      "explanation_he": "**הכפלה בצמוד.** מקבלים $\\dfrac{1}{\\sqrt{x}+3}$.\n\n**הצבה.** $\\dfrac{1}{6}$.\n\n**תשובה:** $\\tfrac16$.",
+      "skill_atoms": [
+        "limit_indeterminate"
+      ],
+      "answer_payload": {
+        "value": 0.166667
+      },
+      "source_item_id": "67d947d5-281e-558d-9be4-632fdcfa56ac",
+      "points_level_min": "4pt",
+      "correct_answer": "0.166667"
     }
   ],
   "est_minutes": 40,

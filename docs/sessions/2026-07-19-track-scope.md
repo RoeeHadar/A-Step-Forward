@@ -213,13 +213,43 @@ All new items are pure SymPy-CAS-verifiable (numeric, MCQ-with-predicate, or
 store rows before rebaking. Strict + math + depth + track-scope audits and the
 207/207 seed dry-run all green; difficulty spread 4-5 kinds per lesson.
 
+## Batch I — shipped
+
+The **HS calculus track-variant + intro core** expanded to **15 CAS-verified
+items each** (7 lessons, 105 items, 0 rejections):
+
+- `derivatives_rules` (4pt/5pt) — topped up 11→15 (added power/quotient/chain
+  drills + derivative-at-a-point).
+- `limits_4pt` (4pt) — substitution, `0/0` factoring, rationalizing conjugates,
+  degree-comparison at infinity, one-sided non-existence. **No special trig
+  limits** (kept to 4pt scope).
+- `limits` (5pt) — adds the fundamental trig limits (`sin x/x`, `sin 5x/x`,
+  `(1-cos x)/x²`, `tan x/x`, `(eˣ-1)/x`) on top of the 4pt basics.
+- `limits_at_infinity` (5pt) — horizontal asymptotes, degree comparison,
+  `√(x²+1)-x` conjugate trick, one/both-direction limits.
+- `continuity` (5pt) — function values, removable vs jump vs infinite
+  discontinuities, solving for a parameter that makes a piecewise `f` continuous.
+- `integrals_4pt` (4pt) — polynomial antiderivatives, definite integrals, area
+  under a curve. **No by-parts / substitution / volumes** (kept to 4pt scope).
+- `function_analysis_4pt` (4pt) — first/second-derivative analysis, critical
+  points, monotonicity, concavity, inflection, parabola vertex/min (polynomial
+  only, no rational/trig investigations).
+
+Track discipline: the 4pt variants deliberately omit 5pt-only techniques so 4pt
+learners are not shown out-of-scope material, while the 5pt siblings
+(`limits`, `limits_at_infinity`, `continuity`) carry the deeper content. All
+items pure SymPy-CAS-verifiable. Strict + math + depth + track-scope audits and
+the 207/207 seed dry-run all green.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **35 math lessons** (Batches B, D, E, F, G, H +
-exponents): the entire 3pt/4pt algebra & functions foundation, sequences, the core
-geometry/trig foundation, the 3pt probability & statistics foundation, **and the
-full 5pt calculus + advanced-topic core**. Remaining thin lessons (8 questions):
-advanced 4pt/5pt geometry/trig/probability, and university/makhina strands.
+Verified 15+ item banks now cover **42 math lessons** (Batches B, D, E, F, G, H,
+I + exponents): the entire 3pt/4pt algebra & functions foundation, sequences, the
+core geometry/trig foundation, the 3pt probability & statistics foundation, the
+full 5pt calculus + advanced-topic core, **and the HS calculus track-variant +
+intro core (limits/continuity/integrals/function-analysis for 4pt & 5pt)**.
+Remaining thin lessons (8 questions): advanced 4pt/5pt geometry/trig/vectors/
+combinatorics/complex, statistics beyond 3pt, and university/makhina strands.
 
 ## Pending (not yet done this window)
 

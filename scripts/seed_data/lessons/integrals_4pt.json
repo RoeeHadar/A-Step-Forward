@@ -239,148 +239,342 @@
       "body_he_md": "- פונקציה קדומה: $F(x)$ עם $F'(x) = f(x)$; כתבו עם $+C$ באינטגרלים לא-מסוימים.\n- אינטגרל מסוים = $F(b) - F(a)$; נותן שטח מכוון מתחת לעקומה.\n- לשטח גיאומטרי: השתמשו בערכים מוחלטים או פצלו בשורשים כש-$f$ משנה סימן.\n- שטח בין עקומות: מצאו חיתוכים ראשית, ואז אינטגרלו $\\int (\\text{upper} - \\text{lower})\\,dx$ בכל קטע.\n- אינטגרל פרמטרי: השוו את האינטגרל ליעד ופתרו אלגברית.\n- משפט היסוד מחבר נגזרות ואינטגרלים — שלטו בשני הכיוונים."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "antiderivative",
+      "area_under_curve",
+      "definite_integral"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find the antiderivative of $f(x) = 4x^3 - 2x + 7$.",
-      "stem_he": "מצאו את הפונקציה הקדומה של $f(x) = 4x^3 - 2x + 7$.",
+      "stem_en": "Compute $\\int_0^2 x\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^2 x\\,dx$.",
+      "explanation_en": "**Antiderivative.** $\\tfrac{x^2}{2}$; evaluate $[\\,]_0^2 = 2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**פונקציה קדומה.** $\\tfrac{x^2}{2}$; הצבה $[\\,]_0^2 = 2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "F(x) = x⁴ − x² + 7x + C",
-          "x⁴ − x² + 7x + C",
-          "7"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nIntegrate term by term: $\\int 4x^3\\,dx = x^4$, $\\int -2x\\,dx = -x^2$, $\\int 7\\,dx = 7x$. Sum with $+C$: $F(x) = x^4 - x^2 + 7x + C$.\n\n**How to think about it:**\nAntiderivatives reverse the power rule. Each term $ax^n$ becomes $a\\cdot\\dfrac{x^{n+1}}{n+1}$. Verify by differentiating — you should recover $4x^3 - 2x + 7$.\n\n**Common slip:**\nForgetting $+C$ or mishandling $\\int -2x\\,dx$ as $-x^2$ without the coefficient (writing $-2x^2$ instead).\n\n**Exam tip:**\nOn indefinite integrals, write $+C$ on the same line as the final answer. Graders deduct even when all terms are correct.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\nאינטגרלו איבר-איבר: $\\int 4x^3\\,dx = x^4$, $\\int -2x\\,dx = -x^2$, $\\int 7\\,dx = 7x$. סכמו עם $+C$: $F(x) = x^4 - x^2 + 7x + C$.\n\n**איך לחשוב על זה:**\nפונקציות קדומות הופכות את כלל החזקה. כל איבר $ax^n$ הופך ל-$a\\cdot\\dfrac{x^{n+1}}{n+1}$. אמתו בגזירה — תקבלו $4x^3 - 2x + 7$.\n\n**טעות נפוצה:**\nשכחת $+C$ או טיפול שגוי ב-$\\int -2x\\,dx$ (כתיבת $-2x^2$ במקום $-x^2$).\n\n**טיפ לבחינה:**\nבאינטגרלים לא-מסוימים, כתבו $+C$ בשורה עם התשובה. מורידים נקודות גם כשכל האיברים נכונים.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "2cddb21a-a446-5294-951e-345849438c2e",
+      "points_level_min": "4pt",
+      "correct_answer": "2"
     },
     {
       "ord": 2,
       "kind": "short_answer",
       "difficulty": "easy",
-      "stem_en": "Compute $\\displaystyle\\int_1^3 (x + 2)\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int_1^3 (x + 2)\\,dx$.",
+      "stem_en": "Find an antiderivative of $f(x) = 2x$.",
+      "stem_he": "מצאו פונקציה קדומה של $f(x) = 2x$.",
+      "explanation_en": "**Reverse the power rule.** $\\int 2x\\,dx = x^2 + C$.\n\n**Check.** $\\tfrac{d}{dx}(x^2) = 2x$. ✓",
+      "explanation_he": "**היפוך כלל החזקה.** $\\int 2x\\,dx = x^2 + C$.\n\n**בדיקה.** $\\tfrac{d}{dx}(x^2) = 2x$. ✓",
+      "skill_atoms": [
+        "antiderivative"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "F(x)=x²/2+2x. F(3)−F(1)=(9/2+6)−(1/2+2)=10.5−2.5=8",
-          "8"
+          "x**2",
+          "x^2",
+          "x**2+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\nAntiderivative: $F(x) = \\dfrac{x^2}{2} + 2x$. By FTC: $\\int_1^3 (x+2)\\,dx = F(3) - F(1) = (\\dfrac{9}{2}+6) - (\\dfrac{1}{2}+2) = \\dfrac{21}{2} - \\dfrac{5}{2} = 8$.\n\n**How to think about it:**\nIntegrate $x$ to $\\dfrac{x^2}{2}$ and $2$ to $2x$. Write $[F(x)]_1^3$ before substituting — this separates method marks from arithmetic.\n\n**Common slip:**\nArithmetic errors at $F(3)$: $9/2 + 6 = 10.5$, not $9/2 + 3$. Or forgetting to subtract $F(1)$ entirely.\n\n**Exam tip:**\nFor linear integrands, you can also interpret $\\int_1^3 (x+2)\\,dx$ as trapezoid area — a quick estimate confirms $8$ is reasonable.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\nפונקציה קדומה: $F(x) = \\dfrac{x^2}{2} + 2x$. לפי משפט היסוד: $\\int_1^3 (x+2)\\,dx = F(3) - F(1) = \\dfrac{21}{2} - \\dfrac{5}{2} = 8$.\n\n**איך לחשוב על זה:**\nאינטגרלו $x$ ל-$\\dfrac{x^2}{2}$ ו-$2$ ל-$2x$. כתבו $[F(x)]_1^3$ לפני הצבה — מפריד נקודות שיטה מחשבון.\n\n**טעות נפוצה:**\nטעויות חשבון ב-$F(3)$: $9/2 + 6 = 10.5$, לא $9/2 + 3$. או שכחת $F(1)$ לגמרי.\n\n**טיפ לבחינה:**\nלביטוי לינארי, אפשר לפרש כשטח מקבילית — הערכה מהירה מאמתת ש-$8$ סביר.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "00588aa8-fcbe-5ee3-b3eb-7b4cddbe2af3",
+      "points_level_min": "4pt",
+      "acceptable_answers": [
+        "x**2",
+        "x^2",
+        "x**2+C"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "x**2"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\displaystyle\\int_0^2 e^x\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int_0^2 e^x\\,dx$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the area under $y = 6x$ from $x = 0$ to $x = 2$.",
+      "stem_he": "מצאו את השטח שמתחת ל-$y = 6x$ מ-$x = 0$ עד $x = 2$.",
+      "explanation_en": "**Step 1 — Set up.** Area $= \\int_0^2 6x\\,dx$.\n\n**Step 2 — Integrate.** $[3x^2]_0^2 = 12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**שלב 1 — הגדרה.** שטח $= \\int_0^2 6x\\,dx$.\n\n**שלב 2 — אינטגרציה.** $[3x^2]_0^2 = 12$.\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "area_under_curve",
+        "definite_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "F(x)=eˣ. F(2)−F(0)=e²−1≈6.389",
-          "e²−1≈6.389",
-          "6.389"
+        "steps_en": [
+          "**Step 1 — Set up.** Area $= \\int_0^2 6x\\,dx$.",
+          "**Step 2 — Integrate.** $[3x^2]_0^2 = 12$.",
+          "**Answer:** $12$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — הגדרה.** שטח $= \\int_0^2 6x\\,dx$.",
+          "**שלב 2 — אינטגרציה.** $[3x^2]_0^2 = 12$.",
+          "**תשובה:** $12$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\n$\\int e^x\\,dx = e^x + C$, so $F(x) = e^x$. Then $\\int_0^2 e^x\\,dx = [e^x]_0^2 = e^2 - e^0 = e^2 - 1 \\approx 6.389$.\n\n**How to think about it:**\n$e^x$ is its own antiderivative — the simplest exponential integral on Bagrut. The definite integral measures area under $y = e^x$ from $0$ to $2$; since $e^x > 0$, area equals the integral value.\n\n**Common slip:**\nWriting $e^2 - 1$ as $e$ (confusing $e^0 = 1$ with $e$) or evaluating $F(0)$ as $0$ instead of $1$.\n\n**Exam tip:**\nLeave exact form $e^2 - 1$ unless the question asks for a decimal. Examiners prefer exact answers with $e$.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\n$\\int e^x\\,dx = e^x + C$, לכן $F(x) = e^x$. אז $\\int_0^2 e^x\\,dx = [e^x]_0^2 = e^2 - 1 \\approx 6.389$.\n\n**איך לחשוב על זה:**\n$e^x$ היא הפונקציה הקדומה של עצמה — האינטגרל המעריכי הפשוט ביותר בבגרות. האינטגרל המסוים מודד שטח מתחת ל-$y = e^x$ מ-$0$ עד $2$; מכיוון ש-$e^x > 0$, השטח שווה לערך.\n\n**טעות נפוצה:**\nכתיבת $e^2 - 1$ כ-$e$ (בלבול $e^0 = 1$ עם $e$) או $F(0) = 0$ במקום $1$.\n\n**טיפ לבחינה:**\nהשאירו צורה מדויקת $e^2 - 1$ אלא אם נדרש עשרוני. בוחנים מעדיפים תשובות מדויקות עם $e$.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "3e0645fc-5386-5b30-bdf8-b4a0d2e78e36",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "4pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find the antiderivative of $f(x) = \\frac{1}{x}$ for $x > 0$.",
-      "stem_he": "מצאו את הפונקציה הקדומה של $f(x) = \\frac{1}{x}$ עבור $x > 0$.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\int_0^2 (x + 1)\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^2 (x + 1)\\,dx$.",
+      "explanation_en": "**Antiderivative.** $\\tfrac{x^2}{2} + x$; $[\\,]_0^2 = 2 + 2 = 4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**פונקציה קדומה.** $\\tfrac{x^2}{2} + x$; $[\\,]_0^2 = 4$.\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "F(x) = ln(x) + C",
-          "ln(x) + C"
+        "options_en": [
+          "$4$",
+          "$2$",
+          "$6$",
+          "$3$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$4$",
+          "$2$",
+          "$6$",
+          "$3$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nFor $x > 0$, $\\dfrac{d}{dx}[\\ln x] = \\dfrac{1}{x}$, so $\\int \\dfrac{1}{x}\\,dx = \\ln|x| + C$. With domain $x > 0$, this simplifies to $\\ln(x) + C$.\n\n**How to think about it:**\nThis is the reverse of the logarithm derivative rule. The $|x|$ in the general formula handles negative $x$; here the restriction $x > 0$ removes the absolute value.\n\n**Common slip:**\nAnswering $\\ln x$ without $+C$ on an indefinite integral, or writing $\\dfrac{x^0}{0}$ via the power rule (which fails at $n = -1$).\n\n**Exam tip:**\nMemorize $\\int \\frac{1}{x}\\,dx = \\ln|x| + C$ separately from the power rule — it is the most tested exception.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\nעבור $x > 0$, $\\dfrac{d}{dx}[\\ln x] = \\dfrac{1}{x}$, לכן $\\int \\dfrac{1}{x}\\,dx = \\ln|x| + C$. עם תחום $x > 0$, זה מתפשט ל-$\\ln(x) + C$.\n\n**איך לחשוב על זה:**\nזה ההיפך של כלל הנגזרת של לוגריתם. ה-$|x|$ בנוסחה הכללית מטפל ב-$x$ שלילי; כאן ההגבלה $x > 0$ מסירה את הערך המוחלט.\n\n**טעות נפוצה:**\nתשובה $\\ln x$ בלי $+C$ באינטגרל לא-מסוים, או $\\dfrac{x^0}{0}$ דרך כלל החזקה (נכשל ב-$n = -1$).\n\n**טיפ לבחינה:**\nשננו $\\int \\frac{1}{x}\\,dx = \\ln|x| + C$ בנפרד מכלל החזקה — זו החריגה הנבחנת ביותר.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "339dd351-8fe1-5398-8ad7-6ef086bfabd4",
+      "points_level_min": "4pt",
+      "options_en": [
+        "$4$",
+        "$2$",
+        "$6$",
+        "$3$"
+      ],
+      "options_he": [
+        "$4$",
+        "$2$",
+        "$6$",
+        "$3$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "medium",
-      "stem_en": "Find the area under $f(x) = x^2 - 2x$ between its roots.",
-      "stem_he": "מצאו את השטח מתחת ל-$f(x) = x^2 - 2x$ בין שורשיה.",
+      "stem_en": "True or False: $\\int_0^1 x^2\\,dx = \\tfrac{1}{3}$.",
+      "stem_he": "נכון או לא נכון: $\\int_0^1 x^2\\,dx = \\tfrac{1}{3}$.",
+      "explanation_en": "**Antiderivative.** $\\left[\\tfrac{x^3}{3}\\right]_0^1 = \\tfrac13$ — **true**.",
+      "explanation_he": "**פונקציה קדומה.** $\\left[\\tfrac{x^3}{3}\\right]_0^1 = \\tfrac13$ — **נכון**.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Roots: x=0 and x=2. f is negative between them, so area = |∫₀² (x²−2x)dx| = |[x³/3−x²]₀²| = |8/3−4| = 4/3",
-          "4/3",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nRoots: $x^2 - 2x = x(x-2) = 0$ at $x = 0$ and $x = 2$. On $(0,2)$, $f(x) = x(x-2) < 0$, so the curve lies below the axis. Geometric area = $\\left|\\int_0^2 (x^2-2x)\\,dx\\right| = \\left|[\\frac{x^3}{3}-x^2]_0^2\\right| = |\\frac{8}{3}-4| = \\frac{4}{3}$.\n\n**How to think about it:**\n\"Area under the curve\" means geometric area (positive). When $f < 0$, the definite integral is negative — take absolute value or split and add magnitudes.\n\n**Common slip:**\nReporting $\\int_0^2 (x^2-2x)\\,dx = -\\frac{4}{3}$ as the final area without absolute value.\n\n**Exam tip:**\nState explicitly: \"$f(x) < 0$ on $(0,2)$, so area = $|\\text{integral}|$.\" Examiners reward sign analysis.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\nשורשים: $x^2 - 2x = x(x-2) = 0$ ב-$x = 0$ ו-$x = 2$. ב-$(0,2)$, $f(x) < 0$, העקומה מתחת לציר. שטח גיאומטרי = $\\left|\\int_0^2 (x^2-2x)\\,dx\\right| = \\left|[\\frac{x^3}{3}-x^2]_0^2\\right| = \\frac{4}{3}$.\n\n**איך לחשוב על זה:**\n\"שטח מתחת לעקומה\" פירושו שטח גיאומטרי (חיובי). כש-$f < 0$, האינטגרל המסוים שלילי — קחו ערך מוחלט או פצלו והוסיפו גדלים.\n\n**טעות נפוצה:**\nדיווח $\\int_0^2 (x^2-2x)\\,dx = -\\frac{4}{3}$ כשטח סופי בלי ערך מוחלט.\n\n**טיפ לבחינה:**\nציינו במפורש: \"$f(x) < 0$ ב-$(0,2)$, לכן שטח = $|\\text{integral}|$.\" בוחנים נותנים נקודות על ניתוח סימן.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "cd6fa603-3d07-5371-9f1e-8c09bd84dfcb",
+      "points_level_min": "4pt",
+      "correct_bool": true
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\int_0^{\\pi/2} \\sin x\\,dx$.",
-      "stem_he": "חשבו $\\displaystyle\\int_0^{\\pi/2} \\sin x\\,dx$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\int_0^3 2\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^3 2\\,dx$.",
+      "explanation_en": "**Constant integral.** $2x$; $[2x]_0^3 = 6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**אינטגרל של קבוע.** $2x$; $[2x]_0^3 = 6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "F(x)=−cosx. F(π/2)−F(0) = −cos(π/2)+cos(0) = 0+1 = 1",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\n$\\int \\sin x\\,dx = -\\cos x + C$. So $\\int_0^{\\pi/2} \\sin x\\,dx = [-\\cos x]_0^{\\pi/2} = -\\cos(\\pi/2) + \\cos(0) = 0 + 1 = 1$.\n\n**How to think about it:**\nThe antiderivative of $\\sin x$ is $-\\cos x$ (note the minus sign). At $\\pi/2$, $\\cos(\\pi/2) = 0$; at $0$, $\\cos(0) = 1$. The integral equals the area under one hump of sine — a standard result worth memorizing.\n\n**Common slip:**\nUsing $+\\cos x$ as antiderivative (differentiation gives $-\\sin x$, not $\\sin x$) or evaluating $-\\cos(\\pi/2)$ as $-1$ instead of $0$.\n\n**Exam tip:**\nDraw the sine graph on $[0, \\pi/2]$ — area $1$ matches the geometric picture and catches sign errors instantly.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\n$\\int \\sin x\\,dx = -\\cos x + C$. אז $\\int_0^{\\pi/2} \\sin x\\,dx = [-\\cos x]_0^{\\pi/2} = -0 + 1 = 1$.\n\n**איך לחשוב על זה:**\nהפונקציה הקדומה של $\\sin x$ היא $-\\cos x$ (שימו לב לסימן). ב-$\\pi/2$, $\\cos(\\pi/2) = 0$; ב-$0$, $\\cos(0) = 1$. האינטגרל שווה לשטח מתחת לגבעה אחת של סינוס — תוצאה שכדאי לשנן.\n\n**טעות נפוצה:**\nשימוש ב-$+\\cos x$ כפונקציה קדומה, או $-\\cos(\\pi/2) = -1$ במקום $0$.\n\n**טיפ לבחינה:**\nסרטטו את גרף הסינוס ב-$[0, \\pi/2]$ — שטח $1$ תואם לתמונה הגיאומטרית ותופס טעויות סימן.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "61d296bd-7a4d-51a2-b982-fd26256fbfb2",
+      "points_level_min": "4pt",
+      "correct_answer": "6"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Find the area between $y = x$ and $y = x^2$ for $0 \\le x \\le 1$.",
-      "stem_he": "מצאו את השטח בין $y = x$ ו-$y = x^2$ עבור $0 \\le x \\le 1$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\int_0^4 x\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^4 x\\,dx$.",
+      "explanation_en": "**Antiderivative.** $\\tfrac{x^2}{2}$; $[\\,]_0^4 = 8$.\n\n**Answer:** $8$.",
+      "explanation_he": "**פונקציה קדומה.** $\\tfrac{x^2}{2}$; $[\\,]_0^4 = 8$.\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "x≥x² on [0,1]. Area = ∫₀¹(x−x²)dx = [x²/2−x³/3]₀¹ = 1/2−1/3 = 1/6",
-          "1/6",
-          "6"
-        ],
-        "case_sensitive": false
+        "value": 8
       },
-      "explanation_en": "**Why this is correct:**\nOn $[0,1]$, $x \\ge x^2$ (test: at $x = 0.5$, $0.5 > 0.25$). Area = $\\int_0^1 (x - x^2)\\,dx = [\\frac{x^2}{2} - \\frac{x^3}{3}]_0^1 = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6}$.\n\n**How to think about it:**\nLine $y = x$ sits above parabola $y = x^2$ on $[0,1]$ (they meet at $0$ and $1$). Integrate top minus bottom. This is the simplest area-between-curves template on Bagrut.\n\n**Common slip:**\nIntegrating $x^2 - x$ instead of $x - x^2$, giving $-\\frac{1}{6}$. Or using limits $[0,2]$ instead of intersection points $[0,1]$.\n\n**Exam tip:**\nWhen curves meet at endpoints, those $x$-values are your limits — no extra intersection step needed, but still verify which is on top.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\nב-$[0,1]$, $x \\ge x^2$ (בדיקה: ב-$x = 0.5$, $0.5 > 0.25$). שטח = $\\int_0^1 (x - x^2)\\,dx = [\\frac{x^2}{2} - \\frac{x^3}{3}]_0^1 = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6}$.\n\n**איך לחשוב על זה:**\nהישר $y = x$ מעל $y = x^2$ ב-$[0,1]$ (נפגשים ב-$0$ ו-$1$). אינטגרלו עליונה פחות תחתונה. זה תבנית שטח-בין-עקומות הפשוטה ביותר בבגרות.\n\n**טעות נפוצה:**\nאינטגרל של $x^2 - x$ במקום $x - x^2$, נותן $-\\frac{1}{6}$. או גבולות $[0,2]$ במקום $[0,1]$.\n\n**טיפ לבחינה:**\nכשעקומות נפגשות בקצוות, אלה הגבולות — אין צורך בחיתוך נוסף, אך עדיין אמתו מי למעלה.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "cb16ef85-8c63-549f-870a-25fcd5d8a033",
+      "points_level_min": "4pt",
+      "correct_answer": "8"
     },
     {
       "ord": 8,
       "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Find $k > 0$ such that $\\displaystyle\\int_0^k x^2\\,dx = 9$.",
-      "stem_he": "מצאו $k > 0$ כך ש-$\\displaystyle\\int_0^k x^2\\,dx = 9$.",
+      "difficulty": "easy",
+      "stem_en": "Find an antiderivative of $f(x) = x^2$.",
+      "stem_he": "מצאו פונקציה קדומה של $f(x) = x^2$.",
+      "explanation_en": "**Reverse the power rule.** $\\int x^2\\,dx = \\tfrac{x^3}{3} + C$.\n\n**Check.** $\\tfrac{d}{dx}\\!\\left(\\tfrac{x^3}{3}\\right) = x^2$. ✓",
+      "explanation_he": "**היפוך כלל החזקה.** $\\int x^2\\,dx = \\tfrac{x^3}{3} + C$.\n\n**בדיקה.** $\\tfrac{d}{dx}\\!\\left(\\tfrac{x^3}{3}\\right) = x^2$. ✓",
+      "skill_atoms": [
+        "antiderivative"
+      ],
       "answer_payload": {
         "acceptable_answers": [
-          "3",
-          "k = 3",
-          "k=3"
+          "x**3/3",
+          "x^3/3",
+          "x**3/3+C"
         ],
         "case_sensitive": false
       },
-      "explanation_en": "**Why this is correct:**\n$\\int_0^k x^2\\,dx = [\\frac{x^3}{3}]_0^k = \\frac{k^3}{3}$. Set $\\frac{k^3}{3} = 9$, so $k^3 = 27$ and $k = 3$ (positive root).\n\n**How to think about it:**\nEvaluate the integral symbolically first, then solve for $k$. This parametric pattern appears frequently on Bagrut: clean algebra after FTC. Verify: $\\frac{3^3}{3} = 9$ ✓\n\n**Common slip:**\nSolving $k^3 = 27$ as $k = 9$ (confusing cube root with division by 3) or forgetting the $\\frac{1}{3}$ factor from the power rule.\n\n**Exam tip:**\nAfter finding $k$, substitute back into $\\int_0^k x^2\\,dx$ — one line of verification earns confidence and catches algebra slips under time pressure.\n\n**Exam follow-up:** Write the antiderivative $F(x)$ before substituting bounds — method marks matter even when arithmetic slips. Re-substitute or differentiate once to verify.",
-      "explanation_he": "**למה זה נכון:**\n$\\int_0^k x^2\\,dx = [\\frac{x^3}{3}]_0^k = \\frac{k^3}{3}$. הציבו $\\frac{k^3}{3} = 9$, כלומר $k^3 = 27$ ו-$k = 3$ (שורש חיובי).\n\n**איך לחשוב על זה:**\nחשבו את האינטגרל סימבולית תחילה, אז פתרו ל-$k$. דפוס פרמטרי תכוף בבגרות: אלגברה נקייה אחרי משפט היסוד. אימות: $\\frac{3^3}{3} = 9$ ✓\n\n**טעות נפוצה:**\nפתרון $k^3 = 27$ כ-$k = 9$ (בלבול שורש שלישי עם חלוקה ב-3) או שכחת גורם $\\frac{1}{3}$ מכלל החזקה.\n\n**טיפ לבחינה:**\nאחרי מציאת $k$, הציבו חזרה — שורת אימות אחת תופסת טעויות אלגברה תחת לחץ זמן.\n\n**טיפ נוסף לבחינה:** כתבו את הפונקציה הקדומה $F(x)$ לפני הצבת הגבולות — נקודות שיטה חשובות גם כשיש טעות חשבונית. בסוף, גזרו או הציבו לאימות מהיר.",
-      "skill_atoms": []
+      "source_item_id": "bd5ba54f-0a59-548a-af2a-bb7429d6cb3b",
+      "points_level_min": "4pt",
+      "acceptable_answers": [
+        "x**3/3",
+        "x^3/3",
+        "x**3/3+C"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "x**3/3"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\int_0^2 3x^2\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^2 3x^2\\,dx$.",
+      "explanation_en": "**Antiderivative.** $x^3$; $[x^3]_0^2 = 8$.\n\n**Answer:** $8$.",
+      "explanation_he": "**פונקציה קדומה.** $x^3$; $[x^3]_0^2 = 8$.\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "ebd80d27-9222-503e-adc5-db0ae4688674",
+      "points_level_min": "4pt",
+      "correct_answer": "8"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\int_1^3 (2x + 1)\\,dx$.",
+      "stem_he": "חשבו את $\\int_1^3 (2x + 1)\\,dx$.",
+      "explanation_en": "**Antiderivative.** $x^2 + x$; $[\\,]_1^3 = 12 - 2 = 10$.\n\n**Answer:** $10$.",
+      "explanation_he": "**פונקציה קדומה.** $x^2 + x$; $[\\,]_1^3 = 12 - 2 = 10$.\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "814967bb-5da0-5b0f-970d-8a7206677cc7",
+      "points_level_min": "4pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\int_0^1 x^3\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^1 x^3\\,dx$.",
+      "explanation_en": "**Antiderivative.** $\\tfrac{x^4}{4}$; $[\\,]_0^1 = \\tfrac14$.\n\n**Answer:** $\\tfrac14$.",
+      "explanation_he": "**פונקציה קדומה.** $\\tfrac{x^4}{4}$; $[\\,]_0^1 = \\tfrac14$.\n\n**תשובה:** $\\tfrac14$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "c3042a4d-5d56-5c8a-a7d0-6bbbef37df19",
+      "points_level_min": "4pt",
+      "correct_answer": "0.25"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the area under $y = x^2$ from $x = 0$ to $x = 2$.",
+      "stem_he": "מצאו את השטח שמתחת ל-$y = x^2$ מ-$x = 0$ עד $x = 2$.",
+      "explanation_en": "**Integrate.** $\\left[\\tfrac{x^3}{3}\\right]_0^2 = \\tfrac{8}{3}$.\n\n**Answer:** $\\tfrac{8}{3}$.",
+      "explanation_he": "**אינטגרציה.** $\\left[\\tfrac{x^3}{3}\\right]_0^2 = \\tfrac{8}{3}$.\n\n**תשובה:** $\\tfrac{8}{3}$.",
+      "skill_atoms": [
+        "area_under_curve",
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 2.666667
+      },
+      "source_item_id": "9f314a2c-9a3e-5db5-8501-f7c58d6379d4",
+      "points_level_min": "4pt",
+      "correct_answer": "2.666667"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\int_1^2 4x^3\\,dx$.",
+      "stem_he": "חשבו את $\\int_1^2 4x^3\\,dx$.",
+      "explanation_en": "**Antiderivative.** $x^4$; $[x^4]_1^2 = 16 - 1 = 15$.\n\n**Answer:** $15$.",
+      "explanation_he": "**פונקציה קדומה.** $x^4$; $[x^4]_1^2 = 15$.\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "bfab9807-feaf-5413-857c-1ab3d37ef597",
+      "points_level_min": "4pt",
+      "correct_answer": "15"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the area between $y = x$ and the $x$-axis from $x = 0$ to $x = 4$.",
+      "stem_he": "מצאו את השטח בין $y = x$ לציר ה-$x$ מ-$x = 0$ עד $x = 4$.",
+      "explanation_en": "**Integrate.** $\\left[\\tfrac{x^2}{2}\\right]_0^4 = 8$.\n\n**Answer:** $8$.",
+      "explanation_he": "**אינטגרציה.** $\\left[\\tfrac{x^2}{2}\\right]_0^4 = 8$.\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "area_under_curve",
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "372ba643-2763-56ce-a5fc-cc42f25aa937",
+      "points_level_min": "4pt",
+      "correct_answer": "8"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\int_0^3 (x^2 - 2x)\\,dx$.",
+      "stem_he": "חשבו את $\\int_0^3 (x^2 - 2x)\\,dx$.",
+      "explanation_en": "**Antiderivative.** $\\tfrac{x^3}{3} - x^2$; $[\\,]_0^3 = 9 - 9 = 0$.\n\n**Answer:** $0$.",
+      "explanation_he": "**פונקציה קדומה.** $\\tfrac{x^3}{3} - x^2$; $[\\,]_0^3 = 0$.\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "definite_integral"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "5bd65b1f-53ad-59b7-bac4-5f594dae59c3",
+      "points_level_min": "4pt",
+      "correct_answer": "0"
     }
   ],
   "est_minutes": 65,

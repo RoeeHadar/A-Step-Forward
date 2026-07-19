@@ -209,151 +209,368 @@
       "body_he_md": "- $f$ רציפה ב-$a$ אם ורק אם שלושת התנאים מתקיימים: $f(a)$ מוגדר, גבול קיים, גבול שווה לערך.\n- פולינומים, טריג, אקספוננט ולוג רציפים בתחומם; רציונליות חוץ מאפסי מכנה.\n- סוגי אי-רציפות: סליקה (חור ניתן לתיקון), קפיצה (גבולות חד-צדדיים שונים), אינסופית (אסימפטוטה).\n- IVT מבטיח שורש כשיש החלפת סימן בקטע סגור; EVT מבטיח שמקסימום ומינימום מתקבלים.\n- שילוב EVT + IVT נותן טיעוני סתירה לחסמים חיוביים.\n\n**לקח:** זהו איזה משפט חל מהניסוח — \"הוכח קיום שורש\" → IVT; \"הוכח $f(x)>h$ לכל $x$\" → EVT."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "continuity",
+      "discontinuity",
+      "function_value",
+      "removable_discontinuity"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Determine whether $f(x) = x^3 - 2x + 1$ is continuous at $x = 1$. Justify using the three conditions.",
-      "stem_he": "קבע האם $f(x) = x^3 - 2x + 1$ רציפה ב-$x = 1$. נמק בשלושת התנאים.",
+      "stem_en": "For $f(x) = x^2 + 1$, compute $f(2)$.",
+      "stem_he": "עבור $f(x) = x^2 + 1$, חשבו את $f(2)$.",
+      "explanation_en": "**Substitute.** $2^2 + 1 = 5$.\n\n**Answer:** $5$.",
+      "explanation_he": "**הצבה.** $2^2 + 1 = 5$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "function_value"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "(1) $f(1)=1-2+1=0$ defined. (2) Limit $=0$ (polynomial). (3) Limit $=f(1)$. All hold: continuous",
-          "f(1)$. All hold: continuous",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\n$f(x)=x^3-2x+1$ is a polynomial, continuous everywhere. At $x=1$: (1) $f(1)=1-2+1=0$ — defined. (2) $\\lim_{x\\to 1}(x^3-2x+1)=0$ — limit exists. (3) Limit equals $f(1)$. All three conditions hold.\n\n**How to think about it:**\nCheck each condition separately — do not skip straight to \"polynomials are continuous.\" Bagrut rubrics award points for explicit verification of (1), (2), and (3).\n\n**Common slip:**\nStopping after computing the limit without checking $f(a)$ is defined, or confusing \"limit exists\" with \"continuous.\"\n\n**Exam tip:**\nFor simple polynomials, all three checks collapse to one substitution — but write all three lines anyway for full credit on 5-unit proofs.",
-      "explanation_he": "**למה זה נכון:**\n$f(x)=x^3-2x+1$ הוא פולינום, רציפה בכל מקום. ב-$x=1$: (1) $f(1)=0$ — מוגדר. (2) $\\lim_{x\\to 1}(x^3-2x+1)=0$ — גבול קיים. (3) הגבול שווה ל-$f(1)$. שלושת התנאים מתקיימים.\n\n**איך לחשוב על זה:**\nבדקו כל תנאי בנפרד — אל תדלגו ישר ל\"פולינום רציף\". מחוון בגרות נותן נקודות על אימות מפורש של (1), (2), (3).\n\n**טעות נפוצה:**\nעצירה אחרי חישוב הגבול בלי לבדוק ש-$f(a)$ מוגדר, או בלבול בין \"גבול קיים\" ל\"רציפה\".\n\n**טיפ לבחינה:**\nבפולינומים פשוטים, שלושת הבדיקות מתמזגות להצבה אחת — אך כתבו שלוש שורות בכל זאת לניקוד מלא.",
-      "skill_atoms": []
+      "source_item_id": "99e5ec62-c7b0-5ebe-a55b-15e4679cb675",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 2,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Classify the discontinuity of $g(x)=\\dfrac{\\sin x}{x}$ at $x=0$.",
-      "stem_he": "סווג את אי-הרציפות של $g(x)=\\dfrac{\\sin x}{x}$ ב-$x=0$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Classify the discontinuity of $f(x) = \\dfrac{x^2 - 4}{x - 2}$ at $x = 2$ and give the value that removes it.",
+      "stem_he": "סווגו את אי-הרציפות של $f(x) = \\dfrac{x^2 - 4}{x - 2}$ ב-$x = 2$ ותנו את הערך שמסלק אותה.",
+      "explanation_en": "**Step 1 — Factor.** $\\dfrac{(x-2)(x+2)}{x-2} = x + 2$ for $x \\ne 2$.\n\n**Step 2 — Limit exists.** $\\lim_{x\\to2} = 4$, but $f(2)$ is undefined — a *removable* discontinuity.\n\n**Step 3 — Repair.** Define $f(2) = 4$.\n\n**Answer:** removable; $f(2) = 4$.",
+      "explanation_he": "**שלב 1 — פירוק.** $\\dfrac{(x-2)(x+2)}{x-2} = x + 2$ עבור $x \\ne 2$.\n\n**שלב 2 — הגבול קיים.** $\\lim_{x\\to2} = 4$, אך $f(2)$ אינה מוגדרת — אי-רציפות *סליקה*.\n\n**שלב 3 — תיקון.** מגדירים $f(2) = 4$.\n\n**תשובה:** סליקה; $f(2) = 4$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$g(0)$ is undefined, but $\\lim_{x\\to 0}\\frac{\\sin x}{x}=1$ exists. **Removable discontinuity.** Extend by $g(0)=1$",
-          "1$",
-          "1"
+        "steps_en": [
+          "**Step 1 — Factor.** $\\dfrac{(x-2)(x+2)}{x-2} = x + 2$ for $x \\ne 2$.",
+          "**Step 2 — Limit exists.** $\\lim_{x\\to2} = 4$, but $f(2)$ is undefined — a *removable* discontinuity.",
+          "**Step 3 — Repair.** Define $f(2) = 4$.",
+          "**Answer:** removable; $f(2) = 4$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — פירוק.** $\\dfrac{(x-2)(x+2)}{x-2} = x + 2$ עבור $x \\ne 2$.",
+          "**שלב 2 — הגבול קיים.** $\\lim_{x\\to2} = 4$, אך $f(2)$ אינה מוגדרת — אי-רציפות *סליקה*.",
+          "**שלב 3 — תיקון.** מגדירים $f(2) = 4$.",
+          "**תשובה:** סליקה; $f(2) = 4$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\n$g(0)$ is undefined ($0/0$), but $\\lim_{x\\to 0}\\frac{\\sin x}{x}=1$ exists (standard limit). Limit exists but value missing → **removable discontinuity**. Extend by $g(0)=1$.\n\n**How to think about it:**\nThis is the classic $\\sin x/x$ limit from the limits chapter. Removable means you can \"plug the hole\" — the graph has a single missing point, not a jump or asymptote.\n\n**Common slip:**\nCalling it a jump discontinuity because $g(0)$ is undefined. Jump requires two-sided limits that exist but differ.\n\n**Exam tip:**\nMemorize $\\lim_{x\\to 0}\\sin x/x=1$ — it appears in both limits and continuity sections on Bagrut 581/807.",
-      "explanation_he": "**למה זה נכון:**\n$g(0)$ לא מוגדר ($0/0$), אך $\\lim_{x\\to 0}\\frac{\\sin x}{x}=1$ קיים (גבול סטנדרטי). גבול קיים אך ערך חסר → **אי-רציפות סליקה**. הרחבה: $g(0)=1$.\n\n**איך לחשוב על זה:**\nזה הגבול הקלאסי $\\sin x/x$ מפרק הגבולות. סליקה = \"סתימת החור\" — נקודה חסרה בודדת, לא קפיצה או אסימפטוטה.\n\n**טעות נפוצה:**\nלקרוא לזה קפיצה כי $g(0)$ לא מוגדר. קפיצה דורשת גבולות חד-צדדיים קיימים אך שונים.\n\n**טיפ לבחינה:**\nשיננו $\\lim_{x\\to 0}\\sin x/x=1$ — מופיע גם בגבולות וגם ברציפות בבגרות 581/807. כתבו \"אי-רציפות סליקה\" ולא רק \"חור\".",
-      "skill_atoms": []
+      "source_item_id": "3203c0dc-4916-5a9d-b12a-da94ab249427",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find $k$ making $f(x)=\\begin{cases}2x+k & x\\le 1\\\\ x^2+3 & x>1\\end{cases}$ continuous at $x=1$.",
-      "stem_he": "מצא $k$ שהופך $f(x)=\\begin{cases}2x+k & x\\le 1\\\\ x^2+3 & x>1\\end{cases}$ לרציפה ב-$x=1$.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Where is $f(x) = \\dfrac{1}{x - 3}$ discontinuous?",
+      "stem_he": "היכן $f(x) = \\dfrac{1}{x - 3}$ אינה רציפה?",
+      "explanation_en": "**The denominator is zero at $x = 3$.** So $f$ is undefined there.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**המכנה מתאפס ב-$x = 3$.** ולכן $f$ אינה מוגדרת שם.\n\n**תשובה:** $x = 3$.",
+      "skill_atoms": [
+        "discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Left limit: $2+k$. Right limit: $4$. Set equal: $k=2$",
-          "2$",
-          "2"
+        "options_en": [
+          "$x = 3$",
+          "$x = 0$",
+          "$x = -3$",
+          "$x = 1$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$x = 3$",
+          "$x = 0$",
+          "$x = -3$",
+          "$x = 1$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=1$: left-hand side gives $2(1)+k=2+k$. Right-hand side limit: $\\lim_{x\\to 1^+}(x^2+3)=4$. For continuity, set $2+k=4$, so $k=2$.\n\n**How to think about it:**\nPiecewise continuity problems always reduce to \"left limit = right limit = $f(a)$.\" Compute each branch separately at the join point.\n\n**Common slip:**\nSetting only left limit equal to right limit but forgetting $f(1)$ comes from the $\\le$ branch, so $f(1)=2+k$ must also equal 4.\n\n**Exam tip:**\nAfter finding $k$, verify by substituting back — $f(1)=4$ and $\\lim_{x\\to 1^+}f=4$. One-line check prevents arithmetic errors.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=1$: הענף השמאלי נותן $2(1)+k=2+k$. גבול ימני: $\\lim_{x\\to 1^+}(x^2+3)=4$. לרציפות: $2+k=4$, כלומר $k=2$.\n\n**איך לחשוב על זה:**\nבעיות רציפות קטעיות תמיד מתמצות ל\"גבול שמאלי = גבול ימני = $f(a)$\". חשבו כל ענף בנפרד בנקודת החיבור.\n\n**טעות נפוצה:**\nהשוואת גבולות בלבד בלי לזכור ש-$f(1)$ מגיע מהענף $\\le$, ולכן $f(1)=2+k$ חייב להיות $4$.\n\n**טיפ לבחינה:**\nאחרי מציאת $k$, בדקו בהצבה — $f(1)=4$ ו-$\\lim_{x\\to 1^+}f=4$. בדיקה של שורה אחת מונעת טעויות חשבון.",
-      "skill_atoms": []
+      "source_item_id": "991dfdd6-dcef-523f-ab17-e1322877cd4a",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$x = 3$",
+        "$x = 0$",
+        "$x = -3$",
+        "$x = 1$"
+      ],
+      "options_he": [
+        "$x = 3$",
+        "$x = 0$",
+        "$x = -3$",
+        "$x = 1$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Use IVT to show $p(x)=x^3+x-1$ has a root in $(0,1)$.",
-      "stem_he": "השתמש ב-IVT להראות ש-$p(x)=x^3+x-1$ בעל שורש ב-$(0,1)$.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: every polynomial is continuous for all real $x$.",
+      "stem_he": "נכון או לא נכון: כל פולינום רציף לכל $x$ ממשי.",
+      "explanation_en": "**Polynomials are continuous everywhere** — the limit always equals the value. **True**.",
+      "explanation_he": "**פולינומים רציפים בכל מקום** — הגבול תמיד שווה לערך. **נכון**.",
+      "skill_atoms": [
+        "continuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$p$ polynomial, continuous. $p(0)=-1<0$, $p(1)=1>0$. By IVT, $\\exists c\\in(0,1):\\;p(c)=0$",
-          "0$",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\n$p(x)=x^3+x-1$ is a polynomial, continuous on $[0,1]$. $p(0)=-1<0$ and $p(1)=1+1-1=1>0$. Opposite signs on a closed interval → by IVT, $\\exists c\\in(0,1): p(c)=0$.\n\n**How to think about it:**\nClassic IVT template: define $f$, verify continuity, evaluate at two endpoints, check sign change. The interval $(0,1)$ is convenient because both endpoints are easy to compute.\n\n**Common slip:**\nForgetting to state that $p$ is continuous before invoking IVT. Examiners deduct points for missing hypotheses.\n\n**Exam tip:**\n$p(0)=-1$ and $p(1)=1$ are designed for mental math — if your endpoint values require a calculator, recheck the function definition.",
-      "explanation_he": "**למה זה נכון:**\n$p(x)=x^3+x-1$ פולינום, רציפה על $[0,1]$. $p(0)=-1<0$ ו-$p(1)=1>0$. סימנים הפוכים בקטע סגור → מ-IVT, $\\exists c\\in(0,1): p(c)=0$.\n\n**איך לחשוב על זה:**\nתבנית IVT קלאסית: הגדר $f$, ודא רציפות, חשב בשני קצות, בדוק החלפת סימן. הקטע $(0,1)$ נוח כי שני הקצות קלים לחישוב.\n\n**טעות נפוצה:**\nשכחת לציין ש-$p$ רציפה לפני IVT. בודקים מורידים נקודות על הנחות חסרות.\n\n**טיפ לבחינה:**\n$p(0)=-1$ ו-$p(1)=1$ מתוכננים לחשב מental — אם הערכים דורשים מחשבון, בדקו שוב את הגדרת הפונקציה.",
-      "skill_atoms": []
+      "source_item_id": "58172f40-48fa-5a3e-acdb-82591555ce95",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Show that $f(x)=e^x-2x-1$ has at least two real roots.",
-      "stem_he": "הראה ש-$f(x)=e^x-2x-1$ בעלת לפחות שני שורשים ממשיים.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $f(x) = 3x - 2$, compute $f(0)$.",
+      "stem_he": "עבור $f(x) = 3x - 2$, חשבו את $f(0)$.",
+      "explanation_en": "**Substitute.** $-2$.\n\n**Answer:** $-2$.",
+      "explanation_he": "**הצבה.** $-2$.\n\n**תשובה:** $-2$.",
+      "skill_atoms": [
+        "function_value"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f(0)=1-0-1=0$: root at $x=0$. $f(1)=e-3<0$, $f(2)=e^2-5>0$. By IVT, root in $(1,2)$. At least two roots",
-          "e^2-5>0$. By IVT, root in $(1,2)$. At least two roots",
-          "1,2"
-        ],
-        "case_sensitive": false
+        "value": -2
       },
-      "explanation_en": "**Why this is correct:**\n$f(x)=e^x-2x-1$. First root: $f(0)=1-0-1=0$ — root at $x=0$ explicitly. For a second root: $f(1)=e-3<0$ (since $e<3$) and $f(2)=e^2-5>0$. By IVT on $[1,2]$, a root exists in $(1,2)$. At least two roots total.\n\n**How to think about it:**\n\"At least two roots\" means find one root directly, then use IVT on a different interval for another. Do not assume IVT gives only one root.\n\n**Common slip:**\nStopping after finding $x=0$ without searching for a second sign change. Also: claiming exactly two roots — IVT only proves existence.\n\n**Exam tip:**\nWhen the question says \"at least two,\" always exhibit one root by substitution, then bracket a second with IVT.",
-      "explanation_he": "**למה זה נכון:**\n$f(x)=e^x-2x-1$. שורש ראשון: $f(0)=0$ — שורש ב-$x=0$ במפורש. לשורש שני: $f(1)=e-3<0$ (כי $e<3$) ו-$f(2)=e^2-5>0$. מ-IVT על $[1,2]$, שורש ב-$(1,2)$. לפחות שני שורשים.\n\n**איך לחשוב על זה:**\n\"לפחות שני שורשים\" = מצא אחד בהצבה, ואז IVT על קטע אחר לשני. אל תניח ש-IVT נותן רק אחד.\n\n**טעות נפוצה:**\nעצירה אחרי $x=0$ בלי לחפש החלפת סימן נוספת. גם: טענה על בדיוק שניים — IVT רק מוכיח קיום.\n\n**טיפ לבחינה:**\nכששואלים \"לפחות שני\", הציגו שורש אחד בהצבה ואז חסמו שני ב-IVT.",
-      "skill_atoms": []
+      "source_item_id": "d217c9b3-51f9-5147-8dbd-261522250f45",
+      "points_level_min": "5pt",
+      "correct_answer": "-2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Let $f(x)=\\begin{cases}x^2-1 & x<1\\\\ k(x-1)+2 & x\\ge 1\\end{cases}$. For what value of $k$ is $f$ continuous at $x=1$? What if no such $k$ exists?",
-      "stem_he": "תהי $f(x)=\\begin{cases}x^2-1 & x<1\\\\ k(x-1)+2 & x\\ge 1\\end{cases}$. לאיזה $k$ רציפה ב-$x=1$?",
+      "stem_en": "What kind of discontinuity does $f(x) = \\dfrac{|x|}{x}$ have at $x = 0$?",
+      "stem_he": "איזה סוג אי-רציפות יש ל-$f(x) = \\dfrac{|x|}{x}$ ב-$x = 0$?",
+      "explanation_en": "**One-sided limits.** $+1$ from the right, $-1$ from the left — they differ.\n\n**Answer:** a jump discontinuity.",
+      "explanation_he": "**גבולות חד-צדדיים.** $+1$ מימין, $-1$ משמאל — שונים.\n\n**תשובה:** אי-רציפות מסוג קפיצה.",
+      "skill_atoms": [
+        "discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Left limit: $\\lim_{x\\to 1^-}(x^2-1)=0$. Value: $f(1)=2$. For continuity: $0=2$ — impossible. No value of $k$ works: **jump discontinuity** of size 2",
-          "2$ — impossible. No value of $k$ works: **jump discontinuity** of size 2",
-          "2"
+        "options_en": [
+          "$\\text{jump}$",
+          "$\\text{removable}$",
+          "$\\text{infinite}$",
+          "$\\text{none}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{jump}$",
+          "$\\text{removable}$",
+          "$\\text{infinite}$",
+          "$\\text{none}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=1$: left limit $\\lim_{x\\to 1^-}(x^2-1)=0$. Function value $f(1)=k(0)+2=2$ (from the $\\ge$ branch). For continuity we need $0=2$ — impossible regardless of $k$. This is a **jump discontinuity** of size $|2-0|=2$.\n\n**How to think about it:**\nWhen left limit $\\ne$ function value and no constant $k$ can fix the left branch, the discontinuity is a jump — not removable. The parameter $k$ only affects the right branch at $x=1$, not the left limit.\n\n**Common slip:**\nTrying to solve for $k$ anyway, or calling it removable because \"we can redefine $f(1)$.\" Jump discontinuities cannot be fixed by redefining one point.\n\n**Exam tip:**\nBagrut often includes \"no such $k$ exists\" as an answer option — always check whether limits actually match before solving for $k$.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=1$: גבול שמאלי $\\lim_{x\\to 1^-}(x^2-1)=0$. ערך $f(1)=k(0)+2=2$ (מהענף $\\ge$). לרציפות צריך $0=2$ — בלתי אפשרי לכל $k$. **אי-רציפות קפיצה** בגודל $|2-0|=2$.\n\n**איך לחשוב על זה:**\nכשגבול שמאלי $\\ne$ ערך הפונקציה ואין $k$ שמתקן את הענף השמאלי — זו קפיצה, לא סליקה. $k$ משפיע רק על הענף הימני ב-$x=1$, לא על הגבול השמאלי.\n\n**טעות נפוצה:**\nניסיון לפתור $k$ בכל זאת, או קריאה לזה סליקה כי \"אפשר להגדיר $f(1)$ מחדש\". קפיצה לא ניתנת לתיקון.\n\n**טיפ לבחינה:**\nבגרות כוללת לעיתים \"אין $k$ כזה\" — תמיד בדקו אם הגבולות באמת שווים לפני פתרון $k$.",
-      "skill_atoms": []
+      "source_item_id": "96cbfb21-78b8-5460-858e-d5dccdcd4c85",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{jump}$",
+        "$\\text{removable}$",
+        "$\\text{infinite}$",
+        "$\\text{none}$"
+      ],
+      "options_he": [
+        "$\\text{jump}$",
+        "$\\text{removable}$",
+        "$\\text{infinite}$",
+        "$\\text{none}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Use EVT to explain why $f(x)=x^2$ attains a minimum on $[-3,5]$. State the minimum and where it occurs.",
-      "stem_he": "השתמש ב-EVT להסביר למה $f(x)=x^2$ מגיעה למינימום על $[-3,5]$.",
+      "stem_en": "At which point does $f(x) = \\dfrac{x + 2}{x^2 - 4}$ have a removable discontinuity?",
+      "stem_he": "באיזו נקודה יש ל-$f(x) = \\dfrac{x + 2}{x^2 - 4}$ אי-רציפות סליקה?",
+      "explanation_en": "**Factor.** $\\dfrac{x+2}{(x-2)(x+2)} = \\dfrac{1}{x-2}$; the $(x+2)$ cancels, so $x = -2$ is removable.\n\n**Answer:** $x = -2$ (while $x = 2$ is an infinite discontinuity).",
+      "explanation_he": "**פירוק.** $\\dfrac{x+2}{(x-2)(x+2)} = \\dfrac{1}{x-2}$; הגורם $(x+2)$ מצטמצם, ולכן $x = -2$ סליקה.\n\n**תשובה:** $x = -2$ (בעוד $x = 2$ אי-רציפות אינסופית).",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f(x)=x^2$ is a polynomial, continuous on $[-3,5]$. By EVT, $f$ attains its minimum. Min $= f(0)=0$ at $x=0$",
-          "0$",
-          "0"
+        "options_en": [
+          "$x = -2$",
+          "$x = 2$",
+          "$x = 0$",
+          "$x = 4$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$x = -2$",
+          "$x = 2$",
+          "$x = 0$",
+          "$x = 4$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$f(x)=x^2$ is a polynomial, continuous on the closed interval $[-3,5]$. By EVT, $f$ attains both a maximum and minimum on $[-3,5]$. Minimum: $f(0)=0$ at $x=0$ (vertex inside the interval). Maximum: $f(5)=25$ at the right endpoint.\n\n**How to think about it:**\nEVT guarantees existence of extrema — it does not find them. For $x^2$ on a closed interval containing $0$, the minimum is at the vertex; max is at the endpoint farthest from zero.\n\n**Common slip:**\nApplying EVT on $(-3,5)$ (open interval) — the theorem requires a closed, bounded interval. Also confusing EVT with finding critical points via $f'=0$.\n\n**Exam tip:**\nState all three EVT hypotheses explicitly: closed, bounded, continuous. Then identify where the extremum occurs.",
-      "explanation_he": "**למה זה נכון:**\n$f(x)=x^2$ פולינום, רציפה על $[-3,5]$. מ-EVT, $f$ מגיעה למקסימום ומינימום. מינימום: $f(0)=0$ ב-$x=0$ (קודקוד בתוך הקטע). מקסימום: $f(5)=25$ בקצה ימני.\n\n**איך לחשוב על זה:**\nEVT מבטיח קיום קיצונים — לא מוצא אותם. ל-$x^2$ על קטע סגור שמכיל $0$, המינימום בקודקוד; המקסימום בקצה הרחוק מ-$0$.\n\n**טעות נפוצה:**\nיישום EVT על $(-3,5)$ (קטע פתוח) — המשפט דורש קטע סגור וחסום. גם בלבול EVT עם מציאת נקודות קריטיות דרך $f'=0$.\n\n**טיפ לבחינה:**\nציינו שלוש הנחות EVT: סגור, חסום, רציף. ואז זהו היכן הקיצון מתקבל.",
-      "skill_atoms": []
+      "source_item_id": "afd84b55-791f-5d17-af0c-83e779fbe39e",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$x = -2$",
+        "$x = 2$",
+        "$x = 0$",
+        "$x = 4$"
+      ],
+      "options_he": [
+        "$x = -2$",
+        "$x = 2$",
+        "$x = 0$",
+        "$x = 4$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Prove that $x^{2n+1}+x-1=0$ has a real root for every $n\\ge 1$.",
-      "stem_he": "הוכח ש-$x^{2n+1}+x-1=0$ בעלת שורש ממשי לכל $n\\ge 1$.",
+      "stem_en": "Compute $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x - 2}$ (the removable value).",
+      "stem_he": "חשבו את $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x - 2}$ (הערך הסליק).",
+      "explanation_en": "**Factor and cancel.** $x + 2 \\to 4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**פירוק וצמצום.** $x + 2 \\to 4$.\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f(x)=x^{2n+1}+x-1$ is a polynomial. $f(0)=-1<0$. $f(1)=1>0$. By IVT, $\\exists c\\in(0,1):\\;f(c)=0$. ∎",
-          "0$. ∎",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nLet $f(x)=x^{2n+1}+x-1$ for fixed $n\\ge 1$. Polynomial → continuous on $\\mathbb{R}$. $f(0)=0+0-1=-1<0$. $f(1)=1+1-1=1>0$. By IVT on $[0,1]$, $\\exists c\\in(0,1): f(c)=0$. Works for every $n\\ge 1$ because the sign pattern at $0$ and $1$ is independent of $n$.\n\n**How to think about it:**\nThe odd power $x^{2n+1}$ at $x=1$ always equals $1$ regardless of $n$. At $x=0$ it vanishes. This uniform sign change is what makes the proof work for all $n$.\n\n**Common slip:**\nTrying to find the root explicitly, or claiming uniqueness without proving $f'>0$.\n\n**Exam tip:**\n\"For every $n$\" proofs need only show the argument is uniform — one IVT application on $[0,1]$ suffices.",
-      "explanation_he": "**למה זה נכון:**\n$f(x)=x^{2n+1}+x-1$ ל-$n\\ge 1$ קבוע. פולינום → רציפה על $\\mathbb{R}$. $f(0)=-1<0$. $f(1)=1>0$. מ-IVT על $[0,1]$, $\\exists c\\in(0,1): f(c)=0$. עובד לכל $n\\ge 1$ כי דפוס הסימנים ב-$0$ ו-$1$ לא תלוי ב-$n$.\n\n**איך לחשוב על זה:**\nהחזקה האי-זוגית $x^{2n+1}$ ב-$x=1$ תמיד $1$ ללא קשר ל-$n$. ב-$x=0$ היא מתאפסת. החלפת הסימן האחידה היא מה שמאפשרת הוכחה לכל $n$.\n\n**טעות נפוצה:**\nניסיון למצוא את השורש במפורש, או טענה על יחידות בלי להוכיח $f'>0$.\n\n**טיפ לבחינה:**\nהוכחות \"לכל $n$\" דורשות רק שהטיעון אחיד — יישום IVT אחד על $[0,1]$ מספיק.",
-      "skill_atoms": []
+      "source_item_id": "ac2fee70-64dd-571f-93ce-ce9f86a6cc48",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x) = \\dfrac{x^2 - 9}{x - 3}$, what value at $x = 3$ makes $f$ continuous?",
+      "stem_he": "עבור $f(x) = \\dfrac{x^2 - 9}{x - 3}$, איזה ערך ב-$x = 3$ הופך את $f$ לרציפה?",
+      "explanation_en": "**Take the limit.** $x + 3 \\to 6$; define $f(3) = 6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**לוקחים גבול.** $x + 3 \\to 6$; מגדירים $f(3) = 6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "c4551bd4-bf50-5d30-a484-ad5e828ad0bb",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 1} \\dfrac{x^3 - 1}{x - 1}$ (the removable value).",
+      "stem_he": "חשבו את $\\lim_{x \\to 1} \\dfrac{x^3 - 1}{x - 1}$ (הערך הסליק).",
+      "explanation_en": "**Factor.** $x^3 - 1 = (x-1)(x^2 + x + 1)$; cancel and substitute $\\to 3$.\n\n**Answer:** $3$.",
+      "explanation_he": "**פירוק.** $x^3 - 1 = (x-1)(x^2 + x + 1)$; מצמצמים ומציבים $\\to 3$.\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "9f1db5fb-a325-5458-95ee-4bf41c4697d7",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x) = \\dfrac{x^2 - 1}{x - 1}$ extended continuously, find $f(1)$.",
+      "stem_he": "עבור $f(x) = \\dfrac{x^2 - 1}{x - 1}$ בהרחבה רציפה, מצאו $f(1)$.",
+      "explanation_en": "**Limit.** $x + 1 \\to 2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**גבול.** $x + 1 \\to 2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "removable_discontinuity"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "aab276cf-e508-5a8c-80a6-93245ed7e37e",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $f(x) = \\dfrac{1}{x}$ is continuous at $x = 0$.",
+      "stem_he": "נכון או לא נכון: $f(x) = \\dfrac{1}{x}$ רציפה ב-$x = 0$.",
+      "explanation_en": "**$f$ is undefined at $x = 0$** (division by zero), so it cannot be continuous there. **False**.",
+      "explanation_he": "**$f$ אינה מוגדרת ב-$x = 0$** (חלוקה באפס), ולכן אינה רציפה שם. **לא נכון**.",
+      "skill_atoms": [
+        "continuity"
+      ],
+      "answer_payload": {
+        "value": false
+      },
+      "source_item_id": "82d46572-9207-5631-a950-78e5e9328a7d",
+      "points_level_min": "5pt",
+      "correct_bool": false
+    },
+    {
+      "ord": 13,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: if $\\lim_{x \\to a} f(x) = f(a)$, then $f$ is continuous at $a$.",
+      "stem_he": "נכון או לא נכון: אם $\\lim_{x \\to a} f(x) = f(a)$, אז $f$ רציפה ב-$a$.",
+      "explanation_en": "**This is the definition of continuity at a point.** **True**.",
+      "explanation_he": "**זו בדיוק הגדרת הרציפות בנקודה.** **נכון**.",
+      "skill_atoms": [
+        "continuity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "92c5eac1-5e92-5ee5-b05a-6a5616f3fa83",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "$f(x) = x^2$ for $x \\le 1$ and $f(x) = kx$ for $x > 1$. Find $k$ so $f$ is continuous at $x = 1$.",
+      "stem_he": "$f(x) = x^2$ עבור $x \\le 1$ ו-$f(x) = kx$ עבור $x > 1$. מצאו $k$ כך ש-$f$ רציפה ב-$x = 1$.",
+      "explanation_en": "**Match the pieces at $x = 1$.** Left: $1^2 = 1$; right: $k\\cdot 1 = k$.\n\n**Solve.** $k = 1$.\n\n**Answer:** $k = 1$.",
+      "explanation_he": "**התאמת החלקים ב-$x = 1$.** משמאל: $1^2 = 1$; מימין: $k\\cdot 1 = k$.\n\n**פתרון.** $k = 1$.\n\n**תשובה:** $k = 1$.",
+      "skill_atoms": [
+        "continuity"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "a76cbe39-9dea-54ab-9426-75fbdd25b0c3",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "$f(x) = x^2$ for $x \\le 2$ and $f(x) = ax + 1$ for $x > 2$. Find $a$ so $f$ is continuous at $x = 2$.",
+      "stem_he": "$f(x) = x^2$ עבור $x \\le 2$ ו-$f(x) = ax + 1$ עבור $x > 2$. מצאו $a$ כך ש-$f$ רציפה ב-$x = 2$.",
+      "explanation_en": "**Match at $x = 2$.** Left: $4$; right: $2a + 1$.\n\n**Solve $2a + 1 = 4$.** $a = \\tfrac{3}{2}$.\n\n**Answer:** $a = \\tfrac{3}{2}$.",
+      "explanation_he": "**התאמה ב-$x = 2$.** משמאל: $4$; מימין: $2a + 1$.\n\n**פתרון $2a + 1 = 4$.** $a = \\tfrac{3}{2}$.\n\n**תשובה:** $a = \\tfrac{3}{2}$.",
+      "skill_atoms": [
+        "continuity"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "deacdcdd-26f6-5bfb-a095-2116e40a2130",
+      "points_level_min": "5pt",
+      "correct_answer": "1.5"
     }
   ],
   "est_minutes": 55,

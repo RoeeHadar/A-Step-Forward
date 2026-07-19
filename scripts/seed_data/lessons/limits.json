@@ -218,148 +218,346 @@
       "body_he_md": "**טכניקות מרכזיות (לפי סדר ניסיון):**\n1. **הצבה ישירה** — תמיד ראשון; אם אין צורה בלתי-קצובה — סיימתם.\n2. **פירוק וצמצום** — לביטויי $0/0$ פולינומיים.\n3. **צמוד** — כששורש ריבועי נותן $0/0$.\n4. **גבולות סטנדרטיים** — שינון $\\sin x/x$, $(e^x-1)/x$, $\\ln(1+x)/x$ וטריקי קנה-מידה.\n5. **לופיטal** — מוצא אחרון ל-$0/0$ או $\\infty/\\infty$ עקשניים; גזירת מונה ומכנה בנפרד.\n\n**מסקנה:** כעת תוכלו לזהות איזו שיטה מתאימה ממבנה השאלה בלבד — לפני שורת אלגברה אחת. בדקו גבולות חד-צדדיים כשהתחום מוגבל ($\\ln x$, $\\sqrt{x}$, $|x|$). השוו מעלות פולינומים ב-$\\infty$.\n\n**המשך:** עברו ל-`concept:continuity` לחיבור גבולות עם ערכי פונקציה בנקודה."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "factoring",
+      "limit_at_infinity",
+      "limit_indeterminate",
+      "limit_substitution",
+      "one_sided_limit",
+      "special_limit"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Compute $\\lim_{x\\to 4}\\dfrac{x^2 - 16}{x-4}$.",
-      "stem_he": "חשבו $\\lim_{x\\to 4}\\dfrac{x^2-16}{x-4}$.",
+      "stem_en": "Compute $\\lim_{x \\to 1} (x^2 + 2x + 1)$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 1} (x^2 + 2x + 1)$.",
+      "explanation_en": "**Substitute.** $1 + 2 + 1 = 4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**הצבה.** $1 + 2 + 1 = 4$.\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "limit_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\lim_{x\\to 4}\\dfrac{(x-4)(x+4)}{x-4} = \\lim_{x\\to 4}(x+4) = 8$. ∎\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8$. ∎\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\nSubstituting $x=4$ gives $\\frac{16-16}{0}=\\frac{0}{0}$ — indeterminate. Factor: $x^2-16=(x-4)(x+4)$. Cancel $(x-4)$ (valid since $x\\ne 4$ in the limit) and substitute: $4+4=8$.\n\n**How to think about it:**\nThis is the difference-of-squares pattern $(x^2-a^2)/(x-a)\\to 2a$. Here $a=4$, so the answer is $8$. Always try substitution first; when you see $0/0$ with polynomials, factor before reaching for L'Hôpital.\n\n**Common slip:**\nConcluding the limit is undefined because the function is undefined at $x=4$. Or cancelling incorrectly and getting $x-4$ instead of $x+4$ after factoring.\n\n**Exam tip:**\nWrite $0/0$ explicitly, show the factorisation, then cancellation. Bagrut rubrics award partial credit for correct setup even if the final arithmetic fails.",
-      "explanation_he": "**למה זה נכון:**\nהצבת $x=4$ נותנת $\\frac{16-16}{0}=\\frac{0}{0}$ — בלתי-קצוב. פירוק: $x^2-16=(x-4)(x+4)$. צמצום $(x-4)$ (תקין כי $x\\ne 4$ בגבול) והצבה: $4+4=8$.\n\n**איך לחשוב על זה:**\nזה דפוס הפרש ריבועים $(x^2-a^2)/(x-a)\\to 2a$. כאן $a=4$, ולכן התשובה $8$. תמיד נסו הצבה ראשון; ב-$0/0$ עם פולינומים — פרקו לפני לופיטal.\n\n**טעות נפוצה:**\nמסקנה שהגבול לא מוגדר כי הפונקציה לא מוגדרת ב-$x=4$. או צמצום שגוי וקבלת $x-4$ במקום $x+4$.\n\n**טיפ לבחינה:**\nכתבו $0/0$ במפורש, הציגו פירוק ואז צמצום. מחוון הבגרות נותן ניקוד חלקי על הגדרה נכונה גם אם החשבון הסופי שגוי.",
-      "skill_atoms": []
+      "source_item_id": "0e25b999-7443-5cc7-a7ad-02b0b36498a9",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 2,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\lim_{x\\to 0}\\dfrac{\\sin(5x)}{x}$.",
-      "stem_he": "חשבו $\\lim_{x\\to 0}\\dfrac{\\sin(5x)}{x}$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\tan(2x)}{x}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\tan(2x)}{x}$.",
+      "explanation_en": "**Step 1 — Rewrite.** $\\dfrac{\\tan 2x}{x} = 2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.\n\n**Step 2 — Take the limit.** $2\\cdot 1\\cdot 1 = 2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**שלב 1 — כתיבה מחדש.** $2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.\n\n**שלב 2 — גבול.** $2\\cdot 1\\cdot 1 = 2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nWrite as $5\\cdot\\dfrac{\\sin(5x)}{5x}\\to 5\\cdot 1 = 5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5"
+        "steps_en": [
+          "**Step 1 — Rewrite.** $\\dfrac{\\tan 2x}{x} = 2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.",
+          "**Step 2 — Take the limit.** $2\\cdot 1\\cdot 1 = 2$.",
+          "**Answer:** $2$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — כתיבה מחדש.** $2\\cdot\\dfrac{\\sin 2x}{2x}\\cdot\\dfrac{1}{\\cos 2x}$.",
+          "**שלב 2 — גבול.** $2\\cdot 1\\cdot 1 = 2$.",
+          "**תשובה:** $2$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=0$: $\\sin(0)=0$, denominator $0$ — form $0/0$. Rewrite as $5\\cdot\\dfrac{\\sin(5x)}{5x}$. The standard limit $\\lim_{u\\to 0}\\frac{\\sin u}{u}=1$ with $u=5x$ gives $5\\cdot 1=5$.\n\n**How to think about it:**\nThe rescaling trick converts any $\\sin(kx)/x$ to $k\\cdot\\sin(kx)/(kx)$. Recognise the inner argument $5x$ and pull out the factor $5$. This is faster than L'Hôpital for trig limits.\n\n**Common slip:**\nUsing $\\sin(5x)/x\\to 0$ because $\\sin(0)=0$ — confusing the value with the limit. Or forgetting to multiply by $5$ after applying $\\sin u/u\\to 1$.\n\n**Exam tip:**\nMemorise $\\lim_{x\\to 0}\\sin(kx)/x=k$ as a one-line identity. It appears on every Bagrut 5-unit paper and saves time on multi-step problems.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=0$: $\\sin(0)=0$, מכנה $0$ — צורה $0/0$. כותבים $5\\cdot\\dfrac{\\sin(5x)}{5x}$. הגבול הסטנדרטי $\\lim_{u\\to 0}\\frac{\\sin u}{u}=1$ עם $u=5x$ נותן $5\\cdot 1=5$.\n\n**איך לחשוב על זה:**\nטריק קנה-המידה ממיר $\\sin(kx)/x$ ל-$k\\cdot\\sin(kx)/(kx)$. זיהו את הארגומנט $5x$ והוציאו גורם $5$. מהיר יותר מלופיטal לגבולות טריגונומטריים.\n\n**טעות נפוצה:**\n$\\sin(5x)/x\\to 0$ כי $\\sin(0)=0$ — בלבול ערך עם גבול. או שכחת כפל ב-$5$ אחרי $\\sin u/u\\to 1$.\n\n**טיפ לבחינה:**\nשיננו $\\lim_{x\\to 0}\\sin(kx)/x=k$ כזהות בשורה. מופיע בכל בגרות 5 יחידות וחוסך זמן.",
-      "skill_atoms": []
+      "source_item_id": "5c5ab999-62c1-5d38-89b3-637d115309c2",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Find $\\lim_{x\\to \\infty}\\dfrac{3x^2-1}{2x^2+5}$.",
-      "stem_he": "מצאו $\\lim_{x\\to\\infty}\\dfrac{3x^2-1}{2x^2+5}$.",
+      "kind": "true_false",
+      "difficulty": "hard",
+      "stem_en": "True or False: $\\lim_{x \\to 0} \\dfrac{1}{x^2}$ grows without bound (equals $+\\infty$).",
+      "stem_he": "נכון או לא נכון: $\\lim_{x \\to 0} \\dfrac{1}{x^2}$ גדל ללא גבול (שווה $+\\infty$).",
+      "explanation_en": "**Both sides.** $\\tfrac{1}{x^2} > 0$ and $\\to +\\infty$ from both sides — **true**.",
+      "explanation_he": "**שני הצדדים.** $\\tfrac{1}{x^2} > 0$ ו-$\\to +\\infty$ משני הצדדים — **נכון**.",
+      "skill_atoms": [
+        "one_sided_limit"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Degrees equal; ratio of leading coefficients: $\\dfrac{3}{2}$",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nAs $x\\to\\infty$, both numerator and denominator are degree-2 polynomials. Divide by $x^2$: $\\dfrac{3-1/x^2}{2+5/x^2}\\to\\dfrac{3}{2}$. Equivalently: equal degrees means the limit is the ratio of leading coefficients $3/2$.\n\n**How to think about it:**\nFor rational functions at infinity, compare degrees first. Same degree $\\Rightarrow$ ratio of leading terms. Higher numerator degree $\\Rightarrow$ $\\pm\\infty$; lower $\\Rightarrow$ $0$. No need for L'Hôpital here.\n\n**Common slip:**\nSubstituting $x=\\infty$ directly (invalid). Or dividing only the numerator by $x^2$ but not the denominator. Some students answer $3/2$ from coefficients but cannot explain why.\n\n**Exam tip:**\nState \"degrees equal, ratio of leading coefficients\" — one sentence earns full reasoning credit on Bagrut limit-at-infinity questions worth 4–6 points.",
-      "explanation_he": "**למה זה נכון:**\nכש-$x\\to\\infty$, מונה ומכנה פולינומים ממעלה 2. חלוקה ב-$x^2$: $\\dfrac{3-1/x^2}{2+5/x^2}\\to\\dfrac{3}{2}$. שווה ערך: מעלות שוות — יחס מקדמים מובילים $3/2$.\n\n**איך לחשוב על זה:**\nבפונקציות רציונליות ב-$\\infty$, השוו מעלות קודם. מעלה שווה $\\Rightarrow$ יחס המקדמים המובילים. מונה גבוה $\\Rightarrow$ $\\pm\\infty$; נמוך $\\Rightarrow$ $0$. אין צורך בלופיטal.\n\n**טעות נפוצה:**\nהצבת $x=\\infty$ ישירות (לא תקף). חלוקת מונה ב-$x^2$ בלי מכנה. תשובה $3/2$ בלי הסבר.\n\n**טיפ לבחינה:**\nכתבו \"מעלות שוות, יחס מקדמים מובילים\" — משפט אחד מקבל ניקוד הסבר מלא בגבולות ב-$\\infty$.",
-      "skill_atoms": []
+      "source_item_id": "7e98cfb5-db7d-5e27-ac32-c1a7d9185a02",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\lim_{x\\to 0^+}\\ln x$.",
-      "stem_he": "חשבו $\\lim_{x\\to 0^+}\\ln x$.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "What is $\\lim_{x \\to 0} \\dfrac{\\tan x}{x}$?",
+      "stem_he": "מהו $\\lim_{x \\to 0} \\dfrac{\\tan x}{x}$?",
+      "explanation_en": "**Rewrite.** $\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x} \\to 1\\cdot 1$.\n\n**Answer:** $1$.",
+      "explanation_he": "**כתיבה מחדש.** $\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x} \\to 1$.\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$-\\infty$. As $x\\to 0^+$, $\\ln x \\to -\\infty$",
-          "0"
+        "options_en": [
+          "$1$",
+          "$0$",
+          "$\\infty$",
+          "$\\tfrac12$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$1$",
+          "$0$",
+          "$\\infty$",
+          "$\\tfrac12$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$\\ln x$ is defined only for $x>0$. As $x\\to 0^+$, $x$ approaches zero from the positive side and $\\ln x$ decreases without bound: $\\lim_{x\\to 0^+}\\ln x=-\\infty$.\n\n**How to think about it:**\nThis is a **one-sided limit** — you must approach from the right because $\\ln x$ is undefined for $x\\le 0$. The graph of $y=\\ln x$ has a vertical asymptote at $x=0$.\n\n**Common slip:**\nWriting $\\lim_{x\\to 0}\\ln x$ without the $^+$ superscript (the two-sided limit does not exist). Or answering $0$ because $\\ln(1)=0$ and confusing nearby values.\n\n**Exam tip:**\nWhenever you see $\\ln x$, $\\sqrt{x}$, or $1/x$ at a boundary point, check the domain and specify one-sided limits. Examiners deliberately test this on 3–5 point questions.",
-      "explanation_he": "**למה זה נכון:**\n$\\ln x$ מוגדר רק ל-$x>0$. כש-$x\\to 0^+$, $x$ מתקרב לאפס מימין ו-$\\ln x$ יורד ללא גבול: $\\lim_{x\\to 0^+}\\ln x=-\\infty$.\n\n**איך לחשוב על זה:**\nזה **גבול חד-צדדי** — חובה להתקרב מימין כי $\\ln x$ לא מוגדר ל-$x\\le 0$. לגרף $y=\\ln x$ אסימפטוטה אנכית ב-$x=0$.\n\n**טעות נפוצה:**\n$\\lim_{x\\to 0}\\ln x$ בלי $^+$ (הגבול הדו-צדדי לא קיים). תשובה $0$ כי $\\ln(1)=0$ — בלבול.\n\n**טיפ לבחינה:**\nב-$\\ln x$, $\\sqrt{x}$ או $1/x$ בגבול — בדקו תחום וציינו גבול חד-צדדי. בוחנים בודקים זאת במפורש.",
-      "skill_atoms": []
+      "source_item_id": "acd1b439-2ed8-58e5-aefb-20b76b06da61",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "$\\tfrac12$"
+      ],
+      "options_he": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "$\\tfrac12$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9}-3}{x}$ using the conjugate method.",
-      "stem_he": "חשבו $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9}-3}{x}$ בשיטת הצמוד.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\lim_{x \\to 4} (2x - 3)$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 4} (2x - 3)$.",
+      "explanation_en": "**Substitute.** $8 - 3 = 5$.\n\n**Answer:** $5$.",
+      "explanation_he": "**הצבה.** $8 - 3 = 5$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "limit_substitution"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nMultiply by $\\dfrac{\\sqrt{x+9}+3}{\\sqrt{x+9}+3}$: $\\dfrac{x}{x(\\sqrt{x+9}+3)}=\\dfrac{1}{\\sqrt{x+9}+3}\\to\\dfrac{1}{6}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\dfrac{1}{\\sqrt{x+9}+3}\\to\\dfrac{1}{6}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "6"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nSubstituting $x=0$: $\\frac{\\sqrt{9}-3}{0}=\\frac{0}{0}$. Multiply by conjugate $\\dfrac{\\sqrt{x+9}+3}{\\sqrt{x+9}+3}$: numerator becomes $x$, giving $\\dfrac{x}{x(\\sqrt{x+9}+3)}=\\dfrac{1}{\\sqrt{x+9}+3}\\to\\dfrac{1}{6}$.\n\n**How to think about it:**\nSquare root in numerator plus $0/0$ equals conjugate method. After rationalising, the $x$ cancels cleanly. Compare with $\\lim_{x\\to 0}\\frac{\\sqrt{x+4}-2}{x}=\\frac{1}{4}$ — same structure.\n\n**Common slip:**\nForgetting to multiply **both** numerator and denominator by the conjugate. Sign errors in the difference-of-squares step: $(x+9)-9=x$, not $x+9-3$.\n\n**Exam tip:**\nShow the conjugate multiplication explicitly. On Bagrut papers, this technique alone appears in 2–3 limit questions per exam — worth practising until automatic.",
-      "explanation_he": "**למה זה נכון:**\nהצבת $x=0$: $\\frac{\\sqrt{9}-3}{0}=\\frac{0}{0}$. כפל בצמוד $\\dfrac{\\sqrt{x+9}+3}{\\sqrt{x+9}+3}$: מונה $x$, ולכן $\\dfrac{1}{\\sqrt{x+9}+3}\\to\\dfrac{1}{6}$.\n\n**איך לחשוב על זה:**\nשורש במונה ו-$0/0$ — שיטת צמוד. אחרי רציונליזציה, $x$ מתצמצם. השוו ל-$\\lim_{x\\to 0}\\frac{\\sqrt{x+4}-2}{x}=\\frac{1}{4}$ — אותו מבנה.\n\n**טעות נפוצה:**\nשכחת כפל **גם** במונה וגם במכנה. שגיאות סימן: $(x+9)-9=x$, לא $x+9-3$.\n\n**טיפ לבחינה:**\nהציגו כפל צמוד במפורש. בבגרות, טכניקה זו מופיעה ב-2–3 שאלות גבול — שווה תרגול עד אוטומטיות. בדקו: $\\frac{1}{\\sqrt{9}+3}=\\frac{1}{6}$. מחוון הבחינה מעניק ניקוד חלקי על זיהוי הצורה הבלתי-קצובה ובחירת שיטת הפתרון הנכונה.",
-      "skill_atoms": []
+      "source_item_id": "8a6476e6-db71-56ab-9455-349c86d978ea",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Compute $\\lim_{x\\to 0}\\dfrac{e^x - 1}{x}$ (do not use L'Hôpital).",
-      "stem_he": "חשבו $\\lim_{x\\to 0}\\dfrac{e^x-1}{x}$ (ללא לופיטל).",
+      "stem_en": "What is $\\lim_{x \\to \\infty} \\dfrac{2x^2 + 1}{x^2 + 3}$?",
+      "stem_he": "מהו $\\lim_{x \\to \\infty} \\dfrac{2x^2 + 1}{x^2 + 3}$?",
+      "explanation_en": "**Ratio of leading coefficients.** $\\tfrac{2}{1} = 2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**יחס מקדמים מובילים.** $\\tfrac{2}{1} = 2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "limit_at_infinity"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "This is the standard limit (definition of $(e^x)'$ at $x=0$), or Taylor: $e^x = 1+x+O(x^2)$, so $\\dfrac{e^x-1}{x}\\to 1$",
-          "1+x+O(x^2)$, so $\\dfrac{e^x-1}{x}\\to 1$",
-          "1"
+        "options_en": [
+          "$2$",
+          "$0$",
+          "$\\infty$",
+          "$1$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$2$",
+          "$0$",
+          "$\\infty$",
+          "$1$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=0$: $e^0-1=0$, denominator $0$ — form $0/0$. This is the **standard limit** $\\lim_{x\\to 0}\\frac{e^x-1}{x}=1$, equivalent to the definition of $(e^x)'$ at zero. Taylor: $e^x=1+x+\\frac{x^2}{2}+\\cdots$, so $(e^x-1)/x=1+\\frac{x}{2}+\\cdots\\to 1$.\n\n**How to think about it:**\nRecognise the pattern immediately — do not use L'Hôpital when the question forbids it. The four standard limits ($\\sin x/x$, $(e^x-1)/x$, $\\ln(1+x)/x$, $(1+1/x)^x$) should be memorised as a set.\n\n**Common slip:**\nApplying L'Hôpital anyway (loses method points when forbidden). Or confusing with $\\lim_{x\\to 0}\\frac{e^x}{x}$ which diverges.\n\n**Exam tip:**\nWhen a question says \"without L'Hôpital\", quote the standard limit or use Taylor. One line of justification is sufficient if you name the identity.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=0$: $e^0-1=0$, מכנה $0$ — $0/0$. זה **גבול סטנדרטי** $\\lim_{x\\to 0}\\frac{e^x-1}{x}=1$, שווה ערך להגדרת $(e^x)'$ באפס. טיילור: $e^x=1+x+\\cdots$, ולכן $(e^x-1)/x\\to 1$.\n\n**איך לחשוב על זה:**\nזיהו מיד — אל תשתמשו בלופיטal כשאסור. ארבעת הגבולות הסטנדרטיים ($\\sin x/x$, $(e^x-1)/x$, $\\ln(1+x)/x$, $(1+1/x)^x$) לשינון כקבוצה.\n\n**טעות נפוצה:**\nלופיטal בכל זאת (מאבד נקודות שיטה). בלבול עם $\\lim_{x\\to 0} e^x/x$ שמתפוצץ.\n\n**טיפ לבחינה:**\nכש\"ללא לופיטal\" — צטטו גבול סטנדרטי או טיילור. שורת הצדקה אחת מספיקה. זהות $(e^x-1)/x$ מופיעה גם בהוכחת נגזרת האקספוננט.",
-      "skill_atoms": []
+      "source_item_id": "ff477593-c5e6-56cb-8447-af5204cc04c8",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$2$",
+        "$0$",
+        "$\\infty$",
+        "$1$"
+      ],
+      "options_he": [
+        "$2$",
+        "$0$",
+        "$\\infty$",
+        "$1$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find $\\lim_{x\\to 1}\\dfrac{x^3-1}{x^2-1}$.",
-      "stem_he": "מצאו $\\lim_{x\\to 1}\\dfrac{x^3-1}{x^2-1}$.",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin x}{x}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin x}{x}$.",
+      "explanation_en": "**Fundamental trig limit.** $\\lim_{x\\to0}\\tfrac{\\sin x}{x} = 1$.\n\n**Answer:** $1$.",
+      "explanation_he": "**גבול טריגונומטרי יסודי.** $\\lim_{x\\to0}\\tfrac{\\sin x}{x} = 1$.\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nFactor: $\\dfrac{(x-1)(x^2+x+1)}{(x-1)(x+1)}=\\dfrac{x^2+x+1}{x+1}\\to\\dfrac{3}{2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\dfrac{x^2+x+1}{x+1}\\to\\dfrac{3}{2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 1
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=1$: numerator $1-1=0$, denominator $1-1=0$ — form $0/0$. Factor: $x^3-1=(x-1)(x^2+x+1)$ and $x^2-1=(x-1)(x+1)$. Cancel $(x-1)$: $\\dfrac{x^2+x+1}{x+1}\\big|_{x=1}=\\dfrac{3}{2}$.\n\n**How to think about it:**\nBoth numerator and denominator share the factor $(x-1)$ because both vanish at $x=1$. After cancellation, direct substitution works. This is factoring, not L'Hôpital — faster and cleaner.\n\n**Common slip:**\nCancelling $(x-1)$ incorrectly and leaving $(x^2+x+1)/(x-1)$ instead of $(x+1)$ in the denominator. Arithmetic: $1+1+1=3$, not $2$.\n\n**Exam tip:**\nWhen both top and bottom are zero, look for a common linear factor first. Sum-of-cubes and difference-of-squares formulas appear together on Bagrut algebra-limit questions.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=1$: מונה $0$, מכנה $0$ — $0/0$. פירוק: $x^3-1=(x-1)(x^2+x+1)$, $x^2-1=(x-1)(x+1)$. צמצום $(x-1)$: $\\dfrac{x^2+x+1}{x+1}\\big|_{x=1}=\\dfrac{3}{2}$.\n\n**איך לחשוב על זה:**\nמונה ומכנה חולקים $(x-1)$ כי שניהם מתאפסים ב-$x=1$. אחרי צמצום — הצבה ישירה. פירוק, לא לופיטal — מהיר ונקי.\n\n**טעות נפוצה:**\nצמצום שגוי — $(x^2+x+1)/(x-1)$ במקום $(x+1)$ במכנה. חשבון: $1+1+1=3$.\n\n**טיפ לבחינה:**\nכשמונה ומכנה אפס — חפשו גורם לינארי משותף. נוסחאות חזקות שלישית וריבוע מופיעות יחד בבגרות. אימות: הצבה אחרי צמצום חייבת לתת $\\frac{3}{2}$.",
-      "skill_atoms": []
+      "source_item_id": "edebf9eb-d565-5413-bac4-76e1c342632f",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Use L'Hôpital to compute $\\lim_{x\\to 0}\\dfrac{x - \\sin x}{x^3}$.",
-      "stem_he": "השתמש בלופיטל לחישוב $\\lim_{x\\to 0}\\dfrac{x-\\sin x}{x^3}$.",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin(5x)}{x}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin(5x)}{x}$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{\\sin 5x}{x} = 5\\cdot\\dfrac{\\sin 5x}{5x} \\to 5\\cdot 1$.\n\n**Answer:** $5$.",
+      "explanation_he": "**כתיבה מחדש.** $\\dfrac{\\sin 5x}{x} = 5\\cdot\\dfrac{\\sin 5x}{5x} \\to 5$.\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nApply L'Hôpital three times: $\\dfrac{1-\\cos x}{3x^2}\\to\\dfrac{\\sin x}{6x}\\to\\dfrac{\\cos x}{6}\\to\\dfrac{1}{6}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "6"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nAt $x=0$: form $0/0$. Apply L'Hôpital three times:\n$\\dfrac{1-\\cos x}{3x^2}\\to\\dfrac{\\sin x}{6x}\\to\\dfrac{\\cos x}{6}\\to\\dfrac{1}{6}$.\n\n**How to think about it:**\nEach L'Hôpital step reduces the \"order\" of the indeterminate behaviour. Taylor confirms: $x-\\sin x\\sim x^3/6$, so dividing by $x^3$ gives $1/6$. Verify $0/0$ before **each** application.\n\n**Common slip:**\nDifferentiating with the quotient rule instead of L'Hôpital (invalid). Stopping after one application when the form is still $0/0$. Forgetting the factor $6$ from $(x^3)'=3x^2$ and then $(6x)'=6$.\n\n**Exam tip:**\nWrite \"L'H\" above each equality when applying the rule. Show all three derivative ratios — partial credit per correct step on university rubrics.",
-      "explanation_he": "**למה זה נכון:**\nב-$x=0$: צורה $0/0$. לופיטal שלוש פעמים:\n$\\dfrac{1-\\cos x}{3x^2}\\to\\dfrac{\\sin x}{6x}\\to\\dfrac{\\cos x}{6}\\to\\dfrac{1}{6}$.\n\n**איך לחשוב על זה:**\nכל שלב לופיטal מפחית \"סדר\" התנהגות בלתי-קצובה. טיילור מאשר: $x-\\sin x\\sim x^3/6$, חלוקה ב-$x^3$ נותנת $1/6$. אמתו $0/0$ לפני **כל** יישום.\n\n**טעות נפוצה:**\nגזירה בכלל מנה במקום לופיטal. עצירה אחרי יישום אחד. שכחת גורם $6$ מ-$(x^3)'=3x^2$ ו-$(6x)'=6$.\n\n**טיפ לבחינה:**\nכתבו \"ל'ה\" מעל כל שוויון. הציגו שלוש מנות נגזרות — ניקוד חלקי לכל שלב נכון. טיילור $x-\\sin x\\sim x^3/6$ מאשר $\\frac{1}{6}$ ללא גזירה.",
-      "skill_atoms": []
+      "source_item_id": "cb3864f2-a824-57d2-8fa2-8c958b63e7d3",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x - 2}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 2} \\dfrac{x^2 - 4}{x - 2}$.",
+      "explanation_en": "**Factor and cancel.** $x + 2 \\to 4$.\n\n**Answer:** $4$.",
+      "explanation_he": "**פירוק וצמצום.** $x + 2 \\to 4$.\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "c667a95f-cbd0-51fc-9068-be9471d03b97",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 3} \\dfrac{x^2 - 9}{x - 3}$.",
+      "explanation_en": "**Factor and cancel.** $x + 3 \\to 6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**פירוק וצמצום.** $x + 3 \\to 6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "limit_indeterminate",
+        "factoring"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "cf52c051-82a0-5c9b-a824-1f8e1027680e",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 11,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\lim_{x \\to 0} \\dfrac{\\sin x}{x} = 1$.",
+      "stem_he": "נכון או לא נכון: $\\lim_{x \\to 0} \\dfrac{\\sin x}{x} = 1$.",
+      "explanation_en": "**Fundamental trig limit** — **true**.",
+      "explanation_he": "**גבול טריגונומטרי יסודי** — **נכון**.",
+      "skill_atoms": [
+        "special_limit"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "0dec24e1-a357-5300-8455-3ad7fd7b4cc6",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{1 - \\cos x}{x^2}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{1 - \\cos x}{x^2}$.",
+      "explanation_en": "**Known limit.** $\\lim_{x\\to0}\\dfrac{1-\\cos x}{x^2} = \\tfrac12$.\n\n**Answer:** $\\tfrac12$.",
+      "explanation_he": "**גבול ידוע.** $\\lim_{x\\to0}\\dfrac{1-\\cos x}{x^2} = \\tfrac12$.\n\n**תשובה:** $\\tfrac12$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "e287d6a1-5ae7-5981-8cf9-41c1602afc3e",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin(3x)}{\\sin(2x)}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin(3x)}{\\sin(2x)}$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{\\sin 3x}{\\sin 2x} = \\dfrac{3}{2}\\cdot\\dfrac{\\sin 3x /3x}{\\sin 2x /2x} \\to \\tfrac32$.\n\n**Answer:** $\\tfrac32$.",
+      "explanation_he": "**כתיבה מחדש.** $\\to \\dfrac{3}{2}$.\n\n**תשובה:** $\\tfrac32$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
+      "answer_payload": {
+        "value": 1.5
+      },
+      "source_item_id": "8405a347-e561-5c8a-9530-2d17b5a8b0be",
+      "points_level_min": "5pt",
+      "correct_answer": "1.5"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{e^{x} - 1}{x}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{e^{x} - 1}{x}$.",
+      "explanation_en": "**Known limit.** $\\lim_{x\\to0}\\dfrac{e^x - 1}{x} = 1$ (the slope of $e^x$ at $0$).\n\n**Answer:** $1$.",
+      "explanation_he": "**גבול ידוע.** $\\lim_{x\\to0}\\dfrac{e^x - 1}{x} = 1$ (השיפוע של $e^x$ ב-$0$).\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "46fb83c5-c284-5040-9da9-d09331d65b6d",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\lim_{x \\to 0} \\dfrac{\\sin x}{3x}$.",
+      "stem_he": "חשבו את $\\lim_{x \\to 0} \\dfrac{\\sin x}{3x}$.",
+      "explanation_en": "**Rewrite.** $\\dfrac{1}{3}\\cdot\\dfrac{\\sin x}{x} \\to \\tfrac13$.\n\n**Answer:** $\\tfrac13$.",
+      "explanation_he": "**כתיבה מחדש.** $\\dfrac{1}{3}\\cdot\\dfrac{\\sin x}{x} \\to \\tfrac13$.\n\n**תשובה:** $\\tfrac13$.",
+      "skill_atoms": [
+        "special_limit"
+      ],
+      "answer_payload": {
+        "value": 0.333333
+      },
+      "source_item_id": "a1098189-8d3d-54d8-9a56-ce8d722eda17",
+      "points_level_min": "5pt",
+      "correct_answer": "0.333333"
     }
   ],
   "est_minutes": 50,
