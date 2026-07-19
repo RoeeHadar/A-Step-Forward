@@ -33,6 +33,13 @@
       "body_he_md": "**משולש פסקל:** שורה $n$ (מ-$0$) מציגה $\\binom{n}{0},\\binom{n}{1},\\ldots,\\binom{n}{n}$.\n\n```\nשורה 0:      1\nשורה 1:     1 1\nשורה 2:    1 2 1\nשורה 3:   1 3 3 1\nשורה 4:  1 4 6 4 1\n```\n\nכל ערך פנימי שווה לסכום שני הערכים מעליו — זו זהות פסקל בטבלה. סימטריה נראית: שורה $n$ זהה משמאל לימין ומימין לשמאל.\n\n**משפט הבינום:** לכל $a,b$ ממשיים ו-$n$ שלם לא-שלילי,\n$$(a+b)^n=\\sum_{k=0}^n\\binom{n}{k}a^{n-k}b^k.$$\nאיבר $k$ (מ-$0$) נושא מקדם $\\binom{n}{k}$, חזקה $n-k$ על $a$ וחזקה $k$ על $b$. למציאת חזקה מסוימת של $x$ ב-$(c+dx)^n$, בוחרים $k$ כך שמעריך $x$ מתאים.\n\n**זהויות סכום-שורה (מועדפות בבגרות):**\n- **כולם חיוביים:** $\\sum_{k=0}^n\\binom{n}{k}=2^n$ — הצבה $a=b=1$ (ספירת כל תת-הקבוצות).\n- **סימנים מתחלפים:** $\\sum_{k=0}^n(-1)^k\\binom{n}{k}=0$ ל-$n\\ge1$ — הצבה $a=1$, $b=-1$.\n- **זוגי מול אי-זוגי:** $\\sum_{k\\text{ even}}\\binom{n}{k}=\\sum_{k\\text{ odd}}\\binom{n}{k}=2^{n-1}$ ל-$n\\ge1$.\n\n**ספירה עם חזרות:** אם סדר חשוב וכל אחת מ-$r$ המקומות יכולה להיות כל אחד מ-$n$ סמלים, יש $n^r$ קודים. אם סדר לא חשוב עם חזרות — **כוכבים ופסים** (הרחבה ל-5 יחידות).\n\n**אסטרטגיה לספירה עם אילוצים:** פיצול למקרים זרים (\"בדיוק $k$ נשים\") או **משלים** (סך הכל פחות לא רצוי). שני המסלולים צריכים להסכים — בבחינה בחרו את הקצר."
     },
     {
+      "kind": "theory",
+      "title_en": "When to Use Permutations versus Combinations",
+      "title_he": "מתי משתמשים בחליפות ומתי בצירופים",
+      "body_en_md": "Almost every counting error on the Bagrut is a P-versus-C mistake. Use this decision filter before writing a factorial.\n\n### Ask one question\nDoes the problem treat two arrangements of the same people/objects as different?\n- Yes (codes, podium places, passwords, seating): use a **permutation** $P(n,k)$ or $n!$.\n- No (committees, hands of cards, choosing a subset): use a **combination** $C(n,k)$.\n\n### Bridge identity\n$P(n,k)=C(n,k)\\cdot k!$ says: choose the set, then order it. If the story never cares about that ordering step, stop at $C(n,k)$.\n\n### Restrictions\nHandle forbidden positions by complement counting or by cases. First count the unrestricted total, then subtract illegal arrangements — or split into mutually exclusive cases and add.\n\n### Exam habit\nWrite one Hebrew/English sentence naming “סדר משנה / לא משנה” before the formula. That sentence often earns the method mark even if arithmetic slips later.",
+      "body_he_md": "כמעט כל טעות ספירה בבגרות היא בלבול בין P ל-C. השתמשו במסנן החלטה לפני כתיבת עצרת.\n\n### שאלה אחת\nהאם שתי סידורים של אותם אנשים/עצמים נחשבים שונים?\n- כן (קודים, פודיום, סיסמאות, ישיבה): **חליפה** $P(n,k)$ או $n!$.\n- לא (ועדות, ידיים בקלפים, בחירת תת-קבוצה): **צירוף** $C(n,k)$.\n\n### זהות גשר\n$P(n,k)=C(n,k)\\cdot k!$ אומרת: בחרו קבוצה ואז סדרו אותה. אם הסיפור לא אכפת לו מהסידור — עצרו ב-$C(n,k)$.\n\n### מגבלות\nטפלו באיסורים במשלים או במקרים. ספרו קודם בלי הגבלה ואז החסירו לא-חוקיים — או פצלו למקרים זרים וחברו.\n\n### הרגל בבחינה\nכתבו משפט אחד \"סדר משנה / לא משנה\" לפני הנוסחה. המשפט לעיתים שומר את נקודת השיטה גם אם יש טעות חשבון."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -76,6 +83,15 @@
       "title_he": "דוגמה פתורה 3 — ספירה עם אילוצים (רמת בחינה)",
       "body_en_md": "**Problem:** From 4 men and 5 women, how many committees of 4 can be formed with **at least 2 women**?\n\n\"At least 2\" invites two standard approaches: **direct case split** or **complement**. Pick the one with fewer cases.\n\n### Move 1 — Direct: exactly 2, 3, or 4 women\nCases are disjoint and cover \"at least 2\":\n\n- Exactly 2 women: $\\binom{5}{2}\\binom{4}{2}=10\\times6=60$.\n- Exactly 3 women: $\\binom{5}{3}\\binom{4}{1}=10\\times4=40$.\n- Exactly 4 women: $\\binom{5}{4}\\binom{4}{0}=5\\times1=5$.\n\n**Total (direct):** $60+40+5=105$.\n\n### Move 2 — Complement check\nTotal committees from 9 people: $\\binom{9}{4}=126$.\n\nUnwanted (fewer than 2 women = 0 or 1 woman):\n- 0 women: $\\binom{5}{0}\\binom{4}{4}=1$.\n- 1 woman: $\\binom{5}{1}\\binom{4}{3}=5\\times4=20$.\n\n**Complement:** $126-1-20=105$ ✓.\n\n### Move 3 — Why both methods agree\nDirect and complement partition the same sample space — agreement confirms no missing or double-counted case.\n\n**Exam strategy:** For \"at least $k$\", compare counting unwanted cases vs listing wanted cases. Here complement uses two subtractions; direct uses three additions — similar effort, but complement is safer when \"at least\" means many cases.",
       "body_he_md": "**בעיה:** מ-4 גברים ו-5 נשים, כמה ועדות של 4 ניתן להרכיב עם **לפחות 2 נשים**?\n\n\"לפחות 2\" מזמין שתי גישות: **פיצול ישיר** או **משלים**. בחרו את זו עם פחות מקרים.\n\n### צעד 1 — ישיר: בדיוק 2, 3 או 4 נשים\nהמקרים זרים ומכסים \"לפחות 2\":\n\n- בדיוק 2 נשים: $\\binom{5}{2}\\binom{4}{2}=10\\times6=60$.\n- בדיוק 3 נשים: $\\binom{5}{3}\\binom{4}{1}=10\\times4=40$.\n- בדיוק 4 נשים: $\\binom{5}{4}\\binom{4}{0}=5\\times1=5$.\n\n**סה\"כ (ישיר):** $60+40+5=105$.\n\n### צעד 2 — בדיקת משלים\nכל הוועדות מ-9 אנשים: $\\binom{9}{4}=126$.\n\nלא רצוי (פחות מ-2 נשים = 0 או 1):\n- 0 נשים: $\\binom{5}{0}\\binom{4}{4}=1$.\n- 1 אישה: $\\binom{5}{1}\\binom{4}{3}=5\\times4=20$.\n\n**משלים:** $126-1-20=105$ ✓.\n\n### צעד 3 — למה שתי השיטות מסכימות\nישיר ומשלים מחלקים את אותו מרחב מדגם — הסכמה מאשרת שאין מקרה חסר או ספירה כפולה.\n\n**אסטרטגיית בחינה:** ב\"לפחות $k$\", השוו ספירת לא-רצוי מול רשימת רצוי. כאן משלים — שתי חיסורים; ישיר — שלוש חיבורים — מאמץ דומה, אך משלים בטוח יותר כש\"לפחות\" פירושו הרבה מקרים."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Committee versus Officers",
+      "title_he": "דוגמה פתורה 4 — ועדה מול בעלי תפקידים",
+      "body_en_md": "**Given:** A class has 10 students.\n\n**(a)** Ways to choose a 3-person committee.\n**(b)** Ways to choose chair, secretary, and treasurer (distinct).\n\n### Move 1 — Part (a)\nOrder does not matter → combination.\n$$C(10,3)=\\frac{10\\times9\\times8}{3\\times2\\times1}=120$$\n\n### Move 2 — Part (b)\nRoles differ → permutation.\n$$P(10,3)=10\\times9\\times8=720$$\n\n### Move 3 — Link\nCheck $120\\times3!=720$. Choosing then assigning roles recovers the officer count.\n\n**Answers:** (a) $120$, (b) $720$.\n\n**Exam tip:** If titles appear in the stem, lean permutation; if only “group/committee”, lean combination.",
+      "body_he_md": "**נתון:** בכיתה 10 תלמידים.\n\n**(א)** דרכים לבחור ועדה של 3.\n**(ב)** דרכים לבחור יו\"ר, מזכיר וגזבר (שונים).\n\n### צעד 1 — חלק (א)\nאין סדר → צירוף.\n$$C(10,3)=120$$\n\n### צעד 2 — חלק (ב)\nתפקידים שונים → חליפה.\n$$P(10,3)=720$$\n\n### צעד 3 — קשר\n$120\\times3!=720$ — בחירה ואז הקצאת תפקידים.\n\n**תשובות:** (א) $120$, (ב) $720$.\n\n**טיפ:** אם מופיעים תארים — חליפה; אם רק \"קבוצה/ועדה\" — צירוף."
     },
     {
       "kind": "method_guide",
@@ -260,8 +276,8 @@
       "difficulty": "easy",
       "stem_en": "How many ways to arrange $3$ distinct books on a shelf?",
       "stem_he": "בכמה דרכים לסדר $3$ ספרים שונים על מדף?",
-      "explanation_en": "**$3!=6$.**\n\n**Answer:** $6$.",
-      "explanation_he": "**$3!=6$.**\n\n**תשובה:** $6$.",
+      "explanation_en": "**$3!=6$.**\n\n**Answer:** $6$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$3!=6$.**\n\n**תשובה:** $6$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "factorial"
       ],
@@ -294,7 +310,13 @@
         "$9$",
         "$27$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual",
+        "application",
+        "graphical",
+        "error_analysis"
+      ]
     },
     {
       "ord": 2,
@@ -302,8 +324,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $5!$.",
       "stem_he": "חשבו $5!$.",
-      "explanation_en": "**$5!=5\\cdot 4\\cdot 3\\cdot 2\\cdot 1=120$.**\n\n**Answer:** $120$.",
-      "explanation_he": "**$5!=120$.**\n\n**תשובה:** $120$.",
+      "explanation_en": "**$5!=5\\cdot 4\\cdot 3\\cdot 2\\cdot 1=120$.**\n\n**Answer:** $120$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$5!=120$.**\n\n**תשובה:** $120$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "factorial"
       ],
@@ -312,7 +334,14 @@
       },
       "source_item_id": "f909a256-a807-5dbc-8198-5949369992f2",
       "points_level_min": "4pt",
-      "correct_answer": "120"
+      "correct_answer": "120",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "120",
+        "expected": 120
+      }
     },
     {
       "ord": 3,
@@ -320,8 +349,8 @@
       "difficulty": "hard",
       "stem_en": "How many ways to form a committee of $3$ from $10$ people?",
       "stem_he": "בכמה דרכים להרכיב ועדה של $3$ מתוך $10$ אנשים?",
-      "explanation_en": "**Step 1 — Order does not matter**, so use combinations.\n\n**Step 2 — Compute.** $\\binom{10}{3}=\\dfrac{10\\cdot 9\\cdot 8}{6}=120$.\n\n**Answer:** $120$.",
-      "explanation_he": "**שלב 1 — הסדר לא חשוב**, לכן צירופים.\n\n**שלב 2 — חישוב.** $\\binom{10}{3}=120$.\n\n**תשובה:** $120$.",
+      "explanation_en": "**Step 1 — Order does not matter**, so use combinations.\n\n**Step 2 — Compute.** $\\binom{10}{3}=\\dfrac{10\\cdot 9\\cdot 8}{6}=120$.\n\n**Answer:** $120$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1 — הסדר לא חשוב**, לכן צירופים.\n\n**שלב 2 — חישוב.** $\\binom{10}{3}=120$.\n\n**תשובה:** $120$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "combination"
       ],
@@ -340,7 +369,11 @@
       "source_item_id": "ed5af2e4-f4fd-50e6-a075-0d071d9a4f96",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "4pt"
+      "points_level_min": "4pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "needs_review": true
     },
     {
       "ord": 4,
@@ -348,8 +381,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: $\\binom{7}{3}=\\binom{7}{4}$.",
       "stem_he": "נכון או לא נכון: $\\binom{7}{3}=\\binom{7}{4}$.",
-      "explanation_en": "**Symmetry: $\\binom{n}{k}=\\binom{n}{n-k}$** — **true**.",
-      "explanation_he": "**סימטריה: $\\binom{n}{k}=\\binom{n}{n-k}$** — **נכון**.",
+      "explanation_en": "**Symmetry: $\\binom{n}{k}=\\binom{n}{n-k}$** — **true**.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**סימטריה: $\\binom{n}{k}=\\binom{n}{n-k}$** — **נכון**.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "combination"
       ],
@@ -358,7 +391,10 @@
       },
       "source_item_id": "158bddf2-6751-5547-827a-157e377ec488",
       "points_level_min": "4pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 5,
@@ -366,8 +402,8 @@
       "difficulty": "easy",
       "stem_en": "How many ways to arrange $2$ items out of $5$ distinct items (order matters)?",
       "stem_he": "בכמה דרכים לסדר $2$ פריטים מתוך $5$ שונים (הסדר חשוב)?",
-      "explanation_en": "**$P(5,2)=\\dfrac{5!}{3!}=5\\cdot 4=20$.**\n\n**Answer:** $20$.",
-      "explanation_he": "**$P(5,2)=5\\cdot 4=20$.**\n\n**תשובה:** $20$.",
+      "explanation_en": "**$P(5,2)=\\dfrac{5!}{3!}=5\\cdot 4=20$.**\n\n**Answer:** $20$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$P(5,2)=5\\cdot 4=20$.**\n\n**תשובה:** $20$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "permutation"
       ],
@@ -376,7 +412,14 @@
       },
       "source_item_id": "929f126f-473d-54b2-b749-366c5bae8f0e",
       "points_level_min": "4pt",
-      "correct_answer": "20"
+      "correct_answer": "20",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "20",
+        "expected": 20
+      }
     },
     {
       "ord": 6,
@@ -384,8 +427,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\binom{5}{2}$.",
       "stem_he": "חשבו $\\binom{5}{2}$.",
-      "explanation_en": "**$\\binom{5}{2}=\\dfrac{5!}{2!\\,3!}=10$.**\n\n**Answer:** $10$.",
-      "explanation_he": "**$\\binom{5}{2}=10$.**\n\n**תשובה:** $10$.",
+      "explanation_en": "**$\\binom{5}{2}=\\dfrac{5!}{2!\\,3!}=10$.**\n\n**Answer:** $10$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$\\binom{5}{2}=10$.**\n\n**תשובה:** $10$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "combination"
       ],
@@ -394,7 +437,14 @@
       },
       "source_item_id": "42310df2-87c0-5cca-84d0-f793bb114fd3",
       "points_level_min": "4pt",
-      "correct_answer": "10"
+      "correct_answer": "10",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "10",
+        "expected": 10
+      }
     },
     {
       "ord": 7,
@@ -402,8 +452,8 @@
       "difficulty": "easy",
       "stem_en": "Compute $\\binom{6}{0}$.",
       "stem_he": "חשבו $\\binom{6}{0}$.",
-      "explanation_en": "**Choosing nothing: $\\binom{6}{0}=1$.**\n\n**Answer:** $1$.",
-      "explanation_he": "**$\\binom{6}{0}=1$.**\n\n**תשובה:** $1$.",
+      "explanation_en": "**Choosing nothing: $\\binom{6}{0}=1$.**\n\n**Answer:** $1$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$\\binom{6}{0}=1$.**\n\n**תשובה:** $1$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "combination"
       ],
@@ -412,7 +462,14 @@
       },
       "source_item_id": "3969afee-01ed-58e0-b6a2-041eeec571d0",
       "points_level_min": "4pt",
-      "correct_answer": "1"
+      "correct_answer": "1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "1",
+        "expected": 1
+      }
     },
     {
       "ord": 8,
@@ -420,8 +477,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\binom{10}{2}$.",
       "stem_he": "חשבו $\\binom{10}{2}$.",
-      "explanation_en": "**$\\binom{10}{2}=\\dfrac{10\\cdot 9}{2}=45$.**\n\n**Answer:** $45$.",
-      "explanation_he": "**$\\binom{10}{2}=45$.**\n\n**תשובה:** $45$.",
+      "explanation_en": "**$\\binom{10}{2}=\\dfrac{10\\cdot 9}{2}=45$.**\n\n**Answer:** $45$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$\\binom{10}{2}=45$.**\n\n**תשובה:** $45$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "combination"
       ],
@@ -430,7 +487,15 @@
       },
       "source_item_id": "59f9bb28-9604-5cea-8ba0-d1907fb0bd43",
       "points_level_min": "4pt",
-      "correct_answer": "45"
+      "correct_answer": "45",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "45",
+        "expected": 45
+      }
     },
     {
       "ord": 9,
@@ -438,8 +503,8 @@
       "difficulty": "medium",
       "stem_en": "How many ordered arrangements of $3$ out of $6$ distinct items?",
       "stem_he": "כמה סידורים מסודרים של $3$ מתוך $6$ פריטים שונים?",
-      "explanation_en": "**$P(6,3)=6\\cdot 5\\cdot 4=120$.**\n\n**Answer:** $120$.",
-      "explanation_he": "**$P(6,3)=120$.**\n\n**תשובה:** $120$.",
+      "explanation_en": "**$P(6,3)=6\\cdot 5\\cdot 4=120$.**\n\n**Answer:** $120$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$P(6,3)=120$.**\n\n**תשובה:** $120$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "permutation"
       ],
@@ -448,7 +513,14 @@
       },
       "source_item_id": "5ca62c25-010e-50bb-9bc3-c5fa607a6973",
       "points_level_min": "4pt",
-      "correct_answer": "120"
+      "correct_answer": "120",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "120",
+        "expected": 120
+      }
     },
     {
       "ord": 10,
@@ -456,8 +528,8 @@
       "difficulty": "medium",
       "stem_en": "How many arrangements of $5$ distinct letters?",
       "stem_he": "כמה סידורים של $5$ אותיות שונות?",
-      "explanation_en": "**$5!=120$.**\n\n**Answer:** $120$.",
-      "explanation_he": "**$5!=120$.**\n\n**תשובה:** $120$.",
+      "explanation_en": "**$5!=120$.**\n\n**Answer:** $120$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$5!=120$.**\n\n**תשובה:** $120$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "factorial"
       ],
@@ -466,7 +538,14 @@
       },
       "source_item_id": "bb0cb7d9-6955-5172-94ef-ca569d1fed3c",
       "points_level_min": "4pt",
-      "correct_answer": "120"
+      "correct_answer": "120",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "120",
+        "expected": 120
+      }
     },
     {
       "ord": 11,
@@ -474,8 +553,8 @@
       "difficulty": "medium",
       "stem_en": "Compute $\\binom{7}{3}$.",
       "stem_he": "חשבו $\\binom{7}{3}$.",
-      "explanation_en": "**$\\binom{7}{3}=\\dfrac{7\\cdot 6\\cdot 5}{6}=35$.**\n\n**Answer:** $35$.",
-      "explanation_he": "**$\\binom{7}{3}=35$.**\n\n**תשובה:** $35$.",
+      "explanation_en": "**$\\binom{7}{3}=\\dfrac{7\\cdot 6\\cdot 5}{6}=35$.**\n\n**Answer:** $35$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$\\binom{7}{3}=35$.**\n\n**תשובה:** $35$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "combination"
       ],
@@ -484,7 +563,14 @@
       },
       "source_item_id": "edf5278d-4760-5ff2-a778-2342cbcab2da",
       "points_level_min": "4pt",
-      "correct_answer": "35"
+      "correct_answer": "35",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "35",
+        "expected": 35
+      }
     },
     {
       "ord": 12,
@@ -492,8 +578,8 @@
       "difficulty": "medium",
       "stem_en": "How many ways to choose $2$ items from $8$?",
       "stem_he": "בכמה דרכים לבחור $2$ פריטים מתוך $8$?",
-      "explanation_en": "**$\\binom{8}{2}=28$.**\n\n**Answer:** $28$.",
-      "explanation_he": "**$\\binom{8}{2}=28$.**\n\n**תשובה:** $28$.",
+      "explanation_en": "**$\\binom{8}{2}=28$.**\n\n**Answer:** $28$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$\\binom{8}{2}=28$.**\n\n**תשובה:** $28$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "combination"
       ],
@@ -502,7 +588,15 @@
       },
       "source_item_id": "c7306d7b-181e-5507-8106-14571628a86c",
       "points_level_min": "4pt",
-      "correct_answer": "28"
+      "correct_answer": "28",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "verify": {
+        "expr": "28",
+        "expected": 28
+      }
     },
     {
       "ord": 13,
@@ -510,8 +604,8 @@
       "difficulty": "hard",
       "stem_en": "How many arrangements of the letters M, A, T, H (all distinct)?",
       "stem_he": "כמה סידורים של האותיות M, A, T, H (כולן שונות)?",
-      "explanation_en": "**$4!=24$.**\n\n**Answer:** $24$.",
-      "explanation_he": "**$4!=24$.**\n\n**תשובה:** $24$.",
+      "explanation_en": "**$4!=24$.**\n\n**Answer:** $24$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**$4!=24$.**\n\n**תשובה:** $24$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
       "skill_atoms": [
         "factorial"
       ],
@@ -520,7 +614,14 @@
       },
       "source_item_id": "d9628b3d-ef5f-50b5-98d2-c0aed71e5313",
       "points_level_min": "4pt",
-      "correct_answer": "24"
+      "correct_answer": "24",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "24",
+        "expected": 24
+      }
     },
     {
       "ord": 14,
@@ -528,8 +629,8 @@
       "difficulty": "hard",
       "stem_en": "Choose $2$ boys from $5$ and $2$ girls from $4$. How many ways?",
       "stem_he": "בחרו $2$ בנים מתוך $5$ ו-$2$ בנות מתוך $4$. בכמה דרכים?",
-      "explanation_en": "**Multiply independent choices.** $\\binom{5}{2}\\cdot\\binom{4}{2}=10\\cdot 6=60$.\n\n**Answer:** $60$.",
-      "explanation_he": "**כפל בחירות בלתי-תלויות.** $10\\cdot 6=60$.\n\n**תשובה:** $60$.",
+      "explanation_en": "**Multiply independent choices.** $\\binom{5}{2}\\cdot\\binom{4}{2}=10\\cdot 6=60$.\n\n**Answer:** $60$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**כפל בחירות בלתי-תלויות.** $10\\cdot 6=60$.\n\n**תשובה:** $60$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "combination"
       ],
@@ -538,7 +639,15 @@
       },
       "source_item_id": "f3ec793c-f55e-52a6-b7df-beb08efed7f5",
       "points_level_min": "4pt",
-      "correct_answer": "60"
+      "correct_answer": "60",
+      "archetypes": [
+        "procedural",
+        "error_analysis"
+      ],
+      "verify": {
+        "expr": "60",
+        "expected": 60
+      }
     },
     {
       "ord": 15,
@@ -546,8 +655,8 @@
       "difficulty": "hard",
       "stem_en": "How many handshakes occur among $6$ people (each pair once)?",
       "stem_he": "כמה לחיצות ידיים בין $6$ אנשים (כל זוג פעם אחת)?",
-      "explanation_en": "**Each handshake is a pair:** $\\binom{6}{2}=15$.\n\n**Answer:** $15$.",
-      "explanation_he": "**כל לחיצה היא זוג:** $\\binom{6}{2}=15$.\n\n**תשובה:** $15$.",
+      "explanation_en": "**Each handshake is a pair:** $\\binom{6}{2}=15$.\n\n**Answer:** $15$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**כל לחיצה היא זוג:** $\\binom{6}{2}=15$.\n\n**תשובה:** $15$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "combination"
       ],
@@ -556,7 +665,347 @@
       },
       "source_item_id": "aecd7e4d-7980-54b8-bebd-67175103d20e",
       "points_level_min": "4pt",
-      "correct_answer": "15"
+      "correct_answer": "15",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "15",
+        "expected": 15
+      }
+    },
+    {
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "Does order matter in a combination? Answer yes or no.",
+      "stem_he": "האם הסדר משנה בצירוף? ענו כן או לא.",
+      "explanation_en": "**Step 1.** Combinations choose unordered sets.\n\n**Step 2.** Order does not matter.\n\n**Step 3.** Permutations are the ordered counterpart.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** צירופים הם קבוצות בלי סדר.\n\n**שלב 2.** הסדר לא משנה.\n\n**שלב 3.** חליפות הן הגרסה הסדורה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "no",
+          "No",
+          "לא"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "no",
+        "No",
+        "לא"
+      ],
+      "correct_answer": "no",
+      "ord": 16
+    },
+    {
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "Fill: 5! = ___ (integer).",
+      "stem_he": "השלימו: 5! = ___ (שלם).",
+      "explanation_en": "**Step 1.** Expand 5×4×3×2×1.\n\n**Step 2.** Product equals 120.\n\n**Step 3.** Remember 0!=1 for later identities.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** פיתוח 5×4×3×2×1.\n\n**שלב 2.** המכפלה 120.\n\n**שלב 3.** זכרו גם 0!=1.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "120"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "120",
+      "verify": {
+        "expr": "fact(5)",
+        "expected": 120
+      },
+      "ord": 17
+    },
+    {
+      "kind": "mcq_multi",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "combination",
+        "factorial"
+      ],
+      "stem_en": "Which statements are true? (Select all.)",
+      "stem_he": "אילו טענות נכונות? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** A and B are the standard formulas.\n\n**Step 2.** C swaps the roles of P and C.\n\n**Step 3.** D is false because P >= C.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** A ו-B נוסחאות תקניות.\n\n**שלב 2.** C מחליף תפקידים.\n\n**שלב 3.** D שגוי כי P >= C.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "options_en": [
+          "P(n,k)=n!/(n-k)!",
+          "C(n,k)=n!/(k!(n-k)!)",
+          "Order matters in combinations but not permutations",
+          "C(n,k) is always larger than P(n,k)"
+        ],
+        "options_he": [
+          "P(n,k)=n!/(n-k)!",
+          "C(n,k)=n!/(k!(n-k)!)",
+          "בצירופים הסדר משנה ובחליפות לא",
+          "C(n,k) תמיד גדול מ-P(n,k)"
+        ],
+        "correct_indices": [
+          0,
+          1
+        ]
+      },
+      "correct_indices": [
+        0,
+        1
+      ],
+      "ord": 18
+    },
+    {
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "combination",
+        "factorial"
+      ],
+      "stem_en": "Match each situation to the best tool.",
+      "stem_he": "התאימו כל מצב לכלי המתאים.",
+      "explanation_en": "**Step 1.** Codes and shelves need order.\n\n**Step 2.** Committees are unordered sets.\n\n**Step 3.** Pick P versus C from the story.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** קודים ומדפים דורשים סדר.\n\n**שלב 2.** ועדות הן קבוצות.\n\n**שלב 3.** בחרו P מול C לפי הסיפור.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "left_en": [
+          "3-digit codes, digits distinct",
+          "Choose 3 students for a committee",
+          "Arrange 5 books on a shelf"
+        ],
+        "left_he": [
+          "קוד 3 ספרות שונות",
+          "בחירת 3 תלמידים לוועדה",
+          "סידור 5 ספרים במדף"
+        ],
+        "right_en": [
+          "Permutation P(10,3) if digits 0-9",
+          "Combination C(n,3)",
+          "5!"
+        ],
+        "right_he": [
+          "חליפה P(10,3) אם 0-9",
+          "צירוף C(n,3)",
+          "5!"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ord": 19
+    },
+    {
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "Order steps to compute C(8,3).",
+      "stem_he": "סדרו צעדים לחישוב C(8,3).",
+      "explanation_en": "**Step 1.** Cancel factorials early to avoid huge numbers.\n\n**Step 2.** Finish with 56.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** צמצמו עצרות מוקדם.\n\n**שלב 2.** סיימו ב-56.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "steps_en": [
+          "Write 8!/(3!5!)",
+          "Cancel 5! from numerator and denominator",
+          "Compute (8×7×6)/(3×2×1)",
+          "Obtain 56"
+        ],
+        "steps_he": [
+          "כתבו 8!/(3!5!)",
+          "צמצמו 5!",
+          "חשבו (8×7×6)/(3×2×1)",
+          "קבלו 56"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 20
+    },
+    {
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "Explain why P(n,k)=C(n,k)*k!.",
+      "stem_he": "הסבירו מדוע P(n,k)=C(n,k)*k!.",
+      "explanation_en": "**Step 1.** First choose k items: C(n,k) ways.\n\n**Step 2.** Then arrange those k items in k! orders.\n\n**Step 3.** Product equals the ordered count P(n,k).\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** קודם בוחרים: C(n,k).\n\n**שלב 2.** אז מסדרים ב-k!.\n\n**שלב 3.** המכפלה היא P(n,k).\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "Choose C(n,k)",
+          "Arrange k!",
+          "Product is P"
+        ],
+        "steps_he": [
+          "בחירה",
+          "סידור",
+          "מכפלה"
+        ]
+      },
+      "ord": 21
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "Compute C(10,2).",
+      "stem_he": "חשבו C(10,2).",
+      "explanation_en": "**Step 1.** Use (10×9)/2.\n\n**Step 2.** Value 45.\n\n**Step 3.** Order does not matter here.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** (10×9)/2.\n\n**שלב 2.** ערך 45.\n\n**שלב 3.** אין סדר.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 45,
+        "tolerance": 0
+      },
+      "correct_answer": "45",
+      "verify": {
+        "expr": "choose(10,2)",
+        "expected": 45
+      },
+      "ord": 22
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "Compute P(6,3).",
+      "stem_he": "חשבו P(6,3).",
+      "explanation_en": "**Step 1.** Ordered product 6×5×4.\n\n**Step 2.** Value 120.\n\n**Step 3.** Do not divide by 3!.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** מכפלה סדורה 6×5×4.\n\n**שלב 2.** ערך 120.\n\n**שלב 3.** אל תחלקו ב-3!.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 120,
+        "tolerance": 0
+      },
+      "correct_answer": "120",
+      "verify": {
+        "expr": "6*5*4",
+        "expected": 120
+      },
+      "ord": 23
+    },
+    {
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "combination",
+        "factorial"
+      ],
+      "stem_en": "A club has 8 members. How many ways to choose a president, secretary, and treasurer (distinct roles)? Explain which tool and why.",
+      "stem_he": "במועדון 8 חברים. בכמה דרכים לבחור יו\"ר, מזכיר וגזבר (תפקידים שונים)? הסבירו איזה כלי ולמה.",
+      "explanation_en": "**Step 1.** Roles differ, so order/assignment matters: permutation.\n\n**Step 2.** P(8,3)=8×7×6=336.\n\n**Step 3.** If it were an unordered committee of 3, use C(8,3) instead.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** תפקידים שונים — חליפה.\n\n**שלב 2.** P(8,3)=336.\n\n**שלב 3.** ועדה בלי תפקידים הייתה צירוף.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "Use P(8,3)",
+          "336",
+          "Not C because roles"
+        ],
+        "steps_he": [
+          "P(8,3)",
+          "336",
+          "לא C כי יש תפקידים"
+        ]
+      },
+      "rubric_en": "Uses permutation, gets 336, mentions roles.",
+      "rubric_he": "חליפה, 336, מזכיר תפקידים.",
+      "ord": 24
+    },
+    {
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "True or False: 0! = 1.",
+      "stem_he": "נכון/לא נכון: 0! = 1.",
+      "explanation_en": "**Step 1.** Empty product convention is 1.\n\n**Step 2.** Needed for binomial coefficients.\n\n**Step 3.** Statement is true.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** מוסכמת מכפלה ריקה = 1.\n\n**שלב 2.** נחוץ למקדמים בינומיים.\n\n**שלב 3.** הטענה נכונה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_answer": "true",
+      "ord": 25
+    },
+    {
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "combination"
+      ],
+      "stem_en": "C(7,0) equals?",
+      "stem_he": "C(7,0) שווה ל?",
+      "explanation_en": "**Step 1.** Choosing none yields one empty set.\n\n**Step 2.** Value 1.\n\n**Step 3.** Not zero.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** בחירת אפס — אפשרות אחת.\n\n**שלב 2.** ערך 1.\n\n**שלב 3.** לא אפס.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "options_en": [
+          "1",
+          "0",
+          "7",
+          "7!"
+        ],
+        "options_he": [
+          "1",
+          "0",
+          "7",
+          "7!"
+        ],
+        "correct_index": 0
+      },
+      "correct_answer": "0",
+      "ord": 26
     }
   ],
   "est_minutes": 45,

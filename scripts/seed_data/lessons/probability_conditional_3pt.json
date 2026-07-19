@@ -32,6 +32,13 @@
       "body_he_md": "### עצי הסתברות — כפל לאורך ענפים, חיבור בין ענפים\n\n**עץ הסתברות** הוא הכלי המועדף כשלבעיה יש שני שלבים או יותר (בוחרים קלנה, ואז שולפים כדור; מטילים מטבע, ואז בוחרים מכונה). כל ענף מסומן בהסתברות מותנית או בלתי-מותנית.\n\n**כללים:**\n1. **הסתברות משותפת** לאורך מסלול: כפלו כל הסתברות ענף.\n2. **הסתברות כוללת** של אירוע: חברו את ההסתברויות המשותפות של כל המסלולים המובילים אליו.\n\nמבנה לדוגמה לבעיה דו-שלבית:\n```\n          B (P(B))     → A: P(A∩B) = P(B)·P(A|B)\n         /\n התחלה  \n         \\\n          B̄ (P(B̄))   → A: P(A∩B̄) = P(B̄)·P(A|B̄)\n```\n\nאז $P(A) = P(A \\cap B) + P(A \\cap \\bar{B})$ — זה חוק ההסתברות הכוללת בצורה גрафית.\n\n### טבלאות דו-ממדיות — בעיות סקר\n\nנתוני סקר מגיעים לעיתים קרובות בטבלה. מלאו סכומי שורות, סכומי עמודות, וסכום כולל (תמיד 1 להסתברויות).\n\n| | $B$ | $\\bar{B}$ | סה\"כ |\n|--|-----|-----------|------|\n| $A$ | $P(A\\cap B)$ | $P(A\\cap\\bar{B})$ | $P(A)$ |\n| $\\bar{A}$ | $P(\\bar{A}\\cap B)$ | $P(\\bar{A}\\cap\\bar{B})$ | $P(\\bar{A})$ |\n| סה\"כ | $P(B)$ | $P(\\bar{B})$ | 1 |\n\nלמציאת $P(A \\mid B)$: חלקו את תא $A \\cap B$ בסכום עמודת $B$. סכום העמודה הוא מרחב המדגם החדש — רק אנשים (או תוצאות) בעמודה $B$.\n\n**טיפ לבחינה:** אם נתון נותן אחוזים של תת-קבוצה (\"30% מהבנים משחקים שחמט\"), הגדירו אירועים קודם, ואז בנו טבלה או עץ. לעולם אל תחלקו בסכום הלא נכון — התנאי תמיד קובע את המכנה."
     },
     {
+      "kind": "theory",
+      "title_en": "Independence versus Dependence in 3-Unit Problems",
+      "title_he": "אי-תלות מול תלות בבעיות 3 יח'",
+      "body_en_md": "Independence is a modeling claim, not a default. In Bagrut 3-unit work you usually meet two settings.\n\n### Setting 1 — With replacement / separate experiments\nIf a ball is returned, or two coins are flipped separately, the second stage does not change because of the first. Then $P(A\\mid B)=P(A)$ and the product rule $P(A\\cap B)=P(A)P(B)$ is safe.\n\n### Setting 2 — Without replacement\nEach draw shrinks the bag. The second conditional probability uses the new totals. Events are dependent even if the story feels like the same experiment.\n\n### Quick checklist\n1. Identify whether information about $B$ changes the chance of $A$.\n2. If yes, use a tree with updated branch labels.\n3. If no, factor the joint probability.\n4. Never swap $P(A\\mid B)$ with $P(B\\mid A)$ unless Bayes or a table justifies the reverse.\n\nThis second theory block pairs with the tree/table section: trees show dependence visually; independence is the special case where branch labels stay constant across stages.",
+      "body_he_md": "אי-תלות היא טענת מודל, לא ברירת מחדל. בבעיות 3 יח' בבגרות פוגשים בעיקר שני מצבים.\n\n### מצב 1 — עם החזרה / ניסויים נפרדים\nאם מחזירים כדור, או מטילים שני מטבעות בנפרד, השלב השני לא משתנה בגלל הראשון. אז $P(A\\mid B)=P(A)$ וכלל המכפלה $P(A\\cap B)=P(A)P(B)$ בטוח.\n\n### מצב 2 — בלי החזרה\nכל שליפה מקטינה את השקית. ההסתברות המותנית השנייה משתמשת בספירות החדשות. האירועים תלויים גם אם הסיפור נשמע כמו אותו ניסוי.\n\n### רשימת בדיקה מהירה\n1. זהו האם מידע על $B$ משנה את סיכוי $A$.\n2. אם כן — עץ עם תוויות מעודכנות.\n3. אם לא — פרקו את המשותף למכפלה.\n4. לעולם אל תחליפו $P(A\\mid B)$ ב-$P(B\\mid A)$ בלי בייס או טבלה.\n\nבלוק תיאוריה זה משלים את עצי/טבלאות: העץ מראה תלות חזותית; אי-תלות היא המקרה המיוחד שבו תוויות הענפים נשארות קבועות בין השלבים."
+    },
+    {
       "kind": "worked_example",
       "difficulty": "easy",
       "example_number": 1,
@@ -75,6 +82,15 @@
       "title_he": "דוגמה פתורה 3 — בעיית שתי קלנות (בגרות 3 יח' קלאסי)",
       "body_en_md": "### Move 1 — Understand the two-stage structure\n\n**Problem:** Urn A has 4 red and 2 white balls. Urn B has 1 red and 3 white balls. A fair coin is tossed:\n- Heads → draw from Urn A.\n- Tails → draw from Urn B.\n\nFind: (a) $P(\\text{red ball drawn})$. (b) Given a red ball was drawn, what is $P(\\text{it came from Urn A})$?\n\nDefine: $A$ = coin shows heads (choose Urn A), $P(A) = 1/2$. $R$ = red ball drawn.\n\nConditional probabilities:\n- $P(R \\mid A) = 4/6 = 2/3$ (4 red out of 6 in Urn A)\n- $P(R \\mid \\bar{A}) = 1/4$ (1 red out of 4 in Urn B)\n\n### Move 2 — Part (a): Total probability\n\n$$P(R) = P(R \\mid A) \\cdot P(A) + P(R \\mid \\bar{A}) \\cdot P(\\bar{A})$$\n$$= \\frac{4}{6} \\cdot \\frac{1}{2} + \\frac{1}{4} \\cdot \\frac{1}{2} = \\frac{4}{12} + \\frac{1}{8} = \\frac{8}{24} + \\frac{3}{24} = \\frac{11}{24}$$\n\n**Tree view:** Two paths to red — via Urn A ($4/12$) and via Urn B ($1/8$). Add them.\n\n### Move 3 — Part (b): Bayes' theorem\n\nWe observe red and ask which urn. Only the Urn A path contributes to both $R$ and $A$:\n$$P(A \\mid R) = \\frac{P(R \\mid A) \\cdot P(A)}{P(R)} = \\frac{\\frac{4}{6} \\cdot \\frac{1}{2}}{\\frac{11}{24}} = \\frac{\\frac{4}{12}}{\\frac{11}{24}} = \\frac{4}{12} \\cdot \\frac{24}{11} = \\frac{8}{11}$$\n\n**Why this method:** Two-stage \"choose then draw\" problems always use total probability for (a) and Bayes for (b). Draw the tree first — it prevents mixing up branches.\n\n**Exam tip:** Part (b) answers are often **not** the same as the prior $P(A) = 1/2$. Observing red shifts belief toward Urn A ($8/11 > 1/2$) because it has more red balls.\n\n**Answers:** (a) $P(\\text{red}) = \\dfrac{11}{24}$. (b) $P(A \\mid R) = \\dfrac{8}{11}$.",
       "body_he_md": "### צעד 1 — הבנת המבנה הדו-שלבי\n\n**בעיה:** קלנה A מכילה 4 אדומים ו-2 לבנים. קלנה B מכילה 1 אדום ו-3 לבנים. מטילים מטבע הוגן:\n- עץ → שולפים מקלנה A.\n- פלי → שולפים מקלנה B.\n\nמצאו: (א) $P(\\text{red ball drawn})$. (ב) בהינתן שנשלף כדור אדום, מה $P(\\text{coin A})$?\n\nהגדרה: $A$ = המטבע מראה עץ (בוחרים קלנה A), $P(A) = 1/2$. $R$ = נשלף כדור אדום.\n\nהסתברויות מותנות:\n- $P(R \\mid A) = 4/6 = 2/3$ (4 אדומים מתוך 6 בקלנה A)\n- $P(R \\mid \\bar{A}) = 1/4$ (1 אדום מתוך 4 בקלנה B)\n\n### צעד 2 — חלק (א): הסתברות כוללת\n\n$$P(R) = P(R \\mid A) \\cdot P(A) + P(R \\mid \\bar{A}) \\cdot P(\\bar{A})$$\n$$= \\frac{4}{6} \\cdot \\frac{1}{2} + \\frac{1}{4} \\cdot \\frac{1}{2} = \\frac{4}{12} + \\frac{1}{8} = \\frac{8}{24} + \\frac{3}{24} = \\frac{11}{24}$$\n\n**מבט עץ:** שני מסלולים לאדום — דרך קלנה A ($4/12$) ודרך קלנה B ($1/8$). מחברים.\n\n### צעד 3 — חלק (ב): משפט בייס\n\nצפינו באדום ושואלים מאיזו קלנה. רק המסלול דרך קלנה A תורם גם ל-$R$ וגם ל-$A$:\n$$P(A \\mid R) = \\frac{P(R \\mid A) \\cdot P(A)}{P(R)} = \\frac{\\frac{4}{6} \\cdot \\frac{1}{2}}{\\frac{11}{24}} = \\frac{\\frac{4}{12}}{\\frac{11}{24}} = \\frac{4}{12} \\cdot \\frac{24}{11} = \\frac{8}{11}$$\n\n**למה השיטה:** בעיות \"בוחרים ואז שולפים\" תמיד משתמשות בהסתברות כוללת ל-(א) ובבייס ל-(ב). סרטטו עץ קודם — זה מונע ערבוב ענפים.\n\n**טיפ לבחינה:** תשובות (ב) לעיתים **שונות** מההסתברות הקודמת $P(A) = 1/2$. תצפית באדום מטה את האמונה לקלנה A ($8/11 > 1/2$) כי יש בה יותר כדורים אדומים.\n\n**תשובות:** (א) $P(\\text{red}) = \\dfrac{11}{24}$. (ב) $P(A \\mid R) = \\dfrac{8}{11}$."
+    },
+    {
+      "kind": "worked_example",
+      "difficulty": "medium",
+      "example_number": 4,
+      "title_en": "Worked Example 4 — Independence Check from a Table",
+      "title_he": "דוגמה פתורה 4 — בדיקת אי-תלות מטבלה",
+      "body_en_md": "**Given:** In a survey of 100 students, 40 play soccer, 30 play basketball, and 12 play both.\n\n**Find:** $P(\\text{basketball}\\mid\\text{soccer})$ and decide independence of the two sports.\n\n### Move 1\nEstimate probabilities by relative frequencies: $P(S)=0.40$, $P(B)=0.30$, $P(S\\cap B)=0.12$.\n\n### Move 2\n$$P(B\\mid S)=\\frac{0.12}{0.40}=0.30$$\n\n### Move 3\nCompare to $P(B)=0.30$. Equality holds, so the sports are independent in this table.\n\n### Move 4 — Product check\n$P(S)P(B)=0.40\\times0.30=0.12=P(S\\cap B)$ confirms the same conclusion.\n\n**Answer:** $0.30$; independent.\n\n**Exam tip:** Always compare the conditional to the marginal — do not guess from the story wording alone.",
+      "body_he_md": "**נתון:** בסקר של 100 תלמידים, 40 משחקים כדורגל, 30 כדורסל, ו-12 את שניהם.\n\n**מצאו:** $P(B\\mid S)$ (הסתברות לכדורסל בהינתן כדורגל) והחליטו על אי-תלות.\n\n### צעד 1\nהסתברויות משכיחויות יחסיות: $P(S)=0.40$, $P(B)=0.30$, $P(S\\cap B)=0.12$.\n\n### צעד 2\n$$P(B\\mid S)=\\frac{0.12}{0.40}=0.30$$\n\n### צעד 3\nהשוו ל-$P(B)=0.30$. יש שוויון — האירועים בלתי-תלויים בטבלה זו.\n\n### צעד 4 — בדיקת מכפלה\n$0.40\\times0.30=0.12$ מאשר.\n\n**תשובה:** $0.30$; בלתי-תלויים.\n\n**טיפ:** תמיד השוו מותנית לשולית — אל תנחשו רק מניסוח הסיפור."
     },
     {
       "kind": "method_guide",
@@ -254,8 +270,8 @@
       "difficulty": "easy",
       "stem_en": "Two fair coins are flipped. Find the probability of two heads.",
       "stem_he": "מטילים שני מטבעות הוגנים. מצאו את ההסתברות לשני 'עץ'.",
-      "explanation_en": "**Independent, so multiply.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.",
-      "explanation_he": "**בלתי-תלויים, לכן מכפילים.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.",
+      "explanation_en": "**Independent, so multiply.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**בלתי-תלויים, לכן מכפילים.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events"
       ],
@@ -264,7 +280,17 @@
       },
       "source_item_id": "61b91459-77ed-53a3-a88a-9ca6f7a82a98",
       "points_level_min": "3pt",
-      "correct_answer": "0.25"
+      "correct_answer": "0.25",
+      "archetypes": [
+        "procedural",
+        "application",
+        "graphical",
+        "error_analysis"
+      ],
+      "verify": {
+        "expr": "0.25",
+        "expected": 0.25
+      }
     },
     {
       "ord": 2,
@@ -272,8 +298,8 @@
       "difficulty": "easy",
       "stem_en": "True or False: for independent events, $P(A \\cap B) = P(A)\\cdot P(B)$.",
       "stem_he": "נכון או לא נכון: עבור מאורעות בלתי-תלויים, $P(A \\cap B) = P(A)\\cdot P(B)$.",
-      "explanation_en": "**Definition of independence.** The joint probability is the product — **true**.",
-      "explanation_he": "**הגדרת אי-תלות.** ההסתברות המשותפת היא המכפלה — **נכון**.",
+      "explanation_en": "**Definition of independence.** The joint probability is the product — **true**.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**הגדרת אי-תלות.** ההסתברות המשותפת היא המכפלה — **נכון**.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events"
       ],
@@ -282,7 +308,10 @@
       },
       "source_item_id": "edaaee81-0e6f-561c-9230-e3af2bf17a6c",
       "points_level_min": "3pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 3,
@@ -290,8 +319,8 @@
       "difficulty": "hard",
       "stem_en": "A box has $4$ good and $2$ defective bulbs. Two are picked without replacement. Find $P(\\text{both good})$.",
       "stem_he": "בקופסה $4$ נורות תקינות ו-$2$ פגומות. בוחרים שתיים ללא החזרה. מצאו את ההסתברות ששתיהן תקינות.",
-      "explanation_en": "**Step 1 — First good.** $\\dfrac{4}{6}$.\n\n**Step 2 — Second good (one fewer good, one fewer total).** $\\dfrac{3}{5}$.\n\n**Step 3 — Multiply.** $\\dfrac{4}{6}\\cdot\\dfrac{3}{5} = \\dfrac{12}{30} = \\dfrac{2}{5}$.\n\n**Answer:** $\\dfrac{2}{5} = 0.4$.",
-      "explanation_he": "**שלב 1 — תקינה ראשונה.** $\\dfrac{4}{6}$.\n\n**שלב 2 — תקינה שנייה.** $\\dfrac{3}{5}$.\n\n**שלב 3 — כפל.** $\\dfrac{12}{30} = \\dfrac{2}{5}$.\n\n**תשובה:** $\\dfrac{2}{5} = 0.4$.",
+      "explanation_en": "**Step 1 — First good.** $\\dfrac{4}{6}$.\n\n**Step 2 — Second good (one fewer good, one fewer total).** $\\dfrac{3}{5}$.\n\n**Step 3 — Multiply.** $\\dfrac{4}{6}\\cdot\\dfrac{3}{5} = \\dfrac{12}{30} = \\dfrac{2}{5}$.\n\n**Answer:** $\\dfrac{2}{5} = 0.4$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip.",
+      "explanation_he": "**שלב 1 — תקינה ראשונה.** $\\dfrac{4}{6}$.\n\n**שלב 2 — תקינה שנייה.** $\\dfrac{3}{5}$.\n\n**שלב 3 — כפל.** $\\dfrac{12}{30} = \\dfrac{2}{5}$.\n\n**תשובה:** $\\dfrac{2}{5} = 0.4$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "dependent_events",
         "multiplication_rule"
@@ -313,7 +342,11 @@
       "source_item_id": "a5e7caf2-1a1a-5a6a-bb8f-1c0414b82b6d",
       "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
       "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "3pt"
+      "points_level_min": "3pt",
+      "archetypes": [
+        "conceptual"
+      ],
+      "needs_review": true
     },
     {
       "ord": 4,
@@ -321,8 +354,8 @@
       "difficulty": "medium",
       "stem_en": "Two fair coins are flipped. What is $P(\\text{two heads})$?",
       "stem_he": "מטילים שני מטבעות הוגנים. מהי ההסתברות לשני 'עץ'?",
-      "explanation_en": "**Multiply independent probabilities.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.",
-      "explanation_he": "**מכפילים הסתברויות בלתי-תלויות.** $\\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.",
+      "explanation_en": "**Multiply independent probabilities.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**מכפילים הסתברויות בלתי-תלויות.** $\\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events"
       ],
@@ -355,7 +388,10 @@
         "$\\tfrac{1}{3}$",
         "$\\tfrac{3}{4}$"
       ],
-      "correct_index": 0
+      "correct_index": 0,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 5,
@@ -363,8 +399,8 @@
       "difficulty": "easy",
       "stem_en": "Two dice are rolled. Find the probability of getting a $6$ on both.",
       "stem_he": "מטילים שתי קוביות. מצאו את ההסתברות לקבל $6$ בשתיהן.",
-      "explanation_en": "**Independent.** $\\dfrac{1}{6}\\cdot\\dfrac{1}{6} = \\dfrac{1}{36}$.\n\n**Answer:** $\\dfrac{1}{36}$.",
-      "explanation_he": "**בלתי-תלויים.** $\\dfrac{1}{6}\\cdot\\dfrac{1}{6} = \\dfrac{1}{36}$.\n\n**תשובה:** $\\dfrac{1}{36}$.",
+      "explanation_en": "**Independent.** $\\dfrac{1}{6}\\cdot\\dfrac{1}{6} = \\dfrac{1}{36}$.\n\n**Answer:** $\\dfrac{1}{36}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**בלתי-תלויים.** $\\dfrac{1}{6}\\cdot\\dfrac{1}{6} = \\dfrac{1}{36}$.\n\n**תשובה:** $\\dfrac{1}{36}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events"
       ],
@@ -373,7 +409,14 @@
       },
       "source_item_id": "d5596710-0ab4-589f-9f34-e1b21ee3a87a",
       "points_level_min": "3pt",
-      "correct_answer": "0.027778"
+      "correct_answer": "0.027778",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.027778",
+        "expected": 0.027778
+      }
     },
     {
       "ord": 6,
@@ -381,8 +424,8 @@
       "difficulty": "medium",
       "stem_en": "A bag has $3$ red and $2$ blue balls. Two are drawn without replacement. Find $P(\\text{both red})$.",
       "stem_he": "בשקית $3$ אדומים ו-$2$ כחולים. שולפים שניים ללא החזרה. מצאו את ההסתברות ששניהם אדומים.",
-      "explanation_en": "**First red.** $\\dfrac{3}{5}$.\n\n**Second red (one fewer red, one fewer total).** $\\dfrac{2}{4}$.\n\n**Multiply.** $\\dfrac{3}{5}\\cdot\\dfrac{2}{4} = \\dfrac{3}{10}$.\n\n**Answer:** $\\dfrac{3}{10}$.",
-      "explanation_he": "**אדום ראשון.** $\\dfrac{3}{5}$.\n\n**אדום שני (אחד פחות מכל).** $\\dfrac{2}{4}$.\n\n**כפל.** $\\dfrac{3}{10}$.\n\n**תשובה:** $\\dfrac{3}{10}$.",
+      "explanation_en": "**First red.** $\\dfrac{3}{5}$.\n\n**Second red (one fewer red, one fewer total).** $\\dfrac{2}{4}$.\n\n**Multiply.** $\\dfrac{3}{5}\\cdot\\dfrac{2}{4} = \\dfrac{3}{10}$.\n\n**Answer:** $\\dfrac{3}{10}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**אדום ראשון.** $\\dfrac{3}{5}$.\n\n**אדום שני (אחד פחות מכל).** $\\dfrac{2}{4}$.\n\n**כפל.** $\\dfrac{3}{10}$.\n\n**תשובה:** $\\dfrac{3}{10}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "dependent_events",
         "multiplication_rule"
@@ -392,7 +435,14 @@
       },
       "source_item_id": "b651f63a-0ae4-5316-8fd3-f73a6d6507bc",
       "points_level_min": "3pt",
-      "correct_answer": "0.3"
+      "correct_answer": "0.3",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.3",
+        "expected": 0.3
+      }
     },
     {
       "ord": 7,
@@ -400,8 +450,8 @@
       "difficulty": "medium",
       "stem_en": "A bag has $3$ red and $2$ blue balls. Two are drawn without replacement. Find $P(\\text{both blue})$.",
       "stem_he": "בשקית $3$ אדומים ו-$2$ כחולים. שולפים שניים ללא החזרה. מצאו את ההסתברות ששניהם כחולים.",
-      "explanation_en": "**First blue.** $\\dfrac{2}{5}$.\n\n**Second blue.** $\\dfrac{1}{4}$.\n\n**Multiply.** $\\dfrac{2}{5}\\cdot\\dfrac{1}{4} = \\dfrac{1}{10}$.\n\n**Answer:** $\\dfrac{1}{10}$.",
-      "explanation_he": "**כחול ראשון.** $\\dfrac{2}{5}$.\n\n**כחול שני.** $\\dfrac{1}{4}$.\n\n**כפל.** $\\dfrac{1}{10}$.\n\n**תשובה:** $\\dfrac{1}{10}$.",
+      "explanation_en": "**First blue.** $\\dfrac{2}{5}$.\n\n**Second blue.** $\\dfrac{1}{4}$.\n\n**Multiply.** $\\dfrac{2}{5}\\cdot\\dfrac{1}{4} = \\dfrac{1}{10}$.\n\n**Answer:** $\\dfrac{1}{10}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**כחול ראשון.** $\\dfrac{2}{5}$.\n\n**כחול שני.** $\\dfrac{1}{4}$.\n\n**כפל.** $\\dfrac{1}{10}$.\n\n**תשובה:** $\\dfrac{1}{10}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "dependent_events",
         "multiplication_rule"
@@ -411,7 +461,14 @@
       },
       "source_item_id": "4b3c8fce-5e9c-5465-8aa2-e7dc0a881e16",
       "points_level_min": "3pt",
-      "correct_answer": "0.1"
+      "correct_answer": "0.1",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.1",
+        "expected": 0.1
+      }
     },
     {
       "ord": 8,
@@ -419,8 +476,8 @@
       "difficulty": "medium",
       "stem_en": "Given $P(A \\cap B) = 0.2$ and $P(A) = 0.5$, find $P(B \\mid A)$.",
       "stem_he": "בהינתן $P(A \\cap B) = 0.2$ ו-$P(A) = 0.5$, מצאו את $P(B \\mid A)$.",
-      "explanation_en": "**Conditional formula.** $P(B \\mid A) = \\dfrac{P(A \\cap B)}{P(A)} = \\dfrac{0.2}{0.5}$.\n\n**Answer:** $0.4$.",
-      "explanation_he": "**נוסחת ההסתברות המותנית.** $\\dfrac{0.2}{0.5}$.\n\n**תשובה:** $0.4$.",
+      "explanation_en": "**Conditional formula.** $P(B \\mid A) = \\dfrac{P(A \\cap B)}{P(A)} = \\dfrac{0.2}{0.5}$.\n\n**Answer:** $0.4$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**נוסחת ההסתברות המותנית.** $\\dfrac{0.2}{0.5}$.\n\n**תשובה:** $0.4$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "conditional_probability"
       ],
@@ -429,7 +486,15 @@
       },
       "source_item_id": "6ce2c029-7b00-5762-af5c-a78f437b2479",
       "points_level_min": "3pt",
-      "correct_answer": "0.4"
+      "correct_answer": "0.4",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "0.4",
+        "expected": 0.4
+      }
     },
     {
       "ord": 9,
@@ -437,8 +502,8 @@
       "difficulty": "medium",
       "stem_en": "Events $A$ and $B$ are independent with $P(A) = 0.3$ and $P(B) = 0.5$. Find $P(A \\cap B)$.",
       "stem_he": "המאורעות $A$ ו-$B$ בלתי-תלויים עם $P(A) = 0.3$ ו-$P(B) = 0.5$. מצאו $P(A \\cap B)$.",
-      "explanation_en": "**Independent, so multiply.** $0.3\\cdot 0.5 = 0.15$.\n\n**Answer:** $0.15$.",
-      "explanation_he": "**בלתי-תלויים, לכן מכפילים.** $0.3\\cdot 0.5 = 0.15$.\n\n**תשובה:** $0.15$.",
+      "explanation_en": "**Independent, so multiply.** $0.3\\cdot 0.5 = 0.15$.\n\n**Answer:** $0.15$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**בלתי-תלויים, לכן מכפילים.** $0.3\\cdot 0.5 = 0.15$.\n\n**תשובה:** $0.15$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events",
         "multiplication_rule"
@@ -448,7 +513,14 @@
       },
       "source_item_id": "5afb314f-f07b-5689-af69-fc76c79c59c4",
       "points_level_min": "3pt",
-      "correct_answer": "0.15"
+      "correct_answer": "0.15",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.15",
+        "expected": 0.15
+      }
     },
     {
       "ord": 10,
@@ -456,8 +528,8 @@
       "difficulty": "medium",
       "stem_en": "A fair die is rolled twice. Find the probability of rolling a $6$ both times.",
       "stem_he": "מטילים קובייה הוגנת פעמיים. מצאו את ההסתברות לקבל $6$ בשתי הפעמים.",
-      "explanation_en": "**Independent rolls.** $\\left(\\dfrac{1}{6}\\right)^2 = \\dfrac{1}{36}$.\n\n**Answer:** $\\dfrac{1}{36}$.",
-      "explanation_he": "**הטלות בלתי-תלויות.** $\\left(\\dfrac{1}{6}\\right)^2 = \\dfrac{1}{36}$.\n\n**תשובה:** $\\dfrac{1}{36}$.",
+      "explanation_en": "**Independent rolls.** $\\left(\\dfrac{1}{6}\\right)^2 = \\dfrac{1}{36}$.\n\n**Answer:** $\\dfrac{1}{36}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**הטלות בלתי-תלויות.** $\\left(\\dfrac{1}{6}\\right)^2 = \\dfrac{1}{36}$.\n\n**תשובה:** $\\dfrac{1}{36}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events"
       ],
@@ -466,7 +538,14 @@
       },
       "source_item_id": "f02fdd72-02b6-539e-8958-1d24d94fd92a",
       "points_level_min": "3pt",
-      "correct_answer": "0.027778"
+      "correct_answer": "0.027778",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.027778",
+        "expected": 0.027778
+      }
     },
     {
       "ord": 11,
@@ -474,8 +553,8 @@
       "difficulty": "medium",
       "stem_en": "Two fair coins are flipped. Find $P(\\text{first head, then tail})$.",
       "stem_he": "מטילים שני מטבעות הוגנים. מצאו את ההסתברות של 'עץ' ואז 'פלי'.",
-      "explanation_en": "**Independent.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.",
-      "explanation_he": "**בלתי-תלויים.** $\\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.",
+      "explanation_en": "**Independent.** $\\dfrac{1}{2}\\cdot\\dfrac{1}{2} = \\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**בלתי-תלויים.** $\\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "independent_events"
       ],
@@ -484,7 +563,14 @@
       },
       "source_item_id": "14881ca0-58de-5ed8-9d8e-8bee6a67e919",
       "points_level_min": "3pt",
-      "correct_answer": "0.25"
+      "correct_answer": "0.25",
+      "archetypes": [
+        "procedural"
+      ],
+      "verify": {
+        "expr": "0.25",
+        "expected": 0.25
+      }
     },
     {
       "ord": 12,
@@ -492,8 +578,8 @@
       "difficulty": "medium",
       "stem_en": "Given $P(A \\cap B) = 0.1$ and $P(B) = 0.4$, find $P(A \\mid B)$.",
       "stem_he": "בהינתן $P(A \\cap B) = 0.1$ ו-$P(B) = 0.4$, מצאו $P(A \\mid B)$.",
-      "explanation_en": "**Conditional formula.** $P(A \\mid B) = \\dfrac{0.1}{0.4}$.\n\n**Answer:** $0.25$.",
-      "explanation_he": "**נוסחת ההסתברות המותנית.** $\\dfrac{0.1}{0.4}$.\n\n**תשובה:** $0.25$.",
+      "explanation_en": "**Conditional formula.** $P(A \\mid B) = \\dfrac{0.1}{0.4}$.\n\n**Answer:** $0.25$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**נוסחת ההסתברות המותנית.** $\\dfrac{0.1}{0.4}$.\n\n**תשובה:** $0.25$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "conditional_probability"
       ],
@@ -502,7 +588,15 @@
       },
       "source_item_id": "c61e5ca5-7741-54b2-9047-8c58e8cbca25",
       "points_level_min": "3pt",
-      "correct_answer": "0.25"
+      "correct_answer": "0.25",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "verify": {
+        "expr": "0.25",
+        "expected": 0.25
+      }
     },
     {
       "ord": 13,
@@ -510,8 +604,8 @@
       "difficulty": "medium",
       "stem_en": "True or False: drawing two cards without replacement makes the two draws dependent events.",
       "stem_he": "נכון או לא נכון: שליפת שני קלפים ללא החזרה הופכת את שתי השליפות למאורעות תלויים.",
-      "explanation_en": "**Without replacement**, the first draw changes the second's probability ($\\tfrac{4}{52} \\ne \\tfrac{3}{51}$) — **true**.",
-      "explanation_he": "**ללא החזרה**, השליפה הראשונה משנה את הסתברות השנייה ($\\tfrac{4}{52} \\ne \\tfrac{3}{51}$) — **נכון**.",
+      "explanation_en": "**Without replacement**, the first draw changes the second's probability ($\\tfrac{4}{52} \\ne \\tfrac{3}{51}$) — **true**.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**ללא החזרה**, השליפה הראשונה משנה את הסתברות השנייה ($\\tfrac{4}{52} \\ne \\tfrac{3}{51}$) — **נכון**.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "dependent_events"
       ],
@@ -520,7 +614,10 @@
       },
       "source_item_id": "3ca14896-851b-5623-8759-dc6517570784",
       "points_level_min": "3pt",
-      "correct_bool": true
+      "correct_bool": true,
+      "archetypes": [
+        "conceptual"
+      ]
     },
     {
       "ord": 14,
@@ -528,8 +625,8 @@
       "difficulty": "hard",
       "stem_en": "Two cards are drawn from $52$ without replacement. Find $P(\\text{both aces})$.",
       "stem_he": "שולפים שני קלפים מתוך $52$ ללא החזרה. מצאו את ההסתברות ששניהם אסים.",
-      "explanation_en": "**First ace.** $\\dfrac{4}{52}$.\n\n**Second ace.** $\\dfrac{3}{51}$.\n\n**Multiply.** $\\dfrac{4}{52}\\cdot\\dfrac{3}{51} = \\dfrac{1}{221}$.\n\n**Answer:** $\\dfrac{1}{221}$.",
-      "explanation_he": "**אס ראשון.** $\\dfrac{4}{52}$.\n\n**אס שני.** $\\dfrac{3}{51}$.\n\n**כפל.** $\\dfrac{1}{221}$.\n\n**תשובה:** $\\dfrac{1}{221}$.",
+      "explanation_en": "**First ace.** $\\dfrac{4}{52}$.\n\n**Second ace.** $\\dfrac{3}{51}$.\n\n**Multiply.** $\\dfrac{4}{52}\\cdot\\dfrac{3}{51} = \\dfrac{1}{221}$.\n\n**Answer:** $\\dfrac{1}{221}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**אס ראשון.** $\\dfrac{4}{52}$.\n\n**אס שני.** $\\dfrac{3}{51}$.\n\n**כפל.** $\\dfrac{1}{221}$.\n\n**תשובה:** $\\dfrac{1}{221}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "dependent_events",
         "multiplication_rule"
@@ -539,7 +636,15 @@
       },
       "source_item_id": "0bbf74aa-6b6a-56b0-bf5a-6d4b99ba697e",
       "points_level_min": "3pt",
-      "correct_answer": "0.004525"
+      "correct_answer": "0.004525",
+      "archetypes": [
+        "procedural",
+        "error_analysis"
+      ],
+      "verify": {
+        "expr": "0.004525",
+        "expected": 0.004525
+      }
     },
     {
       "ord": 15,
@@ -547,8 +652,8 @@
       "difficulty": "hard",
       "stem_en": "An urn has $5$ white and $3$ black balls. Two are drawn without replacement. Find $P(\\text{both white})$.",
       "stem_he": "בכד $5$ לבנים ו-$3$ שחורים. שולפים שניים ללא החזרה. מצאו את ההסתברות ששניהם לבנים.",
-      "explanation_en": "**First white.** $\\dfrac{5}{8}$.\n\n**Second white.** $\\dfrac{4}{7}$.\n\n**Multiply.** $\\dfrac{5}{8}\\cdot\\dfrac{4}{7} = \\dfrac{5}{14}$.\n\n**Answer:** $\\dfrac{5}{14}$.",
-      "explanation_he": "**לבן ראשון.** $\\dfrac{5}{8}$.\n\n**לבן שני.** $\\dfrac{4}{7}$.\n\n**כפל.** $\\dfrac{5}{14}$.\n\n**תשובה:** $\\dfrac{5}{14}$.",
+      "explanation_en": "**First white.** $\\dfrac{5}{8}$.\n\n**Second white.** $\\dfrac{4}{7}$.\n\n**Multiply.** $\\dfrac{5}{8}\\cdot\\dfrac{4}{7} = \\dfrac{5}{14}$.\n\n**Answer:** $\\dfrac{5}{14}$.\n\n**Exam tip.** On the Bagrut probability and statistics paper, name the rule or measure before substituting numbers so partial credit survives a later arithmetic slip. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**לבן ראשון.** $\\dfrac{5}{8}$.\n\n**לבן שני.** $\\dfrac{4}{7}$.\n\n**כפל.** $\\dfrac{5}{14}$.\n\n**תשובה:** $\\dfrac{5}{14}$.\n\n**טיפ לבחינה.** בבגרות בהסתברות וסטטיסטיקה ציינו את הכלל או המדד לפני הצבת מספרים כדי שתישאר נקודת ביניים גם אם יש טעות חשבון אחר כך.",
       "skill_atoms": [
         "dependent_events",
         "multiplication_rule"
@@ -558,7 +663,340 @@
       },
       "source_item_id": "f66da8b7-32d2-506b-af8d-744c9b9112bd",
       "points_level_min": "3pt",
-      "correct_answer": "0.357143"
+      "correct_answer": "0.357143",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "verify": {
+        "expr": "0.357143",
+        "expected": 0.357143
+      }
+    },
+    {
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "Write P(A|B) using P(A and B) and P(B).",
+      "stem_he": "כתבו P(A|B) בעזרת P(A וגם B) ו-P(B).",
+      "explanation_en": "**Step 1.** Conditional probability renormalizes by the condition.\n\n**Step 2.** Denominator must be P(B), not P(A).\n\n**Step 3.** Require P(B) > 0.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** מותנית מנרמלת לפי התנאי.\n\n**שלב 2.** המכנה הוא P(B).\n\n**שלב 3.** דורשים P(B)>0.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "P(A∩B)/P(B)",
+          "P(A and B)/P(B)"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "P(A∩B)/P(B)",
+        "P(A and B)/P(B)"
+      ],
+      "correct_answer": "P(A∩B)/P(B)",
+      "ord": 16
+    },
+    {
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "If A,B independent then P(A∩B)=P(A)*___.",
+      "stem_he": "אם A,B בלתי-תלויים אז P(A∩B)=P(A)*___.",
+      "explanation_en": "**Step 1.** Independence means the joint factors.\n\n**Step 2.** Fill P(B).\n\n**Step 3.** Equivalently P(A|B)=P(A).\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** אי-תלות פירושה פירוק למכפלה.\n\n**שלב 2.** מלאו P(B).\n\n**שלב 3.** שקיל ל-P(A|B)=P(A).\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "P(B)",
+          "p(b)"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "P(B)",
+      "ord": 17
+    },
+    {
+      "kind": "mcq_multi",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "skill_atoms": [
+        "conditional_probability",
+        "dependent_events"
+      ],
+      "stem_en": "Which statements are true? (Select all.)",
+      "stem_he": "אילו טענות נכונות? (בחרו הכול.)",
+      "explanation_en": "**Step 1.** A and C are correct.\n\n**Step 2.** B swaps condition incorrectly.\n\n**Step 3.** D violates the probability axioms.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** A ו-C נכונים.\n\n**שלב 2.** B מחליף תנאי בטעות.\n\n**שלב 3.** D מפר אקסיומות.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "options_en": [
+          "P(A|B)=P(A∩B)/P(B) when P(B)>0",
+          "Always P(A|B)=P(B|A)",
+          "Independence means P(A|B)=P(A)",
+          "Conditional probability can exceed 1 if B is rare"
+        ],
+        "options_he": [
+          "P(A|B)=P(A∩B)/P(B) כאשר P(B)>0",
+          "תמיד P(A|B)=P(B|A)",
+          "אי-תלות: P(A|B)=P(A)",
+          "מותנית יכולה לעבור 1 אם B נדיר"
+        ],
+        "correct_indices": [
+          0,
+          2
+        ]
+      },
+      "correct_indices": [
+        0,
+        2
+      ],
+      "ord": 18
+    },
+    {
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "conditional_probability",
+        "dependent_events"
+      ],
+      "stem_en": "Match each situation to the best tool.",
+      "stem_he": "התאימו כל מצב לכלי המתאים.",
+      "explanation_en": "**Step 1.** Trees multiply along paths.\n\n**Step 2.** Tables use the condition column total.\n\n**Step 3.** Independence compares conditional to marginal.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** עצים מכפילים לאורך מסלול.\n\n**שלב 2.** טבלאות משתמשות בסכום עמודת התנאי.\n\n**שלב 3.** אי-תלות משווה מותנית לשולית.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "left_en": [
+          "Two-stage draw without replacement",
+          "Survey two-way table",
+          "Check independence"
+        ],
+        "left_he": [
+          "שליפה דו-שלבית בלי החזרה",
+          "טבלת סקר דו-ממדית",
+          "בדיקת אי-תלות"
+        ],
+        "right_en": [
+          "Probability tree",
+          "Contingency table",
+          "Compare P(A|B) to P(A)"
+        ],
+        "right_he": [
+          "עץ הסתברות",
+          "טבלת שכיחויות",
+          "השוו P(A|B) ל-P(A)"
+        ],
+        "correct_pairs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ord": 19
+    },
+    {
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "Order steps to compute P(A|B) from P(A∩B) and P(B).",
+      "stem_he": "סדרו צעדים לחישוב P(A|B) מ-P(A∩B) ו-P(B).",
+      "explanation_en": "**Step 1.** Wrong denominator is the classic trap.\n\n**Step 2.** Write the fraction before computing.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** מכנה שגוי הוא המלכודת הקלאסית.\n\n**שלב 2.** כתבו שבר לפני חישוב.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "steps_en": [
+          "Confirm the condition is B",
+          "Write P(A∩B)/P(B)",
+          "Divide the numbers",
+          "State the conditional probability"
+        ],
+        "steps_he": [
+          "אשרו שהתנאי הוא B",
+          "כתבו P(A∩B)/P(B)",
+          "חלקו את המספרים",
+          "רשמו את המותנית"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "ord": 20
+    },
+    {
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "Show that if P(A|B)=P(A) and P(B)>0 then P(A∩B)=P(A)P(B).",
+      "stem_he": "הראו שאם P(A|B)=P(A) ו-P(B)>0 אז P(A∩B)=P(A)P(B).",
+      "explanation_en": "**Step 1.** Start from P(A|B)=P(A∩B)/P(B).\n\n**Step 2.** Set equal to P(A).\n\n**Step 3.** Multiply both sides by P(B).\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** מתחילים מהגדרת המותנית.\n\n**שלב 2.** משווים ל-P(A).\n\n**שלב 3.** מכפילים ב-P(B).\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "Use definition",
+          "Set equal to P(A)",
+          "Multiply by P(B)"
+        ],
+        "steps_he": [
+          "הגדרה",
+          "השוואה ל-P(A)",
+          "כפל ב-P(B)"
+        ]
+      },
+      "ord": 21
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "application"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "P(A∩B)=0.12 and P(B)=0.4. Find P(A|B).",
+      "stem_he": "P(A∩B)=0.12 ו-P(B)=0.4. מצאו P(A|B).",
+      "explanation_en": "**Step 1.** Divide joint by P(B).\n\n**Step 2.** 0.12/0.4=0.3.\n\n**Step 3.** Result lies in [0,1].\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** חלקו משותף ב-P(B).\n\n**שלב 2.** מתקבל 0.3.\n\n**שלב 3.** התוצאה בטווח.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 0.3,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.3",
+      "verify": {
+        "expr": "0.12/0.4",
+        "expected": 0.3
+      },
+      "ord": 22
+    },
+    {
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "graphical"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "Bag 3 red 2 blue. Two draws without replacement. P(both red) as decimal?",
+      "stem_he": "שקית 3 אדומים 2 כחולים. שתי שליפות בלי החזרה. P(שני אדומים) עשרוני?",
+      "explanation_en": "**Step 1.** First red 3/5, then second red 2/4.\n\n**Step 2.** Multiply dependent branches.\n\n**Step 3.** Get 0.3.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** ראשון 3/5 ואז 2/4.\n\n**שלב 2.** כפל ענפים תלויים.\n\n**שלב 3.** מתקבל 0.3.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": 0.3,
+        "tolerance": 0.001
+      },
+      "correct_answer": "0.3",
+      "verify": {
+        "expr": "(3/5)*(2/4)",
+        "expected": 0.3
+      },
+      "ord": 23
+    },
+    {
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "proof"
+      ],
+      "needs_review": true,
+      "skill_atoms": [
+        "conditional_probability",
+        "dependent_events"
+      ],
+      "stem_en": "Class: 40% soccer, 30% basketball, 12% both. Find P(basketball|soccer) and interpret.",
+      "stem_he": "כיתה: 40% כדורגל, 30% כדורסל, 12% שניהם. מצאו P(כדורסל|כדורגל) ופרשו.",
+      "explanation_en": "**Step 1.** Condition soccer: denominator 0.40.\n\n**Step 2.** Joint both = 0.12.\n\n**Step 3.** Conditional 0.12/0.40=0.30.\n\n**Step 4.** Among soccer players, 30% also play basketball.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** תנאי כדורגל: מכנה 0.40.\n\n**שלב 2.** משותף 0.12.\n\n**שלב 3.** מותנית 0.30.\n\n**שלב 4.** מבין שחקני כדורגל, 30% גם כדורסל.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים.",
+      "answer_payload": {
+        "steps_en": [
+          "0.12/0.4=0.3",
+          "Interpret among soccer"
+        ],
+        "steps_he": [
+          "0.3",
+          "פרשנות בתוך כדורגל"
+        ]
+      },
+      "rubric_en": "Gets 0.3 and interprets among soccer players.",
+      "rubric_he": "מגיע ל-0.3 ומפרש בתוך כדורגלנים.",
+      "ord": 24
+    },
+    {
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "True or False: Drawing without replacement typically creates dependent events.",
+      "stem_he": "נכון/לא נכון: שליפה בלי החזרה יוצרת בדרך כלל אירועים תלויים.",
+      "explanation_en": "**Step 1.** After one draw the totals change.\n\n**Step 2.** Later probabilities change.\n\n**Step 3.** Hence dependence is typical.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** אחרי שליפה הספירות משתנות.\n\n**שלב 2.** ההסתברויות הבאות משתנות.\n\n**שלב 3.** לכן יש תלות.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "value": true
+      },
+      "correct_answer": "true",
+      "ord": 25
+    },
+    {
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "skill_atoms": [
+        "conditional_probability"
+      ],
+      "stem_en": "P(A)=0.5, P(B)=0.4, P(A∩B)=0.2. What is P(A|B)?",
+      "stem_he": "P(A)=0.5, P(B)=0.4, P(A∩B)=0.2. מהו P(A|B)?",
+      "explanation_en": "**Step 1.** Denominator is P(B)=0.4.\n\n**Step 2.** 0.2/0.4=0.5.\n\n**Step 3.** Do not use P(A) in the denominator.\n\n**Exam tip.** Name the rule before substituting numbers on the Bagrut so partial credit survives arithmetic slips. Read the stem carefully, identify the sample or data set, apply the definition, then simplify and check that the result is sensible in context.",
+      "explanation_he": "**שלב 1.** המכנה P(B)=0.4.\n\n**שלב 2.** 0.2/0.4=0.5.\n\n**שלב 3.** אל תשימו P(A) במכנה.\n\n**טיפ לבחינה.** ציינו את הכלל לפני הצבת מספרים בבגרות כדי לשמור נקודות ביניים. קראו את השאלה בזהירות, זהו את המדגם או קבוצת הנתונים, יישמו את ההגדרה, ואז פשטו ובדקו שהתוצאה הגיונית להקשר.",
+      "answer_payload": {
+        "options_en": [
+          "0.5",
+          "0.4",
+          "0.2",
+          "0.8"
+        ],
+        "options_he": [
+          "0.5",
+          "0.4",
+          "0.2",
+          "0.8"
+        ],
+        "correct_index": 0
+      },
+      "correct_answer": "0",
+      "ord": 26
     }
   ],
   "est_minutes": 55,
