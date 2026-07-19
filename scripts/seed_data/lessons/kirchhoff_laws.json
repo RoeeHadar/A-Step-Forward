@@ -240,11 +240,12 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "KCL",
-      "KVL",
-      "multi_loop_circuits",
-      "node_analysis",
-      "mesh_analysis"
+      "kcl",
+      "kvl",
+      "parallel_circuits",
+      "power",
+      "series_circuits",
+      "voltage_divider"
     ],
     "tutor_pacing_hint": "KCL single node first, then KVL single loop, then two-loop system.",
     "next_recommended": [
@@ -257,172 +258,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "KCL states that at any node:",
-      "stem_he": "KCL קובע שבכל צומת:",
+      "stem_en": "Kirchhoff's current law (KCL) states that at any node:",
+      "stem_he": "חוק הזרמים של קירכהוף (KCL) קובע שבכל צומת:",
+      "explanation_en": "**Charge is conserved at a node.**\n\n**Answer:** $\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$.",
+      "explanation_he": "**מטען נשמר בצומת.**\n\n**תשובה:** $\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$.",
+      "skill_atoms": [
+        "kcl"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$",
+          "$\\sum V=0$",
+          "$\\sum I=IR$",
+          "$\\sum P=0$"
+        ],
+        "options_he": [
+          "$\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$",
+          "$\\sum V=0$",
+          "$\\sum I=IR$",
+          "$\\sum P=0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "04dedc7d-893c-53ff-902f-1be5549391e1",
+      "points_level_min": "5pt",
       "options_en": [
-        "Sum of voltages = 0",
-        "Sum of currents in = sum of currents out",
-        "Current = voltage / resistance",
-        "Power in = Power out"
+        "$\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$",
+        "$\\sum V=0$",
+        "$\\sum I=IR$",
+        "$\\sum P=0$"
       ],
       "options_he": [
-        "סכום מתחות = 0",
-        "סכום זרמים נכנסים = יוצאים",
-        "זרם = מתח/התנגדות",
-        "הספק נכנס = יוצא"
+        "$\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$",
+        "$\\sum V=0$",
+        "$\\sum I=IR$",
+        "$\\sum P=0$"
       ],
-      "correct_index": 1,
-      "explanation_en": "Kirchhoff's Current Law (KCL) is the junction rule: charge cannot accumulate at a node, so every ampere entering must leave. Mathematically, $\\sum I_{\\text{in}} = \\sum I_{\\text{out}}$ at every junction.\n\n**Why option 2 is correct:** It states exactly this balance of incoming and outgoing currents. Option 1 describes KVL (voltage around a loop), not KCL. Option 3 is Ohm's law for a single resistor. Option 4 describes power balance, which follows from energy conservation but is not the statement of KCL.\n\n**Common wrong path:** Picking \"sum of voltages = 0\" because both Kirchhoff laws appear together in circuit problems — remember KCL is about **currents at nodes**, KVL about **voltages around loops**.\n\n**Exam tip:** When a Bagrut stem says \"at a junction\" or \"at a node,\" reach for KCL immediately. Label arrows in and out before writing the equation.",
-      "explanation_he": "חוק הזרם של קירכהוף (KCL) הוא כלל הצמתים: מטען לא יכול להצטבר בצומת, ולכן כל אמפר שנכנס חייב לצאת. מתמטית: $\\sum I_{\\text{in}} = \\sum I_{\\text{out}}$ בכל צומת.\n\n**למה אפשרות 2 נכונה:** היא מציינת בדיוק את האיזון בין זרמים נכנסים ליוצאים. אפשרות 1 מתארת KVL (מתח סביב לולאה), לא KCL. אפשרות 3 היא חוק אוהם לנגד בודד. אפשרות 4 מתארת איזון הספק — נובע משימור אנרגיה אך אינה ניסוח KCL.\n\n**טעות נפוצה:** בחירת \"סכום מתחים = 0\" כי שני חוקי קירכהוף מופיעים יחד — זכרו: KCL על **זרמים בצמתים**, KVL על **מתחים בלולאות**.\n\n**טיפ לבחינה:** כשבשאלה מופיע \"בצומת\" או \"בנקודת חיבור,\" פנו מיד ל-KCL. סמנו חצים נכנסים ויוצאים לפני כתיבת המשוואה.",
-      "skill_atoms": [
-        "KCL",
-        "circuit_analysis"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Node: $I_1=5$ A in, $I_2=2$ A in, $I_3$ out. Find $I_3$.",
-      "stem_he": "צומת: $I_1=5$ A נכנס, $I_2=2$ A נכנס, $I_3$ יוצא. $I_3$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$I_3=7$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "7$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "7"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "At a node, KCL requires that the sum of currents entering equals the sum leaving. Here $I_1 = 5$ A and $I_2 = 2$ A both flow **into** the junction, and $I_3$ flows out:\n$$I_1 + I_2 = I_3 \\quad\\Rightarrow\\quad 5 + 2 = I_3 = 7\\text{ A}$$\n\nThe answer is positive, confirming $I_3$ leaves in the assumed direction.\n\n**Common wrong path:** Subtracting only one incoming current ($5 - 2 = 3$ A) or adding all three as if they were in the same direction. Always classify each branch as in or out first.\n\n**Exam tip:** Write \"in = out\" as words before substituting numbers. A quick check: 7 A out balances 5 + 2 A in. Units stay in amperes throughout — no conversion needed.",
-      "explanation_he": "בצומת, KCL דורש שסכום הזרמים הנכנסים ישווה לסכום היוצאים. כאן $I_1 = 5$ A ו-$I_2 = 2$ A נכנסים **פנימה**, ו-$I_3$ יוצא:\n$$I_1 + I_2 = I_3 \\quad\\Rightarrow\\quad 5 + 2 = I_3 = 7\\text{ A}$$\n\nהתשובה חיובית — מאשרת ש-$I_3$ יוצא בכיוון ההנחה.\n\n**טעות נפוצה:** חיסור רק זרם נכנס אחד ($5 - 2 = 3$ A) או חיבור שלושת הזרמים כאילו באותו כיוון. תמיד סווגו כל ענף כנכנס או יוצא.\n\n**טיפ לבחינה:** כתבו \"נכנס = יוצא\" במילים לפני הצבת מספרים. בדיקה מהירה: 7 A יוצא מאזן 5 + 2 A נכנס. יחידות נשארות באמפר — אין צורך בהמרה.",
+      "stem_en": "A current of $5\\,\\text{A}$ enters a node and splits; one branch carries $2\\,\\text{A}$. Find the other branch (KCL).",
+      "stem_he": "זרם של $5\\,\\text{A}$ נכנס לצומת ומתפצל; ענף אחד נושא $2\\,\\text{A}$. מצאו את הענף השני (KCL).",
+      "explanation_en": "**KCL: $\\sum I_{\\text{in}}=\\sum I_{\\text{out}}$, so $5-2=3\\,\\text{A}$.**\n\n**Answer:** $3\\,\\text{A}$.",
+      "explanation_he": "**$5-2=3\\,\\text{A}$.**\n\n**תשובה:** $3\\,\\text{A}$.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "kcl"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "9504cf3a-1774-5630-b2dc-513372dd750d",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Single loop: $\\mathcal{E}=6$ V, $R=2\\Omega$. Find $I$.",
-      "stem_he": "לולאה אחת: $\\mathcal{E}=6$ V, $R=2\\Omega$. $I$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$I=6/2=3$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "A single-loop circuit has one current $I$ everywhere. Apply KVL by traversing the loop clockwise from the battery's negative terminal: EMF rise, then resistor drop:\n$$\\mathcal{E} - IR = 0 \\quad\\Rightarrow\\quad I = \\frac{\\mathcal{E}}{R} = \\frac{6}{2} = 3\\text{ A}$$\n\nThis is equivalent to Ohm's law because there is only one branch — KVL generalizes Ohm's law to multi-component loops.\n\n**Common wrong path:** Dividing $R$ by $\\mathcal{E}$ (getting 0.33 A) or forgetting the sign convention and writing $6 + 2I = 0$. Choose a traversal direction and stick to it.\n\n**Exam tip:** For a lone battery and resistor, KVL and $I = V/R$ must agree. If they differ, recheck your sign for the resistor drop ($-IR$ when current flows with your traversal).",
-      "explanation_he": "במעגל לולאה אחת יש זרם $I$ אחד בכל מקום. יישמו KVL במעבר עם כיוון השעון ממינוס הסוללה: עליית כ\"א, אחר כך ירידה על הנגד:\n$$\\mathcal{E} - IR = 0 \\quad\\Rightarrow\\quad I = \\frac{\\mathcal{E}}{R} = \\frac{6}{2} = 3\\text{ A}$$\n\nזה שקול לחוק אוהם כי יש ענף אחד — KVL מכליל את חוק אוהם למעגלים מורכבים.\n\n**טעות נפוצה:** חלוקת $R$ ב-$\\mathcal{E}$ (0.33 A) או שכחת מוסכמת הסימן ($6 + 2I = 0$). בחרו כיוון מעבר והיצמדו אליו.\n\n**טיפ לבחינה:** לסוללה ונגד בודדים, KVL ו-$I = V/R$ חייבים להתאים. אם לא — בדקו סימן ירידת הנגד ($-IR$ כשהזרם בכיוון המעבר).",
+      "stem_en": "True or False: KVL says the sum of voltage changes around any closed loop is zero.",
+      "stem_he": "נכון או לא נכון: KVL קובע שסכום שינויי המתח סביב כל לולאה סגורה הוא אפס.",
+      "explanation_en": "**KVL is energy conservation around a loop** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**KVL הוא שימור אנרגיה סביב לולאה** — **נכון**.\n\n**תשובה:** נכון.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "kvl"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "de711597-ac90-5d52-a8ee-86addffd1870",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Voltage across a $5\\Omega$ resistor with $I=2$ A?",
-      "stem_he": "מתח על נגד $5\\Omega$ עם $I=2$ A?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$V=IR=10$ V.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "10$ V.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "10"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The voltage across a resistor follows Ohm's law: $V = IR$. With $R = 5\\,\\Omega$ and $I = 2$ A:\n$$V = 5 \\times 2 = 10\\text{ V}$$\n\nThis is not a Kirchhoff equation by itself, but every KVL loop contains terms of the form $-IR$ or $+IR$ for each resistor. Knowing $V = IR$ lets you verify individual drops after solving the full system.\n\n**Common wrong path:** Dividing $I/R$ instead of multiplying, or reporting $0.4$ V from $2/5$. Always check: higher current through a fixed resistor means higher voltage drop.\n\n**Exam tip:** After solving a multi-loop problem, compute $V = IR$ on each resistor and confirm the drops around each loop sum to zero — a powerful self-check.",
-      "explanation_he": "המתח על נגד עוקב אחר חוק אוהם: $V = IR$. עם $R = 5\\,\\Omega$ ו-$I = 2$ A:\n$$V = 5 \\times 2 = 10\\text{ V}$$\n\nזו לא משוואת קירכהוף בפני עצמה, אך כל לולאת KVL מכילה איברים $-IR$ או $+IR$ לכל נגד. ידיעת $V = IR$ מאפשרת לאמת ירידות בודדות אחרי פתרון המערכת.\n\n**טעות נפוצה:** חלוקת $I/R$ במקום כפל, או דיווח $0.4$ V מ-$2/5$. תמיד בדקו: זרם גבוה יותר בנגד קבוע ⇒ ירידת מתח גבוהה יותר.\n\n**טיפ לבחינה:** אחרי פתרון מעגל מרובה לולאות, חשבו $V = IR$ על כל נגד וודאו שהירידות סביב כל לולאה מסתכמות לאפס — בדיקה עצמית חזקה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A $24\\,\\text{V}$ source drives $4\\,\\Omega$ in series with $6\\,\\Omega\\parallel3\\,\\Omega$. Find the source current.",
+      "stem_he": "מקור $24\\,\\text{V}$ מניע $4\\,\\Omega$ בטור עם $6\\,\\Omega\\parallel3\\,\\Omega$. מצאו את זרם המקור.",
+      "explanation_en": "**Step 1 — Parallel part.** $6\\parallel3=\\dfrac{6\\cdot3}{9}=2\\,\\Omega$.\n\n**Step 2 — Total.** $R=4+2=6\\,\\Omega$.\n\n**Step 3 — Ohm's law.** $I=\\dfrac{24}{6}=4\\,\\text{A}$.\n\n**Answer:** $4\\,\\text{A}$.",
+      "explanation_he": "**שלב 1 — חלק מקבילי.** $6\\parallel3=2\\,\\Omega$.\n\n**שלב 2 — סה\\\"כ.** $R=6\\,\\Omega$.\n\n**שלב 3 — חוק אוהם.** $I=4\\,\\text{A}$.\n\n**תשובה:** $4\\,\\text{A}$.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "series_circuits"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Parallel part.** $6\\parallel3=\\dfrac{6\\cdot3}{9}=2\\,\\Omega$.",
+          "**Step 2 — Total.** $R=4+2=6\\,\\Omega$.",
+          "**Step 3 — Ohm's law.** $I=\\dfrac{24}{6}=4\\,\\text{A}$.",
+          "**Answer:** $4\\,\\text{A}$."
+        ],
+        "steps_he": [
+          "**שלב 1 — חלק מקבילי.** $6\\parallel3=2\\,\\Omega$.",
+          "**שלב 2 — סה\\\"כ.** $R=6\\,\\Omega$.",
+          "**שלב 3 — חוק אוהם.** $I=4\\,\\text{A}$.",
+          "**תשובה:** $4\\,\\text{A}$."
+        ]
+      },
+      "source_item_id": "dccc4f7d-8e83-575a-9990-8d85df246c2e",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Why does KVL represent conservation of energy?",
-      "stem_he": "מדוע KVL מייצג שימור אנרגיה?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Voltage is energy per charge. A charge completing a closed loop gains and loses equal amounts of energy — net gain is zero"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Voltage is defined as energy per unit charge: $V = W/Q$. When a charge $Q$ completes a full closed loop, it returns to the same potential — no net energy gain or loss. Therefore the algebraic sum of all voltage rises and drops around the loop must be zero: $\\sum V_i = 0$. This is Kirchhoff's Voltage Law, a direct statement of conservation of energy for electric charges in a circuit.\n\n**Common wrong path:** Confusing KVL with KCL (\"energy at a node\") or claiming energy is lost because resistors dissipate heat. Resistors convert electrical energy to heat, but the battery supplies exactly that energy — net around the loop is zero.\n\n**Exam tip:** In Bagrut conceptual questions, link KVL to \"charge returns to start with same energy.\" Draw a loop arrow and label each rise and drop.",
-      "explanation_he": "מתח מוגדר כאנרגיה ליחידת מטען: $V = W/Q$. כשמטען $Q$ משלים לולאה סגורה, הוא חוזר לאותו פוטנציאל — ללא שינוי אנרגיה נטו. לכן סכום עליות וירידות המתח בלולאה חייב להיות אפס: $\\sum V_i = 0$. זה חוק המתח של קירכהוף — ניסוח ישיר של שימור אנרגיה למטענים במעגל.\n\n**טעות נפוצה:** בלבול KVL עם KCL (\"אנרגיה בצומת\") או טענה שאנרגיה \"אבדה\" כי נגדים מפזרים חום. נגדים ממירים אנרגיה חשמלית לחום, אך הסוללה מספקת בדיוק את האנרגיה הזו — נטו סביב הלולאה הוא אפס.\n\n**טיפ לבחינה:** בשאלות מושגיות בבגרות, קשרו KVL ל\"מטען חוזר להתחלה באותה אנרגיה.\" שרטטו חץ לולאה וסמנו כל עלייה וירידה.",
+      "stem_en": "Two resistors $4\\,\\Omega$ and $6\\,\\Omega$ are in series. Find the total resistance.",
+      "stem_he": "שני נגדים $4\\,\\Omega$ ו-$6\\,\\Omega$ בטור. מצאו את ההתנגדות הכוללת.",
+      "explanation_en": "**Series adds: $R=4+6=10\\,\\Omega$.**\n\n**Answer:** $10\\,\\Omega$.",
+      "explanation_he": "**$R=10\\,\\Omega$.**\n\n**תשובה:** $10\\,\\Omega$.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "series_circuits"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "2a0a39fa-dc5c-5937-9a9e-c132e8d1538c",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Two batteries and two resistors in series: $\\mathcal{E}_1=10$ V, $\\mathcal{E}_2=4$ V (opposing), $R_1=2\\Omega$, $R_2=2\\Omega$. Find $I$.",
-      "stem_he": "$\\mathcal{E}_1=10$ V, $\\mathcal{E}_2=4$ V (מנוגדות), $R_1=R_2=2\\Omega$. $I$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nKVL: $10-4-2I-2I=0 \\Rightarrow 4I=6 \\Rightarrow I=1.5$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.5$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.5"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Two opposing batteries mean their EMFs subtract in KVL. Traversing the series loop clockwise from the 10 V battery's negative terminal:\n$$10 - 4 - 2I - 2I = 0 \\quad\\Rightarrow\\quad 6 = 4I \\quad\\Rightarrow\\quad I = 1.5\\text{ A}$$\n\nThe net EMF is $10 - 4 = 6$ V driving current through $R_1 + R_2 = 4\\,\\Omega$, giving $I = 6/4 = 1.5$ A — consistent.\n\n**Common wrong path:** Adding both EMFs ($10 + 4 = 14$ V) when they oppose, or using only one resistor ($6/2 = 3$ A). Trace the loop and assign $+\\mathcal{E}$ or $-\\mathcal{E}$ based on crossing direction.\n\n**Exam tip:** \"Opposing\" batteries in Bagrut usually means subtract EMFs. Verify: $1.5$ A through $4\\,\\Omega$ gives total drop $6$ V matching net EMF.",
-      "explanation_he": "שתי סוללות מנוגדות ⇒ כוחות הכ\"א מתחסרים ב-KVL. מעבר בלולאה עם כיוון השעון ממינוס הסוללה 10 V:\n$$10 - 4 - 2I - 2I = 0 \\quad\\Rightarrow\\quad 6 = 4I \\quad\\Rightarrow\\quad I = 1.5\\text{ A}$$\n\nכ\"א נטו $10 - 4 = 6$ V מניע זרם דרך $R_1 + R_2 = 4\\,\\Omega$, כלומר $I = 6/4 = 1.5$ A — עקבי.\n\n**טעות נפוצה:** חיבור שני כוחות הכ\"א ($10 + 4$) כשהם מנוגדים, או שימוש בנגד אחד בלבד ($6/2 = 3$ A). עקבו אחרי הלולאה והקצו $+\\mathcal{E}$ או $-\\mathcal{E}$ לפי כיוון המעבר.\n\n**טיפ לבחינה:** \"מנוגדות\" בבגרות בדרך כלל ⇒ חיסור כוחות כ\"א. אימות: $1.5$ A דרך $4\\,\\Omega$ נותן ירידה $6$ V = כ\"א נטו.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A $12\\,\\text{V}$ source drives two $3\\,\\Omega$ resistors in series. Find the loop current.",
+      "stem_he": "מקור $12\\,\\text{V}$ מניע שני נגדים $3\\,\\Omega$ בטור. מצאו את זרם הלולאה.",
+      "explanation_en": "**$I=\\dfrac{V}{R}=\\dfrac{12}{6}=2\\,\\text{A}$.**\n\n**Answer:** $2\\,\\text{A}$.",
+      "explanation_he": "**$I=2\\,\\text{A}$.**\n\n**תשובה:** $2\\,\\text{A}$.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "kvl"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "b0375836-8567-5ea7-923b-6ab74f697991",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "In a two-branch circuit: $I_1=3$ A flows into a node, $I_2=1$ A flows out. What is $I_3$ (other outgoing branch)?",
-      "stem_he": "צומת: $I_1=3$ A נכנס, $I_2=1$ A יוצא, $I_3$ יוצא. $I_3$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$I_3=3-1=2$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "KCL at the node: current in equals current out. Only $I_1 = 3$ A enters; $I_2 = 1$ A and $I_3$ both leave:\n$$I_1 = I_2 + I_3 \\quad\\Rightarrow\\quad 3 = 1 + I_3 \\quad\\Rightarrow\\quad I_3 = 2\\text{ A}$$\n\nThe positive result confirms $I_3$ flows out as assumed.\n\n**Common wrong path:** Writing $I_1 + I_2 = I_3$ (adding an outgoing current to the incoming side) or answering $I_3 = 4$ A from $3 + 1$. Draw the node with three arrows before writing the equation.\n\n**Exam tip:** Two outgoing branches is the standard KCL setup after single-branch problems. Always list \"in\" on one side and \"out\" on the other — never mix signs mid-equation.",
-      "explanation_he": "KCL בצומת: זרם נכנס = זרם יוצא. רק $I_1 = 3$ A נכנס; $I_2 = 1$ A ו-$I_3$ שניהם יוצאים:\n$$I_1 = I_2 + I_3 \\quad\\Rightarrow\\quad 3 = 1 + I_3 \\quad\\Rightarrow\\quad I_3 = 2\\text{ A}$$\n\nתוצאה חיובית — מאשרת ש-$I_3$ יוצא בכיוון ההנחה.\n\n**טעות נפוצה:** כתיבת $I_1 + I_2 = I_3$ (חיבור זרם יוצא לצד הנכנס) או תשובה $I_3 = 4$ A מ-$3 + 1$. שרטטו צומת עם שלושה חצים לפני המשוואה.\n\n**טיפ לבחינה:** שני ענפים יוצאים — תצורת KCL סטנדרטית אחרי בעיות ענף בודד. תמיד \"נכנס\" בצד אחד ו\"יוצא\" בצד שני — אל תערבבו סימנים באמצע. בדיקה: $1 + 2 = 3$ A יוצא = $3$ A נכנס — מאזן מושלם.",
+      "stem_en": "In a parallel combination, which quantity is the same across each branch?",
+      "stem_he": "בחיבור מקבילי, איזה גודל זהה בכל ענף?",
+      "explanation_en": "**Parallel branches share the same voltage.**\n\n**Answer:** voltage.",
+      "explanation_he": "**ענפים מקביליים חולקים את אותו מתח.**\n\n**תשובה:** מתח.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "parallel_circuits"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{voltage}$",
+          "$\\text{current}$",
+          "$\\text{power}$",
+          "$\\text{resistance}$"
+        ],
+        "options_he": [
+          "$\\text{voltage}$",
+          "$\\text{current}$",
+          "$\\text{power}$",
+          "$\\text{resistance}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "84f58b74-900c-518f-9a91-3f2d8b62c2cf",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{voltage}$",
+        "$\\text{current}$",
+        "$\\text{power}$",
+        "$\\text{resistance}$"
+      ],
+      "options_he": [
+        "$\\text{voltage}$",
+        "$\\text{current}$",
+        "$\\text{power}$",
+        "$\\text{resistance}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "KVL loop: two batteries $\\mathcal{E}_1=15$ V and $\\mathcal{E}_2=5$ V add in same direction, resistors $R_1=4\\Omega$, $R_2=1\\Omega$. Find $I$.",
-      "stem_he": "$\\mathcal{E}_1=15$ V ו-$\\mathcal{E}_2=5$ V באותו כיוון, $R_1=4\\Omega$, $R_2=1\\Omega$. $I$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$15+5-4I-I=0 \\Rightarrow 5I=20 \\Rightarrow I=4$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4$ A.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Both batteries aid the current in the same direction, so their EMFs add in KVL. Two resistors in series give total drop $4I + I = 5I$:\n$$15 + 5 - 4I - I = 0 \\quad\\Rightarrow\\quad 20 = 5I \\quad\\Rightarrow\\quad I = 4\\text{ A}$$\n\nNet EMF $20$ V across $5\\,\\Omega$ total resistance confirms $I = 20/5 = 4$ A.\n\n**Common wrong path:** Subtracting one battery EMF, or using parallel resistance formula instead of adding $R_1 + R_2$ for series. Read \"same direction\" carefully — both get $+\\mathcal{E}$ when traversed consistently.\n\n**Exam tip:** After finding $I$, compute $V_1 = 4 \\times 4 = 16$ V and $V_2 = 4 \\times 1 = 4$ V; check $16 + 4 = 20$ V = sum of EMFs.",
-      "explanation_he": "שתי הסוללות תומכות בזרם באותו כיוון — כוחות הכ\"א מתחברים ב-KVL. שני נגדים בטור נותנים ירידה $4I + I = 5I$:\n$$15 + 5 - 4I - I = 0 \\quad\\Rightarrow\\quad 20 = 5I \\quad\\Rightarrow\\quad I = 4\\text{ A}$$\n\nכ\"א נטו $20$ V על $5\\,\\Omega$ מאשר $I = 20/5 = 4$ A.\n\n**טעות נפוצה:** חיסור EMF של סוללה אחת, או נוסחת מקביל במקום $R_1 + R_2$ בטור. קראו \"אותו כיוון\" — שתיהן $+\\mathcal{E}$ במעבר עקבי.\n\n**טיפ לבחינה:** אחרי מציאת $I$, חשבו $V_1 = 16$ V ו-$V_2 = 4$ V; בדקו $16 + 4 = 20$ V = סכום כוחות הכ\"א. שאלות \"באותו כיוון\" בבגרות = חיבור EMF; \"מנוגדות\" = חיסור. סה\"כ התנגדות $5\\,\\Omega$ — זכרו שזה טור, לא מקביל.",
+      "stem_en": "A $6\\,\\Omega$ and a $3\\,\\Omega$ resistor are in parallel across $12\\,\\text{V}$. Find the total current from the source.",
+      "stem_he": "נגד $6\\,\\Omega$ ונגד $3\\,\\Omega$ במקביל על $12\\,\\text{V}$. מצאו את הזרם הכולל מהמקור.",
+      "explanation_en": "**$R_{eq}=\\dfrac{6\\cdot3}{9}=2\\,\\Omega$; $I=\\dfrac{12}{2}=6\\,\\text{A}$.**\n\n**Answer:** $6\\,\\text{A}$.",
+      "explanation_he": "**$R_{eq}=2\\,\\Omega$; $I=6\\,\\text{A}$.**\n\n**תשובה:** $6\\,\\text{A}$.",
       "skill_atoms": [
-        "KCL",
-        "KVL"
-      ]
+        "parallel_circuits"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "309c98b5-faf0-5839-9f1e-7fb0c31ed952",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "At a node, $10\\,\\text{A}$ enters and two branches carry $3\\,\\text{A}$ and $4\\,\\text{A}$ out. Find the third outgoing current.",
+      "stem_he": "בצומת, $10\\,\\text{A}$ נכנס ושני ענפים נושאים $3\\,\\text{A}$ ו-$4\\,\\text{A}$ החוצה. מצאו את הזרם היוצא השלישי.",
+      "explanation_en": "**$I=10-3-4=3\\,\\text{A}$.**\n\n**Answer:** $3\\,\\text{A}$.",
+      "explanation_he": "**$I=3\\,\\text{A}$.**\n\n**תשובה:** $3\\,\\text{A}$.",
+      "skill_atoms": [
+        "kcl"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "dfa85720-b243-511b-85c8-4f72acc03ba7",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A battery of emf $9\\,\\text{V}$ with internal resistance $1\\,\\Omega$ drives an external $2\\,\\Omega$. Find the current.",
+      "stem_he": "סוללה בעלת כא\\\"מ $9\\,\\text{V}$ עם התנגדות פנימית $1\\,\\Omega$ מניעה $2\\,\\Omega$ חיצוני. מצאו את הזרם.",
+      "explanation_en": "**$I=\\dfrac{\\varepsilon}{R+r}=\\dfrac{9}{3}=3\\,\\text{A}$.**\n\n**Answer:** $3\\,\\text{A}$.",
+      "explanation_he": "**$I=3\\,\\text{A}$.**\n\n**תשובה:** $3\\,\\text{A}$.",
+      "skill_atoms": [
+        "kvl"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "3e905e3f-7b71-5de3-b7b9-53249bf7cb4a",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A $12\\,\\text{V}$ source is across series $2\\,\\Omega$ and $4\\,\\Omega$. Find the voltage across the $4\\,\\Omega$ resistor (divider).",
+      "stem_he": "מקור $12\\,\\text{V}$ על נגדים בטור $2\\,\\Omega$ ו-$4\\,\\Omega$. מצאו את המתח על הנגד $4\\,\\Omega$ (מחלק מתח).",
+      "explanation_en": "**$V_4=12\\cdot\\dfrac{4}{6}=8\\,\\text{V}$.**\n\n**Answer:** $8\\,\\text{V}$.",
+      "explanation_he": "**$V_4=8\\,\\text{V}$.**\n\n**תשובה:** $8\\,\\text{V}$.",
+      "skill_atoms": [
+        "voltage_divider"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "36b7fca5-5d8c-57c5-9a10-8b75ad47bc74",
+      "points_level_min": "5pt",
+      "correct_answer": "8"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: KVL is a consequence of energy conservation.",
+      "stem_he": "נכון או לא נכון: KVL נובע משימור אנרגיה.",
+      "explanation_en": "**Work per charge around a loop nets to zero** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**עבודה ליחידת מטען סביב לולאה מסתכמת לאפס** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "kvl"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "0b75e06b-3ecb-59f6-bba3-a0847cec1804",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A $12\\,\\text{V}$ source drives $2\\,\\Omega$ in series with a parallel pair $3\\,\\Omega\\parallel6\\,\\Omega$. Find the source current.",
+      "stem_he": "מקור $12\\,\\text{V}$ מניע $2\\,\\Omega$ בטור עם זוג מקבילי $3\\,\\Omega\\parallel6\\,\\Omega$. מצאו את זרם המקור.",
+      "explanation_en": "**$3\\parallel6=2\\,\\Omega$; total $=4\\,\\Omega$; $I=\\dfrac{12}{4}=3\\,\\text{A}$.**\n\n**Answer:** $3\\,\\text{A}$.",
+      "explanation_he": "**סה\\\"כ $4\\,\\Omega$; $I=3\\,\\text{A}$.**\n\n**תשובה:** $3\\,\\text{A}$.",
+      "skill_atoms": [
+        "series_circuits"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "160c38e4-388d-57e3-b24e-674bbee5223a",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A current of $2\\,\\text{A}$ flows through a $5\\,\\Omega$ resistor. Find the power dissipated ($P=I^2R$).",
+      "stem_he": "זרם של $2\\,\\text{A}$ זורם דרך נגד $5\\,\\Omega$. מצאו את ההספק המתפזר ($P=I^2R$).",
+      "explanation_en": "**$P=I^2R=4\\cdot 5=20\\,\\text{W}$.**\n\n**Answer:** $20\\,\\text{W}$.",
+      "explanation_he": "**$P=20\\,\\text{W}$.**\n\n**תשובה:** $20\\,\\text{W}$.",
+      "skill_atoms": [
+        "power"
+      ],
+      "answer_payload": {
+        "value": 20
+      },
+      "source_item_id": "f48b686b-8a7e-5e81-a68f-c7f4e3c875f8",
+      "points_level_min": "5pt",
+      "correct_answer": "20"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "At a node, three currents enter: $2\\,\\text{A}$, $3\\,\\text{A}$, $1\\,\\text{A}$, and one leaves. Find the outgoing current.",
+      "stem_he": "בצומת נכנסים שלושה זרמים: $2\\,\\text{A}$, $3\\,\\text{A}$, $1\\,\\text{A}$, ואחד יוצא. מצאו את הזרם היוצא.",
+      "explanation_en": "**KCL: $I_{\\text{out}}=2+3+1=6\\,\\text{A}$.**\n\n**Answer:** $6\\,\\text{A}$.",
+      "explanation_he": "**$I_{\\text{out}}=6\\,\\text{A}$.**\n\n**תשובה:** $6\\,\\text{A}$.",
+      "skill_atoms": [
+        "kcl"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "d53595d7-6785-5a04-b4bd-838cabac1119",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     }
   ],
   "est_minutes": 45,

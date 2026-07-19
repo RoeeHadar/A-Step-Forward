@@ -268,231 +268,366 @@
     ],
     "tutor_pacing_hint": "Start with point charge / sphere (familiar). Then line charge. Then plane — the pill-box argument. Contrast with Biot-Savart analogy.",
     "skill_atoms_unlocked": [
-      "gauss_law_apply",
-      "sphere_field",
-      "cylinder_field",
-      "plane_field",
-      "conductor_field",
-      "gauss_surface_choice"
+      "electric_flux",
+      "electric_force",
+      "field_lines",
+      "gauss_law"
     ]
   },
   "questions": [
     {
-      "id": "q1",
-      "kind": "numeric",
-      "difficulty": "medium",
-      "skill_atoms": [
-        "gauss_law_apply"
-      ],
-      "stem_en": "A sphere of radius $r = 15\\;\\text{cm}$ encloses a point charge $q = 6\\;\\text{nC}$. Find the total electric flux (in N·m²/C).",
-      "stem_he": "כדור ברדיוס $r = 15\\;\\text{cm}$ מכיל מטען $q = 6\\;\\text{nC}$. מצא שטף חשמלי כולל.",
-      "answer_payload": {
-        "value": 677.6,
-        "tolerance": 5,
-        "unit_en": "N·m²/C",
-        "unit_he": "N·m²/C"
-      },
-      "explanation_en": "**Why this is correct:** Gauss's law gives total flux through any closed surface: $\\Phi = Q_{\\text{enc}}/\\epsilon_0$. The sphere encloses the point charge $q = 6\\;\\text{nC}$, so:\n$$\\Phi = \\frac{6\\times10^{-9}}{8.85\\times10^{-12}} \\approx 678\\;\\text{N·m}^2/\\text{C}$$\n\n**How to think about it:** Flux depends only on **enclosed charge**, not on sphere radius. A larger sphere has the same flux — field weakens as $1/r^2$ but area grows as $r^2$, exactly compensating.\n\n**Common slip:** Using $E = kq/r^2$ and multiplying by area with wrong radius dependence, or forgetting to convert nC to C.\n\n**Exam tip:** For a point charge, $\\Phi = q/\\epsilon_0$ always — memorize this shortcut for flux-only questions.",
-      "explanation_he": "**למה זה נכון:** חוק גאוס נותן שטף כולל דרך משטח סגור: $\\Phi = Q_{\\text{enc}}/\\epsilon_0$. הכדור כולל מטען נקודתי $q = 6\\;\\text{nC}$, לכן:\n$$\\Phi = \\frac{6\\times10^{-9}}{8.85\\times10^{-12}} \\approx 678\\;\\text{N·m}^2/\\text{C}$$\n\n**איך לחשוב:** שטף תלוי רק ב**מטען כלוא**, לא ברדיוס הכדור. כדור גדול יותר — אותו שטף — השדה חלש כ-$1/r^2$ אך השטח גדל כ-$r^2$.\n\n**טעות נפוצה:** שימוש ב-$E = kq/r^2$ עם שטח ברדיוס שגוי, או שכחת המרת nC ל-C.\n\n**טיפ לבחינה:** למטען נקודתי, $\\Phi = q/\\epsilon_0$ תמיד — שמרו קיצור דרך זה לשאלות שטף בלבד. אין צורך לחשב שדה או להכפיל בשטח.",
-      "ord": 1
-    },
-    {
-      "id": "q2",
+      "ord": 1,
       "kind": "mcq",
-      "difficulty": "medium",
+      "difficulty": "easy",
+      "stem_en": "Gauss's law states that the net electric flux through a closed surface equals:",
+      "stem_he": "חוק גאוס קובע שהשטף החשמלי הכולל דרך משטח סגור שווה ל:",
+      "explanation_en": "**$\\Phi=Q_{\\text{enc}}/\\varepsilon_0$.**\n\n**Answer:** $Q_{\\text{enc}}/\\varepsilon_0$.",
+      "explanation_he": "**$\\Phi=Q_{\\text{enc}}/\\varepsilon_0$.**\n\n**תשובה:** $Q_{\\text{enc}}/\\varepsilon_0$.",
       "skill_atoms": [
-        "conductor_field"
+        "gauss_law"
       ],
-      "stem_en": "Inside a charged conducting sphere, $E$ is:",
-      "stem_he": "בתוך כדור מוליך טעון, $E$ הוא:",
       "answer_payload": {
         "options_en": [
-          "Maximum at the center",
-          "Proportional to $r$",
-          "Zero everywhere",
-          "Equal to $kQ/R^2$"
+          "$Q_{\\text{enc}}/\\varepsilon_0$",
+          "$\\varepsilon_0 Q_{\\text{enc}}$",
+          "$Q_{\\text{enc}}\\varepsilon_0$",
+          "$\\varepsilon_0/Q_{\\text{enc}}$"
         ],
         "options_he": [
-          "מקסימלי במרכז",
-          "יחסי ל-$r$",
-          "אפס בכל מקום",
-          "שווה ל-$kQ/R^2$"
+          "$Q_{\\text{enc}}/\\varepsilon_0$",
+          "$\\varepsilon_0 Q_{\\text{enc}}$",
+          "$Q_{\\text{enc}}\\varepsilon_0$",
+          "$\\varepsilon_0/Q_{\\text{enc}}$"
         ],
-        "correct_index": 2
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:** In electrostatic equilibrium, all excess charge on a conductor resides on its **surface**. Any Gaussian surface drawn inside the bulk encloses zero charge, so Gauss's law gives $E = 0$ everywhere inside.\n\n**How to think about it:** If $E \\neq 0$ inside, free electrons would accelerate until they cancel the field — that is the definition of equilibrium. Option \"Proportional to $r$\" applies to uniformly charged **insulators**, not conductors.\n\n**Common slip:** Choosing $E = kQ/R^2$ (that is the surface field, not interior), or \"Maximum at center\" (confusing with insulator formulas).\n\n**Exam tip:** \"Inside conductor\" → immediate answer $E = 0$. No calculation needed.",
-      "explanation_he": "**למה זה נכון:** בשיווי משקל אלקטרוסטטי, כל המטען העודף על **פני** המוליך. כל משטח גאוס בתוך הנפח כולל אפס מטען, לכן חוק גאוס נותן $E = 0$ בכל מקום בפנים.\n\n**איך לחשוב:** אם $E \\neq 0$ בפנים, אלקטרונים חופשיים יואצו עד שיבטלו את השדה — זו הגדרת שיווי משקל. \"יחסי ל-$r$\" מתאים ל**מבודדים** טעונים אחיד, לא למוליכים.\n\n**טעות נפוצה:** בחירת $E = kQ/R^2$ (שדה על פני השטח, לא בפנים), או \"מקסימלי במרכז\" (בלבול עם נוסחאות מבודד).\n\n**טיפ לבחינה:** \"בתוך מוליך\" → $E = 0$ מיד. אין צורך בחישוב.",
+      "source_item_id": "d257d1bc-bd39-5c30-b1cf-49d1e108eb3b",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$Q_{\\text{enc}}/\\varepsilon_0$",
+        "$\\varepsilon_0 Q_{\\text{enc}}$",
+        "$Q_{\\text{enc}}\\varepsilon_0$",
+        "$\\varepsilon_0/Q_{\\text{enc}}$"
+      ],
+      "options_he": [
+        "$Q_{\\text{enc}}/\\varepsilon_0$",
+        "$\\varepsilon_0 Q_{\\text{enc}}$",
+        "$Q_{\\text{enc}}\\varepsilon_0$",
+        "$\\varepsilon_0/Q_{\\text{enc}}$"
+      ],
+      "correct_index": 0
+    },
+    {
       "ord": 2,
-      "options_en": [
-        "Maximum at the center",
-        "Proportional to $r$",
-        "Zero everywhere",
-        "Equal to $kQ/R^2$"
-      ],
-      "options_he": [
-        "מקסימלי במרכז",
-        "יחסי ל-$r$",
-        "אפס בכל מקום",
-        "שווה ל-$kQ/R^2$"
-      ],
-      "correct_index": 2
-    },
-    {
-      "id": "q3",
-      "kind": "mcq",
-      "difficulty": "hard",
-      "skill_atoms": [
-        "gauss_surface_choice"
-      ],
-      "stem_en": "For finding $E$ due to an infinite line charge, which Gaussian surface is best?",
-      "stem_he": "למציאת $E$ מקו מטען אינסופי, איזה משטח גאוס הכי טוב?",
-      "answer_payload": {
-        "options_en": [
-          "Sphere centered on the line",
-          "Cylinder coaxial with the line",
-          "Rectangular box around the line",
-          "Hemisphere"
-        ],
-        "options_he": [
-          "כדור במרכז הקו",
-          "גליל קואקסיאלי לקו",
-          "קופסה מלבנית סביב הקו",
-          "חצי-כדור"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "**Why this is correct:** An infinite line charge has **cylindrical symmetry** — $\\vec{E}$ is radial and $|E|$ depends only on $r$. A coaxial cylinder exploits this: $|E|$ is constant on the curved wall, and flat end caps contribute zero flux because $\\vec{E}$ is parallel to them.\n\n**How to think about it:** Match the Gaussian surface to the symmetry of the **source**, not the field point. A sphere centered on the line fails because $|E|$ is not constant on a spherical surface.\n\n**Common slip:** Choosing a sphere ( $|E|$ varies on sphere around a line) or a box (no constant-$E$ face to pull out).\n\n**Exam tip:** Line charge → cylinder. Point charge → sphere. Plane → pill-box. Memorize this triplet.",
-      "explanation_he": "**למה זה נכון:** קו מטען אינסופי בעל **סימטריה גלילית** — $\\vec{E}$ רדיאלי ו-$|E|$ תלוי רק ב-$r$. גליל קואקסיאלי מנצל זאת: $|E|$ קבוע על הקיר המעוקל, ובסיסים שטוחים תורמים שטף אפס כי $\\vec{E}$ מקביל להם.\n\n**איך לחשוב:** התאימו משטח גאוס לסימטריה של **המקור**, לא לנקודת השדה. כדור במרכז הקו נכשל כי $|E|$ לא קבוע על משטח כדורי.\n\n**טעות נפוצה:** בחירת כדור ($|E|$ משתנה סביב קו) או קופסה (אין פנים עם $E$ קבוע).\n\n**טיפ לבחינה:** קו מטען → גליל. מטען נקודתי → כדור. מישור → קופסת גלולה. שמרו שלישייה זו.",
-      "ord": 3,
-      "options_en": [
-        "Sphere centered on the line",
-        "Cylinder coaxial with the line",
-        "Rectangular box around the line",
-        "Hemisphere"
-      ],
-      "options_he": [
-        "כדור במרכז הקו",
-        "גליל קואקסיאלי לקו",
-        "קופסה מלבנית סביב הקו",
-        "חצי-כדור"
-      ],
-      "correct_index": 1
-    },
-    {
-      "id": "q4",
       "kind": "numeric",
-      "difficulty": "hard",
+      "difficulty": "easy",
+      "stem_en": "A charge $Q=2\\times10^{-6}\\,\\text{C}$ sits at the origin. Find the field at $r=3\\,\\text{m}$ ($E=kQ/r^2$, $k=9\\times10^9$).",
+      "stem_he": "מטען $Q=2\\times10^{-6}\\,\\text{C}$ בראשית. מצאו את השדה ב-$r=3\\,\\text{m}$ ($E=kQ/r^2$, $k=9\\times10^9$).",
+      "explanation_en": "**$E=\\dfrac{9\\times10^9\\cdot 2\\times10^{-6}}{9}=2000\\,\\text{N/C}$.**\n\n**Answer:** $2000\\,\\text{N/C}$.",
+      "explanation_he": "**$E=2000\\,\\text{N/C}$.**\n\n**תשובה:** $2000\\,\\text{N/C}$.",
       "skill_atoms": [
-        "gauss_law_apply",
-        "sphere_field"
+        "gauss_law"
       ],
-      "stem_en": "A solid sphere ($R = 4\\;\\text{cm}$, $Q = 10\\;\\text{nC}$, uniform). Find $E$ in N/C at $r = 2\\;\\text{cm}$.",
-      "stem_he": "כדור מוצק ($R = 4\\;\\text{cm}$, $Q = 10\\;\\text{nC}$, אחיד). מצא $E$ ב-N/C ב-$r = 2\\;\\text{cm}$.",
       "answer_payload": {
-        "value": 28125,
-        "tolerance": 500,
-        "unit_en": "N/C",
-        "unit_he": "N/C"
+        "value": 2000
       },
-      "explanation_en": "**Why this is correct:** At $r = 2\\;\\text{cm} < R = 4\\;\\text{cm}$, we are **inside** a uniformly charged solid sphere. Use:\n$$E = \\frac{kQr}{R^3} = \\frac{(9\\times10^9)(10\\times10^{-9})(0.02)}{(0.04)^3} \\approx 28125\\;\\text{N/C}$$\n\n**How to think about it:** Enclosed charge scales as $(r/R)^3$, giving linear field growth inside. Do not use $E = kQ/r^2$ inside — that is for $r > R$ only.\n\n**Common slip:** Applying the outside formula inside, or forgetting to cube $R = 0.04$ m in the denominator.\n\n**Exam tip:** Check $r$ vs $R$ first. Inside uniform sphere: $E \\propto r$. At surface, both formulas agree: $E = kQ/R^2$. Write which region you are in before substituting numbers.",
-      "explanation_he": "**למה זה נכון:** ב-$r = 2\\;\\text{cm} < R = 4\\;\\text{cm}$, אנחנו **בפנים** כדור מוצק טעון אחיד. השתמשו:\n$$E = \\frac{kQr}{R^3} = \\frac{(9\\times10^9)(10\\times10^{-9})(0.02)}{(0.04)^3} \\approx 28125\\;\\text{N/C}$$\n\n**איך לחשוב:** מטען כלוא גדל כ-$(r/R)^3$, מה שנותן גדילה ליניארית בפנים. אל תשתמשו ב-$E = kQ/r^2$ בפנים — זה ל-$r > R$ בלבד. המרו nC ל-C ו-R ל-m לפני חישוב.\n\n**טעות נפוצה:** יישום נוסחת חוץ בפנים, או שכחת העלאת $R = 0.04$ m במכנה. גם בלבול עם כדור מוליך ($E=0$ בפנים).\n\n**טיפ לבחינה:** בדקו $r$ מול $R$ קודם. בכדור אחיד בפנים: $E \\propto r$. על פני השטח, שתי הנוסחאות מסכימות. כתבו באיזה אזור אתם לפני הצבה.",
-      "ord": 4
+      "source_item_id": "93b324cc-3524-5274-81f9-a2b1f168920a",
+      "points_level_min": "5pt",
+      "correct_answer": "2000"
     },
     {
-      "id": "q5",
-      "kind": "derivation",
-      "difficulty": "medium",
+      "ord": 3,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "stem_en": "True or False: the net flux through a closed surface depends only on the enclosed charge.",
+      "stem_he": "נכון או לא נכון: השטף הכולל דרך משטח סגור תלוי רק במטען הכלוא.",
+      "explanation_en": "**External charges contribute zero net flux** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**מטענים חיצוניים תורמים שטף כולל אפס** — **נכון**.\n\n**תשובה:** נכון.",
       "skill_atoms": [
-        "gauss_law_apply"
+        "gauss_law"
       ],
-      "stem_en": "Use Gauss's law to derive $E = \\sigma/(2\\epsilon_0)$ for an infinite uniformly charged plane with surface charge density $\\sigma$.",
-      "stem_he": "השתמש בחוק גאוס לגזירת $E = \\sigma/(2\\epsilon_0)$ למישור טעון אחיד אינסופי עם $\\sigma$.",
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "8dda8d3c-b2a9-5759-a870-d7250d1b9b00",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the electric field $2\\,\\text{m}$ from a charge $Q=8\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "stem_he": "מצאו את השדה החשמלי במרחק $2\\,\\text{m}$ ממטען $Q=8\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "explanation_en": "**Step 1 — Formula.** $E=kQ/r^2$.\n\n**Step 2 — Substitute.** $E=\\dfrac{9\\times10^9\\cdot 8\\times10^{-6}}{2^2}$.\n\n**Step 3 — Evaluate.** $=\\dfrac{72\\times10^3}{4}=18000\\,\\text{N/C}$.\n\n**Answer:** $18000\\,\\text{N/C}$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $E=kQ/r^2$.\n\n**שלב 2 — הצבה.** $\\dfrac{9\\times10^9\\cdot 8\\times10^{-6}}{2^2}$.\n\n**שלב 3 — חישוב.** $18000\\,\\text{N/C}$.\n\n**תשובה:** $18000\\,\\text{N/C}$.",
+      "skill_atoms": [
+        "gauss_law"
+      ],
       "answer_payload": {
         "steps_en": [
-          "By symmetry, $\\vec{E}$ points perpendicular to the plane and has the same magnitude on both sides",
-          "Choose a pill-box Gaussian surface with faces of area $A$ parallel to the plane, one on each side",
-          "Flux through the two faces: $\\Phi = E\\cdot A + E\\cdot A = 2EA$ (the cylindrical sides contribute zero)",
-          "Enclosed charge: $Q_{\\text{enc}} = \\sigma A$",
-          "Gauss's law: $2EA = \\sigma A/\\epsilon_0 \\implies E = \\sigma/(2\\epsilon_0)$ ∎"
+          "**Step 1 — Formula.** $E=kQ/r^2$.",
+          "**Step 2 — Substitute.** $E=\\dfrac{9\\times10^9\\cdot 8\\times10^{-6}}{2^2}$.",
+          "**Step 3 — Evaluate.** $=\\dfrac{72\\times10^3}{4}=18000\\,\\text{N/C}$.",
+          "**Answer:** $18000\\,\\text{N/C}$."
         ],
         "steps_he": [
-          "מסימטריה, $\\vec{E}$ מאונך למישור עם אותו גודל משני הצדדים",
-          "בחר קופסת גלולה עם פנים שטח $A$ מקביל למישור, אחד מכל צד",
-          "שטף: $2EA$ (הצדדים אפס)",
-          "מטען כלוא: $Q_{\\text{enc}} = \\sigma A$",
-          "גאוס: $E = \\sigma/(2\\epsilon_0)$ ∎"
+          "**שלב 1 — נוסחה.** $E=kQ/r^2$.",
+          "**שלב 2 — הצבה.** $\\dfrac{9\\times10^9\\cdot 8\\times10^{-6}}{2^2}$.",
+          "**שלב 3 — חישוב.** $18000\\,\\text{N/C}$.",
+          "**תשובה:** $18000\\,\\text{N/C}$."
         ]
       },
-      "explanation_en": "**Why this is correct:** By symmetry, $\\vec{E}$ is perpendicular to the plane with equal magnitude on both sides. A pill-box with faces of area $A$ gives flux $2EA$ (both faces contribute). Enclosed charge is $Q_{\\text{enc}} = \\sigma A$, so:\n$$2EA = \\frac{\\sigma A}{\\epsilon_0} \\implies E = \\frac{\\sigma}{2\\epsilon_0}$$\n\n**How to think about it:** The factor 2 comes from **two faces** of the pill-box. Each face sees the same $E$; sides parallel to $\\vec{E}$ contribute zero flux.\n\n**Common slip:** Using $\\sigma/\\epsilon_0$ (forgetting the 1/2 for one plate), or arguing $E$ depends on distance from the plane.\n\n**Exam tip:** State symmetry ($\\vec{E} \\perp$ plane, uniform) before choosing the pill-box — examiners require this reasoning chain.",
-      "explanation_he": "**למה זה נכון:** מסימטריה, $\\vec{E}$ מאונך למישור באותו גודל משני הצדדים. קופסת גלולה עם פנים שטח $A$ נותנת שטף $2EA$ (שני פנים תורמים). מטען כלוא $Q_{\\text{enc}} = \\sigma A$, לכן:\n$$2EA = \\frac{\\sigma A}{\\epsilon_0} \\implies E = \\frac{\\sigma}{2\\epsilon_0}$$\n\n**איך לחשוב:** גורם 2 מגיע מ**שני פנים** של קופסת הגלולה. כל פנים רואה אותו $E$; צדדים מקבילים ל-$\\vec{E}$ תורמים שטף אפס.\n\n**טעות נפוצה:** שימוש ב-$\\sigma/\\epsilon_0$ (שכחת 1/2 ללוח בודד), או טענה ש-$E$ תלוי במרחק מהמישור.\n\n**טיפ לבחינה:** ציינו סימטריה ($\\vec{E} \\perp$ מישור, אחיד) לפני בחירת קופסת הגלולה — הבחינה דורשת שרשרת נימוק זו.",
-      "ord": 5
+      "source_item_id": "b8980d3a-1ec4-568a-82c0-c9c406341f35",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "A field $E=1000\\,\\text{N/C}$ acts on a charge $q=2\\times10^{-6}\\,\\text{C}$. Find the force ($F=qE$).",
+      "stem_he": "שדה $E=1000\\,\\text{N/C}$ פועל על מטען $q=2\\times10^{-6}\\,\\text{C}$. מצאו את הכוח ($F=qE$).",
+      "explanation_en": "**$F=qE=2\\times10^{-6}\\cdot 1000=2\\times10^{-3}\\,\\text{N}$.**\n\n**Answer:** $0.002\\,\\text{N}$.",
+      "explanation_he": "**$F=0.002\\,\\text{N}$.**\n\n**תשובה:** $0.002\\,\\text{N}$.",
+      "skill_atoms": [
+        "electric_force"
+      ],
+      "answer_payload": {
+        "value": 0.002
+      },
+      "source_item_id": "cae2b4af-84a2-59ae-a177-c5b51b0ddd4b",
+      "points_level_min": "5pt",
+      "correct_answer": "0.002"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "A point charge $q = 5\\;\\text{nC}$ is at the center of a sphere of radius $r = 20\\;\\text{cm}$. Find the total electric flux through the sphere.",
-      "stem_he": "מטען נקודתי $q = 5\\;\\text{nC}$ במרכז כדור ברדיוס $r = 20\\;\\text{cm}$. מצא את השטף הכולל דרך הכדור.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "565",
-          "565 N·m²/C",
-          "565 N m²/C",
-          "\\Phi \\approx 565\\;\\text{N·m}^2/\\text{C}",
-          "(5\\times10^{-9})/(8.85\\times10^{-12}) \\approx 565"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** By Gauss's law, total flux through a closed surface equals enclosed charge divided by $\\epsilon_0$:\n$$\\Phi = \\frac{Q_{\\text{enc}}}{\\epsilon_0} = \\frac{5\\times10^{-9}}{8.85\\times10^{-12}} \\approx 565\\;\\text{N·m}^2/\\text{C}$$\n\n**How to think about it:** The point charge sits at the sphere center, so all field lines pass outward through the surface. Radius $20$ cm does not affect flux — only $Q_{\\text{enc}}$ matters.\n\n**Common slip:** Computing field at surface and multiplying by $4\\pi r^2$ with arithmetic errors, or using $\\mu$C without converting to C.\n\n**Exam tip:** Flux questions often need only $\\Phi = q/\\epsilon_0$ — skip the field calculation entirely.",
-      "explanation_he": "**למה זה נכון:** לפי חוק גאוס, שטף כולל דרך משטח סגור שווה מטען כלוא חלקי $\\epsilon_0$:\n$$\\Phi = \\frac{Q_{\\text{enc}}}{\\epsilon_0} = \\frac{5\\times10^{-9}}{8.85\\times10^{-12}} \\approx 565\\;\\text{N·m}^2/\\text{C}$$\n\n**איך לחשוב:** המטען הנקודתי במרכז הכדור, לכן כל קווי השדה יוצאים דרך המשטח. רדיוס $20$ cm לא משפיע על שטף — רק $Q_{\\text{enc}}$ חשוב.\n\n**טעות נפוצה:** חישוב שדה על המשטח והכפלה ב-$4\\pi r^2$ עם שגיאות חשבון, או $\\mu$C בלי המרה ל-C.\n\n**טיפ לבחינה:** שאלות שטף לעיתים דורשות רק $\\Phi = q/\\epsilon_0$ — דלגו על חישוב שדה. המרו nC ל-C לפני חילוק ב-$\\epsilon_0$.",
+      "stem_en": "Find the field at $r=2\\,\\text{m}$ from $Q=4\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "stem_he": "מצאו את השדה ב-$r=2\\,\\text{m}$ ממטען $Q=4\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "explanation_en": "**$E=\\dfrac{9\\times10^9\\cdot 4\\times10^{-6}}{4}=9000\\,\\text{N/C}$.**\n\n**Answer:** $9000\\,\\text{N/C}$.",
+      "explanation_he": "**$E=9000\\,\\text{N/C}$.**\n\n**תשובה:** $9000\\,\\text{N/C}$.",
       "skill_atoms": [
-        "gauss_law_apply",
-        "sphere_field"
-      ]
+        "gauss_law"
+      ],
+      "answer_payload": {
+        "value": 9000
+      },
+      "source_item_id": "33fa1394-0e5d-5c7c-8765-46dff83b8596",
+      "points_level_min": "5pt",
+      "correct_answer": "9000"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A conducting sphere ($R = 6\\;\\text{cm}$, $Q = -3\\;\\text{nC}$). Find $E$ at $r = 10\\;\\text{cm}$.",
-      "stem_he": "כדור מוליך ($R = 6\\;\\text{cm}$, $Q = -3\\;\\text{nC}$). מצא $E$ ב-$r = 10\\;\\text{cm}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$E = k|Q|/r^2 = (9\\times10^9)(3\\times10^{-9})/(0.01) = 2700\\;\\text{N/C}$, pointing inward (toward negative charge)",
-          "2700\\;\\text{N/C}$, pointing inward (toward negative charge)",
-          "2700"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** At $r = 10\\;\\text{cm} > R = 6\\;\\text{cm}$, we are outside the conducting sphere. Treat all charge as concentrated at center:\n$$E = \\frac{k|Q|}{r^2} = \\frac{(9\\times10^9)(3\\times10^{-9})}{(0.10)^2} = 2700\\;\\text{N/C}$$\nNegative charge → field points **inward** toward the sphere.\n\n**How to think about it:** Outside any spherically symmetric distribution, the field matches a point charge at the center. Use $|Q|$ for magnitude; assign direction from the sign.\n\n**Common slip:** Using $R$ instead of $r$ in denominator, or forgetting inward direction for negative $Q$.\n\n**Exam tip:** Always state magnitude AND direction for field answers.",
-      "explanation_he": "**למה זה נכון:** ב-$r = 10\\;\\text{cm} > R = 6\\;\\text{cm}$, אנחנו מחוץ לכדור המוליך. התייחסו לכל המטען במרכז:\n$$E = \\frac{k|Q|}{r^2} = \\frac{(9\\times10^9)(3\\times10^{-9})}{(0.10)^2} = 2700\\;\\text{N/C}$$\nמטען שלילי → שדה **פנימה** לכיוון הכדור.\n\n**איך לחשוב:** מחוץ לכל פילוג סימטרי כדורית, השדה כמו מטען נקודתי במרכז. השתמשו ב-$|Q|$ לגודל; קבעו כיוון מהסימן.\n\n**טעות נפוצה:** שימוש ב-$R$ במקום $r$ במכנה, או שכחת כיוון פנימה ל-$Q$ שלילי.\n\n**טיפ לבחינה:** ציינו תמיד גודל **וגם** כיוון בתשובות שדה. מחוץ לכדור מוליך, התייחסו לכל $Q$ כמטען נקודתי במרכז. המרו cm ל-m לפני חישוב $r^2$.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "The electric field inside a conductor in electrostatic equilibrium is:",
+      "stem_he": "השדה החשמלי בתוך מוליך בשיווי משקל אלקטרוסטטי הוא:",
+      "explanation_en": "**Charges rearrange so the interior field is zero.**\n\n**Answer:** $0$.",
+      "explanation_he": "**המטענים מסתדרים כך שהשדה הפנימי אפס.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "gauss_law_apply",
-        "sphere_field"
-      ]
+        "gauss_law"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$0$",
+          "$kQ/r^2$",
+          "$Q/\\varepsilon_0$",
+          "$\\text{constant}\\neq 0$"
+        ],
+        "options_he": [
+          "$0$",
+          "$kQ/r^2$",
+          "$Q/\\varepsilon_0$",
+          "$\\text{constant}\\neq 0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "4d1ead07-e08e-5eed-9c89-5ba3ba72feb0",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$0$",
+        "$kQ/r^2$",
+        "$Q/\\varepsilon_0$",
+        "$\\text{constant}\\neq 0$"
+      ],
+      "options_he": [
+        "$0$",
+        "$kQ/r^2$",
+        "$Q/\\varepsilon_0$",
+        "$\\text{constant}\\neq 0$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "An infinite line charge with $\\lambda = 8\\;\\mu\\text{C/m}$. Find $E$ at $r = 4\\;\\text{cm}$.",
-      "stem_he": "קו מטען אינסופי עם $\\lambda = 8\\;\\mu\\text{C/m}$. מצא $E$ ב-$r = 4\\;\\text{cm}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "3.59\\times10^6",
-          "3.59e6",
-          "3590000",
-          "3.59\\times10^6\\;\\text{N/C}",
-          "E \\approx 3.59\\times10^6\\;\\text{N/C}"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:** Infinite line charge with cylindrical symmetry gives:\n$$E = \\frac{\\lambda}{2\\pi\\epsilon_0 r} = \\frac{8\\times10^{-6}}{2\\pi(8.85\\times10^{-12})(0.04)} \\approx 3.59\\times10^6\\;\\text{N/C}$$\n\n**How to think about it:** Choose coaxial Gaussian cylinder. Flux through curved wall: $E \\cdot 2\\pi r L$. Enclosed charge: $\\lambda L$. Cancel $L$ and solve for $E \\propto 1/r$. Convert $\\mu$C/m to C/m first.\n\n**Common slip:** Using $1/r^2$ (confusing with point charge), forgetting $2\\pi$ in denominator, or leaving $\\mu$C unconverted.\n\n**Exam tip:** Line charge field falls as $1/r$, not $1/r^2$. Double the distance → halve the field. Write $\\lambda$ in C/m before substituting.",
-      "explanation_he": "**למה זה נכון:** קו מטען אינסופי עם סימטריה גלילית נותן:\n$$E = \\frac{\\lambda}{2\\pi\\epsilon_0 r} = \\frac{8\\times10^{-6}}{2\\pi(8.85\\times10^{-12})(0.04)} \\approx 3.59\\times10^6\\;\\text{N/C}$$\n\n**איך לחשוב:** בחרו גליל גאוס קואקסיאלי. שטף דרך קיר מעוקל: $E \\cdot 2\\pi r L$. מטען כלוא: $\\lambda L$. בטלו $L$ ופתרו ל-$E \\propto 1/r$. המירו $\\mu$C/m ל-C/m קודם.\n\n**טעות נפוצה:** שימוש ב-$1/r^2$ (בלבול עם מטען נקודתי), שכחת $2\\pi$ במכנה, או $\\mu$C לא מומר.\n\n**טיפ לבחינה:** שדה קו מטען יורד כ-$1/r$, לא $1/r^2$. כפלת מרחק מחלקת את השדה בשניים. כתבו $\\lambda$ ב-C/m לפני הצבה. בחרו גליל גאוס קואקסיאלי, לא כדור.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "The SI unit of electric field is:",
+      "stem_he": "יחידת ה-SI של שדה חשמלי היא:",
+      "explanation_en": "**$E$ is force per charge: N/C (equivalently V/m).**\n\n**Answer:** N/C.",
+      "explanation_he": "**$E$ הוא כוח ליחידת מטען: N/C (שקול ל-V/m).**\n\n**תשובה:** N/C.",
       "skill_atoms": [
-        "gauss_law_apply",
-        "sphere_field"
-      ]
+        "gauss_law"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{N/C}$",
+          "$\\text{C/N}$",
+          "$\\text{N·C}$",
+          "$\\text{J/C}$"
+        ],
+        "options_he": [
+          "$\\text{N/C}$",
+          "$\\text{C/N}$",
+          "$\\text{N·C}$",
+          "$\\text{J/C}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "79eda003-e978-5626-aebe-e83b2373ea4b",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{N/C}$",
+        "$\\text{C/N}$",
+        "$\\text{N·C}$",
+        "$\\text{J/C}$"
+      ],
+      "options_he": [
+        "$\\text{N/C}$",
+        "$\\text{C/N}$",
+        "$\\text{N·C}$",
+        "$\\text{J/C}$"
+      ],
+      "correct_index": 0
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the field at $r=3\\,\\text{m}$ from $Q=3\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "stem_he": "מצאו את השדה ב-$r=3\\,\\text{m}$ ממטען $Q=3\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "explanation_en": "**$E=\\dfrac{9\\times10^9\\cdot 3\\times10^{-6}}{9}=3000\\,\\text{N/C}$.**\n\n**Answer:** $3000\\,\\text{N/C}$.",
+      "explanation_he": "**$E=3000\\,\\text{N/C}$.**\n\n**תשובה:** $3000\\,\\text{N/C}$.",
+      "skill_atoms": [
+        "gauss_law"
+      ],
+      "answer_payload": {
+        "value": 3000
+      },
+      "source_item_id": "a3f9fb19-b2e2-5e59-ac5b-ce4e87f7db46",
+      "points_level_min": "5pt",
+      "correct_answer": "3000"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A uniform field $E=200\\,\\text{N/C}$ crosses an area $A=0.5\\,\\text{m}^2$ perpendicularly. Find the flux ($\\Phi=EA$).",
+      "stem_he": "שדה אחיד $E=200\\,\\text{N/C}$ חוצה שטח $A=0.5\\,\\text{m}^2$ ניצב. מצאו את השטף ($\\Phi=EA$).",
+      "explanation_en": "**$\\Phi=EA=200\\cdot 0.5=100\\,\\text{N·m}^2/\\text{C}$.**\n\n**Answer:** $100$.",
+      "explanation_he": "**$\\Phi=100\\,\\text{N·m}^2/\\text{C}$.**\n\n**תשובה:** $100$.",
+      "skill_atoms": [
+        "electric_flux"
+      ],
+      "answer_payload": {
+        "value": 100
+      },
+      "source_item_id": "1d8f3e55-14d4-5a2d-a91f-454ee8989c07",
+      "points_level_min": "5pt",
+      "correct_answer": "100"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the field at $r=5\\,\\text{m}$ from $Q=5\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "stem_he": "מצאו את השדה ב-$r=5\\,\\text{m}$ ממטען $Q=5\\times10^{-6}\\,\\text{C}$ ($k=9\\times10^9$).",
+      "explanation_en": "**$E=\\dfrac{9\\times10^9\\cdot 5\\times10^{-6}}{25}=1800\\,\\text{N/C}$.**\n\n**Answer:** $1800\\,\\text{N/C}$.",
+      "explanation_he": "**$E=1800\\,\\text{N/C}$.**\n\n**תשובה:** $1800\\,\\text{N/C}$.",
+      "skill_atoms": [
+        "gauss_law"
+      ],
+      "answer_payload": {
+        "value": 1800
+      },
+      "source_item_id": "d54e9602-2b87-5bc5-aa4a-7a3668ac14c8",
+      "points_level_min": "5pt",
+      "correct_answer": "1800"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: electric field lines point away from a positive charge.",
+      "stem_he": "נכון או לא נכון: קווי השדה החשמלי מצביעים החוצה ממטען חיובי.",
+      "explanation_en": "**By convention, lines leave $+$ charges** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**לפי המוסכמה, הקווים יוצאים ממטען חיובי** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "field_lines"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "da74aa2f-0c00-5d19-8d2c-c5b1376e66ca",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Field $E=kQ/r^2$ acts on $q=1\\times10^{-6}\\,\\text{C}$ where $Q=2\\times10^{-6}$, $r=3$, $k=9\\times10^9$. Find the force on $q$.",
+      "stem_he": "שדה $E=kQ/r^2$ פועל על $q=1\\times10^{-6}\\,\\text{C}$ כאשר $Q=2\\times10^{-6}$, $r=3$, $k=9\\times10^9$. מצאו את הכוח על $q$.",
+      "explanation_en": "**$E=2000$; $F=qE=2000\\cdot10^{-6}=2\\times10^{-3}\\,\\text{N}$.**\n\n**Answer:** $0.002\\,\\text{N}$.",
+      "explanation_he": "**$F=0.002\\,\\text{N}$.**\n\n**תשובה:** $0.002\\,\\text{N}$.",
+      "skill_atoms": [
+        "electric_force"
+      ],
+      "answer_payload": {
+        "value": 0.002
+      },
+      "source_item_id": "c47d6fac-d9b7-555c-b2d0-b0c09aa8cd13",
+      "points_level_min": "5pt",
+      "correct_answer": "0.002"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A conducting sphere carries $Q=6\\times10^{-6}\\,\\text{C}$. Find the field just outside at $r=3\\,\\text{m}$ ($k=9\\times10^9$).",
+      "stem_he": "כדור מוליך נושא $Q=6\\times10^{-6}\\,\\text{C}$. מצאו את השדה מיד מחוץ ל-$r=3\\,\\text{m}$ ($k=9\\times10^9$).",
+      "explanation_en": "**Outside, the sphere acts like a point charge: $E=\\dfrac{9\\times10^9\\cdot 6\\times10^{-6}}{9}=6000\\,\\text{N/C}$.**\n\n**Answer:** $6000\\,\\text{N/C}$.",
+      "explanation_he": "**$E=6000\\,\\text{N/C}$.**\n\n**תשובה:** $6000\\,\\text{N/C}$.",
+      "skill_atoms": [
+        "gauss_law"
+      ],
+      "answer_payload": {
+        "value": 6000
+      },
+      "source_item_id": "add15c7d-f457-5c67-96eb-f6f4aac478e3",
+      "points_level_min": "5pt",
+      "correct_answer": "6000"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A field $E=100\\,\\text{N/C}$ crosses an area $A=2\\,\\text{m}^2$ at angle $0^\\circ$ to the normal. Find the flux ($\\Phi=EA\\cos\\theta$).",
+      "stem_he": "שדה $E=100\\,\\text{N/C}$ חוצה שטח $A=2\\,\\text{m}^2$ בזווית $0^\\circ$ לנורמל. מצאו את השטף ($\\Phi=EA\\cos\\theta$).",
+      "explanation_en": "**$\\Phi=EA\\cos 0=100\\cdot 2\\cdot 1=200$.**\n\n**Answer:** $200\\,\\text{N·m}^2/\\text{C}$.",
+      "explanation_he": "**$\\Phi=200\\,\\text{N·m}^2/\\text{C}$.**\n\n**תשובה:** $200$.",
+      "skill_atoms": [
+        "electric_flux"
+      ],
+      "answer_payload": {
+        "value": 200
+      },
+      "source_item_id": "ff4a17a1-0e75-56fe-a912-20655c0b348d",
+      "points_level_min": "5pt",
+      "correct_answer": "200"
     }
   ],
   "est_minutes": 50,
