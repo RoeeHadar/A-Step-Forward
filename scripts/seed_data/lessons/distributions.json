@@ -243,11 +243,11 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "uniform_distribution",
-      "normal_distribution",
-      "exponential_distribution",
-      "percentile_calculation",
-      "pdf_cdf"
+      "distribution",
+      "expected_value",
+      "probability",
+      "standard_deviation",
+      "variance"
     ],
     "tutor_pacing_hint": "Start with uniform (simplest PDF, geometric intuition). Then normal (central to stats). Then exponential (connects to Poisson).",
     "next_recommended": [
@@ -260,167 +260,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$X\\sim U[0,6]$. $P(1<X<4)=$",
-      "stem_he": "$X\\sim U[0,6]$. $P(1<X<4)=$",
+      "stem_en": "The probabilities in a discrete distribution must sum to:",
+      "stem_he": "סכום ההסתברויות בהתפלגות בדידה חייב להיות:",
+      "explanation_en": "**All probabilities sum to $1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**סכום ההסתברויות $=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "distribution"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$1$",
+          "$0$",
+          "$100$",
+          "$n$"
+        ],
+        "options_he": [
+          "$1$",
+          "$0$",
+          "$100$",
+          "$n$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "189c602a-79c7-5491-b73d-ef41d0f8b85d",
+      "points_level_min": "5pt",
       "options_en": [
-        "$1/2$",
-        "$1/3$",
-        "$2/3$",
-        "$1/6$"
+        "$1$",
+        "$0$",
+        "$100$",
+        "$n$"
       ],
       "options_he": [
-        "$1/2$",
-        "$1/3$",
-        "$2/3$",
-        "$1/6$"
+        "$1$",
+        "$0$",
+        "$100$",
+        "$n$"
       ],
-      "correct_index": 0,
-      "explanation_en": "**Why this is correct:**\nFor $X \\sim U[0,6]$, probability on an interval equals the fraction of the total length. The favourable interval is $(1,4)$ with length $4-1=3$. Total support length is $6-0=6$. Therefore $P(1<X<4)=3/6=1/2$.\n\n**How to think about it:**\nUniform problems reduce to geometry: identify the support $[a,b]$, locate the requested interval, and divide lengths. No integration needed when the density is constant $1/(b-a)$.\n\n**Common slip:**\nUsing $(4-1)/6$ but forgetting endpoints (open vs closed intervals rarely matter for continuous $X$). Computing $1/6$ by treating each unit as equally likely without using the interval length.\n\n**Exam tip:**\nWrite $P = \\frac{\\text{favourable length}}{\\text{total length}}$ first. Israeli exams often use waiting-time or random-arrival setups that map directly to uniform.",
-      "explanation_he": "**למה זה נכון:**\nל-$X\\sim U[0,6]$, הסתברות על קטע שווה לשבר מאורך הקטע. הקטע $(1,4)$ באורך 3, והתמיכה באורך 6, ולכן $P(1<X<4)=3/6=1/2$.\n\n**איך לחשוב על זה:**\nבעיות אחידות = גאומטריה: זיהוי $[a,b]$, מיקום הקטע המבוקש, חלוקת אורכים. אין צורך באינטגרל כשהצפיפות קבועה $1/(b-a)$.\n\n**טעות נפוצה:**\nחישוב $(4-1)/6$ אך בלבול בקצוות (לרציף כמעט לא משנה). חישוב $1/6$ כאילו כל יחידה בהסתברות שווה בלי אורך הקטע.\n\n**טיפ לבחינה:**\nכתבו $P=\\frac{\\text{preferred length}}{\\text{total length}}$ קודם. בבחינות ישראליות לעיתים המתנה או הגעה אקראית → אחידה.",
-      "skill_atoms": [
-        "uniform_distribution"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "open",
-      "difficulty": "medium",
-      "stem_en": "$T\\sim\\text{Exp}(\\lambda=0.1)$ hours. Find $P(T>20)$ and the median.",
-      "stem_he": "$T\\sim\\text{Exp}(0.1)$ שעות. מצאו $P(T>20)$ ואת החציון.",
-      "rubric_en": "$P(T>20)=e^{-2}\\approx0.135$. Median $=\\ln2/0.1\\approx6.93$ hours.",
-      "rubric_he": "$P(T>20)=e^{-2}\\approx0.135$. חציון $\\approx6.93$ שעות.",
-      "explanation_en": "**Why this is correct:**\nFor $\\text{Exp}(0.1)$, survival is $P(T>t)=e^{-0.1t}$. So $P(T>20)=e^{-2}\\approx0.135$. The median $m$ satisfies $F(m)=0.5$, i.e. $1-e^{-0.1m}=0.5$, giving $m=\\ln(2)/0.1=10\\ln2\\approx6.93$ hours.\n\n**How to think about it:**\nExponential: mean $E[T]=1/\\lambda$, tail $P(T>t)=e^{-\\lambda t}$, median from $F(m)=0.5$. Always check whether $\\lambda$ is given as rate or whether mean is stated instead.\n\n**Common slip:**\nUsing $P(T>20)=0.1\\times20=2$ (linear scaling — wrong). Confusing mean $10$ with median $\\approx6.93$; exponential is right-skewed so mean exceeds median.\n\n**Exam tip:**\nMemorise $P(T>t)=e^{-\\lambda t}$ and median $=\\ln2/\\lambda$. Open questions often ask for both tail probability and a percentile in one stem.",
-      "explanation_he": "**למה זה נכון:**\nל-$\\text{Exp}(0.1)$, הישרדות $P(T>t)=e^{-0.1t}$. לכן $P(T>20)=e^{-2}\\approx0.135$. החציון $m$ מקיים $F(m)=0.5$, כלומר $m=\\ln(2)/0.1\\approx6.93$ שעות — פחות מהממוצע $10$.\n\n**איך לחשוב על זה:**\nמעריכית: ממוצע $E[T]=1/\\lambda$, זנב $P(T>t)=e^{-\\lambda t}$, חציון מ-$F(m)=0.5$. בדקו האם $\\lambda$ נתון כקצב או שהממוצע נמסר במקום. פתרו כל חלק בנפרד.\n\n**טעות נפוצה:**\nשימוש ב-$P(T>20)=0.1\\times20$ (קנה מידה לינארי — שגוי). בלבול ממוצע 10 עם חציון $\\approx6.93$; מעריכית מוטה ימינה ולכן ממוצע גדול מחציון.\n\n**טיפ לבחינה:**\nשיננו $P(T>t)=e^{-\\lambda t}$ וחציון $=\\ln2/\\lambda$. שאלות פתוחות לעיתים מבקשות גם זנב וגם אחוזון — כתבו את שתי הנוסחאות בתחילה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the expected value of a fair six-sided die.",
+      "stem_he": "מצאו את התוחלת של קובייה הוגנת בעלת שש פאות.",
+      "explanation_en": "**$E[X]=\\dfrac{21}{6}=3.5$.**\n\n**Answer:** $3.5$.",
+      "explanation_he": "**$E[X]=3.5$.**\n\n**תשובה:** $3.5$.",
       "skill_atoms": [
-        "exponential_distribution",
-        "percentile_calculation"
-      ]
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": 3.5
+      },
+      "source_item_id": "e16440fb-17ec-59a3-b5ea-c9d3abbedcf7",
+      "points_level_min": "5pt",
+      "correct_answer": "3.5"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "$X\\sim U[0,10]$. Find $P(X<3)$.",
-      "stem_he": "$X\\sim U[0,10]$. מצאו $P(X<3)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(X<3)=3/10=0.3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$X \\sim U[0,10]$ with constant density $1/10$. The event $X<3$ is the interval $[0,3)$ of length 3, so $P(X<3)=3/10=0.3$. This is the simplest uniform probability.\n\n**How to think about it:**\nRead \"below 3\" as the interval from the left endpoint 0 to 3. For uniform on $[0,10]$, every unit of length carries probability $0.1$.\n\n**Common slip:**\nAnswering $3/10$ but writing $0.03$ (decimal error). Using $P(X=3)$ instead of $P(X<3)$ — for continuous $X$, point probabilities are zero.\n\n**Exam tip:**\nSketch the number line from 0 to 10 and shade $[0,3)$. Visual checks prevent arithmetic slips on uniform items.",
-      "explanation_he": "**למה זה נכון:**\n$X\\sim U[0,10]$ עם צפיפות קבועה $1/10$. האירוע $X<3$ הוא הקטע $[0,3)$ באורך 3, ולכן $P(X<3)=3/10=0.3$ — ההסתברות הפשוטה ביותר להתפלגות אחידה.\n\n**איך לחשוב על זה:**\nקראו \"מתחת ל-3\" כקטע מ-0 עד 3. ב-$U[0,10]$, כל יחידת אורך נושאת הסתברות $0.1$. זהו מקרה בסיסי — אותה לוגיקה לכל קטע בתוך $[0,10]$.\n\n**טעות נפוצה:**\nתשובה $3/10$ אך כתיבה $0.03$ (טעות עשרונית). שימוש ב-$P(X=3)$ במקום $P(X<3)$ — לרציף, הסתברות בנקודה בודדת שווה לאפס.\n\n**טיפ לבחינה:**\nשרטטו קו מספרים 0–10 וצבעו $[0,3)$. בדיקה ויזואלית מונעת טעויות באחידה. בבחינה, סמנו במפורש את אורך הקטע המועדף לפני החלוקה.",
+      "stem_en": "True or False: a probability must lie between $0$ and $1$.",
+      "stem_he": "נכון או לא נכון: הסתברות חייבת להיות בין $0$ ל-$1$.",
+      "explanation_en": "**$0\\le P\\le 1$ by definition** — **true**.",
+      "explanation_he": "**$0\\le P\\le 1$** — **נכון**.",
       "skill_atoms": [
-        "uniform_distribution",
-        "normal_distribution"
-      ]
+        "probability"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "b605cd4b-6bcd-5464-bcdd-9e8bd2af6ecf",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$T\\sim\\text{Exp}(\\lambda=0.5)$. Find $E[T]$ and $P(T>4)$.",
-      "stem_he": "$T\\sim\\text{Exp}(0.5)$. מצאו $E[T]$ ו-$P(T>4)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$E[T]=1/0.5=2$. $P(T>4)=e^{-2}\\approx0.135$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "e^{-2}\\approx0.135$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.135"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nFor $\\text{Exp}(0.5)$: mean $E[T]=1/0.5=2$. Tail probability $P(T>4)=e^{-0.5\\times4}=e^{-2}\\approx0.135$.\n\n**How to think about it:**\nTwo separate facts: (1) mean is reciprocal of rate; (2) survival uses the exponential formula, not $1-F$ with a table. Identify $\\lambda=0.5$ before substituting.\n\n**Common slip:**\nComputing $P(T>4)=1-0.5\\times4=-1$ (treating $\\lambda t$ as probability). Reporting mean as $0.5$ instead of $2$.\n\n**Exam tip:**\nWhen a question asks for both $E[T]$ and $P(T>t)$, answer both clearly — partial answers lose marks even if one part is correct.",
-      "explanation_he": "**למה זה נכון:**\nל-$\\text{Exp}(0.5)$: ממוצע $E[T]=1/0.5=2$. זנב $P(T>4)=e^{-0.5\\times4}=e^{-2}\\approx0.135$.\n\n**איך לחשוב על זה:**\nשני עובדות: (1) ממוצע = הופכי של קצב, $E[T]=1/\\lambda$; (2) הישרדות בנוסחה המעריכית $e^{-\\lambda t}$, לא $1-F$ מטבלה. זיהו $\\lambda=0.5$ לפני הצבה.\n\n**טעות נפוצה:**\nחישוב $P(T>4)=1-0.5\\times4=-1$ (התייחסות ל-$\\lambda t$ כהסתברות). דיווח ממוצע $0.5$ במקום $2$ — בלבול בין קצב לממוצע.\n\n**טיפ לבחינה:**\nכשמבקשים $E[T]$ ו-$P(T>t)$, ענו על שניהם בבירור — תשובה חלקית מאבדת ניקוד גם אם חלק אחד נכון. בדקו שההסתברות בין 0 ל-1.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $X\\in\\{2,4,6\\}$ with $P=0.2,0.5,0.3$, find $E[X]$.",
+      "stem_he": "עבור $X\\in\\{2,4,6\\}$ עם $P=0.2,0.5,0.3$, מצאו $E[X]$.",
+      "explanation_en": "**Step 1 — Formula.** $E[X]=\\sum x_i P(x_i)$.\n\n**Step 2 — Substitute.** $2(0.2)+4(0.5)+6(0.3)$.\n\n**Step 3 — Add.** $0.4+2.0+1.8=4.2$.\n\n**Answer:** $4.2$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $\\sum x_i P(x_i)$.\n\n**שלב 2 — הצבה.** $2(0.2)+4(0.5)+6(0.3)$.\n\n**שלב 3 — חיבור.** $4.2$.\n\n**תשובה:** $4.2$.",
       "skill_atoms": [
-        "uniform_distribution",
-        "normal_distribution"
-      ]
+        "expected_value"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Formula.** $E[X]=\\sum x_i P(x_i)$.",
+          "**Step 2 — Substitute.** $2(0.2)+4(0.5)+6(0.3)$.",
+          "**Step 3 — Add.** $0.4+2.0+1.8=4.2$.",
+          "**Answer:** $4.2$."
+        ],
+        "steps_he": [
+          "**שלב 1 — נוסחה.** $\\sum x_i P(x_i)$.",
+          "**שלב 2 — הצבה.** $2(0.2)+4(0.5)+6(0.3)$.",
+          "**שלב 3 — חיבור.** $4.2$.",
+          "**תשובה:** $4.2$."
+        ]
+      },
+      "source_item_id": "ae25ffd5-e769-51e6-9690-2ef9deab643e",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Heights follow $N(170, 100)$ (cm). What fraction are above 180 cm?",
-      "stem_he": "גבהים: $N(170,100)$. כמה אחוז מעל 180 ס\"מ?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$z=(180-170)/10=1$. $P(Z>1)=1-\\Phi(1)\\approx1-0.841=0.159$. About 15.9%",
-          "0.159$. About 15.9%",
-          "15.9"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nHeights $N(170,100)$ means $\\mu=170$, $\\sigma^2=100$, so $\\sigma=10$. For 180 cm: $z=(180-170)/10=1$. Fraction above 180 is $P(Z>1)=1-\\Phi(1)\\approx1-0.8413=0.159$, about 15.9%.\n\n**How to think about it:**\nNormal tail problems: standardize first, then use symmetry or the $z$-table. \"Above 180\" means right tail $P(Z>1)$, not $P(Z<1)$.\n\n**Common slip:**\nUsing $\\sigma=100$ instead of $\\sigma=10$ (confusing variance with standard deviation). Computing $P(Z<1)$ when the question asks for \"above\".\n\n**Exam tip:**\nWrite $\\sigma=\\sqrt{100}=10$ on your paper before standardizing. Bagrut and university stems often write $N(\\mu,\\sigma^2)$ with variance inside the parentheses.",
-      "explanation_he": "**למה זה נכון:**\nגבהים $N(170,100)$: $\\mu=170$, $\\sigma^2=100$, $\\sigma=10$. ל-180 ס\"מ: $z=(180-170)/10=1$. מעל 180: $P(Z>1)=1-\\Phi(1)\\approx0.159$, כ-15.9%.\n\n**איך לחשוב על זה:**\nבעיות זנב נורמלי: תקנון קודם, אחר כך סימטריה או טבלת $z$. \"מעל 180\" = זנב ימני $P(Z>1)$, לא $P(Z<1)$ שמחזיר כ-84%.\n\n**טעות נפוצה:**\nשימוש ב-$\\sigma=100$ במקום $10$ (בלבול שונות עם סטיית תקן). חישוב $P(Z<1)$ כששואלים \"מעל\" — כיוון שגוי של הזנב.\n\n**טיפ לבחינה:**\nכתבו $\\sigma=\\sqrt{100}=10$ לפני תקנון. בבגרות ובאוניברסיטה כותבים $N(\\mu,\\sigma^2)$ עם שונות בסוגריים — חילוץ $\\sigma$ הוא השלב הראשון.",
+      "stem_en": "Find the mean of a uniform distribution on $\\{1,2,3,4\\}$.",
+      "stem_he": "מצאו את התוחלת של התפלגות אחידה על $\\{1,2,3,4\\}$.",
+      "explanation_en": "**$\\dfrac{10}{4}=2.5$.**\n\n**Answer:** $2.5$.",
+      "explanation_he": "**$=2.5$.**\n\n**תשובה:** $2.5$.",
       "skill_atoms": [
-        "uniform_distribution",
-        "normal_distribution"
-      ]
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": 2.5
+      },
+      "source_item_id": "6abdd552-3d8c-5f7c-bb5e-8cd794be9cf6",
+      "points_level_min": "5pt",
+      "correct_answer": "2.5"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "A fair die is rolled 12 times. $X$ = number of 6's. Find $E[X]$ and $P(X=0)$.",
-      "stem_he": "קובייה הוגנת מוטלת 12 פעמים. $X$ = מספר ה-6. מצאו $E[X]$ ו-$P(X=0)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$X\\sim B(12,1/6)$. $E[X]=12/6=2$. $P(X=0)=(5/6)^{12}\\approx0.112$",
-          "(5/6)^{12}\\approx0.112$",
-          "0.112"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nRolling a fair die 12 times: $X$ = number of sixes $\\sim B(12,1/6)$. Expected value $E[X]=np=12\\times(1/6)=2$. Zero sixes: $P(X=0)=(1-p)^{12}=(5/6)^{12}\\approx0.112$.\n\n**How to think about it:**\nRecognise binomial structure: fixed $n$ trials, two outcomes, constant $p$, independence. $P(X=0)$ uses the \"all failures\" shortcut $(1-p)^n$.\n\n**Common slip:**\nUsing $P(X=0)=1/6$ (single-roll probability). Computing $E[X]=12/6$ correctly but forgetting to raise $(5/6)$ to the 12th power.\n\n**Exam tip:**\nState $X\\sim B(n,p)$ explicitly for partial credit. Exam word problems hide the binomial in \"number of successes in $n$ attempts\" language.",
-      "explanation_he": "**למה זה נכון:**\nקובייה הוגנת 12 פעמים: $X$ = מספר שישיות $\\sim B(12,1/6)$. תוחלת $E[X]=np=12\\times(1/6)=2$. אפס שישיות: $P(X=0)=(5/6)^{12}\\approx0.112$.\n\n**איך לחשוב על זה:**\nזיהוי מבנה בינומי: $n$ ניסויים קבוע, שני תוצאות, $p$ קבוע, בלתי-תלות. $P(X=0)$ = \"כולם כישלון\" $(1-p)^n=(5/6)^{12}$.\n\n**טעות נפוצה:**\nשימוש ב-$P(X=0)=1/6$ (הסתברות הטלה בודד). $E[X]=2$ נכון אך שכחת העלאה ב-12 בחישוב $(5/6)^{12}$.\n\n**טיפ לבחינה:**\nכתבו $X\\sim B(n,p)$ במפורש לניקוד חלקי. בבחינה הבינומית מוסתרת ב\"מספר הצלחות ב-$n$ ניסויים\" — ספרו ניסויים והסתברות הצלחה. ודאו שהתוחלת $np$ הגיונית.",
+      "stem_en": "Find $P(\\text{even})$ when rolling a fair die.",
+      "stem_he": "מצאו את ההסתברות $P$ לקבלת תוצאה זוגית בהטלת קובייה הוגנת.",
+      "explanation_en": "**$\\dfrac{3}{6}=0.5$.**\n\n**Answer:** $0.5$.",
+      "explanation_he": "**$=0.5$.**\n\n**תשובה:** $0.5$.",
       "skill_atoms": [
-        "uniform_distribution",
-        "normal_distribution"
-      ]
+        "probability"
+      ],
+      "answer_payload": {
+        "value": 0.5
+      },
+      "source_item_id": "882a7d49-de6a-5f49-b384-bf256177daf6",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Verify that $f(x)=2e^{-2x}$ for $x\\ge0$ is a valid PDF and find the mean.",
-      "stem_he": "אמתו ש-$f(x)=2e^{-2x}$ ($x\\ge0$) הוא PDF תקף ומצאו הממוצע.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^\\infty 2e^{-2x}\\,dx=[-e^{-2x}]_0^\\infty=0-(-1)=1$. ✓ This is $\\text{Exp}(2)$. $E[X]=1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nCheck PDF validity: $\\int_0^\\infty 2e^{-2x}\\,dx = [-e^{-2x}]_0^\\infty = 0-(-1)=1$. ✓ This is $\\text{Exp}(\\lambda=2)$, so mean $E[X]=1/2=0.5$.\n\n**How to think about it:**\nTwo-step exam item: (1) integrate to verify total area 1; (2) identify named distribution and read off mean $1/\\lambda$. Do not stop after the integral.\n\n**Common slip:**\nIntegrating incorrectly to get 2 instead of 1. Identifying $\\lambda=2$ but reporting mean as 2 instead of $1/2$.\n\n**Exam tip:**\nAfter verifying $\\int f=1$, always name the distribution — it unlocks mean/variance formulas without further integration.",
-      "explanation_he": "**למה זה נכון:**\nבדיקת PDF: $\\int_0^\\infty 2e^{-2x}\\,dx=[-e^{-2x}]_0^\\infty=1$. ✓ זו $\\text{Exp}(\\lambda=2)$, ממוצע $E[X]=1/2=0.5$.\n\n**איך לחשוב על זה:**\nפריט בחינה דו-שלבי: (1) אינטגרל לאימות שטח 1; (2) זיהוי התפלגות וקריאת $1/\\lambda$. אל תעצרו אחרי האינטגרל — שם ההתפלגות נותן את הממוצע.\n\n**טעות נפוצה:**\nאינטגרל שגוי → 2 במקום 1. $\\lambda=2$ נכון אך ממוצע 2 במקום $1/2$ — בלבול קצב $\\lambda$ עם תוחלת.\n\n**טיפ לבחינה:**\nאחרי $\\int f=1$, תמיד שם ההתפלגות — פותח נוסחאות ממוצע/שונות בלי אינטגרל נוסף. בבחינות ישראליות מבקשים לעיתים גם $\\text{Var}(X)$.",
+      "stem_en": "For a continuous distribution, the total area under the pdf equals:",
+      "stem_he": "עבור התפלגות רציפה, השטח הכולל מתחת לפונקציית הצפיפות שווה:",
+      "explanation_en": "**$\\int_{-\\infty}^{\\infty} f(x)\\,dx=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\int f=1$.**\n\n**תשובה:** $1$.",
       "skill_atoms": [
-        "uniform_distribution",
-        "normal_distribution"
-      ]
+        "distribution"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$1$",
+          "$0$",
+          "$\\infty$",
+          "$0.5$"
+        ],
+        "options_he": [
+          "$1$",
+          "$0$",
+          "$\\infty$",
+          "$0.5$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "bc8b781c-16eb-561d-89d9-fb834b8ca8e5",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "$0.5$"
+      ],
+      "options_he": [
+        "$1$",
+        "$0$",
+        "$\\infty$",
+        "$0.5$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$X\\sim N(100,225)$ (i.e., $\\mu=100$, $\\sigma=15$). Find the value below which 95% of scores fall (95th percentile).",
-      "stem_he": "$X\\sim N(100,225)$ ($\\sigma=15$). מצאו האחוזון ה-95.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$z_{0.95}\\approx1.645$. $x=\\mu+z\\sigma=100+1.645\\times15=100+24.7=124.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "124.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "124.7"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\n$X\\sim N(100,225)$: $\\mu=100$, $\\sigma=15$. The 95th percentile uses $z_{0.95}\\approx1.645$ (one-sided 95% point). $x_{0.95}=\\mu+z\\sigma=100+1.645\\times15=124.675\\approx124.7$.\n\n**How to think about it:**\nPercentile problems reverse standardization: solve $x=\\mu+z_p\\sigma$ with $z_p$ from the table. Confirm whether \"95th percentile\" means 95% below (use $z_{0.95}$) vs central 95% interval.\n\n**Common slip:**\nUsing $z=1.96$ (two-sided 95% critical value) instead of $1.645$ for a one-sided percentile. Adding $z\\sigma$ when the question asks for the 5th percentile (sign error).\n\n**Exam tip:**\nUnderline \"95th percentile\" vs \"middle 95%\" in the stem. Israeli exams distinguish these deliberately.",
-      "explanation_he": "**למה זה נכון:**\n$X\\sim N(100,225)$: $\\mu=100$, $\\sigma=15$. אחוזון 95 משתמש ב-$z_{0.95}\\approx1.645$. $x_{0.95}=100+1.645\\times15\\approx124.7$.\n\n**איך לחשוב על זה:**\nאחוזון = תקנון הפוך: $x=\\mu+z_p\\sigma$ עם $z_p$ מהטבלה. ודאו: \"אחוזון 95\" = 95% מתחת ($z_{0.95}$) מול \"95% מרכזי\" ($\\pm1.96$).\n\n**טעות נפוצה:**\nשימוש ב-$z=1.96$ (95% דו-צדדי) במקום $1.645$ לאחוזון חד-צדדי. חיבור $z\\sigma$ כשמבקשים אחוזון 5 (טעות סימן).\n\n**טיפ לבחינה:**\nסמנו \"אחוזון 95\" מול \"95% מרכזי\" בשאלה. בבחינות ישראליות מבדילים בכוונה — קראו האם מבקשים ערך שמתחתיו 95% או רווח מרכזי.",
+      "stem_en": "For $X\\in\\{0,1\\}$ with $P(X=1)=0.3$, find $E[X]$.",
+      "stem_he": "עבור $X\\in\\{0,1\\}$ עם $P(X=1)=0.3$, מצאו $E[X]$.",
+      "explanation_en": "**$E[X]=0\\cdot 0.7+1\\cdot 0.3=0.3$.**\n\n**Answer:** $0.3$.",
+      "explanation_he": "**$E[X]=0.3$.**\n\n**תשובה:** $0.3$.",
       "skill_atoms": [
-        "uniform_distribution",
-        "normal_distribution"
-      ]
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": 0.3
+      },
+      "source_item_id": "8e406698-c4b0-5245-99ef-4ee78a32a1a9",
+      "points_level_min": "5pt",
+      "correct_answer": "0.3"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $X\\in\\{1,2,3\\}$ with $P=0.2,0.5,0.3$, find $E[X]$.",
+      "stem_he": "עבור $X\\in\\{1,2,3\\}$ עם $P=0.2,0.5,0.3$, מצאו $E[X]$.",
+      "explanation_en": "**$0.2+1.0+0.9=2.1$.**\n\n**Answer:** $2.1$.",
+      "explanation_he": "**$=2.1$.**\n\n**תשובה:** $2.1$.",
+      "skill_atoms": [
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": 2.1
+      },
+      "source_item_id": "cb57e866-8227-548e-8084-588e7bdc71f5",
+      "points_level_min": "5pt",
+      "correct_answer": "2.1"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the variance of a Bernoulli variable with $p=0.5$.",
+      "stem_he": "מצאו את השונות של משתנה ברנולי עם $p=0.5$.",
+      "explanation_en": "**$\\text{Var}=p(1-p)=0.25$.**\n\n**Answer:** $0.25$.",
+      "explanation_he": "**$\\text{Var}=0.25$.**\n\n**תשובה:** $0.25$.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "bbe4b12e-bf63-5ec0-b9af-ec06f45ed34c",
+      "points_level_min": "5pt",
+      "correct_answer": "0.25"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the expected sum when rolling two fair dice.",
+      "stem_he": "מצאו את התוחלת של סכום שתי קוביות הוגנות.",
+      "explanation_en": "**$E=2\\cdot 3.5=7$.**\n\n**Answer:** $7$.",
+      "explanation_he": "**$E=7$.**\n\n**תשובה:** $7$.",
+      "skill_atoms": [
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "3a98f094-2876-5397-b359-94bc0c358590",
+      "points_level_min": "5pt",
+      "correct_answer": "7"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the expected value is a weighted average of the outcomes.",
+      "stem_he": "נכון או לא נכון: התוחלת היא ממוצע משוקלל של התוצאות.",
+      "explanation_en": "**$E[X]=\\sum x_i P(x_i)$, a weighted average** — **true**.",
+      "explanation_he": "**$E[X]=\\sum x_i P(x_i)$** — **נכון**.",
+      "skill_atoms": [
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "38e11c16-1e84-5fe0-9fc6-6e2c657d409d",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $X\\in\\{1,2,3\\}$ with $P=0.2,0.5,0.3$, find $E[X^2]$.",
+      "stem_he": "עבור $X\\in\\{1,2,3\\}$ עם $P=0.2,0.5,0.3$, מצאו $E[X^2]$.",
+      "explanation_en": "**$0.2+2.0+2.7=4.9$.**\n\n**Answer:** $4.9$.",
+      "explanation_he": "**$=4.9$.**\n\n**תשובה:** $4.9$.",
+      "skill_atoms": [
+        "expected_value"
+      ],
+      "answer_payload": {
+        "value": 4.9
+      },
+      "source_item_id": "93781332-3db9-5cc6-97c8-77f561ae8fef",
+      "points_level_min": "5pt",
+      "correct_answer": "4.9"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For that same $X$, find $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
+      "stem_he": "עבור אותו $X$, מצאו $\\text{Var}(X)=E[X^2]-(E[X])^2$.",
+      "explanation_en": "**$4.9-4.41=0.49$.**\n\n**Answer:** $0.49$.",
+      "explanation_he": "**$4.9-4.41=0.49$.**\n\n**תשובה:** $0.49$.",
+      "skill_atoms": [
+        "variance"
+      ],
+      "answer_payload": {
+        "value": 0.49
+      },
+      "source_item_id": "6dd61ac1-21fb-5b83-b0c0-66e6716141e6",
+      "points_level_min": "5pt",
+      "correct_answer": "0.49"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For that same $X$, find the standard deviation $\\sqrt{\\text{Var}(X)}$.",
+      "stem_he": "עבור אותו $X$, מצאו את סטיית התקן $\\sqrt{\\text{Var}(X)}$.",
+      "explanation_en": "**$\\sqrt{0.49}=0.7$.**\n\n**Answer:** $0.7$.",
+      "explanation_he": "**$\\sqrt{0.49}=0.7$.**\n\n**תשובה:** $0.7$.",
+      "skill_atoms": [
+        "standard_deviation"
+      ],
+      "answer_payload": {
+        "value": 0.7
+      },
+      "source_item_id": "1b71cb8b-6d4d-5fa1-b859-02d84ab91ef3",
+      "points_level_min": "5pt",
+      "correct_answer": "0.7"
     }
   ],
   "est_minutes": 40,

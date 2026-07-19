@@ -239,151 +239,321 @@
       "body_he_md": "- **בינומי $B(n,p)$:** ניסויים קבועים, PMF $\\binom{n}{k}p^k(1-p)^{n-k}$, ממוצע $np$, שונות $np(1-p)$.\n- **פואסון $\\text{Poi}(\\lambda)$:** אירועים בזמן/מרחב, PMF $e^{-\\lambda}\\lambda^k/k!$, ממוצע = שונות = $\\lambda$.\n- **קירוב פואסון** לבינומי: $n$ גדול, $p$ קטן, $\\lambda=np$.\n- **קירוב נורמלי** לבינומי: $np\\geq5$ ו-$n(1-p)\\geq5$; עם תיקון רציפות."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "binomial_mean",
+      "binomial_pmf",
+      "binomial_variance",
+      "poisson",
+      "poisson_pmf"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "If $X \\sim B(8, 0.5)$, find $\\mu$ and $\\sigma^2$.",
-      "stem_he": "אם $X\\sim B(8,0.5)$, מצא $\\mu$ ו-$\\sigma^2$.",
+      "stem_en": "The Poisson distribution models:",
+      "stem_he": "התפלגות פואסון מתארת:",
+      "explanation_en": "**Poisson counts rare events in a fixed interval.**\n\n**Answer:** rare events over an interval.",
+      "explanation_he": "**פואסון סופרת מאורעות נדירים בקטע קבוע.**\n\n**תשובה:** מאורעות נדירים בקטע.",
+      "skill_atoms": [
+        "poisson"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\mu = 8 \\times 0.5 = 4$. $\\sigma^2 = 8 \\times 0.5 \\times 0.5 = 2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+        "options_en": [
+          "$\\text{rare events over an interval}$",
+          "$\\text{two outcomes}$",
+          "$\\text{a straight line}$",
+          "$\\text{continuous area}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{rare events over an interval}$",
+          "$\\text{two outcomes}$",
+          "$\\text{a straight line}$",
+          "$\\text{continuous area}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nFor $X \\sim B(8, 0.5)$, the mean is $\\mu = np = 8 \\times 0.5 = 4$ and the variance is $\\sigma^2 = np(1-p) = 8 \\times 0.5 \\times 0.5 = 2$. These are standard binomial moments — no PMF summation is needed when only $\\mu$ and $\\sigma^2$ are asked.\n\n**How to think about it:**\nIdentify $n=8$ trials and $p=0.5$ success rate. Mean counts expected successes; variance is largest at $p=0.5$ for fixed $n$, here giving $\\sigma^2=2$.\n\n**Common slip:**\nUsing $\\sigma^2 = np$ (Poisson formula) instead of $np(1-p)$, or reporting standard deviation $\\sqrt{2}$ when the question asks for variance.\n\n**Exam tip:**\nWrite $\\mu=np$ and $\\sigma^2=npq$ with $q=1-p$ on your formula sheet — one line of substitution earns full marks on parameter questions.\n\n**Self-check:** For fair coin ($p=0.5$), mean should be half the trials: $8/2=4$ confirms the answer.",
-      "explanation_he": "**למה זה נכון:**\nעבור $X \\sim B(8, 0.5)$, הממוצע הוא $\\mu=np=8\\times0.5=4$ והשונות $\\sigma^2=np(1-p)=8\\times0.5\\times0.5=2$. אלה רגעים בינומיים סטנדרטיים — אין צורך בסכום PMF כששואלים רק $\\mu$ ו-$\\sigma^2$.\n\n**איך לחשוב על זה:**\nזהו $n=8$ ניסויים ו-$p=0.5$ הסתברות הצלחה. הממוצע סופר הצלחות צפויות; השונות מקסימלית ב-$p=0.5$ עבור $n$ קבוע, כאן $\\sigma^2=2$.\n\n**טעות נפוצה:**\nשימוש ב-$\\sigma^2=np$ (נוסחת פואסון) במקום $np(1-p)$, או דיווח סטיית תקן $\\sqrt{2}$ כשהשאלה מבקשת שונות.\n\n**טיפ לבחינה:**\nכתבו $\\mu=np$ ו-$\\sigma^2=npq$ עם $q=1-p$ בגיליון הנוסחאות — שורת הצבה אחת מזכה בניקוד מלא בשאלות פרמטרים.\n\n**בדיקה עצמית:** במטבע הוגן ($p=0.5$), הממוצע צריך להיות חצי הניסויים: $8/2=4$ מאמת את התשובה.",
-      "skill_atoms": []
+      "source_item_id": "c2fcf009-6215-5e57-b86d-54ba1a8e2a4c",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{rare events over an interval}$",
+        "$\\text{two outcomes}$",
+        "$\\text{a straight line}$",
+        "$\\text{continuous area}$"
+      ],
+      "options_he": [
+        "$\\text{rare events over an interval}$",
+        "$\\text{two outcomes}$",
+        "$\\text{a straight line}$",
+        "$\\text{continuous area}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find $P(X=0)$ for $X \\sim B(4, 0.3)$.",
-      "stem_he": "מצא $P(X=0)$ עבור $X\\sim B(4,0.3)$.",
+      "stem_en": "Find the mean of $\\text{Binomial}(n=8,p=0.5)$.",
+      "stem_he": "מצאו את התוחלת של $\\text{Binomial}(n=8,p=0.5)$.",
+      "explanation_en": "**$E[X]=np=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$E[X]=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "binomial_mean"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(X=0) = (0.7)^4 = 0.2401$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.2401$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.2401"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\n$P(X=0)$ for $X \\sim B(4, 0.3)$ means zero successes in four trials: every trial fails with probability $1-p = 0.7$. So $P(X=0) = (0.7)^4 = 0.2401$.\n\n**How to think about it:**\nThe PMF at $k=0$ simplifies because $\\binom{4}{0}=1$ and $p^0=1$, leaving only $(1-p)^n$. Alternatively use the full PMF with $k=0$ to verify.\n\n**Common slip:**\nUsing $p^4 = (0.3)^4$ instead of $(1-p)^4$ — confusing \"zero successes\" with \"four successes.\" Another error: stopping at $(0.7)^4$ without evaluating to 0.2401.\n\n**Exam tip:**\nFor \"exactly zero\" binomial problems, ask: must every trial fail? If yes, multiply $(1-p)$ exactly $n$ times — faster than the full combination formula.\n\n**Self-check:** $(0.7)^4 \\approx 0.24$ is between 0 and 1 and less than 0.5 — sensible for four failures.",
-      "explanation_he": "**למה זה נכון:**\n$P(X=0)$ עבור $X \\sim B(4, 0.3)$ פירושו אפס הצלחות בארבעה ניסויים: כל ניסוי נכשל בהסתברות $1-p=0.7$. לכן $P(X=0)=(0.7)^4=0.2401$.\n\n**איך לחשוב על זה:**\nה-PMF ב-$k=0$ מתפשט כי $\\binom{4}{0}=1$ ו-$p^0=1$, ונשאר רק $(1-p)^n$. לחלופין השתמשו ב-PMF המלא עם $k=0$ לאימות.\n\n**טעות נפוצה:**\nשימוש ב-$p^4=(0.3)^4$ במקום $(1-p)^4$ — בלבול \"אפס הצלחות\" עם \"ארבע הצלחות.\" שגיאה נוספת: עצירה ב-$(0.7)^4$ בלי חישוב ל-0.2401.\n\n**טיפ לבחינה:**\nב\"בדיוק אפס\" בינומי, שאלו: האם כל ניסוי חייב להיכשל? אם כן, הכפילו $(1-p)$ בדיוק $n$ פעמים — מהיר יותר מהנוסחה המלאה.\n\n**בדיקה עצמית:** $(0.7)^4\\approx0.24$ בין 0 ל-1 ופחות מ-0.5 — סביר לארבעה כישלונות.",
-      "skill_atoms": []
+      "source_item_id": "13f094ac-3d5e-52c6-8a17-b611b9e9c52b",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "If $X \\sim \\text{Poi}(2)$, find $P(X=0)$.",
-      "stem_he": "אם $X\\sim\\text{Poi}(2)$, מצא $P(X=0)$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For Poisson with $\\lambda=2$, find $P(X=3)$.",
+      "stem_he": "עבור פואסון עם $\\lambda=2$, מצאו $P(X=3)$.",
+      "explanation_en": "**Step 1 — Formula.** $P(X=k)=\\dfrac{e^{-\\lambda}\\lambda^k}{k!}$.\n\n**Step 2 — Substitute.** $\\dfrac{e^{-2}\\cdot 8}{6}$.\n\n**Step 3 — Evaluate.** $\\approx 0.1804$.\n\n**Answer:** $\\approx 0.1804$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $\\dfrac{e^{-\\lambda}\\lambda^k}{k!}$.\n\n**שלב 2 — הצבה.** $\\dfrac{e^{-2}\\cdot 8}{6}$.\n\n**שלב 3 — חישוב.** $\\approx 0.1804$.\n\n**תשובה:** $\\approx 0.1804$.",
+      "skill_atoms": [
+        "poisson_pmf"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(X=0) = e^{-2} \\approx 0.1353$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "e^{-2} \\approx 0.1353$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.1353"
+        "steps_en": [
+          "**Step 1 — Formula.** $P(X=k)=\\dfrac{e^{-\\lambda}\\lambda^k}{k!}$.",
+          "**Step 2 — Substitute.** $\\dfrac{e^{-2}\\cdot 8}{6}$.",
+          "**Step 3 — Evaluate.** $\\approx 0.1804$.",
+          "**Answer:** $\\approx 0.1804$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — נוסחה.** $\\dfrac{e^{-\\lambda}\\lambda^k}{k!}$.",
+          "**שלב 2 — הצבה.** $\\dfrac{e^{-2}\\cdot 8}{6}$.",
+          "**שלב 3 — חישוב.** $\\approx 0.1804$.",
+          "**תשובה:** $\\approx 0.1804$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nFor $X \\sim \\text{Poi}(2)$, the PMF at $k=0$ is $P(X=0) = e^{-\\lambda}\\lambda^0/0! = e^{-2} \\approx 0.1353$. This is the probability of no events when the average rate is 2 per interval.\n\n**How to think about it:**\nPoisson counts rare events; $P(X=0)$ asks \"nothing happens.\" Plug $\\lambda=2$ into $e^{-\\lambda}$ — the factorial term is 1 when $k=0$.\n\n**Common slip:**\nForgetting the exponential factor and writing only $\\lambda^k/k!$, or using binomial $(1-p)^n$ instead of Poisson when the story gives a rate, not fixed trials.\n\n**Exam tip:**\nMemorise $e^{-1}\\approx0.368$, $e^{-2}\\approx0.135$, $e^{-3}\\approx0.050$ for quick sanity checks on Poisson zero-probability questions.\n\n**Self-check:** With $\\lambda=2$, we expect about 2 events per interval — probability of zero should be moderate, not near 1.",
-      "explanation_he": "**למה זה נכון:**\nעבור $X \\sim \\text{Poi}(2)$, ה-PMF ב-$k=0$ הוא $P(X=0)=e^{-\\lambda}\\lambda^0/0!=e^{-2}\\approx0.1353$. זו ההסתברות שאין אירועים כשהקצב הממוצע הוא 2 למרווח.\n\n**איך לחשוב על זה:**\nפואסון סופר אירועים נדירים; $P(X=0)$ שואל \"שום דבר לא קורה.\" הציבו $\\lambda=2$ ב-$e^{-\\lambda}$ — איבר העצרת הוא 1 כש-$k=0$.\n\n**טעות נפוצה:**\nשכחת גורם המעריך וכתיבה רק של $\\lambda^k/k!$, או שימוש בבינומי $(1-p)^n$ במקום פואסון כשהסיפור נותן קצב, לא ניסויים קבועים.\n\n**טיפ לבחינה:**\nשננו $e^{-1}\\approx0.368$, $e^{-2}\\approx0.135$, $e^{-3}\\approx0.050$ לבדיקות מהירות בשאלות הסתברות-אפס פואסוניות.\n\n**בדיקה עצמית:** עם $\\lambda=2$, מצפים לכ-2 אירועים למרווח — הסתברות לאפס צריכה להיות בינונית, לא קרובה ל-1.",
-      "skill_atoms": []
+      "source_item_id": "8f63c1ab-920a-5a00-9435-9fa19309cf43",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "State the mean and variance of $X \\sim \\text{Poi}(5)$.",
-      "stem_he": "ציין ממוצע ושונות של $X\\sim\\text{Poi}(5)$.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: for a Poisson distribution the mean equals the variance.",
+      "stem_he": "נכון או לא נכון: בהתפלגות פואסון התוחלת שווה לשונות.",
+      "explanation_en": "**Both equal $\\lambda$** — **true**.",
+      "explanation_he": "**שניהם שווים ל-$\\lambda$** — **נכון**.",
+      "skill_atoms": [
+        "poisson"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Mean $= 5$. Variance $= 5$",
-          "5$",
-          "5"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nA defining property of the Poisson distribution: mean and variance both equal $\\lambda$. For $X \\sim \\text{Poi}(5)$, therefore $\\mu = 5$ and $\\sigma^2 = 5$.\n\n**How to think about it:**\nUnlike binomial where $\\sigma^2 = np(1-p) \\leq np$, Poisson has mean = variance. If exam data show equal mean and variance, Poisson is a strong candidate model.\n\n**Common slip:**\nApplying binomial variance $np(1-p)$ to a Poisson question, or reporting standard deviation 5 instead of variance 5.\n\n**Exam tip:**\nWhen asked only for mean and variance of Poisson($\\lambda$), the answer is two copies of $\\lambda$ — no calculation beyond reading the parameter.\n\n**Self-check:** Variance 5 means standard deviation $\\sqrt{5}\\approx2.24$ — do not confuse the two.",
-      "explanation_he": "**למה זה נכון:**\nתכונה מגדירה של פילוג פואסון: ממוצע ושונות שווים ל-$\\lambda$. עבור $X \\sim \\text{Poi}(5)$, לכן $\\mu=5$ ו-$\\sigma^2=5$.\n\n**איך לחשוב על זה:**\nבניגוד לבינומי שבו $\\sigma^2=np(1-p)\\leq np$, בפואסון ממוצע = שונות. אם בנתוני בחינה ממוצע ושונות שווים, פואסון הוא מועמד חזק.\n\n**טעות נפוצה:**\nיישום שונות בינומית $np(1-p)$ על שאלת פואסון, או דיווח סטיית תקן 5 במקום שונות 5.\n\n**טיפ לבחינה:**\nכששואלים רק ממוצע ושונות של פואסון($\\lambda$), התשובה היא שני עותקים של $\\lambda$ — ללא חישוב מעבר לקריאת הפרמטר.\n\n**בדיקה עצמית:** שונות 5 פירושה סטיית תקן $\\sqrt{5}\\approx2.24$ — אל תבלבלו ביניהם.",
-      "skill_atoms": []
+      "source_item_id": "b4dd0d26-e947-5c70-8758-ae76e8ad4059",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$X \\sim B(10, 0.3)$. Find $P(X=3)$.",
-      "stem_he": "$X\\sim B(10,0.3)$. מצא $P(X=3)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the variance of $\\text{Binomial}(n=8,p=0.5)$.",
+      "stem_he": "מצאו את השונות של $\\text{Binomial}(n=8,p=0.5)$.",
+      "explanation_en": "**$\\text{Var}=np(1-p)=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\text{Var}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=3) = \\binom{10}{3}(0.3)^3(0.7)^7 = 120 \\times 0.027 \\times 0.0824 \\approx 0.267$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "120 \\times 0.027 \\times 0.0824 \\approx 0.267$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.267"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\n$P(X=3) = \\binom{10}{3}(0.3)^3(0.7)^7 = 120 \\times 0.027 \\times 0.0824 \\approx 0.267$. Three successes in 10 trials with $p=0.3$ uses the full binomial PMF.\n\n**How to think about it:**\nCompute $\\binom{10}{3}=120$ first, then powers of $p$ and $1-p$. The answer should be less than 0.5 for a single $k$ near the mean $np=3$.\n\n**Common slip:**\nOmitting $\\binom{10}{3}$, swapping $p$ and $1-p$ exponents, or using Poisson because $p=0.3$ is \"small\" without checking the fixed-$n$ binomial setup.\n\n**Exam tip:**\nShow the three-factor PMF structure on paper — graders award partial credit even if final multiplication has a minor arithmetic error.\n\n**Self-check:** Mean $np=3$ — probability at $k=3$ should be among the largest PMF values.",
-      "explanation_he": "**למה זה נכון:**\n$P(X=3)=\\binom{10}{3}(0.3)^3(0.7)^7=120\\times0.027\\times0.0824\\approx0.267$. שלוש הצלחות ב-10 ניסויים עם $p=0.3$ משתמשות ב-PMF בינומי המלא.\n\n**איך לחשוב על זה:**\nחשבו $\\binom{10}{3}=120$ קודם, אחר כך חזקות של $p$ ו-$1-p$. התשובה צריכה להיות פחות מ-0.5 עבור $k$ בודד ליד הממוצע $np=3$.\n\n**טעות נפוצה:**\nהשמטת $\\binom{10}{3}$, החלפת מעריכי $p$ ו-$1-p$, או שימוש בפואסון כי $p=0.3$ \"קטן\" בלי לבדוק מבנה בינומי עם $n$ קבוע.\n\n**טיפ לבחינה:**\nהציגו מבנה PMF של שלושה גורמים — בודקים נותנים ניקוד חלקי גם אם הכפל הסופי שגוי במעט.\n\n**בדיקה עצמית:** ממוצע $np=3$ — ההסתברות ב-$k=3$ צריכה להיות בין הגבוהות ב-PMF.",
-      "skill_atoms": []
+      "source_item_id": "2e9b6443-db0b-543b-a5a6-695e643db084",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Accidents occur at rate 2 per day. Find $P(X \\leq 1)$ using Poisson.",
-      "stem_he": "תאונות מתרחשות בקצב 2 ליום. מצא $P(X\\leq1)$ בעזרת פואסון.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For Poisson with $\\lambda=2$, find $P(X=0)=e^{-\\lambda}$ (round to 4).",
+      "stem_he": "עבור פואסון עם $\\lambda=2$, מצאו $P(X=0)=e^{-\\lambda}$ (עגלו ל-4).",
+      "explanation_en": "**$P(X=0)=e^{-2}\\approx 0.1353$.**\n\n**Answer:** $\\approx 0.1353$.",
+      "explanation_he": "**$e^{-2}\\approx 0.1353$.**\n\n**תשובה:** $\\approx 0.1353$.",
+      "skill_atoms": [
+        "poisson_pmf"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P(X=0)=e^{-2}\\approx0.1353$. $P(X=1)=e^{-2}\\cdot2\\approx0.2707$. $P(X\\leq1)\\approx0.4060$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "e^{-2}\\cdot2\\approx0.2707$. $P(X\\leq1)\\approx0.4060$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.4060"
-        ],
-        "case_sensitive": false
+        "value": 0.135335
       },
-      "explanation_en": "**Why this is correct:**\nAccidents at rate 2/day: $X \\sim \\text{Poi}(2)$. $P(X \\leq 1) = P(X=0) + P(X=1) = e^{-2} + 2e^{-2} = 3e^{-2} \\approx 0.406$. Tail sums require adding individual Poisson terms.\n\n**How to think about it:**\n\"At most 1\" means $k=0$ or $k=1$. Compute each PMF term separately, then add. Do not subtract from 1 unless you first computed $P(X \\geq 2)$.\n\n**Common slip:**\nUsing only $P(X=1)$ and forgetting $P(X=0)$, or treating \"rate 2\" as $p=2$ in a binomial.\n\n**Exam tip:**\nFor small $\\lambda$ and small upper bound $m$, direct summation is faster and more reliable than normal approximation.\n\n**Self-check:** $P(X\\leq1)\\approx0.41$ means roughly 41% of days have zero or one accident — plausible for $\\lambda=2$.",
-      "explanation_he": "**למה זה נכון:**\nתאונות בקצב 2 ליום: $X \\sim \\text{Poi}(2)$. $P(X \\leq 1)=P(X=0)+P(X=1)=e^{-2}+2e^{-2}=3e^{-2}\\approx0.406$. סכימת זנבות דורשת הוספת איברי פואסון בודדים.\n\n**איך לחשוב על זה:**\n\"לכל היותר 1\" פירושו $k=0$ או $k=1$. חשבו כל איבר PMF בנפרד, ואז חברו. אל תחסרו מ-1 אלא אם חישבתם קודם $P(X \\geq 2)$.\n\n**טעות נפוצה:**\nשימוש רק ב-$P(X=1)$ ושכחת $P(X=0)$, או התייחסות ל\"קצב 2\" כ-$p=2$ בבינומי.\n\n**טיפ לבחינה:**\nל-$\\lambda$ קטן וגבול עליון $m$ קטן, סכימה ישירה מהירה ואמינה יותר מקירוב נורמלי.\n\n**בדיקה עצמית:** $P(X\\leq1)\\approx0.41$ פירושו שכ-41% מהימים עם אפס או תאונה אחת — סביר ל-$\\lambda=2$.",
-      "skill_atoms": []
+      "source_item_id": "57db8b1b-d03a-5fe1-884c-a8df08e6842b",
+      "points_level_min": "5pt",
+      "correct_answer": "0.135335"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "100 items are manufactured with defect probability 0.01. Use Poisson approximation to find $P(X=2)$.",
-      "stem_he": "100 פריטים מיוצרים עם הסתברות פגם 0.01. השתמש בקירוב פואסון למציאת $P(X=2)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $\\text{Binomial}(n=5,p=0.5)$, find $P(X=2)$.",
+      "stem_he": "עבור $\\text{Binomial}(n=5,p=0.5)$, מצאו $P(X=2)$.",
+      "explanation_en": "**$\\binom{5}{2}(0.5)^5=10\\cdot 0.03125=0.3125$.**\n\n**Answer:** $0.3125$.",
+      "explanation_he": "**$=0.3125$.**\n\n**תשובה:** $0.3125$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\lambda = 100 \\times 0.01 = 1$. $P(X=2) = e^{-1}/2 \\approx 0.184$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "e^{-1}/2 \\approx 0.184$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.184"
-        ],
-        "case_sensitive": false
+        "value": 0.3125
       },
-      "explanation_en": "**Why this is correct:**\n100 items with defect probability 0.01: check Poisson approx ($n=100 \\geq 20$, $p=0.01 \\leq 0.05$). Set $\\lambda = np = 1$. Then $P(X=2) = e^{-1} \\cdot 1^2 / 2! = e^{-1}/2 \\approx 0.184$.\n\n**How to think about it:**\nThe exact model is $B(100, 0.01)$, but Poisson with $\\lambda=1$ approximates well. Always state $\\lambda=np$ before applying the Poisson PMF.\n\n**Common slip:**\nUsing $\\lambda=0.01$ (confusing rate per item with expected total count), or applying binomial with heavy computation when approximation is explicitly requested.\n\n**Exam tip:**\nWhen the question says \"use Poisson approximation,\" write the rule check ($n \\geq 20$, $p \\leq 0.05$) — examiners award method marks before the numeric answer.\n\n**Self-check:** With $\\lambda=1$, $P(X=2)\\approx0.18$ is the second-largest mass after $k=0,1$.",
-      "explanation_he": "**למה זה נכון:**\n100 פריטים עם הסתברות פגם 0.01: בדקו קירוב פואסון ($n=100\\geq20$, $p=0.01\\leq0.05$). קבעו $\\lambda=np=1$. אז $P(X=2)=e^{-1}\\cdot1^2/2!=e^{-1}/2\\approx0.184$.\n\n**איך לחשוב על זה:**\nהמודל המדויק הוא $B(100,0.01)$, אך פואסון עם $\\lambda=1$ מקורב היטב. תמיד ציינו $\\lambda=np$ לפני PMF פואסון.\n\n**טעות נפוצה:**\nשימוש ב-$\\lambda=0.01$ (בלבול קצב לפריט עם ספירה צפויה כוללת), או בינומי כבד כשהשאלה מבקשת במפורש קירוב.\n\n**טיפ לבחינה:**\nכשהשאלה אומרת \"השתמש בקירוב פואסון\", כתבו בדיקת תנאים ($n\\geq20$, $p\\leq0.05$) — נקודות שיטה לפני התשובה המספרית.\n\n**בדיקה עצמית:** עם $\\lambda=1$, $P(X=2)\\approx0.18$ הוא מסה גדולה שנייה אחרי $k=0,1$.",
-      "skill_atoms": []
+      "source_item_id": "7f6108da-5f0d-5713-ac74-6092c1517e03",
+      "points_level_min": "5pt",
+      "correct_answer": "0.3125"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Check whether normal approximation to $B(50, 0.4)$ is valid.",
-      "stem_he": "בדוק אם קירוב נורמלי ל-$B(50,0.4)$ תקף.",
+      "stem_en": "For Poisson with $\\lambda=2$, find $P(X=1)$ (round to 4).",
+      "stem_he": "עבור פואסון עם $\\lambda=2$, מצאו $P(X=1)$ (עגלו ל-4).",
+      "explanation_en": "**$P(X=1)=e^{-2}\\cdot 2\\approx 0.2707$.**\n\n**Answer:** $\\approx 0.2707$.",
+      "explanation_he": "**$e^{-2}\\cdot 2\\approx 0.2707$.**\n\n**תשובה:** $\\approx 0.2707$.",
+      "skill_atoms": [
+        "poisson_pmf"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$np = 20 \\geq 5$ ✓, $n(1-p) = 30 \\geq 5$ ✓. Normal approximation is valid.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "30 \\geq 5$ ✓. Normal approximation is valid.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5"
-        ],
-        "case_sensitive": false
+        "value": 0.270671
       },
-      "explanation_en": "**Why this is correct:**\nFor $B(50, 0.4)$: $np = 50 \\times 0.4 = 20 \\geq 5$ and $n(1-p) = 50 \\times 0.6 = 30 \\geq 5$. Both success and failure counts are large enough — **normal approximation is valid**.\n\n**How to think about it:**\nThe rule requires BOTH $np \\geq 5$ AND $n(1-p) \\geq 5$. Here $p=0.4$ is not extreme, so both conditions are comfortably satisfied.\n\n**Common slip:**\nChecking only $np$ and ignoring $n(1-p)$, or declaring invalid because $p \\neq 0.5$. Another error: computing a probability when the question only asks validity.\n\n**Exam tip:**\nWrite \"np = ... ≥ 5 ✓\" and \"n(1-p) = ... ≥ 5 ✓\" as two separate lines — this template answers every \"is normal approx valid?\" question.",
-      "explanation_he": "**למה זה נכון:**\nעבור $B(50,0.4)$: $np=50\\times0.4=20\\geq5$ ו-$n(1-p)=50\\times0.6=30\\geq5$. גם ספירת הצלחות וגם כישלונות גדולות מספיק — **קירוב נורמלי תקף**.\n\n**איך לחשוב על זה:**\nהכלל דורש גם $np\\geq5$ וגם $n(1-p)\\geq5$. כאן $p=0.4$ לא קיצוני, ולכן שני התנאים מתקיימים בנוחות.\n\n**טעות נפוצה:**\nבדיקה רק של $np$ והתעלמות מ-$n(1-p)$, או הצהרה על אי-תקפות כי $p\\neq0.5$. שגיאה נוספת: חישוב הסתברות כשהשאלה שואלת רק תקפות.\n\n**טיפ לבחינה:**\nכתבו \"np = ... ≥ 5 ✓\" ו-\"n(1-p) = ... ≥ 5 ✓\" בשתי שורות — תבנית זו עונה על כל שאלת \"האם קירוב נורמלי תקף?\"",
-      "skill_atoms": []
+      "source_item_id": "cf1ba9bf-f106-5e06-81fb-20041b659b98",
+      "points_level_min": "5pt",
+      "correct_answer": "0.270671"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For Poisson with $\\lambda=3$, find $P(X=2)$ (round to 4).",
+      "stem_he": "עבור פואסון עם $\\lambda=3$, מצאו $P(X=2)$ (עגלו ל-4).",
+      "explanation_en": "**$P(X=2)=e^{-3}\\cdot\\dfrac{9}{2}\\approx 0.2240$.**\n\n**Answer:** $\\approx 0.2240$.",
+      "explanation_he": "**$e^{-3}\\cdot 4.5\\approx 0.2240$.**\n\n**תשובה:** $\\approx 0.2240$.",
+      "skill_atoms": [
+        "poisson_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.224042
+      },
+      "source_item_id": "a5ee7da5-f9ba-567b-abe9-b4f71d80bcb9",
+      "points_level_min": "5pt",
+      "correct_answer": "0.224042"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $\\text{Binomial}(n=4,p=0.5)$, find $P(X=3)$.",
+      "stem_he": "עבור $\\text{Binomial}(n=4,p=0.5)$, מצאו $P(X=3)$.",
+      "explanation_en": "**$\\binom{4}{3}(0.5)^4=4\\cdot 0.0625=0.25$.**\n\n**Answer:** $0.25$.",
+      "explanation_he": "**$=0.25$.**\n\n**תשובה:** $0.25$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "780d73a7-865a-570b-a71a-fc880467a800",
+      "points_level_min": "5pt",
+      "correct_answer": "0.25"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For Poisson with $\\lambda=1$, find $P(X=0)$ (round to 4).",
+      "stem_he": "עבור פואסון עם $\\lambda=1$, מצאו $P(X=0)$ (עגלו ל-4).",
+      "explanation_en": "**$e^{-1}\\approx 0.3679$.**\n\n**Answer:** $\\approx 0.3679$.",
+      "explanation_he": "**$e^{-1}\\approx 0.3679$.**\n\n**תשובה:** $\\approx 0.3679$.",
+      "skill_atoms": [
+        "poisson_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.367879
+      },
+      "source_item_id": "1f93aaf9-55ee-527c-8596-38a241654a17",
+      "points_level_min": "5pt",
+      "correct_answer": "0.367879"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the mean of $\\text{Binomial}(n=20,p=0.1)$.",
+      "stem_he": "מצאו את התוחלת של $\\text{Binomial}(n=20,p=0.1)$.",
+      "explanation_en": "**$E[X]=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$E[X]=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "binomial_mean"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "30550804-5c9a-5ed6-b208-d4deabb5dce5",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For Poisson with $\\lambda=4$, find $P(X=2)$ (round to 4).",
+      "stem_he": "עבור פואסון עם $\\lambda=4$, מצאו $P(X=2)$ (עגלו ל-4).",
+      "explanation_en": "**$P(X=2)=e^{-4}\\cdot 8\\approx 0.1465$.**\n\n**Answer:** $\\approx 0.1465$.",
+      "explanation_he": "**$e^{-4}\\cdot 8\\approx 0.1465$.**\n\n**תשובה:** $\\approx 0.1465$.",
+      "skill_atoms": [
+        "poisson_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.146525
+      },
+      "source_item_id": "e4ad77e2-c6d2-572a-bb0b-f958c48fdf06",
+      "points_level_min": "5pt",
+      "correct_answer": "0.146525"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the variance of $\\text{Binomial}(n=100,p=0.3)$.",
+      "stem_he": "מצאו את השונות של $\\text{Binomial}(n=100,p=0.3)$.",
+      "explanation_en": "**$\\text{Var}=100\\cdot 0.3\\cdot 0.7=21$.**\n\n**Answer:** $21$.",
+      "explanation_he": "**$\\text{Var}=21$.**\n\n**תשובה:** $21$.",
+      "skill_atoms": [
+        "binomial_variance"
+      ],
+      "answer_payload": {
+        "value": 21
+      },
+      "source_item_id": "5d923591-1cc1-516b-9759-9ec73667e9b3",
+      "points_level_min": "5pt",
+      "correct_answer": "21"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $\\text{Binomial}(n=3,p=0.2)$, find $P(X\\ge 1)=1-(0.8)^3$.",
+      "stem_he": "עבור $\\text{Binomial}(n=3,p=0.2)$, מצאו $P(X\\ge 1)=1-(0.8)^3$.",
+      "explanation_en": "**$1-0.512=0.488$.**\n\n**Answer:** $0.488$.",
+      "explanation_he": "**$1-0.512=0.488$.**\n\n**תשובה:** $0.488$.",
+      "skill_atoms": [
+        "binomial_pmf"
+      ],
+      "answer_payload": {
+        "value": 0.488
+      },
+      "source_item_id": "84097395-983c-5723-a307-598b72948937",
+      "points_level_min": "5pt",
+      "correct_answer": "0.488"
     }
   ],
   "est_minutes": 50,

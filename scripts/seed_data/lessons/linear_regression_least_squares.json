@@ -239,151 +239,322 @@
       "body_he_md": "- **OLS** ממזער $\\sum e_i^2$; $\\hat{\\beta}_1 = S_{xy}/S_{xx}$, $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$.\n- **שאריות** $e_i = y_i - \\hat{y}_i$ מקיימות $\\sum e_i = 0$; הקו עובר דרך $(\\bar{x}, \\bar{y})$.\n- **$R^2 = 1 - \\text{SSR}/\\text{SST}$** מודד שיעור שונות מוסבר; שווה ל-$r^2$.\n- **גאוס–מרקוב:** OLS הוא BLUE תחת הנחות קלאסיות.\n- **הסקה:** $t = \\hat{\\beta}_1/\\text{SE}(\\hat{\\beta}_1) \\sim t(n-2)$ בודק אם השיפוע שונה מאפס.\n\n**מסקנה:** עם סטטיסטיקות סיכום או טבלת נתונים, עליכם כעת לבצע את צינור OLS המלא — התאמה, שאריות, $R^2$ ומבחן שיפוע — ללא היסוס."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "least_squares",
+      "mean",
+      "prediction",
+      "regression_intercept",
+      "regression_slope",
+      "residual"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Data: $\\bar{x}=4$, $\\bar{y}=10$, $S_{xy}=20$, $S_{xx}=5$. Find the regression line.",
-      "stem_he": "נתונים: $\\bar{x}=4$, $\\bar{y}=10$, $S_{xy}=20$, $S_{xx}=5$. מצא קו הרגרסיה.",
+      "stem_en": "The least-squares line minimizes the sum of:",
+      "stem_he": "ישר הריבועים הפחותים ממזער את סכום:",
+      "explanation_en": "**It minimizes $\\sum(y_i-\\hat y_i)^2$, the squared residuals.**\n\n**Answer:** squared residuals.",
+      "explanation_he": "**ממזער את $\\sum(y_i-\\hat y_i)^2$.**\n\n**תשובה:** ריבועי השאריות.",
+      "skill_atoms": [
+        "least_squares"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\hat{\\beta}_1=4$. $\\hat{\\beta}_0=10-16=-6$. Line: $\\hat{y}=-6+4x$",
-          "-6+4x$",
-          "4"
+        "options_en": [
+          "$\\text{squared residuals}$",
+          "$\\text{residuals}$",
+          "$\\text{absolute }x$",
+          "$\\text{slopes}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{squared residuals}$",
+          "$\\text{residuals}$",
+          "$\\text{absolute }x$",
+          "$\\text{slopes}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$\\hat{\\beta}_1 = S_{xy}/S_{xx} = 20/5 = 4$. Then $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x} = 10 - 4(4) = 10 - 16 = -6$. The regression line is $\\hat{y} = -6 + 4x$.\n\n**How to think about it:**\nWhen summary statistics are given, go directly to the two OLS formulas — no raw data table needed. Slope first, then intercept using the centroid identity.\n\n**Common slip:**\nComputing $\\hat{\\beta}_0 = \\bar{y} + \\hat{\\beta}_1 \\bar{x}$ (wrong sign). Using $S_{xy}/S_{yy}$ instead of $S_{xy}/S_{xx}$ for the slope.\n\n**Exam tip:**\nAlways verify the line passes through $(\\bar{x}, \\bar{y})$: plug in $\\bar{x}$ and confirm you get $\\bar{y}$. This 5-second check catches sign errors on every exam.",
-      "explanation_he": "**למה זה נכון:**\n$\\hat{\\beta}_1 = 20/5 = 4$. אז $\\hat{\\beta}_0 = 10 - 4(4) = -6$. קו הרגרסיה: $\\hat{y} = -6 + 4x$.\n\n**איך לחשוב על זה:**\nכשניתנות סטטיסטיקות סיכום, עברו ישירות לשתי נוסחאות OLS — בלי טבלת נתונים גולמית. שיפוע קודם, ואז חיתוך עם זהות מרכז הכובל.\n\n**טעות נפוצה:**\nחישוב $\\hat{\\beta}_0 = \\bar{y} + \\hat{\\beta}_1 \\bar{x}$ (סימן שגוי). שימוש ב-$S_{xy}/S_{yy}$ במקום $S_{xy}/S_{xx}$ לשיפוע.\n\n**טיפ לבחינה:**\nתמיד ודאו שהקו עובר דרך $(\\bar{x}, \\bar{y})$: הציבו $\\bar{x}$ ואשרו שמתקבל $\\bar{y}$. בדיקה של חמש שניות תופסת טעויות סימן בכל בחינה. כתבו את משוואת הקו המלאה $\\hat{y} = -6 + 4x$ ולא רק את השיפוע.",
-      "skill_atoms": []
+      "source_item_id": "b0a8f25c-3cf7-5515-babf-92b7af278824",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{squared residuals}$",
+        "$\\text{residuals}$",
+        "$\\text{absolute }x$",
+        "$\\text{slopes}$"
+      ],
+      "options_he": [
+        "$\\text{squared residuals}$",
+        "$\\text{residuals}$",
+        "$\\text{absolute }x$",
+        "$\\text{slopes}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "The regression line always passes through which point?",
-      "stem_he": "קו הרגרסיה תמיד עובר דרך איזו נקודה?",
+      "stem_en": "Find the mean of the $x$-values $\\{1,3,5\\}$.",
+      "stem_he": "מצאו את הממוצע של ערכי ה-$x$: $\\{1,3,5\\}$.",
+      "explanation_en": "**$\\bar x=\\dfrac{9}{3}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$\\bar x=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "mean"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "The centroid $(\\bar{x},\\bar{y})$. This follows from $\\hat{\\beta}_0=\\bar{y}-\\hat{\\beta}_1\\bar{x}$",
-          "\\bar{y}-\\hat{\\beta}_1\\bar{x}$",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 3
       },
-      "explanation_en": "**Why this is correct:**\nThe OLS regression line always passes through the centroid $(\\bar{x}, \\bar{y})$. This follows directly from $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$: at $x = \\bar{x}$, we get $\\hat{y} = \\bar{y}$.\n\n**How to think about it:**\nThink of OLS as pivoting a line around the data center. Any line that fits best must go through the average point — otherwise you could shift the intercept and reduce SSR.\n\n**Common slip:**\nAnswering $(0, 0)$ or the first data point $(x_1, y_1)$. Confusing the centroid with the predicted value at $x = 0$.\n\n**Exam tip:**\nThis is a one-mark conceptual question on nearly every exam. Memorize: centroid, not origin, not first point.",
-      "explanation_he": "**למה זה נכון:**\nקו הרגרסיה OLS תמיד עובר דרך מרכז הכובל $(\\bar{x}, \\bar{y})$. זה נובע ישירות מ-$\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$: ב-$x = \\bar{x}$ מתקבל $\\hat{y} = \\bar{y}$.\n\n**איך לחשוב על זה:**\nחשבו על OLS כקו שמסתובב סביב מרכז הנתונים. כל קו התאמה אופטימלי חייב לעבור דרך הנקודה הממוצעת — אחרת אפשר להזיז חיתוך ולהקטין SSR.\n\n**טעות נפוצה:**\nתשובה $(0, 0)$ או הנקודה הראשונה $(x_1, y_1)$. בלבול מרכז כובל עם ערך חזוי ב-$x = 0$.\n\n**טיפ לבחינה:**\nשאלה מושגית של נקודה אחת בכמעט כל בחינה. שיננו: מרכז כובל, לא ראשית, לא נקודה ראשונה.",
-      "skill_atoms": []
+      "source_item_id": "df3c19ec-20ac-5a0d-a482-c565ffd91f31",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "SST = 100, SSR = 20. Find $R^2$.",
-      "stem_he": "SST = 100, SSR = 20. מצא $R^2$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Fit a least-squares line to $(1,2),(3,6),(5,10)$ and predict $y$ at $x=7$.",
+      "stem_he": "התאימו ישר ריבועים פחותים ל-$(1,2),(3,6),(5,10)$ וחזו את $y$ עבור $x=7$.",
+      "explanation_en": "**Step 1 — Slope.** $b=\\dfrac{16}{8}=2$.\n\n**Step 2 — Intercept.** $a=6-2\\cdot 3=0$.\n\n**Step 3 — Predict.** $y=2\\cdot 7+0=14$.\n\n**Answer:** $14$.",
+      "explanation_he": "**שלב 1 — שיפוע.** $b=2$.\n\n**שלב 2 — חותך.** $a=0$.\n\n**שלב 3 — חיזוי.** $14$.\n\n**תשובה:** $14$.",
+      "skill_atoms": [
+        "prediction"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$R^2=1-20/100=0.80$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.80$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.80"
+        "steps_en": [
+          "**Step 1 — Slope.** $b=\\dfrac{16}{8}=2$.",
+          "**Step 2 — Intercept.** $a=6-2\\cdot 3=0$.",
+          "**Step 3 — Predict.** $y=2\\cdot 7+0=14$.",
+          "**Answer:** $14$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — שיפוע.** $b=2$.",
+          "**שלב 2 — חותך.** $a=0$.",
+          "**שלב 3 — חיזוי.** $14$.",
+          "**תשובה:** $14$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\n$R^2 = 1 - \\text{SSR}/\\text{SST} = 1 - 20/100 = 1 - 0.20 = 0.80$. This means 80% of the total variance in $y$ is explained by the linear regression model.\n\n**How to think about it:**\nSSR is what the line could NOT explain; SST is total variation. The ratio SSR/SST is the unexplained fraction; subtract from 1 to get the explained fraction.\n\n**Common slip:**\nComputing $R^2 = \\text{SSR}/\\text{SST}$ (forgetting to subtract from 1). Swapping SSR and SST in the formula.\n\n**Exam tip:**\nWrite $R^2 = 1 - \\text{SSR}/\\text{SST}$ on your formula card in large letters. The \"1 minus\" is the most common arithmetic slip.",
-      "explanation_he": "**למה זה נכון:**\n$R^2 = 1 - 20/100 = 0.80$. כלומר 80% מהשונות הכוללת ב-$y$ מוסברת על ידי מודל הרגרסיה הלינארי.\n\n**איך לחשוב על זה:**\nSSR הוא מה שהקו לא הצליח להסביר; SST הוא השונות הכוללת. יחס SSR/SST הוא החלק שלא מוסבר; מחסרים מ-1 לקבלת החלק המוסבר.\n\n**טעות נפוצה:**\nחישוב $R^2 = \\text{SSR}/\\text{SST}$ (שכחת \"1 פחות\"). החלפת SSR ו-SST בנוסחה.\n\n**טיפ לבחינה:**\nכתבו $R^2 = 1 - \\text{SSR}/\\text{SST}$ בגיליון הנוסחאות באותיות גדולות. ה-\"1 פחות\" הוא הטעות החשבונית הנפוצה ביותר. פרשו 0.80 כ-80% מהשונות ב-$y$ שמוסברת על ידי המודל הלינארי.",
-      "skill_atoms": []
+      "source_item_id": "ade96612-ac95-573d-a52f-5c2caa365a83",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Verify that for residuals: $\\sum e_i = 0$ when $\\hat{\\beta}_0$ is the OLS intercept.",
-      "stem_he": "אמת שלשאריות: $\\sum e_i=0$ כאשר $\\hat{\\beta}_0$ הוא נקודת החיתוך של OLS.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the least-squares line always passes through $(\\bar x,\\bar y)$.",
+      "stem_he": "נכון או לא נכון: ישר הריבועים הפחותים תמיד עובר דרך $(\\bar x,\\bar y)$.",
+      "explanation_en": "**The regression line passes through the centroid $(\\bar x,\\bar y)$** — **true**.",
+      "explanation_he": "**הישר עובר דרך המרכז $(\\bar x,\\bar y)$** — **נכון**.",
+      "skill_atoms": [
+        "least_squares"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\sum e_i = \\sum(y_i-\\hat{\\beta}_0-\\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0-\\hat{\\beta}_1\\sum x_i = n\\bar{y}-n(\\bar{y}-\\hat{\\beta}_1\\bar{x})-\\hat{\\beta}_1 n\\bar{x}=0$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\n$\\sum e_i = \\sum(y_i - \\hat{\\beta}_0 - \\hat{\\beta}_1 x_i) = \\sum y_i - n\\hat{\\beta}_0 - \\hat{\\beta}_1 \\sum x_i = n\\bar{y} - n(\\bar{y} - \\hat{\\beta}_1 \\bar{x}) - \\hat{\\beta}_1 n\\bar{x} = 0$. $\\blacksquare$\n\n**How to think about it:**\nThis proof uses only the intercept formula — no numbers needed. Expand the sum, substitute $n\\bar{y}$ and $n\\bar{x}$, and watch the terms cancel.\n\n**Common slip:**\nStopping after $\\sum e_i = \\sum y_i - n\\hat{\\beta}_0 - \\hat{\\beta}_1 \\sum x_i$ without substituting the OLS intercept. Claiming residuals sum to zero for ANY line (only OLS guarantees this).\n\n**Exam tip:**\nProof questions give full credit for correct substitution of $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$. Write the normal equation $\\sum e_i = 0$ as your starting point.",
-      "explanation_he": "**למה זה נכון:**\n$\\sum e_i = \\sum(y_i - \\hat{\\beta}_0 - \\hat{\\beta}_1 x_i) = n\\bar{y} - n(\\bar{y} - \\hat{\\beta}_1 \\bar{x}) - \\hat{\\beta}_1 n\\bar{x} = 0$. $\\blacksquare$ זוהי תוצאה אלגברית שמבוססת על $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$.\n\n**איך לחשוב על זה:**\nהוכחה זו משתמשת רק בנוסחת החיתוך — בלי מספרים. פתחו את הסכום, הציבו $n\\bar{y}$ ו-$n\\bar{x}$, וצפו בביטויים שמתקזזים לחלוטין.\n\n**טעות נפוצה:**\nעצירה אחרי $\\sum e_i = \\sum y_i - n\\hat{\\beta}_0 - \\hat{\\beta}_1 \\sum x_i$ בלי הצבת חיתוך OLS. טענה ששאריות מתאפסות לכל קו (רק OLS מבטיח זאת).\n\n**טיפ לבחינה:**\nשאלות הוכחה נותנות ניקוד מלא להצבה נכונה של $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$. כתבו $\\sum e_i = 0$ כנקודת התחלה. הוכיחו שהביטויים מתקזזים — לא צריך מספרים כלל.",
-      "skill_atoms": []
+      "source_item_id": "9e836811-81cc-51b7-a095-b3bb3fb5421b",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Data: $(2,5),(4,9),(6,11),(8,13),(10,17)$. Compute $\\hat{\\beta}_1$ and $\\hat{\\beta}_0$.",
-      "stem_he": "נתונים: $(2,5),(4,9),(6,11),(8,13),(10,17)$. חשב $\\hat{\\beta}_1$ ו-$\\hat{\\beta}_0$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the mean of the $y$-values $\\{2,6,10\\}$.",
+      "stem_he": "מצאו את הממוצע של ערכי ה-$y$: $\\{2,6,10\\}$.",
+      "explanation_en": "**$\\bar y=\\dfrac{18}{3}=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$\\bar y=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "mean"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\bar{x}=6$, $\\bar{y}=11$. $S_{xy}=(2-6)(5-11)+...=(-4)(-6)+(-2)(-2)+(0)(0)+(2)(2)+(4)(6)=24+4+0+4+24=56$. $S_{xx}=16+4+0+4+16=40$. $\\hat{\\beta}_1=56/40=1.4$. $\\hat{\\beta}_0=11-1.4(6)=11-8.4=2.6$. Line: $\\hat{y}=2.6+1.4x$",
-          "2.6+1.4x$",
-          "1.4"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\n$\\bar{x} = 6$, $\\bar{y} = 11$. Deviations give $S_{xy} = (-4)(-6)+(-2)(-2)+0+2(2)+4(6) = 24+4+0+4+24 = 56$ and $S_{xx} = 16+4+0+4+16 = 40$. So $\\hat{\\beta}_1 = 56/40 = 1.4$ and $\\hat{\\beta}_0 = 11 - 1.4(6) = 2.6$. Line: $\\hat{y} = 2.6 + 1.4x$.\n\n**How to think about it:**\nBuild a deviation table systematically: compute $x_i - \\bar{x}$ and $y_i - \\bar{y}$ for each row, then sum products for $S_{xy}$ and squared deviations for $S_{xx}$.\n\n**Common slip:**\nArithmetic errors in the deviation products (especially sign errors with negative deviations). Forgetting to subtract $\\hat{\\beta}_1 \\bar{x}$ when computing intercept.\n\n**Exam tip:**\nAfter computing $\\hat{\\beta}_1$, always finish with $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$ — never leave the answer as slope only. Check centroid in 5 seconds.",
-      "explanation_he": "**למה זה נכון:**\n$\\bar{x} = 6$, $\\bar{y} = 11$. $S_{xy} = 56$, $S_{xx} = 40$. $\\hat{\\beta}_1 = 56/40 = 1.4$, $\\hat{\\beta}_0 = 11 - 1.4(6) = 2.6$. קו: $\\hat{y} = 2.6 + 1.4x$. הנתונים מראים מגמה לינארית חזקה.\n\n**איך לחשוב על זה:**\nבנו טבלת סטיות שיטתית: $x_i - \\bar{x}$ ו-$y_i - \\bar{y}$ לכל שורה, סכום מכפלות ל-$S_{xy}$ וריבועי סטיות ל-$S_{xx}$. חשבו ממוצעים קודם — טעות ב-$\\bar{x}$ או $\\bar{y}$ משבשת הכל.\n\n**טעות נפוצה:**\nטעויות חשבון במכפלות סטיות (במיוחד סימנים עם סטיות שליליות). שכחה לחסר $\\hat{\\beta}_1 \\bar{x}$ בחישוב חיתוך.\n\n**טיפ לבחינה:**\nאחרי $\\hat{\\beta}_1$, תמיד סיימו עם $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}$ — לעולם לא רק שיפוע. בדקו מרכז כובל: $2.6 + 1.4(6) = 11 = \\bar{y}$. כתבו $\\hat{y} = 2.6 + 1.4x$ כתשובה סופית.",
-      "skill_atoms": []
+      "source_item_id": "51c4ecca-3aa5-512e-89bf-c4da50c5e1bf",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Using the line from e5, compute $R^2$. First find SST.",
-      "stem_he": "בעזרת הקו מ-e5, חשב $R^2$. מצא קודם SST.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the least-squares slope for $(1,2),(3,6),(5,10)$.",
+      "stem_he": "מצאו את שיפוע הריבועים הפחותים עבור $(1,2),(3,6),(5,10)$.",
+      "explanation_en": "**$b=\\dfrac{16}{8}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$b=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "regression_slope"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$S_{yy}=(-6)^2+(-2)^2+0^2+2^2+6^2=36+4+0+4+36=80=\\text{SST}$. SSR $=\\sum e_i^2$: $e_1=5-5.4=-0.4$; $e_2=9-8.2=0.8$; $e_3=11-11=0$; $e_4=13-13.8=-0.8$; $e_5=17-16.6=0.4$. SSR $=0.16+0.64+0+0.64+0.16=1.6$. $R^2=1-1.6/80=0.98$",
-          "0.98$",
-          "0.98"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nSST $= S_{yy} = (-6)^2+(-2)^2+0+2^2+6^2 = 80$. Residuals from $\\hat{y} = 2.6+1.4x$: $e_1=-0.4$, $e_2=0.8$, $e_3=0$, $e_4=-0.8$, $e_5=0.4$. SSR $= 0.16+0.64+0+0.64+0.16 = 1.6$. $R^2 = 1 - 1.6/80 = 0.98$.\n\n**How to think about it:**\nTwo-step process: first SST from deviations around $\\bar{y}$, then SSR from squared residuals using the fitted line. $R^2$ close to 1 means the line nearly passes through all points.\n\n**Common slip:**\nUsing SST $= \\sum y_i^2$ instead of $\\sum(y_i - \\bar{y})^2$. Computing $R^2 = \\text{SSR}/\\text{SST}$ without the \"1 minus.\" Rounding residuals too early.\n\n**Exam tip:**\nWhen $R^2 > 0.95$, mention in interpretation that the linear model fits very well — exam rubrics reward contextual interpretation, not just the number.",
-      "explanation_he": "**למה זה נכון:**\nSST $= 80$. SSR $= 1.6$. $R^2 = 1 - 1.6/80 = 0.98$ — 98% מהשונות מוסברת. חשבו קודם SST מסטיות סביב $\\bar{y}$, אחר כך SSR מריבועי שאריות.\n\n**איך לחשוב על זה:**\nתהליך דו-שלבי: קודם SST מסטיות סביב $\\bar{y}$, אחר כך SSR מריבועי שאריות. $R^2$ קרוב ל-1 = הקו כמעט עובר דרך כל הנקודות. אל תשתמשו ב-$\\sum y_i^2$ ל-SST.\n\n**טעות נפוצה:**\nשימוש ב-SST $= \\sum y_i^2$ במקום $\\sum(y_i - \\bar{y})^2$. $R^2 = \\text{SSR}/\\text{SST}$ בלי \"1 פחות\". עיגול שאריות מוקדם מדי.\n\n**טיפ לבחינה:**\nכש-$R^2 > 0.95$, ציינו בפרשנות שהמודל הלינארי מתאים מאוד — מחווני בחינה מעריכים פרשנות, לא רק מספר. 98% מהשונות מוסברת — הקשר כמעט לינארי מושלם.",
-      "skill_atoms": []
+      "source_item_id": "bdef5e86-0ecd-5e85-885e-b5307dc31b0e",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Prove that $R^2 = r^2$ (the square of the Pearson correlation).",
-      "stem_he": "הוכח ש-$R^2=r^2$ (ריבוע מקדם המתאם של פירסון).",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Using $y=2x$, predict $y$ when $x=6$.",
+      "stem_he": "בעזרת $y=2x$, חזו את $y$ עבור $x=6$.",
+      "explanation_en": "**$y=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$y=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "prediction"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\hat{\\beta}_1=S_{xy}/S_{xx}$. $\\text{SSE (explained)} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2=\\text{SSE}/\\text{SST}=S_{xy}^2/(S_{xx}S_{yy})=r^2$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "r^2$. $\\blacksquare$\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 12
       },
-      "explanation_en": "**Why this is correct:**\n$\\hat{\\beta}_1 = S_{xy}/S_{xx}$, so explained sum of squares SSE $= \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. Then $R^2 = \\text{SSE}/\\text{SST} = S_{xy}^2/(S_{xx} S_{yy}) = r^2$, where $r = S_{xy}/\\sqrt{S_{xx} S_{yy}}$. $\\blacksquare$\n\n**How to think about it:**\nThe proof chains three facts: (1) SSE in terms of $\\hat{\\beta}_1$ and $S_{xx}$, (2) $R^2 = \\text{SSE}/\\text{SST}$, (3) the definition of Pearson $r$. No numerical computation needed.\n\n**Common slip:**\nProving $R^2 = r$ instead of $R^2 = r^2$. Using $\\text{SSR}$ instead of $\\text{SSE}$ in the numerator of $R^2$.\n\n**Exam tip:**\nThis proof appears on HUJI and Technion statistics finals. Write the three-line chain clearly — partial credit is generous when the logic is visible.",
-      "explanation_he": "**למה זה נכון:**\n$\\text{SSE} = \\hat{\\beta}_1^2 S_{xx} = S_{xy}^2/S_{xx}$. $R^2 = \\text{SSE}/\\text{SST} = S_{xy}^2/(S_{xx} S_{yy}) = r^2$. $\\blacksquare$ שלושה שלבים: SSE דרך $\\hat{\\beta}_1$, $R^2 = \\text{SSE}/\\text{SST}$, והגדרת $r$.\n\n**איך לחשוב על זה:**\nהוכחה מקשרת שלוש עובדות: (1) SSE דרך $\\hat{\\beta}_1$ ו-$S_{xx}$, (2) $R^2 = \\text{SSE}/\\text{SST}$, (3) הגדרת $r$. בלי חישוב מספרי — רק אלגברה טהורה.\n\n**טעות נפוצה:**\nהוכחת $R^2 = r$ במקום $R^2 = r^2$. שימוש ב-SSR במקום SSE במונה $R^2$.\n\n**טיפ לבחינה:**\nהוכחה זו מופיעה בבחינות HUJI וטכניון. כתבו את שלושת השלבים בבירור — ניקוד חלקי נדיב כשהלוגיקה גלויה. זכרו: $R^2 = r^2$ ולא $R^2 = r$.",
-      "skill_atoms": []
+      "source_item_id": "1eb35b34-748d-5adf-ad52-88bf451f911c",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A regression has $n=20$, SSR = 40. Find the residual standard error $s$.",
-      "stem_he": "לרגרסיה עם $n=20$, SSR = 40. מצא שגיאה סטנדרטית $s$.",
+      "stem_en": "For $(1,2),(3,6),(5,10)$ with slope $b=2$, find the intercept $a=\\bar y-b\\bar x$.",
+      "stem_he": "עבור $(1,2),(3,6),(5,10)$ עם שיפוע $b=2$, מצאו את החותך.",
+      "explanation_en": "**$a=6-2\\cdot 3=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$a=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "regression_intercept"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$s=\\sqrt{40/(20-2)}=\\sqrt{40/18}=\\sqrt{2.22}\\approx1.49$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\sqrt{2.22}\\approx1.49$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.49"
-        ],
-        "case_sensitive": false
+        "value": 0
       },
-      "explanation_en": "**Why this is correct:**\n$s = \\sqrt{\\text{SSR}/(n-2)} = \\sqrt{40/(20-2)} = \\sqrt{40/18} = \\sqrt{2.\\overline{2}} \\approx 1.49$. The $n-2$ degrees of freedom account for the two estimated parameters ($\\beta_0$ and $\\beta_1$).\n\n**How to think about it:**\nResidual standard error $s$ estimates $\\sigma$ — the typical size of a vertical deviation from the true line. Always divide SSR by $n-2$, not $n$ or $n-1$.\n\n**Common slip:**\nUsing $n$ instead of $n-2$ in the denominator (confusing with sample standard deviation of $y$). Forgetting the square root and reporting SSR/(n-2) directly.\n\n**Exam tip:**\nSimple regression always uses $df = n-2$. Multiple regression uses $n-k-1$. Write this on your formula card next to $s = \\sqrt{\\text{SSR}/(n-2)}$.",
-      "explanation_he": "**למה זה נכון:**\n$s = \\sqrt{40/18} \\approx 1.49$. $n-2$ דרגות חופש בגלל שני פרמטרים מוערכים ($\\beta_0$ ו-$\\beta_1$).\n\n**איך לחשוב על זה:**\nשגיאה סטנדרטית $s$ מאמידה $\\sigma$ — גודל טיפוסי של סטייה אנכית מהקו האמיתי. תמיד חלקו SSR ב-$n-2$, לא $n$ או $n-1$.\n\n**טעות נפוצה:**\nשימוש ב-$n$ במקום $n-2$ (בלבול עם סטיית תקן מדגמית של $y$). שכחת שורש ודיווח על SSR/(n-2) ישירות.\n\n**טיפ לבחינה:**\nרגרסיה פשוטה: תמיד $df = n-2$. רגרסיה מרובה: $n-k-1$. כתבו זאת בגיליון ליד $s = \\sqrt{\\text{SSR}/(n-2)}$.",
-      "skill_atoms": []
+      "source_item_id": "73bdd508-010b-582e-9e75-6e6c63728de2",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the least-squares slope for $(2,5),(4,9),(6,13)$.",
+      "stem_he": "מצאו את שיפוע הריבועים הפחותים עבור $(2,5),(4,9),(6,13)$.",
+      "explanation_en": "**$b=\\dfrac{16}{8}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$b=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "31df4709-2cbd-50ae-a32d-5a84003d3f4b",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $(2,5),(4,9),(6,13)$ with slope $b=2$, find the intercept.",
+      "stem_he": "עבור $(2,5),(4,9),(6,13)$ עם שיפוע $b=2$, מצאו את החותך.",
+      "explanation_en": "**$a=\\bar y-b\\bar x=9-8=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$a=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "regression_intercept"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "9864d4d3-1a1c-5aa1-8fd7-e48830358164",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Using $y=2x+1$, predict $y$ when $x=10$.",
+      "stem_he": "בעזרת $y=2x+1$, חזו את $y$ עבור $x=10$.",
+      "explanation_en": "**$y=21$.**\n\n**Answer:** $21$.",
+      "explanation_he": "**$y=21$.**\n\n**תשובה:** $21$.",
+      "skill_atoms": [
+        "prediction"
+      ],
+      "answer_payload": {
+        "value": 21
+      },
+      "source_item_id": "10b73893-53fd-5224-8255-40a86eac4400",
+      "points_level_min": "5pt",
+      "correct_answer": "21"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the mean of $\\{4,8,12,16\\}$.",
+      "stem_he": "מצאו את הממוצע של $\\{4,8,12,16\\}$.",
+      "explanation_en": "**$\\dfrac{40}{4}=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "mean"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "a387a601-0b71-5792-93f7-d6476558aa2a",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the least-squares slope for $(1,1),(2,2),(3,3),(4,4)$.",
+      "stem_he": "מצאו את שיפוע הריבועים הפחותים עבור $(1,1),(2,2),(3,3),(4,4)$.",
+      "explanation_en": "**Perfect line $y=x$, so $b=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$b=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "regression_slope"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "bc4f0b25-e4f7-5a04-be32-1d21b44daf33",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For the line $y=2x$, the point $(3,7)$ is observed. Find the residual.",
+      "stem_he": "עבור הישר $y=2x$, נצפתה הנקודה $(3,7)$. מצאו את השארית.",
+      "explanation_en": "**Predicted $=6$; residual $=7-6=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**חזוי $=6$; שארית $=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "residual"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "d327daad-41e7-5d4c-87a9-87354e7ab20a",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For the line $y=2x+1$, find the predicted $y$ at $x=0$ (the intercept).",
+      "stem_he": "עבור הישר $y=2x+1$, מצאו את $y$ החזוי ב-$x=0$ (החותך).",
+      "explanation_en": "**At $x=0$, $y=1$ — the intercept.**\n\n**Answer:** $1$.",
+      "explanation_he": "**ב-$x=0$, $y=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "prediction"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "4f84d420-3bf7-53a1-a8aa-a0c9485ac70d",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 55,

@@ -469,10 +469,40 @@ duplicated a medium item's stem (same matrix/entry), so the content-addressed
 store deduped it to 14; changed it to a distinct matrix and re-baked to 15/15.
 Spread 5/6/4, 4 kinds per lesson. Math + strict + track-scope audits green.
 
+## Batch S — shipped
+
+Six more thin math lessons expanded to 15 verified items each (spread 5/6/4,
+4 kinds per lesson), all CAS-verified with 0 rejections:
+
+- `linear_regression_least_squares` (statistics) — means, least-squares slope
+  via $\sum(x-\bar x)(y-\bar y)/\sum(x-\bar x)^2$, intercept $\bar y-b\bar x$,
+  residuals, prediction, centroid property.
+- `discrete_distributions_binomial_poisson` (statistics) — binomial mean/variance
+  $np$, $np(1-p)$; binomial & Poisson PMFs via `binomial`, `exp`, `factorial`;
+  $P(X\ge 1)=1-(1-p)^n$.
+- `distributions` (probability) — expected value $\sum x_iP(x_i)$, variance
+  $E[X^2]-(E[X])^2$, standard deviation, fair-die/two-dice/Bernoulli examples,
+  pdf-area/probability-axiom conceptual checks.
+- `implicit_differentiation` (5pt/university) — circles/curves $y'=-x/y$, product
+  & power terms, $e^y=x$, $\sin y=x$, quotient-form results; distinct from the
+  Batch-R `derivatives_implicit` set (harder, more transcendental cases).
+- `trigonometric_identities` (5pt) — Pythagorean/reciprocal/double-angle/
+  sum-difference identities verified numerically at special angles via `truth`
+  predicates; special-angle evaluations.
+- `sampling_estimation` (statistics) — standard error $\sigma/\sqrt n$, 95%/99%
+  margins ($1.96/2.576\,SE$), CI half-width, CLT & unbiasedness conceptual checks.
+
+**Fixes during authoring:** `distributions` open-worked item duplicated a medium
+item's stem (identical $E[X]$ distribution) → deduped to 14; changed to a distinct
+distribution $\{2,4,6\}$ and re-baked to 15/15. Two Hebrew-in-math lint hits fixed
+by moving Hebrew out of `$...$`: `distributions` q5 ($P(\text{זוגי})$) and a
+pre-existing Batch-M carryover in `data_representation` q0 (relative-frequency
+fraction with Hebrew `\text{}`). Corpus-wide math lint now **0/207**.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **96 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O, P, Q, R + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **102 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P, Q, R, S + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines
