@@ -68,4 +68,4 @@ Learners **do not edit memory directly** — chat with Tutor/Mentor to change pe
 
 - [[../curriculum/learning-path-architecture|Learning path architecture]]
 - [[../coordination/streams/01-frontend|Frontend stream]]
-- Repo: `skills/use-learning-plan/SKILL.md`, `skills/chat-memory-context/SKILL.md`
+- Repo: `.cursor/skills/use-learning-plan/SKILL.md`, `.cursor/skills/chat-memory-context/SKILL.md`

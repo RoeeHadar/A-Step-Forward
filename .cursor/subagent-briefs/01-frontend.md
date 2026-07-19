@@ -29,7 +29,7 @@ Stand up the Next.js 15 (App Router, TypeScript) web app for **A Step Forward**:
 1. `PLAN.md` §3.1, §6, §8, §11.
 2. `ARCHITECTURE.md` §1–2.
 3. `.cursor/rules/10-typescript-style.mdc`, `50-security.mdc`, `60-testing.mdc`.
-4. `skills/add-a-frontend-page/SKILL.md`.
+4. `.cursor/skills/add-a-frontend-page/SKILL.md`.
 
 ## Pages to build (Phase 1)
 - `/` marketing landing.
@@ -57,7 +57,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§3.1, §6, §8, §11), ARCHITECTURE.md (§1–2),
   .cursor/rules/10-typescript-style.mdc, 50-security.mdc, 60-testing.mdc,
-  skills/add-a-frontend-page/SKILL.md,
+  .cursor/skills/add-a-frontend-page/SKILL.md,
   .cursor/subagent-briefs/01-frontend.md (this file).
 Then implement Phase 1 pages listed in the brief.
 Honor in-scope/out-of-scope. Use shadcn MCP for components, context7 MCP for docs.

@@ -11,4 +11,4 @@ Quick start:
 3. Read [[CLAUDE|CLAUDE.md]], [[_active-context|_active-context.md]], [[curriculum/learning-path-architecture|learning-path architecture]]
 4. Run `pnpm vault:build-kg` (if KG YAML changed) and `pnpm vault:sync` from repo root
 
-Skill: `skills/use-obsidian-vault/SKILL.md` (repo)
+Skill: `.cursor/skills/use-obsidian-vault/SKILL.md` (repo)

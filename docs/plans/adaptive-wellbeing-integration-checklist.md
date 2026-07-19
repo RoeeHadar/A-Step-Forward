@@ -78,9 +78,9 @@ Use this checklist for Phase 1 PRs. Each item includes **acceptance criteria** c
 | --- | --- | --- |
 | 4.1 | Accept ADR-0008; update ADR index | - [ ] `docs/adr/README.md` lists 0008 |
 | 4.2 | Mark ADR-0007 implemented (or superseded by 0008) | - [ ] Status updated with cross-link |
-| 4.3 | Update `skills/use-learning-plan/SKILL.md` | - [ ] Single planner; wellbeing overlay documented |
-| 4.4 | Update `skills/chat-memory-context/SKILL.md` | - [ ] 4-turn memory, compact baseline, no Render fallback |
-| 4.5 | Update `skills/web-agent-mentor/SKILL.md` | - [ ] Wellbeing ownership + server replan exception |
+| 4.3 | Update `.cursor/skills/use-learning-plan/SKILL.md` | - [ ] Single planner; wellbeing overlay documented |
+| 4.4 | Update `.cursor/skills/chat-memory-context/SKILL.md` | - [ ] 4-turn memory, compact baseline, no Render fallback |
+| 4.5 | Update `.cursor/skills/web-agent-mentor/SKILL.md` | - [ ] Wellbeing ownership + server replan exception |
 | 4.6 | Update `obsidian-vault/_active-context.md` | - [ ] Golden path + wellbeing marked shipped or in-progress accurately |
 | 4.7 | Update `learning-path-architecture.md` gaps | - [ ] Strike unified planner; add wellbeing module |
 | 4.8 | Deprecate unused lesson schema fields (optional) | - [ ] ADR note or TSDoc: `level_focus` deprecated; separate-file-per-track is standard |

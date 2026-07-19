@@ -50,7 +50,7 @@ What landed across the stack (on `feat/frontend/09-educator-admin`, all relative
 
 - `PLAN.md` §3.1, §6, §8.
 - `.cursor/rules/10-typescript-style.mdc`, `50-security.mdc`, `60-testing.mdc`.
-- `skills/add-a-frontend-page/SKILL.md`.
+- `.cursor/skills/add-a-frontend-page/SKILL.md`.
 - `.cursor/subagent-briefs/01-frontend.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
 
@@ -67,7 +67,7 @@ Read in this exact order:
   2. .cursor/subagent-briefs/01-frontend-resume.md  (this round's plan)
   3. .cursor/subagent-briefs/01-frontend.md  (original contract)
   4. PLAN.md §3.1, §6, §8
-  5. skills/add-a-frontend-page/SKILL.md
+  5. .cursor/skills/add-a-frontend-page/SKILL.md
   6. .cursor/rules/{10-typescript-style.mdc,50-security.mdc,60-testing.mdc}
 
 Then:

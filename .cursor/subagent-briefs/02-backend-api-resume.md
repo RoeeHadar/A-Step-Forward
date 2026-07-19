@@ -49,7 +49,7 @@ What's on `main`:
 - `PLAN.md` §3.2, §10, §11.
 - `ARCHITECTURE.md` §1–3.
 - `.cursor/rules/20-python-style.mdc`, `40-memory-rules.mdc`, `50-security.mdc`, `60-testing.mdc`.
-- `skills/add-a-backend-endpoint/SKILL.md`, `skills/db-migrations/SKILL.md`.
+- `.cursor/skills/add-a-backend-endpoint/SKILL.md`, `.cursor/skills/db-migrations/SKILL.md`.
 - `.cursor/subagent-briefs/02-backend-api.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
 
@@ -65,7 +65,7 @@ Read in this exact order:
   2. .cursor/subagent-briefs/02-backend-api-resume.md
   3. .cursor/subagent-briefs/02-backend-api.md
   4. PLAN.md §3.2, §10, §11; ARCHITECTURE.md §1–3
-  5. skills/add-a-backend-endpoint/SKILL.md, skills/db-migrations/SKILL.md
+  5. .cursor/skills/add-a-backend-endpoint/SKILL.md, .cursor/skills/db-migrations/SKILL.md
   6. .cursor/rules/{20,40,50,60}-*.mdc
 
 Then implement Phase 2 in this order, one PR per step:

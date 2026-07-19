@@ -34,7 +34,7 @@ Build the FastAPI gateway in `apps/api`: auth, schema validation, rate limiting,
 1. `PLAN.md` §3.2, §10, §11.
 2. `ARCHITECTURE.md` §1–3.
 3. `.cursor/rules/20-python-style.mdc`, `40-memory-rules.mdc`, `50-security.mdc`, `60-testing.mdc`.
-4. `skills/add-a-backend-endpoint/SKILL.md`, `skills/db-migrations/SKILL.md`.
+4. `.cursor/skills/add-a-backend-endpoint/SKILL.md`, `.cursor/skills/db-migrations/SKILL.md`.
 
 ## Acceptance criteria
 - `uv run uvicorn app.main:app --reload` works against docker-compose.
@@ -49,7 +49,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§3.2, §10, §11), ARCHITECTURE.md (§1–3),
   .cursor/rules/20-python-style.mdc, 40-memory-rules.mdc, 50-security.mdc, 60-testing.mdc,
-  skills/add-a-backend-endpoint/SKILL.md, skills/db-migrations/SKILL.md,
+  .cursor/skills/add-a-backend-endpoint/SKILL.md, .cursor/skills/db-migrations/SKILL.md,
   .cursor/subagent-briefs/02-backend-api.md (this file).
 Then implement Phase 1 routes per the brief.
 Open one PR per route group. Run review-bugbot before each PR.

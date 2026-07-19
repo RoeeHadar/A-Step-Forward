@@ -1,11 +1,11 @@
 /**
  * Runtime skill blocks injected into every web chat agent's system prompt.
  *
- * Source of truth for authoring: `skills/web-agent-shared/` and
- * `skills/web-agent-{tutor,mentor,coach,reviewer}/`. These inlined blocks
+ * Source of truth for authoring: `.cursor/skills/web-agent-shared/` and
+ * `.cursor/skills/web-agent-{tutor,mentor,coach,reviewer}/`. These inlined blocks
  * are the live Vercel surface (same pattern as `agent-prompts.ts`).
  *
- * Skill docs follow `skills/skill-creation/SKILL.md`; update both when
+ * Skill docs follow `.cursor/skills/skill-creation/SKILL.md`; update both when
  * behaviour changes.
  */
 import type { WebLiveAgent } from '@/lib/web-agents';

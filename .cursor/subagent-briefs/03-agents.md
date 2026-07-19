@@ -37,7 +37,7 @@ Implement the LangGraph **Orchestrator** and the full agent roster from `AGENTS.
 1. `PLAN.md` §3.3, §4, §11.
 2. `ARCHITECTURE.md` §2, §6.
 3. `.cursor/rules/20-python-style.mdc`, `30-agent-authoring.mdc`, `40-memory-rules.mdc`, `60-testing.mdc`.
-4. `skills/build-an-agent/SKILL.md`, `skills/prompt-authoring/SKILL.md`, `skills/run-evals/SKILL.md`.
+4. `.cursor/skills/build-an-agent/SKILL.md`, `.cursor/skills/prompt-authoring/SKILL.md`, `.cursor/skills/run-evals/SKILL.md`.
 
 ## Acceptance criteria
 - Every agent in `AGENTS.md` implemented + registered + with passing eval baseline.
@@ -51,7 +51,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§3.3, §4, §11), ARCHITECTURE.md (§2, §6),
   .cursor/rules/20-python-style.mdc, 30-agent-authoring.mdc, 40-memory-rules.mdc, 60-testing.mdc,
-  skills/build-an-agent/SKILL.md, skills/prompt-authoring/SKILL.md, skills/run-evals/SKILL.md,
+  .cursor/skills/build-an-agent/SKILL.md, .cursor/skills/prompt-authoring/SKILL.md, .cursor/skills/run-evals/SKILL.md,
   .cursor/subagent-briefs/03-agents.md (this file).
 Implement in the order specified. One PR per agent (or per orchestrator phase).
 Always add an eval suite — PRs without one are blocked by CI.

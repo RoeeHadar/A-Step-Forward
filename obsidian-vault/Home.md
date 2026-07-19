@@ -73,4 +73,4 @@ See [[curriculum/learning-path-architecture#Known gaps (2026-07-03)|Known gaps]]
 - [[coordination/streams/01-frontend|Frontend stream]]
 - [[runbooks/scripts-index|Scripts index]]
 - [[research/README|Research index]]
-- Repo: `skills/use-obsidian-vault/SKILL.md`
+- Repo: `.cursor/skills/use-obsidian-vault/SKILL.md`

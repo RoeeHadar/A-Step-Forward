@@ -35,7 +35,7 @@ uv run alembic -c infra/alembic.ini revision -m "describe change"
 | `0006_kg_chunks_384` | kg_chunks embedding dim 384 (sentence-transformers) |
 | `0007_memory_events` | memory_events chat-turn audit log |
 
-## Rules (see `skills/db-migrations/SKILL.md`)
+## Rules (see `.cursor/skills/db-migrations/SKILL.md`)
 
 - One concern per migration; descriptive slug
 - pgvector columns need HNSW/IVFFlat indexes in the same or follow-up migration

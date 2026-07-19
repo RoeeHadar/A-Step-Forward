@@ -40,7 +40,7 @@ What landed across the stack:
 
 - `PLAN.md` §6, §11; `ARCHITECTURE.md` §5.
 - `.cursor/rules/{20,40,60}-*.mdc`.
-- `skills/graphrag-ingestion/SKILL.md`, `skills/build-an-mcp-server/SKILL.md`.
+- `.cursor/skills/graphrag-ingestion/SKILL.md`, `.cursor/skills/build-an-mcp-server/SKILL.md`.
 - `.cursor/subagent-briefs/05-graphrag.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
 

@@ -14,7 +14,7 @@
  *  - Each open question: shared stem + 3-4 sub-parts (א/ב/ג or a/b/c),
  *    complete worked sample solution, point-by-point rubric.
  *
- * Skill reference: `skills/build-custom-quiz/SKILL.md`.
+ * Skill reference: `.cursor/skills/build-custom-quiz/SKILL.md`.
  */
 import 'server-only';
 import {

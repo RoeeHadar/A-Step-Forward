@@ -33,4 +33,4 @@ infra/
 .github/workflows/      # lint-test, evals, deploy-*
 ```
 
-See also: `skills/deploy/SKILL.md`, `skills/db-migrations/SKILL.md`, `.cursor/subagent-briefs/09-infra.md`.
+See also: `.cursor/skills/deploy/SKILL.md`, `.cursor/skills/db-migrations/SKILL.md`, `.cursor/subagent-briefs/09-infra.md`.

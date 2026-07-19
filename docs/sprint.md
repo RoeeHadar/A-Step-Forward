@@ -102,7 +102,7 @@ Branch `feat/adaptive-learning/phase-a`:
 
 **Archived (do not merge/rebase):** `feat/agents/03-phase3-system-agents`, `feat/mcp/05-server-improvements`, `wip/agents-phase3-snapshot`. **Surgical port only:** `chore/infra/workspace-stabilization` (Alembic/uv slices from `9820532`, not whole branch).
 
-**Build post-mortem:** ESLint unused-var + ESM `transpilePackages` rules in `skills/add-a-frontend-page/SKILL.md`.
+**Build post-mortem:** ESLint unused-var + ESM `transpilePackages` rules in `.cursor/skills/add-a-frontend-page/SKILL.md`.
 
 ## Adaptive learning system dispatched (2026-06-25)
 

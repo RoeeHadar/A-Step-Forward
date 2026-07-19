@@ -2,7 +2,7 @@
  * Lightweight per-(learner, agent) dreaming — deterministic, no LLM.
  *
  * Companion to `POST /api/agent-memory/dream` and the weekly Vercel cron at
- * `/api/cron/dream-memory`. See `skills/dreaming-and-consolidation/SKILL.md`.
+ * `/api/cron/dream-memory`. See `.cursor/skills/dreaming-and-consolidation/SKILL.md`.
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';

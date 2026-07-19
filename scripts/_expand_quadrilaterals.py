@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Expand quadrilaterals.json per skills/expand-lessons-cursor/SKILL.md."""
+"""Expand quadrilaterals.json per .cursor/skills/expand-lessons-cursor/SKILL.md."""
 import json
 import re
 import subprocess

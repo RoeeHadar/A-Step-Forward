@@ -39,7 +39,7 @@ Nothing merged to `main` yet. The Phase-3 cross-stream WIP further refactored th
 ## Required reading
 
 - `PLAN.md` §7; `ARCHITECTURE.md` §7.
-- `skills/build-an-mcp-server/SKILL.md`.
+- `.cursor/skills/build-an-mcp-server/SKILL.md`.
 - `.cursor/rules/{20,30,40,50,60}-*.mdc`.
 - `.cursor/subagent-briefs/06-mcp-servers.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
@@ -56,7 +56,7 @@ Read in this exact order:
   2. .cursor/subagent-briefs/06-mcp-servers-resume.md
   3. .cursor/subagent-briefs/06-mcp-servers.md
   4. PLAN.md §7; ARCHITECTURE.md §7
-  5. skills/build-an-mcp-server/SKILL.md
+  5. .cursor/skills/build-an-mcp-server/SKILL.md
   6. .cursor/rules/{20,30,40,50,60}-*.mdc
 
 Then:

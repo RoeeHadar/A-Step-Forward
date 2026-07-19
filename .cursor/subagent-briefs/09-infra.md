@@ -27,7 +27,7 @@ Make the project trivially runnable locally (`docker compose up`) and reliably d
 ## Required reading
 1. `PLAN.md` §3.5, §11, §14.
 2. `ARCHITECTURE.md` §7.
-3. `skills/deploy/SKILL.md`, `skills/db-migrations/SKILL.md`.
+3. `.cursor/skills/deploy/SKILL.md`, `.cursor/skills/db-migrations/SKILL.md`.
 
 ## Acceptance criteria
 - `docker compose up -d` on a clean checkout brings up all services.
@@ -41,7 +41,7 @@ Make the project trivially runnable locally (`docker compose up`) and reliably d
 You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§3.5, §11, §14), ARCHITECTURE.md (§7),
-  skills/deploy/SKILL.md, skills/db-migrations/SKILL.md,
+  .cursor/skills/deploy/SKILL.md, .cursor/skills/db-migrations/SKILL.md,
   .cursor/subagent-briefs/09-infra.md (this file).
 Extend docker-compose, set up Alembic, then write the CI/CD workflows.
 Document everything in docs/infra/.

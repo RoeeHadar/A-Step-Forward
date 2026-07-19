@@ -26,9 +26,9 @@ Define the curriculum content model (courses, units, lessons, objectives, assess
 ## Required reading
 1. `PLAN.md` §4, §6, §14.
 2. `.cursor/rules/20-python-style.mdc`.
-3. `skills/seed-curriculum/SKILL.md`.
-4. **`skills/expand-lessons-cursor/SKILL.md`** — bulk substantive expansion of the 207 JSON lessons (Cursor Composer, not Groq CI).
-5. **`skills/use-obsidian-vault/SKILL.md`** — dev vault at `obsidian-vault/` (concept graph, expansion dashboard, staging).
+3. `.cursor/skills/seed-curriculum/SKILL.md`.
+4. **`.cursor/skills/expand-lessons-cursor/SKILL.md`** — bulk substantive expansion of the 207 JSON lessons (Cursor Composer, not Groq CI).
+5. **`.cursor/skills/use-obsidian-vault/SKILL.md`** — dev vault at `obsidian-vault/` (concept graph, expansion dashboard, staging).
 
 ## Bulk lesson expansion (207 JSON corpus)
 
@@ -56,7 +56,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§4, §6, §14),
   .cursor/rules/20-python-style.mdc,
-  skills/seed-curriculum/SKILL.md,
+  .cursor/skills/seed-curriculum/SKILL.md,
   .cursor/subagent-briefs/07-curriculum.md (this file).
 Implement schemas → seed script → MCP wiring → eval fixtures, in that order. One PR per phase.
 ```

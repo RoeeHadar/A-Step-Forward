@@ -41,7 +41,7 @@ In-flight on `wip/agents-phase3-snapshot`: `evals/agents/{content_curator,kg_bui
 ## Required reading
 
 - `PLAN.md` §11; `60-testing.mdc`; `30-agent-authoring.mdc`.
-- `skills/run-evals/SKILL.md`.
+- `.cursor/skills/run-evals/SKILL.md`.
 - `.cursor/subagent-briefs/08-evals-qa.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
 
@@ -57,7 +57,7 @@ Read in this exact order:
   2. .cursor/subagent-briefs/08-evals-qa-resume.md
   3. .cursor/subagent-briefs/08-evals-qa.md
   4. PLAN.md §11; .cursor/rules/{30,60}-*.mdc
-  5. skills/run-evals/SKILL.md
+  5. .cursor/skills/run-evals/SKILL.md
 
 Then:
   A. As stream 03 lands Phase-3 agents (research, kg_builder, content_curator),

@@ -210,7 +210,7 @@ This does NOT occur on Vercel. Do not chase this locally; use `npx next lint` an
 destructured from `useChat` in `agent-chat.tsx`. Next.js runs ESLint during build;
 any error exits with code 1.
 
-**Rules now in `skills/add-a-frontend-page/SKILL.md`**:
+**Rules now in `.cursor/skills/add-a-frontend-page/SKILL.md`**:
 1. Always run `npx next lint --dir src` before pushing.
 2. Always add ESM-only packages (remark-*, rehype-*, unified, micromark) to
    `transpilePackages` in `next.config.mjs`.

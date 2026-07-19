@@ -43,7 +43,7 @@ Secondary risks: **Neon-direct vs Render drift** (legacy proxy routes and conten
 - Free tier: Vercel + Neon + Groq; Render optional accelerator.
 - Auth: Clerk JWT; `userId` = `learner_id`; never trust client `learner_id` on reads.
 - Bilingual HE-default; math LTR in `$...$` / `$$...$$`.
-- Neon-direct critical path must survive Render absence (`skills/neon-direct-route/SKILL.md`).
+- Neon-direct critical path must survive Render absence (`.cursor/skills/neon-direct-route/SKILL.md`).
 
 ---
 
@@ -165,7 +165,7 @@ Documented mitigation in `neon-db.ts` lines 1944–1948: paired `concept_mastery
 | F6 | **P2** | Race | **Duplicate cron triggers** — Vercel cron + GitHub Actions same schedule | `apps/web/vercel.json:9-13`; `.github/workflows/cron-consolidate-memory.yml:9-11` | Double Groq spend; amplified F3 overlap on same learner batch |
 | F7 | **P2** | Scale | **Chat/consolidation bounded by Vercel `maxDuration=60`** | `chat/route.ts:47`; `consolidate-memory/route.ts:27` | Long Groq stalls or many DB reads → truncated stream or 504 on Hobby (10s non-streaming ceiling noted in chat comments) |
 | F8 | **P2** | Ops | **Web observability is stdout JSON only — no Sentry/Langfuse on chat path** | `logger.ts:7-13`; FastAPI has `configure_sentry` in `apps/api/app/main.py:52` | Production chat failures invisible except Vercel logs; no trace of LLM latency/cost per learner |
-| F9 | **P2** | Evolution | **ADR drift — ADR-001 Render-primary vs Neon-direct critical path** | `docs/adr/001-hosting.md`; `skills/neon-direct-route/SKILL.md`; `current-state.md` | New contributors proxy features to Render contradicting free-tier policy |
+| F9 | **P2** | Evolution | **ADR drift — ADR-001 Render-primary vs Neon-direct critical path** | `docs/adr/001-hosting.md`; `.cursor/skills/neon-direct-route/SKILL.md`; `current-state.md` | New contributors proxy features to Render contradicting free-tier policy |
 | F10 | **P2** | Data | **`quiz_responses` not learner-scoped** | Migration `0010`; `neon-db.ts:1944-1948` | Analytics on raw quiz rows impossible; streak/progress relies on transitive mastery signal |
 | F11 | **P3** | Cache | **`content-api.ts` caches Render fallback 300s** | `content-api.ts:24-26` | `/learn` section metadata stale up to 5 min when Neon miss falls back to Render |
 | F12 | **P3** | Coupling | **Educator/admin pages still use mock fallbacks** | `data.ts:35-62`, `educator/page.tsx`, `admin/page.tsx` | Demo data shown when Render unavailable — acceptable for non-launch surfaces |
@@ -356,7 +356,7 @@ Ranked by impact ÷ effort; tag indicates dispatch mode.
 - `docs/architecture/current-state.md`
 - `PLAN.md` §2–3, `ARCHITECTURE.md`
 - `obsidian-vault/_active-context.md`
-- `skills/architecture-review/SKILL.md`, `REFERENCE.md`
-- `skills/neon-direct-route/SKILL.md`, `skills/use-learning-plan/SKILL.md`
-- `skills/deploy/SKILL.md`
+- `.cursor/skills/architecture-review/SKILL.md`, `REFERENCE.md`
+- `.cursor/skills/neon-direct-route/SKILL.md`, `.cursor/skills/use-learning-plan/SKILL.md`
+- `.cursor/skills/deploy/SKILL.md`
 - ADR index: `docs/adr/README.md`

@@ -60,7 +60,7 @@ const CORPUS_SUMMARY = {
   questionsPerLessonAvg: 8,
   skillAtomsApprox: 500,
   authoringPolicy:
-    'Bulk substantive expansion is authored in Cursor with Composer 2.5 (skills/expand-lessons-cursor/SKILL.md). Groq CI batch expansion was deprecated 2026-07-02 due to rate-limit stalls. Runtime learner chat may still use Groq.',
+    'Bulk substantive expansion is authored in Cursor with Composer 2.5 (.cursor/skills/expand-lessons-cursor/SKILL.md). Groq CI batch expansion was deprecated 2026-07-02 due to rate-limit stalls. Runtime learner chat may still use Groq.',
 };
 
 export function buildAgentBaseline(): string {
@@ -93,7 +93,7 @@ export function buildAgentBaseline(): string {
     'Two persistence channels are available on every turn:',
     '- **Shared learner persona** — `POST /api/agent-memory/persona` (full replace) or `PATCH` (append a single bullet under a section). Use sparingly: this is the CLAUDE.md every agent reads. Only write stable, durable observations about HOW the learner thinks/talks/learns. Never write PII (no names, schools, contact details). Idempotent on duplicates.',
     '- **Your own private notes** — `POST /api/agent-memory/notes { agent: "<you>", content, importance: 1-5, kind?: observation|preference|strategy|open_question|misconception|win|plan, related_concept_id? }`. Use freely: per-(learner, you) scratchpad nobody else reads. The dreaming pass keeps it under 30 live notes per agent and merges near-duplicates.',
-    'Dreaming/consolidation: `POST /api/agent-memory/dream` runs the lightweight pass (archive + dedupe; no LLM). Vercel cron `GET /api/cron/dream-memory` runs this weekly (Monday 00:00 UTC) for all live agents. Heavy LLM consolidation: `POST /api/agent-memory/consolidate` (authed) and `GET /api/cron/consolidate-memory` (Monday 02:00 UTC). See `skills/dreaming-and-consolidation/SKILL.md` and `skills/memory-steward-consolidate/SKILL.md`.',
+    'Dreaming/consolidation: `POST /api/agent-memory/dream` runs the lightweight pass (archive + dedupe; no LLM). Vercel cron `GET /api/cron/dream-memory` runs this weekly (Monday 00:00 UTC) for all live agents. Heavy LLM consolidation: `POST /api/agent-memory/consolidate` (authed) and `GET /api/cron/consolidate-memory` (Monday 02:00 UTC). See `.cursor/skills/dreaming-and-consolidation/SKILL.md` and `.cursor/skills/memory-steward-consolidate/SKILL.md`.',
     '',
     '### The agent network',
     'You are NOT the only AI here. Each agent has a focused role; route to them by name in your `reply` and the Orchestrator will hand off. Do not impersonate another agent.',

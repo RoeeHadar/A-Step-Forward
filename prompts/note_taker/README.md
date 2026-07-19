@@ -1,4 +1,4 @@
-﻿# prompts/note_taker
+# prompts/note_taker
 
 Versioned system prompts for the `note_taker` agent.
 
@@ -6,4 +6,4 @@ Versioned system prompts for the `note_taker` agent.
 - Never edit a shipped `vN.md` in place. Bump to `vN+1.md` and update `agent.prompt_version`.
 - Each prompt change requires updated evals under `evals/agents/note_taker/` and no regressions vs. baseline.
 
-See `skills/prompt-authoring/SKILL.md` for the full guide.
+See `.cursor/skills/prompt-authoring/SKILL.md` for the full guide.

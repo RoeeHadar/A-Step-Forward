@@ -13,7 +13,7 @@ Before non-trivial work, you **must** have read:
 - `ARCHITECTURE.md` — components and data flows.
 - `AGENTS.md` — runtime agent roster + Cursor sub-agent briefs.
 - The relevant sub-agent brief in `.cursor/subagent-briefs/`.
-- Any project skill the brief points to (under `skills/`).
+- Any project skill the brief points to (under `.cursor/skills/`).
 
 If your task is large or ambiguous and not covered by the plan, **stop and ask** rather than improvise. Architectural decisions are made by Opus and recorded as ADRs under `docs/adr/`.
 
@@ -23,10 +23,13 @@ Monorepo map (memorize):
 apps/web         — Next.js 15 frontend
 apps/api         — FastAPI gateway
 services/        — memory, graphrag, orchestrator, workers
-packages/        — agents, schemas, ui
+packages/        — agents (PRODUCT runtime), schemas, ui
 mcp-servers/     — memory, graphrag, curriculum, progress
-prompts/         — versioned agent prompts
+prompts/         — versioned agent prompts (PRODUCT)
 evals/           — promptfoo + DeepEval suites
 infra/           — docker-compose, alembic
-skills/          — project skills (sub-agent readable)
+.cursor/skills/  — project Agent Skills (Cursor-discovered)
+.cursor/agents/  — Cursor custom subagents (auto-discovered)
+.cursor/rules/   — always-on / glob rules
+.cursor/hooks/   — hook scripts (+ hooks.json)
 ```

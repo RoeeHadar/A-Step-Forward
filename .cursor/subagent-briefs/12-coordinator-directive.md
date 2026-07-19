@@ -399,12 +399,12 @@ Continue (or monitor) all missions from `RESUME-README.md`:
 
 ## Build error log (2026-06-25 13:31)
 
-**Error**: Vercel build failed — "Command 'pnpm --filter @asf/web build' exited with 1"
+**Error**: Vercel build failed ï¿½ "Command 'pnpm --filter @asf/web build' exited with 1"
 **Root cause**: eact-markdown v9, emark-math v6, ehype-katex v7, ehype-highlight v7,
 emark-gfm v4, and their unified/micromark transitive deps are **pure-ESM** packages.
 Next.js cannot equire() them without explicit 	ranspilePackages entries.
 **Fix applied**: 531a227 fix(frontend): add ESM-only remark/rehype packages to transpilePackages
-**Lesson logged**: skills/add-a-frontend-page/SKILL.md — "ESM-only packages" section added.
+**Lesson logged**: .cursor/skills/add-a-frontend-page/SKILL.md ï¿½ "ESM-only packages" section added.
 
 **Rule for future sub-agents**: whenever adding a markdown/unified/remark/rehype package,
 immediately add it (and its transitive deps) to 	ranspilePackages in 

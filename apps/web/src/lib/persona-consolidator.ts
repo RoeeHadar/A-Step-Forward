@@ -24,7 +24,7 @@
  *   - `POST /api/agent-memory/consolidate` (authed, per-user "rebuild now")
  *   - `POST /api/cron/consolidate-memory`  (CRON_SECRET, weekly sweep)
  *
- * Skill reference: `skills/memory-steward-consolidate/SKILL.md`.
+ * Skill reference: `.cursor/skills/memory-steward-consolidate/SKILL.md`.
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';

@@ -1,6 +1,6 @@
 # evals/agents/_template
 
-Copy this directory to `evals/agents/<agent>/` when creating an eval suite for a new agent. See `skills/run-evals/SKILL.md`.
+Copy this directory to `evals/agents/<agent>/` when creating an eval suite for a new agent. See `.cursor/skills/run-evals/SKILL.md`.
 
 Required files:
 

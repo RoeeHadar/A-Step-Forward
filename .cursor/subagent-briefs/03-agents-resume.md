@@ -42,7 +42,7 @@ Phase 3 (in-flight, **preserved by Opus** on branch `wip/agents-phase3-snapshot`
 
 - `PLAN.md` §3.3, §4, §11; `ARCHITECTURE.md` §2, §6.
 - `.cursor/rules/{20,30,40,60}-*.mdc`.
-- `skills/build-an-agent/SKILL.md`, `skills/prompt-authoring/SKILL.md`, `skills/run-evals/SKILL.md`.
+- `.cursor/skills/build-an-agent/SKILL.md`, `.cursor/skills/prompt-authoring/SKILL.md`, `.cursor/skills/run-evals/SKILL.md`.
 - `.cursor/subagent-briefs/03-agents.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
 

@@ -19,15 +19,15 @@ Up to round 8 the starting diagnostic for new learners was English-only because 
 
 The user flagged that questions are too narrow and theoretical explanations are too thin. Two skills now formalise the patterns:
 
-- **`skills/author-question-bank/SKILL.md`** — how any agent (Assessment Generator, Tutor, Coach, Content Curator) generates +N questions on a concept that fit the existing 10-kind schema, the bilingual contract, and the `skill_atoms` planner contract. Covers coverage targets (≥ 12 questions / lesson; kind + difficulty mix; ≥ 1 question per atom), author-mode workflow (PR + re-seed), live-mode workflow (Coach drills), the quality bar, and suggested AI prompts.
-- **`skills/expand-lesson-theory/SKILL.md`** — how to add MORE `worked_example`, `pitfalls`, `why_matters` sections to an authored lesson without breaking the schema. Includes the 5 canonical section kinds, the section shape, three recipes (higher-difficulty worked example; observed-misconception pitfall; cross-subject `why_matters` bridge), explicit boundary with `agent_hints` (DO NOT touch from this skill — pair with `author-lesson` if you need a new hint), and the re-seed + verify loop.
+- **`.cursor/skills/author-question-bank/SKILL.md`** — how any agent (Assessment Generator, Tutor, Coach, Content Curator) generates +N questions on a concept that fit the existing 10-kind schema, the bilingual contract, and the `skill_atoms` planner contract. Covers coverage targets (≥ 12 questions / lesson; kind + difficulty mix; ≥ 1 question per atom), author-mode workflow (PR + re-seed), live-mode workflow (Coach drills), the quality bar, and suggested AI prompts.
+- **`.cursor/skills/expand-lesson-theory/SKILL.md`** — how to add MORE `worked_example`, `pitfalls`, `why_matters` sections to an authored lesson without breaking the schema. Includes the 5 canonical section kinds, the section shape, three recipes (higher-difficulty worked example; observed-misconception pitfall; cross-subject `why_matters` bridge), explicit boundary with `agent_hints` (DO NOT touch from this skill — pair with `author-lesson` if you need a new hint), and the re-seed + verify loop.
 
 ### 3. CLAUDE.md-style learner persona + per-agent private notes
 
 The user's third ask was about giving every agent BOTH a personal scratchpad for the user AND a shared memory about the learner / theoretical database / their own role / dreaming. The shared theoretical database (`buildAgentBaseline`) and per-agent role (`getAgentPersona`) were already in place from round 8. Round 9 adds the two missing pieces:
 
-- **Shared learner persona** (`learner_profiles.learner_persona TEXT` + `learner_persona_updated_at`). Free-form CLAUDE.md-style markdown summary of HOW the learner thinks, talks, and learns. Every agent reads it on every turn via the chat route, injected as `## What I know about this learner (shared persona)`. Documented in `skills/learner-persona/SKILL.md`.
-- **Per-(learner, agent) private notes** (`learner_agent_notes` table). Each agent has its own private scratchpad about THIS learner that no other agent reads. The chat route loads the top-6 by importance/recency on every turn and injects them as `## My private notes on this learner (agent: <you>)`. Documented in `skills/agent-skill-notes/SKILL.md`.
+- **Shared learner persona** (`learner_profiles.learner_persona TEXT` + `learner_persona_updated_at`). Free-form CLAUDE.md-style markdown summary of HOW the learner thinks, talks, and learns. Every agent reads it on every turn via the chat route, injected as `## What I know about this learner (shared persona)`. Documented in `.cursor/skills/learner-persona/SKILL.md`.
+- **Per-(learner, agent) private notes** (`learner_agent_notes` table). Each agent has its own private scratchpad about THIS learner that no other agent reads. The chat route loads the top-6 by importance/recency on every turn and injects them as `## My private notes on this learner (agent: <you>)`. Documented in `.cursor/skills/agent-skill-notes/SKILL.md`.
 - **API endpoints**:
   - `GET / POST / PATCH /api/agent-memory/persona` — read, full-replace, append-line-under-section.
   - `GET / POST /api/agent-memory/notes` — list + append note.
@@ -62,12 +62,12 @@ apps/web/src/app/api/agent-memory/dream/route.ts                        [new]
 apps/web/src/app/diagnostic/page.tsx                                    [bilingual UI + lang toggle]
 apps/web/src/app/dashboard/page.tsx                                     [+ streak card]
 apps/web/src/components/learner-streak-card.tsx                         [new]
-skills/author-question-bank/SKILL.md                                    [new]
-skills/expand-lesson-theory/SKILL.md                                    [new]
-skills/learner-persona/SKILL.md                                         [new]
-skills/agent-skill-notes/SKILL.md                                       [new]
-skills/dreaming-and-consolidation/SKILL.md                              [+ web runtime pass]
-skills/chat-memory-context/SKILL.md                                     [+ 9-layer composition]
+.cursor/skills/author-question-bank/SKILL.md                                    [new]
+.cursor/skills/expand-lesson-theory/SKILL.md                                    [new]
+.cursor/skills/learner-persona/SKILL.md                                         [new]
+.cursor/skills/agent-skill-notes/SKILL.md                                       [new]
+.cursor/skills/dreaming-and-consolidation/SKILL.md                              [+ web runtime pass]
+.cursor/skills/chat-memory-context/SKILL.md                                     [+ 9-layer composition]
 AGENTS.md                                                               [+ memory layer table + new skills]
 ```
 

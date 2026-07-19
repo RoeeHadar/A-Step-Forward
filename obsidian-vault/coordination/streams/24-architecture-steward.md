@@ -7,8 +7,8 @@
 | Resource | Path |
 |----------|------|
 | Sub-agent brief | `.cursor/subagent-briefs/24-architecture-steward.md` |
-| Primary skill | `skills/architecture-review/SKILL.md` |
-| Checklists | `skills/architecture-review/REFERENCE.md` |
+| Primary skill | `.cursor/skills/architecture-review/SKILL.md` |
+| Checklists | `.cursor/skills/architecture-review/REFERENCE.md` |
 | As-built snapshot | `docs/architecture/current-state.md` |
 | Assessments | `docs/architecture/assessments/` |
 

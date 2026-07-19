@@ -37,8 +37,8 @@ design) and **distinct from** Opus (canonical planner — only Opus accepts ADRs
 
 1. `PLAN.md` §2–3, `ARCHITECTURE.md`
 2. `docs/architecture/current-state.md`
-3. `skills/architecture-review/SKILL.md`
-4. `skills/architecture-review/REFERENCE.md` (when scoring NFRs or ADRs)
+3. `.cursor/skills/architecture-review/SKILL.md`
+4. `.cursor/skills/architecture-review/REFERENCE.md` (when scoring NFRs or ADRs)
 5. Relevant accepted ADRs in `docs/adr/`
 6. `obsidian-vault/_active-context.md` (open tensions)
 
@@ -46,10 +46,10 @@ design) and **distinct from** Opus (canonical planner — only Opus accepts ADRs
 
 | Topic | Also read |
 |-------|-----------|
-| Neon vs Render split | `skills/neon-direct-route/SKILL.md` |
-| Planners / mastery | `skills/use-learning-plan/SKILL.md`, `obsidian-vault/curriculum/learning-path-architecture.md` |
-| Memory layers | `skills/dreaming-and-consolidation/SKILL.md`, ADR-0002 |
-| Deploy constraints | `skills/deploy/SKILL.md`, `.cursor/rules/65-deploy-vercel.mdc` |
+| Neon vs Render split | `.cursor/skills/neon-direct-route/SKILL.md` |
+| Planners / mastery | `.cursor/skills/use-learning-plan/SKILL.md`, `obsidian-vault/curriculum/learning-path-architecture.md` |
+| Memory layers | `.cursor/skills/dreaming-and-consolidation/SKILL.md`, ADR-0002 |
+| Deploy constraints | `.cursor/skills/deploy/SKILL.md`, `.cursor/rules/65-deploy-vercel.mdc` |
 
 ---
 
@@ -73,7 +73,7 @@ design) and **distinct from** Opus (canonical planner — only Opus accepts ADRs
 5. **Operability** — deploy independence, observability, rollback
 6. **Evolution** — ADR debt, duplicate logic, skill/agent boundaries
 
-Use P0–P3 severity from `skills/architecture-review/SKILL.md`.
+Use P0–P3 severity from `.cursor/skills/architecture-review/SKILL.md`.
 
 ---
 
@@ -104,8 +104,8 @@ You are the Architecture Steward sub-agent on A Step Forward.
 Read in order:
   PLAN.md (§2–3), ARCHITECTURE.md,
   docs/architecture/current-state.md,
-  skills/architecture-review/SKILL.md,
-  skills/architecture-review/REFERENCE.md,
+  .cursor/skills/architecture-review/SKILL.md,
+  .cursor/skills/architecture-review/REFERENCE.md,
   .cursor/subagent-briefs/24-architecture-steward.md (this file).
 
 Task: {{e.g. "Produce a platform architecture assessment covering monolith vs

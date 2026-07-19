@@ -24,7 +24,7 @@ The change set is directionally correct: auth boundaries are preserved (`learner
 | `apps/web/src/app/api/memory/route.ts` | Neon-direct GET |
 | `apps/web/src/lib/persona-consolidator.ts` | Consolidation lock + `finally` release |
 | `.github/workflows/cron-consolidate-memory.yml` | Schedule removed; manual backstop only |
-| `skills/memory-steward-consolidate/SKILL.md` | Docs aligned with single cron owner |
+| `.cursor/skills/memory-steward-consolidate/SKILL.md` | Docs aligned with single cron owner |
 
 ### Out of scope
 
@@ -190,4 +190,4 @@ The change set is directionally correct: auth boundaries are preserved (`learner
 
 - Diff: uncommitted changes on `main` (11 modified files in coordinator scope)
 - Related assessment: `docs/architecture/assessments/2026-07-05-platform-overview.md` (F2 plan race, F3 consolidation race, F4 legacy API)
-- Skills: `skills/code-review/SKILL.md`, `skills/neon-direct-route/SKILL.md`
+- Skills: `.cursor/skills/code-review/SKILL.md`, `.cursor/skills/neon-direct-route/SKILL.md`

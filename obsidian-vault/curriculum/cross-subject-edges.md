@@ -10,7 +10,7 @@ updated: 2026-07-03
 
 Hand-curated edges live in `apps/web/src/lib/kg-cross-edges.json`. The path planner merges these with within-subject `prerequisites[]` from [[kg-workflow|KG YAML]].
 
-Repo skill: `skills/cross-subject-kg/SKILL.md`.
+Repo skill: `.cursor/skills/cross-subject-kg/SKILL.md`.
 
 ## When to add an edge
 

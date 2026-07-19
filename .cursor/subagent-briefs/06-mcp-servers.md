@@ -37,7 +37,7 @@ Build the four custom MCP servers under `mcp-servers/` (memory, graphrag, curric
 ## Required reading
 1. `PLAN.md` §7, §3.3.
 2. `.cursor/rules/20-python-style.mdc`, `60-testing.mdc`.
-3. `skills/build-an-mcp-server/SKILL.md`.
+3. `.cursor/skills/build-an-mcp-server/SKILL.md`.
 
 ## Acceptance criteria
 - Each server launches via `python -m <package>.server` and registers in `.cursor/mcp.json`.
@@ -51,7 +51,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§7, §3.3),
   .cursor/rules/20-python-style.mdc, 60-testing.mdc,
-  skills/build-an-mcp-server/SKILL.md,
+  .cursor/skills/build-an-mcp-server/SKILL.md,
   .cursor/subagent-briefs/06-mcp-servers.md (this file).
 Implement the four servers in order: memory, graphrag, curriculum, progress.
 One PR per server. Add an evals fixture per server.

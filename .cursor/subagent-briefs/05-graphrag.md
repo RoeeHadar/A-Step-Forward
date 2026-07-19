@@ -37,7 +37,7 @@ Edges include: `PREREQUISITE_OF`, `TEACHES`, `COVERS`, `MASTERS{score,last_asses
 1. `PLAN.md` §6, §11.
 2. `ARCHITECTURE.md` §1, §3.
 3. `.cursor/rules/20-python-style.mdc`, `60-testing.mdc`.
-4. `skills/graphrag-ingestion/SKILL.md`.
+4. `.cursor/skills/graphrag-ingestion/SKILL.md`.
 
 ## Acceptance criteria
 - Ingestion runs end-to-end on a seed corpus.
@@ -52,7 +52,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§6, §11), ARCHITECTURE.md (§1, §3),
   .cursor/rules/20-python-style.mdc, 60-testing.mdc,
-  skills/graphrag-ingestion/SKILL.md,
+  .cursor/skills/graphrag-ingestion/SKILL.md,
   .cursor/subagent-briefs/05-graphrag.md (this file).
 Implement the ontology migration first, then the ingestion pipeline, then the retrieval modes, then the MCP server.
 Add retrieval evals under evals/retrieval/. One PR per phase.

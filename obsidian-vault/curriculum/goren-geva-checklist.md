@@ -46,7 +46,7 @@ Current `author-lesson` validator and `audit-lesson-depth.mjs` enforce a **subse
 ## Workflow
 
 1. Draft sections in `curriculum/drafts/<concept_id>.md` using [[templates/lesson-draft|lesson draft template]]
-2. Validate prose depth against `skills/expand-lessons-cursor/SKILL.md` word gates
+2. Validate prose depth against `.cursor/skills/expand-lessons-cursor/SKILL.md` word gates
 3. Export to `scripts/seed_data/lessons/<concept_id>.json`
 4. Run `node scripts/audit-lesson-depth.mjs --strict --phase=4`
 5. Mark complete: `node scripts/cursor-expansion-queue.mjs --mark <concept_id>`

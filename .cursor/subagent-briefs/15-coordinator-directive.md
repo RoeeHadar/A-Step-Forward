@@ -23,9 +23,9 @@ This directive is the concrete task list for right now.
   3. ✅ 4-step onboarding (technical + mental) → next-test-aware weekly plan.
 
 ### Manager-level changes this round
-- New skill `skills/neon-direct-route/SKILL.md` — pattern for Render-optional Vercel routes.
-- New skill `skills/chat-memory-context/SKILL.md` — how chat persistence + context injection works.
-- New skill `skills/onboarding-flow/SKILL.md` — end-to-end onboarding → diagnostic → plan.
+- New skill `.cursor/skills/neon-direct-route/SKILL.md` — pattern for Render-optional Vercel routes.
+- New skill `.cursor/skills/chat-memory-context/SKILL.md` — how chat persistence + context injection works.
+- New skill `.cursor/skills/onboarding-flow/SKILL.md` — end-to-end onboarding → diagnostic → plan.
 - `apps/web/src/lib/neon-db.ts` is now the **single Vercel access layer** for free-tier features.
 - `scripts/build-kg-json.mjs` regenerates the KG snapshot when YAMLs change.
 
@@ -136,9 +136,9 @@ The ~20 scanned physics PDFs in `Learning Database/Physics/Bagrut/...` still hav
 - Run `review-security` on PRs touching auth, memory, graphrag, mcp, RBAC, encryption, payments.
 - No secrets in code. `.env*` is gitignored.
 - Coverage ≥ 80% for new services; ≥ 70% for frontend components.
-- **NEW:** Free-tier critical-path routes must follow `skills/neon-direct-route/SKILL.md` — no hard Render dependency.
-- **NEW:** Anything touching chat persistence must follow `skills/chat-memory-context/SKILL.md`.
-- **NEW:** Anything touching the onboarding fields must follow `skills/onboarding-flow/SKILL.md`.
+- **NEW:** Free-tier critical-path routes must follow `.cursor/skills/neon-direct-route/SKILL.md` — no hard Render dependency.
+- **NEW:** Anything touching chat persistence must follow `.cursor/skills/chat-memory-context/SKILL.md`.
+- **NEW:** Anything touching the onboarding fields must follow `.cursor/skills/onboarding-flow/SKILL.md`.
 
 ## Coordinator responsibilities
 

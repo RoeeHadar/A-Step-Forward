@@ -2,7 +2,7 @@
  * Lightweight per-(learner, agent) dreaming / consolidation pass.
  *
  * Delegates to `lib/agent-memory-dream.ts`. See
- * `skills/dreaming-and-consolidation/SKILL.md`.
+ * `.cursor/skills/dreaming-and-consolidation/SKILL.md`.
  */
 import { auth } from '@clerk/nextjs/server';
 import 'server-only';

@@ -26,7 +26,7 @@ what this repo already has.
 Before searching the public registry:
 
 1. Skim `AGENTS.md` §3 (cross-cutting skills table).
-2. List folders under `skills/` and `.cursor/skills/`.
+2. List folders under `.cursor/skills/`.
 3. If a local skill already covers the need, recommend reading that `SKILL.md`
    instead of installing a duplicate.
 
@@ -35,12 +35,11 @@ user explicitly wants a personal skill across all projects.
 
 | Target | Path |
 |--------|------|
-| Repo canonical | `skills/<name>/SKILL.md` |
-| Cursor discovery | `.cursor/skills/<name>/SKILL.md` |
+| Repo + Cursor discovery | `.cursor/skills/<name>/SKILL.md` |
 | Index | `AGENTS.md` cross-cutting table |
 
-After installing into the project, mirror into both skill paths when useful and
-add a one-line row to `AGENTS.md` (same pattern as `grill-me` / `find-skills`).
+After installing into the project, place the skill under `.cursor/skills/` and
+add a one-line row to `AGENTS.md`.
 
 ## Skills CLI
 
@@ -92,7 +91,7 @@ Do **not** recommend on search hits alone:
 1. **Install count** — prefer 1K+; be cautious under 100.
 2. **Source reputation** — prefer `vercel-labs`, `anthropics`, `microsoft`, known maintainers.
 3. **Repo stars / maintenance** — treat unknown repos with under 100 stars skeptically.
-4. **Overlap** — skip if ASF already has an equivalent under `skills/`.
+4. **Overlap** — skip if ASF already has an equivalent under `.cursor/skills/`.
 
 ### 5. Present options
 
@@ -123,9 +122,9 @@ If the user agrees, install. Prefer **project** scope for this monorepo:
 npx skills add <owner/repo@skill> -y
 ```
 
-Use `-g` only when they want a personal/global skill. After install, copy or
-link into `skills/` + `.cursor/skills/` and index in `AGENTS.md` when the skill
-should be shared with the team.
+Use `-g` only when they want a personal/global skill. After install, copy into
+`.cursor/skills/` and index in `AGENTS.md` when the skill should be shared with
+the team.
 
 ## Common search categories
 
@@ -143,4 +142,4 @@ should be shared with the team.
 
 1. Say no skill was found.
 2. Offer to help directly.
-3. Suggest creating one via `skills/skill-creation/SKILL.md` or `npx skills init`.
+3. Suggest creating one via `.cursor/skills/skill-creation/SKILL.md` or `npx skills init`.

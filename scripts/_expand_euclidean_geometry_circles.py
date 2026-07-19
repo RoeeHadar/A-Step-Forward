@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Expand euclidean_geometry_circles.json per skills/expand-lessons-cursor/SKILL.md."""
+"""Expand euclidean_geometry_circles.json per .cursor/skills/expand-lessons-cursor/SKILL.md."""
 import json
 import re
 import subprocess

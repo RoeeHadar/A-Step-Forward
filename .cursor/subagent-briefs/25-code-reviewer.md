@@ -39,17 +39,17 @@ explicitly dispatched by the Coordinator (“fix all BLOCKERs from review R…�
 ## Required reading (every session)
 
 1. `.cursor/rules/60-testing.mdc`, `.cursor/rules/50-security.mdc` (skim)
-2. `skills/code-review/SKILL.md`
-3. `skills/code-review/REFERENCE.md`
+2. `.cursor/skills/code-review/SKILL.md`
+3. `.cursor/skills/code-review/REFERENCE.md`
 4. Scope-specific skills when touching those areas (table below)
 
 | Area | Skill |
 |------|-------|
-| Neon API routes | `skills/neon-direct-route/SKILL.md` |
-| Chat / memory | `skills/chat-memory-context/SKILL.md` |
-| Plans | `skills/use-learning-plan/SKILL.md` |
-| Consolidation | `skills/memory-steward-consolidate/SKILL.md` |
-| Deploy-sensitive web | `skills/deploy/SKILL.md` |
+| Neon API routes | `.cursor/skills/neon-direct-route/SKILL.md` |
+| Chat / memory | `.cursor/skills/chat-memory-context/SKILL.md` |
+| Plans | `.cursor/skills/use-learning-plan/SKILL.md` |
+| Consolidation | `.cursor/skills/memory-steward-consolidate/SKILL.md` |
+| Deploy-sensitive web | `.cursor/skills/deploy/SKILL.md` |
 
 ---
 
@@ -72,7 +72,7 @@ explicitly dispatched by the Coordinator (“fix all BLOCKERs from review R…�
 5. Verdict: SHIP / SHIP WITH WARNINGS / DO NOT SHIP.
 6. Escalate architecture/security/eval items to streams 24 / 10 / 08.
 
-Full steps: `skills/code-review/SKILL.md`.
+Full steps: `.cursor/skills/code-review/SKILL.md`.
 
 ---
 
@@ -102,8 +102,8 @@ You are the Code Reviewer sub-agent on A Step Forward.
 
 Read in order:
   .cursor/rules/60-testing.mdc (skim),
-  skills/code-review/SKILL.md,
-  skills/code-review/REFERENCE.md,
+  .cursor/skills/code-review/SKILL.md,
+  .cursor/skills/code-review/REFERENCE.md,
   .cursor/subagent-briefs/25-code-reviewer.md (this file).
 
 Task: {{e.g. "Review uncommitted changes in apps/web related to architecture

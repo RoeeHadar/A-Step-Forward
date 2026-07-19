@@ -54,5 +54,5 @@ See `apps/web/.env.example`. Clerk keys are required for protected routes.
 ## Rules
 
 - `.cursor/rules/10-typescript-style.mdc`
-- `skills/add-a-frontend-page/SKILL.md`
+- `.cursor/skills/add-a-frontend-page/SKILL.md`
 - `.cursor/subagent-briefs/01-frontend.md`

@@ -7,8 +7,8 @@
 | Resource | Path |
 |----------|------|
 | Sub-agent brief | `.cursor/subagent-briefs/25-code-reviewer.md` |
-| Primary skill | `skills/code-review/SKILL.md` |
-| Checklists | `skills/code-review/REFERENCE.md` |
+| Primary skill | `.cursor/skills/code-review/SKILL.md` |
+| Checklists | `.cursor/skills/code-review/REFERENCE.md` |
 | Reports | `docs/reviews/` |
 
 ## Scope

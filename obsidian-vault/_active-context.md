@@ -1,8 +1,8 @@
 ---
 type: active-context
-updated: 2026-07-12
+updated: 2026-07-19
 coordinator_status: .cursor/coordinator/STATUS.md
-production_web: 1d44e8cc
+production_web: d67a7ac0
 ---
 
 # Active Context
@@ -10,11 +10,22 @@ production_web: 1d44e8cc
 > Update this note at the start/end of each focused work session.
 > Machine-readable session trail: `docs/reviews/LAST_DONE.md` + `MEMORY_SNAPSHOT.md` (`<!-- LAST_SESSION -->`).
 
+## Last done (2026-07-19)
+
+- [x] **ADR-0009 living plan shipped** — anchored frontier selection (no "start at arithmetic"),
+  weekly re-pace from mastery + trailing velocity, gate-pass → advance. Prod `d67a7ac0`.
+- [x] **Grilling #2 → [ADR-0010](../docs/adr/0010-assessment-driven-progression.md) (Proposed)** —
+  assessment-driven progression: advancement is EARNED via gates/tests, not lesson completion.
+  16 decisions; phased streams A–F.
+- [!] **Known integrity loophole (fix = Stream A):** `lesson-complete.ts` → mastery 0.7 +
+  `maybeCompleteActiveWeek()` advances the plan with NO quiz. Decouple lessons from advancement.
+- Next build go-ahead: Stream A (hard gate + per-critical pass + lessons=exposure-only).
+
 ## Last done (2026-07-12)
 
 - [x] **Onboarding plan WORKS** — thin `onboarding-plan-bootstrap.ts` (no neon-db on submit); 2 weeks × ≤4 concepts; `/api/plans/bootstrap` fallback
 - [x] **Diagnostic gate removed** — goals/features → create plan; calibrate while learning
-- [x] **Trial-and-error logged** — `skills/diagnostic-plan-golden-path/SKILL.md` + `obsidian-vault/coordination/streams/diagnostic-plan-fixes.md`
+- [x] **Trial-and-error logged** — `.cursor/skills/diagnostic-plan-golden-path/SKILL.md` + `obsidian-vault/coordination/streams/diagnostic-plan-fixes.md`
 - [x] Root cause of `FUNCTION_INVOCATION_TIMEOUT`: importing neon-db/kg-data + advisory-lock transactions on critical path — **do not reintroduce**
 
 ## Current focus
@@ -22,7 +33,7 @@ production_web: 1d44e8cc
 - **Stream**: Pilot — verify rolling `advanceRollingPlanWindow` over real week boundaries; smoke onboarding → `/app` plan
 - **Status**: First-plan create **shipped** on `main` (`1d44e8cc`)
 - **Policy**: Obsidian vault documents architecture; repo code implements it
-- **Must-read before touching plan/onboarding**: `skills/diagnostic-plan-golden-path/SKILL.md`
+- **Must-read before touching plan/onboarding**: `.cursor/skills/diagnostic-plan-golden-path/SKILL.md`
 
 ## Prior (2026-07-11)
 

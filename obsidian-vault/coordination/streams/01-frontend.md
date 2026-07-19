@@ -43,4 +43,4 @@ pnpm --filter @asf/web exec vitest run src/lib/concept-scope.test.ts
 ## Related
 
 - [[07-curriculum|Curriculum stream]] — KG + lessons feed the planner
-- Repo: `skills/add-a-frontend-page/SKILL.md`, `skills/neon-direct-route/SKILL.md`
+- Repo: `.cursor/skills/add-a-frontend-page/SKILL.md`, `.cursor/skills/neon-direct-route/SKILL.md`

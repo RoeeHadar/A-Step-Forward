@@ -58,7 +58,7 @@ Configured by orchestrator — `mcp-servers/{memory,graphrag,curriculum,progress
 
 | Skill | Path | Purpose |
 |-------|------|---------|
-| **use-obsidian-vault** | `skills/use-obsidian-vault/SKILL.md` | Project-specific vault workflows |
+| **use-obsidian-vault** | `.cursor/skills/use-obsidian-vault/SKILL.md` | Project-specific vault workflows |
 
 ### Recommended external (optional install)
 
@@ -240,4 +240,4 @@ sync-obsidian-expansion.mjs (refresh dashboard)
 - [cyanheads/obsidian-mcp-server](https://github.com/cyanheads/obsidian-mcp-server)
 - [Obsidian MCP comparison (ChatForest, 2026)](https://chatforest.com/reviews/obsidian-mcp-servers/)
 - [DevBrain](https://github.com/himanshusanecha/devbrain)
-- Project: `skills/use-obsidian-vault/SKILL.md`, `AGENTS.md`
+- Project: `.cursor/skills/use-obsidian-vault/SKILL.md`, `AGENTS.md`

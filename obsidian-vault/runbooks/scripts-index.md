@@ -36,7 +36,7 @@ Vault docs: [[../curriculum/learning-path-architecture|learning-path-architectur
 
 | Script | Replacement |
 |--------|-------------|
-| `scripts/expand-lessons-substantive.mjs` | Cursor Composer (`skills/expand-lessons-cursor`) |
+| `scripts/expand-lessons-substantive.mjs` | Cursor Composer (`.cursor/skills/expand-lessons-cursor`) |
 | `.github/workflows/expand-lessons-substantive.yml` | Guardrail only; policy is Cursor |
 
 ## Experimental / scratch (untracked)

@@ -6,6 +6,7 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { autoFixMath } from './lib/katex-check.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = join(ROOT, 'scripts/seed_data/lessons');
@@ -51,6 +52,10 @@ function fixCasesRowBreaks(text) {
 function fixString(text) {
   if (!text || typeof text !== 'string') return text;
   let out = text;
+
+  // Principled, deterministic fixes shared with the linter: unicode-in-math ->
+  // LaTeX, backslash-bracket delimiters -> $, $$ fence-meta split.
+  out = autoFixMath(out).text;
 
   // \$ inside $...$ breaks remark-math delimiters
   out = out.replace(/\\\$/g, '');

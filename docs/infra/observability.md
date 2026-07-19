@@ -1,6 +1,6 @@
 # Observability
 
-Stack per `PLAN.md` §11 and `skills/deploy/SKILL.md`.
+Stack per `PLAN.md` §11 and `.cursor/skills/deploy/SKILL.md`.
 
 ## Local (Docker Compose)
 

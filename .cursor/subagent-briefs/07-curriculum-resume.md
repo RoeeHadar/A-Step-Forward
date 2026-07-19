@@ -45,7 +45,7 @@ Evals for `curriculum_designer` and `assessment_generator` already on `main` (ca
 ## Required reading
 
 - `PLAN.md` §13; `AGENTS.md`.
-- `skills/seed-curriculum/SKILL.md`.
+- `.cursor/skills/seed-curriculum/SKILL.md`.
 - `.cursor/rules/{20,60}-*.mdc`.
 - `.cursor/subagent-briefs/07-curriculum.md` (original contract).
 - `.cursor/subagent-briefs/RESUME-README.md` (locked decisions).
@@ -62,7 +62,7 @@ Read in this exact order:
   2. .cursor/subagent-briefs/07-curriculum-resume.md
   3. .cursor/subagent-briefs/07-curriculum.md
   4. PLAN.md §13; AGENTS.md
-  5. skills/seed-curriculum/SKILL.md
+  5. .cursor/skills/seed-curriculum/SKILL.md
   6. .cursor/rules/{20,60}-*.mdc
 
 Then:

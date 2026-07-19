@@ -1,6 +1,6 @@
 # Architecture — As-Built Snapshot
 
-> **Maintained by:** Architecture Steward reviews (`skills/architecture-review/`).
+> **Maintained by:** Architecture Steward reviews (`.cursor/skills/architecture-review/`).
 > **Last updated:** 2026-07-05
 >
 > This document describes **what runs today**, which may differ from the target
@@ -20,7 +20,7 @@
 | KG (runtime) | `kg-data.json`, `kg-cross-edges.json`, lessons index | Bundled on Vercel; no Neo4j on hot path | Repo |
 | Workers | Cron routes + GitHub Actions | Memory consolidate (both fire Sun 03:00 UTC) | Vercel + GHA |
 
-**Critical path principle:** onboarding, diagnostic, plans, chat memory, `/learn`, progress, and most dashboards read/write **Neon directly** from Vercel (`apps/web/src/lib/neon-db.ts`). Render absence must not break signup → study flows (`skills/neon-direct-route/SKILL.md`).
+**Critical path principle:** onboarding, diagnostic, plans, chat memory, `/learn`, progress, and most dashboards read/write **Neon directly** from Vercel (`apps/web/src/lib/neon-db.ts`). Render absence must not break signup → study flows (`.cursor/skills/neon-direct-route/SKILL.md`).
 
 ---
 
@@ -146,7 +146,7 @@ Horizontal scale first wins: stateless Vercel routes, externalized state in Neon
 
 See `docs/adr/README.md` — hosting, memory layers, auth, Groq, embeddings, security model.
 
-**As-built note:** ADR-001 (Vercel + Render) remains accepted, but production learner loop behavior follows Neon-direct (`skills/neon-direct-route/SKILL.md`). Proposed ADR-0006/0007 in `docs/architecture/assessments/2026-07-05-platform-overview.md` would record that drift.
+**As-built note:** ADR-001 (Vercel + Render) remains accepted, but production learner loop behavior follows Neon-direct (`.cursor/skills/neon-direct-route/SKILL.md`). Proposed ADR-0006/0007 in `docs/architecture/assessments/2026-07-05-platform-overview.md` would record that drift.
 
 New cross-cutting decisions → propose ADR; Opus accepts.
 

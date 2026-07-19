@@ -17,7 +17,7 @@ Examples:
 
 ## Template
 
-Copy from `skills/code-review/templates/code-review-report.md`.
+Copy from `.cursor/skills/code-review/templates/code-review-report.md`.
 
 ## Verdicts
 

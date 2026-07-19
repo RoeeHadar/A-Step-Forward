@@ -9,8 +9,8 @@
 
 | Checkpoint | Done? | Evidence |
 |------------|:-----:|----------|
-| Architecture Steward groundwork (skill + brief 24) | [x] | `skills/architecture-review/`, `.cursor/subagent-briefs/24-architecture-steward.md` |
-| Code Reviewer groundwork (skill + brief 25) | [x] | `skills/code-review/`, `.cursor/subagent-briefs/25-code-reviewer.md` |
+| Architecture Steward groundwork (skill + brief 24) | [x] | `.cursor/skills/architecture-review/`, `.cursor/subagent-briefs/24-architecture-steward.md` |
+| Code Reviewer groundwork (skill + brief 25) | [x] | `.cursor/skills/code-review/`, `.cursor/subagent-briefs/25-code-reviewer.md` |
 | Platform architecture assessment | [x] | `docs/architecture/assessments/2026-07-05-platform-overview.md` |
 | Coordinator-fixes code review (R1–R7 written) | [x] | `docs/reviews/2026-07-05-coordinator-fixes.md` |
 | R1 — xact advisory lock (Neon HTTP-safe) | [x] | `neon-db.ts` `pg_try_advisory_xact_lock` inside `sql.transaction` |

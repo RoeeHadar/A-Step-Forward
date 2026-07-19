@@ -42,7 +42,7 @@ Health checks: `/healthz` (liveness), `/readyz` (readiness) on HTTP services.
 
 ## Promotion checklist
 
-See `skills/deploy/SKILL.md`:
+See `.cursor/skills/deploy/SKILL.md`:
 
 1. `evals.yml` green on `main`
 2. Shadow online evals stable 24h (Phase 4+)

@@ -4,7 +4,7 @@
  * Q&A explainer capability is folded into Tutor (see agent-skills.ts).
  * Note-Taker is a future standalone feature in the learning section.
  *
- * Companion specs: prompts/tutor/v1.md (etc.) and skills/web-agent-tutor/SKILL.md.
+ * Companion specs: prompts/tutor/v1.md (etc.) and .cursor/skills/web-agent-tutor/SKILL.md.
  */
 import type { WebLiveAgent } from '@/lib/web-agents';
 import { resolveWebChatAgent } from '@/lib/web-agents';

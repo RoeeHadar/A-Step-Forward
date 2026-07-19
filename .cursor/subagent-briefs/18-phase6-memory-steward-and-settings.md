@@ -3,9 +3,9 @@
 Reading list before any work: `PLAN.md`, `ARCHITECTURE.md`, `AGENTS.md`, plus
 the three skill docs that bound this slice:
 
-- `skills/memory-steward-consolidate/SKILL.md`
-- `skills/learner-persona/SKILL.md`
-- `skills/author-question-bank/SKILL.md`
+- `.cursor/skills/memory-steward-consolidate/SKILL.md`
+- `.cursor/skills/learner-persona/SKILL.md`
+- `.cursor/skills/author-question-bank/SKILL.md`
 
 This brief closes the four pending items from Phase 5
 (`17-phase5-persona-and-agent-memory.md`):
@@ -76,7 +76,7 @@ hallucination defence.
   `generate-bulk-questions` target. Required secret: `GROQ_API_KEY`.
   After a run, review the diff, PR it, then re-run the
   `lessons-from-json` target to push the new questions to Neon.
-- Documented in `skills/author-question-bank/SKILL.md` (Bulk-generation
+- Documented in `.cursor/skills/author-question-bank/SKILL.md` (Bulk-generation
   script section).
 
 ## 4. 30-day activity heatmap + this-week recap
@@ -110,9 +110,9 @@ hallucination defence.
 - `.github/workflows/cron-consolidate-memory.yml` (new)
 - `.github/workflows/seed-db.yml` (+ `generate-bulk-questions` target)
 - `scripts/generate-bulk-questions.mjs` (new)
-- `skills/memory-steward-consolidate/SKILL.md` (new)
-- `skills/dreaming-and-consolidation/SKILL.md` (link to heavy pass)
-- `skills/author-question-bank/SKILL.md` (bulk-q script section)
+- `.cursor/skills/memory-steward-consolidate/SKILL.md` (new)
+- `.cursor/skills/dreaming-and-consolidation/SKILL.md` (link to heavy pass)
+- `.cursor/skills/author-question-bank/SKILL.md` (bulk-q script section)
 - `AGENTS.md` (heavy consolidate + settings + cross-cutting skill row)
 
 ## Deployment / verification checklist

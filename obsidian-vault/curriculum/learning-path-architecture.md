@@ -10,7 +10,7 @@ updated: 2026-07-11
 # Learning Path & GraphRAG Architecture
 
 > **Read this** before changing KG edges, plan generation, mastery signals, Tutor suggestions, or the Memory tab.
-> Repo skills: `skills/use-learning-plan/SKILL.md`, `skills/cross-subject-kg/SKILL.md`.
+> Repo skills: `.cursor/skills/use-learning-plan/SKILL.md`, `.cursor/skills/cross-subject-kg/SKILL.md`.
 
 ## Purpose
 

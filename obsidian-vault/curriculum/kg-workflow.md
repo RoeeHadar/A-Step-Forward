@@ -65,7 +65,7 @@ pnpm vault:sync-expansion
 
 - [[learning-path-architecture|Learning path architecture]]
 - [[cross-subject-edges|Cross-subject edges]]
-- Skill: `skills/use-obsidian-vault/SKILL.md`
-- Skill: `skills/cross-subject-kg/SKILL.md`
+- Skill: `.cursor/skills/use-obsidian-vault/SKILL.md`
+- Skill: `.cursor/skills/cross-subject-kg/SKILL.md`
 - [[expansion-dashboard|Expansion dashboard]]
 - [[../runbooks/scripts-index|Scripts index]]

@@ -88,16 +88,16 @@ joined the original `mcq`, `numeric`, `open`, `free_response`. All ten kinds:
 
 ### New / updated skills
 
-- **`skills/author-lesson/SKILL.md`** — full schema for a lesson JSON,
+- **`.cursor/skills/author-lesson/SKILL.md`** — full schema for a lesson JSON,
   all 10 question kinds, `agent_hints` shape, skill-atom wiring, the seed
   command.
-- **`skills/use-learning-plan/SKILL.md`** — how to consume the planner from
+- **`.cursor/skills/use-learning-plan/SKILL.md`** — how to consume the planner from
   agents, UI, or scripts. Per-agent recipes (Curriculum Designer, Progress
   Analyzer, Tutor, Coach, Q&A).
-- **`skills/cross-subject-kg/SKILL.md`** — how to add edges to
+- **`.cursor/skills/cross-subject-kg/SKILL.md`** — how to add edges to
   `kg-cross-edges.json`, the 5 relation types, naming conventions for
   skill atoms.
-- **`skills/chat-memory-context/SKILL.md`** — pre-existing; should be updated
+- **`.cursor/skills/chat-memory-context/SKILL.md`** — pre-existing; should be updated
   in a follow-up to mention the baseline + persona composition (TODO below).
 
 ### Prompt updates (sub-agent readable)
@@ -138,7 +138,7 @@ an improvised curriculum.
 - All Round 7 deliverables (onboarding, diagnostic, plans, chat memory,
   external resources fallback).
 - The Render backend (still optional fallback; the Vercel route remains
-  Render-independent per `skills/neon-direct-route/SKILL.md`).
+  Render-independent per `.cursor/skills/neon-direct-route/SKILL.md`).
 - All earlier migrations (0001 → 0013).
 - The `external_resources` table — fallback only, not the primary content.
 
@@ -151,7 +151,7 @@ an improvised curriculum.
 | P1       | Author +6 questions per remaining ~69 lessons                     | Continuation from Round 7 brief; ID `author-bulk`. Use `scripts/seed_data/lessons/*.json` shape.  |
 | P1       | Build script: `scripts/sync-agent-prompts.mjs`                    | Read `prompts/<agent>/v1.md` → write `apps/web/src/lib/agent-prompts.generated.ts`. Today it's manual. |
 | P2       | Add E2E test: brand-new user → HE-default + onboarding nudge      | `apps/web/e2e/brand-new-learner.spec.ts`. Critical regression guard.                              |
-| P2       | Extend `skills/chat-memory-context/SKILL.md`                      | Document baseline + persona composition; today it's stale.                                       |
+| P2       | Extend `.cursor/skills/chat-memory-context/SKILL.md`                      | Document baseline + persona composition; today it's stale.                                       |
 | P2       | Add eval suite: cross-subject path planner                        | `evals/planning/cross-subject.yaml`. Verify `vectors → newton_laws → projectile_motion` paths.    |
 | P3       | Cap & cache `buildLearningPlan` results per learner per goal      | Today it runs per chat turn that mentions a relevant concept. ~300ms warm.                        |
 | P3       | Expose more agents via the website chat UI                        | Today: 6 chat agents. Curriculum Designer / Progress Analyzer / Q&A Explainer have personas but no dedicated UI tile yet. |
@@ -179,9 +179,9 @@ an improvised curriculum.
 | `scripts/seed-lessons.mjs`                                    | Validates all 10 kinds; backfills skill_atoms + lesson_skill_atoms.    |
 | `scripts/audit-lessons.mjs`                                   | Corpus health report.                                                  |
 | `scripts/seed_data/lessons/*.json` (5 pilot files)            | Each carries 12 questions covering all 10 kinds.                       |
-| `skills/author-lesson/SKILL.md`                               | New — lesson authoring reference.                                      |
-| `skills/use-learning-plan/SKILL.md`                           | New — planner consumption reference.                                   |
-| `skills/cross-subject-kg/SKILL.md`                            | New — edge + skill-atom authoring reference.                           |
+| `.cursor/skills/author-lesson/SKILL.md`                               | New — lesson authoring reference.                                      |
+| `.cursor/skills/use-learning-plan/SKILL.md`                           | New — planner consumption reference.                                   |
+| `.cursor/skills/cross-subject-kg/SKILL.md`                            | New — edge + skill-atom authoring reference.                           |
 | `prompts/<agent>/v1.md` (tutor, mentor, coach, qa_explainer, reviewer, note_taker, curriculum_designer, progress_analyzer) | Math LTR, bilingual, agent-network sections; `learning_plan` documented. |
 | `.cursor/subagent-briefs/16-phase4-knowledge-and-agent-runtime.md` | This brief.                                                       |
 
@@ -204,13 +204,13 @@ Unchanged from Round 7:
 - Lint + typecheck + unit must pass.
 - Run `review-bugbot` on every PR.
 - No secrets in code.
-- Free-tier critical-path routes follow `skills/neon-direct-route/SKILL.md`.
-- Chat persistence follows `skills/chat-memory-context/SKILL.md`.
-- **NEW:** New lessons follow `skills/author-lesson/SKILL.md`.
+- Free-tier critical-path routes follow `.cursor/skills/neon-direct-route/SKILL.md`.
+- Chat persistence follows `.cursor/skills/chat-memory-context/SKILL.md`.
+- **NEW:** New lessons follow `.cursor/skills/author-lesson/SKILL.md`.
 - **NEW:** Anything that asks "what next?" / "why am I stuck?" follows
-  `skills/use-learning-plan/SKILL.md` — do not hand-walk `kg.related_concepts`.
+  `.cursor/skills/use-learning-plan/SKILL.md` — do not hand-walk `kg.related_concepts`.
 - **NEW:** New cross-subject edges or skill atoms follow
-  `skills/cross-subject-kg/SKILL.md`.
+  `.cursor/skills/cross-subject-kg/SKILL.md`.
 - **NEW:** Anything that touches the runtime agent context (`chat/route.ts`,
   `agent-baseline.ts`, `agent-prompts.ts`) must keep the baseline + persona
   + per-turn composition order intact.

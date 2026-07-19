@@ -24,15 +24,15 @@ Repo brief: `.cursor/subagent-briefs/07-curriculum.md`
 
 
 
-- Repo `skills/use-obsidian-vault/SKILL.md`
+- Repo `.cursor/skills/use-obsidian-vault/SKILL.md`
 
-- Repo `skills/use-learning-plan/SKILL.md`
+- Repo `.cursor/skills/use-learning-plan/SKILL.md`
 
-- Repo `skills/cross-subject-kg/SKILL.md`
+- Repo `.cursor/skills/cross-subject-kg/SKILL.md`
 
-- Repo `skills/expand-lessons-cursor/SKILL.md`
+- Repo `.cursor/skills/expand-lessons-cursor/SKILL.md`
 
-- Repo `skills/author-lesson/SKILL.md`
+- Repo `.cursor/skills/author-lesson/SKILL.md`
 
 
 
@@ -110,7 +110,7 @@ node scripts/cursor-expansion-queue.mjs --next 10
 
 
 
-- Depth + Hebrew parity per `skills/expand-lessons-cursor`
+- Depth + Hebrew parity per `.cursor/skills/expand-lessons-cursor`
 
 - Validate: `node scripts/audit-lesson-depth.mjs --strict --phase=4`
 

@@ -12,7 +12,7 @@ Example: `2026-07-05-platform-overview.md`
 
 ## Template
 
-Copy from `skills/architecture-review/templates/architecture-assessment.md`.
+Copy from `.cursor/skills/architecture-review/templates/architecture-assessment.md`.
 
 ## When to add one
 

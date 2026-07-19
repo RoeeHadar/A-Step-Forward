@@ -4,9 +4,9 @@ Status: **WORKING** — bare SQL bootstrap (`1d44e8cc`+). Plan creates after onb
 
 Full trial-and-error log lives in the skill (authoritative for agents):
 
-→ [[../../skills/diagnostic-plan-golden-path/SKILL|skills/diagnostic-plan-golden-path/SKILL.md]]
+→ [[../../.cursor/skills/diagnostic-plan-golden-path/SKILL|.cursor/skills/diagnostic-plan-golden-path/SKILL.md]]
 
-(Repo path: `skills/diagnostic-plan-golden-path/SKILL.md`)
+(Repo path: `.cursor/skills/diagnostic-plan-golden-path/SKILL.md`)
 
 ## TL;DR for future agents
 

@@ -3,8 +3,8 @@
 Reading list before any work: `PLAN.md`, `ARCHITECTURE.md`, `AGENTS.md`, plus
 the two skill docs that bound this slice:
 
-- `skills/build-custom-quiz/SKILL.md`
-- `skills/neon-direct-route/SKILL.md`
+- `.cursor/skills/build-custom-quiz/SKILL.md`
+- `.cursor/skills/neon-direct-route/SKILL.md`
 
 This brief closes three user-visible bugs / requests:
 
@@ -100,7 +100,7 @@ planner can react to it.
 
 ## 4. Skills + indices
 
-- New `skills/build-custom-quiz/SKILL.md` — full contract, picking
+- New `.cursor/skills/build-custom-quiz/SKILL.md` — full contract, picking
   rules, sizing table, validation rules, pitfalls.
 - `AGENTS.md` cross-cutting skills table now lists the new skill with a
   one-liner explaining when to use it (and when not to — durable question

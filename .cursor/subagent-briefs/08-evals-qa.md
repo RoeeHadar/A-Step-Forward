@@ -28,7 +28,7 @@ Build the evals harness, CI gates, online-eval dashboards, and Playwright E2E fo
 ## Required reading
 1. `PLAN.md` §11.
 2. `.cursor/rules/60-testing.mdc`.
-3. `skills/run-evals/SKILL.md`.
+3. `.cursor/skills/run-evals/SKILL.md`.
 
 ## Acceptance criteria
 - `make evals` runs the full local suite and prints a report.
@@ -42,7 +42,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§11),
   .cursor/rules/60-testing.mdc,
-  skills/run-evals/SKILL.md,
+  .cursor/skills/run-evals/SKILL.md,
   .cursor/subagent-briefs/08-evals-qa.md (this file).
 Stand up promptfoo + DeepEval harness, write the runner, write CI workflow.
 Then add the Phase-1 eval suites for Tutor and the Memory service.

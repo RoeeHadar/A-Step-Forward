@@ -43,7 +43,7 @@ target_json: scripts/seed_data/lessons/<%= concept_id %>.json
 
 ## Export checklist
 
-- [ ] All sections meet `MIN_WORDS` gates (`skills/expand-lessons-cursor/SKILL.md`)
+- [ ] All sections meet `MIN_WORDS` gates (`.cursor/skills/expand-lessons-cursor/SKILL.md`)
 - [ ] `hebrewBodyWeak` false for all sections
 - [ ] 8 questions with bilingual explanations (≥80 words each)
 - [ ] `agent_hints` updated

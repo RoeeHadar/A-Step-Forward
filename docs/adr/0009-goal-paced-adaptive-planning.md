@@ -4,6 +4,7 @@
 - **Date:** 2026-07-19
 - **Deciders:** Product owner + Opus (planning)
 - **Extends:** [ADR-0007](0007-learning-planner-authority.md) (planner authority), [ADR-0008](0008-adaptive-wellbeing-planning.md) (unified path + wellbeing overlay); constrained by [ADR-0006](0006-neon-direct-critical-path.md) (Vercel + Neon hot path)
+- **Extended by:** [ADR-0010](0010-assessment-driven-progression.md) (assessment-driven progression & gating) — flips advancement from lesson completion + soft gate to earned, assessment-only progression.
 
 ## Context
 

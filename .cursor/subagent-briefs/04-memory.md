@@ -36,7 +36,7 @@ Productionize the memory system whose foundation Opus laid in `services/memory/`
 1. `PLAN.md` §5 (entire), §10, §11.
 2. `ARCHITECTURE.md` §3, §4.
 3. `.cursor/rules/20-python-style.mdc`, `40-memory-rules.mdc`, `50-security.mdc`, `60-testing.mdc`.
-4. `skills/memory-operations/SKILL.md`, `skills/dreaming-and-consolidation/SKILL.md`, `skills/db-migrations/SKILL.md`.
+4. `.cursor/skills/memory-operations/SKILL.md`, `.cursor/skills/dreaming-and-consolidation/SKILL.md`, `.cursor/skills/db-migrations/SKILL.md`.
 
 ## Acceptance criteria
 - All eight memory types persisted + retrievable.
@@ -55,7 +55,7 @@ You are a Composer 2.5 sub-agent on the A Step Forward project.
 Read in this order:
   PLAN.md (§5, §10, §11), ARCHITECTURE.md (§3, §4),
   .cursor/rules/20-python-style.mdc, 40-memory-rules.mdc, 50-security.mdc, 60-testing.mdc,
-  skills/memory-operations/SKILL.md, skills/dreaming-and-consolidation/SKILL.md, skills/db-migrations/SKILL.md,
+  .cursor/skills/memory-operations/SKILL.md, .cursor/skills/dreaming-and-consolidation/SKILL.md, .cursor/skills/db-migrations/SKILL.md,
   .cursor/subagent-briefs/04-memory.md (this file).
 Then implement the components in order: stores → hygiene → retrieval → dreaming → APIs → Inspector.
 One PR per component. Add evals under evals/memory/ for every behavior.

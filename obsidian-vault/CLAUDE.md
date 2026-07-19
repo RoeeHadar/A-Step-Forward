@@ -12,7 +12,7 @@ Standing instructions for any AI agent (Cursor Composer, Claude Code) working on
 | 2 | [[Home|Home]] — dashboards + links |
 | 3 | [[curriculum/learning-path-architecture|Learning path & GraphRAG]] — how suggestions work |
 | 4 | [[product/plan-and-memory|Plan & memory]] — shipped product rules |
-| 5 | Repo `PLAN.md`, `AGENTS.md`, relevant `skills/` |
+| 5 | Repo `PLAN.md`, `AGENTS.md`, relevant `.cursor/skills/` |
 
 Shippable code lives in the repo; **this vault explains why and how** — KG topology, golden-path intent, agent rules, expansion status, coordination.
 
@@ -34,7 +34,7 @@ Shippable code lives in the repo; **this vault explains why and how** — KG top
 1. Read [[_active-context|_active-context.md]] (or [[Home|Home]]).
 2. For curriculum / KG / paths: [[curriculum/learning-path-architecture|learning-path-architecture]], [[curriculum/kg-workflow|kg-workflow]], [[curriculum/expansion-dashboard|expansion-dashboard]].
 3. For frontend / plan / memory: [[product/plan-and-memory|plan-and-memory]], [[coordination/streams/01-frontend|01-frontend]].
-4. Read the relevant project skill under `skills/` in the **repo**.
+4. Read the relevant project skill under `.cursor/skills/` in the **repo**.
 5. For concept work, open `concepts/<concept_id>.md` before editing lesson JSON.
 
 ## Universal rules
@@ -52,9 +52,9 @@ Shippable code lives in the repo; **this vault explains why and how** — KG top
 PLAN.md                          # Master plan
 ARCHITECTURE.md                  # Component map
 AGENTS.md                        # Runtime + Cursor agent index
-skills/use-obsidian-vault/       # Vault workflow skill
-skills/use-learning-plan/        # Path planner contract
-skills/cross-subject-kg/         # Edge authoring
+.cursor/skills/use-obsidian-vault/       # Vault workflow skill
+.cursor/skills/use-learning-plan/        # Path planner contract
+.cursor/skills/cross-subject-kg/         # Edge authoring
 apps/web/src/lib/learning-plan.ts
 apps/web/src/lib/kg-cross-edges.json
 apps/web/src/lib/concept-scope.ts
@@ -69,8 +69,8 @@ Cursor should use the **`asf-obsidian`** MCP server (`scripts/mcp-obsidian-vault
 
 ## Related skills (repo)
 
-- `skills/use-obsidian-vault/SKILL.md` — vault operations
-- `skills/use-learning-plan/SKILL.md` — path planner
-- `skills/cross-subject-kg/SKILL.md` — cross-subject edges
-- `skills/expand-lessons-cursor/SKILL.md` — bulk lesson expansion
-- `skills/coordinator-dispatch/SKILL.md` — multi-agent coordination
+- `.cursor/skills/use-obsidian-vault/SKILL.md` — vault operations
+- `.cursor/skills/use-learning-plan/SKILL.md` — path planner
+- `.cursor/skills/cross-subject-kg/SKILL.md` — cross-subject edges
+- `.cursor/skills/expand-lessons-cursor/SKILL.md` — bulk lesson expansion
+- `.cursor/skills/coordinator-dispatch/SKILL.md` — multi-agent coordination
