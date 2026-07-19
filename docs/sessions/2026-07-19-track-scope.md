@@ -580,6 +580,25 @@ on first pass. All use $g=10\,\text{m/s}^2$ stated in-stem for clean answers:
 `points_level_min` exceeds the learner track) shows every physics item to all
 learners — verified against `lesson-quiz-panel.tsx`.
 
+## Batch X — shipped (physics mechanics II)
+
+Continued physics expansion (49 thin remaining after W). Batch X took the next
+mechanics cluster to 15 verified items each (spread 5/6/4, 4 kinds), all
+CAS-verified with 0 rejections, 15/15 first pass, lint 0/207:
+
+- `gravitation` — $W=mg$, inverse-square scaling, gravitational field $g=F/m$,
+  planet/Moon weight, mass-product scaling, radius scaling.
+- `friction` — $f=\mu N$, $f=\mu mg$, coefficient $\mu=f/N$, static vs kinetic,
+  net force with friction, $a=(F-f)/m$, deceleration $a=\mu g$.
+- `conservation_energy` — $PE=mgh$, $KE=\tfrac12mv^2$, $v=\sqrt{2gh}$,
+  $h=v^2/2g$, total mechanical energy, pendulum drop.
+- `static_equilibrium` — $\sum F=0$ & $\sum\tau=0$, tension, torque balance,
+  shared supports, seesaw, couples.
+- `torque` — $\tau=rF\sin\theta$, distance from torque, net torque, wrench,
+  angled-force cases (30°/60°), units.
+- `vectors_basics` — magnitude 2D/3D, components $v\cos\theta$/$v\sin\theta$,
+  dot product, perpendicular resultant, scalar vs vector.
+
 ## Batch V — shipped (math corpus complete)
 
 The final six thin math lessons expanded to 15 verified items each (spread 5/6/4,
