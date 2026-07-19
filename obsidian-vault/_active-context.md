@@ -38,6 +38,9 @@ production_web: f2a8d4a7
   `building`, `at-risk`, `near-exam`, `day-before`, `goal-complete`) + `docs/qa/adr-0010-manual-test-plan.md`
   (decision → variant → steps → expected, 16 cases). Pilot account currently seeded **`building`**
   (~70% mock-gated, 3 plan weeks — richest interactive start).
+- [x] **Bagrut-depth exam corpus SHIPPED** (`1eac2606`) — ~278 original multi-part items;
+  weekly gates / custom quizzes / HS mocks prefer corpus; hard-only custom quizzes; open-only
+  Bagrut mocks (no MCQ quota). Rebuild: `pnpm exam-style:build`.
 
 ## Last done (2026-07-12)
 
