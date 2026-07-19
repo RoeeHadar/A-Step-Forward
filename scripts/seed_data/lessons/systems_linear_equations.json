@@ -271,204 +271,345 @@
     ],
     "tutor_pacing_hint": "Start with 2×2 substitution for concrete intuition. Show geometric interpretation (intersection of lines). Then move to 3×3 Gaussian elimination. Spend extra time on the three-case classification (unique/infinite/none).",
     "skill_atoms_unlocked": [
-      "substitution_method",
-      "elimination_method",
-      "gaussian_elimination",
-      "augmented_matrix",
-      "consistency_conditions",
-      "free_variables",
-      "parametric_solutions"
+      "system_check",
+      "system_dependent",
+      "system_elimination",
+      "system_inconsistent",
+      "system_substitution",
+      "word_problem"
     ]
   },
   "questions": [
     {
-      "id": "q1",
-      "kind": "mcq",
-      "difficulty": "medium",
-      "skill_atoms": [
-        "linear_systems",
-        "substitution"
-      ],
-      "stem_en": "Solve: $x+y=7$, $x-y=3$.",
-      "stem_he": "פתור: $x+y=7$, $x-y=3$.",
-      "answer_payload": {
-        "options_en": [
-          "$(2,5)$",
-          "$(5,2)$",
-          "$(3,4)$",
-          "$(4,3)$"
-        ],
-        "options_he": [
-          "$(2,5)$",
-          "$(5,2)$",
-          "$(3,4)$",
-          "$(4,3)$"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "Add the two equations to eliminate $y$: $(x+y)+(x-y)=7+3 \\Rightarrow 2x=10 \\Rightarrow x=5$. Substitute into $x+y=7$: $5+y=7 \\Rightarrow y=2$. The solution is $(5,2)$.\n\n**Why $(5,2)$ is correct:** Both equations are already in simple form — elimination by addition is the fastest path. Check: $5+2=7$ and $5-2=3$. $\\checkmark$\n\n**Common wrong path:** Swapping coordinates to $(2,5)$ because $y$ was found second, or subtracting instead of adding and getting $x=2$.\n\n**Exam tip:** When coefficients of $y$ are $+1$ and $-1$, always try adding first. Label your answer $(x,y)$, not $(y,x)$ — MCQ distractors often swap the order.",
-      "explanation_he": "חברו את שתי המשוואות כדי לבטל $y$: $(x+y)+(x-y)=7+3 \\Rightarrow 2x=10 \\Rightarrow x=5$. הציבו ב-$x+y=7$: $5+y=7 \\Rightarrow y=2$. הפתרון הוא $(5,2)$.\n\n**למה $(5,2)$ נכון:** שתי המשוואות כבר בצורה פשוטה — חיסור בחיבור הוא הנתיב המהיר. בדיקה: $5+2=7$ ו-$5-2=3$. $\\checkmark$\n\n**דרך שגויה נפוצה:** החלפת קואורדינטות ל-$(2,5)$ כי $y$ נמצא שני, או חיסור במקום חיבור וקבלת $x=2$.\n\n**טיפ לבחינה:** כשמקדמי $y$ הם $+1$ ו-$-1$, נסו תמיד חיבור תחילה. סמנו $(x,y)$, לא $(y,x)$ — מסיחים ב-MCQ לעיתים מחליפים סדר. הציבו את $(5,2)$ בשני המשוואות לפני מעבר לשאלה הבאה.",
       "ord": 1,
-      "options_en": [
-        "$(2,5)$",
-        "$(5,2)$",
-        "$(3,4)$",
-        "$(4,3)$"
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Solve $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Subtract equations.** $(2x + y) - (x + y) = 8 - 5 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**מחסירים משוואות.** $x = 3$.\n\n**תשובה:** $x = 3$.",
+      "skill_atoms": [
+        "system_elimination"
       ],
-      "options_he": [
-        "$(2,5)$",
-        "$(5,2)$",
-        "$(3,4)$",
-        "$(4,3)$"
-      ],
-      "correct_index": 1
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "51b83347-db4e-53b1-8b66-b398ddf68ad8",
+      "points_level_min": "3pt",
+      "correct_answer": "3"
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Solve: $x+y=5$, $x-y=1$.",
-      "stem_he": "פתור: $x+y=5$, $x-y=1$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nAdding: $2x=6 \\Rightarrow x=3$, $y=2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Add the equations: $(x+y)+(x-y)=5+1 \\Rightarrow 2x=6 \\Rightarrow x=3$. From $x+y=5$: $y=2$. Solution: $(3,2)$.\n\n**Why $(3,2)$ is correct:** Coefficients of $y$ are $+1$ and $-1$, so addition eliminates $y$ in one step — no multiplication needed. Verify: $3+2=5$ and $3-2=1$. $\\checkmark$\n\n**Common wrong path:** Subtracting and getting $2y=4$, $y=2$, $x=1$ (sign error), or answering only $x=3$ without the pair.\n\n**Exam tip:** For $2\\times2$ systems with opposite $y$-coefficients, elimination by addition is faster than substitution. Write both values; short-answer graders expect $(3,2)$ or $x=3, y=2$.",
-      "explanation_he": "חברו את המשוואות: $(x+y)+(x-y)=5+1 \\Rightarrow 2x=6 \\Rightarrow x=3$. מ-$x+y=5$: $y=2$. פתרון: $(3,2)$.\n\n**למה $(3,2)$ נכון:** מקדמי $y$ הם $+1$ ו-$-1$, ולכן חיבור מבטל $y$ בצעד אחד — ללא כפל. אימות: $3+2=5$ ו-$3-2=1$. $\\checkmark$\n\n**דרך שגויה נפוצה:** חיסור וקבלת $2y=4$, $y=2$, $x=1$ (טעות סימן), או תשובה $x=3$ בלבד ללא הזוג.\n\n**טיפ לבחינה:** במערכות $2\\times2$ עם מקדמי $y$ מנוגדים, חיסור בחיבור מהיר מהצבה. כתבו שני ערכים; בודקים מצפים ל-$(3,2)$ או $x=3, y=2$ — שתי הצורות מקובלות.",
+      "stem_en": "True or False: $(3, 2)$ satisfies $x + y = 5$.",
+      "stem_he": "נכון או לא נכון: $(3, 2)$ מקיים $x + y = 5$.",
+      "explanation_en": "**Check.** $3 + 2 = 5$. ✓ — **true**.",
+      "explanation_he": "**בדיקה.** $3 + 2 = 5$. ✓ — **נכון**.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_check"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "60cac84a-0632-5d0e-b59a-678449751250",
+      "points_level_min": "3pt",
+      "correct_bool": true
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Solve: $2x+3y=12$, $y=2$.",
-      "stem_he": "פתור: $2x+3y=12$, $y=2$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$2x+6=12 \\Rightarrow x=3$. $(3,2)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3$. $(3,2)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3,2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The second equation already gives $y=2$. Substitute into $2x+3y=12$: $2x+6=12 \\Rightarrow 2x=6 \\Rightarrow x=3$. Solution: $(3,2)$.\n\n**Why $(3,2)$ is correct:** When one equation isolates a variable ($y=2$), substitution is the natural first move — no elimination setup required. Check: $2(3)+3(2)=6+6=12$ and $y=2$. $\\checkmark$\n\n**Common wrong path:** Substituting $y=2$ into only the first equation but forgetting to verify in the second, or computing $2x=12-3=9$ (forgetting to multiply $3\\times2=6$).\n\n**Exam tip:** Always identify the \"free\" equation first — $y=2$, $x=5$, etc. These problems test whether you recognize substitution immediately rather than over-engineering with Gaussian elimination.",
-      "explanation_he": "המשוואה השנייה כבר נותנת $y=2$. הציבו ב-$2x+3y=12$: $2x+6=12 \\Rightarrow 2x=6 \\Rightarrow x=3$. פתרון: $(3,2)$.\n\n**למה $(3,2)$ נכון:** כשמשוואה אחת מבודדת נעלם ($y=2$), הצבה היא הצעד הטבעי — ללא הכנת חיסור. בדיקה: $2(3)+3(2)=12$ ו-$y=2$. $\\checkmark$\n\n**דרך שגויה נפוצה:** הצבת $y=2$ רק במשוואה הראשונה בלי אימות בשנייה, או חישוב $2x=12-3=9$ (שכחת $3\\times2=6$).\n\n**טיפ לבחינה:** זהו תמיד את המשוואה \"החופשית\" — $y=2$, $x=5$ וכו'. שאלות כאלה בודקות זיהוי הצבה מיידי, לא שימוש מיותר בגאוס. הציבו חזרה בשתי המשוואות לפני סיום.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Two numbers sum to $20$ and differ by $6$. Find the larger number.",
+      "stem_he": "סכום שני מספרים הוא $20$ והפרשם $6$. מצאו את הגדול.",
+      "explanation_en": "**Step 1 — Set up.** $x + y = 20$, $x - y = 6$.\n\n**Step 2 — Add.** $2x = 26 \\Rightarrow x = 13$.\n\n**Step 3 — Then $y = 7$.**\n\n**Answer:** the larger number is $13$.",
+      "explanation_he": "**שלב 1 — הגדרה.** $x + y = 20$, $x - y = 6$.\n\n**שלב 2 — חיבור.** $2x = 26 \\Rightarrow x = 13$.\n\n**שלב 3 — ואז $y = 7$.**\n\n**תשובה:** הגדול הוא $13$.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_elimination",
+        "word_problem"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Set up.** $x + y = 20$, $x - y = 6$.",
+          "**Step 2 — Add.** $2x = 26 \\Rightarrow x = 13$.",
+          "**Step 3 — Then $y = 7$.**",
+          "**Answer:** the larger number is $13$."
+        ],
+        "steps_he": [
+          "**שלב 1 — הגדרה.** $x + y = 20$, $x - y = 6$.",
+          "**שלב 2 — חיבור.** $2x = 26 \\Rightarrow x = 13$.",
+          "**שלב 3 — ואז $y = 7$.**",
+          "**תשובה:** הגדול הוא $13$."
+        ]
+      },
+      "source_item_id": "ce3531b5-1ff0-5d62-9956-22916e9680ad",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Does $x+y=3$, $2x+2y=8$ have a solution? Why?",
-      "stem_he": "האם $x+y=3$, $2x+2y=8$ עקבית?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Row 2 = 2×Row 1 gives $2x+2y=6\\neq8$. No solution (inconsistent)",
-          "6\\neq8$. No solution (inconsistent)",
-          "8"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Row 2 equals $2\\times$ Row 1 on the left: $2(x+y)=2\\cdot3=6$. But Row 2 demands $2x+2y=8$. Since $6\\neq8$, the two constraints contradict each other — **no solution** (inconsistent system).\n\n**Why \"no solution\" is correct:** Both equations describe lines with the same slope ($-1$) but different $y$-intercepts ($3$ vs $4$). Parallel lines never intersect.\n\n**Common wrong path:** Answering \"infinitely many\" because the left sides are proportional, without checking whether the RHS scales consistently ($2\\times3=6\\neq8$).\n\n**Exam tip:** For proportional rows, compare $\\frac{c_2}{c_1}$ to the coefficient ratio. Matching ratio $\\Rightarrow$ infinitely many; mismatch $\\Rightarrow$ no solution. State the reason geometrically — examiners award partial credit for \"parallel lines.\"",
-      "explanation_he": "שורה 2 שווה ל-$2\\times$ שורה 1 בצד שמאל: $2(x+y)=2\\cdot3=6$. אך שורה 2 דורשת $2x+2y=8$. מכיוון ש-$6\\neq8$, שני האילוצים סותרים — **אין פתרון** (מערכת לא עקבית).\n\n**למה \"אין פתרון\" נכון:** שתי המשוואות מתארות קווים עם אותו שיפוע ($-1$) אך חיתוכים שונים ($3$ לעומת $4$). קווים מקבילים לא נחתכים.\n\n**דרך שגויה נפוצה:** תשובה \"אינסוף\" כי הצדדים השמאליים פרופורציונליים, בלי לבדוק אם אגף ימין מתאים ($2\\times3=6\\neq8$).\n\n**טיפ לבחינה:** בשורות פרופורציונליות, השוו $\\frac{c_2}{c_1}$ ליחס המקדמים. יחס תואם $\\Rightarrow$ אינסוף; אי-התאמה $\\Rightarrow$ אין פתרון. נמקו גאומטרית — בוחנים נותנים נקודות חלקיות על \"קווים מקבילים\".",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "Which pair $(x, y)$ solves $\\begin{cases} x - 2y = 1 \\\\ 2x + y = 12 \\end{cases}$?",
+      "stem_he": "איזה זוג $(x, y)$ פותר את $\\begin{cases} x - 2y = 1 \\\\ 2x + y = 12 \\end{cases}$?",
+      "explanation_en": "**Test $(5,2)$.** $5 - 4 = 1$ ✓ and $10 + 2 = 12$ ✓.\n\n**Answer:** $(5, 2)$.",
+      "explanation_he": "**מציבים $(5,2)$.** $5 - 4 = 1$ ✓ ו-$10 + 2 = 12$ ✓.\n\n**תשובה:** $(5, 2)$.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_substitution"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$(5, 2)$",
+          "$(3, 4)$",
+          "$(1, 0)$",
+          "$(2, 5)$"
+        ],
+        "options_he": [
+          "$(5, 2)$",
+          "$(3, 4)$",
+          "$(1, 0)$",
+          "$(2, 5)$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "ac968e71-38df-5c9a-b029-d084e936abe5",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$(5, 2)$",
+        "$(3, 4)$",
+        "$(1, 0)$",
+        "$(2, 5)$"
+      ],
+      "options_he": [
+        "$(5, 2)$",
+        "$(3, 4)$",
+        "$(1, 0)$",
+        "$(2, 5)$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "How many solutions does $x+2y=4$, $2x+4y=8$ have?",
-      "stem_he": "כמה פתרונות ל-$x+2y=4$, $2x+4y=8$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Row 2 = 2×Row 1 exactly → identical equations. Infinitely many solutions",
-          "2×Row 1 exactly → identical equations. Infinitely many solutions",
-          "1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Row 2 equals exactly $2\\times$ Row 1: $2(x+2y)=2\\cdot4=8$. Both equations describe the **same line** $x+2y=4$. Every point on that line satisfies both — **infinitely many solutions**.\n\n**Why \"infinitely many\" is correct:** The coefficient ratio and the constant ratio both equal $2$, so the rows are dependent (not just parallel — coincident). Geometrically, one line, not two distinct lines.\n\n**Common wrong path:** Answering \"one solution\" because there are two equations, or \"no solution\" by confusing proportional rows with inconsistent ones.\n\n**Exam tip:** Distinguish three cases: different slopes (unique), same slope + different intercept (none), same slope + same intercept (infinitely many). The ratio test $\\frac{a_2}{a_1}=\\frac{b_2}{b_1}=\\frac{c_2}{c_1}$ confirms dependence.",
-      "explanation_he": "שורה 2 שווה בדיוק ל-$2\\times$ שורה 1: $2(x+2y)=2\\cdot4=8$. שתי המשוואות מתארות את **אותו קו** $x+2y=4$. כל נקודה על הקו מקיימת את שתיהן — **אינסוף פתרונות**.\n\n**למה \"אינסוף\" נכון:** יחס המקדמים ויחס הקבועים שניהם $2$, ולכן השורות תלויות (לא רק מקבילות — זהות). גאומטרית, קו אחד, לא שניים.\n\n**דרך שגויה נפוצה:** תשובה \"פתרון יחיד\" כי יש שתי משוואות, או \"אין פתרון\" בבלבול בין שורות פרופורציונליות לסותרות.\n\n**טיפ לבחינה:** הבחינו שלושה מצבים: שיפועים שונים (יחיד), אותו שיפוע + חיתוך שונה (אין), אותו שיפוע + אותו חיתוך (אינסוף). מבחן היחס $\\frac{a_2}{a_1}=\\frac{b_2}{b_1}=\\frac{c_2}{c_1}$ מאשר תלות.",
+      "stem_en": "For $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — find $y$.",
+      "stem_he": "עבור $\\begin{cases} x + y = 5 \\\\ 2x + y = 8 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**$x = 3$, so $y = 5 - 3 = 2$.**\n\n**Answer:** $y = 2$.",
+      "explanation_he": "**$x = 3$, ולכן $y = 5 - 3 = 2$.**\n\n**תשובה:** $y = 2$.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "431009cf-af5d-5404-b50a-fdf4229efbe6",
+      "points_level_min": "3pt",
+      "correct_answer": "2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Solve by Gaussian elimination:\n$x-y+z=4$\n$2x+y-z=2$\n$x+2y+2z=6$",
-      "stem_he": "פתור באלימינציה גאוסית:\n$x-y+z=4$, $2x+y-z=2$, $x+2y+2z=6$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Augmented: $R_2-2R_1$: $[0,3,-3|-6]$; $R_3-R_1$: $[0,3,1|2]$. $R_3-R_2$: $[0,0,4|8]$. $z=2$, $y=0$, $x=2$. $(2,0,2)$",
-          "2$. $(2,0,2)$",
-          "2,0,2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Write the augmented matrix and row-reduce. $R_2-2R_1$ gives $[0,3,-3|-6]$; $R_3-R_1$ gives $[0,3,1|2]$. Then $R_3-R_2$: $[0,0,4|8]$, so $z=2$. Back-substitute: $y=0$, $x=2$. Solution: $(2,0,2)$.\n\n**Why $(2,0,2)$ is correct:** Three pivots for three unknowns means a unique solution. Verify: $2-0+2=4$, $4+0-2=2$, $2+0+4=6$. $\\checkmark$\n\n**Common wrong path:** Sign error in $R_2-2R_1$ (adding instead of subtracting), or back-substituting from the wrong row and getting $y=2$ instead of $y=0$.\n\n**Exam tip:** Circle each pivot after row reduction. For $3\\times3$ systems on timed exams, write row operations in the margin ($R_2-2R_1$) — partial credit even if the final answer is wrong.",
-      "explanation_he": "כתבו מטריצה מורחבת והפחיתו. $R_2-2R_1$ נותן $[0,3,-3|-6]$; $R_3-R_1$ נותן $[0,3,1|2]$. לאחר $R_3-R_2$: $[0,0,4|8]$, ולכן $z=2$. הצבה לאחור: $y=0$, $x=2$. פתרון: $(2,0,2)$.\n\n**למה $(2,0,2)$ נכון:** שלושה pivots לשלושה נעלמים — פתרון יחיד. אימות: $2-0+2=4$, $4+0-2=2$, $2+0+4=6$. $\\checkmark$\n\n**דרך שגויה נפוצה:** טעות סימן ב-$R_2-2R_1$ (חיבור במקום חיסור), או הצבה לאחור מהשורה הלא נכונה וקבלת $y=2$ במקום $y=0$.\n\n**טיפ לבחינה:** סמנו כל pivot אחרי הפחתה. במערכות $3\\times3$ בבחינה, כתבו פעולות שורה בשוליים — נקודות חלקיות גם אם התשובה הסופית שגויה.",
+      "stem_en": "How many solutions does $\\begin{cases} x + y = 3 \\\\ 2x + 2y = 6 \\end{cases}$ have?",
+      "stem_he": "כמה פתרונות יש ל-$\\begin{cases} x + y = 3 \\\\ 2x + 2y = 6 \\end{cases}$?",
+      "explanation_en": "**The second equation is twice the first** — they are the same line, so infinitely many solutions.\n\n**Answer:** infinitely many.",
+      "explanation_he": "**המשוואה השנייה היא פי שתיים מהראשונה** — אותו ישר, ולכן אינסוף פתרונות.\n\n**תשובה:** אינסוף.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_dependent"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{infinitely many}$",
+          "$\\text{exactly one}$",
+          "$\\text{none}$",
+          "$\\text{two}$"
+        ],
+        "options_he": [
+          "$\\text{infinitely many}$",
+          "$\\text{exactly one}$",
+          "$\\text{none}$",
+          "$\\text{two}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "2f3d8b00-16f4-5cc3-b57e-7cfd80a57467",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$\\text{infinitely many}$",
+        "$\\text{exactly one}$",
+        "$\\text{none}$",
+        "$\\text{two}$"
+      ],
+      "options_he": [
+        "$\\text{infinitely many}$",
+        "$\\text{exactly one}$",
+        "$\\text{none}$",
+        "$\\text{two}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A system of two equations in three unknowns has rank 2. How many free variables are there?",
-      "stem_he": "מערכת של שתי משוואות בשלושה נעלמים, דרגה 2. כמה משתנים חופשיים?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nFree variables = 3 - 2 = 1.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1."
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Free variables $=$ number of unknowns minus rank: $3-2=1$. With rank 2 and 3 unknowns, one direction is unconstrained — exactly **one free variable**.\n\n**Why 1 is correct:** Two independent equations in three unknowns leave a one-dimensional solution set (a line in $\\mathbb{R}^3$). Each free variable adds one parameter $t$ to the general solution.\n\n**Common wrong path:** Answering 2 (confusing rank with free variables), or 0 (thinking two equations force a unique point in 3D).\n\n**Exam tip:** Memorize the formula: $\\#\\text{free}=n-\\text{rank}(A)$ when the system is consistent. If rank equals the number of equations and is less than $n$, free count is $n-\\text{rank}$. This appears on every linear algebra midterm.",
-      "explanation_he": "משתנים חופשיים $=$ מספר נעלמים פחות דרגה: $3-2=1$. עם דרגה 2 ו-3 נעלמים, כיוון אחד לא מוגבל — בדיוק **משתנה חופשי אחד**.\n\n**למה 1 נכון:** שתי משוואות בלתי-תלויות בשלושה נעלמים משאירות קבוצת פתרונות חד-ממדית (קו ב-$\\mathbb{R}^3$). כל משתנה חופשי מוסיף פרמטר $t$ לפתרון הכללי.\n\n**דרך שגויה נפוצה:** תשובה 2 (בלבול בין דרגה למשתנים חופשיים), או 0 (חשיבה ששתי משוואות כופות נקודה יחידה ב-3D).\n\n**טיפ לבחינה:** שמרו את הנוסחה: $\\#\\text{free}=n-\\text{rank}(A)$ כשהמערכת עקבית. אם הדרגה שווה למספר המשוואות וקטנה מ-$n$, מספר החופשיים הוא $n-\\text{rank}$. זה מופיע בכל מבחן באלגברה לינארית.",
+      "stem_en": "Solve $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations.** $4x = 12 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**מחברים משוואות.** $4x = 12 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "7e9cde71-7012-5481-97fc-5cf37ee77b6b",
+      "points_level_min": "3pt",
+      "correct_answer": "3"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find $k$ such that the system has infinitely many solutions:\n$x+2y=3$, $2x+ky=6$.",
-      "stem_he": "מצא $k$ עבורו יש אינסוף פתרונות:\n$x+2y=3$, $2x+ky=6$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$R_2-2R_1$: $(k-4)y=0$. For infinitely many: $k=4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Apply $R_2-2R_1$: $(2x+ky)-2(x+2y)=6-2(3)$, giving $(k-4)y=0$. For **infinitely many solutions**, every row after reduction must be consistent with dependence — we need $k-4=0$ AND the RHS to match, so $k=4$.\n\n**Why $k=4$ is correct:** When $k=4$, Row 2 is exactly $2\\times$ Row 1 (both sides), so both equations describe the same line. For $k\\neq4$, Row 2 would force $0\\cdot y=0$ on the left but a nonzero constraint from the elimination — check: if $k\\neq4$, unique solution exists, not infinite.\n\n**Common wrong path:** Setting only the RHS to zero without requiring $k-4=0$, or answering $k=6$ from matching constants alone.\n\n**Exam tip:** Parameter problems follow the same ratio test as consistency: scale Row 1 to match Row 2's $x$-coefficient, then compare the resulting $y$-coefficient and RHS. Write \"infinitely many iff $k=4$\" for full credit.",
-      "explanation_he": "הפעילו $R_2-2R_1$: $(2x+ky)-2(x+2y)=6-2(3)$, ומקבלים $(k-4)y=0$. ל**אינסוף פתרונות**, כל שורה אחרי הפחתה חייבת להיות עקבית עם תלות — נדרש $k-4=0$ **וגם** התאמת אגף ימין, ולכן $k=4$.\n\n**למה $k=4$ נכון:** כש-$k=4$, שורה 2 היא בדיוק $2\\times$ שורה 1 (שני הצדדים), ושתי המשוואות מתארות אותו קו. ל-$k\\neq4$, תהיה $0\\cdot y=0$ משמאל אך אילוץ שונה — בדיקה: ל-$k\\neq4$ יש פתרון יחיד, לא אינסוף.\n\n**דרך שגויה נפוצה:** אפס רק את אגף ימין בלי לדרוש $k-4=0$, או תשובה $k=6$ מהתאמת קבועים בלבד.\n\n**טיפ לבחינה:** בעיות פרמטר עוקבות אחר מבחן היחס: כפלו שורה 1 להתאמת מקדם $x$ בשורה 2, והשוו מקדם $y$ ואגף ימין. כתבו \"אינסוף אם ורק אם $k=4$\" לקבלת ניקוד מלא.",
+      "stem_en": "For $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — find $y$.",
+      "stem_he": "עבור $\\begin{cases} 3x - y = 5 \\\\ x + y = 7 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**$x = 3$, so $y = 7 - 3 = 4$.**\n\n**Answer:** $y = 4$.",
+      "explanation_he": "**$x = 3$, ולכן $y = 4$.**\n\n**תשובה:** $y = 4$.",
       "skill_atoms": [
-        "substitution_method",
-        "elimination_method"
-      ]
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "ace80edb-9e9c-5ed0-afb5-2718ee03507d",
+      "points_level_min": "3pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 2x + 3y = 12 \\\\ x = 3 \\end{cases}$ — find $y$.",
+      "stem_he": "פתרו $\\begin{cases} 2x + 3y = 12 \\\\ x = 3 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**Substitute $x = 3$.** $6 + 3y = 12 \\Rightarrow 3y = 6 \\Rightarrow y = 2$.\n\n**Answer:** $y = 2$.",
+      "explanation_he": "**מציבים $x = 3$.** $6 + 3y = 12 \\Rightarrow y = 2$.\n\n**תשובה:** $y = 2$.",
+      "skill_atoms": [
+        "system_substitution"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "c7acfa7e-4726-59d6-9da6-aba453716ff7",
+      "points_level_min": "3pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations.** $5x = 15 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**מחברים.** $5x = 15 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "1c5c31e9-1d17-5a17-8c0c-689f13979085",
+      "points_level_min": "3pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — find $y$.",
+      "stem_he": "עבור $\\begin{cases} 4x + y = 14 \\\\ x - y = 1 \\end{cases}$ — מצאו $y$.",
+      "explanation_en": "**$x = 3$, so $y = x - 1 = 2$.**\n\n**Answer:** $y = 2$.",
+      "explanation_he": "**$x = 3$, ולכן $y = 2$.**\n\n**תשובה:** $y = 2$.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "7d273a9f-33b7-5a15-a48a-0b8849600858",
+      "points_level_min": "3pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} y = 2x \\\\ x + y = 9 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} y = 2x \\\\ x + y = 9 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Substitute.** $x + 2x = 9 \\Rightarrow 3x = 9 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**הצבה.** $3x = 9 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$.",
+      "skill_atoms": [
+        "system_substitution"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "699ed225-0108-5623-8da0-a348523430fc",
+      "points_level_min": "3pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Solve $\\begin{cases} 2x + y = 10 \\\\ 2x - y = 2 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 2x + y = 10 \\\\ 2x - y = 2 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations.** $4x = 12 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**מחברים.** $4x = 12 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "77afd4be-1fec-5591-a471-0246bc8c8afa",
+      "points_level_min": "3pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 14,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $\\begin{cases} x + y = 2 \\\\ x + y = 5 \\end{cases}$ has no solution.",
+      "stem_he": "נכון או לא נכון: ל-$\\begin{cases} x + y = 2 \\\\ x + y = 5 \\end{cases}$ אין פתרון.",
+      "explanation_en": "**Same left side, different right side** — parallel lines, no intersection. **True**.",
+      "explanation_he": "**אותו אגף שמאל, אגף ימין שונה** — ישרים מקבילים, אין חיתוך. **נכון**.",
+      "skill_atoms": [
+        "system_inconsistent"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "c3ef0caa-0e2f-5568-9b1e-41b3c6264a86",
+      "points_level_min": "3pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Solve $\\begin{cases} 5x + 2y = 19 \\\\ 3x - 2y = 5 \\end{cases}$ — find $x$.",
+      "stem_he": "פתרו $\\begin{cases} 5x + 2y = 19 \\\\ 3x - 2y = 5 \\end{cases}$ — מצאו $x$.",
+      "explanation_en": "**Add equations (the $2y$ cancels).** $8x = 24 \\Rightarrow x = 3$.\n\n**Answer:** $x = 3$.",
+      "explanation_he": "**מחברים (ה-$2y$ מצטמצם).** $8x = 24 \\Rightarrow x = 3$.\n\n**תשובה:** $x = 3$.",
+      "skill_atoms": [
+        "system_elimination"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "13fdcdec-5d2c-5d47-a3b0-226a45b849a4",
+      "points_level_min": "3pt",
+      "correct_answer": "3"
     }
   ],
   "est_minutes": 55,

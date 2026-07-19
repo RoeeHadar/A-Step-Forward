@@ -241,15 +241,48 @@ learners are not shown out-of-scope material, while the 5pt siblings
 items pure SymPy-CAS-verifiable. Strict + math + depth + track-scope audits and
 the 207/207 seed dry-run all green.
 
+## Batch J — shipped
+
+The **core algebra & functions foundation (alternate/syllabus IDs)** expanded to
+**15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
+
+- `linear_equations_basics` (3pt/4pt/5pt) — isolate, collect, distribute,
+  fractional & cross-multiplied linear equations, identities.
+- `linear_equations_one_variable` (3pt/4pt/5pt) — same skills with distinct
+  problems + two word problems (number puzzle, rectangle perimeter) + a
+  no-solution case.
+- `systems_linear_equations` (3pt/4pt/5pt) — elimination, substitution,
+  dependent (infinite) and inconsistent (none) systems, a word problem.
+- `linear_functions` (3pt/4pt/5pt) — slope, intercepts, evaluation, line through
+  two points, parallel slopes.
+- `functions_intro` (3pt/4pt) — evaluation, domain exclusions, composition,
+  solving `f(x)=k`.
+- `functions_exponential` (4pt/5pt) — evaluate `aˣ`, `a⁰`, growth/decay word
+  problems, `aˣ=b` solving, monotonicity.
+
+All items pure SymPy-CAS-verifiable. Strict + math + track-scope audits and the
+207/207 seed dry-run all green.
+
+## Seed path fix
+
+The `Seed DB (one-shot)` workflow under `target=all` does **not** run the lesson
+question seed — that step is gated to `target=lessons-from-json` (runs
+`generate-lessons-artifacts.mjs` + `seed-lessons.mjs`, a full DELETE+INSERT of all
+207 lessons over Neon HTTP, ~10-13 min). Earlier `all` reseeds this session did
+not push the new question banks to Neon. **Correct trigger for shipping questions:
+`gh workflow run "Seed DB (one-shot)" -f target=lessons-from-json`.** (The
+`target=all` Neo4j KG step also fails when the Aura free instance is paused, but
+that is unrelated to learner-facing question content.)
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **42 math lessons** (Batches B, D, E, F, G, H,
-I + exponents): the entire 3pt/4pt algebra & functions foundation, sequences, the
-core geometry/trig foundation, the 3pt probability & statistics foundation, the
-full 5pt calculus + advanced-topic core, **and the HS calculus track-variant +
-intro core (limits/continuity/integrals/function-analysis for 4pt & 5pt)**.
-Remaining thin lessons (8 questions): advanced 4pt/5pt geometry/trig/vectors/
-combinatorics/complex, statistics beyond 3pt, and university/makhina strands.
+Verified 15+ item banks now cover **48 math lessons** (Batches B, D, E, F, G, H,
+I, J + exponents): the entire 3pt/4pt algebra & functions foundation (incl.
+alternate syllabus IDs), sequences, the core geometry/trig foundation, the 3pt
+probability & statistics foundation, the full 5pt calculus + advanced-topic core,
+and the HS calculus track-variant + intro core. Remaining thin lessons (8
+questions): advanced 4pt/5pt geometry/trig/vectors/combinatorics/complex,
+statistics beyond 3pt, and university/makhina strands.
 
 ## Pending (not yet done this window)
 
