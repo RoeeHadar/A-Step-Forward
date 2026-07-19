@@ -348,10 +348,35 @@ Difficulty spread ≈ 33% easy / 40% medium / 27% hard, 4 kinds per lesson (one
 `algebra_review` item was converted from short-answer to true/false to reach 4
 kinds). Math + strict + track-scope audits and the 207/207 seed dry-run all green.
 
+## Batch N — shipped
+
+The **combinatorics / geometry / modelling strand** expanded to **15 CAS-verified
+items each** (6 lessons, 90 items, 0 rejections after one fix):
+
+- `combinatorics` (4pt/5pt) — factorial, permutations $P(n,k)$, combinations
+  $\binom{n}{k}$, symmetry, committee/handshake/independent-choice counts.
+- `exponential_growth_decay_models` (4pt) — doubling/halving, half-life,
+  compound growth $P(1+r)^t$, depreciation.
+- `function_transformations` (5pt) — vertical/horizontal shifts, stretch/
+  compression, reflection, combined transforms evaluated at points.
+- `similar_triangles` (3pt/4pt/5pt) — scale factor, proportional sides,
+  area ratio $=k^2$, perimeter ratio $=k$, shadow problems.
+- `quadrilaterals` (3pt/4pt/5pt) — rectangle/square/parallelogram/trapezoid/
+  rhombus/kite area & perimeter, angle sums, diagonals.
+- `linear_programming` (4pt) — objective evaluation, corner-point intersection,
+  vertex maximization/minimization, non-unique optimum theory.
+
+**Fix during authoring:** the growth open-worked item had a hand-typed claimed
+value (`7401.221542`) that disagreed with $5000\cdot 1.04^{10}\approx 7401.221425$
+beyond the $10^{-6}$ CAS tolerance; corrected and re-baked to 15/15. `similar_
+triangles` was also initially miscounted at 14 and got one more medium item.
+Difficulty spread ≈ 33/40/27, 4 kinds per lesson. Math + strict + track-scope
+audits and the 207/207 seed dry-run all green.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **66 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **72 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines
