@@ -45,8 +45,23 @@ export interface StoredMockExamQuestion extends ClientMockExamQuestion {
 }
 
 import { llmCompleteJson } from '@/lib/llm-provider';
+import { formatExamStyleStem, pickExamStyleItems } from '@/lib/exam-style-corpus';
 
 const VALID_DURATIONS = new Set([45, 60, 90]);
+
+function goalKeyFromLevel(level: string): string | null {
+  if (level === '3pt') return 'bagrut_math_3';
+  if (level === '4pt') return 'bagrut_math_4';
+  if (level === '5pt') return 'bagrut_math_5';
+  if (level === 'hs_physics') return 'bagrut_physics';
+  if (level === 'calculus') return 'calculus1';
+  if (level === 'linear_algebra') return 'linear_algebra';
+  return null;
+}
+
+function isHighSchoolBagrutLevel(level: string): boolean {
+  return level === '3pt' || level === '4pt' || level === '5pt' || level === 'hs_physics';
+}
 
 const SUBJECT_LABELS: Record<string, { en: string; he: string }> = {
   math: { en: 'Mathematics', he: 'מתמטיקה' },
@@ -125,39 +140,43 @@ function stripForClient(questions: StoredMockExamQuestion[]): ClientMockExamQues
   return questions.map(({ correct, model_answer_he, model_answer_en, rubric_he, rubric_en, ...rest }) => rest);
 }
 
-const SYSTEM_PROMPT = `You are a bilingual (Hebrew primary, English secondary) exam author for Israeli Bagrut (בגרות) high-school exams.
+const SYSTEM_PROMPT_BAGRUT = `You are a bilingual (Hebrew primary, English secondary) exam author for Israeli Bagrut (בגרות).
 
-Generate an authentic timed mock exam. Output ONLY valid JSON — no commentary, no markdown fences.
+Generate an authentic timed mock exam matching REAL Bagrut papers: open multi-part questions with process grading — NOT multiple-choice quizzes.
+
+Output ONLY valid JSON — no commentary, no markdown fences.
 
 Shape:
 {
   "questions": [
     {
       "number": 1,
-      "kind": "mcq" | "short_answer" | "extended",
-      "points": <int>,
-      "stem_he": "<Hebrew question — primary>",
-      "stem_en": "<English question — secondary>",
-      "options": [{"key":"A","text_he":"...","text_en":"..."}, ...],
-      "correct": "A",
-      "model_answer_he": "...",
-      "model_answer_en": "...",
-      "rubric_he": "...",
-      "rubric_en": "..."
+      "kind": "extended",
+      "points": 20,
+      "stem_he": "<shared stem + parts א/ב/ג in Hebrew>",
+      "stem_en": "<shared stem + parts a/b/c in English>",
+      "model_answer_he": "<full worked solution all parts>",
+      "model_answer_en": "<full worked solution all parts>",
+      "rubric_he": "<points per part/step>",
+      "rubric_en": "<points per part/step>"
     }
   ]
 }
 
 Rules:
-- Generate exactly 20–25 questions total:
-  • 8 MCQs (kind=mcq, 2 points each) — exactly 4 options A–D with "correct"
-  • 8 short-answer / calculation (kind=short_answer, 3 points each) — NO options; include model_answer_* and rubric_*
-  • 4 proof / extended / word-problem (kind=extended, 5–15 points) — NO options; include model_answer_* and rubric_*
-- Math in $...$ LaTeX; math always LTR inside delimiters.
-- Questions must match the subject and Bagrut level given.
-- Hebrew stems are the primary display text; English is a faithful translation.
+- HIGH-SCHOOL BAGRUT: 4–6 questions ONLY, all kind=extended (short_answer allowed only for short calc blocks). NO mcq.
+- Each question: 18–25 points, multi-part (א)–(ג)/(א)–(ד), escalating difficulty, ~20–25 minutes.
+- Every part uniquely solvable; name shapes explicitly; consistent numbers; HARD only.
+- Invent ORIGINAL items. NEVER copy real Ministry of Education exam stems.
+- Math in $...$ LaTeX. Hebrew stems primary; English faithful translation.
 - NEVER include names, emails, phones, or external links.
 - Number questions sequentially from 1.`;
+
+const SYSTEM_PROMPT_UNI = `You are a bilingual exam author for university / Makhina finals.
+
+Generate an authentic timed mock exam. Output ONLY valid JSON.
+Shape: { "questions": [ { "number", "kind": "short_answer"|"extended"|"mcq", "points", "stem_he", "stem_en", "options"?, "correct"?, "model_answer_he", "model_answer_en", "rubric_he", "rubric_en" } ] }
+Rules: 6–10 questions; at most 1 MCQ; rest open multi-step HARD finals items; invent ORIGINAL items; math in $...$ LaTeX; number from 1.`;
 
 function buildUserPrompt(
   subject: string,
@@ -170,17 +189,67 @@ function buildUserPrompt(
   const makhinaTopics =
     subject === 'makhina' ? MAKHINA_TOPIC_GUIDANCE[level] ?? '' : '';
   const primaryLang = locale === 'en' ? 'English' : 'Hebrew';
+  const goalKey = goalKeyFromLevel(level);
+  const exemplars = pickExamStyleItems({ goalKey, count: 3, rotation: 0, locale: 'he' });
+  const exemplarBlock =
+    exemplars.length === 0
+      ? '(no corpus exemplars)'
+      : exemplars
+          .map(
+            (it, i) =>
+              `${i + 1}. [${it.level}/${it.difficulty}] ${formatExamStyleStem(it, 'he').slice(0, 360)}…`,
+          )
+          .join('\n\n');
+
+  if (isHighSchoolBagrutLevel(level)) {
+    return `Subject: ${subj.he} / ${subj.en}
+Exam track: ${levelNote}
+Exam duration: ${durationMinutes} minutes
+Primary display language: ${primaryLang}
+
+ASF exam-style exemplars (match depth; invent NEW solvable items; do not copy):
+${exemplarBlock}
+
+Generate a HARD Bagrut-style mock: 4–6 open multi-part questions (no MCQ). Return JSON only.`;
+  }
 
   return `Subject: ${subj.he} / ${subj.en}
 Exam track: ${levelNote}
 Exam duration: ${durationMinutes} minutes
 Primary display language: ${primaryLang}
 ${makhinaTopics ? `\nTopic guidance:\n${makhinaTopics}\n` : ''}
-Generate a full ${subject === 'makhina' ? 'Makhina university-prep' : 'Bagrut-style'} mock exam (20–25 questions) appropriate for this subject and level.
-Mix difficulty: some easy warm-up, mostly exam-realistic, 2–3 challenging items.
-When primary language is English, stem_en must be the main exam text and stem_he a faithful translation.
+Exemplars:
+${exemplarBlock}
 
-Return JSON only.`;
+Generate a HARD university/Makhina-style mock (6–10 questions, ≤1 MCQ). Return JSON only.`;
+}
+
+/** Compose a mock directly from the exam-style corpus (preferred for HS Bagrut). */
+function buildMockFromCorpus(
+  level: string,
+  durationMinutes: number,
+): StoredMockExamQuestion[] | null {
+  const goalKey = goalKeyFromLevel(level);
+  const n = durationMinutes <= 45 ? 3 : durationMinutes <= 60 ? 4 : 5;
+  const items = pickExamStyleItems({
+    goalKey,
+    count: n,
+    rotation: Date.now() % 7,
+    requireGoal: Boolean(goalKey),
+  });
+  if (items.length < 3) return null;
+  return items.map((it, index) => ({
+    id: randomUUID(),
+    number: index + 1,
+    kind: 'extended' as const,
+    points: Math.min(25, Math.max(15, it.total_points || 20)),
+    stem_he: formatExamStyleStem(it, 'he').slice(0, 2000),
+    stem_en: formatExamStyleStem(it, 'en').slice(0, 2000),
+    model_answer_he: it.sample_solution_he?.slice(0, 1200),
+    model_answer_en: it.sample_solution_en?.slice(0, 1200),
+    rubric_he: it.rubric_he?.slice(0, 600),
+    rubric_en: it.rubric_en?.slice(0, 600),
+  }));
 }
 
 function validateQuestion(raw: unknown, index: number): StoredMockExamQuestion | null {
@@ -192,17 +261,24 @@ function validateQuestion(raw: unknown, index: number): StoredMockExamQuestion |
   if (typeof q.stem_en !== 'string' || q.stem_en.trim().length === 0) return null;
 
   const number = typeof q.number === 'number' ? q.number : index + 1;
-  const points = typeof q.points === 'number' ? Math.max(1, Math.min(20, q.points)) : kind === 'mcq' ? 2 : kind === 'short_answer' ? 3 : 10;
+  const points =
+    typeof q.points === 'number'
+      ? Math.max(1, Math.min(25, q.points))
+      : kind === 'mcq'
+        ? 2
+        : kind === 'short_answer'
+          ? 3
+          : 20;
 
   const base: StoredMockExamQuestion = {
     id: randomUUID(),
     number,
     kind,
     points,
-    stem_he: q.stem_he.trim().slice(0, 1200),
-    stem_en: q.stem_en.trim().slice(0, 1200),
-    model_answer_he: typeof q.model_answer_he === 'string' ? q.model_answer_he.slice(0, 800) : undefined,
-    model_answer_en: typeof q.model_answer_en === 'string' ? q.model_answer_en.slice(0, 800) : undefined,
+    stem_he: q.stem_he.trim().slice(0, 2000),
+    stem_en: q.stem_en.trim().slice(0, 2000),
+    model_answer_he: typeof q.model_answer_he === 'string' ? q.model_answer_he.slice(0, 1200) : undefined,
+    model_answer_en: typeof q.model_answer_en === 'string' ? q.model_answer_en.slice(0, 1200) : undefined,
     rubric_he: typeof q.rubric_he === 'string' ? q.rubric_he.slice(0, 600) : undefined,
     rubric_en: typeof q.rubric_en === 'string' ? q.rubric_en.slice(0, 600) : undefined,
   };
@@ -231,13 +307,9 @@ async function callLLMForMockExam(
   locale: 'he' | 'en' = 'he',
 ): Promise<StoredMockExamQuestion[] | null> {
   const userPrompt = buildUserPrompt(subject, level, durationMinutes, locale);
-  const systemPrompt =
-    locale === 'en'
-      ? SYSTEM_PROMPT.replace(
-          'Hebrew stems are the primary display text; English is a faithful translation.',
-          'English stems are the primary display text; Hebrew is a faithful translation.',
-        )
-      : SYSTEM_PROMPT;
+  const systemPrompt = isHighSchoolBagrutLevel(level)
+    ? SYSTEM_PROMPT_BAGRUT
+    : SYSTEM_PROMPT_UNI;
 
   const parsed = await llmCompleteJson<{ questions?: unknown[] }>({
     system: systemPrompt,
@@ -283,17 +355,31 @@ export async function getOrCreateMockExam(
     `) as Array<{ id: number; questions: StoredMockExamQuestion[]; duration_minutes: number }>;
 
     if (cached[0]?.questions?.length) {
-      return {
-        exam_id: cached[0].id,
-        questions: stripForClient(cached[0].questions),
-        duration_minutes: cached[0].duration_minutes,
-      };
+      const qs = cached[0].questions;
+      const mcqCount = qs.filter((q) => q.kind === 'mcq').length;
+      // Discard legacy MCQ-heavy caches for HS Bagrut — they are not exam-realistic.
+      const legacyMcqHeavy =
+        isHighSchoolBagrutLevel(level) && mcqCount >= Math.ceil(qs.length * 0.3);
+      if (!legacyMcqHeavy) {
+        return {
+          exam_id: cached[0].id,
+          questions: stripForClient(qs),
+          duration_minutes: cached[0].duration_minutes,
+        };
+      }
     }
   } catch {
     // proceed to generate
   }
 
-  const generated = await callLLMForMockExam(subject, level, duration, locale);
+  // Prefer composing from the authored exam-style corpus for HS Bagrut.
+  let generated: StoredMockExamQuestion[] | null = null;
+  if (isHighSchoolBagrutLevel(level) || subject === 'math' || subject === 'physics') {
+    generated = buildMockFromCorpus(level, duration);
+  }
+  if (!generated || generated.length === 0) {
+    generated = await callLLMForMockExam(subject, level, duration, locale);
+  }
   if (!generated || generated.length === 0) return null;
 
   try {

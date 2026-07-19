@@ -93,6 +93,12 @@ export const quizQuestionKindSchema = z.enum([
   'derivation',
 ]);
 
+export const quizQuestionPartSchema = z.object({
+  label: z.string(),
+  body: z.string(),
+  points: z.number().optional(),
+});
+
 export const quizQuestionSchema = z.object({
   id: z.string(),
   topic: z.string(),
@@ -103,6 +109,9 @@ export const quizQuestionSchema = z.object({
   options: z.array(quizOptionSchema),
   /** ADR-0010 gate kinds; omit/undefined treated as mcq for legacy payloads. */
   kind: quizQuestionKindSchema.optional(),
+  /** Bagrut-style sub-parts (א/ב/ג) when present. */
+  parts: z.array(quizQuestionPartSchema).optional(),
+  total_points: z.number().optional(),
 });
 
 export const quizStartResponseSchema = z.object({

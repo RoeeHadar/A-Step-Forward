@@ -10,7 +10,8 @@ import { getBundledLesson } from '@/lib/lesson-bundle';
 import { resolveConceptAlias } from '@/lib/concept-aliases';
 import type { LessonQuestionRow, LessonPointsLevel } from '@/lib/neon-db';
 
-export const GATE_BANK_FORMAT_VERSION = 2 as const;
+/** v3: exam-style multipart corpus preferred; v2 lesson-bank hard items still accepted. */
+export const GATE_BANK_FORMAT_VERSION = 3 as const;
 
 /** Kinds the week-gate UI + grader support today. */
 export type GateQuestionKind =
@@ -353,17 +354,30 @@ export function scoreLessonQuestionForGate(
 }
 
 /**
- * True when the cached quiz is the post-ADR-0010 hard format (bank and/or
- * grounded LLM fallback). Legacy easy-MCQ caches (no format_version / all mcq
- * without source) return false so they are regenerated.
+ * True when the cached quiz is post-ADR-0010 hard format (exam corpus,
+ * lesson bank, and/or grounded LLM fallback). Legacy easy-MCQ caches return
+ * false so they are regenerated.
  */
 export function isBankSourcedGateQuiz(
-  questions: Array<{ source?: string; format_version?: number; kind?: string }>,
+  questions: Array<{ source?: string; format_version?: number; kind?: string; parts?: unknown[] }>,
 ): boolean {
   if (!questions.length) return false;
-  const v2 = questions.filter((q) => q.format_version === GATE_BANK_FORMAT_VERSION).length;
-  if (v2 >= Math.ceil(questions.length * 0.8)) return true;
-  // Partial migration: majority explicitly from the lesson bank.
-  const bankish = questions.filter((q) => q.source === 'lesson_bank').length;
-  return bankish >= Math.ceil(questions.length * 0.6);
+  const modern = questions.filter(
+    (q) =>
+      (typeof q.format_version === 'number' && q.format_version >= 2) ||
+      q.source === 'lesson_bank' ||
+      q.source === 'exam_corpus' ||
+      q.source === 'llm_fallback',
+  ).length;
+  if (modern < Math.ceil(questions.length * 0.8)) return false;
+  // Prefer regenerating caches that have zero multipart / open production items.
+  const productive = questions.filter(
+    (q) =>
+      q.kind === 'open' ||
+      q.kind === 'derivation' ||
+      q.kind === 'numeric' ||
+      q.kind === 'short_answer' ||
+      (Array.isArray(q.parts) && q.parts.length >= 2),
+  ).length;
+  return productive >= Math.ceil(questions.length * 0.5);
 }

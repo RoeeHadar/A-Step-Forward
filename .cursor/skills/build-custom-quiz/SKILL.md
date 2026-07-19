@@ -115,7 +115,8 @@ Hard-coded in the system prompt and enforced by `validateQuestion` + `quiz-solva
 - **Concept spread**: roughly even across the chosen concepts.
 - Stems / explanations / rubrics capped at 600 chars each.
 - No real names, schools, emails, phones, or addresses.
-- **Solvability (mandatory):** every part must be uniquely solvable from the stem. Reject: proving diagonal bisection on a generic מרובע; ambiguous area of an unspecified quadrilateral; sample solutions that admit "insufficient data / חסרים נתונים". Authored bank exemplars are injected into the prompt so the model copies honest exam depth.
+- **Solvability (mandatory):** every part must be uniquely solvable from the stem. Reject: proving diagonal bisection on a generic מרובע; ambiguous area of an unspecified quadrilateral; sample solutions that admit "insufficient data / חסרים נתונים".
+- **Exam depth:** `difficulty` must be `hard`. Exemplars come from `exam-style-corpus` (original Bagrut/finals multi-part items — never MoE transcripts). Rebuild with `pnpm exam-style:build`.
 
 Any question failing validation is dropped silently. If zero pass validation the endpoint returns **503** so the UI can show a retry CTA.
 

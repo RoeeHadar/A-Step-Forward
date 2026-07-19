@@ -157,6 +157,35 @@ function QuizQuestionCard({
         </MarkdownMath>
       </div>
 
+      {question.parts && question.parts.length >= 2 ? (
+        <div className="space-y-3 rounded-xl border border-border/60 bg-surface-1/20 p-4">
+          {question.parts.map((part) => (
+            <div key={part.label} className="space-y-1">
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                <span>({part.label})</span>
+                {typeof part.points === 'number' ? (
+                  <span className="text-xs font-normal text-muted-foreground">
+                    {part.points} {lang === 'he' ? "נק'" : 'pts'}
+                  </span>
+                ) : null}
+              </div>
+              <MarkdownMath
+                className="prose-p:my-0 text-sm leading-relaxed"
+                dir={lang === 'he' ? 'rtl' : 'ltr'}
+              >
+                {part.body}
+              </MarkdownMath>
+            </div>
+          ))}
+          {typeof question.total_points === 'number' ? (
+            <p className="text-xs text-muted-foreground">
+              {lang === 'he' ? 'סה״כ' : 'Total'}: {question.total_points}{' '}
+              {lang === 'he' ? "נק'" : 'pts'}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       {isClosed ? (
         <div className="space-y-2">
           {question.options

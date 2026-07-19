@@ -33,7 +33,7 @@ import {
   filterConceptIdsForProfile,
 } from '@/lib/quiz-concept-filter';
 import { filterSolvableQuizQuestions } from '@/lib/quiz-solvability';
-import { pickGateQuestionsFromBank } from '@/lib/gate-question-bank';
+import { examStyleExemplarsForPrompt } from '@/lib/exam-style-corpus';
 
 interface KgConcept {
   id: string;
@@ -197,6 +197,12 @@ D. Numerical data must be internally consistent across the whole item (e.g. a re
 E. sample_solution MUST actually solve every part with correct math. Solutions that say "cannot prove / insufficient data / חסרים נתונים" mean the question is INVALID — rewrite it instead of shipping it.
 F. Prefer "find / calculate / show that under the given conditions" over unfounded "prove that".
 
+DIFFICULTY BAR (real Bagrut / finals — NOT homework drills):
+G. difficulty MUST be "hard" for every question. Warm-up / one-step recognition items are FORBIDDEN.
+H. Each question needs multi-step reasoning: parameters, investigations (חקירה), formal proofs, or multi-concept links. Single arithmetic checks are forbidden.
+I. Match authentic paper depth: ~20–25 minutes per question; parts escalate (א easier than ג).
+J. Invent ORIGINAL numbers and scenarios. NEVER copy or lightly paraphrase real Ministry of Education exam stems.
+
 CRITICAL RULES FOR UNIVERSITY QUESTIONS (mode: university_open or university_mixed):
 1. Questions are mostly open-ended proofs or computations showing all work.
 2. In university_mixed mode: up to 1 MCQ question per quiz (for concept verification), rest are open.
@@ -358,35 +364,18 @@ Allowed concepts, their skill atoms, and depth notes:
 
 ${conceptBlocks}
 
-AUTHENTIC EXEMPLARS from the authored lesson bank (match this depth and honesty — do NOT copy numbers blindly; invent a NEW solvable item at the same standard):
-${buildBankExemplarBlock(ctx.map((c) => c.id))}
+AUTHENTIC EXEMPLARS from the ASF exam-style corpus (original Bagrut/finals depth — match this standard; invent NEW solvable items; do NOT copy stems):
+${examStyleExemplarsForPrompt(
+  ctx.map((c) => c.id),
+  goal,
+  3,
+)}
 
-Generate exactly ${count} exam-style question(s) now.
+Generate exactly ${count} HARD exam-style question(s) now (difficulty=hard only).
 Each question must test at least one skill_atom from the list above.
 Spread questions across the listed concepts where possible.
-Before emitting each question, silently verify: every part is solvable from the stem; numbers are consistent; sample_solution solves all parts without "insufficient data".
+Before emitting each question, silently verify: every part is solvable from the stem; numbers are consistent; sample_solution solves all parts without "insufficient data"; depth matches real Bagrut/finals.
 Follow ALL rules in the system message. Return JSON only.`;
-}
-
-function buildBankExemplarBlock(conceptIds: string[]): string {
-  try {
-    const picks = pickGateQuestionsFromBank({
-      conceptIds: conceptIds.slice(0, 4),
-      locale: 'he',
-      count: 3,
-      rotation: 0,
-      preferHard: true,
-    });
-    if (picks.length === 0) return '(no bank exemplars available for these concepts)';
-    return picks
-      .map(
-        (p, i) =>
-          `${i + 1}. [${p.topic} / ${p.kind}] ${p.stem.slice(0, 280)}${p.stem.length > 280 ? '…' : ''}`,
-      )
-      .join('\n');
-  } catch {
-    return '(no bank exemplars available)';
-  }
 }
 
 // ── LLM ──────────────────────────────────────────────────────────────────────
@@ -431,7 +420,17 @@ function validateQuestion(
   // MCQ only allowed in university_mixed
   if (q.kind === 'mcq' && mode !== 'university_mixed') return null;
 
-  if (q.difficulty !== 'easy' && q.difficulty !== 'medium' && q.difficulty !== 'hard') return null;
+  // Exam bar: reject easy/medium — custom quizzes must be hard.
+  if (q.difficulty !== 'hard' && q.difficulty !== 'very_hard') {
+    // Coerce medium→hard only when the item is clearly multipart open with ≥3 parts.
+    const partsLen = Array.isArray(q.parts) ? q.parts.length : 0;
+    if (q.difficulty === 'medium' && q.kind === 'open' && partsLen >= 3) {
+      (q as Record<string, unknown>).difficulty = 'hard';
+    } else {
+      return null;
+    }
+  }
+  if (q.difficulty === 'very_hard') (q as Record<string, unknown>).difficulty = 'hard';
   if (typeof q.concept_id !== 'string' || !allowedConcepts.has(q.concept_id)) return null;
   if (!isStr(q.stem_en) || !isStr(q.stem_he)) return null;
 

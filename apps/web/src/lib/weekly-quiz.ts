@@ -1,10 +1,9 @@
 ﻿/**
  * Weekly quiz / competency gate — Neon/Vercel path (no Render dependency).
  *
- * ADR-0010: items are drawn from the authored lesson question bank (hard /
- * open / numeric / short_answer). LLM free-invention of easy MCQs is retired
- * as the primary path — it only fills gaps when a concept has no bank items,
- * and then only as open/numeric grounded in bank exemplars.
+ * ADR-0010 + exam corpus: prefer original Bagrut-style multi-part items from
+ * `exam-style-corpus`, then hard lesson-bank production items. LLM only fills
+ * true gaps as hard open/numeric (never easy MCQ).
  */
 import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
@@ -19,6 +18,11 @@ import {
   type GateBankPick,
   type GateQuestionKind,
 } from './gate-question-bank';
+import {
+  formatExamStyleStem,
+  pickExamStyleItems,
+  type ExamStyleItem,
+} from './exam-style-corpus';
 import { answersMatch, getAcceptedAnswers, numericClose } from './answer-normalize';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
@@ -59,6 +63,12 @@ const kgById: Record<string, KgConcept> = (kg as unknown as { byId: Record<strin
 
 // ── Stored shape (with answers, never sent to client) ─────────────────────────
 
+export interface StoredWeeklyPart {
+  label: string;
+  body: string;
+  points?: number;
+}
+
 export interface StoredWeeklyQuestion {
   id: string;
   topic: string;
@@ -67,13 +77,15 @@ export interface StoredWeeklyQuestion {
   kind: GateQuestionKind;
   stem: string;
   options: { key: string; text: string }[];
+  parts?: StoredWeeklyPart[];
+  total_points?: number;
   correct?: string;
   correct_answer?: string | null;
   acceptable_answers?: string[];
   rubric?: string | null;
   model_answer?: string | null;
   source_question_id?: string;
-  source: 'lesson_bank' | 'llm_fallback';
+  source: 'lesson_bank' | 'llm_fallback' | 'exam_corpus';
   format_version: typeof GATE_BANK_FORMAT_VERSION;
 }
 
@@ -93,6 +105,31 @@ function fromBankPick(p: GateBankPick): StoredWeeklyQuestion {
     model_answer: p.model_answer,
     source_question_id: p.source_question_id,
     source: 'lesson_bank',
+    format_version: GATE_BANK_FORMAT_VERSION,
+  };
+}
+
+function fromExamStyle(it: ExamStyleItem, locale: 'he' | 'en'): StoredWeeklyQuestion {
+  const topic = it.concept_ids?.[0] ?? it.paper_pattern ?? 'exam';
+  const parts = (it.parts ?? []).map((p) => ({
+    label: p.label,
+    body: locale === 'he' ? p.body_he : p.body_en,
+    points: p.points,
+  }));
+  return {
+    id: randomUUID(),
+    topic,
+    subject: it.subject === 'physics' ? 'physics' : 'math',
+    difficulty: it.difficulty === 'very_hard' ? 0.95 : 0.88,
+    kind: 'open',
+    stem: formatExamStyleStem(it, locale),
+    options: [],
+    parts,
+    total_points: it.total_points,
+    rubric: locale === 'he' ? it.rubric_he : it.rubric_en,
+    model_answer: locale === 'he' ? it.sample_solution_he : it.sample_solution_en,
+    source_question_id: it.id,
+    source: 'exam_corpus',
     format_version: GATE_BANK_FORMAT_VERSION,
   };
 }
@@ -123,11 +160,27 @@ function normalizeStored(raw: unknown): StoredWeeklyQuestion | null {
     rubric: typeof q.rubric === 'string' ? q.rubric : null,
     model_answer: typeof q.model_answer === 'string' ? q.model_answer : null,
     source_question_id: typeof q.source_question_id === 'string' ? q.source_question_id : undefined,
-    source: q.source === 'lesson_bank' || q.source === 'llm_fallback' ? q.source : 'llm_fallback',
-    format_version:
-      q.format_version === GATE_BANK_FORMAT_VERSION
-        ? GATE_BANK_FORMAT_VERSION
-        : GATE_BANK_FORMAT_VERSION,
+    parts: (() => {
+      if (!Array.isArray(q.parts)) return undefined;
+      const out: StoredWeeklyPart[] = [];
+      for (const p of q.parts) {
+        if (!p || typeof p !== 'object') continue;
+        const part = p as Record<string, unknown>;
+        if (typeof part.label !== 'string' || typeof part.body !== 'string') continue;
+        out.push({
+          label: part.label,
+          body: part.body,
+          points: typeof part.points === 'number' ? part.points : undefined,
+        });
+      }
+      return out.length > 0 ? out : undefined;
+    })(),
+    total_points: typeof q.total_points === 'number' ? q.total_points : undefined,
+    source:
+      q.source === 'lesson_bank' || q.source === 'llm_fallback' || q.source === 'exam_corpus'
+        ? q.source
+        : 'llm_fallback',
+    format_version: GATE_BANK_FORMAT_VERSION,
   };
 }
 
@@ -462,10 +515,12 @@ function buildClientResponse(
     stem: q.stem,
     options: q.options ?? [],
     kind: q.kind,
+    parts: q.parts,
+    total_points: q.total_points,
   }));
 
-  // Harder items need more time: ~4 min each, floor 25 min, cap 50.
-  const time_limit_s = Math.min(3000, Math.max(1500, storedQuestions.length * 240));
+  // Bagrut-depth: ~18 min per multi-part item, floor 45 min, cap 90.
+  const time_limit_s = Math.min(5400, Math.max(2700, storedQuestions.length * 1080));
 
   return {
     quiz_id: quizId,
@@ -482,7 +537,7 @@ function buildClientResponse(
 
 /**
  * Generates (or returns cached) a weekly quiz for the given learner.
- * Bank-sourced hard items preferred; legacy easy-MCQ caches are ignored.
+ * Exam-style multi-part corpus first; legacy easy-MCQ caches are ignored.
  */
 export async function generateWeeklyQuizForUser(
   userId: string,
@@ -570,21 +625,36 @@ export async function generateWeeklyQuizForUser(
 
   void mastery; // reserved for future weak-atom steering within the bank
 
-  const questionCount = Math.min(8, Math.max(5, selectedConcepts.length + 1));
+  // Fewer, deeper items — real Bagrut questions take ~15–25 min each.
+  const questionCount = 4;
   const pointsMin = goalToPointsMin(profile?.goal ?? null);
+  const goalKey = profile?.goal ?? null;
 
-  const bankPicks = pickGateQuestionsFromBank({
+  // 1) Primary: original exam-style multi-part corpus (Bagrut/finals depth).
+  const examPicks = pickExamStyleItems({
     conceptIds: selectedConcepts,
-    locale,
+    goalKey,
     count: questionCount,
     rotation,
-    pointsLevelMin: pointsMin,
-    preferHard: true,
+    locale,
   });
+  let generated: StoredWeeklyQuestion[] = examPicks.map((it) => fromExamStyle(it, locale));
 
-  let generated: StoredWeeklyQuestion[] = bankPicks.map(fromBankPick);
+  // 2) Fill with hard lesson-bank production items (no easy MCQ).
+  if (generated.length < questionCount) {
+    const need = questionCount - generated.length;
+    const bankPicks = pickGateQuestionsFromBank({
+      conceptIds: selectedConcepts,
+      locale,
+      count: need,
+      rotation,
+      pointsLevelMin: pointsMin,
+      preferHard: true,
+    });
+    generated = [...generated, ...bankPicks.map(fromBankPick)];
+  }
 
-  // Fill gaps for concepts with no bank coverage.
+  // 3) Last resort: LLM hard open/numeric only.
   if (generated.length < questionCount) {
     const covered = new Set(generated.map((q) => q.topic));
     const missing = selectedConcepts
@@ -604,11 +674,18 @@ export async function generateWeeklyQuizForUser(
       });
     const need = questionCount - generated.length;
     if (missing.length > 0 && need > 0) {
+      const bankExemplars = pickGateQuestionsFromBank({
+        conceptIds: selectedConcepts,
+        locale,
+        count: 4,
+        rotation,
+        preferHard: true,
+      });
       const fill = await callLLMFallbackForGaps(
         missing,
-        bankPicks,
+        bankExemplars,
         need,
-        profile?.goal ?? null,
+        goalKey,
         locale,
       );
       generated = [...generated, ...fill];
