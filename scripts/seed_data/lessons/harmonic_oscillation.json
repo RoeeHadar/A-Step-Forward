@@ -221,151 +221,347 @@
       "body_he_md": "- **תנאי SHM:** $F=-kx$ → $\\ddot{x}+\\omega^2x=0$ → פתרון סינוסואידלי.\n- $x(t)=A\\cos(\\omega t+\\varphi)$; $\\omega=\\sqrt{k/m}$; $T=2\\pi\\sqrt{m/k}$.\n- $v=-A\\omega\\sin(\\omega t+\\varphi)$; $a=-\\omega^2x$; $v_{\\max}=A\\omega$; $a_{\\max}=A\\omega^2$.\n- ב-$x=\\pm A$: $v=0$, $|a|=A\\omega^2$; ב-$x=0$: $|v|=A\\omega$, $a=0$.\n- מקביל: $k_{\\text{eff}}=k_1+k_2$ (קשיח, $T$ קצר); טור: $1/k_{\\text{eff}}=1/k_1+1/k_2$ (רך, $T$ ארוך).\n- $T$ לא תלוי ב-$A$; משרעת משפיעה רק על $v_{\\max}$, $a_{\\max}$.\n- פאזה מתנאי התחלה: $x_0$ ו-$v_0$ יחד; שיטת אנרגיה מקשרת $v$ ל-$x$ בלי זמן."
     }
   ],
-  "agent_hints": "Most common student errors: (1) using f instead of ω in formulas, (2) forgetting that a_max = Aω² (not Aω). The most productive worked example to dwell on: the series vs parallel spring derivation — students who derive it from scratch understand the physics; those who just memorize the formula regularly mix them up. Phase angle is very commonly set wrong: always use both x₀ and v₀ simultaneously to pin down φ.",
+  "agent_hints": {
+    "socratic_prompt": "Most common student errors: (1) using f instead of ω in formulas, (2) forgetting that a_max = Aω² (not Aω). The most productive worked example to dwell on: the series vs parallel spring derivation — students who derive it from scratch understand the physics; those who just memorize the formula regularly mix them up. Phase angle is very commonly set wrong: always use both x₀ and v₀ simultaneously to pin down φ.",
+    "key_insights": [],
+    "common_misconceptions": [],
+    "skill_atoms_unlocked": [
+      "hookes_law",
+      "pendulum",
+      "period_frequency",
+      "shm"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "A spring ($k=50$ N/m) with $m=2$ kg attached oscillates with $A=0.1$ m. Find $\\omega$, $T$, $v_{max}$.",
-      "stem_he": "קפיץ ($k=50$ נ\"מ), $m=2$ ק\"ג, $A=0.1$ מ'. מצאו $\\omega$, $T$, $v_{\\max}$.",
+      "stem_en": "The period of a simple pendulum is:",
+      "stem_he": "זמן המחזור של מטוטלת פשוטה הוא:",
+      "explanation_en": "**Pendulum period depends on $\\sqrt{L/g}$.**\n\n**Answer:** $T=2\\pi\\sqrt{L/g}$.",
+      "explanation_he": "**זמן מחזור מטוטלת תלוי ב-$\\sqrt{L/g}$.**\n\n**תשובה:** $T=2\\pi\\sqrt{L/g}$.",
+      "skill_atoms": [
+        "pendulum"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\omega=\\sqrt{50/2}=5$ rad/s. $T=2\\pi/5\\approx1.26$ s. $v_{max}=0.1\\times5=0.5$ m/s",
-          "0.5$ m/s",
-          "0.5"
+        "options_en": [
+          "$T=2\\pi\\sqrt{L/g}$",
+          "$T=2\\pi\\sqrt{g/L}$",
+          "$T=2\\pi L g$",
+          "$T=\\sqrt{L/g}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$T=2\\pi\\sqrt{L/g}$",
+          "$T=2\\pi\\sqrt{g/L}$",
+          "$T=2\\pi L g$",
+          "$T=\\sqrt{L/g}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why these values are correct:** For a spring-mass system, angular frequency follows $\\omega=\\sqrt{k/m}$. With $k=50$ N/m and $m=2$ kg: $\\omega=\\sqrt{25}=5$ rad/s. The period is one full oscillation: $T=2\\pi/\\omega=2\\pi/5\\approx1.26$ s. Maximum speed occurs at equilibrium where all energy is kinetic: $v_{max}=A\\omega=0.1\\times5=0.5$ m/s.\n\n**How to think about it:** Compute $\\omega$ first — it sets the time scale for the entire motion. Then $T$ and $f=1/T$ follow. Amplitude affects only $v_{max}$ and $a_{max}$, never $T$ in ideal SHM.\n\n**Common wrong path:** Using $T=2\\pi\\sqrt{k/m}$ (inverted), or $v_{max}=A/T$ instead of $A\\omega$, or forgetting to include $A$ when the question asks for maximum speed.\n\n**Exam tip:** Verify $\\omega^2=k/m$ before proceeding. Label units: rad/s for $\\omega$, seconds for $T$, m/s for $v_{max}$.",
-      "explanation_he": "**למה הערכים נכונים:** במערכת קפיץ-מסה, התדירות הזוויתית $\\omega=\\sqrt{k/m}$. עם $k=50$ נ\"מ ו-$m=2$ ק\"ג: $\\omega=\\sqrt{25}=5$ ראד/ש. המחזור הוא תנודה מלאה אחת: $T=2\\pi/\\omega=2\\pi/5\\approx1.26$ ש'. המהירות המקסימלית במאזן, כשכל האנרגיה קינטית: $v_{\\max}=A\\omega=0.1\\times5=0.5$ מ\"ש.\n\n**איך לחשוב על זה:** חשבו $\\omega$ קודם — הוא קובע את סולם הזמן. אחר כך $T$ ו-$f=1/T$. המשרעת משפיעה רק על $v_{\\max}$ ו-$a_{\\max}$, לא על $T$ ב-SHM אידיאלי.\n\n**טעות נפוצה:** $T=2\\pi\\sqrt{k/m}$ (היפוך), $v_{\\max}=A/T$ במקום $A\\omega$, או שכחת $A$ כשנשאל על מהירות מקסימלית.\n\n**טיפ לבחינה:** אמתו $\\omega^2=k/m$. סמנו יחידות: rad/s, שניות, m/s.\n\n**בדיקה:** $v_{\\max}/A=\\omega=5$ מ\"ש/מ' ✓.",
-      "skill_atoms": []
+      "source_item_id": "94be02e7-11e1-5a3b-921c-1e3ae8f85bb8",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$T=2\\pi\\sqrt{L/g}$",
+        "$T=2\\pi\\sqrt{g/L}$",
+        "$T=2\\pi L g$",
+        "$T=\\sqrt{L/g}$"
+      ],
+      "options_he": [
+        "$T=2\\pi\\sqrt{L/g}$",
+        "$T=2\\pi\\sqrt{g/L}$",
+        "$T=2\\pi L g$",
+        "$T=\\sqrt{L/g}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "What is the period of a spring ($k=200$ N/m) with $m=0.5$ kg?",
-      "stem_he": "מהו מחזור קפיץ ($k=200$ נ\"מ) עם $m=0.5$ ק\"ג?",
+      "stem_en": "An oscillator has frequency $5\\,\\text{Hz}$. Find its period.",
+      "stem_he": "למתנד תדר $5\\,\\text{Hz}$. מצאו את זמן המחזור שלו.",
+      "explanation_en": "**$T=\\dfrac{1}{5}=0.2\\,\\text{s}$.**\n\n**Answer:** $0.2\\,\\text{s}$.",
+      "explanation_he": "**$T=0.2\\,\\text{s}$.**\n\n**תשובה:** $0.2\\,\\text{s}$.",
+      "skill_atoms": [
+        "period_frequency"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\omega=\\sqrt{200/0.5}=20$ rad/s. $T=2\\pi/20=\\pi/10\\approx0.314$ s.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\pi/10\\approx0.314$ s.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.314"
-        ],
-        "case_sensitive": false
+        "value": 0.2
       },
-      "explanation_en": "**Why $T\\approx0.314$ s is correct:** First find angular frequency $\\omega=\\sqrt{k/m}=\\sqrt{200/0.5}=\\sqrt{400}=20$ rad/s. Period relates to $\\omega$, not to amplitude: $T=2\\pi/\\omega=2\\pi/20=\\pi/10\\approx0.314$ s. Frequency is $f=1/T=10/\\pi\\approx3.18$ Hz.\n\n**How to think about it:** Only $k$ and $m$ appear — no initial displacement needed. Stiffer springs and lighter masses both shorten the period. This is a pure parameter-read problem before any $x(t)$ is written.\n\n**Common wrong path:** Treating $20$ as frequency in Hz and writing $T=1/20=0.05$ s. Correct: $20$ is $\\omega$ in rad/s, so $f=\\omega/(2\\pi)$.\n\n**Exam tip:** Write $\\omega=\\sqrt{k/m}$ first, then $T=2\\pi/\\omega$. Cross-check dimensions: $[T]=\\sqrt{\\text{kg}/(\\text{N/m})}=\\sqrt{\\text{s}^2}=\\text{s}$ ✓.",
-      "explanation_he": "**למה $T\\approx0.314$ ש' נכון:** קודם $\\omega=\\sqrt{k/m}=\\sqrt{200/0.5}=20$ ראד/ש. המחזור קשור ל-$\\omega$, לא למשרעת: $T=2\\pi/\\omega=\\pi/10\\approx0.314$ ש'. התדר $f=1/T=10/\\pi\\approx3.18$ Hz.\n\n**איך לחשוב על זה:** רק $k$ ו-$m$ — לא צריך תזוזה התחלתית. קפיץ קשיח יותר ומסה קלה יותר מקצרים מחזור. זו בעיית פרמטרים לפני כתיבת $x(t)$.\n\n**טעות נפוצה:** $20$ כ-Hz ו-$T=1/20$. נכון: $20$ הוא $\\omega$ ב-rad/s, ולכן $f=\\omega/(2\\pi)$.\n\n**טיפ לבחינה:** $\\omega=\\sqrt{k/m}$, אחר כך $T=2\\pi/\\omega$. בדיקת ממדים: $[T]=\\text{s}$ ✓.\n\n**הקשר פיזיקלי:** קפיץ $k=200$ נ\"מ עם $m=0.5$ ק\"ג — מערכת קשיחה; $T\\approx0.31$ ש' אומר ~3 תנודות לשנייה. **בדיקה:** $f=1/T\\approx3.18$ Hz תואם $\\omega/(2\\pi)$.",
-      "skill_atoms": []
+      "source_item_id": "9bf1d945-da03-5dd0-b42f-16a4530d1014",
+      "points_level_min": "5pt",
+      "correct_answer": "0.2"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Given $x(t)=0.04\\cos(10t)$ m. State $A$, $\\omega$, $T$, and find $a_{max}$.",
-      "stem_he": "נתון $x(t)=0.04\\cos(10t)$ מ'. ציינו $A$, $\\omega$, $T$, ומצאו $a_{\\max}$.",
+      "stem_en": "True or False: a pendulum's period depends on its length.",
+      "stem_he": "נכון או לא נכון: זמן המחזור של מטוטלת תלוי באורכה.",
+      "explanation_en": "**$T=2\\pi\\sqrt{L/g}$ grows with $L$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**$T=2\\pi\\sqrt{L/g}$ גדל עם $L$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "pendulum"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$A=0.04$ m; $\\omega=10$ rad/s; $T=2\\pi/10\\approx0.628$ s. $a_{max}=A\\omega^2=0.04\\times100=4$ m/s²",
-          "4$ m/s²",
-          "4"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why these values are correct:** Compare $x(t)=0.04\\cos(10t)$ m to standard form: $A=0.04$ m, $\\omega=10$ rad/s, $\\varphi=0$. Period $T=2\\pi/\\omega=2\\pi/10\\approx0.628$ s. Maximum acceleration at turning points ($x=\\pm A$): $a_{max}=A\\omega^2=0.04\\times100=4$ m/s².\n\n**How to think about it:** Read $A$ and $\\omega$ directly from the cosine. Acceleration uses $\\omega^2$, not $\\omega$ — the defining slip on this question type. At equilibrium $a=0$; at extremes $|a|$ is largest.\n\n**Common wrong path:** $a_{max}=A\\omega=0.4$ m/s² (one power of $\\omega$ short), or using $T=10$ s by confusing $\\omega$ with $T$.\n\n**Exam tip:** Sanity check $a_{max}/A=\\omega^2=100$ s⁻². About $0.4g$ — reasonable for a small-amplitude lab spring.",
-      "explanation_he": "**למה הערכים נכונים:** השוו $x(t)=0.04\\cos(10t)$ מ' לצורה הסטנדרטית: $A=0.04$ מ', $\\omega=10$ ראד/ש, $\\varphi=0$. מחזור $T=2\\pi/10\\approx0.628$ ש'. תאוצה מקסימלית בקצוות ($x=\\pm A$): $a_{\\max}=A\\omega^2=0.04\\times100=4$ מ\"ש².\n\n**איך לחשוב על זה:** קראו $A$ ו-$\\omega$ מ-cos. תאוצה משתמשת ב-$\\omega^2$, לא $\\omega$. במאזן $a=0$; בקצוות $|a|$ מקסימלי.\n\n**טעות נפוצה:** $a_{\\max}=A\\omega=0.4$ מ\"ש², או $T=10$ ש' (בלבול $\\omega$ עם $T$).\n\n**טיפ לבחינה:** $a_{\\max}/A=\\omega^2=100$ s⁻². כ-$0.4g$ — סביר לקפיץ מעבדה.\n\n**הקשר:** $\\omega=10$ ראד/ש מתאים ל-$f\\approx1.59$ Hz. תאוצה $4$ מ\"ש² ≈ $0.4g$ — סביר לתנודה קטנה. **בדיקה:** $|a|$ מקסימלי ב-$x=\\pm0.04$ מ', אפס במאזן.",
-      "skill_atoms": []
+      "source_item_id": "6c078b19-7d5e-5baf-9d57-6261a1d4c65a",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A mass oscillates with $f=5$ Hz and $A=3$ cm. Find $\\omega$, $v_{max}$, and write $x(t)$ assuming it starts at maximum displacement.",
-      "stem_he": "מסה מתנדנדת עם $f=5$ Hz ו-$A=3$ ס\"מ. מצאו $\\omega$, $v_{\\max}$, וכתבו $x(t)$ אם מתחיל בקצה החיובי.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A spring-mass system has $k=90\\,\\text{N/m}$ and $m=10\\,\\text{kg}$. Find the angular frequency $\\omega$.",
+      "stem_he": "למערכת קפיץ-מסה $k=90\\,\\text{N/m}$ ו-$m=10\\,\\text{kg}$. מצאו את התדירות הזוויתית $\\omega$.",
+      "explanation_en": "**Step 1 — Formula.** $\\omega=\\sqrt{k/m}$.\n\n**Step 2 — Substitute.** $\\omega=\\sqrt{90/10}=\\sqrt{9}$.\n\n**Step 3 — Evaluate.** $=3\\,\\text{rad/s}$.\n\n**Answer:** $3\\,\\text{rad/s}$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $\\omega=\\sqrt{k/m}$.\n\n**שלב 2 — הצבה.** $\\sqrt{90/10}=\\sqrt{9}$.\n\n**שלב 3 — חישוב.** $3\\,\\text{rad/s}$.\n\n**תשובה:** $3\\,\\text{rad/s}$.",
+      "skill_atoms": [
+        "shm"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\omega=2\\pi f=10\\pi$ rad/s. $v_{max}=0.03\\times10\\pi=0.3\\pi\\approx0.942$ m/s. $x(t)=0.03\\cos(10\\pi t)$ m",
-          "0.03\\cos(10\\pi t)$ m",
-          "10"
+        "steps_en": [
+          "**Step 1 — Formula.** $\\omega=\\sqrt{k/m}$.",
+          "**Step 2 — Substitute.** $\\omega=\\sqrt{90/10}=\\sqrt{9}$.",
+          "**Step 3 — Evaluate.** $=3\\,\\text{rad/s}$.",
+          "**Answer:** $3\\,\\text{rad/s}$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — נוסחה.** $\\omega=\\sqrt{k/m}$.",
+          "**שלב 2 — הצבה.** $\\sqrt{90/10}=\\sqrt{9}$.",
+          "**שלב 3 — חישוב.** $3\\,\\text{rad/s}$.",
+          "**תשובה:** $3\\,\\text{rad/s}$."
+        ]
       },
-      "explanation_en": "**Why these answers are correct:** Given $f=5$ Hz, angular frequency is $\\omega=2\\pi f=10\\pi$ rad/s — never use $f$ directly where $\\omega$ is required. Amplitude $A=3$ cm $=0.03$ m. Maximum speed: $v_{max}=A\\omega=0.03\\times10\\pi=0.3\\pi\\approx0.942$ m/s. Starting at positive maximum with zero initial velocity means $\\varphi=0$: $x(t)=0.03\\cos(10\\pi t)$ m.\n\n**How to think about it:** Convert Hz → rad/s, cm → m, then choose cosine for \"starts at +A.\" If it started at equilibrium moving right, you would use sine instead.\n\n**Common wrong path:** $\\omega=5$ rad/s (forgot $2\\pi$), or $x=3\\cos(10\\pi t)$ without unit conversion.\n\n**Exam tip:** State $\\omega=2\\pi f$ explicitly on exam scripts — graders look for this step.",
-      "explanation_he": "**למה התשובות נכונות:** $f=5$ Hz נותן $\\omega=2\\pi f=10\\pi$ ראד/ש — אל תשתמשו ב-$f$ ישירות במקום $\\omega$. משרעת $A=3$ ס\"מ $=0.03$ מ'. $v_{\\max}=0.03\\times10\\pi=0.3\\pi\\approx0.942$ מ\"ש. התחלה בקצה חיובי עם $v_0=0$ → $\\varphi=0$: $x(t)=0.03\\cos(10\\pi t)$ מ'.\n\n**איך לחשוב על זה:** Hz→rad/s, ס\"מ→מ', cos ל\"מתחיל ב-$+A$\". אם מתחיל במאזן נע ימינה — sin.\n\n**טעות נפוצה:** $\\omega=5$ (שכחת $2\\pi$), או $x=3\\cos(...)$ בלי המרה.\n\n**טיפ לבחינה:** כתבו $\\omega=2\\pi f$ במפורש — מחפשים את הצעד הזה.\n\n**הקשר:** $v_{\\max}\\approx0.94$ מ\"ש — מהירות נמוכה יחסית כי $A$ קטן (3 ס\"מ). צורת cos מתאימה לשחרור מקצה ללא מהירות התחלתית. **בדיקה:** $x(0)=0.03$ מ' ✓.",
-      "skill_atoms": []
+      "source_item_id": "25b85bbd-011e-5127-a30b-8b8ad100726b",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A mass $m=0.4$ kg is on a spring $k=160$ N/m. At $t=0$: $x_0=0.05$ m and $v_0=0$. Write the complete equation $x(t)$, $v(t)$, $a(t)$.",
-      "stem_he": "מסה $m=0.4$ ק\"ג, קפיץ $k=160$ נ\"מ. ב-$t=0$: $x_0=0.05$ מ', $v_0=0$. כתבו $x(t)$, $v(t)$, $a(t)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "An oscillator has period $2\\,\\text{s}$. Find its frequency.",
+      "stem_he": "למתנד זמן מחזור $2\\,\\text{s}$. מצאו את תדרו.",
+      "explanation_en": "**$f=\\dfrac{1}{2}=0.5\\,\\text{Hz}$.**\n\n**Answer:** $0.5\\,\\text{Hz}$.",
+      "explanation_he": "**$f=0.5\\,\\text{Hz}$.**\n\n**תשובה:** $0.5\\,\\text{Hz}$.",
+      "skill_atoms": [
+        "period_frequency"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\omega=\\sqrt{160/0.4}=20$ rad/s. $x_0=A\\cos\\varphi=0.05$, $v_0=-A\\omega\\sin\\varphi=0\\Rightarrow\\varphi=0$, $A=0.05$ m. $x(t)=0.05\\cos(20t)$. $v(t)=-1.0\\sin(20t)$ m/s. $a(t)=-20\\cos(20t)$ m/s²",
-          "-20\\cos(20t)$ m/s²",
-          "20"
-        ],
-        "case_sensitive": false
+        "value": 0.5
       },
-      "explanation_en": "**Why these equations are correct:** $\\omega=\\sqrt{160/0.4}=20$ rad/s. Initial conditions: $x_0=0.05$ m, $v_0=0$. From $v_0=-A\\omega\\sin\\varphi=0$ with $x_0>0$, get $\\varphi=0$ and $A=0.05$ m. Hence $x(t)=0.05\\cos(20t)$, $v(t)=-A\\omega\\sin(20t)=-1.0\\sin(20t)$ m/s, $a(t)=-A\\omega^2\\cos(20t)=-20\\cos(20t)$ m/s².\n\n**How to think about it:** \"Released from rest at positive displacement\" → cosine with zero phase. Differentiate systematically: each derivative introduces another factor of $\\omega$.\n\n**Common wrong path:** Sine form with wrong $\\varphi$, or $a(t)=-0.05\\cos(20t)$ missing $\\omega^2$.\n\n**Exam tip:** Verify at $t=0$: $x=0.05$ m, $v=0$, $a=-20$ m/s² (maximum inward acceleration at start).\n\n**Check:** $|v|_{max}=A\\omega=1$ m/s at equilibrium in this system.",
-      "explanation_he": "**למה המשוואות נכונות:** $\\omega=\\sqrt{160/0.4}=20$ ראד/ש. תנאי התחלה: $x_0=0.05$ מ', $v_0=0$. מ-$v_0=-A\\omega\\sin\\varphi=0$ עם $x_0>0$: $\\varphi=0$, $A=0.05$ מ'. לכן $x(t)=0.05\\cos(20t)$, $v(t)=-\\sin(20t)$ מ\"ש, $a(t)=-20\\cos(20t)$ מ\"ש².\n\n**איך לחשוב על זה:** \"שחרור ממנוחה בתזוזה חיובית\" → cos עם $\\varphi=0$. נגזרו שיטתית: כל נגזרת מוסיפה $\\omega$.\n\n**טעות נפוצה:** sin עם $\\varphi$ שגוי, או $a=-0.05\\cos(20t)$ בלי $\\omega^2$.\n\n**טיפ לבחינה:** ב-$t=0$: $x=0.05$, $v=0$, $a=-20$ מ\"ש² (תאוצה פנימה מקסימלית).\n\n**הקשר:** $\\omega=20$ ראד/ש → $T=\\pi/10$ ש'. ב-$t=0$ המסה בקצה — תאוצה מקסימalית פנימה. **בדיקה:** $|v|_{\\max}=A\\omega=1$ מ\"ש.",
-      "skill_atoms": []
+      "source_item_id": "a7df1953-a36d-5c77-832e-5d9d576f60e2",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Two springs $k_1=60$ N/m and $k_2=40$ N/m support a mass $m=1$ kg (a) in parallel, (b) in series. Find $T$ for each configuration.",
-      "stem_he": "שני קפיצים $k_1=60$ נ\"מ ו-$k_2=40$ נ\"מ נושאים מסה $m=1$ ק\"ג (א) במקביל, (ב) בטור. מצאו $T$ לכל קונפיגורציה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find $\\omega=\\sqrt{k/m}$ for $k=40\\,\\text{N/m}$ and $m=10\\,\\text{kg}$.",
+      "stem_he": "מצאו $\\omega=\\sqrt{k/m}$ עבור $k=40\\,\\text{N/m}$ ו-$m=10\\,\\text{kg}$.",
+      "explanation_en": "**$\\omega=\\sqrt{4}=2\\,\\text{rad/s}$.**\n\n**Answer:** $2\\,\\text{rad/s}$.",
+      "explanation_he": "**$\\omega=2\\,\\text{rad/s}$.**\n\n**תשובה:** $2\\,\\text{rad/s}$.",
+      "skill_atoms": [
+        "shm"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n(a) $k_{eff}=100$ N/m. $T=2\\pi\\sqrt{1/100}=2\\pi/10\\approx0.628$ s. (b) $k_{eff}=60\\times40/100=24$ N/m. $T=2\\pi\\sqrt{1/24}=2\\pi/\\sqrt{24}\\approx1.28$ s.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2\\pi/\\sqrt{24}\\approx1.28$ s.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1.28"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why these periods are correct:** (a) Parallel: both springs stretch the same amount, so $k_{eff}=k_1+k_2=60+40=100$ N/m. With $m=1$ kg: $T=2\\pi\\sqrt{m/k_{eff}}=2\\pi\\sqrt{1/100}=2\\pi/10\\approx0.628$ s. (b) Series: same force through each, displacements add, giving $k_{eff}=k_1k_2/(k_1+k_2)=2400/100=24$ N/m. $T=2\\pi\\sqrt{1/24}\\approx1.28$ s.\n\n**How to think about it:** Parallel is stiffer → shorter period. Series is softer → longer period. Always verify $T_{series}>T_{parallel}$.\n\n**Common wrong path:** Adding $k$ for series or reciprocals for parallel — the resistor mnemonic prevents this.\n\n**Exam tip:** Quick ratio: $T_{ser}/T_{par}=\\sqrt{k_{par}/k_{ser}}=\\sqrt{100/24}\\approx2$.\n\n**Check:** $T_{ser}/T_{par}\\approx2.04$ — series roughly twice as slow.",
-      "explanation_he": "**למה המחזורים נכונים:** (א) מקביל: $k_{\\text{eff}}=60+40=100$ נ\"מ. עם $m=1$ ק\"ג: $T=2\\pi\\sqrt{1/100}\\approx0.628$ ש'. (ב) טור: $k_{\\text{eff}}=60\\times40/100=24$ נ\"מ. $T=2\\pi\\sqrt{1/24}\\approx1.28$ ש'.\n\n**איך לחשוב על זה:** מקביל קשיח → $T$ קצר. טור רך → $T$ ארוך. תמיד $T_{\\text{series}}>T_{\\text{parallel}}$. שרטטו את שני הקפיצים וסמנו אם התזוזה או הכוח משותף.\n\n**טעות נפוצה:** חיבור $k$ בטור או הופכיים במקביל — אנלוגיית הנגדים (טור=הופכיים, מקביל=ישיר) מונעת זאת.\n\n**טיפ לבחינה:** $T_{\\text{series}}/T_{\\text{parallel}}\\approx2$ — בדיקה מהירה לפני הגשה.\n\n**הקשר:** מחזור טור ~פי 2 ממקביל — תואם $k_{\\text{eff,series}}\\ll k_{\\text{eff,parallel}}$. אם היפכתם נוסחאות, $T$ יצא קצר מדי בטור. **בדיקה:** $T_{\\text{series}}/T_{\\text{parallel}}\\approx2.04$ ✓.",
-      "skill_atoms": []
+      "source_item_id": "a77a46bc-a725-53cc-833b-1f523e177ce3",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "At what position $x$ does a SHM oscillator have speed equal to half its maximum speed? Express in terms of $A$.",
-      "stem_he": "באיזה מיקום $x$ מהירות הוא מחצית מהמהירות המקסימלית? בטאו לפי $A$.",
+      "stem_en": "In an oscillation, the speed of the mass is maximum at:",
+      "stem_he": "בתנודה, מהירות המסה מרבית ב:",
+      "explanation_en": "**Speed peaks at equilibrium, zero at the turning points.**\n\n**Answer:** equilibrium point.",
+      "explanation_he": "**המהירות מרבית בנקודת שיווי המשקל, אפס בנקודות הקיצון.**\n\n**תשובה:** נקודת שיווי המשקל.",
+      "skill_atoms": [
+        "shm"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Energy: $\\frac{1}{2}mv^2+\\frac{1}{2}kx^2=\\frac{1}{2}kA^2$. $(v_{max}/2)^2=\\omega^2(A^2-x^2)$. $v_{max}^2/4=\\omega^2 A^2/4$... Wait, use $v=\\omega\\sqrt{A^2-x^2}$. $v_{max}/2=\\omega\\sqrt{A^2-x^2}$. $(A\\omega/2)=\\omega\\sqrt{A^2-x^2}$. $A^2/4=A^2-x^2$. $x^2=3A^2/4$. $x=\\pm\\frac{\\sqrt{3}}{2}A\\approx\\pm0.866A$",
-          "\\pm\\frac{\\sqrt{3}}{2}A\\approx\\pm0.866A$",
-          "0.866"
+        "options_en": [
+          "$\\text{the equilibrium point}$",
+          "$\\text{the extreme points}$",
+          "$\\text{all points equally}$",
+          "$\\text{no point}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{the equilibrium point}$",
+          "$\\text{the extreme points}$",
+          "$\\text{all points equally}$",
+          "$\\text{no point}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why $x=\\pm\\frac{\\sqrt{3}}{2}A$ is correct:** Instantaneous speed in SHM is $v=\\omega\\sqrt{A^2-x^2}$, with $v_{max}=A\\omega$. Set $v=v_{max}/2$:\n$$\\frac{A\\omega}{2}=\\omega\\sqrt{A^2-x^2}\\Rightarrow\\frac{A^2}{4}=A^2-x^2\\Rightarrow x^2=\\frac{3A^2}{4}$$\nSo $x=\\pm\\frac{\\sqrt{3}}{2}A\\approx\\pm0.866A$ — **not** at $x=A/2$.\n\n**How to think about it:** Energy view: at half max speed, $KE=\\frac{1}{4}$ of maximum, so $PE=\\frac{3}{4}$ of total — position is closer to amplitude than to center.\n\n**Common wrong path:** Linear guess $x=A/2$, or dropping the $\\pm$ sign.\n\n**Exam tip:** Half max speed occurs at 86.6% of amplitude — a favorite trick question.\n\n**Check:** Substitute $x=\\frac{\\sqrt{3}}{2}A$ into $v=\\omega\\sqrt{A^2-x^2}$ to verify half max speed.",
-      "explanation_he": "**למה $x=\\pm\\frac{\\sqrt{3}}{2}A$ נכון:** $v=\\omega\\sqrt{A^2-x^2}$, $v_{\\max}=A\\omega$. נסמכו $v=v_{\\max}/2$:\n$$\\frac{A\\omega}{2}=\\omega\\sqrt{A^2-x^2}\\Rightarrow x^2=\\frac{3A^2}{4}$$\nלכן $x=\\pm\\frac{\\sqrt{3}}{2}A\\approx\\pm0.866A$ — **לא** ב-$x=A/2$.\n\n**איך לחשוב על זה:** אנרגיה: בחצי $v_{\\max}$, $KE$ = רבע מהמקסימום — המיקום קרוב יותר למשרעת מאשר למאזן.\n\n**טעות נפוצה:** $x=A/2$ (ניחוש לינארי), או השמטת $\\pm$.\n\n**טיפ לבחינה:** חצי $v_{\\max}$ ב-86.6% מ-$A$ — שאלת מלכודת נפוצה.\n\n**הקשר:** ב-$x=0$ מהירות מקסימalית; ב-$x=\\pm A$ מהירות אפס. חצי $v_{\\max}$ לא ב-$A/2$ כי $v(x)$ לא לינארית. **בדיקה:** הציבו $x=\\frac{\\sqrt{3}}{2}A$ ב-$v=\\omega\\sqrt{A^2-x^2}$.",
-      "skill_atoms": []
+      "source_item_id": "7b04eeac-5b4d-56cf-8586-68d43b3fac90",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{the equilibrium point}$",
+        "$\\text{the extreme points}$",
+        "$\\text{all points equally}$",
+        "$\\text{no point}$"
+      ],
+      "options_he": [
+        "$\\text{the equilibrium point}$",
+        "$\\text{the extreme points}$",
+        "$\\text{all points equally}$",
+        "$\\text{no point}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A mass $m=0.25$ kg on a spring ($k=100$ N/m) is released from rest at $x=0.08$ m. At what time does it first reach $x=0.04$ m?",
-      "stem_he": "מסה $m=0.25$ ק\"ג, קפיץ $k=100$ נ\"מ, משוחררת ממנוחה ב-$x=0.08$ מ'. באיזה זמן מגיעה לראשונה ל-$x=0.04$ מ'?",
+      "stem_en": "Find the pendulum period $T=2\\pi\\sqrt{L/g}$ for $L=10\\,\\text{m}$, $g=10$ (round to 4).",
+      "stem_he": "מצאו את זמן מחזור המטוטלת $T=2\\pi\\sqrt{L/g}$ עבור $L=10\\,\\text{m}$, $g=10$ (עגלו ל-4).",
+      "explanation_en": "**$T=2\\pi\\sqrt{1}=2\\pi\\approx 6.2832\\,\\text{s}$.**\n\n**Answer:** $\\approx 6.2832\\,\\text{s}$.",
+      "explanation_he": "**$T=2\\pi\\approx 6.2832\\,\\text{s}$.**\n\n**תשובה:** $\\approx 6.2832\\,\\text{s}$.",
+      "skill_atoms": [
+        "pendulum"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\omega=20$ rad/s. $x(t)=0.08\\cos(20t)$. $0.04=0.08\\cos(20t)$. $\\cos(20t)=0.5$. $20t=\\pi/3$. $t=\\pi/60\\approx0.0524$ s",
-          "\\pi/60\\approx0.0524$ s",
-          "0.0524"
-        ],
-        "case_sensitive": false
+        "value": 6.283185
       },
-      "explanation_en": "**Why $t=\\pi/60\\approx0.0524$ s is correct:** $\\omega=\\sqrt{100/0.25}=20$ rad/s. Released from rest at $x=0.08$ m means the mass starts at positive amplitude with $v_0=0$: $x(t)=0.08\\cos(20t)$. Set $x=0.04$ m: $0.08\\cos(20t)=0.04$ → $\\cos(20t)=0.5$ → $20t=\\pi/3$ → $t=\\pi/60\\approx0.0524$ s.\n\n**How to think about it:** First passage to half amplitude on the inward journey — pick the smallest positive solution of $\\cos(20t)=0.5$.\n\n**Common wrong path:** $20t=\\pi/6$, or using sine with wrong phase so $t$ comes out negative first.\n\n**Exam tip:** List $\\cos\\theta=0.5$ solutions: $\\pi/3, 5\\pi/3,\\ldots$ — take minimum positive $t$.\n\n**Check:** $t\\approx0.052$ s $\\ll T\\approx0.31$ s — still in first quarter of cycle.",
-      "explanation_he": "**למה $t=\\pi/60\\approx0.052$ ש' נכון:** $\\omega=\\sqrt{100/0.25}=20$ ראד/ש. שחרור ממנוחה ב-$x=0.08$ מ' (קצה חיובי, $v_0=0$): $x(t)=0.08\\cos(20t)$. נסמכו $x=0.04$ מ': $0.08\\cos(20t)=0.04$ → $\\cos(20t)=0.5$ → $20t=\\pi/3$ → $t=\\pi/60$ ש'.\n\n**איך לחשוב על זה:** מעבר ראשון לחצי משרעת בדרך פנימה מהקצה — בחרו את הפתרון החיובי הקטן ביותר של $\\cos(20t)=0.5$, לא זווית גדולה יותר.\n\n**טעות נפוצה:** $20t=\\pi/6$ (בלבול חצי משרעת עם רבע מחזור), או sin עם $\\varphi$ שגוי שנותן $t$ שלילי ראשון.\n\n**טיפ לבחינה:** $\\cos\\theta=0.5$ → $\\theta=\\pi/3, 5\\pi/3,\\ldots$ — $t$ מינימלי חיובי.\n\n**הקשר:** $t\\approx0.052$ ש' << $T=\\pi/10\\approx0.31$ ש' — המסה עדיין ברבע הראשון. **בדיקה:** $x(0)=0.08$ מ', $x(\\pi/60)=0.04$ מ' ✓.",
-      "skill_atoms": []
+      "source_item_id": "c2dd3aa0-b655-5abb-afb5-821efdeac4b8",
+      "points_level_min": "5pt",
+      "correct_answer": "6.283185"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A spring $k=25\\,\\text{N/m}$ is displaced $0.4\\,\\text{m}$. Find the restoring force.",
+      "stem_he": "קפיץ $k=25\\,\\text{N/m}$ מוסט $0.4\\,\\text{m}$. מצאו את הכוח המחזיר.",
+      "explanation_en": "**$F=kx=25\\cdot 0.4=10\\,\\text{N}$.**\n\n**Answer:** $10\\,\\text{N}$.",
+      "explanation_he": "**$F=10\\,\\text{N}$.**\n\n**תשובה:** $10\\,\\text{N}$.",
+      "skill_atoms": [
+        "hookes_law"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "2010eab0-839f-5889-890d-150a9a8542ea",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "An oscillator at $4\\,\\text{Hz}$ runs for $5\\,\\text{s}$. How many oscillations occur ($n=ft$)?",
+      "stem_he": "מתנד בתדר $4\\,\\text{Hz}$ פועל $5\\,\\text{s}$. כמה תנודות מתרחשות ($n=ft$)?",
+      "explanation_en": "**$n=ft=4\\cdot 5=20$.**\n\n**Answer:** $20$.",
+      "explanation_he": "**$n=20$.**\n\n**תשובה:** $20$.",
+      "skill_atoms": [
+        "period_frequency"
+      ],
+      "answer_payload": {
+        "value": 20
+      },
+      "source_item_id": "9d7e2504-55e3-59e0-98b0-134ee7374956",
+      "points_level_min": "5pt",
+      "correct_answer": "20"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "An oscillator has period $0.1\\,\\text{s}$. Find its frequency.",
+      "stem_he": "למתנד זמן מחזור $0.1\\,\\text{s}$. מצאו את תדרו.",
+      "explanation_en": "**$f=\\dfrac{1}{0.1}=10\\,\\text{Hz}$.**\n\n**Answer:** $10\\,\\text{Hz}$.",
+      "explanation_he": "**$f=10\\,\\text{Hz}$.**\n\n**תשובה:** $10\\,\\text{Hz}$.",
+      "skill_atoms": [
+        "period_frequency"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "c82561e3-aa7b-5b11-af65-a7d0626b430c",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: a simple pendulum's period is independent of the bob mass.",
+      "stem_he": "נכון או לא נכון: זמן המחזור של מטוטלת פשוטה אינו תלוי במסת המשקולת.",
+      "explanation_en": "**$T=2\\pi\\sqrt{L/g}$ has no mass** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**$T=2\\pi\\sqrt{L/g}$ ללא מסה** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "pendulum"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "b4c69722-0451-57ca-938c-1d0239977a63",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the pendulum period $T=2\\pi\\sqrt{L/g}$ for $L=2.5\\,\\text{m}$, $g=10$ (round to 4).",
+      "stem_he": "מצאו את זמן מחזור המטוטלת $T=2\\pi\\sqrt{L/g}$ עבור $L=2.5\\,\\text{m}$, $g=10$ (עגלו ל-4).",
+      "explanation_en": "**$T=2\\pi\\sqrt{0.25}=2\\pi\\cdot 0.5=\\pi\\approx 3.1416\\,\\text{s}$.**\n\n**Answer:** $\\approx 3.1416\\,\\text{s}$.",
+      "explanation_he": "**$T=\\pi\\approx 3.1416\\,\\text{s}$.**\n\n**תשובה:** $\\approx 3.1416\\,\\text{s}$.",
+      "skill_atoms": [
+        "pendulum"
+      ],
+      "answer_payload": {
+        "value": 3.141593
+      },
+      "source_item_id": "2cf40a4d-f2c8-5e42-aa28-ef94f8d880d8",
+      "points_level_min": "5pt",
+      "correct_answer": "3.141593"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "The maximum speed in oscillation is $v_{\\max}=\\omega A$. Find it for $\\omega=5\\,\\text{rad/s}$, $A=0.2\\,\\text{m}$.",
+      "stem_he": "המהירות המרבית בתנודה היא $v_{\\max}=\\omega A$. מצאו אותה עבור $\\omega=5\\,\\text{rad/s}$, $A=0.2\\,\\text{m}$.",
+      "explanation_en": "**$v_{\\max}=5\\cdot 0.2=1\\,\\text{m/s}$.**\n\n**Answer:** $1\\,\\text{m/s}$.",
+      "explanation_he": "**$v_{\\max}=1\\,\\text{m/s}$.**\n\n**תשובה:** $1\\,\\text{m/s}$.",
+      "skill_atoms": [
+        "shm"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "c4867d81-662b-53e5-8108-c04f9fc5f363",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "The energy of a spring oscillator is $E=\\tfrac12 kA^2$. Find it for $k=200\\,\\text{N/m}$, $A=0.1\\,\\text{m}$.",
+      "stem_he": "האנרגיה של מתנד קפיץ היא $E=\\tfrac12 kA^2$. מצאו אותה עבור $k=200\\,\\text{N/m}$, $A=0.1\\,\\text{m}$.",
+      "explanation_en": "**$E=\\tfrac12\\cdot 200\\cdot 0.01=1\\,\\text{J}$.**\n\n**Answer:** $1\\,\\text{J}$.",
+      "explanation_he": "**$E=1\\,\\text{J}$.**\n\n**תשובה:** $1\\,\\text{J}$.",
+      "skill_atoms": [
+        "shm"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "5ccb46d1-52a4-55a9-9fa3-1acb3d44e1f2",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 60,

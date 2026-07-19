@@ -599,6 +599,22 @@ CAS-verified with 0 rejections, 15/15 first pass, lint 0/207:
 - `vectors_basics` — magnitude 2D/3D, components $v\cos\theta$/$v\sin\theta$,
   dot product, perpendicular resultant, scalar vs vector.
 
+## Batch Y — shipped (physics waves & rotation)
+
+Third physics cluster to 15 verified items each (spread 5/6/4, 4 kinds), all
+CAS-verified, 0 rejections, 15/15 first pass, lint 0/207:
+
+- `waves_basics` — $v=f\lambda$, $T=1/f$, $f=1/T$, wave count $n=ft$.
+- `sound_waves` — longitudinal nature, speed in air, echo $d=vt/2$, pitch.
+- `simple_harmonic_motion` — $F=-kx$, $\omega=\sqrt{k/m}$, $T=2\pi\sqrt{m/k}$,
+  $v_{\max}=\omega A$, $a_{\max}=\omega^2A$.
+- `harmonic_oscillation` — pendulum $T=2\pi\sqrt{L/g}$, spring energy $\tfrac12kA^2$,
+  oscillation count.
+- `rotational_kinematics` — $\omega=\theta/t$, $\alpha=\Delta\omega/t$,
+  $v=\omega r$, $\omega=\omega_i+\alpha t$, $\omega^2=2\alpha\theta$, rev→rad.
+- `rotational_dynamics` — $\tau=I\alpha$, $I=mr^2$, $L=I\omega$, disk inertia
+  $\tfrac12mr^2$, rotational KE $\tfrac12I\omega^2$.
+
 ## Batch V — shipped (math corpus complete)
 
 The final six thin math lessons expanded to 15 verified items each (spread 5/6/4,
