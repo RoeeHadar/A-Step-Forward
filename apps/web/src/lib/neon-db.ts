@@ -24,6 +24,7 @@ import {
   type PaceStatus,
   type PacingResult,
 } from './plan-pacing';
+import { computeReadiness } from './readiness';
 import { countGateAttempts, getLatestGateWeakConcepts } from './test-attempts';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
@@ -2069,12 +2070,17 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     });
   }
 
+  const [activityDays, mockPassed] = await Promise.all([
+    getConceptActivityDays(learnerId),
+    getMockPassed(learnerId),
+  ]);
+
   return {
     ...plan,
     plan_adjustment_kind: plan.plan_adjustment_kind as LearningPlan['plan_adjustment_kind'],
     plan_last_adjusted_at: plan.plan_last_adjusted_at,
     weeks,
-    pacing: computePlanPacing(profile, mastery),
+    pacing: computePlanPacing(profile, mastery, { activityDays, mockPassed }),
   };
 }
 
@@ -2114,17 +2120,87 @@ export function computeFullPacing(
   });
 }
 
+/** concept_id → whole days since last activity (for readiness decay). Graceful → {}. */
+export async function getConceptActivityDays(learnerId: string): Promise<Record<string, number>> {
+  if (!sql) return {};
+  try {
+    const rows = (await sql`
+      SELECT concept_id,
+             GREATEST(0, EXTRACT(EPOCH FROM (NOW() - last_activity)) / 86400.0)::float AS days
+      FROM concept_mastery
+      WHERE learner_id = ${learnerId} AND last_activity IS NOT NULL
+    `) as Array<{ concept_id: string; days: number }>;
+    const out: Record<string, number> = {};
+    for (const r of rows) out[r.concept_id] = Number(r.days ?? 0);
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 /**
- * Compute the read-only goal-pacing overlay for the dashboard (ADR-0009).
- * Pure over its inputs (delegates to plan-pacing). Returns null when the goal
- * has no derived frontier so the UI can hide the overlay gracefully.
+ * Whether the learner has passed ≥ 1 full-length mock at target (ADR-0010 Stream E).
+ * Checks the Tests archive (`test_attempts` kind='mock_exam' passed) first, then the
+ * legacy `mock_exam_results` (MCQ auto-grade ≥ 60%). Graceful → false.
+ */
+export async function getMockPassed(learnerId: string): Promise<boolean> {
+  if (!sql) return false;
+  try {
+    const rows = (await sql`
+      SELECT 1 FROM test_attempts
+      WHERE learner_id = ${learnerId} AND kind = 'mock_exam' AND passed = TRUE
+      LIMIT 1
+    `) as Array<unknown>;
+    if (rows.length > 0) return true;
+  } catch {
+    // fall through to legacy table
+  }
+  try {
+    const rows = (await sql`
+      SELECT 1 FROM mock_exam_results
+      WHERE user_id = ${learnerId} AND max_mcq > 0 AND (score_mcq::float / max_mcq::float) >= 0.6
+      LIMIT 1
+    `) as Array<unknown>;
+    return rows.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** Whole days until the learner's dated deadline, or null when none is set. */
+function daysToDeadline(profile: LearnerProfileRow | null, now: Date = new Date()): number | null {
+  const iso = profile?.next_test_date ?? profile?.final_goal_date ?? null;
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return Math.max(0, Math.round((d.getTime() - now.getTime()) / 86_400_000));
+}
+
+/**
+ * Compute the read-only goal-pacing overlay for the dashboard (ADR-0009 + ADR-0010
+ * readiness). Pure over its inputs (delegates to plan-pacing + readiness). Pass
+ * `opts` to enable the humble readiness overlay (decay + mock gate). Returns null
+ * when the goal has no derived frontier so the UI can hide the overlay gracefully.
  */
 export function computePlanPacing(
   profile: LearnerProfileRow | null,
   mastery: Record<string, number>,
+  opts?: {
+    activityDays?: Record<string, number> | null;
+    mockPassed?: boolean;
+    now?: Date;
+  },
 ): PlanPacing | null {
   const p = computeFullPacing(profile, mastery);
   if (!p) return null;
+
+  const readiness = computeReadiness({
+    goalKey: p.goal_key,
+    masteryScores: mastery,
+    activityDays: opts?.activityDays ?? null,
+    mockPassed: opts?.mockPassed ?? false,
+    daysToExam: daysToDeadline(profile, opts?.now),
+  });
 
   return {
     goal_key: p.goal_key,
@@ -2135,6 +2211,18 @@ export function computePlanPacing(
     frontier_size: p.frontier_size,
     required_velocity: p.required_velocity,
     capacity: p.capacity,
+    ...(readiness
+      ? {
+          readiness: readiness.readiness,
+          critical_coverage: readiness.critical_coverage,
+          exam_ready: readiness.exam_ready,
+          mock_passed: readiness.mock_passed,
+          readiness_band: readiness.band,
+          readiness_phase: readiness.phase,
+          days_to_exam: readiness.days_to_exam,
+          readiness_message_key: readiness.message_key,
+        }
+      : {}),
   };
 }
 

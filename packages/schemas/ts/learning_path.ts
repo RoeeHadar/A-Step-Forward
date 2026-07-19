@@ -48,6 +48,19 @@ export const planPacingSchema = z.object({
   frontier_size: z.number(),
   required_velocity: z.number(),
   capacity: z.number(),
+  // Humble readiness overlay (ADR-0010 Stream E). Optional/back-compat: absent when
+  // the goal has no frontier or on older payloads. `readiness` is the concave,
+  // mock-gated, sub-1.0 number the UI should show instead of raw goal_readiness.
+  readiness: z.number().optional(),
+  critical_coverage: z.number().optional(),
+  exam_ready: z.boolean().optional(),
+  mock_passed: z.boolean().optional(),
+  readiness_band: z
+    .enum(['foundational', 'building', 'approaching', 'exam_ready'])
+    .optional(),
+  readiness_phase: z.enum(['building', 'final_phase', 'day_before']).optional(),
+  days_to_exam: z.number().nullable().optional(),
+  readiness_message_key: z.string().optional(),
 });
 
 export const learningPlanSchema = z.object({

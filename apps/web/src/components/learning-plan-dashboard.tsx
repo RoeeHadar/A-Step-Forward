@@ -54,6 +54,12 @@ const STR = {
     pace_at_risk: 'מאחור מול היעד',
     concepts_left: (n: number) => `נותרו ${n} מושגים ליעד`,
     weeks_to_goal: (n: number) => `~${n} שבועות ליעד`,
+    readiness_humble: 'המספר הוא כלי בלבד — הוא לא מבטיח הצלחה. המשיכו להתאמן עד יום המבחן.',
+    readiness_final_phase: 'שלב אחרון: התמקדו בסימולציות מלאות ובחזרה ממוקדת על נקודות התורפה.',
+    readiness_day_before:
+      'יום לפני המבחן: רק חזרה על התיאוריה ושיחה עם המנטור להרגעה — בלי חומר חדש.',
+    readiness_exam_ready: 'אתם קרובים מאוד — אבל אי אפשר להבטיח תוצאה. המשיכו לתרגל עד הסוף.',
+    readiness_needs_mock: 'כדי להעלות את המוכנות — עברו סימולציה מלאה בתנאי מבחן.',
   },
   en: {
     title: 'Your learning plan',
@@ -81,6 +87,15 @@ const STR = {
     pace_at_risk: 'Behind pace',
     concepts_left: (n: number) => `${n} concepts left to goal`,
     weeks_to_goal: (n: number) => `~${n} weeks to goal`,
+    readiness_humble:
+      'This number is only a tool — it cannot promise success. Keep practicing until exam day.',
+    readiness_final_phase:
+      'Final phase: focus on full mock exams and targeted review of your weak spots.',
+    readiness_day_before:
+      'Day before the exam: just a theory review and a calming talk with your Mentor — no new material.',
+    readiness_exam_ready:
+      "You're very close — but no one can guarantee a result. Keep practicing to the end.",
+    readiness_needs_mock: 'To raise your readiness, sit a full mock exam under exam conditions.',
   },
 } as const;
 
@@ -202,7 +217,20 @@ function PacingBanner({
 }) {
   const t = STR[lang];
   const isHe = lang === 'he';
-  const readinessPct = Math.round((pacing.goal_readiness ?? 0) * 100);
+  // Show the humble, mock-gated, concave readiness (ADR-0010 Stream E) when present;
+  // fall back to raw coverage on older payloads.
+  const readinessValue = pacing.readiness ?? pacing.goal_readiness ?? 0;
+  const readinessPct = Math.round(readinessValue * 100);
+  const readinessNote =
+    pacing.readiness_message_key === 'day_before'
+      ? t.readiness_day_before
+      : pacing.readiness_message_key === 'final_phase'
+        ? t.readiness_final_phase
+        : pacing.exam_ready
+          ? t.readiness_exam_ready
+          : pacing.readiness != null && pacing.mock_passed === false && (pacing.critical_coverage ?? 0) >= 0.5
+            ? t.readiness_needs_mock
+            : t.readiness_humble;
 
   const paceMeta =
     pacing.status === 'ahead'
@@ -233,6 +261,7 @@ function PacingBanner({
           <p className="mt-1 text-xs text-muted-foreground">
             {t.concepts_left(pacing.remaining_scope)}
           </p>
+          <p className="mt-1 text-xs text-muted-foreground/80">{readinessNote}</p>
         </div>
         <div className="flex items-center gap-2">
           {hasDeadline ? (
