@@ -271,204 +271,315 @@
     ],
     "tutor_pacing_hint": "Start with concrete sample spaces (dice, coins). Then introduce axioms as 'common sense rules'. Then work through inclusion-exclusion with Venn diagrams. End with at-least-one problems using complement.",
     "skill_atoms_unlocked": [
-      "sample_space_definition",
+      "counting_outcomes",
       "event_operations",
-      "kolmogorov_axioms",
-      "complement_rule",
-      "inclusion_exclusion",
-      "classical_probability",
-      "at_least_one_strategy"
+      "sample_space_definition"
     ]
   },
   "questions": [
     {
-      "id": "q1",
-      "kind": "mcq",
-      "difficulty": "medium",
-      "skill_atoms": [
-        "probability_axioms",
-        "complement_rule"
-      ],
-      "stem_en": "$P(A)=0.6$, $P(B)=0.5$, $P(A\\cap B)=0.3$. Find $P(A\\cup B)$.",
-      "stem_he": "$P(A)=0.6$, $P(B)=0.5$, $P(A\\cap B)=0.3$. מצא $P(A\\cup B)$.",
-      "answer_payload": {
-        "options_en": [
-          "$0.7$",
-          "$0.8$",
-          "$0.9$",
-          "$1.1$"
-        ],
-        "options_he": [
-          "$0.7$",
-          "$0.8$",
-          "$0.9$",
-          "$1.1$"
-        ],
-        "correct_index": 1
-      },
-      "explanation_en": "**Why this is correct:**\nInclusion-exclusion gives $P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.6 + 0.5 - 0.3 = 0.8$. The intersection $0.3$ was counted in both $P(A)$ and $P(B)$, so we subtract once.\n\n**How to think about it:**\nWhen two events overlap, naive addition double-counts shared outcomes. Always check whether $P(A \\cap B) > 0$ before using $P(A)+P(B)$ alone. Here overlap is explicit in the givens.\n\n**Common slip:**\nAnswering $0.7$ by forgetting to subtract the overlap ($0.6+0.5-0.3$ miscomputed as $0.6+0.5-0.4$). Or picking $1.1$ by adding without subtracting — probabilities cannot exceed 1.\n\n**Exam tip:**\nOn Bagrut MCQs with three given probabilities, write the inclusion-exclusion template before substituting — distractor $0.7$ targets students who subtract too much.",
-      "explanation_he": "**למה זה נכון:**\nכלל ההכלה-הפסה נותן $P(A \\cup B) = 0.6 + 0.5 - 0.3 = 0.8$. החיתוך $0.3$ נספר גם ב-$P(A)$ וגם ב-$P(B)$, ולכן מחסירים פעם אחת.\n\n**איך לחשוב על זה:**\nכששני אירועים חופפים, חיבור נאיבי סופר תוצאות משותפות פעמיים. תמיד בדקו אם $P(A \\cap B) > 0$ לפני $P(A)+P(B)$ בלבד. כאן החפיפה נתונה במפורש.\n\n**טעות נפוצה:**\nתשובה $0.7$ משגיאת חיסור ($0.6+0.5-0.3$ מחושב כ-$0.6+0.5-0.4$). או $1.1$ מחיבור בלי חיסור — הסתברות לא יכולה לעלות על 1.\n\n**טיפ לבחינה:**\nבשאלות בגרות עם שלוש הסתברויות נתונות — כתבו את תבנית ההכלה-הפסה לפני ההצבה; מסיח $0.7$ מכוון לתלמידים שמחסירים יותר מדי.",
       "ord": 1,
-      "options_en": [
-        "$0.7$",
-        "$0.8$",
-        "$0.9$",
-        "$1.1$"
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "How many outcomes are there when rolling one die?",
+      "stem_he": "כמה תוצאות יש בהטלת קובייה אחת?",
+      "explanation_en": "**Faces $1$–$6$.** $6$ outcomes.\n\n**Answer:** $6$.",
+      "explanation_he": "**פאות $1$–$6$.** $6$ תוצאות.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "sample_space_definition"
       ],
-      "options_he": [
-        "$0.7$",
-        "$0.8$",
-        "$0.9$",
-        "$1.1$"
-      ],
-      "correct_index": 1
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "9e5b0c2c-5874-5890-a8e2-9f68e797c550",
+      "points_level_min": "3pt",
+      "correct_answer": "6"
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "A die is rolled. Find $P(\\text{even number})$.",
-      "stem_he": "קובייה. מצא $P(\\text{even number})$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P = 3/6 = 1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nOn a fair die, $\\Omega = \\{1,2,3,4,5,6\\}$ with $|\\Omega|=6$. Even numbers are $\\{2,4,6\\}$, so $|A|=3$ and $P = 3/6 = 1/2$ by classical probability.\n\n**How to think about it:**\nList the sample space first, then identify which outcomes belong to the event. 'Even' means divisible by 2 — three out of six equally likely faces.\n\n**Common slip:**\nUsing $1/3$ by counting only $\\{2,4\\}$ and forgetting 6, or answering $3$ (the count) instead of the probability $1/2$.\n\n**Exam tip:**\nDie problems on Bagrut are quick points — always write $|A|$ and $|\\Omega|$ as a fraction before simplifying.",
-      "explanation_he": "**למה זה נכון:**\nבקובייה הוגנת, $\\Omega = \\{1,2,3,4,5,6\\}$ עם $|\\Omega|=6$. מספרים זוגיים: $\\{2,4,6\\}$, $|A|=3$ ו-$P = 3/6 = 1/2$ בהסתברות קלאסית. כל פאה שווה-הסתברות.\n\n**איך לחשוב על זה:**\nרשמו מרחב מדגם קודם, ואז זיהו אילו תוצאות שייכות לאירוע. 'זוגי' = מתחלק ב-2 — שלוש מתוך שש פאות שוות-הסתברות. אל תדלגו על שלב רשימת $\\Omega$.\n\n**טעות נפוצה:**\nשימוש ב-$1/3$ מספירת $\\{2,4\\}$ בלבד בלי 6, או תשובה $3$ (הספירה) במקום ההסתברות $1/2$. גם $2/6$ בלי פישוט ל-$1/2$ עלול להיחשב לא שלם.\n\n**טיפ לבחינה:**\nבעיות קובייה בבגרות — נקודות מהירות; תמיד כתבו $|A|$ ו-$|\\Omega|$ כשבר לפני פישוט. סמנו את התוצאות החיוביות בעץ או ברשימה.",
+      "stem_en": "True or False: the sample space of rolling one die has $6$ outcomes.",
+      "stem_he": "נכון או לא נכון: מרחב המדגם של הטלת קובייה אחת מכיל $6$ תוצאות.",
+      "explanation_en": "**Faces $1$–$6$** give exactly $6$ equally likely outcomes — **true**.",
+      "explanation_he": "**הפאות $1$–$6$** נותנות בדיוק $6$ תוצאות שקולות — **נכון**.",
       "skill_atoms": [
-        "sample_space_definition",
-        "event_operations"
-      ]
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "2ac91af7-2760-598b-8c91-0ab33cfaa76d",
+      "points_level_min": "3pt",
+      "correct_bool": true
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A coin is flipped 3 times. Write the sample space $\\Omega$ and find $|\\Omega|$.",
-      "stem_he": "מטבע מוטל 3 פעמים. כתוב $\\Omega$ ומצא $|\\Omega|$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\Omega = \\{HHH,HHT,...\\}$, $|\\Omega|=8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nThree flips produce $2^3 = 8$ equally likely outcomes. Listing: $\\Omega = \\{HHH, HHT, HTH, HTT, THH, THT, TTH, TTT\\}$, so $|\\Omega|=8$.\n\n**How to think about it:**\nEach flip doubles the sample space: 1 flip $\\to 2$, 2 flips $\\to 4$, 3 flips $\\to 8$. Use the tree diagram or the formula $2^n$ for $n$ independent flips.\n\n**Common slip:**\nWriting $|\\Omega|=6$ by confusing flips with die faces, or listing only 4 outcomes by stopping at HTT without completing the tree.\n\n**Exam tip:**\nCoin-flip sample spaces appear in Bagrut as setup for conditional probability — memorize $2^n$ and practice full enumeration once.",
-      "explanation_he": "**למה זה נכון:**\nשלושה הטלות יוצרות $2^3 = 8$ תוצאות שוות-הסתברות. רשימה מלאה: $\\Omega = \\{HHH, HHT, HTH, HTT, THH, THT, TTH, TTT\\}$, $| \\Omega |=8$. כל מסלול בעץ הטלה מוסיף ענף.\n\n**איך לחשוב על זה:**\nכל הטלה מכפילה את מרחב המדגם: 1 $\\to 2$, 2 $\\to 4$, 3 $\\to 8$. השתמשו בעץ או בנוסחה $2^n$ ל-$n$ הטלות בלתי-תלויות. אל תסתמכו על זיכרון בלבד — ספרו פעם אחת.\n\n**טעות נפוצה:**\nכתיבת $|\\Omega|=6$ מבלבול עם קובייה, או רק 4–6 תוצאות מעצירה מוקדמת בעץ. גם $|\\Omega|=3$ מחלוקת $8$ ב-$2$ — אין כזה.\n\n**טיפ לבחינה:**\nמרחבי מדגם של מטבע מופיעים בבגרות כהכנה להסתברות מותנית — שיננו $2^n$ ותרגלו רשימה מלאה פעם אחת. כתבו את $\\Omega$ לפני כל שאלת 'לפחות $k$ ראשים'.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A restaurant menu has $2$ starters, $3$ mains, and $2$ desserts. How many different $3$-course meals are possible?",
+      "stem_he": "בתפריט מסעדה $2$ מנות ראשונות, $3$ עיקריות ו-$2$ קינוחים. כמה ארוחות בנות $3$ מנות אפשריות?",
+      "explanation_en": "**Step 1 — Multiplication principle.** Choices multiply across independent stages.\n\n**Step 2 — Multiply.** $2\\cdot 3\\cdot 2 = 12$.\n\n**Answer:** $12$ meals.",
+      "explanation_he": "**שלב 1 — עקרון הכפל.** האפשרויות מוכפלות על פני שלבים בלתי-תלויים.\n\n**שלב 2 — כפל.** $2\\cdot 3\\cdot 2 = 12$.\n\n**תשובה:** $12$ ארוחות.",
       "skill_atoms": [
-        "sample_space_definition",
-        "event_operations"
-      ]
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Multiplication principle.** Choices multiply across independent stages.",
+          "**Step 2 — Multiply.** $2\\cdot 3\\cdot 2 = 12$.",
+          "**Answer:** $12$ meals."
+        ],
+        "steps_he": [
+          "**שלב 1 — עקרון הכפל.** האפשרויות מוכפלות על פני שלבים בלתי-תלויים.",
+          "**שלב 2 — כפל.** $2\\cdot 3\\cdot 2 = 12$.",
+          "**תשובה:** $12$ ארוחות."
+        ]
+      },
+      "source_item_id": "6ce107f0-cc39-5efa-a819-f907aa8c9cba",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "3pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$P(A)=0.3$. Find $P(A^c)$.",
-      "stem_he": "$P(A)=0.3$. מצא $P(A^c)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(A^c) = 1-0.3 = 0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.7"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nThe complement rule follows from axioms: $A$ and $A^c$ are disjoint with $A \\cup A^c = \\Omega$, so $P(A) + P(A^c) = 1$. Thus $P(A^c) = 1 - 0.3 = 0.7$.\n\n**How to think about it:**\nComplement means 'everything except A.' Since probabilities sum to 1 over $\\Omega$, finding 'not A' never requires listing outcomes — just subtract from 1.\n\n**Common slip:**\nAnswering $0.3$ again (confusing $A$ with $A^c$), or $-0.7$ from sign error. Some students add $0.3+1$ instead of subtracting.\n\n**Exam tip:**\nComplement is the fastest tool on Bagrut — whenever you see 'not,' 'at least,' or 'at most,' consider $1-P(\\cdot)$ before counting.",
-      "explanation_he": "**למה זה נכון:**\nכלל המשלים נגזר מאקסיומות: $A$ ו-$A^c$ זרים עם $A \\cup A^c = \\Omega$, לכן $P(A)+P(A^c)=1$. כך $P(A^c)=1-0.3=0.7$.\n\n**איך לחשוב על זה:**\nמשלים = 'הכל חוץ מ-A.' מכיוון שהסתברויות מסתכמות ל-1 על $\\Omega$, 'לא A' לא דורש רשימת תוצאות — רק חיסור מ-1.\n\n**טעות נפוצה:**\nתשובה $0.3$ שוב (בלבול $A$ עם $A^c$), או $-0.7$ משגיאת סימן. חלק מוסיפים $0.3+1$ במקום לחסר.\n\n**טיפ לבחינה:**\nמשלים הוא הכלי המהיר בבגרות — ב'לא', 'לפחות' או 'לכל היותר' — שקלו $1-P(\\cdot)$ לפני ספירה.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "A sample space is formed by flipping $3$ coins. How many outcomes does it contain?",
+      "stem_he": "מרחב מדגם נוצר מהטלת $3$ מטבעות. כמה תוצאות הוא מכיל?",
+      "explanation_en": "**$2^3 = 8$.**\n\n**Answer:** $8$.",
+      "explanation_he": "**$2^3 = 8$.**\n\n**תשובה:** $8$.",
       "skill_atoms": [
-        "sample_space_definition",
-        "event_operations"
-      ]
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$8$",
+          "$6$",
+          "$9$",
+          "$3$"
+        ],
+        "options_he": [
+          "$8$",
+          "$6$",
+          "$9$",
+          "$3$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "b2c98afd-94a1-57ab-b84a-7b6d077e43a9",
+      "points_level_min": "3pt",
+      "options_en": [
+        "$8$",
+        "$6$",
+        "$9$",
+        "$3$"
+      ],
+      "options_he": [
+        "$8$",
+        "$6$",
+        "$9$",
+        "$3$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Events A and B are mutually exclusive with $P(A)=0.4$, $P(B)=0.3$. Find $P(A \\cup B)$.",
-      "stem_he": "אירועים $A$, $B$ זרים. $P(A)=0.4$, $P(B)=0.3$. מצא $P(A\\cup B)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$P(A\\cup B) = 0.4+0.3 = 0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.7$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.7"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nMutually exclusive events have $A \\cap B = \\emptyset$, so axiom 3 gives $P(A \\cup B) = P(A) + P(B) = 0.4 + 0.3 = 0.7$ with no subtraction needed.\n\n**How to think about it:**\nThe keyword 'mutually exclusive' (or 'disjoint') tells you the events cannot co-occur — overlap is zero. This is the one case where simple addition is valid.\n\n**Common slip:**\nSubtracting an intersection anyway ($0.4+0.3-0.1$) when the problem states disjointness, or multiplying $0.4 \\times 0.3$ (confusing with independence).\n\n**Exam tip:**\nBagrut often states 'mutually exclusive' explicitly — when you see it, use $P(A)+P(B)$ directly and move on.",
-      "explanation_he": "**למה זה נכון:**\nאירועים זרים: $A \\cap B = \\emptyset$, אקסיומה 3 נותנת $P(A \\cup B) = 0.4 + 0.3 = 0.7$ בלי חיסור. זה המקרה היחיד שבו חיבור פשוט של שני איברים מספיק.\n\n**איך לחשוב על זה:**\nמילת המפתח 'זרים' (disjoint) אומרת שהאירועים לא יכולים להתרחש יחד — חפיפה אפס. אל תחפשו $P(A \\cap B)$ כשהשאלה כבר אומרת שאין חפיפה.\n\n**טעות נפוצה:**\nחיסור חיתוך ($0.4+0.3-0.1$) כשהשאלה אומרת זרים, או כפל $0.4 \\times 0.3$ (בלבול עם אי-תלות). גם תשובה $0.12$ מכפל במקום חיבור.\n\n**טיפ לבחינה:**\nבבגרות כותבים 'זרים' במפורש — כשזה מופיע, השתמשו ב-$P(A)+P(B)$ ישירות והמשיכו. סמנו את המילה 'זרים' בעט לפני חישוב.",
+      "stem_en": "How many outcomes are there when flipping $2$ coins?",
+      "stem_he": "כמה תוצאות יש בהטלת $2$ מטבעות?",
+      "explanation_en": "**Multiply per coin.** $2\\cdot 2 = 4$ (HH, HT, TH, TT).\n\n**Answer:** $4$.",
+      "explanation_he": "**מכפילים לכל מטבע.** $2\\cdot 2 = 4$.\n\n**תשובה:** $4$.",
       "skill_atoms": [
-        "sample_space_definition",
-        "event_operations"
-      ]
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "9e873176-47cd-5cb2-a378-37838c425388",
+      "points_level_min": "3pt",
+      "correct_answer": "4"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Two dice are rolled. Find $P(\\text{sum} \\geq 10)$.",
-      "stem_he": "שתי קוביות. מצא $P(\\text{sum} \\geq 10)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "Favorable: (4,6),(5,5),(5,6),(6,4),(6,5),(6,6) — 6 outcomes. $P = 6/36 = 1/6$",
-          "1/6$",
-          "6"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nWith two ordered dice, $|\\Omega|=36$. Favorable pairs for sum $\\geq 10$: $(4,6),(5,5),(5,6),(6,4),(6,5),(6,6)$ — six outcomes. So $P = 6/36 = 1/6$.\n\n**How to think about it:**\nFor sum problems, systematic listing by first die value avoids misses. Sums $\\geq 10$ are rare — only high pairs qualify. Complement (sum $\\leq 9$) would work but direct count is short here.\n\n**Common slip:**\nGetting $1/12$ by missing $(5,5)$ or $(6,6)$, or using 11 favorable outcomes by double-counting unordered pairs.\n\n**Exam tip:**\nOn Bagrut dice sums, draw a 6$\\times$6 grid once — shading favorable cells prevents counting errors under time pressure.",
-      "explanation_he": "**למה זה נכון:**\nבשתי קוביות סדורות, $|\\Omega|=36$. זוגות לסכום $\\geq 10$: $(4,6),(5,5),(5,6),(6,4),(6,5),(6,6)$ — שש תוצאות. $P = 6/36 = 1/6$.\n\n**איך לחשוב על זה:**\nבבעיות סכום, רשימה שיטתית לפי ערך קובייה ראשונה מונעת פספוס. סכומים $\\geq 10$ נדירים — רק זוגות גבוהים. משלים אפשרי אך ספירה ישירה קצרה כאן.\n\n**טעות נפוצה:**\n$1/12$ מפספוס $(5,5)$ או $(6,6)$, או 11 תוצאות מספירה כפולה של זוגות לא-סדורים.\n\n**טיפ לבחינה:**\nבסכומי קוביות בבגרות — ציירו רשת 6$\\times$6 פעם; הצללת תאים חיוביים מונעת טעויות ספירה.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "How many outcomes are there when flipping $3$ coins?",
+      "stem_he": "כמה תוצאות יש בהטלת $3$ מטבעות?",
+      "explanation_en": "**$2$ per coin.** $2^3 = 8$.\n\n**Answer:** $8$.",
+      "explanation_he": "**$2$ לכל מטבע.** $2^3 = 8$.\n\n**תשובה:** $8$.",
       "skill_atoms": [
-        "sample_space_definition",
-        "event_operations"
-      ]
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "5b771ece-ba86-5149-94aa-7b4d0780f3d4",
+      "points_level_min": "3pt",
+      "correct_answer": "8"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "100 people: 60 drink coffee, 40 drink tea, 25 drink both. Find $P(\\text{coffee or tea})$.",
-      "stem_he": "100 אנשים: 60 קפה, 40 תה, 25 שניהם. $P(\\text{coffee or tea})$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P = (60+40-25)/100 = 75/100 = 0.75$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.75$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.75"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nCoffee-or-tea is a union: $P(C \\cup T) = P(C) + P(T) - P(C \\cap T) = 60/100 + 40/100 - 25/100 = 75/100 = 0.75$. Thirty-five drink only one beverage; 25 drink both — total 75 drink at least one.\n\n**How to think about it:**\nTranslate 'or' to $\\cup$ and identify the overlap (25 drink both). Without subtracting 25, you count dual drinkers twice — once in coffee (60), once in tea (40), yielding 100 instead of 75.\n\n**Common slip:**\nAnswering $1.0$ or $100/100$ by adding $60+40$ without subtracting overlap. Or $35/100$ by subtracting twice.\n\n**Exam tip:**\nVenn word problems on Bagrut always give the 'both' count — circle it before writing the formula.",
-      "explanation_he": "**למה זה נכון:**\n'קפה או תה' = איחוד: $P(C \\cup T) = 60/100 + 40/100 - 25/100 = 75/100 = 0.75$. שלושים וחמישה אנשים שותים רק אחד מהמשקאות, ו-25 שניהם — סה\"כ 75 שותים לפחות אחד.\n\n**איך לחשוב על זה:**\nתרגמו 'או' ל-$\\cup$ וזהו חפיפה (25 שותים שניהם). בלי חיסור 25 — סופרים שותים פעמיים, פעם בקפה (60) ופעם בתה (40), ומקבלים 100 במקום 75.\n\n**טעות נפוצה:**\nתשובה $1.0$ או $100/100$ מ-$60+40$ בלי חיסור חפיפה. או $35/100$ מחיסור כפול. גם $0.25$ מ-$25/100$ — זו רק החפיפה, לא האיחוד.\n\n**טיפ לבחינה:**\nבעיות ון בבגרות תמיד נותנות את 'שניהם' — סמנו לפני כתיבת הנוסחה. ציירו שני מעגלים ורשמו 25 באזור החיתוך לפני חישוב.",
+      "stem_en": "How many outcomes are there when rolling $2$ dice?",
+      "stem_he": "כמה תוצאות יש בהטלת $2$ קוביות?",
+      "explanation_en": "**$6$ per die.** $6\\cdot 6 = 36$.\n\n**Answer:** $36$.",
+      "explanation_he": "**$6$ לכל קובייה.** $6\\cdot 6 = 36$.\n\n**תשובה:** $36$.",
       "skill_atoms": [
-        "sample_space_definition",
-        "event_operations"
-      ]
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "d5f3ef7b-82a2-5017-9f1a-a1313ddca787",
+      "points_level_min": "3pt",
+      "correct_answer": "36"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "3 cards drawn from 52 without replacement. Find $P(\\text{all 3 are aces})$.",
-      "stem_he": "3 קלפים מ-52 ללא החזרה. $P(\\text{all three aces})$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$P = \\frac{4}{52}\\cdot\\frac{3}{51}\\cdot\\frac{2}{50} = \\frac{24}{132600} = \\frac{1}{5525}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{1}{5525}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5525"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nWithout replacement, sequential probability: $\\frac{4}{52} \\cdot \\frac{3}{51} \\cdot \\frac{2}{50} = \\frac{24}{132600} = \\frac{1}{5525}$. Each ace draw reduces remaining aces and total cards.\n\n**How to think about it:**\nThree dependent draws — multiply conditional probabilities in order. Alternatively, $\\binom{4}{3}/\\binom{52}{3} = 4/22100 = 1/5525$ gives the same answer when order does not matter.\n\n**Common slip:**\nUsing $\\frac{4}{52}$ three times (with replacement), or forgetting that denominators decrease: $52, 51, 50$. Some students compute $\\binom{52}{3}$ in the denominator but forget to reduce numerators.\n\n**Exam tip:**\nCard problems state 'without replacement' explicitly on Bagrut — underline it and adjust denominators every draw. Write the chain $52 \\to 51 \\to 50$ on scratch paper before multiplying.",
-      "explanation_he": "**למה זה נכון:**\nללא החזרה, הסתברות רציפה: $\\frac{4}{52} \\cdot \\frac{3}{51} \\cdot \\frac{2}{50} = \\frac{24}{132600} = \\frac{1}{5525}$. כל שליפת אס מקטינה אסים (4→3→2) וקלפים (52→51→50).\n\n**איך לחשוב על זה:**\nשלוש שליפות תלויות — כפלו הסתברויות מותנות בסדר. חלופה: $\\binom{4}{3}/\\binom{52}{3} = 4/22100$ — אותה תוצאה כשסדר לא חשוב. שני הנתיבים חייבים להתאים.\n\n**טעות נפוצה:**\nשימוש ב-$\\frac{4}{52}$ שלוש פעמים (עם החזרה), או מכנים קבועים 52. גם $\\frac{4}{52} \\cdot \\frac{3}{52} \\cdot \\frac{2}{52}$ — שגוי לחלוטין ללא החזרה.\n\n**טיפ לבחינה:**\nבעיות קלפים מציינות 'ללא החזרה' במפורש — הדגישו והקטינו מכנים בכל שליפה. כתבו שרשרת 52, 51, 50 על טיוטה לפני כפל.",
+      "stem_en": "How many outcomes are there when flipping a coin and then rolling a die?",
+      "stem_he": "כמה תוצאות יש בהטלת מטבע ואז קובייה?",
+      "explanation_en": "**Multiply stages.** $2\\cdot 6 = 12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**מכפילים שלבים.** $2\\cdot 6 = 12$.\n\n**תשובה:** $12$.",
       "skill_atoms": [
-        "sample_space_definition",
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "5e387417-1270-5d5e-9c0d-dc84f3983470",
+      "points_level_min": "3pt",
+      "correct_answer": "12"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two coins are flipped. Find the probability of getting two heads (HH).",
+      "stem_he": "מטילים שני מטבעות. מצאו את ההסתברות לקבל שני 'עץ' (HH).",
+      "explanation_en": "**One favorable (HH) of $4$ outcomes.** $\\dfrac{1}{4}$.\n\n**Answer:** $\\dfrac{1}{4}$.",
+      "explanation_he": "**תוצאה רצויה אחת (HH) מתוך $4$.** $\\dfrac{1}{4}$.\n\n**תשובה:** $\\dfrac{1}{4}$.",
+      "skill_atoms": [
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "0382a9ad-fd41-53be-8b4e-492c2f8753f8",
+      "points_level_min": "3pt",
+      "correct_answer": "0.25"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many possible answer keys are there for a $4$-question true/false test?",
+      "stem_he": "כמה מפתחות תשובה אפשריים יש למבחן נכון/לא-נכון בן $4$ שאלות?",
+      "explanation_en": "**$2$ choices per question.** $2^4 = 16$.\n\n**Answer:** $16$.",
+      "explanation_he": "**$2$ אפשרויות לכל שאלה.** $2^4 = 16$.\n\n**תשובה:** $16$.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 16
+      },
+      "source_item_id": "82fc3a7c-35d0-586b-8971-8592e812ec78",
+      "points_level_min": "3pt",
+      "correct_answer": "16"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two dice are rolled. Find the probability that the sum is $7$.",
+      "stem_he": "מטילים שתי קוביות. מצאו את ההסתברות שהסכום הוא $7$.",
+      "explanation_en": "**Favorable $6$, total $36$.** $\\dfrac{6}{36} = \\dfrac{1}{6}$.\n\n**Answer:** $\\dfrac{1}{6}$.",
+      "explanation_he": "**רצוי $6$, סה\\\"כ $36$.** $\\dfrac{6}{36} = \\dfrac{1}{6}$.\n\n**תשובה:** $\\dfrac{1}{6}$.",
+      "skill_atoms": [
+        "sample_space_definition"
+      ],
+      "answer_payload": {
+        "value": 0.166667
+      },
+      "source_item_id": "d7d91541-dd11-53cd-95df-20baddc4951b",
+      "points_level_min": "3pt",
+      "correct_answer": "0.166667"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Two dice are rolled. Find the probability of getting doubles (same number on both).",
+      "stem_he": "מטילים שתי קוביות. מצאו את ההסתברות לקבל 'דאבל' (אותו מספר בשתיהן).",
+      "explanation_en": "**Doubles.** $(1,1),\\dots,(6,6)$ — $6$ of $36$: $\\dfrac{6}{36} = \\dfrac{1}{6}$.\n\n**Answer:** $\\dfrac{1}{6}$.",
+      "explanation_he": "**דאבלים.** $6$ מתוך $36$: $\\dfrac{1}{6}$.\n\n**תשובה:** $\\dfrac{1}{6}$.",
+      "skill_atoms": [
         "event_operations"
-      ]
+      ],
+      "answer_payload": {
+        "value": 0.166667
+      },
+      "source_item_id": "ab86f3c7-fc0b-5e13-9186-a095d88abc65",
+      "points_level_min": "3pt",
+      "correct_answer": "0.166667"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "How many $2$-digit PIN codes (each digit $0$–$9$) are possible?",
+      "stem_he": "כמה קודי PIN בני $2$ ספרות (כל ספרה $0$–$9$) אפשריים?",
+      "explanation_en": "**$10$ choices per digit.** $10\\cdot 10 = 100$.\n\n**Answer:** $100$.",
+      "explanation_he": "**$10$ אפשרויות לכל ספרה.** $10\\cdot 10 = 100$.\n\n**תשובה:** $100$.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 100
+      },
+      "source_item_id": "725bba6f-1d12-52eb-9d4c-124f36d2a9c2",
+      "points_level_min": "3pt",
+      "correct_answer": "100"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Two dice are rolled. How many outcomes give a sum of $7$?",
+      "stem_he": "מטילים שתי קוביות. כמה תוצאות נותנות סכום $7$?",
+      "explanation_en": "**List pairs.** $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$.\n\n**Count.** $6$.\n\n**Answer:** $6$.",
+      "explanation_he": "**רשמו זוגות.** $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$.\n\n**ספירה.** $6$.\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "event_operations"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "e283b0ae-ed5b-5fe2-9880-a7a04b841864",
+      "points_level_min": "3pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "You choose one of $3$ shirts and one of $4$ pants. How many different outfits are possible?",
+      "stem_he": "בוחרים אחת מ-$3$ חולצות ואחד מ-$4$ מכנסיים. כמה תלבושות שונות אפשריות?",
+      "explanation_en": "**Multiplication principle.** $3\\cdot 4 = 12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**עקרון הכפל.** $3\\cdot 4 = 12$.\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "counting_outcomes"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "e758922c-cb4c-5efc-9102-74a173b301dc",
+      "points_level_min": "3pt",
+      "correct_answer": "12"
     }
   ],
   "est_minutes": 45,

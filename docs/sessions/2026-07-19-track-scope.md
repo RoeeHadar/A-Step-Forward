@@ -153,12 +153,39 @@ is content-addressed, so regenerating after an edit leaves stale copies — purg
 the concept's store rows before rebaking (done here). Strict + math + track-scope
 audits and the 207/207 seed dry-run all green.
 
+## Batch G — shipped
+
+Four new **verified generators** for the 3pt probability & statistics foundation
+(previously ~8 hand-authored, no generator), now **15 CAS-verified items each**
+(60 total, 0 rejections):
+
+- `statistics_descriptive` — mean, median, mode, range, weighted average,
+  missing-value-from-mean reveal.
+- `probability_basics_3pt` — favorable/total, complement, deck/bag/spinner,
+  probability range.
+- `sample_space` — counting outcomes, multiplication principle, dice/coins,
+  menu-combinations reveal.
+- `probability_conditional_3pt` — independent multiplication, without-replacement
+  dependent draws, conditional formula.
+
+**Two more file-store gotchas caught & fixed:**
+1. *Duplicate stem collision* — `sample_space` had a `num` and an `mcq` sharing an
+   identical stem; the content-addressed store ID (concept+source+stems) deduped
+   them to 14. Reworded the mcq stem → 15.
+2. *Hebrew in `\text{}`* — `$P(\text{שניהם אדומים})$`-style notation is Hebrew
+   inside a math span (KaTeX can't render). Moved every Hebrew event description
+   out of the math into prose. **Takeaway:** in probability, keep `$P(\dots)$`
+   arguments ASCII (`A'`, `A\cap B`) or describe the event in Hebrew prose.
+
+All audits + seed dry-run (207/207) green.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **20 math lessons** (Batches B, D, E, F +
-exponents): the entire 3pt/4pt algebra & functions foundation, sequences, and the
-core geometry/trig foundation. Remaining thin lessons (8 questions): probability/
-statistics, and the 5pt calculus core (11 each).
+Verified 15+ item banks now cover **24 math lessons** (Batches B, D, E, F, G +
+exponents): the entire 3pt/4pt algebra & functions foundation, sequences, the core
+geometry/trig foundation, and the 3pt probability & statistics foundation.
+Remaining thin lessons (8 questions): the 5pt calculus core (11 each), advanced
+4pt/5pt geometry/trig/probability, and university/makhina strands.
 
 ## Pending (not yet done this window)
 
