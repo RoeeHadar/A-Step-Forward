@@ -1,0 +1,19 @@
+{
+  "$schema_doc": {
+    "purpose": "Thin, hand-authored override layer for scripts/build-goal-frontiers.mjs (ADR-0009 §3). The frontier is DERIVED from the KG; only add entries here to correct the derivation. Keys starting with '$' are ignored by the builder.",
+    "per_goal_shape": {
+      "order": "string[] — concept_ids pinned to the front of the core, in this order",
+      "add_core": "string[] — force-include these KG concept_ids in the core",
+      "remove_core": "string[] — force-exclude these concept_ids from the core",
+      "stretch": "string[] — explicit stretch set; when present it REPLACES the derived stretch set",
+      "critical": "string[] — force these concepts to goal_critical=true",
+      "not_critical": "string[] — force these concepts to goal_critical=false"
+    },
+    "example": {
+      "bagrut_math_5": {
+        "order": ["algebra_basics", "equations_quadratic"],
+        "not_critical": ["combinatorics"]
+      }
+    }
+  }
+}

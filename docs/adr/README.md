@@ -17,6 +17,7 @@ ADRs in PRs.
 | [0006](0006-neon-direct-critical-path.md) | Neon-direct critical path (Vercel + Neon SSOT) | Proposed |
 | [0007](0007-learning-planner-authority.md) | Learning planner authority (`buildLearningPlan`) | Accepted (via 0008) |
 | [0008](0008-adaptive-wellbeing-planning.md) | Adaptive wellbeing planning + unified path (pilot) | Accepted |
+| [0009](0009-goal-paced-adaptive-planning.md) | Goal-paced adaptive planning (living plans) | Proposed |
 
 ## Authoring a new ADR
 
