@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { MarkdownMath } from '@/components/markdown-math';
 import { Clock, CheckCircle2, ArrowLeft } from 'lucide-react';
@@ -39,9 +39,17 @@ function MockExamRunner({
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [persistState, setPersistState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [selectedBySection, setSelectedBySection] = useState<Record<string, Set<string>>>({});
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
+  const persistStarted = useRef(false);
+  const answersRef = useRef(answers);
+  answersRef.current = answers;
+
+  function finishExam() {
+    setFinished(true);
+  }
 
   useEffect(() => {
     if (!started || finished) return;
@@ -56,6 +64,30 @@ function MockExamRunner({
     }, 1000);
     return () => window.clearInterval(id);
   }, [started, finished]);
+
+  // Persist once when the exam ends (button or timer). Previously this UI was
+  // client-only — Progress / My Tests / Memory never saw the attempt.
+  useEffect(() => {
+    if (!finished || persistStarted.current) return;
+    persistStarted.current = true;
+    setPersistState('saving');
+    void (async () => {
+      try {
+        const res = await fetch('/api/quiz/mock-exam/seed-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            exam_id: exam.id,
+            answers: answersRef.current,
+            locale: lang,
+          }),
+        });
+        setPersistState(res.ok ? 'saved' : 'error');
+      } catch {
+        setPersistState('error');
+      }
+    })();
+  }, [finished, exam.id, lang]);
 
   const title = isHe ? exam.title_he : exam.title_en;
   const instructions = isHe ? exam.instructions_he : exam.instructions_en;
@@ -136,7 +168,7 @@ function MockExamRunner({
         {!finished ? (
           <button
             type="button"
-            onClick={() => setFinished(true)}
+            onClick={finishExam}
             className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:border-primary/40"
           >
             {isHe ? 'סיים מבחן' : 'Finish Exam'}
@@ -244,9 +276,32 @@ function MockExamRunner({
               ? 'המבחן הוגש. השוו את הפתרונות שלכם למחוונים.'
               : 'Exam submitted. Compare your work to the rubrics.'}
           </p>
-          <button type="button" onClick={onBack} className="mt-4 text-sm text-primary hover:underline">
-            {isHe ? 'בחר מבחן אחר' : 'Choose another exam'}
-          </button>
+          <p className="mt-2 text-xs text-muted-foreground" aria-live="polite">
+            {persistState === 'saving'
+              ? isHe
+                ? 'שומר את המבחן…'
+                : 'Saving attempt…'
+              : persistState === 'saved'
+                ? isHe
+                  ? 'נשמר ב״המבחנים שלי״ ובעדכון ההתקדמות.'
+                  : 'Saved to My Tests and Progress.'
+                : persistState === 'error'
+                  ? isHe
+                    ? 'השמירה נכשלה — נסו לרענן או לפנות לתמיכה.'
+                    : 'Save failed — try refresh or contact support.'
+                  : null}
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/app/tests" className="text-sm text-primary hover:underline">
+              {isHe ? 'המבחנים שלי' : 'My Tests'}
+            </Link>
+            <Link href="/app/progress" className="text-sm text-primary hover:underline">
+              {isHe ? 'התקדמות' : 'Progress'}
+            </Link>
+            <button type="button" onClick={onBack} className="text-sm text-muted-foreground hover:underline">
+              {isHe ? 'בחר מבחן אחר' : 'Choose another exam'}
+            </button>
+          </div>
         </div>
       ) : null}
     </div>
