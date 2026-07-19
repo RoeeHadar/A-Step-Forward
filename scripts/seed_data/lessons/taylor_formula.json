@@ -230,151 +230,368 @@
       "body_he_md": "- $T_n(x)=\\sum_{k=0}^n\\frac{f^{(k)}(a)}{k!}(x-a)^k$ מקרב את $f$ ליד $a$ ותואם את $n$ הנגזרות הראשונות שם.\n- **שארית לגראנז':** $|R_n|\\leq\\frac{M_{n+1}}{(n+1)!}|x-a|^{n+1}$ — לחסימת שגיאת קירוב בבחינה.\n- **שיננו:** $e^x$, $\\sin x$, $\\cos x$, $\\ln(1+x)$, $(1+x)^\\alpha$ ב-$a=0$; הצבה להרכבות.\n- לגבולות: פתחו עד דרגת המכנה, בטלו, קראו מקדם — לעיתים מהיר מלופיטל.\n- לסדרות מורכבות ($e^{x^2}$, $x\\sin x$): הציבו או הכפילו; אל תגזרו מאפס אלא אם חייבים."
     }
   ],
-  "agent_hints": "When a learner asks for a Taylor series, always ask: 'Around which point? To what degree?' For limit computations, guide them to expand to one more term than needed so the answer is clear. The Lagrange remainder requires bounding |f^(n+1)| on an interval.",
+  "agent_hints": {
+    "socratic_prompt": "When a learner asks for a Taylor series, always ask: 'Around which point? To what degree?' For limit computations, guide them to expand to one more term than needed so the answer is clear. The Lagrange remainder requires bounding |f^(n+1)| on an interval.",
+    "key_insights": [],
+    "common_misconceptions": [],
+    "skill_atoms_unlocked": [
+      "taylor_series"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Write $T_4(x)$ for $\\cos x$ at $a=0$.",
-      "stem_he": "כתבו $T_4(x)$ של $\\cos x$ ב-$a=0$.",
+      "stem_en": "A Maclaurin series is a Taylor series centered at:",
+      "stem_he": "טור מקלורן הוא טור טיילור סביב:",
+      "explanation_en": "**Maclaurin means expansion about $a=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**מקלורן פירושו פיתוח סביב $a=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$T_4(x)=1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1-\\frac{x^2}{2}+\\frac{x^4}{24}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "24"
+        "options_en": [
+          "$0$",
+          "$1$",
+          "$\\infty$",
+          "$-1$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$0$",
+          "$1$",
+          "$\\infty$",
+          "$-1$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$T_4(x)$ for $\\cos x$ at $a=0$ keeps only even powers: $1-\\frac{x^2}{2}+\\frac{x^4}{24}$. All odd derivatives of cosine are $\\pm\\sin x$, which vanish at $0$, so terms in $x$ and $x^3$ are zero.\n\n**How to think about it:**\nEither compute four derivatives at $0$ and plug into the Taylor formula, or read directly from the memorised Maclaurin table. Both routes must agree.\n\n**Common slip:**\nIncluding an $x^3$ term (confusing with $\\sin x$). Writing $\\frac{x^2}{2}$ instead of $\\frac{x^2}{2!}$ — same value, but the factorial notation matters on written exams.\n\n**Exam tip:**\nFor even functions expanded at $0$, only even powers appear. State this observation to earn reasoning credit before writing the polynomial.",
-      "explanation_he": "**למה זה נכון:**\n$T_4(x)$ של $\\cos x$ ב-$a=0$ שומר רק חזקות זוגיות: $1-\\frac{x^2}{2}+\\frac{x^4}{24}$. כל הנגזרות האי-זוגיות של קוסינוס הן $\\pm\\sin x$, שמתאפסות ב-$0$, ולכן אין איברי $x$ ו-$x^3$.\n\n**איך לחשוב על זה:**\nאפשר לחשב ארבע נגזרות ב-$0$ ולהציב בנוסחת טיילור, או לקרוא ישירות מטבלת מקלורן. שני המסלולים חייבים להתאים.\n\n**טעות נפוצה:**\nהכללת איבר $x^3$ (בלבול עם $\\sin x$). כתיבת $\\frac{x^2}{2}$ במקום $\\frac{x^2}{2!}$ — אותו ערך, אך סימון העצרת חשוב בבחינה.\n\n**טיפ לבחינה:**\nלפונקציות זוגיות סביב $0$ מופיעות רק חזקות זוגיות. ציינו זאת לניקוד הסבר לפני כתיבת הפולינום.",
-      "skill_atoms": []
+      "source_item_id": "e74e6847-f932-5170-85fc-c1d4506cd1c9",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$0$",
+        "$1$",
+        "$\\infty$",
+        "$-1$"
+      ],
+      "options_he": [
+        "$0$",
+        "$1$",
+        "$\\infty$",
+        "$-1$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Write $T_3(x)$ for $\\ln(1+x)$ at $a=0$.",
-      "stem_he": "כתבו $T_3(x)$ של $\\ln(1+x)$ ב-$a=0$.",
+      "stem_en": "Find the coefficient of $x$ in the Maclaurin series of $e^{x}$.",
+      "stem_he": "מצאו את מקדם $x$ בטור מקלורן של $e^{x}$.",
+      "explanation_en": "**Coefficient is $\\tfrac{1}{1!}=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**המקדם הוא $\\tfrac{1}{1!}=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$T_3(x)=x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "x-\\frac{x^2}{2}+\\frac{x^3}{3}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": 1
       },
-      "explanation_en": "**Why this is correct:**\n$T_3(x)$ for $\\ln(1+x)$ at $0$ is $x-\\frac{x^2}{2}+\\frac{x^3}{3}$. Successive derivatives of $\\ln(1+x)$ are $\\frac{1}{1+x}$, $-\\frac{1}{(1+x)^2}$, $\\frac{2}{(1+x)^3}$, giving values $1$, $-1$, $2$ at $x=0$; divided by $1!$, $2!$, $3!$ yields the coefficients.\n\n**How to think about it:**\nThe Maclaurin series for $\\ln(1+x)$ alternates signs starting with $+x$. Truncate after the $x^3$ term for degree 3.\n\n**Common slip:**\nStarting the series at $n=0$ with a constant term (there is none — $\\ln(1+0)=0$). Forgetting the alternating sign on the $x^2$ term.\n\n**Exam tip:**\n$\\ln(1+x)$ converges only for $|x|\\leq 1$, $x\\ne -1$. Mention the interval if the question asks about validity, not just the polynomial.",
-      "explanation_he": "**למה זה נכון:**\n$T_3(x)$ של $\\ln(1+x)$ ב-$0$ הוא $x-\\frac{x^2}{2}+\\frac{x^3}{3}$. נגזרות עוקבות: $\\frac{1}{1+x}$, $-\\frac{1}{(1+x)^2}$, $\\frac{2}{(1+x)^3}$, וב-$x=0$ הערכים $1$, $-1$, $2$; חלוקה ב-$1!$, $2!$, $3!$ נותנת את המקדמים.\n\n**איך לחשוב על זה:**\nסדרת מקלורן של $\\ln(1+x)$ מתחלפת בסימן, מתחילה ב-$+x$. חתכו אחרי איבר $x^3$ למדרגה 3.\n\n**טעות נפוצה:**\nהתחלה ב-$n=0$ עם איבר קבוע (אין — $\\ln(1)=0$). שכחת הסימן השלילי על $x^2$.\n\n**טיפ לבחינה:**\n$\\ln(1+x)$ מתכנס רק ל-$|x|\\leq 1$, $x\\ne -1$. ציינו את הטווח אם שואלים על תקפות, לא רק על הפולינום.",
-      "skill_atoms": []
+      "source_item_id": "124d25d4-6bad-5bea-a8d6-3a75da0eff06",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Write the Maclaurin polynomial $T_2(x)$ for $f(x)=(1+x)^{1/2}$.",
-      "stem_he": "כתבו $T_2(x)$ של $f(x)=(1+x)^{1/2}$ (מקלורן).",
+      "stem_en": "True or False: the Maclaurin series of $e^{x}$ is $1+x+\\tfrac{x^2}{2!}+\\tfrac{x^3}{3!}+\\cdots$.",
+      "stem_he": "נכון או לא נכון: טור מקלורן של $e^{x}$ הוא $1+x+\\tfrac{x^2}{2!}+\\tfrac{x^3}{3!}+\\cdots$.",
+      "explanation_en": "**Each coefficient is $\\tfrac{1}{n!}$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**כל מקדם הוא $\\tfrac{1}{n!}$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$(1+x)^{1/2}\\approx 1+\\frac{1}{2}x-\\frac{1}{8}x^2$. (Using $(1+x)^\\alpha$ with $\\alpha=1/2$.)",
-          "1/2$.)",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\n$(1+x)^{1/2}$ uses the generalised binomial series with $\\alpha=\\frac{1}{2}$: $1+\\frac{1}{2}x+\\frac{\\frac{1}{2}(\\frac{1}{2}-1)}{2!}x^2=1+\\frac{x}{2}-\\frac{x^2}{8}$.\n\n**How to think about it:**\nCompute $f(0)=1$, $f'(0)=\\frac{1}{2}$, $f''(0)=-\\frac{1}{4}$, then $T_2(x)=1+\\frac{1}{2}x+\\frac{-1/4}{2}x^2$. Or read from the $(1+x)^\\alpha$ table with $\\alpha=\\frac{1}{2}$.\n\n**Common slip:**\nUsing $\\alpha=2$ instead of $\\frac{1}{2}$. Sign error on the $x^2$ coefficient: $\\alpha(\\alpha-1)=\\frac{1}{2}\\cdot(-\\frac{1}{2})=-\\frac{1}{4}$, not positive.\n\n**Exam tip:**\n$(1+x)^{1/2}$ appears in physics (relativistic energy expansions) and in estimating $\\sqrt{1.1}$ without a calculator. Valid for $|x|<1$.\n\n**Exam tip:** Partial credit on university rubrics rewards correct series choice, sufficient expansion depth, and explicit error bounds before the final numeric answer.",
-      "explanation_he": "**למה זה נכון:**\n$(1+x)^{1/2}$ משתמש בסדרת בינום מוכללת עם $\\alpha=\\frac{1}{2}$: $1+\\frac{x}{2}+\\frac{\\frac{1}{2}(\\frac{1}{2}-1)}{2!}x^2=1+\\frac{x}{2}-\\frac{x^2}{8}$.\n\n**איך לחשוב על זה:**\n$f(0)=1$, $f'(0)=\\frac{1}{2}$, $f''(0)=-\\frac{1}{4}$, ואז $T_2(x)=1+\\frac{x}{2}-\\frac{x^2}{8}$. או קריאה מטבלת $(1+x)^\\alpha$ עם $\\alpha=\\frac{1}{2}$.\n\n**טעות נפוצה:**\nשימוש ב-$\\alpha=2$ במקום $\\frac{1}{2}$. שגיאת סימן: $\\alpha(\\alpha-1)=-\\frac{1}{4}$, לא חיובי.\n\n**טיפ לבחינה:**\n$(1+x)^{1/2}$ מופיע בפיזיקה (פיתוחי אנרגיה יחסותית) ובהערכת $\\sqrt{1.1}$. תקף ל-$|x|<1$. מחוון הבחינה מעניק ניקוד חלקי על בחירת שיטת טיילור הנכונה, פיתוח לעומק מספיק וחסימת שגיאה לפני חישוב סופי.",
-      "skill_atoms": []
+      "source_item_id": "551dd2f5-d0ab-5122-9e3d-9ec0c35acc06",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Write $T_3(x)$ for $e^x$ at $a=1$.",
-      "stem_he": "כתבו $T_3(x)$ של $e^x$ ב-$a=1$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the second-order Maclaurin polynomial of $e^{x}$ and give the coefficient of $x^2$.",
+      "stem_he": "מצאו את פולינום מקלורן מסדר שני של $e^{x}$ ותנו את מקדם $x^2$.",
+      "explanation_en": "**Step 1 — Derivatives at 0.** $f(0)=f'(0)=f''(0)=1$.\n\n**Step 2 — Build polynomial.** $1+x+\\tfrac{x^2}{2}$.\n\n**Step 3 — Coefficient of $x^2$.** $\\tfrac{1}{2!}=\\tfrac12$.\n\n**Answer:** $\\tfrac12$.",
+      "explanation_he": "**שלב 1 — נגזרות ב-0.** $f(0)=f'(0)=f''(0)=1$.\n\n**שלב 2 — בניית הפולינום.** $1+x+\\tfrac{x^2}{2}$.\n\n**שלב 3 — מקדם $x^2$.** $\\tfrac{1}{2!}=\\tfrac12$.\n\n**תשובה:** $\\tfrac12$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "All derivatives of $e^x$ at $x=1$ equal $e$. $T_3(x)=e+e(x-1)+\\frac{e}{2}(x-1)^2+\\frac{e}{6}(x-1)^3=e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$",
-          "e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$",
-          "6"
+        "steps_en": [
+          "**Step 1 — Derivatives at 0.** $f(0)=f'(0)=f''(0)=1$.",
+          "**Step 2 — Build polynomial.** $1+x+\\tfrac{x^2}{2}$.",
+          "**Step 3 — Coefficient of $x^2$.** $\\tfrac{1}{2!}=\\tfrac12$.",
+          "**Answer:** $\\tfrac12$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — נגזרות ב-0.** $f(0)=f'(0)=f''(0)=1$.",
+          "**שלב 2 — בניית הפולינום.** $1+x+\\tfrac{x^2}{2}$.",
+          "**שלב 3 — מקדם $x^2$.** $\\tfrac{1}{2!}=\\tfrac12$.",
+          "**תשובה:** $\\tfrac12$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nAll derivatives of $e^x$ equal $e^x$, so at $x=1$ each equals $e$. The Taylor polynomial centred at $a=1$ is $T_3(x)=e+e(x-1)+\\frac{e}{2}(x-1)^2+\\frac{e}{6}(x-1)^3$, or factored: $e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.\n\n**How to think about it:**\nShift the centre from $0$ to $1$: replace $x$ with $(x-1)$ in the Maclaurin polynomial of $e^x$, then multiply every coefficient by $e=f(1)$.\n\n**Common slip:**\nUsing $x$ instead of $(x-1)$ in the polynomial — that gives the Maclaurin series, not Taylor at $1$. Forgetting to evaluate derivatives at $x=1$ (not $x=0$).\n\n**Exam tip:**\nWhen the centre is not $0$, write $(x-a)$ explicitly in every term. Examiners deduct points for Maclaurin form when Taylor at $a\\ne 0$ is requested.",
-      "explanation_he": "**למה זה נכון:**\nכל נגזרות $e^x$ שוות ל-$e^x$, ולכן ב-$x=1$ כל אחת שווה $e$. פולינום טיילור סביב $a=1$: $T_3(x)=e+e(x-1)+\\frac{e}{2}(x-1)^2+\\frac{e}{6}(x-1)^3$, או $e\\left[1+(x-1)+\\frac{(x-1)^2}{2}+\\frac{(x-1)^3}{6}\\right]$.\n\n**איך לחשוב על זה:**\nהזיזו את המרכז מ-$0$ ל-$1$: החליפו $x$ ב-$(x-1)$ בפולינום מקלורן של $e^x$, והכפילו כל מקדם ב-$e=f(1)$.\n\n**טעות נפוצה:**\nשימוש ב-$x$ במקום $(x-1)$ — זו סדרת מקלורן, לא טיילור ב-$1$. שכחת הערכת נגזרות ב-$x=1$ (לא $0$).\n\n**טיפ לבחינה:**\nכשהמרכז אינו $0$, כתבו $(x-a)$ במפורש בכל איבר. מורידים נקודות על צורת מקלורן כשמבקשים טיילור ב-$a\\ne 0$.",
-      "skill_atoms": []
+      "source_item_id": "d972c474-987f-5a96-9a38-13c87d3a418b",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Use Taylor series to compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\cos x-1}{x^2}$.",
-      "stem_he": "השתמשו בסדרות טיילור לחישוב $\\displaystyle\\lim_{x\\to 0}\\frac{\\cos x-1}{x^2}$.",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "The $n$-th Taylor coefficient of $f$ about $a$ is:",
+      "stem_he": "המקדם ה-$n$ של טור טיילור של $f$ סביב $a$ הוא:",
+      "explanation_en": "**Divide the $n$-th derivative by $n!$.**\n\n**Answer:** $\\dfrac{f^{(n)}(a)}{n!}$.",
+      "explanation_he": "**מחלקים את הנגזרת ה-$n$ ב-$n!$.**\n\n**תשובה:** $\\dfrac{f^{(n)}(a)}{n!}$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\cos x=1-x^2/2+O(x^4)$. $\\frac{\\cos x-1}{x^2}=\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{-x^2/2+O(x^4)}{x^2}\\to -1/2$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+        "options_en": [
+          "$\\dfrac{f^{(n)}(a)}{n!}$",
+          "$f^{(n)}(a)$",
+          "$\\dfrac{f(a)}{n}$",
+          "$n!\\,f^{(n)}(a)$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\dfrac{f^{(n)}(a)}{n!}$",
+          "$f^{(n)}(a)$",
+          "$\\dfrac{f(a)}{n}$",
+          "$n!\\,f^{(n)}(a)$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$\\cos x=1-\\frac{x^2}{2}+O(x^4)$, so $\\cos x-1=-\\frac{x^2}{2}+O(x^4)$. Dividing by $x^2$ gives $-\\frac{1}{2}+O(x^2)\\to -\\frac{1}{2}$ as $x\\to 0$.\n\n**How to think about it:**\nThe denominator is $x^2$, so expand the numerator through $x^2$. The constant $1$ cancels; the leading surviving term is $-x^2/2$.\n\n**Common slip:**\nExpanding only to $x$ (insufficient — numerator still looks like $0/0$). Sign error: $\\cos x-1$ is **negative** near $0$, giving limit $-1/2$, not $+1/2$.\n\n**Exam tip:**\nThis limit is equivalent to the second derivative of $\\cos$ at $0$ divided by $2!$. Taylor makes the connection to derivatives explicit — useful when L'Hôpital would require two applications.",
-      "explanation_he": "**למה זה נכון:**\n$\\cos x=1-\\frac{x^2}{2}+O(x^4)$, ולכן $\\cos x-1=-\\frac{x^2}{2}+O(x^4)$. חלוקה ב-$x^2$ נותנת $-\\frac{1}{2}+O(x^2)\\to -\\frac{1}{2}$.\n\n**איך לחשוב על זה:**\nהמכנה הוא $x^2$, אז פתחו את המונה עד $x^2$. הקבוע $1$ מתבטל; האיבר המוביל הוא $-x^2/2$.\n\n**טעות נפוצה:**\nפיתוח רק עד $x$ (לא מספיק). שגיאת סימן: $\\cos x-1$ **שלילי** ליד $0$, הגבול $-1/2$ לא $+1/2$.\n\n**טיפ לבחינה:**\nהגבול שקול לנגזרת השנייה של $\\cos$ ב-$0$ חלקי $2!$. טיילור מקשר במפורש לנגזרות — שימושי כשלופיטל דורש שני יישומים.",
-      "skill_atoms": []
+      "source_item_id": "6b487dc9-5558-539b-b1e2-4c6aa4522be1",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\dfrac{f^{(n)}(a)}{n!}$",
+        "$f^{(n)}(a)$",
+        "$\\dfrac{f(a)}{n}$",
+        "$n!\\,f^{(n)}(a)$"
+      ],
+      "options_he": [
+        "$\\dfrac{f^{(n)}(a)}{n!}$",
+        "$f^{(n)}(a)$",
+        "$\\dfrac{f(a)}{n}$",
+        "$n!\\,f^{(n)}(a)$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Write the Maclaurin series for $f(x)=e^{-x^2}$ up to degree 4.",
-      "stem_he": "כתבו את סדרת המקלורן של $f(x)=e^{-x^2}$ עד דרגה 4.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the coefficient of $x^2$ in the Maclaurin series of $e^{x}$.",
+      "stem_he": "מצאו את מקדם $x^2$ בטור מקלורן של $e^{x}$.",
+      "explanation_en": "**Coefficient is $\\tfrac{1}{2!}=\\tfrac12$.**\n\n**Answer:** $\\tfrac12$.",
+      "explanation_he": "**המקדם הוא $\\tfrac{1}{2!}=\\tfrac12$.**\n\n**תשובה:** $\\tfrac12$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nReplace $x$ with $-x^2$ in $e^x=1+x+x^2/2+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\cdots$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1-x^2+\\frac{x^4}{2}-\\cdots$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 0.5
       },
-      "explanation_en": "**Why this is correct:**\nReplace $x$ with $-x^2$ in $e^x=1+x+\\frac{x^2}{2}+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\frac{x^6}{6}+\\cdots$. Through degree $4$ (terms up to $x^4$): $1-x^2+\\frac{x^4}{2}$.\n\n**How to think about it:**\nSubstitution preserves the structure: even powers only because $(-x^2)^k$ is always even in $x$. Do not confuse with $e^{-x}$ (which would give alternating signs on odd powers).\n\n**Common slip:**\nSubstituting $-x$ instead of $-x^2$. Dropping the $\\frac{x^4}{2}$ term when the question asks for degree $4$.\n\n**Exam tip:**\nComposition problems test whether you know the table — zero derivatives required. Write the substitution explicitly: \"In $e^x$, replace $x$ by $-x^2$.\"",
-      "explanation_he": "**למה זה נכון:**\nהציבו $-x^2$ במקום $x$ ב-$e^x=1+x+\\frac{x^2}{2}+\\cdots$: $e^{-x^2}=1-x^2+\\frac{x^4}{2}-\\frac{x^6}{6}+\\cdots$. עד דרגה 4: $1-x^2+\\frac{x^4}{2}$.\n\n**איך לחשוב על זה:**\nהצבה שומרת מבנה: רק חזקות זוגיות כי $(-x^2)^k$ תמיד זוגי ב-$x$. אל תבלבלו עם $e^{-x}$ (סימנים מתחלפים על חזקות אי-זוגיות).\n\n**טעות נפוצה:**\nהצבת $-x$ במקום $-x^2$. השמטת $\\frac{x^4}{2}$ כששואלים על דרגה 4.\n\n**טיפ לבחינה:**\nבעיות הרכבה בודקות שליטה בטבלה — בלי נגזרות. כתבו במפורש: \"ב-$e^x$, החליפו $x$ ב-$-x^2$.\" מחוון הבחינה מעניק ניקוד חלקי על בחירת שיטת טיילור הנכונה, פיתוח לעומק מספיק וחסימת שגיאה לפני חישוב סופי.",
-      "skill_atoms": []
+      "source_item_id": "72fca7de-fc82-5a82-9950-081ae3118be9",
+      "points_level_min": "5pt",
+      "correct_answer": "0.5"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Use $T_3$ for $\\sin x$ to approximate $\\sin(0.2)$ and bound the error.",
-      "stem_he": "השתמשו ב-$T_3$ של $\\sin x$ לקירוב $\\sin(0.2)$ ואומדן שגיאה.",
+      "stem_en": "The Maclaurin series of $\\cos x$ begins:",
+      "stem_he": "טור מקלורן של $\\cos x$ מתחיל:",
+      "explanation_en": "**Even powers with alternating signs.**\n\n**Answer:** $1-\\tfrac{x^2}{2}+\\tfrac{x^4}{24}-\\cdots$.",
+      "explanation_he": "**חזקות זוגיות עם סימנים מתחלפים.**\n\n**תשובה:** $1-\\tfrac{x^2}{2}+\\tfrac{x^4}{24}-\\cdots$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$T_3(0.2)=0.2-(0.2)^3/6=0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0.2-0.008/6\\approx 0.19867$. Error $\\leq (0.2)^5/120\\approx 2.7\\times 10^{-7}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-7"
+        "options_en": [
+          "$1-\\tfrac{x^2}{2}+\\tfrac{x^4}{24}-\\cdots$",
+          "$x-\\tfrac{x^3}{6}+\\cdots$",
+          "$1+x+\\tfrac{x^2}{2}+\\cdots$",
+          "$1-x+\\tfrac{x^2}{2}-\\cdots$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$1-\\tfrac{x^2}{2}+\\tfrac{x^4}{24}-\\cdots$",
+          "$x-\\tfrac{x^3}{6}+\\cdots$",
+          "$1+x+\\tfrac{x^2}{2}+\\cdots$",
+          "$1-x+\\tfrac{x^2}{2}-\\cdots$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$T_3(x)=x-\\frac{x^3}{6}$. At $x=0.2$: $T_3(0.2)=0.2-\\frac{(0.2)^3}{6}=0.2-0.008/6\\approx 0.19867$. Lagrange bound: $|R_3(0.2)|\\leq\\frac{1}{4!}(0.2)^4=\\frac{0.0016}{24}\\approx 6.7\\times 10^{-5}$ — actually $R_3$ uses the 4th derivative, so $|R_3|\\leq\\frac{1}{5!}(0.2)^5\\approx 2.7\\times 10^{-7}$.\n\n**How to think about it:**\nTwo-part answer: (1) evaluate the polynomial, (2) bound the remainder. For $\\sin x$, $|f^{(4)}(\\xi)|\\leq 1$ always.\n\n**Common slip:**\nUsing $T_3$ but bounding with $(0.2)^4/4!$ (wrong derivative order — remainder uses $f^{(n+1)}$). Forgetting to include the approximation value, not just the error.\n\n**Exam tip:**\nSmall-angle approximation $\\sin x\\approx x$ gives $0.2$ — crude. $T_3$ adds the cubic correction and is accurate to six decimals for $|x|\\leq 0.2$.",
-      "explanation_he": "**למה זה נכון:**\n$T_3(x)=x-\\frac{x^3}{6}$. ב-$x=0.2$: $T_3(0.2)=0.2-\\frac{(0.2)^3}{6}\\approx 0.19867$. חסם לגראנז': $|R_3(0.2)|\\leq\\frac{1}{5!}(0.2)^5\\approx 2.7\\times 10^{-7}$.\n\n**איך לחשוב על זה:**\nתשובה דו-שלבית: (1) הערכת הפולינום, (2) חסימת השארית. ל-$\\sin x$, $|f^{(4)}(\\xi)|\\leq 1$ תמיד.\n\n**טעות נפוצה:**\nשימוש ב-$(0.2)^4/4!$ (סדר נגזרת שגוי — השארית משתמשת ב-$f^{(n+1)}$). שכחת ערך הקירוב, לא רק השגיאה.\n\n**טיפ לבחינה:**\nקירוב זווית קטנה $\\sin x\\approx x$ נותן $0.2$ — גס. $T_3$ מוסיף תיקון מעוקב ומדויק לשש ספרות ל-$|x|\\leq 0.2$. מחוון הבחינה מעניק ניקוד חלקי על בחירת שיטת טיילור הנכונה, פיתוח לעומק מספיק וחסימת שגיאה לפני חישוב סופי.",
-      "skill_atoms": []
+      "source_item_id": "432951b5-3d3c-5c9d-bef9-25fa3d0c3034",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$1-\\tfrac{x^2}{2}+\\tfrac{x^4}{24}-\\cdots$",
+        "$x-\\tfrac{x^3}{6}+\\cdots$",
+        "$1+x+\\tfrac{x^2}{2}+\\cdots$",
+        "$1-x+\\tfrac{x^2}{2}-\\cdots$"
+      ],
+      "options_he": [
+        "$1-\\tfrac{x^2}{2}+\\tfrac{x^4}{24}-\\cdots$",
+        "$x-\\tfrac{x^3}{6}+\\cdots$",
+        "$1+x+\\tfrac{x^2}{2}+\\cdots$",
+        "$1-x+\\tfrac{x^2}{2}-\\cdots$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Compute $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x - x}{x^3}$ using Taylor series.",
-      "stem_he": "חשבו $\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}$ בסדרות טיילור.",
+      "stem_en": "Find the coefficient of $x^3$ in the Maclaurin series of $\\sin x$.",
+      "stem_he": "מצאו את מקדם $x^3$ בטור מקלורן של $\\sin x$.",
+      "explanation_en": "**$\\sin x=x-\\tfrac{x^3}{3!}+\\cdots$, so it is $-\\tfrac16$.**\n\n**Answer:** $-\\tfrac16$.",
+      "explanation_he": "**$\\sin x=x-\\tfrac{x^3}{3!}+\\cdots$, ולכן $-\\tfrac16$.**\n\n**תשובה:** $-\\tfrac16$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\sin x=x-x^3/6+O(x^5)$. $\\sin x-x=-x^3/6+O(x^5)$. $\\frac{-x^3/6}{x^3}=-1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1/6$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "6"
-        ],
-        "case_sensitive": false
+        "value": -0.166667
       },
-      "explanation_en": "**Why this is correct:**\n$\\sin x=x-\\frac{x^3}{6}+O(x^5)$, so $\\sin x-x=-\\frac{x^3}{6}+O(x^5)$. Dividing by $x^3$: $\\frac{-1/6+O(x^2)}{1}\\to -\\frac{1}{6}$.\n\n**How to think about it:**\nDenominator is $x^3$; expand $\\sin x$ through $x^3$. The linear term $x$ cancels exactly — that is why the limit is non-zero.\n\n**Common slip:**\nStopping at $T_1(x)=x$, which makes the numerator identically $0$ and hides the answer. Sign error on $-1/6$.\n\n**Exam tip:**\nClassic calc-1 limit — appears on virtually every final. Taylor gives the answer in three lines; L'Hôpital requires three applications. Prefer Taylor when the function is standard.",
-      "explanation_he": "**למה זה נכון:**\n$\\sin x=x-\\frac{x^3}{6}+O(x^5)$, ולכן $\\sin x-x=-\\frac{x^3}{6}+O(x^5)$. חלוקה ב-$x^3$: $\\frac{-1/6+O(x^2)}{1}\\to -\\frac{1}{6}$.\n\n**איך לחשוב על זה:**\nמכנה $x^3$; פתחו $\\sin x$ עד $x^3$. האיבר $x$ מתבטל בדיוק — לכן הגבול אינו אפס.\n\n**טעות נפוצה:**\nעצירה ב-$T_1(x)=x$ — המונה מתאפס לגמרי. שגיאת סימן על $-1/6$.\n\n**טיפ לבחינה:**\nגבול קלאסי בחדו\"א — מופיע בכמעט כל בחינה. טיילור בשלוש שורות; לופיטל בשלושה יישומים. העדיפו טיילור לפונקציה סטנדרטית. מחוון הבחינה מעניק ניקוד חלקי על בחירת שיטת טיילור הנכונה, פיתוח לעומק מספיק וחסימת שגיאה לפני חישוב סופי.",
-      "skill_atoms": []
+      "source_item_id": "08085b7a-3976-5943-9340-ccfc9afadeff",
+      "points_level_min": "5pt",
+      "correct_answer": "-0.166667"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the coefficient of $x^2$ in the Maclaurin series of $\\cos x$.",
+      "stem_he": "מצאו את מקדם $x^2$ בטור מקלורן של $\\cos x$.",
+      "explanation_en": "**$\\cos x=1-\\tfrac{x^2}{2!}+\\cdots$, so it is $-\\tfrac12$.**\n\n**Answer:** $-\\tfrac12$.",
+      "explanation_he": "**$\\cos x=1-\\tfrac{x^2}{2!}+\\cdots$, ולכן $-\\tfrac12$.**\n\n**תשובה:** $-\\tfrac12$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": -0.5
+      },
+      "source_item_id": "4124332d-787f-5438-88d4-144af584a79a",
+      "points_level_min": "5pt",
+      "correct_answer": "-0.5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the constant term of the Maclaurin series of $\\cos x$.",
+      "stem_he": "מצאו את האיבר הקבוע בטור מקלורן של $\\cos x$.",
+      "explanation_en": "**$\\cos 0=1$, so the constant term is $1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\cos 0=1$, ולכן האיבר הקבוע הוא $1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "96b9eb37-720e-5d1c-b8f0-2c206899d771",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the coefficient of $x^4$ in the Maclaurin series of $\\cos x$.",
+      "stem_he": "מצאו את מקדם $x^4$ בטור מקלורן של $\\cos x$.",
+      "explanation_en": "**$\\tfrac{1}{4!}=\\tfrac{1}{24}$.**\n\n**Answer:** $\\tfrac{1}{24}$.",
+      "explanation_he": "**$\\tfrac{1}{4!}=\\tfrac{1}{24}$.**\n\n**תשובה:** $\\tfrac{1}{24}$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": 0.041667
+      },
+      "source_item_id": "7e4c0413-2825-5918-8f68-86da9257b963",
+      "points_level_min": "5pt",
+      "correct_answer": "0.041667"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: the Maclaurin series of $\\sin x$ contains only odd powers of $x$.",
+      "stem_he": "נכון או לא נכון: טור מקלורן של $\\sin x$ מכיל רק חזקות אי-זוגיות של $x$.",
+      "explanation_en": "**$\\sin$ is odd, so only odd powers appear** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**$\\sin$ אי-זוגית, ולכן רק חזקות אי-זוגיות** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "000cc86f-4c06-56ee-ac59-f10bb2cc7e8e",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the coefficient of $x^5$ in the Maclaurin series of $\\sin x$.",
+      "stem_he": "מצאו את מקדם $x^5$ בטור מקלורן של $\\sin x$.",
+      "explanation_en": "**$\\tfrac{1}{5!}=\\tfrac{1}{120}$.**\n\n**Answer:** $\\tfrac{1}{120}$.",
+      "explanation_he": "**$\\tfrac{1}{5!}=\\tfrac{1}{120}$.**\n\n**תשובה:** $\\tfrac{1}{120}$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": 0.008333
+      },
+      "source_item_id": "e2043c24-55ea-52a4-ad94-b87d728c6d92",
+      "points_level_min": "5pt",
+      "correct_answer": "0.008333"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the coefficient of $x^3$ in the Maclaurin series of $e^{x}$.",
+      "stem_he": "מצאו את מקדם $x^3$ בטור מקלורן של $e^{x}$.",
+      "explanation_en": "**$\\tfrac{1}{3!}=\\tfrac16$.**\n\n**Answer:** $\\tfrac16$.",
+      "explanation_he": "**$\\tfrac{1}{3!}=\\tfrac16$.**\n\n**תשובה:** $\\tfrac16$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": 0.166667
+      },
+      "source_item_id": "5a0d273b-0873-5c28-9e9b-4a82e6619a5c",
+      "points_level_min": "5pt",
+      "correct_answer": "0.166667"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find $f'''(0)$ for $f(x)=e^{x}$.",
+      "stem_he": "מצאו את $f'''(0)$ עבור $f(x)=e^{x}$.",
+      "explanation_en": "**Every derivative of $e^x$ is $e^x$; at $0$ it equals $1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**כל נגזרת של $e^x$ היא $e^x$; ב-$0$ שווה $1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "taylor_series"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "905f87c7-4b40-51ba-ba0f-65a131f38df2",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 65,
