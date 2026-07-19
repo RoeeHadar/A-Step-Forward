@@ -107,6 +107,37 @@ generator and only ~8 hand-authored questions:
 0 CAS rejections across all 30 items; strict + math + track-scope audits and the
 seed dry-run (207/207) all green.
 
+## Batch E — shipped
+
+Six new **verified generators** for the highest-traffic 3pt/4pt algebra &
+functions core (each previously ~8 hand-authored questions, no generator), now
+**15 CAS-verified items each** (90 total, 0 rejections):
+
+- `equations_linear` (3pt/4pt) — linear solves, literal equations, 2×2 systems,
+  bilingual word problems.
+- `functions_linear` (3pt/4pt) — evaluate, slope, intercepts, slope-from-two-
+  points, parallel/perpendicular, line equations, intersection.
+- `inequalities` (3pt/4pt/5pt) — linear + compound inequalities at 3pt; the **5
+  quadratic-inequality / sign-analysis items gated to 4pt** so 3pt learners stay
+  in scope.
+- `arithmetic` (3pt) — fraction ops, order of operations, integer powers,
+  complex fractions, recipe word problem.
+- `fractions_algebraic` (3pt/4pt) — simplify/combine rational expressions,
+  domain restrictions, complex-fraction reveal.
+- `percentages_and_interest` (3pt) — percent-of, increase/decrease, reverse
+  percentage, simple + compound interest, successive-discount trap.
+
+Each has a calibrated easy/med/hard spread across 4–5 kinds with multi-step
+bilingual solutions. Strict + math + track-scope audits and the 207/207 seed
+dry-run all green.
+
+## Corpus progress
+
+Verified 15+ item banks now cover **16 math lessons** (Batches B, D, E + exponents):
+the entire 3pt/4pt algebra & functions foundation, sequences, and the six
+original foundational lessons. Remaining thin lessons (8 questions): geometry/
+trig, probability/statistics, and the 5pt calculus core (11 each).
+
 ## Pending (not yet done this window)
 
 - **Volume:** expand remaining generators to 15+ items each (5pt calculus core
