@@ -11,7 +11,14 @@
  */
 import { neon } from '@neondatabase/serverless';
 import { getAuthContext } from '@/lib/auth';
-import { getLearnerProfile } from '@/lib/neon-db';
+import {
+  getLearnerProfile,
+  getProgressFromNeon,
+  getLearnerStreak,
+  getDailyActivity,
+  getWeeklyRecap,
+  getRecentActivity,
+} from '@/lib/neon-db';
 import { conceptMatchesSubjects, resolveConceptSubject } from '@/lib/concept-scope';
 
 export const runtime = 'nodejs';
@@ -29,7 +36,53 @@ export async function GET(req: Request) {
   const s = neon(url);
   const learnerId = ctx.learnerId;
   const num = (v: unknown): number => Number(v ?? 0);
-  const probe = new URL(req.url).searchParams.get('probe') === '1';
+  const params = new URL(req.url).searchParams;
+  const probe = params.get('probe') === '1';
+  const progressProbe = params.get('progress') === '1';
+
+  // ---- progress probe: getProgressFromNeon swallows its own errors and returns
+  // an empty snapshot, so we run each of its Promise.all members individually to
+  // find which one throws (why Progress shows all zeros despite real mastery).
+  let progressDiag: Row | undefined;
+  if (progressProbe) {
+    const run = async (label: string, fn: () => Promise<unknown>): Promise<Row> => {
+      try {
+        const r = await fn();
+        return { [label]: 'ok', sample: typeof r === 'object' ? undefined : r };
+      } catch (err) {
+        return { [label]: 'THREW', error: (err as Error)?.message ?? String(err) };
+      }
+    };
+    const rawQuery = async (label: string, q: Promise<unknown>): Promise<Row> => {
+      try {
+        await q;
+        return { [label]: 'ok' };
+      } catch (err) {
+        return { [label]: 'THREW', error: (err as Error)?.message ?? String(err) };
+      }
+    };
+    const snap = await getProgressFromNeon(learnerId).catch((e) => ({ _threw: String(e) }));
+    progressDiag = {
+      final_snapshot_summary:
+        snap && '_threw' in snap
+          ? snap
+          : {
+              streak_days: (snap as { streak?: { current_days?: number } }).streak?.current_days ?? null,
+              total_minutes: (snap as { total_minutes?: number }).total_minutes ?? null,
+              lessons_completed: (snap as { lessons_completed?: number }).lessons_completed ?? null,
+              concepts_len: (snap as { concepts?: unknown[] }).concepts?.length ?? null,
+            },
+      per_dependency: {
+        ...(await run('getLearnerStreak', () => getLearnerStreak(learnerId))),
+        ...(await run('getDailyActivity', () => getDailyActivity(learnerId, 30))),
+        ...(await run('getWeeklyRecap', () => getWeeklyRecap(learnerId))),
+        ...(await run('getRecentActivity', () => getRecentActivity(learnerId, 8))),
+        ...(await rawQuery('raw_concept_mastery', s`SELECT concept_id, score::float AS score, last_activity FROM concept_mastery WHERE learner_id = ${learnerId} ORDER BY last_activity DESC NULLS LAST`)),
+        ...(await rawQuery('raw_chat_count', s`SELECT COUNT(*)::int AS n FROM chat_turns WHERE learner_id = ${learnerId} AND role = 'user'`)),
+        ...(await rawQuery('raw_atom_count', s`SELECT COUNT(*)::int AS n FROM skill_practice WHERE learner_id = ${learnerId} AND attempts > 0`)),
+      },
+    };
+  }
 
   // ---- write-path probes (only with ?probe=1) ----
   // Answers: (1) does CREATE TABLE test_attempts actually work, or is there a
@@ -181,6 +234,7 @@ export async function GET(req: Request) {
     learner_agent_notes: agentNotes,
     test_attempts: testAttempts,
     other_quiz_tables: otherQuizzes,
+    progress_diag: progressDiag ?? 'add ?progress=1 to diagnose why Progress shows zeros',
     write_probes: writeProbes ?? 'add ?probe=1 to run write-path probes (DDL + chat_turns roundtrip)',
     hint: 'If concept_mastery.total_rows > 0 but shown_after_scope_filter is 0 (or much smaller), the SCOPE FILTER is hiding your progress. If total_rows is 0/stale, it is a WRITE-path bug.',
   });
