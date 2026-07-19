@@ -226,7 +226,11 @@ Consolidated defaults so nothing is left hand-wavy. All are reversible engineeri
   - `apps/web/src/lib/goal-frontiers.generated.json` (committed) — 8 goals, all with terminal present in core.
   - `apps/web/src/lib/goal-frontiers.overrides.json` — thin optional override layer (empty by default).
   - `apps/web/src/lib/goal-frontiers.test.ts` — 58-assertion CI coverage gate (non-empty core, terminal present + critical, real KG ids, disjoint stretch, foundations-first order). Passes typecheck + lint.
-- Streams 2–8: pending.
+- **Stream 2 (deterministic pacing engine) — done (2026-07-19):**
+  - `apps/web/src/lib/plan-pacing.ts` — pure, dependency-light engine (imports only the manifest, safe for the onboarding critical path). Computes remaining scope, `required_velocity`, `capacity` (hours + attention span), `weekly_load`, pace `status` (ahead/on_track/at_risk), `goal_readiness`, session minutes, and foundations-first `next_concepts`.
+  - `apps/web/src/lib/plan-pacing.test.ts` — 17 unit tests (capacity, session, weeksUntil, status transitions, edge cases). Green (test + typecheck + lint).
+  - Not yet wired into any route — pure library, no behavior change in production.
+- Streams 3–8: pending.
 
 ## Related
 
