@@ -28,19 +28,23 @@ curriculum tracks. Authority: official MoE Bagrut syllabus (new 172/371/372,
 
 ## Fixes applied this pass
 
-### A. Coverage gaps closed via level-appropriate aliases (9)
+### A. Coverage gap closed via a level-appropriate alias (1)
 
 | Syllabus concept | Aliased to | Level fit |
 | ---------------- | ---------- | --------- |
-| `photoelectric_effect` | `modern_physics_intro` | HS → HS ✓ |
-| `normal_distribution_z_scores` | `statistics_inference` | 4pt/makhina/stats (dedupes uni) |
-| `extreme_value_theorem` | `absolute_extrema` | calc1 → uni ✓ |
-| `intermediate_value_theorem` | `continuity` | calc1 → uni ✓ |
-| `sequences_monotone_bounded` | `series_convergence_tests` | calc1 → uni ✓ |
-| `series_absolute_convergence` | `series_convergence_advanced` | calc1 → uni ✓ |
-| `convergence_divergence_integrals` | `improper_integrals` | calc1 → uni ✓ |
+| `photoelectric_effect` | `modern_physics_intro` | HS → HS ✓ (that lesson already teaches the photoelectric effect) |
 
-Coverage before: 12 gaps across 4 levels. After: **3 honest gaps** (below).
+Only aliased where the target lesson's level matches the served track. The other
+raw "gaps" fall into two categories that must NOT be alias-redirected:
+
+- **Depth-mismatch gaps** (HS concept, only university lesson exists):
+  `capacitors_parallel_plate`, `em_waves`, `normal_distribution_basics`,
+  `normal_distribution_z_scores`.
+- **Intentional titled stubs** (deliberately lesson-less calc-1 theory concepts,
+  guarded by `learn-routes.test.ts` — they render a titled concept page and are
+  tutor-handled): `extreme_value_theorem`, `intermediate_value_theorem`,
+  `sequences_monotone_bounded`, `series_absolute_convergence`,
+  `convergence_divergence_integrals`.
 
 ### B. Lessons where a required level saw ZERO questions (3)
 
@@ -63,15 +67,26 @@ under-served)**.
 
 ## Remaining honest gaps (need level-appropriate authoring — NOT mis-aliased)
 
-These three were intentionally left un-aliased: the only candidate lessons are
+These were intentionally left un-aliased: the only candidate lessons are
 **university-level**, and redirecting HS learners there would violate "in depth
-appropriate for level" (guarded by `lesson-concept-resolve.test.ts`).
+appropriate for level" (`capacitors_parallel_plate` / `em_waves` are guarded by
+`lesson-concept-resolve.test.ts`). They currently render as titled concept stubs.
 
 | Concept | Level(s) needing it | Only existing lesson | Recommendation |
 | ------- | ------------------- | -------------------- | -------------- |
 | `capacitors_parallel_plate` | HS Physics (electricity) | `capacitors_dielectrics` (university) | Author HS-level capacitors lesson |
 | `em_waves` | HS Physics (radiation & matter) | `em_waves_propagation` (university) | Author HS-level EM-waves lesson |
 | `normal_distribution_basics` | Bagrut 3pt | `statistics_inference` (university) | Verify 372 truly requires normal distribution; if so author HS-basic lesson, else prune from 3pt catalog |
+| `normal_distribution_z_scores` | Bagrut 4pt (+ makhina/stats) | `statistics_inference` (university) | Author an HS-level normal-distribution + z-scores lesson serving 4pt/makhina/stats |
+
+### Intentional titled stubs (leave as-is)
+
+`extreme_value_theorem`, `intermediate_value_theorem`,
+`sequences_monotone_bounded`, `series_absolute_convergence`,
+`convergence_divergence_integrals` are deliberate lesson-less calc-1 concepts
+(guarded by `learn-routes.test.ts`). They resolve to a titled concept page under
+`/learn/calculus_1/concept/...` and are handled on-demand by the tutor. Author
+dedicated lessons only if you want them promoted from stubs.
 
 ## Deliberate design confirmed (not bugs)
 
