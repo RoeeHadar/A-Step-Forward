@@ -6,6 +6,7 @@ import { LocalizedSubjectLabel } from '@/components/localized-subject-label';
 import {
   dbConfigured,
   fetchLessonByConceptId,
+  fetchLessonById,
   getLearnerProfile,
   type LessonPointsLevel,
 } from '@/lib/neon-db';
@@ -42,6 +43,8 @@ const kgById: Record<string, KgConcept> = Object.fromEntries(
 import {
   aliasRedirectTarget,
   resolveLessonConceptId,
+  resolveVariantLessonId,
+  variantLessonIds,
 } from '@/lib/lesson-concept-resolve';
 
 /** Level values the user can explicitly select via the ?level= toggle. */
@@ -126,16 +129,22 @@ export default async function ConceptPage({
   }
 
   // Lesson is the new authoritative source. If it exists, render it instead
-  // of the wiki-style explanation. Both queries run in parallel for the
-  // fallback case.
+  // of the wiki-style explanation. Prefer a per-track variant (`<canonical>__<track>`)
+  // matching the learner's level, then fall back to the canonical lesson.
+  const variantLessonId = resolveVariantLessonId(conceptId, learnerLevel);
   const [lessonData] = await Promise.all([
-    fetchLessonByConceptId(canonicalLessonId).then(async (data) => {
-      if (data) return data;
+    (async () => {
+      if (variantLessonId !== canonicalLessonId) {
+        const variant = await fetchLessonById(variantLessonId);
+        if (variant) return variant;
+      }
+      const byCanonical = await fetchLessonByConceptId(canonicalLessonId);
+      if (byCanonical) return byCanonical;
       if (canonicalLessonId !== conceptId) {
         return fetchLessonByConceptId(conceptId);
       }
       return null;
-    }),
+    })(),
   ]);
 
   const indexEntry = getLessonIndexEntry(conceptId) ?? getLessonIndexEntry(canonicalLessonId);
@@ -164,6 +173,13 @@ export default async function ConceptPage({
   const conceptName = pickConceptTitle(titles, locale);
 
   const prerequisites = concept?.prerequisites ?? [];
+
+  // Per-track variants of this concept, if any have been authored. Lets a learner
+  // jump to the version written for a different Bagrut track (e.g. an "advanced version").
+  const trackVariants = variantLessonIds(conceptId);
+  const trackLabel: Record<string, string> = isHe
+    ? { '3pt': '3 יח״ל', '4pt': '4 יח״ל', '5pt': '5 יח״ל' }
+    : { '3pt': '3-unit', '4pt': '4-unit', '5pt': '5-unit' };
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -203,6 +219,33 @@ export default async function ConceptPage({
             </p>
           ) : null}
         </header>
+
+        {trackVariants.length > 1 ? (
+          <div
+            className="mb-6 flex flex-wrap items-center gap-2 text-sm"
+            dir={isHe ? 'rtl' : 'ltr'}
+          >
+            <span className="text-muted-foreground">
+              {isHe ? 'גרסה לפי רמה:' : 'Version by track:'}
+            </span>
+            {trackVariants.map((v) => {
+              const active = learnerLevel === v.track;
+              return (
+                <Link
+                  key={v.track}
+                  href={`/learn/${subject}/concept/${conceptId}?level=${v.track}`}
+                  className={
+                    active
+                      ? 'rounded-full bg-primary px-3 py-1 font-medium text-primary-foreground'
+                      : 'rounded-full border border-border bg-surface-1/50 px-3 py-1 hover:border-primary/40'
+                  }
+                >
+                  {trackLabel[v.track] ?? v.track}
+                </Link>
+              );
+            })}
+          </div>
+        ) : null}
 
         {lessonData && hasDirectLesson ? (
           <LessonPageClient data={lessonData} conceptId={conceptId} learnerLevel={learnerLevel} />

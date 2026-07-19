@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   aliasRedirectTarget,
   resolveLessonConceptId,
+  resolveVariantLessonId,
+  variantLessonIds,
 } from './lesson-concept-resolve';
 
 describe('resolveLessonConceptId', () => {
@@ -28,6 +30,31 @@ describe('aliasRedirectTarget', () => {
   it('does not redirect removed or missing targets', () => {
     expect(aliasRedirectTarget('capacitors_parallel_plate')).toBeNull();
     expect(aliasRedirectTarget('em_waves')).toBeNull();
+  });
+});
+
+describe('resolveVariantLessonId', () => {
+  it('returns the canonical lesson when no per-track variant exists', () => {
+    expect(resolveVariantLessonId('vectors_2d', '5pt')).toBe('vectors_2d');
+    expect(resolveVariantLessonId('fluids_hydrostatics', '3pt')).toBe('fluids_hydrostatics');
+  });
+
+  it('returns the canonical lesson when the learner level is unknown', () => {
+    expect(resolveVariantLessonId('vectors_2d', null)).toBe('vectors_2d');
+    expect(resolveVariantLessonId('vectors_2d', 'hs_physics')).toBe('vectors_2d');
+  });
+
+  it('never invents a variant id that is not in the lesson index', () => {
+    // Until variants are authored, no `__<track>` id should be returned.
+    for (const level of ['3pt', '4pt', '5pt']) {
+      expect(resolveVariantLessonId('vectors_2d', level)).toBe('vectors_2d');
+    }
+  });
+});
+
+describe('variantLessonIds', () => {
+  it('returns an empty list when no variants are authored yet', () => {
+    expect(variantLessonIds('vectors_2d')).toEqual([]);
   });
 });
 

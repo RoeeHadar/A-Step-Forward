@@ -119,3 +119,12 @@ jobs:
 
       - name: Track-scope audit (no questions gated above every served track)
         run: node scripts/audit-track-scope.mjs
+
+      - name: Rewrite-bar audit (per-lesson depth floors for rewritten lessons)
+        run: node scripts/audit-lesson-rewrite-bar.mjs --allowlist=scripts/seed_data/rewrite-bar-allowlist.json --strict
+
+      - name: Question re-derivation (Tier-1 verify blocks, whole corpus)
+        run: node scripts/audit-question-verify.mjs --all --strict
+
+      - name: Question verification (Tier-2 worked solutions, rewritten lessons)
+        run: node scripts/audit-question-verify.mjs --allowlist=scripts/seed_data/rewrite-bar-allowlist.json --strict
