@@ -296,10 +296,68 @@ export function selectNextConcepts(input: SelectNextConceptsInput): string[] {
   const out: string[] = [];
   for (const entry of frontier.core) {
     if (out.length >= input.limit) break;
-    if (excluded.has(entry.id) || mastered.has(entry.id)) continue;
+    if (mastered.has(entry.id)) continue;
+    // Weak concepts are remediation-eligible even if already used — a failed week's
+    // concepts must be re-teachable (ADR-0010 remediation carry-forward). Otherwise
+    // don't reschedule anything already in the plan.
+    if (excluded.has(entry.id) && !weak.has(entry.id)) continue;
     if (entry.depth >= minDepth || engaged.has(entry.id) || weak.has(entry.id)) {
       out.push(entry.id);
     }
   }
   return out;
+}
+
+/** Per-critical-concept mastery floor for a weekly gate pass (ADR-0010). */
+export const GATE_CRITICAL_FLOOR = 0.6;
+
+/** Default aggregate pass threshold for a weekly gate (mirrors GATE_PASS_THRESHOLD). */
+export const GATE_AGGREGATE_THRESHOLD = 0.75;
+
+/** The set of frontier-CRITICAL concept ids for a goal (high downstream degree). */
+export function criticalConceptsForGoal(goalKey: string | null | undefined): Set<string> {
+  const frontier = getFrontier(goalKey);
+  const out = new Set<string>();
+  if (!frontier) return out;
+  for (const c of frontier.core) if (c.critical) out.add(c.id);
+  return out;
+}
+
+export interface GatePassResult {
+  passed: boolean;
+  /** Critical concepts assessed in this gate that fell below the floor. */
+  failed_critical: string[];
+  aggregate_ok: boolean;
+}
+
+/**
+ * Decide whether a weekly gate passes (ADR-0010, pure + tested):
+ *   aggregate score ≥ threshold AND every frontier-CRITICAL concept assessed in the
+ *   gate ≥ the critical floor. A strong average can't mask a zero on a hard
+ *   prerequisite; non-critical weak spots don't block (they fold into spaced review).
+ *
+ * Only critical concepts that actually appear in `perTopic` are checked — the gate
+ * can't fail on a critical concept it never assessed.
+ */
+export function evaluateGatePass(input: {
+  aggregateScore: number;
+  perTopic: Record<string, number>;
+  goalKey?: string | null;
+  passThreshold?: number;
+  criticalFloor?: number;
+}): GatePassResult {
+  const threshold = input.passThreshold ?? GATE_AGGREGATE_THRESHOLD;
+  const floor = input.criticalFloor ?? GATE_CRITICAL_FLOOR;
+  const critical = criticalConceptsForGoal(input.goalKey);
+
+  const failed_critical: string[] = [];
+  for (const [topic, score] of Object.entries(input.perTopic)) {
+    if (critical.has(topic) && score < floor) failed_critical.push(topic);
+  }
+  const aggregate_ok = input.aggregateScore >= threshold;
+  return {
+    passed: aggregate_ok && failed_critical.length === 0,
+    failed_critical,
+    aggregate_ok,
+  };
 }

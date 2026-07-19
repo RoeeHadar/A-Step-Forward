@@ -195,6 +195,61 @@ export async function getTestAttempt(
   }
 }
 
+/**
+ * How many weekly-gate attempts a learner has made for a given plan week.
+ * Drives the soft-override "retakes exhausted" backstop (ADR-0010). Returns 0 on a
+ * missing table or any error (graceful degradation).
+ */
+export async function countGateAttempts(
+  learnerId: string,
+  planId: string,
+  weekNum: number,
+): Promise<number> {
+  if (!sql) return 0;
+  try {
+    const rows = (await sql`
+      SELECT COUNT(*)::int AS n
+      FROM test_attempts
+      WHERE learner_id = ${learnerId}
+        AND plan_id = ${planId}
+        AND week_num = ${weekNum}
+        AND kind = 'weekly_gate'
+    `) as Array<{ n: number }>;
+    return rows[0]?.n ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Weak concepts from the learner's most recent weekly-gate attempt for a plan week.
+ * Used to carry remediation forward when the plan advances via soft override
+ * (ADR-0010). Returns [] on a missing table or any error.
+ */
+export async function getLatestGateWeakConcepts(
+  learnerId: string,
+  planId: string,
+  weekNum: number,
+): Promise<string[]> {
+  if (!sql) return [];
+  try {
+    const rows = (await sql`
+      SELECT weak_concepts
+      FROM test_attempts
+      WHERE learner_id = ${learnerId}
+        AND plan_id = ${planId}
+        AND week_num = ${weekNum}
+        AND kind = 'weekly_gate'
+      ORDER BY created_at DESC
+      LIMIT 1
+    `) as Array<{ weak_concepts: unknown }>;
+    const w = rows[0]?.weak_concepts;
+    return Array.isArray(w) ? (w as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 function mapListRow(row: Record<string, unknown>): TestAttemptListItem {
   return {
     id: String(row.id),

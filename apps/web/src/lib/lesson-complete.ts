@@ -10,8 +10,15 @@ import { resolveLessonConceptId } from '@/lib/lesson-concept-resolve';
 
 neonConfig.fetchConnectionCache = true;
 
-/** Baseline mastery when a learner marks a lesson as read/complete (before quiz). */
-export const LESSON_READ_BASELINE = 0.7;
+/**
+ * Lesson "exposure" signal (ADR-0010). Marking a lesson read is NOT proof of
+ * mastery — a learner can breeze through without attention — so it only records a
+ * light exposure floor, deliberately BELOW the critical-concept floor (~0.6) and
+ * far below "mastered" (0.8). It never completes a plan week and never grants the
+ * mastery that drives advancement; only gates/tests do that. Applied via GREATEST
+ * so it can never lower a real (assessed) score.
+ */
+export const LESSON_EXPOSURE_LEVEL = 0.35;
 
 function requireSql() {
   const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? '';
@@ -22,8 +29,12 @@ function requireSql() {
 }
 
 /**
- * Record lesson completion: bump concept mastery + lessons_completed_count.
- * Also marks the active plan week `completed` when every concept in it is ≥ baseline.
+ * Record lesson exposure: nudge concept mastery up to the exposure floor (never
+ * lowering an assessed score) + bump lessons_completed_count.
+ *
+ * ADR-0010: lessons are decoupled from advancement. This NEVER completes a plan
+ * week — week completion and advancement come solely from passing the gate/tests.
+ * `week_completed` is retained in the return shape (always false) for API stability.
  */
 export async function markLessonCompleteThin(
   learnerId: string,
@@ -35,9 +46,9 @@ export async function markLessonCompleteThin(
 
   await s`
     INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
-    VALUES (${learnerId}, ${canonicalId}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
+    VALUES (${learnerId}, ${canonicalId}, ${LESSON_EXPOSURE_LEVEL}, 1, NOW(), NOW())
     ON CONFLICT (learner_id, concept_id) DO UPDATE SET
-      score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
+      score = GREATEST(concept_mastery.score, ${LESSON_EXPOSURE_LEVEL}),
       last_activity = NOW(),
       updated_at = NOW()
   `;
@@ -45,9 +56,9 @@ export async function markLessonCompleteThin(
   if (rawId !== canonicalId) {
     await s`
       INSERT INTO concept_mastery (learner_id, concept_id, score, data_points, last_activity, created_at)
-      VALUES (${learnerId}, ${rawId}, ${LESSON_READ_BASELINE}, 1, NOW(), NOW())
+      VALUES (${learnerId}, ${rawId}, ${LESSON_EXPOSURE_LEVEL}, 1, NOW(), NOW())
       ON CONFLICT (learner_id, concept_id) DO UPDATE SET
-        score = GREATEST(concept_mastery.score, ${LESSON_READ_BASELINE}),
+        score = GREATEST(concept_mastery.score, ${LESSON_EXPOSURE_LEVEL}),
         last_activity = NOW(),
         updated_at = NOW()
     `;
@@ -62,60 +73,8 @@ export async function markLessonCompleteThin(
       WHERE learner_id = ${learnerId}
     `;
   } catch {
-    // Column may not exist yet; mastery update is the critical path for plan UI.
+    // Column may not exist yet; exposure update is the critical path for lesson UI.
   }
 
-  const weekCompleted = await maybeCompleteActiveWeek(learnerId, s);
-  return { new_mastery: LESSON_READ_BASELINE, week_completed: weekCompleted };
-}
-
-type Sql = ReturnType<typeof requireSql>;
-
-async function maybeCompleteActiveWeek(learnerId: string, s: Sql): Promise<boolean> {
-  try {
-    const planRows = (await s`
-      SELECT id::text
-      FROM learning_plans
-      WHERE learner_id = ${learnerId} AND status = 'active'
-      LIMIT 1
-    `) as Array<{ id: string }>;
-    const planId = planRows[0]?.id;
-    if (!planId) return false;
-
-    const weekRows = (await s`
-      SELECT id::text, concepts
-      FROM plan_weeks
-      WHERE plan_id = ${planId}::uuid AND status = 'active'
-      ORDER BY week_number
-      LIMIT 1
-    `) as Array<{ id: string; concepts: string[] }>;
-    const week = weekRows[0];
-    if (!week?.concepts?.length) return false;
-
-    // Prefer JS filter over ANY(${array}) — Neon HTTP binding is flaky for arrays.
-    const masteryRows = (await s`
-      SELECT concept_id, score::float AS score
-      FROM concept_mastery
-      WHERE learner_id = ${learnerId}
-    `) as Array<{ concept_id: string; score: number }>;
-
-    const byId = new Map(masteryRows.map((r) => [r.concept_id, r.score]));
-    const allDone = week.concepts.every((cid) => {
-      const score = Math.max(
-        byId.get(cid) ?? 0,
-        byId.get(resolveLessonConceptId(cid)) ?? 0,
-      );
-      return score >= LESSON_READ_BASELINE;
-    });
-    if (!allDone) return false;
-
-    await s`
-      UPDATE plan_weeks
-      SET status = 'completed'
-      WHERE id = ${week.id}::uuid
-    `;
-    return true;
-  } catch {
-    return false;
-  }
+  return { new_mastery: LESSON_EXPOSURE_LEVEL, week_completed: false };
 }

@@ -14,6 +14,7 @@ import 'server-only';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { randomUUID } from 'node:crypto';
 import { getConceptMastery, getLearnerProfile } from './neon-db';
+import { evaluateGatePass, hasFrontier } from './plan-pacing';
 import { GATE_PASS_THRESHOLD, recordTestAttempt } from './test-attempts';
 import { llmCompleteJson } from '@/lib/llm-provider';
 import kg from './kg-data.json';
@@ -510,6 +511,26 @@ export async function submitWeeklyQuizForUser(
 
   const { score, per_topic, weak_concepts } = scoreWeeklyQuizAnswers(stored, args.answers);
 
+  // Gate pass (ADR-0010): aggregate ≥ threshold AND every frontier-CRITICAL concept
+  // assessed here ≥ the critical floor. Resolve the goal frontier from the profile.
+  const profile = await getLearnerProfile(userId).catch(() => null);
+  const goalKeyRaw =
+    (profile?.personality_profile as { goal_key?: unknown } | null | undefined)?.goal_key;
+  const goalKey =
+    typeof goalKeyRaw === 'string' && hasFrontier(goalKeyRaw)
+      ? goalKeyRaw
+      : typeof profile?.goal === 'string' && hasFrontier(profile.goal)
+        ? profile.goal
+        : null;
+  const gate = evaluateGatePass({
+    aggregateScore: score,
+    perTopic: per_topic,
+    goalKey,
+    passThreshold: GATE_PASS_THRESHOLD,
+  });
+  // Critical concepts that fell below the floor are remediation carry-forward.
+  const weakForRemediation = Array.from(new Set([...weak_concepts, ...gate.failed_critical]));
+
   try {
     await sql`
       UPDATE weekly_quizzes_ai
@@ -531,9 +552,9 @@ export async function submitWeeklyQuizForUser(
     }
   }
 
-  // Week-gate signal + Tests-archive record (ADR-0009). Best-effort; a missing
+  // Week-gate signal + Tests-archive record (ADR-0009/0010). Best-effort; a missing
   // test_attempts table degrades to a no-op and never blocks grading.
-  const passed = score >= GATE_PASS_THRESHOLD;
+  const passed = gate.passed;
   const answerByItem = new Map(
     args.answers.map((a) => [a.item_id, a.chosen.trim().toUpperCase()]),
   );
@@ -546,7 +567,7 @@ export async function submitWeeklyQuizForUser(
     score,
     passThreshold: GATE_PASS_THRESHOLD,
     perTopic: per_topic,
-    weakConcepts: weak_concepts,
+    weakConcepts: weakForRemediation,
     questions: stored.map((q) => ({
       id: q.id,
       topic: q.topic,
@@ -587,7 +608,7 @@ export async function submitWeeklyQuizForUser(
     quiz_id: quizId,
     score,
     per_topic,
-    weak_concepts,
+    weak_concepts: weakForRemediation,
     plan_adapted: planAdvanced,
     next_week_concepts: null,
     passed,

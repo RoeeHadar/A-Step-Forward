@@ -14,12 +14,16 @@ production_web: d67a7ac0
 
 - [x] **ADR-0009 living plan shipped** — anchored frontier selection (no "start at arithmetic"),
   weekly re-pace from mastery + trailing velocity, gate-pass → advance. Prod `d67a7ac0`.
-- [x] **Grilling #2 → [ADR-0010](../docs/adr/0010-assessment-driven-progression.md) (Proposed)** —
+- [x] **Grilling #2 → [ADR-0010](../docs/adr/0010-assessment-driven-progression.md)** —
   assessment-driven progression: advancement is EARNED via gates/tests, not lesson completion.
   16 decisions; phased streams A–F.
-- [!] **Known integrity loophole (fix = Stream A):** `lesson-complete.ts` → mastery 0.7 +
-  `maybeCompleteActiveWeek()` advances the plan with NO quiz. Decouple lessons from advancement.
-- Next build go-ahead: Stream A (hard gate + per-critical pass + lessons=exposure-only).
+- [x] **ADR-0010 Stream A SHIPPED — earned advancement / breeze-through loophole closed.**
+  `lesson-complete.ts`: mastery bump 0.7 → 0.35 exposure (below floors), `maybeCompleteActiveWeek()`
+  removed → lessons never advance the plan. `evaluateGatePass()` (aggregate ≥ 0.75 AND every
+  frontier-CRITICAL concept ≥ 0.6). `advanceRollingPlanWindow` hard gate (only gate-completed
+  advances) + soft override (>14d overdue OR ≥3 retakes) + remediation carry-forward. tsc/lint/tests green.
+- Next: Stream B (assessment tiers: milestone/unit + final mock, mixed formats, item rotation) or
+  Stream A UI follow-up (remediation-week flag + "pass the gate to continue" affordance).
 
 ## Last done (2026-07-12)
 

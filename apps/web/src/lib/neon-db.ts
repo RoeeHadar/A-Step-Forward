@@ -24,6 +24,7 @@ import {
   type PaceStatus,
   type PacingResult,
 } from './plan-pacing';
+import { countGateAttempts, getLatestGateWeakConcepts } from './test-attempts';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
   buildFastPlanConceptOrder,
@@ -1626,13 +1627,37 @@ export async function advanceRollingPlanWindow(
 
   const dueMs = active.quiz_due_at ? new Date(active.quiz_due_at).getTime() : NaN;
   const weekPastDue = Number.isFinite(dueMs) && dueMs < now;
-  if (active.status !== 'completed' && !weekPastDue) {
+
+  // Hard gate (ADR-0010): only a gate-COMPLETED week advances to new material — time
+  // no longer auto-advances. Soft-override backstops prevent stranding a learner:
+  //  - long overdue (past the gate due date by more than the grace window), OR
+  //  - gate retakes exhausted (>= 3 weekly-gate attempts for this week).
+  const completed = active.status === 'completed';
+  const OVERRIDE_GRACE_MS = 14 * 24 * 60 * 60 * 1000;
+  const longOverdue = weekPastDue && now - dueMs >= OVERRIDE_GRACE_MS;
+  const gateAttempts = await countGateAttempts(learnerId, stub.id, active.week_number).catch(
+    () => 0,
+  );
+  const retakesExhausted = gateAttempts >= 3;
+  const softOverride = longOverdue || retakesExhausted;
+  if (!completed && !softOverride) {
     return { advanced: false, plan: stub };
   }
 
   const profile = await getLearnerProfile(learnerId);
   if (!profile) return { advanced: false, plan: stub };
   const mastery = await getConceptMastery(learnerId);
+
+  // Carry-forward remediation (ADR-0010): when advancing via soft override (not a
+  // genuine pass), pull the failed week's weak concepts forward so they are re-taught
+  // rather than skipped.
+  let carryForwardWeak = sanitizeConceptIds(profile.weak_concepts ?? []);
+  if (softOverride && !completed) {
+    const gw = await getLatestGateWeakConcepts(learnerId, stub.id, active.week_number).catch(
+      () => [] as string[],
+    );
+    carryForwardWeak = sanitizeConceptIds([...carryForwardWeak, ...gw]);
+  }
 
   const usedConcepts = new Set<string>();
   for (const w of stub.weeks) {
@@ -1668,7 +1693,7 @@ export async function advanceRollingPlanWindow(
       masteryScores: mastery,
       engagedConceptIds: usedConcepts,
       excludeConceptIds: usedConcepts,
-      weakConceptIds: sanitizeConceptIds(profile.weak_concepts ?? []),
+      weakConceptIds: carryForwardWeak,
       limit: weeklyLoad,
     });
     if (nextConcepts.length === 0) {
@@ -1685,7 +1710,7 @@ export async function advanceRollingPlanWindow(
       options: {
         excludeConcepts: [...usedConcepts],
         prependConcepts: [],
-        priorityConcepts: sanitizeConceptIds(profile.weak_concepts ?? []),
+        priorityConcepts: carryForwardWeak,
       },
     });
     nextConcepts = ordered
@@ -1704,20 +1729,18 @@ export async function advanceRollingPlanWindow(
 
   // Goal reached (frontier + stretch exhausted) with no upcoming week to promote:
   // wind the plan down at 100% readiness — complete the active week, add no new one.
+  // We only reach here while advancing (gate-completed or soft override).
   if (!appendWeek && !upcoming) {
-    if (weekPastDue || active.status === 'completed') {
-      try {
-        await s.transaction([
-          s`UPDATE plan_weeks SET status = 'completed' WHERE id = ${active.id}::uuid`,
-          s`UPDATE learning_plans SET updated_at = NOW(), plan_last_adjusted_at = NOW(), plan_adjustment_kind = 'mastery' WHERE id = ${stub.id}::uuid`,
-        ]);
-      } catch (err) {
-        console.warn('[advanceRollingPlanWindow] goal-reached', err);
-        return { advanced: false, plan: stub };
-      }
-      return { advanced: true, plan: await loadActivePlanStub(learnerId) };
+    try {
+      await s.transaction([
+        s`UPDATE plan_weeks SET status = 'completed' WHERE id = ${active.id}::uuid`,
+        s`UPDATE learning_plans SET updated_at = NOW(), plan_last_adjusted_at = NOW(), plan_adjustment_kind = 'mastery' WHERE id = ${stub.id}::uuid`,
+      ]);
+    } catch (err) {
+      console.warn('[advanceRollingPlanWindow] goal-reached', err);
+      return { advanced: false, plan: stub };
     }
-    return { advanced: false, plan: stub };
+    return { advanced: true, plan: await loadActivePlanStub(learnerId) };
   }
 
   const nextWeekNumber = Math.max(...stub.weeks.map((w) => w.week_number)) + 1;
@@ -1727,15 +1750,13 @@ export async function advanceRollingPlanWindow(
   const quizDueIso = quizDue.toISOString();
 
   const queries = [
-    ...(weekPastDue || active.status === 'completed'
-      ? [
-          s`
-            UPDATE plan_weeks
-            SET status = 'completed'
-            WHERE id = ${active.id}::uuid
-          `,
-        ]
-      : []),
+    // We only reach here while advancing (gate-completed or soft override), so the
+    // active week is always closed out — never leave two 'active' weeks behind.
+    s`
+      UPDATE plan_weeks
+      SET status = 'completed'
+      WHERE id = ${active.id}::uuid
+    `,
     ...(upcoming
       ? [
           s`

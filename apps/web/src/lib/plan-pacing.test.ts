@@ -3,6 +3,9 @@ import {
   CONCEPTS_PER_ROLLING_WEEK,
   computeCapacity,
   computePacing,
+  criticalConceptsForGoal,
+  evaluateGatePass,
+  GATE_CRITICAL_FLOOR,
   getFrontier,
   hasFrontier,
   listGoalKeys,
@@ -254,5 +257,70 @@ describe('plan-pacing: selectNextConcepts (anchored)', () => {
     // All returned concepts are at/after the anchor depth.
     const anchorDepth = Math.max(...firstTwo.map((id) => depth.get(id)!));
     for (const id of picked) expect(depth.get(id)!).toBeGreaterThanOrEqual(anchorDepth);
+  });
+
+  it('remediation: a weak concept is re-scheduled even if already used', () => {
+    const core = getFrontier(GOAL)!.core;
+    const used = core.slice(0, 3).map((c) => c.id);
+    const weakUsed = used[0]!;
+    const picked = selectNextConcepts({
+      goalKey: GOAL,
+      engagedConceptIds: used,
+      excludeConceptIds: used,
+      weakConceptIds: [weakUsed],
+      limit: 5,
+    });
+    // The weak, already-used concept is pulled back in for remediation…
+    expect(picked).toContain(weakUsed);
+    // …but a non-weak used concept is not.
+    expect(picked).not.toContain(used[1]!);
+  });
+});
+
+describe('plan-pacing: evaluateGatePass (critical-concept floor)', () => {
+  it('exposes the critical concept set for a goal', () => {
+    const crit = criticalConceptsForGoal(GOAL);
+    expect(crit.size).toBeGreaterThan(0);
+    const core = getFrontier(GOAL)!.core;
+    for (const id of crit) {
+      expect(core.find((c) => c.id === id)?.critical).toBe(true);
+    }
+  });
+
+  it('empty critical set for an unknown goal', () => {
+    expect(criticalConceptsForGoal('nope').size).toBe(0);
+  });
+
+  it('passes when aggregate ≥ threshold and no critical concept is below the floor', () => {
+    const crit = [...criticalConceptsForGoal(GOAL)];
+    const perTopic: Record<string, number> = {};
+    for (const c of crit.slice(0, 2)) perTopic[c] = 0.9;
+    const r = evaluateGatePass({ aggregateScore: 0.8, perTopic, goalKey: GOAL });
+    expect(r.passed).toBe(true);
+    expect(r.failed_critical).toEqual([]);
+  });
+
+  it('fails when a critical concept is below the floor even if aggregate passes', () => {
+    const crit = [...criticalConceptsForGoal(GOAL)];
+    expect(crit.length).toBeGreaterThan(0);
+    const weakCritical = crit[0]!;
+    const perTopic: Record<string, number> = { [weakCritical]: GATE_CRITICAL_FLOOR - 0.2 };
+    const r = evaluateGatePass({ aggregateScore: 0.95, perTopic, goalKey: GOAL });
+    expect(r.aggregate_ok).toBe(true);
+    expect(r.passed).toBe(false);
+    expect(r.failed_critical).toContain(weakCritical);
+  });
+
+  it('fails when aggregate is below threshold regardless of critical floors', () => {
+    const r = evaluateGatePass({ aggregateScore: 0.5, perTopic: {}, goalKey: GOAL });
+    expect(r.passed).toBe(false);
+    expect(r.aggregate_ok).toBe(false);
+  });
+
+  it('does not fail on a critical concept that was never assessed', () => {
+    // No critical concept in perTopic → only the aggregate gates.
+    const r = evaluateGatePass({ aggregateScore: 0.8, perTopic: { some_noncritical: 0.1 }, goalKey: GOAL });
+    expect(r.failed_critical).toEqual([]);
+    expect(r.passed).toBe(true);
   });
 });

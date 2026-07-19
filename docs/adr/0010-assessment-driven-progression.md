@@ -1,6 +1,6 @@
 # ADR 0010: Assessment-driven progression & gating
 
-- **Status:** Proposed
+- **Status:** Accepted — Stream A shipped 2026-07-19
 - **Date:** 2026-07-19
 - **Deciders:** Product owner + Opus (planning)
 - **Extends:** [ADR-0009](0009-goal-paced-adaptive-planning.md) (living goal-paced planner). Constrained by [ADR-0006](0006-neon-direct-critical-path.md) (Vercel + Neon hot path), [ADR-0007](0007-learning-planner-authority.md) (planner authority), [ADR-0008](0008-adaptive-wellbeing-planning.md) (wellbeing overlay).
@@ -89,8 +89,18 @@ Progression is **earned through assessment**, not lesson completion. The plan ad
 
 Ordered by leverage/risk. Each ships behind graceful degradation and is verified (tsc + lint + unit + CI Deploy Web) per the deploy rule.
 
-- **Stream A — Earned advancement (integrity fix, highest priority).**
+- **Stream A — Earned advancement (integrity fix, highest priority).** ✅ **Shipped 2026-07-19.**
   Decouple lessons from advancement (#4): lesson-read → exposure signal only; retire `maybeCompleteActiveWeek()` as an advancement path. Enforce the hard gate + per-critical-concept pass criteria (#1–#3) in `advanceRollingPlanWindow` (remove time-based auto-advance to new material; keep it only as the soft-override backstop). Failure loop scaffolding (retake counter, remediation-week flag).
+
+  **What shipped:**
+  - `lesson-complete.ts`: `LESSON_READ_BASELINE = 0.7` → `LESSON_EXPOSURE_LEVEL = 0.35` (below the 0.6 critical floor and 0.8 mastered line), applied via `GREATEST` so it can never lower an assessed score. `maybeCompleteActiveWeek()` removed entirely — **lessons never complete a week or advance the plan.** `markLessonCompleteThin` keeps its `{ new_mastery, week_completed }` shape (`week_completed` always `false`) for API stability; no frontend consumes it.
+  - `plan-pacing.ts`: pure, tested gate decision `evaluateGatePass({ aggregateScore, perTopic, goalKey })` → `{ passed, failed_critical, aggregate_ok }`. Pass = aggregate ≥ `GATE_AGGREGATE_THRESHOLD` (0.75) **AND** every frontier-CRITICAL concept *assessed in the gate* ≥ `GATE_CRITICAL_FLOOR` (0.6). A strong average can't mask a zero on a hard prerequisite; a critical concept never assessed can't fail the gate. `criticalConceptsForGoal(goalKey)` reads the frontier manifest. `selectNextConcepts` now lets **weak concepts bypass the exclusion set** so a failed week's concepts are re-teachable (remediation carry-forward).
+  - `weekly-quiz.ts`: `passed` now comes from `evaluateGatePass` (goal resolved from `personality_profile.goal_key` → `profile.goal`, guarded by `hasFrontier`), not a bare aggregate. `failed_critical` concepts are unioned into `weak_concepts` for remediation and returned to the client + recorded in the attempt.
+  - `neon-db.ts` `advanceRollingPlanWindow`: **hard gate** — only a gate-`completed` week advances to new material; time alone no longer advances. **Soft-override backstops** prevent stranding: long overdue (> 14-day grace past the gate due date) OR gate retakes exhausted (≥ 3 `weekly_gate` attempts, via `countGateAttempts`). On a soft-override advance, the failed week's `weak_concepts` (via `getLatestGateWeakConcepts`) carry forward as remediation. The active week is now always closed out when advancing (never two active weeks).
+  - `test-attempts.ts`: added `countGateAttempts()` and `getLatestGateWeakConcepts()` (both graceful — return 0/[] on a missing table).
+  - Tests: 7 new pacing tests (gate decision + critical set + remediation bypass); full web suite green except a pre-existing local `schemas.test.ts` module-resolution failure (unrelated; fails with Stream A changes stashed too).
+
+  **Deferred within Stream A (follow-ups):** an explicit `remediation_week` flag + retake counter surfaced in UI, and a learner-facing "you must pass the gate to continue" affordance. Current behavior relies on `plan_weeks.status` + attempt counts; the soft override guarantees no learner is ever hard-stranded.
 - **Stream B — Assessment tiers & anti-gaming.**
   Add milestone/unit tests + final mock generation (#5), mixed question formats with Reviewer-graded open-response for milestone/final (#6), item rotation, and between-assessment difficulty calibration (#7). Extend the Tests archive to the new kinds.
 - **Stream C — Evaluation integrity.**
