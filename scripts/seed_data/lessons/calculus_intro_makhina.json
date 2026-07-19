@@ -221,151 +221,346 @@
       "body_he_md": "**רעיונות מרכזיים להמשך:**\n\n- **גבול:** $\\lim_{x\\to a}f(x)=L$ — התקרבות ללא גישה; פתרון $0/0$ באלגברה.\n- **נגזרת:** $f'(a)=\\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}$ — שיעור שינוי מיידי, שיפוע משיק.\n- **ממוצע לעומת מיידי:** שינוי ממוצע — שתי נקודות; נגזרת — נקודה אחת וגבול.\n- **כלל חזקה:** $(x^n)'=nx^{n-1}$ — מאשר כל חישוב מהגדרה לפולינומים.\n- **סימן $f'$:** $f'>0\\Rightarrow f$ עולה; $f'<0\\Rightarrow f$ יורדת; $f'=0\\Rightarrow$ נקודה קריטית.\n- **סימן $f''$:** $f''>0\\Rightarrow$ קמור; $f''<0\\Rightarrow$ קעור; שינוי סימן $\\Rightarrow$ פיתול.\n- **אינטגרל:** $\\int_a^b f(x)\\,dx$ = שטח מסומן; חישוב דרך FTC: $F(b)-F(a)$ כאשר $F'=f$.\n- **קשר לפיזיקה:** $s'(t)=v(t)$, $v'(t)=a(t)$, $\\int v\\,dt$ = מרחק.\n\n**צעדים הבאים:** תרגלו פירוק גבולות יומי, ואז עברו לשיעורי גבולות ונגזרות ייעודיים."
     }
   ],
-  "agent_hints": "Stress that the limit definition of the derivative is the source of all differentiation rules — never let students skip it. Limits of the form 0/0 must be resolved algebraically (factor, rationalize, expand). For graphical problems, always connect: where f has a peak/valley → f' = 0; where f' changes sign → turning point in f; f'' sign determines concavity. For pre-uni students, grounding in physical examples (position/velocity/acceleration) makes the abstract concrete.",
+  "agent_hints": {
+    "socratic_prompt": "Stress that the limit definition of the derivative is the source of all differentiation rules — never let students skip it. Limits of the form 0/0 must be resolved algebraically (factor, rationalize, expand). For graphical problems, always connect: where f has a peak/valley → f' = 0; where f' changes sign → turning point in f; f'' sign determines concavity. For pre-uni students, grounding in physical examples (position/velocity/acceleration) makes the abstract concrete.",
+    "key_insights": [],
+    "common_misconceptions": [],
+    "skill_atoms_unlocked": [
+      "continuity",
+      "derivatives",
+      "limits"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Find the average rate of change of $f(x) = 3x^2$ from $x = 1$ to $x = 4$.",
-      "stem_he": "מצאו שיעור שינוי ממוצע של $f(x) = 3x^2$ מ-$x = 1$ עד $x = 4$.",
+      "stem_en": "The derivative of a function at a point gives:",
+      "stem_he": "נגזרת של פונקציה בנקודה נותנת:",
+      "explanation_en": "**The derivative is the instantaneous slope.**\n\n**Answer:** the slope of the tangent line.",
+      "explanation_he": "**הנגזרת היא השיפוע הרגעי.**\n\n**תשובה:** שיפוע המשיק.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nARC $= \\frac{f(4)-f(1)}{4-1} = \\frac{48-3}{3} = \\frac{45}{3} = 15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "15$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "15"
+        "options_en": [
+          "$\\text{the slope of the tangent line}$",
+          "$\\text{the area under the curve}$",
+          "$\\text{the y-intercept}$",
+          "$\\text{the average value}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{the slope of the tangent line}$",
+          "$\\text{the area under the curve}$",
+          "$\\text{the y-intercept}$",
+          "$\\text{the average value}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why 15 is correct:** Average rate of change uses two endpoints: $\\text{ARC} = \\frac{f(4)-f(1)}{4-1}$. With $f(4)=48$ and $f(1)=3$, we get $\\frac{45}{3}=15$ — the secant slope from $(1,3)$ to $(4,48)$ on $f(x)=3x^2$.\n\n**How to think about it:** The question asks for change **over an interval**, not at a single point — use the ARC formula, not the derivative.\n\n**Common wrong path:** Using $f'(x)=6x$ and substituting — that gives instantaneous rate, not average over $[1,4]$.\n\n**Exam tip:** Label steps: $f(a)$, $f(b)$, divide by $b-a$. Read whether the stem says \"from $x=a$ to $x=b$\" (ARC) or \"at $x=a$\" (derivative).",
-      "explanation_he": "**למה 15 נכון:** שיעור שינוי ממוצע משתמש בשני קצוות: $\\text{avg change} = \\frac{f(4)-f(1)}{4-1}$. חישוב: $f(4)=48$, $f(1)=3$, ולכן $\\frac{45}{3}=15$. זה שיפוע המיתר מ-$(1,3)$ ל-$(4,48)$ על $f(x)=3x^2$.\n\n**איך לחשוב על זה:** השאלה שואלת על שינוי **על קטע**, לא בנקודה בודדת — השתמשו בנוסחת שינוי ממוצע, לא בנגזרת. המקדם 3 מגדיל את הפרבולה אך לא משנה את השיטה.\n\n**טעות נפוצה:** שימוש בכלל חזקה לקבלת $f'(x)=6x$ והצבה — זה נותן קצב מיידי, לא ממוצע על $[1,4]$.\n\n**טיפ לבחינה:** סמנו שלבים: חשבו $f(a)$, $f(b)$, חלקו ב-$b-a$. במבחני מכינה מערבבים שאלות ARC ונגזרת — קראו אם כתוב \"מ-$x=a$ עד $x=b$\" (ממוצע) או \"ב-$x=a$\" (נגזרת).",
-      "skill_atoms": []
+      "source_item_id": "ad5ab9c9-68b1-57a3-8ca7-a1a1b3f319d8",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{the slope of the tangent line}$",
+        "$\\text{the area under the curve}$",
+        "$\\text{the y-intercept}$",
+        "$\\text{the average value}$"
+      ],
+      "options_he": [
+        "$\\text{the slope of the tangent line}$",
+        "$\\text{the area under the curve}$",
+        "$\\text{the y-intercept}$",
+        "$\\text{the average value}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Compute $\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$ by factoring.",
-      "stem_he": "חשבו $\\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$ בפירוק.",
+      "stem_en": "For $f(x)=x^2$, the derivative is $f'(x)=2x$. Find $f'(3)$.",
+      "stem_he": "עבור $f(x)=x^2$, הנגזרת היא $f'(x)=2x$. מצאו את $f'(3)$.",
+      "explanation_en": "**$f'(3)=2\\cdot 3=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$f'(3)=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\frac{x^2-9}{x-3} = \\frac{(x-3)(x+3)}{x-3} = x+3$ for $x\\neq3$. Limit $= 3+3 = 6$",
-          "6$",
-          "6"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why 6 is correct:** Substituting $x=3$ gives $\\frac{0}{0}$, an indeterminate form. Factor the numerator: $x^2-9=(x-3)(x+3)$. Cancel $(x-3)$ (valid since $x\\neq 3$ in the limit) to get $x+3$, then substitute $x=3$ to obtain $6$.\n\n**How to think about it:** This limit is the algebraic template behind every derivative-from-definition problem. Recognize $0/0$, factor or expand, cancel the common term, then evaluate.\n\n**Common wrong path:** Substituting $x=3$ directly and declaring \"undefined,\" or canceling incorrectly without checking that the canceled factor approaches zero. Another slip: forgetting that $\\lim_{x\\to 3}(x+3)=6$, not $0$.\n\n**Exam tip:** Always write \"$0/0$ — factor\" as your first line. Examiners award partial credit for correct factoring even if the final arithmetic fails. This exact pattern appears when computing $f'(3)$ for $f(x)=x^2$ from the limit definition.",
-      "explanation_he": "**למה 6 נכון:** הצבת $x=3$ נותנת $\\frac{0}{0}$, צורה בלתי-קצובה. פירוק: $x^2-9=(x-3)(x+3)$. צמצום $(x-3)$ (חוקי כי $x\\neq 3$ בגבול) מותיר $x+3$, והצבה $x=3$ נותנת $6$.\n\n**איך לחשוב על זה:** גבול זה הוא תבנית האלגברה מאחורי כל נגזרת מהגדרה. זיהוי $0/0$, פירוק, צמצום, ואז חישוב.\n\n**טעות נפוצה:** הצבה ישירה והכרזה \"לא מוגדר\", או צמצום שגוי. טעות נוספת: $\\lim_{x\\to 3}(x+3)=6$, לא $0$.\n\n**טיפ לבחינה:** כתבו \"$0/0$ — פירוק\" בשורה הראשונה. בוחנים נותנים ניקוד חלקי על פירוק נכון. אותה תבנית מופיעה בחישוב $f'(3)$ ל-$f(x)=x^2$ מהגדרה.",
-      "skill_atoms": []
+      "source_item_id": "4fbc54f7-d5a7-5320-bc76-7da059c7db17",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Using the power rule, find $f'(x)$ for $f(x) = 5x^4 - 2x + 7$.",
-      "stem_he": "בעזרת כלל החזקה, מצאו $f'(x)$ עבור $f(x) = 5x^4 - 2x + 7$.",
+      "stem_en": "True or False: the derivative of a constant is zero.",
+      "stem_he": "נכון או לא נכון: הנגזרת של קבוע היא אפס.",
+      "explanation_en": "**Constants don't change, so slope $=0$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**קבועים אינם משתנים, לכן השיפוע $=0$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'(x) = 20x^3 - 2$. (Constant 7 has zero derivative.)",
-          "20x^3 - 2$. (Constant 7 has zero derivative.)",
-          "7"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why $f'(x)=20x^3-2$ is correct:** Apply the power rule term by term: $(5x^4)'=20x^3$, $(-2x)'=-2$, and $(7)'=0$ because the derivative of any constant is zero. Linearity lets you differentiate each term independently.\n\n**How to think about it:** After mastering the limit definition, the power rule is your speed tool for polynomials. Ask: \"What exponent does each term have? Multiply by that exponent and reduce the power by one.\"\n\n**Common wrong path:** Forgetting that constants differentiate to zero (writing $f'(x)=20x^3-2+7$), or mishandling the coefficient: $(5x^4)'\\neq 5x^3$ — you must multiply by 4 to get $20x^3$.\n\n**Exam tip:** Differentiate term by term and omit constants from the answer. Verify: $\\frac{d}{dx}(5x^4-2x+7)=20x^3-2$ ✓. A quick check catches sign and coefficient errors.",
-      "explanation_he": "**למה $f'(x)=20x^3-2$ נכון:** כלל חזקה איבר-איבר: $(5x^4)'=20x^3$, $(-2x)'=-2$, $(7)'=0$ כי נגזרת קבוע היא אפס. ליניאריות מאפשרת גזירה עצמאית של כל איבר.\n\n**איך לחשוב על זה:** אחרי שליטה בהגדרת הגבול, כלל החזקה הוא כלי המהירות לפולינומים. שאלו: \"מה המעריך? הכפילו בו והורידו 1 מהחזקה.\"\n\n**טעות נפוצה:** שכחת שקבועים מתאפסים (כתיבת $+7$), או טיפול שגוי במקדם: $(5x^4)'\\neq 5x^3$ — חייבים להכפיל ב-4.\n\n**טיפ לבחינה:** גזרו איבר-איבר; אל תכללו קבועים בתשובה. אימות: $\\frac{d}{dx}(5x^4-2x+7)=20x^3-2$ ✓. בדיקה מהירה תופסת שגיאות סימן ומקדם בכל איבר.",
-      "skill_atoms": []
+      "source_item_id": "ea2cd70a-ac44-5c2c-be4a-ee2ac9204a7c",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A particle's position is $s(t) = t^2 - 4t$. Find its instantaneous velocity at $t = 3$.",
-      "stem_he": "מיקום חלקיק: $s(t) = t^2 - 4t$. מצאו מהירותו המיידית ב-$t = 3$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=x^2$, find $f'(4)$ using the power rule.",
+      "stem_he": "עבור $f(x)=x^2$, מצאו את $f'(4)$ בעזרת כלל החזקה.",
+      "explanation_en": "**Step 1 — Power rule.** $f'(x)=2x$.\n\n**Step 2 — Substitute.** $f'(4)=2\\cdot 4$.\n\n**Step 3 — Evaluate.** $=8$.\n\n**Answer:** $8$.",
+      "explanation_he": "**שלב 1 — כלל החזקה.** $f'(x)=2x$.\n\n**שלב 2 — הצבה.** $f'(4)=2\\cdot 4$.\n\n**שלב 3 — חישוב.** $8$.\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$v(t) = s'(t) = 2t - 4$. $v(3) = 6 - 4 = 2$ m/s.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2$ m/s.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
+        "steps_en": [
+          "**Step 1 — Power rule.** $f'(x)=2x$.",
+          "**Step 2 — Substitute.** $f'(4)=2\\cdot 4$.",
+          "**Step 3 — Evaluate.** $=8$.",
+          "**Answer:** $8$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — כלל החזקה.** $f'(x)=2x$.",
+          "**שלב 2 — הצבה.** $f'(4)=2\\cdot 4$.",
+          "**שלב 3 — חישוב.** $8$.",
+          "**תשובה:** $8$."
+        ]
       },
-      "explanation_en": "**Why $v(3)=2$ m/s is correct:** Velocity is the derivative of position: $v(t)=s'(t)$. For $s(t)=t^2-4t$, differentiate to get $v(t)=2t-4$. Substitute $t=3$: $v(3)=6-4=2$ m/s.\n\n**How to think about it:** \"Instantaneous velocity at $t=3$\" always means evaluate the derivative at that time — not average velocity over an interval. The $-4t$ term contributes a constant $-4$ to velocity, so the particle slows compared to pure $t^2$ motion.\n\n**Common wrong path:** Computing average velocity $\\frac{s(3)-s(0)}{3-0}=\\frac{-3-0}{3}=-1$ m/s instead of instantaneous velocity. Another slip: forgetting units — position in metres and time in seconds gives m/s.\n\n**Exam tip:** Write $v(t)=s'(t)$ explicitly before substituting. Physics problems on makhina exams routinely give $s(t)$ and ask for $v$ or $a$ — recognizing which operation (differentiate vs integrate) is half the battle.",
-      "explanation_he": "**למה $v(3)=2$ מ\"ש נכון:** מהירות היא נגזרת מיקום: $v(t)=s'(t)$. ל-$s(t)=t^2-4t$, גזירה נותנת $v(t)=2t-4$. הצבה $t=3$: $v(3)=6-4=2$ מ\"ש.\n\n**איך לחשוב על זה:** \"מהירות מיידית ב-$t=3$\" תמיד פירושה הצבה בנגזרת — לא מהירות ממוצעת על קטע. האיבר $-4t$ תורם $-4$ קבוע למהירות.\n\n**טעות נפוצה:** חישוב מהירות ממוצעת $\\frac{s(3)-s(0)}{3}=-1$ במקום מיידית. טעות נוספת: שכחת יחידות — מטר ושניות נותנים מ\"ש.\n\n**טיפ לבחינה:** כתבו $v(t)=s'(t)$ לפני הצבה. תרגילי פיזיקה במכינה נותנים $s(t)$ ושואלים על $v$ או $a$ — זיהוי הפעולה (גזירה מול אינטגרציה) הוא חצי מהפתרון.",
-      "skill_atoms": []
+      "source_item_id": "af69fd62-b99b-5e9e-9226-24ad41a45e6c",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Use the limit definition to find $f'(x)$ for $f(x) = \\frac{1}{x}$.",
-      "stem_he": "השתמשו בהגדרת הגבול למציאת $f'(x)$ עבור $f(x) = \\frac{1}{x}$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $f(x)=x^3$, $f'(x)=3x^2$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=x^3$, $f'(x)=3x^2$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=3\\cdot 4=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$f'(2)=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$f'(x) = \\lim_{h\\to0}\\frac{\\frac{1}{x+h}-\\frac{1}{x}}{h} = \\lim_{h\\to0}\\frac{x-(x+h)}{hx(x+h)} = \\lim_{h\\to0}\\frac{-h}{hx(x+h)} = \\lim_{h\\to0}\\frac{-1}{x(x+h)} = \\frac{-1}{x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\frac{-1}{x^2}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
+        "value": 12
       },
-      "explanation_en": "**Why $f'(x)=-\\frac{1}{x^2}$ is correct:** From the limit definition, form the difference quotient $\\frac{\\frac{1}{x+h}-\\frac{1}{x}}{h}$. Combine fractions in the numerator: $\\frac{x-(x+h)}{x(x+h)h}=\\frac{-h}{x(x+h)h}$. Cancel $h$ and take $h\\to 0$ to get $\\frac{-1}{x(x+0)}=-\\frac{1}{x^2}$.\n\n**How to think about it:** Rational functions require a common denominator before canceling $h$. The negative sign reflects that $1/x$ decreases as $x$ increases — the slope is always negative for $x>0$.\n\n**Common wrong path:** Applying the power rule prematurely as $(x^{-1})'=-x^{-2}$ without showing the limit work when the question explicitly says \"use the limit definition.\" Another slip: sign error when combining $\\frac{1}{x+h}-\\frac{1}{x}$.\n\n**Exam tip:** When the stem says \"from the definition,\" graders expect the full difference-quotient setup. After finishing, confirm with power rule: $(x^{-1})'=-x^{-2}$ ✓. Domain note: derivative exists for $x\\neq 0$.",
-      "explanation_he": "**למה $f'(x)=-\\frac{1}{x^2}$ נכון:** מהגדרת הגבול, מנה ההפרש $\\frac{\\frac{1}{x+h}-\\frac{1}{x}}{h}$. איחוד במונה: $\\frac{-h}{x(x+h)h}$. צמצום $h$ וגבול $h\\to 0$ נותן $-\\frac{1}{x^2}$.\n\n**איך לחשוב על זה:** פונקציות רציונליות דורשות מכנה משותף לפני צמצום $h$. הסימן השלילי משקף ש-$1/x$ יורדת כש-$x$ גדל — השיפוע תמיד שלילי ל-$x>0$.\n\n**טעות נפוצה:** שימוש בכלל חזקה בלי הראות עבודת גבול כשהשאלה דורשת \"מהגדרה\". טעות נוספת: שגיאת סימן באיחוד $\\frac{1}{x+h}-\\frac{1}{x}$.\n\n**טיפ לבחינה:** כשכתוב \"מהגדרה\", בוחנים מצפים להגדרה מלאה. אימות: $(x^{-1})'=-x^{-2}$ ✓. תחום: הנגזרת קיימת ל-$x\\neq 0$.",
-      "skill_atoms": []
+      "source_item_id": "2bcc193d-859e-5784-be25-8093a9957490",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Given $f(x) = x^3 - 3x$, find all $x$ where $f'(x) = 0$ and classify each as local max or min.",
-      "stem_he": "עבור $f(x) = x^3 - 3x$, מצאו את כל $x$ שבהם $f'(x) = 0$ וסווגו כמקסימום/מינימום מקומי.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $f(x)=5x$, find $f'(x)$ (a constant).",
+      "stem_he": "עבור $f(x)=5x$, מצאו את $f'(x)$ (קבוע).",
+      "explanation_en": "**$f'(x)=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$f'(x)=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$f'(x) = 3x^2 - 3 = 0 \\Rightarrow x = \\pm 1$. $f''(x) = 6x$. At $x=1$: $f''=6>0$ → local min. At $x=-1$: $f''=-6<0$ → local max",
-          "-6<0$ → local max",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why $x=\\pm 1$ with min at $1$ and max at $-1$ is correct:** $f'(x)=3x^2-3=0$ gives $x=\\pm 1$. Second derivative test: $f''(x)=6x$. At $x=1$: $f''=6>0$ → local min. At $x=-1$: $f''=-6<0$ → local max.\n\n**How to think about it:** Critical points from $f'=0$; classify with $f''$ or a sign chart. For $f(x)=x^3-3x$, the cubic has an \"N\" shape.\n\n**Common wrong path:** Swapping min and max, or stopping without classification.\n\n**Exam tip:** Show $f'$, solve $f'=0$, compute $f''$ at each critical point, and state max/min explicitly.",
-      "explanation_he": "**למה $x=\\pm 1$ עם מינימום ב-$1$ ומקסימום ב-$-1$ נכון:** $f'(x)=3x^2-3=0$ נותן $x=\\pm 1$. בדיקת $f''$: $f''(x)=6x$. ב-$x=1$: $f''=6>0$ → קמור → מינימום מקומי. ב-$x=-1$: $f''=-6<0$ → קעור → מקסימום מקומי.\n\n**איך לחשוב על זה:** נקודות קריטיות מ-$f'=0$; סיווג דורש $f''$ (או טבלת סימנים). ל-$f(x)=x^3-3x$, קובייה בצורת \"N\" עם מקסימום משמאל ומינימום מימין.\n\n**טעות נפוצה:** מציאת $x=\\pm 1$ אך החלפת מין/מקס, או עצירה בלי סיווג. טעות נוספת: שימוש ב-$f''=0$ בלי $f'=0$.\n\n**טיפ לבחינה:** הציגו $f'$, פתרו $f'=0$, חשבו $f''$ בכל נקודה, וציינו \"מקסימום/מינימום מקומי\". סרטוט סימני $f'$ על ציר מספרים לניקוד מלא.",
-      "skill_atoms": []
+      "source_item_id": "5e664b79-59a4-5d66-b189-bb1305ae0adc",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Compute $\\int_0^2 (3x^2 + 2x)\\,dx$ using the FTC.",
-      "stem_he": "חשבו $\\int_0^2 (3x^2 + 2x)\\,dx$ בעזרת המשפט היסודי.",
+      "stem_en": "The power rule states $\\dfrac{d}{dx}x^n=$:",
+      "stem_he": "כלל החזקה קובע $\\dfrac{d}{dx}x^n=$:",
+      "explanation_en": "**Bring down the exponent, subtract one.**\n\n**Answer:** $nx^{n-1}$.",
+      "explanation_he": "**מורידים את המעריך, מחסירים אחד.**\n\n**תשובה:** $nx^{n-1}$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nAnti-derivative: $F(x) = x^3 + x^2$. $F(2) - F(0) = 8 + 4 - 0 = 12$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "12$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "12"
+        "options_en": [
+          "$nx^{n-1}$",
+          "$nx^{n+1}$",
+          "$x^{n-1}$",
+          "$(n-1)x^n$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$nx^{n-1}$",
+          "$nx^{n+1}$",
+          "$x^{n-1}$",
+          "$(n-1)x^n$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why 12 is correct:** Find an antiderivative: $\\int(3x^2+2x)\\,dx = x^3+x^2$ (no $+C$ needed for definite integrals). Apply FTC: $F(2)-F(0) = (8+4)-0 = 12$.\n\n**How to think about it:** Definite integrals compute net signed area. Integrate term by term using the power rule in reverse: $\\int 3x^2\\,dx=x^3$, $\\int 2x\\,dx=x^2$. The lower bound $0$ kills both terms at $F(0)=0$.\n\n**Common wrong path:** Forgetting to evaluate at **both** bounds ($F(2)-F(0)$, not just $F(2)$). Another slip: integrating incorrectly as $x^3+2x^2$ (wrong coefficient on the linear term).\n\n**Exam tip:** Write $F(x)=x^3+x^2$, then $[F(x)]_0^2 = F(2)-F(0)$ with bracket notation — examiners look for this setup. Verify: $\\frac{d}{dx}(x^3+x^2)=3x^2+2x$ ✓.",
-      "explanation_he": "**למה 12 נכון:** קדומה: $\\int(3x^2+2x)\\,dx = x^3+x^2$ (בלי $+C$ באינטגרל מסוים). משפט יסודי: $F(2)-F(0) = (8+4)-0 = 12$.\n\n**איך לחשוב על זה:** אינטגרל מסוים מחשב שטח מסומן מתחת לגרף. אינטגרציה איבר-איבר: $\\int 3x^2\\,dx=x^3$, $\\int 2x\\,dx=x^2$. גבול תחתון $0$ מאפס את $F(0)=0$.\n\n**טעות נפוצה:** שכחת הצבה ב**שני** הגבולות ($F(2)-F(0)$, לא רק $F(2)$). טעות נוספת: אינטגרציה שגויה כ-$x^3+2x^2$.\n\n**טיפ לבחינה:** כתבו $F(x)=x^3+x^2$, ואז $[F(x)]_0^2 = F(2)-F(0)$. אימות: $\\frac{d}{dx}(x^3+x^2)=3x^2+2x$ ✓. כתבו את שני הגבולות במפורש לפני החיסור — בוחנים מחפשים את סימון הסוגריים.",
-      "skill_atoms": []
+      "source_item_id": "ad8f57cb-1902-5bc1-a10f-108b187b1d86",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$nx^{n-1}$",
+        "$nx^{n+1}$",
+        "$x^{n-1}$",
+        "$(n-1)x^n$"
+      ],
+      "options_he": [
+        "$nx^{n-1}$",
+        "$nx^{n+1}$",
+        "$x^{n-1}$",
+        "$(n-1)x^n$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "The velocity of a car is $v(t) = 6t^2$ m/s. Find the total distance traveled from $t=0$ to $t=3$ s.",
-      "stem_he": "מהירות מכונית: $v(t) = 6t^2$ מ\"ש. מצאו את המרחק הכולל מ-$t=0$ עד $t=3$ שניות.",
+      "stem_en": "For $f(x)=x^2+3x$, $f'(x)=2x+3$. Find $f'(1)$.",
+      "stem_he": "עבור $f(x)=x^2+3x$, $f'(x)=2x+3$. מצאו את $f'(1)$.",
+      "explanation_en": "**$f'(1)=2+3=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$f'(1)=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^3 6t^2\\,dt = [2t^3]_0^3 = 2(27) - 0 = 54$ m.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "54$ m.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "54"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why 54 m is correct:** Total distance is the definite integral of velocity: $\\int_0^3 v(t)\\,dt = \\int_0^3 6t^2\\,dt$. Antiderivative: $2t^3$. Evaluate: $[2t^3]_0^3 = 2(27)-0 = 54$ m.\n\n**How to think about it:** Velocity is a rate; integrating it over time gives accumulated distance. Since $v(t)=6t^2\\geq 0$ on $[0,3]$, the integral equals total distance (no sign cancellation from negative velocity).\n\n**Common wrong path:** Differentiating $6t^2$ instead of integrating — that gives acceleration, not distance. Another slip: antiderivative of $6t^2$ as $6t^3$ instead of $2t^3$ (forgot to divide by the new exponent).\n\n**Exam tip:** State the setup $\\text{distance} = \\int_0^3 v(t)\\,dt$ before computing. Check units: (m/s)×s = m. If velocity could be negative, you would need to split the integral or integrate $|v(t)|$.",
-      "explanation_he": "**למה 54 מ' נכון:** מרחק כולל = אינטגרל של מהירות: $\\int_0^3 6t^2\\,dt$. קדומה: $2t^3$. חישוב: $2(27)-0 = 54$ מ'.\n\n**איך לחשוב על זה:** מהירות היא קצב; אינטגרציה על זמן נותנת מרחק מצטבר. מכיוון ש-$v(t)=6t^2\\geq 0$ ב-$[0,3]$, האינטגרל שווה למרחק (בלי ביטול סימנים).\n\n**טעות נפוצה:** גזירה במקום אינטגרציה — זה נותן תאוצה, לא מרחק. טעות נוספת: קדומה $6t^3$ במקום $2t^3$ (שכחת חלוקה במעריך החדש).\n\n**טיפ לבחינה:** כתבו $\\text{distance} = \\int_0^3 v(t)\\,dt$ לפני חישוב. בדקו יחידות: (מ/ש)×ש = מ'. אם מהירות שלילית, צריך לפצל אינטגרל או $|v(t)|$.",
-      "skill_atoms": []
+      "source_item_id": "82f3f65c-a6b8-559a-9cc1-2af3f154fe80",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the limit $\\displaystyle\\lim_{x\\to 2}x^2$.",
+      "stem_he": "מצאו את הגבול $\\displaystyle\\lim_{x\\to 2}x^2$.",
+      "explanation_en": "**By continuity, $\\lim_{x\\to2}x^2=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**מרציפות, $\\lim_{x\\to2}x^2=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "limits"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "66b56149-0259-5bac-93c3-5ddec6767682",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For $f(x)=x^4$, $f'(x)=4x^3$. Find $f'(1)$.",
+      "stem_he": "עבור $f(x)=x^4$, $f'(x)=4x^3$. מצאו את $f'(1)$.",
+      "explanation_en": "**$f'(1)=4\\cdot 1=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$f'(1)=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "fa4fc55a-f623-5828-944d-bfa4012c9775",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the slope of $f(x)=2x^2+1$ at $x=3$ ($f'(x)=4x$).",
+      "stem_he": "מצאו את השיפוע של $f(x)=2x^2+1$ ב-$x=3$ ($f'(x)=4x$).",
+      "explanation_en": "**$f'(3)=4\\cdot 3=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$f'(3)=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "c1cf9b51-eede-5052-866f-c33633622181",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: if a function is differentiable at a point, it is continuous there.",
+      "stem_he": "נכון או לא נכון: אם פונקציה גזירה בנקודה, היא רציפה בה.",
+      "explanation_en": "**Differentiability $\\Rightarrow$ continuity** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**גזירות $\\Rightarrow$ רציפות** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "continuity"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "59665c30-cc9f-50f1-a5e5-4d362ae12400",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=x^3-2x$, $f'(x)=3x^2-2$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=x^3-2x$, $f'(x)=3x^2-2$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=12-2=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$f'(2)=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "9be430ba-0d8d-57c8-a069-b22cfc62473b",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=x^2+x$, $f'(x)=2x+1$. Find $f'(3)$.",
+      "stem_he": "עבור $f(x)=x^2+x$, $f'(x)=2x+1$. מצאו את $f'(3)$.",
+      "explanation_en": "**$f'(3)=6+1=7$.**\n\n**Answer:** $7$.",
+      "explanation_he": "**$f'(3)=7$.**\n\n**תשובה:** $7$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 7
+      },
+      "source_item_id": "79b5d293-a639-529c-b43b-0ae9ab8661a1",
+      "points_level_min": "5pt",
+      "correct_answer": "7"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $f(x)=3x^2$, $f'(x)=6x$. Find $f'(2)$.",
+      "stem_he": "עבור $f(x)=3x^2$, $f'(x)=6x$. מצאו את $f'(2)$.",
+      "explanation_en": "**$f'(2)=6\\cdot 2=12$.**\n\n**Answer:** $12$.",
+      "explanation_he": "**$f'(2)=12$.**\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "derivatives"
+      ],
+      "answer_payload": {
+        "value": 12
+      },
+      "source_item_id": "50b40314-147d-5aaa-9334-6e0023b4173b",
+      "points_level_min": "5pt",
+      "correct_answer": "12"
     }
   ],
   "est_minutes": 70,
