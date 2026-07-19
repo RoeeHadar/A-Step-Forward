@@ -445,10 +445,34 @@ expanded to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections):
 Spread 5/6/4, 4–5 kinds per lesson. Math + strict + track-scope audits green;
 zero rejections on the first pipeline pass for all six.
 
+## Batch R — shipped
+
+The **calculus-applications + multivariable + complex/linear-algebra strand**
+expanded to **15 CAS-verified items each** (6 lessons, 90 items, 0 rejections
+after one dedup fix):
+
+- `derivatives_implicit` (calc1) — $dy/dx=-F_x/F_y$ on circles, parabolas,
+  hyperbolas, ellipses; tangent vs normal slope; horizontal-tangent case.
+- `optimization_related_rates` (calc1) — square/cube area & volume rates, the
+  ladder $x^2+y^2=c$ relation, product-rule area rate, max-rate-is-zero.
+- `double_integrals` (calc2) — iterated integrals over rectangles, separable
+  factoring, constant/linear/quadratic integrands.
+- `gradient_directional_derivative` (calc2) — $\nabla f$ components, magnitude,
+  directional derivative $\nabla f\cdot u$, max-rate = $|\nabla f|$.
+- `complex_numbers_de_moivre` (5pt) — modulus, $|z^n|=|z|^n$, De Moivre powers,
+  $|\cos\theta+i\sin\theta|=1$, real/imag parts of $(1+i)^2$.
+- `matrix_operations_inverse` (linear algebra) — 2×2 inverse entries via the
+  adjugate formula, determinant prerequisite, $(AB)^{-1}=B^{-1}A^{-1}$.
+
+**Fix during authoring:** the `matrix_operations_inverse` open-worked item
+duplicated a medium item's stem (same matrix/entry), so the content-addressed
+store deduped it to 14; changed it to a distinct matrix and re-baked to 15/15.
+Spread 5/6/4, 4 kinds per lesson. Math + strict + track-scope audits green.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **90 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O, P, Q + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **96 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P, Q, R + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines

@@ -240,151 +240,315 @@
       "body_he_md": "- **אינטגרל כפול** $\\iint_D f\\,dA$: צובר $f$ על $D$; כש-$f\\geq 0$, שווה לנפח תחת $z=f$.\n- **פוביני:** $f$ רציפה על מלבן או סוג I/II → אינטגרל מאוחד; סדר בדרך כלל ניתן להחלפה.\n- **סוג I:** $\\int_a^b\\int_{g_1(x)}^{g_2(x)}f\\,dy\\,dx$ (פרוסות אנכיות). **סוג II:** $\\int_c^d\\int_{h_1(y)}^{h_2(y)}f\\,dx\\,dy$ (פרוסות אופקיות).\n- **החלפת סדר:** ציירו $D$, בטאו כל הגבולות — חיוני כשאינטגרל פנימי נכשל.\n- **קוטביות:** $dA=r\\,dr\\,d\\theta$; לדיסקים, טבעות, והאינטגרנד עם $x^2+y^2$.\n- **קיצור:** $\\iint_D 1\\,dA=\\text{area}(D)$.\n\n**מסקנה:** ציור קודם, בחירת קואורדינטות שנית, אינטגרציה שלישית. ההצבה = 80% מהעבודה."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "double_integral"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Compute $\\int_0^1\\int_0^2 (x+y)\\,dy\\,dx$.",
-      "stem_he": "חשב $\\int_0^1\\int_0^2(x+y)\\,dy\\,dx$.",
+      "stem_en": "A double integral of $f(x,y)\\ge 0$ over a region gives the:",
+      "stem_he": "אינטגרל כפול של $f(x,y)\\ge 0$ מעל תחום נותן את:",
+      "explanation_en": "**It measures the volume between the surface and the region.**\n\n**Answer:** volume under the surface.",
+      "explanation_he": "**מודד את הנפח בין המשטח לתחום.**\n\n**תשובה:** נפח מתחת למשטח.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Inner: $[xy+y^2/2]_0^2=2x+2$. Outer: $[x^2+2x]_0^1=1+2=3$",
-          "3$",
-          "3"
+        "options_en": [
+          "$\\text{volume under the surface}$",
+          "$\\text{slope}$",
+          "$\\text{perimeter}$",
+          "$\\text{arc length}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{volume under the surface}$",
+          "$\\text{slope}$",
+          "$\\text{perimeter}$",
+          "$\\text{arc length}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nInner in $y$: $\\int_0^2(x+y)\\,dy = [xy+y^2/2]_0^2 = 2x+2$. Outer in $x$: $\\int_0^1(2x+2)\\,dx = [x^2+2x]_0^1 = 1+2 = 3$. Both limits are constants on a rectangle, so Fubini applies directly.\n\n**How to think about it:**\nRectangle integrals are the entry point: integrate in $y$ first (treat $x$ as constant), then in $x$. The integrand $x+y$ separates into terms that integrate independently in each variable.\n\n**Common slip:**\nSwapping limits incorrectly ($\\int_0^2\\int_0^1$ vs $\\int_0^1\\int_0^2$) without tracking which variable is outer. Another slip: forgetting the $1/2$ from $y^2/2$, getting $2x+4$ instead of $2x+2$.\n\n**Exam tip:**\nOn rectangles, write limits as constants before integrating. A 30-second sanity check: both orders must give the same answer.",
-      "explanation_he": "**למה זה נכון:**\nפנימי ב-$y$: $\\int_0^2(x+y)\\,dy = 2x+2$. חיצוני ב-$x$: $\\int_0^1(2x+2)\\,dx = 3$. גבולות קבועים על מלבן — פוביני ישיר.\n\n**איך לחשוב על זה:**\nאינטגרלים על מלבן: מאינטגרalים ב-$y$ קודם ($x$ קבוע), אחר כך ב-$x$. האינטגרנד $x+y$ מתפרק לביטויים העצמאיים.\n\n**טעות נפוצה:**\nהחלפת גבולות בלי מעקב אחרי הגורם החיצוני. שכחת $1/2$ מ-$y^2/2$ — $2x+4$ במקום $2x+2$.\n\n**טיפ לבחינה:**\nעל מלבן — כתבו גבולות קבועים לפני אינטגרציה. בדיקה: שני הסדרים נותנים אותה תשובה. זהו תבנית פובינi קלאסית על מלבן — תרגלו עד שזה אוטומטי.",
-      "skill_atoms": []
+      "source_item_id": "b12dd8ba-a2b6-5513-8a07-fb49934f8790",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{volume under the surface}$",
+        "$\\text{slope}$",
+        "$\\text{perimeter}$",
+        "$\\text{arc length}$"
+      ],
+      "options_he": [
+        "$\\text{volume under the surface}$",
+        "$\\text{slope}$",
+        "$\\text{perimeter}$",
+        "$\\text{arc length}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Compute $\\iint_R x^2y\\,dA$ over $R=[0,1]\\times[0,2]$.",
-      "stem_he": "חשב $\\iint_R x^2y\\,dA$ על $R=[0,1]\\times[0,2]$.",
+      "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^1 1\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^1 1\\,dy\\,dx$.",
+      "explanation_en": "**The integral of $1$ over a $1\\times 1$ square is its area $=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**שטח ריבוע $1\\times 1$ הוא $1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\int_0^1\\int_0^2 x^2y\\,dy\\,dx=\\int_0^1 x^2[y^2/2]_0^2\\,dx=\\int_0^1 2x^2\\,dx=2/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": 1
       },
-      "explanation_en": "**Why this is correct:**\nInner: $\\int_0^2 x^2y\\,dy = x^2[y^2/2]_0^2 = 2x^2$. Outer: $\\int_0^1 2x^2\\,dx = 2[x^3/3]_0^1 = 2/3$. The factor $x^2$ passes through the $y$-integral unchanged.\n\n**How to think about it:**\nProduct integrands on rectangles often factor: $\\iint x^2y\\,dA = (\\int x^2\\,dx)(\\int y\\,dy)$ when limits are constants. Here $x^2$ is constant w.r.t. $y$ and $y$ integrates to $y^2/2$.\n\n**Common slip:**\nIntegrating $x^2y$ in $x$ first without adjusting — doable but error-prone. Another slip: evaluating $[y^2/2]_0^2$ as $4$ instead of $2$.\n\n**Exam tip:**\nFor $\\iint x^a y^b\\,dA$ on a rectangle, each power integrates independently. Memorize: $\\int_0^1 x^2\\,dx = 1/3$, $\\int_0^2 y\\,dy = 2$.",
-      "explanation_he": "**למה זה נכון:**\nפנימי: $\\int_0^2 x^2y\\,dy = 2x^2$. חיצוני: $\\int_0^1 2x^2\\,dx = 2/3$. גורם $x^2$ עובר דרך האינטגרל ב-$y$.\n\n**איך לחשוב על זה:**\nמכפלות על מלבן מתפרקות: $\\iint x^2y\\,dA = (\\int x^2\\,dx)(\\int y\\,dy)$. $x^2$ קבוע ב-$y$, $y$ מאינטגרל ל-$y^2/2$.\n\n**טעות נפוצה:**\n$[y^2/2]_0^2$ כ-$4$ במקום $2$. אינטגרציה ב-$x$ קודם — אפשרי אך מועד לטעויות.\n\n**טיפ לבחינה:**\nל-$\\iint x^a y^b\\,dA$ על מלבן — כל חזקה בנפרד. $\\int_0^1 x^2\\,dx = 1/3$, $\\int_0^2 y\\,dy = 2$. בדקו תמיד שהגבולות הפנימיים תואמים לנתון בשאלה. הפרדה $x^2\\cdot y$ על מלבן מקלה על הבדיקה.",
-      "skill_atoms": []
+      "source_item_id": "caec79b6-21f5-59d7-ab46-dcdfe8700fee",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Use the geometric interpretation to find $\\iint_D 3\\,dA$ where $D$ is the unit disk $x^2+y^2\\leq 1$.",
-      "stem_he": "השתמש בפרשנות גיאומטרית למציאת $\\iint_D 3\\,dA$ כאשר $D$ הוא דיסק היחידה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$ step by step.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$ שלב אחר שלב.",
+      "explanation_en": "**Step 1 — Inner integral.** $\\int_0^3 xy\\,dy=x\\left[\\dfrac{y^2}{2}\\right]_0^3=\\dfrac{9x}{2}$.\n\n**Step 2 — Outer integral.** $\\int_0^2 \\dfrac{9x}{2}\\,dx=\\dfrac{9}{2}\\cdot 2=9$.\n\n**Answer:** $9$.",
+      "explanation_he": "**שלב 1 — אינטגרל פנימי.** $\\dfrac{9x}{2}$.\n\n**שלב 2 — אינטגרל חיצוני.** $9$.\n\n**תשובה:** $9$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\iint_D 3\\,dA=3\\cdot\\text{Area}(D)=3\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+        "steps_en": [
+          "**Step 1 — Inner integral.** $\\int_0^3 xy\\,dy=x\\left[\\dfrac{y^2}{2}\\right]_0^3=\\dfrac{9x}{2}$.",
+          "**Step 2 — Outer integral.** $\\int_0^2 \\dfrac{9x}{2}\\,dx=\\dfrac{9}{2}\\cdot 2=9$.",
+          "**Answer:** $9$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — אינטגרל פנימי.** $\\dfrac{9x}{2}$.",
+          "**שלב 2 — אינטגרל חיצוני.** $9$.",
+          "**תשובה:** $9$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\n$\\iint_D 3\\,dA = 3\\cdot\\text{Area}(D)$. The unit disk has area $\\pi(1)^2=\\pi$, so the answer is $3\\pi$. No iterated integral needed — this is the geometric interpretation of integrating a constant.\n\n**How to think about it:**\nWhen the integrand is a constant $c$, the double integral equals $c$ times the area of $D$. Recognizing $f=3$ as '3 times area' saves several minutes versus setting up polar or Cartesian integrals.\n\n**Common slip:**\nSetting up a full polar integral and making arithmetic errors — unnecessary for constant integrands. Another slip: using area $2\\pi$ (circumference) instead of $\\pi$ (disk area).\n\n**Exam tip:**\nIf the stem says 'geometric interpretation,' look for constant integrands or $f=1$. $\\iint_D c\\,dA = c\\cdot\\text{Area}(D)$ is the first tool to try.",
-      "explanation_he": "**למה זה נכון:**\n$\\iint_D 3\\,dA = 3\\cdot\\text{area}(D)$. דיסק יחידה: $\\pi$, תשובה $3\\pi$. פרשנות גיאומטרית — בלי אינטגרל מאוחד.\n\n**איך לחשוב על זה:**\nכשהאינטגרנד קבוע $c$, האינטגרל = $c$ כפול שטח. $f=3$ = '3 פעמים שטח' — חוסך דקות.\n\n**טעות נפוצה:**\nאינטגרל קוטבי מלא — מיותר. שטח $2\\pi$ (היקף) במקום $\\pi$ (שטח דיסק).\n\n**טיפ לבחינה:**\nכש'פרשנות גיאומטרית' — חפשו קבוע או $f=1$. $\\iint_D c\\,dA = c\\cdot\\text{area}(D)$ ראשון. זכרו: $\\iint k\\,dA = k\\cdot\\text{area}(D)$ — אל תפתחו אינטגרל מאוחד מלא. דיסק יחידה = $\\pi$. בבחינה, הציגו ציור אזור, גבולות, אינטגרל פנימי ואינטגרל חיצוני לפני התשובה — setup נכון מונע רוב הטעויות.",
-      "skill_atoms": []
+      "source_item_id": "6bee0a2d-0065-52c4-83b9-700fc65da495",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Compute $\\int_0^{\\pi}\\int_0^1 r\\sin\\theta\\,dr\\,d\\theta$.",
-      "stem_he": "חשב $\\int_0^{\\pi}\\int_0^1 r\\sin\\theta\\,dr\\,d\\theta$.",
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: for a separable integrand $f(x)g(y)$ over a rectangle, the double integral factors into a product of single integrals.",
+      "stem_he": "נכון או לא נכון: עבור אינטגרנד פריק $f(x)g(y)$ מעל מלבן, האינטגרל הכפול מתפרק למכפלת אינטגרלים בודדים.",
+      "explanation_en": "**Yes — $\\iint f(x)g(y)=\\left(\\int f\\right)\\left(\\int g\\right)$** — **true**.",
+      "explanation_he": "**כן — מתפרק למכפלה** — **נכון**.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Inner: $\\int_0^1 r\\sin\\theta\\,dr=\\sin\\theta/2$. Outer: $\\int_0^{\\pi}\\sin\\theta/2\\,d\\theta=[-\\cos\\theta/2]_0^{\\pi}=1$",
-          "1$",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nInner in $r$: $\\int_0^1 r\\sin\\theta\\,dr = \\sin\\theta\\cdot[r^2/2]_0^1 = \\sin\\theta/2$. Outer in $\\theta$: $\\int_0^\\pi \\sin\\theta/2\\,d\\theta = [-\\cos\\theta/2]_0^\\pi = (1/2+1/2)=1$.\n\n**How to think about it:**\nThis integral is already in polar form with the Jacobian $r$ included in the integrand. Treat $\\sin\\theta$ as constant during the $r$-integral, then integrate $\\sin\\theta$ over $[0,\\pi]$.\n\n**Common slip:**\nForgetting that $r$ is part of $dA=r\\,dr\\,d\\theta$ when converting from Cartesian — here it is already present. Another slip: $\\int_0^\\pi\\sin\\theta\\,d\\theta=0$ by symmetry, but the $1/2$ factor means the positive and negative halves each contribute $1/2$.\n\n**Exam tip:**\nPolar integrals on $[0,\\pi]$ often involve $\\int\\sin\\theta\\,d\\theta$. Watch for halving factors from the $r$-integral before integrating in $\\theta$.",
-      "explanation_he": "**למה זה נכון:**\nפנימי ב-$r$: $\\sin\\theta/2$. חיצוני ב-$\\theta$: $[-\\cos\\theta/2]_0^\\pi = 1$. כבר בצורה קוטבית עם $r$.\n\n**איך לחשוב על זה:**\nהאינטגרל כבר קוטבי. $\\sin\\theta$ קבוע ב-$r$, אחר כך $\\sin\\theta$ על $[0,\\pi]$.\n\n**טעות נפוצה:**\n$\\int_0^\\pi\\sin\\theta\\,d\\theta=0$ — נכון ל-$\\sin\\theta$ בלבד, אך כאן יש גורם $1/2$ מ-$r$.\n\n**טיפ לבחינה:**\nקוטבי על $[0,\\pi]$ — שימו לב לגורמי $1/2$ מהאינטגרל ב-$r$ לפני $\\theta$. כאן $r$ כבר מופיע — סימן שההצבה הקוטבית נכונה.",
-      "skill_atoms": []
+      "source_item_id": "8ac636fd-3763-5599-ab24-27518d9ecabf",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\iint_D x\\,dA$ where $D$ is the triangle with vertices $(0,0)$, $(1,0)$, $(1,1)$.",
-      "stem_he": "חשב $\\iint_D x\\,dA$ כאשר $D$ הוא המשולש עם קודקודים $(0,0)$, $(1,0)$, $(1,1)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^3 1\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^3 1\\,dy\\,dx$.",
+      "explanation_en": "**Area of a $2\\times 3$ rectangle $=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**שטח מלבן $2\\times 3$ הוא $6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nRegion: $0\\leq x\\leq 1$, $0\\leq y\\leq x$. $\\int_0^1\\int_0^x x\\,dy\\,dx=\\int_0^1 x^2\\,dx=1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\nRegion: triangle with vertices $(0,0)$, $(1,0)$, $(1,1)$. Type I: $0\\leq x\\leq 1$, $0\\leq y\\leq x$. $\\int_0^1\\int_0^x x\\,dy\\,dx = \\int_0^1 x^2\\,dx = 1/3$. The inner integral gives $x\\cdot x = x^2$.\n\n**How to think about it:**\nSketch the triangle first. The hypotenuse is $y=x$. For each $x$, $y$ runs from $0$ to the line — that is $0\\leq y\\leq x$. The integrand $x$ is constant in $y$, so the inner integral is $x$ times the length of the $y$-interval ($x$).\n\n**Common slip:**\nUsing $0\\leq y\\leq 1$ (full vertical strip) instead of $0\\leq y\\leq x$ — integrates over a rectangle, not the triangle. Another slip: getting $1/2$ by integrating $x$ from $0$ to $1$ without the inner step.\n\n**Exam tip:**\nTriangle with vertices on axes and $(1,1)$: bounds are $0\\leq x\\leq 1$, $0\\leq y\\leq x$. Write the inner integral explicitly before simplifying.",
-      "explanation_he": "**למה זה נכון:**\nאזור: משולש $(0,0)$, $(1,0)$, $(1,1)$. סוג I: $0\\leq x\\leq 1$, $0\\leq y\\leq x$. $\\int_0^1 x^2\\,dx = 1/3$. פנימי: $x\\cdot x = x^2$.\n\n**איך לחשוב על זה:**\nציירו משולש. היתר $y=x$. לכל $x$, $y$ מ-$0$ עד $x$. $x$ קבוע ב-$y$ — פנימי = $x$ כפול אורך ($x$).\n\n**טעות נפוצה:**\n$0\\leq y\\leq 1$ — מלבן, לא משולש. $1/2$ בלי שלב פנימי — שגיאה.\n\n**טיפ לבחינה:**\nמשולש עם $(1,1)$: $0\\leq x\\leq 1$, $0\\leq y\\leq x$. כתבו פנימי במפורש. ציירu את המשולש לפני כתיבת $0\\leq y\\leq x$ — מונע רוב טעויות.",
-      "skill_atoms": []
+      "source_item_id": "7c3b4993-6a16-5f03-b98f-5d5b5df24ec3",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Use polar coordinates to compute $\\iint_D \\sqrt{x^2+y^2}\\,dA$ where $D$ is the disk $x^2+y^2\\leq 9$.",
-      "stem_he": "השתמש בקואורדינטות קוטביות לחישוב $\\iint_D\\sqrt{x^2+y^2}\\,dA$ כאשר $D$: $x^2+y^2\\leq9$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x\\,dy\\,dx$.",
+      "explanation_en": "**Separable:** $\\left(\\int_0^2 x\\,dx\\right)\\left(\\int_0^1 dy\\right)=2\\cdot 1=2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\left(\\int_0^2 x\\right)\\left(\\int_0^1 1\\right)=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^{2\\pi}\\int_0^3 r\\cdot r\\,dr\\,d\\theta=\\int_0^{2\\pi}[r^3/3]_0^3\\,d\\theta=9\\int_0^{2\\pi}d\\theta=18\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "18\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "18"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nIn polar: $\\sqrt{x^2+y^2}=r$, disk $x^2+y^2\\leq 9$ gives $0\\leq r\\leq 3$, $0\\leq\\theta\\leq 2\\pi$. $\\int_0^{2\\pi}\\int_0^3 r\\cdot r\\,dr\\,d\\theta = \\int_0^{2\\pi}[r^3/3]_0^3\\,d\\theta = 9\\cdot 2\\pi = 18\\pi$.\n\n**How to think about it:**\nRadial integrand + circular region = polar. Substitute $\\sqrt{x^2+y^2}=r$, include Jacobian $r$, integrate $r^2$ from $0$ to $3$ to get $9$, then multiply by $2\\pi$.\n\n**Common slip:**\nUsing $r$ once instead of twice ($r$ from $\\sqrt{x^2+y^2}$ and $r$ from $dA$) — gives $6\\pi$ instead of $18\\pi$. Another slip: radius $9$ instead of $3$ (confusing $r^2\\leq 9$ with $r\\leq 9$).\n\n**Exam tip:**\nFor $\\iint\\sqrt{x^2+y^2}\\,dA$ on disk $r\\leq R$: answer is $\\int_0^{2\\pi}\\int_0^R r^2\\,dr\\,d\\theta = 2\\pi R^3/3$. With $R=3$: $18\\pi$.",
-      "explanation_he": "**למה זה נכון:**\nקוטבי: $\\sqrt{x^2+y^2}=r$, דיסק $r\\leq 3$. $\\int_0^{2\\pi}\\int_0^3 r^2\\,dr\\,d\\theta = 9\\cdot 2\\pi = 18\\pi$.\n\n**איך לחשוב על זה:**\nהאינטגרנד רדיאלי + אזור מעגלי = קוטבי. $r$ פעמיים ($\\sqrt{x^2+y^2}$ ו-$dA$), $r^2$ מ-$0$ ל-$3$ = $9$, כפול $2\\pi$.\n\n**טעות נפוצה:**\n$r$ פעם אחת — $6\\pi$. רדיוס $9$ במקום $3$ — בלבול $r^2\\leq 9$.\n\n**טיפ לבחינה:**\nל-$\\iint\\sqrt{x^2+y^2}\\,dA$ על $r\\leq R$: $2\\pi R^3/3$. $R=3$ → $18\\pi$. שני גורמי $r$ — ספרו לפני שמתחילים לחשב. בבחינה, הציגו ציור אזור, גבולות, אינטגרל פנימי ואינטגרל חיצוני לפני התשובה — setup נכון מונע רוב הטעויות.",
-      "skill_atoms": []
+      "source_item_id": "e81dde04-2788-5e5b-b9f7-631ee2db318a",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Change the order and evaluate: $\\int_0^4\\int_{\\sqrt{x}}^2 \\frac{1}{y^3+1}\\,dy\\,dx$.",
-      "stem_he": "החלף סדר וחשב: $\\int_0^4\\int_{\\sqrt{x}}^2\\frac{1}{y^3+1}\\,dy\\,dx$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^2 y\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^2 y\\,dy\\,dx$.",
+      "explanation_en": "**$\\left(\\int_0^1 dx\\right)\\left(\\int_0^2 y\\,dy\\right)=1\\cdot 2=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$1\\cdot 2=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nRegion: $0\\leq x\\leq 4$, $\\sqrt{x}\\leq y\\leq 2$ = $0\\leq y\\leq 2$, $0\\leq x\\leq y^2$. $\\int_0^2\\int_0^{y^2}\\frac{1}{y^3+1}\\,dx\\,dy=\\int_0^2\\frac{y^2}{y^3+1}\\,dy=[\\ln(y^3+1)/3]_0^2=\\ln 9/3=2\\ln 3/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2\\ln 3/3$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nRegion: $0\\leq x\\leq 4$, $\\sqrt{x}\\leq y\\leq 2$ re-expresses as $0\\leq y\\leq 2$, $0\\leq x\\leq y^2$. Reversed: $\\int_0^2\\int_0^{y^2}\\frac{1}{y^3+1}\\,dx\\,dy = \\int_0^2\\frac{y^2}{y^3+1}\\,dy$. With $u=y^3+1$: $[\\ln u/3]_1^9 = \\ln 9/3 = 2\\ln 3/3$.\n\n**How to think about it:**\nThe original inner integral in $y$ is intractable. Sketch the region bounded by $y=2$, $y=\\sqrt{x}$, and $x=0$. Horizontal slices: for each $y$, $x$ goes from $0$ to $y^2$. The $x$-integral pulls out a factor of $y^2$.\n\n**Common slip:**\nReversing bounds incorrectly: $x\\leq y^2$ comes from $y\\geq\\sqrt{x}$, not $x\\leq y$. Another slip: missing the factor $y^2$ from $\\int_0^{y^2}dx$, leaving $\\int 1/(y^3+1)\\,dy$ which is harder.\n\n**Exam tip:**\nWhen inner integral has $1/(y^3+1)$ or similar, reverse order so $x$ integrates first. The $u$-sub $u=y^3+1$ appears after the $x$-integral produces $y^2$.",
-      "explanation_he": "**למה זה נכון:**\nאזור: $0\\leq y\\leq 2$, $0\\leq x\\leq y^2$. $\\int_0^2 y^2/(y^3+1)\\,dy$. $u=y^3+1$: $\\ln 9/3 = 2\\ln 3/3$.\n\n**איך לחשוב על זה:**\nפנימי ב-$y$ בלתי-פתיר. ציירו: $y=2$, $y=\\sqrt{x}$, $x=0$. פרוסות אופקיות: $x$ מ-$0$ ל-$y^2$. פנימי ב-$x$ מוציא $y^2$.\n\n**טעות נפוצה:**\nגבולות הפוכים שגויים. חסר $y^2$ מ-$\\int_0^{y^2}dx$.\n\n**טיפ לבחינה:**\nכש-$1/(y^3+1)$ פנימי — החליפו סדר. $u=y^3+1$ אחרי $y^2$ מ-$x$. החלפת סדר = ציור מחדש + $x\\leq y^2$ מ-$y\\geq\\sqrt{x}$. בבחינה, הציגו ציור אזור, גבולות, אינטגרל פנימי ואינטגרל חיצוני לפני התשובה — setup נכון מונע רוב הטעויות.",
-      "skill_atoms": []
+      "source_item_id": "06c8f65c-9fc0-5d70-886b-4d1fc8c1929e",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find the volume below $z=4-x^2-y^2$ above the disk $x^2+y^2\\leq 4$.",
-      "stem_he": "מצא את הנפח מתחת ל-$z=4-x^2-y^2$ מעל הדיסק $x^2+y^2\\leq4$.",
+      "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^3 xy\\,dy\\,dx$.",
+      "explanation_en": "**$\\left(\\int_0^2 x\\,dx\\right)\\left(\\int_0^3 y\\,dy\\right)=2\\cdot 4.5=9$.**\n\n**Answer:** $9$.",
+      "explanation_he": "**$2\\cdot 4.5=9$.**\n\n**תשובה:** $9$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\int_0^{2\\pi}\\int_0^2(4-r^2)r\\,dr\\,d\\theta=\\int_0^{2\\pi}[2r^2-r^4/4]_0^2\\,d\\theta=\\int_0^{2\\pi}(8-4)\\,d\\theta=4\\cdot 2\\pi=8\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8\\pi$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "8"
-        ],
-        "case_sensitive": false
+        "value": 9
       },
-      "explanation_en": "**Why this is correct:**\nVolume $=\\iint_D (4-x^2-y^2)\\,dA$ over disk $x^2+y^2\\leq 4$. Polar: $\\int_0^{2\\pi}\\int_0^2(4-r^2)r\\,dr\\,d\\theta$. Inner: $[2r^2-r^4/4]_0^2 = 8-4=4$. Outer: $4\\cdot 2\\pi = 8\\pi$.\n\n**How to think about it:**\nVolume under $z=f(x,y)$ above $D$ equals $\\iint_D f\\,dA$. Here $f=4-x^2-y^2=4-r^2$ on the disk $r\\leq 2$. Include $r$ from $dA$; integrate the polynomial in $r$, then multiply by $2\\pi$.\n\n**Common slip:**\nUsing Cartesian limits and getting lost in algebra — polar is cleaner for circular domains. Forgetting $r$ in $dA$. Another slip: integrating $4-r^2$ without the $r$ factor gives $\\pi(8-4/2)=6\\pi$ instead of $8\\pi$.\n\n**Exam tip:**\nVolume under paraboloid $z=4-x^2-y^2$ over disk $r\\leq 2$: template $\\int_0^{2\\pi}\\int_0^R(4-r^2)r\\,dr\\,d\\theta$. Inner evaluates to $R^2(2-R^2/4)$; with $R=2$ gives $4\\cdot 2\\pi$.",
-      "explanation_he": "**למה זה נכון:**\nנפח $=\\iint_D (4-x^2-y^2)\\,dA$ על $r\\leq 2$. קוטבי: $\\int_0^{2\\pi}\\int_0^2(4-r^2)r\\,dr\\,d\\theta$. פנימי: $4$, חיצוני: $8\\pi$.\n\n**איך לחשוב על זה:**\nנפח תחת $z=f$ = $\\iint f\\,dA$. $f=4-r^2$, דיסק $r\\leq 2$. כללו $r$ מ-$dA$; פולינום ב-$r$, כפול $2\\pi$.\n\n**טעות נפוצה:**\nCartesian מסורבל. שכחת $r$. $4-r^2$ בלי $r$ → $6\\pi$ שגוי.\n\n**טיפ לבחינה:**\nתבנית: $\\int_0^{2\\pi}\\int_0^R(4-r^2)r\\,dr\\,d\\theta$. $R=2$ → $8\\pi$. נפח = $\\iint f\\,dA$ על דיסק — קוטביות חוסכת זמן בבחינה. בבחינה, הציגו ציור אזור, גבולות, אינטגרל פנימי ואינטגרל חיצוני לפני התשובה — setup נכון מונע רוב הטעויות.",
-      "skill_atoms": []
+      "source_item_id": "7a389d35-f4c1-58d7-8d1d-9d2d3fdeda56",
+      "points_level_min": "5pt",
+      "correct_answer": "9"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^1 xy\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^1 xy\\,dy\\,dx$.",
+      "explanation_en": "**$\\left(\\tfrac12\\right)\\left(\\tfrac12\\right)=\\tfrac14$.**\n\n**Answer:** $0.25$.",
+      "explanation_he": "**$\\tfrac12\\cdot\\tfrac12=\\tfrac14$.**\n\n**תשובה:** $0.25$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 0.25
+      },
+      "source_item_id": "938bfd7a-1106-51e1-9eeb-c13c10a3ebd2",
+      "points_level_min": "5pt",
+      "correct_answer": "0.25"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^2 (x+y)\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^2 (x+y)\\,dy\\,dx$.",
+      "explanation_en": "**Inner: $\\int_0^2 (x+y)\\,dy=2x+2$. Outer: $\\int_0^2 (2x+2)\\,dx=4+4=8$.**\n\n**Answer:** $8$.",
+      "explanation_he": "**פנימי $2x+2$; חיצוני $=8$.**\n\n**תשובה:** $8$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 8
+      },
+      "source_item_id": "5b135b46-7dd4-5b5a-aad0-68504684897a",
+      "points_level_min": "5pt",
+      "correct_answer": "8"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^3\\!\\!\\int_0^1 x\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^3\\!\\!\\int_0^1 x\\,dy\\,dx$.",
+      "explanation_en": "**$\\left(\\int_0^3 x\\,dx\\right)(1)=4.5$.**\n\n**Answer:** $4.5$.",
+      "explanation_he": "**$=4.5$.**\n\n**תשובה:** $4.5$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 4.5
+      },
+      "source_item_id": "8e83bcc3-789c-507b-939f-ab045ab3ca15",
+      "points_level_min": "5pt",
+      "correct_answer": "4.5"
+    },
+    {
+      "ord": 12,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^3 2\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^3 2\\,dy\\,dx$.",
+      "explanation_en": "**$2\\times(\\text{area }1\\times 3)=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$2\\cdot 3=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "8b284b29-310c-5ad8-8442-6201b0afe827",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x^2 y\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^2\\!\\!\\int_0^1 x^2 y\\,dy\\,dx$.",
+      "explanation_en": "**$\\left(\\int_0^2 x^2\\,dx\\right)\\left(\\int_0^1 y\\,dy\\right)=\\dfrac{8}{3}\\cdot\\dfrac12=\\dfrac43$.**\n\n**Answer:** $\\approx 1.3333$.",
+      "explanation_he": "**$\\dfrac83\\cdot\\dfrac12=\\dfrac43$.**\n\n**תשובה:** $\\approx 1.3333$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 1.333333
+      },
+      "source_item_id": "c8f7ee48-15e8-5588-9bc1-4c7b55a5553d",
+      "points_level_min": "5pt",
+      "correct_answer": "1.333333"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^2 x^2\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^2 x^2\\,dy\\,dx$.",
+      "explanation_en": "**$\\left(\\int_0^1 x^2\\,dx\\right)(2)=\\dfrac13\\cdot 2=\\dfrac23$.**\n\n**Answer:** $\\approx 0.6667$.",
+      "explanation_he": "**$\\dfrac13\\cdot 2=\\dfrac23$.**\n\n**תשובה:** $\\approx 0.6667$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 0.666667
+      },
+      "source_item_id": "5acb6f9e-a017-5c09-af91-d9b6a366c0bc",
+      "points_level_min": "5pt",
+      "correct_answer": "0.666667"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute $\\displaystyle\\int_0^1\\!\\!\\int_0^1 (x+y)\\,dy\\,dx$.",
+      "stem_he": "חשבו $\\displaystyle\\int_0^1\\!\\!\\int_0^1 (x+y)\\,dy\\,dx$.",
+      "explanation_en": "**Inner: $\\int_0^1(x+y)dy=x+\\tfrac12$. Outer: $\\int_0^1(x+\\tfrac12)dx=\\tfrac12+\\tfrac12=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\tfrac12+\\tfrac12=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "double_integral"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "10562a58-398f-51ce-8877-82af9f4aa144",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
     }
   ],
   "est_minutes": 60,
