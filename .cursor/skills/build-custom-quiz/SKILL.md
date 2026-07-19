@@ -106,7 +106,7 @@ Bounds: minimum 3, maximum 20. Hard floor of 3 minutes total.
 
 ## Quality bar (what the model must follow)
 
-Hard-coded in the system prompt and enforced by `validateQuestion`:
+Hard-coded in the system prompt and enforced by `validateQuestion` + `quiz-solvability.ts`:
 
 - **Bilingual**: every stem / explanation / option / rubric must have both EN and HE.
 - **Math LTR inside RTL HE**: rendered via KaTeX; do not translate `$...$`.
@@ -115,6 +115,7 @@ Hard-coded in the system prompt and enforced by `validateQuestion`:
 - **Concept spread**: roughly even across the chosen concepts.
 - Stems / explanations / rubrics capped at 600 chars each.
 - No real names, schools, emails, phones, or addresses.
+- **Solvability (mandatory):** every part must be uniquely solvable from the stem. Reject: proving diagonal bisection on a generic מרובע; ambiguous area of an unspecified quadrilateral; sample solutions that admit "insufficient data / חסרים נתונים". Authored bank exemplars are injected into the prompt so the model copies honest exam depth.
 
 Any question failing validation is dropped silently. If zero pass validation the endpoint returns **503** so the UI can show a retry CTA.
 

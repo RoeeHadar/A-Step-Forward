@@ -32,6 +32,8 @@ import {
   bootstrapConceptIdsForProfile,
   filterConceptIdsForProfile,
 } from '@/lib/quiz-concept-filter';
+import { filterSolvableQuizQuestions } from '@/lib/quiz-solvability';
+import { pickGateQuestionsFromBank } from '@/lib/gate-question-bank';
 
 interface KgConcept {
   id: string;
@@ -186,6 +188,14 @@ CRITICAL RULES FOR BAGRUT-STYLE QUESTIONS (mode: bagrut_open):
 9. Each question should take a student ~20-25 minutes to complete in full.
 10. sample_solution_en/he must show COMPLETE worked solutions for every part, step by step.
 11. rubric_en/he must specify points per step (e.g. "2 pts for setting up equation, 3 pts for correct computation").
+
+MATHEMATICAL INTEGRITY (NON-NEGOTIABLE — exams grade real students):
+A. EVERY part must be uniquely solvable from the stem data (+ conclusions of earlier parts that follow from that data). If a part needs an unstated assumption, DO NOT ask it.
+B. NEVER ask to prove a property that the given data does not imply. Classic forbidden pattern: generic "quadrilateral / מרובע" with two side lengths and a height → "prove the diagonals bisect each other" (that requires a parallelogram). Also forbidden: asking for the area of a generic quadrilateral when the shape type is unspecified (area is not determined).
+C. Name the shape explicitly when you rely on its properties (parallelogram / rectangle / rhombus / square / isosceles trapezoid — מקבילית / מלבן / מעוין / ריבוע / טרפז שווה-שוקיים). Do not smuggle parallelogram properties into a generic מרובע.
+D. Numerical data must be internally consistent across the whole item (e.g. a rectangle cannot have side lengths 8 and 10 while also having "height 6").
+E. sample_solution MUST actually solve every part with correct math. Solutions that say "cannot prove / insufficient data / חסרים נתונים" mean the question is INVALID — rewrite it instead of shipping it.
+F. Prefer "find / calculate / show that under the given conditions" over unfounded "prove that".
 
 CRITICAL RULES FOR UNIVERSITY QUESTIONS (mode: university_open or university_mixed):
 1. Questions are mostly open-ended proofs or computations showing all work.
@@ -348,10 +358,35 @@ Allowed concepts, their skill atoms, and depth notes:
 
 ${conceptBlocks}
 
+AUTHENTIC EXEMPLARS from the authored lesson bank (match this depth and honesty — do NOT copy numbers blindly; invent a NEW solvable item at the same standard):
+${buildBankExemplarBlock(ctx.map((c) => c.id))}
+
 Generate exactly ${count} exam-style question(s) now.
 Each question must test at least one skill_atom from the list above.
 Spread questions across the listed concepts where possible.
+Before emitting each question, silently verify: every part is solvable from the stem; numbers are consistent; sample_solution solves all parts without "insufficient data".
 Follow ALL rules in the system message. Return JSON only.`;
+}
+
+function buildBankExemplarBlock(conceptIds: string[]): string {
+  try {
+    const picks = pickGateQuestionsFromBank({
+      conceptIds: conceptIds.slice(0, 4),
+      locale: 'he',
+      count: 3,
+      rotation: 0,
+      preferHard: true,
+    });
+    if (picks.length === 0) return '(no bank exemplars available for these concepts)';
+    return picks
+      .map(
+        (p, i) =>
+          `${i + 1}. [${p.topic} / ${p.kind}] ${p.stem.slice(0, 280)}${p.stem.length > 280 ? '…' : ''}`,
+      )
+      .join('\n');
+  } catch {
+    return '(no bank exemplars available)';
+  }
 }
 
 // ── LLM ──────────────────────────────────────────────────────────────────────
@@ -534,11 +569,24 @@ export async function buildCustomQuiz(
   const llmResult = await callLLMForQuiz(SYSTEM_PROMPT, buildUserPrompt(ctx, mode, count, profile));
   if (!llmResult) return null;
 
-  const validated: CustomQuizQuestion[] = [];
+  const structurallyOk: CustomQuizQuestion[] = [];
   for (const raw of llmResult.questions) {
-    const q = validateQuestion(raw, mode, conceptSet, validated.length + 1);
-    if (q) validated.push(q);
+    const q = validateQuestion(raw, mode, conceptSet, structurallyOk.length + 1);
+    if (q) structurallyOk.push(q);
   }
+
+  // Drop items that ask unsolvable proofs / use inconsistent data patterns.
+  // This is the last line of defense when the LLM invents authentic-looking junk.
+  const { kept, dropped } = filterSolvableQuizQuestions(structurallyOk);
+  if (dropped.length > 0 && process.env.NODE_ENV !== 'production') {
+    console.warn(
+      '[quiz-builder] dropped unsolvable items:',
+      dropped.map((d) => d.reasons.join('+')),
+    );
+  }
+
+  // Re-number ords after filtering.
+  const validated = kept.map((q, i) => ({ ...q, ord: i + 1 }));
   if (validated.length === 0) return null;
 
   return {
