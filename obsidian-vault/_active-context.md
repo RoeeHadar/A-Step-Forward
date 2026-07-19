@@ -34,6 +34,10 @@ production_web: f2a8d4a7
 - **Deferred (in ADR):** milestone generator + open-response grading, prereq probes/anchor-lowering,
   at-risk Mentor routing, returning-learner warm-up, elevation prompts, mechanical final-phase mode,
   full promptfoo/DeepEval harness (no live learners yet).
+- [x] **Manual-test ground prepped** — `scripts/seed-pilot-demo.mjs` (6 variants: `fresh`,
+  `building`, `at-risk`, `near-exam`, `day-before`, `goal-complete`) + `docs/qa/adr-0010-manual-test-plan.md`
+  (decision → variant → steps → expected, 16 cases). Pilot account currently seeded **`building`**
+  (~70% mock-gated, 3 plan weeks — richest interactive start).
 
 ## Last done (2026-07-12)
 
