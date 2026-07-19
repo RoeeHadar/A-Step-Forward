@@ -273,21 +273,6 @@
     }
   ],
   "agent_hints": {
-    "key_insights": [
-      "Triangle area = (1/2) × base × HEIGHT (perpendicular height, not slant side).",
-      "Trapezoid area = (1/2) × (sum of parallel sides) × height.",
-      "Circle: area = πr², circumference = 2πr. Sector: multiply by θ/360.",
-      "Composite figures: break into simple shapes, add or subtract areas."
-    ],
-    "common_misconceptions": [
-      {
-        "wrong": "Area of circle is 2πr",
-        "correction": "Area is πr². Circumference (perimeter) is 2πr.",
-        "detect_phrase_en": "area of circle is 2 pi r",
-        "detect_phrase_he": "שטח מעגל 2 פי ר"
-      }
-    ],
-    "tutor_pacing_hint": "Build from simplest (rectangle/square) to composite. Emphasize drawing and labeling the height for triangles and trapezoids — this is where most errors happen.",
     "skill_atoms_unlocked": [
       "composite_shapes",
       "parallelogram_area",
@@ -295,314 +280,784 @@
       "rectangle_area",
       "trapezoid_area",
       "triangle_area"
-    ]
+    ],
+    "key_insights": [
+      "Area and perimeter are different dimensions — never mix formulas",
+      "Composite figures: add pieces or subtract holes",
+      "Uniform scale: lengths ×k, areas ×k²"
+    ],
+    "common_misconceptions": [
+      "Using a slanted side as height in parallelograms/triangles",
+      "Forgetting ½ in triangle area",
+      "Scaling area by k instead of k²"
+    ],
+    "tutor_pacing_hint": "Rectangle/triangle formulas → trapezoid/parallelogram → composite add/subtract → scale factors."
   },
   "questions": [
     {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "rectangle_area"
+      ],
       "ord": 1,
       "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find the area of a rectangle with length $5$ and width $3$.",
-      "stem_he": "מצאו את שטח המלבן שאורכו $5$ ורוחבו $3$.",
-      "explanation_en": "**Area of a rectangle.** $A = \\ell \\cdot w = 5\\cdot 3$.\n\n**Answer:** $15$.",
-      "explanation_he": "**שטח מלבן.** $A = \\ell \\cdot w = 5\\cdot 3$.\n\n**תשובה:** $15$.",
-      "skill_atoms": [
-        "rectangle_area"
+      "archetypes": [
+        "procedural"
       ],
+      "stem_en": "Rectangle length $5$, width $3$. Area?",
+      "stem_he": "מלבן אורך $5$, רוחב $3$. שטח?",
+      "explanation_en": "**Step 1 — Formula.** $A=\\ell w=5\\cdot3$.\n\n**Step 2 — Compute.** $15$.\n\n**Step 3 — Units.** Square units of the side unit. On the Bagrut, write the formula before multiplying.",
+      "explanation_he": "**שלב 1 — נוסחה.** $A=\\ell w$.\n\n**שלב 2 — חישוב.** $15$.\n\n**שלב 3 — יחידות.** יחידות ריבוע. בבגרות כתבו נוסחה קודם.",
+      "correct_answer": 15,
       "answer_payload": {
-        "value": 15
+        "value": 15,
+        "tolerance": 1e-9
       },
-      "source_item_id": "2a4b38a0-b04c-5d22-a966-2303cae5a77e",
-      "points_level_min": "3pt",
-      "correct_answer": "15"
+      "verify": {
+        "expr": "5*3",
+        "expected": 15,
+        "tol": 1e-9
+      }
     },
     {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "perimeter"
+      ],
       "ord": 2,
-      "kind": "true_false",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "True or False: the area of a triangle is $\\tfrac12 \\times \\text{base} \\times \\text{height}$.",
-      "stem_he": "נכון או לא נכון: שטח משולש הוא $\\tfrac12 \\times b \\times h$ (בסיס כפול גובה).",
-      "explanation_en": "**Standard formula.** $A = \\tfrac12 b h$ — **true**.",
-      "explanation_he": "**נוסחה סטנדרטית.** $A = \\tfrac12 b h$ — **נכון**.",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Rectangle $5$ by $3$. Perimeter?",
+      "stem_he": "מלבן $5$ על $3$. היקף?",
+      "explanation_en": "**Step 1 — Formula.** $P=2(\\ell+w)=2(5+3)$.\n\n**Step 2 — Compute.** $16$.\n\n**Step 3 — Contrast.** Perimeter is linear; area is $15$ — different measures. On the Bagrut, do not mix $P$ and $A$ formulas.",
+      "explanation_he": "**שלב 1 — נוסחה.** $P=2(\\ell+w)$.\n\n**שלב 2 — חישוב.** $16$.\n\n**שלב 3 — ניגוד.** היקף לינארי; שטח $15$. בבגרות אל תערבבו נוסחאות.",
+      "correct_answer": 16,
+      "answer_payload": {
+        "value": 16,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "2*(5+3)",
+        "expected": 16,
+        "tol": 1e-9
+      }
+    },
+    {
+      "points_level_min": "3pt",
       "skill_atoms": [
         "triangle_area"
       ],
-      "answer_payload": {
-        "value": true
-      },
-      "source_item_id": "bd77bbd5-fdce-5b5a-90ff-4f7d4225c8ce",
-      "points_level_min": "3pt",
-      "correct_bool": true
-    },
-    {
       "ord": 3,
-      "kind": "open",
-      "difficulty": "hard",
-      "stem_en": "A rectangular garden is $12$ m by $8$ m with a $1$ m-wide path running inside along all edges. Find the area of the inner (path-free) region.",
-      "stem_he": "גינה מלבנית בגודל $12$ מ' על $8$ מ' עם שביל ברוחב $1$ מ' לאורך כל הקצוות מבפנים. מצאו את שטח האזור הפנימי (ללא השביל).",
-      "explanation_en": "**Step 1 — Shrink each dimension by $2$** (one metre on each side).\n\n**Step 2 — Inner size.** $(12 - 2)\\times(8 - 2) = 10\\times 6$.\n\n**Step 3 — Area.** $10\\cdot 6 = 60$.\n\n**Answer:** $60$ m².",
-      "explanation_he": "**שלב 1 — כווצו כל מימד ב-$2$** (מטר מכל צד).\n\n**שלב 2 — מידות פנים.** $(12 - 2)\\times(8 - 2) = 10\\times 6$.\n\n**שלב 3 — שטח.** $60$.\n\n**תשובה:** $60$ מ\\\"ר.",
-      "skill_atoms": [
-        "composite_shapes"
-      ],
-      "answer_payload": {
-        "steps_en": [
-          "**Step 1 — Shrink each dimension by $2$** (one metre on each side).",
-          "**Step 2 — Inner size.** $(12 - 2)\\times(8 - 2) = 10\\times 6$.",
-          "**Step 3 — Area.** $10\\cdot 6 = 60$.",
-          "**Answer:** $60$ m²."
-        ],
-        "steps_he": [
-          "**שלב 1 — כווצו כל מימד ב-$2$** (מטר מכל צד).",
-          "**שלב 2 — מידות פנים.** $(12 - 2)\\times(8 - 2) = 10\\times 6$.",
-          "**שלב 3 — שטח.** $60$.",
-          "**תשובה:** $60$ מ\\\"ר."
-        ]
-      },
-      "source_item_id": "a00aaf46-3b32-5482-b177-2f72ff436bf8",
-      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
-      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
-      "points_level_min": "3pt"
-    },
-    {
-      "ord": 4,
-      "kind": "mcq",
-      "difficulty": "medium",
-      "stem_en": "What is the area of a rectangle with sides $4$ and $9$?",
-      "stem_he": "מהו שטח המלבן שצלעותיו $4$ ו-$9$?",
-      "explanation_en": "**Area.** $A = 4\\cdot 9 = 36$.\n\n**Answer:** $36$.",
-      "explanation_he": "**שטח.** $A = 4\\cdot 9 = 36$.\n\n**תשובה:** $36$.",
-      "skill_atoms": [
-        "rectangle_area"
-      ],
-      "answer_payload": {
-        "options_en": [
-          "$36$",
-          "$26$",
-          "$13$",
-          "$40$"
-        ],
-        "options_he": [
-          "$36$",
-          "$26$",
-          "$13$",
-          "$40$"
-        ],
-        "correct_index": 0
-      },
-      "source_item_id": "c090c60d-6684-5a42-8d0c-a37223e2744a",
-      "points_level_min": "3pt",
-      "options_en": [
-        "$36$",
-        "$26$",
-        "$13$",
-        "$40$"
-      ],
-      "options_he": [
-        "$36$",
-        "$26$",
-        "$13$",
-        "$40$"
-      ],
-      "correct_index": 0
-    },
-    {
-      "ord": 5,
       "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find the perimeter of a rectangle with length $5$ and width $3$.",
-      "stem_he": "מצאו את היקף המלבן שאורכו $5$ ורוחבו $3$.",
-      "explanation_en": "**Perimeter.** $P = 2(\\ell + w) = 2(5 + 3)$.\n\n**Answer:** $16$.",
-      "explanation_he": "**היקף.** $P = 2(\\ell + w) = 2(5 + 3)$.\n\n**תשובה:** $16$.",
-      "skill_atoms": [
-        "perimeter"
+      "archetypes": [
+        "procedural"
       ],
+      "stem_en": "Triangle base $8$, height $5$. Area?",
+      "stem_he": "משולש בסיס $8$, גובה $5$. שטח?",
+      "explanation_en": "**Step 1 — Formula.** $A=\\tfrac12 bh=\\tfrac12\\cdot8\\cdot5$.\n\n**Step 2 — Compute.** $20$.\n\n**Step 3 — Height.** Must be perpendicular to the chosen base. On the Bagrut, mark the right-angle height on the sketch.",
+      "explanation_he": "**שלב 1 — נוסחה.** $\\tfrac12 bh$.\n\n**שלב 2 — חישוב.** $20$.\n\n**שלב 3 — גובה.** מאונך לבסיס. בבגרות סמנו זווית ישרה.",
+      "correct_answer": 20,
       "answer_payload": {
-        "value": 16
+        "value": 20,
+        "tolerance": 1e-9
       },
-      "source_item_id": "2d9d5429-92a6-564f-b25b-9e6525b453e7",
-      "points_level_min": "3pt",
-      "correct_answer": "16"
+      "verify": {
+        "expr": "0.5*8*5",
+        "expected": 20,
+        "tol": 1e-9
+      }
     },
     {
-      "ord": 6,
-      "kind": "numeric",
-      "difficulty": "easy",
-      "stem_en": "Find the area of a triangle with base $6$ and height $4$.",
-      "stem_he": "מצאו את שטח המשולש שבסיסו $6$ וגובהו $4$.",
-      "explanation_en": "**Area of a triangle.** $A = \\tfrac12 b h = \\tfrac12\\cdot 6\\cdot 4$.\n\n**Answer:** $12$.",
-      "explanation_he": "**שטח משולש.** $A = \\tfrac12 b h = \\tfrac12\\cdot 6\\cdot 4$.\n\n**תשובה:** $12$.",
-      "skill_atoms": [
-        "triangle_area"
-      ],
-      "answer_payload": {
-        "value": 12
-      },
-      "source_item_id": "ecbf872e-f9e4-5773-9dce-e2134ad346f5",
       "points_level_min": "3pt",
-      "correct_answer": "12"
-    },
-    {
-      "ord": 7,
-      "kind": "numeric",
-      "difficulty": "medium",
-      "stem_en": "Find the area of a square with side $7$.",
-      "stem_he": "מצאו את שטח הריבוע שצלעו $7$.",
-      "explanation_en": "**Area of a square.** $A = s^2 = 7^2$.\n\n**Answer:** $49$.",
-      "explanation_he": "**שטח ריבוע.** $A = s^2 = 7^2$.\n\n**תשובה:** $49$.",
-      "skill_atoms": [
-        "rectangle_area"
-      ],
-      "answer_payload": {
-        "value": 49
-      },
-      "source_item_id": "aee3f2de-8928-5f9c-8fd6-6a249e0c4764",
-      "points_level_min": "3pt",
-      "correct_answer": "49"
-    },
-    {
-      "ord": 8,
-      "kind": "numeric",
-      "difficulty": "medium",
-      "stem_en": "Find the perimeter of a square with side $7$.",
-      "stem_he": "מצאו את היקף הריבוע שצלעו $7$.",
-      "explanation_en": "**Perimeter of a square.** $P = 4s = 4\\cdot 7$.\n\n**Answer:** $28$.",
-      "explanation_he": "**היקף ריבוע.** $P = 4s = 4\\cdot 7$.\n\n**תשובה:** $28$.",
-      "skill_atoms": [
-        "perimeter"
-      ],
-      "answer_payload": {
-        "value": 28
-      },
-      "source_item_id": "c2fb4b5b-0a0f-507b-9016-b8cf9dce3bcc",
-      "points_level_min": "3pt",
-      "correct_answer": "28"
-    },
-    {
-      "ord": 9,
-      "kind": "numeric",
-      "difficulty": "medium",
-      "stem_en": "Find the area of a parallelogram with base $8$ and height $5$.",
-      "stem_he": "מצאו את שטח המקבילית שבסיסה $8$ וגובהה $5$.",
-      "explanation_en": "**Area of a parallelogram.** $A = b h = 8\\cdot 5$.\n\n**Answer:** $40$.",
-      "explanation_he": "**שטח מקבילית.** $A = b h = 8\\cdot 5$.\n\n**תשובה:** $40$.",
       "skill_atoms": [
         "parallelogram_area"
       ],
-      "answer_payload": {
-        "value": 40
-      },
-      "source_item_id": "afb6ee41-9078-5366-9567-e1a8fcf0a1b7",
-      "points_level_min": "3pt",
-      "correct_answer": "40"
-    },
-    {
-      "ord": 10,
+      "ord": 4,
       "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find the area of a trapezoid with parallel sides $6$ and $10$ and height $4$.",
-      "stem_he": "מצאו את שטח הטרפז שבסיסיו $6$ ו-$10$ וגובהו $4$.",
-      "explanation_en": "**Area of a trapezoid.** $A = \\tfrac12 (a + b) h = \\tfrac12 (6 + 10)\\cdot 4$.\n\n**Compute.** $\\tfrac12\\cdot 16\\cdot 4 = 32$.\n\n**Answer:** $32$.",
-      "explanation_he": "**שטח טרפז.** $A = \\tfrac12 (a + b) h = \\tfrac12 (16)\\cdot 4$.\n\n**חישוב.** $= 32$.\n\n**תשובה:** $32$.",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Parallelogram base $9$, height $4$. Area?",
+      "stem_he": "מקבילית בסיס $9$, גובה $4$. שטח?",
+      "explanation_en": "**Step 1 — Formula.** $A=bh=9\\cdot4$ (height perpendicular to that base).\n\n**Step 2 — Compute.** $36$.\n\n**Step 3 — Not slant.** Do not multiply by the slanted side unless it is perpendicular. On the Bagrut, distinguish base from slanted side.",
+      "explanation_he": "**שלב 1 — נוסחה.** $A=bh$.\n\n**שלב 2 — חישוב.** $36$.\n\n**שלב 3 — לא אלכסון.** אל תכפילו בצלע האלכסונית. בבגרות הבחינו בין בסיס לצלע נטויה.",
+      "correct_answer": 36,
+      "answer_payload": {
+        "value": 36,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "9*4",
+        "expected": 36,
+        "tol": 1e-9
+      }
+    },
+    {
+      "points_level_min": "3pt",
       "skill_atoms": [
         "trapezoid_area"
       ],
-      "answer_payload": {
-        "value": 32
-      },
-      "source_item_id": "b79eca5f-4a0e-5c02-bf72-53f393f3dd62",
-      "points_level_min": "3pt",
-      "correct_answer": "32"
-    },
-    {
-      "ord": 11,
+      "ord": 5,
       "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "A $10\\times 4$ rectangle has a $2\\times 2$ square cut out of it. Find the remaining area.",
-      "stem_he": "ממלבן $10\\times 4$ חותכים ריבוע $2\\times 2$. מצאו את השטח שנותר.",
-      "explanation_en": "**Subtract areas.** $10\\cdot 4 - 2\\cdot 2 = 40 - 4$.\n\n**Answer:** $36$.",
-      "explanation_he": "**חיסור שטחים.** $40 - 4$.\n\n**תשובה:** $36$.",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Trapezoid bases $6$ and $10$, height $4$. Area?",
+      "stem_he": "טרפז בסיסים $6$ ו-$10$, גובה $4$. שטח?",
+      "explanation_en": "**Step 1 — Formula.** $A=\\tfrac{a+b}{2}h=\\tfrac{6+10}{2}\\cdot4$.\n\n**Step 2 — Compute.** $8\\cdot4=32$.\n\n**Step 3 — Average bases.** The factor $\\tfrac{a+b}{2}$ is the average of the parallel sides. On the Bagrut, write the average explicitly.",
+      "explanation_he": "**שלב 1 — נוסחה.** $\\tfrac{a+b}{2}h$.\n\n**שלב 2 — חישוב.** $32$.\n\n**שלב 3 — ממוצע בסיסים.** בבגרות כתבו את הממוצע במפורש.",
+      "correct_answer": 32,
+      "answer_payload": {
+        "value": 32,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "((6+10)/2)*4",
+        "expected": 32,
+        "tol": 1e-9
+      }
+    },
+    {
+      "points_level_min": "3pt",
       "skill_atoms": [
         "composite_shapes"
       ],
-      "answer_payload": {
-        "value": 36
-      },
-      "source_item_id": "3e637147-8434-5ba6-bf93-38f1a30d75d0",
-      "points_level_min": "3pt",
-      "correct_answer": "36"
-    },
-    {
-      "ord": 12,
+      "ord": 6,
       "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Find the perimeter of a triangle with sides $3$, $4$, and $5$.",
-      "stem_he": "מצאו את היקף המשולש שצלעותיו $3$, $4$, ו-$5$.",
-      "explanation_en": "**Perimeter = sum of sides.** $3 + 4 + 5 = 12$.\n\n**Answer:** $12$.",
-      "explanation_he": "**היקף = סכום הצלעות.** $3 + 4 + 5 = 12$.\n\n**תשובה:** $12$.",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "stem_en": "An L-shape: $6\\times4$ rectangle minus a $2\\times2$ square cut from a corner. Area?",
+      "stem_he": "צורת L: מלבן $6\\times4$ פחות ריבוע $2\\times2$. שטח?",
+      "explanation_en": "**Step 1 — Whole.** $6\\cdot4=24$.\n\n**Step 2 — Cut.** $2\\cdot2=4$.\n\n**Step 3 — Composite.** $24-4=20$. Alternatively add two rectangles. On the Bagrut, state whether you add or subtract regions.",
+      "explanation_he": "**שלב 1 — שלם.** $24$.\n\n**שלב 2 — גזרה.** $4$.\n\n**שלב 3 — מורכב.** $20$. בבגרות ציינו חיבור או חיסור אזורים.",
+      "correct_answer": 20,
+      "answer_payload": {
+        "value": 20,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "6*4-2*2",
+        "expected": 20,
+        "tol": 1e-9
+      }
+    },
+    {
+      "points_level_min": "3pt",
       "skill_atoms": [
+        "rectangle_area",
         "perimeter"
       ],
-      "answer_payload": {
-        "value": 12
-      },
-      "source_item_id": "50f53e99-f06e-503a-ae16-f0a8f59bcb9d",
-      "points_level_min": "3pt",
-      "correct_answer": "12"
-    },
-    {
-      "ord": 13,
-      "kind": "numeric",
-      "difficulty": "medium",
-      "stem_en": "Find the area of a rectangle with length $2.5$ and width $4$.",
-      "stem_he": "מצאו את שטח המלבן שאורכו $2.5$ ורוחבו $4$.",
-      "explanation_en": "**Area.** $A = 2.5\\cdot 4 = 10$.\n\n**Answer:** $10$.",
-      "explanation_he": "**שטח.** $A = 2.5\\cdot 4 = 10$.\n\n**תשובה:** $10$.",
-      "skill_atoms": [
-        "rectangle_area"
+      "ord": 7,
+      "kind": "mcq",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
       ],
+      "stem_en": "Doubling both length and width of a rectangle multiplies area by…",
+      "stem_he": "הכפלת אורך ורוחב של מלבן מכפילה את השטח ב…",
+      "explanation_en": "**Step 1 — Scale.** Linear scale factor $k=2$ on both sides.\n\n**Step 2 — Area.** Area scales by $k^2=4$.\n\n**Step 3 — Perimeter.** Perimeter would scale by $k=2$, not $4$ — different! On the Bagrut, separate area scale from perimeter scale.",
+      "explanation_he": "**שלב 1 — קנה מידה.** $k=2$.\n\n**שלב 2 — שטח.** $k^2=4$.\n\n**שלב 3 — היקף.** גדל פי $2$ בלבד. בבגרות הבחינו בין שטח להיקף.",
       "answer_payload": {
-        "value": 10
-      },
-      "source_item_id": "4dd6d561-1a2a-5fb8-901e-60c9a8111204",
-      "points_level_min": "3pt",
-      "correct_answer": "10"
+        "options_en": [
+          "$4$",
+          "$2$",
+          "$8$",
+          "unchanged"
+        ],
+        "options_he": [
+          "$4$",
+          "$2$",
+          "$8$",
+          "ללא שינוי"
+        ],
+        "correct_index": 0
+      }
     },
     {
-      "ord": 14,
-      "kind": "numeric",
-      "difficulty": "hard",
-      "stem_en": "A triangle has base $10$ and height $3$. Find its area.",
-      "stem_he": "למשולש בסיס $10$ וגובה $3$. מצאו את שטחו.",
-      "explanation_en": "**Area.** $A = \\tfrac12 b h = \\tfrac12\\cdot 10\\cdot 3$.\n\n**Answer:** $15$.",
-      "explanation_he": "**שטח.** $A = \\tfrac12 b h = \\tfrac12\\cdot 10\\cdot 3$.\n\n**תשובה:** $15$.",
+      "points_level_min": "3pt",
       "skill_atoms": [
         "triangle_area"
       ],
+      "ord": 8,
+      "kind": "mcq",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Triangle area formula is…",
+      "stem_he": "נוסחת שטח משולש היא…",
+      "explanation_en": "**Step 1 — Standard.** $A=\\tfrac12\\times\\text{base}\\times\\text{height}$.\n\n**Step 2 — Why half.** A triangle is half of a parallelogram with the same base and height.\n\n**Step 3 — Trap.** Forgetting $\\tfrac12$ doubles the area — a frequent exam error. On the Bagrut, circle the $\\tfrac12$ after writing the formula.",
+      "explanation_he": "**שלב 1 — תקן.** $\\tfrac12 bh$.\n\n**שלב 2 — למה חצי.** חצי ממקבילית.\n\n**שלב 3 — מלכודת.** שכחת החצי מכפילה. בבגרות סמנו את החצי.",
       "answer_payload": {
-        "value": 15
-      },
-      "source_item_id": "276265d7-d749-5f22-92c0-9c7293b3c89f",
-      "points_level_min": "3pt",
-      "correct_answer": "15"
+        "options_en": [
+          "$\\tfrac12 bh$",
+          "$bh$",
+          "$2bh$",
+          "$b+h$"
+        ],
+        "options_he": [
+          "$\\tfrac12 bh$",
+          "$bh$",
+          "$2bh$",
+          "$b+h$"
+        ],
+        "correct_index": 0
+      }
     },
     {
-      "ord": 15,
-      "kind": "numeric",
-      "difficulty": "hard",
-      "stem_en": "An L-shape is made of a $6\\times 2$ rectangle and a $3\\times 4$ rectangle. Find its total area.",
-      "stem_he": "צורת L מורכבת ממלבן $6\\times 2$ וממלבן $3\\times 4$. מצאו את שטחה הכולל.",
-      "explanation_en": "**Add the pieces.** $6\\cdot 2 + 3\\cdot 4 = 12 + 12$.\n\n**Answer:** $24$.",
-      "explanation_he": "**חברו את החלקים.** $12 + 12$.\n\n**תשובה:** $24$.",
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "perimeter"
+      ],
+      "ord": 9,
+      "kind": "true_false",
+      "difficulty": "easy",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Perimeter and area use the same units.",
+      "stem_he": "להיקף ולשטח אותן יחידות.",
+      "explanation_en": "**Step 1 — Dimension.** Perimeter is 1D (length); area is 2D (length²).\n\n**Step 2 — Example.** $m$ vs $m^2$.\n\n**Step 3 — Exam.** Mixing units is an automatic wrong-path signal. On the Bagrut, write units next to each answer.",
+      "explanation_he": "**שלב 1 — ממד.** היקף חד-ממדי; שטח דו-ממדי.\n\n**שלב 2 — דוגמה.** מ' מול מ\"ר.\n\n**שלב 3 — בחינה.** ערבוב יחידות הוא סימן אזהרה. בבגרות כתבו יחידות.",
+      "answer_payload": {
+        "correct": false
+      },
+      "correct_answer": false
+    },
+    {
+      "points_level_min": "3pt",
       "skill_atoms": [
         "composite_shapes"
       ],
+      "ord": 10,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual"
+      ],
+      "stem_en": "Composite area can be computed by adding or subtracting simple regions.",
+      "stem_he": "שטח מורכב אפשר לחשב בחיבור או חיסור אזורים פשוטים.",
+      "explanation_en": "**Step 1 — Strategy.** Decompose into rectangles/triangles/trapezoids.\n\n**Step 2 — Add or subtract.** Outer shape minus holes, or sum of pieces.\n\n**Step 3 — Sketch.** Label each piece’s dimensions before computing. On the Bagrut, number the regions on the diagram.",
+      "explanation_he": "**שלב 1 — אסטרטגיה.** פירוק למלבנים/משולשים.\n\n**שלב 2 — חיבור או חיסור.**\n\n**שלב 3 — סקיצה.** סמנו ממדים. בבגרות מספרו אזורים בשרטוט.",
       "answer_payload": {
-        "value": 24
+        "correct": true
       },
-      "source_item_id": "41dab500-2801-5dec-8d69-a75acc1a6687",
+      "correct_answer": true
+    },
+    {
       "points_level_min": "3pt",
-      "correct_answer": "24"
+      "skill_atoms": [
+        "rectangle_area"
+      ],
+      "ord": 11,
+      "kind": "short_answer",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Square side $7$. Area?",
+      "stem_he": "ריבוע צלע $7$. שטח?",
+      "explanation_en": "**Step 1 — Square.** $A=s^2=7^2=49$.\n\n**Step 2 — Also.** A square is a rectangle with $\\ell=w$.\n\n**Step 3 — Perimeter contrast.** $P=28$, not $49$. On the Bagrut, do not confuse $s^2$ with $4s$.",
+      "explanation_he": "**שלב 1 — ריבוע.** $49$.\n\n**שלב 2 — גם מלבן.** עם צלעות שוות.\n\n**שלב 3 — היקף.** $28$, לא $49$. בבגרות אל תבלבלו $s^2$ עם $4s$.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "49",
+          "49.0"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "49",
+        "49.0"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "49"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "trapezoid_area"
+      ],
+      "ord": 12,
+      "kind": "short_answer",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Trapezoid bases $3$ and $7$, height $5$. Area?",
+      "stem_he": "טרפז בסיסים $3,7$, גובה $5$. שטח?",
+      "explanation_en": "**Step 1 — Average.** $\\frac{3+7}{2}=5$.\n\n**Step 2 — Times height.** $5\\cdot5=25$.\n\n**Step 3 — Check.** Average base equals height here by coincidence — still correct. On the Bagrut, show the average step.",
+      "explanation_he": "**שלב 1 — ממוצע.** $5$.\n\n**שלב 2 — כפול גובה.** $25$.\n\n**שלב 3 — בדיקה.** בבגרות הציגו את שלב הממוצע.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "25",
+          "25.0"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "25",
+        "25.0"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "25"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "triangle_area"
+      ],
+      "ord": 13,
+      "kind": "fill_blank",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Fill: triangle area $=\\tfrac12\\times$ base $\\times$ $\\underline{\\hspace{1cm}}$.",
+      "stem_he": "השלימו: שטח משולש $=\\tfrac12\\times$ בסיס $\\times$ $\\underline{\\hspace{1cm}}$.",
+      "explanation_en": "**Step 1 — Formula.** Needs perpendicular height.\n\n**Step 2 — Blank.** Height.\n\n**Step 3 — Not a slanted side** unless that side is perpendicular to the base. On the Bagrut, say “perpendicular height”.",
+      "explanation_he": "**שלב 1 — נוסחה.** צריך גובה מאונך.\n\n**שלב 2 — ריק.** גובה.\n\n**שלב 3 — לא צלע נטויה.** בבגרות אמרו \"גובה מאונך\".",
+      "answer_payload": {
+        "acceptable_answers": [
+          "height",
+          "h",
+          "גובה"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "height"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "perimeter"
+      ],
+      "ord": 14,
+      "kind": "fill_blank",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Fill: rectangle perimeter $=2(\\ell+\\underline{\\hspace{1cm}})$.",
+      "stem_he": "השלימו: היקף מלבן $=2(\\ell+\\underline{\\hspace{1cm}})$.",
+      "explanation_en": "**Step 1 — Formula.** $P=2(\\ell+w)$.\n\n**Step 2 — Blank.** Width $w$.\n\n**Step 3 — Alternative.** $2\\ell+2w$ is the same. On the Bagrut, either form is fine.",
+      "explanation_he": "**שלב 1 — נוסחה.** $P=2(\\ell+w)$.\n\n**שלב 2 — ריק.** רוחב.\n\n**שלב 3 — חלופה.** $2\\ell+2w$. בבגרות שתי הצורות תקפות.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "w",
+          "width",
+          "רוחב"
+        ],
+        "case_sensitive": false
+      },
+      "correct_answer": "w"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "composite_shapes",
+        "rectangle_area",
+        "triangle_area"
+      ],
+      "ord": 15,
+      "kind": "mcq_multi",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "error_analysis"
+      ],
+      "stem_en": "Which are true? (Select all.)",
+      "stem_he": "אילו נכונות?",
+      "explanation_en": "**Evaluate.** A, B, D, E true. C false — perimeter scales with $k$, not $k^2$. On the Bagrut, scale-factor questions separate length vs area carefully.",
+      "explanation_he": "**הערכה.** A, B, D, E נכונים. C שגוי — היקף גדל פי $k$. בבגרות הבחינו בין אורך לשטח.",
+      "answer_payload": {
+        "options_en": [
+          "Composite figures may be split into rectangles and triangles",
+          "Area scales with $k^2$ under uniform scaling",
+          "Perimeter scales with $k^2$",
+          "Trapezoid area uses the average of the two bases",
+          "Triangle area needs a perpendicular height"
+        ],
+        "options_he": [
+          "אפשר לפצל לצורה מורכבת למלבנים ומשולשים",
+          "שטח גדל פי $k^2$",
+          "היקף גדל פי $k^2$",
+          "שטח טרפז עם ממוצע בסיסים",
+          "לשטח משולש צריך גובה מאונך"
+        ],
+        "correct_indices": [
+          0,
+          1,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "rectangle_area",
+        "triangle_area",
+        "trapezoid_area",
+        "parallelogram_area"
+      ],
+      "ord": 16,
+      "kind": "match",
+      "difficulty": "medium",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "stem_en": "Match shape to area formula idea.",
+      "stem_he": "התאימו צורה לרעיון נוסחת השטח.",
+      "explanation_en": "**Pairing.** Each formula matches one shape family. Parallelogram looks like rectangle area but height is perpendicular, not the slant. On the Bagrut, recite the four formulas as a card.",
+      "explanation_he": "**התאמה.** לכל צורה נוסחה. מקבילית עם גובה מאונך. בבגרות שיננו ארבע נוסחאות.",
+      "answer_payload": {
+        "left_en": [
+          "Rectangle",
+          "Triangle",
+          "Trapezoid",
+          "Parallelogram"
+        ],
+        "left_he": [
+          "מלבן",
+          "משולש",
+          "טרפז",
+          "מקבילית"
+        ],
+        "right_en": [
+          "$\\ell\\cdot w$",
+          "$\\tfrac12 bh$",
+          "$\\tfrac{a+b}{2}h$",
+          "$b\\cdot h$ (perp height)"
+        ],
+        "right_he": [
+          "$\\ell\\cdot w$",
+          "$\\tfrac12 bh$",
+          "$\\tfrac{a+b}{2}h$",
+          "$b\\cdot h$ (גובה מאונך)"
+        ],
+        "correct_pairs": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "composite_shapes"
+      ],
+      "ord": 17,
+      "kind": "ordering",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Order steps for a composite area by subtraction.",
+      "stem_he": "סדרו צעדים לשטח מורכב בחיסור.",
+      "explanation_en": "**Pipeline.** Outer → remove → subtract. Adding pieces is the dual strategy. On the Bagrut, announce “subtraction method” in one sentence.",
+      "explanation_he": "**צינור.** חיצוני → הסרה → חיסור. בבגרות כתבו \"שיטת חיסור\" במשפט.",
+      "answer_payload": {
+        "steps_en": [
+          "Identify the outer simple shape",
+          "Compute outer area",
+          "Compute the removed region area",
+          "Subtract and state units"
+        ],
+        "steps_he": [
+          "זיהוי הצורה החיצונית",
+          "חישוב שטח חיצוני",
+          "חישוב אזור מוסר",
+          "חיסור וכתיבת יחידות"
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "composite_shapes",
+        "rectangle_area",
+        "triangle_area"
+      ],
+      "ord": 18,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "stem_en": "A rectangular garden $12$ m by $8$ m has a right-triangular flower bed with legs $3$ m and $4$ m cut from one corner. Find the remaining area.",
+      "stem_he": "גינה מלבנית $12$ על $8$ מ' עם ערוגה משולשת ישרת-זווית עם ניצבים $3$ ו-$4$ מ' בפינה. מצאו שטח נותר.",
+      "needs_review": true,
+      "explanation_en": "**Step 1 — Outer.** $12\\cdot8=96$ m².\n\n**Step 2 — Triangle.** $\\tfrac12\\cdot3\\cdot4=6$ m².\n\n**Step 3 — Remaining.** $96-6=90$ m².\n\n**Step 4 — Check.** Triangle fits in the corner since $3<12$ and $4<8$. On the Bagrut, verify fit before subtracting.",
+      "explanation_he": "**שלב 1 — חיצוני.** $96$.\n\n**שלב 2 — משולש.** $6$.\n\n**שלב 3 — נותר.** $90$.\n\n**שלב 4 — בדיקה.** המשולש נכנס לפינה. בבגרות בדקו התאמה לפני חיסור.",
+      "answer_payload": {
+        "steps_en": [
+          "90 m^2"
+        ],
+        "steps_he": [
+          "90 מ\"ר"
+        ]
+      },
+      "rubric_en": "Full marks: 96−6=90 with units.",
+      "rubric_he": "ניקוד מלא: 90 עם יחידות."
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "trapezoid_area",
+        "perimeter"
+      ],
+      "ord": 19,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application",
+        "graphical"
+      ],
+      "stem_en": "An isosceles trapezoid has bases $10$ and $16$, height $4$. Non-parallel sides are each $5$. Find area and perimeter.",
+      "stem_he": "טרפז שווה-שוקיים עם בסיסים $10$ ו-$16$, גובה $4$, שוקיים $5$ כל אחת. מצאו שטח והיקף.",
+      "needs_review": true,
+      "explanation_en": "**Step 1 — Area.** $A=\\tfrac{10+16}{2}\\cdot4=13\\cdot4=52$.\n\n**Step 2 — Perimeter.** $P=10+16+5+5=36$.\n\n**Step 3 — Sketch.** Drop perpendiculars; the overhang total $6$ splits into $3+3$; check $3^2+4^2=5^2$ ✓.\n\n**Step 4 — Separation.** Area uses height; perimeter uses the slanted sides — do not swap. On the Bagrut, compute area and perimeter in separate boxed lines.",
+      "explanation_he": "**שלב 1 — שטח.** $52$.\n\n**שלב 2 — היקף.** $36$.\n\n**שלב 3 — סקיצה.** בדיקת פיתגורס לשוק.\n\n**שלב 4 — הפרדה.** שטח עם גובה; היקף עם שוקיים. בבגרות שני תיבות נפרדות.",
+      "answer_payload": {
+        "steps_en": [
+          "area 52",
+          "perimeter 36"
+        ],
+        "steps_he": [
+          "שטח 52",
+          "היקף 36"
+        ]
+      },
+      "rubric_en": "Full marks: both area and perimeter correct.",
+      "rubric_he": "ניקוד מלא: שטח והיקף."
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "parallelogram_area",
+        "triangle_area"
+      ],
+      "ord": 20,
+      "kind": "open",
+      "difficulty": "hard",
+      "archetypes": [
+        "application"
+      ],
+      "stem_en": "A parallelogram with base $10$ and height $6$ is split by a diagonal into two triangles. Find each triangle’s area and explain why they are equal.",
+      "stem_he": "מקבילית עם בסיס $10$ וגובה $6$ נחלקת באלכסון לשני משולשים. מצאו שטח כל משולש והסבירו שוויון.",
+      "needs_review": true,
+      "explanation_en": "**Step 1 — Parallelogram area.** $10\\cdot6=60$.\n\n**Step 2 — Diagonal split.** Each triangle has area $30$.\n\n**Step 3 — Why equal.** Same base length along the diagonal? Better: triangles share the same height relative to bases that are equal opposite sides — or note a diagonal divides a parallelogram into two congruent triangles.\n\n**Step 4 — Exam.** Congruence of the two triangles is a standard theorem. On the Bagrut, cite “diagonal halves the parallelogram”.",
+      "explanation_he": "**שלב 1 — שטח מקבילית.** $60$.\n\n**שלב 2 — פיצול.** כל משולש $30$.\n\n**שלב 3 — למה שווים.** אלכסון חוצה מקבילית לשני משולשים חופפים.\n\n**שלב 4 — בחינה.** ציטוט המשפט. בבגרות כתבו \"האלכסון חוצה\".",
+      "answer_payload": {
+        "steps_en": [
+          "each 30"
+        ],
+        "steps_he": [
+          "כל אחד 30"
+        ]
+      },
+      "rubric_en": "Full marks: 30 each with congruence/halving reason.",
+      "rubric_he": "ניקוד מלא: 30 עם נימוק."
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "triangle_area",
+        "rectangle_area"
+      ],
+      "ord": 21,
+      "kind": "derivation",
+      "difficulty": "hard",
+      "archetypes": [
+        "proof"
+      ],
+      "stem_en": "Explain why a triangle’s area is half the area of a parallelogram (or rectangle) with the same base and height.",
+      "stem_he": "הסבירו מדוע שטח משולש הוא חצי משטח מקבילית (או מלבן) עם אותו בסיס וגובה.",
+      "needs_review": true,
+      "explanation_en": "**Step 1 — Build.** On base $b$ erect a parallelogram of height $h$; its area is $bh$.\n\n**Step 2 — Diagonal / copy.** A triangle with base $b$ and height $h$ completes to that parallelogram by attaching a congruent copy (or is half via a diagonal of the parallelogram).\n\n**Step 3 — Conclude.** Triangle area $=\\tfrac12 bh$.\n\n**Step 4 — Special case.** For a rectangle, the same halving argument applies. On the Bagrut, a short congruence or diagonal sentence earns the method mark.",
+      "explanation_he": "**שלב 1 — בנייה.** מקבילית עם בסיס $b$ וגובה $h$, שטח $bh$.\n\n**שלב 2 — העתק/אלכסון.** המשולש הוא חצי.\n\n**שלב 3 — מסקנה.** שטח $=\\tfrac12 bh$.\n\n**שלב 4 — מקרה מלבן.** אותו טיעון. בבגרות משפט קצר על חפיפה/אלכסון.",
+      "answer_payload": {
+        "expected_steps": [
+          "Form parallelogram area bh",
+          "Show triangle is half",
+          "Conclude (1/2)bh",
+          "Note rectangle special case"
+        ]
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "composite_shapes"
+      ],
+      "ord": 22,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Big rectangle $10\\times8$ with inner rectangle $4\\times3$ hole. Shaded area?",
+      "stem_he": "מלבן $10\\times8$ עם חור מלבני $4\\times3$. שטח מוצלל?",
+      "explanation_en": "**Step 1 — Outer.** $80$.\n\n**Step 2 — Hole.** $12$.\n\n**Step 3 — Shaded.** $80-12=68$.\n\n**Step 4 — Independence.** Hole position does not matter for area (as long as fully inside). On the Bagrut, state the subtraction clearly.",
+      "explanation_he": "**שלב 1 — חיצוני.** $80$.\n\n**שלב 2 — חור.** $12$.\n\n**שלב 3 — מוצלל.** $68$.\n\n**שלב 4 — מיקום.** לא משנה לשטח. בבגרות כתבו חיסור ברור.",
+      "correct_answer": 68,
+      "answer_payload": {
+        "value": 68,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "10*8-4*3",
+        "expected": 68,
+        "tol": 1e-9
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "perimeter",
+        "rectangle_area"
+      ],
+      "ord": 23,
+      "kind": "mcq",
+      "difficulty": "hard",
+      "archetypes": [
+        "conceptual",
+        "application"
+      ],
+      "stem_en": "A farmer has $36$ m of fencing for a rectangular pen against a barn (one side needs no fence). To maximise area, the side parallel to the barn should be…",
+      "stem_he": "לחקלאי $36$ מ' גדר למכלאה מלבנית מול אסם (צלע אחת בלי גדר). למקסום שטח, הצלע המקבילה לאסם צריכה להיות…",
+      "explanation_en": "**Step 1 — Model.** Let width away from barn be $x$, length parallel $y$. Then $2x+y=36$, area $A=xy=x(36-2x)$.\n\n**Step 2 — Max.** Parabola in $x$ maximises at $x=9$, so $y=18$.\n\n**Step 3 — Answer.** Side parallel to barn is $18$ m. On the Bagrut, this is an optimisation-lite item; set derivative or vertex of parabola.",
+      "explanation_he": "**שלב 1 — מודל.** $2x+y=36$, $A=x(36-2x)$.\n\n**שלב 2 — מקסימום.** $x=9$, $y=18$.\n\n**שלב 3 — תשובה.** $18$ מ'. בבגרות זה פריט אופטימיזציה קל.",
+      "answer_payload": {
+        "options_en": [
+          "$18$ m",
+          "$12$ m",
+          "$9$ m",
+          "$36$ m"
+        ],
+        "options_he": [
+          "$18$ מ'",
+          "$12$ מ'",
+          "$9$ מ'",
+          "$36$ מ'"
+        ],
+        "correct_index": 0
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "triangle_area",
+        "composite_shapes"
+      ],
+      "ord": 24,
+      "kind": "short_answer",
+      "difficulty": "hard",
+      "archetypes": [
+        "procedural",
+        "application"
+      ],
+      "stem_en": "Two congruent right triangles with legs $6$ and $8$ joined along the hyp to form a kite-like diamond. Total area?",
+      "stem_he": "שני משולשים ישרי-זווית חופפים עם ניצבים $6,8$ מחוברים לאורך היתר. שטח כולל?",
+      "explanation_en": "**Step 1 — One triangle.** $\\tfrac12\\cdot6\\cdot8=24$.\n\n**Step 2 — Two.** $48$.\n\n**Step 3 — Note.** Joining along the hypotenuse does not change each triangle’s area. On the Bagrut, compute one then double.",
+      "explanation_he": "**שלב 1 — משולש אחד.** $24$.\n\n**שלב 2 — שניים.** $48$.\n\n**שלב 3 — הערה.** החיבור ביתר לא משנה שטח. בבגרות חשבו אחד והכפילו.",
+      "answer_payload": {
+        "acceptable_answers": [
+          "48",
+          "48.0"
+        ],
+        "case_sensitive": false
+      },
+      "acceptable_answers": [
+        "48",
+        "48.0"
+      ],
+      "case_sensitive": false,
+      "correct_answer": "48"
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "rectangle_area"
+      ],
+      "ord": 25,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Square has perimeter $20$. Area?",
+      "stem_he": "לריבוע היקף $20$. שטח?",
+      "explanation_en": "**Step 1 — Side.** $P=4s=20\\Rightarrow s=5$.\n\n**Step 2 — Area.** $s^2=25$.\n\n**Step 3 — Chain.** Perimeter → side → area is the safe order. On the Bagrut, never jump from perimeter to area with a wrong power.",
+      "explanation_he": "**שלב 1 — צלע.** $s=5$.\n\n**שלב 2 — שטח.** $25$.\n\n**שלב 3 — שרשרת.** היקף → צלע → שטח. בבגרות אל תקפצו עם חזקה שגויה.",
+      "correct_answer": 25,
+      "answer_payload": {
+        "value": 25,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "(20/4)^2",
+        "expected": 25,
+        "tol": 1e-9
+      }
+    },
+    {
+      "points_level_min": "3pt",
+      "skill_atoms": [
+        "triangle_area"
+      ],
+      "ord": 26,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "archetypes": [
+        "procedural"
+      ],
+      "stem_en": "Base $10$, height $7$. Triangle area?",
+      "stem_he": "בסיס $10$, גובה $7$. שטח משולש?",
+      "explanation_en": "**Step 1 — Formula.** $\\tfrac12\\cdot10\\cdot7=35$.\n\n**Step 2 — Compute.** $35$.\n\n**Step 3 — Check.** Half of $70$. On the Bagrut, show the $\\tfrac12$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $35$.\n\n**שלב 2 — חישוב.**\n\n**שלב 3 — בדיקה.** חצי מ-$70$. בבגרות הציגו את החצי.",
+      "correct_answer": 35,
+      "answer_payload": {
+        "value": 35,
+        "tolerance": 1e-9
+      },
+      "verify": {
+        "expr": "0.5*10*7",
+        "expected": 35,
+        "tol": 1e-9
+      }
     }
   ],
   "est_minutes": 40,
