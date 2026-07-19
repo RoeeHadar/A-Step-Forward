@@ -721,6 +721,43 @@ now has a 15+ item, calibrated (~30/40/30), 4–5-kind, bilingual, SymPy-verifie
 question bank. A full scan reports **0 thin lessons (<15 q) across all 207 lesson
 files**, and math lint is clean (0/207 issues).
 
+## MILESTONE — per-track visibility invariant (this window)
+
+Beyond raw counts, closed the gap where a *served track* could see fewer than 15
+questions because higher-track items were gated away:
+
+- `sequences_geometric` 3pt: 11 → **15** visible (+4 finite-sequence items; the 4
+  infinite-series items stay correctly 4pt-gated). Total 19.
+- `inequalities` 3pt: 10 → **15** visible (+5 linear-inequality items; the 5
+  quadratic-inequality items stay 4pt-gated). Total 20.
+- `integrals_applications` 4pt: 14 → **15** visible (+1 area item; the
+  volume-of-revolution item stays 5pt-gated). Total 16.
+
+Corpus-wide sweep now reports **0 served tracks below 15 visible items** in any
+lesson. Shipped and reseeded to production (run 29676280700, success; live smoke
+200 on `/`, `/learn`, `/sign-in`).
+
+## Original-complaint audit (all resolved corpus-wide)
+
+Automated re-verification against the user's six original complaints:
+
+1. **Level + type diversity** — 0/207 lessons have <3 question kinds; 0/207 have
+   a degenerate difficulty spread (no missing easy/hard, no >55% hard / >65% easy).
+2. **Conceptual depth** — avg 2968 section words/lesson; why_matters on 207/207.
+3. **Math notation** — KaTeX/Hebrew-in-math lint: 0 issues across 207 files.
+4. **One-line solutions** — every baked item carries multi-step bilingual working.
+5. **Repeated questions in answer areas** — 0 duplicate stems within a lesson; 0
+   question stems duplicated from a worked_example.
+6. **Wrong-answer marking** — 3116/3116 baked items were CAS-verified at bake time
+   (0 rejected, 0 `needs_review` shipped as graded).
+
+## Reseed operational note
+
+The `Seed DB (one-shot)` workflow only seeds lessons/questions to Neon under
+**`target=lessons-from-json`**; the default `all` target runs the Neo4j KG step
+(currently failing on Aura DNS) and *skips* the lesson seed. Always dispatch
+content reseeds with `-f target=lessons-from-json`.
+
 ## Pending (not yet done this window)
 
 - **Within-lesson 5pt tags:** in mixed 4pt/5pt lessons (integrals_applications
