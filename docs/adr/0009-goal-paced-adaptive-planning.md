@@ -230,7 +230,23 @@ Consolidated defaults so nothing is left hand-wavy. All are reversible engineeri
   - `apps/web/src/lib/plan-pacing.ts` — pure, dependency-light engine (imports only the manifest, safe for the onboarding critical path). Computes remaining scope, `required_velocity`, `capacity` (hours + attention span), `weekly_load`, pace `status` (ahead/on_track/at_risk), `goal_readiness`, session minutes, and foundations-first `next_concepts`.
   - `apps/web/src/lib/plan-pacing.test.ts` — 17 unit tests (capacity, session, weeksUntil, status transitions, edge cases). Green (test + typecheck + lint).
   - Not yet wired into any route — pure library, no behavior change in production.
-- Streams 3–8: pending.
+- **Stream 3a (read-only pacing overlay) — done (2026-07-19):**
+  - `computePlanPacing()` in `neon-db.ts` attaches a `PlanPacing` overlay to
+    `getCurrentPlan()` (goal readiness, weeks-left, remaining scope, required
+    velocity vs capacity, pace status). Computed from profile `goal_key` +
+    concept mastery + deadline. Null when the goal has no frontier.
+  - `planPacingSchema` + optional `pacing` on `learningPlanSchema` (`@asf/schemas`).
+  - Bilingual `PacingBanner` on the plan dashboard (readiness bar + pace chip +
+    weeks-to-goal). **Read-only trajectory overlay — does NOT change concept
+    selection**, so it cannot contradict the persisted plan (avoids the
+    ADR-0008 dashboard-vs-engine hazard).
+  - Verified: typecheck + lint + `pnpm --filter @asf/web build` all green.
+  - Deferred (needs a decision): frontier-driven concept SELECTION for the
+    FIRST plan. At onboarding there's no mastery yet, so a foundations-first
+    frontier slice would start advanced-goal learners at `arithmetic`. Requires
+    goal-level baseline mastery seeding (curriculum decision) before wiring —
+    tracked for a later stream.
+- Streams 3b–8: pending.
 
 ## Related
 

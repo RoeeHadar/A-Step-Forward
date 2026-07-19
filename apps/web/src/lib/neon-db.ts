@@ -15,6 +15,7 @@ import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { resolveConceptTitles } from './concept-display-names';
+import { computePacing, hasFrontier, type PaceStatus } from './plan-pacing';
 import { goalKeyToPointsGroup, sanitizeConceptIds } from './plan-catalog';
 import {
   buildFastPlanConceptOrder,
@@ -1029,6 +1030,25 @@ export interface PlanConcept {
   recommended_bagrut: Array<{ display_name: string; file_url: string; year: number | null; exam_type: string | null }>;
 }
 
+/**
+ * Read-only goal-pacing overlay attached to the current plan (ADR-0009).
+ * Computed from the derived goal-frontier manifest + concept mastery + deadline;
+ * it frames the persisted plan against the goal (readiness, time-to-goal, pace),
+ * without changing which concepts were selected. Null when the goal has no
+ * frontier (e.g. free-text / adult goals) — the UI then hides the overlay.
+ */
+export interface PlanPacing {
+  goal_key: string;
+  status: PaceStatus;
+  /** mastered_in_frontier / frontier_size, 0..1. */
+  goal_readiness: number;
+  weeks_left: number;
+  remaining_scope: number;
+  frontier_size: number;
+  required_velocity: number;
+  capacity: number;
+}
+
 export interface LearningPlan {
   id: string;
   learner_id: string;
@@ -1039,6 +1059,8 @@ export interface LearningPlan {
   weeks: PlanWeek[];
   plan_adjustment_kind?: 'wellbeing' | 'learner_template' | 'mastery' | 'exam_window' | null;
   plan_last_adjusted_at?: string | null;
+  /** Goal-pacing overlay (ADR-0009). Present when the goal has a frontier. */
+  pacing?: PlanPacing | null;
 }
 
 export interface GeneratePlanOptions {
@@ -1961,6 +1983,49 @@ export async function getCurrentPlan(learnerId: string): Promise<LearningPlan | 
     plan_adjustment_kind: plan.plan_adjustment_kind as LearningPlan['plan_adjustment_kind'],
     plan_last_adjusted_at: plan.plan_last_adjusted_at,
     weeks,
+    pacing: computePlanPacing(profile, mastery),
+  };
+}
+
+/**
+ * Compute the read-only goal-pacing overlay for the dashboard (ADR-0009).
+ * Pure over its inputs (delegates to plan-pacing). Returns null when the goal
+ * has no derived frontier so the UI can hide the overlay gracefully.
+ */
+export function computePlanPacing(
+  profile: LearnerProfileRow | null,
+  mastery: Record<string, number>,
+): PlanPacing | null {
+  const goalKey =
+    typeof (profile?.personality_profile as { goal_key?: unknown } | null)?.goal_key === 'string'
+      ? ((profile!.personality_profile as { goal_key: string }).goal_key)
+      : null;
+  if (!hasFrontier(goalKey)) return null;
+
+  const attentionSpanMin =
+    typeof (profile?.personality_profile as { attention_span_min?: unknown } | null)
+      ?.attention_span_min === 'number'
+      ? ((profile!.personality_profile as { attention_span_min: number }).attention_span_min)
+      : (profile?.attention_span ?? null);
+
+  const p = computePacing({
+    goalKey: goalKey!,
+    masteryScores: mastery,
+    hoursPerWeek: profile?.hours_per_week ?? null,
+    attentionSpanMin,
+    deadlineISO: profile?.next_test_date ?? profile?.final_goal_date ?? null,
+  });
+  if (!p) return null;
+
+  return {
+    goal_key: p.goal_key,
+    status: p.status,
+    goal_readiness: p.goal_readiness,
+    weeks_left: p.weeks_left,
+    remaining_scope: p.remaining_scope,
+    frontier_size: p.frontier_size,
+    required_velocity: p.required_velocity,
+    capacity: p.capacity,
   };
 }
 

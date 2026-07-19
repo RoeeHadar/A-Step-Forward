@@ -37,6 +37,19 @@ export const planWeekSchema = z.object({
   status: z.string(),
 });
 
+// Read-only goal-pacing overlay (ADR-0009). Frames the plan against the goal
+// (readiness, time-to-goal, pace) without changing which concepts were selected.
+export const planPacingSchema = z.object({
+  goal_key: z.string(),
+  status: z.enum(['ahead', 'on_track', 'at_risk']),
+  goal_readiness: z.number(),
+  weeks_left: z.number(),
+  remaining_scope: z.number(),
+  frontier_size: z.number(),
+  required_velocity: z.number(),
+  capacity: z.number(),
+});
+
 export const learningPlanSchema = z.object({
   id: z.string(),
   learner_id: z.string(),
@@ -50,6 +63,7 @@ export const learningPlanSchema = z.object({
     .nullable()
     .optional(),
   plan_last_adjusted_at: z.string().nullable().optional(),
+  pacing: planPacingSchema.nullable().optional(),
 });
 
 export const quizOptionSchema = z.object({
@@ -87,6 +101,7 @@ export const quizSubmitResponseSchema = z.object({
 
 export type PlanConcept = z.infer<typeof planConceptSchema>;
 export type PlanWeek = z.infer<typeof planWeekSchema>;
+export type PlanPacing = z.infer<typeof planPacingSchema>;
 export type LearningPlan = z.infer<typeof learningPlanSchema>;
 export type QuizOption = z.infer<typeof quizOptionSchema>;
 export type QuizQuestion = z.infer<typeof quizQuestionSchema>;

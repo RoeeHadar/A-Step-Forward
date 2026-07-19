@@ -47,6 +47,13 @@ const STR = {
     week_until: (d: string) => `עד ${d}`,
     projected_note:
       'זו תוכנית מ-projected — השבועות הבאים עשויים להשתנות לפי ציונים, מבחנים והתקדמות בפועל.',
+    readiness_title: 'מוכנות ליעד',
+    readiness_pct: (p: number) => `${p}% מוכנות`,
+    pace_ahead: 'מקדים/ה את הקצב',
+    pace_on_track: 'בקצב הנכון',
+    pace_at_risk: 'מאחור מול היעד',
+    concepts_left: (n: number) => `נותרו ${n} מושגים ליעד`,
+    weeks_to_goal: (n: number) => `~${n} שבועות ליעד`,
   },
   en: {
     title: 'Your learning plan',
@@ -67,6 +74,13 @@ const STR = {
     week_until: (d: string) => `Through ${d}`,
     projected_note:
       'This is a projected plan — upcoming weeks may change based on quizzes and mastery.',
+    readiness_title: 'Goal readiness',
+    readiness_pct: (p: number) => `${p}% ready`,
+    pace_ahead: 'Ahead of pace',
+    pace_on_track: 'On track',
+    pace_at_risk: 'Behind pace',
+    concepts_left: (n: number) => `${n} concepts left to goal`,
+    weeks_to_goal: (n: number) => `~${n} weeks to goal`,
   },
 } as const;
 
@@ -175,6 +189,62 @@ function ConceptCard({ concept, lang }: { concept: PlanConcept; lang: Lang }) {
   );
 }
 
+type PlanPacing = NonNullable<LearningPlan['pacing']>;
+
+function PacingBanner({
+  pacing,
+  lang,
+  hasDeadline,
+}: {
+  pacing: PlanPacing;
+  lang: Lang;
+  hasDeadline: boolean;
+}) {
+  const t = STR[lang];
+  const isHe = lang === 'he';
+  const readinessPct = Math.round((pacing.goal_readiness ?? 0) * 100);
+
+  const paceMeta =
+    pacing.status === 'ahead'
+      ? { label: t.pace_ahead, variant: 'success' as const, bar: 'bg-emerald-500' }
+      : pacing.status === 'at_risk'
+        ? { label: t.pace_at_risk, variant: 'warning' as const, bar: 'bg-amber-500' }
+        : { label: t.pace_on_track, variant: 'secondary' as const, bar: 'bg-primary' };
+
+  return (
+    <Card className="glass-surface border-border/60" dir={isHe ? 'rtl' : 'ltr'}>
+      <CardContent className="flex flex-wrap items-center justify-between gap-4 py-4">
+        <div className="min-w-[180px] flex-1">
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <span className="text-sm font-medium">{t.readiness_title}</span>
+            <span className="text-sm text-muted-foreground">{t.readiness_pct(readinessPct)}</span>
+          </div>
+          <div className="h-2 rounded-full bg-muted">
+            <div
+              className={`h-full rounded-full transition-all ${paceMeta.bar}`}
+              style={{ width: `${readinessPct}%` }}
+              role="progressbar"
+              aria-valuenow={readinessPct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={t.readiness_title}
+            />
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t.concepts_left(pacing.remaining_scope)}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {hasDeadline ? (
+            <Badge variant="outline">{t.weeks_to_goal(pacing.weeks_left)}</Badge>
+          ) : null}
+          <Badge variant={paceMeta.variant}>{paceMeta.label}</Badge>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function formatShortDate(iso: string, lang: Lang): string {
   try {
     return new Date(iso).toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US', {
@@ -225,6 +295,14 @@ export function LearningPlanDashboard({
         ) : null}
         <p className="mt-3 text-xs text-muted-foreground">{t.projected_note}</p>
       </header>
+
+      {plan.pacing ? (
+        <PacingBanner
+          pacing={plan.pacing}
+          lang={lang}
+          hasDeadline={Boolean(nextTestDate || finalGoalDate)}
+        />
+      ) : null}
 
       {examPrep ? <ExamPrepQuizBanner ctx={examPrep} /> : null}
 
