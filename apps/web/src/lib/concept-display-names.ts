@@ -176,7 +176,15 @@ export function resolveConceptTitles(
   conceptId: string,
   lessonMeta?: { title_en: string | null; title_he: string | null } | null,
 ): ConceptTitles {
-  const canonical = resolveCanonicalTitles(conceptId);
+  // Never throw: a single unresolved/exotic id must not take down a whole
+  // page that maps over many concepts (e.g. /app/progress). Fall back to a
+  // humanized id instead of propagating.
+  let canonical: ConceptTitles;
+  try {
+    canonical = resolveCanonicalTitles(conceptId);
+  } catch {
+    canonical = { title_en: humanizeId(conceptId), title_he: null };
+  }
 
   if (lessonMeta?.title_en) {
     return {

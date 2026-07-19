@@ -20,6 +20,7 @@ import {
   getRecentActivity,
 } from '@/lib/neon-db';
 import { conceptMatchesSubjects, resolveConceptSubject } from '@/lib/concept-scope';
+import { resolveConceptTitles } from '@/lib/concept-display-names';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -39,6 +40,25 @@ export async function GET(req: Request) {
   const params = new URL(req.url).searchParams;
   const probe = params.get('probe') === '1';
   const progressProbe = params.get('progress') === '1';
+  const titlesProbe = params.get('titles') === '1';
+
+  // ---- titles probe: resolveConceptTitles() is the only function call in the
+  // synchronous post-Promise.all block of getProgressFromNeon. If it throws for
+  // any of the learner's concept ids, the whole snapshot is swallowed -> zeros.
+  // After the resiliency fix this should report throws: [] for every id.
+  let titlesDiag: Row | undefined;
+  if (titlesProbe) {
+    const rows = (await s`SELECT concept_id FROM concept_mastery WHERE learner_id = ${learnerId}`) as Array<{ concept_id: string }>;
+    const threw: Array<{ concept_id: string; error: string }> = [];
+    for (const r of rows) {
+      try {
+        resolveConceptTitles(r.concept_id);
+      } catch (err) {
+        threw.push({ concept_id: r.concept_id, error: (err as Error)?.message ?? String(err) });
+      }
+    }
+    titlesDiag = { checked: rows.length, threw };
+  }
 
   // ---- progress probe: getProgressFromNeon swallows its own errors and returns
   // an empty snapshot, so we run each of its Promise.all members individually to
@@ -235,6 +255,7 @@ export async function GET(req: Request) {
     test_attempts: testAttempts,
     other_quiz_tables: otherQuizzes,
     progress_diag: progressDiag ?? 'add ?progress=1 to diagnose why Progress shows zeros',
+    titles_diag: titlesDiag ?? 'add ?titles=1 to check resolveConceptTitles per concept',
     write_probes: writeProbes ?? 'add ?probe=1 to run write-path probes (DDL + chat_turns roundtrip)',
     hint: 'If concept_mastery.total_rows > 0 but shown_after_scope_filter is 0 (or much smaller), the SCOPE FILTER is hiding your progress. If total_rows is 0/stale, it is a WRITE-path bug.',
   });

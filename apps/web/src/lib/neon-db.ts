@@ -14,6 +14,7 @@ import { randomUUID } from 'node:crypto';
 import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
+import { logger } from './logger';
 import { resolveConceptTitles } from './concept-display-names';
 import {
   computePacing,
@@ -3932,11 +3933,19 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
       })
       .slice(0, 25)
       .map((r) => {
-        const titles = resolveConceptTitles(r.concept_id);
+        let titleEn = r.concept_id;
+        let titleHe: string | null = null;
+        try {
+          const titles = resolveConceptTitles(r.concept_id);
+          titleEn = titles.title_en;
+          titleHe = titles.title_he;
+        } catch {
+          // Defensive: a single unresolved concept must never blank the page.
+        }
         return {
           concept_id: r.concept_id,
-          concept_name: titles.title_en,
-          concept_name_he: titles.title_he,
+          concept_name: titleEn,
+          concept_name_he: titleHe,
           current_score: Number(r.score),
           history: r.last_activity
             ? [{ date: r.last_activity.slice(0, 10), score: Number(r.score) }]
@@ -3956,9 +3965,11 @@ export async function getProgressFromNeon(learnerId: string): Promise<ProgressSn
       recent_activity,
     };
   } catch (err) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('[neon-db] getProgressFromNeon failed', err);
-    }
+    // Log in production too — a silent empty snapshot here is exactly the
+    // "Progress shows all zeros despite real mastery data" failure mode.
+    logger.error('[neon-db] getProgressFromNeon failed — returning empty snapshot', {
+      err: String(err),
+    });
     return emptyProgressSnapshot();
   }
 }
