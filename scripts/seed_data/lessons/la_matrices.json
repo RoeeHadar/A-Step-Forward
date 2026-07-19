@@ -230,151 +230,342 @@
       "body_he_md": "- כפל מטריצות: $c_{ij}=\\sum_l a_{il}b_{lj}$; הממדות הפנימיות חייבות להתאים; התוצאה בגודל החיצוני.\n- **אי-קומוטטיביות:** $AB\\neq BA$ בכלל — תמיד לאמת לפני שינוי סדר כפולות.\n- **אסוציאטיביות:** $(AB)C=A(BC)$ — אפשר להזיז סוגריים בחופשיות.\n- **טרנספוז:** $(AB)^T=B^TA^T$ — הסדר מתהפך; גם $(A+B)^T=A^T+B^T$.\n- **הופכי:** $(AB)^{-1}=B^{-1}A^{-1}$ — הסדר מתהפך; נוסחת $2\\times2$ דרך $\\det=ad-bc$.\n- מטריצה סינגולרית אם ורק אם $\\det A=0$.\n- $AB=0$ לא גורר $A=0$ או $B=0$ — למטריצות יש מחלקי אפס.\n\n**מסקנה:** התייחסו לכפל מטריצות כהרכבה של פונקציות — הסדר חשוב, וכל טרנספוז או הופכי של מכפלה הופך את הסדר."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "matrix_multiplication",
+      "matrix_operations"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Compute $AB$ for $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
-      "stem_he": "חשב את $AB$ עבור $A=\\begin{pmatrix}2&-1\\\\0&3\\end{pmatrix}$, $B=\\begin{pmatrix}1&4\\\\-2&1\\end{pmatrix}$.",
+      "stem_en": "The identity matrix has:",
+      "stem_he": "מטריצת היחידה כוללת:",
+      "explanation_en": "**Identity: $1$s on the diagonal.**\n\n**Answer:** ones on the diagonal, zeros elsewhere.",
+      "explanation_he": "**יחידה: $1$ על האלכסון.**\n\n**תשובה:** אחדות על האלכסון, אפסים בשאר.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$AB=\\begin{pmatrix}2+2&8-1\\\\0-6&0+3\\end{pmatrix}=\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
+        "options_en": [
+          "$\\text{ones on the diagonal, zeros elsewhere}$",
+          "$\\text{all ones}$",
+          "$\\text{all zeros}$",
+          "$\\text{ones off the diagonal}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{ones on the diagonal, zeros elsewhere}$",
+          "$\\text{all ones}$",
+          "$\\text{all zeros}$",
+          "$\\text{ones off the diagonal}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nApply the row-by-column dot product rule. Row 1 of $A$ is $(2,-1)$; column 1 of $B$ is $(1,-2)^T$: $c_{11}=2(1)+(-1)(-2)=4$. Column 2 of $B$ is $(4,1)^T$: $c_{12}=2(4)+(-1)(1)=7$. Row 2 of $A$ is $(0,3)$: $c_{21}=0(1)+3(-2)=-6$, $c_{22}=0(4)+3(1)=3$. Result: $\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**How to think about it:**\nFor $2\\times 2$ multiplication, compute four dot products — one per entry. Write each row of $A$ and each column of $B$ explicitly before multiplying.\n\n**Common slip:**\nMultiplying entry-by-entry ($a_{ij}b_{ij}$) instead of row-by-column. Another slip: sign error on $(-1)(-2)=+2$ in position $(1,1)$.\n\n**Exam tip:**\nLabel entries $c_{11}, c_{12}, c_{21}, c_{22}$ before computing — examiners award method marks for correct setup even if one arithmetic step fails.",
-      "explanation_he": "**למה זה נכון:**\nיישמו כלל מכפלה פנימית שורה-עמודה. שורה 1 של $A$ היא $(2,-1)$; עמודה 1 של $B$ היא $(1,-2)^T$: $c_{11}=2(1)+(-1)(-2)=4$. עמודה 2 של $B$ היא $(4,1)^T$: $c_{12}=2(4)+(-1)(1)=7$. שורה 2 של $A$ היא $(0,3)$: $c_{21}=0(1)+3(-2)=-6$, $c_{22}=0(4)+3(1)=3$. תוצאה: $\\begin{pmatrix}4&7\\\\-6&3\\end{pmatrix}$.\n\n**איך לחשוב על זה:**\nבכפל $2\\times 2$, חשבו ארבע מכפלות פנימיות — אחת לכל כניסה. כתבו כל שורה של $A$ וכל עמודה של $B$ במפורש לפני הכפל.\n\n**טעות נפוצה:**\nכפל רכיב-רכיב ($a_{ij}b_{ij}$) במקום שורה-עמודה. טעות נוספת: סימן שגוי ב-$(-1)(-2)=+2$ בכניסה $(1,1)$.\n\n**טיפ לבחינה:**\nסמנו $c_{11}, c_{12}, c_{21}, c_{22}$ לפני החישוב — נקודות שיטה על הגדרה נכונה גם אם שלב חשבון אחד נכשל.",
-      "skill_atoms": []
+      "source_item_id": "071a5070-f1cc-515c-8390-f206dd7e30d8",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{ones on the diagonal, zeros elsewhere}$",
+        "$\\text{all ones}$",
+        "$\\text{all zeros}$",
+        "$\\text{ones off the diagonal}$"
+      ],
+      "options_he": [
+        "$\\text{ones on the diagonal, zeros elsewhere}$",
+        "$\\text{all ones}$",
+        "$\\text{all zeros}$",
+        "$\\text{ones off the diagonal}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Find $(A+B)^T$ for $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
-      "stem_he": "מצא $(A+B)^T$ עבור $A=\\begin{pmatrix}1&3\\\\0&-2\\end{pmatrix}$, $B=\\begin{pmatrix}-1&0\\\\4&2\\end{pmatrix}$.",
+      "stem_en": "Find the trace of $\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את העקבה של $\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$.",
+      "explanation_en": "**Trace $=1+4=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**עקבה $=1+4=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nFirst add: $A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. Then transpose: swap rows and columns to get $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$. Alternatively, use $(A+B)^T=A^T+B^T$: $A^T=\\begin{pmatrix}1&0\\\\3&-2\\end{pmatrix}$, $B^T=\\begin{pmatrix}-1&4\\\\0&2\\end{pmatrix}$, sum gives the same matrix.\n\n**How to think about it:**\nTranspose distributes over addition — you can add first then transpose, or transpose each matrix separately then add. Both paths must agree; use whichever is faster.\n\n**Common slip:**\nTransposing only one matrix before adding: computing $A^T+B$ instead of $A^T+B^T$. Another slip: forgetting that $(A+B)^T \\neq A^T+B$ — the second term also needs transposing.\n\n**Exam tip:**\nWhen asked for $(A+B)^T$, check whether adding first or transposing first is easier. For $2\\times 2$ with simple entries, direct addition then transpose is usually faster.",
-      "explanation_he": "**למה זה נכון:**\nקודם חיבור: $A+B=\\begin{pmatrix}0&3\\\\4&0\\end{pmatrix}$. אחר כך טרנספוז: החלפת שורות ועמודות נותנת $(A+B)^T=\\begin{pmatrix}0&4\\\\3&0\\end{pmatrix}$. לחלופין, $(A+B)^T=A^T+B^T$: $A^T=\\begin{pmatrix}1&0\\\\3&-2\\end{pmatrix}$, $B^T=\\begin{pmatrix}-1&4\\\\0&2\\end{pmatrix}$, הסכום נותן אותה מטריצה.\n\n**איך לחשוב על זה:**\nטרנספוז מתפזר על חיבור — אפשר לחבר קודם ואז לטרנספוז, או לטרנספוז כל מטריצה בנפרד ואז לחבר. שני הנתיבים חייבים להסכים; השתמשו במהיר יותר.\n\n**טעות נפוצה:**\nטרנספוז רק של $A$ לפני חיבור: $A^T+B$ במקום $A^T+B^T$. טעות נוספת: $(A+B)^T \\neq A^T+B$ — גם $B$ צריך טרנספוז.\n\n**טיפ לבחינה:**\nכשמבקשים $(A+B)^T$, בדקו האם חיבור קודם או טרנספוז קודם קל יותר. ל-$2\\times 2$ עם כניסות פשוטות, חיבור ישיר ואז טרנספוז בדרך כלל מהיר.",
-      "skill_atoms": []
+      "source_item_id": "9207b127-ac03-53a0-91bb-f239a674b7a1",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Find $A^{-1}$ for $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, or show it doesn't exist.",
-      "stem_he": "מצא $A^{-1}$ עבור $A=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$, או הראה שאינה קיימת.",
+      "stem_en": "True or False: matrix addition is commutative, $A+B=B+A$.",
+      "stem_he": "נכון או לא נכון: חיבור מטריצות חילופי, $A+B=B+A$.",
+      "explanation_en": "**Entrywise addition is commutative** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**חיבור איבר-איבר חילופי** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\det A = 6-5=1\\neq 0$. $A^{-1}=\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "3"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nCompute $\\det A = (3)(2)-(1)(5)=6-5=1\\neq 0$, so $A$ is invertible. Apply the $2\\times 2$ inverse formula: $A^{-1}=\\frac{1}{1}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$. Verify: $AA^{-1}=\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}=I$. $\\checkmark$\n\n**How to think about it:**\nAlways compute $\\det A$ first. If $\\det=0$, stop — no inverse exists. If $\\det\\neq 0$, swap diagonal entries, negate off-diagonals, divide by $\\det$.\n\n**Common slip:**\nUsing $ad+bc$ instead of $ad-bc$ for the determinant. Another slip: forgetting to divide by $\\det A$ — the adjugate alone is not the inverse.\n\n**Exam tip:**\nWrite the template $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$ before substituting. When $\\det=1$, the inverse equals the adjugate — a quick sanity check.",
-      "explanation_he": "**למה זה נכון:**\nחשבו $\\det A = (3)(2)-(1)(5)=6-5=1\\neq 0$, לכן $A$ הפיכה. יישמו נוסחת הופכי $2\\times 2$: $A^{-1}=\\frac{1}{1}\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$. אימות: $AA^{-1}=I$. $\\checkmark$\n\n**איך לחשוב על זה:**\nתמיד חשבו $\\det A$ קודם. אם $\\det=0$, עצרו — אין הופכי. אם $\\det\\neq 0$, החליפו אלכסון, שינו סימן לכניסות מחוץ לאלכסון, חלקו ב-$\\det$.\n\n**טעות נפוצה:**\n$ad+bc$ במקום $ad-bc$ לדטרמיננטה. טעות נוספת: שכחת חלוקה ב-$\\det A$ — הנלווה לבדה אינה ההופכי.\n\n**טיפ לבחינה:**\nכתבו $A^{-1}=\\frac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$ לפני הצבה. כש-$\\det=1$, ההופכי שווה לנלווה — בדיקת sanity מהירה.",
-      "skill_atoms": []
+      "source_item_id": "15957a9f-14c7-53ea-b30d-73009315dcc4",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Show that $A=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$ has no inverse.",
-      "stem_he": "הראה שלמטריצה $A=\\begin{pmatrix}2&4\\\\1&2\\end{pmatrix}$ אין הופכי.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find entry $(1,1)$ of $\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$.",
+      "stem_he": "מצאו את איבר $(1,1)$ של $\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$.",
+      "explanation_en": "**Step 1 — Row $1$ of first matrix.** $(1,2)$.\n\n**Step 2 — Column $1$ of second.** $(0,1)$.\n\n**Step 3 — Dot.** $1\\cdot0+2\\cdot1=2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**שלב 1 — שורה $1$.** $(1,2)$.\n\n**שלב 2 — עמודה $1$.** $(0,1)$.\n\n**שלב 3 — מכפלה.** $0+2=2$.\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\det A = 4-4=0$, so $A$ is singular (not invertible)",
-          "0$, so $A$ is singular (not invertible)",
-          "0"
+        "steps_en": [
+          "**Step 1 — Row $1$ of first matrix.** $(1,2)$.",
+          "**Step 2 — Column $1$ of second.** $(0,1)$.",
+          "**Step 3 — Dot.** $1\\cdot0+2\\cdot1=2$.",
+          "**Answer:** $2$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — שורה $1$.** $(1,2)$.",
+          "**שלב 2 — עמודה $1$.** $(0,1)$.",
+          "**שלב 3 — מכפלה.** $0+2=2$.",
+          "**תשובה:** $2$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nCompute $\\det A = (2)(2)-(4)(1)=4-4=0$. By Theorem 4 (invertibility criterion), $\\det(A)=0$ means $A$ is **singular** — no matrix $A^{-1}$ exists. Geometrically, columns $(2,1)^T$ and $(4,2)^T$ are parallel (the second is $2\\times$ the first), so the linear map collapses a 2-D region to a line.\n\n**How to think about it:**\nTo show non-invertibility, one line suffices: compute $\\det$ and show it equals zero. Alternatively, exhibit a non-zero vector $\\vec{x}$ with $A\\vec{x}=\\vec{0}$ (kernel argument).\n\n**Common slip:**\nAttempting to apply the inverse formula anyway and getting division by zero. Another slip: saying 'no inverse' without showing $\\det=0$ or linear dependence.\n\n**Exam tip:**\nFor 'show no inverse' questions, write '$\\det A = ad-bc = \\ldots = 0$, therefore singular' — two lines earn full marks on most Israeli university exams.",
-      "explanation_he": "**למה זה נכון:**\nחשבו $\\det A = (2)(2)-(4)(1)=4-4=0$. לפי קריטריון ההפיכות, $\\det(A)=0$ פירושו $A$ **סינגולרית** — אין $A^{-1}$. גיאומטרית, העמודות $(2,1)^T$ ו-$(4,2)^T$ מקבילות (השנייה כפולה של הראשונה), ולכן ההעתקה מכווצת אזור דו-ממדי לקו.\n\n**איך לחשוב על זה:**\nלהוכיח אי-הפיכות, מספיק שורה אחת: חשבו $\\det$ והראו שהוא אפס. לחלופין, מצאו $\\vec{x}\\neq\\vec{0}$ עם $A\\vec{x}=\\vec{0}$ (טיעון גרעין).\n\n**טעות נפוצה:**\nיישום נוסחת ההופכי בכל זאת וחלוקה באפס. טעות נוספת: 'אין הופכי' בלי להראות $\\det=0$ או תלות לינארית.\n\n**טיפ לבחינה:**\nבשאלות 'הראה שאין הופכי', כתבו '$\\det A = ad-bc = \\ldots = 0$, לכן סינגולרית' — שתי שורות מרוויחות נקודות מלאות ברוב הבחינות.",
-      "skill_atoms": []
+      "source_item_id": "bd165e67-1e2f-5367-acc8-cfc23c9afb86",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Find matrices $A$ and $B$ such that $AB = 0$ but $A\\neq 0$ and $B\\neq 0$ (zero divisors).",
-      "stem_he": "מצא מטריצות $A$ ו-$B$ כך ש-$AB = 0$ אבל $A\\neq 0$ ו-$B\\neq 0$ (מחלקי אפס).",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "For $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}5&6\\\\7&8\\end{pmatrix}$, find entry $(1,1)$ of $A+B$.",
+      "stem_he": "עבור $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}5&6\\\\7&8\\end{pmatrix}$, מצאו את איבר $(1,1)$ של $A+B$.",
+      "explanation_en": "**$1+5=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$1+5=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nExample: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. Then $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\nTake $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$ (projects onto the $x$-axis) and $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$ (projects onto the $y$-axis, then zeroes the $y$-component). Both are non-zero, yet $AB=\\begin{pmatrix}0&0\\\\0&0\\end{pmatrix}=0$. This shows matrices can be **zero divisors** — unlike real numbers.\n\n**How to think about it:**\nLook for projection or rank-deficiency patterns. If $A$ maps everything to a proper subspace and $B$ maps that subspace to zero, their product vanishes.\n\n**Common slip:**\nAssuming $AB=0$ forces $A=0$ or $B=0$, importing real-number intuition. Another slip: giving matrices that do not actually multiply to zero — always verify the product.\n\n**Exam tip:**\nMemorise one standard pair: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. It appears in fill-in-the-blank questions about zero divisors.",
-      "explanation_he": "**למה זה נכון:**\nקחו $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$ (הטלה על ציר $x$) ו-$B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$ (הטלה על ציר $y$). שתיהן לא-אפסיות, אך $AB=0$. זה מראה שמטריצות יכולות להיות **מחלקי אפס** — בניגוד למספרים ממשיים.\n\n**איך לחשוב על זה:**\nחפשו דפוסי הטלה או דרגה חסרה. אם $A$ מעבירה הכל לתת-מרחב ממשי ו-$B$ מאפסת את התת-מרחב, המכפלה מתאפסת.\n\n**טעות נפוצה:**\nהנחה ש-$AB=0$ גוררת $A=0$ או $B=0$, ייבוא אינטואיציה ממספרים. טעות נוספת: מטריצות שלא באמת מכפילות לאפס — תמיד אמתו את המכפלה.\n\n**טיפ לבחינה:**\nשננו זוג סטנדרטי: $A=\\begin{pmatrix}1&0\\\\0&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&0\\\\1&0\\end{pmatrix}$. הוא מופיע בשאלות השלמה על מחלקי אפס.",
-      "skill_atoms": []
+      "source_item_id": "7fe397a0-9aee-586b-b1e1-5dce0ed69726",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $A^3$ for $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ and deduce a formula for $A^n$.",
-      "stem_he": "חשב את $A^3$ עבור $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ ומצא נוסחה ל-$A^n$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find entry $(1,2)$ of $3\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את איבר $(1,2)$ של $3\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$.",
+      "explanation_en": "**$3\\cdot2=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$3\\cdot2=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$. By induction, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 6
       },
-      "explanation_en": "**Why this is correct:**\n$A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ is upper triangular with $1$s on the diagonal. $A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$ — the $(1,2)$ entry grows by $1$ each power. By induction: $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$. Base $n=1$ holds; if $A^k=\\begin{pmatrix}1&k\\\\0&1\\end{pmatrix}$, then $A^{k+1}=A^k\\cdot A=\\begin{pmatrix}1&k+1\\\\0&1\\end{pmatrix}$.\n\n**How to think about it:**\nFor nilpotent-ish or unipotent matrices (diagonal all $1$s), compute $A^2, A^3$ and spot the pattern in off-diagonal entries before attempting induction.\n\n**Common slip:**\nSquaring entry-wise: $(1,1,0,1)^2\\neq(1,1,0,1)$. Matrix powers require matrix multiplication. Another slip: wrong induction step — forgetting that $A\\cdot A^n \\neq A^{n+1}$ unless you multiply correctly.\n\n**Exam tip:**\nWhen asked for $A^n$, compute $A^2$ and $A^3$, guess the formula, then prove by induction. Examiners give partial credit for the pattern even if the proof is incomplete.",
-      "explanation_he": "**למה זה נכון:**\n$A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ משולשית עליונה עם $1$ על האלכסון. $A^2=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$, $A^3=\\begin{pmatrix}1&3\\\\0&1\\end{pmatrix}$ — הכניסה $(1,2)$ גדלה ב-$1$ בכל חזקה. באינדוקציה: $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$. בסיס $n=1$ מתקיים; אם $A^k=\\begin{pmatrix}1&k\\\\0&1\\end{pmatrix}$, אז $A^{k+1}=\\begin{pmatrix}1&k+1\\\\0&1\\end{pmatrix}$.\n\n**איך לחשוב על זה:**\nלמטריצות עם $1$ על האלכסון, חשבו $A^2, A^3$ וזהו דפוס בכניסות מחוץ לאלכסון לפני אינדוקציה.\n\n**טעות נפוצה:**\nחזקה רכיב-רכיב במקום כפל מטריצות. טעות נוספת: שלב אינדוקציה שגוי — $A\\cdot A^n$ דורש כפל נכון.\n\n**טיפ לבחינה:**\nכשמבקשים $A^n$, חשבו $A^2$ ו-$A^3$, נחשו נוסחה, הוכיחו באינדוקציה. נקודות חלקיות על הדפוס גם אם ההוכחה לא שלמה.",
-      "skill_atoms": []
+      "source_item_id": "4626f061-2af8-597f-b1c9-f85fee28991c",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Verify directly that $(AB)^T = B^T A^T$ for $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) and $B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
-      "stem_he": "אמת ישירות ש-$(AB)^T = B^T A^T$ עבור $A=\\begin{pmatrix}1&2\\end{pmatrix}$ (1×2) ו-$B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ (2×1).",
+      "stem_en": "Matrix multiplication is:",
+      "stem_he": "כפל מטריצות הוא:",
+      "explanation_en": "**In general $AB\\neq BA$.**\n\n**Answer:** not generally commutative.",
+      "explanation_he": "**בדרך כלל $AB\\neq BA$.**\n\n**תשובה:** לא חילופי בדרך כלל.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$AB=11$ (scalar/1×1). $(AB)^T=11$. $B^T=(3,4)$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$. $B^TA^T=(3)(1)+(4)(2)=11$. Equal. $\\checkmark$",
-          "11$. Equal. $\\checkmark$",
-          "11"
+        "options_en": [
+          "$\\text{not generally commutative}$",
+          "$\\text{always commutative}$",
+          "$\\text{always undefined}$",
+          "$\\text{the same as addition}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{not generally commutative}$",
+          "$\\text{always commutative}$",
+          "$\\text{always undefined}$",
+          "$\\text{the same as addition}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$A=\\begin{pmatrix}1&2\\end{pmatrix}$ is $1\\times 2$, $B=\\begin{pmatrix}3\\\\4\\end{pmatrix}$ is $2\\times 1$, so $AB$ is $1\\times 1$: $AB=(1)(3)+(2)(4)=11$. As a scalar, $(AB)^T=11$. On the right: $B^T=(3,4)$ is $1\\times 2$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$ is $2\\times 1$, so $B^TA^T=(3)(1)+(4)(2)=11$. Both sides equal $11$. $\\checkmark$\n\n**How to think about it:**\nThe transpose law $(AB)^T=B^TA^T$ holds for **any** compatible sizes, including when the product is a $1\\times 1$ scalar. Treat scalars as $1\\times 1$ matrices.\n\n**Common slip:**\nComputing $A^TB^T$ instead of $B^TA^T$ — reversing the reversal. Another slip: dimension mismatch when transposing row/column vectors.\n\n**Exam tip:**\nWhen verifying transpose laws with vectors, write dimensions explicitly: $A$ is $1\\times 2$, $A^T$ is $2\\times 1$. Dimension tracking prevents order errors.",
-      "explanation_he": "**למה זה נכון:**\n$A$ הוא $1\\times 2$, $B$ הוא $2\\times 1$, אז $AB$ הוא $1\\times 1$: $AB=(1)(3)+(2)(4)=11$. כסקalar, $(AB)^T=11$. בצד ימין: $B^T=(3,4)$ הוא $1\\times 2$, $A^T=\\begin{pmatrix}1\\\\2\\end{pmatrix}$ הוא $2\\times 1$, אז $B^TA^T=(3)(1)+(4)(2)=11$. שני הצדדים שווים ל-$11$. $\\checkmark$\n\n**איך לחשוב על זה:**\nחוק הטרנספוז $(AB)^T=B^TA^T$ חל על **כל** גדלים תואמים, כולל כשהמכפלה היא סקalar $1\\times 1$. התייחסו לסקalarים כמטריצות $1\\times 1$.\n\n**טעות נפוצה:**\nחישוב $A^TB^T$ במקום $B^TA^T$ — היפוך כפול. טעות נוספת: אי-התאמת ממדים בטרנספוז וקטורי שורה/עמודה.\n\n**טיפ לבחינה:**\nבאימות חוקי טרנספוז עם וקטורים, כתבו ממדים במפורש: $A$ הוא $1\\times 2$, $A^T$ הוא $2\\times 1$. מעקב ממדים מונע טעויות סדר.",
-      "skill_atoms": []
+      "source_item_id": "921d11bf-2997-52ce-9104-29353486761b",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{not generally commutative}$",
+        "$\\text{always commutative}$",
+        "$\\text{always undefined}$",
+        "$\\text{the same as addition}$"
+      ],
+      "options_he": [
+        "$\\text{not generally commutative}$",
+        "$\\text{always commutative}$",
+        "$\\text{always undefined}$",
+        "$\\text{the same as addition}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Let $A$ be symmetric ($A^T=A$) and $B$ symmetric. Is $AB$ always symmetric? If not, give a counterexample.",
-      "stem_he": "יהי $A$ סימטרית ($A^T=A$) ו-$B$ סימטרית. האם $AB$ תמיד סימטרית? אם לא, תן דוגמת נגד.",
+      "stem_en": "For $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}5&6\\\\7&8\\end{pmatrix}$, find entry $(1,1)$ of $AB$.",
+      "stem_he": "עבור $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}5&6\\\\7&8\\end{pmatrix}$, מצאו את איבר $(1,1)$ של $AB$.",
+      "explanation_en": "**Row $1$ times column $1$: $5+14=19$.**\n\n**Answer:** $19$.",
+      "explanation_he": "**שורה $1$ כפול עמודה $1$: $5+14=19$.**\n\n**תשובה:** $19$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Not always. $(AB)^T=B^TA^T=BA$. For $AB$ to be symmetric we need $AB=BA$. Counterexample: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$. $AB=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $BA=\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. $AB\\neq BA$, so $AB$ not symmetric",
-          "\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. $AB\\neq BA$, so $AB$ not symmetric",
-          "1"
-        ],
-        "case_sensitive": false
+        "value": 19
       },
-      "explanation_en": "**Why this is correct:**\nIf $AB$ were symmetric, we would need $(AB)^T=AB$. But $(AB)^T=B^TA^T=BA$ (using $A^T=A$, $B^T=B$). So $AB$ is symmetric iff $AB=BA$. Counterexample: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ — both symmetric. $AB=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ but $BA=\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. Since $AB\\neq BA$, $AB$ is not symmetric.\n\n**How to think about it:**\nThe product of symmetric matrices is symmetric **only when they commute**. Test symmetry via $(AB)^T \\stackrel{?}{=} AB$, which reduces to checking $AB \\stackrel{?}{=} BA$.\n\n**Common slip:**\nAssuming symmetry is inherited by products — it is not. Another slip: verifying $A^T=A$ and $B^T=B$ but not checking the product.\n\n**Exam tip:**\nFor 'is $AB$ symmetric?' questions, compute $(AB)^T$ and compare to $AB$ directly, or check if $AB=BA$. Either approach works; pick the one with fewer entries to compare.",
-      "explanation_he": "**למה זה נכון:**\nאם $AB$ הייתה סימטרית, היינו צריכים $(AB)^T=AB$. אבל $(AB)^T=B^TA^T=BA$ (כי $A^T=A$, $B^T=B$). לכן $AB$ סימטרית אם ורק אם $AB=BA$. דוגמת נגד: $A=\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$, $B=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ — שתיהן סימטריות. $AB=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ אך $BA=\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$. מכיוון $AB\\neq BA$, $AB$ אינה סימטרית.\n\n**איך לחשוב על זה:**\nמכפלה של מטריצות סימטריות סימטרית **רק כשהן מתחלפות**. בדקו סימטריה דרך $(AB)^T \\stackrel{?}{=} AB$, שמצטמצם ל-$AB \\stackrel{?}{=} BA$.\n\n**טעות נפוצה:**\nהנחה שסימטריה עוברת למכפלות — לא עוברת. טעות נוספת: אימות $A^T=A$ ו-$B^T=B$ בלי לבדוק את המכפלה.\n\n**טיפ לבחינה:**\nבשאלות 'האם $AB$ סימטרית?', חשבו $(AB)^T$ והשוו ל-$AB$ ישירות, או בדקו $AB=BA$. בחרו את הגישה עם פחות כניסות להשוואה.",
-      "skill_atoms": []
+      "source_item_id": "37e8047d-3fd3-5d4d-bb29-ef24e752c43c",
+      "points_level_min": "5pt",
+      "correct_answer": "19"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For the same $A,B$, find entry $(1,2)$ of $AB$.",
+      "stem_he": "עבור אותם $A,B$, מצאו את איבר $(1,2)$ של $AB$.",
+      "explanation_en": "**$6+16=22$.**\n\n**Answer:** $22$.",
+      "explanation_he": "**$6+16=22$.**\n\n**תשובה:** $22$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
+      "answer_payload": {
+        "value": 22
+      },
+      "source_item_id": "853f4731-310d-5aef-b923-0d437b954294",
+      "points_level_min": "5pt",
+      "correct_answer": "22"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "For the same $A,B$, find entry $(2,1)$ of $AB$.",
+      "stem_he": "עבור אותם $A,B$, מצאו את איבר $(2,1)$ של $AB$.",
+      "explanation_en": "**$15+28=43$.**\n\n**Answer:** $43$.",
+      "explanation_he": "**$15+28=43$.**\n\n**תשובה:** $43$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
+      "answer_payload": {
+        "value": 43
+      },
+      "source_item_id": "124e57c6-0e76-59a0-a2a3-faaa443a92fa",
+      "points_level_min": "5pt",
+      "correct_answer": "43"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the trace of $\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&5\\end{pmatrix}$.",
+      "stem_he": "מצאו את העקבה של $\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&5\\end{pmatrix}$.",
+      "explanation_en": "**$2+3+5=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$2+3+5=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "71f88887-b4d5-58ff-8107-e4ad917a63f6",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: $(A+B)^{T}=A^{T}+B^{T}$.",
+      "stem_he": "נכון או לא נכון: $(A+B)^{T}=A^{T}+B^{T}$.",
+      "explanation_en": "**Transpose distributes over addition** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**השחלוף מתפלג על חיבור** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "matrix_operations"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "b2d0dcef-3187-5aa9-8a8d-0ef1ac613ea3",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}5&6\\\\7&8\\end{pmatrix}$, find entry $(2,2)$ of $AB$.",
+      "stem_he": "עבור $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, $B=\\begin{pmatrix}5&6\\\\7&8\\end{pmatrix}$, מצאו את איבר $(2,2)$ של $AB$.",
+      "explanation_en": "**$18+32=50$.**\n\n**Answer:** $50$.",
+      "explanation_he": "**$18+32=50$.**\n\n**תשובה:** $50$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
+      "answer_payload": {
+        "value": 50
+      },
+      "source_item_id": "6b746c7a-bd1e-5604-9258-16f67c7e159d",
+      "points_level_min": "5pt",
+      "correct_answer": "50"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, find the trace of $A^2$.",
+      "stem_he": "עבור $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, מצאו את עקבת $A^2$.",
+      "explanation_en": "**$A^2=\\begin{pmatrix}7&10\\\\15&22\\end{pmatrix}$; trace $=7+22=29$.**\n\n**Answer:** $29$.",
+      "explanation_he": "**$A^2=\\begin{pmatrix}7&10\\\\15&22\\end{pmatrix}$; עקבה $=29$.**\n\n**תשובה:** $29$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
+      "answer_payload": {
+        "value": 29
+      },
+      "source_item_id": "abcbe757-4e81-5ac1-af77-3613222908e0",
+      "points_level_min": "5pt",
+      "correct_answer": "29"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "For $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, find entry $(2,1)$ of $A^2$.",
+      "stem_he": "עבור $A=\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$, מצאו את איבר $(2,1)$ של $A^2$.",
+      "explanation_en": "**$3+12=15$.**\n\n**Answer:** $15$.",
+      "explanation_he": "**$3+12=15$.**\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "matrix_multiplication"
+      ],
+      "answer_payload": {
+        "value": 15
+      },
+      "source_item_id": "835ddd7e-25d0-55cb-910e-cce9a55c41b2",
+      "points_level_min": "5pt",
+      "correct_answer": "15"
     }
   ],
   "est_minutes": 40,

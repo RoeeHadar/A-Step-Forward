@@ -232,150 +232,366 @@
       "body_he_md": "- **CI $(1-\\alpha)$** נותן טווח ערכים סבירים; **הסתברות כיסוי** של ההליך היא $1-\\alpha$.\n- **ממוצע ($\\sigma$ ידוע):** $\\bar{x}\\pm z_{\\alpha/2}\\sigma/\\sqrt{n}$. **$\\sigma$ לא ידוע:** $t_{n-1}$ עם $s$.\n- **פרופורציה:** $\\hat{p}\\pm z_{\\alpha/2}\\sqrt{\\hat{p}(1-\\hat{p})/n}$, תקף כש-$n\\hat{p}$ ו-$n(1-\\hat{p})$ $\\geq 5$.\n- **רוחב** $=2E$ קטן כש-$n$ גדל ($\\propto 1/\\sqrt{n}$) או רמת סמך יורדת.\n- **גודל מדגם:** $n\\geq(z_{\\alpha/2}\\sigma/E_0)^2$ לממוצע; $n\\geq(z_{\\alpha/2}/(2E_0))^2$ שמרני לפרופורציה — תמיד עיגול למעלה.\n- **דואליות CI–מבחן:** דחה $H_0:\\mu=\\mu_0$ אמ\"מ $\\mu_0$ מחוץ ל-CI ברמת $(1-\\alpha)$."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "confidence_interval",
+      "standard_error"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Build a 90% CI for $\\mu$ given $\\bar{x}=120$, $\\sigma=15$, $n=225$.",
-      "stem_he": "בנה CI 90% ל-$\\mu$ עבור $\\bar{x}=120$, $\\sigma=15$, $n=225$.",
+      "stem_en": "A $95\\%$ confidence interval uses a $z$-value of approximately:",
+      "stem_he": "רווח סמך של $95\\%$ משתמש בערך $z$ של בערך:",
+      "explanation_en": "**$95\\%$ corresponds to $z\\approx1.96$.**\n\n**Answer:** $1.96$.",
+      "explanation_he": "**$95\\%$ מתאים ל-$z\\approx1.96$.**\n\n**תשובה:** $1.96$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$z_{0.05}=1.645$. $E=1.645\\cdot15/15=1.645$. CI: $(118.36, 121.64)$",
-          "1.645$. CI: $(118.36, 121.64)$",
-          "121.64"
+        "options_en": [
+          "$1.96$",
+          "$1.645$",
+          "$2.576$",
+          "$1.00$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$1.96$",
+          "$1.645$",
+          "$2.576$",
+          "$1.00$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nFor a 90% CI, $z_{0.05}=1.645$. Standard error: $\\sigma/\\sqrt{n}=15/\\sqrt{225}=15/15=1$. Margin of error: $E=1.645\\cdot 1=1.645$. Interval: $120\\pm 1.645=(118.355,\\ 121.645)\\approx(118.36,\\ 121.64)$.\n\n**How to think about it:**\nWhen $\\sigma$ is known, follow the z-formula. First compute $SE=\\sigma/\\sqrt{n}$, then $E=z_{\\alpha/2}\\cdot SE$, then $\\bar{x}\\pm E$. For 90% CI use $z_{0.05}=1.645$, not 1.96.\n\n**Common slip:**\nUsing $z=1.96$ (95% value) for a 90% CI. Forgetting to divide $\\sigma$ by $\\sqrt{n}$. Reporting only one endpoint instead of the full interval.\n\n**Exam tip:**\nWrite $SE$ first on scratch paper. Check that the interval is centred at $\\bar{x}$ and symmetric: lower + upper $= 2\\bar{x}$.",
-      "explanation_he": "**למה זה נכון:**\nל-CI 90%, $z_{0.05}=1.645$. SE: $\\sigma/\\sqrt{n}=15/\\sqrt{225}=15/15=1$. $E=1.645\\cdot 1=1.645$. הרווח: $120\\pm 1.645=(118.36,\\ 121.64)$ — אנו ב-90% סמך ש-$\\mu$ האמיתי בין 118.36 ל-121.64.\n\n**איך לחשוב על זה:**\nכש-$\\sigma$ ידוע, נוסחת z: קודם $SE=\\sigma/\\sqrt{n}$, אחר כך $E=z_{\\alpha/2}\\cdot SE$, ואז $\\bar{x}\\pm E$. ל-90% השתמשו ב-1.645, לא 1.96. זהו את רמת הסמך מהשאלה לפני שאתם מחפשים $z$ בטבלה.\n\n**טעות נפוצה:**\nשימוש ב-1.96 (95%) ל-CI 90%. שכחה לחלק $\\sigma$ ב-$\\sqrt{n}$. דיווח על קצה אחד בלבד במקום הרווח המלא $(a,b)$.\n\n**טיפ לבחינה:**\nכתבו $SE$ קודם על טיוטה. ודאו שהרווח ממורכז ב-$\\bar{x}$ וסימטרי: תחתון + עליון $= 2\\bar{x}$. בבחינות ישראליות מצפים גם לפרשנות מילולית קצרה.",
-      "skill_atoms": []
+      "source_item_id": "e673d4c2-eab3-5177-849e-ad9751dc58dd",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$1.96$",
+        "$1.645$",
+        "$2.576$",
+        "$1.00$"
+      ],
+      "options_he": [
+        "$1.96$",
+        "$1.645$",
+        "$2.576$",
+        "$1.00$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "In a poll of 600 people, 360 support a policy. Build a 95% CI for the true support proportion.",
-      "stem_he": "בסקר של 600 אנשים, 360 תומכים במדיניות. בנה CI 95% לפרופורציית התמיכה האמיתית.",
+      "stem_en": "Find the margin of error with $z=2$, $\\sigma=10$, $n=25$ (use $z\\cdot\\tfrac{\\sigma}{\\sqrt n}$).",
+      "stem_he": "מצאו את שולי הטעות עם $z=2$, $\\sigma=10$, $n=25$ (בעזרת $z\\cdot\\tfrac{\\sigma}{\\sqrt n}$).",
+      "explanation_en": "**$2\\cdot\\tfrac{10}{5}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$2\\cdot\\tfrac{10}{5}=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\hat{p}=0.6$. $\\text{SE}=\\sqrt{0.24/600}=0.02$. $E=1.96\\cdot0.02=0.039$. CI: $(0.561,0.639)$",
-          "0.039$. CI: $(0.561,0.639)$",
-          "0.561,0.639"
-        ],
-        "case_sensitive": false
+        "value": 4
       },
-      "explanation_en": "**Why this is correct:**\n$\\hat{p}=360/600=0.6$. SE $=\\sqrt{0.6\\cdot 0.4/600}=\\sqrt{0.0004}=0.02$. $E=1.96\\cdot 0.02=0.039$. CI: $(0.561,\\ 0.639)$ — we are 95% confident true support is between 56.1% and 63.9%.\n\n**How to think about it:**\nProportion CI: compute $\\hat{p}=x/n$ first, verify $n\\hat{p}\\geq 5$, then SE and $E$. The answer is in proportion units (0.561), not counts (360).\n\n**Common slip:**\nUsing $n=600$ inside the square root incorrectly. Using $\\hat{p}=360$ instead of 0.6. Forgetting validity check when $n\\hat{p}$ is borderline.\n\n**Exam tip:**\nConvert counts to $\\hat{p}$ before any formula. On poll questions, examiners often give raw counts — divide first.",
-      "explanation_he": "**למה זה נכון:**\n$\\hat{p}=360/600=0.6$. SE $=\\sqrt{0.6\\cdot 0.4/600}=0.02$. $E=1.96\\cdot 0.02=0.039$. CI: $(0.561,\\ 0.639)$ — ב-95% סמך התמיכה האמיתית בין 56.1% ל-63.9%. בדיקת תקפות: $n\\hat{p}=240\\geq 5$.\n\n**איך לחשוב על זה:**\nCI פרופורציה: חשבו $\\hat{p}=x/n$ מהספירות, בדקו $n\\hat{p}\\geq 5$ ו-$n(1-\\hat{p})\\geq 5$, ואז SE ו-$E$. התשובה ביחידות פרופורציה (0.561), לא בספירות (360).\n\n**טעות נפוצה:**\nשימוש שגוי ב-$n$ בשורש. $\\hat{p}=360$ במקום 0.6. דילוג על בדיקת תקפות כש-$n\\hat{p}$ קרוב ל-5.\n\n**טיפ לבחינה:**\nהמרו ספירות ל-$\\hat{p}$ לפני הנוסחה. בבחינות נותנים לעיתים 360 מתוך 600 — חלקו קודם. כתבו את בדיקת התקפות לניקוד חלקי.",
-      "skill_atoms": []
+      "source_item_id": "45ca4f68-5ad6-5f89-aa83-1aae04298fff",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "A 95% CI gives (47.1, 52.9). What is $\\bar{x}$? What is the margin of error?",
-      "stem_he": "CI 95% נותן $(47.1, 52.9)$. מהו $\\bar{x}$? מהי שגיאת השוליים?",
+      "stem_en": "True or False: a higher confidence level produces a wider interval.",
+      "stem_he": "נכון או לא נכון: רמת סמך גבוהה יותר יוצרת רווח רחב יותר.",
+      "explanation_en": "**More confidence needs a wider interval** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**יותר ביטחון דורש רווח רחב יותר** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\bar{x}=(47.1+52.9)/2=50$. $E=(52.9-47.1)/2=2.9$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2.9$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2.9"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nThe CI is symmetric about the point estimate: $\\bar{x}=(47.1+52.9)/2=50$. Margin of error $E=(52.9-47.1)/2=2.9$. Equivalently, half the width.\n\n**How to think about it:**\nReading backwards from a CI: midpoint = estimate, half-width = MOE. You do not need $\\sigma$ or $n$ for this question — pure algebra on the endpoints.\n\n**Common slip:**\nConfusing width (5.8) with MOE (2.9). Computing $\\bar{x}=52.9-47.1=5.8$ by subtracting endpoints incorrectly.\n\n**Exam tip:**\nMemorise: $\\bar{x}=\\frac{\\text{lower}+\\text{upper}}{2}$ and $E=\\frac{\\text{upper}-\\text{lower}}{2}$. These reverse-engineering questions appear on every exam.",
-      "explanation_he": "**למה זה נכון:**\n$\\bar{x}=(47.1+52.9)/2=50$. $E=(52.9-47.1)/2=2.9$ — שווה לחצי הרוחב 5.8. לא צריך $\\sigma$ או $n$; זו אלגebra על קצוות הרווח בלבד.\n\n**איך לחשוב על זה:**\nקריאה לאחור מ-CI: אמצע = הערכה, חצי רוחב = MOE. שאלה \"הפוכה\" נפוצה בבחינות — נותנים רק קצוות (47.1, 52.9) בלי נתוני דגימה.\n\n**טעות נפוצה:**\nבלבול רוחב (5.8) עם MOE (2.9). $\\bar{x}=52.9-47.1=5.8$ בחיסור שגוי. דיווח על רוחב כשמבקשים MOE בלבד.\n\n**טיפ לבחינה:**\nשיננו: $\\bar{x}=\\frac{\\text{bottom}+\\text{top}}{2}$, $E=\\frac{\\text{top}-\\text{bottom}}{2}$. שאלות הפוכות בכל בחינה — אין צורך בנוסחת CI מלאה.",
-      "skill_atoms": []
+      "source_item_id": "5d9c310a-4f7d-5a01-89c6-727e6405f115",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "For $\\sigma=20$ and $n=100$, find the width of a 95% CI for $\\mu$.",
-      "stem_he": "עבור $\\sigma=20$ ו-$n=100$, מצא את רוחב CI 95% ל-$\\mu$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the $95\\%$ margin of error for $\\bar x=100$, $\\sigma=20$, $n=16$ ($z=1.96$).",
+      "stem_he": "מצאו את שולי הטעות ל-$95\\%$ עבור $\\bar x=100$, $\\sigma=20$, $n=16$ ($z=1.96$).",
+      "explanation_en": "**Step 1 — Standard error.** $\\tfrac{\\sigma}{\\sqrt n}=\\tfrac{20}{4}=5$.\n\n**Step 2 — Multiply by $z$.** $1.96\\cdot 5$.\n\n**Step 3 — Evaluate.** $=9.8$.\n\n**Answer:** $9.8$.",
+      "explanation_he": "**שלב 1 — שגיאת תקן.** $\\tfrac{20}{4}=5$.\n\n**שלב 2 — כפל ב-$z$.** $1.96\\cdot 5$.\n\n**שלב 3 — חישוב.** $9.8$.\n\n**תשובה:** $9.8$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\nWidth $=2\\cdot1.96\\cdot20/10=2\\cdot3.92=7.84$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "7.84$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "7.84"
+        "steps_en": [
+          "**Step 1 — Standard error.** $\\tfrac{\\sigma}{\\sqrt n}=\\tfrac{20}{4}=5$.",
+          "**Step 2 — Multiply by $z$.** $1.96\\cdot 5$.",
+          "**Step 3 — Evaluate.** $=9.8$.",
+          "**Answer:** $9.8$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — שגיאת תקן.** $\\tfrac{20}{4}=5$.",
+          "**שלב 2 — כפל ב-$z$.** $1.96\\cdot 5$.",
+          "**שלב 3 — חישוב.** $9.8$.",
+          "**תשובה:** $9.8$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nWidth $W=2z_{\\alpha/2}\\sigma/\\sqrt{n}$. Here: $W=2\\cdot 1.96\\cdot 20/\\sqrt{100}=2\\cdot 1.96\\cdot 2=2\\cdot 3.92=7.84$. Note $\\sqrt{100}=10$, so $\\sigma/\\sqrt{n}=20/10=2$.\n\n**How to think about it:**\nWhen asked for **width**, use $2E$ or the one-line formula $2z\\sigma/\\sqrt{n}$. When asked for MOE, use half of that. Always identify which the question wants before calculating.\n\n**Common slip:**\nAnswering 3.92 (the MOE) instead of 7.84 (width). Using $\\sigma=20$ without dividing by $\\sqrt{n}=10$.\n\n**Exam tip:**\nUnderline \"width\" vs \"margin of error\" in the stem. If only $\\sigma$ and $n$ are given with no $\\bar{x}$, you likely need width, not a centred interval.",
-      "explanation_he": "**למה זה נכון:**\nרוחב $W=2\\cdot 1.96\\cdot 20/\\sqrt{100}=7.84$. $\\sqrt{100}=10$, אז $\\sigma/\\sqrt{n}=2$. MOE היה 3.92 — חצי מהרוחב, לא התשובה המבוקשת.\n\n**איך לחשוב על זה:**\nכשמבקשים **רוחב**, $2E$ או $2z\\sigma/\\sqrt{n}$. MOE = חצי. סמנו במחברת \"רוחב\" מול \"שגיאת שוליים\" לפני החישוב — טעות נפוצה בבחינות.\n\n**טעות נפוצה:**\nתשובה 3.92 (MOE) במקום 7.84 (רוחב). $\\sigma=20$ במכנה בלי $\\sqrt{n}=10$. שימוש ב-z=2.576 (99%) במקום 1.96 (95%).\n\n**טיפ לבחינה:**\nסמנו \"רוחב\" מול \"שגיאת שוליים\" בשאלה. אם ניתנו רק $\\sigma$ ו-$n$ בלי $\\bar{x}$, כנראה מבקשים רוחב. בדקו: רוחב = 2 כפול MOE.",
-      "skill_atoms": []
+      "source_item_id": "e858e4c8-10c2-5750-bf68-a73283e062b9",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "A sample of $n=16$ from a normal population gives $\\bar{x}=34$, $s=8$. Build a 95% CI for $\\mu$. ($t_{0.025,15}=2.131$)",
-      "stem_he": "מדגם $n=16$ מאוכלוסייה נורמלית נותן $\\bar{x}=34$, $s=8$. בנה CI 95% ל-$\\mu$. ($t_{0.025,15}=2.131$)",
+      "kind": "mcq",
+      "difficulty": "easy",
+      "stem_en": "As the sample size increases, the margin of error:",
+      "stem_he": "ככל שגודל המדגם גדל, שולי הטעות:",
+      "explanation_en": "**Larger $n$ shrinks $\\tfrac{\\sigma}{\\sqrt n}$.**\n\n**Answer:** decrease.",
+      "explanation_he": "**$n$ גדול מקטין את $\\tfrac{\\sigma}{\\sqrt n}$.**\n\n**תשובה:** קטנים.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$E=2.131\\cdot8/4=4.262$. CI: $(29.74, 38.26)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "4.262$. CI: $(29.74, 38.26)$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "38.26"
+        "options_en": [
+          "$\\text{decrease}$",
+          "$\\text{increase}$",
+          "$\\text{stay the same}$",
+          "$\\text{become negative}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{decrease}$",
+          "$\\text{increase}$",
+          "$\\text{stay the same}$",
+          "$\\text{become negative}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\n$\\sigma$ unknown with small $n$ from a normal population → **t-interval**. $SE=s/\\sqrt{n}=8/4=2$. $E=t_{0.025,15}\\cdot 2=2.131\\cdot 2=4.262$. CI: $(34-4.262,\\ 34+4.262)=(29.74,\\ 38.26)$.\n\n**How to think about it:**\nDecision tree: $\\sigma$ known → z; $\\sigma$ unknown → t with $df=n-1$. Here $n=16$, $df=15$, and the exam gives $t_{0.025,15}=2.131$ — use it, not 1.96.\n\n**Common slip:**\nUsing z=1.96 when $\\sigma$ is unknown. Using $s=8$ as the full denominator instead of $SE=2$. Wrong degrees of freedom ($df=n$ instead of $n-1$).\n\n**Exam tip:**\nFor $n<30$ with unknown $\\sigma$, always t. Write $df=n-1$ on your paper before looking up the critical value.",
-      "explanation_he": "**למה זה נכון:**\n$\\sigma$ לא ידוע, $n=16$ קטן, אוכלוסייה נורמלית → **t**. $SE=s/\\sqrt{n}=8/4=2$. $E=t_{0.025,15}\\cdot 2=2.131\\cdot 2=4.262$. CI: $(29.74,\\ 38.26)$.\n\n**איך לחשוב על זה:**\nעץ החלטה: $\\sigma$ ידוע → z; לא ידוע → t עם $df=n-1$. כאן $df=15$ ו-$t_{0.025,15}=2.131$ מהשאלה — השתמשו בו, לא 1.96. t נותן רווח רחב יותר (כנה יותר).\n\n**טעות נפוצה:**\nz=1.96 כש-$\\sigma$ לא ידוע ו-$n$ קטן. $s=8$ במכנה במקום SE=2. $df=n$ במקום $n-1$. שכחה ש-$\\sqrt{16}=4$.\n\n**טיפ לבחינה:**\nל-$n<30$ עם $\\sigma$ לא ידוע, תמיד t. כתבו $df=n-1$ לפני חיפוש ערך קריטי. הבחינה לעיתים נותנת $t$ ישירות — השוו $|T|$ אליו.",
-      "skill_atoms": []
+      "source_item_id": "957882f7-e09c-5ef0-9543-b32d024cd812",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{decrease}$",
+        "$\\text{increase}$",
+        "$\\text{stay the same}$",
+        "$\\text{become negative}$"
+      ],
+      "options_he": [
+        "$\\text{decrease}$",
+        "$\\text{increase}$",
+        "$\\text{stay the same}$",
+        "$\\text{become negative}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "How large must $n$ be for a 95% CI for $\\mu$ to have width at most 4, given $\\sigma=10$?",
-      "stem_he": "כמה גדול $n$ עבור CI 95% ל-$\\mu$ ברוחב מקסימלי 4, כאשר $\\sigma=10$?",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the standard error with $\\sigma=20$, $n=100$ (use $\\tfrac{\\sigma}{\\sqrt n}$).",
+      "stem_he": "מצאו את שגיאת התקן עם $\\sigma=20$, $n=100$ (בעזרת $\\tfrac{\\sigma}{\\sqrt n}$).",
+      "explanation_en": "**$\\tfrac{20}{10}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\tfrac{20}{10}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "standard_error"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\nWidth $\\leq4$ means $E\\leq2$. $n\\geq(1.96\\cdot10/2)^2=9.8^2=96.04$. So $n=97$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "97$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "97"
-        ],
-        "case_sensitive": false
+        "value": 2
       },
-      "explanation_en": "**Why this is correct:**\nWidth $\\leq 4$ means MOE $E\\leq 2$. From $E=z_{\\alpha/2}\\sigma/\\sqrt{n}\\leq 2$: $n\\geq(1.96\\cdot 10/2)^2=(9.8)^2=96.04$. Round **up**: $n=97$.\n\n**How to think about it:**\nSample-size problems: translate words to an inequality on $E$ or width first. \"Width at most 4\" → $2E\\leq 4$ → $E\\leq 2$. Then solve for $n$ and round up — never round down.\n\n**Common slip:**\nUsing width=4 directly in the formula without halving to get $E$. Rounding 96.04 down to 96. Using $z=2.576$ (99%) instead of 1.96 (95%).\n\n**Exam tip:**\nAfter computing $n$, verify: plug $n=97$ back and confirm width $\\leq 4$. One-line check catches rounding errors.",
-      "explanation_he": "**למה זה נכון:**\nרוחב $\\leq 4$ ⇒ MOE $E\\leq 2$. מ-$E=z_{\\alpha/2}\\sigma/\\sqrt{n}\\leq 2$: $n\\geq(1.96\\cdot 10/2)^2=96.04$. עיגול **למעלה**: $n=97$, לא 96.\n\n**איך לחשוב על זה:**\nגודל מדגם: תרגמו \"רוחב מקסימלי 4\" ל-$E\\leq 2$. פתרו $n\\geq(z\\sigma/E_0)^2$ ועגלו **למעלה** — מדגם חלקי בלתי אפשרי. בדקו בחזרה עם $n=97$.\n\n**טעות נפוצה:**\nשימוש ברוחב=4 ישירות בלי $E\\leq 2$. עיגול 96.04 ל-96 (למטה). $z=2.576$ (99%) במקום 1.96 (95%).\n\n**טיפ לבחינה:**\nאחרי $n=97$, הכניסו בחזרה: $E=1.96\\cdot 10/\\sqrt{97}\\approx 1.99\\leq 2$ ✓. בדיקה חוזרת תופסת טעויות עיגול — כתבו אותה בבחינה.",
-      "skill_atoms": []
+      "source_item_id": "f4af20db-7eb6-5f9b-a2d2-3d17fc41269f",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "A survey finds $\\hat{p}=0.45$ with $n=500$. Is the 95% CI consistent with a claim that $p=0.5$? Explain.",
-      "stem_he": "סקר נותן $\\hat{p}=0.45$, $n=500$. האם CI 95% עקבי עם טענה ש-$p=0.5$? הסבר.",
+      "stem_en": "A $99\\%$ confidence interval uses a $z$-value of approximately:",
+      "stem_he": "רווח סמך של $99\\%$ משתמש בערך $z$ של בערך:",
+      "explanation_en": "**$99\\%$ corresponds to $z\\approx2.576$.**\n\n**Answer:** $2.576$.",
+      "explanation_he": "**$99\\%$ מתאים ל-$z\\approx2.576$.**\n\n**תשובה:** $2.576$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\text{SE}=\\sqrt{0.45\\cdot0.55/500}=0.02225$. $E=1.96\\cdot0.02225=0.044$. CI: $(0.406,0.494)$. Since $0.5\\notin(0.406,0.494)$, the CI is NOT consistent with $p=0.5$ at the 5% level",
-          "0.5$ at the 5% level",
-          "5"
+        "options_en": [
+          "$2.576$",
+          "$1.96$",
+          "$1.645$",
+          "$1.00$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$2.576$",
+          "$1.96$",
+          "$1.645$",
+          "$1.00$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nSE $=\\sqrt{0.45\\cdot 0.55/500}=0.02225$. $E=1.96\\cdot 0.02225=0.044$. CI: $(0.406,\\ 0.494)$. Since $0.5\\notin(0.406,\\ 0.494)$, the claim $p=0.5$ is **inconsistent** with the data at the 5% level (CI–test duality).\n\n**How to think about it:**\nThis is a CI–test duality question. Build the CI first, then check whether the claimed value falls inside. Inside → consistent (fail to reject); outside → inconsistent (reject).\n\n**Common slip:**\nSaying \"consistent\" because 0.45 is close to 0.5 without checking the CI. Using $\\hat{p}=0.5$ in the SE formula instead of the observed 0.45.\n\n**Exam tip:**\nFor \"is the claim consistent?\" questions, always compute the CI — proximity of $\\hat{p}$ to the claim is not enough. The CI width matters.",
-      "explanation_he": "**למה זה נכון:**\nSE $=\\sqrt{0.45\\cdot 0.55/500}=0.02225$. $E=1.96\\cdot 0.02225=0.044$. CI: $(0.406,\\ 0.494)$. $0.5\\notin$ CI — טענה $p=0.5$ **אינה עקבית** ברמה 5% (דואליות CI–מבחן).\n\n**איך לחשוב על זה:**\nשאלת דואליות: בנו CI 95%, בדקו האם הערך הנטען ($p=0.5$) בפנים. בפנים → עקבי (אין לדחות); מחוץ → לא עקבי (דוחים). קרבה של $\\hat{p}$ לטענה לא מספיקה.\n\n**טעות נפוצה:**\n\"עקבי\" כי 0.45 קרוב ל-0.5 בלי לחשב CI. $\\hat{p}=0.5$ ב-SE במקום 0.45 הנצפה. אמרה \"מוכיח $p\\neq 0.5$\" במקום \"אינו עקבי ברמה 5%\".\n\n**טיפ לבחינה:**\nב\"האם עקבי?\" — תמיד חשבו CI מלא. רוחב הרווח קובע, לא רק $\\hat{p}$. זו דואליות ישירה עם מבחן z לפרופורציה — אותה מסקנה.",
-      "skill_atoms": []
+      "source_item_id": "e1106e68-f1cf-53f4-9e71-1402c67a0a09",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$2.576$",
+        "$1.96$",
+        "$1.645$",
+        "$1.00$"
+      ],
+      "options_he": [
+        "$2.576$",
+        "$1.96$",
+        "$1.645$",
+        "$1.00$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "If we double $n$ while keeping everything else fixed, what happens to the CI width?",
-      "stem_he": "אם מכפילים את $n$ פי שניים (שאר קבועים), מה קורה לרוחב ה-CI?",
+      "stem_en": "Find the $95\\%$ margin of error with $z=1.96$, $\\sigma=5$, $n=25$.",
+      "stem_he": "מצאו את שולי הטעות ל-$95\\%$ עם $z=1.96$, $\\sigma=5$, $n=25$.",
+      "explanation_en": "**$1.96\\cdot\\tfrac{5}{5}=1.96$.**\n\n**Answer:** $1.96$.",
+      "explanation_he": "**$1.96\\cdot\\tfrac{5}{5}=1.96$.**\n\n**תשובה:** $1.96$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Width $\\propto1/\\sqrt{n}$. Doubling $n$ reduces width by factor $\\sqrt{2}\\approx1.41$. So width becomes $1/\\sqrt{2}\\approx70.7\\%$ of the original",
-          "70.7"
-        ],
-        "case_sensitive": false
+        "value": 1.96
       },
-      "explanation_en": "**Why this is correct:**\nCI width $W=2z_{\\alpha/2}\\sigma/\\sqrt{n}$, so $W\\propto 1/\\sqrt{n}$. Doubling $n$ gives new width $W'=W/\\sqrt{2}\\approx 0.707\\,W$ — about 70.7% of the original, **not** half.\n\n**How to think about it:**\nPrecision improves slowly with sample size because of the square root. To cut width in half, you need **four times** as many observations ($n\\to 4n$), not double.\n\n**Common slip:**\nAnswering that width halves when $n$ doubles (confusing with variance, which scales as $1/n$). Saying width stays the same because confidence level is unchanged.\n\n**Exam tip:**\nMemorise the $\\sqrt{n}$ rule: double $n$ → divide width by $\\sqrt{2}$; quadruple $n$ → halve width. Conceptual questions on this appear without numbers.",
-      "explanation_he": "**למה זה נכון:**\nרוחב $W=2z\\sigma/\\sqrt{n}$, לכן $W\\propto 1/\\sqrt{n}$. הכפלת $n$ פי 2: $W'=W/\\sqrt{2}\\approx 0.707\\,W$ — כ-70.7% מהמקורי, **לא** חצי. רמת הסמך לא משתנה.\n\n**איך לחשוב על זה:**\nדיוק משתפר לאט עם $n$ בגלל השורש. לחציית רוחב צריך **פי 4** תצפיות ($n\\to 4n$), לא הכפלה פי 2. זו שאלה מושגית — הבינו את $\\sqrt{n}$ בלי מספרים.\n\n**טעות נפוצה:**\nתשובה \"רוחב חצי\" כש-$n$ מוכפל (בלבול עם שונות שמתקטנת כ-1/n). \"רוחב לא משתנה\" כי רמת סמך קבועה — $n$ כן משפיע.\n\n**טיפ לבחינה:**\nשיננו כלל $\\sqrt{n}$: $n$ כפול → רוחב ב-$\\sqrt{2}$; $n$ פי 4 → רוחב חצי. שאלות מושגיות בלי מספרים מופיעות בבגרות 5 יחידות ובאוניברסיטה.",
-      "skill_atoms": []
+      "source_item_id": "2d9b89a7-e5bc-5fe8-9ada-1b34c204bb80",
+      "points_level_min": "5pt",
+      "correct_answer": "1.96"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A sample mean is $50$ with margin of error $4$. Find the lower bound of the CI.",
+      "stem_he": "ממוצע המדגם הוא $50$ עם שולי טעות $4$. מצאו את הגבול התחתון של הרווח.",
+      "explanation_en": "**$50-4=46$.**\n\n**Answer:** $46$.",
+      "explanation_he": "**$50-4=46$.**\n\n**תשובה:** $46$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
+      "answer_payload": {
+        "value": 46
+      },
+      "source_item_id": "91e1cf47-30c7-5454-a6a0-ca34d84e0955",
+      "points_level_min": "5pt",
+      "correct_answer": "46"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "A sample mean is $50$ with margin of error $4$. Find the upper bound of the CI.",
+      "stem_he": "ממוצע המדגם הוא $50$ עם שולי טעות $4$. מצאו את הגבול העליון של הרווח.",
+      "explanation_en": "**$50+4=54$.**\n\n**Answer:** $54$.",
+      "explanation_he": "**$50+4=54$.**\n\n**תשובה:** $54$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
+      "answer_payload": {
+        "value": 54
+      },
+      "source_item_id": "6798b433-6fea-5b35-998e-1a975dc531bb",
+      "points_level_min": "5pt",
+      "correct_answer": "54"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the $90\\%$ margin of error with $z=1.645$, $\\sigma=10$, $n=100$.",
+      "stem_he": "מצאו את שולי הטעות ל-$90\\%$ עם $z=1.645$, $\\sigma=10$, $n=100$.",
+      "explanation_en": "**$1.645\\cdot\\tfrac{10}{10}=1.645$.**\n\n**Answer:** $1.645$.",
+      "explanation_he": "**$1.645\\cdot\\tfrac{10}{10}=1.645$.**\n\n**תשובה:** $1.645$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
+      "answer_payload": {
+        "value": 1.645
+      },
+      "source_item_id": "36ace004-1755-529a-88fc-6d8221a5dea0",
+      "points_level_min": "5pt",
+      "correct_answer": "1.645"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: increasing the sample size narrows the confidence interval.",
+      "stem_he": "נכון או לא נכון: הגדלת גודל המדגם מצמצמת את רווח הסמך.",
+      "explanation_en": "**Larger $n$ reduces the margin** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**$n$ גדול מקטין את השוליים** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "0fc11036-6fc0-5902-9483-0f1daa36ca80",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A confidence interval has margin of error $3$. Find its full width.",
+      "stem_he": "לרווח סמך שולי טעות $3$. מצאו את רוחבו המלא.",
+      "explanation_en": "**Width $=2\\times$ margin $=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**רוחב $=2\\times$ שוליים $=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "44844fd5-5d12-533d-9859-abfcc704b5c6",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the margin of error with $z=2$, $\\sigma=15$, $n=9$.",
+      "stem_he": "מצאו את שולי הטעות עם $z=2$, $\\sigma=15$, $n=9$.",
+      "explanation_en": "**$2\\cdot\\tfrac{15}{3}=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$2\\cdot\\tfrac{15}{3}=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "confidence_interval"
+      ],
+      "answer_payload": {
+        "value": 10
+      },
+      "source_item_id": "8220f8fb-f518-5e88-92b2-f928d35f8a3f",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the standard error with $\\sigma=12$, $n=36$.",
+      "stem_he": "מצאו את שגיאת התקן עם $\\sigma=12$, $n=36$.",
+      "explanation_en": "**$\\tfrac{12}{6}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\tfrac{12}{6}=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "standard_error"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "a0029474-7a66-52f1-bda4-8932239b5d37",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     }
   ],
   "est_minutes": 50,

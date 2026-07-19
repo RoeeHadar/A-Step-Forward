@@ -230,151 +230,341 @@
       "body_he_md": "- **הגדרה:** $\\det(A)$ דרך פיתוח מינורים; $2\\times2$: $ad-bc$.\n- **פעולות שורה:** החלפה $\\Rightarrow$ שינוי סימן; הכפלה ב-$c$ $\\Rightarrow$ כפל ב-$c$; הוספת כפולה $\\Rightarrow$ ללא שינוי.\n- **כפליות:** $\\det(AB)=\\det A\\cdot\\det B$; $\\det(A^{-1})=1/\\det A$; $\\det(A^T)=\\det A$; $\\det(cA)=c^n\\det A$.\n- **הפיכות:** $A$ הפיכה $\\Leftrightarrow$ $\\det(A)\\neq 0$.\n- **כלל קרמר:** $x_i=\\det(A_i)/\\det(A)$.\n- **הופכי נלווה:** $A^{-1}=\\frac{1}{\\det A}\\text{adj}(A)$.\n\n**מסקנה:** לכל מטריצה ריבועית, אתם אמורים לחשב דטרמיננטה ביעילות, להשתמש בתכונות לפישוט $\\det(2AB^{-1}A^T)$ בלי פיתוח, וליישם כלל קרמר כשמתאים."
     }
   ],
-  "agent_hints": {},
+  "agent_hints": {
+    "skill_atoms_unlocked": [
+      "determinant"
+    ]
+  },
   "questions": [
     {
       "ord": 1,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "Compute $\\det\\begin{pmatrix}6&2\\\\3&1\\end{pmatrix}$. Is this matrix invertible?",
-      "stem_he": "חשב $\\det\\begin{pmatrix}6&2\\\\3&1\\end{pmatrix}$. האם המטריצה הפיכה?",
+      "stem_en": "The determinant of $\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$ is:",
+      "stem_he": "הדטרמיננטה של $\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}$ היא:",
+      "explanation_en": "**$2\\times2$ determinant is $ad-bc$.**\n\n**Answer:** $ad-bc$.",
+      "explanation_he": "**דטרמיננטת $2\\times2$ היא $ad-bc$.**\n\n**תשובה:** $ad-bc$.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\det = 6-6=0$. **Not invertible** (singular)",
-          "0$. **Not invertible** (singular)",
-          "0"
+        "options_en": [
+          "$ad-bc$",
+          "$ab-cd$",
+          "$ac-bd$",
+          "$ad+bc$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$ad-bc$",
+          "$ab-cd$",
+          "$ac-bd$",
+          "$ad+bc$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nApply the $2\\times2$ formula: $\\det = (6)(1)-(2)(3)=6-6=0$. By Theorem 4, $\\det(A)=0$ means $A$ is **singular** (not invertible). The columns $(6,3)^T$ and $(2,1)^T$ are parallel — one is $2$ times the other — so the parallelogram they span has zero area.\n\n**How to think about it:**\nFor a $2\\times2$ determinant question, compute $ad-bc$ first, then immediately state invertibility: $\\det\\neq 0$ $\\Leftrightarrow$ invertible. Do not stop at the number alone when the question asks about invertibility.\n\n**Common slip:**\nComputing $6-2=4$ or $6+6=12$ by mixing up the formula as $ad+bc$. Another slip: saying 'invertible' when $\\det=0$.\n\n**Exam tip:**\nOn $2\\times2$ problems, write 'det = ad-bc = ...' as your first line — examiners award method marks before the final number.",
-      "explanation_he": "**למה זה נכון:**\nנוסחת $2\\times2$: $\\det = (6)(1)-(2)(3)=6-6=0$. לפי משפט 4, $\\det(A)=0$ פירושו **סינגולרית** (לא הפיכה). העמודות $(6,3)^T$ ו-$(2,1)^T$ מקבילות — אחת כפולה של השנייה — ולכן שטח המקבילית אפס.\n\n**איך לחשוב על זה:**\nבשאלת דטרמיננטה $2\\times2$, חשבו $ad-bc$ ומיד ציינו הפיכות: $\\det\\neq 0$ $\\Leftrightarrow$ הפיכה. אל תעצרו במספר כששואלים על הפיכות.\n\n**טעות נפוצה:**\nחישוב $6-2=4$ או $6+6=12$ בגלל נוסחה שגויה $ad+bc$. טעות: 'הפיכה' כש-$\\det=0$.\n\n**טיפ לבחינה:**\nב-$2\\times2$, כתבו 'דט' = ad-bc = ...' כשורה ראשונה — נקודות שיטה לפני המספר הסופי.",
-      "skill_atoms": []
+      "source_item_id": "1f94053f-eb8d-56c4-a51d-64b3cd09ada0",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$ad-bc$",
+        "$ab-cd$",
+        "$ac-bd$",
+        "$ad+bc$"
+      ],
+      "options_he": [
+        "$ad-bc$",
+        "$ab-cd$",
+        "$ac-bd$",
+        "$ad+bc$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Without computing the full determinant, explain why $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}=0$.",
-      "stem_he": "מבלי לחשב את הדטרמיננטה במלואה, הסבר מדוע $\\det\\begin{pmatrix}1&2&3\\\\4&5&6\\\\7&8&9\\end{pmatrix}=0$.",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}2&3\\\\1&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}2&3\\\\1&4\\end{pmatrix}$.",
+      "explanation_en": "**$ad-bc=8-3=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$ad-bc=8-3=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$R_3=2R_2-R_1$, so rows are linearly dependent. Hence $\\det=0$",
-          "Rows are linearly dependent, so $\\det=0$",
-          "0"
-        ],
-        "case_sensitive": false
+        "value": 5
       },
-      "explanation_en": "**Why this is correct:**\nRows satisfy $R_2-R_1=(3,3,3)$ and $R_3-R_2=(3,3,3)$, so $R_3=2R_2-R_1$. The three rows are linearly dependent, meaning the column vectors do not span a full $3$-dimensional volume. By Theorem 4, a dependent set of rows forces $\\det(A)=0$ — no full cofactor expansion needed.\n\n**How to think about it:**\nBefore expanding a $3\\times3$ determinant, scan for linear relations among rows. Row differences that are proportional reveal dependence instantly. This 'structural zero' shortcut saves minutes on exams.\n\n**Common slip:**\nAttempting full cofactor expansion and making arithmetic errors along the way, when a one-line dependence argument suffices. Another slip: claiming two rows are equal when they are only proportional.\n\n**Exam tip:**\nWhen a problem says 'without computing the full determinant,' they reward structural reasoning — write the row relation explicitly: $R_3=2R_2-R_1$ $\\Rightarrow$ $\\det=0$.",
-      "explanation_he": "**למה זה נכון:**\nהשורות מקיימות $R_2-R_1=(3,3,3)$ ו-$R_3-R_2=(3,3,3)$, ולכן $R_3=2R_2-R_1$. שלוש השורות תלויות לינארית, כלומר העמודות לא פורשות נפח $3$-ממדי מלא. לפי משפט 4, תלות שורות $\\Rightarrow$ $\\det(A)=0$ — בלי פיתוח מינורים מלא.\n\n**איך לחשוב על זה:**\nלפני פיתוח $3\\times3$, סרקו יחסים לינאריים בין שורות. הפרשי שורות פרופורציונליים חושפים תלות מיד. קיצור 'אפס מבני' חוסך דקות בבחינה.\n\n**טעות נפוצה:**\nפיתוח מינורים מלא עם טעויות חשבון, כשטיעון תלות בשורה אחת מספיק. טעות: 'שורות שוות' כשהן רק פרופורציונליות.\n\n**טיפ לבחינה:**\nכש'מבלי לחשב את הדטרמיננטה במלואה', מעריכים היגיון מבני — כתבו $R_3=2R_2-R_1$ $\\Rightarrow$ $\\det=0$.",
-      "skill_atoms": []
+      "source_item_id": "bcd43b4e-6eaa-554f-9ec3-3612ddbe8876",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Given $\\det(A)=3$, find $\\det(2A)$ for a $3\\times3$ matrix $A$.",
-      "stem_he": "נתון $\\det(A)=3$. מצא $\\det(2A)$ עבור מטריצה $3\\times3$ $A$.",
+      "stem_en": "True or False: the determinant of the identity matrix is $1$.",
+      "stem_he": "נכון או לא נכון: הדטרמיננטה של מטריצת היחידה היא $1$.",
+      "explanation_en": "**$\\det(I)=1$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**$\\det(I)=1$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\det(2A)=24$",
-          "24",
-          "24$"
-        ],
-        "case_sensitive": false
+        "value": true
       },
-      "explanation_en": "**Why this is correct:**\nFor an $n\\times n$ matrix, scaling every entry by $c$ scales each of $n$ rows by $c$. By Theorem 1(2), each row scaling multiplies $\\det$ by $c$, giving $\\det(cA)=c^n\\det(A)$. Here $n=3$ and $\\det(A)=3$: $\\det(2A)=2^3\\cdot 3=8\\cdot 3=24$.\n\n**How to think about it:**\nIdentify the scalar factor outside the matrix and the dimension $n$ first. The exponent on the scalar is always the matrix size — this is the single most tested determinant property after the $2\\times2$ formula.\n\n**Common slip:**\nUsing $\\det(2A)=2\\det(A)=6$ (forgetting the exponent $n$). This error is especially common when students confuse $\\det(cA)$ with $\\det(cI)=c^n$.\n\n**Exam tip:**\nWrite the template $\\det(cA)=c^n\\det(A)$ before substituting numbers — one line prevents the $c$ vs $c^n$ trap.",
-      "explanation_he": "**למה זה נכון:**\nלמטריצה $n\\times n$, הכפלת כל כניסה ב-$c$ מכפילה כל $n$ שורות ב-$c$. לפי משפט 1(2), $\\det(cA)=c^n\\det(A)$. כאן $n=3$ ו-$\\det(A)=3$: $\\det(2A)=2^3\\cdot 3=24$.\n\n**איך לחשוב על זה:**\nזהו תחילה את גורם הכפל ואת $n$. המעריך על הקבוע $c$ תמיד גודל המטריצה — התכונה הנבחנת ביותר אחרי נוסחת $2\\times2$.\n\n**טעות נפוצה:**\n$\\det(2A)=2\\det(A)=6$ (שכחת המעריך $n$). טעות נפוצה במיוחד.\n\n**טיפ לבחינה:**\nכתבו $\\det(cA)=c^n\\det(A)$ לפני הצבה — שורה אחת מונעת מלכודת $c$ לעומת $c^n$.",
-      "skill_atoms": []
+      "source_item_id": "d22a9976-eb2a-56ae-bfbe-f27758e57258",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Use Cramer's rule to solve $3x+y=7$, $x+2y=4$.",
-      "stem_he": "השתמש בכלל קרמר לפתרון $3x+y=7$, $x+2y=4$.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}1&2&0\\\\0&3&0\\\\2&1&4\\end{pmatrix}$ by expanding along column $3$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}1&2&0\\\\0&3&0\\\\2&1&4\\end{pmatrix}$ על ידי פיתוח לפי עמודה $3$.",
+      "explanation_en": "**Step 1 — Only nonzero entry in column 3.** $a_{33}=4$.\n\n**Step 2 — Its minor.** $\\det\\begin{pmatrix}1&2\\\\0&3\\end{pmatrix}=3$.\n\n**Step 3 — Multiply.** $4\\cdot3=12$.\n\n**Answer:** $12$.",
+      "explanation_he": "**שלב 1 — האיבר היחיד השונה מאפס בעמודה 3.** $a_{33}=4$.\n\n**שלב 2 — המינור שלו.** $\\det\\begin{pmatrix}1&2\\\\0&3\\end{pmatrix}=3$.\n\n**שלב 3 — כפל.** $4\\cdot3=12$.\n\n**תשובה:** $12$.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$A=\\begin{pmatrix}3&1\\\\1&2\\end{pmatrix}$, $\\det A=5$. $A_1=\\begin{pmatrix}7&1\\\\4&2\\end{pmatrix}$, $\\det A_1=10$. $A_2=\\begin{pmatrix}3&7\\\\1&4\\end{pmatrix}$, $\\det A_2=5$. $x=10/5=2$, $y=5/5=1$",
-          "1$",
-          "1"
+        "steps_en": [
+          "**Step 1 — Only nonzero entry in column 3.** $a_{33}=4$.",
+          "**Step 2 — Its minor.** $\\det\\begin{pmatrix}1&2\\\\0&3\\end{pmatrix}=3$.",
+          "**Step 3 — Multiply.** $4\\cdot3=12$.",
+          "**Answer:** $12$."
         ],
-        "case_sensitive": false
+        "steps_he": [
+          "**שלב 1 — האיבר היחיד השונה מאפס בעמודה 3.** $a_{33}=4$.",
+          "**שלב 2 — המינור שלו.** $\\det\\begin{pmatrix}1&2\\\\0&3\\end{pmatrix}=3$.",
+          "**שלב 3 — כפל.** $4\\cdot3=12$.",
+          "**תשובה:** $12$."
+        ]
       },
-      "explanation_en": "**Why this is correct:**\nWrite the system as $A\\vec{x}=\\vec{b}$ with $A=\\begin{pmatrix}3&1\\\\1&2\\end{pmatrix}$, $\\vec{b}=(7,4)^T$. $\\det A=6-1=5\\neq 0$. Replace column 1 with $\\vec{b}$: $\\det A_1=14-4=10$, so $x=10/5=2$. Replace column 2: $\\det A_2=12-7=5$, so $y=5/5=1$.\n\n**How to think about it:**\nCramer's rule requires three determinants for a $2\\times2$ system: $\\det A$, $\\det A_1$ (column 1 replaced by $\\vec{b}$), and $\\det A_2$. Build each matrix explicitly before computing — do not confuse which column to replace.\n\n**Common slip:**\nReplacing the wrong column when forming $A_i$. Another slip: computing $\\det A$ correctly but forgetting to check $\\det A\\neq 0$ before applying Cramer's rule.\n\n**Exam tip:**\nVerify by substitution: $3(2)+1=7$ ✓ and $2+2(1)=4$ ✓. Always substitute back — catches sign errors in $\\det A_i$.",
-      "explanation_he": "**למה זה נכון:**\nכתבו $A\\vec{x}=\\vec{b}$ עם $A=\\begin{pmatrix}3&1\\\\1&2\\end{pmatrix}$, $\\vec{b}=(7,4)^T$. $\\det A=6-1=5\\neq 0$, ולכן כלל קרמר חל. $\\det A_1=\\det\\begin{pmatrix}7&1\\\\4&2\\end{pmatrix}=14-4=10$, ולכן $x=10/5=2$. $\\det A_2=\\det\\begin{pmatrix}3&7\\\\1&4\\end{pmatrix}=12-7=5$, ולכן $y=5/5=1$.\n\n**איך לחשוב על זה:**\nכלל קרמר דורש שלוש דטרמיננטות ל-$2\\times2$: $\\det A$, $\\det A_1$ (עמודה 1 מוחלפת ב-$\\vec{b}$), $\\det A_2$ (עמודה 2 מוחלפת). בנו כל מטריצה במפורש לפני חישוב — אל תבלבלו איזו עמודה להחליף.\n\n**טעות נפוצה:**\nהחלפת עמודה שגויה ב-$A_i$ — למשל החלפת שורה במקום עמודה. טעות נוספת: $\\det A$ נכון אבל שימוש בקרמר כש-$\\det A=0$.\n\n**טיפ לבחינה:**\nאמתו בהצבה: $3(2)+1(1)=7$ ✓ ו-$1(2)+2(1)=4$ ✓. הצבה חוזרת תופסת טעויות סימן ב-$\\det A_i$ ומבטיחה נקודות מלאות.",
-      "skill_atoms": []
+      "source_item_id": "dce83e43-c950-55a0-9bd9-2da714978792",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Compute $\\det\\begin{pmatrix}2&-1&0\\\\1&3&-1\\\\0&2&1\\end{pmatrix}$ by expanding along the most efficient row or column.",
-      "stem_he": "חשב $\\det\\begin{pmatrix}2&-1&0\\\\1&3&-1\\\\0&2&1\\end{pmatrix}$ על ידי פיתוח לפי השורה/עמודה היעילה ביותר.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$.",
+      "explanation_en": "**$4-6=-2$.**\n\n**Answer:** $-2$.",
+      "explanation_he": "**$4-6=-2$.**\n\n**תשובה:** $-2$.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Expand along row 1: $\\det=11$",
-          "11",
-          "11$"
-        ],
-        "case_sensitive": false
+        "value": -2
       },
-      "explanation_en": "**Why this is correct:**\nRow 1 has a zero at $(1,3)$, making it the best expansion row. $\\det = 2\\cdot\\det\\begin{pmatrix}3&-1\\\\2&1\\end{pmatrix} -(-1)\\cdot\\det\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix}+0 = 2(3+2)+1(1-0)=10+1=11$.\n\n**How to think about it:**\nScan all rows and columns for zeros before expanding. Each zero eliminates one $2\\times2$ minor computation. Mark the sign pattern $+ - +$ along your chosen row before evaluating minors.\n\n**Common slip:**\nSign error on the $(1,2)$ term: using $-(-1)\\cdot(...)=-1$ instead of $+1$. Another slip: expanding along row 3 (no zeros) and doing three times the work.\n\n**Exam tip:**\nFor $3\\times3$ determinants, write 'expand along row $i$ (has zero at ...)' as your first line — shows the examiner you chose efficiently.",
-      "explanation_he": "**למה זה נכון:**\nלשורה 1 יש אפס ב-$(1,3)$ — שורת הפיתוח הטובה ביותר. $\\det = 2\\cdot\\det\\begin{pmatrix}3&-1\\\\2&1\\end{pmatrix} + 1\\cdot\\det\\begin{pmatrix}1&-1\\\\0&1\\end{pmatrix} = 2(3+2)+1(1-0)=10+1=11$. סימן $(1,2)$: $(-1)^{1+2}=-1$, ולכן $-(-1)(1)=+1$.\n\n**איך לחשוב על זה:**\nסרקו כל שורות ועמודות לאפסים לפני פיתוח. כל אפס מבטל חישוב מינור $2\\times2$ אחד וחוסך זמן. סמנו לוח סימנים $+ - +$ לאורך השורה הנבחרת לפני שמתחילים לחשב.\n\n**טעות נפוצה:**\nטעות סימן על $(1,2)$: כתיבת $-(-1)(\\ldots)=-1$ במקום $+1$. טעות נוספת: פיתוח לפי שורה 3 (ללא אפסים) ושלושה מינורים במקום שניים.\n\n**טיפ לבחינה:**\nב-$3\\times3$, כתבו 'פיתוח לפי שורה $i$ (אפס ב-$(i,j)$)' כשורה ראשונה — מראה לבוחן שבחרתם ביעילות ומזכה בנקודות שיטה.",
-      "skill_atoms": []
+      "source_item_id": "6c6eb807-ae60-50a0-943e-af76b0e0fcf3",
+      "points_level_min": "5pt",
+      "correct_answer": "-2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "If $\\det(A)=4$ and $\\det(B)=3$ for $3\\times3$ matrices, find $\\det(2AB^{-1}A^T)$.",
-      "stem_he": "אם $\\det(A)=4$ ו-$\\det(B)=3$ עבור מטריצות $3\\times3$, מצא $\\det(2AB^{-1}A^T)$.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}5&0\\\\0&3\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}5&0\\\\0&3\\end{pmatrix}$.",
+      "explanation_en": "**$15-0=15$.**\n\n**Answer:** $15$.",
+      "explanation_he": "**$15-0=15$.**\n\n**תשובה:** $15$.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\det(2AB^{-1}A^T)=128/3$",
-          "128/3",
-          "128/3$"
-        ],
-        "case_sensitive": false
+        "value": 15
       },
-      "explanation_en": "**Why this is correct:**\nApply $\\det(cA)=c^n\\det(A)$, multiplicativity, $\\det(A^{-1})=1/\\det(A)$, and $\\det(A^T)=\\det(A)$ step by step: $\\det(2AB^{-1}A^T)=2^3\\cdot\\det(A)\\cdot\\det(B^{-1})\\cdot\\det(A^T)=8\\cdot 4\\cdot(1/3)\\cdot 4=128/3$.\n\n**How to think about it:**\nNever expand $AB^{-1}A^T$ as a single matrix. Decompose into scalar power ($2^3$), then each factor's determinant. Order does not matter for multiplication of scalars.\n\n**Common slip:**\nUsing $\\det(B^{-1})=\\det(B)=3$ instead of $1/3$. Forgetting $2^3$ and writing $2\\cdot 4\\cdot(1/3)\\cdot 4=32/3$. Confusing $\\det(A^T)$ with $1/\\det(A)$.\n\n**Exam tip:**\nWrite a chain: $\\det(2AB^{-1}A^T)=2^3\\det(A)\\det(B^{-1})\\det(A^T)=...$ — each step is one line, easy to spot errors.",
-      "explanation_he": "**למה זה נכון:**\nיישמו $\\det(cA)=c^n\\det(A)$, כפליות, $\\det(A^{-1})=1/\\det(A)$ ו-$\\det(A^T)=\\det(A)$: $\\det(2AB^{-1}A^T)=2^3\\cdot\\det(A)\\cdot\\det(B^{-1})\\cdot\\det(A^T)=8\\cdot 4\\cdot(1/3)\\cdot 4=128/3$. כל שלב הוא כפל מספרים — אין צורך לחשב $B^{-1}$ במפורש.\n\n**איך לחשוב על זה:**\nאל תפתחו $AB^{-1}A^T$ כמטריצה $3\\times3$ אחת. פרקו לגורם $2^3$, ואז דטרמיננטה של כל גורם בנפרד. סדר הכפל לא משנה כי מדובר בכפל מספרים.\n\n**טעות נפוצה:**\n$\\det(B^{-1})=\\det(B)=3$ במקום $1/3$ — הטעות הנפוצה ביותר. שכחת $2^3$ וכתיבת $2\\cdot 4\\cdot(1/3)\\cdot 4=32/3$. בלבול $\\det(A^T)$ עם $1/\\det(A)$.\n\n**טיפ לבחינה:**\nכתבו שרשרת: $\\det(2AB^{-1}A^T)=2^3\\det(A)\\det(B^{-1})\\det(A^T)=8\\cdot 4\\cdot(1/3)\\cdot 4=128/3$ — כל שלב בשורה, קל לזהות טעויות לפני שמסיימים.",
-      "skill_atoms": []
+      "source_item_id": "cd07a7d3-757c-5602-bf19-6e5a599d2d44",
+      "points_level_min": "5pt",
+      "correct_answer": "15"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Find all values of $\\lambda$ such that $\\det(A-\\lambda I)=0$ for $A=\\begin{pmatrix}3&1\\\\1&3\\end{pmatrix}$.",
-      "stem_he": "מצא את כל ערכי $\\lambda$ כך ש-$\\det(A-\\lambda I)=0$ עבור $A=\\begin{pmatrix}3&1\\\\1&3\\end{pmatrix}$.",
+      "stem_en": "If a matrix has determinant $0$, it is:",
+      "stem_he": "אם לדטרמיננטת מטריצה ערך $0$, היא:",
+      "explanation_en": "**Zero determinant means not invertible.**\n\n**Answer:** singular (not invertible).",
+      "explanation_he": "**דטרמיננטה אפס פירושה לא הפיכה.**\n\n**תשובה:** סינגולרית (לא הפיכה).",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "$\\lambda=2$ or $\\lambda=4$",
-          "2 and 4",
-          "4"
+        "options_en": [
+          "$\\text{singular (not invertible)}$",
+          "$\\text{invertible}$",
+          "$\\text{the identity}$",
+          "$\\text{symmetric}$"
         ],
-        "case_sensitive": false
+        "options_he": [
+          "$\\text{singular (not invertible)}$",
+          "$\\text{invertible}$",
+          "$\\text{the identity}$",
+          "$\\text{symmetric}$"
+        ],
+        "correct_index": 0
       },
-      "explanation_en": "**Why this is correct:**\nForm $A-\\lambda I=\\begin{pmatrix}3-\\lambda&1\\\\1&3-\\lambda\\end{pmatrix}$. $\\det(A-\\lambda I)=(3-\\lambda)^2-1=\\lambda^2-6\\lambda+8=(\\lambda-2)(\\lambda-4)=0$. Roots: $\\lambda=2$ and $\\lambda=4$. These are eigenvalues — the topic where determinants become polynomials.\n\n**How to think about it:**\nSetting $\\det(A-\\lambda I)=0$ converts a matrix problem into a quadratic (for $2\\times2$). Expand carefully: $(3-\\lambda)^2-1$, not $(3-\\lambda)^2+1$.\n\n**Common slip:**\nSign error: $(3-\\lambda)^2+1$ instead of $-1$. Finding only one root and stopping. Forgetting this equation defines eigenvalues, not just 'solve for lambda'.\n\n**Exam tip:**\nAfter factoring, verify: tr$(A)=6=2+4$ ✓ and $\\det(A)=8=2\\cdot 4$ ✓. Trace and determinant checks catch polynomial errors instantly.",
-      "explanation_he": "**למה זה נכון:**\nבנו $A-\\lambda I=\\begin{pmatrix}3-\\lambda&1\\\\1&3-\\lambda\\end{pmatrix}$. $\\det(A-\\lambda I)=(3-\\lambda)^2-1=\\lambda^2-6\\lambda+8=(\\lambda-2)(\\lambda-4)=0$. שורשים: $\\lambda=2$ ו-$\\lambda=4$. אלו ערכים עצמיים — הנושא שבו דטרמיננטות הופכות לפולינום ב-$\\lambda$.\n\n**איך לחשוב על זה:**\nהצבת $\\det(A-\\lambda I)=0$ הופכת בעיית מטריצה לריבועית (ב-$2\\times2$). פתחו $(3-\\lambda)^2-1$ בזהירות — לא $(3-\\lambda)^2+1$. זהו הפולינום האופייני $p(\\lambda)$.\n\n**טעות נפוצה:**\nסימן שגוי: $(3-\\lambda)^2+1$ במקום $-1$. מציאת שורש אחד בלבד והפסקה. שכחה שמשוואה זו מגדירה ערכים עצמיים, לא רק 'פתרון ל-$\\lambda$'.\n\n**טיפ לבחינה:**\nאחרי פירוק, אמתו: tr$(A)=6=2+4$ ✓ ו-$\\det(A)=8=2\\cdot 4$ ✓. בדיקות עקבה ודטרמיננטה תופסות טעויות בפולינום מיד.",
-      "skill_atoms": []
+      "source_item_id": "b535f78f-03d2-5ee4-be4a-bf39ba026418",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{singular (not invertible)}$",
+        "$\\text{invertible}$",
+        "$\\text{the identity}$",
+        "$\\text{symmetric}$"
+      ],
+      "options_he": [
+        "$\\text{singular (not invertible)}$",
+        "$\\text{invertible}$",
+        "$\\text{the identity}$",
+        "$\\text{symmetric}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "Evaluate $\\det\\begin{pmatrix}1&0&0&5\\\\0&2&0&0\\\\0&0&3&0\\\\0&0&0&4\\end{pmatrix}$ efficiently.",
-      "stem_he": "חשב $\\det\\begin{pmatrix}1&0&0&5\\\\0&2&0&0\\\\0&0&3&0\\\\0&0&0&4\\end{pmatrix}$ ביעילות.",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}3&1\\\\2&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}3&1\\\\2&4\\end{pmatrix}$.",
+      "explanation_en": "**$12-2=10$.**\n\n**Answer:** $10$.",
+      "explanation_he": "**$12-2=10$.**\n\n**תשובה:** $10$.",
+      "skill_atoms": [
+        "determinant"
+      ],
       "answer_payload": {
-        "acceptable_answers": [
-          "Expand along column 1: $\\det = 1\\cdot 2\\cdot 3\\cdot 4 = 24$",
-          "24",
-          "24$"
-        ],
-        "case_sensitive": false
+        "value": 10
       },
-      "explanation_en": "**Why this is correct:**\nThe matrix is almost upper triangular with a single off-diagonal entry $5$ at $(1,4)$. Expand along column 1 (one nonzero entry): $\\det = 1\\cdot\\det\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&4\\end{pmatrix}=1\\cdot 2\\cdot 3\\cdot 4=24$. The $(1,4)$ entry contributes via row 1: $5\\cdot(-1)^{1+4}M_{14}$, but $M_{14}$ has a zero column so its det is $0$. Answer: **24**.\n\n**How to think about it:**\nFor nearly-triangular matrices, expand along the sparsest row or column. Do not assume 'almost triangular' means product of diagonal — off-diagonal entries matter only if their minor is nonzero.\n\n**Common slip:**\nGetting $-96$ by mishandling column-4 expansion signs. Assuming $\\det=1\\cdot 2\\cdot 3\\cdot 4=24$ without checking whether off-diagonal entries contribute (here the $(1,4)$ minor vanishes, so $24$ is correct).\n\n**Exam tip:**\nWhen you see mostly zeros, identify the row/column with fewest nonzeros first. Write which entries contribute before computing — prevents sign and minor errors.",
-      "explanation_he": "**למה זה נכון:**\nהמטריצה כמעט משולשת עליונה עם כניסה $5$ ב-$(1,4)$. פיתוח לפי עמודה 1: $\\det = 1\\cdot 2\\cdot 3\\cdot 4=24$. תרומת $(1,4)$ דרך $M_{14}$ עם עמודת אפס — דטרמיננטה $0$. תשובה: **24**.\n\n**איך לחשוב על זה:**\nלמטריצות כמעט-משולשות, פתחו לפי השורה/עמודה הדלילה ביותר. 'כמעט משולש' לא אומר מכפלת אלכסון — כניסות מחוץ לאלכסון משפיעות רק אם המינור לא אפס.\n\n**טעות נפוצה:**\nקבלת $-96$ בטעות סימן. הנחה $\\det=24$ בלי לבדוק תרומת $(1,4)$ (כאן המינור מתאפס — $24$ נכון).\n\n**טיפ לבחינה:**\nכשיש בעיקר אפסים, זהו שורה/עמודה עם הכי מעט כניסות. כתבו אילו כניסות תורמות לפני חישוב.",
-      "skill_atoms": []
+      "source_item_id": "558cfd1d-b97e-5165-85bf-bbb07d519a37",
+      "points_level_min": "5pt",
+      "correct_answer": "10"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}2&5\\\\1&3\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}2&5\\\\1&3\\end{pmatrix}$.",
+      "explanation_en": "**$6-5=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$6-5=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "567a9b3b-80bd-5f75-b969-165a19f19636",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}4&2\\\\6&3\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}4&2\\\\6&3\\end{pmatrix}$.",
+      "explanation_en": "**$12-12=0$ (singular).**\n\n**Answer:** $0$.",
+      "explanation_he": "**$12-12=0$ (סינגולרית).**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "4a0cb744-efc7-56a4-87d1-d691e89286c6",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}2&0&0\\\\0&3&0\\\\0&0&4\\end{pmatrix}$.",
+      "explanation_en": "**Diagonal: product $2\\cdot3\\cdot4=24$.**\n\n**Answer:** $24$.",
+      "explanation_he": "**אלכסונית: מכפלה $24$.**\n\n**תשובה:** $24$.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": 24
+      },
+      "source_item_id": "291bb2f2-7a54-5bdd-8b81-3e47758bf216",
+      "points_level_min": "5pt",
+      "correct_answer": "24"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: swapping two rows of a matrix negates its determinant.",
+      "stem_he": "נכון או לא נכון: החלפת שתי שורות מטריצה הופכת את סימן הדטרמיננטה.",
+      "explanation_en": "**A row swap multiplies the determinant by $-1$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**החלפת שורות מכפילה את הדטרמיננטה ב-$-1$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "39d98ee3-6fed-5760-9d50-c7beb807b2d0",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the determinant of the upper-triangular $\\begin{pmatrix}1&2&3\\\\0&1&4\\\\0&0&2\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של המטריצה המשולשית העליונה $\\begin{pmatrix}1&2&3\\\\0&1&4\\\\0&0&2\\end{pmatrix}$.",
+      "explanation_en": "**Triangular: product of diagonal $1\\cdot1\\cdot2=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**משולשית: מכפלת האלכסון $2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "d79f8d04-75ac-5448-89b5-67aa876b81f9",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the determinant of the lower-triangular $\\begin{pmatrix}2&0&0\\\\1&3&0\\\\4&5&6\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של המטריצה המשולשית התחתונה $\\begin{pmatrix}2&0&0\\\\1&3&0\\\\4&5&6\\end{pmatrix}$.",
+      "explanation_en": "**Product of diagonal $2\\cdot3\\cdot6=36$.**\n\n**Answer:** $36$.",
+      "explanation_he": "**מכפלת האלכסון $36$.**\n\n**תשובה:** $36$.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": 36
+      },
+      "source_item_id": "281df057-c4e8-5499-8f62-b044d164f5d2",
+      "points_level_min": "5pt",
+      "correct_answer": "36"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the determinant of $\\begin{pmatrix}6&2\\\\9&4\\end{pmatrix}$.",
+      "stem_he": "מצאו את הדטרמיננטה של $\\begin{pmatrix}6&2\\\\9&4\\end{pmatrix}$.",
+      "explanation_en": "**$24-18=6$.**\n\n**Answer:** $6$.",
+      "explanation_he": "**$24-18=6$.**\n\n**תשובה:** $6$.",
+      "skill_atoms": [
+        "determinant"
+      ],
+      "answer_payload": {
+        "value": 6
+      },
+      "source_item_id": "a5eeded2-1551-5725-94f5-31690911bc63",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     }
   ],
   "est_minutes": 45,
