@@ -18,6 +18,7 @@ import { Input } from '@asf/ui/input';
 import { cn } from '@asf/ui';
 import { MarkdownReader } from '@/components/markdown-reader';
 import { pickConceptTitle, resolveConceptTitles } from '@/lib/concept-display-names';
+import { localizePersonaMarkdown } from '@/lib/localize-persona';
 import { goalKeyLabel } from '@/lib/plan-catalog';
 import { subjectLabel } from '@/lib/subject-labels';
 import type { LearnerMemorySnapshot, LearnerMemoryNote } from '@/lib/neon-db';
@@ -66,55 +67,6 @@ function localizeNextTestName(name: string | null | undefined, locale: 'he' | 'e
   if (key === 'final' || key === 'final exam') return 'מבחן סוף';
   if (key === 'quiz') return 'בוחן';
   return name;
-}
-
-/**
- * Prefer the Hebrew diagnostic brief for the About-me section when the UI is HE
- * but the stored persona still has English "Diagnostic calibration" dumps
- * (written before we switched persistDiagnosticSummary to Hebrew-default).
- */
-function localizePersonaMarkdown(
-  text: string,
-  locale: 'he' | 'en',
-  diagnosticBriefHe?: string | null,
-  diagnosticBriefEn?: string | null,
-): string {
-  if (!text.trim()) return text;
-
-  let out = text;
-
-  if (locale === 'he' && diagnosticBriefHe) {
-    const heSection = `## כיול אבחון\n- ${diagnosticBriefHe.trim()}`;
-    const replaced = out.replace(
-      /##\s*Diagnostic calibration[\s\S]*?(?=##\s|\s*$)/i,
-      `${heSection}\n\n`,
-    );
-    if (replaced !== out) {
-      out = replaced;
-    } else if (/Diagnostic calibration/i.test(out)) {
-      // Bullets mention diagnostic calibration without a clean H2 — surface HE brief on top.
-      out = `${heSection}\n\n${out}`;
-    }
-  } else if (locale === 'en' && diagnosticBriefEn && /כיול אבחון/.test(out)) {
-    const enSection = `## Diagnostic calibration\n- ${diagnosticBriefEn.trim()}`;
-    out = out.replace(/##\s*כיול אבחון[\s\S]*?(?=##\s|\s*$)/, `${enSection}\n\n`);
-  }
-
-  if (locale !== 'he') return out;
-
-  const map: Array<[RegExp, string]> = [
-    [/^##\s*How they talk\s*$/gim, '## איך הם מדברים'],
-    [/^##\s*How I talk\s*$/gim, '## איך אני מדבר/ת'],
-    [/^##\s*How they like explanations\s*$/gim, '## איך הם אוהבים הסברים'],
-    [/^##\s*How I like explanations\s*$/gim, '## איך אני אוהב/ת הסברים'],
-    [/^##\s*Triggers(?:\s*\/\s*|\s+and\s+)preferences\s*$/gim, '## טריגרים והעדפות'],
-    [/^##\s*Recent durable observations.*$/gim, '## תצפיות יציבות אחרונות'],
-    [/^##\s*Recent observations.*$/gim, '## תצפיות אחרונות'],
-    [/^##\s*About me\s*$/gim, '## עליי'],
-    [/^##\s*Diagnostic calibration\s*$/gim, '## כיול אבחון'],
-  ];
-  for (const [re, he] of map) out = out.replace(re, he);
-  return out;
 }
 
 function SectionCard({

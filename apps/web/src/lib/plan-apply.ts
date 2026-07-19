@@ -4,6 +4,7 @@
 import type { LearningPlan } from '@asf/schemas/learning_path';
 import { resolveConceptTitles } from '@/lib/concept-display-names';
 import {
+  appendLearnerPersonaLine,
   applyPlanProfileUpdates,
   clearPendingPlanProposal,
   generateLearningPlan,
@@ -288,6 +289,19 @@ export async function executePlanUpdate(
     };
     result.noticeHe = buildPlanAppliedNotice(result, 'he');
     result.noticeEn = buildPlanAppliedNotice(result, 'en');
+
+    // Keep Memory "About me" in sync when the plan actually changes.
+    const goalLabel = result.goal?.trim() || 'התוכנית';
+    const weekHint = (weekSummaries?.[0]?.conceptIds ?? [])
+      .slice(0, 3)
+      .map((id) => conceptLabel(id, 'he'))
+      .join(', ');
+    void appendLearnerPersonaLine(
+      learnerId,
+      'תצפיות אחרונות',
+      `עודכנה תוכנית הלימודים (${goalLabel})${weekHint ? ` — מיקוד: ${weekHint}` : ''}. סיבה: ${(sanitized.reason || '').slice(0, 120)}`,
+    ).catch(() => null);
+
     return result;
   } catch (err) {
     return {

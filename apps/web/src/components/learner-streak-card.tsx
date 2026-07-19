@@ -39,9 +39,12 @@ const STR = {
     } as Record<string, string>,
     detail_map: {} as Record<string, string>,
     detail_he: (s: string) =>
-      s.replace(/^practiced /, 'תרגלת ')
-        .replace(/\(mastery (\d+)%\)/, '(שליטה $1%)')
+      s
         .replace(/^practiced atom /, 'תרגלת מיומנות ')
+        .replace(/^practiced /, 'תרגלת ')
+        .replace(/^test /, 'מבחן ')
+        .replace(/\(mastery (\d+)%\)/, '(שליטה $1%)')
+        .replace(/\(score (\d+)%\)/, '(ציון $1%)')
         .replace(/\((\d+)\/(\d+)\)/, '($1/$2)'),
   },
   en: {

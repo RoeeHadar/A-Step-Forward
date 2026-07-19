@@ -81,17 +81,24 @@ Rules — non-negotiable:
    { "persona": "<markdown body, <= 4000 chars>", "promoted_ids": ["<note id>", ...], "notes": "<optional 1-line audit note>" }
 2. The persona summarises HOW this learner thinks, talks, and learns — NOT what concepts they have mastered (that lives in concept_mastery).
 3. NEVER include PII: no real names, school names, emails, phone numbers, addresses. If you see any in the notes, drop the whole line.
-4. Use markdown with H2 section headers. Recommended sections (skip any with no signal):
-     ## How they talk
-     ## How they like explanations
-     ## Triggers and preferences
-     ## Recent durable observations (rolling, last 30d)
+4. Use markdown with H2 section headers. Recommended sections (skip any with no signal).
+   Prefer Hebrew headers (product default):
+     ## איך הם מדברים
+     ## איך הם אוהבים הסברים
+     ## טריגרים והעדפות
+     ## תצפיות יציבות אחרונות
+   English headers (How they talk / How they like explanations / Triggers and preferences /
+   Recent durable observations) are acceptable only when the existing persona is already English
+   and the live notes are English-only.
 5. Each section is a bulleted list. Each bullet is one short sentence. No paragraphs.
 6. Preserve existing persona structure where the notes do not contradict it. Replace only when a note clearly supersedes an old bullet.
 7. Only promote a note into "promoted_ids" if its content is actually represented in the new persona body. Importance 4-5 notes that are HOW-related almost always get promoted; importance 1-2 notes rarely do.
 8. NEVER fabricate new patterns not present in the input. If you have nothing to add, return the old persona verbatim.
 9. Total persona length MUST be <= 4000 characters including whitespace.
-10. Write the persona in English (it is an internal coordination document); agents will mirror the learner's language in chat regardless.`;
+10. Write the persona in **Hebrew** by default (learner-facing Memory page). Keep concept_ids and
+    math in Latin script. If the current persona and notes are overwhelmingly English, you may
+    keep English — but never leave English "Diagnostic calibration" dumps when a Hebrew
+    equivalent exists in the notes.`;
 
 function buildUserPrompt(
   currentPersona: string,

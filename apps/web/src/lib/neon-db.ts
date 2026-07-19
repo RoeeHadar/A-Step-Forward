@@ -15,6 +15,10 @@ import type { LearnerDashboard } from '@asf/schemas/curriculum';
 import type { MemoryRecord } from '@asf/schemas/memory';
 import kg from './kg-data.json';
 import { logger } from './logger';
+import {
+  localizePersonaMarkdown,
+  personaNeedsDiagnosticMigration,
+} from './localize-persona';
 import { resolveConceptTitles } from './concept-display-names';
 import {
   computePacing,
@@ -4254,6 +4258,38 @@ export async function getLearnerMemorySnapshot(
       agent_brief_he?: string;
       agent_brief_en?: string;
     } } | null)?.diagnostic_summary;
+    const diagnosticBriefHe = diag?.agent_brief_he?.trim() || null;
+    const diagnosticBriefEn = diag?.agent_brief_en?.trim() || null;
+
+    // One-time migration: rewrite English diagnostic dumps in the stored persona
+    // so About-me stays Hebrew even without client-side localization.
+    let personaText = persona?.text ?? null;
+    let personaUpdatedAt = persona?.updated_at ?? null;
+    if (
+      personaText &&
+      personaNeedsDiagnosticMigration(personaText) &&
+      (diagnosticBriefHe || /Diagnostic calibration/i.test(personaText))
+    ) {
+      const migrated = localizePersonaMarkdown(
+        personaText,
+        'he',
+        diagnosticBriefHe,
+        diagnosticBriefEn,
+      );
+      if (migrated && migrated !== personaText && !/Diagnostic calibration/i.test(migrated)) {
+        try {
+          await setLearnerPersona(learnerId, migrated);
+          personaText = migrated;
+          personaUpdatedAt = new Date().toISOString();
+        } catch {
+          // Display-side localizePersonaMarkdown still fixes the UI.
+          personaText = migrated;
+        }
+      }
+    }
+
+    const planUpdatedAt = plan?.plan_last_adjusted_at ?? null;
+    const lastUpdatedWithPlan = latestTimestamp([lastUpdated, planUpdatedAt, personaUpdatedAt]);
 
     return {
       profile: profile
@@ -4271,8 +4307,8 @@ export async function getLearnerMemorySnapshot(
           }
         : null,
       persona: {
-        text: persona?.text ?? null,
-        updated_at: persona?.updated_at ?? null,
+        text: personaText,
+        updated_at: personaUpdatedAt,
       },
       notesByAgent,
       totalNoteCount: notes.length,
@@ -4281,9 +4317,9 @@ export async function getLearnerMemorySnapshot(
       activePlanGoal: plan?.goal ?? null,
       activeWeekConceptIds,
       recentChatTurns: chatTurns.reverse(),
-      lastUpdated,
-      diagnosticBriefHe: diag?.agent_brief_he?.trim() || null,
-      diagnosticBriefEn: diag?.agent_brief_en?.trim() || null,
+      lastUpdated: lastUpdatedWithPlan,
+      diagnosticBriefHe,
+      diagnosticBriefEn,
     };
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

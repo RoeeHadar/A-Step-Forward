@@ -5,12 +5,14 @@ import { RefreshCw } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
 import { MemoryOverview } from '@/components/memory-overview';
 import { Button } from '@asf/ui/button';
+import { usePageLiveRefresh } from '@/hooks/use-page-live-refresh';
 import { useI18n } from '@/providers/i18n-provider';
 import type { LearnerMemorySnapshot } from '@/lib/neon-db';
 
 export function MemoryPageContent({ snapshot }: { snapshot: LearnerMemorySnapshot }) {
   const { messages, locale } = useI18n();
   const router = useRouter();
+  usePageLiveRefresh(40_000);
   const refreshLabel = locale === 'he' ? 'רענון' : 'Refresh';
 
   const lastUpdatedText = snapshot.lastUpdated
