@@ -268,206 +268,339 @@
     ],
     "tutor_pacing_hint": "First master the 1D rod integral. Then hemisphere (the disk method). Connect to moment of inertia integrals — same structure.",
     "skill_atoms_unlocked": [
-      "cm_integration",
-      "kings_theorem",
-      "reduced_mass",
-      "moment_of_inertia_integration",
-      "parallel_axis_theorem"
+      "center_of_mass"
     ]
   },
   "questions": [
     {
-      "id": "q1",
-      "kind": "numeric",
-      "difficulty": "medium",
-      "skill_atoms": [
-        "cm_integration"
-      ],
-      "stem_en": "A rod $L = 4\\;\\text{m}$ has $\\lambda(x) = 2x\\;\\text{kg/m}$. Find $x_{\\text{cm}}$ in meters.",
-      "stem_he": "מוט $L = 4\\;\\text{m}$ עם $\\lambda(x) = 2x$. מצא $x_{\\text{cm}}$ במטרים.",
-      "answer_payload": {
-        "value": 2.667,
-        "tolerance": 0.05,
-        "unit_en": "m",
-        "unit_he": "m"
-      },
-      "explanation_en": "For a non-uniform rod, CM requires two integrals: total mass $M = \\int \\lambda(x)\\,dx$ and first moment $\\int x\\,dm$. Here $M = \\int_0^4 2x\\,dx = [x^2]_0^4 = 16\\;\\text{kg}$. The first moment is $\\int_0^4 2x^2\\,dx = [2x^3/3]_0^4 = 128/3\\;\\text{kg·m}$. Dividing: $x_{\\text{cm}} = (128/3)/16 = 8/3 \\approx 2.667\\;\\text{m}$.\n\n**Why 2.667 m is correct:** The density $\\lambda = 2x$ increases linearly, so CM lies beyond the midpoint ($2\\;\\text{m}$), pulled toward $x = 4$ where mass is concentrated.\n\n**Common wrong path:** Using the midpoint $L/2 = 2\\;\\text{m}$ without integrating — valid only for uniform rods. Another slip: integrating $x\\,\\lambda\\,dx$ but forgetting to divide by $M$.\n\n**Exam tip:** Always compute $M$ and $\\int x\\,dm$ as separate labeled steps — partial credit for correct setup even if arithmetic fails.",
-      "explanation_he": "למוט לא-אחיד, CM דורש שני אינטגרלים: מסה כוללת $M = \\int \\lambda(x)\\,dx$ ומומנט ראשון $\\int x\\,dm$. כאן $M = \\int_0^4 2x\\,dx = 16\\;\\text{kg}$. המומנט: $\\int_0^4 2x^2\\,dx = 128/3\\;\\text{kg·m}$. חלוקה: $x_{\\text{cm}} = (128/3)/16 = 8/3 \\approx 2.667\\;\\text{m}$.\n\n**למה 2.667 m נכון:** הצפיפות $\\lambda = 2x$ עולה לינארית, ולכן CM מעבר לאמצע ($2\\;\\text{m}$), נמשך ל-$x = 4$ שם המסה מרוכזת.\n\n**טעות נפוצה:** שימוש באמצע $L/2 = 2\\;\\text{m}$ בלי אינטגרציה — תקף רק למוט אחיד. שגיאה נוספת: אינטגרציה של $x\\,\\lambda\\,dx$ בלי חלוקה ב-$M$.\n\n**טיפ לבחינה:** חשבו $M$ ו-$\\int x\\,dm$ כשלבים נפרדים ומסומנים — נקודות חלקיות על הכנה נכונה. לאחר החישוב, השוו ל-$L/2 = 2$ m — CM חייב להיות גדול יותר כי הצפיפות גדלה לכיוון $x = L$.",
-      "ord": 1
-    },
-    {
-      "id": "q2",
+      "ord": 1,
       "kind": "mcq",
-      "difficulty": "hard",
+      "difficulty": "easy",
+      "stem_en": "The center of mass of a system of particles is:",
+      "stem_he": "מרכז המסה של מערכת חלקיקים הוא:",
+      "explanation_en": "**Mass-weighted average of positions.**\n\n**Answer:** $x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$.",
+      "explanation_he": "**ממוצע מיקומים משוקלל במסה.**\n\n**תשובה:** $x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$.",
       "skill_atoms": [
-        "cm_integration"
+        "center_of_mass"
       ],
-      "stem_en": "The CM of a uniform solid hemisphere (radius $R$) above its flat base is:",
-      "stem_he": "מרכז המסה של חצי-כדור מוצק אחיד (רדיוס $R$) מעל בסיסו השטוח הוא:",
       "answer_payload": {
         "options_en": [
-          "$R/2$",
-          "$R/4$",
-          "$3R/8$",
-          "$2R/3$"
+          "$x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$",
+          "$x_{cm}=\\sum m_i x_i$",
+          "$x_{cm}=\\tfrac{\\sum x_i}{n}$",
+          "$x_{cm}=\\sum x_i$"
         ],
         "options_he": [
-          "$R/2$",
-          "$R/4$",
-          "$3R/8$",
-          "$2R/3$"
+          "$x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$",
+          "$x_{cm}=\\sum m_i x_i$",
+          "$x_{cm}=\\tfrac{\\sum x_i}{n}$",
+          "$x_{cm}=\\sum x_i$"
         ],
-        "correct_index": 2
+        "correct_index": 0
       },
-      "explanation_en": "The CM of a uniform solid hemisphere (flat base at $z = 0$) is found by slicing into horizontal disks. At height $z$, disk radius $r = \\sqrt{R^2 - z^2}$ and $dm = \\rho\\pi(R^2 - z^2)\\,dz$. Integrating gives $z_{\\text{cm}} = 3R/8$ above the flat face.\n\n**Why $3R/8$ is correct (option 3):** The missing lower half-sphere material pulls CM below the geometric center $R/2$. Values $R/2$ and $2R/3$ correspond to a full sphere and different geometries.\n\n**Distractor analysis:** $R/2$ is the midpoint of the height — wrong because mass is not uniform in $z$ for a hemisphere. $R/4$ is too low; $2R/3$ is the CM of a semicircular arc, not a solid.\n\n**Exam tip:** Memorize $3R/8$ but be ready to derive it — university exams often require the disk-method setup.",
-      "explanation_he": "CM של חצי-כדור מוצק אחיד (בסיס שטוח ב-$z = 0$) נמצא בחיתוך לדיסקים אופקיים. בגובה $z$, רדיוס $r = \\sqrt{R^2 - z^2}$ ו-$dm = \\rho\\pi(R^2 - z^2)\\,dz$. אינטגרציה נותנת $z_{\\text{cm}} = 3R/8$ מעל הבסיס.\n\n**למה $3R/8$ נכון (אפשרות 3):** חומר חסר של חצי-כדור תחתון מושך את CM מתחת למרכז הגיאומטרי $R/2$. $R/2$ ו-$2R/3$ מתאימים לכדור מלא או לגיאומטריות אחרות.\n\n**ניתוח מסיחים:** $R/2$ הוא אמצע הגובה — שגוי כי המסה לא אחידה ב-$z$. $R/4$ נמוך מדי; $2R/3$ הוא CM של קשת, לא גוף מוצק.\n\n**טיפ לבחינה:** שיננו $3R/8$ אך היו מוכנים לגזור — בחינות דורשות לעיתים את שיטת הדיסקים.",
-      "ord": 2,
+      "source_item_id": "4f05d076-905c-5f34-8715-fec7d48d592d",
+      "points_level_min": "5pt",
       "options_en": [
-        "$R/2$",
-        "$R/4$",
-        "$3R/8$",
-        "$2R/3$"
+        "$x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$",
+        "$x_{cm}=\\sum m_i x_i$",
+        "$x_{cm}=\\tfrac{\\sum x_i}{n}$",
+        "$x_{cm}=\\sum x_i$"
       ],
       "options_he": [
-        "$R/2$",
-        "$R/4$",
-        "$3R/8$",
-        "$2R/3$"
+        "$x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$",
+        "$x_{cm}=\\sum m_i x_i$",
+        "$x_{cm}=\\tfrac{\\sum x_i}{n}$",
+        "$x_{cm}=\\sum x_i$"
       ],
-      "correct_index": 2
+      "correct_index": 0
     },
     {
-      "id": "q3",
+      "ord": 2,
       "kind": "numeric",
-      "difficulty": "hard",
+      "difficulty": "easy",
+      "stem_en": "Two masses: $2\\,\\text{kg}$ at $x=0$ and $3\\,\\text{kg}$ at $x=10\\,\\text{m}$. Find the center of mass ($x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$).",
+      "stem_he": "שתי מסות: $2\\,\\text{kg}$ ב-$x=0$ ו-$3\\,\\text{kg}$ ב-$x=10\\,\\text{m}$. מצאו את מרכז המסה ($x_{cm}=\\tfrac{\\sum m_i x_i}{\\sum m_i}$).",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+30}{5}=6\\,\\text{m}$.**\n\n**Answer:** $6\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=6\\,\\text{m}$.**\n\n**תשובה:** $6\\,\\text{m}$.",
       "skill_atoms": [
-        "reduced_mass",
-        "kings_theorem"
+        "center_of_mass"
       ],
-      "stem_en": "$m_1 = 3\\;\\text{kg}$ at $v_1 = 10\\;\\text{m/s}$, $m_2 = 7\\;\\text{kg}$ at rest. Find $K_{\\text{internal}}$ (internal KE in CM frame) in joules.",
-      "stem_he": "$m_1 = 3\\;\\text{kg}$ ב-$10\\;\\text{m/s}$, $m_2 = 7\\;\\text{kg}$ בשקט. מצא $K_{\\text{int}}$ בג'ול.",
       "answer_payload": {
-        "value": 105,
-        "tolerance": 1,
-        "unit_en": "J",
-        "unit_he": "J"
+        "value": 6
       },
-      "explanation_en": "Internal kinetic energy in the CM frame equals the energy of relative motion. For two bodies, use reduced mass: $\\mu = m_1 m_2/(m_1+m_2) = 3\\cdot7/10 = 2.1\\;\\text{kg}$. Relative velocity $v_{\\text{rel}} = |10 - 0| = 10\\;\\text{m/s}$.\n\n**Calculation:** $K_{\\text{int}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2 = \\frac{1}{2}(2.1)(100) = 105\\;\\text{J}$.\n\n**Why 105 J is correct:** Only the motion relative to CM contributes to internal processes (deformation, heat). The CM itself carries $K_{\\text{cm}} = \\frac{1}{2}(10)(3^2) = 45\\;\\text{J}$ separately; lab KE is $K_{\\text{lab}} = 150\\;\\text{J}$, and $150 - 45 = 105\\;\\text{J}$.\n\n**Common wrong path:** Using full lab KE $\\frac{1}{2}(3)(100) = 150\\;\\text{J}$ as internal energy — that includes translational CM energy. Another slip: using $m_1 + m_2$ instead of $\\mu$ in the formula.\n\n**Exam tip:** When $m_2$ is at rest, $v_{\\text{rel}} = v_1$ — but still use $\\mu$, not $m_1$. Cross-check with König: $K_{\\text{internal}} = K_{\\text{lab}} - K_{\\text{cm}}$.",
-      "explanation_he": "אנרגיה קינטית פנימית במסגרת CM שווה לאנרגיית התנועה היחסית. לשני גופים, השתמשו במסה מוקטנת: $\\mu = 3\\cdot7/10 = 2.1\\;\\text{kg}$. מהירות יחסית $v_{\\text{rel}} = 10\\;\\text{m/s}$.\n\n**חישוב:** $K_{\\text{int}} = \\frac{1}{2}(2.1)(100) = 105\\;\\text{J}$.\n\n**למה 105 J נכון:** רק התנועה יחסית ל-CM תורמת לתהליכים פנימיים (עיוות, חום). ה-CM עצמו נושא $K_{\\text{cm}} = \\frac{1}{2}(10)(3^2) = 45\\;\\text{J}$ בנפרד; במעבדה $K_{\\text{lab}} = 150\\;\\text{J}$, והפרש $150 - 45 = 105\\;\\text{J}$.\n\n**טעות נפוצה:** שימוש בכל האנרגיה במעבדה $150\\;\\text{J}$ כאנרגיה פנימית — כולל תנועת CM. שגיאה נוספת: $m_1 + m_2$ במקום $\\mu$.\n\n**טיפ לבחינה:** כש-$m_2$ בשקט, $v_{\\text{rel}} = v_1$ — אך עדיין $\\mu$, לא $m_1$. אימות דרך קניג: $K_{\\text{internal}} = K_{\\text{lab}} - K_{\\text{cm}}$.",
-      "ord": 3
+      "source_item_id": "f73fab3d-9b0e-57fb-9521-5bd53427646c",
+      "points_level_min": "5pt",
+      "correct_answer": "6"
     },
     {
-      "id": "q4",
+      "ord": 3,
       "kind": "true_false",
-      "difficulty": "medium",
+      "difficulty": "easy",
+      "stem_en": "True or False: the center of mass of a uniform rod is at its geometric center.",
+      "stem_he": "נכון או לא נכון: מרכז המסה של מוט אחיד נמצא במרכזו הגאומטרי.",
+      "explanation_en": "**Symmetry places the COM at the middle** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**הסימטריה ממקמת את מרכז המסה באמצע** — **נכון**.\n\n**תשובה:** נכון.",
       "skill_atoms": [
-        "parallel_axis_theorem"
+        "center_of_mass"
       ],
-      "stem_en": "True or False: The perpendicular axis theorem $I_z = I_x + I_y$ applies to any 3D solid object.",
-      "stem_he": "נכון או לא נכון: משפט הציר המאונך $I_z = I_x + I_y$ חל על כל גוף 3D מוצק.",
       "answer_payload": {
-        "correct": false
+        "value": true
       },
-      "explanation_en": "The statement is **False**. The perpendicular axis theorem $I_z = I_x + I_y$ applies **only** to flat (two-dimensional) objects — thin laminas lying in the $xy$-plane.\n\n**Why False is correct:** For a 3D solid like a sphere, all three principal moments are equal: $I_x = I_y = I_z = \\frac{2}{5}MR^2$. If the theorem applied, we'd get $I_z = I_x + I_y = \\frac{4}{5}MR^2$, which contradicts the known result.\n\n**Physical reason:** The theorem counts mass elements contributing to rotation about $z$ that also contribute to $x$ and $y$ — valid only when all mass lies in a plane. A 3D solid extends in $z$, breaking the counting argument.\n\n**Common wrong path:** Students see symmetry and assume $I_z = I_x + I_y$ for any symmetric body. Check dimensionality: flat plate → yes; sphere, cylinder, cone → no.\n\n**Exam tip:** State \"2D lamina in the $xy$-plane\" whenever you invoke this theorem.",
-      "explanation_he": "הטענה **שגויה**. משפט הציר המאונך $I_z = I_x + I_y$ חל **רק** על עצמים שטוחים (דו-ממדיים) — lamina דקות במישור $xy$.\n\n**למה \"לא נכון\" נכון:** לגוף 3D כמו כדור, שלושת המומנטים שווים: $I_x = I_y = I_z = \\frac{2}{5}MR^2$. אם המשפט היה חל, $I_z = \\frac{4}{5}MR^2$ — סתירה.\n\n**סיבה פיזיקלית:** המשפט סופר אלמנטי מסה התורמים לסיבוב סביב $z$ שגם תורמים ל-$x$ ו-$y$ — תקף רק כשכל המסה במישור. גוף 3D מתרחב ב-$z$ ושובר את הטיעון.\n\n**טעות נפוצה:** רואים סימטריה ומניחים $I_z = I_x + I_y$ לכל גוף סימטרי. בדקו ממדיות: פלטה שטוחה → כן; כדור, גליל → לא.\n\n**טיפ לבחינה:** נסחו \"lamina 2D במישור $xy$\" בכל שימוש במשפט.",
-      "ord": 4
+      "source_item_id": "6a51b832-f88b-5e82-aa29-fc7277a1e678",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
-      "id": "q5",
-      "kind": "derivation",
-      "difficulty": "medium",
+      "ord": 4,
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Find the center of mass of $3\\,\\text{kg}$ at $x=0$ and $5\\,\\text{kg}$ at $x=8\\,\\text{m}$.",
+      "stem_he": "מצאו את מרכז המסה של $3\\,\\text{kg}$ ב-$x=0$ ו-$5\\,\\text{kg}$ ב-$x=8\\,\\text{m}$.",
+      "explanation_en": "**Step 1 — Formula.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.\n\n**Step 2 — Substitute.** $x_{cm}=\\dfrac{3\\cdot0+5\\cdot8}{3+5}$.\n\n**Step 3 — Evaluate.** $=\\dfrac{40}{8}=5\\,\\text{m}$.\n\n**Answer:** $5\\,\\text{m}$.",
+      "explanation_he": "**שלב 1 — נוסחה.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.\n\n**שלב 2 — הצבה.** $\\dfrac{3\\cdot0+5\\cdot8}{3+5}$.\n\n**שלב 3 — חישוב.** $5\\,\\text{m}$.\n\n**תשובה:** $5\\,\\text{m}$.",
       "skill_atoms": [
-        "cm_integration"
+        "center_of_mass"
       ],
-      "stem_en": "Derive $z_{\\text{cm}} = 3R/8$ for a solid uniform hemisphere of radius $R$ with flat base at $z=0$.",
-      "stem_he": "גזור $z_{\\text{cm}} = 3R/8$ לחצי-כדור מוצק אחיד ברדיוס $R$ עם בסיס שטוח ב-$z=0$.",
       "answer_payload": {
         "steps_en": [
-          "At height $z$, horizontal disk has radius $r(z) = \\sqrt{R^2-z^2}$",
-          "$dm = \\rho\\pi r^2 dz = \\rho\\pi(R^2-z^2)\\,dz$",
-          "$M = \\rho\\pi\\int_0^R(R^2-z^2)\\,dz = \\rho\\pi[R^2z - z^3/3]_0^R = \\frac{2\\rho\\pi R^3}{3}$",
-          "$\\int_0^R z\\,dm = \\rho\\pi\\int_0^R z(R^2-z^2)\\,dz = \\rho\\pi[R^2z^2/2 - z^4/4]_0^R = \\rho\\pi R^4/4$",
-          "$z_{\\text{cm}} = \\frac{\\rho\\pi R^4/4}{2\\rho\\pi R^3/3} = \\frac{R^4/4}{2R^3/3} = \\frac{3R}{8}$ ∎"
+          "**Step 1 — Formula.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.",
+          "**Step 2 — Substitute.** $x_{cm}=\\dfrac{3\\cdot0+5\\cdot8}{3+5}$.",
+          "**Step 3 — Evaluate.** $=\\dfrac{40}{8}=5\\,\\text{m}$.",
+          "**Answer:** $5\\,\\text{m}$."
         ],
         "steps_he": [
-          "בגובה $z$: דיסק ברדיוס $r = \\sqrt{R^2-z^2}$",
-          "$dm = \\rho\\pi(R^2-z^2)\\,dz$",
-          "$M = 2\\rho\\pi R^3/3$",
-          "$\\int z\\,dm = \\rho\\pi R^4/4$",
-          "$z_{\\text{cm}} = 3R/8$ ∎"
+          "**שלב 1 — נוסחה.** $x_{cm}=\\dfrac{m_1x_1+m_2x_2}{m_1+m_2}$.",
+          "**שלב 2 — הצבה.** $\\dfrac{3\\cdot0+5\\cdot8}{3+5}$.",
+          "**שלב 3 — חישוב.** $5\\,\\text{m}$.",
+          "**תשובה:** $5\\,\\text{m}$."
         ]
       },
-      "explanation_en": "Derive $z_{\\text{cm}} = 3R/8$ by the disk method. Place the flat base at $z = 0$ with the curved surface above. At height $z$, a horizontal disk has radius $r(z) = \\sqrt{R^2 - z^2}$ and mass element $dm = \\rho\\pi(R^2 - z^2)\\,dz$.\n\n**Step 1:** $M = \\rho\\pi\\int_0^R(R^2 - z^2)\\,dz = \\frac{2\\rho\\pi R^3}{3}$ (half-sphere volume).\n\n**Step 2:** $\\int z\\,dm = \\rho\\pi\\int_0^R z(R^2 - z^2)\\,dz = \\frac{\\rho\\pi R^4}{4}$.\n\n**Step 3:** $z_{\\text{cm}} = (\\rho\\pi R^4/4)/(2\\rho\\pi R^3/3) = 3R/8$.\n\n**Common wrong path:** Integrating from $-R$ to $R$ (full sphere setup) or using $r = R\\sin\\theta$ without converting to $z$. Another slip: forgetting the $\\pi r^2$ factor in disk volume.\n\n**Exam tip:** Label each step (setup $dm$, find $M$, find $\\int z\\,dm$, divide) — derivation questions award marks per step.",
-      "explanation_he": "גזרו $z_{\\text{cm}} = 3R/8$ בשיטת הדיסקים. בסיס שטוח ב-$z = 0$, פני השטח העגולים למעלה. בגובה $z$, דיסק אופקי ברדיוס $r(z) = \\sqrt{R^2 - z^2}$ ואלמנט מסה $dm = \\rho\\pi(R^2 - z^2)\\,dz$.\n\n**שלב 1:** $M = \\frac{2\\rho\\pi R^3}{3}$ (נפח חצי-כדור).\n\n**שלב 2:** $\\int z\\,dm = \\frac{\\rho\\pi R^4}{4}$.\n\n**שלב 3:** $z_{\\text{cm}} = 3R/8$.\n\n**למה $3R/8$ נכון:** $3R/8 < R/2$ — הבסיס השטוח מושך את CM למטה לעומת כדור מלא.\n\n**טעות נפוצה:** אינטגרציה מ-$-R$ ל-$R$ (הכנה לכדור מלא) או שכחת $\\pi r^2$ בנפח הדיסק.\n\n**טיפ לבחינה:** סמנו כל שלב ($dm$, $M$, $\\int z\\,dm$, חלוקה) — שאלות גזירה נותנות נקודות לכל שלב.",
-      "ord": 5
+      "source_item_id": "3d3731d8-7637-59a9-9b4f-08298fdb27ec",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
+    },
+    {
+      "ord": 5,
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Two equal $1\\,\\text{kg}$ masses at $x=0$ and $x=4\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "שתי מסות שוות $1\\,\\text{kg}$ ב-$x=0$ וב-$x=4\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+4}{2}=2\\,\\text{m}$.**\n\n**Answer:** $2\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=2\\,\\text{m}$.**\n\n**תשובה:** $2\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "3c2e6d24-5cbf-5e10-8a8f-16b65eb7e11d",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "A rod of length $L = 3\\;\\text{m}$ has $\\lambda(x) = 2x\\;\\text{kg/m}$. Find $M$ and $x_{\\text{cm}}$.",
-      "stem_he": "מוט $L = 3\\;\\text{m}$ עם $\\lambda(x) = 2x$. מצא $M$ ו-$x_{\\text{cm}}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "$M = \\int_0^3 2x\\,dx = [x^2]_0^3 = 9\\;\\text{kg}$. $\\int x\\,dm = \\int_0^3 2x^2\\,dx = [2x^3/3]_0^3 = 18\\;\\text{kg·m}$. $x_{\\text{cm}} = 18/9 = 2\\;\\text{m}$",
-          "2\\;\\text{m}$",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Rod $L = 3\\;\\text{m}$, $\\lambda(x) = 2x\\;\\text{kg/m}$. Two integrals required.\n\n**Total mass:** $M = \\int_0^3 2x\\,dx = [x^2]_0^3 = 9\\;\\text{kg}$.\n\n**First moment:** $\\int x\\,dm = \\int_0^3 2x^2\\,dx = [2x^3/3]_0^3 = 18\\;\\text{kg·m}$.\n\n**CM:** $x_{\\text{cm}} = 18/9 = 2\\;\\text{m}$.\n\n**Why 2 m is correct:** Linear density doubles from $x = 0$ to $x = 3$, so CM lies at $2/3$ of the length from the light end — consistent with $x_{\\text{cm}} = 2 > 1.5$ (midpoint).\n\n**Common wrong path:** Answering $1.5\\;\\text{m}$ (midpoint) for a non-uniform rod. Another slip: computing $\\int \\lambda\\,dx$ correctly but using $\\int \\lambda\\,dx$ again instead of $\\int x\\lambda\\,dx$ for the numerator.\n\n**Exam tip:** Sanity-check: CM must lie closer to the denser end ($x = L$).",
-      "explanation_he": "מוט $L = 3\\;\\text{m}$, $\\lambda(x) = 2x\\;\\text{kg/m}$. נדרשים שני אינטגרלים נפרדים.\n\n**מסה כוללת:** $M = \\int_0^3 2x\\,dx = [x^2]_0^3 = 9\\;\\text{kg}$.\n\n**מומנט ראשון:** $\\int x\\,dm = \\int_0^3 2x^2\\,dx = [2x^3/3]_0^3 = 18\\;\\text{kg·m}$.\n\n**CM:** $x_{\\text{cm}} = 18/9 = 2\\;\\text{m}$.\n\n**למה 2 m נכון:** הצפיפות מוכפלת מ-$x = 0$ ל-$x = 3$, ולכן CM ב-$2/3$ האורך מהקצה הקל — $x_{\\text{cm}} = 2 > 1.5$ (אמצע).\n\n**טעות נפוצה:** תשובה $1.5\\;\\text{m}$ (אמצע) למוט לא-אחיד. שגיאה: $\\int \\lambda\\,dx$ במונה במקום $\\int x\\lambda\\,dx$.\n\n**טיפ לבחינה:** בדיקת סבירות: CM קרוב יותר לקצה הצפוף ($x = L$). לאחר החישוב, השוו ל-$L/2 = 1.5$ m — CM חייב להיות גדול יותר כי $\\lambda$ עולה לינארית.",
+      "stem_en": "Masses $3\\,\\text{kg}$ at $x=0$ and $2\\,\\text{kg}$ at $x=10\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $3\\,\\text{kg}$ ב-$x=0$ ו-$2\\,\\text{kg}$ ב-$x=10\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+20}{5}=4\\,\\text{m}$.**\n\n**Answer:** $4\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=4\\,\\text{m}$.**\n\n**תשובה:** $4\\,\\text{m}$.",
       "skill_atoms": [
-        "cm_integration",
-        "kings_theorem"
+        "center_of_mass"
       ],
-      "id": "q6"
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "b899d344-3ede-5ff2-97cf-162d1f623a70",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "A uniform triangular plate has vertices at $(0,0)$, $(6,0)$, $(0,4)$. Find CM.",
-      "stem_he": "פלטה משולשת אחידה עם קודקודים ב-$(0,0)$, $(6,0)$, $(0,4)$. מצא CM.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "(2, 4/3)",
-          "(2, 1.333)",
-          "x = 2, y = 4/3",
-          "2, 4/3"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "For a **uniform** triangular plate, the CM coincides with the geometric centroid — the average of the vertex coordinates.\n\n**Vertices:** $(0,0)$, $(6,0)$, $(0,4)$.\n\n**Calculation:** $x_{\\text{cm}} = (0 + 6 + 0)/3 = 2$, $y_{\\text{cm}} = (0 + 0 + 4)/3 = 4/3$.\n\n**Why $(2,\\; 4/3)$ is correct:** Uniform surface density means each area element contributes equally; the centroid formula for any triangle (not just right triangles) gives vertex average.\n\n**Common wrong path:** Using $(3, 2)$ — the rectangle midpoint, not the triangle centroid. Another error: averaging only two vertices. For non-uniform $\\sigma(x,y)$, you must integrate.\n\n**Exam tip:** Right triangle with legs on axes: CM at $(a/3, b/3)$ from the right angle — memorize this pattern for quick checks.",
-      "explanation_he": "לפלטה **משולשת אחידה**, CM מתלכד עם הצנטרואיד הגיאומטרי — ממוצע קואורדינטות הקודקודים.\n\n**קודקודים:** $(0,0)$, $(6,0)$, $(0,4)$.\n\n**חישוב:** $x_{\\text{cm}} = 2$, $y_{\\text{cm}} = 4/3$.\n\n**למה $(2,\\; 4/3)$ נכון:** צפיפות אחידה — כל אלמנט שטח תורם שווה; נוסחת צנטרואיד לכל משולש נותנת ממוצע קודקודים.\n\n**טעות נפוצה:** $(3, 2)$ — אמצע המלבן, לא צנטרואיד המשולש. ל-$\\sigma(x,y)$ לא אחידה — חובה אינטגרציה.\n\n**טיפ לבחינה:** משולש ישר-זווית על הצירים: CM ב-$(a/3, b/3)$ מהזווית — שינון לבדיקה מהירה. ניתן לאמת באינטגרציה: $\\iint x\\,\\sigma\\,dA = \\sigma ab/6$ עבור משולש ישר-זווית — כאן $x_{\\text{cm}} = 6/3 = 2$ ו-$y_{\\text{cm}} = 4/3$, שני שליש מהרגליים על הצירים.",
+      "kind": "mcq",
+      "difficulty": "medium",
+      "stem_en": "The SI unit of the center-of-mass position is:",
+      "stem_he": "יחידת ה-SI של מיקום מרכז המסה היא:",
+      "explanation_en": "**It is a position, measured in meters.**\n\n**Answer:** m.",
+      "explanation_he": "**זהו מיקום, נמדד במטרים.**\n\n**תשובה:** m.",
       "skill_atoms": [
-        "cm_integration",
-        "kings_theorem"
+        "center_of_mass"
       ],
-      "id": "q7"
+      "answer_payload": {
+        "options_en": [
+          "$\\text{m}$",
+          "$\\text{kg}$",
+          "$\\text{kg·m}$",
+          "$\\text{m/kg}$"
+        ],
+        "options_he": [
+          "$\\text{m}$",
+          "$\\text{kg}$",
+          "$\\text{kg·m}$",
+          "$\\text{m/kg}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "0b751bbe-649a-5d5c-a9a6-abbe410f24d4",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{m}$",
+        "$\\text{kg}$",
+        "$\\text{kg·m}$",
+        "$\\text{m/kg}$"
+      ],
+      "options_he": [
+        "$\\text{m}$",
+        "$\\text{kg}$",
+        "$\\text{kg·m}$",
+        "$\\text{m/kg}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Compute the reduced mass for $m_1 = 2\\;\\text{kg}$ and $m_2 = 6\\;\\text{kg}$.",
-      "stem_he": "חשב מסה מוקטנת עבור $m_1 = 2\\;\\text{kg}$ ו-$m_2 = 6\\;\\text{kg}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "1.5",
-          "1.5 kg",
-          "mu = 1.5",
-          "\\mu = 1.5\\;\\text{kg}"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Reduced mass $\\mu = m_1 m_2/(m_1 + m_2)$ replaces the two-body system in the CM frame.\n\n**Given:** $m_1 = 2\\;\\text{kg}$, $m_2 = 6\\;\\text{kg}$.\n\n**Calculation:** $\\mu = (2)(6)/(2+6) = 12/8 = 1.5\\;\\text{kg}$.\n\n**Why 1.5 kg is correct:** $\\mu$ is always less than either mass ($\\mu < m_1$ and $\\mu < m_2$). When one mass dominates ($m_2 \\gg m_1$), $\\mu \\approx m_1$ — here $m_2 = 3m_1$, so $\\mu = 1.5 = 0.75\\,m_1$.\n\n**Common wrong path:** Adding masses ($2 + 6 = 8$) or averaging ($(2+6)/2 = 4$). Another slip: using $m_1 m_2/(m_1 - m_2)$ with wrong sign.\n\n**Exam tip:** Use $\\mu$ directly in $K_{\\text{int}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2$ — faster than full König decomposition for collision energy questions.",
-      "explanation_he": "מסה מוקטנת $\\mu = m_1 m_2/(m_1 + m_2)$ מחליפה את מערכת שני הגופים במסגרת CM.\n\n**נתון:** $m_1 = 2\\;\\text{kg}$, $m_2 = 6\\;\\text{kg}$.\n\n**חישוב:** $\\mu = 12/8 = 1.5\\;\\text{kg}$.\n\n**למה 1.5 kg נכון:** $\\mu$ תמיד קטנה מכל מסה ($\\mu < m_1$ ו-$\\mu < m_2$). כשמסה אחת דומיננטית ($m_2 \\gg m_1$), $\\mu \\approx m_1$ — כאן $m_2 = 3m_1$, ולכן $\\mu = 0.75\\,m_1$.\n\n**טעות נפוצה:** חיבור מסות ($8$) או ממוצע ($4$). שגיאה: $m_1 m_2/(m_1 - m_2)$ עם סימן שגוי.\n\n**טיפ לבחינה:** $\\mu$ ישירות ב-$K_{\\text{int}} = \\frac{1}{2}\\mu v_{\\text{rel}}^2$ — מהיר מפירוק קניג מלא לשאלות אנרגיה בהתנגשות. בבחינה, כתבו את הנוסחה $\\mu = m_1 m_2/(m_1+m_2)$ לפני ההצבה — נקודות על הנוסחה גם אם החשבון שגוי.",
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $1\\,\\text{kg}$ at $0$, $2\\,\\text{kg}$ at $3\\,\\text{m}$, $3\\,\\text{kg}$ at $6\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $1\\,\\text{kg}$ ב-$0$, $2\\,\\text{kg}$ ב-$3\\,\\text{m}$, $3\\,\\text{kg}$ ב-$6\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+6+18}{6}=4\\,\\text{m}$.**\n\n**Answer:** $4\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=4\\,\\text{m}$.**\n\n**תשובה:** $4\\,\\text{m}$.",
       "skill_atoms": [
-        "cm_integration",
-        "kings_theorem"
+        "center_of_mass"
       ],
-      "id": "q8"
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "7e009f53-f8de-5291-ad50-a2e2b9f3d9b6",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $4\\,\\text{kg}$ at $x=2\\,\\text{m}$ and $6\\,\\text{kg}$ at $x=7\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $4\\,\\text{kg}$ ב-$x=2\\,\\text{m}$ ו-$6\\,\\text{kg}$ ב-$x=7\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{8+42}{10}=5\\,\\text{m}$.**\n\n**Answer:** $5\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=5\\,\\text{m}$.**\n\n**תשובה:** $5\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "6ecf041a-e68d-59da-acd8-c0c404014422",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $2\\,\\text{kg}$ at $x=1\\,\\text{m}$ and $2\\,\\text{kg}$ at $x=5\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $2\\,\\text{kg}$ ב-$x=1\\,\\text{m}$ ו-$2\\,\\text{kg}$ ב-$x=5\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{2+10}{4}=3\\,\\text{m}$.**\n\n**Answer:** $3\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=3\\,\\text{m}$.**\n\n**תשובה:** $3\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "00099a2a-6ad0-578d-9400-642fb6fdbb65",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Masses $5\\,\\text{kg}$ at $x=0$ and $5\\,\\text{kg}$ at $x=8\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $5\\,\\text{kg}$ ב-$x=0$ ו-$5\\,\\text{kg}$ ב-$x=8\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+40}{10}=4\\,\\text{m}$.**\n\n**Answer:** $4\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=4\\,\\text{m}$.**\n\n**תשובה:** $4\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "242b8b47-ee19-58a3-a2fd-be0525a428c2",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: external forces on a system move its center of mass as if all mass were concentrated there.",
+      "stem_he": "נכון או לא נכון: כוחות חיצוניים על מערכת מזיזים את מרכז המסה כאילו כל המסה מרוכזת בו.",
+      "explanation_en": "**$\\vec F_{ext}=M\\vec a_{cm}$** — **true**.\n\n**Answer:** true.",
+      "explanation_he": "**$\\vec F_{ext}=M\\vec a_{cm}$** — **נכון**.\n\n**תשובה:** נכון.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "306e50d1-e9f9-58ab-a82b-3a301af3988e",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Masses $1\\,\\text{kg}$ at $0$, $2\\,\\text{kg}$ at $3\\,\\text{m}$, $3\\,\\text{kg}$ at $9\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $1\\,\\text{kg}$ ב-$0$, $2\\,\\text{kg}$ ב-$3\\,\\text{m}$, $3\\,\\text{kg}$ ב-$9\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{0+6+27}{6}=5.5\\,\\text{m}$.**\n\n**Answer:** $5.5\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=5.5\\,\\text{m}$.**\n\n**תשובה:** $5.5\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 5.5
+      },
+      "source_item_id": "f06c8e6e-8a4a-561f-a0ee-fad75a5bf9fe",
+      "points_level_min": "5pt",
+      "correct_answer": "5.5"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Masses $2\\,\\text{kg}$ at $x=-3\\,\\text{m}$ and $4\\,\\text{kg}$ at $x=6\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $2\\,\\text{kg}$ ב-$x=-3\\,\\text{m}$ ו-$4\\,\\text{kg}$ ב-$x=6\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{-6+24}{6}=3\\,\\text{m}$.**\n\n**Answer:** $3\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}=3\\,\\text{m}$.**\n\n**תשובה:** $3\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "1d0391c0-2f84-5f3d-82c1-b48c54b00810",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Masses $1\\,\\text{kg}$ at $2\\,\\text{m}$, $3\\,\\text{kg}$ at $6\\,\\text{m}$, $2\\,\\text{kg}$ at $10\\,\\text{m}$. Find the center of mass.",
+      "stem_he": "מסות $1\\,\\text{kg}$ ב-$2\\,\\text{m}$, $3\\,\\text{kg}$ ב-$6\\,\\text{m}$, $2\\,\\text{kg}$ ב-$10\\,\\text{m}$. מצאו את מרכז המסה.",
+      "explanation_en": "**$x_{cm}=\\dfrac{2+18+20}{6}=\\dfrac{40}{6}\\approx6.67\\,\\text{m}$.**\n\n**Answer:** $\\approx6.67\\,\\text{m}$.",
+      "explanation_he": "**$x_{cm}\\approx6.67\\,\\text{m}$.**\n\n**תשובה:** $\\approx6.67\\,\\text{m}$.",
+      "skill_atoms": [
+        "center_of_mass"
+      ],
+      "answer_payload": {
+        "value": 6.666667
+      },
+      "source_item_id": "d24f8a6a-5d39-549a-94a3-477f97ace15a",
+      "points_level_min": "5pt",
+      "correct_answer": "6.666667"
     }
   ],
   "est_minutes": 50,
