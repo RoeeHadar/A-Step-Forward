@@ -240,12 +240,11 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "inner_product",
+      "dot_product",
       "orthogonality",
-      "orthogonal_complement",
-      "gram_schmidt",
-      "projection_subspace",
-      "QR_decomposition"
+      "orthonormal",
+      "projection",
+      "vector_norm"
     ],
     "tutor_pacing_hint": "Dot product and orthogonality first, then projection, then Gram-Schmidt.",
     "next_recommended": [
@@ -258,174 +257,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$u=(1,2,3)^T$, $v=(1,-1,0)^T$. Are they orthogonal?",
-      "stem_he": "$u=(1,2,3)^T$, $v=(1,-1,0)^T$. אורתוגונלים?",
+      "stem_en": "Two vectors are orthogonal if and only if their dot product is:",
+      "stem_he": "שני וקטורים מאונכים אם ורק אם מכפלתם הסקלרית היא:",
+      "explanation_en": "**$u\\perp v\\iff u\\cdot v=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$u\\perp v\\iff u\\cdot v=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "orthogonality"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$0$",
+          "$1$",
+          "$-1$",
+          "$\\text{their length}$"
+        ],
+        "options_he": [
+          "$0$",
+          "$1$",
+          "$-1$",
+          "$\\text{their length}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "05b392a2-d65a-5267-80ad-54cea1c3f374",
+      "points_level_min": "5pt",
       "options_en": [
-        "Yes",
-        "No",
-        "Only in $\\mathbb{R}^2$",
-        "Depends on norm"
+        "$0$",
+        "$1$",
+        "$-1$",
+        "$\\text{their length}$"
       ],
       "options_he": [
-        "כן",
-        "לא",
-        "רק ב-$\\mathbb{R}^2$",
-        "תלוי בנורמה"
+        "$0$",
+        "$1$",
+        "$-1$",
+        "$\\text{their length}$"
       ],
-      "correct_index": 1,
-      "explanation_en": "Compute $\\langle u,v\\rangle=1\\cdot1+2\\cdot(-1)+3\\cdot0=1-2+0=-1\\ne0$. The vectors are **not** orthogonal. Option A (\"Yes\") is wrong because a zero inner product is required; $-1\\ne0$.\n\n**Why \"No\" is correct:** Orthogonality means exactly $\\langle u,v\\rangle=0$. Any nonzero value — positive or negative — means the vectors share a component along each other's direction.\n\n**Common wrong path:** Answering \"Yes\" after seeing a zero in the third term ($3\\cdot0=0$) without completing $1-2$. Also confusing orthogonality with \"different dimensions\" (option C is irrelevant in $\\mathbb{R}^3$).\n\n**Exam tip:** Write the sum $u_1v_1+u_2v_2+u_3v_3$ term by term in the margin. One line of arithmetic prevents a sign error from flipping the entire MCQ.",
-      "explanation_he": "חשבו $\\langle u,v\\rangle=1\\cdot1+2\\cdot(-1)+3\\cdot0=1-2+0=-1\\ne0$. הוקטורים **לא** אורתוגונליים. תשובה א' (\"כן\") שגויה כי נדרשת מכפלה פנימית אפס; $-1\\ne0$.\n\n**למה \"לא\" נכון:** אורתוגונליות פירושה בדיוק $\\langle u,v\\rangle=0$. כל ערך לא-אפס — חיובי או שלילי — אומר שלוקטורים יש רכיב משותף.\n\n**דרך שגויה נפוצה:** תשובה \"כן\" אחרי ראיית אפס באיבר השלישי ($3\\cdot0=0$) בלי להשלים $1-2$. גם בלבול עם \"מימדים שונים\" (תשובה ג' לא רלוונטית ב-$\\mathbb{R}^3$).\n\n**טיפ לבחינה:** כתבו את הסכום $u_1v_1+u_2v_2+u_3v_3$ איבר-איבר בשוליים. שורת חישוב אחת מונעת טעות סימן שמהפכת את כל שאלת הבחירה.",
-      "skill_atoms": [
-        "orthogonality",
-        "inner_product"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Are $(1,2,-1)^T$ and $(3,0,3)^T$ orthogonal?",
-      "stem_he": "האם $(1,2,-1)^T$ ו-$(3,0,3)^T$ אורתוגונלים?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\langle(1,2,-1),(3,0,3)\\rangle=3+0-3=0$. Yes, orthogonal.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0$. Yes, orthogonal.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Compute $\\langle(1,2,-1),(3,0,3)\\rangle=3+0-3=0$. The inner product vanishes, so the vectors are **orthogonal**.\n\n**Why this is correct:** In $\\mathbb{R}^3$, orthogonality is purely algebraic: one dot product equals zero. Here the middle term is zero because the second vector has a zero in position 2, but the first and third terms cancel ($3-3=0$).\n\n**Common wrong path:** Stopping after $3+0=3$ and forgetting the $-1\\cdot3=-3$ term. Another slip: checking $\\|u\\|=\\|v\\|$ or comparing norms instead of the inner product (norm equality is unrelated to orthogonality).\n\n**Exam tip:** When one vector has zeros, still write all three products — the zero term is easy, but the remaining terms must still sum to zero. Quick check: if $u\\cdot v=0$, then $v\\cdot u=0$ by symmetry.",
-      "explanation_he": "חשבו $\\langle(1,2,-1),(3,0,3)\\rangle=3+0-3=0$. המכפלה הפנימית מתאפסת, ולכן הוקטורים **אורתוגונליים**.\n\n**למה זה נכון:** ב-$\\mathbb{R}^3$, אורתוגונליות היא אלגברית לחלוטין: מכפלה פנימית אחת שווה לאפס. כאן האיבר האמצעי אפס כי לוקטור השני יש 0 במיקום 2, אך האיברים הראשון והשלישי מתקזזים ($3-3=0$).\n\n**דרך שגויה נפוצה:** עצירה אחרי $3+0=3$ ושכחת האיבר $-1\\cdot3=-3$. טעות נוספת: בדיקת $\\|u\\|=\\|v\\|$ במקום מכפלה פנימית (שוויון נורמות לא קשור לאורתוגונליות).\n\n**טיפ לבחינה:** כשלוקטור אחד מכיל אפסים, עדיין כתבו את שלוש המכפלות — האיבר עם האפס קל, אך השאר חייבים להסתכם לאפס. בדיקה מהירה: אם $u\\cdot v=0$, אז גם $v\\cdot u=0$ מכיוון שהמכפלה הפנימית סימטרית.",
+      "stem_en": "Compute the dot product $(1,2)\\cdot(2,-1)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(1,2)\\cdot(2,-1)$.",
+      "explanation_en": "**$2-2=0$ — orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$2-2=0$ — מאונכים.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "inner_product",
-        "orthogonality"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "9e96a53e-3d23-5faa-a0a9-8528dad8d3bb",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "$\\|v\\|=?$ for $v=(3,4)^T$.",
-      "stem_he": "$\\|v\\|$ עבור $v=(3,4)^T$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\|(3,4)\\|=\\sqrt{9+16}=5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "5"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "The norm of $v=(3,4)^T$ is $\\|v\\|=\\sqrt{\\langle v,v\\rangle}=\\sqrt{9+16}=\\sqrt{25}=5$. This is the classic $3$-$4$-$5$ right triangle.\n\n**Why 5 is correct:** $\\|v\\|^2=3^2+4^2=25$, so $\\|v\\|=5$. The norm always equals the Euclidean length — the distance from the origin to $(3,4)$.\n\n**Common wrong path:** Answering $25$ (forgetting the square root), or $7$ from adding $3+4$. Some students compute $\\sqrt{9+16}$ as $\\sqrt{9}+\\sqrt{16}=7$ — the square root of a sum is not the sum of square roots.\n\n**Exam tip:** Recognize the $3$-$4$-$5$ triple instantly on timed exams. For projection problems involving $(3,4)$, note $\\|v\\|^2=25$ so denominators often involve $25$, not $5$, when using $\\frac{\\langle b,a\\rangle}{\\|a\\|^2}$.",
-      "explanation_he": "הנורמה של $v=(3,4)^T$ היא $\\|v\\|=\\sqrt{\\langle v,v\\rangle}=\\sqrt{9+16}=\\sqrt{25}=5$. זה משולש ישר-זווית $3$-$4$-$5$ הקלאסי.\n\n**למה 5 נכון:** $\\|v\\|^2=3^2+4^2=25$, ולכן $\\|v\\|=5$. הנורמה שווה למרחק מהראשית ל-$(3,4)$.\n\n**דרך שגויה נפוצה:** תשובה $25$ (שכחת שורש), או $7$ מחיבור $3+4$. חלק מחשבים $\\sqrt{9+16}$ כ-$\\sqrt{9}+\\sqrt{16}=7$ — שורש של סכום אינו סכום שורשים.\n\n**טיפ לבחינה:** זהו את שלישייה $3$-$4$-$5$ מיד בבחינה עם זמן. בבעיות הטלה עם $(3,4)$, שימו לב $\\|v\\|^2=25$ — מכנים לעיתים $25$, לא $5$, בנוסחה $\\frac{\\langle b,a\\rangle}{\\|a\\|^2}$.",
+      "stem_en": "True or False: the zero vector is orthogonal to every vector.",
+      "stem_he": "נכון או לא נכון: וקטור האפס מאונך לכל וקטור.",
+      "explanation_en": "**$0\\cdot v=0$ for all $v$** — **true**.",
+      "explanation_he": "**$0\\cdot v=0$ לכל $v$** — **נכון**.",
       "skill_atoms": [
-        "inner_product",
         "orthogonality"
-      ]
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "5beb41a8-3d40-5924-9734-048606ecb92a",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "Project $b=(2,3)^T$ onto $a=(1,0)^T$.",
-      "stem_he": "הטל $b=(2,3)^T$ על $a=(1,0)^T$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$\\text{proj}=\\frac{2}{1}(1,0)=(2,0)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "(2,0)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2,0"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Project $b=(2,3)^T$ onto $a=(1,0)^T$ (the $x$-axis). Using $\\text{proj}_a b=\\frac{\\langle b,a\\rangle}{\\langle a,a\\rangle}a$: $\\langle b,a\\rangle=2$, $\\langle a,a\\rangle=1$, so $\\text{proj}_a b=2(1,0)^T=(2,0)^T$.\n\n**Why $(2,0)^T$ is correct:** Projection onto the $x$-axis keeps the $x$-component and zeroes the $y$-component. The residual $(0,3)^T$ is vertical — orthogonal to the horizontal axis. Verify: $\\langle(0,3),(1,0)\\rangle=0$. ✓\n\n**Common wrong path:** Returning $(2,3)^T$ (no projection), or $(0,3)^T$ (keeping the wrong component). Some divide by $\\|a\\|=1$ correctly but forget to multiply back by $a$.\n\n**Exam tip:** When $a$ is a coordinate axis, projection is instant: keep the matching coordinate, zero the others. Still show the formula once for partial credit on non-axis problems.",
-      "explanation_he": "הטילו $b=(2,3)^T$ על $a=(1,0)^T$ (ציר $x$). בנוסחה $\\text{proj}_a b=\\frac{\\langle b,a\\rangle}{\\langle a,a\\rangle}a$: $\\langle b,a\\rangle=2$, $\\langle a,a\\rangle=1$, ולכן $\\text{proj}_a b=2(1,0)^T=(2,0)^T$.\n\n**למה $(2,0)^T$ נכון:** הטלה על ציר $x$ שומרת את רכיב $x$ ו מאפסת את $y$. השארית $(0,3)^T$ אנכית — אורתוגונלית לציר האופקי. אימות: $\\langle(0,3),(1,0)\\rangle=0$. ✓\n\n**דרך שגויה נפוצה:** החזרת $(2,3)^T$ (ללא הטלה), או $(0,3)^T$ (שמירת הרכיב הלא נכון). חלק מחלקים ב-$\\|a\\|=1$ נכון אך שוכחים לכפול בחזרה ב-$a$.\n\n**טיפ לבחינה:** כש-$a$ הוא ציר קואורדינטות, ההטלה מיידית: שמרו את הקואורדינטה המתאימה, אפסו את השאר. עדיין הציגו את הנוסחה פעם אחת לנקודות חלקיות בבעיות שאינן ציר.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "Show that $(1,2)$ and $(2,-1)$ are orthogonal.",
+      "stem_he": "הראו ש-$(1,2)$ ו-$(2,-1)$ מאונכים.",
+      "explanation_en": "**Step 1 — Dot product.** $(1,2)\\cdot(2,-1)$.\n\n**Step 2 — Multiply.** $1\\cdot 2+2\\cdot(-1)$.\n\n**Step 3 — Add.** $2-2=0$; a zero dot product means orthogonal.\n\n**Answer:** $0$.",
+      "explanation_he": "**שלב 1 — מכפלה סקלרית.** $(1,2)\\cdot(2,-1)$.\n\n**שלב 2 — כפל.** $2+(-2)$.\n\n**שלב 3 — חיבור.** $0$ — מאונכים.\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "inner_product",
-        "orthogonality"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Dot product.** $(1,2)\\cdot(2,-1)$.",
+          "**Step 2 — Multiply.** $1\\cdot 2+2\\cdot(-1)$.",
+          "**Step 3 — Add.** $2-2=0$; a zero dot product means orthogonal.",
+          "**Answer:** $0$."
+        ],
+        "steps_he": [
+          "**שלב 1 — מכפלה סקלרית.** $(1,2)\\cdot(2,-1)$.",
+          "**שלב 2 — כפל.** $2+(-2)$.",
+          "**שלב 3 — חיבור.** $0$ — מאונכים.",
+          "**תשובה:** $0$."
+        ]
+      },
+      "source_item_id": "e99de060-ec83-5f57-b04e-34d6b0e60abf",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "What is $W^\\perp$ if $W=\\text{span}\\{(1,0,0)^T\\}$ in $\\mathbb{R}^3$?",
-      "stem_he": "$W^\\perp$ אם $W=\\text{span}\\{e_1\\}$ ב-$\\mathbb{R}^3$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution:**\n\n$W^\\perp=\\{(0,y,z):y,z\\in\\mathbb{R}\\}$ = the $yz$-plane.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "the $yz$-plane.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "0,"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "If $W=\\text{span}\\{(1,0,0)^T\\}$ in $\\mathbb{R}^3$, then $W$ is the $x$-axis. A vector lies in $W^\\perp$ iff it is orthogonal to every vector in $W$ — equivalently, orthogonal to $(1,0,0)^T$.\n\n**Why the $yz$-plane is correct:** $\\langle(x,y,z),(1,0,0)\\rangle=x$. Setting this to zero gives $x=0$, so $W^\\perp=\\{(0,y,z):y,z\\in\\mathbb{R}\\}$ — all vectors with no $x$-component. This equals $\\text{span}\\{e_2,e_3\\}$.\n\n**Common wrong path:** Answering \"the $x$-axis\" (confusing $W$ with $W^\\perp$), or giving a single vector like $(0,1,0)$ when the question asks for the full complement subspace.\n\n**Exam tip:** Use $\\dim W+\\dim W^\\perp=3$. Here $\\dim W=1$, so $\\dim W^\\perp=2$ — must be a plane, not a line. This dimension check catches many complement errors before you write equations.",
-      "explanation_he": "אם $W=\\text{span}\\{(1,0,0)^T\\}$ ב-$\\mathbb{R}^3$, אז $W$ הוא ציר $x$. וקטור שייך ל-$W^\\perp$ אמ\"מ הוא אורתוגונלי לכל וקטור ב-$W$ — כלומר, אורתוגונלי ל-$(1,0,0)^T$.\n\n**למה מישור $yz$ נכון:** $\\langle(x,y,z),(1,0,0)\\rangle=x$. הצבת אפס נותנת $x=0$, ולכן $W^\\perp=\\{(0,y,z)\\}$ — כל הוקטורים ללא רכיב $x$. זה שווה ל-$\\text{span}\\{e_2,e_3\\}$.\n\n**דרך שגויה נפוצה:** תשובה \"ציר $x$\" (בלבול בין $W$ ל-$W^\\perp$), או מתן וקטור בודד כששואלים על תת-מרחב המשלים המלא.\n\n**טיפ לבחינה:** השתמשו ב-$\\dim W+\\dim W^\\perp=3$. כאן $\\dim W=1$, ולכן $\\dim W^\\perp=2$ — חייב להיות מישור, לא קו. בדיקת מימד זו תופסת טעויות משלים לפני כתיבת משוואות.",
+      "stem_en": "Compute the dot product $(1,0)\\cdot(0,1)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(1,0)\\cdot(0,1)$.",
+      "explanation_en": "**$=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$=0$.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "inner_product",
-        "orthogonality"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "cfb3215f-5f93-5d52-b6b0-bf9c11a13e4a",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "Apply Gram-Schmidt to $\\{(1,1,1)^T,(1,1,0)^T\\}$.",
-      "stem_he": "גרם-שמידט ל-$\\{(1,1,1)^T,(1,1,0)^T\\}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$q_1=(1,1,1)/\\sqrt{3}$. $\\langle v_2,q_1\\rangle=2/\\sqrt{3}$. $u_2=(1,1,0)-(2/3)(1,1,1)=(1/3,1/3,-2/3)$. $q_2=(1,1,-2)/\\sqrt{6}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "(1,1,-2)/\\sqrt{6}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "6"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Apply Gram–Schmidt to $v_1=(1,1,1)^T$, $v_2=(1,1,0)^T$. First: $q_1=v_1/\\sqrt{3}=(1,1,1)/\\sqrt{3}$. Then $\\langle v_2,q_1\\rangle=2/\\sqrt{3}$, so $u_2=(1,1,0)-(2/3)(1,1,1)=(1/3,1/3,-2/3)$, and $q_2=(1,1,-2)/\\sqrt{6}$.\n\n**Why this ONB is correct:** $q_2$ was built by subtracting the component of $v_2$ along $q_1$, guaranteeing $\\langle q_1,q_2\\rangle=0$. Normalization gives $\\|q_2\\|=1$. Both span the same plane as $\\{v_1,v_2\\}$.\n\n**Common wrong path:** Normalizing $v_1$ and $v_2$ first without subtracting projections — the result is not orthogonal. Arithmetic errors in $\\langle v_2,q_1\\rangle=2/\\sqrt{3}$ often propagate; write fractions as exact values, not decimals.\n\n**Exam tip:** Label each $u_k$ and $q_k$ on separate lines. Examiners give partial credit for correct $q_1$ even if $q_2$ has an arithmetic slip. Verify at the end: $\\langle q_1,q_2\\rangle$ must be zero.",
-      "explanation_he": "הפעילו גרם–שמידט על $v_1=(1,1,1)^T$, $v_2=(1,1,0)^T$. ראשית: $q_1=(1,1,1)/\\sqrt{3}$. אז $\\langle v_2,q_1\\rangle=2/\\sqrt{3}$, ולכן $u_2=(1,1,0)-(2/3)(1,1,1)=(1/3,1/3,-2/3)$, ו-$q_2=(1,1,-2)/\\sqrt{6}$.\n\n**למה ONB זה נכון:** $q_2$ נבנה בחיסור הרכיב של $v_2$ לאורך $q_1$, מה שמבטיח $\\langle q_1,q_2\\rangle=0$. נרמול נותן $\\|q_2\\|=1$. שניהם פורשים את אותו מישור כ-$\\{v_1,v_2\\}$.\n\n**דרך שגויה נפוצה:** נרמול $v_1$ ו-$v_2$ לפני חיסור הטלות — התוצאה לא אורתוגונלית. טעויות חישוב ב-$\\langle v_2,q_1\\rangle$ מתפשטות; כתבו שברים מדויקים.\n\n**טיפ לבחינה:** סמנו כל $u_k$ ו-$q_k$ בשורות נפרדות. בוחנים נותנים נקודות חלקיות על $q_1$ נכון גם אם $q_2$ שגוי. אמתו בסוף: $\\langle q_1,q_2\\rangle$ חייב להיות אפס.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "Compute the dot product $(3,4)\\cdot(4,-3)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(3,4)\\cdot(4,-3)$.",
+      "explanation_en": "**$12-12=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$12-12=0$.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "inner_product",
-        "orthogonality"
-      ]
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "8efc2f36-90bf-5ca7-8204-a01515f640f8",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Project $b=(4,1)^T$ onto $a=(1,1)^T$.",
-      "stem_he": "הטל $b=(4,1)^T$ על $a=(1,1)^T$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$\\text{proj}=\\frac{5}{2}(1,1)=(5/2,5/2)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "(5/2,5/2)^T$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "Project $b=(4,1)^T$ onto $a=(1,1)^T$. Compute $\\langle b,a\\rangle=4+1=5$, $\\langle a,a\\rangle=2$. So $\\text{proj}_a b=\\frac{5}{2}(1,1)^T=(5/2,5/2)^T$.\n\n**Why $(5/2,5/2)^T$ is correct:** The projection lies on the line $y=x$, a scalar multiple of $(1,1)$. Residual $b-\\hat{b}=(1.5,-1.5)$ satisfies $\\langle b-\\hat{b},a\\rangle=1.5-1.5=0$. ✓\n\n**Common wrong path:** Using $\\|b\\|^2$ in the denominator instead of $\\|a\\|^2$, or forgetting to multiply the scalar by vector $a$.\n\n**Exam tip:** Fraction answers like $(5/2,5/2)$ are expected — do not round. Verify orthogonality of the residual with one dot product for full marks.",
-      "explanation_he": "הטילו $b=(4,1)^T$ על $a=(1,1)^T$. חשבו $\\langle b,a\\rangle=4+1=5$, $\\langle a,a\\rangle=1+1=2$. לכן $\\text{proj}_a b=\\frac{5}{2}(1,1)^T=(5/2,5/2)^T$.\n\n**למה $(5/2,5/2)^T$ נכון:** ההטלה שוכבת על הקו $y=x$, כפולה סקלרית של $(1,1)$. שארית $b-\\hat{b}=(4-2.5,\\,1-2.5)=(1.5,-1.5)$ מקיימת $\\langle b-\\hat{b},a\\rangle=1.5-1.5=0$. ✓\n\n**דרך שגויה נפוצה:** שימוש ב-$\\|b\\|^2$ במכנה במקום $\\|a\\|^2$, או שכחת לכפול את הסקלר בוקטור $a$ — התוצאה תהיה וקטור בכיוון שגוי.\n\n**טיפ לבחינה:** תשובות שבר כמו $(5/2,5/2)$ צפויות — אל תעגלו לעשרוניים. תמיד אמתו אורתוגונליות השארית במכפלה פנימית אחת; בוחנים מעניקים נקודות על אימות זה גם כשיש טעות חישוב קטנה.",
+      "stem_en": "An orthonormal set is an orthogonal set of vectors that are also:",
+      "stem_he": "קבוצה אורתונורמלית היא קבוצה אורתוגונלית של וקטורים שהם גם:",
+      "explanation_en": "**Orthonormal = orthogonal + unit length.**\n\n**Answer:** unit vectors.",
+      "explanation_he": "**אורתונורמלי = אורתוגונלי + אורך יחידה.**\n\n**תשובה:** וקטורי יחידה.",
       "skill_atoms": [
-        "inner_product",
-        "orthogonality"
-      ]
+        "orthonormal"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{unit vectors}$",
+          "$\\text{parallel}$",
+          "$\\text{zero}$",
+          "$\\text{equal}$"
+        ],
+        "options_he": [
+          "$\\text{unit vectors}$",
+          "$\\text{parallel}$",
+          "$\\text{zero}$",
+          "$\\text{equal}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "5141fbe1-8039-55a4-aaf8-2472d651f1d1",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\text{unit vectors}$",
+        "$\\text{parallel}$",
+        "$\\text{zero}$",
+        "$\\text{equal}$"
+      ],
+      "options_he": [
+        "$\\text{unit vectors}$",
+        "$\\text{parallel}$",
+        "$\\text{zero}$",
+        "$\\text{equal}$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$W=\\text{span}\\{(1,2)^T\\}$ in $\\mathbb{R}^2$. Find $W^\\perp$.",
-      "stem_he": "$W=\\text{span}\\{(1,2)^T\\}$ ב-$\\mathbb{R}^2$. $W^\\perp$?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "**Solution path:** Identify the rule from this lesson, then apply it.\n\n$W^\\perp=\\{(a,b):a+2b=0\\}=\\text{span}\\{(2,-1)^T\\}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "\\text{span}\\{(2,-1)^T\\}$.\n\n**Check:** Re-substitute or verify units and signs before moving on",
-          "-1"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "$W=\\text{span}\\{(1,2)^T\\}$ in $\\mathbb{R}^2$ is a line through the origin with direction $(1,2)$. A vector $(a,b)^T$ lies in $W^\\perp$ iff $\\langle(a,b),(1,2)\\rangle=a+2b=0$.\n\n**Why $\\text{span}\\{(2,-1)^T\\}$ is correct:** The equation $a+2b=0$ has solution $a=-2b$, so every perpendicular vector is a scalar multiple of $(-2,1)^T$ or equivalently $(2,-1)^T$. Note $\\langle(2,-1),(1,2)\\rangle=2-2=0$. ✓\n\n**Common wrong path:** Giving $(1,2)$ itself (that spans $W$, not $W^\\perp$), or $(-2,1)$ vs $(2,-1)$ confusion — both span the same line. Some answer \"the line $a+2b=0$\" without a spanning vector.\n\n**Exam tip:** In $\\mathbb{R}^2$, if $W$ is a line, $W^\\perp$ is also a line — the perpendicular direction. Rotate $(1,2)$ by $90°$ to get $(-2,1)$ or $(2,-1)$ as a quick sanity check.",
-      "explanation_he": "$W=\\text{span}\\{(1,2)^T\\}$ ב-$\\mathbb{R}^2$ הוא קו דרך הראשית בכיוון $(1,2)$. וקטור $(a,b)^T$ שייך ל-$W^\\perp$ אמ\"מ $\\langle(a,b),(1,2)\\rangle=a+2b=0$.\n\n**למה $\\text{span}\\{(2,-1)^T\\}$ נכון:** המשוואה $a+2b=0$ נותנת $a=-2b$, ולכן כל וקטור ניצב הוא כפולה של $(-2,1)^T$ או $(2,-1)^T$. אימות: $\\langle(2,-1),(1,2)\\rangle=0$. ✓\n\n**דרך שגויה נפוצה:** מתן $(1,2)$ עצמו (זה $W$, לא $W^\\perp$), או בלבול בין $(-2,1)$ ל-$(2,-1)$ — שניהם פורשים אותו קו.\n\n**טיפ לבחינה:** ב-$\\mathbb{R}^2$, אם $W$ קו, $W^\\perp$ גם קו — הכיוון הניצב. סובבו $(1,2)$ ב-$90°$ לקבלת $(-2,1)$ כבדיקת sanity מהירה.",
+      "stem_en": "Find the projection coefficient $\\dfrac{a\\cdot b}{b\\cdot b}$ of $a=(3,0)$ onto $b=(1,0)$.",
+      "stem_he": "מצאו את מקדם ההיטל $\\dfrac{a\\cdot b}{b\\cdot b}$ של $a=(3,0)$ על $b=(1,0)$.",
+      "explanation_en": "**$\\dfrac{3}{1}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$\\dfrac{3}{1}=3$.**\n\n**תשובה:** $3$.",
       "skill_atoms": [
-        "inner_product",
+        "projection"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "a64691ae-73fb-5b7a-b5aa-f8373ff5d4af",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the norm $\\lVert(3,4)\\rVert$.",
+      "stem_he": "מצאו את הנורמה $\\lVert(3,4)\\rVert$.",
+      "explanation_en": "**$\\sqrt{25}=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$\\sqrt{25}=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "vector_norm"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "2bfc36d4-febc-54b4-8b9c-3e213e1dcb4b",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Compute the dot product $(2,2)\\cdot(1,-1)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(2,2)\\cdot(1,-1)$.",
+      "explanation_en": "**$2-2=0$ — orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$2-2=0$ — מאונכים.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "da3273a4-ebee-575c-a527-338dc5d67157",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "Find the projection coefficient of $a=(4,2)$ onto $b=(1,0)$.",
+      "stem_he": "מצאו את מקדם ההיטל של $a=(4,2)$ על $b=(1,0)$.",
+      "explanation_en": "**$\\dfrac{4}{1}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$\\dfrac{4}{1}=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "projection"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "3fcb077b-d6ae-556e-868e-fab8614d7216",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: nonzero orthogonal vectors are linearly independent.",
+      "stem_he": "נכון או לא נכון: וקטורים מאונכים שונים מאפס הם בלתי-תלויים לינארית.",
+      "explanation_en": "**Orthogonality of nonzero vectors implies independence** — **true**.",
+      "explanation_he": "**אורתוגונליות של וקטורים לא-אפסיים גוררת אי-תלות** — **נכון**.",
+      "skill_atoms": [
         "orthogonality"
-      ]
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "6b8e3d58-6e01-5c08-a735-67e465a9a158",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Compute the dot product $(1,1,1)\\cdot(1,-2,1)$.",
+      "stem_he": "חשבו את המכפלה הסקלרית $(1,1,1)\\cdot(1,-2,1)$.",
+      "explanation_en": "**$1-2+1=0$ — orthogonal.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$1-2+1=0$ — מאונכים.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "dot_product"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "54be9aa9-13e4-56b6-bc35-f81f4e9fb408",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the projection coefficient of $a=(1,2,2)$ onto $b=(1,0,0)$.",
+      "stem_he": "מצאו את מקדם ההיטל של $a=(1,2,2)$ על $b=(1,0,0)$.",
+      "explanation_en": "**$\\dfrac{1}{1}=1$.**\n\n**Answer:** $1$.",
+      "explanation_he": "**$\\dfrac{1}{1}=1$.**\n\n**תשובה:** $1$.",
+      "skill_atoms": [
+        "projection"
+      ],
+      "answer_payload": {
+        "value": 1
+      },
+      "source_item_id": "88d48b05-0d74-506d-b41f-9961973a1bca",
+      "points_level_min": "5pt",
+      "correct_answer": "1"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "Find the norm $\\lVert(1,2,2)\\rVert$.",
+      "stem_he": "מצאו את הנורמה $\\lVert(1,2,2)\\rVert$.",
+      "explanation_en": "**$\\sqrt{9}=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$\\sqrt{9}=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "vector_norm"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "8e3596c2-c1b3-56ed-9707-fd13c95a4bea",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     }
   ],
   "est_minutes": 50,

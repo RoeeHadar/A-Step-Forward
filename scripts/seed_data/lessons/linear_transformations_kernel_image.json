@@ -240,13 +240,10 @@
       }
     ],
     "skill_atoms_unlocked": [
-      "kernel",
       "image",
+      "kernel",
       "rank",
-      "nullity",
-      "rank_nullity",
-      "injectivity",
-      "surjectivity"
+      "rank_nullity"
     ],
     "tutor_pacing_hint": "Kernel first (solve Ax=0), then image (pivot columns), then rank-nullity, then injective/surjective.",
     "next_recommended": [
@@ -259,180 +256,331 @@
       "ord": 1,
       "kind": "mcq",
       "difficulty": "easy",
-      "stem_en": "$T$ is injective iff:",
-      "stem_he": "$T$ חח\"ע אמ\"מ:",
+      "stem_en": "The kernel of a linear map $T$ is the set of vectors mapped to:",
+      "stem_he": "הגרעין של העתקה לינארית $T$ הוא קבוצת הווקטורים הנשלחים ל:",
+      "explanation_en": "**$\\ker T=\\{v: T(v)=0\\}$.**\n\n**Answer:** the zero vector.",
+      "explanation_he": "**$\\ker T=\\{v: T(v)=0\\}$.**\n\n**תשובה:** וקטור האפס.",
+      "skill_atoms": [
+        "kernel"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\text{the zero vector}$",
+          "$\\text{themselves}$",
+          "$\\text{a basis}$",
+          "$\\text{infinity}$"
+        ],
+        "options_he": [
+          "$\\text{the zero vector}$",
+          "$\\text{themselves}$",
+          "$\\text{a basis}$",
+          "$\\text{infinity}$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "6f53158d-37e8-5e13-97a0-7600ad172615",
+      "points_level_min": "5pt",
       "options_en": [
-        "$\\ker(T)=V$",
-        "$\\ker(T)=\\{\\mathbf{0}\\}$",
-        "Im$(T)=W$",
-        "rank $=0$"
+        "$\\text{the zero vector}$",
+        "$\\text{themselves}$",
+        "$\\text{a basis}$",
+        "$\\text{infinity}$"
       ],
       "options_he": [
-        "$\\ker(T)=V$",
-        "$\\ker(T)=\\{\\mathbf{0}\\}$",
-        "Im$(T)=W$",
-        "rank $=0$"
+        "$\\text{the zero vector}$",
+        "$\\text{themselves}$",
+        "$\\text{a basis}$",
+        "$\\text{infinity}$"
       ],
-      "correct_index": 1,
-      "explanation_en": "**Why this is correct:**\nA map is **injective** (one-to-one) precisely when no two distinct inputs share the same output. For linear maps this is equivalent to $\\ker(T)=\\{\\mathbf{0}\\}$: any nonzero vector in the kernel would create a collision with $\\mathbf{0}$. Option B states exactly this criterion.\n\n**How to think about it:**\nWhen you see \"injective iff\", translate immediately to kernel language. Scan the options for $\\ker(T)=\\{\\mathbf{0}\\}$ versus conditions about the image or rank alone.\n\n**Common slip:**\nChoosing Im$(T)=W$ (surjectivity) or $\\ker(T)=V$ (everything maps to zero — only the zero map). Another trap: rank $=0$, which means the map sends everything to zero, the opposite of injectivity.\n\n**Exam tip:**\nWrite on scratch paper: injective $\\Leftrightarrow$ nullity $=0$. Cross out any option mentioning the codomain dimension before checking the kernel.",
-      "explanation_he": "**למה זה נכון:**\nהעתקה **חח\"ע** (חד-חד-ערכית) בדיוק כשאין שני קלטים שונים עם אותו פלט. בהעתקות לינאריות זה שקול ל-$\\ker(T)=\\{\\mathbf{0}\\}$: כל וקטור לא-אפס בגרעין יוצר התנגשות עם $\\mathbf{0}$. אפשרות ב' מציינת בדיוק קריטריון זה.\n\n**איך לחשוב על זה:**\nכשמופיע \"חח\"ע אמ\"מ\", תרגמו מיד לשפת גרעין. חפשו $\\ker(T)=\\{\\mathbf{0}\\}$ לעומת תנאים על תמונה או rank בלבד.\n\n**טעות נפוצה:**\nבחירה ב-Im$(T)=W$ (על) או $\\ker(T)=V$ (הכל מתאפס — רק העתקת האפס). מלכודת נוספת: rank $=0$, הפכי לחח\"ע.\n\n**טיפ לבחינה:**\nכתבו: חח\"ע $\\Leftrightarrow$ nullity $=0$. סמנו אפשרויות שמדברות על ממד הטווח לפני בדיקת הגרעין.",
-      "skill_atoms": [
-        "kernel",
-        "injectivity"
-      ]
+      "correct_index": 0
     },
     {
       "ord": 2,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "Is $T:\\mathbb{R}^2\\to\\mathbb{R}^2$, $T(x,y)=(x+y,x+y)$ linear?",
-      "stem_he": "האם $T(x,y)=(x+y,x+y)$ לינארית?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "yes",
-          "Yes",
-          "linear",
-          "כן"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nThe map $T(x,y)=(x+y,x+y)$ satisfies linearity: $T((x_1,y_1)+(x_2,y_2))=((x_1+x_2)+(y_1+y_2),\\ldots)=T(x_1,y_1)+T(x_2,y_2)$, and $T(\\alpha(x,y))=\\alpha T(x,y)$ because both coordinates scale equally. A map can be linear yet have a nontrivial kernel — linearity does not mean injective.\n\n**How to think about it:**\nTest linearity by checking whether $T$ respects addition and scalar multiplication, or equivalently whether $T(a\\vec{u}+b\\vec{v})=aT(\\vec{u})+bT(\\vec{v})$. Do not confuse \"looks like a formula\" with \"preserves structure\".\n\n**Common slip:**\nAnswering \"no\" because both output coordinates are equal — that is a property of this particular map, not a violation of linearity. Another error: checking one point numerically instead of the general identity.\n\n**Exam tip:**\nBagrut and first-year linear algebra often pair \"is it linear?\" with \"find the kernel\" in consecutive parts — master the definition before computing subspaces.",
-      "explanation_he": "**למה זה נכון:**\nההעתקה $T(x,y)=(x+y,x+y)$ מקיימת לינאריות: $T((x_1,y_1)+(x_2,y_2))=T(x_1,y_1)+T(x_2,y_2)$, ו-$T(\\alpha(x,y))=\\alpha T(x,y)$ כי שני הרכיבים מוכפלים באותו אופן. העתקה יכולה להיות לינארית ועדיין עם גרעין לא-טריוויאלי.\n\n**איך לחשוב על זה:**\nבדקו לינאריות: האם $T$ שומרת חיבור וכפל בסקלר, או שקול ל-$T(a\\vec{u}+b\\vec{v})=aT(\\vec{u})+bT(\\vec{v})$. אל תבלבלו \"נראה כמו נוסחה\" עם \"שומר מבנה\".\n\n**טעות נפוצה:**\nתשובה \"לא\" כי שני רכיבי הפלט שווים — זו תכונה של העתקה זו, לא הפרת לינאריות. טעות נוספת: בדיקה נקודתית במקום זהות כללית.\n\n**טיפ לבחינה:**\nבבגרות ובשנה א' לינארית לעיתים \"האם לינארית?\" ו\"מצא גרעין\" ברצף — שלוטו בהגדרה לפני חישוב תת-מרחבים.",
+      "stem_en": "By rank-nullity with $n=5$ and rank $3$, find the nullity.",
+      "stem_he": "לפי משפט הדרגה עם $n=5$ ודרגה $3$, מצאו את הממד של הגרעין.",
+      "explanation_en": "**$\\dim\\ker=n-\\text{rank}=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\dim\\ker=n-\\text{rank}=2$.**\n\n**תשובה:** $2$.",
       "skill_atoms": [
-        "kernel",
-        "image"
-      ]
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "8d3960f4-5e5e-5b34-88e4-2df14715802f",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
     },
     {
       "ord": 3,
-      "kind": "short_answer",
+      "kind": "true_false",
       "difficulty": "easy",
-      "stem_en": "Find $\\ker(T)$ for $T(x,y)=(x+y,x+y)$.",
-      "stem_he": "מצא $\\ker(T)$ ל-$T(x,y)=(x+y,x+y)$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "span{(-1,1)",
-          "(-1,1)",
-          "x=-y",
-          "x+y=0"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nBoth output equations $x+y=0$ and $2x+2y=0$ reduce to the same constraint, giving $x=-y$. Parameterizing with $y=t$ yields $\\ker(T)=\\text{span}\\{(-1,1)^T\\}$. Any nonzero scalar multiple is an equivalent basis description.\n\n**How to think about it:**\nFor kernel problems, write $T(\\vec{x})=\\mathbf{0}$ as a linear system, row-reduce, and express pivot variables in terms of free ones. One free variable in $\\mathbb{R}^2$ means a 1-dimensional kernel (a line through the origin).\n\n**Common slip:**\nUsing only the first equation and forgetting the second is OK here because they are dependent — but in general you must satisfy **all** rows. Another slip: writing $\\ker=\\{(1,-1)^T\\}$ without span notation when infinitely many multiples exist.\n\n**Exam tip:**\nAlways verify: plug a proposed kernel vector back into $T$ and confirm the output is $\\mathbf{0}$. One substitution catches sign errors instantly.",
-      "explanation_he": "**למה זה נכון:**\nשתי משוואות הפלט $x+y=0$ ו-$2x+2y=0$ מתמצות לאותו אילוץ, $x=-y$. עם $y=t$ מתקבל $\\ker(T)=\\text{span}\\{(-1,1)^T\\}$. כל כפולה סקלרית לא-אפס היא תיאור בסיס שקול.\n\n**איך לחשוב על זה:**\nבבעיות גרעין, כתבו $T(\\vec{x})=\\mathbf{0}$ כמערכת, דרגו, והביעו משתני ציר במונחי חופשיים. משתנה חופשי אחד ב-$\\mathbb{R}^2$ ⇒ גרעין חד-ממדי (ישר דרך הראשית).\n\n**טעות נפוצה:**\nשימוש רק במשוואה הראשונה — כאן זה מספיק כי הן תלויות, אבל בכלל צריך לספק **כל** השורות. טעות: $\\ker=\\{(1,-1)^T\\}$ בלי span כשיש אינסוף כפולות.\n\n**טיפ לבחינה:**\nאמתו: הציבו וקטור גרעין מוצע ב-$T$ וודאו פלט $\\mathbf{0}$. הצבה אחת תופסת טעויות סימן.",
+      "stem_en": "True or False: the image of a linear map is a subspace of the codomain.",
+      "stem_he": "נכון או לא נכון: התמונה של העתקה לינארית היא תת-מרחב של הטווח.",
+      "explanation_en": "**$\\operatorname{im}T$ is closed under addition and scaling** — **true**.",
+      "explanation_he": "**התמונה סגורה לחיבור וכפל בסקלר** — **נכון**.",
       "skill_atoms": [
-        "kernel",
         "image"
-      ]
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "ec9e55d5-8846-5e4a-b4cf-df4195bbac93",
+      "points_level_min": "5pt",
+      "correct_bool": true
     },
     {
       "ord": 4,
-      "kind": "short_answer",
-      "difficulty": "easy",
-      "stem_en": "$T:\\mathbb{R}^2\\to\\mathbb{R}^2$ with matrix $\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$. Kernel?",
-      "stem_he": "$T=I$. גרעין?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "{0}",
-          "zero",
-          "trivial",
-          "nullity=0",
-          "אפס"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nThe identity matrix $I$ satisfies $I\\vec{x}=\\vec{x}$, so $I\\vec{x}=\\mathbf{0}$ forces $\\vec{x}=\\mathbf{0}$. Therefore $\\ker(I)=\\{\\mathbf{0}\\}$, nullity $=0$, and the identity map is injective (in fact bijective on $\\mathbb{R}^2$).\n\n**How to think about it:**\nRecognize standard maps quickly: $I$ (only zero in kernel), projection matrices (large kernel), rotation matrices (trivial kernel). For $\\ker(I)$, no row reduction is needed — the answer is immediate from the definition of identity.\n\n**Common slip:**\nAnswering \"all of $\\mathbb{R}^2$\" by confusing kernel with image. Another error: $\\ker(I)=\\{1\\}$ or listing basis vectors when the only element is the zero vector.\n\n**Exam tip:**\nMemorize: $\\ker(I)=\\{\\mathbf{0}\\}$, $\\text{Im}(I)=\\mathbb{R}^n$, rank $=n$, nullity $=0$. These four facts appear as quick-check questions on every exam.",
-      "explanation_he": "**למה זה נכון:**\nמטריצת היחידה $I$ מקיימת $I\\vec{x}=\\vec{x}$, ולכן $I\\vec{x}=\\mathbf{0}$ מכריח $\\vec{x}=\\mathbf{0}$. לכן $\\ker(I)=\\{\\mathbf{0}\\}$, nullity $=0$, והעתקת היחידה חח\"ע (ואף הפיכה על $\\mathbb{R}^2$).\n\n**איך לחשוב על זה:**\nזהו העתקות סטנדרטיות: $I$ (רק אפס בגרעין), מטריצות הטלה (גרעין גדול), סיבוב (גרעין טריוויאלי). ל-$\\ker(I)$ אין צורך בדירוג — התשובה מיד מההגדרה.\n\n**טעות נפוצה:**\nתשובה \"כל $\\mathbb{R}^2$\" — בלבול גרעין ותמונה. טעות נוספת: $\\ker(I)=\\{1\\}$ או רשימת בסיס כשהאיבר היחיד הוא $\\mathbf{0}$.\n\n**טיפ לבחינה:**\nשיננו: $\\ker(I)=\\{\\mathbf{0}\\}$, $\\text{Im}(I)=\\mathbb{R}^n$, rank $=n$, nullity $=0$. ארבעת העובדות האלה חוזרות בכל בחינה.",
+      "kind": "open",
+      "difficulty": "hard",
+      "stem_en": "A linear map $T:\\mathbb{R}^4\\to\\mathbb{R}^2$ has rank $2$. Find its nullity.",
+      "stem_he": "העתקה לינארית $T:\\mathbb{R}^4\\to\\mathbb{R}^2$ בעלת דרגה $2$. מצאו את ממד גרעינה.",
+      "explanation_en": "**Step 1 — Rank-nullity.** $\\dim\\ker+\\text{rank}=n$.\n\n**Step 2 — Substitute.** $\\dim\\ker=4-2$.\n\n**Step 3 — Evaluate.** $=2$.\n\n**Answer:** $2$.",
+      "explanation_he": "**שלב 1 — משפט הדרגה.** $\\dim\\ker+\\text{rank}=n$.\n\n**שלב 2 — הצבה.** $\\dim\\ker=4-2$.\n\n**שלב 3 — חישוב.** $2$.\n\n**תשובה:** $2$.",
       "skill_atoms": [
-        "kernel",
-        "image"
-      ]
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "steps_en": [
+          "**Step 1 — Rank-nullity.** $\\dim\\ker+\\text{rank}=n$.",
+          "**Step 2 — Substitute.** $\\dim\\ker=4-2$.",
+          "**Step 3 — Evaluate.** $=2$.",
+          "**Answer:** $2$."
+        ],
+        "steps_he": [
+          "**שלב 1 — משפט הדרגה.** $\\dim\\ker+\\text{rank}=n$.",
+          "**שלב 2 — הצבה.** $\\dim\\ker=4-2$.",
+          "**שלב 3 — חישוב.** $2$.",
+          "**תשובה:** $2$."
+        ]
+      },
+      "source_item_id": "b546d9ec-43f8-5932-8eaa-6c827f25465b",
+      "rubric_en": "Full marks: correct method shown step by step AND correct final answer. Partial: correct method with an arithmetic slip. Method shown always earns method marks even if the final value is wrong.",
+      "rubric_he": "ניקוד מלא: שיטה נכונה המוצגת שלב-אחר-שלב וגם תשובה סופית נכונה. חלקי: שיטה נכונה עם טעות חשבון. הצגת השיטה תמיד מזכה בנקודות שיטה גם אם הערך הסופי שגוי.",
+      "points_level_min": "5pt"
     },
     {
       "ord": 5,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "easy",
-      "stem_en": "$A$ is $3\\times4$, rank 2. Find nullity.",
-      "stem_he": "$3\\times4$, rank 2. Nullity?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "2",
-          "nullity=2",
-          "nullity 2"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nRank-nullity states $\\text{rank}+\\text{nullity}=\\dim(V)$ where $V$ is the **domain**. A $3\\times4$ matrix maps $\\mathbb{R}^4\\to\\mathbb{R}^3$, so $n=4$ (column count), not $3$. With rank $=2$: nullity $=4-2=2$.\n\n**How to think about it:**\nBefore computing nullity, identify $n$ = number of columns = $\\dim(\\text{domain})$. Row count $m$ governs surjectivity (rank $=m$?), not the rank-nullity sum's right-hand side.\n\n**Common slip:**\nUsing $n=3$ (row count) and getting nullity $=1$. Another trap: subtracting rank from $m$ instead of from the domain dimension.\n\n**Exam tip:**\nOn every rank-nullity problem, write \"$n=$ ___ columns\" first. Examiners deliberately use non-square matrices to test whether you know which dimension enters the theorem.",
-      "explanation_he": "**למה זה נכון:**\nמשפט דרגה-אפסיות: $\\text{rank}+\\text{nullity}=\\dim(V)$ כאשר $V$ הוא **התחום**. מטריצה $3\\times4$ ממפה $\\mathbb{R}^4\\to\\mathbb{R}^3$, ולכן $n=4$ (מספר עמודות), לא $3$. עם rank $=2$: nullity $=4-2=2$.\n\n**איך לחשוב על זה:**\nלפני חישוב nullity, זהו $n$ = מספר עמודות = $\\dim(\\text{domain})$. מספר שורות $m$ קובע על (rank $=m$?), לא את צד ימין של המשפט.\n\n**טעות נפוצה:**\nשימוש ב-$n=3$ (שורות) ו-nullity $=1$. מלכודת: חיסור rank מ-$m$ במקום ממד התחום.\n\n**טיפ לבחינה:**\nבכל בעיית דרגה-אפסיות, כתבו \"$n=$ ___ עמודות\" קודם. מרצים משתמשים במטריצות לא-ריבועיות כדי לבדוק איזה ממד נכנס למשפט.",
+      "stem_en": "With $n=4$ and nullity $1$, find the rank.",
+      "stem_he": "עם $n=4$ וממד גרעין $1$, מצאו את הדרגה.",
+      "explanation_en": "**$\\text{rank}=n-\\dim\\ker=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$\\text{rank}=3$.**\n\n**תשובה:** $3$.",
       "skill_atoms": [
-        "kernel",
-        "image"
-      ]
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "5496f7bb-6d61-58e4-be15-645fbc9b61a2",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
     },
     {
       "ord": 6,
-      "kind": "short_answer",
-      "difficulty": "medium",
-      "stem_en": "$A=\\begin{pmatrix}1&-1\\\\-1&1\\end{pmatrix}$. Find $\\ker(A)$, $\\text{Im}(A)$, rank, nullity.",
-      "stem_he": "$A=\\begin{pmatrix}1&-1\\\\-1&1\\end{pmatrix}$. גרעין, תמונה, rank, nullity?",
-      "answer_payload": {
-        "acceptable_answers": [
-          "rank=1",
-          "nullity=1",
-          "span{(1,1)",
-          "span{(1,-1)"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nRREF of $\\begin{pmatrix}1&-1\\\\-1&1\\end{pmatrix}$ is $\\begin{pmatrix}1&-1\\\\0&0\\end{pmatrix}$: one pivot, one free variable. Kernel: $x=y=t$, so $\\ker=\\text{span}\\{(1,1)^T\\}$. Image: pivot column 1 of the original matrix gives $\\text{span}\\{(1,-1)^T\\}$. Rank $=1$, nullity $=1$, and $1+1=2$.\n\n**How to think about it:**\nOne RREF pass yields rank, pivot positions, kernel parametrization, and image basis. Read pivot **positions**, then fetch those columns from the **original** $A$ for the image.\n\n**Common slip:**\nTaking RREF columns as the image basis — here they happen to match, but the method is wrong in general. Reporting rank $=2$ by counting rows instead of pivots.\n\n**Exam tip:**\nAfter finding $\\ker$ and $\\text{Im}$, always verify rank-nullity as a free consistency check — it catches arithmetic slips before you move on.",
-      "explanation_he": "**למה זה נכון:**\nRREF של $\\begin{pmatrix}1&-1\\\\-1&1\\end{pmatrix}$ הוא $\\begin{pmatrix}1&-1\\\\0&0\\end{pmatrix}$: ציר אחד, משתנה חופשי. גרעין: $x=y=t$, $\\ker=\\text{span}\\{(1,1)^T\\}$. תמונה: עמודת ציר 1 מהמקור $\\text{span}\\{(1,-1)^T\\}$. rank $=1$, nullity $=1$, $1+1=2$.\n\n**איך לחשוב על זה:**\nדריגה אחת נותנת rank, מיקומי ציר, פרמטריזציית גרעין ובסיס תמונה. קראו **מיקומי** ציר, ושלפו עמודות אלה מ-$A$ **המקורית** לתמונה.\n\n**טעות נפוצה:**\nלקיחת עמודות RREF כבסיס תמונה — כאן זה מקרה, אבל השיטה שגויה בכלל. rank $=2$ מספירת שורות.\n\n**טיפ לבחינה:**\nאחרי $\\ker$ ו-$\\text{Im}$, אמתו משפט דרגה-אפסיות — זה תופס טעויות חישוב לפני שממשיכים.",
+      "kind": "numeric",
+      "difficulty": "easy",
+      "stem_en": "With $n=3$ and rank $3$, find the nullity.",
+      "stem_he": "עם $n=3$ ודרגה $3$, מצאו את ממד הגרעין.",
+      "explanation_en": "**$\\dim\\ker=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$\\dim\\ker=0$.**\n\n**תשובה:** $0$.",
       "skill_atoms": [
-        "kernel",
-        "image"
-      ]
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "b6cf2399-fd0d-5168-b22e-e45b093b5504",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     },
     {
       "ord": 7,
-      "kind": "short_answer",
+      "kind": "mcq",
       "difficulty": "medium",
-      "stem_en": "Verify rank-nullity for Ex. e5.",
-      "stem_he": "בדוק משפט דרגה-אפסיות עבור e5.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "2",
-          "rank+nullity=2",
-          "verified"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nFor the matrix in exercise e5, rank $=1$ and nullity $=1$. Domain $\\mathbb{R}^2$ has dimension $2$, so rank $+$ nullity $=1+1=2=\\dim(\\mathbb{R}^2)$ — the rank-nullity theorem is satisfied. This confirms your kernel and image dimensions are consistent.\n\n**How to think about it:**\nVerification problems test whether you understand the theorem as a balance law, not just a formula to plug numbers into. Identify rank and nullity separately, then check their sum against $\\dim(V)$.\n\n**Common slip:**\nUsing $\\dim(\\mathbb{R}^3)$ or the row count on the right-hand side. Another slip: verifying $1+1=3$ and moving on without re-checking rank computation.\n\n**Exam tip:**\nWhen a problem says \"verify rank-nullity\", write the three quantities explicitly: rank __, nullity __, $\\dim(V)$ __, then the sum. Partial credit often requires showing the setup even if earlier parts had errors.",
-      "explanation_he": "**למה זה נכון:**\nלמטריצה בתרגיל e5, rank $=1$ ו-nullity $=1$. התחום $\\mathbb{R}^2$ בממד $2$, ולכן rank $+$ nullity $=1+1=2=\\dim(\\mathbb{R}^2)$ — משפט דרגה-אפסיות מתקיים. זה מאשר שממדי הגרעין והתמונה עקביים.\n\n**איך לחשוב על זה:**\nבעיות אימות בודקות הבנה של המשפט כחוק balance, לא רק נוסחה. זהו rank ו-nullity בנפרד, ובדקו סכום מול $\\dim(V)$.\n\n**טעות נפוצה:**\nשימוש ב-$\\dim(\\mathbb{R}^3)$ או במספר שורות בצד ימין. אימות $1+1=3$ בלי לבדוק מחדש את rank.\n\n**טיפ לבחינה:**\nכש\"אמתו משפט דרגה-אפסיות\", כתבו שלושה: rank __, nullity __, $\\dim(V)$ __, ואז סכום. נקודות חלקיות דורשות הצגת ההכנה.",
+      "stem_en": "The rank of a linear map equals:",
+      "stem_he": "הדרגה של העתקה לינארית שווה ל:",
+      "explanation_en": "**Rank $=\\dim(\\operatorname{im}T)$.**\n\n**Answer:** $\\dim(\\operatorname{im}T)$.",
+      "explanation_he": "**דרגה $=\\dim(\\operatorname{im}T)$.**\n\n**תשובה:** $\\dim(\\operatorname{im}T)$.",
       "skill_atoms": [
-        "kernel",
-        "image"
-      ]
+        "rank"
+      ],
+      "answer_payload": {
+        "options_en": [
+          "$\\dim(\\operatorname{im}T)$",
+          "$\\dim(\\ker T)$",
+          "$\\text{the domain dimension}$",
+          "$0$"
+        ],
+        "options_he": [
+          "$\\dim(\\operatorname{im}T)$",
+          "$\\dim(\\ker T)$",
+          "$\\text{the domain dimension}$",
+          "$0$"
+        ],
+        "correct_index": 0
+      },
+      "source_item_id": "5802ea28-5a60-58c2-9968-1fb98a5b4723",
+      "points_level_min": "5pt",
+      "options_en": [
+        "$\\dim(\\operatorname{im}T)$",
+        "$\\dim(\\ker T)$",
+        "$\\text{the domain dimension}$",
+        "$0$"
+      ],
+      "options_he": [
+        "$\\dim(\\operatorname{im}T)$",
+        "$\\dim(\\ker T)$",
+        "$\\text{the domain dimension}$",
+        "$0$"
+      ],
+      "correct_index": 0
     },
     {
       "ord": 8,
-      "kind": "short_answer",
+      "kind": "numeric",
       "difficulty": "medium",
-      "stem_en": "$T$ is injective iff $\\ker(T)=\\{\\mathbf{0}\\}$. Verify for $T:\\mathbb{R}^2\\to\\mathbb{R}^3$ with matrix $\\begin{pmatrix}1&0\\\\0&1\\\\1&1\\end{pmatrix}$.",
-      "stem_he": "בדוק חח\"ע ל-$T:\\mathbb{R}^2\\to\\mathbb{R}^3$, $A=\\begin{pmatrix}1&0\\\\0&1\\\\1&1\\end{pmatrix}$.",
-      "answer_payload": {
-        "acceptable_answers": [
-          "injective",
-          "one-to-one",
-          "ker={0}",
-          "חח\"ע"
-        ],
-        "case_sensitive": false
-      },
-      "explanation_en": "**Why this is correct:**\nRREF of $\\begin{pmatrix}1&0\\\\0&1\\\\1&1\\end{pmatrix}$ is $\\begin{pmatrix}1&0\\\\0&1\\\\0&0\\end{pmatrix}$: two pivots, no free variables. The only solution to $A\\vec{x}=\\mathbf{0}$ is $\\vec{x}=\\mathbf{0}$, so $\\ker(A)=\\{\\mathbf{0}\\}$ and $T$ is **injective**. Note $T:\\mathbb{R}^2\\to\\mathbb{R}^3$ cannot be surjective (rank $\\le2<3$).\n\n**How to think about it:**\nInjectivity is a property of the domain — ask whether anything besides zero collapses. Full column rank (all columns pivot) on an $m\\times n$ matrix with $n\\le m$ signals injectivity.\n\n**Common slip:**\nConcluding surjective because RREF has no zero rows — the codomain is $\\mathbb{R}^3$, so surjectivity requires rank $=3$, impossible from two columns. Another error: confusing \"consistent system\" with \"onto map\".\n\n**Exam tip:**\nFor non-square maps, answer injectivity and surjectivity in **separate sentences**. Examiners love $2\\to3$ embeddings that are injective but not surjective.",
-      "explanation_he": "**למה זה נכון:**\nRREF של $\\begin{pmatrix}1&0\\\\0&1\\\\1&1\\end{pmatrix}$ הוא $\\begin{pmatrix}1&0\\\\0&1\\\\0&0\\end{pmatrix}$: שני צירים, אין משתנים חופשיים. הפתרון היחיד ל-$A\\vec{x}=\\mathbf{0}$ הוא $\\vec{x}=\\mathbf{0}$, $\\ker=\\{\\mathbf{0}\\}$, $T$ **חח\"ע**. שימו לב: $T:\\mathbb{R}^2\\to\\mathbb{R}^3$ לא יכולה להיות על (rank $\\le2<3$).\n\n**איך לחשוב על זה:**\nחח\"ע הוא תכונה של התחום — האם משהו מלבד אפס מתכווץ. דרגת עמודות מלאה (כל העמודות ציר) ב-$m\\times n$ עם $n\\le m$ ⇒ חח\"ע.\n\n**טעות נפוצה:**\nמסקנה \"על\" כי אין שורות אפס — הטווח $\\mathbb{R}^3$, על דורש rank $=3$, בלתי אפשרי משני עמודות. בלבול \"מערכת עקבית\" עם \"העתקה על\".\n\n**טיפ לבחינה:**\nבהעתקות לא-ריבועיות, ענו חח\"ע ועל ב**משפטים נפרדים**. מרצים אוהבים שיכונים $2\\to3$ חח\"ע אך לא על.",
+      "stem_en": "With $n=6$ and rank $4$, find the nullity.",
+      "stem_he": "עם $n=6$ ודרגה $4$, מצאו את ממד הגרעין.",
+      "explanation_en": "**$\\dim\\ker=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\dim\\ker=2$.**\n\n**תשובה:** $2$.",
       "skill_atoms": [
-        "kernel",
-        "image"
-      ]
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "2416c8e3-349e-5da9-a264-bd8f69342472",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 9,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "An injective map from a $5$-dimensional space has nullity $0$. Find its rank.",
+      "stem_he": "העתקה חד-חד-ערכית ממרחב $5$-ממדי בעלת ממד גרעין $0$. מצאו את דרגתה.",
+      "explanation_en": "**$\\text{rank}=5-0=5$.**\n\n**Answer:** $5$.",
+      "explanation_he": "**$\\text{rank}=5$.**\n\n**תשובה:** $5$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 5
+      },
+      "source_item_id": "7d31e7e3-b584-5db7-9f06-e65872661f20",
+      "points_level_min": "5pt",
+      "correct_answer": "5"
+    },
+    {
+      "ord": 10,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "With $n=7$ and nullity $3$, find the rank.",
+      "stem_he": "עם $n=7$ וממד גרעין $3$, מצאו את הדרגה.",
+      "explanation_en": "**$\\text{rank}=4$.**\n\n**Answer:** $4$.",
+      "explanation_he": "**$\\text{rank}=4$.**\n\n**תשובה:** $4$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 4
+      },
+      "source_item_id": "c0bab010-b90c-58cb-86a8-9cde3e6c08c4",
+      "points_level_min": "5pt",
+      "correct_answer": "4"
+    },
+    {
+      "ord": 11,
+      "kind": "numeric",
+      "difficulty": "medium",
+      "stem_en": "An onto map $T:\\mathbb{R}^3\\to\\mathbb{R}^3$ has rank $3$. Find its nullity.",
+      "stem_he": "העתקה על $T:\\mathbb{R}^3\\to\\mathbb{R}^3$ בעלת דרגה $3$. מצאו את ממד גרעינה.",
+      "explanation_en": "**$\\dim\\ker=3-3=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$\\dim\\ker=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "19459de5-3929-52f9-bff8-350d3f281ad4",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
+    },
+    {
+      "ord": 12,
+      "kind": "true_false",
+      "difficulty": "medium",
+      "stem_en": "True or False: a linear map is injective if and only if its kernel is $\\{0\\}$.",
+      "stem_he": "נכון או לא נכון: העתקה לינארית היא חד-חד-ערכית אם ורק אם גרעינה $\\{0\\}$.",
+      "explanation_en": "**Trivial kernel $\\iff$ injective** — **true**.",
+      "explanation_he": "**גרעין טריוויאלי $\\iff$ חד-חד-ערכית** — **נכון**.",
+      "skill_atoms": [
+        "kernel"
+      ],
+      "answer_payload": {
+        "value": true
+      },
+      "source_item_id": "36505c0a-f2bf-5c0f-88c4-3a15c57c6145",
+      "points_level_min": "5pt",
+      "correct_bool": true
+    },
+    {
+      "ord": 13,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "With $n=10$ and rank $7$, find the nullity.",
+      "stem_he": "עם $n=10$ ודרגה $7$, מצאו את ממד הגרעין.",
+      "explanation_en": "**$\\dim\\ker=3$.**\n\n**Answer:** $3$.",
+      "explanation_he": "**$\\dim\\ker=3$.**\n\n**תשובה:** $3$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 3
+      },
+      "source_item_id": "223574b3-44c6-5a56-a627-ce285c4d6f61",
+      "points_level_min": "5pt",
+      "correct_answer": "3"
+    },
+    {
+      "ord": 14,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "A surjective map $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ has rank $3$. Find its nullity.",
+      "stem_he": "העתקה על $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ בעלת דרגה $3$. מצאו את ממד גרעינה.",
+      "explanation_en": "**$\\dim\\ker=5-3=2$.**\n\n**Answer:** $2$.",
+      "explanation_he": "**$\\dim\\ker=2$.**\n\n**תשובה:** $2$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 2
+      },
+      "source_item_id": "274c8e78-b78d-5aaf-8542-4e265373f237",
+      "points_level_min": "5pt",
+      "correct_answer": "2"
+    },
+    {
+      "ord": 15,
+      "kind": "numeric",
+      "difficulty": "hard",
+      "stem_en": "The zero map on an $8$-dimensional space has nullity $8$. Find its rank.",
+      "stem_he": "העתקת האפס על מרחב $8$-ממדי בעלת ממד גרעין $8$. מצאו את דרגתה.",
+      "explanation_en": "**$\\text{rank}=8-8=0$.**\n\n**Answer:** $0$.",
+      "explanation_he": "**$\\text{rank}=0$.**\n\n**תשובה:** $0$.",
+      "skill_atoms": [
+        "rank_nullity"
+      ],
+      "answer_payload": {
+        "value": 0
+      },
+      "source_item_id": "8f641273-6e6d-5d51-b770-8c62053c6c45",
+      "points_level_min": "5pt",
+      "correct_answer": "0"
     }
   ],
   "est_minutes": 45,

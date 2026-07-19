@@ -555,10 +555,34 @@ duplicated the medium $2\times3\times4$ item → deduped to 14; changed the work
 example to a $3\times4\times5$ box ($V=60$) and re-baked to 15/15. Corpus math
 lint 0/207.
 
+## Batch V — shipped (math corpus complete)
+
+The final six thin math lessons expanded to 15 verified items each (spread 5/6/4,
+4 kinds per lesson), all CAS-verified with 0 rejections and 15/15 on first pass:
+
+- `function_investigation_uni` (5pt/university) — critical points ($f'=0$),
+  extrema values, inflection ($f''=0$), second-derivative test, vertex analysis.
+- `multivariable_limits` (calculus2) — limits of polynomials/roots/exponentials by
+  substitution, path test for non-existence, continuity condition.
+- `limits_epsilon_delta` (5pt/university) — for linear $f$, $\delta=\varepsilon/|m|$
+  across a range of slopes and tolerances; the formal implication.
+- `la_orthogonality` (linear algebra) — dot products & orthogonality, norms,
+  projection coefficient $\tfrac{a\cdot b}{b\cdot b}$, orthonormal sets,
+  independence of orthogonal vectors.
+- `linear_transformations_kernel_image` (linear algebra) — rank-nullity
+  $\dim\ker+\operatorname{rank}=n$ across injective/surjective/zero maps, kernel &
+  image definitions.
+- `continuity_uniform` (calculus1/analysis) — Lipschitz $\delta=\varepsilon/L$,
+  uniform ⇒ continuous, Heine–Cantor, $x^2$ non-uniformity, Lipschitz bound.
+
+**Milestone:** `_scan_thin_math.mjs` now reports **0 thin math lessons** — every
+math lesson in the corpus has a 15+ verified, calibrated (30/40/30), 4-kind,
+bilingual question bank. Corpus math lint 0/207.
+
 ## Corpus progress
 
-Verified 15+ item banks now cover **114 math lessons** (Batches B, D, E, F, G, H,
-I, J, K, L, M, N, O, P, Q, R, S, T, U + exponents): the entire 3pt/4pt algebra & functions foundation
+Verified 15+ item banks now cover **all 120 math lessons** (Batches B, D, E, F, G, H,
+I, J, K, L, M, N, O, P, Q, R, S, T, U, V + exponents): the entire 3pt/4pt algebra & functions foundation
 (incl. alternate syllabus IDs, algebra review, quadratic model fitting), sequences,
 the core + coordinate geometry foundation (distance/midpoint/slope, circle
 equations, vectors, solids/mensuration, plane-angle geometry, Law of Sines/Cosines
